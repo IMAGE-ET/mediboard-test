@@ -1,253 +1,36 @@
 <!--  $Id$ -->
 
-<script type="text/javascript">
-Main.add(function () {
-  if(document.addFrm) {
-    document.addFrm._new.focus();
-  }
-  
-  Control.Tabs.create("tabs-owner", true);
-});
+{{mb_script module=compteRendu script=liste_choix}}
 
-function popupImport(owner_guid){
-  var url = new Url("dPcompteRendu", "listes_choix_import_csv");
-  url.addParam("owner_guid", owner_guid);
-  url.pop(500, 400, "Import de listes de choix");
-  return false;
-}
+<script>
+  Main.add(ListeChoix.filter);
 </script>
 
-<table class="main">
-
-<tr>
-  <td style="width: 50%;">
+<button class="new singleclick" onclick="ListeChoix.edit(0);">
+  {{tr}}CListeChoix-title-create{{/tr}}
+</button>
     
-    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;liste_id=0" class="button new">{{tr}}CListeChoix-title-create{{/tr}}</a> 
+<form name="Filter" action="?" method="get" onsubmit="return ListeChoix.filter();">
 
-    <form name="Filter" action="?" method="get">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <table class="form">
-        <tr>
-          <th class="category" colspan="10">{{tr}}Filter{{/tr}}</th>
-        </tr>
-        <tr>
-          <th><label for="filter_user_id">Utilisateur</label></th>
-          <td>
-            <select name="filter_user_id" onchange="this.form.submit()">
-              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-              {{mb_include module=mediusers template=inc_options_mediuser list=$users selected=$user->_id}}
-            </select>
-          </td>
-        </tr>
-      </table>
-    </form>
+<input type="hidden" name="m" value="{{$m}}" />
 
-    <ul id="tabs-owner" class="control_tabs">
-      {{foreach from=$listes key=owner item=_listes}}
-      <li>
-        <a href="#owner-{{$owner}}" {{if !$_listes|@count}} class="empty" {{/if}}>
-          {{$owners.$owner}} 
-          <small>({{$_listes|@count}})</small>
-        </a>
-      </li>
-      {{/foreach}}
-    </ul>
-    <hr class="control_tabs" />
-
-    {{foreach from=$listes key=owner item=_listes}}
-      <div id="owner-{{$owner}}" style="display: none;">
-        {{if $can->admin}}
-          {{assign var=owner_object value=$owners.$owner}}
-          {{assign var=ids value=$_listes|@array_keys}}
-          
-          <button class="hslip"
-                  onclick="window.open('?m=dPcompteRendu&amp;a=listes_choix_export_csv&amp;suppressHeaders=1&amp;owner_guid={{$owner_object->_guid}}&amp;id={{'-'|implode:$ids}}')">
-               Exporter au format CSV
-          </button>
-          
-          <button onclick="return popupImport('{{$owner_object->_guid}}');" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
-        {{/if}}
-        
-        <table class="tbl">
-          <tr>
-            <th>{{mb_title class=CListeChoix field=nom}}</th>
-            <th>{{mb_title class=CListeChoix field=valeurs}}</th>
-            <th>{{mb_title class=CListeChoix field=compte_rendu_id}}</th>
-          </tr>
-          
-          {{foreach from=$_listes item=_liste}}
-            <tr {{if $_liste->_id == $liste->_id}} class="selected" {{/if}}>
-              <td class="text">
-                <a href="?m={{$m}}&amp;tab={{$tab}}&amp;liste_id={{$_liste->_id}}">
-                  {{mb_value object=$_liste field=nom}}
-                </a>
-              </td>
-              <td>
-                {{$_liste->_valeurs|@count}}
-              </td>
-              <td class="text">
-                {{assign var=modele value=$_liste->_ref_modele}}
-                {{if $modele->_id}}
-                  {{$modele}} ({{tr}}{{$modele->object_class}}{{/tr}})
-                {{else}}
-                  &mdash; {{tr}}All{{/tr}}
-                {{/if}}
-              </td>
-            </tr>
-          {{foreachelse}}
-            <tr>
-              <td colspan="10" class="empty">{{tr}}CListeChoix.none{{/tr}}</td>
-            </tr>
-          {{/foreach}}
-        </table>
-      </div>
-    {{/foreach}}
-  </td>
-  
-  <td>
-
-    <form name="EditListChoix" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$liste->_spec}}">
-
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="dosql" value="do_liste_aed" />
-    {{mb_key object=$liste}}
-
-    <table class="form">
-
-    {{mb_include module=system template=inc_form_table_header object=$liste}}
-  
-    <tr>
-      <th>{{mb_label object=$liste field=user_id}}</th>
-      <td>
-        <select name="user_id" class="{{$liste->_props.user_id}}" style="width: 12em;">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$liste->user_id}}
-        </select>
-      </td>
-    </tr>
-  
-    <tr>
-      <th>{{mb_label object=$liste field=function_id}}</th>
-      <td>
-        <select name="function_id" class="{{$liste->_props.function_id}}" style="width: 12em;">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{mb_include module=mediusers template=inc_options_function list=$funcs selected=$liste->function_id}}
-        </select>
-      </td>
-    </tr>
-    
-    <tr>
-      <th>{{mb_label object=$liste field=group_id}}</th>
-      <td>
-        <select name="group_id" class="{{$liste->_props.group_id}}" style="width: 12em;">
-          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{foreach from=$etabs item=curr_etab}}
-            <option value="{{$curr_etab->_id}}" {{if $curr_etab->_id == $liste->group_id}} selected="selected" {{/if}}>
-              {{$curr_etab->_view}}
-            </option>
-         {{/foreach}}
-        </select>
-      </td>
-    </tr>
-
-    <tr>
-      <th>{{mb_label object=$liste field=nom}}</th>
-      <td>{{mb_field object=$liste field=nom}}</td>
-    </tr>
-    
-    <tr>
-      <th>{{mb_label object=$liste field=compte_rendu_id}}</th>
-      <td>
-        <select name="compte_rendu_id" style="max-width: 20em;">
-          <option value="">&mdash; {{tr}}All{{/tr}}</option>
-          
-          {{foreach from=$modeles key=owner item=_modeles}}
-          <optgroup label="{{$owners.$owner}}">
-            {{foreach from=$_modeles item=_modele}}
-            <option value="{{$_modele->_id}}" {{if $liste->compte_rendu_id == $_modele->_id}} selected="selected" {{/if}}>
-              {{$_modele->nom}} ({{tr}}{{$_modele->object_class}}{{/tr}})
-            </option>
-            {{foreachelse}}
-            <option disabled="disabled">{{tr}}None{{/tr}}</option>
-            {{/foreach}}
-          </optgroup>
-          {{/foreach}}
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td class="button" colspan="2">
-        {{if $liste->_id}}
-        <button class="modify" type="submit">
-          {{tr}}Save{{/tr}}
-        </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la liste',objName:$V(this.form.nom)})">
-          {{tr}}Delete{{/tr}}
-        </button>
-        {{else}}
-        <button class="submit" type="submit">
-          {{tr}}Create{{/tr}}
-        </button>
-        {{/if}}
-      </td>
-    </tr>
-
-    </table>
-    
-    </form>
-
-  
-  {{if $liste->_id}}
- 
-    {{if $liste->_valeurs|@count}}
-    <table class="tbl">
-      <tr><th class="category" colspan="2">Choix disponibles</th></tr>
-      {{foreach from=$liste->_valeurs item=_valeur name=choix}}
-      <tr>
-        <td class="text">{{$_valeur|nl2br}}</td>
-        <td class="narrow">
-          <form name="DelChoix-{{$smarty.foreach.choix.iteration}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-          <input type="hidden" name="dosql" value="do_liste_aed" />
-          <input type="hidden" name="del" value="0" />
-          {{mb_key object=$liste}}
-
-          {{mb_field object=$liste field=valeurs hidden=1}}
-          <input type="hidden" name="_del" value="{{$_valeur}}" />
-          <button class="remove notext" type="submit">{{tr}}Delete{{/tr}}</button>
-          </form>
-        </td>
-      </tr>
-      {{/foreach}}
-    </table>
-    {{/if}}
-     
-    <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-    
-    <input type="hidden" name="dosql" value="do_liste_aed" />
-    <input type="hidden" name="del" value="0" />
-    {{mb_key object=$liste}}
-
-    {{mb_field object=$liste field=valeurs hidden=1}}
-
-    <table class="form">
-      <tr>
-        <th class="category" colspan="2">Ajouter un choix</th>
-      </tr>
-      <tr>
-        <td>
-          <textarea name="_new"></textarea>
-        </td>
-      </tr>
-      <tr>
-        <td class="button">
-          <button type="submit" class="add">{{tr}}Add{{/tr}}</button>
-        </td>
-       </tr>
-    </table>
-
-    </form>
-
-  {{/if}}
-  </td>  
-</tr>
+<table class="form">
+  <tr>
+    <th class="category" colspan="10">{{tr}}Filter{{/tr}}</th>
+  </tr>
+  <tr>
+    <th><label for="user_id">Utilisateur</label></th>
+    <td>
+      <select name="user_id" onchange="this.form.onsubmit()">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$users selected=$user->_id}}
+      </select>
+    </td>
+  </tr>
 </table>
+
+</form>
+
+<div id="list-listes_choix">
+</div>
+ 

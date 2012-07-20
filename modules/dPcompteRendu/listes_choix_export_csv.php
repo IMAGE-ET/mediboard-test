@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$list       = CValue::get('id', array());
+$list       = CValue::get('ids', array());
 $owner_guid = CValue::get('owner_guid');
 
 if (!is_array($list)) {
