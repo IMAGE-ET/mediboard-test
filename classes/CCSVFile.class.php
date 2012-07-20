@@ -84,12 +84,14 @@ class CCSVFile {
   function readLine($assoc = false, $nullify_empty_values = false) {
     $line = fgetcsv($this->handle, null, $this->delimiter, $this->enclosure);
     
-    if ($nullify_empty_values) {
-      $line = $this->nullifyEmptyValues($line);
-    }
-    
-    if ($assoc && $this->column_names) {
-      return array_combine($this->column_names, $line);
+    if (!empty($line)) {
+      if ($nullify_empty_values) {
+        $line = $this->nullifyEmptyValues($line);
+      }
+      
+      if ($assoc && $this->column_names) {
+        return array_combine($this->column_names, $line);
+      }
     }
     
     return $line;
