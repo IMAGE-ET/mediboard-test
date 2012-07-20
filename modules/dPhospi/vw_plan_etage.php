@@ -1,4 +1,4 @@
-<?php  /* $Id: vw_plan_etage.php  $ */
+<?php  /** $Id: vw_plan_etage.php  $ **/
 
 /**
  * @package Mediboard
@@ -32,49 +32,49 @@ $where["service.service_id"] = " = '$service_id'";
 $chambre_places = $chambre->loadList($where, null, null, null, $ljoin);
 
 $chambres_non_placees = $chambres_service;
-if(count($chambre_places)){
-	$where=array();
-	$where["service_id"] = " = '$service_id'";
-	$where["chambre_id"] = " NOT ". CSQLDataSource::prepareIn(array_keys($chambre_places));
-	$chambres_non_placees = $chambre->loadList($where);
+if (count($chambre_places)) {
+  $where=array();
+  $where["service_id"] = " = '$service_id'";
+  $where["chambre_id"] = " NOT ". CSQLDataSource::prepareIn(array_keys($chambre_places));
+  $chambres_non_placees = $chambre->loadList($where);
 }
 
-foreach($chambres_non_placees as $ch){
+foreach ($chambres_non_placees as $ch) {
   $ch->loadRefsFwd();
   $ch->loadRefEmplacement();
 }
 
 $grille = array_fill(0, 10, array_fill(0, 10, 0));
 
-if($service_id!=""){
-	foreach($chambre_places as $chambre){
-	  $chambre->loadRefsFwd();
-	  $emplacement = $chambre->loadRefEmplacement();
-	  $grille[$emplacement->plan_y][$emplacement->plan_x] = $chambre;
-	  if($emplacement->hauteur-1){
-	    for($a = 0; $a <= $emplacement->hauteur-1; $a++){
-	      if($emplacement->largeur-1){
-	       for($b = 0; $b <= $emplacement->largeur-1; $b++){
-	         if($b!=0){
-	           unset($grille[$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
-	         }
-	         elseif($a!=0){
-	           unset($grille[$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
-	         }
-	        }
-	      }
-	      elseif($a < $emplacement->hauteur-1){
-	        $c = $a+1;
-	        unset($grille[$emplacement->plan_y+$c][$emplacement->plan_x]);
-	      }
-	    }
-	  }
-	  elseif($emplacement->largeur-1){
-	    for($b = 1; $b <= $emplacement->largeur-1; $b++){
-	      unset($grille[$emplacement->plan_y][$emplacement->plan_x+$b]);
-	    }
-	  }
-	}
+if ($service_id!="") {
+  foreach ($chambre_places as $chambre) {
+    $chambre->loadRefsFwd();
+    $emplacement = $chambre->loadRefEmplacement();
+    $grille[$emplacement->plan_y][$emplacement->plan_x] = $chambre;
+    if ($emplacement->hauteur-1) {
+      for ($a = 0; $a <= $emplacement->hauteur-1; $a++) {
+        if ($emplacement->largeur-1) {
+          for ($b = 0; $b <= $emplacement->largeur-1; $b++) {
+            if ($b!=0) {
+              unset($grille[$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
+            }
+            elseif ($a!=0) {
+              unset($grille[$emplacement->plan_y+$a][$emplacement->plan_x+$b]);
+            }
+          }
+        }
+        elseif ($a < $emplacement->hauteur-1) {
+          $c = $a+1;
+          unset($grille[$emplacement->plan_y+$c][$emplacement->plan_x]);
+        }
+      }
+    }
+    elseif ($emplacement->largeur-1) {
+      for ($b = 1; $b <= $emplacement->largeur-1; $b++) {
+        unset($grille[$emplacement->plan_y][$emplacement->plan_x+$b]);
+      }
+    }
+  }
 }
 
 // Création du template
