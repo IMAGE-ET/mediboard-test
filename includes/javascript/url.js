@@ -28,20 +28,21 @@ Ajax.Responders.register({
 });
 
 var Url = Class.create({
-  initialize: function(sModule, sAction, sType) {
-    sType = sType || "action";
+  initialize: function(sModule, sAction, sMode) {
+    sMode = sMode || "action";
 
     this.oParams = {};
     this.oWindow = null;
     this.sFragment = null;
     this.oPrefixed = {};
     
-    if(sModule && sAction) {
-      if(sType === "action") {
-         this.setModuleAction(sModule, sAction);
-       } else {
-         this.setModuleTab(sModule, sAction);
-       }
+    if (sModule && sAction) {
+      switch (sMode) {
+        case 'action' : this.setModuleAction(sModule, sAction); break;
+        case 'tab'    : this.setModuleTab   (sModule, sAction); break;
+        case 'raw'    : this.setModuleRaw   (sModule, sAction); break;
+        default: Console.debug('Url type incorrect : ' + sType)
+      }
     }
   },
   
@@ -58,6 +59,11 @@ var Url = Class.create({
   setModuleDosql: function(sModule, sDosql) {
     return this.addParam("m", sModule)
                .addParam("dosql", sDosql);
+  },
+
+  setModuleRaw: function(sModule, sRaw) {
+    return this.addParam("m", sModule)
+               .addParam("raw", sRaw);
   },
   
   setFragment: function(sFragment) {
@@ -120,14 +126,15 @@ var Url = Class.create({
     return sUrl;
   },
   
-  redirect: function(sBaseUrl) {
-    var uri = decodeURI(this.make(!!sBaseUrl));
-
-    if(this.oWindow)
-      this.oWindow.location.href = (sBaseUrl ? sBaseUrl : "") + uri;
-    else
-      window.location.href = (sBaseUrl ? sBaseUrl : "") + uri;
-    
+  open: function() {
+    var uri = decodeURI(this.make());
+    (this.oWindow || window).open(uri);
+    return this;
+  },
+  
+  redirect: function() {
+    var uri = decodeURI(this.make());
+    (this.oWindow || window).location.href = (sBaseUrl ? sBaseUrl : "") + uri    
     return this;
   },
   
