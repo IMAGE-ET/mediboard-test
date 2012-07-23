@@ -183,10 +183,10 @@
       {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
       
       {{if !$board}}
-        <td colspan="2" rowspan="2" class="narrow"></td>
+        <td rowspan="2" class="narrow"></td>
       {{/if}}
       
-      <td colspan="2" class="top text" class="top" {{if !$board}}rowspan="2"{{/if}}>
+      <td class="top text" class="top" {{if !$board}}rowspan="2"{{/if}}>
         {{if $patient->_ref_dossier_medical->_id && $patient->_ref_dossier_medical->_count_allergies}}
           <img src="images/icons/warning.png" style="float: right" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
         {{/if}}
