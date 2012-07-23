@@ -38,7 +38,7 @@
       ({{$plage->_nb_operations_placees}}/{{$plage->_nb_operations}})
       </strong>
       <a onclick="EditPlanning.edit('{{$plage->plageop_id}}','{{$curr_day}}');" href="#">
-        <img src="images/icons/edit.png" title="Editer la plage" border="0" height="16" width="16" />
+        <img src="images/icons/edit.png" title="Modifier la plage" border="0" height="16" width="16" />
       </a>
       {{if $plage->verrouillage == "oui"}}
         <img src="style/mediboard/images/buttons/lock.png" title="Plage verrouillée" border="0" height="16" width="16" />
