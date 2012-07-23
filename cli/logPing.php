@@ -10,7 +10,7 @@
  */
 
 require_once "utils.php";
-require_once "Procedure.class.php";
+require_once dirname(__FILE__)."/classes/Procedure.class.php";
 
 /**
  * Log a Ping request

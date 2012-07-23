@@ -9,14 +9,14 @@
  * @link     http://www.mediboard.org
  */
 
-require_once "utils.php";
+require_once dirname(__FILE__)."/../utils.php";
 require_once "Task.class.php";
 
 /**
  * Procedure: Enable you to set up a list a treatments to apply to one Task
  */
-class Procedure extends Task
-{
+class Procedure extends Task {
+  
   /**
    * Constructor
    * 

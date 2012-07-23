@@ -9,14 +9,13 @@
  * @link     http://www.mediboard.org
  */
 
-require_once "utils.php";
+require_once dirname(__FILE__)."/../utils.php";
 
 /**
  * Question: Enable you to create Questions for a Task
  */
-class Question extends Task
-{
-  
+class Question extends Task {
+
   public $qt    = null;
   public $def   = null;
   

@@ -9,16 +9,15 @@
  * @link     http://www.mediboard.org
  */
 
-require_once "utils.php";
+require_once dirname(__FILE__)."/../utils.php";
 require_once "Task.class.php";
 
 /**
  * Menu: Enable you to create a Menu of Tasks
  */
-class Menu extends Task
-{
+class Menu extends Task {
+  
   public $task_list;
-
   public $name;
 
   /**

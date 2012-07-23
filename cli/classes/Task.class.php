@@ -9,15 +9,15 @@
  * @link     http://www.mediboard.org
  */
 
-require_once "utils.php";
+require_once dirname(__FILE__)."/../utils.php";
 require_once "Question.class.php";
 require_once "Menu.class.php";
 
 /**
  * Task: Enable you to create a Task, which is associated to a Procedure
  */
-class Task
-{
+class Task {
+  
   public $procedure   = null;
   public $description = null;
   
