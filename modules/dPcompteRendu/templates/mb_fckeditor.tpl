@@ -61,9 +61,19 @@ CKEDITOR.editorConfig = function(config) {
   config.disableNativeSpellChecker = false;
   config.resize_maxWidth = "100%";
   config.resize_minWidth = "100%";
-  config.font_defaultLabel = '{{$conf.dPcompteRendu.CCompteRendu.default_font}}';
-  config.fontSize_defaultLabel = '{{$conf.dPcompteRendu.CCompteRendu.default_size}}'
+  if (Preferences.default_font != "") {
+    config.font_defaultLabel = Preferences.default_font;
+  }
+  else {
+    config.font_defaultLabel = '{{$conf.dPcompteRendu.CCompteRendu.default_font}}';
+  }
   
+  if (Preferences.default_size) {
+    config.fontSize_defaultLabel = Preferences.default_size; 
+  }
+  else {
+    config.fontSize_defaultLabel = '{{$conf.dPcompteRendu.CCompteRendu.default_size}}'
+  }
   // Suppression du redimensionnement manuel
   config.resize_enabled = false;
   // Suppression du bouton de masquage des barres d'outils

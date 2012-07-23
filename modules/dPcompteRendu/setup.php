@@ -805,7 +805,12 @@ class CSetupdPcompteRendu extends CSetup {
       ADD `fields_missing` INT (11) UNSIGNED DEFAULT 0";
     $this->addQuery($query);
     
-    $this->mod_version = "0.82";
+    $this->makeRevision("0.82");
+    $this->addPrefQuery("default_font", "");
+    
+    $this->addPrefQuery("default_size", "");
+    
+    $this->mod_version = "0.83";
   }
 }
 ?>

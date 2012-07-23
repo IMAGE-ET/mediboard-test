@@ -869,8 +869,16 @@ class CCompteRendu extends CDocumentItem {
    * @return string
    */
   function loadHTMLcontent($htmlcontent, $mode = "modele", $margins = array(), $type = "body", $header = "", $sizeheader = 0, $footer = "", $sizefooter = 0, $preface = "", $ending = "") {
-    $default_font = CAppUI::conf("dPcompteRendu CCompteRendu default_font");
-    $default_size = CAppUI::conf("dPcompteRendu CCompteRendu default_size");
+    $default_font = CAppUI::pref("default_font");
+    $default_size = CAppUI::pref("default_size");
+    
+    if ($default_font == "") {
+      $default_font = CAppUI::conf("dPcompteRendu CCompteRendu default_font");
+    }
+    
+    if ($default_size == "") {
+      $default_size = CAppUI::conf("dPcompteRendu CCompteRendu default_size");
+    }
     
     $style = file_get_contents("style/mediboard/htmlarea.css") .
       "@page {

@@ -23,6 +23,8 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "mode_play",
   "choice_factory",
   "multiple_docs",
-  "auto_capitalize"
+  "auto_capitalize",
+  "default_font",
+  "default_size"
 );
 ?>
