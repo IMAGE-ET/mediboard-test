@@ -132,8 +132,8 @@ var Url = Class.create({
     return this;
   },
   
-  redirect: function() {
-    var uri = decodeURI(this.make());
+  redirect: function(sBaseUrl) {
+    var uri = decodeURI(this.make(!!sBaseUrl));
     (this.oWindow || window).location.href = (sBaseUrl ? sBaseUrl : "") + uri    
     return this;
   },
