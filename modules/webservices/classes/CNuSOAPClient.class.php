@@ -142,7 +142,7 @@ class CNuSOAPClient extends nusoap_client {
       
       $return[] = "$output_type $name($input)";
     }
-    mbTrace($return);
+
     return $return;
   }
   

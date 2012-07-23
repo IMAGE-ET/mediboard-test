@@ -101,7 +101,7 @@ class CSourceSOAP extends CExchangeSource {
     if ($this->_headerbody) {
       $soap_client->setHeaders($this->_headerbody);
     }
-      
+   
     // Aucun log à produire ? 
     $soap_client->client->loggable = $this->loggable;
 
@@ -132,11 +132,8 @@ class CSourceSOAP extends CExchangeSource {
     );
     
     try {
-      if ($this->type_soap == "CMbSOAPClient") {
-        CMbSOAPClient::make($this->host, $this->user, $this->password, $this->type_echange, $options);
-      } elseif ($this->type_soap == "CNuSOAPClient") {
-        CNuSOAPClient::make($this->host, $this->type_echange, $this->encoding, false, $this->user, $this->password);
-      }
+      $soap_client = new CSOAPClient($this->type_soap);
+      $soap_client->make($this->host, $this->user, $this->password, $this->type_echange, $options);
     } catch (Exception $e) {
       $this->_reachable = 1;
       $this->_message   = $e->getMessage();
