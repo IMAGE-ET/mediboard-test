@@ -9,11 +9,14 @@
       url.autoComplete(form._view, "correspondants_area", {
         minChars: 2,
         dropdown: true,
-        afterUpdateElement : function(input, selected) {
+        callback: function(input, queryString){
+          return queryString+"&all_departements="+(input.form.all_departements.checked ? 1 : 0);          
+        },
+        afterUpdateElement: function(input, selected) {
           var medecin_id = selected.id.split("-")[1];
           $V(formCorres.object_id, medecin_id);
           $V(formCorres.compte_rendu_id, '{{$compte_rendu->_id}}');
-          onSubmitFormAjax(formCorres, {onComplete: function(){
+          onSubmitFormAjax(formCorres, {onComplete: function() {
             if (confirm($T("CCorrespondantPatient-add_to_dossier"))) {
               var formAdd = getForm("addCorrespondantToDossier");
               $V(formAdd.patient_id, '{{$patient->_id}}');
@@ -47,11 +50,18 @@
         {{else}}
           <div style="float: left">
             <input type="text" name="_view" class="autocomplete"/>
+            <label>
+              <input type="checkbox" name="all_departements" /> Inclure tous les départements
+            </label>
             <div id="correspondants_area"
               style="color: #000; text-align: left; width: 35px; float: left; font-weight: normal;" class="autocomplete"></div>
           </div>
         {{/if}}
-        
+        {{if $_class != "CPatient"}}
+          </th>
+        <tr>
+          <th class="title" colspan="3">
+        {{/if}}
         {{tr}}{{$_class}}{{/tr}}
       </th>
     </tr>

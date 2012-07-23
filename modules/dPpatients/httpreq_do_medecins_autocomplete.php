@@ -10,6 +10,7 @@
 CCanDo::checkRead();
 
 $keywords = CValue::post("_view");
+$all_departements = CValue::post("all_departements", 0);
 
 if ($keywords == "") {
   $keywords = "%%";
@@ -27,14 +28,14 @@ $medecin_cps_prefs = CAppUI::pref("medecin_cps_pref");
 if ($medecin_cps_prefs != "") {
   $cps = preg_split("/\s*[\s\|,]\s*/", $medecin_cps_prefs);
   CMbArray::removeValue("", $cps);
-	
+  
   $where_cp = array();
   foreach($cps as $cp) {
     $where_cp[] = "cp LIKE '".$cp."___'";
   }
   $where[] = "(".implode(" OR ", $where_cp).")";
 }
-else if($indexGroup->_cp_court) {
+else if($indexGroup->_cp_court && !$all_departements) {
   $where['cp'] = "LIKE '".$indexGroup->_cp_court."___'"; 
 }
 
