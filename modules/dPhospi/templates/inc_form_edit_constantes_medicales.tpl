@@ -200,9 +200,9 @@ Main.add(function () {
             <td>
               {{if $_readonly !="readonly" && $real_context == 1 && $constantes->$_constante != ""}}
                 {{if array_key_exists("formfields", $_params)}}
-                  <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_params.formfields.0}}', '{{$_params.formfields.1}}']);"></button>
+                  <button type="button" class="cancel notext compact" onclick="emptyAndSubmit(['{{$_params.formfields.0}}', '{{$_params.formfields.1}}']);"></button>
                 {{else}}
-                  <button type="button" class="cancel notext" style="margin: -1px;" onclick="emptyAndSubmit(['{{$_constante}}']);"></button>
+                  <button type="button" class="cancel notext compact" onclick="emptyAndSubmit(['{{$_constante}}']);"></button>
                 {{/if}} 
               {{/if}}
             </td>

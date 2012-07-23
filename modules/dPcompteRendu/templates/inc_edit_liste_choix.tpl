@@ -1,9 +1,11 @@
 <table class="main">
   <tr>
-    <td style="width: 50%">
+    <td>
       {{mb_include template=inc_form_liste_choix}}
     </td>
-    <td style="width: 50%">
+  </tr>
+  <tr>
+    <td>
       <div id="list-choix">
         {{mb_include template=inc_list_choix}}
       </div>

@@ -27,7 +27,7 @@ Document.refreshList = function() {
     <ul>
       {{foreach from=$patient->_ref_patient_links item=_patient_link}}
         <li>
-          <button type="button" class="unlink notext" title="{{tr}}Unlink{{/tr}}" style="margin: -1px;" onclick="Patient.doUnlink('{{$patient->_id}}');">
+          <button type="button" class="unlink notext compact" title="{{tr}}Unlink{{/tr}}" onclick="Patient.doUnlink('{{$patient->_id}}');">
             {{tr}}Unlink{{/tr}}
           </button>
           <a href="?m=dPpatients&tab=vw_edit_patients&patient_id={{$_patient_link->_id}}">{{$_patient_link->_view}}</a></li>
@@ -63,11 +63,11 @@ Document.refreshList = function() {
           {{/if}}
         {{/if}}
     
-  	    {{if $canCabinet->read}}
-  		    <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->_id}}&amp;consultation_id=0">
-  		      {{tr}}CConsultation{{/tr}}
-  		    </a>
-  	    {{/if}}
+        {{if $canCabinet->read}}
+          <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->_id}}&amp;consultation_id=0">
+            {{tr}}CConsultation{{/tr}}
+          </a>
+        {{/if}}
       </td>
     </tr>
     {{if $listPrat|@count && $canCabinet->edit}}
@@ -105,7 +105,7 @@ Document.refreshList = function() {
     {{assign var="affectation" value=$patient->_ref_curr_affectation}}
     {{if $affectation && $affectation->affectation_id}}
     <tr>
-    	<th colspan="3" class="category">Chambre actuelle</th>
+      <th colspan="3" class="category">Chambre actuelle</th>
     </tr>
     <tr>
       <td colspan="3">

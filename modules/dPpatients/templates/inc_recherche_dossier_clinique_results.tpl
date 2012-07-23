@@ -39,7 +39,7 @@
         {{$_patient->ville|spancate:20}}
       </td>
       <td>
-        <button type="button" class="search notext" onclick="Patient.view({{$_patient->_id}})" style="margin: -1px;">
+        <button type="button" class="search notext compact" onclick="Patient.view({{$_patient->_id}})">
           Dossier complet
         </button>
       </td>

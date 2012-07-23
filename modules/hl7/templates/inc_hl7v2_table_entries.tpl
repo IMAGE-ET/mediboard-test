@@ -31,7 +31,7 @@
             <input type="hidden" name="@class" value="{{$_table_entry->_class}}" />
             <input type="hidden" name="del" value="1" />
             {{mb_key object=$_table_entry}}
-            <button type="submit" class="trash notext" style="margin: -1px;">{{tr}}Delete{{/tr}}</button>
+            <button type="submit" class="trash notext compact">{{tr}}Delete{{/tr}}</button>
           </form>
         {{/if}}
       </td>
@@ -41,7 +41,7 @@
           <input type="hidden" name="m" value="hl7" />
           <input type="hidden" name="@class" value="{{$_table_entry->_class}}" />
           {{mb_key object=$_table_entry}}
-          {{mb_field object=$_table_entry field="code_mb_from" size="10"}}  <button type="submit" class="save notext" style="margin: -1px;">{{tr}}Save{{/tr}}</button>
+          {{mb_field object=$_table_entry field="code_mb_from" size="10"}}  <button type="submit" class="save notext compact">{{tr}}Save{{/tr}}</button>
         </form>
       </td>
       <td class="disabled">
@@ -50,7 +50,7 @@
           <input type="hidden" name="m" value="hl7" />
           <input type="hidden" name="@class" value="{{$_table_entry->_class}}" />
           {{mb_key object=$_table_entry}}
-          {{mb_field object=$_table_entry field="code_hl7_to" size="10"}}  <button type="submit" class="save notext" style="margin: -1px;">{{tr}}Save{{/tr}}</button>
+          {{mb_field object=$_table_entry field="code_hl7_to" size="10"}}  <button type="submit" class="save notext compact">{{tr}}Save{{/tr}}</button>
         </form>
       </td>
       <td class="disabled button">
@@ -62,7 +62,7 @@
             <input type="hidden" name="m" value="hl7" />
             <input type="hidden" name="@class" value="{{$_table_entry->_class}}" />
             {{mb_key object=$_table_entry}}
-            {{mb_field object=$_table_entry field="code_hl7_from" size="10"}}  <button type="submit" class="save notext" style="margin: -1px;">{{tr}}Save{{/tr}}</button>
+            {{mb_field object=$_table_entry field="code_hl7_from" size="10"}}  <button type="submit" class="save notext compact">{{tr}}Save{{/tr}}</button>
           </form>
         {{/if}}
       </td>
@@ -72,7 +72,7 @@
           <input type="hidden" name="m" value="hl7" />
           <input type="hidden" name="@class" value="{{$_table_entry->_class}}" />
           {{mb_key object=$_table_entry}}
-          {{mb_field object=$_table_entry field="code_mb_to" size="10"}}  <button type="submit" class="save notext" style="margin: -1px;">{{tr}}Save{{/tr}}</button>
+          {{mb_field object=$_table_entry field="code_mb_to" size="10"}}  <button type="submit" class="save notext compact">{{tr}}Save{{/tr}}</button>
         </form>
       </td>
       <td class="disabled text">
@@ -84,7 +84,7 @@
             <input type="hidden" name="m" value="hl7" />
             <input type="hidden" name="@class" value="{{$_table_entry->_class}}" />
             {{mb_key object=$_table_entry}}
-            {{mb_field object=$_table_entry field="description" size="25"}}  <button type="submit" class="save notext" style="margin: -1px;">{{tr}}Save{{/tr}}</button>
+            {{mb_field object=$_table_entry field="description" size="25"}}  <button type="submit" class="save notext compact">{{tr}}Save{{/tr}}</button>
           </form>
         {{/if}}
       </td>

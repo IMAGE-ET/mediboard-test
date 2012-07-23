@@ -66,6 +66,15 @@ span.compact {
   color: #666;
 }
 
+td.compact strong,
+th.compact strong,
+div.compact strong,
+span.compact strong{
+  line-height: 1;
+  font-size: 0.9em; 
+  color: #000;
+}
+
 a.selected{
   background: url(../../images/icons/td_selected.png) no-repeat bottom center;
   padding-bottom: 8px;    

@@ -22,7 +22,7 @@
           </td>
           <td class="narrow" style="text-align: right;">
             {{$_ex_class_count}} 
-            <button class="right notext" style="margin: -1px;" 
+            <button class="right notext compact"
                     onclick="ExObject.loadExObjects(null, null, $('list-ex_object'), 2, {{$_ex_class_id}}, Object.extend(getForm('filter-ex_object').serialize(true), {a: 'ajax_list_ex_object'})); $('row-ex_class-{{$_ex_class_id}}').addUniqueClassName('selected')"></button>
           </td>
         </tr>

@@ -8,31 +8,31 @@ function setClose(id, view) {
 
 var formVisible = false;
 function showAddCorres() {
-	if (!formVisible) {
-		window.resizeBy(320,0);
-		$('addCorres').show();
-		getForm('editFrm').focusFirstElement();
-		formVisible = true;
-	} else {
-		hideAddCorres();
-	}
+  if (!formVisible) {
+    window.resizeBy(320,0);
+    $('addCorres').show();
+    getForm('editFrm').focusFirstElement();
+    formVisible = true;
+  } else {
+    hideAddCorres();
+  }
 }
 
 function hideAddCorres() {
-	window.resizeBy(-320,0);
+  window.resizeBy(-320,0);
   $('addCorres').hide();
   formVisible = false;
 }
 
 function onSubmitCorrespondant(form) {
-	return onSubmitFormAjax(form, { onComplete : function() {
-		hideAddCorres();
-		var formFind = getForm('find');
-		formFind.elements.medecin_nom.value    = form.elements.nom.value;
-		formFind.elements.medecin_prenom.value = form.elements.prenom.value;
-		formFind.elements.medecin_cp.value     = form.elements.cp.value;
+  return onSubmitFormAjax(form, { onComplete : function() {
+    hideAddCorres();
+    var formFind = getForm('find');
+    formFind.elements.medecin_nom.value    = form.elements.nom.value;
+    formFind.elements.medecin_prenom.value = form.elements.prenom.value;
+    formFind.elements.medecin_cp.value     = form.elements.cp.value;
     formFind.submit();
-	}});
+  }});
 }
 
 </script>
@@ -69,11 +69,11 @@ function onSubmitCorrespondant(form) {
         <tr>
           <th><label for="medecin_cp" title="Code postal du correspondant recherché (au moins 2 chiffres)">Département</label></th>
           <td class="text">
-          	<input type="text" name="medecin_cp" value="{{$cp|stripslashes}}" />
+            <input type="text" name="medecin_cp" value="{{$cp|stripslashes}}" />
             <div class="info" style="display: inline-block;">
               {{tr}}CMedecin.several_departements{{/tr}}
             </div>
-					</td>
+          </td>
         </tr>
         
         <tr>
@@ -113,7 +113,7 @@ function onSubmitCorrespondant(form) {
         <tr>
           {{if !$dialog}}
           <th>
-            <button type="submit" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px;">
+            <button type="submit" class="merge notext compact" title="{{tr}}Merge{{/tr}}">
               {{tr}}Merge{{/tr}}
             </button>
           </th>
@@ -160,7 +160,7 @@ function onSubmitCorrespondant(form) {
           {{if $dialog}}
             <td>
               <button type="button" class="tick" onclick="setClose({{$_medecin->_id}}, '{{$_medecin->_view|smarty:nodefaults|JSAttribute}}' )">
-              	{{tr}}Select{{/tr}}
+                {{tr}}Select{{/tr}}
               </button>
             </td>
           {{/if}}
@@ -178,11 +178,11 @@ function onSubmitCorrespondant(form) {
     
     <td id="addCorres" {{if $dialog}}style="display:none"{{/if}}>
       {{mb_script module="dPpatients" script="autocomplete"}}
-    	<script type="text/javascript">
-			Main.add(function () {
-		    InseeFields.initCPVille("editFrm", "cp", "ville","tel");
-			});
-    	</script>
+      <script type="text/javascript">
+      Main.add(function () {
+        InseeFields.initCPVille("editFrm", "cp", "ville","tel");
+      });
+      </script>
 
       <form name="editFrm" action="?m=dPpatients" method="post" onsubmit="return {{if $dialog}}onSubmitCorrespondant{{else}}checkForm{{/if}}(this);">
       <input type="hidden" name="m" value="dPpatients" />
@@ -201,7 +201,7 @@ function onSubmitCorrespondant(form) {
           <th class="title modify text" colspan="2">
             {{mb_include module=system template=inc_object_notes object=$medecin}}
             {{mb_include module=system template=inc_object_idsante400 object=$medecin}}
-			      {{mb_include module=system template=inc_object_history object=$medecin}}
+            {{mb_include module=system template=inc_object_history object=$medecin}}
             Modification de la fiche de {{$medecin->_view}}
           {{else}}
           <th class="title" colspan="2">

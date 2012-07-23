@@ -24,20 +24,20 @@
                  
                  <div style="white-space: nowrap;">
                    {{if !$search_mode}}
-                     <button style="margin: -1px;" class="edit notext" title="{{tr}}Edit{{/tr}}"
+                     <button class="edit notext compact" title="{{tr}}Edit{{/tr}}"
                              onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}', '{{$target_element}}')">
                      </button>
                    {{/if}}
                    
-                   <button style="margin: -1px;" class="search notext" title="{{tr}}Display{{/tr}}"
+                   <button class="search notext compact" title="{{tr}}Display{{/tr}}"
                            onclick="ExObject.display('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
                    </button>
                   
-                   <button style="margin: -1px;" class="history notext" title="{{tr}}History{{/tr}}"
+                   <button class="history notext compact" title="{{tr}}History{{/tr}}"
                            onclick="ExObject.history('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}')">
                    </button>
                    
-                   <button style="margin: -1px;" class="print notext" title="{{tr}}Print{{/tr}}"
+                   <button class="print notext compact" title="{{tr}}Print{{/tr}}"
                            onclick="ExObject.print('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
                    </button>
                  </div>

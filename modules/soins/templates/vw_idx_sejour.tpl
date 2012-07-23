@@ -22,7 +22,7 @@
 {{/if}}
 
 {{mb_script module="soins" script="plan_soins"}}
-	
+  
 {{if "dPprescription"|module_active}}
   {{mb_script module="dPprescription" script="element_selector"}}
   {{mb_script module="dPprescription" script="prescription"}}
@@ -107,7 +107,7 @@ window.tabLoaders = {
       
       PlanSoins.loadTraitement(sejour_id, date,'','administration');
     },
-		
+    
   {{if "dPprescription"|module_active}}
     "prescription_sejour": function(sejour_id, praticien_id, date){
       if(!$("prescription_sejour").visible()) return;
@@ -220,9 +220,9 @@ function submitSuivi(oForm) {
       }
       // Refresh de la partie plan de soin
       if($('semaine').visible()){
-			  {{if $object->_ref_prescriptions}}
+        {{if $object->_ref_prescriptions}}
         calculSoinSemaine('{{$date}}', '{{$object->_ref_prescriptions.sejour->_id}}');
-				{{/if}}
+        {{/if}}
       }
     }
     if ($('dossier_suivi').visible()) {
@@ -375,7 +375,7 @@ checkAnesth = function(oField){
                       <option value="NP" {{if $service_id == "NP"}} selected="selected" {{/if}}>Non placés</option>
                     </select>
                     {{if $service_id && $isPrescriptionInstalled && $service_id != "NP"}}
-                      <button type="button" class="search" onclick="viewBilanService('{{$service_id}}','{{$date}}');" style="margin:-1px;">Bilan</button>
+                      <button type="button" class="search compact" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan</button>
                     {{/if}}
                   </td>
                 </tr>
@@ -610,7 +610,7 @@ checkAnesth = function(oField){
         <li onmousedown="refreshConstantesMedicales('CSejour-'+document.form_prescription.sejour_id.value, 1)"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>
         <li onmousedown="PlanSoins.loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}','','administration')"><a href="#dossier_traitement">{{tr}}CSejour.suivi_soins{{/tr}}</a></li>
         {{if "dPprescription"|module_active}}
-				<li onmousedown="$('prescription_sejour').update(''); Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">
+        <li onmousedown="$('prescription_sejour').update(''); Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value, null, null, null, null, null, '', null, false);">
           <a href="#prescription_sejour">Prescription</a>
         </li>
         {{/if}}
@@ -653,7 +653,7 @@ checkAnesth = function(oField){
         </div>
       </div>
       
-			{{if "dPprescription"|module_active}}
+      {{if "dPprescription"|module_active}}
       <div id="prescription_sejour" style="display: none;">
         <div class="small-info">
           Veuillez sélectionner un séjour dans la liste de gauche pour afficher

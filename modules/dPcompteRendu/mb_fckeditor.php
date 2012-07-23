@@ -7,6 +7,7 @@
 */
 
 $templateManager = unserialize($_SESSION["dPcompteRendu"]["templateManager"]);
+header("Content-Type: text/javascript");
 
 // Création du template
 $smarty = new CSmartyDP("modules/dPcompteRendu");

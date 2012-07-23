@@ -106,7 +106,7 @@ ValueFilter = {
   {{*if !$spec instanceof CBoolSpec}}
     <tr>
       <td>
-        <button type="button" class="add notext" onclick="ValueFilter.newRow()" style="margin: -1px;"></button>
+        <button type="button" class="add notext compact" onclick="ValueFilter.newRow()"></button>
       </td>
     </tr>
   {{/if*}}

@@ -201,17 +201,17 @@ toggleGroupLabelEdit = function(link) {
         {{/if}}
         
         <button onclick="Event.stop(event); this.form.onsubmit();" 
-                class="submit notext" type="submit" style="margin: -1px;">
+                class="submit notext compact" type="submit">
           {{tr}}Save{{/tr}}
         </button>
         <button onclick="toggleGroupLabelEdit($(this).up('li').down('a'))" 
-                class="cancel notext" type="button" style="margin: -1px;">
+                class="cancel notext compact" type="button">
           {{tr}}Cancel{{/tr}}
         </button>
         
         {{if $_group->_ref_fields|@count == 0}}
         <button onclick="return confirmDeletion(this.form, {ajax: true})" 
-                class="trash notext" type="button" style="margin: -1px;">
+                class="trash notext compact" type="button">
           {{tr}}Delete{{/tr}}
         </button>
         {{/if}}

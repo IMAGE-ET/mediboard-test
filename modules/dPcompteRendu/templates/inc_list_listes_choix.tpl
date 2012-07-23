@@ -55,11 +55,20 @@ Main.add(Control.Tabs.create.curry("tabs-owner", true));
       {{mb_value object=$_liste field=nom}}
     </td>
     <td>
-      {{foreach from=$_liste->_valeurs item=_valeur}}
-      <div class="compact">{{$_valeur|spancate:60}}</div>
+      {{foreach from=$_liste->_valeurs item=_valeur name=valeurs}}
+        {{if $smarty.foreach.valeurs.index < 5}}
+          <div class="compact">{{$_valeur|spancate:60}}</div>
+        {{/if}}
       {{foreachelse}}
       <div class="empty">{{tr}}{{$_liste->_class}}.novalues{{/tr}}</div>
       {{/foreach}}
+      {{if $_liste->_valeurs|@count > 4}}
+        <div class="compact">
+          <strong>
+            + {{math equation="x-5" x=$_liste->_valeurs|@count}} {{tr}}others{{/tr}}
+          </strong>
+        </div>
+      {{/if}}
     </td>
     <td class="text">
       {{assign var=modele value=$_liste->_ref_modele}}

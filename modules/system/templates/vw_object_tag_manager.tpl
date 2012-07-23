@@ -39,7 +39,7 @@
          >
     <tr>
       <td>
-        <button class="edit notext" style="float: right; margin: -1px;" onclick="MbObject.edit('{{$_tag.parent->_guid}}')">{{tr}}Edit{{/tr}}</button>
+        <button class="edit notext compact" style="float: right;" onclick="MbObject.edit('{{$_tag.parent->_guid}}')">{{tr}}Edit{{/tr}}</button>
         <span style="background: #{{$_tag.parent->color}}; float: right; display: inline-block; width: 10px; height: 16px; margin-right: 3px;"> </span>
         
         {{if $_tag.children|@count}}

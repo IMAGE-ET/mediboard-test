@@ -218,7 +218,7 @@ ExObject.refreshSelf.{{$self_guid}} = function(start){
       {{if $_ex_objects|@count}}
       <h3 style="margin: 0.5em 1em;">
         {{if isset($ex_classes_creation.$_host_event.$_ex_class_id|smarty:nodefaults)}}
-          <button style="margin: -1px; float: right;" class="new" 
+          <button style="float: right;" class="new compact" 
                   onclick="showExClassForm('{{$_ex_class_id}}', '{{$reference_class}}-{{$reference_id}}', '{{$_ex_class->host_class}}-{{$_ex_class->event}}', null, '{{$_ex_class->event}}', '@ExObject.refreshSelf.{{$self_guid}}')">
             {{tr}}New{{/tr}}
           </button>
@@ -231,22 +231,22 @@ ExObject.refreshSelf.{{$self_guid}} = function(start){
          <table class="layout">
            <tr>
              <td>
-               <button style="margin: -1px;" class="edit notext" 
+               <button class="edit notext compact" 
                        onclick="ExObject.edit('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}', '@ExObject.refreshSelf.{{$self_guid}}')">
                  {{tr}}Edit{{/tr}}
                </button>
                
-               <button style="margin: -1px;" class="search notext" 
+               <button class="search notext compact" 
                        onclick="ExObject.display('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
                  {{tr}}Display{{/tr}}
                </button>
               
-               <button style="margin: -1px;" class="history notext" 
+               <button class="history notext compact" 
                        onclick="ExObject.history('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}')">
                  {{tr}}History{{/tr}}
                </button>
                
-               <button style="margin: -1px;" class="print notext" 
+               <button class="print notext compact" 
                        onclick="ExObject.print('{{$_ex_object->_id}}', '{{$_ex_object->_ex_class_id}}', '{{$_ex_object->_ref_object->_guid}}')">
                  {{tr}}Print{{/tr}}
                </button>
@@ -329,7 +329,7 @@ ExObject.refreshSelf.{{$self_guid}} = function(start){
               </td>
               <td class="narrow" style="text-align: right;">
                 {{$_ex_objects_count}}
-                <button class="right notext" style="margin: -1px" 
+                <button class="right notext compact"
                         onclick="ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list', 2, '{{$_ex_class_id}}')">
                 </button>
               </td>

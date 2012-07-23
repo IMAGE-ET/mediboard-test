@@ -85,7 +85,7 @@ onMergeComplete = function() {
 <tr>
   <th colspan="4">
     {{if $can->admin}}
-    <button type="button" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px; float: left;" onclick="doMerge(this.form);">
+    <button type="button" class="merge notext compact" title="{{tr}}Merge{{/tr}}" style="float: left;" onclick="doMerge(this.form);">
       {{tr}}Merge{{/tr}}
     </button>
     {{/if}}

@@ -2,47 +2,47 @@
 {{assign var=modFSE value="fse"|module_active}}
 
 {{if !$board}}
-	{{if $app->user_prefs.VitaleVision}}
-	  {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
-	{{elseif $modFSE && $modFSE->canRead()}}
-	   <script type="text/javascript">
-	     var urlFSE = new Url;
-	     urlFSE.setModuleTab("dPpatients", "vw_idx_patients");
-	     urlFSE.addParam("useVitale", 1);
-	   </script>
-	{{/if}}
-	
-	<script type="text/javascript">
-  	var Patient = {
-  	  create : function(form) {
-  	    var url = new Url;
-  	    url.setModuleTab("dPpatients", "vw_edit_patients");
-  	    url.addParam("patient_id", 0);
-  	    url.addParam("useVitale", $V(form.useVitale));
-  	    url.addParam("name",      $V(form.nom));
-  	    url.addParam("firstName", $V(form.prenom));
-  	    url.addParam("naissance_day",  $V(form.Date_Day));
-  	    url.addParam("naissance_month",$V(form.Date_Month));
-  	    url.addParam("naissance_year", $V(form.Date_Year));
-  	    url.redirect();
-  	  },
-  	  search : function(from) {
-  	    $("useVitale").value = 0;
-  	    return true;
-  	  }
-  	}
-  	
-  	function doMerge(oForm) {
-  	  var url = new Url();
-  	  url.setModuleAction("system", "object_merger");
-  	  url.addParam("objects_class", "CPatient");
-  	  url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
-  	  url.popup(800, 600, "merge_patients");
-  	}
-  	
-  	onMergeComplete = function() {
-  	  location.reload();
-  	}
+  {{if $app->user_prefs.VitaleVision}}
+    {{include file="../../dPpatients/templates/inc_vitalevision.tpl" debug=false keepFiles=true}}
+  {{elseif $modFSE && $modFSE->canRead()}}
+     <script type="text/javascript">
+       var urlFSE = new Url;
+       urlFSE.setModuleTab("dPpatients", "vw_idx_patients");
+       urlFSE.addParam("useVitale", 1);
+     </script>
+  {{/if}}
+  
+  <script type="text/javascript">
+    var Patient = {
+      create : function(form) {
+        var url = new Url;
+        url.setModuleTab("dPpatients", "vw_edit_patients");
+        url.addParam("patient_id", 0);
+        url.addParam("useVitale", $V(form.useVitale));
+        url.addParam("name",      $V(form.nom));
+        url.addParam("firstName", $V(form.prenom));
+        url.addParam("naissance_day",  $V(form.Date_Day));
+        url.addParam("naissance_month",$V(form.Date_Month));
+        url.addParam("naissance_year", $V(form.Date_Year));
+        url.redirect();
+      },
+      search : function(from) {
+        $("useVitale").value = 0;
+        return true;
+      }
+    }
+    
+    function doMerge(oForm) {
+      var url = new Url();
+      url.setModuleAction("system", "object_merger");
+      url.addParam("objects_class", "CPatient");
+      url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
+      url.popup(800, 600, "merge_patients");
+    }
+    
+    onMergeComplete = function() {
+      location.reload();
+    }
     
     window.checkedMerge = [];
     checkOnlyTwoSelected = function(checkbox) {
@@ -64,13 +64,13 @@
         method: 'post'
       });
     }
-	</script>
+  </script>
 {{/if}}
 
 <script type="text/javascript">
 
 reloadPatient = function(patient_id, link){
-	{{if $board}}
+  {{if $board}}
     var url = new Url('dPpatients', 'vw_full_patients');
     url.addParam("patient_id", patient_id);
     url.redirect();
@@ -102,13 +102,13 @@ emptyBirthday = function() {
     Cette carte vitale semble contenir plusieurs bénéficiaires, merci de sélectionner la personne voulue :
   </p>
   <p id="msg-confirm-benef" style="display: none;"></p>
-	<p id="benef-nom">
-	  <select id="modal-beneficiaire-select"></select>
+  <p id="benef-nom">
+    <select id="modal-beneficiaire-select"></select>
     <span></span>
   </p>
   <div>
-  	<button type="button" class="tick" onclick="VitaleVision.search(getForm('find'), $V($('modal-beneficiaire-select'))); VitaleVision.modalWindow.close();">{{tr}}Choose{{/tr}}</button>
-	  <button type="button" class="cancel" onclick="VitaleVision.modalWindow.close();">{{tr}}Cancel{{/tr}}</button>
+    <button type="button" class="tick" onclick="VitaleVision.search(getForm('find'), $V($('modal-beneficiaire-select'))); VitaleVision.modalWindow.close();">{{tr}}Choose{{/tr}}</button>
+    <button type="button" class="cancel" onclick="VitaleVision.modalWindow.close();">{{tr}}Cancel{{/tr}}</button>
   </div>
 </div>
 
@@ -150,7 +150,7 @@ emptyBirthday = function() {
       </label>
     </th>
     <td>
-    	{{mb_include module=patients template=inc_select_date date=$naissance tabindex=3}}
+      {{mb_include module=patients template=inc_select_date date=$naissance tabindex=3}}
       <button type="button" class="cancel notext" onclick="emptyBirthday()" title="Vider la date de naissance"></button>
     </td>
     
@@ -188,9 +188,9 @@ emptyBirthday = function() {
       
       {{if !$board}}
         {{if $app->user_prefs.VitaleVision}}
-  	      <button class="search singleclick" type="button" tabindex="11" onclick="VitaleVision.read();">
-  	        Lire Vitale
-  	      </button>
+          <button class="search singleclick" type="button" tabindex="11" onclick="VitaleVision.read();">
+            Lire Vitale
+          </button>
         {{elseif $modFSE && $modFSE->canRead()}}
           {{mb_include module=fse template=inc_button_vitale}}
         {{/if}}
@@ -211,10 +211,10 @@ emptyBirthday = function() {
 
 {{if $conf.dPpatients.CPatient.limit_char_search && ($nom != $nom_search || $prenom != $prenom_search)}}
 <div class="small-info">
-	La recherche est volontairement limitée aux {{$conf.dPpatients.CPatient.limit_char_search}} premiers caractères 
+  La recherche est volontairement limitée aux {{$conf.dPpatients.CPatient.limit_char_search}} premiers caractères 
   <ul>
-	  {{if $nom != $nom_search}}
-	  <li>pour le <strong>nom</strong> : '{{$nom_search}}'</li>
+    {{if $nom != $nom_search}}
+    <li>pour le <strong>nom</strong> : '{{$nom_search}}'</li>
     {{/if}}  	
     {{if $prenom != $prenom_search}}
     <li>pour le <strong>prénom</strong> : '{{$prenom_search}}'</li>
@@ -230,12 +230,12 @@ emptyBirthday = function() {
                $conf.dPpatients.CPatient.show_patient_link == 1}}
         <th class="narrow">
         {{if ((!$conf.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
-        	<button type="button" class="merge notext" title="{{tr}}Merge{{/tr}}" style="margin: -1px;" onclick="doMerge(this.form);">
-        		{{tr}}Merge{{/tr}}
-        	</button>
+          <button type="button" class="merge notext compact" title="{{tr}}Merge{{/tr}}" onclick="doMerge(this.form);">
+            {{tr}}Merge{{/tr}}
+          </button>
         {{/if}}
         {{if $conf.dPpatients.CPatient.show_patient_link}}
-          <button type="button" class="link notext" title="{{tr}}Link{{/tr}}" style="margin: -1px;" onclick="doLink(this.form);">
+          <button type="button" class="link notext compact" title="{{tr}}Link{{/tr}}" onclick="doLink(this.form);">
             {{tr}}Link{{/tr}}
           </button>
         {{/if}}
@@ -250,9 +250,9 @@ emptyBirthday = function() {
     {{mb_ternary var="tabPatient" test=$board 
        value="vw_full_patients&patient_id=" 
        other="vw_idx_patients&patient_id="}}
-  		 
+       
     <!-- Recherche exacte -->
-  	<tr>
+    <tr>
       <th colspan="5">
         <em>{{tr}}dPpatients-CPatient-exact-results{{/tr}} 
         {{if ($patients|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
@@ -261,19 +261,19 @@ emptyBirthday = function() {
     {{foreach from=$patients item=_patient}}
       {{mb_include module=patients template=inc_list_patient_line}}
     {{foreachelse}}
-  	  <tr>
-  	    <td colspan="100" class="empty">{{tr}}dPpatients-CPatient-no-exact-results{{/tr}}</td>
-  	  </tr>
+      <tr>
+        <td colspan="100" class="empty">{{tr}}dPpatients-CPatient-no-exact-results{{/tr}}</td>
+      </tr>
     {{/foreach}}
-  	
-  	<!-- Recherche phonétique -->
+    
+    <!-- Recherche phonétique -->
     {{if $patientsSoundex|@count}}
-  	  <tr>
-  	    <th colspan="5">
-  	      <em>{{tr}}dPpatients-CPatient-close-results{{/tr}} 
-  				  {{if ($patientsSoundex|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
-  	    </th>
-  	  </tr>
+      <tr>
+        <th colspan="5">
+          <em>{{tr}}dPpatients-CPatient-close-results{{/tr}} 
+            {{if ($patientsSoundex|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
+        </th>
+      </tr>
     {{/if}}
     {{foreach from=$patientsSoundex item=_patient}}
       {{mb_include module=patients template=inc_list_patient_line}}

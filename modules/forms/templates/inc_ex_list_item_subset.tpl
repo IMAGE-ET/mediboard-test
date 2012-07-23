@@ -111,18 +111,18 @@ moveListItem = function(e, way){
       <td>
         <input type="hidden" name="list[]" class="internal" value="{{$_value}}" {{if !in_array($_value,$items_sub)}}disabled="disabled"{{/if}} />
 
-        <button class="remove notext" type="button" style="margin: -1px; {{if !$active}}display: none;{{/if}}" 
+        <button class="remove notext compact" type="button" style="{{if !$active}}display: none;{{/if}}" 
                 onclick="toggleListItem(this, {{$_item->_id}}, false);">
           {{tr}}Delete{{/tr}}
         </button>
         
-        <button class="add notext" type="button" style="margin: -1px; {{if $active}}display: none;{{/if}}" 
+        <button class="add notext compact" type="button" style="{{if $active}}display: none;{{/if}}" 
                 onclick="toggleListItem(this, {{$_item->_id}}, true);">
           {{tr}}Add{{/tr}}
         </button>
         
-        <button class="down notext" type="button" style="margin: -1px;" onclick="moveListItem(this, 'down')" title="Descendre"></button>
-        <button class="up notext" type="button" style="margin: -1px;" onclick="moveListItem(this, 'up')" title="Monter"></button>
+        <button class="down notext compact" type="button" onclick="moveListItem(this, 'down')" title="Descendre"></button>
+        <button class="up notext compact" type="button" onclick="moveListItem(this, 'up')" title="Monter"></button>
       </td>
       {{/if}}
       

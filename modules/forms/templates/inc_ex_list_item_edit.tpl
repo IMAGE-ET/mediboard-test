@@ -75,14 +75,14 @@ Main.add(function(){
     
     <tr>
       <td>
-        <button class="add notext" style="margin: -1px;">{{tr}}Add{{/tr}}</button>
+        <button class="add notext compact">{{tr}}Add{{/tr}}</button>
       </td>
       <td class="code" {{if !$coded}} style="display: none" {{/if}}>{{mb_field class=CExListItem field=code size=6}}</td>
       <td {{if $context instanceof CExClassField}}colspan="2"{{/if}}>
         {{mb_field class=CExListItem field=name style="width: 99%;"}}
       </td>
       <td>
-        <button class="cancel notext" type="button" onclick="cancelEditListItem(this.form)" style="margin: -1px; visibility: hidden;">
+        <button class="cancel notext compact" type="button" onclick="cancelEditListItem(this.form)" style="visibility: hidden;">
           {{tr}}Cancel{{/tr}}
         </button>
       </td>
@@ -99,7 +99,7 @@ Main.add(function(){
       
       <tr data-id="{{$_item->_id}}" data-name="{{$_item->name}}" data-code="{{$_item->code}}">
         <td>
-          <button class="edit notext" type="button" style="margin: -1px;" onclick="editListItem($(this).up('tr'))">
+          <button class="edit notext compact" type="button" onclick="editListItem($(this).up('tr'))">
             {{tr}}Edit{{/tr}}
           </button>
         </td>

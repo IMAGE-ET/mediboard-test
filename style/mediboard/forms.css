@@ -658,6 +658,10 @@ button.selected {
   border: 2px solid #000;
 }
 
+button.compact {
+  margin: -1px;
+}
+
 optgroup.group {
   text-align: center;
   font-variant: small-caps;

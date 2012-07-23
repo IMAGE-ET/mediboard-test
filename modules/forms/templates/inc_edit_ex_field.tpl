@@ -376,7 +376,7 @@ Main.add(function(){
       {{foreach from=$ex_field->_ref_predicates item=_predicate}}
         <tr>
           <td>
-            <button class="edit notext" onclick="ExFieldPredicate.edit({{$_predicate->_id}})" style="margin: -1px;">{{tr}}Edit{{/tr}}</button>
+            <button class="edit notext compact" onclick="ExFieldPredicate.edit({{$_predicate->_id}})">{{tr}}Edit{{/tr}}</button>
           </td>
           <td style="text-align: right;">{{mb_value object=$_predicate field=operator}}</td>
           <td>{{mb_value object=$_predicate field=_value}}</td>
