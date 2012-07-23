@@ -306,6 +306,10 @@ if (CModule::getActive("maternite")) {
 // Tout utilisateur peut consulter en lecture seule une consultation de séjour
 $consult->canEdit();
 
+if ($consult->_ref_patient->_vip) {
+  CCanDo::redirect();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -373,29 +377,29 @@ if($consult->_is_anesth) {
   $smarty->display("../../dPcabinet/templates/edit_consultation_anesth.tpl");  
 } else {
   if(CAppUI::pref("MODCONSULT")){
-	  $where = array();
-		$where["entree"] = "<= '".mbDateTime()."'";
-		$where["sortie"] = ">= '".mbDateTime()."'";
-		$where["function_id"] = "IS NOT NULL";
-		
-		$affectation = new CAffectation();
-		$blocages_lit = $affectation->loadList($where);
-		
-		$where["function_id"] = "IS NULL";
-		
-		foreach($blocages_lit as $blocage){
-		  $blocage->loadRefLit()->loadRefChambre()->loadRefService();
-		  $where["lit_id"] = "= '$blocage->lit_id'";
-		  
-		  if($affectation->loadObject($where))
-		  {
-		    $affectation->loadRefSejour();
-		    $affectation->_ref_sejour->loadRefPatient();
-		    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
-		  }
-		}
-  	$smarty->assign("blocages_lit" , $blocages_lit);
-  	
+    $where = array();
+    $where["entree"] = "<= '".mbDateTime()."'";
+    $where["sortie"] = ">= '".mbDateTime()."'";
+    $where["function_id"] = "IS NOT NULL";
+    
+    $affectation = new CAffectation();
+    $blocages_lit = $affectation->loadList($where);
+    
+    $where["function_id"] = "IS NULL";
+    
+    foreach($blocages_lit as $blocage){
+      $blocage->loadRefLit()->loadRefChambre()->loadRefService();
+      $where["lit_id"] = "= '$blocage->lit_id'";
+      
+      if($affectation->loadObject($where))
+      {
+        $affectation->loadRefSejour();
+        $affectation->_ref_sejour->loadRefPatient();
+        $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+      }
+    }
+    $smarty->assign("blocages_lit" , $blocages_lit);
+    
     $smarty->display("../../dPcabinet/templates/edit_consultation_accord.tpl");
   } else{  
     $smarty->display("../../dPcabinet/templates/edit_consultation_classique.tpl");

@@ -1061,7 +1061,8 @@ class CStoredObject extends CModelObject {
     $this->_ref_logs = $this->loadBackRefs("logs", "date DESC", 100);
 
     foreach($this->_ref_logs as &$_log) {
-      $_log->loadRefsFwd();
+      $_log->loadRefUser();
+      $_log->_ref_object = $this;
     }
     
     // the first is at the end because of the date order !

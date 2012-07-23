@@ -603,18 +603,20 @@ class CPatient extends CMbObject {
    * @return bool on a accès ou pas
    */
   function checkVIP() {
+    if ($this->_vip !== null) {
+      return;
+    }
+    
     $this->_vip = false;
     $user = CMediusers::get();
     
-    if($this->vip && !CModule::getCanDo("dPpatient")->admin()) {
+    if($this->vip&& !CModule::getCanDo("dPpatient")->admin()) {
+      
       // Test si le praticien est présent dans son dossier
-      $user_in_list_prat = false;
-      $this->loadRefsPraticiens();
-      foreach($this->_ref_praticiens as $_prat) {
-        if($user->_id == $_prat->user_id) {
-          $user_in_list_prat = true;
-        }
-      }
+      
+      $praticiens = $this->loadRefsPraticiens();
+      $user_in_list_prat = array_key_exists($user->_id, $praticiens);
+      
       // Test si un l'utilisateur est présent dans les logs
       $user_in_logs      = false;
       $this->loadLogs();
@@ -622,6 +624,7 @@ class CPatient extends CMbObject {
       foreach($this->_ref_logs as $_log) {
         if($user->_id == $_log->user_id) {
           $user_in_logs = true;
+          break;
         }
       }
       $this->_vip = !$user_in_list_prat && !$user_in_logs;
@@ -1130,6 +1133,7 @@ class CPatient extends CMbObject {
         $this->_ref_praticiens[$praticien->_id] = $praticien;
       }
     }
+    return $this->_ref_praticiens;
   }
   
   function loadDossierComplet($permType = null) {
