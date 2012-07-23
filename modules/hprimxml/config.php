@@ -22,6 +22,11 @@ $dPconfig["hprimxml"] = array (
     "version"    => "1.05",
     "send_ack"   => "1" 
   ),
+  "evt_serveurintervention" => array(
+    "validation" => "0",
+    "version"    => "1.072",
+    "send_ack"   => "1" 
+  ),
   "evt_patients" => array(
     "validation" => "0",
     "version"    => "1.05",
@@ -49,7 +54,8 @@ $dPconfig["hprimxml"] = array (
   "mvtComplet"                 => "0",
   "send_diagnostic"            => "evt_pmsi",
   "send_actes_ngap"            => "0",
-  "actes_ngap_excludes"        => ""
+  "actes_ngap_excludes"        => "",
+  "tag_default"                => ""
 );
 
 

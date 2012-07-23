@@ -40,7 +40,7 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
     $data['dateHeureProduction'] = mbDateTime($xpath->queryTextNode("hprim:dateHeureProduction", $entete));
     $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $entete);
     $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $entete);
-    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents, false);
+    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='".$this->getAttSysteme()."']", $agents, false);
     $this->destinataire = $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
     $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);    
     

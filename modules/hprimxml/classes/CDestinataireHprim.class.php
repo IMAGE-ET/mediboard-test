@@ -17,7 +17,10 @@ class CDestinataireHprim extends CInteropReceiver {
   var $code_appli  = null;
   var $code_acteur = null;
   var $code_syst   = null;
-	  
+  
+  // Form fields
+  var $_tag_hprimxml = null;
+    
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'destinataire_hprim';
@@ -30,7 +33,8 @@ class CDestinataireHprim extends CInteropReceiver {
         (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
           "evenementServeurEtatsPatient" : "evenementPMSI",
         "evenementServeurActe",
-        "evenementFraisDivers"
+        "evenementFraisDivers",
+        "evenementServeurIntervention"
       ),
       "stock" => array ( 
         "evenementMvtStocks"
@@ -57,22 +61,24 @@ class CDestinataireHprim extends CInteropReceiver {
     return $backProps;
   }
     
-	function loadRefsExchangesSources() {
-	  if (!$this->_ref_msg_supported_family) {
-	    $this->getMessagesSupportedByFamily();
-	  }
+  function loadRefsExchangesSources() {
+    if (!$this->_ref_msg_supported_family) {
+      $this->getMessagesSupportedByFamily();
+    }
 
-		$this->_ref_exchanges_sources = array();
-		foreach ($this->_ref_msg_supported_family as $_evenement) {
+    $this->_ref_exchanges_sources = array();
+    foreach ($this->_ref_msg_supported_family as $_evenement) {
       $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
-		}
-	}
+    }
+  }
   
   function updateFormFields() {
     parent::updateFormFields();
 
-		$this->code_syst = $this->code_syst ? $this->code_syst : $this->nom;
-  }  
+    $this->code_syst     = $this->code_syst ? $this->code_syst : $this->nom;
+
+    $this->_tag_hprimxml = CHprimXML::getDefaultTag($this->group_id);
+  }
   
   function sendEvenementPatient(CHPrimXMLEvenementsPatients $dom_evt, CMbObject $mbObject, $referent = null, $initiateur = null) {
     if (!$msg = $dom_evt->generateTypeEvenement($mbObject, $referent, $initiateur)) {

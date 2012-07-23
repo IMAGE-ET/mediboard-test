@@ -13,10 +13,10 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
   var $_sous_type_evt        = null;
   var $_codes_erreurs        = null;
   
-	static function getVersionAcquittementsPatients() {    
+  static function getVersionAcquittementsPatients() {    
     return "msgAcquittementsPatients".str_replace(".", "", CAppUI::conf('hprimxml evt_patients version'));
   } 
-	
+  
   function __construct() {
     $this->evenement = "evt_patients";
      
@@ -40,7 +40,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
     $group = CGroups::loadCurrent();
     $group->loadLastId400();
-    $this->addAgent($agents, "système", CAppUI::conf('mb_id'), $group->text);
+    $this->addAgent($agents, $this->getAttSysteme(), CAppUI::conf('mb_id'), $group->text);
 
     $echg_hprim->loadRefsInteropActor();
     // Pour un acquittement l'emetteur du message devient destinataire
@@ -118,7 +118,7 @@ class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
     
     $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $enteteMessageAcquittement);
     $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $enteteMessageAcquittement);
-    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents);
+    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='".$this->getAttSysteme()."']", $agents);
     $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
     $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
     

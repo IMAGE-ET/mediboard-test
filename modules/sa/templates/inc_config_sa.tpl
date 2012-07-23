@@ -18,6 +18,7 @@
     </tr>
     
     {{mb_include module=system template=configure_handler class_handler=CSaObjectHandler}}
+    {{mb_include module=system template=configure_handler class_handler=CSaEventObjectHandler}}
     
     <tr>
       <th class="category" colspan="10">{{tr}}config-traitement-{{$mod}}{{/tr}}</th>

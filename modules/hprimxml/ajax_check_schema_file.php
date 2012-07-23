@@ -48,6 +48,11 @@ if ($evenement == "evt_frais_divers") {
   $file = $racine."serveurActivitePmsi_v$version/msgEvenementsFraisDivers$version.$ext";
 }
 
+if ($evenement == "evt_serveurintervention") {
+  $version = str_replace(".", "", $version);
+  $file = $racine."serveurActivitePmsi_v$version/msgEvenementsServeurActes$version.$ext";
+}
+
 if ($evenement == "evt_patients") {
   $version = str_replace(".", "", $version);
   $file = $racine."patients/msgEvenementsPatients$version.$ext";

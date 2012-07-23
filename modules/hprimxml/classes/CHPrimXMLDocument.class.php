@@ -102,6 +102,13 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
   }
   
+  function getAttSysteme() {
+    $systeme = "système";
+    
+    return (CAppUI::conf("hprimxml ".$this->evenement." version") < "1.07") ? 
+      $systeme : CMbString::removeDiacritics($systeme);
+  }
+  
   function addEnteteMessage($elParent) {
     $echg_hprim      = $this->_ref_echange_hprim;
     $dest            = $this->_ref_receiver;
@@ -123,7 +130,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $user = CAppUI::$user;
     $this->addAgent($agents, "acteur", "user$user->_id", $user->_view);
     $code_systeme = (CAppUI::conf('hprimxml code_transmitter_sender') == "finess") ? $group->finess : CAppUI::conf('mb_id');
-    $this->addAgent($agents, "système", $code_systeme, $group->text);
+    $this->addAgent($agents, $this->getAttSysteme(), $code_systeme, $group->text);
     
     $destinataire = $this->addElement($enteteMessage, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
@@ -131,7 +138,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addAgent($agents, "application", $dest->code_appli, "");
     if ($dest->code_acteur)
       $this->addAgent($agents, "acteur", $dest->code_acteur, "");
-    $this->addAgent($agents, "système", $dest->code_syst, $dest->libelle);
+    $this->addAgent($agents, $this->getAttSysteme(), $dest->code_syst, $dest->libelle);
   }
   
   function generateTypeEvenement($mbObject, $referent = null, $initiateur = null) {
@@ -407,8 +414,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
     
   function addActeCCAMAcquittement($elParent, $acteCCAM) {
-  	$mbActeCCAM = $acteCCAM["codeActe"];
-		
+    $mbActeCCAM = $acteCCAM["codeActe"];
+    
     $this->addAttribute($elParent, "valide", "oui");
     
     $intervention = $this->addElement($elParent,     "intervention");
@@ -420,7 +427,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($identifiant, "emetteur",  $acteCCAM["idSourceActeCCAM"]);
     $this->addElement($identifiant, "recepteur", $acteCCAM["idCibleActeCCAM"]);
     
-		
+    
     $this->addElement($elParent, "codeActe",     $mbActeCCAM->code_acte);
     $this->addElement($elParent, "codeActivite", $mbActeCCAM->code_activite);
     $this->addElement($elParent, "codePhase",    $mbActeCCAM->code_phase);
@@ -857,44 +864,44 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }*/
   }
   
-  function addIntervention($elParent, $mbOp, $referent = null, $light = false) {
+  function addIntervention($elParent, COperation $operation, $referent = null, $light = false) {
     $identifiant = $this->addElement($elParent, "identifiant");
-    $emetteur = $this->addElement($identifiant, "emetteur", $mbOp->operation_id);
-    $mbOp->loadRefSejour();
-    $sejour = $mbOp->_ref_sejour;
+    $emetteur = $this->addElement($identifiant, "emetteur", $operation->operation_id);
+
+    $sejour = $operation->loadRefSejour();
     
     $mbOpDate = CValue::first(
-      $mbOp->_ref_plageop->date,
-      $mbOp->date
+      $operation->_ref_plageop->date,
+      $operation->date
     );
-    
+
     $mbOpHeureDebut = CValue::first(
-      $mbOp->debut_op, 
-      $mbOp->entree_salle, 
-      $mbOp->time_operation
+      $operation->debut_op, 
+      $operation->entree_salle, 
+      $operation->time_operation
     );
     $mbOpDebut = CMbRange::forceInside($sejour->entree, $sejour->sortie, "$mbOpDate $mbOpHeureDebut");
     
-    $mbOpHeureFin   = CValue::first(
-      $mbOp->fin_op, 
-      $mbOp->sortie_salle, 
-      mbAddTime($mbOp->temp_operation, $mbOp->time_operation)
+    $mbOpHeureFin = CValue::first(
+      $operation->fin_op, 
+      $operation->sortie_salle, 
+      mbAddTime($operation->temp_operation, $operation->time_operation)
     );
     $mbOpFin = CMbRange::forceInside($sejour->entree, $sejour->sortie, "$mbOpDate $mbOpHeureFin");
-    
+
     $debut = $this->addElement($elParent, "debut");
-    $fin = $this->addElement($elParent, "fin");
-    
     $this->addElement($debut, "date" , mbDate($mbOpDebut));
     $this->addElement($debut, "heure", mbTime($mbOpDebut));
-    $this->addElement($fin  , "date" , mbDate($mbOpFin));
-    $this->addElement($fin  , "heure", mbTime($mbOpFin));
     
-    $this->addUniteFonctionnelle($elParent, $mbOp);
+    $fin = $this->addElement($elParent, "fin");
+    $this->addElement($fin, "date" , mbDate($mbOpFin));
+    $this->addElement($fin, "heure", mbTime($mbOpFin));
+    
+    $this->addUniteFonctionnelle($elParent, $operation);
     
     // Ajout des participants
     $mbParticipants = array();
-    foreach($mbOp->_ref_actes_ccam as $acte_ccam) {
+    foreach($operation->_ref_actes_ccam as $acte_ccam) {
       $acte_ccam->loadRefExecutant();
       $mbParticipant = $acte_ccam->_ref_executant;
       $mbParticipants[$mbParticipant->user_id] = $mbParticipant;
@@ -903,12 +910,26 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $participants = $this->addElement($elParent, "participants");
     foreach ($mbParticipants as $mbParticipant) {
       $participant = $this->addElement($participants, "participant");
-      $medecin = $this->addElement($participant, "medecin");
+      $medecin     = $this->addElement($participant, "medecin");
       $this->addProfessionnelSante($medecin, $mbParticipant);
     }
         
     // Libellé de l'opération
-    $this->addTexte($elParent, "libelle", 80);
+    $this->addTexte($elParent, "libelle", $operation->libelle, 80);
+    
+    if (!$light) {
+      // Remarques sur l'opération
+      $this->addTexte($elParent, "commentaire", $operation->rques, 4000);
+      
+      // TypeAnesthésie : nomemclature externe (idex)
+      /*$tag_hprimxml   = $this->_ref_echange_hprim->_ref_receiver->_tag_hprimxml;
+      $idexTypeAnesth = CIdSante400::getMatch("CTypeAnesth", $tag_hprimxml, null, $operation->type_anesth);
+      $this->addElement(typeAnesthesie, "typeAnesthesie", $idexTypeAnesth->id400);*/
+      
+      // Indicateurs
+      
+      // Recours / Durée USCPO
+    }
   }
   
   function addDebiteurs($elParent, CPatient $mbPatient, $referent = null) {
@@ -1002,13 +1023,13 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $diagnosticsRum = $this->addElement($elParent, "diagnosticsRum");
     $diagnosticPrincipal = $this->addElement($diagnosticsRum, "diagnosticPrincipal");
     $this->addElement($diagnosticPrincipal, "codeCim10", strtoupper($mbSejour->DP));
-    if($mbSejour->DR) {
+    if ($mbSejour->DR) {
       $diagnosticRelie = $this->addElement($diagnosticsRum, "diagnosticRelie");
       $this->addElement($diagnosticRelie, "codeCim10", strtoupper($mbSejour->DR));
     }
-    if(count($mbSejour->_ref_dossier_medical->_codes_cim)) {
+    if (count($mbSejour->_ref_dossier_medical->_codes_cim)) {
       $diagnosticsSignificatifs = $this->addElement($diagnosticsRum, "diagnosticsSignificatifs");
-      foreach($mbSejour->_ref_dossier_medical->_codes_cim as $curr_code) {
+      foreach ($mbSejour->_ref_dossier_medical->_codes_cim as $curr_code) {
         $diagnosticSignificatif = $this->addElement($diagnosticsSignificatifs, "diagnosticSignificatif");
         $this->addElement($diagnosticSignificatif, "codeCim10", strtoupper($curr_code));
       }

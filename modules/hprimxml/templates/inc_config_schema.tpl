@@ -16,6 +16,8 @@
       <th class="category" colspan="2">Global</th>
     </tr>
     {{mb_include module=system template=inc_config_bool var=concatenate_xsd}}
+    {{mb_include module=system template=inc_config_str  var=tag_default}}
+    
     <tr>
       <th class="category" colspan="2">Patients</th>
     </tr>
@@ -27,7 +29,7 @@
     
     {{mb_include module=system template=inc_config_enum var=send_diagnostic values=evt_pmsi|evt_serveuretatspatient}}
     {{mb_include module=system template=inc_config_bool var=send_actes_ngap}}
-    {{mb_include module=system template=inc_config_str var=actes_ngap_excludes}}
+    {{mb_include module=system template=inc_config_str  var=actes_ngap_excludes}}
     
     <tr>
       <td class="button" colspan="10">

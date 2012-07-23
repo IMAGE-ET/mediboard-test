@@ -61,7 +61,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     switch ($codable->_class) {
       // COperation 
       case 'COperation':
-        $this->addIntervention($intervention, $codable);
+        $this->addIntervention($intervention, $codable, false, true);
         break;
         
       // CConsultation / CSejour
@@ -230,9 +230,9 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       }     
 
       $operation->loadRefsActesCCAM();
-			$mbActesCCAM = $operation->_ref_actes_ccam;
-			
-			/*mbTrace($actesCCAM, "actesCCAM", true);
+      $mbActesCCAM = $operation->_ref_actes_ccam;
+      
+      /*mbTrace($actesCCAM, "actesCCAM", true);
       mbTrace($mbActesCCAM, "mbActesCCAM", true);
       foreach () {
       

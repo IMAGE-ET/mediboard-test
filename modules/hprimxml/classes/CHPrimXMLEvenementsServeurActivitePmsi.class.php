@@ -13,7 +13,8 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     'evenementPMSI'                => "CHPrimXMLEvenementsPmsi",
     'evenementServeurActe'         => "CHPrimXMLEvenementsServeurActes",
     'evenementServeurEtatsPatient' => "CHPrimXMLEvenementsServeurEtatsPatient",
-    'evenementFraisDivers'         => "CHPrimXMLEvenementsFraisDivers"
+    'evenementFraisDivers'         => "CHPrimXMLEvenementsFraisDivers",
+    'evenementServeurIntervention' => "CHPrimXMLEvenementsServeurIntervention",
   );
   
   function __construct($dirschemaname = null, $schemafilename = null) {
@@ -28,7 +29,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     if ($version == "1.01") {
       parent::__construct($dirschemaname, $schemafilename."101");
     } 
-    // Version 1.04 - 1.05 - 1.06
+    // Version 1.04 - 1.05 - 1.06 - 1.07
     else {
       $version = str_replace(".", "", $version);
       parent::__construct("serveurActivitePmsi_v$version", $schemafilename.$version);
@@ -48,36 +49,36 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     return $xpath->queryTextNode("hprim:date", $debut);
   }
   
-	function mappingServeurActes($data) {
-		// Mapping patient
-		$patient = $this->mappingPatient($data);
-		
-		// Mapping actes CCAM
-		$actesCCAM = $this->mappingActesCCAM($data);
-		
-		return array (
-		  "patient"   => $patient,
-		  "actesCCAM" => $actesCCAM
-		);  
-	}
-	
-	function mappingPatient($data) {
-		$node = $data['patient'];
-		$xpath = new CHPrimXPath($node->ownerDocument);
-		
-		$personnePhysique = $xpath->queryUniqueNode("hprim:personnePhysique", $node);
+  function mappingServeurActes($data) {
+    // Mapping patient
+    $patient = $this->mappingPatient($data);
+    
+    // Mapping actes CCAM
+    $actesCCAM = $this->mappingActesCCAM($data);
+    
+    return array (
+      "patient"   => $patient,
+      "actesCCAM" => $actesCCAM
+    );  
+  }
+  
+  function mappingPatient($data) {
+    $node = $data['patient'];
+    $xpath = new CHPrimXPath($node->ownerDocument);
+    
+    $personnePhysique = $xpath->queryUniqueNode("hprim:personnePhysique", $node);
     $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personnePhysique);
     $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personnePhysique);
-		
-		return array (
+    
+    return array (
       "idSourcePatient" => $data['idSourcePatient'],
       "idCiblePatient"  => $data['idCiblePatient'],
       "nom"             => $xpath->queryTextNode("hprim:nomUsuel", $personnePhysique),
       "prenom"          => $prenoms[0],
       "naissance"       => $xpath->queryTextNode("hprim:date", $elementDateNaissance)
     );
-	}
-	
+  }
+  
   function mappingActesCCAM($data) {
     $node = $data['actesCCAM'];
     $xpath = new CHPrimXPath($node->ownerDocument);
@@ -92,19 +93,19 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   
   function mappingActeCCAM($node, $data) {
     $xpath = new CHPrimXPath($node->ownerDocument);
-    		    
-		$acteCCAM = new CActeCCAM();
-		$acteCCAM->code_acte     = $xpath->queryTextNode("hprim:codeActe", $node);
-		$acteCCAM->code_activite = $xpath->queryTextNode("hprim:codeActivite", $node);
-		$acteCCAM->code_phase    = $xpath->queryTextNode("hprim:codePhase", $node);
-		$acteCCAM->execution     = $xpath->queryTextNode("hprim:execute/hprim:date", $node)." ".mbTransformTime($xpath->queryTextNode("hprim:execute/hprim:heure", $node), null , "%H:%M:%S");
-				
+            
+    $acteCCAM = new CActeCCAM();
+    $acteCCAM->code_acte     = $xpath->queryTextNode("hprim:codeActe", $node);
+    $acteCCAM->code_activite = $xpath->queryTextNode("hprim:codeActivite", $node);
+    $acteCCAM->code_phase    = $xpath->queryTextNode("hprim:codePhase", $node);
+    $acteCCAM->execution     = $xpath->queryTextNode("hprim:execute/hprim:date", $node)." ".mbTransformTime($xpath->queryTextNode("hprim:execute/hprim:heure", $node), null , "%H:%M:%S");
+        
     return array (
       "idSourceIntervention" => $data['idSourceIntervention'],
       "idCibleIntervention"  => $data['idCibleIntervention'],
       "idSourceActeCCAM"     => $data['idSourceActeCCAM'],
       "idCibleActeCCAM"      => $data['idCibleActeCCAM'],
-			"acteCCAM"             => $acteCCAM
+      "acteCCAM"             => $acteCCAM
     );
   }
 }

@@ -59,7 +59,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
     $group = CGroups::loadCurrent();
     $group->loadLastId400();
-    $this->addAgent($agents, "système", $this->emetteur, $group->text);
+    $this->addAgent($agents, $this->getAttSysteme(), $this->emetteur, $group->text);
 
     $destinataire = $this->addElement($enteteMessageAcquittement, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
@@ -107,7 +107,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     $this->generateEnteteMessageAcquittement($statut);
     $this->addReponses($statut, $codes, $actesCCAM, $elPatient, $mbObject, $commentaires);
      
-		// Traitement final
+    // Traitement final
     $this->purgeEmptyElements();
 
     $this->saveTempFile();
@@ -136,7 +136,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     
     $data['identifiantMessage'] = $xpath->queryTextNode("hprim:identifiantMessage", $enteteMessageAcquittement);
     $agents = $xpath->queryUniqueNode("hprim:emetteur/hprim:agents", $enteteMessageAcquittement);
-    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='système']", $agents);
+    $systeme = $xpath->queryUniqueNode("hprim:agent[@categorie='".$this->getAttSysteme()."']", $agents);
     $data['idClient'] = $xpath->queryTextNode("hprim:code", $systeme);
     $data['libelleClient'] = $xpath->queryTextNode("hprim:libelle", $systeme);
     

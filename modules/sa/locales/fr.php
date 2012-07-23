@@ -1,8 +1,11 @@
 <?php
+$locales['CSaEventObjectHandler'] = 'Gestionnaire évènement SA';
 $locales['CSaObjectHandler'] = 'Gestionnaire SA';
 $locales['CSaObjectHandler-send_only_with_ipp_nda'] = 'L\'IPP et/ou le numéro de dossier (NDA) sont manquants pour l\'envoi d\'actes en facturation';
 $locales['CSaObjectHandler-send_only_with_type'] = 'Le type du séjour \'%s\' n\'est pas pris en charge pour un envoi d\'actes';
 $locales['SA'] = 'SA';
+$locales['config-object_handlers-CSaEventObjectHandler'] = 'Activer le gestionnaire SA évènement';
+$locales['config-object_handlers-CSaEventObjectHandler-desc'] = 'Activer le gestionnaire SA évènement (intervention, consultation, ...)';
 $locales['config-object_handlers-CSaObjectHandler'] = 'Activer le gestionnaire SA';
 $locales['config-object_handlers-CSaObjectHandler-desc'] = 'Activer le gestionnaire SA';
 $locales['config-object_server-CSaObjectHandler'] = 'Serveur d\'objets SA';
