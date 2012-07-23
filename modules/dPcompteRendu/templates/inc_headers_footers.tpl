@@ -1,4 +1,4 @@
-<option value="">&mdash; {{tr}}CCompteRendu-set-{{$type}}{{/tr}}</option>
+<option value="">&mdash; {{tr}}Choose{{/tr}}</option>
 {{foreach from=$components item=componentsByOwner key=owner}}
 <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
   {{foreach from=$componentsByOwner item=_component}}

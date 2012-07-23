@@ -123,17 +123,32 @@ function submitCompteRendu(callback){
 
 function reloadHeadersFooters() {
   {{if $compte_rendu->_id}}
-    if ($("headers") && $("footers")) {
+    if ($("headers") && $("footers") && $("prefaces") && $("endings")) {
       var oForm = getForm("editFrm");
+      var compte_rendu_id = $V(oForm.compte_rendu_id);
+      var object_class = $V(oForm.object_class);
+      
       var url = new Url("dPcompteRendu", "ajax_headers_footers");
-      url.addParam("compte_rendu_id", $V(oForm.compte_rendu_id));
-      url.addParam("object_class", $V(oForm.object_class));
+      url.addParam("compte_rendu_id", compte_rendu_id);
+      url.addParam("object_class", object_class);
       url.addParam("type", "header");
       url.requestUpdate(oForm.header_id);
-
+      
       var url = new Url("dPcompteRendu", "ajax_headers_footers");
-      url.addParam("compte_rendu_id", $V(oForm.compte_rendu_id));
-      url.addParam("object_class", $V(oForm.object_class));
+      url.addParam("compte_rendu_id", compte_rendu_id);
+      url.addParam("object_class", object_class);
+      url.addParam("type", "preface");
+      url.requestUpdate(oForm.preface_id);
+      
+      var url = new Url("dPcompteRendu", "ajax_headers_footers");
+      url.addParam("compte_rendu_id", compte_rendu_id);
+      url.addParam("object_class", object_class);
+      url.addParam("type", "ending");
+      url.requestUpdate(oForm.ending_id);
+      
+      var url = new Url("dPcompteRendu", "ajax_headers_footers");
+      url.addParam("compte_rendu_id", compte_rendu_id);
+      url.addParam("object_class", object_class);
       url.addParam("type", "footer");
       url.requestUpdate(oForm.footer_id);
     } 
