@@ -21,9 +21,9 @@ printFicheAnesth = function(consult_id) {
 
 submitAnesth = function(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
-  	onComplete: function() { 
-  		reloadAnesth(oForm.operation_id.value) 
-  	}
+    onComplete: function() { 
+      reloadAnesth(oForm.operation_id.value) 
+    }
   });
 }
 
@@ -59,9 +59,9 @@ refreshConstantesMedicales = function(context_guid) {
 }
 Main.add(function () {
   // Initialisation des onglets
-	if ($('main_tab_group')){
+  if ($('main_tab_group')){
     Control.Tabs.create('main_tab_group', true);
-	}
+  }
   
   if($('antecedents')){
     var url = new Url("dPcabinet", "httpreq_vw_antecedents");
@@ -74,7 +74,7 @@ Main.add(function () {
     refreshConstantesHack('{{$operation->sejour_id}}');
   }
 
-	{{if $isPrescriptionInstalled}}
+  {{if $isPrescriptionInstalled}}
   if($('prescription_sejour')){
     Prescription.reloadPrescSejour('','{{$operation->_ref_sejour->_id}}', null, null, '{{$operation->_id}}', null, null);
   }
@@ -101,6 +101,10 @@ Main.add(function () {
   {{assign var="modeles_prat_id" value=$selOp->_ref_consult_anesth->_ref_consultation->_ref_chir->_id}}
 {{/if}}
 
+<h1>
+  {{$selOp}}
+</h1>
+
 <!-- Tabulations -->
 <ul id="main_tab_group" class="control_tabs">
   <li><a href="#anesth_tab">Anesth.</a></li>
@@ -108,7 +112,7 @@ Main.add(function () {
   <li onmousedown="refreshConstantesHack('{{$operation->sejour_id}}');"><a href="#constantes-medicales">Constantes</a></li>
   {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
     <li><a href="#prescription_sejour_tab">Prescription</a></li>
-	{{/if}}
+  {{/if}}
   {{if $isImedsInstalled}}
     <li><a href="#Imeds_tab">Labo</a></li>
   {{/if}}
