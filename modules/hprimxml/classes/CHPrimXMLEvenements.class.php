@@ -10,10 +10,11 @@
 
 class CHPrimXMLEvenements extends CHPrimXMLDocument {  
   static $documentElements = array(
-    'evenementsPatients'     => "CHPrimXMLEvenementsPatients",
-    'evenementsServeurActes' => "CHPrimXMLEvenementsServeurActivitePmsi",
-    'evenementsPMSI'         => "CHPrimXMLEvenementsServeurActivitePmsi",
-    'evenementsFraisDivers'  => "CHPrimXMLEvenementsServeurActivitePmsi"
+    'evenementsPatients'           => "CHPrimXMLEvenementsPatients",
+    'evenementsServeurActes'       => "CHPrimXMLEvenementsServeurActivitePmsi",
+    'evenementsPMSI'               => "CHPrimXMLEvenementsServeurActivitePmsi",
+    'evenementsFraisDivers'        => "CHPrimXMLEvenementsServeurActivitePmsi",
+    'evenementServeurIntervention' => "CHPrimXMLEvenementsServeurActivitePmsi",
   );
   
   static function getHPrimXMLEvenements() {}

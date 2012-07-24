@@ -58,21 +58,20 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     $data = array();
     $xpath = new CHPrimXPath($this);   
     
-    $evenementServeurActe = $xpath->queryUniqueNode("/hprim:evenementsServeurActes/hprim:evenementServeurActe");
+    $evenementServeurIntervention = $xpath->queryUniqueNode("/hprim:evenementsServeurActes/hprim:evenementServeurIntervention");
     
-    $data['patient']         = $xpath->queryUniqueNode("hprim:patient", $evenementServeurActe);
+    $data['patient']         = $xpath->queryUniqueNode("hprim:patient", $evenementServeurIntervention);
     $data['idSourcePatient'] = $this->getIdSource($data['patient']);
     $data['idCiblePatient']  = $this->getIdCible($data['patient']);
     
-    $data['venue']           = $xpath->queryUniqueNode("hprim:venue", $evenementServeurActe);
+    $data['venue']           = $xpath->queryUniqueNode("hprim:venue", $evenementServeurIntervention);
     $data['idSourceVenue']   = $this->getIdSource($data['venue']);
     $data['idCibleVenue']    = $this->getIdCible($data['venue']);
     
-    $data['intervention']         = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurActe);
+    $data['intervention']         = $xpath->queryUniqueNode("hprim:intervention", $evenementServeurIntervention);
     $data['idSourceIntervention'] = $this->getIdSource($data['intervention'], false);
     $data['idCibleIntervention']  = $this->getIdCible($data['intervention'], false);
-
-    
+        
     return $data; 
   }
   

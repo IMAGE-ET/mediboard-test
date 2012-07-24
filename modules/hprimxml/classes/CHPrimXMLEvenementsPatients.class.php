@@ -31,9 +31,9 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
 
     if ($type) {
       return new self::$evenements[$type];
-    } else {
-      return new CHPrimXMLEvenementsPatients();
-    }
+    } 
+
+    return new CHPrimXMLEvenementsPatients();
   }  
    
   function __construct() {

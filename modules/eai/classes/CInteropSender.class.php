@@ -19,6 +19,7 @@ class CInteropSender extends CInteropActor {
   var $user_id                  = null;
   var $save_unsupported_message = null;
   var $create_ack_file          = null;
+  var $delete_file              = null;
   
   // Forward references
   var $_ref_user = null;
@@ -34,6 +35,7 @@ class CInteropSender extends CInteropActor {
     $props["user_id"]                  = "ref class|CMediusers";
     $props["save_unsupported_message"] = "bool default|1";
     $props["create_ack_file"]          = "bool default|1";
+    $props["delete_file"]              = "bool default|1";
     
     return $props;
   }

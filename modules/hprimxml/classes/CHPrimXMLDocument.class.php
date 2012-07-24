@@ -31,16 +31,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->formatOutput = false;
     
     $this->patharchiveschema = "modules/hprimxml/xsd";
-    $this->schemapath = "$this->patharchiveschema/$dirschemaname";
-    $this->schemafilename = ($schemafilename) ? 
-                              ((!CAppUI::conf("hprimxml concatenate_xsd")) ? 
-                                "$this->schemapath/$schemafilename.xsd" : 
-                                "$this->schemapath/$schemafilename.xml") :
-                              "$this->schemapath/schema.xml";
-    $this->documentfilename = "$this->schemapath/document.xml";
-    $this->finalpath = CFile::$directory . "/hprim/$dirschemaname";
+    $this->schemapath        = "$this->patharchiveschema/$dirschemaname";
+    $this->schemafilename    = ($schemafilename) ? 
+                                ((!CAppUI::conf("hprimxml concatenate_xsd")) ? 
+                                  "$this->schemapath/$schemafilename.xsd" : 
+                                  "$this->schemapath/$schemafilename.xml") :
+                                "$this->schemapath/schema.xml";
+    $this->documentfilename  = "$this->schemapath/document.xml";
+    $this->finalpath         = CFile::$directory . "/hprim/$dirschemaname";
     
-    $this->now = time();
+    $this->now               = time();
   }
   
   function schemaValidate($filename = null, $returnErrors = false, $display_errors = true) {

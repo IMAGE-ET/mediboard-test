@@ -17,6 +17,20 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     'evenementServeurIntervention' => "CHPrimXMLEvenementsServeurIntervention",
   );
   
+  static function getHPrimXMLEvenements($messageServeurActivitePmsi) {
+    $hprimxmldoc = new CMbXMLDocument();
+    $hprimxmldoc->loadXML($messageServeurActivitePmsi);
+    
+    $xpath = new CMbXPath($hprimxmldoc);
+    $event = $xpath->queryUniqueNode("/*/*[2]");
+
+    if ($nodeName = $event->nodeName) {
+      return new self::$evenements[$nodeName];
+    } 
+    
+    return new CHPrimXMLEvenementsServeurActivitePmsi();
+  }  
+  
   function __construct($dirschemaname = null, $schemafilename = null) {
     $this->type = "pmsi";
     

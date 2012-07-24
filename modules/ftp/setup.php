@@ -126,7 +126,13 @@ class CSetupftp extends CSetup {
                 ADD INDEX (`function_name`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.10";    
+    $this->makeRevision("0.10");
+    
+    $query = "ALTER TABLE `echange_ftp` 
+                ADD `delete_file` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.11";    
   }
 }
 ?>

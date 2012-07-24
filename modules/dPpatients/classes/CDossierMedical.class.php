@@ -15,13 +15,13 @@ class CDossierMedical extends CMbMetaObject {
   // DB Fields
   var $dossier_medical_id      = null;
   var $codes_cim               = null;
-	
-	// Dossier medical Patient
-	var $risque_thrombo_patient   = null;
-	var $risque_MCJ_patient = null;
+  
+  // Dossier medical Patient
+  var $risque_thrombo_patient   = null;
+  var $risque_MCJ_patient = null;
 
-	// Dossier medical Sejour
-	var $risque_thrombo_chirurgie = null;
+  // Dossier medical Sejour
+  var $risque_thrombo_chirurgie = null;
   var $risque_antibioprophylaxie   = null;
   var $risque_prophylaxie = null;
   var $risque_MCJ_chirurgie = null;
@@ -41,7 +41,7 @@ class CDossierMedical extends CMbMetaObject {
   var $_ref_etats_dents = null;
   var $_ref_prescription = null;
   var $_ref_allergies = null;
-	
+  
   // Derived back references
   var $_count_antecedents = null;
   var $_count_traitements = null;
@@ -61,13 +61,13 @@ class CDossierMedical extends CMbMetaObject {
     $specs = parent::getProps();
     $specs["object_class"] = "enum list|CPatient|CSejour";
     $specs["codes_cim"] = "text";
-		
-	  $specs["risque_thrombo_patient"   ] = "enum list|NR|faible|modere|eleve|majeur default|NR";
+    
+    $specs["risque_thrombo_patient"   ] = "enum list|NR|faible|modere|eleve|majeur default|NR";
     $specs["risque_thrombo_chirurgie" ] = "enum list|NR|faible|modere|eleve default|NR";
-		$specs["risque_MCJ_patient"       ] = "enum list|NR|sans|avec|suspect|atteint default|NR";
+    $specs["risque_MCJ_patient"       ] = "enum list|NR|sans|avec|suspect|atteint default|NR";
     $specs["risque_MCJ_chirurgie"     ] = "enum list|NR|sans|avec default|NR";
     $specs["risque_antibioprophylaxie"] = "enum list|NR|non|oui default|NR";
-	  $specs["risque_prophylaxie"       ] = "enum list|NR|non|oui default|NR";
+    $specs["risque_prophylaxie"       ] = "enum list|NR|non|oui default|NR";
     return $specs;
   }  
 
@@ -100,7 +100,7 @@ class CDossierMedical extends CMbMetaObject {
     if ($this->_ref_prescription && $this->_ref_prescription->_id){
       $this->_ref_prescription->loadRefsLinesMed();
     }
-		return $this->_ref_prescription;
+    return $this->_ref_prescription;
   }
   
   function loadRefObject(){  
@@ -152,9 +152,9 @@ class CDossierMedical extends CMbMetaObject {
     // Filtrage sur les annulés
     foreach ($this->_all_antecedents as $_atcd) {
       if ($_atcd->annule && !$cancelled) {
-			   unset($this->_all_antecedents[$_atcd->_id]);
+         unset($this->_all_antecedents[$_atcd->_id]);
       }
-		}
+    }
 
     $atcd = new CAntecedent();
 
@@ -176,6 +176,8 @@ class CDossierMedical extends CMbMetaObject {
     foreach ($this->_all_antecedents as $_atcd) {
       @$this->_ref_antecedents_by_type_appareil[$_atcd->type][$_atcd->appareil][$_atcd->_id] = $_atcd;
     }
+    
+    return $this->_all_antecedents;
   }
   
   function loadRefsEtatsDents() {
@@ -187,15 +189,15 @@ class CDossierMedical extends CMbMetaObject {
    */
   function countAntecedents(){
     
-  	$antedecent = new CAntecedent();
-  	$where = array();
+    $antedecent = new CAntecedent();
+    $where = array();
     $where["dossier_medical_id"] = " = '$this->_id'";
 
-	  $where["annule"] = " != '1'";
-  	$this->_count_antecedents = $antedecent->countList($where);
+    $where["annule"] = " != '1'";
+    $this->_count_antecedents = $antedecent->countList($where);
 
-	  $where["annule"] = " = '1'";
-  	$this->_count_cancelled_antecedents = $antedecent->countList($where);
+    $where["annule"] = " = '1'";
+    $this->_count_cancelled_antecedents = $antedecent->countList($where);
   }
   
   /**
@@ -227,9 +229,9 @@ class CDossierMedical extends CMbMetaObject {
     $antecedent->dossier_medical_id = $this->_id;
     return $this->_count_allergies = $antecedent->countMatchingList();
   }
-	
-	function loadRefsAllergies(){
-	  $antecedent = new CAntecedent();
+  
+  function loadRefsAllergies(){
+    $antecedent = new CAntecedent();
     $antecedent->type = "alle";
     $antecedent->annule = "0";
     $antecedent->dossier_medical_id = $this->_id;
@@ -288,71 +290,71 @@ class CDossierMedical extends CMbMetaObject {
 
     $this->codes_cim = implode("|", array_unique($this->_codes_cim));
 
-		return parent::store();
+    return parent::store();
   }
   function fillTemplate(&$template, $champ = "Patient") {
     // Antécédents
     $this->loadRefsAntecedents();
     $atcd = new CAntecedent();
 
-		// Construction des listes de valeurs
+    // Construction des listes de valeurs
     $lists_par_type     = array();
     $lists_par_appareil = array();
     foreach ($this->_all_antecedents as $_antecedent) {
       $type     = $_antecedent->type     ? $_antecedent->getFormattedValue("type"    ).": " : "";
       $appareil = $_antecedent->appareil ? $_antecedent->getFormattedValue("appareil").": " : "";
-			$date = $_antecedent->date ? "[".$_antecedent->getFormattedValue("date")."] " : "";
+      $date = $_antecedent->date ? "[".$_antecedent->getFormattedValue("date")."] " : "";
       $lists_par_type    [$_antecedent->type    ][] = $appareil . $date . $_antecedent->rques;
       $lists_par_appareil[$_antecedent->appareil][] = $type     . $date . $_antecedent->rques;
-		}
+    }
 
     // Séparateur pour les groupes de valeurs
     $default = CAppUI::pref("listDefault");
     $separator = CAppUI::pref("listInlineSeparator");
-		$separators = array(
-		  "ulli"   => "",
-			"br"     => "<br />",
-			"inline" => " $separator ",
-		);
+    $separators = array(
+      "ulli"   => "",
+      "br"     => "<br />",
+      "inline" => " $separator ",
+    );
     $separator = $separators[$default];
 
-		// Création des listes par type
-		$parts = array();
-		$types = $atcd->_specs["type"]->_list;
-		$types[] = "";
-		foreach ($types as $type) {
-			$sType =  CAppUI::tr("CAntecedent.type.$type");
+    // Création des listes par type
+    $parts = array();
+    $types = $atcd->_specs["type"]->_list;
+    $types[] = "";
+    foreach ($types as $type) {
+      $sType =  CAppUI::tr("CAntecedent.type.$type");
       $list = @$lists_par_type[$type];
-			$template->addListProperty("$champ - Antécédents - $sType", $list);
+      $template->addListProperty("$champ - Antécédents - $sType", $list);
       if ($list) {
         $parts[] = "<strong>$sType</strong>: " . $template->makeList($list);
       }
-		}
-		$template->addProperty("$champ - Antécédents - tous", implode($separator, $parts), null, false);
-				
+    }
+    $template->addProperty("$champ - Antécédents - tous", implode($separator, $parts), null, false);
+        
     // Création des listes par appareil
     $parts = array();
     $appareils = $atcd->_specs["appareil"]->_list;
     $appareils[] = "";
     foreach ($appareils as $appareil) {
-		  $sAppareil =  CAppUI::tr("CAntecedent.appareil.$appareil");
-			$list = @$lists_par_appareil[$appareil];
+      $sAppareil =  CAppUI::tr("CAntecedent.appareil.$appareil");
+      $list = @$lists_par_appareil[$appareil];
       $template->addListProperty("$champ - Antécédents - $sAppareil", $list);
-			if ($list) {
+      if ($list) {
         $parts[] = "<strong>$sAppareil</strong>: " . $template->makeList($list);
-			}
+      }
     }
     $template->addProperty("$champ - Antécédents - tous par appareil", implode($separator, $parts), null, false);
     
     // Traitements
     $this->loadRefsTraitements();
     if (is_array($this->_ref_traitements)) {
-    	$list = array();
+      $list = array();
       foreach ($this->_ref_traitements as $_traitement) {
         $debut     = $_traitement->debut ? " depuis "   . $_traitement->getFormattedValue("debut") : "";
         $fin       = $_traitement->debut ? " jusqu'au " . $_traitement->getFormattedValue("fin"  ) : "";
-				$colon  = $debut || $fin ? ": " : "";
-				$list[] = $debut . $fin . $colon . $_traitement->traitement;
+        $colon  = $debut || $fin ? ": " : "";
+        $list[] = $debut . $fin . $colon . $_traitement->traitement;
       }
 
       // Ajout des traitements notés a l'aide de la BCB
@@ -370,8 +372,8 @@ class CDossierMedical extends CMbMetaObject {
           if ($_line->fin) {
             $fin = " jusqu'au" . $_line->getFormattedValue("fin");
           }
-					$posologie = implode(" - ", CMbArray::pluck($prises, "_view"));
-					$posologie = $posologie ? " ($posologie)" : "";
+          $posologie = implode(" - ", CMbArray::pluck($prises, "_view"));
+          $posologie = $posologie ? " ($posologie)" : "";
           $list[] = $view . $posologie;
           
         }
@@ -395,16 +397,16 @@ class CDossierMedical extends CMbMetaObject {
           $etats[$etat->etat] = array();
         }
         $etats[$etat->etat][] = $position;
-			}
-		}
-		
-		// Production des listes par état
-		$list = array();
+      }
+    }
+    
+    // Production des listes par état
+    $list = array();
     foreach ($etats as $etat => $positions) {
       sort($positions);
-			$positions = implode(', ', $positions);
-			$etat = CAppUI::tr("CEtatDent.etat.$etat");
-			$list[] = "$etat: $positions";
+      $positions = implode(', ', $positions);
+      $etat = CAppUI::tr("CEtatDent.etat.$etat");
+      $list[] = "$etat: $positions";
     }
 
     $template->addListProperty("$champ - Etat dentaire", $list);
@@ -413,7 +415,7 @@ class CDossierMedical extends CMbMetaObject {
     $list = array();
     if ($this->_ext_codes_cim){
       foreach ($this->_ext_codes_cim as $_code) {
-      	$list[] = "$_code->code: $_code->libelle";
+        $list[] = "$_code->code: $_code->libelle";
       }
     }
     

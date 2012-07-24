@@ -117,6 +117,12 @@ foreach ($files as $_filepath) {
     }
   }
   
+  if (!$sender->delete_file) {
+    CAppUI::stepAjax("CEAIDispatcher-message_dispatch");
+    
+    continue;
+  }
+
   try {
     if ($sender->_delete_file !== false) {
       $source->delFile($_filepath);

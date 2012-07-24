@@ -1042,6 +1042,12 @@ class CSetupsystem extends CSetup {
               ADD `rank` TINYINT (4) UNSIGNED;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.1.03";
+    $this->makeRevision("1.1.03");
+    
+    $query = "ALTER TABLE `sender_file_system` 
+                ADD `delete_file` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.1.04";
   }
 }

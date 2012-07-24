@@ -168,7 +168,13 @@ function __construct() {
                 ADD `passphrase` VARCHAR (255);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.28";      
+    $this->makeRevision("0.28");
+    
+    $query = "ALTER TABLE `sender_soap` 
+                ADD `delete_file` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.29";      
   }
 }
 ?>

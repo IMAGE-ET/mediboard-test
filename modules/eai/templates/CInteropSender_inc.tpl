@@ -45,3 +45,8 @@
   <th>{{mb_label object=$actor field="create_ack_file"}}</th>
   <td>{{mb_field object=$actor field="create_ack_file"}}</td>
 </tr>
+
+<tr>
+  <th>{{mb_label object=$actor field="delete_file"}}</th>
+  <td>{{mb_field object=$actor field="delete_file"}}</td>
+</tr>

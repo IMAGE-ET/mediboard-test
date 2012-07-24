@@ -795,7 +795,12 @@ class CSetuphl7 extends CSetup {
               ADD `strict_segment_terminator` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.31";
+    $this->makeRevision("0.31");
+    $query = "ALTER TABLE `sender_mllp` 
+                ADD `delete_file` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.32";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
