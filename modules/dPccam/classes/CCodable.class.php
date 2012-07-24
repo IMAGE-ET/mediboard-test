@@ -509,7 +509,7 @@ class CCodable extends CMbObject {
     $codes_ccam = explode("|", $this->codes_ccam);
     CMbArray::removeValue("", $codes_ccam);
     foreach ($codes_ccam as $_code_ccam) {
-      if (!preg_match("/[A-Z]{4}[0-9]{3}/i", $_code_ccam)) {
+      if (!preg_match("/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i", $_code_ccam)) {
         return "Le code CCAM '$_code_ccam' n'est pas valide";
       }
     }
