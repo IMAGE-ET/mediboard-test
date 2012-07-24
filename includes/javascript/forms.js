@@ -304,9 +304,13 @@ function prepareForm(oForm) {
       oElement.type = "text";
     }
     
+    // The "size" attribute is not taken into account with type=number
+    if (sType === "number") {
+      oElement.type = "text";
+    }
+    
     if (Prototype.Browser.IPad) {
       if (sType === "number") {
-        oElement.type = "text";
         oElement.pattern = "[0-9]*";
       }
     }
