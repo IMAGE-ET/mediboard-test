@@ -1452,6 +1452,12 @@ App.print = function(){
   }
 }
 
+App.deferClose = function(){
+  (function(){
+    window.close();
+  }).defer();
+}
+
 /**
  * Adds column highlighting to a table
  * @param {Element} table The table
