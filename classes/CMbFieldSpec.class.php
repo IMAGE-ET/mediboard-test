@@ -722,7 +722,7 @@ class CMbFieldSpec {
    *  
    * @return html HTML form input string
    */
-  function getFormElementText($object, $params, $value, $className){
+  function getFormElementText($object, $params, $value, $className, $type = "text"){
     $field        = htmlspecialchars($this->fieldName);
     $protected    = $value && $object->_id && isset($this->protected) && $this->protected;
     
@@ -845,7 +845,7 @@ class CMbFieldSpec {
                            onclick="$(this).previous(\'input,textarea\').switchMultiline(this)"></button>';
       }
       else {
-        $sHtml = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
+        $sHtml = "<input type=\"$type\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
                   class=\"".htmlspecialchars("$className $this->prop")."\" $extra/>";
       }
     }

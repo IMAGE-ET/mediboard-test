@@ -103,6 +103,7 @@ form hr {
 input[type=text], 
 input[type=tel], 
 input[type=email], 
+input[type=number], 
 input[type=password], 
 input[type=file], 
 select, 
@@ -115,6 +116,7 @@ textarea,
 input[type=text], 
 input[type=tel], 
 input[type=email], 
+input[type=number], 
 input[type=password], 
 input[type=file], 
 select, 
@@ -126,6 +128,7 @@ select,
 input[type=text]:hover, 
 input[type=tel]:hover, 
 input[type=email]:hover, 
+input[type=number]:hover, 
 input[type=password]:hover, 
 input[type=file]:hover, 
 select:hover, 
@@ -137,6 +140,7 @@ textarea:hover,
 input[type=text]:focus, 
 input[type=tel]:focus, 
 input[type=email]:focus, 
+input[type=number]:focus, 
 input[type=password]:focus, 
 input[type=file]:focus, 
 select:focus, 
@@ -148,6 +152,7 @@ textarea:focus,
 input[type=text]:focus, 
 input[type=tel]:focus, 
 input[type=email]:focus, 
+input[type=number]:focus, 
 input[type=password]:focus, 
 input[type=file]:focus, 
 select:focus,
@@ -514,7 +519,7 @@ table.main th.title.modify {
 
 #nav a, 
 #nav a:active, 
-#nav a:hover {
+.desktop #nav a:hover {
   padding: 2px;
   padding-right: 4px;
   background: #FFF;
@@ -522,7 +527,7 @@ table.main th.title.modify {
   background: #FFF -webkit-gradient(linear, left top, right top, color-stop(0.9, transparent), color-stop(1, rgba(100,100,100,0.1)));
 }
 
-#nav a:hover {
+.desktop #nav a:hover {
   text-decoration: none;
   border: 1px #FFBA8C solid;
   border-right: 0;
@@ -538,7 +543,7 @@ table.main th.title.modify {
   height: 32px;
 }
 
-#nav a:hover img {
+.desktop #nav a:hover img {
   position: absolute;
   display: block;
   border: 1px #FF6600 solid;
@@ -801,6 +806,15 @@ ul.control_tabs_vertical li a.active {
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
+}
+
+.numericField.big-buttons button:before {
+  line-height: 13px;
+}
+
+.numericField.big-buttons button {
+  width: 13px;
+  height: 13px;
 }
 
 /* Menus items hidden from print media */

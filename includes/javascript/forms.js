@@ -185,6 +185,7 @@ function prepareForm(oForm) {
   
   // Autofill of the form disabled (useful for the login form for example)
   oForm.setAttribute("autocomplete", "off");
+  oForm.setAttribute("novalidate", "on");
   
   // Form preparation
   if (Prototype.Browser.IE && oForm.name && oForm.name.nodeName) // Stupid IE hack, because it considers an input named "name" as an attribute
@@ -303,12 +304,18 @@ function prepareForm(oForm) {
       oElement.type = "text";
     }
     
+    if (Prototype.Browser.IPad) {
+      if (sType === "number") {
+        oElement.type = "text";
+        oElement.pattern = "[0-9]*";
+      }
+    }
+    
     // Won't make it resizable on IE
-    if (!Prototype.Browser.IPad &&
-        sType === "textarea" && 
-        oElement.id !== "htmlarea" && 
-        !oElement.hasClassName("noresize")) {
-      oElement.setResizable({autoSave: true, step: 'font-size'});
+    else {
+      if (sType === "textarea" && oElement.id !== "htmlarea" && !oElement.hasClassName("noresize")) {
+        oElement.setResizable({autoSave: true, step: 'font-size'});
+      }
     }
     
     // Focus on first text input

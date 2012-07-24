@@ -167,8 +167,8 @@ Main.add(function(){
       {{/if}}
     {{/foreach}}
     
-    {{foreach from=$ex_object->_native_views item=object key=_name}}
-      {{if $object && $object->_id}}
+    {{foreach from=$ex_object->_native_views item=_object key=_name}}
+      {{if $_object && $_object->_id}}
         <li><a href="#tab-native_views-{{$_name}}" class="special">{{tr}}CExClass.native_views.{{$_name}}{{/tr}}</a></li>
       {{/if}}
     {{/foreach}}
@@ -305,9 +305,9 @@ Main.add(function(){
 
 {{/mb_form}}
 
-{{foreach from=$ex_object->_native_views item=object key=_name}}
+{{foreach from=$ex_object->_native_views item=_object key=_name}}
   <div id="tab-native_views-{{$_name}}" style="display: none;">
-    {{mb_include module=forms template="inc_native_view_$_name"}}
+    {{mb_include module=forms template="inc_native_view_$_name" object=$_object}}
   </div>
 {{/foreach}}
 

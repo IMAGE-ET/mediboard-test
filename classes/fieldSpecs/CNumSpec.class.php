@@ -201,7 +201,7 @@ class CNumSpec extends CMbFieldSpec {
     CMbArray::defaultValue($params, "size", min($maxLength, 20));
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     if ($form && $increment) {
-      $sHtml = $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
+      $sHtml = $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className, "number");
       $sHtml .= '
     <script type="text/javascript">
       Main.add(function(){
@@ -222,7 +222,7 @@ class CNumSpec extends CMbFieldSpec {
     </script>';
     }
     else {
-      $sHtml = $this->getFormElementText($object, $params, $value, $className);
+      $sHtml = $this->getFormElementText($object, $params, $value, $className, "number");
     }
     return $sHtml;
   }

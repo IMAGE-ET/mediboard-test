@@ -611,51 +611,71 @@ Element.addMethods({
      label.setAttribute("onclick", "");
    });
     
-    if (App.onMouseOverPrepared) return;
+    if (App.mouseEventsPrepared) {
+      return;
+    }
+    
+    var eventsHandled = $H({
+      onmouseover: 300, 
+      ondblclick:  500
+    });
     
     document.observe("touchstart", function(event){
       var element = Event.element(event);
       
-      if (element.onmouseover) {
-        Event.stop(event);
-        element.mouseOverTriggered = false;
+      eventsHandled.each(function(pair){
+        var eventName = pair.key;
         
-        element.timer = setTimeout(function(){
-          element.onmouseover(event);
-          element.mouseOverTriggered = true;
-        }, 300);
-      }
+        if (element[eventName]) {
+          var timeout = pair.value;
+          Event.stop(event);
+          element["triggered"+eventName] = false;
+          
+          element["timer"+eventName] = setTimeout(function(){
+            element[eventName](event);
+            element["triggered"+eventName] = true;
+          }, timeout);
+        }
+      });
     });
     
     document.observe("touchmove", function(event){
       var element = Event.element(event);
       
-      if (element.timer) {
-        clearTimeout(element.timer);
-      }
+      eventsHandled.each(function(pair){
+        var eventName = pair.key;
+        
+        if (element["timer"+eventName]) {
+          clearTimeout(element["timer"+eventName]);
+        }
+      });
     });
     
     document.observe("touchend", function(event){
       var element = Event.element(event);
       
-      if (element.onmouseover) {
-        Event.stop(event);
-        clearTimeout(element.timer);
+      eventsHandled.each(function(pair){
+        var eventName = pair.key;
         
-        if (!element.mouseOverTriggered) {
-          // event bubbling
-          var bubble = (element.onclick || element.href) ? element : element.up("[onclick], :link");
+        if (element[eventName]) {
+          Event.stop(event);
+          clearTimeout(element["timer"+eventName]);
           
-          // simulate event firing
-          if (bubble.href && (!bubble.onclick || bubble.onclick() !== false)) {
-            location.href = bubble.href;
-            return;
+          if (!element["triggered"+eventName]) {
+            // event bubbling
+            var bubble = (element.onclick || element.href) ? element : element.up("[onclick], :link");
+            
+            // simulate event firing
+            if (bubble.href && (!bubble.onclick || bubble.onclick() !== false)) {
+              location.href = bubble.href;
+              return;
+            }
           }
         }
-      }
+      });
     });
     
-    App.onMouseOverPrepared = true;
+    App.mouseEventsPrepared = true;
   }
 });
 
@@ -1066,10 +1086,20 @@ Element.warnDuplicates = function(){
   }
 };
 
-Event.preventBackspace = function() {
+Event.initKeyboardEvents = function() {
   document.observe("keydown", function(e){
-    if(Event.key(e) == Event.KEY_BACKSPACE && 
-      !/input|textarea/i.test(Event.element(e).tagName)) {
+    var key = Event.key(e);
+    var element = Event.element(e);
+    var tagName = element.tagName;
+    
+    // Prevent backspace to go back in history
+    if(key == Event.KEY_BACKSPACE && !/input|textarea/i.test(tagName)) {
+      Event.stop(e);
+    }
+    
+    // Ctrl+Return in a textera to submit the form
+    if(key == Event.KEY_RETURN && element.form && e.ctrlKey && tagName == "TEXTAREA") {
+      element.form.onsubmit();
       Event.stop(e);
     }
   });

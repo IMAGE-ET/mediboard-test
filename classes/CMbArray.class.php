@@ -19,6 +19,7 @@ abstract class CMbArray {
    * 
    * @param array $array1 The first array
    * @param array $array2 The second array
+   * 
    * @return an associative array with values 
    *   "absent_from_array1"
    *   "absent_from_array2"
@@ -56,8 +57,9 @@ abstract class CMbArray {
    * Compute recursively the associative difference between two arrays
    * Function is not commutative, as first array is the reference
    * 
-   * @param array $array1
-   * @param array $array2
+   * @param array $array1 The first array
+   * @param array $array2 The second array
+   * 
    * @return array The difference
    */
   static function diffRecursive($array1, $array2) {
@@ -69,7 +71,7 @@ abstract class CMbArray {
         }
         elseif (!is_array($array2[$key])) {
           $difference[$key] = $value;
-        } 
+        }
         else {
           if ($new_diff = self::diffRecursive($value, $array2[$key])) {
             $difference[$key] = $new_diff;
@@ -83,7 +85,6 @@ abstract class CMbArray {
           $difference[$key] = $value;
         }
       }
-
       else {
         if (!array_key_exists($key, $array2) || $array2[$key]) {
           $difference[$key] = $value;
@@ -97,8 +98,9 @@ abstract class CMbArray {
   /**
    * Remove all occurences of given value in array
    * 
-   * @param mixed $needle Value to remove
-   * @param array $haystack Array to alter
+   * @param mixed $needle    Value to remove
+   * @param array &$haystack Array to alter
+   * 
    * @return int Occurences count
    **/
   static function removeValue($needle, &$haystack) {
@@ -113,8 +115,9 @@ abstract class CMbArray {
   /**
    * Get the previous and next key 
    * 
-   * @param array $arr The array to seek in
+   * @param array  $arr The array to seek in
    * @param string $key The target key
+   * 
    * @return array Previous and next key in an array, null if unavailable
    */
   static function getPrevNextKeys($arr, $key){
@@ -144,6 +147,7 @@ abstract class CMbArray {
    * 
    * @param array $paArray1 First array
    * @param array $paArray2 The array to be merged
+   * 
    * @return array The merge result
    */
   static function mergeRecursive($paArray1, $paArray2) {
@@ -162,6 +166,7 @@ abstract class CMbArray {
    * Alternative to array_merge that always preserves keys
    * 
    * @param array ... Any number of arrays to merge
+   * 
    * @return array The merge result
    */
   static function mergeKeys(){
@@ -179,8 +184,9 @@ abstract class CMbArray {
   /**
    * Returns the value following the given one in cycle mode
    * 
-   * @param array $array
-   * @param mixed $value
+   * @param array $array The array of values to cycle on
+   * @param mixed $value The reference value
+   * 
    * @return mixed Next value, false if $value does not exist
    */
   static function cycleValue($array, $value) {
@@ -203,10 +209,11 @@ abstract class CMbArray {
   /**
    * Extract a key from an array, returning the value if exists
    * 
-   * @param array $array The array to explore
-   * @param string $name Name of the key to extract
-   * @param mixed $default The default value if $key is not found
-   * @return bool
+   * @param array  $array   The array to explore
+   * @param string $key     Name of the key to extract
+   * @param mixed  $default The default value if $key is not found
+   * 
+   * @return mixed The value corresponding to $key in $array if it exists, else $default
    */
   static function get($array, $key, $default = null) {
     return isset($array[$key]) ? $array[$key] : $default;
@@ -215,9 +222,11 @@ abstract class CMbArray {
   /**
    * Returns the first value of the array that isset, from keys
    * 
-   * @param array $array The array to explore
-   * @param array $keys The keys to read
+   * @param array $array   The array to explore
+   * @param array $keys    The keys to read
    * @param mixed $default The default value no value is found
+   * 
+   * @return mixed The first value found
    */
   static function first($array, $keys, $default = null) {
     foreach ($keys as $key) {
@@ -231,10 +240,12 @@ abstract class CMbArray {
   /**
    * Extract a key from an array, returning the value if exists
    * 
-   * @param array $array The array to explore
-   * @param string $name Name of the key to extract
-   * @param mixed $default The default value is $key is not found
-   * @param bool $mandatory will trigger an warning if value is null 
+   * @param array  &$array    The array to explore
+   * @param string $key       Name of the key to extract
+   * @param mixed  $default   The default value is $key is not found
+   * @param bool   $mandatory Will trigger an warning if value is null 
+   * 
+   * @return mixed The extracted value
    */
   static function extract(&$array, $key, $default = null, $mandatory = false) {
     // Should not use isset
@@ -253,9 +264,11 @@ abstract class CMbArray {
   /**
    * Give a default value to key if key is not set
    * 
-   * @param array $array the array to alter
-   * @param int|string $key The key to check
-   * @param mixed $value The default value if key is not set
+   * @param array &$array The array to alter
+   * @param mixed $key    The key to check
+   * @param mixed $value  The default value if key is not set
+   * 
+   * @return void
    */
   static function defaultValue(&$array, $key, $value) {
     // Should not use isset
@@ -268,8 +281,9 @@ abstract class CMbArray {
    * Return a string of XML attributes based on given array key-value pairs 
    * 
    * @param array $array The source array
-   * @return string String attributes  like 'key1="value1" ... keyN="valueN"'
-   **/
+   * 
+   * @return string String attributes like 'key1="value1" ... keyN="valueN"'
+   */
   static function makeXmlAttributes($array) {
     $return = '';
     foreach ($array as $key => $value) {
@@ -285,8 +299,9 @@ abstract class CMbArray {
    * Pluck (collect) given key or attribute name of each value
    * whether the values are arrays or objects. Preserves indexes
    * 
-   * @param object|array $array The array or object to pluck
-   * @param mixed $key The key or attribute name 
+   * @param mixed $array The array or object to pluck
+   * @param mixed $name  The key or attribute name 
+   * 
    * @return array All plucked values
    */
   static function pluck($array, $name) {
@@ -326,8 +341,9 @@ abstract class CMbArray {
   /**
    * Create an array with filtered keys based on having given prefix
    * 
-   * @param array $array The array to filter
-   * @param string $prefix string The prefix that has to start key strings
+   * @param array  $array  The array to filter
+   * @param string $prefix The prefix that has to start key strings
+   * 
    * @return array The filtered array 
    */
   static function filterPrefix($array, $prefix) {
@@ -344,7 +360,8 @@ abstract class CMbArray {
    * Transpose a 2D matrix
    * 
    * @param array $array The matrix to transpose
-   * @return The transposed matrix
+   * 
+   * @return array The transposed matrix
    */
   static function transpose($array) {
     $out = array();
@@ -359,8 +376,9 @@ abstract class CMbArray {
   /**
    * Call a method on each object of the array
    * 
-   * @param object $array The array of objects
+   * @param object $array  The array of objects
    * @param string $method The method to call on each array
+   * 
    * @return array The array of objects after the method is called
    */
   static function invoke($array, $method) {
@@ -377,10 +395,11 @@ abstract class CMbArray {
   /**
    * Insert a key-value pair after a specific key
    * 
-   * @param array $array
-   * @param string $ref_key
-   * @param string $key
-   * @param mixed $value
+   * @param array  &$array  The source array
+   * @param string $ref_key The reference key
+   * @param string $key     The new key
+   * @param mixed  $value   The new value to insert after $_ref_key
+   * 
    * @return void
    */
   static function insertAfterKey(&$array, $ref_key, $key, $value) {
@@ -403,7 +422,7 @@ abstract class CMbArray {
    * 
    * @param array $array Scalar values
    * 
-   * @return float: average
+   * @return float Average value
    */
   static function average($array) {
     if (!is_array($array)) {

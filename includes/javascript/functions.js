@@ -16,7 +16,7 @@ function main() {
     WaitingMessage.init();
     Note.refresh();
     Element.warnDuplicates();
-    Event.preventBackspace();
+    Event.initKeyboardEvents();
     $(document.documentElement).prepareTouchEvents();
     Main.init();
     new CookieJar().put("cookie-supported", 1);

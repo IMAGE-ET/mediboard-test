@@ -79,6 +79,9 @@ class CCSVFile {
   /**
    * Read a line of the file
    * 
+   * @param boolean $assoc                Make an associative array instead of a numeric-keyed array
+   * @param boolean $nullify_empty_values Set empty strings to NULL
+   * 
    * @return array An indexed array containing the fields read
    */
   function readLine($assoc = false, $nullify_empty_values = false) {
@@ -90,6 +93,7 @@ class CCSVFile {
       }
       
       if ($assoc && $this->column_names) {
+        $line = array_slice($line, 0, count($this->column_names));
         return array_combine($this->column_names, $line);
       }
     }
@@ -119,6 +123,13 @@ class CCSVFile {
     $this->column_names = $names;
   }
   
+  /**
+   * Changes empty string values to NULL
+   * 
+   * @param array $values An array of strings
+   * 
+   * @return arrat The same array, with NULL instead of empty strings
+   */
   function nullifyEmptyValues($values) {
     foreach ($values as &$_value) {
       if ($_value === "") {

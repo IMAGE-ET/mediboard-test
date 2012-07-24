@@ -205,8 +205,12 @@ ul#nav-vert {
   height: 18px;
 }
 
-.touchscreen input[type=text] {
-  min-width: 2em;
+.touchscreen input[type=text],
+.touchscreen input[type=tel],
+.touchscreen input[type=number],
+.touchscreen input[type=email],
+.touchscreen input[type=password] {
+  min-width: 3em;
 }
 
 .touchscreen input,
@@ -243,7 +247,8 @@ ul#nav-vert {
 }
 
 .touchscreen .inputExtension  {
-  margin: 2px;
+  margin: 1px;
+  width: 22px;
 }
 
 .touchscreen .control button,
@@ -271,8 +276,10 @@ ul#nav-vert {
   bottom: -3px;
 }
 
-.touchscreen .numericField input {
-  padding-right: 2.2em;
+.touchscreen .numericField.big-buttons button {
+  height: 22px;
+  width: 22px;
+  font-size: 18px;
 }
 
 .touchscreen .datepickerControl {

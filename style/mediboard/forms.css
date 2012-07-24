@@ -45,9 +45,9 @@ textarea {
   font-size: 1em;
 }
 
-
 input[type=text], 
 input[type=tel], 
+input[type=number], 
 input[type=email], 
 input[type=password], 
 input[type=file],
@@ -56,8 +56,16 @@ textarea {
   -webkit-appearance: none; /* To remove the "shadow" on iPad" */
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 input[type=text], 
 input[type=tel], 
+input[type=number], 
+input[type=email], 
 input[type=password], 
 input[type=file], 
 select, 
@@ -69,6 +77,8 @@ textarea,
 
 input[type=text]:focus, 
 input[type=tel]:focus, 
+input[type=number]:focus, 
+input[type=email]:focus, 
 input[type=password]:focus, 
 input[type=file]:focus, 
 select:focus, 
@@ -955,6 +965,7 @@ textarea#htmlarea {
   border-spacing: 0;
   display: -moz-inline-box;
   display: inline-block;
+  position: static; /* To allow filter:opacity in IE */
 }
 
 .numericField td {
@@ -1004,6 +1015,51 @@ textarea#htmlarea {
 
 .numericField input {
   margin: 0;
+}
+
+.numericField.big-buttons button:before {
+  line-height: 14px;
+  vertical-align: top;
+}
+
+.numericField.big-buttons button.down:before {
+  content: "-";
+}
+
+.numericField.big-buttons button.up:before {
+  content: "+";
+}
+
+.numericField.big-buttons button.down {
+  margin-right: -1px;
+  -moz-border-radius-bottomright: 0;
+  -moz-border-radius-topright: 0;
+  -webkit-border-bottom-right-radius: 0;
+  -webkit-border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.numericField.big-buttons button.up {
+  margin-left: -1px;
+  -moz-border-radius-bottomleft: 0;
+  -moz-border-radius-topleft: 0;
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.numericField.big-buttons button {
+  box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  padding: 1px;
+  font-size: 16px;
+  font-weight: bold;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  text-align: center;
 }
 
 .textarea-container {

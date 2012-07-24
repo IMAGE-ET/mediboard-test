@@ -25,7 +25,7 @@ abstract class CHTMLResourceLoader {
    * IE Conditional comments
    * 
    * <!--[if IE]>Si IE<![endif]-->
-   * <!--[if gte IE 5]> pour réserver le contenu à IE 5.0 et version plus récentes (actuellement E5.5, IE6.0 et IE7.0) <![endif]-->
+   * <!--[if gte IE 5]> pour réserver le contenu à IE 5.0 et plus récents (actuellement E5.5, IE6.0 et IE7.0) <![endif]-->
    * <!--[if IE 5.0]> pour IE 5.0 <![endif]-->
    * <!--[if IE 5.5000]> pour IE 5.5 <![endif]-->
    * <!--[if IE 6]> pour IE 6.0 <![endif]-->
@@ -102,10 +102,12 @@ abstract class CHTMLResourceLoader {
       $tag .= ">$content</$tagName>";
     }
     else {
-      if ($short)
+      if ($short) {
         $tag .= " />";
-      else
+      }
+      else {
         $tag .= "></$tagName>";
+      }
     }
     
     return $tag;
@@ -266,7 +268,7 @@ abstract class CHTMLResourceLoader {
   }
   
   /**
-   * Get the contents of a stylsheet
+   * Get the contents of a stylesheet
    * 
    * @param array $matches The matches of the regular expression
    * 
@@ -278,6 +280,8 @@ abstract class CHTMLResourceLoader {
   
   /**
    * Replace the url(...) in a stylsheet with the base 64 encoded content of the stylesheet
+   * 
+   * @param array $matches The regex matches
    * 
    * @return string The url(...) string
    */
@@ -329,6 +333,10 @@ abstract class CHTMLResourceLoader {
     
     self::$_fp_out = CMbPath::getTempFile();
     
+    $re_img    = "/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)>/i";
+    $re_link   = "/<link[^>]*rel=\"stylesheet\"[^>]*href\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i";
+    $re_script = "/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i";
+    
     // End Output Buffering
     ob_end_clean();
     
@@ -336,9 +344,9 @@ abstract class CHTMLResourceLoader {
     while (!feof(self::$_fp_in)) {
       $line = fgets(self::$_fp_in);
       
-      $line = preg_replace_callback("/<img([^>]*)src\s*=\s*[\"']([^\"']+)[\"']([^>]*)>/i", array('self', 'replaceImgSrc'), $line);
-      $line = preg_replace_callback("/<link[^>]*rel=\"stylesheet\"[^>]*href\s*=\s*[\"']([^\"']+)[\"'][^>]*>/i", array('self', 'replaceStylesheet'), $line);
-      $line = preg_replace_callback("/<script[^>]*src\s*=\s*[\"']([^\"']+)[\"'][^>]*>\s*<\/script>/i", array('self', 'replaceScriptSrc'), $line);
+      $line = preg_replace_callback($re_img,    array('self', 'replaceImgSrc'), $line);
+      $line = preg_replace_callback($re_link,   array('self', 'replaceStylesheet'), $line);
+      $line = preg_replace_callback($re_script, array('self', 'replaceScriptSrc'), $line);
       
       fwrite(self::$_fp_out, $line);
     }

@@ -9,20 +9,44 @@
  * @version    $Revision$
  */
 
+/**
+ * Utility class to handle Javascript loading in an HTML document
+ */
 abstract class CJSLoader extends CHTMLResourceLoader {
   static $files = array();
   
   /**
-   * Loads a javascript file
+   * Creates an HTML script tag to load a Javascript file
+   * 
+   * @param string $file  The Javascript file name
+   * @param string $cc    An IE conditional comment
+   * @param string $build A build number
+   * @param string $type  The mime type to put in the HTML tag
+   * 
+   * @return string The HTML script tag
    */
   static function loadFile($file, $cc = null, $build = null, $type = "text/javascript") {
-    $tag = self::getTag("script", array(
-      "type" => $type ? $type : "text/javascript",
-      "src"  => "$file?".self::getBuild($build),
-    ), null, false);
+    $tag = self::getTag(
+      "script", 
+      array(
+        "type" => $type ? $type : "text/javascript",
+        "src"  => "$file?".self::getBuild($build),
+      ), 
+      null, 
+      false
+    );
+    
     return self::conditionalComments($tag, $cc);
   }
   
+  /**
+   * Loads a list of Javascript files, with or without minification
+   * 
+   * @param boolean $compress True to minify the Javascript files
+   * @param string  $type     The mime type to use to include the Javascript files
+   * 
+   * @return string A list or a single HTML script tag
+   */
   static function loadFiles($compress = false, $type = "text/javascript") {
     $result = "";
     $compress = CAppUI::conf("minify_javascript");
@@ -42,7 +66,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       $uptodate = false;
       
       // We exclude files already in the tmp dir
-      foreach($files as $index => $file) {
+      foreach ($files as $index => $file) {
         if (strpos($file, "tmp/") === 0) {
           $excluded[] = $file;
           unset($files[$index]);
@@ -56,7 +80,8 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       if (file_exists($cachefile)) {
         $uptodate = true;
         $last_update = self::getLastChange($cachefile);
-        foreach($files as $file) {
+        
+        foreach ($files as $file) {
           if (self::getLastChange($file) > $last_update) {
             $uptodate = false;
             break;
@@ -66,7 +91,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       
       if (!$uptodate) {
         $all_scripts = "";
-        foreach($files as $file) {
+        foreach ($files as $file) {
           $_script = file_get_contents($file);
           if (substr($_script, 0, 3) == chr(0xEF).chr(0xBB).chr(0xBF)) {
             $_script = substr($_script, 3);
@@ -82,14 +107,14 @@ abstract class CJSLoader extends CHTMLResourceLoader {
         $last_update = time();
       }
       
-      foreach($excluded as $file) {
+      foreach ($excluded as $file) {
         $result .= self::loadFile($file, null, self::getLastChange($file), $type)."\n";
       }
       
       $result .= self::loadFile($cachefile, null, $last_update, $type)."\n";
     }
     else {
-      foreach(self::$files as $file) {
+      foreach (self::$files as $file) {
         $result .= self::loadFile($file, null, self::getLastChange($file), $type)."\n";
       }
     }
@@ -97,24 +122,42 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     return $result;
   }
   
+  /**
+   * Minify a Javascript script
+   * 
+   * @param string $js Javascript source code
+   * 
+   * @return string The minified Javascript source code
+   */
   static function minify($js) {
     return JSMin::minify($js);
   }
   
+  /**
+   * Writes a locale file
+   * 
+   * @param string $language The language code (fr, en, ...)
+   * @param array  $locales  The locales
+   * @param string $label    A code to istinguish different locales listes
+   * 
+   * @return void
+   */
   static function writeLocaleFile($language = null, $locales = null, $label = null) {
     global $version;
     
     // It will update all the locale files
     if (!$language) {
       $languages = array();
-      foreach (glob("./locales/*", GLOB_ONLYDIR) as $lng)
+      foreach (glob("./locales/*", GLOB_ONLYDIR) as $lng) {
         $languages[] = basename($lng);
+      }
     }
     else {
       $languages = array($language);
     }
+    
     if (!$locales) {
-      foreach($languages as $language) {
+      foreach ($languages as $language) {
         $localeFiles = array_merge(
           glob("./locales/$language/*.php"), 
           glob("./modules/*/locales/$language.php")
@@ -123,13 +166,14 @@ abstract class CJSLoader extends CHTMLResourceLoader {
       
       foreach ($localeFiles as $localeFile) {
         if (basename($localeFile) != "meta.php") {
-          require $localeFile;
+          include $localeFile;
         }
       }
     }
     
-    foreach($languages as $language) {
+    foreach ($languages as $language) {
       $path = self::getLocaleFilePath($language, $label);
+      
       if ($fp = fopen($path, 'w')) {
         // The callback will filter on empty strings (without it, "0" will be removed too).
         $locales = array_filter($locales, "stringNotEmpty");
@@ -137,7 +181,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
         $keys   = array_map('utf8_encode', array_keys($locales));
         $values = array_map('utf8_encode', array_values($locales));
         
-        foreach($values as &$_value) {
+        foreach ($values as &$_value) {
           $_value = CMbString::unslash($_value);
         }
         
@@ -146,13 +190,13 @@ abstract class CJSLoader extends CHTMLResourceLoader {
         if ($compress) {
           $delim = "/([\.-])/";
           $arr = new stdClass;
-          foreach($keys as $_pos => $_key) {
+          foreach ($keys as $_pos => $_key) {
             $parts = preg_split($delim, $_key, null, PREG_SPLIT_DELIM_CAPTURE);
             
             $_arr = $arr;
             $last_key = count($parts)-1;
             
-            foreach($parts as $i => $_token) {
+            foreach ($parts as $i => $_token) {
               $last = ($i == $last_key);
               if ($_token === "") {
                 $_token = '_$_';
@@ -186,11 +230,21 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     }
   }
   
+  /**
+   * Recursive function to reduce locales keys
+   * 
+   * @param object $object An array of locales
+   * 
+   * @return void
+   */
   static function clearLocalesKeys($object) {
-    foreach($object as $key => &$value) {
-      if (!is_object($value)) continue;
+    foreach ($object as $key => &$value) {
+      if (!is_object($value)) {
+        continue;
+      }
       
       $keys = get_object_vars($value);
+      
       if (count($keys) === 1 && isset($keys['$'])) {
         $object->$key = $keys['$'];
       }
@@ -200,6 +254,14 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     }
   }
 
+  /**
+   * Creates a JSON locales file
+   * 
+   * @param array  $locales The locales array
+   * @param string $label   The locales label
+   * 
+   * @return string The path to the JSON locales file
+   */
   static function getLocaleFile($locales = null, $label = null) {
     $language = CAppUI::pref("LOCALE");
     
@@ -212,6 +274,14 @@ abstract class CJSLoader extends CHTMLResourceLoader {
     return $path;
   }
   
+  /**
+   * Returns the JSON locales file path
+   * 
+   * @param string $language The language code (fr, en, ...)
+   * @param string $label    The locales label
+   * 
+   * @return string The JSON file path
+   */
   static function getLocaleFilePath($language, $label = null) {
     return "tmp/locales".($label ? ".$label" : "")."-$language.js";
   }

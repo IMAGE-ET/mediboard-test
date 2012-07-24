@@ -36,7 +36,7 @@ class CCurrencySpec extends CFloatSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {
-    CMbArray::defaultValue($params, "size", 4);
+    CMbArray::defaultValue($params, "size", 6);
     return parent::getFormHtmlElement($object, $params, $value, $className).CAppUI::conf("currency_symbol");
   }
   

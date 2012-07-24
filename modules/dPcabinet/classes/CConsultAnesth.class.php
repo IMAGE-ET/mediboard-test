@@ -100,7 +100,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $spec->events = array(
       "examen" => array(
         "reference1" => array("COperation", "operation_id"),
-        "reference2" => array("CSejour",  "sejour_id"),
+        "reference2" => array("CSejour",    "operation_id.sejour_id"),
       ),
     );
     return $spec;

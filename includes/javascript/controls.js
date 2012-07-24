@@ -611,7 +611,8 @@ Element.addMethods('input', {
       fraction: false,
       deferEvent: false,
       showFraction: false,
-      deferDelay: Prototype.Browser.IE ? 300 : 200
+      deferDelay: Prototype.Browser.IE ? 300 : 200,
+      bigButtons: App.touchDevice
     }, options);
     
     element.spinner = {
@@ -638,7 +639,7 @@ Element.addMethods('input', {
       },
      
       // Increment function
-      inc: function () {
+      inc: function (focus) {
         if (element.disabled || element.readOnly) return;
         
         var step = Number(element.spinner.getStep(0.1));
@@ -665,11 +666,13 @@ Element.addMethods('input', {
           $V(element, result, true);
         }
         
-        element.select();
+        if (focus === true) {
+          element.select();
+        }
       },
     
       // Decrement function
-      dec: function () {
+      dec: function (focus) {
         if (element.disabled || element.readOnly) return;
         
         var step = Number(element.spinner.getStep(-0.1));
@@ -696,7 +699,9 @@ Element.addMethods('input', {
           $V(element, result, true);
         }
         
-        element.select();
+        if (focus === true) {
+          element.select();
+        }
       },
       
       updateFraction: function(value) {
@@ -720,12 +725,19 @@ Element.addMethods('input', {
       element.value = Number(element.value).toFixed(options.decimals);
     }
     
-    var fractionCell = (options.showFraction ? '<td class="fraction"></td>'  : '');
-    var table = '<table class="control numericField"><tr><td></td><td class="arrows"><div class="up"></div><div class="down"></div></td>'+fractionCell+'</tr></table>';
+    var fractionCell = (options.showFraction ? '<td class="fraction"></td>' : '');
+    var table;
+    
+    if (options.bigButtons) {
+      table = '<table class="control numericField big-buttons"><tr><td><button class="down" type="button"></button><span class="field"></span><button class="up" type="button"></button></td>'+fractionCell+'</tr></table>';
+    }
+    else {
+      table = '<table class="control numericField"><tr><td class="field"></td><td class="arrows"><div class="up"></div><div class="down"></div></td>'+fractionCell+'</tr></table>';
+    }
     
     element.insert({before: table});
     table = element.previous();
-    table.down('td').update(element);
+    table.down('.field').update(element);
     
     if (options.showFraction) {
       element.spinner.updateFraction(element.value, " / ");
@@ -733,9 +745,14 @@ Element.addMethods('input', {
       element.observe("change", element.spinner.updateFractionEvent);
     }
 
-    var arrows = table.select('.arrows div');
-    arrows[0].observe('click', element.spinner.inc);
-    arrows[1].observe('click', element.spinner.dec);
+    if (App.touchDevice) {
+      table.down(".up").observe('touchstart', element.spinner.inc);
+      table.down(".down").observe('touchstart', element.spinner.dec);
+    }
+    else {
+      table.down(".up").observe('click', element.spinner.inc.curry(true));
+      table.down(".down").observe('click', element.spinner.dec.curry(true));
+    }
   }
 });
 

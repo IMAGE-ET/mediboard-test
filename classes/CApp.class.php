@@ -362,10 +362,13 @@ class CApp {
   
   /**
    * Subject notification mechanism 
-   * 
-   * @todo Implement to factorise 
+   * TODO Implement to factorize 
    *   on[Before|After][Store|Merge|Delete]()
    *   which have to get back de CPersistantObject layer
+   * 
+   * @param string $message The notification type
+   * 
+   * @return void
    */
   static function notify($message) {
     // Event Handlers
@@ -379,7 +382,4 @@ class CApp {
       }
     }
   }
-  
-  
 }
-?>
