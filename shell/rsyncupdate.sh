@@ -50,6 +50,7 @@ then
           --exclude lib \
           --exclude files \
           --exclude includes/config.php \
+          --exclude modules/hprimxml/xsd \
           --exclude images/pictures/logo_custom.png
         check_errs $? "Failed to rsync $line" "Succesfully rsync-ed $line"
         scp $BASH_PATH/../tmp/svnlog.txt $line/tmp/svnlog.txt
