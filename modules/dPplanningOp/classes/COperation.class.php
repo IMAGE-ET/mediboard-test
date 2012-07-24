@@ -995,6 +995,11 @@ class COperation extends CCodable implements IPatientRelated {
     $plageop = $this->_ref_plageop;
     $plageop->loadAffectationsPersonnel();
     
+    foreach ($this->_ext_codes_ccam as $_code) {
+      $_code->getRemarques();
+      $_code->getActivites();
+    }
+    
     $this->notify("BeforeFillLimitedTemplate", $template);
     
     $template->addProperty("Opération - Chirurgien"           , $this->_ref_praticien->_id ? ("Dr ".$this->_ref_praticien->_view) : '');
@@ -1004,10 +1009,16 @@ class COperation extends CCodable implements IPatientRelated {
     $template->addProperty("Opération - libellé"              , $this->libelle);
     $template->addProperty("Opération - CCAM1 - code"         , @$this->_ext_codes_ccam[0]->code);
     $template->addProperty("Opération - CCAM1 - description"  , @$this->_ext_codes_ccam[0]->libelleLong);
+    $template->addProperty("Opération - CCAM1 - montant activité 1", @$this->_ext_codes_ccam[0]->activites[1]->phases[0]->tarif);
+    $template->addProperty("Opération - CCAM1 - montant activité 4", @$this->_ext_codes_ccam[0]->activites[4]->phases[0]->tarif);
     $template->addProperty("Opération - CCAM2 - code"         , @$this->_ext_codes_ccam[1]->code);
     $template->addProperty("Opération - CCAM2 - description"  , @$this->_ext_codes_ccam[1]->libelleLong);
+    $template->addProperty("Opération - CCAM2 - montant activité 1", @$this->_ext_codes_ccam[1]->activites[1]->phases[0]->tarif);
+    $template->addProperty("Opération - CCAM2 - montant activité 4", @$this->_ext_codes_ccam[1]->activites[4]->phases[0]->tarif);
     $template->addProperty("Opération - CCAM3 - code"         , @$this->_ext_codes_ccam[2]->code);
     $template->addProperty("Opération - CCAM3 - description"  , @$this->_ext_codes_ccam[2]->libelleLong);
+    $template->addProperty("Opération - CCAM3 - montant activité 1", @$this->_ext_codes_ccam[2]->activites[1]->phases[0]->tarif);
+    $template->addProperty("Opération - CCAM3 - montant activité 4", @$this->_ext_codes_ccam[2]->activites[4]->phases[0]->tarif);
     $template->addProperty("Opération - CCAM - codes"         , implode(" - ", $this->_codes_ccam));
     $template->addProperty("Opération - CCAM - descriptions"  , implode(" - ", CMbArray::pluck($this->_ext_codes_ccam, "libelleLong")));
     $template->addProperty("Opération - salle"                , @$this->_ref_salle->nom);
