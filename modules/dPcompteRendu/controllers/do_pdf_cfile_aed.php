@@ -38,7 +38,7 @@ $margins = array($compte_rendu->margin_top,
                  $compte_rendu->margin_bottom,
                  $compte_rendu->margin_left);
 
-$content = $compte_rendu->loadHTMLcontent($content, "", $margins);
+$content = $compte_rendu->loadHTMLcontent($content, "", $margins, CCompteRendu::$fonts[$compte_rendu->font], $compte_rendu->size);
 
 $file = new CFile();
 $file->setObject($compte_rendu);

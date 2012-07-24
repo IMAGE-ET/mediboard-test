@@ -810,7 +810,16 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->addPrefQuery("default_size", "");
     
-    $this->mod_version = "0.83";
+    $this->makeRevision("0.83");
+    $this->delPrefQuery("default_font");
+    $this->delPrefQuery("default_size");
+    
+    $query = "ALTER TABLE `compte_rendu` 
+              ADD `font` ENUM ('arial','comic','courier','georgia','lucida','tahoma','times','trebuchet','verdana') AFTER `object_class`,
+              ADD `size` ENUM ('xx-small','x-small','small','medium','large','x-large','xx-large','8pt','9pt','10pt','11pt','12pt','14pt','16pt','18pt','20pt','22pt','24pt','26pt','28pt','36pt','48pt','72pt') AFTER `font`";
+    $this->addQuery($query);
+        
+    $this->mod_version = "0.84";
   }
 }
 ?>

@@ -83,7 +83,7 @@ else {
       case "header":
       case "footer":
         $height = CValue::post("height",$compte_rendu->height);
-        $content = $compte_rendu->loadHTMLcontent($content, $mode, $margins, $type, "", $height, "", "");
+        $content = $compte_rendu->loadHTMLcontent($content, $mode, $margins, CCompteRendu::$fonts[$compte_rendu->font], $compte_rendu->size, $type, "", $height, "", "");
         break;
       case "body":
       case "preface":
@@ -119,14 +119,14 @@ else {
           $sizefooter = $component->height;
         }
         
-        $content = $compte_rendu->loadHTMLcontent($content, $mode, $margins, $type, $header, $sizeheader, $footer, $sizefooter, $preface, $ending);
+        $content = $compte_rendu->loadHTMLcontent($content, $mode, $margins, CCompteRendu::$fonts[$compte_rendu->font], $compte_rendu->size, $type, $header, $sizeheader, $footer, $sizefooter, $preface, $ending);
       }
     }
   else {
     if ($textes_libres = CValue::post("texte_libre") && CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") && CAppUI::pref("pdf_and_thumbs")) {
       $compte_rendu->_source = $compte_rendu->replaceFreeTextFields($content, $_POST["texte_libre"]);
     }
-    $content = $compte_rendu->loadHTMLcontent($content, $mode, $margins);
+    $content = $compte_rendu->loadHTMLcontent($content, $mode, $margins, CCompteRendu::$fonts[$compte_rendu->font], $compte_rendu->size);
   }
   
   // Traitement du format de la page

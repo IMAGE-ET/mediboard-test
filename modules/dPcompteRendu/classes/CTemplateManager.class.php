@@ -15,23 +15,24 @@
 class CTemplateManager {
   var $editor = "ckeditor";
   
-  var $sections = array();
-  var $helpers = array();
-  var $lists = array();
-  var $graphs = array();
+  var $sections      = array();
+  var $helpers       = array();
+  var $lists         = array();
+  var $graphs        = array();
   var $textes_libres = array();
   
-  var $template = null;
-  var $document = null;
-  var $usedLists = array();
-  var $isCourrier = null;
+  var $template      = null;
+  var $document      = null;
+  var $usedLists     = array();
+  var $isCourrier    = null;
   
-  var $valueMode = true; // @todo : changer en applyMode
-  var $isModele  = true;
-  var $printMode = false;
-  var $simplifyMode = false;
-  var $parameters = array();
-  
+  var $valueMode     = true; // @todo : changer en applyMode
+  var $isModele      = true;
+  var $printMode     = false;
+  var $simplifyMode  = false;
+  var $parameters    = array();
+  var $font          = null;
+  var $size          = null;
   var $destinataires = array();
   
   private static $barcodeCache = array();
@@ -420,12 +421,14 @@ class CTemplateManager {
   function applyTemplate($template) {
     assert($template instanceof CCompteRendu || $template instanceof CPack);
     
-    if($template instanceof CCompteRendu) {
+    if ($template instanceof CCompteRendu) {
+      $this->font = $template->font ? CCompteRendu::$fonts[$template->font] : "";
+      $this->size = $template->size;
       
       if (!$this->valueMode) {
         $this->setFields($template->object_class);
       }
-
+      
       $this->renderDocument($template->_source);
     
     } else {

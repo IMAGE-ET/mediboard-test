@@ -340,6 +340,15 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
         </tr>
         
         <tr>
+          <th>{{mb_label object=$compte_rendu field="font"}}</th>
+          <td>{{mb_field object=$compte_rendu field="font" emptyLabel="Choose" style="width: 15em"}}</td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$compte_rendu field="size"}}</th>
+          <td>{{mb_field object=$compte_rendu field="size" emptyLabel="Choose" style="width: 15em"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$compte_rendu field=type}}</th>
           <td>
             {{if $droit}}

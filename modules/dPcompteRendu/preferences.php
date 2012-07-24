@@ -24,7 +24,5 @@ CPreferences::$modules["dPcompteRendu"] = array(
   "choice_factory",
   "multiple_docs",
   "auto_capitalize",
-  "default_font",
-  "default_size"
 );
 ?>

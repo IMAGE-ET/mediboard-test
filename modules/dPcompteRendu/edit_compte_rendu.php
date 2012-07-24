@@ -97,13 +97,15 @@ else {
     
     // Marges et format
     $first_modele = reset($pack->_back['modele_links']);
-    $compte_rendu->margin_top    = $first_modele->_ref_modele->margin_top;
-    $compte_rendu->margin_left   = $first_modele->_ref_modele->margin_left;
-    $compte_rendu->margin_right  = $first_modele->_ref_modele->margin_right;
-    $compte_rendu->margin_bottom  = $first_modele->_ref_modele->margin_bottom;
-    $compte_rendu->page_height   = $first_modele->_ref_modele->page_height;
-    $compte_rendu->page_width    = $first_modele->_ref_modele->page_width;
-
+    $first_modele = $first_modele->_ref_modele;
+    $compte_rendu->margin_top    = $first_modele->margin_top;
+    $compte_rendu->margin_left   = $first_modele->margin_left;
+    $compte_rendu->margin_right  = $first_modele->margin_right;
+    $compte_rendu->margin_bottom = $first_modele->margin_bottom;
+    $compte_rendu->page_height   = $first_modele->page_height;
+    $compte_rendu->page_width    = $first_modele->page_width;
+    $compte_rendu->font          = $first_modele->font;
+    $compte_rendu->size          = $first_modele->size;
   }
   $compte_rendu->_source = $compte_rendu->generateDocFromModel(null, $header_id, $footer_id);
   $compte_rendu->updateFormFields();

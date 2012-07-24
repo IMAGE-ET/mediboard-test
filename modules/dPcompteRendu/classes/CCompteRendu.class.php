@@ -32,6 +32,8 @@ class CCompteRendu extends CDocumentItem {
   // DB fields
   var $nom               = null;
   var $type              = null;
+  var $font              = null;
+  var $size              = null;
   var $valide            = null;
   var $height            = null;
   var $margin_top        = null;
@@ -91,7 +93,20 @@ class CCompteRendu extends CDocumentItem {
   );
   
   static $templated_classes = null;
-
+  
+  static $fonts = array(
+    ""          => "", // empty font
+    "arial"     => "Arial",
+    "comic"     => "Comic Sans MS",
+    "courier"   => "Courrier New",
+    "georgia"   => "Georgia",
+    "lucida"    => "Lucida Sans Unicode",
+    "tahoma"    => "Tahoma",
+    "times"     => "Times New Roman",
+    "trebuchet" => "Trebuchet MS",
+    "verdana"   => "Verdana"
+  );
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'compte_rendu';
@@ -123,6 +138,8 @@ class CCompteRendu extends CDocumentItem {
     $specs["content_id"]       = "ref class|CContentHTML show|0";
     $specs["object_class"]     = "str notNull class show|0";
     $specs["nom"]              = "str notNull show|0 seekable";
+    $specs["font"]             = "enum list|arial|comic|courier|georgia|lucida|tahoma|times|trebuchet|verdana";
+    $specs["size"]             = "enum list|xx-small|x-small|small|medium|large|x-large|xx-large|8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt";
     $specs["type"]             = "enum list|header|preface|body|ending|footer default|body";
     $specs["_list_classes"]    = "enum list|CBloodSalvage|CConsultAnesth|CConsultation|CDossierMedical|CFunctions|CGroups|CMediusers|COperation|CPatient|CPrescription|CSejour";
     //mbTrace(implode("|", array_keys(CCompteRendu::getTemplatedClasses())));
@@ -868,9 +885,9 @@ class CCompteRendu extends CDocumentItem {
    * 
    * @return string
    */
-  function loadHTMLcontent($htmlcontent, $mode = "modele", $margins = array(), $type = "body", $header = "", $sizeheader = 0, $footer = "", $sizefooter = 0, $preface = "", $ending = "") {
-    $default_font = CAppUI::pref("default_font");
-    $default_size = CAppUI::pref("default_size");
+  function loadHTMLcontent($htmlcontent, $mode = "modele", $margins = array(), $font = "", $size = "", $type = "body", $header = "", $sizeheader = 0, $footer = "", $sizefooter = 0, $preface = "", $ending = "") {
+    $default_font = $font;
+    $default_size = $size;
     
     if ($default_font == "") {
       $default_font = CAppUI::conf("dPcompteRendu CCompteRendu default_font");
@@ -1011,7 +1028,7 @@ class CCompteRendu extends CDocumentItem {
       $this->margin_bottom, 
       $this->margin_left);
     $this->loadContent();
-    $content = $this->loadHTMLcontent($this->_source, '', $margins);
+    $content = $this->loadHTMLcontent($this->_source, '', $margins, CCompteRendu::$fonts[$this->font], $this->size);
     $htmltopdf = new CHtmlToPDF;
     $htmltopdf->generatePDF($content, 0, $this->_page_format, $this->_orientation, $file);
     $file->file_size = filesize($file->_file_path);

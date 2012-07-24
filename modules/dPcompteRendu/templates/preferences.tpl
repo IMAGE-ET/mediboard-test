@@ -23,5 +23,3 @@
 {{mb_include template=inc_pref spec=enum var=choice_factory values="CDomPDFConverter|CWkHtmlToPDFConverter"}}
 {{mb_include template=inc_pref spec=bool var=multiple_docs}}
 {{mb_include template=inc_pref spec=bool var=auto_capitalize}}
-{{mb_include template=inc_pref spec=enum var=default_font values="|Arial|Comic Sans MS|Courier New|Georgia|Lucida Sans Unicode|Tahoma|Times New Roman|Trebuchet MS|Verdana"}}
-{{mb_include template=inc_pref spec=enum var=default_size values="|xx-small|x-small|small|medium|large|x-large|xx-large|8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt"}}

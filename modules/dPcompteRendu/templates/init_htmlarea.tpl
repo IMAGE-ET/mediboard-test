@@ -24,19 +24,19 @@ function initCKEditor() {
   CKEDITOR.ispasting = false;
   window.old_source = $("htmlarea").value;
   var editor = CKEDITOR.replace("htmlarea", {customConfig: "../../?m=dPcompteRendu&a=mb_fckeditor&suppressHeaders=1"});
-  if (Preferences.defaut_font != "") {
-    editor.addCss( 'body { font-family: ' + Preferences.default_font + ' }' );
-  }
-  else {
-    editor.addCss( 'body { font-family: {{$conf.dPcompteRendu.CCompteRendu.default_font}} }' );
-  }
   
-  if (Preferences.default_size != "") {
-    editor.addCss( 'body { font-size: ' + Preferences.default_size + '}' );
-  }
-  else {
+  {{if $templateManager->font != ""}}
+    editor.addCss( 'body { font-family: {{$templateManager->font}} }' );
+  {{else}}
+    editor.addCss( 'body { font-family: {{$conf.dPcompteRendu.CCompteRendu.default_font}} }' );
+  {{/if}}
+  
+  {{if $templateManager->size != ""}}
+    editor.addCss( 'body { font-size: {{$templateManager->size}} }' );
+  {{else}}
     editor.addCss( 'body { font-size: {{$conf.dPcompteRendu.CCompteRendu.default_size}} }' );
-  }
+  {{/if}}
+  
   editor.on("instanceReady", function(e) {  
     window.resizeEditor = function () {
       var dims = document.viewport.getDimensions();
