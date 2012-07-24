@@ -922,13 +922,25 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addTexte($elParent, "commentaire", $operation->rques, 4000);
       
       // TypeAnesthésie : nomemclature externe (idex)
-      /*$tag_hprimxml   = $this->_ref_echange_hprim->_ref_receiver->_tag_hprimxml;
+      $tag_hprimxml   = $this->_ref_receiver->_tag_hprimxml;
       $idexTypeAnesth = CIdSante400::getMatch("CTypeAnesth", $tag_hprimxml, null, $operation->type_anesth);
-      $this->addElement(typeAnesthesie, "typeAnesthesie", $idexTypeAnesth->id400);*/
+      $this->addElement($elParent, "typeAnesthesie", $idexTypeAnesth->id400);
       
       // Indicateurs
+      $indicateurs = $this->addElement($elParent, "indicateurs");
+      $dossier_medical = new CDossierMedical();
+      $dossier_medical->object_class = "CPatient";
+      $dossier_medical->object_id    = $operation->loadRefPatient()->_id;
+      $dossier_medical->loadMatchingObject();
+
+      $antecedents = $dossier_medical->loadRefsAntecedents();
+      foreach ($antecedents as $_antecedent) {
+        $this->addCodeLibelle($indicateurs, "indicateur", $_antecedent->_id, $_antecedent->rques);
+      }
       
       // Recours / Durée USCPO
+      $this->addElement($elParent, "recoursUscpo", $operation->duree_uscpo ? 1 : 0);
+      $this->addElement($elParent, "dureeUscpo"  , $operation->duree_uscpo ? $operation->duree_uscpo : null);
     }
   }
   
@@ -1242,7 +1254,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($uniteFonctionnelleResponsable, "responsabilite", "m");
     $service = $mbAffectation->_ref_lit->_ref_chambre->_ref_service;
     $id400Patient = new CIdSante400();
-    $id400Patient->loadLatestFor($service, $this->_ref_echange_hprim->_ref_receiver->_tag_service);
+    $id400Patient->loadLatestFor($service, $this->_ref_receiver->_tag_service);
     $this->addTexte($uniteFonctionnelleResponsable, "code", $id400Patient->id400 ? $id400Patient->id400 : $service->_id, 10);
     $this->addTexte($uniteFonctionnelleResponsable, "libelle", $service->_view, 35);
   }
