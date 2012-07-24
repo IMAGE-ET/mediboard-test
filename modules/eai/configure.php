@@ -14,10 +14,19 @@
 CCanDo::checkAdmin();
 
 $object_servers = array(
-  "sip" => "CSipObjectHandler",
-  "smp" => "CSmpObjectHandler",
-  "sms" => "CSmsObjectHandler",
-  "sa"  => "CSaObjectHandler",
+  "sip" => array(
+    "CSipObjectHandler"
+  ),
+  "smp" => array(
+    "CSmpObjectHandler"
+  ),
+  "sms" => array(
+    "CSmsObjectHandler"
+  ),
+  "sa"  => array (
+    "CSaObjectHandler",
+    "CSaEventObjectHandler",
+  )
 );
 
 $group = new CGroups();

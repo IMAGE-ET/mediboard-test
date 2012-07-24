@@ -16,8 +16,9 @@
     <th class="category">Mode serveur</th>
   </tr>
     
-  {{foreach from=$object_servers key=_module item=_object_server}}  
+  {{foreach from=$object_servers key=_module item=_objects_server}}  
     {{if @$modules.$_module->mod_active}}
+      {{foreach from=$_objects_server item=_object_server}}
       <tr>
         <td>{{tr}}config-object_server-{{$_object_server}}{{/tr}}</td>
         <td>
@@ -53,6 +54,7 @@
           </form>
         </td>
       </tr>
+      {{/foreach}}
     {{/if}}
   {{/foreach}}
 </table>

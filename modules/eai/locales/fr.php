@@ -189,6 +189,7 @@ $locales['config-eai-idex'] = 'Gestion identifiants';
 $locales['config-eai-max_files_to_process'] = 'Nombre de fichiers à traiter';
 $locales['config-eai-max_files_to_process-desc'] = 'Nombre de fichiers à traiter (FTP, FS)';
 $locales['config-object-servers'] = 'Serveurs d\'objets';
+$locales['config-object_server-CSaEventObjectHandler'] = 'Serveur d\'objets SA Evènement';
 $locales['config-object_server-CSipObjectHandler'] = 'Serveur d\'objets SIP';
 $locales['config-object_server-CSmpObjectHandler'] = 'Serveur d\'objets SMP';
 $locales['eai-evt-choose'] = 'Choisir un événement';
