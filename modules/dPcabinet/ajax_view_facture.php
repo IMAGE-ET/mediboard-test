@@ -1,75 +1,79 @@
 <?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 CCanDo::checkEdit();
 
 $factureconsult_id  = CValue::getOrSession("factureconsult_id");
+//mbTrace($factureconsult_id);
 $patient_id         = CValue::getOrSession("patient_id");
 $consult_id         = CValue::get("consult_id");
+//mbTrace($consult_id);
+$facture_id         = CValue::get("facture_id");
 
 $derconsult_id = null;
-$factures= array();
 $facture = new CFactureConsult();
+$consult = null;
 
-if($consult_id){
-	if($facture->loadObject("patient_id = '$patient_id' AND cloture IS NULL")){
-	  $facture->loadRefs();
-	  if(count($facture->_ref_consults) == 0){
-	    $facture->tarif = null;
-	    $facture->delete();
-	  }
-	  else{
-	    $somme  = 0;
-	    $somme2 = 0;
-	    foreach($facture->_ref_consults as $consultation){
-	      $somme  += $consultation->du_patient;
-	      $somme2 += $consultation->du_tiers;
-	    }
-	    if($somme != $facture->du_patient || $somme2 != $facture->du_tiers){
-	      $facture->du_patient = $somme ;
-	      $facture->du_tiers   = $somme2;
+if ($consult_id) {
+  $consult = new CConsultation();
+  $consult->load($consult_id);
+  $consult->loadRefsReglements();
+  if ($facture->load($consult->factureconsult_id)) {
+    $facture->loadRefs();
+    if (count($facture->_ref_consults) == 0) {
+      $facture->tarif = null;
+      $facture->delete();
+    }
+    else {
+      $somme  = 0;
+      $somme2 = 0;
+      foreach ($facture->_ref_consults as $consultation) {
+        $somme  += $consultation->du_patient;
+        $somme2 += $consultation->du_tiers;
+      }
+      if ($somme != $facture->du_patient || $somme2 != $facture->du_tiers) {
+        $facture->du_patient = $somme ;
+        $facture->du_tiers   = $somme2;
         $facture->tarif = null;
-	      $facture->store();
-	    }
-	  }
-	}
-	else if($factures = $facture->loadList("patient_id = '$patient_id' AND cloture IS NOT NULL")){
-	  foreach($factures as $_facture){
-	    $_facture->loadRefsConsults();
-	    foreach($_facture->_ref_consults as $consultation){
-	      if($consultation->_id == $consult_id){
-	        $facture = $_facture;
-	        $facture->loadRefPatient();
-	        $facture->loadRefReglements();
-	      }
-	    }
-	  }  
-	}
+        $facture->store();
+      }
+    }
+  }
+  elseif ($facture_id) {
+    $facture->load($facture_id);
+    $facture->loadRefs();
+    if (count($facture->_ref_consults) == 0) {
+      $facture->tarif = null;
+      $facture->delete();
+    }
+    
+  }
 }
-else{
-	if($factureconsult_id){
-	  $facture->load($factureconsult_id); 
-	  $facture->loadRefs();
-	}
-	if($facture->_ref_consults){
-		$last_consult = reset($facture->_ref_consults);
+elseif ($factureconsult_id) {
+  $facture->load($factureconsult_id); 
+  $facture->loadRefs();
+  if ($facture->_ref_consults) {
+    $last_consult = reset($facture->_ref_consults);
     $derconsult_id = $last_consult->_id;
-	}
+  }
 }
 
-// Chargement des banques si nous sommes dans la vue des factures
-$reglement = null;
-$banques = null;
-if(!CValue::get("not_load_banque")){
-  $reglement   = new CReglement();
-  $orderBanque = "nom ASC";
-  $banque      = new CBanque();
-  $banques     = $banque->loadList(null,$orderBanque);
-  $factures[0] = "xpi";
-}
+$reglement   = new CReglement();
+$orderBanque = "nom ASC";
+$banque      = new CBanque();
+$banques     = $banque->loadList(null,$orderBanque);
 
 $acte_tarmed = null;
 //Instanciation d'un acte tarmed pour l'ajout de ligne dans la facture
-if(CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
+if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
   $acte_tarmed = new CActeTarmed();
   $acte_tarmed->date     = mbDate();
   $acte_tarmed->quantite = 1;
@@ -83,7 +87,12 @@ $smarty->assign("reglement"     , $reglement);
 $smarty->assign("acte_tarmed"   , $acte_tarmed);
 $smarty->assign("derconsult_id" , $derconsult_id);
 $smarty->assign("banques"       , $banques);
-$smarty->assign("factures"      , $factures);
+if (isset($consult->_id)) {
+  $smarty->assign("consult"     , $consult);
+}
+if (!CValue::get("not_load_banque")) {
+  $smarty->assign("factures"    , array(new CFactureConsult()));
+}
 $smarty->assign("etat_ouvert"   , CValue::getOrSession("etat_ouvert", 1));
 $smarty->assign("etat_cloture"  , CValue::getOrSession("etat_cloture", 1));
 $smarty->assign("date"          , mbDate());

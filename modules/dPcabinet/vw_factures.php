@@ -1,11 +1,12 @@
-<?php /* $Id vw_factures.php $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPcabinet
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -28,7 +29,7 @@ $patient->load($patient_id);
 
 // Liste des chirurgiens
 $user = new CMediusers();
-$listChir =  $user->loadPraticiens(PERM_EDIT) ;
+$listChir =  $user->loadPraticiens(PERM_EDIT);
 
 //Tri des factures ayant un chir dans une de ses consultations
 $factures= array();
@@ -37,75 +38,70 @@ $facture = new CFactureConsult();
 $where = array();
 $where["ouverture"] = "BETWEEN '$date_min' AND '$date_max'";
 
-if($etat_cloture && !$etat_ouvert){
+if ($etat_cloture && !$etat_ouvert) {
   $where["cloture"] = "BETWEEN '$date_min' AND '$date_max'";
 }
-elseif($etat_cloture && $etat_ouvert){
-	 $where[] = "cloture BETWEEN '$date_min' AND '$date_max' OR cloture IS NULL";
+elseif ($etat_cloture && $etat_ouvert) {
+   $where[] = "cloture BETWEEN '$date_min' AND '$date_max' OR cloture IS NULL";
 }
-elseif(!$etat_cloture && $etat_ouvert){
-	$where["cloture"] = "IS NULL";
+elseif (!$etat_cloture && $etat_ouvert) {
+  $where["cloture"] = "IS NULL";
 }
 
-if ($chirSel){
-	$ljoin = array();
-	
-	$ljoin["consultation"] = "factureconsult.factureconsult_id = consultation.factureconsult_id" ;
-	$ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id" ;
-	
-	$where["consultation.factureconsult_id"] =" IS NOT NULL ";
-	$where["plageconsult.chir_id"] =" = '$chirSel' ";
+if ($chirSel) {
+  $ljoin = array();
+  
+  $ljoin["consultation"] = "factureconsult.factureconsult_id = consultation.factureconsult_id" ;
+  $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id" ;
+  
+  $where["consultation.factureconsult_id"] =" IS NOT NULL ";
+  $where["plageconsult.chir_id"] =" = '$chirSel' ";
 
-	if($patient_id){
-		$where["factureconsult.patient_id"] =" = '$patient_id' ";
-	}
-	
-	$order = "factureconsult.cloture DESC";
-	$limit ="0 , 30";
-	
-	$facture = new CFactureConsult();
-	$factures = $facture->loadList($where, $order, $limit, null, $ljoin);
+  if ($patient_id) {
+    $where["factureconsult.patient_id"] =" = '$patient_id' ";
+  }
+  
+  $order = "factureconsult.cloture DESC";
+  $limit ="0 , 30";
+  
+  $facture = new CFactureConsult();
+  $factures = $facture->loadList($where, $order, $limit, null, $ljoin);
 }
-else{
+else {
   $where["patient_id"] = "= '$patient_id'";	
-	$factures = $facture->loadList( $where , "ouverture ASC", 50);
+  $factures = $facture->loadList($where , "ouverture ASC", 50);
 }
 
-if($no_finish_reglement){
-	foreach($factures as $key => $_facture){
-	  $_facture->loadRefReglements();
-	  if($_facture->_du_patient_restant != 0 ){
-	    unset($factures[$key]);
-	  }
-	}
+if ($no_finish_reglement) {
+  foreach ($factures as $key => $_facture) {
+    $_facture->loadRefReglements();
+    if ($_facture->_du_patient_restant != 0 ) {
+      unset($factures[$key]);
+    }
+  }
 }
 
 $derconsult_id = null;
-if($factureconsult_id){
+if ($factureconsult_id) {
   $facture->load($factureconsult_id);	
   $facture->loadRefs();
-  if($facture->_ref_consults){
-  	$last_consult = end($facture->_ref_consults);
+  if ($facture->_ref_consults) {
+    $last_consult = end($facture->_ref_consults);
     $derconsult_id = $last_consult->_id;
   }
 }
 
-// Chargement des banques si nous sommes dans la vue des factures
-$reglement = null;
-$banques = null;
-if(!CValue::get("not_load_banque")){
-  $reglement = new CReglement();
-  $orderBanque = "nom ASC";
-  $banque = new CBanque();
-  $banques = $banque->loadList(null,$orderBanque);
-}
+$reglement = new CReglement();
+$orderBanque = "nom ASC";
+$banque = new CBanque();
+$banques = $banque->loadList(null,$orderBanque);
 
 $acte_tarmed = null;
 //Instanciation d'un acte tarmed pour l'ajout de ligne dans la facture
-if(CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")){
-	$acte_tarmed = new CActeTarmed();
-	$acte_tarmed->date = mbDate();
-	$acte_tarmed->quantite = 1;
+if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
+  $acte_tarmed = new CActeTarmed();
+  $acte_tarmed->date = mbDate();
+  $acte_tarmed->quantite = 1;
 }
 
 $filter = new CConsultation();

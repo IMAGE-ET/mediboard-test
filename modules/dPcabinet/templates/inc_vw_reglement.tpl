@@ -4,14 +4,14 @@
 {{mb_script module="dPcabinet" script="facture" ajax="true"}}
 
 <script type="text/javascript">
-	
+  
 pursueTarif = function() {
   var form = document.tarifFrm;
   $V(form.tarif, "pursue");
   $V(form.valide, 0);
   Reglement.submit(form, false);
 }	
-	
+  
 cancelTarif = function(action) {
   var form = document.tarifFrm;
   
@@ -46,14 +46,10 @@ validTarif = function(){
 }
 
 loadFacture = function(){
-  {{if $conf.dPcabinet.CConsultation.consult_facture == "1"}}
-    Facture.load(document.tarifFrm, '{{$consult->patient_id}}', '{{$consult->_id}}');
-  {{/if}}
+  Facture.load(document.tarifFrm, '{{$consult->patient_id}}', '{{$consult->_id}}', 1);
 }
 reloadFacture = function(){
-  {{if $conf.dPcabinet.CConsultation.consult_facture == "1"}}
-    Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1);
-  {{/if}}
+ Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->factureconsult_id}}');
 }
 
 modifTotal = function(){
@@ -76,8 +72,8 @@ modifSecteur2 = function(){
 
 printActes = function(){
   var url = new Url('dPcabinet', 'print_actes');
-	url.addParam('consultation_id', '{{$consult->_id}}');
-	url.popup(600, 600, 'Impression des actes');
+  url.addParam('consultation_id', '{{$consult->_id}}');
+  url.popup(600, 600, 'Impression des actes');
 }
 
 checkActe = function(button) {
@@ -89,13 +85,13 @@ checkActe = function(button) {
 
 Main.add( function(){
   prepareForm(document.accidentTravail);
-	
-	{{if $consult->_ref_patient->ald}}
-	if($('accidentTravail_concerne_ALD_1')){
-	  $('accidentTravail_concerne_ALD_1').checked = "checked";
-		onSubmitFormAjax(document.accidentTravail);
-	}
-	{{/if}}	
+  
+  {{if $consult->_ref_patient->ald}}
+  if($('accidentTravail_concerne_ALD_1')){
+    $('accidentTravail_concerne_ALD_1').checked = "checked";
+    onSubmitFormAjax(document.accidentTravail);
+  }
+  {{/if}}	
 });
 </script>
 
@@ -146,7 +142,7 @@ Main.add( function(){
             <input type="hidden" name="_consult_id" value="{{$consult->_id}}" />
           </form>
           {{/if}}
-				
+        
           <!-- Formulaire de selection de tarif -->
           <form name="selectionTarif" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, Reglement.reload.curry(true));">
             <input type="hidden" name="m" value="dPcabinet" />
@@ -203,8 +199,8 @@ Main.add( function(){
                   <th>{{mb_label object=$consult field=tarif}}</th>
                   <td>
                     {{if $consult->valide}}
-	                    <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
-	                    <button class="submit" type="button" style="float: right;" onclick="getForm('creerTarif').submit()">Nouveau tarif</button>
+                      <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
+                      <button class="submit" type="button" style="float: right;" onclick="getForm('creerTarif').submit()">Nouveau tarif</button>
                     {{/if}}
                     {{mb_value object=$consult field=tarif}}
                   </td>
@@ -364,114 +360,13 @@ Main.add( function(){
           </form>
           <!-- Fin du formulaire de tarification -->
       </fieldset>
-      {{if $consult->tarif && $consult->valide == "1" && $conf.dPcabinet.CConsultation.consult_facture == "0"}}
-      <fieldset>
-        <legend>Règlement</legend>
-        <!-- Debut du formulaire de rajout de reglements -->
-        {{if $consult->sejour_id}}
-         <div class="small-info">
-           Consultation de séjour : 
-           <strong>Règlement à effectuer au bureau des sorties</strong>
-         </div>
-        {{else}}
-          {{if $consult->du_patient}}
-            <!-- Formulaire de suppression d'un reglement (car pas possible de les imbriquer) -->
-            <form name="reglement-delete" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-              <input type="hidden" name="m" value="dPcabinet" />
-              <input type="hidden" name="del" value="1" />
-              <input type="hidden" name="dosql" value="do_reglement_aed" />
-              <input type="hidden" name="reglement_id" value="" />
-            </form>
-           
-            <script type="text/javascript">Main.add( function() { prepareForm(document.forms["reglement-add"]); } );</script>
-            
-            <form name="reglement-add" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete : Reglement.reload.curry(false) } );">
-              <input type="hidden" name="m" value="dPcabinet" />
-              <input type="hidden" name="del" value="0" />
-              <input type="hidden" name="dosql" value="do_reglement_aed" />
-              {{mb_key object=$reglement}}
-
-              <input type="hidden" name="date" value="now" />
-              <input type="hidden" name="emetteur" value="patient" />
-              <input type="hidden" name="object_id" value="{{$consult->_id}}"/>
-              <input type="hidden" name="object_class" value="CConsultation"/>
-            
-              <table style="width: 100%;">
-                <tr>
-                  <th class="category">
-                    {{mb_label object=$reglement field=mode}}
-                    ({{mb_label object=$reglement field=banque_id}})
-                  </th>
-                  <th class="category" style="width: 6em;">{{mb_label object=$reglement field=montant}}</th>
-                  <th class="category" style="width: 6em;">{{mb_label object=$reglement field=date}}</th>
-                  <th class="category" style="width: 0em;"></th>
-                </tr>
-                
-                <!--  Liste des reglements deja effectués -->
-                {{foreach from=$consult->_ref_reglements item=_reglement}}
-                <tr>
-                  <td>
-                    {{mb_value object=$_reglement field=mode}}
-                    {{if $_reglement->_ref_banque->_id}}
-                      ({{$_reglement->_ref_banque}})
-                    {{/if}}
-                  </td>
-                  <td>{{mb_value object=$_reglement field=montant}}</td>
-                  <td>
-                    <label title="{{mb_value object=$_reglement field=date}}">
-                      {{$_reglement->date|date_format:$conf.date}}
-                    </label>
-                  </td>
-                  <td>
-                    <a class="button remove notext" href="" onclick="return Reglement.cancel({{$_reglement->_id}});"></a>
-                  </td>
-                </tr>
-                {{/foreach}}
-               
-                {{if $reglement->montant > 0}}
-                <tr>
-                  <td>
-                    {{mb_field object=$reglement field=mode emptyLabel="Choose" onchange="Reglement.updateBanque(this)"}}
-                    {{mb_field object=$reglement field=banque_id options=$banques style="display: none"}}
-                  </td>
-                  <td>{{mb_field object=$reglement field=montant}}</td>
-                  <td></td>
-                  <td><button class="add notext" type="submit" onclick="return this.form.onsubmit();">{{tr}}Add{{/tr}}</button></td>
-                </tr>
-                {{/if}}
-                <tr>
-                  <td colspan="4" style="text-align: center;">
-                    {{mb_value object=$consult field=_reglements_total_patient}} réglés, 
-                    <strong>{{mb_value object=$consult field=_du_patient_restant}} restant</strong>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="4" style="text-align: center;">
-                    <strong>
-                      {{if $consult->patient_date_reglement}}
-                      {{mb_label object=$consult field=patient_date_reglement}}
-                      le 
-                      {{mb_value object=$consult field=patient_date_reglement}}
-                      {{/if}}
-                    </strong>
-                  </td>
-                </tr>
-              </table>
-            </form>
-          {{/if}}
-        {{/if}}
-        <!-- Fin du formulaire de rajout de reglement -->
-      </fieldset>
-      {{/if}}
     </td>
   </tr>
-  {{if $conf.dPcabinet.CConsultation.consult_facture == "1"}}
-    <tr>
-      <td id="load_facture">
-        {{mb_include module=dPcabinet template="inc_vw_facturation"}}
-      </td>
-    </tr>
-  {{/if}}
+  <tr>
+    <td id="load_facture">
+      {{mb_include module=dPcabinet template="inc_vw_facturation"}}
+    </td>
+  </tr>
   {{if array_key_exists("sigems", $modules)}}
     <!-- Inclusion de la gestion du système de facturation -->
     {{mb_include module=sigems template=check_actes_reels}}

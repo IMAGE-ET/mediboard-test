@@ -1,11 +1,12 @@
-<?php /* $Id ajax_creation_facture.php $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPcabinet
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 $patient_id     = CValue::getOrSession("patient_id");
@@ -23,12 +24,12 @@ $facture = new CFactureConsult();
 $where["patient_id"]  = "= '$patient_id'";
 $where["cloture"]     = "IS NULL";
 
-if($facture->loadObject($where)){
+if ($facture->loadObject($where)) {
   $facture->loadRefsConsults();
-  if($du_patient && !$ajout_consult){
+  if ($du_patient && !$ajout_consult) {
     $somme = 0;
     $somme2 = 0;
-    foreach($facture->_ref_consults as $consultation){
+    foreach ($facture->_ref_consults as $consultation) {
       $somme  += $consultation->du_patient;
       $somme2 += $consultation->du_tiers;
     }
@@ -38,26 +39,26 @@ if($facture->loadObject($where)){
     $facture->tarif = null;
     $facture->store();
   }
-  elseif($du_patient && $ajout_consult){
-  	$consult = new CConsultation();
-  	$consult->load($consult_id);
-  	$consult->valide = 0;
-  	$consult->store();
-  	
-  	$acte_tarmed = new CActeTarmed();
-  	$acte_tarmed->object_id = $consult_id;
-  	$acte_tarmed->object_class = 'CConsultation';
-  	$acte_tarmed->executant_id = $chirsel_id;
-  	if(CValue::get("_libelle") && !CValue::get("code")){
+  elseif ($du_patient && $ajout_consult) {
+    $consult = new CConsultation();
+    $consult->load($consult_id);
+    $consult->valide = 0;
+    $consult->store();
+    
+    $acte_tarmed = new CActeTarmed();
+    $acte_tarmed->object_id = $consult_id;
+    $acte_tarmed->object_class = 'CConsultation';
+    $acte_tarmed->executant_id = $chirsel_id;
+    if (CValue::get("_libelle") && !CValue::get("code")) {
       $acte_tarmed->libelle = CValue::get("_libelle");
-  	}
-  	$acte_tarmed->date = $date;
+    }
+    $acte_tarmed->date = $date;
     $acte_tarmed->code = CValue::get("code");
     $acte_tarmed->montant_base = CValue::get("montant_base");
     $acte_tarmed->quantite = CValue::get("quantite");
     $acte_tarmed->store();
     
-  	$facture->du_patient = $facture->du_patient + $du_patient;
+    $facture->du_patient = $facture->du_patient + $du_patient;
     $facture->du_tiers   = $facture->du_tiers + $du_tiers;
     $facture->tarif = null;
     $facture->store();
@@ -67,16 +68,19 @@ if($facture->loadObject($where)){
   }
 }
 //Sinon on la créé
-else{
+else {
   $facture->patient_id    = $patient_id;
   $facture->du_patient    = $du_patient;
-  $facture->du_tiers      = $du_tiers;  
-  $facture->type_facture  = $type_facture;  
+  $facture->du_tiers      = $du_tiers;
+  $facture->type_facture  = $type_facture;
   $facture->ouverture     = mbDate();
+  if (!CAppUI::conf("dPcabinet CConsultation consult_facture")) {
+    $facture->cloture     = mbDate();
+  }
 }
 
 //Enregistrement des modifications si besoin
-if($facture->du_patient){
+if ($facture->du_patient) {
   $facture->store();
   
   //Chargement des éléments de la facture
@@ -84,7 +88,7 @@ if($facture->du_patient){
   $consultation->load($consult_id);
   
   //Ajout de l'id de la facture dans la consultation
-  if($facture->_id){
+  if ($facture->_id) {
     $consultation->factureconsult_id = $facture->_id;
     $consultation->store();
   }
@@ -93,18 +97,25 @@ if($facture->du_patient){
 
 $acte_tarmed = null;
 //Instanciation d'un acte tarmed pour l'ajout de ligne dans la facture
-if(CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
+if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
   $acte_tarmed = new CActeTarmed();
   $acte_tarmed->date = mbDate();
   $acte_tarmed->quantite = 1;
 }
 
+$reglement   = new CReglement();
+$orderBanque = "nom ASC";
+$banque      = new CBanque();
+$banques     = $banque->loadList(null,$orderBanque);
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("reglement"   , $reglement);
+$smarty->assign("banques"     , $banques);
 $smarty->assign("acte_tarmed"   , $acte_tarmed);
 $smarty->assign("facture"       , $facture);
-if(!CValue::get("not_load_banque")){
+if (!CValue::get("not_load_banque")) {
   $smarty->assign("factures"      , array(new CFactureConsult()));
 }
 $smarty->assign("derconsult_id" , $consult_id);

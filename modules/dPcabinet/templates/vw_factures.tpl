@@ -30,6 +30,8 @@ viewFacture = function(element, factureconsult_id){
 printFacture = function(factureconsult_id, edit_justificatif, edit_bvr) {
 //  var url = new Url('dPcabinet', 'edit_bvr_avec_preimpression');
   var url = new Url('dPcabinet', 'edit_bvr');
+//  var url = new Url('tarmed', 'edit_facture_xml');
+//  var url = new Url('tarmed', 'edit_justificatif_xml');
   url.addParam('factureconsult_id', factureconsult_id);
   url.addParam('edition_justificatif', edit_justificatif);
   url.addParam('edition_bvr', edit_bvr);
@@ -132,9 +134,6 @@ Main.add(function () {
       </td>
       <td>
         <table class="form">
-          <tr>
-            <th class="title ">Modifier une facture</th>
-          </tr>
           <tr>
             <td id="load_facture">
               {{mb_include module=dPcabinet template="inc_vw_facturation"}}

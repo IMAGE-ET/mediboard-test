@@ -450,6 +450,7 @@ $locales['CConsultation-examen-desc'] = 'Bilan de l\'examen clinique';
 $locales['CConsultation-facture'] = 'Facturée';
 $locales['CConsultation-facture-court'] = 'Facturée';
 $locales['CConsultation-facture-desc'] = 'Consultation facturée';
+$locales['CConsultation-factureconsult_id'] = 'Facture de la consultation';
 $locales['CConsultation-fin_at'] = 'Fin arrêt de travail';
 $locales['CConsultation-fin_at-desc'] = 'Date de fin de l\'arrêt de travail';
 $locales['CConsultation-following-none'] = 'Aucun rendez-vous suivant';
