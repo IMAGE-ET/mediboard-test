@@ -264,7 +264,13 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $this->_ref_consultation->loadRefsFiles();
     $this->_ref_files =& $this->_ref_consultation->_ref_files;
   }
-
+  
+  function countDocItems($permType = null){
+    if (!$this->_nb_files_docs) {
+      parent::countDocItems($permType);
+    }
+  }
+  
   function loadView() {
     parent::loadView();
     $this->_ref_consultation = $this->_fwd["consultation_id"];
