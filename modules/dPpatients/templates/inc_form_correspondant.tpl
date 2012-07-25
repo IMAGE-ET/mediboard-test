@@ -24,20 +24,31 @@
   
   toggleRelationAutre = function(elt) {
     if ($V(elt) == "autre") {
-      $('relation_autre').setStyle({display: "inline"});
+      $("relation_autre").setStyle({display: "inline"});
     }
     else {
-      $('relation_autre').setStyle({display: "none"});
+      $("relation_autre").setStyle({display: "none"});
     }
   }
   
   toggleParenteAutre = function(elt) {
     if ($V(elt) == "autre") {
-      $('parente_autre').setStyle({display: "table-row"});
+      $("parente_autre").setStyle({display: "table-row"});
     }
     else {
       $("parente_autre").setStyle({display: "none"});
       $V(getForm("editCorrespondant").parente_autre, '');
+    }
+  }
+  
+  toggleConfiance = function(elt) {
+    if ($V(elt) == "confiance") {
+      $("nom_jeune_fille").setStyle({display: "table-row"});
+      $("naissance").setStyle({display: "table-row"});
+    }
+    else {
+      $("nom_jeune_fille").setStyle({display: "none"});
+      $("naissance").setStyle({display: "none"});
     }
   }
 </script>
@@ -55,20 +66,27 @@
         {{if $correspondant->_id}}
           {{tr}}CCorrespondantPatient-title-modify{{/tr}}
         {{else}}
-          {{tr}}CCorrespondantPatient-title-create{{/tr}}
           <span style="float: right; {{if $correspondant->relation != "autre"}}display: none;{{/if}}" id="relation_autre">
             {{mb_label object=$correspondant field=relation_autre}} :
               <input type="text" name="relation_autre" value="{{$correspondant->relation_autre}}" />
           </span>
           <span style="float: left;">
-            {{mb_field object=$correspondant field=relation onchange="toggleRelationAutre(this); toggleUrrsafParente(this)" alphabet=true}}
+            {{mb_field object=$correspondant field=relation onchange="toggleRelationAutre(this); toggleUrrsafParente(this); toggleConfiance(this)" alphabet=true}}
           </span>
+          </th>
+        <tr>
+          <th class="title" colspan="2">
+            {{tr}}CCorrespondantPatient-title-create{{/tr}}
         {{/if}}
       </th>
     </tr>
     <tr>
       <th style="width: 30%;">{{mb_label object=$correspondant field="nom"}}</th>
       <td>{{mb_field object=$correspondant field="nom"}}</td>
+    </tr>
+    <tr {{if $correspondant->relation != "confiance"}}style="display: none;"{{/if}} id="nom_jeune_fille">
+      <th>{{mb_label object=$correspondant field="nom_jeune_fille"}}</th>
+      <td>{{mb_field object=$correspondant field="nom_jeune_fille"}}</td>
     </tr>
     
     {{if $correspondant->relation != "employeur"}}
@@ -78,10 +96,16 @@
       </tr>
     {{/if}}
     
+    <tr {{if $correspondant->relation != "confiance"}}style="display: none;"{{/if}} id="naissance">
+      <th>{{mb_label object=$correspondant field="naissance"}}</th>
+      <td>{{mb_field object=$correspondant field="naissance" form="editCorrespondant" register=true}}</td>
+    </tr>
+    
     <tr>
       <th>{{mb_label object=$correspondant field="adresse"}}</th>
       <td>{{mb_field object=$correspondant field="adresse"}}</td>
     </tr>
+    
     <tr>
       <th>{{mb_label object=$correspondant field="cp"}}</th>
       <td>{{mb_field object=$correspondant field="cp"}}</td>

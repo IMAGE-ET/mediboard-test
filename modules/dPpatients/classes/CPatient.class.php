@@ -1533,7 +1533,9 @@ class CPatient extends CMbObject {
           break;
         case "confiance":
           $template->addProperty("Patient - confiance - nom"    , $_correspondant->nom);
+          $template->addProperty("Patient - confiance - nom de jeune fille" , $_correspondant->nom_jeune_fille);
           $template->addProperty("Patient - confiance - prénom" , $_correspondant->prenom);
+          $template->addProperty("Patient - confiance - date de naissance" , $_correspondant->getFormattedValue("naissance"));
           $template->addProperty("Patient - confiance - adresse", $_correspondant->adresse);
           $template->addProperty("Patient - confiance - cp"     , $_correspondant->cp);
           $template->addProperty("Patient - confiance - ville"  , $_correspondant->ville);

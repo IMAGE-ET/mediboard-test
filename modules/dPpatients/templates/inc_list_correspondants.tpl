@@ -8,6 +8,7 @@
     <tr>
       <th class="title">{{mb_label class=CCorrespondantPatient field=nom}}</th>
       <th class="title">{{mb_label class=CCorrespondantPatient field=prenom}}</th>
+      <th class="title">{{mb_label class=CCorrespondantPatient field=naissance}}</th>
       <th class="title">{{mb_label class=CCorrespondantPatient field=adresse}}</th>
       <th class="title">
         {{mb_label class=CCorrespondantPatient field=cp}} / {{mb_label class=CCorrespondantPatient field=ville}}
@@ -26,7 +27,7 @@
     {{foreach from=$correspondants_by_relation item=_correspondants key=relation}}
       {{if $_correspondants|@count}}
         <tr>
-          <th colspan="12">{{tr}}CCorrespondantPatient.relation.{{$relation}}{{/tr}}</th>
+          <th colspan="13">{{tr}}CCorrespondantPatient.relation.{{$relation}}{{/tr}}</th>
         </tr>
         {{foreach from=$_correspondants item=_correspondant}}
           <tr>
@@ -36,6 +37,7 @@
                 {{mb_value object=$_correspondant field=prenom}}
               {{/if}}
             </td>
+            <td>{{mb_value object=$_correspondant field=naissance}}</td>
             <td>{{mb_value object=$_correspondant field=adresse}}</td>
             <td>
               {{mb_value object=$_correspondant field=cp}}
@@ -66,14 +68,14 @@
           </tr>
         {{foreachelse}}
           <tr>
-            <td colspan="12" class="empty">{{tr}}CCorrespondantPatient.none{{/tr}}</td>
+            <td colspan="13" class="empty">{{tr}}CCorrespondantPatient.none{{/tr}}</td>
           </tr>
         {{/foreach}}
       {{/if}}
     {{/foreach}}
   {{else}}
     <tr>
-      <td colspan="12" class="empty">{{tr}}CCorrespondantPatient.none{{/tr}}</td>
+      <td colspan="13" class="empty">{{tr}}CCorrespondantPatient.none{{/tr}}</td>
     </tr>
   {{/if}}
 </table>

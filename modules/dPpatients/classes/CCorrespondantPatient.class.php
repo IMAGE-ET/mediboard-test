@@ -21,7 +21,9 @@ class CCorrespondantPatient extends CMbObject {
   var $relation   = null;
   var $relation_autre = null;
   var $nom        = null;
+  var $nom_jeune_fille = null;
   var $prenom     = null;
+  var $naissance  = null;
   var $adresse    = null;
   var $cp         = null;
   var $ville      = null;
@@ -52,7 +54,9 @@ class CCorrespondantPatient extends CMbObject {
     $specs["relation"]   = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir";
     $specs["relation_autre"] = "str";
     $specs["nom"]        = "str confidential";
+    $specs["nom_jeune_fille"] = "str";
     $specs["prenom"]     = "str";
+    $specs["naissance"]  = "date";
     $specs["adresse"]    = "text";
     $specs["cp"]         = "numchar minLength|4 maxLength|5";
     $specs["ville"]      = "str confidential";

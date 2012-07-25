@@ -838,6 +838,7 @@ $locales['CSejour-msg-modify'] = 'Séjour modifié';
 $locales['CSejour-nature_accident'] = 'Nature de l\'accident';
 $locales['CSejour-nature_accident-court'] = 'Nature accident';
 $locales['CSejour-nature_accident-desc'] = 'Nature de l\'accident ayant conduit à l\'hospitalisation';
+$locales['CSejour-no_diet_specified'] = "Aucun régime alimentaire spécifié";
 $locales['CSejour-partial_view'] = 'Vue partielle limitée aux résultats de la recherche';
 $locales['CSejour-pathologie'] = 'Pathologie';
 $locales['CSejour-pathologie-court'] = 'Patho.';

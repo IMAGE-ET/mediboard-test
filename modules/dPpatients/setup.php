@@ -1777,8 +1777,14 @@ class CSetupdPpatients extends CSetup {
     $query = "ALTER TABLE `antecedent` 
               CHANGE `type` `type` VARCHAR (80);";
     $this->addQuery($query);          
-              
-    $this->mod_version = "1.51";
+    
+    $this->makeRevision("1.51");
+    $query = "ALTER TABLE `correspondant_patient` 
+      ADD `nom_jeune_fille` VARCHAR (255),
+      ADD `naissance` DATE;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.52";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

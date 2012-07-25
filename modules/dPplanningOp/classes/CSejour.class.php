@@ -909,7 +909,7 @@ class CSejour extends CCodable implements IPatientRelated {
     if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
       $this->entree_prevue = "$this->_date_entree_prevue";
       $this->entree_prevue.= " ".str_pad($this->_hour_entree_prevue, 2, "0", STR_PAD_LEFT);
-      $this->entree_prevue.= ":".str_pad($this->_min_entree_prevue, 2, "0", STR_PAD_LEFT);
+      $this->entree_prevue.= ":".str_pad($this->_min_entree_prevue , 2, "0", STR_PAD_LEFT);
       $this->entree_prevue.= ":00";
     }
     
@@ -918,7 +918,7 @@ class CSejour extends CCodable implements IPatientRelated {
     if ($this->_hour_sortie_prevue !== null and $this->_min_sortie_prevue !== null) {
       $this->sortie_prevue = "$this->_date_sortie_prevue";
       $this->sortie_prevue.= " ".str_pad($this->_hour_sortie_prevue, 2, "0", STR_PAD_LEFT);
-      $this->sortie_prevue.= ":".str_pad($this->_min_sortie_prevue, 2, "0", STR_PAD_LEFT); 
+      $this->sortie_prevue.= ":".str_pad($this->_min_sortie_prevue , 2, "0", STR_PAD_LEFT); 
       $this->sortie_prevue.= ":00";
     }
         
@@ -1233,7 +1233,7 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_prestation = $this->loadFwdRef("prestation_id", true);
   }
   
-  function loadRefsTransmissions($cible_importante = false, $important = false, $limit = ""){
+  function loadRefsTransmissions($cible_importante = false, $important = false, $macro_cible = false, $limit = ""){
     $this->_ref_transmissions = array();
     if ($cible_importante){
       // Chargement de la derniere transmission importante (macrocible)
@@ -1245,6 +1245,11 @@ class CSejour extends CCodable implements IPatientRelated {
       $where["object_class"] = " = 'CCategoryPrescription'";
       $where["sejour_id"] = " = '$this->_id'";
       $where["category_prescription.cible_importante"] = " = '1'";
+      
+      if ($macro_cible) {
+        $where["category_prescription.only_cible"] = " = '1'";
+      }
+      
       $order = "date DESC";
       $this->_ref_transmissions = $transmission->loadList($where, $order, $limit, null, $ljoin);
     }
@@ -2021,6 +2026,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $template->addProperty("Admission - Date longue"          , $this->getFormattedValue("entree_prevue"));
     $template->addDateProperty("Admission - Date"             , $this->entree_prevue);
     $template->addTimeProperty("Admission - Heure"            , $this->entree_prevue);
+    $template->addProperty("Admission - Type"                 , $this->getFormattedValue("type"));
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
     $template->addDateProperty("Hospitalisation - Date sortie", $this->sortie_prevue);
     $template->addProperty("Hospitalisation - Date sortie longue", $this->getFormattedValue("sortie_prevue"));
@@ -2066,6 +2072,10 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->loadRefPraticien();
     $template->addProperty("Hospitalisation - Praticien"    , "Dr ".$this->_ref_praticien->_view);
     
+    $this->loadRefsAffectations();
+    $this->_ref_last_affectation->loadView();
+    $template->addProperty("Hospitalisation - Dernière affectation", $this->_ref_last_affectation);
+    
     // Diagnostics
     $this->loadExtDiagnostics();
     $diag = $this->DP ? "$this->DP: {$this->_ext_diagnostic_principal->libelle}" : null;
@@ -2085,7 +2095,32 @@ class CSejour extends CCodable implements IPatientRelated {
         $transmissions["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
       }
     }
+    
     $template->addListProperty("Sejour - Transmissions", $transmissions);
+    
+    $this->loadRefsTransmissions(false, true, false);
+    
+    $transmissions_hautes = array();
+    foreach ($this->_ref_transmissions as $_trans) {
+      $_trans->loadRefUser();
+      $datetime = mbTransformTime(null, $_trans->date, CAppUI::conf('datetime'));
+      $transmissions_hautes["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
+      
+    }
+    $template->addListProperty("Sejour - Transmissions - importance haute", $transmissions_hautes);
+    
+    $this->loadRefsTransmissions(true, false, true);
+    $transmissions_macro  = array();
+    
+    foreach ($this->_ref_transmissions as $_trans) {
+      $_trans->loadRefUser();
+      $datetime = mbTransformTime(null, $_trans->date, CAppUI::conf('datetime'));
+      $transmissions_macro["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
+      
+    }
+    
+    $template->addListProperty("Sejour - Transmissions - macrocible", $transmissions_macro);
+    
     
     // Observations
     $observations = array();
@@ -2138,12 +2173,42 @@ class CSejour extends CCodable implements IPatientRelated {
       $_operation->loadRefPlageOp(true);
       $datetime = $_operation->getFormattedValue("_datetime");
       $chir = $_operation->loadRefChir(true);
-      $operations[] = "le $datetime, par $chir->_view";
+      $operations[] = "le $datetime, par $chir->_view" . ($_operation->libelle ? " : $_operation->libelle" : "");
     }
     $template->addListProperty("Sejour - Intervention - Liste", $operations);
     
     // Dernière intervention
     $this->_ref_last_operation->fillLimitedTemplate($template);
+    
+    // Régime
+    $regimes = array();
+    
+    if ($this->hormone_croissance) {
+      $regimes[] = CAppUI::tr("CSejour-hormone_croissance");
+    }
+    
+    if ($this->repas_sans_sel) {
+      $regimes[] = CAppUI::tr("CSejour-repas_sans_sel");
+    }
+    
+    if ($this->repas_sans_porc) {
+      $regimes[] = CAppUI::tr("CSejour-repas_sans_porc");
+    }
+    
+    if ($this->repas_diabete) {
+      $regimes[] = CAppUI::tr("CSejour-repas_diabete");
+    }
+    
+    if ($this->repas_sans_residu) {
+      $regimes[] = CAppUI::tr("CSejour-repas_sans_residu");
+    }
+    
+    if (!count($regimes)) {
+      $template->addProperty("Sejour - Régime", CAppUI::tr("CSejour-no_diet_specified"));
+    }
+    else {
+      $template->addListProperty("Sejour - Régime", $regimes);
+    }
     
     $this->notify("AfterFillLimitedTemplate", $template);
   }
@@ -2167,6 +2232,10 @@ class CSejour extends CCodable implements IPatientRelated {
       $prescription = isset($this->_ref_prescriptions["sejour"]) ? $this->_ref_prescriptions["sejour"] : new CPrescription();
       $prescription->type = "sejour";
       $prescription->fillLimitedTemplate($template);
+      $prescription = isset($this->_ref_prescriptions["sortie"]) ? $this->_ref_prescriptions["sortie"] : new CPrescription();
+      $prescription->type = "sortie";
+      $prescription->fillLimitedTemplate($template);
+      
     }
     
     // RPU
