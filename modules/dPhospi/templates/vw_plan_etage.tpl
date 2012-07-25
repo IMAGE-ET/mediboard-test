@@ -47,8 +47,8 @@
 
 <table class="main" style="text-align:center;">
   <tr>
-    <th class="title">Chambres{{* non placées*}}</th>
-    <th class="title">{{if $service_id!=""}}Plan du service '{{$service_selectionne->nom}}'{{else}}Plan{{/if}}</th>
+    <th class="title">Chambres</th>
+    <th class="title">{{if $service_selectionne->_id}}Plan du service '{{$service_selectionne->nom}}'{{else}}Plan{{/if}}</th>
   </tr>
   <tr id="rechargement_grille">
     <td class="conteneur_chambres_non_places">

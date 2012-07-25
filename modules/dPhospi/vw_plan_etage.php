@@ -15,12 +15,18 @@ $service_id   = CValue::postOrSession("service_id");
 
 //Chargement de tous les services
 $service_selectionne = new CService();
-$service_selectionne->load($service_id);
+$where = array();
+$where["service_id"] = " = '$service_id'";
+$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$service_selectionne->loadObject($where);
+
 $service = new CService();
-$services = $service->loadList(null, "nom ASC");
+$services = $service->loadGroupList(null, "nom ASC");
 
 $chambre = new CChambre();
-$chambres_service = $chambre->loadList("service_id = '$service_id'");
+$where = array();
+$where["service_id"] = " = '$service_selectionne->_id'";
+$chambres_service = $chambre->loadGroupList($where);
 
 $ljoin = array();
 $ljoin["service"] = "service.service_id = chambre.service_id";
@@ -29,14 +35,15 @@ $where=array();
 $where["emplacement.plan_x"] = "IS NOT NULL";
 $where["emplacement.plan_y"] = "IS NOT NULL";
 $where["service.service_id"] = " = '$service_id'";
-$chambre_places = $chambre->loadList($where, null, null, null, $ljoin);
+$where["service.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$chambre_places = $chambre->loadGroupList($where, null, null, null, $ljoin);
 
 $chambres_non_placees = $chambres_service;
 if (count($chambre_places)) {
   $where=array();
   $where["service_id"] = " = '$service_id'";
   $where["chambre_id"] = " NOT ". CSQLDataSource::prepareIn(array_keys($chambre_places));
-  $chambres_non_placees = $chambre->loadList($where);
+  $chambres_non_placees = $chambre->loadGroupList($where);
 }
 
 foreach ($chambres_non_placees as $ch) {
