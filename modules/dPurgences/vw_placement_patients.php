@@ -46,21 +46,22 @@ $ljoin["rpu"] = "rpu.sejour_id = sejour.sejour_id";
 $temp = array();
 $temp["sejour.type"]      = " = 'urg'";
 $temp["sejour.entree"]    = " BETWEEN '$date_before' AND '$date_after'";
+$temp["sejour.sortie_reelle"]    = "IS NULL";
 $temp["sejour.annule"]    = " = '0'";
 $temp["sejour.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 
 for ($num = 0; $num <= 1; $num++) {
-	if ($num == 0) {
+  if ($num == 0) {
     $chambres = $chambres_uhcd;
     $temp["sejour.uhcd"] = " = '1'";
     $nom = "uhcd";
-	}
-	else {
+  }
+  else {
     $chambres = $chambres_urgences;
     $temp["sejour.uhcd"] = " = '0'";
     $nom = "urgence";
-	}
-	
+  }
+  
   foreach ($chambres as $chambre) {
     $chambre->loadRefsFwd();
     $chambre->loadRefsLits();
@@ -93,9 +94,9 @@ for ($num = 0; $num <= 1; $num++) {
     $nb_lits=0;
     $q = "";
     foreach ($chambre->_ref_lits as $lit) {
-    	if ($nb_lits) {
-    		$q .= " OR ";
-    	}
+      if ($nb_lits) {
+        $q .= " OR ";
+      }
       $q .= "rpu.box_id = '".$lit->_id."'";
       $nb_lits++;
     }
@@ -106,11 +107,11 @@ for ($num = 0; $num <= 1; $num++) {
     $sejour = new CSejour();
     $sejours = $sejour->loadList($where, null, null,null, $ljoin);
     if ($sejours) {
-    	foreach ($sejours as $sejour) {
-    		$sejour->loadRefRPU();
-    		$sejour->loadRefPrescriptionSejour();
-    		$sejour->loadRefsDocItems();
-    	}
+      foreach ($sejours as $sejour) {
+        $sejour->loadRefRPU();
+        $sejour->loadRefPrescriptionSejour();
+        $sejour->loadRefsDocItems();
+      }
       $listSejours[$nom][$chambre->_id] = $sejours;
     }
   }
@@ -120,16 +121,16 @@ for ($num = 0; $num <= 1; $num++) {
   foreach ($grille[$nom] as $j => $value) {
     $nb=0;
       foreach ($value as $i => $valeur) {
-	      if ($valeur == "0") {
-	        if ($j == 0 || $j == 9) {
-	          $nb++;
-	        }
-	        else {
-	          if (!isset($grille[$nom][$j-1][$i]) || $grille[$nom][$j-1][$i] == "0" || !isset($grille[$nom][$j+1][$i]) || $grille[$nom][$j+1][$i] == "0" ) {
-	            $nb++;
-	          }
-	        }
-	      }
+        if ($valeur == "0") {
+          if ($j == 0 || $j == 9) {
+            $nb++;
+          }
+          else {
+            if (!isset($grille[$nom][$j-1][$i]) || $grille[$nom][$j-1][$i] == "0" || !isset($grille[$nom][$j+1][$i]) || $grille[$nom][$j+1][$i] == "0" ) {
+              $nb++;
+            }
+          }
+        }
       }
     //suppression des lignes inutiles
     if ($nb == 10) {
@@ -145,7 +146,7 @@ for ($num = 0; $num <= 1; $num++) {
       $total++;
       if (!isset($grille[$nom][$j][$i]) || $grille[$nom][$j][$i] == "0") {
         if ($i == 0 || $i == 9) {
-        	$nb++; 
+          $nb++; 
         }
         else {
           if ((!isset($grille[$nom][$j][$i-1]) || $grille[$nom][$j][$i-1] == "0") || (!isset($grille[$nom][$j][$i+1]) || $grille[$nom][$j][$i+1] == "0")) {
