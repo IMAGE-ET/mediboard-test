@@ -11,7 +11,7 @@
             {{assign var=chambre   value=$_zone->chambre_id}}
             {{if isset($listSejours.$name_grille.$chambre|smarty:nodefaults)}}
               {{foreach from=$listSejours.$name_grille.$chambre item=_sejour }}
-                {{assign var=_patient   value=$_sejour->_ref_patient}}
+                {{assign var=patient   value=$_sejour->_ref_patient}}
                 {{assign var=rpu   value=$_sejour->_ref_rpu}}
                 <div class="patient draggable ccmu-{{if $rpu->ccmu}}{{$rpu->ccmu}}{{else}}0{{/if}}" data-rpu-guid="{{$rpu->_guid}}" data-patient-id="{{$rpu->_ref_sejour->patient_id}}">
                   <form name="{{$rpu->_guid}}" action="" method="post">
@@ -22,14 +22,14 @@
                     <input type="hidden" name="box_id"      value="{{$rpu->box_id}}"/>
                   </form>
                    <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$rpu->_id}}">
-                     <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');" >
-                       {{$_patient->nom}} {{$_patient->prenom}}
+                     <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');" >
+                       {{$patient->nom}} {{$patient->prenom}}
                      </span>
                    </a>                 
                   {{mb_include template=inc_icone_attente rpu=$_sejour->_ref_rpu width=16}}
                  <div class="libelle compact" >
                     {{$rpu->motif|truncate:30|lower}}
-                    <div>({{$_patient->_age}}) Arrivée: {{mb_value object=$_sejour field=_entree date=$date}}</div>
+                    <div>({{$patient->_age}}) Arrivée: {{mb_value object=$_sejour field=_entree date=$date}}</div>
                  </div>
                  
                   {{if $rpu->radio_debut}}
