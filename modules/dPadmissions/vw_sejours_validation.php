@@ -1,17 +1,16 @@
-<?php /* $Id: vw_idx_admission.php 12978 2011-08-29 10:11:28Z flaviencrochard $ */
+<?php /* $Id: vw_idx_admission.php $ */
 
 /**
  * @package Mediboard
  * @subpackage dPadmissions
- * @version $Revision: 12978 $
+ * @version $Revision: $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
 global $current_m;
-$current_m = "ssr";
+$current_m = "dPadmissions";
 
 CAppUI::requireModuleFile("reservation", "vw_sejours_validation");
-
 
 ?>

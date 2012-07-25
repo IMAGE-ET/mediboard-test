@@ -1,39 +1,39 @@
-{{* $Id: inc_vw_all_admissions.tpl 11726 2011-04-03 14:06:56Z mytto $ *}}
-
 {{*
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: 11726 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage reservation
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ *}}
 
 <table class="tbl" style="text-align: center;">
   <tr>
     <th class="title" colspan="4">
-      <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_sejours_validation&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
+      <a style="display: inline;" href="?m={{$current_m}}&amp;tab=vw_sejours_validation&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
       {{$date|date_format:"%b %Y"}}
-      <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_sejours_validation&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
+      <a style="display: inline;" href="?m={{$current_m}}&amp;tab=vw_sejours_validation&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
     </th>
   </tr>
-		
+    
   <tr>
     <th rowspan="2">Date</th>
   </tr>
 
   <tr>
     <th class="text">
-      <a class={{if $recuse=='-1'}}"selected"{{else}}"selectable"{{/if}} title="Séjours en attente" href="?m={{$m}}&amp;tab=vw_sejours_validation&amp;recuse=-1">
+      <a class={{if $recuse=='-1'}}"selected"{{else}}"selectable"{{/if}} title="Séjours en attente" href="?m={{$current_m}}&amp;tab=vw_sejours_validation&amp;recuse=-1">
         Att.
       </a>
     </th>
     <th class="text">
-      <a class={{if $recuse=='0'}}"selected"{{else}}"selectable"{{/if}} title="Séjours validés" href="?m={{$m}}&amp;tab=vw_sejours_validation&amp;recuse=0">
+      <a class={{if $recuse=='0'}}"selected"{{else}}"selectable"{{/if}} title="Séjours validés" href="?m={{$current_m}}&amp;tab=vw_sejours_validation&amp;recuse=0">
         Val.
       </a>
     </th>
     <th class="text">
-      <a class={{if $recuse=='1'}}"selected"{{else}}"selectable"{{/if}} title="Séjours récusés" href="?m={{$m}}&amp;tab=vw_sejours_validation&amp;recuse=1">
+      <a class={{if $recuse=='1'}}"selected"{{else}}"selectable"{{/if}} title="Séjours récusés" href="?m={{$current_m}}&amp;tab=vw_sejours_validation&amp;recuse=1">
         Rec.
       </a>
     </th>
@@ -48,10 +48,10 @@
       {{elseif $day_number == '0' || $day_number == '6'}}
         style="background-color: #ccc;"
       {{/if}}>
-      <a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$day|iso_date}}" title="{{$day|date_format:$conf.longdate}}">
+      <a href="?m={{$current_m}}&tab=vw_sejour_validation&date={{$day|iso_date}}" title="{{$day|date_format:$conf.longdate}}">
         <strong>
-	        {{$day|date_format:"%a"|upper|substr:0:1}}
-	        {{$day|date_format:"%d"}}
+          {{$day|date_format:"%a"|upper|substr:0:1}}
+          {{$day|date_format:"%d"}}
         </strong>
       </a>
     </td>
@@ -66,8 +66,8 @@
     </td>
   </tr>
   {{foreachelse}}
-	<tr>
-		<td colspan="10" class="empty">Pas d'admission ce mois</td>
-	</tr>
+  <tr>
+    <td colspan="10" class="empty">Pas d'admission ce mois</td>
+  </tr>
   {{/foreach}}
 </table>

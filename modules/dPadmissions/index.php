@@ -10,6 +10,9 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
+if (CAppUI::conf("dPadmissions use_recuse")) {
+  $module->registerTab("vw_sejours_validation", TAB_EDIT);
+}
 $module->registerTab("vw_idx_admission"         , TAB_READ);
 $module->registerTab("vw_idx_sortie"            , TAB_READ);
 $module->registerTab("vw_idx_preadmission"      , TAB_READ);

@@ -1,12 +1,12 @@
-{{* $Id: inc_vw_admission_line.tpl 13679 2011-11-04 17:46:47Z rhum1 $ *}}
-
 {{*
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: 13679 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
-*}}
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage reservation
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ *}}
 
 {{if $_sejour->type == 'ambu'}} {{assign var=background value="#faa"}}
 {{elseif $_sejour->type == 'comp'}} {{assign var=background value="#fff"}}

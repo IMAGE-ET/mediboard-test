@@ -1,19 +1,29 @@
-<?php /* $Id: httpreq_vw_all_admissions.php 12978 2011-08-29 10:11:28Z flaviencrochard $ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: 12978 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage reservation
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
-
 CCanDo::checkRead();
+
+global $m;
+
+// On sauvegarde le module pour que les mises en session des paramètes se fassent
+// dans le module depuis lequel on accède à la ressource
+$save_m = $m;
 
 $ds = CSQLDataSource::get("std");
 
 // Initialisation de variables
-$date = CValue::getOrSession("date", mbDate());
+$current_m     = CValue::get("current_m");
+
+$m = $current_m;
+
+$date          = CValue::getOrSession("date", mbDate());
 $month_min     = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
 $month_max     = mbTransformTime("+ 1 month", $month_min, "%Y-%m-01");
 $lastmonth     = mbDate("-1 month", $date);
@@ -79,7 +89,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`se
   GROUP BY `date`
   ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $num1) {
-	$days[$day]["num1"] = $num1;
+  $days[$day]["num1"] = $num1;
 }
 
 // Liste des séjours validés par jour
@@ -115,9 +125,12 @@ foreach ($ds->loadHashList($query) as $day => $num3) {
   $days[$day]["num3"] = $num3;
 }
 
+$m = $save_m;
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("current_m"    , $current_m);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
 

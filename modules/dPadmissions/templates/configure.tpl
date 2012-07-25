@@ -11,7 +11,8 @@
   {{mb_include module=system template=inc_config_enum var=fiche_admission values="a4|a5"}}
   {{mb_include module=system template=inc_config_bool var=show_dh}}
   {{mb_include module=system template=inc_config_bool var=show_prestations_sorties}}
-
+  {{mb_include module=system template=inc_config_bool var=use_recuse}}
+  
   {{mb_include module=system template=inc_config_bool var=show_deficience}}
 
   <tr>

@@ -14,6 +14,7 @@
 $dPconfig["dPadmissions"] = array(
   "show_deficience" => 0,
   "show_prestations_sorties" => 0,
+  "use_recuse" => "0"
 );
 
 ?>

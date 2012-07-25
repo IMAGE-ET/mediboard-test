@@ -1,16 +1,27 @@
-<?php /* $Id: httpreq_vw_admissions.php 13224 2011-09-21 12:32:54Z lryo $ */
-
+<?php 
 /**
- * @package Mediboard
- * @subpackage dPadmissions
- * @version $Revision: 13224 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage reservation
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
 
+global $m;
+
+// On sauvegarde le module pour que les mises en session des paramètes se fassent
+// dans le module depuis lequel on accède à la ressource
+$save_m = $m;
+
 // Type d'admission
+$current_m      = CValue::get("current_m");
+
+$m = $current_m;
+
 $service_id     = CValue::getOrSession("service_id");
 $prat_id        = CValue::getOrSession("prat_id");
 $recuse         = CValue::getOrSession("recuse", "-1");
@@ -66,7 +77,7 @@ if($recuse != 1) {
 }
 
 if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
-	$order_col = "patient_id";	
+  $order_col = "patient_id";	
 }
 
 if ($order_col == "patient_id"){
@@ -91,9 +102,9 @@ foreach ($sejours as $sejour_id => $_sejour) {
   $_sejour->loadRefPraticien(1);
   $_sejour->loadRefFicheAutonomie();
   
-	if ($filterFunction && $filterFunction != $praticien->function_id) {
+  if ($filterFunction && $filterFunction != $praticien->function_id) {
     unset($sejours[$sejour_id]);
-	  continue;
+    continue;
   }
   
   // Chargement du patient
@@ -115,14 +126,17 @@ foreach ($sejours as $sejour_id => $_sejour) {
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
 if ($filterFunction && !array_key_exists($filterFunction, $functions)){
-	$_function = new CFunctions();
-	$_function->load($filterFunction);
-	$functions[$filterFunction] = $_function;
+  $_function = new CFunctions();
+  $_function->load($filterFunction);
+  $functions[$filterFunction] = $_function;
 }
+
+
+$m = $save_m;
 
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("current_m"     , $current_m);
 $smarty->assign("hier"          , $hier);
 $smarty->assign("demain"        , $demain);
 $smarty->assign("date_min"      , $date_min);

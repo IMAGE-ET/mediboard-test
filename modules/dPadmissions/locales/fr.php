@@ -21,6 +21,8 @@ $locales['config-dPadmissions-show_dh'] = 'Afficher dépassement honoraire';
 $locales['config-dPadmissions-show_dh-desc'] = 'Afficher dépassement honoraire';
 $locales['config-dPadmissions-show_prestations_sorties'] = 'Prestations dans les sorties';
 $locales['config-dPadmissions-show_prestations_sorties-desc'] = 'Afficher les prestations dans l\'onglet Sorties. Désactivé par défaut car volumineux en hauteur';
+$locales['config-dPadmissions-use_recuse'] = 'Utiliser la gestion des récusations';
+$locales['config-dPadmissions-use_recuse-desc'] = 'Utiliser la gestion des récusations';
 $locales['mod-dPadmissions-tab-configure'] = 'Configuration';
 $locales['mod-dPadmissions-tab-httpreq_vw_admissions'] = 'Admissions du jour';
 $locales['mod-dPadmissions-tab-httpreq_vw_all_admissions'] = 'Bilan mensuel d\'admission';
@@ -39,6 +41,7 @@ $locales['mod-dPadmissions-tab-vw_idx_preadmission'] = 'Pré-admissions';
 $locales['mod-dPadmissions-tab-vw_idx_present'] = 'Présents';
 $locales['mod-dPadmissions-tab-vw_idx_sortie'] = 'Sorties';
 $locales['mod-dPadmissions-tab-vw_legende'] = 'Légende';
+$locales['mod-dPadmissions-tab-vw_sejours_validation'] = 'Validation séjours';
 $locales['module-dPadmissions-court'] = 'Admissions';
 $locales['module-dPadmissions-long'] = 'Gestion des admissions';
 ?>

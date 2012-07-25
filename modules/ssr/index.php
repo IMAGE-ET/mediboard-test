@@ -10,9 +10,10 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-if(CAppUI::conf("ssr recusation use_recuse")) {
+if (CAppUI::conf("ssr recusation use_recuse")) {
   $module->registerTab("vw_sejours_validation", TAB_EDIT);
 }
+
 $module->registerTab("vw_sejours_ssr"         , TAB_READ);
 $module->registerTab("vw_aed_sejour_ssr"      , TAB_READ);
 $module->registerTab("vw_kine_board"          , TAB_EDIT);
