@@ -776,8 +776,7 @@ class CCompteRendu extends CDocumentItem {
     // Prevent modele_id = compte_rendu_id
     // But, allow to save the content
     if ($this->_id === $this->modele_id) {
-      CAppUI::setMsg(CAppUI::tr("CCompteRendu-same_ids"), UI_MSG_ERROR);
-      return;
+      $this->modele_id = "";
     }
     
     // Detect the fields not completed

@@ -200,7 +200,6 @@ $locales['CCompteRendu-purge_field-court'] = 'Purge';
 $locales['CCompteRendu-purge_field-desc'] = 'Champ à purger (suppression des lignes qui ne contiennent que ce champ)';
 $locales['CCompteRendu-purgeable'] = 'Temporaire';
 $locales['CCompteRendu-purgeable-desc'] = 'Temporaire (les documents générés à partir de ce modèle seront supprimés automatiquement)';
-$locales['CCompteRendu-same_ids'] = 'Impossible de sauvegarder : le compte-rendu ne peut se référencer lui-même';
 $locales['CCompteRendu-size'] = 'Taille';
 $locales['CCompteRendu-size-desc'] = 'Taille de police par défaut du modèle';
 $locales['CCompteRendu-source'] = 'Contenu';
