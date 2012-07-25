@@ -624,7 +624,7 @@ div.rank.desired {
   padding:      5px;
   margin-top: -1px;
   cursor: default;
-  z-index: 550 !important;
+  z-index: 1000 !important;
   
   -moz-box-shadow   : 0 4px 8px rgba(0,0,0,0.4);
   -webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.4);
@@ -636,17 +636,6 @@ div.rank.desired {
   -webkit-border-top-left-radius: 0;
   border-radius: 6px;
   border-top-left-radius: 0;
-}
-
-/** 
- *  Quand les datepicker sont dans des modales (position:fixed) on ne met pas 
- *  le "picker" a la fin de body mais a cot� du input, il faut donc forcer 
- *  le positionnement a cot� du input
- */
-.modal .datepickerControl {
-  position: absolute!important; 
-  top: auto!important; 
-  left: auto!important; 
 }
 
 .datepickerControl.inline {
@@ -806,14 +795,14 @@ div.rank.desired {
   width: 100%;
   position: absolute;
   background-color:#333;
-  z-index: 899;
+  z-index: 1300;
 }
 
 #waitingMsgText {
   width: 20%;
   min-width: 150px;
   position: fixed;
-  z-index: 900;
+  z-index: 1400;
   font-size: 1.2em;
   background-color: #fff;
   color:#000;

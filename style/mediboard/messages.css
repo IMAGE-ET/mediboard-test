@@ -20,7 +20,7 @@ table.dialog #systemMsg,
   padding: 2px;
   border: 1px solid #888;
   right: 20px;
-  z-index: 850;
+  z-index: 1200;
   background: rgba(255,255,255,0.6);
   -moz-box-shadow   : 0 0 10px rgba(0,0,0,0.4);
   -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.4);
@@ -75,6 +75,10 @@ div.loading {
   min-height: 16px;
   min-width: 16px;
   z-index: 800;
+}
+
+.modal .ajax-loading {
+  z-index: 1002;
 }
 
 div.small-success,

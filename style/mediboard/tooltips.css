@@ -32,6 +32,10 @@ div.tooltip {
   20px -15px 30px red;*/
 }
 
+.modal div.tooltip {
+  z-index: 1001;
+}
+
 /** Postit **/
 div.postit {
   -moz-border-radius: 6px;

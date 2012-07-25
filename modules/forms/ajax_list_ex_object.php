@@ -151,12 +151,16 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     $ex_classes_creation[$ex_class_key] = array();
   }
 
+  // Masquer les sous formulaires !!!
+  
   if ( $_ex_class->host_class == $reference_class && // Possible context
       !$_ex_class->disabled && // Not disabled
        $_ex_class->checkConstraints($reference) && // Passes constraints
-       $_ex_class->canCreateNew($reference)
-  ) { // Check unicity
-    $ex_classes_creation[$ex_class_key][$_ex_class_id] = $_ex_class;
+       $_ex_class->canCreateNew($reference) // Check unicity
+  ) {
+    if ($detail > 0 || !$_ex_class->conditional) {
+      $ex_classes_creation[$ex_class_key][$_ex_class_id] = $_ex_class;
+    }
 
     if (count($_ex_objects) == 0){
       $ex_objects_by_event[$ex_class_key][$_ex_class_id] = array();

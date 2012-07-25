@@ -903,9 +903,9 @@ var DOM = {
 DOM.tags.each(DOM.defineTag);
 
 // To let the tooltips on top
-Control.Window.baseZIndex = 499;
-Control.Overlay.styles.zIndex = 498;
-Control.Overlay.ieStyles.zIndex = 498;
+Control.Window.baseZIndex = 800;
+Control.Overlay.styles.zIndex = 799;
+Control.Overlay.ieStyles.zIndex = 799;
 
 if (document.documentMode >= 8) {
   Control.Overlay.ieStyles.position = "fixed";

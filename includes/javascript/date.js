@@ -504,10 +504,6 @@ var Calendar = {
 
     Calendar.prepareDates(dates);
     
-    // desactivé car tres moche quand datepicker dans les modales tres peu hautes
-    // FIXME
-    var inModalWindow = false;//!!element.up(".modal");
-    
     // Default options
     options = Object.extend({
       datePicker: true,
@@ -519,7 +515,7 @@ var Calendar = {
       timePickerAdjacent: !window.Mobile, 
       use24hrs: true,
       weekNumber: true,
-      container: (inModalWindow ? null : $(document.body)),
+      container: $(document.body),
       dateProperties: function(date){return Calendar.dateProperties(date, dates)},
       center: window.Mobile,
       editable: false
@@ -590,10 +586,6 @@ var Calendar = {
       
       if(!dp) return;
       
-      if (inModalWindow) {
-        this.icon.insert({after: dp});
-      }
-      
       dp.setStyle({zIndex: ""}). // FIXME do not set it in datepicker.js
          unoverflow();
          
@@ -655,14 +647,6 @@ var Calendar = {
           $(element).
             setStyle({zIndex: ""}). // FIXME do not set it in datepicker.js
             unoverflow();
-            
-          if (inModalWindow) {
-            this.datepicker.element.setStyle({
-              fontWeight: "normal",
-              fontStyle:  "normal"
-            });
-            this.icon.insert({after: this.datepicker.element});
-          }
         }
       }.bindAsEventListener(datepicker));
     }

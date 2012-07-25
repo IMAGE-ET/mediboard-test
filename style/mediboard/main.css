@@ -13,14 +13,19 @@
 
 /** 
 z-index ordering (foreground to background) :
- 1000 div#console
-  900 #waitingMsgText
-  899 #waitingMsgMask
-  850 #systemMsg
+ 1500 div#console
+ 1400 #waitingMsgText
+ 1300 #waitingMsgMask
+ 1200 #systemMsg
+  
+ 1002 div.modal .ajax-loading
+ 1001 div.modal div.tooltip
+ 1000 .datepickerControl
+  801 div.modal
+  
   800 .ajax-loading
   600 div.tooltip
-  550 .datepickerControl
-  500 div.modal
+  
   400 div.autocomplete
   100 .planning .event:hover
   100 .planning .selected, .planning .selected:hover

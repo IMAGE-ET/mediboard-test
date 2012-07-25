@@ -178,7 +178,7 @@ class CConsultation extends CCodable {
     $props["categorie_id"]      = "ref class|CConsultationCategorie show|1";
     $props["grossesse_id"]      = "ref class|CGrossesse show|0";
     $props["factureconsult_id"] = "ref class|CFactureConsult show|0";
-    $props["_praticien_id"]     ="ref class|CMediusers seekable show|1"; //is put here for view
+    $props["_praticien_id"]     ="ref class|CMediusers show|1"; //is put here for view
     $props["_function_secondary_id"] = "ref class|CFunctions";
     $props["motif"]             = "text helped seekable";
     $props["type"]              = "enum list|classique|entree|chimio default|classique";
