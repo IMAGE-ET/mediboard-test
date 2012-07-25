@@ -33,6 +33,7 @@ div.patient{
   padding: 1px;
   margin: 3px;
   background-color: rgba(255,255,255,0.8);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#90ffffff,endColorstr=#90ffffff);
   width: 92%;
   box-shadow: 0 0 0 1px silver;
 }

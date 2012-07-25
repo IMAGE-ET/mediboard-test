@@ -85,6 +85,8 @@
       {{/if}}
     {{/foreach}}
     </tr>
+    {{foreachelse}}
+    <div class="small-warning">{{tr}}dPurgences-no-service_{{$name_grille}}s_id{{/tr}}</div>
     {{/foreach}}
   </table>
 </div>

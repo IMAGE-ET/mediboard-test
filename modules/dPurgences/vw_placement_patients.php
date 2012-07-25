@@ -23,11 +23,13 @@ $ljoin["service"]     = "service.service_id = chambre.service_id";
 $ljoin["emplacement"] = "emplacement.chambre_id = chambre.chambre_id";
 $where = array();
 $where["service.urgence"]    = "= '1'";
+$where["service.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 $where["emplacement.plan_x"] = "IS NOT NULL";
 $chambres_urgences = $chambre->loadList($where, null, null, null, $ljoin);
 
 $where = array();
 $where["service.uhcd"]       = "= '1'";
+$where["service.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 $where["emplacement.plan_x"] = "IS NOT NULL";
 $chambres_uhcd = $chambre->loadList($where, null, null, null, $ljoin);
 
