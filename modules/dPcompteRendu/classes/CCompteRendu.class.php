@@ -773,6 +773,13 @@ class CCompteRendu extends CDocumentItem {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
     }
     
+    // Prevent modele_id = compte_rendu_id
+    // But, allow to save the content
+    if ($this->_id === $this->modele_id) {
+      CAppUI::setMsg(CAppUI::tr("CCompteRendu-same_ids"), UI_MSG_ERROR);
+      return;
+    }
+    
     // Detect the fields not completed
     $matches = array();
     preg_match_all("/(field|name)\">(\[)+[^\]]+(\])+<\/span>/ms", $this->_source, $matches);
@@ -909,6 +916,9 @@ class CCompteRendu extends CDocumentItem {
          font-size: $default_size;
          margin:  0;
          padding: 0;
+       }
+       .orig {
+         display: none;
        }";
 
     $content = "";
