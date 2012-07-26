@@ -1051,7 +1051,7 @@ Element._duplicates = [];
 Element._idConflicts = [];
 
 Element.warnDuplicates = function(){
-  if (Prototype.Browser.IE || !(console.firebug || (Preferences.INFOSYSTEM == 1))) return; // if("0") => true
+  if (Prototype.Browser.IE || Prototype.Browser.IPad || !(console.firebug || (Preferences.INFOSYSTEM == 1))) return; // if("0") => true
   
   var elements;
   
