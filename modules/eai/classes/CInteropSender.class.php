@@ -49,8 +49,9 @@ class CInteropSender extends CInteropActor {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
+
     $backProps["messages_supported"]   = "CMessageSupported object_id";
-    $backProps["expediteur_generique"] = "CExchangeAny sender_id";
+
     return $backProps;
   }
   
