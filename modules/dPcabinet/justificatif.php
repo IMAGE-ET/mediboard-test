@@ -1,7 +1,30 @@
 <?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
+
 $colonnes = array(20, 28, 25, 75, 30);
+
+/**
+ * Création du premier type d'en-tête possible d'un justificatif 
+ * 
+ * @param object $pdf       le pdf
+ * @param object $facture   la facture courante
+ * @param object $user      l'utilisateur
+ * @param object $praticien le praticien de la facture
+ * @param object $group     l'établissement
+ * @param object $colonnes  les colonnes
+ * 
+ * @return void
+ */
 function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
-	ajoutEntete2($pdf, 1, $facture, $user, $praticien, $group, $colonnes);
+  ajoutEntete2($pdf, 1, $facture, $user, $praticien, $group, $colonnes);
   $pdf->SetFillColor(255, 255, 255);
   $pdf->SetDrawColor(0);
   $pdf->Rect(10, 38, 180, 100,'DF');
@@ -34,9 +57,9 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
   );
   $font = "vera";
   $pdf->setFont($font, '', 8);
-  foreach($lignes as $ligne){
+  foreach ($lignes as $ligne) {
     $pdf->setXY(10, $pdf->getY()+4);
-    foreach($ligne as $key => $value){
+    foreach ($ligne as $key => $value) {
       $pdf->Cell($colonnes[$key], "", $value);
     }
   }
@@ -45,6 +68,20 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
   $pdf->Line(10, 127, 190, 127);
   $pdf->Line(10, 131, 190, 131);
 }
+
+/**
+ * Création du second type d'en-tête possible d'un justificatif, celui-ci étant plus léger 
+ * 
+ * @param object $pdf       le pdf
+ * @param object $nb        le numéro de la page
+ * @param object $facture   la facture courante
+ * @param object $user      l'utilisateur
+ * @param object $praticien le praticien de la facture
+ * @param object $group     l'établissement
+ * @param object $colonnes  les colonnes
+ * 
+ * @return void
+ */
 function ajoutEntete2($pdf, $nb, $facture, $user, $praticien, $group, $colonnes){
   $font = "verab";
   $pdf->setFont($font, '', 12);
@@ -64,15 +101,15 @@ function ajoutEntete2($pdf, $nb, $facture, $user, $praticien, $group, $colonnes)
   $font = "vera";
   $pdf->setFont($font, '', 8);
   $pdf->setXY(10, $pdf->getY()-4);
-  foreach($lignes as $ligne){
+  foreach ($lignes as $ligne) {
     $pdf->setXY(10, $pdf->getY()+4);
-    foreach($ligne as $key => $value){
+    foreach ($ligne as $key => $value) {
       $pdf->Cell($colonnes[$key], "", $value);
     }
   }
 }
   
-foreach($factures as $facture){
+foreach ($factures as $facture) {
   // Création du PDF
   $pdf = new CMbPdf('P', 'mm');
   $pdf->setPrintHeader(false);
@@ -85,25 +122,17 @@ foreach($factures as $facture){
   $facture->loadNumerosBVR("nom");
   $pm = 0;
   $pt = 0;
-  foreach($facture->_ref_consults as $consult){
-    foreach($consult->_ref_actes_tarmed as $acte){
-      $pt += $acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite;
-      $pm += $acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al * $acte->quantite;
-    }
-  }
-  $pt = sprintf("%.2f", $pt * $facture->_coeff);
-  $pm = sprintf("%.2f", $pm * $facture->_coeff);
   
   $hauteur_en_tete = 100;
 // Praticien selectionné
-    if($prat_id){
+    if ($prat_id) {
       $praticien = new CMediusers();
       $praticien->load($prat_id);
     }
-    else{
+    else {
       $praticien = $facture->_ref_chir;
     }
-    if(!$praticien){
+    if (!$praticien) {
       $chirSel = CValue::getOrSession("chirSel", "-1");
       $praticien = new CMediusers();
       $praticien->load($chirSel);
@@ -130,7 +159,7 @@ foreach($factures as $facture){
             "Montant" => 10 );
   $x=0;
   $pdf->setX(10);
-  foreach($tailles_colonnes as $key => $value){
+  foreach ($tailles_colonnes as $key => $value) {
     $pdf->setXY($pdf->getX()+$x, 140);
     $pdf->Cell($value, "", $key, null, null, "C");
     $x = $value;
@@ -139,18 +168,18 @@ foreach($factures as $facture){
   $debut_lignes = 140;
   $nb_pages = 1;
   $montant_intermediaire = 0;
-  foreach($facture->_ref_consults as $consult){
-    foreach($consult->_ref_actes_tarmed as $acte){
+  foreach ($facture->_ref_consults as $consult) {
+    foreach ($consult->_ref_actes_tarmed as $acte) {
       $ligne++;
       $x = 0;
       $pdf->setXY(37, $debut_lignes + $ligne*3);
       //Traitement pour le bas de la page et début de la suivante
-      if($pdf->getY()>=265){
-      	$pdf->setFont("verab", '', 8);
-      	$pdf->setXY($pdf->getX()+$x, $debut_lignes + $ligne*3);
-      	$pdf->Cell(130, "", "Total Intermédiaire", null, null, "R");
-      	$pdf->Cell(28, "",$montant_intermediaire , null, null, "R");
-      	$pdf->setFont("vera", '', 8);
+      if ($pdf->getY()>=265) {
+        $pdf->setFont("verab", '', 8);
+        $pdf->setXY($pdf->getX()+$x, $debut_lignes + $ligne*3);
+        $pdf->Cell(130, "", "Total Intermédiaire", null, null, "R");
+        $pdf->Cell(28, "",$montant_intermediaire , null, null, "R");
+        $pdf->setFont("vera", '', 8);
         $pdf->AddPage();  
         $nb_pages++;
         ajoutEntete2($pdf, $nb_pages, $facture, $user, $praticien, $group, $colonnes);
@@ -170,70 +199,84 @@ foreach($factures as $facture){
       $pdf->Write("<b>",substr($acte->_ref_tarmed->libelle, 0, 90));
       $ligne++;
       //Si le libelle est trop long
-      if(strlen($acte->_ref_tarmed->libelle)>90){
-      	
-      	$pdf->setXY(37, $debut_lignes + $ligne*3);
-	      $pdf->Write("<b>",substr($acte->_ref_tarmed->libelle, 90));
-	      $ligne++;
+      if (strlen($acte->_ref_tarmed->libelle)>90) {
+        $pdf->setXY(37, $debut_lignes + $ligne*3);
+        $pdf->Write("<b>",substr($acte->_ref_tarmed->libelle, 90));
+        $ligne++;
       }
      
-      
       $pdf->setX(10);
       $pdf->setFont("vera", '', 8);
       
-      foreach($tailles_colonnes as $key => $largeur){
-      	
+      foreach ($tailles_colonnes as $key => $largeur) {      	
           $pdf->setXY($pdf->getX()+$x, $debut_lignes + $ligne*3);
           $valeur = "";
           $cote = "C";
-          if($key == "Date"){
-            if($acte->date){
+          if ($key == "Date") {
+            if ($acte->date) {
               $valeur = $acte->date;
             }
-            else{
+            else {
               $valeur = $consult->_date;
             }
             $valeur= mbTransformTime(null, $valeur, "%d.%m.%Y");
           }
-          if($key == "Tarif"){
+          if ($key == "Tarif") {
             $valeur = "001";
           }
-          if($key == "Code" && $acte->code!=10){
+          if ($key == "Code" && $acte->code!=10) {
             $valeur = $acte->code;
           }
-          if($key == "Code réf"){
-            $valeur = $acte->_ref_tarmed->procedure_associe[0][0];
+          if ($key == "Code réf") {
+            if ($acte->code_ref) {
+              $valeur = $acte->code_ref;
+            }
+            else {
+              $valeur = $acte->_ref_tarmed->procedure_associe[0][0];
+            }
           }
-          if($key == "Sé Cô"){
+          if ($key == "Sé Cô") {
              $valeur = "1";
           }
-          if($key == "Quantité"){
-            $valeur = $acte->quantite; //->quantite|string_format:"%.2f"
+          if ($key == "Quantité") {
+            $valeur = $acte->quantite;
           }
-          if($key == "Pt PM/Prix"){
+          
+          if ($acte->code_ref) {
+            $acte_ref = null;
+            foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
+              if ($acte_tarmed->code == $acte->code_ref) {
+                $acte_ref = $acte_tarmed;break;
+              }
+            }
+            $acte_ref->loadRefTarmed();
+            $acte->_ref_tarmed->tp_al = $acte_ref->_ref_tarmed->tp_al;
+            $acte->_ref_tarmed->tp_tl = $acte_ref->_ref_tarmed->tp_tl;
+          }
+          if ($key == "Pt PM/Prix") {
             $valeur = $acte->_ref_tarmed->tp_al;
             $cote = "R";
           }
-          if($key == "fPM"){
+          if ($key == "fPM") {
             $valeur = $acte->_ref_tarmed->f_al;
           }
-          if($key == "VPtPM" || $key == "VPtPT"){
+          if ($key == "VPtPM" || $key == "VPtPT") {
             $valeur = $facture->_coeff;
           }
-          if($key == "Pt PT"){
+          if ($key == "Pt PT") {
             $valeur = $acte->_ref_tarmed->tp_tl;
             $cote = "R";
           }
-          if($key == "fPT"){
+          if ($key == "fPT") {
             $valeur = $acte->_ref_tarmed->f_tl;
           }
-          if($key == "E" || $key == "R"){
+          if ($key == "E" || $key == "R") {
             $valeur = "1";
           }
-          if($key == "P" || $key == "M"){
+          if ($key == "P" || $key == "M") {
             $valeur = "0";
           }
-          if($key == "Montant"){
+          if ($key == "Montant") {
             $pdf->setX($pdf->getX()+3);
             $valeur = sprintf("%.2f", $acte->montant_base * $facture->_coeff);
             $cote = "R";
@@ -241,20 +284,22 @@ foreach($factures as $facture){
           $pdf->Cell($largeur, null ,  $valeur, null, null, $cote);
           $x = $largeur;
       }
+      $pt += ($acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite * $facture->_coeff);
+      $pm += ($acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al * $acte->quantite * $facture->_coeff);
       $montant_intermediaire += sprintf("%.2f", $acte->montant_base * $facture->_coeff);
     }
-    foreach($consult->_ref_actes_caisse as $acte){
+    foreach ($consult->_ref_actes_caisse as $acte) {
       $ligne++;
       $x = 0;
       $pdf->setXY(37, $debut_lignes + $ligne*3);
       //Traitement pour le bas de la page et début de la suivante
-      if($pdf->getY()>=265){
-      	$pdf->setFont("verab", '', 8);
-      	$pdf->setXY($pdf->getX()+$x, $debut_lignes + $ligne*3);
-      	$pdf->Cell(130, "", "Total Intermédiaire", null, null, "R");
-      	$pdf->Cell(28, "",$montant_intermediaire , null, null, "R");
-      	$pdf->setFont("vera", '', 8);
-        $pdf->AddPage();  
+      if ($pdf->getY()>=265) {
+        $pdf->setFont("verab", '', 8);
+        $pdf->setXY($pdf->getX()+$x, $debut_lignes + $ligne*3);
+        $pdf->Cell(130, "", "Total Intermédiaire", null, null, "R");
+        $pdf->Cell(28, "",$montant_intermediaire , null, null, "R");
+        $pdf->setFont("vera", '', 8);
+        $pdf->AddPage();
         $nb_pages++;
         ajoutEntete2($pdf, $nb_pages, $facture, $user, $praticien, $group, $colonnes);
         $pdf->setXY(10,$pdf->getY()+4);
@@ -265,7 +310,7 @@ foreach($factures as $facture){
         $pdf->Line(190, 38, 190, 42);
         $ligne = 0;
         $debut_lignes = 50;
-        $pdf->setXY(10,0);          
+        $pdf->setXY(10,0);
       }
       $pdf->setFont("verab", '', 7);
       $pdf->setXY(37, $debut_lignes + $ligne*3);
@@ -273,48 +318,45 @@ foreach($factures as $facture){
       $pdf->Write("<b>",substr($acte->_ref_prestation_caisse->libelle, 0, 90));
       $ligne++;
       //Si le libelle est trop long
-      if(strlen($acte->_ref_prestation_caisse->libelle)>90){
-      	
-      	$pdf->setXY(37, $debut_lignes + $ligne*3);
-	      $pdf->Write("<b>",substr($acte->_ref_prestation_caisse->libelle, 90));
-	      $ligne++;
+      if (strlen($acte->_ref_prestation_caisse->libelle)>90) {      	
+        $pdf->setXY(37, $debut_lignes + $ligne*3);
+        $pdf->Write("<b>",substr($acte->_ref_prestation_caisse->libelle, 90));
+        $ligne++;
       }
-     
       
       $pdf->setX(10);
       $pdf->setFont("vera", '', 8);
       
-      foreach($tailles_colonnes as $key => $largeur){
-      	
+      foreach ($tailles_colonnes as $key => $largeur) {
           $pdf->setXY($pdf->getX()+$x, $debut_lignes + $ligne*3);
           $valeur = "";
           $cote = "C";
-          if($key == "Date"){
+          if ($key == "Date") {
             $valeur= mbTransformTime(null,  $consult->_date, "%d.%m.%Y");
           }
-          if($key == "Tarif"){
+          if ($key == "Tarif") {
             $valeur = $acte->_ref_caisse_maladie->code;
           }
-          if($key == "Code" && $acte->code!=10){
+          if ($key == "Code" && $acte->code!=10) {
             $valeur = $acte->code;
           }
-          if($key == "Sé Cô"){
+          if ($key == "Sé Cô") {
              $valeur = "1";
           }
-          if($key == "Quantité"){
+          if ($key == "Quantité") {
             $valeur = $acte->quantite;
           }
-          if($key == "Pt PM/Prix"){
+          if ($key == "Pt PM/Prix") {
             $valeur = sprintf("%.2f", $acte->montant_base/$acte->quantite);
             $cote = "R";
           }
-          if($key == "VPtPM"){
+          if ($key == "VPtPM") {
             $valeur = "1.00";
           }
-          if($key == "P" || $key == "M"){
+          if ($key == "P" || $key == "M") {
             $valeur = "0";
           }
-          if($key == "Montant"){
+          if ($key == "Montant") {
             $pdf->setX($pdf->getX()+3);
             $valeur = $acte->montant_base;
             $cote = "R";
@@ -325,7 +367,11 @@ foreach($factures as $facture){
       $montant_intermediaire += $acte->montant_base;
     }
   }
-      $pdf->setFont("verab", '', 8);
+  
+  $pt = sprintf("%.2f", $pt);
+  $pm = sprintf("%.2f", $pm);
+  
+  $pdf->setFont("verab", '', 8);
   $ligne = 265;
   $l = 20;
   $pdf->setXY(20, $ligne+3);
@@ -339,18 +385,20 @@ foreach($factures as $facture){
   $x = 3;
   $i = 0;
   $y = 0;
-  foreach($facture->_montant_factures_caisse as $key => $value){
-  	if(!is_int($key)){
-	  	$i++;
-	    if($i%2 == 1 ){
-	      $x = 3;
-	      $y += 70; 
-	    }
-	    else{ $x = 6;}
-	    $pdf->setXY($y, $ligne+$x);
-	    $pdf->Cell($l, "", "$key", null, null, "R");
-	    $pdf->Cell($l, "", $value, null, null, "R");
-  	}
+  foreach ($facture->_montant_factures_caisse as $key => $value) {
+    if (!is_int($key)) {
+      $i++;
+      if ($i%2 == 1 ) {
+        $x = 3;
+        $y += 70; 
+      }
+      else {
+        $x = 6;
+      }
+      $pdf->setXY($y, $ligne+$x);
+      $pdf->Cell($l, "", "$key", null, null, "R");
+      $pdf->Cell($l, "", $value, null, null, "R");
+    }
   }
   
   $pdf->setXY(20, $ligne+9);
@@ -366,10 +414,10 @@ foreach($factures as $facture){
   $pdf->Cell($l, "", "Montant dû", null, null, "R");
   $pdf->Cell($l, "", $total, null, null, "R");
 
-  if($factureconsult_id){
+  if ($factureconsult_id) {
     $pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "I");
   }
-  else{
+  else {
     $exchange_source = CExchangeSource::get("tarmed_export_impression_justificatifs", "ftp", true);
     $exchange_source->init();
     try {
