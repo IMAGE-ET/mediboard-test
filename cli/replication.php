@@ -458,8 +458,9 @@ function chooseConfMethod($file, $name) {
       
     }
     else {
+      $sshPort = recup("SSH port to use [default 22]? ", "22");
       $sshUser = recup("Username allowed to connect to ".$hostname.": ");
-      exec("scp ".$sshUser."@".$hostname.":".$myConf." ".$myConf.".".$hostname.".old", $result, $returnVar);
+      exec("scp -P ".$sshPort." ".$sshUser."@".$hostname.":".$myConf." ".$myConf.".".$hostname.".old", $result, $returnVar);
       check_errs($returnVar, true, "Unable to SCP", "SCP copy worked properly!");
       
       // Copy of the .old file to the .new file in order to work
@@ -805,11 +806,12 @@ START SLAVE;";
           }
           // Else, SSH
           else {
+            $sshPort = recup("SSH port [default 22]? ", "22");
             // User allowed
             $sshUser = recup("Username allowed to connect to ".$myServer->getAttribute('ip').": ");
             // Command via SSH
             exec(
-              "ssh ".$sshUser."@".$myServer->getAttribute('ip')." mysqldump -u ".
+              "ssh -p ".$sshPort." ".$sshUser."@".$myServer->getAttribute('ip')." mysqldump -u ".
               $myServer->getAttribute('dbusername')." -P ".$myServer->getAttribute('dbport').
               " -p".$myServer->getAttribute('dbpassword')." --databases ".
               $root->getAttribute('db')." > /tmp/mysqldump.sql",
@@ -839,11 +841,12 @@ START SLAVE;";
             );
           }
           else {
+            $sshPort = recup("SSH port [default 22]? ", "22");
             // User allowed
             $sshUser = recup("Username allowed to connect to ".$myServer->getAttribute('ip').": ");
             // Command via SSH
             exec(
-              "ssh ".$sshUser."@".$myServer->getAttribute('ip')." mysql -u ".$myServer->getAttribute('dbusername').
+              "ssh -p "$sshPort." ".$sshUser."@".$myServer->getAttribute('ip')." mysql -u ".$myServer->getAttribute('dbusername').
               " -P ".$myServer->getAttribute('dbport')." -p".$myServer->getAttribute('dbpassword').
               " < /tmp/mysqldump.sql",
               $result,
