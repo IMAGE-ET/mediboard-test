@@ -36,27 +36,27 @@ $wanted = array();
 foreach ($classes as $_class) {
   $object = new $_class;
   if ($object->_spec->table) {
-	  foreach ($object->_specs as $field => $spec) {
-	    if ($field != $object->_spec->key && $field[0] != "_") {
-		    if ($spec instanceof CRefSpec) {
-		      // Cas des meta-object avec enum list de classes
-		      if ($spec->meta) {
-		        $meta_spec = $object->_specs[$spec->meta];
+    foreach ($object->_specs as $field => $spec) {
+      if ($field != $object->_spec->key && $field[0] != "_") {
+        if ($spec instanceof CRefSpec) {
+          // Cas des meta-object avec enum list de classes
+          if ($spec->meta) {
+            $meta_spec = $object->_specs[$spec->meta];
             if ($meta_spec instanceof CEnumSpec) {
               foreach ($meta_spec->_list as $_class_meta) {
-		            $wanted[$_class_meta]["$_class $field"] = true;
-            	}
+                $wanted[$_class_meta]["$_class $field"] = true;
+              }
             }
             else {
-		          $wanted[$spec->class]["$_class $field"] = true;
+              $wanted[$spec->class]["$_class $field"] = true;
             }
-		      }
-		      else {
-	          $wanted[$spec->class]["$_class $field"] = true;
-		      }
-		    }
-	    }    
-	  }
+          }
+          else {
+            $wanted[$spec->class]["$_class $field"] = true;
+          }
+        }
+      }    
+    }
   }
 }
 
@@ -71,30 +71,30 @@ foreach ($classes as $_class) {
   }
   
   // Are the wanted present ?
-	if (isset($wanted[$_class])) {
-	  foreach ($wanted[$_class] as $backProp => $backName) {
-	  	$correct = @array_key_exists($backProp, $present[$_class]);
-			$error_count += $correct ? 0 : 1;
-	    $reports[$_class][$backProp] =  $correct ? "ok"  : "wanted";
-	  }
-	}
+  if (isset($wanted[$_class])) {
+    foreach ($wanted[$_class] as $backProp => $backName) {
+      $correct = @array_key_exists($backProp, $present[$_class]);
+      $error_count += $correct ? 0 : 1;
+      $reports[$_class][$backProp] =  $correct ? "ok"  : "wanted";
+    }
+  }
 
   // Are the present wanted ?
-	if (isset($present[$_class])) {
-	  foreach ($present[$_class] as $backProp => $backName) {
-	  	$correct = @array_key_exists($backProp, $wanted[$_class]);
+  if (isset($present[$_class])) {
+    foreach ($present[$_class] as $backProp => $backName) {
+      $correct = @array_key_exists($backProp, $wanted[$_class]);
       $error_count += $correct ? 0 : 1;
-	    $reports[$_class][$backProp] =  $correct ? "ok"  : "present";
-	  }
-	}
-	
-	if (isset($reports[$_class]) && $show == "errors") {
-		CMbArray::removeValue("ok", $reports[$_class]);
-	}
+      $reports[$_class][$backProp] =  $correct ? "ok"  : "present";
+    }
+  }
+  
+  if (isset($reports[$_class]) && $show == "errors") {
+    CMbArray::removeValue("ok", $reports[$_class]);
+  }
 }
 
 if ($show == "errors") {
-	CMbArray::removeValue(array(), $reports);
+  CMbArray::removeValue(array(), $reports);
 }
 
 //mbTrace($reports);

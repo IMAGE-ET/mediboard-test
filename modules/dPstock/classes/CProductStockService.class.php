@@ -33,24 +33,30 @@ class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
     $specs['common']       = 'bool';
     return $specs;
   }
-	
-	// <CMbMetaObject>
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["administrations"] = "CAdministration stock_id";
+    return $backProps;
+  }
+  
+  // <CMbMetaObject>
   function setObject(CMbObject $object) {
     $this->_ref_object  = $object;
     $this->object_id    = $object->_id;
     $this->object_class = $object->_class;
   }
-	
-	function loadTargetObject($cache = true) {
-		return $this->_ref_object = $this->loadFwdRef("object_id", $cache);
-	}
+  
+  function loadTargetObject($cache = true) {
+    return $this->_ref_object = $this->loadFwdRef("object_id", $cache);
+  }
 
   function loadRefsFwd(){
     parent::loadRefsFwd();
     $this->loadTargetObject();
   }
-	// </CMbMetaObject> 
-	
+  // </CMbMetaObject> 
+  
   /**
    * 
    * @param string $code
@@ -63,25 +69,25 @@ class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
     $where = array();
     $where['product.code'] = "= '$code'";
     $where['product_stock_service.object_class'] = "= 'CService'"; // XXX
-		
+    
     if ($service_id) {
       $where['product_stock_service.object_id'] = "= $service_id";
     }
-		
+    
     $ljoin = array();
     $ljoin['product'] = 'product_stock_service.product_id = product.product_id';
 
     $stock->loadObject($where, null, null, $ljoin);
     return $stock;
   }
-	
-	static function getFromProduct(CProduct $product, CMbObject $host) {
-	  $stock = new self;
-	  $stock->setObject($host);
-	  $stock->product_id = $product->_id;
-		$stock->loadMatchingObject();
-		return $stock;
-	}
+  
+  static function getFromProduct(CProduct $product, CMbObject $host) {
+    $stock = new self;
+    $stock->setObject($host);
+    $stock->product_id = $product->_id;
+    $stock->loadMatchingObject();
+    return $stock;
+  }
 
   function updateFormFields() {
     parent::updateFormFields();
@@ -108,7 +114,7 @@ class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
       $location = $this->loadRefLocation();
       
       if ($location->object_class !== $this->object_class || 
-			    $location->object_id    !=  $this->object_id) {
+          $location->object_id    !=  $this->object_id) {
         return "Le stock doit être associé à un emplacement de '".$this->loadTargetObject()."'";
       }
     }

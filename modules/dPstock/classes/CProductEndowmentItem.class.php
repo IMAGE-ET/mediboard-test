@@ -36,6 +36,12 @@ class CProductEndowmentItem extends CMbObject {
     $specs['cancelled']    = 'bool notNull default|0';
     return $specs;
   }
+  
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["deliveries"] = "CProductDelivery endowment_item_id";
+    return $backProps;
+  }
 
   function updateFormFields() {
     parent::updateFormFields();

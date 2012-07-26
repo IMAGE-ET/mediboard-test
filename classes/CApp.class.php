@@ -273,7 +273,14 @@ class CApp {
    */
   static function getMbClasses($properties = array(), &$instances = null) {
     $classes = self::getChildClasses("CMbObject", $properties);
+    
     foreach ($classes as $key => $class) {
+      // In case we removed a class and it's still in the cache
+      if (!class_exists($class, true)) {
+        unset($classes[$key]);
+        continue;
+      }
+      
       // Escaped instanciation in case of DSN errors
       $object = @new $class;
      

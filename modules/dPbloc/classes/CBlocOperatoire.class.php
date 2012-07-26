@@ -10,11 +10,11 @@
 
 class CBlocOperatoire extends CMbObject {
   // DB Table key
-	var $bloc_operatoire_id = null;
+  var $bloc_operatoire_id = null;
   
   // DB references
   var $group_id    = null;
-	
+  
   // DB Fields
   var $nom         = null;
   var $days_locked = null;
@@ -35,20 +35,20 @@ class CBlocOperatoire extends CMbObject {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["salles"] = "CSalle bloc_id";
-    $backProps["check_lists"] = "CDailyCheckList object_id";
-    $backProps["destination_brancardage"]        = "CDestinationBrancardage object_id";
-    //$backProps["stock_locations"] = "CProductStockLocation object_id";
+    $backProps["salles"]                  = "CSalle bloc_id";
+    $backProps["check_lists"]             = "CDailyCheckList object_id";
+    $backProps["destination_brancardage"] = "CDestinationBrancardage object_id";
+    $backProps["stock_locations"]         = "CProductStockLocation object_id";
     return $backProps;
   }
   
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["group_id"] = "ref notNull class|CGroups";
-    $specs["nom"]      = "str notNull seekable";
-    $specs["days_locked"] = "num pos default|0";
-    $specs["_date_min"] = "date";
-    return $specs;
+    $props = parent::getProps();
+    $props["group_id"] = "ref notNull class|CGroups";
+    $props["nom"]      = "str notNull seekable";
+    $props["days_locked"] = "num pos default|0";
+    $props["_date_min"] = "date";
+    return $props;
   }
   
   function updateFormFields() {
@@ -61,12 +61,12 @@ class CBlocOperatoire extends CMbObject {
    */
   function loadGroupList($where = array(), $order = 'nom', $limit = null, $groupby = null, $ljoin = array()) {
     // Filtre sur l'établissement
-		$g = CGroups::loadCurrent();
-		$where["group_id"] = "= '$g->_id'";
+    $g = CGroups::loadCurrent();
+    $where["group_id"] = "= '$g->_id'";
     
     $list = $this->loadList($where, $order, $limit, $groupby, $ljoin);
     foreach ($list as &$bloc) {
-    	$bloc->loadRefsSalles();
+      $bloc->loadRefsSalles();
     }
     return $list;
   }
@@ -81,7 +81,7 @@ class CBlocOperatoire extends CMbObject {
   }
   
   function loadRefsSalles() {
-  	return $this->_ref_salles = $this->loadBackRefs('salles', 'nom');
+    return $this->_ref_salles = $this->loadBackRefs('salles', 'nom');
   }
   
   function loadRefsBack() {
@@ -104,4 +104,3 @@ class CBlocOperatoire extends CMbObject {
     return $this->_alertes_intervs = $alerte->loadList($where, $order, null, null, $ljoin);
   }
 }
-?>
