@@ -100,7 +100,13 @@
             <td style="text-align:center;width:100px;">{{if $_acte_tarmed->date}}{{mb_value object=$_acte_tarmed field="date"}} {{else}}{{$_consultation->_date|date_format:"%d/%m/%Y"}}{{/if}}</td>
             <td  {{if $_acte_tarmed->code}} style="background-color:#BA55D3;width:140px;">{{mb_value object=$_acte_tarmed field="code"}}{{else}}>{{/if}}</td>
             <td style="white-space: pre-wrap;">{{if !isset($_acte_tarmed->libelle|smarty:nodefaults)}}{{$_acte_tarmed->_ref_tarmed->libelle}}{{else}}{{$_acte_tarmed->libelle}}{{/if}}</td>
-            <td style="text-align:right;">{{$_acte_tarmed->montant_base/$_acte_tarmed->quantite|string_format:"%0.2f"}}</td>
+            <td style="text-align:right;">
+              {{if $_acte_tarmed->quantite}}
+                {{$_acte_tarmed->montant_base/$_acte_tarmed->quantite|string_format:"%0.2f"}}
+              {{else}}
+                {{$_acte_tarmed->montant_base|string_format:"%0.2f"}}
+              {{/if}}
+            </td>
             <td style="text-align:right;">{{mb_value object=$_acte_tarmed field="quantite"}}</td>
             <td style="text-align:right;">{{$facture->_coeff}}</td>
             <td style="text-align:right;">{{$_acte_tarmed->montant_base*$facture->_coeff|string_format:"%0.2f"}}</td>
@@ -111,7 +117,13 @@
             <td style="text-align:center;width:100px;">{{$_consultation->_date|date_format:"%d/%m/%Y"}}</td>
             <td  {{if $_acte_caisse->code}} style="background-color:#DA70D6;width:140px;">{{mb_value object=$_acte_caisse field="code"}}{{else}}>{{/if}}</td>
             <td style="white-space: pre-wrap;">{{$_acte_caisse->_ref_prestation_caisse->libelle}}</td>
-            <td style="text-align:right;">{{$_acte_caisse->montant_base/$_acte_caisse->quantite|string_format:"%0.2f"}}</td>
+            <td style="text-align:right;">
+              {{if $_acte_caisse->quantite}}
+                {{$_acte_caisse->montant_base/$_acte_caisse->quantite|string_format:"%0.2f"}}
+              {{else}}
+                {{$_acte_caisse->montant_base|string_format:"%0.2f"}}
+              {{/if}}
+            </td>
             <td style="text-align:right;">{{mb_value object=$_acte_caisse field="quantite"}}</td>
             <td style="text-align:right;">1.00</td>
             <td style="text-align:right;">{{$_acte_caisse->montant_base}}</td>
