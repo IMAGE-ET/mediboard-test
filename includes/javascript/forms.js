@@ -14,7 +14,6 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
     objName : "",
     msg     : "Voulez-vous réellement supprimer ",
     ajax    : false,
-    target  : "systemMsg",
     callback: null
   }, oOptions);
   
@@ -37,7 +36,7 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
   }
 
   if (oOptions.ajax) {
-    return submitFormAjax(oForm, oOptions.target, oOptionsAjax);
+    return onSubmitFormAjax(oForm, oOptionsAjax);
   }
   
   return oForm.submit();
