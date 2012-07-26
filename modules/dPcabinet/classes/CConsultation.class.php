@@ -159,14 +159,15 @@ class CConsultation extends CCodable {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["consult_anesth"]  = "CConsultAnesth consultation_id";
-    $backProps["examaudio"]       = "CExamAudio consultation_id";
-    $backProps["examcomp"]        = "CExamComp consultation_id";
-    $backProps["examnyha"]        = "CExamNyha consultation_id";
-    $backProps["exampossum"]      = "CExamPossum consultation_id";
-    $backProps["prescriptions"]   = "CPrescription object_id";
-    $backProps["reglements"]      = "CReglement object_id";
-    $backProps["actes_dentaires"] = "CActeDentaire consult_id";
+    $backProps["consult_anesth"]    = "CConsultAnesth consultation_id";
+    $backProps["examaudio"]         = "CExamAudio consultation_id";
+    $backProps["examcomp"]          = "CExamComp consultation_id";
+    $backProps["examnyha"]          = "CExamNyha consultation_id";
+    $backProps["exampossum"]        = "CExamPossum consultation_id";
+    $backProps["prescriptions"]     = "CPrescription object_id";
+    $backProps["reglements"]        = "CReglement object_id";
+    $backProps["actes_dentaires"]   = "CActeDentaire consult_id";
+    $backProps["echanges_hprimxml"] = "CEchangeHprim object_id";
     return $backProps;
   }
   
