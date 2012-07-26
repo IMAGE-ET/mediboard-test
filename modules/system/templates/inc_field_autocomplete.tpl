@@ -25,7 +25,11 @@
   </li>
 {{foreachelse}}
   <li>
-    <span class="view"></span>
+    {{if $ref_spec}}
+      <span class="view"></span>
+    {{else}}
+      <span class="view" style="display: none;">{{$input}}</span>
+    {{/if}}
     <span style="font-style: italic;">{{tr}}No result{{/tr}}</span>
   </li>
 {{/foreach}}

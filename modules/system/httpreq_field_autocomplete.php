@@ -99,6 +99,7 @@ $smarty->assign('view_field', $view_field);
 $smarty->assign('show_view',  $show_view);
 $smarty->assign('template',   $template);
 $smarty->assign('nodebug',    true);
+$smarty->assign('ref_spec',   $spec instanceof CRefSpec);
 
 $smarty->display('inc_field_autocomplete.tpl');
 
