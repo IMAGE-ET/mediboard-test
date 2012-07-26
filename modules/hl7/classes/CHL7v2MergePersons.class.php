@@ -1,21 +1,18 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * Merge persons, message XML
- *  
- * @category HL7
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage hl7
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
  * Class CHL7v2MergePersons 
  * Merge persons, message XML HL7
  */
-
 class CHL7v2MergePersons extends CHL7v2MessageXML {
   function getContentNodes() {
     $data = array();
@@ -130,5 +127,3 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
     return $exchange_ihe->setAckAA($ack, "I103", $comment, $mbPatient);
   }
 }
-
-?>

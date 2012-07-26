@@ -1,14 +1,12 @@
 <?php
-
 /**
- * Interop Sender MLLP
- *  
- * @category FTP
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage hl7
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
@@ -32,7 +30,7 @@ class CSenderMLLP extends CInteropSender {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["expediteur_ihe"]  = "CExchangeIHE sender_id";
-		$backProps["config_hprimxml"] = "CHprimXMLConfig sender_id";
+    $backProps["config_hprimxml"] = "CHprimXMLConfig sender_id";
     $backProps["config_hl7"]      = "CHL7Config sender_id";
         
     return $backProps;
@@ -47,29 +45,27 @@ class CSenderMLLP extends CInteropSender {
   }
   
   function store(){
-  	if ($msg = parent::store()) {
-  		return $msg;
-  	}
-  	
-  	if ($this->_duplicate) {
-  		$duplicate = new self;
-  		
-	  	foreach ($this->getProperties() as $name => $value) {
-	      if ($name[0] !== "_" && $name != $this->_spec->key) {
-	        $duplicate->$name = $value;
-	      }
-	    }
-	    
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    if ($this->_duplicate) {
+      $duplicate = new self;
+      
+      foreach ($this->getProperties() as $name => $value) {
+        if ($name[0] !== "_" && $name != $this->_spec->key) {
+          $duplicate->$name = $value;
+        }
+      }
+      
       $duplicate->nom     .= " (Copy)";
       if ($duplicate->libelle) {
         $duplicate->libelle .= " (Copy)";
       }
       
-	    $duplicate->store();
-  	}
-  	
-  	$this->_duplicate = null;
+      $duplicate->store();
+    }
+    
+    $this->_duplicate = null;
   }
 }
-
-?>

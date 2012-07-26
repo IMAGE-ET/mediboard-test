@@ -1,21 +1,18 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * Record person message XML
- *  
- * @category HL7
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage hl7
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
  * Class CHL7v2RecordPerson 
  * Record person, message XML HL7
  */
-
 class CHL7v2RecordPerson extends CHL7v2MessageXML {
   function getContentNodes() {
     $data = parent::getContentNodes();
@@ -357,7 +354,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         case "PRN" :
         if ($this->queryTextNode("XTN.3", $_PID13) == "PH") {
           $newPatient->tel  = $this->getPhone($tel_number);
-      }		
+      }    
           
         if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
             $newPatient->tel2 = $this->getPhone($tel_number);
@@ -492,5 +489,3 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     return $medecin->_id;
   }
 }
-
-?>

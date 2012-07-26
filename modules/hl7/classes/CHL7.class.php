@@ -1,14 +1,12 @@
 <?php
-
 /**
- * HL7 Tools
- *  
- * @category HL7
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage hl7
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
@@ -22,5 +20,3 @@ class CHL7 {
 CHL7::$versions = array (
   "v2" => CHL7v2::$versions,
 );
-
-?>

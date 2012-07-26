@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage hl7
- * @version $Revision: 10041 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CHL7v2DataTypeInteger extends CHL7v2DataType {

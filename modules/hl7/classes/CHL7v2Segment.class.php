@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage hl7
- * @version $Revision: 10041 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CHL7v2Segment extends CHL7v2Entity {
@@ -28,7 +29,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     $doc = $node->ownerDocument;
     $new_node = $doc->createElement($this->name);
     
-    foreach($this->fields as $_field) {
+    foreach ($this->fields as $_field) {
       $_field->_toXML($new_node, $hl7_datatypes, $encoding);
     }
     
@@ -58,7 +59,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $this->error(CHL7v2Exception::TOO_MANY_FIELDS, $this->data, $this, CHL7v2Error::E_WARNING);
     }
    
-    foreach($_segment_specs as $i => $_spec){
+    foreach ($_segment_specs as $i => $_spec) {
       $field = new CHL7v2Field($this, $_spec);
       
       if (array_key_exists($i, $fields)) {
@@ -66,20 +67,22 @@ class CHL7v2Segment extends CHL7v2Entity {
         
         $this->fields[] = $field;
       }
-      elseif($_spec->isRequired()) {
+      elseif ($_spec->isRequired()) {
         $this->error(CHL7v2Exception::FIELD_EMPTY, null, $field);
       }
     }
   }
   
   function fill($fields) {
-    if (!$this->name) return;
+    if (!$this->name) {
+      return;
+    }
     
     $specs = $this->getSpecs();
     $message = $this->getMessage();
 
     $_segment_specs = $specs->getItems();
-    foreach($_segment_specs as $i => $_spec){
+    foreach ($_segment_specs as $i => $_spec) {
       $field = new CHL7v2Field($this, $_spec);
       
       if (array_key_exists($i, $fields)) {
@@ -104,14 +107,14 @@ class CHL7v2Segment extends CHL7v2Entity {
         
         $this->fields[] = $field;
       }
-      elseif($_spec->isRequired()) {
+      elseif ($_spec->isRequired()) {
         $this->error(CHL7v2Exception::FIELD_EMPTY, null, $field);
       }
     }
   }
   
   function validate() {
-    foreach($this->fields as $field) {
+    foreach ($this->fields as $field) {
       $field->validate();
     }
   }
@@ -147,9 +150,12 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   /**
-   * @param string             $name
-   * @param CHL7v2SegmentGroup $parent
-   * @return CHL7v2Segment
+   * Build an HL7v2 segment
+   * 
+   * @param string             $name   The name of the segment
+   * @param CHL7v2SegmentGroup $parent The parent of the segment to create
+   * 
+   * @return CHL7v2Segment The segment
    */
   static function create($name, CHL7v2SegmentGroup $parent) {
     $class = "CHL7v2Segment$name";
@@ -186,10 +192,10 @@ class CHL7v2Segment extends CHL7v2Entity {
     if (CHL7v2Message::$decorateToString) {
       $str = "<div class='entity segment' id='entity-er7-$this->id' data-title='$this->description'>$str</div>";
     }
-	else {
-	  $str .= $this->getMessage()->segmentTerminator;
-	}
-	
+  else {
+    $str .= $this->getMessage()->segmentTerminator;
+  }
+  
     return $str;
   }
   
@@ -215,45 +221,44 @@ class CHL7v2Segment extends CHL7v2Entity {
           $configs["assigning_authority_universal_id"],
           $configs["assigning_authority_universal_type_id"],
         );
-        break;
+      
       case "mediboard" :
         return array(
           CAppUI::conf("hl7 assigning_authority_namespace_id"),
           CAppUI::conf("hl7 assigning_authority_universal_id"),
           CAppUI::conf("hl7 assigning_authority_universal_type_id"),
         );
-        break;
+      
       case "INS-C" :
         return array(
           "ASIP-SANTE-INS-C",
           "1.2.250.1.213.1.4.2",
           "ISO"
         );
-        break;
+      
       case "ADELI" :
         return array(
           "ASIP-SANTE-PS",
           "1.2.250.1.71.4.2.1",
           "ISO"
         );
-        break;
+      
       case "RPPS" :
         return array(
           "ASIP-SANTE-PS",
           "1.2.250.1.71.4.2.1",
           "ISO"
         );
-        break; 
+      
       case "FINESS" :
         return array(
           $value,
           null,
           "M"
         );
-        break; 
+        
       default :
         throw new CHL7v2Exception(CHL7v2Exception::UNKNOWN_AUTHORITY);
-        break;
     }
   }
   
@@ -705,5 +710,3 @@ class CHL7v2Segment extends CHL7v2Entity {
     return ($sejour->provenance == "8") ? "5" : $sejour->provenance;  
   }
 }
-
-?>

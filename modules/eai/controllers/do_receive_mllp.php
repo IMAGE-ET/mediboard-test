@@ -15,8 +15,8 @@
 $client_addr = CValue::post("client_addr");
 $message     = stripslashes(CValue::post("message"));
 
-$source_mllp 		     = new CSourceMLLP;
-$source_mllp->host 	 = $client_addr;
+$source_mllp          = new CSourceMLLP;
+$source_mllp->host    = $client_addr;
 $source_mllp->active = 1;
 $source_mllp->loadMatchingObject();
 
@@ -34,7 +34,7 @@ if (!$source_mllp->_id) {
   $data[] = $message->fieldSeparator;  
          
   // MSH-2: Encoding Characters (ST)
-  $data[] = substr($message->encoding_characters(), 1);       
+  $data[] = substr($message->getEncodingCharacters(), 1);       
    
   // MSH-3: Sending Application (HD) (optional)
   $data[] = CAppUI::conf("hl7 sending_application"); 

@@ -1,21 +1,18 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * Record observation result set, message XML
- *  
- * @category HL7
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage hl7
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
  * Class CHL7v2RecordObservationResultSet 
  * Record observation result set, message XML
  */
-
 class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   function getContentNodes() {
     $data = $patient_results = array();
@@ -183,4 +180,3 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $result->status = $this->queryTextNode("OBX.11", $node);
   }   
 }
-?>

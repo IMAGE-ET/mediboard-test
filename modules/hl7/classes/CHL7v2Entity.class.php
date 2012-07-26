@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage hl7
- * @version $Revision: 10041 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /** 
@@ -18,7 +19,6 @@
  *       |- Component      ^
  *         |- Subcomponent &
  */
-
 abstract class CHL7v2Entity extends CHL7v2 {
   protected static $_id = 0;
   protected $id      = null;
@@ -30,59 +30,121 @@ abstract class CHL7v2Entity extends CHL7v2 {
   var $specs         = null;
   var $data          = null;
   
+  /**
+   * Initializes an internal entity counter
+   * 
+   * @return void
+   */
   function __construct(){
     $this->id = self::$_id++;
   }
   
+  /**
+   * Get the internal entity counter
+   * 
+   * @return integer The entity counter
+   */
   function getId(){
     return $this->id;
   }
   
+  /**
+   * Saves the string message in the entity
+   * 
+   * @param string $data The string data
+   * 
+   * @return void
+   */
   function parse($data) {
     $this->data = $data;
   }
   
-  function fill($items) {}
+  /**
+   * Fill the current entity with structured data
+   * 
+   * @param array $items The structure
+   * 
+   * @return void 
+   */
+  function fill($items) {
+    
+  }
   
   /**
    * Appends an error object in the errors array
    * 
-   * @param integer      The code of the error
-   * @param string       Additional info about the error
-   * @param CHL7v2Entity The entity where the error occured
-   * @param integer      The error level : CHL7v2Error::E_ERROR or CHL7v2Error::E_WARNING
+   * @param integer      $code   The code of the error
+   * @param string       $data   Additional info about the error
+   * @param CHL7v2Entity $entity The entity where the error occurred
+   * @param integer      $level  The error level : CHL7v2Error::E_ERROR or CHL7v2Error::E_WARNING
+   * 
+   * @return void
    */
   function error($code, $data, $entity = null, $level = CHL7v2Error::E_ERROR) {    
     $this->getMessage()->error($code, $data, $entity, $level);
   }
   
+  /**
+   * Validate the current entity
+   * 
+   * @return boolean Valid or not
+   */
   abstract function validate();
   
   /**
-   * @return CHL7v2Message
+   * Get the current entity's containing message
+   * 
+   * @return CHL7v2Message The containing message
    */
   abstract function getMessage();
   
   /**
-   * @return CHL7v2Segment
+   * Get the current entity's containing segment
+   * 
+   * @return CHL7v2Segment The containing segment
    */
   abstract function getSegment();
   
   /**
-   * @return array
+   * Get the current entity's path
+   * 
+   * @param string  $separator The separator to use in the path
+   * @param boolean $with_name Put the name of the entities in the path
+   * 
+   * @return array The path of the current entity
    */
   abstract function getPath($separator = ".", $with_name = false);
   
   /**
-   * @return string
+   * Get the path as a string
+   *
+   * @param string  $glue      The glue between the parts of the path
+   * @param string  $separator The separator of the path
+   * @param boolean $with_name Put the name of the entities in the path
+   * 
+   * @return string The path as a string
    */
   function getPathString($glue = "/", $separator = ".", $with_name = true) {
     return implode($glue, $this->getPath($separator, $with_name));
   }
   
+  /**
+   * Get the encoding of the current message
+   * 
+   * @return string The encoding of the current message
+   */
   function getEncoding() {
     return $this->getMessage()->getEncoding();
   }
   
+  /**
+   * Add the current entity in an XML node
+   * 
+   * @param DOMNode $node          The node to insert data into
+   * @param boolean $hl7_datatypes Use the HL7 data formatting
+   * @param string  $encoding      The XML document encoding
+   * 
+   * @return void
+   */
   abstract function _toXML(DOMNode $node, $hl7_datatypes, $encoding);
 }

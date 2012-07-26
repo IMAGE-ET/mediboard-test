@@ -1,21 +1,18 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * Message HL7
- *  
- * @category HL7
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage hl7
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
  * Class CHL7v2Message 
  * Message HL7
  */
-
 class CHL7v2Message extends CHL7v2SegmentGroup {
   const DEFAULT_SEGMENT_TERMINATOR      = "\r";
   const DEFAULT_ESCAPE_CHARACTER        = "\\";
@@ -60,7 +57,8 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $this->extension = $version;
       $this->i18n_code = $matches[2];
       $this->version   = "2.5";
-    } else {
+    }
+    else {
       $this->version = $version;
     }  
   }
@@ -100,7 +98,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   function _toXML(DOMNode $node, $hl7_datatypes, $encoding) {
     $doc = $node->ownerDocument;
     
-    foreach($this->children as $_child) {
+    foreach ($this->children as $_child) {
       $_child->_toXML($node, $hl7_datatypes, $encoding);
     }
     
@@ -152,7 +150,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     // validation de la syntaxe : chaque ligne doit commencer par 3 lettre + un separateur + au moins une donnée
     $sep_preg = preg_quote($fieldSeparator);
     
-    foreach($lines as $_line) {
+    foreach ($lines as $_line) {
       if (!preg_match("/^[A-Z]{2}[A-Z0-9]$sep_preg.+/", $_line)) {
         throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $_line);
       }
@@ -228,7 +226,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $this->name       = $message_type[0];
       if ($this->name == "ACK") {
         $this->event_name = $message_type[0];
-      } 
+      }
       else {
         $this->event_name = $message_type[0].$message_type[1];
       }
@@ -353,7 +351,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     $n = 500; // pour eviter les boucles infinies !
 
-    while($n-- && trim($this->getCurrentLine())/* && $current_node && $this->current_line < $lines_count*/) {
+    while ($n-- && trim($this->getCurrentLine())/* && $current_node && $this->current_line < $lines_count*/) {
       if (!$current_node && $this->current_line <= count($this->children)) {
         $this->error(CHL7v2Exception::UNEXPECTED_SEGMENT, $this->getCurrentLine());
         break;
@@ -369,7 +367,12 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
             break 2;
           }
 
-          $seg_schema = $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->getCurrentLineHeader(), $this->getMessage()->extension);
+          $seg_schema = $this->getSchema(
+            self::PREFIX_SEGMENT_NAME, 
+            $this->getCurrentLineHeader(), 
+            $this->getMessage()->extension
+          );
+          
           if ($seg_schema == false) {
             $this->error(CHL7v2Exception::UNKOWN_SEGMENT_TYPE, $this->getCurrentLine());
             break 2;
@@ -590,11 +593,15 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     return $str;
   }
   
-  function encoding_characters() {
-    return $this->fieldSeparator.$this->componentSeparator.$this->repetitionSeparator.$this->escapeCharacter.$this->subcomponentSeparator;
+  function getEncodingCharacters() {
+    return $this->fieldSeparator.
+           $this->componentSeparator.
+           $this->repetitionSeparator.
+           $this->escapeCharacter.
+           $this->subcomponentSeparator;
   }
   
-  static function highlight_er7($msg){
+  static function highlightER7($msg){
     $msg = str_replace("\r", "\n", $msg);
     
     preg_match("/.*MSH(.)(.)(.)(.)(.)/", $msg, $matches);

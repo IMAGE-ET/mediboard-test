@@ -35,7 +35,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = $message->fieldSeparator;  
            
     // MSH-2: Encoding Characters (ST)
-    $data[] = substr($message->encoding_characters(), 1);       
+    $data[] = substr($message->getEncodingCharacters(), 1);       
      
     // MSH-3: Sending Application (HD) (optional)
     $data[] = CAppUI::conf("hl7 sending_application"); 
@@ -122,7 +122,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $fields[0] = $message->fieldSeparator; 
     
     // Encoding characters without the field separator
-    $fields[1] = substr($message->encoding_characters(), 1); 
+    $fields[1] = substr($message->getEncodingCharacters(), 1); 
     
     // Message type
     $fields[8] = $message->name;

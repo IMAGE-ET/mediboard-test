@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage hl7
- * @version $Revision: 10041 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CHL7v2DataTypeComposite extends CHL7v2DataType {
@@ -40,7 +41,7 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
   function toHL7($components, CHL7v2Field $field){
     $hl7 = array();
     
-    foreach($components as $k => $component) {
+    foreach ($components as $k => $component) {
       if (!array_key_exists($k, $this->components)) {
         break;
       }
@@ -57,7 +58,7 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
       $components_data = array($components_data);
     }
     
-    foreach($components_data as $k => $component_data) {
+    foreach ($components_data as $k => $component_data) {
       if (!array_key_exists($k, $this->components)) {
         break;
       }
@@ -71,10 +72,3 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
     return true;
   }
 }
-
-
-/* 
-formulaire de fiche de liaison qui suit le patient (etapes de brancardage)
-
- */
-

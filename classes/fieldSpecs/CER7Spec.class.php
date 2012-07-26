@@ -31,7 +31,7 @@ class CER7Spec extends CTextSpec {
       return $message->flatten(true);
     }
     
-    return CHL7v2Message::highlight_er7($value);
+    return CHL7v2Message::highlightER7($value);
   }
   
   function sample(&$object, $consistent = true){

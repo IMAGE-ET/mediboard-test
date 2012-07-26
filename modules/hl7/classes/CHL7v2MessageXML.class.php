@@ -1,21 +1,18 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * Message XML HL7
- *  
- * @category HL7
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage hl7
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
  * Class CHL7v2MessageXML 
  * Message XML HL7
  */
-
 class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   var $_ref_exchange_ihe = null;
   var $_ref_sender       = null;
@@ -108,10 +105,11 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   function query($nodeName, DOMNode $contextNode = null) {
     $xpath = new CHL7v2MessageXPath($contextNode ? $contextNode->ownerDocument : $this);   
     
-    if ($contextNode)
+    if ($contextNode) {
       return $xpath->query($nodeName, $contextNode);
-    else 
-      return $xpath->query($nodeName);
+    }
+    
+    return $xpath->query($nodeName);
   }
   
   function queryNode($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {
@@ -136,7 +134,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   }
   
   function getSegment($name, $data, $object) {
-    if (!array_key_exists($name, $data) || $data[$name] === NULL) {
+    if (!array_key_exists($name, $data) || $data[$name] === null) {
       return;
     }
     
@@ -159,19 +157,18 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   function getPIIdentifier(DOMNode $node, &$data) {
     if (CHL7v2Message::$handle_mode == "simple") {
       $data["PI"] = $this->queryTextNode("CX.1", $node);
-    } 
+    }
     else {
       if ($this->queryTextNode("CX.5", $node) == "PI") {
         $data["PI"] = $this->queryTextNode("CX.1", $node);
       }
     }
-    
   }
   
   function getANIdentifier(DOMNode $node, &$data) {
     if (CHL7v2Message::$handle_mode == "simple") {
       $data["AN"] = $this->queryTextNode("CX.1", $node);
-    } 
+    }
     else {
       if ($this->queryTextNode("CX.5", $node) == "AN") {
         $data["AN"] = $this->queryTextNode("CX.1", $node);
@@ -302,5 +299,3 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {}
 }
-
-?>

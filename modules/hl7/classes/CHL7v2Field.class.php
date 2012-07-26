@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage hl7
- * @version $Revision: 10041 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CHL7v2Field extends CHL7v2Entity {
@@ -39,9 +40,10 @@ class CHL7v2Field extends CHL7v2Entity {
     
     $this->meta_spec = $spec;
     
-    if ($this->datatype == "TS") {
-      //$this->datatype = "DTM";
-    }
+    /*if ($this->datatype == "TS") {
+      $this->datatype = "DTM";
+    }*/
+    
     $this->description = (string)$spec->description;
     $this->required    = $spec->isRequired();
     $this->forbidden   = $spec->isForbidden();
@@ -51,7 +53,7 @@ class CHL7v2Field extends CHL7v2Entity {
   function _toXML(DOMNode $node, $hl7_datatypes, $encoding) {
     $doc = $node->ownerDocument;
     
-    foreach($this->items as $_item) {
+    foreach ($this->items as $_item) {
       $_item->_toXML($node, $hl7_datatypes, $encoding);
     }
   }
@@ -74,7 +76,8 @@ class CHL7v2Field extends CHL7v2Entity {
     
     $items = CHL7v2::split($message->repetitionSeparator, $this->data, $this->keep());
     
-    /* // Ce test ne semble pas etre valide, car meme si maxOccurs n'est pas unbounded, on en trouve souvent plusieurs occurences 
+    /* // Ce test ne semble pas etre valide, car meme si maxOccurs n'est pas unbounded, 
+    // on en trouve souvent plusieurs occurences 
     if (!$this->unbounded && count($items) > 1) {
       mbTrace($this);
       $this->error(CHL7v2Exception::TOO_MANY_FIELD_ITEMS, $this->name, $this);
@@ -82,7 +85,7 @@ class CHL7v2Field extends CHL7v2Entity {
     
     $this->items = array();
     
-    foreach($items as $i => $components) {
+    foreach ($items as $i => $components) {
       $_field_item = new CHL7v2FieldItem($this, $this->meta_spec, $i);
       $_field_item->parse($components);
       
@@ -104,7 +107,7 @@ class CHL7v2Field extends CHL7v2Entity {
     
     $this->items = array();
     
-    foreach($items as $i => $data) {
+    foreach ($items as $i => $data) {
       $_field_item = new CHL7v2FieldItem($this, $this->meta_spec, $i);
       $_field_item->fill($data);
       
@@ -113,7 +116,7 @@ class CHL7v2Field extends CHL7v2Entity {
   }
   
   function validate() {
-    foreach($this->items as $item) {
+    foreach ($this->items as $item) {
       $item->validate();
     }
   }
@@ -135,16 +138,10 @@ class CHL7v2Field extends CHL7v2Entity {
     return $this->owner_segment->getVersion();
   }
   
-  /**
-   * @return CHL7v2Segment
-   */
   function getSegment(){
     return $this->owner_segment;
   }
   
-  /**
-   * @return CHL7v2Message
-   */
   function getMessage(){
     return $this->owner_segment->getMessage();
   }
@@ -158,6 +155,11 @@ class CHL7v2Field extends CHL7v2Entity {
     return array((int)$self_pos[1]);
   }
   
+  /**
+   * Build a view of the type of the field
+   * 
+   * @return string The view of the form DATATYPE[LENGTH]
+   */
   function getTypeTitle(){
     $str = $this->datatype;
     

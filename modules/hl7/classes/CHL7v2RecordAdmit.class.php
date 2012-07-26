@@ -1,21 +1,18 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * Record admit, message XML
- *  
- * @category HL7
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage hl7
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
  * Class CHL7v2RecordAdmit 
  * Record admit, message XML HL7
  */
-
 class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   var $_object_found_by_vn = null;
   
@@ -1392,7 +1389,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   function getModeProvenancePMSI(DOMNode $node, CSejour $newVenue) {
     $ZFM_3 = $this->queryTextNode("ZFM.3", $node);
     if ($ZFM_3 == 0) {
-      $ZFM_3 = null;	
+      $ZFM_3 = null;  
     }
     $newVenue->provenance = $ZFM_3;
   }
@@ -1400,7 +1397,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   function getModeDestinationPMSI(DOMNode $node, CSejour $newVenue) {
     $ZFM_4 = $this->queryTextNode("ZFM.4", $node);
     if ($ZFM_4 == 0) {
-      $ZFM_4 = null;	
+      $ZFM_4 = null;  
     }
     $newVenue->destination = $ZFM_4;
   }
@@ -1437,4 +1434,3 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
   }
 }
-?>

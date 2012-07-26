@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage hl7
- * @version $Revision: 10041 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
@@ -34,7 +35,6 @@
  * TN=^(\d\d )?(\(\d\d\d\))?\d\d\d-\d\d\d\d([X,x]\d{1,5})?([B,b]\d{1,5})?([C,c][\x20-\x7e]{0,199})?$
  * DTM=^\d{4}(((0[1-9])|(1[0-2]))(((0[1-9])|([1-2]\d)|(3[0-1]))((([01]\d|2[0-3])([0-5]\d))(([0-5]\d)((\.\d{1,4}))?)?)?)?)?([+-](([0]\d|1[0-3])([0-5]\d)))?$
  */
-
 class CHL7v2DataType extends CHL7v2 {
   const RE_HL7_DATE = '(?P<year>\d{4})(?:(?P<month>0[1-9]|1[012])(?P<day>0[1-9]|[12]\d|3[01])?)?';
   const RE_HL7_TIME = '(?P<hour>[01]\d|2[0-3])(?:(?P<minute>[0-5]\d)(?:(?P<second>[0-5]\d)?(?:\.\d{1,4})?)?)?(?P<tz>[+-]\d{4})?';
@@ -81,6 +81,11 @@ class CHL7v2DataType extends CHL7v2 {
     $this->extension = $extension;
   }
   
+  /**
+   * Initializes the data format patterns
+   * 
+   * @return void
+   */
   static function init(){
     self::$re_hl7 = array(
       "Date"     => '/^'.self::RE_HL7_DATE.'$/',
@@ -102,17 +107,25 @@ class CHL7v2DataType extends CHL7v2 {
   }
   
   /**
-   * @todo Check if all these types will always be a direct match of base types
-   * @param string $type
-   * @return string
+   * Return the human readable type
+   * TODO Check if all these types will always be a direct match of base types
+   * 
+   * @param string $type The 2 or 3 letters type
+   * 
+   * @return string The human readable type
    */
   static function mapToBaseType($type) {
     return CValue::read(self::$typesMap, $type, $type);
   }
   
   /**
-   * @param string $type
-   * @return CHL7v2DataType
+   * Get the spec object of a data type
+   * 
+   * @param string $type      The 2 or 3 letters type
+   * @param string $version   The version number of the spec
+   * @param string $extension The extension
+   * 
+   * @return CHL7v2DataType The data type spec
    */
   static function load($type, $version, $extension) {
     static $cache = array();
@@ -140,8 +153,12 @@ class CHL7v2DataType extends CHL7v2 {
   }
   
   /**
-   * @param string $value
-   * @return bool
+   * Checks whether a value is valid regarding its type
+   * 
+   * @param string      $value The value to check
+   * @param CHL7v2Field $field The field in which the value is
+   * 
+   * @return boolean Is the value valid regarding its type
    */
   function validate($value, CHL7v2Field $field){
     if (is_array($value)) {
@@ -156,7 +173,9 @@ class CHL7v2DataType extends CHL7v2 {
     }
     
     $value = trim($value);
-    if ($value === "") return true;
+    if ($value === "") {
+      return true;
+    }
     
     $valid = preg_match($this->getRegExpHL7(), $value);
     if (!$valid) {
@@ -167,6 +186,14 @@ class CHL7v2DataType extends CHL7v2 {
     return true;
   }
   
+  /**
+   * Parses an HL7 value
+   * 
+   * @param string      $value The HL7 value
+   * @param CHL7v2Field $field The field containing the value
+   * 
+   * @return array A structure containing the elements of the value
+   */
   protected function parseHL7($value, CHL7v2Field $field) {
     if ($value === null) {
       return array();
@@ -180,6 +207,14 @@ class CHL7v2DataType extends CHL7v2 {
     return $matches;
   }
   
+  /**
+   * Parses an MB value
+   * 
+   * @param string      $value The MB value
+   * @param CHL7v2Field $field The field containing the value
+   * 
+   * @return array A structure containing the elements of the value
+   */
   protected function parseMB($value, CHL7v2Field $field) {
     if ($value === null) {
       return array();

@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 6069 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage hl7
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CSourceMLLP extends CExchangeSource {
@@ -53,7 +54,9 @@ class CSourceMLLP extends CExchangeSource {
    * @return SocketClient
    */
   function getSocketClient(){
-    if ($this->_socket_client) return $this->_socket_client;
+    if ($this->_socket_client) {
+      return $this->_socket_client;
+    }
     
     $address = "$this->host:$this->port";
     $context = stream_context_create();

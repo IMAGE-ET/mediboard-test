@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage hl7
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 $dir = dirname(__FILE__)."/../../..";
@@ -23,6 +24,9 @@ if (!class_exists("SocketServer", false)) {
 
 require "$dir/includes/version.php";
 
+/**
+ * A MLLP server listening with a socket of a port
+ */
 class CMLLPServer {
   /**
    * @var string Root URL called when receiving data on the $port
@@ -87,6 +91,14 @@ class CMLLPServer {
     $this->server = new SocketServer(AF_INET, SOCK_STREAM, SOL_TCP);
   }
   
+  /**
+   * Handle request callback
+   * 
+   * @param string  $request The request to handle
+   * @param integer $id      The client's ID
+   * 
+   * @return string A hash of the handled request
+   */
   function handle($request, $id) {
     $client = $this->clients[$id];
     $buffer = &$this->clients[$id]["buffer"];
@@ -129,7 +141,10 @@ class CMLLPServer {
       );
       
       $start = microtime(true);
-      $ack = $this->http_request_post($this->call_url."/index.php?suppressHeaders=1&login={$this->username}:{$this->password}", $post);
+      
+      $url = $this->call_url."/index.php?suppressHeaders=1&login={$this->username}:{$this->password}";
+      $ack = $this->http_request_post($url, $post);
+      
       $this->request_count++;
       $time = microtime(true) - $start;
       echo sprintf(" > Request done in %f s\n", $time);
@@ -146,6 +161,15 @@ class CMLLPServer {
     return md5($request)."\n";
   }
   
+  /**
+   * The open connection callback
+   * 
+   * @param integer $id   The client's ID
+   * @param string  $addr The client's IP address
+   * @param integer $port The client's port
+   * 
+   * @return boolean true
+   */
   function open($id, $addr, $port = null) {
     if (!isset($this->clients[$id])) {
       $this->clients[$id] = array(
@@ -159,19 +183,45 @@ class CMLLPServer {
     return true;
   }
   
+  /**
+   * Connection cleanup callback
+   * 
+   * @param integer $id The client's ID
+   * 
+   * @return void
+   */
   function cleanup($id) {
     unset($this->clients[$id]);
     echo sprintf(" > Connection [%d] cleaned-up\n", $id);
   }
   
+  /**
+   * Connection close callback
+   * 
+   * @param integer $id The client's ID
+   * 
+   * @return void
+   */
   function close($id) {
     echo sprintf(" > Connection [%d] closed\n", $id);
   }
   
-  function write_error($id) {
+  /**
+   * Write error callback
+   * 
+   * @param integer $id The client's ID
+   * 
+   * @return void
+   */
+  function writeError($id) {
     echo sprintf(" !!! Write error to [%d]\n", $id);
   }
   
+  /**
+   * Get the server's stats
+   * 
+   * @return array An array of various stats
+   */
   function getStats(){
     return array(
       "request_count" => $this->request_count,
@@ -182,8 +232,11 @@ class CMLLPServer {
   }
   
   /**
-   * @param string $url The URL to call
-   * @param array $data The data to pass to $url via POST
+   * Execute an HTTP POST request
+   * 
+   * @param string $url  The URL to call
+   * @param array  $data The data to pass to $url via POST
+   * 
    * @return string HTTP Responses
    */
   function http_request_post($url, $data) {
@@ -191,8 +244,7 @@ class CMLLPServer {
     $data_len = strlen($data_url);
     
     $scheme = substr($url, 0, strpos($url, ":"));
-    
-    $ctx = stream_context_create(array(
+    $options = array(
       $scheme => array(
         "method" => "POST",
         "header" => array (
@@ -201,11 +253,18 @@ class CMLLPServer {
         ),
         "content" => $data_url
       )
-    ));
+    );
+    
+    $ctx = stream_context_create($options);
     
     return file_get_contents($url, false, $ctx);
   }
   
+  /**
+   * Run the MLLP server
+   * 
+   * @return void
+   */
   function run(){
     global $version;
     
@@ -220,16 +279,26 @@ class CMLLPServer {
 EOT;
     $this->started_datetime = $time;
 
-    $this->server->bind("0.0.0.0", $this->port, $this->certificate, $this->passphrase)
-                 //->setMotd($motd)
-                 ->setRequestHandler     (array($this, "handle"))
-                 ->setOnOpenHandler      (array($this, "open"))
-                 ->setOnCleanupHandler   (array($this, "cleanup"))
-                 ->setOnCloseHandler     (array($this, "close"))
-                 ->setOnWriteErrorHandler(array($this, "write_error"))
-                 ->run();
+    $server = $this->server->bind("0.0.0.0", $this->port, $this->certificate, $this->passphrase);
+    
+    //$server->setMotd($motd);
+    $server->setRequestHandler(array($this, "handle"));
+    $server->setOnOpenHandler(array($this, "open"));
+    $server->setOnCleanupHandler(array($this, "cleanup"));
+    $server->setOnCloseHandler(array($this, "close"));
+    $server->setOnWriteErrorHandler(array($this, "writeError"));
+    $server->run();
   }
   
+  /**
+   * Send an MLLP request
+   * 
+   * @param string  $host    The client's IP to send the request to
+   * @param integer $port    The client's port number
+   * @param string  $message The message to send
+   * 
+   * @return string The clien's response
+   */
   static function send($host, $port, $message) {
     $root_dir = dirname(__FILE__)."/../../..";
     
@@ -254,7 +323,7 @@ EOT;
     $pid_files = glob("$tmp_dir/pid.*");
     $processes = array();
     
-    foreach($pid_files as $_file) {
+    foreach ($pid_files as $_file) {
       $_pid = substr($_file, strrpos($_file, ".")+1);
       $launched = strftime("%Y-%m-%d %H:%M:%S", filemtime($_file));
       $processes[$_pid] = array(
@@ -268,9 +337,11 @@ EOT;
       exec("tasklist", $out);
       $out = array_slice($out, 2); 
       
-      foreach($out as $_line) {
+      foreach ($out as $_line) {
         $_pid = (int)substr($_line, 26, 8);
-        if (!isset($processes[$_pid])) continue;
+        if (!isset($processes[$_pid])) {
+          continue;
+        }
         
         $_ps_name = trim(substr($_line, 0, 25));
         $processes[$_pid]["ps_name"] = $_ps_name;
@@ -280,9 +351,11 @@ EOT;
       exec("ps -e", $out);
       $out = array_slice($out, 1); 
       
-      foreach($out as $_line) {
+      foreach ($out as $_line) {
         $_pid = (int)substr($_line, 0, 5);
-        if (!isset($processes[$_pid])) continue;
+        if (!isset($processes[$_pid])) {
+          continue;
+        }
       
         $_ps_name = trim(substr($_line, 24));
         $processes[$_pid]["ps_name"] = $_ps_name;
@@ -332,6 +405,8 @@ EOT;
   }
 
   /**
+   * 
+   * 
    * @return array The list of available test messages
    */
   static function getList(){
@@ -339,7 +414,7 @@ EOT;
     $list = $reflection->getMethods(ReflectionMethod::IS_FINAL);
     
     $types = array();
-    foreach($list as $_method) {
+    foreach ($list as $_method) {
       $types[] = $_method->name;
     }
     

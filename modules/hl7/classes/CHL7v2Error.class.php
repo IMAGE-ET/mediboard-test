@@ -1,14 +1,12 @@
 <?php
-
 /**
- * HL7v2 Error
- *  
- * @category HL7
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage hl7
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
@@ -17,8 +15,8 @@
 class CHL7v2Error {
   const E_ERROR = 2;
   const E_WARNING = 1;
-	
-	static $errorMap = array(
+  
+  static $errorMap = array(
     CHL7v2Exception::EMPTY_MESSAGE              => 100,
     CHL7v2Exception::INVALID_SEPARATOR          => 102,
     CHL7v2Exception::SEGMENT_INVALID_SYNTAX     => 102,
@@ -34,7 +32,7 @@ class CHL7v2Error {
     CHL7v2Exception::UNEXPECTED_DATA_TYPE       => 207,
     CHL7v2Exception::DATA_TOO_LONG              => 102,
     CHL7v2Exception::UNKNOWN_TABLE_ENTRY        => 103,
-	);
+  );
   
   /**
    * @var integer
@@ -80,17 +78,17 @@ class CHL7v2Error {
     
     return $path;
   }
-	
-	function getHL7Code() {
-		return CValue::read(self::$errorMap, $this->code, 207);
-	}
-	
-	function getCodeLocation() {
-	  return array (
-	    $this->getLocation(),
-	    $this->getHL7Code()
-	  );
-	}
+  
+  function getHL7Code() {
+    return CValue::read(self::$errorMap, $this->code, 207);
+  }
+  
+  function getCodeLocation() {
+    return array (
+      $this->getLocation(),
+      $this->getHL7Code()
+    );
+  }
 }
 
 ?>

@@ -1,21 +1,18 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * Change patient identifier list, message XML
- *  
- * @category HL7
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage hl7
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
  * Class CHL7v2ChangePatientIdentifierList 
  * Change patient identifier list, message XML HL7
  */
-
 class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
   function getContentNodes() {
     $data = parent::getContentNodes();
@@ -44,7 +41,7 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
     $MRG_1 = $this->queryNodes("MRG.1", $data["MRG"])->item(0);
     if (CHL7v2Message::$handle_mode == "simple") {
       /* @todo En mode simple, est-ce toujours le PI ? */
-    } 
+    }
     else {
       if ($this->queryTextNode("CX.5", $MRG_1) == "PI") {
         $incorrect_identifier = $this->queryTextNode("CX.1", $MRG_1);
@@ -86,5 +83,3 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
     return $exchange_ihe->setAckAA($ack, "I140", null, $newPatient);
   }
 }
-
-?>
