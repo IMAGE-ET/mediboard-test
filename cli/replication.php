@@ -846,7 +846,7 @@ START SLAVE;";
             $sshUser = recup("Username allowed to connect to ".$myServer->getAttribute('ip').": ");
             // Command via SSH
             exec(
-              "ssh -p "$sshPort." ".$sshUser."@".$myServer->getAttribute('ip')." mysql -u ".$myServer->getAttribute('dbusername').
+              "ssh -p ".$sshPort." ".$sshUser."@".$myServer->getAttribute('ip')." mysql -u ".$myServer->getAttribute('dbusername').
               " -P ".$myServer->getAttribute('dbport')." -p".$myServer->getAttribute('dbpassword').
               " < /tmp/mysqldump.sql",
               $result,
