@@ -1784,7 +1784,18 @@ class CSetupdPpatients extends CSetup {
       ADD `naissance` DATE;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.52";
+    $this->makeRevision("1.52");
+    $query = "ALTER TABLE `constantes_medicales` 
+              ADD `douleur_en` FLOAT UNSIGNED,
+              ADD `douleur_doloplus` TINYINT (4) UNSIGNED,
+              ADD `douleur_algoplus` TINYINT (4) UNSIGNED,
+              ADD `ecpa_avant` TINYINT (4) UNSIGNED,
+              ADD `ecpa_apres` TINYINT (4) UNSIGNED,
+              ADD `vision_oeil_droit` TINYINT (4) UNSIGNED,
+              ADD `vision_oeil_gauche` TINYINT (4) UNSIGNED";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.53";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

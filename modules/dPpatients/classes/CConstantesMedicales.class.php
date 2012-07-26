@@ -175,6 +175,50 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 10
     ),
     
+    // Douleur
+    "douleur_en" => array(
+      "type" => "physio",
+      "unit" => "", 
+      "min" => 0, "max" => 10
+    ),
+    "douleur_doloplus" => array(
+      "type" => "physio",
+      "unit" => "", 
+      "min" => 0, "max" => 30
+    ),
+    "douleur_algoplus" => array(
+      "type" => "physio",
+      "unit" => "", 
+      "min" => 0, "max" => 5
+    ),
+    "ecpa_avant" => array(
+      "type" => "physio",
+      "unit" => "", 
+      "min" => 0, "max" => 16
+    ),
+    "ecpa_apres" => array(
+      "type" => "physio",
+      "unit" => "", 
+      "min" => 0, "max" => 16
+    ),
+    "_ecpa_total" => array(
+      "type" => "physio",
+      "unit" => "",
+      "min" => 0, "max" => 32,
+      "plot" => true,
+    ),
+    
+    // Vision
+    "vision_oeil_droit" => array(
+      "type" => "physio",
+      "unit" => "", 
+      "min" => 0, "max" => 10
+    ),
+    "vision_oeil_gauche" => array(
+      "type" => "physio",
+      "unit" => "", 
+      "min" => 0, "max" => 10
+    ),
     
     /// DRAINS ///
     "sng"           => array(
@@ -466,6 +510,18 @@ class CConstantesMedicales extends CMbObject {
     $specs['_inj']                   = 'num pos';
     $specs['_inj_essai']             = 'num pos moreEquals|_inj';
     
+    // Douleur
+    $specs['douleur_en']             = 'float min|0 max|10';
+    $specs['douleur_doloplus']       = 'num min|0 max|30';
+    $specs['douleur_algoplus']       = 'num min|0 max|5';
+    $specs['ecpa_avant']             = 'num min|0 max|16';
+    $specs['ecpa_apres']             = 'num min|0 max|16';
+    $specs['_ecpa_total']            = 'num min|0 max|32';
+    
+    // Vision
+    $specs['vision_oeil_droit']      = 'num min|0 max|10';
+    $specs['vision_oeil_gauche']     = 'num min|0 max|10';
+    
     $specs['redon']                  = 'float min|0';
     $specs['redon_2']                = 'float min|0';
     $specs['redon_3']                = 'float min|0';
@@ -582,6 +638,15 @@ class CConstantesMedicales extends CMbObject {
     if ($this->injection && isset($_injection[0]) && isset($_injection[1])) {
       $this->_inj  = $_injection[0];
       $this->_inj_essai = $_injection[1];
+    }
+    
+    // Calcul de l'ECPA total
+    $this->_ecpa_total = null;
+    if ($this->ecpa_avant !== null) {
+      $this->_ecpa_total += $this->ecpa_avant;
+    }
+    if ($this->ecpa_apres !== null) {
+      $this->_ecpa_total += $this->ecpa_apres;
     }
   }
   
