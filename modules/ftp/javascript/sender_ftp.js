@@ -13,7 +13,7 @@ SenderFTP = {
   actor_guid: null,
   
   dispatch: function(actor_guid) {
-	var url = new Url("system", "ajax_dispatch_files");
+  var url = new Url("ftp", "ajax_dispatch_files_ftp");
     url.addParam("actor_guid", actor_guid);
     url.requestUpdate("CSenderFTP-utilities_dispatch");
   },
