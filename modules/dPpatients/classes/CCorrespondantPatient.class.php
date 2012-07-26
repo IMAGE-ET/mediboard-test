@@ -35,6 +35,7 @@ class CCorrespondantPatient extends CMbObject {
   var $parente_autre = null;
   var $email      = null;
   var $remarques  = null;
+  var $ean        = null;
   
   var $_eai_initiateur_group_id = null;
   
@@ -68,6 +69,7 @@ class CCorrespondantPatient extends CMbObject {
     $specs["parente_autre"] = "str";
     $specs["email"]      = "str maxLength|255";
     $specs["remarques"]  = "text";
+    $specs["ean"]        = "str";
     return $specs;
   }
   

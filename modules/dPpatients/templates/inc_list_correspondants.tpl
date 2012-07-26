@@ -20,6 +20,9 @@
       <th class="title">{{mb_label class=CCorrespondantPatient field=urssaf}}</th>
       <th class="title">{{mb_label class=CCorrespondantPatient field=email}}</th>
       <th class="title">{{mb_label class=CCorrespondantPatient field=remarques}}</th>
+      {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+        <th class="title">{{mb_label class=CCorrespondantPatient field=ean}}</th>
+      {{/if}}
       <th class="title" style="width: 1%"></th>
     </tr>
   </thead>
@@ -27,7 +30,9 @@
     {{foreach from=$correspondants_by_relation item=_correspondants key=relation}}
       {{if $_correspondants|@count}}
         <tr>
-          <th colspan="13">{{tr}}CCorrespondantPatient.relation.{{$relation}}{{/tr}}</th>
+          <th colspan="{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}14{{else}}13{{/if}}">
+            {{tr}}CCorrespondantPatient.relation.{{$relation}}{{/tr}}
+          </th>
         </tr>
         {{foreach from=$_correspondants item=_correspondant}}
           <tr>
@@ -62,6 +67,9 @@
             </td>
             <td>{{mb_value object=$_correspondant field=email}}</td>
             <td>{{mb_value object=$_correspondant field=remarques}}</td>
+            {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+              <td>{{mb_value object=$_correspondant field=ean}}</td>
+            {{/if}}
             <td>
               <button type="button" class="edit notext" onclick="Correspondant.edit('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))"></button>
             </td>

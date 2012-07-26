@@ -51,6 +51,17 @@
       $("naissance").setStyle({display: "none"});
     }
   }
+  
+  toggleAssurance = function(elt) {
+    {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+      if ($V(elt) == "assurance") {
+        $("ean").setStyle({display: "table-row"});
+      }
+      else {
+        $("ean").setStyle({display: "none"});
+      }
+    {{/if}}
+  }
 </script>
 
 <form name="editCorrespondant" method="post" action="?">
@@ -71,7 +82,7 @@
               <input type="text" name="relation_autre" value="{{$correspondant->relation_autre}}" />
           </span>
           <span style="float: left;">
-            {{mb_field object=$correspondant field=relation onchange="toggleRelationAutre(this); toggleUrrsafParente(this); toggleConfiance(this)" alphabet=true}}
+            {{mb_field object=$correspondant field=relation onchange="toggleRelationAutre(this); toggleUrrsafParente(this); toggleConfiance(this); toggleAssurance(this);" alphabet=true}}
           </span>
           </th>
         <tr>
@@ -147,6 +158,12 @@
       <th>{{mb_label object=$correspondant field="remarques"}}</th>
       <td>{{mb_field object=$correspondant field="remarques" onchange="this.form.onsubmit()"}}</td>
     </tr>
+    {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+      <tr id="ean"  {{if $correspondant->relation != "assurance" && $correspondant->_id}} style="display: none;"{{/if}}>
+        <th>{{mb_label object=$correspondant field="ean"}}</th>
+        <td>{{mb_field object=$correspondant field="ean""}}</td>
+      </tr>
+    {{/if}}
     <tr>
       <td colspan="2" style="text-align:center;">
         <button type="button" class="save" onclick="Correspondant.onSubmit(this.form);" style="margin: auto;">

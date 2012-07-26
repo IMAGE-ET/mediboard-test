@@ -1795,7 +1795,13 @@ class CSetupdPpatients extends CSetup {
               ADD `vision_oeil_gauche` TINYINT (4) UNSIGNED";
     $this->addQuery($query);
     
-    $this->mod_version = "1.53";
+    $this->makeRevision("1.53");
+    
+    $query = "ALTER TABLE `correspondant_patient`
+                 ADD `ean` VARCHAR (30);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.54";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
