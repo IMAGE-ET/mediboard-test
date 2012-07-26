@@ -76,7 +76,7 @@
         <button class="modify" type="submit">
           {{tr}}Save{{/tr}}
         </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la liste',objName:$V(this.form.nom)})">
+        <button class="trash" type="button" onclick="ListeChoix.confirmDeletion(this)">
           {{tr}}Delete{{/tr}}
         </button>
         {{else}}

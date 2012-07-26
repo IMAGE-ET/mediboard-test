@@ -23,25 +23,22 @@ ListeChoix = {
   },
 
   onSubmit: function(form) {
-    return onSubmitFormAjax(form)
+    return onSubmitFormAjax(form);
   },
 
   onSubmitChoix: function(form) {
-	 return onSubmitFormAjax(form, ListeChoix.refreshChoix);
+    return onSubmitFormAjax(form, ListeChoix.refreshChoix);
   },
 	  
-  confirmDeletion: function(form) {
+  confirmDeletion: function(button) {
+	var form = button.form;
     var options = {
       typeName: 'liste de choix', 
-      objName: $V(form.nom),
-      ajax: 1
+      objName: $V(form.nom)
     };
     
-    var ajax = {
-      onComplete: function() {
-    	ListeChoix.refreshList();
-        Control.Modal.close();
-      }
+    var ajax = function() {
+      Control.Modal.close();
     };
     
     confirmDeletion(form, options, ajax);    
@@ -56,7 +53,10 @@ ListeChoix = {
     var form = getForm('Add-Choix');
     var url = new Url('compteRendu', 'ajax_list_choix');
     url.addElement(form.liste_id);
-    url.requestUpdate('list-choix');
+    url.requestUpdate('list-choix', function() {
+      var add = getForm('Add-Choix');
+      add.focusFirstElement();
+    });
   },
 
   refreshList: function() {

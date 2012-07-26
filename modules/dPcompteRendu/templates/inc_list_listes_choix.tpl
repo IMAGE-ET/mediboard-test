@@ -62,7 +62,7 @@ Main.add(Control.Tabs.create.curry("tabs-owner", true));
       {{foreachelse}}
       <div class="empty">{{tr}}{{$_liste->_class}}.novalues{{/tr}}</div>
       {{/foreach}}
-      {{if $_liste->_valeurs|@count > 4}}
+      {{if $_liste->_valeurs|@count > 5}}
         <div class="compact">
           <strong>
             + {{math equation="x-5" x=$_liste->_valeurs|@count}} {{tr}}others{{/tr}}
