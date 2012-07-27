@@ -110,8 +110,8 @@ if (filemtime("/tmp/synConfig/".basename($file)) != filemtime($file)) {
     }
     
     // Set the owner group to APACHE_GROUP
-    $APACHE_USER = shell_exec("ps -ef|grep apache|grep -v grep|head -2|tail -1|cut -d' ' -f1");
-    $APACHE_GROUP = shell_exec("groups ".$APACHE_USER." | cut -d' ' -f3");
+    $APACHE_USER = trim(shell_exec("ps -ef|grep apache|grep -v grep|head -2|tail -1|cut -d' ' -f1"));
+    $APACHE_GROUP = trim(shell_exec("groups ".$APACHE_USER."| cut -d' ' -f3"));
     exec("chgrp ".$APACHE_GROUP." ".$file, $result, $returnVar);
     
     if (!(check_errs(
