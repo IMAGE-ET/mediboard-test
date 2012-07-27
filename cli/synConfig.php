@@ -85,7 +85,7 @@ else {
   return;
 }
 
-exec("scp -P ".$port." -p ".$username."@".$hostname.":".$file." /tmp/synConfig".basename($file), $result, $returnVar);
+exec("scp -P ".$port." -p ".$username."@".$hostname.":".$file." /tmp/synConfig/".basename($file), $result, $returnVar);
 if (!(check_errs($returnVar, true, "Unable to get the file.", "File received!"))) {
   return;
 }
@@ -95,13 +95,13 @@ if (!(check_errs(is_readable($file), false, $file." is not readable.", $file." i
 }
 
 // If files have not the same last modification time
-if (filemtime("/tmp/synConfig".basename($file)) != filemtime($file)) {
+if (filemtime("/tmp/synConfig/".basename($file)) != filemtime($file)) {
   // If remote file is younger, we get
-  if (filemtime("/tmp/synConfig".basename($file)) > filemtime($file)) {
+  if (filemtime("/tmp/synConfig/".basename($file)) > filemtime($file)) {
     echo "Remote file is younger. Older will be replaced.\n";
     
     if (!(check_errs(
-      rename("/tmp/synConfig".basename($file), $file),
+      rename("/tmp/synConfig/".basename($file), $file),
       false,
       "Unable to replace the file.",
       "The file has been replaced!"
