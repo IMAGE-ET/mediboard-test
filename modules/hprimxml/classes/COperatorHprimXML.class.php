@@ -47,8 +47,9 @@ class COperatorHprimXML extends CEAIOperator {
         $echg_hprim->populateEchange($data_format, $dom_evt);
 
         $dom_acq->_ref_echange_hprim = $echg_hprim;
-        $msgAcq                      = $dom_acq->generateAcquittements("erreur", "E002", $doc_errors);
-        $doc_valid                   = $dom_acq->schemaValidate();
+        $msgAcq    = $dom_acq->generateAcquittements($dom_acq instanceof CHPrimXMLAcquittementsServeurActivitePmsi ? 
+         "err" : "erreur", "E002", $doc_errors);
+        $doc_valid = $dom_acq->schemaValidate();
 
         $echg_hprim->populateErrorEchange($msgAcq, $doc_valid, "erreur");
 
@@ -89,14 +90,16 @@ class COperatorHprimXML extends CEAIOperator {
       $echg_hprim->populateEchange($data_format, $dom_evt);
       
       $dom_acq = CHPrimXMLAcquittements::getAcquittementEvenementXML($dom_evt);
+      
       // Type par défaut
-      $dom_acq->_sous_type_evt        = "enregistrementPatient";
+      $dom_acq->_sous_type_evt        = "none";
       $dom_acq->_identifiant_acquitte = isset($data['identifiantMessage']) ? $data['identifiantMessage'] : "000000000";
       $dom_acq->_ref_echange_hprim    = $echg_hprim;
-      
-      $msgAcq    = $dom_acq->generateAcquittements("erreur", "E009", $e->getMessage());
+
+      $msgAcq = $dom_acq->generateAcquittements($dom_acq instanceof CHPrimXMLAcquittementsServeurActivitePmsi ? 
+         "err" : "erreur", "E009", $e->getMessage());
+    
       $doc_valid = $dom_acq->schemaValidate();
-      
       $echg_hprim->populateErrorEchange($msgAcq, $doc_valid, "erreur");
       
       return $msgAcq;
@@ -175,9 +178,9 @@ class COperatorHprimXML extends CEAIOperator {
     return $msgAcq;
   }
   
-  static function eventPMSI(CExchangeDataFormat $data_format, CHPrimXMLEvenementsPatients $dom_evt, 
+  static function eventPMSI(CExchangeDataFormat $data_format, CHPrimXMLEvenementsServeurActivitePmsi $dom_evt, 
                             $data = array(), CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq, CEchangeHprim $echg_hprim) {
-
+    mbTrace($dom_evt);
   }
 }
 ?>
