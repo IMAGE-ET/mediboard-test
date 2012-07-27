@@ -138,7 +138,7 @@ if (filemtime("/tmp/synConfig".basename($file)) != filemtime($file)) {
   // Else, we push
   else {
     echo "Remote file is older. It will be replaced.\n";
-    exec("scp -P ".$port." -p ".$username."@".$hostname.":".$file, $result, $returnVar);
+    exec("scp -P ".$port." -p ".$file." ".$username."@".$hostname.":".$file, $result, $returnVar);
     
     if (!(check_errs($returnVar, true, "Unable to push the file.", "File sent!"))) {
       return;
