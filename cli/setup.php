@@ -68,7 +68,7 @@ function setup($subDir, $apacheGrp) {
       // Change to Mediboard directory
       $MB_PATH = dirname($currentDir);
       chdir($MB_PATH);
-      var_dump($MB_PATH);exit();
+      
       // Change group to allow Apache to access files as group
       $chgrp = recurse_chgrp($BASE_PATH, $APACHE_GROUP);
       check_errs(
