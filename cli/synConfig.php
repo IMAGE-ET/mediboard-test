@@ -20,7 +20,7 @@ $help = false;
 $i = 0;
 $command = array_shift($argv);
 
-if (count($argv) >= 2 && count($argv) <= 4) {
+if (count($argv) >= 3 && count($argv) <= 5) {
   foreach ($argv as $key=>$arg) {
     switch ($arg) {
       case "-h":
@@ -38,6 +38,10 @@ if (count($argv) >= 2 && count($argv) <= 4) {
             break;
             
           case 2:
+            $port = $arg;
+            break;
+          
+          case 3:
             $file = $arg;
             break;
         }
@@ -53,9 +57,10 @@ else {
 echo chr(27)."[1m--- Synchronize files (".date("l d F H:i:s").") ---".chr(27)."[0m"."\n";
 
 if ($help) {
-  echo "Usage : ".basename($command)." <hostname> <username> <password> <file>
+  echo "Usage : ".basename($command)." <hostname> <username> <ssh port> <file>
 <hostname> : host to connect
 <username> : username requesting
+<ssh port> : SSH port
 <file>     : file to get or push\n";
 
   return;
@@ -79,7 +84,7 @@ else {
   return;
 }
 
-exec("scp -p ".$username."@".$hostname.":".$file." /tmp/synConfig".basename($file), $result, $returnVar);
+exec("scp -P ".$port." -p ".$username."@".$hostname.":".$file." /tmp/synConfig".basename($file), $result, $returnVar);
 if (!(check_errs($returnVar, true, "Unable to get the file.", "File received!"))) {
   return;
 }
