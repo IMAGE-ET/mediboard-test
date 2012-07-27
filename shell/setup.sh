@@ -22,12 +22,12 @@ darwin_kernel=`uname -a|cut -d' ' -f1`
 # Pour mac
 if [ $darwin_kernel = "Darwin" ]
 then
-  APACHE_USER=`ps -ef|grep httpd|head -2|tail -1|cut -d' ' -f4`
+  APACHE_USER=`ps -ef|grep httpd|grep -v grep|head -2|tail -1|cut -d' ' -f4`
   APACHE_GROUP=`groups $APACHE_USER|cut -d' ' -f1`
 
 # Distributions linux
 else
-  APACHE_USER=`ps -ef|grep apache|head -2|tail -1|cut -d' ' -f1`
+  APACHE_USER=`ps -ef|grep apache|grep -v grep|head -2|tail -1|cut -d' ' -f1`
   APACHE_GROUP=`groups $APACHE_USER|cut -d' ' -f3`
 fi
 
