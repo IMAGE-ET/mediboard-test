@@ -33,7 +33,7 @@ function setup($subDir, $apacheGrp) {
   }
   // To Linux distributions
   else {
-    $APACHE_USER = trim(shell_exec("ps -ef|grep apache|head -2|tail -1|cut -d' ' -f1"));
+    $APACHE_USER = trim(shell_exec("ps -ef|grep apache|grep -v grep|head -2|tail -1|cut -d' ' -f1"));
     $APACHE_GROUP = trim(shell_exec("groups ".$APACHE_USER." | cut -d' ' -f3"));
   }
 
@@ -68,7 +68,7 @@ function setup($subDir, $apacheGrp) {
       // Change to Mediboard directory
       $MB_PATH = dirname($currentDir);
       chdir($MB_PATH);
-      
+      var_dump($MB_PATH);exit();
       // Change group to allow Apache to access files as group
       $chgrp = recurse_chgrp($BASE_PATH, $APACHE_GROUP);
       check_errs(

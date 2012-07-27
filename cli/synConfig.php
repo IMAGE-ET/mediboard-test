@@ -39,11 +39,11 @@ if (count($argv) >= 3 && count($argv) <= 5) {
             break;
             
           case 2:
-            $port = $arg;
+            $file = $arg;
             break;
           
           case 3:
-            $file = $arg;
+            $port = $arg;
             break;
         }
         
@@ -61,8 +61,8 @@ if ($help) {
   echo "Usage : ".basename($command)." <hostname> <username> <ssh port> <file>
 <hostname> : host to connect
 <username> : username requesting
-<ssh port> : SSH port
-<file>     : file to get or push\n";
+<file>     : file to get or push
+<ssh port> : SSH port\n";
 
   return;
 }
