@@ -1,11 +1,13 @@
 <?php
-
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Alexis Granger
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 $date = mbDate();
 
@@ -51,15 +53,28 @@ $orderby = "reglement.date ASC";
 $reglement = new CReglement();
 $list_reglements = $reglement->loadList($where, $orderby, null, null, $ljoin);
 
+//if (CAppUI::conf("dPcabinet CConsultation consult_facture")) {
+  $where['reglement.object_class']     = " = 'CFactureConsult'";
+  
+  unset($where['plageconsult.chir_id']);
+  $ljoin = array();
+  $ljoin['factureconsult']       = "factureconsult.factureconsult_id = reglement.object_id";
+  
+  $supplements = $reglement->loadList($where, $orderby, null, null, $ljoin);
+  foreach ($supplements as $key => $reglement) {
+    $list_reglements[$key] = $reglement;
+  }
+//}
+
 // Chargements des consultations
-foreach($list_reglements as $curr_reglement){
+foreach ($list_reglements as $curr_reglement) {
   $curr_reglement->loadrefs();
   
   $curr_consult = $curr_reglement->_ref_object;
-	$curr_consult->loadRefPraticien();
-	$curr_consult->loadRefPatient();
-	
-	$montantTotal += $curr_reglement->montant;
+  $curr_consult->loadRefPraticien();
+  $curr_consult->loadRefPatient();
+  
+  $montantTotal += $curr_reglement->montant;
 }
 $nbRemise = count($list_reglements);
 

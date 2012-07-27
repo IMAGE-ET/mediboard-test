@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 CCanDo::checkEdit();
 
@@ -36,10 +38,10 @@ $filter_reglement->mode = CValue::getOrSession("mode", 0);
 $mediuser = CMediusers::get();
 $mediuser->loadRefFunction();
 
-$is_praticien           = $mediuser->isPraticien();
-$is_admin = in_array(CUser::$types[$mediuser->_user_type], array("Administrator"));
+$is_praticien = $mediuser->isPraticien();
+$is_admin     = in_array(CUser::$types[$mediuser->_user_type], array("Administrator"));
 $is_admin_or_secretaire = in_array(CUser::$types[$mediuser->_user_type], array("Administrator", "Secrétaire"));
-$listPrat = $mediuser->loadPraticiensCompta();
+$listPrat     = $mediuser->loadPraticiensCompta();
 
 // Création du template
 $smarty = new CSmartyDP();
