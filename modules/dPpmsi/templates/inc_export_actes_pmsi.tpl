@@ -7,11 +7,11 @@
   {{if $object->facture}}
     {{if $m == "dPpmsi" || $can->admin}}
     <button class="cancel " onclick="PMSI.deverouilleDossier('{{$object->_id}}', '{{$object->_class}}', '{{$confirmCloture}}', '{{$m}}')">
-      Déverouiller le dossier
+      Déverrouiller le dossier
     </button>
     {{else}}
     <div class="small-info">
-      Veuillez contacter le PMSI pour déverouiller le dossier
+      Veuillez contacter le PMSI pour déverrouiller le dossier
     </div>
     {{/if}}
   {{else}}

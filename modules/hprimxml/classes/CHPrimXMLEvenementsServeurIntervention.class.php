@@ -74,7 +74,5 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
         
     return $data; 
   }
-  
-  
 }
 ?>

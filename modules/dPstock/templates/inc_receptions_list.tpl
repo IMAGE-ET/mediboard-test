@@ -40,7 +40,7 @@
         <input type="hidden" name="dosql" value="do_product_reception_aed" />
         {{mb_key object=$_reception}}
         <input type="hidden" name="locked" value="{{$_reception->locked|ternary:0:1}}" />
-        <button type="submit" class="{{if $_reception->locked}}un{{/if}}lock notext" >{{if $_reception->locked}}Déverouiller{{else}}Vérrouiller{{/if}}</button>
+        <button type="submit" class="{{if $_reception->locked}}un{{/if}}lock notext" >{{if $_reception->locked}}Déverrouiller{{else}}Vérrouiller{{/if}}</button>
       </form>
       
       <button type="button" class="print" onclick="printReception('{{$_reception->_id}}');">Bon de réception</button>

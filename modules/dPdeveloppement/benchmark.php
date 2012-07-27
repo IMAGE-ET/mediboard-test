@@ -9,7 +9,7 @@
 
 CCanDo::checkRead();
 
-// Déverouiller la session pour rendre possible les requêtes concurrentes.
+// Déverrouiller la session pour rendre possible les requêtes concurrentes.
 session_write_close();
 
 // Création du template

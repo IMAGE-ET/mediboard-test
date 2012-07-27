@@ -9,17 +9,18 @@
  */
 
 class CHPrimXMLAcquittements extends CHPrimXMLDocument {  
-  static function getAcquittementEvenementXML(CHPrimXMLEvenements $dom_evenement) {
+  static function getAcquittementEvenementXML(CHPrimXMLEvenements $dom_evt) {
     // Message événement patient
-    if ($dom_evenement instanceof CHPrimXMLEvenementsPatients) {
+    if ($dom_evt instanceof CHPrimXMLEvenementsPatients) {
       return new CHPrimXMLAcquittementsPatients();
     } 
     // Message serveur activité PMSI
-    elseif ($dom_evenement instanceof CHPrimXMLEvenementsServeurActivitePmsi) {
-      return new CHPrimXMLAcquittementsServeurActivitePmsi();
+    elseif ($dom_evt instanceof CHPrimXMLEvenementsServeurActivitePmsi) {
+      return CHPrimXMLAcquittementsServeurActivitePmsi::getEvtAcquittement($dom_evt);
     }
   }
   
-  function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null) {}
+  function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null) {
+  }
 }
 ?>

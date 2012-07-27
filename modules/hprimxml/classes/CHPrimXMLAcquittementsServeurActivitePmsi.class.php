@@ -13,7 +13,8 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     'evenementPMSI'                => "CHPrimXMLAcquittementsPmsi",
     'evenementServeurActe'         => "CHPrimXMLAcquittementsServeurActes",
     'evenementServeurEtatsPatient' => "CHPrimXMLAcquittementsServeurEtatsPatient",
-    'evenementFraisDivers'         => "CHPrimXMLAcquittementsFraisDivers"
+    'evenementFraisDivers'         => "CHPrimXMLAcquittementsFraisDivers",
+    'evenementServeurIntervention' => "CHPrimXMLAcquittementsServeurIntervention",
   );
   
   var $acquittement = null;
@@ -33,15 +34,14 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     else if ($dom_evt instanceof CHPrimXMLEvenementsFraisDivers) {
       $acq_evt = new CHPrimXMLAcquittementsFraisDivers;
     }
+    else if ($dom_evt instanceof CHPrimXMLEvenementsServeurIntervention) {
+      $acq_evt = new CHPrimXMLAcquittementsServeurIntervention;
+    }
     
     return $acq_evt;
   }
   
-  function __construct($messageAcquittement) {     
-    parent::__construct("serveurActivitePmsi", $messageAcquittement);
-  }
-  
-  function generateEnteteMessageAcquittement($statut) {
+  function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {
     $echg_hprim      = $this->_ref_echange_hprim;
     $identifiant     = $echg_hprim->_id ? str_pad($echg_hprim->_id, 6, '0', STR_PAD_LEFT) : "ES{$this->now}";
     
@@ -51,34 +51,38 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     $enteteMessageAcquittement = $this->addElement($acquittementsServeurActivitePmsi, "enteteMessage");
     $this->addAttribute($enteteMessageAcquittement, "statut", $statut);
 
-    $this->addElement($enteteMessageAcquittement, "identifiantMessage", $this->identifiant);
+    $this->addElement($enteteMessageAcquittement, "identifiantMessage", $identifiant);
     $this->addDateTimeElement($enteteMessageAcquittement, "dateHeureProduction");
-
+    
     $emetteur = $this->addElement($enteteMessageAcquittement, "emetteur");
     $agents = $this->addElement($emetteur, "agents");
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
     $group = CGroups::loadCurrent();
     $group->loadLastId400();
-    $this->addAgent($agents, $this->getAttSysteme(), $this->emetteur, $group->text);
+    $this->addAgent($agents, $this->getAttSysteme(), CAppUI::conf('mb_id'), $group->text);
 
+    $echg_hprim->loadRefsInteropActor();
+    // Pour un acquittement l'emetteur du message devient destinataire
     $destinataire = $this->addElement($enteteMessageAcquittement, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
-    $this->addAgent($agents, "application", $this->destinataire, $this->destinataire_libelle);
+    $this->addAgent($agents, "application", $echg_hprim->_ref_sender->nom, $echg_hprim->_ref_sender->libelle);
+    /* @todo Doit-on gérer le système du destinataire ? */
+    //$this->addAgent($agents, "système", $group->_id, $group->text);
 
-    $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->identifiant);
+    $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->_identifiant_acquitte);
   }
   
-  function addReponses($statut, $codes, $actesCCAM, $elPatient, $mbObject = null, $commentaires = null) {
+  function addReponses($statut, $codes, $commentaires = null, $mbObject = null, $actesCCAM = array()) {
     $acquittementsServeurActivitePmsi = $this->documentElement;
     
     $mbPatient = $mbSejour = null;    
     if ($mbObject instanceof CSejour) {
-      $mbPatient =& $mbObject->_ref_patient;
-      $mbSejour  =& $mbObject;
+      $mbPatient = $mbObject->_ref_patient;
+      $mbSejour  = $mbObject;
     }
     if ($mbObject instanceof COperation) {
-      $mbPatient =& $mbObject->_ref_sejour->_ref_patient;
-      $mbSejour  =& $mbObject->_ref_sejour;
+      $mbPatient = $mbObject->_ref_sejour->_ref_patient;
+      $mbSejour  = $mbObject->_ref_sejour;
     } 
      
     // Ajout des réponses
@@ -87,9 +91,8 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     if ($mbPatient) {
       $patient = $this->addElement($reponses, "patient");
       $this->addPatient($patient, $mbPatient, false, true);
-    } else {
-      $reponses->appendChild($this->importNode($elPatient, true));
-    }
+    } 
+    
     if ($mbSejour) {    
       $venue = $this->addElement($reponses, "venue");
       $this->addVenue($venue, $mbSejour, false, true);
@@ -100,12 +103,12 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     }   
   }
 
-  function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null, $actesCCAM, $elPatient) {
+  function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null, $actesCCAM = array()) {
     $this->emetteur = CAppUI::conf('mb_id');
     $this->date_production = mbDateTime();
 
     $this->generateEnteteMessageAcquittement($statut);
-    $this->addReponses($statut, $codes, $actesCCAM, $elPatient, $mbObject, $commentaires);
+    $this->addReponses($statut, $codes, $commentaires, $mbObject, $actesCCAM);
      
     // Traitement final
     $this->purgeEmptyElements();
