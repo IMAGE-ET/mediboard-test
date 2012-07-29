@@ -21,7 +21,7 @@
 {{/if}}
 
 {{if $conf.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
-     $date < $smarty.now|iso_date || 
+     $date < $smarty.now|date_format:'%Y-%m-%d' || 
      $check_list->_id && $check_list->validator_id}}
      
 <script type="text/javascript">
