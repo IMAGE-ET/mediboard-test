@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 CCanDo::checkEdit();
 
@@ -21,20 +23,22 @@ $banques = $banque->loadList(null,$orderBanque);
 $consult = new CConsultation();
 
 // Test compliqué afin de savoir quelle consultation charger
-if(isset($_GET["selConsult"])) {
-  if($consult->load($selConsult) && $consult->patient_id) {
+if (isset($_GET["selConsult"])) {
+  if ($consult->load($selConsult) && $consult->patient_id) {
     $consult->loadRefsFwd();
     $prat_id = $consult->_ref_plageconsult->chir_id;
     CValue::setSession("chirSel", $prat_id);
-  } else {
+  }
+  else {
     $consult = new CConsultation();
     $selConsult = null;
     CValue::setSession("selConsult");
   }
-} else {
-  if($consult->load($selConsult) && $consult->patient_id) {
+}
+else {
+  if ($consult->load($selConsult) && $consult->patient_id) {
     $consult->loadRefsFwd();
-    if($prat_id !== $consult->_ref_plageconsult->chir_id) {
+    if ($prat_id !== $consult->_ref_plageconsult->chir_id) {
       $consult = new CConsultation();
       $selConsult = null;
       CValue::setSession("selConsult");
@@ -47,9 +51,10 @@ $userSel->loadRefs();
 $canUserSel = $userSel->canDo();
 
 // Vérification des droits sur les praticiens
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
+if (CAppUI::pref("pratOnlyForConsult", 1)) {
   $listChir = $userSel->loadPraticiens(PERM_EDIT);
-} else {
+}
+else {
   $listChir = $userSel->loadProfessionnelDeSante(PERM_EDIT);
 }
 
@@ -79,7 +84,7 @@ if ($selConsult) {
 
 if (CModule::getActive("fse")) {
   $fse = CFseFactory::createFSE();
-  if($fse) {
+  if ($fse) {
     $fse->loadIdsFSE($consult);
     $fse->makeFSE($consult);
     CFseFactory::createCPS()->loadIdCPS($consult->_ref_chir);
@@ -104,7 +109,7 @@ if (!$consult->tarif || $consult->tarif == "pursue") {
   $where = array();
   $where["function_id"] = "= '$userSel->function_id'";
   $tarifs["func"] = $tarif->loadList($where, $order);
-  foreach($tarifs["func"] as $_tarif) {
+  foreach ($tarifs["func"] as $_tarif) {
     $_tarif->getPrecodeReady();
   }
 }
@@ -128,21 +133,22 @@ $facture_patient = null;
 $where = array();
 $where["patient_id"] = "= '$consult->patient_id'";
 $where["cloture"] = " IS NULL";
-if($consult->patient_id && $facture->loadObject($where)){
+if ($consult->patient_id && $facture->loadObject($where)) {
   $facture_patient = $facture;
   $facture_patient->loadRefs();
 }
-else{ $where["cloture"] = " IS NOT NULL"; 
-	if( $consult->patient_id &&  $factures = $facture->loadList($where)){
-	  foreach($factures as $_facture){
-	    $_facture->loadRefs();
-	    foreach($_facture->_ref_consults as $consultation){
-	      if($consultation->_id == $consult->_id){
-	        $facture_patient = $_facture;
-	      }
-	    }
-	  }  
-	}
+else { 
+  $where["cloture"] = " IS NOT NULL"; 
+  if ($consult->patient_id &&  $factures = $facture->loadList($where)) {
+    foreach ($factures as $_facture) {
+      $_facture->loadRefs();
+      foreach ($_facture->_ref_consults as $consultation) {
+        if ($consultation->_id == $consult->_id) {
+          $facture_patient = $_facture;
+        }
+      }
+    }  
+  }
 }
 
 // Création du template

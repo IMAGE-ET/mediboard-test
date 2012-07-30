@@ -12,10 +12,8 @@
 CCanDo::checkEdit();
 
 $factureconsult_id  = CValue::getOrSession("factureconsult_id");
-//mbTrace($factureconsult_id);
 $patient_id         = CValue::getOrSession("patient_id");
 $consult_id         = CValue::get("consult_id");
-//mbTrace($consult_id);
 $facture_id         = CValue::get("facture_id");
 
 $derconsult_id = null;

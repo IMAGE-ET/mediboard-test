@@ -1,11 +1,12 @@
-<?php /* $Id ajax_refresh_reglement.php $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPcabinet
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -28,7 +29,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("facture"       , $facture);
 $smarty->assign("banques"       , $banques);
-$smarty->assign("reglement"       , $reglement);
+$smarty->assign("reglement"     , $reglement);
 $smarty->assign("date"          , mbDate());
 
 $smarty->display("inc_vw_reglements.tpl");

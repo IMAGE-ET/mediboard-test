@@ -1,11 +1,13 @@
-<?php /* $Id: do_factureconsult_aed.php  $ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision: 8216 $
-* @author 
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 $do = new CDoObjectAddEdit("CFactureConsult", "factureconsult_id");
 $do->doIt();

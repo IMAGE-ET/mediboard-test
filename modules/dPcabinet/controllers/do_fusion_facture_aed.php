@@ -1,11 +1,12 @@
-<?php /* $Id: do_fusion_facture_aed.php $ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPcabinet
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 $factureconsult_id = CValue::post("factureconsult_id");
@@ -15,14 +16,14 @@ $facture->load($factureconsult_id);
 $facture->loadRefs();
 
 $facture->du_patient = 0;
-foreach ($facture->_ref_consults as $consult){
-	$consult->loadRefsActes();
-	foreach($consult->_ref_actes_tarmed as $acte_tarmed){
-		$facture->du_patient += $acte_tarmed->montant_base; 
-	}
-	foreach($consult->_ref_actes_caisse as $acte_caisse){
-		$facture->du_patient += $acte_caisse->montant_base; 
-	}
+foreach ($facture->_ref_consults as $consult) {
+  $consult->loadRefsActes();
+  foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
+    $facture->du_patient += $acte_tarmed->montant_base; 
+  }
+  foreach ($consult->_ref_actes_caisse as $acte_caisse) {
+    $facture->du_patient += $acte_caisse->montant_base; 
+  }
 }
 
 $facture->remise = 0;
@@ -39,12 +40,12 @@ $where["patient_id"] = "= '$facture->patient_id'";
 $where["ouverture"]  = "= '$facture->ouverture'";
 $where["cloture"]    = "= '$facture->cloture'";
 $where["type_facture"] = "= '$facture->type_facture'";
-$factures = $facture->loadList( $where, "factureconsult_id DESC");
+$factures = $facture->loadList($where, "factureconsult_id DESC");
 
-foreach($factures as $_facture){
-	if ($msg = $_facture->delete()) {
-	  CAppUI::setMsg($msg, UI_MSG_ERROR);
-	}
+foreach ($factures as $_facture) {
+  if ($msg = $_facture->delete()) {
+    CAppUI::setMsg($msg, UI_MSG_ERROR);
+  }
 }
 
 echo CAppUI::getMsg();
