@@ -22,7 +22,7 @@
 
 <tbody class="hoverable">
 
-<tr {{if $_consult->_id == $consult->_id}}class="selected"{{/if}}>
+<tr class="{{if $_consult->_id == $consult->_id}}selected{{/if}}{{if $_consult->chrono == $_consult|const:'TERMINE'}} hatching{{/if}}">
   {{assign var=categorie value=$_consult->_ref_categorie}}
   <td {{if $_consult->annule}}class="cancelled"{{/if}} style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} class="text">
     {{if $destinations && !@$offline && $mode_vue == "horizontal"}}

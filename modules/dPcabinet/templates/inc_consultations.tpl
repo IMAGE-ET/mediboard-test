@@ -32,7 +32,7 @@
     <th>{{mb_title class=CConsultation field=_etat}}</th>
   </tr>
   {{foreach from=$plageSel->_ref_consultations item=_consult}}
-  <tr>
+  <tr {{if $_consult->chrono == $_consult|const:'TERMINE'}} class="hatching" {{/if}}>
     {{assign var="consult_id" value=$_consult->_id}}
     {{assign var=patient value=$_consult->_ref_patient}}
     {{assign var="href_consult" value="?m=$m&tab=edit_consultation&selConsult=$consult_id"}}
