@@ -43,6 +43,11 @@ if ($receiver instanceof CDestinataireHprim) {
   }
 }
 
+if ($receiver instanceof CPhastDestinataire) {
+  $data_format = CPhastEvenementsPN13::getXMLEvenementsPN13($exchange->_message);
+  $evenement = $data_format->sous_type;
+}
+
 if (!$evenement) {
   CAppUI::stepAjax("Aucun événement défini pour cet échange", UI_MSG_ERROR);
 }
