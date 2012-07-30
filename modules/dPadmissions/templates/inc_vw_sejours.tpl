@@ -2,7 +2,7 @@
  * $Id$
  * 
  * @package    Mediboard
- * @subpackage reservation
+ * @subpackage dPadmissions
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -58,7 +58,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 
   {{foreach from=$sejours item=_sejour}}
   <tr id="admission{{$_sejour->sejour_id}}">
-    {{mb_include module=reservation template="inc_vw_sejour_line" nodebug=true}}
+    {{mb_include module=dPadmissions template="inc_vw_sejour_line" nodebug=true}}
   </tr>
   {{foreachelse}}
   <tr>

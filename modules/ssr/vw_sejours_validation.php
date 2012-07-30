@@ -11,7 +11,7 @@
 global $current_m;
 $current_m = "ssr";
 
-CAppUI::requireModuleFile("reservation", "vw_sejours_validation");
+CAppUI::requireModuleFile("dPadmissions", "vw_sejours_validation");
 
 
 ?>

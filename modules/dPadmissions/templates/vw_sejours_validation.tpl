@@ -2,7 +2,7 @@
  * $Id$
  * 
  * @package    Mediboard
- * @subpackage reservation
+ * @subpackage dPadmissions
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -35,7 +35,7 @@ function printDHE(type, object_id) {
 
 function reloadFullAdmissions(filterFunction) {
   var oForm = getForm("selType");
-  var url = new Url("reservation", "ajax_vw_all_sejours");
+  var url = new Url("dPadmissions", "ajax_vw_all_sejours");
   url.addParam("current_m" , "{{$current_m}}");
   url.addParam("date"      , "{{$date}}");
   url.addParam("service_id", $V(oForm.service_id));
@@ -46,7 +46,7 @@ function reloadFullAdmissions(filterFunction) {
 
 function reloadAdmission(filterFunction) {
   var oForm = getForm("selType");
-  var url = new Url("reservation", "ajax_vw_sejours");
+  var url = new Url("dPadmissions", "ajax_vw_sejours");
   url.addParam("current_m" , "{{$current_m}}");
   url.addParam("recuse"    , "{{$recuse}}");
   url.addParam("date"      , "{{$date}}");
@@ -126,12 +126,12 @@ SejourHprimSelector.doSet = function(){
 }  
 
 Main.add(function () {
-  var totalUpdater = new Url("reservation", "ajax_vw_all_sejours");
+  var totalUpdater = new Url("dPadmissions", "ajax_vw_all_sejours");
   totalUpdater.addParam("current_m", "{{$current_m}}");
   totalUpdater.addParam("date", "{{$date}}");
   totalUpdater.periodicalUpdate('allAdmissions', { frequency: 120 });
   
-  var listUpdater = new Url("reservation", "ajax_vw_sejours");
+  var listUpdater = new Url("dPadmissions", "ajax_vw_sejours");
   listUpdater.addParam("recuse", "{{$recuse}}");
   listUpdater.addParam("current_m", "{{$current_m}}");
   listUpdater.addParam("date", "{{$date}}");
