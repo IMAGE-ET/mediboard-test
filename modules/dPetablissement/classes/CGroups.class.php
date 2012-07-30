@@ -97,7 +97,7 @@ class CGroups extends CMbObject {
     $backProps["echanges_hprim"]          = "CEchangeHprim group_id";
     $backProps["echanges_hprim21"]        = "CEchangeHprim21 group_id";
     $backProps["echanges_ihe"]            = "CExchangeIHE group_id";
-    $backProps["echanges_phast"]          = "CPhastEchange group_id";
+    $backProps["echanges_phast"]          = "CExchangePhast group_id";
     $backProps["extract_passages"]        = "CExtractPassages group_id";
     $backProps["destinataires_phast"]     = "CPhastDestinataire group_id";  
     $backProps["senders_ftp"]             = "CSenderFTP group_id";
