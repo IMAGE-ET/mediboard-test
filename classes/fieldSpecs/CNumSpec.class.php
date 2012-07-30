@@ -177,6 +177,7 @@ class CNumSpec extends CMbFieldSpec {
     $increment  = CMbArray::extract($params, "increment");
     $showPlus   = CMbArray::extract($params, "showPlus");
     $deferEvent = CMbArray::extract($params, "deferEvent");
+    $bigButtons = CMbArray::extract($params, "bigButtons");
     $field      = htmlspecialchars($this->fieldName);
     $maxLength  = CValue::first($this->length, $this->maxLength, 11);
     $fieldId    = $form.'_'.$field;
@@ -215,6 +216,7 @@ class CNumSpec extends CMbFieldSpec {
           elseif(isset($min)) $sHtml .= "min: $min,";
           if (isset($max))    $sHtml .= "max: $max,";
           if ($deferEvent)    $sHtml .= "deferEvent: true,";
+          if ($bigButtons)    $sHtml .= "bigButtons: true,";
           if ($showPlus)      $sHtml .= "showPlus: true,";
           $sHtml .= '_:0 // IE rules
         });

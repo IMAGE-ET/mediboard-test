@@ -108,6 +108,7 @@ class CFloatSpec extends CMbFieldSpec {
     $fraction     = CMbArray::extract($params, "fraction");
     $showFraction = CMbArray::extract($params, "showFraction");
     $deferEvent   = CMbArray::extract($params, "deferEvent");
+    $bigButtons   = CMbArray::extract($params, "bigButtons");
     $field        = htmlspecialchars($this->fieldName);
     $maxLength    = 8;
     CMbArray::defaultValue($params, "size", $maxLength);
@@ -153,6 +154,7 @@ class CFloatSpec extends CMbFieldSpec {
           elseif(isset($min)) $sHtml .= "min: $min,";
           if (isset($max))    $sHtml .= "max: $max,";
           if ($deferEvent)    $sHtml .= "deferEvent: true,";
+          if ($bigButtons)    $sHtml .= "bigButtons: true,";
           if ($showPlus)      $sHtml .= "showPlus: true,";
           if ($fraction)      $sHtml .= "fraction: true,";
           if ($showFraction)  $sHtml .= "showFraction: true,";
