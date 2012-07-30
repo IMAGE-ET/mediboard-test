@@ -90,11 +90,11 @@ if ($ack_data = $source->getACQ()) {
   }
   
   if ($exchange instanceof CExchangePhast) {
-    $ack = new CPhastAcquittementsPN13;
+    $ack = new CPhastAcquittementsPN13();
     $ack->loadXML($ack_data);
     $doc_valid = $ack->schemaValidate();
     if ($doc_valid) {
-      $exchange->statut_acquittement = $ack->getStatutAcquittement();
+      $exchange->statut_acquittement = $ack->getCodeAcquittement();
     }
   }  
   
