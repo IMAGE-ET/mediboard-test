@@ -50,6 +50,7 @@
   <input type="hidden" name="dosql" value="do_planning_aed" />
   <input type="hidden" name="operation_id" />
   <input type="hidden" name="time_operation" />
+  <input type="hidden" name="temp_operation" />
   <input type="hidden" name="salle_id" />
 </form>
 

@@ -149,7 +149,7 @@
       à
       <select name="_hour_urgence" onchange="Value.synchronize(this)">
       {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
-        <option value="{{$hour}}" {{if $op->_hour_urgence == $hour || (!$op->operation_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
+        <option value="{{$hour}}" {{if $op->_hour_urgence == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
       {{/foreach}}
       </select> h
       <select name="_min_urgence" onchange="Value.synchronize(this);">

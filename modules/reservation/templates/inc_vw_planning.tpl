@@ -8,19 +8,12 @@
  * @version    $Revision$
  *}}
 
-{{if $salles|@count == 0}}
-  <div class="small-info">
-    {{tr}}CPlageOp.none{{/tr}}
-  </div>
-  {{mb_return}}
-{{/if}}
-
 {{mb_script module=ssr script=planning ajax=1}}
 
 <script type="text/javascript">
   Main.add(function() {
     ViewPort.SetAvlHeight("planningInterventions", 1);
-      $('planningWeek').style.height = "5500px";
+      $('planningWeek').style.height = "4500px";
   });
 </script>
 
@@ -49,15 +42,24 @@
     
     planning.onEventChange = function(e) {
       var time = e.getTime();
+      var index_salle = time.start.getFullYear()-2000;
+      
+      if (index_salle < 0 || index_salle > this.salles_ids.length) {
+        return;
+      }
+      
       var form = getForm("editOperation");
-      var index_salle = parseInt((''+time.start.getFullYear()).substring(1));
+      
+      
       var time_operation = time.start.toTIME();
       
       $V(form.operation_id, e.draggable_guid.split('-')[1]);
       $V(form.time_operation, time_operation);
+      $V(form.temp_operation, new Date(1970, 1, 1, 0, time.length).toTIME());
+      
       $V(form.salle_id, this.salles_ids[index_salle]);
       
-      onSubmitFormAjax(form);
+      onSubmitFormAjax(form, {onComplete: refreshPlanning});
     }
     
     var planning_div = $("{{$planning->guid}}");
