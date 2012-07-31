@@ -76,9 +76,9 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
         // Entity identifier
         $movement->_view,
         // Autorité assignement
-        "Mediboard",
-        CAppUI::conf("hl7 assigningAuthorityUniversalID"),
-        "OX"
+        CAppUI::conf("hl7 assigning_authority_namespace_id"),
+        CAppUI::conf("hl7 assigning_authority_universal_id"),
+        CAppUI::conf("hl7 assigning_authority_universal_type_id"),
       )
     );
     

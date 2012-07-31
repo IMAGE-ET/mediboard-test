@@ -151,7 +151,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $sep_preg = preg_quote($fieldSeparator);
     
     foreach ($lines as $_line) {
-      if (!preg_match("/^[A-Z]{2}[A-Z0-9]$sep_preg.+/", $_line)) {
+      if (!preg_match("/^[A-Z]{2}[A-Z0-9]$sep_preg/", $_line)) {
         throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $_line);
       }
     }
