@@ -12,14 +12,14 @@ class CPlanningWeek  {
   var $guid = null;
   var $title = null;
   
-  var $date = null;
-  var $selectable = null;
-	var $height = null;
-	var $large   = null;
-	var $adapt_range = null;
-	
-  var $date_min = null; // Monday
-  var $date_max = null; // Sunday
+  var $date        = null;
+  var $selectable  = null;
+  var $height      = null;
+  var $large       = null;
+  var $adapt_range = null;
+  
+  var $date_min    = null; // Monday
+  var $date_max    = null; // Sunday
   
   var $date_min_active = null;
   var $date_max_active = null;
@@ -29,6 +29,8 @@ class CPlanningWeek  {
   var $hour_divider = 6;
   var $maximum_load = 6;
   var $has_load = false;
+  var $dragndrop = 0;
+  var $no_dates    = 0;
   
   var $events = array();
   var $pauses = array("08", "12", "16");
@@ -36,9 +38,9 @@ class CPlanningWeek  {
   var $day_labels = array();
   var $load_data = array();
   
-	var $_date_min_planning = null;
-	var $_date_max_planning = null;
-	
+  var $_date_min_planning = null;
+  var $_date_max_planning = null;
+  
   // Periods
   var $hours = array(
     "00", "01", "02", "03", "04", "05", 
@@ -50,39 +52,53 @@ class CPlanningWeek  {
   var $days = array();
 
   function __construct($date, $date_min = null, $date_max = null, $nb_days = 7, $selectable = false, $height = "auto", $large = false, $adapt_range = false) {
-		$this->date = $date;
+    $this->date = $date;
     $this->selectable = $selectable;
-		$this->height = $height ? $height : "auto";
-		$this->large = $large;
-		$this->nb_days = $nb_days;
-		$this->adapt_range = $adapt_range;
-		
-		$days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday");
-		$last_day = $days[$this->nb_days - 1];
-		
-    $monday = mbDate("last monday", mbDate("+1 day", $this->date));
-    $sunday = mbDate("next $last_day", mbDate("-1 DAY", $this->date));
+    $this->height = $height ? $height : "auto";
+    $this->large = $large;
+    $this->nb_days = $nb_days;
+    $this->adapt_range = $adapt_range;
     
-    if (mbDaysRelative($monday, $sunday) > 7) {
-      $sunday = mbDate("-7 DAYS", $sunday);
+    if (is_int($date) || is_int($date_min) || is_int($date_max)) {
+      $this->no_dates = true;
+      $this->date_min = $this->date_min_active = $this->_date_min_planning = $date_min;
+      $this->date_max = $this->date_max_active = $this->_date_max_planning = $date_max;
+      
+      for ($i=0 ; $i < $this->nb_days ; $i++) {
+        $this->days[$i] = array();
+        $this->load_data[$i] = array();
+      }
     }
-		
-		$this->date_min_active = $date_min ? max($monday, mbDate($date_min)) : $monday;
-		$this->date_max_active = $date_max ? min($sunday, mbDate($date_max)) : $sunday;
-    
-    $this->date_min = $monday;
-    $this->date_max = $sunday;
-    
-    // Days period
-    for ($i = 0; $i < $this->nb_days; $i++) {
-      $_day = mbDate("+$i day", $monday);
-      $this->days[$_day] = array();
-      $this->load_data[$_day] = array();
+    else {
+      $days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday");
+      
+      $last_day = $days[$this->nb_days - 1];
+      
+      
+      $monday = mbDate("last monday", mbDate("+1 day", $this->date));
+      $sunday = mbDate("next $last_day", mbDate("-1 DAY", $this->date));
+      
+      if (mbDaysRelative($monday, $sunday) > 7) {
+        $sunday = mbDate("-7 DAYS", $sunday);
+      }
+      
+      $this->date_min_active = $date_min ? max($monday, mbDate($date_min)) : $monday;
+      $this->date_max_active = $date_max ? min($sunday, mbDate($date_max)) : $sunday;
+      
+      $this->date_min = $monday;
+      $this->date_max = $sunday;
+      
+      // Days period
+      for ($i = 0; $i < $this->nb_days; $i++) {
+        $_day = mbDate("+$i day", $monday);
+        $this->days[$_day] = array();
+        $this->load_data[$_day] = array();
+      }
+      
+      $this->_date_min_planning = reset(array_keys($this->days));
+      $this->_date_max_planning = end(array_keys($this->days));
     }
-		
-		$this->_date_min_planning = reset(array_keys($this->days));
-		$this->_date_max_planning = end(array_keys($this->days));
-	}
+  }
   
   function addEvent(CPlanningEvent $event) {
     if ($event->day < $this->date_min || $event->day > $this->date_max) {
@@ -147,7 +163,7 @@ class CPlanningWeek  {
    * @return bool
    */
   function isDayActive($day) {
-  	return CMbRange::in($day, $this->date_min_active, $this->date_max_active);
+    return CMbRange::in($day, $this->date_min_active, $this->date_max_active);
   }
 
   /**
@@ -157,7 +173,8 @@ class CPlanningWeek  {
    * @param object $color [optional] The label's color
    */
   function addDayLabel($day, $text, $detail = null, $color = null) {
-    $this->day_labels[mbDate($day)][] = array(
+    
+    $this->day_labels[$this->no_dates ? $day : mbDate($day)][] = array(
       "text"   => $text, 
       "detail" => $detail, 
       "color"  => $color,
@@ -174,10 +191,20 @@ class CPlanningWeek  {
     
     if ($start instanceof CPlanningEvent) {
       $event = $start;
-      $day = mbDate($event->day);
+      if ($this->no_dates) {
+        $day = $event->day;
+      }
+      else {
+        $day = mbDate($event->day);
+      }
     }
     else {
-      $day = mbDate($start);
+      if ($this->no_dates) {
+        $day = $start;
+      }
+      else {
+        $day = mbDate($start);
+      }
       $event = new CPlanningEvent(null, $start, $length);
     }
     

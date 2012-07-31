@@ -33,6 +33,10 @@ $prestations = CPrestation::loadCurrentList();
 $operation_id = CValue::getOrSession("operation_id");
 $chir_id      = CValue::getOrSession("chir_id");
 $sejour_id    = CValue::get("sejour_id");
+$hour_urgence = CValue::get("hour_urgence");
+$min_urgence  = CValue::get("min_urgence");
+$date_urgence = CValue::get("date_urgence");
+$salle_id     = CValue::get("salle_id");
 $patient_id   = CValue::get("pat_id");
 $today        = mbDate();
 $tomorow      = mbDate("+1 DAY");
@@ -101,14 +105,23 @@ if ($op->_id) {
   foreach($op->_ref_actes_ccam as $acte) {
     $acte->loadRefExecutant();
   }	
-	
+  
   $sejour = $op->_ref_sejour;
   $sejour->loadRefsFwd();
   $sejour->makeCancelAlerts($op->_id);
   $chir    = $op->_ref_chir;
   $patient = $sejour->_ref_patient;
 }
-
+else {
+  if ($hour_urgence && $min_urgence) {
+    $op->_hour_urgence = intval(substr($hour_urgence, 0, 2));
+    $op->_min_urgence  = intval(substr($min_urgence, 0, 2));
+  }
+  if ($date_urgence) {
+    $op->date = $op->_datetime = $date_urgence;
+  }
+  $op->salle_id = $salle_id;
+}
 // Liste des types d'anesthésie
 $listAnesthType = new CTypeAnesth;
 $orderanesth = "name";

@@ -231,13 +231,12 @@ CCAMSelector.init = function(){
             Value.synchronize(this);
             document.editSejour._curr_op_date.value = this.value;
             modifSejour(); $V(this.form._date, this.value);">
-            {{if $op->operation_id}}
+            {{if $op->operation_id || $op->_datetime}}
             <option value="{{$op->_datetime|iso_date}}" selected="selected">
               {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)
             </option>
             {{/if}}
             <option value="{{$today}}">
-            
               {{$today|date_format:"%d/%m/%Y"}} (aujourd'hui)
             </option>
             <option value="{{$tomorow}}">
@@ -248,7 +247,7 @@ CCAMSelector.init = function(){
         à
         <select name="_hour_urgence" onchange="Value.synchronize(this)">
         {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
-          <option value="{{$hour}}" {{if $op->_hour_urgence == $hour || (!$op->operation_id && $hour == "8")}} selected="selected" {{/if}}>{{$hour}}</option>
+          <option value="{{$hour}}" {{if $op->_hour_urgence == $hour}} selected="selected" {{/if}}>{{$hour}}</option>
         {{/foreach}}
         </select> h
         <select name="_min_urgence" onchange="Value.synchronize(this);">

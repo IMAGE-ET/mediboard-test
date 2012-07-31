@@ -244,10 +244,10 @@ addBorderEvent = function(){
   }
   
   // Parfois le planning n'est pas prêt
-	
-	if (planning.down('div.planning')) {
+  
+  if (planning.down('div.planning')) {
     window["planning-"+planning.down('div.planning').id].updateNbSelectEvents();
-	}
+  }
 }
 
 updateCdarrCount = function(line_id, type_cdarr){
@@ -354,13 +354,13 @@ Main.add(function(){
             {{mb_field object=$bilan field=demi_journee_2 onchange="this.form.onsubmit();" typeEnum=checkbox}}
             {{mb_label object=$bilan field=demi_journee_2}} 
           </div>
-					<script>
-						updateDemiJournees = function (input) {
+          <script>
+            updateDemiJournees = function (input) {
               $('demi-journees').setVisible($V(input) == '1');
               input.form.onsubmit();
-						}
-					</script>
-        	{{mb_field object=$bilan field=hospit_de_jour onchange="updateDemiJournees(this)"}}
+            }
+          </script>
+          {{mb_field object=$bilan field=hospit_de_jour onchange="updateDemiJournees(this)"}}
         </td>
       </tr>
 
@@ -439,10 +439,10 @@ Main.add(function(){
                   </span>
                   
                   <label>
-							      {{if $_line->_recent_modification}}
-							      <img style="float: left" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
-							      {{/if}}
-										
+                    {{if $_line->_recent_modification}}
+                    <img style="float: left" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
+                    {{/if}}
+                    
                     <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" 
                            onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); $V(this.form._cdarr, false); $$('#other_cdarr span').invoke('remove'); $('other_cdarr').hide();" />
                    
@@ -626,8 +626,8 @@ Main.add(function(){
                 {{foreach from=$week_days key=_number item=_day}}
                   <td>
                     <label>
-                    	{{$_day}}<br />
-											<input class="days nocheck" type="checkbox" name="_days[{{$_number}}]" value="{{$_number}}" />
+                      {{$_day}}<br />
+                      <input class="days nocheck" type="checkbox" name="_days[{{$_number}}]" value="{{$_number}}" />
                     </label>
                   </td>
                 {{/foreach}}
@@ -828,8 +828,8 @@ Main.add(function(){
       <tr>
         <td class="button" colspan="2">
           <button type="button" onclick="$V(this.form.del, '0'); this.form.onsubmit();" class="submit">
-          	{{tr}}Modify{{/tr}}
-					</button>
+            {{tr}}Modify{{/tr}}
+          </button>
           <button type="button" name="delete" class="trash" onclick="$V(this.form.del, '1'); this.form.onsubmit();">
             {{tr}}Delete{{/tr}}
           </button>
@@ -852,15 +852,15 @@ Main.add(function(){
         </th>
       </tr>
       <tr>
-      	
-      	<th>
+        
+        <th>
           <select name="period">
             <option value="+1 WEEK">{{tr}}Week-after{{/tr}}</option>
             <option value="+1 DAY" >{{tr}}Day-after{{/tr}} </option>
             <option value="-1 DAY" >{{tr}}Day-before{{/tr}}</option>
           </select>
-      	</th>
-				
+        </th>
+        
         <td class="button">
           <button type="button" class="new singleclick" onclick="$V(this.form.propagate, '0'); this.form.onsubmit();">
             {{tr}}Duplicate{{/tr}}
@@ -869,21 +869,21 @@ Main.add(function(){
       </tr> 
 
       <tr>
-      	<th>
+        <th>
           <table style="float: right;">
             <tr>
               {{foreach from=$week_days key=_number item=_day}}
                 <td>
                   <label>
-                  	{{$_day}}<br />
-										<input class="days nocheck" type="checkbox" name="_days[{{$_number}}]" value="{{$_number}}" />
+                    {{$_day}}<br />
+                    <input class="days nocheck" type="checkbox" name="_days[{{$_number}}]" value="{{$_number}}" />
                   </label>
                 </td>
               {{/foreach}}
             </tr>
           </table>
-      	</th>
-				
+        </th>
+        
         <td class="button">
           <button type="button" class="new singleclick" onclick="$V(this.form.propagate, '1'); this.form.onsubmit();">
             {{tr}}Propagate{{/tr}}

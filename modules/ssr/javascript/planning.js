@@ -28,27 +28,44 @@ PlanningEvent = Class.create({
     return $(this.internal_id);
   },
   getTime: function(){
+    
     var element = this.getElement();
-    var date = element.up("td").className.match(/segment-([\d-]{10})-(\d{2})/i);
+    
     var divider = this.planning.hour_divider;
     var minutes = 60/divider;
     var cellHeight = this.planning.getCellHeight();
     var cellWidth = element.up().getWidth();
     
-    date = Date.fromDATETIME(date[1]+" "+date[2]+":00:00");
-    
     var offset = {
-      date: Math.round(element.offsetLeft/parseInt(cellWidth)), 
-      time: Math.round((element.offsetTop/cellHeight) * divider) / divider
+      date: Math.round(element.offsetLeft / parseInt(cellWidth)),
+      time: Math.round((element.offsetTop / cellHeight) * divider) / divider
     };
     
-    date.addDays(offset.date);
+    if (this.planning.no_dates) {
+      var date = element.up("td").className.match(/segment-([\d-]+)-(\d{2})/i);
+      
+      // Date fictive permettant de retrouver l'index de la colonne sur l'année
+      var annee = 2000+parseInt(date[1]);
+      
+      date = Date.fromDATETIME(annee+"-01-01 " + date[2]+":00:00");
+      date.addYears(offset.date);
+    }
+    else {
+      var date = element.up("td").className.match(/segment-([\d-]{10})-(\d{2})/i);
+      date = Date.fromDATETIME(date[1] + " " + date[2] + ":00:00");
+      date.addDays(offset.date);
+    }
+    
     date.addMinutes(offset.time * 60);
     
     var end = new Date(date);
     end.addMinutes((Math.round((element.getHeight() / cellHeight) * divider) / divider) * 60);
-
-    return {start: date, end: end, length: (end - date) / (1000 * 60)};
+    
+    return {
+      start: date,
+      end: end,
+      length: (end - date) / (1000 * 60)
+    };
   },
   getTimeString: function(){
     var time = this.getTime();
@@ -125,18 +142,20 @@ WeekPlanning = Class.create({
   scrollTop: null,
   load_data: [],
   maximum_load: null,
-  initialize: function(guid, hour_min, hour_max, events, hour_divider, scroll_top, adapt_range, selectable) {
+  dragndrop: false,
+  no_dates: false,
+  initialize: function(guid, hour_min, hour_max, events, hour_divider, scroll_top, adapt_range, selectable, dragndrop, no_dates) {
     this.eventsById = {};
     for (var i = 0; i < events.length; i++) {
       this.eventsById[events[i].internal_id] = events[i] = new PlanningEvent(events[i], this);
-      
-      if (Preferences.ssr_planning_dragndrop == 1 &&this.eventsById[events[i].internal_id].draggable) {
+      if ( (Preferences.ssr_planning_dragndrop == 1 || dragndrop == 1) && this.eventsById[events[i].internal_id].draggable) {
         this.eventsById[events[i].internal_id].setDraggable(
           Preferences.ssr_planning_dragndrop == 1 && this.eventsById[events[i].internal_id].resizable
         );
       }
     }
     
+    this.no_dates = no_dates;
     this.container = $(guid);
     this.hour_min = hour_min;
     this.hour_max = hour_max;
@@ -144,7 +163,8 @@ WeekPlanning = Class.create({
     this.hour_divider = hour_divider;
     this.adapt_range = adapt_range;
     this.selectable = selectable;
-
+    this.dragndrop = dragndrop;
+    
     // Event observation
     if (this.selectable) {
       this.observeEvent('click', function(event){
@@ -224,7 +244,7 @@ WeekPlanning = Class.create({
     
     // Day
     $H(this.load_data).each(function(day){
-      if (day.value.length === 0) return;
+      if (day.value.length === 0 || typeof day.value == "function") return;
       
       // Hour
       $H(day.value).each(function(hour){

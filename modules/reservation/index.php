@@ -12,3 +12,4 @@
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab('vw_sejours_validation', TAB_READ);
+$module->registerTab("vw_planning", TAB_READ);

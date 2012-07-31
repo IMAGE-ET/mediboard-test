@@ -10,6 +10,7 @@
 
 {{mb_default var=bank_holidays value="|"|explode:""}}
 {{mb_default var=print value=0}}
+{{mb_default var=scroll_top value=null}}
 
 <script type="text/javascript">
 
@@ -22,7 +23,9 @@ Main.add(function() {
     {{$planning->hour_divider}},
     window["planning-{{$planning->guid}}"] && window["planning-{{$planning->guid}}"].scrollTop,
     {{$planning->adapt_range|@json}},
-    '{{$planning->selectable}}'
+    '{{$planning->selectable}}',
+    {{$planning->dragndrop}},
+    {{$planning->no_dates}}
   );
   
   planning.container.addClassName("drawn");
@@ -31,7 +34,7 @@ Main.add(function() {
   planning.setLoadData({{$planning->load_data|@json}}, {{$planning->maximum_load}});
     
 
-  planning.scroll();
+  planning.scroll({{$scroll_top}});
   window["planning-{{$planning->guid}}"] = planning;
 });
 
@@ -69,7 +72,9 @@ Main.add(function() {
          <th class="day {{if $disabled}}disabled{{/if}} text day-{{$smarty.foreach.days.index}} {{if $planning->selectable}}selector{{/if}}"
            {{if $planning->selectable}} onclick="window['planning-{{$planning->guid}}'].selectDayEvents({{$smarty.foreach.days.index}})" {{/if}}
            {{if in_array($_day, $bank_holidays)}}style="background: #fc0"{{/if}}>
-           {{$_day|date_format:"%a %d"|nl2br}}
+             {{if !$planning->no_dates}}
+               {{$_day|date_format:"%a %d"|nl2br}}
+             {{/if}}
            {{if array_key_exists($_day, $planning->day_labels)}}
              {{assign var=_labels_for_day value=$planning->day_labels.$_day}}
              {{foreach from=$_labels_for_day item=_days_label}}
@@ -135,7 +140,7 @@ Main.add(function() {
                       {{if $_event->hour == $_hour}}
                       
                         {{assign var=draggable value=""}}
-                        {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable}}
+                        {{if ($app->user_prefs.ssr_planning_dragndrop || $planning->dragndrop) && $_event->draggable}}
                           {{assign var=draggable value=draggable}}
                         {{/if}}
                         
@@ -153,20 +158,22 @@ Main.add(function() {
                               <div style="height:100%;width:5px;background-color:#{{if isset($_event->plage.color|smarty:nodefaults)}}{{$_event->plage.color}};{{else}}DDDDDD{{/if}}"> </div>
                             {{/if}}
                             
-                           {{if $_event->menu|@count == 3}}
+                           {{if $_event->menu|@count}}
                             <div class="toolbar" {{if $_event->hour == 0}}style="top:100%;"{{/if}}>
                               {{foreach from=$_event->menu item=element}}
                                 <a class="button {{$element.class}} notext" onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$element.class}}','{{$_event->plage.id}}', this)" title="{{$element.title}}"></a>
                               {{/foreach}}
                             </div>
                             {{/if}}
-                          {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable || $app->user_prefs.ssr_planning_resize && $_event->resizable}}
+                            
+                          {{if (($app->user_prefs.ssr_planning_dragndrop || $planning->dragndrop ) && $_event->draggable) ||
+                               ($app->user_prefs.ssr_planning_resize && $_event->resizable)}}
                             <div class="time-preview" style="display: none;"></div>
                           {{/if}}
                           
                           {{if $planning->large}}
                           <div class="time" title="{{$_event->start|date_format:"%H:%M"}}{{if $_event->length}} - {{$_event->end|date_format:"%H:%M"}}{{/if}}">
-                            {{$_event->start|date_format:"%H:%M"}}
+                            {{$_event->hour}}:{{$_event->minutes}}
                             {{if $_event->length}}
                              - {{$_event->end|date_format:"%H:%M"}}
                             {{/if}}
@@ -236,7 +243,7 @@ Main.add(function() {
                             <div class="footer"></div>
                           {{/if}}
                           
-                          {{if $app->user_prefs.ssr_planning_dragndrop && $_event->draggable}}
+                          {{if ($app->user_prefs.ssr_planning_dragndrop || $planning->dragndrop) && $_event->draggable}}
                             <div class="handle"></div>
                           {{/if}}
                           
