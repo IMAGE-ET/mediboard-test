@@ -128,16 +128,6 @@ class CSetupftp extends CSetup {
     
     $this->makeRevision("0.10");
     
-    $query = "ALTER TABLE `echange_ftp` 
-                ADD `delete_file` ENUM ('0','1') DEFAULT '1';";
-    $this->addQuery($query);
-    
-    $this->makeRevision("0.11");
-    
-     $query = "ALTER TABLE `echange_ftp` 
-                 DROP `delete_file`;";
-    $this->addQuery($query);
-    
     $query = "ALTER TABLE `sender_ftp` 
                 ADD `delete_file` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
