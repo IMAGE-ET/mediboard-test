@@ -899,25 +899,35 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $this->addUniteFonctionnelle($elParent, $operation);
     
-    // Ajout des participants
-    $mbParticipants = array();
-    foreach($operation->_ref_actes_ccam as $acte_ccam) {
-      $acte_ccam->loadRefExecutant();
-      $mbParticipant = $acte_ccam->_ref_executant;
-      $mbParticipants[$mbParticipant->user_id] = $mbParticipant;
-    }
-    
-    $participants = $this->addElement($elParent, "participants");
-    foreach ($mbParticipants as $mbParticipant) {
-      $participant = $this->addElement($participants, "participant");
-      $medecin     = $this->addElement($participant, "medecin");
-      $this->addProfessionnelSante($medecin, $mbParticipant);
-    }
+    if ($light) {
+      // Ajout des participants
+      $mbParticipants = array();
+      foreach($operation->_ref_actes_ccam as $acte_ccam) {
+        $acte_ccam->loadRefExecutant();
+        $mbParticipant = $acte_ccam->_ref_executant;
+        $mbParticipants[$mbParticipant->user_id] = $mbParticipant;
+      }
+      
+      $participants = $this->addElement($elParent, "participants");
+      foreach ($mbParticipants as $mbParticipant) {
+        $participant = $this->addElement($participants, "participant");
+        $medecin     = $this->addElement($participant, "medecin");
+        $this->addProfessionnelSante($medecin, $mbParticipant);
+      }
         
-    // Libellé de l'opération
-    $this->addTexte($elParent, "libelle", $operation->libelle, 80);
+      // Libellé de l'opération
+      $this->addTexte($elParent, "libelle", $operation->libelle, 80);
+    }
+    else { 
+      // Uniquement le responsable de l’'intervention
+      $participants = $this->addElement($elParent, "participants");
+      $participant  = $this->addElement($participants, "participant");
+      $medecin      = $this->addElement($participant, "medecin");
+      $this->addProfessionnelSante($medecin, $operation->chir_id);
+        
+      // Libellé de l'opération
+      $this->addTexte($elParent, "libelle", $operation->libelle, 80);
     
-    if (!$light) {
       // Remarques sur l'opération
       $this->addTexte($elParent, "commentaire", $operation->rques, 4000);
       
