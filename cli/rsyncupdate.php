@@ -117,10 +117,10 @@ function rsyncupdate($action, $revision) {
             
             echo $rsync."\n";
             
-            check_errs($rsync, null, "Failed to rsync ".$line, "Successfully rsync-ed ".$line);
+            check_errs($rsync, null, "Failed to rsync ".substr($line, 0, $portPOS), "Successfully rsync-ed ".substr($line, 0, $portPOS));
             
-            $scp = shell_exec("scp ".$currentDir."/../tmp/svnlog.txt ".$line."/tmp/svnlog.txt");
-            $scp = shell_exec("scp ".$currentDir."/../tmp/svnstatus.txt ".$line."/tmp/svnstatus.txt");
+            $scp = shell_exec("scp ".$currentDir."/../tmp/svnlog.txt ".substr($line, 0, $portPOS)."/tmp/svnlog.txt");
+            $scp = shell_exec("scp ".$currentDir."/../tmp/svnstatus.txt ".substr($line, 0, $portPOS)."/tmp/svnstatus.txt");
           }
         }
       }
