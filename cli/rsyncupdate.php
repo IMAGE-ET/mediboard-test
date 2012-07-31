@@ -92,10 +92,24 @@ function rsyncupdate($action, $revision) {
             }
           }
           else {
-            $dirName = substr($line, $hostnamePOS + 1);
+            // Default value
+            $port = 22;
+            
+            $portPOS = strpos($line, " ");
+            
+            if ($portPOS) {
+              $dirName = substr($line, $hostnamePOS + 1, ($portPOS - ($hostnamePOS + 1)));
+            }
+            else {
+              $dirName = substr($line, $hostnamePOS + 1);
+            }
+           
+            if ($portPOS) {
+              $port = substr($line, $portPOS + 1);
+            }
             
             $rsync = shell_exec(
-              "rsync -avpz --stats ".$currentDir."/.. --delete ".$line." --exclude-from=".$currentDir.
+              "rsync -avpz --stats --rsh='ssh -p $port' ".$currentDir."/.. --delete ".$line." --exclude-from=".$currentDir.
               "/rsyncupdate.exclude --exclude includes/config_overload.php --exclude tmp".
               " --exclude lib --exclude files --exclude includes/config.php".
               " --exclude images/pictures/logo_custom.png"
