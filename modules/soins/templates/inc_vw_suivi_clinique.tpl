@@ -83,6 +83,17 @@
           {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
           {{assign var=sejour_id value=$sejour->_id}}
           {{include file="../../soins/templates/inc_vw_antecedent_allergie.tpl" nodebug=true}}
+
+          {{if $dossier_medical->_id && $dossier_medical->_count_allergies}}
+            <script type="text/javascript">
+              ObjectTooltip.modes.allergies = {  
+                module: "patients",
+                action: "ajax_vw_allergies",
+                sClass: "tooltip"
+              };
+            </script> 
+            <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
+          {{/if}}
         </h2>
       </form>
     </th>
@@ -305,12 +316,12 @@
       {{/if}}
       
     </td>
-		
-		
+    
+    
     <td style="vertical-align: top;" rowspan="2">
        
-		{{if "dPprescription"|module_active}}
-			 {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
+    {{if "dPprescription"|module_active}}
+       {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
         <table class="tbl">
           <tr>
             <th class="title">

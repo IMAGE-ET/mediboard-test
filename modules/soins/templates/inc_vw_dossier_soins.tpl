@@ -57,23 +57,23 @@ editPerf = function(prescription_line_mix_id, date, mode_dossier, sejour_id){
 
 submitPosePerf = function(oFormPerf){
   if(confirm('Etes vous sur de vouloir poser la perfusion ?')){
-	  $V(oFormPerf.date_pose, 'current');
-	  $V(oFormPerf.time_pose, 'current');
-	  submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-	    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
-	  } } )
+    $V(oFormPerf.date_pose, 'current');
+    $V(oFormPerf.time_pose, 'current');
+    submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
+      PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
+    } } )
   }
 }
 
 
 submitRetraitPerf = function(oFormPerf){
   if(confirm('Etes vous sur de vouloir retirer définitivement la perfusion ?')){
-	  $V(oFormPerf.date_retrait, 'current');
-	  $V(oFormPerf.time_retrait, 'current');
-	  submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
-	    PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
-	  } } )
-	}
+    $V(oFormPerf.date_retrait, 'current');
+    $V(oFormPerf.time_retrait, 'current');
+    submitFormAjax(oFormPerf, 'systemMsg', { onComplete: function(){ 
+      PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}', document.click.nb_decalage.value,'{{$mode_dossier}}',oFormPerf.prescription_line_mix_id.value,'CPrescriptionLineMix','');
+    } } )
+  }
 }
 
 
@@ -105,10 +105,10 @@ refreshTabState = function(){
   
   window['injSoinLoaded'] = false;
   {{if "dPprescription"|module_active}}
-		{{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
-		{{foreach from=$specs_chapitre->_list item=_chapitre}}
-		  window['{{$_chapitre}}SoinLoaded'] = false;
-		{{/foreach}}
+    {{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
+    {{foreach from=$specs_chapitre->_list item=_chapitre}}
+      window['{{$_chapitre}}SoinLoaded'] = false;
+    {{/foreach}}
   {{/if}}
   if(tabs){
     if(tabs.activeLink){
@@ -147,9 +147,9 @@ submitSuivi = function(oForm, del) {
       }
       // Refresh de la partie plan de soin
       if($('semaine').visible()){
-			  {{if isset($prescription_id|smarty:nodefaults)}}
+        {{if isset($prescription_id|smarty:nodefaults)}}
         calculSoinSemaine('{{$date}}', '{{$prescription_id}}');
-				{{/if}}
+        {{/if}}
       }
     }
     if ($('dossier_suivi').visible()) {
@@ -176,8 +176,8 @@ function updateNbTrans(sejour_id) {
 Main.add(function () {
   {{if !"dPprescription"|module_active || $multiple_prescription|@count <= 1}}
   
-	{{if "dPprescription"|module_active}}
-	PlanSoins.init({
+  {{if "dPprescription"|module_active}}
+  PlanSoins.init({
     composition_dossier: {{$composition_dossier|@json}}, 
     date: "{{$date}}", 
     manual_planif: "{{$manual_planif}}",
@@ -185,9 +185,9 @@ Main.add(function () {
     nb_postes: {{$bornes_composition_dossier|@count}}
   });
   {{else}}
-	  // Si prescription non installé, chargement des taches en premier
-	  updateTasks('{{$sejour->_id}}');
-	{{/if}}
+    // Si prescription non installé, chargement des taches en premier
+    updateTasks('{{$sejour->_id}}');
+  {{/if}}
   loadSuivi('{{$sejour->_id}}');
   
   // Deplacement du dossier de soin
@@ -313,12 +313,12 @@ Main.add(function () {
              {{if !$hide_close}}
                <button type="button" class="cancel" style="float: right; display: none;"
                        onclick="modalWindow.close(); 
-							          {{if "dPprescription"|module_active}}
-												if(window.refreshLinePancarte){ refreshLinePancarte('{{$prescription_id}}'); }
+                        {{if "dPprescription"|module_active}}
+                        if(window.refreshLinePancarte){ refreshLinePancarte('{{$prescription_id}}'); }
                         if(window.refreshLineSejour){ refreshLineSejour('{{$sejour->_id}}'); }
-												{{/if}}" id="modal_button">
-								 {{tr}}Close{{/tr}}
-							 </button>
+                        {{/if}}" id="modal_button">
+                 {{tr}}Close{{/tr}}
+               </button>
              {{/if}}
            </span>
            <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
@@ -346,9 +346,8 @@ Main.add(function () {
                   action: "ajax_vw_allergies",
                   sClass: "tooltip"
                 };
-             
               </script> 
-              <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_ref_patient->_guid}}', 'allergies');" />
+              <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_ref_patient->_guid}}', 'allergies');" />
             {{/if}}
           
            </h2>
@@ -358,14 +357,14 @@ Main.add(function () {
     </table>
     
     <ul id="tab_dossier_soin" class="control_tabs">
-    	{{if "dPprescription"|module_active}}
+      {{if "dPprescription"|module_active}}
       <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med', '{{$hide_close}}'); refreshTabState();"><a href="#jour">Journée</a></li>
       <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
-				{{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
-				  <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')"><a href="#perop_adm" {{if $count_perop_adm == 0}}class="empty"{{/if}}>Perop {{if $count_perop_adm}}<small>({{$count_perop_adm}})</small>{{/if}}</a></li>
-				{{/if}}
+        {{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
+          <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')"><a href="#perop_adm" {{if $count_perop_adm == 0}}class="empty"{{/if}}>Perop {{if $count_perop_adm}}<small>({{$count_perop_adm}})</small>{{/if}}</a></li>
+        {{/if}}
       {{/if}}
-			<li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches</a></li>
+      <li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches</a></li>
       <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">Trans. <span id="nb_trans"></span> / Obs. / Consult.{{if $conf.soins.constantes_show}} / Const.{{/if}}</a></li>
     </ul>
     
@@ -451,9 +450,9 @@ Main.add(function () {
     {{/if}}
     </div>
     <div id="semaine" style="display:none"></div>
-		{{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
+    {{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
       <div id="perop_adm" style="display: none"></div>
-		{{/if}}
+    {{/if}}
     <div id="tasks" style="display:none"></div>
     <div id="dossier_suivi" style="display:none"></div>
   {{/if}}
