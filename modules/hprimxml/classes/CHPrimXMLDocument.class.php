@@ -638,29 +638,46 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($observation, "commentaire", substr($commentaires, 0, 4000)); 
   }
   
-  function addReponse($elParent, $statut, $codes, $acteCCAM, $mbObject = null, $commentaires = null) {
+  function addReponse($elParent, $statut, $codes, $mbObject = null, $commentaires = null) {
+    if ($statut != "ok") {
+      return; 
+    }  
+    
+    $erreur = $this->addElement($elParent, "erreur");
+    
+    $libelle = null;
+    if (is_array($codes)) {
+      $code = implode("", $codes);
+      foreach ($codes as $_code) {
+        $libelle .= CAppUI::tr("hprimxml-error-$_code");
+      }
+    } else {
+      $code = $codes;
+      $libelle = CAppUI::tr("hprimxml-error-$code");
+    }
+    $this->addElement($erreur, "code", substr($code, 0, 17));
+    $this->addElement($erreur, "libelle", substr($libelle, 0, 80));
+    $this->addElement($erreur, "commentaire", substr("$libelle $commentaires", 0, 4000)); 
+  }
+  
+  function addReponseCCAM($elParent, $statut, $codes, $acteCCAM, $mbObject = null, $commentaires = null) {
     $reponse = $this->addElement($elParent, "reponse");
     $this->addAttribute($reponse, "statut", $statut);
       
     $elActeCCAM = $this->addElement($reponse, "acteCCAM");
     $this->addActeCCAMAcquittement($elActeCCAM, $acteCCAM);
     
-    if ($statut != "ok") {
-      $erreur = $this->addElement($reponse, "erreur");
-      $libelle = null;
-      if (is_array($codes)) {
-        $code = implode("", $codes);
-        foreach ($codes as $_code) {
-          $libelle .= CAppUI::tr("hprimxml-error-$_code");
-        }
-      } else {
-        $code = $codes;
-        $libelle = CAppUI::tr("hprimxml-error-$code");
-      }
-      $this->addElement($erreur, "code", substr($code, 0, 17));
-      $this->addElement($erreur, "libelle", substr($libelle, 0, 80));
-      $this->addElement($erreur, "commentaire", substr("$libelle $commentaires", 0, 4000)); 
-    }      
+    $this->addReponse($reponse, $statut, $codes);
+  }
+  
+  function addReponseIntervention($elParent, $statut, $codes, $acteCCAM, $mbObject = null, $commentaires = null) {
+    $reponse = $this->addElement($elParent, "reponse");
+    $this->addAttribute($reponse, "statut", $statut);
+      
+    $intervention = $this->addElement($reponse, "intervention");
+    $this->addActeInterventionAcquittement($elActeCCAM, $acteCCAM);
+    
+    $this->addReponse($reponse, $statut, $codes);
   }
   
   function getTypeEvenementPatient() {
@@ -923,7 +940,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $participants = $this->addElement($elParent, "participants");
       $participant  = $this->addElement($participants, "participant");
       $medecin      = $this->addElement($participant, "medecin");
-      $this->addProfessionnelSante($medecin, $operation->chir_id);
+      $this->addProfessionnelSante($medecin, $operation->loadRefChir());
         
       // Libellé de l'opération
       $this->addTexte($elParent, "libelle", $operation->libelle, 80);

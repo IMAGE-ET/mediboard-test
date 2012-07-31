@@ -86,7 +86,8 @@ class COperatorHprimXML extends CEAIOperator {
       elseif ($dom_evt instanceof CHPrimXMLEvenementsServeurActivitePmsi) {
         return self::eventPMSI($dom_evt, $data, $dom_acq, $echg_hprim);
       }
-    } catch(Exception $e) {
+    } 
+    catch(Exception $e) {
       $echg_hprim->populateEchange($data_format, $dom_evt);
       
       $dom_acq = CHPrimXMLAcquittements::getAcquittementEvenementXML($dom_evt);

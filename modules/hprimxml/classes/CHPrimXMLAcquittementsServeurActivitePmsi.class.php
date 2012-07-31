@@ -72,7 +72,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     $this->addElement($enteteMessageAcquittement, "identifiantMessageAcquitte", $this->_identifiant_acquitte);
   }
   
-  function addReponses($statut, $codes, $commentaires = null, $mbObject = null, $actesCCAM = array()) {
+  function addReponses($statut, $codes, $commentaires = null, $mbObject = null, $data = array()) {
     $acquittementsServeurActivitePmsi = $this->documentElement;
     
     $mbPatient = $mbSejour = null;    
@@ -98,25 +98,37 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
       $this->addVenue($venue, $mbSejour, false, true);
     }
     
-    foreach ($actesCCAM as $_acteCCAM) {
-      $this->addReponse($reponses, $statut, $codes, $_acteCCAM, $mbObject, $commentaires);
-    }   
+    // Génération des réponses en fonction du type de l'acquittement
+    switch ($this->_class) {
+      case "CHPrimXMLAcquittementsServeurActes" :
+        $actesCCAM = $data;
+        
+        foreach ($actesCCAM as $_acteCCAM) {
+          $this->addReponseCCAM($reponses, $statut, $codes, $_acteCCAM, $mbObject, $commentaires);
+        } 
+        
+        break;
+      case "CHPrimXMLAcquittementsServeurIntervention" :
+        $this->addReponseIntervention($reponses, $statut, $codes, $mbObject, $commentaires);
+        break;
+    }
+      
   }
 
-  function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null, $actesCCAM = array()) {
+  function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null, $data = array()) {
     $this->emetteur = CAppUI::conf('mb_id');
     $this->date_production = mbDateTime();
 
     $this->generateEnteteMessageAcquittement($statut);
-    $this->addReponses($statut, $codes, $commentaires, $mbObject, $actesCCAM);
+    $this->addReponses($statut, $codes, $commentaires, $mbObject, $data);
      
     // Traitement final
     $this->purgeEmptyElements();
 
     $this->saveTempFile();
-    $messageAckServeurActivitePmsi = utf8_encode($this->saveXML());
+    $acq = utf8_encode($this->saveXML());
 
-    return $messageAckServeurActivitePmsi;
+    return $acq;
   }
   
   function getStatutAcquittement() {
