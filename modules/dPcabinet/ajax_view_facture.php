@@ -19,6 +19,7 @@ $facture_id         = CValue::get("facture_id");
 $derconsult_id = null;
 $facture = new CFactureConsult();
 $consult = null;
+$assurances_patient = array();
 
 if ($consult_id) {
   $consult = new CConsultation();
@@ -29,6 +30,7 @@ if ($consult_id) {
     if (count($facture->_ref_consults) == 0) {
       $facture->tarif = null;
       $facture->delete();
+      $facture = new CFactureConsult();
     }
     else {
       $somme  = 0;
@@ -51,8 +53,8 @@ if ($consult_id) {
     if (count($facture->_ref_consults) == 0) {
       $facture->tarif = null;
       $facture->delete();
+      $facture = new CFactureConsult();
     }
-    
   }
 }
 elseif ($factureconsult_id) {
@@ -62,7 +64,9 @@ elseif ($factureconsult_id) {
     $last_consult = reset($facture->_ref_consults);
     $derconsult_id = $last_consult->_id;
   }
+  $facture->_ref_patient->loadRefsCorrespondantsPatient();
 }
+
 
 $reglement   = new CReglement();
 $orderBanque = "nom ASC";

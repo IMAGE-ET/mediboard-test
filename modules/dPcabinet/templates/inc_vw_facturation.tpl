@@ -54,6 +54,22 @@
             <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}} onchange="Facture.modifCloture(this.form);" />
             {{mb_label object=$facture field=npq}}
           </form>
+          {{if count($facture->_ref_patient->_ref_correspondants_patient)}}
+            <form name="assurance_patient" method="post" action="" style="margin-left:40px;"> 
+              {{mb_class object=$facture}}
+              {{mb_key   object=$facture}}
+              <select name="assurance" style="width: 15em;" onchange="refreshAssurance();">
+                <option value="" {{if !$facture->assurance}}selected="selected" {{/if}}>&mdash; Choisir une assurance</option>
+                {{foreach from=$facture->_ref_patient->_ref_correspondants_patient item=_assurance}}
+                  {{if $_assurance->relation == "assurance"}}
+                  <option value="{{$_assurance->_id}}" {{if $facture->assurance == $_assurance->_id}} selected="selected" {{/if}}>
+                    {{$_assurance->nom}}
+                  </option>
+                  {{/if}}
+                {{/foreach}}
+              </select>
+            </form>
+          {{/if}}
         </td>
       </tr>
     {{/if}}
@@ -125,8 +141,8 @@
               {{/if}}
             </td>
             <td style="text-align:right;">{{mb_value object=$_acte_caisse field="quantite"}}</td>
-            <td style="text-align:right;">1.00</td>
-            <td style="text-align:right;">{{$_acte_caisse->montant_base}}</td>
+            <td style="text-align:right;">{{$facture->_coeff}}</td>
+            <td style="text-align:right;">{{$_acte_caisse->montant_base*$facture->_coeff|string_format:"%0.2f"}}</td>
           </tr>
         {{/foreach}}
       {{/if}}

@@ -136,6 +136,7 @@ $where["cloture"] = " IS NULL";
 if ($consult->patient_id && $facture->loadObject($where)) {
   $facture_patient = $facture;
   $facture_patient->loadRefs();
+  $facture->_ref_patient->loadRefsCorrespondantsPatient();
 }
 else { 
   $where["cloture"] = " IS NOT NULL"; 
@@ -144,6 +145,7 @@ else {
       $_facture->loadRefs();
       foreach ($_facture->_ref_consults as $consultation) {
         if ($consultation->_id == $consult->_id) {
+          $_facture->_ref_patient->loadRefsCorrespondantsPatient();
           $facture_patient = $_facture;
         }
       }

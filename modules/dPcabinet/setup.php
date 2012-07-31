@@ -717,45 +717,45 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("0.77");
     // Tranfert des addictions tabac vers la consultation d'anesthésie
     $query = "INSERT INTO `addiction` ( `addiction_id` , `object_id` , `object_class` , `type` , `addiction` )
-			SELECT null,`consultation_anesth_id`, 'CConsultAnesth', 'tabac', `tabac` 
-			FROM `consultation_anesth` 
-			WHERE `tabac` IS NOT NULL
-			AND `tabac` <> ''";
+      SELECT null,`consultation_anesth_id`, 'CConsultAnesth', 'tabac', `tabac` 
+      FROM `consultation_anesth` 
+      WHERE `tabac` IS NOT NULL
+      AND `tabac` <> ''";
     $this->addQuery($query);
 
     // Tranfert des addictions tabac vers le dossier patient
     $query = "INSERT INTO `addiction` ( `addiction_id` , `object_id` , `object_class` , `type` , `addiction` )
-			SELECT null,`patient_id`, 'CPatient', 'tabac', `tabac`
-			FROM `consultation_anesth`, `consultation`
-			WHERE `tabac` IS NOT NULL
-			AND `tabac` <> ''
-			AND `consultation`.`consultation_id` = `consultation_anesth`.`consultation_id`";
+      SELECT null,`patient_id`, 'CPatient', 'tabac', `tabac`
+      FROM `consultation_anesth`, `consultation`
+      WHERE `tabac` IS NOT NULL
+      AND `tabac` <> ''
+      AND `consultation`.`consultation_id` = `consultation_anesth`.`consultation_id`";
     $this->addQuery($query);
 
     // Tranfert des addictions oenolisme vers la consultation d'anesthésie
     $query = "INSERT INTO `addiction` ( `addiction_id` , `object_id` , `object_class` , `type` , `addiction` )
-			SELECT null,`consultation_anesth_id`, 'CConsultAnesth', 'oenolisme', `oenolisme` 
-			FROM `consultation_anesth` 
-			WHERE `oenolisme` IS NOT NULL
-			AND `oenolisme` <> ''";
+      SELECT null,`consultation_anesth_id`, 'CConsultAnesth', 'oenolisme', `oenolisme` 
+      FROM `consultation_anesth` 
+      WHERE `oenolisme` IS NOT NULL
+      AND `oenolisme` <> ''";
     $this->addQuery($query);
 
     // Tranfert des addictions oenolisme vers le dossier patient
     $query = "INSERT INTO `addiction` ( `addiction_id` , `object_id` , `object_class` , `type` , `addiction` )
-			SELECT null,`patient_id`, 'CPatient', 'oenolisme', `oenolisme`
-			FROM `consultation_anesth`, `consultation`
-			WHERE `oenolisme` IS NOT NULL
-			AND `oenolisme` <> ''
-			AND `consultation`.`consultation_id` = `consultation_anesth`.`consultation_id`";
+      SELECT null,`patient_id`, 'CPatient', 'oenolisme', `oenolisme`
+      FROM `consultation_anesth`, `consultation`
+      WHERE `oenolisme` IS NOT NULL
+      AND `oenolisme` <> ''
+      AND `consultation`.`consultation_id` = `consultation_anesth`.`consultation_id`";
     $this->addQuery($query);
 
     // Transfert des aides à la saisie
     // @todo : A vérifier
     /*$this->addDependency("dPcompteRendu", "0.30", true);
     $query = "UPDATE `aide_saisie`
-			SET `class`='CAddiction',`depend_value`=`field`, `field`='addiction'
-			WHERE `class` = 'CConsultAnesth'
-			AND `field` IN('oenolisme','tabac')";
+      SET `class`='CAddiction',`depend_value`=`field`, `field`='addiction'
+      WHERE `class` = 'CConsultAnesth'
+      AND `field` IN('oenolisme','tabac')";
     $this->addQuery($query);*/
     
     $this->makeRevision("0.78");
@@ -796,8 +796,8 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($query);
     
     $query = "UPDATE `consultation`
-			      SET `valide` = '1'
-		     	  WHERE `tarif` IS NOT NULL;";
+            SET `valide` = '1'
+             WHERE `tarif` IS NOT NULL;";
     $this->addQuery($query);
      
     
@@ -818,7 +818,7 @@ class CSetupdPcabinet extends CSetup {
     $query = "UPDATE `consultation`
             SET `a_regler` = `secteur1` + `secteur2`
             WHERE `mode_reglement` <> 'tiers'
-						OR `mode_reglement` IS NULL;";
+            OR `mode_reglement` IS NULL;";
     $this->addQuery($query);
     
     $query = "UPDATE `consultation`
@@ -897,7 +897,7 @@ class CSetupdPcabinet extends CSetup {
     
     $this->makeRevision("0.91");
     $query = "DELETE FROM `user_preferences` 
-		  WHERE `key` = 'ccam_consultation'";
+      WHERE `key` = 'ccam_consultation'";
     $this->addQuery($query);
     $query = "UPDATE `user_preferences`
       SET `key` = 'ccam_consultation'
@@ -911,25 +911,25 @@ class CSetupdPcabinet extends CSetup {
 
     $this->makeRevision("0.93");
     $query = "CREATE TABLE `examigs` (
-					 `examigs_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-					 `consultation_id` INT(11) UNSIGNED NOT NULL, 
-					 `age` ENUM('0','7','12','15','16','18'), 
-					 `FC` ENUM('11','2','0','4','7'), 
-					 `TA` ENUM('13','5','0','2'), 
-					 `temperature` ENUM('0','3'), 
-					 `PAO2_FIO2` ENUM('11','9','6'), 
-					 `diurese` ENUM('12','4','0'), 
-					 `uree` ENUM('0','6','10'), 
-					 `globules_blancs` ENUM('12','0','3'), 
-					 `kaliemie` ENUM('3a','0','3b'), 
-					 `natremie` ENUM('5','0','1'), 
-					 `HCO3` ENUM('6','3','0'), 
-					 `billirubine` ENUM('0','4','9'), 
-					 `glascow` ENUM('26','13','7','5','0'), 
-					 `maladies_chroniques` ENUM('9','10','17'), 
-					 `admission` ENUM('0','6','8'), 
-					 `scoreIGS` INT(11), 
- 					  PRIMARY KEY (`examigs_id`)) /*! ENGINE=MyISAM */;";
+           `examigs_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+           `consultation_id` INT(11) UNSIGNED NOT NULL, 
+           `age` ENUM('0','7','12','15','16','18'), 
+           `FC` ENUM('11','2','0','4','7'), 
+           `TA` ENUM('13','5','0','2'), 
+           `temperature` ENUM('0','3'), 
+           `PAO2_FIO2` ENUM('11','9','6'), 
+           `diurese` ENUM('12','4','0'), 
+           `uree` ENUM('0','6','10'), 
+           `globules_blancs` ENUM('12','0','3'), 
+           `kaliemie` ENUM('3a','0','3b'), 
+           `natremie` ENUM('5','0','1'), 
+           `HCO3` ENUM('6','3','0'), 
+           `billirubine` ENUM('0','4','9'), 
+           `glascow` ENUM('26','13','7','5','0'), 
+           `maladies_chroniques` ENUM('9','10','17'), 
+           `admission` ENUM('0','6','8'), 
+           `scoreIGS` INT(11), 
+             PRIMARY KEY (`examigs_id`)) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     
@@ -1189,10 +1189,10 @@ class CSetupdPcabinet extends CSetup {
     
     $this->makeRevision("1.09");
     $query = "UPDATE `consultation` 
-			SET du_tiers = ROUND(secteur1 + secteur2 - du_patient, 2)
-			WHERE ROUND(secteur1 + secteur2 - du_tiers - du_patient, 2) != 0
-			AND ABS(ROUND(secteur1 + secteur2 - du_tiers - du_patient, 2)) > 1
-			AND valide = '1'";
+      SET du_tiers = ROUND(secteur1 + secteur2 - du_patient, 2)
+      WHERE ROUND(secteur1 + secteur2 - du_tiers - du_patient, 2) != 0
+      AND ABS(ROUND(secteur1 + secteur2 - du_tiers - du_patient, 2)) > 1
+      AND valide = '1'";
     $this->addQuery($query);
     
     $this->makeRevision("1.10");
@@ -1217,15 +1217,15 @@ class CSetupdPcabinet extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.13");
-		$query = "ALTER TABLE `consultation` 
+    $query = "ALTER TABLE `consultation` 
             ADD `concerne_ALD` ENUM ('0','1') DEFAULT '0';";
-		$this->addQuery($query);
+    $this->addQuery($query);
     
-		$this->makeRevision("1.14");
-		$query = "ALTER TABLE `consultation_anesth` 
+    $this->makeRevision("1.14");
+    $query = "ALTER TABLE `consultation_anesth` 
             ADD `date_analyse` DATE;";
-		$this->addQuery($query);
-		    
+    $this->addQuery($query);
+        
     $this->makeRevision("1.15");
     $query = "ALTER TABLE `consultation` 
               ADD `facture` ENUM ('0','1') DEFAULT '0';";
@@ -1280,13 +1280,13 @@ class CSetupdPcabinet extends CSetup {
     
     $this->makeRevision("1.19");
     $query = "ALTER TABLE `consultation_anesth` 
-		  DROP `intubation`";
+      DROP `intubation`";
     $this->addQuery($query);
     
-		$this->makeRevision("1.20");
-		$query = "UPDATE plageconsult SET fin = '23:59:59' WHERE fin = '00:00:00'";
-		$this->addquery($query);
-		
+    $this->makeRevision("1.20");
+    $query = "UPDATE plageconsult SET fin = '23:59:59' WHERE fin = '00:00:00'";
+    $this->addquery($query);
+    
     $this->makeRevision("1.21");
     $query = "ALTER TABLE `consultation_anesth`
               DROP `biologie`,
@@ -1300,7 +1300,7 @@ class CSetupdPcabinet extends CSetup {
               ADD `result_ecg` TEXT AFTER `ht_final`,
               ADD `result_rp` TEXT AFTER `result_ecg`;";
     $this->addquery($query);
-		
+    
     $this->makeRevision("1.23");
     $query = "ALTER TABLE `consultation`
               ADD `adresse_par_prat_id` INT (11) UNSIGNED;";
@@ -1558,8 +1558,8 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("1.61");
     
     $query = "UPDATE `plageconsult`
-							SET color = 'DDDDDD'
-							WHERE color = 'DDD'";
+              SET color = 'DDDDDD'
+              WHERE color = 'DDD'";
     $this->addQuery($query);
     
     $this->makeRevision("1.62");
@@ -1567,7 +1567,14 @@ class CSetupdPcabinet extends CSetup {
               ADD `derniere` ENUM ('0','1') DEFAULT '0' AFTER `premiere`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.63";
+    $this->makeRevision("1.63");
+    
+    $query = "ALTER TABLE `factureconsult`
+              ADD `facture`  ENUM('-1','0','1') DEFAULT '0',
+              ADD `assurance`  INT(11) UNSIGNED NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.64";
   }
 }
 ?>

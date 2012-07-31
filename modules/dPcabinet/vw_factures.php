@@ -82,6 +82,7 @@ if ($no_finish_reglement) {
 }
 
 $derconsult_id = null;
+$assurances_patient = array();
 if ($factureconsult_id) {
   $facture->load($factureconsult_id);	
   $facture->loadRefs();
@@ -89,6 +90,7 @@ if ($factureconsult_id) {
     $last_consult = end($facture->_ref_consults);
     $derconsult_id = $last_consult->_id;
   }
+  $facture->_ref_patient->loadRefsCorrespondantsPatient();
 }
 
 $reglement = new CReglement();

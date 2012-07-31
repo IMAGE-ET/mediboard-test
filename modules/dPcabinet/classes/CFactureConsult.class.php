@@ -32,6 +32,8 @@ class CFactureConsult extends CMbObject
   var $tarif                  = null;
   var $npq                    = null;
   var $cession_creance        = null;
+  var $assurance              = null;
+  var $facture                = null;
   
   // Form fields
   var $_nb_factures         = null;
@@ -98,6 +100,8 @@ class CFactureConsult extends CMbObject
     $props["tiers_date_reglement"]      = "date";
     $props["npq"]                       = "enum notNull list|0|1 default|0";
     $props["cession_creance"]           = "enum notNull list|0|1 default|0";
+    $props["assurance"]                 = "ref class|CCorrespondantPatient";
+    $props["facture"]                   = "enum notNull list|-1|0|1 default|0";
     
     $props["_du_patient_restant"]       = "currency";
     $props["_du_tiers_restant"]         = "currency";
@@ -131,6 +135,38 @@ class CFactureConsult extends CMbObject
     $this->loadRefsConsults();
     $this->loadRefPraticien();
   } 
+  
+  /**
+   * Redéfinition du store
+   * 
+   * @return void
+  **/
+  function store(){
+  // Standard store
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+  } 
+  
+  /**
+   * Redéfinition du store
+   * 
+   * @return void
+  **/
+
+  function delete(){
+    $consultation = new CConsultation();
+    $consults = $consultation->loadList("factureconsult_id = '$this->factureconsult_id'");
+    
+    foreach ($consults as $consult) {
+      $consult->factureconsult_id = "";
+      $consult->store();
+    }
+    
+    if ($msg = parent::delete()){
+      return $msg;
+    }
+  }
      
   /**
    * Chargement des différentes consultations liées à la facture
@@ -381,7 +417,7 @@ class CFactureConsult extends CMbObject
           $total_tarmed += $acte_tarmed->montant_base + $acte_tarmed->montant_depassement;
         }
         foreach ($consult->_ref_actes_caisse as $acte_caisse) {
-          $total_caisse[$acte_caisse->_ref_caisse_maladie->$select] += $acte_caisse->montant_base + $acte_caisse->montant_depassement;
+          $total_caisse[$acte_caisse->_ref_caisse_maladie->$select] += ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$this->_coeff;
         }
       }
       $montant_prem = $total_tarmed * $this->_coeff;

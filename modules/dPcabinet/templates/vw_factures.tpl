@@ -18,6 +18,11 @@ refreshList = function(){
   url.addParam("no_finish_reglement" , $V(oForm.no_finish_reglement) ? 1 : 0);
   url.redirect();
 }
+
+refreshAssurance = function(){
+  var oForm = getForm("assurance_patient");
+  return onSubmitFormAjax(oForm);
+}
   
 viewFacture = function(element, factureconsult_id){
   element.up("tr").addUniqueClassName("selected");
@@ -114,7 +119,7 @@ Main.add(function () {
             <th> Patient</th>
           </tr>
           {{foreach from=$factures item=_facture}}
-            <tr {{if $facture->_id == $_facture->_id}} class="selected" {{/if}}>
+            <tr class="{{if $facture->_id == $_facture->_id}}selected{{/if}}">
               <td>
                 {{if $_facture->cloture}}
                   {{mb_value object=$_facture field="cloture"}}
