@@ -698,7 +698,7 @@ class CConsultation extends CCodable {
         $acte->object_id = $this->_id;
         $acte->object_class = $this->_class;
         $acte->executant_id = $this->_ref_chir->_id;
-        $acte->execution = mbDateTime();
+        $acte->execution = $this->_datetime;
         if($msg = $acte->store()){
           return $msg;
         }
