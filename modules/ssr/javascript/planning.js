@@ -143,14 +143,15 @@ WeekPlanning = Class.create({
   load_data: [],
   maximum_load: null,
   dragndrop: false,
+  resizable: false,
   no_dates: false,
-  initialize: function(guid, hour_min, hour_max, events, hour_divider, scroll_top, adapt_range, selectable, dragndrop, no_dates) {
+  initialize: function(guid, hour_min, hour_max, events, hour_divider, scroll_top, adapt_range, selectable, dragndrop, resizable, no_dates) {
     this.eventsById = {};
     for (var i = 0; i < events.length; i++) {
       this.eventsById[events[i].internal_id] = events[i] = new PlanningEvent(events[i], this);
       if ( (Preferences.ssr_planning_dragndrop == 1 || dragndrop == 1) && this.eventsById[events[i].internal_id].draggable) {
         this.eventsById[events[i].internal_id].setDraggable(
-          Preferences.ssr_planning_dragndrop == 1 && this.eventsById[events[i].internal_id].resizable
+          (Preferences.ssr_planning_dragndrop == 1 || resizable == 1) && this.eventsById[events[i].internal_id].resizable
         );
       }
     }

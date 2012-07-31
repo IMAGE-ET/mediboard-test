@@ -25,6 +25,7 @@ Main.add(function() {
     {{$planning->adapt_range|@json}},
     '{{$planning->selectable}}',
     {{$planning->dragndrop}},
+    {{$planning->resizable}},
     {{$planning->no_dates}}
   );
   
@@ -118,7 +119,12 @@ Main.add(function() {
               {{assign var=unavail value=false}}
             {{/if}}
             
-            <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}} day-{{$smarty.foreach.days.index}}">
+            <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}} day-{{$smarty.foreach.days.index}}"
+              {{if $planning->show_half}}style="vertical-align: middle;"{{/if}}>
+              {{if $planning->show_half}}
+                <div style="width: 100%; height: 3px; background: #f00" class="opacity-50"></div>
+              {{/if}}
+              
               {{if isset($planning->events_sorted.$_day.$_hour|smarty:nodefaults)}}
                 {{assign var=has_events value=true}} 
               {{else}}
@@ -239,7 +245,7 @@ Main.add(function() {
                             </span>
                           </div>
                           
-                          {{if $app->user_prefs.ssr_planning_resize && $_event->resizable}}
+                          {{if ($app->user_prefs.ssr_planning_resize || $planning->resizable) && $_event->resizable}}
                             <div class="footer"></div>
                           {{/if}}
                           

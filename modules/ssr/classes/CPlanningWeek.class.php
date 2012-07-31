@@ -28,9 +28,11 @@ class CPlanningWeek  {
   var $hour_max = "16";
   var $hour_divider = 6;
   var $maximum_load = 6;
-  var $has_load = false;
+  var $has_load  = false;
+  var $show_half = false;
   var $dragndrop = 0;
-  var $no_dates    = 0;
+  var $resizable = 0;
+  var $no_dates  = 0;
   
   var $events = array();
   var $pauses = array("08", "12", "16");
