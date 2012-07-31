@@ -43,7 +43,7 @@ if($plage->countList($where)) {
 }
 
 //Instanciation du planning
-$planning = new CPlanningWeek($debut, $debut, $fin, $nbDays, false, $print ? "1000" : "auto", false, !$print);
+$planning = new CPlanningWeek($debut, $debut, $fin, $nbDays, false, $print ? "1000" : "auto");
 $planning->title    = $prat->_view;
 $planning->guid     = $prat->_guid;
 $planning->hour_min = "07";

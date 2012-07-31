@@ -19,90 +19,86 @@
       {{if $vue_right}}
       Calendar.regField(getForm("FilterRight").date, null, {noView: true, inline: true, container: null});
       {{/if}}
-      var planning = window["planning-{{$planning->guid}}"];
       ViewPort.SetAvlHeight("plageSelectorTable", 1);
-      $('planningWeek').style.height = "1500px";
+      $('planningWeek').setStyle({height : "2000px"});
     {{/if}}
   });
 </script>
-<div id="plageSelectorTable">
-  {{if !$print}}
-    <table class="main layout" style="height: 100%">
-      <tr>
-        <td>
-          
-          <form name="FilterTop" action="?" method="get">
-          
-          <input type="hidden" name="m" value="dPcabinet" />
-          <input type="hidden" name="a" value="plage_selector" />
-          <input type="hidden" name="dialog" value="1" />
-          <input type="hidden" name="function_id" value="{{$function_id}}" />
-          <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
-      
-          <table class="form">
-            <tr>
-              <th><label for="period" title="Changer la période de recherche">Planning</label></th>
-              <td>
-                <select name="period" onchange="this.form.submit()">
-                  {{foreach from=$periods item="_period"}}
-                  <option value="{{$_period}}" {{if $_period == $period}}selected="selected"{{/if}}>
-                    {{tr}}Period.{{$_period}}{{/tr}}
-                  </option>
-                  {{/foreach}}
-                </select>
-              </td>
-              
-              <td>
-                <select name="chir_id" style="width: 15em;" onchange="this.form.submit()">
-                  {{foreach from=$listPraticiens item=curr_praticien}}
-                  <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
-                    {{$curr_praticien->_view}}
-                    {{if $app->user_prefs.viewFunctionPrats}}
-                      - {{$curr_praticien->_ref_function->_view}}
-                    {{/if}}
-                  </option>
-                 {{/foreach}}
-                </select>
-              </td>
-              
-              <td class="button" style="width: 250px;">
-                <a style="float:left" href="#1" onclick="$V(getForm('FilterTop').date, '{{$pdate}}')">&lt;&lt;&lt;</a>
-                <a style="float:right" href="#1" onclick="$V(getForm('FilterTop').date, '{{$ndate}}')">&gt;&gt;&gt;</a>
-                <strong>
-                  {{$refDate|date_format:" semaine du %d %B %Y (%U)"}}
-                </strong>
-                <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit();" />
-              </td>
-            </tr>
-      
-          </table>
-      
-          </form>
-        </td>
-        {{if $vue_right}}
-        <td rowspan="2">
-          <form name="FilterRight" action="?" method="get">
-          <input type="hidden" name="m" value="dPcabinet" />
-          <input type="hidden" name="a" value="plage_selector" />
-          <input type="hidden" name="dialog" value="1" />
-          <input type="hidden" name="chir_id" value="{{$chir_id}}" />
-          <input type="hidden" name="function_id" value="{{$function_id}}" />
-          <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
-          <input type="hidden" name="period" value="{{$period}}" />
-          <table class="form">
-             <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit();" />
-          </table>
-          </form>
-        </td>
-        {{/if}}
-      </tr>
-      <tr>
-        <td>
-          {{mb_include module=ssr template=inc_vw_week}}
-        </td>
-      </tr>
+{{if !$print}}
+  <table class="main layout">
+    <tr>
+      <td>
+        <form name="FilterTop" action="?" method="get">
+        
+        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="a" value="plage_selector" />
+        <input type="hidden" name="dialog" value="1" />
+        <input type="hidden" name="function_id" value="{{$function_id}}" />
+        <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
+    
+        <table class="form">
+          <tr>
+            <th><label for="period" title="Changer la période de recherche">Planning</label></th>
+            <td>
+              <select name="period" onchange="this.form.submit()">
+                {{foreach from=$periods item="_period"}}
+                <option value="{{$_period}}" {{if $_period == $period}}selected="selected"{{/if}}>
+                  {{tr}}Period.{{$_period}}{{/tr}}
+                </option>
+                {{/foreach}}
+              </select>
+            </td>
+            
+            <td>
+              <select name="chir_id" style="width: 15em;" onchange="this.form.submit()">
+                {{foreach from=$listPraticiens item=curr_praticien}}
+                <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
+                  {{$curr_praticien->_view}}
+                  {{if $app->user_prefs.viewFunctionPrats}}
+                    - {{$curr_praticien->_ref_function->_view}}
+                  {{/if}}
+                </option>
+               {{/foreach}}
+              </select>
+            </td>
+            
+            <td class="button" style="width: 250px;">
+              <a style="float:left" href="#1" onclick="$V(getForm('FilterTop').date, '{{$pdate}}')">&lt;&lt;&lt;</a>
+              <a style="float:right" href="#1" onclick="$V(getForm('FilterTop').date, '{{$ndate}}')">&gt;&gt;&gt;</a>
+              <strong>
+                {{$refDate|date_format:" semaine du %d %B %Y (%U)"}}
+              </strong>
+              <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit();" />
+            </td>
+          </tr>
+    
+        </table>
+    
+        </form>
+      </td>
+      {{if $vue_right}}
+      <td rowspan="2">
+        <form name="FilterRight" action="?" method="get">
+        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="a" value="plage_selector" />
+        <input type="hidden" name="dialog" value="1" />
+        <input type="hidden" name="chir_id" value="{{$chir_id}}" />
+        <input type="hidden" name="function_id" value="{{$function_id}}" />
+        <input type="hidden" name="plageconsult_id" value="{{$plage->_id}}" />
+        <input type="hidden" name="period" value="{{$period}}" />
+        <table class="form">
+           <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit();" />
+        </table>
+        </form>
+      </td>
+      {{/if}}
+    </tr>
     </table>
-  {{else}}
+    <div id="plageSelectorTable">
+      {{mb_include module=ssr template=inc_vw_week}}
+    </div>
+{{else}}
+  <div id="plageSelectorTable">
     {{mb_include module=ssr template=inc_vw_week print=1}}
     <script type="text/javascript">
       // Pour l'impression, on cache les lignes vides
@@ -123,16 +119,5 @@
         planning.updateEventsDimensions();
       });
     </script>
-  {{/if}}
-</div>
-
-{{if !$print}}
-  <script type="text/javascript">
-  Main.add(function() {
-    var planning = window["planning-{{$planning->guid}}"];
-    planning.setPlanningHeight(1000);
-    planning.adaptRangeHeight();
-    planning.scroll();  
-  });
-  </script>
+  </div>
 {{/if}}
