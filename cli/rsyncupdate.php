@@ -109,7 +109,7 @@ function rsyncupdate($action, $revision) {
             }
             
             $rsync = shell_exec(
-              "rsync -avpz --stats --rsh='ssh -p $port' ".$currentDir."/.. --delete ".$line." --exclude-from=".$currentDir.
+              "rsync -avpz --stats --rsh='ssh -p $port' ".$currentDir."/.. --delete ".substr($line, 0, $portPOS)." --exclude-from=".$currentDir.
               "/rsyncupdate.exclude --exclude includes/config_overload.php --exclude tmp".
               " --exclude lib --exclude files --exclude includes/config.php".
               " --exclude images/pictures/logo_custom.png"
