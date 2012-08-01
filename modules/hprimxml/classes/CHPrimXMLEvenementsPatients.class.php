@@ -51,31 +51,6 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     parent::generateEnteteMessage("evenementsPatients", false);
   }
   
-  static function getActionEvenement($query, $node) {
-    $xpath = new CHPrimXPath($node->ownerDocument);
-    
-    return $xpath->queryAttributNode($query, $node, "action");    
-  }
-    
-  function isActionValide($action, $domAcquittement) {
-    $messageAcquittement = null;
-    $echange_hprim = $this->_ref_echange_hprim;
-    
-    if (array_key_exists($action, $this->actions)) {
-      return $messageAcquittement;
-    }
-    
-    $messageAcquittement = $domAcquittement->generateAcquittements("erreur", "E008");
-    $doc_valid = $domAcquittement->schemaValidate();
-    $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-      
-    $echange_hprim->_acquittement = $messageAcquittement;
-    $echange_hprim->statut_acquittement = "erreur";
-    $echange_hprim->store();
-    
-    return $messageAcquittement;
-  }
-  
   function mappingPatient($node, CPatient $mbPatient) {   
     $mbPatient = $this->getPersonnePhysique($node, $mbPatient);
     $mbPatient = $this->getActiviteSocioProfessionnelle($node, $mbPatient);

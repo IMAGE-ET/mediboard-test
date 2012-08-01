@@ -77,29 +77,30 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     
     $mbPatient = $mbSejour = null;    
     if ($mbObject instanceof CSejour) {
-      $mbPatient = $mbObject->_ref_patient;
+      $mbPatient = $mbObject->loadRefPatient();
       $mbSejour  = $mbObject;
     }
     if ($mbObject instanceof COperation) {
-      $mbPatient = $mbObject->_ref_sejour->_ref_patient;
+      $mbPatient = $mbObject->loadRefSejour()->loadRefPatient();
       $mbSejour  = $mbObject->_ref_sejour;
     } 
      
     // Ajout des réponses
     $reponses = $this->addElement($acquittementsServeurActivitePmsi, "reponses");
+
     // Ajout du patient et de la venue
-    if ($mbPatient) {
-      $patient = $this->addElement($reponses, "patient");
+    $patient = $this->addElement($reponses, "patient");
+    if ($mbPatient->_id) {
       $this->addPatient($patient, $mbPatient, false, true);
-    } 
-    
-    if ($mbSejour) {    
-      $venue = $this->addElement($reponses, "venue");
-      $this->addVenue($venue, $mbSejour, false, true);
     }
     
+    $venue = $this->addElement($reponses, "venue");
+    if ($mbSejour->_id) {
+      $this->addVenue($venue, $mbSejour, false, true);
+    }
+   
     // Génération des réponses en fonction du type de l'acquittement
-    switch ($this->_class) {
+    switch (get_class($this)) {
       case "CHPrimXMLAcquittementsServeurActes" :
         $actesCCAM = $data;
         
@@ -109,10 +110,9 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
         
         break;
       case "CHPrimXMLAcquittementsServeurIntervention" :
-        $this->addReponseIntervention($reponses, $statut, $codes, $mbObject, $commentaires);
+        $this->addReponseIntervention($reponses, $statut, $codes, null, $mbObject, $commentaires);
         break;
     }
-      
   }
 
   function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null, $data = array()) {
@@ -126,8 +126,9 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     $this->purgeEmptyElements();
 
     $this->saveTempFile();
+    $this->formatOutput = true;
     $acq = utf8_encode($this->saveXML());
-
+mbTrace($acq);
     return $acq;
   }
   

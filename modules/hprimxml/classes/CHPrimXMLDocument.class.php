@@ -639,7 +639,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function addReponse($elParent, $statut, $codes, $mbObject = null, $commentaires = null) {
-    if ($statut != "ok") {
+    if ($statut == "ok") {
       return; 
     }  
     
@@ -675,9 +675,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($reponse, "statut", $statut);
       
     $intervention = $this->addElement($reponse, "intervention");
-    $this->addActeInterventionAcquittement($elActeCCAM, $acteCCAM);
+    $this->addInterventionAcquittement($intervention, $mbObject);
     
-    $this->addReponse($reponse, $statut, $codes);
+    $this->addReponse($reponse, $statut, $codes, $mbObject, $commentaires);
+  }
+  
+  function addInterventionAcquittement($elParent, $operation = null) {
+    $identifiant = $this->addElement($elParent, "identifiant");
+    $emetteur = $this->addElement($identifiant, "emetteur", $operation ? $operation->operation_id : 0);
   }
   
   function getTypeEvenementPatient() {

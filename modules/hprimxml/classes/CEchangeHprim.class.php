@@ -9,11 +9,11 @@
  */
 
 class CEchangeHprim extends CEchangeXML {
-	static $messages = array(
-		 "patients" => "CHPrimXMLEvenementsPatients",
-	   "pmsi"     => "CHPrimXMLEvenementsServeurActivitePmsi" 
-	);
-	
+  static $messages = array(
+     "patients" => "CHPrimXMLEvenementsPatients",
+     "pmsi"     => "CHPrimXMLEvenementsServeurActivitePmsi" 
+  );
+  
   // DB Table key
   var $echange_hprim_id     = null;
 
@@ -163,12 +163,12 @@ class CEchangeHprim extends CEchangeXML {
   }
   
   function setAckError(CHPrimXMLAcquittements $dom_acq, $code_erreur, 
-                       $commentaires = null, CMbObject $mbObject = null) {
-    $msgAcq    = $dom_acq->generateAcquittements("erreur", $code_erreur, $commentaires, $mbObject);
+                       $commentaires = null, CMbObject $mbObject = null, $code = "erreur") {
+    $msgAcq    = $dom_acq->generateAcquittements($code, $code_erreur, $commentaires, $mbObject);
     $doc_valid = $dom_acq->schemaValidate();
     
     $this->acquittement_valide = $doc_valid ? 1 : 0;
-    $this->statut_acquittement = "erreur";
+    $this->statut_acquittement = $code;
     
     if ($mbObject) {
       $this->setObjectIdClass($mbObject);
@@ -178,7 +178,12 @@ class CEchangeHprim extends CEchangeXML {
     $this->store();
     
     return $msgAcq;
-  }
+  }     
+                       
+  function setAckErr(CHPrimXMLAcquittements $dom_acq, $code_erreur, 
+                        $commentaires = null, CMbObject $mbObject = null, $code = null) {
+    $this->setAckError($dom_acq, $code_erreur, $commentaires, $mbObject, "err");
+  }          
   
   function getConfigs($actor_guid) {
     list($sender_class, $sender_id) = explode("-", $actor_guid);

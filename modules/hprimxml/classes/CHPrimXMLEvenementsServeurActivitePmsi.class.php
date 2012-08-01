@@ -122,6 +122,9 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
       "acteCCAM"             => $acteCCAM
     );
   }
+  
+  function handle(CHPrimXMLAcquittementsServeurActivitePmsi $ack, CMbObject $mbObject, $data) {
+  }
 }
 
 ?>

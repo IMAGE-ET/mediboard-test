@@ -9,6 +9,14 @@
  */
 
 class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivitePmsi {
+  var $actions = array(
+    'création'     => "création",
+    'remplacement' => "remplacement",
+    'modification' => "modification",
+    'suppression'  => "suppression",
+    'information'  => "information",
+  );
+  
   function __construct() {
     $this->sous_type = "evenementServeurActe";
     $this->evenement = "evt_serveuractes";
@@ -129,12 +137,15 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
   
   /**
    * Enregistrement des actes CCAM
-   * @param CHPrimXMLAcquittementsServeurActes $domAcquittement
-   * @param CEchangeHprim $echange_hprim
-   * @param array $data
-   * @return CHPrimXMLAcquittementsServeurActes $messageAcquittement 
+   * 
+   * @param CHPrimXMLAcquittementsServeurActivitePmsi $ack        DOM Acquittement 
+   * @param CMbObject                                 $mbObject   Object
+   * @param array                                     $data       Data that contain the nodes 
+   * 
+   * @return string Acquittement 
    **/
-  function serveurActes($domAcquittement, &$echange_hprim, $data) {
+  function handle(CHPrimXMLAcquittementsServeurActivitePmsi $ack, CMbObject $mbObject, $data) {
+    return;
     $messageAcquittement = null;
     
      // Si pas Serveur d'Actes

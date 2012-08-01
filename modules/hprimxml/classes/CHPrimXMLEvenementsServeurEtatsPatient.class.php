@@ -9,6 +9,14 @@
  */
 
 class CHPrimXMLEvenementsServeurEtatsPatient extends CHPrimXMLEvenementsServeurActivitePmsi {
+  var $actions = array(
+    'création'     => "création",
+    'remplacement' => "remplacement",
+    'modification' => "modification",
+    'suppression'  => "suppression",
+    'information'  => "information",
+  );
+  
   function __construct() {
     $this->sous_type = "evenementServeurEtatsPatient";
     $this->evenement = "evt_serveuretatspatient";

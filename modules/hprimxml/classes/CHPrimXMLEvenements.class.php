@@ -48,6 +48,31 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
     return $data;
   }
   
+  function getActionEvenement($query, $node) {
+    $xpath = new CHPrimXPath($node->ownerDocument);
+    
+    return $xpath->queryAttributNode($query, $node, "action");    
+  }
+  
+  function isActionValide($action, $dom_acq) {
+    $acq = null;
+    $echange_hprim = $this->_ref_echange_hprim;
+
+    if (!$action || array_key_exists($action, $this->actions)) {
+      return $acq;
+    }
+    
+    $acq       = $dom_acq->generateAcquittements("erreur", "E008");
+    $doc_valid = $dom_acq->schemaValidate();
+    
+    $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
+    $echange_hprim->_acquittement       = $acq;
+    $echange_hprim->statut_acquittement = "erreur";
+    $echange_hprim->store();
+    
+    return $acq;
+  }
+  
   function getAcquittementEvenementXML() {
     // Message événement patient
     if ($dom_evenement instanceof CHPrimXMLEvenementsPatients) {
