@@ -108,6 +108,9 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     $this->html = preg_replace("/#body\s*\{\s*padding-top:\s*[0-9]*px;\s*\}/", "", $this->html);
     $this->html = preg_replace("/hr.pagebreak\s*{\s*padding-top:\s*[0-9]*px;\s*}/", "", $this->html);
     
+    // Supprimer le padding-bottom du body
+    $this->html = preg_replace("/#body\s*\{\s*padding-bottom:\s*[0-9]*px;\s*\}/", "", $this->html);
+    
     // Suppression de la balise script pour l'impression
     $this->html = preg_replace("/(<script type=[\'\"]text\/javascript[\'\"]>.*<\/script>)/msU", "", $this->html);
     
