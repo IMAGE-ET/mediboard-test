@@ -10,7 +10,7 @@
   
 $dPconfig["dPurgences"] = array (
   "date_tolerance"            => "2",
-  "old_rpu"                   => "1",
+  "old_rpu"                   => "0",
   "rpu_warning_time"          => "00:20:00",
   "rpu_alert_time"            => "01:00:00",
   "default_view"              => "tous",
@@ -28,8 +28,8 @@ $dPconfig["dPurgences"] = array (
   "only_prat_responsable"     => "0",
   "rpu_sender"                => "",
   "rpu_xml_validation"        => "1",
-	"gerer_hospi"               => "1",
-	"gerer_reconvoc"            => "1",
+  "gerer_hospi"               => "1",
+  "gerer_reconvoc"            => "1",
   "sibling_hours"             => "0",
   "pec_change_prat"           => "1",
   "pec_after_sortie"          => "0",
