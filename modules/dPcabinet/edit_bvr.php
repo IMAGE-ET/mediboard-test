@@ -33,44 +33,48 @@ else {
   $factures = $facture->loadList($where, "factureconsult_id DESC", null, "patient_id");
   
   //Avant l'envoi par ftp des fichiers, création d'un fichier print.lock indiquant un envoi de fichiers en cours
-  $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
-  $exchange_source->init();
-  try {
-    $exchange_source->setData("Ne pas imprimer maintenant. Merci d'avance!");
-    $exchange_source->send("", "print.lock");
-  } catch(CMbException $e) {
-    $e->stepAjax();
-  }
+//  $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
+//  $exchange_source->init();
+//  try {
+//    $exchange_source->setData("Ne pas imprimer maintenant. Merci d'avance!");
+//    $exchange_source->send("", "print.lock");
+//  } catch(CMbException $e) {
+//    $e->stepAjax();
+//  }
 }
 
 if ($edition_bvr) {
+  // Création du PDF
+  $pdf = new CMbPdf('P', 'mm');
+  $pdf->setPrintHeader(false);
+  $pdf->setPrintFooter(false);
+  
   foreach ($factures as $facture) {
     $facture->loadRefCoeffFacture();
     $facture->loadRefsFwd();
     $facture->loadRefsBack();
     $facture->loadNumerosBVR("nom");
       
-    // Création du PDF
-    $pdf = new CMbPdf('P', 'mm');
-    $pdf->setPrintHeader(false);
-    $pdf->setPrintFooter(false);
-    
     $pm = 0;
     $pt = 0;
     foreach ($facture->_ref_consults as $consult) {
       foreach ($consult->_ref_actes_tarmed as $acte) {
-        if ($acte->code_ref && $acte->_ref_tarmed->tp_tl == 0.00&& $acte->_ref_tarmed->tp_al == 0.00) {
-          $acte_ref = null;
-          foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
-            if ($acte_tarmed->code == $acte->code_ref) {
-              $acte_tarmed->loadRefTarmed();
-              $acte_ref = $acte_tarmed;break;
+        if ($acte->_ref_tarmed->tp_al == 0.00 && $acte->_ref_tarmed->tp_tl == 0.00) {
+          if ($acte->code_ref) {
+            $acte_ref = null;
+            foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
+              if ($acte_tarmed->code == $acte->code_ref) {
+                $acte_ref = $acte_tarmed;break;
+              }
             }
+            $acte_ref->loadRefTarmed();
+            $acte->_ref_tarmed->tp_al = $acte_ref->_ref_tarmed->tp_al;
+            $acte->_ref_tarmed->tp_tl = $acte_ref->_ref_tarmed->tp_tl;
           }
-          $acte->_ref_tarmed->tp_al = $acte_ref->_ref_tarmed->tp_al;
-          $acte->_ref_tarmed->tp_tl = $acte_ref->_ref_tarmed->tp_tl;          
+          elseif ($acte->montant_base) {
+            $acte->_ref_tarmed->tp_al = $acte->montant_base;
+          }
         }
-        
         $pt += $acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite;
         $pm += $acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al * $acte->quantite;
       }
@@ -170,17 +174,25 @@ if ($edition_bvr) {
            "cp"=> $facture->_ref_patient->cp." ".$facture->_ref_patient->ville,
         );
          
-        if ($facture->cession_creance) {
-          $facture->_ref_patient->loadRefsCorrespondantsPatient();
-          foreach ($facture->_ref_patient->_ref_correspondants_patient as $correspondant) {
-            if ($correspondant->relation == "assurance") {
-              $destinataire["nom"] = $correspondant->nom." ".$correspondant->prenom;
-              $destinataire["adresse"] = $correspondant->adresse;
-              $destinataire["cp"] = $correspondant->cp." ".$correspondant->ville;
+        if ($facture->cession_creance || $facture->type_facture == "accident") {
+          $correspondant = new CCorrespondantPatient();
+          if ($facture->assurance) { 
+            $correspondant->load($facture->assurance);
+          }
+          else {
+            $facture->_ref_patient->loadRefsCorrespondantsPatient();
+            foreach ($facture->_ref_patient->_ref_correspondants_patient as $correspondant_patient) {
+              if ($correspondant_patient->relation == "assurance") {
+                $correspondant = $correspondant_patient;break;
+              }
             }
           }
+          if ($correspondant->_id) {
+            $destinataire["nom"] = $correspondant->nom." ".$correspondant->prenom;
+            $destinataire["adresse"] = $correspondant->adresse;
+            $destinataire["cp"] = $correspondant->cp." ".$correspondant->ville;
+          }
         }
-        
         
         //Destinataire de la facture
         $patient = array(
@@ -306,7 +318,8 @@ if ($edition_bvr) {
         $cle = $facture->getNoControle($genre.$montant);
         $adherent2 = str_replace(' ','',$praticien->adherent);
         $adherent2 = str_replace('-','',$adherent2);
-        $bvr = $genre.$montant.$cle.">".$facture->_num_reference."+ ".$adherent2.">";
+        $_num_reference = str_replace(' ','',$facture->_num_reference);
+        $bvr = $genre.$montant.$cle.">".$_num_reference."+ ".$adherent2.">";
           
         // Dimensions du bvr
         $largeur_bvr = 210;
@@ -345,7 +358,7 @@ if ($edition_bvr) {
           $pdf->setFont($font, '', 10);
           $pdf->Text($l_colonne*(17-strlen($montant_facture*100)) + $decalage, $h_ligne*13+$haut_doc , sprintf("%d", $montant_facture));
           
-          $cents = floor(($montant_facture - sprintf("%d", $montant_facture))*100);
+          $cents = floor(sprintf("%.2f", $montant_facture - sprintf("%d", $montant_facture))*100);
           if ($cents<10) {			
             $cents = "0".$cents;
           }
@@ -391,31 +404,34 @@ if ($edition_bvr) {
     if ($factureconsult_id) {
       $pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "I");
     }
-    else {
-      $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
-      $exchange_source->init();
-  
-      try {
-        $exchange_source->setData($pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "S"));
-        $exchange_source->send("", $facture->cloture."_".$facture->_ref_patient->nom.'.pdf');
-      } catch(CMbException $e) {
-        $e->stepAjax();
-      }
-    }
+//    else {
+//      $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
+//      $exchange_source->init();
+//  
+//      try {
+//        $exchange_source->setData($pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "S"));
+//        $exchange_source->send("", $facture->cloture."_".$facture->_ref_patient->nom.'.pdf');
+//      } catch(CMbException $e) {
+//        $e->stepAjax();
+//      }
+//    }
+  }
+  if (!$factureconsult_id) {
+    $pdf->Output('Factures.pdf', "I");
   }
 }
 if ($edition_justificatif) {
   include "justificatif.php" ;
 }
 
-if (!$factureconsult_id) {
+//if (!$factureconsult_id) {
   //Après l'envoi par ftp des fichiers, suppression du fichier print.lock
-  $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
-  $exchange_source->init();
-  try {
-    $exchange_source->delFile("print.lock");
-  } catch(CMbException $e) {
-    $e->stepAjax();
-  }
-}
+//  $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
+//  $exchange_source->init();
+//  try {
+//    $exchange_source->delFile("print.lock");
+//  } catch(CMbException $e) {
+//    $e->stepAjax();
+//  }
+//}
 ?>

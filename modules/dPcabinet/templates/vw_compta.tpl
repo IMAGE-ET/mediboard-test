@@ -70,7 +70,8 @@ printFacture = function(edit_justificatif, edit_bvr) {
   url.addParam('_date_min', oForm._date_min.value);
   url.addParam('_date_max', oForm._date_max.value);
   url.addParam('prat_id', oForm.chir.value);
-  url.requestUpdate(SystemMessage.id);
+  url.addParam('suppressHeaders', '1');
+  url.popup(1000, 600);
 }
 </script>
 

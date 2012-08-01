@@ -108,18 +108,16 @@ function ajoutEntete2($pdf, $nb, $facture, $user, $praticien, $group, $colonnes)
     }
   }
 }
-  
+
+// Création du PDF
+$pdf = new CMbPdf('P', 'mm');
+$pdf->setPrintHeader(false);
+$pdf->setPrintFooter(false);
+
 foreach ($factures as $facture) {
-  // Création du PDF
-  $pdf = new CMbPdf('P', 'mm');
-  $pdf->setPrintHeader(false);
-  $pdf->setPrintFooter(false);
   $pdf->AddPage();  
   
-  $facture->loadRefCoeffFacture();
-  $facture->loadRefsFwd();
-  $facture->loadRefsBack();
-  $facture->loadNumerosBVR("nom");
+  $facture->loadRefs();
   $pm = 0;
   $pt = 0;
   
@@ -207,7 +205,23 @@ foreach ($factures as $facture) {
      
       $pdf->setX(10);
       $pdf->setFont("vera", '', 8);
-      
+    
+      if ($acte->_ref_tarmed->tp_al == 0.00 && $acte->_ref_tarmed->tp_tl == 0.00) {
+        if ($acte->code_ref) {
+          $acte_ref = null;
+          foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
+            if ($acte_tarmed->code == $acte->code_ref) {
+              $acte_ref = $acte_tarmed;break;
+            }
+          }
+          $acte_ref->loadRefTarmed();
+          $acte->_ref_tarmed->tp_al = $acte_ref->_ref_tarmed->tp_al;
+          $acte->_ref_tarmed->tp_tl = $acte_ref->_ref_tarmed->tp_tl;
+        }
+        elseif ($acte->montant_base) {
+          $acte->_ref_tarmed->tp_al = $acte->montant_base;
+        }
+      }
       foreach ($tailles_colonnes as $key => $largeur) {      	
           $pdf->setXY($pdf->getX()+$x, $debut_lignes + $ligne*3);
           $valeur = "";
@@ -351,20 +365,20 @@ foreach ($factures as $facture) {
             $cote = "R";
           }
           if ($key == "VPtPM") {
-            $valeur = "1.00";
+            $valeur = $facture->_coeff;
           }
           if ($key == "P" || $key == "M") {
             $valeur = "0";
           }
           if ($key == "Montant") {
             $pdf->setX($pdf->getX()+3);
-            $valeur = $acte->montant_base;
+            $valeur = sprintf("%.2f", $acte->montant_base * $facture->_coeff);
             $cote = "R";
           }
           $pdf->Cell($largeur, null ,  $valeur, null, null, $cote);
           $x = $largeur;
       }
-      $montant_intermediaire += $acte->montant_base;
+      $montant_intermediaire += sprintf("%.2f", $acte->montant_base * $facture->_coeff);
     }
   }
   
@@ -400,10 +414,10 @@ foreach ($factures as $facture) {
       $pdf->Cell($l, "", $value, null, null, "R");
     }
   }
-  
+  $montant_intermediaire = $pm + $pt;
   $pdf->setXY(20, $ligne+9);
   $pdf->Cell($l, "", "Montant total/CHF", null, null, "R");
-  $pdf->Cell($l, "", $montant_intermediaire, null, null, "R");
+  $pdf->Cell($l, "", sprintf("%.2f",$montant_intermediaire), null, null, "R");
   
   $acompte = sprintf("%.2f", $facture->_reglements_total_patient);
   $pdf->Cell(30, "", "Acompte", null, null, "R");
@@ -411,21 +425,25 @@ foreach ($factures as $facture) {
   $pdf->Cell($l, "", "", null, null, "R");
   
   $total = $montant_intermediaire - $facture->_reglements_total_patient;
+  
   $pdf->Cell($l, "", "Montant dû", null, null, "R");
-  $pdf->Cell($l, "", $total, null, null, "R");
+  $pdf->Cell($l, "", sprintf("%.2f",$total), null, null, "R");
 
   if ($factureconsult_id) {
     $pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "I");
   }
-  else {
-    $exchange_source = CExchangeSource::get("tarmed_export_impression_justificatifs", "ftp", true);
-    $exchange_source->init();
-    try {
-      $exchange_source->setData($pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "S"));
-      $exchange_source->send("", $facture->cloture."_".$facture->_ref_patient->nom.'.pdf');
-    } catch(CMbException $e) {
-      $e->stepAjax();
-    }
-  }
+//  else {
+//    $exchange_source = CExchangeSource::get("tarmed_export_impression_justificatifs", "ftp", true);
+//    $exchange_source->init();
+//    try {
+//      $exchange_source->setData($pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "S"));
+//      $exchange_source->send("", $facture->cloture."_".$facture->_ref_patient->nom.'.pdf');
+//    } catch(CMbException $e) {
+//      $e->stepAjax();
+//    }
+//  }
+}
+if (!$factureconsult_id) {
+  $pdf->Output('Justificatifs.pdf', "I");
 }
 ?>

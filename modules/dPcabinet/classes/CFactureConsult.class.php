@@ -78,7 +78,7 @@ class CFactureConsult extends CMbObject
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["reglement"] = "CReglement object_id";
-//    $backProps["factures"]  = "CConsultation factureconsult_id";
+    $backProps["factures"]  = "CConsultation factureconsult_id";
     return $backProps;
   }
    
@@ -142,25 +142,31 @@ class CFactureConsult extends CMbObject
    * @return void
   **/
   function store(){
-  // Standard store
+    
+    // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
   } 
   
   /**
-   * Redéfinition du store
+   * Rédéfinition du delete
    * 
    * @return void
   **/
-
   function delete(){
+    //Suppression du champ factureconsult_id pour les consultations de cette facture 
     $consultation = new CConsultation();
     $consults = $consultation->loadList("factureconsult_id = '$this->factureconsult_id'");
-    
     foreach ($consults as $consult) {
       $consult->factureconsult_id = "";
       $consult->store();
+    }
+    
+    //Suppression des règlements effectuées pour la facture
+    $this->loadRefReglements();
+    foreach ($this->_ref_reglements as $reglement) {
+      $reglement->delete();
     }
     
     if ($msg = parent::delete()){
@@ -176,54 +182,55 @@ class CFactureConsult extends CMbObject
    * @return void
   **/
   function loadRefsConsults($cache = 1) {
-    $consult = new CConsultation();
-    
-    $where = array();
-    $where["patient_id"]        = "= '$this->patient_id'";
-    $where["factureconsult_id"] = "= '$this->factureconsult_id'";
-    $order = "consultation_id ASC";
-    
-    $this->_ref_consults = $consult->loadList($where, $order);
-    $this->_nb_factures = 1 ;
-    if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
-    
-      if ($this->npq) {
-        $this->remise = sprintf("%.2f",(10*(($this->du_patient+$this->du_tiers)*$this->_coeff))/100);
-      }
-      //Dans le cas d'un éclatement de facture recherche des consultations
-      $facture = new CFactureConsult();
-          
+    if (!count($this->_ref_consults)){
+      $consult = new CConsultation();    
       $where = array();
-      $where["patient_id"] = "= '$this->patient_id'";
-      $where["ouverture"]  = "= '$this->ouverture'";
-      $where["cloture"]    = "= '$this->cloture'";
-      $where["type_facture"] = "= '$this->type_facture'";
+      $where["patient_id"]        = "= '$this->patient_id'";
+      $where["factureconsult_id"] = "= '$this->factureconsult_id'";
+      $order = "consultation_id ASC";    
+      $this->_ref_consults = $consult->loadList($where, $order);
       
-      $factures = $facture->loadList($where, "factureconsult_id DESC");
-      if (count($factures)>1) {
-        foreach ($factures as $fact) {
-          $ajout = $fact->du_patient + $fact->du_tiers - $fact->remise;
-          $this->_montant_factures[] = $ajout;
-          $refs = $consult->loadList("patient_id = '$this->patient_id' AND factureconsult_id = '$fact->factureconsult_id'", "consultation_id DESC");
-          if ($refs) {
-            $this->_ref_consults = $refs;
+      $this->_nb_factures = 1 ;
+      if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+      
+        if ($this->npq) {
+          $this->remise = sprintf("%.2f",(10*(($this->du_patient+$this->du_tiers)*$this->_coeff))/100);
+        }
+        //Dans le cas d'un éclatement de facture recherche des consultations
+        $facture = new CFactureConsult();
+            
+        $where = array();
+        $where["patient_id"] = "= '$this->patient_id'";
+        $where["ouverture"]  = "= '$this->ouverture'";
+        $where["cloture"]    = "= '$this->cloture'";
+        $where["type_facture"] = "= '$this->type_facture'";
+        
+        $factures = $facture->loadList($where, "factureconsult_id DESC");
+        if (count($factures)>1) {
+          foreach ($factures as $fact) {
+            $ajout = $fact->du_patient + $fact->du_tiers - $fact->remise;
+            $this->_montant_factures[] = $ajout;
+            $refs = $consult->loadList("patient_id = '$this->patient_id' AND factureconsult_id = '$fact->factureconsult_id'", "consultation_id DESC");
+            if ($refs) {
+              $this->_ref_consults = $refs;
+            }
+            $this->_nb_factures ++;
           }
-          $this->_nb_factures ++;
+        }
+        else {
+          $this->_montant_factures   = array();
+          $this->_montant_factures[] = ($this->du_patient + $this->du_tiers) * $this->_coeff - $this->remise;
         }
       }
-      else {
-        $this->_montant_factures   = array();
-        $this->_montant_factures[] = ($this->du_patient + $this->du_tiers) * $this->_coeff - $this->remise;
+      foreach ($this->_ref_consults as $key => $consult) {
+        $consult->loadRefsActes();
+        $consult->loadExtCodesCCAM();
+        if ($consult->_count_actes == 0) {
+          unset($this->_ref_consults[$key]);
+        }
       }
+      $this->loadRefsDerConsultation();
     }
-    foreach ($this->_ref_consults as $key => $consult) {
-      $consult->loadRefsActes();
-      $consult->loadExtCodesCCAM();
-      if ($consult->_count_actes == 0) {
-        unset($this->_ref_consults[$key]);
-      }
-    }
-    $this->loadRefsDerConsultation();
   } 
      
   /**
@@ -247,13 +254,15 @@ class CFactureConsult extends CMbObject
    * @return $this->_ref_patient
   **/
   function loadRefPatient($cache = 1) {
-    $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
-    
-    // Le numéro de référence doit comporter 16 ou 27 chiffres
-    $_num_reference = $this->_ref_patient->matricule.sprintf("%012s",$this->_id);
-    $_num_reference = str_replace(' ','',$_num_reference);
-    $this->_num_reference = substr($_num_reference, 0, 2)." ".substr($_num_reference, 2, 5)." ".substr($_num_reference, 7, 5)." ".substr($_num_reference, 12, 5)." ".substr($_num_reference, 17, 5)." ".substr($_num_reference, 22, 5);
-    return $this->_ref_patient;
+    if (!$this->_ref_patient) {
+      $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
+      
+      // Le numéro de référence doit comporter 16 ou 27 chiffres
+      $_num_reference = $this->_ref_patient->matricule.sprintf("%012s",$this->_id);
+      $_num_reference = str_replace(' ','',$_num_reference);
+      $this->_num_reference = substr($_num_reference, 0, 2)." ".substr($_num_reference, 2, 5)." ".substr($_num_reference, 7, 5)." ".substr($_num_reference, 12, 5)." ".substr($_num_reference, 17, 5)." ".substr($_num_reference, 22, 5);
+      return $this->_ref_patient;
+    }
   }  
    
   /**
@@ -304,7 +313,7 @@ class CFactureConsult extends CMbObject
     
     $this->_ref_reglements = $this->loadBackRefs("reglement", 'date');
     
-    $this->_du_patient_restant = $this->du_patient - $this->remise;
+    $this->_du_patient_restant = sprintf("%.2f", $this->du_patient*$this->_coeff) - $this->remise;
     $this->_du_tiers_restant = $this->du_tiers;
     foreach ($this->_ref_reglements as $_reglement) {
       $_reglement->loadRefBanque();
@@ -425,8 +434,10 @@ class CFactureConsult extends CMbObject
       if ($montant_prem < 0) {
         $montant_prem = 0;
       }
+      if ($total_tarmed) {
+         $this->_montant_factures_caisse[] = sprintf("%.2f",$montant_prem - $this->remise);
+      }
       
-      $this->_montant_factures_caisse[] = sprintf("%.2f",$montant_prem - $this->remise);
       $this->_montant_sans_remise = sprintf("%.2f",$montant_prem);
       foreach ($total_caisse as $cle => $caisse) {
         if ($caisse) {
