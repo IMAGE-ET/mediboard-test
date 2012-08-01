@@ -38,7 +38,7 @@ function savePlan(element){
 
   onSubmitFormAjax(form);
   var url = new Url('dPhospi', 'vw_plan_etage', "tab");
-  url.redirect("rechargement_grille");
+  url.redirect();
 }
 
 PlanEtage = {
@@ -52,7 +52,7 @@ PlanEtage = {
   onSubmit: function(form) {
     return onSubmitFormAjax(form, {onComplete : function() {
         var url = new Url('dPhospi', 'vw_plan_etage', "tab");
-        url.redirect("rechargement_grille");}
+        url.redirect();}
       });
   }
 };
