@@ -57,8 +57,9 @@ if (!$evenement) {
 }
 
 $source = CExchangeSource::get("$receiver->_guid-$evenement");
-if (!$source->_id) {
-  CAppUI::stepAjax("Aucune source pour cet acteur", UI_MSG_ERROR);
+
+if (!$source->_id  || !$source->active) {
+  CAppUI::stepAjax("Aucune source pour cet acteur / Source non active", UI_MSG_ERROR);
 }
 
 if ($source instanceof CSourceFileSystem) {
@@ -67,41 +68,46 @@ if ($source instanceof CSourceFileSystem) {
 else {
   $source->setData($msg);
 }
+
 $source->send();
 
-if ($ack_data = $source->getACQ()) {
-  $exchange->date_echange = mbDateTime();
-  
-  if ($exchange instanceof CEchangeHprim) {
-    $ack_data = utf8_decode($ack_data);
-    $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($data_format);
-    $ack->loadXML($ack_data);
-    $doc_valid = $ack->schemaValidate();
-    if ($doc_valid) {
-      $exchange->statut_acquittement = $ack->getStatutAcquittement();
-    }
-  }
+$exchange->date_echange = mbDateTime();
 
-  if ($exchange instanceof CExchangeIHE) {
-    $ack = new CHL7v2Acknowledgment($data_format);
-    $ack->handle($ack_data);
-    $exchange->statut_acquittement = $ack->getStatutAcknowledgment();
-    $exchange->acquittement_valide = $ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
-  }
-  
-  if ($exchange instanceof CExchangePhast) {
-    $ack = new CPhastAcquittementsPN13();
-    $ack->loadXML($ack_data);
-    $doc_valid = $ack->schemaValidate();
-    if ($doc_valid) {
-      $exchange->statut_acquittement = $ack->getCodeAcquittement();
-    }
-  }  
-  
-  $exchange->_acquittement = $ack_data;
+if (!$ack_data = $source->getACQ()) {
   $exchange->store();
+  CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été réexpédié");
+  return;
+} 
+   
+if ($exchange instanceof CEchangeHprim) {
+  $ack_data = utf8_decode($ack_data);
+  $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($data_format);
+  $ack->loadXML($ack_data);
+  $doc_valid = $ack->schemaValidate();
+  if ($doc_valid) {
+    $exchange->statut_acquittement = $ack->getStatutAcquittement();
+  }
 }
 
-CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");
+if ($exchange instanceof CExchangeIHE) {
+  $ack = new CHL7v2Acknowledgment($data_format);
+  $ack->handle($ack_data);
+  $exchange->statut_acquittement = $ack->getStatutAcknowledgment();
+  $exchange->acquittement_valide = $ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
+}
+
+if ($exchange instanceof CExchangePhast) {
+  $ack = new CPhastAcquittementsPN13();
+  $ack->loadXML($ack_data);
+  $doc_valid = $ack->schemaValidate();
+  if ($doc_valid) {
+    $exchange->statut_acquittement = $ack->getCodeAcquittement();
+  }
+}  
+
+$exchange->_acquittement = $ack_data;
+$exchange->store();
+
+CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été réexpédié");
 
 ?>

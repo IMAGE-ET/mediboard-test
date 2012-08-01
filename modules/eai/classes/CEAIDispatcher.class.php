@@ -88,7 +88,7 @@ class CEAIDispatcher {
     $data_format->_message      = $data;
     $data_format->_exchange_id  = $exchange_id;
     $data_format->_to_treatment = $to_treatment;
-        
+    
     // Traitement par le handler du format
     try {
       return $data_format->handle();
