@@ -22,13 +22,13 @@
       {{if preg_match("/deficience/", $antecedents)}}
         <div class="small-success">
           Le type d'antécédent <strong>Déficience</strong> est bien coché dans le volet Antécédents de
-          <a href="?m=patients&tab=configure">l'onglet Configurer dumodule Dossier Patient</a>
+          <a href="?m=patients&tab=configure">l'onglet Configurer du module Dossier Patient</a>
         </div>
       {{else}}
         <div class="small-warning">
           Pour afficher cette icône, le type d'antécédent <strong>Déficience</strong> 
           doit être coché dans le volet Antécédents de
-          <a href="?m=patients&tab=configure">l'onglet Configurer dumodule Dossier Patient</a>
+          <a href="?m=patients&tab=configure">l'onglet Configurer du module Dossier Patient</a>
         </div>
       {{/if}}
     </td>
