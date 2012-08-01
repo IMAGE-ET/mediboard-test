@@ -28,64 +28,6 @@ Rafraichissement = {
 }
 </script>
 
-<style type="text/css">
-div.patient{
-  padding: 1px;
-  margin: 3px;
-  background-color: rgba(255,255,255,0.8);
-  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#90ffffff,endColorstr=#90ffffff);
-  width: 92%;
-  box-shadow: 0 0 0 1px silver;
-}
-
-div.grille table{
-  table-layout:fixed; 
-  border-spacing: 13px;
-  border-collapse:separate;/*A ne pas enlever util pr IE!!*/
-}
-
-div.grille td.chambre, div.grille td.pas-de-chambre{
-  height:120px;
-}
-
-div.grille small{
-  float: right;
-  margin-top: -9px;
-  border-radius: 2px;
-  padding: 0 3px;
-  text-shadow:  0 0 0 transparent,
-              -1px  0  .0px rgba(255,255,255,.7),
-               0   1px .0px rgba(255,255,255,.7),
-               1px  0  .0px rgba(255,255,255,.7),
-               0  -1px .0px rgba(255,255,255,.7);
-}
-
-div.ccmu-0{
-  border-left: 5px solid rgba(255,255,255,0.8);
-}
-div.ccmu-1{
-  border-left: 5px solid #0F0;
-}
-div.ccmu-2{
-  border-left: 5px solid #9F0;
-}
-div.ccmu-3{
-  border-left: 5px solid #FF0;
-}
-div.ccmu-4{
-  border-left: 5px solid #FFCD00;
-}
-div.ccmu-5{
-  border-left: 5px solid #F60;
-}
-div.ccmu-D{
-  border-left: 5px solid #F00;
-}
-div.ccmu-P{
-  border-left: 5px solid #0F0;
-}
-</style>
-
 <ul id="tabs-urgences" class="control_tabs">
   <li><a href="#urgences">Urgence</a></li>
   <li><a href="#uhcds">   UHCD   </a></li>
@@ -107,10 +49,10 @@ div.ccmu-P{
 
 <hr class="control_tabs" />
 
-<div id="urgences" style="display: none;">
+<div id="urgences" style="display: none;" class='vue_topologique'>
   {{mb_include module=dPurgences template=inc_vw_plan_urgences name_grille="urgence"}}
 </div>
 
-<div id="uhcds" style="display: none;">
+<div id="uhcds" style="display: none;" class='vue_topologique'>
   {{mb_include module=dPurgences template=inc_vw_plan_urgences name_grille="uhcd"}}
 </div>
