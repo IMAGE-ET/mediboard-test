@@ -46,8 +46,8 @@ class CUserLog extends CMbMetaObject {
   }
 
   function getProps() {
-  	$specs = parent::getProps();
-  	$specs["object_id"]    = "ref notNull class|CMbObject meta|object_class unlink";
+    $specs = parent::getProps();
+    $specs["object_id"]    = "ref notNull class|CMbObject meta|object_class unlink";
     $specs["object_class"] = "str notNull show|0"; // Ne pas mettre "class" !! (pour les CExObject)
     $specs["user_id"]      = "ref notNull class|CUser";
     $specs["date"]         = "dateTime notNull";
@@ -76,9 +76,9 @@ class CUserLog extends CMbMetaObject {
   }
   
   function getOldValues() {
-  	$this->completeField("extra");
-		
-  	$this->_old_values = array();
+    $this->completeField("extra");
+    
+    $this->_old_values = array();
     if ($this->extra && ($this->type === "store" || $this->type === "merge")) {
       $this->_old_values = (array) json_decode($this->extra);
       $this->_old_values = array_map("utf8_decode", $this->_old_values);
@@ -86,27 +86,27 @@ class CUserLog extends CMbMetaObject {
     return $this->_old_values;
   }
   
-	/**
-	 * @param bool $cache [optional]
-	 * @return CUser
-	 */
+  /**
+   * @param bool $cache [optional]
+   * @return CUser
+   */
   function loadRefUser($cache = true) {
     return $this->_ref_user = $this->loadFwdRef("user_id", $cache);
   }
   
   function loadRefsFwd() {
-  	parent::loadRefsFwd();
-  	$this->loadRefUser();
+    parent::loadRefsFwd();
+    $this->loadRefUser();
   }
   
-	function loadView(){
-		parent::loadView();
-		
-		$this->getOldValues();
-		$this->canUndo();
-		$this->loadTargetObject()->loadHistory();
-	}
-	
+  function loadView(){
+    parent::loadView();
+    
+    $this->getOldValues();
+    $this->canUndo();
+    $this->loadTargetObject()->loadHistory();
+  }
+  
   function loadMergedIds(){
     if ($this->type === "merge") {
       $date_max = mbDateTime("+3 seconds", $this->date);
@@ -122,17 +122,17 @@ class CUserLog extends CMbMetaObject {
       }
     }
   }
-	 
+   
   static function countRecentFor($object_class, $ids, $recent){
     $log = new CUserLog();
-		$where = array();
-		$where["object_class"] = "= '$object_class'";
+    $where = array();
+    $where["object_class"] = "= '$object_class'";
     $where["date"] = "> '$recent'";
     $where["object_id"] = CSQLDataSource::prepareIn($ids);
     return $log->countList($where);
   }
-	
-	static function getObjectValueAtDate(CMbObject $object, $date, $field) {
+  
+  static function getObjectValueAtDate(CMbObject $object, $date, $field) {
     $where = array(
       "object_class" => "= '$object->_class'",
       "object_id"    => "= '$object->_id'",
@@ -146,7 +146,7 @@ class CUserLog extends CMbMetaObject {
     
     $where[] = "
       fields LIKE '$field' OR 
-			fields LIKE '$field %' OR 
+      fields LIKE '$field %' OR 
       fields LIKE '% $field' OR 
       fields LIKE '% $field %'";
     
@@ -158,20 +158,20 @@ class CUserLog extends CMbMetaObject {
     }
     
     return CValue::read($user_log->_old_values, $field, $object->$field);
-	}
-	
-	function store(){
-		if ($msg = $this->check()) {
-			return $msg;
-		}
+  }
+  
+  function store(){
+    if ($msg = $this->check()) {
+      return $msg;
+    }
     
     if ($this->_undo) {
-			$this->_undo = null;
-			return $this->undo();
+      $this->_undo = null;
+      return $this->undo();
     }
-		
-		return parent::store();
-	}
+    
+    return parent::store();
+  }
   
   function canDeleteEx(){
     if (!$this->canEdit() || !$this->_ref_module->canAdmin()) {
@@ -180,51 +180,105 @@ class CUserLog extends CMbMetaObject {
     
     return parent::canDeleteEx();
   }
-	
-	function canUndo(){
-		$this->completeField("type", "extra");
-		
-		if (!$this->_id || ($this->type != "store") || ($this->extra == null) || !$this->canEdit() || !$this->_ref_module->canAdmin()) {
-			return $this->_canUndo = false;
-		}
-		
-		$this->completeField("object_id", "object_class");
-		
-		$where = array(
-		  "object_id"           => "= '$this->object_id'",
-			"object_class"        => "= '$this->object_class'",
-			"{$this->_spec->key}" => "> $this->_id",
-		);
-		
-		return $this->_canUndo = ($this->countList($where) == 0);
-	}
-	
-	function undo(){
-		if (!$this->canUndo()) {
-			return "CUserLog-undo-ko";
-		}
-		
-		$object = $this->loadTargetObject();
-		$object->_spec->loggable = false;
-		
-		$this->getOldValues();
-		
-		// Revalue fields
-		foreach($this->_old_values as $_field => $_value) {
-			$object->$_field = $_value;
-		}
-		$object->updateFormFields();
-		
-		// Prevent disturbing checks
-		$object->_merging = true;
-		
-		$msg = $object->store();
+  
+  function canUndo(){
+    $this->completeField("type", "extra");
+    
+    if (!$this->_id || ($this->type != "store") || ($this->extra == null) || !$this->canEdit() || !$this->_ref_module->canAdmin()) {
+      return $this->_canUndo = false;
+    }
+    
+    $this->completeField("object_id", "object_class");
+    
+    $where = array(
+      "object_id"           => "= '$this->object_id'",
+      "object_class"        => "= '$this->object_class'",
+      "{$this->_spec->key}" => "> $this->_id",
+    );
+    
+    return $this->_canUndo = ($this->countList($where) == 0);
+  }
+  
+  function undo(){
+    if (!$this->canUndo()) {
+      return "CUserLog-undo-ko";
+    }
+    
+    $object = $this->loadTargetObject();
+    $object->_spec->loggable = false;
+    
+    $this->getOldValues();
+    
+    // Revalue fields
+    foreach($this->_old_values as $_field => $_value) {
+      $object->$_field = $_value;
+    }
+    $object->updateFormFields();
+    
+    // Prevent disturbing checks
+    $object->_merging = true;
+    
+    $msg = $object->store();
     $object->_spec->loggable = true;
-		
-		if ($msg) {
-			return $msg;
-		}
-		
-		return $this->delete();
-	}
+    
+    if ($msg) {
+      return $msg;
+    }
+    
+    return $this->delete();
+  }
+  
+  static function loadAgregation($start, $end, $groupmod = 0, $module = null) {
+    $listClasses = implode("', '", CModule::getClassesFor($module));
+    
+    $query = "SELECT 
+        user_log_id, 
+        object_class, 
+        type,
+        0 AS grouping
+      FROM user_log
+      USE INDEX (date)
+      WHERE date BETWEEN '$start' AND '$end' ";
+            
+    if ($module && !$groupmod) {
+      $query .= "AND object_class IN ('".$listClasses."') ";
+    }
+    
+    switch ($groupmod) {
+      case 2 :  $query .= "GROUP BY grouping "; break;
+      case 1 :  $query .= "GROUP BY object_class ORDER BY object_class "; break;
+      case 0 :  $query .= "GROUP BY object_class, type ORDER BY object_class, type "; break;
+    }
+    
+    $log = new self;
+    return $log->loadQueryList($query);
+  }
+  
+  static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name) {
+    $query = "SELECT
+        COUNT(*) AS count,
+        `object_class`,
+        `type`,
+        `date`,
+      DATE_FORMAT(`date`, '$period_format') AS `gperiod`
+      FROM `user_log`
+      USE INDEX (date)
+      WHERE `date` BETWEEN '$start' AND '$end'";
+          
+    if ($module_name) {
+      $listClasses = implode("', '", CModule::getClassesFor($module_name));
+      $query .= "\nAND object_class IN ('".$listClasses."') ";
+    }
+    
+    if ($action_name) {
+      $query .= "\nAND `type` = '$action_name'";
+      $query .= "\nGROUP BY `gperiod`, `object_class`, `type` ORDER BY `date`";
+    }
+    else {
+      $query .= "\nGROUP BY `gperiod` ORDER BY `date`";
+    }
+  
+    $log = new self;
+    return $log->_spec->ds->loadList($query);
+  }
 }
