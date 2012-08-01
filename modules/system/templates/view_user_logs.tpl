@@ -96,10 +96,8 @@ Main.add(function () {
       <div>
         Données :
         <select name="left_mode" onchange="this.form.submit()">
-          <option value="counts" {{if $left_mode == 'counts'}}selected="selected"{{/if}}>Counts</option>
-        </select>
-        <select name="left_sampling" onchange="this.form.submit()">
-          <option value="total" {{if $left_sampling == 'total'}}selected="selected"{{/if}}>Total</option>
+          <option value="type" {{if $left_mode == 'type'}}selected="selected"{{/if}}>par type</option>
+          <option value="classe" {{if $left_mode == 'classe'}}selected="selected"{{/if}}>par classe</option>
         </select>
       </div>
     </form>

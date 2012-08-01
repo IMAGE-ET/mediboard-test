@@ -17,8 +17,7 @@ $hour_min = CValue::getOrSession("hour_min", "6");
 $hour_max = CValue::getOrSession("hour_max", "23");
 $hours = range(0, 23);
 
-$left_mode      = CValue::getOrSession("left_mode", "counts"); // counts
-$left_sampling  = CValue::getOrSession("left_sampling", "total"); // total
+$left_mode = CValue::getOrSession("left_mode", "type"); // type, classe
 
 $module = null;
 if (!is_numeric($groupmod)) {
@@ -56,18 +55,32 @@ switch ($interval = CValue::getOrSession("interval", "day")) {
 CSQLDataSource::$trace = false;
 
 $graphs = array();
-$left   = array($left_mode, $left_sampling);
 
 switch ($groupmod) {
   case 0:
-    foreach (array('store', 'create', 'delete', 'merge') as $type) {
-      $graphs[] = graphUserLogV2($module, $type, $from, $to, $interval, $left);
+    if ($left_mode == 'type') {
+      foreach (array('store', 'create', 'delete', 'merge') as $type) {
+        $graph = graphUserLogV2($module, $type, $from, $to, $interval, $left_mode);
+        
+        if ($graph) {
+          $graphs[] = $graph;
+        }
+      }
+    }
+    else {
+      foreach (CModule::getClassesFor($module) as $oneClass) {
+        $graph = graphUserLogV2($module, array($oneClass, 'store', 'create', 'delete', 'merge'), $from, $to, $interval, $left_mode);
+        
+        if ($graph) {
+          $graphs[] = $graph;
+        }
+      }
     }
     break;
     
   case 1:
     foreach ($listModules as $unModule) {
-      $graph = graphUserLogV2($unModule->mod_name, null, $from, $to, $interval, $left);
+      $graph = graphUserLogV2($unModule->mod_name, null, $from, $to, $interval, $left_mode);
       
       if ($graph) {
         $graphs[] = $graph;
@@ -76,7 +89,7 @@ switch ($groupmod) {
     break;
     
   case 2:
-    $graphs[] = graphUserLogV2(null, null, $from, $to, $interval, $left);
+    $graphs[] = graphUserLogV2(null, null, $from, $to, $interval, $left_mode);
 }
 
 CSQLDataSource::$trace = false;
@@ -93,7 +106,6 @@ $smarty->assign("hour_min"   , $hour_min);
 $smarty->assign("hour_max"   , $hour_max);
 
 $smarty->assign("left_mode"    , $left_mode);
-$smarty->assign("left_sampling", $left_sampling);
 
 $smarty->assign("module"     , $module);
 $smarty->assign("interval"   , $interval);

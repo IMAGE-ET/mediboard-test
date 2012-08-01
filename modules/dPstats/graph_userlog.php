@@ -166,14 +166,33 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
   $count = array();
   
   if ($action_name) {
-    foreach ($datax as $x) {
-      foreach ($logs as $log) {
-        $count[$log['object_class']][$x[0]] = array($x[0], 0);
+    $_class = null;
+    
+    if ($left == "type") {
+      foreach ($datax as $x) {
+        foreach ($logs as $log) {
+          $count[$log['object_class']][$x[0]] = array($x[0], 0);
+        }
+        
+        foreach ($logs as $log) {
+          if($x[1] == $log['gperiod']) {
+            $count[$log['object_class']][$x[0]] = array($x[0], $log['count']);
+          }
+        }
       }
+    }
+    else {
+      $_class = array_shift($action_name);
       
-      foreach ($logs as $log) {
-        if($x[1] == $log['gperiod']) {
-          $count[$log['object_class']][$x[0]] = array($x[0], $log['count']);
+      foreach ($datax as $x) {
+        foreach ($logs as $log) {
+          $count[$log['type']][$x[0]] = array($x[0], 0);
+        }
+        
+        foreach ($logs as $log) {
+          if($x[1] == $log['gperiod']) {
+            $count[$log['type']][$x[0]] = array($x[0], $log['count']);
+          }
         }
       }
     }
@@ -199,8 +218,19 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
   }
   
   $title = '';
-  if($module_name) $title .= CAppUI::tr("module-$module_name-court");
-  if($action_name) $title .= " - $action_name";
+  if ($module_name) {
+    $title .= CAppUI::tr("module-$module_name-court");
+  }
+  
+  if ($action_name) {
+    if ($left == "type") {
+      $title .= " - $action_name";
+    }
+    else {
+      $title .= " - $_class";
+    }
+    
+  }
   
   $subtitle = mbTransformTime(null, $endx, CAppUI::conf("longdate"));
   
@@ -213,7 +243,7 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
     ),
     'yaxis' => array(
       'min' => 0,
-      'title' => utf8_encode(($left[0] == 'counts' ? 'Counts' : ''
+      'title' => utf8_encode(($left == 'type' ? 'Type' : ($left == 'classe') ? 'Classe' : ''
                               )
                             ),
       'autoscaleMargin' => 1
@@ -237,13 +267,13 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
   $series = array();
   
   if ($action_name) {
-    foreach ($count as $class => $oneClassCount) {
-      $series[] = array(
-       'label' => $class,
-       'data' => $oneClassCount,
-       'bars' => array('show' => true, 'stacked' => true),
-       'yaxis' => 2
-     );
+    foreach ($count as $key => $oneCount) {
+        $series[] = array(
+         'label' => $key,
+         'data' => $oneCount,
+         'bars' => array('show' => true, 'stacked' => true),
+         'yaxis' => 2
+       );
     }
   }
   else {

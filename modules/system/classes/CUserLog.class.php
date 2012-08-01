@@ -228,32 +228,6 @@ class CUserLog extends CMbMetaObject {
     return $this->delete();
   }
   
-  static function loadAgregation($start, $end, $groupmod = 0, $module = null) {
-    $listClasses = implode("', '", CModule::getClassesFor($module));
-    
-    $query = "SELECT 
-        user_log_id, 
-        object_class, 
-        type,
-        0 AS grouping
-      FROM user_log
-      USE INDEX (date)
-      WHERE date BETWEEN '$start' AND '$end' ";
-            
-    if ($module && !$groupmod) {
-      $query .= "AND object_class IN ('".$listClasses."') ";
-    }
-    
-    switch ($groupmod) {
-      case 2 :  $query .= "GROUP BY grouping "; break;
-      case 1 :  $query .= "GROUP BY object_class ORDER BY object_class "; break;
-      case 0 :  $query .= "GROUP BY object_class, type ORDER BY object_class, type "; break;
-    }
-    
-    $log = new self;
-    return $log->loadQueryList($query);
-  }
-  
   static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name) {
     $query = "SELECT
         COUNT(*) AS count,
@@ -265,19 +239,35 @@ class CUserLog extends CMbMetaObject {
       USE INDEX (date)
       WHERE `date` BETWEEN '$start' AND '$end'";
           
-    if ($module_name) {
-      $listClasses = implode("', '", CModule::getClassesFor($module_name));
-      $query .= "\nAND object_class IN ('".$listClasses."') ";
-    }
+    
     
     if ($action_name) {
-      $query .= "\nAND `type` = '$action_name'";
-      $query .= "\nGROUP BY `gperiod`, `object_class`, `type` ORDER BY `date`";
+      // If is_array, then we have to show one graph per class, with all types
+      if (is_array($action_name)) {
+        $_class = array_shift($action_name);
+        $query .= "\nAND `object_class` = '$_class'";
+        $query .= "\nAND `type` IN ('".implode("', '", $action_name)."') ";
+        $query .= "\nGROUP BY `gperiod`, `object_class`, `type` ORDER BY `date`";
+      }
+      else {
+        if ($module_name) {
+          $listClasses = implode("', '", CModule::getClassesFor($module_name));
+          $query .= "\nAND object_class IN ('".$listClasses."') ";
+        }
+        
+        $query .= "\nAND `type` = '$action_name'";
+        $query .= "\nGROUP BY `gperiod`, `object_class`, `type` ORDER BY `date`";
+      }
     }
     else {
+      if ($module_name) {
+        $listClasses = implode("', '", CModule::getClassesFor($module_name));
+        $query .= "\nAND object_class IN ('".$listClasses."') ";
+      }
+      
       $query .= "\nGROUP BY `gperiod` ORDER BY `date`";
     }
-  
+    
     $log = new self;
     return $log->_spec->ds->loadList($query);
   }
