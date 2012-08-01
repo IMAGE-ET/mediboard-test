@@ -15,13 +15,13 @@ $next = mbDate("+1 day", $date);
 
 $sejour = new CSejour;
 $where = array();
-$where["entree_prevue"] = "< '$next'";
-$where["sortie_prevue"] = "> '$date'";
+$where["entree"] = "< '$next'";
+$where["sortie"] = "> '$date'";
 $where["group_id"]      = "= '$group->_id'";
 $where["annule"]        = "= '0'";
 $order = array();
-$order[] = "sortie_prevue";
-$order[] = "entree_prevue";
+$order[] = "sortie";
+$order[] = "entree";
 
 $listSejours = $sejour->loadList($where, $order);
 
