@@ -47,7 +47,7 @@ class CAccessLog extends CMbObject {
   }
 
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["module"]      = "str notNull";
     $specs["action"]      = "str notNull";
     $specs["period"]      = "dateTime notNull";
@@ -114,72 +114,72 @@ class CAccessLog extends CMbObject {
   
   static function loadAgregation($start, $end, $groupmod = 0, $module = null) {
     $query = "SELECT 
-			  accesslog_id, 
-				module, 
-				action,
-	      SUM(hits)        AS hits,
-	      SUM(size)        AS size,
-	      SUM(duration)    AS duration, 
+        accesslog_id, 
+        module, 
+        action,
+        SUM(hits)        AS hits,
+        SUM(size)        AS size,
+        SUM(duration)    AS duration, 
         SUM(duration)    AS processus, 
         SUM(duration)    AS processor, 
         SUM(request)     AS request,
         SUM(peak_memory) AS peak_memory,
-	      SUM(errors)      AS errors,
-	      SUM(warnings)    AS warnings,
-	      SUM(notices)     AS notices,
-	      0 AS grouping
-	    FROM access_log
+        SUM(errors)      AS errors,
+        SUM(warnings)    AS warnings,
+        SUM(notices)     AS notices,
+        0 AS grouping
+      FROM access_log
       USE INDEX (period)
-	    WHERE period BETWEEN '$start' AND '$end' ";
+      WHERE period BETWEEN '$start' AND '$end' ";
             
     if ($module && !$groupmod) {
       $query .= "AND module = '$module' ";
     }
-		
-		switch ($groupmod) {
+    
+    switch ($groupmod) {
       case 2 :  $query .= "GROUP BY grouping "; break;
       case 1 :  $query .= "GROUP BY module ORDER BY module "; break;
       case 0 :  $query .= "GROUP BY module, action ORDER BY module, action "; break;
 
-		}
+    }
    
-	  $log = new self;
+    $log = new self;
     return $log->loadQueryList($query);
   }
-	
-	static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name) {
-	  $query = "SELECT 
-			  `accesslog_id`, 
-				`module`, 
-				`action`, 
-				`period`,
+  
+  static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name) {
+    $query = "SELECT 
+        `accesslog_id`, 
+        `module`, 
+        `action`, 
+        `period`,
         AVG(duration/hits)    AS _average_duration,
         AVG(processus/hits)   AS _average_processus,
         AVG(processor/hits)   AS _average_processor,
         AVG(request/hits)     AS _average_request,
         AVG(peak_memory/hits) AS _average_peak_memory,
-		    SUM(hits)             AS hits, 
-		    SUM(size)             AS size, 
-		    SUM(duration)         AS duration, 
+        SUM(hits)             AS hits, 
+        SUM(size)             AS size, 
+        SUM(duration)         AS duration, 
         SUM(processus)        AS processus, 
         SUM(processor)        AS processor, 
-		    SUM(request)          AS request, 
+        SUM(request)          AS request, 
         SUM(peak_memory)      AS peak_memory, 
-		    SUM(errors)           AS errors, 
-		    SUM(warnings)         AS warnings, 
-		    SUM(notices)          AS notices,
-		  DATE_FORMAT(`period`, '$period_format') AS `gperiod`
-		  FROM `access_log`
-		  USE INDEX (period)
-		  WHERE `period` BETWEEN '$start' AND '$end'";
-	        
-	  if ($module_name) $query .= "\nAND `module` = '$module_name'";
-	  if ($action_name) $query .= "\nAND `action` = '$action_name'";
-	
-	  $query .= "\nGROUP BY `gperiod` ORDER BY `period`";
-			
+        SUM(errors)           AS errors, 
+        SUM(warnings)         AS warnings, 
+        SUM(notices)          AS notices,
+      DATE_FORMAT(`period`, '$period_format') AS `gperiod`
+      FROM `access_log`
+      USE INDEX (period)
+      WHERE `period` BETWEEN '$start' AND '$end'";
+          
+    if ($module_name) $query .= "\nAND `module` = '$module_name'";
+    if ($action_name) $query .= "\nAND `action` = '$action_name'";
+  
+    $query .= "\nGROUP BY `gperiod` ORDER BY `period`";
+    
     $log = new self;
     return $log->loadQueryList($query);
-	}
+  }
 }
 ?>

@@ -1,9 +1,9 @@
-<?php /* $Id$ */
+<?php /* $Id:$ */
 
 /**
  * @package Mediboard
  * @subpackage system
- * @version $Revision$
+ * @version $Revision: 12962 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
@@ -17,11 +17,8 @@ $hour_min = CValue::getOrSession("hour_min", "6");
 $hour_max = CValue::getOrSession("hour_max", "23");
 $hours = range(0, 23);
 
-$left_mode      = CValue::getOrSession("left_mode", "request_time"); // request_time, cpu_time, errors, memory_peak
-$left_sampling  = CValue::getOrSession("left_sampling", "mean"); // total, mean
-
-$right_mode     = CValue::getOrSession("right_mode", "hits"); // hits, size
-$right_sampling = CValue::getOrSession("right_sampling", "total"); // total, mean
+$left_mode      = CValue::getOrSession("left_mode", "counts"); // counts
+$left_sampling  = CValue::getOrSession("left_sampling", "total"); // total
 
 $module = null;
 if (!is_numeric($groupmod)) {
@@ -29,7 +26,9 @@ if (!is_numeric($groupmod)) {
   $groupmod = 0;
 }
 
-CAppUI::requireModuleFile('dPstats', 'graph_accesslog');
+CAppUI::requireModuleFile('dPstats', 'graph_userlog');
+
+$listModules = CModule::getInstalled();
 
 $to    = mbDate("+1 DAY", $date);
 switch ($interval = CValue::getOrSession("interval", "day")) {
@@ -55,17 +54,29 @@ switch ($interval = CValue::getOrSession("interval", "day")) {
 }
 
 CSQLDataSource::$trace = false;
-$logs = CAccessLog::loadAgregation($from, $to, $groupmod, $module);
 
 $graphs = array();
 $left   = array($left_mode, $left_sampling);
-$right  = array($right_mode, $right_sampling);
-foreach($logs as $log) {
-  switch($groupmod) {
-    case 0: $graphs[] = graphAccessLog($log->module, $log->action, $from, $to,$interval, $left, $right); break;
-    case 1: $graphs[] = graphAccessLog($log->module, null        , $from, $to,$interval, $left, $right); break;
-    case 2: $graphs[] = graphAccessLog(null        , null        , $from, $to,$interval, $left, $right); break;
-  }
+
+switch ($groupmod) {
+  case 0:
+    foreach (array('store', 'create', 'delete', 'merge') as $type) {
+      $graphs[] = graphUserLogV2($module, $type, $from, $to, $interval, $left);
+    }
+    break;
+    
+  case 1:
+    foreach ($listModules as $unModule) {
+      $graph = graphUserLogV2($unModule->mod_name, null, $from, $to, $interval, $left);
+      
+      if ($graph) {
+        $graphs[] = $graph;
+      }
+    }
+    break;
+    
+  case 2:
+    $graphs[] = graphUserLogV2(null, null, $from, $to, $interval, $left);
 }
 
 CSQLDataSource::$trace = false;
@@ -84,13 +95,10 @@ $smarty->assign("hour_max"   , $hour_max);
 $smarty->assign("left_mode"    , $left_mode);
 $smarty->assign("left_sampling", $left_sampling);
 
-$smarty->assign("right_mode"    , $right_mode);
-$smarty->assign("right_sampling", $right_sampling);
-
 $smarty->assign("module"     , $module);
 $smarty->assign("interval"   , $interval);
-$smarty->assign("listModules", CModule::getInstalled());
+$smarty->assign("listModules", $listModules);
 
-$smarty->display("view_access_logs.tpl");
+$smarty->display("view_user_logs.tpl");
 
 ?>

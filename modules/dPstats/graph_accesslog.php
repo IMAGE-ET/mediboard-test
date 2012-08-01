@@ -9,26 +9,26 @@
  */
 
 function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 'day', $left, $right) {
-	switch($interval) {
-	  case "day":
-	    $step = "+1 HOUR";
-	    $period_format = "%Hh";
-	    $max = 24;
+  switch($interval) {
+    case "day":
+      $step = "+1 HOUR";
+      $period_format = "%Hh";
+      $max = 24;
       $hours = 1;
-	    break;
-	  case "month":
-	    $step = "+1 DAY";
-	    $period_format = "%d/%m";
-	    $max = 32;
+      break;
+    case "month":
+      $step = "+1 DAY";
+      $period_format = "%d/%m";
+      $max = 32;
       $hours = 24;
-	    break;
-	  case "hyear":
-	    $step = "+1 WEEK";
-	    $period_format = "%U";
-	    $max = 27;
+      break;
+    case "hyear":
+      $step = "+1 WEEK";
+      $period_format = "%U";
+      $max = 27;
       $hours = 24 * 7;
-	    break;
-	  case "twoyears":
+      break;
+    case "twoyears":
       $step = "+1 MONTH";
       $period_format = "%m/%Y";
       $max = 25;
@@ -40,21 +40,21 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
       $max = 21;
       $hours = 24 * 30 * 12;
       break;
-	}
-	
-	$datax = array();
-	$i = 0;
-	for($d = $startx; $d <= $endx; $d = mbDateTime($step, $d)) {
-	  $datax[] = array($i, mbTransformTime(null, $d, $period_format));
-	  $i++;
-	}
-	
-	$logs = CAccessLog::loadPeriodAggregation($startx, $endx, $period_format, $module_name, $action_name);
+  }
   
-	$duration  = array();
+  $datax = array();
+  $i = 0;
+  for($d = $startx; $d <= $endx; $d = mbDateTime($step, $d)) {
+    $datax[] = array($i, mbTransformTime(null, $d, $period_format));
+    $i++;
+  }
+  
+  $logs = CAccessLog::loadPeriodAggregation($startx, $endx, $period_format, $module_name, $action_name);
+  
+  $duration  = array();
   $processus = array();
   $processor = array();
-	$request   = array();
+  $request   = array();
   $errors    = array();
   $warnings  = array();
   $notices   = array();
@@ -63,8 +63,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
   $size = array();
   
   $errors_total = 0;
-	foreach($datax as $x) {
-	  // Needed
+  foreach($datax as $x) {
+    // Needed
     $duration[$x[0]]    = array($x[0], 0);
     $processus[$x[0]]   = array($x[0], 0);
     $processor[$x[0]]   = array($x[0], 0);
@@ -77,13 +77,13 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     $hits[$x[0]] = array($x[0], 0);
     $size[$x[0]] = array($x[0], 0);
     
-	  foreach($logs as $log) {
-	    if($x[1] == mbTransformTime(null, $log->period, $period_format)) {
-	      $duration[$x[0]]    = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'duration'});
+    foreach($logs as $log) {
+      if($x[1] == mbTransformTime(null, $log->period, $period_format)) {
+        $duration[$x[0]]    = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'duration'});
         $processus[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'processus'});
         $processor[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'processor'});
         $request[$x[0]]     = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'request'});
-	      $peak_memory[$x[0]] = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'peak_memory'});
+        $peak_memory[$x[0]] = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'peak_memory'});
         $errors[$x[0]]      = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'errors'});
         $warnings[$x[0]]    = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'warnings'});
         $notices[$x[0]]     = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'notices'});
@@ -91,41 +91,41 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
         
         $hits[$x[0]] = array($x[0], $log->{($right[1] == 'mean' ? '_average_' : '').'hits'} / ($right[1] == 'mean' ? $hours : 1));
         $size[$x[0]] = array($x[0], $log->{($right[1] == 'mean' ? '_average_' : '').'size'} / ($right[1] == 'mean' ? $hours : 1));
-	    }
-	  }
-	}
-	
-	if ($interval == 'month') {
-	  foreach($datax as $i => &$x) {
-	    if ($i % 2) $x[1] = '';
-	  }
-	}
-	
-	$title = '';
+      }
+    }
+  }
+  
+  if ($interval == 'month') {
+    foreach($datax as $i => &$x) {
+      if ($i % 2) $x[1] = '';
+    }
+  }
+  
+  $title = '';
   if($module_name) $title .= CAppUI::tr("module-$module_name-court");
   if($action_name) $title .= " - $action_name";
   
   $subtitle = mbTransformTime(null, $endx, CAppUI::conf("longdate"));
-	
-	$options = array(
+  
+  $options = array(
     'title' => utf8_encode($title),
     'subtitle' => utf8_encode($subtitle),
-	  'xaxis' => array(
-	    'labelsAngle' => 45,
-	    'ticks' => $datax,
-	  ),
-	  'yaxis' => array(
-	    'min' => 0,
+    'xaxis' => array(
+      'labelsAngle' => 45,
+      'ticks' => $datax,
+    ),
+    'yaxis' => array(
+      'min' => 0,
       'title' => utf8_encode(($left[0] == 'request_time' ? 'Temps de réponse' :
                                 ($left[0] == 'cpu_time' ? 'Temps CPU' :
                                   ($left[0] == 'errors' ? 'Erreurs' : 'Mémoire'))) .
                               ($left[1] == 'mean' ? ' (par hit)' : '')),
-	    'autoscaleMargin' => 1
-	  ),
-	  'y2axis' => array(
+      'autoscaleMargin' => 1
+    ),
+    'y2axis' => array(
       'min' => 0,
-	    'title' => utf8_encode(($right[0] == 'hits' ? 'Hits' : 'Bande passante') .
-	                           ($right[1] == 'mean' ? (($right[0] == 'hits' ? ' (par minute)' : ' (octets/s)')) : '')),
+      'title' => utf8_encode(($right[0] == 'hits' ? 'Hits' : 'Bande passante') .
+                             ($right[1] == 'mean' ? (($right[0] == 'hits' ? ' (par minute)' : ' (octets/s)')) : '')),
       'autoscaleMargin' => 1
     ),
     'grid' => array(
@@ -135,15 +135,15 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
       'track' => true,
       'relative' => true
     ),*/
-	  'HtmlText' => false,
+    'HtmlText' => false,
     'spreadsheet' => array(
-		  'show' => true, 
-			'csvFileSeparator' => ';',
-			'decimalSeparator' => ','
-		)
-	);
-	
-	$series = array();
+      'show' => true, 
+      'csvFileSeparator' => ';',
+      'decimalSeparator' => ','
+    )
+  );
+  
+  $series = array();
   
   // Right axis (before in order the lines to be on top)
   if ($right[0] == 'hits') {
@@ -166,7 +166,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
   
   // Left axis
   if ($left[0] == 'request_time') {
-  	$series[] = array(
+    $series[] = array(
      'label' => 'Page (s)',
      'data' => $duration,
      'lines' => array('show' => true),
@@ -237,7 +237,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
      'lines' => array('show' => true),
     );
   }
-	
-	return array('series' => $series, 'options' => $options, 'module' => $module_name);
+  
+  return array('series' => $series, 'options' => $options, 'module' => $module_name);
 }
 ?>
