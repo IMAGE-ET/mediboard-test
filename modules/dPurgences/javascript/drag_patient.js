@@ -19,18 +19,20 @@ Main.add(function(){
 
 function TraiterDrop(element, zoneDrop)
 {
-  element_select = element;
-  zone_select = zoneDrop;
-  var nb_chambres_libres = parseInt(zoneDrop.getAttribute("data-nb-lits")) - parseInt(zoneDrop.select('div.patient').length);
-  
-  if(nb_chambres_libres >= 2){
-    element.style.width = "92%";
-    ChoiceLit.edit(zoneDrop.get("chambre-id"), element.get("patient-id"), getForm("changeDate").date.value);    
-  }
-  else{
-    element.style.width = "92%";
-    ChoiceLit.submitRPU(zoneDrop.get("lit-id"));
-  }
+  if(zoneDrop.get("chambre-id")!=element.parentNode.get("chambre-id")){
+    element_select = element;
+    zone_select = zoneDrop;
+    var nb_chambres_libres = parseInt(zoneDrop.getAttribute("data-nb-lits")) - parseInt(zoneDrop.select('div.patient').length);
+    
+    if(nb_chambres_libres >= 2){
+      element.style.width = "92%";
+      ChoiceLit.edit(zoneDrop.get("chambre-id"), element.get("patient-id"), getForm("changeDate").date.value);    
+    }
+    else{
+      element.style.width = "92%";
+      ChoiceLit.submitRPU(zoneDrop.get("lit-id"));
+    }
+  }  
 }
 
 ChoiceLit  = {
