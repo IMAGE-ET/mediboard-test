@@ -17,14 +17,14 @@ z-index ordering (foreground to background) :
  1400 #waitingMsgText
  1300 #waitingMsgMask
  1200 #systemMsg
+ 
+ 1100 div.tooltip
   
  1002 div.modal .ajax-loading
- 1001 div.modal div.tooltip
  1000 .datepickerControl
   801 div.modal
   
   800 .ajax-loading
-  600 div.tooltip
   
   400 div.autocomplete
   100 .planning .event:hover
@@ -629,6 +629,18 @@ table#weeklyPlanning th.today {
   white-space: nowrap;
   line-height: 90%;
   text-align: right;
+}
+
+.planning .range {
+  position: absolute; 
+  left: -12%; 
+  top: 0; 
+  width: 15%;
+  background: rgba(255,255,255,0.8);
+}
+
+.planning.range .cell-positioner {
+  width: 90%;
 }
 
 .planning .elt_selected {
