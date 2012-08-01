@@ -80,6 +80,18 @@ class CMLLPServer {
   
   private $clients = array();
   
+  /**
+   * MLLP server constructor
+   * 
+   * @param string  $call_url    The Mediboard root URL to call
+   * @param string  $username    The Mediboard user name
+   * @param string  $password    The Mediboard user password
+   * @param integer $port        The port number to listen on
+   * @param string  $certificate The path to the SSL/TLS certificate
+   * @param string  $passphrase  The SSL/TLS certificate passphrase
+   * 
+   * @return void
+   */
   function __construct($call_url, $username, $password, $port, $certificate = null, $passphrase = null){
     $this->call_url    = $call_url;
     $this->username    = $username;
@@ -108,11 +120,12 @@ class CMLLPServer {
       case "__STOP__":
         $buffer = "";
         return false;
-        
+      
       case "__RESTART__":
         if (function_exists("quit")) {
           quit("restart");
         }
+      
       case "__STATS__":
         return json_encode($this->getStats());
     }
@@ -143,7 +156,7 @@ class CMLLPServer {
       $start = microtime(true);
       
       $url = $this->call_url."/index.php?suppressHeaders=1&login={$this->username}:{$this->password}";
-      $ack = $this->http_request_post($url, $post);
+      $ack = $this->requestHttpPost($url, $post);
       
       $this->request_count++;
       $time = microtime(true) - $start;
@@ -237,9 +250,9 @@ class CMLLPServer {
    * @param string $url  The URL to call
    * @param array  $data The data to pass to $url via POST
    * 
-   * @return string HTTP Responses
+   * @return string HTTP Response
    */
-  function http_request_post($url, $data) {
+  function requestHttpPost($url, $data) {
     $data_url = http_build_query($data, null, "&");
     $data_len = strlen($data_url);
     
@@ -317,7 +330,12 @@ EOT;
     }
   }
   
-  static function get_ps_status(){
+  /**
+   * Get a list of the current MLLP servers processes
+   * 
+   * @return array A list of structures containing the processes information
+   */
+  static function getPsStatus(){
     $tmp_dir = self::getTmpDir();
     
     $pid_files = glob("$tmp_dir/pid.*");
@@ -365,6 +383,11 @@ EOT;
     return $processes;
   }
   
+  /**
+   * Returns the temp directory
+   * 
+   * @return string The temp directory path
+   */
   static function getTmpDir() {
     $root_dir = dirname(__FILE__)."/../../..";
     
@@ -377,17 +400,19 @@ EOT;
   }
 
   /**
-   * @return string An ORU message formatted in ER7
+   * A sample ORU message formatted in ER7
+   * 
+   * @return string A sample ORU message formatted in ER7
    */
-  final static function ORU(){
+  final static function sampleORU(){
     $date = strftime("%Y%m%d%H%M%S");
-    $er7 = <<<EOT
+    $er7 = <<<ER7
 MSH|^~\&|||||||ORU^R01|HP104220879017992|P|2.3||||||8859/1
 PID|1||000038^^^&&^PI~323328^^^Mediboard&1.2.250.1.2.3.4&OX^RI||TEST^Obx^^^m^^L^A||19800101|M|||^^^^^^H|||||||12000041^^^&&^AN||||||||||||N||VALI|20120116161701||||||
 PV1|1|I|UF1^^^&&^O|R|12000041^^^&&^RI||929997607^FOO^Bar^^^^^^&1.2.250.1.71.4.2.1&ISO^L^^^ADELI^^^^^^^^^^|||||||90||P|929997607^FOO^Bar^^^^^^&1.2.250.1.71.4.2.1&ISO^L^^^ADELI^^^^^^^^^^||321120^^^Mediboard&1.2.250.1.2.3.4&OX^RI||AMBU|N||||||||||||||4||||||||||||||||
 OBR||||Mediboard test|||$date
 
-EOT;
+ER7;
     
     $obx = array();
     $obx[] = "OBX||NM|0002-4b60^Tcore^MDIL|0|".(rand(350, 400)/10)."|0004-17a0^°C^MDIL|||||F";
@@ -405,7 +430,7 @@ EOT;
   }
 
   /**
-   * 
+   * Return the list of sample messages defined in this class
    * 
    * @return array The list of available test messages
    */
@@ -415,7 +440,7 @@ EOT;
     
     $types = array();
     foreach ($list as $_method) {
-      $types[] = $_method->name;
+      $types[] = substr($_method->name, 6);
     }
     
     return $types;

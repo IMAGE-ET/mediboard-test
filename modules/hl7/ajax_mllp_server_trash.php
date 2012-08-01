@@ -28,7 +28,7 @@ foreach($pid_files as $_file) {
 
 CAppUI::displayAjaxMsg("Le fichier 'pid.$process_id' n'a pas pu être supprimé", UI_MSG_ERROR);
 
-$processes = CMLLPServer::get_ps_status();
+$processes = CMLLPServer::getPsStatus();
 if (!array_key_exists($process_id, $processes)) {
   return;
 }

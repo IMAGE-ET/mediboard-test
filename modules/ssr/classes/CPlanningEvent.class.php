@@ -16,9 +16,9 @@ class CPlanningEvent  {
   var $icon      = null;
   var $icon_desc = null;
   
-  var $type   = null;
-  var $plage  = array();
-  var $menu   = array();
+  var $type      = null;
+  var $plage     = array();
+  var $menu      = array();
   
   var $start     = null;
   var $end       = null;
@@ -28,8 +28,8 @@ class CPlanningEvent  {
   var $resizable = false;
   var $disabled  = false;
   
-  var $hour    = null;
-  var $minutes = null;
+  var $hour      = null;
+  var $minutes   = null;
   
   var $width     = null;
   var $offset    = null;
@@ -37,9 +37,10 @@ class CPlanningEvent  {
   var $important = null;
   
   function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true, $css_class = null, $draggable_guid = null) {
-    if(!$color){
-       $color = "#999";
+    if (!$color) {
+      $color = "#999";
     }
+    
     $this->guid = $guid;
     $this->draggable_guid = $draggable_guid;
     
@@ -74,8 +75,11 @@ class CPlanningEvent  {
            ($event->start <  $this->start && $event->end >  $this->start) || 
            ($event->start >= $this->start && $event->end <= $this->end  );
   }
+  
   function addMenuItem($type, $title){
-     $taille_menu = sizeof($this->menu);
-     $this->menu[$taille_menu] = array("class" => $type, "title" => $title);
+    $this->menu[] = array(
+      "class" => $type, 
+      "title" => $title,
+    );
   }
 }

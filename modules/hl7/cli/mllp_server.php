@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage hl7
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 // For sig_handler
@@ -20,9 +21,16 @@ set_time_limit(0);
 global $exit_status, $pid_file, $handler;
 $exit_status = "error";
 
-// restart the server
+/**
+ * Restarts the current server
+ * Only works on Linux (not MacOS and Windows)
+ * 
+ * @return void
+ */
 function restart(){
-  if (!function_exists("pcntl_exec")) return;
+  if (!function_exists("pcntl_exec")) {
+    return;
+  }
   
   global $handler;
 
@@ -31,6 +39,11 @@ function restart(){
   pcntl_exec($_SERVER["_"], $_SERVER["argv"]);
 }
 
+/**
+ * Script shutdown callback
+ * 
+ * @return void
+ */
 function on_shutdown() {
   global $exit_status, $pid_file, $handler;
   
@@ -54,6 +67,13 @@ function on_shutdown() {
   }
 }
 
+/**
+ * Exit the script, with a status
+ * 
+ * @param string $new_exit_status Exit status : "ok" or "error"
+ * 
+ * @return void
+ */
 function quit($new_exit_status = "ok"){
   global $exit_status;
   $exit_status = $new_exit_status;
@@ -61,7 +81,13 @@ function quit($new_exit_status = "ok"){
 }
 
 if (function_exists("pcntl_signal")) {
-  // SIG number manager
+  /**
+   * SIG number manager
+   * 
+   * @param integer $signo The signal number to handle
+   * 
+   * @return void
+   */
   function sig_handler($signo) {
     switch ($signo) {
       case SIGTERM:
@@ -108,17 +134,17 @@ $options = array(
   "passphrase" => null,
 );
 
-for($i = 3; $i < $argc; $i++) {
+for ($i = 3; $i < $argc; $i++) {
   switch($argv[$i]){
     case "--debug":
       $options["debug"] = true;
-    break;
+      break;
     
     case "--port":
     case "--cert":
     case "--passphrase":
       $options[substr($argv[$i], 2)] = $argv[++$i];
-    break;
+      break;
   }
 }
 // ---- End read arguments
@@ -141,7 +167,15 @@ try {
     outln("SSL certificate: '{$options['cert']}'");
   }
   
-  $handler = new CMLLPServer($options["url"], $options["username"], $options["password"], $options["port"], $options["cert"], $options["passphrase"]);
+  $handler = new CMLLPServer(
+    $options["url"], 
+    $options["username"], 
+    $options["password"], 
+    $options["port"], 
+    $options["cert"], 
+    $options["passphrase"]
+  );
+  
   $handler->run();
   
   quit();

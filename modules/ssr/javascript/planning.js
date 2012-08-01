@@ -138,6 +138,25 @@ PlanningEvent.Drag = {
   }
 };
 
+PlanningRange = Class.create({
+  initialize: function(event, planning) {
+    Object.extend(this, event);
+    this.planning = planning;
+  }, 
+  updateDimensions: function(){
+    var container = $(this.internal_id);
+    if (!container) return;
+
+    var height = this.planning.getCellHeight() / 60;
+   
+    container.style.top    = (this.minutes * height)+"px";
+    container.style.height = ((this.length * height) || 1)+"px";
+  },
+  getElement: function(){
+    return $(this.internal_id);
+  }
+});
+
 WeekPlanning = Class.create({
   scrollTop: null,
   load_data: [],
@@ -145,15 +164,25 @@ WeekPlanning = Class.create({
   dragndrop: false,
   resizable: false,
   no_dates: false,
-  initialize: function(guid, hour_min, hour_max, events, hour_divider, scroll_top, adapt_range, selectable, dragndrop, resizable, no_dates) {
+  initialize: function(guid, hour_min, hour_max, events, ranges, hour_divider, scroll_top, adapt_range, selectable, dragndrop, resizable, no_dates) {
+    var pref_dragndrop = Preferences.ssr_planning_dragndrop == 1;
+    var _dragndrop = (pref_dragndrop || dragndrop == 1);
+    var _resizable = (pref_dragndrop || resizable == 1);
+    
     this.eventsById = {};
-    for (var i = 0; i < events.length; i++) {
-      this.eventsById[events[i].internal_id] = events[i] = new PlanningEvent(events[i], this);
-      if ( (Preferences.ssr_planning_dragndrop == 1 || dragndrop == 1) && this.eventsById[events[i].internal_id].draggable) {
-        this.eventsById[events[i].internal_id].setDraggable(
-          (Preferences.ssr_planning_dragndrop == 1 || resizable == 1) && this.eventsById[events[i].internal_id].resizable
-        );
+    for (var i = 0, l = events.length; i < l; i++) {
+      events[i] = new PlanningEvent(events[i], this);
+      var _event = this.eventsById[events[i].internal_id] = events[i];
+      
+      if (_dragndrop && _event.draggable) {
+        _event.setDraggable(_resizable && _event.resizable);
       }
+    }
+    
+    this.rangesById = {};
+    for (var i = 0, l = ranges.length; i < l; i++) {
+      ranges[i] = new PlanningRange(ranges[i], this);
+      this.rangesById[ranges[i].internal_id] = ranges[i];
     }
     
     this.no_dates = no_dates;
@@ -161,6 +190,7 @@ WeekPlanning = Class.create({
     this.hour_min = hour_min;
     this.hour_max = hour_max;
     this.events = events;
+    this.ranges = ranges;
     this.hour_divider = hour_divider;
     this.adapt_range = adapt_range;
     this.selectable = selectable;
@@ -178,8 +208,8 @@ WeekPlanning = Class.create({
     this.observeEvent('dblclick', PlanningEvent.onDblClic);
   },
   scroll: function(scroll_top) {
-  if(this.container.down(".hour-"+this.hour_min)){
-    var top = this.container.down(".hour-"+this.hour_min).offsetTop;
+    if (this.container.down(".hour-"+this.hour_min)) {
+      var top = this.container.down(".hour-"+this.hour_min).offsetTop;
       this.container.down('.week-container').scrollTop = (scroll_top !== null && !Object.isUndefined(scroll_top) ? scroll_top : top);
     }
   },
@@ -192,6 +222,7 @@ WeekPlanning = Class.create({
     }
     
     this.updateEventsDimensions();
+    this.updateRangesDimensions();
   },
   adaptRangeHeight: function(){
     var weekContainer = this.container.down('.week-container table');
@@ -206,6 +237,9 @@ WeekPlanning = Class.create({
   updateEventsDimensions: function(){
     this.events.invoke("updateDimensions");
   },
+  updateRangesDimensions: function(){
+    this.ranges.invoke("updateDimensions");
+  },
   selectAllEvents: function(){
     this.container.select('.event:not(.now)').invoke('toggleClassName','selected');
     this.updateNbSelectEvents();
@@ -219,6 +253,9 @@ WeekPlanning = Class.create({
   },
   getEventById: function(id) {
     return this.eventsById[id];
+  },
+  getRangeById: function(id) {
+    return this.rangesById[id];
   },
   countVisibleLines: function(){
     return this.container.select(".week-container tr").filter(Element.visible).length;

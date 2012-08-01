@@ -19,7 +19,8 @@ Main.add(function() {
     '{{$planning->guid}}', 
     '{{$planning->hour_min}}', 
     '{{$planning->hour_max}}', 
-    {{$planning->events|@json}}, 
+    {{$planning->events|@json}},
+    {{$planning->ranges|@json}},
     {{$planning->hour_divider}},
     window["planning-{{$planning->guid}}"] && window["planning-{{$planning->guid}}"].scrollTop,
     {{$planning->adapt_range|@json}},
@@ -33,15 +34,14 @@ Main.add(function() {
   planning.container.show();
   planning.setPlanningHeight(planning.container.up().getHeight());
   planning.setLoadData({{$planning->load_data|@json}}, {{$planning->maximum_load}});
-    
-
+  
   planning.scroll({{$scroll_top}});
   window["planning-{{$planning->guid}}"] = planning;
 });
 
 </script>
 
-<div class="planning {{if $planning->large}} large {{/if}} {{if $planning->has_load}} load {{/if}}" id="{{$planning->guid}}" style="display: none;">
+<div class="planning {{if $planning->large}} large {{/if}} {{if $planning->has_load}} load {{/if}} {{if $planning->has_range}} range {{/if}}" id="{{$planning->guid}}" style="display: none;">
   {{assign var=nb_days value=$planning->nb_days}}
   <table class="tbl" style="table-layout: fixed;">
     <colgroup>
@@ -125,6 +125,12 @@ Main.add(function() {
                 <div style="width: 100%; height: 3px; background: #f00" class="opacity-50"></div>
               {{/if}}
               
+              {{if isset($planning->ranges_sorted.$_day.$_hour|smarty:nodefaults)}}
+                {{assign var=has_range value=true}} 
+              {{else}}
+                {{assign var=has_range value=false}} 
+              {{/if}}
+              
               {{if isset($planning->events_sorted.$_day.$_hour|smarty:nodefaults)}}
                 {{assign var=has_events value=true}} 
               {{else}}
@@ -137,9 +143,17 @@ Main.add(function() {
                 {{assign var=has_load value=false}} 
               {{/if}}
               
-              {{if $has_events || $has_load}}
-                <div>{{* <<< This div is necessary (relative positionning) *}}
-                
+              {{if $has_range || $has_events || $has_load}}
+                <div class="cell-positioner">{{* <<< This div is necessary (relative positionning) *}}
+                  
+                  {{if $has_range}}
+                    <div class="range-container">
+                      {{foreach from=$planning->ranges_sorted.$_day.$_hour item=_range key=_key}}
+                        <div id="{{$_range->internal_id}}" class="range"></div>
+                      {{/foreach}}
+                    </div>
+                  {{/if}}
+                  
                   {{if $has_events}}
                     <div class="event-container">
                     {{foreach from=$_events item=_event}}
@@ -161,7 +175,7 @@ Main.add(function() {
                              {{if $_event->type == "rdvfull"}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}')"{{/if}}
                              {{if ($_event->type == "rdvfree" || $_event->type == "rdvfull") && !$_event->disabled}}onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}');"{{/if}}>
                             {{if $_event->type == "consultation"}}
-                              <div style="height:100%;width:5px;background-color:#{{if isset($_event->plage.color|smarty:nodefaults)}}{{$_event->plage.color}};{{else}}DDDDDD{{/if}}"> </div>
+                              <div style="height:100%; width:5px; background-color:#{{if isset($_event->plage.color|smarty:nodefaults)}}{{$_event->plage.color}}{{else}}DDDDDD{{/if}};"> </div>
                             {{/if}}
                             
                            {{if $_event->menu|@count}}

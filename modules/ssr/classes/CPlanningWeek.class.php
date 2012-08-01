@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CPlanningWeek  {
+class CPlanningWeek {
   var $guid = null;
   var $title = null;
   
@@ -29,12 +29,15 @@ class CPlanningWeek  {
   var $hour_divider = 6;
   var $maximum_load = 6;
   var $has_load  = false;
+  var $has_range = false;
   var $show_half = false;
   var $dragndrop = 0;
   var $resizable = 0;
   var $no_dates  = 0;
   
   var $events = array();
+  var $ranges = array();
+  
   var $pauses = array("08", "12", "16");
   var $unavailabilities = array();
   var $day_labels = array();
@@ -66,7 +69,7 @@ class CPlanningWeek  {
       $this->date_min = $this->date_min_active = $this->_date_min_planning = $date_min;
       $this->date_max = $this->date_max_active = $this->_date_max_planning = $date_max;
       
-      for ($i=0 ; $i < $this->nb_days ; $i++) {
+      for ($i = 0 ; $i < $this->nb_days ; $i++) {
         $this->days[$i] = array();
         $this->load_data[$i] = array();
       }
@@ -103,11 +106,13 @@ class CPlanningWeek  {
   }
   
   function addEvent(CPlanningEvent $event) {
-    if ($event->day < $this->date_min || $event->day > $this->date_max) {
+    if ($event->day < $this->date_min || 
+        $event->day > $this->date_max) {
       return;
     }
       
-    if ($event->day < $this->date_min_active || $event->day > $this->date_max_active) {
+    if ($event->day < $this->date_min_active || 
+        $event->day > $this->date_max_active) {
       $event->disabled = true;
     }
     
@@ -133,6 +138,21 @@ class CPlanningWeek  {
         $_event->offset = $_key * $_event->width;
       }
     }
+  }
+  
+  function addRange(CPlanningRange $range) {
+    if ($range->day < $this->date_min || 
+        $range->day > $this->date_max) {
+      return;
+    }
+    
+    $this->has_range = true;
+    
+    $this->ranges[] = $range;
+    $this->ranges_sorted[$range->day][$range->hour][] = $range;
+    
+    $range->offset = 0.0;
+    $range->width = 1.0;
   }
   
   function showNow($color = "red") {
@@ -175,7 +195,6 @@ class CPlanningWeek  {
    * @param object $color [optional] The label's color
    */
   function addDayLabel($day, $text, $detail = null, $color = null) {
-    
     $this->day_labels[$this->no_dates ? $day : mbDate($day)][] = array(
       "text"   => $text, 
       "detail" => $detail, 
@@ -230,6 +249,7 @@ class CPlanningWeek  {
         if (!isset($this->load_data[$day][$hour][$min])) {
           $this->load_data[$day][$hour][$min] = 0;
         }
+        
         $this->load_data[$day][$hour][$min]++;
       }
     }

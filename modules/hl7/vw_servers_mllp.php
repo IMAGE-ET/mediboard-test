@@ -10,7 +10,7 @@
 
 CCanDo::checkAdmin();
 
-$processes = CMLLPServer::get_ps_status();
+$processes = CMLLPServer::getPsStatus();
 
 // Création du template
 $smarty = new CSmartyDP();

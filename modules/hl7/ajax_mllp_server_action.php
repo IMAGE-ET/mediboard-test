@@ -52,7 +52,7 @@ switch ($action) {
     CAppUI::displayAjaxMsg("Unknown command '$action'", UI_MSG_ERROR);
 }
 
-$processes = CMLLPServer::get_ps_status();
+$processes = CMLLPServer::getPsStatus();
 $process_id = CValue::get("process_id");
 
 if (!array_key_exists($process_id, $processes)) {

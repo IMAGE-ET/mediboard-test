@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ * 
+ * @package    Mediboard
  * @subpackage hl7
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 require dirname(__FILE__)."/mllp_utils.php";
@@ -56,7 +57,7 @@ switch($command) {
     }
     $n = 30;
     $secs = 60;
-    for($i = 0; $i < $n; $i++) {
+    for ($i = 0; $i < $n; $i++) {
       echo CMLLPServer::send($host, $port, "\x0B".CMLLPServer::ORU()."\x1C\x0D");
       usleep($secs * 1000000);
     }
@@ -67,13 +68,13 @@ switch($command) {
       outln("Specified host is not local, localhost will be used instead");
     }
     
-    $processes = CMLLPServer::get_ps_status();
+    $processes = CMLLPServer::getPsStatus();
     
     echo "--------------------------------------\n";
     echo "   PID |  PORT | STATUS | PS NAME     \n";
     echo "--------------------------------------\n";
     
-    foreach($processes as $_pid => $_status) {
+    foreach ($processes as $_pid => $_status) {
       $_ok = isset($_status["ps_name"]) && stripos($_status["ps_name"], "php") !== false;
       $_msg = ($_ok ? $msg_ok : $msg_error);
       

@@ -556,7 +556,7 @@ table#weeklyPlanning th.today {
   font-size: 10px;
   overflow: hidden;
   cursor: help;
-  
+  z-index: 10;
   margin: -1px;
   border: 1px solid #ccc;
 }
@@ -633,13 +633,17 @@ table#weeklyPlanning th.today {
 
 .planning .range {
   position: absolute; 
-  left: -12%; 
-  top: 0; 
-  width: 15%;
+  width: 20%;
+  left: 0; 
+  top: 0;
+  z-index: 0;
   background: rgba(255,255,255,0.8);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#aaffffff,endColorstr=#aaffffff)";
+  outline: 1px solid #ddd;
 }
 
-.planning.range .cell-positioner {
+.planning.range .event-container {
+  margin-left: 10%;
   width: 90%;
 }
 
@@ -661,13 +665,13 @@ table#weeklyPlanning th.today {
   filter: none; /* IE lt 8 */
   -ms-filter: none; /* IE 8 */
 }
+
 .planning .consultation .body,  .planning .operation .body{
   position: absolute;
   top: 50%;
   right: 0;
   left: 0;
   margin-top: -2em;
-  
 }
 
 .planning .event .body {
