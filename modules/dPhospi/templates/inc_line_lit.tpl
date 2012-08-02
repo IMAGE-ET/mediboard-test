@@ -218,7 +218,7 @@
                         {{/if}}
                         <button type="button" class="edit notext opacity-40"
                           onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"
-                          onclick="editAffectation('{{$_affectation->_id}}', '{{$_affectation->lit_id}}')"></button>
+                          onclick="editAffectation('{{$_affectation->_id}}')"></button>
                         <input type="radio" name="affectation_move" onclick="chooseAffectation('{{$_affectation->_id}}');" />
                       </span>
                     </td>
