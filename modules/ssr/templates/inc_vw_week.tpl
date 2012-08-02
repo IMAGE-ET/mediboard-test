@@ -122,7 +122,7 @@ Main.add(function() {
             <td class="segment-{{$_day}}-{{$_hour}} {{if $disabled}}disabled{{/if}} {{if $unavail}}unavailable{{/if}} day-{{$smarty.foreach.days.index}}"
               {{if $planning->show_half}}style="vertical-align: middle;"{{/if}}>
               {{if $planning->show_half}}
-                <div style="width: 100%; height: 3px; background: #f00" class="opacity-50"></div>
+                <div style="width: 100%; height: 1px; background: #ccc" class="opacity-50"></div>
               {{/if}}
               
               {{if isset($planning->ranges_sorted.$_day.$_hour|smarty:nodefaults)}}
@@ -178,7 +178,7 @@ Main.add(function() {
                               <div style="height:100%; width:5px; background-color:#{{if isset($_event->plage.color|smarty:nodefaults)}}{{$_event->plage.color}}{{else}}DDDDDD{{/if}};"> </div>
                             {{/if}}
                             
-                           {{if $_event->menu|@count}}
+                           {{if $_event->menu|@count <= 3}}
                             <div class="toolbar" {{if $_event->hour == 0}}style="top:100%;"{{/if}}>
                               {{foreach from=$_event->menu item=element}}
                                 <a class="button {{$element.class}} notext" onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$element.class}}','{{$_event->plage.id}}', this)" title="{{$element.title}}"></a>
