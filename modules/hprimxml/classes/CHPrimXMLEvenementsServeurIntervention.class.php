@@ -89,28 +89,32 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
    /**
    * Enregistrement des interventions
    * 
-   * @param CHPrimXMLAcquittementsServeurActivitePmsi $ack        DOM Acquittement 
+   * @param CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq    DOM Acquittement 
    * @param CMbObject                                 $mbObject   Object
    * @param array                                     $data       Data that contain the nodes 
    * 
    * @return string Acquittement 
    **/
-  function handle(CHPrimXMLAcquittementsServeurActivitePmsi $ack, CMbObject $mbObject, $data) {
+  function handle(CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq, CMbObject $mbObject, $data) {
+    $operation      = $mbObject;
     $exchange_hprim = $this->_ref_echange_hprim;
     $sender         = $exchange_hprim->_ref_sender;
     $sender->loadConfigValues();
 
     $this->_ref_sender = $sender;
     
+    $warning = null;
+    $comment = null;
+    
     // Acquittement d'erreur : identifiants source du patient / séjour non fournis
     if (!$data['idSourcePatient'] || !$data['idSourceVenue']) {
-      return $exchange_hprim->setAckErr($ack, "E206", null, $mbObject);
+      return $exchange_hprim->setAckError($dom_acq, "E206", null, $mbObject);
     }
     
     // IPP non connu => message d'erreur
     $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatient']);
     if (!$IPP->_id) {
-      return $exchange_hprim->setAckErr($ack, "E013", null, $mbObject);   
+      return $exchange_hprim->setAckError($dom_acq, "E013", null, $mbObject);   
     }
     
     // Chargement du patient
@@ -120,7 +124,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     // Num dossier non connu => message d'erreur
     $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $data['idSourceVenue']);
     if (!$NDA->_id) {
-      return $exchange_hprim->setAckErr($ack, "E014", null, $mbObject);
+      return $exchange_hprim->setAckError($dom_acq, "E014", null, $mbObject);
     }
     
     // Chargement du séjour
@@ -129,64 +133,55 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     
     // Si patient H'XML est différent du séjour
     if ($sejour->patient_id != $patient->_id) {
-      return $exchange_hprim->setAckErr($ack, "E015", null, $mbObject);
+      return $exchange_hprim->setAckError($dom_acq, "E015", null, $mbObject);
     }
 
     // Chargement du patient du séjour
     $sejour->loadRefPatient();
-    
-    // Traitement de la date/heure début, et durée de l'opération
-    
-    $date_op  = mbDate($date_debut);
-    $time_op  = mbTime($date_debut);
-    $temps_op = mbSubTime(mbTime($date_debut), mbTime($date_fin)); 
+    $operation->sejour_id = $sejour->_id;
     
     // Recherche de la salle
-    $salle      = new CSalle();
-    $salle->nom = $nom_salle;
-    if (!$salle->loadMatchingObject()) {
-      return $exchange_hprim->setAckErr($ack, "E014", null, $mbObject);
-      
-      CAppUI::stepAjax("La salle '$nom_salle' n'a pas été retrouvée dans Mediboard", UI_MSG_WARNING);
-      $results["count_erreur"]++;
-      continue;
+    $salle = $this->getSalle($data['intervention']);
+    if ($salle->nom && !$salle->_id) {
+      $comment = "Salle '$salle->nom' inconnue dans l'infrastructure de l'établissement";
+      return $exchange_hprim->setAckError($dom_acq, "E202", $comment, $mbObject);
     }
+    $operation->salle_id = $salle->_id;
     
-    // Recherche d'une éventuelle PlageOp
-    $plageOp           = new CPlageOp();
-    $plageOp->chir_id  = $mediuser->_id;
-    $plageOp->salle_id = $salle->_id;
-    $plageOp->date     = $date_op;
-    foreach ($plageOp->loadMatchingList() as $_plage) {
-      // Si notre intervention est dans la plage Mediboard
-      if ($_plage->debut <= $time_op && $temps_op <= $_plage->fin) {
-        $plageOp = $_plage;
-        
-        break;
-      }
+    // Mapping du chirurgien
+    $mediuser = $this->getParticipant($data['intervention']);
+    if (($mediuser->adeli && !$mediuser->_id) || !$mediuser->adeli) {
+      $comment = $mediuser->adeli ? "Participant '$mediuser->adeli' inconnu" : "Le code ADELI n'est pas renseigné";
+      return $exchange_hprim->setAckError($dom_acq, "E203", $comment, $mbObject);
     }
-
-    // Recherche d'une intervension existante sinon création
-    $operation                 = new COperation();
-    $operation->sejour_id      = $sejour->_id;
-    $operation->chir_id        = $mediuser->_id;
-    $operation->plageop_id     = $plageOp->_id;
-    $operation->salle_id       = $salle->_id;
-    if (!$operation->plageop_id) {
-      $operation->date         = $date_op;
-    }
-    $operation->temp_operation = $temps_op;
-    $operation->time_operation = $time_op;
+    $operation->chir_id = $mediuser->_id;
+    
+    // Mapping de la plage
+    $plageOp = $this->mappingPlage($data['intervention'], $operation);
+ 
+    // Recherche d'une intervention existante sinon création  
     $operation->loadMatchingObject();
     
-    $operation->libelle        = $libelle;
-    $operation->cote           = $cote ? $cote : "inconnu";
+    // Mapping de l'intervention
+    $this->mappingIntervention(($data['intervention']), $operation);
     
-    if ($msg = $operation->store()) {
-      CAppUI::stepAjax($msg, UI_MSG_WARNING);
-      $results["count_erreur"]++;
-      continue;
+    // Store de l'intervention
+    // Notifier les autres destinataires autre que le sender
+    $operation->_eai_initiateur_group_id = $sender->group_id;
+    $msgInterv = $operation->store();
+    
+    $modified_fields = CEAIMbObject::getModifiedFields($operation);
+          
+    $codes = array ($msgInterv ? "A201" : "I201");
+    if ($msgInterv) {
+      $warning .= $msgInterv." ";
+    } 
+    else {
+      $comment .= "Intervention : $operation->_id.";
+      $comment .= $modified_fields ? " Les champs mis à jour sont les suivants : $modified_fields." : null;
     }
+    
+    return $exchange_hprim->setAck($dom_acq, $codes, $warning, $comment, $operation);
   }
 }
 ?>

@@ -54,15 +54,6 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     return self::$evenements;
   }
   
-  function getDateInterv($node) {
-    $xpath = new CHPrimXPath($node->ownerDocument);
-    
-    // Obligatoire pour MB
-    $debut = $xpath->queryUniqueNode("hprim:debut", $node, false);
-    
-    return $xpath->queryTextNode("hprim:date", $debut);
-  }
-  
   function mappingServeurActes($data) {
     // Mapping patient
     $patient = $this->mappingPatient($data);
@@ -93,6 +84,106 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     );
   }
   
+  function mappingIntervention($node, COperation $operation) {
+    $xpath = new CHPrimXPath($node->ownerDocument);
+    
+    $operation->libelle = $xpath->queryTextNode("hprim:libelle", $node);
+    $operation->rques   = $xpath->queryTextNode("hprim:commentaire", $node);
+    
+    /* @todo On met en inconnu ? */
+    $operation->cote = "inconnu";
+    
+    // TypeAnesthésie
+    $this->getTypeAnesthesie($node, $operation);
+    
+    $operation->duree_uscpo = $xpath->queryTextNode("hprim:dureeUscpo", $node);
+  }
+  
+  function getTypeAnesthesie($node, COperation $operation) {
+    $xpath = new CHPrimXPath($node->ownerDocument); 
+    
+    $typeAnesthesie = $xpath->queryTextNode("hprim:typeAnesthesie", $node); 
+    
+    $operation->type_anesth = CIdSante400::getMatch("CTypeAnesth", $this->_ref_sender->_tag_hprimxml, $typeAnesthesie)->object_id;
+  }
+  
+  function mappingPlage($node, COperation $operation) {
+    $xpath = new CHPrimXPath($node->ownerDocument);
+    
+    $debut = $this->getDebutInterv($node);
+    $fin   = $this->getFinInterv($node);
+    
+    // Traitement de la date/heure début, et durée de l'opération
+    $date_op  = mbDate($debut);
+    $time_op  = mbTime($debut);
+    $temps_op = mbSubTime(mbTime($debut), mbTime($fin)); 
+    
+    // Recherche d'une éventuelle PlageOp
+    $plageOp           = new CPlageOp();  
+    $plageOp->chir_id  = $operation->chir_id;
+    $plageOp->salle_id = $operation->salle_id;
+    $plageOp->date     = $date_op;
+    $plageOps          = $plageOp->loadMatchingList();
+    foreach ($plageOps as $_plage) {
+      // Si notre intervention est dans la plage Mediboard
+      if ($_plage->debut <= $time_op && (mbAddTime($temps_op, $time_op) <= $_plage->fin)) {
+        $plageOp = $_plage;
+        
+        break;
+      }
+    }
+    
+    $operation->time_operation = $time_op;
+    $operation->temp_operation = $temps_op;
+    
+    if ($plageOp->_id) {
+      $operation->plageop_id = $plageOp->_id;
+    }
+    else {
+      $operation->date = $date_op;
+    }
+  }
+  
+  function getDebutInterv($node) {
+    $xpath = new CHPrimXPath($node->ownerDocument);
+    
+    return $this->getDateHeure($xpath->queryUniqueNode("hprim:debut", $node, false));
+  }
+  
+  function getFinInterv($node) {
+    $xpath = new CHPrimXPath($node->ownerDocument);
+    
+    return $this->getDateHeure($xpath->queryUniqueNode("hprim:fin", $node, false));
+  } 
+  
+  function getParticipant($node) {
+    $xpath = new CHPrimXPath($node->ownerDocument);
+    
+    $adeli = $xpath->queryTextNode("hprim:participants/hprim:participant/hprim:medecin/hprim:numeroAdeli", $node);
+    
+    // Recherche du mediuser
+    $mediuser = new CMediusers();
+    if (!$adeli) {
+      return $mediuser;
+    }
+    
+    $mediuser->adeli = $adeli;
+    $mediuser->loadMatchingObject();
+    
+    return $mediuser;
+  }
+  
+  function getSalle($node) {
+    $xpath = new CHPrimXPath($node->ownerDocument);
+    
+    // Recherche de la salle
+    $salle      = new CSalle();
+    $salle->nom = $xpath->queryTextNode("hprim:uniteFonctionnelle/hprim:code", $node);
+    $salle->loadMatchingObject();
+    
+    return $salle;
+  }
+    
   function mappingActesCCAM($data) {
     $node = $data['actesCCAM'];
     $xpath = new CHPrimXPath($node->ownerDocument);
@@ -123,7 +214,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     );
   }
   
-  function handle(CHPrimXMLAcquittementsServeurActivitePmsi $ack, CMbObject $mbObject, $data) {
+  function handle(CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq, CMbObject $mbObject, $data) {
   }
 }
 

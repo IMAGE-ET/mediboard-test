@@ -84,8 +84,8 @@ function deleteSejour() {
 
 function deleteObjects() {
   var oOptions = {
-  	objName : '{{$op->_view|smarty:nodefaults|escape:"javascript"}}',
-  	ajax : true
+    objName : '{{$op->_view|smarty:nodefaults|escape:"javascript"}}',
+    ajax : true
   }
   
   var oAjaxOptions = {
@@ -146,11 +146,11 @@ ProtocoleSelector.init = function(){
 
 modeExpertDisplay = function() {
   if($("modeExpert").style.display == "none"){
-	  $("modeEasy").hide(); 
-	  $("modeExpert").show(); 
-	  $("modeExpert-trigger").show(); 
-		$("modeEasy-trigger").hide();
-	}
+    $("modeEasy").hide(); 
+    $("modeExpert").show(); 
+    $("modeExpert-trigger").show(); 
+    $("modeEasy-trigger").hide();
+  }
 }
 </script> 
 
@@ -260,7 +260,7 @@ modeExpertDisplay = function() {
     {{if $op->_id}}
     {{if !$op->_ref_sejour->sortie_reelle || $modules.dPbloc->_can->edit || $modules.dPhospi->_can->edit}}
       <button class="submit" type="button" onclick="submitForms();">{{tr}}Save{{/tr}}</button>
-			{{if $op->annulee}}
+      {{if $op->annulee}}
       <button class="change" type="button" onclick="cancelObjects();">{{tr}}Restore{{/tr}}</button>
       {{else}}
         {{if !$conf.dPplanningOp.COperation.cancel_only_for_resp_bloc || $modules.dPbloc->_can->edit || (!$op->_ref_sejour->entree_reelle && !$op->rank)}}
@@ -269,7 +269,7 @@ modeExpertDisplay = function() {
       {{/if}}
       {{if !$conf.dPplanningOp.COperation.delete_only_admin || $can->admin}}
       <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
-			{{/if}}
+      {{/if}}
       
       <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
     {{else}}
@@ -308,10 +308,10 @@ modeExpertDisplay = function() {
 
 <!-- la modale qui s'affiche dans le cas où la date de l'intervention est en dehors de celle du séjour -->
 <div id="date_alert" style="display:none">
-	<div style="text-align:center">  L'intervention est en dehors du séjour, voulez-vous passer au mode expert pour modifier les dates du séjour?
+  <div style="text-align:center">  L'intervention est en dehors du séjour, voulez-vous passer au mode expert pour modifier les dates du séjour?
   </div>
   <div style="text-align:center">
     <button  class="tick" onclick="modalWindow.close();modeExpertDisplay();"> {{tr}}Yes{{/tr}}</button>
     <button  class="cancel" onclick="modalWindow.close();"> {{tr}}No{{/tr}}</button>
-	</div>
+  </div>
 </div>

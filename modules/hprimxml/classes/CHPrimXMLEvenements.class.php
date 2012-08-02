@@ -83,5 +83,21 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
       return new CHPrimXMLAcquittementsServeurActivitePmsi();
     }
   }
+  
+  function getDate($node) {
+    $xpath = new CHPrimXPath($node->ownerDocument);
+    
+    return $xpath->queryTextNode("hprim:date", $node);
+  }
+  
+  function getHeure($node) {
+    $xpath = new CHPrimXPath($node->ownerDocument);
+    
+    return $xpath->queryTextNode("hprim:heure", $node);
+  }
+  
+  function getDateHeure($node) {
+    return $this->getDate($node)." ".$this->getHeure($node);
+  }
 }
 ?>

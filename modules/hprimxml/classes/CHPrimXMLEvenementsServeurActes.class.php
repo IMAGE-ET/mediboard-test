@@ -138,13 +138,13 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
   /**
    * Enregistrement des actes CCAM
    * 
-   * @param CHPrimXMLAcquittementsServeurActivitePmsi $ack        DOM Acquittement 
+   * @param CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq    DOM Acquittement 
    * @param CMbObject                                 $mbObject   Object
    * @param array                                     $data       Data that contain the nodes 
    * 
    * @return string Acquittement 
    **/
-  function handle(CHPrimXMLAcquittementsServeurActivitePmsi $ack, CMbObject $mbObject, $data) {
+  function handle(CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq, CMbObject $mbObject, $data) {
     return;
     $messageAcquittement = null;
     

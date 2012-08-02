@@ -32,6 +32,10 @@ class CSaEventHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     if (CGroups::loadCurrent()->_id != $receiver->group_id) {
       return;
     }
+    
+    if ($mbObject->_eai_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLEvenementsServeurIntervention")) {
+      return;
+    }
 
     $operation = $mbObject;
         

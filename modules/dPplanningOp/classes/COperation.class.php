@@ -124,6 +124,9 @@ class COperation extends CCodable implements IPatientRelated {
   var $_datetime_reel_fin = null;
   var $_ref_affectation   = null;
   
+  // EAI Fields
+  var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
+  
   // Links
   var $_link_editor = null;
   var $_link_viewer = null;

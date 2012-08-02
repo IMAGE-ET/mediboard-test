@@ -33,6 +33,7 @@ class CInteropActor extends CMbObject {
   var $_tag_service              = null;
   var $_tag_movement             = null;
   var $_tag_visit_number         = null;
+  var $_tag_hprimxml             = null;
   
   // Forward references
   var $_ref_group                = null;
@@ -57,6 +58,7 @@ class CInteropActor extends CMbObject {
     $props["_tag_service"]      = "str";
     $props["_tag_movement"]     = "str";
     $props["_tag_visit_number"] = "str";
+    $props["_tag_hprimxml"]     = "str";
     
     return $props;
   }
@@ -73,7 +75,8 @@ class CInteropActor extends CMbObject {
     $this->_tag_service       = CService::getTagService($this->group_id);
     $this->_tag_movement      = CMovement::getTagMovement($this->group_id);
     $this->_tag_visit_number  = CSmp::getTagVisitNumber($this->group_id);
-    
+
+    $this->_tag_hprimxml      = CHprimXML::getDefaultTag($this->group_id);
     if (CModule::getActive("phast")) {
       $this->_tag_phast  = CPhast::getTagPhast($this->group_id);
     }
@@ -148,7 +151,7 @@ class CInteropActor extends CMbObject {
     }
     
     $supported = $this->loadRefsMessagesSupported();
-		
+    
     foreach($family as $_family => $_root_class) {
       $root  = new $_root_class;   
 

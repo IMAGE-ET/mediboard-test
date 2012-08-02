@@ -144,13 +144,15 @@ class CEchangeHprim extends CEchangeXML {
     $this->store();
   }
   
-  function setAck(CHPrimXMLAcquittements $dom_acq, $codes, $avertissement = null,
-                       $commentaires = null, CMbObject $mbObject = null) {
-    $msgAcq = $dom_acq->generateAcquittements($avertissement ? "avertissement" : "OK", $codes, $avertissement ? $avertissement : $commentaires);
+  function setAck(CHPrimXMLAcquittements $dom_acq, $codes, $avertissement = null, $commentaires = null, CMbObject $mbObject = null) {
+    $commentaire = $avertissement ? $avertissement : $commentaires;                    
+    $statut      = $avertissement ? $dom_acq->_codes_erreurs["avt"] : $dom_acq->_codes_erreurs["ok"];
+
+    $msgAcq = $dom_acq->generateAcquittements($statut, $codes, $commentaire, $mbObject);
     $doc_valid = $dom_acq->schemaValidate();
     
     $this->acquittement_valide = $doc_valid ? 1 : 0;
-    $this->statut_acquittement = $avertissement ? "avertissement" : "OK";
+    $this->statut_acquittement = $statut;
         
     if ($mbObject) {
       $this->setObjectIdClass($mbObject);
@@ -162,13 +164,14 @@ class CEchangeHprim extends CEchangeXML {
     return $msgAcq;
   }
   
-  function setAckError(CHPrimXMLAcquittements $dom_acq, $code_erreur, 
-                       $commentaires = null, CMbObject $mbObject = null, $code = "erreur") {
-    $msgAcq    = $dom_acq->generateAcquittements($code, $code_erreur, $commentaires, $mbObject);
+  function setAckError(CHPrimXMLAcquittements $dom_acq, $code_erreur, $commentaires = null, CMbObject $mbObject = null) {
+    $statut = $dom_acq->_codes_erreurs["err"];
+    
+    $msgAcq    = $dom_acq->generateAcquittements($code, $dom_acq->_codes_erreurs["err"], $commentaires, $mbObject);
     $doc_valid = $dom_acq->schemaValidate();
     
     $this->acquittement_valide = $doc_valid ? 1 : 0;
-    $this->statut_acquittement = $code;
+    $this->statut_acquittement = $statut;
     
     if ($mbObject) {
       $this->setObjectIdClass($mbObject);
@@ -178,12 +181,7 @@ class CEchangeHprim extends CEchangeXML {
     $this->store();
     
     return $msgAcq;
-  }     
-                       
-  function setAckErr(CHPrimXMLAcquittements $dom_acq, $code_erreur, 
-                        $commentaires = null, CMbObject $mbObject = null, $code = null) {
-    $this->setAckError($dom_acq, $code_erreur, $commentaires, $mbObject, "err");
-  }          
+  }         
   
   function getConfigs($actor_guid) {
     list($sender_class, $sender_id) = explode("-", $actor_guid);

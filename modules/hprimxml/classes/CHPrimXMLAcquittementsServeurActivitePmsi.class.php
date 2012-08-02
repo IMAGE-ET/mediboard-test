@@ -21,7 +21,11 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
   
   var $_identifiant_acquitte = null;
   var $_sous_type_evt        = null;
-  var $_codes_erreurs        = null;
+  var $_codes_erreurs        = array(
+    "ok"  => "ok",
+    "avt" => "avt",
+    "err" => "err"
+  );
   
   static function getEvtAcquittement(CHPrimXMLEvenementsServeurActivitePmsi $dom_evt) {
     $acq_evt = null;
@@ -84,21 +88,21 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
       $mbPatient = $mbObject->loadRefSejour()->loadRefPatient();
       $mbSejour  = $mbObject->_ref_sejour;
     } 
-     
+
     // Ajout des réponses
     $reponses = $this->addElement($acquittementsServeurActivitePmsi, "reponses");
 
     // Ajout du patient et de la venue
     $patient = $this->addElement($reponses, "patient");
-    if ($mbPatient->_id) {
+    if (isset($mbPatient->_id)) {
       $this->addPatient($patient, $mbPatient, false, true);
     }
     
     $venue = $this->addElement($reponses, "venue");
-    if ($mbSejour->_id) {
+    if (isset($mbSejour->_id)) {
       $this->addVenue($venue, $mbSejour, false, true);
     }
-   
+    
     // Génération des réponses en fonction du type de l'acquittement
     switch (get_class($this)) {
       case "CHPrimXMLAcquittementsServeurActes" :
@@ -116,7 +120,6 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
   }
 
   function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null, $data = array()) {
-    $this->emetteur = CAppUI::conf('mb_id');
     $this->date_production = mbDateTime();
 
     $this->generateEnteteMessageAcquittement($statut);
@@ -125,11 +128,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
     // Traitement final
     $this->purgeEmptyElements();
 
-    $this->saveTempFile();
-    $this->formatOutput = true;
-    $acq = utf8_encode($this->saveXML());
-mbTrace($acq);
-    return $acq;
+    return utf8_encode($this->saveXML());
   }
   
   function getStatutAcquittement() {

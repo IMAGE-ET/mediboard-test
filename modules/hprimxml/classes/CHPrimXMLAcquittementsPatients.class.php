@@ -11,7 +11,12 @@
 class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
   var $_identifiant_acquitte = null;
   var $_sous_type_evt        = null;
-  var $_codes_erreurs        = null;
+  
+  var $_codes_erreurs        = array(
+    "ok"  => "OK",
+    "avt" => "avertissement",
+    "err" => "erreur"
+  );
   
   static function getVersionAcquittementsPatients() {    
     return "msgAcquittementsPatients".str_replace(".", "", CAppUI::conf('hprimxml evt_patients version'));

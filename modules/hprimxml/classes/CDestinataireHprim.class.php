@@ -75,9 +75,7 @@ class CDestinataireHprim extends CInteropReceiver {
   function updateFormFields() {
     parent::updateFormFields();
 
-    $this->code_syst     = $this->code_syst ? $this->code_syst : $this->nom;
-
-    $this->_tag_hprimxml = CHprimXML::getDefaultTag($this->group_id);
+    $this->code_syst = $this->code_syst ? $this->code_syst : $this->nom;
   }
   
   function sendEvenementPatient(CHPrimXMLEvenementsPatients $dom_evt, CMbObject $mbObject, $referent = null, $initiateur = null) {

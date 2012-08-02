@@ -8,7 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CHPrimXMLAcquittements extends CHPrimXMLDocument {  
+class CHPrimXMLAcquittements extends CHPrimXMLDocument {
+  var $_codes_erreurs = array();
+    
   static function getAcquittementEvenementXML(CHPrimXMLEvenements $dom_evt) {
     // Message événement patient
     if ($dom_evt instanceof CHPrimXMLEvenementsPatients) {

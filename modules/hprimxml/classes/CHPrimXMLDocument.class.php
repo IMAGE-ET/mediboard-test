@@ -545,9 +545,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       }
     }
     
-    if ($this->_ref_receiver->_configs["uppercase_fields"]) {
-     $personne['nom']          = CMbString::upper($personne['nom']);
-     $personne['nomNaissance'] = CMbString::upper($personne['nomNaissance']);
+    if (isset($this->_ref_receiver->_id) && $this->_ref_receiver->_configs["uppercase_fields"]) {
+      $personne['nom']          = CMbString::upper($personne['nom']);
+      $personne['nomNaissance'] = CMbString::upper($personne['nomNaissance']);
     }
     
     $this->addTexte($elParent, "nomUsuel", $personne['nom']);
@@ -555,12 +555,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $prenoms = $this->addElement($elParent, "prenoms");
     foreach ($personne['prenoms'] as $key => $prenom) {
       if ($key == 0) {
-        if ($this->_ref_receiver->_configs["uppercase_fields"]) {
+        if (isset($this->_ref_receiver->_id) && $this->_ref_receiver->_configs["uppercase_fields"]) {
           $prenom = CMbString::upper($prenom ? $prenom : $personne['nom']);
         }
         $this->addTexte($prenoms, "prenom", $prenom ? $prenom : $personne['nom']);
       } else {
-        if ($this->_ref_receiver->_configs["uppercase_fields"]) {
+        if (isset($this->_ref_receiver->_id) && $this->_ref_receiver->_configs["uppercase_fields"]) {
           $prenom = CMbString::upper($prenom);
         }
         $this->addTexte($prenoms, "prenom", $prenom);
@@ -651,13 +651,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       foreach ($codes as $_code) {
         $libelle .= CAppUI::tr("hprimxml-error-$_code");
       }
-    } else {
-      $code = $codes;
+    } 
+    else {
+      $code    = $codes;
       $libelle = CAppUI::tr("hprimxml-error-$code");
     }
-    $this->addElement($erreur, "code", substr($code, 0, 17));
-    $this->addElement($erreur, "libelle", substr($libelle, 0, 80));
-    $this->addElement($erreur, "commentaire", substr("$libelle $commentaires", 0, 4000)); 
+    $this->addElement($erreur, "code"       , substr($code, 0, 17));
+    $this->addElement($erreur, "libelle"    , substr($libelle, 0, 80));
+    $this->addElement($erreur, "commentaire", substr("$libelle : \"$commentaires\"", 0, 4000)); 
   }
   
   function addReponseCCAM($elParent, $statut, $codes, $acteCCAM, $mbObject = null, $commentaires = null) {
@@ -682,7 +683,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function addInterventionAcquittement($elParent, $operation = null) {
     $identifiant = $this->addElement($elParent, "identifiant");
-    $emetteur = $this->addElement($identifiant, "emetteur", $operation ? $operation->operation_id : 0);
+    $emetteur = $this->addElement($identifiant, "emetteur", $operation && $operation->_id  ? $operation->operation_id : 0);
   }
   
   function getTypeEvenementPatient() {
@@ -835,7 +836,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     
     // Cas dans lequel on transmet pas de sortie tant que l'on a pas la sortie réelle
-    if (!$mbVenue->sortie_reelle && ($this->_ref_receiver->_configs["send_sortie_prevue"] == 0)) {
+    if (!$mbVenue->sortie_reelle && (isset($this->_ref_receiver->_id) && $this->_ref_receiver->_configs["send_sortie_prevue"] == 0)) {
       return;
     }  
     
