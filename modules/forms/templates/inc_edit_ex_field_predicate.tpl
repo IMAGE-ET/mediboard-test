@@ -3,15 +3,46 @@
 showField = function(field_id, field_name, value){
   window.predicateFieldName = field_name;
   
+  var form = getForm("ex_field_predicate-form");
+    
+  toggleNoValue(form);
+  
   var url = new Url("forms", "ajax_view_ex_class_field");
   url.addParam("ex_class_field_id", field_id);
   url.addParam("form_name", "ex_field_predicate-form");
   url.addParam("value", value);
   url.requestUpdate("field-view", function(){
-    var form = getForm("ex_field_predicate-form");
     form.removeClassName("prepared");
     prepareForm(form);
   });
+}
+
+toggleNoValue = function(form){
+  var field = form.elements[window.predicateFieldName];
+  
+  if ($V(form.elements.operator) == "hasValue") {
+    $("field-view").hide();
+    $("field-view-novalue").show();
+    
+    if (field) {
+      field._valueSave = $V(field);
+      field._specSave = field.className;
+      
+      $V(field, "__no_value__");
+      field.className = "";
+    }
+    return;
+  }
+  
+  if (field && field._valueSave) {
+    $V(field, field._valueSave);
+    field.className = field._specSave;
+    field._valueSave = null;
+    field._specSave = null;
+  }
+    
+  $("field-view").show();
+  $("field-view-novalue").hide();
 }
 
 predicateCallback = function(id, obj) {
@@ -28,29 +59,32 @@ predicateCallback = function(id, obj) {
 Main.add(function(){
   var form = getForm("ex_field_predicate-form");
   
-  var url = new Url("forms", "ajax_autocomplete_ex_class_field");
-  url.autoComplete(form.elements._ex_field_view, null, {
-    minChars: 2,
-    method: "get",
-    select: "view",
-    dropdown: true,
-    afterUpdateElement: function(field, selected){
-      var id = selected.get("id");
-      
-      $V(field.form.ex_class_field_id, id);
-      
-      if (id) {
-        showField(id, selected.down('.name').getText());
+  if (form.elements._ex_field_view) {
+    var url = new Url("forms", "ajax_autocomplete_ex_class_field");
+    url.autoComplete(form.elements._ex_field_view, null, {
+      minChars: 2,
+      method: "get",
+      select: "view",
+      dropdown: true,
+      afterUpdateElement: function(field, selected){
+        var id = selected.get("id");
+        var form = field.form;
+        
+        $V(form.ex_class_field_id, id);
+        
+        if (id) {
+          showField(id, selected.down('.name').getText(), "");
+        }
+        
+        if ($V(form.elements._field_view) == "") {
+          $V(form.elements._field_view, selected.down('.view').getText());
+        }
+      },
+      callback: function(input, queryString){
+        return queryString + "&ex_class_id={{$ex_class->_id}}&exclude_ex_field_id={{$exclude_ex_field_id}}"; 
       }
-      
-      if ($V(field.form.elements._field_view) == "") {
-        $V(field.form.elements._field_view, selected.down('.view').getText());
-      }
-    },
-    callback: function(input, queryString){
-      return queryString + "&ex_class_id={{$ex_class->_id}}&exclude_ex_field_id={{$exclude_ex_field_id}}"; 
-    }
-  });
+    });
+  }
   
   {{if $ex_field_predicate->ex_class_field_id}}
     var fieldName = "{{$ex_field_predicate->_ref_ex_class_field->name}}";
@@ -97,11 +131,14 @@ Main.add(function(){
     {{/if}}
     <tr>
       <th>{{mb_label object=$ex_field_predicate field=operator}}</th>
-      <td>{{mb_field object=$ex_field_predicate field=operator}}</td>
+      <td>{{mb_field object=$ex_field_predicate field=operator onchange="toggleNoValue(this.form)"}}</td>
     </tr>
     <tr>
       <th id="field-label">{{mb_label object=$ex_field_predicate field=value}}</th>
-      <td id="field-view">{{mb_field object=$ex_field_predicate field=value hidden=true}}</td>
+      <td>
+        <div id="field-view">{{mb_field object=$ex_field_predicate field=value hidden=true}}</div>
+        <div id="field-view-novalue" class="empty">N/A</div>
+      </td>
     </tr>
     <tr>
       <td></td>

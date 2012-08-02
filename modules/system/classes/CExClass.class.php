@@ -112,6 +112,10 @@ class CExClass extends CMbObject {
       case "contains": 
         if (strpos($a, $b) !== false) return true;
         break;
+        
+      case "hasValue": 
+        if ($a != "") return true;
+        break;
     }
     
     return false;

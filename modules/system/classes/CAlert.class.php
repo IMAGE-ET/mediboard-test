@@ -29,12 +29,12 @@ class CAlert extends CMbMetaObject {
   }
 
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["tag"]      = "str notNull";
     $specs["level"]    = "enum list|low|medium|high default|medium notNull";
     $specs["comments"] = "text";
     $specs["handled"]  = "bool notNull default|0";
-		$specs["object_id"] .= " cascade";
+    $specs["object_id"] .= " cascade";
     return $specs;
   }
 }

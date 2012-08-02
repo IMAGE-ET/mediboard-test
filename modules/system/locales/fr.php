@@ -470,6 +470,7 @@ $locales['CExClassFieldPredicate.operator.>'] = '>';
 $locales['CExClassFieldPredicate.operator.>='] = '>=';
 $locales['CExClassFieldPredicate.operator.contains'] = 'contient';
 $locales['CExClassFieldPredicate.operator.endsWith'] = 'finit par';
+$locales['CExClassFieldPredicate.operator.hasValue'] = 'a une valeur';
 $locales['CExClassFieldPredicate.operator.startsWith'] = 'commence par';
 $locales['CExClassFieldTranslation'] = 'Traduction de champ de formulaire';
 $locales['CExClassFieldTranslation-court'] = 'Traduction courte';

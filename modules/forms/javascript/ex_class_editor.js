@@ -693,7 +693,7 @@ ExFieldPredicate = {
       url.addParam("opener_field_view",  form.predicate_id_autocomplete_view.identify());
     }
     
-    url.requestModal(500, 300);
+    url.requestModal(600, 300);
   },
   create: function(ex_field_id, exclude_ex_field_id, form) {
     this.edit("0", ex_field_id, exclude_ex_field_id, form);

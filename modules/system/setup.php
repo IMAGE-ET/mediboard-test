@@ -1048,6 +1048,11 @@ class CSetupsystem extends CSetup {
                 ADD `delete_file` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.1.04";
+    $this->makeRevision("1.1.04");
+    $query = "ALTER TABLE `ex_class_field_predicate`
+              CHANGE `operator` `operator` ENUM ('=','!=','>','>=','<','<=','startsWith','endsWith','contains','hasValue') NOT NULL DEFAULT '=';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.1.05";
   }
 }

@@ -255,6 +255,10 @@ var ExObject = {
             if (triggerValue.indexOf(p.value) > -1) return true;
             break;
             
+          case "hasValue": 
+            if (triggerValue != "") return true;
+            break;
+            
           default: return true;
         }
         

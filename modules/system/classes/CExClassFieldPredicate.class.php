@@ -29,7 +29,7 @@ class CExClassFieldPredicate extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props["ex_class_field_id"] = "ref notNull class|CExClassField cascade seekable";
-    $props["operator"]          = "enum notNull list|=|!=|>|>=|<|<=|startsWith|endsWith|contains default|=";
+    $props["operator"]          = "enum notNull list|=|!=|>|>=|<|<=|startsWith|endsWith|contains|hasValue default|=";
     $props["value"]             = "str notNull seekable";
     $props["_value"]            = "str";
     return $props;
@@ -51,7 +51,10 @@ class CExClassFieldPredicate extends CMbObject {
     $ex_object->setExClass();
     $ex_object->{$field->name} = $this->value;
     
-    $this->_value = $ex_object->getFormattedValue($field->name);
+    $this->_value = "";
+    if ($this->operator != "hasValue") {
+      $this->_value = $ex_object->getFormattedValue($field->name);
+    }
     
     $this->_view = $field->_view." ".$this->_specs["operator"]->_locales[$this->operator]." ".$this->_value;
   }

@@ -144,7 +144,7 @@ Main.add(function() {
               {{/if}}
               
               {{if $has_range || $has_events || $has_load}}
-                <div class="cell-positioner">{{* <<< This div is necessary (relative positionning) *}}
+                <div class="cell-positioner" unselectable="on">{{* <<< This div is necessary (relative positionning) *}}
                   
                   {{if $has_range}}
                     <div class="range-container">

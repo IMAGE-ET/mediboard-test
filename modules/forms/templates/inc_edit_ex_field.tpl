@@ -379,7 +379,13 @@ Main.add(function(){
             <button class="edit notext compact" onclick="ExFieldPredicate.edit({{$_predicate->_id}})">{{tr}}Edit{{/tr}}</button>
           </td>
           <td style="text-align: right;">{{mb_value object=$_predicate field=operator}}</td>
-          <td>{{mb_value object=$_predicate field=_value}}</td>
+          <td>
+            {{if $_predicate->operator != "hasValue"}}
+              {{mb_value object=$_predicate field=_value}}
+            {{else}}
+              <div class="empty">N/A</div>
+            {{/if}}
+          </td>
         </tr>
       {{foreachelse}}
         <tr>

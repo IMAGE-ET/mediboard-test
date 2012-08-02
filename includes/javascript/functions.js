@@ -1384,8 +1384,10 @@ Element.addMethods({
     bodyContent += "<"+"/style>";
 
     var htmlClass = $$("html")[0].className;
+    var meta = Prototype.Browser.IE ? "<meta http-equiv='X-UA-Compatible' content='IE="+document.documentMode+"' />" : "";
+    
     doc.open();
-    doc.write("<"+"html class='"+htmlClass+"'><"+"head><"+"/head><"+"body>"+bodyContent+"<"+"/body><"+"/html>");
+    doc.write("<"+"html class='"+htmlClass+"'><"+"head>"+meta+"<"+"/head><"+"body>"+bodyContent+"<"+"/body><"+"/html>");
 
     // !! Don't use PrototypeJS functions here, this is an iframe
     var head = doc.head || doc.getElementsByTagName('head')[0];
@@ -1436,6 +1438,7 @@ Element.addMethods({
       else {
         head.innerHTML = parentHead.innerHTML;
       }
+      
       win.focus();
       win.print();
     }
