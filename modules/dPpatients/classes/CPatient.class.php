@@ -1270,6 +1270,7 @@ class CPatient extends CMbObject {
         $_consult->countDocItems($permType);
         
         $_consult->loadRefsFwd(1);
+        $_consult->_ref_sejour = $_sejour;
         $_consult->getType();
         $_consult->_ref_chir->loadRefFunction();
         $_consult->_ref_chir->_ref_function->loadRefGroup();

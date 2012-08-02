@@ -1228,8 +1228,15 @@ TESTS A EFFECTUER
   
   function getType() {
     $praticien = $this->loadRefPraticien();
-    $sejour = $this->loadRefSejour();
-    $sejour->loadRefRPU();
+    $sejour = $this->_ref_sejour;
+    
+    if (!$sejour) {
+      $sejour = $this->loadRefSejour();
+    }
+    
+    if (!$sejour->_ref_rpu) {
+      $sejour->loadRefRPU();
+    }
     
     // Consultations d'urgences
     if ($praticien->isUrgentiste() && $sejour->_ref_rpu && $sejour->_ref_rpu->_id) {
