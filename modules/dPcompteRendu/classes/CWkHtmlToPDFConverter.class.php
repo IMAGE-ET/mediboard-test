@@ -115,7 +115,7 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     $this->html = preg_replace("/(<script type=[\'\"]text\/javascript[\'\"]>.*<\/script>)/msU", "", $this->html);
     
     // Supression du margin: 0 et padding: 0
-    $this->html = preg_replace("/body\s*{([a-zA-Z:;\-\n\s\t]*)(margin:\s*0;[\n\t\s]*padding:\s*0;)/", 'body { $1', $this->html);
+    $this->html = preg_replace("/body\s*{([a-zA-Z0-9:;\-\n\s\t]*)(margin:\s*0;[\n\t\s]*padding:\s*0;)/", 'body { $1', $this->html);
     
     // Suppression du position fixed du header et du footer
     if ($header_footer_common) {
