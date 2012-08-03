@@ -388,8 +388,8 @@ class CDossierMedical extends CMbMetaObject {
       if ($etat->etat) {
         switch ($etat->dent) {
           case 10: 
-          case 30: $position = 'Central haut'; break;
-          case 50: 
+          case 50: $position = 'Central haut'; break;
+          case 30: 
           case 70: $position = 'Central bas'; break;
           default: $position = $etat->dent;
         }
