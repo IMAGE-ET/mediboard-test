@@ -20,6 +20,7 @@
     var url = new Url("reservation", "ajax_vw_planning");
     url.addParam("date_planning", $V(form.date_planning));
     url.addParam("praticien_id" , $V(form.praticien_id));
+    url.addParam("bloc_id"      , $V(form.bloc_id));
     
     var week_container = $$(".week-container")[0];
     
@@ -57,9 +58,10 @@
 <form name="filterPlanning" method="get"> 
   <table class="form">
     <tr>
-      <th class="category" colspan="2">
+      <th class="category" colspan="3">
         Filtre
       </th>
+    </tr>
     <tr>
       <td>
         <label>
@@ -72,6 +74,17 @@
           <select name="praticien_id" onchange="refreshPlanning();">
             <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
             {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$praticien_id}}
+          </select>
+        </label>
+      </td>
+      <td>
+        <label>
+          {{tr}}CBlocOperatoire{{/tr}}
+          <select name="bloc_id" onchange="refreshPlanning();">
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            {{foreach from=$blocs item=_bloc}}
+              <option value="{{$_bloc->_id}}" {{if $bloc_id == $_bloc->_id}}selected{{/if}}>{{$_bloc->nom}}</option>
+            {{/foreach}}
           </select>
         </label>
       </td>

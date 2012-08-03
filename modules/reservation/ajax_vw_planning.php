@@ -14,6 +14,7 @@ CCanDo::checkRead();
 $date_planning = CValue::getOrSession("date_planning");
 $praticien_id  = CValue::getOrSession("praticien_id");
 $scroll_top    = CValue::get("scroll_top", null);
+$bloc_id       = CValue::getOrSession("bloc_id", "");
 
 // Récupération des opérations
 $operation = new COperation;
@@ -33,6 +34,10 @@ $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
 $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
 $where["group_id"] = "= '$group->_id'";
 
+if ($bloc_id) {
+  $where["bloc_operatoire_id"] = "= '$bloc_id'";
+}
+
 $operations = $operation->loadMatchingList("bloc_operatoire.nom", null, null, $ljoin);
 
 $prats  = CMbObject::massLoadFwdRef($operations, "chir_id");
@@ -48,8 +53,7 @@ $salles_ids = array_keys($salles);
 $planning = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
 $planning->title = "Planning du ".mbDateToLocale($date_planning);
 $planning->guid = "planning_interv";
-$planning->hour_min  = mbTime(CAppUI::conf("dPplanningOp COperation hour_urgence_deb").":00");
-$planning->hour_max  = mbTime(CAppUI::conf("dPplanningOp COperation hour_urgence_fin").":00");
+$planning->hour_min  = mbTime(CAppUI::conf("reservation debut_planning").":00");
 $planning->dragndrop = $planning->resizable = CCanDo::edit();
 $planning->hour_divider = 60 / intval(CAppUI::conf("dPplanningOp COperation min_intervalle"));
 $planning->show_half = true;

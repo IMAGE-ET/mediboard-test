@@ -13,6 +13,6 @@ CCanDo::checkAdmin();
 
 $smarty = new CSmartyDP();
 
-//$smarty->assign('var', $states);
+$smarty->assign("hours", range(0, 23));
 
 $smarty->display("configure.tpl");

@@ -10,4 +10,5 @@
  */
 
 $dPconfig["reservation"] = array(
+  "debut_planning" => "8"
 );
