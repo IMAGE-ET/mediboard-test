@@ -3,7 +3,7 @@
 {{assign var=cste_grid value=$constantes_medicales_grid}}
 {{assign var=list_constantes value="CConstantesMedicales"|static:list_constantes}}
 
-<table class="tbl constantes" style="width: 1%;">
+<table class="tbl constantes" style="width: 1%; font-size: inherit;">
   <tr>
     <th></th>
     {{foreach from=$cste_grid.grid item=_constante key=_datetime}}
