@@ -272,6 +272,7 @@ class CMediusers extends CMbObject {
     $backProps["plages_remplacees"]               = "CPlageconsult remplacant_id";
     $backProps["poses_disp_vasc_operateur"]       = "CPoseDispositifVasculaire operateur_id";
     $backProps["poses_disp_vasc_encadrant"]       = "CPoseDispositifVasculaire encadrant_id";
+    $backProps["praticien_facture"]               = "CFactureConsult praticien_id";
     
     return $backProps;
   }
