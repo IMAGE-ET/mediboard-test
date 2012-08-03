@@ -27,7 +27,12 @@
   
   {{foreach from=$lits item=_lit}}
     {{assign var=lit_id value=$_lit->_id}}
-    {{math equation="(x/y) * 100" x=$_lit->_dispo_depuis y=$max_entree assign=width_entree}}
+    {{if $_lit->_dispo_depuis == 0}}
+      {{assign var=width_entree value=0}}
+    {{else}}
+      {{math equation="(x/y) * 100" x=$_lit->_dispo_depuis y=$max_entree assign=width_entree}}
+    {{/if}}
+    
     {{if $_lit->_occupe_dans == "libre"}}
       {{assign var=width_sortie value="100"}}
     {{else}}
