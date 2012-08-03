@@ -43,7 +43,7 @@ class CUniteFonctionnelle extends CMbObject {
     $props["code"]        = "str notNull seekable";
     $props["libelle"]     = "str notNull seekable";
     $props["description"] = "text";
-    $props["type"]        = "enum list|hebergement|soins|medicale";
+    $props["type"]        = "enum list|hebergement|soins|medicale default|hebergement";
     
     return $props;
   }
