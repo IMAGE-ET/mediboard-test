@@ -19,6 +19,7 @@ function popPlages() {
   url.addParam("_coordonnees",$V(form._coordonnees));
   url.addParam("_plages_vides",$V(form._plages_vides));
   url.addParam("_non_pourvues",$V(form._non_pourvues));
+  url.addParam("_telephone", $V(form._telephone));
   url.popup(700, 550, "Planning");
 }
 
@@ -77,7 +78,7 @@ function changeDateCal(){
           <td><select name="chir">
             <option value="0">&mdash; Tous</option>
             {{foreach from=$listChir item=curr_chir}}
-	            <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}">{{$curr_chir->_view}}</option>
+              <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}">{{$curr_chir->_view}}</option>
             {{/foreach}}
           </select></td>
         </tr>
