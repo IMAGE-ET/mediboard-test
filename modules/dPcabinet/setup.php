@@ -1573,8 +1573,33 @@ class CSetupdPcabinet extends CSetup {
               ADD `facture`  ENUM('-1','0','1') DEFAULT '0',
               ADD `assurance`  INT(11) UNSIGNED NULL;";
     $this->addQuery($query);
+    $this->makeRevision("1.64");
     
-    $this->mod_version = "1.64";
+    $query = "ALTER TABLE `factureconsult` 
+              ADD `praticien_id` INT (11) UNSIGNED AFTER `patient_id`,
+              CHANGE `npq` `npq` ENUM ('0','1') NOT NULL DEFAULT '0',
+              CHANGE `cession_creance` `cession_creance` ENUM ('0','1') NOT NULL DEFAULT '0',
+              CHANGE `facture` `facture` ENUM ('-1','0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `factureconsult` 
+              ADD INDEX (`praticien_id`),
+              ADD INDEX (`ouverture`),
+              ADD INDEX (`cloture`),
+              ADD INDEX (`patient_date_reglement`),
+              ADD INDEX (`tiers_date_reglement`),
+              ADD INDEX (`assurance`);";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `factureconsult`
+              SET `factureconsult`.praticien_id = (SELECT plageconsult.chir_id
+                               FROM  plageconsult , consultation
+                               WHERE consultation.factureconsult_id = `factureconsult`.factureconsult_id
+                               AND plageconsult.plageconsult_id = consultation.plageconsult_id
+                               LIMIT 1)
+              WHERE factureconsult.praticien_id IS NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.65";
   }
 }
 ?>

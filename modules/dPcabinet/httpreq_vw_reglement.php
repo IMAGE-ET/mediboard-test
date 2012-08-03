@@ -132,6 +132,7 @@ $facture = new CFactureConsult();
 $facture_patient = null;
 $where = array();
 $where["patient_id"] = "= '$consult->patient_id'";
+$where["praticien_id"]  = "= '$prat_id'";
 $where["cloture"] = " IS NULL";
 if ($consult->patient_id && $facture->loadObject($where)) {
   $facture_patient = $facture;

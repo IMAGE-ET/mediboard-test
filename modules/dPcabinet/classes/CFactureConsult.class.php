@@ -21,6 +21,7 @@ class CFactureConsult extends CMbObject
   
   // DB Fields
   var $patient_id   = null; 
+  var $praticien_id   = null; 
   var $remise       = null; 
   var $ouverture    = null; 
   var $cloture      = null;
@@ -52,6 +53,7 @@ class CFactureConsult extends CMbObject
   
   // Object References
   var $_ref_patient       = null;
+  var $_ref_praticien     = null;
   var $_ref_consults      = null;
   var $_ref_der_consult   = null;
   var $_ref_reglements    = null;
@@ -89,7 +91,8 @@ class CFactureConsult extends CMbObject
   **/
   function getProps() {
     $props = parent::getProps();
-    $props["patient_id"]  = "ref class|CPatient purgeable seekable notNull show|1";
+    $props["patient_id"]    = "ref class|CPatient purgeable seekable notNull show|1";
+    $props["praticien_id"]  = "ref class|CMediusers";
     $props["remise"]      = "currency default|0";
     $props["ouverture"]   = "date notNull";
     $props["cloture"]     = "date";
@@ -169,7 +172,7 @@ class CFactureConsult extends CMbObject
       $reglement->delete();
     }
     
-    if ($msg = parent::delete()){
+    if ($msg = parent::delete()) {
       return $msg;
     }
   }
@@ -182,7 +185,7 @@ class CFactureConsult extends CMbObject
    * @return void
   **/
   function loadRefsConsults($cache = 1) {
-    if (!count($this->_ref_consults)){
+    if (!count($this->_ref_consults)) {
       $consult = new CConsultation();    
       $where = array();
       $where["patient_id"]        = "= '$this->patient_id'";
@@ -266,16 +269,12 @@ class CFactureConsult extends CMbObject
   }  
    
   /**
-   * Chargement du praticien de la dernière consultation de la facture
+   * Chargement du praticien de la facture
    * 
    * @return void
   **/
   function loadRefPraticien(){
-    if (!$this->_ref_consults) $this->loadRefsConsults();
-    if ($this->_ref_der_consult) {
-      $this->_ref_chir = $this->_ref_der_consult->loadRefPraticien();
-      $this->tarif     = $this->_ref_der_consult->tarif;
-    }
+    $this->_ref_praticien = $this->loadFwdRef("praticien_id");
   }
   
   //Ne pas supprimer cette fonction!

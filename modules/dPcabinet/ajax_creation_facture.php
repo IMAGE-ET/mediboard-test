@@ -22,6 +22,7 @@ $facture = new CFactureConsult();
 
 //Si la facture existe déjà on la met à jour
 $where["patient_id"]  = "= '$patient_id'";
+$where["praticien_id"]  = "= '$chirsel_id'";
 $where["cloture"]     = "IS NULL";
 
 if ($facture->loadObject($where)) {
@@ -70,6 +71,7 @@ if ($facture->loadObject($where)) {
 //Sinon on la créé
 else {
   $facture->patient_id    = $patient_id;
+  $facture->praticien_id    = $chirsel_id;
   $facture->du_patient    = $du_patient;
   $facture->du_tiers      = $du_tiers;
   $facture->type_facture  = $type_facture;

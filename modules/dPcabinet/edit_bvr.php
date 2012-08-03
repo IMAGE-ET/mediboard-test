@@ -29,6 +29,7 @@ if ($factureconsult_id) {
 }
 else {
   $where = array();
+  $where["praticien_id"] = " = '$prat_id'";
   $where[]  = "(ouverture >= '$date_min' AND cloture  <= '$date_max') OR (ouverture >= '$date_min' AND cloture  <= '$date_max') ";
   $factures = $facture->loadList($where, "factureconsult_id DESC", null, "patient_id");
   
@@ -99,18 +100,7 @@ if ($edition_bvr) {
     }
     
     // Praticien selectionné
-    if ($prat_id) {
-      $praticien = new CMediusers();
-      $praticien->load($prat_id);
-    }
-    else {
-      $praticien = $facture->_ref_chir;
-    }
-    if (!$praticien) {
-      $chirSel = CValue::getOrSession("chirSel", "-1");
-      $praticien = new CMediusers();
-      $praticien->load($chirSel);
-    }
+    $praticien = $facture->_ref_praticien;
     
     $adherent = $praticien->adherent;
     $group->adresse = str_replace(CHR(13).CHR(10),' ', $group->adresse);

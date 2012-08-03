@@ -1,8 +1,9 @@
 window.Facture = {
   modal: null,
-  load: function(oForm, patient_id, consult_id, not_load_banque) {
+  load: function(oForm, patient_id, praticien_id, consult_id, not_load_banque) {
     var url = new Url('dPcabinet', 'ajax_creation_facture');
     url.addParam('patient_id', patient_id);
+    url.addParam('executant_id', praticien_id);
     url.addParam('du_patient', oForm.du_patient.value);
     url.addParam('du_tiers'  , oForm.du_tiers.value);
     url.addParam('consult_id', consult_id);

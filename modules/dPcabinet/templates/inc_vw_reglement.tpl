@@ -46,7 +46,7 @@ validTarif = function(){
 }
 
 loadFacture = function(){
-  Facture.load(document.tarifFrm, '{{$consult->patient_id}}', '{{$consult->_id}}', 1);
+  Facture.load(document.tarifFrm, '{{$consult->patient_id}}', '{{$praticien->_id}}', '{{$consult->_id}}', 1);
 }
 reloadFacture = function(){
  Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->factureconsult_id}}');

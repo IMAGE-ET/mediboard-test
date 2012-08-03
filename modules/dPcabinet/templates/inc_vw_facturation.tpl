@@ -43,7 +43,7 @@
             {{mb_key   object=$facture}}
             <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
             <input type="hidden" name="cession_creance" value="{{if $facture->cession_creance == 1}}0{{else}}1{{/if}}" />
-            <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}} onchange="Facture.modifCloture(this.form);" />
+            <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}} onclick="Facture.modifCloture(this.form);" />
             {{mb_label object=$facture field=cession_creance}}
           </form>
           <form name="npq_facture" method="post" action=""> 
@@ -51,7 +51,7 @@
             {{mb_key   object=$facture}}
             <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
             <input type="hidden" name="npq" value="{{if $facture->npq == 1}}0{{else}}1{{/if}}" />
-            <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}} onchange="Facture.modifCloture(this.form);" />
+            <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}} onclick="Facture.modifCloture(this.form);" />
             {{mb_label object=$facture field=npq}}
           </form>
           {{if count($facture->_ref_patient->_ref_correspondants_patient)}}
