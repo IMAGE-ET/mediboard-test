@@ -72,6 +72,24 @@
           {{/if}}
         </td>
       </tr>
+      {{if $facture->type_facture == "accident"}}
+        <tr>
+          <td colspan="2">
+            <form name="ref_accident" method="post" action="" onsubmit="return onSubmitFormAjax(this);" style="max-width:100px;">
+              {{mb_class object=$facture}}
+              {{mb_key   object=$facture}}
+              <b>{{mb_label object=$facture field="ref_accident"}}:</b>
+              {{if $facture->cloture}}
+                {{mb_value object=$facture field="ref_accident"}} 
+              {{else}}
+                {{mb_field object=$facture field="ref_accident" onchange="return onSubmitFormAjax(this.form);"}} 
+              </text
+              {{/if}}
+            </form>
+          </td>
+          <td colspan="9"></td>
+        </tr>
+      {{/if}}
     {{/if}}
     <tr>
       <th class="category">Date</th>
@@ -129,6 +147,12 @@
           </tr>
         {{/foreach}}
         {{foreach from=$_consultation->_ref_actes_caisse item=_acte_caisse}}
+          {{assign var="caisse" value=$_acte_caisse->_ref_caisse_maladie}}
+          {{if $facture->type_facture == "accident"}}
+            {{assign var="coeff_caisse" value=$_acte_caisse->_ref_caisse_maladie->coeff_accident}}
+          {{else}}
+            {{assign var="coeff_caisse" value=$_acte_caisse->_ref_caisse_maladie->coeff_maladie}}
+          {{/if}}
           <tr>
             <td style="text-align:center;width:100px;">{{$_consultation->_date|date_format:"%d/%m/%Y"}}</td>
             <td  {{if $_acte_caisse->code}} style="background-color:#DA70D6;width:140px;">{{mb_value object=$_acte_caisse field="code"}}{{else}}>{{/if}}</td>
@@ -141,8 +165,9 @@
               {{/if}}
             </td>
             <td style="text-align:right;">{{mb_value object=$_acte_caisse field="quantite"}}</td>
-            <td style="text-align:right;">{{$facture->_coeff}}</td>
-            <td style="text-align:right;">{{$_acte_caisse->montant_base*$facture->_coeff|string_format:"%0.2f"}}</td>
+            <td style="text-align:right;">{{$coeff_caisse}}
+            </td>
+            <td style="text-align:right;">{{$_acte_caisse->montant_base*$coeff_caisse|string_format:"%0.2f"}}</td>
           </tr>
         {{/foreach}}
       {{/if}}

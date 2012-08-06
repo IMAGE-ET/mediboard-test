@@ -1599,7 +1599,13 @@ class CSetupdPcabinet extends CSetup {
               WHERE factureconsult.praticien_id IS NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.65";
+    $this->makeRevision("1.65");
+    
+    $query = "ALTER TABLE `factureconsult`
+              ADD `ref_accident` TEXT;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.66";
   }
 }
 ?>

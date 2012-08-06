@@ -35,6 +35,7 @@ class CFactureConsult extends CMbObject
   var $cession_creance        = null;
   var $assurance              = null;
   var $facture                = null;
+  var $ref_accident           = null;
   
   // Form fields
   var $_nb_factures         = null;
@@ -105,6 +106,7 @@ class CFactureConsult extends CMbObject
     $props["cession_creance"]           = "enum notNull list|0|1 default|0";
     $props["assurance"]                 = "ref class|CCorrespondantPatient";
     $props["facture"]                   = "enum notNull list|-1|0|1 default|0";
+    $props["ref_accident"]              = "text";
     
     $props["_du_patient_restant"]       = "currency";
     $props["_du_tiers_restant"]         = "currency";
@@ -425,7 +427,9 @@ class CFactureConsult extends CMbObject
           $total_tarmed += $acte_tarmed->montant_base + $acte_tarmed->montant_depassement;
         }
         foreach ($consult->_ref_actes_caisse as $acte_caisse) {
-          $total_caisse[$acte_caisse->_ref_caisse_maladie->$select] += ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$this->_coeff;
+          $coeff = "coeff_".$this->type_facture;
+          $total_caisse[$acte_caisse->_ref_caisse_maladie->$select] 
+            += ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
         }
       }
       $montant_prem = $total_tarmed * $this->_coeff;

@@ -117,7 +117,11 @@ $pdf->setPrintFooter(false);
 foreach ($factures as $facture) {
   $pdf->AddPage();  
   
-  $facture->loadRefs();
+  $facture->loadRefCoeffFacture();
+  $facture->loadRefsFwd();
+  $facture->loadRefsBack();
+  $facture->loadNumerosBVR("nom");
+  
   $pm = 0;
   $pt = 0;
   
@@ -298,9 +302,12 @@ foreach ($factures as $facture) {
           $pdf->Cell($largeur, null ,  $valeur, null, null, $cote);
           $x = $largeur;
       }
-      $pt += ($acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite * $facture->_coeff);
-      $pm += ($acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al * $acte->quantite * $facture->_coeff);
-      $montant_intermediaire += sprintf("%.2f", $acte->montant_base * $facture->_coeff);
+      $this_pt = ($acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite * $facture->_coeff);
+      $this_pm = ($acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al * $acte->quantite * $facture->_coeff);
+      $pt += $this_pt;
+      $pm += $this_pm;
+      $montant_intermediaire += $this_pt;
+      $montant_intermediaire += $this_pm;
     }
     foreach ($consult->_ref_actes_caisse as $acte) {
       $ligne++;
@@ -341,6 +348,9 @@ foreach ($factures as $facture) {
       $pdf->setX(10);
       $pdf->setFont("vera", '', 8);
       
+      $nom_coeff = "coeff_".$facture->type_facture;
+      $coeff = $acte->_ref_caisse_maladie->$nom_coeff;
+      
       foreach ($tailles_colonnes as $key => $largeur) {
           $pdf->setXY($pdf->getX()+$x, $debut_lignes + $ligne*3);
           $valeur = "";
@@ -361,24 +371,28 @@ foreach ($factures as $facture) {
             $valeur = $acte->quantite;
           }
           if ($key == "Pt PM/Prix") {
-            $valeur = sprintf("%.2f", $acte->montant_base/$acte->quantite);
+            $valeur = sprintf("%.2f", $acte->_ref_prestation_caisse->pt_medical);
             $cote = "R";
           }
-          if ($key == "VPtPM") {
-            $valeur = $facture->_coeff;
+          if ($key == "VPtPM" || $key == "VPtPT") {
+            $valeur = $coeff;
+          }
+          if ($key == "Pt PT") {
+            $valeur = sprintf("%.2f", $acte->_ref_prestation_caisse->pt_technique);
+            $cote = "R";
           }
           if ($key == "P" || $key == "M") {
             $valeur = "0";
           }
           if ($key == "Montant") {
             $pdf->setX($pdf->getX()+3);
-            $valeur = sprintf("%.2f", $acte->montant_base * $facture->_coeff);
+            $valeur = sprintf("%.2f", $acte->montant_base * $coeff);
             $cote = "R";
           }
           $pdf->Cell($largeur, null ,  $valeur, null, null, $cote);
           $x = $largeur;
       }
-      $montant_intermediaire += sprintf("%.2f", $acte->montant_base * $facture->_coeff);
+      $montant_intermediaire += sprintf("%.2f", $acte->montant_base * $coeff);
     }
   }
   
@@ -414,7 +428,7 @@ foreach ($factures as $facture) {
       $pdf->Cell($l, "", $value, null, null, "R");
     }
   }
-  $montant_intermediaire = $pm + $pt;
+  
   $pdf->setXY(20, $ligne+9);
   $pdf->Cell($l, "", "Montant total/CHF", null, null, "R");
   $pdf->Cell($l, "", sprintf("%.2f",$montant_intermediaire), null, null, "R");
