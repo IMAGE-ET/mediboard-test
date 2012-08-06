@@ -84,6 +84,7 @@ class CCorrespondantPatient extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
+    $backProps["assurance"] = "CFactureConsult assurance";
     return $backProps;
   }  
   
