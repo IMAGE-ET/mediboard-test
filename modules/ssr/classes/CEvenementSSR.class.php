@@ -184,14 +184,13 @@ class CEvenementSSR extends CMbObject {
       return $msg;
     }
     
-    // Impossible de supprmier un événement réalisé  
+    // Impossible de supprmier un événement réalisé
     $this->completeField("realise");
     $this->completeField("annule");
     $this->_traite = $this->realise || $this->annule;
     if ($this->realise) {
-      return "CEvenementSSR-msg-delete-failed-traite";
+      return "CEvenementSSR-msg-delete-failed-realise";
     }
-    
   }
   
   function loadView() {
