@@ -309,7 +309,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
         $heure = mbTime($sejour->sortie);
       }
     }
-    // Date et heure de l'éxécution de l'acte
+    // Date et heure de l'exécution de l'acte
     else {
       $date  = mbDate($mbActeCCAM->execution);
       $heure = mbTime($mbActeCCAM->execution);
