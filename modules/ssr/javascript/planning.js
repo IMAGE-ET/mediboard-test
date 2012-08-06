@@ -310,5 +310,12 @@ WeekPlanning = Class.create({
   },
   /*Cette fonction (vide) permet d'instancier dans le semainier les évènements des menus*/
   onMenuClick: function(event, data, elem){
+  },
+  showHalf: function() {
+    var table = $("planningWeek");
+    var top = parseInt(table.down("td").getStyle("height")) / 2;
+    table.select(".show_half").each(function(elt) {
+      elt.setStyle({top: top+'px'});
+    });
   }
 });
