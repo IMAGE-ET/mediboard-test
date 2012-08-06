@@ -17,9 +17,7 @@
  */
 
 class CHL7v2SegmentZBE_FR extends CHL7v2SegmentZBE {
-  function fillOtherSegments(&$data, $ufs = array(), CHL7v2Event $event) {
-    
-    
+  function fillOtherSegments(&$data, $ufs = array(), CHL7v2Event $event) {    
     // ZBE-8: Ward of care responsibility in the period starting with this movement (XON) (optional)
     $uf_soins = isset($ufs["soins"]) ? $ufs["soins"] : null;
     if (isset($uf_soins->_id)) {

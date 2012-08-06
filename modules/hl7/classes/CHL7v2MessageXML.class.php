@@ -232,8 +232,8 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     }
     
     // AN - Patient Account Number (NDA)
-    if ($PID_18 = $this->queryNode("PID.18", $contextNode)) {
-      $this->getANIdentifier($PID_18, $data);
+    foreach ($this->query("PID.18", $contextNode) as $_node) {  
+      $this->getANIdentifier($_node, $data);
     }    
  
     return $data;
@@ -245,17 +245,18 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     // RI - Resource identifier 
     // VN - Visit Number
     // AN - On peut également retrouver le numéro de dossier dans ce champ
-    if ($PV1_19 = $this->queryNode("PV1.19", $contextNode)) {
+    foreach ($this->query("PV1.19", $contextNode) as $_node) {
       switch ($sender->_configs["handle_NDA"]) {
         case 'PV1_19':
-          $this->getANIdentifier($PV1_19, $data);
+          $this->getANIdentifier($_node, $data);
           break;
+          
         default:
           // RI - Resource Identifier
-          $this->getRIIdentifiers($PV1_19, $data, $sender);
+          $this->getRIIdentifiers($_node, $data, $sender);
 
           // VN - Visit Number
-          $this->getVNIdentifiers($PV1_19, $data, $sender);
+          $this->getVNIdentifiers($_node, $data, $sender);
     
           break;
       }

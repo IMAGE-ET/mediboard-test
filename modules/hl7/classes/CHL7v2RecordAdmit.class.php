@@ -366,7 +366,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // Suppression de l'entrée réelle / mode d'entrée
-    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
   
@@ -796,9 +795,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     $movement = new CMovement();
     if (!$movement = $this->mappingMovement($data, $newVenue, $movement)) {
-      $movement_id = $this->queryTextNode("ZBE.1/EI.1", $node);
-      $comment = "Le mouvement '$movement_id' est inconnu dans Mediboard";
-      return $exchange_ihe->setAckAR($ack, "E206", $comment, $newVenue);
+      return $exchange_ihe->setAckAR($ack, "E206", null, $newVenue);
     }
     
     return $movement;
@@ -1307,16 +1304,44 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   function getZBE(DOMNode $node, CSejour $newVenue, CMovement $movement) {    
     $sender       = $this->_ref_sender;
     $id400_create = false;
+    $event_code   = $this->_ref_exchange_ihe->code;
     
-    $movement_id       = $this->queryTextNode("ZBE.1/EI.1", $node);
+    $movement_id  = null;
+    $own_movement = false;
+    foreach ($this->queryNodes("ZBE.1", $node) as $ZBE_1) {
+      $EI_1 = $this->queryTextNode("EI.1", $ZBE_1);
+      $EI_3 = $this->queryTextNode("EI.3", $ZBE_1);
+      
+      // Notre propre identifiant de mouvement
+      if ($EI_3 == CAppUI::conf("hl7 assigning_authority_universal_id")) {
+        $own_movement = true;
+        $movement_id  = $EI_1;
+        break;
+      }
+      
+      // L'identifiant de mouvement du sender
+      if ($EI_3 == $sender->_configs["assigning_authority_universal_id"]) {
+        $movement_id = $EI_1;
+        continue;
+      }    
+    }
+    
+    if (!$movement_id) {
+      return null;
+    }
+        
     $start_movement_dt = $this->queryTextNode("ZBE.2/TS.1", $node);
     $action            = $this->queryTextNode("ZBE.4", $node);
     $original_trigger  = $this->queryTextNode("ZBE.6", $node);
+    if (!$original_trigger) {
+      $original_trigger = $event_code;
+    }
     
     $movement->sejour_id = $newVenue->_id;
     $movement->original_trigger_code = $original_trigger;
+    
     // Notre propre ID de mouvement
-    if (($this->queryTextNode("ZBE.1/EI.3", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))) {
+    if ($own_movement) {
       $movement_id_split       = explode("-", $movement_id);
       $movement->_id           = $movement_id_split[0];
       $movement->movement_type = $movement_id_split[1];
@@ -1327,8 +1352,17 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     // ID mouvement provenant d'un système tiers
     else {
-      $id400Movement = CIdSante400::getMatch("CMovement", $sender->_tag_movement, $movement_id);
-      $id400Movement->_id ? $movement->load($id400Movement->object_id) : ($id400_create = true);
+      $id400Movement = CIdSante400::getMatch("CMovement", $sender->_tag_movement, $movement_id);      
+      if ($id400Movement->_id) {
+        $movement->load($id400Movement->object_id);
+      }
+      // Recherche d'un mouvement identique dans le cas ou il ne s'agit pas d'une mutation / absence
+      else {
+        $id400_create = true;
+        if ($event_code != "A02" || $event_code != "A21") {
+          $movement->loadMatchingObjectEsc();
+        }
+      }
       
       $movement->movement_type = $newVenue->getMovementType($original_trigger);
     }
@@ -1337,9 +1371,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (($original_trigger == "UPDATE" || $original_trigger == "CANCEL") && !$movement->_id) {
       return null;
     }
+    
     $movement->start_of_movement = $start_movement_dt;
     $movement->last_update = mbDateTime();
-    
     if ($msg = $movement->store()) {
       return $msg;
     }
