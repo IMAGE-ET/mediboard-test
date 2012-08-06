@@ -7,10 +7,7 @@
       view_affectations.scrollTop = 0;
      
       if (Prototype.Browser.Gecko) {
-        if (!window.top_view_affectations) {
-          var top_tempo = time_line_temporelle.getStyle("top");
-          time_line_temporelle.setStyle({top: top_tempo});
-        }
+        time_line_temporelle.setStyle({top: window.top_tempo});
       }
       
       if (!Prototype.Browser.IE)  {

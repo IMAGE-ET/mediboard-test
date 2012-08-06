@@ -22,8 +22,7 @@
     var list_affectations = $("list_affectations");
     
     if (Prototype.Browser.Gecko) {
-      var top_tempo = time_line_temporelle_non_affectes.getStyle("top");
-      time_line_temporelle_non_affectes.setStyle({top: top_tempo});
+      time_line_temporelle_non_affectes.setStyle({top: window.top_tempo_na});
     }
     
     if (!Prototype.Browser.IE) {

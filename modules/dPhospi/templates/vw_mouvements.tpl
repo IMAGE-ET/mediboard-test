@@ -1,7 +1,10 @@
 <script type="text/javascript">
-   loadNonPlaces = function() {
+   loadNonPlaces = function(after_refresh) {
+     if (!after_refresh) {
+       after_refresh = Prototype.emptyFunction;
+     }
      var url = new Url("dPhospi", "ajax_vw_non_places");
-     url.requestUpdate("list_affectations");
+     url.requestUpdate("list_affectations", {onComplete: after_refresh});
    }
    
    changeLit = function(affectation_id, link_affectation) {
@@ -185,7 +188,15 @@
     list_affectations.setStyle(
       { height: document.viewport.getHeight()*(0.3)+"px"
       });
-    refreshMouvements(loadNonPlaces);
+    refreshMouvements(loadNonPlaces.curry(function() {
+      var time_line_temporelle = $("time_line_temporelle");
+      var time_line_temporelle_na = $("time_line_temporelle_non_affectes");
+      window.top_tempo = time_line_temporelle.getStyle("top");
+      time_line_temporelle.setStyle({top: window.top_tempo});
+      window.top_tempo_na = time_line_temporelle_na.getStyle("top");
+      time_line_temporelle_na.setStyle({top: window.top_tempo_na});
+    }
+    ));
   });
 </script>
 
