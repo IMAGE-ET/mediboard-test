@@ -18,8 +18,9 @@
 </script>
 
 <style type="text/css">
-  .planning .event {
+  .planning .event .body{
     color: #000 !important;
+    line-height: 120% !important;
   }
 </style>
 
@@ -31,10 +32,6 @@
   Main.add(function() {
     var planning = window["planning-{{$planning->guid}}"];
     planning.salles_ids = {{$salles_ids|@json}};
-    
-    /*planning.setPlanningHeight(2000);
-    planning.adaptRangeHeight();
-    planning.scroll();*/
     
     planning.onMenuClick = function(event, plage, elem) {
       modifIntervention('', '', '', plage);

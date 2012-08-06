@@ -36,7 +36,7 @@ class CPlanningEvent  {
   var $color     = null;
   var $important = null;
   
-  function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true, $css_class = null, $draggable_guid = null) {
+  function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true, $css_class = null, $draggable_guid = null, $html_escape = true) {
     if (!$color) {
       $color = "#999";
     }
@@ -48,7 +48,7 @@ class CPlanningEvent  {
     
     $this->start = $date;
     $this->length = $length;
-    $this->title = htmlentities($title);
+    $this->title = $html_escape ? htmlentities($title) : $title;
     $this->color = $color;
     $this->important = $important;
     $this->css_class = is_array($css_class) ? implode(" ", $css_class) : $css_class;

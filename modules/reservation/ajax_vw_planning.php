@@ -103,16 +103,17 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $duree = mbMinutesRelative($_operation->time_operation, $fin_op);
     }
     
-    $libelle = "$patient->nom $patient->prenom, ".$patient->getFormattedValue("naissance").
-    "\n".mbTransformTime($debut_op, null, "%H:%M")." - ".mbTransformTime($fin_op, null, "%H:%M").
-    "\n".$sejour->getFormattedValue("entree").
-    "\n$_operation->libelle".
-    "\n$chir->_shortview, $anesth->_shortview".
+    $libelle = "<span onmouseover='ObjectTooltip.createEx(this, \"".$patient->_guid."\")'>$patient->nom $patient->prenom</span>, ".$patient->getFormattedValue("naissance").
+    "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".mbTransformTime($debut_op, null, "%H:%M")." - ".mbTransformTime($fin_op, null, "%H:%M")."</span>".
+    "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>".
+    "\n<span style='font-size: 11px; font-weight: bold;'>$_operation->libelle</span>".
+    "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>$chir->_shortview</span>".
+    "<span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>$anesth->_shortview</span>".
     "\n$_operation->rques";
     
     $color = $_operation->rank ? "#{$chir->_ref_function->color}" : "#fd3";
     
-    $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $libelle, $color, true, null, $_operation->_guid);
+    $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $libelle, $color, true, null, $_operation->_guid, false);
     
     if (CCanDo::edit()) {
       $event->addMenuItem("edit", "Modifier cette opération");
