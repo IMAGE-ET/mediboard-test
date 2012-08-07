@@ -1053,6 +1053,16 @@ class CSetupsystem extends CSetup {
               CHANGE `operator` `operator` ENUM ('=','!=','>','>=','<','<=','startsWith','endsWith','contains','hasValue') NOT NULL DEFAULT '=';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.1.05";
+    $this->makeRevision("1.1.05");
+    $query = "CREATE TABLE `datasource_log` (
+      `datasourcelog_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+      `datasource` VARCHAR( 40 ) NOT NULL ,
+      `requests` INT (11) UNSIGNED NOT NULL,
+      `duration` FLOAT NOT NULL ,
+      `accesslog_id` INT UNSIGNED NOT NULL ,
+      PRIMARY KEY ( `datasourcelog_id` )) /*! ENGINE=MyISAM */";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.1.06";
   }
 }

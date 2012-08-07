@@ -1,69 +1,43 @@
-<?php /* $Id$ */
+<?php /* $Id:$ */
 
 /**
  * @package Mediboard
  * @subpackage system
- * @version $Revision$
+ * @version $Revision: 16292 $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CAccessLog extends CMbObject {
-  var $accesslog_id = null;
+class CDataSourceLog extends CMbObject {
+  // DB Table Key
+  var $datasourcelog_id = null;
   
   // DB Fields
-  var $module      = null;
-  var $action      = null;
-  var $period      = null;
-  var $hits        = null;
-  var $duration    = null;
-  var $processus   = null;
-  var $processor   = null;
-  var $request     = null;
-  var $peak_memory = null;
-  var $size        = null;
-  var $errors      = null;
-  var $warnings    = null;
-  var $notices     = null;
+  var $datasource       = null;
+  var $requests         = null;
+  var $duration         = null;
+  
+  // Object Reference
+  var $accesslog_id     = null;
   
   // Form fields
-  var $_average_hits        = 0;
-  var $_average_duration    = 0;
-  var $_average_processus   = 0;
-  var $_average_processor   = 0;
-  var $_average_request     = 0;
-  var $_average_peak_memory = 0;
-  var $_average_size        = 0;
-  var $_average_errors      = 0;
-  var $_average_warnings    = 0;
-  var $_average_notices     = 0;
+  
   
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
-    $spec->table = 'access_log';
-    $spec->key   = 'accesslog_id';
+    $spec->table    = 'datasource_log';
+    $spec->key      = 'datasourcelog_id';
     return $spec;
   }
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["module"]      = "str notNull";
-    $specs["action"]      = "str notNull";
-    $specs["period"]      = "dateTime notNull";
-    $specs["hits"]        = "num pos";
-    $specs["duration"]    = "float";
-    $specs["processus"]   = "float";
-    $specs["processor"]   = "float";
-    $specs["request"]     = "float";
-    $specs["peak_memory"] = "num min|0";
-    $specs["size"]        = "num min|0";
-    $specs["errors"]      = "num min|0";
-    $specs["warnings"]    = "num min|0";
-    $specs["notices"]     = "num min|0";
+    $specs["datasource"]   = "str notNull";
+    $specs["requests"]     = "num";
+    $specs["duration"]     = "float";
+    $props['accesslog_id'] = "ref notNull class|CAccessLog";
 
-    $specs["_average_duration"] = "num min|0";
-    
     return $specs;
   }
   
@@ -77,7 +51,7 @@ class CAccessLog extends CMbObject {
     foreach ($fields as $_name => $_value) {
       $columns[] = "$_name";
       $inserts[] = "'$_value'";
-      if (!in_array($_name, array("module", "action", "period"))) {
+      if (!in_array($_name, array("datasource", "accesslog_id"))) {
           $updates[] = "$_name = $_name + '$_value'";
       }
     }
@@ -86,10 +60,11 @@ class CAccessLog extends CMbObject {
     $inserts = implode(",", $inserts);
     $updates = implode(",", $updates);
     
-    $query = "INSERT INTO access_log ($columns) 
+    $query = "INSERT INTO datasource_log ($columns) 
       VALUES ($inserts)
       ON DUPLICATE KEY UPDATE $updates";
     $ds = $this->_spec->ds;
+    
     if (!$ds->exec($query)) {
       return $ds->error();
     }
@@ -97,21 +72,9 @@ class CAccessLog extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    if ($this->hits) {
-      $this->_average_duration    = $this->duration    / $this->hits;
-      $this->_average_processus   = $this->processus   / $this->hits;
-      $this->_average_processor   = $this->processor   / $this->hits;
-      $this->_average_request     = $this->request     / $this->hits;
-      $this->_average_peak_memory = $this->peak_memory / $this->hits;
-      $this->_average_errors      = $this->errors      / $this->hits;
-      $this->_average_warnings    = $this->warnings    / $this->hits;
-      $this->_average_notices     = $this->notices     / $this->hits;
-    }
-    // If time period == 1 hour
-    $this->_average_hits = $this->hits / 60;   // hits per min
-    $this->_average_size = $this->size / 3600; // size per sec
   }
   
+  /*
   static function loadAgregation($start, $end, $groupmod = 0, $module = null) {
     $query = "SELECT 
         accesslog_id, 
@@ -146,7 +109,9 @@ class CAccessLog extends CMbObject {
     $log = new self;
     return $log->loadQueryList($query);
   }
+  */
   
+  /*
   static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name) {
     $query = "SELECT 
         `accesslog_id`, 
@@ -181,5 +146,6 @@ class CAccessLog extends CMbObject {
     $log = new self;
     return $log->loadQueryList($query);
   }
+  */
 }
 ?>
