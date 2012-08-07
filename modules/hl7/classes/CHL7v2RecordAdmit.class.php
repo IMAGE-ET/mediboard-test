@@ -1343,8 +1343,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Notre propre ID de mouvement
     if ($own_movement) {
       $movement_id_split       = explode("-", $movement_id);
-      $movement->_id           = $movement_id_split[0];
-      $movement->movement_type = $movement_id_split[1];
+      $movement->movement_type = $movement_id_split[0];
+      $movement->_id           = $movement_id_split[1];
       $movement->loadMatchingObjectEsc();
       if (!$movement->_id) {
         return null;
@@ -1374,6 +1374,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     $movement->start_of_movement = $start_movement_dt;
     $movement->last_update = mbDateTime();
+    mbTrace($movement);
     if ($msg = $movement->store()) {
       return $msg;
     }
