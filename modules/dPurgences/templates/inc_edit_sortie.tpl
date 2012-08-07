@@ -25,7 +25,13 @@ submitSejour = function(force) {
 Fields = {
   init: function(mode_sortie) {
     $('etablissement_sortie_transfert').setVisible(mode_sortie == "transfert");
-    $('lit_sortie_transfert'      ).setVisible(mode_sortie == "mutation");
+    if($('lit_sortie_transfert')) {
+      $('lit_sortie_transfert').setVisible(mode_sortie == "mutation");
+      $('service_sortie_transfert').setVisible(mode_sortie == "mutation");
+    }
+    else{
+      $('service_sortie_transfert').setVisible(mode_sortie == "mutation");      
+    }
     $('date_deces').setVisible(mode_sortie === "deces");
     var date_deces = getForm("editSejour")._date_deces;
     if (mode_sortie != "deces") {

@@ -41,7 +41,8 @@ $dPconfig["dPurgences"] = array (
   "attente_third_part"        => "04:00:00",
   "gerer_circonstance"        => "0",
   "valid_cotation_sortie_reelle" => "1",
-  "display_regule_par"        => "0"
+  "display_regule_par"        => "0",
+  "use_blocage_lit"           => "0"
 );
 
 
