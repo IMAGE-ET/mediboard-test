@@ -13,6 +13,7 @@
 
 $patient_id = CValue::get("patient_id");
 $type       = CValue::get("type");
+$antecedent_id = CValue::get("antecedent_id");
 
 $patient = new CPatient;
 $patient->load($patient_id);
@@ -30,13 +31,17 @@ if ($type) {
   $antecedents = $dossier_medical->_ref_antecedents_by_type[$type];
 }
 
+$antecedent = new CAntecedent;
+$antecedent->load($antecedent_id);
+
 $smarty = new CSmartyDP;
 
 $smarty->assign("patient"    , $patient);
 $smarty->assign("antecedents", $antecedents);
 $smarty->assign("is_anesth"  , CAppUI::$user->isAnesth());
-$smarty->assign("antecedent" , new CAntecedent);
+$smarty->assign("antecedent" , $antecedent);
 $smarty->assign("type"       , $type);
+
 $smarty->display("inc_edit_antecedents.tpl");
 
 ?>

@@ -1,3 +1,5 @@
+{{mb_script module=patients script=antecedents}}
+
 <table class="tbl">
   <tr>
     <th class="category">{{tr}}CAntecedent{{/tr}}</th>
@@ -44,10 +46,11 @@
   {{/if}}
 </table>
 
+{{assign var=dossier_medical value=$object->_ref_dossier_medical}}
 <table class="form">
   <tr>
     <td class="button">
-      {{if $object->_ref_dossier_medical->object_class == "CPatient"}}
+      {{if $dossier_medical->object_class == "CPatient"}}
         {{assign var=reload value="DossierMedical.reloadDossierPatient"}}
       {{else}}
         {{assign var=reload value="DossierMedical.reloadDossierSejour"}}
@@ -74,6 +77,12 @@
         {{/if}}
         
         {{if $object->_ref_first_log && $object->_ref_first_log->user_id == $app->user_id}}
+          {{if $dossier_medical->object_class == "CPatient"}}
+          <button type="button" class="edit"
+            onclick="Antecedent.editAntecedents('{{$dossier_medical->object_id}}', '', {{$reload}}, '{{$object->_id}}')">
+            {{tr}}Edit{{/tr}}
+          </button>
+          {{/if}}
           <button title="{{tr}}Delete{{/tr}}" class="trash" type="button" onclick="Antecedent.remove(this.form, {{$reload}}); $('{{$object->_guid}}_tooltip').up('.tooltip').remove();">
             {{tr}}Delete{{/tr}}
           </button>

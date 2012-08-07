@@ -39,11 +39,18 @@ Antecedent = {
     $(list).select('.cancelled').invoke('toggle');
   },
   
-  editAntecedents: function(patient_id, type, callback){
+  editAntecedents: function(patient_id, type, callback, antecedent_id){
     var url = new Url("dPpatients", "ajax_edit_antecedents");
     url.addParam("patient_id", patient_id);
     url.addParam("type", type);
-    url.requestModal(700, 400);
+    if (antecedent_id) {
+      url.addParam("antecedent_id", antecedent_id);
+    }
+    
+    url.modal({
+      width: 700,
+      height: 400
+    });
     url.modalObject.observe("afterClose", function() { if (callback) { callback(); } });
   }
 }
