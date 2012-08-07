@@ -56,6 +56,8 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
   function build(CHL7v2Event $event) {
     parent::build($event);
     
+    $receiver = $event->_receiver;
+    
     $sejour      = $this->sejour;
     $movement    = $this->movement;
     $affectation = $this->curr_affectation;
@@ -71,16 +73,28 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     };
     
     // ZBE-1: Movement ID (EI) (optional)
-    $data[] = array (
-      array (
-        // Entity identifier
-        $movement->_view,
-        // Autorité assignement
-        CAppUI::conf("hl7 assigning_authority_namespace_id"),
-        CAppUI::conf("hl7 assigning_authority_universal_id"),
-        CAppUI::conf("hl7 assigning_authority_universal_type_id"),
-      )
+    $identifiers[] = array(
+      // Entity identifier
+      $movement->_view,
+      // Autorité assignement
+      CAppUI::conf("hl7 assigning_authority_namespace_id"),
+      CAppUI::conf("hl7 assigning_authority_universal_id"),
+      CAppUI::conf("hl7 assigning_authority_universal_type_id"),
     );
+    
+    $id400Movement = CIdSante400::getMatch("CMovement", $receiver->_tag_movement, null, $movement->_id);
+    if ($id400Movement->_id) {
+      $configs = $receiver->_configs;
+      $identifiers[] = array(
+        // Entity identifier
+        $id400Movement->id400,
+        // Autorité assignement
+        $configs["assigning_authority_namespace_id"],
+        $configs["assigning_authority_universal_id"],
+        $configs["assigning_authority_universal_type_id"]
+      );
+    }
+    $data[] = $identifiers;
     
     // ZBE-2: Start of Movement Date/Time (TS)
     $data[] = ($action_movement == "UPDATE" || $action_movement == "CANCEL") ? $movement->last_update : $movement->start_of_movement;
