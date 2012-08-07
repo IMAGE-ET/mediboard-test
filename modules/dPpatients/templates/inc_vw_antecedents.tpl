@@ -4,7 +4,8 @@
 {{assign var=antecedents value=$patient->_ref_dossier_medical->_ref_antecedents_by_type}}
 {{if isset($antecedents.$type|smarty:nodefaults)}}
   {{if $readonly}}
-    <img src="images/icons/{{$type}}.png" {{if !$antecedents.$type|@count}}class="opacity-40"{{/if}} onmouseover="ObjectTooltip.createDOM(this, 'div_atcd');"/>
+    <img src="images/icons/{{$type}}.png" {{if !$antecedents.$type|@count}}class="opacity-40"{{/if}}
+      onmouseover="ObjectTooltip.createDOM(this, 'div_atcd_{{$patient->_id}}');"/>
   {{else}}
     <button type="button" onclick="Antecedent.editAntecedents('{{$patient->_id}}', '{{$type}}', reloadAdmission)"
       class="{{$type}} notext {{if !$antecedents.$type|@count}}opacity-40{{/if}}"
