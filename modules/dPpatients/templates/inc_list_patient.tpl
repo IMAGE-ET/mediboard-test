@@ -155,7 +155,6 @@ emptyForm = function() {
     </th>
     <td>
       {{mb_include module=patients template=inc_select_date date=$naissance tabindex=3}}
-      <button type="button" class="cancel notext" onclick="emptyForm()" title="Vider la date de naissance"></button>
     </td>
     
     {{if $conf.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
@@ -188,6 +187,8 @@ emptyForm = function() {
   
   <tr>
     <td class="button" colspan="4">
+      <button type="button" class="cancel" onclick="emptyForm()"
+          title="Vider les champs du formulaire">{{tr}}Empty{{/tr}}</button>
       <button class="search" tabindex="10" type="submit" onclick="Patient.search(this.form);">{{tr}}Search{{/tr}}</button>
       
       {{if !$board}}
@@ -198,7 +199,7 @@ emptyForm = function() {
         {{elseif $modFSE && $modFSE->canRead()}}
           {{mb_include module=fse template=inc_button_vitale}}
         {{/if}}
-
+        
         {{if $can->edit}}
           {{if $nom || $prenom || $patient_ipp || $naissance}}
           <button class="new" type="button" tabindex="15" onclick="Patient.create(this.form);">
