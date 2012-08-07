@@ -53,7 +53,6 @@ Admissions = {
   },
   
   restoreSelection: function(table_id) {
-    console.log("ON COMPLETE");
     var table = $(table_id);
     
     table.select("input[name=print_doc]").each(function(elt) {
