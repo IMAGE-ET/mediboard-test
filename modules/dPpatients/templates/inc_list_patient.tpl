@@ -86,11 +86,15 @@ toggleSearch = function() {
   $$(".field_basic").each(function(elt){ elt.toggle();});
 }
 
-emptyBirthday = function() {
-  var oForm = getForm("find");
-  $V(oForm.Date_Day, '');
-  $V(oForm.Date_Month, '');
-  $V(oForm.Date_Year, '');
+emptyForm = function() {
+  var form = getForm("find");
+  $V(form.Date_Day, '');
+  $V(form.Date_Month, '');
+  $V(form.Date_Year, '');
+  $V(form.prat_id, '');
+  form.select("input[type=text]").each(function(elt) {
+    $V(elt, '');
+  });
 }
 {{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id}}
   Main.add(toggleSearch); 
@@ -151,7 +155,7 @@ emptyBirthday = function() {
     </th>
     <td>
       {{mb_include module=patients template=inc_select_date date=$naissance tabindex=3}}
-      <button type="button" class="cancel notext" onclick="emptyBirthday()" title="Vider la date de naissance"></button>
+      <button type="button" class="cancel notext" onclick="emptyForm()" title="Vider la date de naissance"></button>
     </td>
     
     {{if $conf.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
