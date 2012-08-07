@@ -52,23 +52,6 @@
      modal.modalObject.observe("afterClose", function() { Placement.resume(); });
    }
    
-   delAffectation = function(affectation_id, lit_id, sejour_guid) {
-     var form = getForm("delAffect");
-     $V(form.affectation_id, affectation_id);
-     
-     return onSubmitFormAjax(form, {onComplete: function(){
-       refreshMouvements(loadNonPlaces, lit_id);
-       if (sejour_guid) {
-         $("view_affectations").select("."+sejour_guid).each(function(div) {
-           var div_lit_id = div.get("lit_id");
-           if (div_lit_id != lit_id) {
-             refreshMouvements(null, div_lit_id);
-           }
-         });
-       }
-     }});
-   }
-   
    moveAffectation = function(affectation_id, lit_id, sejour_id, lit_id_origine) {
    
     var url = new Url("dPhospi", "ajax_move_affectation");
@@ -199,14 +182,6 @@
     ));
   });
 </script>
-
-<!-- Formulaire de suppression d'affectation -->
-<form name="delAffect" method="post" action="?">
-  <input type="hidden" name="m" value="dPhospi" />
-  <input type="hidden" name="dosql" value="do_affectation_aed" />
-  <input type="hidden" name="del" value="1" />
-  <input type="hidden" name="affectation_id" value="" />
-</form>
 
 <form name="filterMouv" action="?" method="get" onsubmit="return false;">
   <input type="hidden" name="m" value="hospi" />
