@@ -25,6 +25,7 @@ $patient_cp          = CValue::get("cp");
 $patient_day         = CValue::getOrSession("Date_Day");
 $patient_month       = CValue::getOrSession("Date_Month");
 $patient_year        = CValue::getOrSession("Date_Year");
+$patient_sexe        = CValue::get("sexe");
 $patient_naissance   = null;
 $patient_ipp         = CValue::get("patient_ipp");
 $useVitale           = CValue::get("useVitale",  CModule::getActive("fse") || CAppUI::pref('VitaleVision') ? 1 : 0);
@@ -75,9 +76,9 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 
 // Recherche par trait standard
 else {
-	$where        = array();
-	$whereSoundex = array();
-	$soundexObj   = new soundex2();
+  $where        = array();
+  $whereSoundex = array();
+  $soundexObj   = new soundex2();
   // Limitation du nombre de caractères
   $patient_nom_search    = trim($patient_nom);
   $patient_prenom_search = trim($patient_prenom);
@@ -105,21 +106,29 @@ else {
       CValue::first($patient_day  , "%");
     $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$patient_naissance'";
   }
-	
-  if ($patient_ville) $where["ville"] = $whereSoundex["ville"] = "LIKE '$patient_ville%'";
-  if ($patient_cp)    $where["cp"]    = $whereSoundex["cp"]    = "LIKE '$patient_cp%'";
-	
-	$patients        = array();
-	$patientsSoundex = array();
+  
+  if ($patient_sexe) {
+    $where["sexe"] = $whereSoundex["sexe"] = "= '$patient_sexe'";
+  }
+  
+  if ($patient_ville) {
+    $where["ville"] = $whereSoundex["ville"] = "LIKE '$patient_ville%'";
+  }
+  if ($patient_cp) {
+    $where["cp"]    = $whereSoundex["cp"]    = "LIKE '$patient_cp%'";
+  }
+  
+  $patients        = array();
+  $patientsSoundex = array();
 
-	$pat = new CPatient();
-	if ($where) {
-	  $patients = $pat->loadList($where, "nom, prenom, naissance", "0, 100");
-	}
-	if($whereSoundex && ($nbExact = (100 - count($patients)))) {
-	  $patientsSoundex = $pat->loadList($whereSoundex, "nom, prenom, naissance", "0, $nbExact");
-	  $patientsSoundex = array_diff_key($patientsSoundex, $patients);
-	}
+  $pat = new CPatient();
+  if ($where) {
+    $patients = $pat->loadList($where, "nom, prenom, naissance", "0, 100");
+  }
+  if($whereSoundex && ($nbExact = (100 - count($patients)))) {
+    $patientsSoundex = $pat->loadList($whereSoundex, "nom, prenom, naissance", "0, $nbExact");
+    $patientsSoundex = array_diff_key($patientsSoundex, $patients);
+  }
 }
 
 // Liste des praticiens

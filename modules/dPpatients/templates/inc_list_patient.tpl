@@ -96,7 +96,7 @@ emptyForm = function() {
     $V(elt, '');
   });
 }
-{{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id}}
+{{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id || $sexe}}
   Main.add(toggleSearch); 
 {{/if}}
 </script>
@@ -169,8 +169,21 @@ emptyForm = function() {
   </tr>
   
   <tr>
-    <td colspan="2">
+    <th class="field_advanced" style="display: none;">
+      {{mb_label class=CPatient field=sexe}}
+    </th>
+    <td class="field_advanced" style="display: none;">
+      <select name="sexe">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        <option value="m" {{if $sexe == "m"}}selected{{/if}}>
+          {{tr}}CPatient.sexe.m{{/tr}}
+        </option>
+        <option value="f" {{if $sexe == "f"}}selected{{/if}}>
+          {{tr}}CPatient.sexe.f{{/tr}}
+        </option>
+      </select>
     </td>
+    
     <td class="field_advanced" colspan="2"></td>
     <th style="display: none;" class="field_advanced">
       <label for="prat" title="Praticien concerné">
