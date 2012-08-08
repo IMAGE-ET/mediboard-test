@@ -1063,6 +1063,17 @@ class CSetupsystem extends CSetup {
       PRIMARY KEY ( `datasourcelog_id` )) /*! ENGINE=MyISAM */";
     $this->addQuery($query);
     
-    $this->mod_version = "1.1.06";
+    $this->makeRevision("1.1.06");
+    $query = "LOCK TABLE `datasource_log` WRITE";
+    $this->addQuery($query);
+    $query = "DELETE FROM `datasource_log`";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `datasource_log` 
+      ADD UNIQUE `doublon` (`datasource` , `accesslog_id`)";
+    $this->addQuery($query);
+    $query = "UNLOCK TABLES";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.1.07";
   }
 }
