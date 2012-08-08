@@ -22,8 +22,12 @@ class CEAISoapHandler extends CSoapHandler {
    * @var array
    */
   static $paramSpecs = array(
-    "event" => array ( 
-      "message" => "string"),
+    "event" => array(
+      "parameters" => array(
+        "message" => "string"
+      ),
+      "return" => array()
+    )
   );
   
   /**

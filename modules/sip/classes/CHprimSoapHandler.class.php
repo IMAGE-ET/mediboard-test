@@ -13,12 +13,24 @@
  */
 class CHprimSoapHandler extends CSoapHandler {
   static $paramSpecs = array(
-    "evenementPatient" => array ( 
-      "messagePatient" => "string"),
-    "evenementServeurActes" => array ( 
-      "messageServeurActes" => "string"),
-    "evenementPmsi" => array ( 
-      "messagePmsi" => "string")
+    "evenementPatient" => array(
+      "parameters" => array(
+        "messagePatient" => "string"
+      ),
+      "return" => array()
+    ),
+    "evenementServeurActes" => array(
+      "parameters" => array(
+        "messageServeurActes" => "string"
+      ),
+      "return" => array()
+    ),
+    "evenementPmsi" => array(
+      "parameters" => array(
+        "messagePmsi" => "string"
+      ),
+      "return" => array()
+    )
   );
   
   static function getParamSpecs() {
