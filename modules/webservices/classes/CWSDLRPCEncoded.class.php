@@ -16,64 +16,59 @@
  * Format RPC Encoded
  */
 class CWSDLRPCEncoded extends CWSDLRPC {
-  function addMessage($functions, $returns = array()) {
+  function addMessage() {
     $definitions = $this->documentElement;
     $this->addComment($definitions, "Partie 3 : Messages");
     
-    foreach($functions as $nameFunction => $atts) {
-      $message = $this->addElement($definitions, "message");
-      $this->addAttribute($message, "name", $nameFunction."Request");
+    foreach($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
+      $message = $this->addElement($definitions, "message", null, "http://schemas.xmlsoap.org/wsdl/");
+      $this->addAttribute($message, "name", $_method."Request");
       
-      foreach($atts as $attName => $attValue) {
-        $part = $this->addElement($message, "part");
-        $this->addAttribute($part, "name", $attName);
-        $this->addAttribute($part, "type", "xsd:".$this->xsd[$attValue]);
+      foreach ($_paramSpec['parameters'] as $_oneParam => $_paramType) {
+        $part = $this->addElement($message, "part", null, "http://schemas.xmlsoap.org/wsdl/");
+        $this->addAttribute($part, "name", $_oneParam);
+        $this->addAttribute($part, "type", "xsd:".$_paramType);
       }
       
-      $message = $this->addElement($definitions, "message");
-      $this->addAttribute($message, "name", $nameFunction."Response");
+      $message = $this->addElement($definitions, "message", null, "http://schemas.xmlsoap.org/wsdl/");
+      $this->addAttribute($message, "name", $_method."Response");
       
-      if (!empty($returns) && array_key_exists($nameFunction, $returns)) {
-        foreach ($returns[$nameFunction] as $returnName => $returnValue) {
-          $part = $this->addElement($message, "part");
-          $this->addAttribute($part, "name", $returnName);
-          $this->addAttribute($part, "type", "xsd:".$this->xsd[$returnValue]);
-        }
-      } 
-      else {
-        $part = $this->addElement($message, "part");
-        $this->addAttribute($part, "name", "return");
-        $this->addAttribute($part, "type", "xsd:".$this->xsd["string"]);
+      foreach ($_paramSpec['return'] as $_oneParam => $_paramType) {
+        $part = $this->addElement($message, "part", null, "http://schemas.xmlsoap.org/wsdl/");
+        $this->addAttribute($part, "name", $_oneParam);
+        $this->addAttribute($part, "type", "xsd:".$_paramType);
       }
     }
   }
   
-  function addPortType($functions) {
+  function addPortType() {
     $definitions = $this->documentElement;
-    $this->addComment($definitions, "Partie 4 : Port Type");
+    $partie4 = $this->createComment("partie 4 : Port Type");
+    $definitions->appendChild($partie4);
     
-    $portType = $this->addElement($definitions, "portType");
+    $portType = $this->addElement($definitions, "portType", null, "http://schemas.xmlsoap.org/wsdl/");
     $this->addAttribute($portType, "name", "MediboardPort");
     
-    foreach($functions as $nameFunction => $atts) {
+    foreach($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
       $partie5 = $this->createComment("partie 5 : Operation");
       $portType->appendChild($partie5);
-      $operation = $this->addElement($portType, "operation");
-      $this->addAttribute($operation, "name", $nameFunction);
+      $operation = $this->addElement($portType, "operation", null, "http://schemas.xmlsoap.org/wsdl/");
+      $this->addAttribute($operation, "name", $_method);
       
-      $input = $this->addElement($operation, "input");
-      $this->addAttribute($input, "message", "typens:".$nameFunction."Request");
+      $input = $this->addElement($operation, "input", null, "http://schemas.xmlsoap.org/wsdl/");
+      $this->addAttribute($input, "message", "typens:".$_method."Request");
       
-      $output = $this->addElement($operation, "output");
-      $this->addAttribute($output, "message", "typens:".$nameFunction."Response");
+      $output = $this->addElement($operation, "output", null, "http://schemas.xmlsoap.org/wsdl/");
+      $this->addAttribute($output, "message", "typens:".$_method."Response");
     }
   }
   
-  function addBinding($functions) {
+  function addBinding() {
     $definitions = $this->documentElement;
-    $this->addComment($definitions, "Partie 6 : Binding");
+    $partie6 = $this->createComment("partie 6 : Binding");
+    $definitions->appendChild($partie6);
     
-    $binding = $this->addElement($definitions, "binding");
+    $binding = $this->addElement($definitions, "binding", null, "http://schemas.xmlsoap.org/wsdl/");
     $this->addAttribute($binding, "name", "MediboardBinding");
     $this->addAttribute($binding, "type", "typens:MediboardPort");
     
@@ -81,23 +76,24 @@ class CWSDLRPCEncoded extends CWSDLRPC {
     $this->addAttribute($soap, "style", "rpc");
     $this->addAttribute($soap, "transport", "http://schemas.xmlsoap.org/soap/http");
 
-    foreach($functions as $nameFunction => $atts) {
-      $operation = $this->addElement($binding, "operation");
-      $this->addAttribute($operation, "name", $nameFunction);
+    foreach($this->_soap_handler->getParamSpecs() as $_method => $_paramSpec) {
+      $operation = $this->addElement($binding, "operation", null, "http://schemas.xmlsoap.org/wsdl/");
+      
+      $this->addAttribute($operation, "name", $_method);
       
       $soapoperation = $this->addElement($operation, "soap:operation", null, "http://schemas.xmlsoap.org/wsdl/soap/");
       $this->addAttribute($soapoperation, "soapAction", "MediboardAction");
       
-      $input = $this->addElement($operation, "input");
-      $this->addAttribute($input, "name", $nameFunction."Request");
+      $input = $this->addElement($operation, "input", null, "http://schemas.xmlsoap.org/wsdl/");
+      $this->addAttribute($input, "name", $_method."Request");
       
       $soapbody = $this->addElement($input, "soap:body", null, "http://schemas.xmlsoap.org/wsdl/soap/");
       $this->addAttribute($soapbody, "use", "encoded");
       $this->addAttribute($soapbody, "namespace", "urn:MediboardWSDL");
       $this->addAttribute($soapbody, "encodingStyle", "http://schemas.xmlsoap.org/soap/encoding/");
       
-      $output = $this->addElement($operation, "output");
-      $this->addAttribute($output, "name", $nameFunction."Reponse");
+      $output = $this->addElement($operation, "output", null, "http://schemas.xmlsoap.org/wsdl/");
+      $this->addAttribute($output, "name", $_method."Response");
       
       $soapbody = $this->addElement($output, "soap:body", null, "http://schemas.xmlsoap.org/wsdl/soap/");
       $this->addAttribute($soapbody, "use", "encoded");

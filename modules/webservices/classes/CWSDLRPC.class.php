@@ -18,9 +18,9 @@
 class CWSDLRPC extends CWSDL {
   function addTypes() {}
     
-  function addMessage($functions, $returns = array()) {}
+  function addMessage() {}
   
-  function addPortType($functions) {}
+  function addPortType() {}
   
-  function addBinding($functions) {}  
+  function addBinding() {}  
 }

@@ -34,22 +34,18 @@ if (isset($wsdl)) {
 
   header('Content-Type: application/xml; charset=iso-8859-1');
   
-  /*if ($classname != "CSoapHandler") {
-    $soap_handler= new CSoapHandler();
-    $functions += $soap_handler->paramSpecs;
-  }*/
-  $functions = $class->getParamSpecs();
-  $returns   = $class->getReturnSpecs();
-  
   $wsdlFile = new $wsdl_mode;
+  // Pour garder en référence les fonctions a decrire
+  $wsdlFile->_soap_handler = $class;
   $wsdlFile->addTypes();
-  $wsdlFile->addMessage($functions, $returns);
-  $wsdlFile->addPortType($functions);
-  $wsdlFile->addBinding($functions);
+  $wsdlFile->addMessage();
+  $wsdlFile->addPortType();
+  $wsdlFile->addBinding();
   $wsdlFile->addService($username, $password, $m, $a, $classname);
   
   echo $wsdlFile->saveXML();
-} else {
+}
+else {
   if (!$classname || !class_exists($classname, true)) {
     throw new SoapFault("1", "Error : classname is not valid");  
   }
@@ -57,7 +53,8 @@ if (isset($wsdl)) {
   // on indique au serveur à quel fichier de description il est lié
   try {
     $serverSOAP = new SoapServer(CApp::getBaseUrl()."/?login=1&username=$username&password=$password&m=$m&a=$a&class=$classname&wsdl");
-  } catch (Exception $e) {
+  }
+  catch (Exception $e) {
     echo $e->getMessage();
   }
     

@@ -10,29 +10,39 @@
 
 class CSoapHandler {
   static $paramSpecs = array(
-    "calculatorAuth" => array ( 
-      "operation" => "string",
-      "entier1"   => "int",
-      "entier2"   => "int")
+    "calculatorAuth" => array(
+      "parameters" => array(
+        "operation" => "string",
+        "entier1"   => "int",
+        "entier2"   => "int"
+      ),
+      "return" => array(
+        "result" => "int")
+    ),
+    "calculatorAuth2" => array(
+      "parameters" => array(
+        "operation" => "string",
+        "entier1"   => "int",
+        "entier2"   => "int"
+      ),
+      "return" => array(
+        "result" => "int")
+    )
   );
-  
-  static $returnSpecs = array();
   
   static function getParamSpecs() {
     return self::$paramSpecs;
   }
   
-  static function getReturnSpecs() {
-    return self::$returnSpecs;
-  }
-  
   /**
    * Calculation method (add/substract)
-   * @param operation Type de l'opération (add / substract)
-   * @param entier1 Premier entier
-   * @param entier2 Deuxième entier
-   * @return result Operation result 
-   **/
+   * 
+   * @param string $operation Type de l'opération (add / substract)
+   * @param int    $entier1   Premier entier
+   * @param int    $entier2   Deuxième entier
+   * 
+   * @return int $result Operation result
+   */
   function calculatorAuth($operation, $entier1, $entier2) {
     $result = 0;
 
@@ -50,6 +60,19 @@ class CSoapHandler {
     }
     
     return $result;
+  }
+  
+  /**
+   * Calculation method (add/substract)
+   * 
+   * @param string $operation Type de l'opération (add / substract)
+   * @param int    $entier1   Premier entier
+   * @param int    $entier2   Deuxième entier
+   * 
+   * @return int $result Operation result
+   */
+  function calculatorAuth2($operation, $entier1, $entier2) {
+    return 2;
   }
 }
 ?>
