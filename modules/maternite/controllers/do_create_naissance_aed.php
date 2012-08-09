@@ -142,22 +142,25 @@ else {
   $sejour_enfant->praticien_id = $praticien_id;
   storeObject($sejour_enfant);
   
-  // Créer l'affectation si nécessaire (si issu d'un dossier provisoire)
-  // Checker également si l'affectation de la maman existe
-  if ($validation_naissance && $curr_affect->_id) {
+  // Effectuer l'admission si nécessaire (si issu d'un dossier provisoire)
+  if ($validation_naissance) {
     $sejour_enfant->entree_reelle = $datetime;
     storeObject($sejour_enfant);
     
-    $affectation = $sejour_enfant->loadRefCurrAffectation();
-    
-    if (!$affectation->_id) {
-      $affectation = new CAffectation;
-      $affectation->entree = $sejour_enfant->entree_reelle;
-      $affectation->sortie = $sejour_enfant->sortie_prevue;
-      $affectation->lit_id = $curr_affect->lit_id;
-      $affectation->sejour_id = $sejour_enfant->_id;
-      $affectation->parent_affectation_id = $curr_affect->_id;
-      storeObject($affectation);
+    // Checker également si l'affectation de la maman existe
+    // Et dans ce cas, la créer pour le bébé  
+    if ($curr_affect->_id) {
+      $affectation = $sejour_enfant->loadRefCurrAffectation();
+      
+      if (!$affectation->_id) {
+        $affectation = new CAffectation;
+        $affectation->entree = $sejour_enfant->entree_reelle;
+        $affectation->sortie = $sejour_enfant->sortie_prevue;
+        $affectation->lit_id = $curr_affect->lit_id;
+        $affectation->sejour_id = $sejour_enfant->_id;
+        $affectation->parent_affectation_id = $curr_affect->_id;
+        storeObject($affectation);
+      }
     }
   }
   
