@@ -210,7 +210,7 @@ class CAffectation extends CMbObject {
     // Si c'est une création d'affectation, avec ni une précédente ni une suivante,
     // que le séjour est relié à une grossesse, et que le module maternité est actif,
     // alors il faut créer les affectations des bébés.
-    if (CModule::getActive("maternite") && $this->_ref_sejour->grossesse_id && !$this->_id && !$this->_ref_prev && !$this->_ref_next) {
+    if (CModule::getActive("maternite") && $this->_ref_sejour->grossesse_id && !$this->_id && !$this->_ref_prev->_id && !$this->_ref_next->_id) {
       $create_affectations = true;
     }
     
