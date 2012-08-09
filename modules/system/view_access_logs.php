@@ -23,6 +23,8 @@ $left_sampling  = CValue::getOrSession("left_sampling", "mean"); // total, mean
 $right_mode     = CValue::getOrSession("right_mode", "hits"); // hits, size
 $right_sampling = CValue::getOrSession("right_sampling", "total"); // total, mean
 
+$DBorNotDB = CValue::getOrSession("DBorNotDB_hidden", false); // Do we use DB or datasource_logs?
+
 $module = null;
 if (!is_numeric($groupmod)) {
   $module = $groupmod;
@@ -55,16 +57,44 @@ switch ($interval = CValue::getOrSession("interval", "day")) {
 }
 
 CSQLDataSource::$trace = false;
-$logs = CAccessLog::loadAgregation($from, $to, $groupmod, $module);
+$logs = CAccessLog::loadAgregation($from, $to, $groupmod, $module, $DBorNotDB);
 
 $graphs = array();
 $left   = array($left_mode, $left_sampling);
 $right  = array($right_mode, $right_sampling);
-foreach($logs as $log) {
-  switch($groupmod) {
-    case 0: $graphs[] = graphAccessLog($log->module, $log->action, $from, $to,$interval, $left, $right); break;
-    case 1: $graphs[] = graphAccessLog($log->module, null        , $from, $to,$interval, $left, $right); break;
-    case 2: $graphs[] = graphAccessLog(null        , null        , $from, $to,$interval, $left, $right); break;
+
+if (!$DBorNotDB) {
+  foreach($logs as $log) {
+    switch($groupmod) {
+      case 0: $graphs[] = graphAccessLog($log->module, $log->action, $from, $to,$interval, $left, $right, $DBorNotDB); break;
+      case 1: $graphs[] = graphAccessLog($log->module, null        , $from, $to,$interval, $left, $right, $DBorNotDB); break;
+      case 2: $graphs[] = graphAccessLog(null        , null        , $from, $to,$interval, $left, $right, $DBorNotDB); break;
+    }
+  }
+}
+else {
+  foreach($logs as $log) {
+    switch($groupmod) {
+      case 0:
+        $graph = graphAccessLog($log['module'], $log['action'], $from, $to,$interval, $left, $right, $DBorNotDB);
+        if ($graph["series"]) {
+          $graphs[] = $graph;
+        }
+        break;
+        
+      case 1:
+        $graph = graphAccessLog($log['module'], null, $from, $to,$interval, $left, $right, $DBorNotDB);
+        if ($graph["series"]) {
+          $graphs[] = $graph;
+        }
+        break;
+        
+      case 2:
+        $graph = graphAccessLog(null, null, $from, $to,$interval, $left, $right, $DBorNotDB);
+        if ($graph["series"]) {
+          $graphs[] = $graph;
+        }
+    }
   }
 }
 
@@ -90,6 +120,8 @@ $smarty->assign("right_sampling", $right_sampling);
 $smarty->assign("module"     , $module);
 $smarty->assign("interval"   , $interval);
 $smarty->assign("listModules", CModule::getInstalled());
+
+$smarty->assign("DBorNotDB", $DBorNotDB);
 
 $smarty->display("view_access_logs.tpl");
 

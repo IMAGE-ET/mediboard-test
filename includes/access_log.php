@@ -14,7 +14,7 @@
  */
 
 if (CAppUI::conf("readonly")) {
-	return;
+  return;
 }
 
 global $m, $action;
@@ -48,4 +48,25 @@ $log->notices     += CApp::$performance["notice"];
 // Fast store
 if ($msg = $log->fastStore()) {
   trigger_error($msg, E_USER_WARNING);
+}
+else {
+  foreach (CSQLDataSource::$dataSources as $aDataSource) {
+    $dsl = new CDataSourceLog();
+    $dsl->datasource = $aDataSource->dsn;
+    $dsl->requests   = $aDataSource->chrono->nbSteps;
+    $dsl->duration   = round(floatval($aDataSource->chrono->total), 3);
+    
+    // In order to retrieve inserted AccessLog ID
+    $log2 = new CAccessLog();
+    $log2->module   = $log->module;
+    $log2->action   = $log->action;
+    $log2->period   = $log->period;
+    $log2->loadMatchingObject();
+    
+    $dsl->accesslog_id = $log2->_id;
+    
+    if ($msg = $dsl->fastStore()) {
+      trigger_error($msg, E_USER_WARNING);
+    }
+  }
 }

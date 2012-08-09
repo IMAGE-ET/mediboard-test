@@ -89,6 +89,7 @@ class CAccessLog extends CMbObject {
     $query = "INSERT INTO access_log ($columns) 
       VALUES ($inserts)
       ON DUPLICATE KEY UPDATE $updates";
+      
     $ds = $this->_spec->ds;
     if (!$ds->exec($query)) {
       return $ds->error();
@@ -112,7 +113,7 @@ class CAccessLog extends CMbObject {
     $this->_average_size = $this->size / 3600; // size per sec
   }
   
-  static function loadAgregation($start, $end, $groupmod = 0, $module = null) {
+  static function loadAgregation($start, $end, $groupmod = 0, $module = null, $DBorNotDB = false) {
     $query = "SELECT 
         accesslog_id, 
         module, 
@@ -142,41 +143,90 @@ class CAccessLog extends CMbObject {
       case 0 :  $query .= "GROUP BY module, action ORDER BY module, action "; break;
 
     }
-   
+    
+    if ($DBorNotDB) {
+      $query = "SELECT 
+        `access_log`.`accesslog_id`,
+        `access_log`.`module`,
+        `access_log`.`action`,
+        `access_log`.`period`,
+        0 AS grouping
+      FROM `access_log`
+      USE INDEX (`period`)
+      WHERE `access_log`.`period` BETWEEN '$start' AND '$end' ";
+        
+      if ($module && !$groupmod) {
+        $query .= "AND module = '$module' ";
+      }
+      
+      switch ($groupmod) {
+        case 2 :  $query .= "GROUP BY grouping "; break;
+        case 1 :  $query .= "GROUP BY module ORDER BY module "; break;
+        case 0 :  $query .= "GROUP BY module, action ORDER BY module, action "; break;
+      }
+      
+      $log = new self;
+      return $log->_spec->ds->loadList($query);
+    }
+    
     $log = new self;
     return $log->loadQueryList($query);
   }
   
-  static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name) {
+  static function loadPeriodAggregation($start, $end, $period_format, $module_name, $action_name, $DBorNotDB = false) {
     $query = "SELECT 
-        `accesslog_id`, 
-        `module`, 
-        `action`, 
+        `accesslog_id`,
+        `module`,
+        `action`,
         `period`,
         AVG(duration/hits)    AS _average_duration,
         AVG(processus/hits)   AS _average_processus,
         AVG(processor/hits)   AS _average_processor,
         AVG(request/hits)     AS _average_request,
         AVG(peak_memory/hits) AS _average_peak_memory,
-        SUM(hits)             AS hits, 
-        SUM(size)             AS size, 
-        SUM(duration)         AS duration, 
-        SUM(processus)        AS processus, 
-        SUM(processor)        AS processor, 
-        SUM(request)          AS request, 
-        SUM(peak_memory)      AS peak_memory, 
-        SUM(errors)           AS errors, 
-        SUM(warnings)         AS warnings, 
+        SUM(hits)             AS hits,
+        SUM(size)             AS size,
+        SUM(duration)         AS duration,
+        SUM(processus)        AS processus,
+        SUM(processor)        AS processor,
+        SUM(request)          AS request,
+        SUM(peak_memory)      AS peak_memory,
+        SUM(errors)           AS errors,
+        SUM(warnings)         AS warnings,
         SUM(notices)          AS notices,
       DATE_FORMAT(`period`, '$period_format') AS `gperiod`
       FROM `access_log`
       USE INDEX (period)
       WHERE `period` BETWEEN '$start' AND '$end'";
-          
+      
     if ($module_name) $query .= "\nAND `module` = '$module_name'";
     if ($action_name) $query .= "\nAND `action` = '$action_name'";
-  
+    
     $query .= "\nGROUP BY `gperiod` ORDER BY `period`";
+    
+    if ($DBorNotDB) {
+      $query = "SELECT 
+        `access_log`.`accesslog_id`,
+        `access_log`.`module`,
+        `access_log`.`action`,
+        `access_log`.`period`,
+        `datasource_log`.`datasource`,
+        `datasource_log`.`requests`,
+        `datasource_log`.`duration`,
+      DATE_FORMAT(`access_log`.`period`, '$period_format') AS `gperiod`
+      FROM `datasource_log`, `access_log`
+      USE INDEX (`period`)
+      WHERE `access_log`.`period` BETWEEN '$start' AND '$end'
+        AND `access_log`.`accesslog_id` = `datasource_log`.`accesslog_id`";
+        
+      if ($module_name) $query .= "\nAND `access_log`.`module` = '$module_name'";
+      if ($action_name) $query .= "\nAND `access_log`.`action` = '$action_name'";
+      
+      $query .= "\nGROUP BY `gperiod`, `datasource_log`.`datasource` ORDER BY `period`";
+      
+      $log = new self;
+      return $log->_spec->ds->loadList($query);
+    }
     
     $log = new self;
     return $log->loadQueryList($query);

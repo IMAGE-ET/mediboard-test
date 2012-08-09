@@ -23,7 +23,7 @@ function drawGraphs(size) {
   var container;
   size = size || graphSizes[0];
   $A(graphs).each(function(g, key) {
-  	container = $('graph-'+key);
+    container = $('graph-'+key);
     container.setStyle(size);
     g.options.y2axis.noTicks = size.yaxisNoTicks;
     g.options.yaxis.noTicks = size.yaxisNoTicks;
@@ -33,7 +33,7 @@ function drawGraphs(size) {
     
     {{if $groupmod==1}}
     f.overlay.setStyle({cursor: 'pointer'})
-             .observe('click', function(m){return function(){$V(getForm('typevue').elements.groupmod, m)}}(g.module));
+             .observe('click', function(m){return function(){$V(getForm('typevue').groupmod, m)}}(g.module));
     {{/if}}
   });
 }
@@ -61,7 +61,7 @@ Main.add(function () {
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
       
-  	  Logs d'accès du {{$date|date_format:$conf.longdate}}
+      Logs d'accès du {{$date|date_format:$conf.longdate}}
       <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       
       <label for="interval" title="Echelle d'affichage">Intervalle</label>
@@ -73,28 +73,35 @@ Main.add(function () {
         <option value="twentyyears"  {{if $interval == "twentyyears"}} selected="selected" {{/if}}>20 ans  </option>
       </select>
       
-			{{if $interval == "day"}} 
-	      <label for="hour_min" title="Heure minimale">{{tr}}From{{/tr}}</label>
-	      <select name="hour_min" onchange="this.form.submit()">
-	        {{foreach from=$hours item=_hour}}
-	          <option value="{{$_hour}}" {{if $hour_min == $_hour}} selected="selected" {{/if}}>
-	            {{$_hour|pad:2:0}}h
-	          </option>
-	        {{/foreach}}
-	      </select>
-	
-	      <label for="hour_max" title="Heure maximale">{{tr}}To{{/tr}}</label>
-	      <select name="hour_max"  onchange="this.form.submit()">
-	        {{foreach from=$hours item=_hour}}
-	          <option value="{{$_hour}}" {{if $hour_max == $_hour}} selected="selected" {{/if}}>
-	            {{$_hour|pad:2:0}}h
-	          </option>
-	        {{/foreach}}
-	      </select>
-			{{/if}}
-			
+      {{if $interval == "day"}}
+        <label for="hour_min" title="Heure minimale">{{tr}}From{{/tr}}</label>
+        <select name="hour_min" onchange="this.form.submit()">
+          {{foreach from=$hours item=_hour}}
+            <option value="{{$_hour}}" {{if $hour_min == $_hour}} selected="selected" {{/if}}>
+              {{$_hour|pad:2:0}}h
+            </option>
+          {{/foreach}}
+        </select>
+  
+        <label for="hour_max" title="Heure maximale">{{tr}}To{{/tr}}</label>
+        <select name="hour_max"  onchange="this.form.submit()">
+          {{foreach from=$hours item=_hour}}
+            <option value="{{$_hour}}" {{if $hour_max == $_hour}} selected="selected" {{/if}}>
+              {{$_hour|pad:2:0}}h
+            </option>
+          {{/foreach}}
+        </select>
+      {{/if}}
+      
       <label for="bigsize" title="Afficher en plus grande taille">Grande taille</label>
       <input type="checkbox" name="bigsize" onclick="drawGraphs(graphSizes[this.checked ? 1 : 0])" {{if $groupmod == 2}}checked="checked"{{/if}} />
+      {{if $DBorNotDB}}
+        <button type="button" class="lookup" onclick="this.form.DBorNotDB_hidden.value = '0'; this.form.submit()">Vue standard</button>
+        <input type="hidden" name="DBorNotDB_hidden" value="1" />
+      {{else}}
+        <button type="button" class="lookup" onclick="this.form.DBorNotDB_hidden.value = '1'; this.form.submit()">Détails des sources de données</button>
+        <input type="hidden" name="DBorNotDB_hidden" value="0" />
+      {{/if}}
       <br />
       
       <label for="groupmod" title="Type de vue des graphiques">Type de vue</label>
@@ -110,6 +117,7 @@ Main.add(function () {
         </optgroup>
       </select>
       
+      {{if !$DBorNotDB}}
       <div>
         Gauche:
         <select name="left_mode" onchange="this.form.submit()">
@@ -133,6 +141,7 @@ Main.add(function () {
           <option value="mean"  {{if $right_sampling == 'mean'}} selected="selected"{{/if}}>par unité de temps</option>
         </select>
       </div>
+      {{/if}}
     </form>
   </th>
   <td>
