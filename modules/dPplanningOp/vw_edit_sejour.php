@@ -89,6 +89,7 @@ if (CModule::getActive("maternite")) {
     $duree_sejour = CAppUI::conf("maternite duree_sejour");
     $sejour->_date_sortie_prevue = mbDate("+ $duree_sejour days");
     $sejour->_duree_prevue = $duree_sejour;
+    $sejour->type = $duree_sejour > 0 ? "comp" : "ambu";
   }
 }
 
@@ -106,7 +107,7 @@ $patient->loadRefsCorrespondants();
 
 $correspondantsMedicaux = array();
 if ($patient->_ref_medecin_traitant->_id) {
-	$correspondantsMedicaux["traitant"] = $patient->_ref_medecin_traitant;
+  $correspondantsMedicaux["traitant"] = $patient->_ref_medecin_traitant;
 }
 foreach($patient->_ref_medecins_correspondants as $correspondant) {
   $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
