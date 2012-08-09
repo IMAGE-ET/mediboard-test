@@ -28,21 +28,21 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
   );
   
   static function getEvtAcquittement(CHPrimXMLEvenementsServeurActivitePmsi $dom_evt) {
-    $acq_evt = null;
     if ($dom_evt instanceof CHPrimXMLEvenementsServeurActes) {
-      $acq_evt = new CHPrimXMLAcquittementsServeurActes;
-    }
-    else if ($dom_evt instanceof CHPrimXMLEvenementsPmsi) {
-      $acq_evt = new CHPrimXMLAcquittementsPmsi;
-    }
-    else if ($dom_evt instanceof CHPrimXMLEvenementsFraisDivers) {
-      $acq_evt = new CHPrimXMLAcquittementsFraisDivers;
-    }
-    else if ($dom_evt instanceof CHPrimXMLEvenementsServeurIntervention) {
-      $acq_evt = new CHPrimXMLAcquittementsServeurIntervention;
+      return new CHPrimXMLAcquittementsServeurActes();
     }
     
-    return $acq_evt;
+    if ($dom_evt instanceof CHPrimXMLEvenementsPmsi) {
+      return new CHPrimXMLAcquittementsPmsi();
+    }
+    
+    if ($dom_evt instanceof CHPrimXMLEvenementsFraisDivers) {
+      return new CHPrimXMLAcquittementsFraisDivers();
+    }
+
+    if ($dom_evt instanceof CHPrimXMLEvenementsServeurIntervention) {
+      return new CHPrimXMLAcquittementsServeurIntervention();
+    }
   }
   
   function generateEnteteMessageAcquittement($statut, $codes = null, $commentaires = null) {

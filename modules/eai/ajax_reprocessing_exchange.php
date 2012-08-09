@@ -42,7 +42,8 @@ if (!$ack_data = CEAIDispatcher::dispatch($exchange->_message, $sender, $exchang
 $exchange->load($exchange->_id);
 
 if ($exchange instanceof CEchangeHprim) {
-  $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($sender->_data_format->_family_message);
+  $dom_evt = $sender->_data_format->_family_message->getHPrimXMLEvenements($exchange->_message);
+  $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($dom_evt);
   $ack->loadXML($ack_data);
   $doc_valid = $ack->schemaValidate();
   if ($doc_valid) {

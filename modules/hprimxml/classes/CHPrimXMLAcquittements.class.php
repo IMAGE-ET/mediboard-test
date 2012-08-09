@@ -16,8 +16,9 @@ class CHPrimXMLAcquittements extends CHPrimXMLDocument {
     if ($dom_evt instanceof CHPrimXMLEvenementsPatients) {
       return new CHPrimXMLAcquittementsPatients();
     } 
+
     // Message serveur activité PMSI
-    elseif ($dom_evt instanceof CHPrimXMLEvenementsServeurActivitePmsi) {
+    if ($dom_evt instanceof CHPrimXMLEvenementsServeurActivitePmsi) {
       return CHPrimXMLAcquittementsServeurActivitePmsi::getEvtAcquittement($dom_evt);
     }
   }

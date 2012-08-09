@@ -73,17 +73,6 @@ class CHPrimXMLEvenements extends CHPrimXMLDocument {
     return $acq;
   }
   
-  function getAcquittementEvenementXML() {
-    // Message événement patient
-    if ($dom_evenement instanceof CHPrimXMLEvenementsPatients) {
-      return new CHPrimXMLAcquittementsPatients();
-    } 
-    // Message serveur activité PMSI
-    elseif ($dom_evenement instanceof CHPrimXMLEvenementsServeurActivitePmsi) {
-      return new CHPrimXMLAcquittementsServeurActivitePmsi();
-    }
-  }
-  
   function getDate($node) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     

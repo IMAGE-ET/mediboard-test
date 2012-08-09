@@ -62,9 +62,12 @@ class CEchangeHprim extends CEchangeXML {
         
       $domGetEvenement->loadXML($this->_message);
       $domGetEvenement->formatOutput = true;
-
-      $errors = explode("\n", utf8_decode($domGetEvenement->schemaValidate(null, true, false)));
-      $this->_doc_errors_msg = array_filter($errors);
+      
+      $validate = $domGetEvenement->schemaValidate(null, true, false);
+      if (!is_bool($validate)) {
+        $errors = explode("\n", utf8_decode($validate));
+        $this->_doc_errors_msg = array_filter($errors);
+      }
       
       $this->_message = utf8_encode($domGetEvenement->saveXML());
     } 
@@ -74,10 +77,16 @@ class CEchangeHprim extends CEchangeXML {
         $domGetAcquittement = new CHPrimXMLAcquittementsPatients() : null;
       $this->type == "pmsi" ?
         $domGetAcquittement = new CHPrimXMLAcquittementsServeurActivitePmsi::$evenements[$this->sous_type] : null;
+      
       $domGetAcquittement->loadXML($this->_acquittement);
       $domGetAcquittement->formatOutput = true; 
-      $errors = explode("\n", utf8_decode($domGetAcquittement->schemaValidate(null, true, false)));
-      $this->_doc_errors_ack = array_filter($errors);
+      
+      $validate = $domGetAcquittement->schemaValidate(null, true, false);
+      if (!is_bool($validate)) {
+        $errors = explode("\n", utf8_decode($validate));
+        $this->_doc_errors_ack = array_filter($errors);
+      }
+      
           
       $this->_acquittement = utf8_encode($domGetAcquittement->saveXML());
     }
