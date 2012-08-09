@@ -332,7 +332,7 @@ Main.add( function(){
   
   Calendar.regField(form._date_sortie_prevue, dates);
   
-  {{if !$mode_operation}}
+  {{if !$mode_operation && $can->view}}
     Calendar.regProgressiveField(form._date_deces);
   {{/if}}
   
