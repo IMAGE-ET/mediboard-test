@@ -4,8 +4,9 @@
       refreshMouvements(Control.Modal.close, '{{$affectation->lit_id}}'); 
     }
     else{
-    refreshMouvements(Control.Modal.close);
+      refreshMouvements(Control.Modal.close);
     }
+    loadNonPlaces();
     }});">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="dosql" value="do_affectation_aed" />
