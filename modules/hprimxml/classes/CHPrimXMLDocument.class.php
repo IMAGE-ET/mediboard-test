@@ -296,7 +296,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $heure = CValue::first(
                 $codable->debut_op, 
                 $codable->entree_salle, 
-                $codable->time_operation
+                $codable->time_operation,
+                $codable->horaire_voulu
               );
       
       $sejour = $codable->_ref_sejour;
@@ -747,7 +748,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     $identifiant = $this->addElement($elParent, "identifiant");
     
-    if(!$referent) {
+    if (!$referent) {
       $this->addIdentifiantPart($identifiant, "emetteur",  $mbVenue->sejour_id, $referent);
       if($mbVenue->_NDA)
         $this->addIdentifiantPart($identifiant, "recepteur", $mbVenue->_NDA, $referent);
@@ -889,8 +890,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function addIntervention($elParent, COperation $operation, $referent = null, $light = false) {
     $identifiant = $this->addElement($elParent, "identifiant");
-    $emetteur = $this->addElement($identifiant, "emetteur", $operation->operation_id);
-
+    $this->addElement($identifiant, "emetteur", $operation->_id);
+    $last_idex = $operation->_ref_last_id400;
+    if (isset($last_idex->_id)) {
+      $this->addElement($identifiant, "recepteur", $last_idex->id400);
+    }
+      
     $sejour = $operation->loadRefSejour();
     
     $mbOpDate = CValue::first(
@@ -901,7 +906,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $mbOpHeureDebut = CValue::first(
       $operation->debut_op, 
       $operation->entree_salle, 
-      $operation->time_operation
+      $operation->time_operation,
+      $operation->horaire_voulu
     );
     $mbOpDebut = CMbRange::forceInside($sejour->entree, $sejour->sortie, "$mbOpDate $mbOpHeureDebut");
     

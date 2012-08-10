@@ -53,8 +53,9 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     $venue = $this->addElement($evenementServeurIntervention, "venue");
     $mbSejour = $operation->_ref_sejour;
     $this->addVenue($venue, $mbSejour, null, true);
-    
-    // Ajout de l'intervention ou consultation ou sejour
+
+    // Ajout de l'intervention
+    $operation->loadLastId400($this->_ref_receiver->_tag_hprimxml);
     $intervention = $this->addElement($evenementServeurIntervention, "intervention");
     $this->addIntervention($intervention, $operation);
       
