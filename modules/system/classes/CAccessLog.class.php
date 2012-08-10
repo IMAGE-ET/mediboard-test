@@ -211,8 +211,8 @@ class CAccessLog extends CMbObject {
         `access_log`.`action`,
         `access_log`.`period`,
         `datasource_log`.`datasource`,
-        `datasource_log`.`requests`,
-        `datasource_log`.`duration`,
+        SUM(`datasource_log`.`requests`) AS requests,
+        SUM(`datasource_log`.`duration`) AS duration,
       DATE_FORMAT(`access_log`.`period`, '$period_format') AS `gperiod`
       FROM `datasource_log`, `access_log`
       USE INDEX (`period`)
