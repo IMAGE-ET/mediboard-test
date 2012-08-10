@@ -28,7 +28,23 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
   $pdf->SetFillColor(255, 255, 255);
   $pdf->SetDrawColor(0);
   $pdf->Rect(10, 38, 180, 100,'DF');
-  
+  $_ref_assurance = "";
+  $nom_entreprise = "";
+  if ($facture->type_facture == "accident" && $facture->_ref_assurance->_id && $facture->_ref_assurance->employeur) {
+    $employeur = new CCorrespondantPatient();
+    $employeur->load($facture->_ref_assurance->employeur);
+    $_ref_assurance = $employeur->num_assure;
+    $nom_entreprise = $employeur->nom;
+  }
+  $loi = "LAMal";
+  if ($facture->cession_creance) {
+    //La LAI : Loi sur l'Assurance Invalidité
+    $loi = "LAI";
+  }
+  elseif ($facture->type_facture == "accident") {
+    //La LAA : Loi sur L'Assurance Accident
+    $loi = "LAA";
+  }
   $lignes = array(
     array("Patient", "Nom", $facture->_ref_patient->nom),
     array(""      , "Prénom", $facture->_ref_patient->prenom),
@@ -38,18 +54,18 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
     array(""      , "Date de naissance", mbTransformTime(null, $facture->_ref_patient->naissance, "%d.%m.%Y")),
     array(""      , "Sexe", $facture->_ref_patient->sexe),
     array(""      , "Date cas", mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
-    array(""      , "N° cas", ""),
-    array(""      , "N° AVS", $facture->_ref_patient->matricule),
-    array(""      , "N° Cada", ""),
-    array(""      , "N° assuré", ""),
-    array(""      , "Canton", ""),
+    array(""      , "N° cas", "$facture->ref_accident"),
+    array(""      , "N° AVS", $facture->_ref_patient->avs),
+    array(""      , "N° assuré", "$_ref_assurance"),
+    array(""      , "Nom entreprise", "$nom_entreprise"),
+    array(""      , "Canton", "GE"),
     array(""      , "Copie", "Non"),
     array(""      , "Type de remb.", "TG"),
-    array(""      , "Loi", "LAMal"),
+    array(""      , "Loi", "$loi"),
     array(""      , "N° contrat", ""),
-    array(""      , "Traitement", "-"),
-    array(""      , "N°/Nom entreprise"),
-    array(""      , "Rôle/ Localité", mbTransformTime(null, $facture->ouverture, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
+    array(""      , "Motif traitement", "$facture->type_facture"),
+    array(""      , "Traitement", mbTransformTime(null, $facture->ouverture, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
+    array(""      , "Rôle/ Localité", "-"),
     array("Mandataire", "N° EAN/N° RCC", $praticien->ean." - ".$praticien->rcc." "),
     array("Diagnostic", "Contrat", "ICD--"),
     array("Liste EAN" , "", "1/".$praticien->ean." 2/".$user->ean),
@@ -117,10 +133,7 @@ $pdf->setPrintFooter(false);
 foreach ($factures as $facture) {
   $pdf->AddPage();  
   
-  $facture->loadRefCoeffFacture();
-  $facture->loadRefsFwd();
-  $facture->loadRefsBack();
-  $facture->loadNumerosBVR("nom");
+  $facture->loadRefs("nom");
   
   $pm = 0;
   $pt = 0;

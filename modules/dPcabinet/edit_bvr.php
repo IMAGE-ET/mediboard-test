@@ -51,10 +51,7 @@ if ($edition_bvr) {
   $pdf->setPrintFooter(false);
   
   foreach ($factures as $facture) {
-    $facture->loadRefCoeffFacture();
-    $facture->loadRefsFwd();
-    $facture->loadRefsBack();
-    $facture->loadNumerosBVR("nom");
+    $facture->loadRefs("nom");
       
     $pm = 0;
     $pt = 0;
@@ -191,7 +188,7 @@ if ($edition_bvr) {
           $destinataire["adresse"],
           $destinataire["cp"],
           "80" => "Patient",
-          "n° AVS: ".$facture->_ref_patient->matricule, 
+          "n° AVS: ".$facture->_ref_patient->avs, 
           $facture->_ref_patient->_view,
           $facture->_ref_patient->adresse,
           $facture->_ref_patient->cp." ".$facture->_ref_patient->ville

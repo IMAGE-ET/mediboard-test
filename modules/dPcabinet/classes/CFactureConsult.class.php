@@ -55,6 +55,7 @@ class CFactureConsult extends CMbObject
   // Object References
   var $_ref_patient       = null;
   var $_ref_praticien     = null;
+  var $_ref_assurance     = null;
   var $_ref_consults      = null;
   var $_ref_der_consult   = null;
   var $_ref_reglements    = null;
@@ -139,6 +140,7 @@ class CFactureConsult extends CMbObject
     $this->loadRefPatient();
     $this->loadRefsConsults();
     $this->loadRefPraticien();
+    $this->loadRefAssurance();
   } 
   
   /**
@@ -147,6 +149,21 @@ class CFactureConsult extends CMbObject
    * @return void
   **/
   function store(){
+    //a vérifier pour le ==0 s'il faut faire un traitement
+    if ($this->facture !== '0') {
+      $consultation = new CConsultation();
+      $consults = $consultation->loadList("factureconsult_id = '$this->factureconsult_id'");
+      foreach ($consults as $consult) {
+        if ($this->facture == -1 && $consult->facture == 1) {
+          $consult->facture = 0;
+          $consult->store();
+        }
+        elseif ($this->facture == 1 && $consult->facture == 0) {
+          $consult->facture = 0;
+          $consult->store();
+        }
+      }
+    }
     
     // Standard store
     if ($msg = parent::store()) {
@@ -263,9 +280,11 @@ class CFactureConsult extends CMbObject
       $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
       
       // Le numéro de référence doit comporter 16 ou 27 chiffres
-      $_num_reference = $this->_ref_patient->matricule.sprintf("%012s",$this->_id);
+      $_num_reference = $this->_ref_patient->avs.sprintf("%027s",$this->_id);
       $_num_reference = str_replace(' ','',$_num_reference);
+      $_num_reference = str_replace('.','',$_num_reference);
       $this->_num_reference = substr($_num_reference, 0, 2)." ".substr($_num_reference, 2, 5)." ".substr($_num_reference, 7, 5)." ".substr($_num_reference, 12, 5)." ".substr($_num_reference, 17, 5)." ".substr($_num_reference, 22, 5);
+
       return $this->_ref_patient;
     }
   }  
@@ -342,13 +361,15 @@ class CFactureConsult extends CMbObject
   /**
    * loadRefs
    * 
+   * @param string $select le champ à sélectionner pour l'affichage des totaux des prestations
+   * 
    * @return void
   **/
-  function loadRefs(){
+  function loadRefs($select = "_id"){
     $this->loadRefCoeffFacture();
     $this->loadRefsFwd();
     $this->loadRefsBack();
-    $this->loadNumerosBVR();
+    $this->loadNumerosBVR($select);
   }
   
   /**
@@ -366,6 +387,20 @@ class CFactureConsult extends CMbObject
         $this->_coeff = CAppUI::conf("tarmed CCodeTarmed pt_maladie");
       }
     }
+  }
+  
+  /**
+   * Chargement de l'assurance de la facture si elle a été choisie
+   * 
+   * @return object
+  **/
+  function loadRefAssurance() {
+    $assurance = new CCorrespondantPatient();
+    if ($this->assurance) {
+      $assurance->load($this->assurance);
+    }
+    $this->_ref_assurance = $assurance;
+    return $this->_ref_assurance;
   }
   
   /**
