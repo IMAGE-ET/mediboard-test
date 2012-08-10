@@ -917,7 +917,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $mbOpHeureFin = CValue::first(
       $operation->fin_op, 
       $operation->sortie_salle, 
-      mbAddTime($operation->temp_operation, $operation->time_operation)
+      mbAddTime($operation->temp_operation, $time_operation ? $time_operation : $operation->horaire_voulu)
     );
     $mbOpFin = CMbRange::forceInside($sejour->entree, $sejour->sortie, "$mbOpDate $mbOpHeureFin");
 
