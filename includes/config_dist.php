@@ -28,6 +28,7 @@ $dPconfig["mb_id"]             = "";
 $dPconfig["minify_javascript"] = "1";
 $dPconfig["minify_css"]        = "1";
 $dPconfig["currency_symbol"]   = "&euro;";
+$dPconfig["ref_pays"]          = "1";
 $dPconfig["hide_confidential"] = "0";
 $dPconfig["locale_warn"]       = "0";
 $dPconfig["locale_alert"]      = "^";

@@ -18,6 +18,7 @@
     {{mb_include module=system template=inc_config_str var=issue_tracker_url size=60}}
     {{mb_include module=system template=inc_config_str var=help_page_url size=60}}
     {{mb_include module=system template=inc_config_str var=currency_symbol}}
+    {{mb_include module=system template=inc_config_enum var=ref_pays values="1|2"}}
     {{mb_include module=system template=inc_config_bool var=hide_confidential}}
     {{mb_include module=system template=inc_config_bool var=locale_warn}}
     {{mb_include module=system template=inc_config_str var=locale_alert}}
