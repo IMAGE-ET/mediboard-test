@@ -276,9 +276,9 @@ if($service_id){
     $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order, $praticien_id);
     if($_is_praticien){
       foreach($groupSejourNonAffectes as $sejours_by_moment){
-        foreach($sejours_by_moment as $sejour){
-          if($sejour->praticien_id == $userCourant->user_id){
-            $tab_sejour[$sejour->_id] = $sejour;
+        foreach($sejours_by_moment as $_sejour){
+          if($_sejour->praticien_id == $userCourant->user_id){
+            $tab_sejour[$_sejour->_id] = $_sejour;
           }
         }
       }
@@ -318,11 +318,11 @@ $visites = array(
 );
 
 if(count($tab_sejour)){
-  foreach($tab_sejour as $sejour_id => $sejour){
-    if($sejour->countNotificationVisite($date)){
-      $visites["effectuee"][] = $sejour->_id;
+  foreach($tab_sejour as $_sejour){
+    if($_sejour->countNotificationVisite($date)){
+      $visites["effectuee"][] = $_sejour->_id;
     } else {
-      $visites["non_effectuee"][] = $sejour->_id; 
+      $visites["non_effectuee"][] = $_sejour->_id; 
     }
   }
 }
