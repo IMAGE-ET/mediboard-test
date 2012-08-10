@@ -79,14 +79,19 @@
     <td>{{mb_value object=$patient field="tel_autre"}}</td>
   </tr>
   
-  {{if $patient->rques || $patient->matricule}}
+  {{if $patient->rques || $patient->matricule || $patient->avs}}
   <tr>
     <th colspan="2">{{mb_label object=$patient field="rques"}}</th>
     <td class="text">
       {{mb_value object=$patient field="rques"}}
     </td>
-    <th>{{mb_label object=$patient field="matricule"}}</th>
-    <td>{{mb_value object=$patient field="matricule"}}</td>
+    {{if $conf.ref_pays == 1}}
+      <th>{{mb_label object=$patient field="matricule"}}</th>
+      <td>{{mb_value object=$patient field="matricule"}}</td>
+    {{else}}
+      <th>{{mb_label object=$patient field="avs"}}</th>
+      <td>{{mb_value object=$patient field="avs"}}</td>
+    {{/if}}
   </tr>
   {{/if}}
   <tr>

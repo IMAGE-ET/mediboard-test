@@ -3,8 +3,12 @@
 <script type="text/javascript">
   InseeFields.initCPVille("editCorrespondant", "cp", "ville", "tel");
 
+  Main.add(function() {
+    Calendar.regField(getForm("editCorrespondant").date_debut, null, { noView: false } );
+    Calendar.regField(getForm("editCorrespondant").date_fin  , null, { noView: false } );
+  } );
   toggleUrrsafParente = function(elt) {
-    
+
     $("parente").toggle();
     if ($V(elt) == "employeur") {
       $("urssaf").setStyle({display: "table-row"});
@@ -21,7 +25,7 @@
       $V(elt.form.urrsaf, "");
     }
   }
-  
+
   toggleRelationAutre = function(elt) {
     if ($V(elt) == "autre") {
       $("relation_autre").setStyle({display: "inline"});
@@ -30,7 +34,7 @@
       $("relation_autre").setStyle({display: "none"});
     }
   }
-  
+
   toggleParenteAutre = function(elt) {
     if ($V(elt) == "autre") {
       $("parente_autre").setStyle({display: "table-row"});
@@ -40,7 +44,7 @@
       $V(getForm("editCorrespondant").parente_autre, '');
     }
   }
-  
+
   toggleConfiance = function(elt) {
     if ($V(elt) == "confiance") {
       $("nom_jeune_fille").setStyle({display: "table-row"});
@@ -51,14 +55,39 @@
       $("naissance").setStyle({display: "none"});
     }
   }
-  
+
   toggleAssurance = function(elt) {
     {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
       if ($V(elt) == "assurance") {
-        $("ean").setStyle({display: "table-row"});
+         {{if $conf.ref_pays == 2}}
+          $("ean").setStyle({display: "table-row"});
+          $("employeur").setStyle({display: "table-row"});
+          $("num_assure").setStyle({display: "none"});
+        {{/if}}
+        $("date_debut").setStyle({display: "table-row"});
+        $("date_fin").setStyle({display: "table-row"});
+        $("prenom").setStyle({display: "none"});
+      }
+      else if ($V(elt) == "employeur") {
+        {{if $conf.ref_pays == 2}}
+          $("ean").setStyle({display: "none"});
+          $("num_assure").setStyle({display: "table-row"});
+          $("employeur").setStyle({display: "none"});
+        {{/if}}
+        $("prenom").setStyle({display: "none"});
+        $("date_debut").setStyle({display: "table-row"});
+        $("date_fin").setStyle({display: "table-row"});
       }
       else {
-        $("ean").setStyle({display: "none"});
+        {{if $conf.ref_pays == 2}}
+          $("ean").setStyle({display: "none"});
+          $("num_assure").setStyle({display: "none"});
+          $("employeur").setStyle({display: "none"});
+        {{/if}}
+        $("prenom").setStyle({display: "table-row"});
+        $("date_debut").setStyle({display: "none"});
+        $("date_fin").setStyle({display: "none"});
+        
       }
     {{/if}}
   }
@@ -70,7 +99,7 @@
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$correspondant}}
   {{mb_field object=$correspondant field="patient_id" hidden=true}}
-  
+
   <table class="form">
     <tr>
       <th colspan="2" class="title {{if $correspondant->_id}}modify{{/if}}">
@@ -99,24 +128,41 @@
       <th>{{mb_label object=$correspondant field="nom_jeune_fille"}}</th>
       <td>{{mb_field object=$correspondant field="nom_jeune_fille"}}</td>
     </tr>
-    
-    {{if $correspondant->relation != "employeur"}}
-      <tr>
-        <th>{{mb_label object=$correspondant field="prenom"}}</th>
-        <td>{{mb_field object=$correspondant field="prenom"}}</td>
-      </tr>
-    {{/if}}
-    
+
+    <tr id="prenom" {{if !$correspondant->_id || ($correspondant->relation == "employeur" && $correspondant->relation == "assurance")}}style="display: none;"{{/if}}>
+      <th>{{mb_label object=$correspondant field="prenom"}}</th>
+      <td>{{mb_field object=$correspondant field="prenom"}}</td>
+    </tr>
+
+    <tr id="num_assure" {{if $correspondant->relation != "employeur" || !$correspondant->_id || $conf.ref_pays == 1}}style="display: none;"{{/if}}>
+      <th>{{mb_label object=$correspondant field="num_assure"}}</th>
+      <td>{{mb_field object=$correspondant field="num_assure"}}</td>
+    </tr>
+
+    <tr id="employeur" {{if ($correspondant->relation != "assurance" && $correspondant->_id) || $conf.ref_pays == 1}} style="display: none;"{{/if}}>
+      <th>{{mb_label object=$correspondant field="employeur"}}</th>
+      <td>
+        <select name="employeur">
+          <option value="">-- Choisir</option>
+          {{foreach from=$patient->_ref_correspondants_patient item=_correspondant}}
+            {{if $_correspondant->relation == "employeur"}}
+              <option value="{{$_correspondant->_id}}" {{if $correspondant->employeur == $_correspondant->_id}}selected="selected"{{/if}}>{{$_correspondant->nom}}</option>
+            {{/if}}
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+
     <tr {{if $correspondant->relation != "confiance"}}style="display: none;"{{/if}} id="naissance">
       <th>{{mb_label object=$correspondant field="naissance"}}</th>
       <td>{{mb_field object=$correspondant field="naissance" form="editCorrespondant" register=true}}</td>
     </tr>
-    
+
     <tr>
       <th>{{mb_label object=$correspondant field="adresse"}}</th>
       <td>{{mb_field object=$correspondant field="adresse"}}</td>
     </tr>
-    
+
     <tr>
       <th>{{mb_label object=$correspondant field="cp"}}</th>
       <td>{{mb_field object=$correspondant field="cp"}}</td>
@@ -145,7 +191,8 @@
       <th>{{mb_label object=$correspondant field="parente_autre"}}</th>
       <td>{{mb_field object=$correspondant field="parente_autre"}}</td>
     </tr>
-    <tr {{if $correspondant->relation != "employeur"}}style="display: none;"{{/if}} id="urssaf">
+
+    <tr {{if $correspondant->relation != "employeur" || $conf.ref_pays == 2}}style="display: none;"{{/if}} id="urssaf">
       <th>{{mb_label object=$correspondant field="urssaf"}}</th>
       <td>{{mb_field object=$correspondant field="urssaf"}}</td>
     </tr>
@@ -158,12 +205,21 @@
       <th>{{mb_label object=$correspondant field="remarques"}}</th>
       <td>{{mb_field object=$correspondant field="remarques" onchange="this.form.onsubmit()"}}</td>
     </tr>
-    {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
-      <tr id="ean"  {{if $correspondant->relation != "assurance" && $correspondant->_id}} style="display: none;"{{/if}}>
-        <th>{{mb_label object=$correspondant field="ean"}}</th>
-        <td>{{mb_field object=$correspondant field="ean""}}</td>
-      </tr>
-    {{/if}}
+
+    <tr id="ean"  {{if ($correspondant->relation != "assurance" && $correspondant->_id) || $conf.ref_pays == 1}} style="display: none;"{{/if}}>
+      <th>{{mb_label object=$correspondant field="ean"}}</th>
+      <td>{{mb_field object=$correspondant field="ean"}}</td>
+    </tr>
+
+    <tr id="date_debut" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
+      <th>{{mb_label object=$correspondant field="date_debut"}}</th>
+      <td>{{mb_field object=$correspondant field="date_debut"}}</td>
+    </tr>
+
+    <tr id="date_fin" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
+      <th>{{mb_label object=$correspondant field="date_fin"}}</th>
+      <td>{{mb_field object=$correspondant field="date_fin"}}</td>
+    </tr>
     <tr>
       <td colspan="2" style="text-align:center;">
         <button type="button" class="save" onclick="Correspondant.onSubmit(this.form);" style="margin: auto;">

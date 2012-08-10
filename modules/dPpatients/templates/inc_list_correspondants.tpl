@@ -17,12 +17,13 @@
       <th class="title">{{mb_label class=CCorrespondantPatient field=mob}}</th>
       <th class="title">{{mb_label class=CCorrespondantPatient field=fax}}</th>
       <th class="title">{{mb_label class=CCorrespondantPatient field=parente}}</th>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=urssaf}}</th>
+      {{if $conf.ref_pays == 1}}
+        <th class="title">{{mb_label class=CCorrespondantPatient field=urssaf}}</th>
+      {{/if}}
       <th class="title">{{mb_label class=CCorrespondantPatient field=email}}</th>
       <th class="title">{{mb_label class=CCorrespondantPatient field=remarques}}</th>
-      {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
-        <th class="title">{{mb_label class=CCorrespondantPatient field=ean}}</th>
-      {{/if}}
+      <th class="title">{{mb_label class=CCorrespondantPatient field=date_debut}}</th>
+      <th class="title">{{mb_label class=CCorrespondantPatient field=date_fin}}</th>
       <th class="title" style="width: 1%"></th>
     </tr>
   </thead>
@@ -30,18 +31,14 @@
     {{foreach from=$correspondants_by_relation item=_correspondants key=relation}}
       {{if $_correspondants|@count}}
         <tr>
-          <th colspan="{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}14{{else}}13{{/if}}">
+          <th colspan="{{if $conf.ref_pays == 1}}15{{else}}14{{/if}}">
             {{tr}}CCorrespondantPatient.relation.{{$relation}}{{/tr}}
           </th>
         </tr>
         {{foreach from=$_correspondants item=_correspondant}}
           <tr>
             <td>{{mb_value object=$_correspondant field=nom}}</td>
-            <td>
-              {{if $_correspondant->relation != "employeur"}}
-                {{mb_value object=$_correspondant field=prenom}}
-              {{/if}}
-            </td>
+            <td>{{mb_value object=$_correspondant field=prenom}}</td>
             <td>{{mb_value object=$_correspondant field=naissance}}</td>
             <td>{{mb_value object=$_correspondant field=adresse}}</td>
             <td>
@@ -60,16 +57,20 @@
                 {{/if}}
               {{/if}}
             </td>
-            <td>
-              {{if $_correspondant->relation == "employeur"}}
-                {{mb_value object=$_correspondant field=urssaf}}
-              {{/if}}
-            </td>
-            <td>{{mb_value object=$_correspondant field=email}}</td>
-            <td>{{mb_value object=$_correspondant field=remarques}}</td>
-            {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
-              <td>{{mb_value object=$_correspondant field=ean}}</td>
+            {{if $conf.ref_pays == 1}}
+              <td>
+                {{if $_correspondant->relation == "employeur"}}
+                  {{mb_value object=$_correspondant field=urssaf}}
+                {{/if}}
+              </td>
             {{/if}}
+            <td>{{mb_value object=$_correspondant field=email}}</td>
+            <td>
+              {{mb_value object=$_correspondant field=remarques}}
+              {{mb_value object=$_correspondant field=ean}}
+            </td>            
+            <td>{{mb_value object=$_correspondant field=date_debut}}</td>
+            <td>{{mb_value object=$_correspondant field=date_fin}}</td>
             <td>
               <button type="button" class="edit notext" onclick="Correspondant.edit('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))"></button>
             </td>

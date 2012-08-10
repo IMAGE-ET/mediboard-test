@@ -25,17 +25,17 @@ function toggleList(list, button) {
 
 <table class="print">
   <tr>
-  	<th class="title" colspan="4"><a href="#" onclick="window.print()">Fiche Patient &mdash; le {{$today}}</a></th>
-	</tr>
-	<tr>
-    <td colspan="2" style="width: 50%;"></td>
-    <td colspan="2" style="width: 50%;"></td>
-	</tr>
+    <th class="title" colspan="4"><a href="#" onclick="window.print()">Fiche Patient &mdash; le {{$today}}</a></th>
+  </tr>
   <tr>
-  	<th>{{mb_label object=$patient field=nom}} / {{mb_label object=$patient field=prenom}}</th>
-	  <td colspan="3"><strong>{{$patient->_view}}</strong> {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP hide_empty=true}}</td>
-	</tr>
-	<tr>
+    <td colspan="2" style="width: 50%;"></td>
+    <td colspan="2" style="width: 50%;"></td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$patient field=nom}} / {{mb_label object=$patient field=prenom}}</th>
+    <td colspan="3"><strong>{{$patient->_view}}</strong> {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP hide_empty=true}}</td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$patient field=naissance}} / {{mb_label object=$patient field=sexe}}</th>
     <td>
       né(e) le {{mb_value object=$patient field=naissance}} <br />
@@ -49,19 +49,24 @@ function toggleList(list, button) {
     </td>
   </tr>
   <tr>
-    <th>{{mb_label object=$patient field=matricule}}</th>
-    <td>{{mb_value object=$patient field=matricule}}</td>
+    {{if $conf.ref_pays == 1}}
+      <th>{{mb_label object=$patient field=matricule}}</th>
+      <td>{{mb_value object=$patient field=matricule}}</td>
+    {{else}}
+      <th>{{mb_label object=$patient field=avs}}</th>
+      <td>{{mb_value object=$patient field=avs}}</td>
+    {{/if}}
     <th>{{mb_label object=$patient field=profession}}</th>
     <td>{{mb_value object=$patient field=profession}}</td>
   </tr>
   <tr>
-  	<th>{{mb_label object=$patient field=tel}}</th>
-		<td>{{mb_value object=$patient field=tel}}</td>
+    <th>{{mb_label object=$patient field=tel}}</th>
+    <td>{{mb_value object=$patient field=tel}}</td>
     <th>{{mb_label object=$patient field=tel2}}</th>
     <td>{{mb_value object=$patient field=tel2}}</td>
   </tr>
   <tr>
-	</tr>
+  </tr>
   {{if $patient->tel_autre}}
   <tr>
     <th>{{mb_label object=$patient field=tel_autre}}</th>
@@ -70,18 +75,18 @@ function toggleList(list, button) {
   </tr>
   {{/if}}
   <tr>
-  	<th>{{mb_label object=$patient field=adresse}}</th>
-		<td>
-		  {{$patient->adresse|nl2br}} <br />
-		  {{$patient->cp}} {{$patient->ville}}
-		</td>
+    <th>{{mb_label object=$patient field=adresse}}</th>
+    <td>
+      {{$patient->adresse|nl2br}} <br />
+      {{$patient->cp}} {{$patient->ville}}
+    </td>
     <th>{{mb_label object=$patient field=incapable_majeur}}</th>
     <td>{{mb_value object=$patient field=incapable_majeur}}</td>
-	</tr>
+  </tr>
   <tr>
-  	<th>{{mb_label object=$patient field=rques}}</th>
-		<td colspan="3">{{$patient->rques|nl2br}}</td>
-	</tr>
+    <th>{{mb_label object=$patient field=rques}}</th>
+    <td colspan="3">{{$patient->rques|nl2br}}</td>
+  </tr>
   <tr>
     <th class="category" colspan="4">Correspondants</th>
   </tr>
@@ -145,7 +150,7 @@ function toggleList(list, button) {
       {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$curr_sejour}}
       Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
       au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
-			- ({{mb_value object=$curr_sejour field=type}})
+      - ({{mb_value object=$curr_sejour field=type}})
       <ul>
       {{foreach from=$curr_sejour->_ref_operations item="curr_op"}}
         <li>

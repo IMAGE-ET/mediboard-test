@@ -33,8 +33,13 @@
   </tr>
   <tr>
     <td colspan="2">
-      {{mb_label object=$patient field="matricule"}} :
-      {{mb_value object=$patient field="matricule"}}
+       {{if $conf.ref_pays == 1}}
+        {{mb_label object=$patient field="matricule"}} :
+        {{mb_value object=$patient field="matricule"}}
+      {{else}}
+        {{mb_label object=$patient field="avs"}} :
+        {{mb_value object=$patient field="avs"}}
+      {{/if}}
     </td>
   </tr>
   <tr>

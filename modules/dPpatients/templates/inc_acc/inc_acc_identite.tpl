@@ -260,8 +260,14 @@ Main.add(function() {
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$patient field="matricule"}}</th>
-          <td>{{mb_field object=$patient field="matricule" onchange="copyIdentiteAssureValues(this)"}}</td>
+         {{if $conf.ref_pays == 1}}
+            <th>{{mb_label object=$patient field="matricule"}}</th>
+            <td>{{mb_field object=$patient field="matricule" onchange="copyIdentiteAssureValues(this)"}}</td>
+          </tr>
+        {{else}}
+            <th>{{mb_label object=$patient field="avs"}}</th>
+            <td>{{mb_field object=$patient field="avs"}}</td>
+       {{/if}}
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="qual_beneficiaire"}}</th>

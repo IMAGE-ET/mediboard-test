@@ -79,52 +79,57 @@
           <div style="display:none;" class="autocomplete" id="_assure_pays_naissance_insee_auto_complete"></div>
         </td>
       </tr>
-    	<tr>
+      <tr>
         <th>{{mb_label object=$patient field="assure_profession"}}</th>
         <td>{{mb_field object=$patient field="assure_profession" form=editFrm}}</td>
-    	</tr>
-    	<tr>
-        <th>{{mb_label object=$patient field="assure_matricule"}}</th>
-        <td>{{mb_field object=$patient field="assure_matricule"}}</td>
       </tr>
+      <tr>
+       {{if $conf.ref_pays == 1}}
+          <th>{{mb_label object=$patient field="matricule"}}</th>
+          <td>{{mb_field object=$patient field="matricule" onchange="copyIdentiteAssureValues(this)"}}</td>
+      {{else}}
+          <th>{{mb_label object=$patient field="assure_avs"}}</th>
+          <td>{{mb_field object=$patient field="assure_avs"}}</td>
+      {{/if}}
+     </tr>
     </table>
   </td>
   <td>
     <table class="form">
-    	<tr>
+      <tr>
         <th class="category" colspan="2">Coordonnées Assuré Social</th>
-    	</tr>
-    	<tr>
+      </tr>
+      <tr>
         <th>{{mb_label object=$patient field="assure_adresse"}}</th>
         <td>{{mb_field object=$patient field="assure_adresse"}}</td>
-    	</tr>
-    	<tr>
+      </tr>
+      <tr>
         <th>{{mb_label object=$patient field="assure_cp"}}</th>
         <td>{{mb_field object=$patient field="assure_cp"}}</td>
-    	</tr>
-    	<tr>
+      </tr>
+      <tr>
         <th>{{mb_label object=$patient field="assure_ville"}}</th>
         <td>{{mb_field object=$patient field="assure_ville"}}</td>
-    	</tr>
-    	<tr>
+      </tr>
+      <tr>
         <th>{{mb_label object=$patient field="assure_pays"}}</th>
         <td>
           {{mb_field object=$patient field="assure_pays" size="31" class="autocomplete"}}
           <div style="display:none;" class="autocomplete" id="assure_pays_auto_complete"></div>
         </td>
       </tr>
-    	<tr>
+      <tr>
         <th>{{mb_label object=$patient field="assure_tel"}}</th>
         <td>{{mb_field object=$patient field="assure_tel"}}</td>
-    	</tr>
-    	<tr>
+      </tr>
+      <tr>
         <th>{{mb_label object=$patient field="assure_tel2"}}</th>
         <td>{{mb_field object=$patient field="assure_tel2"}}</td>
-    	</tr>
+      </tr>
       <tr>
         <th>{{mb_label object=$patient field="assure_rques"}}</th>
         <td>{{mb_field object=$patient field="assure_rques" onblur="tabs.changeTabAndFocus('identite', this.form.nom)"}}</td>
-    	</tr>
+      </tr>
     </table>
     </td>
   </tr>

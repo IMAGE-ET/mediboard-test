@@ -1,7 +1,7 @@
 {{mb_script module="dPpatients" script="patient" ajax=true}}
 
 <table class="tbl print_patient" style="page-break-after: always;">
-	{{if !@$no_header}}
+  {{if !@$no_header}}
   <tr>
     <th class="title text" colspan="2">
 
@@ -41,7 +41,7 @@
       </form>
     </th>
   </tr>
-	{{/if}}
+  {{/if}}
   <tr>
     <td class="button" colspan="2">
       {{assign var=patient value=$object}}
@@ -216,8 +216,13 @@
   </tr>
   <tr>
     <td class="text">
-      <strong>{{mb_label object=$object field="matricule"}}</strong>
-      {{mb_value object=$object field="matricule"}}
+       {{if $conf.ref_pays == 1}}
+        <strong>{{mb_label object=$object field="matricule"}}</strong>
+        {{mb_value object=$object field="matricule"}}
+      {{else}}
+        <strong>{{mb_label object=$object field="avs"}}</strong>
+        {{mb_value object=$object field="avs"}}
+      {{/if}}
     </td>
     <td class="text">
       <strong>{{mb_label object=$object field="cmu"}}</strong>
@@ -260,7 +265,7 @@
     <td class="text">
       <strong>Correspondants médicaux</strong>
       {{foreach from=$object->_ref_medecins_correspondants item=curr_corresp}}
-	      {{assign var=medecin value=$curr_corresp->_ref_medecin}}
+        {{assign var=medecin value=$curr_corresp->_ref_medecin}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
           {{$medecin}}
         </span>

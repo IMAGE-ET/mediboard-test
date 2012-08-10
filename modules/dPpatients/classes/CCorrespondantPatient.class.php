@@ -1,14 +1,16 @@
 <?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPpatients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 /**
- * dPpatients
- *  
- * @category dPpatients
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * Correspondants du patient
  */
 
 class CCorrespondantPatient extends CMbObject {
@@ -36,6 +38,10 @@ class CCorrespondantPatient extends CMbObject {
   var $email      = null;
   var $remarques  = null;
   var $ean        = null;
+  var $date_debut = null;
+  var $date_fin   = null;
+  var $num_assure = null;
+  var $employeur  = null;
   
   var $_eai_initiateur_group_id = null;
   
@@ -69,7 +75,11 @@ class CCorrespondantPatient extends CMbObject {
     $specs["parente_autre"] = "str";
     $specs["email"]      = "str maxLength|255";
     $specs["remarques"]  = "text";
-    $specs["ean"]        = "str";
+    $specs["ean"]        = "str maxLength|30";
+    $specs["date_debut"] = "date";
+    $specs["date_fin"]   = "date";
+    $specs["num_assure"] = "str maxLength|30";
+    $specs["employeur"]  = "ref class|CCorrespondantPatient";
     return $specs;
   }
   

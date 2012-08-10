@@ -1131,7 +1131,7 @@ class CSetupdPpatients extends CSetup {
     $query = "ALTER TABLE `patients` ADD `qual_beneficiaire` ENUM ('0','1','2','3','4','5','6','7','8','9')";
     $this->addQuery($query);
     
-    foreach(CPatient::$rangToQualBenef as $from => $to) {
+    foreach (CPatient::$rangToQualBenef as $from => $to) {
       $query = "UPDATE `patients` SET `qual_beneficiaire` = '$to' WHERE `rang_beneficiaire` = '$from'";
       $this->addQuery($query);
     }
@@ -1611,7 +1611,7 @@ class CSetupdPpatients extends CSetup {
       "0401-0bc8" => array("Age", "Age"),
     );
     $values = array();
-    foreach($mdil_params as $_code => $_labels) {
+    foreach ($mdil_params as $_code => $_labels) {
       list($_label, $_desc) = $_labels;
       $values[] = "('MDIL', '$_code', '$_label', '$_desc', 'NM')";
     }
@@ -1630,7 +1630,7 @@ class CSetupdPpatients extends CSetup {
       "0004-0f20" => array("mmHg", "mmHg"),
     );
     $values = array();
-    foreach($mdil_units as $_code => $_labels) {
+    foreach ($mdil_units as $_code => $_labels) {
       list($_label, $_desc) = $_labels;
       $values[] = "('MDIL', '$_code', '$_label', '$_desc')";
     }
@@ -1643,7 +1643,7 @@ class CSetupdPpatients extends CSetup {
       "0004-17a0" => array("°C", "°C"),
     );
     $values = array();
-    foreach($mdil_units as $_code => $_labels) {
+    foreach ($mdil_units as $_code => $_labels) {
       list($_label, $_desc) = $_labels;
       $values[] = "('MDIL', '$_code', '$_label', '$_desc')";
     }
@@ -1800,8 +1800,26 @@ class CSetupdPpatients extends CSetup {
     $query = "ALTER TABLE `correspondant_patient`
                  ADD `ean` VARCHAR (30);";
     $this->addQuery($query);
+    $this->makeRevision("1.54");
     
-    $this->mod_version = "1.54";
+    $query = "ALTER TABLE `correspondant_patient` 
+              ADD `date_debut` DATE,
+              ADD `date_fin` DATE,
+              ADD `num_assure` VARCHAR (30),
+              ADD `employeur` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `correspondant_patient` 
+              ADD INDEX (`naissance`),
+              ADD INDEX (`date_debut`),
+              ADD INDEX (`date_fin`),
+              ADD INDEX (`employeur`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `patients` 
+              ADD `avs` VARCHAR (15),
+              ADD `assure_avs` VARCHAR (15);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.55";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

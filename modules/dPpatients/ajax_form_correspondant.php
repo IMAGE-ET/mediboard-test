@@ -1,25 +1,33 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPpatients
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 $correspondant_id = CValue::get("correspondant_id");
 $patient_id       = CValue::get("patient_id");
+
+$patient = new CPatient();
+$patient->load($patient_id);
 
 $correspondant = new CCorrespondantPatient;
 $correspondant->patient_id = $patient_id;
 
 if ($correspondant_id) {
   $correspondant->load($correspondant_id);
+  $patient->load($correspondant->patient_id);
 }
 
+$patient->loadRefsCorrespondantsPatient();
+
 $smarty = new CSmartyDP;
-$smarty->assign("correspondant", $correspondant);
+$smarty->assign("correspondant" , $correspondant);
+$smarty->assign("patient"       , $patient);
 $smarty->display("inc_form_correspondant.tpl");
 
 ?>
