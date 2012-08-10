@@ -19,11 +19,13 @@ class CWSDL extends CMbXMLDocument {
   var $xsd = array("string"=>"string", "bool"=>"boolean", "boolean"=>"boolean",
                    "int"=>"integer", "integer"=>"integer", "double"=>"double", "float"=>"float", "number"=>"float",
                    "resource"=>"anyType", "mixed"=>"anyType", "unknown_type"=>"anyType", "anyType"=>"anyType", "xml"=>"anyType");
+  
+  var $_soap_handler = null;
              
   function __construct() {
     parent::__construct();
     $this->documentfilename = "tmp/document.wsdl";
-    $this->addComment($this, "WSDL Mediboard genere permettant de d'ecrire le service web.");
+    $this->addComment($this, "WSDL Mediboard genere permettant de decrire le service web.");
     $this->addComment($this, "Partie 1 : Definitions");
     $definitions = $this->addElement($this, "definitions", null, "http://schemas.xmlsoap.org/wsdl/");
     $this->addNameSpaces($definitions);
