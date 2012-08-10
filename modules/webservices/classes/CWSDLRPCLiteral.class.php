@@ -33,25 +33,27 @@ class CWSDLRPCLiteral extends CWSDLRPC {
       // Foreach parameters
       foreach ($_paramSpec["parameters"] as $_param => $_type) {
         $child_element = $this->addElement($xsd, "element", null, "http://www.w3.org/2001/XMLSchema");
-        $this->addAttribute($child_element, "name", $_method."-".$_param); 
-        $this->addAttribute($child_element, "type", "xsd:".$this->xsd[$_type]);
+        $this->addAttribute($child_element, "name", $_method."-".$_param);
         
         $this->addDocumentation($child_element, CAppUI::tr(get_class($this->_soap_handler)."-".$_method."-".$_param));
         
-        if ($_type == "array") {
+        /*if (is_array($_type)) {
           $complexType = $this->addElement($child_element, "complexType", null, "http://www.w3.org/2001/XMLSchema");
-          $this->addAttribute($complexType, "name", "parameters");
+          $this->addAttribute($complexType, "name", $_method."-".$_param);
           
           $sequence = $this->addElement($complexType, "sequence", null, "http://www.w3.org/2001/XMLSchema");
           // Foreach array parameters
-          foreach ($_param as $_paramName => $_type) {
+          foreach ($_type as $_paramName => $_arrayType) {
             $child_element = $this->addElement($sequence, "element", null, "http://www.w3.org/2001/XMLSchema");
             $this->addAttribute($child_element, "name", $_paramName); 
-            $this->addAttribute($child_element, "type", "xsd:".$this->xsd[$_type]);
+            $this->addAttribute($child_element, "type", "xsd:".$this->xsd[$_arrayType]);
             
             $this->addDocumentation($child_element, CAppUI::tr(get_class($this->_soap_handler)."-".$_method."-".$_paramName));
           }
-        }
+        }*/
+        //else {
+          $this->addAttribute($child_element, "type", "xsd:".$this->xsd[$_type]);
+        //}
       }
       
       // MethodResponse element
@@ -59,24 +61,26 @@ class CWSDLRPCLiteral extends CWSDLRPC {
       foreach ($_paramSpec["return"] as $_return => $_type) {
         $child_element = $this->addElement($xsd, "element", null, "http://www.w3.org/2001/XMLSchema");
         $this->addAttribute($child_element, "name", $_method."-".$_return);
-        $this->addAttribute($child_element, "type", "xsd:".$this->xsd[$_type]);
         
         $this->addDocumentation($child_element, CAppUI::tr(get_class($this->_soap_handler)."-".$_method."-".$_return));
         
-        if ($_type == "array") {
+        /*if (is_array($_type)) {
           $complexType = $this->addElement($child_element, "complexType", null, "http://www.w3.org/2001/XMLSchema");
-          $this->addAttribute($complexType, "name", "parameters");
+          $this->addAttribute($complexType, "name", $_method."-".$_param);
           
           $sequence = $this->addElement($complexType, "sequence", null, "http://www.w3.org/2001/XMLSchema");
           // Foreach array parameters
-          foreach ($_param as $_paramName => $_type) {
+          foreach ($_type as $_paramName => $_arrayType) {
             $child_element = $this->addElement($sequence, "element", null, "http://www.w3.org/2001/XMLSchema");
             $this->addAttribute($child_element, "name", $_paramName); 
-            $this->addAttribute($child_element, "type", "xsd:".$this->xsd[$_type]);
+            $this->addAttribute($child_element, "type", "xsd:".$this->xsd[$_arrayType]);
             
             $this->addDocumentation($child_element, CAppUI::tr(get_class($this->_soap_handler)."-".$_method."-".$_paramName));
           }
-        }
+        }*/
+        //else {
+          $this->addAttribute($child_element, "type", "xsd:".$this->xsd[$_type]);
+        //}
       }
     }
     
@@ -107,6 +111,10 @@ class CWSDLRPCLiteral extends CWSDLRPC {
         $this->addAttribute($part, "name", $_oneParam);
         $this->addAttribute($part, "element", "typens:".$_method."-".$_oneParam);
       }
+      
+      // SOAP Fault
+      /*$message = $this->addElement($definitions, "message", null, "http://schemas.xmlsoap.org/wsdl/");
+      $this->addAttribute($message, "name", $_method."Fault");*/
     }
   }
   
@@ -129,6 +137,10 @@ class CWSDLRPCLiteral extends CWSDLRPC {
       
       $output = $this->addElement($operation, "output", null, "http://schemas.xmlsoap.org/wsdl/");
       $this->addAttribute($output, "message", "typens:".$_method."Response");
+      
+      // SOAP Fault
+      /*$fault = $this->addElement($operation, "fault", null, "http://schemas.xmlsoap.org/wsdl/");
+      $this->addAttribute($fault, "message", "typens:".$_method."Fault");*/
     }
   }
   
@@ -164,6 +176,14 @@ class CWSDLRPCLiteral extends CWSDLRPC {
       
       $soapbody = $this->addElement($output, "soap:body", null, "http://schemas.xmlsoap.org/wsdl/soap/");
       $this->addAttribute($soapbody, "use", "literal");
+      
+      // SOAP Fault
+      /*$fault = $this->addElement($operation, "fault", null, "http://schemas.xmlsoap.org/wsdl/");
+      $this->addAttribute($fault, "name", $_method."Exception");
+      
+      $soapfault = $this->addElement($fault, "soap:fault", null, "http://schemas.xmlsoap.org/wsdl/soap/");
+      $this->addAttribute($soapfault, "name", $_method."Exception");
+      $this->addAttribute($soapfault, "use", "literal");*/
     }
   }
 }
