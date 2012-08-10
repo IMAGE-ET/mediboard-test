@@ -293,10 +293,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     // Date et heure de l'opération
     if ((CAppUI::conf("hprimxml date_heure_acte") == "operation") && $codable instanceof COperation) {
       $date  = $codable->date ? $codable->date : $codable->_ref_plageop->date;
+      
+      $time_operation = ($codable->time_operation == "00:00:00") ? null : $codable->time_operation;
       $heure = CValue::first(
                 $codable->debut_op, 
                 $codable->entree_salle, 
-                $codable->time_operation,
+                $time_operation,
                 $codable->horaire_voulu
               );
       
@@ -902,11 +904,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $operation->_ref_plageop->date,
       $operation->date
     );
-
+    
+    $time_operation = ($operation->time_operation == "00:00:00") ? null : $operation->time_operation;
     $mbOpHeureDebut = CValue::first(
       $operation->debut_op, 
       $operation->entree_salle, 
-      $operation->time_operation,
+      $time_operation,
       $operation->horaire_voulu
     );
     $mbOpDebut = CMbRange::forceInside($sejour->entree, $sejour->sortie, "$mbOpDate $mbOpHeureDebut");
