@@ -176,7 +176,7 @@ class CEchangeHprim extends CEchangeXML {
   function setAckError(CHPrimXMLAcquittements $dom_acq, $code_erreur, $commentaires = null, CMbObject $mbObject = null) {
     $statut = $dom_acq->_codes_erreurs["err"];
     
-    $msgAcq    = $dom_acq->generateAcquittements($code, $dom_acq->_codes_erreurs["err"], $commentaires, $mbObject);
+    $msgAcq    = $dom_acq->generateAcquittements($dom_acq->_codes_erreurs["err"], $code_erreur, $commentaires, $mbObject);
     $doc_valid = $dom_acq->schemaValidate();
     
     $this->acquittement_valide = $doc_valid ? 1 : 0;

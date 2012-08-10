@@ -109,6 +109,22 @@ class CEAIMbObject {
       return "L'IPP/NDA créé est : $object->id400";
     }
   }
+  
+  /**
+   * Recording idex
+   * 
+   * @param CIdSante400    $idex   Object id400
+   * @param CMbObject      $object Object
+   * @param CInteropSender $sender Sender
+   * 
+   * @return null|string null if successful otherwise returns and error message
+   */ 
+  function storeIdex(CIdSante400 $idex, CMbObject $object, CInteropSender $sender) {
+    $idex->object_id   = $object->_id; 
+    $idex->last_update = mbDateTime();
+
+    return $idex->store();
+  }
 }
 
 ?>

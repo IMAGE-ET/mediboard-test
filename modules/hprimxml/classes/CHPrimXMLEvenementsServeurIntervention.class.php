@@ -141,28 +141,44 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     $sejour->loadRefPatient();
     $operation->sejour_id = $sejour->_id;
     
-    // Recherche de la salle
-    $salle = $this->getSalle($data['intervention']);
-    if ($salle->nom && !$salle->_id) {
-      $comment = "Salle '$salle->nom' inconnue dans l'infrastructure de l'établissement";
-      return $exchange_hprim->setAckError($dom_acq, "E202", $comment, $mbObject);
+    // idex de l'intervention
+    $idex = CIdSante400::getMatch("COperation", $sender->_tag_hprimxml, $data['idSourceIntervention']);
+    
+    if ($idex->_id) {
+      $operation_source = new COperation();
+      $operation_source->load($idex->object_id);
+
+      if ($operation_source->sejour_id != $sejour->_id) {
+        return $exchange_hprim->setAckError($dom_acq, "E204", null, $mbObject);
+      } 
+
+      $operation = $operation_source;     
     }
-    $operation->salle_id = $salle->_id;
     
-    // Mapping du chirurgien
-    $mediuser = $this->getParticipant($data['intervention']);
-    if (($mediuser->adeli && !$mediuser->_id) || !$mediuser->adeli) {
-      $comment = $mediuser->adeli ? "Participant '$mediuser->adeli' inconnu" : "Le code ADELI n'est pas renseigné";
-      return $exchange_hprim->setAckError($dom_acq, "E203", $comment, $mbObject);
+    if (!$operation->_id) {
+      // Recherche de la salle
+      $salle = $this->getSalle($data['intervention']);
+      if ($salle->nom && !$salle->_id) {
+        $comment = "Salle '$salle->nom' inconnue dans l'infrastructure de l'établissement";
+        return $exchange_hprim->setAckError($dom_acq, "E202", $comment, $mbObject);
+      }
+      $operation->salle_id = $salle->_id;
+      
+      // Mapping du chirurgien
+      $mediuser = $this->getParticipant($data['intervention']);
+      if (($mediuser->adeli && !$mediuser->_id) || !$mediuser->adeli) {
+        $comment = $mediuser->adeli ? "Participant '$mediuser->adeli' inconnu" : "Le code ADELI n'est pas renseigné";
+        return $exchange_hprim->setAckError($dom_acq, "E203", $comment, $mbObject);
+      }
+      $operation->chir_id = $mediuser->_id;
+      
+      // Mapping de la plage
+      $plageOp = $this->mappingPlage($data['intervention'], $operation);
+   
+      // Recherche d'une intervention existante sinon création  
+      $operation->loadMatchingObject();
     }
-    $operation->chir_id = $mediuser->_id;
-    
-    // Mapping de la plage
-    $plageOp = $this->mappingPlage($data['intervention'], $operation);
- 
-    // Recherche d'une intervention existante sinon création  
-    $operation->loadMatchingObject();
-    
+
     // Mapping de l'intervention
     $this->mappingIntervention(($data['intervention']), $operation);
     
@@ -171,6 +187,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     $operation->_eai_initiateur_group_id = $sender->group_id;
     $msgInterv = $operation->store();
     
+    CEAIMbObject::storeIdex($idex, $operation, $sender);
     $modified_fields = CEAIMbObject::getModifiedFields($operation);
           
     $codes = array ($msgInterv ? "A201" : "I201");

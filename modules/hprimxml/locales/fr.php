@@ -469,6 +469,7 @@ $locales['hprimxml-error-E141'] = 'Discordance entre l\'identifiant source et l\
 $locales['hprimxml-error-E201'] = 'Intervention non trouvée, impossible de rattacher les actes pour la venue';
 $locales['hprimxml-error-E202'] = 'La salle n\'a pas été retrouvée dans Mediboard';
 $locales['hprimxml-error-E203'] = 'Le chirurgien de l\'intervention est inconnu';
+$locales['hprimxml-error-E204'] = 'Le séjour  de l\'intervention récupérée par l\'identifiant externe est différent de celle de Mediboard';
 $locales['hprimxml-error-E206'] = 'IPP et/ou Numéro de dossier non fourni';
 $locales['hprimxml-error-I001'] = 'L\'enregistrement du patient est terminé';
 $locales['hprimxml-error-I002'] = 'Modification du patient terminée';
