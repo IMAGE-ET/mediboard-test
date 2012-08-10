@@ -113,20 +113,20 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       }
     }
     
-		$patient = $mbObject;
+    $patient = $mbObject;
     if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
       return;
     }
-   	
+     
     if (!$patient->_IPP) {
-    	// Génération de l'IPP dans le cas de la création, ce dernier n'était pas créé
-			if ($msg = $patient->generateIPP()) {
-	      CAppUI::setMsg($msg, UI_MSG_ERROR);
-	    }
-			
-			$IPP = new CIdSante400();
-    	$IPP->loadLatestFor($patient, $receiver->_tag_patient);
-			$patient->_IPP = $IPP->id400;
+      // Génération de l'IPP dans le cas de la création, ce dernier n'était pas créé
+      if ($msg = $patient->generateIPP()) {
+        CAppUI::setMsg($msg, UI_MSG_ERROR);
+      }
+      
+      $IPP = new CIdSante400();
+      $IPP->loadLatestFor($patient, $receiver->_tag_patient);
+      $patient->_IPP = $IPP->id400;
     }
 
     // Envoi pas les patients qui n'ont pas d'IPP
@@ -201,6 +201,14 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     } 
   }  
 
+  function onBeforeDelete(CMbObject $mbObject) {
+    if (!$this->isHandled($mbObject)) {
+      return false;
+    }
+    
+    return true;
+  }
+  
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;

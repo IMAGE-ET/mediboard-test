@@ -56,16 +56,16 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         if ($sejour->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
           return;
         }
-				
+        
         if (!$sejour->_NDA) {
-        	// Génération du NDA dans le cas de la création, ce dernier n'était pas créé
-					if ($msg = $sejour->generateNDA()) {
-			      CAppUI::setMsg($msg, UI_MSG_ERROR);
-			    }
-					
-					$NDA = new CIdSante400();
-        	$NDA->loadLatestFor($sejour, $receiver->_tag_sejour);
-					$sejour->_NDA = $NDA->id400;
+          // Génération du NDA dans le cas de la création, ce dernier n'était pas créé
+          if ($msg = $sejour->generateNDA()) {
+            CAppUI::setMsg($msg, UI_MSG_ERROR);
+          }
+          
+          $NDA = new CIdSante400();
+          $NDA->loadLatestFor($sejour, $receiver->_tag_sejour);
+          $sejour->_NDA = $NDA->id400;
         }
         
         $current_affectation = null;
@@ -106,7 +106,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       $sejour->loadRefPatient();
       $sejour->_receiver = $receiver;
-      
       $this->createMovement($code, $sejour, $affectation);
    
       // Envoi de l'événement
@@ -118,7 +117,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     $insert = in_array($code, CHL7v2SegmentZBE::$actions["INSERT"]);
     $update = in_array($code, CHL7v2SegmentZBE::$actions["UPDATE"]);
     $cancel = in_array($code, CHL7v2SegmentZBE::$actions["CANCEL"]);
-    
+
     $movement = new CMovement();
     // Initialise le mouvement 
     $movement->sejour_id     = $sejour->_id;
@@ -131,7 +130,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Dans le cas d'un insert le type correspond nécessairement au type actuel du séjour
       $movement->movement_type         = $sejour->getMovementType($code);
       $movement->original_trigger_code = $code;
-      $movement->start_of_movement     = $this->getStartOfMovement($code, $sejour);
+      $movement->start_of_movement     = $this->getStartOfMovement($code, $sejour, $affectation);
       $movement->store();
     
       return $sejour->_ref_hl7_movement = $movement;
@@ -155,14 +154,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         $movement_type = "MUTA";
       }
       $movement->movement_type = $movement_type;
-      $movement->cancel = 0; 
-    }
-    elseif ($cancel) {
-      $movement->cancel = 0;    
     }
 
     $order = "affectation_id DESC";
-    $movements = $movement->loadMatchingList($order);
+    
+    $movements = $movement->loadMatchingList($order);    
     if (!empty($movements)) {
       $movement = reset($movements);
     }
@@ -170,7 +166,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($cancel) {
       $movement->cancel = 1;
     }
-
     $movement->store();
     
     return $sejour->_ref_hl7_movement = $movement;
@@ -185,6 +180,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return $sejour->entree_reelle;
       // Mutation : changement d'UF hébergement
       case 'A02':
+        return $affectation->entree;
       // Changement de statut externe ou urgence vers hospitalisé
       case 'A06':
       // Changement de statut hospitalisé ou urgence vers externe
@@ -236,6 +232,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas d'une annulation ? 
       if ($sejour->fieldModified("annule", "1")) {
         return "A38";
+      }
+      
+      // Cas d'un rétablissement d'annulation ? 
+      if ($sejour->fieldModified("annule", "0") && ($sejour->_old->annule == 1)) {
+        return "A05";
       }
 
       // Annulation de l'admission
@@ -416,7 +417,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
   }  
   
-  function onAfterDelete(CMbObject $mbObject) {
+  function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
@@ -428,7 +429,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($mbObject instanceof CAffectation) {
       $affectation = $mbObject;
       $current_log = $affectation->_ref_current_log;
-      if (!$current_log || $affectation->_no_synchro || !in_array($current_log->type, array("delete"))) {
+      if ($affectation->_no_synchro) {
         return;
       }
       
@@ -461,7 +462,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
         return;
       }
-      
+            
       $sejour->loadRefPatient();
       $sejour->_receiver = $receiver;
 
@@ -471,5 +472,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $this->sendITI($this->profil, $this->transaction, $code, $sejour);
     }  
   }  
+  
+  function onAfterDelete(CMbObject $mbObject) {
+  }
 }
 ?>

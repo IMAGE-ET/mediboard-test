@@ -14,6 +14,8 @@
  * Record person, message XML HL7
  */
 class CHL7v2RecordPerson extends CHL7v2MessageXML {
+  static $event_codes = "A28 A31";
+  
   function getContentNodes() {
     $data = parent::getContentNodes();
     

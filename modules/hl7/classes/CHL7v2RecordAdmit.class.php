@@ -14,6 +14,8 @@
  * Record admit, message XML HL7
  */
 class CHL7v2RecordAdmit extends CHL7v2MessageXML {
+  static $event_codes = "A01 A02 A03 A04 A05 A06 A07 A08 A11 A12 A13 A14 A16 A25 A38 A44 A54 A55 Z80 Z81 Z4 Z85 Z99";
+  
   var $_object_found_by_vn = null;
   
   function getContentNodes() {
@@ -1306,26 +1308,26 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $id400_create = false;
     $event_code   = $this->_ref_exchange_ihe->code;
     
-    $movement_id  = null;
-    $own_movement = false;
+    $own_movement    = null;
+    $sender_movement = null;
     foreach ($this->queryNodes("ZBE.1", $node) as $ZBE_1) {
       $EI_1 = $this->queryTextNode("EI.1", $ZBE_1);
       $EI_3 = $this->queryTextNode("EI.3", $ZBE_1);
       
       // Notre propre identifiant de mouvement
       if ($EI_3 == CAppUI::conf("hl7 assigning_authority_universal_id")) {
-        $own_movement = true;
-        $movement_id  = $EI_1;
+        $own_movement = $EI_1;
         break;
       }
       
       // L'identifiant de mouvement du sender
       if ($EI_3 == $sender->_configs["assigning_authority_universal_id"]) {
-        $movement_id = $EI_1;
+        $sender_movement = $EI_1;
         continue;
       }    
     }
     
+    $movement_id = $own_movement ? $own_movement : $sender_movement;
     if (!$movement_id) {
       return null;
     }
@@ -1348,6 +1350,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $movement->loadMatchingObjectEsc();
       if (!$movement->_id) {
         return null;
+      }
+      
+      if ($sender_movement) {
+        $id400Movement = CIdSante400::getMatch("CMovement", $sender->_tag_movement, $sender_movement);
+        if (!$id400Movement->_id) {
+          $id400_create = true;
+        }         
       }
     }
     // ID mouvement provenant d'un système tiers
@@ -1374,7 +1383,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     $movement->start_of_movement = $start_movement_dt;
     $movement->last_update = mbDateTime();
-    mbTrace($movement);
     if ($msg = $movement->store()) {
       return $msg;
     }

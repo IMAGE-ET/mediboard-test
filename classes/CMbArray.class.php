@@ -453,4 +453,20 @@ abstract class CMbArray {
     return sqrt($sigma / count($array));
   }
   
+  /**
+   * Check whether a value is in array
+   * 
+   * @param mixed $needle   The searched value
+   * @param mixed $haystack Array or token space separated string
+   * @param bool  $strict   Type based comparaison
+   * 
+   * @return bool 
+   */
+  static function in($needle, $haystack, $strict = false) {
+    if (is_string($haystack)) {
+      $haystack = explode(" ", $haystack);
+    }
+    
+    return in_array($needle, $haystack);
+  }
 }

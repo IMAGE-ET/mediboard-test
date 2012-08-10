@@ -14,6 +14,8 @@
  * Record observation result set, message XML
  */
 class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
+  static $event_codes = "R01";
+  
   function getContentNodes() {
     $data = $patient_results = array();
     

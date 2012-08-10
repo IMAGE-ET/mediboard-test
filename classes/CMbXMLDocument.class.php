@@ -130,9 +130,10 @@ class CMbXMLDocument extends DOMDocument {
     
     if (!parent::schemaValidate($filename)) {
       $errors = $this->libxml_display_errors($display_errors);
+      
       return $returnErrors ? $errors : false;
     }
-    
+
     return true;
   }
   

@@ -278,6 +278,12 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
   }  
 
+  function onBeforeDelete(CMbObject $mbObject) {
+    if (!$this->isHandled($mbObject)) {
+      return false;
+    }
+  }
+
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;

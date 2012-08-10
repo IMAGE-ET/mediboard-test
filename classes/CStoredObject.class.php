@@ -1777,6 +1777,9 @@ class CStoredObject extends CModelObject {
         return $msg;
       }
     }
+    
+    // Trigger before event
+    $this->notify("BeforeDelete");
 
     // Deleting backSpecs
     foreach ($this->_backSpecs as $backName => $backSpec) {

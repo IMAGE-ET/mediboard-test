@@ -14,6 +14,8 @@
  * Merge persons, message XML HL7
  */
 class CHL7v2MergePersons extends CHL7v2MessageXML {
+  static $event_codes = "A40";
+  
   function getContentNodes() {
     $data = array();
     

@@ -19,70 +19,42 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   var $_ref_receiver     = null;
   var $_is_i18n          = null;
   
-  static function getEventType($event_code = null, $encoding = "utf-8") {
-    switch ($event_code) {
-      // Création d'un nouveau patient - Mise à jour d'information du patient
-      case "CHL7v2EventADTA28" : 
-      case "CHL7v2EventADTA28_FR" :   
-      case "CHL7v2EventADTA31" :
-      case "CHL7v2EventADTA31_FR" :
-        return new CHL7v2RecordPerson($encoding);
-      // Fusion de deux patients
-      case "CHL7v2EventADTA40" : 
-      case "CHL7v2EventADTA40_FR" : 
-        return new CHL7v2MergePersons($encoding);
-      // Changement de la liste d'identifiants du patient
-      case "CHL7v2EventADTA47" : 
-      case "CHL7v2EventADTA47_FR" : 
-        return new CHL7v2ChangePatientIdentifierList($encoding);
-      // Création d'une venue - Mise à jour d'information de la venue
-      case "CHL7v2EventADTA01" :
-      case "CHL7v2EventADTA01_FR" : 
-      case "CHL7v2EventADTA02" :
-      case "CHL7v2EventADTA02_FR" :
-      case "CHL7v2EventADTA03" :
-      case "CHL7v2EventADTA03_FR" :
-      case "CHL7v2EventADTA04" :
-      case "CHL7v2EventADTA04_FR" :
-      case "CHL7v2EventADTA05" :
-      case "CHL7v2EventADTA05_FR" :
-      case "CHL7v2EventADTA06" :
-      case "CHL7v2EventADTA06_FR" :
-      case "CHL7v2EventADTA07" :
-      case "CHL7v2EventADTA07_FR" :
-      case "CHL7v2EventADTA08" :  
-      case "CHL7v2EventADTA11" :
-      case "CHL7v2EventADTA11_FR" :
-      case "CHL7v2EventADTA12" :
-      case "CHL7v2EventADTA12_FR" :
-      case "CHL7v2EventADTA13" :
-      case "CHL7v2EventADTA13_FR" :
-      case "CHL7v2EventADTA14" :
-      case "CHL7v2EventADTA14_FR" :
-      case "CHL7v2EventADTA16" :
-      case "CHL7v2EventADTA16_FR" :
-      case "CHL7v2EventADTA25" :
-      case "CHL7v2EventADTA25_FR" :  
-      case "CHL7v2EventADTA38" :
-      case "CHL7v2EventADTA38_FR" :  
-      case "CHL7v2EventADTA44" :
-      case "CHL7v2EventADTA44_FR" :
-      case "CHL7v2EventADTA54" :
-      case "CHL7v2EventADTA54_FR" :
-      case "CHL7v2EventADTA55" : 
-      case "CHL7v2EventADTA55_FR" :
-      case "CHL7v2EventADTZ80_FR" : 
-      case "CHL7v2EventADTZ81_FR" : 
-      case "CHL7v2EventADTZ84_FR" :
-      case "CHL7v2EventADTZ85_FR" : 
-      case "CHL7v2EventADTZ99_FR" : 
-        return new CHL7v2RecordAdmit($encoding);  
-      // Création des résultats d'observations
-      case "CHL7v2EventORUR01" : 
-        return new CHL7v2RecordObservationResultSet($encoding);  
-      default : 
-        return new CHL7v2MessageXML($encoding);
+  static function getEventType($event_name = null, $encoding = "utf-8") {
+    if (!$event_name) {
+      return new CHL7v2MessageXML($encoding);
     }
+    
+    list($event_type, $event_code) = str_split($event_name, strlen("CHL7vXEventXXX"));
+    $event_code = substr($event_code, 0, 3);
+    
+    if ($event_type == "CHL7v2EventADT") {
+      // Création d'un nouveau patient - Mise à jour d'information du patient
+      if (CMbArray::in($event_code, CHL7v2RecordPerson::$event_codes)) {
+        return new CHL7v2MergePersons($encoding);
+      }
+      
+      // Fusion de deux patients
+      if (CMbArray::in($event_code, CHL7v2MergePersons::$event_codes)) {
+        return new CHL7v2MergePersons($encoding);
+      }
+      
+      // Changement de la liste d'identifiants du patient
+      if (CMbArray::in($event_code, CHL7v2ChangePatientIdentifierList::$event_codes)) {
+        return new CHL7v2ChangePatientIdentifierList($encoding);
+      }  
+      
+      // Création d'une venue - Mise à jour d'information de la venue
+      if (CMbArray::in($event_code, CHL7v2RecordAdmit::$event_codes)) {
+        return new CHL7v2RecordAdmit($encoding);
+      }  
+    }    
+    
+    // Création des résultats d'observations  
+    if ($event_type == "CHL7v2EventORU") {
+      return new CHL7v2RecordObservationResultSet($encoding);  
+    }
+    
+    return new CHL7v2MessageXML($encoding);
   }
   
   function __construct($encoding = "utf-8") {
