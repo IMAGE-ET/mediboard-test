@@ -30,7 +30,7 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     if ($event_type == "CHL7v2EventADT") {
       // Création d'un nouveau patient - Mise à jour d'information du patient
       if (CMbArray::in($event_code, CHL7v2RecordPerson::$event_codes)) {
-        return new CHL7v2MergePersons($encoding);
+        return new CHL7v2RecordPerson($encoding);
       }
       
       // Fusion de deux patients
