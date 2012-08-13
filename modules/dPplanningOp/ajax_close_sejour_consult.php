@@ -37,6 +37,7 @@ foreach ($sejours as $_sejour) {
 // Annulation des séjours sans entrée reelle ni sortie reelle
 $where['entree_reelle'] = "IS NULL";
 $where['sortie_reelle'] = "IS NULL";
+$where['annule']        = "= '0'";
 $order = "entree_prevue";
 $sejours = $sejour->loadList($where, $order, $limit);
 
