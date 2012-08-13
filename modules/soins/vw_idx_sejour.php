@@ -84,7 +84,7 @@ function cacheLit($affectation) {
     $lits[$lit_id] = $lit;     
   }
   
-  $lit =& $lits[$lit_id];
+  $lit = $lits[$lit_id];
   $lit->_ref_affectations[$affectation->_id] = $affectation;
 
   // Cache des chambres
@@ -96,8 +96,8 @@ function cacheLit($affectation) {
     $chambres[$chambre_id] = $chambre;
   }
 
-  $chambre =& $chambres[$chambre_id];
-  $chambre->_ref_lits[$lit_id] =& $lit;
+  $chambre = $chambres[$chambre_id];
+  $chambre->_ref_lits[$lit_id] = $lit;
   
   // Cache de services
   global $sejoursParService;
@@ -108,8 +108,8 @@ function cacheLit($affectation) {
     $sejoursParService[$service_id] = $service;
   }
 
-  $service =& $sejoursParService[$service_id];
-  $service->_ref_chambres[$chambre_id] =& $chambre;
+  $service = $sejoursParService[$service_id];
+  $service->_ref_chambres[$chambre_id] = $chambre;
 }
 
 // Chargement du praticien
@@ -148,7 +148,7 @@ if($praticien_id && !$service_id){
     $sejours = $sejour->loadList($where);
   }
     
-  foreach($sejours as &$_sejour){
+  foreach($sejours as $_sejour){
     if($_is_praticien && $_sejour->praticien_id == $userCourant->user_id){
       $tab_sejour[$_sejour->_id]= $_sejour;
     }
@@ -161,7 +161,7 @@ if($praticien_id && !$service_id){
     $affectations = $affectation->loadList($where);
 
     if(count($affectations) >= 1){
-      foreach($affectations as &$_affectation){
+      foreach($affectations as $_affectation){
         $_affectation->loadRefsAffectations();
         cacheLit($_affectation);
       }
@@ -186,7 +186,7 @@ foreach ($sejoursParService as $key => $_service) {
         foreach ($_lit->_ref_affectations as $_affectation) {
           $_affectation->loadRefsAffectations();
           $_affectation->loadRefSejour();
-          $_sejour =& $_affectation->_ref_sejour;
+          $_sejour = $_affectation->_ref_sejour;
           if($_is_praticien && $_sejour->praticien_id == $userCourant->user_id){
             $tab_sejour[$_sejour->_id]= $_sejour;
           }
@@ -198,7 +198,7 @@ foreach ($sejoursParService as $key => $_service) {
       
           if($_sejour->_ref_prescriptions){
             if(array_key_exists('sejour', $_sejour->_ref_prescriptions)){
-               $prescription_sejour =& $_sejour->_ref_prescriptions["sejour"];
+               $prescription_sejour = $_sejour->_ref_prescriptions["sejour"];
                $prescription_sejour->countNoValideLines();
             }
           }
@@ -289,9 +289,9 @@ if($service_id){
   }
   
   if($service->_id){
-    foreach($service->_ref_chambres as &$_chambre){
-      foreach($_chambre->_ref_lits as &$_lits){
-        foreach($_lits->_ref_affectations as &$_affectation){
+    foreach($service->_ref_chambres as $_chambre){
+      foreach($_chambre->_ref_lits as $_lits){
+        foreach($_lits->_ref_affectations as $_affectation){
           if($_is_praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id){
             $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
           }
@@ -300,7 +300,7 @@ if($service_id){
           $_affectation->loadRefsAffectations();
           if($_affectation->_ref_sejour->_ref_prescriptions){
             if(array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)){
-              $prescription_sejour =& $_affectation->_ref_sejour->_ref_prescriptions["sejour"];
+              $prescription_sejour = $_affectation->_ref_sejour->_ref_prescriptions["sejour"];
               $prescription_sejour->countNoValideLines();
             }
           }
