@@ -62,14 +62,12 @@ if (!$source->_id  || !$source->active) {
   CAppUI::stepAjax("Aucune source pour cet acteur / Source non active", UI_MSG_ERROR);
 }
 
-if ($source instanceof CSourceFileSystem) {
-  $source->setData($msg, false, "MB-$exchange->type-$exchange->code-$exchange->_id.$source->fileextension");
+$source->setData($msg, false, $exchange);
+try {
+  $source->send();
+} catch (Exception $e) {
+  throw new CMbException("CExchangeSource-no-response");
 }
-else {
-  $source->setData($msg);
-}
-
-$source->send();
 
 $exchange->date_echange = mbDateTime();
 

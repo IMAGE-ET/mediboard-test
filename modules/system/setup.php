@@ -1074,6 +1074,26 @@ class CSetupsystem extends CSetup {
     $query = "UNLOCK TABLES";
     $this->addQuery($query);
     
-    $this->mod_version = "1.1.07";
+    $this->makeRevision("1.1.07");
+    $query = "CREATE TABLE `source_http` (
+              `source_http_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `name` VARCHAR (255) NOT NULL,
+              `role` ENUM ('prod','qualif') NOT NULL DEFAULT 'qualif',
+              `host` TEXT NOT NULL,
+              `user` VARCHAR (255),
+              `password` VARCHAR (50),
+              `type_echange` VARCHAR (255),
+              `active` ENUM ('0','1') NOT NULL DEFAULT '1',
+              `loggable` ENUM ('0','1') NOT NULL DEFAULT '1'
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $this->makeRevision("1.1.08");
+    $query = "ALTER TABLE `source_file_system` 
+                ADD `fileprefix` VARCHAR (255),
+                ADD `sort_files_by` ENUM ('date','name','size') DEFAULT 'name';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.1.09";
   }
 }

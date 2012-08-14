@@ -14,6 +14,8 @@ class CSourceFileSystem extends CExchangeSource {
   
   var $fileextension           = null;
   var $fileextension_write_end = null;
+  var $fileprefix              = null;
+  var $sort_files_by           = null;
   
   // Form fields
   var $_path             = null;
@@ -32,9 +34,11 @@ class CSourceFileSystem extends CExchangeSource {
     $specs = parent::getProps();
     $specs["fileextension"]           = "str";
     $specs["fileextension_write_end"] = "str";
+    $specs["fileprefix"]              = "str";
+    $specs["sort_files_by"]           = "enum list|date|name|size default|name";
+    
     return $specs;
   }
-
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -169,16 +173,27 @@ class CSourceFileSystem extends CExchangeSource {
     return file_get_contents($path);
   }
   
-  function setData($data, $argsList = false, $file_path) {
+  function setData($data, $argsList = false, CExchangeDataFormat $exchange = null) {
     parent::setData($data, $argsList);
     
-    $this->_file_path = $file_path;
+    $file_path = str_replace(array(" ", ":", "-"), array("_", "", ""), mbDateTime());
+    
+    if ($this->fileprefix) {
+      $file_path = $this->fileprefix.$file_path;
+    }
+    
+    if ($exchange) {
+      $file_path = "$file_path-$exchange->_id";
+    }
+            
+    $this->_file_path = "MB-".$file_path;
   }
   
   public function getFullPath($path = ""){
     $host = rtrim($this->host, "/\\");
     $path = ltrim($path, "/\\");
     $path = $host.($path ? "/$path" : "");
+    
     return str_replace("\\", "/", $path);
   }
   

@@ -35,7 +35,7 @@ if ($type_action == "connexion") {
 // Envoi d'un fichier
 else if ($type_action == "sendFile") {
   try {
-    $exchange_source->setData("Test source file system in Mediboard", false, "testSendFile$exchange_source->fileextension");
+    $exchange_source->setData("Test source file system in Mediboard", false);
     $exchange_source->send();
   } catch (CMbException $e) {
     $e->stepAjax(UI_MSG_ERROR);

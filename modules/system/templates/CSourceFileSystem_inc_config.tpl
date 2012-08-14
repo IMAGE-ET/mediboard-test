@@ -28,6 +28,11 @@
           {{mb_include module=system template=CExchangeSource_inc}}
           
           <tr>
+            <th>{{mb_label object=$source field="fileprefix"}}</th>
+            <td>{{mb_field object=$source field="fileprefix"}}</td>
+          </tr>
+          
+          <tr>
             <th>{{mb_label object=$source field="fileextension"}}</th>
             <td>{{mb_field object=$source field="fileextension"}}</td>
           </tr>
@@ -35,6 +40,11 @@
           <tr>
             <th>{{mb_label object=$source field="fileextension_write_end"}}</th>
             <td>{{mb_field object=$source field="fileextension_write_end"}}</td>
+          </tr>
+          
+          <tr>
+            <th>{{mb_label object=$source field="sort_files_by"}}</th>
+            <td>{{mb_field object=$source field="sort_files_by"}}</td>
           </tr>
 
           <tr>

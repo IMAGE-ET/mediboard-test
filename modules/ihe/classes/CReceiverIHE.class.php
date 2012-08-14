@@ -110,17 +110,11 @@ class CReceiverIHE extends CInteropReceiver {
     
     $exchange = $evenement->_exchange_ihe;
 
-    // Dans le cas d'une source file system on passe le nom du fichier en paramètre
-    if ($source instanceof CSourceFileSystem) {
-      $source->setData($msg, false, "MB-$evenement->event_type-$evenement->code-$exchange->_id.$source->fileextension");
+    if ($this->_configs["encoding"] == "UTF-8") {
+      $msg = utf8_encode($msg); 
     }
-    else {
-      if ($this->_configs["encoding"] == "UTF-8") {
-        $msg = utf8_encode($msg); 
-      }
-      
-      $source->setData($msg);
-    }
+    
+    $source->setData($msg, null, $exchange);
     try {
       $source->send();
     } catch (Exception $e) {

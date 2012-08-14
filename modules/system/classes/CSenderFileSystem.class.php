@@ -17,8 +17,8 @@
  */
 class CSenderFileSystem extends CInteropSender {
   // DB Table key
-  var $sender_file_system_id  = null;
-  
+  var $sender_file_system_id = null;
+    
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'sender_file_system';

@@ -21,6 +21,7 @@ class CExchangeSource extends CMbObject {
     "soap"        => "CSourceSOAP",
     "smtp"        => "CSourceSMTP",
     "file_system" => "CSourceFileSystem",
+    "http"        => "CSourceHTTP",
   );
   
   // DB Fields
@@ -135,7 +136,7 @@ class CExchangeSource extends CMbObject {
     return parent::store();
   }
   
-  function setData($data, $argsList = false) {
+  function setData($data, $argsList = false, CExchangeDataFormat $exchange = null) {
     $this->_args_list = $argsList;
     $this->_data = $data;
   }
