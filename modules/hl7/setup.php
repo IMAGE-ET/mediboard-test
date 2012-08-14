@@ -161,8 +161,8 @@ class CSetuphl7 extends CSetup {
     // I - Inpatient - Hospitalisation
     $set = array(
       "code_hl7_to"   => "I",
-      "code_mb_from"  => "urg",
-      "code_mb_to"    => "urg"
+      "code_mb_from"  => "comp",
+      "code_mb_to"    => "comp"
     );
     $and = array(
       "code_hl7_from" => "I"
