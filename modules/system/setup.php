@@ -1094,6 +1094,25 @@ class CSetupsystem extends CSetup {
                 ADD `sort_files_by` ENUM ('date','name','size') DEFAULT 'name';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.1.09";
+    $this->makeRevision("1.1.09");
+    $query = "CREATE TABLE `echange_http` (
+                `echange_http_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `http_fault` ENUM ('0','1') DEFAULT '0',
+                `emetteur` VARCHAR (255),
+                `destinataire` VARCHAR (255),
+                `date_echange` DATETIME NOT NULL,
+                `function_name` VARCHAR (255) NOT NULL,
+                `input` MEDIUMTEXT,
+                `output` MEDIUMTEXT,
+                `purge` ENUM ('0','1') DEFAULT '0',
+                `response_time` FLOAT
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `echange_http` 
+                ADD INDEX (`date_echange`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.1.10";
   }
 }

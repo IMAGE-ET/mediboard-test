@@ -33,9 +33,9 @@
     
     {{if $source->_allowed_instances}} 
     <script type="text/javascript">
-	    Main.add(function () {
-	      Control.Tabs.create('tabs-exchange-source-{{$sourcename}}', true);
-	    });
+      Main.add(function () {
+        Control.Tabs.create('tabs-exchange-source-{{$sourcename}}', true);
+      });
     </script>
     
     <ul id="tabs-exchange-source-{{$sourcename}}" class="control_tabs">
@@ -77,6 +77,10 @@
       {{else}}
         {{mb_include module=system template=CExchangeSource_inc_config mod=hl7 class="CSourceMLLP"}}  
       {{/if}}
+    </div>
+    
+    <div id="CSourceHTTP-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceHTTP)}}block{{else}}none{{/if}};">
+      {{mb_include module=system template=CExchangeSource_inc_config mod=system class="CSourceHTTP"}}  
     </div>
   </div>
 {{/if}}
