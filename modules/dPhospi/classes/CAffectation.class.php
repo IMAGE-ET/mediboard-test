@@ -177,7 +177,7 @@ class CAffectation extends CMbObject {
   }
 
   function delete() {
-    $this->completeField("sejour_id");
+    $this->completeField("sejour_id", "entree", "sortie");
     if (!$this->sejour_id) {
       return $this->deleteOne();
     }
