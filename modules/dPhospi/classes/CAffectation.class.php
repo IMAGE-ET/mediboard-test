@@ -166,7 +166,7 @@ class CAffectation extends CMbObject {
     unset($affectations[$this->_id]);
     
     foreach($affectations as $_aff) {
-      if($this->collide($_aff)) {
+      if ($this->collide($_aff)) {
         return "Placement déjà effectué";
       }
     }
@@ -178,13 +178,44 @@ class CAffectation extends CMbObject {
 
   function delete() {
     $this->completeField("sejour_id");
-    if ($this->sejour_id){
-      $this->loadRefSejour();
-      if ($this->_ref_sejour->type != "seances") {
-        return $this->_ref_sejour->delAffectations();
-      }
+    if (!$this->sejour_id) {
+      return $this->deleteOne();
     }
-    return $this->deleteOne();
+    
+    if ($this->loadRefSejour()->type == "seances") {
+      return $this->deleteOne(); 
+    }
+    
+    $this->loadRefsAffectations();
+    
+    $entree = $this->entree;
+    $sortie = $this->sortie;
+    
+    if ($msg = $this->deleteOne()) {
+      return $msg;
+    }
+    
+    // On positionne la sortie de la précédente affectation à l'affectation que l'on supprime 
+    if ($prev = $this->_ref_prev) {
+      $prev->sortie = $sortie;
+      
+      if ($msg = $prev->store()) {
+        return $msg;
+      }
+      
+      return null;
+    }
+    
+    // On positionne l'entrée de la suivante affectation à l'affectation que l'on supprime 
+    if ($next = $this->_ref_next) {
+      $next->entree = $entree;
+      
+      if ($msg = $prev->store()) {
+        return $msg;
+      }
+      
+      return null;
+    } 
   }
 
   function store() {

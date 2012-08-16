@@ -377,6 +377,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
     }
     
+    // Suppression de l'affectation
+    
+    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
   
@@ -723,7 +726,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $movement = $return_movement;
     
     // Mapping de l'affectation
-    $return_affectation = $this->mapAndStoreAffectation($ack, $newVenue, $data, $return_movement);
+    $return_affectation = $this->mapAndStoreAffectation($ack, $newVenue, $data, $movement);
     if (is_string($return_affectation)) {
       return $exchange_ihe->setAckAR($ack, "E208", $return_affectation, $newVenue);
     }
@@ -799,7 +802,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!$movement = $this->mappingMovement($data, $newVenue, $movement)) {
       return $exchange_ihe->setAckAR($ack, "E206", null, $newVenue);
     }
-    
+
     return $movement;
   }
   
@@ -814,7 +817,25 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         
     $affectation = new CAffectation();
     $affectation->sejour_id = $newVenue->_id;
+    
+    // Chargement des affectations du séjour
+    $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
+    
+    $event_code = $this->_ref_exchange_ihe->code;
+    // Cas d'une suppression de mutation
+    if ($event_code == "A12") {
+      $affectation->load($movement->affectation_id);
+      if (!$affectation->_id) {
+        return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+      }
 
+      if ($msgAffectation = $affectation->delete()) {
+        return $msgAffectation;
+      }
+      
+      return null;
+    }  
+    
     // Si pas de lit on retourne une affectation vide
     if (!$this->queryTextNode("PL.3", $PV1_3)) {
       // On essaye de récupérer le service dans ce cas depuis l'UF d'hébergement
@@ -833,15 +854,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }
 
       $newVenue->service_id = $affectation_uf->object_id;
-      $newVenue->store();
+      if ($msgVenue = $newVenue->store()) {
+        return $msgVenue;
+      }
       
       return $affectation;     
     }
-
-    // Chargement des affectations du séjour
-    $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
     
-    if ($this->_ref_exchange_ihe->code == "A11") {
+    if ($event_code == "A11") {
       $affectation =  $newVenue->getCurrAffectation($datetime);
       
       // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
@@ -862,7 +882,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
 
     // Cas mutation - A02
-    if ($this->_ref_exchange_ihe->code == "A02") {
+    if ($event_code == "A02") {
       $affectation->entree = $datetime;
       $affectation->loadMatchingObject();
 
@@ -883,7 +903,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
 
     // Cas modification - Z99
-    elseif ($this->_ref_exchange_ihe->code == "Z99") {
+    elseif ($event_code == "Z99") {
       $affectation =  $newVenue->getCurrAffectation($datetime);
       // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
       if (!$movement->affectation_id && $affectation->_id) {
@@ -1377,8 +1397,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // Erreur dans le cas où le type du mouvement est UPDATE ou CANCEL et que l'on a pas retrouvé le mvt
-    if (($original_trigger == "UPDATE" || $original_trigger == "CANCEL") && !$movement->_id) {
+    if (($action == "UPDATE" || $action == "CANCEL") && !$movement->_id) {
       return null;
+    }
+    
+    if ($action == "CANCEL") {
+      $movement->cancel = true;
     }
     
     $movement->start_of_movement = $start_movement_dt;
