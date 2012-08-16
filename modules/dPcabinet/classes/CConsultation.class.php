@@ -39,6 +39,7 @@ class CConsultation extends CCodable {
   var $rques            = null;
   var $examen           = null;
   var $histoire_maladie = null;
+  var $brancardage      = null;
   var $conclusion       = null;
   
   var $traitement          = null;
@@ -195,6 +196,7 @@ class CConsultation extends CCodable {
     $props["examen"]            = "text helped seekable show|0";
     $props["traitement"]        = "text helped seekable";
     $props["histoire_maladie"]  = "text helped seekable";
+    $props["brancardage"]       = "text helped seekable";
     $props["conclusion"]        = "text helped seekable";
     
     $props["facture"]           = "bool default|0 show|0";
@@ -306,7 +308,7 @@ class CConsultation extends CCodable {
     $plageconsult = $this->_ref_plageconsult;
     $this->_date_fin = "$plageconsult->date ". mbTime("+".mbMinutesRelative("00:00:00", $plageconsult->freq)*$this->duree." MINUTES", $this->heure);
 
-    $this->_exam_fields = self::getExamFields();
+    $this->_exam_fields = $this->getExamFields();
   }
    
   function updatePlainFields() {
@@ -1412,22 +1414,25 @@ TESTS A EFFECTUER
     }
   }
   
-  static function getExamFields() {
+  function getExamFields() {
     $fields = array(
       "motif",
       "rques",
     );
-    if(CAppUI::conf("dPcabinet CConsultation show_histoire_maladie")) {
+    if (CAppUI::conf("dPcabinet CConsultation show_histoire_maladie")) {
       $fields[] = "histoire_maladie";
     }
-    if(CAppUI::conf("dPcabinet CConsultation show_examen")) {
+    if (CAppUI::conf("dPcabinet CConsultation show_examen")) {
       $fields[] = "examen";
     }
-    if(CAppUI::pref("view_traitement")) {
+    if (CAppUI::pref("view_traitement")) {
       $fields[] = "traitement";
     }
-    if(CAppUI::conf("dPcabinet CConsultation show_conclusion")) {
+    if (CAppUI::conf("dPcabinet CConsultation show_conclusion")) {
       $fields[] = "conclusion";
+    }
+    if ($this->sejour_id) {
+      $fields[] = "brancardage";
     }
     return $fields;
   }

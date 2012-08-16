@@ -1605,7 +1605,13 @@ class CSetupdPcabinet extends CSetup {
               ADD `ref_accident` TEXT;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.66";
+    $this->makeRevision("1.66");
+    $query = "ALTER TABLE `consultation`
+      ADD `brancardage` TEXT;";
+    
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.67";
   }
 }
 ?>
