@@ -194,6 +194,7 @@ class CExchangeDataFormat extends CMbMetaObject {
 
     foreach ($this->getFamily() as $_message => $_root_class) {
       $root  = new $_root_class;
+      
       foreach ($root->getEvenements() as $_evt => $_evt_class) {
         if ($evenement && ($evenement != $_evt)) {
           continue;

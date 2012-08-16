@@ -9,19 +9,41 @@
  * @link     http://www.mediboard.org
 *}}
 
+<script type="text/javascript">
+  countChecked = function(message) {
+    var tab = $(message).select("input[value=1]:checked");
+    $("span-"+message).innerHTML = tab.length;
+  }
+
+  Main.add(function () {
+    Control.Tabs.create('tabs-messages-supported', true);
+    
+    {{foreach from=$messages key=_message item=_messages_supported}}
+      countChecked('{{$_message}}');
+    {{/foreach}}
+  });
+</script>
+
+<ul id="tabs-messages-supported" class="control_tabs">
+  {{foreach from=$messages key=_message item=_messages_supported}}
+    <li> 
+      <a href="#{{$_message}}"> {{tr}}{{$_message}}{{/tr}} (<span id="span-{{$_message}}">-</span>/{{$_messages_supported|@count}}) </a> 
+    </li>
+  {{/foreach}}
+</ul>
+
+<hr class="control_tabs" />
 
 {{foreach from=$messages key=_message item=_messages_supported}}
-<fieldset>
-  <legend>{{tr}}{{$_message}}{{/tr}}</legend>
-  
-  <table class="form">
+<div id="{{$_message}}" style="display: none;"> 
+  <table class="tbl form">
     {{foreach from=$_messages_supported item=_message_supported}}
     <tr>
-      <th class="narrow">{{tr}}{{$_message_supported->message}}{{/tr}}</th>
+      <th width="20%">{{tr}}{{$_message_supported->message}}{{/tr}}</th>
       <td>
-      	{{unique_id var=uid}}
+        {{unique_id var=uid}}
         <form name="editActorMessageSupported-{{$uid}}" 
-          action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
+          action="?" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete:countChecked.curry('{{$_message}}')});">
           <input type="hidden" name="m" value="eai" />
           <input type="hidden" name="dosql" value="do_message_supported" />
           <input type="hidden" name="del" value="0" />  
@@ -36,6 +58,5 @@
     </tr>
     {{/foreach}}
   </table>
-  
-</fieldset>
+</div>
 {{/foreach}}
