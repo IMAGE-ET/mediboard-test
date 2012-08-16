@@ -1,24 +1,13 @@
-<script type="text/javascript">
-  Main.add(function() {
-    var form = getForm("editRessourceMaterielle");
-    var url = new Url("system", "ajax_seek_autocomplete");
-    url.addParam("object_class", "CTypeRessource");
-    url.addParam("field", "_type_ressource_view");
-    
-    url.autoComplete(form.elements._type_ressource_view, null, {
-      minChars: 3,
-      method: "get",
-      select: "view",
-      dropdown: true,
-      afterUpdateElement: function(field, selected){
-        $V(field.form.type_ressource_id, selected.getAttribute("id").split("-")[2]);
-        if ($V(field.form.elements._type_ressource_view) == "") {
-          $V(field.form.elements._type_ressource_view, selected.down('.view').innerHTML);
-        }
-      }
-    });
-  });
-</script>
+{{*
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage dPbloc
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ *}}
+ 
 <form name="editRessourceMaterielle" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="dPbloc" />
   <input type="hidden" name="dosql" value="do_ressource_materielle_aed"/>
@@ -43,8 +32,7 @@
         {{mb_label object=$ressource_materielle field=type_ressource_id}}
       </th>
       <td>
-        {{mb_field object=$ressource_materielle field=type_ressource_id hidden=true}}
-        <input type="text" name="_type_ressource_view" value="{{$ressource_materielle->_ref_type_ressource}}"/>
+        {{mb_field object=$ressource_materielle field=type_ressource_id form="editRessourceMaterielle" autocomplete="true,2,30,false,true,1"}}
       </td>
     </tr>
     <tr>

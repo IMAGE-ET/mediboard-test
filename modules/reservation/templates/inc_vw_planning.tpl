@@ -62,7 +62,7 @@
     var planning_div = $("{{$planning->guid}}");
     
     
-    {{if $can->admin || ($can->edit && $today_tomorrow)}}
+    {{if $can->edit}}
       // Création d'une interv sur une case à une heure donnée
       planning_div.select("td").each(function(elt) {
         elt.observe('dblclick', function() {

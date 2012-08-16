@@ -36,6 +36,7 @@
     {{mb_include module=system template=inc_config_bool var=fix_doc_edit}}
     {{mb_include module=system template=inc_config_bool var=show_type_pec}}
     {{mb_include module=system template=inc_config_bool var=show_discipline_tarifaire }}
+    {{mb_include module=system template=inc_config_bool var=ask_for_colliding_sejours }}
     
     <tr>
       <th class="title" colspan="2">Heure par defaut du séjour</th>

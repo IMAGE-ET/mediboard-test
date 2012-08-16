@@ -133,6 +133,10 @@
                 onclick="printFicheAnesth('{{$_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_op->_id}}');">
           Fiche d'anesthésie
         </button>
+        {{if $conf.dPbloc.CPlageOp.systeme_materiel}}
+          <br />
+          {{mb_include module=bloc template=inc_button_besoins_ressources type=operation_id object_id=$_op->_id usage=1}}
+        {{/if}}
       </form>
       
       <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_op->_id}}">

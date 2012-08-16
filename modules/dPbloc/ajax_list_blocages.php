@@ -20,21 +20,20 @@ $date_min = mbTransformTime(null, $date_replanif, "%Y-%m-01");
 $date_max = mbDate("-1 day", mbDate("+1 month", $date_min));
 
 $bloc = new CBlocOperatoire;
-$blocs = $bloc->loadListWithPerms(PERM_READ, null, "nom");
+$where = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
+$blocs = $bloc->loadListWithPerms(PERM_READ, $where, "nom");
 
 $blocages = array();
 $salles   = array();
 
 foreach ($blocs as $_bloc) {
-  $salle = new CSalle;
-  $where["bloc_id"] = "= '$_bloc->_id'";
   $salles[$_bloc->_id] = $_bloc->loadRefsSalles();
   
   foreach ($salles[$_bloc->_id] as $_salle) {
     $blocage = new CBlocage;
     $whereBloc = array();
     $whereBloc["salle_id"] = "= '$_salle->_id'";
-    $whereBloc[] = "deb < '$date_max' AND fin > '$date_min'";
+    $whereBloc[] = "deb <= '$date_max' AND fin >= '$date_min'";
     
     $blocages[$_salle->_id] = $blocage->loadList($whereBloc);
   }

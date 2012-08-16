@@ -57,10 +57,12 @@ $total_protocoles = $protocole->countList($where);
 
 foreach ($list_protocoles as $_prot){
   $_prot->loadRefsFwd();
+  $_prot->_types_ressources_ids = implode(",", CMbArray::pluck($_prot->loadRefsBesoins(), "type_ressource_id"));
 }
 
 foreach ($list_protocoles_total as $_prot) {
   $_prot->loadRefsFwd();
+  $_prot->_types_ressources_ids = implode(",", CMbArray::pluck($_prot->loadRefsBesoins(), "type_ressource_id"));
 }
 
 // Création du template

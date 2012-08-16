@@ -117,6 +117,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $_fin_offset      = array();
   var $_place_after_interv_id = null;
   var $_heure_us        = null;
+  var $_types_ressources_ids = null;
   
   // Distant fields
   var $_datetime          = null;
@@ -614,6 +615,24 @@ class COperation extends CCodable implements IPatientRelated {
     // Standard storage
     if ($msg = parent::store()) {
       return $msg;
+    }
+    
+    // Création des besoins d'après le protocole sélectionné
+    // Ne le faire que pour une nouvelle intervention
+    // Pour une intervention existante, l'application du protocole
+    // store les protocoles
+    if (CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert" &&
+        $this->_types_ressources_ids && !$this->_old->_id) {
+      $types_ressources_ids = explode(",", $this->_types_ressources_ids);
+      
+      foreach ($types_ressources_ids as $_type_ressource_id) {
+        $besoin = new CBesoinRessource;
+        $besoin->type_ressource_id = $_type_ressource_id;
+        $besoin->operation_id = $this->_id;
+        if ($msg = $besoin->store()) {
+          return $msg;
+        }
+      }
     }
     
     $this->createAlert($comments);

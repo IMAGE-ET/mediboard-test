@@ -60,7 +60,8 @@ class CProtocole extends CMbObject {
   var $_hour_op        = null;
   var $_min_op         = null;
   var $_codes_ccam     = array();
-
+  var $_types_ressources_ids = null;
+  
   // DB References
   var $_ref_chir                          = null;
   var $_ref_function                      = null;
@@ -81,7 +82,7 @@ class CProtocole extends CMbObject {
   }
 
   function getProps() {
-  	$props = parent::getProps();
+    $props = parent::getProps();
     $props["chir_id"]         = "ref class|CMediusers seekable";
     $props["function_id"]     = "ref class|CFunctions seekable";
     $props["group_id"]        = "ref class|CGroups seekable";
@@ -244,7 +245,11 @@ class CProtocole extends CMbObject {
       $this->_view .= " &mdash; Etablissement {$this->_ref_group->_view}";
     }
   }
-
+  
+  function loadRefsBesoins() {
+    return $this->_ref_besoins = $this->loadBackRefs("besoins_ressources");
+  }
+  
   function getPerm($permType) {
     if($this->chir_id) {
       if(!$this->_ref_chir) {

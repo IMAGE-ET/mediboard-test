@@ -282,7 +282,9 @@ var Sejour = {
 }
 
 Main.add( function(){
-  Sejour.sejours_collision = {{$sejours_collision|@json}};
+  {{if $conf.dPplanningOp.CSejour.ask_for_colliding_sejours}}
+    Sejour.sejours_collision = {{$sejours_collision|@json}};
+  {{/if}}
   var oForm = getForm("editOp");
   Sejour.preselectSejour($V(oForm._date));
 });

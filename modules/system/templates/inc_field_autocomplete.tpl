@@ -25,7 +25,7 @@
   </li>
 {{foreachelse}}
   <li>
-    {{if $ref_spec}}
+    {{if isset($ref_spec|smarty:nodefaults)}}
       <span class="view"></span>
     {{else}}
       <span class="view" style="display: none;">{{$input}}</span>

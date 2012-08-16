@@ -174,12 +174,12 @@ class CSetupdPbloc extends CSetup {
     
     $this->makeRevision("0.22");
     $query = "CREATE TABLE `bloc_operatoire` (
-					  `bloc_operatoire_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-					  `group_id` INT (11) UNSIGNED NOT NULL,
-					  `nom` VARCHAR (255) NOT NULL);";
+            `bloc_operatoire_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+            `group_id` INT (11) UNSIGNED NOT NULL,
+            `nom` VARCHAR (255) NOT NULL);";
     $this->addQuery($query);
     
-		$query = "ALTER TABLE `bloc_operatoire` ADD INDEX (`group_id`);";
+    $query = "ALTER TABLE `bloc_operatoire` ADD INDEX (`group_id`);";
     $this->addQuery($query);
     
     $query = "INSERT INTO `bloc_operatoire` (`nom`, `group_id`)
@@ -231,7 +231,7 @@ class CSetupdPbloc extends CSetup {
     
     global $dPconfig;
     $days_locked = (isset($dPconfig["dPbloc"]["CPlageOp"]["days_locked"]) ?
-			  CAppUI::conf("dPbloc CPlageOp days_locked") : 0);
+        CAppUI::conf("dPbloc CPlageOp days_locked") : 0);
     
     $query = "UPDATE `bloc_operatoire`
      SET days_locked = '$days_locked'";
@@ -331,7 +331,16 @@ class CSetupdPbloc extends CSetup {
       ADD INDEX (`operation_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.32";
+    $this->makeRevision("0.32");
+    $query = "ALTER TABLE `usage_ressource`
+      CHANGE `besoin_id` `besoin_ressource_id` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `indispo_ressource`
+      CHANGE `deb` `deb` DATETIME NOT NULL,
+      CHANGE `fin` `fin` DATETIME NOT NULL;";
+    
+    $this->mod_version = "0.33";
   }
 }
 ?>

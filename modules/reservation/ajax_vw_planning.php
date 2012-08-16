@@ -50,8 +50,16 @@ unset($ljoin["sallesbloc"]);
 $salles = $salle->loadList($where, $order, null, null, $ljoin);
 $salles_ids = array_keys($salles);
 
+$bloc = new CBlocOperatoire;
+$bloc->load($bloc_id);
+
 $planning = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
 $planning->title = "Planning du ".mbDateToLocale($date_planning);
+
+if ($bloc_id) {
+  $planning->title .= " - $bloc->nom";
+}
+
 $planning->guid = "planning_interv";
 $planning->hour_min  = mbTime(CAppUI::conf("reservation debut_planning").":00");
 $planning->dragndrop = $planning->resizable = CCanDo::edit();
@@ -60,7 +68,12 @@ $planning->show_half = true;
 $i = 0;
 
 foreach ($salles as $_salle) {
-  $planning->addDayLabel($i, $_salle->_view);
+  if ($bloc_id) {
+    $planning->addDayLabel($i, $_salle->_shortview);
+  }
+  else {
+    $planning->addDayLabel($i, $_salle->_view);
+  }
   $i++;
 }
 $operations_by_salle = array();
@@ -111,7 +124,19 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     "<span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>$anesth->_shortview</span>".
     "\n$_operation->rques";
     
-    $color = $_operation->rank ? "#{$chir->_ref_function->color}" : "#fd3";
+    if ($sejour->annule) {
+      $color = "#f88";
+    }
+    else {
+      switch ($sejour->recuse) {
+        case "-1":
+          $color = "#{$chir->_ref_function->color}";
+        case "0" :
+          $color = "#9be";
+        case "1" :
+          $color = "#f88";
+      }
+    }
     
     $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $libelle, $color, true, null, $_operation->_guid, false);
     
@@ -144,8 +169,6 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
   }
 }
 
-$today_tomorrow = $date_planning == mbDate() || $date_planning == mbDate("+1 day");
-
 $smarty = new CSmartyDP;
 
 $smarty->assign("planning", $planning);
@@ -153,6 +176,5 @@ $smarty->assign("salles"  , $salles);
 $smarty->assign("salles_ids", $salles_ids);
 $smarty->assign("date_planning", $date_planning);
 $smarty->assign("scroll_top", $scroll_top);
-$smarty->assign("today_tomorrow", $today_tomorrow);
 
 $smarty->display("inc_vw_planning.tpl");

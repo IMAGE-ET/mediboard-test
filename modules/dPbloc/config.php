@@ -7,6 +7,7 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "plage_vide"           => "0",
   "libelle_ccam"         => "1",
   "locked"               => "1",
+  "systeme_materiel"     => "standard",
   "planning"             => array (
     "col1" => "interv",
     "col2" => "sejour",

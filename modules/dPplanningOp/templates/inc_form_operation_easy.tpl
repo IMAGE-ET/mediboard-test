@@ -116,36 +116,27 @@
     </th>
     <td colspan="2">
       <input type="hidden" name="plageop_id" value="" />
-      <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime|iso_date}}{{else}}{{$today}}{{/if}}" />
-      {{if $can->admin}}
-        {{assign var="operation_id" value=$op->operation_id}}
-        {{mb_ternary var=update_entree_prevue test=$op->operation_id value="" other="updateEntreePrevue();"}}
-        {{mb_field object=$op field="date" name="date" prop="date" form="editOpEasy" register=true onchange="
-          $update_entree_prevue
-          Value.synchronize(this.form.date_da);
-          Value.synchronize(this);
-          document.editSejour._curr_op_date.value = this.value;
-          modifSejour();  \$V(this.form._date, this.value);"}}
-      {{else}}
-        <select name="date" style="width: 15em"
-          onchange="
-          {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
-          Value.synchronize(this);
-          document.editSejour._curr_op_date.value = this.value;
-          modifSejour(); $V(this.form._date, this.value);">
-          {{if $op->operation_id}}
-          <option value="{{$op->_datetime|iso_date}}" selected="selected">
-            {{$op->_datetime|date_format:$conf.date}} (inchangée)
-          </option>
-          {{/if}}
-          <option value="{{$today}}">
-            {{$today|date_format:$conf.date}} (aujourd'hui)
-          </option>
-          <option value="{{$tomorow}}">
-            {{$tomorow|date_format:$conf.date}} (demain)
-          </option>
-        </select>
-      {{/if}}
+      <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime|iso_date}}{{else}}{{$date_min}}{{/if}}" />
+      {{assign var="operation_id" value=$op->operation_id}}
+      {{mb_ternary var=update_entree_prevue test=$op->operation_id value="" other="updateEntreePrevue();"}}
+      <input type="hidden" name="date" value="{{$op->date}}" class="date notNull"
+        onchange="{{$update_entree_prevue}}
+        Value.synchronize(this.form.date_da);
+        Value.synchronize(this);
+        document.editSejour._curr_op_date.value = this.value;
+        modifSejour();
+        $V(this.form._date, this.value);"/>
+      <script type="text/javascript">
+        Main.add(function() {
+          var dates = {
+            limit: {
+              start: "{{$date_min}}",
+              stop:  "{{$date_max}}"
+            }
+          };
+          Calendar.regField(getForm("editOpEasy").date{{if !$can->admin}}, dates{{/if}});
+        });
+      </script>
       à
       <select name="_hour_urgence" onchange="Value.synchronize(this)">
       {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
@@ -260,15 +251,23 @@
     <td class="text" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>{{mb_label object=$op field="materiel"}}</td>
     {{/if}}
     {{if $conf.dPplanningOp.COperation.easy_remarques}}
-    <td class="text" {{if !$conf.dPplanningOp.COperation.easy_materiel}}colspan="2"{{/if}}>{{mb_label object=$op field="rques"}}</td>
+      <td class="text" {{if !$conf.dPplanningOp.COperation.easy_materiel}}colspan="2"{{/if}}>{{mb_label object=$op field="rques"}}</td>
     {{/if}}
   </tr>
   <tr>
   <td></td>
     {{if $conf.dPplanningOp.COperation.easy_materiel}}
     <td style="width: 33%;" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>
-      {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOpEasy"
+      {{if $conf.dPbloc.CPlageOp.systeme_materiel == "standard"}}
+        {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOpEasy"
         aidesaisie="validateOnBlur: 0"}}
+      {{elseif $op->_id}}
+        {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$op->_id type=operation_id}}
+      {{else}}
+        <div class="text small-info">
+          {{tr}}COperation-save_for_ressources{{/tr}}
+        </div>
+      {{/if}}
     </td>
     {{/if}}
     {{if $conf.dPplanningOp.COperation.easy_remarques}}

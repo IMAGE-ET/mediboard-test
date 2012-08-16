@@ -157,14 +157,14 @@ Main.add(function () {
   <tr>
     <td colspan="2" class="title">
       <a class="button new" href="?m={{$m}}&amp;protocole_id=0">
-       	Créer un nouveau protocole
-			</a>
+         Créer un nouveau protocole
+      </a>
     </td>
   </tr>
   {{/if}}
 
   {{mb_include module=system template=inc_form_table_header object=$protocole}}
-	
+  
   <tr>
     <th>{{mb_label object=$protocole field="chir_id"}}</th>
     <td>
@@ -231,7 +231,7 @@ Main.add(function () {
             <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
             <script type="text/javascript">
               Main.add(function() {
-							  var oForm = getForm("editFrm");
+                var oForm = getForm("editFrm");
                 var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
                 url.autoComplete(oForm._codes_ccam, '', {
                   minChars: 1,
@@ -243,7 +243,7 @@ Main.add(function () {
                   }
                 });
               });
-							
+              
               CCAMSelector.init = function(){
                 this.sForm  = "editFrm";
                 this.sView  = "_codes_ccam";
@@ -309,7 +309,17 @@ Main.add(function () {
 
         <tr>
           <td>{{mb_field object=$protocole field="examen" rows="3"}}</td>
-          <td>{{mb_field object=$protocole field="materiel" rows="3"}}</td>
+          <td>
+            {{if $conf.dPbloc.CPlageOp.systeme_materiel == "standard"}}
+              {{mb_field object=$protocole field="materiel" rows="3"}}
+            {{elseif $protocole->_id}}
+              {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$protocole->_id type=protocole_id}}
+            {{else}}
+              <div class="text small-info">
+                {{tr}}CProtocole-save_for_ressources{{/tr}}
+              </div>
+            {{/if}}
+          </td>
           <td>{{mb_field object=$protocole field="rques_operation" rows="3"}}</td>
         </tr>
   
@@ -339,45 +349,45 @@ Main.add(function () {
         </tr>
         
         <tr>
-				  <th>
-				    {{mb_label object=$protocole field="service_id"}}
-				  </th>
-				  <td>
-				    <select name="service_id" class="{{$protocole->_props.service_id}}" style="width: 15em;">
-				      <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-				      {{foreach from=$listServices item=_service}}
-				      <option value="{{$_service->_id}}" {{if $protocole->service_id == $_service->_id}} selected="selected" {{/if}}>
-				        {{$_service->_view}}
-				      </option>
-				      {{/foreach}}
-				    </select>
-				  </td>
-				</tr>
+          <th>
+            {{mb_label object=$protocole field="service_id"}}
+          </th>
+          <td>
+            <select name="service_id" class="{{$protocole->_props.service_id}}" style="width: 15em;">
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+              {{foreach from=$listServices item=_service}}
+              <option value="{{$_service->_id}}" {{if $protocole->service_id == $_service->_id}} selected="selected" {{/if}}>
+                {{$_service->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
         
         <tr>
           <th>
             {{mb_label object=$protocole field="DP"}}
           </th>
           <td>
-	          <script type="text/javascript">
+            <script type="text/javascript">
             Main.add(function(){
-	            var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-				      url.autoComplete(getForm("editFrm").keywords_code, '', {
-				        minChars: 1,
-				        dropdown: true,
-				        width: "250px",
+              var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
+              url.autoComplete(getForm("editFrm").keywords_code, '', {
+                minChars: 1,
+                dropdown: true,
+                width: "250px",
                 select: "code",
                 afterUpdateElement: function(oHidden) {
                   $V(getForm("editFrm").DP, oHidden.value);
                 }
-				      });
+              });
             });
             </script>
             
-				    <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$protocole->DP}}" style="width: 12em;" />
-	          <input type="hidden" name="DP" value="{{$protocole->DP}}" onchange="$V(this.form.keywords_code, this.value)"/>
+            <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$protocole->DP}}" style="width: 12em;" />
+            <input type="hidden" name="DP" value="{{$protocole->DP}}" onchange="$V(this.form.keywords_code, this.value)"/>
             <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
-	          <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
+            <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
               <script type="text/javascript">
                 CIM10Selector.init = function(){
                   this.sForm = "editFrm";

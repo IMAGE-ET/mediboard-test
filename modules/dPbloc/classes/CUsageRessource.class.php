@@ -20,6 +20,14 @@ class CUsageRessource extends CMbObject{
   var $besoin_ressource_id        = null;
   var $commentaire                = null;
   
+  // Ref Fields
+  var $_ref_ressource             = null;
+  
+  // Form Fields
+  var $_debut_offset              = null;
+  var $_fin_offset                = null;
+  var $_width                     = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'usage_ressource';
@@ -35,5 +43,13 @@ class CUsageRessource extends CMbObject{
     $specs["commentaire"]             = "text helped";
     
     return $specs;
+  }
+  
+  function loadRefRessource() {
+    return $this->_ref_ressource = $this->loadFwdRef("ressource_materielle_id");
+  }
+  
+  function loadRefBesoin() {
+    return $this->_ref_besoin = $this->loadFwdRef("besoin_ressource_id");
   }
 }

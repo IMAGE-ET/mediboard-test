@@ -8,11 +8,11 @@
     <th class="title">
       <a style="display: inline" href="#1" onclick="Blocage.refreshList('', '{{$date_before}}')">&lt;&lt;&lt;</a>
       {{$date_replanif|date_format:"%b %G"}}
-      <form name="changeDateList" class="prepared">
+      <form name="changeDateList" class="prepared" method="get">
       <input type="hidden" name="date" value="{{$date_replanif}}" onchange="Blocage.refreshList('', this.value)"/>
       </form>
       <a style="display: inline" href="#1" onclick="Blocage.refreshList('', '{{$date_after}}')">&gt;&gt;&gt;</a>
-    </td>
+    </th>
   </tr>
   {{foreach from=$blocs item=_bloc key=_bloc_id}}
     <tr>

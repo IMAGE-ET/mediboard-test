@@ -1,3 +1,13 @@
+{{*
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage dPbloc
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ *}}
+ 
 <script type="text/javascript">
   Ressource = {
     editRessource: function(ressource_id, type_ressource_id) {
@@ -7,9 +17,9 @@
       url.requestModal();
     },
     
-    afterEditRessource: function(ressource_id) {
+    afterEditRessource: function(ressource_id, obj) {
       Control.Modal.close();
-      TypeRessource.refreshListTypeRessources();
+      TypeRessource.refreshListTypeRessources(obj.type_ressource_id);
     }
   };
   
@@ -20,15 +30,40 @@
       url.requestModal(400);
     },
     
-    refreshListTypeRessources: function() {
+    refreshListTypeRessources: function(type_ressource_id) {
       var url = new Url("dPbloc", "ajax_list_type_ressources");
+      if (type_ressource_id) {
+        url.addParam("type_ressource_id", type_ressource_id);
+      }
       url.requestUpdate("list_type_ressources");
     },
     
     afterEditTypeRessource: function(type_ressource_id) {
       Control.Modal.close();
-      this.refreshListTypeRessources();
+      this.refreshListTypeRessources(type_ressource_id);
     },
+  };
+  
+  Indispo = {
+    editIndispo: function(indispo_ressource_id) {
+      var url = new Url("dPbloc", "ajax_edit_indispo");
+      url.addParam("indispo_ressource_id", indispo_ressource_id);
+      url.requestModal(400, 250);
+    },
+    refreshListIndispos: function(indispo_ressource_id, date_indispo) {
+      var url = new Url("dPbloc", "ajax_list_indispos");
+      if (indispo_ressource_id)  {
+        url.addParam("indispo_ressource_id", indispo_ressource_id);
+      }
+      if (date_indispo) {
+        url.addParam("date_indispo", date_indispo);
+      }
+      url.requestUpdate("list_indispos");
+    },
+    afterEditIndispo: function(indispo_ressource_id) {
+      Control.Modal.close();
+      this.refreshListIndispos(indispo_ressource_id);
+    }
   };
   
   updateSelected = function(table_name, tr) {
@@ -41,14 +76,28 @@
   }
   
   Main.add(function() {
-    TypeRessource.refreshListTypeRessources();
+    new Control.Tabs.create("manage_ressources", true);
     
-    new Control.Tabs.create("edit_ressource_type", true);
+    var tab_name = Control.Tabs.loadTab("manage_ressources");
+    if (tab_name == "list_type_ressources" || !tab_name) {
+      TypeRessource.refreshListTypeRessources('{{$type_ressource_id}}');
+    }
+    else {
+      Indispo.refreshListIndispos('{{$indispo_ressource_id}}','{{$date_indispo}}');
+    }
   })
 </script>
 
-<table class="main">
-  <tr>
-    <td id="list_type_ressources" style="width: 50%"></td>
-  </tr>
-</table>
+<ul id="manage_ressources" class="control_tabs">
+  <li onmousedown="TypeRessource.refreshListTypeRessources()">
+    <a href="#list_type_ressources">{{tr}}CRessourceMaterielle.all{{/tr}}</a>
+  </li>
+  <li onmousedown="Indispo.refreshListIndispos()">
+    <a href="#list_indispos">Indisponibilités</a>
+  </li>
+</ul>
+
+<hr class="control_tabs" />
+
+<div id="list_type_ressources" style="display: none"></div>
+<div id="list_indispos" style="display: none"></div>

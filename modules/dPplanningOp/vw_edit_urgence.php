@@ -38,8 +38,6 @@ $min_urgence  = CValue::get("min_urgence");
 $date_urgence = CValue::get("date_urgence");
 $salle_id     = CValue::get("salle_id");
 $patient_id   = CValue::get("pat_id");
-$today        = mbDate();
-$tomorow      = mbDate("+1 DAY");
 
 // L'utilisateur est-il un praticien
 $chir = CMediusers::get();
@@ -117,9 +115,8 @@ else {
     $op->_hour_urgence = intval(substr($hour_urgence, 0, 2));
     $op->_min_urgence  = intval(substr($min_urgence, 0, 2));
   }
-  if ($date_urgence) {
-    $op->date = $op->_datetime = $date_urgence;
-  }
+  
+  $op->date = $op->_datetime = $date_urgence ? $date_urgence : mbDate();
   $op->salle_id = $salle_id;
 }
 // Liste des types d'anesthésie
@@ -213,7 +210,9 @@ foreach($blocages_lit as $key => $blocage){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejours_collision", $patient->getSejoursCollisions());
+if (CAppUI::conf("dPplanningOp CSejour ask_for_colliding_sejours")) {
+  $smarty->assign("sejours_collision", $patient->getSejoursCollisions());
+}
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 $smarty->assign("urgInstalled", CModule::getInstalled("dPurgences"));
@@ -232,8 +231,8 @@ $smarty->assign("sejours"   , $sejours);
 $smarty->assign("ufs"       , CUniteFonctionnelle::getUFs());
 
 $smarty->assign("modurgence", 1);
-$smarty->assign("today"     , $today);
-$smarty->assign("tomorow"   , $tomorow);
+$smarty->assign("date_min", mbDate());
+$smarty->assign("date_max", mbDate("+".CAppUI::conf("dPplanningOp COperation nb_jours_urgence")." days", mbDate()));
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);

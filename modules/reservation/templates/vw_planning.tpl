@@ -38,6 +38,7 @@
     url.addParam("hour_urgence", hour);
     url.addParam("salle_id"    , salle_id);
     url.addParam("min_urgence" , "00");
+    url.addParam("pat_id"  , "{{$conf.reservation.patient_fictif_id}}");
     url.addParam("dialog", 1);
     url.modal({width: 1000, height: 700});
     url.modalObject.observe("afterClose", function() {

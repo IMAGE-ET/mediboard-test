@@ -1757,3 +1757,27 @@ tr.transmission_haute td {
 div.scroll_shadow {
   box-shadow: 0px 3px 8px rgba(0,0,0,.3);
 }
+
+div.planning_ressource {
+  margin-top: -0.8em;
+  margin-left: 10%;
+}
+
+div.planning_ressource.interv {
+  outline: 2px solid black;
+}
+
+div.planning_ressource.usage {
+  background: #fd7;
+  height: 1.5em;
+}
+
+div.planning_ressource.usage_selected {
+  background: #fb0;
+  height: 1.5em;
+}
+
+div.planning_ressource.indispo {
+  background: #f88;
+  height: 1.5em;
+}

@@ -16,6 +16,7 @@
     <tr>
       <th class="title" colspan="2">Planning</th>
       {{mb_include module=system template=inc_config_enum var=debut_planning values=$hours}}
+      {{mb_include module=system template=inc_config_str var=patient_fictif_id}}
     </tr>
     <tr>
       <td class="button" colspan="2">

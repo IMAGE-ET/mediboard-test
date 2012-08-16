@@ -111,10 +111,10 @@ if ($op->_id){
 //  }
   
   // Ancienne methode
-  if (!array_key_exists($op->chir_id, $listPraticiens)) {
+  /*if (!array_key_exists($op->chir_id, $listPraticiens)) {
     CAppUI::setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
     CAppUI::redirect("m=$m&tab=$tab&operation_id=0");
-  }
+  }*/
 }
 
 CValue::setSession("chir_id", $chir->_id);

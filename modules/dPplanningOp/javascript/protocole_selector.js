@@ -36,6 +36,7 @@ ProtocoleSelector = {
   sUf_hebergement_id : null,
   sUf_medicale_id  : null,
   sUf_soins_id     : null,
+  sTypesRessourcesIds : null,
   options : {},
 
   pop: function() {
@@ -83,6 +84,7 @@ ProtocoleSelector = {
       $V(oOpForm[this.sExamen],            protocole.examen);
       $V(oOpForm[this.sDuree_uscpo],       protocole.duree_uscpo);
       $V(oOpForm[this.sDuree_preop],       protocole.duree_preop);
+      $V(oOpForm[this.sTypesRessourcesIds], protocole._types_ressources_ids);
       if (oOpForm[this.sDepassement] && oOpForm[this.sForfait] && oOpForm[this.sFournitures]) {
         $V(oOpForm[this.sDepassement],       protocole.depassement, false);
         $V(oOpForm[this.sForfait],           protocole.forfait, false);

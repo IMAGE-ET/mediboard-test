@@ -22,6 +22,7 @@ PlageOpSelector.init = function(){
   this.sPlaceAfterInterv = "_place_after_interv_id";
   this.sHoraireVoulu     = "_horaire_voulu";
   
+  
   this.s_hour_entree_prevue = "_hour_entree_prevue";
   this.s_min_entree_prevue  = "_min_entree_prevue";
   this.s_date_entree_prevue = "_date_entree_prevue";
@@ -38,7 +39,31 @@ CCAMSelector.init = function(){
   this.sClass = "_class";
   this.pop();
 }
+
+addBesoins = function(types_ressources_ids) {
+  var form = getForm("addBesoinOp");
+  types_ressources_ids = types_ressources_ids.split(",");
+  
+  types_ressources_ids.each(function(type_ressource_id) {
+    $V(form.type_ressource_id, type_ressource_id);
+    onSubmitFormAjax(form, function() {
+    // C'est après l'ajout du dernier besoin que l'on actualise la couleur du bouton Matériel
+      if (types_ressources_ids.indexOf(type_ressource_id) == (types_ressources_ids.length - 1)) {
+       checkRessources.curry('{{$op->_id}}');
+      }
+    });
+  });
+}
+
 </script>
+
+<form name="addBesoinOp" method="post">
+  <input type="hidden" name="m" value="dPbloc" />
+  <input type="hidden" name="dosql" value="do_besoin_ressource_aed" />
+  <input type="hidden" name="besoin_ressource_id" />
+  <input type="hidden" name="operation_id" value="{{$op->_id}}" />
+  <input type="hidden" name="type_ressource_id" />
+</form>
 
 <form name="editOp" action="?m={{$m}}" method="post" onsubmit="return checkFormOperation()">
 
@@ -70,6 +95,7 @@ CCAMSelector.init = function(){
 {{mb_field object=$op field="_count_actes" hidden=1}}
 <input type="hidden" name="_place_after_interv_id" value="" />
 {{mb_field object=$op field=duree_preop form=editOp hidden=1}}
+<input type="hidden" name="_types_ressources_ids" {{if $op->_id}}onchange="addBesoins(this.value)"{{/if}}/>
 
 <table class="form">
   <tr>
@@ -214,36 +240,32 @@ CCAMSelector.init = function(){
       <th>{{mb_label object=$op field="date"}}</th>
       <td colspan="2">
         <input type="hidden" name="plageop_id" value="" />
-        <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime|iso_date}}{{else}}{{$today}}{{/if}}" />
+        <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime|iso_date}}{{else}}{{$date_min}}{{/if}}" />
        
-        {{if $can->admin}}
-          {{assign var="operation_id" value=$op->operation_id}}
-          {{mb_ternary var=update_entree_prevue test=$op->operation_id value="" other="updateEntreePrevue();"}}
-          {{mb_field object=$op field="date" name="date" prop="date" form="editOp" register=true onchange="
-            $update_entree_prevue
-            Value.synchronize(this.form.date_da);
-            Value.synchronize(this);
-            document.editSejour._curr_op_date.value = this.value;
-            modifSejour();  \$V(this.form._date, this.value);"}}
-        {{else}}
-          <select name="date"  style="width: 15em" onchange="
-            {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
-            Value.synchronize(this);
-            document.editSejour._curr_op_date.value = this.value;
-            modifSejour(); $V(this.form._date, this.value);">
-            {{if $op->operation_id || $op->_datetime}}
-            <option value="{{$op->_datetime|iso_date}}" selected="selected">
-              {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)
-            </option>
-            {{/if}}
-            <option value="{{$today}}">
-              {{$today|date_format:"%d/%m/%Y"}} (aujourd'hui)
-            </option>
-            <option value="{{$tomorow}}">
-              {{$tomorow|date_format:"%d/%m/%Y"}} (demain)
-            </option>
-          </select>
-        {{/if}}
+        
+        {{assign var="operation_id" value=$op->operation_id}}
+        {{mb_ternary var=update_entree_prevue test=$op->operation_id value="" other="updateEntreePrevue();"}}
+        
+        <input type="hidden" name="date" value="{{$op->date}}" class="date notNull"
+          onchange="
+          {{$update_entree_prevue}}
+          Value.synchronize(this.form.date_da);
+          Value.synchronize(this);
+          document.editSejour._curr_op_date.value = this.value;
+          modifSejour();  $V(this.form._date, this.value);" />
+        
+        <script type="text/javascript">
+          Main.add(function() {
+            var dates = {
+              limit: {
+                start: "{{$date_min}}",
+                stop:  "{{$date_max}}"
+              }
+            };
+            Calendar.regField(getForm("editOp").date{{if !$can->admin}}, dates{{/if}});
+          });
+        </script>
+        
         à
         <select name="_hour_urgence" onchange="Value.synchronize(this)">
         {{foreach from=$hours_urgence|smarty:nodefaults item=hour}}
@@ -339,8 +361,16 @@ CCAMSelector.init = function(){
         aidesaisie="validateOnBlur: 0"}}
     </td>
     <td style="width: 33%;">
-      {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOp"
+      {{if $conf.dPbloc.CPlageOp.systeme_materiel == "standard"}}
+        {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOp"
         aidesaisie="validateOnBlur: 0"}}
+      {{elseif $op->_id}}
+        {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$op->_id type=operation_id}}
+      {{else}}
+        <div class="text small-info">
+          {{tr}}COperation-save_for_ressources{{/tr}}
+        </div>
+      {{/if}}
     </td>
     <td style="width: 33%;">
       {{mb_field object=$op field="rques" onchange="Value.synchronize(this);" form="editOp"

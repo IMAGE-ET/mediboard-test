@@ -16,10 +16,19 @@ class CBesoinRessource extends CMbObject{
   var $besoin_ressource_id = null;
   
   // DB References
-  var $type_ressource_id          = null;
-  var $protocole_id               = null;
-  var $operation_id               = null;
-  var $commentaire                = null;
+  var $type_ressource_id   = null;
+  var $protocole_id        = null;
+  var $operation_id        = null;
+  var $commentaire         = null;
+  
+  // Ref Fields
+  var $_ref_type_ressource = null;
+  var $_ref_operation      = null;
+  var $_ref_protocole      = null;
+  var $_ref_usage          = null;
+  
+  // Form Fields
+  var $_color              = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -35,8 +44,8 @@ class CBesoinRessource extends CMbObject{
     $specs = parent::getProps();
     
     $specs["type_ressource_id"] = "ref class|CTypeRessource notNull";
-    $specs["operation_id"]      = "ref class|COperation notNull";
-    $specs["protocole_id"]      = "ref class|CProtocole notNull";
+    $specs["operation_id"]      = "ref class|COperation";
+    $specs["protocole_id"]      = "ref class|CProtocole";
     $specs["commentaire"]       = "text helped";
     
     return $specs;
@@ -47,5 +56,21 @@ class CBesoinRessource extends CMbObject{
     $backProps["usages"] = "CUsageRessource besoin_ressource_id";
     
     return $backProps;
+  }
+  
+  function loadRefTypeRessource() {
+    return $this->_ref_type_ressource = $this->loadFwdRef("type_ressource_id");
+  }
+  
+  function loadRefOperation() {
+    return $this->_ref_operation = $this->loadFwdRef("operation_id");
+  }
+  
+  function loadRefProtocole() {
+    return $this->_ref_protocole = $this->loadFwdRef("protocole_id");
+  }
+  
+  function loadRefUsage() {
+    return $this->_ref_usage = $this->loadUniqueBackRef("usages");
   }
 }

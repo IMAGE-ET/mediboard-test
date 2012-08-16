@@ -13,13 +13,15 @@
 
 CCanDo::checkEdit();
 
-$ressource_id      = CValue::getOrSession("ressource_id");
+$indispo_ressource_id = CValue::getOrSession("indispo_ressource_id");
 $type_ressource_id = CValue::getOrSession("type_ressource_id");
+$date_indispo      = CValue::getOrSession("date_indispo");
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("ressource_id"     , $ressource_id);
+$smarty->assign("indispo_ressource_id", $indispo_ressource_id);
 $smarty->assign("type_ressource_id", $type_ressource_id);
+$smarty->assign("date_indispo", $date_indispo);
 
 $smarty->display("vw_ressources.tpl");
 
