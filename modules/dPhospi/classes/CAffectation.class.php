@@ -196,7 +196,8 @@ class CAffectation extends CMbObject {
     }
     
     // On positionne la sortie de la précédente affectation à l'affectation que l'on supprime 
-    if ($prev = $this->_ref_prev) {
+    $prev = $this->_ref_prev;
+    if (isset($prev->_id)) {
       $prev->sortie = $sortie;
       
       if ($msg = $prev->store()) {
@@ -207,7 +208,8 @@ class CAffectation extends CMbObject {
     }
     
     // On positionne l'entrée de la suivante affectation à l'affectation que l'on supprime 
-    if ($next = $this->_ref_next) {
+    $next = $this->_ref_next;
+    if (isset($next->_id)) {
       $next->entree = $entree;
       
       if ($msg = $prev->store()) {
