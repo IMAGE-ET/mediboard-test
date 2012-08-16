@@ -95,6 +95,7 @@ emptyForm = function() {
   form.select("input[type=text]").each(function(elt) {
     $V(elt, '');
   });
+  form.nom.focus();
 }
 {{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id || $sexe}}
   Main.add(toggleSearch); 
