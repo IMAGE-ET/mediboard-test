@@ -15,6 +15,10 @@ $file    = isset($_FILES['import']) ? $_FILES['import'] : null;
 $results = array();
 $i       = 0;
 
+if (!CMediusers::getTagMediusers()) {
+  CAppUI::stepAjax("Aucun tag de défini pour les mediusers", UI_MSG_ERROR);
+}
+
 if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
   // Object columns on the first line
   $cols = fgetcsv($fp, null, ";");
@@ -32,11 +36,6 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["idex"]      = addslashes(trim($line[1]));
     $results[$i]["lastname"]  = isset($line[2]) ? addslashes(trim($line[2])) : null;
     $results[$i]["firstname"] = isset($line[3]) ? addslashes(trim($line[3])) : null;
-    
-    
-    if (!$results[$i]["adeli"] && $results[$i]["idex"]) {
-      continue;
-    }
     
     $mediuser = new CMediusers();
     $mediuser->adeli = $results[$i]["adeli"];
@@ -56,6 +55,30 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     }
     
     $mediuser->loadMatchingObject();
+    
+    // Recherche pas nom/prenom si pas de code ADELI
+    if (!$mediuser->_id) {
+      $user = new CUser();
+      $user->user_last_name  = $results[$i]["lastname"];
+      $user->user_first_name = $results[$i]["firstname"];
+      
+      $count = $user->countMatchingList();
+      
+      if ($count == "0") {
+        $results[$i]["error"] = "L'utilisateur n'a pas été retrouvé dans Mediboard";
+        $i++;
+        continue;
+      }
+      
+      elseif ($count > 1) {
+        $results[$i]["error"] = "Plusieurs utilisateurs correspondent à cette recherche";
+        $i++;
+        continue;
+      }
+      
+      $user->loadMatchingObject();
+      $mediuser = $user->loadRefMediuser();
+    }
     
     $idex = CIdSante400::getMatch($mediuser->_class, CMediusers::getTagMediusers(), null, $mediuser->_id);
     if ($idex->_id && ($idex->id400 != $results[$i]["idex"])) {
