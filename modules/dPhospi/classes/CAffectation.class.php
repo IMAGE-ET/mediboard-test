@@ -212,7 +212,7 @@ class CAffectation extends CMbObject {
     if (isset($next->_id)) {
       $next->entree = $entree;
       
-      if ($msg = $prev->store()) {
+      if ($msg = $next->store()) {
         return $msg;
       }
       
