@@ -31,7 +31,20 @@
        url.addParam("prestation_id", $V(form.prestation_id));
        url.addParam("granularite", $V(form.granularite));
        
-       url.requestUpdate($("CLit-"+lit_id), {onComplete: after_refresh});
+       url.requestUpdate($("CLit-"+lit_id), {onComplete: function() {
+         after_refresh();
+         {{if !$readonly}}
+           $("CLit-"+lit_id).select("td").each(function(elt) {
+             elt.observe("dblclick", function() {
+               window.sejour_id_for_affectation;
+               var datetime = elt.get("date").split(" ");
+               var date = datetime[0];
+               var hour = datetime[1].split(":")[0];
+               createIntervention(date, hour, elt.up("tr").id);
+             });
+           });
+         {{/if}}
+       } });
      }
      else return onSubmitFormAjax(getForm('filterMouv'), {onComplete: after_refresh}, 'view_affectations');
    }
@@ -158,7 +171,31 @@
     return onSubmitFormAjax(oForm, {onComplete: function() {
       refreshMouvements(loadNonPlaces);
     }});
+  }
   
+  createAffectation = function(sejour_id, lit_id) {
+    var url = new Url("dPplanningOp", "ajax_create_affectation");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("lit_id", lit_id);
+    url.requestUpdate("systemMsg", function() {
+      refreshMouvements(null, lit_id);
+    });
+  }
+  
+  createIntervention = function(date, hour, lit_guid) {
+    var url = new Url("dPplanningOp", "vw_edit_urgence");
+    url.addParam("date_urgence", date);
+    url.addParam("hour_urgence", hour);
+    url.addParam("min_urgence" , "00");
+    url.addParam("dialog", 1);
+    url.addParam("operation_id", 0);
+    url.modal({width: 1000, height: 700});
+    
+    url.modalObject.observe("afterClose", function() {
+      if (window.sejour_id_for_affectation) {
+        createAffectation(window.sejour_id_for_affectation, lit_guid.split("-")[1]);
+      }
+    });
   }
   
   Main.add(function() {

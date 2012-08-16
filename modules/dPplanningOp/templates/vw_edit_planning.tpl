@@ -13,6 +13,12 @@
 <script type="text/javascript">
   
 Main.add(function(){
+  // Il faut sauvegarder le sejour_id pour la création de l'affectation
+  // après la fermeture de la modale.
+  {{if $op->_id && $dialog == 1}}
+    window.parent.sejour_id_for_affectation = '{{$op->_ref_sejour->_id}}';
+  {{/if}}
+  
   new TogglePairEffect("modeEasy", "modeExpert", { 
     idFirstVisible: {{$app->user_prefs.mode_dhe+1}}
   });

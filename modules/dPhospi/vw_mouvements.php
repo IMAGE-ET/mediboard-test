@@ -34,6 +34,7 @@ $smarty->assign("granularite" , $granularite);
 $smarty->assign("mode_vue_tempo", $mode_vue_tempo);
 $smarty->assign("prestations_journalieres", $prestations_journalieres);
 $smarty->assign("prestation_id", $prestation_id);
+$smarty->assign("readonly"    , $readonly);
 
 $smarty->display("vw_mouvements.tpl");
 ?>
