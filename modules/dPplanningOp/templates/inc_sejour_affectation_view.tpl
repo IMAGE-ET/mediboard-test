@@ -3,7 +3,6 @@
     {{mb_include module=system template=inc_object_notes     }}
     {{mb_include module=system template=inc_object_idsante400}}
     {{mb_include module=system template=inc_object_history   }}
-    {{$object->_shortview}}
     {{if $object instanceof CAffectation}}
       {{mb_include module=system template=inc_interval_datetime from=$object->entree to=$object->sortie}}
     {{/if}}
