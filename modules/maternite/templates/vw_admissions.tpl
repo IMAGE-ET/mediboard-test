@@ -225,7 +225,7 @@
          
         {{foreachelse}}
           <tr>
-            <td colspan="9" class="empty">{{tr}}CSejour.none{{/tr}}</td>
+            <td colspan="11" class="empty">{{tr}}CSejour.none{{/tr}}</td>
           </tr>
         {{/foreach}}
       </table>

@@ -19,14 +19,17 @@ $date_max = mbDate("+$days_terme days", $date);
 $grossesse = new CGrossesse;
 
 $where = array();
+$ljoin = array();
 $where["terme_prevu"] = "BETWEEN '$date_min' AND '$date_max'";
+$ljoin["patients"]    = "patients.patient_id = grossesse.parturiente_id";
 
-$grossesses = $grossesse->loadList($where);
+$grossesses = $grossesse->loadList($where, "terme_prevu DESC, nom ASC", null, null, $ljoin);
 CMbObject::massLoadFwdRef($grossesses, "parturiente_id");
 
 foreach ($grossesses as $_grossesse) {
   $_grossesse->loadRefParturiente();
   $_grossesse->loadRefsSejours();
+  $_grossesse->loadLastConsultAnesth();
 }
 
 $smarty = new CSmartyDP;

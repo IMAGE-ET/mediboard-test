@@ -53,8 +53,6 @@
     <th class="category">
       {{tr}}CSejour.all{{/tr}}
     </th>
-    <th class="category">
-    </th>
   </tr>
   {{foreach from=$grossesses item=_grossesse}}
     <tr>
@@ -67,22 +65,28 @@
         </span>
       </td>
       <td>
+        <button class="new notext" title="{{tr}}CSejour-title-create{{/tr}}"
+          onclick="editSejour(0, '{{$_grossesse->_id}}', '{{$_grossesse->parturiente_id}}');"></button>
         {{foreach from=$_grossesse->_ref_sejours item=_sejour}}
-          <div>
+          <span>
             <button type="button" class="edit notext" onclick="editSejour({{$_sejour->_id}})"></button>
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
               {{$_sejour}}
             </span>
-          </div>
+          </span>
         {{/foreach}}
-      </td>
-      <td class="narrow">
-        <button class="new" onclick="editSejour(0, '{{$_grossesse->_id}}', '{{$_grossesse->parturiente_id}}');">{{tr}}CSejour-title-create{{/tr}}</button>
+        {{assign var=consult value=$_grossesse->_ref_last_consult_anesth}}
+        {{if $consult->_id}}
+          &mdash;
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$consult->_ref_consult_anesth->_guid}}')">
+            {{$consult}} du {{$consult->_ref_plageconsult->date|date_format:$conf.date}}
+          </span>
+        {{/if}}
       </td>
     </tr>
   {{foreachelse}}
     <tr>
-      <td class="empty" colspan="5">{{tr}}CGrossesse.none{{/tr}}</td>
+      <td class="empty" colspan="4">{{tr}}CGrossesse.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

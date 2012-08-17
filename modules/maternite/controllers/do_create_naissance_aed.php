@@ -144,6 +144,12 @@ else {
   
   // Effectuer l'admission si nécessaire (si issu d'un dossier provisoire)
   if ($validation_naissance) {
+    
+    // On passe la date de naissance du bébé au jour courant
+    $patient->naissance = mbDate();
+    storeObject($patient);
+    
+    // L'entrée réelle du séjour à maintenant
     $sejour_enfant->entree_reelle = $datetime;
     storeObject($sejour_enfant);
     

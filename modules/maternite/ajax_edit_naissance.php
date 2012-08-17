@@ -34,16 +34,19 @@ $naissance  = new CNaissance;
 if ($naissance_id) {
   $naissance->load($naissance_id);
   
-  // Heure courante pour transformer le dossier provisoire en naissance
-  if (!$naissance->heure) {
-    $naissance->heure = mbTime();
-  }
-  
   // Quand la naissance existe, le praticien à modifier est
   // celui du séjour de l'enfant.
   $sejour = $naissance->loadRefSejourEnfant();
   $patient = $sejour->loadRefPatient();
   $constantes = $patient->getFirstConstantes();
+  
+  // Heure courante sur la naissance et date courante sur le patient
+  // pour transformer le dossier provisoire en naissance
+  if (!$naissance->heure) {
+    $naissance->heure = mbTime();
+    $patient->naissance = mbDate();
+  }
+  
 }
 else {
   if (!$provisoire) {

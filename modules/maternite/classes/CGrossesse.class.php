@@ -32,6 +32,7 @@ class CGrossesse extends CMbObject{
   var $_ref_naissances  = null;
   var $_ref_sejours     = array();
   var $_ref_consultations = array();
+  var $_ref_last_consult_anesth = null;
   
   // Form fields
   var $_praticiens      = null;
@@ -91,7 +92,21 @@ class CGrossesse extends CMbObject{
   }
   
   function loadRefsConsultations() {
+    if ($this->_ref_consultations) {
+      return $this->_ref_consultations;
+    }
     return $this->_ref_consultations = $this->loadBackRefs("consultations");
+  }
+  
+  function loadLastConsultAnesth() {
+    $consultations = $this->loadRefsConsultations();
+    foreach ($consultations as $_consultation) {
+      $consult_anesth = $_consultation->loadRefConsultAnesth();
+      if ($consult_anesth->_id) {
+        return $this->_ref_last_consult_anesth = $_consultation;
+      }
+    }
+    return $this->_ref_last_consult_anesth = new CConsultation;
   }
   
   function loadView() {
