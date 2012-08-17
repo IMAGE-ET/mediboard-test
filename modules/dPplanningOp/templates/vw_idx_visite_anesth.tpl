@@ -124,7 +124,7 @@ Main.add(function(){
               -
             {{/if}}
           </td>
-          <td class="text {{if $_operation->annulee}}cancelled{{/if}}"">
+          <td class="text {{if $_operation->annulee}}cancelled{{/if}} {{if !$_operation->date_visite_anesth}}empty{{/if}}">
             {{if $_operation->date_visite_anesth}}
               Le {{$_operation->date_visite_anesth|date_format:$conf.date}} par le Dr {{$_operation->_ref_anesth_visite->_view}}
             {{else}}
