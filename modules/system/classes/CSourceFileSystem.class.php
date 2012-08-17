@@ -178,15 +178,14 @@ class CSourceFileSystem extends CExchangeSource {
     
     $file_path = str_replace(array(" ", ":", "-"), array("_", "", ""), mbDateTime());
     
-    if ($this->fileprefix) {
-      $file_path = $this->fileprefix.$file_path;
-    }
+    // Ajout du prefix si existant
+    $file_path = $this->fileprefix.$file_path;
     
     if ($exchange) {
       $file_path = "$file_path-$exchange->_id";
     }
             
-    $this->_file_path = "MB-".$file_path;
+    $this->_file_path = "MB-$file_path.$this->fileextension";
   }
   
   public function getFullPath($path = ""){
