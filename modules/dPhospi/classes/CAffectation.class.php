@@ -224,6 +224,7 @@ class CAffectation extends CMbObject {
     $this->completeField("sejour_id");
     $create_affectations = false;
     $sejour = $this->loadRefSejour();
+    $sejour->loadRefPatient();
     
     // Conserver l'ancien objet avant d'enregistrer
     $old = new CAffectation();
@@ -243,7 +244,11 @@ class CAffectation extends CMbObject {
     // Si c'est une création d'affectation, avec ni une précédente ni une suivante,
     // que le séjour est relié à une grossesse, et que le module maternité est actif,
     // alors il faut créer les affectations des bébés.
-    if (CModule::getActive("maternite") && $this->_ref_sejour->grossesse_id && !$this->_id && !$this->_ref_prev->_id && !$this->_ref_next->_id) {
+    if (CModule::getActive("maternite")  &&
+        !is_numeric($this->_ref_sejour->_ref_patient->nom) &&
+        $this->_ref_sejour->grossesse_id &&
+        !$this->_id && !$this->_ref_prev->_id &&
+        !$this->_ref_next->_id) {
       $create_affectations = true;
     }
     
