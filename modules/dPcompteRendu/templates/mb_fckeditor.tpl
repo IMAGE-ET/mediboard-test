@@ -109,7 +109,7 @@ CKEDITOR.editorConfig = function(config) {
       ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Find', 'Undo', 'Redo'],
       [{{if !$templateManager->isModele}}'mbheader', 'mbfooter',{{/if}} 'mbpagebreak'],
       ['Table','HorizontalRule','Image','SpecialChar'],
-      ['Maximize', 'Source'], '/',
+      ['Maximize'{{if $can->admin}}, 'Source'{{/if}}], '/',
       ['Font', 'FontSize'],
       ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike', 'mbbreakage', 'mbcap'],
       ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],'/',
