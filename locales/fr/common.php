@@ -336,6 +336,7 @@ $locales['early'] = 'Début';
 $locales['end'] = 'Fin';
 $locales['extension-failed-needed'] = 'Extension \'%s\' nécessaire pour cette fonctionnalité.';
 $locales['extension-msg-ok'] = 'Extension \'%s\' correctement installée.';
+$locales['fast-search'] = 'Recherche rapide';
 $locales['fifty-first-results'] = '50 premiers résultats';
 $locales['filter'] = 'filtre';
 $locales['filter-criteria'] = 'Critères de filtres';
