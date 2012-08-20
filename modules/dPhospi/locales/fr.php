@@ -80,6 +80,7 @@ $locales['CAffectation.effectue.1'] = '1';
 $locales['CAffectation.more'] = 'Des affectations';
 $locales['CAffectation.none'] = 'Pas d\'affectation';
 $locales['CAffectation.one'] = 'Une affectation';
+$locales['CAffectationHandler'] = 'Gestionnaire d\'objet';
 $locales['CAffectationUniteFonctionnelle'] = 'Affectation d\'UF';
 $locales['CAffectationUniteFonctionnelle-affectation_uf_id'] = 'Identifiant';
 $locales['CAffectationUniteFonctionnelle-affectation_uf_id-court'] = 'ID';
