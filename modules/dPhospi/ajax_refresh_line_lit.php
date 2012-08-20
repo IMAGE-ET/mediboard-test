@@ -101,7 +101,7 @@ $where["entree"] = "<= '$date_max'";
 $where["sortie"] = ">= '$date_min'";
 
 $affectation = new CAffectation;
-$affectations = $affectation->loadList($where);
+$affectations = $affectation->loadList($where, "parent_affectation_id ASC");
 
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
