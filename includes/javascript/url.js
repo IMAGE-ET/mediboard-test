@@ -40,6 +40,7 @@ var Url = Class.create({
       switch (sMode) {
         case 'action' : this.setModuleAction(sModule, sAction); break;
         case 'tab'    : this.setModuleTab   (sModule, sAction); break;
+        case 'dosql'  : this.setModuleDosql (sModule, sAction); break;
         case 'raw'    : this.setModuleRaw   (sModule, sAction); break;
         default: Console.debug('Url type incorrect : ' + sType)
       }
