@@ -1,13 +1,15 @@
 // $Id$
 
 var PatSelector = {
-  sForm     : null,
-  sFormEasy : null,
-  sId       : null,
-  sView     : null,
-  sSexe     : null,
-  sId_easy  : null,
-  sView_easy: null,
+  sForm      : null,
+  sFormEasy  : null,
+  sId        : null,
+  sView      : null,
+  sSexe      : null,
+  sName       : null,
+  sFirstName : null,
+  sId_easy   : null,
+  sView_easy : null,
   options : {
     width : 900,
     height: 600,
@@ -21,6 +23,8 @@ var PatSelector = {
   pop: function() {
     var url = new Url("dPpatients", "pat_selector");
     url.addParam("useVitale", this.options.useVitale);
+    url.addParam("name"     , this.sName);
+    url.addParam("firstName", this.sFirstName);
     url.modal(this.options);
   },
   
@@ -43,5 +47,16 @@ var PatSelector = {
       $V(oFormEasy[PatSelector.sId_easy]  , PatSelector.prepared.id);
       $V(oFormEasy[PatSelector.sView_easy], PatSelector.prepared.view);
     }
+  },
+  
+  init: function() {
+    alert("Selecteur non initialisé");
+  },
+  
+  cancelFastSearch: function(e) {
+    if(Event.key(e) == Event.KEY_ESC){
+      PatSelector.init();
+    }
   }
+  
 };

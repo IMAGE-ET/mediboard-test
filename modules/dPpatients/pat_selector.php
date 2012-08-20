@@ -15,8 +15,7 @@ $patient_year  = CValue::get("Date_Year"  );
 $patient_month = CValue::get("Date_Month" );
 $patient_day   = CValue::get("Date_Day"   );
 $patient_ipp   = CValue::get("patient_ipp");
-$useVitale     = CValue::get("useVitale"  ); 
-
+$useVitale     = CValue::get("useVitale"  );
 $patVitale = null;
 $patient_name_search = null;
 $patient_firstName_search = null;

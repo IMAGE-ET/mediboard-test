@@ -285,7 +285,7 @@ class CPatient extends CMbObject {
     $props["prenom_2"]          = "str";
     $props["prenom_3"]          = "str";
     $props["prenom_4"]          = "str";
-    $props["nom_jeune_fille"]   = "str confidential";
+    $props["nom_jeune_fille"]   = "str confidential seekable|begin";
     $props["nom_soundex2"]      = "str";
     $props["prenom_soundex2"]   = "str";
     $props["nomjf_soundex2"]    = "str";
@@ -302,7 +302,7 @@ class CPatient extends CMbObject {
     $props["sexe"]              = "enum list|m|f";
     $props["civilite"]          = "enum list|m|mme|mlle|enf|dr|pr|me|vve";
     $props["adresse"]           = "text confidential";
-    $props["ville"]             = "str confidential seekable";
+    $props["ville"]             = "str confidential seekable|begin";
     $props["cp"]                = "str minLength|4 maxLength|5 confidential";
     $props["tel"]               = "phone confidential";
     $props["tel2"]              = "phone confidential";

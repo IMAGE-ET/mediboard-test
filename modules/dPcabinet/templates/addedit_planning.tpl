@@ -154,6 +154,28 @@ Main.add(function () {
   {{/if}}
 });
 
+Main.add(function() {
+  var form = getForm("editFrm");
+  var url = new Url("system", "ajax_seek_autocomplete");
+  url.addParam("object_class", "CPatient");
+  url.addParam("field", "patient_id");
+  url.addParam("view_field", "_pat_name");
+  url.addParam("input_field", "_seek_patient");
+  url.autoComplete(form.elements._seek_patient, null, {
+    minChars: 3,
+    method: "get",
+    select: "view",
+    dropdown: false,
+    width: "300px",
+    afterUpdateElement: function(field,selected){
+      $V(field.form.patient_id, selected.getAttribute("id").split("-")[2]);
+      $V(field.form.elements._pat_name, selected.down('.view').innerHTML);
+      $V(field.form.elements._seek_patient, "");
+    }
+  });
+  Event.observe(form.elements._seek_patient, 'keydown', PatSelector.cancelFastSearch);
+});
+
 </script>
 
 <form name="editFrm" action="?m={{$m}}" class="watched" method="post" onsubmit="return checkFormRDV(this)">
@@ -286,9 +308,12 @@ Main.add(function () {
     						<button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
     	          <script type="text/javascript">
     	            PatSelector.init = function(){
-    	              this.sForm = "editFrm";
-    	              this.sId   = "patient_id";
-    	              this.sView = "_pat_name";
+    	              this.sForm      = "editFrm";
+    	              this.sId        = "patient_id";
+    	              this.sView      = "_pat_name";
+    	              var seekResult  = $V(getForm(this.sForm)._seek_patient).split(" ");
+    	              this.sName      = seekResult[0] ? seekResult[0] : "";
+    	              this.sFirstName = seekResult[1] ? seekResult[1] : "";
                     {{if "maternite"|module_active && !$consult->_id}}
                       this.sSexe = "_patient_sexe";
                     {{/if}}
@@ -300,8 +325,10 @@ Main.add(function () {
     										class="edit notext" {{if !$pat->_id}}style="display: none;"{{/if}}>
     						  {{tr}}Edit{{/tr}}
     					  </button>
+    					  <br />
+    					  <input type="text" name="_seek_patient" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}" "autocomplete" onblur="$V(this, '')" />
     					</td>
-            </tr>           
+            </tr>         
             
             <tr>
               <th>{{mb_label object=$consult field="motif"}}</th> 
