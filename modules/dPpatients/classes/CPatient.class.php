@@ -554,6 +554,11 @@ class CPatient extends CMbObject {
     }
     
     $relative = CMbDate::relative($this->naissance);
+    
+    if ($relative["count"] < 0) {
+      $relative["count"] = 0;
+    }
+    
     $this->evalAge();    
     $this->_age = $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : "") .($relative["unit"] == "year" ? "_old" : ""));
     
