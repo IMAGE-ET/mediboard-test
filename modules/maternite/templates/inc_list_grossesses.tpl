@@ -14,7 +14,6 @@
       <tr>
         <td class="narrow">
           <input type="radio" name="unique_grossesse_id"
-          {{if !$_grossesse->active}}disabled="disabled"{{/if}}
           {{if $_grossesse->_id == $object->grossesse_id || $_grossesse->_id == $grossesse_id_form}}checked="checked"{{/if}} value="{{$_grossesse->_id}}"
           data-view_grossesse="{{$_grossesse}}"/>
         <td>
