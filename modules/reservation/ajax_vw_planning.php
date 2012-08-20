@@ -100,11 +100,12 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
   $i = array_search($salle_id, $salles_ids);
   foreach ($_operations as $_operation) {
     $_operation->_ref_salle = $_operation->loadFwdRef("salle_id");
-    $chir   = $_operation->loadRefChir();
+    $chir    = $_operation->loadRefChir();
     $chir->loadRefFunction();
-    $anesth = $_operation->_ref_anesth = $_operation->loadFwdRef("anesth_id");
+    $anesth  = $_operation->_ref_anesth = $_operation->loadFwdRef("anesth_id");
     $sejour  = $_operation->loadRefSejour();
     $patient = $sejour->loadRefPatient();
+    $besoins = $_operation->loadRefsBesoins();
     
     if (!$anesth->_id) {
       $anesth = $_operation->loadFwdRef("anesth_id", true);
@@ -129,6 +130,20 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>$chir->_shortview</span>".
     "<span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>$anesth->_shortview</span>".
     "\n$_operation->rques";
+    
+    CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
+    
+    $last_besoin = end($besoins);
+    
+    $libelle .= "<span class='compact' style='color: #000'>";
+    foreach ($besoins as $_besoin) {
+      $_type_ressource = $_besoin->loadRefTypeRessource();
+      $libelle .= $_type_ressource->libelle;
+      if ($_besoin != $last_besoin) {
+        $libelle .= " - ";
+      }
+    }
+    $libelle .= "</span>";
     
     if ($sejour->annule) {
       $color = "#f88";

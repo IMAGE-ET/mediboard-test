@@ -124,6 +124,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $_datetime_reel     = null;
   var $_datetime_reel_fin = null;
   var $_ref_affectation   = null;
+  var $_ref_besoins       = null;
   
   // EAI Fields
   var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
@@ -948,6 +949,10 @@ class COperation extends CCodable implements IPatientRelated {
     $this->loadRefChir($cache)->loadRefFunction();
     $this->loadRefPatient($cache);
     $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr {$this->_ref_chir->_view}";
+  }
+  
+  function loadRefsBesoins() {
+    return $this->_ref_besoins = $this->loadBackRefs("besoins_ressources");
   }
   
   function loadRefsBack() {
