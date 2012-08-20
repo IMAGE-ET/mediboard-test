@@ -124,7 +124,8 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
     
     foreach ($plage->_ref_consultations as $consultation) {
       if ($mode_urgence){
-        if ($consultation->loadRefSejour()->_id && $consultation->_ref_sejour->type == "urg"){
+        $consultation->getType();
+        if ($consultation->_type == "urg") {
           unset($plage->_ref_consultations[$consultation->_id]);
           continue;
         }
