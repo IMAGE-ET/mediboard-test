@@ -1,6 +1,6 @@
 <script type="text/javascript">
   Main.add(function() {
-    Grossesse.refreshList('{{$parturiente_id}}', '{{$object_guid}}', '{{$grossesse_id_form}}');
+    Grossesse.refreshList('{{$parturiente_id}}', '{{$object_guid}}');
   });
 </script>
 
@@ -14,6 +14,7 @@
   <tr>
     <td colspan="2" class="button">
       <button type="button" class="tick" onclick="Grossesse.bindGrossesse(); Control.Modal.close();">Sélectionner</button>
+      <button type="button" class="cancel" onclick="Grossesse.emptyGrossesses(); Control.Modal.close();">Vider</button>
     </td>
   </tr>
 </table>

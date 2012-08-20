@@ -13,7 +13,6 @@
 
 $patient_id   = CValue::getOrSession("patient_id");
 $object_guid  = CValue::getOrSession("object_guid");
-$grossesse_id_form = CValue::getOrSession("grossesse_id_form");
 
 $object = CMbObject::loadFromGuid($object_guid);
 
@@ -32,7 +31,6 @@ $smarty = new CSmartyDP;
 $smarty->assign("grossesses"  , $grossesses);
 $smarty->assign("patient_id"  , $patient_id);
 $smarty->assign("object"      , $object);
-$smarty->assign("grossesse_id_form", $grossesse_id_form);
 
 $smarty->display("inc_list_grossesses.tpl");
 

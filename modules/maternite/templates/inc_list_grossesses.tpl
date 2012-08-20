@@ -14,8 +14,8 @@
       <tr>
         <td class="narrow">
           <input type="radio" name="unique_grossesse_id"
-          {{if $_grossesse->_id == $object->grossesse_id || $_grossesse->_id == $grossesse_id_form}}checked="checked"{{/if}} value="{{$_grossesse->_id}}"
-          data-view_grossesse="{{$_grossesse}}"/>
+          {{if $_grossesse->_id == $object->grossesse_id}}checked="checked"{{/if}} value="{{$_grossesse->_id}}"
+          data-view_grossesse="{{$_grossesse}}" />
         <td>
           <a href="#1" onclick="Grossesse.editGrossesse('{{$_grossesse->_id}}')">{{$_grossesse}}</a>
         </td>
