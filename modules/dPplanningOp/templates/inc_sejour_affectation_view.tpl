@@ -5,6 +5,8 @@
     {{mb_include module=system template=inc_object_history   }}
     {{if $object instanceof CAffectation}}
       {{mb_include module=system template=inc_interval_datetime from=$object->entree to=$object->sortie}}
+    {{else}}
+      {{mb_include module=system template=inc_interval_date from=$object->entree to=$object->sortie}}
     {{/if}}
   </th>
 </tr>
