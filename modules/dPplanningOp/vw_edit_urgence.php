@@ -210,9 +210,7 @@ foreach($blocages_lit as $key => $blocage){
 // Création du template
 $smarty = new CSmartyDP();
 
-if (CAppUI::conf("dPplanningOp CSejour ask_for_colliding_sejours")) {
-  $smarty->assign("sejours_collision", $patient->getSejoursCollisions());
-}
+$smarty->assign("sejours_collision", $patient->getSejoursCollisions());
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 $smarty->assign("urgInstalled", CModule::getInstalled("dPurgences"));

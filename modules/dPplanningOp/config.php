@@ -82,7 +82,9 @@ $dPconfig["dPplanningOp"]= array(
     "show_modal_identifiant"    => "0",
     "show_discipline_tarifaire" => "0",
     "show_type_pec" => "0",
-    "ask_for_colliding_sejours" => "1" 
+    "create_anonymous_pat" => "0",
+    "anonymous_sexe" => "m",
+    "anonymous_naissance" => "1970-01-01"
   ),
 );
 

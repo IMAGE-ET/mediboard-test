@@ -282,9 +282,7 @@ var Sejour = {
 }
 
 Main.add( function(){
-  {{if $conf.dPplanningOp.CSejour.ask_for_colliding_sejours}}
-    Sejour.sejours_collision = {{$sejours_collision|@json}};
-  {{/if}}
+  Sejour.sejours_collision = {{$sejours_collision|@json}};
   var oForm = getForm("editOp");
   Sejour.preselectSejour($V(oForm._date));
 });
@@ -355,7 +353,6 @@ Main.add( function(){
   <input type="hidden" name="ald" value="">
   <input type="hidden" name="cmu" value="">
 </form>
-
 
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkSejour()">
 
@@ -496,6 +493,8 @@ Main.add( function(){
         reloadSejours = Prototype.emptyFunction;
       }
     </script>
+    {{mb_include module=patients template=inc_button_pat_anonyme form=editSejour patient_id=$patient->_id}}
+    
     <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" 
       onchange="changePat(); reloadSejours();" />
     {{mb_label object=$sejour field="patient_id"}}

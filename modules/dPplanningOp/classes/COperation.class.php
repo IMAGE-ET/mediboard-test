@@ -1063,6 +1063,8 @@ class COperation extends CCodable implements IPatientRelated {
     $template->addProperty("Opération - convalescence"        , $this->_ref_sejour->convalescence);
     $template->addProperty("Opération - remarques"            , $this->rques);
     
+    $template->addBarcode("Opération - Code Barre ID"         , $this->_id);
+    
     $list = CMbArray::pluck($this->_ref_files, "file_name");
     $template->addListProperty("Opération - Liste des fichiers", $list);
     

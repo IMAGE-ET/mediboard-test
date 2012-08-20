@@ -11,6 +11,12 @@
 
 CCanDo::checkRead();
 
+/*$token = new CToken;
+$token->module = "dPplanningOp";
+$token->params = json_encode(array("a"=>"vw_edit_urgence", "operation_id" => 13762));
+$token->fin = mbDate("+2 days");
+mbTrace($token->store());*/
+
 $date_planning = CValue::getOrSession("date_planning");
 $praticien_id  = CValue::getOrSession("praticien_id");
 $scroll_top    = CValue::get("scroll_top", null);

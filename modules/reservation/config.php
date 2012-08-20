@@ -11,5 +11,4 @@
 
 $dPconfig["reservation"] = array(
   "debut_planning" => "8",
-  "patient_fictif_id" => "",
 );
