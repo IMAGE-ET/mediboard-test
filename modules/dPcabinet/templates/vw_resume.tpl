@@ -151,9 +151,6 @@ function newExam(sAction, consultation_id) {
               <td valign="top">
                 {{foreach from=$_consult->_ref_documents item=_doc}}
                   <div>
-                    <a href="#" onclick="popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')" style="display: inline">
-                      {{$_doc->nom}}
-                    </a>
                     <button type="button" class="print notext"
                       onclick="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
                         Document.printPDF({{$_doc->_id}}, '{{$app->user_prefs.choice_factory}}');
@@ -161,6 +158,9 @@ function newExam(sAction, consultation_id) {
                         Document.print({{$_doc->_id}})
                       {{/if}}">
                     </button>
+                    <a href="#" onclick="popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')" style="display: inline">
+                      {{$_doc->nom}}
+                    </a>
                   </div>
                 {{/foreach}}
                 {{foreach from=$_consult->_ref_files item=_file}}
@@ -236,17 +236,41 @@ function newExam(sAction, consultation_id) {
                 </ul>
               </td>
               <td colspan="2" valign="top">
-                {{foreach from=$_sejour->_ref_operations item=_op}}
-                  {{if !$_op->annulee}}
-                    {{foreach from=$_op->_ref_documents item=_doc}}
-                    <a href="#" onclick="popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')">
-                      {{$_doc->nom}}
-                    </a>
-                    {{/foreach}}
-                  {{/if}}
+                {{foreach from=$_sejour->_ref_documents item=_doc}}
+                <div>
+                <button type="button" class="print notext"
+                  onclick="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+                    Document.printPDF({{$_doc->_id}}, '{{$app->user_prefs.choice_factory}}');
+                  {{else}}
+                    Document.print({{$_doc->_id}})
+                  {{/if}}">
+                </button>
+                <a href="#" onclick="popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')" style="display: inline">
+                  {{$_doc->nom}}
+                </a>
+                </div>
+                {{/foreach}}
+                {{foreach from=$_sejour->_ref_files item=_file}}
+                <a href="#" onclick="popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')">
+                  {{$_file->file_name}}
+                </a>
                 {{/foreach}}
                 {{foreach from=$_sejour->_ref_operations item=_op}}
                   {{if !$_op->annulee}}
+                    {{foreach from=$_op->_ref_documents item=_doc}}
+                    <div>
+                    <button type="button" class="print notext"
+                      onclick="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+                        Document.printPDF({{$_doc->_id}}, '{{$app->user_prefs.choice_factory}}');
+                      {{else}}
+                        Document.print({{$_doc->_id}})
+                      {{/if}}">
+                    </button>
+                    <a href="#" onclick="popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')" style="display: inline">
+                      {{$_doc->nom}}
+                    </a>
+                    </div>
+                    {{/foreach}}
                     {{foreach from=$_op->_ref_files item=_file}}
                     <a href="#" onclick="popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')">
                       {{$_file->file_name}}
