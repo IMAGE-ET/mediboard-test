@@ -155,7 +155,7 @@ function loadPosesDispVasc(){
         <img src="images/icons/edit.png" />
        </a>
       
-      {{$patient->_view}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient->_view}}</span>
       ({{$patient->_age}}
       {{if $patient->_annees != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
       &mdash; Dr {{$selOp->_ref_chir->_view}}
