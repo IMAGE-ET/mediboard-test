@@ -1,7 +1,6 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-
 function popFile(objectClass, objectId, elementClass, elementId){
   var url = new Url;
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
@@ -15,8 +14,10 @@ function newExam(sAction, consultation_id) {
     url.popup(900, 600, "Examen");  
   }
 }
-
 </script>
+
+{{mb_script module=dPcompteRendu script=document}}
+{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 
 <table style="border-spacing: 0; border-collapse: collapse; padding: 2px; vertical-align: middle; white-space: nowrap;">
   <thead>
@@ -24,7 +25,7 @@ function newExam(sAction, consultation_id) {
       <td>
         <table class="tbl">
           <th colspan="10" class="title">
-          	{{$patient->_view}} <br />
+            {{$patient->_view}} <br />
             Né{{if $patient->sexe == "f"}}e{{/if}} le {{$patient->naissance|date_format:$conf.date}}
           </th>
         </table>
@@ -32,10 +33,10 @@ function newExam(sAction, consultation_id) {
     </tr>
   </thead>
   <tbody>
-	<tr>
-	  <td>
-	    <table class="tbl">
-	      <tr>
+  <tr>
+    <td>
+      <table class="tbl">
+        <tr>
           <th style="width: 50%;">Fichiers du patient</th>
           <th style="width: 50%;">Documents du patient</th>
         </tr>
@@ -73,23 +74,23 @@ function newExam(sAction, consultation_id) {
       <table class="tbl">
         <tr>
           <th colspan="4" class="title">
-          	<div style="float:right">
-            	<input type="checkbox" id="toggle_compta" onchange="Compta.toggle();" 
-            		{{if $app->user_prefs.resumeCompta == 1}}checked="checked"{{/if}}
-            		/>
-            	<label for="toggle_compta" title="Afficher/masquer les données comptables">Compta</label>
-            	<script type="text/javascript">
-            	var Compta = {
-            	  toggle: function() {
-            	    $$(".compta").each(Element[($V("toggle_compta") ? "show" : "hide")]);
-            	  }
-            	}
-            	
-            	Main.add(Compta.toggle);
-            	</script>
-          	</div>
+            <div style="float:right">
+              <input type="checkbox" id="toggle_compta" onchange="Compta.toggle();" 
+                {{if $app->user_prefs.resumeCompta == 1}}checked="checked"{{/if}}
+                />
+              <label for="toggle_compta" title="Afficher/masquer les données comptables">Compta</label>
+              <script type="text/javascript">
+              var Compta = {
+                toggle: function() {
+                  $$(".compta").each(Element[($V("toggle_compta") ? "show" : "hide")]);
+                }
+              }
+              
+              Main.add(Compta.toggle);
+              </script>
+            </div>
         
-          	Consultations
+            Consultations
           </th>
         </tr>
         <tr>
@@ -107,51 +108,60 @@ function newExam(sAction, consultation_id) {
           {{if !$_consult->annule}}
             <tr>
               <td class="text" valign="top">
-              	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_plageconsult->_ref_chir}}
-          			
+                {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_plageconsult->_ref_chir}}
+                
                 &mdash; {{$_consult->_ref_plageconsult->date|date_format:$conf.date}}
                   {{if $_consult->motif}}
-          	      <br />
-          	      <strong>{{mb_label object=$_consult field=motif}}</strong>
-          	      <em>{{mb_value object=$_consult field=motif}}</em>
-          	    {{/if}}
-          	    {{if $_consult->rques}}
-          	      <br />
-          	      <strong>{{mb_label object=$_consult field=rques}}</strong>
-          	      <em>{{mb_value object=$_consult field=rques}}</em>
-          	    {{/if}}
-          	    {{if $_consult->examen}}
-          	      <br />
-          	      <strong>{{mb_label object=$_consult field=examen}}</strong>
-          	      <em>{{mb_value object=$_consult field=examen}}</em>
-          	    {{/if}}
-          	    {{if $_consult->traitement}}
-          	      <br />
-          	      <strong>{{mb_label object=$_consult field=traitement}}</strong>
-          	      <em>{{mb_value object=$_consult field=traitement}}</em>
-          	    {{/if}}
-          			{{if $_consult->histoire_maladie && $conf.dPcabinet.CConsultation.show_histoire_maladie}}
+                  <br />
+                  <strong>{{mb_label object=$_consult field=motif}}</strong>
+                  <em>{{mb_value object=$_consult field=motif}}</em>
+                {{/if}}
+                {{if $_consult->rques}}
+                  <br />
+                  <strong>{{mb_label object=$_consult field=rques}}</strong>
+                  <em>{{mb_value object=$_consult field=rques}}</em>
+                {{/if}}
+                {{if $_consult->examen}}
+                  <br />
+                  <strong>{{mb_label object=$_consult field=examen}}</strong>
+                  <em>{{mb_value object=$_consult field=examen}}</em>
+                {{/if}}
+                {{if $_consult->traitement}}
+                  <br />
+                  <strong>{{mb_label object=$_consult field=traitement}}</strong>
+                  <em>{{mb_value object=$_consult field=traitement}}</em>
+                {{/if}}
+                {{if $_consult->histoire_maladie && $conf.dPcabinet.CConsultation.show_histoire_maladie}}
                   <br />
                   <strong>{{mb_label object=$_consult field=histoire_maladie}}</strong>
                   <em>{{mb_value object=$_consult field=histoire_maladie}}</em>
                 {{/if}}
-          			{{if $_consult->conclusion && $conf.dPcabinet.CConsultation.show_conclusion}}
+                {{if $_consult->conclusion && $conf.dPcabinet.CConsultation.show_conclusion}}
                   <br />
                   <strong>{{mb_label object=$_consult field=conclusion}}</strong>
                   <em>{{mb_value object=$_consult field=conclusion}}</em>
                 {{/if}}
-          	    {{if $_consult->_ref_examaudio->examaudio_id}}
-          	      <br />
-          	      <a href="#" onclick="newExam('exam_audio', {{$_consult->consultation_id}})">
-          	        <strong>Audiogramme</strong>
-          	      </a>
-          	    {{/if}}
+                {{if $_consult->_ref_examaudio->examaudio_id}}
+                  <br />
+                  <a href="#" onclick="newExam('exam_audio', {{$_consult->consultation_id}})">
+                    <strong>Audiogramme</strong>
+                  </a>
+                {{/if}}
               </td>
               <td valign="top">
                 {{foreach from=$_consult->_ref_documents item=_doc}}
-                <a href="#" onclick="popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')">
-                  {{$_doc->nom}}
-                </a>
+                  <div>
+                    <a href="#" onclick="popFile('{{$_doc->object_class}}','{{$_doc->object_id}}','{{$_doc->_class}}','{{$_doc->_id}}')" style="display: inline">
+                      {{$_doc->nom}}
+                    </a>
+                    <button type="button" class="print notext"
+                      onclick="{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
+                        Document.printPDF({{$_doc->_id}}, '{{$app->user_prefs.choice_factory}}');
+                      {{else}}
+                        Document.print({{$_doc->_id}})
+                      {{/if}}">
+                    </button>
+                  </div>
                 {{/foreach}}
                 {{foreach from=$_consult->_ref_files item=_file}}
                 <a href="#" onclick="popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')">
