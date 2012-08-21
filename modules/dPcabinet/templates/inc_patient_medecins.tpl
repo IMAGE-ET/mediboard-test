@@ -10,6 +10,18 @@ togglePatientAddresse = function(input) {
   }
 }
 
+addOtherCorrespondant = function(medecin_id) {
+  var form = getForm("addCorrespondant");
+  $V(form.medecin_id, medecin_id);
+  onSubmitFormAjax(form, {onComplete: reloadCorrespondants.curry('{{$consult->_id}}')});
+}
+
+reloadCorrespondants = function(consultation_id) {
+  var url = new Url("cabinet", "ajax_reload_correspondants");
+  url.addParam("consultation_id", consultation_id);
+  url.requestUpdate("adresseParPrat");
+}
+
 Medecin = {
   form: null,
   edit : function() {
@@ -28,7 +40,7 @@ Medecin = {
     
     var viewElement = lastRadio.next('span');
     viewElement.update(view);
-    
+    viewElement.next('button').show();
     lastRadio.checked = true;
     lastRadio.value = id;
     lastRadio.form.onsubmit();
@@ -36,60 +48,14 @@ Medecin = {
 };
 </script>
 
-{{assign var=medecin value=$patient->_ref_medecin_traitant}}
-
-<form name="editAdresseParPrat" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">
-  <input type="hidden" name="m" value="dPcabinet" />
-  <input type="hidden" name="dosql" value="do_consultation_aed" />
-  {{mb_key object=$consult}}
-  
-  <label>
-    {{mb_field object=$consult field=adresse typeEnum=checkbox 
-               onchange="togglePatientAddresse(this)"}}
-    {{tr}}CConsultation-adresse{{/tr}}
-  </label>
-  <br />
-  
-  {{assign var=medecin_found value=false}}
-  
-  {{if $medecin->_id}}
-    <label onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
-      <input type="radio" name="adresse_par_prat_id" value="{{$medecin->_id}}" class="adresse_par"
-             {{if !$consult->adresse}}style="visibility:hidden"{{/if}}
-             {{if $consult->adresse_par_prat_id == $medecin->_id}}
-               {{assign var=medecin_found value=true}}
-               checked="checked"
-             {{/if}}
-             onclick="this.form.onsubmit()" /> 
-      <strong>{{$medecin}}</strong>
-    </label>
-    <br />
-  {{/if}}
-  
-  {{foreach from=$patient->_ref_medecins_correspondants item=curr_corresp}}
-    {{assign var=medecin value=$curr_corresp->_ref_medecin}}
-    <label onmouseover="ObjectTooltip.createEx(this, '{{$medecin->_guid}}');">
-      <input type="radio" name="adresse_par_prat_id" value="{{$medecin->_id}}" class="adresse_par"
-             {{if !$consult->adresse}}style="visibility:hidden"{{/if}}
-             {{if $consult->adresse_par_prat_id == $medecin->_id}}
-               {{assign var=medecin_found value=true}}
-               checked="checked"
-             {{/if}}
-             onclick="this.form.onsubmit()" /> 
-      {{$medecin}}
-    </label>
-    <br />
-  {{/foreach}}
-  
-  <div class="adresse_par" {{if !$consult->adresse}}style="visibility:hidden"{{/if}}>
-    <input type="radio" name="adresse_par_prat_id" value="{{if !$medecin_found}}{{$consult->adresse_par_prat_id}}{{/if}}" class="adresse_par"
-           {{if !$medecin_found && $consult->adresse_par_prat_id}}checked="checked"{{/if}}
-           onclick="Medecin.edit()" />
-    <button type="button" class="search" onclick="$(this).previous('input').checked=true;Medecin.edit()">{{tr}}Other{{/tr}}</button> 
-    <span>
-      {{if !$medecin_found && $consult->adresse_par_prat_id}}
-        {{$consult->_ref_adresse_par_prat}}
-      {{/if}}
-    </span>
-  </div>
+<form name="addCorrespondant" method="post">
+  <input type="hidden" name="m" value="dPpatients" />
+  <input type="hidden" name="dosql" value="do_correspondant_aed"/>
+  <input type="hidden" name="correspondant_id" />
+  <input type="hidden" name="patient_id" value="{{$consult->patient_id}}" />
+  <input type="hidden" name="medecin_id" />
 </form>
+
+<div id="adresseParPrat">
+  {{mb_include module=cabinet template=inc_list_patient_medecins}}
+</div>

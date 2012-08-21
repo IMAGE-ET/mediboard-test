@@ -43,7 +43,7 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
       Patient
     </th>
     <th class="category">
-    	Correspondants
+      Correspondants
     </th>
     <th class="category">
       {{mb_include module=system template=inc_object_idsante400 object=$consult}}
@@ -65,23 +65,23 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
     </td>
     <td class="button">
       {{if !$app->user_prefs.simpleCabinet}}
-	      {{if @$modules.ecap->mod_active}}
+        {{if @$modules.ecap->mod_active}}
           {{mb_include module=ecap template=inc_button_dhe patient_id=$consult->patient_id praticien_id=$consult->_praticien_id}}
-	      {{else}}
-	      {{if $m != "dPurgences"}}
-	      <button class="new" type="button" onclick="newOperation({{$consult->_praticien_id}},{{$consult->patient_id}})" style="width: 12em;">
+        {{else}}
+        {{if $m != "dPurgences"}}
+        <button class="new" type="button" onclick="newOperation({{$consult->_praticien_id}},{{$consult->patient_id}})" style="width: 12em;">
           {{tr}}COperation-title-create{{/tr}}
         </button>
-	      <br/>
-	      <button class="new" type="button" onclick="newHospitalisation({{$consult->_praticien_id}},{{$consult->patient_id}})" style="width: 12em;">
+        <br/>
+        <button class="new" type="button" onclick="newHospitalisation({{$consult->_praticien_id}},{{$consult->patient_id}})" style="width: 12em;">
           {{tr}}CSejour-title-create{{/tr}}
         </button>
-	      <br/>
-	      {{/if}}
-	    	{{/if}}
-    	{{/if}}
+        <br/>
+        {{/if}}
+        {{/if}}
+      {{/if}}
       {{assign var=sejour value=$consult->_ref_sejour}}
-    	{{if !$sejour || $sejour->type != "urg"}}
+      {{if !$sejour || $sejour->type != "urg"}}
       <button class="new" type="button" onclick="newConsultation({{$consult->_praticien_id}},{{$consult->patient_id}})" style="width: 12em;">
         {{tr}}CConsultation-title-create{{/tr}}
       </button>
