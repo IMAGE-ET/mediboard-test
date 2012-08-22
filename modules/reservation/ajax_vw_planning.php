@@ -11,54 +11,60 @@
 
 CCanDo::checkRead();
 
-/*$token = new CToken;
-$token->module = "dPplanningOp";
-$token->params = json_encode(array("a"=>"vw_edit_urgence", "operation_id" => 13762));
-$token->fin = mbDate("+2 days");
-mbTrace($token->store());*/
-
 $date_planning = CValue::getOrSession("date_planning");
 $praticien_id  = CValue::getOrSession("praticien_id");
 $scroll_top    = CValue::get("scroll_top", null);
 $bloc_id       = CValue::getOrSession("bloc_id", "");
 
+$bloc = new CBlocOperatoire;
+$bloc->load($bloc_id);
+
 // Récupération des opérations
-$operation = new COperation;
-$operation->date = $date_planning;
-$operation->annulee = 0;
-$operation->plageop_id = null;
-
-if ($praticien_id) {
-  $operation->chir_id = $praticien_id;
-}
-
 $group = CGroups::loadCurrent();
-$order = "bloc_operatoire.nom";
+$operation = new COperation;
+
 $where = array();
 $ljoin = array();
-$ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
-$ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
-$where["group_id"] = "= '$group->_id'";
+
+$where["operations.date"] = "= '$date_planning'";
+$where["operations.annulee"] = "= '0'";
+$where["operations.plageop_id"] = "IS NULL";
+$where["operations.salle_id"] = "IS NOT NULL";
 
 if ($bloc_id) {
-  $where["bloc_operatoire_id"] = "= '$bloc_id'";
+  $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
+  $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
+  $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
 }
 
-$operations = $operation->loadMatchingList("bloc_operatoire.nom", null, null, $ljoin);
+if ($praticien_id) {
+  $where["operations.chir_id"] = " = '$praticien_id'";
+}
+
+$operations = $operation->loadList($where, null, null, null, $ljoin);
 
 $prats  = CMbObject::massLoadFwdRef($operations, "chir_id");
 CMbObject::massLoadFwdRef($operations, "salle_id");
 CMbObject::massLoadFwdRef($operations, "anesth_id");
 CMbObject::massLoadFwdRef($prats, "function_id");
 
+// Récupération des salles
 $salle = new CSalle;
-unset($ljoin["sallesbloc"]);
+$where = array();
+$ljoin = array();
+$order = "bloc_operatoire.nom";
+
+if ($bloc_id) {
+  $where["bloc_id"] = "= '$bloc_id'";
+}
+
+$where["group_id"] = "= '$group->_id'";
+$ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
+
 $salles = $salle->loadList($where, $order, null, null, $ljoin);
 $salles_ids = array_keys($salles);
 
-$bloc = new CBlocOperatoire;
-$bloc->load($bloc_id);
-
+// Création du planning
 $planning = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
 $planning->title =  "Planning du ".mbDateToLocale($date_planning);
 
@@ -84,6 +90,7 @@ foreach ($salles as $_salle) {
 }
 $operations_by_salle = array();
 
+// Tri des opérations par salle
 foreach ($operations as $key => $_operation) {
   if (!$_operation->salle_id) {
     unset($operations[$key]);
@@ -96,6 +103,7 @@ foreach ($operations as $key => $_operation) {
   $operations_by_salle[$_operation->salle_id][] = $_operation;
 }
 
+// Ajout des événements
 foreach ($operations_by_salle as $salle_id => $_operations) {
   $i = array_search($salle_id, $salles_ids);
   foreach ($_operations as $_operation) {
@@ -139,7 +147,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     $libelle .= "<span class='compact' style='color: #000'>";
     foreach ($besoins as $_besoin) {
       $_type_ressource = $_besoin->loadRefTypeRessource();
-      $libelle .= $_type_ressource->libelle;
+      $libelle .= htmlentities($_type_ressource->libelle);
       if ($_besoin != $last_besoin) {
         $libelle .= " - ";
       }
