@@ -158,7 +158,9 @@ for ($i = 0; $i < 7; $i++) {
     
     $libelle = "";
     
-    $libelle = $_plage->libelle;
+    if (mbMinutesRelative($_plage->debut, $_plage->fin) >= 30 ) {
+      $libelle = $_plage->libelle;
+    }
     $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, "#DDD", true, null, null);
 
     //Menu des évènements
