@@ -60,7 +60,7 @@ $bloc = new CBlocOperatoire;
 $bloc->load($bloc_id);
 
 $planning = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
-$planning->title = "Planning du ".mbDateToLocale($date_planning);
+$planning->title =  "Planning du ".mbDateToLocale($date_planning);
 
 if ($bloc_id) {
   $planning->title .= " - $bloc->nom";
@@ -123,7 +123,8 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $duree = mbMinutesRelative($_operation->time_operation, $fin_op);
     }
     
-    $libelle = "<span onmouseover='ObjectTooltip.createEx(this, \"".$patient->_guid."\")'>$patient->nom $patient->prenom</span>, ".$patient->getFormattedValue("naissance").
+    $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue' data-sortie_prevue='$sejour->sortie_prevue'></span>".
+    "<span onmouseover='ObjectTooltip.createEx(this, \"".$patient->_guid."\")'>$patient->nom $patient->prenom</span>, ".$patient->getFormattedValue("naissance").
     "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".mbTransformTime($debut_op, null, "%H:%M")." - ".mbTransformTime($fin_op, null, "%H:%M")."</span>".
     "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>".
     "\n<span style='font-size: 11px; font-weight: bold;'>$_operation->libelle</span>".
@@ -162,7 +163,9 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $libelle, $color, true, null, $_operation->_guid, false);
     
     if (CCanDo::edit()) {
-      $event->addMenuItem("edit", "Modifier cette opération");
+      $event->addMenuItem("edit" , "Modifier cette opération");
+      $event->addMenuItem("cut"  , "Couper cette opération");
+      $event->addMenuItem("clock", "Modifier les dates d'entrée et sortie du séjour");
     }
     
     $event->plage["id"] = $_operation->_id;

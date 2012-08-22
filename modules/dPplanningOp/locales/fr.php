@@ -1314,6 +1314,7 @@ $locales['mod-dPplanningOp-tab-add_operation_csv'] = 'Ajout d\'interventions dan
 $locales['mod-dPplanningOp-tab-ajax_check_ald'] = 'Vérification d\'ALD';
 $locales['mod-dPplanningOp-tab-ajax_check_correspondant_medical'] = 'Vérification du correspondant médicale';
 $locales['mod-dPplanningOp-tab-ajax_close_sejour_consult'] = 'Cloture de la consultation de séjour';
+$locales['mod-dPplanningOp-tab-ajax_edit_dates_sejour'] = 'Modification des dates du séjour';
 $locales['mod-dPplanningOp-tab-ajax_edit_pose_disp_vasc'] = 'Pose de dispositif vasculaire';
 $locales['mod-dPplanningOp-tab-ajax_import_sae_base'] = 'Import base SAE';
 $locales['mod-dPplanningOp-tab-ajax_list_sejours'] = 'Liste des éjour';

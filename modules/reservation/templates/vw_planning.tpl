@@ -11,7 +11,7 @@
 <script type="text/javascript">
   Main.add(function() {
     var form = getForm("filterPlanning");
-    Calendar.regField(form.date_planning);
+    window.calendar_planning = Calendar.regField(form.date_planning);
     refreshPlanning();
   });
   
@@ -44,6 +44,116 @@
       refreshPlanning();
     });
   }
+  
+  cutIntervention = function(operation_id, elt) {
+    if ((window.cut_operation_id && window.cut_operation_id != operation_id)) {
+      return;
+    }
+    
+    if (elt.hasClassName("opacity-50")) {
+      elt.removeClassName("opacity-50");
+      window.cut_operation_id = null;
+    }
+    else {
+      elt.addClassName("opacity-50");
+      window.cut_operation_id = operation_id;
+      var span_infos = elt.up('div.toolbar').next('div.body').down('span').down('span');
+      window.save_entree_prevue = span_infos.get("entree_prevue");
+      window.save_sortie_prevue = span_infos.get("sortie_prevue");
+    }
+    updateStatusCut();
+  }
+  
+  pasteIntervention = function(operation_id, salle_id, heure) {
+    var heure = heure+":00:00"
+    var date = window.calendar_planning.altElement.defaultValue;
+    var datetime_interv = date+ " " + heure;
+    
+    if (datetime_interv < window.save_entree_prevue || datetime_interv > window.save_sortie_prevue) {
+      window.save_cut_operation =
+      { "operation_id": operation_id,
+        "date": date,
+        "time_operation": heure,
+        "salle_id": salle_id
+      };
+      
+      modifSejour(operation_id, datetime_interv, "afterModifSejour");
+      return;
+    }
+    
+    var form = getForm("cutOperation");
+    
+    $V(form.operation_id  , operation_id);
+    $V(form.date          , date);
+    $V(form.salle_id      , salle_id);
+    $V(form.time_operation, heure);
+    
+    onSubmitFormAjax(form, {onComplete: function() {
+      window.cut_operation_id = null;
+      updateStatusCut();
+      refreshPlanning();
+    } });
+  }
+  
+  updateStatusCut = function() {
+    var div = $("status_cut");
+    if (window.cut_operation_id) {
+      div.update("En cours");
+      div.setStyle({borderColor: "#080"});
+    }
+    else {
+      div.update();
+      div.setStyle({borderColor: "#ddd"});
+    }
+  }
+  
+  modifSejour = function(operation_id, date_move, callback) {
+    var url = new Url("dPplanningOp", "ajax_edit_dates_sejour");
+    url.addParam("operation_id", operation_id);
+    url.addParam("date_move", date_move);
+    if (callback) {
+      url.addParam("callback", callback);
+    }
+    url.requestModal(300);
+    url.modalObject.observe("afterClose", refreshPlanning);
+  }
+  
+  afterModifSejour = function() {
+    // Après un drag and drop
+    if (window.save_operation) {
+      var form = getForm("editOperation");
+      $V(form.operation_id  , window.save_operation.operation_id);
+      $V(form.time_operation, window.save_operation.time_operation);
+      $V(form.temp_operation, window.save_operation.temp_operation);
+      $V(form.salle_id      , window.save_operation.salle_id);
+      
+      onSubmitFormAjax(form, {onComplete: function() {
+        getForm("editSejour").onsubmit = "";
+        window.cut_operation_id = null;
+        updateStatusCut();
+        onSubmitFormAjax(getForm("editSejour"), {onComplete: Control.Modal.close});
+        }
+      });
+      window_save_operation = null;
+      return;
+    }
+    // Après un couper coller
+    if (window.save_cut_operation) {
+      var form = getForm("cutOperation");
+      $V(form.operation_id, window.save_cut_operation.operation_id);
+      $V(form.date, window.save_cut_operation.date);
+      $V(form.time_operation, window.save_cut_operation.time_operation);
+      $V(form.salle_id, window.save_cut_operation.salle_id);
+      onSubmitFormAjax(form, {onComplete: function() {
+        getForm("editSejour").onsubmit = "";
+        window.cut_operation_id = null;
+        updateStatusCut();
+        onSubmitFormAjax(getForm("editSejour"), {onComplete: Control.Modal.close});
+        }
+      });
+      window.save_cut_operation = null;
+    }
+  }
 </script>
 
 <form name="editOperation" method="post">
@@ -55,18 +165,29 @@
   <input type="hidden" name="salle_id" />
 </form>
 
+<form name="cutOperation" method="post">
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="dosql" value="do_cut_operation" />
+  <input type="hidden" name="operation_id" />
+  <input type="hidden" name="date" />
+  <input type="hidden" name="time_operation" />
+  <input type="hidden" name="salle_id" />
+</form>
+
 <form name="filterPlanning" method="get"> 
   <table class="form">
     <tr>
-      <th class="category" colspan="3">
+      <th class="category" colspan="4">
         Filtre
       </th>
     </tr>
     <tr>
       <td>
+        <a href="#1" onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('-24')))">&lt;&lt;&lt;</a>
         <label>
         Date <input name="date_planning" type="hidden" value="{{$date_planning}}" class="date" onchange="refreshPlanning();"/>
         </label>
+        <a href="#1" onclick="window.calendar_planning.datePicked(new Date(new Date(window.calendar_planning.altElement.defaultValue).setHours('+24')))">&gt;&gt;&gt;</a>
       </td>
       <td>
         <label>
@@ -87,6 +208,10 @@
             {{/foreach}}
           </select>
         </label>
+      </td>
+      <td class="narrow">
+        <div id="status_cut" style="width: 100px; height: 14px; border: 2px dashed #ddd; font-weight: bold; text-align: center;">
+        </div>
       </td>
     </tr>
   </table>

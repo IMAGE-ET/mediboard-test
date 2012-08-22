@@ -33,13 +33,34 @@
     var planning = window["planning-{{$planning->guid}}"];
     planning.salles_ids = {{$salles_ids|@json}};
     
-    planning.onMenuClick = function(event, plage, elem) {
-      modifIntervention('', '', '', plage);
+    planning.onMenuClick = function(event, operation_id, elem) {
+      switch (event) {
+        case 'edit':
+          modifIntervention('', '', '', operation_id);
+          break;
+        case 'cut':
+          cutIntervention(operation_id, elem);
+          break;
+        case 'clock':
+          modifSejour(operation_id, null, "Control.Modal.close");
+      }
     }
     
     planning.onEventChange = function(e) {
+      var operation_guid = e.draggable_guid;
+      var operation_id = operation_guid.split("-")[1];
+      
+      var entree_prevue = /entree_prevue='([0-9 \:-]*)'/.exec(e.title)[1];
+      var prevue_split = entree_prevue.split(" ");
+      var date_entree_prevue = prevue_split[0];
+      var heure_entree_prevue = prevue_split[1];
+      var sortie_prevue = /sortie_prevue='([0-9 \:-]*)'/.exec(e.title)[1];
+      var heure_sortie_prevue = sortie_prevue.split(" ")[1];
       var time = e.getTime();
+      var temp_operation = new Date(1970, 1, 1, 0, time.length).toTIME();
+      var time_operation = time.start.toTIME();
       var index_salle = time.start.getFullYear()-2000;
+      var salle_id = this.salles_ids[index_salle];
       
       if (index_salle < 0 || index_salle > this.salles_ids.length) {
         return;
@@ -47,14 +68,25 @@
       
       var form = getForm("editOperation");
       
+      // Popup de modification des dates d'entrée et sortie prévue du séjour
+      // dans le cas où la date et heure d'intervention n'est pas dans cet intervalle
       
-      var time_operation = time.start.toTIME();
+      if ("{{$date_planning}} "+time_operation < entree_prevue) {
+        modifSejour(operation_id, "{{$date_planning}} "+time_operation, "afterModifSejour");
+        
+        window.save_operation =
+          {"operation_id": operation_id,
+           "time_operation": time_operation,
+           "temp_operation": temp_operation,
+           "salle_id": salle_id};
+        return;
+      }
       
-      $V(form.operation_id, e.draggable_guid.split('-')[1]);
+      // Sinon, on peut enregistrer
+      $V(form.operation_id,   operation_id);
       $V(form.time_operation, time_operation);
-      $V(form.temp_operation, new Date(1970, 1, 1, 0, time.length).toTIME());
-      
-      $V(form.salle_id, this.salles_ids[index_salle]);
+      $V(form.temp_operation, temp_operation);
+      $V(form.salle_id,       salle_id);
       
       onSubmitFormAjax(form, {onComplete: refreshPlanning});
     }
@@ -68,8 +100,13 @@
         elt.observe('dblclick', function() {
           var classes = elt.className.split("  ");
           var hour = classes[0].split("-")[2];
-          
           var salle_id = planning.salles_ids[classes[0].split("-")[1]];
+          
+          if (window.cut_operation_id) {
+            pasteIntervention(window.cut_operation_id, salle_id, hour);
+            return;
+          }
+                      
           modifIntervention("{{$date_planning}}", hour, salle_id);
         });
       });
