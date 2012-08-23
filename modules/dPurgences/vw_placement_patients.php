@@ -105,7 +105,9 @@ for ($num = 0; $num <= 1; $num++) {
     
     $where = array();
     $where = $temp;
-    $where[] = $q;
+    if ($q != "") {
+      $where[] = $q;
+    }
     $sejour = new CSejour();
     $sejours = $sejour->loadList($where, null, null,null, $ljoin);
     if ($sejours) {
