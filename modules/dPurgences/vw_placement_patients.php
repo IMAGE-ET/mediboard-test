@@ -93,19 +93,11 @@ for ($num = 0; $num <= 1; $num++) {
         unset($grille[$nom][$emplacement->plan_y][$emplacement->plan_x+$b]);
       }
     }
-    $nb_lits=0;
-    $q = "";
-    foreach ($chambre->_ref_lits as $lit) {
-      if ($nb_lits) {
-        $q .= " OR ";
-      }
-      $q .= "rpu.box_id = '".$lit->_id."'";
-      $nb_lits++;
-    }
     
     $where = array();
     $where = $temp;
-    $where[] = $q;
+    $where["rpu.box_id"] = CSQLDataSource::prepareIn(array_keys($chambre->_ref_lits));
+    
     $sejour = new CSejour();
     $sejours = $sejour->loadList($where, null, null,null, $ljoin);
     if ($sejours) {
