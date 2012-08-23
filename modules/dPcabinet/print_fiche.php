@@ -43,8 +43,11 @@ if(!$consultation_id) {
   $patient->loadRefsConsultations();
   
   // Chargement des praticiens
-  $listAnesths = new CMediusers;
-  $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
+  $listAnesths = array();
+  if (!$offline) {
+    $listAnesths = new CMediusers;
+    $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
+  }
   
   foreach ($patient->_ref_consultations as $consultation) {
     $consultation->loadRefConsultAnesth();
