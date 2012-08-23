@@ -139,6 +139,15 @@ function loadPosesDispVasc(){
   }
 {{/if}}
 
+function infoAnapath(field) {
+  if($V(field) == 1) {
+    var url = new Url("salleOp", "ajax_info_anapath");
+    url.addParam("operation_id", $V(field.form.operation_id));
+    url.requestModal();
+  }
+  submitFormAjax(field.form, 'systemMsg');
+}
+
 </script>
 
 <!-- Informations générales sur l'intervention et le patient -->
@@ -345,10 +354,10 @@ function loadPosesDispVasc(){
     <table class="form">
       <tr>
         <th style="text-align: right">
-          {{mb_label object=$selOp field=anapath}}
+          {{mb_label object=$selOp field=anapath onclick="infoAnapath($(this.getAttribute('for')+'_1'));"}}
         </th>
         <td>
-          {{mb_field object=$selOp field=anapath typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
+          {{mb_field object=$selOp field=anapath typeEnum="radio" onChange="infoAnapath(this);"}}
         </td>
         <th style="text-align: right">
           {{mb_label object=$selOp field=prothese}}

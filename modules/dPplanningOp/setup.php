@@ -1409,7 +1409,14 @@ class CSetupdPplanningOp extends CSetup {
               ADD INDEX (`encadrant_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.50";
+    $this->makeRevision("1.50");
+    $query = "ALTER TABLE `operations` 
+              ADD `flacons_anapath` TINYINT (4) AFTER `anapath`,
+              ADD `labo_anapath` VARCHAR (255)  AFTER `flacons_anapath`,
+              ADD `description_anapath` TEXT    AFTER `labo_anapath`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.51";
   }
 }
 ?>

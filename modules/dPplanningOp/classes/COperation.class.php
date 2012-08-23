@@ -23,25 +23,28 @@ class COperation extends CCodable implements IPatientRelated {
   var $libelle_uf = null;
 
   // DB Fields
-  var $salle_id       = null;
-  var $date           = null;
-  var $libelle        = null;
-  var $cote           = null;
-  var $temp_operation = null;
-  var $pause          = null;
-  var $time_operation = null;
-  var $exam_extempo   = null;
-  var $examen         = null;
-  var $materiel       = null;
-  var $commande_mat   = null;
-  var $info           = null;
-  var $type_anesth    = null;  
-  var $rques          = null;
-  var $rank           = null;
-  var $rank_voulu     = null;
-  var $anapath        = null;
-  var $labo           = null;
-  var $prothese       = null;
+  var $salle_id            = null;
+  var $date                = null;
+  var $libelle             = null;
+  var $cote                = null;
+  var $temp_operation      = null;
+  var $pause               = null;
+  var $time_operation      = null;
+  var $exam_extempo        = null;
+  var $examen              = null;
+  var $materiel            = null;
+  var $commande_mat        = null;
+  var $info                = null;
+  var $type_anesth         = null;  
+  var $rques               = null;
+  var $rank                = null;
+  var $rank_voulu          = null;
+  var $anapath             = null;
+  var $flacons_anapath     = null;
+  var $labo_anapath        = null;
+  var $description_anapath = null;
+  var $labo                = null;
+  var $prothese            = null;
 
   var $depassement        = null;
   var $forfait            = null;
@@ -139,17 +142,17 @@ class COperation extends CCodable implements IPatientRelated {
   /**
    * @var CPlageOp
    */
-  var $_ref_plageop        = null;
-  var $_ref_salle          = null;
-  var $_ref_anesth         = null;
-  var $_ref_type_anesth    = null;
-  var $_ref_consult_anesth = null;
-  var $_ref_anesth_visite  = null;
-  var $_ref_actes_ccam     = array();
-  var $_ref_echange_hprim  = null;
-  var $_ref_anesth_perops  = null;
-  var $_ref_naissances     = null;
-  var $_ref_poses_disp_vasc= null;
+  var $_ref_plageop         = null;
+  var $_ref_salle           = null;
+  var $_ref_anesth          = null;
+  var $_ref_type_anesth     = null;
+  var $_ref_consult_anesth  = null;
+  var $_ref_anesth_visite   = null;
+  var $_ref_actes_ccam      = array();
+  var $_ref_echange_hprim   = null;
+  var $_ref_anesth_perops   = null;
+  var $_ref_naissances      = null;
+  var $_ref_poses_disp_vasc = null;
   
   // External references
   var $_ext_codes_ccam = null;
@@ -157,14 +160,14 @@ class COperation extends CCodable implements IPatientRelated {
  //Filter Fields
   var $_date_min      = null;
   var $_date_max      = null;
-  var $_plage        = null;
-  var $_service      = null;
-  var $_intervention = null;
+  var $_plage         = null;
+  var $_service       = null;
+  var $_intervention  = null;
   var $_specialite    = null;
-  var $_scodes_ccam  = null;
-  var $_prat_id      = null;
-  var $_bloc_id      = null;
-  var $_ccam_libelle = null;
+  var $_scodes_ccam   = null;
+  var $_prat_id       = null;
+  var $_bloc_id       = null;
+  var $_ccam_libelle  = null;
 
   function COperation() {
     parent::__construct();
@@ -240,6 +243,9 @@ class COperation extends CCodable implements IPatientRelated {
     $props["induction_fin"]      = "time show|0";
     $props["entree_bloc"]        = "time show|0";
     $props["anapath"]            = "enum list|1|0|? default|? show|0";
+    $props["flacons_anapath"]    = "num max|255 show|0";
+    $props["labo_anapath"]       = "str autocomplete";
+    $props["description_anapath"]= "text helped";
     $props["labo"]               = "enum list|1|0|? default|? show|0";
     $props["prothese"]           = "enum list|1|0|? default|? show|0";
     $props["horaire_voulu"]      = "time show|0";

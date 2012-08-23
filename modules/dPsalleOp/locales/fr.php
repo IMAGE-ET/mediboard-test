@@ -356,6 +356,7 @@ $locales['config-dPsalleOp-mode_anesth-desc'] = 'N\'affiche que les informations
 $locales['mod-dPsalleOp-tab-ajax_cloture_activite'] = 'Clôture des activités';
 $locales['mod-dPsalleOp-tab-ajax_edit_evenement_perop'] = 'Evénement per-opératoire';
 $locales['mod-dPsalleOp-tab-ajax_edit_object_check_lists'] = 'Check list';
+$locales['mod-dPsalleOp-tab-ajax_info_anapath'] = 'Information sur les prélèvements anapath';
 $locales['mod-dPsalleOp-tab-configure'] = 'Configuration';
 $locales['mod-dPsalleOp-tab-print_feuille_bloc'] = 'Impression feuille de bloc';
 $locales['mod-dPsalleOp-tab-print_intervention_anesth'] = 'Fiche d\'intervention d\'anesthésie';
