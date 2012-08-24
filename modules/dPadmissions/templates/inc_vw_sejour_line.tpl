@@ -20,7 +20,7 @@
 
 <td class="button" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $can->edit}}
-  <form name="editAdmFrm{{$_sejour->_id}}" action="?m={{$m}}" method="post">
+  <form name="editAdmFrm{{$_sejour->_id}}" action="?m={{$current_m}}" method="post">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />

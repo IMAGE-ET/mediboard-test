@@ -18,7 +18,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
       <a href="?m={{$current_m}}&tab=vw_sejours_validation&date={{$hier}}" style="display: inline"><<<</a>
       {{$date|date_format:$conf.longdate}}
       <form name="changeDateAdmissions" action="?" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="m" value="{{$current_m}}" />
         <input type="hidden" name="tab" value="vw_sejours_validation" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
