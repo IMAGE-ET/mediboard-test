@@ -19,6 +19,14 @@ function printFicheBloc(interv_id) {
   url.popup(700, 600, 'FeuilleBloc');
 }
 
+function printAnapath() {
+  var form = getForm(changeDate);
+  var url = new Url("dPbloc", "print_anapath");
+  url.addParam("date"   , $V(form.date));
+  url.addParam("bloc_id", $V(form.bloc_id));
+  url.popup(700, 600, 'Anapath');
+}
+
 function showLegend() {
   var url = new Url('bloc', 'legende').requestModal()
 }
@@ -34,6 +42,7 @@ function showLegend() {
     <th colspan="0">
       <button type="button" onclick="showLegend()" class="search" style="float: left;">Légende</button>
       <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
+      <button type="button" onclick="printAnapath();" class="print" style="float: right;">{{tr}}COperation-anapath{{/tr}}</button>
       
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />

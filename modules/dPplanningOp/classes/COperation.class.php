@@ -108,8 +108,8 @@ class COperation extends CCodable implements IPatientRelated {
   var $_pause_hour      = null;
   var $_protocole_prescription_anesth_id = null;
   var $_protocole_prescription_chir_id   = null;
-  var $_move            = null;
-  var $_reorder_rank_voulu = null;
+  var $_move                   = null;
+  var $_reorder_rank_voulu     = null;
   var $_password_visite_anesth = null;
   var $_patient_id      = null;
   var $_dmi_alert       = null;
@@ -126,6 +126,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $_datetime          = null;
   var $_datetime_reel     = null;
   var $_datetime_reel_fin = null;
+  var $_datetime_best     = null;
   var $_ref_affectation   = null;
   var $_ref_besoins       = null;
   
@@ -258,20 +259,20 @@ class COperation extends CCodable implements IPatientRelated {
     $props["cote_bloc"]          = "enum list|droit|gauche show|0";
     
     // Visite de préanesthésie
-    $props["date_visite_anesth"]    = "date";
-    $props["prat_visite_anesth_id"] = "ref class|CMediusers";
-    $props["rques_visite_anesth"]   = "text helped show|0";
-    $props["autorisation_anesth"]   = "bool default|0";
+    $props["date_visite_anesth"]     = "date";
+    $props["prat_visite_anesth_id"]  = "ref class|CMediusers";
+    $props["rques_visite_anesth"]    = "text helped show|0";
+    $props["autorisation_anesth"]    = "bool default|0";
 
-    $props["facture"]                 = "bool default|0";
+    $props["facture"]                = "bool default|0";
     
-    $props["duree_uscpo"]             = "num min|0 default|0";
+    $props["duree_uscpo"]            = "num min|0 default|0";
     
     if (CAppUI::conf("dPplanningOp COperation show_duree_uscpo") == 2) {
-      $props["passage_uscpo"]           = "bool notNull";
+      $props["passage_uscpo"]        = "bool notNull";
     }
     else {
-      $props["passage_uscpo"]           = "bool";
+      $props["passage_uscpo"]        = "bool";
     }
     
     $props["duree_preop"]             = "time";
@@ -295,6 +296,9 @@ class COperation extends CCodable implements IPatientRelated {
     $props["_hour_op"]                = "";
     $props["_min_op"]                 = "";
     $props["_datetime"]               = "dateTime show";
+    $props["_datetime_reel"]          = "dateTime";
+    $props["_datetime_reel_fin"]      = "dateTime";
+    $props["_datetime_best"]          = "dateTime";
     $props["_pause_min"]              = "numchar length|2";
     $props["_pause_hour"]             = "numchar length|2";
     $props["_move"]                   = "str";
@@ -860,7 +864,11 @@ class COperation extends CCodable implements IPatientRelated {
     } else {
       $this->_datetime = "$date 00:00:00";
     }
+    $this->_datetime_best     = $this->_datetime;
     $this->_datetime_reel     = "$date $this->debut_op";
+    if($this->debut_op) {
+      $this->_datetime_best = $this->_datetime_reel;
+    }
     $this->_datetime_reel_fin = "$date $this->fin_op";
     
     // Heure standard d'exécution des actes
