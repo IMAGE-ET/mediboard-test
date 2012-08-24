@@ -55,12 +55,13 @@
     getForm('delBesoin').up('div.modal').down('button.change').onclick();
   }
   
-  showPlanning = function(type_ressource_id, operation_id, usage_ressource_id, besoin_ressource_id) {
+  showPlanning = function(type_ressource_id, operation_id, usage_ressource_id, besoin_ressource_id, usage) {
    var url = new Url("dPbloc", "ajax_vw_planning_ressources");
    url.addParam("besoin_ressource_id", besoin_ressource_id);
    url.addParam("usage_ressource_id", usage_ressource_id);
    url.addParam("type_ressource_id", type_ressource_id);
    url.addParam("operation_id", operation_id);
+   url.addParam("usage", usage);
    url.modal();
    url.modalObject.observe("afterClose", reloadModal);
   }
@@ -82,7 +83,7 @@
 
 <table class="tbl">
   <tr>
-    <th {{if $type == "operation_id"}} colspan="2"{{/if}}>
+    <th {{if $type == "operation_id"}} colspan="3"{{/if}}>
       {{if !$usage}}
         <div style="float: right;">
           <form name="addBesoin" method="post" onsubmit="onSubmitBesoins(this)">
@@ -103,20 +104,18 @@
       {{assign var=type_ressource value=$_besoin->_ref_type_ressource}}
       {{assign var=_usage value=$_besoin->_ref_usage}}
       <tr>
+        <td style="width: 12px; background: #{{$_besoin->_color}}">
+        </td>
         <td style="width: 50%">
           <div style="float: right">
             <button type="button" class="trash notext" {{if $usage || $_usage->_id}}disabled{{/if}} title="{{tr}}Delete{{/tr}}"
               onclick="onDelBesoin('{{$_besoin->_id}}', '{{$type_ressource->libelle}}')"></button>
             {{if $type == "operation_id"}}
               <button type="button" class="modele_etiquette notext"
-                {{if $usage && !$_usage->_id}}
-                  onclick="showPlanning('{{$_besoin->type_ressource_id}}', '{{$object_id}}', '{{$_usage->_id}}', '{{$_besoin->_id}}')"
-                {{else}}
-                  onclick="showPlanning('{{$_besoin->type_ressource_id}}', '{{$object_id}}', '{{$_usage->_id}}')"
-                {{/if}} title="Planning"></button>
+                onclick="showPlanning('{{$_besoin->type_ressource_id}}', '{{$object_id}}', '{{$_usage->_id}}', '{{$_besoin->_id}}', '{{$usage}}')"title="Planning"></button>
             {{/if}}
           </div>
-          <strong style="color: #{{$_besoin->_color}}">
+          <strong>
             {{$type_ressource->libelle}}
           </strong>
         </td>

@@ -52,6 +52,14 @@
       </td>
     </tr>
     <tr>
+      <th>
+        {{mb_label object=$ressource_materielle field=retablissement}}
+      </th>
+      <td>
+        {{mb_field object=$ressource_materielle field=retablissement form=editRessourceMaterielle register=true}}
+      </td>
+    </tr>
+    <tr>
       <td colspan="2" class="button">
         {{if $ressource_materielle->_id}}
           <button type="button" class="save" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>

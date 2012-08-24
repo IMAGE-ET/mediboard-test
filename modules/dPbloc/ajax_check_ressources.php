@@ -22,46 +22,38 @@ $color = "0a0";
 if (count($besoins)) {
   $operation = reset($besoins)->loadRefOperation();
   $operation->loadRefPlageOp();
+  $deb_op = $operation->_datetime;
+  $fin_op = mbAddDateTime($operation->temp_operation, $deb_op);
   
-  $types_ressources = CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
+  CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
   
   foreach ($besoins as $_besoin) {
     $usage = $_besoin->loadRefUsage();
     
-    if (!$usage->_id) {
-      // Un usage absent, on passe en orange
-      $color = "fb0";
-      break;
-    }
-  }
-  
-  // Si la ressource d'un usage a une indispo ou est en conflit avec une autre intervention,
-  // on passe en rouge
-  if ($color != "fb0") {
-    foreach ($besoins as $_besoin) {
-      $usage = $_besoin->loadRefUsage();
+    $ressource = new CRessourceMaterielle;
+    $ressource->type_ressource_id = $_besoin->type_ressource_id;
+    if ($usage->_id) {
       $ressource = $usage->loadRefRessource();
-      
-      // Check sur les indisponibilités
-      $indispos = $ressource->loadRefsIndispos($operation->_datetime, $operation->_datetime );
-      
-      if (count($indispos)) {
-        $color = "a00";
-        break;
-      }
-      
-      // Check sur les usages
-      $usages = $ressource->loadRefsUsagesDateTime($operation->_datetime);
-      
-      // Il faut enlever l'usage éventuel associé au besoin qu'on est en train de parcourir
-      if ($usage->_id) {
-        unset($usages[$usage->_id]);
-      }
-      
-      if (count($usages)) {
-        $color = "a00";
-        break;
-      }
+    }
+    $type_ressource = $_besoin->loadRefTypeRessource();
+    $nb_ressources = $type_ressource->countBackRefs("ressources_materielles");
+    
+    // Check sur les indisponibilités
+    $indispos = $ressource->loadRefsIndispos($deb_op, $fin_op);
+    
+    // Check sur les besoins
+    $besoins = $ressource->loadRefsBesoins($deb_op, $fin_op);
+    unset($besoins[$_besoin->_id]);
+    
+    // Check sur les usages
+    $usages = $ressource->loadRefsUsages($deb_op, $fin_op);
+    if ($usage->_id) {
+      unset($usages[$usage->_id]);
+    }
+    
+    if (count($indispos) + count($besoins) + count($usages) >= $nb_ressources) {
+      $color = "a00";
+      break;
     }
   }
 }

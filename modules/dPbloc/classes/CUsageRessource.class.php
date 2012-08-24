@@ -46,10 +46,10 @@ class CUsageRessource extends CMbObject{
   }
   
   function loadRefRessource() {
-    return $this->_ref_ressource = $this->loadFwdRef("ressource_materielle_id");
+    return $this->_ref_ressource = $this->loadFwdRef("ressource_materielle_id", true);
   }
   
   function loadRefBesoin() {
-    return $this->_ref_besoin = $this->loadFwdRef("besoin_ressource_id");
+    return $this->_ref_besoin = $this->loadFwdRef("besoin_ressource_id", true);
   }
 }

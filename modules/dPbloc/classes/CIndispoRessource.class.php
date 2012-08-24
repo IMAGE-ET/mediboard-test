@@ -58,6 +58,6 @@ class CIndispoRessource extends CMbObject{
   }
   
   function loadRefRessource() {
-    return $this->_ref_ressource_materielle = $this->loadFwdRef("ressource_materielle_id");
+    return $this->_ref_ressource_materielle = $this->loadFwdRef("ressource_materielle_id", true);
   }
 }

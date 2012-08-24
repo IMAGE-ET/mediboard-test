@@ -340,7 +340,12 @@ class CSetupdPbloc extends CSetup {
       CHANGE `deb` `deb` DATETIME NOT NULL,
       CHANGE `fin` `fin` DATETIME NOT NULL;";
     
-    $this->mod_version = "0.33";
+    $this->makeRevision("0.33");
+    $query = "ALTER TABLE `ressource_materielle` 
+      CHANGE `retablissement` `retablissement` TIME;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.34";
   }
 }
 ?>

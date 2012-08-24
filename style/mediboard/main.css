@@ -1781,3 +1781,8 @@ div.planning_ressource.indispo {
   background: #f88;
   height: 1.5em;
 }
+
+div.planning_ressource.besoin {
+  background: #ffb;
+  outline: 1px solid #000;
+}

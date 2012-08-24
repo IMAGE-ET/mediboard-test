@@ -23,14 +23,15 @@ CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
 $operation = new COperation;
 $operation->load($object_id);
 $operation->loadRefPlageOp();
-$hour_operation = mbTransformTime(null, $operation->temp_operation, "%H");
-$min_operation  = mbTransformTime(null, $operation->temp_operation, "%M");
-$fin_operation  = mbDateTime("+$hour_operation hours +$min_operation minutes", $operation->_datetime);
+$deb_op = $operation->_datetime;
+$fin_op  = mbAddDateTime($operation->temp_operation, $deb_op);
 
 foreach ($besoins as $_besoin) {
   $type_ressource = $_besoin->loadRefTypeRessource();
+  $nb_ressources = $type_ressource->countBackRefs("ressources_materielles");
   $_usage = $_besoin->loadRefUsage();
   
+  // Côté protocole, rien à vérifier
   if ($type != "operation_id") {
     $_besoin->_color = "000";
     continue;
@@ -42,46 +43,46 @@ foreach ($besoins as $_besoin) {
   // S'il y a un usage, alors on peut vérifier si conflit avec :
   // - un autre usage
   // - une indispo
+  // - un besoin
   // Dans ce cas, on passe en rouge
   if ($_usage->_id) {
     $ressource = $_usage->loadRefRessource();
     
-    $usages = $ressource->loadRefsUsagesDateTime($operation->_datetime);
-    unset($usages[$_usage->_id]);
+    $_usages = $ressource->loadRefsUsages($deb_op, $fin_op);
+    unset($_usages[$_usage->_id]);
     
-    if (count($usages)) {
+    $_indispos = $ressource->loadRefsIndispos($deb_op, $fin_op);
+    
+    $_besoins = $ressource->loadRefsBesoins($deb_op, $fin_op);
+    unset($_besoins[$_besoin->_id]);
+    
+    if (count($_usages) + count($_indispos) + count($_besoins) >= $nb_ressources) {
       $_besoin->_color = "a00";
-      continue;
-    }
-    
-    $indispos = $ressource->loadRefsIndispos($operation->_datetime, $fin_operation);
-    
-    if (count($indispos)) {
-      $_besoin->_color = "a00";
-      continue;
     }
     
     continue;
   }
   
   // Sinon, on parcourt les ressources associées au type de ressource du besoin.
-  // Si on on trouve un usage ou indispo en conflit, alors on passe en orange
   $ressources = $type_ressource->loadRefsRessources();
-  $usages = 0;
-  $indispos = 0;
+  $_usages   = 0;
+  $_indispos = 0;
+  $_besoins  = 0;
   
   foreach ($ressources as $_ressource) {
-    $usages += count($_ressource->loadRefsUsagesDateTime($operation->_datetime));
-    $indispos += count($_ressource->loadRefsIndispos($operation->_datetime, $fin_operation));
+    $_usages += count($_ressource->loadRefsUsages($deb_op, $fin_op));
+    $_indispos += count($_ressource->loadRefsIndispos($deb_op, $fin_op));
   }
   
-  if ($usages >= count($ressources) || $indispos >= count($ressources) || ($usages + $indispos) >= count($ressources)) {
+  // Pour compter les besoins, on ne le fait qu'une fois.
+  // Car un besoin cible un type de ressource.
+  // On décrémente d'une unité, car le besoin de la boucle est compté
+  $_ressource = new CRessourceMaterielle;
+  $_ressource->type_ressource_id = $type_ressource->_id;
+  $_besoins = count($_ressource->loadRefsBesoins($deb_op, $fin_op)) - 1;
+   
+  if ($_usages + $_indispos + $_besoins >= $nb_ressources) {
     $_besoin->_color = "a00";
-    continue;
-  }
-  
-  if ($usages || $indispos) {
-    $_besoin->_color = "fb0";
   }
 }
 

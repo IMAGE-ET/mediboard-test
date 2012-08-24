@@ -29,6 +29,9 @@ class CBesoinRessource extends CMbObject{
   
   // Form Fields
   var $_color              = null;
+  var $_width              = null;
+  var $_debut_offset       = null;
+  var $_fin_offset         = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -59,18 +62,18 @@ class CBesoinRessource extends CMbObject{
   }
   
   function loadRefTypeRessource() {
-    return $this->_ref_type_ressource = $this->loadFwdRef("type_ressource_id");
+    return $this->_ref_type_ressource = $this->loadFwdRef("type_ressource_id", true);
   }
   
   function loadRefOperation() {
-    return $this->_ref_operation = $this->loadFwdRef("operation_id");
+    return $this->_ref_operation = $this->loadFwdRef("operation_id", true);
   }
   
   function loadRefProtocole() {
-    return $this->_ref_protocole = $this->loadFwdRef("protocole_id");
+    return $this->_ref_protocole = $this->loadFwdRef("protocole_id", true);
   }
   
   function loadRefUsage() {
-    return $this->_ref_usage = $this->loadUniqueBackRef("usages");
+    return $this->_ref_usage = $this->loadUniqueBackRef("usages", true);
   }
 }
