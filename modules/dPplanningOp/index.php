@@ -22,7 +22,7 @@ if($hors_plage->canRead()) {
 }
 
 $module->registerTab("vw_protocoles"     , TAB_EDIT);
-$module->registerTab("vw_edit_protocole" , TAB_EDIT);
+//$module->registerTab("vw_edit_protocole" , TAB_EDIT);
 $module->registerTab("vw_edit_typeanesth", TAB_ADMIN);
 $module->registerTab("vw_idx_colors"     , TAB_ADMIN);
 

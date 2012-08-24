@@ -1,12 +1,12 @@
-{{mb_script module="dPplanningOp" script="cim10_selector"}}
-{{mb_script module="dPplanningOp" script="ccam_selector"}}
+{{mb_script module="dPplanningOp" script="cim10_selector" ajax=true}}
+{{mb_script module="dPplanningOp" script="ccam_selector" ajax=true}}
 
 <script type="text/javascript">
 
 var oCcamField = null;
 
-function copier(){
-  var oForm = document.editFrm;
+copier = function(){
+  var oForm = getForm("editProtocole");
   oForm.protocole_id.value = "";
   {{if $is_praticien}}
   oForm.chir_id.value = '{{$mediuser->_id}}';
@@ -16,13 +16,23 @@ function copier(){
   } else {
     oForm.libelle.value = "Copie de "+oForm.codes_ccam.value;
   }
-  oForm.submit();
+  oForm.onsubmit = function() {
+    onSubmitFormAjax(this);
+  }
+  $V(oForm.callback, "afterCopier");
+  oForm.onsubmit();
 }
 
-function refreshListCCAM() {
+afterCopier = function(id) {
+  refreshList(getForm("selectFrm"), null, false);
+  Control.Modal.close();
+  chooseProtocole(id);
+}
+
+refreshListCCAM = function() {
   var oCcamNode = $("listCodesCcam");
 
-  var oForm = document.editFrm;
+  var oForm = getForm("editProtocole");
   $V(oForm._codes_ccam, "");
   var aCcam = oForm.codes_ccam.value.split("|");
   // Si la chaine est vide, il crée un tableau à un élément vide donc :
@@ -38,13 +48,13 @@ function refreshListCCAM() {
   oCcamNode.update(aCodeNodes.join(""));
 }
 
-function checkFormSejour() {
-  var oForm = document.editFrm;
+checkFormSejour = function() {
+  var oForm = getForm("editProtocole");
   return checkForm(oForm) && checkDuree() && checkDureeHospi() && checkCCAM();
 }
 
-function checkCCAM() {
-  var oForm = document.editFrm;
+checkCCAM = function() {
+  var oForm = getForm("editProtocole");
   if ($V(oForm.for_sejour) == 1) return true;
   
   var sCcam = $V(oForm._codes_ccam);
@@ -64,8 +74,8 @@ function checkCCAM() {
   return true;
 }
 
-function checkDureeHospi() {
-  var form = document.editFrm;
+checkDureeHospi = function() {
+  var form = getForm("editProtocole");
   if ($V(form.for_sejour) == 1) return true;
   
   field1 = form.type;
@@ -86,8 +96,8 @@ function checkDureeHospi() {
   return true;
 }
 
-function checkChir() {
-  var form = document.editFrm;
+checkChir = function() {
+  var form = getForm("editProtocole");
   var field = null;
   
   if (field = form.chir_id) {
@@ -100,8 +110,8 @@ function checkChir() {
   return true;
 }
 
-function checkDuree() {
-  var form = document.editFrm;
+checkDuree = function() {
+  var form = getForm("editProtocole");
   field1 = form.temp_operation;
   
   if ($V(form.for_sejour) == 1) return true; // Si mode séjour
@@ -114,22 +124,32 @@ function checkDuree() {
   return true;
 }
 
-function setOperationActive(active) {
+setOperationActive = function(active) {
   var op = $('operation'),
-      form = getForm('editFrm');
+      form = getForm('editProtocole');
   op.setOpacity(active ? 1 : 0.4);
   op.select('input, button, select, textarea').each(Form.Element[active ? 'enable' : 'disable']);
 }
 
-function fillClass(element_id, element_class) {
+fillClass = function(element_id, element_class) {
   var split = $V(element_id).split("-");
   var classe = split[0] == "prot" ? "CPrescription" : "CPrescriptionProtocolePack";
   element_class.value =  classe;
   element_id.value = split[1] ? split[1] : '';
 }
 
+applyModifProtocole = function() {
+  var form = getForm("editProtocole");
+  var type_protocole = ["interv"];
+  if($V(form.for_sejour) == 1) {
+    type_protocole = ["sejour"];
+  }
+  refreshList(getForm("selectFrm"), type_protocole, false);
+  Control.Modal.close();
+}
+
 Main.add(function () {
-  var form = getForm('editFrm');
+  var form = getForm('editProtocole');
   refreshListCCAM();
   setOperationActive($V(form.for_sejour) == 0);
   oCcamField = new TokenField(form.codes_ccam, { 
@@ -140,11 +160,12 @@ Main.add(function () {
 
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkFormSejour()" class="{{$protocole->_spec}}">
+<form name="editProtocole" action="?m={{$m}}" method="post" onsubmit="if(checkFormSejour()) return onSubmitFormAjax(this, {onComplete: applyModifProtocole});" class="{{$protocole->_spec}}">
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_protocole_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="_ccam_object_class" value="COperation" />
+<input type="hidden" name="callback" value=""/>
 {{mb_key object=$protocole}}
 
 {{if $dialog}}
@@ -153,15 +174,6 @@ Main.add(function () {
 
 
 <table class="form">
-  {{if $protocole->protocole_id}}
-  <tr>
-    <td colspan="2" class="title">
-      <a class="button new" href="?m={{$m}}&amp;protocole_id=0">
-         Créer un nouveau protocole
-      </a>
-    </td>
-  </tr>
-  {{/if}}
 
   {{mb_include module=system template=inc_form_table_header object=$protocole}}
   
@@ -169,8 +181,8 @@ Main.add(function () {
     <th>{{mb_label object=$protocole field="chir_id"}}</th>
     <td>
       <select name="chir_id" class="{{$protocole->_props.chir_id}}"
-              onchange="$('editFrm_libelle_protocole').value = '';
-                        this.form.protocole_prescription_chir_id.value = '';"
+              onchange="$V(this.form.libelle_protocole, '');
+                        $V(this.form.protocole_prescription_chir_id, '');"
               style="width: 15em;">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$listPraticiens item=_prat}}
@@ -186,8 +198,8 @@ Main.add(function () {
     <th>{{mb_label object=$protocole field="function_id"}}</th>
     <td>
       <select name="function_id" class="{{$protocole->_props.function_id}}"
-              onchange="$('editFrm_libelle_protocole').value = '';
-                        this.form.protocole_prescription_chir_id.value = '';"
+              onchange="$V(this.form.libelle_protocole, '');
+                        $V(this.form.protocole_prescription_chir_id, '');"
               style="width: 15em;">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$listFunctions item=_function}}
@@ -231,7 +243,7 @@ Main.add(function () {
             <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
             <script type="text/javascript">
               Main.add(function() {
-                var oForm = getForm("editFrm");
+                var oForm = getForm("editProtocole");
                 var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
                 url.autoComplete(oForm._codes_ccam, '', {
                   minChars: 1,
@@ -245,7 +257,7 @@ Main.add(function () {
               });
               
               CCAMSelector.init = function(){
-                this.sForm  = "editFrm";
+                this.sForm  = "editProtocole";
                 this.sView  = "_codes_ccam";
                 this.sChir  = "chir_id";
                 this.sClass = "_ccam_object_class";
@@ -272,29 +284,29 @@ Main.add(function () {
         
         <tr>
           <th>{{mb_label object=$protocole field=temp_operation}}</th>
-          <td colspan="2">{{mb_field object=$protocole field=temp_operation form=editFrm class="notNull"}}</td>
+          <td colspan="2">{{mb_field object=$protocole field=temp_operation form=editProtocole class="notNull"}}</td>
         </tr>
         
         {{if $conf.dPplanningOp.COperation.show_duree_uscpo >= 1}}
           <tr>
             <th>{{mb_label object=$protocole field="duree_uscpo"}}</th>
-            <td colspan="2">{{mb_field object=$protocole field="duree_uscpo" increment=true form=editFrm size="2"}} {{tr}}night{{/tr}}(s)</td>
+            <td colspan="2">{{mb_field object=$protocole field="duree_uscpo" increment=true form=editProtocole size="2"}} {{tr}}night{{/tr}}(s)</td>
           </tr>
         {{/if}}
         
         <tr>
           <th>{{mb_label object=$protocole field=duree_preop}}</th>
-          <td colspan="2">{{mb_field object=$protocole field=duree_preop form=editFrm }}</td>
+          <td colspan="2">{{mb_field object=$protocole field=duree_preop form=editProtocole }}</td>
         </tr>
         
         <tr>
           <th>{{mb_label object=$protocole field=presence_preop}}</th>
-          <td colspan="2">{{mb_field object=$protocole field=presence_preop form=editFrm }}</td>
+          <td colspan="2">{{mb_field object=$protocole field=presence_preop form=editProtocole }}</td>
         </tr>
 
         <tr>
           <th>{{mb_label object=$protocole field=presence_postop}}</th>
-          <td colspan="2">{{mb_field object=$protocole field=presence_postop form=editFrm }}</td>
+          <td colspan="2">{{mb_field object=$protocole field=presence_postop form=editProtocole }}</td>
         </tr>
         
         <tr>
@@ -372,13 +384,13 @@ Main.add(function () {
             <script type="text/javascript">
             Main.add(function(){
               var url = new Url("dPcim10", "ajax_code_cim10_autocomplete");
-              url.autoComplete(getForm("editFrm").keywords_code, '', {
+              url.autoComplete(getForm("editProtocole").keywords_code, '', {
                 minChars: 1,
                 dropdown: true,
                 width: "250px",
                 select: "code",
                 afterUpdateElement: function(oHidden) {
-                  $V(getForm("editFrm").DP, oHidden.value);
+                  $V(getForm("editProtocole").DP, oHidden.value);
                 }
               });
             });
@@ -390,7 +402,7 @@ Main.add(function () {
             <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
               <script type="text/javascript">
                 CIM10Selector.init = function(){
-                  this.sForm = "editFrm";
+                  this.sForm = "editProtocole";
                   this.sView = "DP";
                   this.sChir = "chir_id";
                   this.pop();
@@ -438,7 +450,7 @@ Main.add(function () {
           <th>
             <script type="text/javascript">
             Main.add(function(){
-              var form = getForm("editFrm");
+              var form = getForm("editProtocole");
               var url = new Url("dPprescription", "httpreq_vw_select_protocole");
               var autocompleter = url.autoComplete(form.libelle_protocole, null, {
                 minChars: 2,
@@ -460,7 +472,7 @@ Main.add(function () {
             {{mb_label object=$protocole field="protocole_prescription_chir_id"}}
           </th>
           <td>
-            <input type="text" name="libelle_protocole" id="editFrm_libelle_protocole" class="autocomplete str"
+            <input type="text" name="libelle_protocole" id="editProtocole_libelle_protocole" class="autocomplete str"
               value="{{if $protocole->_id}}{{$protocole->_ref_protocole_prescription_chir->libelle}}{{/if}}"  style="width: 12em;"/>
             <input type="hidden" name="protocole_prescription_chir_id" value="{{$protocole->protocole_prescription_chir_id}}"
               onchange="fillClass(this.form.protocole_prescription_chir_id, this.form.protocole_prescription_chir_class);
@@ -476,12 +488,12 @@ Main.add(function () {
     <td colspan="2" style="text-align: center;">
     {{if $protocole->protocole_id}}
       <button class="submit" type="button" onclick="copier()">Dupliquer</button>
-      <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$protocole->_view|smarty:nodefaults|JSAttribute}}'})">
+      <button class="submit" type="button" onclick="this.form.onsubmit();">{{tr}}Save{{/tr}}</button>
+      <button class="trash" type="button" onclick="confirmDeletion(this.form,{ajax: 1, typeName:'le {{$protocole->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: applyModifProtocole})">
         {{tr}}Delete{{/tr}}
       </button>
     {{else}}
-      <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+      <button class="submit" type="button" onclick="this.form.onsubmit();">{{tr}}Create{{/tr}}</button>
     {{/if}}
     </td>
   </tr>

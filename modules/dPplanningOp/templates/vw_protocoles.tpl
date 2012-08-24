@@ -23,12 +23,19 @@ var aProtocoles = {
 
 chooseProtocole = function(protocole_id) {
   {{if $dialog}}
-  setClose(protocole_id);
+  if(protocole_id == 0) {
+    var url =  new Url();
+    url.setModuleAction("dPplanningOp", "vw_edit_protocole");
+    url.addParam("protocole_id", protocole_id);
+    var protocoleModal = url.requestModal();
+  } else {
+    setClose(protocole_id);
+  }
   {{else}}
   var url =  new Url();
-  url.setModuleTab("dPplanningOp", "vw_edit_protocole");
+  url.setModuleAction("dPplanningOp", "vw_edit_protocole");
   url.addParam("protocole_id", protocole_id);
-  url.redirect();
+  url.requestModal();
   {{/if}}
 }
 
@@ -39,7 +46,7 @@ setClose = function(protocole_id) {
 
 refreshList = function(form, types, reset) {
   types = types || ["interv", "sejour"];
-  
+  console.log(types);
   if (reset) {
     types.each(function(type) {
       $V(form.elements["page["+type+"]"], 0, false);
@@ -47,14 +54,13 @@ refreshList = function(form, types, reset) {
   }
   
   var url = new Url("dPplanningOp","httpreq_vw_list_protocoles");
-  url.addParam("page[interv]", $V(form["page[interv]"]));
-  url.addParam("page[sejour]", $V(form["page[sejour]"]));
   url.addParam("chir_id", $V(form.chir_id));
   url.addParam("dialog", $V(form.dialog));
   url.addParam("function_id", $V(form.function_id));
   url.addParam("sejour_type", "{{$sejour_type}}");
   
   types.each(function(type){
+  url.addParam("page["+type+"]", $V(form["page["+type+"]"]));
     url.addParam("type", type);
     url.requestUpdate(type);
   });
@@ -101,10 +107,10 @@ Main.add(function(){
   });
 });
 </script>
-<table class="main">
+<table class="main" style="background-color: #fff">
   <tr>
-    <td colspan="2">
-      <a class="button new" href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_edit_protocole&amp;protocole_id=0">Créer un nouveau protocole</a>
+    <td colspan="2" style="text-align: left;">
+      <button type="button" class="new" onclick="chooseProtocole(0);">{{tr}}CProtocole-title-create{{/tr}}</button>
       <form name="selectFrm" action="?" method="get" onsubmit="return false">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dialog" value="{{$dialog}}" />
