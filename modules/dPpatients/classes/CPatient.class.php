@@ -1463,7 +1463,7 @@ class CPatient extends CMbObject {
     
     $template->addProperty("Patient - article"           , $this->_civilite  );
     $template->addProperty("Patient - article long"      , ucfirst($this->_civilite_long));
-    $template->addProperty("Patient - article long (miniscule)", strtolower($this->_civilite_long));
+    $template->addProperty("Patient - article long (minuscule)", strtolower($this->_civilite_long));
     $template->addProperty("Patient - nom"               , $this->nom        );
     $template->addProperty("Patient - nom jeune fille"   , $this->nom_jeune_fille);
     $template->addProperty("Patient - prénom"            , $this->prenom     );
