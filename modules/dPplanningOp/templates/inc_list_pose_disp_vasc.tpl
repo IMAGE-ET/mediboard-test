@@ -39,6 +39,7 @@ PoseDispVasc = {
 <table class="main tbl">
   <tr>
     <th class="narrow"></th>
+    <th class="narrow">{{tr}}CPoseDispositifVasculaire-back-check_lists{{/tr}}</th>
     <th>{{mb_title class=CPoseDispositifVasculaire field=date}}</th>
     <th>{{mb_title class=CPoseDispositifVasculaire field=urgence}}</th>
     <th>{{mb_title class=CPoseDispositifVasculaire field=lieu}}</th>
@@ -53,7 +54,12 @@ PoseDispVasc = {
         <button type="button" class="edit notext" onclick="PoseDispVasc.edit({{$_pose->_id}}, '{{$sejour_id}}', '{{$operation_id}}')">
           {{tr}}Edit{{/tr}}
         </button>
-        <button type="button" class="tick notext" onclick="PoseDispVasc.checkList('{{$_pose->_guid}}')">{{tr}}CDailyCheckList{{/tr}}</button>
+        <button type="button" class="tick notext" onclick="PoseDispVasc.checkList('{{$_pose->_guid}}')">
+          {{tr}}CDailyCheckList{{/tr}}
+        </button>
+      </td>
+      <td {{if $_pose->_count.check_lists < 3}} class="error" {{elseif $_pose->_count.check_lists >= 3}} class="ok" {{/if}}>
+        {{$_pose->_count.check_lists}} / 3
       </td>
       <td>{{mb_value object=$_pose field=date}}</td>
       <td {{if $_pose->urgence}} class="warning" {{/if}}>{{mb_value object=$_pose field=urgence}}</td>

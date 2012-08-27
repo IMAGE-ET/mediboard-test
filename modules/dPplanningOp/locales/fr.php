@@ -412,6 +412,7 @@ $locales['CPlageOp._verrouillee.datemin'] = 'Délai trop court';
 $locales['CPlageOp._verrouillee.fill'] = 'Dépassement du temps opératoire';
 $locales['CPlageOp._verrouillee.force'] = 'Verrouillage forcé par le cadre';
 $locales['CPoseDispositifVasculaire'] = 'Pose dispositif vasculaire';
+$locales['CPoseDispositifVasculaire-back-check_lists'] = 'Check lists';
 $locales['CPoseDispositifVasculaire-date'] = 'Date';
 $locales['CPoseDispositifVasculaire-date-court'] = 'Date';
 $locales['CPoseDispositifVasculaire-date-desc'] = 'Date';

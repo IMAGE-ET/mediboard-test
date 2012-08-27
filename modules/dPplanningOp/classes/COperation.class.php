@@ -358,7 +358,7 @@ class COperation extends CCodable implements IPatientRelated {
   function check() {
     $msg = null;
     $this->completeField("chir_id", "plageop_id", "sejour_id");
-    if(!$this->_id && !$this->chir_id) {
+    if (!$this->_id && !$this->chir_id) {
       $msg .= "Praticien non valide ";
     }
 
@@ -381,7 +381,7 @@ class COperation extends CCodable implements IPatientRelated {
     if ($this->fieldModified("prat_visite_anesth_id") && $this->prat_visite_anesth_id !== null && $this->prat_visite_anesth_id != $user->_id) {
       $anesth = new CUser();
       $anesth->load($this->prat_visite_anesth_id);
-      if($anesth->user_password != md5($this->_password_visite_anesth)) {
+      if ($anesth->user_password != md5($this->_password_visite_anesth)) {
         $msg .= "Mot de passe incorrect";
       }
     }
@@ -402,13 +402,13 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_hour_urgence = intval(substr($this->time_operation, 0, 2));
     $this->_min_urgence  = intval(substr($this->time_operation, 3, 2));
     
-    if($this->horaire_voulu){
+    if ($this->horaire_voulu) {
       $this->_hour_voulu = intval(substr($this->horaire_voulu, 0, 2));
       $this->_min_voulu  = intval(substr($this->horaire_voulu, 3, 2)); 
       $this->_horaire_voulu = $this->horaire_voulu;
     }
     
-    if($this->pause){
+    if ($this->pause) {
       $this->_pause_hour = intval(substr($this->pause, 0, 2));
       $this->_pause_min  = intval(substr($this->pause, 3, 2)); 
     }
@@ -416,26 +416,29 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_ref_type_anesth = $this->loadFwdRef("type_anesth", true);
     $this->_lu_type_anesth = $this->_ref_type_anesth->name;
     
-    if($this->debut_op && $this->fin_op && $this->fin_op > $this->debut_op){
+    if ($this->debut_op && $this->fin_op && $this->fin_op > $this->debut_op) {
       $this->_duree_interv = mbSubTime($this->debut_op,$this->fin_op);
     }
-    if($this->pose_garrot && $this->retrait_garrot && $this->retrait_garrot > $this->pose_garrot){
+    if ($this->pose_garrot && $this->retrait_garrot && $this->retrait_garrot > $this->pose_garrot) {
       $this->_duree_garrot = mbSubTime($this->pose_garrot,$this->retrait_garrot);
     }
-    if($this->induction_debut && $this->induction_fin && $this->induction_fin > $this->induction_debut){
+    if ($this->induction_debut && $this->induction_fin && $this->induction_fin > $this->induction_debut) {
       $this->_duree_induction = mbSubTime($this->induction_debut,$this->induction_fin);
     }
-    if($this->entree_salle && $this->sortie_salle && $this->sortie_salle>$this->entree_salle){
+    if ($this->entree_salle && $this->sortie_salle && $this->sortie_salle>$this->entree_salle) {
       $this->_presence_salle = mbSubTime($this->entree_salle,$this->sortie_salle);
     }
-    if($this->entree_reveil && $this->sortie_reveil && $this->sortie_reveil > $this->entree_reveil){
+    if ($this->entree_reveil && $this->sortie_reveil && $this->sortie_reveil > $this->entree_reveil) {
       $this->_duree_sspi = mbSubTime($this->entree_reveil,$this->sortie_reveil);
     }
-    if($this->plageop_id) {
+    
+    if ($this->plageop_id) {
       $this->_link_editor = "index.php?m=dPplanningOp&tab=vw_edit_planning&operation_id=".$this->_id;
-    } else {
+    }
+    else {
       $this->_link_editor = "index.php?m=dPplanningOp&tab=vw_edit_urgence&operation_id=".$this->_id;
     }
+    
     $this->_acte_depassement        = $this->depassement;
     $this->_acte_depassement_anesth = $this->depassement_anesth;   
   }
@@ -450,7 +453,7 @@ class COperation extends CCodable implements IPatientRelated {
       $codes_ccam = explode("|", $this->codes_ccam);
       $XPosition = true;
       // @TODO: change it to use removeValue
-      while($XPosition !== false) {
+      while ($XPosition !== false) {
         $XPosition = array_search("-", $codes_ccam);
         if ($XPosition !== false) {
           array_splice($codes_ccam, $XPosition, 1);
@@ -458,24 +461,25 @@ class COperation extends CCodable implements IPatientRelated {
       }
       $this->codes_ccam = implode("|", $codes_ccam);
     }
-    if($this->_hour_op !== null and $this->_min_op !== null) {
+    if ($this->_hour_op !== null and $this->_min_op !== null) {
       $this->temp_operation = sprintf("%02d:%02d:00", $this->_hour_op, $this->_min_op);
     }
-    if($this->_hour_urgence !== null and $this->_min_urgence !== null) {
+    if ($this->_hour_urgence !== null and $this->_min_urgence !== null) {
       $this->time_operation = sprintf("%02d:%02d:00", $this->_hour_urgence, $this->_min_urgence);
     }
-    if($this->_hour_voulu != null and $this->_min_voulu != null) {
+    if ($this->_hour_voulu != null and $this->_min_voulu != null) {
       $this->horaire_voulu = sprintf("%02d:%02d:00", $this->_hour_voulu, $this->_min_voulu);
-    } elseif($this->_horaire_voulu) {
+    }
+    elseif ($this->_horaire_voulu) {
       $this->horaire_voulu = $this->_horaire_voulu;
     }
-    if($this->_pause_hour !== null and $this->_pause_min !== null) {
+    if ($this->_pause_hour !== null and $this->_pause_min !== null) {
       $this->pause = sprintf("%02d:%02d:00", $this->_pause_hour, $this->_pause_min);
     }
     
     $this->completeField('rank', 'plageop_id');
     
-    if($this->_move) {
+    if ($this->_move) {
       $op = new COperation;
       $op->plageop_id = $this->plageop_id;
       
@@ -709,7 +713,7 @@ class COperation extends CCodable implements IPatientRelated {
           $reorder_rank_voulu = true;
           $plage->_ref_operations = CMbArray::mergeKeys(array($this->_id => $this), $plage->_ref_operations); // To preserve keys (array_unshift does not)
         }
-        elseif(isset($plage->_ref_operations[$place_after_interv_id])) {
+        elseif (isset($plage->_ref_operations[$place_after_interv_id])) {
           $reorder = true;
           $reorder_rank_voulu = true;
           CMbArray::insertAfterKey($plage->_ref_operations, $place_after_interv_id, $this->_id, $this);
@@ -855,13 +859,16 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_compteur_jour = mbDaysRelative($date, mbDate());
     
     // Horaire global
-    if($this->time_operation && $this->time_operation != "00:00:00") {
+    if ($this->time_operation && $this->time_operation != "00:00:00") {
       $this->_datetime = "$date $this->time_operation";
-    } elseif($this->horaire_voulu && $this->horaire_voulu != "00:00:00") {
+    }
+    elseif ($this->horaire_voulu && $this->horaire_voulu != "00:00:00") {
       $this->_datetime = "$date $this->horaire_voulu"; 
-    } elseif($this->_ref_plageop->_id) {
+    }
+    elseif ($this->_ref_plageop->_id) {
       $this->_datetime = "$date ".$this->_ref_plageop->debut;
-    } else {
+    }
+    else {
       $this->_datetime = "$date 00:00:00";
     }
     $this->_datetime_best     = $this->_datetime;
@@ -930,10 +937,18 @@ class COperation extends CCodable implements IPatientRelated {
   }
   
   /**
-   * Chargement des pose de dispositifs vasculaire
+   * Chargement des poses de dispositif vasculaire
    */
-  function loadRefsPosesDispVasc(){
-    return $this->_ref_poses_disp_vasc = $this->loadBackRefs("poses_disp_vasc", "date");
+  function loadRefsPosesDispVasc($count_check_lists = false){
+    $this->_ref_poses_disp_vasc = $this->loadBackRefs("poses_disp_vasc", "date");
+    
+    if ($count_check_lists) {
+      foreach ($this->_ref_poses_disp_vasc as $_cl) {
+        $_cl->countBackRefs("check_lists");
+      }
+    }
+    
+    return $this->_ref_poses_disp_vasc;
   }
   
   /**
@@ -990,14 +1005,18 @@ class COperation extends CCodable implements IPatientRelated {
   function getPerm($permType) {
     switch($permType) {
       case PERM_EDIT :
-        if(!$this->_ref_chir){
+        if (!$this->_ref_chir) {
           $this->loadRefChir();
-        }if(!$this->_ref_anesth){
+        }
+        
+        if (!$this->_ref_anesth) {
           $this->loadRefPlageOp();
         }
-        if($this->plageop_id) {
+        
+        if ($this->plageop_id) {
           return (($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType)) && $this->_ref_module->getPerm($permType));
-        } else {
+        }
+        else {
           return (($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType)) && $this->_ref_module->getPerm(PERM_READ));
         }
         break;
@@ -1005,9 +1024,10 @@ class COperation extends CCodable implements IPatientRelated {
         return parent::getPerm($permType);
     }
     
-    //if(!$this->_ref_chir){
+    //if (!$this->_ref_chir) {
     //  $this->loadRefChir();
-    //}if(!$this->_ref_anesth){
+    //}
+    //if (!$this->_ref_anesth) {
     //  $this->loadRefPlageOp();
     //}
     //return ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType));
@@ -1116,7 +1136,7 @@ class COperation extends CCodable implements IPatientRelated {
       return $this->_dmi_alert = "none";
     }
     
-    foreach($lines as $_line) {
+    foreach ($lines as $_line) {
       if (!isset($this->_dmi_prescription_id)) {
         $this->_dmi_prescription_id = $_line->prescription_id;
         $this->_dmi_praticien_id    = $_line->loadRefPrescription()->praticien_id;

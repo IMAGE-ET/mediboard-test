@@ -32,12 +32,12 @@ else {
 if ($operation_id) {
   $interv = new COperation;
   $interv->load($operation_id);
-  $poses = $interv->loadRefsPosesDispVasc();
+  $poses = $interv->loadRefsPosesDispVasc(true);
 }
 elseif ($sejour_id) {
   $sejour = new CSejour;
   $sejour->load($sejour_id);
-  $poses = $sejour->loadRefsPosesDispVasc();
+  $poses = $sejour->loadRefsPosesDispVasc(true);
 }
 
 // Création du template
