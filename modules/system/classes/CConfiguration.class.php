@@ -319,7 +319,7 @@ class CConfiguration extends CMbMetaObject {
     foreach ($model as $_inherit => $_configs) {
       foreach ($patterns as $_patt) {
         // Faster than preg_match ?
-        if (strpos($_inherit, $_patt) !== false) {
+        if ($_inherit === $class || strpos($_inherit, $_patt) !== false) {
           if ($flatten) {
             $configs = array_merge($configs, $_configs);
           }
