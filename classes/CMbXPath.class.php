@@ -17,6 +17,15 @@ class CMbXPath extends DOMXPath {
     parent::__construct($doc);
   }
   
+  /**
+   * Get the node corresponding to an XPath
+   * 
+   * @param string  $query       The XPath to the node
+   * @param DOMNode $contextNode The context node from which the XPath starts
+   * @param boolean $optional    Don't throw an exception if node not found
+   * 
+   * @return DOMNode The node
+   */
   function queryUniqueNode($query, DOMNode $contextNode = null, $optional = true) {
     $query = utf8_encode($query);
     $nodeList = $contextNode ? parent::query($query, $contextNode) : parent::query($query);
@@ -28,8 +37,11 @@ class CMbXPath extends DOMXPath {
 
     if (!$optional && $nodeList->length == 0) {
       $erreur  = "Impossible de trouver l'élément '$query'";
-      if ($contextNode)
+      
+      if ($contextNode) {
         $erreur .= " dans le contexte : ".$this->nodePath($contextNode);
+      }
+      
       throw new Exception($erreur);
     }
     
@@ -47,21 +59,43 @@ class CMbXPath extends DOMXPath {
     return $text;
   }
   
+  /**
+   * Get the text of a node corresponding to an XPath
+   * 
+   * @param string  $query       The XPath to the node
+   * @param DOMNode $contextNode The context node from which the XPath starts
+   * @param string  $purgeChars  The chars to remove from the text
+   * @param boolean $addslashes  Escape slashes is the return string
+   * 
+   * @return string The textual value of the node
+   */
   function queryTextNode($query, DOMNode $contextNode = null, $purgeChars = "", $addslashes = false) {
     $text = "";
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = $this->convertEncoding($node->textContent);
       $text = str_replace(str_split($purgeChars), "", $text);
       $text = trim($text);
-      if ($addslashes)
+      
+      if ($addslashes) {
         $text = addslashes($text);
+      }
     }
 
     return $text;
   } 
 
+  /**
+   * Get the multiline text of a node corresponding to an XPath
+   * 
+   * @param string  $query       The XPath to the node
+   * @param DOMNode $contextNode The context node from which the XPath starts
+   * @param string  $prefix      The string to remove from the text
+   * 
+   * @return string The textual value of the node
+   */
   function queryMultilineTextNode($query, DOMNode $contextNode = null, $prefix = "") {
     $text = "";
+    
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = $this->convertEncoding($node->textContent);
       if ($prefix) {
@@ -74,6 +108,7 @@ class CMbXPath extends DOMXPath {
   
   function queryAttributNode($query, DOMNode $contextNode = null, $attName, $purgeChars = "", $optional = true) {
     $text = "";
+    
     if ($node = $this->queryUniqueNode($query, $contextNode, $optional)) {
       $text = $this->convertEncoding($node->getAttribute($attName));
       $text = str_replace(str_split($purgeChars), "", $text);
@@ -85,10 +120,10 @@ class CMbXPath extends DOMXPath {
   }
   
   function getMultipleTextNodes($query, DOMNode $contextNode = null) {
-    $array = array();
     $query = $this->convertEncoding($query);
     $nodeList = $contextNode ? parent::query($query, $contextNode) : parent::query($query);
     
+    $array = array();
     foreach ($nodeList as $n) {
       $array[] = $this->convertEncoding($n->nodeValue);
     }
@@ -97,6 +132,7 @@ class CMbXPath extends DOMXPath {
   
   function getValueAttributNode(DOMNode $node, $attName, $purgeChars = "") {
     $text = "";
+    
     if ($att = $node->getAttributeNode($attName)) {
       $text = $this->convertEncoding($att->value);
       $text = str_replace(str_split($purgeChars), "", $text);
@@ -111,5 +147,3 @@ class CMbXPath extends DOMXPath {
     return utf8_decode($value);
   }
 }
-
-?>

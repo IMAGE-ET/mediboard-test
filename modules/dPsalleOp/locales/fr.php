@@ -256,6 +256,7 @@ $locales['CDailyCheckList.none'] = 'Aucune liste de vérification';
 $locales['CDailyCheckList.object_class.CBlocOperatoire'] = 'Salle de réveil (Bloc)';
 $locales['CDailyCheckList.object_class.COperation'] = 'Intervention';
 $locales['CDailyCheckList.object_class.CSalle'] = 'Salle opératoire';
+$locales['CDailyCheckList.object_class.CPoseDispositifVasculaire'] = 'Pose dispositif vasculaire';
 $locales['CDailyCheckList.one'] = 'liste de vérification';
 $locales['CDailyCheckList.type.'] = ' ';
 $locales['CDailyCheckList.type.disp_vasc_apres'] = 'Après mise en place';

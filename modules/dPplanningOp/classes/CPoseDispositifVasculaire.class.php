@@ -59,4 +59,18 @@ class CPoseDispositifVasculaire extends CMbObject {
   function loadRefSejour($cache = true){
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
   }
+  
+  function updateFormFields(){
+    parent::updateFormFields();
+    
+    $this->_view = $this->getFormattedValue("date")." - ".$this->getFormattedValue("type_materiel");
+    
+    if ($this->urgence) {
+      $this->_view .= " - [URG]";
+    }
+    
+    if ($this->lieu) {
+      $this->_view .= " - $this->lieu";
+    }
+  }
 }

@@ -8,11 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $m;
-
 CCanDo::checkAdmin();
 
-require_once("install/libs.php");
+require_once "install/libs.php";
 
 CModule::loadModules(false);
 
