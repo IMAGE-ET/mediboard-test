@@ -818,8 +818,15 @@ class CSetupdPcompteRendu extends CSetup {
               ADD `font` ENUM ('arial','comic','courier','georgia','lucida','tahoma','times','trebuchet','verdana') AFTER `object_class`,
               ADD `size` ENUM ('xx-small','x-small','small','medium','large','x-large','xx-large','8pt','9pt','10pt','11pt','12pt','14pt','16pt','18pt','20pt','22pt','24pt','26pt','28pt','36pt','48pt','72pt') AFTER `font`";
     $this->addQuery($query);
-        
-    $this->mod_version = "0.84";
+    
+    $this->makeRevision("0.84");
+    $query = self::replaceTemplateQuery("[Patient - Il/Elle", "[Patient - Il/Elle (majuscule)", true);
+    $this->addQuery($query);
+    
+    $query = self::replaceTemplateQuery("[Patient - Le/La", "[Patient - Le/La (majuscule)", true);
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.85";
   }
 }
 ?>

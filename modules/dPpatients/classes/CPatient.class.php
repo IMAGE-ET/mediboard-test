@@ -1492,17 +1492,17 @@ class CPatient extends CMbObject {
     
     if ($this->sexe === "m") {
       $template->addProperty("Patient - il/elle"         , "il"              );
-      $template->addProperty("Patient - Il/Elle"         , "Il"              );
+      $template->addProperty("Patient - Il/Elle (majuscule)", "Il"           );
       $template->addProperty("Patient - le/la"           , "le"              );
-      $template->addProperty("Patient - Le/La"           , "Le"              );
+      $template->addProperty("Patient - Le/La (majuscule)", "Le"             );
       $template->addProperty("Patient - du/de la"        , "du"              );
       $template->addProperty("Patient - accord genre"    , ""                );
     }
     else {
       $template->addProperty("Patient - il/elle"         , "elle"            );
-      $template->addProperty("Patient - Il/Elle"         , "Elle"            );
+      $template->addProperty("Patient - Il/Elle (majuscule)", "Elle"         );
       $template->addProperty("Patient - le/la"           , "la"              );
-      $template->addProperty("Patient - Le/La"           , "La"              );
+      $template->addProperty("Patient - Le/La (majuscule)", "La"             );
       $template->addProperty("Patient - du/de la"        , "de la"           );
       $template->addProperty("Patient - accord genre"    , "e"               );
     }
