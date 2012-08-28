@@ -271,6 +271,15 @@ function incFormOperationMain() {
   } );
 }
 
+function toggleOtherPrats(elt) {
+  var form = getForm("editOp");
+  var formEasy = getForm("editOpEasy");
+  form.select('.other_prats').invoke('toggle');
+  formEasy.select('.other_prats').invoke('toggle');
+  Element.classNames(form.chir_id.next('button')).flip('up', 'down');
+  Element.classNames(formEasy.chir_id.next('button')).flip('up', 'down');
+}
+
 Main.add(incFormOperationMain);
 
 </script>

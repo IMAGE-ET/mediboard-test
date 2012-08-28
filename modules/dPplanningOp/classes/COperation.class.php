@@ -15,6 +15,9 @@ class COperation extends CCodable implements IPatientRelated {
   // DB References
   var $sejour_id  = null;
   var $chir_id    = null;
+  var $chir_2_id  = null;
+  var $chir_3_id  = null;
+  var $chir_4_id  = null;
   var $anesth_id  = null;
   var $plageop_id = null;
 
@@ -205,6 +208,9 @@ class COperation extends CCodable implements IPatientRelated {
     $props = parent::getProps();
     $props["sejour_id"]          = "ref notNull class|CSejour";
     $props["chir_id"]            = "ref notNull class|CMediusers seekable";
+    $props["chir_2_id"]          = "ref class|CMediusers seekable";
+    $props["chir_3_id"]          = "ref class|CMediusers seekable";
+    $props["chir_4_id"]          = "ref class|CMediusers seekable";
     $props["anesth_id"]          = "ref class|CMediusers";
     $props["plageop_id"]         = "ref class|CPlageOp seekable show|0";
     $props["pause"]              = "time show|0";

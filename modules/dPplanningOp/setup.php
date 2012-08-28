@@ -1416,7 +1416,14 @@ class CSetupdPplanningOp extends CSetup {
               ADD `description_anapath` TEXT    AFTER `labo_anapath`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.51";
+    $this->makeRevision("1.51");
+    $query = "ALTER TABLE `operations`
+      ADD `chir_2_id` INT (11) UNSIGNED AFTER `chir_id`,
+      ADD `chir_3_id` INT (11) UNSIGNED AFTER `chir_2_id`,
+      ADD `chir_4_id` INT (11) UNSIGNED AFTER `chir_3_id`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.52";
   }
 }
 ?>

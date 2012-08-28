@@ -15,7 +15,7 @@
   </tr>
   {{/if}}
   
-  <!-- Selection du chirurgien -->
+  <!-- Selection du ou des chirurgiens -->
   <tr>
     <th class="narrow">{{mb_label object=$op field="chir_id"}}</th>
     <td colspan="2">
@@ -23,11 +23,42 @@
         onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);"
          style="width: 15em">
         <option value="">&mdash; Choisir un chirurgien</option>
-        {{foreach from=$listPraticiens item=curr_praticien}}
-        <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
-        {{$curr_praticien->_view}}
-        </option>
-        {{/foreach}}
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listPraticiens selected=$chir->_id}}
+      </select>
+      <button type="button"onclick="toggleOtherPrats()" title="{{tr}}Add{{/tr}}"
+        class="notext {{if $op->chir_2_id || $op->chir_3_id || $op->chir_4_id}}up{{else}}down{{/if}}"></button>
+    </td>
+  </tr>
+  <tr class="other_prats" {{if !$op->chir_2_id && !$op->chir_3_id && !$op->chir_4_id}}style="display: none"{{/if}}>
+    <th>
+      {{mb_label object=$op field="chir_2_id"}}
+    </th>
+    <td colspan="2">
+      <select name="chir_2_id" onchange="Value.synchronize(this)">
+        <option value="">&mdash; Choisir un chirurgien</option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listPraticiens selected=$op->chir_2_id}}
+      </select>
+    </td>
+  </tr>
+  <tr class="other_prats" {{if !$op->chir_2_id && !$op->chir_3_id && !$op->chir_4_id}}style="display: none"{{/if}}>
+    <th>
+      {{mb_label object=$op field="chir_3_id"}}
+    </th>
+    <td colspan="2">
+      <select name="chir_3_id" onchange="Value.synchronize(this)">
+        <option value="">&mdash; Choisir un chirurgien</option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listPraticiens selected=$op->chir_3_id}}
+      </select>
+    </td>
+  </tr>
+  <tr class="other_prats" {{if !$op->chir_2_id && !$op->chir_3_id && !$op->chir_4_id}}style="display: none"{{/if}}>
+    <th>
+      {{mb_label object=$op field="chir_4_id"}}
+    </th>
+    <td colspan="2">
+      <select name="chir_4_id" onchange="Value.synchronize(this)">
+        <option value="">&mdash; Choisir un chirurgien</option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listPraticiens selected=$op->chir_4_id}}
       </select>
     </td>
   </tr>
