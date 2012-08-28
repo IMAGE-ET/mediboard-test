@@ -442,6 +442,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
       $img = $this->mallampati.'<br /><img src="/'.$rootName.'/images/pictures/'.$this->mallampati.'.png" alt="'.$this->mallampati.'" />';
     }
     $template->addProperty("Anesthésie - Mallampati", $img, null, false);
+    $template->addProperty("Anesthésie - Mallampati (texte seul)", $this->getFormattedValue("mallampati"));
     $template->addProperty("Anesthésie - Remarques",  $this->conclusion);
     $template->addProperty("Anesthésie - Score APFEL", $this->_score_apfel);
     
