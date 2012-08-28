@@ -92,8 +92,8 @@ class CGrossesse extends CMbObject{
     
     $this->_allaitement_en_cours =
       $this->allaitement_maternel &&
-      $this->date_fin_allaitement &&
-      $this->date_fin_allaitement > mbDate();
+      (!$this->date_fin_allaitement ||
+      $this->date_fin_allaitement > mbDate());
     
     $this->_semaine_grossesse = ceil(mbDaysRelative($this->_date_fecondation, mbDate()) / 7);
   }

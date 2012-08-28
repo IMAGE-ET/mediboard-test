@@ -30,7 +30,6 @@ foreach ($grossesses as $_grossesse) {
   $_grossesse->loadRefParturiente();
   $_grossesse->loadRefsSejours();
   $_grossesse->loadLastConsultAnesth();
-  mbTrace($_grossesse->_allaitement_en_cours);
 }
 
 $smarty = new CSmartyDP;
