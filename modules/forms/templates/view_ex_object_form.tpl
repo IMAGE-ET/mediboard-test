@@ -168,7 +168,7 @@ Main.add(function(){
     {{/foreach}}
     
     {{foreach from=$ex_object->_native_views item=_object key=_name}}
-      {{if $_object && $_object->_id}}
+      {{if $_object && $_object->_id || $preview_mode}}
         <li><a href="#tab-native_views-{{$_name}}" class="special">{{tr}}CExClass.native_views.{{$_name}}{{/tr}}</a></li>
       {{/if}}
     {{/foreach}}
@@ -307,7 +307,13 @@ Main.add(function(){
 
 {{foreach from=$ex_object->_native_views item=_object key=_name}}
   <div id="tab-native_views-{{$_name}}" style="display: none;">
-    {{mb_include module=forms template="inc_native_view_$_name" object=$_object}}
+    {{if $preview_mode}}
+      <div class="small-info">
+        Ici apparaitra la vue <strong>{{tr}}CExClass.native_views.{{$_name}}{{/tr}}</strong>.
+      </div>
+    {{else}}
+      {{mb_include module=forms template="inc_native_view_$_name" object=$_object}}
+    {{/if}}
   </div>
 {{/foreach}}
 

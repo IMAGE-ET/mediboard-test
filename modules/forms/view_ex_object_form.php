@@ -194,6 +194,7 @@ $smarty->assign("groups",       $groups);
 $smarty->assign("formula_token_values", $formula_token_values);
 $smarty->assign("can_delete",   $can_delete);
 $smarty->assign("parent_view",  $parent_view);
+$smarty->assign("preview_mode", $preview);
 
 $smarty->assign("readonly",     $readonly);
 $smarty->assign("print",        $print);
