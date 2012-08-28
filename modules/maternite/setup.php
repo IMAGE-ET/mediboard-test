@@ -87,7 +87,12 @@ class CSetupmaternite extends CSetup {
       ADD `allaitement_maternel` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.08";
+    $this->makeRevision("0.08");
+    $query = "ALTER TABLE `grossesse` 
+      ADD `date_fin_allaitement` DATE;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.09";
   }
 }
 ?>

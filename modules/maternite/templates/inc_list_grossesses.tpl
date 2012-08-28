@@ -13,7 +13,7 @@
     {{foreach from=$grossesses item=_grossesse}}
       <tr>
         <td class="narrow">
-          <input type="radio" name="unique_grossesse_id"
+          <input type="radio" name="unique_grossesse_id" data-active="{{$_grossesse->active}}"
           {{if $_grossesse->_id == $object->grossesse_id}}checked="checked"{{/if}} value="{{$_grossesse->_id}}"
           data-view_grossesse="{{$_grossesse}}" />
         <td>

@@ -23,6 +23,7 @@ class CGrossesse extends CMbObject{
   var $active         = null;
   var $multiple       = null;
   var $allaitement_maternel = null;
+  var $date_fin_allaitement = null;
   var $date_dernieres_regles = null;
   
   // DB References
@@ -40,6 +41,7 @@ class CGrossesse extends CMbObject{
   var $_semaine_grossesse = null;
   var $_terme_vs_operation = null;
   var $_operation_id    = null;
+  var $_allaitement_en_cours = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -55,6 +57,7 @@ class CGrossesse extends CMbObject{
     $specs["active"]         = "bool default|1";
     $specs["multiple"]       = "bool default|0";
     $specs["allaitement_maternel"] = "bool default|1";
+    $specs["date_fin_allaitement"] = "date";
     $specs["date_dernieres_regles"] = "date";
     
     return $specs;
@@ -84,7 +87,15 @@ class CGrossesse extends CMbObject{
     parent::updateFormFields();
     $this->loadRefParturiente();
     $this->_view = "Terme du " . mbDateToLocale($this->terme_prevu);
-    $this->_date_fecondation = mbDate("-42 weeks", $this->terme_prevu);
+    // Nombre de semaines (aménorrhée = 41, grossesse = 39)
+    $this->_date_fecondation = mbDate("-39 weeks", $this->terme_prevu);
+    
+    $this->_allaitement_en_cours =
+      $this->allaitement_maternel &&
+      $this->date_fin_allaitement &&
+      $this->date_fin_allaitement > mbDate();
+    
+    $this->_semaine_grossesse = ceil(mbDaysRelative($this->_date_fecondation, mbDate()) / 7);
   }
   
   function loadRefsSejours() {
@@ -117,7 +128,6 @@ class CGrossesse extends CMbObject{
     foreach ($naissances as $_naissance) {
       $_naissance->loadRefSejourEnfant()->loadRefPatient();
     }
-    
   }
 }
 ?>

@@ -12,7 +12,7 @@ Grossesse = {
       url.addParam("parturiente_id", parturiente_id);
     }
     url.addParam("object_guid", object_guid);
-    url.requestModal(700, 225);
+    url.requestModal(700, 280);
   },
   toggleGrossesse: function(sexe, form) {
     form.select(".button_grossesse")[0].disabled = sexe == "f" ? "" : "disabled";
@@ -41,7 +41,14 @@ Grossesse = {
     var grossesse_id = $V(this.formFrom.unique_grossesse_id);
     $V(this.formTo.grossesse_id, grossesse_id);
     if (grossesse_id) {
-      $("view_grossesse").update(this.formFrom.down("input[name='unique_grossesse_id']:checked").get("view_grossesse"));
+      var input = this.formFrom.down("input[name='unique_grossesse_id']:checked");
+      var html = "<img src='style/mediboard/images/icons/grossesse.png' ";
+      html += "onmouseover=\"ObjectTooltip.createEx(this, 'CGrossesse-"+grossesse_id+"')\" ";
+      if (input.get("active") == 0) {
+        html += "class='opacity-40'";
+      }
+      html += "/>";
+      $("view_grossesse").update(html);
       this.formTo.select(".button_grossesse")[0].show();
       if (this.formTo.sejour_id) {
         $V(this.formTo.type_pec, 'O');

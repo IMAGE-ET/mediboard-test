@@ -19,7 +19,8 @@
 
 <span id="view_grossesse">
   {{if $grossesse->_id}}
-    <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">{{$grossesse}}</span>
+    <img onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')" {{if !$grossesse->active}}class="opacity-50"{{/if}}
+        src="style/mediboard/images/icons/grossesse.png" />
   {{else}}
     <div class="empty" style="display:inline">{{tr}}CGrossesse.none_linked{{/tr}}</div>
   {{/if}}

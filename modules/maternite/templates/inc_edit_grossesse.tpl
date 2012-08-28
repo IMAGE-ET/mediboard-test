@@ -51,6 +51,14 @@
       </td>
     </tr>
     <tr>
+      <th>
+        {{mb_label object=$grossesse field=date_fin_allaitement}}
+      </th>
+      <td>
+        {{mb_field object=$grossesse field=date_fin_allaitement form=editFormGrossesse register=true}}
+      </td>
+    </tr>
+    <tr>
       <td colspan="2" class="button">
         {{if $grossesse->_id}}
           <button type="button" class="save" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
