@@ -4,9 +4,11 @@ Main.add(function () {
 });
 </script>
 
+{{assign var=systeme_materiel value=$conf.dPbloc.CPlageOp.systeme_materiel}}
+
 <table class="tbl main">
   <tr>
-    <th class="title" colspan="7">
+    <th class="title" colspan="{{if $systeme_materiel == "expert"}}8{{else}}7{{/if}}">
       Hors plage du {{$date|date_format:$conf.longdate}}
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
@@ -98,6 +100,9 @@ Main.add(function () {
       {{else}}
         {{mb_value object=$_op field=salle_id}}
       {{/if}}
+      {{if $systeme_materiel == "expert"}}
+        {{mb_include module=dPbloc template=inc_button_besoins_ressources type=operation_id usage=1 object_id=$_op->_id}}
+      {{/if}}
     </td>
     {{/if}}
     <td class="text">
@@ -120,6 +125,6 @@ Main.add(function () {
     </td>
   </tr>
   {{foreachelse}}
-  <tr><td colspan="7" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
+  <tr><td colspan="{{if $systeme_materiel == "expert"}}8{{else}}7{{/if}}" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>
