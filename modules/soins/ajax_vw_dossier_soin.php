@@ -48,6 +48,8 @@ if ($group->_id != $sejour->group_id){
   return;
 }
 
+$planif_manuelle = CAppUI::conf("dPprescription CPrescription planif_manuelle", $group->_guid);
+
 $sejour->loadRefPatient();
 $sejour->loadRefPraticien();
 
@@ -117,7 +119,7 @@ if (CModule::getActive("dPprescription")) {
   $tabHours = CAdministration::getTimingPlanSoins($date, $configs);
   foreach($tabHours as $_key_date => $_period_date){
     foreach($_period_date as $_key_periode => $_period_dates){
-      $count_composition_dossier[$_key_date][$_key_periode] = CConfigService::getConfigGroupFor("Planfication manuelle") ? 3 : 2;
+      $count_composition_dossier[$_key_date][$_key_periode] = $planif_manuelle ? 3 : 2;
       $first_date = reset(array_keys($_period_dates));
       $first_time = reset(reset($_period_dates));
       $last_date = end(array_keys($_period_dates));
@@ -158,7 +160,7 @@ if (CModule::getActive("dPprescription")) {
         $line->_ref_produit->loadClasseATC();
         $line->_ref_produit->loadRefsFichesATC();
         if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){     
-          $line->calculPrises($prescription, $curr_date, null, null, true, CConfigService::getConfigGroupFor("Planfication manuelle"));
+          $line->calculPrises($prescription, $curr_date, null, null, true, $planif_manuelle);
         }
         $line->removePrisesPlanif();
       }
@@ -171,7 +173,7 @@ if (CModule::getActive("dPprescription")) {
         $name_chap = $element->_ref_category_prescription->chapitre;
          $line->calculAdministrations($curr_date);  
         if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
-          $line->calculPrises($prescription, $curr_date, $name_chap, $name_cat, true, CConfigService::getConfigGroupFor("Planfication manuelle"));
+          $line->calculPrises($prescription, $curr_date, $name_chap, $name_cat, true, $planif_manuelle);
         }
         $line->removePrisesPlanif();
       }
@@ -189,7 +191,7 @@ if (CModule::getActive("dPprescription")) {
       // Calcul des prises prevues
       $line->calculQuantiteTotal();
       foreach($_dates as $curr_date){
-        $line->calculPrisesPrevues($curr_date, CConfigService::getConfigGroupFor("Planfication manuelle"));
+        $line->calculPrisesPrevues($curr_date, $planif_manuelle);
       }
       $line->calculAdministrations();
       
@@ -371,7 +373,7 @@ $smarty->assign("today"               , mbDate());
 $smarty->assign("move_dossier_soin"   , false);
 $smarty->assign("params"              , CConstantesMedicales::$list_constantes);
 $smarty->assign("hide_close"          , $hide_close);
-$smarty->assign("manual_planif"       , CConfigService::getConfigGroupFor("Planfication manuelle"));
+$smarty->assign("manual_planif"       , $planif_manuelle);
 
 // Affichage d'une ligne
 if($object_id && $object_class){

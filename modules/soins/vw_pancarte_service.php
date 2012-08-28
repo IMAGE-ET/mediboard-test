@@ -223,7 +223,7 @@ foreach($prescriptions as $_prescription){
         if($count_planif){
           continue;
         }  
-      } elseif (CConfigService::getConfigGroupFor("Planfication manuelle")) {
+      } elseif (CAppUI::conf("dPprescription CPrescription planif_manuelle", CGroups::loadCurrent()->_guid)) {
         continue;
       }
       

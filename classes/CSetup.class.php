@@ -235,10 +235,8 @@ class CSetup {
   }
      
   /**
-   * 
-   * Adds default confuguration
+   * Adds default configuration
    * @param string $config
-   * @return 
    */
   function addDefaultConfig($new_path, $old_path = null) {
     if (!$old_path) {
@@ -248,6 +246,26 @@ class CSetup {
       VALUES ('$new_path', '".CAppUI::conf($old_path)."')";
     $this->addQuery($query);
   } 
+  
+  /**
+   * Adds default configuration from a configuration by service
+   * @param string $config
+   * @param string $name
+   * @return 
+   */
+  function addDefaultConfigForGroups($path, $name) {
+    $config = CConfigService::getConfigGroupForAllGroups($name);
+    
+    foreach ($config as $group_id => $value) {
+      $query = "INSERT INTO `configuration` (`feature`, `value`, `object_id`, `object_class`)
+        VALUES ('$path', '$value', '$group_id', 'CGroups')";
+      $this->addQuery($query);
+    }
+    
+    $query = "DELETE FROM `config_service`
+      WHERE `name` = '$name'";
+    $this->addQuery($query);
+  }
   
   /**
    * Launches module upgrade process
