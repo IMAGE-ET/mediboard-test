@@ -235,6 +235,21 @@ class CSetup {
   }
      
   /**
+   * 
+   * Adds default confuguration
+   * @param string $config
+   * @return 
+   */
+  function addDefaultConfig($new_path, $old_path = null) {
+    if (!$old_path) {
+      $old_path = $new_path;
+    }
+    $query = "INSERT INTO `configuration` (`feature`, `value`)
+      VALUES ('$new_path', ".CAppUI::conf($old_path).")";
+    $this->addQuery($query);
+  } 
+  
+  /**
    * Launches module upgrade process
    * @param string $oldRevision revision befoire upgrade
    */

@@ -172,6 +172,7 @@ $locales['config-dPetablissement-object-config'] = 'Configuration ';
 $locales['config-dPetablissement-object-config-classes'] = 'Cliquer sur le volet Configuration';
 $locales['config-dPetablissement-tag_group'] = 'Tag établissement';
 $locales['config-dPetablissement-tag_group-desc'] = 'Tag établissement';
+$locales['config-inherit-CGroups'] = 'Etablissement';
 $locales['mod-dPetablissement-tab-configure'] = 'Configuration';
 $locales['mod-dPetablissement-tab-vw_etab_externe'] = 'Etablissements externes';
 $locales['mod-dPetablissement-tab-vw_idx_groups'] = 'Gestion des établissements';

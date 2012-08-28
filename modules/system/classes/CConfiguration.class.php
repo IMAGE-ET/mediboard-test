@@ -57,7 +57,7 @@ class CConfiguration extends CMbMetaObject {
   }
 
   static function register($configs) {
-    self::$model_raw = array_merge(self::$model_raw, $configs);
+    self::$model_raw = array_merge_recursive(self::$model_raw, $configs);
   }
 
   static protected function buildTree() {
@@ -202,6 +202,10 @@ class CConfiguration extends CMbMetaObject {
         "content" => self::$values,
       )
     );
+  }
+  
+  static function clearDataCache() {
+    SHM::rem("config-values");
   }
   
   static function getValues($object_guid = null){
@@ -648,5 +652,19 @@ class CConfiguration extends CMbMetaObject {
 
   static function inheritConfig($feature, CMbObject $object = null){
     return self::setConfig($feature, self::INHERIT, $object);
+  }
+  
+  function store() {
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    self::clearDataCache();
+  }
+  
+  function delete() {
+    if ($msg = parent::delete()) {
+      return $msg;
+    }
+    self::clearDataCache();
   }
 }
