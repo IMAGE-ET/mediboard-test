@@ -12,7 +12,7 @@
 
 <table class="main">
   <tr>
-    <td class="greedyPane" style="text-align:center; height: 1px;">
+    <td class="greedyPane not-printable" style="text-align:center; height: 1px;">
       {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
         <div class="warning" style="float: right; text-align:left;">
           <a href="#nothing" onclick="EditPlanning.showAlerte('{{$date}}', '{{$bloc->_id}}', 'jour')">
@@ -54,7 +54,7 @@
         </select>
       </form>
     </td>
-    <td rowspan="100">
+    <td rowspan="100" class="not-printable">
       {{include file="inc_legende_planning.tpl"}}
     </td>
   </tr>
