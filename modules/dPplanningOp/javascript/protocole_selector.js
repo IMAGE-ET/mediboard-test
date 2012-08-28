@@ -45,6 +45,7 @@ ProtocoleSelector = {
     var oSejourForm = getForm("editSejour");
     
     var url = new Url("dPplanningOp", "vw_protocoles");
+    url.addParam("dialog", 1);
     url.addParam("chir_id", oForm[this.sChir_id].value);
     
     if (this.sForceType) {
@@ -52,6 +53,7 @@ ProtocoleSelector = {
     }
     
     url.setFragment(this.sForSejour == 1 ? 'sejour': 'interv');
+    //url.modal(this.options);
     url.requestModal(1000, 700, this.options);
   },
   

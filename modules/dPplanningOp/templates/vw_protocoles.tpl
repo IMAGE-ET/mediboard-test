@@ -8,7 +8,7 @@ function popupImport() {
   return false;
 }
 
-var aProtocoles = {
+window.aProtocoles = {
   sejour: {},
   interv: {}
 };
@@ -24,24 +24,22 @@ var aProtocoles = {
 chooseProtocole = function(protocole_id) {
   {{if $dialog}}
   if(protocole_id == 0) {
-    var url =  new Url();
-    url.setModuleAction("dPplanningOp", "vw_edit_protocole");
+    var url =  new Url("dPplanningOp", "vw_edit_protocole");
     url.addParam("protocole_id", protocole_id);
     var protocoleModal = url.requestModal();
   } else {
     setClose(protocole_id);
   }
   {{else}}
-  var url =  new Url();
-  url.setModuleAction("dPplanningOp", "vw_edit_protocole");
+  var url =  new Url("dPplanningOp", "vw_edit_protocole");
   url.addParam("protocole_id", protocole_id);
   url.requestModal();
   {{/if}}
 }
 
 setClose = function(protocole_id) {
-  window.parent.ProtocoleSelector.set(aProtocoles[protocole_id]);
-  window._close();
+  ProtocoleSelector.set(aProtocoles[protocole_id]);
+  Control.Modal.close();
 }
 
 refreshList = function(form, types, reset) {
