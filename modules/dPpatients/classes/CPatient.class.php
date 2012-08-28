@@ -219,6 +219,7 @@ class CPatient extends CMbObject {
   var $_ref_consultations           = null;
   var $_ref_prescriptions           = null;
   var $_ref_grossesses              = null;
+  var $_ref_last_grossesse          = null;
   var $_ref_first_constantes        = null;
   var $_ref_patient_links           = null;
   
@@ -1422,6 +1423,14 @@ class CPatient extends CMbObject {
     }
     
     return $this->_ref_photo_identite = $file;
+  }
+  
+  function loadLastGrossesse() {
+    $grossesse = new CGrossesse;
+    $grossesse->active = 1;
+    $grossesse->parturiente_id = $this->_id;
+    $grossesse->loadMatchingObject("terme_prevu desc");
+    return $this->_ref_last_grossesse = $grossesse;
   }
   
   function getTemplateClasses(){
