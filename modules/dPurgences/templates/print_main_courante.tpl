@@ -155,21 +155,13 @@ function printPage(element){
         <tr style="display: none;" class="modal-row">
           <td colspan="8">
             {{if $offline && $rpu->_id}}
+              {{assign var=sejour_id value=$sejour->_id}}
               <div id="modal-{{$sejour->_id}}" style="height: 90%; min-width: 700px; overflow: auto;" class="dossier">
                 <button style="float: right" class="cancel not-printable" onclick="modalwindow.close(); $('modal-{{$sejour->_id}}').up('tr').hide()">{{tr}}Close{{/tr}}</button>
                 <button style="float: right" class="print not-printable" onclick="$(this).next('.content').print()">{{tr}}Print{{/tr}}</button>
                 
                 <div class="content" style="page-break-before: always;">
-                  {{assign var=sejour_id value=$sejour->_id}}
-                  {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-                  
-                  {{assign var=constantes_medicales_grid value=null}}
-                    
-                  {{if array_key_exists($sejour_id, $csteByTimeAll)}}
-                    {{assign var=constantes_medicales_grid value=$csteByTimeAll.$sejour_id}}
-                  {{/if}}
-                  
-                  {{mb_include module=urgences template=print_dossier}}
+                  {{$offlines.$sejour_id|smarty:nodefaults}}
                 </div>
               </div>
             {{/if}}

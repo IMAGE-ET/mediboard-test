@@ -37,24 +37,24 @@ $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 $stats = array (
   "entree" => array (
     "total" => 0,
-	  "less_than_1" => 0,
-	  "more_than_75" => 0,
+    "less_than_1" => 0,
+    "more_than_75" => 0,
 ),
-	"sortie" => array (
+  "sortie" => array (
     "total" => 0,
-	  "transferts_count" => 0, 
-	  "mutations_count" => 0,
-	  "etablissements_transfert" => array(),
-	  "services_mutation" => array(),
+    "transferts_count" => 0, 
+    "mutations_count" => 0,
+    "etablissements_transfert" => array(),
+    "services_mutation" => array(),
 ),
 );
 
-$csteByTimeAll = array();
+$offlines = array();
 
 // Détail du chargement
 foreach ($sejours as &$_sejour) {
   $_sejour->loadRefsFwd(1);
-	$_sejour->_ref_patient->loadIPP();
+  $_sejour->_ref_patient->loadIPP();
   $_sejour->loadRefRPU();
   $_sejour->_ref_rpu->loadRefSejourMutation();
   $_sejour->_veille = mbDate($_sejour->entree) != $date;
@@ -70,8 +70,8 @@ foreach ($sejours as &$_sejour) {
       $stat_service =& $stats["sortie"]["services_mutation"][$service_mutation->_id];
       if (!isset($stat_service)) {
         $stat_service = array(
-	        "ref" => $service_mutation,
-	        "count" => 0
+          "ref" => $service_mutation,
+          "count" => 0
         );
       }
       $stat_service["count"]++;
@@ -84,8 +84,8 @@ foreach ($sejours as &$_sejour) {
       $stat_etablissement =& $stats["sortie"]["etablissements_transfert"][$etablissement_tranfert->_id];
       if (!isset($stat_etablissement)) {
         $stat_etablissement = array(
-	        "ref" => $etablissement_tranfert,
-	        "count" => 0
+          "ref" => $etablissement_tranfert,
+          "count" => 0
         );
       }
       $stat_etablissement["count"]++;
@@ -109,39 +109,26 @@ foreach ($sejours as &$_sejour) {
 
   // Chargement nécessaire du mode offline
   if ($offline) {
-    $_sejour->loadRefsConsultations();
-    $_sejour->loadListConstantesMedicales();
-
-    $patient =& $_sejour->_ref_patient;
-    $patient->loadIPP();
-    $patient->loadRefDossierMedical();
-
-    $dossier_medical =& $patient->_ref_dossier_medical;
-    $dossier_medical->countAntecedents();
-    $dossier_medical->loadRefPrescription();
-    $dossier_medical->loadRefsTraitements();
-
-    $consult =& $_sejour->_ref_consult_atu;
-    $consult->loadRefPatient(1);
-    $consult->loadRefPraticien(1);
-    $consult->loadRefsBack();
-    $consult->loadRefsDocs();
-    foreach ($consult->_ref_actes_ccam as $_ccam) {
-      $_ccam->loadRefExecutant();
-    }
-
-    $csteByTimeAll[$_sejour->_id] = CConstantesMedicales::buildGrid($_sejour->_list_constantes_medicales, false);
+    $params = array(
+        "rpu_id" => $_sejour->_ref_rpu->_id,
+        "dialog" => 1,
+        "offline" => 1,
+      );
+    $offlines[$_sejour->_id] = CApp::fetch("dPurgences", "print_dossier", $params);
   }
 }
 
+
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("date",$date);
-$smarty->assign("stats", $stats);
-$smarty->assign("sejours", $sejours);
-$smarty->assign("csteByTimeAll", $csteByTimeAll);
-$smarty->assign("offline", $offline);
-$smarty->assign("dateTime", mbDateTime());
+
+$smarty->assign("date"         , $date);
+$smarty->assign("stats"        , $stats);
+$smarty->assign("sejours"      , $sejours);
+$smarty->assign("offline"      , $offline);
+$smarty->assign("dateTime"     , mbDateTime());
+$smarty->assign("offlines"     , $offlines);
+
 $smarty->display("print_main_courante.tpl");
 
 ?>

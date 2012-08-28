@@ -1,12 +1,12 @@
 {{assign var=tbl_class value="main tbl"}}
 
 {{if !@$offline}}
-	<script type="text/javascript">
-	  Main.add(window.print);
-	</script>
+  <script type="text/javascript">
+    Main.add(window.print);
+  </script>
 
-	</td>
-	</tr>
+  </td>
+  </tr>
   </table>
   {{assign var=tbl_class value="print"}}
 {{/if}}
@@ -44,7 +44,7 @@
     <td>{{mb_value object=$rpu field="motif"}}</td>
   </tr>
   
-	{{mb_include module=cabinet template=print_inc_antecents_traitements}}
+  {{mb_include module=cabinet template=print_inc_antecents_traitements}}
 </table>
 
 {{if !@$offline}}
@@ -75,8 +75,8 @@
   <tr> 
     <th>{{mb_label object=$sejour field="mode_entree"}}</th>
     <td>{{mb_value object=$sejour field="mode_entree"}}</td>
-		
-		<th>{{mb_label object=$sejour field="provenance"}}</th>
+    
+    <th>{{mb_label object=$sejour field="provenance"}}</th>
     <td>{{mb_value object=$sejour field="provenance"}}</td>
   </tr>
   
@@ -130,6 +130,146 @@
 <br />
 {{mb_include module=cabinet template=print_actes readonly=true}}
 
+{{if $dossier|@count}}
+  <br />
+  {{mb_include module=prescription template=inc_vw_dossier_cloture offline=1}}
+{{/if}}
+
+{{if "dPprescription"|module_active}}
+  <br />
+  <table class="tbl print_prescription" style="page-break-after: always;">
+    <thead>
+      <tr>
+        <th class="title">
+          {{$sejour->_view}}
+          {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
+        </th>
+      </tr>
+    </thead>
+    <tr>
+      <th class="title">
+        Prescription
+      </th>
+    </tr>
+    {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_lines_med_comments.comment|@count}}
+    <tr>
+      <th>
+        Médicaments
+      </th>
+    </tr>
+    {{/if}}
+    {{foreach from=$prescription->_ref_lines_med_comments.med key=atc_code item=lines_med_by_atc}}
+      <tr>
+        <th class="section">
+          {{assign var=_libelle_ATC value=$atc_classes.$atc_code}}
+          {{$_libelle_ATC}}
+        </th>
+      </tr>  
+      {{foreach from=$lines_med_by_atc item=line_med}}
+        <tr>
+          <td class="text">
+            {{mb_include module="dPprescription" template="inc_print_medicament" med=$line_med nodebug=true print=false dci=0}}
+          </td>
+        </tr>
+      {{/foreach}}
+    {{/foreach}}
+  
+    {{foreach from=$prescription->_ref_lines_med_comments.comment item=line_med_comment}}
+      <tr>
+        <td class="text">
+          {{mb_include module="dPprescription"  template="inc_print_commentaire" comment=$line_med_comment nodebug=true}}
+        </td>
+      </tr>
+    {{/foreach}}
+  
+    
+    {{if $prescription->_ref_prescription_line_mixes|@count}}
+    <tr>
+      <th>Perfusions</th>
+    </tr>
+    {{/if}}
+    {{foreach from=$prescription->_ref_prescription_line_mixes item=_prescription_line_mix}}
+    <tr>
+      <td class="text">
+        {{mb_include module="dPprescription" template="inc_print_prescription_line_mix" perf=$_prescription_line_mix nodebug=true}}
+      </td>
+    </tr>
+    {{/foreach}}
+    
+    {{foreach from=$prescription->_ref_lines_elements_comments key=_chap item=_lines_by_chap}}
+      {{if $_lines_by_chap|@count}}
+        <tr>
+          <th>
+            {{tr}}CCategoryPrescription.chapitre.{{$_chap}}{{/tr}}
+          </th>
+        </tr>
+      {{/if}}
+      {{if $conf.dPprescription.CPrescription.display_cat_for_elt}}
+        {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+          {{assign var=cat_displayed value="0"}}
+          {{if array_key_exists('element', $_lines_by_cat) || array_key_exists('comment', $_lines_by_cat)}}
+            <tr>
+              <td class="text">
+              {{if array_key_exists('comment', $_lines_by_cat)}}
+                {{foreach from=$_lines_by_cat.element item=line_elt name=foreach_lines_a}}
+                  {{if $smarty.foreach.foreach_lines_a.first}}
+                    {{assign var=cat_displayed value="1"}}
+                    <strong>{{$line_elt->_ref_element_prescription->_ref_category_prescription->nom}} :</strong>
+                  {{/if}}
+                  {{mb_include module="dPprescription" template="inc_print_element" elt=$line_elt nodebug=true}}
+                {{/foreach}}
+              {{/if}}
+              {{if array_key_exists('comment', $_lines_by_cat)}}
+                {{foreach from=$_lines_by_cat.comment item=line_elt_comment name=foreach_lines_b}}
+                  {{if $smarty.foreach.foreach_lines_b.first && !$cat_displayed}}
+                    <strong>{{$line_elt_comment->_ref_category_prescription->nom}} :</strong>
+                  {{/if}}
+                  <li>
+                     ({{$line_elt_comment->_ref_praticien->_view}})
+                     {{$line_elt_comment->commentaire|nl2br}}
+                  </li>
+                {{/foreach}}
+              {{/if}}
+              </td>
+            </tr>
+          {{/if}}
+        {{/foreach}}
+      {{else}}
+        {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+          {{if array_key_exists('element', $_lines_by_cat)}}
+            {{foreach from=$_lines_by_cat.element item=line_elt}}
+              <tr>
+                <td class="text">
+                   {{mb_include module="dPprescription" template="inc_print_element" elt=$line_elt nodebug=true}}
+                </td>
+              </tr>
+            {{/foreach}}
+          {{/if}}
+          {{if array_key_exists('comment', $_lines_by_cat)}}
+            {{foreach from=$_lines_by_cat.comment item=line_elt_comment}}
+              <tr>
+                <td class="text">
+                   <li>
+                     ({{$line_elt_comment->_ref_praticien->_view}})
+                     {{$line_elt_comment->commentaire|nl2br}}
+                  </li>
+                </td>
+              </tr>
+            {{/foreach}}
+          {{/if}}
+        {{/foreach}}
+      {{/if}}
+    {{/foreach}}
+  </table>
+{{/if}}
+{{if "forms"|module_active}}
+  <table class="main tbl">
+    <tr>
+      <th class="title">Formulaires</th>
+    </tr>
+  </table>
+  <div id="ex-objects-{{$sejour->_id}}">{{$formulaires|smarty:nodefaults}}</div>
+{{/if}}
 </div>
 
 {{if !@$offline}}
