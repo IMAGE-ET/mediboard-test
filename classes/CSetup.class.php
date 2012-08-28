@@ -245,7 +245,7 @@ class CSetup {
       $old_path = $new_path;
     }
     $query = "INSERT INTO `configuration` (`feature`, `value`)
-      VALUES ('$new_path', ".CAppUI::conf($old_path).")";
+      VALUES ('$new_path', '".CAppUI::conf($old_path)."')";
     $this->addQuery($query);
   } 
   
