@@ -253,6 +253,7 @@ Main.add(function () {
                             this.sView = "produit";
                             this.sCode = "code_cip";
                             this.sSearch = document.editLineTP.produit.value;
+                            this.sSearchByCIS = 1;
                             this.selfClose = true;
                             this.sOnglet = onglet;
                             this.pop();
