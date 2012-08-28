@@ -1,11 +1,12 @@
-<?php /* $Id: product_stock_service.class.php 8121 2010-02-23 10:23:49Z phenxdesign $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision: 8121 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CProductEndowment extends CMbObject {

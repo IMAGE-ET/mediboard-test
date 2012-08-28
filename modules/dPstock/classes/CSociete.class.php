@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CSociete extends CMbObject {
@@ -97,7 +98,7 @@ class CSociete extends CMbObject {
   static function getManufacturers($also_inactive = true){
     $societe = new self;
     $list = $societe->loadList(null, "name");
-    foreach($list as $_id => $_societe) {
+    foreach ($list as $_id => $_societe) {
       if (!($_societe->_is_manufacturer || $also_inactive && !$_societe->_is_supplier)) {
         unset($list[$_id]);
       }
@@ -108,7 +109,7 @@ class CSociete extends CMbObject {
   static function getSuppliers($also_inactive = true){
     $societe = new self;
     $list = $societe->loadList(null, "name");
-    foreach($list as $_id => $_societe) {
+    foreach ($list as $_id => $_societe) {
       if (!($_societe->_is_supplier || $also_inactive && !$_societe->_is_manufacturer)) {
         unset($list[$_id]);
       }
@@ -119,7 +120,7 @@ class CSociete extends CMbObject {
   function updatePlainFields() {
     parent::updatePlainFields();
     if ($this->_departments) {
-      foreach($this->_departments as &$_dep) {
+      foreach ($this->_departments as &$_dep) {
         $_dep = str_pad($_dep, 2, "0", STR_PAD_LEFT);
       }
       $this->departments = implode("|", $this->_departments);

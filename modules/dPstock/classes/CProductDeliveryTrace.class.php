@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CProductDeliveryTrace extends CMbObject {
@@ -92,9 +93,7 @@ class CProductDeliveryTrace extends CMbObject {
     //$stock_service->location_id = $this->target_location_id;
     $stock_service->loadMatchingObject();
     
-    if ($this->date_delivery && 
-        !$negative_allowed && 
-        !$infinite_group_stock && 
+    if ($this->date_delivery && !$negative_allowed && !$infinite_group_stock && 
         (($this->quantity == 0) || ($stock->quantity < $this->quantity))) {
       $unit = $stock->_ref_product->_unit_title ? $stock->_ref_product->_unit_title : $stock->_ref_product->_view;
       return "Impossible de délivrer ce nombre de $unit";
@@ -103,13 +102,22 @@ class CProductDeliveryTrace extends CMbObject {
     // Un-deliver
     if ($this->_undeliver) {
       $this->_undeliver = null;
-      return $this->delete();
+      
+      // If we can't delete (it has a back ref or something else: interop, etc)
+      if ($msg = $this->delete()) {
+        $this->quantity = 0;
+        return parent::store();
+      }
+      
+      return;
     }
      
     // If we want to deliver, just provide a delivery date
     if ($this->date_delivery && !$infinite_group_stock) {
       $stock->quantity -= $this->quantity;
-      if ($msg = $stock->store()) return $msg;
+      if ($msg = $stock->store()) {
+        return $msg;
+      }
     }
     
     // Un-receive
@@ -150,7 +158,9 @@ class CProductDeliveryTrace extends CMbObject {
       }
 
       if ($stock_service->object_id && $stock_service->object_class) {
-        if ($msg = $stock_service->store()) return $msg;
+        if ($msg = $stock_service->store()) {
+          return $msg;
+        }
       }
     }
     
@@ -162,7 +172,9 @@ class CProductDeliveryTrace extends CMbObject {
       }
       
       if ($this->_ref_delivery->service_id) {
-        if ($msg = $stock_service->store()) return $msg;
+        if ($msg = $stock_service->store()) {
+          return $msg;
+        }
       }
     }
 
@@ -186,12 +198,16 @@ class CProductDeliveryTrace extends CMbObject {
     
     if (!$infinite_group_stock && $this->date_delivery) {
       $stock->quantity += $this->quantity;
-      if ($msg = $stock->store()) return $msg;
+      if ($msg = $stock->store()) {
+        return $msg;
+      }
     }
     
     if ($stock_service->_id && $this->date_reception /* && CAppUI::conf('dPstock CProductStockService infinite_quantity') == 0*/) {
       $stock_service->quantity -= $this->quantity;
-      if ($msg = $stock_service->store()) return $msg;
+      if ($msg = $stock_service->store()) {
+        return $msg;
+      }
     }
     
     return parent::delete();
@@ -234,4 +250,3 @@ class CProductDeliveryTrace extends CMbObject {
     return $this->loadLastLog()->loadRefUser(false)->loadRefMediuser();
   }
 }
-?>

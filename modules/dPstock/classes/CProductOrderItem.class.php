@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CProductOrderItem extends CMbObject {
@@ -88,14 +89,19 @@ class CProductOrderItem extends CMbObject {
       $reception->date = mbDateTime();
       $reception->code = $code;
       return $reception->store();
-    } else {
+    }
+    else {
       return "$this->_class::receive failed : order_item must be stored before";
     }
   }
   
   function isReceived() {
     $this->completeField("renewal");
-    if ($this->renewal == 0) return true;
+    
+    if ($this->renewal == 0) {
+      return true;
+    }
+    
     $this->updateReceived();
     return $this->_quantity_received >= $this->quantity;
   }
@@ -129,7 +135,9 @@ class CProductOrderItem extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
-    if (self::$_load_lite) return;
+    if (self::$_load_lite) {
+      return;
+    }
     
     $this->updateReceived();
     $this->loadReference();
@@ -158,7 +166,9 @@ class CProductOrderItem extends CMbObject {
   function loadRefsFwd() {
     parent::loadRefsFwd();
     
-    if (self::$_load_lite) return;
+    if (self::$_load_lite) {
+      return;
+    }
 
     $this->loadReference();
     $this->loadOrder();
@@ -180,10 +190,10 @@ class CProductOrderItem extends CMbObject {
     
     if (!$this->_id) {
       if ($this->renewal === null) $this->renewal = "1";
-      if ($this->septic  === null) $this->septic = "0";
+      if ($this->septic  === null) $this->septic  = "0";
     }
     
-    if($this->order_id && $this->reference_id && !$this->_id) {
+    if ($this->order_id && $this->reference_id && !$this->_id) {
       $this->loadRefsFwd();
       
       $where = array(
@@ -198,13 +208,14 @@ class CProductOrderItem extends CMbObject {
       }
       
       $duplicateKey = new CProductOrderItem();
-      if($duplicateKey->loadObject($where)) {
+      if ($duplicateKey->loadObject($where)) {
         $duplicateKey->loadRefsFwd();
         $this->_id = $duplicateKey->_id;
         $this->quantity += $duplicateKey->quantity;
         $this->unit_price = $duplicateKey->unit_price;
         $this->tva = $duplicateKey->tva;
-      } else {
+      }
+      else {
         $this->unit_price = $this->_ref_reference->price;
         $this->tva = $this->_ref_reference->tva;
       }
@@ -235,7 +246,7 @@ class CProductOrderItem extends CMbObject {
   function delete(){
     $order = $this->loadOrder(false);
     
-    if ($msg = parent::delete()){
+    if ($msg = parent::delete()) {
       return $msg;
     }
     

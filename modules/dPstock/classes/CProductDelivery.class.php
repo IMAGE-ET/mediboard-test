@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CProductDelivery extends CMbObject {
@@ -83,7 +84,8 @@ class CProductDelivery extends CMbObject {
     $specs = parent::getProps();
     
     // Source
-    $specs['stock_id']          = 'ref class|CProductStock meta|stock_class'; // can be null when the stock doesn't exist in the group
+    // can be null when the stock doesn't exist in the group
+    $specs['stock_id']          = 'ref class|CProductStock meta|stock_class'; 
     $specs['stock_class']       = 'str notNull class show|0';
     
     // Target
@@ -142,9 +144,11 @@ class CProductDelivery extends CMbObject {
     $this->loadRefsDeliveryTraces();
     $sum = 0;
     foreach ($this->_ref_delivery_traces as $trace) {
-      if ($trace->date_delivery)
+      if ($trace->date_delivery) {
         $sum += $trace->quantity;
+      }
     }
+    
     return $sum;
   }
   
@@ -267,7 +271,7 @@ class CProductDelivery extends CMbObject {
       }
     }
     
-    if ($msg = parent::store()){
+    if ($msg = parent::store()) {
       return $msg;
     }
     
@@ -299,10 +303,17 @@ class CProductDelivery extends CMbObject {
       $delivery_trace->quantity = $this->quantity;
       $delivery_trace->date_delivery = $this->date_delivery ? $this->date_delivery : mbDateTime();
       $delivery_trace->date_reception = $delivery_trace->date_delivery;
-      $location = CProductStockLocation::getDefaultLocation($this->loadRefService(), $this->loadRefStock()->loadRefProduct());
+      
+      $product = $this->loadRefStock()->loadRefProduct();
+      $location = CProductStockLocation::getDefaultLocation($this->loadRefService(), $product);
+      
       $delivery_trace->target_location_id = $location->_id;
+      
       if ($msg = $delivery_trace->store()) {
-        CAppUI::setMsg("La commande a été validée, mais elle n'a pas pu etre délivrée automatiquement pour la raison suivante: <br />$msg", UI_MSG_WARNING);
+        CAppUI::setMsg(
+          "La commande a été validée, mais n'a pas pu etre délivrée automatiquement pour la raison suivante: <br />$msg", 
+          UI_MSG_WARNING
+        );
       }
       else {
         CAppUI::setMsg("CProductDeliveryTrace-msg-create");

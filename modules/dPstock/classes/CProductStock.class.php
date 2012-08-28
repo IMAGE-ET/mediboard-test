@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CProductStock extends CMbObject {
@@ -128,13 +129,16 @@ class CProductStock extends CMbObject {
       if ($this->quantity <= $this->order_threshold_critical) {
         $this->_zone = 0;
 
-      } elseif ($this->quantity <= $this->order_threshold_min) {
+      }
+      elseif ($this->quantity <= $this->order_threshold_min) {
         $this->_zone = 1;
 
-      } elseif ($this->quantity <= $this->order_threshold_optimum) {
+      }
+      elseif ($this->quantity <= $this->order_threshold_optimum) {
         $this->_zone = 2;
 
-      } else {
+      }
+      else {
         $this->_zone = 3;
       }
     }

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CProductCategory extends CMbObject {
@@ -14,8 +15,8 @@ class CProductCategory extends CMbObject {
   
   // DB fields
   var $name          = null;
-	
-	var $_count_products = null;
+  
+  var $_count_products = null;
 
   // Object References
   //    Multiple
@@ -45,12 +46,12 @@ class CProductCategory extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->name;
   }
-	
-	function loadView(){
-		parent::loadView();
-		
-		$this->countProducts();
-	}
+  
+  function loadView(){
+    parent::loadView();
+    
+    $this->countProducts();
+  }
 
   function loadRefsBack() {
     $this->_ref_products = $this->loadBackRefs('products');

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CProduct extends CMbObject {
@@ -135,25 +136,24 @@ class CProduct extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->name;
     
-    if ($this->unit_quantity !== null && $this->unit_quantity == round($this->unit_quantity)) { // float to int (the comma is deleted)
+    if ($this->unit_quantity !== null && $this->unit_quantity == round($this->unit_quantity)) {
+      // float to int (the comma is deleted)
       $this->unit_quantity = round($this->unit_quantity);
     }
-    if ($this->unit_quantity === 0) $this->unit_quantity = '';
+    if ($this->unit_quantity === 0) {
+      $this->unit_quantity = '';
+    }
     
     $this->_quantity = '';
     if ($this->item_title && $this->quantity) {
       $this->_quantity .= "$this->quantity $this->item_title";
     }
     
-//  Unnecessary. Waiting a few days before total removal
-//    if ($this->unit_quantity && $this->unit_title) {
-//      $this->_quantity .= ($this->_quantity ? " x " : "") . "$this->unit_quantity $this->unit_title";
-//    }
-    
     if ($this->item_title && $this->quantity) {
       $this->_unit_quantity = ($this->quantity ? $this->quantity : 1);
       $this->_unit_title = $this->item_title;
-    } else {
+    }
+    else {
       $this->_unit_quantity = ($this->unit_quantity ? $this->unit_quantity : 1);
       $this->_unit_title = $this->unit_title;
     }
@@ -199,7 +199,8 @@ class CProduct extends CMbObject {
       return $this->_ref_stock_group;
     }
     
-    // Coneserver le loadMatchingObject car group_id et product_id sont utilisés (au moins dans CBcbProduitLivretTherapeutique::addToStocks)
+    // Coneserver le loadMatchingObject car group_id et product_id sont 
+    // utilisés (au moins dans CBcbProduitLivretTherapeutique::addToStocks)
     $this->completeField("product_id");
     $this->_ref_stock_group = new CProductStockGroup();
     $this->_ref_stock_group->group_id = CProductStockGroup::getHostGroup();
@@ -210,7 +211,7 @@ class CProduct extends CMbObject {
   }
 
   function getPerm($permType) {
-    if(!$this->_ref_category) {
+    if (!$this->_ref_category) {
       $this->loadRefsFwd();
     }
     return $this->_ref_category->getPerm($permType);
@@ -236,10 +237,13 @@ class CProduct extends CMbObject {
     $this->getConsumption("-3 MONTHS");
   }
   
-  /** Computes this product's consumption between two dates
-   * @param Date $since [optional]
-   * @param Date $date_max [optional]
-   * @return Number
+  /** 
+   * Computes this product's consumption between two dates
+   * 
+   * @param date $since [optional]
+   * @param date $date_max [optional]
+   * 
+   * @return float
    */
   function getConsumption($since = "-1 MONTH", $date_max = null, $service_id = null, $include_loss = true){
     $this->loadRefStock(true);
@@ -275,10 +279,13 @@ class CProduct extends CMbObject {
     return $this->_consumption = $total;
   }
   
-  /** Computes this product's consumption between two dates
-   * @param Date $since [optional]
-   * @param Date $date_max [optional]
-   * @return Number
+  /** 
+   * Computes this product's consumption between two dates
+   * 
+   * @param date $since    [optional]
+   * @param date $date_max [optional]
+   * 
+   * @return float
    */
   static function getConsumptionMultipleProducts($products, $since = "-1 MONTH", $date_max = null, $services = null, $include_loss = true){
     $ds = CSQLDataSource::get("std");
@@ -325,10 +332,13 @@ class CProduct extends CMbObject {
     return $total;
   }
   
-  /** Computes this product's supply between two dates
-   * @param Date $since [optional]
-   * @param Date $date_max [optional]
-   * @return Number
+  /** 
+   * Computes this product's supply between two dates
+   * 
+   * @param date $since    [optional]
+   * @param date $date_max [optional]
+   * 
+   * @return float
    */
   function getSupply($since = "-1 MONTH", $date_max = null){
     $where = array(
@@ -383,15 +393,20 @@ class CProduct extends CMbObject {
     return $ds->loadHashList($sql->getRequest());
   }
   
-  /** Computes the weighted average price (PMP)
-   * @param Date $since [optional]
-   * @param Date $date_max [optional]
-   * @return Number
+  /** 
+   * Computes the weighted average price (PMP)
+   * 
+   * @param date $since    [optional]
+   * @param date $date_max [optional]
+   * 
+   * @return float
    */
   function getWAP($since = "-1 MONTH", $date_max = null){
     $qty = $this->getSupply($since, $date_max);
     
-    if (!$qty) return null;
+    if (!$qty) {
+      return null;
+    }
     
     $where = array(
       "product.product_id" => "= '{$this->_id}'",
@@ -424,8 +439,13 @@ class CProduct extends CMbObject {
   function store() {
     $this->completeField("code", 'quantity', 'unit_quantity');
     
-    if(!$this->quantity)          $this->quantity = 1;
-    if($this->unit_quantity == 0) $this->unit_quantity = '';
+    if (!$this->quantity) {
+      $this->quantity = 1;
+    }
+    
+    if ($this->unit_quantity == 0) {
+      $this->unit_quantity = '';
+    }
     
     if ($this->code !== null && (!$this->_id || $this->fieldModified("code"))) {
       $this->code_canonical = preg_replace("/[^0-9a-z]/i", "", $this->code);
@@ -441,7 +461,7 @@ class CProduct extends CMbObject {
     
     if ($this->fieldModified("cancelled", 1)) {
       $references = $this->loadRefsReferences();
-      foreach($references as $_ref) {
+      foreach ($references as $_ref) {
         $_ref->cancelled = 1;
         $_ref->store();
       }
@@ -485,12 +505,14 @@ class CProduct extends CMbObject {
     );
     
     $item = new CProductOrderItem;
-    if ($count)
+    if ($count) {
       $list = $item->countList($where, null, $leftjoin);
-    else
+    }
+    else {
       $list = $item->loadList($where, "date_ordered ASC", null, "product_order_item.order_item_id", $leftjoin);
-      
-    foreach($list as $_id => $_item) {
+    }
+    
+    foreach ($list as $_id => $_item) {
       if ($_item->isReceived()) {
         unset($list[$_id]);
       }
@@ -499,7 +521,7 @@ class CProduct extends CMbObject {
     $this->_in_order = $list;
     
     if ($list) {
-      foreach($this->_in_order as $_item) {
+      foreach ($this->_in_order as $_item) {
         $_item->loadOrder();
       }
     }
@@ -508,14 +530,14 @@ class CProduct extends CMbObject {
   }
   
   private static function fillFlow(&$array, $products, $n, $start, $unit, $services) {
-    foreach($services as $_key => $_service) {
+    foreach ($services as $_key => $_service) {
       $array["out"]["total"][$_key] = array(0, 0);
     }
     
     $d = &$array["out"];
     
     // Y init
-    for($i = 0; $i < 12; $i++) {
+    for ($i = 0; $i < 12; $i++) {
       $from = mbDate("+$i $unit", $start);
       $to   = mbDate("+1 $unit", $from);
       
@@ -525,12 +547,12 @@ class CProduct extends CMbObject {
       "total" => array(0, 0)
     );
     
-    for($i = 0; $i < $n; $i++) {
+    for ($i = 0; $i < $n; $i++) {
       $from = mbDate("+$i $unit", $start);
       $to = mbDate("+1 $unit", $from);
       
       // X init
-      foreach($services as $_key => $_service) {
+      foreach ($services as $_key => $_service) {
         $d[$from][$_key] = array(0, 0);
         if (!isset($d["total"][$_key])) {
           $d["total"][$_key] = array(0, 0);
@@ -541,11 +563,11 @@ class CProduct extends CMbObject {
       $all_counts = self::getConsumptionMultipleProducts($products, $from, $to, $services, false);
       
       $by_product = array();
-      foreach($all_counts as $_data) {
+      foreach ($all_counts as $_data) {
         $by_product[$_data["product_id"]][$_data["service_id"]] = $_data["sum"];
       }
       
-      foreach($products as $_product) {
+      foreach ($products as $_product) {
         $counts = CValue::read($by_product, $_product->_id, array()); 
         
         $coeff = 1;
@@ -554,7 +576,7 @@ class CProduct extends CMbObject {
           $coeff = $ref->price;
         }
         
-        foreach($services as $_key => $_service) {
+        foreach ($services as $_key => $_service) {
           $_count = CValue::read($counts, $_key, 0);
           $_price = $_count * $coeff;
           
@@ -592,30 +614,35 @@ class CProduct extends CMbObject {
   }
   
   static function getFlowGraph($flow, $title, $services) {
-    $options = CFlotrGraph::merge("lines", array(
-      "title" => $title,
-      "legend" => array(
-        "show" => true
-      ),
-      "xaxis" => array(
-        "ticks" => array(),
-      ),
-      "yaxis" => array(
-        "min" => 0,
-        "title" => utf8_encode("Valeur (euro)") // FIXME le symbole ne euro passe pas
-      ),
-      "markers" => array(
-        "show" => false
+    $options = CFlotrGraph::merge(
+      "lines", 
+      array(
+        "title" => $title,
+        "legend" => array(
+          "show" => true
+        ),
+        "xaxis" => array(
+          "ticks" => array(),
+        ),
+        "yaxis" => array(
+          "min" => 0,
+          "title" => utf8_encode("Valeur (euro)") // FIXME le symbole ne euro passe pas
+        ),
+        "markers" => array(
+          "show" => false
+        )
       )
-    ));
+    );
     
     $graph = array(
       "data" => array(),
       "options" => $options,
     );
     
-    foreach($flow["out"] as $_service_id => $_data) {
-      if ($_service_id == "total") continue;
+    foreach ($flow["out"] as $_service_id => $_data) {
+      if ($_service_id == "total") {
+        continue;
+      }
       
       $data = array(
         "data" => array(),
@@ -623,14 +650,18 @@ class CProduct extends CMbObject {
       );
       
       if (empty($graph["options"]["xaxis"]["ticks"])) {
-        foreach($_data as $_date => $_values) {
-          if ($_date == "total") continue;
+        foreach ($_data as $_date => $_values) {
+          if ($_date == "total") {
+            continue;
+          }
           $graph["options"]["xaxis"]["ticks"][] = array(count($graph["options"]["xaxis"]["ticks"]), $_date);
         }
       }
       
-      foreach($_data as $_date => $_values) {
-        if ($_date == "total") continue;
+      foreach ($_data as $_date => $_values) {
+        if ($_date == "total") {
+          continue;
+        }
         $data["data"][] = array(count($data["data"]), $_values[1]);
       }
       $graph["data"][] = $data;
@@ -658,7 +689,7 @@ class CProduct extends CMbObject {
     ); 
     
     // MONTH //////////
-    if ($month){
+    if ($month) {
       $month_flows = array(
         "in"  => array(),
         "out" => array(),
@@ -682,7 +713,7 @@ class CProduct extends CMbObject {
     );
     
     $start = mbDate(null, "$year-01-01");
-    for($i = 0; $i < 12; $i++) {
+    for ($i = 0; $i < 12; $i++) {
       $from = mbDate("+$i MONTH", $start);
       $to = mbDate("+1 MONTH", $from);
       
@@ -692,7 +723,7 @@ class CProduct extends CMbObject {
       $supply_multiple = self::getSupplyMultiple($products, $from, $to);
       $consum_multiple = self::getConsumptionMultipleProducts($products, $from, $to, null, false);
 
-      foreach($products as $_product) {
+      foreach ($products as $_product) {
         /** 
         @var CProduct
         */
@@ -720,7 +751,7 @@ class CProduct extends CMbObject {
     
     $cumul = 0;
     $cumul_price = 0;
-    foreach($balance["in"] as $_date => $_balance) {
+    foreach ($balance["in"] as $_date => $_balance) {
       $diff =       $balance["in"][$_date][0] - $balance["out"][$_date][0];
       $diff_price = $balance["in"][$_date][1] - $balance["out"][$_date][1];
       
@@ -733,22 +764,25 @@ class CProduct extends CMbObject {
     
     $balance = array_map_recursive(array("CProduct", "round2"), $balance);
     
-    $options = CFlotrGraph::merge("bars", array(
-      "title" => "Rotation des stocks",
-      "legend" => array(
-        "show" => true
-      ),
-      "xaxis" => array(
-        "ticks" => array(),
-      ),
-      "yaxis" => array(
-        "min" => null,
-        "title" => utf8_encode("Valeur (euro)") // FIXME le symbole euro ne passe pas
-      ),
-      "y2axis" => array(
-        "min" => null,
+    $options = CFlotrGraph::merge(
+      "bars", 
+      array(
+        "title" => "Rotation des stocks",
+        "legend" => array(
+          "show" => true
+        ),
+        "xaxis" => array(
+          "ticks" => array(),
+        ),
+        "yaxis" => array(
+          "min" => null,
+          "title" => utf8_encode("Valeur (euro)") // FIXME le symbole euro ne passe pas
+        ),
+        "y2axis" => array(
+          "min" => null,
+        )
       )
-    ));
+    );
     
     $graph = array(
       "data" => array(),
@@ -761,7 +795,7 @@ class CProduct extends CMbObject {
       "diff" => array("label" => "Cumul",  "color" => "#00A8F0"),
     );
     
-    foreach($balance as $_type => $_data) {
+    foreach ($balance as $_type => $_data) {
       $data = array(
         "data" => array(),
         "label" => utf8_encode($params[$_type]["label"]),
@@ -777,14 +811,18 @@ class CProduct extends CMbObject {
       }
       
       if (empty($graph["options"]["xaxis"]["ticks"])) {
-        foreach($_data as $_date => $_values) {
-          if ($_date == "total") continue;
+        foreach ($_data as $_date => $_values) {
+          if ($_date == "total") {
+            continue;
+          }
           $graph["options"]["xaxis"]["ticks"][] = array(count($graph["options"]["xaxis"]["ticks"]), $_date);
         }
       }
       
-      foreach($_data as $_date => $_values) {
-        if ($_date == "total") continue;
+      foreach ($_data as $_date => $_values) {
+        if ($_date == "total") {
+          continue;
+        }
         $v = ($_type === "out" ? -$_values[1] : $_values[1]);
         $data["data"][] = array(count($data["data"]), $v);
       }
@@ -800,4 +838,3 @@ class CProduct extends CMbObject {
     );
   }
 }
-?>

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CProductOrder extends CMbMetaObject {
@@ -137,7 +138,9 @@ class CProductOrder extends CMbMetaObject {
     $this->loadRefsOrderItems();
     
     foreach($this->_ref_order_items as $_item) {
-      if ($_item->renewal) return true;
+      if ($_item->renewal) {
+        return true;
+      }
     }
     return false;
   }
@@ -183,7 +186,7 @@ class CProductOrder extends CMbMetaObject {
     $list_stocks = $stock->loadList();
     
     // for every stock
-    foreach($list_stocks as $stock) {
+    foreach ($list_stocks as $stock) {
       $stock->loadRefsFwd();
       
       // if the stock is in the "red" or "orange" zone
@@ -247,7 +250,7 @@ class CProductOrder extends CMbMetaObject {
     
     $this->loadRefsOrderItems();
     foreach ($this->_ref_order_items as $item) {
-      foreach($item->_ref_receptions as $reception) {
+      foreach ($item->_ref_receptions as $reception) {
         $reception->delete();
       }
     }

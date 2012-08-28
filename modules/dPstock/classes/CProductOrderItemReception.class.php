@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CProductOrderItemReception extends CMbObject {
@@ -101,7 +102,9 @@ class CProductOrderItemReception extends CMbObject {
   function loadRefsFwd() {
     parent::loadRefsFwd();
     
-    if (self::$_load_lite) return;
+    if (self::$_load_lite) {
+      return;
+    }
     
     $this->loadRefOrderItem();
     $this->loadRefReception();
@@ -137,16 +140,18 @@ class CProductOrderItemReception extends CMbObject {
       }
     }
     
-    if ($msg = parent::delete()){
+    if ($msg = parent::delete()) {
       return $msg;
     }
     
     // we store other objects only if deletion was ok !
-    if ($product->_ref_stock_group && $product->_ref_stock_group->_id)
+    if ($product->_ref_stock_group && $product->_ref_stock_group->_id) {
       $product->_ref_stock_group->store();
+    }
     
-    if ($order && $order->_id)
+    if ($order && $order->_id) {
       $order->store();
+    }
   }
  
   function getUsedQuantity(){
@@ -216,6 +221,7 @@ class CProductOrderItemReception extends CMbObject {
         CAppUI::setMsg("Un nouveau stock a été créé", UI_MSG_OK);
         //CAppUI::setMsg("Un nouveau stock pour [%s] a été créé", UI_MSG_OK, $product->_view);
       }
+      
       if ($msg = $stock->store()) {
         return $msg;
       }

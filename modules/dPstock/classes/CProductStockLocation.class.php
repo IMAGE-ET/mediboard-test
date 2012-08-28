@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CProductStockLocation extends CMbMetaObject {
@@ -81,10 +82,12 @@ class CProductStockLocation extends CMbMetaObject {
         $query = '';
         $table = $this->_spec->table;
         
-        if ($this->position)
+        if ($this->position) {
           $query = "AND `$table`.`position` BETWEEN $next_object->position AND $this->position";
-        else if ($next_object->position)
+        }
+        else if ($next_object->position) {
           $query = "AND `$table`.`position` >= $next_object->position";
+        }
         
         $where = array(
           "`$table`.`position` IS NOT NULL $query",
@@ -94,7 +97,7 @@ class CProductStockLocation extends CMbMetaObject {
         
         $this->position = $next_object->position;
         $next_objects = $this->loadList($where);
-        foreach($next_objects as &$object) {
+        foreach ($next_objects as &$object) {
           $object->position++;
           $object->store();
         }
@@ -110,10 +113,12 @@ class CProductStockLocation extends CMbMetaObject {
     }
     else if (!$this->_id && !$this->position) {
       $existing = $this->loadList(null, "position");
-      if ($location = end($existing)) 
+      if ($location = end($existing)) {
         $this->position = $location->position + 1;
-      else 
+      }
+      else { 
         $this->position = 1;
+      }
     }
   }
   
@@ -129,7 +134,9 @@ class CProductStockLocation extends CMbMetaObject {
   }
   
   function getStockType(){
-    if (!$this->_id) return;
+    if (!$this->_id) {
+      return;
+    }
     
     $this->completeField("object_class");
     return self::getStockClass($this->object_class);
@@ -142,8 +149,10 @@ class CProductStockLocation extends CMbMetaObject {
     $this->loadBackRefs("group_stocks", "product.name", null, null, $ljoin);
     
     if (!empty($this->_back["group_stocks"])) {
-      foreach($this->_back["group_stocks"] as $_id => $_stock) {
-        if ($_stock->loadRefProduct()->cancelled) unset($this->_back["group_stocks"][$_id]);
+      foreach ($this->_back["group_stocks"] as $_id => $_stock) {
+        if ($_stock->loadRefProduct()->cancelled) {
+          unset($this->_back["group_stocks"][$_id]);
+        }
       }
     }
     
@@ -153,8 +162,10 @@ class CProductStockLocation extends CMbMetaObject {
     $this->loadBackRefs("service_stocks", "product.name", null, null, $ljoin);
     
     if (!empty($this->_back["service_stocks"])) {
-      foreach($this->_back["service_stocks"] as $_id => $_stock) {
-        if ($_stock->loadRefProduct()->cancelled) unset($this->_back["service_stocks"][$_id]);
+      foreach ($this->_back["service_stocks"] as $_id => $_stock) {
+        if ($_stock->loadRefProduct()->cancelled) {
+          unset($this->_back["service_stocks"][$_id]);
+        }
       }
     }
   }
@@ -166,9 +177,11 @@ class CProductStockLocation extends CMbMetaObject {
   /**
    * Returns the existing location for the product in the host,
    * if it doesn't exist, will return the first location found in the host
-   * @param CGroups|CService|CBlocOperatoire $host 
-   * @param CProduct $product
-   * @return CProductStockLocation
+   * 
+   * @param CGroups|CService|CBlocOperatoire $host    Stock location's host object
+   * @param CProduct                         $product Product
+   * 
+   * @return CProductStockLocation The location
    */
   static function getDefaultLocation(CMbObject $host, CProduct $product = null) {
     $stock_class = self::getStockClass($host->_class);

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage dPstock
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage stock
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CProductStockGroup extends CProductStock {
@@ -34,10 +35,12 @@ class CProductStockGroup extends CProductStock {
     $spec->table = 'product_stock_group';
     $spec->key   = 'stock_id';
     
-    if (!CAppUI::conf("dPstock host_group_id")) 
+    if (!CAppUI::conf("dPstock host_group_id")) {
       $uniques = array("product_id"/*, "location_id"*/, "group_id");
-    else
+    }
+    else {
       $uniques = array("product_id"/*, "location_id"*/);
+    }
     
     $spec->uniques["product"] = $uniques;
     
@@ -86,17 +89,18 @@ class CProductStockGroup extends CProductStock {
     
     $future_quantity = $this->quantity + $this->_ordered_count;
     
-    if     ($future_quantity <= $this->order_threshold_critical)
+    if ($future_quantity <= $this->order_threshold_critical) {
       $this->_zone_future = 0;
-      
-    elseif ($future_quantity <= $this->order_threshold_min)
+    }
+    elseif ($future_quantity <= $this->order_threshold_min) {
       $this->_zone_future = 1;
-      
-    elseif ($future_quantity <= $this->order_threshold_optimum)
+    }
+    elseif ($future_quantity <= $this->order_threshold_optimum) {
       $this->_zone_future = 2;
-      
-    else
+    }
+    else {
       $this->_zone_future = 3;
+    }
   }
   
   /**
@@ -129,7 +133,10 @@ class CProductStockGroup extends CProductStock {
     
     self::$_host_group = $group;
     
-    if ($get_id) return $group->_id;
+    if ($get_id) {
+      return $group->_id;
+    }
+    
     return $group;
   }
   
@@ -138,8 +145,9 @@ class CProductStockGroup extends CProductStock {
 
     $where = array();
     
-    if (CAppUI::conf("dPstock host_group_id")) 
+    if (CAppUI::conf("dPstock host_group_id")) {
       $where["group_id"] = "IS NOT NULL";
+    }
     
     return $service->loadListWithPerms(PERM_READ, $where, "nom");
   }
