@@ -81,6 +81,9 @@ class CRessourceMaterielle extends CMbObject {
       $where[] = "(operations.date BETWEEN '$from_date' AND '$to_date' AND operations.plageop_id IS NULL) ".
                  "OR (operations.plageop_id IS NOT NULL AND plagesop.date BETWEEN '$from_date' AND '$to_date')";
       
+      // Sur les interventions non annulées
+      $where[] = "operations.annulee = '0'";
+      
       // Sur la ressource instanciée
       if ($this->_id) {
         $where["usage_ressource.ressource_materielle_id"] = " = '$this->_id'";
@@ -159,6 +162,9 @@ class CRessourceMaterielle extends CMbObject {
     
     $where[] = "(operations.date BETWEEN '$from_date' AND '$to_date' AND operations.plageop_id IS NULL) ".
                  "OR (operations.plageop_id IS NOT NULL AND plagesop.date BETWEEN '$from_date' AND '$to_date')";
+    
+    // Sur les interventions non annulées
+    $where[] = "operations.annulee = '0'";
     
     if ($this->type_ressource_id) {
       $ljoin["ressource_materielle"] = "ressource_materielle.type_ressource_id = besoin_ressource.type_ressource_id";
