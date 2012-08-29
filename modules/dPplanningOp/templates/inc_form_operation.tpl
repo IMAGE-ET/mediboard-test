@@ -378,7 +378,16 @@ addBesoins = function(types_ressources_ids) {
     <th>{{mb_label object=$op field=presence_postop}}</th>
     <td colspan="2">{{mb_field object=$op field=presence_postop form=editOp }}</td>
   </tr>
-        
+  
+  {{if $conf.dPbloc.CPlageOp.systeme_materiel == "expert"}}
+    <tr>
+      <td></td>
+      <td>
+        {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$op->_id type=operation_id}}
+      </td>
+      <td></td>
+    </tr>
+  {{/if}}
   <tr>
     <td class="text">{{mb_label object=$op field="examen"}}</td>
     <td class="text">{{mb_label object=$op field="materiel"}}</td>
@@ -391,16 +400,8 @@ addBesoins = function(types_ressources_ids) {
         aidesaisie="validateOnBlur: 0"}}
     </td>
     <td style="width: 33%;">
-      {{if $conf.dPbloc.CPlageOp.systeme_materiel == "standard"}}
-        {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOp"
-        aidesaisie="validateOnBlur: 0"}}
-      {{elseif $op->_id}}
-        {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$op->_id type=operation_id}}
-      {{else}}
-        <div class="text small-info">
-          {{tr}}COperation-save_for_ressources{{/tr}}
-        </div>
-      {{/if}}
+      {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOp"
+      aidesaisie="validateOnBlur: 0"}}
     </td>
     <td style="width: 33%;">
       {{mb_field object=$op field="rques" onchange="Value.synchronize(this);" form="editOp"

@@ -238,33 +238,27 @@
   
   
   <!-- Selection du type de chambre et du régime alimentaire-->
-  {{if $conf.dPplanningOp.CSejour.easy_chambre_simple || $conf.dPplanningOp.COperation.easy_regime}}
-  <tr>
-
-    {{if $conf.dPplanningOp.CSejour.easy_chambre_simple}}
-      {{if $conf.dPhospi.systeme_prestations == "standard"}}
+  {{if $conf.dPplanningOp.CSejour.easy_chambre_simple && $conf.dPhospi.systeme_prestations == "standard"}}
+    <tr>
       <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
-      <td>{{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}</td>
-      {{/if}}
-      
-      {{if $conf.dPhospi.systeme_prestations == "expert"}}
-      <td />
-      <td class="button">
-        {{if $sejour->_id}}
-        <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}', 'sejour')">Prestations</button>
+      <td colspan="2">{{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}</td>
+    </tr>
+  {{/if}}
+  
+  {{if $conf.dPplanningOp.CSejour.easy_chambre_simple || $conf.dPplanningOp.COperation.easy_regime || $conf.dPbloc.CPlageOp.systeme_materiel == "expert"}}
+    <tr>
+      <td></td>
+      <td colspan="2">
+        {{if $conf.dPplanningOp.COperation.easy_materiel && $conf.dPbloc.CPlageOp.systeme_materiel == "expert"}}
+          {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$op->_id type=operation_id}}
         {{/if}}
-      </td>
+      {{if $conf.dPplanningOp.CSejour.easy_chambre_simple && $conf.dPhospi.systeme_prestations == "expert" && $sejour->_id}}
+        <button type="button" class="search" onclick="Prestations.edit('{{$sejour->_id}}', 'sejour')">Prestations</button>
       {{/if}}
-    {{else}}
-      <td colspan="2" />
-    {{/if}}
-   
-    <td class="button">
       {{if $conf.dPplanningOp.COperation.easy_regime}}
-       {{mb_include template=regimes_alimentaires prefix=easy}}
+        {{mb_include template=regimes_alimentaires prefix=easy}}
       {{/if}}
-    </td>
-  </tr>
+    </tr>
   {{/if}}
 
   <!-- Consultation d'accompagnement -->
@@ -277,9 +271,11 @@
   
   {{if $conf.dPplanningOp.COperation.easy_materiel || $conf.dPplanningOp.COperation.easy_remarques}}
   <tr>
-    <td />
+    <td></td>
     {{if $conf.dPplanningOp.COperation.easy_materiel}}
-    <td class="text" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>{{mb_label object=$op field="materiel"}}</td>
+    <td class="text" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>
+      {{mb_label object=$op field="materiel"}}
+    </td>
     {{/if}}
     {{if $conf.dPplanningOp.COperation.easy_remarques}}
       <td class="text" {{if !$conf.dPplanningOp.COperation.easy_materiel}}colspan="2"{{/if}}>{{mb_label object=$op field="rques"}}</td>
@@ -289,16 +285,8 @@
   <td></td>
     {{if $conf.dPplanningOp.COperation.easy_materiel}}
     <td style="width: 33%;" {{if !$conf.dPplanningOp.COperation.easy_remarques}}colspan="2"{{/if}}>
-      {{if $conf.dPbloc.CPlageOp.systeme_materiel == "standard"}}
         {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOpEasy"
         aidesaisie="validateOnBlur: 0"}}
-      {{elseif $op->_id}}
-        {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$op->_id type=operation_id}}
-      {{else}}
-        <div class="text small-info">
-          {{tr}}COperation-save_for_ressources{{/tr}}
-        </div>
-      {{/if}}
     </td>
     {{/if}}
     {{if $conf.dPplanningOp.COperation.easy_remarques}}

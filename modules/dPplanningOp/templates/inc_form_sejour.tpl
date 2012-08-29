@@ -389,6 +389,10 @@ Main.add( function(){
 <input type="hidden" name="septique" value="{{$sejour->septique|default:"0"}}" />
 <input type="hidden" name="pathologie" value="{{$sejour->pathologie}}" />
 
+{{if "reservation"|module_active && !$sejour->annule}}
+  {{mb_field object=$sejour field="recuse" hidden=1}}
+{{/if}}
+
 <input type="hidden" name="adresse_par_prat_id" value="{{$sejour->adresse_par_prat_id}}" />
 {{if !$mode_operation}}
   {{mb_key object=$sejour}}

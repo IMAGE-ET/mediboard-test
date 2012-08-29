@@ -272,6 +272,13 @@ modeExpertDisplay = function() {
         {{if !$conf.dPplanningOp.COperation.cancel_only_for_resp_bloc || $modules.dPbloc->_can->edit || (!$op->_ref_sejour->entree_reelle && !$op->rank)}}
           <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
         {{/if}}
+        {{if "reservation"|module_active}}
+          {{if $op->_ref_sejour->recuse == "-1"}}
+            <button class="tick" onclick="$V(getForm('editSejour').recuse, 0); submitForms();">{{tr}}Validate{{/tr}}</button>
+          {{elseif $op->_ref_sejour->recuse == "0"}}
+            <button class="cancel" onclick="$V(getForm('editSejour').recuse, -1); submitForms();">Annuler la validation</button>
+          {{/if}}
+         {{/if}}
       {{/if}}
       {{if !$conf.dPplanningOp.COperation.delete_only_admin || $can->admin}}
       <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
