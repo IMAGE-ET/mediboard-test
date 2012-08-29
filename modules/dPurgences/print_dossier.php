@@ -60,7 +60,8 @@ if (CModule::getActive("forms")) {
 }
 
 $dossier     = array();
-$list_lines = array();
+$list_lines  = array();
+$atc_classes = array();
 
 if (CModule::getActive("dPprescription")){
   // Chargement du dossier de soins cloturé
