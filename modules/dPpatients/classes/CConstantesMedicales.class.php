@@ -398,11 +398,18 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 200,
     ),
     // FIN DIURESE ////////
+    
+    "creatininemie" => array(
+      "type" => "biolo",
+      "unit" => "mg/l", 
+      "min" => 0, "max" => 30,
+    ),
   );
   
   static $list_constantes_type = array(
     "physio" => array(),
     "drain" => array(),
+    "biolo" => array()
   );
   
   function __construct() {
@@ -548,6 +555,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['catheter_suspubien']     = 'float min|0';
     $specs['bricker']                = 'float min|0';
     $specs['entree_lavage']          = 'float min|0';
+    $specs['creatininemie']          = 'float min|0';
     
     return $specs;
   }

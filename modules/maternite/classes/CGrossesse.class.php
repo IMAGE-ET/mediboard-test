@@ -89,12 +89,7 @@ class CGrossesse extends CMbObject{
     $this->_view = "Terme du " . mbDateToLocale($this->terme_prevu);
     // Nombre de semaines (aménorrhée = 41, grossesse = 39)
     $this->_date_fecondation = mbDate("-39 weeks", $this->terme_prevu);
-    
-    $this->_allaitement_en_cours =
-      $this->allaitement_maternel &&
-      (!$this->date_fin_allaitement ||
-      $this->date_fin_allaitement > mbDate());
-    
+    $this->_allaitement_en_cours = $this->allaitement_maternel && !$this->active && (!$this->date_fin_allaitement || $this->date_fin_allaitement > mbDate());
     $this->_semaine_grossesse = ceil(mbDaysRelative($this->_date_fecondation, mbDate()) / 7);
   }
   

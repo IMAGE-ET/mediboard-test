@@ -1427,7 +1427,6 @@ class CPatient extends CMbObject {
   
   function loadLastGrossesse() {
     $grossesse = new CGrossesse;
-    $grossesse->active = 1;
     $grossesse->parturiente_id = $this->_id;
     $grossesse->loadMatchingObject("terme_prevu desc");
     return $this->_ref_last_grossesse = $grossesse;

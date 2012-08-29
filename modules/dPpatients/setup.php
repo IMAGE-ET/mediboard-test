@@ -1819,7 +1819,11 @@ class CSetupdPpatients extends CSetup {
               ADD `assure_avs` VARCHAR (15);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.55";
+    $this->makeRevision("1.55");
+    $query = "ALTER TABLE `constantes_medicales` ADD `creatininemie` FLOAT UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.56";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
