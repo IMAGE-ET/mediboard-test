@@ -159,10 +159,12 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     }
     else {
       switch ($sejour->recuse) {
-        case "-1":
+        case "0":
           $color = "#{$chir->_ref_function->color}";
-        case "0" :
+          break;
+        case "-1" :
           $color = "#9be";
+          break;
         case "1" :
           $color = "#f88";
       }
