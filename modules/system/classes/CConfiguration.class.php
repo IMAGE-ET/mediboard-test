@@ -397,7 +397,7 @@ class CConfiguration extends CMbMetaObject {
      * @var CMbObject
      */
     $_obj = new $class;
-    $_list = $_obj->loadListWithPerms(PERM_EDIT, $where);
+    $_list = $_obj->loadList($where);
     
     foreach ($_list as $_object) {
       $subtree[$_object->_guid] = array(
