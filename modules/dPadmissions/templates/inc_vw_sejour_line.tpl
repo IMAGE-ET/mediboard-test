@@ -54,9 +54,16 @@
 
 <td colspan="2" class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{if $can->edit}}
-  <a class="action" style="float: right" title="Modifier le séjour" href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id={{$_sejour->_id}}">
-    <img src="images/icons/planning.png" />
-  </a>
+    {{if $current_m == "ssr"}}
+      {{assign var=url value="?m=ssr&tab=vw_aed_sejour_ssr&sejour_id=`$_sejour->_id`"}}
+    {{elseif $current_m == "reservation"}}
+      {{assign var=url value="?m=reservation&tab=vw_edit_sejour&sejour_id=`$_sejour->_id`"}}
+    {{else}}
+      {{assign var=url value="?m=planningOp&tab=vw_edit_sejour&sejour_id=`$_sejour->_id`"}}
+    {{/if}}
+    <a class="action" style="float: right" title="Modifier le séjour" href="{{$url}}">
+      <img src="images/icons/planning.png" />
+    </a>
   {{/if}}
   {{if $canPlanningOp->read}}
   <a class="action" style="float: right" title="Imprimer la DHE du séjour" href="#1" onclick="printDHE('sejour_id', {{$_sejour->_id}}); return false;">

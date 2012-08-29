@@ -208,6 +208,6 @@ $smarty->assign("blocages_lit" , $blocages_lit);
 
 $smarty->assign("dialog", $dialog);
 
-$smarty->display("vw_edit_sejour.tpl");
+$smarty->display("../../dPplanningOp/templates/vw_edit_sejour.tpl");
 
 ?>

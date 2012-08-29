@@ -343,7 +343,7 @@ Main.add( function(){
 </script>
 
 <!-- div de confirmation de changement de patient lorsqu'on a un sejour_id -->
-{{mb_include template=inc_modal_change_patient}}
+{{mb_include module=planningOp template=inc_modal_change_patient}}
 
 <form name="patAldForm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="dPpatients" />
@@ -832,7 +832,7 @@ Main.add( function(){
 
 <tr id="correspondant_medical">
   {{assign var="object" value=$sejour}}
-  {{mb_include template=inc_check_correspondant_medical}}
+  {{mb_include module=planningOp template=inc_check_correspondant_medical}}
 </tr>
 <tr>
   <td></td>
@@ -902,7 +902,7 @@ Main.add( function(){
     </td>
     
     <td colspan="2" class="button modeExpert">
-      {{mb_include template=regimes_alimentaires prefix=expert}}
+      {{mb_include module=planningOp template=regimes_alimentaires prefix=expert}}
     </td>
   </tr>
   
@@ -945,7 +945,7 @@ Main.add( function(){
 
   <td colspan="2" class="button">
     <div {{if !$conf.dPplanningOp.COperation.easy_regime}} class="modeExpert" {{/if}}>
-      {{mb_include template=regimes_alimentaires prefix=expert}}
+      {{mb_include module=planningOp template=regimes_alimentaires prefix=expert}}
     </div>
   </td>
 </tr>

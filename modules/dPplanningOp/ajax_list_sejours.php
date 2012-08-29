@@ -54,7 +54,7 @@ if ($check_collision) {
     $sejour->load($sejour_id);
   }
   
-	// Simulation du formulaire
+  // Simulation du formulaire
   $sejour->_date_entree_prevue = $date_entree_prevue;
   $sejour->_date_sortie_prevue = CValue::get("date_sortie_prevue");
   $sejour->_hour_entree_prevue = $hour_entree_prevue;
@@ -79,5 +79,5 @@ $smarty = new CSmartyDP;
 $smarty->assign("patient"         , $patient);
 $smarty->assign("collision_sejour", $collision_sejour);
 
-$smarty->display("inc_list_sejours.tpl");
+$smarty->display("../../dPplanningOp/templates/inc_list_sejours.tpl");
 ?>

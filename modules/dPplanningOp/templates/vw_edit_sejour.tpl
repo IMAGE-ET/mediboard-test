@@ -85,17 +85,19 @@ function reloadSejours(checkCollision) {
       </a>
     </td>
     <td>
-      <a class="button new" href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}" id="link_operation">
-        Programmer une nouvelle intervention dans ce séjour
-      </a>
-      <label>
-        <input type="checkbox" onclick="
-        if (this.checked) {
-          $('link_operation').href = '?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}';
-        } else {
-          $('link_operation').href = '?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}';
-        }" /> Hors plage
-      </label>
+      {{if $m != "reservation"}}
+        <a class="button new" href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}" id="link_operation">
+          Programmer une nouvelle intervention dans ce séjour
+        </a>
+        <label>
+          <input type="checkbox" onclick="
+          if (this.checked) {
+            $('link_operation').href = '?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}';
+          } else {
+            $('link_operation').href = '?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}';
+          }" /> Hors plage
+        </label>
+      {{/if}}
     </td>
   </tr>
   {{/if}}
@@ -134,19 +136,19 @@ function reloadSejours(checkCollision) {
   
   <tr>
     <td style="width: 60%">
-      {{include file="js_form_sejour.tpl"}}
-      {{include file="inc_form_sejour.tpl" mode_operation=false}}
+      {{mb_include module=planningOp template=js_form_sejour}}
+      {{mb_include module=planningOp template=inc_form_sejour mode_operation=false}}
     </td>
     <td>
-      {{include file="inc_infos_operation.tpl"}}
-      {{include file="inc_infos_hospitalisation.tpl"}}
+      {{mb_include module=planningOp template=inc_infos_operation}}
+      {{mb_include module=planningOp template=inc_infos_hospitalisation}}
       <table class="form" style="width: 100%;">
         <tr>
           <th class="title">{{tr}}CSejour-existants{{/tr}}</th>
         </tr>
         <tr>
           <td id="list_sejours">
-            {{mb_include template=inc_list_sejours selected_guid=$sejour->_guid}}
+            {{mb_include module=planningOp template=inc_list_sejours selected_guid=$sejour->_guid}}
           </td>
         </tr>
 

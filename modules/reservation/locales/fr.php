@@ -27,6 +27,7 @@ $locales['config-reservation-debut_planning-22'] = '22';
 $locales['config-reservation-debut_planning-23'] = '23';
 $locales['config-reservation-debut_planning-desc'] = 'Heure de début du planning';
 $locales['mod-reservation-tab-configure'] = 'Configurer';
+$locales['mod-reservation-tab-vw_edit_sejour'] = 'Séjours';
 $locales['mod-reservation-tab-vw_planning'] = 'Planning';
 $locales['mod-reservation-tab-vw_sejours_validation'] = 'Validation séjours';
 $locales['module-reservation-court'] = 'Réservation';
