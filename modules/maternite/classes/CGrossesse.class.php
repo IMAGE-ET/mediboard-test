@@ -129,5 +129,35 @@ class CGrossesse extends CMbObject{
       $_naissance->loadRefSejourEnfant()->loadRefPatient();
     }
   }
+  
+  function delete() {
+    $consults = $this->loadRefsConsultations();
+    $sejours  = $this->loadRefsSejours();
+    
+    if ($msg = parent::delete()) {
+      return $msg;
+    }
+    
+    $msg = "";
+    
+    foreach ($consults as $_consult) {
+      $_consult->grossesse_id = "";
+      if ($_msg = $_consult->store()) {
+        $msg .= "\n $_msg";
+      }
+    }
+    
+    
+    foreach ($sejours as $_sejour) {
+      $_sejour->grossesse_id = "";
+      if ($_msg = $_sejour->store()) {
+        $msg .= "\n $_msg";
+      }
+    }
+    
+    if ($msg) {
+      return $msg;
+    }
+  }
 }
 ?>

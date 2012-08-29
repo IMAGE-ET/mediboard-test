@@ -281,7 +281,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["patient_id"]               = "ref notNull class|CPatient seekable";
     $props["praticien_id"]             = "ref notNull class|CMediusers seekable";
     $props["group_id"]                 = "ref notNull class|CGroups";
-    $props["grossesse_id"]             = "ref class|CGrossesse";
+    $props["grossesse_id"]             = "ref class|CGrossesse unlink";
     $props["uf_hebergement_id"]        = "ref class|CUniteFonctionnelle seekable";
     $props["uf_medicale_id"]           = "ref class|CUniteFonctionnelle seekable";
     $props["uf_soins_id"]              = "ref class|CUniteFonctionnelle seekable";
@@ -1094,8 +1094,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $affectation = new CAffectation();
     $where = array();
     $where["sejour_id"] = " = '$this->_id'";
-    $where["entree"] = "<= '$date'";
-    $where["sortie"] = ">= '$date'";
+    $where[] = "'$date' BETWEEN entree AND sortie";
     $affectation->loadObject($where);
     if ($affectation->_id) {
       $affectation->loadRefLit()->loadCompleteView();

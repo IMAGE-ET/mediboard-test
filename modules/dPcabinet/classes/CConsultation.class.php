@@ -178,7 +178,7 @@ class CConsultation extends CCodable {
     $props["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable show|1";
     $props["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
     $props["categorie_id"]      = "ref class|CConsultationCategorie show|1";
-    $props["grossesse_id"]      = "ref class|CGrossesse show|0";
+    $props["grossesse_id"]      = "ref class|CGrossesse show|0 unlink";
     $props["factureconsult_id"] = "ref class|CFactureConsult show|0";
     $props["_praticien_id"]     ="ref class|CMediusers show|1"; //is put here for view
     $props["_function_secondary_id"] = "ref class|CFunctions";
