@@ -1,4 +1,5 @@
 <?php
+$locales['checkbox-COperation-show_cancelled'] = 'Afficher les interventions annulées';
 $locales['config-reservation-debut_planning'] = 'Heure de début du planning';
 $locales['config-reservation-debut_planning-0'] = '0';
 $locales['config-reservation-debut_planning-1'] = '1';

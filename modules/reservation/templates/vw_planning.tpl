@@ -21,7 +21,7 @@
     url.addParam("date_planning", $V(form.date_planning));
     url.addParam("praticien_id" , $V(form.praticien_id));
     url.addParam("bloc_id"      , $V(form.bloc_id));
-    
+    url.addParam("show_cancelled", form.show_cancelled.checked ? 1 : 0);
     var week_container = $$(".week-container")[0];
     
     if (week_container) {
@@ -177,7 +177,7 @@
 <form name="filterPlanning" method="get"> 
   <table class="form">
     <tr>
-      <th class="category" colspan="4">
+      <th class="category" colspan="5">
         Filtre
       </th>
     </tr>
@@ -207,6 +207,12 @@
               <option value="{{$_bloc->_id}}" {{if $bloc_id == $_bloc->_id}}selected{{/if}}>{{$_bloc->nom}}</option>
             {{/foreach}}
           </select>
+        </label>
+      </td>
+      <td>
+        <label>
+          <input type="checkbox" name="show_cancelled" {{if $show_cancelled}}checked{{/if}} onclick="refreshPlanning()"/>
+            {{tr}}checkbox-COperation-show_cancelled{{/tr}}
         </label>
       </td>
       <td class="narrow">

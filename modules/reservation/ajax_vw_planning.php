@@ -15,6 +15,7 @@ $date_planning = CValue::getOrSession("date_planning");
 $praticien_id  = CValue::getOrSession("praticien_id");
 $scroll_top    = CValue::get("scroll_top", null);
 $bloc_id       = CValue::getOrSession("bloc_id", "");
+$show_cancelled = CValue::getOrSession("show_cancelled", 0);
 
 $bloc = new CBlocOperatoire;
 $bloc->load($bloc_id);
@@ -27,7 +28,9 @@ $where = array();
 $ljoin = array();
 
 $where["operations.date"] = "= '$date_planning'";
-$where["operations.annulee"] = "= '0'";
+if (!$show_cancelled) {
+  $where["operations.annulee"] = "= '0'";
+}
 $where["operations.plageop_id"] = "IS NULL";
 $where["operations.salle_id"] = "IS NOT NULL";
 
@@ -175,7 +178,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     $libelle .= "</span>";
     
     if ($sejour->annule) {
-      $color = "#f88";
+      $color = "#f22";
     }
     else {
       switch ($sejour->recuse) {
@@ -183,9 +186,6 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
           $color = "#{$chir->_ref_function->color}";
           break;
         case "-1" :
-          $color = "#9be";
-          break;
-        case "1" :
           $color = "#f88";
       }
     }
@@ -230,5 +230,6 @@ $smarty->assign("salles"  , $salles);
 $smarty->assign("salles_ids", $salles_ids);
 $smarty->assign("date_planning", $date_planning);
 $smarty->assign("scroll_top", $scroll_top);
+$smarty->assign("show_cancelled", $show_cancelled);
 
 $smarty->display("inc_vw_planning.tpl");

@@ -14,6 +14,7 @@ CCanDo::checkRead();
 $date_planning = CValue::getOrSession("date_planning", mbDate());
 $praticien_id  = CValue::getOrSession("praticien_id", "");
 $bloc_id       = CValue::getOrSession("bloc_id", "");
+$show_cancelled = CValue::getOrSession("show_cancelled", 0);
 
 $praticiens = new CMediusers;
 $praticiens = $praticiens->loadChirurgiens(); 
@@ -33,5 +34,6 @@ $smarty->assign("praticien_id" , $praticien_id);
 $smarty->assign("praticiens"   , $praticiens);
 $smarty->assign("blocs"        , $blocs);
 $smarty->assign("bloc_id"      , $bloc_id);
+$smarty->assign("show_cancelled", $show_cancelled);
 
 $smarty->display("vw_planning.tpl");
