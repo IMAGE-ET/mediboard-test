@@ -22,6 +22,12 @@ else {
   $month_min     = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
   $lastmonth     = mbDate("-1 month", $date);
   $nextmonth     = mbDate("+1 month", $date);
+  if (mbTransformTime(null, $date, "%m-%d") == "08-31") {
+    $nextmonth = mbTransformTime("+0 month", $nextmonth, "%Y-09-%d");
+  }
+  else {
+    $nextmonth     = mbTransformTime("+0 month", $nextmonth, "%Y-%m-01");
+  }
 }
 
 $type          = CValue::getOrSession("type");

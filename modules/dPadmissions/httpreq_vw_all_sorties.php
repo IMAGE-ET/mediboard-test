@@ -24,6 +24,12 @@ else {
   $month_min     = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
   $lastmonth     = mbDate("-1 month", $date);
   $nextmonth     = mbDate("+1 month", $date);
+  if (mbTransformTime(null, $date, "%m-%d") == "08-31") {
+    $nextmonth = mbTransformTime("+0 month", $nextmonth, "%Y-09-%d");
+  }
+  else {
+    $nextmonth     = mbTransformTime("+0 month", $nextmonth, "%Y-%m-01");
+  }
 }
 
 $selSortis     = CValue::getOrSession("selSortis", "0");
@@ -82,16 +88,16 @@ $group = CGroups::loadCurrent();
 
 // Listes des sorties par jour
 $query = "SELECT DATE_FORMAT(`sejour`.`sortie`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
-	FROM `sejour`
-	$leftjoinService
-	WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$nextmonth'
-	  AND `sejour`.`group_id` = '$group->_id'
-	  AND `sejour`.`annule` = '0'
+  FROM `sejour`
+  $leftjoinService
+  WHERE `sejour`.`sortie` BETWEEN '$month_min' AND '$nextmonth'
+    AND `sejour`.`group_id` = '$group->_id'
+    AND `sejour`.`annule` = '0'
     $filterType
     $filterService
     $filterPrat
-	GROUP BY `date`
-	ORDER BY `date`";
+  GROUP BY `date`
+  ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $num1) {
   $days[$day]["num1"] = $num1;
 }

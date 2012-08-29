@@ -41,7 +41,9 @@ $prat = CMediusers::get();
 $prats = $prat->loadPraticiens();
 
 $sejour = new CSejour();
-$sejour->_type_admission = "ssr";
+if ($current_m == "ssr") {
+  $sejour->_type_admission = "ssr";
+}
 $sejour->service_id      = $service_id;
 $sejour->praticien_id    = $prat_id;
 
@@ -51,7 +53,9 @@ $where = array();
 $where["group_id"] = "= '$g'";
 $where["recuse"]   = "= '-1'";
 $where["annule"]   = "= '0'";
-$where["type"]     = "= 'ssr'";
+if ($current_m == "ssr") {
+  $where["type"]     = "= 'ssr'";
+}
 $where["entree"]   = ">= '".mbDate()."'";
 $nb_sejours_attente = $sejour->countList($where);
 

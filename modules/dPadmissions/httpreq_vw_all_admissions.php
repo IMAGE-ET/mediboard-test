@@ -24,7 +24,12 @@ else {
   $month_min     = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
   $lastmonth     = mbDate("-1 month", $date);
   $nextmonth     = mbDate("+1 month", $date);
-}
+  if (mbTransformTime(null, $date, "%m-%d") == "08-31") {
+    $nextmonth = mbTransformTime("+0 month", $nextmonth, "%Y-09-%d");
+  }
+  else {
+    $nextmonth     = mbTransformTime("+0 month", $nextmonth, "%Y-%m-01");
+  }
 
 $selAdmis      = CValue::getOrSession("selAdmis", "0");
 $selSaisis     = CValue::getOrSession("selSaisis", "0");
@@ -98,7 +103,7 @@ $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`se
   GROUP BY `date`
   ORDER BY `date`";
 foreach ($ds->loadHashList($query) as $day => $num1) {
-	$days[$day]["num1"] = $num1;
+  $days[$day]["num1"] = $num1;
 }
 
 // Liste des admissions non effectuées par jour

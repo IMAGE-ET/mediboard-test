@@ -62,15 +62,16 @@ if($service_id) {
 }
 
 // Filtre sur le type du séjour
-$where["type"] = "= 'ssr'";
-
+if ($current_m == "ssr") {
+  $where["type"] = "= 'ssr'";
+}
 // Filtre sur le praticien
 if ($prat_id) {
   $where["sejour.praticien_id"] = " = '$prat_id'";
 }
 
 $where["sejour.group_id"] = "= '$group->_id'";
-$where["sejour.entree"]   = "BETWEEN '$date' AND '$next'";
+$where["sejour.entree"]   = "BETWEEN '$date_min' AND '$date_max'";
 $where["sejour.recuse"]   = "= '$recuse'";
 if($recuse != 1) {
   $where["sejour.annule"]   = "= '0'";
