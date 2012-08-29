@@ -6,7 +6,7 @@
     <script type="text/javascript">
      listCat = {{$listCat|@json}};
      
-     reloadIcone = function(cat_id){
+     reloadIcone = function(cat_id, updateFields){
        var img = $('iconeBackground');
        var form = getForm('editFrm');
        if (!img) return;
@@ -16,19 +16,21 @@
        }
        else {
          img.show().src = "./modules/dPcabinet/images/categories/"+listCat[cat_id]['nom_icone'];
-         $V(form.duree, listCat[cat_id]['duree']);
-         $V(form.rques, ($V(form.rques) ? $V(form.rques) + '\n' : '' ) + listCat[cat_id]['commentaire']);
+         if(updateFields) {
+           $V(form.duree, listCat[cat_id]['duree']);
+           $V(form.rques, ($V(form.rques) ? $V(form.rques) + '\n' : '' ) + listCat[cat_id]['commentaire']);
+         }
        }
-       $V(form.duree, listCat)
+       $V(form.duree, listCat);
      }
 
      Main.add(function() {
-       reloadIcone('{{$categorie_id}}');
+       reloadIcone('{{$categorie_id}}', false);
      });
     </script>
     
     {{if !empty($categories|smarty:nodefaults)}}
-    <select name="categorie_id" onchange="reloadIcone(this.value);">
+    <select name="categorie_id" onchange="reloadIcone(this.value, true);">
       <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
       {{foreach from=$categories item="categorie"}}
         <option class="categorieConsult" {{if $categorie_id == $categorie->_id}} selected="selected"{{/if}}
