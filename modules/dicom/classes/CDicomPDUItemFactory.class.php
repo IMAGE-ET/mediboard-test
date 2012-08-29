@@ -53,10 +53,6 @@ class CDicomPDUItemFactory {
     return $items;
   }
   
-  static function decodeItems(CDicomStreamReader $stream_reader, $length) {
-    
-  }
-  
   static function encodeItem($type) {
     
   }
