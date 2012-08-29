@@ -110,6 +110,13 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     $_operation->_ref_salle = $_operation->loadFwdRef("salle_id");
     $chir    = $_operation->loadRefChir();
     $chir->loadRefFunction();
+    $chir_2  = $_operation->loadRefChir2();
+    $chir_2->loadRefFunction();
+    $chir_3  = $_operation->loadRefChir3();
+    $chir_3->loadRefFunction();
+    $chir_4  = $_operation->loadRefChir4();
+    $chir_4->loadRefFunction();
+    
     $anesth  = $_operation->_ref_anesth = $_operation->loadFwdRef("anesth_id");
     $sejour  = $_operation->loadRefSejour();
     $patient = $sejour->loadRefPatient();
@@ -136,8 +143,21 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".mbTransformTime($debut_op, null, "%H:%M")." - ".mbTransformTime($fin_op, null, "%H:%M")."</span>".
     "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>".
     "\n<span style='font-size: 11px; font-weight: bold;'>$_operation->libelle</span>".
-    "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>$chir->_shortview</span>".
-    "<span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>$anesth->_shortview</span>".
+    "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>$chir->_view</span>";
+    
+    if ($chir_2->_id) {
+      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_2->_guid."\")'>$chir_2->_view</span>";
+    }
+    
+    if ($chir_3->_id) {
+      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_3->_guid."\")'>$chir_3->_view</span>";
+    }
+    
+    if ($chir_4->_id) {
+      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_4->_guid."\")'>$chir_4->_view</span>";
+    }
+    
+    $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>$anesth->_view</span>".
     "\n$_operation->rques";
     
     CMbObject::massLoadFwdRef($besoins, "type_ressource_id");

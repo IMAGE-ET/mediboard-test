@@ -142,6 +142,9 @@ class COperation extends CCodable implements IPatientRelated {
 
   // References
   var $_ref_chir           = null;
+  var $_ref_chir_2         = null;
+  var $_ref_chir_3         = null;
+  var $_ref_chir_4         = null;
   
   /**
    * @var CPlageOp
@@ -781,6 +784,30 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_ref_chir = $this->loadFwdRef("chir_id", $cache);
     $this->_praticien_id = $this->_ref_chir->_id;
     return $this->_ref_chir;
+  }
+  
+  /**
+   * @param boolean cache
+   * @return CMediusers
+   */
+  function loadRefChir2($cache = 0) {
+    return $this->_ref_chir_2 = $this->loadFwdRef("chir_2_id", $cache);
+  }
+  
+  /**
+   * @param boolean cache
+   * @return CMediusers
+   */
+  function loadRefChir3($cache = 0) {
+    return $this->_ref_chir_3 = $this->loadFwdRef("chir_3_id", $cache);
+  }
+  
+  /**
+   * @param boolean cache
+   * @return CMediusers
+   */
+  function loadRefChir4($cache = 0) {
+    return $this->_ref_chir_4 = $this->loadFwdRef("chir_4_id", $cache);
   }
   
   /**
