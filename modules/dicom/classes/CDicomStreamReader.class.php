@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  *  @package Mediboard
@@ -40,6 +40,8 @@ class CDicomStreamReader {
    * Move forward the stream pointer
    * 
    * @param int $bytes The number of bytes you want to skip. This number can't be negative
+   * 
+   * @return null
    */
   function skip($bytes) {
     if ($bytes > 0) {
@@ -60,7 +62,7 @@ class CDicomStreamReader {
   /**
    * Read hexadecimal numbers from the stream
    * 
-   * @param int $length The length of the number, equal to 1 if not given
+   * @param int    $length     The length of the number, equal to 1 if not given
    * 
    * @param string $endianness Equal to BE if you need Big Endian, LE if Little Endian. Equal to BE if not given
    * 
@@ -69,7 +71,8 @@ class CDicomStreamReader {
   function readHexByte($length = 1, $endianness = "BE") {
     if ($endianness == "BE") {
       return $this->readHexByteBE($length);
-    } elseif ($endianness == "LE") {
+    }
+    elseif ($endianness == "LE") {
       return $this->readHexByteLE($length);
     }
   }
@@ -112,7 +115,8 @@ class CDicomStreamReader {
   function readUnsignedInt32($endianness = "BE") {
     if ($endianness == "BE") {
       return $this->readUnsignedInt32BE();
-    } elseif ($endianness == "LE") {
+    }
+    elseif ($endianness == "LE") {
       return $this->readUnsignedInt32LE();
     }
   }
@@ -151,7 +155,8 @@ class CDicomStreamReader {
   function readUnsignedInt16($endianness = "BE") {
     if ($endianness == "BE") {
       return $this->readUnsignedInt16BE();
-    } elseif ($endianness == "LE") {
+    }
+    elseif ($endianness == "LE") {
       return $this->readUnsignedInt16LE();
     }
   }

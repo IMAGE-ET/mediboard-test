@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  *  @package Mediboard
@@ -7,14 +7,53 @@
  *  @author SARL OpenXtrem
  */
 
+/**
+ * Represents a Presentation Syntax PDU Item
+ */
 class CDicomPDUItemPresentationContext extends CDicomPDUItem {
   
+  /**
+   * The type of the Item
+   * 
+   * @var hexadecimal number
+   */
   var $type = 0x20;
+    
+  /**
+   * The length of the Item
+   * 
+   * @var integer
+   */
   var $length = null;
+  
+  /**
+   * The id of the presentation context
+   * 
+   * @var integer
+   */
   var $id = null;
+  
+  /**
+   * The abstract syntax
+   * 
+   * @var CDicomPDUItemAbstractSyntax
+   */
   var $abstract_syntax = null;
+  
+  /**
+   * The transfer syntaxes
+   * 
+   * @var array of CDicomPDUItemTransferSyntax
+   */
   var $transfer_syntaxes = array();
   
+  /**
+   * Decode the Transfer Syntax
+   * 
+   * @param CDicomStreamReader $stream_reader The stream reader
+   * 
+   * @return null
+   */
   function decodeItem(CDicomStreamReader $stream_reader) {
     // On passe le 2ème octet, réservé par Dicom et égal à 00
     $stream_reader->skip(1);
@@ -23,11 +62,25 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
     $stream_reader->skip(3);
     
     $this->abstract_syntax = CDicomPDUItemFactory::decodeItem($stream_reader);
-    $this->transfer_syntaxes = CDicomPDUItemFactory::decodeItems($stream_reader, "40");
+    $this->transfer_syntaxes = CDicomPDUItemFactory::decodeConsecutiveItemsByType($stream_reader, "40");
   }
   
-  function encodeItem(CDicomStreamWriter $stream_writer) {}
+  /**
+   * Encode the Transfer Syntax
+   * 
+   * @param CDicomStreamWriter $stream_writer The stream writer
+   *  
+   * @return null
+   */ 
+  function encodeItem(CDicomStreamWriter $stream_writer) {
+    
+  }
 
+  /**
+   * Return a string representation of the class
+   * 
+   * @return string
+   */
   function __toString() {
     $str = "<ul>
               <li>Item type : $this->type</li>

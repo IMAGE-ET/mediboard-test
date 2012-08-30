@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -16,7 +16,7 @@ class CDicomPDU {
   /**
    * The type of the PDU
    * 
-   * @var hexadecimal umber
+   * @var hexadecimal number
    */
   var $type = null;
   
@@ -31,14 +31,22 @@ class CDicomPDU {
    * Decode the PDU
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
+   * 
+   * @return null
    */
-  function decodePDU(CDicomStreamReader $stream_reader) {}
+  function decodePDU(CDicomStreamReader $stream_reader) {
+    
+  }
   
   /**
    * Encode the PDU
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
+   * 
+   * @return null
    */
-  function encodePDU(CDicomStreamWriter $stream_writer) {}
+  function encodePDU(CDicomStreamWriter $stream_writer) {
+    
+  }
 }
 ?>

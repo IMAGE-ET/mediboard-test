@@ -8,16 +8,16 @@
  */
 
 /**
- * Represents a Transfer Syntax PDU Item
+ * Represents a Implementation Version Name PDU Item
  */
-class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
+class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
   
   /**
    * The type of the Item
    * 
    * @var hexadecimal number
    */
-  var $type = 0x40;
+  var $type = 0x55;
   
   /**
    * The length of the Item
@@ -27,11 +27,11 @@ class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
   var $length = null;
   
   /**
-   * The transfer syntax name, coded as a UID
+   * The maximum length for PDU
    * 
-   * @var string
+   * @var integer
    */
-  var $name = null;
+  var $version_name = null;
   
   /**
    * Decode the Transfer Syntax
@@ -43,7 +43,7 @@ class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
   function decodeItem(CDicomStreamReader $stream_reader) {
     $stream_reader->skip(1);
     $this->length = $stream_reader->readUnsignedInt16();
-    $this->name = $stream_reader->readUID($this->length);
+    $this->version_name = $stream_reader->readString($this->length);
   }
   
   /**
@@ -63,7 +63,7 @@ class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
    * @return string
    */
   function __toString() {
-    return "<ul><li>Item type : $this->type</li><li>Item length : $this->length</li><li>Transfer syntax name : $this->name</li></ul>";
+    return "Implementation version name : <ul><li>Item type : $this->type</li><li>Item length : $this->length</li><li>Version name : $this->version_name</li></ul>";
   }
 }
 ?>

@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  *  @package Mediboard
@@ -7,16 +7,67 @@
  *  @author SARL OpenXtrem
  */
 
+/**
+ * An A-Associate-RQ PDU
+ */
 class CDicomPDUAAssociateRQ extends CDicomPDU {
   
+  /**
+   * The type of the PDU
+   * 
+   * @var hexadecimal number
+   */
   var $type = 0x01;
+  
+  /**
+   * The length of the PDU
+   * 
+   * @var integer
+   */
   var $length = null;
+  
+  /**
+   * Protocol version, must be equal to 1
+   * 
+   * @var integer
+   */
   var $protocol_version = null;
+  
+  /**
+   * The called application entity
+   * 
+   * @var string
+   */
   var $called_AE_title = null;
+  
+  /**
+   * The calling application entity
+   * 
+   * @var string
+   */
   var $calling_AE_title = null;
+  
+  /**
+   * The application context
+   * 
+   * @var CDicomPDUItemApplicationContext
+   */
   var $application_context = null;
+  
+  /**
+   * The presentation contexts
+   * 
+   * @var array of CDicomPDUItemPresentationContext
+   */
   var $presentation_contexts = array();
   
+  /**
+   * Decode the PDU
+   * 
+   * @param CDicomStreamReader $stream_reader The stream reader
+   *  
+   * @return null
+   */
   function decodePDU(CDicomStreamReader $stream_reader) {
     // On passe le 2ème octet, réservé par Dicom et égal à 00
     $stream_reader->skip(1);
@@ -42,12 +93,26 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
     $stream_reader->skip(32);
     
     $this->application_context = CDicomPDUItemFactory::decodeItem($stream_reader);
-    $this->presentation_contexts = CDicomPDUItemFactory::decodeItems($stream_reader, "20");
+    $this->presentation_contexts = CDicomPDUItemFactory::decodeConsecutiveItemsByType($stream_reader, "20");
     $this->user_info = CDicomPDUItemFactory::decodeItem($stream_reader);
   }
   
-  function encodePDU(CDicomStreamWriter $stream_writer) {}
+  /**
+   * Encode the PDU
+   * 
+   * @param CDicomStreamWriter $stream_writer The stream writer
+   *  
+   * @return null
+   */
+  function encodePDU(CDicomStreamWriter $stream_writer) {
+    
+  }
   
+  /**
+   * Return a string representation of the class
+   * 
+   * @return string
+   */
   function __toString() {
     $str = "<h1>A-Associate-RQ</h1><br>
             <ul>
@@ -61,7 +126,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
     foreach ($this->presentation_contexts as $pres_context) {
       $str .= "<li>Presentation context : {$pres_context->__toString()}";
     }
-    $str .= "</ul>";
+    $str .= "<li>User Info : {$this->user_info->__toString()}</ul>";
     return $str;
   }
 }

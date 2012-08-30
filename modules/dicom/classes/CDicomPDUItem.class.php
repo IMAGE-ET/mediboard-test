@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  *  @package Mediboard
@@ -30,14 +30,22 @@ class CDicomPDUItem {
    * Decode the item
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
+   * 
+   * @return null
    */
-  function decodeItem(CDicomStreamReader $stream_reader) {}
+  function decodeItem(CDicomStreamReader $stream_reader) {
+    
+  }
   
   /**
    * Encode the item
    * 
-   * @param CDicomStreamReader $stream_reader The stream reader
+   * @param CDicomStreamWriter $stream_writer The stream writer
+   * 
+   * @return null
    */
-  function encodeItem(CDicomStreamWriter $stream_writer) {}
+  function encodeItem(CDicomStreamWriter $stream_writer) {
+    
+  }
 }
 ?>

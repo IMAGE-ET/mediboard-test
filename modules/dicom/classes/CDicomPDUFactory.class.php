@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -9,10 +9,15 @@
  */ 
  
 /**
- * Description
+ * The PDU Factory, who matches the type of PDU and the corresponding PHP class
  */
 class CDicomPDUFactory {
 
+  /**
+   * Make the link between the code types and the PDU classes
+   * 
+   * @var array
+   */
   static $pdu_types = array(
     "01" => "CDicomPDUAAssociateRQ",
     "02" => "CDicomPDUAAssociateAC",
@@ -23,6 +28,13 @@ class CDicomPDUFactory {
     "07" => "CDicomPDUAAbort",
   );
   
+  /**
+   * Get the type of the PDU, and create the corresponding CDicomPDU
+   * 
+   * @param resource $stream A stream, file or socket
+   * 
+   * @return CDicomPDU The PDU
+   */
   static function decodePDU($stream) {
     if (!$stream) {
       // retourne une erreur
@@ -37,7 +49,16 @@ class CDicomPDUFactory {
     return $pdu;
   }
   
-  static function encodePDU($type) {
+  /**
+   * Create a PDU of the given type
+   * 
+   * @param resource $stream A stream, file or socket
+   * 
+   * @param string   $type   The type of the PDU you want to create
+   * 
+   * @return CDicomPDU The PDU
+   */
+  static function encodePDU($stream , $type) {
     
   }
 }
