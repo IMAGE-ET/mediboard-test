@@ -340,6 +340,7 @@ $locales['mod-dPbloc-tab-vw_edit_planning'] = 'Planning des vacations';
 $locales['mod-dPbloc-tab-vw_idx_blocs'] = 'Gestion des blocs';
 $locales['mod-dPbloc-tab-vw_idx_materiel'] = 'Commande de matériel';
 $locales['mod-dPbloc-tab-vw_idx_salles'] = 'Gestion des salles';
+$locales['mod-dPbloc-tab-vw_planning'] = 'Planning';
 $locales['mod-dPbloc-tab-vw_planning_week'] = 'Planning de la semaine';
 $locales['mod-dPbloc-tab-vw_replanification'] = 'Replanification';
 $locales['mod-dPbloc-tab-vw_ressources'] = 'Gestion des ressources';

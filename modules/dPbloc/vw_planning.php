@@ -9,4 +9,7 @@
  * @version    $Revision$
  */
 
-CAppUI::requireModuleFile("dPplanningOp", "vw_edit_sejour");
+global $current_m;
+$current_m = "dPbloc";
+
+CAppUI::requireModuleFile("reservation", "vw_planning");

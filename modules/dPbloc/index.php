@@ -13,6 +13,9 @@ $module = CModule::getInstalled(basename(dirname(__FILE__)));
 $module->registerTab("vw_edit_planning"     , TAB_READ);
 $module->registerTab("vw_edit_interventions", TAB_EDIT);
 $module->registerTab("vw_suivi_salles"      , TAB_EDIT);
+if (CModule::getActive("reservation")) {
+  $module->registerTab("vw_planning"        , TAB_READ);
+}
 $module->registerTab("vw_urgences"          , TAB_EDIT);
 $module->registerTab("vw_departs_us"        , TAB_EDIT);
 if (CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "standard") {

@@ -22,6 +22,7 @@
     url.addParam("praticien_id" , $V(form.praticien_id));
     url.addParam("bloc_id"      , $V(form.bloc_id));
     url.addParam("show_cancelled", form.show_cancelled.checked ? 1 : 0);
+    url.addParam("current_m"    , "{{$current_m}}");
     var week_container = $$(".week-container")[0];
     
     if (week_container) {

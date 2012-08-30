@@ -11,6 +11,13 @@
 
 CCanDo::checkRead();
 
+global $m, $current_m;
+
+if (!isset($current_m)){
+  $current_m = CValue::get("current_m", $m);
+}
+
+
 $date_planning = CValue::getOrSession("date_planning", mbDate());
 $praticien_id  = CValue::getOrSession("praticien_id", "");
 $bloc_id       = CValue::getOrSession("bloc_id", "");
@@ -27,8 +34,9 @@ foreach ($praticiens as $_prat) {
 $bloc = new CBlocOperatoire;
 $blocs = $bloc->loadGroupList();
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP("modules/reservation");
 
+$smarty->assign("current_m"    , $current_m);
 $smarty->assign("date_planning", $date_planning);
 $smarty->assign("praticien_id" , $praticien_id);
 $smarty->assign("praticiens"   , $praticiens);

@@ -11,6 +11,15 @@
 
 CCanDo::checkRead();
 
+global $m;
+
+// On sauvegarde le module pour que les mises en session des paramètes se fassent
+// dans le module depuis lequel on accède à la ressource
+$save_m = $m;
+
+$current_m     = CValue::get("current_m");
+$m = $current_m;
+
 $date_planning = CValue::getOrSession("date_planning");
 $praticien_id  = CValue::getOrSession("praticien_id");
 $scroll_top    = CValue::get("scroll_top", null);
@@ -222,6 +231,8 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     }
   }
 }
+
+$m = $save_m;
 
 $smarty = new CSmartyDP;
 
