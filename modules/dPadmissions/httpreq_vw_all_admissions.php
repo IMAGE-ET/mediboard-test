@@ -30,6 +30,7 @@ else {
   else {
     $nextmonth     = mbTransformTime("+0 month", $nextmonth, "%Y-%m-01");
   }
+}
 
 $selAdmis      = CValue::getOrSession("selAdmis", "0");
 $selSaisis     = CValue::getOrSession("selSaisis", "0");
@@ -156,5 +157,3 @@ $smarty->assign('nextmonth'    , $nextmonth);
 $smarty->assign('days'         , $days);
 
 $smarty->display('inc_vw_all_admissions.tpl');
-
-?>
