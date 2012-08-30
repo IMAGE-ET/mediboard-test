@@ -37,8 +37,19 @@ $salle = new CSalle;
 $where = array("bloc_id" => "='$bloc->_id'");
 $bloc->_ref_salles = $salle->loadListWithPerms(PERM_READ, $where, "nom");
 
+$systeme_materiel_expert = CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert";
+
 foreach ($bloc->_ref_salles as &$salle) {
   $salle->loadRefsForDay($date_suivi);
+  if ($systeme_materiel_expert) {
+    foreach ($salle->_ref_urgences as $_operation) {
+      $besoins = $_operation->loadRefsBesoins();
+      CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
+      foreach ($besoins as $_besoin) {
+        $_besoin->loadRefTypeRessource();
+      }
+    }
+  }
 }
 
 // Création du template

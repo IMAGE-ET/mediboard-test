@@ -27,24 +27,24 @@
     <td style="text-align: center;">
       {{mb_ditto name=date value=$_operation->_datetime|date_format:$conf.date}}
       <br />{{mb_ditto name=weekday value=$_operation->_datetime|date_format:"%A"}}
-			{{if $_operation->annulee}}
-			<div class="cancelled">{{tr}}Cancelled{{/tr}}</div>
-			{{/if}}
+      {{if $_operation->annulee}}
+      <div class="cancelled">{{tr}}Cancelled{{/tr}}</div>
+      {{/if}}
     </td>
     
     {{assign var=chir value=$_operation->_ref_chir}}
     <td><span class="mediuser" style="border-color: #{{$chir->_ref_function->color}};">{{$chir}}</span></td>
     
-		{{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
+    {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
     <td class="text">
-    	<span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-    	{{$patient}}
-			</span>
-		</td>
-		
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+      {{$patient}}
+      </span>
+    </td>
+    
     <td class="text">
-    	{{if !$dialog}}
-			<a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
+      {{if !$dialog}}
+      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
       {{/if}}
 
       {{mb_include module=planningOp template=inc_vw_operation _operation=$_operation}}
@@ -59,22 +59,23 @@
 
     {{if !$dialog}}
     <td>
-      <form name="Edit-{{$_operation->_guid}}" action="?m=dPbloc" method="post">
+      <form name="Edit-{{$_operation->_guid}}" action="?m=dPbloc" method="post"
+        onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         {{mb_key object=$_operation}}
         {{if $commande_mat}}
         <input type="hidden" name="commande_mat" value="0" />
-        <button type="submit" class="cancel">{{tr}}Cancel{{/tr}}</button>
+        <button type="button" class="cancel" onclick="this.form.onsubmit()">{{tr}}Cancel{{/tr}}</button>
         {{else}}
         <input type="hidden" name="commande_mat" value="1" />
-        <button type="submit" class="submit">{{tr}}COperation.commande_mat.1{{/tr}}</button>
+        <button type="button" class="submit" onclick="this.form.onsubmit()">{{tr}}COperation.commande_mat.1{{/tr}}</button>
         {{/if}}
       </form>
     </td>
     {{/if}}
   </tr>
   {{foreachelse}}
-	<tr><td colspan="10" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
+  <tr><td colspan="10" class="empty">{{tr}}COperation.none{{/tr}}</td></tr>
   {{/foreach}}
 </table>

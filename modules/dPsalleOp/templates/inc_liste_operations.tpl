@@ -19,6 +19,8 @@
   {{/if}}
 </tr>
 
+{{assign var=systeme_materiel value=$conf.dPbloc.CPlageOp.systeme_materiel}}
+
 {{foreach from=$operations item=_operation}}
 {{if $conf.dPsalleOp.COperation.modif_salle}}
   {{assign var="rowspan" value=2}}
@@ -43,16 +45,47 @@
   {{/if}}
     <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$_operation->_id}}" title="Coder l'intervention">
       {{if ($urgence && $salle) || $_operation->_ref_plageop->spec_id}}
-        {{$_operation->_ref_chir->_view}} - 
+        {{$_operation->_ref_chir->_view}} -
+      {{if $_operation->_ref_anesth->_id && $vueReduite}}
+        {{$_operation->_ref_anesth->_view}} -
+      {{/if}}
       {{/if}}
       {{if $_operation->time_operation != "00:00:00"}}
         {{$_operation->time_operation|date_format:$conf.time}}
       {{else}}
         NP
       {{/if}}
+      {{if $vueReduite && $urgence && $salle}}
+        - {{$_operation->temp_operation|date_format:$conf.time}}
+        
+        {{if $_operation->presence_preop}}
+          <div>
+            Pré-op : {{$_operation->presence_preop|date_format:$conf.time}}
+          </div>
+        {{/if}}
+        {{if $_operation->presence_postop}}
+          <div>
+            Post-op : {{$_operation->presence_postop|date_format:$conf.time}}
+          </div>
+        {{/if}}
+      {{/if}}
     </a>
-    {{if $vueReduite}}
+    {{if $vueReduite && $systeme_materiel == "expert"}}
       <button class="print notext not-printable" onclick="printFicheBloc({{$_operation->_id}})">{{tr}}Print{{/tr}}</button>
+      {{if $urgence && $salle && $_operation->_ref_besoins|@count}}
+        
+        <img src="style/mediboard/images/icons/equipement.png" onmouseover="ObjectTooltip.createDOM(this, 'besoins_{{$_operation->_id}}')"/>
+        <div id="besoins_{{$_operation->_id}}" style="display: none;">
+          {{tr}}CBesoinRessource.all{{/tr}} :
+          <ul>
+            {{foreach from=$_operation->_ref_besoins item=_besoin}}
+             <li>
+               {{$_besoin->_ref_type_ressource}}
+             </li>
+            {{/foreach}}
+          </ul>
+        </div>
+      {{/if}}
     {{/if}}
   </td>
  

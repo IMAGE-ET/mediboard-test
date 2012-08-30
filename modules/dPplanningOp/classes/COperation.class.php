@@ -861,11 +861,15 @@ class COperation extends CCodable implements IPatientRelated {
     }
   }
   
+  function loadRefAnesth($cache = 0) {
+    return $this->_ref_anesth = $this->loadFwdRef("anesth_id", $cache);
+  }
+  
   /**
    * @return CPlageOp
    */
   function loadRefPlageOp($cache = 0) {
-    $this->_ref_anesth        = $this->loadFwdRef("anesth_id"            , $cache);
+    $this->loadRefAnesth($cache);
     $this->_ref_anesth_visite = $this->loadFwdRef("prat_visite_anesth_id", $cache);
     
     if (!$this->_ref_plageop) {

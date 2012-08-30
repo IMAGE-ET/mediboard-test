@@ -11,7 +11,6 @@
 ?>
 
 <table class="tbl">
-  <col style="width: 0.1%" />
   <tr>
     <td class="patient-not-arrived">M. PATIENT Patient</td>
     <td class="text">Patient pas encore dans l'établissement</td>

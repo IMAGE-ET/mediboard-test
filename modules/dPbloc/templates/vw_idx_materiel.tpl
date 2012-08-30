@@ -9,7 +9,7 @@
 *}}
 
 <script type="text/javascript">
-function checkFormPrint() {
+checkFormPrint = function() {
   var form = document.PrintFilter;
     
   if(!(checkForm(form))){
@@ -22,6 +22,15 @@ function checkFormPrint() {
   url.popup(900, 750, 'Materiel');
 }
 
+refreshLists = function() {
+  var url = new Url("dPbloc", "ajax_vw_materiel");
+  url.addFormData(getForm("selectBloc"));
+  url.requestUpdate("list_materiel");
+}
+
+Main.add(function() {
+  refreshLists();
+});
 </script>
 
 <form name="PrintFilter" action="?m=dPbloc" method="post" onsubmit="return checkFormPrint()">
@@ -40,34 +49,8 @@ function checkFormPrint() {
 
 </form>
 
-<script type="text/javascript">
-Main.add(function () {
-  Control.Tabs.create('tabs-commande_mat', true);
-});
-</script>
-
-<ul id="tabs-commande_mat" class="control_tabs">
-  <li>
-    {{assign var=op_count value=$operations[0]|@count}}
-    <a href="#commande_mat_0" {{if !$op_count}}class="empty"{{/if}}>
-      {{tr}}COperation.commande_mat.0{{/tr}} 
-      <small>({{$op_count}})</small>
-    </a>
-  </li>
-  <li>
-    {{assign var=op_count value=$operations[1]|@count}}
-    <a href="#commande_mat_1" {{if !$op_count}}class="empty"{{/if}}>
-      A annuler
-      <small>({{$op_count}})</small>
-    </a>
-  </li>
-</ul>
-
-      
-<form action="?" name="selectBloc" method="get">
-  <input type="hidden" name="m" value="{{$m}}" />
-  <input type="hidden" name="tab" value="vw_idx_materiel" />
-  <select name="bloc_id" style="float: right;" onchange="this.form.submit()">
+<form action="?" name="selectBloc" method="get" onsubmit="refreshLists(); return false;">
+  <select name="bloc_id" style="float: right;" onchange="this.form.onsubmit()">
     {{foreach from=$listBlocs item=curr_bloc}}
     <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc_id}}selected="selected"{{/if}}>
       {{$curr_bloc->nom}}
@@ -78,8 +61,5 @@ Main.add(function () {
   </select>
 </form>
 
-<hr class="control_tabs" />
-
-{{foreach from=$operations key=commande_mat item=_operations}}
-{{mb_include template=inc_list_materiel}}
-{{/foreach}}
+<div id="list_materiel">
+</div>

@@ -10,11 +10,11 @@
 
 class CSalle extends CMbObject {
   // DB Table key
-	var $salle_id = null;
+  var $salle_id = null;
   
   // DB references
   var $bloc_id = null;
-	
+  
   // DB Fields
   var $nom         = null;
   var $stats       = null;
@@ -48,7 +48,7 @@ class CSalle extends CMbObject {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["bloc_id"] = "ref notNull class|CBlocOperatoire";
     $specs["nom"]     = "str notNull seekable";
     $specs["stats"]   = "bool notNull";
@@ -66,7 +66,7 @@ class CSalle extends CMbObject {
     );
     $this->_view = '';
     if ($bloc->countList($where) > 1) {
-    	$this->_view = $bloc->nom.' - ';
+      $this->_view = $bloc->nom.' - ';
     }
     $this->_view .= $this->nom;
     $this->_shortview = $this->nom;
@@ -76,17 +76,17 @@ class CSalle extends CMbObject {
    * Load list overlay for current group
    */
   function loadGroupList($where = array(), $order = 'bloc_id, nom', $limit = null, $groupby = null, $ljoin = array()) {
-  	$list_blocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, false);
-  	
+    $list_blocs = CGroups::loadCurrent()->loadBlocs(PERM_READ, false);
+    
     // Filtre sur l'établissement
-		$where[] = "bloc_id ".CSQLDataSource::prepareIn(array_keys($list_blocs));
+    $where[] = "bloc_id ".CSQLDataSource::prepareIn(array_keys($list_blocs));
     
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
   
   function getPerm($permType) {
-  	$this->loadRefBloc();
-  	return $this->_ref_bloc->getPerm($permType) && parent::getPerm($permType);
+    $this->loadRefBloc();
+    return $this->_ref_bloc->getPerm($permType) && parent::getPerm($permType);
   }
   
   function loadRefBloc(){
@@ -104,65 +104,66 @@ class CSalle extends CMbObject {
    */
   function loadRefsForDay($date) {
     // Plages d'opérations
-	  $plages = new CPlageOp;
-	  $where = array();
-	  $where["date"] = "= '$date'";
-	  $where["salle_id"] = "= '$this->_id'";
-	  $order = "debut";
-		$this->_ref_plages = $plages->loadList($where, $order);
-		foreach ($this->_ref_plages as &$plage) {
-		  $plage->loadRefs(0, 1);
+    $plages = new CPlageOp;
+    $where = array();
+    $where["date"] = "= '$date'";
+    $where["salle_id"] = "= '$this->_id'";
+    $order = "debut";
+    $this->_ref_plages = $plages->loadList($where, $order);
+    foreach ($this->_ref_plages as &$plage) {
+      $plage->loadRefs(0, 1);
       $plage->loadRefsNotes();
-		  $plage->_unordered_operations = array();
-		  foreach ($plage->_ref_operations as &$operation) {
-		    $operation->loadRefChir(1);
-		    $operation->loadRefPatient(1);
-		    $operation->loadExtCodesCCAM();
-		    $operation->loadRefPlageOp(1);
+      $plage->_unordered_operations = array();
+      foreach ($plage->_ref_operations as &$operation) {
+        $operation->loadRefAnesth(1);
+        $operation->loadRefChir(1);
+        $operation->loadRefPatient(1);
+        $operation->loadExtCodesCCAM();
+        $operation->loadRefPlageOp(1);
 
-		    if(CAppUI::conf("dPbloc CPlageOp chambre_operation")) {
-		    	$operation->loadRefAffectation();
-		    }
-		    
-		    // Extraire les interventions non placées
-		    if ($operation->rank == 0) {
-		      $plage->_unordered_operations[$operation->_id] = $operation;
-		      unset($plage->_ref_operations[$operation->_id]);
-		    }
-		  }
-		}
-		
-		// Interventions déplacés
-		$deplacees = new COperation;
-		$ljoin = array();
-		$ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
-		$where = array();
-		$where["operations.plageop_id"] = "IS NOT NULL";
-		$where["plagesop.salle_id"]     = "!= operations.salle_id";
-		$where["plagesop.date"]         = "= '$date'";
-		$where["operations.salle_id"]   = "= '$this->_id'";
-		$order = "operations.time_operation";
-		$this->_ref_deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
-		foreach ($this->_ref_deplacees as &$deplacee) {
-		  $deplacee->loadRefChir(1);
-		  $deplacee->loadRefPatient(1);
-		  $deplacee->loadExtCodesCCAM();
-		  $deplacee->loadRefPlageOp(1);
-		}
+        if(CAppUI::conf("dPbloc CPlageOp chambre_operation")) {
+          $operation->loadRefAffectation();
+        }
+        
+        // Extraire les interventions non placées
+        if ($operation->rank == 0) {
+          $plage->_unordered_operations[$operation->_id] = $operation;
+          unset($plage->_ref_operations[$operation->_id]);
+        }
+      }
+    }
+    
+    // Interventions déplacés
+    $deplacees = new COperation;
+    $ljoin = array();
+    $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
+    $where = array();
+    $where["operations.plageop_id"] = "IS NOT NULL";
+    $where["plagesop.salle_id"]     = "!= operations.salle_id";
+    $where["plagesop.date"]         = "= '$date'";
+    $where["operations.salle_id"]   = "= '$this->_id'";
+    $order = "operations.time_operation";
+    $this->_ref_deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
+    foreach ($this->_ref_deplacees as &$deplacee) {
+      $deplacee->loadRefChir(1);
+      $deplacee->loadRefPatient(1);
+      $deplacee->loadExtCodesCCAM();
+      $deplacee->loadRefPlageOp(1);
+    }
 
-		// Urgences
-	  $urgences = new COperation;
-	  $where = array();
-	  $where["date"]     = "= '$date'";
-	  $where["salle_id"] = "= '$this->_id'";
-	  $order = "chir_id";
-	  $this->_ref_urgences = $urgences->loadList($where);
-	  foreach($this->_ref_urgences as &$urgence) {
-	    $urgence->loadRefChir(1);
-	    $urgence->loadRefPatient(1);
-	    $urgence->loadExtCodesCCAM();
-		  $urgence->loadRefPlageOp(1);
-	  }
+    // Urgences
+    $urgences = new COperation;
+    $where = array();
+    $where["date"]     = "= '$date'";
+    $where["salle_id"] = "= '$this->_id'";
+    $order = "chir_id";
+    $this->_ref_urgences = $urgences->loadList($where);
+    foreach($this->_ref_urgences as &$urgence) {
+      $urgence->loadRefChir(1);
+      $urgence->loadRefPatient(1);
+      $urgence->loadExtCodesCCAM();
+      $urgence->loadRefPlageOp(1);
+    }
   }
   
   function loadRefsAlertesIntervs() {

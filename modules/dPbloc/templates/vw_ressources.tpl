@@ -75,6 +75,11 @@
     }
   }
   
+  refreshCommandes = function() {
+    var url = new Url("dPbloc", "vw_idx_materiel");
+    url.requestUpdate("list_commandes");
+  }
+  
   Main.add(function() {
     new Control.Tabs.create("manage_ressources", true);
     
@@ -82,8 +87,11 @@
     if (tab_name == "list_type_ressources" || !tab_name) {
       TypeRessource.refreshListTypeRessources('{{$type_ressource_id}}');
     }
-    else {
+    else if (tab_name == "list_indispos"){
       Indispo.refreshListIndispos('{{$indispo_ressource_id}}','{{$date_indispo}}');
+    }
+    else {
+      refreshCommandes();
     }
   })
 </script>
@@ -95,9 +103,13 @@
   <li onmousedown="Indispo.refreshListIndispos()">
     <a href="#list_indispos">Indisponibilités</a>
   </li>
+  <li onmousedown="refreshCommandes()">
+    <a href="#list_commandes">Commandes</a>
+  </li>
 </ul>
 
 <hr class="control_tabs" />
 
 <div id="list_type_ressources" style="display: none"></div>
-<div id="list_indispos" style="display: none"></div>
+<div id="list_indispos"        style="display: none"></div>
+<div id="list_commandes"       style="display: none"></div>
