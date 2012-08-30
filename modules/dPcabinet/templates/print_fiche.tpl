@@ -311,6 +311,9 @@
                         {{$_prise->_view}}{{if !$smarty.foreach.foreach_prise.last}},{{/if}}
                       {{/foreach}})
                     {{/if}}
+                    {{if $_line_med->commentaire}}
+                    ({{$_line_med->commentaire}})
+                    {{/if}}
                   </li>
                 {{/foreach}}
               {{/if}}
