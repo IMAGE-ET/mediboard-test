@@ -372,13 +372,13 @@ class CStoredObject extends CModelObject {
     $perm_module = CModule::getCanDo(CModelObject::$module_name[$this->_class]);
     
     if ($perm_module->admin || $perm_module->edit) {
-      $perm->permission = 2;
+      $perm->permission = PERM_EDIT;
     }
     elseif ($perm_module->read) {
-      $perm->permission = 1;
+      $perm->permission = PERM_READ;
     }
     else {
-      $perm->permission = 0;
+      $perm->permission = PERM_DENY;
     }
     
     return $perm;
