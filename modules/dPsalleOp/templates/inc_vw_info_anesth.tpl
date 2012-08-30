@@ -107,7 +107,7 @@ Main.add(function(){
           <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>            
           <div id="files-anesth">
             <script type="text/javascript">
-              File.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class}}', 'files-anesth');
+              File.register('{{$consult_anesth->consultation_id}}','CConsultation', 'files-anesth');
             </script>
           </div>
         </fieldset>
