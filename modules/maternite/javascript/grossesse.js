@@ -45,7 +45,10 @@ Grossesse = {
       var html = "<img src='style/mediboard/images/icons/grossesse.png' ";
       html += "onmouseover=\"ObjectTooltip.createEx(this, 'CGrossesse-"+grossesse_id+"')\" ";
       if (input.get("active") == 0) {
-        html += "class='opacity-40'";
+        html += "class='opacity-40' ";
+      }
+      if ($V(this.formTo._large_icon) == 1) {
+        html += "style='width: 30px;'";
       }
       html += "/>";
       $("view_grossesse").update(html);

@@ -62,7 +62,7 @@ function changePratPec(prat_id) {
       </button>
       {{if "maternite"|module_active && $modules.maternite->_can->read}}
         <div style="float: right;">
-          {{mb_include module=maternite template=inc_input_grossesse object=$consult submit=1}}
+          {{mb_include module=maternite template=inc_input_grossesse object=$consult submit=1 large_icon=1}}
         </div>
       {{/if}}
       {{else}}
@@ -85,7 +85,7 @@ function changePratPec(prat_id) {
         {{/if}}
         {{if "maternite"|module_active && !$_is_anesth && $modules.maternite->_can->read}}
           <br />
-          {{mb_include module=maternite template=inc_input_grossesse object=$consult submit=1}}
+          {{mb_include module=maternite template=inc_input_grossesse object=$consult submit=1 large_icon=1}}
         {{/if}}   
       </div>
       {{/if}}
