@@ -11,7 +11,7 @@
 <script type="text/javascript">
 function fixUnits(){
   var url = new Url("dPstock", "do_fix_quantities_units");
-	url.requestUpdate("fix-units-logs");
+  url.requestUpdate("fix-units-logs");
 }
 
 Main.add(function(){
@@ -39,7 +39,7 @@ Main.add(function(){
         {{assign var=name value="$m[$var]"}}
         
         <select name="{{$name}}">
-          <option value=""> &ndash; {{tr}}None{{/tr}}</option>
+          <option value=""> &ndash; Chaque établissement gère ses stocks</option>
           {{foreach from=$groups_list item=_group}}
             <option value="{{$_group->_id}}" {{if $conf.$m.$var == $_group->_id}}selected="selected"{{/if}}>{{$_group}}</option>
           {{/foreach}}
@@ -142,12 +142,12 @@ Les caractères suivants sont utilisés pour spécifier le format du numéro de comm
 </div>
 
 <table class="main tbl" id="units" style="table-layout: fixed;">
-	<tr>
+  <tr>
     <td>
-    	<button type="button" class="change oneclick" onclick="fixUnits()">Corriger les unités des stocks</button>
+      <button type="button" class="change oneclick" onclick="fixUnits()">Corriger les unités des stocks</button>
     </td>
     <td id="fix-units-logs"></td>
-	</tr>
+  </tr>
   <tr>
     <td>
       <a class="button search" href="?m=dPstock&tab=vw_reference_price_changes">Commandes avec prix unitaire erroné</a>
