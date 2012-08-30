@@ -134,8 +134,11 @@
           {{math equation=x*y+z x=$ressources|@count y=26 z=$td_height assign=height}}
           {{math equation=x*y x=$operation->_debut_offset y=$td_width assign=offset}}
           {{math equation=x*y x=$operation->_width y=$td_width assign=width}}
-          <div class="planning_ressource interv"
-            style="position: absolute; left: {{$offset}}%; width: {{$width}}%; height: {{$height}}px; margin-top: 3px"></div>
+          
+          {{if $width > 0}}
+            <div class="planning_ressource interv"
+              style="position: absolute; left: {{$offset}}%; width: {{$width}}%; height: {{$height}}px; margin-top: 3px"></div>
+          {{/if}}
           
           {{assign var=margin_top value=5}}
           {{foreach from=$besoins item=_besoin key=ressource_id name=ressources}}

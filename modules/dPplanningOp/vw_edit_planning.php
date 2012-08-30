@@ -208,6 +208,8 @@ if (CModule::getActive("maternite")) {
   $sejour->loadRefGrossesse();
 }
 
+$exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -257,6 +259,8 @@ $smarty->assign("listAnesthType"        , $listAnesthType);
 $smarty->assign("anesthesistes"         , $anesthesistes);
 $smarty->assign("medecin_adresse_par"   , $medecin_adresse_par);
 $smarty->assign("blocages_lit"          , $blocages_lit);
+
+$smarty->assign("exchange_source"       , $exchange_source);
 
 $smarty->display("vw_edit_planning.tpl");
 

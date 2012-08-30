@@ -95,7 +95,8 @@ addBesoins = function(types_ressources_ids) {
 {{mb_field object=$op field="_count_actes" hidden=1}}
 <input type="hidden" name="_place_after_interv_id" value="" />
 {{mb_field object=$op field=duree_preop form=editOp hidden=1}}
-<input type="hidden" name="_types_ressources_ids" {{if $op->_id}}onchange="addBesoins(this.value)"{{/if}}/>
+<input type="hidden" name="_types_ressources_ids"
+  onchange="{{if $op->_id}}addBesoins(this.value){{else}}synchronizeTypes($V(this)){{/if}}"/>
 
 <table class="form">
   <tr>

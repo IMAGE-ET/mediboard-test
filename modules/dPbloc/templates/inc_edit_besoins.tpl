@@ -26,10 +26,18 @@
           if (!id) {
             return;
           }
-          $V(field.form.type_ressource_id, id);
-          field.form.onsubmit();
+          {{if !$object_id}}
+             addBesoinNonStored(id);
+             $V(field, "");
+          {{else}}          
+            $V(field.form.type_ressource_id, id);
+            field.form.onsubmit();
+          {{/if}}
         }
       });
+      {{if !$object_id}}
+        refreshBesoinsNonStored();
+      {{/if}}
     });
   {{/if}}
   
@@ -53,6 +61,23 @@
   
   reloadModal = function() {
     getForm('delBesoin').up('div.modal').down('button.change').onclick();
+  }
+  
+  addBesoinNonStored = function(type_ressource_id) {
+    window.besoins_non_stored.push(type_ressource_id);
+    refreshBesoinsNonStored();
+  }
+  
+  delBesoinNonStored = function(type_ressource_id) {
+    window.besoins_non_stored.splice(window.besoins_non_stored.indexOf(type_ressource_id), 1);
+    refreshBesoinsNonStored();
+  }
+  
+  refreshBesoinsNonStored = function() {
+    var url = new Url("bloc", "ajax_list_besoins_non_stored");
+    url.addParam("types_ressources_ids", window.besoins_non_stored.join(","));
+    url.addParam("type", '{{$type}}')
+    url.requestUpdate("list_besoins");
   }
   
   showPlanning = function(type_ressource_id, operation_id, usage_ressource_id, besoin_ressource_id, usage) {
@@ -83,7 +108,7 @@
 
 <table class="tbl">
   <tr>
-    <th {{if $type == "operation_id"}} colspan="3"{{/if}}>
+    <th colspan="{{if $type == "operation_id"}}3{{else}}2{{/if}}">
       {{if !$usage}}
         <div style="float: right;">
           <form name="addBesoin" method="post" onsubmit="onSubmitBesoins(this)">
@@ -93,54 +118,15 @@
             <input type="hidden" name="{{$type}}" value="{{$object_id}}"/>
             <input type="hidden" name="type_ressource_id" />
           </form>
-          <div id="besoins_area" style="text-align: left;" class="autocomplete">
-            
-          </div>
+          <div id="besoins_area" style="text-align: left;" class="autocomplete"></div>
         </div>
       {{/if}}
       Liste des besoins
     </th>
-    {{foreach from=$besoins item=_besoin}}
-      {{assign var=type_ressource value=$_besoin->_ref_type_ressource}}
-      {{assign var=_usage value=$_besoin->_ref_usage}}
-      <tr>
-        <td style="width: 12px; background: #{{$_besoin->_color}}">
-        </td>
-        <td style="width: 50%">
-          <div style="float: right">
-            <button type="button" class="trash notext" {{if $usage || $_usage->_id}}disabled{{/if}} title="{{tr}}Delete{{/tr}}"
-              onclick="onDelBesoin('{{$_besoin->_id}}', '{{$type_ressource->libelle}}')"></button>
-            {{if $type == "operation_id"}}
-              <button type="button" class="modele_etiquette notext"
-                onclick="showPlanning('{{$_besoin->type_ressource_id}}', '{{$object_id}}', '{{$_usage->_id}}', '{{$_besoin->_id}}', '{{$usage}}')"title="Planning"></button>
-            {{/if}}
-          </div>
-          <strong>
-            {{$type_ressource->libelle}}
-          </strong>
-        </td>
-        {{if $type == "operation_id"}}
-          <td {{if !$_usage->_id}}class="empty"{{/if}}>
-            {{if $_usage->_id}}
-              {{$_usage->_ref_ressource}}
-              <form name="delUsage{{$_usage->_id}}" method="post">
-                <input type="hidden" name="m" value="bloc" />
-                <input type="hidden" name="dosql" value="do_usage_ressource_aed" />
-                <button type="button" {{if !$usage}}disabled{{/if}} class="trash notext" style="float: right;"
-                  onclick="onDelUsage('{{$_usage->_id}}', '{{$_usage->_ref_ressource}}')"></button>
-              </form>
-            {{else}}
-              Non pourvu
-            {{/if}}
-          </td>
-        {{/if}}
-      </tr>
-    {{foreachelse}}
-      <tr>
-        <td class="empty">
-          {{tr}}CBesoinRessource.none{{/tr}}
-        </td>
-      </tr>
-    {{/foreach}}
   </tr>
+  <tbody id="list_besoins">
+    {{if $object_id}}
+      {{mb_include module=bloc template=inc_list_besoins}}
+    {{/if}}
+  </tbody>
 </table>

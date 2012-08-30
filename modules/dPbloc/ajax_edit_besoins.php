@@ -33,7 +33,7 @@ foreach ($besoins as $_besoin) {
   
   // Côté protocole, rien à vérifier
   if ($type != "operation_id") {
-    $_besoin->_color = "000";
+    $_besoin->_color = "";
     continue;
   }
   

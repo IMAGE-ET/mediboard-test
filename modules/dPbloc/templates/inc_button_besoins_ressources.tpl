@@ -16,11 +16,14 @@
   // Dans le cas d'une intervention, il faut vérifier
   // que pour chaque type de ressource exprimé par un besoin, une ressource
   // au moment de l'intervention est disponible.
-  {{if $type == "operation_id"}}
+  
     Main.add(function() {
-      checkRessources("{{$object_id}}");
+      {{if $type == "operation_id"}}
+        checkRessources("{{$object_id}}");
+      {{/if}}
+      window.besoins_non_stored = [];
     });
-  {{/if}}
+  
   
   editBesoins = function (object_id) {
     var url = new Url("dPbloc", "ajax_edit_besoins");
@@ -34,9 +37,23 @@
     // la couleur de la bordure des boutons
     
       url.modalObject.observe("afterClose", function() {
+        {{if !$object_id}}
+          var form = getForm("editOp");
+          if (form) {
+            // Un protocole a pu être appliqué, donc garder les besoins
+            /*var types_ressources_ids = $V(form._types_ressources_ids);
+            types_ressources_ids = types_ressources_ids.split(",").concat(window.besoins_non_stored).join(",");*/
+            $V(getForm("editOp")._types_ressources_ids, window.besoins_non_stored.join(","));
+          }
+                      
+        {{/if}}
         checkRessources(object_id);
       });
     {{/if}}
+  }
+  
+  synchronizeTypes = function(types) {
+    window.besoins_non_stored = types.split(",");
   }
   
   checkRessources = function(object_id) {

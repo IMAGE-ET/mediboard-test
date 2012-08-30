@@ -596,7 +596,8 @@ class COperation extends CCodable implements IPatientRelated {
   }
   
   function store($reorder = true) {
-    $this->loadOldObject();
+    $old_object = $this->loadOldObject();
+    
     $this->completeField(
       "annulee", 
       "rank", 
@@ -646,7 +647,8 @@ class COperation extends CCodable implements IPatientRelated {
     // Pour une intervention existante, l'application du protocole
     // store les protocoles
     if (CAppUI::conf("dPbloc CPlageOp systeme_materiel") == "expert" &&
-        $this->_types_ressources_ids && !$this->_old->_id) {
+        $this->_types_ressources_ids && !$old_object->_id) {
+       
       $types_ressources_ids = explode(",", $this->_types_ressources_ids);
       
       foreach ($types_ressources_ids as $_type_ressource_id) {
