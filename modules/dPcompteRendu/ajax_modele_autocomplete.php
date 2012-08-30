@@ -29,7 +29,10 @@ if (!$fast_edit) {
 
 $where["object_class"] = "= '$object_class'";
 $where["type"] = "= 'body'";
-$where["user_id"] = "IN ('$user->_id', '".CAppUI::$user->_id."')";
+$where["user_id"] = " = '".CAppUI::$user->_id."'";
+if ($user->canEdit()) {
+  $where["user_id"] = "IN ('$user->_id', '".CAppUI::$user->_id."')";
+}
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
 
 unset($where["user_id"]);

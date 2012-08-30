@@ -12,7 +12,7 @@
 
 <table class="tbl">
   <tr>
-  	{{assign var=file value=$document->_ref_file}}
+    {{assign var=file value=$document->_ref_file}}
     {{if $document->object_id && $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs && $file->_id}}
     <td id="thumbnail-{{$document->_id}}" style="text-align: center;">
      <a href="#1" onclick="new Url().ViewFilePopup('{{$file->object_class}}', '{{$file->object_id}}', 'CFile', '{{$file->_id}}')">
@@ -20,7 +20,7 @@
           src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$file->_id}}&amp;phpThumb=1&amp;w=64&h=92" />
      </a>
       <br />
-		  {{mb_value object=$file field=_file_size}}
+      {{mb_value object=$file field=_file_size}}
     </td>
 
     {{else}}
@@ -31,14 +31,16 @@
   
     <td rowspan="2" style="vertical-align: top;">
       {{include file=CMbObject_view.tpl}}
-		</td>
-	</tr>
-	
-	<tr>
-		<td class="button">
+    </td>
+  </tr>
+  
+  <tr>
+    <td class="button">
       <strong>{{$document->_source|count_words}} {{tr}}CCompteRendu-words{{/tr}}</strong>
       <br/>
-      <button type="button" class="search" onclick="Document.edit('{{$document->_id}}')">{{tr}}Open{{/tr}}</button>
+      {{if $can->edit}}
+       <button type="button" class="search" onclick="Document.edit('{{$document->_id}}')">{{tr}}Open{{/tr}}</button>
+      {{/if}}
     </td>
   </tr>
 </table>

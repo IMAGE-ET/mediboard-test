@@ -363,25 +363,31 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     if(!$this->_ref_consultation){
       $this->loadRefConsultation();
     }
-    // Droits sur l'opération
-    if($this->operation_id){
-      if(!$this->_ref_operation){
-        $this->loadRefOperation();
-      }
-      $canOper = $this->_ref_operation->getPerm($permType);
-    }else{
-      $canOper = false;
+    
+    switch($permType) {
+      case PERM_EDIT :
+        return $this->_ref_consultation->getPerm($permType);
+      default :
+        // Droits sur l'opération
+        if($this->operation_id){
+          if(!$this->_ref_operation){
+            $this->loadRefOperation();
+          }
+          $canOper = $this->_ref_operation->getPerm($permType);
+        }else{
+          $canOper = false;
+        }
+        // Droits sur le séjour
+        if($this->sejour_id){
+          if(!$this->_ref_sejour){
+            $this->loadRefSejour();
+          }
+          $canSej = $this->_ref_sejour->getPerm($permType);
+        }else{
+          $canSej = false;
+        }
+        return $canOper || $canSej || $this->_ref_consultation->getPerm($permType);	
     }
-    // Droits sur le séjour
-    if($this->sejour_id){
-      if(!$this->_ref_sejour){
-        $this->loadRefSejour();
-      }
-      $canSej = $this->_ref_sejour->getPerm($permType);
-    }else{
-      $canSej = false;
-    }
-    return $canOper || $canSej || $this->_ref_consultation->getPerm($permType);
   }
 
   function fillTemplate(&$template) {

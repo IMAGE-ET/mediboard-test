@@ -13,7 +13,7 @@
 
 class CDocumentItem extends CMbMetaObject {
   
-	// DB Fields
+  // DB Fields
   var $file_category_id  = null;
   var $etat_envoi        = null;
   var $author_id         = null;
@@ -27,7 +27,7 @@ class CDocumentItem extends CMbMetaObject {
 
   // Behavior Field
   var $_send             = null; 
-  
+  var $_is_editable      = true;
   // References
   var $_ref_category     = null;
   
@@ -56,7 +56,7 @@ class CDocumentItem extends CMbMetaObject {
    * @return binary Content
    */
   function getExtensioned() {
-  	return $this->_extensioned;
+    return $this->_extensioned;
   }
 
   /**
@@ -64,11 +64,11 @@ class CDocumentItem extends CMbMetaObject {
    * @return CDocumentSender sender or null on error
    */
   static function getDocumentSender() {
-  	if (null == $system_sender = CAppUI::conf("dPfiles system_sender")) {
-  	  return;
-  	}
-  	
-  	if (!is_subclass_of($system_sender, "CDocumentSender")) {
+    if (null == $system_sender = CAppUI::conf("dPfiles system_sender")) {
+      return;
+    }
+    
+    if (!is_subclass_of($system_sender, "CDocumentSender")) {
       trigger_error("Instanciation du Document Sender impossible.");
       return;
     }
@@ -78,9 +78,9 @@ class CDocumentItem extends CMbMetaObject {
   
   
   function updateFormFields() {
-  	parent::updateFormFields();
-  	$this->getSendProblem();
-  	$this->loadRefCategory();
+    parent::updateFormFields();
+    $this->getSendProblem();
+    $this->loadRefCategory();
   }
   
   /**
@@ -88,13 +88,13 @@ class CDocumentItem extends CMbMetaObject {
    * @return string message Store-like problem message
    */
   function getSendProblem() {
-  	if ($sender = self::getDocumentSender()) {
-   		$this->_send_problem = $sender->getSendProblem($this);
- 		}
+    if ($sender = self::getDocumentSender()) {
+       $this->_send_problem = $sender->getSendProblem($this);
+     }
   }
   
   function store() {
-  	$this->completeField("etat_envoi");
+    $this->completeField("etat_envoi");
     $this->completeField("object_class");
     $this->completeField("object_id");
 
@@ -121,25 +121,25 @@ class CDocumentItem extends CMbMetaObject {
     }
     
     switch ($this->etat_envoi) {
-    	case "non" :
-    	  if (!$sender->send($this)) return "Erreur lors de l'envoi.";
-    	  CAppUI::setMsg("Document transmis.");
+      case "non" :
+        if (!$sender->send($this)) return "Erreur lors de l'envoi.";
+        CAppUI::setMsg("Document transmis.");
         break;
       case "oui" :
-      	if (!$sender->cancel($this)) return "Erreur lors de l'invalidation de l'envoi."; 
-      	CAppUI::setMsg("Document annulé."); 
+        if (!$sender->cancel($this)) return "Erreur lors de l'invalidation de l'envoi."; 
+        CAppUI::setMsg("Document annulé."); 
         break;
       case "obsolete" :
         if (!$sender->resend($this)) return "Erreur lors du renvoi."; 
         CAppUI::setMsg("Document annulé/transmis.");
         break;
       default:
-      	return "Fonction d'envoi '$this->etat_envoi' non reconnue.";
+        return "Fonction d'envoi '$this->etat_envoi' non reconnue.";
     }
   }  
   
   function loadRefsFwd() {
-	  parent::loadRefsFwd();
+    parent::loadRefsFwd();
     $this->loadRefCategory();
     $this->_ref_author = $this->loadFwdRef("author_id");
   }
@@ -158,8 +158,8 @@ class CDocumentItem extends CMbMetaObject {
   
   function canRead() {
     if (!$this->private) {
-    	return parent::canRead();
-		}
+      return parent::canRead();
+    }
     
     $this->loadRefAuthor();
 

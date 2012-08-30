@@ -69,10 +69,11 @@ class CMbObject extends CStoredObject {
     if (null == $this->_ref_files = $this->loadBackRefs("files", "file_name")) {
       return;
     }
-    
+    $is_editable = $this->docsEditable();
     // Read permission
     foreach ($this->_ref_files as $_file) {
       $this->_ref_files_by_name[$_file->file_name] = $_file;
+      $_file->_is_editable = $is_editable;
       if (!$_file->canRead()){
         unset($this->_ref_files[$_file->_id]);
       }

@@ -13,9 +13,11 @@
 </form>
 {{/if}}
 
-<button class="new" type="button" onclick="File.upload('{{$object->_class}}','{{$object->_id}}', '')" >
-  {{tr}}CFile-title-create{{/tr}}
-</button>
+{{if $canDoFiles->permission == PERM_EDIT && $object->_can->edit}}
+  <button class="new" type="button" onclick="File.upload('{{$object->_class}}','{{$object->_id}}', '')" >
+    {{tr}}CFile-title-create{{/tr}}
+  </button>
+{{/if}}
 
 {{if $app->user_prefs.directory_to_watch}} 
 <button class="new yopletbutton" type="button" disabled="disabled" onclick="File.applet.modalOpen('{{$object->_guid}}')">

@@ -361,6 +361,29 @@ class CStoredObject extends CModelObject {
     return CPermObject::getPermObject($this, $permType);
   }
   
+  function loadPermClass() {
+    global $userPermsObjects, $can;
+    
+    if (isset($userPermsObjects[$this->_class][0])) {
+      return $userPermsObjects[$this->_class][0];
+    }
+    
+    $perm = new CPermObject;
+    $perm_module = CModule::getCanDo(CModelObject::$module_name[$this->_class]);
+    
+    if ($perm_module->admin || $perm_module->edit) {
+      $perm->permission = 2;
+    }
+    elseif ($perm_module->read) {
+      $perm->permission = 1;
+    }
+    else {
+      $perm->permission = 0;
+    }
+    
+    return $perm;
+  }
+  
   /**
    * Gets the can-read boolean permission
    * DEPRECATED

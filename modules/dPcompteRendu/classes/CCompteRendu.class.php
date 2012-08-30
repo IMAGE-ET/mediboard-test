@@ -60,8 +60,6 @@ class CCompteRendu extends CDocumentItem {
   var $_date             = null;
   var $_count_utilisation = null;
   
-  var $_is_editable      = true;
-
   // Distant field
   var $_source           = null;
   

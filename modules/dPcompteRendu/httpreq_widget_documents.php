@@ -17,19 +17,21 @@ $only_docs    = CValue::get("only_docs", 0);
 // Chargement de l'objet cible
 $object = new $object_class;
 if (!$object instanceof CMbObject) {
-	trigger_error("object_class should be an CMbObject", E_USER_WARNING);
-	return;
+  trigger_error("object_class should be an CMbObject", E_USER_WARNING);
+  return;
 }
 
 $object->load($object_id);
 if (!$object->_id) {
-	trigger_error("object of class '$object_class' could not be loaded with id '$object_id'", E_USER_WARNING);
-	return;
+  trigger_error("object of class '$object_class' could not be loaded with id '$object_id'", E_USER_WARNING);
+  return;
 }
+
+$object->canDo();
 
 // Praticien concerné
 if (!$user->isPraticien()) {
-	$user->load($user_id);
+  $user->load($user_id);
 }
 
 $user->loadRefFunction();
@@ -39,6 +41,7 @@ $user->canDo();
 if ($object->loadRefsDocs()) {
   foreach($object->_ref_documents as $_doc) {
     $_doc->loadRefCategory();
+    $_doc->canDo();
   }
 }
 
@@ -61,6 +64,8 @@ if (CModule::getActive("printing")) {
   $nb_printers   = $function->countBackRefs("printers");
 }
 
+$compte_rendu = new CCompteRendu();
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -70,6 +75,7 @@ $smarty->assign("mode"          , CValue::get("mode"));
 $smarty->assign("notext"        , "notext");
 $smarty->assign("nb_printers"   , $nb_printers);
 $smarty->assign("nb_modeles_etiquettes", $nb_modeles_etiquettes);
+$smarty->assign("can_doc", $compte_rendu->loadPermClass());
 
 $smarty->display($only_docs ? "inc_widget_list_documents.tpl" : "inc_widget_documents.tpl");
 

@@ -31,23 +31,25 @@
         &mdash; <em>{{tr}}CCompteRendu-private{{/tr}}</em>
       {{/if}}
     </td>
-    <td class="button" style="width: 1px">
-      <form name="Delete-{{$_file->_guid}}" action="?" enctype="multipart/form-data" method="post"
-        onsubmit="return checkForm(this)">
-        <input type="hidden" name="m" value="dPfiles" />
-        <input type="hidden" name="dosql" value="do_file_aed" />
-        <input type="hidden" name="del" value="1" />
-        {{mb_key object=$_file}}
-        {{mb_field object=$_file field="_view" hidden=1}}
-        <span style="white-space: nowrap;">
-          <button class="edit notext" id="edit_{{$_file->_guid}}" type="button"
-            onclick="File.editNom('{{$_file->_guid}}'); File.toggleClass(this);">{{tr}}Modify{{/tr}}</button>
-          <button class="trash notext" type="button" onclick="File.remove(this, '{{$object_id}}', '{{$object_class}}')">
-            {{tr}}Delete{{/tr}}
-          </button>
-        </span>
-      </form>
-    </td>
+    {{if $_file->_can->edit && $_file->_is_editable}}
+      <td class="button" style="width: 1px">
+        <form name="Delete-{{$_file->_guid}}" action="?" enctype="multipart/form-data" method="post"
+          onsubmit="return checkForm(this)">
+          <input type="hidden" name="m" value="dPfiles" />
+          <input type="hidden" name="dosql" value="do_file_aed" />
+          <input type="hidden" name="del" value="1" />
+          {{mb_key object=$_file}}
+          {{mb_field object=$_file field="_view" hidden=1}}
+          <span style="white-space: nowrap;">
+            <button class="edit notext" id="edit_{{$_file->_guid}}" type="button"
+              onclick="File.editNom('{{$_file->_guid}}'); File.toggleClass(this);">{{tr}}Modify{{/tr}}</button>
+            <button class="trash notext" type="button" onclick="File.remove(this, '{{$object_id}}', '{{$object_class}}')">
+              {{tr}}Delete{{/tr}}
+            </button>
+          </span>
+        </form>
+      </td>
+    {{/if}}
     {{if $conf.dPfiles.system_sender}}
     <td class="button" style="width: 1px">
       <form name="Edit-{{$_file->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

@@ -26,13 +26,13 @@
   {{foreach from=$object->_ref_documents item=document}}
   <tr>
     <td class="text">
-      {{if $document->_is_editable}}
+      {{if $document->_is_editable && $document->_can->edit}}
         <a href="#{{$document->_guid}}" onclick="Document.edit({{$document->_id}}); return false;" style="display: inline;">
       {{/if}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$document->_guid}}', 'objectView')">
           {{$document}}
         </span>
-      {{if $document->_is_editable}}
+      {{if $document->_is_editable && $document->_can->edit}}
         </a>
       {{/if}}
       {{if $document->private}}
@@ -58,10 +58,11 @@
           {{/if}}">
           {{tr}}Print{{/tr}}
         </button>
-        
-        <button type="button" class="trash notext" onclick="Document.del(this.form, '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
-          {{tr}}Delete{{/tr}}
-        </button>
+        {{if $document->_is_editable && $document->_can->edit}}
+          <button type="button" class="trash notext" onclick="Document.del(this.form, '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
+            {{tr}}Delete{{/tr}}
+          </button>
+        {{/if}}
       </form>
     </td> 
 
