@@ -19,6 +19,7 @@ if(!isset($current_m)){
 // Filtres d'affichage
 
 $recuse     = CValue::getOrSession("recuse", "-1");
+$envoi_mail = CValue::getOrSession("envoi_mail", "0");
 $order_way  = CValue::getOrSession("order_way", "ASC");
 $order_col  = CValue::getOrSession("order_col", "patient_id");
 $date       = CValue::getOrSession("date", mbDate());
@@ -68,6 +69,7 @@ $smarty->assign("date_demain"       , $date_demain);
 $smarty->assign("date_actuelle"     , $date_actuelle);
 $smarty->assign("date"              , $date);
 $smarty->assign("recuse"            , $recuse);
+$smarty->assign("envoi_mail"        , $envoi_mail);
 $smarty->assign("order_way"         , $order_way);
 $smarty->assign("order_col"         , $order_col);
 $smarty->assign("services"          , $services);

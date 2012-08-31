@@ -43,6 +43,7 @@ else {
 }
 
 $recuse        = CValue::getOrSession("recuse", "-1");
+$envoi_mail    = CValue::getOrSession("envoi_mail", "0");
 $service_id    = CValue::getOrSession("service_id");
 $prat_id       = CValue::getOrSession("prat_id");
 $bank_holidays = mbBankHolidays($date);
@@ -58,6 +59,12 @@ for ($day = $month_min; $day <= $nextmonth; $day = mbDate("+1 DAY", $day)) {
     "num2" => "0",
     "num3" => "0",
   );
+}
+
+if ($current_m == "reservation") {
+  for ($day = $month_min; $day <= $nextmonth; $day = mbDate("+1 DAY", $day)) {
+    $days[$day]["num4"] = "0";
+  }
 }
 
 // filtre sur les types d'admission
@@ -142,6 +149,56 @@ foreach ($ds->loadHashList($query) as $day => $num3) {
   $days[$day]["num3"] = $num3;
 }
 
+
+if ($current_m == "reservation") {
+  // Une nouvelle colonne de la forme : Mails répondus / Mails envoyés
+  
+  // Mails envoyés
+  $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(`sejour`.`sejour_id`) AS `num`
+    FROM `sejour`
+    $leftjoinService
+    LEFT JOIN `operations` ON `operations`.`sejour_id` = `sejour`.`sejour_id`
+    WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$nextmonth'
+      AND `operations`.`operation_id` IS NOT NULL
+      AND `operations`.`envoi_mail` IS NOT NULL
+      AND `sejour`.`group_id` = '$group->_id'
+      AND `sejour`.`recuse` != '1'
+      $filterType
+      $filterService
+      $filterPrat
+    GROUP BY `date`
+    ORDER BY `date`";
+  foreach ($ds->loadHashList($query) as $day => $num4) {
+    $days[$day]["num4"] = "0/$num4";
+  }
+  
+  // Mails répondus
+  // Sur la base d'un user log du praticien (qui a donc modifié la DHE)
+  // On ajout DISTINCT sur le sejour_id, car il peut y avoir plusieurs entrées dans la table
+  // user_log qui correspondent
+  $query = "SELECT DATE_FORMAT(`sejour`.`entree`, '%Y-%m-%d') AS `date`, COUNT(DISTINCT `sejour`.`sejour_id`) AS `num`
+    FROM `sejour`
+    $leftjoinService
+    LEFT JOIN `operations` ON `operations`.`sejour_id` = `sejour`.`sejour_id`
+    LEFT JOIN `user_log` ON `user_log`.`user_id` = `operations`.`chir_id`
+      AND `user_log`.`object_class` = 'COperation' AND `user_log`.`object_id` = `operations`.`operation_id`
+    WHERE `sejour`.`entree` BETWEEN '$month_min' AND '$nextmonth'
+      AND `operations`.`operation_id` IS NOT NULL
+      AND `operations`.`envoi_mail` IS NOT NULL
+      AND `user_log`.`user_log_id` IS NOT NULL
+      AND `sejour`.`group_id` = '$group->_id'
+      AND `sejour`.`recuse` != '1'
+      $filterType
+      $filterService
+      $filterPrat
+    GROUP BY `date`
+    ORDER BY `date`";
+  
+  foreach ($ds->loadHashList($query) as $day => $num4) {
+    $days[$day]["num4"] = preg_replace("/0\//", "$num4/", $days[$day]["num4"]);
+  }
+}
+
 $m = $save_m;
 
 // Création du template
@@ -152,6 +209,7 @@ $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
 
 $smarty->assign("recuse"       , $recuse);
+$smarty->assign("envoi_mail"   , $envoi_mail);
 
 $smarty->assign("bank_holidays", $bank_holidays);
 $smarty->assign('date'         , $date);

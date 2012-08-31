@@ -10,7 +10,7 @@
 
 <table class="tbl" style="text-align: center;">
   <tr>
-    <th class="title" colspan="4">
+    <th class="title" colspan="{{if $current_m == "reservation"}}5{{else}}4{{/if}}">
       <a style="display: inline;" href="?m={{$current_m}}&amp;tab=vw_sejours_validation&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
       {{$date|date_format:"%b %Y"}}
       <a style="display: inline;" href="?m={{$current_m}}&amp;tab=vw_sejours_validation&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
@@ -23,20 +23,27 @@
 
   <tr>
     <th class="text">
-      <a class={{if $recuse=='-1'}}"selected"{{else}}"selectable"{{/if}} title="Séjours en attente" href="?m={{$current_m}}&amp;tab=vw_sejours_validation&amp;recuse=-1">
+      <a class={{if $recuse=='-1'}}"selected"{{else}}"selectable"{{/if}} title="Séjours en attente" href="?m={{$current_m}}&tab=vw_sejours_validation&recuse=-1{{if $current_m == "reservation"}}&envoi_mail=0{{/if}}">
         Att.
       </a>
     </th>
     <th class="text">
-      <a class={{if $recuse=='0'}}"selected"{{else}}"selectable"{{/if}} title="Séjours validés" href="?m={{$current_m}}&amp;tab=vw_sejours_validation&amp;recuse=0">
+      <a class={{if $recuse=='0'}}"selected"{{else}}"selectable"{{/if}} title="Séjours validés" href="?m={{$current_m}}&tab=vw_sejours_validation&recuse=0{{if $current_m == "reservation"}}&envoi_mail=0{{/if}}">
         Val.
       </a>
     </th>
     <th class="text">
-      <a class={{if $recuse=='1'}}"selected"{{else}}"selectable"{{/if}} title="Séjours récusés" href="?m={{$current_m}}&amp;tab=vw_sejours_validation&amp;recuse=1">
+      <a class={{if $recuse=='1'}}"selected"{{else}}"selectable"{{/if}} title="Séjours récusés" href="?m={{$current_m}}&tab=vw_sejours_validation&recuse=1{{if $current_m == "reservation"}}&envoi_mail=0{{/if}}">
         Rec.
       </a>
     </th>
+    {{if $current_m == "reservation"}}
+      <th class="text">
+        <a class={{if $envoi_mail=='1'}}"selected"{{else}}"selectable"{{/if}} title="DHE avec envoi de mail" href="?m={{$current_m}}&tab=vw_sejours_validation&envoi_mail=1&recuse=-2">
+          Mail
+        </a>
+      </th>
+    {{/if}}
   </tr>
 
   {{foreach from=$days key=day item=counts}}
@@ -64,6 +71,11 @@
     <td {{if $recuse=='1' && $day == $date}}style="font-weight: bold;"{{/if}}>
       {{if $counts.num3}}{{$counts.num3}}{{else}}-{{/if}}
     </td>
+    {{if $current_m == "reservation"}}
+      <td {{if $envoi_mail =='1' && $day == $date}}style="font-weight: bold;"{{/if}}>
+        {{if $counts.num4}}{{$counts.num4}}{{else}}-{{/if}}
+      </td>
+    {{/if}}
   </tr>
   {{foreachelse}}
   <tr>

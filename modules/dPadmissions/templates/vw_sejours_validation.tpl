@@ -49,6 +49,9 @@ function reloadAdmission(filterFunction) {
   var url = new Url("dPadmissions", "ajax_vw_sejours");
   url.addParam("current_m" , "{{$current_m}}");
   url.addParam("recuse"    , "{{$recuse}}");
+  {{if "reservation"|module_active}}
+    url.addParam("envoi_mail", "{{$envoi_mail}}");
+  {{/if}}
   url.addParam("date"      , "{{$date}}");
   url.addParam("service_id", $V(oForm.service_id));
   url.addParam("prat_id", $V(oForm.prat_id));

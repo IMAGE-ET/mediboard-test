@@ -25,6 +25,7 @@ $m = $current_m;
 $service_id     = CValue::getOrSession("service_id");
 $prat_id        = CValue::getOrSession("prat_id");
 $recuse         = CValue::getOrSession("recuse", "-1");
+$envoi_mail     = CValue::getOrSession("envoi_mail", "0");
 $order_col      = CValue::getOrSession("order_col", "patient_id");
 $order_way      = CValue::getOrSession("order_way", "ASC");
 $date           = CValue::getOrSession("date", mbDate());
@@ -72,11 +73,17 @@ if ($prat_id) {
 
 $where["sejour.group_id"] = "= '$group->_id'";
 $where["sejour.entree"]   = "BETWEEN '$date_min' AND '$date_max'";
-$where["sejour.recuse"]   = "= '$recuse'";
-if($recuse != 1) {
-  $where["sejour.annule"]   = "= '0'";
-}
 
+if ($envoi_mail == 1) {
+  $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
+  $where["operations.envoi_mail"] = "IS NOT NULL";
+}
+else {
+  $where["sejour.recuse"]   = "= '$recuse'";
+  if ($recuse != 1) {
+    $where["sejour.annule"]   = "= '0'";
+  }
+}
 if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
   $order_col = "patient_id";	
 }
