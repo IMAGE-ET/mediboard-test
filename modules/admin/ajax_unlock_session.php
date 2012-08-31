@@ -16,13 +16,11 @@ if ($lock) {
   return;
 }
 else {
-  $user = CUser::get();
-  
   if (!$password) {
     CAppUI::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
   }
   
-  else if ($user->user_password != md5($password)) {
+  if (!CUser::checkPassword(CUser::get()->user_username, $password)) {
     CAppUI::setMsg("Auth-failed-combination", UI_MSG_ERROR);
   }
   
