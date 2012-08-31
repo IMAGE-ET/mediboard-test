@@ -207,7 +207,7 @@ modeExpertDisplay = function() {
 </div>
 
 <table class="main">
-  {{if $op->operation_id}}
+  {{if $op->operation_id && !$dialog}}
   <tr>
     <td colspan="2">
        <a class="button new" href="?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">
@@ -264,34 +264,37 @@ modeExpertDisplay = function() {
   <tr>
     <td colspan="2" class="button">
     {{if $op->_id}}
-    {{if !$op->_ref_sejour->sortie_reelle || $modules.dPbloc->_can->edit || $modules.dPhospi->_can->edit}}
-      <button class="submit" type="button" onclick="submitForms();">{{tr}}Save{{/tr}}</button>
-      {{if $op->annulee}}
-      <button class="change" type="button" onclick="cancelObjects();">{{tr}}Restore{{/tr}}</button>
-      {{else}}
-        {{if !$conf.dPplanningOp.COperation.cancel_only_for_resp_bloc || $modules.dPbloc->_can->edit || (!$op->_ref_sejour->entree_reelle && !$op->rank)}}
-          <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
-        {{/if}}
-        {{if "reservation"|module_active}}
-          {{if $op->_ref_sejour->recuse == "-1"}}
-            <button class="tick" onclick="$V(getForm('editSejour').recuse, 0); submitForms();">{{tr}}Validate{{/tr}}</button>
-          {{elseif $op->_ref_sejour->recuse == "0"}}
-            <button class="cancel" onclick="$V(getForm('editSejour').recuse, -1); submitForms();">Annuler la validation</button>
+      {{if !$op->_ref_sejour->sortie_reelle || $modules.dPbloc->_can->edit || $modules.dPhospi->_can->edit}}
+        <button class="submit" type="button" onclick="submitForms();">{{tr}}Save{{/tr}}</button>
+        {{if $op->annulee}}
+        <button class="change" type="button" onclick="cancelObjects();">{{tr}}Restore{{/tr}}</button>
+        {{else}}
+          {{if !$conf.dPplanningOp.COperation.cancel_only_for_resp_bloc || $modules.dPbloc->_can->edit || (!$op->_ref_sejour->entree_reelle && !$op->rank)}}
+            <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
           {{/if}}
-         {{/if}}
+          {{if "reservation"|module_active}}
+            {{if $op->_ref_sejour->recuse == "-1"}}
+              <button class="tick" onclick="$V(getForm('editSejour').recuse, 0); submitForms();">{{tr}}Validate{{/tr}}</button>
+            {{elseif $op->_ref_sejour->recuse == "0"}}
+              <button class="cancel" onclick="$V(getForm('editSejour').recuse, -1); submitForms();">Annuler la validation</button>
+            {{/if}}
+           {{/if}}
+        {{/if}}
+        {{if !$conf.dPplanningOp.COperation.delete_only_admin || $can->admin}}
+        <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
+        {{/if}}
+        
+        <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
+      {{else}}
+        <div class="big-info">
+          Les informations sur le séjour et sur l'intervention ne peuvent plus être modifiées car <strong>le patient est déjà sorti de l'établissement</strong>.
+          Veuillez contacter le <strong>responsable du service d'hospitalisation</strong> pour annuler la sortie ou
+          <strong>un administrateur</strong> si vous devez tout de même modifier certaines informations.
+        </div>
       {{/if}}
-      {{if !$conf.dPplanningOp.COperation.delete_only_admin || $can->admin}}
-      <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
+      {{if "reservation"|module_active && $exchange_source->_id}}
+        {{mb_include module=reservation template=inc_button_send_mail operation_id=$op->_id}}
       {{/if}}
-      
-      <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
-    {{else}}
-      <div class="big-info">
-        Les informations sur le séjour et sur l'intervention ne peuvent plus être modifiées car <strong>le patient est déjà sorti de l'établissement</strong>.
-        Veuillez contacter le <strong>responsable du service d'hospitalisation</strong> pour annuler la sortie ou
-        <strong>un administrateur</strong> si vous devez tout de même modifier certaines informations.
-      </div>
-    {{/if}}
     {{else}}
       <button class="submit" type="button" onclick="submitForms();">{{tr}}Create{{/tr}}</button>
     {{/if}}

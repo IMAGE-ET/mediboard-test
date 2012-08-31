@@ -154,37 +154,42 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     "<span onmouseover='ObjectTooltip.createEx(this, \"".$patient->_guid."\")'>$patient->nom $patient->prenom</span>, ".$patient->getFormattedValue("naissance").
     "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".mbTransformTime($debut_op, null, "%H:%M")." - ".mbTransformTime($fin_op, null, "%H:%M")."</span>".
     "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>".
-    "\n<span style='font-size: 11px; font-weight: bold;'>$_operation->libelle</span>".
-    "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>$chir->_view</span>";
+    "\n<span style='font-size: 11px; font-weight: bold;'>".htmlentities($_operation->libelle)."</span>".
+    "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>".htmlentities($chir->_view)."</span>";
     
     if ($chir_2->_id) {
-      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_2->_guid."\")'>$chir_2->_view</span>";
+      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_2->_guid."\")'>".htmlentities($chir_2->_view)."</span>";
     }
     
     if ($chir_3->_id) {
-      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_3->_guid."\")'>$chir_3->_view</span>";
+      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_3->_guid."\")'>".htmlentities($chir_3->_view)."</span>";
     }
     
     if ($chir_4->_id) {
-      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_4->_guid."\")'>$chir_4->_view</span>";
+      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_4->_guid."\")'>".htmlentities($chir_4->_view)."</span>";
     }
     
-    $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>$anesth->_view</span>".
-    "\n$_operation->rques";
+    if ($anesth->_id) {
+      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>".htmlentities($anesth->_view)."</span>";
+    }
     
-    CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
+    $libelle .= "\n".htmlentities($_operation->rques);
     
-    $last_besoin = end($besoins);
-    
-    $libelle .= "<span class='compact' style='color: #000'>";
-    foreach ($besoins as $_besoin) {
-      $_type_ressource = $_besoin->loadRefTypeRessource();
-      $libelle .= htmlentities($_type_ressource->libelle);
-      if ($_besoin != $last_besoin) {
-        $libelle .= " - ";
+    if (count($besoins)) {
+      CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
+      
+      $last_besoin = end($besoins);
+      
+      $libelle .= "<span class='compact' style='color: #000'>";
+      foreach ($besoins as $_besoin) {
+        $_type_ressource = $_besoin->loadRefTypeRessource();
+        $libelle .= htmlentities($_type_ressource->libelle);
+        if ($_besoin != $last_besoin) {
+          $libelle .= " - ";
+        }
       }
+      $libelle .= "</span>";
     }
-    $libelle .= "</span>";
     
     if ($sejour->annule) {
       $color = "#f22";

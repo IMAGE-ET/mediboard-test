@@ -21,7 +21,8 @@ class CViewAccessToken extends CMbObject {
   var $hash           = null;
   
   var $_ref_user      = null;
-
+  var $_url           = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "view_access_token";
@@ -60,13 +61,13 @@ class CViewAccessToken extends CMbObject {
   }
 
   function store() {
-    if (!$this->_id) {
-      $this->hash = sha1("$this->user_id $this->datetime_start $this->ttl_hours $this->params");
-    }
-    
     $this->completeField("datetime_start");
     if (!$this->datetime_start) {
       $this->datetime_start = mbDateTime();
+    }
+    
+    if (!$this->_id) {
+      $this->hash = sha1("$this->user_id $this->datetime_start $this->ttl_hours $this->params");
     }
     
     return parent::store();
@@ -84,9 +85,18 @@ class CViewAccessToken extends CMbObject {
    * 
    * @return array An associative array
    */
-  function getParams(){
+  function getParams() {
     parse_str($this->params, $params);
     return $params;
+  }
+  
+  /**
+   * Buid the complete url requested by the token
+   * 
+   * @return string The url 
+   */
+  function getUrl() {
+    return $this->_url = CAppUI::conf("base_url")."/?signin_token=$this->hash";
   }
   
   /**

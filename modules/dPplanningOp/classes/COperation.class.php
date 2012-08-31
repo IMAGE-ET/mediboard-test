@@ -48,7 +48,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $description_anapath = null;
   var $labo                = null;
   var $prothese            = null;
-
+  
   var $depassement        = null;
   var $forfait            = null;
   var $fournitures        = null;
@@ -63,6 +63,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $duree_preop        = null;
   var $presence_preop     = null;
   var $presence_postop    = null;
+  var $envoi_mail         = null;
   
   // Timings enregistrés
   var $debut_prepa_preop = null;
@@ -261,6 +262,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["horaire_voulu"]      = "time show|0";
     $props["presence_preop"]     = "time show|0";
     $props["presence_postop"]    = "time show|0";
+    $props["envoi_mail"]         = "dateTime show|0";
     
     $props["cote_admission"]     = "enum list|droit|gauche show|0";
     $props["cote_consult_anesth"]= "enum list|droit|gauche show|0";

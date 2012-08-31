@@ -207,6 +207,10 @@ foreach($blocages_lit as $key => $blocage){
     $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectatione->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectatione->_ref_sejour->_ref_patient->_view.")";
   }
 }
+
+
+$exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -253,6 +257,8 @@ $smarty->assign("count_etab_externe", $count_etab_externe);
 $smarty->assign("medecin_adresse_par", $medecin_adresse_par);
 
 $smarty->assign("listBlocs",  $listBlocs);
+
+$smarty->assign("exchange_source"       , $exchange_source);
 
 $smarty->display("vw_edit_planning.tpl");
 

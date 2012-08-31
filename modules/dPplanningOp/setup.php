@@ -1423,7 +1423,12 @@ class CSetupdPplanningOp extends CSetup {
       ADD `chir_4_id` INT (11) UNSIGNED AFTER `chir_3_id`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.52";
+    $this->makeRevision("1.52");
+    $query = "ALTER TABLE `operations`
+      ADD `envoi_mail` DATETIME;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.53";
   }
 }
 ?>
