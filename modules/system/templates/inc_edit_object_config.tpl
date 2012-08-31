@@ -82,6 +82,8 @@ toggleCustomValue = function(button, b) {
           </label>
         </td>
 
+        {{assign var=prev_value value=null}}
+        
         {{foreach from=$ancestor_configs item=_ancestor name=ancestor}}
           {{assign var=value value=$_ancestor.config_parent.$_feature}}
           {{assign var=is_inherited value=true}}
@@ -89,6 +91,10 @@ toggleCustomValue = function(button, b) {
           {{if array_key_exists($_feature, $_ancestor.config)}}
             {{assign var=value value=$_ancestor.config.$_feature}}
             {{assign var=is_inherited value=false}}
+          {{/if}}
+          
+          {{if $is_inherited}}
+            {{assign var=value value=$prev_value}}
           {{/if}}
 
           <td>
@@ -153,6 +159,7 @@ toggleCustomValue = function(button, b) {
               {{/if}}
             </div>
           </td>
+          {{assign var=prev_value value=$value}}
         {{/foreach}}
       </tr>
     {{/foreach}}
