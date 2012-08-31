@@ -71,9 +71,12 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $temps_op = mbSubTime(mbTime($date_debut), mbTime($date_fin)); 
     
     // Recherche de la salle
+    $bloc  = new CBlocOperatoire();
+    $blocs = $bloc->loadGroupList();
     $salle      = new CSalle();
-    $salle->nom = $nom_salle;
-    if (!$salle->loadMatchingObject()) {
+    $where["nom"]     = "= '$nom_salle'";
+    $where["bloc_id"] = CSQLDataSource::prepareIn(array_keys($blocs));
+    if (!$salle->loadObject($where)) {
       CAppUI::stepAjax("La salle '$nom_salle' n'a pas été retrouvée dans Mediboard", UI_MSG_WARNING);
       $results["count_erreur"]++;
       continue;
