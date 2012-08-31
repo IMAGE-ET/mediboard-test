@@ -235,13 +235,16 @@ Main.add(function(){
              <th style="width: 50%;">{{tr}}CPlageConge-choix-periode{{/tr}}</th>
              <td style="width: 50%;">
                <label>
-                 <input onclick="getForm('searchplanning').onsubmit();" type="radio" name="choix" {{if $choix=="semaine"}}checked="checked"{{/if}} value="semaine" /> {{tr}}week{{/tr}}
+                 <input onclick="getForm('searchplanning').onsubmit();" type="radio" name="choix"
+                   {{if $choix=="semaine"}}checked="checked"{{/if}} value="semaine" /> {{tr}}week{{/tr}}
                </label>
-               <label >
-                 <input onclick="getForm('searchplanning').onsubmit();" type="radio" name="choix" {{if $choix=="mois"}}checked="checked"{{/if}} value="mois" /> {{tr}}month{{/tr}}
+               <label>
+                 <input onclick="getForm('searchplanning').onsubmit();" type="radio" name="choix"
+                   {{if $choix=="mois"}}checked="checked"{{/if}} value="mois" /> {{tr}}month{{/tr}}
                </label>
-               <label >
-                 <input onclick="getForm('searchplanning').onsubmit();" id="annee" type="radio" hidden="true" name="choix" {{if $choix=="annee"}}checked="checked"{{/if}} value="annee" /> {{tr}}year{{/tr}}
+               <label>
+                 <input onclick="getForm('searchplanning').onsubmit();" id="annee" type="radio" name="choix"
+                   {{if $choix=="annee"}}checked="checked"{{/if}} value="annee" /> {{tr}}year{{/tr}}
                </label>
              </td>
            </tr>
