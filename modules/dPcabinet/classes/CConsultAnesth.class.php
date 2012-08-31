@@ -36,6 +36,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   var $bouche         = null;
   var $distThyro      = null;
   var $etatBucco      = null;
+  var $intub_difficile = null;
   
   var $examenCardio   = null;
   var $examenPulmo    = null;
@@ -164,7 +165,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $specs["bouche"]           = "enum list|m20|m35|p35";
     $specs["distThyro"]        = "enum list|m65|p65";
     $specs["etatBucco"]        = "text helped";
-    
+    $specs["intub_difficile"]  = "enum list|0|1";
     $specs["examenCardio"]     = "text helped";
     $specs["examenPulmo"]      = "text helped";
     $specs["examenDigest"]     = "text helped";
@@ -186,10 +187,11 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     parent::updateFormFields();
     
     // Vérification si intubation difficile
-    $this->_intub_difficile = 
-       $this->mallampati === "classe3" || $this->mallampati === "classe4" || 
+    $this->_intub_difficile =
+       $this->intub_difficile == '1' || 
+       (($this->mallampati === "classe3" || $this->mallampati === "classe4" || 
        $this->bouche === "m20" || $this->bouche === "m35" || 
-       $this->distThyro === "m65";
+       $this->distThyro === "m65") && $this->intub_difficile != '0');
      
     $this->_sec_tsivy = intval(substr($this->tsivy, 6, 2));
     $this->_min_tsivy = intval(substr($this->tsivy, 3, 2));

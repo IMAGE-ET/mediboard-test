@@ -26,6 +26,7 @@ Main.add(function () {
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
 {{mb_key object=$consult_anesth}}
+{{mb_field object=$consult_anesth field=intub_difficile hidden=true}}
 {{/if}}
 <table class="form">
   <tr>
@@ -111,7 +112,7 @@ Main.add(function () {
                     <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
                       <img src="images/pictures/{{$curr_mallampati}}.png?build={{$version.build}}" />
                       <br />
-                      <input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked" {{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
+                      <input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked" {{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
                       {{$trans_mallampati}}
                     </label>
                     </div>
@@ -119,7 +120,7 @@ Main.add(function () {
                   {{/foreach}}
                 </tr>
               </table>
-              <input type="radio" style="display: none;" name="mallampati" value="" {{if !$consult_anesth->mallampati}}checked="checked" {{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
+              <input type="radio" style="display: none;" name="mallampati" value="" {{if !$consult_anesth->mallampati}}checked="checked" {{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
             </td>
           </tr>
           <tr>
@@ -128,15 +129,15 @@ Main.add(function () {
           <tr>
             <th class="narrow" style="vertical-align: top;">{{mb_label object=$consult_anesth field="bouche" defaultFor="bouche_m20"}}</th>
             <td>
-              {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
-              <input type="radio" style="display: none;" name="bouche" value="" {{if !$consult_anesth->bouche}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
+              {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="\$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);"}}
+              <input type="radio" style="display: none;" name="bouche" value="" {{if !$consult_anesth->bouche}}checked="checked"{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
             </td>
           </tr>
           <tr>
             <th style="vertical-align: top;">{{mb_label object=$consult_anesth field="distThyro" defaultFor="distThyro_m65"}}</th>
             <td>
-              {{mb_field object=$consult_anesth field="distThyro" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
-              <input type="radio" style="display: none;" name="distThyro" value="" {{if !$consult_anesth->distThyro}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
+              {{mb_field object=$consult_anesth field="distThyro" typeEnum="radio" separator="<br />" onclick="\$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);"}}
+              <input type="radio" style="display: none;" name="distThyro" value="" {{if !$consult_anesth->distThyro}}checked="checked"{{/if}} onclick="$V(this.form.intub_difficile, ''); verifIntubDifficileAndSave(this.form);" />
             </td>
           </tr>
           <tr>
@@ -166,7 +167,21 @@ Main.add(function () {
           </tr>
           <tr>
             <td colspan="2" class="button">
-              <div id="divAlertIntubDiff" style="float:right;color:#F00;{{if !$consult_anesth->_intub_difficile}}visibility:hidden;{{/if}}"><strong>Intubation Difficile Prévisible</strong></div>
+              <button type="button" id="force_pas_difficile" class="tick"
+                {{if !$consult_anesth->_intub_difficile}}style="display: none;"{{/if}}
+                onclick="$V(this.form.intub_difficile, '0'); verifIntubDifficileAndSave(this.form);" >Pas difficile</button>
+              <button type="button" id="force_difficile" class="tick"
+              {{if $consult_anesth->_intub_difficile}}style="display: none;"{{/if}}
+                onclick="$V(this.form.intub_difficile, '1'); verifIntubDifficileAndSave(this.form);">Difficile</button>
+              <div id="divAlertIntubDiff"
+                style="float: right;
+                  color: {{if $consult_anesth->_intub_difficile}}
+                           #F00;
+                         {{else}}
+                           #000
+                {{/if}}" {{if !$consult_anesth->_intub_difficile}}class="hatching opacity-50"{{/if}}>
+                <strong>Intubation Difficile Prévisible</strong>
+              </div>
             </td>
           </tr>
         </table>

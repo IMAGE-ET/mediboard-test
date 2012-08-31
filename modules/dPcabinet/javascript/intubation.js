@@ -9,14 +9,36 @@
  */
 
 verifIntubDifficileAndSave = function(oForm){
-  // Avertissement d'intubatino difficile
-  $('divAlertIntubDiff').setVisibility(
-    oForm.mallampati[2].checked || 
+  // Avertissement d'intubation difficile
+  var intubation_difficile = ($V(oForm.intub_difficile) == 1) ||
+    ((oForm.mallampati[2].checked ||
     oForm.mallampati[3].checked || 
     oForm.bouche[0].checked || 
     oForm.bouche[1].checked || 
-    oForm.distThyro[0].checked
-  );
+    oForm.distThyro[0].checked) &&
+    $V(oForm.intub_difficile) != '0');
+   var div = $('divAlertIntubDiff');
+   
+   div.show();
+   
+   // Possibilité de dire qu'elle ne l'est pas. 
+   if (intubation_difficile) {
+     div.setStyle({color: "#f00"});
+     div.removeClassName("opacity-50");
+     div.removeClassName("hatching");
+     div.previous("button#force_difficile").hide();
+     div.previous("button#force_pas_difficile").show();
+   }
+   // Sinon affichage en grisé, et possibilité de dire
+   // qu'elle l'est en réalité
+   else {
+     div.setStyle({color: "#000"});
+     div.addClassName("opacity-50");
+     div.addClassName("hatching");
+     div.previous("button#force_difficile").show();
+     div.previous("button#force_pas_difficile").hide();
+     
+   }
   
   onSubmitFormAjax(oForm);
   
@@ -32,6 +54,7 @@ resetIntubation = function(form) {
   fields.each(function(f){
     $V(form[f], '');
   });
+  $V(form.intub_difficile, '');
   verifIntubDifficileAndSave(form);
 }
 
