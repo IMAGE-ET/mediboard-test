@@ -22,7 +22,7 @@ abstract class CFaviconLoader extends CHTMLResourceLoader {
    * 
    * @return string An HTML tag to load the favicon
    */
-  static function loadFile($file) {
+  static function loadFile($file, $type = "image/ico") {
     if (CAppUI::pref("moduleFavicon")) {
       global $m;
       
@@ -40,7 +40,7 @@ abstract class CFaviconLoader extends CHTMLResourceLoader {
 
     return self::getTag(
       "link", array(
-        "type" => "image/ico",
+        "type" => $type,
         "rel"  => "shortcut icon",
         "href" => "$file?".self::getBuild(),
       )

@@ -56,7 +56,12 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
       $files = glob("modules/*/css/main.css");
     }
     else {
-      $path = "style/$theme";
+      if ($theme == "mobile") {
+        $path = "mobile/style";
+      }
+      else {
+        $path = "style/$theme";
+      }
       
       /*if (!$compress) {
         $css_file = "$path/main.css";

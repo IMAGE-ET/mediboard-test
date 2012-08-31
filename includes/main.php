@@ -119,12 +119,11 @@ if (!CAppUI::$instance->user_id) {
     $tplAjax->display("ajax_errors.tpl");
   }
   else {
-    $favicon = "style/$uistyle/images/icons/favicon.ico";
     $tplLogin = new CSmartyDP("style/$uistyle");
     $tplLogin->assign("localeInfo"           , $locale_info);
     
     // Favicon
-    $tplLogin->assign("mediboardShortIcon"   , CFaviconLoader::loadFile($favicon));
+    $tplLogin->assign("mediboardShortIcon"   , CFaviconLoader::loadFile("style/$uistyle/images/icons/favicon.ico"));
     
     // CSS
     $mediboardStyle = CCSSLoader::loadFiles();
