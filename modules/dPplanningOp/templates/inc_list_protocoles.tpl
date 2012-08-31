@@ -58,7 +58,7 @@
 
 </script>
 
-{{mb_include module=system template=inc_pagination total=$total_protocoles current=$page.$type change_page="changePage.$type" step=40}}
+{{mb_include module=system template=inc_pagination total=$total_protocoles current=$page.$type change_page="changePage$type" step=40}}
 
 <table class="tbl">
   {{foreach from=$list_protocoles item=_protocole}}

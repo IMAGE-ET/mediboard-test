@@ -44,7 +44,6 @@ setClose = function(protocole_id) {
 
 refreshList = function(form, types, reset) {
   types = types || ["interv", "sejour"];
-  console.log(types);
   if (reset) {
     types.each(function(type) {
       $V(form.elements["page["+type+"]"], 0, false);
@@ -64,14 +63,13 @@ refreshList = function(form, types, reset) {
   });
 }
 
-var changePage = {
-  sejour: function (page) {
+changePagesejour = function (page) {
     $V(getForm("selectFrm").elements['page[sejour]'], page);
-  },
-  interv: function (page) {
-    $V(getForm("selectFrm").elements['page[interv]'], page);
-  }
-};
+}
+
+changePageinterv = function (page) {
+  $V(getForm("selectFrm").elements['page[interv]'], page);
+}
 
 reloadPage = function(form) {
   $V(form["page[interv]"], 0, false);
@@ -113,14 +111,14 @@ Main.add(function(){
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dialog" value="{{$dialog}}" />
         <input type="hidden" {{if $dialog}} name="a" {{else}} name="tab" {{/if}} value="vw_protocoles" />
-  			<input type="hidden" name="page[interv]" value="{{$page.interv}}" onchange="refreshList(this.form, ['interv'])" />
+        <input type="hidden" name="page[interv]" value="{{$page.interv}}" onchange="refreshList(this.form, ['interv'])" />
         <input type="hidden" name="page[sejour]" value="{{$page.sejour}}" onchange="refreshList(this.form, ['sejour'])" />
         
         <table class="form">
           <tr>
             <th><label for="chir_id" title="Filtrer les protocoles d'un praticien">Praticien</label></th>
             <td>
-              <select name="chir_id" style="width: 20em;" onchange="if (this.form.function_id) {this.form.function_id.selectedIndex=0;} reloadPage(this.form);">
+              <select name="chir_id" style="width: 20em;" onchange="if (this.form.function_id) {this.form.function_id.selectedIndex=0;} refreshList(this.form);">
                 <option value="0">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listPrat item=curr_prat}}
                 <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}}; {{if !$curr_prat->_ref_protocoles|@count}}color: #999;{{/if}}"
@@ -133,7 +131,7 @@ Main.add(function(){
             <th><label for="prat_id" title="Filtrer les protocoles d'une fonction">Fonction</label></th>
             <td>
               {{if $can->admin}}
-              <select name="function_id" style="width: 30em;" onchange="if (this.form.chir_id) { this.form.selectedIndex=0; } reloadPage(this.form);">
+              <select name="function_id" style="width: 30em;" onchange="if (this.form.chir_id) { this.form.selectedIndex=0; } refreshList(this.form);">
                 <option value="0">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listFunc item=curr_function}}
                 <option class="mediuser" style="border-color: #{{$curr_function->color}}; {{if !$curr_function->_ref_protocoles|@count}}color: #999;{{/if}}"
@@ -153,7 +151,7 @@ Main.add(function(){
       </form>
     </td>
   </tr>
-	
+  
   <tr>
     <td>
       {{if !$dialog}}
