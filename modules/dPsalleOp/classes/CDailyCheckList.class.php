@@ -134,12 +134,10 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       if (!$this->_validator_password) {
         return 'Veuillez taper votre mot de passe';
       }
-      $this->loadRefsFwd();
-      $user = new CUser;
-      $user->user_username = $this->_ref_validator->_user_username;
-      $user->_user_password = $this->_validator_password;
       
-      if (!$user->loadMatchingObject()) {
+      $this->loadRefsFwd();
+      
+      if (!CUser::checkPassword($this->_ref_validator->_user_username, $this->_validator_password)) {
         $this->validator_id = "";
         $msg = 'Le mot de passe entré n\'est pas correct';
       }

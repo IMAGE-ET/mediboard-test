@@ -25,13 +25,8 @@ if ($password_activite_1) {
   $chir = new CMediusers;
   $chir->load($chir_id);
   
-  $user = new CUser;
-  $user->user_username = $chir->_user_username;
-  $user->_user_password = $password_activite_1;
-  $user->loadMatchingObject();
-  
-  if (!$user->_id) {
-    CAppUI::setMsg("Mot de passe incorrect", UI_MSG_ERROR );
+  if (!CUser::checkPassword($chir->_user_username, $password_activite_1)) {
+    CAppUI::setMsg("Mot de passe incorrect", UI_MSG_ERROR);
     echo CAppUI::getMsg();
     CApp::rip();
   }
@@ -42,7 +37,7 @@ if ($password_activite_1) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
   }
   else {
-    CAppUI::setMsg(CAppUI::tr("COperation-msg-modify"), UI_MSG_OK);
+    CAppUI::setMsg("COperation-msg-modify", UI_MSG_OK);
   }
 }
 
@@ -51,13 +46,8 @@ if ($password_activite_4) {
   $anesth->load($anesth_id);
   
   if ($anesth->_id) {
-    $user = new CUser;
-    $user->user_username = $anesth->_user_username;
-    $user->_user_password = $password_activite_4;
-    $user->loadMatchingObject();
-    
-    if (!$user->_id) {
-      CAppUI::setMsg("Mot de passe incorrect", UI_MSG_ERROR );
+    if (!CUser::checkPassword($anesth->_user_username, $password_activite_4)) {
+      CAppUI::setMsg("Mot de passe incorrect", UI_MSG_ERROR);
       
       echo CAppUI::getMsg();
       CApp::rip();
@@ -66,10 +56,10 @@ if ($password_activite_4) {
     $object->cloture_activite_4 = 1;
     
     if ($msg = $object->store()) {
-      CAppUI::setMsg($sg, UI_MSG_ERROR);
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
     }
     else {
-      CAppUI::setMsg(CAppUI::tr("COperation-msg-modify"), UI_MSG_OK);
+      CAppUI::setMsg("COperation-msg-modify", UI_MSG_OK);
     }
   }
 }
@@ -110,7 +100,7 @@ if (CAppUI::conf("dPpmsi transmission_actes") == "signature" && $object instance
   foreach ($actes_ccam as $key => $_acte_ccam){
     $_acte_ccam->sent = 1;
     if ($msg = $_acte_ccam->store()) {
-      CAppUI::setMsg($msg, UI_MSG_ERROR );
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
     }
   }
 }

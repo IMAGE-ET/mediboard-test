@@ -1113,6 +1113,22 @@ class CSetupsystem extends CSetup {
                 ADD INDEX (`date_echange`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.1.10";
+    $this->makeRevision("1.1.10");
+    $query = "CREATE TABLE `view_access_token` (
+              `view_access_token_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `user_id` INT (11) UNSIGNED NOT NULL,
+              `datetime_start` DATETIME NOT NULL,
+              `ttl_hours` INT (11) UNSIGNED NOT NULL,
+              `params` VARCHAR (255) NOT NULL,
+              `hash` CHAR (40) NOT NULL
+             ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `view_access_token` 
+              ADD INDEX (`user_id`),
+              ADD INDEX (`datetime_start`),
+              ADD INDEX (`hash`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.1.11";
   }
 }

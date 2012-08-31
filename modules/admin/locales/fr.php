@@ -1,6 +1,7 @@
 <?php
 $locales['Auth-failed'] = 'Echec d\'authentification';
 $locales['Auth-failed-combination'] = 'Le nom de connexion et le mot de passe ne correspondent pas';
+$locales['Auth-failed-invalidToken'] = 'Jeton d\'authentification invalide ou expiré';
 $locales['Auth-failed-loginas-admin'] = 'Seuls les administrateurs peuvent se substituer à d\'autres utilisateurs';
 $locales['Auth-failed-nopassword'] = 'Merci de fournir un mot de passe';
 $locales['Auth-failed-nousername'] = 'Merci de fournir un nom d\'utilisateur';

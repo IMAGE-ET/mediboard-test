@@ -40,15 +40,14 @@ else {
     $_REQUEST['passwordas'] = $password;
     
     CAppUI::login(true);
-  } else {
-    $new_user = new CUser;
-    $new_user->user_username = trim($username);
-    $new_user->loadMatchingObject();
-    
-    if (md5($password) != $new_user->user_password) {
+  }
+  else {
+    if (!CUser::checkPassword($username, $password)) {
       CAppUI::setMsg("Auth-failed-combination", UI_MSG_ERROR);
     }
-    else CAppUI::login(true);
+    else {
+      CAppUI::login(true);
+    }
   }
 }
 
@@ -56,4 +55,6 @@ if ($msg = CAppUI::getMsg()) {
   echo $msg;
   return;
 }
-else CAppUI::callbackAjax('UserSwitch.reload');
+else {
+  CAppUI::callbackAjax('UserSwitch.reload');
+}

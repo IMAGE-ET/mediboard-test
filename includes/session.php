@@ -23,6 +23,24 @@ if (get_cfg_var("session.auto_start") > 0) {
 
 session_start();
 
+// Check if the session was made via a temporary token
+// and save its expiration date
+if (isset($_SESSION["token_expiration"])) {
+  CAppUI::$token_expiration = $_SESSION["token_expiration"];
+}
+
+// Reset session if it expired
+if (CAppUI::isTokenSessionExpired()) {
+  CAppUI::$token_expiration = null;
+  
+  // Free the session data
+  session_unset();
+  @session_destroy(); // Escaped because of an unknown error
+  
+  // Start it back
+  session_start();
+}
+
 // Check if session has previously been initialised
 if (empty($_SESSION["AppUI"]) || isset($_GET["logout"])) {
   $_SESSION["AppUI"] = CAppUI::init();

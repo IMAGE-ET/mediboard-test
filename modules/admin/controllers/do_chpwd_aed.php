@@ -14,14 +14,10 @@ $new_pwd2 = CValue::post("new_pwd2");
 $callback = CValue::post("callback");
 
 // Vérification du mot de passe actuel de l'utilisateur courant
-$user = CUser::get();
-$ds = CSQLDataSource::get("std");
-$where = array();
-$where["user_id"]       = $ds->prepare("= %", $user->_id);
-$where["user_password"] = $ds->prepare("= %", md5($old_pwd));
+$user = CUser::checkPassword(CUser::get()->user_username, $old_pwd, true);
 
 // Mot de passe actuel correct
-if (!$user->loadObject($where)) {
+if (!$user->_id) {
   CAppUI::stepAjax("CUser-user_password-nomatch", UI_MSG_ERROR);
 }
 
@@ -71,4 +67,3 @@ CAppUI::$instance->weak_password = false;
 CAppUI::callbackAjax($callback);
 
 CApp::rip();
-?>

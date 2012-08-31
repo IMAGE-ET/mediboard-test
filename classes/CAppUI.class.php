@@ -58,14 +58,16 @@ class CAppUI {
   
   // END DEPRECATED
 
-  /** @var bool Weak password */
+  // Weak password
   var $weak_password = null;
 
-  /** @var string language alert mask */
+  // Language alert mask
   static $locale_mask = "";
 
-  /** @var string language alert mask */
+  // Language alert mask
   static $unlocalized  = array();
+  
+  static $token_expiration = null;
   
   // Global collections
   var $messages = array();
@@ -452,64 +454,95 @@ class CAppUI {
    * @return boolean Job done
    */
   static function login($force_login = false) {
-    $ds = CSQLDataSource::get("std");
-    
     $ldap_connection = CAppUI::conf("admin LDAP ldap_connection");
-    $ldap_guid = CValue::get("ldap_guid");
+    
+    // Login as
+    $loginas    = trim(CValue::request("loginas"));
+    $passwordas = trim(CValue::request("passwordas"));
+    
+    // LDAP
+    $ldap_guid  = trim(CValue::get("ldap_guid"));
+    
+    // Standard login
+    $username   = trim(CValue::request("username"));
+    $password   = trim(CValue::request("password"));
+    
+    // Token sign-in
+    $token_hash = trim(CValue::request("signin_token"));
     
     // Test login and password validity
     $user = new CUser;
+    $user->_is_logging = true;
     
-    // Login as: no need to provide a password for administators
-    if ($loginas = CValue::request("loginas")) {
+    // -------------- Login as: no need to provide a password for administrators
+    if ($loginas) {
       if (self::$instance->user_type != 1 && !$force_login) {
         self::setMsg("Auth-failed-loginas-admin", UI_MSG_ERROR);
         return false;
       }
+      $username = $loginas;
+      $password = ($ldap_connection ? $passwordas : null);
       
-      $username = $user->user_username = trim($loginas);
-      $password = $user->_user_password = $ldap_connection ? CValue::request("passwordas") : null;
+      $user->user_username  = $username;
+      $user->_user_password = $password;
     }
-    // Standard login
-    else {
-      $username  = trim(CValue::request("username"));
-      $password  = trim(CValue::request("password"));
-      
-      if (!$username && !$password && $ldap_connection && $ldap_guid) {
-        try {  
-          $user = CLDAP::getFromLDAPGuid($ldap_guid);
-        } 
-        catch (Exception $e) {
-          self::setMsg($e->getMessage(), UI_MSG_ERROR); 
-          return false;
-        }
+    
+    // -------------- LDAP sign-in
+    elseif ($ldap_connection && $ldap_guid) {
+      try {  
+        $user = CLDAP::getFromLDAPGuid($ldap_guid);
       }
-      else {
-        if (null == $user->user_username  = $username) {
-          self::setMsg("Auth-failed-nousername", UI_MSG_ERROR);
-          return false;
-        }
-  
-        if (null == $user->_user_password = $password) {
-          self::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
-          return false;
-        }
-        
-        self::$instance->weak_password = self::checkPasswordWeakness($user);
+      catch (Exception $e) {
+        self::setMsg($e->getMessage(), UI_MSG_ERROR); 
+        return false;
       }
     }
     
-    // See CUser::updatePlainFields
-    $user->loadMatchingObject();
+    // -------------- Token sign-in
+    elseif ($token_hash) {
+      $token = CViewAccessToken::getByHash($token_hash);
+      
+      if (!$token->isValid()) {
+        self::setMsg("Auth-failed-invalidToken", UI_MSG_ERROR);
+        return false;
+      }
+      
+      $token->applyParams();
+      
+      $user->load($token->user_id);
+    }
+    
+    // -------------- Standard sign-in
+    else {
+      if (!$username) {
+        self::setMsg("Auth-failed-nousername", UI_MSG_ERROR);
+        return false;
+      }
+
+      if (!$password) {
+        self::setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
+        return false;
+      }
+      
+      $user->user_username  = $username;
+      $user->_user_password = $password;
+      
+      self::$instance->weak_password = self::checkPasswordWeakness($user);
+    }
+    
+    if (!$user->_id) {
+      $user->loadMatchingObject();
+    }
     
     // User template case
     if ($user->template) {
-        self::setMsg("Auth-failed-template", UI_MSG_ERROR);
+      self::setMsg("Auth-failed-template", UI_MSG_ERROR);
       return false;
     }
 
-    // LDAP case
-    if ($ldap_connection) {
+    // LDAP case (when not using a ldap_guid), we check is the user in the LDAP directory is still allowed
+    // TODO we shoud check it when using ldap_guid too
+    if ($ldap_connection && $username) {
       $user_ldap = new CUser();
       $user_ldap->user_username = $username;
       $user_ldap->loadMatchingObject();
@@ -519,7 +552,7 @@ class CAppUI {
         $user_ldap->_user_password = $password;
         $user_ldap->_bound = false;
         
-        try {        
+        try {
           $user_ldap = CLDAP::login($user_ldap, $ldap_guid);
           
           if (!$user_ldap->_bound) {
@@ -542,7 +575,9 @@ class CAppUI {
     // Put user_group in AppUI
     self::$instance->user_remote = 1;
     
-    // @todo: is all this stuff necessary ?
+    $ds = CSQLDataSource::get("std");
+    
+    // We get the user's group if the Mediusers module is installed
     if ($ds->loadTable("users_mediboard") && $ds->loadTable("groups_mediboard")) {
       $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$user->_id'";
       self::$instance->user_remote = $ds->loadResult($sql);
@@ -559,6 +594,7 @@ class CAppUI {
     self::$instance->_is_intranet = 
       is_intranet_ip($_SERVER["REMOTE_ADDR"]) && 
       $_SERVER["REMOTE_ADDR"] != self::conf("system reverse_proxy");
+      
     if (!self::$instance->_is_intranet && self::$instance->user_remote == 1 && $user->user_type != 1) {
       self::setMsg("Auth-failed-user-noremoteaccess", UI_MSG_ERROR);
       return false;
@@ -566,17 +602,17 @@ class CAppUI {
 
     self::$instance->user_id = $user->_id;
     
-    // DEPRECATED
+    // <DEPRECATED>
     self::$instance->user_first_name = $user->user_first_name;
     self::$instance->user_last_name  = $user->user_last_name;
     self::$instance->user_email      = $user->user_email;
     self::$instance->user_type       = $user->user_type;
     self::$instance->user_last_login = $user->user_last_login;
-    // END DEPRECATED
+    // </DEPRECATED>
     
     // save the last_login dateTime
     if ($ds->loadField("users", "user_last_login")) {
-      // Nullify password or you md5 it once more
+      // Nullify password or you hash it once more
       $user->user_last_name = null;
       $user->user_last_login = mbDateTime();
       $user->store();
@@ -654,12 +690,11 @@ class CAppUI {
       }
     
       $today = mbDate();
+      $deb = $mediuser->deb_activite;
+      $fin = $mediuser->fin_activite;
       
       // Check if the user is in his activity period
-      if (
-          $mediuser->fin_activite && $mediuser->fin_activite <= $today ||
-          $mediuser->deb_activite && $mediuser->deb_activite >  $today
-      ) {
+      if ($deb && $deb > $today || $fin && $fin <= $today) {
         self::setMsg("Auth-failed-user-deactivated", UI_MSG_ERROR);
         return false;
       }
@@ -693,7 +728,7 @@ class CAppUI {
   /**
    * Load the stored user preferences from the database into cache
    * 
-   * @param ref|CUser $user_id User ID, 0 for default preferences
+   * @param integer $user_id User ID, 0 for default preferences
    * 
    * @return void
    */
@@ -756,6 +791,7 @@ class CAppUI {
    */
   static function getLocaleFilesPaths($locale) {
     global $root_dir;
+    
     $paths = array_merge(
       glob("$root_dir/locales/$locale/*.php"), 
       glob("$root_dir/modules/*/locales/$locale.php")
@@ -932,6 +968,14 @@ class CAppUI {
       self::buildPrefs();
       $instance->update_hash = $hash;
     }
+  }
+  
+  static function isTokenSessionExpired(){
+    if (!CAppUI::$token_expiration) {
+      return false;
+    }
+    
+    return mbDateTime() >= CAppUI::$token_expiration;
   }
 }
 

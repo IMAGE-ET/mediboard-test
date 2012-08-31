@@ -84,6 +84,7 @@ $index = "index";
 
 // Don't output anything. Usefull for fileviewers, ajax requests, exports, etc.
 $suppressHeaders = CValue::request("suppressHeaders");
+$signin_token    = CValue::get("signin_token");
 
 // WSDL if often stated as final with no value (&wsdl) wrt client compat 
 $wsdl = CValue::request("wsdl");
@@ -112,8 +113,30 @@ if ($dialog = CValue::request("dialog")) {
   $dialog = 1;
 }
 
-// Check ldap_guid
-if (CValue::get("ldap_guid")) {
+// If the user uses a token, his session should not be reset, but only redirected
+$do_login = false;
+if ($signin_token) {
+  $token = CViewAccessToken::getByHash($signin_token);
+  
+  // If the user is already logged in (in a normal session), keep his session, but use the params
+  if (CAppUI::$instance->user_id && !CAppUI::$token_expiration) {
+    if ($token->isValid() && CAppUI::$instance->user_id == $token->user_id) {
+      CAppUI::redirect($token->params);
+      CApp::rip();
+    }
+  }
+  else {
+    $do_login = true;
+  }
+}
+
+// We force the dialog view if in a token session
+if (CAppUI::$token_expiration || $do_login) {
+  $dialog = 1;
+}
+
+// Check ldap_guid or sining token
+if (CValue::get("ldap_guid") || $do_login) {
   $_REQUEST["login"] = 1;
 }
 

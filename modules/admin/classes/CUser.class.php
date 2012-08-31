@@ -13,26 +13,27 @@
  */
 class CUser extends CMbObject {
   // DB key
-  var $user_id          = null;
+  var $user_id             = null;
   
   // DB fields
-  var $user_username    = null;
-  var $user_password    = null;
-  var $user_type        = null;
-  var $user_first_name  = null;
-  var $user_last_name   = null;
-  var $user_email       = null;
-  var $user_phone       = null;
-  var $user_mobile      = null;
-  var $user_address1    = null;
-  var $user_city        = null;
-  var $user_zip         = null;
-  var $user_country     = null;
-  var $user_birthday    = null;
-  var $user_last_login  = null;
-  var $user_login_errors= null;
-  var $template         = null;
-  var $profile_id       = null;
+  var $user_username       = null;
+  var $user_password       = null;
+  var $user_salt           = null;
+  var $user_type           = null;
+  var $user_first_name     = null;
+  var $user_last_name      = null;
+  var $user_email          = null;
+  var $user_phone          = null;
+  var $user_mobile         = null;
+  var $user_address1       = null;
+  var $user_city           = null;
+  var $user_zip            = null;
+  var $user_country        = null;
+  var $user_birthday       = null;
+  var $user_last_login     = null;
+  var $user_login_errors   = null;
+  var $template            = null;
+  var $profile_id          = null;
   var $dont_log_connection = null;
 
   // Derived fields
@@ -46,6 +47,9 @@ class CUser extends CMbObject {
   var $_user_deb_activite    = null;
   var $_user_fin_activite    = null;
   var $_count_connections    = null;
+  
+  var $_is_logging           = null;
+  var $_user_salt            = null;
 
   // Behaviour fields
   var $_purge_connections = null;
@@ -113,7 +117,8 @@ class CUser extends CMbObject {
     
     // Plain fields
     $props["user_username"]       = "str notNull maxLength|20";
-    $props["user_password"]       = "str show|0";
+    $props["user_password"]       = "str maxLength|64 show|0";
+    $props["user_salt"]           = "str maxLength|64 show|0";
     $props["user_type"]           = "num notNull min|0 max|20 default|0";
     $props["user_first_name"]     = "str maxLength|50 seekable|begin";
     $props["user_last_name"]      = "str notNull maxLength|50 confidential seekable|begin";
@@ -144,6 +149,8 @@ class CUser extends CMbObject {
     $props["_ldap_linked"]       = "bool";
     $props["_user_type_view"]    = "str";
     $props["_count_connections"] = "num";
+    $props["_is_logging"]        = "bool";
+    $props["_user_salt"]         = "str";
     
     return $props;
   }
@@ -161,7 +168,7 @@ class CUser extends CMbObject {
     
     if ($user->isInstalled()) {
       if ($result = $user->load($this->user_id)) {
-         $remote = $user->remote;
+        $remote = $user->remote;
       }
     }
     
@@ -213,10 +220,19 @@ class CUser extends CMbObject {
   /**
    * Return true if user login count system is ready
    * 
-   * @return bool
+   * @return boolean
    */
   function loginErrorsReady() {
     return $this->_spec->ds->loadField($this->_spec->table, "user_login_errors");
+  }
+
+  /**
+   * Return true if new hash system is ready
+   * 
+   * @return boolean
+   */
+  function loginSaltReady() {
+    return $this->_spec->ds->loadField($this->_spec->table, "user_salt");
   }
   
   function updatePlainFields() {
@@ -224,18 +240,86 @@ class CUser extends CMbObject {
     
     $this->user_password = null;
 
-    // Nullify no to empty in database
-    if ($this->_user_password && !preg_match('/^[0-9a-f]{32}$/i', $this->_user_password)) {
-      $this->user_password = md5($this->_user_password);
+    // If no raw password or already hashed, nothing to do
+    if (!$this->_user_password || preg_match('/^[0-9a-f]{32}$/i', $this->_user_password)) {
+      return;
     }
+    
+    // If the new password hashing system is not ready yet
+    if (!$this->loginSaltReady()) {
+      $this->user_password = md5($this->_user_password);
+      return;
+    }
+    
+    // If user is logging, get the salt value in table
+    if (!$this->_is_logging) {
+      $this->generateUserSalt();
+      return;
+    }
+    
+    // If user is trying to log in, we have to compare hashes with corresponding user in table
+    $where = array(
+      "user_username" => " = '$this->user_username'"
+    );
+    $_user = new CUser();
+    $_user->loadObject($where);
+    
+    // If user exists, we compare hashes
+    if ($_user->_id) {
+      // Password is a SHA256 hash, we get user's salt
+      if (strlen($_user->user_password) == 64) {
+        $this->user_password = hash("SHA256", $_user->user_salt.$this->_user_password);
+        return;
+      }
+
+      // Password is an old MD5 hash, we have to update
+      if ($_user->user_password == md5($this->_user_password)) {
+        $this->generateUserSalt();
+        
+        $_user->_user_password = $this->_user_password;
+        $_user->_user_salt     = $this->user_salt;
+        $_user->store();
+      }
+    }
+  }
+
+  /**
+   * Randomly create a 64 bytes salt according to available methods
+   * Compute user_password by hashing _user_password + user_salt
+   * 
+   * @return void
+   */
+  function generateUserSalt() {
+    if ($this->_user_salt) {
+      $this->user_salt = $this->_user_salt;
+    }
+    
+    else {
+      // Mcrypt has a better CSPRNG method
+      if (function_exists('mcrypt_create_iv')) {
+        // CSPRNG initialisation
+        srand();
+        // Random salt if modifying the user
+        $this->user_salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
+      }
+      else {
+        // Instead of Mcrypt, we use mt_rand() method
+        $this->user_salt = hash("SHA256", mt_rand());
+      }
+    }
+    
+    // Compute the hash
+    $this->user_password = hash("SHA256", $this->user_salt.$this->_user_password);
   }
 
   function updateFormFields () {
     parent::updateFormFields();
+    
     $user_first_name = CMbString::capitalize($this->user_first_name);
     $user_last_name  = CMbString::upper($this->user_last_name);
-    $this->_view = "$user_last_name $user_first_name";
-    $this->_login_locked = $this->user_login_errors >= CAppUI::conf('admin CUser max_login_attempts');
+    
+    $this->_view           = "$user_last_name $user_first_name";
+    $this->_login_locked   = $this->user_login_errors >= CAppUI::conf('admin CUser max_login_attempts');
     $this->_user_type_view = CValue::read(self::$types, $this->user_type);
   }
 
@@ -252,33 +336,26 @@ class CUser extends CMbObject {
 
     // S'il a été défini, on le contrôle (necessaire de le mettre ici a cause du md5)
     if ($pwd) {
-
       // minLength
       if ($pwdSpecs->minLength > strlen($pwd)) {
         return "Mot de passe trop court (minimum {$pwdSpecs->minLength})";
       }
 
       // notContaining
-      if($target = $pwdSpecs->notContaining) {
-        if ($field = $this->$target) {
-          if (stristr($pwd, $field)) {
-          return "Le mot de passe ne doit pas contenir '$field'";
-      } } }
+      if(($target = $pwdSpecs->notContaining) && ($field = $this->$target) && stristr($pwd, $field)) {
+        return "Le mot de passe ne doit pas contenir '$field'";
+      }
       
       // notNear
-      if($target = $pwdSpecs->notNear) {
-        if ($field = $this->$target) {
-          if (levenshtein($pwd, $field) < 3) {
-            return "Le mot de passe ressemble trop à '$field'";
-      } } }
+      if(($target = $pwdSpecs->notNear) && ($field = $this->$target) && (levenshtein($pwd, $field) < 3)) {
+        return "Le mot de passe ressemble trop à '$field'";
+      }
        
       // alphaAndNum
-      if($pwdSpecs->alphaAndNum) {
-        if (!preg_match("/[A-z]/", $pwd) || !preg_match("/\d+/", $pwd)) {
-          return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
-        }
+      if($pwdSpecs->alphaAndNum && (!preg_match("/[A-z]/", $pwd) || !preg_match("/\d+/", $pwd))) {
+        return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
       }
-    } 
+    }
     else {
       $this->_user_password = null;
     }
@@ -461,6 +538,7 @@ class CUser extends CMbObject {
     if (!CAppUI::conf("admin LDAP ldap_connection") || !$this->_id) {
       return;
     }
+    
     $this->loadLastId400(CAppUI::conf("admin LDAP ldap_tag"));
     return $this->_ldap_linked = ($this->_ref_last_id400->_id) ? 1 : 0;
   }
@@ -490,6 +568,18 @@ class CUser extends CMbObject {
   function canChangePassword() {
     return (CAppUI::conf("admin CUser allow_change_password") || $this->user_type == 1);
   }
+  
+  static function checkPassword($username, $password, $return_object = false) {
+    $new_user = new self;
+    $new_user->user_username  = $username;
+    $new_user->_user_password = $password;
+    $new_user->_is_logging    = true;
+    $new_user->loadMatchingObjectEsc();
+    
+    if ($return_object) {
+      return $new_user;
+    }
+    
+    return $new_user->_id != null;
+  }
 }
-
-?>

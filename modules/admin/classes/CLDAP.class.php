@@ -17,7 +17,8 @@ class CLDAP {
   static function login(CUser $user, $ldap_guid) {
     if (!$ldap_guid) {
       $source_ldap = self::bind($user);
-    } else {
+    }
+    else {
       $ldaprdn  = CAppUI::conf("admin LDAP ldap_user");
       $ldappass = CAppUI::conf("admin LDAP ldap_password");
       
@@ -72,11 +73,13 @@ class CLDAP {
     if (!$ldaprdn) {
       $ldaprdn  = $user->user_username;
     }
+    
     if (!$ldappass) {
       $ldappass = $user->_user_password;
     }
 
     $bound = $source_ldap->ldap_bind($ldapconn, $ldaprdn, $ldappass);
+    
     if ($user) {
       $user->_bound = $bound;
     }
@@ -353,14 +356,12 @@ class CLDAP {
       throw new CMbException("CUser_no-ldap-guid");
     }
     
-    $id400 = CIdSante400::getMatch("CUser", CAppUI::conf("admin LDAP ldap_tag"), $ldap_guid);
+    $id_ext = CIdSante400::getMatch("CUser", CAppUI::conf("admin LDAP ldap_tag"), $ldap_guid);
     
-    if (!$id400->_id) {
+    if (!$id_ext->_id) {
       throw new CMbException("CUser_ldap-guid-no-user");
     }
     
-    return $id400->loadTargetObject();
+    return $id_ext->loadTargetObject();
   }
 }
-
-?>

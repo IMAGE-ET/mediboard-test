@@ -288,7 +288,13 @@ class CSetupadmin extends CSetup {
       CHANGE `user_type`         `user_type`         TINYINT( 4 ) UNSIGNED NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.24";
+    $this->makeRevision("1.0.24");
+    $query = "ALTER TABLE `users`
+      ADD `user_salt` CHAR(64) AFTER `user_password`,
+      MODIFY `user_password` CHAR(64);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.25";
   }
 }
 ?>
