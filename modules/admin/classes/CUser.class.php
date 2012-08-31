@@ -273,13 +273,12 @@ class CUser extends CMbObject {
       }
 
       // Password is an old MD5 hash, we have to update
-      if ($_user->user_password == md5($this->_user_password)) {
-        $this->generateUserSalt();
-        
-        $_user->_user_password = $this->_user_password;
-        $_user->_user_salt     = $this->user_salt;
-        $_user->store();
-      }
+      $_user->user_password = md5($this->_user_password);
+      
+      $this->generateUserSalt();
+      $_user->_user_password = $this->_user_password;
+      $_user->_user_salt     = $this->user_salt;
+      $_user->store();
     }
   }
 
