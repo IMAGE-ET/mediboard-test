@@ -20,6 +20,9 @@ $results = array(
   "count_erreur" => 0,
 );
 
+$bloc  = new CBlocOperatoire();
+$blocs = $bloc->loadGroupList();
+
 if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
   // Object columns on the first line
   $cols = fgetcsv($fp, null, ";");
@@ -71,8 +74,6 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $temps_op = mbSubTime(mbTime($date_debut), mbTime($date_fin)); 
     
     // Recherche de la salle
-    $bloc  = new CBlocOperatoire();
-    $blocs = $bloc->loadGroupList();
     $salle      = new CSalle();
     $where["nom"]     = "= '$nom_salle'";
     $where["bloc_id"] = CSQLDataSource::prepareIn(array_keys($blocs));
