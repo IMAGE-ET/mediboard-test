@@ -34,8 +34,6 @@ $exchange_source->init();
 try {
   $exchange_source->setRecipient($email);
   
-  $exchange_source->setSubject("Mediboard - DHE du ".mbDateToLocale($operation->_datetime));
-  
   // Création du token
   $token = new CViewAccessToken();
   $token->ttl_hours = 24;
@@ -49,8 +47,29 @@ try {
   $url = $token->getUrl();
   
   // Lien vers la DHE
-  $content = utf8_encode("Formulaire de DHE accessible à l'adresse : <br /> $url");
+  $subject = CAppUI::conf("reservation subject_mail");
+  $content = CAppUI::conf("reservation text_mail");
   
+  $from = array(
+  "[URL]",
+  "[PRATICIEN - NOM]",
+  "[PRATICIEN - PRENOM]",
+  "[DATE INTERVENTION]",
+  "[HEURE INTERVENTION]");
+  
+  $to = array(
+   $url,
+   $praticien->_user_last_name,
+   $praticien->_user_first_name,
+   mbDateToLocale(mbDate($operation->_datetime_best)),
+   mbTransformTime($operation->_datetime_best, null, CAppUI::conf("time"))
+  );
+  
+  $subject = str_replace($from, $to, $subject);
+  $exchange_source->setSubject($subject);
+  
+  $content = str_replace($from, $to, $content);
+  $content = nl2br(utf8_encode($content));
   $exchange_source->setBody($content);
   
   $exchange_source->send();

@@ -11,4 +11,6 @@
 
 $dPconfig["reservation"] = array(
   "debut_planning" => "8",
+  "subject_mail"   => "Mediboard - DHE du [DATE INTERVENTION] à [HEURE INTERVENTION]",
+  "text_mail"      => "Formulaire de DHE accessible à l'adresse :\n[URL]",
 );
