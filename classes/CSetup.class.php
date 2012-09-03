@@ -27,6 +27,7 @@ class CSetup {
   // Protected vars
   var $revisions    = array();
   var $queries      = array();
+  var $preferences  = array();
   var $functions    = array();
   var $dependencies = array();
   var $timeLimit    = array();
@@ -42,7 +43,10 @@ class CSetup {
 
   /**
    * Create a revision of a given name
+   * 
    * @param string $revision Revision number of form x.y
+   * 
+   * @return void
    */
   function makeRevision($revision) {
      
@@ -52,6 +56,7 @@ class CSetup {
     
     $this->revisions[] = $revision;
     $this->queries     [$revision] = array();
+    $this->preferences [$revision] = array();
     $this->functions   [$revision] = array();
     $this->dependencies[$revision] = array();
     $this->config_moves[$revision] = array();
@@ -61,7 +66,10 @@ class CSetup {
   
   /**
    * Create an empty revision
+   * 
    * @param string $revision Revision number of form x.y
+   * 
+   * @return void
    */
   function makeEmptyRevision($revision) {
     $this->makeRevision($revision);
@@ -70,7 +78,11 @@ class CSetup {
   
   /**
    * Add a callback function to be executed
-   * function must return true/false
+   * The function must return true/false
+   * 
+   * @param callback $function The callback to execute
+   * 
+   * @return void
    */
   function addFunction($function) {
     $this->functions[current($this->revisions)][] = $function;
@@ -78,8 +90,11 @@ class CSetup {
   
   /**
    * Add a data source to module for existence and up to date checking
-   * @param string $dsn Name of the data sourcec
+   * 
+   * @param string $dsn   Name of the data source
    * @param string $query Data source is considered up to date if the returns a result
+   * 
+   * @return void
    */
   function addDatasource($dsn, $query) {
     $this->datasources[$dsn] = $query;
@@ -87,11 +102,12 @@ class CSetup {
 
   /**
    * Check all declared datasources and retrieve them as uptodate or obosolete
+   * 
    * @return array The uptodate and obsolete DSNs
    */
   function getDatasources() {
     $dsns = array();
-    foreach($this->datasources as $dsn => $query) {
+    foreach ($this->datasources as $dsn => $query) {
       if ($ds = @CSQLDataSource::get($dsn)) {
         $dsns[$ds->loadResult($query) ? "uptodate" : "obsolete"][] = $dsn;
       }
@@ -104,8 +120,11 @@ class CSetup {
   }
   
   /**
-   * Set a time limit for un actual upgrade
-   * @param int $limit Limits in seconds
+   * Set a time limit for an actual upgrade
+   * 
+   * @param integer $limit Limits in seconds
+   * 
+   * @return void
    */
   function setTimeLimit($limit) {
     $this->timeLimit[current($this->revisions)] = $limit;
@@ -116,6 +135,8 @@ class CSetup {
    * 
    * @param string $query  SQL query
    * @param bool   $ignore Ignore errors if true
+   * 
+   * @return void
    */
   function addQuery($query, $ignore_errors = false, $dsn = null) {
     // Table creation ?
@@ -123,13 +144,17 @@ class CSetup {
       $table = trim($matches[1], "`");
       $this->addTable($table);
     }
+    
     // Table name changed ?
-    if (preg_match("/RENAME\s+TABLE\s+(\S+)\s+TO\s+(\S+)/i", $query, $matches) || 
-        preg_match("/ALTER\s+TABLE\s+(\S+)\s+RENAME\s+(\S+)/i", $query, $matches)) {
+    if (
+        preg_match("/RENAME\s+TABLE\s+(\S+)\s+TO\s+(\S+)/i", $query, $matches) || 
+        preg_match("/ALTER\s+TABLE\s+(\S+)\s+RENAME\s+(\S+)/i", $query, $matches)
+    ) {
       $tableFrom = trim($matches[1], "`");
       $tableTo   = trim($matches[2], "`");
       $this->renameTable($tableFrom, $tableTo);
     }
+        
     // Table removed ?
     if (preg_match("/DROP\s+TABLE\s+(\S+)/i", $query, $matches)) {
       $table = trim($matches[1], "`");
@@ -140,62 +165,45 @@ class CSetup {
   }
   
   /**
-   * @FIXME: Make it pure SQL, DELETE + INSERT
    * Add a preference query to current revision definition 
-   * @param string $name Name of the preference
+   * 
+   * @param string $name    Name of the preference
    * @param string $default Default value of the preference
+   * 
+   * @return void
    */
   function addPrefQuery($name, $default) {
-    if (self::$_old_pref_system === null) {
-      $ds = CSQLDataSource::get("std");
-      self::$_old_pref_system = $ds->loadField("user_preferences", "pref_name") != null;
-    }
-    
-    // Former pure SQL system
-    // Cannot check against module version or fresh install will generate errors
-    // Very consuming though...
-    if (self::$_old_pref_system) {
-      $sqlTest = "SELECT * FROM `user_preferences` WHERE `pref_user` = '0' && `pref_name` = '$name'";
-      $result = $this->ds->exec($sqlTest);
-      if (!$this->ds->numRows($result)) {
-        $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )
-          VALUES ('0', '$name', '$default');";
-        $this->addQuery($sql);
-      }
-    }
-    // Latter object oriented system
-    else {
-      $pref = new CPreferences;
-      $pref->user_id = 0;
-      $pref->key = $name;
-      if (!$pref->loadMatchingObject()) {
-        $pref->value = $default;
-        $pref->store();
-      }
-    }
+    $this->preferences[current($this->revisions)][] = array($name, $default);
   }
   
   /**
-   * @FIXME: Make it pure SQL
    * Delete a user preference
+   * 
    * @param string $name Name of the preference
+   * 
+   * @return void
    */
   function delPrefQuery($name) {
-    return; 
+    return;
+    
     // FIXME: les fonctions addPrefQuery et delPrefQuery sont EXECUTEES
     // a CHAQUE fois quon va sur la page de setup ! cf. pure SQL
     $pref = new CPreferences;
     $where = array();
     $where['key'] = " = '$name'";
     foreach ($pref->loadList($where) as $_pref) {
-      if ($msg = $_pref->delete())
+      if ($msg = $_pref->delete()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
+      }
     }
   }
   
   /**
    * Registers a table in the module
+   * 
    * @param string $table Table name
+   * 
+   * @return void
    */
   function addTable($table) {
     if (in_array($table, $this->tables)) {
@@ -206,7 +214,10 @@ class CSetup {
 
   /**
    * Remove a table in the module
+   * 
    * @param string $table Table name
+   * 
+   * @return void
    */
   function dropTable($table) {
     CMbArray::removeValue($table, $this->tables);
@@ -214,8 +225,11 @@ class CSetup {
 
   /**
    * Change a table name in the module
+   * 
    * @param string $tableFrom Table former name
-   * @param string $tableFrom Table latter name
+   * @param string $tableTo   Table latter name
+   * 
+   * @return void
    */
   function renameTable($tableFrom, $tableTo) {
     $this->dropTable($tableFrom);
@@ -224,8 +238,11 @@ class CSetup {
     
   /**
    * Adds a revision dependency with another module
-   * @param string $module
-   * @param string $revision
+   * 
+   * @param string $module   The dependency name
+   * @param string $revision The dependency revision
+   * 
+   * @return void
    */
   function addDependency($module, $revision) {
     $dependency = new CObject;
@@ -269,7 +286,10 @@ class CSetup {
   
   /**
    * Launches module upgrade process
-   * @param string $oldRevision revision befoire upgrade
+   * 
+   * @param string $oldRevision revision before upgrade
+   * 
+   * @return void
    */
   function upgrade($oldRevision) {
     if (array_key_exists($this->mod_version, $this->queries)) {
@@ -289,6 +309,11 @@ class CSetup {
       next($this->revisions);
     }
 
+    if (self::$_old_pref_system === null) {
+      $ds = CSQLDataSource::get("std");
+      self::$_old_pref_system = $ds->loadField("user_preferences", "pref_name") != null;
+    }
+    
     do {
       // Check for dependencies
       foreach ($this->dependencies[$currRevision] as $dependency) {
@@ -304,7 +329,7 @@ class CSetup {
       }
       
       // Set Time Limit
-      if ($this->timeLimit[$currRevision]){
+      if ($this->timeLimit[$currRevision]) {
         set_time_limit($this->timeLimit[$currRevision]);
       }
 
@@ -331,6 +356,35 @@ class CSetup {
         }
       }
       
+      // Preferences
+      foreach ($this->preferences[$currRevision] as $_pref) {
+        list($_name, $_default) = $_pref;
+        
+        // Former pure SQL system
+        // Cannot check against module version or fresh install will generate errors
+        if (self::$_old_pref_system) {
+          $query = "SELECT * FROM `user_preferences` WHERE `pref_user` = '0' && `pref_name` = '$_name'";
+          $result = $this->ds->exec($query);
+          
+          if (!$this->ds->numRows($result)) {
+            $query = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )
+              VALUES ('0', '$_name', '$_default');";
+            $this->addQuery($query);
+          }
+        }
+        // Latter object oriented system
+        else {
+          $pref = new CPreferences;
+          $pref->user_id = 0;
+          $pref->key = $_name;
+          if (!$pref->loadMatchingObject()) {
+            $pref->value = $_default;
+            $pref->store();
+          }
+        }
+      }
+      
+      // Config moves
       if (count($this->config_moves[$currRevision])) {
         $mbConfig = new CMbConfig;
         $mbConfig->load();
@@ -352,7 +406,8 @@ class CSetup {
   /**
    * Removes a module
    * Warning, it actually breaks module dependency
-   * @return bool Job done
+   * 
+   * @return boolean Job done
    */
   function remove() {
     if ($this->mod_type == "core") {
@@ -373,8 +428,9 @@ class CSetup {
   }
   
   /**
-   * Link to the configure pane
-   * Should be handled in the template
+   * Link to the configure pane. Should be handled in the template
+   * 
+   * @return void
    */
   function configure() {
     CAppUI::redirect("m=$this->mod_name&a=configure");
@@ -383,8 +439,11 @@ class CSetup {
   
   /**
    * Move the configuration setting for a given path in a new configuration
-   * @param $old_conf string Tokenized path, eg "module class var";
-   * @param $new_conf string Tokenized path, eg "module class var";
+   * 
+   * @param string $old_path Tokenized path, eg "module class var";
+   * @param string $new_path Tokenized path, eg "module class var";
+   * 
+   * @return void
    */
   function moveConf($old_path, $new_path) {
     $this->config_moves[current($this->revisions)][] = array($old_path, $new_path);
@@ -392,9 +451,12 @@ class CSetup {
   
   /**
    * Rename a field in the user log
-   * @param $object_class object_class of the user_log
-   * @param $from The field to rename
-   * @param $to The new name
+   * 
+   * @param string $object_class object_class value of the user_log
+   * @param string $from         The field to rename
+   * @param string $to           The new name
+   * 
+   * @return void
    */
   function getFieldRenameQueries($object_class, $from, $to) {
     $query =
@@ -424,4 +486,3 @@ class CSetup {
     $this->addQuery($query);
   }
 }
-?>
