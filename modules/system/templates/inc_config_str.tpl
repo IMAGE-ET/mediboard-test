@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_default var=textarea value=0}}
+
 {{if @$m}}
   {{if @$class}}
     {{assign var=field  value="$m[$class][$var]"}}
@@ -43,9 +45,13 @@
     </script>
     {{/if}}
     
-    <input class="{{if @$cssClass}}{{$cssClass}}{{else}}str{{/if}} {{$uid}}" {{if @$password}} type="password" {{/if}} name="{{$field}}" 
-           value="{{$value}}" {{if @$size}}size="{{$size}}"{{/if}}
-           {{if @$maxlength}}maxlength="{{$maxlength}}"{{/if}}/> 
-    {{if @$suffix}}{{$suffix}}{{/if}} 
+    {{if $textarea}}
+      <textarea class="{{if @$cssClass}}{{$cssClass}}{{else}}str{{/if}} {{$uid}}" name="{{$field}}">{{$value|smarty:nodefaults}}</textarea>
+    {{else}}
+      <input class="{{if @$cssClass}}{{$cssClass}}{{else}}str{{/if}} {{$uid}}" {{if @$password}} type="password" {{/if}} name="{{$field}}" 
+             value="{{$value}}" {{if @$size}}size="{{$size}}"{{/if}}
+             {{if @$maxlength}}maxlength="{{$maxlength}}"{{/if}}/> 
+      {{if @$suffix}}{{$suffix}}{{/if}}
+    {{/if}} 
   </td>
 </tr>
