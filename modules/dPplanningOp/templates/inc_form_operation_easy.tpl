@@ -150,6 +150,7 @@
       <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime|iso_date}}{{else}}{{$date_min}}{{/if}}" />
       {{assign var="operation_id" value=$op->operation_id}}
       {{mb_ternary var=update_entree_prevue test=$op->operation_id value="" other="updateEntreePrevue();"}}
+      <input type="text" name="date_da" readonly value="{{$op->date|date_format:"%d/%m/%Y"}}" />
       <input type="hidden" name="date" value="{{$op->date}}" class="date notNull"
         onchange="{{$update_entree_prevue}}
         Value.synchronize(this.form.date_da);
