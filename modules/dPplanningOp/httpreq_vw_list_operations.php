@@ -32,11 +32,21 @@ if($userSel->_id){
   $operation->annulee = 1;
   $nb_canceled += $operation->countMatchingList();
   foreach($list_urgences as $curr_urg) {
+    $curr_urg->canDo();
     $curr_urg->loadRefsFwd();
+    $_sejour = $curr_urg->_ref_sejour;
     $curr_urg->loadRefsDocs();
-    $curr_urg->_ref_sejour->loadRefsFwd();
-    $curr_urg->_ref_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();
-    $curr_urg->_ref_sejour->loadRefsDocs();
+    foreach ($curr_urg->_ref_documents as $_document) {
+      $_document->canDo();
+    }
+    
+    $_sejour->loadRefsFwd();
+    $_sejour->canDo();
+    $_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();
+    $_sejour->loadRefsDocs();
+    foreach ($_sejour->_ref_documents as $_document) {
+      $_document->canDo();
+    }
   }
 }
 
@@ -82,10 +92,19 @@ if($userSel->_id){
     
     foreach ($_plage->_ref_operations as $_op) {
       $_op->loadRefsFwd();
+      $_sejour = $_op->_ref_sejour;
       $_op->loadRefsDocs();
-      $_op->_ref_sejour->loadRefsFwd();
-      $_op->_ref_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();
-      $_op->_ref_sejour->loadRefsDocs();
+      foreach ($_op->_ref_documents as $_doc) {
+        $_doc->canDo();
+      }
+      $_op->canDo();
+      $_sejour->canDo();
+      $_sejour->loadRefsFwd();
+      $_sejour->_ref_patient->loadRefDossierMedical()->countAllergies();
+      $_sejour->loadRefsDocs();
+      foreach ($_sejour->_ref_documents as $_doc) {
+        $_doc->canDo();
+      }
     }
   }
 }
@@ -102,22 +121,6 @@ if ($user->isPraticien()) {
 $praticien->loadRefFunction();
 $praticien->_ref_function->loadRefGroup();
 $praticien->canDo();
-
-// Modèles du praticien
-$modelesByOwner = array(
-  'COperation' => array(),
-  'CSejour' => array()
-);
-$packsByOwner = array(
-  'COperation' => array(),
-  'CSejour' => array()
-);
-if ($praticien->_can->edit) {
-  foreach($modelesByOwner as $object_class => $modeles) {
-    $modelesByOwner[$object_class] = CCompteRendu::loadAllModelesFor($praticien->_id, 'prat', $object_class, "body");
-    $packsByOwner[$object_class] = CPack::loadAllPacksFor($praticien->_id, 'user', $object_class);
-  }
-}
 
 // Compter les modèles d'étiquettes
 $modele_etiquette = new CModeleEtiquette;
@@ -137,11 +140,11 @@ if (CModule::getActive("printing")) {
   $nb_printers   = $function->countBackRefs("printers");
 }
 
+$compte_rendu = new CCompteRendu();
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("modelesByOwner", $modelesByOwner);
-$smarty->assign("packsByOwner"  , $packsByOwner);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("boardItem"     , $boardItem);
 $smarty->assign("date"          , $date);
@@ -151,6 +154,7 @@ $smarty->assign("listDay"       , $list_plages);
 $smarty->assign("nb_canceled"   , $nb_canceled);
 $smarty->assign("board"         , $board);
 $smarty->assign("nb_printers"   , $nb_printers);
+$smarty->assign("can_doc"       , $compte_rendu->loadPermClass());
 $smarty->assign("nb_modeles_etiquettes", $nb_modeles_etiquettes);
 
 $smarty->display("inc_list_operations.tpl");
