@@ -127,7 +127,8 @@
         {{foreach from=$sejours item=_sejour}}
         <tbody class="hoverable">
           {{assign var=grossesse value=$_sejour->_ref_grossesse}}
-          {{assign var=patient value=$_sejour->_ref_patient}}
+          {{assign var=patient   value=$_sejour->_ref_patient}}
+          {{assign var=operation value=$_sejour->_ref_last_operation}}
           <tr>
             <td rowspan="{{$grossesse->_ref_naissances|@count}}">
               <form name="editSejour-{{$_sejour->_id}}" method="post">
@@ -153,76 +154,82 @@
                 {{mb_value object=$_sejour field=entree date=$date}}
               </span>
             </td>
-            <td {{if $grossesse->_ref_naissances|@count}}rowspan="{{$grossesse->_ref_naissances|@count}}"{{/if}} class="button">
-              {{assign var=operation value=$_sejour->_ref_last_operation}}
-              {{if $operation->_id}}
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}')">
-                  {{mb_value object=$operation field=time_operation}}
-                </span>
-                <button type="button" class="edit notext" onclick="editOperation('{{$operation->_id}}')"></button>
-              {{else}}
-                <button type="button" class="add notext" onclick="editOperation(0, '{{$_sejour->_id}}')"></button>
-              {{/if}}
-            </td>
-            <td rowspan="{{$grossesse->_ref_naissances|@count}}">
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">
-                {{$grossesse->terme_prevu|date_format:$conf.date}}
-              </span>
-            </td>
-            <td class="text" rowspan="{{$grossesse->_ref_naissances|@count}}">
-              {{foreach from=$grossesse->_praticiens item=_praticien}}
-                {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_praticien}}
-              {{/foreach}}
-            </td>
-            {{foreach from=$grossesse->_ref_naissances item=_naissance name=foreach_naissance}}
-              {{assign var=sejour_enfant value=$_naissance->_ref_sejour_enfant}}
-              {{assign var=enfant value=$sejour_enfant->_ref_patient}}
-              {{if !$smarty.foreach.foreach_naissance.first}}
-                <tr>
-              {{/if}}
-              <td {{if !$_naissance->heure}}class="empty"{{/if}}>
-                <button class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}', null, null, 0, 'document.location.reload')">
-                  {{tr}}Edit{{/tr}}
-                </button>
-                {{if $_naissance->heure}}
-                  Le {{$enfant->naissance|date_format:$conf.date}} à {{$_naissance}}
-                {{else}}
-                 {{$_naissance}}
+            {{if $_sejour->grossesse_id}}
+              <td {{if $grossesse->_ref_naissances|@count}}rowspan="{{$grossesse->_ref_naissances|@count}}"{{/if}} class="button">
+                {{if $operation->_id}}
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$operation->_guid}}')">
+                    {{mb_value object=$operation field=time_operation}}
+                  </span>
+                  <button type="button" class="edit notext" onclick="editOperation('{{$operation->_id}}')"></button>
+                {{elseif $_sejour->grossesse_id}}
+                  <button type="button" class="add notext" onclick="editOperation(0, '{{$_sejour->_id}}')"></button>
                 {{/if}}
               </td>
-              <td>
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$enfant->_guid}}')">
-                  {{$enfant}}
+              <td rowspan="{{$grossesse->_ref_naissances|@count}}">
+                <span onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')">
+                  {{$grossesse->terme_prevu|date_format:$conf.date}}
                 </span>
               </td>
-              
-              <td>
-                <button class="print notext" onclick="Naissance.printDossier('{{$sejour_enfant->_id}}')">
-                  {{tr}}Print{{/tr}}
-                </button>
+              <td class="text" rowspan="{{$grossesse->_ref_naissances|@count}}">
+                {{foreach from=$grossesse->_praticiens item=_praticien}}
+                  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_praticien}}
+                {{/foreach}}
+              </td>
+              {{foreach from=$grossesse->_ref_naissances item=_naissance name=foreach_naissance}}
                 {{assign var=sejour_enfant value=$_naissance->_ref_sejour_enfant}}
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour_enfant->_guid}}')">
-                  {{mb_value object=$sejour_enfant field=entree date=$date}}
-                </span>
-              </td>
-              {{if $smarty.foreach.foreach_naissance.first}}
+                {{assign var=enfant value=$sejour_enfant->_ref_patient}}
+                {{if !$smarty.foreach.foreach_naissance.first}}
+                  <tr>
+                {{/if}}
+                <td {{if !$_naissance->heure}}class="empty"{{/if}}>
+                  <button class="edit notext" onclick="Naissance.edit('{{$_naissance->_id}}', null, null, 0, 'document.location.reload')">
+                    {{tr}}Edit{{/tr}}
+                  </button>
+                  {{if $_naissance->heure}}
+                    Le {{$enfant->naissance|date_format:$conf.date}} à {{$_naissance}}
+                  {{else}}
+                   {{$_naissance}}
+                  {{/if}}
+                </td>
+                <td>
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$enfant->_guid}}')">
+                    {{$enfant}}
+                  </span>
+                </td>
+                
+                <td>
+                  <button class="print notext" onclick="Naissance.printDossier('{{$sejour_enfant->_id}}')">
+                    {{tr}}Print{{/tr}}
+                  </button>
+                  {{assign var=sejour_enfant value=$_naissance->_ref_sejour_enfant}}
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour_enfant->_guid}}')">
+                    {{mb_value object=$sejour_enfant field=entree date=$date}}
+                  </span>
+                </td>
+                {{if $smarty.foreach.foreach_naissance.first}}
+                  <td class="narrow" rowspan="{{$grossesse->_ref_naissances|@count}}">
+                    <button type="button" class="add notext" title="Créer un dossier provisoire"
+                      onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
+                  </td>
+                {{/if}}
+                {{if $smarty.foreach.foreach_naissance.first}}
+                  </tr>
+                {{/if}}
+              {{foreachelse}}
+                <td colspan="3"></td>
                 <td class="narrow" rowspan="{{$grossesse->_ref_naissances|@count}}">
                   <button type="button" class="add notext" title="Créer un dossier provisoire"
                     onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
                 </td>
-              {{/if}}
-              {{if $smarty.foreach.foreach_naissance.first}}
-                </tr>
-              {{/if}}
-            {{foreachelse}}
-              <td colspan="3"></td>
-              <td class="narrow" rowspan="{{$grossesse->_ref_naissances|@count}}">
-                <button type="button" class="add notext" title="Créer un dossier provisoire"
-                  onclick="Naissance.edit(null, null, '{{$_sejour->_id}}', 1, 'document.location.reload')"></button>
+              {{/foreach}}
+            {{else}}
+              <td colspan="7"  rowspan="{{$grossesse->_ref_naissances|@count}}">
+                <div class="small-info">
+                  {{tr}}CGrossesse-no_link_sejour{{/tr}}
+                </div>
               </td>
-            {{/foreach}}
+            {{/if}}
          </tbody>
-         
         {{foreachelse}}
           <tr>
             <td colspan="11" class="empty">{{tr}}CSejour.none{{/tr}}</td>

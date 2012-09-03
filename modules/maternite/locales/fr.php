@@ -19,6 +19,7 @@ $locales['CGrossesse-msg-delete'] = 'Grossesse supprimée';
 $locales['CGrossesse-msg-modify'] = 'Grossesse modifiée';
 $locales['CGrossesse-multiple'] = 'Multiple';
 $locales['CGrossesse-multiple-desc'] = 'Grossesse multiple';
+$locales['CGrossesse-no_link_sejour'] = 'Veuillez relier le séjour à une grossesse pour créer un accouchement et/ou une naissance.';
 $locales['CGrossesse-parturiente_id'] = 'Patiente';
 $locales['CGrossesse-parturiente_id-court'] = 'Patiente';
 $locales['CGrossesse-parturiente_id-desc'] = 'Patiente';

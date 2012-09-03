@@ -1786,3 +1786,7 @@ div.planning_ressource.besoin {
   background: #ffb;
   outline: 1px solid #000;
 }
+
+span.hatching {
+  background-image: url(images/icons/ray.gif);
+}
