@@ -95,8 +95,9 @@ if ($vue) {
   unset($where["sejour.confirme"]);
   $where["effectue"] = "= '0'";
 }
-$where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
 $whereEntrants = $whereSortants = $where;
+$whereSortants["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
+$whereEntrants["affectation.entree"] = "BETWEEN '$limit1' AND '$limit2'";
 $whereEntrants["sejour.entree"] = "!= affectation.entree";
 $whereSortants["sejour.sortie"] = "!= affectation.sortie";
 $dep_entrants = $affectation->countList($whereEntrants, null, $ljoin);

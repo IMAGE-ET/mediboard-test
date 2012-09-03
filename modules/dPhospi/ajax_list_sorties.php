@@ -48,18 +48,18 @@ $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
 
 // Patients placés
-$affectation                 = new CAffectation();
-$ljoin                       = array();
-$ljoin["sejour"]             = "sejour.sejour_id = affectation.sejour_id";
-$ljoin["patients"]           = "sejour.patient_id = patients.patient_id";
-$ljoin["users"]              = "sejour.praticien_id = users.user_id";
-$ljoin["lit"]                = "lit.lit_id = affectation.lit_id";
-$ljoin["chambre"]            = "chambre.chambre_id = lit.chambre_id";
-$ljoin["service"]            = "service.service_id = chambre.service_id";
-$where                       = array();
-$where["service.group_id"]   = "= '$group->_id'";
-$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services)   , $service->_id);
-$where["sejour.type"]        = CSQLDataSource::prepareIn($types_hospi, $type_hospi);
+$affectation                     = new CAffectation();
+$ljoin                           = array();
+$ljoin["sejour"]                 = "sejour.sejour_id = affectation.sejour_id";
+$ljoin["patients"]               = "sejour.patient_id = patients.patient_id";
+$ljoin["users"]                  = "sejour.praticien_id = users.user_id";
+$ljoin["lit"]                    = "lit.lit_id = affectation.lit_id";
+$ljoin["chambre"]                = "chambre.chambre_id = lit.chambre_id";
+$ljoin["service"]                = "service.service_id = chambre.service_id";
+$where                           = array();
+$where["service.group_id"]       = "= '$group->_id'";
+$where["affectation.service_id"] = CSQLDataSource::prepareIn(array_keys($services)   , $service->_id);
+$where["sejour.type"]            = CSQLDataSource::prepareIn($types_hospi, $type_hospi);
 if($praticien_id) {
   $where["sejour.praticien_id"] = "= '$praticien->_id'";
 }
@@ -143,8 +143,9 @@ if($type == "presents") {
   if ($vue) {
     $where["effectue"] = "= '0'";
   }
-  $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
   $whereEntrants = $whereSortants = $where;
+  $whereSortants["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
+  $whereEntrants["affectation.entree"] = "BETWEEN '$limit1' AND '$limit2'";
   $whereEntrants["sejour.entree"] = "!= affectation.entree";
   $whereSortants["sejour.sortie"] = "!= affectation.sortie";
   $dep_entrants = $affectation->loadList($whereEntrants, $order, null, null, $ljoin);

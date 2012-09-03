@@ -59,7 +59,7 @@
       {{foreach from=$dep_entrants item=_sortie}}
         {{mb_include module=hospi template=inc_check_deplacement_line sens="entrants"}}
       {{foreachelse}}
-        <tr><td colspan="{{if $show_duree_preop}}7{{else}}6{{/if}}" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
+        <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
       {{/foreach}}
     </table>
   </div>
@@ -93,7 +93,7 @@
       {{foreach from=$dep_sortants item=_sortie}}
         {{mb_include module=hospi template=inc_check_deplacement_line sens="sortants"}}
       {{foreachelse}}
-        <tr><td colspan="{{if $show_duree_preop}}7{{else}}6{{/if}}" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
+        <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
       {{/foreach}}
     </table>
   </div>
@@ -208,7 +208,7 @@
       {{foreach from=$mouvementsNP item=_sortie}}
         {{mb_include module=hospi template=inc_check_sortieNP_line}}
       {{foreachelse}}
-        <tr><td colspan="10" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
+        <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
     </table>
   </div>
