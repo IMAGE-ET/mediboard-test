@@ -113,7 +113,7 @@ function printForm() {
 }
 
 function printDocument(iDocument_id) {
-	var form = getForm("editFrm");
+  var form = getForm("editFrm");
   if (iDocument_id.value != 0) {
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addElement(form.consultation_id, "object_id");
@@ -143,15 +143,14 @@ Main.add(function () {
     $V(form.plageconsult_id, '{{$plageConsult->_id}}');
     refreshListCategorie({{$plageConsult->chir_id}});
     PlageConsultSelector.init();
-  {{elseif $pat->_id && !$consult->_id}}
-    if($V(form.chir_id)) {
+  {{elseif ($pat->_id || $date_planning) && !$consult->_id}}
       PlageConsultSelector.init();
-    }
   {{/if}}
   
   {{if $consult->_id && $consult->patient_id}}
-  $("print_fiche_consult").disabled = "";
+    $("print_fiche_consult").disabled = "";
   {{/if}}
+  
 });
 
 Main.add(function() {
@@ -284,7 +283,7 @@ Main.add(function() {
                   </option>
                  {{/foreach}}
                 </select>
-    						<input type="checkbox" name="_pause" value="1" onclick="changePause()" {{if $consult->_id && $consult->patient_id==0}} checked="checked" {{/if}} {{if $attach_consult_sejour && $consult->_id}}disabled="disabled"{{/if}}/>
+                <input type="checkbox" name="_pause" value="1" onclick="changePause()" {{if $consult->_id && $consult->patient_id==0}} checked="checked" {{/if}} {{if $attach_consult_sejour && $consult->_id}}disabled="disabled"{{/if}}/>
                 <label for="_pause" title="Planification d'une pause">Pause</label>
               </td>
             </tr>
@@ -303,31 +302,31 @@ Main.add(function() {
                 {{mb_label object=$consult field="patient_id"}}
               </th>
               <td>
-              	{{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
-              	<input type="text" name="_pat_name" style="width: 15em;" value="{{$pat->_view}}" readonly="readonly" onfocus="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
-    						<button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
-    	          <script type="text/javascript">
-    	            PatSelector.init = function(){
-    	              this.sForm      = "editFrm";
-    	              this.sId        = "patient_id";
-    	              this.sView      = "_pat_name";
-    	              var seekResult  = $V(getForm(this.sForm)._seek_patient).split(" ");
-    	              this.sName      = seekResult[0] ? seekResult[0] : "";
-    	              this.sFirstName = seekResult[1] ? seekResult[1] : "";
+                {{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat(); $('button-edit-patient').setVisible(this.value);"}}
+                <input type="text" name="_pat_name" style="width: 15em;" value="{{$pat->_view}}" readonly="readonly" onfocus="PatSelector.init()" onchange="checkCorrespondantMedical()"/>
+                <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
+                <script type="text/javascript">
+                  PatSelector.init = function(){
+                    this.sForm      = "editFrm";
+                    this.sId        = "patient_id";
+                    this.sView      = "_pat_name";
+                    var seekResult  = $V(getForm(this.sForm)._seek_patient).split(" ");
+                    this.sName      = seekResult[0] ? seekResult[0] : "";
+                    this.sFirstName = seekResult[1] ? seekResult[1] : "";
                     {{if "maternite"|module_active && !$consult->_id}}
                       this.sSexe = "_patient_sexe";
                     {{/if}}
-    	              this.pop();
-    	            }
-    	          </script>
-    						<button id="button-edit-patient" type="button" 
-    						        onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
-    										class="edit notext" {{if !$pat->_id}}style="display: none;"{{/if}}>
-    						  {{tr}}Edit{{/tr}}
-    					  </button>
-    					  <br />
-    					  <input type="text" name="_seek_patient" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}" "autocomplete" onblur="$V(this, '')" />
-    					</td>
+                    this.pop();
+                  }
+                </script>
+                <button id="button-edit-patient" type="button" 
+                        onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
+                        class="edit notext" {{if !$pat->_id}}style="display: none;"{{/if}}>
+                  {{tr}}Edit{{/tr}}
+                </button>
+                <br />
+                <input type="text" name="_seek_patient" style="width: 13em;" placeholder="{{tr}}fast-search{{/tr}}" "autocomplete" onblur="$V(this, '')" />
+              </td>
             </tr>         
             
             <tr>
@@ -355,6 +354,7 @@ Main.add(function() {
             <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
             <td>
               <input type="text" name="_date" style="width: 15em;" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" onfocus="PlageConsultSelector.init()" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
+              <input type="hidden" name="_date_planning" value="{{$date_planning}}" />
               {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}
               <script type="text/javascript">
                 PlageConsultSelector.init = function(){
@@ -364,6 +364,7 @@ Main.add(function() {
                   this.sDate            = "_date";
                   this.sChir_id         = "chir_id";
                   this.sFunction_id     = "_function_id";
+                  this.sDatePlanning    = "_date_planning";
                   this.options          = {width: 1200, height: 900};
                   this.modal();
                 }
@@ -379,7 +380,7 @@ Main.add(function() {
               {{if $consult->patient_id}}
               ({{$consult->_etat}})
               <br />
-              <a class="button new" href="?m=dPcabinet&tab=edit_planning&pat_id={{$consult->patient_id}}&consultation_id=0">Nouveau RDV pour ce patient</a>
+              <a class="button new" href="?m=dPcabinet&tab=edit_planning&pat_id={{$consult->patient_id}}&consultation_id=0&date_planning={{$consult->_date}}">Nouveau RDV pour ce patient</a>
               {{/if}}
             </td>
           </tr>
@@ -471,10 +472,10 @@ Main.add(function() {
           </tr>
           <tbody id="listCategorie">
             {{if $consult->_id || $chir->_id}}
-  	          {{mb_include template="httpreq_view_list_categorie" 
-            		categorie_id=$consult->categorie_id 
-            		categories=$categories
-            		listCat=$listCat}}
+              {{mb_include template="httpreq_view_list_categorie" 
+                categorie_id=$consult->categorie_id 
+                categories=$categories
+                listCat=$listCat}}
             {{/if}}
           </tbody>
           <tr>
@@ -505,7 +506,7 @@ Main.add(function() {
       {{if $consult->_id}}
         {{if !$consult->_locks || $can->admin}}
           <button class="modify" type="submit" onclick="submitRDV();">
-          	{{tr}}Save{{/tr}}
+            {{tr}}Save{{/tr}}
           </button>
 
         {{/if}}

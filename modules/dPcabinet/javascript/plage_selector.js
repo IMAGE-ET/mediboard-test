@@ -7,6 +7,7 @@ var PlageConsultSelector = {
   sDate            : null,
   sChir_id         : null,
   sFunction_id     : null,
+  sDatePlanning    : null,
   options 		     : {},
 
   modal: function() {
@@ -15,6 +16,9 @@ var PlageConsultSelector = {
     url.addParam("chir_id"        , $V(oForm[this.sChir_id]));
     url.addParam("function_id"    , $V(oForm[this.sFunction_id]));
     url.addParam("plageconsult_id", $V(oForm[this.sPlageconsult_id]));
+    if (this.sDatePlanning != null && $V(oForm[this.sDatePlanning])) {
+      url.addParam("date", $V(oForm[this.sDatePlanning]));
+    }
     url.modal(this.options);
   },
 

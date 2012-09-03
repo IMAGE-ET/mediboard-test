@@ -38,6 +38,8 @@ $listFunctions  = $function->loadSpecialites(PERM_EDIT);
 $consultation_id = CValue::getOrSession("consultation_id");
 $plageconsult_id = CValue::get("plageconsult_id", null);
 
+$date_planning   = CValue::get("date_planning", null);
+
 $correspondantsMedicaux = array();
 $medecin_adresse_par = "";
 
@@ -63,6 +65,11 @@ if (!$consultation_id) {
   // A t'on fourni l'id du patient
   if ($pat_id = CValue::get("pat_id")) {
     $pat->load($pat_id);
+  }
+  
+  // A t'on fourni une date
+  if ($date_planning) {
+    $consult->_date = $date_planning;
   }
 } 
 
@@ -181,6 +188,7 @@ $smarty->assign("listFunctions"          , $listFunctions);
 $smarty->assign("correspondantsMedicaux" , $correspondantsMedicaux);
 $smarty->assign("medecin_adresse_par"    , $medecin_adresse_par);
 $smarty->assign("today"                  , $today);
+$smarty->assign("date_planning"          , $date_planning);
 
 $smarty->display("addedit_planning.tpl");
 
