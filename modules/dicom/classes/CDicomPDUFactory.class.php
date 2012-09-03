@@ -56,10 +56,22 @@ class CDicomPDUFactory {
    * 
    * @param string   $type   The type of the PDU you want to create
    * 
+   * @param array    $datas  The differents datas of the PDU
+   * 
    * @return CDicomPDU The PDU
    */
-  static function encodePDU($stream , $type) {
+  static function encodePDU($stream , $type, $datas) {
+    if (!$stream) {
+      // retourne une erreur
+    }
+    $stream_writer = new CDicomStreamWriter($stream);
+
+    $pdu_type = self::$pdu_types[$type];
     
+    $pdu = new $pdu_type($datas);
+    $pdu->encodePDU($stream_writer);
+    
+    return $pdu;
   }
 }
 ?>

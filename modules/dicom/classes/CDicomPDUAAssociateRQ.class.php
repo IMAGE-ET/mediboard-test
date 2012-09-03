@@ -17,7 +17,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * 
    * @var hexadecimal number
    */
-  var $type = 0x01;
+  var $type = "01";
   
   /**
    * The length of the PDU
@@ -72,6 +72,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
     // On passe le 2ème octet, réservé par Dicom et égal à 00
     $stream_reader->skip(1);
     $this->length = $stream_reader->readUnsignedInt32();
+    $stream_reader->setMaxLength($this->length + 6);
     $this->protocol_version = $stream_reader->readHexByte(2);
     
     // On vérifie que la version du protocole est bien 0001

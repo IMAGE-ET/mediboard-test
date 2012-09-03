@@ -27,6 +27,13 @@ class CDicomStreamReader {
   var $buf = null;
   
   /**
+   * The max length of the stream
+   * 
+   * @var integer
+   */
+  var $max_length = null;
+  
+  /**
    * The constructor of CDicomStreamReader
    * 
    * @param resource $stream The stream
@@ -34,6 +41,7 @@ class CDicomStreamReader {
   function __construct($stream) {
     $this->stream = $stream;
     $this->buf = "";
+    $this->max_length = 300;
   }
   
   /**
@@ -45,7 +53,7 @@ class CDicomStreamReader {
    */
   function skip($bytes) {
     if ($bytes > 0) {
-      $this->buf .= fread($this->stream, $bytes);
+      $this->buf .= $this->read($bytes);
     }
   }
   
@@ -58,6 +66,32 @@ class CDicomStreamReader {
     return ftell($this->stream);
   }
   
+  /**
+   * Set the max length
+   * 
+   * @param integer $max_length The max length
+   * 
+   * @return null
+   */
+  function setMaxLength($max_length) {
+    $this->max_length = $max_length;
+  }
+  
+  /**
+   * Read data from the stream, and check if the length of the PDU is passed
+   * 
+   * @param integer $length The number of byte to read
+   * 
+   * @return string
+   */
+  function read($length = 1) {
+    if ($this->getPos() < $this->max_length) {
+      return fread($this->stream, $length);
+    }
+    else {
+      return false;
+    }
+  }
   
   /**
    * Read hexadecimal numbers from the stream
@@ -85,7 +119,7 @@ class CDicomStreamReader {
    * @return hexadecimal number
    */
   function readHexByteBE($length = 1) {
-    $tmp = fread($this->stream, $length);
+    $tmp = $this->read($length);
     $this->buf .= $tmp;
     $tmp = unpack("H*", $tmp);
     return $tmp[1];
@@ -99,7 +133,7 @@ class CDicomStreamReader {
    * @return hexadecimal number
    */
   function readHexByteLE($length = 1) {
-    $tmp = fread($this->stream, $length);
+    $tmp = $this->read($length);
     $this->buf .= $tmp;
     $tmp = unpack("h*", $tmp);
     return $tmp[1];
@@ -127,7 +161,7 @@ class CDicomStreamReader {
    * @return integer
    */
   function readUnsignedInt32BE() {
-    $tmp = fread($this->stream, 4);
+    $tmp = $this->read(4);
     $this->buf .= $tmp;
     $tmp = unpack("N", $tmp);
     return $tmp[1];
@@ -139,7 +173,7 @@ class CDicomStreamReader {
    * @return integer
    */
   function readUnsignedInt32LE() {
-    $tmp = fread($this->stream, 4);
+    $tmp = $this->read(4);
     $this->buf .= $tmp;
     $tmp = unpack("V", $tmp);
     return $tmp[1];
@@ -167,7 +201,7 @@ class CDicomStreamReader {
    * @return integer
    */
   function readUnsignedInt16BE() {
-    $tmp = fread($this->stream, 2);
+    $tmp = $this->read(2);
     $this->buf .= $tmp;
     $tmp = unpack("n", $tmp);
     return $tmp[1];
@@ -179,7 +213,7 @@ class CDicomStreamReader {
    * @return integer
    */
   function readUnsignedInt16LE() {
-    $tmp = fread($this->stream, 2);
+    $tmp = $this->read(2);
     $this->buf .= $tmp;
     $tmp = unpack("v", $tmp);
     return $tmp[1];
@@ -191,7 +225,7 @@ class CDicomStreamReader {
    * @return integer
    */
   function readUnsignedInt8() {
-    $tmp = fread($this->stream, 1);
+    $tmp = $this->read(1);
     $this->buf .= $tmp;
     $tmp = unpack("C", $tmp);
     return $tmp[1];
@@ -205,7 +239,7 @@ class CDicomStreamReader {
    * @return string
    */
   function readString($length) {
-    $tmp = fread($this->stream, $length);
+    $tmp = $this->read($length);
     $this->buf .= $tmp;
     $tmp = unpack("A*", $tmp);
     return $tmp[1];
@@ -219,7 +253,7 @@ class CDicomStreamReader {
    * @return string
    */
   function readUID($length = 64) {
-    $tmp = fread($this->stream, $length);
+    $tmp = $this->read($length);
     $this->buf .= $tmp;
     $tmp = unpack("A*", $tmp);
     return $tmp[1];

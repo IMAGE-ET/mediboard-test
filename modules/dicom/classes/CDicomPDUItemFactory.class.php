@@ -93,10 +93,10 @@ class CDicomPDUItemFactory {
     
     $pos = $stream_reader->getPos();
     $endOfItem = $pos + $length;
-    echo "End of Item : $endOfItem<br>";
+
     $item_type = self::getItemType($stream_reader);
     
-    while ($item_type && $stream_reader->getPos() < $endOfItem) {
+    while ($item_type && $stream_reader->getPos() <= $endOfItem) {
       if (!$item_type) {
         break;
       }  
@@ -104,7 +104,7 @@ class CDicomPDUItemFactory {
       
       $item->decodeItem($stream_reader);
       $items[] = $item;
-      echo "Pos : {$stream_reader->getPos()}";
+
       $item_type = self::getItemType($stream_reader);
     }
     
@@ -135,6 +135,7 @@ class CDicomPDUItemFactory {
     $item_type = null;
     if (!self::$next_item) {
       $tmp = $stream_reader->readHexByte();
+
       if (!$tmp) {
         return false;
       }
