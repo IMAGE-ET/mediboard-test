@@ -611,8 +611,8 @@ class CStoredObject extends CModelObject {
   
   /**
    * Loads the first object matching the query
+   * @param array        $where Where SQL statement
    * @param array|string $order Order SQL statement
-   * @param string       $limit Limit SQL statement
    * @param array|string $group Group by SQL statement
    * @param array        $ljoin Left join SQL statement collection
    * @return boolean True if the object was found
