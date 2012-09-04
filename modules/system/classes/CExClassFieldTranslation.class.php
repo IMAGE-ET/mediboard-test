@@ -97,8 +97,6 @@ class CExClassFieldTranslation extends CMbObject {
   }
   
   function store(){
-    $is_new = !$this->_id;
-    
     if ($msg = parent::store()) {
       return $msg;
     }

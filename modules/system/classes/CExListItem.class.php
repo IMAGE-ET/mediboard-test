@@ -55,11 +55,13 @@ class CExListItem extends CMbObject {
   }
   
   function store(){
+    $is_new = !$this->_id;
+    
     if ($msg = parent::store()) {
       return $msg;
     }
     
-    if ($this->fieldModified("name") || !$this->_old->_id) {
+    if ($is_new || $this->fieldModified("name")) {
       CExObject::clearLocales();
     }
   }
