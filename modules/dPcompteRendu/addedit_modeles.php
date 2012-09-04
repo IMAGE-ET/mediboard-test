@@ -150,6 +150,9 @@ if ($compte_rendu->_id) {
     case "preface":
       $compte_rendu->_count_utilisation = $compte_rendu->countBackRefs("modeles_prefaced");
       break;
+    case "body":
+      $compte_rendu->_count_utilisation = $compte_rendu->countBackRefs("pack_links");
+      break;
     case "preface":
       $compte_rendu->_count_utilisation = $compte_rendu->countBackRefs("modeles_ended");
       break;

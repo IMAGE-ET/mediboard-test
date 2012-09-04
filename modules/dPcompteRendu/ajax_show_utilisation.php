@@ -27,11 +27,16 @@ switch ($compte_rendu->type) {
   case "preface":
     $modeles = $compte_rendu->loadBackRefs("modeles_prefaced", "nom");
     break;
+  case "body":
+    $links = $compte_rendu->loadBackRefs("pack_links");
+    $modeles = CMbObject::massLoadFwdRef($links, "pack_id");
+    break;
   case "ending":
     $modeles = $compte_rendu->loadBackRefs("modeles_ended", "nom");
     break;
   case "footer":
     $modeles = $compte_rendu->loadBackRefs("modeles_footed", "nom");
+    break;
 }
 
 $smarty = new CSmartyDP;

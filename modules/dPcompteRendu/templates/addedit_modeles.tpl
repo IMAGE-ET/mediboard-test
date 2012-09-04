@@ -601,10 +601,8 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
           <td class="button" colspan="2">
              <button type="button" class="add" onclick="Modele.copy(this.form)">{{tr}}Duplicate{{/tr}}</button>
              <button type="button" class="search" onclick="Modele.preview($V(this.form.compte_rendu_id))">{{tr}}Preview{{/tr}}</button>
-             {{if $compte_rendu->type != "body"}}
-               <br />
-               <button type="button" class="search" onclick="Modele.showUtilisation()">Utilisation ({{$compte_rendu->_count_utilisation}})</button>
-             {{/if}}
+             <br />
+             <button type="button" class="search" onclick="Modele.showUtilisation()">Utilisation ({{$compte_rendu->_count_utilisation}})</button>
           </td>
         </tr>
         
