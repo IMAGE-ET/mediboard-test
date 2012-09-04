@@ -8,17 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$profile = 0;
-
-if ($profile) {
-  xhprof_enable(XHPROF_FLAGS_NO_BUILTINS | XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY, array(
-    'ignored_functions' => array(
-      'call_user_func',
-      'call_user_func_array',
-    )
-  ));
-}
-
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 set_min_memory_limit("640M");
@@ -61,17 +50,6 @@ foreach($service->_ref_chambres as &$_chambre){
       $dossiers_complets[$sejour->_id] = CApp::fetch("soins", "print_dossier_soins", $params);
     }
   }
-}
-
-if ($profile) {
-  $xhprof_data = xhprof_disable();
-  $xhprof_root = 'C:/xampp/htdocs/xhgui/';
-  require_once $xhprof_root.'xhprof_lib/config.php';
-  require_once $xhprof_root.'xhprof_lib/utils/xhprof_lib.php';
-  require_once $xhprof_root.'xhprof_lib/utils/xhprof_runs.php';
-  
-  $xhprof_runs = new XHProfRuns_Default();
-  $run_id = $xhprof_runs->save_run($xhprof_data, "mediboard");
 }
 
 $smarty = new CSmartyDP;
