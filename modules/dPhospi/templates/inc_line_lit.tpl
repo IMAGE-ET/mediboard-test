@@ -131,8 +131,8 @@
                         <span style="text-decoration: line-through">
                       {{/if}}
                       
-                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');" class="CPatient-view">
-                        {{$_patient->nom}} {{if $_patient->nom_jeune_fille}}({{$_patient->nom_jeune_fille}}) {{/if}}{{$_patient->prenom}}
+                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_affectation->_guid}}');" class="CPatient-view {{if $_sejour->recuse == "-1"}}opacity-70{{/if}}">
+                        {{if $_sejour->recuse == "-1"}}[Att] {{/if}}{{$_patient->nom}} {{if $_patient->nom_jeune_fille}}({{$_patient->nom_jeune_fille}}) {{/if}}{{$_patient->prenom}}
                       </span>
                       
                       {{if $show_age_patient}}({{$_patient->_age}}){{/if}}

@@ -890,6 +890,10 @@ class CSejour extends CCodable implements IPatientRelated {
     
     // Motif complet du séjour
     $this->_motif_complet = $this->libelle;
+    
+    if (!$this->annule && $this->recuse == -1) {
+      $this->_view = "[Att] " . $this->_view;
+    }
   }
 
   function checkDaysRelative($date) {

@@ -136,10 +136,10 @@
                       {{/if}}
                       
                       <span onmouseover="ObjectTooltip.createEx(this, '{{$_object->_guid}}');"
-                        class="CPatient-view {{if !$_object->entree_reelle}}patient-not-arrived{{/if}} {{if $_object->septique}}septique{{/if}}"
+                        class="CPatient-view {{if !$_object->entree_reelle}}patient-not-arrived{{/if}} {{if $_object->septique}}septique{{/if}} {{if $_object->recuse == "-1"}}opacity-70{{/if}}"
                       {{if $_object->type == "ambu"}}style="font-style: italic;"{{/if}}>
                         
-                        {{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
+                        {{if $_object->recuse == "-1"}}[Att] {{/if}} {{$patient->nom}} {{if $patient->nom_jeune_fille}}({{$patient->nom_jeune_fille}}) {{/if}}{{$patient->prenom}}
                         
                       </span>{{if $show_age_patient}}({{$patient->_age}}){{/if}}
                       {{if $_object->type != "ambu" && $_object->type != "exte"}}

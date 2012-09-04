@@ -32,9 +32,9 @@
       {{/if}}
     </td>
     <td class="patient" onclick="flipSejour({{$_sejour->_id}})">
-      <strong {{if !$_sejour->entree_reelle}}class="patient-not-arrived"{{/if}} {{if $_sejour->septique}}class="septique"{{/if}}>
+      <strong class="{{if !$_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_sejour->septique}}septique{{/if}} {{if $_sejour->recuse == "-1"}}opacity-70{{/if}}">
         <a name="sejour{{$_sejour->_id}}" {{if $_sejour->type == "ambu"}}style="font-style: italic;"{{/if}}>
-          {{$_sejour->_ref_patient}}
+          {{if $_sejour->recuse == "-1"}}[Att] {{/if}}{{$_sejour->_ref_patient}}
         </a>
       </strong>
       {{if $_sejour->type != "ambu" && $_sejour->type != "exte"}}
