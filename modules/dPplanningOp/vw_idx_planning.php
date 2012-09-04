@@ -60,8 +60,7 @@ if ($selPraticien->isAnesth()) {
   $whereHospi = array(
                  "plagesop.date = '$date' OR operations.date = '$date'",
                  "sejour.type"   => "= 'comp'",
-                 "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'",
-                 "operations.anesth_id = '$selPraticien->_id' OR plagesop.anesth_id = '$selPraticien->_id'"
+                 "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'"
                );
   $whereHospi[] = $where_anesth;
   
@@ -73,7 +72,6 @@ if ($selPraticien->isAnesth()) {
                  "plagesop.plageop_id" => "IS NULL",
                  "operations.date"     => "= '$date'",
                  "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'",
-                 "operations.anesth_id = '$selPraticien->_id' OR plagesop.anesth_id = '$selPraticien->_id'"
                );
   $whereUrg[] = $where_anesth;
   
