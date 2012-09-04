@@ -55,7 +55,11 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
    */
   function __construct(array $datas = array()) {
     foreach ($datas as $key => $value) {
-      $method = 'set' . ucfirst($key);
+      $words = explode('_', $key);
+      $method = 'set';
+      foreach ($words as $_word) {
+        $method .= ucfirst($_word);
+      }
       if (method_exists($this, $method)) {
         $this->$method($value);
       }
@@ -102,18 +106,18 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
    * 
    * @return null
    */
-  function setAbstract_syntax($datas) {
+  function setAbstractSyntax($datas) {
     $this->abstract_syntax = new CDicomPDUItemAbstractSyntax($datas);
   }
   
   /**
    * Set the transfer syntaxes
    * 
-   * @param array of array $transfer_syntaxes The datas for create the transfer syntaxes
+   * @param array $transfer_syntaxes The datas for create the transfer syntaxes
    * 
    * @return null
    */
-  function setTransfer_syntaxes($transfer_syntaxes) {
+  function setTransferSyntaxes($transfer_syntaxes) {
     foreach ($transfer_syntaxes as $datas) {
       $this->transfer_syntaxes[] = new CDicomPDUItemTransferSyntax($datas);
     }

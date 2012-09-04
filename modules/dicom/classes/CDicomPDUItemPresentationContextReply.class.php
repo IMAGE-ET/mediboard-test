@@ -69,7 +69,11 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
    */
   function __construct(array $datas = array()) {
     foreach ($datas as $key => $value) {
-      $method = 'set' . ucfirst($key);
+      $words = explode('_', $key);
+      $method = 'set';
+      foreach ($words as $_word) {
+        $method .= ucfirst($_word);
+      }
       if (method_exists($this, $method)) {
         $this->$method($value);
       }
@@ -116,7 +120,7 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
    * 
    * @return null
    */
-  function setTransfer_syntax($datas) {
+  function setTransferSyntax($datas) {
     $this->transfer_syntax = new CDicomPDUItemTransferSyntax($datas);
   }
   

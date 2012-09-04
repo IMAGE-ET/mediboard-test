@@ -76,7 +76,11 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    */
   function __construct(array $datas = array()) {
     foreach ($datas as $key => $value) {
-      $method = 'set' . ucfirst($key);
+      $words = explode('_', $key);
+      $method = 'set';
+      foreach ($words as $_word) {
+        $method .= ucfirst($_word);
+      }
       if (method_exists($this, $method)) {
         $this->$method($value);
       }
@@ -101,7 +105,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    *  
    * @return null
    */
-  function setProtocol_version($protocol_version) {
+  function setProtocolVersion($protocol_version) {
     $this->protocol_version = $protocol_version;
   }
   
@@ -112,7 +116,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * 
    * @return null
    */
-  function setCalled_AE_title($called_AE_title) {
+  function setCalledAETitle($called_AE_title) {
     $this->called_AE_title = $called_AE_title;
   }
   
@@ -123,7 +127,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * 
    * @return null
    */
-  function setCalling_AE_title($calling_AE_title) {
+  function setCallingAETitle($calling_AE_title) {
     $this->calling_AE_title = $calling_AE_title;
   }
   
@@ -134,7 +138,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * 
    * @return null
    */
-  function setApplication_context($datas) {
+  function setApplicationContext($datas) {
     $this->application_context = new CDicomPDUItemApplicationContext($datas);
   }
   
@@ -145,7 +149,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * 
    * @return null
    */
-  function setPresentation_contexts($pres_contexts) {
+  function setPresentationContexts($pres_contexts) {
     foreach ($pres_contexts as $datas) {
       $this->presentation_contexts[] = new CDicomPDUItemPresentationContext($datas);
     }
@@ -158,7 +162,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * 
    * @return null
    */
-  function setUser_info($datas) {
+  function setUserInfo($datas) {
     $this->user_info = new CDicomPDUItemTransferSyntax($datas);
   }
   

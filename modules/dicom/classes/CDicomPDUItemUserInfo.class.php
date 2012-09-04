@@ -36,7 +36,7 @@ class CDicomPDUItemUserInfo extends CDicomPDUItem {
   /**
    * The constructor.
    * 
-   * @param array $datas Default null. 
+   * @param array $items Default null. 
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    * For the sub items, the value must be an array,
    * with keys the type of the item, and for value and item array.
