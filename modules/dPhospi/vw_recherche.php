@@ -54,7 +54,7 @@ if($typeVue == 0) {
   }
   $notIn = count($arrayIn) > 0 ? implode(', ', $arrayIn) : 0;
   
-  $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, service.nom AS service, MIN(affectation.entree) AS limite
+  $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, chambre.caracteristiques as caracteristiques, service.nom AS service, MIN(affectation.entree) AS limite
           FROM lit
           LEFT JOIN affectation ON affectation.lit_id = lit.lit_id
           AND (affectation.entree > '$date_recherche' OR affectation.entree IS NULL)

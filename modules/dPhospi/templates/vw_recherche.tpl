@@ -64,12 +64,19 @@ Main.add(function () {
   {{foreach from=$libre item=curr_lit}}
   <tr>
     <td class="text">{{$curr_lit.service}}</td>
-    <td class="text">{{$curr_lit.chambre}}</td>
+    <td class="text">
+      {{$curr_lit.chambre}}
+      {{if $curr_lit.caracteristiques != ""}}
+        <div class="compact">
+          {{$curr_lit.caracteristiques}}
+        </div>
+      {{/if}}
+    </td>
     <td class="text">{{$curr_lit.lit}}</td>
     <td class="text">{{$curr_lit.limite|date_format:"%A %d %B %Y à %Hh%M"}}
   </tr>
   {{/foreach}}
-	
+  
   {{else}}
   <tr>
     <th class="title" colspan="9">
@@ -87,8 +94,8 @@ Main.add(function () {
     <th colspan="2">
      {{tr}}CAffectation{{/tr}} /
      {{mb_title class=CAffectation field=_duree}}
-		</th>
-		<th>Motif</th>
+    </th>
+    <th>Motif</th>
     <th>Bornes<br/>GHM</th>
   </tr>
   {{foreach from=$listAff key=_type_aff item=_liste_aff}}
@@ -111,12 +118,12 @@ Main.add(function () {
         <img src="images/icons/planning.png" alt="modifier" />
       </a>
       {{/if}}
-			<span onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">
         {{$_patient}}
-			</span>
+      </span>
     </td>
     <td class="text">
-    	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_praticien}}
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_praticien}}
     </td>
     {{if $_type_aff == "Aff"}}
     <td class="text">{{$_affectation->_view}}</td>
@@ -134,8 +141,8 @@ Main.add(function () {
     </td>
     {{/if}}
     <td>{{$_affectation->_duree}}</td>
-		
-		<td class="text">
+    
+    <td class="text">
       {{if $_sejour->libelle}}
         {{$_sejour->libelle}}
       {{else}}
@@ -144,7 +151,7 @@ Main.add(function () {
         {{/foreach}}
       {{/if}}
     </td>
-		
+    
     <td style="text-align: center;">
       {{if $_GHM->_DP}}
         De {{$_GHM->_borne_basse}}
