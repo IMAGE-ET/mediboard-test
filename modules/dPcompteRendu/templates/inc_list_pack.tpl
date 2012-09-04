@@ -34,18 +34,18 @@
 
 <ul id="tabs-owner" class="control_tabs">
   <li>
-    <a href="#owner-user" {{if !$packsUser|@count}}class="empty"{{/if}}>
-      {{$userSel}} <small>({{$packsUser|@count}})</small>
+    <a href="#owner-user" {{if !$packs.user|@count}}class="empty"{{/if}}>
+      {{$userSel}} <small>({{$packs.user|@count}})</small>
     </a>
   </li>
   <li>
-    <a href="#owner-func" {{if !$packsFunc|@count}}class="empty"{{/if}}>
-      {{$userSel->_ref_function}} <small>({{$packsFunc|@count}})</small>
+    <a href="#owner-func" {{if !$packs.func|@count}}class="empty"{{/if}}>
+      {{$userSel->_ref_function}} <small>({{$packs.func|@count}})</small>
     </a>
   </li>
   <li>
-    <a href="#owner-etab" {{if !$packsEtab|@count}}class="empty"{{/if}}>
-      {{$userSel->_ref_function->_ref_group}} <small>({{$packsEtab|@count}})</small>
+    <a href="#owner-etab" {{if !$packs.etab|@count}}class="empty"{{/if}}>
+      {{$userSel->_ref_function->_ref_group}} <small>({{$packs.etab|@count}})</small>
     </a>
   </li>
 </ul>
@@ -54,83 +54,50 @@
 
 <table class="tbl">
   <tr>
-    <th>Nom</th>
-      <th>Modèles</th>
-      <th>Type</th>
+    <th>{{mb_label class=CPack field=nom}}</th>
+    <th>Modèles</th>
+    <th>Type</th>
   </tr>
   
-  <tbody id="owner-user" style="display: none">
-    {{foreach from=$packsUser item=_pack}}
-    <tr {{if $_pack->_id == $pack_id}}class="selected"{{/if}} id="p{{$_pack->_id}}">
-      {{assign var="_pack_id" value=$_pack->_id}}
-      {{assign var="onclick" value="updateAddEditPack('$_pack_id');"}}
-      <td class="text">
-        {{if $_pack->fast_edit_pdf}}
-          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png"/>
-        {{elseif $_pack->fast_edit}}
-          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprinting/images/mbprinting.png"/>
-        {{/if}}
-        {{if $_pack->fast_edit || $_pack->fast_edit_pdf}}
-          <img style="float: right;" src="images/icons/lightning.png"/>
-        {{/if}}
-        <a href="#1" onclick="{{$onclick}}">{{$_pack->nom}}</a></td>
-      <td class="text">{{$_pack->_back.modele_links|@count}}</td>
-      <td class="text">{{tr}}{{$_pack->object_class}}{{/tr}}</td>
-    </tr>
-    {{foreachelse}}
-    <tr>
-      <td colspan="10" class="empty">{{tr}}CPack.none{{/tr}}</td>
-    </tr>
-    {{/foreach}}
-  </tbody>
-      
-  <tbody id="owner-func" style="display: none">
-    {{foreach from=$packsFunc item=_pack}}
-    <tr {{if $_pack->_id == $pack_id}}class="selected"{{/if}} id="p{{$_pack->_id}}">
-      {{assign var="_pack_id" value=$_pack->_id}}
-      {{assign var="onclick" value="updateAddEditPack('$_pack_id');"}}
-      <td>
-        {{if $_pack->fast_edit_pdf}}
-          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png"/>
-        {{elseif $_pack->fast_edit}}
-          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprinting/images/mbprinting.png"/>
-        {{/if}}
-        {{if $_pack->fast_edit || $_pack->fast_edit_pdf}}
-          <img style="float: right;" src="images/icons/lightning.png"/>
-        {{/if}}
-        <a href="#1" onclick="{{$onclick}}">{{$_pack->nom}}</a></td>
-      <td>{{$_pack->_back.modele_links|@count}}</td>
-      <td>{{tr}}{{$_pack->object_class}}{{/tr}}</td>
-    </tr>
-    {{foreachelse}}
-    <tr>
-      <td colspan="10" class="empty">{{tr}}CPack.none{{/tr}}</td>
-    </tr>
-    {{/foreach}}
-  </tbody>
-      
-  <tbody id="owner-etab" style="display: none">
-    {{foreach from=$packsEtab item=_pack}}
-    <tr {{if $_pack->_id == $pack_id}}class="selected"{{/if}} id="p{{$_pack->_id}}">
-      {{assign var="_pack_id" value=$_pack->_id}}
-      {{assign var="onclick" value="updateAddEditPack('$_pack_id');"}}
-      <td>
-        {{if $_pack->fast_edit_pdf}}
-          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png"/>
-        {{elseif $_pack->fast_edit}}
-          <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprinting/images/mbprinting.png"/>
-        {{/if}}
-        {{if $_pack->fast_edit || $_pack->fast_edit_pdf}}
-          <img style="float: right;" src="images/icons/lightning.png"/>
-        {{/if}}
-        <a href="#1" onclick="{{$onclick}}">{{$_pack->nom}}</a></td>
-      <td>{{$_pack->_back.modele_links|@count}}</td>
-      <td>{{tr}}{{$_pack->object_class}}{{/tr}}</td>
-    </tr>
-    {{foreachelse}}
-    <tr>
-      <td colspan="10"  class="empty">{{tr}}CPack.none{{/tr}}</td>
-    </tr>
-    {{/foreach}}
-  </tbody>
+  {{foreach from=$packs item=packs_by_entity key=entity}}
+    <tbody id="owner-{{$entity}}" style="display: none">
+      {{foreach from=$packs_by_entity item=_pack}}
+      <tr {{if $_pack->_id == $pack_id}}class="selected"{{/if}} id="p{{$_pack->_id}}">
+        {{assign var="_pack_id" value=$_pack->_id}}
+        {{assign var="onclick" value="updateAddEditPack('$_pack_id');"}}
+        {{assign var=header value=$_pack->_header_found}}
+        {{assign var=footer value=$_pack->_footer_found}}
+        <td class="text">
+          {{if $_pack->fast_edit_pdf}}
+            <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprintPDF/images/mbprintPDF.png"/>
+          {{elseif $_pack->fast_edit}}
+            <img style="float: right;" src="modules/dPcompteRendu/fcke_plugins/mbprinting/images/mbprinting.png"/>
+          {{/if}}
+          {{if $_pack->fast_edit || $_pack->fast_edit_pdf}}
+            <img style="float: right;" src="images/icons/lightning.png"/>
+          {{/if}}
+          <a href="#1" onclick="{{$onclick}}">{{$_pack->nom}}</a>
+          <div class="compact">
+            {{if $header->_id}}
+              <div>
+                Entête : <span onmouseover="ObjectTooltip.createEx(this, '{{$header->_guid}}')">{{$header->nom}}</span>
+              </div>
+            {{/if}}
+            {{if $footer->_id}}
+              <div>
+                Pied de page : <span onmouseover="ObjectTooltip.createEx(this, '{{$footer->_guid}}')">{{$footer->nom}}</span>
+              </div>
+            {{/if}}
+          </div>
+        </td>
+        <td class="text">{{$_pack->_back.modele_links|@count}}</td>
+        <td class="text">{{tr}}{{$_pack->object_class}}{{/tr}}</td>
+      </tr>
+      {{foreachelse}}
+      <tr>
+        <td colspan="10" class="empty">{{tr}}CPack.none{{/tr}}</td>
+      </tr>
+      {{/foreach}}
+    </tbody>
+  {{/foreach}}
 </table>

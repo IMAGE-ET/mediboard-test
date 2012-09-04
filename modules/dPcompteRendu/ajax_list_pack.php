@@ -26,33 +26,29 @@ $where = array();
 $orderby = "object_class, nom";
 
 $pack = new CPack;
+$packs = array();
 
 if ($filter_class)
   $pack->object_class = $filter_class;
 
 $pack->user_id = $userSel->_id;
-$packsUser = $pack->loadMatchingList($orderby);
+$packs["user"] = $pack->loadMatchingList($orderby);
 $pack->user_id = null;
 
 $pack->function_id = $userSel->function_id;
-$packsFunc = $pack->loadMatchingList($orderby);
+$packs["func"] = $pack->loadMatchingList($orderby);
 $pack->function_id = null;
 
 $pack->group_id = $userSel->_ref_function->group_id;
-$packsEtab = $pack->loadMatchingList($orderby);
+$packs["etab"] = $pack->loadMatchingList($orderby);
 $pack->group_id = null;
 
-foreach($packsUser as $_pack) {
-  $_pack->loadRefsFwd();
-  $_pack->loadBackRefs("modele_links");
-}
-foreach($packsFunc as $_pack) {
-  $_pack->loadRefsFwd();
-  $_pack->loadBackRefs("modele_links");
-}  
-foreach($packsEtab as $_pack) {
-  $_pack->loadRefsFwd();
-  $_pack->loadBackRefs("modele_links");
+foreach ($packs as $_packs_by_entity) {
+  foreach($_packs_by_entity as $_pack) {
+    $_pack->loadRefsFwd();
+    $_pack->loadBackRefs("modele_links");
+    $_pack->loadHeaderFooter();
+  }
 }
 
 // Utilisateurs modifiables
@@ -70,9 +66,7 @@ $smarty->assign("classes"       , CCompteRendu::getTemplatedClasses());
 
 $smarty->assign("listUser"      , $listUser);
 
-$smarty->assign("packsUser"     , $packsUser);
-$smarty->assign("packsFunc"     , $packsFunc);
-$smarty->assign("packsEtab"     , $packsEtab);
+$smarty->assign("packs"     , $packs);
 
 $smarty->display("inc_list_pack.tpl");
 

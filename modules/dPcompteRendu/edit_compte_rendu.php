@@ -76,24 +76,10 @@ else {
     $compte_rendu->_source = $pack->_source;
     $compte_rendu->modele_id = null;
     
-    // Parcours des modeles du pack pour trouver le premier header et footer
-    foreach($pack->_back['modele_links'] as $mod) {
-      $modele = $mod->_ref_modele;
-      
-      if ($modele->header_id || $modele->footer_id) {
-        $header_id = $modele->header_id;
-        $footer_id = $modele->footer_id;
-      }
-      if (!$header_id && $modele->header_id) {
-        $header_id = $modele->header_id;
-      }
-      if (!$footer_id && $modele->footer_id) {
-        $footer = $modele->footer_id;
-      }
-      if ($header_id && $footer_id) {
-        break;
-      }
-    }
+    $pack->loadHeaderFooter();
+    
+    $header_id = $pack->_header_found->_id;
+    $footer_id = $pack->_footer_found->_id;
     
     // Marges et format
     $first_modele = reset($pack->_back['modele_links']);

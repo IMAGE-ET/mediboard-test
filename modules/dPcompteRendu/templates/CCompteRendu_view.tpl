@@ -39,7 +39,13 @@
       <strong>{{$document->_source|count_words}} {{tr}}CCompteRendu-words{{/tr}}</strong>
       <br/>
       {{if $can->edit}}
-       <button type="button" class="search" onclick="Document.edit('{{$document->_id}}')">{{tr}}Open{{/tr}}</button>
+        {{if !$document->object_id}}
+          <a class="button search" href="?m=compteRendu&tab=addedit_modeles&compte_rendu_id={{$document->_id}}">
+            {{tr}}Open{{/tr}}
+          </a>
+        {{else}}
+          <button type="button" class="search" onclick="Document.edit('{{$document->_id}}')">{{tr}}Open{{/tr}}</button>
+        {{/if}}
       {{/if}}
     </td>
   </tr>

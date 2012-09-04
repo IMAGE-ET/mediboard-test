@@ -35,6 +35,8 @@ class CPack extends CMbObject {
   var $_source       = null;
   var $_object_class = null;
   var $_owner        = null;
+  var $_header_found = null;
+  var $_footer_found = null;
   
   // Referenced objects
   var $_ref_user     = null;
@@ -226,6 +228,43 @@ class CPack extends CMbObject {
     }
     
     return $packs;
+  }
+  
+  function loadHeaderFooter() {
+    if (!isset($pack->_back['modele_links'])) {
+      $this->loadBackRefs("modele_links", "modele_to_pack_id");
+    }
+    
+    $header_id = null;
+    $footer_id = null;
+    
+    foreach($this->_back['modele_links'] as $mod) {
+      $modele = $mod->_ref_modele;
+      
+      if ($modele->header_id || $modele->footer_id) {
+        $header_id = $modele->header_id;
+        $footer_id = $modele->footer_id;
+      }
+      if (!$header_id && $modele->header_id) {
+        $header_id = $modele->header_id;
+      }
+      if (!$footer_id && $modele->footer_id) {
+        $footer = $modele->footer_id;
+      }
+      if ($header_id && $footer_id) {
+        break;
+      }
+    }
+    
+    $this->_header_found = new CCompteRendu();
+    if ($header_id) {
+      $this->_header_found->load($header_id);
+    }
+    
+    $this->_footer_found = new CCompteRendu();
+    if ($footer_id) {
+      $this->_footer_found->load($footer_id);
+    }
   }
   
   function getPerm($permType) {
