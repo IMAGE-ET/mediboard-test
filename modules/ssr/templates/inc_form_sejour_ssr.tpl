@@ -104,10 +104,12 @@ function printFormSejour() {
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="annule" value="{{$sejour->annule|default:"0"}}" />
   <input type="hidden" name="type" value="ssr" />
-	
+  
   {{mb_key object=$sejour}}
   {{mb_field object=$sejour field=group_id hidden=1}}
-
+  
+  {{mb_field object=$sejour field=recuse hidden=1}}
+  
   <input type="hidden" name="_bind_sejour" value="1" />
 
   <table class="form">
@@ -129,7 +131,7 @@ function printFormSejour() {
         <button type="button" class="search" style="float: left;" onclick="ProtocoleSelector.init()">
           {{tr}}button-COperation-choixProtocole{{/tr}}
         </button>
-				
+        
         {{tr}}CSejour-title-create{{/tr}} 
         {{if $sejour->_NDA}}
           pour le dossier
@@ -148,115 +150,115 @@ function printFormSejour() {
     {{/if}}
     
     {{if !$modules.dPplanningOp->_can->edit}}
-		  {{if $sejour->_id}}
-			<tr>
+      {{if $sejour->_id}}
+      <tr>
         <th>{{mb_label object=$sejour field=praticien_id}}</th>
         <td>{{mb_value object=$sejour field=praticien_id}}</td>
         <th>{{mb_label object=$sejour field=libelle}}</th>
         <td>{{mb_value object=$sejour field=libelle}}</td>
         <th>{{mb_label object=$sejour field=_duree_prevue}}</th>
         <td>{{mb_value object=$sejour field=_duree_prevue}} jours</td>
-			</tr>
-			{{else}}
-			<tr>
-				<td>
-		      <div class="small-warning">
-		        Vous ne pouvez pas créer de nouveaux séjours.
-		        <br>
-		        Merci d'en sélectionner un depuis la vue des séjours.
-		      </div>
-				</td>
-			</tr>
-			{{/if}}
+      </tr>
+      {{else}}
+      <tr>
+        <td>
+          <div class="small-warning">
+            Vous ne pouvez pas créer de nouveaux séjours.
+            <br>
+            Merci d'en sélectionner un depuis la vue des séjours.
+          </div>
+        </td>
+      </tr>
+      {{/if}}
     {{else}}
-	    <tr>
-	      <th>{{mb_label object=$sejour field=praticien_id}}</th>
-	      <td>
-	        <select name="praticien_id" class="{{$sejour->_props.praticien_id}}" style="width: 15em" tabindex="1">
-	          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-	          {{foreach from=$prats item=_user}}
-	          <option value="{{$_user->_id}}" class="mediuser" 
-	            style="border-color: #{{$_user->_ref_function->color}}" {{if $_user->_id == $sejour->praticien_id}}selected="selected"{{/if}}>
-	            {{$_user->_view}}
-	          </option>
-	          {{/foreach}}
-	        </select>
-	      </td>
-	
-	      <th>{{mb_label object=$sejour field=entree_prevue}}</th>
-	      <td colspan="2">
+      <tr>
+        <th>{{mb_label object=$sejour field=praticien_id}}</th>
+        <td>
+          <select name="praticien_id" class="{{$sejour->_props.praticien_id}}" style="width: 15em" tabindex="1">
+            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            {{foreach from=$prats item=_user}}
+            <option value="{{$_user->_id}}" class="mediuser" 
+              style="border-color: #{{$_user->_ref_function->color}}" {{if $_user->_id == $sejour->praticien_id}}selected="selected"{{/if}}>
+              {{$_user->_view}}
+            </option>
+            {{/foreach}}
+          </select>
+        </td>
+  
+        <th>{{mb_label object=$sejour field=entree_prevue}}</th>
+        <td colspan="2">
           {{mb_field object=$sejour field="entree_prevue" form="editSejour" tabindex="5" register=true canNull=false onchange="updateSortiePrevue();"}}
         </td>
-	    </tr>
-	  
-	    <tr>
-	      <th>
-	        <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$sejour->patient_id}}" />
-	        {{mb_label object=$sejour field="patient_id"}}
-	      </th>
-	      <td>
-	        <input type="text" name="patient_view" style="width: 15em" value="{{$patient->_view}}" tabindex="2" 
-	          {{if (!$sejour->_id || $app->user_type == 1) && !$conf.ssr.recusation.sejour_readonly}} 
-	          onclick="PatSelector.init()" 
-	          {{/if}}
-	          readonly="readonly" />
-	        {{if (!$sejour->_id || $app->user_type == 1) && !$conf.ssr.recusation.sejour_readonly}} 
-	          <button type="button" class="search notext" onclick="PatSelector.init()">
-	            {{tr}}Choose{{/tr}}
-	          </button>
-	        {{/if}}
+      </tr>
+    
+      <tr>
+        <th>
+          <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$sejour->patient_id}}" />
+          {{mb_label object=$sejour field="patient_id"}}
+        </th>
+        <td>
+          <input type="text" name="patient_view" style="width: 15em" value="{{$patient->_view}}" tabindex="2" 
+            {{if (!$sejour->_id || $app->user_type == 1) && !$conf.ssr.recusation.sejour_readonly}} 
+            onclick="PatSelector.init()" 
+            {{/if}}
+            readonly="readonly" />
+          {{if (!$sejour->_id || $app->user_type == 1) && !$conf.ssr.recusation.sejour_readonly}} 
+            <button type="button" class="search notext" onclick="PatSelector.init()">
+              {{tr}}Choose{{/tr}}
+            </button>
+          {{/if}}
           <button id="button-edit-patient" type="button" 
                   onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
                   class="edit notext" {{if !$patient->_id || $conf.ssr.recusation.sejour_readonly}}style="display: none;"{{/if}}>
             {{tr}}Edit{{/tr}}
           </button>
-	        <script type="text/javascript">
-	          PatSelector.init = function(){
-	            this.sForm = "editSejour";
-	            this.sId   = "patient_id";
-	            this.sView = "patient_view";
-	            this.pop();
-	          }
-	        </script>
-	      </td>
-	      
-	      <th>{{mb_label object=$sejour field=sortie_prevue}}</th>
-	      <td colspan="2">{{mb_field object=$sejour field="sortie_prevue" form="editSejour"  tabindex="6" register=true canNull=false onchange="updateDureePrevue();"}}</td>
-	    </tr>
-	    
-	    <tr>
-	      <th>{{mb_label object=$sejour field=libelle}}</th>
-	      <td>{{mb_field object=$sejour field=libelle form=editSejour tabindex="3" style="width: 12em"}}</td>
-	      <th>{{mb_label object=$sejour field=_duree_prevue}}</th>
-	      <td>
+          <script type="text/javascript">
+            PatSelector.init = function(){
+              this.sForm = "editSejour";
+              this.sId   = "patient_id";
+              this.sView = "patient_view";
+              this.pop();
+            }
+          </script>
+        </td>
+        
+        <th>{{mb_label object=$sejour field=sortie_prevue}}</th>
+        <td colspan="2">{{mb_field object=$sejour field="sortie_prevue" form="editSejour"  tabindex="6" register=true canNull=false onchange="updateDureePrevue();"}}</td>
+      </tr>
+      
+      <tr>
+        <th>{{mb_label object=$sejour field=libelle}}</th>
+        <td>{{mb_field object=$sejour field=libelle form=editSejour tabindex="3" style="width: 12em"}}</td>
+        <th>{{mb_label object=$sejour field=_duree_prevue}}</th>
+        <td>
           {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 tabindex="7" onchange="updateSortiePrevue();" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:0}}
           nuits
-	      </td>
-	      <td id="dureeEst"></td>
-	    </tr>
-	    
-	    {{if !$dialog && !$conf.ssr.recusation.sejour_readonly}} 
-	    <tr>
-	      <td class="button" colspan="8">
-	        {{if $sejour->_id}}
-	          {{if $can->edit}}
-	            <button class="modify default" type="submit" tabindex="23">{{tr}}Save{{/tr}}</button>
+        </td>
+        <td id="dureeEst"></td>
+      </tr>
+      
+      {{if !$dialog && !$conf.ssr.recusation.sejour_readonly}} 
+      <tr>
+        <td class="button" colspan="8">
+          {{if $sejour->_id}}
+            {{if $can->edit}}
+              <button class="modify default" type="submit" tabindex="23">{{tr}}Save{{/tr}}</button>
               {{if $can->admin}}
-	            <button class="{{$sejour->annule|ternary:'change':'cancel'}}" type="button" tabindex="24" onclick="cancelSejourSSR();">
-	               {{tr}}{{$sejour->annule|ternary:'Restore':'Cancel'}}{{/tr}}
-	            </button>
-	              <button class="trash" type="button" tabindex="25" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
-	                {{tr}}Delete{{/tr}}
-	              </button>
-	            {{/if}}
-	          {{/if}}
-	          <button class="print" type="button" onclick="printFormSejour();">{{tr}}Print{{/tr}}</button>
-	        {{else}}
-	          <button class="submit default" tabindex="26" type="submit">{{tr}}Create{{/tr}}</button>
-	        {{/if}}
-	      </td>
-	    </tr>
-	    {{/if}}
+              <button class="{{$sejour->annule|ternary:'change':'cancel'}}" type="button" tabindex="24" onclick="cancelSejourSSR();">
+                 {{tr}}{{$sejour->annule|ternary:'Restore':'Cancel'}}{{/tr}}
+              </button>
+                <button class="trash" type="button" tabindex="25" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
+                  {{tr}}Delete{{/tr}}f
+                </button>
+              {{/if}}
+            {{/if}}
+            <button class="print" type="button" onclick="printFormSejour();">{{tr}}Print{{/tr}}</button>
+          {{else}}
+            <button class="submit default" tabindex="26" type="submit">{{tr}}Create{{/tr}}</button>
+          {{/if}}
+        </td>
+      </tr>
+      {{/if}}
     {{/if}}
 
   </table>

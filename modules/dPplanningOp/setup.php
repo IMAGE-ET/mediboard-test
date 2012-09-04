@@ -1428,7 +1428,13 @@ class CSetupdPplanningOp extends CSetup {
       ADD `envoi_mail` DATETIME;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.53";
+    $this->makeRevision("1.53");
+    $query = "UPDATE `sejour`
+      SET `sejour`.`recuse` = '0'
+      WHERE `sejour`.`type` != 'ssr';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.54";
   }
 }
 ?>

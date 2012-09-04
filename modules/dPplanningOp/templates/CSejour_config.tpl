@@ -48,7 +48,7 @@
     {{mb_include module=system template=inc_config_bool var=show_type_pec}}
     {{mb_include module=system template=inc_config_bool var=show_discipline_tarifaire }}
     {{mb_include module=system template=inc_config_bool var=create_anonymous_pat onchange="toggleSpecsPat(this.value)"}}
-    
+    {{mb_include module=system template=inc_config_bool var=use_recuse }}
     <tbody id="specs_anonymous_pat" {{if !$conf.dPplanningOp.CSejour.create_anonymous_pat}}style="display: none;"{{/if}}>
       {{mb_include module=system template=inc_config_enum var=anonymous_sexe values=m|f}}
       {{mb_include module=system template=inc_config_str var=anonymous_naissance}}

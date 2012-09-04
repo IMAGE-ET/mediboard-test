@@ -93,6 +93,7 @@ else {
   $sejour->praticien_id = $user->_id;
   $sejour->entree_prevue = mbDate()." 08:00:00";
   $sejour->sortie_prevue = mbDate()." 18:00:00";
+  $sejour->recuse = CAppUI::conf("ssr recusation use_recuse") ? -1 : 0;
 }
 
 // Chargement des categories de prescription

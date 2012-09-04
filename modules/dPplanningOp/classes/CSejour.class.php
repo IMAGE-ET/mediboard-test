@@ -683,6 +683,11 @@ class CSejour extends CCodable implements IPatientRelated {
       }
     }
     
+    // On fixe la récusation si pas définie pour un nouveau séjour
+    if (!$this->_id && ($this->recuse === "" || $this->recuse === null)) {
+      $this->recuse = CAppUI::conf("dPplanningOp CSejour use_recuse") ? -1 : 0;
+    }
+    
     // On fait le store du séjour
     if ($msg = parent::store()) {
       return $msg;

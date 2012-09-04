@@ -138,7 +138,7 @@ function cancelSejour() {
   // Annulation 
   if (oElement.value == "0") {
     if (checkCancelAlerts()) {
-      oElement.value = "1";
+      $V(oElement, "1");
       oForm.submit();
       return;   
     }

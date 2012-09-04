@@ -84,7 +84,8 @@ $dPconfig["dPplanningOp"]= array(
     "show_type_pec" => "0",
     "create_anonymous_pat" => "0",
     "anonymous_sexe" => "m",
-    "anonymous_naissance" => "1970-01-01"
+    "anonymous_naissance" => "1970-01-01",
+    "use_recuse" => "0",
   ),
 );
 

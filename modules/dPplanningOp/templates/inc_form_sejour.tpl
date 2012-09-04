@@ -370,6 +370,10 @@ Main.add( function(){
 
 {{mb_field object=$sejour field="codes_ccam" hidden=1}}
 
+{{if !$sejour->annule}}
+  {{mb_field object=$sejour field="recuse" hidden=1}}
+
+{{/if}}
 {{if $mode_operation}}
   <input type="hidden" name="callback" value="submitFormOperation" />
 {{/if}}
@@ -388,10 +392,6 @@ Main.add( function(){
 <input type="hidden" name="annule" value="{{$sejour->annule|default:"0"}}" />
 <input type="hidden" name="septique" value="{{$sejour->septique|default:"0"}}" />
 <input type="hidden" name="pathologie" value="{{$sejour->pathologie}}" />
-
-{{if "reservation"|module_active && !$sejour->annule}}
-  {{mb_field object=$sejour field="recuse" hidden=1}}
-{{/if}}
 
 <input type="hidden" name="adresse_par_prat_id" value="{{$sejour->adresse_par_prat_id}}" />
 {{if !$mode_operation}}
