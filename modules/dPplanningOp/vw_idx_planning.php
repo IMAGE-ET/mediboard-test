@@ -63,7 +63,7 @@ if ($selPraticien->isAnesth()) {
                  "sejour.group_id" => "= '".CGroups::loadCurrent()->_id."'",
                  "operations.anesth_id = '$selPraticien->_id' OR plagesop.anesth_id = '$selPraticien->_id'"
                );
-  $whereAmbu[] = $where_anesth;
+  $whereHospi[] = $where_anesth;
   
   if (!$canceled) {
     $whereHospi["operations.annulee"] = " = '0'";
