@@ -14,7 +14,7 @@ class CExListItem extends CMbObject {
   var $list_id         = null;
   var $concept_id      = null;
   var $field_id        = null;
-	
+  
   var $code            = null;
   var $name            = null;
   
@@ -38,19 +38,29 @@ class CExListItem extends CMbObject {
     $props["name"]       = "str notNull";
     return $props;
   }
-	
-	function loadRefList($cache = true) {
-		return $this->_ref_list = $this->loadFwdRef("list_id", $cache);
-	}
+  
+  function loadRefList($cache = true) {
+    return $this->_ref_list = $this->loadFwdRef("list_id", $cache);
+  }
   
   function updateFormFields(){
     parent::updateFormFields();
-		
-		$list = $this->loadRefList();
+    
+    $list = $this->loadRefList();
     $this->_view = "{$list->_view} / $this->name";
-		
-		if ($this->code != null) {
-			$this->_view .= " [$this->code]";
-		}
+    
+    if ($this->code != null) {
+      $this->_view .= " [$this->code]";
+    }
+  }
+  
+  function store(){
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    if ($this->fieldModified("name") || !$this->_old->_id) {
+      CExObject::clearLocales();
+    }
   }
 }

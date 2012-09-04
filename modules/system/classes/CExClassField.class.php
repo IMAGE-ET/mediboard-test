@@ -184,7 +184,10 @@ class CExClassField extends CExListItemsOwner {
     
     if (!self::$_load_lite) {
       $this->_ex_class_id = $this->loadRefExGroup()->ex_class_id;
-      $this->updateTranslation();
+      // must be called in the class editor
+      //if (!CExObject::$_locales_cache_enabled) {
+        $this->updateTranslation();
+      //}
     }
   }
   
@@ -429,8 +432,6 @@ class CExClassField extends CExListItemsOwner {
     $this->_locale_court = $trans->court;
     
     $this->_view = $this->_locale;
-    
-    return $trans;
   }
   
   function getTableName(){

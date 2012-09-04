@@ -32,11 +32,11 @@
   </td>  
   <td class="text">
     <div>
-	    <strong>{{mb_value object=$_suivi field=text}}</strong>
+      <strong>{{mb_value object=$_suivi field=text}}</strong>
     </div>
   </td>
-	<td>
-  	{{if !$readonly && $_suivi->_canEdit}}
+  <td>
+    {{if !$readonly && $_suivi->_canEdit}}
       <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_observation_aed" />
         <input type="hidden" name="del" value="1" />
@@ -45,7 +45,7 @@
         <input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
         <button type="button" class="trash notext" onclick="submitSuivi(this.form, 1)">{{tr}}Delete{{/tr}}</button>
       </form>
-  	  <button type="button" class="edit notext" onclick="addObservation(null, null, '{{$_suivi->_id}}');"></button>
+      <button type="button" class="edit notext" onclick="addObservation(null, null, '{{$_suivi->_id}}');"></button>
     {{/if}}
   </td>
 {{/if}}
@@ -71,37 +71,37 @@
         {{/if}} {{$_field.unit}},
       {{/if}}
     {{/foreach}}
-		{{if $_suivi->comment}}
-		({{$_suivi->comment}})
-		{{/if}}
+    {{if $_suivi->comment}}
+    ({{$_suivi->comment}})
+    {{/if}}
   </td>
   <td></td>
 {{/if}}
 
 {{if $_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment}}
   <td><strong>Prescription</strong></td>
-	<td>
-		<strong>
+  <td>
+    <strong>
       <div class="mediuser" style="border-color: #{{$_suivi->_ref_praticien->_ref_function->color}};">
         {{mb_value object=$_suivi field="praticien_id"}}
       </div>
     </strong>
-	</td>
+  </td>
   <td style="text-align: center">
-  	{{mb_ditto name=date value=$_suivi->debut|date_format:$conf.date}}
-	</td>
-	<td>{{mb_value object=$_suivi field="time_debut"}}</td>
+    {{mb_ditto name=date value=$_suivi->debut|date_format:$conf.date}}
+  </td>
+  <td>{{mb_value object=$_suivi field="time_debut"}}</td>
   <td colspan="2" {{if $_suivi->_count.transmissions}} class="arretee" {{/if}}>
-  	{{if !$readonly}}
-		  <button type="button" class="tick" onclick="addTransmissionAdm('{{$_suivi->_id}}','{{$_suivi->_class}}');" style="float: right;">Réaliser ({{$_suivi->_count.transmissions}})</button>
-		{{/if}}
-		
-		{{if $_suivi instanceof CPrescriptionLineElement}}
-		<strong onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_ref_element_prescription->_guid}}');">{{$_suivi->_view}}</strong>
-		{{/if}}
+    {{if !$readonly}}
+      <button type="button" class="tick" onclick="addTransmissionAdm('{{$_suivi->_id}}','{{$_suivi->_class}}');" style="float: right;">Réaliser ({{$_suivi->_count.transmissions}})</button>
+    {{/if}}
+    
+    {{if $_suivi instanceof CPrescriptionLineElement}}
+    <strong onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_ref_element_prescription->_guid}}');">{{$_suivi->_view}}</strong>
+    {{/if}}
     {{mb_value object=$_suivi field="commentaire"}}
-	</td>
-	<td class="narrow button {{if $_suivi->_count.transmissions}} arretee {{/if}}" style="white-space: nowrap;">
+  </td>
+  <td class="narrow button {{if $_suivi->_count.transmissions}} arretee {{/if}}" style="white-space: nowrap;">
     {{if !$readonly && $_suivi->_canEdit && !$_suivi->_count.transmissions}}
       <form name="Del-{{$_suivi->_guid}}" action="?" method="post">
         <input type="hidden" name="m" value="dPprescription" />

@@ -52,6 +52,9 @@ class CExObject extends CMbMetaObject {
   static $_multiple_load  = false;
   
   static $_ex_specs       = array();
+  
+  static $_locales_ready = false;
+  static $_locales_cache_enabled = true;
 
   function __construct(){
     parent::__construct();
@@ -67,7 +70,13 @@ class CExObject extends CMbMetaObject {
   }
 
   function setExClass() {
-    if ($this->_specs_already_set || !$this->_ex_class_id && !$this->_own_ex_class_id) return;
+    if ($this->_specs_already_set || !$this->_ex_class_id && !$this->_own_ex_class_id) {
+      return;
+    }
+    
+    if (CExObject::$_locales_cache_enabled) {
+      self::initLocales();
+    }
     
     $this->_props = $this->getProps();
     
@@ -99,6 +108,101 @@ class CExObject extends CMbMetaObject {
     $ex_class->load($this->getClassId());
     
     return $this->_ref_ex_class = $ex_class; // can't use loadFwdRef here
+  }
+  
+  static function clearLocales() {
+    SHM::rem("exclass-locales-fr");
+    SHM::rem("exclass-locales-en");
+    self::$_locales_ready = false;
+  }
+  
+  static function initLocales(){
+    if (self::$_locales_ready) {
+      return;
+    }
+    
+    $lang = CAppUI::pref("LOCALE");
+    $_locales = SHM::get("exclass-locales-$lang");
+    
+    if (!$_locales) {
+      $_locales = array();
+      
+      $request = new CRequest();
+      $request->addTable("ex_class_field_translation");
+      $request->addWhere(array(
+        "lang" => "= '$lang'",
+      ));
+      $request->addLJoin(array(
+        "ex_class_field"       => "ex_class_field.ex_class_field_id = ex_class_field_translation.ex_class_field_id",
+        "ex_concept"           => "ex_concept.ex_concept_id = ex_class_field.concept_id",
+        "ex_class_field_group" => "ex_class_field_group.ex_class_field_group_id = ex_class_field.ex_group_id",
+      ));
+      $request->addSelect(array(
+        "ex_class_field_translation.std", 
+        "IF(ex_class_field_translation.desc, ex_class_field_translation.desc, ex_class_field_translation.std) AS `desc`", 
+        "IF(ex_class_field_translation.court, ex_class_field_translation.court, ex_class_field_translation.std) AS `court`",
+        "ex_class_field.ex_class_field_id AS field_id",
+        "ex_class_field.name",
+        "ex_class_field.prop",
+        "ex_class_field.concept_id",
+        "ex_class_field_group.ex_class_id",
+        "ex_concept.ex_list_id",
+      ));
+      
+      $ds = CSQLDataSource::get("std");
+      $list = $ds->loadList($request->getRequest());
+      
+      foreach($list as $_item) {
+        $key = "CExObject_{$_item['ex_class_id']}-{$_item['name']}";
+        $_locales[$key]         = $_item["std"];
+        $_locales["$key-desc"]  = $_item["desc"];
+        $_locales["$key-court"] = $_item["court"];
+        
+        $prop = $_item["prop"];
+        if (strpos($prop, "enum") === false && strpos($prop, "set") === false) {
+          continue;
+        }
+        
+        $key = "CExObject_{$_item['ex_class_id']}.{$_item['name']}";
+        
+        $request = new CRequest();
+        $request->addTable("ex_list_item");
+        $request->addSelect(array(
+          "ex_list_item_id",
+          "name",
+        ));
+          
+        if ($concept_id = $_item["concept_id"]) {
+          if ($list_id = $_item["ex_list_id"]) {
+            $request->addWhere(array(
+              "list_id" => "= '$list_id'"
+            ));
+          }
+          else {
+            $request->addWhere(array(
+              "concept_id" => "= '$concept_id'"
+            ));
+          }
+        }
+        else {
+          $request->addWhere(array(
+            "field_id" => "= '{$_item['field_id']}'"
+          ));
+        }
+          
+        $enum_list = $ds->loadHashList($request->getRequest());
+        foreach($enum_list as $_value => $_locale) {
+          $_locales["$key.$_value"] = $_locale;
+        }
+      }
+
+      SHM::put("exclass-locales-$lang", $_locales);
+    }
+    
+    global $locales;
+    $locales = array_merge($locales, $_locales);
+    
+    self::$_locales_ready = true;
   }
   
   function setReferenceObject_1(CMbObject $reference) {

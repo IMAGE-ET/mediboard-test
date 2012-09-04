@@ -95,4 +95,14 @@ class CExClassFieldTranslation extends CMbObject {
   function loadRefExClassField($cache = true){
     return $this->_ref_ex_class_field = $this->loadFwdRef("ex_class_field_id", $cache);
   }
+  
+  function store(){
+    $is_new = !$this->_id;
+    
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    CExObject::clearLocales();
+  }
 }

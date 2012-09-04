@@ -45,7 +45,8 @@ CExObject::$_load_lite = $detail < 2;
 
 $group_id = ($group_id ? $group_id : CGroups::loadCurrent()->_id);
 $where = array(
-  "group_id = $group_id OR group_id IS NULL"
+  "group_id = $group_id OR group_id IS NULL",
+  //"disabled = '0'",
 );
 
 if ($ex_class_id) {
@@ -56,7 +57,7 @@ if (empty(CExClass::$_list_cache)) {
   $ex_class = new CExClass;
   CExClass::$_list_cache = $ex_class->loadList($where);
 
-  if ($detail > 1) {
+  if (!CExObject::$_locales_cache_enabled && $detail > 1) {
     foreach(CExClass::$_list_cache as $_ex_class) {
       foreach($_ex_class->loadRefsGroups() as $_group) {
         $_group->loadRefsFields();

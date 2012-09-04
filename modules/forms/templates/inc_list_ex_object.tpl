@@ -112,7 +112,7 @@ ExObject.refreshSelf.{{$self_guid}} = function(start){
     </tr>
     
     <tr>
-      <td>
+      <td class="text">
       {{foreach from=$ex_objects_by_class item=_ex_objects key=_ex_class_id}}
         {{if $_ex_objects|@count}}
           <h2>{{$ex_classes.$_ex_class_id->name}}</h2>
