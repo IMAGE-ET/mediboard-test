@@ -168,7 +168,9 @@ function initCKEditor() {
       if (window.pdf_thumbnails && Prototype.Browser.IE) {
         window.save_style = deleteStyle();
         ck_instance.on("beforePreview", function() { restoreStyle(); });
-        ck_instance.on("afterPreview", function() { window.save_style = deleteStyle(); });
+        ck_instance.on("afterPreview", function()  { window.save_style = deleteStyle(); });
+        ck_instance.on("beforeSource", function()  { ck_instance.fire("beforePreview");});
+        ck_instance.on("afterSource", function()   { ck_instance.fire("afterPreview");});
       }
       
       // Don't close the window with escape
