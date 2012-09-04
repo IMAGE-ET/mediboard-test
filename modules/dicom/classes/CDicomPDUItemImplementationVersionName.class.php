@@ -17,7 +17,7 @@ class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
    * 
    * @var hexadecimal number
    */
-  var $type = 0x55;
+  var $type = "55";
   
   /**
    * The length of the Item
@@ -32,6 +32,26 @@ class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
    * @var integer
    */
   var $version_name = null;
+  
+  /**
+   * The constructor
+   * 
+   * @param integer $version_name The version name, default null
+   */
+  function  __construct($version_name = null) {
+    if ($version_name) {
+      $this->version_name = $version_name;
+    }
+  }
+  
+  /**
+   * Return the version name
+   * 
+   * @return integer
+   */
+  function getValue() {
+    return $this->version_name;
+  }
   
   /**
    * Decode the Transfer Syntax
@@ -54,7 +74,33 @@ class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
    * @return null
    */
   function encodeItem(CDicomStreamWriter $stream_writer) {
+    $this->calculateLength();
     
+    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->skip(1);
+    $stream_writer->writeUnsignedInt16($this->length);
+    $stream_writer->writeString($this->version_name, $this->length);
+  }
+
+  /**
+   * Calculate the length of the item (without the type and the length fields)
+   * 
+   * @return null
+   */
+  function calculateLength() {
+    $this->length = strlen($this->version_name);
+  }
+
+  /**
+   * Return the total length, in number of bytes
+   * 
+   * @return integer
+   */
+  function getTotalLength() {
+    if (!$this->length) {
+      $this->calculateLength();
+    }
+    return $this->length + 4;
   }
 
   /**

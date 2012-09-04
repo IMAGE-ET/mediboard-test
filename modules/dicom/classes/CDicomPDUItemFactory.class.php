@@ -21,6 +21,7 @@ class CDicomPDUItemFactory {
   static $item_types = array(
     "10" => "CDicomPDUItemApplicationContext",
     "20" => "CDicomPDUItemPresentationContext",
+    "21" => "CDicomPDUItemPresentationContextReply",
     "30" => "CDicomPDUItemAbstractSyntax",
     "40" => "CDicomPDUItemTransferSyntax",
     "50" => "CDicomPDUItemUserInfo",
@@ -44,7 +45,7 @@ class CDicomPDUItemFactory {
    * @return CDicomPDUItem The PDU item
    */
   static function decodeItem(CDicomStreamReader $stream_reader) {
-    $item_type = self::getItemType($stream_reader);
+    $item_type = self::readItemType($stream_reader);
     
     $item = new $item_type();
     $item->decodeItem($stream_reader);
@@ -63,7 +64,7 @@ class CDicomPDUItemFactory {
    */
   static function decodeConsecutiveItemsByType(CDicomStreamReader $stream_reader, $wanted_type) {
     $items = array();
-    $item_type = self::getItemType($stream_reader);
+    $item_type = self::readItemType($stream_reader);
     
     $wanted_type = self::$item_types[$wanted_type];
 
@@ -72,7 +73,7 @@ class CDicomPDUItemFactory {
       $item->decodeItem($stream_reader);
       $items[] = $item;
       
-      $item_type = self::getItemType($stream_reader);
+      $item_type = self::readItemType($stream_reader);
     }
     self::$next_item = $item_type;
     
@@ -94,7 +95,7 @@ class CDicomPDUItemFactory {
     $pos = $stream_reader->getPos();
     $endOfItem = $pos + $length;
 
-    $item_type = self::getItemType($stream_reader);
+    $item_type = self::readItemType($stream_reader);
     
     while ($item_type && $stream_reader->getPos() <= $endOfItem) {
       if (!$item_type) {
@@ -105,7 +106,7 @@ class CDicomPDUItemFactory {
       $item->decodeItem($stream_reader);
       $items[] = $item;
 
-      $item_type = self::getItemType($stream_reader);
+      $item_type = self::readItemType($stream_reader);
     }
     
     return $items;
@@ -131,7 +132,7 @@ class CDicomPDUItemFactory {
    * 
    * @return string The name of the item class
    */
-  static function getItemType(CDicomStreamReader $stream_reader) {
+  static function readItemType(CDicomStreamReader $stream_reader) {
     $item_type = null;
     if (!self::$next_item) {
       $tmp = $stream_reader->readHexByte();
@@ -146,6 +147,17 @@ class CDicomPDUItemFactory {
       self::$next_item = null;
     }
     return $item_type;
+  }
+  
+  /**
+   * Return the name of the class, corresponding to the given type
+   * 
+   * @param string $type The type of the item
+   * 
+   * @return string The name of the corresponding class
+   */
+  static function getItemClass($type) {
+    return self::$item_types[$type];
   }
 }
 ?>

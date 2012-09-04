@@ -8,16 +8,16 @@
  */
 
 /**
- * An A-Associate-RQ PDU
+ * An A-Associate-RJ PDU
  */
-class CDicomPDUAAssociateRQ extends CDicomPDU {
+class CDicomPDUAAssociateAC extends CDIcomPDU {
   
   /**
    * The type of the PDU
    * 
    * @var hexadecimal number
    */
-  var $type = "01";
+  var $type = "02";
   
   /**
    * The length of the PDU
@@ -57,7 +57,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
   /**
    * The presentation contexts
    * 
-   * @var array of CDicomPDUItemPresentationContextRQ
+   * @var array of CDicomPDUItemPresentationContext
    */
   var $presentation_contexts = array();
   
@@ -113,6 +113,12 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * @return null
    */
   function setCalled_AE_title($called_AE_title) {
+    if (strlen($called_AE_title) < 16) {
+      $nb_space = 16 - strlen($called_AE_title);
+      for ($i = 0; $i < $nb_space; $i++) {
+        $called_AE_title .= " ";
+      }
+    }
     $this->called_AE_title = $called_AE_title;
   }
   
@@ -124,6 +130,12 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * @return null
    */
   function setCalling_AE_title($calling_AE_title) {
+    if (strlen($calling_AE_title) < 16) {
+      $nb_space = 16 - strlen($calling_AE_title);
+      for ($i = 0; $i < $nb_space; $i++) {
+        $calling_AE_title .= " ";
+      }
+    }
     $this->calling_AE_title = $calling_AE_title;
   }
   
@@ -147,7 +159,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    */
   function setPresentation_contexts($pres_contexts) {
     foreach ($pres_contexts as $datas) {
-      $this->presentation_contexts[] = new CDicomPDUItemPresentationContext($datas);
+      $this->presentation_contexts[] = new CDicomPDUItemPresentationContextReply($datas);
     }
   }
   
@@ -159,8 +171,9 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * @return null
    */
   function setUser_info($datas) {
-    $this->user_info = new CDicomPDUItemTransferSyntax($datas);
+    $this->user_info = new CDicomPDUItemUserInfo($datas);
   }
+  
   
   /**
    * Decode the PDU
@@ -195,7 +208,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
     $stream_reader->skip(32);
     
     $this->application_context = CDicomPDUItemFactory::decodeItem($stream_reader);
-    $this->presentation_contexts = CDicomPDUItemFactory::decodeConsecutiveItemsByType($stream_reader, "20");
+    $this->presentation_contexts = CDicomPDUItemFactory::decodeConsecutiveItemsByType($stream_reader, "21");
     $this->user_info = CDicomPDUItemFactory::decodeItem($stream_reader);
   }
   
@@ -207,22 +220,22 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * @return null
    */
   function encodePDU(CDicomStreamWriter $stream_writer) {
-    $this->length = $this->calculateLength();
+    $this->calculateLength();
     
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
     $stream_writer->writeUnsignedInt32($this->length);
-    $stream_writer->skip(1);
     $stream_writer->writeUnsignedInt16($this->protocol_version);
     $stream_writer->skip(2);
-    $stream_writer->writeUnsignedInt16($this->called_AE_title);
-    $stream_writer->writeUnsignedInt8($this->calling_AE_title);
+    $stream_writer->writeString($this->called_AE_title, 16);
+    $stream_writer->writeString($this->calling_AE_title, 16);
     $stream_writer->skip(32);
     $this->application_context->encodeItem($stream_writer);
     foreach ($this->presentation_contexts as $_item) {
-      $item->encodeItem($stream_writer);
+      $_item->encodeItem($stream_writer);
     }
     $this->user_info->encodeItem($stream_writer);
+
   }
 
   /**
@@ -258,7 +271,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * @return string
    */
   function __toString() {
-    $str = "<h1>A-Associate-RQ</h1><br>
+    $str = "<h1>A-Associate-AC</h1><br>
             <ul>
               <li>Type : $this->type</li>
               <li>Length : $this->length</li>

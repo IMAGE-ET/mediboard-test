@@ -17,7 +17,7 @@ class CDicomPDUItemUserInfo extends CDicomPDUItem {
    * 
    * @var hexadecimal number
    */
-  var $type = 0x50;
+  var $type = "50";
     
   /**
    * The length of the Item
@@ -32,6 +32,21 @@ class CDicomPDUItemUserInfo extends CDicomPDUItem {
    * @var array of CDicomPDUItem
    */
   var $sub_items = array();
+  
+  /**
+   * The constructor.
+   * 
+   * @param array $datas Default null. 
+   * You can set all the field of the class by passing an array, the keys must be the name of the fields.
+   * For the sub items, the value must be an array,
+   * with keys the type of the item, and for value and item array.
+   */
+  function __construct($items = array()) {
+    foreach ($items as $_type => $_data) {
+      $class = CDicomPDUItemFactory::getItemClass("$_type");
+      $this->sub_items[] = new $class($_data);
+    }
+  }
   
   /**
    * Decode the Transfer Syntax
@@ -56,7 +71,38 @@ class CDicomPDUItemUserInfo extends CDicomPDUItem {
    * @return null
    */ 
   function encodeItem(CDicomStreamWriter $stream_writer) {
+    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->skip(1);
+    $stream_writer->writeUnsignedInt16($this->length);
     
+    foreach ($this->sub_items as $sub_item) {
+      $sub_item->encodeItem($stream_writer);
+    }
+  }
+  
+  /**
+   * Calculate the length of the item (without the type and the length fields)
+   * 
+   * @return null
+   */
+  function calculateLength() {
+    $this->length = 0;
+    
+    foreach ($this->sub_items as $sub_item) {
+      $this->length += $sub_item->getTotalLength();
+    }
+  }
+
+  /**
+   * Return the total length, in number of bytes
+   * 
+   * @return integer
+   */
+  function getTotalLength() {
+    if (!$this->length) {
+      $this->calculateLength();
+    }
+    return $this->length + 4;
   }
   
   /**

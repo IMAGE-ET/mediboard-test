@@ -178,18 +178,36 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
    * @return null
    */
   function encodePDU(CDicomStreamWriter $stream_writer) {
-    $this->length = 4;
+    $this->length = $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2, "BE");
+    $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
     $stream_writer->writeUnsignedInt32($this->length);
     $stream_writer->skip(1);
     $stream_writer->writeUnsignedInt8($this->result);
     $stream_writer->writeUnsignedInt8($this->source);
     $stream_writer->writeUnsignedInt8($this->diagnostic);
-    $f = fopen("modules/dicom/a_associate_rj.dat", "w+");
-    fwrite($f, $stream_writer->buf);
-    fclose($f);
+  }
+  
+  /**
+   * Calculate the length of the item (without the type and the length fields)
+   * 
+   * @return null
+   */
+  function calculateLength() {
+    $this->length = 4;
+  }
+
+  /**
+   * Return the total length, in number of bytes
+   * 
+   * @return integer
+   */
+  function getTotalLength() {
+    if (!$this->length) {
+      $this->calculateLength();
+    }
+    return $this->length + 6;
   }
   
   /**

@@ -10,14 +10,14 @@
 /**
  * Represents a Presentation Syntax PDU Item
  */
-class CDicomPDUItemPresentationContext extends CDicomPDUItem {
+class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
   
   /**
    * The type of the Item
    * 
    * @var hexadecimal number
    */
-  var $type = "20";
+  var $type = "21";
     
   /**
    * The length of the Item
@@ -34,18 +34,32 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
   var $id = null;
   
   /**
-   * The abstract syntax
+   * The acceptance or the rejection of the transfer sybtax, and the reason if the rejected.
+   * See $reason_enum for the different values and their signification
    * 
-   * @var CDicomPDUItemAbstractSyntax
+   * @var integer
    */
-  var $abstract_syntax = null;
+  var $reason = null;
   
   /**
-   * The transfer syntaxes
+   * Possible values for the field $reason
    * 
-   * @var array of CDicomPDUItemTransferSyntax
+   * @var array
    */
-  var $transfer_syntaxes = array();
+  static $reason_enum = array(
+    0 => "acceptance",
+    1 => "user-rejection",
+    2 => "no-reason",
+    3 => "abstract-syntax-not-supported",
+    4 => "transfer-syntaxes-not-supported"
+  );
+  
+  /**
+   * The transfer syntax
+   * 
+   * @var CDicomPDUItemTransferSyntax
+   */
+  var $transfer_syntax = null;
   
   /**
    * The constructor.
@@ -96,27 +110,14 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
   }
   
   /**
-   * Set the abstract syntax
+   * Set the transfer syntax
    * 
-   * @param array $datas The data for create the abstract syntax
-   * 
-   * @return null
-   */
-  function setAbstract_syntax($datas) {
-    $this->abstract_syntax = new CDicomPDUItemAbstractSyntax($datas);
-  }
-  
-  /**
-   * Set the transfer syntaxes
-   * 
-   * @param array of array $transfer_syntaxes The datas for create the transfer syntaxes
+   * @param array $datas The data for create the transfer syntax
    * 
    * @return null
    */
-  function setTransfer_syntaxes($transfer_syntaxes) {
-    foreach ($transfer_syntaxes as $datas) {
-      $this->transfer_syntaxes[] = new CDicomPDUItemTransferSyntax($datas);
-    }
+  function setTransfer_syntax($datas) {
+    $this->transfer_syntax = new CDicomPDUItemTransferSyntax($datas);
   }
   
   /**
@@ -131,10 +132,10 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
     $stream_reader->skip(1);
     $this->length = $stream_reader->readUnsignedInt16();
     $this->id = $stream_reader->readUnsignedInt8();
-    $stream_reader->skip(3);
-    
-    $this->abstract_syntax = CDicomPDUItemFactory::decodeItem($stream_reader);
-    $this->transfer_syntaxes = CDicomPDUItemFactory::decodeConsecutiveItemsByType($stream_reader, "40");
+    $stream_reader->skip(1);
+    $this->reason = $stream_reader->readUnsignedInt8();
+    $stream_reader->skip(1);
+    $this->transfer_syntax = CDicomPDUItemFactory::decodeItem($stream_reader);
   }
   
   /**
@@ -150,23 +151,20 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
     $stream_writer->writeUnsignedInt16($this->length);
-    $stream_reader->skip(3);
-    $this->abstract_syntax->encodeItem($stream_writer);
-    foreach ($this->transfer_syntaxes as $transfer_syntax) {
-      $transfer_syntax->encodeItem($stream_writer);
-    }
+    $stream_writer->writeUnsignedInt8($this->id);
+    $stream_writer->skip(1);
+    $stream_writer->writeUnsignedInt8($this->reason);
+    $stream_writer->skip(1);
+    $this->transfer_syntax->encodeItem($stream_writer);
   }
-
+  
   /**
    * Calculate the length of the item (without the type and the length fields)
    * 
    * @return null
    */
   function calculateLength() {
-    $this->length = 4 + $this->abstract_syntax->getTotalLength();
-    foreach ($this->transfer_syntaxes as $transfer_syntax) {
-      $this->length += $transfer_syntax->getTotalLength();
-    }
+    $this->length = 4 + $this->transfer_syntax->getTotalLength();
   }
 
   /**
@@ -180,7 +178,7 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
     }
     return $this->length + 4;
   }
-
+  
   /**
    * Return a string representation of the class
    * 
@@ -191,13 +189,7 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
               <li>Item type : $this->type</li>
               <li>Item length : $this->length</li>
               <li>id : $this->id</li>
-              <li>Abstract syntax : 
-                {$this->abstract_syntax->__toString()}
-              </li>";
-    foreach ($this->transfer_syntaxes as $transfer_syntax) {
-      $str .= "<li>Transfer syntax : {$transfer_syntax->__toString()}</li>";
-    }
-    $str .= "</ul>";
+              <li>Transfer syntax : {$this->transfer_syntax->__toString()}</li></ul>";
     return $str;
   }
 }

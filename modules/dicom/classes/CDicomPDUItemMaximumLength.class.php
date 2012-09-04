@@ -17,7 +17,7 @@ class CDicomPDUItemMaximumLength extends CDicomPDUItem {
    * 
    * @var hexadecimal number
    */
-  var $type = 0x51;
+  var $type = "51";
   
   /**
    * The length of the Item
@@ -32,6 +32,26 @@ class CDicomPDUItemMaximumLength extends CDicomPDUItem {
    * @var integer
    */
   var $maximum_length = null;
+  
+  /**
+   * The constructor
+   * 
+   * @param integer $maximum_length The maximum_length, default null
+   */
+  function __construct($maximum_length = null) {
+    if ($maximum_length) {
+      $this->maximum_length = $maximum_length;
+    }
+  }
+  
+  /**
+   * Return the maximum length
+   * 
+   * @return integer
+   */
+  function getValue() {
+    return $this->maximum_length;
+  }
   
   /**
    * Decode the Transfer Syntax
@@ -54,7 +74,33 @@ class CDicomPDUItemMaximumLength extends CDicomPDUItem {
    * @return null
    */
   function encodeItem(CDicomStreamWriter $stream_writer) {
+    $this->calculateLength();
     
+    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->skip(1);
+    $stream_writer->writeUnsignedInt16($this->length);
+    $stream_writer->writeUnsignedInt32($this->maximum_length);
+  }
+
+  /**
+   * Calculate the length of the item (without the type and the length fields)
+   * 
+   * @return null
+   */
+  function calculateLength() {
+    $this->length = 4;
+  }
+
+  /**
+   * Return the total length, in number of bytes
+   * 
+   * @return integer
+   */
+  function getTotalLength() {
+    if (!$this->length) {
+      $this->calculateLength();
+    }
+    return $this->length + 4;
   }
 
   /**
