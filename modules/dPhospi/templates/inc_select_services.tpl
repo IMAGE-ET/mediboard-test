@@ -58,6 +58,8 @@
     <input type="hidden" name="m" value="dPhospi" />
     {{if $view == "tableau"}}
       <input type="hidden" name="a" value="vw_affectations" />
+    {{elseif $view == "topologique"}}
+      <input type="hidden" name="a" value="vw_placement_patients" />
     {{else}}
       <input type="hidden" name="a" value="vw_mouvements" />
     {{/if}}

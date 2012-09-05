@@ -16,6 +16,10 @@
       var url = new Url('dPhospi', 'vw_mouvements');
       url.requestUpdate('temporel');
     },
+    loadTopologique: function() {
+      var url = new Url('dPhospi', 'vw_placement_patients');
+      url.requestUpdate('topologique');
+    },
     showLegend: function() {
       modal("legend_" + this.tabs.activeLink.key);
     },
@@ -40,6 +44,8 @@
           break;
         case 'temporel':
           this.loadTemporel();
+        case 'topologique':
+          this.loadTopologique();
       }
     },
     init: function(frequency){
@@ -127,6 +133,12 @@
   {{mb_include module=hospi template=legende}}
 </div>
 
+{{if $conf.dPhospi.use_vue_topologique}}
+  <div class="modal" id="legend_topologique" style="display: none;">
+    {{mb_include module=hospi template=legende_topologique}}
+  </div>
+{{/if}}
+
 <ul class="control_tabs" id="placements_tabs">
   <li onmousedown="Placement.loadTableau();">
     <a href="#tableau">Tableau</a>
@@ -134,6 +146,11 @@
   <li onmousedown="Placement.start(0, 120);">
     <a href="#temporel">Temporel</a>
   </li>
+  {{if $conf.dPhospi.use_vue_topologique}}
+  <li onmousedown="Placement.loadTopologique();">
+    <a href="#topologique">Topologique</a>
+  </li>
+  {{/if}}
   <li>
     <button type="button" onclick="Placement.selectServices();" class="search">Services</button>
   </li>
@@ -146,3 +163,7 @@
 
 <div id="tableau" style="display: none;"></div>
 <div id="temporel" style="display: none;"></div>
+
+{{if $conf.dPhospi.use_vue_topologique}}
+<div id="topologique" style="display: none;"></div>
+{{/if}}
