@@ -13,6 +13,7 @@ CCanDo::checkAdmin();
 $axe    = CValue::getOrSession('axe');
 $entree = CValue::getOrSession('entree', mbDate());
 $count  = CValue::getOrSession('count', 30);
+$hide_cancelled = CValue::getOrSession("hide_cancelled", 1);
 
 $filter = new CSejour;
 $filter->entree = $entree;
@@ -49,5 +50,7 @@ $smarty->assign('axe', $axe);
 $smarty->assign('axes', $axes);
 $smarty->assign('axes_other', $axes_other);
 $smarty->assign('count', $count);
+$smarty->assign('hide_cancelled', $hide_cancelled);
 $smarty->assign("ecap_installed", CModule::getActive("ecap"));
+
 $smarty->display('vw_stats.tpl');

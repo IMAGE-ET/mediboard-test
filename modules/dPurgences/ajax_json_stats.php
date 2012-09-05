@@ -16,6 +16,7 @@ $axe    = CValue::getOrSession('axe');
 $entree = CValue::getOrSession('entree', mbDate());
 $period = CValue::getOrSession('period', "MONTH");
 $count  = CValue::getOrSession('count', 30);
+$hide_cancelled = CValue::getOrSession("hide_cancelled", 1);
 
 function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejour, &$total, $start_field, $end_field) {
   $only_duration = empty($areas);
@@ -184,6 +185,10 @@ $where = array(
   "sejour.group_id" => "= '$group->_id'",
   "rpu.rpu_id" => "IS NOT NULL",
 );
+
+if ($hide_cancelled) {
+  $where["sejour.annule"] = "= '0'";
+}
 
 $ljoin = array(
   'rpu' => 'sejour.sejour_id = rpu.sejour_id',

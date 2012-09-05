@@ -38,7 +38,7 @@ var profiles = {
 };
 
 function yTickFormatter(y) {
-	return parseInt(y).toString();
+  return parseInt(y).toString();
 }
 
 function timeLabelFormatter(obj) {
@@ -124,13 +124,22 @@ Main.add(function () {
             </td>
           </tr>
           <tr>
-            <th>Mode</th>
+            <th rowspan="2">Mode</th>
             <td>
               <label>
-                <input type="radio" name="mode" value="bars" onchange="drawGraphs(window.data, $V(this))" checked="checked" /> Barres
+                <input type="radio" name="mode" value="bars" onchange="drawGraphs(window.data)" checked="checked" /> Barres
               </label>
               <label>
-                <input type="radio" name="mode" value="lines" onchange="drawGraphs(window.data, $V(this))" /> Lignes
+                <input type="radio" name="mode" value="lines" onchange="drawGraphs(window.data)" /> Lignes
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label>
+                <input type="hidden" name="hide_cancelled" value="{{$hide_cancelled}}" />
+                <input type="checkbox" name="_hide_cancelled_view" {{if $hide_cancelled}}checked{{/if}}
+                  onclick="$V(this.form.hide_cancelled, this.checked ? 1 : 0); this.form.onsubmit()"/> Cacher les annulés
               </label>
             </td>
           </tr>
