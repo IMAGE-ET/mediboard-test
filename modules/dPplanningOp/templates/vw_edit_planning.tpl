@@ -272,7 +272,9 @@ modeExpertDisplay = function() {
           {{if !$conf.dPplanningOp.COperation.cancel_only_for_resp_bloc || $modules.dPbloc->_can->edit || (!$op->_ref_sejour->entree_reelle && !$op->rank)}}
             <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
           {{/if}}
-          {{if "reservation"|module_active}}
+          {{assign var=current_user value="CMediusers::get"|static_call:null}}
+          {{assign var=types_forbidden value=","|explode:"Médecin,Secrétaire"}}
+          {{if "reservation"|module_active && !$current_user->isFromType($types_forbidden)}}
             {{if $op->_ref_sejour->recuse == "-1"}}
               <button class="tick" onclick="$V(getForm('editSejour').recuse, 0); submitForms();">{{tr}}Validate{{/tr}}</button>
             {{elseif $op->_ref_sejour->recuse == "0"}}
