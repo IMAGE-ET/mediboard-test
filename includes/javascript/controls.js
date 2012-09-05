@@ -530,6 +530,7 @@ Element.addMethods({
     
     // We remove the margin between the textarea and the grippie
     $(container).insert(element);
+    element.insert({after: grippie});
     
     // grippie's class and style
     grippie.addClassName('grippie-h').setOpacity(0.5);
@@ -539,7 +540,6 @@ Element.addMethods({
     
     // When the mouse is pressed on the grippie, we begin the drag
     grippie.observe('mousedown', startDrag);
-    element.insert({after: grippie});
     
     // All this doesn't work with curry()
     element
