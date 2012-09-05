@@ -1,5 +1,4 @@
 <!-- $Id$ -->
-
 <script>
 function checkRapport(){
   var oForm = document.printFrm;
@@ -73,6 +72,18 @@ printFacture = function(edit_justificatif, edit_bvr) {
   url.addParam('suppressHeaders', '1');
   url.popup(1000, 600);
 }
+sendBill = function(oForm2) {
+  var oForm = getForm("printFrm");
+  var url = new Url('tarmed', 'ajax_send_file_http');
+  url.addParam('prat_id'  , oForm.chir.value);
+  url.addParam('date_min' , $V(oForm._date_min));
+  url.addParam('date_max' , $V(oForm._date_max));
+  url.addParam('user'     , $V(oForm2.user));
+  url.addParam('pwd'      , $V(oForm2.pwd));
+  url.addParam('suppressHeaders', '1');
+//  url.requestUpdate("response_send_bill");
+  url.popup(1000, 600);
+}
 </script>
 
 {{if count($listPrat)}}
@@ -137,13 +148,16 @@ printFacture = function(edit_justificatif, edit_bvr) {
           <th class="category" colspan="4">Comptabilité "Consultations"</th>
         </tr>
         <tr>
-          <td colspan="2" class="button"><button class="print" type="submit" onclick="document.printFrm.a.value='print_noncote';">Consultation non cotés</button></td>
+          <td colspan="2" class="button">
+            <button class="print" type="submit" onclick="document.printFrm.a.value='print_noncote';">Consultation non cotés</button>
+          </td>
           <td colspan="2" class="text">
             <div class="big-info">
-              Affichage des règlements effectués, en fonction de la date de paiement.
+              Affichage des consultations non cotés, en fonction de la date de consultation.
             </div>
           </td>  
         </tr>
+        
         <tr>
           <td class="button" colspan="4">
             <hr />
@@ -204,9 +218,31 @@ printFacture = function(edit_justificatif, edit_bvr) {
         </tr>
         {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
           <tr>
+            <td class="button" colspan="4">
+              <hr />
+            </td>
+          </tr>
+          <tr>
             <td class="button" colspan="2">
               <button type="button" class="pdf" onclick="printFacture(0, 1);">Impression des BVR</button>
               <button type="button" class="pdf" onclick="printFacture(1, 0);">Justificatifs de remboursement</button>
+            </td>
+            <td colspan="2" rowspan="2" class="text">
+              <div class="big-info" id="response_send_bill">
+                Envoi des factures à la Caisse des Médecins et stockage au format pdf.
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="button" colspan="2">
+              <form name="send_bill" method="post">
+                {{*
+                Identifiant:  <input name="user" type="text" value="" /><br/>
+                Mot de passe: <input name="pwd"  type="password" value="" /><br/>
+                <button type="button" class="send" onclick="sendBill(this.form);">Envoi à la Caisse des Medecins</button>
+                *}}
+                <button type="button" class="send" onclick="sendBill(this.form);">Générer dossier pour la Caisse des medecins</button>
+              </form>
             </td>
           </tr>
         {{/if}}
