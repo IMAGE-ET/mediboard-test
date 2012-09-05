@@ -263,7 +263,7 @@ class CConsultation extends CCodable {
     $etat[self::PATIENT_ARRIVE] = mbTransformTime(null, $this->arrivee, "%Hh%M");
     $etat[self::EN_COURS]       = "En cours";
     $etat[self::TERMINE]        = "Term.";
-    if($this->chrono)
+    if ($this->chrono)
       $this->_etat = $etat[$this->chrono];
     if ($this->annule) {
       $this->_etat = "Ann.";
@@ -289,7 +289,7 @@ class CConsultation extends CCodable {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_somme = $this->secteur1 + $this->secteur2;
-    if($this->patient_date_reglement === "0000-00-00") {
+    if ($this->patient_date_reglement === "0000-00-00") {
       $this->patient_date_reglement = null;
     }
     $this->du_patient = round($this->du_patient, 2);
@@ -322,7 +322,7 @@ class CConsultation extends CCodable {
     }
     
     // Cas du paiement d'un séjour
-    if ($this->sejour_id !== null && $this->sejour_id && $this->secteur1 !== null && $this->secteur2 !== null){
+    if ($this->sejour_id !== null && $this->sejour_id && $this->secteur1 !== null && $this->secteur2 !== null) {
       $this->du_tiers = $this->secteur1 + $this->secteur2;
       $this->du_patient = 0;
     }
@@ -331,7 +331,7 @@ class CConsultation extends CCodable {
   function check() {
     // Data checking
     $msg = null;
-    if(!$this->_id) {
+    if (!$this->_id) {
       if (!$this->plageconsult_id) {
         $msg .= "Plage de consultation non valide<br />";
       }
@@ -343,7 +343,7 @@ class CConsultation extends CCodable {
     
     // Dévalidation avec règlement déjà effectué
     if ($this->fieldModified("valide", "0")) {
-      if (count($this->_ref_reglements)){
+      if (count($this->_ref_reglements)) {
         $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements ont déjà été effectués";
       }
     }
@@ -397,7 +397,7 @@ class CConsultation extends CCodable {
     
     // Chargement des FSE externes
     $fse = @new CLmFSE();
-    if(!isset($fse->_spec->ds)){
+    if (!isset($fse->_spec->ds)) {
       return;
     }
     $where = array();
@@ -448,18 +448,18 @@ class CConsultation extends CCodable {
       $this->secteur1 += $tarif->secteur1;
       $this->secteur2 += $tarif->secteur2;
       $this->tarif     = "composite";
-     }
+    }
     // Cas de la cotation normale
     else {
       $this->secteur1 = $tarif->secteur1;
       $this->secteur2 = $tarif->secteur2;
       $this->tarif    = $tarif->description;
-     }
+    }
 
     $this->du_patient   = $this->secteur1 + $this->secteur2;
     
     // Mise à jour de codes CCAM prévus, sans information serialisée complémentaire
-    foreach($tarif->_codes_ccam as $_code_ccam) {
+    foreach ($tarif->_codes_ccam as $_code_ccam) {
       $this->_codes_ccam[] = substr($_code_ccam, 0, 7);
     }
     $this->codes_ccam = implode("|", $this->_codes_ccam);
@@ -470,23 +470,23 @@ class CConsultation extends CCodable {
     // Precodage des actes NGAP avec information sérialisée complète
     
     $this->_tokens_ngap = $tarif->codes_ngap;
-    if ($msg = $this->precodeNGAP()){
+    if ($msg = $this->precodeNGAP()) {
       return $msg;
     }  
 
     $this->codes_ccam = $tarif->codes_ccam;
     // Precodage des actes CCAM avec information sérialisée complète
-    if ($msg = $this->precodeCCAM()){
+    if ($msg = $this->precodeCCAM()) {
       return $msg;
     }  
     
     if (CModule::getInstalled("tarmed")) {
       $this->_tokens_tarmed = $tarif->codes_tarmed;
-      if ($msg = $this->precodeTARMED()){
+      if ($msg = $this->precodeTARMED()) {
         return $msg;
       }
       $this->_tokens_caisse = $tarif->codes_caisse;
-      if ($msg = $this->precodeCAISSE()){
+      if ($msg = $this->precodeCAISSE()) {
         return $msg;
       }
     }
@@ -684,7 +684,7 @@ class CConsultation extends CCodable {
     $this->loadRefPlageConsult();
     // Explode des codes_ccam du tarif
     $listCodesCCAM = explode("|", $this->codes_ccam);
-    foreach($listCodesCCAM as $key => $code){
+    foreach ($listCodesCCAM as $key => $code) {
       $acte = new CActeCCAM();
       $acte->_adapt_object = true;
         
@@ -692,7 +692,7 @@ class CConsultation extends CCodable {
       $acte->setFullCode($code);
       
       // si le code ccam est composé de 3 elements, on le precode
-      if($acte->code_activite != "" && $acte->code_phase != ""){
+      if ($acte->code_activite != "" && $acte->code_phase != "") {
         // Permet de sauvegarder le montant de base de l'acte CCAM
         $acte->_calcul_montant_base = 1;
         
@@ -701,7 +701,7 @@ class CConsultation extends CCodable {
         $acte->object_class = $this->_class;
         $acte->executant_id = $this->_ref_chir->_id;
         $acte->execution = $this->_datetime;
-        if($msg = $acte->store()){
+        if ($msg = $acte->store()) {
           return $msg;
         }
       }
@@ -710,8 +710,8 @@ class CConsultation extends CCodable {
   
   function precodeNGAP() {
     $listCodesNGAP = explode("|",$this->_tokens_ngap);
-    foreach($listCodesNGAP as $key => $code_ngap){
-      if($code_ngap) {
+    foreach ($listCodesNGAP as $key => $code_ngap) {
+      if ($code_ngap) {
         $acte = new CActeNGAP();
         $acte->_preserve_montant = true;
         $acte->setFullCode($code_ngap);
@@ -730,8 +730,8 @@ class CConsultation extends CCodable {
   
   function precodeTARMED() {
     $listCodesTarmed = explode("|",$this->_tokens_tarmed);
-    foreach($listCodesTarmed as $key => $code_tarmed){
-      if($code_tarmed) {
+    foreach ($listCodesTarmed as $key => $code_tarmed) {
+      if ($code_tarmed) {
         $acte = new CActeTarmed();
         $acte->_preserve_montant = true;
         $acte->setFullCode($code_tarmed);
@@ -750,8 +750,8 @@ class CConsultation extends CCodable {
   
   function precodeCAISSE() {
     $listCodesCaisse = explode("|",$this->_tokens_caisse);
-    foreach($listCodesCaisse as $key => $code_caisse){
-      if($code_caisse) {
+    foreach ($listCodesCaisse as $key => $code_caisse) {
+      if ($code_caisse) {
         $acte = new CActeCaisse();
         $acte->_preserve_montant = true;
         $acte->setFullCode($code_caisse);
@@ -816,7 +816,7 @@ class CConsultation extends CCodable {
     $this->secteur1 = $secteur1_NGAP + $secteur1_CCAM + $secteur1_TARMED + $secteur1_CAISSE;
     $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM + $secteur2_TARMED + $secteur2_CAISSE;
     
-    if($secteur1_NGAP == 0 && $secteur1_CCAM == 0 && $secteur2_NGAP==0 && $secteur2_CCAM ==0){
+    if ($secteur1_NGAP == 0 && $secteur1_CCAM == 0 && $secteur2_NGAP==0 && $secteur2_CCAM ==0) {
       $this->du_patient = $this->secteur1 + $this->secteur2;
     }
     
@@ -946,7 +946,8 @@ TESTS A EFFECTUER
         $datetime = ($this->_date && $this->heure) ? "$this->_date $this->heure" : NULL;
         if ($this->chrono == self::PLANIFIE) {
           $sejour->entree_prevue = $datetime;
-        } else {
+        }
+        else {
           $sejour->entree_reelle = $datetime;
         }
         $sejour->sortie_prevue = "$this->_date 23:59:59";
@@ -1142,7 +1143,7 @@ TESTS A EFFECTUER
     
     // Gestion du tarif et precodage des actes
     if ($this->_bind_tarif && $this->_id){
-      if($msg = $this->bindTarif()){
+      if ($msg = $this->bindTarif()) {
         return $msg;
       }
     }
@@ -1225,7 +1226,12 @@ TESTS A EFFECTUER
   
   function loadRefPraticien(){
     $this->loadRefPlageConsult();
-    return $this->_ref_praticien =& $this->_ref_chir;
+    if ($this->_ref_plageconsult->_ref_remplacant->_id) {
+      return $this->_ref_praticien = $this->_ref_plageconsult->_ref_remplacant;
+    }
+    else {
+      return $this->_ref_praticien =& $this->_ref_chir;
+    }
   }
   
   function getType() {
@@ -1342,13 +1348,13 @@ TESTS A EFFECTUER
   function loadRefsPrescriptions() {
     $prescriptions = $this->loadBackRefs("prescriptions");
     // Cas du module non installé
-    if(!is_array($prescriptions)){
+    if (!is_array($prescriptions)) {
       $this->_ref_prescriptions = null;
       return;
     }
     $this->_count_prescriptions = count($prescriptions);
     
-    foreach($prescriptions as &$prescription){
+    foreach ($prescriptions as &$prescription) {
       $this->_ref_prescriptions[$prescription->type] = $prescription;
     }
   }
@@ -1360,9 +1366,10 @@ TESTS A EFFECTUER
     
     foreach ($this->_ref_reglements as $_reglement) {
       $_reglement->loadRefBanque(1);
-      if($_reglement->emetteur == "patient") {
+      if ($_reglement->emetteur == "patient") {
         $this->_ref_reglements_patient[$_reglement->_id] = $_reglement;
-      } else {
+      }
+      else {
         $this->_ref_reglements_tiers[$_reglement->_id] = $_reglement;
       }
     }
@@ -1409,7 +1416,7 @@ TESTS A EFFECTUER
     $order = "examen";
     $this->_ref_examcomp = $this->_ref_examcomp->loadList($where,$order);
     
-    foreach($this->_ref_examcomp as $keyExam => &$currExam){
+    foreach ($this->_ref_examcomp as $keyExam => &$currExam) {
       $this->_types_examen[$currExam->realisation][$keyExam] = $currExam;
     }
   }
@@ -1486,11 +1493,11 @@ TESTS A EFFECTUER
       "histoire_maladie" => "histoire maladie",
       "conclusion"       => "conclusion"
     );
-    foreach($this->_exam_fields as $field) {
+    foreach ($this->_exam_fields as $field) {
       $loc_field = $locExamFields[$field];
       $template->addProperty("Consultation - $loc_field", $this->$field);
     }
-    if(!in_array("traitement", $this->_exam_fields)) {
+    if (!in_array("traitement", $this->_exam_fields)) {
       $template->addProperty("Consultation - traitement", $this->traitement);
     }
     
@@ -1645,14 +1652,17 @@ TESTS A EFFECTUER
       if ($plageBefore->plageconsult_id) {
         if ($plageAfter->plageconsult_id) {
           $plageBefore->fin = $plageAfter->debut;
-        } else {
+        }
+        else {
           $plageBefore->fin = max($plageBefore->fin, $hour_next);
         }
         $plage = $plageBefore;
-      } elseif ($plageAfter->plageconsult_id) {
+      }
+      elseif ($plageAfter->plageconsult_id) {
         $plageAfter->debut = min($plageAfter->debut, $hour_now);
         $plage = $plageAfter;
-      } else {
+      }
+      else {
         $plage->chir_id = $praticien_id;
         $plage->date    = $day_now;
         $plage->freq    = "00:".CPlageconsult::$minutes_interval.":00";
