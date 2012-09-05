@@ -1129,6 +1129,11 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`hash`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.1.11";
+    // Moved to "admin"
+    $this->makeRevision("1.1.11");
+    $query = "DROP TABLE `view_access_token`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.1.12";
   }
 }

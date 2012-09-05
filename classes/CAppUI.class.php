@@ -507,6 +507,7 @@ class CAppUI {
         return false;
       }
       
+      $token->useIt();
       $token->applyParams();
       
       $user->load($token->user_id);

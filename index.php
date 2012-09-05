@@ -121,6 +121,7 @@ if ($signin_token) {
   // If the user is already logged in (in a normal session), keep his session, but use the params
   if (CAppUI::$instance->user_id && !CAppUI::$token_expiration) {
     if ($token->isValid() && CAppUI::$instance->user_id == $token->user_id) {
+      $token->useIt();
       CAppUI::redirect($token->params);
       CApp::rip();
     }

@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage system
+ * @subpackage admin
  * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -17,6 +17,7 @@ class CViewAccessToken extends CMbObject {
   var $user_id        = null;
   var $datetime_start = null;
   var $ttl_hours      = null;
+  var $first_use      = null;
   var $params         = null;
   var $hash           = null;
   
@@ -36,6 +37,7 @@ class CViewAccessToken extends CMbObject {
     $props["user_id"]        = "ref notNull class|CMediusers";
     $props["datetime_start"] = "dateTime notNull";
     $props["ttl_hours"]      = "num notNull min|1";
+    $props["first_use"]      = "dateTime";
     $props["params"]         = "str notNull";
     $props["hash"]           = "str notNull length|40 show|0";
     return $props;
@@ -142,6 +144,16 @@ class CViewAccessToken extends CMbObject {
     foreach($params as $key => $value) {
       $_GET[$key] = $value;
     }
+  }
+  
+  function useIt(){
+    $this->completeField("first_use");
+    
+    if ($this->_id && !$this->first_use) {
+      $this->first_use = mbDateTime();
+    }
+    
+    $this->store();
   }
   
   /**

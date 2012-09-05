@@ -294,7 +294,25 @@ class CSetupadmin extends CSetup {
       MODIFY `user_password` CHAR(64);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.25";
+    $this->makeRevision("1.0.25");
+    $query = "CREATE TABLE `view_access_token` (
+              `view_access_token_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `user_id` INT (11) UNSIGNED NOT NULL,
+              `datetime_start` DATETIME NOT NULL,
+              `ttl_hours` INT (11) UNSIGNED NOT NULL,
+              `first_use` DATETIME,
+              `params` VARCHAR (255) NOT NULL,
+              `hash` CHAR (40) NOT NULL
+             ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `view_access_token` 
+              ADD INDEX (`user_id`),
+              ADD INDEX (`datetime_start`),
+              ADD INDEX (`first_use`),
+              ADD INDEX (`hash`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.0.26";
   }
 }
 ?>
