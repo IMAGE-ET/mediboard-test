@@ -16,6 +16,7 @@ class CExamIgs extends CMbObject {
   var $sejour_id       = null;
 
   // DB fields
+  var $date                = null;
   var $age                 = null;
   var $FC                  = null;
   var $TA                  = null;
@@ -47,7 +48,8 @@ class CExamIgs extends CMbObject {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
+    $specs["date"]                = "dateTime notNull";
     $specs["sejour_id"]           = "ref notNull class|CSejour";
     $specs["age"]                 = "enum list|0|7|12|15|16|18";
     $specs["FC"]                  = "enum list|11|2|0|4|7";

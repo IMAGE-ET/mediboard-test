@@ -1621,7 +1621,13 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `examigs` CHANGE `diurese` `diurese` ENUM('11','12','4','0');";
     $this->addQuery($query);
     
-    $this->mod_version = "1.69";
+    $this->makeRevision("1.69");
+    
+    $query = "ALTER TABLE `examigs` 
+      ADD `date` DATETIME AFTER examigs_id";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.70";
   }
 }
 ?>

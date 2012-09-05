@@ -23,8 +23,9 @@ $exam_igs = new CExamIgs();
 $last_constantes = array();
 
 if ($exam_igs_id) {
-  $exam_igs->load($exam_igs_id);  
-} else {
+  $exam_igs->load($exam_igs_id);
+}
+else {
   // Pre-remplissage de l'age du patient
   $age_patient = $patient->_annees;
   if($age_patient < 40){
@@ -95,11 +96,15 @@ if ($exam_igs_id) {
   }
 }
 
+if ($exam_igs->_id && !$exam_igs->date) {
+  $exam_igs->loadLastLog();
+  $exam_igs->date = $exam_igs->_ref_last_log->date;
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("sejour", $sejour);
 $smarty->assign("exam_igs", $exam_igs);
 $smarty->assign("last_constantes", $last_constantes);
-$smarty->display('exam_igs.tpl');
 
-?>
+$smarty->display('exam_igs.tpl');

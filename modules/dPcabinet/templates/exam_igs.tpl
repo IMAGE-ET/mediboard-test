@@ -41,12 +41,17 @@ Main.add(checkSelect);
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   {{mb_key object=$exam_igs}}
-
+  {{if !$exam_igs->_id}}
+    {{mb_field object=$exam_igs field=date hidden="1"}}
+  {{/if}}
   <table class="tbl">
     <tr>
       <th class="title {{if $exam_igs->_id}}modify{{/if}}" colspan="10">
         <button type="button" style="float: right" onclick="showLaboResult();" class="search">Labo</button>
         {{if $exam_igs->_id}}
+          <span style="float: left;">
+            {{mb_field object=$exam_igs field=date form=editScoreIGS register=true}}
+          </span>
           {{mb_include module=system template=inc_object_history object=$exam_igs}}
           {{tr}}{{$exam_igs->_class}}-title-modify{{/tr}} 
           <br />

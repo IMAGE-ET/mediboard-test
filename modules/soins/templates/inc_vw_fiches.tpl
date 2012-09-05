@@ -44,7 +44,13 @@ Main.add(function(){
   <td style="font-weight: bold; font-size: 1.3em; text-align: center;">
     {{mb_value object=$_igs field="scoreIGS"}}
   </td>  
-  <td class="text" style="text-align: center;">{{mb_value object=$_igs->_ref_last_log field="date"}}</td>
+  <td class="text" style="text-align: center;">
+    {{if $_igs->date}}
+      {{mb_value object=$_igs field=date}}
+    {{else}}
+      {{mb_value object=$_igs->_ref_last_log field="date"}}
+    {{/if}}
+  </td>
   {{foreach from="CExamIGS"|static:fields item=_field}}
   <td class="text {{if $_igs->$_field == ''}}empty{{/if}}" style="text-align: center;">{{mb_value object=$_igs field=$_field}}</td>
   {{/foreach}}
