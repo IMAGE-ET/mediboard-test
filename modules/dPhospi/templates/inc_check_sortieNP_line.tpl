@@ -1,7 +1,7 @@
 {{assign var=sejour value=$_sortie}}
 {{assign var=patient value=$sejour->_ref_patient}}
 
-<tr>
+<tr {{if $sejour->recuse == -1}}class="opacity-70"{{/if}}>
   {{if $show_duree_preop && $type_mouvement != "sorties"}}
     <td>
       {{mb_value object=$sejour->_ref_curr_operation field=_heure_us}}

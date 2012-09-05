@@ -889,7 +889,11 @@ class CSejour extends CCodable implements IPatientRelated {
     }
     
     // Motif complet du séjour
-    $this->_motif_complet = $this->libelle;
+    $this->_motif_complet = "";
+    if($this->recuse == -1) {
+      $this->_motif_complet .= "[Att] ";
+    }
+    $this->_motif_complet .= $this->libelle;
     
     if (!$this->annule && $this->recuse == -1) {
       $this->_view = "[Att] " . $this->_view;
@@ -1942,6 +1946,10 @@ class CSejour extends CCodable implements IPatientRelated {
     
     // Motif complet
     if(!$this->libelle) {
+      $this->_motif_complet = "";
+      if($this->recuse == -1) {
+        $this->_motif_complet .= "[Att] ";
+      }
       $motif = array();
       foreach($this->_ref_operations as $_op) {
         if($_op->libelle) {
@@ -1950,7 +1958,7 @@ class CSejour extends CCodable implements IPatientRelated {
            $motif[] = implode("; ", $_op->_codes_ccam);
         }
       }
-      $this->_motif_complet = implode("; ", $motif);
+      $this->_motif_complet .= implode("; ", $motif);
     }
     
     // Agrégats des codes CCAM des opérations

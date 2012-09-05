@@ -1,4 +1,7 @@
-<tr>
+{{assign var=sejour value=$_sortie->_ref_sejour}}
+{{assign var=patient value=$sejour->_ref_patient}}
+
+<tr {{if $sejour->recuse == -1}}class="opacity-70"{{/if}}>
   <td class="not-printable">
     {{assign var=_mouv value=$_sortie}}
     {{if $sens == "entrants"}}
