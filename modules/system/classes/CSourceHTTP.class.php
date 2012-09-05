@@ -18,8 +18,6 @@ class CSourceHTTP extends CExchangeSource {
   var $_filename = null;
   var $_fieldname = null;
   var $_mimetype = null;
-  var $_user = null;
-  var $_password = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -33,31 +31,21 @@ class CSourceHTTP extends CExchangeSource {
     return $specs;
   }
   
-  function send($evenement_name = null) {
+  function send($evenement_name = null, $tab_data = null) {
     $boundary = "-------MB-BOUNDARY-".uniqid();
     $content =  "--$boundary\r\n".
                 "Content-Disposition: form-data; name=\"txtDocument\"; filename=\"$this->_filename\"\r\n".
                 "Content-Type: $this->_mimetype\r\n\r\n".
                 $this->_data."\r\n";
-    $content .= "--$boundary\r\n".
-            "Content-Disposition: form-data; name=\"chkDoubleOK\"\r\n\r\n".
-            "\r\n";
-    $content .= "--$boundary\r\n".
-            "Content-Disposition: form-data; name=\"docs\"\r\n\r\n".
-            "\r\n";
-    $content .= "--$boundary\r\n".
-            "Content-Disposition: form-data; name=\"user\"\r\n\r\n".
-            "$this->_user\r\n";
-    $content .= "--$boundary\r\n".
-            "Content-Disposition: form-data; name=\"pwd\"\r\n\r\n".
-            "$this->_password\r\n";
-    $content .= "--$boundary\r\n".
-            "Content-Disposition: form-data; name=\"lang\"\r\n\r\n".
-            "\r\n";
-    $content .= "--$boundary\r\n".
-            "Content-Disposition: form-data; name=\"btnTransfert\"\r\n\r\n".
-            "TransfÈrer\r\n";
+                
+    foreach ($tab_data as $key=>$value) {
+      $content .= "--$boundary\r\n".
+            "Content-Disposition: form-data; name=\"$key\"\r\n\r\n".
+            "$value\r\n";
+    }
+    
     $content .= "--$boundary--\r\n";
+    
     $context = stream_context_create(
       array(
         'http' => array(
