@@ -443,7 +443,7 @@ class CSetupssr extends CSetup {
     $this->makeRevision("0.41");
     
     if (CAppUI::conf("ssr recusation use_recuse") == 0) {
-      $query = "UPDATE `sejours`
+      $query = "UPDATE `sejour`
         SET `sejour`.`recuse` = '0'
         WHERE `sejour`.`type` = 'ssr'";
       
