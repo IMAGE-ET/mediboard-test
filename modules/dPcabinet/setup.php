@@ -1617,7 +1617,11 @@ class CSetupdPcabinet extends CSetup {
       ADD `intub_difficile` ENUM ('0','1');";
     $this->addQuery($query);
     
-    $this->mod_version = "1.68";
+    $this->makeRevision("1.68");
+    $query = "ALTER TABLE `examigs` CHANGE `diurese` `diurese` ENUM('11','12','4','0');";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.69";
   }
 }
 ?>

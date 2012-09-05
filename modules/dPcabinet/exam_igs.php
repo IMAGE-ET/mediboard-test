@@ -86,7 +86,7 @@ if ($exam_igs_id) {
   if($diurese) {
     $last_constantes["diurese"] = $diurese;
     if($diurese < 500){
-      $exam_igs->diurese = '12'; 
+      $exam_igs->diurese = '11'; 
     } elseif ($diurese < 1000) {
       $exam_igs->diurese = '4'; 
     } else {

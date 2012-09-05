@@ -54,7 +54,7 @@ class CExamIgs extends CMbObject {
     $specs["TA"]                  = "enum list|13|5|0|2";
     $specs["temperature"]         = "enum list|0|3";
     $specs["PAO2_FIO2"]           = "enum list|11|9|6";
-    $specs["diurese"]             = "enum list|12|4|0";
+    $specs["diurese"]             = "enum list|11|4|0";
     $specs["uree"]                = "enum list|0|6|10";
     $specs["globules_blancs"]     = "enum list|12|0|3";
     $specs["kaliemie"]            = "enum list|3a|0|3b";
