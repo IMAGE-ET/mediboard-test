@@ -335,9 +335,9 @@ PlanSoins = {
       }
     }
   },
-  viewDossierSoin: function(element){  
+  viewDossierSoin: function(element){
     // recuperation du mode d'affichage du dossier (administration ou planification)
-    mode_dossier = $V(document.mode_dossier_soin.mode_dossier);
+    var mode_dossier = $V(document.mode_dossier_soin.mode_dossier);
     
     if (PlanSoins.manual_planif) {
       var periode_visible = PlanSoins.composition_dossier[PlanSoins.formClick.nb_decalage.value];
@@ -347,26 +347,22 @@ PlanSoins = {
     // Dossier en mode Administration
     if(mode_dossier == "administration" || mode_dossier == ""){
       $('button_administration').update("Appliquer les administrations sélectionnées");
-      element.select('.colorPlanif').each(function(elt){
-         elt.setStyle( { backgroundColor: '#FFD' } );
-      });
+      element.select('.colorPlanif').invoke("setStyle", {backgroundColor: '#FFD'});
       element.select('.draggablePlanif').each(function(elt){
          elt.removeClassName("draggable");
          elt.onmousedown = null;
       });
-      element.select('.canDropPlanif').each(function(elt){
-         elt.removeClassName("canDrop");
-      });
+      element.select('.canDropPlanif').invoke("removeClassName", "canDrop");
     }
     
     // Dossier en mode planification
     if(mode_dossier == "planification"){      
       $('button_administration').update("Appliquer les planifications sélectionnées");
-      element.select('.colorPlanif').each(function(elt){
-         elt.setStyle( { backgroundColor: '#CAFFBA' } );
-      });
+      element.select('.colorPlanif').invoke("setStyle", {backgroundColor: '#CAFFBA'});
+      
       element.select('.draggablePlanif').each(function(elt){
          elt.addClassName("draggable");
+         
          elt.onmousedown = function(){
             if(elt.hasClassName('perfusion')){
              PlanSoins.addDroppablesPerfDiv(elt);
@@ -375,9 +371,8 @@ PlanSoins = {
            }
          }
       });
-      element.select('.canDropPlanif').each(function(elt){
-         elt.addClassName("canDrop");
-      });
+      
+      element.select('.canDropPlanif').invoke("addClassName", "canDrop");
     }
   },
   
@@ -408,21 +403,20 @@ PlanSoins = {
   moveDossierSoin: function(element){
     var periode_visible = PlanSoins.composition_dossier[PlanSoins.formClick.nb_decalage.value];
     
+    // To prevent IE to crash
+    if (Prototype.Browser.IE) {
+      element.hide();
+    }
+    
     PlanSoins.composition_dossier.each(function(moment){
-      listToHide = element.select('.'+moment);
-      listToHide.each(function(elt) { 
-        elt.show();
-      });  
+      element.select('.'+moment).invoke("setVisible", moment == periode_visible);
     });
-    PlanSoins.composition_dossier.each(function(moment){
-      if(moment != periode_visible){
-        listToHide = element.select('.'+moment);
-        listToHide.each(function(elt) { 
-          elt.hide();
-        });  
-      }
-    });
+    
     PlanSoins.viewDossierSoin(element);
+    
+    if (Prototype.Browser.IE) {
+      element.show();
+    }
   },
   
   addDroppablesDiv: function(draggable){
@@ -431,6 +425,7 @@ PlanSoins = {
         PlanSoins.timeOutBefore = setTimeout(PlanSoins.showBefore, 1000);
       }
     });
+    
     $('plan_soin').select('.after').each(function(td_after) {
       td_after.onmouseover = function(){
         PlanSoins.timeOutAfter = setTimeout(PlanSoins.showAfter, 1000);
@@ -640,10 +635,10 @@ PlanSoins = {
       } });
     }
   },
-	
-	showPeropAdministrations: function(prescription_id) {
-	  var url = new Url("soins", "ajax_vw_perop_administrations");
-		url.addParam("prescription_id", prescription_id);
-		url.requestUpdate("perop_adm");
-	}
+  
+  showPeropAdministrations: function(prescription_id) {
+    var url = new Url("soins", "ajax_vw_perop_administrations");
+    url.addParam("prescription_id", prescription_id);
+    url.requestUpdate("perop_adm");
+  }
 };
