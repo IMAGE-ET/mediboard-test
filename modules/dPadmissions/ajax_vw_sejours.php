@@ -106,6 +106,9 @@ CMbObject::massLoadFwdRef($sejours, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 
+// Pour l'envoi de mail, on instancie une nouvelle opération
+$operation = new COperation;
+
 foreach ($sejours as $sejour_id => $_sejour) {
   $_sejour->loadRefPraticien(1);
   $_sejour->loadRefFicheAutonomie();
@@ -129,6 +132,19 @@ foreach ($sejours as $sejour_id => $_sejour) {
   if ($affectation->_id) {
     $affectation->loadRefLit(1);
     $affectation->_ref_lit->loadCompleteView();
+  }
+  
+  // Pour l'envoi de mail, afficher une enveloppe pour les interventions modifiées par le chirurgien
+  if ($envoi_mail) {
+    $where = array(
+      "sejour.sejour_id" => "= '$_sejour->_id'",
+      "user_log.user_id" => "= operations.chir_id"
+    );
+    $ljoin = array(
+     "sejour" => "sejour.sejour_id = operations.sejour_id",
+     "user_log" => "user_log.object_id = operations.operation_id AND user_log.object_class = 'COperation'"
+    );
+    $_sejour->_envoi_mail = $operation->countList($where, null, $ljoin);
   }
 }
 

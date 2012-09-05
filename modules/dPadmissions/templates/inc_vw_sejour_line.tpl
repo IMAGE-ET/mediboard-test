@@ -53,6 +53,9 @@
 </td>
 
 <td colspan="2" class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  {{if $_sejour->_envoi_mail}}
+   <img src="style/mediboard/images/buttons/mail.png" style="float: right;" title="Mail répondu"/>
+  {{/if}}
   {{if $can->edit}}
     {{if $current_m == "ssr"}}
       {{assign var=url value="?m=ssr&tab=vw_aed_sejour_ssr&sejour_id=`$_sejour->_id`"}}
