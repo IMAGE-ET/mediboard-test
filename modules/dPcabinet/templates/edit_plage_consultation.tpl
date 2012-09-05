@@ -124,7 +124,7 @@
     <th></th>
     <td></td>
     <th>{{mb_label object=$plageSel field="pct_retrocession"}}</th>
-    <td>{{mb_field object=$plageSel field="pct_retrocession" size="2"}}%</td>
+    <td>{{mb_field object=$plageSel field="pct_retrocession" size="2" increment=true form=editFrm}}</td>
   </tr>
 
   <tr>

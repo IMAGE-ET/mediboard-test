@@ -85,7 +85,7 @@ class CPlageconsult extends CMbObject {
       "remplacant_ok" => "bool default|0",
       "desistee"      => "bool default|0",
       "color"         => "str length|6 default|DDDDDD",
-      "pct_retrocession" => "num default|70",
+      "pct_retrocession" => "pct default|70",
       
       // Form fields
       "_freq"        => "",

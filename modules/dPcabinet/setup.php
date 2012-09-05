@@ -1636,8 +1636,13 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `plageconsult` 
               ADD INDEX (`remplacant_id`);";
     $this->addQuery($query);
+    $this->makeRevision("1.71");
     
-    $this->mod_version = "1.71";
+    $query = "ALTER TABLE `plageconsult` 
+               CHANGE `pct_retrocession` `pct_retrocession` FLOAT DEFAULT '70';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.72";
   }
 }
 ?>
