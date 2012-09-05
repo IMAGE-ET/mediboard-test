@@ -205,7 +205,16 @@
   </tr>
 
   {{mb_include module=system template=inc_config_bool var=view_prescription}}
-
+  
+  {{if $user->_user_username == "admin"}}
+    <!-- Comptabilité affichée uniquement pour le comtpe "admin"-->
+    {{assign var="class" value="Comptabilite"}}
+    <tr>
+      <th class="category" colspan="2">Comptabilité</th>
+    </tr>
+    {{mb_include module=system template=inc_config_bool var=show_compta_tiers}}
+  {{/if}}
+  
   <tr>
     <td class="button" colspan="6">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

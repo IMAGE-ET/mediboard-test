@@ -52,6 +52,9 @@ $dPconfig["dPcabinet"] = array(
   ),
   "CPrescription" => array (
     "view_prescription" => "0"
+  ),
+  "Comptabilite" => array(
+    "show_compta_tiers" => 1
   )
 );
 
