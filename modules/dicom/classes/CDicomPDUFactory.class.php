@@ -60,7 +60,7 @@ class CDicomPDUFactory {
    * 
    * @return CDicomPDU The PDU
    */
-  static function encodePDU($stream , $type, $datas) {
+  static function encodePDU($stream , $type, $datas = null) {
     if (!$stream) {
       // retourne une erreur
     }

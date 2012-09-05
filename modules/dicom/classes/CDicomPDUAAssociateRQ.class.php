@@ -211,7 +211,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * @return null
    */
   function encodePDU(CDicomStreamWriter $stream_writer) {
-    $this->length = $this->calculateLength();
+    $this->calculateLength();
     
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);

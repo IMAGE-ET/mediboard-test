@@ -10,14 +10,14 @@
 /**
  * An A-Associate-RJ PDU
  */
-class CDicomPDUAAssociateRJ extends CDIcomPDU {
+class CDicomPDUAAbort extends CDIcomPDU {
   
   /**
    * The type of the PDU
    * 
    * @var hexadecimal number
    */
-  var $type = "03";
+  var $type = "07";
   
   /**
    * The length of the PDU
@@ -25,24 +25,6 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
    * @var integer
    */
   var $length = null;
-  
-  /**
-   * The result of the association request.
-   * See $result_enum for possible values
-   * 
-   * @var integer
-   */
-  var $result = null;
-  
-  /**
-   * Possible values for the field $result
-   * 
-   * @var array
-   */
-  static $result_enum = array(
-    1 => "rejected-permanent",
-    2 => "rejected-transient",
-  );
   
   /**
    * Identify the creating source of the result and diagnostic fields.
@@ -58,9 +40,8 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
    * @var array
    */
   static $source_enum = array(
-    1 => "Dicom-UL-service-user",
-    2 => "Dicom-UL-service-provider-ACSE",
-    3 => "Dicom-UL-service-provider-Pres" ,
+    0 => "Dicom-UL-service-user",
+    2 => "Dicom-UL-service-provider" ,
   );
   
   /**
@@ -77,20 +58,14 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
    * @var array
    */
   static $diagnostic_enum = array(
-    1 => array(
-      1 => "no-reason",
-      2 => "application-context-name-not-supported",
-      3 => "calling-AE-title-not-recognized",
-      7 => "called-AE-title-not-recognized",
-    ),
     2 => array(
-      1 => "no-reason",
-      2 => "protocole-version-not-supported",
-    ),
-    3 => array(
-      1 => "temporary-congestion",
-      2 => "local-limit-exceeded",
-    ),
+      0 => "reason-not-specified",
+      1 => "unrecognized-PDU",
+      2 => "unexpected-PDU",
+      4 => "unrecognized-PDU-parameter",
+      5 => "unexpected-PDU-parameter",
+      6 => "invalide-PDU-parameter-value"
+    )
   );
   
   /**
@@ -131,17 +106,6 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
   }
   
   /**
-   * Set the result
-   * 
-   * @param integer $result The result, see $result_enum for the different values
-   * 
-   * @return null
-   */
-  function setResult($result) {
-    $this->result = $result;
-  }
-  
-  /**
    * Set the diagnostic
    * 
    * @param integer $diagnostic The diagnostic, see $diagnostic_enum for the different values
@@ -164,8 +128,7 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
     $stream_reader->skip(1);
     
     $this->length = $stream_reader->readUnsignedInt32();
-    $stream_reader->skip(1);
-    $this->result = $stream_reader->readUnsignedInt8();
+    $stream_reader->skip(2);
     $this->source = $stream_reader->readUnsignedInt8();
     $this->diagnostic = $stream_reader->readUnsignedInt8();
   }
@@ -178,15 +141,19 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
    * @return null
    */
   function encodePDU(CDicomStreamWriter $stream_writer) {
-    $this->length = $this->calculateLength();
+    $this->calculateLength();
     
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
     $stream_writer->writeUnsignedInt32($this->length);
-    $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt8($this->result);
+    $stream_writer->skip(2);
     $stream_writer->writeUnsignedInt8($this->source);
-    $stream_writer->writeUnsignedInt8($this->diagnostic);
+    if ($this->source == 0) {
+      $stream_writer->skip(1);
+    }
+    else {
+      $stream_writer->writeUnsignedInt8($this->diagnostic);
+    }
   }
   
   /**
@@ -216,14 +183,18 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
    * @return string
    */
   function __toString() {
-    $str = "<h1>A-Associate-RJ</h1><br>
+    $str = "<h1>A-Abort</h1><br>
             <ul>
               <li>Type : $this->type</li>
               <li>Length : $this->length</li>
-              <li>Result : " . self::$result_enum[$this->result] . "</li>
               <li>Source : " . self::$source_enum[$this->source] . "</li>
-              <li>Diagnostic : " . self::$diagnostic_enum[$this->source][$this->diagnostic] . "</li>
-            </ul>";
+              <li>Diagnostic : ";
+    if ($this->source == 0) {
+      $str .= "non significant</li></ul>";
+    }
+    else {
+      $str .= self::$diagnostic_enum[$this->source][$this->diagnostic] . "</li></ul>";
+    }          
     return $str;
   }
 }
