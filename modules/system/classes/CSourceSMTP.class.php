@@ -38,15 +38,15 @@ class CSourceSMTP extends CExchangeSource {
     $props["email"]    = "email";
     $props["auth"]     = "bool default|1";
     $props["ssl"]      = "bool";
-    $props["password"] = "password";
+    $props["password"] = "password show|0";
     $props["timeout"]  = "num default|5";
     $props["debug"]    = "bool default|0";
     return $props;
   }
   
   function updatePlainFields() {
-  	parent::updatePlainFields();
-  	$this->role = "prod";
+    parent::updatePlainFields();
+    $this->role = "prod";
   }
   
   function updateFormFields() {
@@ -60,10 +60,10 @@ class CSourceSMTP extends CExchangeSource {
    * @return void
    */
   function init() {
-  	$this->_mail = new PHPMailer(true);
-  	$this->_mail->IsSMTP();
-  	
-  	// Sets the prefix to the server
+    $this->_mail = new PHPMailer(true);
+    $this->_mail->IsSMTP();
+    
+    // Sets the prefix to the server
     if ($this->ssl) {
       $this->_mail->SMTPSecure = "ssl";
     }
