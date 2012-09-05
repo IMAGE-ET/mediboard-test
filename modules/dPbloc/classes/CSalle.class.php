@@ -156,8 +156,8 @@ class CSalle extends CMbObject {
     $where = array();
     $where["date"]     = "= '$date'";
     $where["salle_id"] = "= '$this->_id'";
-    $order = "chir_id";
-    $this->_ref_urgences = $urgences->loadList($where);
+    $order = "time_operation, chir_id";
+    $this->_ref_urgences = $urgences->loadList($where, $order);
     foreach($this->_ref_urgences as &$urgence) {
       $urgence->loadRefChir(1);
       $urgence->loadRefPatient(1);

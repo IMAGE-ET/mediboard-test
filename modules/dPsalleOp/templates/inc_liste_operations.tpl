@@ -21,13 +21,35 @@
 
 {{assign var=systeme_materiel value=$conf.dPbloc.CPlageOp.systeme_materiel}}
 
-{{foreach from=$operations item=_operation}}
+{{assign var=save_op value=$operations|@current}}
+
+{{foreach from=$operations item=_operation name=ops}}
 {{if $conf.dPsalleOp.COperation.modif_salle}}
   {{assign var="rowspan" value=2}}
 {{else}}
   {{assign var="rowspan" value=1}}
 {{/if}}
 {{if !$_operation->annulee}}
+
+{{if $smarty.foreach.ops.index > 0}}
+  {{assign var=preop_curr value=$_operation->presence_preop}}
+  {{assign var=timeop_curr value=$_operation->time_operation}}
+  {{assign var=postop_save value=$save_op->presence_postop}}
+  {{assign var=timeop_save value=$save_op->time_operation}}
+  {{assign var=tempop_save value=$save_op->temp_operation}}
+  
+  
+  {{assign var=intervalle_a value=$postop_save|mbAddTime:$tempop_save|mbAddTime:$timeop_save}}
+  {{assign var=intervalle_b value=$preop_curr|mbSubTime:$timeop_curr}}
+  {{if $intervalle_a < $intervalle_b}}
+    <tr>
+      <th colspan="4" class="section">
+        [PAUSE] ({{$intervalle_a|mbTimeRelative:$intervalle_b:"%02dh%02d"}})
+      </th>
+    </tr>
+  {{/if}}
+  {{assign var=save_op value=$_operation}}
+{{/if}}
 <tbody class="hoverable">
 <tr {{if $_operation->_id == $operation_id}}class="selected"{{/if}}>
   {{if $_operation->_deplacee && $_operation->salle_id != $salle->_id}}
