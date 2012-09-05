@@ -42,7 +42,7 @@ Main.add(checkSelect);
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   {{mb_key object=$exam_igs}}
   {{if !$exam_igs->_id}}
-    {{mb_field object=$exam_igs field=date hidden="1"}}
+    {{mb_field object=$exam_igs field=date value="now" hidden="1"}}
   {{/if}}
   <table class="tbl">
     <tr>
@@ -104,7 +104,7 @@ Main.add(checkSelect);
         {{mb_field object=$exam_igs field="scoreIGS" readonly="readonly" style="font-weight: bold; text-align: center; font-size: 1.2em;"}}
         {{if $exam_igs->_id}}
           <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
-          <button type="button" class="trash" onclick="confirmDeletion(this.form, { ajax:true, typeName:'cet examen IGS'})">
+          <button type="button" class="trash" onclick="confirmDeletion(this.form, { ajax:true, typeName:'cet examen IGS'}, {onComplete: function(){ refreshFiches('{{$sejour->_id}}'); Control.Modal.close(); } })">
             {{tr}}Delete{{/tr}}
           </button>
         {{else}}
