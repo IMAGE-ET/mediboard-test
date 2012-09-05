@@ -54,7 +54,7 @@
       <img src="modules/dPhospi/images/annule.png" alt="warning" title="Chambre plus utilisée" />
       {{/if}}
 
-      <a name="chambre{{$curr_chambre->_id}}" style="font-weight: bold;">
+      <a name="chambre{{$curr_chambre->_id}}" style="font-weight: bold;" title="{{$curr_chambre->caracteristiques}}">
         {{$curr_chambre->_shortview}}
       </a>
     </th>
