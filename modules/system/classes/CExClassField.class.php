@@ -68,7 +68,7 @@ class CExClassField extends CExListItemsOwner {
   static $_formula_token_re = "/\[([^\]]+)\]/";
   
   static $_formula_valid_types = array("float", "num", "numchar", "pct", "currency");
-  static $_concat_valid_types  = array("float", "num", "numchar", "pct", "currency", "str", "text", "code", "email");
+  static $_concat_valid_types  = array("float", "num", "numchar", "pct", "currency", "str", "text", "code", "email", "date", "dateTime", "time");
   
   static $_formula_constants = array("DateCourante", "HeureCourante", "DateHeureCourante");
   static $_formula_intervals = array(

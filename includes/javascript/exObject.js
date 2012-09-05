@@ -399,8 +399,11 @@ var ExObjectFormula = Class.create({
   },
   
   //get the input value : coded or non-coded
-  getInputValue: function(element){
-    if (!element) return false;
+  getInputValue: function(element, isConcat){
+    if (!element) {
+      return false;
+    }
+    
     var value = $V(element);
     
     element = Form.getInputsArray(element)[0];
@@ -408,29 +411,47 @@ var ExObjectFormula = Class.create({
     var name = element.name;
     var result = this.tokenData[name].values;
 
-    if (element.hasClassName("date")) {
-      if (!value) return NaN;
-      var date = Date.fromDATE(value);
-      date.resetTime();
-      return date.getTime();
-    }
+    if (element.hasClassName("date") || 
+        element.hasClassName("dateTime") ||
+        element.hasClassName("time")) {
+          
+      if (!value) {
+        return isConcat ? "" : NaN;
+      }
+      
+      if (element.hasClassName("date")) {
+        var date = Date.fromDATE(value);
+        date.resetTime();
+        
+        if (isConcat) {
+          return date.toLocaleDate();
+        }
+      }
 
-    if (element.hasClassName("dateTime")) {
-      if (!value) return NaN;
-      var date = Date.fromDATETIME(value);
-      return date.getTime();
-    }
-    
-    if (element.hasClassName("time")) {
-      if (!value) return NaN;
-      var date = Date.fromDATETIME("1970-01-01 "+value);
-      date.resetDate();
+      if (element.hasClassName("dateTime")) {
+        var date = Date.fromDATETIME(value);
+        
+        if (isConcat) {
+          return date.toLocaleDateTime();
+        }
+      }
+      
+      if (element.hasClassName("time")) {
+        var date = Date.fromDATETIME("1970-01-01 "+value);
+        date.resetDate();
+        
+        if (isConcat) {
+          return date.toLocaleTime();
+        }
+      }
+      
       return date.getTime();
     }
     
     // non-coded
-    if (result === true)
+    if (result === true) {
       return value;
+    }
 
     // coded
     return this.tokenData[name].values[value];
@@ -462,7 +483,7 @@ var ExObjectFormula = Class.create({
     var isConcat = target.hasClassName("text");
 
     data.variables.each(function(v){
-      var val = constants[v] || this.getInputValue(form[v]);
+      var val = constants[v] || this.getInputValue(form[v], isConcat);
       
       // functions are considered like variables
       if (val === false) {
@@ -471,7 +492,9 @@ var ExObjectFormula = Class.create({
       
       values[v] = val;
       
-      if (!isConcat && values[v] === "") values[v] = NaN;
+      if (!isConcat && values[v] === "") {
+        values[v] = NaN;
+      }
     }, this);
     
     var result = data.parser.evaluate(values);
