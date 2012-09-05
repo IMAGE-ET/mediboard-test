@@ -328,6 +328,7 @@ class CRPU extends CMbObject {
     $sejour->group_id = CGroups::loadCurrent()->_id;
     $sejour->praticien_id = $this->_responsable_id;
     $sejour->type = "urg";
+    $sejour->recuse        = "-1";
     $sejour->entree_prevue = $this->_entree;
     $sejour->entree_reelle = $this->_entree;
     $sejour->sortie_prevue = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? mbDateTime("+1 DAY", $this->_entree) : mbDate(null, $this->_entree)." 23:59:59";
