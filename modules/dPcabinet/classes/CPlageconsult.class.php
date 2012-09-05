@@ -31,6 +31,7 @@ class CPlageconsult extends CMbObject {
   var $remplacant_ok = null;
   var $desistee = null;
   var $color = null;
+  var $pct_retrocession = null;
   
   // Form fields
   var $_freq                 = null;
@@ -44,7 +45,7 @@ class CPlageconsult extends CMbObject {
   
   // Field pour le calcul de collision (fin à 00:00:00)
   var $_fin = null;
-	
+  
   // Filter fields
   var $_date_min = null;
   var $_date_max = null;
@@ -84,6 +85,7 @@ class CPlageconsult extends CMbObject {
       "remplacant_ok" => "bool default|0",
       "desistee"      => "bool default|0",
       "color"         => "str length|6 default|DDDDDD",
+      "pct_retrocession" => "num default|70",
       
       // Form fields
       "_freq"        => "",
@@ -158,16 +160,16 @@ class CPlageconsult extends CMbObject {
   function getUtilisation() {
     $this->loadRefsConsultations(false);
     $i = $this->debut;
-    for($i = $this->debut; $i < $this->fin; $i = mbAddTime("+".$this->freq, $i)) {
+    for ($i = $this->debut; $i < $this->fin; $i = mbAddTime("+".$this->freq, $i)) {
       $utilisation[$i] = 0;
     }
-    foreach($this->_ref_consultations as $_consult) {
-      if(!isset($utilisation[$_consult->heure])) {
+    foreach ($this->_ref_consultations as $_consult) {
+      if (!isset($utilisation[$_consult->heure])) {
         continue;
       }
       $emplacement = $_consult->heure;
-      for($i = 0; $i < $_consult->duree; $i++) {
-        if(isset($utilisation[$emplacement])) {
+      for ($i = 0; $i < $_consult->duree; $i++) {
+        if (isset($utilisation[$emplacement])) {
           $utilisation[$emplacement]++;
         }
         $emplacement = mbAddTime("+".$this->freq, $emplacement);
@@ -180,8 +182,8 @@ class CPlageconsult extends CMbObject {
     if (!$this->_id) {
       return;
     }
-  	$query = "SELECT `consultation`.`categorie_id`, COUNT(`consultation`.`categorie_id`) as nb,
-  	                 `consultation_cat`.`nom_icone`, `consultation_cat`.`nom_categorie`
+    $query = "SELECT `consultation`.`categorie_id`, COUNT(`consultation`.`categorie_id`) as nb,
+                     `consultation_cat`.`nom_icone`, `consultation_cat`.`nom_categorie`
               FROM `consultation`
               LEFT JOIN `consultation_cat`
                 ON `consultation`.`categorie_id` = `consultation_cat`.`categorie_id`
@@ -190,7 +192,7 @@ class CPlageconsult extends CMbObject {
                 AND `consultation`.`categorie_id` IS NOT NULL
               GROUP BY `consultation`.`categorie_id`
               ORDER BY `consultation`.`categorie_id`";
-  	$this->_consult_by_categorie = $this->_spec->ds->loadList($query);
+    $this->_consult_by_categorie = $this->_spec->ds->loadList($query);
   }
   
   function loadRefs($withCanceled = true, $cache = 0) {
@@ -204,22 +206,22 @@ class CPlageconsult extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_chir) {
+    if (!$this->_ref_chir) {
       $this->loadRefsFwd(1);
     }
-		
+    
     return $this->_ref_chir->getPerm($permType) 
-		  && $this->_ref_module->getPerm($permType);
+      && $this->_ref_module->getPerm($permType);
   }
 
   function checkFrequence() {
-  	return true;
+    return true;
 
-  	$oldValues = new CPlageconsult();
-  	$oldValues->load($this->plageconsult_id);
-  	$oldValues->loadRefs();
+    $oldValues = new CPlageconsult();
+    $oldValues->load($this->plageconsult_id);
+    $oldValues->loadRefs();
 
-	  return $oldValues->_freq == $this->_freq 
+    return $oldValues->_freq == $this->_freq 
       or count($oldValues->_ref_consultations) == 0;
   }
   
@@ -241,11 +243,11 @@ class CPlageconsult extends CMbObject {
     
     $this->completeField("debut");
     $this->completeField("fin");
-		
-		$this->_fin = $this->fin == "00:00:00" ? "23:59:59" : $this->fin;
-		foreach ($plages as $plage) {
-			$plage->_fin = $plage->fin == "00:00:00" ? "23:59:59" : $plage->fin;
-			if (($plage->debut <  $this->_fin   and $plage->_fin >  $this->_fin  )
+    
+    $this->_fin = $this->fin == "00:00:00" ? "23:59:59" : $this->fin;
+    foreach ($plages as $plage) {
+      $plage->_fin = $plage->fin == "00:00:00" ? "23:59:59" : $plage->fin;
+      if (($plage->debut <  $this->_fin   and $plage->_fin >  $this->_fin  )
         or($plage->debut <  $this->debut and $plage->_fin >  $this->debut)
         or($plage->debut >= $this->debut and $plage->_fin <= $this->_fin  )) {
         $msg .= "Collision avec la plage du $this->date, de $plage->debut à $plage->_fin.";
@@ -260,7 +262,7 @@ class CPlageconsult extends CMbObject {
     // Data checking
     $msg = null;
 
-    if(!$this->plageconsult_id) {
+    if (!$this->plageconsult_id) {
       if (!$this->chir_id) {
         $msg .= "Praticien non valide<br />";
       }
@@ -304,10 +306,10 @@ class CPlageconsult extends CMbObject {
     }
   
     // @todo: Still useful? Not so sure...
-	if ($this->fin && $this->fin == "00:00:00"){
-	  	$this->fin = "23:59:59";
-	  }
-	}
+    if ($this->fin && $this->fin == "00:00:00") {
+      $this->fin = "23:59:59";
+    }
+  }
   
   function becomeNext() {
     $week_jumped = 0;
@@ -333,7 +335,7 @@ class CPlageconsult extends CMbObject {
           $this->date = mbDate("+1 WEEK", $this->date);
           $week_jumped++;
           $i++;
-        } while(
+        } while (
           $i<10 && 
           (CMbDate::monthNumber($this->date)       <  $next_month) ||
           (CMbDate::weekNumberInMonth($this->date) != $week_number)
@@ -378,12 +380,12 @@ CPlageconsult::$minutes_interval = CValue::first($pcConfig["minutes_interval"],"
 $hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
 $mins  = range(0, 59, CPlageconsult::$minutes_interval);
 
-foreach($hours as $key => $hour){
-	CPlageconsult::$hours[$hour] = str_pad($hour, 2, "0", STR_PAD_LEFT);
+foreach ($hours as $key => $hour) {
+  CPlageconsult::$hours[$hour] = str_pad($hour, 2, "0", STR_PAD_LEFT);
 }
 
-foreach($mins as $key => $min){
-	CPlageconsult::$minutes[] = str_pad($min, 2, "0", STR_PAD_LEFT);
+foreach ($mins as $key => $min) {
+  CPlageconsult::$minutes[] = str_pad($min, 2, "0", STR_PAD_LEFT);
 }
 
 ?>

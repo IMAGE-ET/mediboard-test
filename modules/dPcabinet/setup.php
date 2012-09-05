@@ -1627,7 +1627,17 @@ class CSetupdPcabinet extends CSetup {
       ADD `date` DATETIME AFTER examigs_id";
     $this->addQuery($query);
     
-    $this->mod_version = "1.70";
+    $this->makeRevision("1.70");
+    
+    $query = "ALTER TABLE `plageconsult` 
+              ADD `pct_retrocession` INT (11) DEFAULT '70';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `plageconsult` 
+              ADD INDEX (`remplacant_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.71";
   }
 }
 ?>

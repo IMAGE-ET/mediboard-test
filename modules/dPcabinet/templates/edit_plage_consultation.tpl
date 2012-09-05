@@ -120,6 +120,12 @@
      <th>{{mb_label object=$plageSel field="locked"}}</th>
      <td>{{mb_field object=$plageSel field="locked" typeEnum="checkbox"}}</td>
   </tr>
+  <tr>
+    <th></th>
+    <td></td>
+    <th>{{mb_label object=$plageSel field="pct_retrocession"}}</th>
+    <td>{{mb_field object=$plageSel field="pct_retrocession" size="2"}}%</td>
+  </tr>
 
   <tr>
     <td colspan="4" class="text">
