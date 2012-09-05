@@ -295,6 +295,8 @@ class CSetupadmin extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("1.0.25");
+    $this->addDependency("system", "1.1.12");
+    
     $query = "CREATE TABLE `view_access_token` (
               `view_access_token_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `user_id` INT (11) UNSIGNED NOT NULL,
