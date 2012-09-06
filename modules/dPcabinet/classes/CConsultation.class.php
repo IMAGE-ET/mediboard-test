@@ -1263,7 +1263,7 @@ TESTS A EFFECTUER
   
   function loadRefsFwd($cache = 1) {
     $this->loadRefPatient($cache);
-    $this->_ref_patient->loadRefConstantesMedicales(1);
+    $this->_ref_patient->loadRefConstantesMedicales();
     $this->loadRefPlageConsult($cache);
     $this->_view = "Consult. de ".$this->_ref_patient->_view." - ".$this->_ref_plageconsult->_ref_chir->_view;
     $this->_view .= " (".mbTransformTime(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
