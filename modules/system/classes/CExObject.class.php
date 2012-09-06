@@ -164,6 +164,7 @@ class CExObject extends CMbMetaObject {
         }
         
         $key = "CExObject_{$_item['ex_class_id']}.{$_item['name']}";
+        $_locales["$key."] = CAppUI::tr("Undefined");
         
         $request = new CRequest();
         $request->addTable("ex_list_item");
