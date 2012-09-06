@@ -1,9 +1,12 @@
 <script type="text/javascript">
 
-openScoreIGS = function(igs_id){
+openScoreIGS = function(igs_id, date){
   var url = new Url("dPcabinet", "exam_igs");
   url.addParam("sejour_id", "{{$sejour->_id}}");
   url.addParam("exam_igs_id", igs_id);
+  if (date) {
+    url.addParam("date", date);
+  }
   url.requestModal();
 }  
  

@@ -41,17 +41,12 @@ Main.add(checkSelect);
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
   {{mb_key object=$exam_igs}}
-  {{if !$exam_igs->_id}}
-    {{mb_field object=$exam_igs field=date value="now" hidden="1"}}
-  {{/if}}
+  
   <table class="tbl">
     <tr>
       <th class="title {{if $exam_igs->_id}}modify{{/if}}" colspan="10">
         <button type="button" style="float: right" onclick="showLaboResult();" class="search">Labo</button>
         {{if $exam_igs->_id}}
-          <span style="float: left;">
-            {{mb_field object=$exam_igs field=date form=editScoreIGS register=true}}
-          </span>
           {{mb_include module=system template=inc_object_history object=$exam_igs}}
           {{tr}}{{$exam_igs->_class}}-title-modify{{/tr}} 
           <br />
@@ -68,6 +63,16 @@ Main.add(checkSelect);
       <th class="category">Dernière<br />constante</th>
       {{/if}}
       <th class="category"></th>
+    </tr>
+    <tr>
+      <th>{{tr}}Date{{/tr}}</th>
+      <td colspan="9">
+        {{if $exam_igs->_id}}
+          {{mb_value object=$exam_igs field=date}}
+        {{else}}
+          {{mb_field object=$exam_igs field=date form=editScoreIGS register=true onchange="Control.Modal.close(); openScoreIGS('0', this.value);"}}
+        {{/if}}
+      </td>
     </tr>
     {{foreach from="CExamIGS"|static:fields item=_field}}
     <tr>

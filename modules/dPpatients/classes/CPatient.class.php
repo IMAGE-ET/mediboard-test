@@ -1070,8 +1070,8 @@ class CPatient extends CMbObject {
     }
   }
   
-  function loadRefConstantesMedicales() {
-    $latest = CConstantesMedicales::getLatestFor($this);
+  function loadRefConstantesMedicales($where = array()) {
+    $latest = CConstantesMedicales::getLatestFor($this, $where);
     
     list($this->_ref_constantes_medicales, $dates) = $latest;
     $this->_ref_constantes_medicales->updateFormFields();

@@ -9,6 +9,7 @@
 
 $sejour_id = CValue::get("sejour_id"); 
 $exam_igs_id = CValue::get("exam_igs_id");
+$date = CValue::get("date", mbDateTime());
 
 // Chargement du séjour
 $sejour = new CSejour();
@@ -25,7 +26,7 @@ $last_constantes = array();
 if ($exam_igs_id) {
   $exam_igs->load($exam_igs_id);
 }
-else {
+else {  
   // Pre-remplissage de l'age du patient
   $age_patient = $patient->_annees;
   if($age_patient < 40){
@@ -43,7 +44,10 @@ else {
   }
   
   // Pre-remplissage des constantes médicales: FC, TA, temp, diurese (l/jour)
-  $patient->loadRefConstantesMedicales();
+  $where = array();
+  $where["datetime"] = " <= '$date'";
+  
+  $patient->loadRefConstantesMedicales($where);
   $constantes_medicales = $patient->_ref_constantes_medicales;
   
   $FC = $constantes_medicales->pouls;
@@ -94,12 +98,15 @@ else {
       $exam_igs->diurese = '0';
     }   
   }
+  
+  $exam_igs->date = $date;
 }
 
 if ($exam_igs->_id && !$exam_igs->date) {
   $exam_igs->loadLastLog();
   $exam_igs->date = $exam_igs->_ref_last_log->date;
 }
+
 
 // Création du template
 $smarty = new CSmartyDP();
