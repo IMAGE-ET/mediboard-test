@@ -1,4 +1,4 @@
-<form name="Choice_lit" action="" method="post" onsubmit="return ChoiceLit.finish(this.lit_id.value);">
+<form name="Choice_lit" action="" method="post" onsubmit="return ChoiceLit.finish(this.lit_id.value, 1);">
   <input type="hidden" name="chambre_id" value="{{$chambre->_id}}"/>
   <table class = "main">
     <tr>
@@ -24,7 +24,7 @@
     </tr>
     <tr>
       <td class="button" colspan="2">
-        <button class="submit" onclick="return ChoiceLit.finish(this.form.lit_id.value);">{{tr}}Save{{/tr}}</button>
+        <button type="button" class="submit" onclick="return ChoiceLit.finish(this.form.lit_id.value, 1);">{{tr}}Save{{/tr}}</button>
       </td>
     </tr>
   </table>
