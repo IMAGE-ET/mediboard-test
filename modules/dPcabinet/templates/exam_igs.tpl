@@ -28,7 +28,7 @@ empty_on_click = function(elem) {
 showLaboResult = function() {
   var url = new Url("dPImeds", "httpreq_vw_sejour_results");
   url.addParam("sejour_id", "{{$sejour->_id}}");
-  url.requestModal(800, 700);
+  url.popup(800, 700);
 }
 
 Main.add(checkSelect);
