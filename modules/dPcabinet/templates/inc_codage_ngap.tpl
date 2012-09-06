@@ -12,37 +12,37 @@ refreshTarif = function(){
 }
   
 ActesNGAP = {
-	refreshList: function() {
+  refreshList: function() {
     var url = new Url("dPcabinet", "httpreq_vw_actes_ngap");
-	  url.addParam("object_id", "{{$object->_id}}");
-	  url.addParam("object_class", "{{$object->_class}}");
-	  url.requestUpdate('listActesNGAP');
-	},
+    url.addParam("object_id", "{{$object->_id}}");
+    url.addParam("object_class", "{{$object->_class}}");
+    url.requestUpdate('listActesNGAP');
+  },
 
-	remove: function(acte_ngap_id){
-	  var oForm = document.editNGAP;
-	  oForm.del.value = 1;
-	  oForm.acte_ngap_id.value = acte_ngap_id;
-	  this.submit();
-	},
-	
-	changeExecutant: function(acte_ngap_id, executant_id){
-	  var oForm = document.changeExecutant;
-	  $V(oForm.acte_ngap_id, acte_ngap_id); 
-		$V(oForm.executant_id, executant_id);
-		
-		submitFormAjax(oForm, 'systemMsg');
-	},
-	
-	submit: function() {
-	  var oForm = document.editNGAP;
-		submitFormAjax(oForm, 'systemMsg', { 
-			onComplete: function() { 
-			  ActesNGAP.refreshList();
+  remove: function(acte_ngap_id){
+    var oForm = document.editNGAP;
+    oForm.del.value = 1;
+    oForm.acte_ngap_id.value = acte_ngap_id;
+    this.submit();
+  },
+  
+  changeExecutant: function(acte_ngap_id, executant_id){
+    var oForm = document.changeExecutant;
+    $V(oForm.acte_ngap_id, acte_ngap_id); 
+    $V(oForm.executant_id, executant_id);
+    
+    submitFormAjax(oForm, 'systemMsg');
+  },
+  
+  submit: function() {
+    var oForm = document.editNGAP;
+    submitFormAjax(oForm, 'systemMsg', { 
+      onComplete: function() { 
+        ActesNGAP.refreshList();
         if (Reglement) Reglement.reload(false);
-			}
-		} );
-	}
+      }
+    } );
+  }
 }
 
 </script>
@@ -63,9 +63,9 @@ ActesNGAP = {
   <input type="hidden" name="object_id" value="{{$object->_id}}" />
   <input type="hidden" name="object_class" value="{{$object->_class}}" />
   <table class="form">
-  	
-  	{{if $object->_coded}}
-  	{{if $object->_class == "CConsultation"}}
+    
+    {{if $object->_coded}}
+    {{if $object->_class == "CConsultation"}}
     <tr>
       <td colspan="10">
         <div class="small-info">
@@ -134,8 +134,8 @@ ActesNGAP = {
           <td>{{mb_field object=$acte_ngap field="coefficient" size="3" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
           <td>{{mb_field object=$acte_ngap field="demi" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
           <td id="tarifActe">
-          	{{mb_field object=$acte_ngap field="montant_base"}}
-          	{{mb_field object=$acte_ngap field="lettre_cle" hidden=hidden}}
+            {{mb_field object=$acte_ngap field="montant_base"}}
+            {{mb_field object=$acte_ngap field="lettre_cle" hidden=hidden}}
           </td>
           <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
           <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" onkeyup="refreshTarif()" emptyLabel="None"}}</td>
@@ -143,7 +143,7 @@ ActesNGAP = {
             <select name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{foreach from=$acte_ngap->_list_executants item=curr_executant}}
-              <option class="mediuser" style="border-color: #{{$curr_executant->_ref_function->color}};" value="{{$curr_executant->user_id}}" {{if $acte_ngap->executant_id == $curr_executant->user_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$curr_executant->_ref_function->color}};" value="{{$curr_executant->user_id}}" {{if $acte_ngap->executant_id == $curr_executant->user_id || $curr_executant->user_id == $object->_ref_praticien->_id}} selected="selected" {{/if}}>
                 {{$curr_executant->_view}}
               </option>
               {{/foreach}}
@@ -187,10 +187,10 @@ ActesNGAP = {
       </td>
 
       {{assign var="executant" value=$_acte_ngap->_ref_executant}}
-			<td>
-				{{if !$object->_coded}}
+      <td>
+        {{if !$object->_coded}}
           {{if $can->edit}}
-    				<select onchange="ActesNGAP.changeExecutant('{{$_acte_ngap->_id}}', $V(this))" name="executant" style="width: 150px;" class="{{$acte_ngap->_props.executant_id}}">
+            <select onchange="ActesNGAP.changeExecutant('{{$_acte_ngap->_id}}', $V(this))" name="executant" style="width: 150px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{foreach from=$acte_ngap->_list_executants item=_executant}}
               <option class="mediuser" {{if ($_acte_ngap->executant_id == $_executant->user_id)}}selected="selected"{{/if}} style="border-color: #{{$_executant->_ref_function->color}};" value="{{$_executant->user_id}}">
@@ -203,19 +203,19 @@ ActesNGAP = {
              {{$executant}}
             </div>
           {{/if}}
-				{{else}}
-				<div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
+        {{else}}
+        <div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
          {{$executant}}
         </div>
-				{{/if}}
+        {{/if}}
       </td>
 
       {{if !$object->_coded}}
         {{if $can->edit}}
           <td>
-           	<button type="button" class="trash" onclick="ActesNGAP.remove({{$_acte_ngap->_id}})">
+             <button type="button" class="trash" onclick="ActesNGAP.remove({{$_acte_ngap->_id}})">
               {{tr}}Delete{{/tr}}
-    		 	  </button>
+             </button>
           </td>
         {{/if}}
       {{/if}}
@@ -230,8 +230,8 @@ ActesNGAP = {
   <input type="hidden" name="acte_ngap_id" value="" />
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="dosql" value="do_acte_ngap_aed" />
-	
-	<input type="hidden" name="executant_id" value="" />
+  
+  <input type="hidden" name="executant_id" value="" />
 </form>
 
 <script type="text/javascript">

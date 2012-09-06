@@ -92,7 +92,7 @@
           {{/if}}
           
         
-        	<!-- Couleur de l'acte -->
+          <!-- Couleur de l'acte -->
           {{if $acte->_id && ($acte->code_association == $acte->_guess_association || !$confCCAM.alerte_asso)}}
             {{assign var=bg_color value=9f9}}
           {{elseif $acte->_id}}
@@ -154,7 +154,7 @@
               <tr {{if !$can->edit}}style="display: none;"{{/if}}>
                 <th>{{mb_label object=$acte field=execution}}</th>
                 <td colspan="10">
-          	      {{mb_field object=$acte field=execution form="formActe-$view" register=true}}
+                  {{mb_field object=$acte field=execution form="formActe-$view" register=true}}
                 </td>
               </tr>
       
@@ -167,7 +167,7 @@
                   <select name="executant_id" class="{{$acte->_props.executant_id}}">
                     <option value="">&mdash; Choisir un professionnel de santé</option>
                     {{foreach from=$listExecutants item=_executant}}
-                    <option class="mediuser" style="border-color: #{{$_executant->_ref_function->color}};" value="{{$_executant->user_id}}" {{if $acte->executant_id == $_executant->user_id}} selected="selected" {{/if}}>
+                    <option class="mediuser" style="border-color: #{{$_executant->_ref_function->color}};" value="{{$_executant->user_id}}" {{if $acte->executant_id == $_executant->user_id || $_executant->user_id == $subject->_ref_praticien->_id}} selected="selected" {{/if}}>
                       {{$_executant->_view}}
                     </option>
                     {{/foreach}}
@@ -175,8 +175,8 @@
                 </td>
               </tr>
       
-          		<!-- Modificateurs -->
-          		{{assign var=modifs_compacts value=$confCCAM.modifs_compacts}}  
+              <!-- Modificateurs -->
+              {{assign var=modifs_compacts value=$confCCAM.modifs_compacts}}  
               <tr class="{{$view}}">
                 <th>{{mb_label object=$acte field=modificateurs}}</th>
                 <td{{if !$modifs_compacts}} class="text" colspan="10"{{/if}}>
@@ -213,8 +213,8 @@
                 <td>{{mb_field object=$acte field=montant_depassement}}</td>
                 {{/if}}
                  
-               	{{if $_phase->charges}}
-               	<th />
+                 {{if $_phase->charges}}
+                 <th />
                 <td>
                   {{mb_field object=$acte field=charges_sup typeEnum="checkbox"}}
                   {{mb_label object=$acte field=charges_sup}}
@@ -253,8 +253,8 @@
               </tr>
               {{/if}}
               {{/if}}
-  		
-          		<!-- Commentaire -->
+      
+              <!-- Commentaire -->
               {{if $confCCAM.commentaire}}
               <tr class="{{$view}}">
                 <th>{{mb_label object=$acte field=commentaire}}</th>
@@ -267,12 +267,12 @@
               <tr>
                 <td class="button" colspan="10">
                   <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
-                  		onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}})
+                      onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}})
                   })">
                     {{tr}}Modify{{/tr}} cet acte
                   </button>
                 </td>
-          		</tr>
+              </tr>
               {{/if}}
             </tbody>
       
@@ -283,7 +283,7 @@
                   {{if $confCCAM.openline}}
                     <div style="float: right;">
                     <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
-                    	    ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}})
+                          ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}})
                     })">
                       {{tr}}Modify{{/tr}} cet acte
                     </button>
