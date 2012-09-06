@@ -434,7 +434,7 @@ class CMediusers extends CMbObject {
     $this->loadRefFunction();
     $functions = array($this->function_id);
     $this->loadBackRefs("secondary_functions");
-    foreach($this->_back["secondary_functions"] as $curr_sec_func) {
+    foreach ($this->_back["secondary_functions"] as $curr_sec_func) {
       $functions[] = $curr_sec_func->function_id;
     }
     $list_functions = implode(",", $functions);
@@ -481,26 +481,29 @@ class CMediusers extends CMbObject {
       }
 
       // notContaining
-      if($target = $pwdSpecs->notContaining) {
+      if ($target = $pwdSpecs->notContaining) {
         if ($field = $this->$target) {
           if (stristr($pwd, $field)) {
           return "Le mot de passe ne doit pas contenir '$field'";
-      } } }
+          } 
+        } 
+      }
       
       // notNear
-      if($target = $pwdSpecs->notNear) {
+      if ($target = $pwdSpecs->notNear) {
         if ($field = $this->$target) {
           if (levenshtein($pwd, $field) < 3) {
             return "Le mot de passe ressemble trop à '$field'";
       } } }
        
       // alphaAndNum
-      if($pwdSpecs->alphaAndNum) {
+      if ($pwdSpecs->alphaAndNum) {
         if (!preg_match("/[A-z]/", $pwd) || !preg_match("/\d+/", $pwd)) {
           return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
         }
       }
-    } else {
+    }
+    else {
       $this->_user_password = null;
     }
 
@@ -548,7 +551,8 @@ class CMediusers extends CMbObject {
       // Can't use parent::store cuz user_id don't auto-increment
       if ($this->user_id) {
         $ret = $spec->ds->updateObject($spec->table, $this, $spec->key, $spec->nullifyEmptyStrings);
-      } else {
+      }
+      else {
         $this->user_id = $user->user_id;
         $keyToUpdate = $spec->incremented ? $spec->key : null;
         $ret = $spec->ds->insertObject($spec->table, $this, $keyToUpdate);
@@ -596,7 +600,7 @@ class CMediusers extends CMbObject {
     $where["object_id"]    = "= '$this->function_id'";
 
     $perm = new CPermObject;
-    if($perm->loadObject($where)) {
+    if ($perm->loadObject($where)) {
       $perm->delete();
     }
   }
@@ -608,7 +612,7 @@ class CMediusers extends CMbObject {
     $where["object_id"]    = "= '$this->function_id'";
 
     $perm = new CPermObject;
-    if(!$perm->loadObject($where)) {
+    if (!$perm->loadObject($where)) {
       $perm = new CPermObject;
       $perm->user_id      = $this->user_id;
       $perm->object_class = "CFunctions";
@@ -627,7 +631,7 @@ class CMediusers extends CMbObject {
     $where["object_id"]    = "= '$function->group_id'";
 
     $perm = new CPermObject;
-    if(!$perm->loadObject($where)) {
+    if (!$perm->loadObject($where)) {
       $perm = new CPermObject;
       $perm->user_id      = $this->user_id;
       $perm->object_class = "CGroups";
@@ -642,11 +646,12 @@ class CMediusers extends CMbObject {
     $where = array();
     $ljoin = array();
     
-    if($function_id) {
-      if($secondary) {
+    if ($function_id) {
+      if ($secondary) {
         $ljoin["secondary_function"] = "`users_mediboard`.`user_id` = `secondary_function`.`user_id`";
         $where[] = "`users_mediboard`.`function_id` = '$function_id' OR `secondary_function`.`function_id` = '$function_id'";
-      } else {
+      }
+      else {
         $where["users_mediboard.function_id"] = "= '$function_id'";
       }
     }
@@ -695,7 +700,7 @@ class CMediusers extends CMbObject {
     $groups = $group->loadList(null, $order);
 
     // Filtre
-    foreach($groups as $keyGroupe => $groupe){
+    foreach ($groups as $keyGroupe => $groupe) {
       if (!$groupe->getPerm($permType)) {
         unset($groups[$keyGroupe]);
       }
@@ -777,17 +782,22 @@ class CMediusers extends CMbObject {
     $listPrat = array();
     $this->loadRefFunction();
     // Liste des praticiens du cabinet
-    if($is_admin || $is_secretaire || $is_directeur || $this->_ref_function->compta_partagee) {
-      if($is_admin) {
-        if(CAppUI::pref("pratOnlyForConsult", 1)) {
-          $listPrat = $this->loadPraticiens(PERM_EDIT);
+    if ($is_admin || $is_secretaire || $is_directeur || $this->_ref_function->compta_partagee) {
+      $function = null;
+      if (!CAppUI::conf("dPcabinet Comptabilite show_compta_tiers") && $this->_user_username != "admin") {
+        $function = $this->function_id;
+      }
+      
+      if ($is_admin) {
+        if (CAppUI::pref("pratOnlyForConsult", 1)) {
+          $listPrat = $this->loadPraticiens(PERM_EDIT, $function);
         }
         else {
-          $listPrat = $this->loadProfessionnelDeSante(PERM_EDIT);
+          $listPrat = $this->loadProfessionnelDeSante(PERM_EDIT, $function);
         }
       }
       else {
-        if(CAppUI::pref("pratOnlyForConsult", 1)) {
+        if (CAppUI::pref("pratOnlyForConsult", 1)) {
           $listPrat = $this->loadPraticiens(PERM_EDIT, $this->function_id);
         }
         else {
@@ -813,7 +823,8 @@ class CMediusers extends CMbObject {
         }
         $listPrat = $mediusers;
       }
-    } else if($this->isPraticien() && !$this->compta_deleguee){
+    }
+    else if ($this->isPraticien() && !$this->compta_deleguee) {
       $listPrat = array($this->_id => $this);
     }
     
@@ -945,7 +956,7 @@ class CMediusers extends CMbObject {
   function loadRefsForDay($date) {
     $this->loadBackRefs("secondary_functions");
     $secondary_specs = array();
-    foreach($this->_back["secondary_functions"] as  $curr_sec_spec) {
+    foreach ($this->_back["secondary_functions"] as  $curr_sec_spec) {
       $curr_sec_spec->loadRefsFwd();
       $curr_function = $curr_sec_spec->_ref_function;
       $secondary_specs[$curr_function->_id] = $curr_function;
@@ -961,9 +972,10 @@ class CMediusers extends CMbObject {
       $plage->loadRefs(0);
       $plage->_unordered_operations = array();
       foreach ($plage->_ref_operations as $key_op => &$operation) {
-        if($operation->chir_id != $this->_id) {
+        if ($operation->chir_id != $this->_id) {
           unset($plage->_ref_operations[$key_op]);
-        } else {
+        }
+        else {
           $operation->_ref_chir = $this;
           $operation->loadRefPatient();
           $operation->loadExtCodesCCAM();
@@ -1005,7 +1017,7 @@ class CMediusers extends CMbObject {
     $where["annulee"]    = "= '0'";
     $order = "chir_id";
     $this->_ref_urgences = $urgences->loadList($where);
-    foreach($this->_ref_urgences as &$urgence) {
+    foreach ($this->_ref_urgences as &$urgence) {
       $urgence->loadRefChir();
       $urgence->loadRefPatient();
       $urgence->loadExtCodesCCAM();
@@ -1053,12 +1065,12 @@ class CMediusers extends CMbObject {
     $nb_days = 7;
     
     // Si aucun evenement le dimanche
-    if(!$count_event_sunday){
+    if (!$count_event_sunday) {
       $nb_days = 6;
       $where["debut"] = "BETWEEN '$saturday 00:00:00' AND '$saturday 23:59:59'";
       $count_event_saturday= $_evt->countList($where);  
       // Aucun evenement le samedi et aucun le dimanche
-      if(!$count_event_saturday){
+      if (!$count_event_saturday) {
         $nb_days = 5;
       }
     }
@@ -1069,7 +1081,7 @@ class CMediusers extends CMbObject {
     $ljoin = array_merge($ljoin, array("users" => "users.user_id = users_mediboard.user_id"));
     $list = $this->seek($keywords, $where, $limit, null, $ljoin, "users.user_last_name");
     
-    foreach($list as $_mediuser) {
+    foreach ($list as $_mediuser) {
       $_mediuser->loadRefFunction();
     }
     
