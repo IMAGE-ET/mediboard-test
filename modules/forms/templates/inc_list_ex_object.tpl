@@ -50,7 +50,15 @@ prepareEmptyRows = function(){
     return empty;
   });
   
-  emptyBodies.invoke("addClassName", "empty");
+  emptyBodies.each(function(body){
+    body.addClassName("empty");
+    
+    // Hide the tbody's header (previous tbody) if the tbody is empty
+    var previous = body.previous("tbody");
+    if (previous) {
+      previous.addClassName("empty");
+    }
+  });
 }
 
 toggleEmptyRows = function(){
