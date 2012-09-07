@@ -1823,7 +1823,11 @@ class CSetupdPpatients extends CSetup {
     $query = "ALTER TABLE `constantes_medicales` ADD `creatininemie` FLOAT UNSIGNED;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.56";
+    $this->makeRevision("1.56");
+    $query = "ALTER TABLE `constantes_medicales` ADD `glasgow` FLOAT UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.57";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

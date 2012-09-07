@@ -398,11 +398,15 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 200,
     ),
     // FIN DIURESE ////////
-    
     "creatininemie" => array(
       "type" => "biolo",
       "unit" => "mg/l", 
       "min" => 0, "max" => 30,
+    ),
+    "glasgow" => array(
+      "type" => "physio",
+      "unit" => "", 
+      "min" => 3, "max" => 15,
     ),
   );
   
@@ -556,7 +560,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['bricker']                = 'float min|0';
     $specs['entree_lavage']          = 'float min|0';
     $specs['creatininemie']          = 'float min|0';
-    
+    $specs['glasgow']                = 'float min|0';
     return $specs;
   }
 
