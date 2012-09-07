@@ -52,7 +52,7 @@ class CReglement extends CMbMetaObject {
   
   function loadRefsFwd() {
     $this->loadTargetObject();
-		$this->loadRefBanque();
+    $this->loadRefBanque();
   }
   
   function check () {
@@ -71,7 +71,7 @@ class CReglement extends CMbMetaObject {
     $this->loadRefsFwd();
     
     if ($this->object_class == "CConsultation" && !$this->_ref_object->valide) {
-    	return "Impossible d'enregistrer un règlement car le tarif de la consultation n'est pas validé";
+      return "Impossible d'enregistrer un règlement car le tarif de la consultation n'est pas validé";
     }
   }
   
@@ -83,36 +83,36 @@ class CReglement extends CMbMetaObject {
     // Au cas où le reglement fait l'acquittement
     $this->loadRefsFwd();
     if ($this->object_class == "CConsultation"){
-	    $consult =& $this->_ref_object;
-	    $consult->loadRefsReglements();
-	    
-	    // Acquitement patient
-	    if ($this->emetteur == "patient" && $consult->du_patient) {
-	      $consult->patient_date_reglement = $consult->_du_patient_restant <= 0 ? mbDate() : "";
-	    }
-	      
-	    // Acquitement tiers
-	    if ($this->emetteur == "tiers" && $consult->du_tiers) {
-	      $consult->tiers_date_reglement = $consult->_du_tiers_restant <= 0 ? mbDate() : "";
-	    }
-	    
-	    return $consult->store();
+      $consult =& $this->_ref_object;
+      $consult->loadRefsReglements();
+      
+      // Acquitement patient
+      if ($this->emetteur == "patient" && $consult->du_patient) {
+        $consult->patient_date_reglement = $consult->_du_patient_restant <= 0 ? mbDate() : "";
+      }
+        
+      // Acquitement tiers
+      if ($this->emetteur == "tiers" && $consult->du_tiers) {
+        $consult->tiers_date_reglement = $consult->_du_tiers_restant <= 0 ? mbDate() : "";
+      }
+      
+      return $consult->store();
     }
     if ($this->object_class == "CFactureConsult"){
-	    $facture =& $this->_ref_object;
-	    $facture->loadRefReglements();
-	    
-	    // Acquitement patient
-	    if ($this->emetteur == "patient" && $facture->du_patient) {
-	      $facture->patient_date_reglement = $facture->_du_patient_restant <= 0 ? mbDate() : "";
-	    }
-	      
-	    // Acquitement tiers
-	    if ($this->emetteur == "tiers" && $facture->du_tiers) {
-	      $facture->tiers_date_reglement = $facture->_du_tiers_restant <= 0 ? mbDate() : "";
-	    }
-	    
-	    return $facture->store();
+      $facture =& $this->_ref_object;
+      $facture->loadRefsReglements();
+      
+      // Acquitement patient
+      if ($this->emetteur == "patient" && $facture->du_patient) {
+        $facture->patient_date_reglement = $facture->_du_patient_restant <= 0 ? mbDate() : "";
+      }
+        
+      // Acquitement tiers
+      if ($this->emetteur == "tiers" && $facture->du_tiers) {
+        $facture->tiers_date_reglement = $facture->_du_tiers_restant <= 0 ? mbDate() : "";
+      }
+      
+      return $facture->store();
     }
   }
   

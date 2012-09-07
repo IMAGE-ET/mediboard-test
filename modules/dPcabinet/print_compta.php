@@ -120,7 +120,7 @@ foreach ($reglements as  $key => $_reglement) {
   $_reglement->_ref_object->loadRefPatient(1);
   $_reglement->_ref_object->loadRefPlageConsult(1);
   $_reglement->_ref_object->loadRefPraticien();
-  $_reglement->_ref_object->loadRefReglements();
+  $_reglement->_ref_object->loadRefsReglements();
   if ($_reglement->object_class == "CConsultation") {
     $_reglement->_ref_object->loadRefsActes();
   }
@@ -186,7 +186,7 @@ foreach ($reglements as  $key => $_reglement) {
         $recapReglement["total"]["secteur2"] += $_reglement->_ref_object->secteur2;
       }
       else {
-        $_reglement->_ref_object->loadRefReglements();
+        $_reglement->_ref_object->loadRefsReglements();
         $recapReglement["total"]["secteur1"] += $_reglement->_ref_object->_montant_avec_remise;
       }
       

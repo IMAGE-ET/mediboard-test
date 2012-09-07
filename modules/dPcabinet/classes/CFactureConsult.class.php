@@ -186,7 +186,7 @@ class CFactureConsult extends CMbObject
     }
     
     //Suppression des règlements effectuées pour la facture
-    $this->loadRefReglements();
+    $this->loadRefsReglements();
     foreach ($this->_ref_reglements as $reglement) {
       $reglement->delete();
     }
@@ -315,7 +315,7 @@ class CFactureConsult extends CMbObject
    * 
    * @return $this->_ref_reglements
   **/
-  function loadRefReglements($cache = 1) {
+  function loadRefsReglements($cache = 1) {
     $this->_reglements_total_patient = 0.00;
     $this->_montant_sans_remise = 0;
     if (!CModule::getInstalled("tarmed") || !CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
@@ -355,7 +355,7 @@ class CFactureConsult extends CMbObject
    * @return void
   **/
   function loadRefsBack(){
-    $this->loadRefReglements();
+    $this->loadRefsReglements();
   }
   
   /**
