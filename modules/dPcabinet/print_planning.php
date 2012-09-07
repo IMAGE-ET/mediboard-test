@@ -17,4 +17,8 @@ $date    = CValue::get("date");
 $chir_id = CValue::get("chir_id");
 $print   = 1;
 
+if (!$chir_id) {
+  echo "<div class='small-info'>".CAppUI::tr("CConsultation-no_chir_planning")."</div>";
+  CApp::rip();
+}
 echo CApp::fetch("dPcabinet", "inc_plage_selector_weekly");

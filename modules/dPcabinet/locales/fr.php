@@ -470,6 +470,7 @@ $locales['CConsultation-motif-desc'] = 'Motif de la consultation';
 $locales['CConsultation-msg-create'] = 'Consultation créée';
 $locales['CConsultation-msg-delete'] = 'Consultation supprimée';
 $locales['CConsultation-msg-modify'] = 'Consultation modifiée';
+$locales['CConsultation-no_chir_planning'] = 'Veuillez choisir un praticien pour afficher son planning.';
 $locales['CConsultation-patient_date_reglement'] = 'Aquitement patient';
 $locales['CConsultation-patient_date_reglement-court'] = 'Acq Pat.';
 $locales['CConsultation-patient_date_reglement-desc'] = 'Date d\'aquitement de la facture par le patient';
