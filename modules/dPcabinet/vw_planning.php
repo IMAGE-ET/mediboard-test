@@ -1,12 +1,14 @@
-<?php /* $Id$ */
+<?php
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 CCanDo::checkRead();
 
 // L'utilisateur est-il praticien ?
@@ -38,7 +40,7 @@ $suiv = mbDate("+1 week", $debut);
 // Plage de consultation selectionnée
 $plageconsult_id = CValue::getOrSession("plageconsult_id", null);
 $plageSel = new CPlageconsult();
-if(($plageconsult_id === null) && $chirSel && $is_in_period) {
+if (($plageconsult_id === null) && $chirSel && $is_in_period) {
   $nowTime = mbTime();
   $where = array(
     "chir_id" => "= '$chirSel'",
@@ -48,9 +50,10 @@ if(($plageconsult_id === null) && $chirSel && $is_in_period) {
   );
   $plageSel->loadObject($where);
 }
-if(!$plageSel->plageconsult_id) {
+if (!$plageSel->plageconsult_id) {
   $plageSel->load($plageconsult_id);
-} else {
+}
+else {
   $plageconsult_id = $plageSel->plageconsult_id;
 }
 $plageSel->loadRefsFwd(1);
@@ -78,7 +81,7 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
   $consultation->loadRefCategorie(1);
   $consultation->countDocItems();    
 }
-if ($plageSel->chir_id != $chirSel) {
+if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel) {
   $plageconsult_id = null;
   $plageSel = new CPlageconsult();
 }
@@ -115,7 +118,7 @@ $where = array();
 $where["date"] = "= '$dateArr'";
 $where["chir_id"] = " = '$chirSel'";
 
-if (!$listPlage->countList($where)){
+if (!$listPlage->countList($where)) {
   $nbjours--;
   // Aucune plage le dimanche, on peut donc tester le samedi.
   $dateArr = mbDate("+5 day", $debut);
@@ -134,10 +137,12 @@ $debut = mbDate("next monday", $debut);
 
 //Instanciation du planning
 $planning = new CPlanningWeek($debut, $debut, $fin, $nbjours, false, 450, null, true);
-if($user->load($chirSel)){
+if ($user->load($chirSel)) {
   $planning->title = $user->load($chirSel)->_view;
 }
-else{$planning->title = "";}
+else {
+  $planning->title = "";
+}
 $planning->guid = $mediuser->_guid;
 $planning->hour_min = "07";
 $planning->hour_max = "20";
@@ -146,22 +151,36 @@ $planning->pauses = array("07", "12", "19");
 $plage = new CPlageConsult();
 
 $where = array();
-$where["chir_id"] = " = '$chirSel'";
+$where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel'";
 
 for ($i = 0; $i < 7; $i++) {
   $jour = mbDate("+$i day", $debut);
   $where["date"] = "= '$jour'";
-  foreach($plage->loadList($where) as $_plage){
+  foreach ($plage->loadList($where) as $_plage) {
     $_plage->loadRefsBack();
     $_plage->countPatients();
     $debute = "$jour $_plage->debut";
-    
     $libelle = "";
-    
     if (mbMinutesRelative($_plage->debut, $_plage->fin) >= 30 ) {
       $libelle = $_plage->libelle;
     }
-    $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, "#DDD", true, null, null);
+    
+    $color = "#DDD";
+    if ($_plage->desistee) {
+      if (!$_plage->remplacant_id) {
+        $color = "#CCC";
+      }
+      elseif ($_plage->remplacant_id && $_plage->remplacant_id != $chirSel) {
+        $color = "#FAA";
+      }
+      elseif ($_plage->remplacant_id && !$_plage->remplacant_ok) {
+        $color = "#FDA";
+      }
+      elseif ($_plage->remplacant_id && $_plage->remplacant_ok) {
+        $color = "#BFB";
+      }
+    }
+    $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null);
 
     //Menu des évènements
     $event->addMenuItem("list", "Voir le contenu de la plage");
@@ -173,10 +192,10 @@ for ($i = 0; $i < 7; $i++) {
     $event->plage["id"] = $_plage->plageconsult_id;
     
     $pct = $_plage->_fill_rate;
-    if($pct > "100"){
+    if ($pct > "100") {
       $pct = "100";
     }
-    if($pct == ""){
+    if ($pct == "") {
       $pct = 0;
     }
     
@@ -209,6 +228,7 @@ $smarty->assign("suiv"              , $suiv);
 $smarty->assign("plageconsult_id"    , $plageconsult_id);
 $smarty->assign("count_si_desistement", $count_si_desistement);
 $smarty->assign("bank_holidays"     , mbBankHolidays($today));
+$smarty->assign("mediuser"          , $mediuser);
 
 $smarty->display("vw_planning.tpl");
 ?>

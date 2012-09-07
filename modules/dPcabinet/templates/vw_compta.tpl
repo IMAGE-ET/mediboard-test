@@ -216,6 +216,22 @@ sendBill = function(oForm2) {
             {{/if}}
           </td>
         </tr>
+        <tr>
+          <td class="button" colspan="4">
+            <hr />
+          </td>
+        </tr>
+        
+        <tr>
+          <td colspan="2" class="button">
+            <button class="print" type="submit" onclick="document.printFrm.a.value='vw_retrocession';">Rétrocession des remplacements</button>
+          </td>
+          <td colspan="2" class="text">
+            <div class="big-info">
+              Affichage des consultations effectuées par un remplaçant, en fonction de la date de consultation.
+            </div>
+          </td>  
+        </tr>
         {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
           <tr>
             <td class="button" colspan="4">

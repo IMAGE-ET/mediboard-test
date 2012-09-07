@@ -143,7 +143,7 @@ ActesNGAP = {
             <select name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
               {{foreach from=$acte_ngap->_list_executants item=curr_executant}}
-              <option class="mediuser" style="border-color: #{{$curr_executant->_ref_function->color}};" value="{{$curr_executant->user_id}}" {{if $acte_ngap->executant_id == $curr_executant->user_id || $curr_executant->user_id == $object->_ref_praticien->_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$curr_executant->_ref_function->color}};" value="{{$curr_executant->user_id}}" {{if $curr_executant->user_id == $object->_ref_executant->_id}} selected="selected" {{/if}}>
                 {{$curr_executant->_view}}
               </option>
               {{/foreach}}

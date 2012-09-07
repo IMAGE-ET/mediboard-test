@@ -9,6 +9,17 @@
 *}}
 
 <script type="text/javascript">
+  modifEtatDistement = function(valeur){
+    if(valeur == 1){
+      $('remplacant_plage').setVisible(valeur);
+    }
+    else{
+      $('remplacant_plage').hide();
+      var form = getForm('editFrm');
+      form.remplacant_id.value = "";
+    }
+  }
+  
   Main.add(function(){
     var form = getForm('editFrm');
     
@@ -121,12 +132,22 @@
      <td>{{mb_field object=$plageSel field="locked" typeEnum="checkbox"}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$plageSel field="desistee"}}</th>
+    <td>{{mb_field object=$plageSel field="desistee"  typeEnum="checkbox" onchange="modifEtatDistement(this.value);" }}</td>
     <th></th>
     <td></td>
-    <th>{{mb_label object=$plageSel field="pct_retrocession"}}</th>
-    <td>{{mb_field object=$plageSel field="pct_retrocession" size="2" increment=true form=editFrm}}</td>
   </tr>
-
+  <tr id="remplacant_plage" {{if !$plageSel->desistee}} style="display:none"{{/if}}>
+    <th>{{mb_label object=$plageSel field="remplacant_id"}}</th>
+    <td>
+      <select name="remplacant_id" style="width: 15em;">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs selected=$plageSel->remplacant_id}}
+      </select>
+    </td>
+    <th>{{mb_label object=$plageSel field="pct_retrocession"}}</th>
+    <td>{{mb_field object=$plageSel field="pct_retrocession" size="2" increment=true form=editFrm }}</td>
+  </tr>
   <tr>
     <td colspan="4" class="text">
       <div class="small-info">

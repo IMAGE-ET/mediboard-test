@@ -1,11 +1,14 @@
-<?php /* $Id: inc_consultation_plage.php$ */
+<?php 
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision
-* @author SARL OpenXtrem
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -25,19 +28,20 @@ $hide_annulees = CValue::getOrSession("hide_annulees", 1);
 // Plage de consultation selectionnée
 $plageconsult_id = CValue::getOrSession("plageconsult_id", null);
 $plageSel = new CPlageconsult();
-if(($plageconsult_id === null) && $chirSel && $is_in_period) {
+if (($plageconsult_id === null) && $chirSel && $is_in_period) {
   $nowTime = mbTime();
   $where = array(
-    "chir_id" => "= '$chirSel'",
+    "chir_id = '$chirSel' OR remplacant_id = '$chirSel'",
     "date"    => "= '$today'",
     "debut"   => "<= '$nowTime'",
     "fin"     => ">= '$nowTime'"
   );
   $plageSel->loadObject($where);
 }
-if(!$plageSel->plageconsult_id) {
+if (!$plageSel->plageconsult_id) {
   $plageSel->load($plageconsult_id);
-} else {
+}
+else {
   $plageconsult_id = $plageSel->plageconsult_id;
 }
 $plageSel->loadRefsFwd(1);
@@ -69,7 +73,7 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
   $consultation->countDocItems();    
 }
 
-if ($plageSel->chir_id != $chirSel) {
+if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel) {
   $plageconsult_id = null;
   $plageSel = new CPlageconsult();
 }
@@ -78,11 +82,11 @@ if ($plageSel->chir_id != $chirSel) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("plageSel"          , $plageSel);
-$smarty->assign("chirSel"          , $chirSel);
+$smarty->assign("chirSel"           , $chirSel);
 $smarty->assign("hide_payees"       , $hide_payees);
 $smarty->assign("hide_annulees"     , $hide_annulees);
+$smarty->assign("mediuser"          , $mediuser);
 
 $smarty->display("inc_consultations.tpl");
 
-  
 ?>

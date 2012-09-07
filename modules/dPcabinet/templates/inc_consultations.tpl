@@ -13,11 +13,16 @@
     <th class="title" colspan="10">
       <strong>
       {{if $plageSel->_id}}
-      <button class="print" onclick="printPlage({{$plageSel->_id}})" style="float:right">{{tr}}Print{{/tr}}</button>
-      {{mb_include module=system template=inc_object_notes object=$plageSel}}
-        Consultations du {{$plageSel->date|date_format:$conf.longdate}}
+        <button class="print" onclick="printPlage({{$plageSel->_id}})" style="float:right">{{tr}}Print{{/tr}}</button>
+        {{mb_include module=system template=inc_object_notes object=$plageSel}}
+          Consultations du {{$plageSel->date|date_format:$conf.longdate}}<br/>
+          {{if $plageSel->chir_id != $chirSel}}
+           remplacement de {{$plageSel->_ref_chir->_view}}
+          {{elseif $plageSel->remplacant_id}}
+           remplacé par {{$plageSel->_ref_remplacant->_view}} 
+          {{/if}}
       {{else}}
-      {{tr}}CPlageconsult.none{{/tr}}
+        {{tr}}CPlageconsult.none{{/tr}}
       {{/if}}
       </strong>
     </th>

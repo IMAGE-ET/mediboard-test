@@ -1215,6 +1215,7 @@ class CSejour extends CCodable implements IPatientRelated {
   
   function loadRefPraticien($cache = 0) {
     $this->_ref_praticien = $this->loadFwdRef("praticien_id", $cache);
+    $this->_ref_executant = $this->_ref_praticien;    
     $this->_ref_praticien->loadRefFunction();
     return $this->_ref_praticien;
   }

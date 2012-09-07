@@ -1213,7 +1213,10 @@ TESTS A EFFECTUER
     $this->_ref_plageconsult->loadRefsFwd($cache);
     
     // Distant fields
-    $this->_ref_chir = $this->_ref_plageconsult->_ref_chir;
+    $this->_ref_chir = $this->_ref_plageconsult->_ref_remplacant->_id ?
+      $this->_ref_plageconsult->_ref_remplacant :
+      $this->_ref_plageconsult->_ref_chir;
+                      
     $this->_date     = $this->_ref_plageconsult->date;
     $this->_datetime = mbAddDateTime($this->heure,$this->_date);
     $this->_acte_execution = $this->_datetime;
@@ -1226,12 +1229,8 @@ TESTS A EFFECTUER
   
   function loadRefPraticien(){
     $this->loadRefPlageConsult();
-    if ($this->_ref_plageconsult->_ref_remplacant->_id) {
-      return $this->_ref_praticien = $this->_ref_plageconsult->_ref_remplacant;
-    }
-    else {
-      return $this->_ref_praticien =& $this->_ref_chir;
-    }
+    $this->_ref_executant = $this->_ref_plageconsult->_ref_executant;
+    return $this->_ref_praticien = $this->_ref_chir;
   }
   
   function getType() {

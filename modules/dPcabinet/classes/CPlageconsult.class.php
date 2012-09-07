@@ -350,6 +350,8 @@ class CPlageconsult extends CMbObject {
     $libelle = $this->libelle;
     $locked  = $this->locked;
     $color   = $this->color;
+    $desistee       = $this->desistee;
+    $remplacant_id  = $this->remplacant_id;
 
     // Recherche de la plage suivante
     $where["date"]    = "= '$this->date'";
@@ -366,6 +368,8 @@ class CPlageconsult extends CMbObject {
     $this->libelle = $libelle;
     $this->locked  = $locked;
     $this->color   = $color;
+    $this->desistee       = $desistee;
+    $this->remplacant_id  = $remplacant_id;
     $this->updateFormFields();
     return $week_jumped;
   }    

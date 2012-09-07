@@ -63,6 +63,7 @@ class CCodable extends CMbObject {
   var $_ref_sejour = null;
   var $_ref_patient = null;
   var $_ref_praticien = null;
+  var $_ref_executant = null;
   
   // Behaviour fields
   var $_delete_actes   = null;
@@ -167,6 +168,7 @@ class CCodable extends CMbObject {
   }
   
   function loadRefPraticien() {
+    
   }
   
   function loadView() {
