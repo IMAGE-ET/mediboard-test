@@ -1,14 +1,4 @@
-/* $Id$ */
-
-/* Body */
-body {
-  font-family: arial, sans-serif;
-  background: #fff;
-}
-
-#login {
-  margin: 40px 0 0; 
-}
+@import url(../e-cap/main.css);
 
 /* Login */
 #login table {
@@ -19,7 +9,6 @@ body {
 /* Form tables */
 table.form th {
   background-color: #ffd;
-  vertical-align: top;
   border-right: 1px solid #ddd;
 }
 
@@ -29,30 +18,15 @@ table.form th.title {
   border: #aaa 1px outset;
 }
 
-table.form tr.groupexpand td,
-table.form tr.groupcollapse td,
-table.form tr.groupexpand th,
-table.form tr.groupcollapse th {
-  padding-left: 25px;
-}
-
-table.form tr.triggerShow td,
-table.form tr.triggerHide td,
-table.form tr.triggerShow th,
-table.form tr.triggerHide th {
-  padding-left:25px;
-}
 
 table.form th.category {
   color: #fff;
-  font-style: normal;
   background-color: #ae0040;
   border: #68c 1px outset;
 }
 
 table.form th.category label {
   color: #fff;
-  font-style: normal;
 }
 
 table.form th a:link {
@@ -61,7 +35,6 @@ table.form th a:link {
 
 table.form td {
   background-color: #ffd;
-  border: none;
 }
 
 table.form td.dark {
@@ -78,50 +51,20 @@ table.form td.compte_rendu {
 
 div.autocomplete ul li.selected { 
   background-color: #ffd;
-    font-weight:bold;
-}
-
-/* Navigation */
-td#mainHeader table {
-  width: 100%;
-}
-
-td#mainHeader td.logo {
-  text-align: left;
-}
-
-td#mainHeader td.welcome {
-  text-align: right;
-  font-size: 14px;
-  font-style: italic;
 }
 
 #menubar {
-  text-align: right;
   border: 2px solid #000;
   background-color: #68c;
   color: #fff;
-  width: 100%;
-  line-height: 150%;
 }
 
 #menubar a.textSelected {
   color: #a00;
-  font-weight: bold;
 }
 
 #menubar a.textNonSelected {
   color: #fff;
-}
-
-#menubar a.textNonSelected img {
-  opacity: 0.6;
-  -ms-filter: "alpha(opacity=60)";
-}
-
-#menubar a.textNonSelected:hover img {
-  opacity: 1;
-  -ms-filter: "alpha(opacity=100)";
 }
 
 #menubar a {
@@ -133,84 +76,26 @@ td#mainHeader td.welcome {
 }
 
 #topMenu #menubar a {
-  margin: 1px 0;
-  padding-left: 3px;
   border-left: 1px solid #fff;
-}
-
-#leftMenu {
-  vertical-align: top;
-  width: 140px;
-  overflow: hidden;
 }
 
 #leftMenu #menubar {
   border: 2px solid #000;
-  padding: 2px;
   background-color: #68c;
   color: #fff;
-  width: 130px;
-  text-align: center;
-  position: relative;
 }
 
 #leftMenu #menubar a {
   border: 1px solid transparent;
-  margin-top: -1px;
-  display: block;
-}
-
-#leftMenu #menubar #menuTools {
-  height: 14px;
-  /* Hack to remove the whitespace between the buttons */
-  font-size: 1px; /* for browsers not supporting 0px fonts */
-  font-size: 0px;
-}
-
-#leftMenu #menubar #menuTools a {
-  text-decoration: none;
-  height: 16px;
-  width: 16px;
-  display: inline-block;
 }
 
 #leftMenu #menubar a.textSelected {
   border-color: #fff;
   background-color: #abe;
 }
+
 #leftMenu #menubar a:hover {
   border-color: #ddd;
-}
-
-#leftMenu #menubar a img {
-  margin: 0 auto;
-  display: block;
-}
-
-#leftMenu #menubar.iconed a.textNonSelected img {
-  display: block;
-}
-
-#leftMenu #menubar #menuTools a#toggleIcons {
-  position: absolute;
-  top: 26px;
-  left: 2px;
-}
-
-#leftMenu #menubar.iconed #menuTools a#toggleIcons {
-  background: url(./images/icons/action_up.png) no-repeat;
-}
-
-#leftMenu #menubar.uniconed #menuTools a#toggleIcons {
-  background: url(./images/icons/action_down.png) no-repeat;
-}
-
-#leftMenu #menubar.uniconed a.textNonSelected img {
-  display: none;
-}
-
-#leftMenu #systemMsg {
-  text-align: left;
 }
 
 /* Tabbed items */
@@ -220,21 +105,12 @@ td.tabox {
   border: solid #fff 0;
 }
 
-table.tabmenu {
-  margin: 5px 10px;
-}
-
-table.tabmenu td {
-  height: 25px;
-  background: url(./images/icons/tabBg.png) repeat-x center;
-}
-
 table.tabmenu td a {
   color: #fff;
 }
 
 table.tabmenu td.selected a {
-  color: #666;
+  color: #333;
 }
 
 table.tabmenu td.left,
@@ -242,24 +118,28 @@ table.tabmenu td.right {
   width: 15px;
 }
 
+table.tabmenu td {
+  background-image: url(./images/icons/tabBg.png);
+}
+
 table.tabmenu td.left {
-  background: url(./images/icons/tabLeft.png) no-repeat center right;
+  background-image: url(./images/icons/tabLeft.png);
 }
 
 table.tabmenu td.right {
-  background: url(./images/icons/tabRight.png) no-repeat center left;
+  background-image: url(./images/icons/tabRight.png);
 }
 
 table.tabmenu td.selected {
-  background: url(./images/icons/tabSelectedBg.png) repeat-x center;
+  background-image: url(./images/icons/tabSelectedBg.png);
 }
 
 table.tabmenu td.selected.left {
-  background: url(./images/icons/tabSelectedLeft.png) no-repeat center right;
+  background-image: url(./images/icons/tabSelectedLeft.png);
 }
 
 table.tabmenu td.selected.right {
-  background: url(./images/icons/tabSelectedRight.png) no-repeat center left;
+  background-image: url(./images/icons/tabSelectedRight.png);
 }
 
 /* Standard table */
@@ -269,12 +149,6 @@ table.tbl {
 
 table.tbl th {
   background-color: #68c;
-  font-style: italic;
-}
-
-table.tbl tr.triggerShow td,
-table.tbl tr.triggerHide td{
-  padding-left: 25px;
 }
 
 table.tbl th.title {
@@ -290,8 +164,6 @@ div.tree-header:hover {
 table.tbl td,
 div.tree-header {
   background-color: #ffd;
-  padding: 2px;
-  white-space: nowrap;
   border-bottom: 1px solid #ddd;
 }
 
@@ -308,15 +180,11 @@ table.tbl tr.clear a {
 
 table.titleblock td.titlecell {
   color: #68c;
-  padding-bottom: 5px;
 }
 
 /* Main table */
 table.main th.title {
-  font-size: 14px;
   color: #fff;
-  font-weight: bold;  
-  text-align: center;
   background-color: #68c;
   border: #68c 1px outset;
 }
@@ -334,23 +202,6 @@ table.main th.urgence.modify {
   color: #fc0;
 }
 
-/* System message */
-#systemMsg {
-  text-align: left;
-}
-
-table.dialog #systemMsg {
-  float: right;
-}
-
-div.loading {
-  background-image: url(images/icons/loading.gif);
-}
-
-div.message, div.loading, div.error, div.warning {
-   white-space: normal;
-}
-
 /* Tooltips */
 div.tooltip {
   border-color: #ccc;
@@ -358,26 +209,15 @@ div.tooltip {
 
 table.note th,
 table.note td {
-  font-style: normal;
   color: #000000;
 }
 
-/* dPlabo catalogues */
-tr.catalogue-1 th {
-  font-size: 160%;
-  font-variant: small-caps;
-}
-
 tr.catalogue-2 th {
-  font-size: 130%;
   background-color: #79d;
 }
 
 tr.catalogue-3 th {
   color: #444;
-  font-weight: bold;
-  text-align: left;
-  background-color: transparent;
 }
 
 /* Inputs */
@@ -386,9 +226,8 @@ input[type=tel],
 input[type=email], 
 input[type=number], 
 input[type=password], 
-input[type=file], 
 select,
-textarea {
+.textarea-container {
   border: 1px solid #ae0040;
   background-color: #fff;
 }
@@ -398,11 +237,15 @@ input[type=tel]:focus,
 input[type=email]:focus, 
 input[type=number]:focus, 
 input[type=password]:focus, 
-input[type=file]:focus, 
 select:focus, 
-textarea:focus {
+.textarea-container.input-focus,
+.textarea-container textarea:focus {
   background-color: #fde0b6;
   border: 1px solid #ae0040;
+}
+
+.textarea-container textarea:focus {
+  border: none;
 }
 
 input[readonly],
@@ -414,15 +257,8 @@ label {
   color: #ae0040;
 }
 
-button, 
-a.button {
-  color: #ae0040;
-  border: 1px outset #444;
-}
-
 table.tbl th {
   background-color: #feebcd;
-  font-style: normal;
   color: #ae0040;
 }
 
@@ -454,7 +290,6 @@ div.tree-header:hover {
 
 #leftMenu #menubar a:hover {
   color: #fff;
-  font-weight: bold;
 }
 
 table.main th.title,
@@ -462,12 +297,20 @@ table.tbl th.title,
 table.form th.title {
   color: #fff;
   background-color: #ae0040;
-  text-align: left;
 }
 
-/* Menus items hidden from print media */
-@media print {
-  #leftMenu, #mainHeader {
-    display: none;
-  }
+ul.control_tabs li a, 
+ul.control_tabs_vertical li a {
+  border-color: #ae0040;
+  background-color: #c55;
+}
+
+ul.control_tabs li a:hover, 
+ul.control_tabs_vertical li a:hover {
+  background-color: #d77;
+}
+
+ul.control_tabs li a.active:hover, 
+ul.control_tabs_vertical li a.active:hover {
+  background-color: #fdd;
 }

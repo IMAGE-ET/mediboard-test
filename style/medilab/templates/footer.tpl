@@ -1,1 +1,1 @@
-{{mb_include style=mediboard template=footer}}
+{{mb_include style=e-cap template=footer}}

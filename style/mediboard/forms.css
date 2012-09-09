@@ -28,7 +28,11 @@ button.intermax-result {
   opacity: .4;
 }
 
-input, select, textarea, button, .textarea-container {
+input, 
+select, 
+textarea, 
+button, 
+.textarea-container {
   margin: 1px;
   vertical-align: middle;
   font-family: inherit;
@@ -49,8 +53,7 @@ input[type=text],
 input[type=tel], 
 input[type=number], 
 input[type=email], 
-input[type=password], 
-input[type=file],
+input[type=password],
 textarea {
   -webkit-border-radius: 0;
   -webkit-appearance: none; /* To remove the "shadow" on iPad" */
@@ -67,7 +70,6 @@ input[type=tel],
 input[type=number], 
 input[type=email], 
 input[type=password], 
-input[type=file], 
 select, 
 textarea,
 .textarea-container {
@@ -80,7 +82,6 @@ input[type=tel]:focus,
 input[type=number]:focus, 
 input[type=email]:focus, 
 input[type=password]:focus, 
-input[type=file]:focus, 
 select:focus, 
 textarea:focus,
 .textarea-container.input-focus {
@@ -225,6 +226,30 @@ a.button {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
+::-webkit-file-upload-button {
+  font-size: 11px;
+  line-height: 16px;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: left;
+  font-weight: normal;
+  white-space: nowrap;
+  display: inline-block;
+  
+  color: #000 !important;
+  background: #eee url(images/buttons/button.png) center center repeat-x;
+  
+  border: 1px solid #999;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  
+  vertical-align: middle;
+  height: 20px;
+  padding: 1px 3px;
+  margin: 1px;
+  text-shadow: none;
+  box-sizing: border-box;
+}
 
 button:before, 
 a.button:before,
@@ -246,8 +271,11 @@ button:focus,
 a.button:focus {
   outline: 1px dotted #000;
 }
+::-webkit-file-upload-button:focus {
+  outline: 1px dotted #000;
+}
 
-button[type="submit"],
+button[type=submit],
 form button:not([type]) {
   border-color: #000;
   font-weight: bold;
@@ -259,7 +287,6 @@ a.button.notext {
   color: rgba(0,0,0,0);
   overflow: hidden;
   width: 20px;
-  padding-right: 0;
 }
 
 button.rtl,
@@ -278,6 +305,10 @@ a.button.rtl:before {
 
 button:hover,
 a.button:hover {
+  background-image: url(images/buttons/button-over.png);
+  border-color: #333;
+}
+::-webkit-file-upload-button:hover {
   background-image: url(images/buttons/button-over.png);
   border-color: #333;
 }
