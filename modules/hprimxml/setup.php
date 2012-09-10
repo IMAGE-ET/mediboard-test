@@ -25,7 +25,7 @@ class CSetuphprimxml extends CSetup {
               `username` VARCHAR (255) NOT NULL,
               `password` VARCHAR (50) NOT NULL,
               `actif` ENUM ('0','1') NOT NULL DEFAULT '0',
-    					`group_id` INT (11) UNSIGNED NOT NULL
+              `group_id` INT (11) UNSIGNED NOT NULL
             ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
@@ -45,12 +45,12 @@ class CSetuphprimxml extends CSetup {
               `message` MEDIUMTEXT NOT NULL,
               `acquittement` MEDIUMTEXT,
               `initiateur_id` INT (11) UNSIGNED,
-    					`statut_acquittement` VARCHAR (255),
-    					`message_valide` ENUM ('0','1'),
+              `statut_acquittement` VARCHAR (255),
+              `message_valide` ENUM ('0','1'),
               `acquittement_valide` ENUM ('0','1'),
-    					`group_id` INT (11) UNSIGNED NOT NULL,
-    					`id_permanent` VARCHAR (25),
-    					`object_id` INT (11) UNSIGNED DEFAULT NULL,
+              `group_id` INT (11) UNSIGNED NOT NULL,
+              `id_permanent` VARCHAR (25),
+              `object_id` INT (11) UNSIGNED DEFAULT NULL,
               `object_class` VARCHAR (255) DEFAULT NULL,
               `compressed` ENUM ('0','1') DEFAULT '0'
             ) /*! ENGINE=MyISAM */;";
@@ -60,8 +60,8 @@ class CSetuphprimxml extends CSetup {
               ADD INDEX (`date_production`),
               ADD INDEX (`date_echange`),
               ADD INDEX (`initiateur_id`),
-    					ADD INDEX (`group_id`),
-    					ADD INDEX (`object_id`);";
+              ADD INDEX (`group_id`),
+              ADD INDEX (`object_id`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.11");
@@ -81,8 +81,8 @@ class CSetuphprimxml extends CSetup {
             ADD INDEX (`statut_acquittement`),
             ADD INDEX (`message_valide`),
             ADD INDEX (`acquittement_valide`),
-    				ADD INDEX (`id_permanent`),
-    				ADD INDEX (`object_class`);";
+            ADD INDEX (`id_permanent`),
+            ADD INDEX (`object_class`);";
     $this->addQuery($query); 
     
     $this->makeRevision("0.13");
@@ -93,14 +93,14 @@ class CSetuphprimxml extends CSetup {
     
     $this->makeRevision("0.14");
     $this->setTimeLimit(3600);
-    		 
+         
     $query = "UPDATE `echange_hprim` 
             SET `compressed` = '0' WHERE `compressed` = '1';";
     $this->addQuery($query); 
     
     $query = "ALTER TABLE `echange_hprim` 
               CHANGE `compressed` `purge` ENUM ('0','1') DEFAULT '0',
-    					CHANGE `message` `message` MEDIUMTEXT;";
+              CHANGE `message` `message` MEDIUMTEXT;";
     $this->addQuery($query);
     
     $this->makeRevision("0.15");
@@ -383,8 +383,19 @@ class CSetuphprimxml extends CSetup {
     $query = "ALTER TABLE `echange_hprim` 
                 CHANGE `sender_class` `sender_class` VARCHAR (80);";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.40");
+    
+    $query = "ALTER TABLE `destinataire_hprim_config` 
+                ADD `encoding` ENUM ('UTF-8','ISO-8859-1') DEFAULT 'UTF-8';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `destinataire_hprim_config`
+                DROP `send_debiteurs_venue`,
+                DROP `send_mvt_patients`"; 
+    $this->addQuery($query);
         
-    $this->mod_version = "0.40";
+    $this->mod_version = "0.41";
   }
 }
 

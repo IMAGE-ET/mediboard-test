@@ -23,16 +23,25 @@ if (!$exchange->message_valide) {
 }
 
 $receiver = $exchange->_ref_receiver;
+$receiver->loadConfigValues();
 
 $evenement = null;
 
-$msg = utf8_encode($exchange->_message);
+$msg = $exchange->_message;
 if ($receiver instanceof CReceiverIHE) {
+  if ($receiver->_configs["encoding"] == "UTF-8") {
+    $msg = utf8_encode($msg);
+  }
+  
   $evenement   = "evenementsPatient";
   $data_format = CIHE::getEvent($exchange);
 }
 
 if ($receiver instanceof CDestinataireHprim) {
+  if ($receiver->_configs["encoding"] == "UTF-8") {
+    $msg = utf8_encode($msg);
+  }
+  
   if ($exchange->type == "patients") {
     $evenement   = "evenementPatient";
     $data_format = CHPrimXMLEvenementsPatients::getHPrimXMLEvenements($exchange->_message);
@@ -47,9 +56,6 @@ if ($receiver instanceof CDestinataireHprim) {
 if ($receiver instanceof CPhastDestinataire) {
   $data_format = CPhastEvenementsPN13::getXMLEvenementsPN13($exchange->_message);
   $evenement = $data_format->sous_type;
-  
-  // Il est nécessaire de supprimer l'utf8_encode
-  $msg = $exchange->_message;
 }
 
 if (!$evenement) {

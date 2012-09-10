@@ -156,7 +156,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim->store();
     
     // Chargement des configs du destinataire
-    $this->_ref_receiver->loadConfigValues();
+    $dest = $this->_ref_receiver;
+    $dest->loadConfigValues();
     
     $this->_ref_echange_hprim = $echg_hprim;
             
@@ -167,13 +168,15 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $echg_hprim->message_valide = $doc_valid ? 1 : 0;
 
     $this->saveTempFile();
-    $msg = utf8_encode($this->saveXML()); 
+    $msg = $this->saveXML();
     
-    $echg_hprim->_message = $msg;
+    // On sauvegarde toujours en base le message en UTF-8
+    $echg_hprim->_message = utf8_encode($msg);
 
     $echg_hprim->store();
-
-    return $msg;
+    
+    // On envoie le contenu et NON l'entête en UTF-8 si le destinataire est en UTF-8
+    return ($dest->_configs["encoding"] == "UTF-8") ? utf8_encode($msg) : $msg;
   }
   
   function getIdSource($node, $valeur = true) {
