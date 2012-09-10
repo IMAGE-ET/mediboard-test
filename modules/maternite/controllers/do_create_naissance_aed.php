@@ -85,6 +85,7 @@ if (!$naissance_id) {
   $sejour_enfant->patient_id = $patient->_id;
   $sejour_enfant->praticien_id = $praticien_id;
   $sejour_enfant->group_id = $sejour->group_id;
+  $sejour_enfant->_naissance = true;
   storeObject($sejour_enfant);
   
   // Etape 4 (affectation)
@@ -140,6 +141,7 @@ else {
   $sejour_enfant = new CSejour;
   $sejour_enfant->load($naissance->sejour_enfant_id);
   $sejour_enfant->praticien_id = $praticien_id;
+  $sejour_enfant->_naissance = true;
   storeObject($sejour_enfant);
   
   // Effectuer l'admission si nécessaire (si issu d'un dossier provisoire)

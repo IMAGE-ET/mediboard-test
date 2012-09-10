@@ -60,6 +60,7 @@ $sejour_enfant->entree_prevue = mbDateTime();
 $sejour_enfant->sortie_prevue = $sejour->sortie;
 $sejour_enfant->praticien_id = $praticien_id ? $praticien_id : $sejour->praticien_id;
 $sejour_enfant->group_id = $sejour->group_id;
+$sejour_enfant->_naissance = true;
 storeObject($sejour_enfant);
 
 $naissance = new CNaissance;

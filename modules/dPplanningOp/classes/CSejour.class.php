@@ -131,6 +131,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_sejours_enfants_ids = array();
   var $_date_deces         = null;
   var $_envoi_mail         = null;
+  var $_naissance          = null;
   
   // Behaviour fields
   var $_check_bounds  = true;
