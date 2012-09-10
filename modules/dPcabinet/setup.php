@@ -1642,7 +1642,11 @@ class CSetupdPcabinet extends CSetup {
                CHANGE `pct_retrocession` `pct_retrocession` FLOAT DEFAULT '70';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.72";
+    $this->makeRevision("1.72");
+    $query = "ALTER TABLE `examigs` CHANGE `glascow` `glasgow` ENUM('26','13','7','5','0');";
+    $this->addQuery($query);
+           
+    $this->mod_version = "1.73";
   }
 }
 ?>

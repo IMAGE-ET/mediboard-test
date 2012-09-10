@@ -29,7 +29,7 @@ class CExamIgs extends CMbObject {
   var $natremie            = null;
   var $HCO3                = null;
   var $billirubine         = null;
-  var $glascow             = null;
+  var $glasgow             = null;
   var $maladies_chroniques = null;
   var $admission           = null;
   var $scoreIGS            = null;
@@ -38,7 +38,7 @@ class CExamIgs extends CMbObject {
   var $_ref_consult = null;
   
   static $fields = array("age", "FC", "TA", "temperature", "PAO2_FIO2", "diurese", "uree", "globules_blancs", 
-                            "kaliemie", "natremie", "HCO3" , "billirubine", "glascow", "maladies_chroniques", "admission");
+                            "kaliemie", "natremie", "HCO3" , "billirubine", "glasgow", "maladies_chroniques", "admission");
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -63,7 +63,7 @@ class CExamIgs extends CMbObject {
     $specs["natremie"]            = "enum list|5|0|1";
     $specs["HCO3"]                = "enum list|6|3|0";
     $specs["billirubine"]         = "enum list|0|4|9";
-    $specs["glascow"]             = "enum list|26|13|7|5|0";
+    $specs["glasgow"]             = "enum list|26|13|7|5|0";
     $specs["maladies_chroniques"] = "enum list|9|10|17";
     $specs["admission"]           = "enum list|0|6|8";
     $specs["scoreIGS"]            = "num";

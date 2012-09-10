@@ -81,6 +81,22 @@ else {
     }
   }
   
+  $glasgow = $constantes_medicales->glasgow;
+  if ($glasgow) {
+    $last_constantes["glasgow"] = $glasgow;
+    if($glasgow < 6){
+      $exam_igs->glasgow = '26'; 
+    } elseif ($glasgow <= 8) {
+      $exam_igs->glasgow = '13'; 
+    } elseif ($glasgow <= 10) {
+      $exam_igs->glasgow = '7'; 
+    } elseif ($glasgow <= 13) {
+      $exam_igs->glasgow = '5'; 
+    } else {
+      $exam_igs->glasgow = '0';
+    }
+  }
+  
   $temp = $constantes_medicales->temperature;
   if ($temp) {
     $last_constantes["temperature"] = $temp;
