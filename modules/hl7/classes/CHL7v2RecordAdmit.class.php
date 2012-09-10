@@ -378,8 +378,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // Suppression de l'affectation
-    
-    
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
   

@@ -9,7 +9,7 @@
  */
 
 class CSmpObjectHandler extends CEAIObjectHandler {
-  static $handled = array ("CSejour", "CAffectation");
+  static $handled = array ("CSejour", "CAffectation", "CNaissance");
 
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);

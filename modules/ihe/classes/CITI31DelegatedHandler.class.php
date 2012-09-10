@@ -16,7 +16,7 @@
  * ITI31 Delegated Handler
  */
 class CITI31DelegatedHandler extends CITIDelegatedHandler {
-  static $handled        = array ("CSejour", "CAffectation");
+  static $handled        = array ("CSejour", "CAffectation", "CNaissance");
   protected $profil      = "PAM";
   protected $transaction = "ITI31";
 
@@ -40,7 +40,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $sejour = $mbObject;
       $sejour->loadRefPatient();
       
+      // Si on ne souhaite explicitement pas de synchro
       if ($sejour->_no_synchro) {
+        return;
+      }
+      
+      // Si on est en train de créer un séjour et qu'il s'agit d'une naissance
+      $current_log = $sejour->loadLastLog();
+      if ($current_log->type == "create" && $sejour->_naissance) {
         return;
       }
       
@@ -81,7 +88,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
     }
     
-     // Traitement Affectation
+    // Traitement Affectation
     if ($mbObject instanceof CAffectation) {
       $affectation = $mbObject;
       $current_log = $affectation->_ref_current_log;
@@ -110,6 +117,49 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
    
       // Envoi de l'événement
       $this->sendITI($this->profil, $this->transaction, $code, $sejour);
+    }
+    
+    // Traitement Naissance
+    if ($mbObject instanceof CNaissance) {
+      $current_log = $mbObject->loadLastLog();
+      if ($current_log->type != "create") {
+        return;
+      }
+
+      $sejour_enfant = $mbObject->loadRefSejourEnfant();
+      $sejour_enfant->loadRefPatient();
+      $sejour_enfant->_receiver = $receiver;
+      
+      $code = $this->getCodeSejour($sejour_enfant);
+        
+      // Cas où : 
+      // * on est l'initiateur du message 
+      // * le destinataire ne supporte pas le message
+      if ($sejour_enfant->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+        return;
+      }
+      
+      if (!$sejour_enfant->_NDA) {
+        // Génération du NDA dans le cas de la création, ce dernier n'était pas créé
+        if ($msg = $sejour_enfant->generateNDA()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
+        
+        $NDA = new CIdSante400();
+        $NDA->loadLatestFor($sejour_enfant, $receiver->_tag_sejour);
+        $sejour_enfant->_NDA = $NDA->id400;
+      }
+      
+      $current_affectation = null;
+      // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
+      if ($sejour_enfant->fieldModified("entree_reelle") && !$sejour_enfant->_old->entree_reelle) {
+        $current_affectation = $sejour->getCurrAffectation();
+      }
+
+      $this->createMovement($code, $sejour_enfant, $current_affectation);
+
+      // Envoi de l'événement
+      $this->sendITI($this->profil, $this->transaction, $code, $sejour_enfant);
     }
   }
   

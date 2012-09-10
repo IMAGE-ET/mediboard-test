@@ -271,17 +271,14 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
 
       if ($naissance->_id) {
         $sejour_maman = $naissance->loadRefSejourMaman();
+        $sejour_maman->loadNDA($group->_id);
+        
         $sejour_maman->loadRefPatient()->loadIPP($group->_id);
         $mother = $sejour_maman->_ref_patient;
         
-        if (CHL7v2Message::$build_mode == "simple") {
-          $data[] = array(
-            (!$mother->_IPP) ? 0 : $mother->_IPP
-          );          
-        }
-    
+        $identifiers = array();
         if ($mother->_IPP) {
-          $data[] = array(
+          $identifiers[] = array(
             $mother->_IPP,
             null,
             null,
@@ -290,6 +287,18 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
             "PI"
           );
         }
+        if ($sejour_maman->_NDA) {
+          $identifiers[] = array(
+            $sejour_maman->_NDA,
+            null,
+            null,
+            // PID-3-4 Autorité d'affectation
+            $this->getAssigningAuthority("FINESS", $group->finess),
+            "AN"
+          );
+        }
+
+        $data[] = $identifiers;
       }
       else {
         $data[] = null;
@@ -298,7 +307,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     else {
       $data[] = null;
     }
-    
+
     // PID-22: Ethnic Group (CE) (optional repeating)
     $data[] = null;
     

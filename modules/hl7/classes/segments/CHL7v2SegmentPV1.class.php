@@ -67,7 +67,19 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     // U  - Caractère d'urgence aigue du problème quel que soit le service d'entrée
     // RM - Rétrocession du médicament
     // IE - Prestation inter-établissements
-    $data[] = "R";
+    
+    $naissance = new CNaissance();
+    $naissance->sejour_enfant_id = $sejour->_id;
+    $naissance->loadMatchingObject();
+    
+    // Cas d'une naissance
+    if ($naissance->_id) {
+      $data[] = "N";
+    }
+    // Défaut
+    else {
+      $data[] = "R";
+    }    
     
     // PV1-5: Preadmit Number (CX) (optional)
     if (CHL7v2Message::$build_mode == "simple") {
