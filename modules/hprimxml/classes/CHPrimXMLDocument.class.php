@@ -964,9 +964,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addTexte($elParent, "commentaire", $operation->rques, 4000);
       
       // TypeAnesthésie : nomemclature externe (idex)
-      $tag_hprimxml   = $this->_ref_receiver->_tag_hprimxml;
-      $idexTypeAnesth = CIdSante400::getMatch("CTypeAnesth", $tag_hprimxml, null, $operation->type_anesth);
-      $this->addElement($elParent, "typeAnesthesie", $idexTypeAnesth->id400);
+      if ($operation->type_anesth) {
+        $tag_hprimxml   = $this->_ref_receiver->_tag_hprimxml;
+        $idexTypeAnesth = CIdSante400::getMatch("CTypeAnesth", $tag_hprimxml, null, $operation->type_anesth);
+        $this->addElement($elParent, "typeAnesthesie", $idexTypeAnesth->id400);
+      }
       
       // Indicateurs
       $indicateurs = $this->addElement($elParent, "indicateurs");
@@ -983,6 +985,22 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       // Recours / Durée USCPO
       $this->addElement($elParent, "recoursUscpo", $operation->duree_uscpo ? 1 : 0);
       $this->addElement($elParent, "dureeUscpo"  , $operation->duree_uscpo ? $operation->duree_uscpo : null);
+      
+      // Côté (droit|gauche|bilatéral|total|inconnu)
+      // D - Droit
+      // G - Gauche
+      // B - Bilatéral
+      // T - Total
+      // I - Inconnu
+      $cote = array (
+        "droit"     => "D",
+        "gauche"    => "G",
+        "bilatéral" => "B",
+        "total"     => "T",
+        "inconnu"   => "I"
+      );
+      
+      $this->addCodeLibelle($elParent, "cote", $cote[$operation->cote], CMbString::capitalize($operation->cote));
     }
   }
   

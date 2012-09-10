@@ -84,14 +84,30 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     );
   }
   
+  function mappingVenue($node, CSejour $sejour) {
+    // On ne récupère que l'entrée et la sortie 
+    $sejour = CHPrimXMLEvenementsPatients::getEntree($node, $sejour);
+    $sejour = CHPrimXMLEvenementsPatients::getSortie($node, $sejour);
+    
+    return $sejour;    
+  }
+  
   function mappingIntervention($node, COperation $operation) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     $operation->libelle = $xpath->queryTextNode("hprim:libelle", $node);
     $operation->rques   = $xpath->queryTextNode("hprim:commentaire", $node);
     
-    /* @todo On met en inconnu ? */
-    $operation->cote = "inconnu";
+    // Côté
+    $cote = array (
+      "D" => "droit",
+      "G" => "gauche",
+      "B" => "bilatéral",
+      "T" => "total",
+      "I" => "inconnu"
+    );
+    $code_cote = $xpath->queryTextNode("hprim:cote/hprim:code", $node);
+    $operation->cote = isset($cote[$code_cote]) ? $cote[$code_cote] : "inconnu";
     
     // TypeAnesthésie
     $this->getTypeAnesthesie($node, $operation);
@@ -101,8 +117,10 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   
   function getTypeAnesthesie($node, COperation $operation) {
     $xpath = new CHPrimXPath($node->ownerDocument); 
-    
-    $typeAnesthesie = $xpath->queryTextNode("hprim:typeAnesthesie", $node); 
+       
+    if (!$typeAnesthesie = $xpath->queryTextNode("hprim:typeAnesthesie", $node)) {
+      return;
+    }
     
     $operation->type_anesth = CIdSante400::getMatch("CTypeAnesth", $this->_ref_sender->_tag_hprimxml, $typeAnesthesie)->object_id;
   }

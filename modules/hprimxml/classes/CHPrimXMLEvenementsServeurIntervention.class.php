@@ -38,7 +38,9 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
       "delete" => "suppression"
     );
     $action = (!$operation->loadLastLog()) ? "modification" : $actionConversion[$operation->_ref_last_log->type];
-
+    if ($operation->fieldModified("annulee", 1)) {
+      $action = "suppression";
+    }
     $this->addAttribute($evenementServeurIntervention, "action", $action);
     
     // Date de l'action
@@ -140,6 +142,15 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     // Chargement du patient du séjour
     $sejour->loadRefPatient();
     $operation->sejour_id = $sejour->_id;
+    
+    // Mapping du séjour
+    $sejour = $this->mappingVenue($data['venue'], $sejour);
+    
+    // Notifier les autres destinataires autre que le sender
+    $sejour->_eai_initiateur_group_id = $sender->group_id;
+    if (!$msgVenue = $sejour->store()) {
+      return $exchange_hprim->setAck($dom_acq, "A102", $msgVenue, null, $sejour);
+    }
     
     // idex de l'intervention
     $idex = CIdSante400::getMatch("COperation", $sender->_tag_hprimxml, $data['idSourceIntervention']);

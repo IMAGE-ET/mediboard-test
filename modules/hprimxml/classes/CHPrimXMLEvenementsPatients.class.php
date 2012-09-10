@@ -233,7 +233,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $mbVenue = self::getEntree($node, $mbVenue);
     $mbVenue = $this->getMedecins($node, $mbVenue);
     $mbVenue = self::getPlacement($node, $mbVenue);
-    $mbVenue = $this->getSortie($node, $mbVenue);
+    $mbVenue = self::getSortie($node, $mbVenue);
 
     /* TODO Supprimer ceci après l'ajout des times picker */
     $mbVenue->_hour_entree_prevue = null;
@@ -466,7 +466,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $mbVenue;
   }
   
-  function getSortie($node, CSejour $mbVenue) {
+  static function getSortie($node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     $sortie = $xpath->queryUniqueNode("hprim:sortie", $node);
@@ -503,7 +503,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
         
         $destination = $xpath->queryUniqueNode("hprim:destination", $sortie);
         if ($destination) {
-          $mbVenue = $this->getEtablissementTransfert($destination, $mbVenue);
+          $mbVenue = self::getEtablissementTransfert($destination, $mbVenue);
         }
       } 
       //retour au domicile
@@ -515,14 +515,13 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     return $mbVenue;
   }
   
-  function getEtablissementTransfert($node, CSejour $mbVenue) {
+  static function getEtablissementTransfert($node, CSejour $mbVenue) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     $code = $xpath->queryUniqueNode("hprim:code", $node);
     
     $etabExterne = new CEtabExterne();
-    
-    
+
     return $mbVenue->etablissement_sortie_id;
   }
   
