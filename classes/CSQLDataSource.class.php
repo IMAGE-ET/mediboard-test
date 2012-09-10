@@ -316,7 +316,7 @@ abstract class CSQLDataSource {
       $pace = max(0, min(6, $pace));
       $message = "query-pace-$pace";
       $type = floor(($pace+3)/2);
-      CAppUI::stepMessage($type, $message, $this->dsn, number_format($step, 2));
+      CAppUI::stepMessage($type, $message, $this->dsn, number_format($step, 2), number_format($this->chrono->total, 2));
     }
 
     return $result;
