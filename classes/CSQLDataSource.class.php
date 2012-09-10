@@ -312,11 +312,13 @@ abstract class CSQLDataSource {
     // Chrono messaging
     if (CSQLDataSource::$trace) {
       $step = $this->chrono->step * 1000;
+      $total = $this->chrono->total * 1000;
+      
       $pace = floor(2*log10($step));
       $pace = max(0, min(6, $pace));
       $message = "query-pace-$pace";
       $type = floor(($pace+3)/2);
-      CAppUI::stepMessage($type, $message, $this->dsn, number_format($step, 2), number_format($this->chrono->total, 2));
+      CAppUI::stepMessage($type, $message, $this->dsn, number_format($step, 2), number_format($total, 2));
     }
 
     return $result;
