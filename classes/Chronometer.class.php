@@ -19,6 +19,7 @@ class Chronometer {
   var $avgStep = 0;
   var $nbSteps = 0;
   var $main = false;
+  var $latestStep = 0;
   
   var $report = array();
   
@@ -64,6 +65,7 @@ class Chronometer {
       $report->avgStep = $report->total/$report->nbSteps;
     }
     
+    $this->latestStep = $this->step;
     $this->step = 0; 
   }
 }
