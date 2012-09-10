@@ -127,6 +127,10 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
   static function isWellFormed($data, $strict_segment_terminator = false) {
     // remove all chars before MSH
     $msh_pos = strpos($data, "MSH");
+    if ($msh_pos === false) {
+      throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $data);
+    }
+    
     $data = substr($data, $msh_pos);
     $data = self::fixRawER7($data, $strict_segment_terminator);
   
@@ -169,12 +173,22 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
 
      // remove all chars before MSH
     $msh_pos = strpos($data, "MSH");
+    
+    if ($msh_pos === false) {
+      throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $data);
+    }
+    
     $data = substr($data, $msh_pos);
     $data = self::fixRawER7($data, $this->strict_segment_terminator);
     
     parent::parse($data);
     
     $message = $this->data;
+    
+    // 4 to 7
+    if (!isset($message[7])) {
+      throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $message);
+    }
     
     $this->fieldSeparator = $message[3];
     
@@ -210,6 +224,10 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     
     // we extract the first line info "by hand"
     $first_line = CHL7v2::split($this->fieldSeparator, reset($this->lines));
+    
+    if (!isset($first_line[11])) {
+      throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $message);
+    }
     
     // version
     if (array_key_exists(16, $first_line)) {

@@ -177,7 +177,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
       $orderby .= "daily_check_item_type_id";
     }
     else {
-      $orderby .= "title";
+      $orderby .= "`index`, title";
     }
     
     $itemType = new CDailyCheckItemType();

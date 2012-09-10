@@ -31,6 +31,10 @@ class COracleDataSource extends CSQLDataSource {
     $this->exec("ALTER SESSION SET NLS_COMP = LINGUISTIC");
     $this->exec("ALTER SESSION SET NLS_SORT = BINARY_AI"); // accent-insensitive and case-insensitive binary sort
 
+    //mbTrace($this->loadList("SELECT * FROM NLS_SERVER_PARAMETERS"));
+    //mbTrace($this->loadList("SELECT * FROM NLS_INSTANCE_PARAMETERS"));
+    //mbTrace($this->loadList("SELECT * FROM NLS_SESSION_PARAMETERS"));
+    
     return $this->link;
   }  
     
