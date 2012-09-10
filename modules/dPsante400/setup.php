@@ -132,8 +132,14 @@ class CSetupdPsante400 extends CSetup {
                 ADD INDEX (`object_class`),
                 ADD INDEX (`group_id`);";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.24");
+    $query = "ALTER TABLE `trigger_mark` 
+                ADD INDEX ( `trigger_class` ),
+                ADD INDEX ( `trigger_number` );";
+    $this->addQuery($query);
               
-    $this->mod_version = "0.24";
+    $this->mod_version = "0.25";
   } 
 }
 ?>
