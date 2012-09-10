@@ -59,13 +59,11 @@ class CHL7v2SegmentZBE_FR extends CHL7v2SegmentZBE {
     /* @todo Voir comment gérer ceci... */
    
     // Changement d'UF médicale
-    if ($event->code == "Z80" || $event->code == "Z81" ||
-        $event->code == "Z82" || $event->code == "Z83") {
+    if (CMbArray::in($event->code, "Z80 Z81 Z82 Z83")) {
       $data[] = "M";
     }
     // Changement d'UF de soins
-    elseif ($event->code == "Z84" || $event->code == "Z85" ||
-            $event->code == "Z86" || $event->code == "Z87") {
+    elseif (CMbArray::in($event->code, "Z84 Z85 Z86 Z87")) {
       $data[] = "S";
     }
     else {

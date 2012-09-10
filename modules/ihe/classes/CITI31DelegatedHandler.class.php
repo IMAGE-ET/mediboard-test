@@ -162,6 +162,10 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if (!empty($movements)) {
       $movement = reset($movements);
     }
+    
+    if ($update) {
+      $movement->start_of_movement = $this->getStartOfMovement($movement->original_trigger_code, $sejour, $affectation);
+    }
 
     if ($cancel) {
       $movement->cancel = 1;
