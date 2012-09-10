@@ -144,7 +144,9 @@ Main.add(function () {
     refreshListCategorie({{$plageConsult->chir_id}});
     PlageConsultSelector.init();
   {{elseif ($pat->_id || $date_planning) && !$consult->_id}}
+    if($V(form.chir_id)) {
       PlageConsultSelector.init();
+    }
   {{/if}}
   
   {{if $consult->_id && $consult->patient_id}}
@@ -335,7 +337,7 @@ Main.add(function() {
                 {{mb_field object=$consult field="motif" class="autocomplete" rows=5 form="editFrm"}}
               </td>
             </tr>
-      
+            
             <tr>
               <th>{{mb_label object=$consult field="rques"}}</th> 
               <td>
@@ -380,7 +382,7 @@ Main.add(function() {
               {{if $consult->patient_id}}
               ({{$consult->_etat}})
               <br />
-              <a class="button new" href="?m=dPcabinet&tab=edit_planning&pat_id={{$consult->patient_id}}&consultation_id=0&date_planning={{$consult->_date}}">Nouveau RDV pour ce patient</a>
+              <a class="button new" href="?m=dPcabinet&tab=edit_planning&pat_id={{$consult->patient_id}}&consultation_id=0&date_planning={{$consult->_date}}&chir_id={{$chir->_id}}">Nouveau RDV pour ce patient</a>
               {{/if}}
             </td>
           </tr>
