@@ -243,6 +243,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     // Téléphones
     $this->getPhones($node, $newPatient);
     
+    // E-mail
+    $this->getEmail($node, $newPatient);
+    
     //NSS
     $sender = $this->_ref_sender;
     switch ($sender->_configs["handle_NSS"]) {
@@ -305,7 +308,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $adress_type = $this->queryTextNode("XAD.7", $_PID11);
       /* @todo Ajouter la gestion des multi-lignes - SAD.2 */
       $addresses[$adress_type]["adresse"]      = $this->queryTextNode("XAD.1", $_PID11);
-    $addresses[$adress_type]["adresse_comp"] = $this->queryTextNode("XAD.2", $_PID11);
+      $addresses[$adress_type]["adresse_comp"] = $this->queryTextNode("XAD.2", $_PID11);
       $addresses[$adress_type]["ville"]        = $this->queryTextNode("XAD.3", $_PID11);
       $addresses[$adress_type]["cp"]           = $this->queryTextNode("XAD.5", $_PID11);
       $addresses[$adress_type]["pays_insee"]   = $this->queryTextNode("XAD.6", $_PID11);
@@ -321,7 +324,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     // Adresse
     if (array_key_exists("H", $addresses)) {
       $this->getAdress($addresses["H"], $newPatient);
-    } else {
+    } 
+    else {
       foreach ($addresses as $adress_type => $_address) {
         $this->getAdress($_address, $newPatient);
       }
@@ -354,23 +358,41 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       
       switch ($this->queryTextNode("XTN.2", $_PID13)) {
         case "PRN" :
-        if ($this->queryTextNode("XTN.3", $_PID13) == "PH") {
-          $newPatient->tel  = $this->getPhone($tel_number);
-      }    
+          if ($this->queryTextNode("XTN.3", $_PID13) == "PH") {
+            $newPatient->tel  = $this->getPhone($tel_number);
+          }    
           
-        if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
+          if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
             $newPatient->tel2 = $this->getPhone($tel_number);
           }
           break;
+          
         case "ORN" :
           if ($this->queryTextNode("XTN.3", $_PID13) == "CP") {
             $newPatient->tel2 = $this->getPhone($tel_number);
           }
           break;
+          
         default :
           $newPatient->tel_autre = $tel_number;
           break;
       }
+    }
+  }
+  
+  function getEmail(DOMNode $node, CPatient $newPatient) {
+    $PID13 = $this->query("PID.13", $node);
+    
+    foreach ($PID13 as $_PID13) {
+      if ($this->queryTextNode("XTN.2", $_PID13) != "NET") {
+        continue;
+      }  
+      
+      if ($this->queryTextNode("XTN.3", $_PID13) != "Internet") {
+        continue;
+      }
+      
+      $newPatient->email = $this->queryTextNode("XTN.4", $_PID13);
     }
   }
   
