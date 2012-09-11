@@ -46,6 +46,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $this->queryNode("ZFD", null, $data, true);
     }
     
+    $this->queryNodes("OBX", null, $data, true);
+    
     $this->queryNodes("GT1", null, $data, true);
     
     return $data;
@@ -787,6 +789,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (array_key_exists("GT1", $data)) {
       foreach ($data["GT1"] as $_GT1) {
         $this->getGT1($_GT1, $newVenue);
+      }
+    }
+    
+    // Constantes
+    if (array_key_exists("OBX", $data)) {
+      foreach ($data["OBX"] as $_OBX) {
+        $this->getOBX($_OBX, $newVenue, $data);
       }
     }
 

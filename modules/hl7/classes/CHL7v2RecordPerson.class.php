@@ -22,6 +22,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $this->queryNodes("NK1", null, $data, true);
     
     $this->queryNodes("ROL", null, $data, true);
+    
+    $this->queryNodes("OBX", null, $data, true);
 
     return $data;
   }
@@ -207,6 +209,13 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     if (array_key_exists("NK1", $data)) {
       foreach ($data["NK1"] as $_NK1) {
         $this->getNK1($_NK1, $newPatient);
+      }
+    }
+    
+    // Constantes du patient
+    if (array_key_exists("OBX", $data)) {
+      foreach ($data["OBX"] as $_OBX) {
+        $this->getOBX($_OBX, $newPatient, $data);
       }
     }
     

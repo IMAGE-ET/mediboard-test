@@ -269,6 +269,44 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
   function getPhone($string) {
     return preg_replace("/[^0-9]/", "", $string);
   }
+
+  function getOBX(DOMNode $node, CMbObject $mbObject, $data) {
+    $sender = $this->_ref_sender;
+    
+    $type  = $this->queryTextNode("OBX.3/CE.2", $node);
+    $value = floatval($this->queryTextNode("OBX.5", $node));
+    
+    $constante_medicale = new CConstantesMedicales();
+    
+    if ($mbObject instanceof CSejour) {
+      $constante_medicale->context_class = "CSejour";
+      $constante_medicale->context_id    = $mbObject->_id;
+      $constante_medicale->patient_id    = $mbObject->patient_id;
+    }
+    else if ($mbObject instanceof CPatient) {
+      $constante_medicale->context_class = "CPatient";
+      $constante_medicale->context_id    = $mbObject->_id;
+      $constante_medicale->patient_id    = $mbObject->_id;
+    }
+    
+    $constante_medicale->datetime = $this->queryTextNode("EVN.2/TS.1", $data["EVN"]);
+    $constante_medicale->loadMatchingObject();
+    switch ($type) {
+      case "WEIGHT" :
+        $constante_medicale->poids  = $value;
+        break;
+      
+      case "HEIGHT" :
+        $constante_medicale->taille = $value;
+        break;
+      default :
+        return;  
+    }
+    $constante_medicale->_new_constantes_medicales = true;
+    
+    // Pour le moment pas de retour d'erreur dans l'acquittement
+    $constante_medicale->store();
+  }
   
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {}
 }
