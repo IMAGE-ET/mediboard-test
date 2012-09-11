@@ -19,12 +19,12 @@
     <tr>
       <th>{{mb_label object=$stock_location field="object_id"}}</th>
       <td>
-        {{if $stock_location->_back.group_stocks|@count || $stock_location->_back.service_stocks|@count}}
+        {{if $stock_location->_id && ($stock_location->_back.group_stocks|@count || $stock_location->_back.service_stocks|@count)}}
           <div class="small-info">
             Impossible de changer le type d'emplacement car il possède déjà des stocks
           </div>
         {{/if}}
-        <select name="_type" {{if $stock_location->_back.group_stocks|@count || $stock_location->_back.service_stocks|@count}}disabled="disabled"{{/if}}>
+        <select name="_type" {{if $stock_location->_id && ($stock_location->_back.group_stocks|@count || $stock_location->_back.service_stocks|@count)}}disabled="disabled"{{/if}}>
           <option value="" disabled="disabled"> &ndash; Choisir un type</option>
           {{foreach from=$types item=_type key=_label}}
             <optgroup label="{{$_label}}">
