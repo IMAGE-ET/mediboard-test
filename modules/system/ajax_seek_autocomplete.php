@@ -23,7 +23,7 @@ $ds = $object->_spec->ds;
 
 foreach($where as $key => $value) {
   $where[$key] = $ds->prepare("= %", $value);
-	$object->$key = $value;
+  $object->$key = $value;
 }
 
 if ($keywords == "") {
@@ -37,11 +37,12 @@ $template = $object->getTypedTemplate("autocomplete");
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('matches',    $matches);
-$smarty->assign('field',      $field);
+$smarty->assign('matches'   , $matches);
+$smarty->assign('field'     , $field);
 $smarty->assign('view_field', $view_field);
-$smarty->assign('show_view',  1);
-$smarty->assign('template',   $template);
-$smarty->assign('nodebug',    true);
+$smarty->assign('show_view' , 1);
+$smarty->assign('template'  , $template);
+$smarty->assign('nodebug'   , true);
+$smarty->assign("input"     , $keywords);
 
 $smarty->display('inc_field_autocomplete.tpl');
