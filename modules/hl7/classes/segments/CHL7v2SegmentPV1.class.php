@@ -76,6 +76,10 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     if ($naissance->_id) {
       $data[] = "N";
     }
+    // Cas accouchement maternité
+    elseif ($sejour->type_pec == "O") {
+      $data[] = "L";
+    }
     // Défaut
     else {
       $data[] = "R";
