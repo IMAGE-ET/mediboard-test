@@ -36,9 +36,11 @@ function savePlan(element){
     form.del.value = "1";
   }
 
-  onSubmitFormAjax(form);
-  var url = new Url('dPhospi', 'vw_plan_etage', "tab");
-  url.redirect();
+  onSubmitFormAjax(form, {onComplete: function() {
+    var url = new Url('dPhospi', 'vw_plan_etage', "tab");
+    url.redirect();
+    }
+  });
 }
 
 PlanEtage = {
