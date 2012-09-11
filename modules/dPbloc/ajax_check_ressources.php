@@ -17,9 +17,10 @@ $besoins->$type = $object_id;
 $besoins = $besoins->loadMatchingList();
 
 // Vert : tout va bien
-$color = "0a0";
+$color = "";
 
 if (count($besoins)) {
+  $color = "0a0";
   $operation = reset($besoins)->loadRefOperation();
   $operation->loadRefPlageOp();
   $deb_op = $operation->_datetime;
