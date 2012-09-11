@@ -18,19 +18,17 @@
     <th>{{tr}}CProductEndowment-back-endowment_items{{/tr}}</th>
   </tr>
   {{foreach from=$list item=_endowment}}
-    <tbody class="hoverable">
-      <tr id="list-{{$_endowment->_guid}}">
-        <td style="font-weight: bold;">
-          <a href="#1" onclick="return loadEndowment({{$_endowment->_id}})">
-            {{mb_value object=$_endowment field=name}}
-          </a>
-        </td>
-        <td>{{mb_value object=$_endowment field=service_id}}</td>
-        <td>
-          {{$_endowment->_count.endowment_items}}
-        </td>
-      </tr>
-    </tbody>
+    <tr id="list-{{$_endowment->_guid}}">
+      <td style="font-weight: bold;">
+        <a href="#1" onclick="return loadEndowment({{$_endowment->_id}})">
+          {{mb_value object=$_endowment field=name}}
+        </a>
+      </td>
+      <td>{{mb_value object=$_endowment field=service_id}}</td>
+      <td>
+        {{$_endowment->_count.endowment_items}}
+      </td>
+    </tr>
   {{foreachelse}}
     <tr>
       <td colspan="6" class="empty">{{tr}}CProductEndowment.none{{/tr}}</td>
