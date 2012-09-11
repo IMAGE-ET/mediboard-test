@@ -51,11 +51,12 @@ $template = $object->getTypedTemplate("autocomplete");
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('matches',    $matches);
-$smarty->assign('field',      $field);
+$smarty->assign('matches'   , $matches);
+$smarty->assign('field'     , $field);
 $smarty->assign('view_field', $view_field);
-$smarty->assign('show_view',  1);
-$smarty->assign('template',   $template);
-$smarty->assign('nodebug',    true);
+$smarty->assign('show_view' , 1);
+$smarty->assign('template'  , $template);
+$smarty->assign('nodebug'   , true);
+$smarty->assign("input"     , null);
 
 $smarty->display('../../system/templates/inc_field_autocomplete.tpl');
