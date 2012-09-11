@@ -250,7 +250,7 @@ class CModeleEtiquette extends CMbMetaObject {
         }
         else {
           if ($was_barcode) {
-            mbLog($sub_fragments);
+            
             $sub_fragments = explode("<br />", $fragment,2);
             
             $pdf->WriteHTML($sub_fragments[0], false);
