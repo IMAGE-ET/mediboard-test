@@ -839,6 +839,10 @@ class CPatient extends CMbObject {
         }
       }
     }
+    
+    $sejour->loadRefPraticien()->loadRefFunction();
+    $op->loadRefPraticien()->loadRefFunction();
+    
     return array("CSejour" => $sejour, "COperation" => $op);
   }
   
