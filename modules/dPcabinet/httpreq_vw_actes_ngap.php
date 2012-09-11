@@ -15,6 +15,8 @@ $object_class = CValue::getOrSession("object_class");
 $object = new $object_class;
 $object->load($object_id);
 $object->loadRefsActesNGAP();
+$object->loadRefPraticien();
+
 $date            = CValue::getOrSession("date", mbDate());
 $date_now        = mbDate();
 
