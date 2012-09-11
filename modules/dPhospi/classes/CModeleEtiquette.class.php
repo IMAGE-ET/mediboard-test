@@ -209,11 +209,12 @@ class CModeleEtiquette extends CMbMetaObject {
           else {
             if ($was_barcode) {
               $sub_fragments = explode("<br />", $fragment,2);
-              
               $pdf_ex->WriteHTML($sub_fragments[0], false);
-              $actual_y = $pdf_ex->getY();
-              $pdf_ex->setY($actual_y+0.8);
-              $pdf_ex->WriteHTML($sub_fragments[1], false);
+              if (isset($sub_fragments[1])) {
+                $actual_y = $pdf_ex->getY();
+                $pdf_ex->setY($actual_y+0.8);
+                $pdf_ex->WriteHTML($sub_fragments[1], false);
+              }
             }
             else {
               $pdf_ex->WriteHTML($fragment, false);
@@ -229,10 +230,10 @@ class CModeleEtiquette extends CMbMetaObject {
         
         switch($this->text_align) {
           case "middle":
-          	$pdf->setY($pdf_y -0.2 + ($hauteur_etiq - $pdf_ex_y) / 2);
+            $pdf->setY($pdf_y -0.2 + ($hauteur_etiq - $pdf_ex_y) / 2);
             break;
           case "bottom":
-          	$pdf->setY($pdf_y - 0.4 + $hauteur_etiq - $pdf_ex_y);
+            $pdf->setY($pdf_y - 0.4 + $hauteur_etiq - $pdf_ex_y);
         }
       }
       
@@ -249,12 +250,15 @@ class CModeleEtiquette extends CMbMetaObject {
         }
         else {
           if ($was_barcode) {
+            mbLog($sub_fragments);
             $sub_fragments = explode("<br />", $fragment,2);
             
             $pdf->WriteHTML($sub_fragments[0], false);
-            $actual_y = $pdf->getY();
-            $pdf->setY($actual_y+0.8);
-            $pdf->WriteHTML($sub_fragments[1], false);
+            if (isset($sub_fragments[1])) {
+              $actual_y = $pdf->getY();
+              $pdf->setY($actual_y+0.8);
+              $pdf->WriteHTML($sub_fragments[1], false);
+            }
           }
           else {
             $pdf->WriteHTML($fragment, false);
