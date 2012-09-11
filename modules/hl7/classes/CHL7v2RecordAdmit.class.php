@@ -314,7 +314,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Mapping du mouvement
     $return_movement = $this->mapAndStoreMovement($ack, $newVenue, $data);
     if (is_string($return_movement)) {
-      return $exchange_ihe->setAckAR($ack, "E207", $return_movement, $newVenue);
+      return $return_movement;
     }
     $movement = $return_movement;
     
@@ -329,6 +329,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
       $movement->store();
+    }
+    
+    // Dans le cas d'une grossesse
+    if ($return_grossesse = $this->storeGrossesse($newVenue, $data)) {
+      return $exchange_ihe->setAckAR($ack, "E211", $return_grossesse, $newVenue);
     }
     
     return $exchange_ihe->setAckAA($ack, $codes, $comment, $newVenue);
@@ -719,7 +724,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Mapping du mouvement
     $return_movement = $this->mapAndStoreMovement($ack, $newVenue, $data);
     if (is_string($return_movement)) {
-      return $exchange_ihe->setAckAR($ack, "E207", $return_movement, $newVenue);
+      return $return_movement;
     }
     $movement = $return_movement;
     
@@ -734,6 +739,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
       $movement->store();
+    }
+    
+    // Dans le cas d'une grossesse
+    if ($return_grossesse = $this->storeGrossesse($newVenue, $data)) {
+      return $exchange_ihe->setAckAR($ack, "E211", $return_grossesse, $newVenue);
     }
     
     // Création du VN, voir de l'objet
@@ -942,6 +952,38 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     return $affectation;
   }
+
+  function storeGrossesse(CSejour $newVenue, $data) {
+    if (!$newVenue->_id || ($newVenue->type_pec != "O")) {
+      return;
+    }
+    
+    $grossesse                 = new CGrossesse();
+    $grossesse->parturiente_id = $newVenue->patient_id;
+    $grossesse->loadMatchingObject("terme_prevu desc"); 
+    
+    // Dans le cas où l'on a déjà une grossesse pour la patiente
+    if ($grossesse->_id) {
+      // On recherche si la grossesse a déjà un séjour avec des naissances OU le nbre de jours entre le terme et l'entrée du
+      // séjour est inférieur à 294 jours (42 semaines)   
+      if (count($grossesse->loadRefsNaissances()) || (abs(mbDaysRelative($grossesse->terme_prevu, $newVenue->entree)) > 294 /* 42*7 */)) {
+        $grossesse                 = new CGrossesse();
+        $grossesse->parturiente_id = $newVenue->patient_id;
+      }
+    }
+    
+    if (!$grossesse->_id) {
+      $grossesse->terme_prevu = mbDate($newVenue->sortie);
+      if ($msg = $grossesse->store()) {
+        return $msg;
+      }
+    }
+     
+    $newVenue->grossesse_id = $grossesse->_id;
+    if ($msg = $newVenue->store()) {
+      return $msg;
+    }   
+  }
   
   function mappingUFMedicale($data) {
     if (!array_key_exists("ZBE", $data)) {
@@ -1029,7 +1071,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getAdmissionType(DOMNode $node, CSejour $newVenue) {
-    /* @todo Gérer par la suite avec les naissances */
+    $admission_type = $this->queryTextNode("PV1.4", $node);
+    
+    // Gestion de l'accouchement maternité
+    if ($admission_type == "L") {
+      $newVenue->type_pec = "O";
+    }
   }
   
   function getAttendingDoctor(DOMNode $node, CSejour $newVenue) {

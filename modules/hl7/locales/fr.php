@@ -122,6 +122,7 @@ $locales['CHL7EventADT-AR-E207'] = 'L\'enregistrement du mouvement a échoué.';
 $locales['CHL7EventADT-AR-E208'] = 'L\'enregistrement de l\'affectation a échoué.';
 $locales['CHL7EventADT-AR-E209'] = 'L\'enregistrement de l\'identifiant de la venue a échoué';
 $locales['CHL7EventADT-AR-E210'] = 'Erreur lors de l\'enregistrement de l\'objet lié au numéro de venue';
+$locales['CHL7EventADT-AR-E211'] = 'Erreur lors de l\'enregistrement de la grossesse liée au séjour';
 $locales['CHL7EventADT-AR-E220'] = 'Séjour(s) inconnu(s) par le système';
 $locales['CHL7EventADT-AR-E221'] = 'Erreur lors du test préalable de la fusion des séjours';
 $locales['CHL7EventADT-AR-E222'] = 'Erreur lors de la fusion des données séjours';
