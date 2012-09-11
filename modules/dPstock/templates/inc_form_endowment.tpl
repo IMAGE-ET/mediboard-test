@@ -16,7 +16,7 @@ duplicateEndowment = function(endowment_id){
 }
 
 Main.add(function(){
-  $("list-{{$_endowment->_guid}}").addUniqueClassName("selected");
+  $("list-{{$endowment->_guid}}").addUniqueClassName("selected");
 });
 </script>
 
