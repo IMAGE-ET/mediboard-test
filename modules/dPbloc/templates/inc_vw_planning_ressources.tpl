@@ -155,10 +155,10 @@
   {{foreach from=$ressources item=_ressource key=ressource_id name=ressources}}
     <tr>
       <th style="height: {{if $smarty.session.browser.name == "firefox"}}28{{else}}23{{/if}}px;">
-        {{$_ressource}}
         {{if $usage && !$usage_ressource_id}}
           <button type="button" class="tick notext" style="float: right;" onclick="createUsage('{{$ressource_id}}')"></button>
         {{/if}}
+        {{$_ressource}}
       </th>
       {{foreach from=$hours item=_hour name=hours}}
         <td>

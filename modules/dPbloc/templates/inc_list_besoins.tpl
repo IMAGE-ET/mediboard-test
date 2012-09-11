@@ -36,13 +36,13 @@
     {{if $type == "operation_id"}}
       <td {{if !$_usage->_id}}class="empty"{{/if}}>
         {{if $_usage->_id}}
-          {{$_usage->_ref_ressource}}
           <form name="delUsage{{$_usage->_id}}" method="post">
             <input type="hidden" name="m" value="bloc" />
             <input type="hidden" name="dosql" value="do_usage_ressource_aed" />
             <button type="button" {{if !$usage}}disabled{{/if}} class="trash notext" style="float: right;"
               onclick="onDelUsage('{{$_usage->_id}}', '{{$_usage->_ref_ressource}}')"></button>
           </form>
+          {{$_usage->_ref_ressource}}
         {{else}}
           Non pourvu
         {{/if}}
