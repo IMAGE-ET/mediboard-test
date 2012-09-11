@@ -345,7 +345,13 @@ class CSetupdPbloc extends CSetup {
       CHANGE `retablissement` `retablissement` TIME;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.34";
+    $this->makeRevision("0.34");
+    $query = "UPDATE `ressource_materielle`
+      SET `retablissement` = '00:00:00'
+      WHERE `retablissement` IS NULL;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.35";
   }
 }
 ?>

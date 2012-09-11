@@ -63,6 +63,14 @@ class CRessourceMaterielle extends CMbObject {
     $this->_view = $this->libelle;
   }
   
+  function updatePlainFields() {
+    parent::updatePlainFields();
+    
+    if (!$this->retablissement) {
+      $this->retablissement = "00:00:00";
+    }
+  }
+  
   function loadRefTypeRessource() {
     return $this->_ref_type_ressource = $this->loadFwdRef("type_ressource_id", true);
   }
