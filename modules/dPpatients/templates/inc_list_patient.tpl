@@ -32,7 +32,7 @@
       }
     }
     
-    function doMerge(oForm) {
+    doMerge = function(oForm) {
       var url = new Url();
       url.setModuleAction("system", "object_merger");
       url.addParam("objects_class", "CPatient");
@@ -55,7 +55,7 @@
         checkedMerge.shift().checked = false;
     }
     
-    function doLink(oForm) {
+    doLink = function(oForm) {
       var url = new Url();
       url.addParam("m", "dPpatients");
       url.addParam("dosql", "do_link");
@@ -203,7 +203,7 @@ emptyForm = function() {
     <td class="button" colspan="4">
       <button type="button" class="cancel" onclick="emptyForm()"
           title="Vider les champs du formulaire">{{tr}}Empty{{/tr}}</button>
-      <button class="search" tabindex="10" type="submit" onclick="Patient.search(this.form);">{{tr}}Search{{/tr}}</button>
+      <button class="search" tabindex="10" type="submit" {{if !$board}}onclick="Patient.search(this.form);"{{/if}}>{{tr}}Search{{/tr}}</button>
       
       {{if !$board}}
         {{if $app->user_prefs.VitaleVision}}

@@ -51,6 +51,8 @@ function updateListPatients() {
     url.addElement(oForm.Date_Month);
     url.addElement(oForm.Date_Year);
     url.addElement(oForm.patient_ipp);
+    url.addElement(oForm.prat_id);
+    url.addElement(oForm.sexe);
   }
   url.addParam("board"   , 1);
   url.requestUpdate("patients");

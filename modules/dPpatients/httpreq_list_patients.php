@@ -78,6 +78,7 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 else {
   $where        = array();
   $whereSoundex = array();
+  $ljoin        = array();
   $soundexObj   = new soundex2();
   // Limitation du nombre de caractères
   $patient_nom_search    = trim($patient_nom);
@@ -118,15 +119,24 @@ else {
     $where["cp"]    = $whereSoundex["cp"]    = "LIKE '$patient_cp%'";
   }
   
+  if ($prat_id) {
+    $ljoin["consultation"] = "`consultation`.`patient_id` = `patients`.`patient_id`";
+    $ljoin["plageconsult"] = "`plageconsult`.`plageconsult_id` = `consultation`.`plageconsult_id`";
+    $ljoin["sejour"]       = "`sejour`.`patient_id` = `patients`.`patient_id`";
+    
+    $where[] = "plageconsult.chir_id = '$prat_id' OR sejour.praticien_id = '$prat_id'";
+    $whereSoundex[] = "plageconsult.chir_id = '$prat_id' OR sejour.praticien_id = '$prat_id'";
+  }
+  
   $patients        = array();
   $patientsSoundex = array();
 
   $pat = new CPatient();
   if ($where) {
-    $patients = $pat->loadList($where, "nom, prenom, naissance", "0, 100");
+    $patients = $pat->loadList($where, "nom, prenom, naissance", "0, 100", null, $ljoin);
   }
   if($whereSoundex && ($nbExact = (100 - count($patients)))) {
-    $patientsSoundex = $pat->loadList($whereSoundex, "nom, prenom, naissance", "0, $nbExact");
+    $patientsSoundex = $pat->loadList($whereSoundex, "nom, prenom, naissance", "0, $nbExact", null, $ljoin);
     $patientsSoundex = array_diff_key($patientsSoundex, $patients);
   }
 }
@@ -149,6 +159,7 @@ $smarty->assign("cp"             , $patient_cp);
 $smarty->assign("naissance"      , $patient_naissance);
 $smarty->assign("nom_search"     , $patient_nom_search);
 $smarty->assign("prenom_search"  , $patient_prenom_search);
+$smarty->assign("sexe"           , $patient_sexe);
 $smarty->assign("prat_id"        , $prat_id);
 $smarty->assign("prats"          , $prats);
 
