@@ -153,7 +153,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $current_affectation = null;
       // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
       if ($sejour_enfant->fieldModified("entree_reelle") && !$sejour_enfant->_old->entree_reelle) {
-        $current_affectation = $sejour->getCurrAffectation();
+        $current_affectation = $sejour_enfant->getCurrAffectation();
       }
 
       $this->createMovement($code, $sejour_enfant, $current_affectation);
