@@ -27,13 +27,6 @@ class CDicomStreamReader {
   var $buf = null;
   
   /**
-   * The max length of the stream
-   * 
-   * @var integer
-   */
-  var $max_length = null;
-  
-  /**
    * The constructor of CDicomStreamReader
    * 
    * @param resource $stream The stream
@@ -41,7 +34,6 @@ class CDicomStreamReader {
   function __construct($stream) {
     $this->stream = $stream;
     $this->buf = "";
-    $this->max_length = 300;
   }
   
   /**
@@ -53,7 +45,7 @@ class CDicomStreamReader {
    */
   function skip($bytes) {
     if ($bytes > 0) {
-      $this->buf .= $this->read($bytes);
+      $this->read($bytes);
     }
   }
   
@@ -67,14 +59,23 @@ class CDicomStreamReader {
   }
   
   /**
-   * Set the max length
+   * Move the stream pointer
    * 
-   * @param integer $max_length The max length
+   * @param int $pos the position
    * 
    * @return null
    */
-  function setMaxLength($max_length) {
-    $this->max_length = $max_length;
+  function seek($pos) {
+    fseek($this->stream, $pos, SEEK_CUR);
+  }
+  
+  /**
+   * Rewind the position of the stream pointer
+   * 
+   * @return null
+   */
+  function rewind() {
+    rewind($this->stream);
   }
   
   /**
@@ -85,12 +86,18 @@ class CDicomStreamReader {
    * @return string
    */
   function read($length = 1) {
-    if ($this->getPos() < $this->max_length) {
-      return fread($this->stream, $length);
-    }
-    else {
-      return false;
-    }
+    $tmp = fread($this->stream, $length);
+    $this->buf .= $tmp;
+    return $tmp;
+  }
+  
+  /**
+   * Close the stream
+   * 
+   * @return null
+   */
+  function close() {
+    fclose($this->stream);
   }
   
   /**
@@ -119,9 +126,7 @@ class CDicomStreamReader {
    * @return hexadecimal number
    */
   function readHexByteBE($length = 1) {
-    $tmp = $this->read($length);
-    $this->buf .= $tmp;
-    $tmp = unpack("H*", $tmp);
+    $tmp = unpack("H*", $this->read($length));
     return $tmp[1];
   }
   
@@ -133,9 +138,7 @@ class CDicomStreamReader {
    * @return hexadecimal number
    */
   function readHexByteLE($length = 1) {
-    $tmp = $this->read($length);
-    $this->buf .= $tmp;
-    $tmp = unpack("h*", $tmp);
+    $tmp = unpack("h*", $this->read($length));
     return $tmp[1];
   }
   
@@ -161,9 +164,7 @@ class CDicomStreamReader {
    * @return integer
    */
   function readUnsignedInt32BE() {
-    $tmp = $this->read(4);
-    $this->buf .= $tmp;
-    $tmp = unpack("N", $tmp);
+    $tmp = unpack("N", $this->read(4));
     return $tmp[1];
   }
   
@@ -173,9 +174,7 @@ class CDicomStreamReader {
    * @return integer
    */
   function readUnsignedInt32LE() {
-    $tmp = $this->read(4);
-    $this->buf .= $tmp;
-    $tmp = unpack("V", $tmp);
+    $tmp = unpack("V", $this->read(4));
     return $tmp[1];
   }
   
@@ -201,9 +200,7 @@ class CDicomStreamReader {
    * @return integer
    */
   function readUnsignedInt16BE() {
-    $tmp = $this->read(2);
-    $this->buf .= $tmp;
-    $tmp = unpack("n", $tmp);
+    $tmp = unpack("n", $this->read(2));
     return $tmp[1];
   }
   
@@ -213,9 +210,7 @@ class CDicomStreamReader {
    * @return integer
    */
   function readUnsignedInt16LE() {
-    $tmp = $this->read(2);
-    $this->buf .= $tmp;
-    $tmp = unpack("v", $tmp);
+    $tmp = unpack("v", $this->read(2));
     return $tmp[1];
   }
   
@@ -225,9 +220,7 @@ class CDicomStreamReader {
    * @return integer
    */
   function readUnsignedInt8() {
-    $tmp = $this->read(1);
-    $this->buf .= $tmp;
-    $tmp = unpack("C", $tmp);
+    $tmp = unpack("C", $this->read(1));
     return $tmp[1];
   }
   
@@ -239,9 +232,7 @@ class CDicomStreamReader {
    * @return string
    */
   function readString($length) {
-    $tmp = $this->read($length);
-    $this->buf .= $tmp;
-    $tmp = unpack("A*", $tmp);
+    $tmp = unpack("A*", $this->read($length));
     return $tmp[1];
   }
   
@@ -253,9 +244,7 @@ class CDicomStreamReader {
    * @return string
    */
   function readUID($length = 64) {
-    $tmp = $this->read($length);
-    $this->buf .= $tmp;
-    $tmp = unpack("A*", $tmp);
+    $tmp = unpack("A*", $this->read($length));
     return $tmp[1];
   }
 } 

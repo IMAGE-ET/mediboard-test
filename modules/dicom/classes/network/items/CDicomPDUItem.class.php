@@ -27,6 +27,28 @@ class CDicomPDUItem {
   var $length = null;
   
   /**
+   * Set the type
+   * 
+   * @param string $type The type
+   *  
+   * @return null
+   */
+  function setType($type) {
+    $this->type = $type;
+  }
+  
+  /**
+   * Set the length
+   * 
+   * @param integer $length The length
+   *  
+   * @return null
+   */
+  function setLength($length) {
+    $this->length = $length;
+  }
+  
+  /**
    * Decode the item
    * 
    * @param CDicomStreamReader $stream_reader The stream reader

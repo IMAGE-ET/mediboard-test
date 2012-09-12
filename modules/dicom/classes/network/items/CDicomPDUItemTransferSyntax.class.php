@@ -8,49 +8,42 @@
  */
 
 /**
- * Represents a Implementation Version Name PDU Item
+ * Represents a Transfer Syntax PDU Item
  */
-class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
+class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
   
   /**
-   * The type of the Item
+   * The transfer syntax name, coded as a UID
    * 
-   * @var hexadecimal number
+   * @var string
    */
-  var $type = "55";
+  var $name = null;
   
   /**
-   * The length of the Item
+   * The constructor.
    * 
-   * @var integer
+   * @param array $datas Default null. 
+   * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
-  var $length = null;
-  
-  /**
-   * The maximum length for PDU
-   * 
-   * @var integer
-   */
-  var $version_name = null;
-  
-  /**
-   * The constructor
-   * 
-   * @param integer $version_name The version name, default null
-   */
-  function  __construct($version_name = null) {
-    if ($version_name) {
-      $this->version_name = $version_name;
+  function __construct(array $datas = array()) {
+    $this->setType("40");
+    foreach ($datas as $key => $value) {
+      $method = 'set' . ucfirst($key);
+      if (method_exists($this, $method)) {
+        $this->$method($value);
+      }
     }
   }
   
   /**
-   * Return the version name
+   * Set the name
    * 
-   * @return integer
+   * @param integer $name The name
+   *  
+   * @return null
    */
-  function getValue() {
-    return $this->version_name;
+  function setName($name) {
+    $this->name = $name;
   }
   
   /**
@@ -61,9 +54,7 @@ class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $stream_reader->skip(1);
-    $this->length = $stream_reader->readUnsignedInt16();
-    $this->version_name = $stream_reader->readString($this->length);
+    $this->name = $stream_reader->readUID($this->length);
   }
   
   /**
@@ -74,12 +65,10 @@ class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
    * @return null
    */
   function encodeItem(CDicomStreamWriter $stream_writer) {
-    $this->calculateLength();
-    
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
     $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeString($this->version_name, $this->length);
+    $stream_writer->writeUID($this->name, $this->length);
   }
 
   /**
@@ -88,7 +77,7 @@ class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
    * @return null
    */
   function calculateLength() {
-    $this->length = strlen($this->version_name);
+    $this->length = strlen($this->name);
   }
 
   /**
@@ -109,7 +98,12 @@ class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
    * @return string
    */
   function __toString() {
-    return "Implementation version name : <ul><li>Item type : $this->type</li><li>Item length : $this->length</li><li>Version name : $this->version_name</li></ul>";
+    return "Transfer syntax :
+            <ul>
+              <li>Item type : $this->type</li>
+              <li>Item length : $this->length</li>
+              <li>Transfer syntax name : $this->name</li>
+            </ul>";
   }
 }
 ?>

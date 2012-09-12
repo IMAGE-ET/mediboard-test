@@ -8,40 +8,30 @@
  */
 
 /**
- * Represents a Transfer Syntax PDU Item
+ * Represents a Implementation Class UID PDU Item
  */
-class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
+class CDicomPDUItemImplementationClassUID extends CDicomPDUItem {
   
   /**
-   * The type of the Item
-   * 
-   * @var hexadecimal number
-   */
-  var $type = "40";
-  
-  /**
-   * The length of the Item
+   * The implementation class uid
    * 
    * @var integer
    */
-  var $length = null;
-  
-  /**
-   * The transfer syntax name, coded as a UID
-   * 
-   * @var string
-   */
-  var $name = null;
+  var $uid = null;
   
   /**
    * The constructor.
    * 
-   * @param array $datas Default null. 
-   * You can set all the field of the class by passing an array, the keys must be the name of the fields.
+   * @param array $datas The datas, default null. 
    */
-  function __construct(array $datas = array()) {
+  function __construct($datas = array()) {
+    $this->setType("52");
     foreach ($datas as $key => $value) {
-      $method = 'set' . ucfirst($key);
+      $words = explode('_', $key);
+      $method = 'set';
+      foreach ($words as $_word) {
+        $method .= ucfirst($_word);
+      }
       if (method_exists($this, $method)) {
         $this->$method($value);
       }
@@ -49,52 +39,50 @@ class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
   }
   
   /**
-   * Set the length
+   * Set the uid
    * 
-   * @param integer $length The length
-   *  
+   * @param string $uid The uid
+   * 
    * @return null
    */
-  function setLength($length) {
-    $this->length = $length;
+  function setUid($uid) {
+    $this->uid = $uid;
   }
   
   /**
-   * Set the name
+   * Return the values of the class
    * 
-   * @param integer $name The name
-   *  
-   * @return null
+   * @return array
    */
-  function setName($name) {
-    $this->name = $name;
+  function getValues() {
+    return array("uid" => $this->uid);
   }
   
   /**
-   * Decode the Transfer Syntax
+   * Decode the Implementation Class UID
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
    * 
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $stream_reader->skip(1);
-    $this->length = $stream_reader->readUnsignedInt16();
-    $this->name = $stream_reader->readUID($this->length);
+    $this->uid = $stream_reader->readUID($this->length);
   }
   
   /**
-   * Encode the Transfer Syntax
+   * Encode the Iplementation Class UID
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
    *  
    * @return null
    */
   function encodeItem(CDicomStreamWriter $stream_writer) {
+    $this->calculateLength();
+    
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
     $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUID($this->name, $this->length);
+    $stream_writer->writeUID($this->uid, $this->length);
   }
 
   /**
@@ -103,7 +91,7 @@ class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
    * @return null
    */
   function calculateLength() {
-    $this->length = strlen($this->name);
+    $this->length = strlen($this->uid);
   }
 
   /**
@@ -124,7 +112,12 @@ class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
    * @return string
    */
   function __toString() {
-    return "<ul><li>Item type : $this->type</li><li>Item length : $this->length</li><li>Transfer syntax name : $this->name</li></ul>";
+    return "Implementation class UID :
+            <ul>
+              <li>Item type : $this->type</li>
+              <li>Item length : $this->length</li>
+              <li>UID : $this->uid</li>
+            </ul>";
   }
 }
 ?>

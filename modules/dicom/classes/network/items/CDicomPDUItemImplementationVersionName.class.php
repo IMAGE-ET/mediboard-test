@@ -7,41 +7,31 @@
  *  @author SARL OpenXtrem
  */
 
- /**
- * Represents an Abstract Syntax PDU Item
+/**
+ * Represents a Implementation Version Name PDU Item
  */
-class CDicomPDUItemAbstractSyntax extends CDicomPDUItem {
+class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
   
   /**
-   * The type of the Item
-   * 
-   * @var hexadecimal number
-   */
-  var $type = "30";
-  
-  /**
-   * The length of the Item
+   * The version name
    * 
    * @var integer
    */
-  var $length = null;
+  var $version_name = null;
   
-  /**
-   * The transfer syntax name, coded as a UID
-   * 
-   * @var string
-   */
-  var $name = null;
-
   /**
    * The constructor.
    * 
-   * @param array $datas Default null. 
-   * You can set all the field of the class by passing an array, the keys must be the name of the fields.
+   * @param array $datas The datas, default null. 
    */
-  function __construct(array $datas = array()) {
+  function __construct($datas = array()) {
+    $this->setType("55");
     foreach ($datas as $key => $value) {
-      $method = 'set' . ucfirst($key);
+      $words = explode('_', $key);
+      $method = 'set';
+      foreach ($words as $_word) {
+        $method .= ucfirst($_word);
+      }
       if (method_exists($this, $method)) {
         $this->$method($value);
       }
@@ -49,43 +39,38 @@ class CDicomPDUItemAbstractSyntax extends CDicomPDUItem {
   }
   
   /**
-   * Set the length
+   * Set the version name
    * 
-   * @param integer $length The length
-   *  
+   * @param string $version_name The version name
+   * 
    * @return null
    */
-  function setLength($length) {
-    $this->length = $length;
+  function setVersionName($version_name) {
+    $this->version_name = $version_name;
   }
   
   /**
-   * Set the name
+   * Return the version name
    * 
-   * @param integer $name The name
-   *  
-   * @return null
+   * @return integer
    */
-  function setName($name) {
-    $this->name = $name;
+  function getValues() {
+    return array("version_name" => $this->version_name);
   }
   
   /**
-   * Decode the Transfer Syntax
+   * Decode the Implementation Version Name
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
    * 
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    // On passe le 2ème octet, réservé par Dicom et égal à 00
-    $stream_reader->skip(1);
-    $this->length = $stream_reader->readUnsignedInt16();
-    $this->name = $stream_reader->readUID($this->length);
+    $this->version_name = $stream_reader->readString($this->length);
   }
   
   /**
-   * Encode the Transfer Syntax
+   * Encode the Implementation Version Name
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
    *  
@@ -97,7 +82,7 @@ class CDicomPDUItemAbstractSyntax extends CDicomPDUItem {
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
     $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUID($this->name, $this->length);
+    $stream_writer->writeString($this->version_name, $this->length);
   }
 
   /**
@@ -106,7 +91,7 @@ class CDicomPDUItemAbstractSyntax extends CDicomPDUItem {
    * @return null
    */
   function calculateLength() {
-    $this->length = strlen($this->name);
+    $this->length = strlen($this->version_name);
   }
 
   /**
@@ -120,14 +105,19 @@ class CDicomPDUItemAbstractSyntax extends CDicomPDUItem {
     }
     return $this->length + 4;
   }
-  
+
   /**
    * Return a string representation of the class
    * 
    * @return string
    */
   function __toString() {
-    return "<ul><li>Item type : $this->type</li><li>Item length : $this->length</li><li>Abstract syntax name : $this->name</li></ul>";
+    return "Implementation version name :
+            <ul>
+              <li>Item type : $this->type</li>
+              <li>Item length : $this->length</li>
+              <li>Version name : $this->version_name</li>
+            </ul>";
   }
 }
 ?>

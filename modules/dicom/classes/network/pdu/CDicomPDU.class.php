@@ -16,7 +16,7 @@ class CDicomPDU {
   /**
    * The type of the PDU
    * 
-   * @var hexadecimal number
+   * @var string
    */
   var $type = null;
   
@@ -27,6 +27,29 @@ class CDicomPDU {
    */
   var $length = null;
   
+	/**
+   * Set the length
+   * 
+   * @param integer $length The length
+   *  
+   * @return null
+   */
+  function setLength($length) {
+    $this->length = $length;
+  }
+	
+	/**
+   * Set the type
+   * 
+   * @param string $type The type of the PDU
+   *  
+   * @return null
+   */
+  function setType($type) {
+    $this->type = $type;
+  }
+	
+	
   /**
    * Decode the PDU
    * 

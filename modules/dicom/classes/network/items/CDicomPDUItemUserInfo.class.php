@@ -13,20 +13,6 @@
 class CDicomPDUItemUserInfo extends CDicomPDUItem {
   
   /**
-   * The type of the Item
-   * 
-   * @var hexadecimal number
-   */
-  var $type = "50";
-    
-  /**
-   * The length of the Item
-   * 
-   * @var integer
-   */
-  var $length = null;
-  
-  /**
    * An array of differents items
    * 
    * @var array of CDicomPDUItem
@@ -36,35 +22,52 @@ class CDicomPDUItemUserInfo extends CDicomPDUItem {
   /**
    * The constructor.
    * 
+   * @param array $datas Default null. 
+   * You can set all the field of the class by passing an array, the keys must be the name of the fields.
+   */
+  function __construct(array $datas = array()) {
+    $this->setType("50");
+    foreach ($datas as $key => $value) {
+      $words = explode('_', $key);
+      $method = 'set';
+      foreach ($words as $_word) {
+        $method .= ucfirst($_word);
+      }
+      if (method_exists($this, $method)) {
+        $this->$method($value);
+      }
+    }
+  }
+  
+  /**
+   * Set the different sub items
+   * 
    * @param array $items Default null. 
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    * For the sub items, the value must be an array,
    * with keys the type of the item, and for value and item array.
+   * 
+   * @return null
    */
-  function __construct($items = array()) {
+  function setSubItems($items) {
     foreach ($items as $_type => $_data) {
       $class = CDicomPDUItemFactory::getItemClass("$_type");
       $this->sub_items[] = new $class($_data);
     }
   }
-  
   /**
-   * Decode the Transfer Syntax
+   * Decode the User Information
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
    * 
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    // On passe le 2ème octet, réservé par Dicom et égal à 00
-    $stream_reader->skip(1);
-    $this->length = $stream_reader->readUnsignedInt16();
-
     $this->sub_items = CDicomPDUItemFactory::decodeConsecutiveItemsByLength($stream_reader, $this->length);
   }
     
   /**
-   * Encode the Transfer Syntax
+   * Encode the User Information
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
    *  
@@ -111,7 +114,8 @@ class CDicomPDUItemUserInfo extends CDicomPDUItem {
    * @return string
    */
   function __toString() {
-    $str = "<ul>
+    $str = "User informations : 
+            <ul>
               <li>Item type : $this->type</li>
               <li>Item length : $this->length</li>";
     foreach ($this->sub_items as $item) {

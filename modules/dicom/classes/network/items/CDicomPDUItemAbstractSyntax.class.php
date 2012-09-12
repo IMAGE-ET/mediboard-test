@@ -7,67 +7,58 @@
  *  @author SARL OpenXtrem
  */
 
-/**
- * Represents a Implementation Class UID PDU Item
+ /**
+ * Represents an Abstract Syntax PDU Item
  */
-class CDicomPDUItemImplementationClassUID extends CDicomPDUItem {
+class CDicomPDUItemAbstractSyntax extends CDicomPDUItem {
   
   /**
-   * The type of the Item
+   * The transfer syntax name, coded as a UID
    * 
-   * @var hexadecimal number
+   * @var string
    */
-  var $type = "52";
-  
-  /**
-   * The length of the Item
-   * 
-   * @var integer
-   */
-  var $length = null;
-  
-  /**
-   * The implementation class uid
-   * 
-   * @var integer
-   */
-  var $uid = null;
-  
+  var $name = null;
+
   /**
    * The constructor.
    * 
-   * @param string $uid The uid, default null. 
+   * @param array $datas Default null. 
+   * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
-  function __construct($uid = null) {
-    if ($uid) {
-      $this->uid = $uid;
-    }  
+  function __construct(array $datas = array()) {
+    $this->setType("30");
+    foreach ($datas as $key => $value) {
+      $method = 'set' . ucfirst($key);
+      if (method_exists($this, $method)) {
+        $this->$method($value);
+      }
+    }
   }
   
   /**
-   * Return the UID
+   * Set the name
    * 
-   * @return integer
+   * @param integer $name The name
+   *  
+   * @return null
    */
-  function getValue() {
-    return $this->uid;
+  function setName($name) {
+    $this->name = $name;
   }
   
   /**
-   * Decode the Transfer Syntax
+   * Decode the Abstract Syntax
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
    * 
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $stream_reader->skip(1);
-    $this->length = $stream_reader->readUnsignedInt16();
-    $this->uid = $stream_reader->readUID($this->length);
+    $this->name = $stream_reader->readUID($this->length);
   }
   
   /**
-   * Encode the Transfer Syntax
+   * Encode the Abstract Syntax
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
    *  
@@ -79,7 +70,7 @@ class CDicomPDUItemImplementationClassUID extends CDicomPDUItem {
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
     $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUID($this->uid, $this->length);
+    $stream_writer->writeUID($this->name, $this->length);
   }
 
   /**
@@ -88,7 +79,7 @@ class CDicomPDUItemImplementationClassUID extends CDicomPDUItem {
    * @return null
    */
   function calculateLength() {
-    $this->length = strlen($this->uid);
+    $this->length = strlen($this->name);
   }
 
   /**
@@ -102,14 +93,19 @@ class CDicomPDUItemImplementationClassUID extends CDicomPDUItem {
     }
     return $this->length + 4;
   }
-
+  
   /**
    * Return a string representation of the class
    * 
    * @return string
    */
   function __toString() {
-    return "Implementation class UID : <ul><li>Item type : $this->type</li><li>Item length : $this->length</li><li>UID : $this->uid</li></ul>";
+    return "Abstract syntax :
+            <ul>
+              <li>Item type : $this->type</li>
+              <li>Item length : $this->length</li>
+              <li>Abstract syntax name : $this->name</li>
+            </ul>";
   }
 }
 ?>

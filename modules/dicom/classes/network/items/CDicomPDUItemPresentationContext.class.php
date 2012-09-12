@@ -10,21 +10,7 @@
 /**
  * Represents a Presentation Syntax PDU Item
  */
-class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
-  
-  /**
-   * The type of the Item
-   * 
-   * @var hexadecimal number
-   */
-  var $type = "21";
-    
-  /**
-   * The length of the Item
-   * 
-   * @var integer
-   */
-  var $length = null;
+class CDicomPDUItemPresentationContext extends CDicomPDUItem {
   
   /**
    * The id of the presentation context
@@ -34,32 +20,18 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
   var $id = null;
   
   /**
-   * The acceptance or the rejection of the transfer sybtax, and the reason if the rejected.
-   * See $reason_enum for the different values and their signification
+   * The abstract syntax
    * 
-   * @var integer
+   * @var CDicomPDUItemAbstractSyntax
    */
-  var $reason = null;
+  var $abstract_syntax = null;
   
   /**
-   * Possible values for the field $reason
+   * The transfer syntaxes
    * 
-   * @var array
+   * @var array of CDicomPDUItemTransferSyntax
    */
-  static $reason_enum = array(
-    0 => "acceptance",
-    1 => "user-rejection",
-    2 => "no-reason",
-    3 => "abstract-syntax-not-supported",
-    4 => "transfer-syntaxes-not-supported"
-  );
-  
-  /**
-   * The transfer syntax
-   * 
-   * @var CDicomPDUItemTransferSyntax
-   */
-  var $transfer_syntax = null;
+  var $transfer_syntaxes = array();
   
   /**
    * The constructor.
@@ -68,6 +40,7 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
+    $this->setType("20");
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
       $method = 'set';
@@ -78,17 +51,6 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
         $this->$method($value);
       }
     }
-  }
-  
-  /**
-   * Set the length
-   * 
-   * @param integer $length The length
-   *  
-   * @return null
-   */
-  function setLength($length) {
-    $this->length = $length;
   }
   
   /**
@@ -114,14 +76,27 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
   }
   
   /**
-   * Set the transfer syntax
+   * Set the abstract syntax
    * 
-   * @param array $datas The data for create the transfer syntax
+   * @param array $datas The data for create the abstract syntax
    * 
    * @return null
    */
-  function setTransferSyntax($datas) {
-    $this->transfer_syntax = new CDicomPDUItemTransferSyntax($datas);
+  function setAbstractSyntax($datas) {
+    $this->abstract_syntax = new CDicomPDUItemAbstractSyntax($datas);
+  }
+  
+  /**
+   * Set the transfer syntaxes
+   * 
+   * @param array $transfer_syntaxes The datas for create the transfer syntaxes
+   * 
+   * @return null
+   */
+  function setTransferSyntaxes($transfer_syntaxes) {
+    foreach ($transfer_syntaxes as $datas) {
+      $this->transfer_syntaxes[] = new CDicomPDUItemTransferSyntax($datas);
+    }
   }
   
   /**
@@ -132,14 +107,11 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    // On passe le 2ème octet, réservé par Dicom et égal à 00
-    $stream_reader->skip(1);
-    $this->length = $stream_reader->readUnsignedInt16();
     $this->id = $stream_reader->readUnsignedInt8();
-    $stream_reader->skip(1);
-    $this->reason = $stream_reader->readUnsignedInt8();
-    $stream_reader->skip(1);
-    $this->transfer_syntax = CDicomPDUItemFactory::decodeItem($stream_reader);
+    $stream_reader->skip(3);
+    
+    $this->abstract_syntax = CDicomPDUItemFactory::decodeItem($stream_reader);
+    $this->transfer_syntaxes = CDicomPDUItemFactory::decodeConsecutiveItemsByType($stream_reader, "40");
   }
   
   /**
@@ -155,20 +127,23 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
     $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUnsignedInt8($this->id);
-    $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt8($this->reason);
-    $stream_writer->skip(1);
-    $this->transfer_syntax->encodeItem($stream_writer);
+    $stream_reader->skip(3);
+    $this->abstract_syntax->encodeItem($stream_writer);
+    foreach ($this->transfer_syntaxes as $transfer_syntax) {
+      $transfer_syntax->encodeItem($stream_writer);
+    }
   }
-  
+
   /**
    * Calculate the length of the item (without the type and the length fields)
    * 
    * @return null
    */
   function calculateLength() {
-    $this->length = 4 + $this->transfer_syntax->getTotalLength();
+    $this->length = 4 + $this->abstract_syntax->getTotalLength();
+    foreach ($this->transfer_syntaxes as $transfer_syntax) {
+      $this->length += $transfer_syntax->getTotalLength();
+    }
   }
 
   /**
@@ -182,18 +157,23 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
     }
     return $this->length + 4;
   }
-  
+
   /**
    * Return a string representation of the class
    * 
    * @return string
    */
   function __toString() {
-    $str = "<ul>
+    $str = "Presentation Context : 
+            <ul>
               <li>Item type : $this->type</li>
               <li>Item length : $this->length</li>
               <li>id : $this->id</li>
-              <li>Transfer syntax : {$this->transfer_syntax->__toString()}</li></ul>";
+              <li>{$this->abstract_syntax->__toString()}</li>";
+    foreach ($this->transfer_syntaxes as $transfer_syntax) {
+      $str .= "<li>{$transfer_syntax->__toString()}</li>";
+    }
+    $str .= "</ul>";
     return $str;
   }
 }

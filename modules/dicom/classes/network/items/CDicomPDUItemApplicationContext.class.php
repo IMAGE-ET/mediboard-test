@@ -13,20 +13,6 @@
 class CDicomPDUItemApplicationContext extends CDicomPDUItem {
   
   /**
-   * The type of the Item
-   * 
-   * @var hexadecimal number
-   */
-  var $type = "10";
-  
-  /**
-   * The length of the Item
-   * 
-   * @var integer
-   */
-  var $length = null;
-  
-  /**
    * The transfer syntax name, coded as a UID
    * 
    * @var string
@@ -40,23 +26,13 @@ class CDicomPDUItemApplicationContext extends CDicomPDUItem {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
+    $this->setType("10");
     foreach ($datas as $key => $value) {
       $method = 'set' . ucfirst($key);
       if (method_exists($this, $method)) {
         $this->$method($value);
       }
     }
-  }
-  
-  /**
-   * Set the length
-   * 
-   * @param integer $length The length
-   *  
-   * @return null
-   */
-  function setLength($length) {
-    $this->length = $length;
   }
   
   /**
@@ -71,21 +47,18 @@ class CDicomPDUItemApplicationContext extends CDicomPDUItem {
   }
   
   /**
-   * Decode the Transfer Syntax
+   * Decode the Application Context
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
    * 
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    // On passe le 2ème octet, réservé par Dicom et égal à 00
-    $stream_reader->skip(1);
-    $this->length = $stream_reader->readUnsignedInt16();
     $this->name = $stream_reader->readUID($this->length);
   }
   
   /**
-   * Encode the Transfer Syntax
+   * Encode the Application Context
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
    *  
@@ -127,7 +100,12 @@ class CDicomPDUItemApplicationContext extends CDicomPDUItem {
    * @return string
    */
   function __toString() {
-    return "<ul><li>Item type : $this->type</li><li>Item length : $this->length</li><li>Application context name : $this->name</li></ul>";
+    return "Application context :
+            <ul>
+              <li>Item type : $this->type</li>
+              <li>Item length : $this->length</li>
+              <li>Application context name : $this->name</li>
+            </ul>";
   }
 }
 ?>

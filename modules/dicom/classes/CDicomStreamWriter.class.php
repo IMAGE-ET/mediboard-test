@@ -49,9 +49,22 @@ class CDicomStreamWriter {
       for ($i = 0; $i < $bytes; $i++) {
         $bin .= pack("H*", "00");
       }
-      $this->buf .= $bin;
-      return fwrite($this->stream, $bin, $bytes);
+      return $this->write($bin, $bytes);
     }
+  }
+  
+  /**
+   * Write the contents of str to the stream
+   * 
+   * @param string  $str    The string
+   * 
+   * @param integer $length The length of the string
+   * 
+   * @return integer or null
+   */
+  function write($str, $length = 1) {
+    $this->buf .= $str;
+    return fwrite($this->stream, $str, $length);
   }
   
   /**
@@ -63,7 +76,15 @@ class CDicomStreamWriter {
     return ftell($this->stream);
   }
   
-  
+  /**
+   * Close the stream
+   * 
+   * @return null
+   */
+  function close() {
+    fclose($this->stream);
+  }
+    
   /**
    * Write hexadecimal numbers from the stream
    *  
@@ -95,8 +116,7 @@ class CDicomStreamWriter {
    */
   function writeHexByteBE($hexa, $length = 1) {
     $bin = pack("H*", $hexa);
-    $this->buf .= $bin;
-    return fwrite($this->stream, $bin, $length);
+    return $this->write($bin, $length);
   }
   
   /**
@@ -110,8 +130,7 @@ class CDicomStreamWriter {
    */
   function writeHexByteLE($hexa, $length = 1) {
     $bin = pack("h*", $hexa);
-    $this->buf .= $bin;
-    return fwrite($this->stream, $bin, $length);
+    return $this->write($bin, $length);
   }
   
   /**
@@ -141,8 +160,7 @@ class CDicomStreamWriter {
    */
   function writeUnsignedInt32BE($int) {
     $bin = pack("N", $int);
-    $this->buf .= $bin;
-    return fwrite($this->stream, $bin, 4);
+    return $this->write($bin, 4);
   }
   
   /**
@@ -154,8 +172,7 @@ class CDicomStreamWriter {
    */
   function writeUnsignedInt32LE($int) {
     $bin = pack("V", $int);
-    $this->buf .= $bin;
-    return fwrite($this->stream, $bin, 4);
+    return $this->write($bin, 4);
   }
   
   /**
@@ -185,8 +202,7 @@ class CDicomStreamWriter {
    */
   function writeUnsignedInt16BE($int) {
     $bin = pack("n", $int);
-    $this->buf .= $bin;
-    return fwrite($this->stream, $bin, 2);
+    return $this->write($bin, 2);
   }
   
   /**
@@ -198,8 +214,7 @@ class CDicomStreamWriter {
    */
   function writeUnsignedInt16LE($int) {
     $bin = pack("v", $int);
-    $this->buf .= $bin;
-    return fwrite($this->stream, $bin, 2);
+    return $this->write($bin, 2);
   }
   
   /**
@@ -211,8 +226,7 @@ class CDicomStreamWriter {
    */
   function writeUnsignedInt8($int) {
     $bin = pack("C", $int);
-    $this->buf .= $bin;
-    return fwrite($this->stream, $bin, 1);
+    return $this->write($bin, 1);
   }
   
   /**
@@ -226,8 +240,7 @@ class CDicomStreamWriter {
    */
   function writeString($str, $length) {
     $bin = pack("A*", $str);
-    $this->buf .= $bin;
-    return fwrite($this->stream, $bin, $length);
+    return $this->write($bin, $length);
   }
   
   /**
@@ -241,8 +254,7 @@ class CDicomStreamWriter {
    */
   function writeUID($uid, $length = 64) {
     $bin = pack("A*", $uid);
-    $this->buf .= $bin;
-    return fwrite($this->stream, $bin, $length);
+    return $this->write($bin, $length);
   }
 } 
 ?>

@@ -11,21 +11,27 @@
  * An A-Associate-RJ PDU
  */
 class CDicomPDUAReleaseRP extends CDIcomPDU {
-  
+
   /**
-   * The type of the PDU
+   * The constructor.
    * 
-   * @var hexadecimal number
+   * @param array $datas Default null. 
+   * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
-  var $type = "06";
-  
-  /**
-   * The length of the PDU
-   * 
-   * @var integer
-   */
-  var $length = null;
-  
+  function __construct(array $datas = array()) {
+    $this->setType("06");
+    foreach ($datas as $key => $value) {
+      $words = explode('_', $key);
+      $method = 'set';
+      foreach ($words as $_word) {
+        $method .= ucfirst($_word);
+      }
+      if (method_exists($this, $method)) {
+        $this->$method($value);
+      }
+    }
+  }
+    
   /**
    * Decode the PDU
    * 
@@ -34,10 +40,6 @@ class CDicomPDUAReleaseRP extends CDIcomPDU {
    * @return null
    */
   function decodePDU(CDicomStreamReader $stream_reader) {
-    // On passe le 2ème octet, réservé par Dicom et égal à 00
-    $stream_reader->skip(1);
-    
-    $this->length = $stream_reader->readUnsignedInt32();
     $stream_reader->skip(4);
   }
   

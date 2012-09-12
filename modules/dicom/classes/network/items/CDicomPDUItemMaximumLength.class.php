@@ -13,20 +13,6 @@
 class CDicomPDUItemMaximumLength extends CDicomPDUItem {
   
   /**
-   * The type of the Item
-   * 
-   * @var hexadecimal number
-   */
-  var $type = "51";
-  
-  /**
-   * The length of the Item
-   * 
-   * @var integer
-   */
-  var $length = null;
-  
-  /**
    * The maximum length for PDU
    * 
    * @var integer
@@ -34,40 +20,57 @@ class CDicomPDUItemMaximumLength extends CDicomPDUItem {
   var $maximum_length = null;
   
   /**
-   * The constructor
+   * The constructor.
    * 
-   * @param integer $maximum_length The maximum_length, default null
+   * @param array $datas The datas, default null. 
    */
-  function __construct($maximum_length = null) {
-    if ($maximum_length) {
-      $this->maximum_length = $maximum_length;
+  function __construct($datas = array()) {
+    $this->setType("51");
+    foreach ($datas as $key => $value) {
+      $words = explode('_', $key);
+      $method = 'set';
+      foreach ($words as $_word) {
+        $method .= ucfirst($_word);
+      }
+      if (method_exists($this, $method)) {
+        $this->$method($value);
+      }
     }
   }
   
   /**
-   * Return the maximum length
+   * Set the maximum length
    * 
-   * @return integer
+   * @param interer $max_length The maximum length of PDU
+   * 
+   * @return null
    */
-  function getValue() {
-    return $this->maximum_length;
+  function setMaximumLength($max_length) {
+    $this->maximum_length = $max_length;
   }
   
   /**
-   * Decode the Transfer Syntax
+   * Return the values of the fields
+   * 
+   * @return array
+   */
+  function getValues() {
+    return array("maximum_length" => $this->maximum_length);
+  }
+  
+  /**
+   * Decode the Maximum Length
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
    * 
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $stream_reader->skip(1);
-    $this->length = $stream_reader->readUnsignedInt16();
     $this->maximum_length = $stream_reader->readUnsignedInt32();
   }
   
   /**
-   * Encode the Transfer Syntax
+   * Encode the Maximum Length
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
    *  
@@ -109,7 +112,12 @@ class CDicomPDUItemMaximumLength extends CDicomPDUItem {
    * @return string
    */
   function __toString() {
-    return "Maximum length : <ul><li>Item type : $this->type</li><li>Item length : $this->length</li><li>maximum length : $this->maximum_length</li></ul>";
+    return "Maximum length :
+            <ul>
+              <li>Item type : $this->type</li>
+              <li>Item length : $this->length</li>
+              <li>maximum length : $this->maximum_length</li>
+            </ul>";
   }
 }
 ?>

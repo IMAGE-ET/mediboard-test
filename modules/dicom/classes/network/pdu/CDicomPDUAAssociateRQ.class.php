@@ -13,20 +13,6 @@
 class CDicomPDUAAssociateRQ extends CDicomPDU {
   
   /**
-   * The type of the PDU
-   * 
-   * @var hexadecimal number
-   */
-  var $type = "01";
-  
-  /**
-   * The length of the PDU
-   * 
-   * @var integer
-   */
-  var $length = null;
-  
-  /**
    * Protocol version, must be equal to 1
    * 
    * @var integer
@@ -75,6 +61,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
+    $this->setType("01");
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
       $method = 'set';
@@ -85,17 +72,6 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
         $this->$method($value);
       }
     }
-  }
-  
-  /**
-   * Set the length
-   * 
-   * @param integer $length The length
-   *  
-   * @return null
-   */
-  function setLength($length) {
-    $this->length = $length;
   }
   
   /**
@@ -174,10 +150,6 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * @return null
    */
   function decodePDU(CDicomStreamReader $stream_reader) {
-    // On passe le 2ème octet, réservé par Dicom et égal à 00
-    $stream_reader->skip(1);
-    $this->length = $stream_reader->readUnsignedInt32();
-    $stream_reader->setMaxLength($this->length + 6);
     $this->protocol_version = $stream_reader->readHexByte(2);
     
     // On vérifie que la version du protocole est bien 0001
@@ -268,13 +240,11 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
               <li>Length : $this->length</li>
               <li>Called AE title : $this->called_AE_title</li>
               <li>Calling AE title : $this->calling_AE_title</li>
-              <li>Application Context : 
-                {$this->application_context->__toString()}
-              </li>";
+              <li>{$this->application_context->__toString()}</li>";
     foreach ($this->presentation_contexts as $pres_context) {
-      $str .= "<li>Presentation context : {$pres_context->__toString()}";
+      $str .= "<li>{$pres_context->__toString()}</li>";
     }
-    $str .= "<li>User Info : {$this->user_info->__toString()}</ul>";
+    $str .= "<li>{$this->user_info->__toString()}</li></ul>";
     return $str;
   }
 }
