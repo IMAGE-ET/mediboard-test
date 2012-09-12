@@ -84,7 +84,7 @@ $index = "index";
 
 // Don't output anything. Usefull for fileviewers, ajax requests, exports, etc.
 $suppressHeaders = CValue::request("suppressHeaders");
-$signin_token    = CValue::get("signin_token");
+$token_hash = CValue::get("token");
 
 // WSDL if often stated as final with no value (&wsdl) wrt client compat 
 $wsdl = CValue::request("wsdl");
@@ -115,8 +115,8 @@ if ($dialog = CValue::request("dialog")) {
 
 // If the user uses a token, his session should not be reset, but only redirected
 $do_login = false;
-if ($signin_token) {
-  $token = CViewAccessToken::getByHash($signin_token);
+if ($token_hash) {
+  $token = CViewAccessToken::getByHash($token_hash);
   
   // If the user is already logged in (in a normal session), keep his session, but use the params
   if (CAppUI::$instance->user_id && !CAppUI::$token_expiration) {
