@@ -1,4 +1,4 @@
-<form name="filterFrm" action="?" method="get">
+<form name="filterFrm" action="?" method="get" onsubmit="return refreshListFilter();">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   <input type="hidden" name="dialog" value="{{$dialog}}" />
@@ -48,7 +48,7 @@
   
     <tr>
       <td class="button" colspan="6">
-        <button class="search" type="button" onclick="refreshListFilter()">Afficher</button>
+        <button class="search" type="submit">Afficher</button>
       </td>
     </tr>
   </table>

@@ -1,4 +1,4 @@
-<form name="editFrm" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
+<form name="editFrm" action="?" method="post" onsubmit="return onSubmitFormAjax(this, Control.Modal.close);">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="dosql" value="do_idsante400_aed" />
   <input type="hidden" name="del" value="0" />

@@ -17,12 +17,26 @@
     <th>{{tr}}CIdSante400-object_id-court{{/tr}}</th> 
     <th>{{tr}}CIdSante400-object{{/tr}}</th>
     {{/if}}
-    <th>{{tr}}CIdSante400-last_update{{/tr}}</th>
+    <th class="narrow">{{tr}}CIdSante400-last_update{{/tr}}</th>
     <th>{{tr}}CIdSante400-id400-court{{/tr}}</th> 
     <th>{{tr}}CIdSante400-tag{{/tr}}</th>
   </tr>
   
-  {{assign var=href value="?m=dPsante400&$actionType=$action&dialog=$dialog"}}
+  {{assign var=href value="?m=sante400&$actionType=$action&dialog=$dialog"}}
+  
+  {{if $list_idSante400|@count}}
+  <tr>
+    <th colspan="6">
+      <em>
+        {{$list_idSante400|@count}} identifiants 
+        {{if $list_idSante400|@count != $count_idSante400}}
+        sur {{$count_idSante400}}
+        {{/if}}
+        trouvés
+      </em>
+    </th>
+  </tr>
+  {{/if}}
   
   {{foreach from=$list_idSante400 item=_idSante400}}
   <tr {{if $_idSante400->_id == $idSante400_id}}class="selected"{{/if}}>
@@ -50,14 +64,12 @@
     <td>{{$_idSante400->id400}}</td>
     <td>{{$_idSante400->tag}}</td>
   </tr>
-  {{/foreach}}
+  {{foreachelse}}
   <tr>
-    <td colspan="6" style="background: #fff;">
-      {{$list_idSante400|@count}} identifiants 
-      {{if $list_idSante400|@count != $count_idSante400}}
-      sur {{$count_idSante400}}
-      {{/if}}
-      trouvés
+    <td colspan="6" class="empty">
+      {{tr}}CIdSante400.none{{/tr}}
+
     </td>
   </tr>
+  {{/foreach}}
 </table>
