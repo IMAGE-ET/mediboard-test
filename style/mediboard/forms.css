@@ -700,7 +700,7 @@ button.selected {
 }
 
 button.compact {
-  margin: -1px;
+  margin: -1px !important;
 }
 
 optgroup.group {
