@@ -468,7 +468,7 @@ class CAppUI {
     $password   = trim(CValue::request("password"));
     
     // Token sign-in
-    $token_hash = trim(CValue::request("signin_token"));
+    $token_hash = trim(CValue::request("token"));
     
     // Test login and password validity
     $user = new CUser;

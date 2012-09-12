@@ -98,7 +98,7 @@ class CViewAccessToken extends CMbObject {
    * @return string The url 
    */
   function getUrl() {
-    return $this->_url = CAppUI::conf("base_url")."/?signin_token=$this->hash";
+    return $this->_url = CAppUI::conf("base_url")."/?token=$this->hash";
   }
   
   /**
