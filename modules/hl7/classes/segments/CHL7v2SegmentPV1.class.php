@@ -67,11 +67,9 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     // U  - Caractère d'urgence aigue du problème quel que soit le service d'entrée
     // RM - Rétrocession du médicament
     // IE - Prestation inter-établissements
-    
     $naissance = new CNaissance();
     $naissance->sejour_enfant_id = $sejour->_id;
     $naissance->loadMatchingObject();
-    
     // Cas d'une naissance
     if ($naissance->_id) {
       $data[] = "N";
@@ -131,7 +129,6 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = null;
     
     // PV1-14: Admit Source (IS) (optional)
-    // Table - 0023
     $data[] = $this->getPV114($receiver, $sejour);
     
     // PV1-15: Ambulatory Status (IS) (optional repeating)
@@ -229,12 +226,11 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = null;
     
     // PV1-36: Discharge Disposition (IS) (optional)
-    // Table - 0112
     $sejour->loadRefsAffectations();
     $data[] = $this->getPV136($receiver, $sejour);
     
     // PV1-37: Discharged to Location (DLD) (optional)
-    $data[] = ($sejour->etablissement_sortie_id && ($event->code == "A03" || $event->code == "A16")) ? array($sejour->loadRefEtablissementTransfert()->finess) : null;
+    $data[] = ($sejour->etablissement_sortie_id && ($event->code == "A03" || $event->code == "A16" || $event->code == "A21")) ? array($sejour->loadRefEtablissementTransfert()->finess) : null;
     
     // PV1-38: Diet Type (CE) (optional)
     $data[] = null;

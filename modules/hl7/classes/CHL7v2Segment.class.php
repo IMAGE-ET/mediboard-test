@@ -583,7 +583,14 @@ class CHL7v2Segment extends CHL7v2Entity {
       // Combinaison du ZFM
       // ZFM.1 + ZFM.3
       case 'ZFM':
-        return $sejour->mode_entree.$this->getModeProvenance($sejour);
+        // Si mutation des urgences
+        if ($sejour->provenance == "8" || $sejour->provenance == "5") {
+          return $sejour->mode_entree;
+        }
+        
+        // Sinon concaténation du code mode d'entrée et du code de provenance
+        return $sejour->mode_entree.$sejour->provenance;
+        
       // Mode d'entrée
       default:
          // 1  - Envoyé par un médecin extérieur 
@@ -618,7 +625,15 @@ class CHL7v2Segment extends CHL7v2Entity {
       // Combinaison du ZFM
       // ZFM.2 + ZFM.4
       case 'ZFM':
-        return $this->getModeSortie($sejour).$sejour->destination;
+        $mode_sortie = $this->getModeSortie($sejour);
+        // Si décès
+        if ($mode_sortie == "9") {
+          return $mode_sortie;
+        }
+        
+        // Sinon concaténation du code mode de sortie et du code destination
+        return $mode_sortie.$sejour->destination;
+        
       // Circonstance de sortie
       default:
         // 2 - Messures disciplinaires
