@@ -1302,8 +1302,22 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getAdmitSource(DOMNode $node, CSejour $newVenue) {
-    $admit_source = $this->queryTextNode("PV1.14", $node);
-    /* @todo Voir comment gérer */    
+    if (!($admit_source = $this->queryTextNode("PV1.14", $node))) {
+      return;
+    }
+    
+    // Admit source
+    switch ($sender->_configs["handle_PV1_14"]) {
+      // Combinaison du ZFM
+      // ZFM.1 + ZFM.3
+      case 'ZFM':
+        $newVenue->mode_entree = $admit_source[0];        
+        if (strlen($admit_source) == 2) {
+          $newVenue->provenance = $admit_source[1];
+        }
+        
+        break;
+    }       
   }
   
   function getFinancialClass(DOMNode $node, CSejour $newVenue) {
@@ -1315,7 +1329,23 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getDischargeDisposition(DOMNode $node, CSejour $newVenue) {
-    /* @todo Gestion des circonstances de sortie ? */
+    // Gestion des circonstances de sortie
+    if (!($discharge_disposition = $this->queryTextNode("PV1.36", $node))) {
+      return;
+    }
+    
+    // Admit source
+    switch ($sender->_configs["handle_PV1_36"]) {
+      // Combinaison du ZFM
+      // ZFM.2 + ZFM.4
+      case 'ZFM':
+        $newVenue->mode_sortie = $discharge_disposition[0];        
+        if (strlen($discharge_disposition) == 2) {
+          $newVenue->destination = $discharge_disposition[1];
+        }
+        
+        break;
+    } 
   }
   
   function getDischargedToLocation(DOMNode $node, CSejour $newVenue) {

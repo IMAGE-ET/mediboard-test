@@ -800,7 +800,13 @@ class CSetuphl7 extends CSetup {
                 ADD `delete_file` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.32";
+    $this->makeRevision("0.32");
+    $query = "ALTER TABLE `hl7_config` 
+                ADD `handle_PV1_14` ENUM ('admit_source','ZFM') DEFAULT 'admit_source',
+                ADD `handle_PV1_36` ENUM ('discharge_disposition','ZFM') DEFAULT 'discharge_disposition';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.33";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
