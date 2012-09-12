@@ -212,7 +212,7 @@
   <!-- Selection du patient -->
   <tr>
     <th>
-      <input type="hidden" name="patient_id" class="notNull {{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="changePat()" />
+      <input type="hidden" name="patient_id" class="notNull {{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="changePat(); $('button-edit-patient-easy').setVisible(this.value);" />
       {{mb_label object=$sejour field="patient_id"}}
     </th>
     <td colspan="2">
@@ -223,7 +223,7 @@
       />
       {{if $conf.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
       <button type="button" class="search notext" onclick="PatSelector.init()">Choisir un patient</button>
-      <button id="button-edit-patient" type="button" 
+      <button id="button-edit-patient-easy" type="button" 
             onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
             class="edit notext" {{if !$patient->_id}}style="display: none;"{{/if}}>
         {{tr}}Edit{{/tr}}

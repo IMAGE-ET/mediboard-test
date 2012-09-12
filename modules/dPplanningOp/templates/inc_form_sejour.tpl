@@ -221,6 +221,12 @@ function printFormSejour() {
   return;
 }
 
+function openAntecedents() {
+  var url = new Url("cabinet", "httpreq_vw_antecedents");
+  url.addParam("sejour_id", '{{$sejour->_id}}');
+  url.modal();
+}
+
 PatSelector.init = function(){
   window.bOldPat = $V(getForm("editSejour").patient_id);
   this.sForm     = "editSejour";
@@ -497,10 +503,10 @@ Main.add( function(){
         reloadSejours = Prototype.emptyFunction;
       }
     </script>
-    {{mb_include module=patients template=inc_button_pat_anonyme form=editSejour patient_id=$patient->_id}}
+    {{mb_include module=patients template=inc_button_pat_anonyme form=editSejour other_form=editOpEasy patient_id=$patient->_id}}
     
     <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" 
-      onchange="changePat(); reloadSejours();" />
+      onchange="changePat(); reloadSejours(); $('button-edit-patient').setVisible(this.value);" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td colspan="3">
@@ -524,6 +530,9 @@ Main.add( function(){
             class="edit notext" {{if !$patient->_id}}style="display: none;"{{/if}}>
       {{tr}}Edit{{/tr}}
     </button>
+    {{if $sejour->_id}}
+      <button type="button" onclick="openAntecedents()">ATCD</button>
+    {{/if}}
   </td>
 </tr>
 

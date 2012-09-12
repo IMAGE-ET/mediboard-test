@@ -10,6 +10,7 @@
 
 {{mb_default var=form value=""}}
 {{mb_default var=patient_id value=""}}
+{{mb_default var=other_form value=""}}
 
 <script type="text/javascript">
   createPatAnonyme = function() {
@@ -23,6 +24,13 @@
     if (form) {
       $V(form.patient_id, pat_id);
       $V(form._patient_view, pat_view);
+    }
+    
+    var otherForm = getForm("{{$other_form}}");
+    
+    if (otherForm) {
+      $V(otherForm.patient_id, pat_id);
+      $V(otherForm._patient_view, pat_view);
     }
   }
 </script>
