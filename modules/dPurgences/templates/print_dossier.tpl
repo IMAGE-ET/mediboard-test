@@ -87,6 +87,11 @@
     <th>{{mb_label object=$rpu field="pec_transport"}}</th>
     <td>{{mb_value object=$rpu field="pec_transport"}}</td>
   </tr>
+  
+  <tr>
+    <th>{{mb_label object=$rpu field="diag_infirmier"}}</th>
+    <td>{{mb_value object=$rpu field="diag_infirmier"}}</td>
+  </tr>
 </table>
 
 <br />
