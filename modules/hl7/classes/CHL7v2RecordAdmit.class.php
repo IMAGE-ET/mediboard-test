@@ -1018,6 +1018,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $sejour_mother = new CSejour();
     $sejour_mother->load($idex_mother->object_id);
     
+    // Récupération de l'IPP de la maman
+    if (!$mother_PI = $this->getPIMotherIdentifier($data["PID"])) {
+      return CAppUI::tr("CHL7EventADT-AA-E229");
+    }
+    
+    if (CIdSante400::getMatch("CPatient", $sender->_tag_patient, $mother_PI)->object_id != $sejour_mother->_id) {
+      return CAppUI::tr("CHL7EventADT-AA-E230");
+    }
+    
     $naissance                   = new CNaissance();
     $naissance->sejour_enfant_id = $newVenue->_id;    
     $naissance->sejour_maman_id  = $sejour_mother->_id;

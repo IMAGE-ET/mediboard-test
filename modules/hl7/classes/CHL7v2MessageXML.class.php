@@ -157,6 +157,15 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     } 
   }
   
+  function getPIMotherIdentifier(DOMNode $node) {
+    $PID_21 = $this->queryNodes("PID.21", $node);
+    foreach ($PID_21 as $_PID21) {
+      if ($this->queryTextNode("CX.5", $_PID21) == "PI") {
+        return $this->queryTextNode("CX.1", $_PID21);
+      }
+    } 
+  }
+  
   function getVNIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
     if (($this->queryTextNode("CX.5", $node) == "VN")) {
       $data["VN"] = $this->queryTextNode("CX.1", $node);
