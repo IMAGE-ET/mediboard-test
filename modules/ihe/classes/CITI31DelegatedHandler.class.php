@@ -96,13 +96,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if (!$current_log || $affectation->_no_synchro || !in_array($current_log->type, array("create", "store"))) {
         return;
       }
-
+      
+      // On envoie pas les affectations prévisionnelles 
       $sejour = $affectation->loadRefSejour();
       if (!$sejour->_id || $sejour->_etat == "preadmission") {
         return;
       }
+      $first_affectation = $sejour->loadRefFirstAffectation();
 
-      $code = $this->getCodeAffectation($affectation);
+      $code = $this->getCodeAffectation($affectation, $first_affectation);
 
       // Cas où : 
       // * on est l'initiateur du message 
@@ -388,7 +390,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
   }
   
-  function getCodeAffectation(CAffectation $affectation) {
+  function getCodeAffectation(CAffectation $affectation, CAffectation $first_affectation = null) {
     $current_log = $affectation->_ref_current_log;
     if (!in_array($current_log->type, array("create", "store"))) {
       return null;
@@ -398,6 +400,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     $configs  = $receiver->_configs;
 
     if ($current_log->type == "create") {
+      // Dans le cas où il s'agit de la première affectation du séjour on ne fait pas une mutation mais une modification
+      if ($first_affectation && ($first_affectation->_id == $affectation->_id)) {
+        return $this->getModificationAdmitCode($receiver);
+      }
+      
       // Création d'une affectation
       return "A02";
     }
