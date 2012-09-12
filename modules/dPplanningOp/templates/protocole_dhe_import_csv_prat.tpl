@@ -14,7 +14,8 @@
   Veuillez indiquez les champs suivants dans un fichier CSV (<strong>au format ISO</strong>) dont les champs sont séparés par
   <strong>;</strong> et les textes par <strong>"</strong>, la première ligne étant sautée :
   <ul>
-    <li>Nom de la fonction *</li>
+    <li>Nom du praticien *</li>
+    <li>Prénom du praticien *</li>
     <li>Motif d'hospitalisation *</li>
     <li>Durée d'intervention (HH:MM) *</li>
     <li>Acte(s) CCAM (séparés par des |)</li>
@@ -41,7 +42,8 @@
   </tr>
   <tr>
     <th>Etat</th>
-    <th>Fonction</th>
+    <th>Nom</th>
+    <th>Prénom</th>
     <th>Motif d'hospitalisation</th>
     <th>Durée d'intervention</th>
     <th>Actes</th>
@@ -57,7 +59,8 @@
         OK
       {{/if}}
     </td>
-    <td>{{$_protocole.function}}</td>
+    <td>{{$_protocole.nom}}</td>
+    <td>{{$_protocole.prenom}}</td>
     <td>{{$_protocole.motif}}</td>
     <td>{{$_protocole.temps_op}}</td>
     <td>{{$_protocole.actes}}</td>

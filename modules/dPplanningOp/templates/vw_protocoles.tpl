@@ -2,8 +2,12 @@
 
 <script type="text/javascript">
 
-function popupImport() {
-  var url = new Url('planningOp', 'protocole_dhe_import_csv');
+function popupImport(type) {
+  if(type == 'fonction') {
+    var url = new Url('dPplanningOp', 'protocole_dhe_import_csv');
+  } else {
+    var url = new Url('dPplanningOp', 'protocole_dhe_import_csv_prat');
+  }
   url.popup(800, 600, 'Import des Protocoles de DHE');
   return false;
 }
@@ -16,8 +20,7 @@ window.aProtocoles = {
 {{if $dialog}}
   Main.add(function(){
     var urlComponents = Url.parse();
-    $(urlComponents.fragment || 'interv').show();
-    getForm('selectFrm').action = '#'+urlComponents.fragment;
+    $('{{$singleType}}' || 'interv').show();
   });
 {{/if}}
 
@@ -87,10 +90,10 @@ Main.add(function(){
   url.addParam('field'            , 'protocole_id');
   url.addParam('input_field'      , 'search_protocole');
   url.addParam('chir_id'          , $V(oForm.chir_id));
-  if (urlComponents.fragment == 'interv') {
+  if ('{{$singleType}}' == 'interv') {
     url.addParam('for_sejour', '0');
   } 
-  if (urlComponents.fragment == 'sejour') {
+  if ('{{$singleType}}' == 'sejour') {
     url.addParam('for_sejour', '1');
   }
   url.autoComplete(oForm.elements.search_protocole, null, {
@@ -160,7 +163,8 @@ Main.add(function(){
         <li><a href="#interv">Chirurgicaux <small>(0)</small></a></li>
         <li><a href="#sejour">Médicaux <small>(0)</small></a></li>
         {{if !$dialog}}
-        <li><button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li>
+        <li><button type="button" style="float:right;" onclick="return popupImport('fonction');" class="hslip">{{tr}}Import-CSV{{/tr}} (par fonction)</button></li>
+        <li><button type="button" style="float:right;" onclick="return popupImport('praticien');" class="hslip">{{tr}}Import-CSV{{/tr}} (par praticien)</button></li>
         {{/if}}
       </ul>
       

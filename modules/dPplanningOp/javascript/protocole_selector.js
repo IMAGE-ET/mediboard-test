@@ -52,7 +52,7 @@ ProtocoleSelector = {
       url.addParam("sejour_type", this.sForceType);
     }
     
-    url.setFragment(this.sForSejour == 1 ? 'sejour': 'interv');
+    url.addParam("singleType", this.sForSejour == 1 ? 'sejour': 'interv');
     //url.modal(this.options);
     url.requestModal(1000, 700, this.options);
   },

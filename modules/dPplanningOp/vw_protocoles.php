@@ -15,6 +15,8 @@ else {
   CCanDo::checkEdit();
 }
 
+$singleType = CValue::get("singleType");
+
 // L'utilisateur est-il chirurgien ?
 $mediuser      = CMediusers::get();
 $is_praticien  = $mediuser->isPraticien();
@@ -42,6 +44,7 @@ foreach($listFunc as $_function) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("singleType" , $singleType);
 $smarty->assign("page"        , $page);
 $smarty->assign("listPrat"    , $listPrat);
 $smarty->assign("listFunc"    , $listFunc);
