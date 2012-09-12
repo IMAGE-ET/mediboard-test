@@ -36,6 +36,7 @@ $locales['mod-reservation-tab-configure'] = 'Configurer';
 $locales['mod-reservation-tab-vw_edit_sejour'] = 'Séjours';
 $locales['mod-reservation-tab-vw_planning'] = 'Planning';
 $locales['mod-reservation-tab-vw_sejours_validation'] = 'Validation séjours';
+$locales['mod-reservation-tab-vw_suivi_salles'] = 'Suivi salles';
 $locales['module-reservation-court'] = 'Réservation';
 $locales['module-reservation-long'] = 'Réservation';
 ?>

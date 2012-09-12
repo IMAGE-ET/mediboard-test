@@ -194,7 +194,7 @@
         <label>
           Praticien
           <select name="praticien_id" onchange="refreshPlanning();">
-            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            <option value="">&mdash; Tous les praticiens</option>
             {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens selected=$praticien_id}}
           </select>
         </label>
@@ -203,7 +203,7 @@
         <label>
           {{tr}}CBlocOperatoire{{/tr}}
           <select name="bloc_id" onchange="refreshPlanning();">
-            <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+            <option value="">&mdash; {{tr}}CBlocOperatoire.all{{/tr}}</option>
             {{foreach from=$blocs item=_bloc}}
               <option value="{{$_bloc->_id}}" {{if $bloc_id == $_bloc->_id}}selected{{/if}}>{{$_bloc->nom}}</option>
             {{/foreach}}
