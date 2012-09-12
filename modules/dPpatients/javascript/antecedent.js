@@ -6,6 +6,7 @@ Antecedent = {
       target: 'systemMsg'
     };
     
+    onComplete = onComplete || Prototype.emptyFunction;
     var oOptionsAjax = {
       onComplete: onComplete
     };

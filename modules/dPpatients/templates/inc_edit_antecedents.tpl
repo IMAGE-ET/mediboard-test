@@ -66,7 +66,7 @@
               {{if $first_log && $first_log->user_id == $app->user_id}}
                 <button title="{{tr}}Delete{{/tr}}" class="trash notext" type="button"
                     onclick="var form = getForm('delAntecedent'); $V(form.antecedent_id, '{{$_antecedent->_id}}');
-                      Antecedent.remove(form, afterAntecedent)">
+                      Antecedent.remove(form)">
                   {{tr}}Delete{{/tr}}
                 </button>
               {{/if}}   
