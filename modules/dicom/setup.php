@@ -7,7 +7,7 @@
  * @author SARL OpenXtrem
  */
 
-class CSetupDicom extends CSetup {
+class CSetupdicom extends CSetup {
 
   function __construct() {
     parent::__construct();
