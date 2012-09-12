@@ -292,6 +292,12 @@ Main.add(function () {
                     <th>{{mb_label object=$line field="commentaire"}}</th>
                     <td>{{mb_field object=$line field="commentaire" size=20 form=editLineTP}}</td>
                   </tr>
+                  
+                  <tr>
+                    <th>{{mb_label object=$line field="long_cours"}}</th>
+                    <td>{{mb_field object=$line field="long_cours" typeEnum=checkbox}}</td>
+                  </tr>
+                  
                   <tr>
                     <td colspan="3" class="button">
                       <button id="button_submit_traitement" class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { 
@@ -394,7 +400,7 @@ Main.add(function () {
               this.options.mode = "favoris";
               this.pop();
             }
-          </script> 
+          </script>
         </form>
         
       </fieldset>
@@ -473,7 +479,10 @@ resetEditLineTP = function(){
 resetFormTP = function(){
   $V(oFormTP.commentaire, '');
   $V(oFormTP.token_poso, '');
-  $('addPosoLine').update('');                   
+  $('addPosoLine').update('');     
+  
+  $V(oFormTP.long_cours, 0);
+  $V(oFormTP.__long_cours, false);
 }
 </script>
 {{/if}}

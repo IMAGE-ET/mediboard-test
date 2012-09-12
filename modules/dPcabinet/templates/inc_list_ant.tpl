@@ -164,19 +164,22 @@ Traitement = {
         <input type="hidden" name="del" value="1" />
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
         <input type="hidden" name="prescription_line_medicament_id" value="{{$_line->_id}}" />
-          <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
-            {{tr}}Delete{{/tr}}
-          </button>
+        
+        {{if $_line->creator_id == $app->user_id}}
+        <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
+          {{tr}}Delete{{/tr}}
+        </button>
+        {{/if}}
+        
         {{if $sejour->_id && $user->_is_praticien}}
           <button class="add notext" type="button" onclick="Traitement.copyTraitement('{{$_line->_id}}')">
             {{tr}}Add{{/tr}}
           </button>
         {{/if}}
-        {{mb_include module=system template=inc_interval_date from=$_line->debut to=$_line->fin}} :
+        {{mb_include module=system template=inc_interval_date from=$_line->debut to=$_line->fin}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_line->_guid}}', 'objectView')">
           <a href="#1" onclick="Prescription.viewProduit(null,'{{$_line->code_ucd}}','{{$_line->code_cis}}');">
             {{$_line->_ucd_view}}
-
           </a>
         </span>
         
@@ -187,6 +190,10 @@ Traitement = {
             ({{foreach from=`$_line->_ref_prises` item=_prise name=foreach_prise}}
             {{$_prise}}{{if !$smarty.foreach.foreach_prise.last}},{{/if}}
             {{/foreach}})
+          {{/if}}
+
+          {{if $_line->long_cours}}
+            (Long cours)
           {{/if}}
         </span>
       </form>
@@ -209,9 +216,12 @@ Traitement = {
     <input type="hidden" name="dosql" value="do_traitement_aed" />
     {{mb_key object=$_traitement}}
     
+    {{if $_traitement->_ref_first_log && $_traitement->_ref_first_log->user_id == $app->user_id}}
     <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
       {{tr}}delete{{/tr}}
     </button>
+    {{/if}}
+    
     {{if $_is_anesth && $sejour->_id}}
     <button class="add notext" type="button" onclick="copyTraitement('{{$_traitement->_id}}')">
       {{tr}}Add{{/tr}}

@@ -37,6 +37,9 @@ if ($dossier_medical->_id) {
   foreach ($dossier_medical->_all_antecedents as $_antecedent) {
     $_antecedent->loadLogs();
   }
+  foreach ($dossier_medical->_ref_traitements as $_traitement) {
+    $_traitement->loadLogs();
+  }
   
   if ($prescription && is_array($prescription->_ref_prescription_lines)) {
     foreach($prescription->_ref_prescription_lines as $_line) {
