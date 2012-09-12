@@ -3,8 +3,8 @@
 <script type="text/javascript">
 
 function popupImport() {
-  var url = new Url("dPplanningOp", "protocole_dhe_import_csv");
-  url.popup(800, 600, "Import des Protocoles de DHE");
+  var url = new Url('planningOp', 'protocole_dhe_import_csv');
+  url.popup(800, 600, 'Import des Protocoles de DHE');
   return false;
 }
 
@@ -17,23 +17,23 @@ window.aProtocoles = {
   Main.add(function(){
     var urlComponents = Url.parse();
     $(urlComponents.fragment || 'interv').show();
-    getForm("selectFrm").action = "#"+urlComponents.fragment;
+    getForm('selectFrm').action = '#'+urlComponents.fragment;
   });
 {{/if}}
 
 chooseProtocole = function(protocole_id) {
   {{if $dialog}}
   if(protocole_id == 0) {
-    var url =  new Url("dPplanningOp", "vw_edit_protocole");
-    url.addParam("protocole_id", protocole_id);
-    var protocoleModal = url.requestModal();
+    var url =  new Url('planningOp', 'vw_edit_protocole');
+    url.addParam('protocole_id', protocole_id);
+    var protocoleModal = url.requestModal(800);
   } else {
     setClose(protocole_id);
   }
   {{else}}
-  var url =  new Url("dPplanningOp", "vw_edit_protocole");
-  url.addParam("protocole_id", protocole_id);
-  url.requestModal();
+  var url =  new Url('planningOp', 'vw_edit_protocole');
+  url.addParam('protocole_id', protocole_id);
+  url.requestModal(800);
   {{/if}}
 }
 
@@ -43,62 +43,63 @@ setClose = function(protocole_id) {
 }
 
 refreshList = function(form, types, reset) {
-  types = types || ["interv", "sejour"];
+  types = types || ['interv', 'sejour'];
   if (reset) {
     types.each(function(type) {
-      $V(form.elements["page["+type+"]"], 0, false);
+      $V(form.elements['page['+type+']'], 0, false);
     });
   }
   
-  var url = new Url("dPplanningOp","httpreq_vw_list_protocoles");
-  url.addParam("chir_id", $V(form.chir_id));
-  url.addParam("dialog", $V(form.dialog));
-  url.addParam("function_id", $V(form.function_id));
-  url.addParam("sejour_type", "{{$sejour_type}}");
+  var url = new Url('planningOp','httpreq_vw_list_protocoles');
+  url.addParam('chir_id'    , $V(form.chir_id));
+  url.addParam('dialog'     , $V(form.dialog));
+  url.addParam('function_id', $V(form.function_id));
+  url.addParam('sejour_type', '{{$sejour_type}}');
   
   types.each(function(type){
-  url.addParam("page["+type+"]", $V(form["page["+type+"]"]));
-    url.addParam("type", type);
+  url.addParam('page['+type+']', $V(form['page['+type+']']));
+    url.addParam('type', type);
     url.requestUpdate(type);
   });
 }
 
 changePagesejour = function (page) {
-    $V(getForm("selectFrm").elements['page[sejour]'], page);
+    $V(getForm('selectFrm').elements['page[sejour]'], page);
 }
 
 changePageinterv = function (page) {
-  $V(getForm("selectFrm").elements['page[interv]'], page);
+  $V(getForm('selectFrm').elements['page[interv]'], page);
 }
 
 reloadPage = function(form) {
-  $V(form["page[interv]"], 0, false);
-  $V(form["page[sejour]"], 0, false);
+  $V(form['page[interv]'], 0, false);
+  $V(form['page[sejour]'], 0, false);
   form.submit();
 }
 
 Main.add(function(){
-  var oForm = getForm("selectFrm");
+  var oForm = getForm('selectFrm');
   var urlComponents = Url.parse();
   
   refreshList(oForm);
   
-  var url = new Url("dPplanningOp", "ajax_protocoles_autocomplete");
-  url.addParam("field"            , "protocole_id");
-  url.addParam("input_field"      , "search_protocole");
-  url.addParam("chir_id"          , $V(oForm.chir_id));
-  if(urlComponents.fragment == 'interv') {
-    url.addParam("for_sejour", '0');
-  } else if(urlComponents.fragment == 'sejour') {
-    url.addParam("for_sejour", '1');
+  var url = new Url('planningOp', 'ajax_protocoles_autocomplete');
+  url.addParam('field'            , 'protocole_id');
+  url.addParam('input_field'      , 'search_protocole');
+  url.addParam('chir_id'          , $V(oForm.chir_id));
+  if (urlComponents.fragment == 'interv') {
+    url.addParam('for_sejour', '0');
+  } 
+  if (urlComponents.fragment == 'sejour') {
+    url.addParam('for_sejour', '1');
   }
   url.autoComplete(oForm.elements.search_protocole, null, {
     minChars: 3,
-    method: "get",
-    select: "view",
+    method: 'get',
+    select: 'view',
     dropdown: true,
     afterUpdateElement: function(field,selected){
-        chooseProtocole(selected.id.split("-")[2]);
+        chooseProtocole(selected.id.split('-')[2]);
     }
   });
 });
