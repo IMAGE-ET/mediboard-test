@@ -338,6 +338,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $exchange_ihe->setAckAR($ack, "E211", $return_grossesse, $newVenue);
     }
     
+    // Dans le cas d'une naissance
+    if ($return_naissance = $this->mapAndStoreNaissance($newVenue, $data)) {
+      return $exchange_ihe->setAckAR($ack, "E212", $return_naissance, $newVenue);
+    }
+    
     return $exchange_ihe->setAckAA($ack, $codes, $comment, $newVenue);
   }
   
@@ -963,7 +968,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
 
   function storeGrossesse(CSejour $newVenue, $data) {
-    if (!$newVenue->_id || ($newVenue->type_pec != "O")) {
+    if ($newVenue->type_pec != "O") {
       return;
     }
     
@@ -993,6 +998,41 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $msg;
     }   
   }
+  
+  function mapAndStoreNaissance(CSejour $newVenue, $data) {
+    if ($this->queryTextNode("PV1.4", $data["PV1"]) != "N") {
+      return;
+    }
+    
+    // Récupération du séjour de la maman
+    if (!$mother_AN = $this->getANMotherIdentifier($data["PID"])) {
+      return CAppUI::tr("CHL7EventADT-AA-E227");
+    }
+    
+    $sender = $this->_ref_sender;
+    $idex_mother = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $mother_AN);
+    if (!$idex_mother->_id) {
+      return CAppUI::tr("CHL7EventADT-AA-E228");
+    }
+    
+    $sejour_mother = new CSejour();
+    $sejour_mother->load($idex_mother->object_id);
+    
+    $naissance                   = new CNaissance();
+    $naissance->sejour_enfant_id = $newVenue->_id;    
+    $naissance->sejour_maman_id  = $sejour_mother->_id;
+    $naissance->grossesse_id     = $sejour_mother->grossesse_id;
+    $naissance->loadMatchingObject();
+    
+    $naissance->rang = $this->queryTextNode("PID.25", $data["PID"]);
+        
+    // On récupère l'entrée réelle ssi msg A01 pour indiquer l'heure de la naissance 
+    if ($this->_ref_exchange_ihe->code == "A01") {
+      $naissance->heure = mbTime($this->queryTextNode("PV1.44", $data["PV1"]));
+    }
+    
+    return $naissance->store();
+  }  
   
   function mappingUFMedicale($data) {
     if (!array_key_exists("ZBE", $data)) {

@@ -236,12 +236,18 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $this->getFirstNames($_PID5, $newPatient);
       
       // Civilité
+      $newPatient->civilite = "guess";
       /* @todo Voir comment faire ! Nouvelle table HL7 ? */
       //$newPatient->civilite = $this->queryTextNode("XPN.5", $_PID5);
     }
     
     // Date de naissance
     $newPatient->naissance = mbDate($this->queryTextNode("PID.7/TS.1", $node));
+    
+    // Cas d'un patient anonyme
+    if ($newPatient->naissance && !$newPatient->prenom) {
+      $newPatient->prenom = CValue::read($data['personIdentifiers'], "PI");
+    }
     
     // Sexe
     $newPatient->sexe = CHL7v2TableEntry::mapFrom("1", $this->queryTextNode("PID.8", $node));
