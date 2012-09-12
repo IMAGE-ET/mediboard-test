@@ -27,6 +27,11 @@ $selPraticien->load($selPrat);
 
 if ($selPraticien->isAnesth()) {
   // Selection des différentes interventions de la journée par service
+  $count_ops = array(
+    "ambu"       => 0,
+    "comp"       => 0,
+    "hors_plage" => 0);
+  
   $service = new CService();
   $services = $service->loadGroupList();
   $interv = new COperation();
@@ -85,20 +90,25 @@ if ($selPraticien->isAnesth()) {
     $whereUrg["service.service_id"]           = "= '$_service->_id'";
     
     $listInterv["ambu"][$_service->_id]       = $interv->loadList($whereAmbu , $order, null, null, $ljoin);
+    $count_ops["ambu"] += count($listInterv["ambu"][$_service->_id]);
     foreach ($listInterv["ambu"][$_service->_id] as &$_interv) {
       $_interv->loadRefAffectation();
       $_interv->loadRefsFwd(1);
       $_interv->loadRefsConsultAnesth();
       $_interv->_ref_chir->loadRefFunction();
     }
+    
     $listInterv["comp"][$_service->_id]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
+    $count_ops["comp"] += count($listInterv["comp"][$_service->_id]);
     foreach ($listInterv["comp"][$_service->_id] as &$_interv) {
       $_interv->loadRefAffectation();
       $_interv->loadRefsFwd(1);
       $_interv->loadRefsConsultAnesth();
       $_interv->_ref_chir->loadRefFunction();
     }
+    
     $listInterv["hors_plage"][$_service->_id] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
+    $count_ops["hors_plage"] += count($listInterv["hors_plage"][$_service->_id]);
     foreach ($listInterv["hors_plage"][$_service->_id] as &$_interv) {
       $_interv->loadRefAffectation();
       $_interv->loadRefsFwd(1);
@@ -106,24 +116,31 @@ if ($selPraticien->isAnesth()) {
       $_interv->_ref_chir->loadRefFunction();
     }
   }
+  
   $whereAmbu["service.service_id"]       = "IS NULL";
   $whereHospi["service.service_id"]      = "IS NULL";
   $whereUrg["service.service_id"]        = "IS NULL";
+  
   $listInterv["ambu"]["non_place"]       = $interv->loadList($whereAmbu , $order, null, null, $ljoin);
+  $count_ops["ambu"] += count($listInterv["ambu"]["non_place"]);
   foreach ($listInterv["ambu"]["non_place"] as &$_interv) {
     $_interv->loadRefAffectation();
     $_interv->loadRefsFwd(1);
     $_interv->loadRefsConsultAnesth();
     $_interv->_ref_chir->loadRefFunction();
   }
+  
   $listInterv["comp"]["non_place"]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
+  $count_ops["comp"] += count($listInterv["comp"]["non_place"]);
   foreach ($listInterv["comp"]["non_place"] as &$_interv) {
     $_interv->loadRefAffectation();
     $_interv->loadRefsFwd(1);
     $_interv->loadRefsConsultAnesth();
     $_interv->_ref_chir->loadRefFunction();
   }
+  
   $listInterv["hors_plage"]["non_place"] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
+  $count_ops["hors_plage"] += count($listInterv["hors_plage"]["non_place"]);
   foreach ($listInterv["hors_plage"]["non_place"] as &$_interv) {
     $_interv->loadRefAffectation();
     $_interv->loadRefsFwd(1);
@@ -141,6 +158,8 @@ if ($selPraticien->isAnesth()) {
   $smarty->assign("selPrat"     , $selPrat);
   $smarty->assign("canceled"    , $canceled);
   $smarty->assign("sans_anesth" , $sans_anesth);
+  $smarty->assign("count_ops"   , $count_ops);
+  
   $smarty->display("vw_idx_visite_anesth.tpl");
   
 } else {

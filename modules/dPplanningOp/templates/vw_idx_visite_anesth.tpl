@@ -61,11 +61,18 @@ Main.add(function(){
     <td>
       <ul id="type_sejour" class="control_tabs">
       {{foreach from=$listInterv key=_key_type item=_services}}
-      <li><a href="#{{$_key_type}}_tab">{{tr}}CSejour.type.{{$_key_type}}{{/tr}}</a></li>
+        {{assign var=count_ops_by_type value=$count_ops.$_key_type}}
+        <li>
+          <a href="#{{$_key_type}}_tab" {{if $count_ops_by_type == 0}}class="empty"{{/if}}>
+            {{tr}}CSejour.type.{{$_key_type}}{{/tr}}
+            <small>({{$count_ops_by_type}})</small>
+          </a>
+        </li>
       {{/foreach}}
       </ul>
       <hr class="control_tabs" />
       {{foreach from=$listInterv key=_key_type item=_services}}
+      {{assign var=count_ops_by_type value=$count_ops.$_key_type}}
       <div id="{{$_key_type}}_tab" style="display:none">
       <table class="tbl">
         <tr>
@@ -77,70 +84,78 @@ Main.add(function(){
           <th>Consultation</th>
           <th colspan="2">Visite</th>
         </tr>
-        {{foreach from=$_services key=_key_service item=_list_intervs}}
-        {{if $_list_intervs|@count}}
-        <tr>
-          {{if $_key_service == "non_place"}}
-          <th colspan="8">Non placés</th>
-          {{else}}
-          <th colspan="8">Service {{$services.$_key_service->_view}}</th>
-          {{/if}}
-        </tr>
-        {{foreach from=$_list_intervs item=_operation}}
-        <tr>
-          <td class="text {{if $_operation->annulee}}cancelled{{/if}}">
-            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
-          </td>
-          <td class="text {{if $_operation->annulee}}cancelled{{/if}}">
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
-              {{$_operation->_ref_sejour->_ref_patient->_view}}
-            </span>
-          </td>
-          <td {{if $_operation->annulee}}class="cancelled"{{/if}}">
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
-            {{if $_operation->libelle}}
-              {{$_operation->libelle}}
-            {{else}}
-              {{foreach from=$_operation->_ext_codes_ccam item=curr_code}}
-                {{$curr_code->code}}
+        {{if $count_ops_by_type == 0}}
+          <tr>
+            <td colspan="8" class="empty">
+              {{tr}}COperation.none{{/tr}}
+            </td>
+          </tr>
+        {{else}}
+          {{foreach from=$_services key=_key_service item=_list_intervs}}
+            {{if $_list_intervs|@count}}
+              <tr>
+                {{if $_key_service == "non_place"}}
+                <th colspan="8">Non placés</th>
+                {{else}}
+                <th colspan="8">Service {{$services.$_key_service->_view}}</th>
+                {{/if}}
+              </tr>
+              {{foreach from=$_list_intervs item=_operation}}
+              <tr>
+                <td class="text {{if $_operation->annulee}}cancelled{{/if}}">
+                  {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
+                </td>
+                <td class="text {{if $_operation->annulee}}cancelled{{/if}}">
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
+                    {{$_operation->_ref_sejour->_ref_patient->_view}}
+                  </span>
+                </td>
+                <td {{if $_operation->annulee}}class="cancelled"{{/if}}">
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
+                  {{if $_operation->libelle}}
+                    {{$_operation->libelle}}
+                  {{else}}
+                    {{foreach from=$_operation->_ext_codes_ccam item=curr_code}}
+                      {{$curr_code->code}}
+                    {{/foreach}}
+                  {{/if}}
+                  </span>
+                </td>
+                <td class="button {{if $_operation->annulee}}cancelled{{/if}}"">
+                  {{$_operation->time_operation|date_format:$conf.time}}
+                </td>
+                <td class="button {{if $_operation->annulee}}cancelled{{/if}}"">
+                  {{$_operation->_ref_affectation->_ref_lit->_view}}
+                </td>
+                <td class="text {{if $_operation->annulee}}cancelled{{/if}}"">
+                  {{if $_operation->_ref_consult_anesth->_id}}
+                  <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_operation->_ref_consult_anesth->_ref_consultation->_id}}">
+                    <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_consult_anesth->_guid}}')">
+                    Le {{mb_value object=$_operation->_ref_consult_anesth->_ref_consultation field="_date"}} par le Dr {{$_operation->_ref_consult_anesth->_ref_consultation->_ref_chir->_view}}
+                    </span>
+                  </a>
+                  {{else}}
+                    -
+                  {{/if}}
+                </td>
+                <td class="text {{if $_operation->annulee}}cancelled{{/if}} {{if !$_operation->date_visite_anesth}}empty{{/if}}">
+                  {{if $_operation->date_visite_anesth}}
+                    Le {{$_operation->date_visite_anesth|date_format:$conf.date}} par le Dr {{$_operation->_ref_anesth_visite->_view}}
+                  {{else}}
+                    Visite non effectuée
+                  {{/if}}
+                </td>
+                <td {{if $_operation->annulee}}class="cancelled"{{/if}}">
+                  <button type="button" class="edit notext" onclick="editVisite({{$_operation->_id}});">{{tr}}Edit{{/tr}}</button>
+                  {{if $_operation->_ref_consult_anesth->_id}}
+                    <button type="button" class="print notext" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}');">{{tr}}Print{{/tr}}</button>
+                  {{/if}}
+                </td>
+              </tr>
               {{/foreach}}
             {{/if}}
-            </span>
-          </td>
-          <td class="button {{if $_operation->annulee}}cancelled{{/if}}"">
-            {{$_operation->time_operation|date_format:$conf.time}}
-          </td>
-          <td class="button {{if $_operation->annulee}}cancelled{{/if}}"">
-            {{$_operation->_ref_affectation->_ref_lit->_view}}
-          </td>
-          <td class="text {{if $_operation->annulee}}cancelled{{/if}}"">
-            {{if $_operation->_ref_consult_anesth->_id}}
-            <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_operation->_ref_consult_anesth->_ref_consultation->_id}}">
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_consult_anesth->_guid}}')">
-              Le {{mb_value object=$_operation->_ref_consult_anesth->_ref_consultation field="_date"}} par le Dr {{$_operation->_ref_consult_anesth->_ref_consultation->_ref_chir->_view}}
-              </span>
-            </a>
-            {{else}}
-              -
-            {{/if}}
-          </td>
-          <td class="text {{if $_operation->annulee}}cancelled{{/if}} {{if !$_operation->date_visite_anesth}}empty{{/if}}">
-            {{if $_operation->date_visite_anesth}}
-              Le {{$_operation->date_visite_anesth|date_format:$conf.date}} par le Dr {{$_operation->_ref_anesth_visite->_view}}
-            {{else}}
-              Visite non effectuée
-            {{/if}}
-          </td>
-          <td {{if $_operation->annulee}}class="cancelled"{{/if}}">
-            <button type="button" class="edit notext" onclick="editVisite({{$_operation->_id}});">{{tr}}Edit{{/tr}}</button>
-            {{if $_operation->_ref_consult_anesth->_id}}
-              <button type="button" class="print notext" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}');">{{tr}}Print{{/tr}}</button>
-            {{/if}}
-          </td>
-        </tr>
-        {{/foreach}}
+          {{/foreach}}
         {{/if}}
-        {{/foreach}}
       </table>
       </div>
       {{/foreach}}
