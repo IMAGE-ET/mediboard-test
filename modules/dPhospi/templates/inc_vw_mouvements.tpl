@@ -76,15 +76,18 @@
        
        $("view_affectations").scrollTop = Placement.scrollAffectations;
        
-       tableau_vue_temporelle.select(".mouvement_lit").each(function(elt) {
-         elt.observe("dblclick", function() {
-           window.sejour_id_for_affectation = null;
-           var datetime = elt.get("date").split(" ");
-           var date = datetime[0];
-           var hour = datetime[1].split(":")[0];
-           createIntervention(date, hour, elt.up("tr").id);
+       
+       {{if "reservation"|module_active}}
+         tableau_vue_temporelle.select(".mouvement_lit").each(function(elt) {
+           elt.observe("dblclick", function() {
+             var datetime = elt.get("date").split(" ");
+             window.save_date = datetime[0];
+             window.save_hour = datetime[1].split(":")[0];
+             window.save_lit_guid = elt.up("tr").id;
+             chooseIntervSejour();
+           });
          });
-       });
+       {{/if}}
     });
   </script>
 {{/if}}

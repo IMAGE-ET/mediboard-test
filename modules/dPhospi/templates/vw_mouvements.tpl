@@ -33,14 +33,14 @@
        
        url.requestUpdate($("CLit-"+lit_id), {onComplete: function() {
          after_refresh();
-         {{if !$readonly}}
+         {{if !$readonly && "reservation"|module_active}}
            $("CLit-"+lit_id).select("td").each(function(elt) {
              elt.observe("dblclick", function() {
-               window.sejour_id_for_affectation;
                var datetime = elt.get("date").split(" ");
-               var date = datetime[0];
-               var hour = datetime[1].split(":")[0];
-               createIntervention(date, hour, elt.up("tr").id);
+               window.save_date = datetime[0];
+               window.save_hour = datetime[1].split(":")[0];
+               window.save_lit_guid = elt.up("tr").id;
+               chooseIntervSejour();
              });
            });
          {{/if}}
@@ -182,20 +182,43 @@
     });
   }
   
-  createIntervention = function(date, hour, lit_guid) {
+  createIntervention = function() {
+    Placement.stop();
     var url = new Url("dPplanningOp", "vw_edit_urgence");
-    url.addParam("date_urgence", date);
-    url.addParam("hour_urgence", hour);
+    url.addParam("date_urgence", window.save_date);
+    url.addParam("hour_urgence", window.save_hour);
     url.addParam("min_urgence" , "00");
     url.addParam("dialog", 1);
     url.addParam("operation_id", 0);
     url.modal({width: 1000, height: 700});
     
     url.modalObject.observe("afterClose", function() {
+      Placement.resume();
       if (window.sejour_id_for_affectation) {
-        createAffectation(window.sejour_id_for_affectation, lit_guid.split("-")[1]);
+        createAffectation(window.sejour_id_for_affectation, window.save_lit_guid.split("-")[1]);
       }
     });
+  }
+  
+  createSejour = function() {
+    Placement.stop();
+    var url = new Url("planningOp", "vw_edit_sejour");
+    url.addParam("date_reservation", window.save_date);
+    url.addParam("sejour_id", 0);
+    url.addParam("dialog", 1);
+    url.modal({width: 1000, height: 700});
+    
+    url.modalObject.observe("afterClose", function() {
+      Placement.resume();
+      if (window.sejour_id_for_affectation) {
+        createAffectation(window.sejour_id_for_affectation, window.save_lit_guid.split("-")[1]);
+      }
+    });
+  }
+  
+  chooseIntervSejour = function() {
+    window.sejour_id_for_affectation = null;
+    modal("choose_interv_sejour");
   }
   
   Main.add(function() {
@@ -219,6 +242,28 @@
     ));
   });
 </script>
+
+<div class="modal" style="display: none;" id="choose_interv_sejour">
+  <table class="tbl">
+    <tr>
+      <th class="title" colspan="2">
+        Création de :
+      </th>
+    <tr>
+      <td>
+        <button type="button" class="new" onclick="Control.Modal.close(); createIntervention()">{{tr}}COperation{{/tr}}</button>
+      </td>
+      <td>
+        <button type="button" class="new" onclick="Control.Modal.close(); createSejour()">{{tr}}CSejour{{/tr}}</button>
+      </td>
+    </tr>
+    <tr>
+      <td class="button" colspan="2">
+        <button type="button" class="cancel" onclick="Control.Modal.close()">{{tr}}Close{{/tr}}</button>
+      </td>
+    </tr>
+  </table>
+</div>
 
 <form name="filterMouv" action="?" method="get" onsubmit="return false;">
   <input type="hidden" name="m" value="hospi" />

@@ -70,6 +70,12 @@ function reloadSejours(checkCollision) {
   url.requestUpdate("list_sejours", {onComplete: function() { window.refreshingSejours = false; }});
 }
 
+{{if $sejour->_id && $dialog == 1}}
+  // Il faut sauvegarder le sejour_id pour la création de l'affectation
+  // après la fermeture de la modale.
+  window.parent.sejour_id_for_affectation = '{{$sejour->_id}}';
+{{/if}}
+
 {{if $app->user_prefs.mode_dhe == 0}}
   Main.add(toggleMode);
 {{/if}}
@@ -77,7 +83,7 @@ function reloadSejours(checkCollision) {
 
 <table class="main">
 
-  {{if $sejour->_id}}
+  {{if $sejour->_id && !$dialog}}
   <tr>
     <td>
       <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;sejour_id=0">

@@ -76,6 +76,12 @@ $sejour->loadRefsNotes();
 $sejour->loadRefsConsultAnesth();
 $sejour->_ref_consult_anesth->loadRefConsultation();
 
+
+if (CModule::getActive("reservation") && !$sejour_id && $dialog) {
+  $date_reservation = CValue::get("date_reservation");
+  $sejour->_date_entree_prevue = $sejour->_date_sortie_prevue = $date_reservation;
+}
+
 if (CModule::getActive("maternite")) {
   if ($grossesse_id) {
     $sejour->grossesse_id = $grossesse_id;
