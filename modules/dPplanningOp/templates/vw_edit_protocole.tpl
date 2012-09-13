@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
 
-window.oCcamField = null;
+window.oCcamFieldProtocole = null;
 
 copier = function(){
   var oForm = getForm("editProtocole");
@@ -30,7 +30,7 @@ afterCopier = function(id) {
 }
 
 refreshListCCAM = function() {
-  var oCcamNode = $("listCodesCcam");
+  var oCcamNode = $("listCodesCcamProtocole");
 
   var oForm = getForm("editProtocole");
   $V(oForm._codes_ccam, "");
@@ -42,7 +42,7 @@ refreshListCCAM = function() {
   var iCode = 0;
   
   while (sCode = aCcam[iCode++]) {
-    var sCodeNode = printf("<button class='remove' type='button' onclick='oCcamField.remove(\"%s\")'>%s<\/button>", sCode, sCode);
+    var sCodeNode = printf("<button class='remove' type='button' onclick='oCcamFieldProtocole.remove(\"%s\")'>%s<\/button>", sCode, sCode);
     aCodeNodes.push(sCodeNode);
   }
   oCcamNode.update(aCodeNodes.join(""));
@@ -59,11 +59,11 @@ checkCCAM = function() {
   
   var sCcam = $V(oForm._codes_ccam);
   if(sCcam != "") {
-    if(!oCcamField.add(sCcam,true)) {
+    if(!oCcamFieldProtocole.add(sCcam,true)) {
       return false;
     }
   }
-  oCcamField.remove("XXXXXX");
+  oCcamFieldProtocole.remove("XXXXXX");
   var sCodesCcam = oForm.codes_ccam.value;
   var sLibelle = oForm.libelle.value;
   if(sCodesCcam == "" && sLibelle == "") {
@@ -152,7 +152,8 @@ Main.add(function () {
   var form = getForm('editProtocole');
   refreshListCCAM();
   setOperationActive($V(form.for_sejour) == 0);
-  oCcamField = new TokenField(form.codes_ccam, { 
+  
+  oCcamFieldProtocole = new TokenField(form.codes_ccam, { 
     onChange : refreshListCCAM,
     sProps : "notNull code ccam"
   } );
@@ -250,7 +251,7 @@ Main.add(function () {
           </th>
           <td colspan="2">
             <input type="text" name="_codes_ccam" ondblclick="CCAMSelector.init()"  style="width: 12em" value="" />
-            <button class="add notext" type="button" onclick="oCcamField.add($V(this.form._codes_ccam), true)">{{tr}}Add{{/tr}}</button>
+            <button class="add notext" type="button" onclick="oCcamFieldProtocole.add($V(this.form._codes_ccam), true)">{{tr}}Add{{/tr}}</button>
             <button class="search notext" type="button" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
             <script type="text/javascript">
               Main.add(function() {
@@ -261,8 +262,11 @@ Main.add(function () {
                   dropdown: true,
                   width: "250px",
                   updateElement: function(selected) {
+                    console.log(oCcamFieldProtocole);
+                    console.log(oForm._codes_ccam);
+                    
                     $V(oForm._codes_ccam, selected.down("strong").getText());
-                    oCcamField.add($V(oForm._codes_ccam), true);
+                    oCcamFieldProtocole.add($V(oForm._codes_ccam), true);
                   }
                 });
               });
@@ -283,7 +287,7 @@ Main.add(function () {
             Liste des codes CCAM
             {{mb_field object=$protocole field="codes_ccam" hidden=1}}
           </th>
-          <td colspan="2" class="text" id="listCodesCcam"></td>
+          <td colspan="2" class="text" id="listCodesCcamProtocole"></td>
         </tr>
   
         <tr>
