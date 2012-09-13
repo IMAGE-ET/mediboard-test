@@ -29,7 +29,7 @@ afterCopier = function(id) {
   chooseProtocole(id);
 }
 
-refreshListCCAM = function() {
+refreshListCCAMProtocole = function() {
   var oCcamNode = $("listCodesCcamProtocole");
 
   var oForm = getForm("editProtocole");
@@ -150,11 +150,11 @@ applyModifProtocole = function() {
 
 Main.add(function () {
   var form = getForm('editProtocole');
-  refreshListCCAM();
+  refreshListCCAMProtocole();
   setOperationActive($V(form.for_sejour) == 0);
   
   oCcamFieldProtocole = new TokenField(form.codes_ccam, { 
-    onChange : refreshListCCAM,
+    onChange : refreshListCCAMProtocole,
     sProps : "notNull code ccam"
   } );
 });
@@ -262,9 +262,6 @@ Main.add(function () {
                   dropdown: true,
                   width: "250px",
                   updateElement: function(selected) {
-                    console.log(oCcamFieldProtocole);
-                    console.log(oForm._codes_ccam);
-                    
                     $V(oForm._codes_ccam, selected.down("strong").getText());
                     oCcamFieldProtocole.add($V(oForm._codes_ccam), true);
                   }

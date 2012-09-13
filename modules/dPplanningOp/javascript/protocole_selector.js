@@ -55,6 +55,9 @@ ProtocoleSelector = {
     url.addParam("singleType", this.sForSejour == 1 ? 'sejour': 'interv');
     //url.modal(this.options);
     url.requestModal(1000, 700, this.options);
+    url.modalObject.observe("afterClose", function() {
+      ProtocoleSelector.reloadInitCCAMSelector(oForm.name);
+    });
   },
   
   set: function(protocole) {
@@ -165,6 +168,16 @@ ProtocoleSelector = {
     
     if (window.refreshViewProtocoleAnesth) {
       refreshViewProtocoleAnesth(protocole.protocole_prescription_anesth_id);
+    }
+  },
+  reloadInitCCAMSelector: function(form_name) {
+    CCAMSelector.init = function(){
+      var oForm     = (ProtocoleSelector.sForm && getForm(ProtocoleSelector.sForm)) || getForm("editOp");
+      this.sForm  = oForm.name;
+      this.sView  = "_codes_ccam";
+      this.sChir  = "chir_id";
+      this.sClass = "_class";
+      this.pop();
     }
   }
 };

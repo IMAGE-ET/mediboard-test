@@ -2,15 +2,14 @@
 
 <script type="text/javascript">
 
-var oCcamField = null;
+window.oCcamField = null;
+
 function updateTokenCcam(){
   refreshListCCAM("expert");
   refreshListCCAM("easy");
   $V(document.editOp._codes_ccam, "");
   modifOp();
 }
-
-
 
 function refreshListCCAM(mode) {
   if (mode=="expert") {
