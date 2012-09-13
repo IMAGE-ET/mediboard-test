@@ -99,6 +99,7 @@ $locales['CExchangeAny.all'] = 'Tous les Aucun échanges génériques';
 $locales['CExchangeAny.none'] = 'Aucun échange générique';
 $locales['CExchangeAny.one'] = 'Un échange générique';
 $locales['CExchangeAny.sender_class.CSenderFTP'] = 'Expéditeur FTP';
+$locales['CExchangeAny.sender_class.CSenderFileSystem'] = 'Expéditeur Système de fichiers';
 $locales['CExchangeAny.sender_class.CSenderMLLP'] = 'Expéditeur MLLP';
 $locales['CExchangeAny.sender_class.CSenderSOAP'] = 'Expéditeur SOAP';
 $locales['CExchangeDataFormat'] = 'Formats d\'échanges';
