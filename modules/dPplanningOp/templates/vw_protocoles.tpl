@@ -2,12 +2,8 @@
 
 <script type="text/javascript">
 
-function popupImport(type) {
-  if(type == 'fonction') {
-    var url = new Url('dPplanningOp', 'protocole_dhe_import_csv');
-  } else {
-    var url = new Url('dPplanningOp', 'protocole_dhe_import_csv_prat');
-  }
+function popupImport() {
+  var url = new Url('dPplanningOp', 'protocole_dhe_import_csv');
   url.popup(800, 600, 'Import des Protocoles de DHE');
   return false;
 }
@@ -163,8 +159,7 @@ Main.add(function(){
         <li><a href="#interv">Chirurgicaux <small>(0)</small></a></li>
         <li><a href="#sejour">Médicaux <small>(0)</small></a></li>
         {{if !$dialog}}
-        <li><button type="button" style="float:right;" onclick="return popupImport('fonction');" class="hslip">{{tr}}Import-CSV{{/tr}} (par fonction)</button></li>
-        <li><button type="button" style="float:right;" onclick="return popupImport('praticien');" class="hslip">{{tr}}Import-CSV{{/tr}} (par praticien)</button></li>
+        <li><button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li>
         {{/if}}
       </ul>
       

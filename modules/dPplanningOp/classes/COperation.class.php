@@ -50,6 +50,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $prothese            = null;
   
   var $depassement        = null;
+  var $conventionne       = null;
   var $forfait            = null;
   var $fournitures        = null;
   var $depassement_anesth = null;
@@ -240,6 +241,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["rank"]               = "num max|255 show|0";
     $props["rank_voulu"]         = "num max|255 show|0";
     $props["depassement"]        = "currency min|0 confidential show|0";
+    $props["conventionne"]       = "bool default|1";
     $props["forfait"]            = "currency min|0 confidential show|0";
     $props["fournitures"]        = "currency min|0 confidential show|0";
     $props["depassement_anesth"] = "currency min|0 confidential show|0";

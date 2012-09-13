@@ -27,11 +27,13 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     
     // Parsing
     $results[$i]["function"]    = addslashes(trim($line[0]));
-    $results[$i]["motif"]       = addslashes(trim($line[1]));
-    $results[$i]["temps_op"]    = addslashes(trim($line[2]));
-    $results[$i]["actes"]       = addslashes(trim($line[3]));
-    $results[$i]["type_hospi"]  = strtolower((trim($line[4])));
-    $results[$i]["duree_hospi"] = addslashes(trim($line[5]));
+    $results[$i]["nom"]         = addslashes(trim($line[1]));
+    $results[$i]["prenom"]      = addslashes(trim($line[2]));
+    $results[$i]["motif"]       = addslashes(trim($line[3]));
+    $results[$i]["temps_op"]    = addslashes(trim($line[4]));
+    $results[$i]["actes"]       = addslashes(trim($line[5]));
+    $results[$i]["type_hospi"]  = strtolower(trim($line[6]));
+    $results[$i]["duree_hospi"] = addslashes(trim($line[7]));
     
     // Règles pour les types de séjour et les durées
     $results[$i]["type_hospi"]  = $results[$i]["type_hospi"] ? $results[$i]["type_hospi"] : "comp";
@@ -61,13 +63,35 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       }
     }
     
+    // Praticien
+    if($results[$i]["nom"]) {
+      $user = new CMediusers();
+      $ljoin = array();
+      $ljoin["users"] = "users.user_id = users_mediboard.user_id";
+      $where = array();
+      $where["users.users_last_name"]  = "= '".$results[$i]["nom"]."'";
+      $where["users.users_first_name"] = "= '".$results[$i]["prenom"]."'";
+      $where["users_mediboard.function_id"] = "= '".$function->_id."'";
+      $user->loadObject($where, null, null, $ljoin);
+      if(!$user->_id) {
+        CAppUI::setMsg("Utilisateur non trouvé", UI_MSG_ERROR);
+        $results[$i]["error"] = $msg;
+        $i++;
+        continue;
+      }
+    }
+    
     // Protocole
     $protocole = new CProtocole();
     $protocole->for_sejour  = 0;
     $protocole->libelle     = $results[$i]["motif"];
     $protocole->type        = $results[$i]["type_hospi"];
     $protocole->duree_hospi = $results[$i]["duree_hospi"];
-    $protocole->function_id = $function->_id;
+    if($user->_id) {
+      $protocole->praticien_id = $user->_id;
+    } else {
+      $protocole->function_id = $function->_id;
+    }
     $protocole->loadMatchingObject();
     if($protocole->_id) {
       $msg = "Protocole existant";

@@ -423,6 +423,13 @@ addBesoins = function(types_ressources_ids) {
   {{/if}}
   
   <tr>
+    <th>{{mb_label object=$op field="conventionne"}}</th>
+    <td colspan="2">
+      {{mb_field object=$op field="conventionne" typeEnum="checkbox"}}
+    </td>
+  </tr>
+  
+  <tr>
     <td class="text">{{mb_label object=$op field="depassement"}}</td>
     <td class="text">{{mb_label object=$op field="forfait"}}</td>
     <td class="text">{{mb_label object=$op field="fournitures"}}</td>
@@ -443,7 +450,7 @@ addBesoins = function(types_ressources_ids) {
   <tr>
     <th>{{mb_label object=$op field="info"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="info"}}
+      {{mb_field object=$op field="info" typeEnum="checkbox"}}
     </td>
   </tr>
 
