@@ -270,6 +270,27 @@ class CProtocole extends CMbObject {
       return $this->_ref_group->getPerm($permType);
     }
   }
+  
+  function store() {
+    if (!$this->_id && $this->_types_ressources_ids) {
+      if ($msg = parent::store()) {
+        return $msg;
+      }
+      
+      $types_ressources_ids = explode(",", $this->_types_ressources_ids);
+      
+      foreach ($types_ressources_ids as $_type_ressource_id) {
+        $besoin = new CBesoinRessource;
+        $besoin->type_ressource_id = $_type_ressource_id;
+        $besoin->protocole_id = $this->_id;
+        if ($msg = $besoin->store()) {
+          return $msg;
+        }
+      }
+    }
+    
+    return parent::store();
+  }
 }
 
 ?>

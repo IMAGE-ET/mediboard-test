@@ -160,6 +160,15 @@ Main.add(function () {
 
 </script>
 
+
+<form name="addBesoinProtocole" method="post">
+  <input type="hidden" name="m" value="dPbloc" />
+  <input type="hidden" name="dosql" value="do_besoin_ressource_aed" />
+  <input type="hidden" name="besoin_ressource_id" />
+  <input type="hidden" name="protocole_id" value="{{$protocole->_id}}" />
+  <input type="hidden" name="type_ressource_id" />
+</form>
+
 <form name="editProtocole" action="?m={{$m}}" method="post" onsubmit="if(checkFormSejour()) return onSubmitFormAjax(this, {onComplete: applyModifProtocole});" class="{{$protocole->_spec}}">
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_protocole_aed" />
@@ -167,6 +176,8 @@ Main.add(function () {
 <input type="hidden" name="_ccam_object_class" value="COperation" />
 <input type="hidden" name="callback" value=""/>
 {{mb_key object=$protocole}}
+<input type="hidden" name="_types_ressources_ids"
+  onchange="{{if $protocole->_id}}addBesoins(this.value){{else}}synchronizeTypes($V(this)){{/if}}"/>
 
 {{if $dialog}}
   <input type="hidden" name="postRedirect" value="m=dPplanningOp&a=vw_protocoles&dialog=1" />
@@ -313,6 +324,15 @@ Main.add(function () {
           <td colspan="3"><hr /></td>
         </tr>
         
+        {{if $conf.dPbloc.CPlageOp.systeme_materiel == "expert"}}
+          <tr>
+            <td></td>
+            <td>
+              {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$protocole->_id type=protocole_id}}
+            </td>
+            <td></td>
+        {{/if}}
+        
         <tr>
           <td class="text" style="width: 33%;">{{mb_label object=$protocole field="examen"}}</td>
           <td class="text" style="width: 33%;">{{mb_label object=$protocole field="materiel"}}</td>
@@ -321,17 +341,7 @@ Main.add(function () {
 
         <tr>
           <td>{{mb_field object=$protocole field="examen" rows="3"}}</td>
-          <td>
-            {{if $conf.dPbloc.CPlageOp.systeme_materiel == "standard"}}
-              {{mb_field object=$protocole field="materiel" rows="3"}}
-            {{elseif $protocole->_id}}
-              {{mb_include module=dPbloc template=inc_button_besoins_ressources object_id=$protocole->_id type=protocole_id}}
-            {{else}}
-              <div class="text small-info">
-                {{tr}}CProtocole-save_for_ressources{{/tr}}
-              </div>
-            {{/if}}
-          </td>
+          <td>{{mb_field object=$protocole field="materiel" rows="3"}}</td>
           <td>{{mb_field object=$protocole field="rques_operation" rows="3"}}</td>
         </tr>
   

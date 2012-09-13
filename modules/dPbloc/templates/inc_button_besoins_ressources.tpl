@@ -32,24 +32,25 @@
     url.addParam("usage", "{{$usage}}");
     url.requestModal(500, 380);
     
-    {{if $type == "operation_id"}}
-    // Arprès fermeture de la modale, on réactualise
-    // la couleur de la bordure des boutons
-    
-      url.modalObject.observe("afterClose", function() {
-        {{if !$object_id}}
+    url.modalObject.observe("afterClose", function() {
+      {{if !$object_id}}
+        {{if $type == "operation_id"}}
           var form = getForm("editOp");
-          if (form) {
-            // Un protocole a pu être appliqué, donc garder les besoins
-            /*var types_ressources_ids = $V(form._types_ressources_ids);
-            types_ressources_ids = types_ressources_ids.split(",").concat(window.besoins_non_stored).join(",");*/
-            $V(getForm("editOp")._types_ressources_ids, window.besoins_non_stored.join(","));
-          }
-                      
+        {{elseif $type == "protocole_id"}}
+          var form = getForm("editProtocole");
         {{/if}}
+        if (form) {
+          // Un protocole a pu être appliqué, donc garder les besoins
+          $V(form._types_ressources_ids, window.besoins_non_stored.join(","));
+        }
+      {{/if}}
+      // Arprès fermeture de la modale, on réactualise
+      // la couleur de la bordure des boutons
+      {{if $type == "operation_id"}}
         checkRessources(object_id);
-      });
-    {{/if}}
+      {{/if}}
+    });
+    
   }
   
   synchronizeTypes = function(types) {
