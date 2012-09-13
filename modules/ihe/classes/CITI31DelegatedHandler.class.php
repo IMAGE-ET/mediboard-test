@@ -115,6 +115,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       $sejour->loadRefPatient();
       $sejour->_receiver = $receiver;
+      
+      // Dans le cas où il s'agit de la première affectation du séjour et qu'on est en type "création" on ne recherche pas 
+      // un mouvement avec l'affectation, mais on va prendre le mouvement d'admission
+      if (($current_log->type == "create") && $first_affectation && ($first_affectation->_id == $affectation->_id)) {
+        $affectation = null;
+      }
       $this->createMovement($code, $sejour, $affectation);
    
       // Envoi de l'événement
@@ -177,7 +183,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($affectation) {
       $movement->affectation_id = $affectation->_id;  
     }
-
+     
     if ($insert) {
       // Dans le cas d'un insert le type correspond nécessairement au type actuel du séjour
       $movement->movement_type         = $sejour->getMovementType($code);
