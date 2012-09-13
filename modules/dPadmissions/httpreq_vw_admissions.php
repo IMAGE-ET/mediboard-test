@@ -124,6 +124,10 @@ foreach ($sejours as $sejour_id => $_sejour) {
   // Chargement des prestations
   $_sejour->countPrestationsSouhaitees();
   
+  // Chargement des modes d'entrée
+  $_sejour->loadRefEtablissementProvenance();
+  
+  
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");
   $_sejour->loadRefsOperations($whereOperations);

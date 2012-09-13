@@ -114,6 +114,11 @@ var ExtRefManager = {
   }
 }
 
+function changeEtablissementId(oForm) {
+  $V(oForm._modifier_entree, '0');
+  submitAdmission(oForm);
+}
+
 function setExternalIds(oForm) {
   SejourHprimSelector["init"+oForm.sejour_id.value]();
 }

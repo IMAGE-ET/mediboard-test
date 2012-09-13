@@ -220,6 +220,7 @@ class CSejour extends CCodable implements IPatientRelated {
   
   // Object tool field
   var $_modifier_sortie = null;
+  var $_modifier_entree = null;
   
   function CSejour() {
     parent::__construct();
@@ -323,7 +324,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["repas_sans_residu"]        = "bool";
     $props["repas_sans_porc"]          = "bool";
     
-    $props["mode_entree"]              = "enum list|6|7|8";
+    $props["mode_entree"]              = "enum list|6|7|8 default|8";
     $props["mode_sortie"]              = "enum list|normal|transfert|mutation|deces default|normal";
     $props["confirme"]                 = "bool";
     $props["prestation_id"]            = "ref class|CPrestation";
@@ -652,6 +653,17 @@ class CSejour extends CCodable implements IPatientRelated {
       $this->sortie_reelle = "";
     }
     
+    // Annulation de l'établissement de provenance si le mode d'entrée n'est pas transfert
+    if (null !== $this->mode_entree) {
+      if ("7" != $this->mode_entree) {
+        $this->etablissement_entree_id = "";
+      }
+      
+      if ("6" != $this->mode_entree) {
+        $this->service_entree_id = "";
+      }
+    }
+    
     $patient_modified = $this->fieldModified("patient_id");
     
     // Pour un séjour non annulé, mise à jour de la date de décès du patient
@@ -944,9 +956,18 @@ class CSejour extends CCodable implements IPatientRelated {
       $this->sortie_reelle = mbDateTime();
     }
     
-    if ($this->_modifier_sortie === '0'){
+    if ($this->_modifier_sortie === '0') {
       $this->sortie_reelle = "";
-    }    
+    }
+    
+    // Signaler l'action de validation de l'entrée
+    if ($this->_modifier_entree === '1') {
+      $this->entree_reelle = mbDateTime();
+    }
+    
+    if ($this->_modifier_entree === '0') {
+      $this->entree_reelle = "";
+    }
     
     // Affectation de la date d'entrée prévue si on a la date d'entrée réelle
     if ($this->entree_reelle && !$this->entree_prevue) {

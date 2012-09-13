@@ -32,6 +32,12 @@
     {{/if}}
   {{/foreach}}
   {{/if}}
+  <script type="text/javascript">
+    Main.add(function(){
+      // Ceci doit rester ici !! prepareForm necessaire car pas appelé au premier refresh d'un periodical update
+      prepareForm("editAdmFrm{{$_sejour->_id}}");
+    });
+  </script>
   <form name="editAdmFrm{{$_sejour->_id}}" action="?" method="post">
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -40,11 +46,20 @@
   
   {{if !$_sejour->entree_reelle}}
     <input type="hidden" name="entree_reelle" value="now" />
+    <input type="hidden" name="_modifier_entree" value="1" />
+    {{mb_field object=$_sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); submitAdmission(this.form);"}}
     <button class="tick" type="button" onclick="{{if (($date_actuelle > $_sejour->entree_prevue) || ($date_demain < $_sejour->entree_prevue))}}confirmation(this.form);{{else}}submitAdmission(this.form);{{/if}};">
       {{tr}}CSejour-admit{{/tr}}
     </button>
-    
+    <div id="listEtabExterne-editAdmFrm{{$_sejour->_id}}" {{if $_sejour->mode_entree != "7"}} style="display: none;" {{/if}}>
+      {{mb_field object=$_sejour field="etablissement_entree_id" form="editAdmFrm`$_sejour->_id`" 
+        autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}
+    </div>
   {{else}}
+    <input type="hidden" name="_modifier_entree" value="0" />
+    <input type="hidden" name="mode_entree" value="{{$_sejour->mode_entree}}" />
+    <input type="hidden" name="etablissement_entree_id" value="{{$_sejour->etablissement_entree_id}}" />
+    
     <input type="hidden" name="entree_reelle" value="" />
     <button class="cancel" type="button" onclick="submitAdmission(this.form);">
       {{tr}}Cancel{{/tr}}
@@ -57,6 +72,11 @@
     {{else}}
     {{$_sejour->entree_reelle|date_format:$conf.time}}
     {{/if}}
+    - {{tr}}CSejour.mode_entree.{{$_sejour->mode_entree}}{{/tr}}
+          
+    {{if $_sejour->etablissement_entree_id}}
+      - {{$_sejour->_ref_etablissement_provenance}}
+    {{/if}}
   {{/if}}
   </form>
   {{elseif $_sejour->entree_reelle}}
@@ -65,6 +85,14 @@
       <br>
     {{else}}
       {{$_sejour->entree_reelle|date_format:$conf.time}}
+    {{/if}}
+    {{if $_sejour->mode_sortie}}
+      <br />
+      {{tr}}CSejour.mode_entree.{{$_sejour->mode_entree}}{{/tr}}
+    {{/if}}
+    
+    {{if $_sejour->etablissement_entree_id}}
+      <br />{{$_sejour->_ref_etablissement_provenance}}
     {{/if}}
   {{else}}
     -
