@@ -1,14 +1,14 @@
-<?php 
+<?php
 /**
- * Main URL Dispatcher 
+ * Main URL Dispatcher
  *
  * PHP version 5.1.x+
- *  
+ *
  * @category Dispatcher
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id$ 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -86,7 +86,7 @@ $index = "index";
 $suppressHeaders = CValue::request("suppressHeaders");
 $token_hash = CValue::get("token");
 
-// WSDL if often stated as final with no value (&wsdl) wrt client compat 
+// WSDL if often stated as final with no value (&wsdl) wrt client compat
 $wsdl = CValue::request("wsdl");
 if (isset($wsdl)) {
   $suppressHeaders = 1;
@@ -117,7 +117,7 @@ if ($dialog = CValue::request("dialog")) {
 $do_login = false;
 if ($token_hash) {
   $token = CViewAccessToken::getByHash($token_hash);
-  
+
   // If the user is already logged in (in a normal session), keep his session, but use the params
   if (CAppUI::$instance->user_id && !CAppUI::$token_expiration) {
     if ($token->isValid() && CAppUI::$instance->user_id == $token->user_id) {
@@ -144,29 +144,29 @@ if (CValue::get("ldap_guid") || $do_login) {
 // check if the user is trying to log in
 if (isset($_REQUEST["login"])) {
   $login_action = $_REQUEST["login"];
-  
+
   // login with "login=user:password"
   if (strpos($login_action, ":") !== false) {
     list($_REQUEST["username"], $_REQUEST["password"]) = explode(":", $login_action, 2);
   }
-  
+
   include "./locales/core.php";
   if (null == $ok = CAppUI::login()) {
     CAppUI::$instance->user_id = null;
-    
+
     // we delete the session in case the user was deactivated
     CAppUI::setMsg("Auth-failed", UI_MSG_ERROR);
   }
 
-  if (isset($_SESSION['browser']['deprecated']) 
-      && $_SESSION['browser']['deprecated'] 
+  if (isset($_SESSION['browser']['deprecated'])
+      && $_SESSION['browser']['deprecated']
       && !CValue::get("password")
   ) { // If we are not connecting directly
     $tpl = new CSmartyDP("style/mediboard");
     $tpl->display("old_browser.tpl");
     CApp::rip();
   }
-  
+
   $redirect = CValue::request("redirect");
   parse_str($redirect, $parsed_redirect);
   if ($ok && $dialog && isset($parsed_redirect["login_info"])) {
@@ -176,7 +176,7 @@ if (isset($_REQUEST["login"])) {
   if ($redirect) {
     CAppUI::redirect($redirect);
   }
-  
+
   // Empty post data only if we login by POST (with the login page)
   if (isset($_POST["login"])) {
     CApp::emptyPostData();
@@ -236,8 +236,9 @@ CHTMLResourceLoader::initOutput(CValue::get("_aio"));
 
 CApp::notify("BeforeMain");
 
-// We check if the mobile feature is available and if the user agent is a mobile
-if (is_file("./mobile/main.php") && !empty($_SESSION["browser"]["mobile"]) && CAppUI::pref("MobileUI")) {
+
+// Check if the mobile feature is available and if the user agent is a mobile
+if (is_file("./mobile/main.php") && !empty($_SESSION["browser"]["mobile"]) && (CAppUI::pref("MobileUI") || !CAppUI::$user->_id)) {
   include "./mobile/main.php";
 }
 else {
