@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
 
-var oCcamField = null;
+window.oCcamField = null;
 
 copier = function(){
   var oForm = getForm("editProtocole");
