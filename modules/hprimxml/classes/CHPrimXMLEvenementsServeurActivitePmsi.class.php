@@ -109,6 +109,9 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $code_cote = $xpath->queryTextNode("hprim:cote/hprim:code", $node);
     $operation->cote = isset($cote[$code_cote]) ? $cote[$code_cote] : "inconnu";
     
+    // Conventionnée ?
+    $operation->conventionne = $xpath->queryTextNode("hprim:convention", $node);
+    
     // TypeAnesthésie
     $this->getTypeAnesthesie($node, $operation);
     

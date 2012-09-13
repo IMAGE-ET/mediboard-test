@@ -966,6 +966,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       // Remarques sur l'opération
       $this->addTexte($elParent, "commentaire", $operation->rques, 4000);
       
+      // Conventionnée ?
+      $this->addElement($elParent, "convention", $operation->conventionne ? 1 : 0);
+      
       // TypeAnesthésie : nomemclature externe (idex)
       if ($operation->type_anesth) {
         $tag_hprimxml   = $this->_ref_receiver->_tag_hprimxml;
