@@ -16,7 +16,7 @@
       <a style="display: inline;" href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
     </th>
   </tr>
-		
+    
   <tr>
     <th rowspan="2">Date</th>
   </tr>
@@ -50,24 +50,24 @@
       {{/if}}>
       <a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;date={{$day|iso_date}}" title="{{$day|date_format:$conf.longdate}}">
         <strong>
-	        {{$day|date_format:"%a"|upper|substr:0:1}}
-	        {{$day|date_format:"%d"}}
+          {{$day|date_format:"%a"|upper|substr:0:1}}
+          {{$day|date_format:"%d"}}
         </strong>
       </a>
     </td>
     <td {{if $selAdmis=='0' && $selSaisis=='0' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if $counts.num1}}{{$counts.num1}}{{else}}-{{/if}}
+      {{if isset($counts.num1|smarty:nodefaults) && $counts.num1}}{{$counts.num1}}{{else}}-{{/if}}
     </td>
     <td {{if $selAdmis=='0' && $selSaisis=='n' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if $counts.num3}}{{$counts.num3}}{{else}}-{{/if}}
+      {{if isset($counts.num2|smarty:nodefaults) && $counts.num2}}{{$counts.num3}}{{else}}-{{/if}}
     </td>
     <td {{if $selAdmis=='n' && $selSaisis=='0' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if $counts.num2}}{{$counts.num2}}{{else}}-{{/if}}
+      {{if isset($counts.num3|smarty:nodefaults) && $counts.num3}}{{$counts.num2}}{{else}}-{{/if}}
     </td>
   </tr>
   {{foreachelse}}
-	<tr>
-		<td colspan="10" class="empty">Pas d'admission ce mois</td>
-	</tr>
+  <tr>
+    <td colspan="10" class="empty">Pas d'admission ce mois</td>
+  </tr>
   {{/foreach}}
 </table>
