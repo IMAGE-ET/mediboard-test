@@ -1306,6 +1306,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
     
+    $sender = $this->_ref_sender;
+    
     // Admit source
     switch ($sender->_configs["handle_PV1_14"]) {
       // Combinaison du ZFM
