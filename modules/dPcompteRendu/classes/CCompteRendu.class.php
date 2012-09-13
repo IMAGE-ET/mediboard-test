@@ -322,6 +322,9 @@ class CCompteRendu extends CDocumentItem {
    */
   function loadContent($field_source = true) {
     $this->_ref_content = $this->loadFwdRef("content_id", true);
+    
+    $this->_ref_content->content = preg_replace("/#body\s*{\s*padding/", "body { margin", $this->_ref_content->content);
+    
     if ($field_source) {
       $this->_source = $this->_ref_content->content;
       $this->_source = preg_replace("/<meta[^>]+>/", '', $this->_source);
@@ -950,8 +953,8 @@ class CCompteRendu extends CDocumentItem {
             
             $style .= "
                 @media print {
-                  #body { 
-                    padding-top: {$padding_top}px;
+                  body { 
+                    margin-top: {$padding_top}px;
                   }
                   #header {
                     height: {$sizeheader}px;
@@ -966,8 +969,8 @@ class CCompteRendu extends CDocumentItem {
             $padding_bottom = $sizefooter;
             $style .= "
                 @media print {
-                  #body { 
-                    padding-bottom: {$padding_bottom}px;
+                  body { 
+                    margin-bottom: {$padding_bottom}px;
                   }
                   #footer {
                     height: {$sizefooter}px;
@@ -1124,8 +1127,8 @@ class CCompteRendu extends CDocumentItem {
     
       $style.= "
         @media print { 
-          #body { 
-            padding-top: {$header->height}px;
+          body { 
+            margin-top: {$header->height}px;
           }
           hr.pagebreak {
             padding-top: {$header->height}px;
@@ -1134,8 +1137,8 @@ class CCompteRendu extends CDocumentItem {
     
       $style .="
         @media dompdf {
-          #body {
-            padding-bottom: {$footer->height}px;
+          body {
+            margin-bottom: {$footer->height}px;
           }
           hr.pagebreak {
             padding-top: 0px;

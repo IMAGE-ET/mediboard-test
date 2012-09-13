@@ -63,8 +63,11 @@ class CHtmlToPDF {
   /**
    * Constructeur standard
    */
-  function __construct() {
-    $factory = CAppUI::pref("choice_factory");
+  function __construct($factory = null) {
+    if (!$factory) {
+      $factory = CAppUI::pref("choice_factory");
+    }
+    
     CHtmlToPDFConverter::init($factory);
   }
   

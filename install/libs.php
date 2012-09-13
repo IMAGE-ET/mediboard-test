@@ -265,7 +265,7 @@ $library->description = "Composant Javascript d'édition de texte au format HTML"
 $library->sourceDir = "ckeditor";
 $library->targetDir = "ckeditor";
 $library->versionFile = "ckeditor.js";
-$library->versionString = "3.6.4";
+$library->versionString = "3.6.4b";
 
 CLibrary::$all[$library->name] = $library;
 
@@ -351,12 +351,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "dompdf";
 $library->url = "http://code.google.com/p/dompdf";
-$library->fileName = "dompdf-05-03-12.tar.gz";
+$library->fileName = "dompdf-10-09-12.tar.gz";
 $library->description ="HTML to PDF Converter";
 $library->sourceDir = "dompdf";
 $library->targetDir = "dompdf";
-$library->versionFile = "include/image_cache.cls.php";
-$library->versionString = "!strpos(";
+$library->versionFile = "lib/class.pdf.php";
+$library->versionString = "0 && extensio";
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;

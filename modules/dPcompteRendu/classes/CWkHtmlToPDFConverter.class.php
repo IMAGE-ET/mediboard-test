@@ -104,12 +104,19 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
       $this->footer_height = $matches[1];
     }
     
-    // Supprimer le padding-top du body et du hr
-    $this->html = preg_replace("/#body\s*\{\s*padding-top:\s*[0-9]*px;\s*\}/", "", $this->html);
+    // Supprimer le padding-top du hr et le margin-top du body
+    $this->html = preg_replace("/body\s*\{\s*margin-top:\s*[0-9]*px;\s*\}/", "", $this->html);
+    if ($header_footer_common != null) {
+      $header_footer_common = preg_replace("/body\s*\{\s*margin-top:\s*[0-9]*px;\s*\}/", "", $header_footer_common);
+    }
     $this->html = preg_replace("/hr.pagebreak\s*{\s*padding-top:\s*[0-9]*px;\s*}/", "", $this->html);
     
-    // Supprimer le padding-bottom du body
-    $this->html = preg_replace("/#body\s*\{\s*padding-bottom:\s*[0-9]*px;\s*\}/", "", $this->html);
+    // Supprimer le margin-bottom du body
+    $this->html = preg_replace("/body\s*\{\s*margin-bottom:\s*[0-9]*px;\s*\}/", "", $this->html);
+    
+    if ($header_footer_common != null) {
+      $header_footer_common = preg_replace("/body\s*\{\s*margin-bottom:\s*[0-9]*px;\s*\}/", "", $header_footer_common);
+    }
     
     // Suppression de la balise script pour l'impression
     $this->html = preg_replace("/(<script type=[\'\"]text\/javascript[\'\"]>.*<\/script>)/msU", "", $this->html);
