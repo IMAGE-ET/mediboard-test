@@ -1437,9 +1437,7 @@ TESTS A EFFECTUER
     if (CAppUI::conf("dPcabinet CConsultation show_conclusion")) {
       $fields[] = "conclusion";
     }
-    if ($this->sejour_id) {
-      $fields[] = "brancardage";
-    }
+    
     return $fields;
   }
 

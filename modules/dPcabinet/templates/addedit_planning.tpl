@@ -344,6 +344,15 @@ Main.add(function() {
                 {{mb_field object=$consult field="rques" class="autocomplete" rows=5 form="editFrm"}}
               </td>
             </tr>
+            
+            {{if $attach_consult_sejour}}
+              <tr>
+                <th>{{mb_label object=$consult field="brancardage"}}</th> 
+                <td>
+                  {{mb_field object=$consult field="brancardage" class="autocomplete" rows=5 form="editFrm"}}
+                </td>
+              </tr>
+            {{/if}}
           </table>
        </fieldset>
     </td>
