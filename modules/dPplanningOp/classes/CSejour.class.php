@@ -1899,6 +1899,14 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_affectations = $affectations;
   }
   
+  function loadRefFirstAffectation() {
+    if (!$this->_ref_first_affectation) {
+      $this->loadRefsAffectations();
+    }
+    
+    return $this->_ref_first_affectation;
+  }
+  
   function forceAffectation($datetime, $lit_id) {
     $splitting            = new CAffectation();
     $where["sejour_id"] = "=  '$this->_id'";
