@@ -59,10 +59,10 @@
       {{if isset($counts.num1|smarty:nodefaults) && $counts.num1}}{{$counts.num1}}{{else}}-{{/if}}
     </td>
     <td {{if $selAdmis=='0' && $selSaisis=='n' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if isset($counts.num2|smarty:nodefaults) && $counts.num2}}{{$counts.num3}}{{else}}-{{/if}}
+      {{if isset($counts.num3|smarty:nodefaults) && $counts.num3}}{{$counts.num3}}{{else}}-{{/if}}
     </td>
     <td {{if $selAdmis=='n' && $selSaisis=='0' && $day == $date}}style="font-weight: bold;"{{/if}}>
-      {{if isset($counts.num3|smarty:nodefaults) && $counts.num3}}{{$counts.num2}}{{else}}-{{/if}}
+      {{if isset($counts.num2|smarty:nodefaults) && $counts.num2}}{{$counts.num2}}{{else}}-{{/if}}
     </td>
   </tr>
   {{foreachelse}}
