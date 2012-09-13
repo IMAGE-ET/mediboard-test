@@ -39,7 +39,12 @@ onSubmitAnt = function (form) {
   }
 
   onSubmitFormAjax(form, { onComplete : DossierMedical.reloadDossiersMedicaux } );
-
+  
+  $V(form.date    , "");
+  $V(form.date_da , "");
+  $V(form.type    , "");
+  $V(form.appareil, "");
+  
   rques.clear().focus();
 
   return false;
