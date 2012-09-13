@@ -601,21 +601,20 @@ class CHL7v2Segment extends CHL7v2Entity {
         // 8  - Entrée sous contrainte des forces de l'ordre
         // 90 - Séjour programmé
         // 91 - Décision personnelle
-        $admit_source = "90";
         if ($sejour->adresse_par_prat_id) {
-          $admit_source = "1";
+          return 1;
         }
         if ($sejour->etablissement_entree_id) {
-          $admit_source = "4";
+          return 4;
         }
         if ($sejour->service_entree_id) {
-          $admit_source = "6";
+          return 6;
         }
         if ($sejour->type == "urg") {
-          $admit_source = "7";
+          return 7;
         }
         
-        return $admit_source;
+        return 90;
     }
   }
   
@@ -645,7 +644,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         // E - Evasion 
         // F - Fugue
         $discharge_disposition = $sejour->confirme ? "3": "4";
-        CHL7v2TableEntry::mapTo("112", $discharge_disposition);    
+        return CHL7v2TableEntry::mapTo("112", $discharge_disposition);    
     }
   }   
   
@@ -702,23 +701,16 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getModeSortie(CSejour $sejour) {
-    $mode_sortie = null;
     switch ($sejour->mode_sortie) {
-      case "transfert" :
-        $mode_sortie = 7;
-        break;
       case "mutation" :
-        $mode_sortie = 6;
-        break;
+        return 6;
+      case "transfert" :
+        return 7;
+      case "normal" :
+        return 8;
       case "deces" :
-        $mode_sortie = 9;
-        break;
-      default :
-        $mode_sortie = 5;
-        break;
+        return 9;
     }
-    
-    return $mode_sortie;
   }
   
   function getModeProvenance(CSejour $sejour) {
