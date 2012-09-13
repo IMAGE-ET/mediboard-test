@@ -114,73 +114,73 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   function getProps() {
-    $specs = parent::getProps();
+    $props = parent::getProps();
 
-    $specs["consultation_id"]  = "ref notNull class|CConsultation cascade seekable show|0";
-    $specs["operation_id"]     = "ref class|COperation seekable";
-    $specs["sejour_id"]        = "ref class|CSejour seekable";
-    $specs["chir_id"]          = "ref class|CMediusers";
+    $props["consultation_id"]  = "ref notNull class|CConsultation cascade seekable show|0";
+    $props["operation_id"]     = "ref class|COperation seekable";
+    $props["sejour_id"]        = "ref class|CSejour seekable";
+    $props["chir_id"]          = "ref class|CMediusers";
 
-    $specs["date_interv"]      = "date";
-    $specs["libelle_interv"]   = "str";
-    $specs["groupe"]           = "enum list|?|O|A|B|AB default|? show|0";
-    $specs["rhesus"]           = "enum list|?|NEG|POS default|? show|0";
-    $specs["groupe_ok"]        = "bool default|0 show|0";
+    $props["date_interv"]      = "date";
+    $props["libelle_interv"]   = "str";
+    $props["groupe"]           = "enum list|?|O|A|B|AB default|? show|0";
+    $props["rhesus"]           = "enum list|?|NEG|POS default|? show|0";
+    $props["groupe_ok"]        = "bool default|0 show|0";
     
     // @todo: Supprimer ces quatre champs
-    $specs["antecedents"]      = "text confidential";
-    $specs["traitements"]      = "text confidential";
-    $specs["tabac"]            = "text helped";
-    $specs["oenolisme"]        = "text helped";
+    $props["antecedents"]      = "text confidential";
+    $props["traitements"]      = "text confidential";
+    $props["tabac"]            = "text helped";
+    $props["oenolisme"]        = "text helped";
     
-    $specs["ASA"]              = "enum list|1|2|3|4|5 default|1";
+    $props["ASA"]              = "enum list|1|2|3|4|5 default|1";
 
     // Données examens complementaires
-    $specs["rai"]              = "enum list|?|NEG|POS default|? show|0";
-    $specs["hb"]               = "float min|0 show|0";
-    $specs["tp"]               = "float min|0 max|100 show|0";
-    $specs["tca"]              = "numchar maxLength|2 show|0";
-    $specs["tca_temoin"]       = "numchar maxLength|2 show|0";
-    $specs["creatinine"]       = "float show|0";
-    $specs["fibrinogene"]      = "float show|0";
-    $specs["na"]               = "float min|0 show|0";
-    $specs["k"]                = "float min|0 show|0";
-    $specs["tsivy"]            = "time show|0";
-    $specs["plaquettes"]       = "numchar maxLength|4 pos show|0";
-    $specs["ecbu"]             = "enum list|?|NEG|POS default|? show|0";
-    $specs["ht"]               = "float min|0 max|100 show|0";
-    $specs["ht_final"]         = "float min|0 max|100 show|0";
-    $specs["result_ecg"]       = "text helped";
-    $specs["result_rp"]        = "text helped";
-    $specs["premedication"]    = "text helped";
-    $specs["prepa_preop"]      = "text helped";
-    $specs["date_analyse"]     = "date show|0";
-    $specs["apfel_femme"]      = "bool show|0";
-    $specs["apfel_non_fumeur"] = "bool show|0";
-    $specs["apfel_atcd_nvp"]   = "bool show|0";
-    $specs["apfel_morphine"]   = "bool show|0";
+    $props["rai"]              = "enum list|?|NEG|POS default|? show|0";
+    $props["hb"]               = "float min|0 show|0";
+    $props["tp"]               = "float min|0 max|100 show|0";
+    $props["tca"]              = "numchar maxLength|2 show|0";
+    $props["tca_temoin"]       = "numchar maxLength|2 show|0";
+    $props["creatinine"]       = "float show|0";
+    $props["fibrinogene"]      = "float show|0";
+    $props["na"]               = "float min|0 show|0";
+    $props["k"]                = "float min|0 show|0";
+    $props["tsivy"]            = "time show|0";
+    $props["plaquettes"]       = "numchar maxLength|4 pos show|0";
+    $props["ecbu"]             = "enum list|?|NEG|POS default|? show|0";
+    $props["ht"]               = "float min|0 max|100 show|0";
+    $props["ht_final"]         = "float min|0 max|100 show|0";
+    $props["result_ecg"]       = "text helped";
+    $props["result_rp"]        = "text helped";
+    $props["premedication"]    = "text helped";
+    $props["prepa_preop"]      = "text helped";
+    $props["date_analyse"]     = "date show|0";
+    $props["apfel_femme"]      = "bool show|0";
+    $props["apfel_non_fumeur"] = "bool show|0";
+    $props["apfel_atcd_nvp"]   = "bool show|0";
+    $props["apfel_morphine"]   = "bool show|0";
     
     // Champs pour les conditions d'intubation
-    $specs["mallampati"]       = "enum list|classe1|classe2|classe3|classe4";
-    $specs["bouche"]           = "enum list|m20|m35|p35";
-    $specs["distThyro"]        = "enum list|m65|p65";
-    $specs["etatBucco"]        = "text helped";
-    $specs["intub_difficile"]  = "enum list|0|1";
-    $specs["examenCardio"]     = "text helped";
-    $specs["examenPulmo"]      = "text helped";
-    $specs["examenDigest"]     = "text helped";
-    $specs["examenAutre"]      = "text helped";
+    $props["mallampati"]       = "enum list|classe1|classe2|classe3|classe4";
+    $props["bouche"]           = "enum list|m20|m35|p35";
+    $props["distThyro"]        = "enum list|m65|p65";
+    $props["etatBucco"]        = "text helped";
+    $props["intub_difficile"]  = "bool";
+    $props["examenCardio"]     = "text helped";
+    $props["examenPulmo"]      = "text helped";
+    $props["examenDigest"]     = "text helped";
+    $props["examenAutre"]      = "text helped";
     
-    $specs["conclusion"]       = "text helped seekable";
-    $specs["position"]         = "enum list|DD|DV|DL|GP|AS|TO|GYN";
+    $props["conclusion"]       = "text helped seekable";
+    $props["position"]         = "enum list|DD|DV|DL|GP|AS|TO|GYN";
 
     // Champs dérivés
-    $specs["_intub_difficile"] = "";
-    $specs["_clairance"]       = "";
-    $specs["_psa"]             = "";
-    $specs["_score_apfel"]     = "";
+    $props["_intub_difficile"] = "";
+    $props["_clairance"]       = "";
+    $props["_psa"]             = "";
+    $props["_score_apfel"]     = "";
     
-    return $specs;
+    return $props;
   }
 
   function updateFormFields() {
