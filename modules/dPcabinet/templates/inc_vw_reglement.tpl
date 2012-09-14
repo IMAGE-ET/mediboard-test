@@ -368,7 +368,7 @@ Main.add( function(){
     </td>
   </tr>
   <tr>
-    <td id="load_facture">
+    <td id="load_facture" colspan="2">
       {{mb_include module=cabinet template="inc_vw_facturation"}}
     </td>
   </tr>
