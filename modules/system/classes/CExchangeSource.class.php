@@ -79,6 +79,7 @@ class CExchangeSource extends CMbObject {
     foreach (self::getExchangeClasses() as $_class) {
       $exchange_objects[$_class] = new $_class;
       $exchange_objects[$_class]->name = $name;
+      $exchange_objects[$_class]->loadMatchingObject();
       $exchange_objects[$_class]->type_echange = $type_echange;
     }
     
@@ -88,15 +89,16 @@ class CExchangeSource extends CMbObject {
   static function get($name, $type = null, $override = false, $type_echange = null) {
     $exchange_classes = self::getExchangeClasses(); 
     foreach ($exchange_classes as $_class) {
-      $exchange_source = new $_class;
-      $exchange_source->name = $name;
+      $exchange_source         = new $_class;
+      $exchange_source->name   = $name;
+      $exchange_source->active = 1;
       $exchange_source->loadMatchingObject();
       if ($exchange_source->_id) {
         $exchange_source->_wanted_type = $type;
         $exchange_source->_allowed_instances = self::getObjects($name, $type, $type_echange);
         if ($exchange_source->role != CAppUI::conf("instance_role")) {
           if (!$override) {
-            $incompatible_source = new $exchange_source->_class;
+            $incompatible_source       = new $exchange_source->_class;
             $incompatible_source->name = $exchange_source->name;
             $incompatible_source->_incompatible = true;
             CAppUI::displayAjaxMsg("CExchangeSource-_incompatible", UI_MSG_ERROR);
@@ -121,8 +123,8 @@ class CExchangeSource extends CMbObject {
   
   function check() {
     $source = self::get($this->name, null, true);
-    if (!$this->_id && $source->_id) {
-      return CAppUI::tr("CExchangeSource-already-exist");
+    if ($source->_id) {
+      $this->active = 0;
     }
     
     return parent::check();

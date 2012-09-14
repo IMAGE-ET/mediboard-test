@@ -82,6 +82,15 @@ class CInteropReceiver extends CInteropActor {
     
     return $objects;
   } 
-}
+  
+  function loadRefsExchangesSources() {
+    if (!$this->_ref_msg_supported_family) {
+      $this->getMessagesSupportedByFamily();
+    }
 
-?>
+    $this->_ref_exchanges_sources = array();
+    foreach ($this->_ref_msg_supported_family as $_evenement) {
+      $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
+    }
+  }
+}

@@ -30,6 +30,8 @@
         url.requestUpdate('exchange_source-'+exchange_source_name);
       }
     </script>
+
+    <div class="small-info">{{tr}}CExchangeSource-only_one_active{{/tr}}</div>
     
     {{if $source->_allowed_instances}} 
     <script type="text/javascript">
@@ -40,12 +42,12 @@
     
     <ul id="tabs-exchange-source-{{$sourcename}}" class="control_tabs">
       {{foreach from=$source->_allowed_instances item=_source_allowed}}
-      <li><a href="#{{$_source_allowed->_class}}-{{$sourcename}}">{{tr}}{{$_source_allowed->_class}}{{/tr}}</a></li>
-     {{/foreach}}
+        <li><a href="#{{$_source_allowed->_class}}-{{$sourcename}}" class="{{if $_source_allowed->_id}}{{if $_source_allowed->active}}special{{else}}wrong{{/if}}{{else}}empty{{/if}}">{{tr}}{{$_source_allowed->_class}}{{/tr}}</a></li>
+       {{/foreach}}
     </ul>
       
     <hr class="control_tabs" />
-    {{/if}} 
+    {{/if}}
          
     <div id="CSourceFTP-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceFTP)}}block{{else}}none{{/if}};">
       {{if !"ftp"|module_active}}

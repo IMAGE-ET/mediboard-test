@@ -46,17 +46,6 @@ class CDestinataireHprim21 extends CInteropReceiver {
     return $backProps;
   }
   
-  function loadRefsExchangesSources() {
-    if (!$this->_ref_msg_supported_family) {
-      $this->getMessagesSupportedByFamily();
-    }
-
-    $this->_ref_exchanges_sources = array();
-    foreach ($this->_ref_msg_supported_family as $_evenement) {
-      $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
-    }
-  }
-  
   function lastMessage() {
     $echg_hprim21 = new CEchangeHprim21();
     $where = array();
