@@ -683,7 +683,10 @@ Element.addMethods({
 Element.addMethods({
   "get": function(element, data) {
     return element.getAttribute("data-"+data);
-  }
+  },
+  "set": function(element, key, data) {
+    return element.writeAttribute("data-"+key, data);
+  },
 });
 
 Element.addMethods(['input', 'textarea'], {
@@ -767,7 +770,7 @@ Element.addMethods('form', {
     });
   },
   isReadonly: function(form) {
-    return !!(App.readonly && User.id && form.method === "post" && (!form.elements.dosql || form.elements.dosql.value !== "do_configure"));
+    return App.readonly && User.id && form.method === "post" && (!form.elements.dosql || App.notReadonlyForms.indexOf(form.elements.dosql.value) == -1);
   }
 });
 

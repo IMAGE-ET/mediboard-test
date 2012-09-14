@@ -134,7 +134,7 @@
 <div id="sessionLock" style="display: none;">
   {{if $app->_ref_user}}
   <h1>{{tr}}Session locked{{/tr}} - {{$app->_ref_user}}</h1>
-  <form name="sessionLockForm" method="post" action="?" onsubmit="return Session.request(this)">
+  <form name="sessionLockForm" method="get" action="?" onsubmit="return Session.request(this)">
     <input type="hidden" name="unlock" value="unlock" />
     <input type="hidden" name="username" value="{{$app->_ref_user->_user_username}}" />
     <div>
@@ -156,17 +156,27 @@
   <form name="userSwitchForm" method="post" action="?" onsubmit="return UserSwitch.login(this)">
     <input type="hidden" name="m" value="admin" />
     <input type="hidden" name="dosql" value="do_login_as" />
-    <div style="text-align: right;">
-      <label for="username">{{tr}}User{{/tr}} </label> <input name="username" tabIndex="1000" type="text" class="notNull" />
+    <table class="main form">
+      <tr>
+        <th><label for="username">{{tr}}User{{/tr}}</label></th>
+        <td><input name="username" tabIndex="1000" type="text" class="notNull" /></td>
+      </tr>
       
       {{if ($app->user_type != 1) || $conf.admin.LDAP.ldap_connection}}
-        <br /><label for="password">{{tr}}Password{{/tr}} </label> <input name="password" tabIndex="1001" type="password" />
+      <tr>
+        <th><label for="password">{{tr}}Password{{/tr}}</label></th>
+        <td><input name="password" tabIndex="1001" type="password" /></td>
+      </tr>
       {{/if}}
-    </div>
-    <div>
-      <button type="submit" class="tick">{{tr}}Switch{{/tr}}</button>
-      <button type="button" class="cancel" onclick="UserSwitch.cancel()">{{tr}}Cancel{{/tr}}</button>
-    </div>
+      
+      <tr>
+        <th></th>
+        <td>
+          <button type="submit" class="tick">{{tr}}Switch{{/tr}}</button>
+          <button type="button" class="cancel" onclick="UserSwitch.cancel()">{{tr}}Cancel{{/tr}}</button>
+        </td>
+      </tr>
+    </table>
     <div class="login-message"></div>
   </form>
 </div>

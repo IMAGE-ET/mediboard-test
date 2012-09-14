@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+App.notReadonlyForms = ["do_configure", "do_login_as"];
+
 function confirmDeletion(oForm, oOptions, oOptionsAjax) {
   oOptions = Object.extend({
     typeName: "",
@@ -433,7 +435,9 @@ function prepareForm(oForm) {
 function makeReadOnly(element) {
   (function(){
     element.select("form[method='post']").each(function(form){
-      if (form.dosql && form.dosql.value === "do_configure") return;
+      if (form.dosql && App.notReadonlyForms.indexOf(form.dosql.value) > -1) {
+        return;
+      }
       
       form.addClassName("readonly");
     });

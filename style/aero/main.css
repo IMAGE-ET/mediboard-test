@@ -4,10 +4,24 @@ html, body {
   margin: 0;
 }
 
+#main .tabox {
+  padding-top: 32px;
+}
+
+#main.dialog .tabox {
+  padding-top: 0;
+}
+
 #headerMenu {
   width: 100%;
   background: #EAEFF6;
   border-bottom: 1px solid #AECFF7;
+  position: fixed;
+  top: 0;
+  z-index: 10;
+  -moz-box-shadow:    0 0 8px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  box-shadow:         0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 #headerMenu td {

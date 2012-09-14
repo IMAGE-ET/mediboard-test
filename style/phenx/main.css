@@ -759,6 +759,9 @@ ul.control_tabs li a.wrong.active,
 ul.control_tabs_vertical li a.wrong.active {
   background-color: #FFAA5B;
   color: #000000;
+}
+
+ul.control_tabs li a.wrong.active {
   border-bottom-color: #FFAA5B;
 }
 
