@@ -148,7 +148,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     
     // Notifier les autres destinataires autre que le sender
     $sejour->_eai_initiateur_group_id = $sender->group_id;
-    if (!$msgVenue = $sejour->store()) {
+    if ($msgVenue = $sejour->store()) {
       return $exchange_hprim->setAck($dom_acq, "A102", $msgVenue, null, $sejour);
     }
     
