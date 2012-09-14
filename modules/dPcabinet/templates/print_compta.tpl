@@ -27,7 +27,7 @@
     </td>
     
     <td class="halfPane">
-      <table class="tbl">
+      <table class="tbl" style="text-align: center;">
         <tr>
           <th class="title" colspan="7">Réglement Patients</th>
         </tr>
@@ -127,17 +127,22 @@
     <td colspan="2">
       <table class="tbl">
         <tr>
+          <th rowspan="2" class="narrow text">{{tr}}CFactureConsult{{/tr}}</th>
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=_prat_id}}</th>
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=patient_id}}</th>
-          <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=tarif}}</th>
+          <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=_date}}: {{mb_label class=CConsultation field=tarif}}</th>
+          
           {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-            <th rowspan="2" class="narrow">{{mb_title class=CConsultation field=secteur1}}</th>
-            <th rowspan="2" class="narrow">{{mb_title class=CConsultation field=secteur2}}</th>
-          {{elseif @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+            <th rowspan="2" class="narrow">{{mb_title class=CFactureConsult field=_montant_secteur1}}</th>
+            <th rowspan="2" class="narrow">{{mb_title class=CFactureConsult field=_montant_secteur2}}</th>
+          {{/if}}
+          
+          {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
             <th rowspan="2" class="narrow">Montant</th>
             <th rowspan="2" class="narrow">Remise</th>
           {{/if}}
-          <th rowspan="2" class="narrow">{{mb_title class=CConsultation field=_somme}}</th>
+          
+          <th rowspan="2" class="narrow">{{mb_title class=CFactureConsult field=_montant_total}}</th>
           <th rowspan="2" class="narrow">{{mb_label class=CReglement field=mode}}</th>
           <th colspan="2" class="narrow">{{mb_title class=CReglement field=emetteur}}</th>
         </tr>
@@ -152,45 +157,53 @@
         
         {{foreach from=$_date.reglements item=_reglement}}
         {{assign var=_object value=$_reglement->_ref_object}}
+        {{assign var=facture value=$_reglement->_ref_facture}}
+        {{assign var=prat_id value=$facture->_ref_praticien->_id}}
+        
         <tr>
+          <td><strong>{{$facture}}</strong></td>
           <td class="text">
-            {{if isset($_object->_ref_chir|smarty:nodefaults)}}
-              {{assign var=prat_id value=$_object->_ref_chir->_id}}
-              {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$listPrat.$prat_id}}
-            {{/if}}
+            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$listPrat.$prat_id}}
           </td>
 
           <td class="text">
-            {{assign var=patient value=$_object->_ref_patient}}
+            {{assign var=patient value=$facture->_ref_patient}}
             <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">{{$patient}}</span>
           </td>
 
           <td class="text">
-            {{if isset($_object->tarif|smarty:nodefaults)}}
-              <span onmouseover="ObjectTooltip.createEx(this, '{{$_object->_guid}}')">
-                {{mb_value object=$_object field=tarif}}
+            {{foreach from=$facture->_ref_consults item=_consult}}
+            <div>
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
+                {{mb_value object=$_consult field=_date}}: {{mb_value object=$_consult field=tarif}}
               </span>
-            {{/if}}
+            </div>   
+            {{foreachelse}}
+            <div class="empty">{{tr}}CConsultation.none{{/tr}}</div>
+            {{/foreach}}
           </td>
           
-          {{if isset($_object->secteur1|smarty:nodefaults)}}
-            <td>{{mb_value object=$_object field=secteur1}}</td>
-            <td>{{mb_value object=$_object field=secteur2}}</td>
-            <td>{{mb_value object=$_object field=_somme}}</td>
-          {{else}}
-            <td>{{mb_value object=$_object field=_montant_sans_remise}}</td>
-            <td>{{mb_value object=$_object field=remise}}</td>
-            <td>{{mb_value object=$_object field=_montant_avec_remise}}</td>
+          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+            <td {{if $facture->_montant_secteur1 < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_montant_secteur1}}</td>
+            <td {{if $facture->_montant_secteur2 < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_montant_secteur2}}</td>
+            <td {{if $facture->_montant_total    < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_montant_total   }}</td>
           {{/if}}
 
-          <td>{{$_reglement->mode}}</td>
-          <td>
+          {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+            <td style="text-align: right;">{{mb_value object=$facture field=_montant_sans_remise}}</td>
+            <td style="text-align: right;">{{mb_value object=$facture field=remise}}</td>
+            <td style="text-align: right;">{{mb_value object=$facture field=_montant_avec_remise}}</td>
+          {{/if}}
+
+          <td style="text-align: center;">{{mb_value object=$_reglement field=mode}}</td>
+          <td style="text-align: right;">
             {{if $_reglement->emetteur == "patient"}}
               {{mb_value object=$_reglement field=montant}}
             {{/if}}
           </td>
+          
           {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-            <td>
+            <td  style="text-align: right;">
               {{if $_reglement->emetteur == "tiers"}}
                 {{mb_value object=$_reglement field=montant}}
               {{/if}}
@@ -199,7 +212,7 @@
         </tr>
         {{/foreach}}
         <tr>
-          <td colspan="6" />
+          <td colspan="7" />
           <td><strong>{{tr}}Total{{/tr}}</strong></td>
           <td><strong>{{$_date.total.patient|currency}} </strong></td>
           {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}

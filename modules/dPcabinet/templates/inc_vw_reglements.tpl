@@ -16,6 +16,7 @@ updateBanque = function(mode) {
     bvr.hide();
   }
 }
+
 delReglement= function(reglement_id){
   var oForm = getForm('reglement-delete');
   $V(oForm.reglement_id, reglement_id);
@@ -31,6 +32,7 @@ delReglement= function(reglement_id){
     }
   });
 }
+
 AddReglement = function (oForm){
   return onSubmitFormAjax(oForm, {
     onComplete : function() {
@@ -46,6 +48,7 @@ AddReglement = function (oForm){
     }
   });
 }
+
 modifMontantBVR = function (num_bvr){
    var eclat = num_bvr.split('>')[0];
    var montant_bvr = eclat.substring(2, 12)/100;
@@ -53,13 +56,13 @@ modifMontantBVR = function (num_bvr){
    form.montant.value = montant_bvr;
 }
 </script>
-{{if isset($facture|smarty:nodefaults)}}
+{{if $facture->_id}}
   {{assign var=object value=$facture}}
-{{elseif isset($consult|smarty:nodefaults)}}
+{{else}}
   {{assign var=object value=$consult}}
 {{/if}}
 <fieldset>
-  <legend>Règlements</legend>
+  <legend>Règlements ({{tr}}{{$object->_class}}{{/tr}})</legend>
     {{if $object->du_patient}}
       <!-- Formulaire de suppression d'un reglement (car pas possible de les imbriquer) -->
       <form name="reglement-delete" action="#" method="post">
@@ -139,22 +142,22 @@ modifMontantBVR = function (num_bvr){
           <tr>
             <td colspan="4" style="text-align: center;">
               {{mb_value object=$object field=_reglements_total_patient}} réglés, 
-              <strong>{{$object->_du_patient_restant}} restant</strong>
+              <strong>{{mb_value object=$object field=_du_patient_restant}} restant</strong>
             </td>
           </tr>
-          {{if ($object->_du_patient_restant) <= 0}}
-            <tr>
-              <td colspan="4" style="text-align: center;">
-                <strong>
-                  {{if $object->patient_date_reglement}}
-                  {{mb_label object=$object field=patient_date_reglement}}
-                  le 
-                  {{mb_value object=$object field=patient_date_reglement}}
-                  {{/if}}
-                </strong>
-              </td>
-            </tr>
+
+          {{if $object->patient_date_reglement}}
+          <tr>
+            <td colspan="4" style="text-align: center;">
+              <strong>
+                {{mb_label object=$object field=patient_date_reglement}}
+                le 
+                {{mb_value object=$object field=patient_date_reglement}}
+              </strong>
+            </td>
+          </tr>
           {{/if}}
+
         </table>
       </form>
     {{/if}}

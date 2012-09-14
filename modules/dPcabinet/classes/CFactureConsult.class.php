@@ -42,11 +42,13 @@ class CFactureConsult extends CMbObject
   var $_coeff               = null;
   var $_montant_sans_remise = null;
   var $_montant_avec_remise = null;
+  var $_montant_secteur1    = null;
+  var $_montant_secteur2    = null;
+  
   var $_du_patient_restant        = null;
   var $_du_tiers_restant          = null;
   var $_reglements_total_patient  = null;
   var $_reglements_total_tiers    = null;
-  var $_der_consult_id            = null;
   var $_montant_factures          = array();
   var $_num_reference             = null;
   var $_num_bvr                   = array();
@@ -57,7 +59,7 @@ class CFactureConsult extends CMbObject
   var $_ref_praticien     = null;
   var $_ref_assurance     = null;
   var $_ref_consults      = null;
-  var $_ref_der_consult   = null;
+  var $_ref_last_consult  = null;
   var $_ref_reglements    = null;
   
   var $_ref_chir = null;
@@ -81,8 +83,8 @@ class CFactureConsult extends CMbObject
   **/
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["reglement"] = "CReglement object_id";
-    $backProps["factures"]  = "CConsultation factureconsult_id";
+    $backProps["reglement"]     = "CReglement object_id";
+    $backProps["consultations"] = "CConsultation factureconsult_id";
     return $backProps;
   }
    
@@ -100,6 +102,7 @@ class CFactureConsult extends CMbObject
     $props["cloture"]     = "date";
     $props["du_patient"]  = "float notNull default|0";
     $props["du_tiers"]    = "float notNull default|0";
+    
     $props["type_facture"]              = "enum notNull list|maladie|accident default|maladie";
     $props["patient_date_reglement"]    = "date";
     $props["tiers_date_reglement"]      = "date";
@@ -115,6 +118,10 @@ class CFactureConsult extends CMbObject
     $props["_reglements_total_tiers"]   = "currency";
     $props["_montant_sans_remise"]      = "currency";
     $props["_montant_avec_remise"]      = "currency";
+    $props["_montant_secteur1"]         = "currency";
+    $props["_montant_secteur2"]         = "currency";
+    $props["_montant_total"]            = "currency";
+    
     $props["_num_reference"]            = "str";
     $props["tarif"]                     = "str";
     return $props;
@@ -127,8 +134,7 @@ class CFactureConsult extends CMbObject
   **/
   function updateFormFields() {
     parent::updateFormFields();
-    if (!$this->_ref_patient) $this->loadRefPatient();
-    $this->_view = "Facture de ".$this->_ref_patient->_view;
+    $this->_view = sprintf("FA%08d", $this->_id);
   }
      
   /**
@@ -204,70 +210,76 @@ class CFactureConsult extends CMbObject
    * @return void
   **/
   function loadRefsConsults($cache = 1) {
-    if (!count($this->_ref_consults)) {
-      $consult = new CConsultation();    
-      $where = array();
-      $where["patient_id"]        = "= '$this->patient_id'";
-      $where["factureconsult_id"] = "= '$this->factureconsult_id'";
-      $order = "consultation_id ASC";    
-      $this->_ref_consults = $consult->loadList($where, $order);
-      
-      $this->_nb_factures = 1 ;
-      if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
-      
-        if ($this->npq) {
-          $this->remise = sprintf("%.2f",(10*(($this->du_patient+$this->du_tiers)*$this->_coeff))/100);
-        }
-        //Dans le cas d'un éclatement de facture recherche des consultations
-        $facture = new CFactureConsult();
-            
-        $where = array();
-        $where["patient_id"] = "= '$this->patient_id'";
-        $where["ouverture"]  = "= '$this->ouverture'";
-        $where["cloture"]    = "= '$this->cloture'";
-        $where["type_facture"] = "= '$this->type_facture'";
-        
-        $factures = $facture->loadList($where, "factureconsult_id DESC");
-        if (count($factures)>1) {
-          foreach ($factures as $fact) {
-            $ajout = $fact->du_patient + $fact->du_tiers - $fact->remise;
-            $this->_montant_factures[] = $ajout;
-            $refs = $consult->loadList("patient_id = '$this->patient_id' AND factureconsult_id = '$fact->factureconsult_id'", "consultation_id DESC");
-            if ($refs) {
-              $this->_ref_consults = $refs;
-            }
-            $this->_nb_factures ++;
-          }
-        }
-        else {
-          $this->_montant_factures   = array();
-          $this->_montant_factures[] = ($this->du_patient + $this->du_tiers) * $this->_coeff - $this->remise;
-        }
-      }
-      foreach ($this->_ref_consults as $key => $consult) {
-        $consult->loadRefsActes();
-        $consult->loadExtCodesCCAM();
-        if ($consult->_count_actes == 0) {
-          unset($this->_ref_consults[$key]);
-        }
-      }
-      $this->loadRefsDerConsultation();
+    if (count($this->_ref_consults)) {
+      return $this->_ref_consults;
     }
+      
+    $this->_ref_consults = $this->loadBackRefs("consultations", "consultation_id");
+    
+    // Eclatement des factures
+    $this->_nb_factures = 1;
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+      $this->eclatementTarmed();
+    }
+    
+    // Chargement des actes de consultations
+    foreach ($this->_ref_consults as $_consult) {
+      $_consult->loadRefsActes();
+      $_consult->loadExtCodesCCAM();
+    }
+    
+    $this->updateMontants();
+    $this->_ref_last_consult = end($this->_ref_consults);
+          
+    return $this->_ref_consults;
   } 
-     
-  /**
-   * Chargement de la dernière consultation de la facture
-   * 
-   * @return $this->_ref_der_consult
-  **/
-  function loadRefsDerConsultation() {
-    $this->_ref_der_consult = end($this->_ref_consults);
-    if ($this->_ref_der_consult) {
-      $this->_der_consult_id = $this->_ref_der_consult->_id;
+
+  function updateMontants() {
+    $this->_montant_secteur1 = 0.0;
+    $this->_montant_secteur1 = 0.0;
+    $this->_montant_total    = 0.0;
+    foreach ($this->_ref_consults as $_consult) {
+      $this->_montant_secteur1 += $_consult->secteur1;
+      $this->_montant_secteur2 += $_consult->secteur2;
+      $this->_montant_total    += $_consult->_somme;
     }
-    return $this->_ref_der_consult;
   }
-     
+
+  function eclatementTarmed() {
+      
+    if ($this->npq) {
+      $this->remise = sprintf("%.2f",(10*(($this->du_patient+$this->du_tiers)*$this->_coeff))/100);
+    }
+    
+    // Dans le cas d'un éclatement de facture recherche des consultations
+    $facture = new CFactureConsult();
+    $where = array();
+    $where["patient_id"] = "= '$this->patient_id'";
+    $where["ouverture"]  = "= '$this->ouverture'";
+    $where["cloture"]    = "= '$this->cloture'";
+    $where["type_facture"] = "= '$this->type_facture'";
+    $factures = $facture->loadList($where, "factureconsult_id DESC");
+
+    if (count($factures) > 1) {
+      foreach ($factures as $_facture) {
+        $this->_montant_factures[] = $_facture->du_patient + $_facture->du_tiers - $_facture->remise;
+        
+        $consult = new CConsultation();
+        $consult->patient_id        = $this->patient_id;
+        $consult->factureconsult_id = $_facture->_id;
+        $consults = $consult->loadMatchingList("consultation_id DESC");
+        if ($consults) {
+          $this->_ref_consults = $consults;
+        }
+        $this->_nb_factures ++;
+      }
+    }
+    else {
+      $this->_montant_factures   = array();
+      $this->_montant_factures[] = ($this->du_patient + $this->du_tiers) * $this->_coeff - $this->remise;
+    }
+  }
+          
   /**
    * Chargement du patient concerné par la facture
    * 
@@ -295,7 +307,7 @@ class CFactureConsult extends CMbObject
    * @return void
   **/
   function loadRefPraticien(){
-    $this->_ref_praticien = $this->loadFwdRef("praticien_id");
+    $this->_ref_praticien = $this->loadFwdRef("praticien_id", true);
   }
   
   //Ne pas supprimer cette fonction!
@@ -318,7 +330,8 @@ class CFactureConsult extends CMbObject
   function loadRefsReglements($cache = 1) {
     $this->_reglements_total_patient = 0.00;
     $this->_montant_sans_remise = 0;
-    if (!CModule::getInstalled("tarmed") || !CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+    
+    if (!CModule::getActive("tarmed") || !CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
       if (count($this->_montant_factures)>1) {
         foreach ($this->_montant_factures as $_montant) {
           $this->_montant_sans_remise += $_montant;
@@ -326,6 +339,7 @@ class CFactureConsult extends CMbObject
         $this->_montant_avec_remise = $this->_montant_sans_remise;
       }
     }
+    
     if ($this->_montant_sans_remise == 0) {
       $this->_montant_sans_remise = $this->du_patient  + $this->du_tiers;
       $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
@@ -335,17 +349,21 @@ class CFactureConsult extends CMbObject
     
     $this->_du_patient_restant = sprintf("%.2f", $this->du_patient*$this->_coeff) - $this->remise;
     $this->_du_tiers_restant = $this->du_tiers;
+
     foreach ($this->_ref_reglements as $_reglement) {
       $_reglement->loadRefBanque();
+
       if ($_reglement->emetteur == "patient") {
         $this->_du_patient_restant  -= $_reglement->montant;
         $this->_reglements_total_patient += $_reglement->montant;
       }
+
       if ($_reglement->emetteur == "tiers") {
         $this->_du_tiers_restant  -= $_reglement->montant;
         $this->_reglements_total_tiers += $_reglement->montant;
       }
     }
+    
     return $this->_ref_reglements;
   }
   
@@ -379,7 +397,7 @@ class CFactureConsult extends CMbObject
   **/
   function loadRefCoeffFacture() {
     $this->_coeff = 1;
-    if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
       if ($this->type_facture == "accident") {
         $this->_coeff = CAppUI::conf("tarmed CCodeTarmed pt_accident");
       }
@@ -446,7 +464,7 @@ class CFactureConsult extends CMbObject
    * @return void
   **/
   function loadNumerosBVR($select = "_id"){
-    if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
       $total_tarmed = 0;
       $total_caisse = array();
           

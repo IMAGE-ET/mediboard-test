@@ -158,7 +158,8 @@ $soustotal_base = array("tarmed" => 0, "caisse" => 0);
 $soustotal_dh   = array("tarmed" => 0, "caisse" => 0);
 $acte_tarmed = null;
 $acte_caisse = null;
-if(CModule::getInstalled("tarmed")){
+
+if (CModule::getActive("tarmed")){
   //Initialisation d'un acte Tarmed
   $acte_tarmed = new CActeTarmed();
   $acte_tarmed->quantite = 1;

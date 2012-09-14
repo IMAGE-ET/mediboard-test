@@ -60,7 +60,7 @@ if ($facture->loadObject($where)) {
     $acte_tarmed->store();
     
     $facture->du_patient = $facture->du_patient + $du_patient;
-    $facture->du_tiers   = $facture->du_tiers + $du_tiers;
+    $facture->du_tiers   = $facture->du_tiers   + $du_tiers  ;
     $facture->tarif = null;
     $facture->store();
     
@@ -71,7 +71,7 @@ if ($facture->loadObject($where)) {
 //Sinon on la créé
 else {
   $facture->patient_id    = $patient_id;
-  $facture->praticien_id    = $chirsel_id;
+  $facture->praticien_id  = $chirsel_id;
   $facture->du_patient    = $du_patient;
   $facture->du_tiers      = $du_tiers;
   $facture->type_facture  = $type_facture;
@@ -99,7 +99,7 @@ if ($facture->du_patient) {
 
 $acte_tarmed = null;
 //Instanciation d'un acte tarmed pour l'ajout de ligne dans la facture
-if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
+if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
   $acte_tarmed = new CActeTarmed();
   $acte_tarmed->date = mbDate();
   $acte_tarmed->quantite = 1;

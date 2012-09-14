@@ -100,7 +100,7 @@ $banques = $banque->loadList(null,$orderBanque);
 
 $acte_tarmed = null;
 //Instanciation d'un acte tarmed pour l'ajout de ligne dans la facture
-if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
+if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
   $acte_tarmed = new CActeTarmed();
   $acte_tarmed->date = mbDate();
   $acte_tarmed->quantite = 1;

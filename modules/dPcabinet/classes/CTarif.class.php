@@ -180,7 +180,7 @@ class CTarif extends CMbObject {
     }
     $this->codes_ngap = implode("|", $this->_codes_ngap);
     
-    if(CModule::getInstalled("tarmed")){
+    if (CModule::getActive("tarmed")){
 	    // Actes Tarmed 
 	    $this->completeField("codes_tarmed");
 	    $this->_codes_tarmed = explode("|", $this->codes_tarmed);
@@ -273,7 +273,7 @@ class CTarif extends CMbObject {
         $this->_has_mto = '1';
       }
     }
-    if(CModule::getInstalled("tarmed")){
+    if(CModule::getActive("tarmed")){
 	    foreach ($this->_codes_tarmed as $code) {
 	      $acte = new CActeTarmed();
 	      $acte->setFullCode($code);

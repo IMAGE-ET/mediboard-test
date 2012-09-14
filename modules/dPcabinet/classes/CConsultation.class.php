@@ -480,7 +480,7 @@ class CConsultation extends CCodable {
       return $msg;
     }
 
-    if (CModule::getInstalled("tarmed")) {
+    if (CModule::getActive("tarmed")) {
       $this->_tokens_tarmed = $tarif->codes_tarmed;
       if ($msg = $this->precodeTARMED()) {
         return $msg;
@@ -780,7 +780,7 @@ class CConsultation extends CCodable {
     $secteur2_CAISSE  = 0;
     $count_actes = 0;
 
-    if (CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
       // Chargement des actes Tarmed
       $this->loadRefsActesTarmed();
       foreach ($this->_ref_actes_tarmed as $actetarmed) {

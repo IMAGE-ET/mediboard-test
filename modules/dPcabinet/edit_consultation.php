@@ -238,7 +238,7 @@ $acte_ngap->loadListExecutants();
 $acte_tarmed = null;
 $acte_caisse = null;
 //Si le module Tarmed est installé chargement d'un acte
-if(CModule::getInstalled("tarmed")){
+if(CModule::getActive("tarmed")){
   //Initialisation d'un acte Tarmed
   $acte_tarmed = new CActeTarmed();
   $acte_tarmed->quantite = 1;

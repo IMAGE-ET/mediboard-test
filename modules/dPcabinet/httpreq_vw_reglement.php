@@ -122,26 +122,29 @@ $reglement = new CReglement();
 $reglement->consultation_id = $consult->_id;
 $reglement->montant = round($consult->_du_patient_restant, 2);
 
-// Codes et actes NGAP
+// Codes et actes
 $consult->loadRefsActesNGAP();
 $consult->loadRefsActesTarmed();
 $consult->loadRefsActesCaisse();
 
-//Chargement de la facture
+// Chargement de la facture
 $facture = new CFactureConsult();
-$facture_patient = null;
+$facture_patient = new CFactureConsult();
 $where = array();
 $where["patient_id"] = "= '$consult->patient_id'";
 $where["praticien_id"]  = "= '$prat_id'";
+
+// On essaie de retrouver une ancienne facture ouverte
 $where["cloture"] = " IS NULL";
 if ($consult->patient_id && $facture->loadObject($where)) {
   $facture_patient = $facture;
   $facture_patient->loadRefs();
   $facture->_ref_patient->loadRefsCorrespondantsPatient();
 }
+// [TD] Sinon ???: je ne comprends pas
 else { 
   $where["cloture"] = " IS NOT NULL"; 
-  if ($consult->patient_id &&  $factures = $facture->loadList($where)) {
+  if ($consult->patient_id && $factures = $facture->loadList($where)) {
     foreach ($factures as $_facture) {
       $_facture->loadRefs();
       foreach ($_facture->_ref_consults as $consultation) {
@@ -162,7 +165,7 @@ $smarty->assign("facture"  , $facture_patient);
 $smarty->assign("consult"  , $consult);
 $smarty->assign("reglement", $reglement);
 $smarty->assign("tarifs"   , $tarifs);
-$smarty->assign("date"      , mbDate());
+$smarty->assign("date"     , mbDate());
 
 $smarty->display("inc_vw_reglement.tpl");
 

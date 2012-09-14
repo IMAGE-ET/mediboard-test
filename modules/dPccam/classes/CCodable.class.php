@@ -93,7 +93,7 @@ class CCodable extends CMbObject {
     }
     $this->_tokens_ngap = "";
     
-    if(CModule::getInstalled("tarmed")){
+    if(CModule::getActive("tarmed")){
       // Suppression des anciens actes Tarmed
       $this->loadRefsActesTarmed();
       foreach ($this->_ref_actes_tarmed as $acte) { 
@@ -386,7 +386,7 @@ class CCodable extends CMbObject {
   function loadRefsActesTarmed(){
     $this->_ref_actes_tarmed = array();
     
-    if(CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
+    if(CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
       //Classement des actes par ordre chonologique et par code
       $ljoin = array();
       $ljoin["consultation"] = "acte_tarmed.object_id = consultation.consultation_id";
@@ -423,7 +423,7 @@ class CCodable extends CMbObject {
   function loadRefsActesCaisse(){
     $this->_ref_actes_caisse = array();
     
-    if(CModule::getInstalled("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
+    if(CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
       //Classement des actes par ordre chonologique et par code
       
       $where = array();

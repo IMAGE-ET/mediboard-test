@@ -227,23 +227,23 @@ foreach ($listConsults as $consult) {
       $recapReglement[$_reglement->mode]["du_patient"]          += $_reglement->montant;
       $recapReglement[$_reglement->mode]["nb_reglement_patient"]++;
     }
-   if ($facture->_ref_der_consult) {
-    if (!isset($listPlages[$facture->_ref_der_consult->plageconsult_id])) {
-      $plageConsult = $facture->_ref_der_consult->_ref_plageconsult;
+   if ($facture->_ref_last_consult) {
+    if (!isset($listPlages[$facture->_ref_last_consult->plageconsult_id])) {
+      $plageConsult = $facture->_ref_last_consult->_ref_plageconsult;
       
-      $listPlages[$facture->_ref_der_consult->plageconsult_id]["plage"] = $plageConsult;
-      $listPlages[$facture->_ref_der_consult->plageconsult_id]["total"]["secteur1"] = 0;
-      $listPlages[$facture->_ref_der_consult->plageconsult_id]["total"]["secteur2"] = 0;
-      $listPlages[$facture->_ref_der_consult->plageconsult_id]["total"]["total"]    = 0;
-      $listPlages[$facture->_ref_der_consult->plageconsult_id]["total"]["patient"]  = 0;
+      $listPlages[$facture->_ref_last_consult->plageconsult_id]["plage"] = $plageConsult;
+      $listPlages[$facture->_ref_last_consult->plageconsult_id]["total"]["secteur1"] = 0;
+      $listPlages[$facture->_ref_last_consult->plageconsult_id]["total"]["secteur2"] = 0;
+      $listPlages[$facture->_ref_last_consult->plageconsult_id]["total"]["total"]    = 0;
+      $listPlages[$facture->_ref_last_consult->plageconsult_id]["total"]["patient"]  = 0;
     }
     
-    $listPlages[$facture->_ref_der_consult->plageconsult_id]["total"]["secteur1"] += $facture->_montant_sans_remise;
-    $listPlages[$facture->_ref_der_consult->plageconsult_id]["total"]["secteur2"] += $facture->remise;
-    $listPlages[$facture->_ref_der_consult->plageconsult_id]["total"]["total"]    += $facture->_montant_avec_remise;
-    $listPlages[$facture->_ref_der_consult->plageconsult_id]["total"]["patient"]  += $facture->_reglements_total_patient;
-    $listPlages[$facture->_ref_der_consult->plageconsult_id]["total"]["tiers"]  = 0;
-    $listPlages[$facture->_ref_der_consult->plageconsult_id]["consultations"][$facture->_guid] = $facture;
+    $listPlages[$facture->_ref_last_consult->plageconsult_id]["total"]["secteur1"] += $facture->_montant_sans_remise;
+    $listPlages[$facture->_ref_last_consult->plageconsult_id]["total"]["secteur2"] += $facture->remise;
+    $listPlages[$facture->_ref_last_consult->plageconsult_id]["total"]["total"]    += $facture->_montant_avec_remise;
+    $listPlages[$facture->_ref_last_consult->plageconsult_id]["total"]["patient"]  += $facture->_reglements_total_patient;
+    $listPlages[$facture->_ref_last_consult->plageconsult_id]["total"]["tiers"]  = 0;
+    $listPlages[$facture->_ref_last_consult->plageconsult_id]["consultations"][$facture->_guid] = $facture;
    }
   }
 //}

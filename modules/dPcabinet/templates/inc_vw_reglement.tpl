@@ -229,6 +229,7 @@ Main.add( function(){
               }
             } );
           </script>
+          
           <form name="tarifFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
     
           <input type="hidden" name="m" value="dPcabinet" />
@@ -274,6 +275,7 @@ Main.add( function(){
                 {{/if}}
               </td>
             </tr>
+            
             {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
             <tr>
               <th>Codes CCAM</th>
@@ -291,7 +293,9 @@ Main.add( function(){
                 {{/foreach}}
               </td>
             </tr>
-            {{elseif @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+            {{/if}}
+            
+            {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
             <tr>
               <th>Codes Tarmed</th>
               <td>{{mb_field object=$consult field="_tokens_tarmed" readonly="readonly" hidden=1}}
@@ -309,6 +313,7 @@ Main.add( function(){
               </td>
             </tr>
             {{/if}}
+            
             {{if $consult->tarif && $consult->patient_date_reglement == "" && $consult->valide == "1"}}
             <tr>
               <td colspan="2" class="button">
@@ -364,7 +369,7 @@ Main.add( function(){
   </tr>
   <tr>
     <td id="load_facture">
-      {{mb_include module=dPcabinet template="inc_vw_facturation"}}
+      {{mb_include module=cabinet template="inc_vw_facturation"}}
     </td>
   </tr>
   {{if array_key_exists("sigems", $modules)}}

@@ -26,6 +26,7 @@ class CReglement extends CMbMetaObject {
   // Fwd References
   var $_ref_consultation = null;
   var $_ref_banque       = null;
+  var $_ref_facture      = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -76,14 +77,44 @@ class CReglement extends CMbMetaObject {
   }
   
   /**
+   * Accesseur sur la 
+   * Fait abstraction de l'ambivalence des consultations et des factures de consultation
+   * Charge les actes des consultations en question
+   * 
+   * @return array Consultations concernées
+   */
+  function loadRefFacture() {
+    $target = $this->loadTargetObject();
+    
+    if ($target instanceof CConsultation) {
+      $target->loadRefsActes();
+      $facture = new CFactureConsult();
+      $facture->_view = sprintf("CO%08d", $target->_id);
+      $facture->_ref_patient   = $target->loadRefPatient();
+      $facture->_ref_praticien = $target->loadRefPraticien();
+      $facture->_ref_consults  = array($target->_id => $target);
+      $facture->updateMontants();
+      return $this->_ref_facture = $facture;
+    }
+    
+    if ($target instanceof CFactureConsult) {
+      $target->loadRefsConsults();
+      $target->loadRefPatient();
+      $target->loadRefPraticien();
+      return $this->_ref_facture = $target;
+    }
+  }
+  
+  /**
    * Acquite la facture automatiquement
    * @return Store-like message
    */
   function acquiteFacture() {
-    // Au cas où le reglement fait l'acquittement
     $this->loadRefsFwd();
+    
+    // Cas de la consultation
     if ($this->object_class == "CConsultation"){
-      $consult =& $this->_ref_object;
+      $consult = $this->_ref_object;
       $consult->loadRefsReglements();
       
       // Acquitement patient
@@ -98,8 +129,10 @@ class CReglement extends CMbMetaObject {
       
       return $consult->store();
     }
+    
+    // Cas de la facture
     if ($this->object_class == "CFactureConsult"){
-      $facture =& $this->_ref_object;
+      $facture = $this->_ref_object;
       $facture->loadRefsReglements();
       
       // Acquitement patient
