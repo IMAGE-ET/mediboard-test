@@ -19,7 +19,7 @@ if (null == $type_action = CValue::get("type_action")) {
   CAppUI::stepAjax("Aucun type de test spécifié", UI_MSG_ERROR);
 }
 
-$exchange_source = CExchangeSource::get($exchange_source_name);
+$exchange_source = CExchangeSource::get($exchange_source_name, "file_system", true, null, false);
 
 // Connexion
 if ($type_action == "connexion") {

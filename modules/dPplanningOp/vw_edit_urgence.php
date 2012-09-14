@@ -209,7 +209,7 @@ foreach($blocages_lit as $key => $blocage){
 }
 
 
-$exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id);
+$exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id, $smtp);
 
 // Création du template
 $smarty = new CSmartyDP();

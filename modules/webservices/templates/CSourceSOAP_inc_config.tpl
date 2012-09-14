@@ -37,11 +37,11 @@
             <th>{{mb_label object=$source field="password"}}</th>
             <td>{{mb_field object=$source field="password"}}</td>
           </tr>
-					<tr>
+          <tr>
             <th>{{mb_label object=$source field="type_echange"}}</th>
             <td>{{mb_field object=$source field="type_echange"}}</td>
           </tr>
-					<tr>
+          <tr>
             <th>{{mb_label object=$source field="evenement_name"}}</th>
             <td>{{mb_field object=$source field="evenement_name"}}</td>
           </tr>
@@ -73,7 +73,9 @@
             <td class="button" colspan="2">
               {{if $source->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-                <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:1, typeName:'',objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}', onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
+                <button type="button" class="trash" onclick="confirmDeletion(this.form, {ajax:1, typeName:'',
+                  objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}'}, 
+                  {onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
                   {{tr}}Delete{{/tr}}
                 </button>
               {{else}}  
@@ -114,8 +116,8 @@
               {{tr}}utilities-source-soap-connexion{{/tr}}
             </button>
           </td>
-			  </tr>
-				<tr>
+        </tr>
+        <tr>
           <td id="utilities-source-soap-connexion-{{$source->name}}" class="text"></td>
         </tr>
         
@@ -126,7 +128,7 @@
               {{tr}}utilities-source-soap-getFunctions{{/tr}}
             </button> 
           </td>
-				</tr>
+        </tr>
         <tr>
           <td id="utilities-source-soap-getFunctions-{{$source->name}}" class="text"></td>
         </tr>

@@ -86,13 +86,24 @@ class CExchangeSource extends CMbObject {
     return $exchange_objects;
   } 
     
-  static function get($name, $type = null, $override = false, $type_echange = null) {
+  static function get($name, $type = null, $override = false, $type_echange = null, $only_active = true) {
     $exchange_classes = self::getExchangeClasses(); 
     foreach ($exchange_classes as $_class) {
       $exchange_source         = new $_class;
-      $exchange_source->name   = $name;
-      $exchange_source->active = 1;
+      if (isset(self::$typeToClass[$type])) {
+        $classname = self::$typeToClass[$type];
+        if ($classname != $exchange_source->_class) {
+          continue;
+        }
+      }
+    
+      if ($only_active) {
+        $exchange_source->active = 1;
+      }
+      
+      $exchange_source->name = $name;
       $exchange_source->loadMatchingObject();
+      
       if ($exchange_source->_id) {
         $exchange_source->_wanted_type = $type;
         $exchange_source->_allowed_instances = self::getObjects($name, $type, $type_echange);
@@ -109,8 +120,9 @@ class CExchangeSource extends CMbObject {
         return $exchange_source;
       }
     }
+    
     $source = new CExchangeSource();
-    if ($type) {
+    if (isset(self::$typeToClass[$type])) {
       $source = new self::$typeToClass[$type];
     }
 
@@ -118,12 +130,14 @@ class CExchangeSource extends CMbObject {
     $source->type_echange = $type_echange;
     $source->_wanted_type = $type;
     $source->_allowed_instances = self::getObjects($name, $type, $type_echange);
+    
     return $source;
   }
   
   function check() {
     $source = self::get($this->name, null, true);
-    if ($source->_id) {
+
+    if ($source->_id && ($source->_id != $this->_id)) {
       $this->active = 0;
     }
     

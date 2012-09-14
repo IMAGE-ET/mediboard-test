@@ -29,7 +29,7 @@ else {
 }
 
 
-$exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id);
+$exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id, "smtp");
 
 $exchange_source->init();
 

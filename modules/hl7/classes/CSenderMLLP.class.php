@@ -37,7 +37,7 @@ class CSenderMLLP extends CInteropSender {
   }
   
   function loadRefsExchangesSources() {
-    $this->_ref_exchanges_sources[] = CExchangeSource::get("$this->_guid", "mllp", true, $this->_type_echange);
+    $this->_ref_exchanges_sources[] = CExchangeSource::get("$this->_guid", "mllp", true, $this->_type_echange, false);
   }
   
   function read() {

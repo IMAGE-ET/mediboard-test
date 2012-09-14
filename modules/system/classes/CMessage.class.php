@@ -111,13 +111,13 @@ class CMessage extends CMbObject {
     
     // Module name restriction
     if ($mod_name) {
-			foreach ($messages as $message_id => $_message) {
-			  if ($_message->module_id) {
-					if ($_message->loadRefModule()->mod_name != $mod_name) {
-						unset($messages[$message_id]);
-					}
-			  }
-			}
+      foreach ($messages as $message_id => $_message) {
+        if ($_message->module_id) {
+          if ($_message->loadRefModule()->mod_name != $mod_name) {
+            unset($messages[$message_id]);
+          }
+        }
+      }
     }
     
     return $messages;
@@ -136,7 +136,7 @@ class CMessage extends CMbObject {
     
     try {
       // Source init
-      $source = CExchangeSource::get("system-message");
+      $source = CExchangeSource::get("system-message", "smtp");
       $source->init();
       $source->addTo($this->_email_to);
       $source->addBcc($this->_email_from);

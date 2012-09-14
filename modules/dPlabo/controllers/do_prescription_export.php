@@ -71,19 +71,19 @@ $mbPatient =& $mbPrescription->_ref_patient;
 // Gestion du titre du patient
 if($mbPatient->sexe == "m"){
   if($mbPatient->_annees >= 0 && $mbPatient->_annees <= 3){
-	  $titre_ = "Bébé garçon";
+    $titre_ = "Bébé garçon";
   }
   if($mbPatient->civilite == "enf") {
-  	$titre_ = "Enfant garçon";
+    $titre_ = "Enfant garçon";
   }
   if($mbPatient->civilite == "m") {
-	  $titre_ = "Monsieur";
+    $titre_ = "Monsieur";
   }
 }
 
 if($mbPatient->sexe == "f"){
   if($mbPatient->_annees >= 0 && $mbPatient->_annees <= 3){
-	  $titre_ = "Bébé fille";
+    $titre_ = "Bébé fille";
   }
   if($mbPatient->civilite == "enf") {
     $titre_ = "Enfant fille";
@@ -188,7 +188,7 @@ if (!$doc->schemaValidate()) {
 
 // Envoi de la prescription par sur un seveurFTP
 // Envoi à la source créée 'PrescriptionLabo' (FTP)
-$prescriptionlabo_source = CExchangeSource::get("prescriptionlabo");
+$prescriptionlabo_source = CExchangeSource::get("prescriptionlabo", "ftp");
 // Creation du FTP
 $ftp = new CFTP;
 $ftp->init($prescriptionlabo_source);

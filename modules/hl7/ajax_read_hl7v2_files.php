@@ -11,7 +11,7 @@
 CCanDo::checkRead();
 
 // Envoi à la source créée 'HL7 v.2'
-$exchange_source = CExchangeSource::get("hl7v2");
+$exchange_source = CExchangeSource::get("hl7v2", "ftp");
 $extension = $exchange_source->fileextension;
 
 $ftp = new CFTP();

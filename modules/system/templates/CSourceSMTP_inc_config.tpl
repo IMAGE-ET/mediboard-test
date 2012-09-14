@@ -26,7 +26,9 @@ guessDataFormEmail = function(element){
 <table class="main"> 
   <tr>
     <td>
-      <form name="editSourceSMTP-{{$source->name}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
+      <form name="editSourceSMTP-{{$source->name}}" action="?m={{$m}}" method="post" 
+         onsubmit="return onSubmitFormAjax(this, { 
+           onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}') } )">
         <input type="hidden" name="m" value="system" />
         <input type="hidden" name="dosql" value="do_source_smtp_aed" />
         <input type="hidden" name="source_smtp_id" value="{{$source->_id}}" />
@@ -76,7 +78,9 @@ guessDataFormEmail = function(element){
             <td class="button" colspan="2">
               {{if $source->_id}}
                 <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-                <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:1, typeName:'',objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}', onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
+                <button type="button" class="trash" onclick="confirmDeletion(this.form, {ajax:1, typeName:'',
+                  objName:'{{$source->_view|smarty:nodefaults|JSAttribute}}'}, 
+                  {onComplete: refreshExchangeSource.curry('{{$source->name}}', '{{$source->_wanted_type}}')})">
                   {{tr}}Delete{{/tr}}
                 </button>
               {{else}}  

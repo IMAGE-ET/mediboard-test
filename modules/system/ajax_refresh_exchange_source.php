@@ -11,7 +11,7 @@
 $type                 = CValue::get('type');
 $exchange_source_name = CValue::get('exchange_source_name');
 
-$exchange_source      = CExchangeSource::get($exchange_source_name, $type, true);
+$exchange_source      = CExchangeSource::get($exchange_source_name, $type, true, null, false);
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -66,7 +66,7 @@ $browser_compat = array(
 );
 
 // Source SMTP
-$message_smtp = CExchangeSource::get("system-message", "smtp", true);
+$message_smtp = CExchangeSource::get("system-message", "smtp", true, null, false);
 
 // Création du template
 $smarty = new CSmartyDP();

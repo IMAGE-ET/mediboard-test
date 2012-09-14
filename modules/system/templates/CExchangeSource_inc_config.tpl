@@ -10,7 +10,9 @@
 
 <table class="main">
   {{assign var="_source" value=$source}}
-  {{assign var="_source" value=$source->_allowed_instances.$class}}
+  {{if isset($source->_allowed_instances.$class|smarty:nodefaults)}}
+    {{assign var="_source" value=$source->_allowed_instances.$class}}
+  {{/if}}
   
   {{if !$_source->_id}}
   <tr>

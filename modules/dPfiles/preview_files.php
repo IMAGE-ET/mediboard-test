@@ -239,7 +239,7 @@ if($popup==1){
       }
     }
     
-    $exchange_source = CExchangeSource::get("mediuser-".CAppUI::$user->_id);
+    $exchange_source = CExchangeSource::get("mediuser-".CAppUI::$user->_id, "smtp");
     $smarty->assign("exchange_source", $exchange_source);
     $smarty->assign("destinataires"  , $destinataires);
     $smarty->assign("nonavig"  , $nonavig);

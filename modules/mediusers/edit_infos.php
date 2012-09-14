@@ -30,7 +30,7 @@ $spec_cpam = $spec_cpam->loadList();
 $affiche_nom = CValue::get("affiche_nom",0);
 
 // Source SMTP
-$smtp_source = CExchangeSource::get("mediuser-".$mediuser->_id, "smtp", true);
+$smtp_source = CExchangeSource::get("mediuser-".$mediuser->_id, "smtp", true, null, false);
 
 // Création du template
 $smarty = new CSmartyDP();

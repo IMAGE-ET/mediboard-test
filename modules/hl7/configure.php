@@ -10,7 +10,7 @@
 
 CCanDo::checkAdmin();
 
-$hl7v2_source = CExchangeSource::get("hl7v2", "ftp", true);
+$hl7v2_source = CExchangeSource::get("hl7v2", "ftp", true, null, false);
 
 // Création du template
 $smarty = new CSmartyDP();

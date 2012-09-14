@@ -53,7 +53,7 @@ class CPrescriptionLabo extends CMbObject {
   }
   
   function getProps() {
-  	$specsParent = parent::getProps();
+    $specsParent = parent::getProps();
     $specs = array (
       "patient_id"   => "ref class|CPatient notNull seekable",
       "praticien_id" => "ref class|CMediusers notNull",
@@ -78,20 +78,20 @@ class CPrescriptionLabo extends CMbObject {
   }
   
   function loadIdPresc(){
-  	$tagCatalogue = CAppUI::conf('dPlabo CCatalogueLabo remote_name');
+    $tagCatalogue = CAppUI::conf('dPlabo CCatalogueLabo remote_name');
   
-  	$this->loadRefsFwd();
-  	$prat =& $this->_ref_praticien;
-  	
+    $this->loadRefsFwd();
+    $prat =& $this->_ref_praticien;
+    
     $tagCode4 = "labo code4";
     $idSantePratCode4 = new CIdSante400();
     $idSantePratCode4->loadLatestFor($prat, $tagCode4);
-	
+  
     $idPresc = new CIdSante400();
     $idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
     $idPresc->object_class = "CPrescriptionLabo";
     $idPresc->loadMatchingObject("id400 DESC");
-  	
+    
     return $idPresc->id400;
   }
   
@@ -108,7 +108,7 @@ class CPrescriptionLabo extends CMbObject {
       $tagCode4 = "labo code4";
       $idSantePratCode4 = new CIdSante400();
       $idSantePratCode4->loadLatestFor($prat, $tagCode4);
-	
+  
       $idPresc = new CIdSante400();
       $idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
       $idPresc->object_class = "CPrescriptionLabo";
@@ -116,7 +116,7 @@ class CPrescriptionLabo extends CMbObject {
       $numprovisoire = str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT).str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT);
   
       // Envoi à la source créée 'get_id_prescriptionlabo' (SOAP)
-      $exchange_source = CExchangeSource::get("get_id_prescriptionlabo");
+      $exchange_source = CExchangeSource::get("get_id_prescriptionlabo", "soap");
       $exchange_source->setData(array("NumMedi" => $numprovisoire, "pwd" =>$exchange_source->password));
       $exchange_source->send("NDOSLAB");
       

@@ -11,7 +11,7 @@
 CCanDo::checkRead();
 
 // Envoi à la source créée 'HPRIM21' (FTP)
-$exchange_source = CExchangeSource::get("hprim21");
+$exchange_source = CExchangeSource::get("hprim21", "ftp");
 $extension = $exchange_source->fileextension;
 
 $ftp = new CFTP();

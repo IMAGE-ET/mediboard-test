@@ -25,7 +25,7 @@
           {{foreach from=$actor->_ref_msg_supported_family item=_msg_supported}}
             <li>
               <a href="#exchanges_sources_{{$actor->_guid}}_{{$_msg_supported}}">
-                 {{$_msg_supported}}
+                 {{tr}}{{$_msg_supported}}{{/tr}}
               </a>
             </li>
           {{/foreach}}

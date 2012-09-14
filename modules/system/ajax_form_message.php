@@ -40,7 +40,7 @@ if ($update_moment) {
 $groups = CMediusers::loadEtablissements(PERM_EDIT);
 
 // Source SMTP
-$message_smtp = CExchangeSource::get("system-message", "smtp", true);
+$message_smtp = CExchangeSource::get("system-message", "smtp", true, null, false);
 $message->_email_from = CAppUI::conf("system CMessage default_email_from");
 $message->_email_to   = CAppUI::conf("system CMessage default_email_to"  );
 

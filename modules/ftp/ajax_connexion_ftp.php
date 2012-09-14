@@ -15,7 +15,7 @@ if (null == $exchange_source_name = CValue::get("exchange_source_name")) {
   CAppUI::stepAjax("Aucun nom de source d'échange spécifié", UI_MSG_ERROR);
 }
 
-$exchange_source = CExchangeSource::get($exchange_source_name);
+$exchange_source = CExchangeSource::get($exchange_source_name, "ftp", false, null, false);
 
 $ftp = new CFTP();
 $ftp->init($exchange_source);
@@ -27,12 +27,12 @@ try {
   $ftp->connect();
   CAppUI::stepAjax("CFTP-success-authentification", E_USER_NOTICE, $ftp->username);
 
-	if ($ftp->passif_mode) {
-	  CAppUI::stepAjax("CFTP-msg-passive_mode"); 
-	}
-	
-	$sent_file = CAppUI::conf('root_dir')."/offline.php";
-	$remote_file = $ftp->fileprefix . "test.txt";
+  if ($ftp->passif_mode) {
+    CAppUI::stepAjax("CFTP-msg-passive_mode"); 
+  }
+  
+  $sent_file = CAppUI::conf('root_dir')."/offline.php";
+  $remote_file = $ftp->fileprefix . "test.txt";
 
   $ftp->sendFile($sent_file, $remote_file);
   CAppUI::stepAjax("CFTP-success-transfer_out", E_USER_NOTICE, $sent_file, $remote_file);

@@ -191,7 +191,7 @@ if (isset($compte_rendu->_ref_file->_id)) {
 $smarty->assign("textes_libres", $templateManager->textes_libres);
 
 $exchange_source = CExchangeSource::get("mediuser-".CAppUI::$user->_id);
-$smarty->assign("exchange_source", $exchange_source);
+$smarty->assign("exchange_source", $exchange_source, "smtp");
 
 // Ajout d'entête / pied de page à la volée
 $headers = array();

@@ -208,7 +208,7 @@ if (CModule::getActive("maternite")) {
   $sejour->loadRefGrossesse();
 }
 
-$exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id);
+$exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id, "smtp");
 
 // Création du template
 $smarty = new CSmartyDP();

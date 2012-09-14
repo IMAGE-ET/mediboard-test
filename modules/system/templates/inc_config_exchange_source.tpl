@@ -31,14 +31,14 @@
       }
     </script>
 
-    <div class="small-info">{{tr}}CExchangeSource-only_one_active{{/tr}}</div>
-    
     {{if $source->_allowed_instances}} 
     <script type="text/javascript">
       Main.add(function () {
         Control.Tabs.create('tabs-exchange-source-{{$sourcename}}', true);
       });
     </script>
+    
+    <div class="small-info">{{tr}}CExchangeSource-only_one_active{{/tr}}</div>
     
     <ul id="tabs-exchange-source-{{$sourcename}}" class="control_tabs">
       {{foreach from=$source->_allowed_instances item=_source_allowed}}
