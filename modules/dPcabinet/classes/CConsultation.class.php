@@ -1189,11 +1189,11 @@ TESTS A EFFECTUER
   }
 
   function loadRefGrossesse() {
-    return $this->_ref_grossesse = $this->loadFwdRef("grossesse_id");
+    return $this->_ref_grossesse = $this->loadFwdRef("grossesse_id", true);
   }
 
   function loadRefFacture() {
-    return $this->_ref_facture = $this->loadFwdRef("factureconsult_id");
+    return $this->_ref_facture = $this->loadFwdRef("factureconsult_id", true);
   }
 
   function getActeExecution() {
@@ -1359,7 +1359,10 @@ TESTS A EFFECTUER
   }
 
   function loadRefsReglements() {
-    $this->_ref_reglements = $this->loadBackRefs('reglements', 'date');
+    $this->_ref_reglements = $this->factureconsult_id ?
+      $this->loadRefFacture()->loadRefsReglements() :
+      $this->loadBackRefs('reglements', 'date');
+      
     $this->_ref_reglements_patient = array();
     $this->_ref_reglements_tiers   = array();
 

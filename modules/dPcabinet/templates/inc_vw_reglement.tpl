@@ -328,8 +328,10 @@ Main.add( function(){
                 <input type="hidden" name="chrono" value="{{$consult->chrono}}" />
                 {{/if}}
                 
-                {{if !$consult->_current_fse && $consult->_ref_reglements|@count == 0}}
-                <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this);reloadFacture();">Rouvrir la cotation</button>
+                {{if !$consult->_current_fse && !count($consult->_ref_reglements)}}
+                <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this); reloadFacture();">
+                  Rouvrir la cotation
+                </button>
                 {{/if}}
                 <button class="print" type="button" onclick="printActes()">Imprimer les actes</button>
               </td>

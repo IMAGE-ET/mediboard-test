@@ -136,7 +136,7 @@
   {{/if}}
   <tr>
     <td style="text-align:center;width:100px;">{{$_consultation->_date|date_format:"%d/%m/%Y"}}</td>
-    <td  {{if $_acte_caisse->code}} style="background-color:#DA70D6;width:140px;">{{mb_value object=$_acte_caisse field="code"}}{{else}}>{{/if}}</td>
+    <td  {{if $_acte_caisse->code}} style="background-color:#DA70D6; width:140px;">{{mb_value object=$_acte_caisse field="code"}}{{else}}>{{/if}}</td>
     <td style="white-space: pre-wrap;">{{$_acte_caisse->_ref_prestation_caisse->libelle}}</td>
     <td style="text-align:right;">
       {{if $_acte_caisse->quantite}}
@@ -152,8 +152,7 @@
   </tr>
 {{/foreach}}
 
-  <tbody class="over">
-    {{*@todo ??? *}}
+  <tbody class="hoverable">
     {{assign var="nb_montants" value=$facture->_montant_factures|@count }}
     {{if $nb_montants > 1}}
       {{foreach from=$facture->_montant_factures item=_montant key=key }}
@@ -169,7 +168,7 @@
     
     <tr>
       <td colspan="2"><b>{{mb_label object=$facture field="remise"}}</b></td>
-      <td style="text-align:right;"> 
+      <td style="text-align: right;"> 
         <form name="modif_remise" method="post" onsubmit="Facture.modifCloture(this.form);">
           {{mb_class object=$facture}}
           {{mb_key   object=$facture}}

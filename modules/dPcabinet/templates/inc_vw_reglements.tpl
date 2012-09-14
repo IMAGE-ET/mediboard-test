@@ -74,9 +74,8 @@ modifMontantBVR = function (num_bvr){
     
       <script type="text/javascript">Main.add( function() { prepareForm(document.forms["reglement-add"]); } );</script>
       
-      <form name="reglement-add" action="" method="post" >
+      <form name="reglement-add" action="" method="post" onsubmit="return AddReglement(this);" >
         <input type="hidden" name="m" value="{{$m}}" />
-        {{*<input type="hidden" name="tab" value="vw_factures" />*}}
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_reglement_aed" />
         <input type="hidden" name="date" value="now" />
@@ -92,9 +91,9 @@ modifMontantBVR = function (num_bvr){
               {{mb_label object=$reglement field=mode}}
               ({{mb_label object=$reglement field=banque_id}})
             </th>
-            <th class="category" style="width: 6em;">{{mb_label object=$reglement field=montant}}</th>
-            <th class="category" style="width: 6em;">{{mb_label object=$reglement field=date}}</th>
-            <th class="category" style="width: 0em;"></th>
+            <th class="category narrow">{{mb_label object=$reglement field=montant}}</th>
+            <th class="category narrow">{{mb_label object=$reglement field=date}}</th>
+            <th class="category narrow"></th>
           </tr>
           
           <!--  Liste des reglements deja effectués -->
@@ -107,14 +106,16 @@ modifMontantBVR = function (num_bvr){
               {{/if}}
               {{if $_reglement->num_bvr}}( {{$_reglement->num_bvr}} ){{/if}}
             </td>
-            <td>{{mb_value object=$_reglement field=montant}}</td>
+            <td style="text-align: right;">
+              {{mb_value object=$_reglement field=montant}}
+            </td>
             <td>
               <label title="{{mb_value object=$_reglement field=date}}">
                 {{$_reglement->date|date_format:$conf.date}}
               </label>
             </td>
             <td>
-              <button class="remove notext" type="button" onclick="delReglement('{{$_reglement->reglement_id}}');"></button>
+              <button class="remove notext" type="button" onclick="delReglement('{{$_reglement->_id}}');"></button>
             </td>
           </tr>
           {{/foreach}}
@@ -136,7 +137,7 @@ modifMontantBVR = function (num_bvr){
               </td>
               <td><input type="text" class="currency notNul" size="4" maxlength="8" name="montant" value="{{$object->_du_patient_restant}}" /></td>
               <td></td>
-              <td><button class="add notext" type="button" onclick="AddReglement(this.form);">{{tr}}Add{{/tr}}</button></td>
+              <td><button class="add notext" type="button" onclick="this.form.onsubmit();">{{tr}}Add{{/tr}}</button></td>
             </tr>
           {{/if}}
           <tr>

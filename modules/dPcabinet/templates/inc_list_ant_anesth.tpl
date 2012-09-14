@@ -189,5 +189,5 @@ Main.add(function(){
 });
 </script>
 {{else}}
-Aucun séjour sélectionné
+<div class="empty">Aucun séjour sélectionné</div>
 {{/if}}
