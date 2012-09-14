@@ -16,8 +16,8 @@
     </tr>
     {{/if}}
     
-    {{mb_include module=cabinet template=inc_view_facturation_tarmed}}
-    {{mb_include module=cabinet template=inc_view_facturation_t2a   }}
+    {{mb_include module=cabinet template=inc_vw_facturation_tarmed}}
+    {{mb_include module=cabinet template=inc_vw_facturation_t2a   }}
 
   </table> 
 {{/if}}
