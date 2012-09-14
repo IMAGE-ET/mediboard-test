@@ -67,6 +67,6 @@
   </tbody>
   
 {{foreachelse}}
-  <tr><td colspan="10" class="empty">{{tr}}{{CConsultation.none}}{{/tr}}</td></tr>
+  <tr><td colspan="10" class="empty">{{tr}}CConsultation.none{{/tr}}</td></tr>
 {{/foreach}}
 
