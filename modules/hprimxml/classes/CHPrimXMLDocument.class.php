@@ -689,7 +689,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function addInterventionAcquittement($elParent, $operation = null) {
     $identifiant = $this->addElement($elParent, "identifiant");
-    $emetteur = $this->addElement($identifiant, "emetteur", $operation && $operation->_id  ? $operation->operation_id : 0);
+    $emetteur = $this->addElement($identifiant, "emetteur", isset($operation->_id) ? $operation->_id : 0);
   }
   
   function getTypeEvenementPatient() {
