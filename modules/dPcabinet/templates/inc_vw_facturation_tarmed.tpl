@@ -69,6 +69,7 @@
     {{/if}}
   </td>
 </tr>
+
 {{if $facture->type_facture == "accident"}}
   <tr>
     <td colspan="2">
@@ -86,7 +87,6 @@
     </td>
     <td colspan="9"></td>
   </tr>
-{{/if}}
 {{/if}}
 
 {{foreach from=$facture->_ref_consults item=_consultation}}
