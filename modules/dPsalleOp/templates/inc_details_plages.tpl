@@ -23,11 +23,7 @@
         {{else}}
         {{$_plage->_ref_spec->_view}}
         {{/if}}
-        {{if $vueReduite}}
-          <br />
-        {{else}}
-          -
-        {{/if}}
+        <br />
         {{$_plage->debut|date_format:$conf.time}} à {{$_plage->fin|date_format:$conf.time}}
       </a>
     </th>
