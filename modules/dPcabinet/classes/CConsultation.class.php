@@ -388,7 +388,7 @@ class CConsultation extends CCodable {
    * Chargement des identifiants des FSE associées
    * @return void
    */
-  function loadIdsFSE() {
+  /*function loadIdsFSE() {
     $id_fse = new CIdSante400();
     $id_fse->setObject($this);
     $id_fse->tag = "LogicMax FSENumero";
@@ -411,7 +411,7 @@ class CConsultation extends CCodable {
         $this->_current_fse = $_ext_fse;
       }
     }
-  }
+  }*/
 
   /**
    * deleteActes() Redefinition
@@ -497,7 +497,7 @@ class CConsultation extends CCodable {
    * Conterpart to Bind FSE
    * @return void
    */
-  function makeFSE() {
+  /*function makeFSE() {
     $this->_fse_intermax = array();
 
     // Ajout des actes NGAP
@@ -554,7 +554,7 @@ class CConsultation extends CCodable {
     if (!count($this->_fse_intermax["FSE"])) {
       unset($this->_fse_intermax["FSE"]);
     }
-  }
+  }*/
 
   /**
    * Bind a FSE to current consult
@@ -676,7 +676,13 @@ class CConsultation extends CCodable {
     if (!$consult->tarif) {
       $consult->tarif = "FSE LogicMax";
     }
-
+    
+    $consult->loadRefFacture();
+    mbLog($consult->_ref_facture);
+    $consult->_ref_facture->du_patient = $consult->du_patient;
+    $consult->_ref_facture->du_tiers = $consult->du_tiers;
+    $consult->_ref_facture->store();
+    mbLog($consult->_ref_facture);
     return $consult->store();
   }
 
