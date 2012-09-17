@@ -661,7 +661,8 @@ class CHL7v2Segment extends CHL7v2Entity {
       } 
     }
     $affectation->loadRefLit()->loadRefChambre();
-    $current_uf  = $sejour->getUF();
+
+    $current_uf = $sejour->getUF(null, $affectation->_id);
       
     return array(
       array(
