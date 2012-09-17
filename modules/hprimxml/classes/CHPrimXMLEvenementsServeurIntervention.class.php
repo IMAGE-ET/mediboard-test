@@ -142,16 +142,17 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     // Chargement du patient du séjour
     $sejour->loadRefPatient();
     $operation->sejour_id = $sejour->_id;
-    
+
     // Mapping du séjour
     $sejour = $this->mappingVenue($data['venue'], $sejour);
-    
+
     // Notifier les autres destinataires autre que le sender
     $sejour->_eai_initiateur_group_id = $sender->group_id;
+    
     if ($msgVenue = $sejour->store()) {
       return $exchange_hprim->setAck($dom_acq, "A102", $msgVenue, null, $sejour);
     }
-    
+
     // idex de l'intervention
     $idex = CIdSante400::getMatch("COperation", $sender->_tag_hprimxml, $data['idSourceIntervention']);
     
@@ -166,29 +167,27 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
       $operation = $operation_source;     
     }
     
-    if (!$operation->_id) {
-      // Recherche de la salle
-      $salle = $this->getSalle($data['intervention']);
-      if ($salle->nom && !$salle->_id) {
-        $comment = "Salle '$salle->nom' inconnue dans l'infrastructure de l'établissement";
-        return $exchange_hprim->setAckError($dom_acq, "E202", $comment, $mbObject);
-      }
-      $operation->salle_id = $salle->_id;
-      
-      // Mapping du chirurgien
-      $mediuser = $this->getParticipant($data['intervention']);
-      if (($mediuser->adeli && !$mediuser->_id) || !$mediuser->adeli) {
-        $comment = $mediuser->adeli ? "Participant '$mediuser->adeli' inconnu" : "Le code ADELI n'est pas renseigné";
-        return $exchange_hprim->setAckError($dom_acq, "E203", $comment, $mbObject);
-      }
-      $operation->chir_id = $mediuser->_id;
-      
-      // Mapping de la plage
-      $plageOp = $this->mappingPlage($data['intervention'], $operation);
-   
-      // Recherche d'une intervention existante sinon création  
-      $operation->loadMatchingObject();
+    // Recherche de la salle
+    $salle = $this->getSalle($data['intervention']);
+    if ($salle->nom && !$salle->_id) {
+      $comment = "Salle '$salle->nom' inconnue dans l'infrastructure de l'établissement";
+      return $exchange_hprim->setAckError($dom_acq, "E202", $comment, $mbObject);
     }
+    $operation->salle_id = $salle->_id;
+    
+    // Mapping du chirurgien
+    $mediuser = $this->getParticipant($data['intervention']);
+    if (($mediuser->adeli && !$mediuser->_id) || !$mediuser->adeli) {
+      $comment = $mediuser->adeli ? "Participant '$mediuser->adeli' inconnu" : "Le code ADELI n'est pas renseigné";
+      return $exchange_hprim->setAckError($dom_acq, "E203", $comment, $mbObject);
+    }
+    $operation->chir_id = $mediuser->_id;
+    
+    // Mapping de la plage
+    $plageOp = $this->mappingPlage($data['intervention'], $operation);
+ 
+    // Recherche d'une intervention existante sinon création  
+    $operation->loadMatchingObject();
 
     // Mapping de l'intervention
     $this->mappingIntervention(($data['intervention']), $operation);

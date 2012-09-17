@@ -184,7 +184,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           
           // Notifier les autres destinataires autre que le sender
           $newVenue->_eai_initiateur_group_id = $sender->group_id;
+          // Pas de génération de NDA
           $newVenue->_generate_NDA = false;
+          // On ne check pas la cohérence des dates des consults/intervs
+          $newVenue->_skip_date_consistencies = true;
           if ($msgVenue = $newVenue->store()) {
             return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
           }
@@ -208,7 +211,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           
           // Notifier les autres destinataires autre que le sender
           $newVenue->_eai_initiateur_group_id = $sender->group_id;
+          // Pas de génération de NDA
           $newVenue->_generate_NDA = false;
+          // On ne check pas la cohérence des dates des consults/intervs
+          $newVenue->_skip_date_consistencies = true;
           if ($msgVenue = $newVenue->store()) {
             return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
           }
@@ -249,7 +255,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         
         // Notifier les autres destinataires autre que le sender
         $newVenue->_eai_initiateur_group_id = $sender->group_id;
+        // Pas de génération de NDA
         $newVenue->_generate_NDA = false;
+        // On ne check pas la cohérence des dates des consults/intervs
+        $newVenue->_skip_date_consistencies = true;
         if ($msgVenue = $newVenue->store()) {
           return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
         }
@@ -299,6 +308,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       
       // Notifier les autres destinataires autre que le sender
       $newVenue->_eai_initiateur_group_id = $sender->group_id;
+      // On ne check pas la cohérence des dates des consults/intervs
+      $newVenue->_skip_date_consistencies = true;
       if ($msgVenue = $newVenue->store()) {
         return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
       }
@@ -724,6 +735,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Notifier les autres destinataires autre que le sender
     $newVenue->_eai_initiateur_group_id = $sender->group_id;
+    // On ne check pas la cohérence des dates des consults/intervs
+    $newVenue->_skip_date_consistencies = true;
     if ($msgVenue = $newVenue->store()) {
       return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
     }
@@ -876,6 +889,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }
 
       $newVenue->service_id = $affectation_uf->object_id;
+      // On ne check pas la cohérence des dates des consults/intervs
+      $newVenue->_skip_date_consistencies = true;
       if ($msgVenue = $newVenue->store()) {
         return $msgVenue;
       }
@@ -994,6 +1009,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
      
     $newVenue->grossesse_id = $grossesse->_id;
+    // On ne check pas la cohérence des dates des consults/intervs
+    $newVenue->_skip_date_consistencies = true;
     if ($msg = $newVenue->store()) {
       return $msg;
     }   

@@ -13,6 +13,7 @@ class CRefSpec extends CMbFieldSpec {
   var $class     = null;
   var $cascade   = null;
   var $unlink    = null;
+  var $nullify   = null;
   var $meta      = null;
   var $purgeable = null;
   
@@ -29,6 +30,7 @@ class CRefSpec extends CMbFieldSpec {
       'class'     => 'class',
       'cascade'   => 'bool',
       'unlink'    => 'bool',
+      'nullify'   => 'bool',
       'meta'      => 'field',
       'purgeable' => 'bool',
     ) + parent::getOptions();
@@ -48,6 +50,10 @@ class CRefSpec extends CMbFieldSpec {
   }
 
   function checkProperty($object){
+    if ($this->notNull && $this->nullify) {
+      return "Spécifications de propriété incohérentes entre 'notNull' et 'nullify'";
+    }
+    
     $fieldName = $this->fieldName;
     $propValue = CMbFieldSpec::checkNumeric($object->$fieldName, true);
     

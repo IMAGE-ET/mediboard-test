@@ -116,11 +116,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $sejour->loadRefPatient();
       $sejour->_receiver = $receiver;
       
-      // Dans le cas où il s'agit de la première affectation du séjour et qu'on est en type "création" on ne recherche pas 
-      // un mouvement avec l'affectation, mais on va prendre le mouvement d'admission
-      if (($current_log->type == "create") && $first_affectation && ($first_affectation->_id == $affectation->_id)) {
-        $affectation = null;
-      }
       $this->createMovement($code, $sejour, $affectation);
    
       // Envoi de l'événement
@@ -178,12 +173,24 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
     $movement = new CMovement();
     // Initialise le mouvement 
-    $movement->sejour_id     = $sejour->_id;
-  
+    $movement->sejour_id = $sejour->_id;
+    
+    $affectation_id = null;
     if ($affectation) {
-      $movement->affectation_id = $affectation->_id;  
+      $current_log       = $affectation->_ref_current_log;
+      $first_affectation = $sejour->loadRefFirstAffectation();
+    
+      // Dans le cas où il s'agit de la première affectation du séjour et qu'on est en type "création" on ne recherche pas 
+      // un mouvement avec l'affectation, mais on va prendre le mouvement d'admission
+      if ($current_log && ($current_log->type == "create") && $first_affectation && ($first_affectation->_id == $affectation->_id)) {
+        $affectation_id = $affectation->_id;
+        $affectation    = null;
+      } 
+      else {
+        $movement->affectation_id = $affectation->_id;  
+      }  
     }
-     
+      
     if ($insert) {
       // Dans le cas d'un insert le type correspond nécessairement au type actuel du séjour
       $movement->movement_type         = $sejour->getMovementType($code);
@@ -207,10 +214,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         $movement_type = "SORT";
       }
 
-      // Mise à jour d'une affectation
-      if ($affectation && $affectation->_ref_current_log->type == "store") {
-        $movement_type = "MUTA";
-      }
       $movement->movement_type = $movement_type;
     }
 
@@ -224,10 +227,16 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($update) {
       $movement->start_of_movement = $this->getStartOfMovement($movement->original_trigger_code, $sejour, $affectation);
     }
-
+    
+    // on annule un mouvement sauf dans le cas d'une annulation de mutation et que 
     if ($cancel) {
       $movement->cancel = 1;
     }
+
+    if ($affectation_id) {
+      $movement->affectation_id = $affectation_id;
+    }
+
     $movement->store();
     
     return $sejour->_ref_hl7_movement = $movement;
@@ -522,7 +531,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       else {
         $code = "A12";
       }
-      
+            
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message

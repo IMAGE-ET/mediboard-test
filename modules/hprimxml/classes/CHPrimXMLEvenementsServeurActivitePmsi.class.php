@@ -89,6 +89,9 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $sejour = CHPrimXMLEvenementsPatients::getEntree($node, $sejour);
     $sejour = CHPrimXMLEvenementsPatients::getSortie($node, $sejour);
     
+    // On ne check pas la cohérence des dates des consults/intervs
+    $sejour->_skip_date_consistencies = true;
+    
     return $sejour;    
   }
   

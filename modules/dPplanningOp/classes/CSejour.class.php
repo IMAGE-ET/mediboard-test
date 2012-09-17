@@ -139,6 +139,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_unique_lit_id = null;
   var $_no_synchro    = null;
   var $_generate_NDA  = true;
+  var $_skip_date_consistencies = false; // On ne check pas la cohérence des dates des consults/intervs
   
   // EAI Fields
   var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
@@ -418,7 +419,7 @@ class CSejour extends CCodable implements IPatientRelated {
       $entree = $this->entree_prevue;
       $sortie = $this->sortie_prevue;
   
-      if ($entree !== null && $sortie !== null) {
+      if ($entree !== null && $sortie !== null  && !$this->_skip_date_consistencies) {
         $entree = mbDate($entree);
         $sortie = mbDate($sortie);
         $this->makeDatesOperations();
@@ -2541,6 +2542,7 @@ class CSejour extends CCodable implements IPatientRelated {
         $affectation = $this->_ref_next_affectation;
       } 
     }
+    
     if ($affectation->_id) {
       return $affectation->getUFs();
     }

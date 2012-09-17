@@ -1741,6 +1741,11 @@ class CStoredObject extends CModelObject {
       if (!$backObject->_ref_module) {
         continue;
       }
+    
+      // Cas de la nullification
+      if ($fwdSpec->nullify) {
+        continue;
+      }
       
       // Cas de la suppression en cascade
       if ($fwdSpec->cascade || $backSpec->cascade) {
@@ -1779,6 +1784,7 @@ class CStoredObject extends CModelObject {
         }
       }
     };
+    
     $msg = count($issues) ?
       CAppUI::tr("CMbObject-msg-nodelete-backrefs") . ": " . implode(", ", $issues) :
       null;
@@ -1807,14 +1813,18 @@ class CStoredObject extends CModelObject {
     // Deleting backSpecs
     foreach ($this->_backSpecs as $backName => $backSpec) {
       $backObject = new $backSpec->class;
-      $backField = $backSpec->field;
-      $fwdSpec =& $backObject->_specs[$backField];
-      $backMeta = $fwdSpec->meta;
+      $backField  = $backSpec->field;
+      $fwdSpec    =& $backObject->_specs[$backField];
+      $backMeta   = $fwdSpec->meta;
       
       /* Cas du module non installé, 
        * Cas de l'interdiction de suppression, 
        * Cas de l'interdiction de la non liaison des backRefs */
-      if (!$backObject->_ref_module || !($fwdSpec->cascade || $backSpec->cascade) || $fwdSpec->unlink) {
+      if (!$backObject->_ref_module) {
+        continue; 
+      } 
+      
+      if (!($fwdSpec->cascade || $backSpec->cascade) || $fwdSpec->unlink || !$fwdSpec->nullify) {
         continue; 
       }
       
@@ -1825,10 +1835,22 @@ class CStoredObject extends CModelObject {
         $backObject->$backMeta = $this->_class;
       }
 
-      foreach ($backObject->loadMatchingList() as $object) {
-        if ($msg = $object->delete()) {
-          return $msg;
+      foreach ($backObject->loadMatchingList() as $object) {      
+        // Cas de nullification de la collection
+        if ($fwdSpec->nullify) {
+          $object->$backField = "";
+          if ($msg = $object->store()) {
+            return $msg;
+          }
         }
+        
+        // Suppression en cascade
+        if ($fwdSpec->cascade) {
+          if ($msg = $object->delete()) {
+            return $msg;
+          }
+        }
+        
       }
     }
     
