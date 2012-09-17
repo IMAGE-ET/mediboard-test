@@ -214,7 +214,7 @@ var ExObject = {
       
       var display = (function(){
         // An empty value hides the target
-        if (triggerValue === "" || isNaN(triggerValue)) {
+        if (triggerValue === ""/* || isNaN(triggerValue)*/) { // pas isNaN car on peut avoir des dates ou du texte!!
           return false;
         }
         
