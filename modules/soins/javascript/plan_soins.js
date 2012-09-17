@@ -282,7 +282,7 @@ PlanSoins = {
       if(object_class == 'CPrescriptionLineMix'){
         url.requestUpdate("line_"+object_class+"-"+object_id, { onComplete: function() { 
           $("line_"+object_class+"-"+object_id).hide();
-          PlanSoins.moveDossierSoin($("line_"+object_class+"-"+object_id));
+          PlanSoins.moveDossierSoin($("line_"+object_class+"-"+object_id), false);
         } } );
       }
       else {
@@ -308,7 +308,7 @@ PlanSoins = {
         url.requestUpdate(first_td, {
           insertion: Insertion.After,
           onComplete: function(){
-            PlanSoins.moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise));
+            PlanSoins.moveDossierSoin($("line_"+object_class+"_"+object_id+"_"+unite_prise), false);
             first_td.hide().colSpan = 1;
           }
         } );
@@ -327,7 +327,7 @@ PlanSoins = {
           chapitre = "_cat-"+chapitre;
         }
         if($(chapitre)){
-          url.requestUpdate(chapitre, { onComplete: function() { PlanSoins.moveDossierSoin($(chapitre)); } } );
+          url.requestUpdate(chapitre, { onComplete: function() { PlanSoins.moveDossierSoin($(chapitre), false); } } );
         }
         
       } else {
@@ -400,21 +400,21 @@ PlanSoins = {
   },
   
   // Deplacement du dossier de soin
-  moveDossierSoin: function(element){
+  moveDossierSoin: function(element, hack_ie){
     var periode_visible = PlanSoins.composition_dossier[PlanSoins.formClick.nb_decalage.value];
     
     // To prevent IE to crash
-    if (Prototype.Browser.IE) {
+    if (hack_ie && Prototype.Browser.IE) {
       element.hide();
     }
     
     PlanSoins.composition_dossier.each(function(moment){
-      element.select('.'+moment).invoke("setVisible", moment == periode_visible);
+      element.select('.' + moment).invoke("setVisible", moment == periode_visible);
     });
     
     PlanSoins.viewDossierSoin(element);
-    
-    if (Prototype.Browser.IE) {
+  
+    if (hack_ie && Prototype.Browser.IE) {
       element.show();
     }
   },
@@ -512,7 +512,7 @@ PlanSoins = {
   showBefore: function(){
     if(PlanSoins.formClick.nb_decalage.value >= 1){
       PlanSoins.formClick.nb_decalage.value = parseInt(PlanSoins.formClick.nb_decalage.value) - 1;
-      PlanSoins.moveDossierSoin($('plan_soin'));
+      PlanSoins.moveDossierSoin($('plan_soin'), true);
     }
     PlanSoins.togglePeriodNavigation();
   },
@@ -521,7 +521,7 @@ PlanSoins = {
   showAfter: function(){
     if(PlanSoins.formClick.nb_decalage.value < (PlanSoins.nb_postes - 1)){
       PlanSoins.formClick.nb_decalage.value = parseInt(PlanSoins.formClick.nb_decalage.value) + 1;
-      PlanSoins.moveDossierSoin($('plan_soin'));
+      PlanSoins.moveDossierSoin($('plan_soin'), true);
     }
     PlanSoins.togglePeriodNavigation();
   },
