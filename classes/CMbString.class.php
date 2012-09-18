@@ -420,5 +420,19 @@ abstract class CMbString {
     
     return $geshi->parse_code();
   }
+  
+  static function toWords($num) {
+    @list($whole, $decimal) = @preg_split('/[.,]/', $num);
+    
+    $nw = new nuts($whole, "");
+    $words = $nw->convert("fr-FR");
+    
+    if ($decimal) {
+      $nw = new nuts($decimal, "");
+      $words .= " virgule ".$nw->convert("fr-FR");
+    }
+    
+    return $words;
+  }
 }
 ?>
