@@ -239,12 +239,16 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
             $code_NDA     = "A221";
             $_modif_sejour = true;
           }
-        } else {
+        } 
+        else {
+          // Valuer "entree" et "sortie" 
+          $newVenue->updatePlainFields();
+          
           $collision = $newVenue->getCollisions();
 
           if (count($collision) == 1) {
             $newVenue = reset($collision);
-            
+
             $code_NDA     = "A222";
             $_modif_sejour = true;
           }
