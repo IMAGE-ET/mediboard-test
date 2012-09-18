@@ -35,7 +35,7 @@ class CSOAPClient {
    * 
    * @return null
    */
-  function __construct($type) {
+  function __construct($type = "CMbSOAPClient") {
     $this->type_client = $type;
   }
   
@@ -83,6 +83,10 @@ class CSOAPClient {
     }
     
     return $this->client;
+  }
+
+  public function __soapCall($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
+    return $this->call($function_name, $arguments, $options, $input_headers, $output_headers);
   }
 
   /**
