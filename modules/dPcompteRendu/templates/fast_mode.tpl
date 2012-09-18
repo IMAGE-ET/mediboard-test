@@ -267,7 +267,8 @@ Main.add(function() {
                 <fieldset>
                   <legend>
                     {{$_nom|html_entity_decode}}
-                    <input type="checkbox" name="_empty_texte_libre[{{$_nom|md5}}]" title="{{tr}}CListeChoix.fill{{/tr}}" class="empty_field"/>
+                    <input type="checkbox" name="_empty_texte_libre[{{$_nom|md5}}]"
+                      title="{{if $check_to_empty_field}}{{tr}}CListeChoix.empty{{/tr}}{{else}}{{tr}}CListeChoix.fill{{/tr}}{{/if}}" class="empty_field"/>
                   </legend>
                   <textarea class="freetext" name="_texte_libre[{{$_nom|md5}}]"
                   {{if !$check_to_empty_field}}onkeydown="this.form.elements['_empty_texte_libre[{{$_nom|md5}}]'].checked='checked'; this.onkeydown=''"{{/if}}></textarea>
