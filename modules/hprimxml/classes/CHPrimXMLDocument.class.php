@@ -985,7 +985,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
       $antecedents = $dossier_medical->loadRefsAntecedents();
       foreach ($antecedents as $_antecedent) {
-        $this->addCodeLibelle($indicateurs, "indicateur", $_antecedent->_id, $_antecedent->rques);
+        $this->addCodeLibelle($indicateurs, "indicateur", $_antecedent->_id, CMbString::convertHTMLToXMLEntities($_antecedent->rques));
       }
       
       // Recours / Durée USCPO
