@@ -606,6 +606,7 @@ $locales['CSejour-ATNC'] = 'ATNC';
 $locales['CSejour-ATNC-court'] = 'ATNC';
 $locales['CSejour-ATNC-desc'] = 'Risque de Creutzfeld Jacob';
 $locales['CSejour-DP'] = 'Diagnostic principal (CIM)';
+$locales['CSejour-DP.unknown'] = 'Diagnostic non renseigné';
 $locales['CSejour-DP-court'] = 'DP';
 $locales['CSejour-DP-desc'] = 'Code CIM du diagnostic principal';
 $locales['CSejour-DR'] = 'Diagnostic relié (CIM)';
