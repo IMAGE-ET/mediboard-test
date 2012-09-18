@@ -40,10 +40,13 @@ onSubmitAnt = function (form) {
 
   onSubmitFormAjax(form, { onComplete : DossierMedical.reloadDossiersMedicaux } );
   
-  $V(form.date    , "");
-  $V(form.date_da , "");
-  $V(form.type    , "");
-  $V(form.appareil, "");
+  // Après l'ajout d'antécédents
+  if (Preferences.empty_form_atcd == "1") {
+    $V(form.date    , "");
+    $V(form.date_da , "");
+    $V(form.type    , "");
+    $V(form.appareil, "");
+  }
   
   rques.clear().focus();
 

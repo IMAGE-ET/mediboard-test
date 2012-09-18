@@ -27,6 +27,7 @@ CPreferences::$modules["dPcabinet"] = array (
   "displayPremedConsult",
   "displayResultsConsult",
   "choosePatientAfterDate",
-  "viewFunctionPrats"
+  "viewFunctionPrats",
+  "empty_form_atcd"
 );
 ?>

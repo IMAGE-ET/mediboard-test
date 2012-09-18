@@ -1645,8 +1645,11 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("1.72");
     $query = "ALTER TABLE `examigs` CHANGE `glascow` `glasgow` ENUM('26','13','7','5','0');";
     $this->addQuery($query);
-           
-    $this->mod_version = "1.73";
+    
+    $this->makeRevision("1.73");
+    $this->addPrefQuery("empty_form_atcd", "0");
+    
+    $this->mod_version = "1.74";
   }
 }
 ?>
