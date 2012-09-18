@@ -15,7 +15,7 @@
 {{mb_script module="dPcabinet" script="edit_consultation"}}
 
 <script type="text/javascript">
-{{if !$consult->_canEdit && !$consult->_ref_sejour->_ref_rpu->_id}}
+{{if !$consult->_canEdit && !$consult->sejour_id && !$consult->_ref_sejour->_ref_rpu->_id}}
   App.readonly = true;
 {{/if}}
 
