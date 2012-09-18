@@ -33,23 +33,29 @@
     var planning = window["planning-{{$planning->guid}}"];
     planning.salles_ids = {{$salles_ids|@json}};
     
-    planning.onMenuClick = function(event, operation_id, elem) {
+    planning.onMenuClick = function(event, object_id, elem) {
       switch (event) {
         case 'edit':
-          modifIntervention('', '', '', operation_id);
+          // Commentaire
+          if (elem.up().up().hasClassName("commentaire_planning")) {
+            modifCommentaire(null, null, null, object_id, "Control.Modal.close");
+          }
+          // DHE
+          else {
+            modifIntervention('', '', '', object_id);
+          }
           break;
         case 'cut':
-          cutIntervention(operation_id, elem);
+          cutIntervention(object_id, elem);
           break;
         case 'clock':
-          modifSejour(operation_id, null, "Control.Modal.close");
+          modifSejour(object_id, null, "Control.Modal.close");
       }
     }
     
     planning.onEventChange = function(e) {
-      var operation_guid = e.draggable_guid;
-      var operation_id = operation_guid.split("-")[1];
-      
+      var object_guid = e.draggable_guid;
+      var object_id = object_guid.split("-")[1];
       var entree_prevue = /entree_prevue='([0-9 \:-]*)'/.exec(e.title)[1];
       var prevue_split = entree_prevue.split(" ");
       var date_entree_prevue = prevue_split[0];
@@ -57,7 +63,9 @@
       var sortie_prevue = /sortie_prevue='([0-9 \:-]*)'/.exec(e.title)[1];
       var heure_sortie_prevue = sortie_prevue.split(" ")[1];
       var time = e.getTime();
-      var temp_operation = new Date(1970, 1, 1, 0, time.length).toTIME();
+      var temp_operation_date = new Date(1970, 1, 1, 0, time.length)
+      var temp_operation = temp_operation_date.toTIME();
+      
       var time_operation = time.start.toTIME();
       var index_salle = time.start.getFullYear()-2000;
       var salle_id = this.salles_ids[index_salle];
@@ -66,16 +74,33 @@
         return;
       }
       
+      // Pour un commentaire
+      if (e.type == "commentaire_planning") {
+        var form = getForm("editCommentairePlanning");
+        
+        var fin = time.start.addHours(temp_operation_date.getHours()).addMinutes(temp_operation_date.getMinutes());
+        
+        $V(form.commentaire_planning_id, object_id);
+        $V(form.debut, "{{$date_planning}} " + time_operation);
+        $V(form.fin, "{{$date_planning}} " + fin.toTIME());
+        $V(form.salle_id, salle_id);
+        
+        onSubmitFormAjax(form, {onComplete: refreshPlanning});
+        return;
+      }
+      
+      // Pour une DHE
+      
       var form = getForm("editOperation");
       
       // Popup de modification des dates d'entrée et sortie prévue du séjour
       // dans le cas où la date et heure d'intervention n'est pas dans cet intervalle
       
       if ("{{$date_planning}} "+time_operation < entree_prevue) {
-        modifSejour(operation_id, "{{$date_planning}} "+time_operation, "afterModifSejour");
+        modifSejour(object_id, "{{$date_planning}} "+time_operation, "afterModifSejour");
         
         window.save_operation =
-          {"operation_id": operation_id,
+          {"operation_id": object_id,
            "time_operation": time_operation,
            "temp_operation": temp_operation,
            "salle_id": salle_id};
@@ -83,7 +108,7 @@
       }
       
       // Sinon, on peut enregistrer
-      $V(form.operation_id,   operation_id);
+      $V(form.operation_id,   object_id);
       $V(form.time_operation, time_operation);
       $V(form.temp_operation, temp_operation);
       $V(form.salle_id,       salle_id);
@@ -102,11 +127,23 @@
           var hour = classes[0].split("-")[2];
           var salle_id = planning.salles_ids[classes[0].split("-")[1]];
           
+          // Mode commentaire
+          var form = getForm("filterPlanning");
+          
+          if (form._comment_mode.checked) {
+            modifCommentaire("{{$date_planning}}", hour, salle_id, null, "Control.Modal.close");
+            return;
+          }
+          
+          // Mode DHE
+          
+          // - Couper coller
           if (window.cut_operation_id) {
             pasteIntervention(window.cut_operation_id, salle_id, hour);
             return;
           }
-                      
+          
+          // - Création
           modifIntervention("{{$date_planning}}", hour, salle_id);
         });
       });

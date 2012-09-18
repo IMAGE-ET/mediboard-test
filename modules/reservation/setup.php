@@ -16,6 +16,24 @@ class CSetupreservation extends CSetup {
     $this->mod_name = "reservation";
     $this->makeRevision("all");
     
-    $this->mod_version = "0.01";    
+    $this->makeRevision("0.01");
+    
+    $query = "CREATE TABLE `commentaire_planning` (
+      `commentaire_planning_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `salle_id` INT (11) UNSIGNED,
+      `libelle` VARCHAR (255) NOT NULL,
+      `commentaire` TEXT,
+      `debut` DATETIME NOT NULL,
+      `fin` DATETIME NOT NULL
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `commentaire_planning` 
+      ADD INDEX (`salle_id`),
+      ADD INDEX (`debut`),
+      ADD INDEX (`fin`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.02";
   }
 }

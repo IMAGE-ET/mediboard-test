@@ -26,12 +26,29 @@ $scroll_top    = CValue::get("scroll_top", null);
 $bloc_id       = CValue::getOrSession("bloc_id", "");
 $show_cancelled = CValue::getOrSession("show_cancelled", 0);
 
-$bloc = new CBlocOperatoire;
+$bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
 
-// Récupération des opérations
 $group = CGroups::loadCurrent();
-$operation = new COperation;
+
+// Récupération des salles
+$salle = new CSalle();
+$where = array();
+$ljoin = array();
+$order = "bloc_operatoire.nom";
+
+if ($bloc_id) {
+  $where["bloc_id"] = "= '$bloc_id'";
+}
+
+$where["group_id"] = "= '$group->_id'";
+$ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
+
+$salles = $salle->loadList($where, $order, null, null, $ljoin);
+$salles_ids = array_keys($salles);
+
+// Récupération des opérations
+$operation = new COperation();
 
 $where = array();
 $ljoin = array();
@@ -41,7 +58,7 @@ if (!$show_cancelled) {
   $where["operations.annulee"] = "= '0'";
 }
 $where["operations.plageop_id"] = "IS NULL";
-$where["operations.salle_id"] = "IS NOT NULL";
+$where["operations.salle_id"] = CSQLDataSource::prepareIn($salles_ids);
 
 if ($bloc_id) {
   $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
@@ -60,21 +77,14 @@ CMbObject::massLoadFwdRef($operations, "salle_id");
 CMbObject::massLoadFwdRef($operations, "anesth_id");
 CMbObject::massLoadFwdRef($prats, "function_id");
 
-// Récupération des salles
-$salle = new CSalle;
+// Récupération des commentaires
+$commentaire = new CCommentairePlanning();
 $where = array();
-$ljoin = array();
-$order = "bloc_operatoire.nom";
 
-if ($bloc_id) {
-  $where["bloc_id"] = "= '$bloc_id'";
-}
+$where[] = "'$date_planning' BETWEEN date(debut) AND date(fin)";
+$where["salle_id"] = CSQLDataSource::prepareIn($salles_ids);
 
-$where["group_id"] = "= '$group->_id'";
-$ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
-
-$salles = $salle->loadList($where, $order, null, null, $ljoin);
-$salles_ids = array_keys($salles);
+$commentaires = $commentaire->loadList($where);
 
 // Création du planning
 $planning = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
@@ -100,9 +110,9 @@ foreach ($salles as $_salle) {
   }
   $i++;
 }
-$operations_by_salle = array();
 
 // Tri des opérations par salle
+$operations_by_salle = array();
 foreach ($operations as $key => $_operation) {
   if (!$_operation->salle_id) {
     unset($operations[$key]);
@@ -115,7 +125,19 @@ foreach ($operations as $key => $_operation) {
   $operations_by_salle[$_operation->salle_id][] = $_operation;
 }
 
-// Ajout des événements
+// Tri des commentaires par salle
+$commentaires_by_salle = array();
+foreach ($commentaires as $key => $_commentaire) {
+  $salle_id = $_commentaire->salle_id;
+  if (!isset($commentaires_by_salle[$salle_id])) {
+    $commentaires_by_salle[$salle_id] = array();
+  }
+  $commentaires_by_salle[$salle_id][] = $_commentaire;
+}
+
+// Ajout des événements (opérations)
+$can_edit = CCanDo::edit();
+
 foreach ($operations_by_salle as $salle_id => $_operations) {
   $i = array_search($salle_id, $salles_ids);
   foreach ($_operations as $_operation) {
@@ -206,7 +228,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     
     $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $libelle, $color, true, null, $_operation->_guid, false);
     
-    if (CCanDo::edit()) {
+    if ($can_edit) {
       $event->addMenuItem("edit" , "Modifier cette opération");
       $event->addMenuItem("cut"  , "Couper cette opération");
       $event->addMenuItem("clock", "Modifier les dates d'entrée et sortie du séjour");
@@ -237,9 +259,36 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
   }
 }
 
+// Ajout des événements (commentaires)
+foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
+  $i = array_search($salle_id, $salles_ids);
+  
+  foreach ($_commentaires as $_commentaire) {
+    $debut = "$i ".mbTime($_commentaire->debut);
+    
+    $duree = mbMinutesRelative(mbTime($_commentaire->debut), mbTime($_commentaire->fin));
+    
+    $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue' data-sortie_prevue='$sejour->sortie_prevue'></span>".
+    "<span style='font-size: 11px; font-weight: bold;'>$_commentaire->libelle</span>".
+    "\n<span class='compact'>".nl2br($_commentaire->commentaire)."</span>";
+    
+    $event = new CPlanningEvent($_commentaire->_guid, $debut, $duree, $libelle, "#ccc", true, null, $_commentaire->_guid, false);
+    
+    $event->type = "commentaire_planning";
+    $event->draggable = $event->resizable = CCanDo::edit();
+    $event->plage["id"] = $_commentaire->_id;
+    
+    if ($can_edit) {
+      $event->addMenuItem("edit" , "Modifier ce commentaire");
+    }
+    
+    $planning->addEvent($event);
+  }
+}
+
 $m = $save_m;
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("planning", $planning);
 $smarty->assign("salles"  , $salles);

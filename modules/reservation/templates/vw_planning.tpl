@@ -155,6 +155,25 @@
       window.save_cut_operation = null;
     }
   }
+  
+  modifCommentaire = function(date, hour, salle_id, commentaire_id, callback) {
+    var url = new Url("reservation", "ajax_edit_commentaire");
+    
+    if (commentaire_id) {
+      url.addParam("commentaire_id", commentaire_id);
+    }
+    
+    if (callback) {
+      url.addParam("callback", callback);
+    }
+    
+    url.addParam("date", date);
+    url.addParam("hour", hour);
+    url.addParam("salle_id", salle_id);
+    
+    url.requestModal(500, 300);
+    url.modalObject.observe("afterClose", refreshPlanning);
+  }
 </script>
 
 <form name="editOperation" method="post">
@@ -175,11 +194,23 @@
   <input type="hidden" name="salle_id" />
 </form>
 
+<form name="editCommentairePlanning" method="post">
+  <input type="hidden" name="m" value="reservation" />
+  <input type="hidden" name="dosql" value="do_commentaire_planning_aed" />
+  <input type="hidden" name="commentaire_planning_id" />
+  <input type="hidden" name="debut" />
+  <input type="hidden" name="fin" />
+  <input type="hidden" name="salle_id" />
+</form>
+
 <form name="filterPlanning" method="get"> 
   <table class="form">
     <tr>
-      <th class="category" colspan="5">
+      <th class="category" colspan="4">
         Filtre
+      </th>
+      <th class="category" colspan="2">
+        Interface
       </th>
     </tr>
     <tr>
@@ -214,6 +245,11 @@
         <label>
           <input type="checkbox" name="show_cancelled" {{if $show_cancelled}}checked{{/if}} onclick="refreshPlanning()"/>
             {{tr}}checkbox-COperation-show_cancelled{{/tr}}
+        </label>
+      </td>
+      <td>
+        <label>
+          <input type="checkbox" name="_comment_mode" /> Mode commentaire
         </label>
       </td>
       <td class="narrow">
