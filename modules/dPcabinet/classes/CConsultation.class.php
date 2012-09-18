@@ -678,11 +678,11 @@ class CConsultation extends CCodable {
     }
     
     $consult->loadRefFacture();
-    mbLog($consult->_ref_facture);
+    
     $consult->_ref_facture->du_patient = $consult->du_patient;
     $consult->_ref_facture->du_tiers = $consult->du_tiers;
     $consult->_ref_facture->store();
-    mbLog($consult->_ref_facture);
+    
     return $consult->store();
   }
 
