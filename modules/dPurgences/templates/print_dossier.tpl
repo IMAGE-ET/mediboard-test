@@ -44,7 +44,7 @@
     <td>{{mb_value object=$rpu field="motif"}}</td>
   </tr>
   
-  {{mb_include module=cabinet template=print_inc_antecents_traitements}}
+  {{mb_include module=cabinet template=print_inc_antecedents_traitements}}
 </table>
 
 {{if !@$offline}}

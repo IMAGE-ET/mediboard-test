@@ -14,11 +14,11 @@
   <tr>
     <th class="title" colspan="10" style="font-size: 16px;">
       Dossier de consultation de 
-			<span style="font-size: 20px;">{{$patient->_view}}</span> 
-			{{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}} 
-			<br />
+      <span style="font-size: 20px;">{{$patient->_view}}</span> 
+      {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}} 
+      <br />
       né(e) le {{mb_value object=$patient field=naissance}} ({{mb_value object=$patient field="_age"}})
-			de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}} <br /> <hr />
+      de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}} <br /> <hr />
       <span style="font-size: 14px">
         par le Dr {{$consult->_ref_praticien}}
         le {{mb_value object=$consult field=_date}}
@@ -32,7 +32,7 @@
 {{mb_include module=patients template=print_constantes}}
 
 <table class="{{$tbl_class}}">
-  {{mb_include module=cabinet template=print_inc_antecents_traitements}}
+  {{mb_include module=cabinet template=print_inc_antecedents_traitements}}
 </table>
 
 {{if !@$offline}}

@@ -29,6 +29,7 @@ $sejour->loadRefsConsultations();
 $sejour->loadListConstantesMedicales();
 $sejour->loadNDA();
 $sejour->loadSuiviMedical();
+$sejour->loadExtDiagnostics();
 $patient = $consult->_ref_patient;
 
 $patient->loadIPP();

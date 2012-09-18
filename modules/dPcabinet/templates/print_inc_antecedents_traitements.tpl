@@ -39,6 +39,18 @@
     </td>
   </tr>  
   
+  {{if isset($sejour|smarty:nodefaults)}}
+    <tr>
+      <th>Diagnostic principal (CIM)</th>
+      <td>
+        {{if $sejour->_ext_diagnostic_principal}}
+          {{$sejour->_ext_diagnostic_principal->code}} - {{$sejour->_ext_diagnostic_principal->libelle}}
+        {{else}}
+          {{tr}}CSejour-DP.unknown{{/tr}}
+        {{/if}}
+      </td>
+    </tr>
+  {{/if}}
   <tr>
     <th>Diagnostics CIM</th>
     <td>
