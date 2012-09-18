@@ -653,15 +653,16 @@ class CHL7v2Segment extends CHL7v2Entity {
     if (!$affectation) {
       // Chargement de l'affectation courante
       $affectation = $sejour->getCurrAffectation();
-      
+      mbLog($affectation);
       // Si on n'a pas d'affectation on va essayer de chercher la première
       if (!$affectation->_id) {
         $sejour->loadSurrAffectations();
-        $affectation = $sejour->_ref_next_affectation;
+        $affectation = $sejour->_ref_prev_affectation;
+        mbLog($affectation);
       } 
     }
     $affectation->loadRefLit()->loadRefChambre();
-
+    //mbLog($affectation);
     $current_uf = $sejour->getUF(null, $affectation->_id);
       
     return array(
