@@ -207,7 +207,7 @@ var ExObject = {
       
       var refValue = p.value;
       
-      if ([">", ">=", "<", "<="].indexOf(p.operator) > -1) {
+      if (["=", "!=", ">", ">=", "<", "<="].indexOf(p.operator) > -1) {
         refValue     = ExObject.getCastedInputValue(p.value, triggerField);
         triggerValue = ExObject.getCastedInputValue(triggerValue, triggerField);
       }

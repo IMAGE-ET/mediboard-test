@@ -33,4 +33,5 @@ $smarty = new CSmartyDP();
 $smarty->assign("ex_field", $ex_class_field);
 $smarty->assign("ex_object", $ex_object);
 $smarty->assign("form", $form_name);
+$smarty->assign("is_predicate", true);
 $smarty->display("inc_ex_object_field.tpl");

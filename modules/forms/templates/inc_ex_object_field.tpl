@@ -1,5 +1,6 @@
 {{mb_default var=form value=editExObject}}
 {{mb_default var=mode value=normal}}
+{{mb_default var=is_predicate value=false}}
 
 {{assign var=_field_name value=$ex_field->name}}
 {{assign var=_spec value=$ex_object->_specs.$_field_name}}
@@ -47,7 +48,7 @@
   <fieldset>
     {{mb_field object=$ex_object field=$_field_name register=true increment=true form=$form}}
   </fieldset>
-{{elseif $ex_field->formula}}
+{{elseif $ex_field->formula && !$is_predicate}}
   {{mb_field object=$ex_object field=$_field_name readonly=true style="font-weight: bold; background-color: #aaff56;" class="noresize" rows=5 title=$ex_field->_formula}}
   <button type="button" class="cancel notext" style="margin-left: -1px;" onclick="$V($(this).previous(),'')">Vider</button>
 {{else}}
