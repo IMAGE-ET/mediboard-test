@@ -24,4 +24,7 @@ define("DOMPDF_DEFAULT_FONT", "sans-serif");
 // PHP inline desactivé
 define("DOMPDF_ENABLE_PHP", false);
 
+// Hauteur de ligne
+define("DOMPDF_FONT_HEIGHT_RATIO", 1.0);
+
 ?>
