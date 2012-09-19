@@ -21,7 +21,7 @@
 
 {{assign var=systeme_materiel value=$conf.dPbloc.CPlageOp.systeme_materiel}}
 
-{{assign var=save_op value=$operations|@current}}
+{{assign var=save_op value=$operations|@reset}}
 
 {{foreach from=$operations item=_operation name=ops}}
 {{if $conf.dPsalleOp.COperation.modif_salle}}
