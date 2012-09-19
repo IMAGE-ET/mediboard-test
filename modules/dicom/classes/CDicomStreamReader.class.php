@@ -149,12 +149,12 @@ class CDicomStreamReader {
    * 
    * @return integer
    */
-  function readUnsignedInt32($endianness = "BE") {
+  function readUInt32($endianness = "BE") {
     if ($endianness == "BE") {
-      return $this->readUnsignedInt32BE();
+      return $this->readUInt32BE();
     }
     elseif ($endianness == "LE") {
-      return $this->readUnsignedInt32LE();
+      return $this->readUInt32LE();
     }
   }
   
@@ -163,7 +163,7 @@ class CDicomStreamReader {
    * 
    * @return integer
    */
-  function readUnsignedInt32BE() {
+  function readUInt32BE() {
     $tmp = unpack("N", $this->read(4));
     return $tmp[1];
   }
@@ -173,9 +173,30 @@ class CDicomStreamReader {
    * 
    * @return integer
    */
-  function readUnsignedInt32LE() {
+  function readUInt32LE() {
     $tmp = unpack("V", $this->read(4));
     return $tmp[1];
+  }
+  
+  /**
+   * Read 32 bits numbers.
+   * 
+   * @param string $endianness Equal to BE if you need Big Endian, LE if Little Endian. Equal to BE if not given
+   * 
+   * @return integer
+   */
+  function readInt32($endianness = "BE") {
+    if ($endianness == "BE") {
+      $int = $this->readUInt32BE();
+    }
+    elseif ($endianness == "LE") {
+      $int = $this->readUInt32LE();
+    }
+    
+    if ($int >= 0x80000000) {
+      $int -= 0x100000000;
+    }
+    return $int;
   }
   
   /**
@@ -185,12 +206,12 @@ class CDicomStreamReader {
    * 
    * @return integer
    */
-  function readUnsignedInt16($endianness = "BE") {
+  function readUInt16($endianness = "BE") {
     if ($endianness == "BE") {
-      return $this->readUnsignedInt16BE();
+      return $this->readUInt16BE();
     }
     elseif ($endianness == "LE") {
-      return $this->readUnsignedInt16LE();
+      return $this->readUInt16LE();
     }
   }
   
@@ -199,7 +220,7 @@ class CDicomStreamReader {
    * 
    * @return integer
    */
-  function readUnsignedInt16BE() {
+  function readUInt16BE() {
     $tmp = unpack("n", $this->read(2));
     return $tmp[1];
   }
@@ -209,8 +230,39 @@ class CDicomStreamReader {
    * 
    * @return integer
    */
-  function readUnsignedInt16LE() {
+  function readUInt16LE() {
     $tmp = unpack("v", $this->read(2));
+    return $tmp[1];
+  }
+  
+  /**
+   * Read 16 bits numbers.
+   * 
+   * @param string $endianness Equal to BE if you need Big Endian, LE if Little Endian. Equal to BE if not given
+   * 
+   * @return integer
+   */
+  function readInt16($endianness = "BE") {
+    if ($endianness == "BE") {
+      $int = $this->readUInt16BE();
+    }
+    elseif ($endianness == "LE") {
+      $int = $this->readUInt16LE();
+    }
+    
+    if ($int >= 0x8000) {
+      $int -= 0x10000;
+    }
+    return $int;
+  }
+  
+  /**
+   * Read 8 bits numbers.
+   * 
+   * @return integer
+   */
+  function readUInt8() {
+    $tmp = unpack("C", $this->read(1));
     return $tmp[1];
   }
   
@@ -219,9 +271,12 @@ class CDicomStreamReader {
    * 
    * @return integer
    */
-  function readUnsignedInt8() {
-    $tmp = unpack("C", $this->read(1));
-    return $tmp[1];
+  function readInt8() {
+    $int = $this->readUInt8();
+    if ($int >= 0x80) {
+      $int -= 0x100;
+    }
+    return $int;
   }
   
   /**

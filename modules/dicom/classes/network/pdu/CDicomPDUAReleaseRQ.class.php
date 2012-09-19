@@ -55,7 +55,7 @@ class CDicomPDUAReleaseRQ extends CDIcomPDU {
     
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt32($this->length);
+    $stream_writer->writeUInt32($this->length);
     $stream_writer->skip(4);
   }
   

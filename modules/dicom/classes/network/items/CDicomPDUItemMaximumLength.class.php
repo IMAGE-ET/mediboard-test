@@ -66,7 +66,7 @@ class CDicomPDUItemMaximumLength extends CDicomPDUItem {
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $this->maximum_length = $stream_reader->readUnsignedInt32();
+    $this->maximum_length = $stream_reader->readUInt32();
   }
   
   /**
@@ -81,8 +81,8 @@ class CDicomPDUItemMaximumLength extends CDicomPDUItem {
     
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUnsignedInt32($this->maximum_length);
+    $stream_writer->writeUInt16($this->length);
+    $stream_writer->writeUInt32($this->maximum_length);
   }
 
   /**

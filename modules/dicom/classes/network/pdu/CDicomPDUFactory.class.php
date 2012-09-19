@@ -62,6 +62,7 @@ class CDicomPDUFactory {
     $pdu = new $pdu_type($datas);
     $pdu->encodePDU($stream_writer);
     
+    $pdu->setPacket($stream_writer->buf);
     $stream_writer->close();
     
     return $pdu;
@@ -88,7 +89,7 @@ class CDicomPDUFactory {
    * @return integer
    */
   static function readLength(CDicomStreamReader $stream) {
-    return $stream->readUnsignedInt32();
+    return $stream->readUInt32();
   }
   
   /**

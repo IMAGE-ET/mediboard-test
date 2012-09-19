@@ -108,9 +108,9 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $this->id = $stream_reader->readUnsignedInt8();
+    $this->id = $stream_reader->readUInt8();
     $stream_reader->skip(1);
-    $this->reason = $stream_reader->readUnsignedInt8();
+    $this->reason = $stream_reader->readUInt8();
     $stream_reader->skip(1);
     $this->transfer_syntax = CDicomPDUItemFactory::decodeItem($stream_reader);
   }
@@ -127,10 +127,10 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
     
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUnsignedInt8($this->id);
+    $stream_writer->writeUInt16($this->length);
+    $stream_writer->writeUInt8($this->id);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt8($this->reason);
+    $stream_writer->writeUInt8($this->reason);
     $stream_writer->skip(1);
     $this->transfer_syntax->encodeItem($stream_writer);
   }

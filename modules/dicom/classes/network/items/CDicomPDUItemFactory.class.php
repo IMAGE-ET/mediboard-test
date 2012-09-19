@@ -147,7 +147,7 @@ class CDicomPDUItemFactory {
    * @return integer
    */
   static function readItemLength(CDicomStreamReader $stream) {
-    return $stream->readUnsignedInt16();
+    return $stream->readUInt16();
   }
   
   /**

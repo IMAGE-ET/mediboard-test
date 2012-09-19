@@ -84,6 +84,15 @@ class CDicomStreamWriter {
   function close() {
     fclose($this->stream);
   }
+  
+  /**
+   * Rewind the position of the stream pointer
+   * 
+   * @return null
+   */
+  function rewind() {
+    rewind($this->stream);
+  }
     
   /**
    * Write hexadecimal numbers from the stream
@@ -142,12 +151,12 @@ class CDicomStreamWriter {
    * 
    * @return integer or false on error
    */
-  function writeUnsignedInt32($int, $endianness = "BE") {
+  function writeUInt32($int, $endianness = "BE") {
     if ($endianness == "BE") {
-      return $this->writeUnsignedInt32BE($int);
+      return $this->writeUInt32BE($int);
     }
     elseif ($endianness == "LE") {
-      return $this->writeUnsignedInt32LE($int);
+      return $this->writeUInt32LE($int);
     }
   }
   
@@ -158,7 +167,7 @@ class CDicomStreamWriter {
    * 
    * @return integer or false on error
    */
-  function writeUnsignedInt32BE($int) {
+  function writeUInt32BE($int) {
     $bin = pack("N", $int);
     return $this->write($bin, 4);
   }
@@ -170,7 +179,7 @@ class CDicomStreamWriter {
    * 
    * @return integer or false on error
    */
-  function writeUnsignedInt32LE($int) {
+  function writeUInt32LE($int) {
     $bin = pack("V", $int);
     return $this->write($bin, 4);
   }
@@ -184,12 +193,12 @@ class CDicomStreamWriter {
    * 
    * @return integer or false on error
    */
-  function writeUnsignedInt16($int, $endianness = "BE") {
+  function writeUInt16($int, $endianness = "BE") {
     if ($endianness == "BE") {
-      return $this->writeUnsignedInt16BE($int);
+      return $this->writeUInt16BE($int);
     }
     elseif ($endianness == "LE") {
-      return $this->writeUnsignedInt16LE($int);
+      return $this->writeUInt16LE($int);
     }
   }
   
@@ -200,7 +209,7 @@ class CDicomStreamWriter {
    * 
    * @return integer or false on error
    */
-  function writeUnsignedInt16BE($int) {
+  function writeUInt16BE($int) {
     $bin = pack("n", $int);
     return $this->write($bin, 2);
   }
@@ -212,7 +221,7 @@ class CDicomStreamWriter {
    * 
    * @return integer or false on error
    */
-  function writeUnsignedInt16LE($int) {
+  function writeUInt16LE($int) {
     $bin = pack("v", $int);
     return $this->write($bin, 2);
   }
@@ -224,11 +233,68 @@ class CDicomStreamWriter {
    * 
    * @return integer or false on error
    */
-  function writeUnsignedInt8($int) {
+  function writeUInt8($int) {
     $bin = pack("C", $int);
     return $this->write($bin, 1);
   }
   
+  /**
+   * Write 32 bits numbers.
+   * 
+   * @param integer $int        The integer
+   * 
+   * @param string  $endianness Equal to BE if you need Big Endian, LE if Little Endian. Equal to BE if not given
+   * 
+   * @return integer or false on error
+   */
+  function writeInt32($int, $endianness = "BE") {
+    if ($int < 0) {
+      $int += 0x100000000;
+    }
+    if ($endianness == "BE") {
+      return $this->writeUInt32BE($int);
+    }
+    elseif ($endianness == "LE") {
+      return $this->writeUInt32LE($int);
+    }
+  }
+
+  
+  /**
+   * Write 16 bits numbers.
+   * 
+   * @param integer $int        The integer
+   * 
+   * @param string  $endianness Equal to BE if you need Big Endian, LE if Little Endian. Equal to BE if not given
+   * 
+   * @return integer or false on error
+   */
+  function writeInt16($int, $endianness = "BE") {
+    if ($int < 0) {
+      $int += 0x10000;
+    }
+    if ($endianness == "BE") {
+      return $this->writeUInt16BE($int);
+    }
+    elseif ($endianness == "LE") {
+      return $this->writeUInt16LE($int);
+    }
+  }
+
+  /**
+   * Write 8 bits numbers.
+   * 
+   * @param integer $int The integer
+   * 
+   * @return integer or false on error
+   */
+  function writeInt8($int) {
+    if ($int < 0) {
+      $int += 0x100;
+    }
+    return $this->writeUInt8($int);
+  }
+
   /**
    * Write a string
    * 

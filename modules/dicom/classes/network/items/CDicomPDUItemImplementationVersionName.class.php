@@ -81,7 +81,7 @@ class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
     
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt16($this->length);
+    $stream_writer->writeUInt16($this->length);
     $stream_writer->writeString($this->version_name, $this->length);
   }
 

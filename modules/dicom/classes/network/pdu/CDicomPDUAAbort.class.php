@@ -101,8 +101,8 @@ class CDicomPDUAAbort extends CDIcomPDU {
    */
   function decodePDU(CDicomStreamReader $stream_reader) {
     $stream_reader->skip(2);
-    $this->source = $stream_reader->readUnsignedInt8();
-    $this->diagnostic = $stream_reader->readUnsignedInt8();
+    $this->source = $stream_reader->readUInt8();
+    $this->diagnostic = $stream_reader->readUInt8();
   }
   
   /**
@@ -117,14 +117,14 @@ class CDicomPDUAAbort extends CDIcomPDU {
     
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt32($this->length);
+    $stream_writer->writeUInt32($this->length);
     $stream_writer->skip(2);
-    $stream_writer->writeUnsignedInt8($this->source);
+    $stream_writer->writeUInt8($this->source);
     if ($this->source == 0) {
       $stream_writer->skip(1);
     }
     else {
-      $stream_writer->writeUnsignedInt8($this->diagnostic);
+      $stream_writer->writeUInt8($this->diagnostic);
     }
   }
   

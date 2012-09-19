@@ -27,7 +27,14 @@ class CDicomPDU {
    */
   var $length = null;
   
-	/**
+  /**
+   * The encoded pdu
+   * 
+   * @var string
+   */
+  protected $packet = null;
+  
+  /**
    * Set the length
    * 
    * @param integer $length The length
@@ -37,8 +44,8 @@ class CDicomPDU {
   function setLength($length) {
     $this->length = $length;
   }
-	
-	/**
+  
+  /**
    * Set the type
    * 
    * @param string $type The type of the PDU
@@ -48,8 +55,28 @@ class CDicomPDU {
   function setType($type) {
     $this->type = $type;
   }
-	
-	
+  
+  
+  /**
+   * Return the encoded pdu
+   * 
+   * @return string
+   */
+  function getPacket() {
+    return $this->packet;
+  }
+  
+  /**
+   * Set the encoded pdu
+   * 
+   * @param string $packet The encoded packet
+   * 
+   * @return null
+   */
+  function setPacket($packet) {
+    $this->packet = $packet;
+  }
+  
   /**
    * Decode the PDU
    * 

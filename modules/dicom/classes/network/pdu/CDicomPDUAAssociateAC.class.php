@@ -200,8 +200,8 @@ class CDicomPDUAAssociateAC extends CDIcomPDU {
     
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt32($this->length);
-    $stream_writer->writeUnsignedInt16($this->protocol_version);
+    $stream_writer->writeUInt32($this->length);
+    $stream_writer->writeUInt16($this->protocol_version);
     $stream_writer->skip(2);
     $stream_writer->writeString($this->called_AE_title, 16);
     $stream_writer->writeString($this->calling_AE_title, 16);

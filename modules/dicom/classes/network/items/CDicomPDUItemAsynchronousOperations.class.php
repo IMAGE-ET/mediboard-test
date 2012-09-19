@@ -87,8 +87,8 @@ class CDicomPDUItemAsynchronousOperations extends CDicomPDUItem {
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $this->max_number_operations_invoked = $stream_reader->readUnsignedInt16();
-    $this->max_number_operations_performed = $stream_reader->readUnsignedInt16();
+    $this->max_number_operations_invoked = $stream_reader->readUInt16();
+    $this->max_number_operations_performed = $stream_reader->readUInt16();
   }
   
   /**
@@ -103,9 +103,9 @@ class CDicomPDUItemAsynchronousOperations extends CDicomPDUItem {
     
     $stream_writer->writeHexByte($this->type, 2);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUnsignedInt16($this->max_number_operations_invoked);
-    $stream_writer->writeUnsignedInt16($this->max_number_operations_performed);
+    $stream_writer->writeUInt16($this->length);
+    $stream_writer->writeUInt16($this->max_number_operations_invoked);
+    $stream_writer->writeUInt16($this->max_number_operations_performed);
   }
 
   /**
