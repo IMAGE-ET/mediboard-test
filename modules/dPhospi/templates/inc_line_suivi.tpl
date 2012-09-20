@@ -197,7 +197,7 @@
     <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
   {{/if}}
   <td class="narrow">{{tr}}{{$_suivi->_class}}{{/tr}}</td>
-  <td class="narrow">{{$_suivi->_ref_user}}</td>
+  <td class="text">{{$_suivi->_ref_user}}</td>
   <td style="text-align: center;" class="narrow">
     {{mb_ditto name=date value=$_suivi->date|date_format:$conf.date}}
   </td>
@@ -281,7 +281,7 @@
   {{/if}}
   
   <td class="narrow">{{tr}}{{$_suivi[0]->_class}}{{/tr}}</td>
-  <td class="narrow">{{$_suivi[0]->_ref_user}}</td>
+  <td class="text">{{$_suivi[0]->_ref_user}}</td>
   <td style="text-align: center;" class="narrow">
     {{mb_ditto name=date value=$_suivi[0]->date|date_format:$conf.date}}
   </td>
