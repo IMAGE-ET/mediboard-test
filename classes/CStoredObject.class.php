@@ -1824,7 +1824,7 @@ class CStoredObject extends CModelObject {
         continue; 
       } 
       
-      if (!($fwdSpec->cascade || $backSpec->cascade) || $fwdSpec->unlink || !$fwdSpec->nullify) {
+      if (!($fwdSpec->cascade || $backSpec->cascade || $fwdSpec->nullify) || $fwdSpec->unlink) {
         continue; 
       }
       
