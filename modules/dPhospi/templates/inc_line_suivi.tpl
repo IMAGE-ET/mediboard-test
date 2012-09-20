@@ -19,7 +19,7 @@
     </strong>
   </td>
   <td>{{$_suivi->date|date_format:$conf.time}}</td>
-  <td class="text">
+  <td class="narrow text">
    {{if $_suivi->object_id}}
      <span onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_ref_object->_guid}}');">
        {{if $_suivi->_ref_object instanceof CPrescriptionLineMedicament}}
@@ -122,7 +122,7 @@
   {{/if}}
 
 {{if $_suivi instanceof CConsultation}}
-  <td>
+  <td class="text">
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_guid}}')">
       {{if $_suivi->type == "entree"}}
         {{tr}}CConsultation.type.entree{{/tr}}
