@@ -1,12 +1,12 @@
 <table class="tbl">
   <tr>
-    <th class="category">
+    <th class="category text">
       {{tr}}CTransmissionMedicale-user_id{{/tr}}
     </th>
-    <th class="category">
+    <th class="category text">
       {{tr}}CTransmissionMedicale-date{{/tr}}
     </th>
-    <th class="category">
+    <th class="category text">
       {{tr}}CTransmissionMedicale._heure{{/tr}}
     </th>
     <th class="category">
@@ -28,7 +28,7 @@
         <td class="text {{if $_transmission->type}}trans-{{$_transmission->type}}{{/if}} libelle_trans" {{if $_transmission->degre == "high"}} style="background-color: #faa" {{/if}}>
           <button class="add notext" type="button" data-text="{{$_transmission->text}}" onclick="completeTrans('{{$_transmission->type}}',this);" style="float: right;">{{tr}}Add{{/tr}}</button>
           {{mb_value object=$_transmission field=text}}
-				</td>
+        </td>
       </tr>
     {{foreachelse}}
       <tr>
