@@ -268,7 +268,7 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
     
     $duree = mbMinutesRelative(mbTime($_commentaire->debut), mbTime($_commentaire->fin));
     
-    $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue' data-sortie_prevue='$sejour->sortie_prevue'></span>".
+    $libelle = "<span style='display: none;' data-entree_prevue='$_commentaire->debut' data-sortie_prevue='$_commentaire->fin'></span>".
     "<span style='font-size: 11px; font-weight: bold;'>$_commentaire->libelle</span>".
     "\n<span class='compact'>".nl2br($_commentaire->commentaire)."</span>";
     
