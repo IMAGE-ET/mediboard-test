@@ -95,7 +95,7 @@
       </tr>
       <tr>
         {{assign var="var" value="default_font"}}
-        {{mb_include module=system template=inc_config_enum values="Arial|Comic Sans MS|Courier New|Georgia|Lucida Sans Unicode|Tahoma|Times New Roman|Trebuchet MS|Verdana"}}
+        {{mb_include module=system template=inc_config_enum values="Arial|Calibri|Comic Sans MS|Courier New|Georgia|Lucida Sans Unicode|Tahoma|Times New Roman|Trebuchet MS|Verdana"}}
       </tr>
       <tr>
         {{assign var="var" value="default_size"}}

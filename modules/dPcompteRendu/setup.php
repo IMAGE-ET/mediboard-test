@@ -826,7 +826,12 @@ class CSetupdPcompteRendu extends CSetup {
     $query = self::replaceTemplateQuery("[Patient - Le/La", "[Patient - Le/La (majuscule)", true);
     $this->addQuery($query);
     
-    $this->mod_version = "0.85";
+    $this->makeRevision("0.85");
+    $query = "ALTER TABLE `compte_rendu`
+      CHANGE `font` `font` ENUM ('arial','calibri','comic','courier','georgia','lucida','tahoma','times','trebuchet','verdana')";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.86";
   }
 }
 ?>
