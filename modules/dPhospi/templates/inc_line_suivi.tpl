@@ -133,7 +133,7 @@
       {{/if}}
     </strong>
   </td>
-  <td>
+  <td class="text narrow">
     <strong>
       <div class="mediuser" style="border-color: #{{$_suivi->_ref_praticien->_ref_function->color}};">
         {{mb_value object=$_suivi field="_praticien_id"}}
