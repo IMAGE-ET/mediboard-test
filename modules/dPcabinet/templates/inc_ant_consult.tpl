@@ -303,7 +303,7 @@ Main.add(function () {
                   
                   <tr>
                     <th>{{mb_label object=$line field="long_cours"}}</th>
-                    <td>{{mb_field object=$line field="long_cours" typeEnum=checkbox}}</td>
+                    <td>{{mb_field object=$line field="long_cours" typeEnum=checkbox value=1}}</td>
                   </tr>
                   
                   <tr>
@@ -489,8 +489,8 @@ resetFormTP = function(){
   $V(oFormTP.token_poso, '');
   $('addPosoLine').update('');     
   
-  $V(oFormTP.long_cours, 0);
-  $V(oFormTP.__long_cours, false);
+  $V(oFormTP.long_cours, 1);
+  $V(oFormTP.__long_cours, true);
 }
 </script>
 {{/if}}
