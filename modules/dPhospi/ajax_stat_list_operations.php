@@ -11,8 +11,9 @@
  * @link     http://www.mediboard.org
  */
 
-$date = CValue::get("date");
+$date       = CValue::get("date");
 $service_id = CValue::get("service_id");
+$group_id   = CGroups::loadCurrent()->_id;
 
 $where = array();
 $ljoin = array();
@@ -24,8 +25,10 @@ $where[] = "(operations.date <= '$date' OR plagesop.date <= '$date') AND
   (DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) > '$date' OR
    DATE_ADD(operations.date, INTERVAL duree_uscpo DAY) = '$date')";
 
-if ($service_id) {
-  $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
+$ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
+$where["sejour.group_id"] = "= '$group_id'";
+
+if ($service_id) {  
   $where["sejour.service_id"] = " = '$service_id'";
 }
 
