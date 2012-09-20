@@ -27,6 +27,13 @@ class CDicomStreamReader {
   var $buf = null;
   
   /**
+   * The stream length
+   * 
+   * @var integer
+   */
+  protected $stream_length = null;
+  
+  /**
    * The constructor of CDicomStreamReader
    * 
    * @param resource $stream The stream
@@ -34,6 +41,26 @@ class CDicomStreamReader {
   function __construct($stream) {
     $this->stream = $stream;
     $this->buf = "";
+  }
+  
+  /**
+   * Return the stream length
+   * 
+   * @return integer
+   */
+  function getStreamLength() {
+    return $this->stream_length;
+  }
+  
+  /**
+   * Set the stream length
+   * 
+   * @param integer $length The stream length
+   * 
+   * @return null
+   */
+  function setStreamLength($length) {
+    $this->stream_length = $length;
   }
   
   /**

@@ -18,24 +18,31 @@ class CDicomPDUFactory {
   /**
    * Get the type of the PDU, and create the corresponding CDicomPDU
    * 
-   * @param string $pdu_content The datas sent by the client
+   * @param string $pdu_content     The datas sent by the client
+   * 
+   * @param string $transfer_syntax The transfer syntax
    * 
    * @return CDicomPDU The PDU
    */
-  static function decodePDU($pdu_content) {
+  static function decodePDU($pdu_content, $transfer_syntax) {
     $stream = fopen("php://temp", 'w+');
     fwrite($stream, $pdu_content);
     
     $stream_reader = new CDicomStreamReader($stream);
     $stream_reader->rewind();
     
-    $type = self::readType($stream_reader);
+    $pdu_class = self::readType($stream_reader);
     if ($type == "Unknown type!") {
       return null;
     }
     $length = self::readLength($stream_reader);
 
-    $pdu = new $type(array("length" => $length));
+    $pdu = new $pdu_class(array("length" => $length));
+    
+    if ($pdu_class == "CDicomPDUCDataTF") {
+      $pdu->setTransferSyntax($transfer_syntax);
+    }
+    
     $pdu->decodePDU($stream_reader);
     
     $stream_reader->close();

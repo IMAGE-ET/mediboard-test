@@ -277,7 +277,7 @@ class CDicomMessageCFindRQ {
       return false;
     }
     
-    if ($this->message_id->getGroupNumber() != 0x0000 || $this->message_id->getElementNumber() != 0x0700) {
+    if ($this->priority->getGroupNumber() != 0x0000 || $this->priority->getElementNumber() != 0x0700) {
       return false;
     }
     
@@ -285,6 +285,26 @@ class CDicomMessageCFindRQ {
       return false;
     }
     return true;
+  }
+  
+  /**
+   * Return a string representation of the class
+   * 
+   * @return string
+   */
+  function __toString() {
+    return "C-Find-RQ :
+            <table>
+              <tr>
+                <th>Tag</th><th>Name</th><th>VR</th><th>Length</th><th>Value</th>
+              </tr>
+              <tr>" . $this->command_group_length->__toString() . "</tr>
+              <tr>" . $this->affected_sop_class->__toString() . "</tr>
+              <tr>" . $this->command_field->__toString() . "</tr>
+              <tr>" . $this->message_id->__toString() . "</tr>              
+              <tr>" . $this->priority->__toString() . "</tr>
+              <tr>" . $this->command_data_set->__toString() . "</tr>
+            </table>";
   }
 }
 ?>

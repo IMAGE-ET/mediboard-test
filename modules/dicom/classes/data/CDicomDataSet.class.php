@@ -233,6 +233,31 @@ class CDicomDataSet {
   }
   
   /**
+   * Return the total length of the dataset in bytes
+   * 
+   * @param string $transfer_syntax The transfer syntax
+   * 
+   * @return integer
+   */
+  function getTotalLength($transfer_syntax) {
+    $this->calculateLength();
+    $this->setDataSet();
+    if (!in_array($this->vr, array("OB", "OW", "OF", "SQ", "UT", "UN"))) {
+      return 8 + $this->length;
+    }
+    switch ($transfer_syntax) {
+      case "1.2.840.10008.1.2" :
+        return 8 + $this->length;
+      case "1.2.840.10008.1.2.1" :
+      case "1.2.840.10008.1.2.2" :
+        return 12 + $this->length;
+      default :
+        
+        break;
+    }
+  }
+  
+  /**
    * Encode the dataset, depending on the transfer syntax
    * 
    * @param CDicomStreamWriter $stream_writer		The stream writer
@@ -511,7 +536,11 @@ class CDicomDataSet {
    * @return string
    */
   function __toString() {
-    return "";
+    return "<td>($this->group_number,$this->element_number)</td>
+            <td>$this->name</td>
+            <td>$this->vr</td>
+            <td>$this->length</td>
+            <td>$this->value</td>";
   }
 }
 ?>

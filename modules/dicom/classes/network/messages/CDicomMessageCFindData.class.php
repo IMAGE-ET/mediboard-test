@@ -71,6 +71,19 @@ class CDicomMessageCFindData {
   }
   
   /**
+   * Return th total length
+   * 
+   * @return integer
+   */
+  function getTotalLength() {
+    $length = 0;
+    foreach ($this->datasets as $group) {
+      $length += $group[0x0000]->getValue + $group[0x0000]->getTotalLength();
+    }
+    return $length;
+  }
+  
+  /**
    * Encode the datas, depending on the transfer syntax
    * 
    * @param CDicomStreamWriter $stream_writer   The stream writer
@@ -90,14 +103,14 @@ class CDicomMessageCFindData {
         $dataset = new CDicomDataSet(array("group_number" => $group_number, "element_number" => $element_number, "value" => $value));
         $dataset->encode($group_writer, $transfer_syntax);
         
-        $this->datasets[$group_number][] = $dataset;
+        $this->datasets[$group_number][$element_number] = $dataset;
       }
       
       $length = strlen($group_writer->buf);
       $group_length_dataset = new CDicomDataSet(array("group_number" => $group_number, "element_number" => 0x0000, "value" => $length));
       
       $group_length_dataset->encode($stream_writer, $transfer_syntax);
-      $this->datasets[$group_number][] = $group_length_dataset;
+      $this->datasets[$group_number][0x0000] = $group_length_dataset;
       
       $stream_writer->write($group_writer->buf);
     
@@ -110,15 +123,14 @@ class CDicomMessageCFindData {
    * 
    * @param CDicomStreamReader $stream_reader   The stream writer
    * 
-   * @param integer            $stream_length   The length of the stream
-   * 
    * @param string             $transfer_syntax The UID of the transfer syntax
    * 
    * @return null
    */
-  function decode(CDicomStreamReader $stream_reader, $stream_length, $transfer_syntax) {
+  function decode(CDicomStreamReader $stream_reader, $transfer_syntax) {
     $this->attributes = array();
     $this->datasets = array();
+    $stream_length = $stream_reader->getStreamLength();
     while ($stream_reader->getPos() < $stream_length) {
       $dataset = new CDicomDataSet();
       $dataset->decode($stream_reader, $transfer_syntax);
@@ -132,9 +144,29 @@ class CDicomMessageCFindData {
         $this->attributes[$group] = array();
       }
       
-      $this->datasets[$group][] = $dataset;
+      $this->datasets[$group][$element] = $dataset;
       $this->attributes[$group][$element] = $dataset->getValue();
     }
+  }
+  
+  /**
+   * Return a string representation of the class
+   * 
+   * @return string
+   */
+  function __toString() {
+    $str = "C-Find-Data :
+            <table>
+              <tr>
+                <th>Tag</th><th>Name</th><th>VR</th><th>Length</th><th>Value</th>
+              </tr>";
+    foreach ($this->datasets as $group) {
+      foreach ($group as $element) {
+        $str = "<tr>" . $element->__toString() . "</tr>";
+      }
+    }              
+
+    $str = "</table>";
   }
 }
 ?>

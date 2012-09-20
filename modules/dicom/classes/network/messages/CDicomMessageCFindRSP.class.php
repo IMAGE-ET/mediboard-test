@@ -272,7 +272,7 @@ class CDicomMessageCFindRSP {
       return false;
     }
     
-    if ($this->message_id->getGroupNumber() != 0x0000 || $this->message_id->getElementNumber() != 0x0120) {
+    if ($this->message_id_request->getGroupNumber() != 0x0000 || $this->message_id_request->getElementNumber() != 0x0120) {
       return false;
     }
     
@@ -285,6 +285,26 @@ class CDicomMessageCFindRSP {
     }
     
     return true;
+  }
+  
+  /**
+   * Return a string representation of the class
+   * 
+   * @return string
+   */
+  function __toString() {
+    return "C-Find-RSP :
+            <table>
+              <tr>
+                <th>Tag</th><th>Name</th><th>VR</th><th>Length</th><th>Value</th>
+              </tr>
+              <tr>" . $this->command_group_length->__toString() . "</tr>
+              <tr>" . $this->affected_sop_class->__toString() . "</tr>
+              <tr>" . $this->command_field->__toString() . "</tr>
+              <tr>" . $this->message_id_request->__toString() . "</tr>
+              <tr>" . $this->command_data_set->__toString() . "</tr>
+              <tr>" . $this->status->__toString() . "</tr>
+            </table>";
   }
 }
 ?>

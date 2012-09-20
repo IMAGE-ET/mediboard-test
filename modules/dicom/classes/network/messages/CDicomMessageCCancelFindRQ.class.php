@@ -217,5 +217,23 @@ class CDicomMessageCCancelFindRQ {
     
     return true;
   }
+  
+  /**
+   * Return a string representation of the class
+   * 
+   * @return string
+   */
+  function __toString() {
+    return "C-Cancel-Find-RQ :
+            <table>
+              <tr>
+                <th>Tag</th><th>Name</th><th>VR</th><th>Length</th><th>Value</th>
+              </tr>
+              <tr>" . $this->command_group_length->__toString() . "</c>
+              <tr>" . $this->command_field->__toString() . "</tr>
+              <tr>" . $this->message_id_request->__toString() . "</tr>
+              <tr>" . $this->command_data_set->__toString() . "</tr>
+            </table>";
+  }
 }
 ?>
