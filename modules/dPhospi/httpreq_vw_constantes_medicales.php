@@ -112,7 +112,10 @@ foreach($list as $_context) {
 }
 
 $current_context = CMbObject::loadFromGuid($context_guid);
-$current_context->loadComplete();
+
+if ($current_context instanceof CConsultation) {
+  $current_context->loadComplete();
+}
 
 // Cas d'un RPU
 if ($current_context instanceof CConsultation && $current_context->sejour_id) {
@@ -259,15 +262,16 @@ if ($list_constantes) {
 
       $user_view = "";
       
-      if ($name[0] !== "_") {
+      if ($cst->$name !== null && $name[0] !== "_") {
         $log = $cst->loadLastLogForField($name);
         if (!$log->_id && $cst->_ref_last_log) {
           $log = $cst->_ref_last_log;
         }
-        $log->loadRefsFwd();
         
-        if ($log->_ref_user) {
-          $user_view = utf8_encode($log->_ref_user->_view);
+        $_user = $log->loadRefUser();
+        
+        if ($_user) {
+          $user_view = utf8_encode($_user->_view);
         }
       }
       
