@@ -178,17 +178,20 @@ var ExObject = {
     url.requestUpdate(target, {onComplete: options.onComplete});
   },
   getCastedInputValue: function(value, input){
-    if (input.hasClassName("float") || 
-        input.hasClassName("currency") || 
-        input.hasClassName("pct")) {
-      return parseFloat(value);
-    }
-    
-    if (input.hasClassName("num") || 
-        input.hasClassName("numchar") || 
-        input.hasClassName("pct")) {
-      return parseInt(value);
-    }
+    // input may be a nodeList (bool, etc)
+    try {
+      if (input.hasClassName("float") ||
+          input.hasClassName("currency") ||
+          input.hasClassName("pct")) {
+        return parseFloat(value);
+      }
+  
+      if (input.hasClassName("num") ||
+          input.hasClassName("numchar") ||
+          input.hasClassName("pct")) {
+        return parseInt(value);
+      }
+    } catch(e) {}
     
     return value;
   },
