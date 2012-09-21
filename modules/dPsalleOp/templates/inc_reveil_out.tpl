@@ -98,9 +98,7 @@
         {{else}}
           {{mb_value object=$_operation field="sortie_reveil"}}
         {{/if}}
-      </form>
-      
-      {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event=sortie_reveil cssStyle="display: inline-block; font-size: 0.8em;"}}
+      </form>      
     </td>
     <td>
       <button type="button" class="print notext"
