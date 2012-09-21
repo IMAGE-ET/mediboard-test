@@ -182,8 +182,15 @@ class CMbFieldSpec {
   function getValue($object, $smarty = null, $params = array()) {
     $propValue = $object->{$this->fieldName};
     
+    // Masque de formattage
     if ($propValue && $this->mask) {
       $propValue = self::formattedToMasked($propValue, $this->mask, $this->format);
+    }
+    
+    // Valeur par defaut, traduite
+    $default = CMbArray::extract($params, "default");
+    if ($default && !$propValue) {
+      $propValue = CAppUI::tr($default);
     }
     
     return htmlspecialchars($propValue);
