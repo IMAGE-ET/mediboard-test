@@ -76,7 +76,7 @@ PlanningEvent = Class.create({
     return this.planning.onEventChange(this);
   },
   setDraggable: function(resizable){
-    Main.add(function(){
+    (function(){
       var planning = this.planning;
       var element = this.getElement();
       var parent = element.up("td");
@@ -99,7 +99,7 @@ PlanningEvent = Class.create({
           onEnd: PlanningEvent.Drag.onEndSize.bind(planning)
         });
       }
-    }.bind(this));
+    }.bind(this)).defer();
   }
 });
 

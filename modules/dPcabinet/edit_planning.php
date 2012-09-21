@@ -13,6 +13,7 @@ $user = CUser::get();
 
 // Recuperation de l'id de la consultation du passage en urgence
 $consult_urgence_id = CValue::get("consult_urgence_id");
+$dialog = CValue::get("dialog", 0);
 
 $consult      = new CConsultation();
 $chir         = new CMediusers();
@@ -39,6 +40,7 @@ $consultation_id = CValue::getOrSession("consultation_id");
 $plageconsult_id = CValue::get("plageconsult_id", null);
 
 $date_planning   = CValue::get("date_planning", null);
+$heure           = CValue::get("heure", null);
 
 $correspondantsMedicaux = array();
 $medecin_adresse_par = "";
@@ -48,7 +50,7 @@ if (!$consultation_id) {
 
   // A t'on fourni une plage de consultation
   if ($plageconsult_id){
-    $plageConsult->load($plageconsult_id);    
+    $plageConsult->load($plageconsult_id);
   } 
   // A t'on fourni l'id du praticien
   else {
@@ -70,6 +72,13 @@ if (!$consultation_id) {
   // A t'on fourni une date
   if ($date_planning) {
     $consult->_date = $date_planning;
+  }
+  
+  // A t'on fourni une heure
+  if ($heure) {
+    $consult->heure = $heure;
+    $consult->plageconsult_id = $plageconsult_id;
+    $chir->load($plageConsult->chir_id);
   }
 } 
 
@@ -189,7 +198,6 @@ $smarty->assign("correspondantsMedicaux" , $correspondantsMedicaux);
 $smarty->assign("medecin_adresse_par"    , $medecin_adresse_par);
 $smarty->assign("today"                  , $today);
 $smarty->assign("date_planning"          , $date_planning);
+$smarty->assign("dialog"                 , $dialog);
 
 $smarty->display("addedit_planning.tpl");
-
-?>

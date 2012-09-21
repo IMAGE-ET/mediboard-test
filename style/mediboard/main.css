@@ -638,9 +638,26 @@ table#weeklyPlanning th.today {
   left: 0; 
   top: 0;
   z-index: 0;
+  background: white;
   background: rgba(255,255,255,0.8);
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#aaffffff,endColorstr=#aaffffff)";
   outline: 1px solid #ddd;
+}
+
+.planning.range .range-container .libelle {
+  position: absolute; 
+  top: -23px;
+  left: 0;
+  height:20px;
+  background: #fd7;
+  display: none;
+  border: 1px solid #AAA;
+  border-radius: 3px;
+  width: 490%;
+  overflow: hidden;
+}
+
+.planning.range .range-container:hover .libelle {
+  display: block;
 }
 
 .planning.range .event-container {

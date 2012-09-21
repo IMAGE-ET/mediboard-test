@@ -30,3 +30,4 @@
 {{mb_include template=inc_pref spec=bool var=choosePatientAfterDate}}
 {{mb_include template=inc_pref spec=bool var=viewFunctionPrats}}
 {{mb_include template=inc_pref spec=bool var=empty_form_atcd}}
+{{mb_include template=inc_pref spec=bool var=new_semainier}}

@@ -60,6 +60,12 @@ for ($i = 0; $i < $nbDays; $i++) {
   foreach($plages as $_plage){
     $_plage->loadRefsFwd(1);
     $_plage->loadRefsConsultations(false);
+    
+    $range = new CPlanningRange($_plage->_guid, $jour." ".$_plage->debut, mbMinutesRelative($_plage->debut, $_plage->fin));
+    $range->color = $_plage->color;
+    $range->type = "plageconsult";
+    $planning->addRange($range);
+    
     foreach($_plage->_ref_consultations as $_consult) {
       $debute = "$jour $_consult->heure";
       if($_consult->patient_id) {

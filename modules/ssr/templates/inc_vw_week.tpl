@@ -152,7 +152,18 @@ Main.add(function() {
                   {{if $has_range}}
                     <div class="range-container">
                       {{foreach from=$planning->ranges_sorted.$_day.$_hour item=_range key=_key}}
-                        <div id="{{$_range->internal_id}}" class="range"></div>
+                        <div id="{{$_range->internal_id}}" class="range"
+                          {{assign var=explode_guid value="-"|explode:$_range->guid}}
+                          {{if $_range->type == "plageconsult"}}
+                            style="cursor: help; background: #{{$_range->color}}";
+                            onclick="PlageConsultation.edit('{{$explode_guid.1}}')"
+                          {{/if}}>
+                          {{if $_range->title}}
+                            <div class="libelle">
+                              {{$_range->title|smarty:nodefaults}}
+                            </div>
+                          {{/if}}
+                        </div>
                       {{/foreach}}
                     </div>
                   {{/if}}
@@ -176,7 +187,10 @@ Main.add(function() {
                              class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}} {{$_event->type}} {{if !$_event->important}}opacity-60{{/if}} {{if  isset($plageconsult_id|smarty:nodefaults) && $plageconsult_id == $_event->plage.id }}selected{{/if}}" 
                              style="background-color:{{$_event->color}}; {{if $_event->type == 'consultation' || $_event->type == 'operation'}}text-align:center;{{/if}}"
                              {{if $_event->type == "rdvfull"}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}')"{{/if}}
-                             {{if ($_event->type == "rdvfree" || $_event->type == "rdvfull") && !$_event->disabled}}onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}');"{{/if}}>
+                             {{if ($_event->type == "rdvfree" || $_event->type == "rdvfull") && !$_event->disabled}}
+                               onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}' {{if isset($_event->plage.consult_id|smarty:nodefaults)}}, '{{$_event->plage.consult_id}}'{{/if}});"
+                               data-plageconsult_id="{{$_event->plage.id}}"
+                             {{/if}}>
                             {{if $_event->type == "consultation"}}
                               <div style="height:100%; width:5px; background-color:#{{if isset($_event->plage.color|smarty:nodefaults)}}{{$_event->plage.color}}{{else}}DDDDDD{{/if}};"> </div>
                             {{/if}}
@@ -243,9 +257,6 @@ Main.add(function() {
                               {{/foreach}}
                               
                             {{elseif $_event->type == "rdvfree" || $_event->type == "rdvfull"}}
-                              {{if isset($_event->plage.color|smarty:nodefaults)}}
-                                <div style="background-color:#{{$_event->plage.color}};display:inline;">&nbsp;&nbsp;</div>
-                              {{/if}}
                               {{if $_event->disabled}}
                                 <img src="style/mediboard/images/buttons/lock.png" style="float: right; height: 12px; width: 12px;" />
                               {{/if}}

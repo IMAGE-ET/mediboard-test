@@ -1,10 +1,10 @@
 <!-- $Id$ -->
 
-{{mb_script module="dPpatients"    script="pat_selector"}}
-{{mb_script module="dPcabinet"     script="plage_selector"}}
-{{mb_script module="dPcabinet"     script="file"}}
-{{mb_script module="dPcompteRendu" script="document"}}
-{{mb_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPpatients"    script="pat_selector" ajax=true}}
+{{mb_script module="dPcabinet"     script="plage_selector" ajax=true}}
+{{mb_script module="dPcabinet"     script="file" ajax=true}}
+{{mb_script module="dPcompteRendu" script="document" ajax=true}}
+{{mb_script module="dPcompteRendu" script="modele_selector" ajax=true}}
 
 {{if $consult->_id}}
   {{mb_ternary var=object_consult test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
@@ -35,19 +35,19 @@ Medecin = {
   }
 };
 
-function refreshListCategorie(praticien_id){
+refreshListCategorie = function(praticien_id){
   var url = new Url("dPcabinet", "httpreq_view_list_categorie");
   url.addParam("praticien_id", praticien_id);
   url.requestUpdate("listCategorie");
 }
 
-function refreshFunction(chir_id) {
+refreshFunction = function(chir_id) {
   var url = new Url("dPcabinet", "ajax_refresh_secondary_functions");
   url.addParam("chir_id", chir_id);
   url.requestUpdate("secondary_functions");
 }
 
-function changePause(){
+changePause = function(){
   var oForm = getForm("editFrm");
   if(oForm._pause.checked){
     oForm.patient_id.value = "";
@@ -59,7 +59,7 @@ function changePause(){
   }
 }
 
-function requestInfoPat() {
+requestInfoPat = function() {
   var oForm = getForm("editFrm");
   if(!oForm.patient_id.value){
     return false;
@@ -70,7 +70,7 @@ function requestInfoPat() {
   url.requestUpdate("infoPat");
 }
 
-function ClearRDV(){
+ClearRDV = function(){
   var oForm = getForm("editFrm");
   $V(oForm.plageconsult_id, "", true);
   $V(oForm._date, "");
@@ -80,7 +80,7 @@ function ClearRDV(){
   }
 }
 
-function checkFormRDV(form){
+checkFormRDV = function(form){
   if(!form._pause.checked && form.patient_id.value == ""){
     alert("Veuillez sélectionner un patient");
     PatSelector.init();
@@ -98,21 +98,21 @@ function checkFormRDV(form){
   }
 }
 
-function submitRDV() {
+submitRDV = function() {
   var form = getForm('editFrm');
   if (checkFormRDV(form)) {
     form.submit(); 
   }
 }
 
-function printForm() {
+printForm = function() {
   var url = new Url("dPcabinet", "view_consultation"); 
   url.addElement(getForm("editFrm").consultation_id);
   url.popup(700, 500, "printConsult");
   return;
 }
 
-function printDocument(iDocument_id) {
+printDocument = function(iDocument_id) {
   var form = getForm("editFrm");
   if (iDocument_id.value != 0) {
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
@@ -137,13 +137,13 @@ Main.add(function () {
   var form = getForm("editFrm");
 
   requestInfoPat();
-
-  {{if $plageConsult->_id && !$consult->_id}}
+  
+  {{if $plageConsult->_id && !$consult->_id && !$consult->heure}}
     $V(form.chir_id, '{{$plageConsult->chir_id}}', false);
     $V(form.plageconsult_id, '{{$plageConsult->_id}}');
     refreshListCategorie({{$plageConsult->chir_id}});
     PlageConsultSelector.init();
-  {{elseif ($pat->_id || $date_planning) && !$consult->_id}}
+  {{elseif ($pat->_id || $date_planning) && !$consult->_id && !$consult->heure}}
     if($V(form.chir_id)) {
       PlageConsultSelector.init();
     }
@@ -179,21 +179,24 @@ Main.add(function() {
 
 </script>
 
-<form name="editFrm" action="?m={{$m}}" class="watched" method="post" onsubmit="return checkFormRDV(this)">
-
+<form name="editFrm" action="?m={{$m}}" class="watched" method="post" onsubmit="return checkFormRDV(this)"> 
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
 {{mb_key object=$consult}}
-
+{{if $dialog}}
+  <input type="hidden" name="postRedirect" value="m=cabinet&a=edit_planning&dialog=1" />
+{{/if}}
 <input type="hidden" name="adresse_par_prat_id" value="{{$consult->adresse_par_prat_id}}" />
 <input type="hidden" name="annule" value="{{$consult->annule|default:"0"}}" />
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
 <input type="hidden" name="_operation_id" value="" />
 
-<a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
-  {{tr}}CConsultation-title-create{{/tr}}
-</a>
+{{if !$dialog}}
+  <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
+    {{tr}}CConsultation-title-create{{/tr}}
+  </a>
+{{/if}}
 
 {{if $consult->_id}}
 <a class="button search" href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}" style="float: right;">

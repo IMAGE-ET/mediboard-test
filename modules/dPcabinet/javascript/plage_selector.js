@@ -1,6 +1,6 @@
 // $Id: $
 
-var PlageConsultSelector = {
+PlageConsultSelector = {
   sForm            : null,
   sHeure           : null,
   sPlageconsult_id : null,

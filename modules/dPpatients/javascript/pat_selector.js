@@ -1,6 +1,6 @@
 // $Id$
 
-var PatSelector = {
+PatSelector = {
   sForm      : null,
   sFormEasy  : null,
   sId        : null,

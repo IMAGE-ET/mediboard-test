@@ -1649,7 +1649,10 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("1.73");
     $this->addPrefQuery("empty_form_atcd", "0");
     
-    $this->mod_version = "1.74";
+    $this->makeRevision("1.74");
+    $this->addPrefQuery("new_semainier", "0");
+    
+    $this->mod_version = "1.75";
   }
 }
 ?>
