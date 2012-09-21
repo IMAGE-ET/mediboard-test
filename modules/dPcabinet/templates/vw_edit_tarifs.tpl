@@ -4,10 +4,10 @@
 
 Main.add(function () {
   Tarif.updateTotal();
-  Tarif.chir_id     = "{{$prat->user_id}}";
-  Tarif.function_id = "{{$prat->function_id}}";
+  Tarif.chir_id     = '{{$prat->user_id}}';
+  Tarif.function_id = '{{$prat->function_id}}';
 	{{if $user->_is_praticien || ($user->_is_secretaire && $tarif->_id)}}
-	  Tarif.updateOwner();
+	Tarif.updateOwner();
 	{{/if}}
 });
 
@@ -23,7 +23,7 @@ Main.add(function () {
   </tr>
   <tr>
     <td class="halfPane">
-      {{include file=inc_list_tarifs.tpl}}
+      {{mb_include template=inc_list_tarifs}}
     </td>
     
     <td>

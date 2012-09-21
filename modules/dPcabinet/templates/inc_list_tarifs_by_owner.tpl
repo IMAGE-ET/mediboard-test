@@ -20,4 +20,8 @@
   <td style="text-align: right">{{mb_value object=$_tarif field=secteur2}}</td>
   <td style="text-align: right"><strong>{{mb_value object=$_tarif field=_somme}}</strong></td>
 </tr>
+{{foreachelse}}
+<tr>
+  <td class="empty" colspan="5">{{tr}}CTarif.none{{/tr}}</td>
+</tr>
 {{/foreach}}
