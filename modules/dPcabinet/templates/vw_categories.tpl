@@ -36,6 +36,10 @@
       <td><img src="./modules/dPcabinet/images/categories/{{$_categorie->nom_icone}}" /></td>
       <td>x{{$_categorie->duree}}</td>
     </tr>
+    {{foreachelse}}
+    <tr>
+      <td class="empty" colspan="3">{{tr}}CConsultationCategorie.none{{/tr}}</td>
+    </tr>
     {{/foreach}}
     </table>
   </td> 
