@@ -13,18 +13,14 @@ div.tooltip {
   background: #fff;
   border: 2px solid #999;
   padding: 2px;
-
-  /* The shadow */
-  -moz-box-shadow   : 0 4px 10px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  box-shadow        : 0 4px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   
   /* IE specific shadow */
   zoom: 1;
   -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6)";
   
   /* Fun with box-shadows */
-  /*-moz-box-shadow:
+  /*box-shadow:
   0 0 20px black,
   20px 15px 30px yellow,
   -20px 15px 30px lime,

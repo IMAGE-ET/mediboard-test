@@ -101,9 +101,9 @@ class CSetup {
   }
 
   /**
-   * Check all declared datasources and retrieve them as uptodate or obosolete
+   * Check all declared data sources and retrieve them as uptodate or obsolete
    * 
-   * @return array The uptodate and obsolete DSNs
+   * @return array The up to date and obsolete DSNs
    */
   function getDatasources() {
     $dsns = array();
@@ -135,6 +135,7 @@ class CSetup {
    * 
    * @param string $query  SQL query
    * @param bool   $ignore Ignore errors if true
+   * @param string $dsn    Data source name
    * 
    * @return void
    */
@@ -252,23 +253,36 @@ class CSetup {
   }
      
   /**
-   * Adds default configuration
-   * @param string $config
+   * Adds default configuration, based on old configurations
+   * 
+   * @param string $new_path New config path
+   * @param string $old_path Current config path, if different 
+   * 
+   * @return void
    */
   function addDefaultConfig($new_path, $old_path = null) {
     if (!$old_path) {
       $old_path = $new_path;
     }
-    $query = "INSERT INTO `configuration` (`feature`, `value`)
-      VALUES ('$new_path', '".CAppUI::conf($old_path)."')";
+    
+    $config_value = @CAppUI::conf($old_path);
+    
+    if ($config_value === null) {
+      return;
+    }
+    
+    $query = "INSERT INTO `configuration` (`feature`, `value`) VALUES (%1, %2)";
+    $query = $this->ds->prepare($query, $new_path, $config_value);
     $this->addQuery($query);
-  } 
+  }
   
   /**
    * Adds default configuration from a configuration by service
-   * @param string $config
+   * 
+   * @param string $path
    * @param string $name
-   * @return 
+   * 
+   * @return void
    */
   function addDefaultConfigForGroups($path, $name) {
     $config = CConfigService::getConfigGroupForAllGroups($name);
@@ -279,8 +293,7 @@ class CSetup {
       $this->addQuery($query);
     }
     
-    $query = "DELETE FROM `config_service`
-      WHERE `name` = '$name'";
+    $query = "DELETE FROM `config_service` WHERE `name` = '$name'";
     $this->addQuery($query);
   }
   

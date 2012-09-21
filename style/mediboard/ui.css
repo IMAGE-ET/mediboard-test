@@ -625,10 +625,7 @@ div.rank.desired {
   margin-top: -1px;
   cursor: default;
   z-index: 1000 !important;
-  
-  -moz-box-shadow   : 0 4px 8px rgba(0,0,0,0.4);
-  -webkit-box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-  box-shadow        : 0 4px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
   
   -moz-border-radius: 6px;
   -moz-border-radius-topleft: 0;
@@ -644,9 +641,6 @@ div.rank.desired {
   background-color:  transparent;
   width: auto;
   position: static !important;
-  
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none;
   box-shadow: none;
 }
 
@@ -955,9 +949,6 @@ table.active {
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
-  
-  -moz-box-shadow: 0 0 15px rgba(0,0,0,0.7);  
-  -wekit-box-shadow: 0 0 15px rgba(0,0,0,0.7);  
   box-shadow: 0 0 15px rgba(0,0,0,0.7);
 }
 
@@ -1065,8 +1056,6 @@ img.thumbnail {
   margin-top: 0.5em ;
   margin-bottom: 0.5em;
   cursor: pointer;
-  -moz-box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);  
-  -wekit-box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);  
   box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);
 }
 

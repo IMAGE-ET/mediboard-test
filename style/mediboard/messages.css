@@ -22,9 +22,7 @@ table.dialog #systemMsg,
   right: 20px;
   z-index: 1200;
   background: rgba(255,255,255,0.6);
-  -moz-box-shadow   : 0 0 10px rgba(0,0,0,0.4);
-  -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.4);
-  box-shadow        : 0 0 10px rgba(0,0,0,0.4);
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
@@ -180,7 +178,5 @@ div.small-info,
 div.small-warning,
 div.small-error,
 div.small-mail {
-  -moz-box-shadow   : 0 2px 3px rgba(0,0,0,0.3);
-  -webkit-box-shadow: 0 2px 3px rgba(0,0,0,0.3);
-  box-shadow        : 0 2px 3px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 3px rgba(0,0,0,0.3);
 }

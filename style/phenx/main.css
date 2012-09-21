@@ -119,8 +119,7 @@ input[type=number],
 input[type=password], 
 select, 
 .textarea-container {
-  -moz-box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
-  -webkit-box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
 }
 
 input[type=text]:hover, 
@@ -152,8 +151,6 @@ input[type=number]:focus,
 input[type=password]:focus, 
 select:focus,
 .textarea-container.input-focus {
-  -moz-box-shadow: 0 0 2px rgba(255,127,0,0.8);
-  -webkit-box-shadow: 0 0 2px rgba(255,127,0,0.8);
   box-shadow: 0 0 2px rgba(255,127,0,0.8);
 }
 

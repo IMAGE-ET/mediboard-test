@@ -1572,9 +1572,7 @@ table.tbl td.hour-plan.active {
 }
 
 img#thumb {
-  -moz-box-shadow:    0 6px 10px rgba(0,0,0,0.4);
-  -webkit-box-shadow: 0 6px 10px rgba(0,0,0,0.4);
-  box-shadow:         0 6px 10px rgba(0,0,0,0.4);
+  box-shadow: 0 6px 10px rgba(0,0,0,0.4);
 }
 
 div.oldThumbs {

@@ -19,9 +19,7 @@ html, body {
   position: fixed;
   top: 0;
   z-index: 10;
-  -moz-box-shadow:    0 0 8px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-  box-shadow:         0 0 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
 #headerMenu td {
