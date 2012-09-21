@@ -120,7 +120,7 @@ $consult->loadRefsReglements();
 // Reglement vide pour le formulaire
 $reglement = new CReglement();
 $reglement->consultation_id = $consult->_id;
-$reglement->montant = round($consult->_du_patient_restant, 2);
+$reglement->montant = round($consult->_du_restant_patient, 2);
 
 // Codes et actes
 $consult->loadRefsActesNGAP();

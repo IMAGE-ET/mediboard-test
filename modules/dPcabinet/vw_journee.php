@@ -104,7 +104,7 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
       foreach($plage->_ref_consultations as $key_consult => $_consult) {
         if(!$paid) {
           $_consult->loadRefsReglements();
-          if($_consult->valide == 1 && $_consult->_du_patient_restant == 0) {
+          if($_consult->valide == 1 && $_consult->_du_restant_patient == 0) {
             unset($plage->_ref_consultations[$key_consult]);
           }
         }

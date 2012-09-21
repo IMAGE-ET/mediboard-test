@@ -69,7 +69,7 @@ onSubmitReglement = function(form) {
     <th>{{mb_label class=CConsultation field=patient_id}}</th>
     <th>{{mb_label class=CConsultation field=_date}}</th>
     <th>{{mb_label class=CConsultation field=du_tiers}}</th>
-    <th>{{mb_label class=CConsultation field=_du_tiers_restant}}</th>
+    <th>{{mb_label class=CConsultation field=_du_restant_tiers}}</th>
     <th>{{tr}}Validate{{/tr}}</th>
   </tr>
   {{foreach from=$listConsults item=_consult}}
@@ -91,7 +91,7 @@ onSubmitReglement = function(form) {
     </td>
           
     <td>{{$_consult->du_tiers|currency}}</td>
-    <td>{{$_consult->_du_tiers_restant|currency}}</td>
+    <td>{{$_consult->_du_restant_tiers|currency}}</td>
     <td>
       <form name="reglement-add-tiers-{{$_consult->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitReglement(this);">
         <input type="hidden" name="m" value="dPcabinet" />
@@ -101,8 +101,8 @@ onSubmitReglement = function(form) {
         <input type="hidden" name="emetteur" value="tiers" />
         {{mb_field object=$_consult field="consultation_id" hidden=1}}
         <button class="add notext" type="submit">{{tr}}Add{{/tr}}</button>
-        {{mb_field object=$_consult->_new_tiers_reglement field="montant"}}
-        {{mb_field object=$_consult->_new_tiers_reglement field="mode"}}
+        {{mb_field object=$_consult->_new_reglement_tiers field="montant"}}
+        {{mb_field object=$_consult->_new_reglement_tiers field="mode"}}
       </form>
     </td>
   </tr>

@@ -48,7 +48,7 @@ class CReglement extends CMbMetaObject {
   }
   
   function loadRefBanque() {
-    $this->_ref_banque = $this->loadFwdRef("banque_id", 1);
+    $this->_ref_banque = $this->loadFwdRef("banque_id", true);
   }
   
   function loadRefsFwd() {
@@ -88,13 +88,7 @@ class CReglement extends CMbMetaObject {
     
     if ($target instanceof CConsultation) {
       $target->loadRefsActes();
-      $facture = new CFactureConsult();
-      $facture->_view = sprintf("CO%08d", $target->_id);
-      $facture->_ref_patient   = $target->loadRefPatient();
-      $facture->_ref_praticien = $target->loadRefPraticien();
-      $facture->_ref_consults  = array($target->_id => $target);
-      $facture->updateMontants();
-      return $this->_ref_facture = $facture;
+      return $this->_ref_facture = $target->fakeRefFacture();
     }
     
     if ($target instanceof CFactureConsult) {
@@ -119,12 +113,12 @@ class CReglement extends CMbMetaObject {
       
       // Acquitement patient
       if ($this->emetteur == "patient" && $consult->du_patient) {
-        $consult->patient_date_reglement = $consult->_du_patient_restant <= 0 ? mbDate() : "";
+        $consult->patient_date_reglement = $consult->_du_restant_patient <= 0 ? mbDate() : "";
       }
         
       // Acquitement tiers
       if ($this->emetteur == "tiers" && $consult->du_tiers) {
-        $consult->tiers_date_reglement = $consult->_du_tiers_restant <= 0 ? mbDate() : "";
+        $consult->tiers_date_reglement = $consult->_du_restant_tiers <= 0 ? mbDate() : "";
       }
       
       return $consult->store();
@@ -137,12 +131,12 @@ class CReglement extends CMbMetaObject {
       
       // Acquitement patient
       if ($this->emetteur == "patient" && $facture->du_patient) {
-        $facture->patient_date_reglement = $facture->_du_patient_restant <= 0 ? mbDate() : "";
+        $facture->patient_date_reglement = $facture->_du_restant_patient <= 0 ? mbDate() : "";
       }
         
       // Acquitement tiers
       if ($this->emetteur == "tiers" && $facture->du_tiers) {
-        $facture->tiers_date_reglement = $facture->_du_tiers_restant <= 0 ? mbDate() : "";
+        $facture->tiers_date_reglement = $facture->_du_restant_tiers <= 0 ? mbDate() : "";
       }
       
       return $facture->store();

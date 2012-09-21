@@ -75,7 +75,7 @@ else {
 if ($no_finish_reglement) {
   foreach ($factures as $key => $_facture) {
     $_facture->loadRefsReglements();
-    if ($_facture->_du_patient_restant != 0 ) {
+    if ($_facture->_du_restant_patient != 0 ) {
       unset($factures[$key]);
     }
   }

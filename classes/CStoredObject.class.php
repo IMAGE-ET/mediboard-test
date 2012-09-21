@@ -1667,7 +1667,9 @@ class CStoredObject extends CModelObject {
 
   /**
    * Mass load mechanism for forward references of an object collection
+   * 
    * @param CMbObject[] Array of objects
+   * 
    * @return CMbObject[] Loaded collection 
    */
   static function massLoadFwdRef($objects, $field, $object_class = null) {

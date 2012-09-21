@@ -81,7 +81,7 @@ class CConsultation extends CCodable {
   var $_function_secondary_id = null;
   var $_semaine_grossesse = null;
   var $_type           = null;  // Type de la consultation
-
+    
   // Fwd References
   var $_ref_patient      = null; // Declared in CCodable
   var $_ref_sejour       = null; // Declared in CCodable
@@ -120,9 +120,9 @@ class CConsultation extends CCodable {
   var $_datetime                 = null;
   var $_date_fin                 = null;
   var $_is_anesth                = null;
-  var $_du_patient_restant       = null;
+  var $_du_restant_patient       = null;
+  var $_du_restant_tiers         = null;
   var $_reglements_total_patient = null;
-  var $_du_tiers_restant         = null;
   var $_reglements_total_tiers   = null;
   var $_forfait_se               = null;
   var $_forfait_sd               = null;
@@ -179,7 +179,7 @@ class CConsultation extends CCodable {
     $props["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
     $props["categorie_id"]      = "ref class|CConsultationCategorie show|1";
     $props["grossesse_id"]      = "ref class|CGrossesse show|0 unlink";
-    $props["factureconsult_id"] = "ref class|CFactureConsult show|0";
+    $props["factureconsult_id"] = "ref class|CFactureConsult show|0 nullify";
     $props["_praticien_id"]     ="ref class|CMediusers show|1"; //is put here for view
     $props["_function_secondary_id"] = "ref class|CFunctions";
     $props["motif"]             = "text helped seekable";
@@ -228,8 +228,8 @@ class CConsultation extends CCodable {
     $props["valide"]            = "bool show|0";
     $props["si_desistement"]    = "bool notNull default|0";
 
-    $props["_du_patient_restant"]       = "currency";
-    $props["_du_tiers_restant"]         = "currency";
+    $props["_du_restant_patient"]       = "currency";
+    $props["_du_restant_tiers"]         = "currency";
     $props["_reglements_total_patient"] = "currency";
     $props["_reglements_total_tiers"  ] = "currency";
     $props["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";
@@ -1202,6 +1202,51 @@ TESTS A EFFECTUER
     return $this->_ref_facture = $this->loadFwdRef("factureconsult_id", true);
   }
 
+  /**
+   * Permet de simplifier la transition vers les CFactureConsult
+   * @see    self::loadRefFacture()
+   * @todo   A supprimer le cas échéant
+   * 
+   * @return CFactureConsult La pseudo facture
+   */
+  function fakeRefFacture() {
+    $facture = new CFactureConsult();
+    $facture->_guid = "$facture->_class-$this->_guid";
+    $facture->_view = sprintf("CO%08d", $this->_id);
+    $facture->_ref_patient   = $this->loadRefPatient();
+    $facture->_ref_praticien = $this->loadRefPraticien();
+    $facture->_ref_consults  = array($this->_id => $this);
+    $facture->_ref_last_consult = $this;
+    
+    $facture->du_patient = $this->du_patient;
+    $facture->du_tiers   = $this->du_tiers  ;
+    $facture->patient_date_reglement = $this->patient_date_reglement;
+    $facture->tiers_date_reglement   = $this->tiers_date_reglement;
+    $facture->updateMontants();
+    
+    return $this->_ref_facture = $facture;
+  }
+  
+  /**
+   * Permet de simplifier la transition vers les CFactureConsult
+   * @see    self::loadRefFacture()
+   * @see    self::loadRefReglements()
+   * @todo   A supprimer le cas échéant
+   * 
+   * @return CFactureConsult La pseudo facture
+   */
+  function fakeRefFactureReglements() {
+    $facture = $this->fakeRefFacture();
+    $facture->_ref_reglements = $this->loadRefsReglements();
+    $facture->_ref_reglements_patient = $this->_ref_reglements_patient;
+    $facture->_ref_reglements_tiers   = $this->_ref_reglements_tiers  ;
+    $facture->_du_restant_patient = $this->_du_restant_patient;
+    $facture->_du_restant_tiers   = $this->_du_restant_tiers  ;
+    $facture->_reglements_total_patient = $this->_reglements_total_patient;
+    $facture->_reglements_total_tiers   = $this->_reglements_total_tiers  ;
+    return $facture;
+  }
+  
   function getActeExecution() {
     $this->loadRefPlageConsult();
   }
@@ -1369,38 +1414,40 @@ TESTS A EFFECTUER
       $this->loadRefFacture()->loadRefsReglements() :
       $this->loadBackRefs('reglements', 'date');
       
+    // Classement reglements patient et tiers 
     $this->_ref_reglements_patient = array();
     $this->_ref_reglements_tiers   = array();
-
     foreach ($this->_ref_reglements as $_reglement) {
       $_reglement->loadRefBanque(1);
       if ($_reglement->emetteur == "patient") {
         $this->_ref_reglements_patient[$_reglement->_id] = $_reglement;
       }
-      else {
+      if ($_reglement->emetteur == "tiers") {
         $this->_ref_reglements_tiers[$_reglement->_id] = $_reglement;
       }
     }
 
     // Calcul de la somme du restante du patient
-    $this->_du_patient_restant = $this->du_patient;
+    $this->_du_restant_patient = $this->du_patient;
     $this->_reglements_total_patient = 0;
     foreach ($this->_ref_reglements_patient as $_reglement) {
-      $this->_du_patient_restant -= $_reglement->montant;
+      $this->_du_restant_patient       -= $_reglement->montant;
       $this->_reglements_total_patient += $_reglement->montant;
     }
-    $this->_du_patient_restant       = round($this->_du_patient_restant, 2);
+    $this->_du_restant_patient       = round($this->_du_restant_patient      , 2);
     $this->_reglements_total_patient = round($this->_reglements_total_patient, 2);
 
     // Calcul de la somme du restante du tiers
-    $this->_du_tiers_restant = $this->du_tiers;
+    $this->_du_restant_tiers = $this->du_tiers;
     $this->_reglements_total_tiers = 0;
     foreach ($this->_ref_reglements_tiers as $_reglement) {
-      $this->_du_tiers_restant -= $_reglement->montant;
+      $this->_du_restant_tiers       -= $_reglement->montant;
       $this->_reglements_total_tiers += $_reglement->montant;
     }
-    $this->_du_tiers_restant       = round($this->_du_tiers_restant, 2);
+    $this->_du_restant_tiers       = round($this->_du_restant_tiers      , 2);
     $this->_reglements_total_tiers = round($this->_reglements_total_tiers, 2);
+    
+    return $this->_ref_reglements;
   }
 
   function loadRefsBack() {

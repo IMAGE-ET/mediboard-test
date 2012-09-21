@@ -54,7 +54,7 @@ PlageConsult = {
         {{if $filter->_etat_reglement_patient}}
         <tr>
           <td>
-            Paiment patients :
+            Paiements patients :
             {{tr}}CConsultation._etat_reglement_tiers.{{$filter->_etat_reglement_patient}}{{/tr}}
           </td>
         </tr>
@@ -62,7 +62,7 @@ PlageConsult = {
         {{if $filter->_etat_reglement_tiers}}
         <tr>
           <td>
-            Paiment tiers :
+            Paiements tiers :
             {{tr}}CConsultation._etat_reglement_tiers.{{$filter->_etat_reglement_tiers}}{{/tr}}
           </td> 
         </tr>
@@ -81,16 +81,16 @@ PlageConsult = {
       <table id="totals" class="tbl">
         {{foreach from=$reglement->_specs.emetteur->_list item=emetteur}}
           <tr>
-            <th class="category" colspan="8">Réglement {{tr}}CReglement.emetteur.{{$emetteur}}{{/tr}}</th>
+            <th class="title" colspan="9">Réglements {{tr}}CReglement.emetteur.{{$emetteur}}{{/tr}}</th>
           </tr>
   
           <tr>
-            <th class="category">{{mb_label object=$reglement field=mode}}</th>
-            <th class="category">{{tr}}Total{{/tr}}</th>
+            <th>{{mb_label object=$reglement field=mode}}</th>
+            <th>{{tr}}Total{{/tr}}</th>
             {{foreach from=$reglement->_specs.mode->_list item=_mode}}
-            <th class="category">{{tr}}CReglement.mode.{{$_mode}}{{/tr}}</th>
+            <th>{{tr}}CReglement.mode.{{$_mode}}{{/tr}}</th>
             {{/foreach}}
-            <th class="category">Impayé</th>
+            <th>Impayé</th>
           </tr>
   
           <tr>
@@ -116,53 +116,52 @@ PlageConsult = {
         {{/foreach}}
          
         <tr>
-          <th class="category" colspan="8">Récapitulatif des consultations concernées</th>
+          <th class="title" colspan="9">Récapitulatif des consultations concernées</th>
         </tr>
         <tr>
-          <th class="category">Nb de {{tr}}CConsultation{{/tr}}</th>
+          <th>Nb de {{tr}}CConsultation{{/tr}}</th>
           <td colspan="7">{{$recapReglement.total.nb_consultations}}</td>
         </tr>
         
         {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
           <tr>
-            <th class="category">
+            <th>
               {{tr}}Total{{/tr}}
               {{mb_label class=CConsultation field=secteur1}}
             </th>
-            <td colspan="3">{{$recapReglement.total.secteur1|currency}}</td>
+            <td colspan="4">{{$recapReglement.total.secteur1|currency}}</td>
             <th colspan="4">{{mb_label class=CConsultation field=_somme}}</th>
           </tr>
           <tr>
-            <th class="category">
+            <th>
               {{tr}}Total{{/tr}}
-              {{mb_label class=CConsultation field=secteur1}}
+              {{mb_label class=CConsultation field=secteur2}}
             </th>
-            <td colspan="3">{{$recapReglement.total.secteur2|currency}}</td>
+            <td colspan="4">{{$recapReglement.total.secteur2|currency}}</td>
             <td colspan="4" class="button">
               {{$recapReglement.total.secteur1+$recapReglement.total.secteur2|currency}}
             </td>
           </tr>
           <tr>
-            <th class="category">
-              Total réglé patient</th>
-            <td colspan="3">{{$recapReglement.total.du_patient|currency}}</td>
+            <th>Total réglé patient</th>
+            <td colspan="4">{{$recapReglement.total.du_patient|currency}}</td>
             <th colspan="4">Total réglé</th>
           </tr>
           <tr>
-            <th class="category">Total réglé tiers</th>
-            <td colspan="3">{{$recapReglement.total.du_tiers|currency}}</td>
+            <th>Total réglé tiers</th>
+            <td colspan="4">{{$recapReglement.total.du_tiers|currency}}</td>
             <td colspan="4" class="button">
               {{$recapReglement.total.du_patient+$recapReglement.total.du_tiers|currency}}
             </td>
           </tr>
           <tr>
-            <th class="category">Total non réglé patient</th>
-            <td colspan="3">{{$recapReglement.total.reste_patient|currency}}</td>
+            <th>Total non réglé patient</th>
+            <td colspan="4">{{$recapReglement.total.reste_patient|currency}}</td>
             <th colspan="4">Total non réglé</th>
           </tr>
           <tr>
-            <th class="category">Total non réglé tiers</th>
-            <td colspan="3">{{$recapReglement.total.reste_tiers|currency}}</td>
+            <th>Total non réglé tiers</th>
+            <td colspan="4">{{$recapReglement.total.reste_tiers|currency}}</td>
             <td colspan="4" class="button">
               {{$recapReglement.total.reste_patient+$recapReglement.total.reste_tiers|currency}}
             </td>
@@ -171,7 +170,7 @@ PlageConsult = {
           <tr>
             <th>{{mb_label class=CConsultation field=_somme}}</th>
             {{assign var=total_du value=$recapReglement.total.secteur1+$recapReglement.total.secteur2}}
-            <td colspan="7">{{$recapReglement.total.secteur1+$recapReglement.total.secteur2|currency}}</td>
+            <td colspan="8">{{$recapReglement.total.secteur1+$recapReglement.total.secteur2|currency}}</td>
           </tr>
           <tr>
             <th>Total réglé</th>
@@ -196,6 +195,8 @@ PlageConsult = {
     
   <tr>
     <td colspan="2">
+      <br />
+      <br />
       <strong onclick="PlageConsult.refresh('{{$_plage.plage->_id}}')">
         {{$_plage.plage->_ref_chir}}
         &mdash; {{$_plage.plage->date|date_format:$conf.longdate}}
@@ -214,58 +215,69 @@ PlageConsult = {
     <td colspan="2">
       <table class="tbl">
         <tr>
+          <th class="narrow text">{{tr}}CFactureConsult{{/tr}}</th>
           <th style="width: 20%;">{{mb_label class=CConsultation field=patient_id}}</th>
           <th style="width: 10%;">{{mb_label class=CConsultation field=tarif}}</th>
-          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-            <th class="narrow">{{mb_title class=CConsultation field=secteur1}}</th>
-            <th class="narrow">{{mb_title class=CConsultation field=secteur2}}</th>
-          {{elseif @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
-            <th class="narrow">Montant</th>
-            <th class="narrow">Remise</th>
-          {{/if}}
+          
+          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+          <th class="narrow">{{mb_title class=CConsultation field=secteur1}}</th>
+          <th class="narrow">{{mb_title class=CConsultation field=secteur2}}</th>
           <th class="narrow">{{mb_title class=CConsultation field=_somme}}</th>
-          <th style="width: 20%;">{{mb_title class=CConsultation field=du_patient}}</th>
-          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-            <th style="width: 20%;">{{mb_title class=CConsultation field=du_tiers}}</th>
           {{/if}}
+          
+          {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+          <th class="narrow">Montant</th>
+          <th class="narrow">Remise</th>
+          {{/if}}
+          
+          <th style="width: 20%;">{{mb_title class=CConsultation field=du_patient}}</th>
+          
+          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+          <th style="width: 20%;">{{mb_title class=CConsultation field=du_tiers}}</th>
+          {{/if}}
+          
         </tr>
-        {{foreach from=$_plage.consultations item=_consultation}}
+        {{foreach from=$_plage.factures item=_facture}}
         <tr>
+          <td><strong>{{$_facture}}</strong></td>
+        
           <td class="text">
-            <a name="consult-{{$_consultation->_id}}">
-              {{assign var=patient value=$_consultation->_ref_patient}}
+            <a name="{{$_facture->_guid}}">
+              {{assign var=patient value=$_facture->_ref_patient}}
               <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
                 {{$patient}}
               </span>
             </a>
           </td>
           <td class="text">
-            {{if $_consultation->tarif}} 
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_consultation->_guid}}')">
-              {{$_consultation->tarif}}
-            </span>
-            {{/if}}
+            {{foreach from=$_facture->_ref_consults item=_consult}}
+            <div {{if !$_consult->tarif}} class="empty" {{/if}}>
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
+                {{mb_value object=$_consult field=_date}}: {{mb_value object=$_consult field=tarif default=None}}
+              </span>
+            </div>   
+            {{foreachelse}}
+            <div class="empty">{{tr}}CConsultation.none{{/tr}}</div>
+            {{/foreach}}
           </td>
-          {{if isset($_consultation->secteur1|smarty:nodefaults)}}
-            <td>{{mb_value object=$_consultation field=secteur1}}</td>
-            <td>{{mb_value object=$_consultation field=secteur2}}</td>
-            <td>{{mb_value object=$_consultation field=_somme}}</td>
-          {{else}}
-            <td>{{mb_value object=$_consultation field=_montant_sans_remise}}</td>
-            <td>{{mb_value object=$_consultation field=remise}}</td>
-            <td>{{mb_value object=$_consultation field=_montant_avec_remise}}</td>
+
+          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+          <td>{{mb_value object=$_facture field=_montant_secteur1 empty=1}}</td>
+          <td>{{mb_value object=$_facture field=_montant_secteur2 empty=1}}</td>
+          <td>{{mb_value object=$_facture field=_montant_total    empty=1}}</td>
           {{/if}}
+          
+          {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+          <td>{{mb_value object=$_facture field=_montant_sans_remise empty=1}}</td>
+          <td>{{mb_value object=$_facture field=remise empty=1}}</td>
+          <td>{{mb_value object=$_facture field=_montant_avec_remise empty=1}}</td>
+          {{/if}}
+
           <td>
-            {{if $_consultation->_class == "CConsultation"}}
-              {{assign var=reglements value=$_consultation->_ref_reglements_patient}}
-            {{else}}
-              {{assign var=reglements value=$_consultation->_ref_reglements}}
-            {{/if}}
-            
-            {{foreach name=reglement_patient from=$reglements item=_reglement}}
+            {{foreach name=reglement_patient from=$_facture->_ref_reglements_patient item=_reglement}}
               {{assign var=_reglement_id value=$_reglement->_id}}
               <form name="reglement-del-{{$_reglement_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
-              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="m" value="cabinet" />
               <input type="hidden" name="del" value="1" />
               <input type="hidden" name="dosql" value="do_reglement_aed" />
               {{mb_key object=$_reglement}}
@@ -274,7 +286,7 @@ PlageConsult = {
               </form>
               <br />
               <form name="reglement-chdate-{{$_reglement_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
-              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="m" value="cabinet" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="dosql" value="do_reglement_aed" />
               {{mb_key object=$_reglement}}
@@ -290,75 +302,77 @@ PlageConsult = {
             {{/foreach}}
             
 
-            {{assign var=new_reglement value=$_consultation->_new_patient_reglement}}
-            <form name="reglement-add-patient-{{$_consultation->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
-            <input type="hidden" name="m" value="dPcabinet" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="dosql" value="do_reglement_aed" />
-            <input type="hidden" name="date" value="now" />
-            <input type="hidden" name="emetteur" value="patient" />
-            {{mb_field object=$new_reglement field=object_id    hidden=1}}
-            {{mb_field object=$new_reglement field=object_class hidden=1}}
-            {{mb_field object=$new_reglement field=montant}}
-            {{mb_field object=$new_reglement field=mode emptyLabel="Choose" onchange="Reglement.updateBanque(this)"}}
-            {{mb_field object=$new_reglement field=banque_id options=$banques style="width: 7em; display: none;"}}
-            <button class="add notext" type="submit">+</button>
-            </form>
-
-          </td>
-          {{if $_consultation->_class == "CConsultation" && $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-            <td>
-              {{foreach name=reglement_tier from=$_consultation->_ref_reglements_tiers item=_reglement}}
-                {{assign var=_reglement_id value=$_reglement->_id}}
-                <form name="reglement-del-{{$_reglement_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
-                <input type="hidden" name="m" value="dPcabinet" />
-                <input type="hidden" name="del" value="1" />
-                <input type="hidden" name="dosql" value="do_reglement_aed" />
-                {{mb_key object=$_reglement}}
-                <button class="remove" type="submit">{{mb_value object=$_reglement field=montant}}</button>
-                {{mb_value object=$_reglement field=mode}}
-                </form>
-                <br />
-                <form name="reglement-chdate-{{$_reglement_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
-                <input type="hidden" name="m" value="dPcabinet" />
-                <input type="hidden" name="del" value="0" />
-                <input type="hidden" name="dosql" value="do_reglement_aed" />
-                {{mb_key object=$_reglement}}
-                {{mb_field object=$_reglement field=object_id       hidden=1}}
-                {{mb_field object=$_reglement field=object_class    hidden=1}}
-                {{mb_field object=$_reglement field=montant         hidden=1}}
-                {{mb_field object=$_reglement field=mode            hidden=1}}
-                {{mb_field object=$_reglement field=date register=true form="reglement-chdate-$_reglement_id" onchange="this.form.onsubmit()"}}
-                </form>
-                {{if !$smarty.foreach.reglement_tier.last}}
-                <hr />
-                {{/if}}
-              {{/foreach}}
-              
-              {{if $_consultation->_du_tiers_restant > 0}}
-              {{assign var=new_reglement value=$_consultation->_new_tiers_reglement}}
-              <form name="reglement-add-tiers-{{$_consultation->_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
-              <input type="hidden" name="m" value="dPcabinet" />
+            {{if $_facture->_du_restant_patient > 0.001}}
+              {{assign var=new_reglement value=$_facture->_new_reglement_patient}}
+              <form name="reglement-add-patient-{{$_facture->_guid}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
+              <input type="hidden" name="m" value="cabinet" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="dosql" value="do_reglement_aed" />
               <input type="hidden" name="date" value="now" />
-              <input type="hidden" name="emetteur" value="tiers" />
-              <input type="hidden" name="object_id" value="{{$_consultation->_id}}" />
-              <input type="hidden" name="object_class" value="CConsultation" />
+              <input type="hidden" name="emetteur" value="patient" />
+              {{mb_field object=$new_reglement field=object_id    hidden=1}}
+              {{mb_field object=$new_reglement field=object_class hidden=1}}
               {{mb_field object=$new_reglement field=montant}}
               {{mb_field object=$new_reglement field=mode emptyLabel="Choose" onchange="Reglement.updateBanque(this)"}}
               {{mb_field object=$new_reglement field=banque_id options=$banques style="width: 7em; display: none;"}}
               <button class="add notext" type="submit">+</button>
               </form>
+            {{/if}}
+
+          </td>
+          
+          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+          <td>
+            {{foreach name=reglement_tier from=$_facture->_ref_reglements_tiers item=_reglement}}
+              {{assign var=_reglement_id value=$_reglement->_id}}
+              <form name="reglement-del-{{$_reglement_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
+              <input type="hidden" name="m" value="cabinet" />
+              <input type="hidden" name="del" value="1" />
+              <input type="hidden" name="dosql" value="do_reglement_aed" />
+              {{mb_key object=$_reglement}}
+              <button class="remove" type="submit">{{mb_value object=$_reglement field=montant}}</button>
+              {{mb_value object=$_reglement field=mode}}
+              </form>
+              <br />
+              <form name="reglement-chdate-{{$_reglement_id}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
+              <input type="hidden" name="m" value="cabinet" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="dosql" value="do_reglement_aed" />
+              {{mb_key object=$_reglement}}
+              {{mb_field object=$_reglement field=object_id       hidden=1}}
+              {{mb_field object=$_reglement field=object_class    hidden=1}}
+              {{mb_field object=$_reglement field=montant         hidden=1}}
+              {{mb_field object=$_reglement field=mode            hidden=1}}
+              {{mb_field object=$_reglement field=date register=true form="reglement-chdate-$_reglement_id" onchange="this.form.onsubmit()"}}
+              </form>
+              {{if !$smarty.foreach.reglement_tier.last}}
+              <hr />
               {{/if}}
-            </td>
-          {{elseif $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
-            <td></td>
+            {{/foreach}}
+            
+            {{if $_facture->_du_restant_tiers > 0.001}}
+              {{assign var=new_reglement value=$_facture->_new_reglement_tiers}}
+              <form name="reglement-add-tiers-{{$_facture->_guid}}" action="?m={{$m}}" method="post" onsubmit="return PlageConsult.onSubmit(this, '{{$_plage.plage->_id}}');">
+              <input type="hidden" name="m" value="cabinet" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="dosql" value="do_reglement_aed" />
+              <input type="hidden" name="date" value="now" />
+              <input type="hidden" name="emetteur" value="tiers" />
+              {{mb_field object=$new_reglement field=object_id    hidden=1}}
+              {{mb_field object=$new_reglement field=object_class hidden=1}}
+              {{mb_field object=$new_reglement field=montant}}
+              {{mb_field object=$new_reglement field=mode emptyLabel="Choose" onchange="Reglement.updateBanque(this)"}}
+              {{mb_field object=$new_reglement field=banque_id options=$banques style="width: 7em; display: none;"}}
+              <button class="add notext" type="submit">+</button>
+            </form>
+            {{/if}}
+          </td>
           {{/if}}
         </tr>
+        
         {{/foreach}}
         <tr>
-          <td colspan="2" style="text-align: right" >
+          <td colspan="3" style="text-align: right" >
             <strong>{{tr}}Total{{/tr}}</strong>
           </td>
           <td><strong>{{$_plage.total.secteur1|currency}}</strong></td>

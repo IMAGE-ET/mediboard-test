@@ -42,25 +42,33 @@ $listConsults = $consult->loadList($where, $order, null, null, $ljoin);
 
 $total = array("nb" => 0, "value" => 0);
 
-foreach($listConsults as $key => &$consult) {
+foreach($listConsults as $consult) {
   $consult->loadRefsFwd();
   $consult->loadRefsReglements();
+  
+  // Chargment de la FSE
   if (CModule::getActive("fse")) {
-    $fse = CFseFactory::createFSE();
-    if ($fse) {
+    if ($fse = CFseFactory::createFSE()) {
       $fse->loadIdsFSE($consult);
     }
   }
-  $consult->_new_tiers_reglement = new CReglement();
-  $consult->_new_tiers_reglement->mode = "virement";
-  $consult->_new_tiers_reglement->montant = $consult->_du_tiers_restant;
+  
+  // Retour Noemie déjà traité
   $hasNoemie = (!$consult->_current_fse || $consult->_current_fse->S_FSE_ETAT != 9);
-  if($hasNoemie) {
-    unset($listConsults[$key]);
-  } else {
-    $total["nb"]++;
-    $total["value"] += $consult->_du_tiers_restant;
+  if ($hasNoemie) {
+    unset($listConsults[$consult->_id]);
+    continue;
   }
+  
+  // Nouveau règelement pour le formulaire
+  $consult->_new_reglement_tiers = new CReglement();
+  $consult->_new_reglement_tiers->setObject($consult);
+  $consult->_new_reglement_tiers->mode = "virement";
+  $consult->_new_reglement_tiers->montant = $consult->_du_restant_tiers;
+
+  // Toaux
+  $total["nb"]++;
+  $total["value"] += $consult->_du_restant_tiers;
 }
 
 // Création du template

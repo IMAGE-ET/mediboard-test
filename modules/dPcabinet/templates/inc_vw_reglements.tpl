@@ -119,7 +119,7 @@ modifMontantBVR = function (num_bvr){
             </td>
           </tr>
           {{/foreach}}
-          {{if ($object->_du_patient_restant) > 0}}
+          {{if ($object->_du_restant_patient) > 0}}
             <tr>
               <td>
                 {{mb_field object=$reglement field=mode emptyLabel="Choose" onchange="updateBanque(this)"}}
@@ -135,7 +135,7 @@ modifMontantBVR = function (num_bvr){
                   </select>
                 {{/if}}
               </td>
-              <td><input type="text" class="currency notNul" size="4" maxlength="8" name="montant" value="{{$object->_du_patient_restant}}" /></td>
+              <td><input type="text" class="currency notNul" size="4" maxlength="8" name="montant" value="{{$object->_du_restant_patient}}" /></td>
               <td></td>
               <td><button class="add notext" type="button" onclick="this.form.onsubmit();">{{tr}}Add{{/tr}}</button></td>
             </tr>
@@ -143,7 +143,7 @@ modifMontantBVR = function (num_bvr){
           <tr>
             <td colspan="4" style="text-align: center;">
               {{mb_value object=$object field=_reglements_total_patient}} réglés, 
-              <strong>{{mb_value object=$object field=_du_patient_restant}} restant</strong>
+              <strong>{{mb_value object=$object field=_du_restant_patient}} restant</strong>
             </td>
           </tr>
 
