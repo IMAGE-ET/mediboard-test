@@ -433,8 +433,27 @@ class CSmartyMB extends Smarty {
    * Example:  {$value|currency}
    * @param float $value The value to format
    */
-  function currency($value) {
-    return number_format($value, 2, ",", " ") . " " . CAppUI::conf("currency_symbol");
+  function currency($value, $decimals = null, $precise = null, $empty = true) {
+    if ($decimals == null) {
+      $decimals = $precise ? 4 : 2;
+    }
+    
+    // Formatage et symbole monétaire
+    $value = ($value !== null && $value !== "") ? 
+      number_format($value, $decimals, ",", " ")." ".CAppUI::conf("currency_symbol") : 
+      "-";
+      
+    // Negativité
+    $html = $value < 0 ?
+      "<span class=\"negative\">$value</span>" :
+      $value;
+     
+    // Nullité 
+    $html = $empty && abs($value) < 0.001 ? 
+      "<div class=\"empty\">$html</div>" :
+      $html;
+      
+    return $html;
   }
   
   /**
