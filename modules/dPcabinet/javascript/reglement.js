@@ -6,6 +6,7 @@ var Reglement = {
     document.write('<div id="reglement"></div>');
     Main.add(Reglement.reload.curry(false));
   },
+
   submit: function(oForm, reload_acts) {
 	  submitFormAjax(oForm, 'systemMsg', {
 	    onComplete : function() {
@@ -46,11 +47,16 @@ var Reglement = {
   updateBanque: function(mode) {
     var banque_id = mode.form.banque_id;
     if ($V(mode) == "cheque") {
-      banque_id.show();
+      banque_id.enable();
     }
     else {
-      banque_id.hide();
+      banque_id.disable();
       $V(banque_id, "");
     }
+  },
+  regBanque: function(form) {
+    Main.add(function() {
+      Reglement.updateBanque(getForm(form).mode[0]);
+    });
   }
 };

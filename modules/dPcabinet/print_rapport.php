@@ -137,9 +137,11 @@ foreach ($listConsults as $_consult) {
   // Ajout de reglements
   $facture->_new_reglement_patient = new CReglement();
   $facture->_new_reglement_patient->setObject($_consult);
+  $facture->_new_reglement_patient->emetteur = "patient";
   $facture->_new_reglement_patient->montant = $facture->_du_restant_patient;
   $facture->_new_reglement_tiers = new CReglement();
   $facture->_new_reglement_tiers->setObject($_consult);
+  $facture->_new_reglement_tiers->emetteur = "tiers";
   $facture->_new_reglement_tiers->mode = "virement";
   $facture->_new_reglement_tiers->montant = $facture->_du_restant_tiers;
   
@@ -166,11 +168,13 @@ foreach ($listFactures as $_facture) {
   // Ajout de reglements
   $_facture->_new_reglement_patient = new CReglement();
   $_facture->_new_reglement_patient->setObject($_facture);
+  $_facture->_new_reglement_patient->emetteur = "patient";
   $_facture->_new_reglement_patient->montant = $_facture->_du_restant_patient;
   $_facture->_new_reglement_tiers = new CReglement();
   $_facture->_new_reglement_tiers->setObject($_facture);
+  $_facture->_new_reglement_tiers->emetteur = "tiers";
   $_facture->_new_reglement_tiers->mode = "virement";
-  $_facture->_new_reglement_tiers->montant = $facture->_du_restant_tiers;
+  $_facture->_new_reglement_tiers->montant = $_facture->_du_restant_tiers;
   
   // Utiliser le GUID comme pour les consultations
   $factures[$_facture->_guid] = $_facture; 
@@ -226,9 +230,8 @@ foreach ($factures as $_facture) {
 }
   
 // Chargement des banques
-$orderBanque = "nom ASC";
 $banque = new CBanque();
-$banques = $banque->loadList(null,$orderBanque);
+$banques = $banque->loadList(null, "nom ASC");
 
 // Création du template
 $smarty = new CSmartyDP();
