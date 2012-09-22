@@ -41,7 +41,7 @@ class CReglement extends CMbMetaObject {
     $specs['banque_id']       = 'ref class|CBanque';
     $specs['date']            = 'dateTime notNull';
     $specs['montant']         = 'currency notNull';
-    $specs['emetteur']        = 'enum list|patient|tiers';
+    $specs['emetteur']        = 'enum notNull list|patient|tiers';
     $specs['mode']            = 'enum notNull list|cheque|CB|especes|virement|BVR|autre default|cheque';
     $specs['num_bvr']         = 'str';
     return $specs;
