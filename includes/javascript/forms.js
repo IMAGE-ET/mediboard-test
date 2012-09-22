@@ -31,6 +31,12 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
     return;
   }
   
+  // Add the del hidden field when missing
+  // @todo Remove all del hidden fields in code !!!
+  if (oForm.del == undefined) {
+	oForm.insert(DOM.input({ name: 'del', type: 'hidden', value: '' }));
+  }
+  
   oForm.del.value = 1;
     
   if (oOptions.callback) {
