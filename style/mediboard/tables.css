@@ -197,6 +197,10 @@ li.empty {
   color: #999;
 }
 
+span.negative {
+  color: #f00;
+}
+
 table.tbl th {
   background-color: #bbb;
   padding: 2px;
