@@ -34,6 +34,11 @@ class CSetupreservation extends CSetup {
       ADD INDEX (`fin`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.02";
+    $this->makeRevision("0.02");
+    $query = "ALTER TABLE `commentaire_planning` 
+      ADD `color` CHAR (6) DEFAULT 'DDDDDD' AFTER `commentaire`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.03";
   }
 }

@@ -272,7 +272,7 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
     "<span style='font-size: 11px; font-weight: bold;'>$_commentaire->libelle</span>".
     "\n<span class='compact'>".nl2br($_commentaire->commentaire)."</span>";
     
-    $event = new CPlanningEvent($_commentaire->_guid, $debut, $duree, $libelle, "#ccc", true, null, $_commentaire->_guid, false);
+    $event = new CPlanningEvent($_commentaire->_guid, $debut, $duree, $libelle, "#$_commentaire->color", true, null, $_commentaire->_guid, false);
     
     $event->type = "commentaire_planning";
     $event->draggable = $event->resizable = CCanDo::edit();

@@ -1,5 +1,7 @@
 <?php
 $locales['CCommentairePlanning'] = 'Commentaire de planning';
+$locales['CCommentairePlanning-color'] = 'Couleur';
+$locales['CCommentairePlanning-color-desc'] = 'Couleur';
 $locales['CCommentairePlanning-commentaire'] = 'Commentaire';
 $locales['CCommentairePlanning-commentaire-court'] = 'COmmentaire';
 $locales['CCommentairePlanning-commentaire-desc'] = 'Commentaire';

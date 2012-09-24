@@ -8,6 +8,17 @@
  * @version    $Revision$
  *}}
 
+{{mb_script module="mediusers" script="color_selector" ajax=true}}
+
+<script type="text/javascript">
+  ColorSelector.init = function(){
+    this.sForm  = "editCommentaire";
+    this.sColor = "color";
+    this.sColorView = "color-view";
+    this.pop();
+  };
+</script>
+
 <form name="editCommentaire" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="reservation" />
   <input type="hidden" name="dosql" value="do_commentaire_planning_aed" />
@@ -36,6 +47,21 @@
       </th>
       <td>
         {{mb_field object=$commentaire field=fin form=editCommentaire register=true}}
+      </td>
+    </tr>
+    
+    <tr>
+      <th>
+        {{mb_label object=$commentaire field=color}}
+      </th>
+      <td>
+        <span class="color-view" id="color-view" style="background: #{{if $commentaire->color}}{{$commentaire->color}}{{else}}DDDDDD{{/if}};">
+          {{tr}}Choose{{/tr}}
+        </span>
+        <button type="button" class="search notext" onclick="ColorSelector.init()">
+          {{tr}}Choose{{/tr}}
+        </button>
+        {{mb_field object=$commentaire field="color" hidden=1}}
       </td>
     </tr>
     

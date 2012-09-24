@@ -23,6 +23,7 @@ class CCommentairePlanning extends CMbObject {
   // DB Fields
   var $libelle     = null;
   var $commentaire = null;
+  var $color       = null;
   var $debut       = null;
   var $fin         = null;
   
@@ -38,6 +39,7 @@ class CCommentairePlanning extends CMbObject {
     $specs["salle_id"]    = "ref class|CSalle";
     $specs["libelle"]     = "str notNull";
     $specs["commentaire"] = "text helped";
+    $specs["color"]       = "str length|6 default|DDDDDD";
     $specs["debut"]       = "dateTime notNull";
     $specs["fin"]         = "dateTime notNull";
     
