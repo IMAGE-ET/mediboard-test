@@ -71,7 +71,7 @@
   {{assign var=doc_class   value=$_doc_item->_class}}
   {{assign var=doc_id      value=$_doc_item->_id   }}
   {{assign var=category_id value=$_doc_item->file_category_id}}
-  {{mb_include template=inc_file_send_button onComplete="Document.refreshList('$category_id' '$doc_class','$doc_id')"}}
+  {{mb_include template=inc_file_send_button onComplete="Document.refreshList('$category_id')"}}
   
   <!-- Move -->
   <button type="button" class="hslip  {{$notext}}" onclick="this.form.file_category_id.setVisibility(true)">
