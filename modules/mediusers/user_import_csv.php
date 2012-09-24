@@ -28,9 +28,10 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     // Parsing
     $results[$i]["lastname"]      = addslashes(trim($line[0]));
     $results[$i]["firstname"]     = addslashes(trim($line[1]));
-    $results[$i]["type"]          = addslashes(trim($line[2]));
-    $results[$i]["function_name"] = addslashes(trim($line[3]));
-    $results[$i]["profil_name"]   = addslashes(trim($line[4]));
+    $results[$i]["login"]         = addslashes(trim($line[2]));
+    $results[$i]["type"]          = addslashes(trim($line[3]));
+    $results[$i]["function_name"] = addslashes(trim($line[4]));
+    $results[$i]["profil_name"]   = addslashes(trim($line[5]));
     
     $results[$i]["error"] = 0;
     
@@ -77,6 +78,9 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $results[$i]["profil_name"] .= " : Non trouvé";
     }
     $user->makeUsernamePassword($results[$i]["firstname"], $results[$i]["lastname"]);
+    if($results[$i]["login"]) {
+      $user->_user_username = $results[$i]["login"];
+    };
     $user->actif  = 1;
     $user->remote = 0;
     $user->function_id = $function->_id;

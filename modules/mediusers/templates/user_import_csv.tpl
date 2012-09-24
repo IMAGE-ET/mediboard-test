@@ -16,6 +16,7 @@
   <ul>
     <li>Nom *</li>
     <li>Prénom *</li>
+    <li>Login</li>
     <li>Type (code numérique) *</li>
     <li>Fonction (nom) *</li>
     <li>Profil (username)</li>
