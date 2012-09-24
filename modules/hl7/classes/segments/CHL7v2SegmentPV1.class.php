@@ -25,6 +25,11 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
    */
   var $sejour = null;
   
+  /**
+   * @var CAffectation
+   */
+  var $curr_affectation = null;
+  
   function build(CHL7v2Event $event) {
     parent::build($event);
     
@@ -56,7 +61,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = CHL7v2TableEntry::mapTo("4", $sejour->type);
     
     // PV1-3: Assigned Patient Location (PL) (optional)
-    $data[] = $this->getPL($receiver, $sejour);
+    $data[] = $this->getPL($receiver, $sejour, $this->curr_affectation);
     
     // PV1-4: Admission Type (IS) (optional)
     // Table - 0007

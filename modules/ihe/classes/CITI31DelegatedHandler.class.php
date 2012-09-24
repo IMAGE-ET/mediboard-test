@@ -119,7 +119,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $this->createMovement($code, $sejour, $affectation);
    
       // Envoi de l'événement
-      $this->sendITI($this->profil, $this->transaction, $code, $sejour);
+      $this->sendITI($this->profil, $this->transaction, $code, $mbObject);
     }
     
     // Traitement Naissance
@@ -202,7 +202,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
     elseif ($update) {
       // Dans le cas d'un update le type correspond à celui du trigger
-      $movement_type = $sejour->getMovementType($code);
+      $movement_type = null;
 
       // Mise à jour entrée réelle
       if ($sejour->fieldModified("entree_reelle")) {
@@ -229,7 +229,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
     
     // on annule un mouvement sauf dans le cas d'une annulation de mutation et que 
-    if ($cancel) {
+    if ($cancel && !($code == "A12" && $movement->original_trigger_code != "A02")) {
       $movement->cancel = 1;
     }
 
@@ -545,7 +545,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $this->createMovement($code, $sejour, $affectation);
    
       // Envoi de l'événement
-      $this->sendITI($this->profil, $this->transaction, $code, $sejour);
+      $this->sendITI($this->profil, $this->transaction, $code, $mbObject);
     }  
   }  
   

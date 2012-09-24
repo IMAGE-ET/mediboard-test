@@ -64,7 +64,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     if ($this->other_affectation) {
       $affectation = $this->other_affectation;
     }
-    
+
     $action_movement = null;
     foreach (self::$actions as $action => $events) {
       if (in_array($event->code, $events)) {

@@ -154,6 +154,9 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $PV1 = CHL7v2Segment::create($segment_name, $this->message);
     $PV1->sejour = $sejour;
     $PV1->set_id = 1;
+    if ($sejour) {
+      $PV1->curr_affectation = $sejour->_ref_hl7_affectation;
+    }
     $PV1->build($this);
   }
   
@@ -183,15 +186,16 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function addZBE(CSejour $sejour = null) {
     $segment_name = $this->_is_i18n ? "ZBE_FR" : "ZBE";
-    $ZBE = CHL7v2Segment::create($segment_name, $this->message);
-    $ZBE->sejour = $sejour;
-    $movement = $sejour->_ref_hl7_movement;
-    $affectation = new CAffectation();
+    $ZBE          = CHL7v2Segment::create($segment_name, $this->message);
+    $ZBE->sejour  = $sejour;
+    $movement     = $sejour->_ref_hl7_movement;
+    $affectation  = new CAffectation();
     if ($movement->affectation_id) {
       $affectation->load($movement->affectation_id);
     }
-    $ZBE->curr_affectation = $affectation;
-    $ZBE->movement = $movement;
+    $ZBE->curr_affectation  = $affectation;
+    $ZBE->movement          = $movement;
+    $ZBE->other_affectation = $sejour->_ref_hl7_affectation;
     $ZBE->build($this);
   }
 

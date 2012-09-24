@@ -23,14 +23,17 @@ class CHL7v2EventADTA12 extends CHL7v2EventADT implements CHL7EventADTA12 {
     parent::__construct($i18n);
   }
   
-  function getEVNOccuredDateTime($sejour) {
+  function getEVNOccuredDateTime($affectation) {
     return mbDateTime();
   }
   
   /**
    * @see parent::build()
    */
-  function build($sejour) {
+  function build($affectation) {
+    $sejour                       = $affectation->_ref_sejour;
+    $sejour->_ref_hl7_affectation = $affectation;
+    
     parent::build($sejour);
     
     $patient = $sejour->_ref_patient;
@@ -53,7 +56,9 @@ class CHL7v2EventADTA12 extends CHL7v2EventADT implements CHL7EventADTA12 {
   /**
    * @see parent::buildI18nSegments()
    */
-  function buildI18nSegments($sejour) {
+  function buildI18nSegments($affectation) {
+    $sejour                       = $affectation->_ref_sejour;
+    $sejour->_ref_hl7_affectation = $affectation;
     
     // Movement segment only used within the context of the "Historic Movement Management"
     if ($this->_receiver->_configs["iti31_historic_movement"]) {
