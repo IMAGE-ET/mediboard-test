@@ -40,6 +40,7 @@ class CAideSaisie extends CMbObject {
   var $_is_ref_dp_2       = null;
   var $_class_dp_1        = null;
   var $_class_dp_2        = null;
+  var $_applied           = null;
   
   // Referenced objects
   var $_ref_user          = null;
