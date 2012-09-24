@@ -356,7 +356,7 @@ $library->description ="HTML to PDF Converter";
 $library->sourceDir = "dompdf";
 $library->targetDir = "dompdf";
 $library->versionFile = "include/functions.inc.php";
-$library->versionString = "//if ( $url";
+$library->versionString = '//if ( $url';
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
