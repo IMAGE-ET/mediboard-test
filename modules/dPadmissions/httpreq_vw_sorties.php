@@ -31,6 +31,8 @@ $demain = mbDate("+ 1 day", $date);
 
 $date_min = mbDateTime("00:00:00", $date);
 $date_max = mbDateTime("23:59:59", $date);
+//$date_min = "2012-09-23 00:00:00";
+//$date_max = "2012-09-25 23:59:59";
 
 // Sorties de la journée
 $sejour = new CSejour;
@@ -43,7 +45,7 @@ $ljoin["users"]       = "sejour.praticien_id = users.user_id";
 
 // Filtre sur les services
 if (count($service_id)) {
-  $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie_prevue";
+  $ljoin["affectation"]        = "affectation.sejour_id = sejour.sejour_id AND affectation.sortie = sejour.sortie";
   $ljoin["lit"]                = "affectation.lit_id = lit.lit_id";
   $ljoin["chambre"]            = "lit.chambre_id = chambre.chambre_id";
   $ljoin["service"]            = "chambre.service_id = service.service_id";
@@ -87,6 +89,8 @@ if ($order_col == "entree_prevue"){
 if ($order_col == "praticien_id"){
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
+
+mbTrace($where);
 
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 

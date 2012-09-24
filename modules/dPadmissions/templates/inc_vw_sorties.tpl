@@ -209,7 +209,7 @@
         
     </td>
     <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-      {{if !($_sejour->type == 'exte') && !($_sejour->type == 'consult') && $_sejour->annule != 1}}
+      {{if !($_sejour->type == 'consult') && $_sejour->annule != 1}}
         {{if $conf.dPadmissions.show_prestations_sorties}}
           {{mb_include template=inc_form_prestations sejour=$_sejour edit=$canAdmissions->edit}}
         {{/if}}        
