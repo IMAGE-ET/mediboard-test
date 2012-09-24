@@ -163,9 +163,6 @@
       <td class="button" colspan="2">
         {{if $naissance->_id}}
           <button type="submit" class="submit">{{tr}}Modify{{/tr}}</button>
-          <button type="button" class="trash" onclick="Naissance.confirmDeletion(this.form)">
-            {{tr}}Delete{{/tr}}
-          </button>
         {{else}}
           <button type="submit" class="submit singleclick">{{tr}}Create{{/tr}}</button>
         {{/if}}
