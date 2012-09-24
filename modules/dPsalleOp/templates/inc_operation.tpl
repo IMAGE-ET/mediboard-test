@@ -148,6 +148,15 @@ function infoAnapath(field) {
   submitFormAjax(field.form, 'systemMsg');
 }
 
+function infoBacterio(field) {
+  if($V(field) == 1) {
+    var url = new Url("salleOp", "ajax_info_bacterio");
+    url.addParam("operation_id", $V(field.form.operation_id));
+    url.requestModal();
+  }
+  submitFormAjax(field.form, 'systemMsg');
+}
+
 </script>
 
 <!-- Informations générales sur l'intervention et le patient -->
@@ -368,10 +377,10 @@ function infoAnapath(field) {
       </tr>
       <tr>
         <th style="text-align: right">
-          {{mb_label object=$selOp field=labo}}
+          {{mb_label object=$selOp field=labo onclick="infoBacterio($(this.getAttribute('for')+'_1'));"}}
         </th>
-        <td style="vertical-align:middle;">     
-          {{mb_field object=$selOp field=labo typeEnum="radio" onChange="submitFormAjax(this.form, 'systemMsg');"}}
+        <td style="vertical-align:middle;">
+          {{mb_field object=$selOp field=labo typeEnum="radio" onChange="infoBacterio(this);"}}  
         </td>
         <td colspan="2"></td>
       </tr>

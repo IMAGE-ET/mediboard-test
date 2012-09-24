@@ -27,6 +27,14 @@ function printAnapath() {
   url.popup(700, 600, 'Anapath');
 }
 
+function printBacterio() {
+  var form = getForm(changeDate);
+  var url = new Url("dPbloc", "print_bacterio");
+  url.addParam("date"   , $V(form.date));
+  url.addParam("bloc_id", $V(form.bloc_id));
+  url.popup(700, 600, 'Bacterio');
+}
+
 function showLegend() {
   var url = new Url('bloc', 'legende').requestModal()
 }
@@ -43,6 +51,7 @@ function showLegend() {
       <button type="button" onclick="showLegend()" class="search" style="float: left;">Légende</button>
       <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
       <button type="button" onclick="printAnapath();" class="print" style="float: right;">{{tr}}COperation-anapath{{/tr}}</button>
+      <button type="button" onclick="printBacterio();" class="print" style="float: right;">{{tr}}COperation-bacterio{{/tr}}</button>
       
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />

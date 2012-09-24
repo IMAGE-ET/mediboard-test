@@ -1439,7 +1439,14 @@ class CSetupdPplanningOp extends CSetup {
               ADD `conventionne` ENUM ('0','1') DEFAULT '1' AFTER `depassement`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.55";
+    $this->makeRevision("1.55");
+    $query = "ALTER TABLE `operations` 
+              ADD `flacons_bacterio` TINYINT (4) AFTER `labo`,
+              ADD `labo_bacterio` VARCHAR (255)  AFTER `flacons_bacterio`,
+              ADD `description_bacterio` TEXT    AFTER `labo_bacterio`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.56";
   }
 }
 ?>
