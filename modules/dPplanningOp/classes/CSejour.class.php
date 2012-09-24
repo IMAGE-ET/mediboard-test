@@ -2524,7 +2524,7 @@ class CSejour extends CCodable implements IPatientRelated {
     return !$fix_edit_doc ? true : $this->sortie_reelle === null;
   }
   
-  function getUF($date = null, $affectation_id = null) {
+  function getUFs($date = null, $affectation_id = null) {
     if (!$date) {
       $date = mbDateTime();
     }
@@ -2549,7 +2549,11 @@ class CSejour extends CCodable implements IPatientRelated {
     }
     
     if ($this->uf_hebergement_id) {
-      return array("hebergement" => $this->loadRefUFHebergement());
+      return array(
+        "hebergement" => $this->loadRefUFHebergement(),
+        "medicale"    => $this->loadRefUFMedicale(),
+        "soins"       => $this->loadRefUFSoins(),
+      );
     }
     
     $affectation_uf = new CAffectationUniteFonctionnelle();
@@ -2567,7 +2571,11 @@ class CSejour extends CCodable implements IPatientRelated {
     
     $affectation_uf->loadMatchingObject();
     
-    return array("hebergement" => $affectation_uf->loadRefUniteFonctionnelle());  
+    return array(
+      "hebergement" => $affectation_uf->loadRefUniteFonctionnelle(),
+      "medicale"    => $this->loadRefUFMedicale(),
+      "soins"       => $this->loadRefUFSoins(),
+    );  
   }
   
   function getIncrementVars() {
