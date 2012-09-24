@@ -9,7 +9,7 @@
     url.addParam('tag'            , '{{$filter->tag}}');
     url.addParam('id400'          , '{{$filter->id400}}');
     url.addParam('dialog'         , 1);
-    url.requestModal('edit_id400');
+    url.requestModal();
   }
 
   refreshListId400 = function(idSante400_id) {
@@ -43,16 +43,6 @@
   
   reloadId400 = function(idSante400_id) {
     refreshListId400(idSante400_id);
-  }
-
-  toggleSelected = function(tr) {
-    var elts = $('list_identifiants').select('tr');
-
-    elts.each(function(tr) {
-      tr.removeClassName('selected');
-    });
-
-    tr.addClassName('selected');
   }
   
   Main.add(refreshListId400);

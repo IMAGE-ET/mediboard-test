@@ -46,7 +46,7 @@
     <td>
       {{assign var="object" value=$_idSante400->_ref_object}}
       {{if $object->_id}}
-      <a href="#1" onclick="toggleSelected(this.up('tr')); editId400('{{$_idSante400->_id}}');">
+      <a href="#1" onclick="this.up('tr').addUniqueClassName('selected'); editId400('{{$_idSante400->_id}}');">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
         {{$object}}
       </span>
@@ -57,7 +57,7 @@
     </td>
     {{/if}}
     <td>
-      <a href="#1" onclick="toggleSelected(this.up('tr')); editId400('{{$_idSante400->_id}}');">
+      <a href="#1" onclick="this.up('tr').addUniqueClassName('selected'); editId400('{{$_idSante400->_id}}');">
         {{$_idSante400->last_update|date_format:$conf.datetime}}
       </a>
     </td>
