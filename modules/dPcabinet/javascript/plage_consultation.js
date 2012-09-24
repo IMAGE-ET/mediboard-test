@@ -13,19 +13,17 @@ PlageConsultation  = {
   modal: null,
   
   edit: function(plageconsult_id) {
-    var url = new Url('dPcabinet', 'edit_plage_consultation');
+    var url = new Url('cabinet', 'edit_plage_consultation');
     url.addParam('plageconsult_id', plageconsult_id);
     url.requestModal(800);
     this.modal = url.modalObject;
   },
   
   onSubmit: function(form) {
-    return onSubmitFormAjax(form, { 
-      onComplete: function() {
-        PlageConsultation.refreshList();
-        PlageConsultation.modal.close();
-      }
-    })
+    return onSubmitFormAjax(form, function() {
+      PlageConsultation.refreshList();
+      PlageConsultation.modal.close();
+    });
   },
   
   checkForm: function(form) {
