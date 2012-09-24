@@ -32,7 +32,7 @@
           <th class="title" colspan="7">Réglement Patients</th>
         </tr>
         <tr>
-          <th class="category">Type réglement</th>
+          <th class="category">Type règlement</th>
           <th class="category">Total</th>
           <th class="category">Chèque</th>
           <th class="category">CB</th>
@@ -41,7 +41,7 @@
           <th class="category">Autre</th>
         </tr>
         <tr>
-          <th class="category">Nb réglements</th>
+          <th class="category">Nb règlements</th>
           <td>{{$recapReglement.total.nb_reglement_patient}}</td>
           <td>{{$recapReglement.cheque.nb_reglement_patient}}</td>
           <td>{{$recapReglement.CB.nb_reglement_patient}}</td>
@@ -50,7 +50,7 @@
           <td>{{$recapReglement.autre.nb_reglement_patient}}</td>
         </tr>
         <tr>
-          <th class="category">Total réglement patient</th>
+          <th class="category">Total règlement patient</th>
           <td>{{$recapReglement.total.du_patient|currency}}</td>
           <td>{{$recapReglement.cheque.du_patient|currency}}</td>
           <td>{{$recapReglement.CB.du_patient|currency}}</td>
@@ -63,7 +63,7 @@
             <th class="title" colspan="7">Réglement Tiers</th>
           </tr>
           <tr>
-            <th class="category">Type réglement</th>
+            <th class="category">Type règlement</th>
             <th class="category">Total</th>
             <th class="category">Chèque</th>
             <th class="category">CB</th>
@@ -72,7 +72,7 @@
             <th class="category">Autre</th>
           </tr>
           <tr>
-            <th class="category">Nb réglements</th>
+            <th class="category">Nb règlements</th>
             <td>{{$recapReglement.total.nb_reglement_tiers}}</td>
             <td>{{$recapReglement.cheque.nb_reglement_tiers}}</td>
             <td>{{$recapReglement.CB.nb_reglement_tiers}}</td>
@@ -81,7 +81,7 @@
             <td>{{$recapReglement.autre.nb_reglement_tiers}}</td>
           </tr>
           <tr>
-            <th class="category">Total réglement Tiers</th>
+            <th class="category">Total règlement Tiers</th>
             <td>{{$recapReglement.total.du_tiers|currency}}</td>
             <td>{{$recapReglement.cheque.du_tiers|currency}}</td>
             <td>{{$recapReglement.CB.du_tiers|currency}}</td>

@@ -16,7 +16,7 @@ if ($reglement->_id) {
   $reglement->loadRefsNotes();
   $object = $reglement->loadTargetObject(true);
 }
-// Préparation du nouveau réglement
+// Préparation du nouveau règlement
 else {
   $object = mbGetObjectFromGet("object_class", "object_id", "object_guid");
   $reglement->setObject($object);

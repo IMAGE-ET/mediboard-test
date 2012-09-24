@@ -110,7 +110,7 @@ printFiche = function() {
         </tr>
       {{foreachelse}}
         <tr>
-            <td colspan="4">Aucun réglement effectué</d>
+            <td colspan="4">Aucun règlement effectué</d>
         </tr>
       {{/foreach}}
       </table>

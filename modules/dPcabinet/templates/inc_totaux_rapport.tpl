@@ -23,7 +23,7 @@
     </tr>
 
     <tr>
-      <th class="category">Nb réglements</th>
+      <th class="category">Nb règlements</th>
       {{assign var=nb_reglement_name value="nb_reglement_$emetteur"}}
       <td>{{$recapReglement.total.$nb_reglement_name}}</td>
       {{foreach from=$reglement->_specs.mode->_list item=_mode}}
@@ -33,7 +33,7 @@
     </tr>
 
     <tr>
-      <th class="category">Total réglements</th>
+      <th class="category">Total règlements</th>
       {{assign var=du_name value="du_$emetteur"}}
       <td>{{$recapReglement.total.$du_name|currency}}</td>
       {{foreach from=$reglement->_specs.mode->_list item=_mode}}
