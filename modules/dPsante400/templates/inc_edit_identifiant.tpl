@@ -38,11 +38,11 @@
     <tr>
       <th>{{mb_label object=$filter field="object_id"}}</th>
       <td>
-  	  {{if $dialog && $target}}
-  	  <input type="hidden" name="object_id" class="{{$filter->_props.object_id}}" value="{{$filter->object_id}}" />
+      {{if $dialog && $target}}
+      <input type="hidden" name="object_id" class="{{$filter->_props.object_id}}" value="{{$filter->object_id}}" />
         {{$target->_view}}
-  	  {{else}}
-  	    {{mb_field object=$idSante400 field=object_id}}
+      {{else}}
+        {{mb_field object=$idSante400 field=object_id}}
         <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
         <script type="text/javascript">
           ObjectSelector.initEdit = function(){
@@ -83,8 +83,7 @@
         <button class="trash" type="button" onclick="confirmDeletion(this.form, {
           typeName: 'l\'identifiant',
           objName: '{{$idSante400->_view|smarty:nodefaults|JSAttribute}}',
-          ajax: '1'
-        })">
+        }, Control.Modal.close )">
           Supprimer
         </button>
       {{else}}
