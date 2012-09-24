@@ -446,10 +446,6 @@ class CAffectation extends CMbObject {
     if (!$this->uf_hebergement_id) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
       $where = array("uf.type" => "= 'hebergement'");
-      
-      if (!$prev_aff->_id) {
-        $affectation_uf->uf_id = $sejour->uf_hebergement_id;  
-      }
  
       if (!$affectation_uf->uf_id) {
         $where["object_id"]    = "= '$lit->_id'";
@@ -468,7 +464,7 @@ class CAffectation extends CMbObject {
           }
         }
       }
-      
+
       $this->uf_hebergement_id = $affectation_uf->uf_id;      
     }
     
