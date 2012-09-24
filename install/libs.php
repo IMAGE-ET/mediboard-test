@@ -351,12 +351,12 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "dompdf";
 $library->url = "http://code.google.com/p/dompdf";
-$library->fileName = "dompdf-21-09-12.tar.gz";
+$library->fileName = "dompdf-24-09-12.tar.gz";
 $library->description ="HTML to PDF Converter";
 $library->sourceDir = "dompdf";
 $library->targetDir = "dompdf";
-$library->versionFile = "include/inline_frame_reflower.cls.php";
-$library->versionString = "check_page_break";
+$library->versionFile = "include/functions.inc.php";
+$library->versionString = "//if ( $url";
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
