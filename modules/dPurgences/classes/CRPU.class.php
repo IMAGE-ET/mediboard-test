@@ -354,7 +354,7 @@ class CRPU extends CMbObject {
   }
 
   function store() {
-    if (!$this->_id) {
+    if (!$this->_id && !$this->sejour_id) {
       $sejour                = new CSejour();
       $sejour->patient_id    = $this->_patient_id;
       $sejour->type          = "urg";
@@ -371,14 +371,22 @@ class CRPU extends CMbObject {
       if (count($siblings)) {
         $sibling = reset($siblings);
         $this->sejour_id = $sibling->_id;
-        $this->loadRefSejour();
-        $this->_ref_sejour->loadRefRPU();
+        $sejour = $this->loadRefSejour();
+        $sejour->loadRefRPU();
 
         // Si y'a un RPU déjà existant on alerte d'une erreur
-        if ($this->_ref_sejour->_ref_rpu->_id) {
+        if ($sejour->_ref_rpu->_id) {
           return CAppUI::tr("CRPU-already-exists");
         }
-        $this->_bind_sejour = false;
+        
+        $sejour->service_id              = $this->_service_id;
+        $sejour->etablissement_entree_id = $this->_etablissement_entree_id;
+        $sejour->service_entree_id       = $this->_service_entree_id;
+        $sejour->mode_entree             = $this->_mode_entree;
+        $sejour->provenance              = $this->_provenance;
+        $sejour->destination             = $this->_destination;
+        $sejour->transport               = $this->_transport;
+        $sejour->UHCD                    = $this->_UHCD;
       }
     }
 
