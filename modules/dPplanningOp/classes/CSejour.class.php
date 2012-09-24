@@ -179,6 +179,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_transmissions           = null;
   var $_ref_observations            = null;
   var $_ref_hl7_movement            = null;
+  var $_ref_hl7_affectation         = null;
   var $_ref_grossesse               = null;
   var $_ref_curr_operation          = null;
   var $_ref_curr_operations         = null;
@@ -1148,7 +1149,7 @@ class CSejour extends CCodable implements IPatientRelated {
    * 
    * @return array[CAffectation] Affectations array with curr, prev and next keys
    */
-    function loadSurrAffectations($date = "") {
+  function loadSurrAffectations($date = "") {
     if (!$date) {
       $date = mbDateTime();
     }
