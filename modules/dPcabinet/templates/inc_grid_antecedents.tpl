@@ -1,5 +1,12 @@
 <script type="text/javascript">
-function addAntecedent(rques, type, appareil, input) {
+function addAntecedent(event, rques, type, appareil, input) {
+  if (event && event.ctrlKey) {
+    window.save_params = { 'input': input, 'type': type, 'appareil': appareil};
+    var complete_atcd = $('complete_atcd');
+    complete_atcd.down("textarea").innerHTML = rques;
+    modal(complete_atcd);
+    return;
+  }
   if (window.opener) {
     var oForm = window.opener.getForm('editAntFrm');
     if (oForm) {
@@ -31,6 +38,30 @@ Main.add(function () {
 });
 
 </script>
+
+<div class="modal" id="complete_atcd" style="display: none; width: 400px; height: 180px;">
+ <table class="form">
+   <tr>
+     <th class="title">
+       Compléter l'antécédent
+     </th>
+   </tr>
+   <tr>
+     <td>
+       <textarea></textarea>
+     </td>
+   </tr>
+   <tr>
+     <td class="button">
+       <button type="button" class="tick"
+         onclick="Control.Modal.close(); addAntecedent(null, $V($('complete_atcd').down('textarea')), window.save_params.type, window.save_params.appareil, window.save_params.input)">
+           {{tr}}Validate{{/tr}}
+        </button>
+       <button type="button" class="close" onclick="Control.Modal.close(); window.save_params.input.checked = ''">{{tr}}Close{{/tr}}</button>
+     </td>
+   </tr>
+ </table> 
+</div>
 
 <!-- Antécédents -->
 {{assign var=numCols value=4}}
@@ -121,19 +152,29 @@ Main.add(function () {
                 {{/if}}
                 {{assign var=i value=$smarty.foreach.aides.index}}
                 {{assign var=text value=$curr_aide->text}}
-                {{if isset($applied_antecedents.$type.$text|smarty:nodefaults)}}
-                  {{assign var=checked value=1}}
-                {{else}}
-                  {{assign var=checked value=0}}
-                {{/if}}
+                {{assign var=checked value=$curr_aide->_applied}}
                 <td class="text {{if $checked}}opacity-30{{/if}} {{$owner_icon}}" 
-                    style="cursor: pointer; width: {{$width}}%; {{if $checked}}cursor: default;{{/if}}" 
-                    title="{{$curr_aide->text|smarty:nodefaults|JSAttribute}}">
-                  <label>
-                    <input type="checkbox" {{if $checked}}checked="checked" disabled="disabled"{{/if}} 
-                           onclick="addAntecedent('{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)"/> 
+                    style="cursor: pointer; width: {{$width}}%; {{if $checked}}cursor: default;{{/if}}" >
+                  <label onmouseover="ObjectTooltip.createDOM(this, 'tooltip_{{$curr_aide->_guid}}')">
+                    <input type="checkbox" {{if $checked}}checked="checked" disabled="disabled"{{/if}} id="aide_{{$curr_aide->_guid}}"
+                      onclick="addAntecedent(arguments[0] || window.event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)"/> 
                     {{$curr_aide->name}}
                   </label>
+                  <div style="display: none" id="tooltip_{{$curr_aide->_guid}}">
+                    <table class="tbl">
+                      <tr>
+                        <th>
+                          {{$curr_aide->text}}
+                        </th>
+                      </tr>
+                      <tr>
+                        <td class="button">
+                          <button type="button" class="edit"
+                            onclick="var event = {ctrlKey: true}; addAntecedent(event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', $('aide_{{$curr_aide->_guid}}'))">Compléter</button>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
                 </td>
                 {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.aides.last}}</tr><tr>{{/if}}
               {{/foreach}}
