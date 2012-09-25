@@ -254,10 +254,9 @@ function updateListCPI(form){
   var url = new Url("dPplanningOp", "ajax_vw_list_cpi");
   url.addParam("group_id", $V(form.group_id));
   url.addParam("type", $V(form.type));
-  url.addParam("selected_id", "{{$sejour->charge_id}}");
   url.requestUpdate(field, function(){
     $V(field, ""); // To check the field
-    $V(field, selected_id);
+    $V(field, "{{$sejour->charge_id}}");
   });
 }
 
