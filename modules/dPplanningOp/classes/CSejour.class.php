@@ -32,6 +32,7 @@ class CSejour extends CCodable implements IPatientRelated {
   
   // DB Fields
   var $type                = null; 
+  var $charge_id           = null;
   var $modalite            = null;
   var $annule              = null; 
   var $recuse              = null; 
@@ -291,6 +292,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["uf_medicale_id"]           = "ref class|CUniteFonctionnelle seekable";
     $props["uf_soins_id"]              = "ref class|CUniteFonctionnelle seekable";
     $props["type"]                     = "enum notNull list|comp|ambu|exte|seances|ssr|psy|urg|consult default|ambu";
+    $props["charge_id"]                = "ref class|CChargePriceIndicator autocomplete|libelle show|0";
     $props["modalite"]                 = "enum notNull list|office|libre|tiers default|libre show|0";
     $props["annule"]                   = "bool show|0";
     $props["recuse"]                   = "enum list|-1|0|1 default|-1 show|0";

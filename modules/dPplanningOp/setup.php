@@ -1446,7 +1446,23 @@ class CSetupdPplanningOp extends CSetup {
               ADD `description_bacterio` TEXT    AFTER `labo_bacterio`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.56";
+    $this->makeRevision("1.56");
+    $query = "CREATE TABLE `charge_price_indicator` (
+                `charge_price_indicator_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `code` VARCHAR (255) NOT NULL,
+                `type` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult') NOT NULL DEFAULT 'ambu',
+                `group_id` INT (11) UNSIGNED NOT NULL,
+                `libelle` VARCHAR (255),
+                `actif` ENUM ('0','1') DEFAULT '0'
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `charge_price_indicator` 
+                ADD INDEX (`group_id`),
+                ADD INDEX (`code`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.57";
   }
 }
 ?>

@@ -117,6 +117,7 @@ class CGroups extends CMbObject {
     $backProps["type_ressources"]         = "CTypeRessource group_id";
     $backProps["secteurs"]                = "CSecteur group_id";
     $backProps["protocoles"]              = "CProtocole group_id";
+    $backProps["charges"]                 = "CChargePriceIndicator group_id";
     return $backProps;
   }
   
