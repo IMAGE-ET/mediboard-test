@@ -1115,6 +1115,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Code tarif su séjour
     $this->getFinancialClass($node, $newVenue);
     
+    // Type d'activité, mode de traitement
+    $this->getChargePriceIndicator($node, $newVenue);
+    
     // Demande de chambre particulière
     $this->getCourtesyCode($node, $newVenue);
     
@@ -1345,6 +1348,26 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function getFinancialClass(DOMNode $node, CSejour $newVenue) {
     /* @todo Voir comment gérer */
+  }
+  
+  function getChargePriceIndicator(DOMNode $node, CSejour $newVenue) {
+    $PV1_21 = $this->query("PV1.21", $node);
+    
+    $sender = $this->_ref_sender;
+    
+    $charge           = new CChargePriceIndicator();
+    $charge->code     = $PV1_21;
+    $charge->actif    = 1;
+    $charge->group_id = $sender->group_id;
+    $charge->loadMatchingObject();
+    
+    // On affecte le type d'activité reçu sur le séjour
+    $newVenue->charge_id = $charge->_id;
+    
+    // Si le type du séjour est différent de celui du type d'activité on modifie son type
+    if ($charge->type && $charge->type != $newVenue->type) {
+      $newVenue->type = $charge->type;
+    }
   }
   
   function getCourtesyCode(DOMNode $node, CSejour $newVenue) {
