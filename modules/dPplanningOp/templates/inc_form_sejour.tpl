@@ -248,6 +248,19 @@ CIM10Selector.init = function(){
   this.pop();
 }
 
+function updateListCPI(form){
+  var field = form.charge_id;
+  
+  var url = new Url("dPplanningOp", "ajax_vw_list_cpi");
+  url.addParam("group_id", $V(form.group_id));
+  url.addParam("type", $V(form.type));
+  url.addParam("selected_id", "{{$sejour->charge_id}}");
+  url.requestUpdate(field, function(){
+    $V(field, ""); // To check the field
+    $V(field, selected_id);
+  });
+}
+
 {{if $mode_operation}}
 // Declaration d'un objet Sejour
 var Sejour = {
@@ -345,6 +358,10 @@ Main.add( function(){
   removePlageOp(false);
   OccupationServices.initOccupation();
   OccupationServices.configBlocage = ({{$conf.dPplanningOp.CSejour.blocage_occupation|@json}} == "1") && !{{$modules.dPcabinet->_can->edit|@json}};
+  
+  {{if $conf.dPplanningOp.CSejour.use_charge_price_indicator}}
+    updateListCPI(form);
+  {{/if}}
 });
 </script>
 
@@ -463,7 +480,7 @@ Main.add( function(){
   </th>
   <td colspan="3">
     {{if !$sejour->_id || $can->admin}}
-    <select class="{{$sejour->_props.group_id}}" style="width: 15em" name="group_id" onchange="removePlageOp(true);">
+    <select class="{{$sejour->_props.group_id}}" style="width: 15em" name="group_id" onchange="removePlageOp(true); updateListCPI(this.form);">
     {{foreach from=$etablissements item=curr_etab}}
       <option value="{{$curr_etab->group_id}}" {{if ($sejour->sejour_id && $sejour->group_id==$curr_etab->group_id) || (!$sejour->sejour_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->_view}}</option>
     {{/foreach}}
@@ -560,7 +577,7 @@ Main.add( function(){
     </script>
     
     <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" onchange="Value.synchronize(this, 'editSejour');" style="width: 12em" />
-    <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');" />
+    <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');"></button>
     <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
     <input type="hidden" name="DP" value="{{$sejour->DP}}" onchange="$V(this.form.keywords_code, this.value); Value.synchronize(this, 'editSejour');"/>
   </td>
@@ -719,10 +736,10 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field="type"}}</th>
   <td>
     {{mb_field object=$sejour field=type style="width: 15em;"
-      onchange="changeTypeHospi(); OccupationServices.updateOccupation(); checkDureeHospi('syncDuree');"}}
+      onchange="changeTypeHospi(); OccupationServices.updateOccupation(); checkDureeHospi('syncDuree'); updateListCPI(this.form);"}}
   </td>
   
-  <td colspan="2" rowspan="2">
+  <td colspan="2" rowspan="{{if $conf.dPplanningOp.CSejour.use_charge_price_indicator}}3{{else}}2{{/if}}">
     <table>
       <tr class="reanimation">
         <th>{{mb_label object=$sejour field="reanimation"}}</th>
@@ -753,6 +770,13 @@ Main.add( function(){
     </table>
   </td>
 </tr>
+
+{{if $conf.dPplanningOp.CSejour.use_charge_price_indicator}}
+  <tr>
+    <th>{{mb_label object=$sejour field="charge_id"}}</th>
+    <td><select class="ref notNull" name="charge_id"></select></td>
+  </tr>
+{{/if}}
 
 {{if $conf.dPplanningOp.CSejour.show_type_pec}}
   <tr>
@@ -927,7 +951,7 @@ Main.add( function(){
     </td>
   
     {{if $mode_operation}}
-    <td colspan="2" />
+    <td colspan="2"></td>
     {{/if}}
   </tr>
     

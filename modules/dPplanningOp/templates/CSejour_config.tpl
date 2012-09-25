@@ -52,7 +52,8 @@
       {{mb_include module=system template=inc_config_enum var=anonymous_sexe values=m|f}}
       {{mb_include module=system template=inc_config_str var=anonymous_naissance}}
     </tbody>
-    {{mb_include module=system template=inc_config_bool var=use_recuse }}
+    {{mb_include module=system template=inc_config_bool var=use_recuse}}
+    {{mb_include module=system template=inc_config_bool var=use_charge_price_indicator}}
     
     <tr>
       <th class="title" colspan="2">Heure par defaut du séjour</th>
