@@ -18,8 +18,6 @@ $cpi = new CChargePriceIndicator;
 $cpi->group_id = $group_id;
 $cpi->type     = $type;
 $cpi->actif    = 1;
-
-mbLog($cpi);
 $cpi_list = $cpi->loadMatchingList();
 
 $smarty = new CSmartyDP();
