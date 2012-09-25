@@ -1351,7 +1351,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getChargePriceIndicator(DOMNode $node, CSejour $newVenue) {
-    $PV1_21 = $this->query("PV1.21", $node);
+    $PV1_21 = $this->queryTextNode("PV1.21", $node);
     
     $sender = $this->_ref_sender;
     
@@ -1363,7 +1363,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // On affecte le type d'activité reçu sur le séjour
     $newVenue->charge_id = $charge->_id;
-    
+
     // Si le type du séjour est différent de celui du type d'activité on modifie son type
     if ($charge->type && $charge->type != $newVenue->type) {
       $newVenue->type = $charge->type;
