@@ -78,7 +78,43 @@
   <tr id="service_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}}>
     <th>{{mb_label object=$sejour field="service_sortie_id"}}</th>
     <td>
-      {{mb_field object=$sejour field="service_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" onchange="this.form.onsubmit();"}}
+      <input type="hidden" name="service_sortie_id" value="{{$sejour->service_sortie_id}}"
+        class="autocomplete" onchange="this.form.onsubmit();" size="25"  />
+      <input type="text" name="service_sortie_id_autocomplete_view" value="{{$sejour->_ref_service_mutation}}" 
+        class="autocomplete" onchange='if(!this.value){this.form["service_sortie_id"].value=""}'size="25"  />
+      
+      <script type="text/javascript">
+        Main.add(function(){
+          var form = getForm("editSejour");
+          var input = form.service_sortie_id_autocomplete_view;
+          var url = new Url("system", "httpreq_field_autocomplete");
+          url.addParam("class", "CSejour");
+          url.addParam("field", "service_sortie_id");
+          url.addParam("limit", 50);
+          url.addParam("view_field", "nom");
+          url.addParam("show_view", false);
+          url.addParam("input_field", "service_sortie_id_autocomplete_view");
+          url.addParam("wholeString", true);
+          url.addParam("min_occurences", 1);
+          url.autoComplete(input, "service_sortie_id_autocomplete_view", {
+            minChars: 1,
+            method: "get",
+            select: "view",
+             dropdown: true,
+            afterUpdateElement: function(field,selected){
+              $V(field.form["service_sortie_id"], selected.getAttribute("id").split("-")[2]);
+            },
+            callback: function(element, query){
+              query += "&where[group_id]={{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}";
+              var field = input.form.elements["cancelled"];
+              if (field) {
+                query += "&where[cancelled]=" + $V(field);  return query;
+              }
+            }
+          });
+        });
+      </script>
+      
       <input type="hidden" name="cancelled" value="0" />
     </td>
   </tr>
