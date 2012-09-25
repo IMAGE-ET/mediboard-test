@@ -61,4 +61,3 @@ class CChargePriceIndicator extends CMbObject {
     $this->_shortview = $this->code;
   }
 }
-?>;
