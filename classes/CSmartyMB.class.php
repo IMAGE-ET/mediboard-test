@@ -79,6 +79,7 @@ class CSmartyMB extends Smarty {
     $this->register_modifier("iso_datetime"      , array($this,"iso_datetime"));
     $this->register_modifier("rel_datetime"      , array($this,"rel_datetime"));
     $this->register_modifier("week_number_month" , array($this,"week_number_month"));
+    $this->register_modifier("conf"              , array($this,"conf"));
     
     $this->register_modifier("const"             , array($this,"_const"));
     $this->register_modifier("static"            , array($this,"_static"));
@@ -412,6 +413,16 @@ class CSmartyMB extends Smarty {
    */
   function week_number_month($datetime) {
     return CMbDate::weekNumberInMonth($datetime);
+  }
+  
+  /**
+   * Configuration accessor
+   * 
+   * @param string $path    The configuration path
+   * @param object $context The context
+   */
+  function conf($path, $context = null) {
+    return CAppUI::conf($path, $context);
   }
   
   /**
