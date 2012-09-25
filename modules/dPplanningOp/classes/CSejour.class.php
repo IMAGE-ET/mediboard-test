@@ -185,7 +185,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_curr_operation          = null;
   var $_ref_curr_operations         = null;
   var $_ref_exams_igs               = null;
-  var $_ref_charges_price_indicator = null; // Type d'activité
+  var $_ref_charge_price_indicator  = null; // Type d'activité
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -1217,8 +1217,8 @@ class CSejour extends CCodable implements IPatientRelated {
   /**
    * @return CChargePriceIndicator
    */
-  function loadRefChargesPriceIndicator($cache = true){
-    return $this->_ref_charges_price_indicator = $this->loadFwdRef("charge_id", $cache);
+  function loadRefChargePriceIndicator($cache = true){
+    return $this->_ref_charge_price_indicator = $this->loadFwdRef("charge_id", $cache);
   }
   
   function countNotificationVisite($date = ''){
