@@ -33,7 +33,7 @@ if (file_exists($filename_lock)) {
   return;
 }  
 
-touch($filename_lock);
+@touch($filename_lock);
 
 $count = $source->_limit = CAppUI::conf("eai max_files_to_process");
 
