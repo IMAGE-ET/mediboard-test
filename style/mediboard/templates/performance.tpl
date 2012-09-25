@@ -8,60 +8,93 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<div id="performance">
-  PHP : 
-    {{$performance.genere}} sec. &ndash;
-    Poids de la page : {{$performance.size}} &ndash;
-    Mémoire {{$performance.memoire}} &ndash;
-    IP du serveur : {{$performance.ip}}
-  
-  {{*
-  <br />
-  Journal :
-    {{$performance.error}}   erreurs &ndash;
-    {{$performance.warning}} alertes &ndash;
-    {{$performance.notice}}  notices 
-  *}}
-  
-  <br />
-  Objets métier : 
-    {{$performance.objets}} chargements &ndash;
-    {{$performance.cachableCount}} cachable &ndash;
-    {{$performance.autoload}} classes auto-chargées
+<ul id="performance">
+  <li class="performance-time" style="width: 10em;">
+    <span class="performance-time">{{$performance.genere}} s</span>
     
-  <br />
-  Détails cachable :
-  {{foreach from=$performance.cachableCounts key=objectClass item=cachableCount}}
-  &ndash; {{$cachableCount}} {{$objectClass}}
-  {{/foreach}}
+    {{assign var=dsTime value=0}}
+    {{foreach from=$performance.dataSources key=dsn item=dataSource}}
+      {{assign var=dsTime value=$dsTime+$dataSource.time}}
+    {{/foreach}}
+    {{math equation='(x/y)*100' assign=ratio x=$dsTime y=$performance.genere}}
+    {{assign var=ratio value=$ratio|round:2}}
+    
+    <div class="performance-bar" title="{{$ratio}} % du temps passé en requêtes au SGBD"><div style="width: {{$ratio}}%;"></div></div>
+    <ul>
+      {{foreach from=$performance.dataSources key=dsn item=dataSource}}
+        <li>
+          <strong>{{$dsn}}</strong> 
+          <span class="performance-count">{{$dataSource.count}}</span> / 
+          <span class="performance-time">{{$dataSource.time|string_format:"%.3f"}} s</span>
+        </li>
+      {{/foreach}}
+    </ul>
+  </li>
   
-  <br />
-  Détails objets :
-  {{foreach from=$performance.objectCounts key=objectClass item=objectCount}}
-  &ndash; {{$objectCount}} {{$objectClass}}
-  {{/foreach}}
+  <li class="performance-memory">
+    {{$performance.memoire}}
+  </li>
   
-  <br />
-  Requêtes SQL : 
-  {{foreach from=$performance.dataSources key=dsn item=dataSource}}
-    &ndash; {{$dataSource.count}} 
-    en {{$dataSource.time|string_format:"%.3f"}} sec.
-    sur '{{$dsn}}'
-  {{/foreach}}
+  <li class="performance-objects" title="Objets chargés / cachables">
+    <span class="performance-count">{{$performance.objets}}</span> / 
+    <span class="performance-count">{{$performance.cachableCount}}</span>
+    <ul>
+      {{foreach from=$performance.objectCounts key=objectClass item=objectCount}}
+        <li>
+          <strong>{{$objectClass}}</strong>
+          <span class="performance-count">{{$objectCount}}</span>
+        </li>
+      {{/foreach}}
+      <li> <hr /> </li>
+      {{foreach from=$performance.cachableCounts key=objectClass item=cachableCount}}
+        <li>
+          <strong>{{$objectClass}}</strong> 
+          <span class="performance-count">{{$cachableCount}}</span>
+        </li>
+      {{/foreach}}
+    </ul>
+  </li>
   
-  {{if $performance.ccam.useCount.1 || 
-       $performance.ccam.useCount.2 || 
-       $performance.ccam.useCount.3}}
-  <br />
-  Utilisation CCAM : 
-    {{$performance.ccam.useCount.1}} light , 
-    {{$performance.ccam.useCount.2}} medium,
-    {{$performance.ccam.useCount.3}} full  &ndash;
-    {{$performance.ccam.cacheCount}} Appels au cache
-  {{/if}}
+  <li class="performance-autoload" title="Classes chargées / pas encore en cache">
+    <span class="performance-count">{{$performance.autoloadCount}}</span>
+    <ul>
+      {{foreach from=$performance.autoload key=objectClass item=time}}
+        <li>
+          <strong>{{$objectClass}}</strong>
+          <span class="performance-time">{{$time|string_format:"%.3f"}} ms</span>
+        </li>
+      {{foreachelse}}
+        <li class="empty">Aucune classe hors cache</li>
+      {{/foreach}}
+    </ul>
+  </li>
   
   {{*
-  <br />
-  Adresse IP : {{$userIP}}
+  <li class="performance-ccam">
+    <span class="performance-count">{{$performance.ccam.cacheCount}}</span>
+    <ul>
+      <li>
+        <strong>light</strong> 
+        <span class="performance-count">{{$performance.ccam.useCount.1}}</span>
+      </li>
+      <li>
+        <strong>medium</strong> 
+        <span class="performance-count">{{$performance.ccam.useCount.2}}</span>
+      </li>
+      <li>
+        <strong>full</strong> 
+        <span class="performance-count">{{$performance.ccam.useCount.3}}</span>
+      </li>
+    </ul>
+  </li>
   *}}
-</div>
+  
+  <li class="performance-pagesize">
+    {{$performance.size}}
+  </li>
+  
+  <li class="performance-network">
+    {{$performance.ip}}
+  </li>
+  <li class="close" onclick="this.up('ul').remove()" title="{{tr}}Close{{/tr}}"></li>
+</ul>

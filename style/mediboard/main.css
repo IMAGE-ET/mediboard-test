@@ -548,9 +548,7 @@ table#weeklyPlanning th.today {
 }
 
 .planning .event {
-  position: absolute; 
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
+  position: absolute;
   border-radius: 3px;
   color: #fff;
   white-space: normal;
@@ -591,9 +589,6 @@ table#weeklyPlanning th.today {
   opacity: 0.5;
   border: 1px solid #666;
   background: #fff url(../../images/buttons/move-black.png) no-repeat center center;
-  
-  -moz-border-radius-bottomright: 6px;
-  -webkit-border-bottom-right-radius: 6px;
   border-bottom-right-radius: 6px;
 }
 
@@ -891,16 +886,37 @@ table#weber td {
   top: 20px;
   background: #fff;
   border: 2px solid #666;
-  padding: 10px;
+  padding: 8px;
   opacity: .7;
+  width: 180px;
+  font-size: 1.1em;
 }
 
 .wizard .toc ol {
   margin: 0;
   padding-left: 20px;
+  line-height: 1.2;
 }
 
-.wizard .toc a {
+.wizard .toc img {
+  width: 12px;
+  float: left; 
+  margin-right: 2px;
+}
+
+.wizard .toc a.logout {
+  background: #ddd url(images/icons/logout.png) no-repeat 3px 3px;
+  padding: 3px;
+  padding-left: 22px;
+  vertical-align: middle;
+  line-height: 16px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+}
+
+.wizard .toc a,
+.wizard .toc strong {
   display: block;
   color: #000;
 }
@@ -942,12 +958,130 @@ div.about div.nav {
   cursor: pointer;
 }
 
-div#performance {
-  opacity: 0.6;
-  line-height: 110%;  
-  font-size: 9px;
-  margin: 10px; 
-  text-align: center;
+#performance {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  border: 1px solid #ddd;
+  border-width: 1px 0 0 1px;
+  cursor: pointer;
+  border-top-left-radius: 2px;
+  z-index: 5000;
+  background: #eee;
+  opacity: 0.7;
+}
+
+#performance:hover {
+  opacity: 1.0;
+}
+
+#performance, 
+#performance ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#performance strong {
+  min-width: 8em;
+  display: inline-block;
+}
+
+#performance > li {
+  display: inline-block;
+  width: 8em;
+  vertical-align: middle;
+  background: #fff;
+  margin: 0;
+  margin-right: -2px;
+  height: 20px;
+  padding-left: 4px;
+  white-space: nowrap;
+  position: relative;
+}
+
+#performance > li:before {
+  display: inline-block;
+  line-height: 16px;
+  height: 16px;
+  width: 16px;
+  position: relative;
+  top: 2px;
+  content: "";
+  background-size: 16px 16px;
+}
+
+#performance > li.performance-time:before {
+  background-image: url(../../images/icons/hourglass.png);
+}
+
+#performance > li.performance-memory:before {
+  background-image: url(../../images/icons/memory.png);
+}
+
+#performance > li.performance-objects:before {
+  background-image: url(../../images/icons/database_load.png);
+}
+
+#performance > li.performance-autoload:before {
+  background-image: url(../../images/icons/autoload.png);
+}
+
+#performance > li.performance-ccam:before {
+  background-image: url(../../modules/dPccam/images/icon.png);
+}
+
+#performance > li.performance-network:before {
+  background-image: url(../../images/icons/network.png);
+}
+
+#performance > li.performance-pagesize:before {
+  background-image: url(../../images/icons/kilogram_weight.png);
+}
+
+#performance > li.close {
+  width: 1em;
+  color: #666;
+}
+
+#performance > li.close:before {
+  content: "x";
+}
+
+#performance > li > ul {
+  display: none;
+  background: #eee;
+  padding: 2px;
+}
+
+#performance > li:hover {
+  background: #eee;
+}
+
+#performance > li:hover > ul {
+  border: 1px solid #ddd;
+  border-bottom: none;
+  display: block;
+  position: absolute;
+  bottom: 21px;
+  left: 1px;
+  min-width: 10em;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+#performance span.performance-count {
+  color: #009;
+}
+
+#performance .performance-bar {
+  display: inline-block;
+  width: 40px;
+  background: #ddd;
+}
+
+#performance .performance-bar div {
+  background: orange; 
+  height: 8px;
 }
 
 option.validation {
@@ -1145,8 +1279,6 @@ table.tbl td.ccmu-P, table.tbl tr:hover td.ccmu-P{
 }
 
 .dent {
-  -moz-border-radius: 22px;
-  -webkit-border-radius: 22px;
   border-radius: 22px;
   position: absolute;
   cursor: pointer;
@@ -1693,8 +1825,6 @@ div.sniffed.uptodate {
 div.jeton_dizaine {
   background: #333;
   border: 1px solid #666;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
   border-radius: 6px;
   float: left;
   width: 11px;
@@ -1705,8 +1835,6 @@ div.jeton_dizaine {
 div.jeton_unite {
   background: #ddd;
   border: 1px solid #666;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
   border-radius: 4px;
   float: left;
   width: 7px;

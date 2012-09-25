@@ -33,7 +33,7 @@
                 <tr>
                   <th style="width: 30%;">{{mb_label class=CConsultation field=_prat_id}}</th>
                   <th style="width: 30%;">{{mb_label class=CConsultation field=patient_id}}</th>
-                  <th style="width: 30%;">{{mb_label class=CPlageConsult field=date}}</th>
+                  <th style="width: 30%;">{{mb_label class=CPlageconsult field=date}}</th>
                   <th style="width: 30%;">{{mb_label class=CConsultation field=heure}}</th>
                 </tr>
                 {{foreach from=$consultations.consult item=consultation}}

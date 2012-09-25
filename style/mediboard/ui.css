@@ -337,8 +337,6 @@ ul.control_tabs li a,
 ul.control_tabs_vertical li a {
   display: block;
   border: 1px solid #458;
-  -moz-border-radius: 3px 3px 0 0;
-  -webkit-border-radius: 3px 3px 0 0;
   border-radius: 3px 3px 0 0;
   background-color: #6688CC;
   font-size: 1.1em;
@@ -450,8 +448,6 @@ ul.control_tabs_vertical li {
 }
 
 ul.control_tabs_vertical li a {
-  -moz-border-radius: 3px 0 0 3px;
-  -webkit-border-radius: 3px 0 0 3px;
   border-radius: 3px 0 0 3px;
   padding: 3px 8px;
   margin-bottom: 2px;
@@ -626,11 +622,6 @@ div.rank.desired {
   cursor: default;
   z-index: 1000 !important;
   box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-  
-  -moz-border-radius: 6px;
-  -moz-border-radius-topleft: 0;
-  -webkit-border-radius: 6px;
-  -webkit-border-top-left-radius: 0;
   border-radius: 6px;
   border-top-left-radius: 0;
 }
@@ -803,8 +794,6 @@ div.rank.desired {
   border: 1px solid #999;
   padding: 20px 5px;
   text-align: center;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 
@@ -863,9 +852,6 @@ div.rank.desired {
   margin: 0 3px;
   padding: 1px 4px;
   cursor: pointer;
-  -moz-border-radius-bottomleft: 4px;
-  -moz-border-radius-bottomright: 4px;
-  -webkit-border-radius: 0 0 4px 4px;
   border-radius: 0 0 4px 4px;
   opacity: 0.5;
 }
@@ -945,9 +931,6 @@ table.active {
   padding: 0.3em;
   border: 3px solid #fff;
   background-color: #eee;
-  
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
   border-radius: 6px;
   box-shadow: 0 0 15px rgba(0,0,0,0.7);
 }
@@ -956,9 +939,7 @@ table.active {
   text-align: center;
   font-size: inherit;
   background: #ccc; 
-  border-radius: 5px; 
-  -moz-border-radius: 5px; 
-  -webkit-border-radius: 5px; 
+  border-radius: 5px;
   font-weight: bold; 
   margin: 0; 
   padding: 5px 1em; 
@@ -984,8 +965,6 @@ table.active {
   background: #eee;
   padding: 4px 2em;
   font-weight: bold;
-  -moz-border-radius: 5px; 
-  -webkit-border-radius: 5px;
   border-radius: 5px; 
 }
 
@@ -1017,8 +996,6 @@ table.active {
   padding: 1px 3px;
   margin: 1px 0;
   color: #555;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
   border-radius: 3px;
   background: url(images/buttons/button.png) center center repeat-x;
 }
@@ -1079,9 +1056,7 @@ ul.tags > li.input {
 ul.tags > li.tag {
   border: 1px solid #ccc;
   background: #fff;
-  padding: 1px 3px 1px 5px; 
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
+  padding: 1px 3px 1px 5px;
   border-radius: 4px;
   cursor: pointer;
   margin-top: 2px;
@@ -1134,8 +1109,6 @@ span.countertip {
   font-size: 8px; 
   margin-top: -7px; 
   margin-left: -8px; 
-  -webkit-border-radius: 30px;
-  -moz-border-radius: 30px;
   border-radius: 30px; 
   border: 1px solid #888;
   width: 10px;
@@ -1150,8 +1123,6 @@ span.countertip {
   background:rgba(255,255,255, 0.4); 
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#66FFFFFF,endColorstr=#66FFFFFF)"; 
   zoom: 1;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
   border-radius: 4px; 
 }
 

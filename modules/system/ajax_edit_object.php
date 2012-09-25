@@ -12,28 +12,28 @@ $object_guid = CValue::get("object_guid");
 $values      = CValue::get("_v", array()); // pre-filled values
 
 if (!$object_guid) {
-	CAppUI::stepAjax("Un identifiant d'objet doit être fourni", UI_MSG_WARNING);
-	return;
+  CAppUI::stepAjax("Un identifiant d'objet doit être fourni", UI_MSG_WARNING);
+  return;
 }
 
 $object = CMbObject::loadFromGuid($object_guid);
 
 if ($object && $object->_id) {
-	global $can;
-	$can->read = $object->canRead();
-	$can->edit = $object->canEdit();
-	$can->needsRead();
+  global $can;
+  $can->read = $object->canRead();
+  $can->edit = $object->canEdit();
+  $can->needsRead();
 }
 
 if (!$object->_id && !empty($values)) {
-	foreach($values as $_key => $_value) {
-		$object->$_key = $_value;
-	}
+  foreach($values as $_key => $_value) {
+    $object->$_key = $_value;
+  }
 }
 
 $template = $object->getTypedTemplate("edit");
 
-$object->loadView();
+$object->loadEditView();
 $object->loadRefsTagItems();
 
 $smarty = new CSmartyDP();

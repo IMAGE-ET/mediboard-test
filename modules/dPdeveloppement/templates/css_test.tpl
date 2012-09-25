@@ -1,17 +1,5 @@
 <script type="text/javascript">
 Main.add(function(){
-  var buttonClasses = {{$button_classes|@json}};
-                      
-  var buttonsContainers = $$("#buttons td");
-  buttonClasses.each(function(c){
-    buttonsContainers[0].insert('<button class="'+c+' notext" title="button.'+c+' notext">'+c+'</button><br />');
-    buttonsContainers[1].insert('<button class="'+c+'" title="button.'+c+'">'+c+'</button><br />');
-    buttonsContainers[2].insert('<button class="'+c+' rtl" title="button.'+c+' rtl">'+c+'</button><br />');
-    buttonsContainers[3].insert('<a href="#1" class="button '+c+' notext" title="a.button '+c+' notext">'+c+'</a><br />');
-    buttonsContainers[4].insert('<a href="#1" class="button '+c+'" title="a.button '+c+'">'+c+'</a><br />');
-    buttonsContainers[5].insert('<a href="#1" class="button '+c+' rtl" title="a.button '+c+' rtl">'+c+'</a><br />');
-  });
-
   var form = getForm("test");
   Calendar.regField(form.dateTime);
   Calendar.regField(form.time);
@@ -66,12 +54,36 @@ Main.add(function(){
       
 <table style="width: 0.1%;" id="buttons">
   <tr>
-    <td></td>
-    <td></td>
-    <td style="text-align:right;"></td>
-    <td></td>
-    <td></td>
-    <td style="text-align:right;"></td>
+    <td>
+      {{foreach from=$button_classes item=_class}}
+        <button class="{{$_class}} notext" title="button.{{$_class}} notext">{{$_class}}</button><br />
+      {{/foreach}}
+    </td>
+    <td>
+      {{foreach from=$button_classes item=_class}}
+        <button class="{{$_class}}" title="button.{{$_class}}">{{$_class}}</button><br />
+      {{/foreach}}
+    </td>
+    <td style="text-align:right;">
+      {{foreach from=$button_classes item=_class}}
+        <button class="{{$_class}} rtl" title="button.{{$_class}} rtl">{{$_class}}</button><br />
+      {{/foreach}}
+    </td>
+    <td>
+      {{foreach from=$button_classes item=_class}}
+        <a href="#1" class="button {{$_class}} notext" title="a.button {{$_class}} notext">{{$_class}}</a><br />
+      {{/foreach}}
+    </td>
+    <td>
+      {{foreach from=$button_classes item=_class}}
+        <a href="#1" class="button {{$_class}}" title="a.button {{$_class}}">{{$_class}}</a><br />
+      {{/foreach}}
+    </td>
+    <td style="text-align:right;">
+      {{foreach from=$button_classes item=_class}}
+        <a href="#1" class="button {{$_class}} rtl" title="a.button {{$_class}} rtl">{{$_class}}</a><br />
+      {{/foreach}}
+    </td>
   </tr>
 </table>
 

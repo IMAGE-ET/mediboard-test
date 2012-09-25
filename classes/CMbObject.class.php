@@ -223,6 +223,13 @@ class CMbObject extends CStoredObject {
   }
   
   /**
+   * Load object view information when used in an edit form (see system/ajax_edit_object.php)
+   */
+  function loadEditView() {
+    return $this->loadView();
+  }
+  
+  /**
    * Load complete object view information 
    */
   function loadComplete() {

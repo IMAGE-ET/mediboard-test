@@ -62,7 +62,7 @@ header("Content-type: text/html; charset=iso-8859-1");
       margin: auto;
       padding: 0.5em;
       font-size: 1.3em;
-      -moz-border-radius: 5px;
+      border-radius: 5px;
     }
   </style>
 </head>

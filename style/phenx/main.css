@@ -24,7 +24,7 @@ dt {
   width: auto;
   background-color: #FFE49F;
   padding: 0.2em 0.5em;
-  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
 
 dd {
@@ -75,8 +75,6 @@ p em {
 
 fieldset, legend {
   border: 1px solid #bbb;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 
@@ -404,8 +402,6 @@ table.main th.title.modify {
   border: 1px solid #f60;
   background-color: #fefefe;
   margin: 3px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
   border-radius: 4px;
   padding: 5px;
   opacity: 0.8;
@@ -413,8 +409,6 @@ table.main th.title.modify {
 
 /* @import "./login.css";   */
 #login {
-  -moz-border-radius: 8px;
-  -webkit-border-radius: 8px;
   border-radius: 8px;
   background: #ddd;
   padding: 10px;
@@ -453,8 +447,6 @@ table.main th.title.modify {
   color: #666;
   margin: 10px 0 4px;
   padding: 4px;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
   border-radius: 6px;
   box-shadow: 0 0 20px rgba(0,0,0,0.1) ;
 }
@@ -498,9 +490,6 @@ table.main th.title.modify {
   font-size: 1em;
   border: 1px solid #DDD;
   border-right: none;
-  -moz-border-radius: 4px 0 0 4px;
-  -webkit-border-top-left-radius: 4px;
-  -webkit-border-bottom-left-radius: 4px;
   border-radius: 4px 0 0 4px;
   text-align: right;
   margin: 2px 0;
@@ -544,16 +533,11 @@ table.main th.title.modify {
   top: -14px;
   left: -4px;
   margin: 2px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
   border-radius: 4px;
   background: #FFF;
   padding: 4px;
   z-index: 40;
-  /*-moz-border-radius: 0 4px 4px 0;
-  -webkit-border-top-right-radius: 4px;
-  -webkit-border-bottom-right-radius: 4px;
-  border-radius: 0 4px 4px 0;*/
+  /*border-radius: 0 4px 4px 0;*/
 }
 
 #nav .selected {
@@ -591,8 +575,6 @@ table.main th.title.modify {
 /* User */
 #user {
   background: #FFF;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
   border-radius: 6px;
   margin: 4px;
   padding: 2px;
@@ -604,8 +586,6 @@ table.main th.title.modify {
 
 #user .menu {
   background: #EFEFEF;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
   border-radius: 5px;
   margin: 2px;
   padding: 2px;
@@ -621,8 +601,6 @@ table.main th.title.modify {
 
 #user .menu a:hover img {
   background: #CCC;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
   border-radius: 2px;
 }
 
@@ -637,8 +615,6 @@ table.main th.title.modify {
 
 #main>.title {
   background: #E0DFE3;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
   border-radius: 4px;
   margin: 2px;
   margin-bottom: 4px;
@@ -800,8 +776,6 @@ ul.control_tabs_vertical li a.active {
 
 #waitingMsgText {
   border: 1px solid #F60;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
   border-radius: 6px;
 }
 

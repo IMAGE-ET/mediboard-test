@@ -340,6 +340,7 @@ $phpChrono->stop();
 
 arsort(CMbObject::$cachableCounts);
 arsort(CMbObject::$objectCounts);
+arsort(CApp::$performance["autoload"]);
 
 CApp::$performance["genere"]         = number_format($phpChrono->total, 3);
 CApp::$performance["memoire"]        = CHTMLResourceLoader::getOutputMemory();

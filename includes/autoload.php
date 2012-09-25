@@ -13,7 +13,8 @@
  * @link       http://www.mediboard.org
  */
 
-CApp::$performance["autoload"] = 0;
+CApp::$performance["autoloadCount"] = 0;
+CApp::$performance["autoload"] = array();
 
 CApp::$classPaths = SHM::get("class-paths");
 
@@ -26,6 +27,7 @@ CApp::$classPaths = SHM::get("class-paths");
  */
 function mbAutoload($class) {
   $file_exists = false;
+  $time = microtime(true);
   
   // Entry already in cache
   if (isset(CApp::$classPaths[$class])) {
@@ -36,7 +38,7 @@ function mbAutoload($class) {
     
     // Load it if we can
     if ($file_exists = file_exists(CApp::$classPaths[$class])) {
-      CApp::$performance["autoload"]++;
+      CApp::$performance["autoloadCount"]++;
       return include_once CApp::$classPaths[$class];
     }
   }
@@ -47,8 +49,10 @@ function mbAutoload($class) {
   }
   
   // CSetup* class
-  if (preg_match("/^CSetup.+/", $class)) {
-    $dirs = array("modules/*/setup.php");
+  if (preg_match('/^CSetup(.+)$/', $class, $matches)) {
+    $dirs = array(
+      "modules/$matches[1]/setup.php",
+    );
   }
   
   // Other class
@@ -60,35 +64,36 @@ function mbAutoload($class) {
       "modules/*/classes/$class.class.php",
       "modules/*/classes/*/$class.class.php",
       "modules/*/classes/*/*/$class.class.php",
+      "install/classes/$class.class.php", 
     );
   }
   
   $rootDir = CAppUI::conf("root_dir");
   
+  $class_path = false;
+  
   foreach ($dirs as $dir) {
     $files = glob("$rootDir/$dir");
+    
     foreach ($files as $filename) {
       include_once $filename;
+  
+      // The class was found
+      if (class_exists($class, false) || interface_exists($class, false)) {
+        $class_path = $filename;
+        break 2;
+      }
     }
   }
   
-  $mb_class = true;
-  
-  // The class was found
-  if (class_exists($class, false) || interface_exists($class, false)) {
-    $reflection = new ReflectionClass($class);
-    CApp::$classPaths[$class] = $reflection->getFileName();
-  }
-  
   // Class not found, it is not in MB
-  else {
-    CApp::$classPaths[$class] = false;
-    $mb_class = false;
-  }
+  CApp::$classPaths[$class] = $class_path;
   
   SHM::put("class-paths", CApp::$classPaths);
   
-  return $mb_class;
+  CApp::$performance["autoload"][$class] = microtime(true) - $time;
+  
+  return $class_path !== false;
 }
 
 if (function_exists("spl_autoload_register")) {

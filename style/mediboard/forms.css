@@ -55,7 +55,7 @@ input[type=number],
 input[type=email], 
 input[type=password],
 textarea {
-  -webkit-border-radius: 0;
+  border-radius: 0;
   -webkit-appearance: none; /* To remove the "shadow" on iPad" */
 }
 
@@ -163,8 +163,6 @@ form hr {
 fieldset, 
 fieldset legend {
   border: 1px solid #999;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
   border-radius: 3px;
 }
 
@@ -213,8 +211,6 @@ a.button {
   background: #eee url(images/buttons/button.png) center center repeat-x;
   
   border: 1px solid #999;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
   border-radius: 3px;
   
   vertical-align: middle;
@@ -240,7 +236,6 @@ a.button {
   background: #eee url(images/buttons/button.png) center center repeat-x;
   
   border: 1px solid #999;
-  -webkit-border-radius: 3px;
   border-radius: 3px;
   
   vertical-align: middle;
@@ -287,6 +282,7 @@ a.button.notext {
   color: rgba(0,0,0,0);
   overflow: hidden;
   width: 20px;
+  padding: 1px;
 }
 
 button.rtl,
@@ -341,8 +337,6 @@ a.button.big {
   padding: 0 2px;
   border-width: 2px;
   text-align: center;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
   border-radius: 6px;
   white-space: normal;
 }
@@ -860,8 +854,6 @@ div.dropdown-trigger {
   background-position: center center;
   background-image: url(images/buttons/button.png);
   border: 1px solid #999;
-  -moz-border-radius: 0 3px 3px 0;
-  -webkit-border-radius: 0 3px 3px 0;
   border-radius: 0 3px 3px 0;
 }
 
@@ -878,8 +870,6 @@ div.dropdown-trigger div {
   bottom:0;
   background: url(../../images/buttons/down.gif) center center no-repeat;
   border: 1px solid #eee;
-  -moz-border-radius: 0 3px 3px 0;
-  -webkit-border-radius: 0 3px 3px 0;
   border-radius: 0 3px 3px 0;
 }
 
@@ -909,8 +899,6 @@ table.tbl .textarea-helped a {
   background-color: #fff;
   opacity: 1;
   border: 1px solid #ccc;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
   border-radius: 3px;
 }
 
@@ -951,8 +939,6 @@ table.tbl .textarea-helped a {
   padding: 2px;
   border: 1px solid #ccc;
   border-top: none;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
   border-radius: 3px;
 }
 
@@ -1018,8 +1004,6 @@ textarea#htmlarea {
 }
 
 .numericField .arrows div.up {
-  -moz-border-radius: 3px 3px 0 0;
-  -webkit-border-radius: 3px 3px 0 0;
   border-radius: 3px 3px 0 0;
   background-image: url(../../images/buttons/up-small.gif);
   border-bottom: none;
@@ -1027,8 +1011,6 @@ textarea#htmlarea {
 }
 
 .numericField .arrows div.down {
-  -moz-border-radius: 0 0 3px 3px;
-  -webkit-border-radius: 0 0 3px 3px;
   border-radius: 0 0 3px 3px;
   background-image: url(../../images/buttons/down-small.gif);
 }
@@ -1063,20 +1045,12 @@ textarea#htmlarea {
 
 .numericField.big-buttons button.down {
   margin-right: -1px;
-  -moz-border-radius-bottomright: 0;
-  -moz-border-radius-topright: 0;
-  -webkit-border-bottom-right-radius: 0;
-  -webkit-border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
 }
 
 .numericField.big-buttons button.up {
   margin-left: -1px;
-  -moz-border-radius-bottomleft: 0;
-  -moz-border-radius-topleft: 0;
-  -webkit-border-bottom-left-radius: 0;
-  -webkit-border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
 }
