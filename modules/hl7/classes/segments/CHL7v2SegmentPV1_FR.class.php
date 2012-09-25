@@ -170,7 +170,7 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     
     // PV1-21: Charge Price Indicator (IS) (optional)
     // Table - 0032
-    $data[] = $sejour->loadRefChargePriceIndicator()->code;
+    $data[] = $this->getModeTraitement($sejour);
     
     // PV1-22: Courtesy Code (IS) (optional)
     // Table - 0045
