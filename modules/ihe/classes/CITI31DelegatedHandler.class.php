@@ -282,6 +282,51 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return $sejour->sortie;
     }
   }
+
+  static function getBasculeCode(CSejour $from, CSejour $to) {
+    $matrix = array(    // comp/M   comp/C   comp/O   bebe/*   ambu/*   urg/*   seances/* exte/*
+      "comp/M"    => array( null,   "A06",   "A06",   "A06",   "A06",   "A07",   "A06",   "A07"),
+      "comp/C"    => array("A06",    null,   "A06",   "A06",   "A06",   "A07",   "A06",   "A07"),
+      "comp/O"    => array("A06",   "A06",    null,   "A06",   "A06",   "A07",   "A06",   "A07"),
+      "bebe/*"    => array("A06",   "A06",   "A06",    null,   "A06",   "A07",   "A06",   "A07"),
+      "ambu/*"    => array("A06",   "A06",   "A06",   "A06",    null,   "A07",   "A06",   "A07"),
+      "urg/*"     => array("A06",   "A06",   "A06",   "A06",   "A06",    null,   "A06",   "A07"),
+      "seances/*" => array("A06",   "A06",   "A06",   "A06",   "A06",   "A07",    null,   "A07"),
+      "exte/*"    => array("A06",   "A06",   "A06",   "A06",   "A06",   "A07",   "A06",    null),
+    );
+    
+    $from->completeField("type", "type_pec");
+    $type_from     = $from->type;
+    $type_pec_from = $from->type_pec;
+    
+    $to->completeField("type", "type_pec");
+    $type_to     = $to->type;
+    $type_pec_to = $to->type_pec;
+    
+    /* // TODO prendre en compte les sejours de type nouveau né
+    $naissances = $from->loadRefsNaissances();
+    foreach ($naissances as $_naissance) {
+      if ($naissances->sejour_bebe_id == $from->_id) {
+        $type_from = "bebe";
+        break;
+      }
+    }*/
+    
+    $row = CMbArray::first($matrix, array("$type_from/$type_pec_from", "$type_from/*"));
+    
+    if (!$row) {
+      return;
+    }
+    
+    $columns = array_flip(array_keys($matrix));
+    $col_num = CMbArray::first($columns, array("$type_to/$type_pec_to", "$type_to/*"));
+    
+    if ($columns === null) {
+      return;
+    }
+    
+    return $row[$col_num];
+  }
   
   function getCodeSejour(CSejour $sejour) {
     $current_log = $sejour->loadLastLog();
@@ -342,18 +387,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return "A25";
       }
       
-      // Bascule externe devient hospitalisé (outpatient > inpatient)
-      if ($sejour->fieldModified("type") 
-        && (in_array($sejour->type, self::$inpatient)) 
-        && in_array($sejour->_old->type, self::$outpatient)) {
-        return "A06";
-      }
-      
-      // Bascule d'hospitalisé à externe (inpatient > outpatient)
-      if ($sejour->fieldModified("type") 
-        && (in_array($sejour->type, self::$outpatient)) 
-        && in_array($sejour->_old->type, self::$inpatient)) {
-        return "A07";
+      // Bascule du type et type_pec
+      if ($sejour->fieldModified("type")) {
+        return self::getBasculeCode($sejour, $sejour->_old);
       }
       
       // Annulation du médecin responsable
