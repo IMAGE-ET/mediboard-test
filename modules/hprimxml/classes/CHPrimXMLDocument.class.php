@@ -918,10 +918,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     );
     $mbOpDebut = CMbRange::forceInside($sejour->entree, $sejour->sortie, "$mbOpDate $mbOpHeureDebut");
     
+    $temp_operation = null;
+    if ($operation->horaire_voulu && $time_operation) {
+      $temp_operation = mbAddTime($time_operation, $operation->horaire_voulu);
+    }
     $mbOpHeureFin = CValue::first(
       $operation->fin_op, 
       $operation->sortie_salle, 
-      mbAddTime($operation->temp_operation, $time_operation ? $time_operation : $operation->horaire_voulu),
+      $temp_operation,
       $operation->_ref_plageop->fin
     );
     $mbOpFin = CMbRange::forceInside($sejour->entree, $sejour->sortie, "$mbOpDate $mbOpHeureFin");
