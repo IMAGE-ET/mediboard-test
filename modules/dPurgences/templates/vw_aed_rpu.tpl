@@ -680,4 +680,4 @@
   {{/if}}
 {{/if}}
 
-<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto;"></div>  
+<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto; display: none;"></div>  
