@@ -163,4 +163,9 @@ span.page:before {
     margin: 0;
     page-break-before: always;
   }
+  
+  input {
+    font-family: dejavu sans;
+    display: inline;
+  }
 }
