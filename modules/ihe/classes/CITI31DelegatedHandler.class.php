@@ -315,14 +315,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     $row = CMbArray::first($matrix, array("$type_from/$type_pec_from", "$type_from/*"));
     
     if (!$row) {
-      return;
+      return $this->getModificationAdmitCode($from->_receiver);
     }
     
     $columns = array_flip(array_keys($matrix));
     $col_num = CMbArray::first($columns, array("$type_to/$type_pec_to", "$type_to/*"));
     
     if ($columns === null) {
-      return;
+      return $this->getModificationAdmitCode($from->_receiver);
     }
     
     return $row[$col_num];
