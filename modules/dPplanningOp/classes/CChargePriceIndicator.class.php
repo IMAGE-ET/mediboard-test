@@ -20,26 +20,25 @@ class CChargePriceIndicator extends CMbObject {
   // DB Table key
   var $code     = null;
   var $type     = null;
+  var $type_pec = null;
   var $group_id = null;
   var $libelle  = null;
   var $actif    = null;
   
   function getSpec() {
     $spec = parent::getSpec();
-    
     $spec->table = 'charge_price_indicator';
     $spec->key   = 'charge_price_indicator_id';
-    
     return $spec;
   }
   
   function getProps() {
     $props = parent::getProps();
-        
     $props["code"]     = "str notNull";
     
     $sejour = new CSejour();
     $props["type"]     = $sejour->_props["type"];
+    $props["type_pec"] = $sejour->_props["type_pec"];
     
     $props["group_id"] = "ref notNull class|CGroups";
     $props["libelle"]  = "str";

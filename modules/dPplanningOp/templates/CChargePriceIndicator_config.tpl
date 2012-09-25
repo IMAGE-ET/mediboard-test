@@ -13,6 +13,7 @@ editCharge = function(charge_id) {
     <th>{{mb_title class=CChargePriceIndicator field=code}}</th>
     <th>{{mb_title class=CChargePriceIndicator field=libelle}}</th>
     <th>{{mb_title class=CChargePriceIndicator field=type}}</th>
+    <th>{{mb_title class=CChargePriceIndicator field=type_pec}}</th>
     <th>{{mb_title class=CChargePriceIndicator field=actif}}</th>
   </tr>
 
@@ -25,6 +26,7 @@ editCharge = function(charge_id) {
         <a href="#1" onclick="return editCharge({{$_cpi->_id}})">{{mb_value object=$_cpi field=libelle}}</a>
       </td>
       <td>{{mb_value object=$_cpi field=type}}</td>
+      <td>{{mb_value object=$_cpi field=type_pec}}</td>
       <td>{{mb_value object=$_cpi field=actif}}</td>
     </tr>
   {{/foreach}}

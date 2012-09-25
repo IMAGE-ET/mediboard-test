@@ -1473,7 +1473,13 @@ class CSetupdPplanningOp extends CSetup {
                 ADD INDEX (`charge_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.58";
+    $this->makeRevision("1.58");
+    $query = "ALTER TABLE `charge_price_indicator` 
+              ADD `type_pec` ENUM ('M','C','O'),
+              ADD INDEX (`type_pec`)";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.59";
   }
 }
 ?>

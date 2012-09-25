@@ -21,6 +21,10 @@
       <td>{{mb_field object=$charge field=type}}</td>
     </tr>
     <tr>
+      <th>{{mb_label object=$charge field=type_pec}}</th>
+      <td>{{mb_field object=$charge field=type_pec emptyLabel="Tous"}}</td>
+    </tr>
+    <tr>
       <th>{{mb_label object=$charge field=actif}}</th>
       <td>{{mb_field object=$charge field=actif}}</td>
     </tr>
