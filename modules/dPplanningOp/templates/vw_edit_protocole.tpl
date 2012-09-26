@@ -286,7 +286,12 @@ Main.add(function () {
           </th>
           <td colspan="2" class="text" id="listCodesCcamProtocole"></td>
         </tr>
-  
+        
+        <tr>
+          <th>{{mb_label object=$protocole field=exam_extempo}}</th>
+          <td colspan="2">{{mb_field object=$protocole field=exam_extempo}}</td>
+        </tr>
+        
         <tr>
           <th>{{mb_label object=$protocole field="cote"}}</th>
           <td colspan="2">

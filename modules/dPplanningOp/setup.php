@@ -1479,7 +1479,12 @@ class CSetupdPplanningOp extends CSetup {
               ADD INDEX (`type_pec`)";
     $this->addQuery($query);
     
-    $this->mod_version = "1.59";
+    $this->makeRevision("1.59");
+    $query = "ALTER TABLE `protocole`
+      ADD `exam_extempo` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.60";
   }
 }
 ?>

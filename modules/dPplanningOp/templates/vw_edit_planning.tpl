@@ -137,7 +137,8 @@ ProtocoleSelector.init = function(){
   this.sConvalescence = "convalescence";
   this.sDP            = "DP";
   this.sRques_sej     = "rques";
-
+  this.sExamExtempo   = "exam_extempo";
+  
   this.sChir_id_easy    = "chir_id";
   this.sServiceId_easy  = "service_id";
   this.sLibelle_easy    = "libelle";

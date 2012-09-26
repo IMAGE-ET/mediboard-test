@@ -47,7 +47,8 @@
       uf_hebergement_id: "{{$_protocole->uf_hebergement_id}}",
       uf_medicale_id   : "{{$_protocole->uf_medicale_id}}",
       uf_soins_id      : "{{$_protocole->uf_soins_id}}",
-      _types_ressources_ids : "{{$_protocole->_types_ressources_ids}}"
+      _types_ressources_ids : "{{$_protocole->_types_ressources_ids}}",
+      exam_extempo     : "{{$_protocole->exam_extempo}}"
     };
   {{/foreach}}
 {{else}}

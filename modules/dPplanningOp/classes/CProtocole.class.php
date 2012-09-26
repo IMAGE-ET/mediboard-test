@@ -49,6 +49,7 @@ class CProtocole extends CMbObject {
   var $duree_preop       = null;
   var $presence_preop    = null;
   var $presence_postop   = null;
+  var $exam_extempo      = null;
   
   // DB fields linked protocols
   var $protocole_prescription_chir_id      = null;
@@ -114,6 +115,7 @@ class CProtocole extends CMbObject {
     $props["duree_preop"]     = "time show|0";
     $props["presence_preop"]  = "time show|0";
     $props["presence_postop"] = "time show|0";
+    $props["exam_extempo"]    = "bool";
     
     $props["protocole_prescription_chir_id"]      = "ref class|CMbObject meta|protocole_prescription_chir_class";
     $props["protocole_prescription_chir_class"]   = "enum list|CPrescription|CPrescriptionProtocolePack";

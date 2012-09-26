@@ -37,6 +37,7 @@ ProtocoleSelector = {
   sUf_medicale_id  : null,
   sUf_soins_id     : null,
   sTypesRessourcesIds : null,
+  sExamExtempo   : null,
   options : {},
 
   pop: function() {
@@ -89,6 +90,7 @@ ProtocoleSelector = {
       $V(oOpForm[this.sExamen],            protocole.examen);
       $V(oOpForm[this.sDuree_uscpo],       protocole.duree_uscpo);
       $V(oOpForm[this.sDuree_preop],       protocole.duree_preop);
+      $V(oOpForm[this.sExamExtempo],       protocole.exam_extempo);
       
       var types_ressources_ids = $V(oOpForm[this.sTypesRessourcesIds]);
       if (types_ressources_ids != "") {
