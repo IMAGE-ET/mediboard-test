@@ -56,6 +56,9 @@ function playField(element, class_name, editor_element, name) {
   // Réouverture si la modale est fermée 
   if (!window.modal_mode_play || !window.modal_mode_play.isOpen) {
     window.modal_mode_play = Modal.open(modal, {draggable: modal.select(".title")[0], overlayOpacity: 0.3});
+    
+    var left = document.viewport.getDimensions().width - window.modal_mode_play.container.getDimensions().width;
+    modal.setStyle({top: 0, left: left+"px"});
   }
 }
 

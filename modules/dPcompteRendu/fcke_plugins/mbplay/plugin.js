@@ -59,6 +59,10 @@ function mbplay_onclick(editor) {
         backgroundColor: "#ffd700"
       });
       window_parent.modal_mode_play.open();
+      
+      var left = window_parent.document.viewport.getDimensions().width - window_parent.modal_mode_play.container.getDimensions().width;
+      window_parent.modal_mode_play.container.setStyle({top: 0, left: left+"px"});
+      
       setTimeout(function(){
         bodyEditor.scrollTop = window_parent.save_scroll
       }, 10);
