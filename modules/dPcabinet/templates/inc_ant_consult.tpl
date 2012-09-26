@@ -263,6 +263,7 @@ Main.add(function () {
                             this.sSearch = document.editLineTP.produit.value;
                             this.sSearchByCIS = 1;
                             this.selfClose = true;
+                            this._DCI = 0;
                             this.sOnglet = onglet;
                             this.pop();
                           }
