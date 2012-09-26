@@ -23,11 +23,13 @@
   {{if $grossesse->_id}}
     <img onmouseover="ObjectTooltip.createEx(this, '{{$grossesse->_guid}}')" {{if !$grossesse->active}}class="opacity-50"{{/if}}
         src="style/mediboard/images/icons/grossesse.png" {{if $large_icon}}style="width: 30px;"{{/if}}/>
-  {{else}}
+  {{elseif !$patient->_id || $patient->sexe == "f"}}
     <div class="empty" style="display:inline">{{tr}}CGrossesse.none_linked{{/tr}}</div>
   {{/if}}
 </span>
 
-<button type="button" class="edit notext button_grossesse" {{if !$patient->_id || $patient->sexe != "f" || $patient->_annees < 12}}disabled="disabled"{{/if}}
-  onclick="Grossesse.viewGrossesses('{{$patient->_id}}', '{{$object->_guid}}', this.form)"></button>
+{{if !$patient->_id || $patient->sexe == "f"}}
+  <button type="button" class="edit notext button_grossesse" {{if !$patient->_id || $patient->_annees < 12}}disabled="disabled"{{/if}}
+    onclick="Grossesse.viewGrossesses('{{$patient->_id}}', '{{$object->_guid}}', this.form)"></button>
+{{/if}}
   
