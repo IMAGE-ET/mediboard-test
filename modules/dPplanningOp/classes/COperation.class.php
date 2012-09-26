@@ -673,32 +673,46 @@ class COperation extends CCodable implements IPatientRelated {
     
     $this->createAlert($comments);
     
+    $sejour = $this->loadRefSejour();
+    $do_store_sejour = false; // Flag pour storer le séjour une seule fois
+    
+    // Mise à jour du type de PeC du séjour en Chirurgical si pas déja obstétrique
+    $sejour->completeField("type_pec");
+    if (!$this->_id && $sejour->type_pec != "O") {
+      $sejour->type_pec = "C";
+      $do_store_sejour = true;
+    }
+    
     // Cas d'une annulation
     if (!$this->annulee) {
       // Si pas une annulation on recupére le sejour
       // et on regarde s'il n'est pas annulé
-      $this->loadRefSejour();
-      if ($this->_ref_sejour->annule) {
-        $this->_ref_sejour->annule = 0;
-        $this->_ref_sejour->store();
+      if ($sejour->annule) {
+        $sejour->annule = 0;
+        $do_store_sejour = true;
       }
 
       // Application des protocoles de prescription en fonction de l'operation->_id
       if ($this->_protocole_prescription_chir_id || $this->_protocole_prescription_anesth_id) {
-        $this->_ref_sejour->_protocole_prescription_chir_id   = $this->_protocole_prescription_chir_id  ;
-        $this->_ref_sejour->_protocole_prescription_anesth_id = $this->_protocole_prescription_anesth_id;
-        $this->_ref_sejour->applyProtocolesPrescription($this->_id);
+        $sejour->_protocole_prescription_chir_id   = $this->_protocole_prescription_chir_id;
+        $sejour->_protocole_prescription_anesth_id = $this->_protocole_prescription_anesth_id;
+        $sejour->applyProtocolesPrescription($this->_id);
         
         // On les nullify pour eviter de les appliquer 2 fois
         $this->_protocole_prescription_anesth_id = null;
         $this->_protocole_prescription_chir_id   = null;
-        $this->_ref_sejour->_protocole_prescription_chir_id   = null;
-        $this->_ref_sejour->_protocole_prescription_anesth_id = null;
+        $sejour->_protocole_prescription_chir_id   = null;
+        $sejour->_protocole_prescription_anesth_id = null;
       }
     } 
     elseif ($this->rank != 0 && !CAppUI::conf("dPplanningOp COperation save_rank_annulee_validee")) {
       $this->rank = 0;
       $this->time_operation = "00:00:00";
+    }
+    
+    // Store du séjour (une seule fois) 
+    if ($do_store_sejour) {
+      $sejour->store();
     }
     
     // Vérification qu'on a pas des actes CCAM codés obsolètes
