@@ -303,6 +303,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     $type_to     = $to->type;
     $type_pec_to = $to->type_pec;
     
+    // psy || ssr == seances
+    if (in_array($type_from, array("psy", "ssr"))) {
+      $type_from = "seances";
+    }
+    if (in_array($type_to, array("psy", "ssr"))) {
+      $type_to = "seances";
+    }
+    
     /* // TODO prendre en compte les sejours de type nouveau né
     $naissances = $from->loadRefsNaissances();
     foreach ($naissances as $_naissance) {
