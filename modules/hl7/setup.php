@@ -9,13 +9,13 @@
  */
 
 class CSetuphl7 extends CSetup {
-  function insertTableEntry($number, $code_hl7_from, $code_hl7_to, $code_mb_from, $code_mb_to, $description) {
+  function insertTableEntry($number, $code_hl7_from, $code_hl7_to, $code_mb_from, $code_mb_to, $description, $user = 1) {
     $description = $this->ds->escape($description);
     
     $query = "INSERT INTO `hl7v2`.`table_entry` (
               `table_entry_id`, `number`, `code_hl7_from`, `code_hl7_to`, `code_mb_from`, `code_mb_to`, `description`, `user`
               ) VALUES (
-                NULL , '$number', '$code_hl7_from', '$code_hl7_to', '$code_mb_from', '$code_mb_to', '$description', '1'
+                NULL , '$number', '$code_hl7_from', '$code_hl7_to', '$code_mb_from', '$code_mb_to', '$description', '$user'
               );";
     
     $this->addQuery($query, false, "hl7v2");
@@ -811,7 +811,62 @@ class CSetuphl7 extends CSetup {
                 ADD `purge_idex_movements` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.34";
+    $this->makeRevision("0.34");
+    
+    /* Remise à niveau des types d'hospitalisation */
+    
+    // Suppression
+    $and = array(
+      "code_mb_from" => "exte"
+    );
+    $this->deleteTableEntry("4", $and);
+    $and = array(
+      "code_mb_from" => "seances"
+    );
+    $this->deleteTableEntry("4", $and);
+    $and = array(
+      "code_mb_from" => "comp"
+    );
+    $this->deleteTableEntry("4", $and);
+    $and = array(
+      "code_mb_from" => "ambu"
+    );
+    $this->deleteTableEntry("4", $and);
+    $and = array(
+      "code_mb_from" => "urg"
+    );
+    $this->deleteTableEntry("4", $and);
+    $and = array(
+      "code_mb_from" => "consult"
+    );
+    $this->deleteTableEntry("4", $and);
+    $and = array(
+      "code_mb_from" => "psy"
+    );
+    $this->deleteTableEntry("4", $and);
+    $and = array(
+      "code_mb_from" => "ssr"
+    );
+    $this->deleteTableEntry("4", $and);
+    
+    // Table 0004 - Patient Class
+    // E - Emergency - Passage aux Urgences - Arrivée aux urgences
+    $this->insertTableEntry("4", "E", "E", "urg", "urg", "Emergency", 0);
+    
+    // I - Inpatient - Hospitalisation
+    $this->insertTableEntry("4", "I" , "I", "comp", "comp", "Inpatient", 0);
+    $this->insertTableEntry("4", null, "I", "ssr" , null  , "Inpatient");
+    $this->insertTableEntry("4", null, "I", "psy" , null  , "Inpatient");
+    $this->insertTableEntry("4", null, "I", "ambu", null  , "Inpatient");
+    
+    // O - Outpatient - Actes et consultation externe
+    $this->insertTableEntry("4", "O" , "O", "exte"   , "exte", "Outpatient", 0);
+    $this->insertTableEntry("4", null, "O", "consult", null  , "Outpatient");
+    
+    // R - Recurring patient - Séances
+    $this->insertTableEntry("4", "R", "R", "seances", "seances", "Recurring patient", 0);
+    
+    $this->mod_version = "0.35";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
