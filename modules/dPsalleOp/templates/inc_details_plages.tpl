@@ -39,6 +39,27 @@
       {{/if}}
     </th>
   </tr>
+  {{assign var=affectations value=$_plage->_ref_affectations_personnel}}
+  {{if $affectations|@is_array}}
+    {{foreach from=$affectations key=type item=list_aff}}
+      {{if $list_aff|@count}}
+        <tr>
+          <td>
+            <strong>
+              {{tr}}CPersonnel.emplacement.{{$type}}{{/tr}} :
+            </strong>
+            <div class="compact">
+              <ul>
+              {{foreach from=$list_aff item=_affectation}}
+                <li>{{$_affectation->_ref_personnel->_ref_user}}</li>
+              {{/foreach}}
+              </ul>
+            </div>
+          </td>
+        </tr>
+      {{/if}}
+    {{/foreach}}
+  {{/if}}
   {{else}}
   <tr>
     <th><label for="anesth_id" title="Anesthésiste associé à la plage d'opération">Anesthésiste</label></th>

@@ -113,6 +113,7 @@ class CSalle extends CMbObject {
     foreach ($this->_ref_plages as &$plage) {
       $plage->loadRefs(0, 1);
       $plage->loadRefsNotes();
+      $plage->loadAffectationsPersonnel();
       $plage->_unordered_operations = array();
       foreach ($plage->_ref_operations as &$operation) {
         $operation->loadRefAnesth(1);
