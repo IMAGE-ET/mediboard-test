@@ -30,7 +30,7 @@ class CPlanningEvent  {
   
   var $hour      = null;
   var $minutes   = null;
-  
+  var $hour_divider = null;
   var $width     = null;
   var $offset    = null;
   var $color     = null;

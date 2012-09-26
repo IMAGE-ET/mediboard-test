@@ -117,6 +117,7 @@
         
         var planning = window["planning-{{$planning->guid}}"];
         planning.updateEventsDimensions();
+        planning.updateRangesDimensions();
       });
     </script>
   </div>

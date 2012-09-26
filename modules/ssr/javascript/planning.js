@@ -31,7 +31,8 @@ PlanningEvent = Class.create({
     
     var element = this.getElement();
     
-    var divider = this.planning.hour_divider;
+    var divider = this.hour_divider || this.planning.hour_divider;
+    
     var minutes = 60/divider;
     var cellHeight = this.planning.getCellHeight();
     var cellWidth = element.up().getWidth();
@@ -80,7 +81,7 @@ PlanningEvent = Class.create({
       var planning = this.planning;
       var element = this.getElement();
       var parent = element.up("td");
-      var snap = [parent.getWidth(), planning.getCellHeight()/planning.hour_divider];
+      var snap = [parent.getWidth(), planning.getCellHeight()/(this.hour_divider || planning.hour_divider)];
       
       // draggable
       new Draggable(element, {

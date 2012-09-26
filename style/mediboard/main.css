@@ -501,7 +501,8 @@ table#weeklyPlanning th.today {
 #planningWeek .operation:hover,
 #planningWeek .consultation:hover,
 #planningWeek .operation_horsplage:hover,
-#planningWeek .commentaire_planning:hover {
+#planningWeek .commentaire_planning:hover,
+#planningWeek .rdvfull:hover {
   overflow:visible;
   min-height:35px;
 }

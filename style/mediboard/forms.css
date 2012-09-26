@@ -341,6 +341,10 @@ a.button.big {
   white-space: normal;
 }
 
+button.copy:before, a.button.copy:before {
+  content: url(images/buttons/copy.png);
+}
+
 button.cut:before, a.button.cut:before {
   content: url(images/buttons/cut.png);
 }

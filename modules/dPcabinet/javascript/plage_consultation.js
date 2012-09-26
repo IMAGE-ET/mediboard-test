@@ -12,11 +12,14 @@ PlageConsultation  = {
   status_images : ["images/icons/status_red.png", "images/icons/status_orange.png", "images/icons/status_green.png"],
   modal: null,
   
-  edit: function(plageconsult_id) {
+  edit: function(plageconsult_id, callback) {
     var url = new Url('cabinet', 'edit_plage_consultation');
     url.addParam('plageconsult_id', plageconsult_id);
     url.requestModal(800);
     this.modal = url.modalObject;
+    if (callback) {
+      url.modalObject.observe("afterClose", callback);
+    }
   },
   
   onSubmit: function(form) {

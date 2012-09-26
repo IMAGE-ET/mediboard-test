@@ -156,7 +156,7 @@ Main.add(function() {
                           {{assign var=explode_guid value="-"|explode:$_range->guid}}
                           {{if $_range->type == "plageconsult"}}
                             style="cursor: help; background: #{{$_range->color}}";
-                            onclick="PlageConsultation.edit('{{$explode_guid.1}}')"
+                            onclick="PlageConsultation.edit('{{$explode_guid.1}}', refreshPlanning)"
                           {{/if}}>
                           {{if $_range->title}}
                             <div class="libelle">
@@ -198,7 +198,12 @@ Main.add(function() {
                            {{if $_event->menu|@count <= 3}}
                             <div class="toolbar" {{if $_event->hour == 0}}style="top:100%;"{{/if}}>
                               {{foreach from=$_event->menu item=element}}
-                                <a class="button {{$element.class}} notext" onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$element.class}}','{{$_event->plage.id}}', this)" title="{{$element.title}}"></a>
+                                <a class="button {{$element.class}} notext"
+                                  {{if isset($_event->plage.consult_id|smarty:nodefaults)}}
+                                   data-consultation_id="{{$_event->plage.consult_id}}"
+                                 {{/if}}
+                                onclick="window['planning-{{$planning->guid}}'].onMenuClick('{{$element.class}}','{{$_event->plage.id}}', this)"
+                                title="{{$element.title}}"></a>
                               {{/foreach}}
                             </div>
                             {{/if}}
