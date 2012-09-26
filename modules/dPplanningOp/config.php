@@ -87,6 +87,7 @@ $dPconfig["dPplanningOp"]= array(
     "anonymous_naissance" => "1970-01-01",
     "use_recuse" => "0",
     "use_charge_price_indicator" => "0",
+    "show_only_charge_price_indicator" => "0",
   ),
 );
 

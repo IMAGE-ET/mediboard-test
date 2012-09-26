@@ -54,6 +54,7 @@
     </tbody>
     {{mb_include module=system template=inc_config_bool var=use_recuse}}
     {{mb_include module=system template=inc_config_bool var=use_charge_price_indicator}}
+    {{mb_include module=system template=inc_config_bool var=show_only_charge_price_indicator}}
     
     <tr>
       <th class="title" colspan="2">Heure par defaut du séjour</th>

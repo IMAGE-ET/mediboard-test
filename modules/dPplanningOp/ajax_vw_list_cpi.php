@@ -16,9 +16,13 @@ $selected_id = CValue::get("selected_id");
 
 $cpi = new CChargePriceIndicator;
 $cpi->group_id = $group_id;
-$cpi->type     = $type;
 $cpi->actif    = 1;
-$cpi_list = $cpi->loadMatchingList();
+
+if ($type) {
+  $cpi->type = $type;
+}
+
+$cpi_list = $cpi->loadMatchingList("libelle");
 
 $smarty = new CSmartyDP();
 $smarty->assign("cpi_list", $cpi_list);
