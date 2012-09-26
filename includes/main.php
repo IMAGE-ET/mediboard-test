@@ -109,8 +109,11 @@ if (!CAppUI::$instance->user_id) {
   $redirect = CValue::get("logout") ?  "" : CValue::read($_SERVER, "QUERY_STRING"); 
   $_SESSION["locked"] = null;
   
-  // HTTP 403 header
-  //header('HTTP/1.0 403 Forbidden');  
+  // HTTP 403 Forbidden header when RAW response expected
+  if ($suppressHeaders) {
+    header("HTTP/1.0 403 Forbidden");
+    CApp::rip();
+  }
   
   // Ajax login alert
   if ($ajax) {
