@@ -44,10 +44,12 @@ CKEDITOR.editorConfig = function(config) {
   'Courier New/Courier New, Courier, monospace;' +
   'Georgia/Georgia, serif;' +
   'Lucida Sans Unicode/Lucida Sans Unicode, Lucida Grande, sans-serif;' +
+  'Symbol/Symbol;' +
   'Tahoma/Tahoma, Geneva, sans-serif;' +
   'Times New Roman/Times New Roman, Times, serif;' +
   'Trebuchet MS/Trebuchet MS, Helvetica, sans-serif;' +
-  'Verdana/Verdana, Geneva, sans-serif';
+  'Verdana/Verdana, Geneva, sans-serif;' +
+  'ZapfDingBats/ZapfDingBats';
   
   var css = ["style/mediboard/htmlarea.css?build={{$version.build}}"];
   if (Prototype.Browser.IE) {

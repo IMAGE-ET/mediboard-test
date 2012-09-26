@@ -100,10 +100,12 @@ class CCompteRendu extends CDocumentItem {
     "courier"   => "Courrier New",
     "georgia"   => "Georgia",
     "lucida"    => "Lucida Sans Unicode",
+    "symbol"    => "Symbol",
     "tahoma"    => "Tahoma",
     "times"     => "Times New Roman",
     "trebuchet" => "Trebuchet MS",
-    "verdana"   => "Verdana"
+    "verdana"   => "Verdana",
+    "zapfdingbats" => "ZapfDingBats"
   );
   
   function getSpec() {
@@ -137,7 +139,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["content_id"]       = "ref class|CContentHTML show|0";
     $specs["object_class"]     = "str notNull class show|0";
     $specs["nom"]              = "str notNull show|0 seekable";
-    $specs["font"]             = "enum list|arial|calibri|comic|courier|georgia|lucida|tahoma|times|trebuchet|verdana";
+    $specs["font"]             = "enum list|arial|calibri|comic|courier|georgia|lucida|symbol|tahoma|times|trebuchet|verdana|zapfdingbats";
     $specs["size"]             = "enum list|xx-small|x-small|small|medium|large|x-large|xx-large|8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt";
     $specs["type"]             = "enum list|header|preface|body|ending|footer default|body";
     $specs["_list_classes"]    = "enum list|CBloodSalvage|CConsultAnesth|CConsultation|CDossierMedical|CFunctions|CGroups|CMediusers|COperation|CPatient|CPrescription|CSejour";

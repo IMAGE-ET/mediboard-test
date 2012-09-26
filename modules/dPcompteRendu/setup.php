@@ -831,7 +831,12 @@ class CSetupdPcompteRendu extends CSetup {
       CHANGE `font` `font` ENUM ('arial','calibri','comic','courier','georgia','lucida','tahoma','times','trebuchet','verdana')";
     $this->addQuery($query);
     
-    $this->mod_version = "0.86";
+    $this->makeRevision("0.86");
+    $query = "ALTER TABLE `compte_rendu`
+      CHANGE `font` `font` ENUM ('arial','calibri','comic','courier','georgia','lucida','symbol','tahoma','times','trebuchet','verdana','zapfdingbats')";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.87";
   }
 }
 ?>
