@@ -82,6 +82,25 @@ class CEAISejour extends CEAIMbObject {
     $group = new CGroups();
     $group->load($sender->group_id);
     $group->loadConfigValues();
+    
+    // Purge du NDA existant sur le séjour et on le remplace par le nouveau
+    if ($sender->_configs["purge_idex_movements"]) {
+      // On charge le NDA courant du séjour
+      $sejour->loadNDA($sender->group_id);
+      
+      $ref_NDA = $sejour->_ref_NDA;
+      // On passe le NDA courant en trash
+      $ref_NDA->tag = CAppUI::conf("dPplanningOp CSejour tag_dossier_trash").$ref_NDA->tag;
+      $ref_NDA->store();
+      
+      // On sauvegarde le nouveau
+      $NDA->tag          = $sender->_tag_sejour;
+      $NDA->object_class = "CSejour";
+      $NDA->object_id    = $sejour->_id;
+      $NDA->last_update  = mbDateTime();
+      
+      return $NDA->store();  
+    }
       
     // Génération du NDA ? 
     // Non

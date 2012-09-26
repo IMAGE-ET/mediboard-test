@@ -806,7 +806,12 @@ class CSetuphl7 extends CSetup {
                 ADD `handle_PV1_36` ENUM ('discharge_disposition','ZFM') DEFAULT 'discharge_disposition';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.33";
+    $this->makeRevision("0.33");
+    $query = "ALTER TABLE `hl7_config` 
+                ADD `purge_idex_movements` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.34";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

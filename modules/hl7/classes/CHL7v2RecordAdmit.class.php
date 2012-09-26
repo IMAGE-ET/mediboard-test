@@ -156,8 +156,15 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $venueAN       = $this->getVenueAN($sender, $data);
 
     $NDA = new CIdSante400();
-    if ($venueAN) {
-      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
+    
+    $sender_purge_idex_movements = $sender->_configs["purge_idex_movements"];
+    if ($sender_purge_idex_movements) {
+      $NDA->id400 = $venueAN;
+    }  
+    else {
+      if ($venueAN) {
+        $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
+      }
     }
   
     // NDA non connu (non fourni ou non retrouvé)
@@ -173,7 +180,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }
       
       // VN fourni
-      if (!$found && $venueVN) {
+      if (!$found && $venueVN && !$sender_purge_idex_movements) {
         // Le champ PV1.2 conditionne le remplissage et l'interprétation de PV1.19
         $this->getSejourByVisitNumber($newVenue, $data);
         if ($newVenue->_id) {
@@ -329,6 +336,33 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // Mapping du mouvement
+    if ($sender_purge_idex_movements) {
+      // On recherche un mouvement de l'event (A05/A01/A04)
+      $movement                        = new CMovement();
+      $movement->sejour_id             = $newVenue->_id;
+      $movement->original_trigger_code = $this->_ref_exchange_ihe->code;
+      $movement->cancel                = 0;
+      $movement->loadMatchingObject();
+      
+      // Si on a un mouvement alors on annule tous les autres
+      if ($movement->_id) {
+        foreach ($newVenue->loadRefsMovements() as $_movement) {
+          // On passe en trash l'idex associé
+          $_movement->loadLastId400();
+          $last_id400 = $_movement->_ref_last_id400;
+          if ($last_id400->_id) {
+            $last_id400->tag = "trash_".$last_id400->tag;
+            $last_id400->last_update = mbDateTime();
+            $last_id400->store();
+          }
+          
+          // On annule le mouvement
+          $_movement->cancel = 1;
+          $_movement->store();
+        }
+      }      
+    }
+    
     $return_movement = $this->mapAndStoreMovement($ack, $newVenue, $data);
     if (is_string($return_movement)) {
       return $return_movement;
@@ -1312,6 +1346,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $sender = $this->_ref_sender;
     $PV1_10 = $this->queryTextNode("PV1.10", $node);
     
+    if (!$PV1_10) {
+      return;
+    }
+    
     // Hospital Service
     switch ($sender->_configs["handle_PV1_10"]) {
       // idex du service
@@ -1529,6 +1567,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       }    
     }
     
+    if (!$own_movement && !$sender_movement) {
+      return "Impossible d'identifier le mouvement";
+    }
+    
     $movement_id = $own_movement ? $own_movement : $sender_movement;
     if (!$movement_id) {
       return null;
@@ -1563,7 +1605,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     // ID mouvement provenant d'un système tiers
     else {
-      $id400Movement = CIdSante400::getMatch("CMovement", $sender->_tag_movement, $movement_id);      
+      $id400Movement = CIdSante400::getMatch("CMovement", $sender->_tag_movement, $movement_id); 
       if ($id400Movement->_id) {
         $movement->load($id400Movement->object_id);
       }
@@ -1571,6 +1613,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       else {
         $id400_create = true;
         if ($event_code != "A02" || $event_code != "A21") {
+          $movement->cancel = 0;
           $movement->loadMatchingObjectEsc();
         }
       }

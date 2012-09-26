@@ -47,10 +47,17 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $patientRI       = CValue::read($data['personIdentifiers'], "RI");
     $patientRISender = CValue::read($data['personIdentifiers'], "RI_Sender");
     $patientPI       = CValue::read($data['personIdentifiers'], "PI");
-   
+      
     $IPP = new CIdSante400();
-    if ($patientPI) {
-      $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
+    
+    $sender_purge_idex_movements = $sender->_configs["purge_idex_movements"];  
+    if ($sender_purge_idex_movements) {
+      $IPP->id400 = $patientPI;
+    }  
+    else {
+      if ($patientPI) {
+        $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
+      }
     }
 
     // PI non connu (non fourni ou non retrouvé)
@@ -116,6 +123,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         }
       }
       
+      $newPatient->_generate_IPP = false;
       // Mapping secondaire (correspondants, médecins) du patient
       if ($msgPatient = $this->secondaryMappingPatient($data, $newPatient)) {
         return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);

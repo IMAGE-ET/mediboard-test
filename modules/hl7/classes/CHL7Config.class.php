@@ -40,7 +40,10 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle_PV1_10",
     "handle_PV1_14",
     "handle_PV1_36",
-    "handle_NSS"
+    "handle_NSS",
+    
+    // Purge
+    "purge_idex_movements",
   );
   
   var $hl7_config_id = null;
@@ -68,6 +71,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $handle_PV1_14 = null;
   var $handle_PV1_36 = null;
   var $handle_NSS    = null;
+  
+  var $purge_idex_movements = null;
   
   var $_categories = array(
     "format" => array(
@@ -99,6 +104,10 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_PV1_36",
       "handle_NSS",
     ),
+    
+    "purge" => array(
+      "purge_idex_movements"
+    )
   );
 
   function getSpec() {
@@ -140,6 +149,9 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["handle_PV1_10"] = "enum list|discipline|service default|discipline";
     $props["handle_PV1_14"]  = "enum list|admit_source|ZFM default|admit_source";
     $props["handle_PV1_36"]  = "enum list|discharge_disposition|ZFM default|discharge_disposition";
+    
+    // Purge
+    $props["purge_idex_movements"] = "bool default|0";
     
     return $props;
   }

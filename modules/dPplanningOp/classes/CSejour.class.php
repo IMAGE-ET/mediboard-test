@@ -186,6 +186,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_curr_operations         = null;
   var $_ref_exams_igs               = null;
   var $_ref_charge_price_indicator  = null; // Type d'activité
+  var $_ref_movements               = null;
 
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -1948,6 +1949,10 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_affectations = $affectations;
   }
 
+  function loadRefsMovements() {
+    return $this->_ref_movements = $this->loadBackRefs("movements");
+  }
+  
   function loadRefFirstAffectation() {
     if (!$this->_ref_first_affectation) {
       $this->loadRefsAffectations();

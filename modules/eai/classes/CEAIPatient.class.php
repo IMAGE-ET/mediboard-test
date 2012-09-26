@@ -69,6 +69,25 @@ class CEAIPatient extends CEAIMbObject {
     $group = new CGroups();
     $group->load($sender->group_id);
     $group->loadConfigValues();
+    
+    // Purge de l'IPP existant sur le patient et on le remplace par le nouveau
+    if ($sender->_configs["purge_idex_movements"]) {
+      // On charge l'IPP courant du patient
+      $patient->loadIPP($sender->group_id);
+      
+      $ref_IPP = $patient->_ref_IPP;
+      // On passe l'IPP courant en trash
+      $ref_IPP->tag = CAppUI::conf("dPpatients CPatient tag_ipp_trash").$ref_IPP->tag;
+      $ref_IPP->store();
+      
+      // On sauvegarde le nouveau
+      $IPP->tag          = $sender->_tag_patient;
+      $IPP->object_class = "CPatient";
+      $IPP->object_id    = $patient->_id;
+      $IPP->last_update  = mbDateTime();
+      
+      return $IPP->store();  
+    }
       
     // Génération de l'IPP ? 
     // Non
