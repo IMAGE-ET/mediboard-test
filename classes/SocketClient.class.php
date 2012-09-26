@@ -352,7 +352,7 @@ class SocketClient {
    * @param string $sBuf
    * @return string
    */
-  public function sendandrecive($sBuf) {
+  public function sendAndReceive($sBuf) {
     $this->send($sBuf);
     return $this->recv();
   }

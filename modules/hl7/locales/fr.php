@@ -425,7 +425,6 @@ $locales['mod-hl7-tab-vw_display_hl7v2_message'] = 'Highlight HL7v2';
 $locales['mod-hl7-tab-vw_hl7v2_schemas'] = 'Schémas HL7v2';
 $locales['mod-hl7-tab-vw_hl7v2_tables'] = 'Tables HL7v2';
 $locales['mod-hl7-tab-vw_read_hl7v2_files'] = 'Lecture fichier HL7';
-$locales['mod-hl7-tab-vw_servers_mllp'] = 'Serveurs MLLP';
 $locales['mod-hl7-tab-vw_test_hl7v2_data_type'] = 'Test types de données';
 $locales['module-hl7-court'] = 'HL7';
 $locales['module-hl7-long'] = 'HL7';

@@ -331,7 +331,7 @@ if (!$suppressHeaders) {
   $tplHeader->display("header.tpl");
 }
 
-// tabBox et inclusion du fichier demandï¿½
+// tabBox et inclusion du fichier demandé
 if ($tab !== null) {
   $module->showTabs();
 }

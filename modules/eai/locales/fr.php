@@ -220,6 +220,7 @@ $locales['mod-eai-tab-import_config'] = 'Import configuration du format';
 $locales['mod-eai-tab-vw_idx_exchange_data_format'] = 'Echanges';
 $locales['mod-eai-tab-vw_idx_interop_actors'] = 'Acteurs';
 $locales['mod-eai-tab-vw_stats'] = 'Stats';
+$locales['mod-eai-tab-vw_servers_socket'] = 'Serveurs de sockets';
 $locales['module-eai-court'] = 'EAI';
 $locales['module-eai-long'] = 'Enterprise Application Integration';
 $locales['utilities-source-http'] = 'Utilitaires de la source HTTP';
