@@ -97,7 +97,14 @@ for ($i = 0; $i < $nbDays; $i++) {
       $debute = "$jour $_consult->heure";
       if($_consult->patient_id) {
         $_consult->loadRefPatient();
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, "#fee", true, "droppable", $_consult->_guid);
+        $color = "#fee";
+        if ($_consult->premiere) {
+          $color = "#faa";
+        }
+        if ($_consult->derniere) {
+          $color = "#faf";
+        }
+        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, $color, true, "droppable", $_consult->_guid);
       } else {
         $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->motif ? $_consult->motif : "[PAUSE]", "#ffa", true, null, null);
       }
