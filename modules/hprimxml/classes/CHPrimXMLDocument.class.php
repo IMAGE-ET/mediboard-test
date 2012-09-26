@@ -903,6 +903,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       
     $sejour = $operation->loadRefSejour();
     
+    // Calcul du début de l'intervention
     $mbOpDate = CValue::first(
       $operation->_ref_plageop->date,
       $operation->date
@@ -918,15 +919,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     );
     $mbOpDebut = CMbRange::forceInside($sejour->entree, $sejour->sortie, "$mbOpDate $mbOpHeureDebut");
     
-    $temp_operation = null;
-    if ($operation->horaire_voulu && $time_operation) {
-      $temp_operation = mbAddTime($time_operation, $operation->horaire_voulu);
-    }
+    // Calcul de la fin de l'intervention
     $mbOpHeureFin = CValue::first(
       $operation->fin_op, 
       $operation->sortie_salle, 
-      $temp_operation,
-      $operation->_ref_plageop->fin
+      mbAddTime($operation->temp_operation, mbTime($mbOpDebut))
     );
     $mbOpFin = CMbRange::forceInside($sejour->entree, $sejour->sortie, "$mbOpDate $mbOpHeureFin");
 
