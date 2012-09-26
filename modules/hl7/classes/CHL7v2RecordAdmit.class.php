@@ -1363,6 +1363,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // On affecte le type d'activité reçu sur le séjour
     $newVenue->charge_id = $charge->_id;
+    
+    // Type PEC
+    $newVenue->type_pec = $charge->type_pec;
 
     // Si le type du séjour est différent de celui du type d'activité on modifie son type
     if ($charge->type && $charge->type != $newVenue->type) {
