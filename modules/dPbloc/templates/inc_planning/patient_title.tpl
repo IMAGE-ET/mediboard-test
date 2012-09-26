@@ -9,9 +9,9 @@
 *}}
 
 {{if $_coordonnees}}
-<th class="title" colspan="3">
+<th class="title" colspan="4">
 {{else}}
-<th class="title" colspan="2">
+<th class="title" colspan="3">
 {{/if}}
   Patient
 </th>

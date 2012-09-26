@@ -11,6 +11,7 @@
 <!-- Patient -->
 <th>Nom - Prénom</th>
 <th>Age</th>
+<th>Sexe</th>
 {{if $_coordonnees}}
 <th>Telephone</th>
 {{/if}}
