@@ -2,7 +2,7 @@
 
 /**
  * @package Mediboard
- * @subpackage dicom
+ * @subpackage cli
  * @version $Revision$
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @author SARL OpenXtrem
