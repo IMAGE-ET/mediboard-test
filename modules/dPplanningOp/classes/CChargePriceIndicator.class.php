@@ -56,7 +56,7 @@ class CChargePriceIndicator extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
-    $this->_view      = $this->libelle;
+    $this->_view      = $this->libelle ? $this->libelle : $this->code;
     $this->_shortview = $this->code;
   }
 }
