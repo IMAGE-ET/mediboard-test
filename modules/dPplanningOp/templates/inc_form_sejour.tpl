@@ -224,6 +224,7 @@ function printFormSejour() {
 function openAntecedents() {
   var url = new Url("cabinet", "httpreq_vw_antecedents");
   url.addParam("sejour_id", '{{$sejour->_id}}');
+  url.addParam("show_header", 1);
   url.modal();
 }
 
