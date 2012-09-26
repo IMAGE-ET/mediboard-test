@@ -226,10 +226,11 @@ function infoBacterio(field) {
   </tr>
   {{/if}}
   
-  {{if $selOp->_ref_sejour->rques || $selOp->rques || $selOp->materiel}}
+  {{assign var=consult_anesth value=$selOp->_ref_consult_anesth}}
+  {{if $selOp->_ref_sejour->rques || $selOp->rques || $selOp->materiel || ($consult_anesth->_id && $consult_anesth->_intub_difficile)}}
   <!-- Mise en avant du matériel et remarques -->
   <tr>
-    {{if $selOp->_ref_sejour->rques || $selOp->rques}}
+    {{if $selOp->_ref_sejour->rques || $selOp->rques || ($consult_anesth->_id && $consult_anesth->_intub_difficile)}}
     {{if !$selOp->materiel}}
     <td class="text big-warning" colspan="2">
     {{else}}
@@ -239,9 +240,16 @@ function infoBacterio(field) {
       <strong>{{mb_label object=$selOp->_ref_sejour field=rques}}</strong>
       {{mb_value object=$selOp->_ref_sejour field=rques}}
       {{/if}}
-      {{if $selOp->rques}}
+      {{if $selOp->rques || ($consult_anesth->_id && $consult_anesth->_intub_difficile)}}
       <strong>{{mb_label object=$selOp field=rques}}</strong>
+      {{/if}}
+      {{if $selOp->rques}}
       {{mb_value object=$selOp field=rques}}
+      {{/if}}
+      {{if $consult_anesth->_id && $consult_anesth->_intub_difficile}}
+        <div style="font-weight: bold; color:#f00;">
+          {{tr}}CConsultAnesth-_intub_difficile{{/tr}}
+        </div>
       {{/if}}
     </td>
     {{/if}}
@@ -320,10 +328,10 @@ function infoBacterio(field) {
 {{if !$conf.dPsalleOp.mode_anesth && (!$currUser->_is_praticien || $currUser->_is_praticien && $can->edit)}}
 <div id="timing_tab" style="display:none">
   <div id="check_lists">
-    {{include file="inc_vw_operation_check_lists.tpl"}}
+    {{mb_include module=salleOp template=inc_vw_operation_check_lists}}
   </div>
   <div id="timing">
-    {{include file="inc_vw_timing.tpl"}}
+    {{mb_include module=salleOp template=inc_vw_timing}}
   </div>
   <div id="listPersonnel">
     {{* include file="inc_vw_personnel.tpl" *}}
@@ -404,7 +412,7 @@ function infoBacterio(field) {
 {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)}}
 <!-- Anesthesie -->
 <div id="anesth_tab" style="display:none">
-  {{include file="inc_vw_info_anesth.tpl"}}
+  {{mb_include module=salleOp template=inc_vw_info_anesth}}
 </div>
 {{/if}}
 

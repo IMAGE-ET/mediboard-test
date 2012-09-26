@@ -445,7 +445,7 @@
         <tr>
         {{if $consult->_ref_consult_anesth->_intub_difficile}}
           <td colspan="3" style="font-weight: bold; text-align:center; color:#F00;">
-            Intubation difficile prévisible
+            {{tr}}CConsultAnesth-_intub_difficile{{/tr}}
           </td>
         {{else}}
           <td colspan="3" style="font-weight: bold; text-align:center;">

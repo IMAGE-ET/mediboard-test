@@ -51,7 +51,7 @@
 {{foreach from=$intervs item=_op}}
   {{assign var=sejour  value=$_op->_ref_sejour}}
   {{assign var=patient value=$sejour->_ref_patient}}
-
+  {{assign var=consult_anesth value=$_op->_ref_consult_anesth}}
   <tr>
     <td class="text" style="vertical-align: top;">
       {{mb_include module=system template=inc_object_history object=$_op}}
@@ -129,8 +129,8 @@
         </select>
         <br />
         <button type="button" style="clear: both; width:11em;" 
-                class="{{if $_op->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}"
-                onclick="printFicheAnesth('{{$_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_op->_id}}');">
+                class="{{if $consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}"
+                onclick="printFicheAnesth('{{$consult_anesth->_ref_consultation->_id}}', '{{$_op->_id}}');">
           Fiche d'anesthésie
         </button>
         {{if $conf.dPbloc.CPlageOp.systeme_materiel == "expert"}}
@@ -162,10 +162,15 @@
         <em>{{mb_label object=$_op field=materiel}}</em> :
         {{mb_value object=$_op field=materiel}}
       {{/if}}
-      {{if $_op->rques}}
+      {{if $_op->rques || ($consult_anesth->_ref_consultation->_id && $consult_anesth->_intub_difficile)}}
       <div class="small-warning">
         <em>{{mb_label object=$_op field=rques}}</em> :
         {{mb_value object=$_op field=rques}}
+        {{if $consult_anesth->_ref_consultation->_id && $consult_anesth->_intub_difficile}}
+          <div style="font-weight: bold; color:#f00;">
+            {{tr}}CConsultAnesth-_intub_difficile{{/tr}}
+          </div>
+        {{/if}}
       </div>
       {{/if}}
     </td>
