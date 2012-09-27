@@ -21,7 +21,8 @@ table.dialog #systemMsg,
   border: 1px solid #888;
   right: 20px;
   z-index: 1200;
-  background: rgba(255,255,255,0.6);
+  background: white;
+  background: rgba(255,255,255,0.95);
   box-shadow: 0 0 10px rgba(0,0,0,0.4);
   border-radius: 3px;
 }

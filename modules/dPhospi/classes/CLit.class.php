@@ -16,7 +16,7 @@ class CLit extends CMbObject {
   static $_prefixe = null;
   
   // DB Table key
-	var $lit_id = null;	
+  var $lit_id = null;	
   
   // DB References
   var $chambre_id = null;
@@ -31,11 +31,19 @@ class CLit extends CMbObject {
   var $_lines       = array();
   
   // Object references
+  
+  /**
+   * @var CChambre
+   */
   var $_ref_chambre      = null;
+  /**
+   * @var CService
+   */
+  var $_ref_service      = null;
   var $_ref_affectations = null;
   var $_ref_last_dispo   = null;
   var $_ref_next_dispo   = null;
-	
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'lit';
@@ -54,7 +62,7 @@ class CLit extends CMbObject {
   }
 
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["chambre_id"]  = "ref notNull class|CChambre seekable";
     $specs["nom"]         = "str notNull seekable";
     $specs["nom_complet"] = "str seekable";
@@ -94,6 +102,14 @@ class CLit extends CMbObject {
     $this->_view = $this->nom_complet ? self::$_prefixe . $this->nom_complet : "{$this->_ref_chambre->_view} - $this->_shortview";
     return $this->_ref_chambre;
   }
+  
+  function loadRefService() {
+    if (!$this->_ref_chambre) {
+      $this->loadRefChambre();
+    } 
+    
+    return $this->_ref_service = $this->_ref_chambre->loadRefService();
+  }  
 
   function loadRefsFwd() {
     $this->loadRefChambre();

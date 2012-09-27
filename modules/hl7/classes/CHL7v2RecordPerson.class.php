@@ -50,14 +50,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       
     $IPP = new CIdSante400();
     
-    $sender_purge_idex_movements = $sender->_configs["purge_idex_movements"];  
-    if ($sender_purge_idex_movements) {
-      $IPP->id400 = $patientPI;
-    }  
-    else {
-      if ($patientPI) {
-        $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
-      }
+    $sender_purge_idex_movements = $sender->_configs["purge_idex_movements"]; 
+    if ($patientPI) {
+      $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
     }
 
     // PI non connu (non fourni ou non retrouvé)

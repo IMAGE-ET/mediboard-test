@@ -89,6 +89,12 @@ class CEAISejour extends CEAIMbObject {
       $sejour->loadNDA($sender->group_id);
       
       $ref_NDA = $sejour->_ref_NDA;
+      
+      // Si le NDA actuel est identique à celui qu'on reçoit on ne fait rien
+      if ($ref_NDA->id400 == $NDA->id400) {
+        return;
+      }
+      
       // On passe le NDA courant en trash
       $ref_NDA->tag = CAppUI::conf("dPplanningOp CSejour tag_dossier_trash").$ref_NDA->tag;
       $ref_NDA->store();

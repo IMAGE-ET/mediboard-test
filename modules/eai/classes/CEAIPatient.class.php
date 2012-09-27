@@ -76,6 +76,12 @@ class CEAIPatient extends CEAIMbObject {
       $patient->loadIPP($sender->group_id);
       
       $ref_IPP = $patient->_ref_IPP;
+      
+      // Si l'IPP actuel est identique à celui qu'on reçoit on ne fait rien
+      if ($ref_IPP->id400 == $IPP->id400) {
+        return;
+      }
+      
       // On passe l'IPP courant en trash
       $ref_IPP->tag = CAppUI::conf("dPpatients CPatient tag_ipp_trash").$ref_IPP->tag;
       $ref_IPP->store();

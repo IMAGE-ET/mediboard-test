@@ -158,13 +158,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $NDA = new CIdSante400();
     
     $sender_purge_idex_movements = $sender->_configs["purge_idex_movements"];
-    if ($sender_purge_idex_movements) {
-      $NDA->id400 = $venueAN;
-    }  
-    else {
-      if ($venueAN) {
-        $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
-      }
+    if ($venueAN) {
+      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
     }
   
     // NDA non connu (non fourni ou non retrouvé)
@@ -925,7 +920,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       if (!$affectation_uf->loadMatchingObject()) {
         return $affectation;      
       }
-
       $newVenue->service_id = $affectation_uf->object_id;
       // On ne check pas la cohérence des dates des consults/intervs
       $newVenue->_skip_date_consistencies = true;
@@ -1181,6 +1175,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Affectation du lit
     $affectation->lit_id = $lit->_id;
+    
+    // Affectation du service
+    if (!$affectation->service_id) {
+      $affectation->service_id = $lit->loadRefService()->_id;
+    }
 
     // Affectation de l'UF hébergement
     $affectation->uf_hebergement_id = CUniteFonctionnelle::getUF($code_uf)->_id;
