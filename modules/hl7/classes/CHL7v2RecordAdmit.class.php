@@ -1614,7 +1614,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // Recherche d'un mouvement identique dans le cas ou il ne s'agit pas d'une mutation / absence
       else {
         $id400_create = true;
-        if ($event_code != "A02" || $event_code != "A21") {
+        if ($event_code != "A02" && $event_code != "A21") {
           $movement->cancel = 0;
           $movement->loadMatchingObjectEsc();
         }
