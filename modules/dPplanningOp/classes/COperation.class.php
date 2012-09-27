@@ -213,6 +213,7 @@ class COperation extends CCodable implements IPatientRelated {
   }
   
   function getProps() {
+    $protocole = new CProtocole();
     $props = parent::getProps();
     $props["sejour_id"]            = "ref notNull class|CSejour";
     $props["chir_id"]              = "ref notNull class|CMediusers seekable";
@@ -227,7 +228,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["code_uf"]              = "str length|3";
     $props["libelle_uf"]           = "str maxLength|35";
     $props["libelle"]              = "str seekable autocomplete dependsOn|chir_id";
-    $props["cote"]                 = "enum notNull list|droit|gauche|bilatéral|total|inconnu default|inconnu";
+    $props["cote"]                 = $protocole->_props["cote"] . " notNull default|inconnu";
     $props["temp_operation"]       = "time show|0";
     $props["debut_prepa_preop"]    = "time show|0";
     $props["fin_prepa_preop"]      = "time show|0";
@@ -272,10 +273,10 @@ class COperation extends CCodable implements IPatientRelated {
     $props["presence_postop"]      = "time show|0";
     $props["envoi_mail"]           = "dateTime show|0";
     
-    $props["cote_admission"]      = "enum list|droit|gauche show|0";
-    $props["cote_consult_anesth"] = "enum list|droit|gauche show|0";
-    $props["cote_hospi"]          = "enum list|droit|gauche show|0";
-    $props["cote_bloc"]           = "enum list|droit|gauche show|0";
+    $props["cote_admission"]      = $protocole->_props["cote"] . " show|0";
+    $props["cote_consult_anesth"] = $protocole->_props["cote"] . " show|0";
+    $props["cote_hospi"]          = $protocole->_props["cote"] . " show|0";
+    $props["cote_bloc"]           = $protocole->_props["cote"] . " show|0";
     
     // Visite de préanesthésie
     $props["date_visite_anesth"]     = "date";

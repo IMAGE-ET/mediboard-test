@@ -1484,7 +1484,19 @@ class CSetupdPplanningOp extends CSetup {
       ADD `exam_extempo` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "1.60";
+    $this->makeRevision("1.60");
+    $query = "ALTER TABLE `protocole`
+      CHANGE `cote` `cote` ENUM ('droit','gauche','haut','bas','bilatéral','total','inconnu');";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `operations`
+      CHANGE `cote` `cote` ENUM ('droit','gauche','haut','bas','bilatéral','total','inconnu') NOT NULL DEFAULT 'inconnu',
+      CHANGE `cote_admission` `cote_admission` ENUM ('droit','gauche','haut','bas','bilatéral','total','inconnu'),
+      CHANGE `cote_consult_anesth` `cote_consult_anesth` ENUM ('droit','gauche','haut','bas','bilatéral','total','inconnu'),
+      CHANGE `cote_hospi` `cote_hospi` ENUM ('droit','gauche','haut','bas','bilatéral','total','inconnu'),
+      CHANGE `cote_bloc` `cote_bloc` ENUM ('droit','gauche','haut','bas','bilatéral','total','inconnu'),";
+    
+    $this->mod_version = "1.61";
   }
 }
 ?>

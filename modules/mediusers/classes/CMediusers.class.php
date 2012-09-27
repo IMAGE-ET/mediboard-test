@@ -223,6 +223,9 @@ class CMediusers extends CMbObject {
     $backProps["owned_notes"]                     = "CNote user_id";
     $backProps["observations"]                    = "CObservationMedicale user_id";
     $backProps["operations_chir"]                 = "COperation chir_id";
+    $backProps["operations_chir2"]                = "COperation chir_2_id";
+    $backProps["operations_chir3"]                = "COperation chir_3_id";
+    $backProps["operations_chir4"]                = "COperation chir_4_id";
     $backProps["operations_anesth"]               = "COperation anesth_id";
     $backProps["packs"]                           = "CPack user_id";
     $backProps["prescription_line_mixes"]         = "CPrescriptionLineMix praticien_id";
@@ -273,6 +276,7 @@ class CMediusers extends CMbObject {
     $backProps["poses_disp_vasc_operateur"]       = "CPoseDispositifVasculaire operateur_id";
     $backProps["poses_disp_vasc_encadrant"]       = "CPoseDispositifVasculaire encadrant_id";
     $backProps["praticien_facture"]               = "CFactureConsult praticien_id";
+    $backProps["tokens"]                          = "CViewAccessToken user_id";
     
     return $backProps;
   }

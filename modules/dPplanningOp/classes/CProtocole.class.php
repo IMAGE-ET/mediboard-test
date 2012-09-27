@@ -96,7 +96,7 @@ class CProtocole extends CMbObject {
     $props["convalescence"]   = "text";
     $props["rques_sejour"]    = "text";
     $props["libelle"]         = "str seekable";
-    $props["cote"]            = "enum list|droit|gauche|bilatéral|total|inconnu";
+    $props["cote"]            = "enum list|droit|gauche|haut|bas|bilatéral|total|inconnu";
     $props["libelle_sejour"]  = "str seekable";
     $props["service_id"]      = "ref".(CAppUI::conf("dPplanningOp CSejour service_id_notNull") == 1 ? ' notNull' : '')." class|CService seekable";
     $props["examen"]          = "text confidential seekable";
