@@ -1089,6 +1089,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $naissance->heure = mbTime($this->queryTextNode("PV1.44", $data["PV1"]));
     }
     
+    // Notifier les autres destinataires autre que le sender
+    $naissance->_eai_initiateur_group_id = $sender->group_id;
+    
     return $naissance->store();
   }  
   

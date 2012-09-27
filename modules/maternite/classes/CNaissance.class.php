@@ -32,6 +32,8 @@ class CNaissance extends CMbObject {
   var $_ref_sejour_enfant = null;
   var $_ref_sejour_maman  = null;
   
+  var $_eai_initiateur_group_id = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'naissance';
@@ -40,7 +42,7 @@ class CNaissance extends CMbObject {
   }
   
   function getProps() {
-  	$props = parent::getProps();
+    $props = parent::getProps();
     $props["operation_id"]     = "ref class|COperation";
     $props["grossesse_id"]     = "ref class|CGrossesse";
     $props["sejour_maman_id" ] = "ref notNull class|CSejour";
@@ -52,19 +54,19 @@ class CNaissance extends CMbObject {
   }
   
   function check() {
-  	if ($msg = parent::check()) {
+    if ($msg = parent::check()) {
       return $msg;
-  	}
-  	
-  	$this->completeField("operation_id", "sejour_maman_id", "grossesse_id");
-  	
-  	// Operation has to be part of sejour
-  	if ($this->operation_id) {
+    }
+    
+    $this->completeField("operation_id", "sejour_maman_id", "grossesse_id");
+    
+    // Operation has to be part of sejour
+    if ($this->operation_id) {
       $operation = $this->loadRefOperation();
       if ($operation->sejour_id != $this->sejour_maman_id) {
-      	return "failed-operation-notin-sejour";
+        return "failed-operation-notin-sejour";
       }
-  	}
+    }
 
     // Sejour has to be part of grossesse
     $sejour = $this->loadRefSejourMaman();

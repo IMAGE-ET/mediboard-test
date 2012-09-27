@@ -138,7 +138,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message
-      if ($sejour_enfant->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+      if ($mbObject->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
         return;
       }
       
