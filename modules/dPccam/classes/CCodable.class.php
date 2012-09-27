@@ -299,6 +299,7 @@ class CCodable extends CMbObject {
       $_acte->guessAssociation();
       if($_acte->_guess_association != "X") {
         $_acte->code_association = $_acte->_guess_association;
+        $_acte->_calcul_montant_base = true;
         $_acte->store();
       }
     }
