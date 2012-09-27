@@ -88,6 +88,8 @@ $dPconfig["dPplanningOp"]= array(
     "use_recuse" => "0",
     "use_charge_price_indicator" => "0",
     "show_only_charge_price_indicator" => "0",
+    "fiche_rques_sej"    => "0",
+    "fiche_conval"       => "0",
   ),
 );
 

@@ -34,9 +34,9 @@
     <th>Praticien</th>
     <td>
     {{if $operation->_id}}
-	    {{if $operation->_ref_chir}}
-	      Dr {{$operation->_ref_chir->_view}}
-	    {{/if}}
+      {{if $operation->_ref_chir}}
+        Dr {{$operation->_ref_chir->_view}}
+      {{/if}}
     {{else}}
       {{if $sejour->_ref_praticien}}
         Dr {{$sejour->_ref_praticien->_view}}
@@ -130,13 +130,27 @@
   </tr>
   {{/if}}
   
+  {{if $conf.dPplanningOp.CSejour.fiche_rques_sej && $sejour->rques}}
+  <tr>
+    <th>{{mb_label object=$sejour field=rques}}</th>
+    <td>{{mb_value object=$sejour field=rques}}</td>
+  </tr>
+  {{/if}}
+  
+  {{if $conf.dPplanningOp.CSejour.fiche_conval && $sejour->convalescence}}
+  <tr>
+    <th>{{mb_label object=$sejour field=convalescence}}</th>
+    <td>{{mb_value object=$sejour field=convalescence}}</td>
+  </tr>
+  {{/if}}
+  
   {{if $operation->_id}}
   <tr>
     <th>Date d'intervention</th>
     <td>le {{$operation->_datetime|date_format:"%A %d/%m/%Y"}}</td>
   </tr>
-	
-	{{if !$simple_DHE}}
+  
+  {{if !$simple_DHE}}
   {{if $operation->libelle}}
   <tr>
     <th>{{mb_label object=$operation field=libelle}}</th>
@@ -219,7 +233,7 @@
   </tr>
   {{/if}}
   {{/if}}
-	
+  
   <tr>
     <th>Durée prévue d'hospitalisation</th>
     <td>{{$sejour->_duree_prevue}} nuits</td>
@@ -232,27 +246,27 @@
       {{$sejour->_ref_group->adresse}}<br />
       {{$sejour->_ref_group->cp}}
       {{$sejour->_ref_group->ville}}
-		</td>
-	</tr>
-	
+    </td>
+  </tr>
+  
   {{if $operation->_id}}
   {{if $operation->forfait}}
   <tr>
     <th>{{mb_label object=$operation field=forfait}}</th>
     <td>{{mb_value object=$operation field=forfait}}</td>
   </tr>
-	{{/if}}  
+  {{/if}}  
   {{if $operation->fournitures}}
-	  <tr>
+    <tr>
     <th>{{mb_label object=$operation field=fournitures}}</th>
     <td>{{mb_value object=$operation field=fournitures}}</td>
-	  </tr>
+    </tr>
   {{/if}}
 
   <tr>
     <th class="category" colspan="2">Rendez vous d'anesthésie</th>
   </tr>
-	  
+    
   <tr>
     <td class="text" colspan="2">
       Veuillez prendre rendez-vous avec le cabinet d'anesthésistes <strong>impérativement</strong>
