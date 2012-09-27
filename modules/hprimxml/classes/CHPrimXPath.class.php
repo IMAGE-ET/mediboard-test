@@ -54,8 +54,4 @@ class CHPrimXPath extends CMbXPath {
     
     return isset($textNodes[0]) ? $textNodes[0] : null;
   }
-  
-  
 }
-
-?>

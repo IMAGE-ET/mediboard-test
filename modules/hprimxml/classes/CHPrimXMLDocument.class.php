@@ -967,7 +967,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addTexte($elParent, "libelle", $operation->libelle, 80);
     
       // Remarques sur l'opération
-      $this->addTexte($elParent, "commentaire", $operation->rques, 4000);
+      $this->addTexte($elParent, "commentaire", "$operation->materiel - $operation->rques", 4000);
       
       // Conventionnée ?
       $this->addElement($elParent, "convention", $operation->conventionne ? 1 : 0);
@@ -989,6 +989,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $antecedents = $dossier_medical->loadRefsAntecedents();
       foreach ($antecedents as $_antecedent) {
         $this->addCodeLibelle($indicateurs, "indicateur", $_antecedent->_id, CMbString::convertHTMLToXMLEntities($_antecedent->rques));
+      }
+      // Extemporané
+      if ($operation->exam_extempo) {
+        $this->addCodeLibelle($indicateurs, "indicateur", "EXT", "Extemporané");
       }
       
       // Recours / Durée USCPO

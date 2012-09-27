@@ -115,6 +115,14 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     // Conventionnée ?
     $operation->conventionne = $xpath->queryTextNode("hprim:convention", $node);
     
+    // Extemporané
+    $indicateurs = $xpath->query("hprim:indicateurs/*", $node);
+    foreach ($indicateurs as $_indicateur) {
+      if ($xpath->queryTextNode("hprim:code", $_indicateur) == "EXT") {
+        $operation->exam_extempo = true;
+      }
+    }
+    
     // TypeAnesthésie
     $this->getTypeAnesthesie($node, $operation);
     
