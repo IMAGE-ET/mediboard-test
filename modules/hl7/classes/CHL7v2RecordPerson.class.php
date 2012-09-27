@@ -72,10 +72,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
             return $exchange_ihe->setAckAR($ack, "E123", $commentaire, $newPatient);
           }
           
-          // Notifier les autres destinataires autre que le sender
-          $newPatient->_eai_initiateur_group_id = $sender->group_id;
-          $newPatient->_generate_IPP = false;
-          if ($msgPatient = $newPatient->store()) {
+          // On store le patient
+          if ($msgPatient = CEAIPatient::storePatient($newPatient, $sender)) {
             return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
           }
                     
@@ -110,10 +108,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           $_modif_patient = true; 
         }
 
-        // Notifier les autres destinataires autre que le sender
-        $newPatient->_eai_initiateur_group_id = $sender->group_id;
-        $newPatient->_generate_IPP = false;
-        if ($msgPatient = $newPatient->store()) {
+        // On store le patient
+        if ($msgPatient = CEAIPatient::storePatient($newPatient, $sender)) {
           return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
         }
       }
@@ -167,9 +163,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         }
       }
       
-      // Notifier les autres destinataires autre que le sender
-      $newPatient->_eai_initiateur_group_id = $sender->group_id;
-      if ($msgPatient = $newPatient->store()) {
+      // On store le patient
+      if ($msgPatient = CEAIPatient::storePatient($newPatient, $sender)) {
         return $exchange_ihe->setAckAR($ack, "E101", $msgPatient, $newPatient);
       }
       
@@ -195,6 +190,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   }
   
   function secondaryMappingPatient($data, CPatient $newPatient) {
+    $sender = $this->_ref_sender;
+    
     // Possible seulement dans le cas où le patient 
     if (!$newPatient->_id) {
       return;
@@ -222,7 +219,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       }
     }
     
-    return $newPatient->store();
+    // On store le patient
+    return CEAIPatient::storePatient($newPatient, $sender);
   }
 
   function checkSimilarPatient(CPatient $recoveredPatient, CPatient $newPatient) {

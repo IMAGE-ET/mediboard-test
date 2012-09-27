@@ -137,6 +137,27 @@ class CEAIPatient extends CEAIMbObject {
       }
     }  
   }
+
+  /**
+   * Recording patient
+   * 
+   * @param CPatient       $patient     Patient
+   * @param CInteropSender $sender      Sender
+   * @param bool           $generateIPP Generate IPP ?
+   * 
+   * @return null|string null if successful otherwise returns and error message
+   */ 
+  static function storePatient(CPatient $newPatient, CInteropSender $sender, $generateIPP = false) {   
+    // Notifier les autres destinataires autre que le sender
+    $newPatient->_eai_initiateur_group_id = $sender->group_id;
+    $newPatient->_generate_IPP            = $generateIPP;
+    
+    if ($msg = $newPatient->store()) {
+      $newPatient->repair();
+      
+      return $newPatient->store();
+    }
+  }
   
   /**
    * Recording patient
@@ -146,7 +167,7 @@ class CEAIPatient extends CEAIMbObject {
    * 
    * @return null|string null if successful otherwise returns and error message
    */ 
-  static function storePatient(CPatient $newPatient, $IPP) {
+  static function storePatientSIP(CPatient $newPatient, $IPP) {
     $newPatient->_IPP = $IPP;
     
     return $newPatient->store();

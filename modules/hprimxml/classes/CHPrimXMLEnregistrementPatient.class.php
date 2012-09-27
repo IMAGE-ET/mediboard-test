@@ -103,7 +103,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
           // Mapping du patient
           $newPatient = $this->mappingPatient($data['patient'], $newPatient);
           // Store du patient
-          $msgPatient = CEAIPatient::storePatient($newPatient, $IPP->id400);
+          $msgPatient = CEAIPatient::storePatientSIP($newPatient, $IPP->id400);
           
           $modified_fields = CEAIPatient::getModifiedFields($newPatient);
           
@@ -172,7 +172,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $mutex->release();
             
             // Store du patient
-            $msgPatient = CEAIPatient::storePatient($newPatient, $IPP->_id);
+            $msgPatient = CEAIPatient::storePatientSIP($newPatient, $IPP->_id);
             
             $modified_fields = CEAIPatient::getModifiedFields($newPatient);
              
@@ -201,7 +201,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
               // Mapping du patient
               $newPatient = $this->mappingPatient($data['patient'], $newPatient);
               // Store du patient
-              $msgPatient = CEAIPatient::storePatient($newPatient, $IPP->id400);
+              $msgPatient = CEAIPatient::storePatientSIP($newPatient, $IPP->id400);
               
               $modified_fields = CEAIPatient::getModifiedFields($newPatient);
               
