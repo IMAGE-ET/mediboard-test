@@ -90,6 +90,7 @@
         <option value="20" {{if ($plageSel->_freq == "20")}} selected="selected" {{/if}}>20</option>
         <option value="30" {{if ($plageSel->_freq == "30")}} selected="selected" {{/if}}>30</option>
         <option value="45" {{if ($plageSel->_freq == "45")}} selected="selected" {{/if}}>45</option>
+        <option value="45" {{if ($plageSel->_freq == "60")}} selected="selected" {{/if}}>60</option>
      </select> min
    </td>
     <th>{{mb_label object=$plageSel field="_type_repeat"}}</th>
