@@ -1072,7 +1072,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return CAppUI::tr("CHL7EventADT-AA-E229");
     }
     
-    if (CIdSante400::getMatch("CPatient", $sender->_tag_patient, $mother_PI)->object_id != $sejour_mother->_id) {
+    if (CIdSante400::getMatch("CPatient", $sender->_tag_patient, $mother_PI)->object_id != $sejour_mother->patient_id) {
       return CAppUI::tr("CHL7EventADT-AA-E230");
     }
     
