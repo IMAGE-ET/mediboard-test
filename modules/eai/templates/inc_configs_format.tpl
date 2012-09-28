@@ -44,7 +44,7 @@ importConfig = function(format_config_guid, actor_guid) {
         <td>
           <form name="editConfigsFormat-{{$_field_name}}" 
              action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-            <input type="hidden" name="sender_id" value="{{$actor->_id}}" />
+            <input type="hidden" name="sender_id"    value="{{$actor->_id}}" />
             <input type="hidden" name="sender_class" value="{{$actor->_class}}" />
             {{mb_key   object=$format_config}}
             {{mb_class object=$format_config}}

@@ -394,8 +394,20 @@ class CSetuphprimxml extends CSetup {
                 DROP `send_debiteurs_venue`,
                 DROP `send_mvt_patients`"; 
     $this->addQuery($query);
+    
+    $this->makeRevision("0.41");
+    
+    $query = "ALTER TABLE `hprimxml_config` 
+                ADD `encoding` ENUM ('UTF-8','ISO-8859-1') DEFAULT 'UTF-8';";
+    $this->addQuery($query);  
+      
+    $this->makeRevision("0.42");
+    
+    $query = "ALTER TABLE `hprimxml_config` 
+                CHANGE `sender_class` `sender_class` VARCHAR (80);";
+    $this->addQuery($query);
         
-    $this->mod_version = "0.41";
+    $this->mod_version = "0.43";
   }
 }
 
