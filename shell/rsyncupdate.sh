@@ -55,6 +55,7 @@ then
         check_errs $? "Failed to rsync $line" "Succesfully rsync-ed $line"
         scp $BASH_PATH/../tmp/svnlog.txt $line/tmp/svnlog.txt
         scp $BASH_PATH/../tmp/svnstatus.txt $line/tmp/svnstatus.txt
+        scp $BASH_PATH/../tmp/svnevent.txt $line/tmp/svnevent.txt
       fi
     fi
   done < $BASH_PATH/rsyncupdate.conf
