@@ -182,16 +182,28 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
       return $exchange_hprim->setAckError($dom_acq, "E203", $comment, $mbObject);
     }
     $operation->chir_id = $mediuser->_id;
-    
+
     // Mapping de la plage
-    $plageOp = $this->mappingPlage($data['intervention'], $operation);
- 
+    $this->mappingPlage($data['intervention'], $operation);
+    
     // Recherche d'une intervention existante sinon création  
     $operation->loadMatchingObject();
+    
+    // Si pas trouvé on recherche en hors plage
+    if (!$operation->_id) {
+      $operation->loadRefPlageOp();
+      $operation->plageop_id     = null;
+      $operation->temp_operation = null;
+      $operation->time_operation = null;
+      $operation->date           = $operation->_ref_plageop->date;
+      if ($operation->countMatchingList() == 1) {
+        $operation->loadMatchingObject();
+      }
+    }
 
     // Mapping de l'intervention
     $this->mappingIntervention(($data['intervention']), $operation);
-    
+
     // Store de l'intervention
     // Notifier les autres destinataires autre que le sender
     $operation->_eai_initiateur_group_id = $sender->group_id;

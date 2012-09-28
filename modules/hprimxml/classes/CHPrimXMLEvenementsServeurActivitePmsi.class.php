@@ -98,8 +98,15 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   function mappingIntervention($node, COperation $operation) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
-    $operation->libelle = $xpath->queryTextNode("hprim:libelle", $node);
-    $operation->rques   = $xpath->queryTextNode("hprim:commentaire", $node);
+    $debut = $this->getDebutInterv($node);
+    $fin   = $this->getFinInterv($node);
+    
+    // Traitement de la date/heure début, et durée de l'opération
+    $operation->time_operation = mbTime($debut);
+    $operation->temp_operation = mbSubTime(mbTime($debut), mbTime($fin)); 
+    
+    $operation->libelle = CMbString::capitalize($xpath->queryTextNode("hprim:libelle", $node));
+    $operation->rques   = CMbString::capitalize($xpath->queryTextNode("hprim:commentaire", $node));
     
     // Côté
     $cote = array (
@@ -110,7 +117,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
       "I" => "inconnu"
     );
     $code_cote = $xpath->queryTextNode("hprim:cote/hprim:code", $node);
-    $operation->cote = isset($cote[$code_cote]) ? $cote[$code_cote] : "inconnu";
+    $operation->cote = isset($cote[$code_cote]) ? $cote[$code_cote] : ($operation->cote ? $operation->cote : "inconnu");
     
     // Conventionnée ?
     $operation->conventionne = $xpath->queryTextNode("hprim:convention", $node);
@@ -164,9 +171,6 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
         break;
       }
     }
-    
-    $operation->time_operation = $time_op;
-    $operation->temp_operation = $temps_op;
     
     if ($plageOp->_id) {
       $operation->plageop_id = $plageOp->_id;
