@@ -195,7 +195,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
       $operation->plageop_id     = null;
       $operation->temp_operation = null;
       $operation->time_operation = null;
-      $operation->date           = $operation->_ref_plageop->date;
+      $operation->date           = $operation->_ref_plageop->_id ? $operation->_ref_plageop->date : $operation->date;
       if ($operation->countMatchingList() == 1) {
         $operation->loadMatchingObject();
       }
