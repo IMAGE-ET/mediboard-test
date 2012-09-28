@@ -13,7 +13,8 @@ class CBlocOperatoire extends CMbObject {
   var $bloc_operatoire_id = null;
   
   // DB references
-  var $group_id    = null;
+  var $group_id      = null;
+  var $poste_sspi_id = null;
   
   // DB Fields
   var $nom         = null;
@@ -22,6 +23,7 @@ class CBlocOperatoire extends CMbObject {
   // Object references
   var $_ref_salles = null;
   var $_ref_group  = null;
+  var $_ref_poste  = null;
   
   // Form field
   var $_date_min   = null;
@@ -44,9 +46,10 @@ class CBlocOperatoire extends CMbObject {
   
   function getProps() {
     $props = parent::getProps();
-    $props["group_id"] = "ref notNull class|CGroups";
-    $props["nom"]      = "str notNull seekable";
-    $props["days_locked"] = "num pos default|0";
+    $props["group_id"]  = "ref notNull class|CGroups";
+    $props["poste_sspi_id"] = "ref class|CPosteSSPI";
+    $props["nom"]       = "str notNull seekable";
+    $props["days_locked"] = "num min|0 default|0";
     $props["_date_min"] = "date";
     return $props;
   }
@@ -82,6 +85,10 @@ class CBlocOperatoire extends CMbObject {
   
   function loadRefsSalles() {
     return $this->_ref_salles = $this->loadBackRefs('salles', 'nom');
+  }
+  
+  function loadRefPoste() {
+    return $this->_ref_poste = $this->loadFwdRef("poste_sspi_id");
   }
   
   function loadRefsBack() {

@@ -20,13 +20,13 @@ class COperation extends CCodable implements IPatientRelated {
   var $chir_4_id  = null;
   var $anesth_id  = null;
   var $plageop_id = null;
-
+  var $salle_id   = null;
+  var $poste_sspi_id = null;
   // DB Fields S@nté.com communication
   var $code_uf    = null;
   var $libelle_uf = null;
 
   // DB Fields
-  var $salle_id             = null;
   var $date                 = null;
   var $libelle              = null;
   var $cote                 = null;
@@ -150,6 +150,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $_ref_chir_2         = null;
   var $_ref_chir_3         = null;
   var $_ref_chir_4         = null;
+  var $_ref_poste          = null;
   
   /**
    * @var CPlageOp
@@ -224,6 +225,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["plageop_id"]           = "ref class|CPlageOp seekable show|0";
     $props["pause"]                = "time show|0";
     $props["salle_id"]             = "ref class|CSalle";
+    $props["poste_sspi_id"]        = "ref class|CPosteSSPI";
     $props["date"]                 = "date";
     $props["code_uf"]              = "str length|3";
     $props["libelle_uf"]           = "str maxLength|35";
@@ -869,6 +871,17 @@ class COperation extends CCodable implements IPatientRelated {
   
   function loadRefsNaissances() {
     return $this->_ref_naissances = $this->loadBackRefs("naissances");
+  }
+  
+  
+  function loadRefPoste() {
+    if ($this->poste_sspi_id) {
+      return $this->_ref_poste = $this->loadFwdRef("poste_sspi_id");
+    }
+    if ($this->salle_id) {
+      return $this->_ref_poste = $this->updateSalle()->loadRefBloc()->loadRefPoste();
+    }
+    return $this->_ref_poste = new CPosteSSPI();
   }
   
   /**

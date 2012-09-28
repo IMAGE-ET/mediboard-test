@@ -1496,7 +1496,19 @@ class CSetupdPplanningOp extends CSetup {
       CHANGE `cote_hospi` `cote_hospi` ENUM ('droit','gauche','haut','bas','bilatéral','total','inconnu'),
       CHANGE `cote_bloc` `cote_bloc` ENUM ('droit','gauche','haut','bas','bilatéral','total','inconnu'),";
     
-    $this->mod_version = "1.61";
+    $this->makeRevision("1.61");
+    $query = "ALTER TABLE `operations`
+      ADD `poste_sspi_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `operations` 
+      ADD INDEX (`chir_2_id`),
+      ADD INDEX (`chir_3_id`),
+      ADD INDEX (`chir_4_id`),
+      ADD INDEX (`poste_sspi_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.62";
   }
 }
 ?>

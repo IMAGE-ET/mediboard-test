@@ -28,7 +28,16 @@ $listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
 
 $where = array();
 $where["annulee"] = "= '0'";
-$where["salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
+$ljoin = array();
+
+if (CAppUI::conf("dPplanningOp COperation use_poste")) {
+  $ljoin["bloc_operatoire"] = "bloc_operatoire.poste_sspi_id = operations.poste_sspi_id";
+  $where[] = "(operations.poste_sspi_id IS NOT NULL AND bloc_operatoire.bloc_operatoire_id = '$bloc_id')
+              OR (operations.poste_sspi_id IS NULL AND operations.salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles)) . ")";
+}
+else {
+  $where["operations.salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
+}
 $where[] = "plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (plageop_id IS NULL AND date = '$date')";
 
 switch($type){
@@ -57,10 +66,10 @@ switch($type){
     $order = "sortie_reveil DESC";
     break;
 }
-  
+
 // Chargement des interventions    
 $operation = new COperation();
-$listOperations = $operation->loadList($where, $order);
+$listOperations = $operation->loadList($where, $order, null, null, $ljoin);
 
 foreach($listOperations as $key => &$op) {
   $sejour = $op->loadRefSejour(1);

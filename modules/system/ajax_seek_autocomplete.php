@@ -16,6 +16,7 @@ $input_field  = CValue::get('input_field', $view_field);
 $keywords     = CValue::get($input_field);
 $limit        = CValue::get('limit', 30);
 $where        = CValue::get('where', array());
+$whereComplex = CValue::get('whereComplex', array());
 $ljoin        = CValue::get("ljoin", array());
 
 $object = new $object_class;
@@ -24,6 +25,10 @@ $ds = $object->_spec->ds;
 foreach($where as $key => $value) {
   $where[$key] = $ds->prepare("= %", $value);
   $object->$key = $value;
+}
+
+foreach ($whereComplex as $key => $value) {
+  $where[$key] = $value;
 }
 
 if ($keywords == "") {
@@ -43,6 +48,6 @@ $smarty->assign('view_field', $view_field);
 $smarty->assign('show_view' , 1);
 $smarty->assign('template'  , $template);
 $smarty->assign('nodebug'   , true);
-$smarty->assign("input"     , $keywords);
+$smarty->assign("input"     , "");
 
 $smarty->display('inc_field_autocomplete.tpl');

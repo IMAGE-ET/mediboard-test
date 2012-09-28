@@ -210,6 +210,10 @@ if (CModule::getActive("maternite")) {
 
 $exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id, "smtp");
 
+if (CAppUI::conf("dPplanningOp COperation use_poste")) {
+  $op->loadRefPoste();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 

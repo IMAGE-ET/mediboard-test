@@ -364,6 +364,41 @@ addBesoins = function(types_ressources_ids) {
     </tr>
   {{/if}}
   
+  {{if $conf.dPplanningOp.COperation.use_poste}}
+    <tr>
+      <th>
+        {{mb_label object=$op field=poste_sspi_id}}
+      </th>
+      <td colspan="3">
+        <input type="hidden" name="poste_sspi_id" value="{{$op->poste_sspi_id}}"/>
+        <input type="text" name="_poste_sspi_id_autocomplete" value="{{$op->_ref_poste}}"/>
+        <script type="text/javascript">
+          Main.add(function() {
+            var form=getForm("editOp");
+            var url = new Url("system", "ajax_seek_autocomplete");
+            url.addParam("object_class", "CPosteSSPI");
+            url.addParam('show_view', true);
+            url.addParam("input_field", "_poste_sspi_id_autocomplete");
+            url.autoComplete(form.elements._poste_sspi_id_autocomplete, null, {
+              minChars: 2,
+              method: "get",
+              select: "view",
+              dropdown: true,
+              afterUpdateElement: function(field,selected) {
+                var guid = selected.getAttribute('id');
+                if (guid) {
+                  $V(field.form['poste_sspi_id'], guid.split('-')[2]);
+                }
+              },
+            });
+          });
+        </script>
+        <button type="button" class="cancel notext"
+          onclick="$V(this.form.poste_sspi_id, ''), $V(this.form._poste_sspi_id_autocomplete, '')"></button>
+      </td>
+    </tr>
+  {{/if}}
+  
   {{if $conf.dPplanningOp.COperation.show_duree_uscpo >= 1}}
     <tr>
       <th>{{mb_label object=$op field=duree_uscpo}}</th>

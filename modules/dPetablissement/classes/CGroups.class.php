@@ -35,11 +35,12 @@ class CGroups extends CMbObject {
   var $_cp_court = null;
   
   // Object References
-  var $_ref_functions = null;
-  var $_ref_blocs = null;
+  var $_ref_functions      = null;
+  var $_ref_blocs          = null;
+  var $_ref_postes         = null;
   var $_ref_dmi_categories = null;
-  var $_ref_services = null;
-  var $_ref_pharmacie = null;
+  var $_ref_services       = null;
+  var $_ref_pharmacie      = null;
   var $_ref_service_urgences = null;
   
   
@@ -118,6 +119,7 @@ class CGroups extends CMbObject {
     $backProps["secteurs"]                = "CSecteur group_id";
     $backProps["protocoles"]              = "CProtocole group_id";
     $backProps["charges"]                 = "CChargePriceIndicator group_id";
+    $backProps["postes"]                  = "CPosteSSPI group_id";
     return $backProps;
   }
   
@@ -181,15 +183,32 @@ class CGroups extends CMbObject {
    */
   function loadBlocs($permType = PERM_READ, $load_salles = true) {
     $bloc = new CBlocOperatoire();
-    $where = array('group_id' => "='$this->_id'");
-    $this->_ref_blocs = $bloc->loadListWithPerms($permType, $where, 'nom');
+    $where = array('group_id' => "= '$this->_id'");
+    $this->_ref_blocs = $bloc->loadListWithPerms($permType, $where, "nom");
+    $use_poste = CAppUI::conf("dPplanningOp COperation use_poste");
     
     if ($load_salles) {
       foreach ($this->_ref_blocs as &$bloc) {
         $bloc->loadRefsSalles();
+        if ($use_poste) {
+          $bloc->loadRefPoste();
+        }
       }
     }
     return $this->_ref_blocs;
+  }
+  
+  function loadPostes($permType = PERM_READ, $load_bloc = true) {
+    $poste = new CPosteSSPI();
+    $where = array("group_id" => "= '$this->_id'");
+    $this->_ref_postes = $poste->loadListWithPerms($permType, $where, "nom");
+    
+    if ($load_bloc) {
+      foreach ($this->_ref_postes as $_poste) {
+        $_poste->loadRefBloc();
+      }
+    }
+    return $this->_ref_postes;
   }
   
   function loadRefsBack() {

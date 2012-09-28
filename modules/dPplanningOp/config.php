@@ -36,6 +36,7 @@ $dPconfig["dPplanningOp"]= array(
     "fiche_materiel"     => "0",
     "fiche_rques"        => "0",
     "nb_jours_urgence"   => "1",
+    "use_poste"          => "0",
    ),
   "CSejour" => array (
     "check_collisions"    => "date",

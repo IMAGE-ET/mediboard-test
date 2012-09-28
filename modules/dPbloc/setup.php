@@ -351,7 +351,27 @@ class CSetupdPbloc extends CSetup {
       WHERE `retablissement` IS NULL;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.35";
+    $this->makeRevision("0.35");
+    $query = "CREATE TABLE `poste_sspi` (
+      `poste_sspi_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `group_id` INT (11) UNSIGNED NOT NULL,
+      `nom` VARCHAR (255) NOT NULL
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `poste_sspi`
+      ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `bloc_operatoire` 
+      ADD `poste_sspi_id` INT (11) UNSIGNED AFTER `group_id`;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `bloc_operatoire` 
+      ADD INDEX (`poste_sspi_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.36";
   }
 }
 ?>
