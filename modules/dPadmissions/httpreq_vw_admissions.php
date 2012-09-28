@@ -108,12 +108,16 @@ foreach ($sejours as $sejour_id => $_sejour) {
   }
   
   // Chargement du patient
-  $patient = $_sejour->loadRefPatient(1);
+  $patient = $_sejour->loadRefPatient(true);
   $patient->loadIPP();
   
   // Dossier médical
-  $dossier_medical = $patient->loadRefDossierMedical();
-  $dossier_medical->loadRefsAntecedents();
+  $dossier_medical = $patient->loadRefDossierMedical(false);
+  
+  if (CAppUI::conf("dPadmissions show_deficience")) {
+    $deficiences = $dossier_medical->loadRefsDeficiences();
+    $dossier_medical->_ref_antecedents_by_type["deficience"] = $deficiences;
+  }
   
   // Chargement du numéro de dossier
   $_sejour->loadNDA();
@@ -126,7 +130,6 @@ foreach ($sejours as $sejour_id => $_sejour) {
   
   // Chargement des modes d'entrée
   $_sejour->loadRefEtablissementProvenance();
-  
   
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");

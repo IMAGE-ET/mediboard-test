@@ -8,15 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=background value="#ccc"}}
-{{if $_sejour->type == 'ambu'   }} {{assign var=background value="#faa"}} {{/if}}
-{{if $_sejour->type == 'comp'   }} {{assign var=background value="#fff"}} {{/if}}
-{{if $_sejour->type == 'exte'   }} {{assign var=background value="#afa"}} {{/if}}
-{{if $_sejour->type == 'consult'}} {{assign var=background value="#cdf"}} {{/if}}
-
 {{assign var=patient value=$_sejour->_ref_patient}}
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td>
   {{if $canAdmissions->edit}}
   {{if $conf.dPplanningOp.COperation.verif_cote}}
   {{foreach from=$_sejour->_ref_operations item=curr_op}}
@@ -99,7 +93,7 @@
   {{/if}}
 </td>
 
-<td colspan="2" class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td colspan="2" class="text">
   {{if $canPlanningOp->read}}
     <div style="float: right;">
       {{if "web100T"|module_active}}
@@ -137,6 +131,17 @@
       this.sPatPrenom = "{{$patient->prenom}}";
       this.pop();
     };
+    
+    SejourHprimSelector.init{{$_sejour->_id}} = function(){
+      this.sForm      = "editNumdos{{$_sejour->_id}}";
+      this.sId        = "id400";
+      this.sIPPForm   = "editIPP{{$patient->_id}}";
+      this.sIPPId     = "id400";
+      this.sIPP       = document.forms.editIPP{{$patient->_id}}.id400.value;
+      this.sPatNom    = "{{$patient->nom}}";
+      this.sPatPrenom = "{{$patient->prenom}}";
+      this.pop();
+    };
   </script>
   <form name="editIPP{{$patient->_id}}" action="?m={{$m}}" method="post" class="prepared">
     <input type="hidden" name="dosql" value="do_idsante400_aed" />
@@ -151,18 +156,6 @@
     <input type="hidden" name="last_update" value="{{$patient->_ref_IPP->last_update}}" />
   </form>
   
-  <script type="text/javascript">
-    SejourHprimSelector.init{{$_sejour->_id}} = function(){
-      this.sForm      = "editNumdos{{$_sejour->_id}}";
-      this.sId        = "id400";
-      this.sIPPForm   = "editIPP{{$patient->_id}}";
-      this.sIPPId     = "id400";
-      this.sIPP       = document.forms.editIPP{{$patient->_id}}.id400.value;
-      this.sPatNom    = "{{$patient->nom}}";
-      this.sPatPrenom = "{{$patient->prenom}}";
-      this.pop();
-    };
-  </script>
   {{if $_sejour->_ref_NDA}}
   <form name="editNumdos{{$_sejour->_id}}" action="?m={{$m}}" method="post" class="prepared" onsubmit="return ExtRefManager.submitNumdosForm({{$_sejour->_id}})">
     <input type="hidden" name="dosql" value="do_idsante400_aed" />
@@ -189,11 +182,11 @@
   </span>
 </td>
 
-<td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text">
   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
 </td>
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td>
   <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
     {{$_sejour->entree_prevue|date_format:$conf.time}} 
     <br />
@@ -202,14 +195,14 @@
   </span>
 </td>
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td>
   {{if !($_sejour->type == 'exte') && !($_sejour->type == 'consult') && $_sejour->annule != 1}}
     {{mb_include template=inc_form_prestations sejour=$_sejour edit=$canAdmissions->edit}}
     {{mb_include module=hospi template=inc_placement_sejour sejour=$_sejour}}
   {{/if}}  
 </td>
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td>
   {{if $canAdmissions->edit}}
     <form name="editSaisFrm{{$_sejour->_id}}" action="?" method="post" class="prepared">
       <input type="hidden" name="m" value="dPplanningOp" />
@@ -238,7 +231,7 @@
   {{/if}}
 </td>
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td>
   {{foreach from=$_sejour->_ref_operations item=_op}}
   {{if $_op->_ref_consult_anesth->_id}}
   <div class="{{if $_op->_ref_consult_anesth->_ref_consultation->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0px;">
@@ -250,7 +243,7 @@
   {{/foreach}}
 </td>
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}" class="button">
+<td class="button">
   {{if $_sejour->_couvert_cmu}}
   <div><strong>CMU</strong></div>
   {{/if}}
@@ -260,7 +253,7 @@
 </td>
 
 {{if $conf.dPadmissions.show_dh}}
-  <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  <td>
     {{foreach from=$_sejour->_ref_operations item=_op}}
     {{if $_op->_ref_actes_ccam|@count}}
     <span style="color: #484;">
@@ -280,8 +273,8 @@
     </span>
     {{/if}}
     {{if $_op->depassement}}
-    <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->
-    <!-- <a href="#" onclick="printDepassement({{$_sejour->sejour_id}})"></a> -->
+    {{* Pas de possibilité d'imprimer les dépassements pour l'instant
+      <a href="#" onclick="printDepassement({{$_sejour->sejour_id}})"></a>*}}
     Prévu : {{mb_value object=$_op field="depassement"}}
     <br />
     {{/if}}

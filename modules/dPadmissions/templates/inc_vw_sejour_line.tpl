@@ -8,17 +8,9 @@
  * @version    $Revision$
  *}}
 
-{{if $_sejour->type == 'ambu'}} {{assign var=background value="#faa"}}
-{{elseif $_sejour->type == 'comp'}} {{assign var=background value="#fff"}}
-{{elseif $_sejour->type == 'exte'}} {{assign var=background value="#afa"}}
-{{elseif $_sejour->type == 'consult'}} {{assign var=background value="#cfdfff"}}
-{{else}}
-{{assign var=background value="#ddd"}}
-{{/if}}
-
 {{assign var="patient" value=$_sejour->_ref_patient}}
 
-<td class="button" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="button">
   {{if $can->edit}}
   <form name="editAdmFrm{{$_sejour->_id}}" action="?m={{$current_m}}" method="post">
   <input type="hidden" name="m" value="dPplanningOp" />
@@ -52,7 +44,7 @@
   {{/if}}
 </td>
 
-<td colspan="2" class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td colspan="2" class="text">
   {{if $_sejour->_envoi_mail}}
    <img src="style/mediboard/images/buttons/mail.png" style="float: right;" title="Mail répondu"/>
   {{/if}}
@@ -134,25 +126,25 @@
   </span>
 </td>
 
-<td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text">
   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
 </td>
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td>
   <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
     {{mb_value object=$_sejour field=libelle}}<br />
     {{$_sejour->entree_prevue|date_format:$conf.time}}
   </span>
 </td>
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td>
   {{if !($_sejour->type == 'exte') && !($_sejour->type == 'consult') && $_sejour->annule != 1}}
     {{mb_include module=admissions template=inc_form_prestations sejour=$_sejour edit=$canAdmissions->edit}}
     {{mb_include module=hospi template=inc_placement_sejour sejour=$_sejour}}
   {{/if}}  
 </td>
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}" class="button">
+<td class="button">
   {{if $_sejour->_couvert_cmu}}
   <div><strong>CMU</strong></div>
   {{/if}}

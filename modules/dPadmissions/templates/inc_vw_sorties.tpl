@@ -18,17 +18,19 @@
   });
 </script>
 
+{{mb_include module=admissions template=inc_refresh_page_message}}
+
 <table class="tbl" id="sortie">
   <tr>
     <th class="title" colspan="10">
-      <a href="?m=dPadmissions&tab=vw_idx_sortie&date={{$hier}}" style="display: inline"><<<</a>
+      <a href="?m=dPadmissions&tab=vw_idx_sortie&date={{$hier}}" style="display: inline">&lt;&lt;&lt;</a>
       {{$date|date_format:$conf.longdate}}
       <form name="changeDateSorties" action="?" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_idx_sortie" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
-      <a href="?m=dPadmissions&tab=vw_idx_sortie&date={{$demain}}" style="display: inline">>>></a>
+      <a href="?m=dPadmissions&tab=vw_idx_sortie&date={{$demain}}" style="display: inline">&gt;&gt;&gt;</a>
       
       <br />
       
@@ -75,15 +77,8 @@
   </tr>
   
   {{foreach from=$sejours item=_sejour}}
-  {{if $_sejour->type == 'ambu'}} {{assign var=background value="#faa"}}
-  {{elseif $_sejour->type == 'comp'}} {{assign var=background value="#fff"}}
-  {{elseif $_sejour->type == 'exte'}} {{assign var=background value="#afa"}}
-  {{elseif $_sejour->type == 'consult'}} {{assign var=background value="#cfdfff"}}
-  {{else}}
-  {{assign var=background value="#ccc"}}
-  {{/if}}
-  <tr>
-    <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+  <tr class="sejour-type-default sejour-type-{{$_sejour->type}} {{if !$_sejour->facturable}} non-facturable {{/if}}">
+    <td class="text">
       {{if $canAdmissions->edit}}
       
       <script type="text/javascript">
@@ -159,7 +154,7 @@
       {{/if}}
     </td>
     
-    <td class="text CPatient-view" colspan="2" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+    <td class="text CPatient-view" colspan="2">
       {{if $canPlanningOp->read}}
         <div style="float: right;">
           {{if "web100T"|module_active}}
@@ -192,10 +187,10 @@
         {{$_sejour->_ref_patient->_view}}
       </span>
     </td>
-    <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+    <td class="text">
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
     </td>
-    <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+    <td>
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
         {{if ($_sejour->sortie_prevue < $date_min) || ($_sejour->sortie_prevue > $date_max)}}
           {{$_sejour->sortie_prevue|date_format:$conf.datetime}}
@@ -208,7 +203,7 @@
       {{/if}}
         
     </td>
-    <td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+    <td class="text">
       {{if !($_sejour->type == 'consult') && $_sejour->annule != 1}}
         {{if $conf.dPadmissions.show_prestations_sorties}}
           {{mb_include template=inc_form_prestations sejour=$_sejour edit=$canAdmissions->edit}}
@@ -226,7 +221,7 @@
        {{/if}}  
     </td>
     {{if $conf.dPadmissions.show_dh}}
-      <td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+      <td>
         {{foreach from=$_sejour->_ref_operations item=curr_op}}
         {{if $curr_op->_ref_actes_ccam|@count}}
         <span style="color: #484;">

@@ -8,17 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if     $_sejour->type == 'ambu'}} {{assign var=background value="#faa"}}
-{{elseif $_sejour->type == 'comp'}} {{assign var=background value="#fff"}}
-{{elseif $_sejour->type == 'exte'}} {{assign var=background value="#afa"}}
-{{elseif $_sejour->type == 'consult'}} {{assign var=background value="#cfdfff"}}
-{{else}}
-{{assign var=background value="#ccc"}}
-{{/if}}
-
 {{assign var="patient" value=$_sejour->_ref_patient}}
 
-<td colspan="2" class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td colspan="2" class="text">
   {{if $canPlanningOp->read}}
     <div style="float: right;">
       {{if "web100T"|module_active}}
@@ -108,11 +100,11 @@
   </span>
 </td>
 
-<td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text">
   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
 </td>
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td>
   <span {{if $_sejour->entree|date_format:"%Y-%m-%d" == $date}}style="color: #070;"{{/if}}
     onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
     {{$_sejour->entree|date_format:$conf.datetime}}
@@ -124,13 +116,13 @@
   </div>
 </td>
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td>
   <span {{if $_sejour->sortie|date_format:"%Y-%m-%d" == $date}}style="color: #070;"{{/if}}>
     {{$_sejour->sortie|date_format:$conf.datetime}}
   </span>
 </td>
 
-<td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text">
   {{if !($_sejour->type == 'exte') && !($_sejour->type == 'consult') && $_sejour->annule != 1}}
     {{mb_include template=inc_form_prestations sejour=$_sejour edit=$canAdmissions->edit}}
     {{mb_include module=hospi template=inc_placement_sejour sejour=$_sejour}}

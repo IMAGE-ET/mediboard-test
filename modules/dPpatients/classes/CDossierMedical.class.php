@@ -13,34 +13,39 @@
  */
 class CDossierMedical extends CMbMetaObject {
   // DB Fields
-  var $dossier_medical_id      = null;
-  var $codes_cim               = null;
+  var $dossier_medical_id        = null;
+  var $codes_cim                 = null;
   
   // Dossier medical Patient
-  var $risque_thrombo_patient   = null;
-  var $risque_MCJ_patient = null;
+  var $risque_thrombo_patient    = null;
+  var $risque_MCJ_patient        = null;
 
   // Dossier medical Sejour
-  var $risque_thrombo_chirurgie = null;
-  var $risque_antibioprophylaxie   = null;
-  var $risque_prophylaxie = null;
-  var $risque_MCJ_chirurgie = null;
+  var $risque_thrombo_chirurgie  = null;
+  var $risque_antibioprophylaxie = null;
+  var $risque_prophylaxie        = null;
+  var $risque_MCJ_chirurgie      = null;
+  
+  // TODO Activer ces champs
+  //var $groupe_sanguin            = null;
+  //var $rhesus                    = null;
   
   // Form Fields
-  var $_added_code_cim   = null;
-  var $_deleted_code_cim = null;
-  var $_codes_cim        = null;
-  var $_ext_codes_cim    = null;
+  var $_added_code_cim           = null;
+  var $_deleted_code_cim         = null;
+  var $_codes_cim                = null;
+  var $_ext_codes_cim            = null;
 
   // Back references
-  var $_all_antecedents = null;
-  var $_ref_antecedents_by_type = null;
+  var $_all_antecedents          = null;
+  var $_ref_antecedents_by_type  = null;
   var $_ref_antecedents_by_appareil = null;
   var $_ref_antecedents_by_type_appareil = null;
-  var $_ref_traitements = null;
-  var $_ref_etats_dents = null;
-  var $_ref_prescription = null;
-  var $_ref_allergies = null;
+  var $_ref_traitements          = null;
+  var $_ref_etats_dents          = null;
+  var $_ref_prescription         = null;
+  var $_ref_allergies            = null;
+  var $_ref_deficiences          = null;
   
   // Derived back references
   var $_count_antecedents = null;
@@ -48,7 +53,7 @@ class CDossierMedical extends CMbMetaObject {
   var $_count_cancelled_antecedents = null;
   var $_count_cancelled_traitements = null;
 
-  var $_count_allergies = null;
+  var $_count_allergies          = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -59,8 +64,12 @@ class CDossierMedical extends CMbMetaObject {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs["object_class"] = "enum list|CPatient|CSejour";
-    $specs["codes_cim"] = "text";
+    $specs["object_class"]   = "enum list|CPatient|CSejour";
+    $specs["codes_cim"]      = "text";
+    
+    // TODO Activer ces champs
+    //$specs["groupe_sanguin"] = "enum list|?|O|A|B|AB default|?";
+    //$specs["rhesus"]         = "enum list|?|NEG|POS default|?";
     
     $specs["risque_thrombo_patient"   ] = "enum list|NR|faible|modere|eleve|majeur default|NR";
     $specs["risque_thrombo_chirurgie" ] = "enum list|NR|faible|modere|eleve default|NR";
@@ -121,10 +130,6 @@ class CDossierMedical extends CMbMetaObject {
       $this->_ext_codes_cim[$code_cim] = new CCodeCIM10($code_cim, 1);
     }
   }
-
-  function updatePlainFields() {
-    parent::updatePlainFields();
-  }
   
   function mergePlainFields ($objects /*array(<CMbObject>)*/, $getFirstValue = false) {
     $codes_cim_array = CMbArray::pluck($objects, 'codes_cim');
@@ -133,7 +138,9 @@ class CDossierMedical extends CMbMetaObject {
     $codes_cim_array = array_unique(explode('|', $codes_cim));
     CMbArray::removeValue('', $codes_cim_array);
     
-    if ($msg = parent::mergePlainFields($objects)) return $msg;
+    if ($msg = parent::mergePlainFields($objects)) {
+      return $msg;
+    }
     
     $this->codes_cim = implode('|', $codes_cim_array);
   }
@@ -188,7 +195,6 @@ class CDossierMedical extends CMbMetaObject {
    * Compte les antécédents annulés et non-annulés
    */
   function countAntecedents(){
-    
     $antedecent = new CAntecedent();
     $where = array();
     $where["dossier_medical_id"] = " = '$this->_id'";
@@ -204,7 +210,6 @@ class CDossierMedical extends CMbMetaObject {
    * Compte les antécédents annulés et non-annulés
    */
   function countTraitements(){
-    
     $traitement = new CTraitement();
     $where = array();
     $where["dossier_medical_id"] = " = '$this->_id'";
@@ -220,9 +225,10 @@ class CDossierMedical extends CMbMetaObject {
    * Compte les antecedents de type allergies
    */
   function countAllergies(){
-    if(!$this->_id){
+    if (!$this->_id) {
       return $this->_count_allergies = 0;
     }
+    
     $antecedent = new CAntecedent();
     $antecedent->type = "alle";
     $antecedent->annule = "0";
@@ -230,12 +236,24 @@ class CDossierMedical extends CMbMetaObject {
     return $this->_count_allergies = $antecedent->countMatchingList();
   }
   
-  function loadRefsAllergies(){
+  function loadRefsAntecedentsOfType($type) {
+    if (!$this->_id) {
+      return array();
+    }
+    
     $antecedent = new CAntecedent();
-    $antecedent->type = "alle";
+    $antecedent->type = $type;
     $antecedent->annule = "0";
     $antecedent->dossier_medical_id = $this->_id;
-    $this->_ref_allergies = $antecedent->loadMatchingList();
+    return $antecedent->loadMatchingList();
+  }
+  
+  function loadRefsAllergies(){
+    return $this->_ref_allergies = $this->loadRefsAntecedentsOfType("alle");
+  }
+  
+  function loadRefsDeficiences(){
+    return $this->_ref_deficiences = $this->loadRefsAntecedentsOfType("deficience");
   }
   
   function loadRefsTraitements($cancelled = false) {
@@ -263,9 +281,10 @@ class CDossierMedical extends CMbMetaObject {
     $dossier->object_id    = $object_id;
     $dossier->object_class = $object_class;
     $dossier->loadMatchingObject();
-    if(!$dossier->_id) {
+    if (!$dossier->_id) {
       $dossier->store();
     }
+    
     return $dossier->_id;
   }
 
@@ -292,6 +311,7 @@ class CDossierMedical extends CMbMetaObject {
 
     return parent::store();
   }
+  
   function fillTemplate(&$template, $champ = "Patient") {
     // Antécédents
     $this->loadRefsAntecedents();

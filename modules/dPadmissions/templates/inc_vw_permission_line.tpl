@@ -8,17 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if $_sejour->type == 'ambu'}} {{assign var=background value="#faa"}}
-{{elseif $_sejour->type == 'comp'}} {{assign var=background value="#fff"}}
-{{elseif $_sejour->type == 'exte'}} {{assign var=background value="#afa"}}
-{{elseif $_sejour->type == 'consult'}} {{assign var=background value="#cfdfff"}}
-{{else}}
-{{assign var=background value="#ccc"}}
-{{/if}}
-
 {{assign var="patient" value=$_sejour->_ref_patient}}
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td>
   <form name="editAffFrm{{$_aff->_id}}" action="?m=dPadmissions" method="post">
     <input type="hidden" name="m" value="dPhospi" />
     <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -50,17 +42,17 @@
   </form>
 </td>
 
-<td colspan="2" class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td colspan="2" class="text">
   <span class="CPatient-view" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
     {{$patient}}
   </span>
 </td>
 
-<td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text">
   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
 </td>
 
-<td style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td>
   <div style="float: right;">
     
   </div>
@@ -71,26 +63,26 @@
 
 {{if $type_externe == "depart"}}
 
-<td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text">
   {{$_aff->_ref_prev->_ref_lit->_view}}
 </td>
 
-<td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text">
   {{$_aff->_ref_lit->_view}}
 </td>
 
 {{else}}
 
-<td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text">
   {{$_aff->_ref_lit->_view}}
 </td>
 
-<td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text">
   {{$_aff->_ref_next->_ref_lit->_view}}
 </td>
 
 {{/if}}
 
-<td class="text" style="background: {{$background}}; {{if !$_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text" >
   {{$_aff->_duree}} jour(s)
 </td>

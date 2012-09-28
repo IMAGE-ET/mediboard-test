@@ -12,6 +12,8 @@
 Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
 </script>
 
+{{mb_include module=admissions template=inc_refresh_page_message}}
+
 <table class="tbl" id="admissions">
   <tr>
     <th class="title" colspan="10">
@@ -57,7 +59,7 @@ Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
   </tr>
 
   {{foreach from=$sejours item=_sejour}}
-  <tr id="admission{{$_sejour->sejour_id}}">
+  <tr class="sejour-type-default sejour-type-{{$_sejour->type}} {{if !$_sejour->facturable}} non-facturable {{/if}}" id="admission{{$_sejour->sejour_id}}">
     {{mb_include module=dPadmissions template="inc_vw_sejour_line" nodebug=true}}
   </tr>
   {{foreachelse}}

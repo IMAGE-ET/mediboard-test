@@ -238,6 +238,9 @@ class CPatient extends CMbObject {
   var $_ref_correspondants_patient  = null;
   var $_ref_cp_by_relation          = null;
   
+  /**
+   * @var CDossierMedical
+   */
   var $_ref_dossier_medical         = null;
   var $_refs_devenirs_dentaires     = null;
   var $_ref_IPP                     = null;
@@ -1013,9 +1016,16 @@ class CPatient extends CMbObject {
     return $this->_ref_consultations = array();
   }
   
-  function loadRefDossierMedical() {
+  /**
+   * @return CDossierMedical
+   */
+  function loadRefDossierMedical($load_refs_back = true) {
     $this->_ref_dossier_medical = $this->loadUniqueBackRef("dossier_medical");
-    $this->_ref_dossier_medical->loadRefsBack();
+    
+    if ($load_refs_back) {
+      $this->_ref_dossier_medical->loadRefsBack();
+    }
+    
     return $this->_ref_dossier_medical;
   }
   

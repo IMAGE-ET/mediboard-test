@@ -12,6 +12,8 @@
 Calendar.regField(getForm("changeDatePermissions").date, null, {noView: true});
 </script>
 
+{{mb_include module=admissions template=inc_refresh_page_message}}
+
 <table class="tbl" id="admissions">
   <tr>
     <th class="title" colspan="10">
@@ -21,20 +23,20 @@ Calendar.regField(getForm("changeDatePermissions").date, null, {noView: true});
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_idx_permissions" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
-			</form>
-			<a href="?m=dPadmissions&tab=vw_idx_permissions&date={{$demain}}" style="display: inline">>>></a>
-			<br />
-			
+      </form>
+      <a href="?m=dPadmissions&tab=vw_idx_permissions&date={{$demain}}" style="display: inline">>>></a>
+      <br />
+      
       <em style="float: left; font-weight: normal;">
-			{{$affectations|@count}}
+      {{$affectations|@count}}
       {{if $type_externe == "depart"}}
         Départ(s)
       {{else}}
         Retour(s)
       {{/if}}
       </em>
-	
-			<select style="float: right" name="filterFunction" style="width: 16em;" onchange="reloadPermission(this.value);">
+  
+      <select style="float: right" name="filterFunction" style="width: 16em;" onchange="reloadPermission(this.value);">
         <option value=""> &mdash; Toutes les fonctions</option>
         {{foreach from=$functions item=_function}}
           <option value="{{$_function->_id}}" {{if $_function->_id == $filterFunction}}selected="selected"{{/if}} class="mediuser" style="border-color: #{{$_function->color}};">{{$_function}}</option>
@@ -42,8 +44,8 @@ Calendar.regField(getForm("changeDatePermissions").date, null, {noView: true});
       </select>
     </th>
   </tr>
-	
-	{{assign var=url value="?m=$m&tab=vw_idx_permissions&type_externe=$type_externe"}}
+  
+  {{assign var=url value="?m=$m&tab=vw_idx_permissions&type_externe=$type_externe"}}
   <tr>
     <th class="narrow">Valider</th>
     <th>
@@ -65,9 +67,10 @@ Calendar.regField(getForm("changeDatePermissions").date, null, {noView: true});
   </tr>
 
   {{foreach from=$affectations item=_aff}}
-  <tr id="permission{{$_aff->_id}}">
-    {{mb_include module=admissions template="inc_vw_permission_line" _sejour=$_aff->_ref_sejour nodebug=true}}
-  </tr>
+    {{assign var=_sejour value=$_aff->_ref_sejour}}
+    <tr class="sejour-type-default sejour-type-{{$_sejour->type}} {{if !$_sejour->facturable}} non-facturable {{/if}}" id="permission{{$_aff->_id}}">
+      {{mb_include module=admissions template="inc_vw_permission_line" _sejour=$_aff->_ref_sejour nodebug=true}}
+    </tr>
   {{foreachelse}}
   <tr>
     <td colspan="10" class="empty">{{tr}}None{{/tr}}</td>

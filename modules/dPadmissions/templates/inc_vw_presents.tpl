@@ -18,17 +18,19 @@
   });
 </script>
 
+{{mb_include module=admissions template=inc_refresh_page_message}}
+
 <table class="tbl" id="admissions">
   <tr>
     <th class="title" colspan="10">
-      <a href="?m=dPadmissions&tab=vw_idx_present&date={{$hier}}" style="display: inline"><<<</a>
+      <a href="?m=dPadmissions&tab=vw_idx_present&date={{$hier}}" style="display: inline">&lt;&lt;&lt;</a>
       {{$date|date_format:$conf.longdate}}
       <form name="changeDatePresents" action="?" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_idx_present" />
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
       </form>
-      <a href="?m=dPadmissions&tab=vw_idx_present&date={{$demain}}" style="display: inline">>>></a>
+      <a href="?m=dPadmissions&tab=vw_idx_present&date={{$demain}}" style="display: inline">&gt;&gt;&gt;</a>
       <br />
       
       <em style="float: left; font-weight: normal;">
@@ -70,7 +72,7 @@
   </tr>
 
   {{foreach from=$sejours item=_sejour}}
-  <tr class="sejour" id="{{$_sejour->_guid}}">
+  <tr class="sejour sejour-type-default sejour-type-{{$_sejour->type}} {{if !$_sejour->facturable}} non-facturable {{/if}}" id="{{$_sejour->_guid}}">
     {{mb_include module=admissions template="inc_vw_present_line" nodebug=true}}
   </tr>
   {{foreachelse}}

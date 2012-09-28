@@ -10,31 +10,21 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="2">Admissions</th>
+    <th class="title">Admissions</th>
   </tr>
-  <tr>
-    <th>Couleur</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td style="background-color:#faa"></td>
+  <tr class="sejour-type-default sejour-type-ambu">
     <td class="text">Ambulatoire</td>
   </tr>
-  <tr>
-    <td style="background-color:#fff"></td>
+  <tr class="sejour-type-default sejour-type-comp">
     <td class="text">Hospitalisation complète</td>
   </tr>
-  <tr>
-    <td style="background-color:#afa"></td>
+  <tr class="sejour-type-default sejour-type-exte">
     <td class="text">Externe</td>
   </tr>
-  <tr>
-    <td style="background-color:#cfdfff"></td>
+  <tr class="sejour-type-default sejour-type-consult">
     <td class="text">Consultations</td>
   </tr>
-  <tr>
-    <td style="background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;"></td>
+  <tr class="non-facturable">
     <td class="text">Non Facturable</td>
   </tr>
-  
 </table>

@@ -35,7 +35,6 @@
   <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
     {{$patient->_view}}
   </span>
-  </a>
 </td>
 <td class="text">
   <div class="{{if $curr_consult->chrono == 64}}small-success{{else}}small-info{{/if}}" style="margin: 0px;">
@@ -47,18 +46,22 @@
 
 {{if $curr_adm->_id}}
 
-{{if $curr_adm->type == 'ambu'}} {{assign var=background value="#faa"}}
-{{elseif $curr_adm->type == 'comp'}} {{assign var=background value="#fff"}}
-{{elseif $curr_adm->type == 'exte'}} {{assign var=background value="#afa"}}
-{{elseif $curr_adm->type == 'urg'}} {{assign var=background value="#ff6"}}
-{{else}}
-{{assign var=background value="#ccc"}}
+{{assign var=cell_style value="background: #ccc;"}}
+
+{{if     $curr_adm->type == 'ambu'}} {{assign var=cell_style value="background: #faa;"}}
+{{elseif $curr_adm->type == 'comp'}} {{assign var=cell_style value="background: #fff;"}}
+{{elseif $curr_adm->type == 'exte'}} {{assign var=cell_style value="background: #afa;"}}
+{{elseif $curr_adm->type == 'urg'}}  {{assign var=cell_style value="background: #ff6;"}}
 {{/if}}
 
-<td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+{{if !$curr_adm->facturable}}
+  {{assign var=cell_style value="$cell_style background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;"}}
+{{/if}}
+
+<td class="text" style="{{$cell_style}}">
   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_adm->_ref_praticien}}
 </td>
-<td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text" style="{{$cell_style}}">
   <div style="float: right;">
     {{mb_include module=system template=inc_object_notes object=$curr_adm}}
   </div>
@@ -68,12 +71,12 @@
   </span>
 </td>
 {{if !$curr_adm->annule && $curr_consult->_ref_consult_anesth->_ref_sejour->_id}}
-<td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td class="text" style="{{$cell_style}}">
   {{mb_include template=inc_form_prestations sejour=$curr_adm edit=$canAdmissions->edit}}
   {{mb_include module=hospi template=inc_placement_sejour sejour=$curr_adm}}
 </td>
 
-<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td style="{{$cell_style}}">
   {{if $canAdmissions->edit}}
   <form name="editSaisFrm{{$curr_adm->_id}}" action="?" method="post">
 
@@ -101,7 +104,7 @@
   {{/if}}
 </td>
 
-<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td style="{{$cell_style}}">
   {{if $curr_adm->_couvert_cmu}}
     <img src="images/icons/tick.png" title="Droits CMU en cours" />
   {{else}}
@@ -109,7 +112,7 @@
   {{/if}}
 </td>
 
-<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td style="{{$cell_style}}">
   {{foreach from=$curr_adm->_ref_operations item=curr_op}}
   {{if $curr_op->depassement}}
   <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->
@@ -126,7 +129,7 @@
   Annulé
 </td>
 {{else}}
-<td colspan="4" class="button" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
+<td colspan="4" class="button" style="{{$cell_style}}">
   {{if $type_event == "COperation"}}
   <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="Admissions.printDHE('operation_id', {{$curr_consult->_next_sejour_and_operation.COperation->_id}}); return false;">
     <img src="images/icons/print.png" />
