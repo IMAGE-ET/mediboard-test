@@ -102,8 +102,27 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $fin   = $this->getFinInterv($node);
     
     // Traitement de la date/heure début, et durée de l'opération
-    $operation->time_operation = mbTime($debut);
     $operation->temp_operation = mbSubTime(mbTime($debut), mbTime($fin)); 
+    $operation->_hour_op       = null;
+    $operation->_min_op        = null;
+      
+    // Si une intervention du passée    
+    if (mbDate($debut) < mbDate()) {
+      // On affecte le début de l'opération
+      if (!$operation->debut_op) {
+        $operation->debut_op = mbTime($debut);
+      } 
+      // On affecte la fin de l'opération
+      if (!$operation->fin_op) {
+        $operation->fin_op = mbTime($fin);
+      }
+    }
+    // Si dans le futur
+    else {
+      $operation->_hour_urgence  = null;
+      $operation->_min_urgence   = null;
+      $operation->time_operation = mbTime($debut);
+    }
     
     $operation->libelle = CMbString::capitalize($xpath->queryTextNode("hprim:libelle", $node));
     $operation->rques   = CMbString::capitalize($xpath->queryTextNode("hprim:commentaire", $node));

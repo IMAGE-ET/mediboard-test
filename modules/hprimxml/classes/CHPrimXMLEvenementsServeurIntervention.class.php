@@ -208,7 +208,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     // Notifier les autres destinataires autre que le sender
     $operation->_eai_initiateur_group_id = $sender->group_id;
     $msgInterv = $operation->store();
-    
+
     CEAIMbObject::storeIdex($idex, $operation, $sender);
     $modified_fields = CEAIMbObject::getModifiedFields($operation);
           
