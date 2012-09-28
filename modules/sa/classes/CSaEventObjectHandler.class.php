@@ -34,27 +34,5 @@ class CSaEventObjectHandler extends CEAIObjectHandler {
     
     $this->sendFormatAction("onAfterStore", $mbObject);
   }
-  
-  /**
-   * @see parent::onBeforeDelete()
-   */
-  function onBeforeDelete(CMbObject $mbObject) {
-    if (!parent::onBeforeDelete($mbObject)) {
-      return false;
-    }
-    
-    $this->sendFormatAction("onBeforeDelete", $mbObject);
-  }  
-  
-  /**
-   * @see parent::onAfterDelete()
-   */  
-  function onAfterDelete(CMbObject $mbObject) {
-    if (!parent::onAfterDelete($mbObject)) {
-      return;
-    }
-    
-    $this->sendFormatAction("onAfterDelete", $mbObject);
-  }
 }
 ?>
