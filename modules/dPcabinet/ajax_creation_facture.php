@@ -20,10 +20,10 @@ $date           = CValue::get("date", mbDate());
 
 $facture = new CFactureConsult();
 
-//Si la facture existe déjà on la met à jour
-$where["patient_id"]  = "= '$patient_id'";
+// Si la facture existe déjà on la met à jour
+$where["patient_id"]    = "= '$patient_id'";
 $where["praticien_id"]  = "= '$chirsel_id'";
-$where["cloture"]     = "IS NULL";
+$where["cloture"]       = "IS NULL";
 
 if ($facture->loadObject($where)) {
   $facture->loadRefsConsults();
@@ -68,7 +68,8 @@ if ($facture->loadObject($where)) {
     $consult->store();
   }
 }
-//Sinon on la créé
+
+// Sinon on la crée
 else {
   $facture->patient_id    = $patient_id;
   $facture->praticien_id  = $chirsel_id;
@@ -81,7 +82,7 @@ else {
   }
 }
 
-//Enregistrement des modifications si besoin
+// Enregistrement des modifications si besoin
 if ($facture->du_patient) {
   $facture->store();
   
@@ -89,7 +90,7 @@ if ($facture->du_patient) {
   $consultation = new CConsultation();
   $consultation->load($consult_id);
   
-  //Ajout de l'id de la facture dans la consultation
+  // Ajout de l'id de la facture dans la consultation
   if ($facture->_id) {
     $consultation->factureconsult_id = $facture->_id;
     $consultation->store();
@@ -97,15 +98,15 @@ if ($facture->du_patient) {
   $facture->loadRefs();
 }
 
+// Instanciation d'un acte tarmed pour l'ajout de ligne dans la facture
 $acte_tarmed = null;
-//Instanciation d'un acte tarmed pour l'ajout de ligne dans la facture
 if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
   $acte_tarmed = new CActeTarmed();
   $acte_tarmed->date = mbDate();
   $acte_tarmed->quantite = 1;
 }
 
-$reglement   = new CReglement();
+// Chargement des banques
 $orderBanque = "nom ASC";
 $banque      = new CBanque();
 $banques     = $banque->loadList(null,$orderBanque);
@@ -113,7 +114,8 @@ $banques     = $banque->loadList(null,$orderBanque);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("reglement"   , $reglement);
+$smarty->assign("consult"     , null);
+$smarty->assign("reglement"   , new CReglement());
 $smarty->assign("banques"     , $banques);
 $smarty->assign("acte_tarmed"   , $acte_tarmed);
 $smarty->assign("facture"       , $facture);
