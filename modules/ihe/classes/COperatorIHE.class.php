@@ -96,8 +96,8 @@ class COperatorIHE extends CEAIOperator {
       // Chargement des configs de l'expéditeur
       $sender = $exchange_ihe->_ref_sender;
       $sender->getConfigs($data_format);
-			
-			CHL7v2Message::setHandleMode($sender->_configs["handle_mode"]); 
+      
+      CHL7v2Message::setHandleMode($sender->_configs["handle_mode"]); 
 
       $dom_evt->_ref_exchange_ihe = $exchange_ihe;
       $ack->_ref_exchange_ihe     = $exchange_ihe;
@@ -119,7 +119,7 @@ class COperatorIHE extends CEAIOperator {
 
       $exchange_ihe->populateErrorExchange($ack);
       
-			CHL7v2Message::resetBuildMode(); 
+      CHL7v2Message::resetBuildMode(); 
     }
 
     return $msgAck;
@@ -130,8 +130,6 @@ class COperatorIHE extends CEAIOperator {
     $newPatient->_eai_exchange_initiator_id = $exchange_ihe->_id;
     
     $data = array_merge($data, $dom_evt->getContentNodes());
-    
-    //$exchange_ihe->id_permanent = array_key_exists("PI", $data['personIdentifiers']) ? $data['personIdentifiers']['PI'] : null;
 
     return $dom_evt->handle($ack, $newPatient, $data);
   }

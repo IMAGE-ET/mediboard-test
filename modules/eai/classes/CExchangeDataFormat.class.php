@@ -233,7 +233,21 @@ class CExchangeDataFormat extends CMbMetaObject {
     }
   }
   
-  
+  function setIdPermanent(CMbObject $mbObject) {
+    if ($mbObject instanceof CPatient) {
+      if (!$mbObject->_IPP) {
+        $mbObject->loadIPP($this->group_id);
+      }
+      $this->id_permanent = $mbObject->_IPP;
+    }
+    
+    if ($mbObject instanceof CSejour) {
+      if (!$mbObject->_NDA) {
+        $mbObject->loadNDA($this->group_id);
+      }
+      $this->id_permanent = $mbObject->_NDA;
+    }
+  }
 }
 
 ?>

@@ -198,7 +198,8 @@ class CExchangeIHE extends CExchangeTabular {
       /* @todo Comment gérer ces informations ? */
       $this->statut_acquittement = $ack->ack_code;
       $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
-    } else {
+    } 
+    else {
       $this->message_valide      = $event->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
       $this->date_production     = mbDateTime();
       $this->date_echange        = mbDateTime();
@@ -212,8 +213,10 @@ class CExchangeIHE extends CExchangeTabular {
 
     $this->statut_acquittement = $ack->ack_code;
     $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
+
     if ($mbObject && $mbObject->_id) {
       $this->setObjectIdClass($mbObject);
+      $this->setIdPermanent($mbObject);
     }
 
     $this->_acquittement = $msgAck;
