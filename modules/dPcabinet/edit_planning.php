@@ -176,7 +176,7 @@ if ($pat->_id) {
   unset($following_consultations[$consult->_id]);
   foreach ($following_consultations as $_consultation) {
     $_consultation->loadRefPlageConsult();
-    $_consultation->loadRefPraticien();
+    $_consultation->loadRefPraticien()->loadRefFunction();
     $_consultation->canEdit();
   }
 }
