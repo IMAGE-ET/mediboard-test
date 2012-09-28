@@ -44,6 +44,10 @@ class CHL7Config extends CExchangeDataFormatConfig {
     
     // Purge
     "purge_idex_movements",
+    
+    // Auto repair
+    "repair_patient",
+    "control_date"
   );
   
   var $hl7_config_id = null;
@@ -73,6 +77,9 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $handle_NSS    = null;
   
   var $purge_idex_movements = null;
+  
+  var $repair_patient = null;
+  var $control_date   = null;
   
   var $_categories = array(
     "format" => array(
@@ -107,6 +114,11 @@ class CHL7Config extends CExchangeDataFormatConfig {
     
     "purge" => array(
       "purge_idex_movements"
+    ),
+    
+    "auto-repair" => array(
+      "repair_patient",
+      "control_date"
     )
   );
 
@@ -137,21 +149,25 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["assigning_authority_universal_type_id"] = "str";
     
     // Encoding
-    $props["encoding"]      = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
+    $props["encoding"] = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
     $props["strict_segment_terminator"] = "bool default|0";
     
     // Handle
-    $props["handle_mode"]   = "enum list|normal|simple default|normal";
+    $props["handle_mode"] = "enum list|normal|simple default|normal";
     // => PID
-    $props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
-    $props["handle_NSS"]    = "enum list|PID_3|PID_19 default|PID_3";
+    $props["handle_NDA"] = "enum list|PID_18|PV1_19 default|PID_18";
+    $props["handle_NSS"] = "enum list|PID_3|PID_19 default|PID_3";
     // => PV1
     $props["handle_PV1_10"] = "enum list|discipline|service default|discipline";
-    $props["handle_PV1_14"]  = "enum list|admit_source|ZFM default|admit_source";
-    $props["handle_PV1_36"]  = "enum list|discharge_disposition|ZFM default|discharge_disposition";
+    $props["handle_PV1_14"] = "enum list|admit_source|ZFM default|admit_source";
+    $props["handle_PV1_36"] = "enum list|discharge_disposition|ZFM default|discharge_disposition";
     
     // Purge
     $props["purge_idex_movements"] = "bool default|0";
+    
+    // Auto repair
+    $props["repair_patient"] = "bool default|1";
+    $props["control_date"]   = "enum list|permissif|strict default|strict";
     
     return $props;
   }

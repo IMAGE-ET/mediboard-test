@@ -153,7 +153,9 @@ class CEAIPatient extends CEAIMbObject {
     $newPatient->_generate_IPP            = $generateIPP;
     
     if ($msg = $newPatient->store()) {
-      $newPatient->repair();
+      if ($sender->_configs["repair_patient"]) {
+        $newPatient->repair();
+      }
       
       return $newPatient->store();
     }

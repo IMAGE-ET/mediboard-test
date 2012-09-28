@@ -50,7 +50,6 @@ class CHPrimXPath extends CMbXPath {
   
   function getFirstNode($query, DOMNode $contextNode = null) {
     $textNodes = $this->getMultipleTextNodes($query, $contextNode);
-    //mbTrace($textNodes, "nodes", true);
     
     return isset($textNodes[0]) ? $textNodes[0] : null;
   }

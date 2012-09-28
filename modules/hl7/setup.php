@@ -866,7 +866,13 @@ class CSetuphl7 extends CSetup {
     // R - Recurring patient - Séances
     $this->insertTableEntry("4", "R", "R", "seances", "seances", "Recurring patient", 0);
     
-    $this->mod_version = "0.35";
+    $this->makeRevision("0.35");
+    $query = "ALTER TABLE `hl7_config` 
+                ADD `repair_patient` ENUM ('0','1') DEFAULT '1',
+                ADD `control_date` ENUM ('permissif','strict') DEFAULT 'strict';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.36";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

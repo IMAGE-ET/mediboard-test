@@ -233,7 +233,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       if (!$newVenue->_id) {
         // Mapping du séjour
         $this->mappingVenue($data, $newVenue);
-      
+
         // Séjour retrouvé ?
         if (CAppUI::conf("hl7 strictSejourMatch")) {
           // Recherche d'un num dossier déjà existant pour cette venue 
@@ -255,7 +255,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
             $_modif_sejour = true;
           }
         }
-        
+
         // Mapping du séjour
         $newVenue = $this->mappingVenue($data, $newVenue);
         
@@ -1454,15 +1454,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   function getAdmitDischarge(DOMNode $node, CSejour $newVenue) {
     $event_code = $this->_ref_exchange_ihe->code;
     
-    // On récupère l'entrée réelle ssi msg !A05
-    if ($event_code != "A05") {
-      $newVenue->entree_reelle = $this->queryTextNode("PV1.44", $node);
-    }
-    
-    // On récupère la sortie réelle ssi msg A03 / Z99
-    if ($event_code == "A03" || $event_code == "Z99") {
-      $newVenue->sortie_reelle = $this->queryTextNode("PV1.45", $node);
-    }
+    $newVenue->entree_reelle = $this->queryTextNode("PV1.44", $node);
+    $newVenue->sortie_reelle = $this->queryTextNode("PV1.45", $node);
     
     // Cas spécifique de certains segments 
     // A11 : on supprime la date d'entrée réelle 
@@ -1532,6 +1525,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     if (!$newVenue->sortie_prevue) {
       $newVenue->sortie_prevue = $this->queryTextNode("PV1.45", $this->queryNode("PV1", $parentNode));
+    }
+    
+    // Si les dates entrées/sorties sont incohérentes 
+    $sender = $this->_ref_sender;
+    if ($sender->_configs["control_date"] == "permissif") {
+      $newVenue->entree_prevue = min($newVenue->entree_prevue, $newVenue->sortie_prevue);
+      $newVenue->sortie_prevue = max($newVenue->entree_prevue, $newVenue->sortie_prevue);
     }
   }
 
