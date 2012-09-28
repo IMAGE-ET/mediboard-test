@@ -90,8 +90,6 @@ if ($order_col == "praticien_id"){
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
 
-mbTrace($where);
-
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 CMbObject::massLoadFwdRef($sejours, "patient_id");
