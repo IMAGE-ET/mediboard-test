@@ -173,7 +173,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     }
     
     $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue' data-sortie_prevue='$sejour->sortie_prevue'></span>".
-    "<span onmouseover='ObjectTooltip.createEx(this, \"".$patient->_guid."\")'>$patient->nom $patient->prenom</span>, ".$patient->getFormattedValue("naissance").
+    "<span onmouseover='ObjectTooltip.createEx(this, \"".htmlentities($patient->_guid)."\")'>".htmlentities($patient->nom. " " .$patient->prenom)."</span>, ".$patient->getFormattedValue("naissance").
     "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".mbTransformTime($debut_op, null, "%H:%M")." - ".mbTransformTime($fin_op, null, "%H:%M")."</span>".
     "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>".
     "\n<span style='font-size: 11px; font-weight: bold;'>".htmlentities($_operation->libelle)."</span>".
