@@ -14,7 +14,7 @@ $exchange_id = CValue::post("exchange_id");
 $hl7_message = new CHL7v2Message;
 $hl7_message->parse($er7);
 
-$xml = $hl7_message->toXML();
+$xml = $hl7_message->toXML(null ,false);
 
 $PID = $xml->queryNode("PID");
 $IPP = $NDA = null;
@@ -34,22 +34,60 @@ if ($xml->queryTextNode("CX.5", $PID_18) == "AN") {
 $PV1 = $xml->queryNode("PV1");
 $PV2 = $xml->queryNode("PV2");
 
+$names = array(
+  "nom"             => "",
+  "nom_jeune_fille" => ""
+);
+  
+$PID5 = $xml->query("PID.5", $PID);
+foreach ($PID5 as $_PID5) {
+  // Nom(s)
+  getNames($xml, $_PID5, $PID5, $names);
+  
+  // Prenom(s)
+  $prenom = getFirstNames($xml, $_PID5);
+}      
+
 $queries = array(
   "CPatient" => array(
-    "nom"       => $xml->queryTextNode("PID.5/XPN.1/FN.1", $PID),
-    "prenom"    => $xml->queryTextNode("PID.5/XPN.2", $PID),
-    "naissance" => mbDate($xml->queryTextNode("PID.7", $PID)),
+    "nom"       => $names["nom"] . " (".$names["nom_jeune_fille"].")",
+    "prenom"    => $prenom,
+    "naissance" => mbDateToLocale($xml->queryTextNode("PID.7", $PID)),
     "_IPP"      => $IPP,
   ),
   "CSejour" => array(
     "type"          => $xml->queryTextNode("PV1.2", $PV1),
-    "entree_prevue" => mbDateTime($xml->queryTextNode("PV2.8/TS.1", $PV2)),
-    "entree_reelle" => mbDateTime($xml->queryTextNode("PV1.44/TS.1", $PV1)),
-    "sortie_prevue" => mbDateTime($xml->queryTextNode("PV2.9/TS.1", $PV2)),
-    "sortie_reelle" => mbDateTime($xml->queryTextNode("PV1.45/TS.1", $PV1)),
+    "entree_prevue" => mbDateToLocale($xml->queryTextNode("PV2.8/TS.1", $PV2)),
+    "entree_reelle" => mbDateToLocale($xml->queryTextNode("PV1.44/TS.1", $PV1)),
+    "sortie_prevue" => mbDateToLocale($xml->queryTextNode("PV2.9/TS.1", $PV2)),
+    "sortie_reelle" => mbDateToLocale($xml->queryTextNode("PV1.45/TS.1", $PV1)),
     "_NDA"          => $NDA,
   )
 );
+
+function getNames(CHL7v2MessageXML $xml, DOMNode $node, DOMNodeList $PID5, &$names = array()) {
+  $fn1 = $xml->queryTextNode("XPN.1/FN.1", $node);
+  
+  switch($xml->queryTextNode("XPN.7", $node)) {
+    case "D" :
+      $names["nom"] = $fn1;
+      break;
+    case "L" :
+      // Dans le cas où l'on a pas de nom de nom de naissance le legal name
+      // est le nom du patient
+      if ($PID5->length > 1) {
+        $names["nom_jeune_fille"] = $fn1;
+      }
+      else {
+        $names["nom"] = $fn1;
+      }
+      break;
+  }  
+}
+
+function getFirstNames(CHL7v2MessageXML $xml, DOMNode $node) {
+  return $xml->queryTextNode("XPN.2", $node);
+}
 
 // Création du template
 $smarty = new CSmartyDP();
