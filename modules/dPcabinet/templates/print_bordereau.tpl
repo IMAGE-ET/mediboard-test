@@ -1,9 +1,14 @@
+{{assign var=banque value=$praticien->_ref_banque}}
+{{if !$banque->_id}} 
+  <div class="small-warning">{{tr}}CMediusers-banque_id-none{{/tr}}</div>
+{{/if}}
+
 <table class="tbl">
   <tr>
-    <th style="text-align: left; font-size: 1.5em; text-align: center">
-    {{$praticien->_ref_banque->_view}}
+    <th class="title">
+     {{$banque}}
     </th>
-    <th style="text-align: right; font-size: 2em;" colspan="6">
+    <th class="title" colspan="6">
       Remise de chèques
     </th>
   </tr>
@@ -18,45 +23,41 @@
   </tr>
   
   <tr style="text-align: center">
-    <td>{{$date|date_format:"%d/%m/%Y"}}</td>
+    <td>{{$date|date_format:$conf.date}}</td>
     <td>{{$compte_banque}}</td>
     <td>{{$compte_guichet}}</td>
     <td>{{$compte_numero}}</td>
     <td>{{$compte_cle}}</td>
-    <td colspan="2">{{$praticien->_view}}</td>
+    <td colspan="2">{{$praticien}}</td>
   </tr>
   
   <tr>
     <th colspan="3" class="title">Tireur</th>
     <th colspan="3" class="title">Etablissement payeur</th>
-    <th class="title">Montant</th>
+    <th class="title narrow">Montant</th>
   </tr>
   
-  {{foreach from=$list_reglements item="reglement"}}
+  {{foreach from=$reglements item=_reglement}}
   <tr>
-    <td colspan="3">{{$reglement->_ref_object->_ref_patient->_view}}</td>
-    <td colspan="3">{{$reglement->_ref_banque->_view}}</td>
-    <td>{{mb_value object=$reglement field=montant}}</td>
+    <td colspan="3">{{$_reglement->_ref_object->_ref_patient}}</td>
+    <td colspan="3">{{$_reglement->_ref_banque}}</td>
+    <td style="text-align: right;">{{mb_value object=$_reglement field=montant}}</td>
   </tr>
   {{/foreach}}
   
-  <tr>
+  <tr style="text-align: right; font-weight: bold;">
     <td colspan="3"></td>
-    <th>Nombre de remises</th>
+    <td>Nombre de remises</td>
     <td>{{$nbRemise}}</td>
-    <th>Montant total</th>
+    <td>Montant total</td>
     <td>{{$montantTotal|currency}}</td>
   </tr>
 </table>
 
-<table class="form">
-  <tr>
-    <th class="category" style="width: 50%;">Visa de la banque</th>
-    <th class="category" style="width: 50%;">Visa du client</th>
-    
-  </tr>
-  <tr>  
-    <td style="height: 50px;"> </td>
-    <td> </td>
-  </tr>
-</table>
+<fieldset style="float: left; width: 47%; height: 6em;">
+  <legend>Visa de la banque</legend>
+</fieldset>
+
+<fieldset style="float: right; width: 47%; height: 6em;">
+  <legend>Visa du client</legend>
+</fieldset>

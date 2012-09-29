@@ -65,7 +65,6 @@ $reglements_consult = $reglement->loadList($where, "reglement.date, plageconsult
 $ljoin["consultation"] = "reglement.object_id = consultation.factureconsult_id";
 $where["object_class"] = " = 'CFactureConsult'";
 
-// Chargement
 $reglement = new CReglement();
 $reglements_facture = $reglement->loadList($where, "reglement.date, plageconsult.chir_id", null, null, $ljoin);
 

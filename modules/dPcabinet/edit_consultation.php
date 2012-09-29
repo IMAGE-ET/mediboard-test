@@ -10,7 +10,7 @@
 
 global $m;
 
-$user = CUser::get();
+$user = CMediusers::get();
 
 $date  = CValue::getOrSession("date", mbDate());
 $vue   = CValue::getOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
@@ -21,32 +21,28 @@ $now = mbDateTime();
 
 CMbObject::$useObjectCache = false;
 
-if(!isset($current_m)){
+if (!isset($current_m)) {
   $current_m = CValue::get("current_m", $m);
 }
 
 $prat_id      = CValue::getOrSession("chirSel", $user->_id);
-$selConsult   = CValue::getOrSession("selConsult", null);
+$selConsult   = CValue::getOrSession("selConsult");
 
-$listChirs = new CMediusers;
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listChirs = $listChirs->loadPraticiens(null);
-} else {
-  $listChirs = $listChirs->loadProfessionnelDeSante(null);
-}
+$listChirs = CAppUI::pref("pratOnlyForConsult", 1) ?
+  $user->loadPraticiens(null) :
+  $user->loadProfessionnelDeSante(null);
 
-$listAnesths = new CMediusers;
-$listAnesths = $listAnesths->loadAnesthesistes();
-
-$consult = new CConsultation();
+$listAnesths = $user->loadAnesthesistes();
 
 $listPrats = array();
 
-if($current_m == "dPurgences"){
+$consult = new CConsultation();
+if ($current_m == "dPurgences") {
   if (!$selConsult) {
     CAppUI::setMsg("Vous devez selectionner une consultation", UI_MSG_ALERT);
-    CAppUI::redirect("m=dPurgences&tab=0");
+    CAppUI::redirect("m=urgences&tab=0");
   }
+  
   $user = CAppUI::$user;
   $group = CGroups::loadCurrent();
   $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
@@ -57,7 +53,7 @@ $tabSejour = array();
 // Chargement des banques
 $orderBanque = "nom ASC";
 $banque = new CBanque();
-$banques = $banque->loadList(null,$orderBanque);
+$banques = $banque->loadList(null, $orderBanque);
 
 if(isset($_GET["date"])) {
   $selConsult = null;
@@ -70,7 +66,8 @@ if (isset($_GET["selConsult"])) {
     $consult->loadRefPlageConsult();
     $prat_id = $consult->_ref_plageconsult->chir_id;
     CValue::setSession("chirSel", $prat_id);
-  } else {
+  } 
+  else {
     $consult = new CConsultation();
     $selConsult = null;
     CValue::setSession("selConsult");
@@ -79,7 +76,7 @@ if (isset($_GET["selConsult"])) {
 else {
   if ($consult->load($selConsult) && $consult->patient_id) {
     $consult->loadRefPlageConsult();
-    if($prat_id !== $consult->_ref_plageconsult->chir_id) {
+    if ($prat_id !== $consult->_ref_plageconsult->chir_id) {
       $consult = new CConsultation();
       $selConsult = null;
       CValue::setSession("selConsult");
@@ -100,7 +97,7 @@ if ((!$userSel->isMedical()) && ($current_m != "dPurgences")) {
 
 $anesth = new CTypeAnesth;
 $orderanesth = "name";
-$anesth = $anesth->loadList(null,$orderanesth);
+$anesth = $anesth->loadList(null, $orderanesth);
 
 $consultAnesth =& $consult->_ref_consult_anesth;
 
@@ -125,23 +122,22 @@ if ($consult->_id) {
   }
  
   // Chargement du patient
-  $patient =& $consult->_ref_patient;
+  $patient = $consult->_ref_patient;
   $patient->loadRefs();
   $patient->loadRefsNotes();  
   $patient->loadRefPhotoIdentite();
   
   // Chargement de ses consultations
-  foreach ($patient->_ref_consultations as &$_consultation) {
+  foreach ($patient->_ref_consultations as $_consultation) {
     $_consultation->loadRefsFwd();
     $_consultation->_ref_chir->loadRefFunction();
-    
   }
   
   // Chargement de ses séjours
-  foreach ($patient->_ref_sejours as &$_sejour) {
+  foreach ($patient->_ref_sejours as $_sejour) {
     $_sejour->loadRefsFwd();
     $_sejour->loadRefsOperations();
-    foreach ($_sejour->_ref_operations as &$_operation) {
+    foreach ($_sejour->_ref_operations as $_operation) {
       $_operation->loadRefsFwd();
       $_operation->_ref_chir->loadRefFunction();
       // Tableaux de correspondances operation_id => sejour_id
@@ -151,15 +147,16 @@ if ($consult->_id) {
   
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
-} else {
+} 
+else {
   $consultAnesth->consultation_anesth_id = 0;
 }
 
-if ($consult->_id){
+if ($consult->_id) {
   $consult->canDo();
 }
 
-if ($consult->_id && CModule::getActive("fse")){
+if ($consult->_id && CModule::getActive("fse")) {
   // Chargement des identifiants LogicMax
   $fse = CFseFactory::createFSE();
   if ($fse) {
@@ -211,35 +208,36 @@ if ($consult->_ref_sejour && $sejour->_id){
   $sejour->loadRefDossierMedical();
   $sejour->loadNDA();
 
-  if ($sejour->loadRefRPU()->_id) {
+  // Cas des urgences
+  $rpu = $sejour->loadRefRPU();
+  if ($rpu->_id) {
     // Mise en session du rpu_id
-    $_SESSION["dPurgences"]["rpu_id"] = $sejour->_ref_rpu->_id;
-    $sejour->_ref_rpu->loadRefSejourMutation();
-    $sejour->_ref_rpu->_ref_sejour_mutation->loadNDA();
+    $_SESSION["dPurgences"]["rpu_id"] = $rpu->_id;
+    $rpu->loadRefSejourMutation();
 
     // Urgences pour un séjour "urg"
     if ($sejour->type == "urg") {
       $services = CService::loadServicesUrgence();
     }
+    
     // UHCD pour un séjour "comp" et en UHCD
     if ($sejour->type == "comp" && $sejour->UHCD) {
       $services = CService::loadServicesUHCD();
     }
-
   }
 }
 
 // Initialisation d'un acte NGAP
 $acte_ngap = new CActeNGAP();
-$acte_ngap->quantite = 1;
+$acte_ngap->quantite    = 1;
 $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
+// Si le module Tarmed est installé chargement d'un acte
 $acte_tarmed = null;
 $acte_caisse = null;
-//Si le module Tarmed est installé chargement d'un acte
-if(CModule::getActive("tarmed")){
-  //Initialisation d'un acte Tarmed
+if (CModule::getActive("tarmed")) {
+  // Initialisation d'un acte Tarmed
   $acte_tarmed = new CActeTarmed();
   $acte_tarmed->quantite = 1;
   $acte_tarmed->loadListExecutants();
@@ -258,20 +256,20 @@ $contrainteProvenance[7] = array("", 1, 2, 3, 4);
 $contrainteProvenance[8] = array("", 5, 8);
 
 // Contraintes sur le mode de sortie / destination
-$contrainteDestination["mutation"]  = array("", 1, 2, 3, 4);
+$contrainteDestination["mutation" ] = array("", 1, 2, 3, 4);
 $contrainteDestination["transfert"] = array("", 1, 2, 3, 4);
-$contrainteDestination["normal"] = array("", 6, 7);
+$contrainteDestination["normal"   ] = array("", 6, 7);
 
 // Contraintes sur le mode de sortie / orientation
-$contrainteOrientation["mutation"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
+$contrainteOrientation["mutation" ] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation["transfert"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
-$contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
+$contrainteOrientation["normal"   ] = array("", "FUGUE", "SCAM", "PSA", "REO");
 
 $list_etat_dents = array();
 if ($consult->_id) {
-  if ($consult->_ref_patient->_ref_dossier_medical->_id) {
-    $consult->_ref_patient->_ref_dossier_medical->loadRefsEtatsDents();
-    $etat_dents = $consult->_ref_patient->_ref_dossier_medical->_ref_etats_dents;
+  $dossier_medical = $consult->_ref_patient->_ref_dossier_medical;
+  if ($dossier_medical->_id) {
+    $etat_dents = $dossier_medical->loadRefsEtatsDents();
     foreach ($etat_dents as $etat) {
       $list_etat_dents[$etat->dent] = $etat->etat;
     }
