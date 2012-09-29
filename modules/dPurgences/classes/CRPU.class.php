@@ -311,8 +311,9 @@ class CRPU extends CMbObject {
   }
 
   function loadRefSejourMutation() {
-    $this->_ref_sejour_mutation = $this->loadFwdRef("mutation_sejour_id", true);
-    $this->_ref_sejour_mutation->loadNDA();
+    $sejour = $this->loadFwdRef("mutation_sejour_id", true);
+    $sejour->loadNDA();
+    return $this->_ref_sejour_mutation = $sejour;
   }
 
   function bindSejour() {
@@ -323,11 +324,11 @@ class CRPU extends CMbObject {
     $this->_bind_sejour = false;
 
     $this->loadRefsFwd();
-    $sejour =& $this->_ref_sejour;
-    $sejour->patient_id = $this->_patient_id;
-    $sejour->group_id = CGroups::loadCurrent()->_id;
-    $sejour->praticien_id = $this->_responsable_id;
-    $sejour->type = "urg";
+    $sejour = $this->_ref_sejour;
+    $sejour->patient_id    = $this->_patient_id;
+    $sejour->group_id      = CGroups::loadCurrent()->_id;
+    $sejour->praticien_id  = $this->_responsable_id;
+    $sejour->type          = "urg";
     $sejour->recuse        = "-1";
     $sejour->entree_prevue = $this->_entree;
     $sejour->entree_reelle = $this->_entree;
