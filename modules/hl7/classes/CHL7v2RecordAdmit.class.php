@@ -1454,9 +1454,16 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   function getAdmitDischarge(DOMNode $node, CSejour $newVenue) {
     $event_code = $this->_ref_exchange_ihe->code;
     
-    $newVenue->entree_reelle = $this->queryTextNode("PV1.44", $node);
-    $newVenue->sortie_reelle = $this->queryTextNode("PV1.45", $node);
+    // On récupère l'entrée réelle ssi msg !A05
+    if ($event_code != "A05") {
+      $newVenue->entree_reelle = $this->queryTextNode("PV1.44", $node);
+    }
     
+    // On récupére la sortie réelle ssi msg A03 / Z99
+    if ($event_code == "A03" || $event_code == "Z99") {
+      $newVenue->sortie_reelle = $this->queryTextNode("PV1.45", $node);
+    }
+      
     // Cas spécifique de certains segments 
     // A11 : on supprime la date d'entrée réelle 
     if ($event_code == "A11") {
