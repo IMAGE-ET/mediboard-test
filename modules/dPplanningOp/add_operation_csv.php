@@ -20,6 +20,8 @@ $results = array(
   "count_erreur" => 0,
 );
 
+$group_id = CGroups::loadCurrent()->_id;
+
 $bloc  = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList();
 
@@ -53,20 +55,28 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     }
     
     // Traitement du praticien responsable de l'intervention
-    $mediuser        = new CMediusers();
-    $mediuser->adeli = $ADELI;
-    $count           = $mediuser->countMatchingList();
-    if ($count == "0") {
+    $mediuser = new CMediusers();
+    $where = array(
+      "users_mediboard.adeli"        => "= '$ADELI'",
+      "functions_mediboard.group_id" => "= '$group_id'",
+    );
+    $ljoin = array(
+      "functions_mediboard" => "functions_mediboard.function_id = users_mediboard.function_id"
+    );
+    $count = $mediuser->countList($where, null, $ljoin);
+    if ($count == 0) {
       CAppUI::stepAjax("L'utilisateur '$ADELI' n'a pas été retrouvé dans Mediboard", UI_MSG_WARNING);
       $results["count_erreur"]++;
       continue;
     }
     elseif ($count > 1) {
-      CAppUI::stepAjax("Plusieurs utilisateurs correspondent à cette recherche", UI_MSG_WARNING);
+      $mediusers = $mediuser->loadList($where, null, null, null, $ljoin);
+      $list_view = implode(", ", CMbArray::pluck($mediusers, "_view"));
+      CAppUI::stepAjax("Plusieurs utilisateurs correspondent à cette recherche (ADELI = $ADELI): %s", UI_MSG_WARNING, $list_view);
       $results["count_erreur"]++;
       continue;
     }    
-    $mediuser->loadMatchingObject();
+    $mediuser->loadObject($where, null, null, $ljoin);
     
     // Traitement de la date/heure début, et durée de l'opération
     $date_op  = mbDate($date_debut);
@@ -92,7 +102,6 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       // Si notre intervention est dans la plage Mediboard
       if ($_plage->debut <= $time_op && $temps_op <= $_plage->fin) {
         $plageOp = $_plage;
-        
         break;
       }
     }
