@@ -333,7 +333,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $xcn2  = $object->nom;
       $xcn3  = $object->prenom;      
       $xcn9  = $this->getXCN9($object, $id400, $actor);
-      $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
+      $xcn13 = $object->adeli ? "ADELI" : ($object->rpps ? "RPPS" : "RI");
     }
     if ($object instanceof CUser) {
       $xcn1  = $object->_id;
@@ -347,7 +347,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       $xcn2  = $object->_user_last_name;
       $xcn3  = $object->_user_first_name;
       $xcn9  = $this->getXCN9($object, $id400, $actor);
-      $xcn13 = $object->rpps ? "RPPS" : ($object->adeli ? "ADELI" : "RI");
+      $xcn13 = $object->adeli ? "ADELI" : ($object->rpps ? "RPPS" : "RI");
     }
     
     if ($repeatable && ($actor->_configs["build_PV1_7"] == "repeatable") && $object instanceof CMediusers) {
