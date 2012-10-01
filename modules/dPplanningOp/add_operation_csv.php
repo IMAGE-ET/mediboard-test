@@ -85,8 +85,10 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     
     // Recherche de la salle
     $salle      = new CSalle();
-    $where["nom"]     = "= '$nom_salle'";
-    $where["bloc_id"] = CSQLDataSource::prepareIn(array_keys($blocs));
+    $where = array(
+      "nom"     => "= '$nom_salle'",
+      "bloc_id" => CSQLDataSource::prepareIn(array_keys($blocs)),
+    );
     if (!$salle->loadObject($where)) {
       CAppUI::stepAjax("La salle '$nom_salle' n'a pas été retrouvée dans Mediboard", UI_MSG_WARNING);
       $results["count_erreur"]++;
