@@ -88,12 +88,12 @@
     {{/if}}
     <td>
       {{if $can->edit}}
-        <form name="editSortieBlocFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+        <form name="editSortieBlocReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
           <input type="hidden" name="del" value="0" />
-          {{mb_field object=$_operation field="sortie_salle" register=true form="editSortieBlocFrm$_operation_id"}}
+          {{mb_field object=$_operation field="sortie_salle" register=true form="editSortieBlocReveilFrm$_operation_id"}}
           <button class="tick notext" type="button" onclick="submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
         </form>
       {{else}}
@@ -136,7 +136,7 @@
     </td>
     {{/if}}
     <td>
-      <form name="editEntreeReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+      <form name="editEntreeReveilReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
@@ -144,7 +144,7 @@
         {{if $_operation->_ref_sejour->type=="exte"}}
         -
         {{elseif $modif_operation}}
-        {{mb_field object=$_operation field="entree_reveil" form="editEntreeReveilFrm$_operation_id" onchange="submitReveilForm(this.form);"}}
+        {{mb_field object=$_operation field="entree_reveil" form="editEntreeReveilReveilFrm$_operation_id" onchange="submitReveilForm(this.form);"}}
         {{else}}
           {{mb_value object=$_operation field="entree_reveil"}}
         {{/if}}
@@ -169,7 +169,7 @@
     {{/if}}
     <td class="button">
       {{if $modif_operation}}
-      <form name="editSortieReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+      <form name="editSortieReveilReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />

@@ -87,13 +87,13 @@
     {{/if}}
     <td>
       {{if $can->edit}}
-      <form name="editSortieBlocFrm{{$_operation->operation_id}}" action="?m={{$m}}" method="post">
-      	{{assign var=_operation_id value=$_operation->_id}}
+      <form name="editSortieBlocOpsFrm{{$_operation->operation_id}}" action="?m={{$m}}" method="post">
+        {{assign var=_operation_id value=$_operation->_id}}
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->operation_id}}" />
         <input type="hidden" name="del" value="0" />
-        {{mb_field object=$_operation field="sortie_salle" register=true form="editSortieBlocFrm$_operation_id"}}
+        {{mb_field object=$_operation field="sortie_salle" register=true form="editSortieBlocOpsFrm$_operation_id"}}
         <button class="tick notext" type="button" onclick="submitOperationForm(this.form);">{{tr}}Modify{{/tr}}</button>
       </form>
       {{else}}
@@ -121,7 +121,7 @@
       </form>
       {{/if}}
       
-      <form name="editEntreeReveilFrm{{$_operation->operation_id}}" action="?m={{$m}}" method="post">
+      <form name="editEntreeReveilOpsFrm{{$_operation->operation_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->operation_id}}" />
@@ -149,7 +149,7 @@
     </td>
     <td class="button">
       {{if $modif_operation}}
-      <form name="editSortieReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+      <form name="editSortieReveilOpsFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />

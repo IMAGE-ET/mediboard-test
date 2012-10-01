@@ -53,13 +53,13 @@
     
     <td class="button">
       {{if $can->edit}}
-      <form name="editSortieBlocFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+      <form name="editSortieBlocOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
         {{assign var=_operation_id value=$_operation->_id}}
-        {{mb_field object=$_operation field=sortie_salle form="editSortieBlocFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
+        {{mb_field object=$_operation field=sortie_salle form="editSortieBlocOutFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
       </form>
       {{else}}
         {{mb_value object=$_operation field="sortie_salle"}}
@@ -68,12 +68,12 @@
     <td class="button">
       {{if $_operation->entree_reveil}}
         {{if $can->edit}}
-        <form name="editEntreeReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+        <form name="editEntreeReveilOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
           <input type="hidden" name="del" value="0" />
-          {{mb_field object=$_operation field=entree_reveil form="editEntreeReveilFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
+          {{mb_field object=$_operation field=entree_reveil form="editEntreeReveilOutFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
         </form>
         {{else}}
           {{mb_value object=$_operation field="entree_reveil"}}
@@ -88,13 +88,13 @@
       {{/foreach}}
     </td>
     <td class="button">
-      <form name="editSortieReveilFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+      <form name="editSortieReveilOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
         {{if $modif_operation}}
-          {{mb_field object=$_operation field=sortie_reveil register=true form="editSortieReveilFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
+          {{mb_field object=$_operation field=sortie_reveil register=true form="editSortieReveilOutFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
         {{else}}
           {{mb_value object=$_operation field="sortie_reveil"}}
         {{/if}}
