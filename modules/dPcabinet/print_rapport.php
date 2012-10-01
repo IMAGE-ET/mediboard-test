@@ -53,26 +53,6 @@ else {
   $where["plageconsult.date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
 }
 
-// Tri sur les paiements
-if ($filter->_etat_reglement_patient) {
-  if ($filter->_etat_reglement_patient == "reglee") {
-    $where["consultation.patient_date_reglement"] = "IS NOT NULL";
-  }
-  else {
-    $where["consultation.patient_date_reglement"] = "IS NULL";
-    $where["consultation.du_patient"] = "> 0";
-  }
-}
-if ($filter->_etat_reglement_tiers) {
-  if ($filter->_etat_reglement_tiers == "reglee") {
-    $where["consultation.tiers_date_reglement"] = "IS NOT NULL";
-  }
-  else {
-    $where["consultation.tiers_date_reglement"] = "IS NULL";
-    $where["consultation.du_tiers"] = "> 0";
-  }
-}
-
 // Consultations gratuites
 if (!CValue::getOrSession("cs")) {
   $where[] = "consultation.secteur1 + consultation.secteur2 > 0";
@@ -119,6 +99,25 @@ foreach (array_merge($reglement->_specs["mode"]->_list, array("")) as $_mode) {
   );
 }
 
+// Etat des règlements
+if ($filter->_etat_reglement_patient == "reglee") {
+  $where["consultation.patient_date_reglement"] = "IS NOT NULL";
+}
+  
+if ($filter->_etat_reglement_patient == "non_reglee") {
+  $where["consultation.patient_date_reglement"] = "IS NULL";
+  $where["consultation.du_patient"] = "> 0";
+}
+
+if ($filter->_etat_reglement_tiers == "reglee") {
+  $where["consultation.tiers_date_reglement"] = "IS NOT NULL";
+}
+
+if ($filter->_etat_reglement_tiers == "non_reglee") {
+  $where["consultation.tiers_date_reglement"] = "IS NULL";
+  $where["consultation.du_tiers"] = "> 0";
+}
+
 // Reglements via les ***consultations***
 $listConsults = $consultation->loadList($where, $order, null, null, $ljoin);
 CMbObject::massLoadFwdRef($listConsults, "patient_id");
@@ -157,6 +156,7 @@ $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsu
 
 $where["factureconsult.cloture"] = "IS NOT NULL";
 $where["consultation.factureconsult_id"] = "IS NOT NULL";
+
 $facture = new CFactureConsult();
 $listFactures = $facture->loadList($where, $order, null, null, $ljoin);
 

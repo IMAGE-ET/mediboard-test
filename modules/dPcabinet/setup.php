@@ -1652,7 +1652,13 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("1.74");
     $this->addPrefQuery("new_semainier", "0");
     
-    $this->mod_version = "1.75";
+    $this->makeRevision("1.75");
+    $query = "UPDATE consultation, factureconsult
+      SET consultation.patient_date_reglement = factureconsult.patient_date_reglement
+      WHERE consultation.factureconsult_id = factureconsult.factureconsult_id";
+    $this->addQuery($query);
+        
+    $this->mod_version = "1.76";
   }
 }
 ?>

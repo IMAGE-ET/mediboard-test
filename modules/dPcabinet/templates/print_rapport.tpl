@@ -96,7 +96,7 @@
         </tr>
         {{foreach from=$_plage.factures item=_facture}}
         <tr>
-          <td><strong>{{$_facture}}</strong></td>
+          <td><strong {{if $_facture->_id}} onmouseover="ObjectTooltip.createEx(this, '{{$_facture->_guid}}')" {{/if}}>{{$_facture}}</strong></td>
         
           <td class="text">
             <a name="{{$_facture->_guid}}">
@@ -108,7 +108,9 @@
           </td>
           <td class="text">
             {{foreach from=$_facture->_ref_consults item=_consult}}
+            <div>pdr: {{mb_value object=$_consult field=patient_date_reglement}}</div>
             <div {{if !$_consult->tarif}} class="empty" {{/if}}>
+
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
                 {{mb_value object=$_consult field=_date}}: {{mb_value object=$_consult field=tarif default=None}}
               </span>

@@ -102,8 +102,8 @@ class CFactureConsult extends CMbObject
     $props["remise"]      = "currency default|0";
     $props["ouverture"]   = "date notNull";
     $props["cloture"]     = "date";
-    $props["du_patient"]  = "float notNull default|0";
-    $props["du_tiers"]    = "float notNull default|0";
+    $props["du_patient"]  = "currency notNull default|0";
+    $props["du_tiers"]    = "currency notNull default|0";
     
     $props["type_facture"]              = "enum notNull list|maladie|accident default|maladie";
     $props["patient_date_reglement"]    = "date";
@@ -156,19 +156,29 @@ class CFactureConsult extends CMbObject
    * 
    * @return void
   **/
-  function store(){
-    //a vérifier pour le ==0 s'il faut faire un traitement
+  function store() {
+    // A vérifier pour le == 0 s'il faut faire un traitement
     if ($this->facture !== '0') {
-      $consultation = new CConsultation();
-      $consults = $consultation->loadList("factureconsult_id = '$this->factureconsult_id'");
-      foreach ($consults as $consult) {
-        if ($this->facture == -1 && $consult->facture == 1) {
-          $consult->facture = 0;
-          $consult->store();
+      foreach ($this->loadBackRefs("consultations") as $_consultation) {
+        if ($this->facture == -1 && $_consultation->facture == 1) {
+          $_consultation->facture = 0;
+          $_consultation->store();
         }
-        elseif ($this->facture == 1 && $consult->facture == 0) {
-          $consult->facture = 0;
-          $consult->store();
+        elseif ($this->facture == 1 && $_consultation->facture == 0) {
+          $_consultation->facture = 0;
+          $_consultation->store();
+        }
+      }
+    }
+    
+    // Etat des règlement à propager sur les consultations
+    if ($this->fieldModified("patient_date_reglement") || $this->fieldModified("tiers_date_reglement")) {
+      
+      foreach ($this->loadBackRefs("consultations") as $_consultation) {
+        $_consultation->patient_date_reglement = $this->patient_date_reglement;
+        $_consultation->tiers_date_reglement   = $this->tiers_date_reglement;
+        if ($msg = $_consultation->store()) {
+          return $msg;
         }
       }
     }
