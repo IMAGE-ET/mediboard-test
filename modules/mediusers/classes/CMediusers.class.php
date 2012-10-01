@@ -94,6 +94,7 @@ class CMediusers extends CMbObject {
   var $_ref_user                   = null;
   var $_ref_intervenant_cdarr = null;
   var $_ref_protocoles             = array();
+  var $_count_protocoles           = null;
   
   // Object references per day
   var $_ref_plages                 = null;
@@ -452,6 +453,26 @@ class CMediusers extends CMbObject {
     
     $protocole = new CProtocole();
     $this->_ref_protocoles = $protocole->loadList($where, "libelle_sejour, libelle, codes_ccam");
+  }
+  
+  function countProtocoles($type = null) {
+    $this->loadRefFunction();
+    $functions = array($this->function_id);
+    $this->loadBackRefs("secondary_functions");
+    foreach ($this->_back["secondary_functions"] as $curr_sec_func) {
+      $functions[] = $curr_sec_func->function_id;
+    }
+    $list_functions = implode(",", $functions);
+    $where = array(
+      "protocole.chir_id = '$this->_id' OR protocole.function_id IN ($list_functions)"
+    );
+    
+    if ($type) {
+      $where["type"] = "= '$type'";
+    }
+    
+    $protocole = new CProtocole();
+    $this->_count_protocoles = $protocole->countList($where);
   }
   
   function getOwners() {

@@ -35,10 +35,10 @@ $page          = CValue::get("page", array(
 // Protocoles disponibles
 $_prat = new CMediusers();
 foreach($listPrat as $_prat) {
-  $_prat->loadProtocoles($sejour_type);
+  $_prat->countProtocoles($sejour_type);
 }
 foreach($listFunc as $_function) {
-  $_function->loadProtocoles($sejour_type);
+  $_function->countProtocoles($sejour_type);
 }
 
 // Création du template

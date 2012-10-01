@@ -37,6 +37,10 @@ class CFunctions extends CMbObject {
   var $_ref_group = null;
   var $_ref_users = null;
   
+  // Form fields
+  var $_ref_protocoles   = array();
+  var $_count_protocoles = null;
+  
   // Filter fields
   var $_skipped = null;
   
@@ -155,6 +159,19 @@ class CFunctions extends CMbObject {
     
     $protocole = new CProtocole();
     $this->_ref_protocoles = $protocole->loadList($where, "libelle_sejour, libelle, codes_ccam");
+  }
+  
+  function countProtocoles($type = null) {
+    $where = array(
+      "function_id" => "= '$this->_id'"
+    );
+    
+    if ($type) {
+      $where["type"] = "= '$type'";
+    }
+    
+    $protocole = new CProtocole();
+    $this->_count_protocoles = $protocole->countList($where);
   }
   
   // @todo : ameliorer le choix des spécialités

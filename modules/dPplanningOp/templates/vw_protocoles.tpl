@@ -132,9 +132,9 @@ Main.add(function(){
               <select name="chir_id" style="width: 20em;" onchange="if (this.form.function_id) {this.form.function_id.selectedIndex=0;} refreshList(this.form);">
                 <option value="0">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listPrat item=curr_prat}}
-                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}}; {{if !$curr_prat->_ref_protocoles|@count}}color: #999;{{/if}}"
+                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}}; {{if !$curr_prat->_count_protocoles}}color: #999;{{/if}}"
                         value="{{$curr_prat->user_id}}" {{if ($chir_id == $curr_prat->user_id) && !$function_id}} selected="selected" {{/if}}>
-                  {{$curr_prat->_view}} ({{$curr_prat->_ref_protocoles|@count}})
+                  {{$curr_prat->_view}} ({{$curr_prat->_count_protocoles}})
                 </option>
                 {{/foreach}}
               </select>
@@ -145,9 +145,9 @@ Main.add(function(){
               <select name="function_id" style="width: 30em;" onchange="if (this.form.chir_id) { this.form.selectedIndex=0; } refreshList(this.form);">
                 <option value="0">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listFunc item=curr_function}}
-                <option class="mediuser" style="border-color: #{{$curr_function->color}}; {{if !$curr_function->_ref_protocoles|@count}}color: #999;{{/if}}"
+                <option class="mediuser" style="border-color: #{{$curr_function->color}}; {{if !$curr_function->_count_protocoles}}color: #999;{{/if}}"
                         value="{{$curr_function->_id}}" {{if $curr_function->_id == $function_id}}selected="selected"{{/if}}>
-                  {{$curr_function->_view}} ({{$curr_function->_ref_protocoles|@count}})
+                  {{$curr_function->_view}} ({{$curr_function->_count_protocoles}})
                 </option>
                 {{/foreach}}
               </select>
