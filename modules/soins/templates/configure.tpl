@@ -58,23 +58,23 @@
       <td>
         <a class="button search" onclick="redirectOffline('sejour');">{{tr}}CSejour.all{{/tr}}</a>
         {{if "dPprescription"|module_active}}
-				<br/>
+        <br/>
         <a class="button search" onclick="redirectOffline('bilan');">{{tr}}CService.bilan{{/tr}}</a>
-				{{/if}}
+        {{/if}}
       </td>
     </tr>
-		
+    
     <tr>
-    	<th class="category" colspan="2">
-    		 Pancarte des services
-    	</th>
+      <th class="category" colspan="2">
+         Pancarte des services
+      </th>
     </tr>
     <tr>
-    	<td colspan="2">
-			  {{mb_include module=system template=inc_config_enum var=transmissions_hours values="12|24|36|48" skip_locales=1}}
-		  </td>
-		</tr>	
-		<tr>
+      <td colspan="2">
+        {{mb_include module=system template=inc_config_enum var=transmissions_hours values="12|24|36|48" skip_locales=1}}
+      </td>
+    </tr>	
+    <tr>
       <th class="category" colspan="2">
         Transmissions
       </th>
@@ -102,6 +102,11 @@
     <tr>
       <td colspan="2">
         {{mb_include module=system template=inc_config_bool var=show_only_lit_bilan}}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        {{mb_include module=system template=inc_config_str var=ignore_allergies}}
       </td>
     </tr>
     <tr>
