@@ -53,7 +53,7 @@ foreach ($aides_antecedent as $_depend_1 => $_aides_by_depend_1) {
     foreach ($_aides_by_depend_2 as $_aide) {
       if (isset($applied_antecedents[$_depend_1])) {
         foreach ($applied_antecedents[$_depend_1] as $_atcd) {
-          if ($_atcd == $_aide->text || strpos($_atcd, $_aide->text) == 0) {
+          if ($_atcd == $_aide->text || strpos($_atcd, $_aide->text) === 0) {
             $_aide->_applied = true;
           }
         }
