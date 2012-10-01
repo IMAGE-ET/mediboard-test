@@ -1006,7 +1006,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $this->getPL($PV1_3, $affectation);
     $affectation->uf_medicale_id = $this->mappingUFMedicale($data);
     $affectation->uf_soins_id    = $this->mappingUFSoins($data);
-    
+
     if ($msg = $affectation->store()) {
       return $msg;
     }
@@ -1180,12 +1180,23 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $affectation->lit_id = $lit->_id;
     
     // Affectation du service
-    if (!$affectation->service_id) {
+    if (!$affectation->service_id && $lit->_id) {
       $affectation->service_id = $lit->loadRefService()->_id;
     }
 
     // Affectation de l'UF hébergement
-    $affectation->uf_hebergement_id = CUniteFonctionnelle::getUF($code_uf)->_id;
+    $uf = CUniteFonctionnelle::getUF($code_uf);
+    $affectation->uf_hebergement_id = $uf->_id;
+    
+    // Affectation du service (couloir)
+    if (!$affectation->service_id) {
+      $affectation_uf               = new CAffectationUniteFonctionnelle();
+      $affectation_uf->uf_id        = $uf->_id;
+      $affectation_uf->object_class = "CService";
+      $affectation_uf->loadMatchingObject();
+      
+      $affectation->service_id = $affectation_uf->object_id;
+    }
   }
   
   function getAdmissionType(DOMNode $node, CSejour $newVenue) {
