@@ -278,6 +278,17 @@ function updateTypeAndPeC(select) {
   }
 }
 
+function toggleIsolement(elt) {
+  var isolement_area = $$(".isolement_area");
+  
+  if ($V(elt) == 1) {
+    isolement_area.invoke("show");
+  }
+  else {
+    isolement_area.invoke("hide");
+  }
+}
+
 {{if $mode_operation}}
 // Declaration d'un objet Sejour
 var Sejour = {
@@ -946,12 +957,41 @@ Main.add( function(){
   </td>
 </tr>
 
+{{assign var=systeme_isolement value=$conf.dPplanningOp.CSejour.systeme_isolement}}
+
 <tr {{if $mode_operation}} style="display: none;" {{/if}}>
   <th>{{mb_label object=$sejour field="ATNC"}}</th>
   <td>{{mb_field object=$sejour field="ATNC"}}</td>
   <th>{{mb_label object=$sejour field="isolement"}}</th>
-  <td>{{mb_field object=$sejour field="isolement"}}</td>
+  {{if $systeme_isolement == "standard"}}
+    <td>{{mb_field object=$sejour field="isolement"}}</td>
+  {{else}}
+    <td>
+      {{mb_field object=$sejour field="isolement" onchange=toggleIsolement(this)}}
+    </td>
+  {{/if}}
 </tr>
+
+{{if $systeme_isolement == "expert"}}
+  <tr class="isolement_area" {{if !$sejour->isolement}}style="display: none"{{/if}}>
+    <td></td>
+    <th>
+      {{mb_label object=$sejour field=_isolement_date}}
+    </th>
+    <td colspan="2">
+      {{mb_field object=$sejour field=_isolement_date form=editSejour register=true}}
+    </td>
+  </tr>
+  <tr class="isolement_area" {{if !$sejour->isolement}}style="display: none"{{/if}}>
+    <td></td>
+    <th>
+      {{mb_label object=$sejour field=raison_medicale}}
+    </th>
+    <td colspan="2">
+      {{mb_field object=$sejour field=raison_medicale form=editSejour}}
+    </td>
+  </tr>
+{{/if}}
 
 </tbody>
 

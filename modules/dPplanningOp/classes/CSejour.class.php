@@ -71,6 +71,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $hormone_croissance  = null;
   var $lit_accompagnant    = null;
   var $isolement           = null;
+  var $isolement_date      = null;
+  var $raison_medicale     = null;
   var $television          = null;
   var $repas_diabete       = null;
   var $repas_sans_sel      = null;
@@ -133,7 +135,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_date_deces         = null;
   var $_envoi_mail         = null;
   var $_naissance          = null;
-
+  var $_isolement_date     = null;
+  
   // Behaviour fields
   var $_check_bounds  = true;
   var $_en_mutation   = null;
@@ -323,6 +326,8 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["hormone_croissance"]       = "bool";
     $props["lit_accompagnant"]         = "bool";
     $props["isolement"]                = "bool";
+    $props["isolement_date"]           = "dateTime";
+    $props["raison_medicale"]          = "text helped";
     $props["television"]               = "bool";
 
     $props["repas_diabete"]            = "bool";
@@ -396,7 +401,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["_motif_complet"]                    = "str";
     $props["_unique_lit_id"]    = "ref class|CLit";
     $props["_date_deces"]       = "date progressive";
-
+    $props["_isolement_date"]   = "dateTime";
     return $props;
   }
 
@@ -713,7 +718,14 @@ class CSejour extends CCodable implements IPatientRelated {
     if (!$this->_id && ($this->recuse === "" || $this->recuse === null)) {
       $this->recuse = CAppUI::conf("dPplanningOp CSejour use_recuse") ? -1 : 0;
     }
-
+    
+    // Si gestion en mode expert de l'isolement
+    if (CAppUI::conf("dPplanningOp CSejour systeme_isolement") == "expert") {
+      $this->isolement_date =
+        $this->_isolement_date !== $this->entree ?
+        $this->_isolement_date : "";
+    }
+    
     // On fait le store du séjour
     if ($msg = parent::store()) {
       return $msg;
@@ -848,11 +860,19 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->_entree = CValue::first($this->entree_reelle, $this->entree_prevue);
     $this->_sortie = CValue::first($this->sortie_reelle, $this->sortie_prevue);
   }
-
+  
+  function updateIsolement() {
+    $this->_isolement_date = CValue::first($this->isolement_date, $this->_entree);
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     $this->updateEntreeSortie();
-
+    
+    if (CAppUI::conf("dPplanningOp CSejour systeme_isolement") == "expert") {
+      $this->updateIsolement();
+    }
+    
     // Durées
     $this->_duree_prevue       = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
     $this->_duree_reelle       = mbDaysRelative($this->entree_reelle, $this->sortie_reelle);

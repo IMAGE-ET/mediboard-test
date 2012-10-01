@@ -91,6 +91,7 @@ $dPconfig["dPplanningOp"]= array(
     "show_only_charge_price_indicator" => "0",
     "fiche_rques_sej"    => "0",
     "fiche_conval"       => "0",
+    "systeme_isolement"  => "standard",
   ),
 );
 

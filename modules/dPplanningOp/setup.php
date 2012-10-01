@@ -1508,7 +1508,13 @@ class CSetupdPplanningOp extends CSetup {
       ADD INDEX (`poste_sspi_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.62";
+    $this->makeRevision("1.62");
+    $query = "ALTER TABLE `sejour`
+      ADD `isolement_date` DATETIME AFTER `isolement`,
+      ADD `raison_medicale` TEXT AFTER `isolement_date`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.63";
   }
 }
 ?>
