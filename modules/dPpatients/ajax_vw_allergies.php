@@ -23,6 +23,14 @@ if($dossier_medical->_id){
   $allergies = $dossier_medical->_ref_allergies;
 }
 
+$keywords = explode("|", CAppUI::conf("soins ignore_allergies"));
+
+foreach ($allergies as $key => $_allergie) {
+  if (pref_match()) {
+    unset($allergies[$key]);
+  }
+}
+
 $smarty = new CSmartyDP();
 $smarty->assign("allergies", $allergies);
 $smarty->display("inc_vw_allergies.tpl");

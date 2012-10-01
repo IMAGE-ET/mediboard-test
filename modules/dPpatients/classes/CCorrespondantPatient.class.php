@@ -63,7 +63,7 @@ class CCorrespondantPatient extends CMbObject {
     $specs["nom"]        = "str confidential";
     $specs["nom_jeune_fille"] = "str";
     $specs["prenom"]     = "str";
-    $specs["naissance"]  = "date";
+    $specs["naissance"]  = "birthDate mask|99/99/9999 format|$3-$2-$1";
     $specs["adresse"]    = "text";
     $specs["cp"]         = "numchar minLength|4 maxLength|5";
     $specs["ville"]      = "str confidential";

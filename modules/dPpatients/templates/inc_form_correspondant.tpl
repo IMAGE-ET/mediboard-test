@@ -45,13 +45,20 @@
     }
   }
 
-  toggleConfiance = function(elt) {
+  toggleConfiancePrevenir = function(elt) {
     if ($V(elt) == "confiance") {
       $("nom_jeune_fille").setStyle({display: "table-row"});
+      $("prenom").setStyle({display: "table-row"});
+      $("naissance").setStyle({display: "table-row"});
+    }
+    else if ($V(elt) == "prevenir") {
+      $("nom_jeune_fille").setStyle({display: "none"});
+      $("prenom").setStyle({display: "table-row"});
       $("naissance").setStyle({display: "table-row"});
     }
     else {
       $("nom_jeune_fille").setStyle({display: "none"});
+      $("prenom").setStyle({display: "none"});
       $("naissance").setStyle({display: "none"});
     }
   }
@@ -111,7 +118,7 @@
               <input type="text" name="relation_autre" value="{{$correspondant->relation_autre}}" />
           </span>
           <span style="float: left;">
-            {{mb_field object=$correspondant field=relation onchange="toggleRelationAutre(this); toggleUrrsafParente(this); toggleConfiance(this); toggleAssurance(this);" alphabet=true}}
+            {{mb_field object=$correspondant field=relation onchange="toggleRelationAutre(this); toggleUrrsafParente(this); toggleConfiancePrevenir(this); toggleAssurance(this);" alphabet=true}}
           </span>
           </th>
         <tr>
