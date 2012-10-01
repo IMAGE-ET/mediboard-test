@@ -28,7 +28,6 @@ $dPconfig["dPcabinet"] = array(
     "fix_doc_edit"                  => 0,
     "search_sejour_all_groups"      => 0,
     "consult_readonly"             => 0,
-    "consult_facture"              => 0,
     "surbooking_readonly"   => 1
   ),
   "CConsultAnesth" => array(

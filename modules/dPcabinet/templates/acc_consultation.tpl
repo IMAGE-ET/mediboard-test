@@ -47,15 +47,15 @@ function submitSuivi(oForm) {
 
 var constantesMedicalesDrawn = false;
 function refreshConstantesMedicales (force) {
-	if (!constantesMedicalesDrawn || force) {
-	  var url = new Url();
-	  url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
-	  url.addParam("patient_id", {{$consult->_ref_patient->_id}});
-	  url.addParam("context_guid", "{{$consult->_guid}}");
+  if (!constantesMedicalesDrawn || force) {
+    var url = new Url();
+    url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+    url.addParam("patient_id", {{$consult->_ref_patient->_id}});
+    url.addParam("context_guid", "{{$consult->_guid}}");
     //url.addParam("selection[]", ["poids", "ta", "temperature", "pouls"]);
-	  url.requestUpdate("Constantes");
-		constantesMedicalesDrawn = true;
-	}
+    url.requestUpdate("Constantes");
+    constantesMedicalesDrawn = true;
+  }
 };
 
 function reloadPrescription(prescription_id){
@@ -71,11 +71,11 @@ function loadResultLabo(sejour_id) {
 Main.add(function () {
   var tabsConsult = Control.Tabs.create('tab-consult', false);
   {{if ($app->user_prefs.ccam_consultation == 1)}}
-	  {{if !($consult->sejour_id && $mutation_id)}}
-	    var tabsActes = Control.Tabs.create('tab-actes', false);
-	  {{/if}}
+    {{if !($consult->sejour_id && $mutation_id)}}
+      var tabsActes = Control.Tabs.create('tab-actes', false);
+    {{/if}}
   {{/if}}
-	  
+    
   {{if $consult->sejour_id && $rpu && !$mutation_id}}
   loadSuivi({{$rpu->sejour_id}});
   {{/if}}
@@ -90,11 +90,11 @@ Main.add(function () {
 
 <ul id="tab-consult" class="control_tabs">
   {{if $rpu}}
-	  <li><a href="#rpuConsult">
-	     RPU 
-	    {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$consult->_ref_sejour}}
-	    </a>
-	  </li>
+    <li><a href="#rpuConsult">
+       RPU 
+      {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$consult->_ref_sejour}}
+      </a>
+    </li>
   {{/if}}
   
   <li><a href="#AntTrait">Antécédents</a></li>
@@ -131,16 +131,16 @@ Main.add(function () {
   {{/if}}
   
   <li><a href="#fdrConsult">Documents</a></li>
-  <li><a href="#reglement">Réglements</a></li>
+  <li onclick="Reglement.reload(true);"><a href="#reglement">Réglements</a></li>
 </ul>
 <hr class="control_tabs" />
 
 {{if $consult->sejour_id}}
   {{if $rpu}}
     <div id="rpuConsult" style="display: none;">
-		  {{mb_include module=urgences template=inc_vw_rpu}}
-		</div>
-	{{/if}}
+      {{mb_include module=urgences template=inc_vw_rpu}}
+    </div>
+  {{/if}}
 
 
 
@@ -192,50 +192,50 @@ Main.add(function () {
 {{if $app->user_prefs.ccam_consultation == 1 }}
 <div id="Actes" style="display: none;">
   {{if $mutation_id}}
-	  <div class="small-info">
-	    Ce patient a été hospitalisé, veuillez vous référer au dossier de soin de son séjour.
-	  </div>
+    <div class="small-info">
+      Ce patient a été hospitalisé, veuillez vous référer au dossier de soin de son séjour.
+    </div>
   {{else}}
     {{assign var="sejour" value=$consult->_ref_sejour}}
-	  <ul id="tab-actes" class="control_tabs">
-	    {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-  	    <li><a href="#ccam">Actes CCAM</a></li>
-  	    <li><a href="#ngap">Actes NGAP</a></li>
+    <ul id="tab-actes" class="control_tabs">
+      {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+        <li><a href="#ccam">Actes CCAM</a></li>
+        <li><a href="#ngap">Actes NGAP</a></li>
       {{/if}}
-	    {{if $sejour && $sejour->_id}}
-	     <li><a href="#cim">Diagnostics</a></li>	    
-	    {{/if}}
-	    {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
-	     <li><a href="#fraisdivers">Frais divers</a></li>
-	    {{/if}}
+      {{if $sejour && $sejour->_id}}
+       <li><a href="#cim">Diagnostics</a></li>	    
+      {{/if}}
+      {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+       <li><a href="#fraisdivers">Frais divers</a></li>
+      {{/if}}
       {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
         <li><a href="#tarmed_tab">Tarmed</a></li>
         <li><a href="#caisse_tab">Caisses</a></li>
       {{/if}}
     </ul>
     <hr class="control_tabs"/>
-	  
-	  <div id="ccam" style="display: none;">
-	    {{assign var="module" value="dPcabinet"}}
-	    {{assign var="subject" value=$consult}}
-	    {{mb_include module=salleOp template=inc_codage_ccam}}
-	  </div>
-	  
-	  <div id="ngap" style="display: none;">
-	    <div id="listActesNGAP">
-	      {{assign var="_object_class" value="CConsultation"}}
-		    {{mb_include module=cabinet template=inc_codage_ngap}}
-	    </div>
-	  </div>
-	  
-	  {{if $sejour && $sejour->_id}}
-	  <div id="cim" style="display: none;">
-	    {{assign var=sejour value=$consult->_ref_sejour}}
-	    {{mb_include module=salleOp template=inc_diagnostic_principal modeDAS="1"}}
-	  </div>
-	  {{/if}}
-	  
-	  {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}     
+    
+    <div id="ccam" style="display: none;">
+      {{assign var="module" value="dPcabinet"}}
+      {{assign var="subject" value=$consult}}
+      {{mb_include module=salleOp template=inc_codage_ccam}}
+    </div>
+    
+    <div id="ngap" style="display: none;">
+      <div id="listActesNGAP">
+        {{assign var="_object_class" value="CConsultation"}}
+        {{mb_include module=cabinet template=inc_codage_ngap}}
+      </div>
+    </div>
+    
+    {{if $sejour && $sejour->_id}}
+    <div id="cim" style="display: none;">
+      {{assign var=sejour value=$consult->_ref_sejour}}
+      {{mb_include module=salleOp template=inc_diagnostic_principal modeDAS="1"}}
+    </div>
+    {{/if}}
+    
+    {{if $conf.dPccam.CCodable.use_frais_divers.CConsultation && $conf.dPccam.CCodeCCAM.use_cotation_ccam}}     
     <div id="fraisdivers" style="display: none;">
       {{mb_include module=ccam template=inc_frais_divers object=$consult}}
     </div>
@@ -253,7 +253,7 @@ Main.add(function () {
         </div>
       </div>
     {{/if}}
-	{{/if}}
+  {{/if}}
 </div>
 {{/if}}
 

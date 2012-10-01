@@ -77,9 +77,7 @@ else {
   $facture->du_tiers      = $du_tiers;
   $facture->type_facture  = $type_facture;
   $facture->ouverture     = mbDate();
-  if (!CAppUI::conf("dPcabinet CConsultation consult_facture")) {
-    $facture->cloture     = mbDate();
-  }
+  $facture->cloture       = mbDate();
 }
 
 // Enregistrement des modifications si besoin

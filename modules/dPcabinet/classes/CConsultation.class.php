@@ -343,8 +343,12 @@ class CConsultation extends CCodable {
 
     // Dévalidation avec règlement déjà effectué
     if ($this->fieldModified("valide", "0")) {
-      if (count($this->_ref_reglements)) {
-        $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements ont déjà été effectués";
+      if ($this->countBackRefs("reglements")) {
+        $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements de consultation ont déjà été effectués";
+      }
+      // Bien tester sur _old car valide = 0 s'accompagne systématiquement d'un factureconsult_id = 0
+      if ($this->_old->loadRefFacture()->countBackRefs("reglements")) {
+        $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements de factures ont déjà été effectués";
       }
     }
 
@@ -908,6 +912,15 @@ TESTS A EFFECTUER
       $this->si_desistement = 0;
     }
 
+    /*if ($this->fieldAltered("factureconsult_id")) {
+      $facture = $this->_old->loadRefFacture();
+      if ($facture->countBackRefs("consultations") == 1) {
+        if ($msg = $facture->delete()) {
+          return $msg;
+        }
+      }
+    }*/
+    
     // Consultation dans un séjour
     if (!$this->_id && !$this->sejour_id &&
         CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) {

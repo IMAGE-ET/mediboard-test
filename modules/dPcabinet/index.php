@@ -25,9 +25,7 @@ $module->registerTab("edit_consultation"         , TAB_EDIT);
 $module->registerTab("form_print_plages"         , TAB_READ);
 $module->registerTab("vw_compta"                 , TAB_EDIT);
 
-if (CAppUI::conf("dPcabinet CConsultation consult_facture")) {
-  $module->registerTab("vw_factures"             , TAB_EDIT);
-}
+$module->registerTab("vw_factures"             , TAB_ADMIN);
 
 $module->registerTab("vw_edit_tarifs"            , TAB_EDIT);
 $module->registerTab("vw_categories"             , TAB_EDIT);

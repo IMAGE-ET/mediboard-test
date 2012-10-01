@@ -29,6 +29,7 @@ delReglement= function(reglement_id){
         url.addParam('consult_id'    ,'{{$consult->_id}}');
       {{/if}}
       url.requestUpdate("load_facture");
+      Reglement.reload(true);
     }
   });
 }
@@ -45,6 +46,7 @@ AddReglement = function (oForm){
       var url = new Url('dPcabinet'   , 'ajax_view_facture');
       url.addParam(name, oForm.object_id.value);
       url.requestUpdate('load_facture');
+      Reglement.reload(true);
     }
   });
 }
