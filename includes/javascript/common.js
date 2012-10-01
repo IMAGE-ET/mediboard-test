@@ -266,13 +266,12 @@ var Localize = {
   showForm: function() {
     var form = getForm('UnlocForm');
     modal(form, { 
-      closeOnClick: form.down('button.close'),
-      height: "50px"
+      closeOnClick: form.down('button.close')
     } );
   },
   
   onSubmit: function(form) {
-    return onSubmitFormAjax(form, { onComplete: location.reload.bind(location) } );
+    return onSubmitFormAjax(form, location.reload.bind(location));
   }
 }
 

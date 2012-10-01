@@ -23,6 +23,8 @@
 <input type="hidden" name="m" value="dPdeveloppement" />
 <input type="hidden" name="dosql" value="do_translate_aed" />
 
+<div style="height: 400px; overflow-y: scroll;">
+
 <table class="form">
   <tr>
     <th class="title" colspan="2">{{tr}}system-title-unlocalized{{/tr}}</th>
@@ -57,6 +59,8 @@
   </tr>
 
 </table> 
+
+</div>
 
 </form> 
 {{/if}}
