@@ -1120,7 +1120,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!($ZBE_8 = $this->queryNode("ZBE.8", $data["ZBE"]))) {
       return;
     }
-    mbTrace($this->queryTextNode("XON.10", $ZBE_8));
+
     return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_8), "soins")->_id;
   }  
   
