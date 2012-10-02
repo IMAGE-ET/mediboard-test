@@ -12,10 +12,16 @@ class CSetuphl7 extends CSetup {
   function insertTableEntry($number, $code_hl7_from, $code_hl7_to, $code_mb_from, $code_mb_to, $description, $user = 1) {
     $description = $this->ds->escape($description);
     
+    $code_hl7_from = ($code_hl7_from === null) ? "NULL" : "'$code_hl7_from'";
+    $code_hl7_to   = ($code_hl7_to === null)   ? "NULL" : "'$code_hl7_to'";
+    $code_mb_from  = ($code_mb_from === null)  ? "NULL" : "'$code_mb_from'";
+    $code_mb_to    = ($code_mb_to === null)    ? "NULL" : "'$code_mb_to'";
+    
+    
     $query = "INSERT INTO `hl7v2`.`table_entry` (
               `table_entry_id`, `number`, `code_hl7_from`, `code_hl7_to`, `code_mb_from`, `code_mb_to`, `description`, `user`
               ) VALUES (
-                NULL , '$number', '$code_hl7_from', '$code_hl7_to', '$code_mb_from', '$code_mb_to', '$description', '$user'
+                NULL , '$number', $code_hl7_from, $code_hl7_to, $code_mb_from, $code_mb_to, '$description', '$user'
               );";
     
     $this->addQuery($query, false, "hl7v2");
