@@ -248,6 +248,63 @@ class CExchangeDataFormat extends CMbMetaObject {
       $this->id_permanent = $mbObject->_NDA;
     }
   }
+  
+  function reprocessing() {
+    $sender = new $this->sender_class;
+    $sender->load($this->sender_id);
+    
+    // Suppression de l'identifiant dans le cas où l'échange repasse pour éviter un autre échange avec
+    // un identifiant forcé
+    if ($this instanceof CExchangeAny) {
+      $exchange_id = $this->_id;
+      $this->_id = null;
+    }
+    
+    if (!$ack_data = CEAIDispatcher::dispatch($this->_message, $sender, $this->_id)) {
+      // Dans le cas d'un échange générique on le supprime
+      if ($this instanceof CExchangeAny) {
+        $this->_id = $exchange_id;
+        if ($msg = $this->delete()) {
+          throw new CMbException("CMbObject-msg-delete-failed", $msg);
+        }
+      }
+    }
+    
+    $this->load($this->_id);
+    
+    // Dans le cas d'un échange générique on le supprime
+    if ($this instanceof CExchangeAny) {
+      $this->_id = $exchange_id;
+      if ($msg = $this->delete()) {
+        throw new CMbException("CMbObject-msg-delete-failed", $msg);
+      }
+    }
+    
+    if ($this instanceof CEchangeHprim) {
+      $dom_evt = $sender->_data_format->_family_message->getHPrimXMLEvenements($this->_message);
+      $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($dom_evt);
+      $ack->loadXML($ack_data);
+      $ack_valid = $ack->schemaValidate();
+      if ($ack_valid) {
+        $exchange->statut_acquittement = $ack->getStatutAcquittement();
+      }
+      
+    }
+    
+    if ($this instanceof CExchangeIHE) {
+      $ack = new CHL7v2Acknowledgment($sender->_data_format->_family_message);
+      $ack->handle($ack_data);
+      $this->statut_acquittement = $ack->getStatutAcknowledgment(); 
+      $ack_valid = $ack->message->isOK(CHL7v2Error::E_ERROR);
+    }
+    
+    $this->date_echange        = mbDateTime();
+    $this->acquittement_valide = $ack_valid ? 1 : 0;
+    $this->_acquittement       = $ack_data;
+    if ($msg = $this->store()) {
+      throw new CMbException("CMbObject-msg-store-failed", $msg);
+    }
+  }
 }
 
 ?>

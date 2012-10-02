@@ -136,6 +136,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_envoi_mail         = null;
   var $_naissance          = null;
   var $_isolement_date     = null;
+  var $_collisions         = null;
   
   // Behaviour fields
   var $_check_bounds  = true;
@@ -515,7 +516,7 @@ class CSejour extends CCodable implements IPatientRelated {
       }
     }
 
-    return $collisions;
+    return $this->_collisions = $collisions;
   }
 
   /**

@@ -191,6 +191,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           // On ne check pas la cohérence des dates des consults/intervs
           $newVenue->_skip_date_consistencies = true;
           if ($msgVenue = $newVenue->store()) {
+            if ($newVenue->_collisions) {
+              return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, $newVenue);
+            }
+            
             return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
           }
                     
@@ -218,6 +222,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           // On ne check pas la cohérence des dates des consults/intervs
           $newVenue->_skip_date_consistencies = true;
           if ($msgVenue = $newVenue->store()) {
+            if ($newVenue->_collisions) {
+              return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, $newVenue);
+            }
+            
             return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
           }
                     
@@ -266,6 +274,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         // On ne check pas la cohérence des dates des consults/intervs
         $newVenue->_skip_date_consistencies = true;
         if ($msgVenue = $newVenue->store()) {
+          if ($newVenue->_collisions) {
+            return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, $newVenue);
+          }
+          
           return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
         }
       }
@@ -302,7 +314,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         if ($tmpVenue->load($venueRI)) {
           if ($tmpVenue->_id != $NDA->object_id) {
             $comment = "L'identifiant source fait référence au séjour : $NDA->object_id et l'identifiant cible au séjour : $tmpVenue->_id.";
-            return $exchange_ihe->setAckAR($ack, "E201", $comment, $newVenue);
+            
+            return $exchange_ihe->setAckAR($ack, "E230", $comment, $newVenue);
           }
           $code_NDA = "I224"; 
         }
@@ -317,6 +330,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // On ne check pas la cohérence des dates des consults/intervs
       $newVenue->_skip_date_consistencies = true;
       if ($msgVenue = $newVenue->store()) {
+        if ($newVenue->_collisions) {
+          return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, $newVenue);
+        }
+        
         return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
       }
       

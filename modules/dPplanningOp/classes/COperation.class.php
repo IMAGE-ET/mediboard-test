@@ -649,12 +649,12 @@ class COperation extends CCodable implements IPatientRelated {
         $this->duree_preop = "00:" . CAppUI::conf("dPplanningOp COperation duree_preop_enfant") . ":00";
       }
     }
-    
+
     // Standard storage
     if ($msg = parent::store()) {
       return $msg;
     }
-    
+
     // Création des besoins d'après le protocole sélectionné
     // Ne le faire que pour une nouvelle intervention
     // Pour une intervention existante, l'application du protocole
@@ -727,7 +727,7 @@ class COperation extends CCodable implements IPatientRelated {
         }
       }
     }
-    
+
     $reorder_rank_voulu = $this->_reorder_rank_voulu;
     $this->_reorder_rank_voulu = null;
     

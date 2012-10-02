@@ -17,64 +17,17 @@ $exchange_guid = CValue::get("exchange_guid");
 // Chargement de l'échange demandé
 $exchange = CMbObject::loadFromGuid($exchange_guid);
 
-$sender = new $exchange->sender_class;
-$sender->load($exchange->sender_id);
-
-// Suppression de l'identifiant dans le cas où l'échange repasse pour éviter un autre échange avec
-// un identifiant forcé
-if ($exchange instanceof CExchangeAny) {
-  $exchange_id = $exchange->_id;
-  $exchange->_id = null;
+try {
+  $exchange->reprocessing();
+}
+catch (CMbException $e) {
+  $e->stepAjax(UI_MSG_ERROR);
 }
 
-if (!$ack_data = CEAIDispatcher::dispatch($exchange->_message, $sender, $exchange->_id)) {
-  // Dans le cas d'un échange générique on le supprime
-  if ($exchange instanceof CExchangeAny) {
-    $exchange->_id = $exchange_id;
-    $exchange->delete();
-    
-    CAppUI::stepAjax("Le message a été supprimé");
-  }
-
-  CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' ne peut retraité", UI_MSG_ERROR);
+if (!$exchange->_id) {
+  CAppUI::stepAjax("CExchangeAny-msg-delete", UI_MSG_ALERT);
 }
 
-$exchange->load($exchange->_id);
-
-if ($exchange instanceof CEchangeHprim) {
-  $dom_evt = $sender->_data_format->_family_message->getHPrimXMLEvenements($exchange->_message);
-  $ack = CHPrimXMLAcquittements::getAcquittementEvenementXML($dom_evt);
-  $ack->loadXML($ack_data);
-  $doc_valid = $ack->schemaValidate();
-  if ($doc_valid) {
-    $exchange->statut_acquittement = $ack->getStatutAcquittement();
-  }
-  $exchange->date_echange        = mbDateTime();
-  $exchange->acquittement_valide = $doc_valid ? 1 : 0;
-  $exchange->_acquittement = $ack_data;
-  $exchange->store();
-  
-  CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");
-}
-
-if ($exchange instanceof CExchangeIHE) {
-  $ack = new CHL7v2Acknowledgment($sender->_data_format->_family_message);
-  $ack->handle($ack_data);
-  $exchange->date_echange        = mbDateTime(); 
-  $exchange->statut_acquittement = $ack->getStatutAcknowledgment(); 
-  $exchange->acquittement_valide = $ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
-  $exchange->_acquittement       = $ack_data;
-  $exchange->store();
-  
-  CAppUI::stepAjax("Le message '".CAppUI::tr("$exchange->_class")."' a été retraité");
-}
-
-// Dans le cas d'un échange générique on le supprime
-if ($exchange instanceof CExchangeAny) {
-  $exchange->_id = $exchange_id;
-  $exchange->delete();
-  
-  CAppUI::stepAjax("Le message a été supprimé");
-}
+CAppUI::stepAjax("CExchangeDataFormat-reprocessed");
 
 ?>

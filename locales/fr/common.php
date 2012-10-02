@@ -241,6 +241,7 @@ $locales['Remove'] = 'Supprimer';
 $locales['Rendez-vous'] = 'Rendez-vous';
 $locales['Repair'] = 'Réparer';
 $locales['Reprocess'] = 'Retraiter';
+$locales['Reprocessing'] = 'Retraiter';
 $locales['Resend'] = 'Renvoyer';
 $locales['Reset'] = 'Réinitialiser';
 $locales['Restart'] = 'Redémarrer';

@@ -1,4 +1,13 @@
 <?php
+$locales['CEAI-tools'] = 'Outils de l\'EAI';
+$locales['CEAI-tools-exchanges'] = 'Outils sur les échanges';
+$locales['CEAI-tools-exchanges-corresponding_exchanges'] = '\'%s\' échanges correspondants à ce code d\'erreur';
+$locales['CEAI-tools-exchanges-detect_collision'] = 'Identifier les échanges en collisions';
+$locales['CEAI-tools-exchanges-detect_collision-button'] = 'Détecter les collisions';
+$locales['CEAI-tools-exchanges-no_corresponding_exchange'] = 'Aucun échange correspond à ce code d\'erreur';
+$locales['CEAI-tools-exchanges-no_error_code'] = 'Aucun code d\'erreur sur l\'acquittement de choisi';
+$locales['CEAI-tools-exchanges-reprocessing'] = 'Retraiter les échanges';
+$locales['CEAI-tools-exchanges-reprocessing-button'] = 'Retraiter';
 $locales['CEAIDispatcher-_family_message_no_supported_for_this_actor'] = 'Le message \'%s\' est compris mais n\'est pas supporté par cet utilisateur Mediboard. Veuillez contacter votre administrateur.';
 $locales['CEAIDispatcher-message_dispatch'] = 'Message retraité';
 $locales['CEAIDispatcher-no_actor'] = 'Aucun utilisateur Mediboard associé à ce message. Veuillez contacter votre administrateur.';
@@ -109,6 +118,7 @@ $locales['CExchangeDataFormat-_count_exchanges'] = 'Echanges';
 $locales['CExchangeDataFormat-_count_msg_invalide'] = 'MSG invalide';
 $locales['CExchangeDataFormat-group_id'] = 'Etablissement';
 $locales['CExchangeDataFormat-group_id-desc'] = 'Etablissement';
+$locales['CExchangeDataFormat-reprocessed'] = 'Échange retraité';
 $locales['CExchangeDataFormat-utilities_treatment_exchanges'] = 'Traitement des échanges';
 $locales['CExchangeDataFormat.none'] = 'Échange supprimé / inexistant';
 $locales['CExchangeDataFormat.sender_class.CSenderFTP'] = 'Expéditeur FTP';

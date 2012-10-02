@@ -72,11 +72,12 @@ class CUniteFonctionnelle extends CMbObject {
     $this->_view = $this->libelle;
   }
   
-  static function getUF($code_uf) {
-    $uf = new self;
+  static function getUF($code_uf, $type = null) {
+    $uf       = new self;
     $uf->code = $code_uf;
+    $uf->type = $type;
     $uf->loadMatchingObject();
-    
+
     return $uf;
   }
   
