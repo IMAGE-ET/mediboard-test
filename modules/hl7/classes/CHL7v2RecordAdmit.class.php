@@ -921,6 +921,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         return $affectation;      
       }
       $newVenue->service_id = $affectation_uf->object_id;
+      
+      $newVenue->uf_hebergement_id = $affectation_uf->uf_id;
+      $newVenue->uf_medicale_id    = $this->mappingUFMedicale($data);
+      $newVenue->uf_soins_id       = $this->mappingUFSoins($data);
+      
       // On ne check pas la cohérence des dates des consults/intervs
       $newVenue->_skip_date_consistencies = true;
       if ($msgVenue = $newVenue->store()) {
@@ -1104,7 +1109,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     return;
   }
     
-    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_7))->_id;
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_7), "medicale")->_id;
   }
   
   function mappingUFSoins($data) {
@@ -1112,11 +1117,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
   
-  if (!($ZBE_8 = $this->queryNode("ZBE.8", $data["ZBE"]))) {
-    return;
-  }
-    
-    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_8))->_id;
+    if (!($ZBE_8 = $this->queryNode("ZBE.8", $data["ZBE"]))) {
+      return;
+    }
+    mbTrace($this->queryTextNode("XON.10", $ZBE_8));
+    return CUniteFonctionnelle::getUF($this->queryTextNode("XON.10", $ZBE_8), "soins")->_id;
   }  
   
   function mappingMovement($data, CSejour $newVenue, CMovement $movement) {
