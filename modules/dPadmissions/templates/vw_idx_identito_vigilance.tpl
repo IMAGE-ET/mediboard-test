@@ -15,8 +15,18 @@ onMergeComplete = function() {
   IdentitoVigilance.start(0, 80);
 }
 
+togglePlayPause = function(button) {
+  button.toggleClassName("play");
+  button.toggleClassName("pause");
+  if (button.hasClassName("play")) {
+    IdentitoVigilance.stop();
+  }
+  else {
+    IdentitoVigilance.resume();
+  }
+}
 Main.add(function () {
-	IdentitoVigilance.date = "{{$date}}";
+  IdentitoVigilance.date = "{{$date}}";
   IdentitoVigilance.start(2, 60);
 
   var tabs = Control.Tabs.create('tab_admissions_identito_vigilance', false);
@@ -38,6 +48,10 @@ Main.add(function () {
       <input type="hidden" name="tab" value="{{$tab}}" />
       <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
     </form>
+  </li>
+  <li>
+    <button type="button" class="pause notext" onclick="togglePlayPause(this);" style="float: right;"
+      title="{{tr}}CAffectation-play_pause_temporel{{/tr}}"></button>
   </li>
 </ul>
 <hr class="control_tabs" />
