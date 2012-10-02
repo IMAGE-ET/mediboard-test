@@ -37,8 +37,16 @@ chooseProtocole = function(protocole_id) {
 }
 
 setClose = function(protocole_id) {
-  ProtocoleSelector.set(aProtocoles[protocole_id]);
-  Control.Modal.close();
+  if (aProtocoles[protocole_id]) {
+    ProtocoleSelector.set(aProtocoles[protocole_id]);
+    Control.Modal.close();
+  }
+  else {
+    var url = new Url('planningOp', 'ajax_get_protocole');
+    url.addParam('protocole_id', protocole_id);
+    url.addParam('chir_id'     , $V(getForm('selectFrm').chir_id));
+    url.requestUpdate("get_protocole");
+  }
 }
 
 refreshList = function(form, types, reset) {
@@ -107,12 +115,15 @@ Main.add(function(){
     method: 'get',
     select: 'view',
     dropdown: true,
-    afterUpdateElement: function(field,selected){
-        chooseProtocole(selected.id.split('-')[2]);
+    afterUpdateElement: function(field, selected){
+      chooseProtocole(selected.id.split('-')[2]);
+      $V(field, "");
     }
   });
 });
 </script>
+
+<div id="get_protocole" style="display: none;"></div>
 
 <table class="main" style="background-color: #fff">
   <tr>
@@ -142,7 +153,7 @@ Main.add(function(){
             <th><label for="prat_id" title="Filtrer les protocoles d'une fonction">Fonction</label></th>
             <td>
               {{if $can->admin}}
-              <select name="function_id" style="width: 30em;" onchange="if (this.form.chir_id) { this.form.selectedIndex=0; } refreshList(this.form);">
+              <select name="function_id" style="width: 30em;" onchange="if (this.form.chir_id) { this.form.chir_id.selectedIndex=0; } refreshList(this.form);">
                 <option value="0">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listFunc item=curr_function}}
                 <option class="mediuser" style="border-color: #{{$curr_function->color}}; {{if !$curr_function->_count_protocoles}}color: #999;{{/if}}"

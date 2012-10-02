@@ -6,7 +6,7 @@
     aProtocoles = {};
   }
   
-  {{foreach from=$list_protocoles_total item=_protocole}}
+  {{foreach from=$list_protocoles item=_protocole}}
     {{assign var="type_prot_chir" value="prot-"}}
     {{assign var="type_prot_anesth" value="prot-"}}
     {{if $_protocole->protocole_prescription_anesth_class == "CPrescriptionProtocolePack"}}
@@ -15,8 +15,8 @@
       {{if $_protocole->protocole_prescription_chir_class == "CPrescriptionProtocolePack"}}
       {{assign var="type_prot_chir" value="pack-"}}
     {{/if}}
-    aProtocoles[{{$_protocole->protocole_id}}] = {
-      protocole_id     : {{$_protocole->protocole_id}},
+    aProtocoles[{{$_protocole->_id}}] = {
+      protocole_id     : {{$_protocole->_id}},
       chir_id          : {{if $_protocole->chir_id}}"{{$_protocole->chir_id}}"{{else}}"{{$chir_id}}"{{/if}},
       codes_ccam       : "{{$_protocole->codes_ccam}}",
       cote             : "{{$_protocole->cote}}",

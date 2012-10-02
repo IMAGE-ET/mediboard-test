@@ -51,7 +51,6 @@ if ($sejour_type) {
 $order = "libelle_sejour, libelle, codes_ccam";
 
 $list_protocoles       = $protocole->loadList($where, $order, "{$page[$type]},40");
-$list_protocoles_total = $protocole->loadList($where, $order);
 
 $total_protocoles = $protocole->countList($where);
 
@@ -60,16 +59,10 @@ foreach ($list_protocoles as $_prot){
   $_prot->_types_ressources_ids = implode(",", CMbArray::pluck($_prot->loadRefsBesoins(), "type_ressource_id"));
 }
 
-foreach ($list_protocoles_total as $_prot) {
-  $_prot->loadRefsFwd();
-  $_prot->_types_ressources_ids = implode(",", CMbArray::pluck($_prot->loadRefsBesoins(), "type_ressource_id"));
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("list_protocoles"      , $list_protocoles);
-$smarty->assign("list_protocoles_total", $list_protocoles_total);
 $smarty->assign("total_protocoles"     , $total_protocoles);
 $smarty->assign("page"                 , $page);
 $smarty->assign("chir_id"              , $chir_id);
