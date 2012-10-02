@@ -166,10 +166,7 @@ class CReglement extends CMbMetaObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_consultation) {
-      $this->loadRefsFwd();
-    }
-    return $this->_ref_consultation->getPerm($permType);
+    return $this->loadTargetObject()->getPerm($permType);
   }
 }
 

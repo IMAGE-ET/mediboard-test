@@ -161,7 +161,7 @@
         {{assign var=prat_id value=$facture->_ref_praticien->_id}}
         
         <tr>
-          <td><strong>{{$facture}}</strong></td>
+          <td><strong onmouseover="ObjectTooltip.createEx(this, '{{$_reglement->_guid}}')">{{$facture}}</strong></td>
           <td class="text">
             {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$listPrat.$prat_id}}
           </td>
