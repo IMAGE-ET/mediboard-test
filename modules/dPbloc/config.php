@@ -16,6 +16,7 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "chambre_operation"    => "0",
   "impression_suivi"     => "0",
   "id_salles_impression" => "",
+  "hour_midi_fullprint"  => "12",
 );
 
 ?>

@@ -53,6 +53,21 @@ function printPlanningPersonnel(form) {
   url.popup(900, 500, 'Planning du personnel');
 }
 
+function printFullPlanning(form) {
+  var url = new Url("bloc", "print_full_planning");
+  url.addElement(form._date_min);
+  url.addElement(form._date_max);
+  url.addElement(form._bloc_id);
+  url.addParam("_intervention", $V(form._intervention));
+  url.popup(900, 550, 'Planning');
+}
+
+function togglePrintFull(status) {
+  var print_button = $("print_button");
+  $("print_button").setAttribute("onclick", status ? "printFullPlanning(this.form)" : "checkFormPrint(this.form)");
+  $$(".not-full").invoke(status ? "addClassName" : "removeClassName", "opacity-30");
+}
+
 function changeDate(sDebut, sFin){
   var oForm = getForm("paramFrm");
   oForm._date_min.value = sDebut;
@@ -141,7 +156,7 @@ function showCheckboxAnesth(element){
         <tr>
           <th class="category" colspan="3">Types d'intervention</th>
         </tr>
-        <tr>
+        <tr class="not-full">
           <th>{{mb_label object=$filter field="_intervention"}}</th>
           <td colspan="2">
             <input type="radio" name="_intervention" value="0" checked="checked" />
@@ -152,7 +167,7 @@ function showCheckboxAnesth(element){
             <label for="_intervention_2">Non validées (NP)</label>
           </td>
         </tr>
-        <tr>
+        <tr class="not-full">
           <th>{{mb_label object=$filterSejour field="type"}}</th>
           <td colspan="2">
             {{mb_field object=$filterSejour field="type" canNull=true style="width: 15em;" emptyLabel="CSejour.type.all"}}
@@ -167,7 +182,7 @@ function showCheckboxAnesth(element){
         <tr>
           <th class="category" colspan="2">Autres filtres</th>
         </tr>
-        <tr>
+        <tr class="not-full">
           <th>{{mb_label object=$filter field="_prat_id"}}</th>
           <td>
             <select name="_prat_id" style="width: 15em;" onchange="showCheckboxAnesth(this); this.form._specialite.value = '0';">
@@ -183,7 +198,7 @@ function showCheckboxAnesth(element){
             </span>
           </td>
         </tr>
-        <tr>
+        <tr class="not-full">
           <th>{{mb_label object=$filter field="_specialite"}}</th>
           <td>
             <select name="_specialite" style="width: 15em;" onchange="this.form._prat_id.value = '0';">
@@ -209,7 +224,7 @@ function showCheckboxAnesth(element){
             </select>
           </td>
         </tr>
-        <tr>
+        <tr class="not-full">
           <th>{{mb_label object=$filter field="salle_id"}}</th>
           <td>
             <select name="salle_id" style="width: 15em;">
@@ -226,7 +241,7 @@ function showCheckboxAnesth(element){
             </select>
           </td>
         </tr>
-        <tr>
+        <tr class="not-full">
           <th>{{mb_label object=$filter field="_codes_ccam"}}</th>
           <td><input type="text" name="_codes_ccam" style="width: 12em;" value="" />
           <button type="button" class="search notext" onclick="CCAMSelector.init()">Chercher un code</button>
@@ -253,9 +268,10 @@ function showCheckboxAnesth(element){
           </script>
           </td>
         </tr>
+        <tr class="not-full">
           <th>{{mb_label object=$filter field="exam_extempo"}}</th>
           <td>{{mb_field object=$filter field="exam_extempo" typeEnum=checkbox}}</td>
-
+        </tr>
       </table>
 
     </td>
@@ -268,7 +284,7 @@ function showCheckboxAnesth(element){
         </tr>
         {{assign var="class" value="CPlageOp"}}
             
-        <tr>
+        <tr class="not-full">
           <th>
             <label for="_coordonnees_1" title="Afficher ou cacher le numéro de tel du patient">Afficher les coordonnées du patient</label>
           </th>
@@ -282,7 +298,7 @@ function showCheckboxAnesth(element){
           </td>
         </tr>
             
-        <tr>
+        <tr class="not-full">
           <th>
             <label for="print_numdoss_1" title="Afficher ou cacher le numéro de dossier">Afficher le numéro de dossier</label>
           </th>
@@ -295,7 +311,7 @@ function showCheckboxAnesth(element){
             </label> 
           </td>
         </tr>
-        <tr>
+        <tr class="not-full">
           <th style="width: 50%">{{mb_label object=$filter field="_plage"}}</th>
           <td>  
             {{assign var="var" value="plage_vide"}}
@@ -307,7 +323,7 @@ function showCheckboxAnesth(element){
             </label>
           </td>
         </tr>
-        <tr>
+        <tr class="not-full">
           <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
           <td>  
             {{assign var="var" value="libelle_ccam"}}
@@ -319,7 +335,7 @@ function showCheckboxAnesth(element){
             </label> 
           </td>
         </tr>
-        <tr>
+        <tr class="not-full">
           <th>
             <label for="print_annulees_1" title="Afficher ou cacher les interventions annulées">Afficher les interventions annulées</label>
           </th>
@@ -333,8 +349,21 @@ function showCheckboxAnesth(element){
           </td>
         </tr>
         <tr>
+          <th>
+            <label for="print_full" title="Imprimer le planning complet de tous les blocs">Imprimer le planning complet de tous les blocs</label>
+          </th>
+          <td>
+            <label>
+              Oui <input type="radio" name="_print_full" value="1" onclick="togglePrintFull(true)"/>
+            </label>
+            <label>
+              Non <input type="radio" name="_print_full" value="0" checked onclick="togglePrintFull(false)"/>
+            </label>
+          </td>
+        </tr>
+        <tr>
           <td colspan="2" class="button">
-            <button class="print" type="button" onclick="checkFormPrint(this.form)">Afficher</button>
+            <button class="print" id="print_button" type="button" onclick="checkFormPrint(this.form)">Afficher</button>
             {{if $can->edit}}
               <button class="print" type="button" onclick="printPlanningPersonnel(this.form)">Planning du personnel</button>
             {{/if}}

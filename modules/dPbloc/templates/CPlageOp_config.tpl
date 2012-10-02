@@ -53,6 +53,25 @@
     {{mb_include module=system template=inc_config_bool var=chambre_operation}}
     
     {{mb_include module=system template=inc_config_enum var=systeme_materiel values="standard|expert"}}
+    
+    <tr>
+      {{assign var="var" value="hour_midi_fullprint"}}
+      <th>
+        <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+          {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+        </label>  
+      </th>
+      <td>
+        <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+        {{foreach from=$hours item=_hour}}
+          <option value="{{$_hour}}" {{if $_hour == $conf.$m.$class.$var}} selected="selected" {{/if}}>
+            {{$_hour|string_format:"%02d"}}
+          </option>
+        {{/foreach}}
+        </select>
+      </td>
+    </tr>
+    
     <tr>
       <td class="button" colspan="100">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
