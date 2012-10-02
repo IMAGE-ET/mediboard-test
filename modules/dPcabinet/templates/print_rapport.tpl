@@ -108,9 +108,7 @@
           </td>
           <td class="text">
             {{foreach from=$_facture->_ref_consults item=_consult}}
-            <div>pdr: {{mb_value object=$_consult field=patient_date_reglement}}</div>
             <div {{if !$_consult->tarif}} class="empty" {{/if}}>
-
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
                 {{mb_value object=$_consult field=_date}}: {{mb_value object=$_consult field=tarif default=None}}
               </span>
