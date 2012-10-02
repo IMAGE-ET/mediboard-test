@@ -36,7 +36,22 @@
 <hr class="control_tabs" />
 
 <div id="message" style="display: none;">
-  {{mb_value object=$exchange field="_message" advanced=true}}  
+  <div id="msg-message-view">
+    {{mb_value object=$exchange field="_message" advanced=true}}
+    <button type="button" class="edit" onclick="$('msg-message-view').toggle(); $('msg-message-edit').toggle();">{{tr}}Edit{{/tr}}</button>
+  </div>
+  
+  <div id="msg-message-edit" style="display: none;">
+    <form name="edit-xml-message" method="post" onsubmit="return onSubmitFormAjax(this, function(){ Control.Modal.close(); ExchangeDataFormat.viewExchange('{{$exchange->_guid}}'); })">
+      <input type="hidden" name="m" value="eai" />
+      <input type="hidden" name="dosql" value="do_exchange_content_edit" />
+      <input type="hidden" name="exchange_guid" value="{{$exchange->_guid}}" />
+      <textarea name="_message" rows="20" style="white-space: pre; word-wrap: normal; font-family: 'lucida console', 'courier new', courier, monospace; font-size: 10px; line-height: 1.3; overflow-x: auto; resize: vertical;">{{$exchange->_message}}</textarea>
+      <button type="submit" class="save">{{tr}}Save{{/tr}}</button>
+      <button type="button" class="cancel" onclick="$('msg-message-view').toggle(); $('msg-message-edit').toggle();">{{tr}}Cancel{{/tr}}</button>
+    </form>
+  </div>
+  
   {{if $exchange->message_valide != 1 && count($exchange->_doc_errors_msg) > 0}}
   <div class="big-error">
     <strong>{{tr}}CExchange-message-invalide{{/tr}}</strong> <br />

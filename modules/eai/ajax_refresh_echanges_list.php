@@ -25,6 +25,8 @@ $_date_min           = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
 $_date_max           = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
 $keywords_msg        = CValue::getOrSession("keywords_msg");
 $keywords_ack        = CValue::getOrSession("keywords_ack");
+$order_col           = CValue::getOrSession("order_col");
+$order_way           = CValue::getOrSession("order_way");
 
 $exchange = new $exchange_class;
 
@@ -92,7 +94,7 @@ $exchange->loadRefGroups();
 
 $forceindex[] = "date_production";
 $total_exchanges = $itemExchange->countList($where, null, $ljoin, $forceindex);
-$order = "date_production DESC";
+$order = "$order_col $order_way";
 
 $exchanges = $itemExchange->loadList($where, $order, "$page, 25", null, $ljoin, $forceindex);
 foreach ($exchanges as $_exchange) {
@@ -114,6 +116,8 @@ $smarty->assign("type"               , $type);
 $smarty->assign("evenement"          , $evenement);
 $smarty->assign("keywords_msg"       , $keywords_msg);
 $smarty->assign("keywords_ack"       , $keywords_ack);
+$smarty->assign("order_col"          , $order_col);
+$smarty->assign("order_way"          , $order_way);
 
 $smarty->display("inc_exchanges.tpl");
 

@@ -18,6 +18,7 @@ $_message           = CValue::post("_message");
 $segment_terminator = CValue::post("segment_terminator");
 
 $_message = str_replace("\\\\", "\\", $_message);
+$_message = str_replace('\"', '"', $_message);
 
 $map = array(
   "CR"   => "\r",

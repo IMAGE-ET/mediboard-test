@@ -37,7 +37,8 @@
       <button onclick="toggleAutoRefresh()" id="auto-refresh-toggler" style="float: right;" class="change notext" type="button">
         Auto-refresh (5s)
       </button>
-      {{tr}}{{$exchange->_class}}{{/tr}}</th>
+      {{tr}}{{$exchange->_class}}{{/tr}}
+    </th>
   </tr>
   <!-- Filtres -->
   <tr>
@@ -47,6 +48,8 @@
         <input type="hidden" name="types[]" />
         <input type="hidden" name="page" value="{{$page}}" onchange="this.form.onsubmit()"/>
         <input type="hidden" name="exchange_class" value="{{$exchange->_class}}" />
+        <input type="hidden" name="order_col" value="date_production" />
+        <input type="hidden" name="order_way" value="DESC" />
         
         <table class="form">
           <tr>

@@ -134,9 +134,10 @@ mbExport($unescaped, "escaped unescaped");
 mbExport($message->escape($unescaped), "escaped unescaped escaped");
 
 $unicode = "coeur unicode \\M2764\\";
-mbExport($unicode);
+echo pre($unicode);
 echo pre($message->unescape($unicode));
 
 $format = "test \H\I'm strong\N\ test \.br\ new line";
 echo pre($format);
 echo pre($message->format($format));
+
