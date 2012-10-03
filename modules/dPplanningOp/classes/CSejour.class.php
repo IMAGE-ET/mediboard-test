@@ -813,7 +813,7 @@ class CSejour extends CCodable implements IPatientRelated {
   }
 
   function generateNDA() {
-    $group = CGroups::loadCurrent();
+    $group = $this->loadRefEtablissement();
     $group->loadConfigValues();
     if ($group->_configs["smp_idex_generator"]) {
       $NDA = new CIdSante400();
