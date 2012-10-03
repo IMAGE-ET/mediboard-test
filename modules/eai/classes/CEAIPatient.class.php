@@ -111,11 +111,6 @@ class CEAIPatient extends CEAIMbObject {
       return $IPP->store();  
     }
     else {
-      $IPP_temp = CIdSante400::getMatch("CPatient", $sender->_tag_patient, null, $patient->_id);
-      if ($IPP_temp->_id) {
-        return;
-      }
-      
       // Pas d'IPP passé
       if (!$IPP->id400) {
         if (!CIncrementer::generateIdex($patient, $sender->_tag_patient, $sender->group_id)) {
@@ -125,6 +120,14 @@ class CEAIPatient extends CEAIMbObject {
         return null;
       }
       else {
+        $IPP_temp = CIdSante400::getMatch("CPatient", $sender->_tag_patient, null, $patient->_id);
+        // Si j'ai déjà un identifiant
+        if ($IPP_temp->_id) {
+          // On passe l'IPP courant en trash
+          $IPP_temp->tag = CAppUI::conf("dPpatients CPatient tag_ipp_trash").$IPP_temp->tag;
+          $IPP_temp->store();
+        }
+      
         /* @todo Gestion des plages d'identifiants */
         if (($IPP->id400 < $group->_configs["ipp_range_min"]) || ($IPP->id400 > $group->_configs["ipp_range_max"])) {
            return CAppUI::tr("CEAIPatient-idex-not-in-the-range");
