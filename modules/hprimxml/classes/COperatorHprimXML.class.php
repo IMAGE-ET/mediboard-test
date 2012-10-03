@@ -30,7 +30,7 @@ class COperatorHprimXML extends CEAIOperator {
     }
     
     // Récupération des informations du message XML
-    $dom_evt->loadXMLSafe($msg);
+    $dom_evt->loadXML($msg);
     $doc_errors = $dom_evt->schemaValidate(null, true);
     
     // Récupération du noeud racine
