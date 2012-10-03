@@ -68,7 +68,7 @@ switch ($tool) {
     
     break;
     
-  case "detect_collision" :
+  case "detect_collision":
     $collisions = array();
     
     foreach ($exchanges as $_exchange) {
@@ -84,14 +84,15 @@ switch ($tool) {
         $sejour = new CSejour();
         $sejour->load($_exchange->object_id);
         
+        $sejour_hl7 = new CSejour;
+        $sejour_hl7->entree_prevue = $xml->queryTextNode("PV2.8/TS.1",  $PV2);
+        $sejour_hl7->entree_reelle = $xml->queryTextNode("PV1.44/TS.1", $PV1);
+        $sejour_hl7->sortie_prevue = $xml->queryTextNode("PV2.9/TS.1",  $PV2);
+        $sejour_hl7->sortie_reelle = $xml->queryTextNode("PV1.45/TS.1", $PV1);
+        
         $collisions[] = array(
-          "admit_hl7" => array (
-            "entree_prevue" => mbDateToLocale($xml->queryTextNode("PV2.8/TS.1", $PV2)),
-            "entree_reelle" => mbDateToLocale($xml->queryTextNode("PV1.44/TS.1", $PV1)),
-            "sortie_prevue" => mbDateToLocale($xml->queryTextNode("PV2.9/TS.1", $PV2)),
-            "sortie_reelle" => mbDateToLocale($xml->queryTextNode("PV1.45/TS.1", $PV1))
-          ),
-          "admit_mb" => $sejour
+          "hl7" => $sejour_hl7,
+          "mb"  => $sejour,
         );
 /*
         echo "Date d'entrée prévue (réelle) du fichier HL7 : <strong>$entree_prevue ($entree_reelle)</strong>, ".
