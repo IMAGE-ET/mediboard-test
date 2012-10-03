@@ -7,21 +7,21 @@ var Reglement = {
     Main.add(Reglement.reload.curry(false));
   },
 
-  submit: function(oForm, reload_acts) {
-	  submitFormAjax(oForm, 'systemMsg', {
-	    onComplete : function() {
-        Reglement.reload(reload_acts);
+  submit: function(oForm, reload_acts, callback) {
+    submitFormAjax(oForm, 'systemMsg', {
+      onComplete : function() {
+        Reglement.reload(reload_acts, callback);
         if(Preferences.autoCloseConsult == "1"){
           reloadFinishBanner();
         }
       }
-	} );
+  } );
   }, 
-  reload: function(reload_acts) {
-	var url = new Url("dPcabinet", "httpreq_vw_reglement");
+  reload: function(reload_acts, callback) {
+    var url = new Url("dPcabinet", "httpreq_vw_reglement");
     url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-	url.requestUpdate('reglement');
-	
+    url.requestUpdate('reglement', callback);
+  
     // Rafraichissement des actes CCAM et NGAP
     if (reload_acts && Preferences.ccam_consultation == "1" && Preferences.MODCONSULT == "1"){
       ActesCCAM.refreshList(Reglement.consultation_id, Reglement.user_id);

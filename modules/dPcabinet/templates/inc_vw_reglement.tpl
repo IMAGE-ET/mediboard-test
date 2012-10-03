@@ -12,7 +12,7 @@ pursueTarif = function() {
   Reglement.submit(form, false);
 }	
   
-cancelTarif = function(action) {
+cancelTarif = function(action, callback) {
   var form = document.tarifFrm;
   
   if(action == "delActes") {
@@ -31,7 +31,7 @@ cancelTarif = function(action) {
   $V(form.tiers_date_reglement, "");
   $V(form.patient_date_reglement, "");
   
-  Reglement.submit(form, true);
+  Reglement.submit(form, true, callback);
 }
 
 validTarif = function(){
@@ -42,14 +42,16 @@ validTarif = function(){
   if ($V(form.tarif) == ""){
     $V(form.tarif, "manuel");
   }
-  Reglement.submit(form, true);
+  Reglement.submit(form, true, loadFacture);
 }
 
-loadFacture = function(){
+loadFacture = function() {
   Facture.load(document.tarifFrm, '{{$consult->patient_id}}', '{{$praticien->_id}}', '{{$consult->_id}}', 1);
 }
-reloadFacture = function(){
- Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->factureconsult_id}}');
+reloadFacture = function() {
+  {{if $consult->factureconsult_id}}
+    Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->factureconsult_id}}');
+  {{/if}}
 }
 
 modifTotal = function(){
@@ -80,7 +82,7 @@ checkActe = function(button) {
   button.form.du_tiers.value = 0; 
   button.form.du_patient.value = 0; 
   button.form.factureconsult_id.value = ""; 
-  cancelTarif();
+  cancelTarif(null, reloadFacture);
 }
 
 Main.add( function(){
@@ -329,7 +331,7 @@ Main.add( function(){
                 {{/if}}
                 
                 {{if !$consult->_current_fse && !count($consult->_ref_reglements)}}
-                <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this); reloadFacture();">
+                <button class="cancel" type="button" id="buttonCheckActe" onclick="checkActe(this);">
                   Rouvrir la cotation
                 </button>
                 {{/if}}
@@ -358,7 +360,7 @@ Main.add( function(){
                   {{if $app->user_prefs.autoCloseConsult}}
                   <input type="hidden" name="chrono" value="64" />
                   {{/if}}
-                  <button class="submit" type="button" onclick="validTarif();loadFacture();">Cloturer la cotation</button>
+                  <button class="submit" type="button" onclick="validTarif();">Cloturer la cotation</button>
                   <button class="cancel" type="button" onclick="cancelTarif('delActes')">Vider la cotation</button>
                 </td>
               </tr>
@@ -371,7 +373,9 @@ Main.add( function(){
   </tr>
   <tr>
     <td id="load_facture" colspan="2">
-      {{mb_include module=cabinet template="inc_vw_facturation"}}
+      {{if $consult->factureconsult_id || $consult->_ref_reglements|@count}}
+        {{mb_include module=cabinet template="inc_vw_facturation"}}
+      {{/if}}
     </td>
   </tr>
   {{if array_key_exists("sigems", $modules)}}
