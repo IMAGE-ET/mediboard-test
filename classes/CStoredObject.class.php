@@ -1389,12 +1389,13 @@ class CStoredObject extends CModelObject {
    * 
    * @param string $backName name the of the back references to count
    * @param array  $where    Additional where clauses
+   * @param array  $ljoin    Additionnal ljoin clauses
    * 
    * @return int the count null if back references module is not installed
    * 
    * @todo Add the missing arguments (the same as loadbackRefs)
    */
-  function countBackRefs($backName, $where = array()) {
+  function countBackRefs($backName, $where = array(), $ljoin = array()) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }
@@ -1413,8 +1414,15 @@ class CStoredObject extends CModelObject {
     
     // @todo Refactor using CRequest
     $query = "SELECT COUNT({$backObject->_spec->key}) 
-      FROM `{$backObject->_spec->table}`
-      WHERE `$backField` = '$this->_id'";
+      FROM `{$backObject->_spec->table}`";
+    
+    if ($ljoin && count($ljoin)) {
+      foreach ($ljoin as $table => $condition) {
+        $query .= "\nLEFT JOIN `$table` ON $condition ";
+      }
+    }
+    
+    $query .= "WHERE `$backField` = '$this->_id'";
 
     // Additional where clauses
     foreach ($where as $_field => $_clause) {
