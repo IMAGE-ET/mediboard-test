@@ -12,6 +12,9 @@
  
 CCanDo::checkAdmin();
 
+$date_min = CValue::getOrSession('date_min', mbDateTime("-7 day"));
+$date_max = CValue::getOrSession('date_max', mbDateTime("+1 day"));
+
 $exchanges_classes = array();
 foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {  
   foreach (CApp::getChildClasses($_exchange_class, array(), true) as $under_key => $_under_class) {
@@ -39,8 +42,13 @@ $tools = array(
   )
 );
 
+$exchange = new CExchangeDataFormat();
+$exchange->_date_min = $date_min;
+$exchange->_date_max = $date_max;
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("exchange"         , $exchange);
 $smarty->assign("exchanges_classes", $exchanges_classes);
 $smarty->assign("groups"           , $groups);
 $smarty->assign("tools"            , $tools);

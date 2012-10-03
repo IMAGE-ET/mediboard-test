@@ -18,9 +18,13 @@ $error_code     = CValue::get("error_code");
 $exchange_class = CValue::get("exchange_class"); 
 $group_id       = CValue::get("group_id");
 $tool           = CValue::get("tool"); 
+$date_min       = CValue::getOrSession('date_min', mbDateTime("-7 day"));
+$date_max       = CValue::getOrSession('date_max', mbDateTime("+1 day"));
 
 $exchange = new $exchange_class;
 $exchange->group_id = $group_id;
+$exchange->_date_min = $date_min;
+$exchange->_date_max = $date_max;
 
 if (!$error_code) {
   CAppUI::stepAjax("CEAI-tools-exchanges-no_error_code", UI_MSG_ERROR);
@@ -43,7 +47,7 @@ if ($total_exchanges == 0) {
 
 CAppUI::stepAjax("CEAI-tools-exchanges-corresponding_exchanges", UI_MSG_OK, $total_exchanges);
 
-$order = "date_production ASC";
+$order = "date_echange ASC, date_production ASC";
 $exchanges = $exchange->loadList($where, $order, "0, $count", null, $ljoin, $forceindex);
 
 // Création du template
@@ -94,21 +98,7 @@ switch ($tool) {
           "hl7" => $sejour_hl7,
           "mb"  => $sejour,
         );
-/*
-        echo "Date d'entrée prévue (réelle) du fichier HL7 : <strong>$entree_prevue ($entree_reelle)</strong>, ".
-             "date de sortie prévue (réelle) du fichier HL7 : <strong>$sortie_prevue ($sortie_reelle)</strong> <br />";
-
-        $entree_prevue = mbDateToLocale($sejour->entree_prevue);
-        $entree_reelle = mbDateToLocale($sejour->entree_reelle);
-        $sortie_prevue = mbDateToLocale($sejour->sortie_prevue);
-        $sortie_reelle = mbDateToLocale($sejour->sortie_reelle);
-        
-        echo "Date d'entrée prévue (réelle) du séjour Mediboard : <strong>$entree_prevue ($entree_reelle)</strong>, ".
-             "date de sortie prévue (réelle) du séjour Mediboard : <strong>$sortie_prevue ($sortie_reelle)</strong> <br />";
-             
-        echo "<a href=\"index.php?m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id\" target=\"_blank\">Visualiser le séjour dans Mediboard</a><br />";*/
       }
-        
     }  
 
     $smarty->assign("collisions", $collisions);

@@ -54,6 +54,22 @@
           <input type="hidden" name="tool" value="{{$_tool}}" />
           <input type="hidden" name="suppressHeaders" value="1" />
           
+          {{mb_label class=CExchangeDataFormat field="_date_min"}} 
+          <input class="dateTime notNull" type="hidden" name="date_min" value="{{$exchange->_date_min}}" /> <br />
+          <script type="text/javascript">
+            Main.add(function () {
+              Calendar.regField(getForm('tools-{{$_tool_class}}-{{$_tool}}').date_min);
+            });
+          </script>
+          
+          {{mb_label class=CExchangeDataFormat field="_date_max"}} 
+          <input class="dateTime notNull" type="hidden" name="date_max" value="{{$exchange->_date_max}}" /> <br />
+          <script type="text/javascript">
+            Main.add(function () {
+              Calendar.regField(getForm('tools-{{$_tool_class}}-{{$_tool}}').date_max);
+            });
+          </script>
+          
           <select name="group_id">
             <option value=""> &ndash; Tous</option>
             {{foreach from=$groups item=_group}}
@@ -71,7 +87,7 @@
             {{/foreach}}
           </select> <br />
           
-          <input type="text" name="count" value="100" size="3" title="Nombre d'échanges à traiter" />
+          <input type="text" name="count" value="30" size="3" title="Nombre d'échanges à traiter" />
           <input type="text" name="error_code" value="{{if $_tool == "detect_collision"}}E213{{/if}}" size="15" placeholder="Code erreur" 
             title="Code de l'erreur dans le contenu de l'acquittement"/> <br />
           <label><input type="checkbox" name="continue" value="1" title="Automatique" /> Automatique</label>
