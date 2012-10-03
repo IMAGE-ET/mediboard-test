@@ -35,6 +35,7 @@ $where = array();
 $where["$table.content"] = " LIKE '%$error_code%'";
 
 $forceindex[] = "date_production";
+
 $total_exchanges = $exchange->countList($where, null, $ljoin, $forceindex);
 if ($total_exchanges == 0) {
   CAppUI::stepAjax("CEAI-tools-exchanges-no_corresponding_exchange", UI_MSG_ERROR);
@@ -44,6 +45,9 @@ CAppUI::stepAjax("CEAI-tools-exchanges-corresponding_exchanges", UI_MSG_OK, $tot
 
 $order = "date_production ASC";
 $exchanges = $exchange->loadList($where, $order, "0, $count", null, $ljoin, $forceindex);
+
+// Création du template
+$smarty = new CSmartyDP();
     
 switch ($tool) {
   case "reprocessing" :
@@ -65,6 +69,8 @@ switch ($tool) {
     break;
     
   case "detect_collision" :
+    $collisions = array();
+    
     foreach ($exchanges as $_exchange) {
       if ($_exchange instanceof CExchangeIHE) {
         $hl7_message = new CHL7v2Message;
@@ -75,14 +81,38 @@ switch ($tool) {
         $PV1 = $xml->queryNode("PV1");
         $PV2 = $xml->queryNode("PV2");
         
-        $entree_prevue = mbDateToLocale($xml->queryTextNode("PV2.8/TS.1", $PV2));
-        $entree_reelle = mbDateToLocale($xml->queryTextNode("PV1.44/TS.1", $PV1));
-        $sortie_prevue = mbDateToLocale($xml->queryTextNode("PV2.9/TS.1", $PV2));
-        $sortie_reelle = mbDateToLocale($xml->queryTextNode("PV1.45/TS.1", $PV1));
+        $sejour = new CSejour();
+        $sejour->load($_exchange->object_id);
         
+        $collisions[] = array(
+          "admit_hl7" => array (
+            "entree_prevue" => mbDateToLocale($xml->queryTextNode("PV2.8/TS.1", $PV2)),
+            "entree_reelle" => mbDateToLocale($xml->queryTextNode("PV1.44/TS.1", $PV1)),
+            "sortie_prevue" => mbDateToLocale($xml->queryTextNode("PV2.9/TS.1", $PV2)),
+            "sortie_reelle" => mbDateToLocale($xml->queryTextNode("PV1.45/TS.1", $PV1))
+          ),
+          "admit_mb" => $sejour
+        );
+/*
+        echo "Date d'entrée prévue (réelle) du fichier HL7 : <strong>$entree_prevue ($entree_reelle)</strong>, ".
+             "date de sortie prévue (réelle) du fichier HL7 : <strong>$sortie_prevue ($sortie_reelle)</strong> <br />";
+
+        $entree_prevue = mbDateToLocale($sejour->entree_prevue);
+        $entree_reelle = mbDateToLocale($sejour->entree_reelle);
+        $sortie_prevue = mbDateToLocale($sejour->sortie_prevue);
+        $sortie_reelle = mbDateToLocale($sejour->sortie_reelle);
         
+        echo "Date d'entrée prévue (réelle) du séjour Mediboard : <strong>$entree_prevue ($entree_reelle)</strong>, ".
+             "date de sortie prévue (réelle) du séjour Mediboard : <strong>$sortie_prevue ($sortie_reelle)</strong> <br />";
+             
+        echo "<a href=\"index.php?m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id\" target=\"_blank\">Visualiser le séjour dans Mediboard</a><br />";*/
       }
+        
     }  
+
+    $smarty->assign("collisions", $collisions);
+    $smarty->display("inc_detect_collisions.tpl");
+      
     break;
 }
 
