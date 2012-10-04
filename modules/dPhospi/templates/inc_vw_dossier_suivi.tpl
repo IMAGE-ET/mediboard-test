@@ -35,12 +35,12 @@ submitLineElement = function(){
   // Formulaire autocomplete
   var oFormLineSuivi = getForm('addLineSuivi');
   $V(oFormLineElementSuivi.commentaire, $V(oFormLineSuivi.commentaire));
-	
-	// Si la prescription de sejour n'existe pas
-	if (!$V(oFormLineElementSuivi.prescription_id)){
-	  var oFormPrescription = getForm("addPrescriptionSuiviSoins");
-		return onSubmitFormAjax(oFormPrescription);
-	}
+  
+  // Si la prescription de sejour n'existe pas
+  if (!$V(oFormLineElementSuivi.prescription_id)){
+    var oFormPrescription = getForm("addPrescriptionSuiviSoins");
+    return onSubmitFormAjax(oFormPrescription);
+  }
   
   return onSubmitFormAjax(oFormLineElementSuivi, { onComplete: function() {
     Control.Modal.close();
@@ -66,7 +66,7 @@ submitLineComment = function(){
 
 submitProtocoleSuiviSoins = function(){
   var oFormProtocoleSuiviSoins = getForm("applyProtocoleSuiviSoins");
-	// Si la prescription de sejour n'existe pas
+  // Si la prescription de sejour n'existe pas
   if (!$V(oFormProtocoleSuiviSoins.prescription_id)){
     var oFormPrescription = getForm("addPrescriptionSuiviSoins");
     return onSubmitFormAjax(oFormPrescription);
@@ -85,35 +85,35 @@ submitProtocoleSuiviSoins = function(){
 
 updatePrescriptionId = function(prescription_id){
   // Ligne d'element
-	var oFormLineElementSuivi = getForm('addLineElementSuivi');
+  var oFormLineElementSuivi = getForm('addLineElementSuivi');
   $V(oFormLineElementSuivi.prescription_id, prescription_id);
-	
-	// Ligne de commentaire
-	var oFormLineCommentSuivi = getForm('addLineCommentMedSuiviSoins');
-	$V(oFormLineCommentSuivi.prescription_id, prescription_id);
-
-	// Protocole
-	var oFormProtocoleSuiviSoins = getForm("applyProtocoleSuiviSoins");
-	$V(oFormProtocoleSuiviSoins.prescription_id, prescription_id);
   
-	// Envoi du formulaire (suivant celui qui est rempli)
-	if($V(oFormLineElementSuivi.element_prescription_id)){
-	  submitLineElement();
-	}
-	else if($V(oFormLineCommentSuivi.commentaire)){
-	  submitLineComment();
+  // Ligne de commentaire
+  var oFormLineCommentSuivi = getForm('addLineCommentMedSuiviSoins');
+  $V(oFormLineCommentSuivi.prescription_id, prescription_id);
+
+  // Protocole
+  var oFormProtocoleSuiviSoins = getForm("applyProtocoleSuiviSoins");
+  $V(oFormProtocoleSuiviSoins.prescription_id, prescription_id);
+  
+  // Envoi du formulaire (suivant celui qui est rempli)
+  if($V(oFormLineElementSuivi.element_prescription_id)){
+    submitLineElement();
   }
-	else {
-	  submitProtocoleSuiviSoins();
+  else if($V(oFormLineCommentSuivi.commentaire)){
+    submitLineComment();
+  }
+  else {
+    submitProtocoleSuiviSoins();
   }
 }
 
 addTransmissionAdm = function(line_id, line_class){
   var oFormTransmission = getForm("addTransmissionFrm");
-	$V(oFormTransmission.object_id, line_id);
-	$V(oFormTransmission.object_class, line_class);
+  $V(oFormTransmission.object_id, line_id);
+  $V(oFormTransmission.object_class, line_class);
   $V(oFormTransmission.text, "Réalisé");
-	return onSubmitFormAjax(oFormTransmission, { onComplete: loadSuivi.curry('{{$sejour->_id}}')});
+  return onSubmitFormAjax(oFormTransmission, { onComplete: loadSuivi.curry('{{$sejour->_id}}')});
 }
 
 highlightTransmissions = function(cible_guid){
@@ -217,6 +217,8 @@ createConsultEntree = function() {
   Main.add(showListTransmissions.curry(0, {{$count_trans}}));
 {{/if}}
 
+App.readonly = false;
+
 </script>
 
 <form name="addTransmissionFrm" method="post" action="?">
@@ -270,11 +272,11 @@ createConsultEntree = function() {
   {{if $smarty.foreach.steps.index % $page_step == 0}}
     {{assign var=id value=$smarty.foreach.steps.index}}
     <div class="list_trans" id="list_{{$id}}" style="display:none">
-	    {{assign var=start value=$smarty.foreach.steps.index}}
-	    {{if $start+$end > $count_trans}}
-	       {{assign var=end value=$count_trans-$start}}
-	    {{/if}}
-	    {{assign var=mini_list value=$sejour->_ref_suivi_medical|@array_slice:$start:$end}}
+      {{assign var=start value=$smarty.foreach.steps.index}}
+      {{if $start+$end > $count_trans}}
+         {{assign var=end value=$count_trans-$start}}
+      {{/if}}
+      {{assign var=mini_list value=$sejour->_ref_suivi_medical|@array_slice:$start:$end}}
       {{mb_include module=hospi template=inc_list_transmissions readonly=false list_transmissions=$mini_list}}
     </div>
   {{/if}}
