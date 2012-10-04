@@ -192,7 +192,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           $newVenue->_skip_date_consistencies = true;
           if ($msgVenue = $newVenue->store()) {
             if ($newVenue->_collisions) {
-              return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, $newVenue);
+              return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, reset($newVenue->_collisions));
             }
             
             return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
@@ -223,7 +223,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           $newVenue->_skip_date_consistencies = true;
           if ($msgVenue = $newVenue->store()) {
             if ($newVenue->_collisions) {
-              return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, $newVenue);
+              return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, reset($newVenue->_collisions));
             }
             
             return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
@@ -275,7 +275,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $newVenue->_skip_date_consistencies = true;
         if ($msgVenue = $newVenue->store()) {
           if ($newVenue->_collisions) {
-            return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, $newVenue);
+            return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, reset($newVenue->_collisions));
           }
           
           return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
@@ -331,7 +331,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $newVenue->_skip_date_consistencies = true;
       if ($msgVenue = $newVenue->store()) {
         if ($newVenue->_collisions) {
-          return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, $newVenue);
+          return $exchange_ihe->setAckAR($ack, "E213", $msgVenue, reset($newVenue->_collisions));
         }
         
         return $exchange_ihe->setAckAR($ack, "E201", $msgVenue, $newVenue);
@@ -934,12 +934,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $affectation_uf               = new CAffectationUniteFonctionnelle();
       $affectation_uf->uf_id        = $uf->_id;
       $affectation_uf->object_class = "CService";
-      if (!$affectation_uf->loadMatchingObject()) {
-        return $affectation;      
+      $affectation_uf->loadMatchingObject();
+      // Dans le cas où l'on retrouve un service associé à l'UF d'hébergement
+      if ($affectation_uf->_id) {
+        $newVenue->service_id        = $affectation_uf->object_id;
+        $newVenue->uf_hebergement_id = $affectation_uf->uf_id;
       }
-      $newVenue->service_id = $affectation_uf->object_id;
       
-      $newVenue->uf_hebergement_id = $affectation_uf->uf_id;
       $newVenue->uf_medicale_id    = $this->mappingUFMedicale($data);
       $newVenue->uf_soins_id       = $this->mappingUFSoins($data);
       
