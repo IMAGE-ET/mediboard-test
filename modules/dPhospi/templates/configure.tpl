@@ -16,6 +16,7 @@
   <li><a href="#config-dPhospi">{{tr}}config-dPhospi{{/tr}}</a></li>
   <li><a href="#CLit">{{tr}}CLit{{/tr}}</a></li>
   <li><a href="#CService">{{tr}}CService{{/tr}}</a></li>
+  <li><a href="#CIdSante400">{{tr}}CIdSante400-tag{{/tr}}</a></li>
   <li><a href="#CMovement">{{tr}}CMovement{{/tr}}</a></li>
   <li><a href="#config-synchro_sejour_affectation">{{tr}}config-synchro_sejour_affectation{{/tr}}</a></li>
 </ul>
@@ -32,6 +33,10 @@
 
 <div id="CService" style="display: none;">
   {{mb_include template=CService_config}}
+</div>
+
+<div id="CIdSante400" style="display: none;">
+  {{mb_include template=CIdSante400_config}}
 </div>
 
 <div id="CMovement" style="display: none;">
