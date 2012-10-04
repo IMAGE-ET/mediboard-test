@@ -18,6 +18,14 @@
     $("no_author").toggle();
     $("editFrm_public_1").checked = "checked";
   }
+  
+  Main.add(function() {
+    if (Preferences.notes_anonymous == "1") {
+      var elt = getForm("editFrm").notes_anonymous;
+      elt.checked = true;
+      elt.onclick();
+    }
+  });
 </script>
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return Note.submit(this);">
@@ -59,7 +67,7 @@
     <td>
       {{mb_field object=$note field="public"}}
       <label>
-        <input type="checkbox" onchange="toggleAnonymous(this.checked);"/> Sans propriétaire
+        <input type="checkbox" name="notes_anonymous" onclick="toggleAnonymous(this.checked);"/> Sans propriétaire
       </label>
     </td>
   </tr>

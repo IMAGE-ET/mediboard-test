@@ -31,5 +31,6 @@ CPreferences::$modules["system"] = array (
   "INFOSYSTEM",
   "showTemplateSpans",
   "moduleFavicon",
+  "notes_anonymous"
 );
 ?>

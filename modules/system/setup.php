@@ -1134,6 +1134,9 @@ class CSetupsystem extends CSetup {
     $query = "DROP TABLE `view_access_token`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.1.12";
+    $this->makeRevision("1.1.12");
+    $this->addPrefQuery("notes_anonymous", "0");
+    
+    $this->mod_version = "1.1.13";
   }
 }
