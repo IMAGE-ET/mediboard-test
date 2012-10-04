@@ -38,12 +38,14 @@ $results = array();
 $dates = array();
 $dates_planning = array();
 
-$where = array();
 $plage = new CPlageOp();
 
 $hour_midi = CAppUI::conf("dPbloc CPlageOp hour_midi_fullprint");
 
 for ($date_temp = $date_min ; $date_temp <= $date_max ; $date_temp = mbDate("+1 WEEK", $date_temp)) {
+  $ljoin = array();
+  $where = array();
+  
   $_date_min = $date_temp;
   $_date_max = mbDate("+1 WEEK -1 DAY", $date_temp);
   
@@ -61,15 +63,23 @@ for ($date_temp = $date_min ; $date_temp <= $date_max ; $date_temp = mbDate("+1 
   
   // On teste si l'on peut retirer le dimanche
   $where["date"] = "= '$date_max'";
-  if ($plage->countList($where) == 0) {
+  
+  if ($bloc_id) {
+    $ljoin["sallesbloc"] = "sallesbloc.salle_id = plagesop.salle_id";
+    $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
+  }
+  
+  if ($plage->countList($where, null, $ljoin) == 0) {
+    array_pop($dates[$date_temp]);
+  }
+  CFactureConsult
+  // Puis le samedi
+  $where["date"] = "= '".mbDate("-1 day", $date_max)."'";
+  if ($plage->countList($where, null, $ljoin) == 0) {
     array_pop($dates[$date_temp]);
   }
   
-  // Puis le samedi
-  $where["date"] = "= '".mbDate("-1 day", $date_max)."'";
-  if ($plage->countList($where) == 0) {
-    array_pop($dates[$date_temp]);
-  }
+  unset($where["sallesbloc.bloc_id"]);
   
   foreach ($blocs as $_bloc) {
     foreach ($_bloc->_ref_salles as $_salle) {
