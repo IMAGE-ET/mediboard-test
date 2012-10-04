@@ -41,8 +41,10 @@
           {{mb_key object=$_file}}
           {{mb_field object=$_file field="_view" hidden=1}}
           <span style="white-space: nowrap;">
-            <button class="edit notext" id="edit_{{$_file->_guid}}" type="button"
-              onclick="File.editNom('{{$_file->_guid}}'); File.toggleClass(this);">{{tr}}Modify{{/tr}}</button>
+            {{if !$name_readonly}}
+              <button class="edit notext" id="edit_{{$_file->_guid}}" type="button"
+                onclick="File.editNom('{{$_file->_guid}}'); File.toggleClass(this);">{{tr}}Modify{{/tr}}</button>
+            {{/if}}
             <button class="trash notext" type="button" onclick="File.remove(this, '{{$object_id}}', '{{$object_class}}')">
               {{tr}}Delete{{/tr}}
             </button>

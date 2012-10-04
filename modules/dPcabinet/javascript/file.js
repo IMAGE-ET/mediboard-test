@@ -32,8 +32,8 @@ var File = {
       ajax: 1,
       target: 'systemMsg'
     };
-		
-		object_guid = object_guid.split('-');
+    
+    object_guid = object_guid.split('-');
     var oAjaxOptions = {
       onComplete: function() { File.refresh(object_guid[1], object_guid[0]); } 
     };
@@ -41,18 +41,27 @@ var File = {
   },
   
   refresh: function(object_id, object_class, only_files) {
-  	var div_id = printf("files-%s-%s", object_id, object_class);
-  	if (!$(div_id)) {
-  	  return;
-  	}
+    var div_id = printf("files-%s-%s", object_id, object_class);
+    if (!$(div_id)) {
+      return;
+    }
     var url = new Url("dPcabinet", "httpreq_widget_files");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
+    
     if (only_files == undefined || only_files == 1) {
       url.addParam("only_files", 1);
+      var elt = $("list_"+object_class+object_id);
+      if (elt.up().up().hasClassName("name_readonly")) {
+        url.addParam("name_readonly", 1);
+      }
       url.requestUpdate("list_"+object_class+object_id);
     }
     else {
+      var elt = $("files-"+object_id+"-"+object_class);
+      if (elt.up().hasClassName("name_readonly")) {
+        url.addParam("name_readonly", 1);
+      }
       url.requestUpdate("files-"+object_id+"-"+object_class);
     }
   },
@@ -65,7 +74,7 @@ var File = {
     $(container).insert(div);
     
     Main.add(function() {
-      File.refresh(object_id,object_class, 0)
+      File.refresh(object_id, object_class, 0)
     });
   },
   
