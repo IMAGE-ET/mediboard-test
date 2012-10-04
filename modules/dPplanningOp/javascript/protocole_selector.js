@@ -117,7 +117,7 @@ ProtocoleSelector = {
     
     // Champs du séjour
     if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
-      $V(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
+      oSejourForm[this.sDuree_prevu].value = protocole.duree_hospi;
       if (this.sType) {
         oSejourForm[this.sType].value = protocole.type;
       }

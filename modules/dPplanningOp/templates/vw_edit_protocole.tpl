@@ -50,10 +50,10 @@ refreshListCCAMProtocole = function() {
 
 checkFormSejour = function() {
   var oForm = getForm("editProtocole");
-  return checkForm(oForm) && checkDuree() && checkDureeHospi() && checkCCAM();
+  return checkForm(oForm) && checkDureeProtocole() && checkDureeHospiProtocole() && checkCCAMProtocole();
 }
 
-checkCCAM = function() {
+checkCCAMProtocole = function() {
   var oForm = getForm("editProtocole");
   if ($V(oForm.for_sejour) == 1) return true;
   
@@ -74,7 +74,7 @@ checkCCAM = function() {
   return true;
 }
 
-checkDureeHospi = function() {
+checkDureeHospiProtocole = function() {
   var form = getForm("editProtocole");
   if ($V(form.for_sejour) == 1) return true;
   
@@ -96,21 +96,8 @@ checkDureeHospi = function() {
   return true;
 }
 
-checkChir = function() {
-  var form = getForm("editProtocole");
-  var field = null;
-  
-  if (field = form.chir_id) {
-    if (field.value == 0) {
-      alert("Chirurgien manquant");
-      popChir();
-      return false;
-    }
-  }
-  return true;
-}
 
-checkDuree = function() {
+checkDureeProtocole = function() {
   var form = getForm("editProtocole");
   field1 = form.temp_operation;
   
