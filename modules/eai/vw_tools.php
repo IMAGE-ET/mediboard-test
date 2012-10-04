@@ -33,13 +33,19 @@ $group = new CGroups();
 $groups = $group->loadList();
 foreach ($groups as $_group) {
   $_group->loadConfigValues(); 
-}  
+}
+
+$receiver = new CInteropReceiver(); 
+$receivers = $receiver->getObjects();
 
 $tools = array(
   "exchanges" => array(
     "reprocessing",
-    "detect_collision"
-  )
+    "detect_collision",
+  ),
+  "smp" => array(
+    "resend_exchange",
+  ),
 );
 
 $exchange = new CExchangeDataFormat();
@@ -52,6 +58,7 @@ $smarty->assign("exchange"         , $exchange);
 $smarty->assign("exchanges_classes", $exchanges_classes);
 $smarty->assign("groups"           , $groups);
 $smarty->assign("tools"            , $tools);
+$smarty->assign("receivers"        , $receivers);
 $smarty->display("vw_tools.tpl");
 
 ?>
