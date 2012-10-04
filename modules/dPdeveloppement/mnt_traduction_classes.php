@@ -81,7 +81,7 @@ function addLocale($class, $cat, $name) {
   global $trans, $items, $completions, $language, $all_locales;
   
   $items[$class][$cat][$name] = array_key_exists($name, $trans) ? @$trans[$name][$language] : "";
-  $items[$class][$cat][$name] = str_replace('\n', "\n", $items[$class][$cat][$name]);
+  $items[$class][$cat][$name] = str_replace(array('\n', '\t'), array("\n", "\t"), $items[$class][$cat][$name]);
   
   unset($all_locales[$name]);
   
@@ -210,6 +210,10 @@ if ($module != "common") {
 }
 
 $empty_locales = array_fill(0, 5, null);
+
+foreach ($all_locales as &$_locale) {
+  $_locale = str_replace(array('\n', '\t'), array("\n", "\t"), &$_locale);
+}
 
 // Création du template
 $smarty = new CSmartyDP();

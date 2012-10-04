@@ -166,7 +166,7 @@ Main.add(function () {
  </tr>
 
  <tr>
-   <th>Nom</th>
+   <th class="narrow">Nom</th>
    <th>{{tr}}language.{{$language}}{{/tr}}</th>
    <th>{{tr}}Save{{/tr}}</th>
  </tr>
@@ -176,7 +176,7 @@ Main.add(function () {
     <td>{{$_key}}</td>
     <td>
       {{if $_trad|strpos:"\n"}}
-        <textarea name="s[{{$_key}}]">{{$_trad}}</textarea>
+        <textarea name="s[{{$_key}}]" rows="6">{{$_trad}}</textarea>
       {{else}}
         <input style="width: 100%" type="text" name="s[{{$_key}}]" value="{{$_trad}}" />
       {{/if}}
@@ -192,7 +192,7 @@ Main.add(function () {
     <td><input type="text" name="empty_locales" value="" onkeypress="$(this).up().next().select('input,textarea').each(function(i){i.name='s['+this.value+']'}.bind(this))" /></td>
     <td>
       {{if $_trad|strpos:"\n"}}
-        <textarea name="_"></textarea>
+        <textarea name="_" rows="6"></textarea>
       {{else}}
         <input style="width: 100%" type="text" name="_" value="" />
       {{/if}}

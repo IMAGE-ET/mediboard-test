@@ -432,8 +432,19 @@ $locales['config-dPurgences-use_blocage_lit'] = 'Utiliser le blocage de lit';
 $locales['config-dPurgences-use_blocage_lit-desc'] = 'Utiliser le blocage de lit pour les urgences à destination des mutations';
 $locales['config-dPurgences-valid_cotation_sortie_reelle'] = 'Valider cotation lors de la sortie réelle';
 $locales['config-dPurgences-valid_cotation_sortie_reelle-desc'] = 'Valider cotation lors de la sortie réelle';
-$locales['confirm-RPU-Hospitalisation-simple'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.nnCette action modifiera le type d\'hospitalisation de sujour pour permettre son traitement dans les unités de soins.nnSouhaitez-vous poursuivre ?';
-$locales['confirm-RPU-Hospitalisation-transfert'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.nnCette action irréversible effectue les actions suivantes :nt- Création d\'un séjour reliquat contanant le RPU,nt- Chainage du reliquat vers le séjour d\'hospitalisation,nt- Changement du type d\'hospitalisation du séjour principal.nnSouhaitez-vous poursuivre ?';
+$locales['confirm-RPU-Hospitalisation-simple'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.
+
+Cette action modifiera le type d\'hospitalisation de séjour pour permettre son traitement dans les unités de soins.
+
+Souhaitez-vous poursuivre ?';
+$locales['confirm-RPU-Hospitalisation-transfert'] = 'Vous êtes sur le point de tranformer un passage aux urgences en hospitalisation.
+
+Cette action irréversible effectue les actions suivantes :
+  - Création d\'un séjour reliquat contanant le RPU,
+  - Chainage du reliquat vers le séjour d\'hospitalisation,
+  - Changement du type d\'hospitalisation du séjour principal.
+
+Souhaitez-vous poursuivre ?';
 $locales['dPurgences-no-service_uhcds_id'] = 'Veuillez indiquer un service d\'uhcd dans le module \'Etablissements\' afin d\'avoir accès aux fonctionnalités du module.';
 $locales['dPurgences-no-service_urgences_id'] = 'Veuillez indiquer un service d\'urgences dans le module \'Etablissements\' afin d\'avoir accès aux fonctionnalités du module.';
 $locales['extract-rpu'] = 'RPU';
