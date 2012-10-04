@@ -155,7 +155,7 @@
       {{mb_value object=$_op field=cote}}
       {{if $_op->exam_extempo}}
         <br />
-        {{mb_title object=$_op field=exam_extempo}}
+        <img src="images/icons/extempo.png" title="{{tr}}COperation-exam_extempo{{/tr}}"/>
       {{/if}}
       {{if $_op->materiel}}
         <br />
