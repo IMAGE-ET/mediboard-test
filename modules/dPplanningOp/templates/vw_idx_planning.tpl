@@ -75,8 +75,8 @@ Main.add(function () {
               {{$curr_date|date_format:"%a %d"}}
             </a>
           </td>
-          {{foreach from=$curr_day item=curr_plage}}
-          {{if $curr_plage.plageop_id}}
+          {{foreach from=$curr_day item=curr_plage key=curr_key}}
+          {{if $curr_plage.plageop_id && $curr_key != "hors_plage"}}
           <td {{if $curr_plage.unique_chir}}class="user"{{else}}class="function"{{/if}}>
             {{$curr_plage.debut|date_format:$conf.time}} à {{$curr_plage.fin|date_format:$conf.time}}
           </td>
@@ -86,8 +86,8 @@ Main.add(function () {
           </td>
           {{/if}}
           <td align="center">{{$curr_plage.total}}</td>
-          <td align="center" {{if $curr_plage.plageop_id && $curr_plage.spec_id}} style="background-color: #{{$curr_plage.color_function}}"{{/if}}>
-            {{if $curr_plage.plageop_id && $curr_plage.spec_id}}
+          <td align="center" {{if $curr_plage.plageop_id && $curr_key != "hors_plage" && $curr_plage.spec_id}} style="background-color: #{{$curr_plage.color_function}}"{{/if}}>
+            {{if $curr_plage.plageop_id && $curr_key != "hors_plage" && $curr_plage.spec_id}}
               <label title="{{$curr_plage.nom_function}}">{{$curr_plage.duree|date_format:$conf.time}}</label>
             {{else}}
               {{$curr_plage.duree|date_format:$conf.time}}

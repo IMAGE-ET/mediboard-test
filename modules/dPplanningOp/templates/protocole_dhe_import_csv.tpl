@@ -22,6 +22,13 @@
     <li>Acte(s) CCAM (séparés par des |)</li>
     <li>Type d'hospitalisation (comp, ambu, exte, seances, ssr, psy, urg ou consult) *</li>
     <li>Durée d'hospitalisation en nuits *</li>
+    <li>Durée USCPO</li>
+    <li>Durée préop (HH:MM)</li>
+    <li>Présence préop (HH:MM)</li>
+    <li>Présence postop (HH:MM)</li>
+    <li>UF d'hébergement</li>
+    <li>UF de soins</li>
+    <li>UF médicale</li>
   </ul>
   <em>* : champs obligatoires</em>
 </div>
@@ -39,7 +46,7 @@
 {{if $results|@count}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="7">{{$results|@count}} protocoles trouvés</th>
+    <th class="title" colspan="16">{{$results|@count}} protocoles trouvés</th>
   </tr>
   <tr>
     <th>Etat</th>
@@ -51,6 +58,13 @@
     <th>Actes</th>
     <th>Type d'hospi</th>
     <th>Durée d'hospi</th>
+    <th>Durée USCPO</th>
+    <th>Durée préop</th>
+    <th>Présence préop</th>
+    <th>Présence postop</th>
+    <th>UF d'hébergement</th>
+    <th>UF médicale</th>
+    <th>UF de soins</th>
   </tr>
   {{foreach from=$results item=_protocole}}
   <tr>
@@ -69,6 +83,13 @@
     <td>{{$_protocole.actes}}</td>
     <td>{{$_protocole.type_hospi}}</td>
     <td>{{$_protocole.duree_hospi}}</td>
+    <td>{{$_protocole.duree_uscpo}}</td>
+    <td>{{$_protocole.duree_preop}}</td>
+    <td>{{$_protocole.presence_preop}}</td>
+    <td>{{$_protocole.presence_postop}}</td>
+    <td>{{$_protocole.uf_hebergement}}</td>
+    <td>{{$_protocole.uf_medicale}}</td>
+    <td>{{$_protocole.uf_soins}}</td>
   </tr>
   {{/foreach}}
 </table>

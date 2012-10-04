@@ -3,9 +3,16 @@
 <script type="text/javascript">
 
 function popupImport() {
-  var url = new Url('dPplanningOp', 'protocole_dhe_import_csv');
+  var url = new Url('planningOp', 'protocole_dhe_import_csv');
   url.popup(800, 600, 'Import des Protocoles de DHE');
-  return false;
+}
+
+function popupExport() {
+  var formFrom = getForm('selectFrm');
+  var formTo = getForm('exportProtocoles');
+  $V(formTo.chir_id, $V(formFrom.chir_id));
+  $V(formTo.function_id, $V(formFrom.function_id));
+  formTo.submit();
 }
 
 window.aProtocoles = {
@@ -123,6 +130,15 @@ Main.add(function(){
 });
 </script>
 
+<form name="exportProtocoles" method="get" target="_blank">
+  <input type="hidden" name="m" value="planningOp" />
+  <input type="hidden" name="a" value="ajax_export_protocoles_dhe" />
+  <input type="hidden" name="dialog" value="1" />
+  <input type="hidden" name="suppressHeaders" value="1" />
+  <input type="hidden" name="chir_id" />
+  <input type="hidden" name="function_id" />
+</form>
+
 <div id="get_protocole" style="display: none;"></div>
 
 <table class="main" style="background-color: #fff">
@@ -150,7 +166,7 @@ Main.add(function(){
                 {{/foreach}}
               </select>
             </td>
-            <th><label for="prat_id" title="Filtrer les protocoles d'une fonction">Fonction</label></th>
+            <th><label for="function_id" title="Filtrer les protocoles d'une fonction">Fonction</label></th>
             <td>
               {{if $can->admin}}
               <select name="function_id" style="width: 30em;" onchange="if (this.form.chir_id) { this.form.chir_id.selectedIndex=0; } refreshList(this.form);">
@@ -181,7 +197,10 @@ Main.add(function(){
         <li><a href="#interv">Chirurgicaux <small>(0)</small></a></li>
         <li><a href="#sejour">Médicaux <small>(0)</small></a></li>
         {{if !$dialog}}
-        <li><button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li>
+          <li>
+            <button type="button" onclick="popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
+            <button type="button" onclick="popupExport();" class="hslip">{{tr}}Export-CSV{{/tr}}</button>
+          </li>
         {{/if}}
       </ul>
       

@@ -69,7 +69,10 @@ class CProtocole extends CMbObject {
   var $_ref_group                         = null;
   var $_ref_protocole_prescription_chir   = null;
   var $_ref_protocole_prescription_anesth = null;
-
+  var $_ref_uf_hebergement                = null;
+  var $_ref_uf_medicale                   = null;
+  var $_ref_uf_soins                      = null;
+  
   // External references
   var $_ext_codes_ccam = null;
   var $_ext_code_cim   = null;
@@ -250,6 +253,18 @@ class CProtocole extends CMbObject {
   
   function loadRefsBesoins() {
     return $this->_ref_besoins = $this->loadBackRefs("besoins_ressources");
+  }
+  
+  function loadRefUFHebergement($cache = true) {
+    return $this->_ref_uf_hebergement = $this->loadFwdRef("uf_hebergement_id", $cache);
+  }
+
+  function loadRefUFMedicale($cache = true) {
+    return $this->_ref_uf_medicale = $this->loadFwdRef("uf_medicale_id", $cache);
+  }
+
+  function loadRefUFSoins($cache = true) {
+    return $this->_ref_uf_soins = $this->loadFwdRef("uf_soins_id", $cache);
   }
   
   function getPerm($permType) {

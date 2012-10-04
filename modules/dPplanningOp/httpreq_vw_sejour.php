@@ -111,6 +111,10 @@ $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 $order = "nom";
 $listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
 
+if (CModule::getActive("maternite")) {
+  $sejour->loadRefGrossesse();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
