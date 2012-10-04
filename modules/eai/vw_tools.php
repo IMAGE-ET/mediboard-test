@@ -52,6 +52,8 @@ $exchange = new CExchangeDataFormat();
 $exchange->_date_min = $date_min;
 $exchange->_date_max = $date_max;
 
+$movement = new CMovement();
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("exchange"         , $exchange);
@@ -59,6 +61,7 @@ $smarty->assign("exchanges_classes", $exchanges_classes);
 $smarty->assign("groups"           , $groups);
 $smarty->assign("tools"            , $tools);
 $smarty->assign("receivers"        , $receivers);
+$smarty->assign("movement"         , $movement);
 $smarty->display("vw_tools.tpl");
 
 ?>

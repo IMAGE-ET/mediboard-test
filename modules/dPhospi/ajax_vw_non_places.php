@@ -69,14 +69,14 @@ switch ($granularite) {
     $date_min = mbDateTime($date);
     break;
   case "week":
-  	$period = "6hours";
+    $period = "6hours";
     $unite = "hour";
     $nb_unite = 6;
     $nb_ticks = 28;
     $date_min = mbDateTime("-2 days", $date);
     break;
   case "4weeks":
-  	$period = "1day";
+    $period = "1day";
     $unite = "day";
     $nb_unite = 1;
     $nb_ticks = 28;

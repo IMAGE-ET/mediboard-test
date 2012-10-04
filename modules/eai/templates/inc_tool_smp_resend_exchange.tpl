@@ -15,12 +15,15 @@
   }
 </script>
 
+{{mb_script module="eai" script="action"}}
+
 <form name="tools-{{$_tool_class}}-{{$_tool}}" method="get" action="?" 
   onsubmit="return onSubmitFormAjax(this, null, 'tools-{{$_tool_class}}-{{$_tool}}')">
   <input type="hidden" name="m" value="eai" />
-  <input type="hidden" name="a" value="ajax_tools" />
+  <input type="hidden" name="a" value="ajax_resend_exchange" />
   <input type="hidden" name="tool" value="{{$_tool}}" />
   <input type="hidden" name="suppressHeaders" value="1" />
+  <input type="hidden" name="action" value="" />
   
   <table class="main form">
     <tr>
@@ -46,13 +49,17 @@
       </td>
     </tr>
     <tr>
-      <th></th>
+      <th>ID départ</th>
+      <td><input type="text" name="id_start" value="" size="6" title="Démarrer à l'ID ..." /></td>
+    </tr>
+    <tr>
+      <th>{{tr}}CInteropReceiver{{/tr}}</th>
       <td>
-        <select name="receiver_id">
+        <select name="receiver_guid">
           {{foreach from=$receivers item=_receivers key=_class}}
             <optgroup label="{{tr}}{{$_class}}{{/tr}}">
               {{foreach from=$_receivers item=_receiver}}
-                <option value="{{$_receiver->_guid}}">{{tr}}{{$_receiver}}{{/tr}}</option>
+                <option value="{{$_receiver->_guid}}">{{$_receiver}}</option>
               {{/foreach}}
             </optgroup>
           {{/foreach}}
@@ -74,6 +81,16 @@
       </td>
     </tr>
     <tr>
+      <th>{{tr}}CMovement{{/tr}}</th>
+      <td>
+        <select name="movement_type">
+          {{foreach from=$movement->_specs.movement_type->_locales key=_type item=_locale}}
+            <option value="{{$_type}}">{{$_locale}}</option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
+    <tr>
       <th>Nombre</th>
       <td><input type="text" name="count" value="30" size="3" title="Nombre d'échanges à traiter" /></td>
     </tr>
@@ -83,7 +100,15 @@
     </tr>
     <tr>
       <td colspan="2">
-        <button type="submit" class="change">{{tr}}CEAI-tools-{{$_tool_class}}-{{$_tool}}-button{{/tr}}</button>
+        <button type="button" class="new" onclick="$V(this.form.action, 'start'); this.form.onsubmit()">
+          {{tr}}CEAI-tools-{{$_tool_class}}-{{$_tool}}-button{{/tr}}
+        </button>
+        <button type="button" class="change" onclick="$V(this.form.action, 'retry'); this.form.onsubmit()">
+          {{tr}}Retry{{/tr}}      
+        </button>
+        <button type="button" class="tick" onclick="$V(this.form.action, 'continue'); this.form.onsubmit()">
+          {{tr}}Continue{{/tr}}      
+        </button>
       </td>
     </tr>
   </table>
