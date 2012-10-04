@@ -110,7 +110,7 @@ if (!CAppUI::$instance->user_id) {
   $_SESSION["locked"] = null;
   
   // HTTP 403 Forbidden header when RAW response expected
-  if ($suppressHeaders) {
+  if ($suppressHeaders && !$ajax) {
     header("HTTP/1.0 403 Forbidden");
     CApp::rip();
   }
