@@ -27,7 +27,7 @@ $keywords = explode("|", CAppUI::conf("soins ignore_allergies"));
 
 foreach ($keywords as $_keyword) {
   foreach ($allergies as $_key => $_allergie) {
-    if (preg_match("/$_keyword/", strtolower($_allergie->_view))) {
+    if (preg_match('/^'.$_keyword.'$/', strtolower($_allergie->_view))) {
       unset($allergies[$_key]);
       break;
     }
