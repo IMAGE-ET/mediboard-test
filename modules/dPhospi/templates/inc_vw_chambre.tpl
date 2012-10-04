@@ -117,6 +117,10 @@
       <th>{{mb_label object=$lit field=nom_complet}}</th>
       <td>{{mb_field object=$lit field=nom_complet}}</td>
     </tr>
+    <tr>
+      <th>{{mb_label object=$lit field=annule}}</th>
+      <td>{{mb_field object=$lit field=annule}}</td>
+    </tr>
     </table>
   </form>
   {{if $lit->_id}}

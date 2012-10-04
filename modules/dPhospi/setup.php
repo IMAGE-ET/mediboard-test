@@ -682,7 +682,12 @@ class CSetupdPhospi extends CSetup {
       SET `type` = 'medicale' WHERE `type` IS NULL";
     $this->addQuery($query);
     
-    $this->mod_version = "0.72";
+    $this->makeRevision("0.72");
+    $query = "ALTER TABLE `lit` 
+      ADD `annule` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.73";
   }
 }
 ?>

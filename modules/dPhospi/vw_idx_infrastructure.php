@@ -39,7 +39,7 @@ $chambre = new CChambre();
 $chambre->load($chambre_id);
 $chambre->loadRefsNotes();
 $chambre->loadRefService();
-foreach ($chambre->loadRefsLits() as $_lit) {
+foreach ($chambre->loadRefsLits(true) as $_lit) {
   $_lit->loadRefsNotes();
 }
 

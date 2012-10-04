@@ -126,6 +126,7 @@ $group_id = CGroups::loadCurrent()->_id;
 $where = array();
 $where["chambre.service_id"] = CSQLDataSource::prepareIn($services_ids);
 $where["service.group_id"] = " = '$group_id'";
+$where["lit.annule"] = "= '0'";
 $ljoin = array();
 $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
 $ljoin["service"] = "chambre.service_id = service.service_id";

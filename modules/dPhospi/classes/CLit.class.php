@@ -24,6 +24,7 @@ class CLit extends CMbObject {
   // DB Fields
   var $nom         = null;
   var $nom_complet = null;
+  var $annule      = null;
   
   // Form Fields
   var $_overbooking = null;
@@ -66,6 +67,7 @@ class CLit extends CMbObject {
     $specs["chambre_id"]  = "ref notNull class|CChambre seekable";
     $specs["nom"]         = "str notNull seekable";
     $specs["nom_complet"] = "str seekable";
+    $specs["annule"]      = "bool default|0";
     return $specs;
   }
   

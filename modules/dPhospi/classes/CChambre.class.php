@@ -17,7 +17,7 @@ class CChambre extends CMbObject {
   static $_prefixe = null;
   
   // DB Table key
-	var $chambre_id = null;	
+  var $chambre_id = null;	
   
   // DB References
   var $service_id = null;
@@ -61,7 +61,7 @@ class CChambre extends CMbObject {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["service_id"]       = "ref notNull class|CService seekable";
     $specs["nom"]              = "str notNull seekable";
     $specs["caracteristiques"] = "text";
@@ -75,22 +75,32 @@ class CChambre extends CMbObject {
     $this->_shortview = self::$_prefixe . $this->nom;
     $this->_view      = $this->_shortview;
   }
-	
-	function loadRefService() {
-		return $this->_ref_service = $this->loadFwdRef("service_id", true);
-	}
+  
+  function loadRefService() {
+    return $this->_ref_service = $this->loadFwdRef("service_id", true);
+  }
   
   function loadRefsFwd() {
     $this->loadRefService();
   }
 
-  function loadRefsLits() {
+  function loadRefsLits($annule = false) {
+    $lit = new CLit();
+    $where = array(
+      "chambre_id" => "= '$this->_id'"
+    );
+    
+    if (!$annule) {
+      $where["annule"] = " ='0'";
+    }
+    
     if($this->lits_alpha) {
       $order = "lit.nom ASC";
     } else {
       $order = "lit.nom DESC";
     }
-    return $this->_ref_lits = $this->loadBackRefs("lits", $order);
+    
+    return $this->_ref_lits = $this->_back["lits"] = $lit->loadList($where, $order);
   }
 
   function loadRefEmplacement() {
@@ -101,7 +111,7 @@ class CChambre extends CMbObject {
   }
 
   function loadRefsBack() {
-  	$this->loadRefsLits();
+    $this->loadRefsLits();
   }
   
   function getPerm($permType) {
