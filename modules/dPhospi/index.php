@@ -19,7 +19,8 @@ if(CAppUI::conf("dPhospi pathologies") || CAppUI::$user->isAdmin()) {
   $module->registerTab("vw_idx_pathologies"         , TAB_READ);
 }
 $module->registerTab("vw_idx_infrastructure"      , TAB_ADMIN);
-$module->registerTab("vw_stats"                   , TAB_ADMIN);
+$module->registerTab("vw_stats"                   , CAppUI::conf("dPhospi stats_for_all") ? TAB_EDIT : TAB_ADMIN);
+
 $module->registerTab("vw_prestations"             , TAB_ADMIN);
 $module->registerTab("vw_etiquettes"              , TAB_ADMIN);
 if (CModule::getInstalled("printing")) {
