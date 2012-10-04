@@ -23,7 +23,7 @@ if ($bloc_id) {
   $blocs = array_intersect_key($blocs, array($bloc_id => ""));
 }
 
-$date_min = mbDate("LAST MONDAY", $date_min);
+$date_min = mbDate("LAST SUNDAY +1 DAY", $date_min);
 
 if (!$date_max) {
   $date_max = mbDate("+1 WEEK -1 DAY", $date_min);

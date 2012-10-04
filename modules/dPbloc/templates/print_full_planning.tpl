@@ -20,7 +20,7 @@
   <h1 style="page-break-before: avoid; text-align: center">
     Planning opératoire du {{$result.date_min|date_format:$conf.date}} au {{$result.date_max|date_format:$conf.date}}
   </h1>
-  <table class="tbl" style="table-layout: fixed; {{if !$smarty.foreach.planning.last}}page-break-after: always{{/if}}">
+  <table class="tbl" style="table-layout: fixed; text-align: center; {{if !$smarty.foreach.planning.last}}page-break-after: always{{/if}}">
     <thead>
       <tr>
         <th style="width: 8%;">
@@ -45,7 +45,7 @@
           </th>
           {{foreach from=$result.$_salle_id item=_result_by_date}}
             {{foreach from=$_result_by_date item=_result_by_creneau}}
-              <td class="text">
+              <td class="text compact">
                 {{$_result_by_creneau}}
               </td>
             {{/foreach}}
