@@ -72,7 +72,7 @@ for ($date_temp = $date_min ; $date_temp <= $date_max ; $date_temp = mbDate("+1 
   if ($plage->countList($where, null, $ljoin) == 0) {
     array_pop($dates[$date_temp]);
   }
-  CFactureConsult
+  
   // Puis le samedi
   $where["date"] = "= '".mbDate("-1 day", $date_max)."'";
   if ($plage->countList($where, null, $ljoin) == 0) {
