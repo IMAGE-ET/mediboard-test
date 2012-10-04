@@ -140,6 +140,7 @@ $locales['Erase'] = 'Gommer';
 $locales['Estimation'] = 'Estimation';
 $locales['Execute'] = 'Exécuter';
 $locales['Export'] = 'Exporter';
+$locales['Export-CSV'] = 'Exporter au format CSV';
 $locales['Field'] = 'Champ';
 $locales['Filter'] = 'Filtrer';
 $locales['FormObserver-msg-confirm'] = 'Vous avez modifié certaines informations sur cette page sans les sauvegarder. Si vous cliquez sur OK, ces données seront perdues.';

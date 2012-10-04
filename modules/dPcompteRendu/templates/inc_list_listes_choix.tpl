@@ -35,7 +35,7 @@ Main.add(Control.Tabs.create.curry("tabs-owner", true));
       {{assign var=ids value=$_listes|@array_keys}}
           
       <button type="button" class="hslip" onclick="ListeChoix.exportCSV('{{$owner_object->_guid}}', '{{'-'|implode:$ids}}');">
-        Exporter au format CSV
+        {{tr}}Export-CSV{{/tr}}
       </button>
           
       <button type="button" class="hslip" onclick="ListeChoix.importCSV('{{$owner_object->_guid}}');">
