@@ -75,9 +75,9 @@ elseif ($factureconsult_id) {
 $facture->loadRefsNotes();
 
 $reglement   = new CReglement();
-$orderBanque = "nom ASC";
+
 $banque      = new CBanque();
-$banques     = $banque->loadList(null,$orderBanque);
+$banques     = $banque->loadList(null, "nom");
 
 // Instanciation d'un acte tarmed pour l'ajout de ligne dans la facture
 $acte_tarmed = null;

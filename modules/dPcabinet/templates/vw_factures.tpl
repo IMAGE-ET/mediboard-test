@@ -25,7 +25,9 @@ refreshAssurance = function(){
 }
   
 viewFacture = function(element, factureconsult_id){
-  element.up("tr").addUniqueClassName("selected");
+  if (element) {
+    element.up("tr").addUniqueClassName("selected");
+  }
    
   var url = new Url("cabinet"     , "ajax_view_facture");
   url.addParam("factureconsult_id", factureconsult_id);
@@ -46,6 +48,10 @@ printFacture = function(factureconsult_id, edit_justificatif, edit_bvr) {
 Main.add(function () {
   Calendar.regField(getForm("choice-facture")._date_min, null);
   Calendar.regField(getForm("choice-facture")._date_max, null);
+  
+  {{if $facture->_id}}
+    viewFacture(null, '{{$facture->_id}}');
+  {{/if}}
 });
 </script>
 
@@ -55,17 +61,17 @@ Main.add(function () {
     <input type="hidden" name="tab" value="{{$tab}}" />
     <table class="form" name="choix_type_facture">
       <tr>
-        <th class="title" colspan="6">Afficher les factures</th>
-      </tr>
-      <tr>
         <th>Depuis le</th>
         <td>{{mb_field object=$filter field="_date_min" form="choice-facture" canNull="false" register=true onchange="refreshList()"}}</td>
-        <th style="width:100px;"></th>
         <td>
-            <input name="etat_ouvert" value="1" type="checkbox" {{if $etat_ouvert == 1}}checked="checked"{{/if}} onchange="refreshList();" />
-            Ouvertes
-           <input name="etat_cloture" value="1" type="checkbox" {{if $etat_cloture == 1}}checked="checked"{{/if}} onchange="refreshList();" />
-           Cloturées 
+           <label>
+             <input name="etat_ouvert" value="1" type="checkbox" {{if $etat_ouvert == 1}}checked="checked"{{/if}} onchange="refreshList();" />
+             Ouvertes
+           </label>
+           <label>
+             <input name="etat_cloture" value="1" type="checkbox" {{if $etat_cloture == 1}}checked="checked"{{/if}} onchange="refreshList();" />
+             Cloturées 
+           </label>
         </td>
         <th>Patient</th>
         <td>
@@ -86,15 +92,14 @@ Main.add(function () {
       <tr>
         <th>Jusqu'au</th>
         <td>{{mb_field object=$filter field="_date_max" form="choice-facture" canNull="false" register=true onchange="refreshList()"}}</td>
-        <th></th>
         <td>
           <label>
             <input type="checkbox" name="no_finish_reglement" value="0" {{if $no_finish_reglement }}checked="checked"{{/if}} onchange="refreshList();"/>
             Uniquement réglées
           </label>
         </td>
-        <th >Praticien</th>
-        <td ><!-- Un iclude existe peu etre! à voir-->
+        <th>Praticien</th>
+        <td>
           <select name="chirSel" style="width: 15em;" onchange="refreshList();">
             <option value="0" {{if !$chirSel}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
             {{foreach from=$listChirs item=curr_chir}}
@@ -115,8 +120,8 @@ Main.add(function () {
             <th colspan="2" class="title">Factures</th>
           </tr>
           <tr>
-            <th> Date</th>
-            <th> Patient</th>
+            <th>Date</th>
+            <th>Patient</th>
           </tr>
           {{foreach from=$factures item=_facture}}
             <tr class="{{if $facture->_id == $_facture->_id}}selected{{/if}}">
@@ -128,7 +133,7 @@ Main.add(function () {
                 {{/if}}
               </td>
               <td class="text">
-                <a onclick="viewFacture(this, '{{$_facture->factureconsult_id}}');" href="#" 
+                <a onclick="viewFacture(this, '{{$_facture->_id}}');" href="#" 
                   onmouseover="ObjectTooltip.createEx(this, '{{$_facture->_ref_patient->_guid}}')">
                   {{$_facture->_ref_patient->_view|truncate:30:"...":true}}
                 </a>
@@ -137,15 +142,7 @@ Main.add(function () {
           {{/foreach}}
         </table>
       </td>
-      <td>
-        <table class="form">
-          <tr>
-            <td id="load_facture">
-              {{mb_include module=dPcabinet template="inc_vw_facturation"}}
-            </td>
-          </tr>
-        </table>
-      </td>
+      <td id="load_facture">&nbsp;</td>
     </tr>
   </table>
 </div>

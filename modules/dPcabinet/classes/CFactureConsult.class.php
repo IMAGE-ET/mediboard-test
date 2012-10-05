@@ -13,8 +13,7 @@
  * Facture liée à une ou plusieurs consultations
  *
  */
-class CFactureConsult extends CMbObject
-{
+class CFactureConsult extends CMbObject {
   // DB Table key
   var $factureconsult_id = null;
   
@@ -29,7 +28,6 @@ class CFactureConsult extends CMbObject
   var $type_facture           = null;
   var $patient_date_reglement = null;
   var $tiers_date_reglement   = null;
-  var $tarif                  = null;
   var $npq                    = null;
   var $cession_creance        = null;
   var $assurance              = null;
@@ -125,7 +123,6 @@ class CFactureConsult extends CMbObject
     $props["_montant_total"]            = "currency";
     
     $props["_num_reference"]            = "str";
-    $props["tarif"]                     = "str";
     return $props;
   }
      
@@ -175,8 +172,14 @@ class CFactureConsult extends CMbObject
     if ($this->fieldModified("patient_date_reglement") || $this->fieldModified("tiers_date_reglement")) {
       
       foreach ($this->loadBackRefs("consultations") as $_consultation) {
-        $_consultation->patient_date_reglement = $this->patient_date_reglement;
-        $_consultation->tiers_date_reglement   = $this->tiers_date_reglement;
+        if ($this->patient_date_reglement) {
+          $_consultation->patient_date_reglement = $this->patient_date_reglement;
+        }
+        
+        if ($this->tiers_date_reglement) {
+          $_consultation->tiers_date_reglement   = $this->tiers_date_reglement;
+        }
+        
         if ($msg = $_consultation->store()) {
           return $msg;
         }
@@ -272,7 +275,7 @@ class CFactureConsult extends CMbObject
    * 
    * @param bool $cache cache
    * 
-   * @return $this->_ref_patient
+   * @return CPatient
   **/
   function loadRefPatient($cache = 1) {
     if (!$this->_ref_patient) {
@@ -519,4 +522,3 @@ class CFactureConsult extends CMbObject
     return $this->_num_bvr;
   }
 }
-?>

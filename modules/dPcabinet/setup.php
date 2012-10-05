@@ -1630,20 +1630,21 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("1.70");
     
     $query = "ALTER TABLE `plageconsult` 
-              ADD `pct_retrocession` INT (11) DEFAULT '70';";
+                ADD `pct_retrocession` INT (11) DEFAULT '70';";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `plageconsult` 
-              ADD INDEX (`remplacant_id`);";
+                ADD INDEX (`remplacant_id`);";
     $this->addQuery($query);
     $this->makeRevision("1.71");
     
     $query = "ALTER TABLE `plageconsult` 
-               CHANGE `pct_retrocession` `pct_retrocession` FLOAT DEFAULT '70';";
+                CHANGE `pct_retrocession` `pct_retrocession` FLOAT DEFAULT '70';";
     $this->addQuery($query);
     
     $this->makeRevision("1.72");
-    $query = "ALTER TABLE `examigs` CHANGE `glascow` `glasgow` ENUM('26','13','7','5','0');";
+    $query = "ALTER TABLE `examigs` 
+                CHANGE `glascow` `glasgow` ENUM('26','13','7','5','0');";
     $this->addQuery($query);
     
     $this->makeRevision("1.73");
@@ -1654,11 +1655,16 @@ class CSetupdPcabinet extends CSetup {
     
     $this->makeRevision("1.75");
     $query = "UPDATE consultation, factureconsult
-      SET consultation.patient_date_reglement = factureconsult.patient_date_reglement
-      WHERE consultation.factureconsult_id = factureconsult.factureconsult_id";
+                SET consultation.patient_date_reglement = factureconsult.patient_date_reglement
+                WHERE consultation.factureconsult_id = factureconsult.factureconsult_id";
+    $this->addQuery($query);
+    
+    $this->makeRevision("1.76");
+    $query = "ALTER TABLE `reglement` 
+                ADD `reference` VARCHAR (255)";
     $this->addQuery($query);
         
-    $this->mod_version = "1.76";
+    $this->mod_version = "1.77";
   }
 }
 ?>

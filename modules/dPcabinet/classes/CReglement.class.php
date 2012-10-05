@@ -21,12 +21,15 @@ class CReglement extends CMbMetaObject {
   var $mode            = null;
   var $object_class    = null;
   var $object_id       = null;
+  var $reference       = null;
   var $num_bvr         = null;
   
   // Fwd References
   var $_ref_consultation = null;
   var $_ref_banque       = null;
   var $_ref_facture      = null;
+  
+  var $_update_facture = true;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -43,6 +46,7 @@ class CReglement extends CMbMetaObject {
     $specs['montant']         = 'currency notNull';
     $specs['emetteur']        = 'enum notNull list|patient|tiers';
     $specs['mode']            = 'enum notNull list|cheque|CB|especes|virement|BVR|autre default|cheque';
+    $specs['reference']       = 'str';
     $specs['num_bvr']         = 'str';
     return $specs;
   }
@@ -60,6 +64,8 @@ class CReglement extends CMbMetaObject {
     if ($msg = parent::check()) {
       return $msg;
     }
+    
+    $this->completeField("montant", "mode");
     
     if (!$this->montant) {
       return 'Le montant du règlement ne doit pas être nul';
@@ -125,7 +131,7 @@ class CReglement extends CMbMetaObject {
     }
     
     // Cas de la facture
-    if ($this->object_class == "CFactureConsult"){
+    if ($this->_update_facture && $this->object_class == "CFactureConsult"){
       $facture = $this->_ref_object;
       $facture->loadRefsReglements();
       

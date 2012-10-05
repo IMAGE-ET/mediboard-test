@@ -61,15 +61,15 @@ if ($chirSel) {
     $where["factureconsult.patient_id"] =" = '$patient_id' ";
   }
   
-  $order = "factureconsult.cloture DESC";
-  $limit ="0 , 30";
-  
-  $facture = new CFactureConsult();
-  $factures = $facture->loadList($where, $order, $limit, null, $ljoin);
+  $factures = $facture->loadList($where, "factureconsult.cloture DESC", 100, null, $ljoin);
 }
 else {
-  $where["patient_id"] = "= '$patient_id'";	
+  $where["patient_id"] = "= '$patient_id'";  
   $factures = $facture->loadList($where , "ouverture ASC", 50);
+}
+
+foreach ($factures as $_facture) {
+  $_facture->loadRefPatient();
 }
 
 if ($no_finish_reglement) {
@@ -84,7 +84,7 @@ if ($no_finish_reglement) {
 $derconsult_id = null;
 $assurances_patient = array();
 if ($factureconsult_id) {
-  $facture->load($factureconsult_id);	
+  $facture->load($factureconsult_id);  
   $facture->loadRefs();
   if ($facture->_ref_consults) {
     $last_consult = end($facture->_ref_consults);
@@ -94,9 +94,9 @@ if ($factureconsult_id) {
 }
 
 $reglement = new CReglement();
-$orderBanque = "nom ASC";
+
 $banque = new CBanque();
-$banques = $banque->loadList(null,$orderBanque);
+$banques = $banque->loadList(null, "nom");
 
 $acte_tarmed = null;
 //Instanciation d'un acte tarmed pour l'ajout de ligne dans la facture
@@ -129,4 +129,3 @@ $smarty->assign("filter"        , $filter);
 $smarty->assign("no_finish_reglement"      ,$no_finish_reglement);
 
 $smarty->display("vw_factures.tpl");
-?>
