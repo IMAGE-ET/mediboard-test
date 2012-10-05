@@ -14,6 +14,9 @@
   Main.add(function() {
     ViewPort.SetAvlHeight("planningInterventions", 1);
       $('planningWeek').style.height = "1500px";
+    $$(".body").each(function(elt) {
+      elt.setStyle({backgroundColor: elt.up().getStyle("backgroundColor")});
+    });
   });
 </script>
 

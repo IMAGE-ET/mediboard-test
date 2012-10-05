@@ -100,6 +100,7 @@ $planning->dragndrop = $planning->resizable = CCanDo::edit();
 $planning->hour_divider = 60 / intval(CAppUI::conf("dPplanningOp COperation min_intervalle"));
 $planning->show_half = true;
 $i = 0;
+$today = mbDate();
 
 foreach ($salles as $_salle) {
   if ($bloc_id) {
@@ -107,6 +108,9 @@ foreach ($salles as $_salle) {
   }
   else {
     $planning->addDayLabel($i, $_salle->_view);
+  }
+  if ($today == $date_planning) {
+    $planning->addEvent(new CPlanningEvent(null, "$i ".mbTime(), null, null, "red", null, "now"));
   }
   $i++;
 }
@@ -222,7 +226,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
           $color = "#{$chir->_ref_function->color}";
           break;
         case "-1" :
-          $color = "#f88";
+          $color = "#88f";
       }
     }
     
