@@ -99,7 +99,7 @@ class CActe extends CMbMetaObject {
    * @return bool
    */
   function checkCoded() {
-    if (!$this->_check_coded){
+    if (!$this->_check_coded || $this->_forwardRefMerging){
       return;
     }
     
