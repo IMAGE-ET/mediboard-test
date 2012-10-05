@@ -16,9 +16,9 @@ $patient->load($patient_id);
 
 $user = CMediusers::get();
 if(CAppUI::pref("pratOnlyForConsult", 1)) {
-  $listPrat = $user->loadPraticiens(PERM_EDIT);
+  $listPrat = $user->loadPraticiens(PERM_EDIT, null, null, null, false);
 } else {
-  $listPrat = $user->loadProfessionnelDeSante(PERM_EDIT);
+  $listPrat = $user->loadProfessionnelDeSante(PERM_EDIT, null, null, null, false);
 }
 
 $patient->loadRefsFiles();

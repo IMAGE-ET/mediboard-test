@@ -666,7 +666,7 @@ class CMediusers extends CMbObject {
     }
   }
 
-  function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null, $secondary = false) {
+  function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
     
     $where = array();
     $ljoin = array();
@@ -681,7 +681,9 @@ class CMediusers extends CMbObject {
       }
     }
     
-    $where["users_mediboard.actif"] = "= '1'";
+    if($actif) {
+      $where["users_mediboard.actif"] = "= '1'";
+    }
     
     // Filters on users values
     $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
@@ -776,28 +778,28 @@ class CMediusers extends CMbObject {
     return $functions;
   }
 
-  function loadUsers($permType = PERM_READ, $function_id = null, $name = null) {
-    return $this->loadListFromType(null, $permType, $function_id, $name);
+  function loadUsers($permType = PERM_READ, $function_id = null, $name = null, $actif = true) {
+    return $this->loadListFromType(null, $permType, $function_id, $name, $actif);
   }
 
-  function loadMedecins($permType = PERM_READ, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Médecin"), $permType, $function_id, $name);
+  function loadMedecins($permType = PERM_READ, $function_id = null, $name = null, $actif = true) {
+    return $this->loadListFromType(array("Médecin"), $permType, $function_id, $name, $actif);
   }
 
-  function loadChirurgiens($permType = PERM_READ, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Chirurgien", "Dentiste"), $permType, $function_id, $name);
+  function loadChirurgiens($permType = PERM_READ, $function_id = null, $name = null, $actif = true) {
+    return $this->loadListFromType(array("Chirurgien", "Dentiste"), $permType, $function_id, $name, $actif);
   }
 
-  function loadAnesthesistes($permType = PERM_READ, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Anesthésiste"), $permType, $function_id, $name);
+  function loadAnesthesistes($permType = PERM_READ, $function_id = null, $name = null, $actif = true) {
+    return $this->loadListFromType(array("Anesthésiste"), $permType, $function_id, $name, $actif);
   }
 
-  function loadPraticiens($permType = PERM_READ, $function_id = null, $name = null, $secondary = false) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Dentiste"), $permType, $function_id, $name, $secondary);
+  function loadPraticiens($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Dentiste"), $permType, $function_id, $name, $secondary, $actif);
   }
 
-  function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary);
+  function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary, $actif);
   }
   
   function loadPraticiensCompta(){
