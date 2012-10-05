@@ -231,11 +231,7 @@ class CTemplateManager {
       $_field = &$this->sections[$section][$field];
       $file = new CFile();
       $file->load($_field['value']);
-      
-      $src = $this->valueMode && $file->_file_path ?
-        "data:image/png;base64,".urlencode(base64_encode(file_get_contents($file->_file_path))) :
-        $_field['fieldHTML'];
-      
+      $src = $this->valueMode ? $file->getDataURI() :$_field['fieldHTML'];
       $_field["field"] = "<img src=\"$src\" />";
     }
   }
@@ -601,7 +597,7 @@ class CTemplateManager {
         else if ($property["valueHTML"] && isset($property["options"]["image"])) {
           $file = new CFile();
           $file->load($property['value']);
-          $src = $file->_file_path ?  "data:image/png;base64,".urlencode(base64_encode(file_get_contents($file->_file_path))) : "";
+          $src = $file->getDataURI();
           $fields[] = "src=\"{$property['fieldHTML']}\"";
           $values[] = "src=\"$src\"";
         }

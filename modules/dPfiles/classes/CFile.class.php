@@ -548,6 +548,12 @@ class CFile extends CDocumentItem {
     return $file;
   }
   
+  function getDataURI() {
+    return $this->_file_path ? 
+      "data:".$this->file_type.";base64,".urlencode(base64_encode(file_get_contents($this->_file_path))) :
+      "";
+  }
+  
   function streamFile() {
     header("Pragma: ");
     header("Cache-Control: ");
