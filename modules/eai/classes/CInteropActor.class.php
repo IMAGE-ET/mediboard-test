@@ -31,6 +31,8 @@ class CInteropActor extends CMbObject {
   var $_tag_sejour               = null;
   var $_tag_mediuser             = null;
   var $_tag_service              = null;
+  var $_tag_chambre              = null;
+  var $_tag_lit                  = null;
   var $_tag_movement             = null;
   var $_tag_visit_number         = null;
   var $_tag_hprimxml             = null;
@@ -56,6 +58,8 @@ class CInteropActor extends CMbObject {
     $props["_tag_sejour"]       = "str";
     $props["_tag_mediuser"]     = "str";
     $props["_tag_service"]      = "str";
+    $props["_tag_chambre"]      = "str";
+    $props["_tag_lit"]          = "str";
     $props["_tag_movement"]     = "str";
     $props["_tag_visit_number"] = "str";
     $props["_tag_hprimxml"]     = "str";
@@ -73,10 +77,13 @@ class CInteropActor extends CMbObject {
     $this->_tag_sejour        = CSejour::getTagNDA($this->group_id);
     $this->_tag_mediuser      = CMediusers::getTagMediusers($this->group_id);
     $this->_tag_service       = CService::getTagService($this->group_id);
+    $this->_tag_chambre       = CChambre::getTagChambre($this->group_id);
+    $this->_tag_lit           = CLit::getTagLit($this->group_id);
     $this->_tag_movement      = CMovement::getTagMovement($this->group_id);
     $this->_tag_visit_number  = CSmp::getTagVisitNumber($this->group_id);
 
     $this->_tag_hprimxml      = CHprimXML::getDefaultTag($this->group_id);
+    
     if (CModule::getActive("phast")) {
       $this->_tag_phast  = CPhast::getTagPhast($this->group_id);
     }

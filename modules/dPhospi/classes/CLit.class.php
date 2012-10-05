@@ -170,6 +170,26 @@ class CLit extends CMbObject {
   function loadRefsLiaisonsItems() {
     return $this->_ref_liaisons_items = $this->loadBackRefs("liaisons_items");
   }
+  
+  /**
+   * Construit le tag Lit en fonction des variables de configuration
+   * @param $group_id Permet de charger l'id externe d'un lit pour un établissement donné si non null
+   * @return string
+   */
+  static function getTagLit($group_id = null) {
+    // Pas de tag Lit
+    if (null == $tag_lit = CAppUI::conf("dPhospi CLit tag")) {
+      return;
+    }
+
+    // Permettre des id externes en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+    
+    return str_replace('$g', $group_id, $tag_lit);
+  }
 }
 
 CLit::$_prefixe = CAppUI::conf("dPhospi CLit prefixe");

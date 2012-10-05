@@ -207,6 +207,26 @@ class CChambre extends CMbObject {
     $this->_conflits_pathologies /= 2;
     $this->_conflits_chirurgiens /= 2;
   }
+
+  /**
+   * Construit le tag Chambre en fonction des variables de configuration
+   * @param $group_id Permet de charger l'id externe d'une chambre pour un établissement donné si non null
+   * @return string
+   */
+  static function getTagChambre($group_id = null) {
+    // Pas de tag Chambre
+    if (null == $tag_chambre = CAppUI::conf("dPhospi CChambre tag")) {
+      return;
+    }
+
+    // Permettre des id externes en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+    
+    return str_replace('$g', $group_id, $tag_chambre);
+  }
 }
 
 CChambre::$_prefixe = CAppUI::conf("dPhospi CChambre prefixe");
