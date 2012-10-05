@@ -12,6 +12,8 @@ $where = array();
 $ljoin = array();
 
 $user_id = CValue::get("user_id");
+$type_prescription = CValue::get("type_prescription");
+
 CValue::setSession("user_id", $user_id);
 $start = intval(CValue::get("start", 0));
 
@@ -55,6 +57,10 @@ $fields = array(
     "codes_ccam" => null,
     "_rques_interv" => null,
   ),
+  "CPrescriptionLineMedicament" => array(
+    "code_cis" => "=",
+    "code_ucd" => "="
+  )
 );
 
 $one_field = false;
@@ -79,7 +85,6 @@ foreach($fields as $_class => $_fields) {
       $where["$prefix.$_field"] = $ds->prepareLike("%$_value%");
   }
 }
-
 
 $sejour_data = $data["CSejour"];
 if (!empty($sejour_data["entree"]) || !empty($sejour_data["sortie"])) {
@@ -172,6 +177,23 @@ $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
 
 $list_patient = array();
 $count_patient = array();
+
+// CPrescription ----------------------------
+$prescription_data = $data["CPrescriptionLineMedicament"];
+
+if (!empty($prescription_data["code_cis"]) || !empty($prescription_data["code_ucd"])) {
+  switch ($type_prescription) {
+    case "externe":
+      $ljoin["prescription"] = "prescription.object_class = 'CConsultation' AND prescription.object_id = consultation.consultation_id";
+      break;
+    case "pre_admission":
+    case "sejour":
+    case "sortie":
+      $ljoin["prescription"] = "prescription.object_class = 'CSejour' AND prescription.object_id = sejour.sejour_id";
+  }
+  $where["prescription.type"] = "= '$type_prescription'";
+  $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_id = prescription.prescription_id";
+}
 
 if ($one_field) {
   $list_patient = $patient->loadList($where, "patients.nom, patients.prenom", "$start,30", "patients.patient_id", $ljoin);

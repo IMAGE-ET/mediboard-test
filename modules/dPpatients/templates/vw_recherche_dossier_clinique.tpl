@@ -11,14 +11,32 @@
 {{mb_script module=patients script=patient}}
 {{mb_script module=planningOp script=ccam_selector}}
 
-{{main}}
-  getForm('rechercheDossierClinique').onsubmit();
-{{/main}}
-
 <script type="text/javascript">
 function changePage (start) {
   $V(getForm('rechercheDossierClinique').start, start);
 }
+Main.add(function() {
+  var form = getForm("rechercheDossierClinique");
+  
+  // Autocomplete des medicaments
+  var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
+  url.addParam("produit_max", 40);
+  url.autoComplete(form.produit, "produit_auto_complete", {
+    minChars: 3,
+    afterUpdateElement: function(input, selected) {
+      var code_cis = selected.select(".code-cis")[0].innerHTML;
+      if (code_cis != "") {
+        $V(input.form.code_cis, code_cis);
+      }
+      // Si pas de cis, on recherche par ucd
+      else {
+        $V(input.form.code_ucd, selected.select(".code-ucd")[0].innerHTML);
+      }
+      $V(input, selected.select(".libelle")[0].innerHTML);
+    }
+  } );
+  form.onsubmit();
+});
 </script>
 
 <form name="rechercheDossierClinique" method="get" action="?" onsubmit="return Url.update(this, 'search-results')">
@@ -201,6 +219,38 @@ function changePage (start) {
               </script>
               <br />
               (codes complets ou partiels séparés par des virgules)
+            </td>
+          </tr>
+          
+          <tr>
+            <th colspan="2" class="title">{{tr}}CPrescription{{/tr}}</th>
+          </tr>
+          <tr>
+            <th>{{mb_label object=$prescription field=type}}</th>
+            <td>
+              <label>
+                <input type="radio" name="type_prescription" value="externe" checked/> Externe
+              </label>
+              <label>
+                <input type="radio" name="type_prescription" value="pre_admission" /> Pré-admission
+              </label>
+              <label>
+                <input type="radio" name="type_prescription" value="sejour" /> Séjour
+              </label>
+              <label>
+                <input type="radio" name="type_prescription" value="sortie" /> Sortie
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <th>Produit</th>
+            <td>
+              <input type="hidden" name="code_cis" />
+              <input type="hidden" name="code_ucd" />
+              <input type="text" name="produit" value="&mdash; {{tr}}CPrescription.select_produit{{/tr}}" size="20"
+                style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete"
+                onclick="$V(this, '')"/>
+              <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>
             </td>
           </tr>
           
