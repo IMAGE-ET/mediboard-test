@@ -182,7 +182,7 @@ modifMontantBVR = function (num_bvr){
                 {{mb_field object=$reglement field=reference style="display: none"}}
               </td>
               <td><input type="text" class="currency notNull" size="4" maxlength="8" name="montant" value="{{$object->_du_restant_patient}}" /></td>
-              <td>{{mb_field object=$_reglement field=date register=true form="reglement-add" value="now"}}</td>
+              <td>{{mb_field object=$reglement field=date register=true form="reglement-add" value="now"}}</td>
               <td>
                 <button class="add notext" type="submit">{{tr}}Add{{/tr}}</button>
               </td>

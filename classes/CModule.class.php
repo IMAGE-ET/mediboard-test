@@ -436,5 +436,3 @@ class CModule extends CMbObject {
 }
 
 CModule::loadModules(false);
-
-?>

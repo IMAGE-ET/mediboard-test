@@ -1,9 +1,9 @@
 <?php /* $Id:acteccam.class.php 8144 2010-02-25 11:05:27Z rhum1 $ */
 
 /**
- *	@package Mediboard
- *	@subpackage mediusers
- *	@version $Revision:8144 $
+ *  @package Mediboard
+ *  @subpackage mediusers
+ *  @version $Revision:8144 $
  *  @author Thomas Despoix
  */
 
@@ -22,7 +22,7 @@ class CActeCCAM extends CActe {
   );
   
   // DB Table key
-	var $acte_id = null;
+  var $acte_id = null;
 
   // DB Fields
   var $code_acte           = null;
@@ -104,16 +104,14 @@ class CActeCCAM extends CActe {
       // dans le cas de la modification
       $where["acte_id"]     = "<> '$this->_id'";  
     }
-    $this->completeField("code_acte");
-    $this->completeField("object_class");
-    $this->completeField("object_id");
-    $this->completeField("code_activite");
-    $this->completeField("code_phase");
+    
+    $this->completeField("code_acte", "object_class", "object_id", "code_activite", "code_phase");
     $where["code_acte"]     = "= '$this->code_acte'";
     $where["object_class"]  = "= '$this->object_class'";
     $where["object_id"]     = "= '$this->object_id'";
     $where["code_activite"] = "= '$this->code_activite'";
     $where["code_phase"]    = "= '$this->code_phase'";
+    
     $this->_ref_siblings = $acte->loadList($where);
 
     // retourne le nombre de code semblables
@@ -155,7 +153,7 @@ class CActeCCAM extends CActe {
     
     if ($msg = $this->checkEnoughCodes()) {
       // Ajoute le code si besoins à l'objet
-      if ($this->_adapt_object) {
+      if ($this->_adapt_object || $this->_forwardRefMerging) {
         $this->_ref_object->_codes_ccam[] = $this->code_acte;
         $this->_ref_object->updateDBCodesCCAMField();
         return $this->_ref_object->store();
@@ -172,14 +170,14 @@ class CActeCCAM extends CActe {
    * @return string Serialised full code
    */
   function makeFullCode() {
-	  return $this->code_acte.
-	    "-". $this->code_activite.
-	    "-". $this->code_phase.
-	    "-". $this->modificateurs.
-	    "-". str_replace("-","*", $this->montant_depassement).
-	    "-". $this->code_association.
-	    "-". $this->rembourse.
-	    "-". $this->charges_sup;
+    return $this->code_acte.
+      "-". $this->code_activite.
+      "-". $this->code_phase.
+      "-". $this->modificateurs.
+      "-". str_replace("-","*", $this->montant_depassement).
+      "-". $this->code_association.
+      "-". $this->rembourse.
+      "-". $this->charges_sup;
   }
 
   /**
@@ -242,9 +240,9 @@ class CActeCCAM extends CActe {
     $this->_rembex = $this->rembourse && $code->remboursement == 3 ? '1' : '0';
   }
   
-	function updateMontantBase() {
+  function updateMontantBase() {
     return $this->montant_base = $this->getTarif();  
-	}
+  }
   
   /**
    * Check if acte is compatible with others already coded
@@ -300,12 +298,12 @@ class CActeCCAM extends CActe {
       }
     }
   }
-	
+  
   function store() {
     // Sauvegarde du montant de base
     if ($this->_calcul_montant_base) {
       $this->updateFormFields();
-			$this->updateMontantBase();
+      $this->updateMontantBase();
     }
    
     // En cas d'une modification autre que signe, on met signe à 0
@@ -317,7 +315,7 @@ class CActeCCAM extends CActe {
       // Parcours des objets pour detecter les modifications
       $_modif = 0;
       foreach($oldObject->getPlainFields() as $propName => $propValue) {
-      	if (($this->$propName !== null) && ($propValue != $this->$propName)) {
+        if (($this->$propName !== null) && ($propValue != $this->$propName)) {
           $_modif++;
         }
       }
@@ -333,7 +331,7 @@ class CActeCCAM extends CActe {
   }
   
   function loadRefObject(){
-  	$this->loadTargetObject(true);
+    $this->loadTargetObject(true);
   }
 
   function loadRefCodeCCAM() {
@@ -363,20 +361,20 @@ class CActeCCAM extends CActe {
   }
   
   function getFavoris($user_id, $class) {
-  	$condition = ( $class == "" ) ? "executant_id = '$user_id'" : "executant_id = '$user_id' AND object_class = '$class'";
-  	$sql = "select code_acte, object_class, count(code_acte) as nb_acte
+    $condition = ( $class == "" ) ? "executant_id = '$user_id'" : "executant_id = '$user_id' AND object_class = '$class'";
+    $sql = "select code_acte, object_class, count(code_acte) as nb_acte
             from acte_ccam
             where $condition
             group by code_acte
             order by nb_acte DESC
             limit 20";
-  	$codes = $this->_spec->ds->loadlist($sql);
-  	return $codes;
+    $codes = $this->_spec->ds->loadlist($sql);
+    return $codes;
   }
   
   function getPerm($permType) {
     if(!$this->_ref_object) {
-    	$this->loadRefObject();
+      $this->loadRefObject();
     }
     return $this->_ref_object->getPerm($permType);
   }
@@ -541,10 +539,10 @@ class CActeCCAM extends CActe {
     
     if ($this->object_class == "COperation") {
       $this->loadRefObject();
-			$operation =& $this->_ref_object;
-			$operation->loadRefSejour();
-			$sejour =& $operation->_ref_sejour;
-			if($sejour->DP) {
+      $operation =& $this->_ref_object;
+      $operation->loadRefSejour();
+      $sejour =& $operation->_ref_sejour;
+      if($sejour->DP) {
         if ($sejour->DP[0] == "S" || $sejour->DP[0] == "T") {
           $DPST = true;
           $membresDiff = true;
@@ -800,9 +798,9 @@ class CActeCCAM extends CActe {
     $this->_tarif = ($this->_tarif * ($coefficient / 100) + $forfait) * ($coeffAsso / 100);
     
     // Charges supplémentaires
-	  if ($this->charges_sup) {
-	    $this->_tarif += $phase->charges;
-	  }
+    if ($this->charges_sup) {
+      $this->_tarif += $phase->charges;
+    }
     
     return $this->_tarif;
   }

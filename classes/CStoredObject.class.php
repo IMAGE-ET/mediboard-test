@@ -60,6 +60,7 @@ class CStoredObject extends CModelObject {
   var $_merging           = null;
   var $_purge             = null;
   var $_forwardRefMerging = null;
+  var $_mergeDeletion     = null;
   
   /**
    * Check whether object is persistant (ie has a specified table) 
@@ -441,12 +442,14 @@ class CStoredObject extends CModelObject {
   
   /**
    * Permission wise load list alternative, with limit simulatio when necessary
+   * 
    * @param $permType 
    * @param $where
    * @param $order
    * @param $limit
    * @param $group
    * @param $leftjoin
+   * 
    * @return unknown_type
    */
   function loadListWithPerms($permType = PERM_READ, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
@@ -471,8 +474,10 @@ class CStoredObject extends CModelObject {
   
   /**
    * Filters an object collection according to given permission
+   * 
    * @param $objects array Objects to be filtered
    * @param $permType int  One of PERM_READ, PERM_EDIT
+   * 
    * @return array Collection of filtered objects
    */
   static function filterByPerm(&$objects = array/*<CMbObject>*/(), $permType = PERM_READ) {
@@ -487,7 +492,9 @@ class CStoredObject extends CModelObject {
   
   /**
    * Load all objects for given identifiers
-   * @params array $ids list of identifiers
+   * 
+   * @param array $ids list of identifiers
+   * 
    * @return array list of objects
    */
   function loadAll($ids) {
@@ -497,16 +504,20 @@ class CStoredObject extends CModelObject {
   
   /**
    * Loads the first object matching defined properties
+   * 
    * @param array|string $order Order SQL statement
    * @param array|string $group Group by SQL statement
    * @param array        $ljoin Left join SQL statement collection
+   * @param array|string $index Force index
+   * 
    * @return integer The found object's ID
    */
-  function loadMatchingObject($order = null, $group = null, $ljoin = null) {
+  function loadMatchingObject($order = null, $group = null, $ljoin = null, $index = null) {
     $request = new CRequest;
     $request->addLJoin($ljoin);
     $request->addGroup($group);
     $request->addOrder($order);
+    $request->addForceIndex($index);
 
     $this->updatePlainFields();
     $fields = $this->getPlainFields();
@@ -516,15 +527,18 @@ class CStoredObject extends CModelObject {
       }
     }
     
-    $this->loadObject($request->where, $request->order, $request->group, $request->ljoin);
+    $this->loadObject($request->where, $request->order, $request->group, $request->ljoin, $request->forceindex);
     return $this->_id;
   }
   
   /**
    * Loads the first object matching defined properties, escaping the values
+   * 
    * @param array|string $order Order SQL statement
    * @param array|string $group Group by SQL statement
    * @param array        $ljoin Left join SQL statement collection
+   * @param array|string $index Force index
+   * 
    * @return integer The found object's ID
    */
   function loadMatchingObjectEsc($order = null, $group = null, $ljoin = null) {
@@ -536,18 +550,22 @@ class CStoredObject extends CModelObject {
   
   /**
    * Loads the list of objects matching the $this properties
+   * 
    * @param array|string $order Order SQL statement
    * @param string       $limit Limit SQL statement
    * @param array|string $group Group by SQL statement
    * @param array        $ljoin Left join SQL statement collection
+   * @param array|string $index Force index
+   * 
    * @return array The list of objects
    */
-  function loadMatchingList($order = null, $limit = null, $group = null, $ljoin = null) {
+  function loadMatchingList($order = null, $limit = null, $group = null, $ljoin = null, $index = null) {
     $request = new CRequest;
     $request->addLJoin($ljoin);
     $request->addGroup($group);
     $request->addOrder($order);
     $request->setLimit($limit);
+    $request->addForceIndex($index);
 
     $this->updatePlainFields();
     $fields = $this->getPlainFields();
@@ -557,34 +575,41 @@ class CStoredObject extends CModelObject {
       }
     }
     
-    return $this->loadList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
+    return $this->loadList($request->where, $request->order, $request->limit, $request->group, $request->ljoin, $request->forceindex);
   }
   
   /**
    * Loads the list of objects matching the $this properties, escaping the values
+   * 
    * @param array|string $order Order SQL statement
    * @param string       $limit Limit SQL statement
    * @param array|string $group Group by SQL statement
    * @param array        $ljoin Left join SQL statement collection
+   * @param array|string $index Force index
+   * 
    * @return array The list of objects
    */
-  function loadMatchingListEsc($order = null, $limit = null, $group = null, $ljoin = null) {
+  function loadMatchingListEsc($order = null, $limit = null, $group = null, $ljoin = null, $index = null) {
     $this->escapeValues();
-    $ret = $this->loadMatchingList($order, $limit, $group, $ljoin);
+    $ret = $this->loadMatchingList($order, $limit, $group, $ljoin, $index);
     $this->unescapeValues();
     return $ret;
   }
   
   /**
    * Size of the list of objects matching the $this properties
+   * 
    * @param array|string $group Group by SQL statement
    * @param array        $ljoin Left join SQL statement collection
+   * @param array|string $index Force index
+   * 
    * @return integer The count
    */
-  function countMatchingList($group = null, $ljoin = null) {
+  function countMatchingList($group = null, $ljoin = null, $index = null) {
     $request = new CRequest;
     $request->addLJoin($ljoin);
     $request->addGroup($group);
+    $request->addForceIndex($index);
 
     $this->updatePlainFields();
     $fields = $this->getPlainFields();
@@ -593,32 +618,38 @@ class CStoredObject extends CModelObject {
         $request->addWhereClause($key, "= '$value'");
       }
     }
-    return $this->countList($request->where, $request->group, $request->ljoin);
+    return $this->countList($request->where, $request->group, $request->ljoin, $request->forceindex);
   }
   
   /**
    * Size of the list of objects matching the $this properties, escaping the values
+   * 
    * @param array|string $group Group by SQL statement
    * @param array        $ljoin Left join SQL statement collection
+   * @param array|string $index Force index
+   * 
    * @return integer The count
    */
-  function countMatchingListEsc($group = null, $ljoin = null) {
+  function countMatchingListEsc($group = null, $ljoin = null, $index = null) {
     $this->escapeValues();
-    $ret = $this->countMatchingList($group, $ljoin);
+    $ret = $this->countMatchingList($group, $ljoin, $index);
     $this->unescapeValues();
     return $ret;
   }
   
   /**
    * Loads the first object matching the query
+   * 
    * @param array        $where Where SQL statement
    * @param array|string $order Order SQL statement
    * @param array|string $group Group by SQL statement
    * @param array        $ljoin Left join SQL statement collection
+   * @param array|string $index Force index
+   * 
    * @return boolean True if the object was found
    */
-  function loadObject($where = null, $order = null, $group = null, $ljoin = null) {
-    $list = $this->loadList($where, $order, '0,1', $group, $ljoin);
+  function loadObject($where = null, $order = null, $group = null, $ljoin = null, $index = null) {
+    $list = $this->loadList($where, $order, '0,1', $group, $ljoin, $index);
 
     if ($list)
     foreach($list as $object) {
@@ -634,12 +665,14 @@ class CStoredObject extends CModelObject {
   
   /**
    * Object list by a request constructor
-   * @param array        $where Where SQL statement
-   * @param array|string $order Order SQL statement
-   * @param string       $limit Limit SQL statement
-   * @param array|string $group Group by SQL statement
-   * @param array        $ljoin Left join SQL statement collection
-   * @param boolean      $index Add the forceindex SQL statement
+   * 
+   * @param array   $where Where SQL statement
+   * @param array   $order Order SQL statement
+   * @param string  $limit Limit SQL statement
+   * @param array   $group Group by SQL statement
+   * @param array   $ljoin Left join SQL statement collection
+   * @param boolean $index Add the forceindex SQL statement
+   * 
    * @return self[] List of found objects, null if module is not installed
    */
   function loadList($where = null, $order = null, $limit = null, $group = null, $ljoin = null, $index = null, $found_rows = false) {
@@ -664,11 +697,13 @@ class CStoredObject extends CModelObject {
   
   /**
    * Object list for a given group
-   * @param array        $where Where SQL statement
-   * @param array|string $order Order SQL statement
-   * @param string       $limit Limit SQL statement
-   * @param array|string $group Group by SQL statement
-   * @param array        $ljoin Left join SQL statement collection
+   * 
+   * @param array  $where Where SQL statement
+   * @param array  $order Order SQL statement
+   * @param string $limit Limit SQL statement
+   * @param array  $group Group by SQL statement
+   * @param array  $ljoin Left join SQL statement collection
+   * 
    * @return self[] List of found objects, null if module is not installed
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $group = null, $ljoin = array()) {
@@ -1351,6 +1386,8 @@ class CStoredObject extends CModelObject {
         $this->transferBackRefsFrom($object);
         
       if ($msg) return $msg;
+      
+      $object->_mergeDeletion = true;
       if ($msg = $object->delete()) return $msg;
     }
     
@@ -1535,7 +1572,8 @@ class CStoredObject extends CModelObject {
 
     $count = count($backRefs);
     if ($count > 1) {
-      trigger_error("'$backName' back reference should be unique (actually $count) for object of class '$this->_view'", E_USER_WARNING);
+      $ids = array_keys($backRefs);
+      trigger_error("'$backName' back reference should be unique (actually $count: ".implode(", ", $ids).") for object '$this->_view' of class '$this->_class'", E_USER_WARNING);
     }
     
     if (!$count) {

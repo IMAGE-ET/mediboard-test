@@ -361,7 +361,7 @@ class CConsultation extends CCodable {
       }
     }
     */
-    if ($this->_old->valide === "1" && $this->valide === "1") {
+    if (!($this->_merging || $this->_mergeDeletion) && $this->_old->valide === "1" && $this->valide === "1") {
       // Modification du tarif déjà validé
       if ($this->fieldModified("secteur1")
        || $this->fieldModified("secteur2")
@@ -1593,10 +1593,12 @@ TESTS A EFFECTUER
   }
 
   function canDeleteEx() {
-    // Date dépassée
-    $this->loadRefPlageConsult();
-    if ($this->_date < mbDate() && !$this->_ref_module->_can->admin) {
-      return "Impossible de supprimer une consultation passée";
+    if (!$this->_mergeDeletion) {
+      // Date dépassée
+      $this->loadRefPlageConsult();
+      if ($this->_date < mbDate() && !$this->_ref_module->_can->admin) {
+        return "Impossible de supprimer une consultation passée";
+      }
     }
 
     return parent::canDeleteEx();

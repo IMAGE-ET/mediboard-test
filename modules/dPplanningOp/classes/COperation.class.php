@@ -11,6 +11,10 @@
 class COperation extends CCodable implements IPatientRelated {
   // DB Table key
   var $operation_id  = null;
+  
+  // Clôture des actes
+  var $cloture_activite_1    = null;
+  var $cloture_activite_4    = null;
 
   // DB References
   var $sejour_id  = null;
@@ -274,6 +278,10 @@ class COperation extends CCodable implements IPatientRelated {
     $props["presence_preop"]       = "time show|0";
     $props["presence_postop"]      = "time show|0";
     $props["envoi_mail"]           = "dateTime show|0";
+    
+    // Clôture des actes
+    $props["cloture_activite_1"]    = "bool default|0";
+    $props["cloture_activite_4"]    = "bool default|0";
     
     $props["cote_admission"]      = $protocole->_props["cote"] . " show|0";
     $props["cote_consult_anesth"] = $protocole->_props["cote"] . " show|0";

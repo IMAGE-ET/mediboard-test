@@ -14,6 +14,10 @@
 class CSejour extends CCodable implements IPatientRelated {
   // DB Table key
   var $sejour_id = null;
+  
+  // Clôture des actes
+  var $cloture_activite_1    = null;
+  var $cloture_activite_4    = null;
 
   // DB Réference
   var $patient_id          = null;
@@ -367,6 +371,10 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["rques_assurance_accident"] = "text helped";
     $props["date_accident"]            = "date";
     $props["nature_accident"]          = "enum list|P|T|D|S|J|C|L|B|U";
+    
+    // Clôture des actes
+    $props["cloture_activite_1"]    = "bool default|0";
+    $props["cloture_activite_4"]    = "bool default|0";
 
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";
