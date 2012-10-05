@@ -878,7 +878,12 @@ class CSetuphl7 extends CSetup {
                 ADD `control_date` ENUM ('permissif','strict') DEFAULT 'strict';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.36";
+    $this->makeRevision("0.36");
+    $query = "ALTER TABLE `hl7_config` 
+              ADD `handle_PV1_3` ENUM ('name','config_value','idex') DEFAULT 'name';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.37";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

@@ -1192,13 +1192,29 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getPL(DOMNode $node, CAffectation $affectation) {
+    $sender = $this->_ref_sender;
+    
     $code_uf     = $this->queryTextNode("PL.1", $node);    
     $nom_lit     = $this->queryTextNode("PL.3", $node);
     
     $lit = new CLit();
-    $lit->nom = $nom_lit;
-    $lit->loadMatchingObjectEsc();
     
+    // Récupération du lit
+    switch ($sender->_configs["handle_PV1_3"]) {
+      // idex du service
+      case 'idex':
+        $lit_id = CIdSante400::getMatch("CLit", $sender->_tag_lit, $nom_lit)->object_id;
+        $lit->load($lit_id);
+        
+        break;
+      // Dans tous les cas le nom du lit est celui que l'on reçoit du flux
+      default:
+        $lit->nom = $nom_lit;
+        $lit->loadMatchingObjectEsc();
+        
+        break; 
+    }
+        
     // Affectation du lit
     $affectation->lit_id = $lit->_id;
     

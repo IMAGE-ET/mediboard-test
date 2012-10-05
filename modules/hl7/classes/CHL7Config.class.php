@@ -37,6 +37,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     // Handle
     "handle_mode",
     "handle_NDA",
+    "handle_PV1_3",
     "handle_PV1_10",
     "handle_PV1_14",
     "handle_PV1_36",
@@ -71,6 +72,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   
   var $handle_mode   = null;
   var $handle_NDA    = null;
+  var $handle_PV1_3  = null;
   var $handle_PV1_10 = null;
   var $handle_PV1_14 = null;
   var $handle_PV1_36 = null;
@@ -106,6 +108,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle" => array(
       "handle_mode",
       "handle_NDA",
+      "handle_PV1_3",
       "handle_PV1_10",
       "handle_PV1_14",
       "handle_PV1_36",
@@ -158,6 +161,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["handle_NDA"] = "enum list|PID_18|PV1_19 default|PID_18";
     $props["handle_NSS"] = "enum list|PID_3|PID_19 default|PID_3";
     // => PV1
+    $props["handle_PV1_3"]  = "enum list|name|config_value|idex default|name";
     $props["handle_PV1_10"] = "enum list|discipline|service default|discipline";
     $props["handle_PV1_14"] = "enum list|admit_source|ZFM default|admit_source";
     $props["handle_PV1_36"] = "enum list|discharge_disposition|ZFM default|discharge_disposition";
