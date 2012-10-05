@@ -22,43 +22,59 @@ if (!$receiver_guid || !$receiver->_id) {
   CAppUI::stepAjax("CInteropReceiver.none", UI_MSG_ERROR); 
 }
 
-// Filtre sur les enregistrements
-$sejour = new CSejour();
-$action = CValue::get("action", "start");
+// On rejoue pour une liste de NDA
+if ($list_nda = CValue::get("list_nda")) {
+  $ndas = explode("|", $list_nda);
+  
+  $sejours = array();
+  foreach ($ndas as $_nda) {
+    $sejour = new CSejour();
+    $sejour->loadFromNDA($_nda);
 
-// Tous les départs possibles
-$idMins = array(
-  "start"    => CValue::get("id_start", "000000"),
-  "continue" => CValue::getOrSession("idContinue"),
-  "retry"    => CValue::getOrSession("idRetry"),
-);
-
-$idMin = CValue::first(@$idMins[$action], "000000");
-CValue::setSession("idRetry", $idMin);
-
-// Requêtes
-$where = array();
-$where[$sejour->_spec->key] = "> '$idMin'";
-$where['annule']            = " = '0'";
-
-$date_min = CValue::getOrSession('date_min', mbDateTime("-7 day"));
-$date_max = CValue::getOrSession('date_max', mbDateTime("+1 day"));
-
-// Bornes
-$where['entree'] = " BETWEEN '$date_min' AND '$date_max'";
-
-// Comptage
-$count_sejours = $sejour->countList($where);
-$max           = min(CValue::get("count", 30), $count_sejours);
-CAppUI::stepAjax("Export de $max sur $count_sejours objets de type 'CSejour' à partir de l'ID '$idMin'", UI_MSG_OK);
-
-// Time limit
-$seconds = max($max / 20, 120);
-CAppUI::stepAjax("Limite de temps du script positionné à '$seconds' secondes", UI_MSG_OK);
-set_time_limit($seconds);
-
-// Export réel
-$sejours  = $sejour->loadList($where, $sejour->_spec->key, "0, $max");
+    if ($sejour->_id) {
+      $sejours[] = $sejour;
+    }
+  }
+}
+else {
+  // Filtre sur les enregistrements
+  $sejour = new CSejour();
+  $action = CValue::get("action", "start");
+  
+  // Tous les départs possibles
+  $idMins = array(
+    "start"    => CValue::get("id_start", "000000"),
+    "continue" => CValue::getOrSession("idContinue"),
+    "retry"    => CValue::getOrSession("idRetry"),
+  );
+  
+  $idMin = CValue::first(@$idMins[$action], "000000");
+  CValue::setSession("idRetry", $idMin);
+  
+  // Requêtes
+  $where = array();
+  $where[$sejour->_spec->key] = "> '$idMin'";
+  $where['annule']            = " = '0'";
+  
+  $date_min = CValue::getOrSession('date_min', mbDateTime("-7 day"));
+  $date_max = CValue::getOrSession('date_max', mbDateTime("+1 day"));
+  
+  // Bornes
+  $where['entree'] = " BETWEEN '$date_min' AND '$date_max'";
+  
+  // Comptage
+  $count_sejours = $sejour->countList($where);
+  $max           = min(CValue::get("count", 30), $count_sejours);
+  CAppUI::stepAjax("Export de $max sur $count_sejours objets de type 'CSejour' à partir de l'ID '$idMin'", UI_MSG_OK);
+  
+  // Time limit
+  $seconds = max($max / 20, 120);
+  CAppUI::stepAjax("Limite de temps du script positionné à '$seconds' secondes", UI_MSG_OK);
+  set_time_limit($seconds);
+  
+  // Export réel
+  $sejours  = $sejour->loadList($where, $sejour->_spec->key, "0, $max");
+}
 
 $errors   = 0;
 $exchange = 0;

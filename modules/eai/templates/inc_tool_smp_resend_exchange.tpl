@@ -53,6 +53,10 @@
       <td><input type="text" name="id_start" value="" size="6" title="Démarrer à l'ID ..." /></td>
     </tr>
     <tr>
+      <th>NDA (si plusieurs séparer par des |)</th>
+      <td><input type="text" name="list_nda" value="" size="25" placeholder="NDA des séjours à rejouer" /></td>
+    </tr>
+    <tr>
       <th>{{tr}}CInteropReceiver{{/tr}}</th>
       <td>
         <select name="receiver_guid">
