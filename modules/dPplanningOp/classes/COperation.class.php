@@ -626,9 +626,15 @@ class COperation extends CCodable implements IPatientRelated {
       "plageop_id", 
       "chir_id", 
       "materiel", 
-      "commande_mat"
+      "commande_mat",
+      "date"
     );
-                         
+    
+    // Problème après fusion si on a la date et la plage
+    if ($this->date && $this->plageop_id) {
+      $this->date = "";
+    }
+                 
     // Si on choisit une plage, on copie la salle
     if ($this->fieldValued("plageop_id")) {
       $plage = $this->loadRefPlageOp();
