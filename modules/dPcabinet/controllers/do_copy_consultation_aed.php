@@ -21,6 +21,7 @@ $new_consult->plageconsult_id = $plageconsult_id;
 $new_consult->heure = $heure;
 $new_consult->chrono = CConsultation::PLANIFIE;
 $new_consult->patient_id = $consult->patient_id;
+$new_consult->categorie_id = $consult->categorie_id;
 
 $msg = $new_consult->store();
 
