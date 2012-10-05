@@ -105,7 +105,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $operation->temp_operation = mbSubTime(mbTime($debut), mbTime($fin)); 
     $operation->_hour_op       = null;
     $operation->_min_op        = null;
-      
+
     // Si une intervention du passée    
     if (mbDate($debut) < mbDate()) {
       // On affecte le début de l'opération
@@ -195,7 +195,10 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
       $operation->plageop_id = $plageOp->_id;
     }
     else {
-      $operation->date = $date_op;
+      // Dans le cas où l'on avait une plage sur l'interv on la supprime
+      $operation->plageop_id = "";
+      
+      $operation->date       = $date_op;
     }
   }
   

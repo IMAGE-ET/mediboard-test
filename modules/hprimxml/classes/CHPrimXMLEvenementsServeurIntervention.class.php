@@ -149,6 +149,12 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     // Notifier les autres destinataires autre que le sender
     $sejour->_eai_initiateur_group_id = $sender->group_id;
     
+    /* TODO Supprimer ceci après l'ajout des times picker */
+    $sejour->_hour_entree_prevue = null;
+    $sejour->_min_entree_prevue  = null;
+    $sejour->_hour_sortie_prevue = null;
+    $sejour->_min_sortie_prevue  = null;
+
     if ($msgVenue = $sejour->store()) {
       return $exchange_hprim->setAck($dom_acq, "A102", $msgVenue, null, $sejour);
     }
@@ -187,7 +193,9 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     $this->mappingPlage($data['intervention'], $operation);
     
     // Recherche d'une intervention existante sinon création  
-    $operation->loadMatchingObject();
+    if (!$operation->_id) {
+      $operation->loadMatchingObject();
+    }
     
     // Si pas trouvé on recherche en hors plage
     if (!$operation->_id) {
