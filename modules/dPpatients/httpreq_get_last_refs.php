@@ -14,9 +14,9 @@ $is_anesth = CValue::get("is_anesth", 1);
 $patient = new CPatient;
 $patient->load($patient_id);
 $where = array(
-           "group_id" => "= '".CGroups::loadCurrent()->_id."'",
-           "annule"   => "= '0'"
-         );
+  "group_id" => "= '".CGroups::loadCurrent()->_id."'",
+  "annule"   => "= '0'"
+);
          
 foreach ($patient->loadRefsSejours($where) as $_sejour) {
   foreach ($_sejour->loadRefsConsultations() as $_consult) {
@@ -36,13 +36,20 @@ foreach ($patient->loadRefsConsultations(array("annule" => "= '0'")) as $_consul
     continue;
   }
   
-  $_consult->loadRefPraticien()->loadRefFunction();
-  if($_consult->_ref_praticien->_ref_function->group_id != CGroups::loadCurrent()->_id) {
+  $function = $_consult->loadRefPraticien()->loadRefFunction();
+  if ($function->group_id != CGroups::loadCurrent()->_id) {
     unset($patient->_ref_consultations[$_consult->_id]);
     continue;
   }
+
   $_consult->getType();
   $_consult->loadRefPlageConsult();
+  
+  // Facture de consultation
+  $facture = $_consult->loadRefFacture();
+  if ($facture->_id) {
+    $facture->loadRefsNotes();
+  }
 }
 
 $consultation = new CConsultation();

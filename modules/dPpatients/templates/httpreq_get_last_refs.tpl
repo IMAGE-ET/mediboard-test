@@ -57,9 +57,13 @@
       <ul>
         {{foreach from=$patient->_ref_consultations item=_consult}}
           <li class="iconed-text {{$_consult->_type}}" >
+            {{assign var=facture value=$_consult->_ref_facture}}
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
               Consultation le  {{mb_value object=$_consult field=_datetime}}
             </span>
+            {{if count($facture->_ref_notes)}}
+              {{mb_include module=system template=inc_object_notes object=$facture float=left}}
+            {{/if}}
               avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_consult->_ref_chir}} 
              {{if $_consult->annule}}<span style="color: red;">[ANNULE]</span>{{/if}}
           </li>

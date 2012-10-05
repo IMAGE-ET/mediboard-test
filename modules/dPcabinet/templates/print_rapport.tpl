@@ -72,7 +72,7 @@
     <td colspan="2">
       <table class="tbl">
         <tr>
-          <th class="narrow text">{{tr}}CFactureConsult{{/tr}}</th>
+          <th colspan="2" class="narrow text">{{tr}}CFactureConsult{{/tr}}</th>
           <th style="width: 20%;">{{mb_label class=CConsultation field=patient_id}}</th>
           <th style="width: 20%;">{{mb_label class=CConsultation field=tarif}}</th>
           
@@ -94,9 +94,21 @@
           {{/if}}
           
         </tr>
+        
         {{foreach from=$_plage.factures item=_facture}}
         <tr>
-          <td><strong {{if $_facture->_id}} onmouseover="ObjectTooltip.createEx(this, '{{$_facture->_guid}}')" {{/if}}>{{$_facture}}</strong></td>
+          {{if $_facture->_id}}
+          <td>
+            <strong onmouseover="ObjectTooltip.createEx(this, '{{$_facture->_guid}}')">
+              {{$_facture}}
+            </strong>
+          </td>
+          <td>{{mb_include module=system template=inc_object_notes object=$_facture}}</td>
+          {{else}}
+          <td colspan="2">
+            <strong>{{$_facture}}</strong>
+          </td>
+          {{/if}}
         
           <td class="text">
             <a name="{{$_facture->_guid}}">
@@ -194,7 +206,7 @@
         
         {{/foreach}}
         <tr>
-          <td colspan="3" style="text-align: right" >
+          <td colspan="4" style="text-align: right" >
             <strong>{{tr}}Total{{/tr}}</strong>
           </td>
           <td><strong>{{$_plage.total.secteur1|currency}}</strong></td>

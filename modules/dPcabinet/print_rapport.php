@@ -164,6 +164,7 @@ foreach ($listFactures as $_facture) {
   $_facture->loadRefPatient();
   $_facture->loadRefsConsults();
   $_facture->loadRefsReglements();
+  $_facture->loadRefsNotes();
   
   // Ajout de reglements
   $_facture->_new_reglement_patient = new CReglement();

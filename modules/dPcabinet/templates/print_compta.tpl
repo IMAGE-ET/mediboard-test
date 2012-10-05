@@ -127,7 +127,7 @@
     <td colspan="2">
       <table class="tbl">
         <tr>
-          <th rowspan="2" class="narrow text">{{tr}}CFactureConsult{{/tr}}</th>
+          <th rowspan="2"  colspan="2" class="narrow text">{{tr}}CFactureConsult{{/tr}}</th>
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=_prat_id}}</th>
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=patient_id}}</th>
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=_date}}: {{mb_label class=CConsultation field=tarif}}</th>
@@ -161,7 +161,19 @@
         {{assign var=prat_id value=$facture->_ref_praticien->_id}}
         
         <tr>
-          <td><strong onmouseover="ObjectTooltip.createEx(this, '{{$_reglement->_guid}}')">{{$facture}}</strong></td>
+          {{if $facture->_id}}
+          <td>
+            <strong onmouseover="ObjectTooltip.createEx(this, '{{$facture->_guid}}')">
+              {{$facture}}
+            </strong>
+          </td>
+          <td>{{mb_include module=system template=inc_object_notes object=$facture}}</td>
+          {{else}}
+          <td colspan="2">
+            <strong>{{$facture}}</strong>
+          </td>
+          {{/if}}
+          
           <td class="text">
             {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$listPrat.$prat_id}}
           </td>
@@ -195,7 +207,10 @@
             <td style="text-align: right;">{{mb_value object=$facture field=_montant_avec_remise}}</td>
           {{/if}}
 
-          <td style="text-align: center;">{{mb_value object=$_reglement field=mode}}</td>
+          <td style="text-align: center;">
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_reglement->_guid}}')">{{mb_value object=$_reglement field=mode}}</span>
+          </td>
+          
           <td style="text-align: right;">
             {{if $_reglement->emetteur == "patient"}}
               {{mb_value object=$_reglement field=montant}}
