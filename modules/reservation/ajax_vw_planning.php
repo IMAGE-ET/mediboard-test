@@ -86,6 +86,15 @@ $where["salle_id"] = CSQLDataSource::prepareIn($salles_ids);
 
 $commentaires = $commentaire->loadList($where);
 
+// Récupération des plages opératoires
+$plageop = new CPlageOp();
+$where = array();
+
+$where["date"] = " = '$date_planning'";
+$where["salle_id"] = CSQLDataSource::prepareIn($salles_ids);
+
+$plages = $plageop->loadList($where);
+
 // Création du planning
 $planning = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
 $planning->title =  "Planning du ".mbDateToLocale($date_planning);
@@ -137,6 +146,21 @@ foreach ($commentaires as $key => $_commentaire) {
     $commentaires_by_salle[$salle_id] = array();
   }
   $commentaires_by_salle[$salle_id][] = $_commentaire;
+}
+
+// Tri des plages par salle
+$plages_by_salle = array();
+CMbObject::massLoadFwdRef($plages, "chir_id");
+CMbObject::massLoadFwdRef($plages, "spec_id");
+
+foreach ($plages as $_plage) {
+  $_plage->loadRefChir();
+  $_plage->loadRefSpec();
+  $salle_id = $_plage->salle_id;
+  if (!isset($plages_by_salle[$salle_id])) {
+    $plages_by_salle[$salle_id] = array();
+  }
+  $plages_by_salle[$salle_id][] = $_plage;
 }
 
 // Ajout des événements (opérations)
@@ -285,6 +309,27 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
     if ($can_edit) {
       $event->addMenuItem("edit" , "Modifier ce commentaire");
     }
+    
+    $planning->addEvent($event);
+  }
+}
+
+// Ajout des plages
+foreach ($plages_by_salle as $salle_id => $_plages) {
+  $i = array_search($salle_id, $salles_ids);
+  
+  foreach ($_plages as $_plage) {
+    $debut = "$i ".mbTime($_plage->debut);
+    
+    $duree = mbMinutesRelative(mbTime($_plage->debut), mbTime($_plage->fin));
+    
+    $libelle = $_plage->chir_id ? $_plage->_ref_chir->_view : $_plage->_ref_spec->_view;
+    
+    $event = new CPlanningEvent($_plage->_guid, $debut, $duree, $libelle, "#aaa", true, null, $_plage->_guid, false);
+    
+    $event->type = "commentaire_planning";
+    $event->plage["id"] = $_plage->_id;
+    
     
     $planning->addEvent($event);
   }
