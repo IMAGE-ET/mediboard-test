@@ -162,13 +162,13 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     // Entête
     if ($this->header) {
       $this->margins["top"] += (25.4*$this->header_height)/96;
-      $options .= "--header-html ".escapeshellarg($this->header). "--header-spacing ".escapeshellarg($this->header_spacing)." ";
+      $options .= "--header-html ".escapeshellarg($this->header). " --header-spacing ".escapeshellarg($this->header_spacing)." ";
     }
 
     // Pied de page
     if ($this->footer) {
       $this->margins["bottom"] += ((25.4*$this->footer_height)/96 + $this->footer_spacing); 
-      $options .= "--footer-html ".escapeshellarg($this->footer)." --footer-spacing".escapeshellarg($this->footer_spacing)." ";
+      $options .= "--footer-html ".escapeshellarg($this->footer)." --footer-spacing ".escapeshellarg($this->footer_spacing)." ";
     }
     
     // Marges
