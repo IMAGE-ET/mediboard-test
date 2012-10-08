@@ -66,6 +66,8 @@ class CIHE {
         return CPAM::getEvent($exchange);
       case "DEC" :
         return CDEC::getEvent($exchange);
+      case "SWF" :
+        return CSWF::getEvent($exchange);
       default :
         throw new CMbException("CIHE_event-unknown");
         break;
@@ -101,6 +103,18 @@ class CIHE {
    */
   static function getDECTransaction($code, $i18n = null) {
     return CDEC::getTransaction($code);
+  }
+  
+  /**
+   * Return Scheduled Workflow (SWF) transaction
+   * 
+   * @param string $code Event code
+   * @param string $i18n Internationalization
+   * 
+   * @return object An instance of DEC transaction 
+   */
+  static function getSWFTransaction($code, $i18n = null) {
+    return CSWF::getTransaction($code);
   }
 }
 ?>

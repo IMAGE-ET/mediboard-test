@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Scheduled Workflow Profile IHE
+ * Scheduled Workflow IHE
  *  
  * @category IHE
  * @package  Mediboard
@@ -13,7 +13,7 @@
 
 /**
  * Class CSWF 
- * Scheduled Workflow Profile
+ * Scheduled Workflow
  */
 class CSWF extends CIHE {
   static $versions = array (
