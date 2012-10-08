@@ -94,6 +94,7 @@ $dPconfig["dPplanningOp"]= array(
     "systeme_isolement"  => "standard",
     "easy_isolement"     => "0",
     "show_cmu_ald"       => "1",
+    "show_days_duree"    => "0"
   ),
 );
 

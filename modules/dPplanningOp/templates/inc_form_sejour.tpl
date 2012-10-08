@@ -729,10 +729,13 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="_duree_prevue"}}</th>
-  <td colspan="3">
-    {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 onchange="updateSortiePrevue(); checkDureeHospi('syncType');" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:$_duree_prevue}}
+  <td colspan="3" style="vertical-align: middle">
+    {{mb_field object=$sejour field="_duree_prevue" increment=true form=editSejour prop="num min|0" size=2 onchange="updateSortiePrevue(); checkDureeHospi('syncType'); \$('jours_prevus').update(parseInt(this.value)+1)" value=$sejour->sejour_id|ternary:$sejour->_duree_prevue:$_duree_prevue}}
     {{tr}}night{{/tr}}(s)
     - (<span id="dureeEst"></span>)
+    <span {{if !$conf.dPplanningOp.CSejour.show_days_duree}}style="display: none"{{/if}}>
+      <span id="jours_prevus">{{math equation=x+1 x=$sejour->sejour_id|ternary:$sejour->_duree_prevue:$_duree_prevue}}</span> {{tr}}day{{/tr}}(s)
+    </span>
   </td>
 </tr>
 

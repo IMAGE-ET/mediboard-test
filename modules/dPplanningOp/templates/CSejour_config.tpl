@@ -59,6 +59,8 @@
     {{mb_include module=system template=inc_config_bool var=fiche_conval}}
     {{mb_include module=system template=inc_config_enum var=systeme_isolement values=standard|expert}}
     {{mb_include module=system template=inc_config_bool var=show_cmu_ald}}
+    {{mb_include module=system template=inc_config_bool var=show_days_duree}}
+    
     <tr>
       <th class="title" colspan="2">Heure par defaut du séjour</th>
     </tr>

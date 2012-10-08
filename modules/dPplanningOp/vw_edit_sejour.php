@@ -96,7 +96,7 @@ if (CModule::getActive("maternite")) {
     $sejour->_date_sortie_prevue = mbDate("+ $duree_sejour days");
     $sejour->_duree_prevue = $duree_sejour;
     $sejour->type = $duree_sejour > 0 ? "comp" : "ambu";
-  }
+  }f_duree_prevue
 }
 
 $patient->loadRefsSejours();
