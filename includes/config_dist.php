@@ -187,10 +187,6 @@ $dPconfig["dmi"] = array (
   )
 );
 
-$dPconfig["mediusers"] = array (
-  "tag_mediuser" => ""
-);
-
 // Module config file inclusion
 $config_files = glob("./modules/*/config.php");
 foreach ($config_files as $file) {
