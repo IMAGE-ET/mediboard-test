@@ -27,8 +27,13 @@ $where = array (
 $urgences = $operation->loadGroupList($where, "salle_id, chir_id");
 foreach ($urgences as &$urgence) {
   $urgence->loadRefsFwd();
-  $urgence->_ref_sejour->loadRefPatient();
+  $patient = $urgence->_ref_sejour->loadRefPatient();
+  $dossier_medical = $patient->loadRefDossierMedical();
+  $dossier_medical->loadRefsAntecedents();
+  $dossier_medical->countAntecedents();
+  $dossier_medical->countAllergies();
   $urgence->_ref_chir->loadRefsFwd();
+  
   // Chargement des plages disponibles pour cette intervention
   $urgence->_ref_chir->loadBackRefs("secondary_functions");
   $secondary_functions = array();
@@ -44,7 +49,7 @@ foreach ($urgences as &$urgence) {
   $plage = new CPlageOp;
   $urgence->_alternate_plages = $plage->loadList($where, $order);
   foreach($urgence->_alternate_plages as $curr_plage) {
-  	$curr_plage->loadRefsFwd();
+    $curr_plage->loadRefsFwd();
   }
 }
 

@@ -29,7 +29,8 @@ Main.add(function () {
   {{foreach from=$urgences item=_op}}
   {{assign var=sejour value=$_op->_ref_sejour}}
   {{assign var=patient value=$sejour->_ref_patient}}
-
+  {{assign var=consult_anesth value=$_op->_ref_consult_anesth}}
+  
   <tr>
     <td>
       <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}"
@@ -106,6 +107,23 @@ Main.add(function () {
     </td>
     {{/if}}
     <td class="text">
+      <span style="float: right;">
+        {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+        {{assign var=sejour_id value=$sejour->_id}}
+        {{assign var=antecedents value=$dossier_medical->_ref_antecedents_by_type}}
+        {{mb_include module=soins template=inc_vw_antecedent_allergie nodebug=true}}
+        {{if $dossier_medical->_id && $dossier_medical->_count_allergies}}
+          <script type="text/javascript">
+            ObjectTooltip.modes.allergies = {  
+              module: "patients",
+              action: "ajax_vw_allergies",
+              sClass: "tooltip"
+            };
+         
+          </script> 
+          <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
+        {{/if}}
+      </span>
       <a href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={{$_op->_id}}">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}');">
       {{if $_op->libelle}}
