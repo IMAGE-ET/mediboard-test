@@ -13,6 +13,7 @@
     {{mb_include module=system template=inc_config_bool var=easy_service}}
     {{mb_include module=system template=inc_config_bool var=easy_chambre_simple}}
     {{mb_include module=system template=inc_config_bool var=easy_ald_cmu}}
+    {{mb_include module=system template=inc_config_bool var=easy_isolement}}
       
     {{assign var=class value=COperation}}
     

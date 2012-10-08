@@ -957,43 +957,43 @@ Main.add( function(){
   </td>
 </tr>
 
-{{assign var=systeme_isolement value=$conf.dPplanningOp.CSejour.systeme_isolement}}
-
 <tr {{if $mode_operation}} style="display: none;" {{/if}}>
   <th>{{mb_label object=$sejour field="ATNC"}}</th>
-  <td>{{mb_field object=$sejour field="ATNC"}}</td>
-  <th>{{mb_label object=$sejour field="isolement"}}</th>
-  {{if $systeme_isolement == "standard"}}
-    <td>{{mb_field object=$sejour field="isolement"}}</td>
-  {{else}}
-    <td>
-      {{mb_field object=$sejour field="isolement" onchange=toggleIsolement(this)}}
-    </td>
-  {{/if}}
+  <td colspan="3">{{mb_field object=$sejour field="ATNC"}}</td>
 </tr>
 
-{{if $systeme_isolement == "expert"}}
-  <tr class="isolement_area" {{if !$sejour->isolement}}style="display: none"{{/if}}>
-    <td></td>
-    <th>
-      {{mb_label object=$sejour field=_isolement_date}}
-    </th>
-    <td colspan="2">
-      {{mb_field object=$sejour field=_isolement_date form=editSejour register=true}}
-    </td>
-  </tr>
-  <tr class="isolement_area" {{if !$sejour->isolement}}style="display: none"{{/if}}>
-    <td></td>
-    <th>
-      {{mb_label object=$sejour field=raison_medicale}}
-    </th>
-    <td colspan="2">
-      {{mb_field object=$sejour field=raison_medicale form=editSejour}}
-    </td>
-  </tr>
-{{/if}}
-
 </tbody>
+{{if !$mode_operation}}
+  {{assign var=systeme_isolement value=$conf.dPplanningOp.CSejour.systeme_isolement}}
+  <tr {{if !$conf.dPplanningOp.CSejour.easy_isolement}}class="modeExpert"{{/if}}>
+    <th>{{mb_label object=$sejour field="isolement"}}</th>
+    <td colspan="3">
+      {{if $systeme_isolement == "standard"}}
+        {{mb_field object=$sejour field="isolement"}}
+      {{else}}
+        {{mb_field object=$sejour field="isolement" onchange=toggleIsolement(this)}}
+    {{/if}}
+  </tr>
+  
+  {{if $systeme_isolement == "expert"}}
+    <tr class="isolement_area {{if !$conf.dPplanningOp.CSejour.easy_isolement}}modeExpert{{/if}}" {{if !$sejour->isolement}}style="display: none"{{/if}}>
+      <th>
+        {{mb_label object=$sejour field=_isolement_date}}
+      </th>
+      <td colspan="3">
+        {{mb_field object=$sejour field=_isolement_date form=editSejour register=true}}
+      </td>
+    </tr>
+    <tr class="isolement_area {{if !$conf.dPplanningOp.CSejour.easy_isolement}}modeExpert{{/if}}" {{if !$sejour->isolement}}style="display: none"{{/if}}>
+      <th>
+        {{mb_label object=$sejour field=raison_medicale}}
+      </th>
+      <td colspan="3">
+        {{mb_field object=$sejour field=raison_medicale form=editSejour}}
+      </td>
+    </tr>
+  {{/if}}
+{{/if}}
 
 {{if $conf.dPhospi.systeme_prestations == "standard"}} 
   <tr {{if !$conf.dPplanningOp.CSejour.easy_chambre_simple}} class="modeExpert" {{/if}}>
@@ -1001,7 +1001,6 @@ Main.add( function(){
     <td>
       {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejour();"}}
     </td>
-    
     <td colspan="2" class="button modeExpert">
       {{mb_include module=planningOp template=regimes_alimentaires prefix=expert}}
     </td>
