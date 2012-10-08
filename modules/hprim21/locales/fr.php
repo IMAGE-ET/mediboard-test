@@ -164,6 +164,7 @@ $locales['CEchangeHprim21.one'] = 'échange H\' 2.1';
 $locales['CEchangeHprim21.sender_class.CSenderFTP'] = 'Expéditeur FTP';
 $locales['CEchangeHprim21.sender_class.CSenderMLLP'] = 'Expéditeur MLLP';
 $locales['CEchangeHprim21.sender_class.CSenderSOAP'] = 'Expéditeur SOAP';
+$locales['CEchangeHprim21.sender_class.CSenderFileSystem'] = 'Expéditeur FS';
 $locales['CGroups-back-echanges_hprim21'] = 'Echanges';
 $locales['CGroups-back-echanges_hprim21.empty'] = 'Pas d\'échange';
 $locales['CHprim21Complementaire'] = 'Assurance complémentaire Hprim21';

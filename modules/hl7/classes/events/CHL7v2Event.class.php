@@ -45,7 +45,7 @@ class CHL7v2Event extends CHL7Event {
     $message = new CHL7v2Message($this->version);
     $message->segmentTerminator = $terminator;
     $message->name              = $this->msg_codes;
-    
+   
     $this->message = $message;
   }
     
@@ -83,8 +83,8 @@ class CHL7v2Event extends CHL7Event {
     $exchange_ihe->code            = $this->code;
     $exchange_ihe->object_id       = $this->object->_id;
     $exchange_ihe->object_class    = $this->object->_class;
-    $exchange_ihe->store();
-    
+    $msg = $exchange_ihe->store();
+
     return $this->_exchange_ihe = $exchange_ihe;
   }
   

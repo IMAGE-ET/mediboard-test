@@ -109,7 +109,7 @@ foreach ($sejours as $_sejour) {
       $code = $_movement->original_trigger_code;
 
       $iti31 = new CITI31DelegatedHandler();
-      if (!$iti31->isMessageSupported("ITI31", $code, $receiver)) {
+      if (!$iti31->isMessageSupported("ITI31", "ADT", $code, $receiver)) {
         $errors++;
         CAppUI::stepAjax("Le destinataire ne prend pas en charge cet événement", UI_MSG_WARNING);
       }
@@ -118,7 +118,7 @@ foreach ($sejours as $_sejour) {
       
       try {
         // Envoi de l'événement
-        $iti31->sendITI("PAM", "ITI31", $code, $_sejour);
+        $iti31->sendITI("PAM", "ITI31", "ADT", $code, $_sejour);
         $exchange++;
       }
       catch (Exception $e) {

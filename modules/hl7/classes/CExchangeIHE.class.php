@@ -49,7 +49,7 @@ class CExchangeIHE extends CExchangeTabular {
     $props["sender_class"]  = "enum list|CSenderFTP|CSenderSOAP|CSenderMLLP|CSenderFileSystem show|0";
     
     $props["receiver_id"]   = "ref class|CReceiverIHE"; 
-    $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation show|0";
+    $props["object_class"]  = "enum list|CPatient|CSejour|COperation|CAffectation|COperation|CConsultation show|0";
     $props["code"]          = "str";
     
     $props["_message"]      = "er7";

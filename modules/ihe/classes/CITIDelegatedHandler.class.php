@@ -27,16 +27,16 @@ class CITIDelegatedHandler {
     return $i18n_code;
   }
   
-  function isMessageSupported($transaction, $code, $receiver) {
+  function isMessageSupported($transaction, $message, $code, $receiver) {
     $i18n_code = $this->getI18nCode($receiver);
-    if (!$receiver->isMessageSupported("CHL7EventADT{$code}{$i18n_code}")) {
+    if (!$receiver->isMessageSupported("CHL7Event{$message}{$code}{$i18n_code}")) {
       return false;
     }
     
     return true;
   }
   
-  function sendITI($profil, $transaction, $code, CMbObject $mbObject) {
+  function sendITI($profil, $transaction, $message, $code, CMbObject $mbObject) {
     $receiver = $mbObject->_receiver;
 
     if (!$code) {
@@ -49,9 +49,10 @@ class CITIDelegatedHandler {
     }
     
     $hl7_version = $receiver->getHL7Version($transaction);
-    $class       = "CHL7".$hl7_version."EventADT".$code.$i18n_code;
+    $class       = "CHL7".$hl7_version."Event".$message.$code.$i18n_code;
+   
     if (!class_exists($class)) {
-      trigger_error("class-CHL7".$hl7_version."EventADT".$code.$i18n_code."-not-found", E_USER_ERROR);
+      trigger_error("class-CHL7".$hl7_version."Event".$message.$code.$i18n_code."-not-found", E_USER_ERROR);
       return;  
     }
 

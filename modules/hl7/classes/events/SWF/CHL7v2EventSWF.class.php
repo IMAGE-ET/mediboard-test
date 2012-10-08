@@ -16,7 +16,7 @@
  * Scheduled Workflow
  */
 class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
-  var $event_type = "ORU";
+  var $event_type = "SIU";
   
   function __construct() {
     parent::__construct();
@@ -24,10 +24,10 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
     $this->profil    = "SWF";
     $this->msg_codes = array ( 
       array(
-        $this->event_type, $this->code
+        $this->event_type, $this->code, "{$this->event_type}_{$this->struct_code}"
       )
     );
-    $this->transaction = CIHE::getSWFTransaction($this->code, $i18n);
+    $this->transaction = CIHE::getSWFTransaction($this->code);
   }
   
   /**

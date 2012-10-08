@@ -18,6 +18,7 @@
 class CITI31DelegatedHandler extends CITIDelegatedHandler {
   static $handled        = array ("CSejour", "CAffectation", "CNaissance");
   protected $profil      = "PAM";
+  protected $message     = "ADT";
   protected $transaction = "ITI31";
 
   static $inpatient      = array("comp", "ssr", "psy", "seances", "consult", "ambu");
@@ -60,7 +61,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         // Cas où : 
         // * on est l'initiateur du message 
         // * le destinataire ne supporte pas le message
-        if ($sejour->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+        if ($sejour->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
           return;
         }
         
@@ -84,7 +85,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         $this->createMovement($code, $sejour, $current_affectation);
 
         // Envoi de l'événement
-        $this->sendITI($this->profil, $this->transaction, $code, $sejour);
+        $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour);
       }
     }
     
@@ -109,7 +110,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message
-      if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+      if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
         return;
       }
       
@@ -119,7 +120,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $this->createMovement($code, $sejour, $affectation);
    
       // Envoi de l'événement
-      $this->sendITI($this->profil, $this->transaction, $code, $mbObject);
+      $this->sendITI($this->profil, $this->transaction, $this->message, $code, $mbObject);
     }
     
     // Traitement Naissance
@@ -138,7 +139,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message
-      if ($mbObject->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+      if ($mbObject->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
         return;
       }
       
@@ -162,7 +163,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $this->createMovement($code, $sejour_enfant, $current_affectation);
 
       // Envoi de l'événement
-      $this->sendITI($this->profil, $this->transaction, $code, $sejour_enfant);
+      $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour_enfant);
     }
   }
   
@@ -579,7 +580,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Cas où : 
       // * on est l'initiateur du message 
       // * le destinataire ne supporte pas le message
-      if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+      if ($affectation->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
         return;
       }
             
@@ -589,7 +590,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $this->createMovement($code, $sejour, $affectation);
    
       // Envoi de l'événement
-      $this->sendITI($this->profil, $this->transaction, $code, $mbObject);
+      $this->sendITI($this->profil, $this->transaction, $this->message, $code, $mbObject);
     }  
   }  
   

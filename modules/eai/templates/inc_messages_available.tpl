@@ -10,7 +10,7 @@
 *}}
 
 <fieldset>
-  <legend>{{tr}}{{$message}}{{/tr}}</legend>
+  <legend>{{tr}}{{$message}}{{/tr}} <span class="compact">({{tr}}{{$message}}-desc{{/tr}})</span></legend>
   
   <table class="tbl">
   {{foreach from=$messages_supported item=_message_supported}}

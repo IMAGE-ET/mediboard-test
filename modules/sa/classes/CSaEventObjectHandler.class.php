@@ -17,12 +17,11 @@
  */
 
 class CSaEventObjectHandler extends CEAIObjectHandler {
-  static $handled = array ("COperation");
+  static $handled = array ("COperation", "CConsultation");
 
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
-
   
   /**
    * @see parent::onAfterStore()
@@ -33,6 +32,28 @@ class CSaEventObjectHandler extends CEAIObjectHandler {
     }
     
     $this->sendFormatAction("onAfterStore", $mbObject);
+  }
+  
+  /**
+   * @see parent::onBeforeDelete()
+   */  
+  function onBeforeDelete(CMbObject $mbObject) {
+    if (!parent::onBeforeDelete($mbObject)) {
+      return;
+    }
+    
+    $this->sendFormatAction("onBeforeDelete", $mbObject);
+  }
+  
+  /**
+   * @see parent::onAfterDelete()
+   */  
+  function onAfterDelete(CMbObject $mbObject) {
+    if (!parent::onAfterDelete($mbObject)) {
+      return;
+    }
+    
+    $this->sendFormatAction("onAfterDelete", $mbObject);
   }
 }
 ?>

@@ -18,6 +18,7 @@
 class CITI30DelegatedHandler extends CITIDelegatedHandler {
   static $handled        = array ("CPatient", "CCorrespondantPatient", "CIdSante400");
   protected $profil      = "PAM";
+  protected $message     = "ADT";
   protected $transaction = "ITI30";
   
   static function isHandled(CMbObject $mbObject) {
@@ -76,12 +77,12 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       // Affecte l'ancien IPP au "patient éliminé"
       $patient->_patient_elimine->_IPP = $id400->_old->id400;
 
-      if (!$this->isMessageSupported($this->transaction, $code, $receiver)) {
+      if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
        
         return;
       }
       
-      $this->sendITI($this->profil, $this->transaction, $code, $patient);
+      $this->sendITI($this->profil, $this->transaction, $this->message, $code, $patient);
       
       return;
     }
@@ -114,7 +115,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     }
     
     $patient = $mbObject;
-    if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+    if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
       return;
     }
      
@@ -134,7 +135,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       return;
     }
     
-    $this->sendITI($this->profil, $this->transaction, $code, $patient);
+    $this->sendITI($this->profil, $this->transaction, $this->message, $code, $patient);
     
     $patient->_IPP = null;
   }
@@ -178,11 +179,11 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
           if ($patient2_ipp)
             $patient->_IPP = $patient2_ipp;
           
-          if (!$this->isMessageSupported($this->transaction, "A31", $receiver)) {
+          if (!$this->isMessageSupported($this->transaction, $this->message, "A31", $receiver)) {
             return;
           }
             
-          $this->sendITI($this->profil, $this->transaction, "A31", $patient);
+          $this->sendITI($this->profil, $this->transaction, $this->message, "A31", $patient);
           continue;
         }
         
@@ -190,11 +191,11 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
         if ($patient1_ipp && $patient2_ipp) {
           $patient->_patient_elimine = $patient_eliminee;
           
-          if (!$this->isMessageSupported($this->transaction, "A40", $receiver)) {
+          if (!$this->isMessageSupported($this->transaction, $this->message, "A40", $receiver)) {
             return;
           }
           
-          $this->sendITI($this->profil, $this->transaction, "A40", $patient);
+          $this->sendITI($this->profil, $this->transaction, $this->message, "A40", $patient);
           continue;
         }
       } 
@@ -236,7 +237,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       return;
     }
     
-    $this->sendITI($this->profil, $this->transaction, $code, $patient);
+    $this->sendITI($this->profil, $this->transaction, $this->message, $code, $patient);
   }
 }
 ?>

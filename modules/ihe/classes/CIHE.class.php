@@ -17,8 +17,9 @@
  */
 class CIHE {
   static $object_handlers = array(
-    "CSipObjectHandler" => "CITI30DelegatedHandler",
-    "CSmpObjectHandler" => "CITI31DelegatedHandler",
+    "CSipObjectHandler"     => "CITI30DelegatedHandler",
+    "CSmpObjectHandler"     => "CITI31DelegatedHandler",
+    "CSaEventObjectHandler" => "CRAD48DelegatedHandler"
   );
   static $versions = array();
   static $evenements = array();
