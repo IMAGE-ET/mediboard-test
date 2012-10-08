@@ -84,5 +84,11 @@ InteropActor = {
     url.addParam("object_id", object_id);
     url.addParam("object_configs_guid", object_configs_guid);
     url.requestUpdate("actor_config_"+object_id);
+  },
+  
+  refreshTags : function(actor_guid) {
+    var url = new Url("eai", "ajax_refresh_tags");
+    url.addParam("actor_guid", actor_guid);
+    url.requestUpdate("tags_"+actor_guid);
   }
 };

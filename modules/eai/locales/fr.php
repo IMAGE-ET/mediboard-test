@@ -159,6 +159,7 @@ $locales['CInteropReceiver.none'] = 'Aucun destinataire d\'intégration';
 $locales['CInteropReceiver_config'] = 'Configuration';
 $locales['CInteropReceiver_exchanges-sources'] = 'Sources d\'échange';
 $locales['CInteropReceiver_formats-available'] = 'Formats disponibles';
+$locales['CInteropReceiver_tags'] = 'Étiquettes';
 $locales['CInteropSender'] = 'Expéditeur d\'intégration';
 $locales['CInteropSender-_reachable'] = 'Accessible';
 $locales['CInteropSender-_reachable-court'] = 'Actif';
