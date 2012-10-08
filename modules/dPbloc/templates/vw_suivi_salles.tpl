@@ -47,7 +47,7 @@ function showLegend() {
     </th>
   </tr>
   <tr class="not-printable">
-    <th colspan="0">
+    <th colspan="100">
       <button type="button" onclick="showLegend()" class="search" style="float: left;">Légende</button>
       <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
       <button type="button" onclick="printAnapath();" class="print" style="float: right;">{{tr}}COperation-anapath{{/tr}}</button>
@@ -70,10 +70,13 @@ function showLegend() {
     </th>
   </tr>
   <tr class="not-printable">
-    <td class="button" colspan="0">
+    <td class="button" colspan="100">
       {{foreach from=$bloc->_ref_salles item=_salle}}
         <label><input type="checkbox" onclick="Effect.toggle('salle-{{$_salle->_id}}', 'appear');" checked="checked" /> {{$_salle->nom}}</label>
       {{/foreach}}
+      {{if $non_traitees|@count}}
+        <label><input type="checkbox" onclick="Effect.toggle('non-traitees', 'appear');" checked="checked" /> {{tr}}CSejour.type.hors_plage{{/tr}}</label>
+      {{/if}}
     </td>
   </tr>
   <tr>
@@ -89,5 +92,16 @@ function showLegend() {
     {{foreachelse}}
     <td class="empty">{{tr}}CSalle.none{{/tr}}</td>
     {{/foreach}}
+    {{if $non_traitees|@count}}
+      {{assign var=salle value=""}}
+      <td id="non-traitees">
+        <table class="tbl">
+          <tr>
+            <th class="title" colspan="5">{{tr}}CSejour.type.hors_plage{{/tr}}</th>
+          </tr>
+          {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=1 operations=$non_traitees}}
+        </table>
+      </td>
+    {{/if}}
   </tr>
 </table>

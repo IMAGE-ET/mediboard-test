@@ -52,6 +52,21 @@ foreach ($bloc->_ref_salles as &$salle) {
   }
 }
 
+// Interventions hors plages non traitées
+$non_traitee = new COperation();
+$where = array();
+$where["date"] = "= '$date_suivi'";
+$where["salle_id"] = "IS NULL";
+$where["plageop_id"] = "IS NULL";
+$non_traitees = $non_traitee->loadList($where);
+
+foreach ($non_traitees as $_operation) {
+  $_operation->loadRefChir(1);
+  $_operation->loadRefPatient(1);
+  $_operation->loadExtCodesCCAM();
+  $_operation->loadRefPlageOp(1);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -61,6 +76,7 @@ $smarty->assign("listBlocs"      , $listBlocs);
 $smarty->assign("bloc"           , $bloc);
 $smarty->assign("date_suivi"     , $date_suivi);
 $smarty->assign("operation_id"   , 0);
+$smarty->assign("non_traitees"   , $non_traitees);
 
 $smarty->display("vw_suivi_salles.tpl");
 ?>
