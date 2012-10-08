@@ -12,8 +12,6 @@
 // For sig_handler
 declare(ticks = 1);
 
-require dirname(__FILE__)."/socket_server_utils.php";
-
 // Ignores user logout
 ignore_user_abort(true);
 set_time_limit(0);
@@ -124,6 +122,8 @@ Usage: {$argv[0]} <type> <root_url> <username> <password> [--port port]
 EOT;
   exit(0);
 }
+
+require dirname(__FILE__)."/socket_server_utils.php";
 
 $options = array(
   "url"        => $argv[2],

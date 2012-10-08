@@ -8,24 +8,23 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-
-require dirname(__FILE__)."/socket_server_utils.php";
-
 // ---- Read arguments
 $argv = $_SERVER["argv"];
 $argc = $_SERVER["argc"];
 
-if (count($argv) < 2) {
+if (count($argv) < 3) {
   echo <<<EOT
 Usage: {$argv[0]} <type> <command> [<port>] [<host> = localhost]
   <type>    The type of the server, (dicom or mllp)
-  <command> The command to issue on the DICOM server
-  <port>    The port of the DICOM server to control
-  <host>    The host of the DICOM server to control (default localhost)
+  <command> The command to issue on the server
+  <port>    The port of the server to control
+  <host>    The host of the server to control (default localhost)
 
 EOT;
   exit(0);
 }
+
+require dirname(__FILE__)."/socket_server_utils.php";
 
 @list($self, $type, $command, $port, $host) = $argv;
 if (!$host) {

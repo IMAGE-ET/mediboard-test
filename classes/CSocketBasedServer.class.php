@@ -321,8 +321,6 @@ class CSocketBasedServer {
         //"login" => "$this->username:$this->password",
       );
       
-      var_dump($post);
-      
       $start = microtime(true);
       
       $url = $this->call_url."/index.php?login=$this->username:$this->password";
@@ -357,11 +355,13 @@ class CSocketBasedServer {
   /**
    * Format the acknowledgement
    * 
-   * @param string $ack The acknowledgement
+   * @param string  $ack     The acknowledgement
+   * 
+   * @param integer $conn_id The connection id
    * 
    * @return string
    */
-  function formatAck($ack) {
+  function formatAck($ack, $conn_id = null) {
     return $ack;
   }
   
@@ -385,7 +385,7 @@ class CSocketBasedServer {
    * 
    * @return boolean true
    */
-  function open($id, $addr, $port = null) {
+  function onOpen($id, $addr, $port = null) {
     if (!isset($this->clients[$id])) {
       $this->clients[$id] = array(
         "buffer" => "",
@@ -405,7 +405,7 @@ class CSocketBasedServer {
    * 
    * @return void
    */
-  function cleanup($id) {
+  function onCleanup($id) {
     unset($this->clients[$id]);
     echo sprintf(" > Connection [%d] cleaned-up\n", $id);
   }
@@ -417,7 +417,7 @@ class CSocketBasedServer {
    * 
    * @return void
    */
-  function close($id) {
+  function onClose($id) {
     echo sprintf(" > Connection [%d] closed\n", $id);
   }
   
@@ -497,9 +497,9 @@ EOT;
     $server = $this->server->bind("0.0.0.0", $this->port, $this->certificate, $this->passphrase);
     
     $server->setRequestHandler(array($this, "handle"));
-    $server->setOnOpenHandler(array($this, "open"));
-    $server->setOnCleanupHandler(array($this, "cleanup"));
-    $server->setOnCloseHandler(array($this, "close"));
+    $server->setOnOpenHandler(array($this, "onOpen"));
+    $server->setOnCleanupHandler(array($this, "onCleanup"));
+    $server->setOnCloseHandler(array($this, "onClose"));
     $server->setOnWriteErrorHandler(array($this, "writeError"));
     $server->run();
   }

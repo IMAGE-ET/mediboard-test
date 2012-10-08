@@ -42,11 +42,13 @@ class CMLLPServer extends CSocketBasedServer{
   /**
    * Format the acknowledgement
    * 
-   * @param string $ack The acknowledgement
+   * @param string  $ack     The acknowledgement
+   * 
+   * @param integer $conn_id The connection id
    * 
    * @return string
    */
-  function formatAck($ack) {
+  function formatAck($ack, $conn_id = null) {
     return "\x0B$ack\x1C\x0D";
   }
   

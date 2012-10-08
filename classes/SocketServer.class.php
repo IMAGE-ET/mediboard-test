@@ -19,7 +19,6 @@ class SocketServer {
    * @var resource
    */
   public $__socket;
-
   
   /**
    * Tells whenever {@link $__socket} is binded or not.
@@ -109,7 +108,6 @@ class SocketServer {
    * @var boolean
    */
   private $__autoClose = false;
-
   
   /**
    * Class constructor.
@@ -520,7 +518,7 @@ class SocketServer {
     // Main cycle
     while (is_resource($this->__socket)) {
       // Clean-up pool
-      foreach ($pool as $conn_id=>$conn) {
+      foreach ($pool as $conn_id => $conn) {
         if (!is_resource($conn)) {
           $this->__cleanup($conn_id);
           unset($pool[$conn_id]);
