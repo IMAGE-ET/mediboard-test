@@ -162,33 +162,33 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     // Entête
     if ($this->header) {
       $this->margins["top"] += (25.4*$this->header_height)/96;
-      $options .= "--header-html $this->header --header-spacing $this->header_spacing ";
+      $options .= "--header-html ".escapeshellarg($this->header). "--header-spacing ".escapeshellarg($this->header_spacing)." ";
     }
 
     // Pied de page
     if ($this->footer) {
       $this->margins["bottom"] += ((25.4*$this->footer_height)/96 + $this->footer_spacing); 
-      $options .= "--footer-html $this->footer --footer-spacing $this->footer_spacing ";
+      $options .= "--footer-html ".escapeshellarg($this->footer)." --footer-spacing".escapeshellarg($this->footer_spacing)." ";
     }
     
     // Marges
     foreach ($this->margins as $key=>$_marge) {
-      $options .= "--margin-$key $_marge ";
+      $options .= "--margin-$key ".escapeshellarg($_marge)." ";
     }
     
     // Format de la page
     if ($this->format && $this->orientation) {
-      $options .= "--page-size $this->format --orientation $this->orientation ";
+      $options .= "--page-size ".escapeshellarg($this->format)." --orientation ". escapeshellarg($this->orientation)." ";
     }
     
     if ($this->width && $this->height) {
       // Conversion en mm
       $width = (25.4*$this->width)/72;
       $height = (25.4*$this->height)/72;
-      $options .= "--page-width $width --page-height $height ";
+      $options .= "--page-width ". escapeshellarg($width). " --page-height ". escapeshellarg($height)." ";
     }
     
-    $options .= "$this->file $result";
+    $options .= escapeshellarg($this->file) . " " . escapeshellarg($result);
     
     exec($command.$options);
     
