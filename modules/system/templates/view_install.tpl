@@ -12,33 +12,30 @@
 
 <ol>
   <li>
-    <a href="install/check.php">Prérequis</a>
+    <a href="install/01_check.php">Prérequis</a>
   </li>
   <li>
-    <a href="install/fileaccess.php">Permissions en écriture</a>
+    <a href="install/02_fileaccess.php">Permissions en écriture</a>
   </li>
   <li>
-    <a href="install/install.php">Installation</a>
+    <a href="install/03_install.php">Installation</a>
   </li>
   <li>
-    <a href="install/configure.php">Configuration</a>
+    <a href="install/04_configure.php">Configuration</a>
   </li>
   <li>
-    <a href="install/initialize.php">Initialisation</a>
+    <a href="install/05_initialize.php">Initialisation</a>
   </li>
   <li>
-    <a href="install/feed.php">Remplissage des bases</a>
+    <a href="install/06_feed.php">Remplissage des bases</a>
   </li>
   <li>
-    <a href="install/finish.php">Finalisation</a>
+    <a href="install/07_finish.php">Finalisation</a>
   </li>
   <li>
-    <a href="install/phpinfo.php">Infos PHP</a>
+    <a href="install/08_phpinfo.php">Infos PHP</a>
   </li>
   <li>
-    <a href="install/errorlog.php">Logs d'erreur</a>
-  </li>
-  <li>
-    <a href="install/update.php">Mise à jour du système</a>
+    <a href="install/09_errorlog.php">Logs d'erreur</a>
   </li>
 </ol>

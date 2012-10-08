@@ -93,7 +93,7 @@
               Vider les caches template Smarty
             </button>
           </td>
-          <td id="Templates" />
+          <td id="Templates"></td>
         </tr>
         <tr>
           <td>
@@ -101,7 +101,7 @@
               Vider les variables de la mémoire partagée
             </button>
           </td>
-          <td id="SharedMemory" />
+          <td id="SharedMemory"></td>
         </tr>
       </table>
   </div>
@@ -115,9 +115,9 @@
       </tr>
       <tr>
         <td>
-          <button class="change" onclick="document.location.href='install/install.php'">
+          <a class="button change" href="install/03_install.php">
             Mettre à jour les bibliothèques externes
-          </button>
+          </a>
         </td>
         <td>
           {{if $obsoleteLibs|@count}}
