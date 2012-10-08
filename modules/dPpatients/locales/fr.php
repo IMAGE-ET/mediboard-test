@@ -258,9 +258,6 @@ $locales['CConstantesMedicales-context_id-desc'] = 'Contexte';
 $locales['CConstantesMedicales-creatininemie'] = 'Créatininémie';
 $locales['CConstantesMedicales-creatininemie-court'] = 'Créatininémie';
 $locales['CConstantesMedicales-creatininemie-desc'] = 'Créatininémie';
-$locales['CConstantesMedicales-glasgow'] = 'Glasgow';
-$locales['CConstantesMedicales-glasgow-court'] = 'Glasgow';
-$locales['CConstantesMedicales-glasgow-desc'] = 'Glasgow';
 $locales['CConstantesMedicales-datetime'] = 'Date';
 $locales['CConstantesMedicales-datetime-court'] = 'Date';
 $locales['CConstantesMedicales-datetime-desc'] = 'Date de mesure';
@@ -294,12 +291,18 @@ $locales['CConstantesMedicales-drain_pleural_1-desc'] = 'Drain pleural 1';
 $locales['CConstantesMedicales-drain_pleural_2'] = 'Drain pleural 2';
 $locales['CConstantesMedicales-drain_pleural_2-court'] = 'Drain pleu. 2';
 $locales['CConstantesMedicales-drain_pleural_2-desc'] = 'Drain pleural 2';
+$locales['CConstantesMedicales-drain_shirley'] = 'Drain de Shirley';
+$locales['CConstantesMedicales-drain_shirley-court'] = 'Shirley';
+$locales['CConstantesMedicales-drain_shirley-desc'] = 'Drain de Shirley';
 $locales['CConstantesMedicales-drain_thoracique_1'] = 'Drain thoracique 1';
 $locales['CConstantesMedicales-drain_thoracique_1-court'] = 'Drain thor. 1';
 $locales['CConstantesMedicales-drain_thoracique_1-desc'] = 'Drain thoracique 1';
 $locales['CConstantesMedicales-drain_thoracique_2'] = 'Drain thoracique 2';
 $locales['CConstantesMedicales-drain_thoracique_2-court'] = 'Drain thor. 2';
 $locales['CConstantesMedicales-drain_thoracique_2-desc'] = 'Drain thoracique 2';
+$locales['CConstantesMedicales-drain_thoracique_flow'] = 'Flow drain thoracique';
+$locales['CConstantesMedicales-drain_thoracique_flow-court'] = 'Flow';
+$locales['CConstantesMedicales-drain_thoracique_flow-desc'] = 'Flow drain thoracique';
 $locales['CConstantesMedicales-ecpa_apres'] = 'ECPA pendant soin';
 $locales['CConstantesMedicales-ecpa_apres-court'] = 'ECPA pendant';
 $locales['CConstantesMedicales-ecpa_apres-desc'] = 'ECPA pendant soin';
@@ -312,6 +315,9 @@ $locales['CConstantesMedicales-entree_lavage-desc'] = 'Entrée lavage';
 $locales['CConstantesMedicales-frequence_respiratoire'] = 'Freq. respiratoire';
 $locales['CConstantesMedicales-frequence_respiratoire-court'] = 'Freq. respi.';
 $locales['CConstantesMedicales-frequence_respiratoire-desc'] = 'Fréquence respiratoire';
+$locales['CConstantesMedicales-glasgow'] = 'Glasgow';
+$locales['CConstantesMedicales-glasgow-court'] = 'Glasgow';
+$locales['CConstantesMedicales-glasgow-desc'] = 'Glasgow';
 $locales['CConstantesMedicales-glycemie'] = 'Glycémie';
 $locales['CConstantesMedicales-glycemie-court'] = 'Glyc.';
 $locales['CConstantesMedicales-glycemie-desc'] = 'Glycémie capilaire';
@@ -1409,9 +1415,13 @@ $locales['Intermax.error.-22'] = 'La FSE ne peut être traitée manuellement parce
 $locales['Intermax.error.-23'] = 'La FSE ne peut être mise en attente parce qu\'elle est annulée, transmise ou en attente';
 $locales['Intermax.error.-24'] = 'La FSE ne peut être sortie de l\'attente parce qu\'elle n\'est pas en attente';
 $locales['Intermax.error.-25'] = 'La DRE Initiale n\'a jamais été transmise ou nla convention utilisée ne permet la création d\'une DRE telle DRE';
-$locales['Intermax.error.-26'] = 'La DRE d\'Annulation ne peut être créée \n\tsi la DRE Initiale n\'a jamais été transmise ou \n\tsi la convention utilisée ne';
+$locales['Intermax.error.-26'] = 'La DRE d\'Annulation ne peut être créée 
+	- si la DRE Initiale n\'a jamais été transmise ou 
+	- si la convention utilisée ne';
 $locales['Intermax.error.-29'] = 'l\'action sur FSE est inconnue';
-$locales['Intermax.error.-30'] = 'Le praticien de Mediboard ne correspond à aucune fiche praticien de LogicMax. Vérifiez que : \n\t1. Le code Adeli est bien paramétré dans Mediboard\n\t2. Le praticien est configuré dans LogicMax avec le même code Adeli';
+$locales['Intermax.error.-30'] = 'Le praticien de Mediboard ne correspond à aucune fiche praticien de LogicMax. Vérifiez que : 
+	1. Le code Adeli est bien paramétré dans Mediboard
+	2. Le praticien est configuré dans LogicMax avec le même code Adeli';
 $locales['Intermax.error.-31'] = 'La praticien est salarié ou remplaçant non autorisé à facturer';
 $locales['Intermax.error.-32'] = 'Le praticien est non actif ou non autorisé à facturer';
 $locales['Intermax.error.-33'] = 'Aucun praticien référencé dans la base de LogicMax';
@@ -1434,8 +1444,16 @@ $locales['Intermax.error.-74'] = 'La demande du type d\'acte est incorrecte.';
 $locales['Intermax.error.-75'] = 'La demande des dents est incorrecte.';
 $locales['Intermax.error.-76'] = 'Le type de recherche est iconnu';
 $locales['Intermax.error.0'] = 'Exécution interrompue, aucun résultat.';
-$locales['Intermax.error.100'] = 'Il n\'est plus utile de cliquer sur les boutons pour récupérer les données LogicMax, car le retour des résultats est désormais automatique !\n\nSi toutefois vous voulez forcer la lecture, il semble que le retour LogicMax soit non accessible. Vérifiez que :\n\t1. LogicMax est bien lancé\n\t2. Une fonction LogicMax a bien été déclenchée depuis la dernière récupération de résultats';
-$locales['Intermax.error.110'] = 'Il n\'est plus utile de cliquer sur les boutons pour récupérer les données LogicMax, car le retour des résultats est désormais automatique !\n\nSi toutefois vous voulez forcer la lecture, il semble que le retour LogicMax récupéré ne correspond pas à la fonction demandée. nEssayez de relancer la fonction demandée.\n\nFonctions acceptées : ';
+$locales['Intermax.error.100'] = 'Il n\'est plus utile de cliquer sur les boutons pour récupérer les données LogicMax, car le retour des résultats est désormais automatique !
+
+Si toutefois vous voulez forcer la lecture, il semble que le retour LogicMax soit non accessible. Vérifiez que :
+	1. LogicMax est bien lancé
+	2. Une fonction LogicMax a bien été déclenchée depuis la dernière récupération de résultats';
+$locales['Intermax.error.110'] = 'Il n\'est plus utile de cliquer sur les boutons pour récupérer les données LogicMax, car le retour des résultats est désormais automatique !
+
+Si toutefois vous voulez forcer la lecture, il semble que le retour LogicMax récupéré ne correspond pas à la fonction demandée. nEssayez de relancer la fonction demandée.
+
+Fonctions acceptées : ';
 $locales['Intermax.error.120'] = 'Il semble que LogicMax soit en cours d\'exécution. Merci de retourner dans LogicMax et de terminer son exécution avant d\'en récupérer le résultat.';
 $locales['Intermax.error.200'] = 'Fonctionnalité exécutée avec succès';
 $locales['LogicMax'] = 'LogicMax';

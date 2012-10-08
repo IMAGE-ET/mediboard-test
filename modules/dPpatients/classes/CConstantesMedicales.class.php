@@ -299,6 +299,11 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 100,
       "cumul_reset_config" => "drain_thoracique_cumul_reset_hour",
     ),
+    "drain_thoracique_flow" => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 1000,
+    ),
     "drain_pleural_1"   => array(
       "type" => "drain",
       "unit" => "ml", 
@@ -312,6 +317,12 @@ class CConstantesMedicales extends CMbObject {
       "cumul_reset_config" => "drain_pleural_cumul_reset_hour",
     ),
     "drain_mediastinal" => array(
+      "type" => "drain",
+      "unit" => "ml", 
+      "min" => 0, "max" => 100,
+      "cumul_reset_config" => "drain_mediastinal_cumul_reset_hour",
+    ),
+    "drain_shirley" => array(
       "type" => "drain",
       "unit" => "ml", 
       "min" => 0, "max" => 100,
@@ -548,9 +559,11 @@ class CConstantesMedicales extends CMbObject {
     $specs['drain_3']                = 'float min|0';
     $specs['drain_thoracique_1']     = 'float min|0';
     $specs['drain_thoracique_2']     = 'float min|0';
+    $specs['drain_thoracique_flow']  = 'float min|0';
     $specs['drain_pleural_1']        = 'float min|0';
     $specs['drain_pleural_2']        = 'float min|0';
     $specs['drain_mediastinal']      = 'float min|0';
+    $specs['drain_shirley']          = 'float min|0';
     $specs['sonde_ureterale_1']      = 'float min|0';
     $specs['sonde_ureterale_2']      = 'float min|0';
     $specs['sonde_nephro_1']         = 'float min|0';
