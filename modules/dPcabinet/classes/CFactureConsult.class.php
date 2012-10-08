@@ -170,15 +170,9 @@ class CFactureConsult extends CMbObject {
     
     // Etat des règlement à propager sur les consultations
     if ($this->fieldModified("patient_date_reglement") || $this->fieldModified("tiers_date_reglement")) {
-      
       foreach ($this->loadBackRefs("consultations") as $_consultation) {
-        if ($this->patient_date_reglement) {
-          $_consultation->patient_date_reglement = $this->patient_date_reglement;
-        }
-        
-        if ($this->tiers_date_reglement) {
-          $_consultation->tiers_date_reglement   = $this->tiers_date_reglement;
-        }
+        $_consultation->patient_date_reglement = $this->patient_date_reglement;
+        $_consultation->tiers_date_reglement   = $this->tiers_date_reglement;
         
         if ($msg = $_consultation->store()) {
           return $msg;
