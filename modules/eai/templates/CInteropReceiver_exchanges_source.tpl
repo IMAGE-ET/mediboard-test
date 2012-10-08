@@ -26,6 +26,8 @@
             <li>
               <a href="#exchanges_sources_{{$actor->_guid}}_{{$_msg_supported}}">
                  {{tr}}{{$_msg_supported}}{{/tr}}
+                 <br />
+                 <span class="compact">{{tr}}{{$_msg_supported}}-desc{{/tr}}</span>
               </a>
             </li>
           {{/foreach}}
