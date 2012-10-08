@@ -92,7 +92,8 @@ $dPconfig["dPplanningOp"]= array(
     "fiche_rques_sej"    => "0",
     "fiche_conval"       => "0",
     "systeme_isolement"  => "standard",
-    "easy_isolement"     => "0"
+    "easy_isolement"     => "0",
+    "show_cmu_ald"       => "1",
   ),
 );
 
