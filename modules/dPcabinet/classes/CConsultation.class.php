@@ -1828,6 +1828,28 @@ TESTS A EFFECTUER
       }
     }
   }
+
+  /**
+   * Construit le tag d'une consultation en fonction des variables de configuration
+   * 
+   * @param $group_id Permet de charger l'id externe d'uns consultation pour un établissement donné si non null
+   * 
+   * @return string
+   */
+  static function getTagConsultation($group_id = null) {
+    // Pas de tag consultation
+    if (null == $tag_consultation = CAppUI::conf("dPcabinet CConsultation tag")) {
+      return;
+    }
+
+    // Permettre des id externes en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+    
+    return str_replace('$g', $group_id, $tag_consultation);
+  }
 }
 
 ?>
