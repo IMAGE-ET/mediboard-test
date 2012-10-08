@@ -22,6 +22,8 @@ $paid           = CValue::getOrSession("paid"     , true);
 $empty          = CValue::getOrSession("empty"    , true);
 $immediate      = CValue::getOrSession("immediate", true);
 $mode_vue       = CValue::getOrSession("mode_vue" , "vertical");
+$matin          = CValue::getOrSession("matin"    , true);
+$apres_midi     = CValue::getOrSession("apres_midi", true);
 
 $mode_urgence = CValue::get("mode_urgence", false);
 $offline      = CValue::get("offline"     , false);
@@ -60,11 +62,27 @@ if ($consult->_id) {
 
 // Récupération des plages de consultation du jour et chargement des références
 $listPlages = array();
+$heure_limit_matin = CAppUI::conf("dPcabinet CPlageconsult hour_limit_matin");
+
 foreach($praticiens as $prat) {
   $listPlage = new CPlageconsult();
   $where = array();
   $where["chir_id"] = "= '$prat->_id'";
   $where["date"] = "= '$date'";
+  
+  // Que le matin
+  if ($matin && !$apres_midi) {
+    $where["debut"] = "< '$heure_limit_matin:00:00'";
+  }
+  // Que l'après-midi
+  elseif ($apres_midi && !$matin) {
+    $where["debut"] = "> '$heure_limit_matin:00:00'";
+  }
+  // Ou rien
+  elseif (!$matin && !$apres_midi){
+    $where["debut"] = "IS NULL";
+  }
+  
   $order = "debut";
   $listPlage = $listPlage->loadList($where, $order);
   if(!count($listPlage)) {
@@ -188,6 +206,9 @@ $smarty->assign("nb_attente"    , $nb_attente);
 $smarty->assign("nb_a_venir"    , $nb_a_venir);
 $smarty->assign("mode_vue"      , $mode_vue);
 $smarty->assign("heure_min"     , $heure_min);
+$smarty->assign("matin"         , $matin);
+$smarty->assign("apres_midi"    , $apres_midi);
+
 $smarty->display("vw_journee.tpl");
 
 

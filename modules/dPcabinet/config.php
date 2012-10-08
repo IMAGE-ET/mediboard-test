@@ -15,6 +15,7 @@ $dPconfig["dPcabinet"] = array(
     "hours_start"      => "8",
     "hours_stop"       => "20",
     "minutes_interval" => "15",
+    "hour_limit_matin" => "12",
   ),
   "CConsultation" => array(
     "use_last_consult"      => 0,
@@ -28,7 +29,7 @@ $dPconfig["dPcabinet"] = array(
     "fix_doc_edit"                  => 0,
     "search_sejour_all_groups"      => 0,
     "consult_readonly"             => 0,
-    "surbooking_readonly"   => 1
+    "surbooking_readonly"   => 1,
   ),
   "CConsultAnesth" => array(
     "feuille_anesthesie" => "print_fiche",

@@ -27,6 +27,10 @@ synchronizeView = function(form) {
   $V(form.finished, finished);
   var immediate = $V(form._immediate) ? 1 : 0;
   $V(form.immediate, immediate);
+  var matin = $V(form._matin) ? 1 : 0;
+  $V(form.matin, matin);
+  var apres_midi = $V(form._apres_midi) ? 1 : 0;
+  $V(form.apres_midi, apres_midi);
   form.submit();
 }
 
@@ -149,7 +153,14 @@ Reconvocation = {
               <label for="_finished"   title="Afficher les consultations terminées">Terminées</label>
               <input name="_immediate" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $immediate}}checked="checked"{{/if}} />
               <input name="immediate"  type="hidden"   value="{{$immediate}}" />
-              <label for="_immediate"  title="Afficher les consultations immédiates">Immediates</label>
+              <label for="_immediate"  title="Afficher les consultations immédiates">Immédiates</label>
+              <input name="_matin"     type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $matin}}checked="checked"{{/if}} />
+              <input name="matin"      type="hidden"   value="{{$matin}}" />
+              <label for="_matin"      title="Afficher les consultations du matin"/>Matin</label>
+              <input name="_apres_midi" type="checkbox" value="1" onchange="synchronizeView(this.form);" {{if $apres_midi}}checked="checked"{{/if}} />
+              <input name="apres_midi" type="hidden"   value="{{$apres_midi}}" />
+              <label for="_apres_midi" title="Afficher les consultations de l'après-midi"/>Après-midi</label>
+              
             </td>
             {{if !$mode_urgence}}
               <th>

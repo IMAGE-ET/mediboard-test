@@ -1367,6 +1367,7 @@ $locales['config-dPcabinet-CConsultation-surbooking_readonly'] = 'Autoriser le s
 $locales['config-dPcabinet-CConsultation-surbooking_readonly-desc'] = 'Autoriser le surbooking en lecture seule';
 $locales['config-dPcabinet-CConsultation-use_last_consult'] = 'Affichage du champs Dernière consultation';
 $locales['config-dPcabinet-CConsultation-use_last_consult-desc'] = 'Affichage du champs Dernière consultation';
+$locales['config-dPcabinet-CPlageconsult-hour_limit_matin'] = 'Heure limite d\'affichage matin/midi dans la vue journée';
 $locales['config-dPcabinet-CPlageconsult-hours_start'] = 'Heure de début';
 $locales['config-dPcabinet-CPlageconsult-hours_start-desc'] = 'Heure de début affichée des plages de consultation';
 $locales['config-dPcabinet-CPlageconsult-hours_stop'] = 'Heure de fin';

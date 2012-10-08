@@ -195,6 +195,23 @@
     </td>
   </tr>
   
+  {{assign var="var" value="hour_limit_matin"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$hours item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $conf.$m.$class.$var}} selected="selected" {{/if}}>
+          {{$_hour|string_format:"%02d"}}
+        </option>
+      {{/foreach}}
+      </select>
+    </td>
+  </tr>
   
   <!-- CPrescription -->  
   {{assign var="class" value="CPrescription"}}
