@@ -38,7 +38,7 @@ var Tag = {
     var row = node.up('tbody');
     var table = row.up('table');
     var opened = row.hasClassName("opened");
-    var tagId = row.getAttribute("data-tag_id");
+    var tagId = row.get("tag_id");
     
     if (opened) {
       node.show();
@@ -72,7 +72,7 @@ var Tag = {
     if (!row.hasClassName("opened")) return;
     
     var nextRow = row.next('tbody');
-    var insertAfter = ((nextRow && nextRow.getAttribute("data-tag_id")) || !nextRow);
+    var insertAfter = ((nextRow && nextRow.get("tag_id")) || !nextRow);
     var insertion, target;
     var offset = parseInt(node.style.marginLeft)+18;
     var tagId = row.get("tag_id");
@@ -90,6 +90,7 @@ var Tag = {
     var url = new Url('system', 'ajax_list_objects_by_tag');
     url.addParam("tag_id", tagId);
     url.addParam("insertion", insertion);
+    url.addParam("group_id", $V(form.group_id));
     //url.addParam("object_class", objectClass);
     
     if (columns && columns.length) {
@@ -189,6 +190,7 @@ var Tag = {
     url.addParam("tag_id", "all-"+object_class);
     url.addParam("keywords", term);
     url.addParam("object_class", object_class);
+    url.addParam("group_id", $V(input.form.group_id));
     
     url.requestUpdate(list, {
       onComplete: function(){

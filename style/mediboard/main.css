@@ -901,7 +901,7 @@ table#weber td {
 
 .wizard .toc img {
   width: 12px;
-  float: left; 
+  float: none; 
   margin-right: 2px;
 }
 

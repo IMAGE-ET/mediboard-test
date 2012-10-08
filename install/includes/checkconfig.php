@@ -1,8 +1,6 @@
 <?php
 /**
- * Installation config checker
- *
- * PHP version 5.1.x+
+ * $Id$
  *  
  * @package    Mediboard
  * @subpackage Intaller
@@ -16,7 +14,6 @@ require_once "header.php";
 
 if (!@include_once $mbpath."includes/config.php") { 
   showHeader();
-  // @codingStandardsIgnoreStart
 ?>
   
   <div class="small-error">
@@ -25,11 +22,6 @@ if (!@include_once $mbpath."includes/config.php") {
   </div>
   
 <?php
-  // @codingStandardsIgnoreStop
-
-  require("valid.php");
-  checkAll();
   showFooter();
-  die();
 }
 ?>

@@ -1,15 +1,17 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage install
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Database installation
+ *  
+ * @package    Mediboard
+ * @subpackage Intaller
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
-require_once("checkauth.php");
-require_once("checkconfig.php");
+require_once "includes/checkauth.php";
+require_once "includes/checkconfig.php";
 
 // Data sources to test in the wizard
 global $dPconfig;
@@ -17,8 +19,7 @@ $dbConfigs = array (
   "std" => $dPconfig["db"]["std"]
 );
 
-require_once("CMbDb.class.php");
-require_once("addusers.sql.php");
+require_once "includes/addusers.sql.php"; // Must stay AFTER $dbConfigs
 
 showHeader();
 
@@ -41,7 +42,7 @@ showHeader();
   l'exécute.
 </p>
 
-<form name="createBases" action="initialize.php" method="post">
+<form name="createBases" action="05_initialize.php" method="post">
 
 <table class="form">
   <col style="width: 25%" />
@@ -67,12 +68,12 @@ showHeader();
 
   <tr>
     <td class="button" colspan="2">
-    	<button type="submit" class="new">Création de la base et des utilisateurs</button>
+      <button type="submit" class="new">Création de la base et des utilisateurs</button>
     </td>
   </tr>
 
 <?php 
-if (@$_POST["adminhost"]) { 
+if (@$_POST["adminhost"]) {
   $dbConnection = new CMbDb(
     $_POST["adminhost"],
     $_POST["adminuser"],
@@ -105,13 +106,13 @@ if (@$_POST["adminhost"]) {
   </td>
 </tr>
 
-</table>
-
 <?php } ?>
+
+</table>
 
 </form>
 
-<form name="generateCode" action="initialize.php" method="post">
+<form name="generateCode" action="05_initialize.php" method="post">
 
 <input type="hidden" name="generate" value="true"/>
   
@@ -124,7 +125,7 @@ if (@$_POST["adminhost"]) {
 
   <tr>
     <td class="button" colspan="2">
-    	<button type="submit" class="edit">Générer le code de création des utilisateurs et des bases</button>
+      <button type="submit" class="edit">Générer le code de création des utilisateurs et des bases</button>
     </td>
   </tr>
   
@@ -182,4 +183,4 @@ if (@$_POST["adminhost"]) {
   
 </table>
 
-<?php require("valid.php"); checkAll(); showFooter(); ?>
+<?php showFooter(); ?>

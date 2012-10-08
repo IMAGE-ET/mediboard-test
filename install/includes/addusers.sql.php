@@ -1,12 +1,13 @@
 <?php
 /**
- * Generate systtem user SQL queries
+ * Generate system user SQL queries
  * 
  * @package    Mediboard
- * @subpackage install
+ * @subpackage Intaller
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Id$
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
 $queries = array();
@@ -28,9 +29,8 @@ foreach ($dbConfigs as $dbConfigName => $dbConfig) {
       
   // Grant user with database permissions
   $queries[] = 
-   "GRANT SELECT , INSERT , UPDATE , DELETE , CREATE , DROP , INDEX , ALTER , CREATE TEMPORARY TABLES
+   "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES
     ON `$name` . *
     TO '$user'@'$host';";
 }
 
-?>

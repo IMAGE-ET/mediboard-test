@@ -10,8 +10,6 @@
 
 CCanDo::checkAdmin();
 
-require_once "install/libs.php";
-
 CModule::loadModules(false);
 
 $setupClasses = CApp::getChildClasses("CSetup");

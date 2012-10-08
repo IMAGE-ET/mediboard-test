@@ -1,14 +1,12 @@
 <?php 
 /**
  * Installation Shared memory manager
- *
- * PHP version 5.1.x+
  *  
  * @package    Mediboard
  * @subpackage Intaller
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    SVN: $Id: checkauth.php 15808 2012-06-10 18:19:07Z mytto $ 
+ * @version    SVN: $Id$ 
  * @link       http://www.mediboard.org
  */
 
@@ -38,18 +36,18 @@ if (!SHM::rem("class-paths")) {
   return;
 }
 
-echo "Table des classes supprimée";
+echo "Table des classes supprimée<br />";
 
 if (!SHM::rem("child-classes")) {
   echo "Impossible de supprimer la table des classes<br />";
   return;
 }
 
-echo "Table des classes filles supprimée";
+echo "Table des classes filles supprimée<br />";
 
 if (!SHM::rem("modules")) {
   echo "Impossible de supprimer la table des classes<br />";
   return;
 }
 
-echo "Table des modules supprimée";
+echo "Table des modules supprimée<br />";

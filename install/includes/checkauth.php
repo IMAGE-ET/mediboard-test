@@ -1,8 +1,6 @@
 <?php
 /**
  * Installation authentication checker
- *
- * PHP version 5.1.x+
  *  
  * @package    Mediboard
  * @subpackage Intaller
@@ -13,11 +11,13 @@
  */
 
 require_once "header.php";
-require_once "CMbDb.class.php";
-require_once "Auth.php";
 
 if (!@include_once $mbpath."includes/config.php") { 
   return;
+}
+
+function computeHash($password, $salt) {
+  return hash("SHA256", $salt.$password);
 }
 
 /**
@@ -26,10 +26,7 @@ if (!@include_once $mbpath."includes/config.php") {
  * @return void
  */
 function showLogin() {
-  include "valid.php";
-  checkAll();
   showHeader();
-  // @codingStandardsIgnoreStart
 ?>
 
 <form name="login" method="post" action="">
@@ -54,54 +51,62 @@ function showLogin() {
 </form>
 
 <?php
-  // @codingStandardsIgnoreEnd
   showFooter();
-  die();
 }
 
 $dbConfig = $dPconfig["db"]["std"];
 $host = $dbConfig["dbhost"];
-$name = $dbConfig["dbname"];
 $user = $dbConfig["dbuser"];
 $pass = $dbConfig["dbpass"];
+$name = $dbConfig["dbname"];
+
 $table = "users";
 $userCol = "user_username";
 $passCol = "user_password";
+$saltCol = "user_salt";
 
-$params = array(
-  "dsn" => "mysql://$user:$pass@$host/$name",
-  "table" => $table,
-  "usernamecol" => $userCol,
-  "passwordcol" => $passCol
-);
+$db = new CMbDb($host, $user, $pass, $name);
 
-$auth = new Auth("DB", $params);
-$auth->setShowLogin(false);
-$auth->start();
-
-// Abandon if authentication is not possible
-$users = $auth->listUsers();
-if (PEAR::isError($users)) {
+if (!$db->connect()) {
+  // DB not configured yet, don't need to auth
   return;
 }
 
+$list = $db->getAssoc("SELECT * FROM $table");
+
+if (!$list || !isset($list[1])) {
+  return; 
+}
+
+$admin_user = $list[1];
+
 // Abandon if only user is still admin/admin
-if ($users[0][$userCol] == "admin" and $users[0][$passCol] == md5("admin")) {
+if ($admin_user[$userCol] == "admin" && $admin_user[$passCol] == md5("admin")) {
   return;
 }
 
 // Check if any authentification
-if (!$auth->checkAuth()) {
-  showLogin();
-}
+if (!empty($_POST["username"]) && !empty($_POST["password"])) {
+  $username = $_POST["username"];
+  $password = $_POST["password"];
 
-// Check if authentified user is root admin with user_id = 1
-$db = new CMbDb($host, $user, $pass, $name);
-if ($db->connect()) {
-  $authUserId = $db->getOne("SELECT * FROM $table WHERE `$userCol` = ?", $auth->getUsername());
-  if ($authUserId != 1) {
-    $auth->logout();
+  $username_db = $admin_user[$userCol];
+  $password_db = $admin_user[$passCol];
+  $salt_db     = $admin_user[$saltCol];
+  
+  sleep(2); // Intentional to avoid brute force
+  
+  if ($username == $username_db && (md5($password) == $password_db || computeHash($password, $salt_db) == $password_db)) {
+    $_SESSION["auth_username"] = $username;
+  }
+  else {
+    session_unset();
+    session_destroy();
     showLogin();
+    return;
   }
 }
-?>
+elseif (empty($_SESSION["auth_username"])) {
+  showLogin();
+  return;
+}

@@ -13,6 +13,9 @@ CCanDo::checkRead();
 $object_class = CValue::get("object_class");
 $object_guid  = CValue::get("object_guid");
 $hide_tree    = CValue::get("hide_tree");
+$tree_width   = CValue::get("tree_width");
+$group_id     = CValue::get("group_id");
+$columns      = CValue::get("col");
 
 if (!$object_class && $object_guid) {
   $parts = explode("-", $object_guid);
@@ -27,11 +30,11 @@ if (!$object_guid) {
   $object_guid = CValue::session("object_guid", "$object_class-0");
 }
 
-$columns = CValue::get("col");
-
 $smarty = new CSmartyDP("modules/system");
 $smarty->assign("object_class", $object_class);
-$smarty->assign("object_guid", $object_guid);
-$smarty->assign("columns", $columns);
-$smarty->assign("hide_tree", $hide_tree);
+$smarty->assign("object_guid",  $object_guid);
+$smarty->assign("columns",      $columns);
+$smarty->assign("hide_tree",    $hide_tree);
+$smarty->assign("tree_width",   $tree_width);
+$smarty->assign("group_id",     $group_id);
 $smarty->display("vw_object_tree_explorer.tpl");

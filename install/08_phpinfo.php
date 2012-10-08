@@ -1,6 +1,6 @@
 <?php
 /**
- * $Id$
+ * PHP general installation
  *  
  * @package    Mediboard
  * @subpackage Intaller
@@ -10,4 +10,15 @@
  * @link       http://www.mediboard.org
  */
 
-header("Location: 01_check.php");
+require_once "includes/header.php" ;
+
+showHeader();
+?>
+
+<div style="font-size: 14px">
+  
+  <?php phpinfo(); ?>
+  
+</div>
+
+<?php showFooter(); ?>

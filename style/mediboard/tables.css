@@ -357,6 +357,28 @@ table.layout > * > tr > th {
   background: transparent !important;
 }
 
+table.layout > * > tr > td.separator {
+  width: 8px;
+  background: #eee!important;
+  vertical-align: middle;
+  text-align:center;
+  color: #AAA;
+  cursor: pointer;
+  font-size: 9px;
+}
+
+table.layout > * > tr > td.separator:hover {
+  background: #ddd!important;
+}
+
+table.layout > * > tr > td.separator:before {
+  content: "<\A<\A<";
+}
+
+table.layout > * > tr > td.separator.expand:before {
+  content: ">\A>\A>";
+}
+
 .desktop tbody.hoverable:hover tr td,
 .desktop table.tbl tr:hover td,
 .desktop div.tree-header:hover,

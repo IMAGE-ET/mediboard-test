@@ -297,6 +297,15 @@ class CSetup {
     $this->addQuery($query);
   }
   
+  static function isOldPrefSystem($core_upgrade = false){
+    if (self::$_old_pref_system === null || $core_upgrade) {
+      $ds = CSQLDataSource::get("std");
+      self::$_old_pref_system = $ds->loadField("user_preferences", "pref_name") != null;
+    }
+    
+    return self::$_old_pref_system;
+  }
+  
   /**
    * Launches module upgrade process
    * 
@@ -304,11 +313,11 @@ class CSetup {
    * 
    * @return void
    */
-  function upgrade($oldRevision) {
-    if (array_key_exists($this->mod_version, $this->queries)) {
+  function upgrade($oldRevision, $core_upgrade = false) {
+    /*if (array_key_exists($this->mod_version, $this->queries)) {
       CAppUI::setMsg("Latest revision '%s' should not have upgrade queries", UI_MSG_ERROR, $this->mod_version);
       return;
-    }
+    }*/
 
     if (!array_key_exists($oldRevision, $this->queries) && 
         !array_key_exists($oldRevision, $this->config_moves)) {
@@ -320,11 +329,6 @@ class CSetup {
     reset($this->revisions);
     while ($oldRevision != $currRevision = current($this->revisions)) {
       next($this->revisions);
-    }
-
-    if (self::$_old_pref_system === null) {
-      $ds = CSQLDataSource::get("std");
-      self::$_old_pref_system = $ds->loadField("user_preferences", "pref_name") != null;
     }
     
     do {
@@ -375,7 +379,7 @@ class CSetup {
         
         // Former pure SQL system
         // Cannot check against module version or fresh install will generate errors
-        if (self::$_old_pref_system) {
+        if (self::isOldPrefSystem($core_upgrade)) {
           $query = "SELECT * FROM `user_preferences` WHERE `pref_user` = '0' && `pref_name` = '$_name'";
           $result = $this->ds->exec($query);
           

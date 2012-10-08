@@ -1148,26 +1148,6 @@ select.helper {
   resize: vertical;
 }
 
-/** ExForms **/
-.ex-form fieldset {
-  margin: 0px;
-}
-
-div.ex-message-title {
-  font-weight: bold;
-  border-bottom: 1px solid #666;
-  font-size: 1.2em;
-  left: 0.5em; 
-  right: 0.5em; 
-  line-height: 1.4;
-  padding-top: 3px;
-  position: absolute;
-}
-
-span.ex-message-title-spacer {
-  font-size: 1.6em;
-}
-
 /** Readonly mode **/
 form.readonly .inputExtension,
 form.readonly .dropdown-trigger,

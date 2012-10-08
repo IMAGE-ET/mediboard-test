@@ -1,8 +1,6 @@
 <?php
 /**
  * Installation file access checker
- *
- * PHP version 5.1.x+
  *  
  * @package    Mediboard
  * @subpackage Intaller
@@ -12,66 +10,10 @@
  * @link       http://www.mediboard.org
  */
 
-
-require_once "checkauth.php";
-
-/**
- * File access check helper
- * Responsibilities:
- *  - path and description of path
- *  - checking
- */
-class CPathAccess {
-  var $path = "";
-  var $description = "";
-  var $reason = array();
-
-  /**
-   * Actually check path is writable
-   * 
-   * @return bool
-   */
-  function check() {
-    global $mbpath;
-    return is_writable($mbpath.$this->path);
-  }
-}
-
-$pathAccesses = array();
-
-$pathAccess = new CPathAccess;
-$pathAccess->path = "tmp/";
-$pathAccess->description = "Répertoire des fichiers temporaires";
-
-$pathAccesses[] = $pathAccess;
-
-$pathAccess = new CPathAccess;
-$pathAccess->path = "files/";
-$pathAccess->description = "Répertoire de tous les fichiers attachés";
-
-$pathAccesses[] = $pathAccess;
-
-$pathAccess = new CPathAccess;
-$pathAccess->path = "lib/";
-$pathAccess->description = "Répertoire d'installation des bibliothèques tierces";
-
-$pathAccesses[] = $pathAccess;
-
-$pathAccess = new CPathAccess;
-$pathAccess->path = "includes/";
-$pathAccess->description = "Répertoire du fichier de configuration du système";
-
-$pathAccesses[] = $pathAccess;
-
-$pathAccess = new CPathAccess;
-$pathAccess->path = "modules/hprimxml/xsd";
-$pathAccess->description = "Répertoire des schemas HPRIM";
-
-$pathAccesses[] = $pathAccess;
+require_once "includes/checkauth.php";
 
 showHeader();
 
-// @codingStandardsIgnoreStart
 ?>
 
 <h2>Vérification des accès en écriture</h2>
@@ -111,7 +53,9 @@ showHeader();
   <th>Vérification ?</th>
 </tr>
   
-<?php foreach($pathAccesses as $pathAccess) { ?>
+<?php 
+$pathAccess = new CPathAccess();
+foreach($pathAccess->getAll() as $pathAccess) { ?>
 <tr>
   <td><strong><?php echo $pathAccess->path; ?></strong></td>
   <td class="text"><?php echo nl2br($pathAccess->description); ?></td>
@@ -127,9 +71,4 @@ showHeader();
   
 </table>
 
-<?php
-// @codingStandardsIgnoreStop
-require "valid.php"; 
-checkAll();
-showFooter(); 
-?>
+<?php showFooter(); ?>

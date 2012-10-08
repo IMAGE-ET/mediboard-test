@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 <style type="text/css">
@@ -18,10 +19,12 @@ body.loaded {
 /**
  * @package Mediboard
  * @subpackage install
- * @version $Revision: 6153 $
+ * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
+
+die;
 
 if (isset($_POST["action"])) {
   $action = $_POST["action"];

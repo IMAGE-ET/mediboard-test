@@ -12,9 +12,9 @@
 
 $dPconfig["forms"] = array(
   "CExClassField" => array(
-    "force_concept" => 0,
+    "force_concept" => 1,
   ),
   "CExConcept" => array(
-    "force_list"    => 0,
+    "force_list"    => 1,
   ),
 );

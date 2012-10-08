@@ -1,8 +1,6 @@
-<?php 
+<?php
 /**
- * Installation database structure checker
- *
- * PHP version 5.1.x+
+ * $Id$
  *  
  * @package    Mediboard
  * @subpackage Intaller
@@ -13,7 +11,6 @@
  */
 
 require_once "header.php";
-require_once "CMbDb.class.php";
 
 $dbConfig = $dPconfig["db"]["std"];
 $db = new CMbDb(
@@ -26,7 +23,6 @@ $db = new CMbDb(
 $db->connect();
 if (!$db->getOne("SELECT * FROM `users`")) {
   showHeader();
-  // @codingStandardsIgnoreStart
 ?>
 
 <div class="small-error">
@@ -36,10 +32,6 @@ if (!$db->getOne("SELECT * FROM `users`")) {
 </div>
 
 <?php
-  // @codingStandardsIgnoreStop
-  require "valid.php";
-  checkAll();
-  showFooter();
-  die();
+showFooter();
 }
 ?>

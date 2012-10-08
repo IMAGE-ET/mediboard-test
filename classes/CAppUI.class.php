@@ -247,7 +247,8 @@ class CAppUI {
         $params .= "&suppressHeaders=1";
       }
       
-      header("Location: index.php?$params");
+      $query = ($params && $params[0] !== "#" ? "?$params" : "");
+      header("Location: index.php$query");
       CApp::rip();
     }
   }

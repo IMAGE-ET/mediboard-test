@@ -1,16 +1,18 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage install
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Ending installation step
+ *  
+ * @package    Mediboard
+ * @subpackage Intaller
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
-require_once("checkconfig.php");
-require_once("checkstructure.php");
-require_once("checkauth.php");
+require_once "includes/checkconfig.php";
+require_once "includes/checkstructure.php";
+require_once "includes/checkauth.php";
 
 showHeader(); 
 
@@ -53,7 +55,7 @@ function checkForm(oForm) {
   minuscules et majuscules, de chiffres et d'autres symboles comme @$%^, etc.
 </div>
 
-<form name="changePassword" action="finish.php" method="post" onsubmit="return checkForm(this)">
+<form name="changePassword" action="07_finish.php" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="changePassword" value="true" />
 <table class="form">
 
@@ -63,12 +65,12 @@ function checkForm(oForm) {
 
   <tr>
     <th><label for="password1" title="Saisir un mot de passe fiable">Saisir le mot de passe :</label></th>
-    <td><input type="password" size="20" name="password1" value="" /></td>
+    <td><input type="password" size="20" id="password1" name="password1" value="" autofocus /></td>
   </tr>
 
   <tr>
     <th><label for="password2" title="Re-saisir le mot de passe pour vérification">Re-saisir le mot de passe :</label></th>
-    <td><input type="password" size="20" name="password2" value="" /></td>
+    <td><input type="password" size="20" id="password2" name="password2" value="" /></td>
   </tr>
 
 
@@ -83,9 +85,11 @@ function checkForm(oForm) {
 </form>
 
 <?php
-if (@$_POST["changePassword"]) {
+if (@$_POST["changePassword"] && $_POST["password1"] === $_POST["password2"]) {
   $password = $_POST["password1"];
-  $res = $auth->changePassword("admin", $password);
+  
+  // TODO salt will never be ready for now, fix it
+  $db->query("UPDATE $table SET $passCol = ? WHERE $userCol = 'admin'", array(md5($password)));
 ?>
 
 <table class="tbl">
@@ -117,7 +121,7 @@ if (@$_POST["changePassword"]) {
 <h3>Installer et configurer les modules</h3>
 
 <?php
-if (@$_POST["changePassword"] and $password != "admin") {
+if (@$_POST["changePassword"] && $password != "admin") {
 ?>
 <div class="small-success">
   Félicitations !
@@ -147,4 +151,4 @@ if (@$_POST["changePassword"] and $password != "admin") {
   </a>
 </div>
 
-<?php require("valid.php"); checkAll(); showFooter(); ?>
+<?php showFooter(); ?>

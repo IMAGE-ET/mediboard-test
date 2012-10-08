@@ -113,21 +113,15 @@ class CPermObject extends CMbObject {
     $perms["user"] = $perm->loadMatchingList();
     
     // Build final tree
-    foreach($perms as $owner => $_perms) {
-      foreach($_perms as $_perm) {
+    foreach ($perms as $owner => $_perms) {
+      foreach ($_perms as $_perm) {
         self::$users_perms[$user->_id][$_perm->object_class][$_perm->object_id ? $_perm->object_id : "all"] = $_perm->permission;
       }
     }
-    
-    mbTrace(self::$users_perms, "User perm objects");
   }
   
   // Those functions are statics
   static function loadUserPerms($user_id = null) {
-    if (CPermModule::$system_down) {
-      return true;
-    }
-
     global $userPermsObjects;
     
     // Déclaration du user
@@ -144,13 +138,13 @@ class CPermObject extends CMbObject {
     $permsObjectSelf = CPermObject::loadExactPermsObject($user->user_id);
     
     // Creation du tableau de droits du user
-    foreach($permsObjectSelf as $key => $value){
+    foreach ($permsObjectSelf as $key => $value){
       $tabObjectSelf["obj_$value->object_id$value->object_class"] = $value;
     }
     
     // Creation du tableau de droits du profil
     $permsObjectProfil = CPermObject::loadExactPermsObject($user->profile_id);
-    foreach($permsObjectProfil as $key => $value){
+    foreach ($permsObjectProfil as $key => $value){
       $tabObjectProfil["obj_$value->object_id$value->object_class"] = $value;
     }
     
@@ -158,7 +152,7 @@ class CPermObject extends CMbObject {
     $tabObjectFinal = array_merge($tabObjectProfil, $tabObjectSelf);
     
     // Creation du tableau de fusion des droits
-    foreach($tabObjectFinal as $object => $value){
+    foreach ($tabObjectFinal as $object => $value){
       $permsObjectFinal[$value->perm_object_id] = $value;
     }
 
@@ -166,10 +160,11 @@ class CPermObject extends CMbObject {
     ksort($permsObjectFinal);
 
     $userPermsObjects = array();
-    foreach($permsObjectFinal as $perm_obj) {
-      if(!$perm_obj->object_id){
+    foreach ($permsObjectFinal as $perm_obj) {
+      if (!$perm_obj->object_id) {
         $userPermsObjects[$perm_obj->object_class][0] = $perm_obj;
-      }else{
+      }
+      else {
         $userPermsObjects[$perm_obj->object_class][$perm_obj->object_id] = $perm_obj;
       }
     }
@@ -188,10 +183,6 @@ class CPermObject extends CMbObject {
     // Use permission query cache when available
     if (isset(self::$users_cache[$user->_id][$class][$id])) {
       return self::$users_cache[$user->_id][$class][$id] >= $permType;
-    }
-
-    if (CPermModule::$system_down) {
-      return true;
     }
 
     // New cached permissions system : DO NOT REMOVE
@@ -220,12 +211,15 @@ class CPermObject extends CMbObject {
     $result       = PERM_DENY;
     $object_class = $object->_class;
     $object_id    = $object->_id;
-    if(isset($userPermsObjects[$object_class][$object_id])) {
+    
+    if (isset($userPermsObjects[$object_class][$object_id])) {
       return $userPermsObjects[$object_class][$object_id]->permission >= $permType;
     }
-    if(isset($userPermsObjects[$object_class][0])) {
+    
+    if (isset($userPermsObjects[$object_class][0])) {
       return $userPermsObjects[$object_class][0]->permission >= $permType;
     }
+    
     return $defaultObject != null ?
       $defaultObject->getPerm($permType) :
       $object->_ref_module->getPerm($permType);
@@ -235,13 +229,14 @@ class CPermObject extends CMbObject {
     $msg = null;
     $ds = $this->_spec->ds;
     
-    if(!$this->perm_object_id) {
+    if (!$this->perm_object_id) {
       $where = array();
       $where["user_id"]      = $ds->prepare("= %",$this->user_id);
       $where["object_class"] = $ds->prepare("= %",$this->object_class);
-      if($this->object_id){
+      if ($this->object_id) {
         $where["object_id"]    = $ds->prepare("= %",$this->object_id);
-      }else{
+      }
+      else {
         $where["object_id"]    = "IS NULL";
       }
       
@@ -252,10 +247,11 @@ class CPermObject extends CMbObject {
       
       $nb_result = $ds->loadResult($query->getRequest());
       
-      if($nb_result){
+      if ($nb_result) {
         $msg.= "Une permission sur cet objet existe déjà.<br />";
       }
     }
+    
     return $msg . parent::check();
   }
 }
@@ -263,5 +259,3 @@ class CPermObject extends CMbObject {
 if (is_null(CPermModule::$users_perms)) {
   CPermObject::loadUserPerms();
 }
-
-?>

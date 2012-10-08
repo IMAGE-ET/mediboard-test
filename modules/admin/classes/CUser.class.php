@@ -246,8 +246,8 @@ class CUser extends CMbObject {
     }
     
     // If the new password hashing system is not ready yet
-    // Or if the user is "admin", or the /install won't work anymore (FIXME)
-    if (!$this->loginSaltReady() || $this->user_username == "admin") {
+    if (!$this->loginSaltReady()) {
+      CValue::setSessionAbs("_pass_deferred", $this->_user_password);
       $this->user_password = md5($this->_user_password);
       return;
     }

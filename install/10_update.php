@@ -8,8 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-require_once("checkauth.php");
-require_once("header.php");
+require_once "includes/checkauth.php" ;
+require_once "includes/header.php";
 
 showHeader();
 
@@ -70,18 +70,18 @@ Defaults:[nom de l'utilisateur Apache] passwd_timeout=0</pre>
   </ul>
 </div>
 
-<form name="info" action="updatescript.php" target="info_res" method="post">
+<form name="info" action="10a_updatescript.php" target="info_res" method="post">
   <input type="hidden" name="action" value="info" />
     
   <fieldset>
     <legend>Informations de mise à jour</legend>
     <button class="change" name="button_info" onclick="loadRequest('info_res');">Infos</button>
   
-    <iframe name="info_res" src="updatescript.php"></iframe>
+    <iframe name="info_res" src="10a_updatescript.php"></iframe>
   </fieldset>
 </form>
 
-<form name="real" target="real_res" action="updatescript.php" method="post" onsubmit="return checkPassword(this)">
+<form name="real" target="real_res" action="10a_updatescript.php" method="post" onsubmit="return checkPassword(this)">
   <input type="hidden" name="action" value="real" />
   
   <fieldset>
@@ -109,8 +109,8 @@ Defaults:[nom de l'utilisateur Apache] passwd_timeout=0</pre>
     
     <button class="change" id="update" name="button_real">Mise à jour</button>
     
-    <iframe name="real_res" src="updatescript.php"></iframe>
+    <iframe name="real_res" src="10a_updatescript.php"></iframe>
   </fieldset>
 </form>
 
-<?php require("valid.php"); checkAll(); showFooter(); ?>
+<?php showFooter(); ?>

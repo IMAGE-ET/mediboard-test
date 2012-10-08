@@ -10,4 +10,14 @@
  * @link       http://www.mediboard.org
  */
 
-header("Location: 01_check.php");
+class CCheckable {
+  function checkAll($strict = true){
+    foreach($this->getAll() as $item) {
+      if (!$item->check($strict)) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+}

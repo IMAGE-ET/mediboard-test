@@ -1,12 +1,13 @@
 <?php
 /**
  * $Id$
- * 
+ *  
  * @package    Mediboard
- * @subpackage install
+ * @subpackage Intaller
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision$
+ * @version    SVN: $Id$ 
+ * @link       http://www.mediboard.org
  */
 
 require_once "DB.php";
@@ -107,10 +108,28 @@ class CMbDb {
    * @param string $query SQL query
    * @param array  $data  Preparation data
    * 
-   * @return result The actual result if successfull, false otherwise
+   * @return result The actual result if successful, false otherwise
    */
   function getOne($query, $data = array()) {
     $res =& $this->_db->getOne($query, $data);
+    if (PEAR::isError($res)) {
+      $this->logError($res, "Erreur d'exécution de requête");
+      return false;
+    }
+
+    return $res;
+  }
+  
+  /**
+   * Execute a get one query on data source
+   * 
+   * @param string $query SQL query
+   * @param array  $data  Preparation data
+   * 
+   * @return result The actual result if successful, false otherwise
+   */
+  function getAssoc($query, $data = array()) {
+    $res =& $this->_db->getAssoc($query, true, $data, DB_FETCHMODE_ASSOC);
     if (PEAR::isError($res)) {
       $this->logError($res, "Erreur d'exécution de requête");
       return false;

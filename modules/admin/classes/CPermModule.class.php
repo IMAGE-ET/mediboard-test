@@ -12,8 +12,6 @@
  * The CPermModule class
  */
 class CPermModule extends CMbObject {
-  static $system_down = false;
-
   // Constants
   const DENY = 0;
   const READ = 1;
@@ -24,11 +22,11 @@ class CPermModule extends CMbObject {
 //  static $users_perms = array(); // NEW query system
   static $users_cache = array();
 
-	static $pair_deny = array (
+  static $pair_deny = array(
     "permission" => CPermModule::DENY, 
     "view"       => CPermModule::DENY,
   );
-	
+  
   // DB Table key
   var $perm_module_id = null;
 
@@ -37,9 +35,9 @@ class CPermModule extends CMbObject {
   var $mod_id     = null;
   var $permission = null;
   var $view       = null;
-	
-	// Distant fields
-	var $_owner = null;
+  
+  // Distant fields
+  var $_owner = null;
   
   // References
   var $_ref_db_user   = null;
@@ -53,7 +51,7 @@ class CPermModule extends CMbObject {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["user_id"]     = "ref notNull class|CUser cascade";
     $specs["mod_id"]      = "ref class|CModule";
     $specs["permission"]  = "enum list|0|1|2";
@@ -64,7 +62,7 @@ class CPermModule extends CMbObject {
   }
   
   function loadRefDBModule() {
-  	return $this->_ref_db_module = $this->loadFwdRef("mod_id", true);
+    return $this->_ref_db_module = $this->loadFwdRef("mod_id", true);
   }
 
   function loadRefDBUser() {
@@ -84,7 +82,7 @@ class CPermModule extends CMbObject {
     );
     return $perm->loadList($where);
   }
-	
+  
   /**
    * Build the class object permission tree for given user
    * Cache the result as static member
@@ -113,21 +111,17 @@ class CPermModule extends CMbObject {
     $perms["user"] = $perm->loadMatchingList();
     
     // Build final tree
-    foreach($perms as $owner => $_perms) {
-      foreach($_perms as $_perm) {
+    foreach ($perms as $owner => $_perms) {
+      foreach ($_perms as $_perm) {
         self::$users_perms[$user->_id][$_perm->mod_id ? $_perm->mod_id : "all"] = array(
-				  "permission" => $_perm->permission,
-					"view"       => $_perm->view,
-				);
+          "permission" => $_perm->permission,
+          "view"       => $_perm->view,
+        );
       }
     }
-  }	
+  }  
   
   static function loadUserPerms($user_id = null) {
-    if (CPermModule::$system_down) {
-      return true;
-    }
-    
     global $userPermsModules;
     
     // Déclaration du user
@@ -148,12 +142,12 @@ class CPermModule extends CMbObject {
     $permsSelf = CPermModule::loadExactPerms($user->user_id);
     
     // Creation du tableau de droit de permsSelf
-    foreach($permsSelf as $key => $value){
+    foreach ($permsSelf as $key => $value){
       $tabModSelf["mod_$value->mod_id"] = $value;
     }
     
     // Creation du tableau de droit de permsProfil
-    foreach($permsProfil as $key => $value){
+    foreach ($permsProfil as $key => $value){
       $tabModProfil["mod_$value->mod_id"] = $value;
     }
     
@@ -161,7 +155,7 @@ class CPermModule extends CMbObject {
     $tabModFinal = array_merge($tabModProfil, $tabModSelf);
     
     // Creation du tableau de fusion des droits
-    foreach($tabModFinal as $mod => $value){
+    foreach ($tabModFinal as $mod => $value){
       $permsFinal[$value->perm_module_id] = $value;
     }
 
@@ -169,27 +163,30 @@ class CPermModule extends CMbObject {
     ksort($permsFinal);
 
     $listPermsModules = $permsFinal;
-    if($user_id !== null) {
+    if ($user_id !== null) {
       $currPermsModules = array();
-      foreach($listPermsModules as $perm_mod) {
-        if(!$perm_mod->mod_id){
+      foreach ($listPermsModules as $perm_mod) {
+        if (!$perm_mod->mod_id) {
           $currPermsModules[0] = $perm_mod;
-        }else{
+        }
+        else {
           $currPermsModules[$perm_mod->mod_id] = $perm_mod;
         }
       }
       return $currPermsModules;
     } 
-		
-		else {
+    
+    else {
       $userPermsModules = array();
-      foreach($listPermsModules as $perm_mod) {
-        if(!$perm_mod->mod_id){
+      foreach ($listPermsModules as $perm_mod) {
+        if (!$perm_mod->mod_id) {
           $userPermsModules[0] = $perm_mod;
-        }else{
+        }
+        else {
           $userPermsModules[$perm_mod->mod_id] = $perm_mod;
         }
       }
+      
       return $userPermsModules;
     }
   }
@@ -206,45 +203,45 @@ class CPermModule extends CMbObject {
     $user = CUser::get($user_id);
   
     // Use permission query cache when available
-		if (isset(self::$users_cache[$user->_id][$mod_id])) {
-			return self::$users_cache[$user->_id][$mod_id][$field] >= $permType;
-		}
-  	
-    if (CPermModule::$system_down) {
-      return true;
+    if (isset(self::$users_cache[$user->_id][$mod_id])) {
+      return self::$users_cache[$user->_id][$mod_id][$field] >= $permType;
     }
-		
+    
     // New cached permissions system : DO NOT REMOVE
     if (is_array(self::$users_perms)) {
-			self::buildUser($user->_id);
-			$perms = self::$users_perms[$user->_id];
-			
-			// Module specific, or All modules, or DENY
-			$perm =  
-			  (isset($perms[$mod_id]) ? $perms[$mod_id] :
-				(isset($perms["all"  ]) ? $perms["all"  ] : self::$pair_deny));
+      self::buildUser($user->_id);
+      $perms = self::$users_perms[$user->_id];
+      
+      // Module specific, or All modules, or DENY
+      $perm =  
+        (isset($perms[$mod_id]) ? $perms[$mod_id] :
+        (isset($perms["all"  ]) ? $perms["all"  ] : self::$pair_deny));
 
       // Register cache
       self::$users_cache[$user->_id][$mod_id] = $perm;
       return $permType === null ? $perm[$field] : $perm[$field] >= $permType;
-		}
+    }
 
     // Old permission system    
     global $userPermsModules;
-		
+    
     $result = PERM_DENY;
-    if($user_id !== null) {
+    if ($user_id !== null) {
       $perms = CPermModule::loadUserPerms($user_id);
-    } else {
+    }
+    else {
       $perms =& $userPermsModules;
     }
-    if(isset($perms[0])) {
+    
+    if (isset($perms[0])) {
       $result = $perms[0]->$field;
     }
-    if(isset($perms[$mod_id])) {
-      if(!$mod_id){
+    
+    if (isset($perms[$mod_id])) {
+      if (!$mod_id) {
         $result = $perms[0]->$field;
-      }else{
+      }
+      else {
         $result = $perms[$mod_id]->$field;
       }
     }
@@ -271,8 +268,8 @@ class CPermModule extends CMbObject {
   static function getVisibleModules() {
     $listReadable = array();
     $listModules = CModule::getVisible();
-    foreach($listModules as $module) {
-      if(CPermModule::getViewModule($module->mod_id, PERM_READ)) {
+    foreach ($listModules as $module) {
+      if (CPermModule::getViewModule($module->mod_id, PERM_READ)) {
         $listReadable[$module->mod_name] = $module;
       }
     }
@@ -281,9 +278,6 @@ class CPermModule extends CMbObject {
 }
 
 
-// Check if permission system is down
-CPermModule::$system_down = !CSQLDataSource::get("std")->loadTable("perm_module");
 if (is_null(CPermModule::$users_perms)) {
-	CPermModule::loadUserPerms();
+  CPermModule::loadUserPerms();
 }
-?>

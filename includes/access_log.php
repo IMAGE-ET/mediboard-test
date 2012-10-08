@@ -21,8 +21,9 @@ global $m, $action;
 
 // Check prerequisites
 $ds = CSQLDataSource::get("std");
+
 // $action may not defined when the module is inactive
-if (!$ds->loadTable("access_log") || !$action) { 
+if (!$action) { 
   return;
 }
 

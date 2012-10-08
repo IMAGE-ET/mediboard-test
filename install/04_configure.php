@@ -1,8 +1,6 @@
 <?php
 /**
  * Installation main configure form
- *
- * PHP version 5.1.x+
  *  
  * @package    Mediboard
  * @subpackage Intaller
@@ -12,8 +10,7 @@
  * @link       http://www.mediboard.org
  */
 
-
-require_once "checkauth.php";
+require_once "includes/checkauth.php";
 require_once $mbpath."includes/compat.php";
 require_once $mbpath."classes/CMbConfig.class.php";
 require_once $mbpath."classes/CMbArray.class.php";
@@ -23,7 +20,7 @@ if (isset($_POST["username"])) {
 }
 
 if (isset($_POST["password"])) {
-  unset($_POST["password"]); 
+  unset($_POST["password"]);
 }
 
 $mbConfig = new CMbConfig;
@@ -34,12 +31,11 @@ $dPconfig = $mbConfig->values;
 
 showHeader();
 
-// @codingStandardsIgnoreStart
 ?>
 
 <h2>Création du fichier de configuration</h2>
 
-<form name="configure" action="configure.php" method="post">
+<form name="configure" action="04_configure.php" method="post">
 
 <table class="form">
   <col style="width: 50%" />
@@ -59,7 +55,7 @@ showHeader();
   </tr>
   
   <tr>
-    <th><label for="instance_role" title="Instance">Rôle de l'instance</label></th>
+    <th><label for="instance_role">Rôle de l'instance</label></th>
     <td>
       <select name="instance_role" size="1">
         <option value="prod"   <?php if ($dPconfig['instance_role'] == 'prod'  ) echo 'selected="1"'; ?> >Production</option>
@@ -79,7 +75,7 @@ showHeader();
   </tr>
 
   <tr>
-    <th><label for="offline" title="Mode maintenance">Mode maintenance</label></th>
+    <th><label for="offline">Mode maintenance</label></th>
     <td>
       <input type="radio" name="offline" value="0" id="offline_0" <?php if ($dPconfig['offline'] == "0") echo 'checked="1"'; ?> />
       <label for="offline_0">Non</label>
@@ -113,7 +109,7 @@ showHeader();
     <th><label for="shared_memory" title="Choisir quelle extension doit tenter de gérer la mémoire partagée (celle-ci doit être installée)">Mémoire partagée</label></th>
     <td>
       <div class="small-info" style='float: right;'> 
-        <?php require_once("empty_shared_memory.php"); ?>
+        <?php require_once "includes/empty_shared_memory.php"; ?>
       </div>
       <select name="shared_memory" size="1">
         <option value="none"         <?php if ($dPconfig['shared_memory'] == 'none'        ) { echo 'selected="selected"'; } ?> >Disque</option>
@@ -133,23 +129,23 @@ showHeader();
   </tr>
 
   <tr>
-    <th><label for="db[std][dbhost]" title="Nom de l'hôte">Nom de l'hôte</label></th>
+    <th><label for="db[std][dbhost]">Nom de l'hôte</label></th>
     <td><input type="text" size="40" name="db[std][dbhost]" value="<?php echo @$dPconfig["db"]["std"]["dbhost"]; ?>" /></td>
   </tr>
 
   <tr>
-    <th><label for="db[std][dbname]" title="Nom de la base">Nom de la base</label></th>
+    <th><label for="db[std][dbname]">Nom de la base</label></th>
     <td><input type="text" size="40" name="db[std][dbname]" value="<?php echo @$dPconfig["db"]["std"]["dbname"]; ?>" /></td>
   </tr>
 
   <tr>
-    <th><label for="db[std][dbuser]" title="Nom de l'utilisateur">Nom de l'utilisateur</label></th>
+    <th><label for="db[std][dbuser]">Nom de l'utilisateur</label></th>
     <td><input type="text" size="40" name="db[std][dbuser]" value="<?php echo @$dPconfig["db"]["std"]["dbuser"]; ?>" /></td>
   </tr>
 
   <tr>
-    <th><label for="db[std][dbpass]" title="Mot de passe de l'utililisateur'">Mot de passe</label></th>
-    <td><input type="text" size="40" name="db[std][dbpass]" value="<?php echo @$dPconfig["db"]["std"]["dbpass"]; ?>" /></td>
+    <th><label for="db[std][dbpass]">Mot de passe</label></th>
+    <td><input type="password" size="40" name="db[std][dbpass]" value="<?php echo @$dPconfig["db"]["std"]["dbpass"]; ?>" /></td>
   </tr>
 
 <!--
@@ -193,10 +189,4 @@ showHeader();
 
 </form>
 
-<?php
-// @codingStandardsIgnoreStop
-
-require "valid.php"; 
-checkAll();
-showFooter(); 
-?>
+<?php showFooter(); ?>

@@ -1,8 +1,6 @@
 <?php
 /**
  * Installation database feed
- *
- * PHP version 5.1.x+
  *  
  * @package    Mediboard
  * @subpackage Intaller
@@ -12,15 +10,14 @@
  * @link       http://www.mediboard.org
  */
 
-require_once "checkconfig.php";
-require_once "checkauth.php";
+require_once "includes/checkconfig.php";
+require_once "includes/checkauth.php";
 
 $dbConfigs = $dPconfig["db"];
 unset($dbConfigs["ccam"]);
 
 showHeader(); 
 
-// @codingStandardsIgnoreStart
 ?>
 
 <h2>Test et construction initial de la base de données</h2>
@@ -33,7 +30,7 @@ showHeader();
   opérationnelle pour continuer.
 </p>
 
-<form action="feed.php" name="feedBase" method="post">  
+<form action="06_feed.php" name="feedBase" method="post">  
 <input type="hidden" name="do" value="true" />
 <table class="form">
   <tr>
@@ -56,7 +53,7 @@ if (@$_POST["do"]) {
     $dbConfig["dbpass"], 
     $dbConfig["dbname"]);
   if ($dbConnection->connect()) {
-    echo $dbConnection->queryDump("mediboard.sql");
+    echo $dbConnection->queryDump("includes/mediboard.sql");
   }
 ?>
 
@@ -87,7 +84,6 @@ if (@$_POST["do"]) {
 <?php } ?>
 
 <?php 
-// @codingStandardsIgnoreStop
 
 $dbConfig = $dbConfigs["std"];
 $db = new CMbDb(
@@ -99,7 +95,6 @@ $db = new CMbDb(
 
 $db->connect();
 if ($db->getOne("SELECT * FROM `users`")) {
-// @codingStandardsIgnoreStart
 ?>
 
 <div class="small-warning">
@@ -112,10 +107,4 @@ if ($db->getOne("SELECT * FROM `users`")) {
 
 <?php } ?>
 
-<?php 
-// @codingStandardsIgnoreStop
-
-require "valid.php";
-checkAll();
-showFooter(); 
-?>
+<?php showFooter(); ?>

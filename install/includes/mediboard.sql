@@ -127,8 +127,8 @@ CREATE TABLE IF NOT EXISTS `modules` (
 --
 
 INSERT INTO `modules` (`mod_id`, `mod_name`, `mod_directory`, `mod_version`, `mod_setup_class`, `mod_type`, `mod_active`, `mod_ui_name`, `mod_ui_icon`, `mod_ui_order`, `mod_ui_active`, `mod_description`) VALUES
-(1, 'admin', 'admin', '1.0.14', '', 'core', 1, 'User Admin', 'admin.png', 1, 1, ''),
-(2, 'system', 'system', '1.0.13', '', 'core', 1, 'System Admin', 'system.png', 2, 1, ''),
+(1, 'system', 'system', '1.0.13', '', 'core', 1, 'System Admin', 'system.png', 1, 1, ''),
+(2, 'admin', 'admin', '1.0.14', '', 'core', 1, 'User Admin', 'admin.png', 2, 1, ''),
 (3, 'dPetablissement', 'dPetablissement', '0.19', '', 'core', 1, 'Groups admin', 'dPetablissement.png', 3, 1, '');
 
 -- --------------------------------------------------------
