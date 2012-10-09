@@ -93,7 +93,7 @@ changeReceptionPage = function(start) {
           {{if $curr_delivery->_ref_stock->canEdit()}}
           <a href="?m=dPstock&amp;tab=vw_idx_stock_group&amp;stock_service_id={{$curr_delivery->_ref_stock->_id}}">
           {{/if}}
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_product->_guid}}')">{{$curr_delivery->_ref_stock}}</span>
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_delivery->_ref_stock->_ref_product->_guid}}')">{{$curr_delivery->_ref_stock}}</span>
           {{if $curr_delivery->_ref_stock->canEdit()}}
           </a>
           {{/if}}

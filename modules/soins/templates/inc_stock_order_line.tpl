@@ -63,7 +63,7 @@
          onchange="this.form._quantity_package.value = this.value/$qty" class="num notNull min|1"}}
       {{else}}
         <input type="hidden" name="endowment_quantity" value="{{$stock->quantity}}" class="num" />
-        <input type="hidden" name="endowment_item_id" value="{{$stock->_endowment_item_id}}" class="ref" />
+        <input type="hidden" name="endowment_item_id" value="{{if isset($stock->_endowment_item_id|smarty:nodefaults)}}{{$stock->_endowment_item_id}}{{/if}}" class="ref" />
         {{mb_field object=$stock field=quantity form="form-dispensation-$stock_id" prop="num notNull min|1" increment=1 size=3 min=1 style=$style}}
       {{/if}}
       <button type="button" class="comment notext" title="{{tr}}CProductDelivery-comments-desc{{/tr}}" onclick="$(this).up('form').elements.comments.up('.com').show().down('textarea').tryFocus()"></button>
