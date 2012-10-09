@@ -8,11 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$type    = CValue::get("type", "semaine");
+$type    = CValue::get("type", "week");
 $date    = CValue::get("date", mbDate());
 $bloc_id = CValue::get("bloc_id");
 
-if($type == "semaine") {
+if ($type == "week") {
   $date = mbDate("last sunday", $date);
   $fin  = mbDate("next sunday", $date);
   $date = mbDate("+1 day", $date);
