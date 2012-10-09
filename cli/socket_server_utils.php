@@ -14,11 +14,10 @@ PHP_SAPI === "cli" or die;
 $root_dir = dirname(__FILE__)."/..";
 require "$root_dir/classes/CSocketBasedServer.class.php";
 
-
 $server_type = "";
 $server_class = "";
 $class_path = "";
-switch ($argv[1]) {
+switch (strtolower($argv[1])) {
   case "dicom" :
     $server_type = "Dicom";
     $server_class = "CDicomServer";

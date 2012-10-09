@@ -8,6 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+// CLI or die
+PHP_SAPI === "cli" or die;
+
 // ---- Read arguments
 $argv = $_SERVER["argv"];
 $argc = $_SERVER["argc"];
@@ -56,9 +59,9 @@ switch ($command) {
       exit(0);
     }
     $n = 30;
-    $secs = 60;
+    $secs = 5;
     for ($i = 0; $i < $n; $i++) {
-      echo $server_class::send($host, $port, $server_class::sampleMessage());
+      echo $server_class::send($host, $port, $server_class::sampleMessage())."\n";
       usleep($secs * 1000000);
     }
     break;

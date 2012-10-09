@@ -8,9 +8,11 @@
  * @author SARL OpenXtrem
  */
 
-
 // For sig_handler
 declare(ticks = 1);
+
+// CLI or die
+PHP_SAPI === "cli" or die;
 
 // Ignores user logout
 ignore_user_abort(true);
@@ -45,7 +47,7 @@ function restart(){
 function on_shutdown() {
   global $exit_status, $pid_file, $handler;
   
-  switch($exit_status) {
+  switch ($exit_status) {
     case "error":
       outln("Server stopped unexpectedly, trying to restart.");
       restart();
