@@ -460,7 +460,7 @@ class CCodable extends CMbObject {
   }
 
   function getMaxCodagesActes() {
-    if(!$this->_id || $this->codes_ccam === null || $this->_forwardRefMerging) {
+    if (!$this->_id || $this->codes_ccam === null) {
       return;
     }
 
@@ -513,17 +513,18 @@ class CCodable extends CMbObject {
     
     //@todo: why not use $this->_old ?
     $oldObject = new $this->_class;
-    if($this->_id) {
+    if ($this->_id) {
       $oldObject->load($this->_id);
     }
     
-    if(CAppUI::conf("dPccam CCodable use_getMaxCodagesActes")){
-      if($this->codes_ccam != $oldObject->codes_ccam){
+    if (!$this->_forwardRefMerging && !$this->_merging && CAppUI::conf("dPccam CCodable use_getMaxCodagesActes")) {
+      if ($this->codes_ccam != $oldObject->codes_ccam) {
         if ($msg = $this->getMaxCodagesActes()) {
           return $msg;
         }
-      }   
+      }
     }
+    
     return parent::check();
   }
   

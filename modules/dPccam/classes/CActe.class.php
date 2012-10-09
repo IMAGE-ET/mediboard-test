@@ -136,26 +136,31 @@ class CActe extends CMbMetaObject {
   }
   
   function updateMontant(){
-    if (!$this->_preserve_montant){
-      $object = new $this->object_class;
-      $object->load($this->object_id);
-      // Permet de mettre a jour le montant dans le cas d'une consultation
-      return $object->doUpdateMontants();
+    if ($this->_preserve_montant || $this->_forwardRefMerging) {
+      return;
     }
+    
+    $object = new $this->object_class;
+    $object->load($this->object_id);
+    
+    // Permet de mettre a jour le montant dans le cas d'une consultation
+    return $object->doUpdateMontants();
   }
   
   function store(){
-    if ($msg = parent::store()){
+    if ($msg = parent::store()) {
       return $msg;
     }
+    
     return $this->updateMontant();
   }
   
   function delete(){
-    if ($msg = parent::delete()){
+    if ($msg = parent::delete()) {
       return $msg;
     }
-    if(!$this->_purge) {
+    
+    if (!$this->_purge) {
       return $this->updateMontant();
     }
   }

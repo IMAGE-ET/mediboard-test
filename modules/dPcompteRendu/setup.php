@@ -18,13 +18,21 @@ class CSetupdPcompteRendu extends CSetup {
    * @return string The SQL Query
    */
   static function replaceTemplateQuery($search, $replace, $force_content_table = false) {
+    static $_compte_rendu = null;
+    static $_compte_rendu_content_id = null;
+    
     $search  = htmlentities($search);
     $replace = htmlentities($replace);
     
     $ds = CSQLDataSource::get("std");
     
+    if ($_compte_rendu === null || $_compte_rendu_content_id === null) {
+      $_compte_rendu = $ds->loadTable("compte_rendu") != null;
+      $_compte_rendu_content_id = $_compte_rendu && $ds->loadField("compte_rendu", "content_id");
+    }
+    
     // Content specific table 
-    if ($force_content_table || ($ds->loadTable("compte_rendu") && $ds->loadField("compte_rendu", "content_id"))) {
+    if ($force_content_table || $_compte_rendu && $_compte_rendu_content_id) {
       return "UPDATE compte_rendu AS cr, content_html AS ch
         SET ch.content = REPLACE(`content`, '$search', '$replace')
         WHERE cr.object_id IS NULL
@@ -476,7 +484,7 @@ class CSetupdPcompteRendu extends CSetup {
     // Insertion des modèles par référence pour les packs
     function setup_addmodeles() {
       $ds = CSQLDataSource::get("std");
-      $query = "SELECT * from pack;";	
+      $query = "SELECT * from pack;";  
       $packs = $ds->loadList($query);
 
       foreach($packs as $_pack) {
