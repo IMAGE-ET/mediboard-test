@@ -883,6 +883,8 @@ class CSetuphl7 extends CSetup {
               ADD `handle_PV1_3` ENUM ('name','config_value','idex') DEFAULT 'name';";
     $this->addQuery($query);
     
+    $this->addDependency("ihe", "0.26");
+    
     $this->makeRevision("0.37");
     $query = "ALTER TABLE `receiver_ihe_config` 
                 ADD `RAD48_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5') DEFAULT '2.5';";

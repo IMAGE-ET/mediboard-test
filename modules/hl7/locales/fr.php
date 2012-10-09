@@ -118,6 +118,7 @@ $locales['CExchangeIHE-version-desc'] = 'Version de la transaction';
 $locales['CExchangeIHE.all'] = 'Tous les échanges IHE';
 $locales['CExchangeIHE.none'] = 'Aucun échange IHE';
 $locales['CExchangeIHE.object_class.CAffectation'] = 'Mouvement';
+$locales['CExchangeIHE.object_class.CConsultation'] = 'Consultation';
 $locales['CExchangeIHE.object_class.COperation'] = 'Opération';
 $locales['CExchangeIHE.object_class.CPatient'] = 'Patient';
 $locales['CExchangeIHE.object_class.CSejour'] = 'Séjour';
