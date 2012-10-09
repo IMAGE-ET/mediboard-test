@@ -11,6 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
+CCanDo::checkEdit();
 
 $client_addr = CValue::post("client_addr");
 $message     = stripslashes(CValue::post("message"));

@@ -28,8 +28,8 @@ class CReceiverIHE extends CInteropReceiver {
     $spec->table = 'receiver_ihe';
     $spec->key   = 'receiver_ihe_id';
     $spec->messages = array(
-      "PAM"    => array ("CPAM"),
-      "PAM_FR" => array ("CPAMFR"),
+      "PAM"    => array ("evenementsPatient"),
+      "PAM_FR" => array ("evenementsPatient"),
       "DEC"    => array ("CDEC"),
       "SWF"    => array ("CSWF"),
     );
@@ -92,7 +92,7 @@ class CReceiverIHE extends CInteropReceiver {
     if (!$msg = $evenement->flatten()) {
       return;
     }
-    
+
     $source = CExchangeSource::get("$this->_guid-evenementsPatient");
    
     if (!$source->_id || !$source->active) {
