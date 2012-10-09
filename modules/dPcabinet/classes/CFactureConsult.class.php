@@ -280,9 +280,9 @@ class CFactureConsult extends CMbObject {
       $_num_reference = str_replace(' ','',$_num_reference);
       $_num_reference = str_replace('.','',$_num_reference);
       $this->_num_reference = substr($_num_reference, 0, 2)." ".substr($_num_reference, 2, 5)." ".substr($_num_reference, 7, 5)." ".substr($_num_reference, 12, 5)." ".substr($_num_reference, 17, 5)." ".substr($_num_reference, 22, 5);
-
-      return $this->_ref_patient;
     }
+    
+    return $this->_ref_patient;
   }  
    
   /**
