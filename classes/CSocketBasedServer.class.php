@@ -297,7 +297,7 @@ class CSocketBasedServer {
         return json_encode($this->getStats());
     }
     
-    // Verification qu'on ne recoit pas un en-tete de message en ayant deja des donnÃ©es en buffer
+    // Verification qu'on ne recoit pas un en-tete de message en ayant deja des données en buffer
     if ($buffer && $this->isHeader($request)) {
       echo sprintf(" !!! Got a header, while having data in the buffer from %d\n", $id);
     }
@@ -323,7 +323,8 @@ class CSocketBasedServer {
       
       $start = microtime(true);
       
-      $url = $this->call_url."/index.php?login=$this->username:$this->password";
+      // We must keep m=$module in the GET because of user permissions
+      $url = $this->call_url."/index.php?login=$this->username:$this->password&m=$this->module";
       $ack = $this->requestHttpPost($url, $post);
       
       $this->request_count++;
