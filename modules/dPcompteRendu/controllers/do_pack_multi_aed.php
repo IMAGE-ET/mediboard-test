@@ -57,7 +57,7 @@ foreach ($modeles_to_pack as $_modele_to_pack) {
   
   $cr->_source = $modele->generateDocFromModel();
   $template->applyTemplate($cr);
-  
+  $cr->_source = $template->document;
   
   if ($msg = $cr->store()) {
     CAppUI::setMsg($msg, UI_MSG_ERROR);
