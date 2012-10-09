@@ -176,17 +176,6 @@ $dPconfig["bloodSalvage"] = array (
     "AntiCoagulantList"     => "",
 );
 
-$dPconfig["dmi"] = array (
-  "CDMI" => array(
-    "product_category_id" => "",
-    "active" => 0
-  ),
-  "CDM" => array(
-    "product_category_id" => "",
-    "active" => 0
-  )
-);
-
 // Module config file inclusion
 $config_files = glob("./modules/*/config.php");
 foreach ($config_files as $file) {
