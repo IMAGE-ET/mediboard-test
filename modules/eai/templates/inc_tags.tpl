@@ -1,7 +1,7 @@
 {{*
  * Actor tags EAI
  *  
- * @category EAI
+ * @section EAI
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -10,48 +10,10 @@
 *}}
 
 <table class="main form">
+  {{foreach from=$actor->_tags key=_tag_name item=_tag_value}}
   <tr>
-    <th style="width: 50%">{{mb_label class=CInteropActor field=_tag_patient}}</th>
-    <td>{{mb_value object=$actor field=_tag_patient}}</td>
+    <th style="width: 50%" class="section">{{mb_label class=CInteropActor field=$_tag_name}}</th>
+    <td>{{if $_tag_value}}{{$_tag_value}}{{else}}<div class="small-error">{{tr}}CInteropActor-no_tags{{/tr}}</div>{{/if}}</td>
   </tr>
-  
-  <tr>
-    <th>{{mb_label class=CInteropActor field=_tag_sejour}}</th>
-    <td>{{mb_value object=$actor field=_tag_sejour}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label class=CInteropActor field=_tag_mediuser}}</th>
-    <td>{{mb_value object=$actor field=_tag_mediuser}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label class=CInteropActor field=_tag_service}}</th>
-    <td>{{mb_value object=$actor field=_tag_service}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label class=CInteropActor field=_tag_chambre}}</th>
-    <td>{{mb_value object=$actor field=_tag_chambre}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label class=CInteropActor field=_tag_lit}}</th>
-    <td>{{mb_value object=$actor field=_tag_lit}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label class=CInteropActor field=_tag_movement}}</th>
-    <td>{{mb_value object=$actor field=_tag_movement}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label class=CInteropActor field=_tag_visit_number}}</th>
-    <td>{{mb_value object=$actor field=_tag_visit_number}}</td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label class=CInteropActor field=_tag_hprimxml}}</th>
-    <td>{{mb_value object=$actor field=_tag_hprimxml}}</td>
-  </tr>
+  {{/foreach}}
 </table>

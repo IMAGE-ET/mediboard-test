@@ -15,6 +15,7 @@ CCanDo::checkRead();
 $actor_guid = CValue::getOrSession("actor_guid");
 
 $actor = CMbObject::loadFromGuid($actor_guid);
+$actor->getTags();
 
 // Création du template
 $smarty = new CSmartyDP();

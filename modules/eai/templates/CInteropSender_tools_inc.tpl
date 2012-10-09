@@ -14,20 +14,23 @@
   
   <script type="text/javascript">
     Main.add(function () {
-  	  tabs = Control.Tabs.create('tabs-{{$actor->_guid}}', false,  {
+      tabs = Control.Tabs.create('tabs-{{$actor->_guid}}', false,  {
           afterChange: function(newContainer){
-        		switch (newContainer.id) {
+            switch (newContainer.id) {
               case "exchanges_sources_{{$actor->_guid}}" :
-            	  InteropActor.refreshExchangesSources('{{$actor->_guid}}');
+                InteropActor.refreshExchangesSources('{{$actor->_guid}}');
                 break;
               case "formats_available_{{$actor->_guid}}" :
-            	  InteropActor.refreshFormatsAvailable('{{$actor->_guid}}');
+                InteropActor.refreshFormatsAvailable('{{$actor->_guid}}');
                 break;
               case "configs_formats_{{$actor->_guid}}" :      
-            	  InteropActor.refreshConfigsFormats('{{$actor->_guid}}');
+                InteropActor.refreshConfigsFormats('{{$actor->_guid}}');
+                break;
+              case "tags_{{$actor->_guid}}" :
+                InteropActor.refreshTags('{{$actor->_guid}}');
                 break;
             }
-  	      }
+          }
       });
     });
   </script>
@@ -44,7 +47,9 @@
           <li>
             <a href="#formats_available_{{$actor->_guid}}">{{tr}}{{$actor->_class}}_formats-available{{/tr}}</a></li>
           <li>
-            <a href="#configs_formats_{{$actor->_guid}}">{{tr}}{{$actor->_class}}_configs-formats{{/tr}}</a></li>   
+            <a href="#configs_formats_{{$actor->_guid}}">{{tr}}{{$actor->_class}}_configs-formats{{/tr}}</a></li>
+          <li>
+            <a href="#tags_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class}}_tags{{/tr}}</a></li>   
           <li>
             <a href="#actions_{{$actor->_guid}}">{{tr}}{{$actor->_class}}_actions{{/tr}}</a></li>
         </ul>
@@ -58,6 +63,8 @@
         <div id="formats_available_{{$actor->_guid}}" style="display:none"></div>
         
         <div id="configs_formats_{{$actor->_guid}}" style="display:none"></div>
+        
+        <div id="tags_{{$actor->_guid}}" style="display:none"></div>
         
         <div id="actions_{{$actor->_guid}}" style="display:none">
           {{mb_include module=$mod_name template="`$actor->_class`_actions_inc"}}

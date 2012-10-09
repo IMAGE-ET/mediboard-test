@@ -36,6 +36,8 @@ class CInteropActor extends CMbObject {
   var $_tag_movement             = null;
   var $_tag_visit_number         = null;
   var $_tag_hprimxml             = null;
+  var $_tag_consultation         = null;
+  var $_tags                     = array(); // All tags
   
   // Forward references
   var $_ref_group                = null;
@@ -56,6 +58,7 @@ class CInteropActor extends CMbObject {
     
     $props["_tag_patient"]      = "str";
     $props["_tag_sejour"]       = "str";
+    $props["_tag_consultation"] = "str";
     $props["_tag_mediuser"]     = "str";
     $props["_tag_service"]      = "str";
     $props["_tag_chambre"]      = "str";
@@ -63,6 +66,10 @@ class CInteropActor extends CMbObject {
     $props["_tag_movement"]     = "str";
     $props["_tag_visit_number"] = "str";
     $props["_tag_hprimxml"]     = "str";
+    
+    if (CModule::getActive("phast")) {
+      $props["_tag_phast"]        = "str";
+    }
     
     return $props;
   }
@@ -75,6 +82,7 @@ class CInteropActor extends CMbObject {
 
     $this->_tag_patient       = CPatient::getTagIPP($this->group_id);  
     $this->_tag_sejour        = CSejour::getTagNDA($this->group_id);
+    $this->_tag_consultation  = CConsultation::getTagConsultation($this->group_id);
     $this->_tag_mediuser      = CMediusers::getTagMediusers($this->group_id);
     $this->_tag_service       = CService::getTagService($this->group_id);
     $this->_tag_chambre       = CChambre::getTagChambre($this->group_id);
@@ -95,7 +103,21 @@ class CInteropActor extends CMbObject {
     
     return $backProps;
   }
+    
+  function getTags() {
+    $tags = array();
+    
+    foreach ($this->getSpecs() as $key => $spec) {
+      if (strpos($key, "_tag_") === false) {
+        continue;
+      }
+      
+      $tags[$key] = $this->$key;
+    }
 
+    return $this->_tags = $tags;
+  }  
+    
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", 1);
   }
