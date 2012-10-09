@@ -28,9 +28,11 @@ UHCD = {
     }
   },
   
-  refreshUHCD: function() {    
-    var url = new Url("dPurgences", "ajax_refresh_uhcd");
-    url.requestUpdate('uhcd');
+  refreshUHCD: function() {
+    var form = getForm("UHCD-view");
+    var url = new Url();
+    url.addParam("uhcd_affichage", $V(form.uhcd_affichage));
+    url.requestUpdate('uhcd', {method: "post", getParameters: {m: "dPurgences", a: "ajax_refresh_uhcd"}});
   },
   
   filter: function(input, indicator) {

@@ -11,7 +11,7 @@
 CCanDo::checkRead();
 
 // Type d'affichage
-$uhcd_affichage = CValue::postOrSession("selAffichage", CAppUI::conf("dPurgences default_view"));
+$uhcd_affichage = CValue::postOrSession("uhcd_affichage", CAppUI::conf("dPurgences default_view"));
 
 // Parametre de tri
 $order_way = CValue::getOrSession("order_way", "DESC");
@@ -158,7 +158,7 @@ $smarty->assign("order_col"   , $order_col);
 $smarty->assign("order_way"   , $order_way);
 $smarty->assign("listPrats"   , $listPrats);
 $smarty->assign("listSejours" , $listSejours);
-$smarty->assign("selAffichage", $uhcd_affichage);
+$smarty->assign("uhcd_affichage", $uhcd_affichage);
 $smarty->assign("medicalView" , $medicalView);
 $smarty->assign("date"        , $date);
 $smarty->assign("date_before" , $date_before);
