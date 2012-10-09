@@ -27,7 +27,7 @@ class CHL7v2EventDEC extends CHL7v2Event implements CHL7EventDEC {
         $this->event_type, $this->code
       )
     );
-    $this->transaction = CIHE::getDECTransaction($this->code, $i18n);
+    $this->transaction = CIHE::getDECTransaction($this->code);
   }
   
   /**
