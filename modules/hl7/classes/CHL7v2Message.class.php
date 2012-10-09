@@ -371,7 +371,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
 
     while ($n-- && trim($this->getCurrentLine())/* && $current_node && $this->current_line < $lines_count*/) {
       if (!$current_node && $this->current_line <= count($this->children)) {
-        //$this->error(CHL7v2Exception::UNEXPECTED_SEGMENT, $this->getCurrentLine());
+        $this->error(CHL7v2Exception::UNEXPECTED_SEGMENT, $this->getCurrentLine());
         break;
       }
       switch($current_node->getName()) {
@@ -436,8 +436,10 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
         case "group":
           CHL7v2::d($current_group->name." ".$current_node->state(), "red");
           $current_node->markEmpty();
-          
+
           if ($current_node->isUnbounded() || !$current_node->isUsed()) {
+            $current_node->attributes()->mbOpen = 0;
+            
             CHL7v2::d(" --> Groupe multiple ou pas encore utilisé, on entre dedans");
             $current_group = new CHL7v2SegmentGroup($current_group, $current_node);
             
