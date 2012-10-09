@@ -15,7 +15,7 @@
     <td class="greedyPane not-printable" style="text-align:center; height: 1px;">
       {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
         <div class="warning" style="float: right; text-align:left;">
-          <a href="#nothing" onclick="EditPlanning.showAlerte('{{$date}}', '{{$bloc->_id}}', 'jour')">
+          <a href="#nothing" onclick="EditPlanning.showAlerte('{{$date}}', '{{$bloc->_id}}', '{{$type_view_planning}}')">
           {{if $nbAlertesInterv}}
             {{$nbAlertesInterv}} alerte(s) sur des interventions
             <br />
