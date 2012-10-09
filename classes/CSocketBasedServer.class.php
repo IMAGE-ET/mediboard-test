@@ -129,7 +129,7 @@ class CSocketBasedServer {
    * @return void
    */
   function __construct($call_url, $username, $password, $port, $certificate = null, $passphrase = null){
-    $this->call_url    = $call_url;
+    $this->call_url    = rtrim($call_url, " /");
     $this->username    = $username;
     $this->password    = $password;
     $this->port        = $port;
@@ -324,7 +324,7 @@ class CSocketBasedServer {
       $start = microtime(true);
       
       // We must keep m=$module in the GET because of user permissions
-      $url = $this->call_url."/index.php?login=$this->username:$this->password&m=$this->module";
+      $url = "$this->call_url/index.php?login=$this->username:$this->password&m=$this->module";
       $ack = $this->requestHttpPost($url, $post);
       
       $this->request_count++;
