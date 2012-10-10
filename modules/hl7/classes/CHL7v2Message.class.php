@@ -241,11 +241,17 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     $message_type = explode($this->componentSeparator, $first_line[8]);
 
     if ($message_type[0]) {
-      $this->name       = $message_type[0];
+      $this->name  = $message_type[0];
+
       if ($this->name == "ACK") {
         $this->event_name = $message_type[0];
       }
       else {
+        if (strlen($message_type[0]) != 3 || strlen($message_type[1]) != 3) {
+          $msg = $message_type[0].$this->componentSeparator.$message_type[1];
+          throw new CHL7v2Exception(CHL7v2Exception::WRONG_MESSAGE_TYPE, $msg);
+        }
+
         $this->event_name = $message_type[0].$message_type[1];
       }
     }
@@ -285,7 +291,7 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
     // Dans le cas où la version passée est incorrecte on met par défaut 2.5
     if (!in_array($version, CHL7v2Message::$versions)) {
       $this->version = CAppUI::conf("hl7 default_version");
-    }    
+    }
   }
   
   function readHeader(){

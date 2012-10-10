@@ -11,6 +11,7 @@
 
 class CHL7v2Exception extends Exception {  
   const EMPTY_MESSAGE              = 1;
+  const WRONG_MESSAGE_TYPE         = 2;
   const INVALID_SEPARATOR          = 3;
   const SEGMENT_INVALID_SYNTAX     = 4;
   const UNKOWN_SEGMENT_TYPE        = 5;

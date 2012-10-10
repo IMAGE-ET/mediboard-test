@@ -376,6 +376,7 @@ $locales['CHL7EventSIUS13'] = 'RAD48 - SIU^S13';
 $locales['CHL7EventSIUS14'] = 'RAD48 - SIU^S14';
 $locales['CHL7EventSIUS15'] = 'RAD48 - SIU^S15';
 $locales['CHL7v2Exception-1'] = 'Fichier vide ou trop court';
+$locales['CHL7v2Exception-2'] = 'Type de message invalide';
 $locales['CHL7v2Exception-3'] = 'Format de séparateur invalide';
 $locales['CHL7v2Exception-4'] = 'Syntaxe de segment invalide';
 $locales['CHL7v2Exception-5'] = 'Type de segment inconnu';
