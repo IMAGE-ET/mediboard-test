@@ -310,14 +310,14 @@ class CHL7v2Segment extends CHL7v2Entity {
       return $this->getAssigningAuthority("actor", null, $actor);
     } 
     
-    // Autorité d'affectation du RPPS
-    elseif ($object->rpps) {
-      return $this->getAssigningAuthority("RPPS");
-    } 
-    
     // Autorité d'affectation de l'ADELI
     elseif ($object->adeli) {
       return $this->getAssigningAuthority("ADELI");
+    } 
+    
+    // Autorité d'affectation du RPPS
+    elseif ($object->rpps) {
+      return $this->getAssigningAuthority("RPPS");
     } 
     
     // Autorité d'affectation de Mediboard
@@ -329,11 +329,11 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $id400 = $object->loadLastId400();
     if ($object instanceof CMedecin) {
-      $xcn1  = CValue::first($id400->id400, $object->rpps, $object->adeli, $object->_id);
+      $xcn1  = CValue::first($id400->id400, $object->adeli, $object->rpps, $object->_id);
       $xcn2  = $object->nom;
       $xcn3  = $object->prenom;      
       $xcn9  = $this->getXCN9($object, $id400, $actor);
-      $xcn13 = $object->adeli ? "ADELI" : ($object->rpps ? "RPPS" : "RI");
+      $xcn13 = ($id400->id400 ? "RI" : ($object->adeli ? "ADELI" : ($object->rpps ? "RPPS" : "RI")));
     }
     if ($object instanceof CUser) {
       $xcn1  = $object->_id;
@@ -343,11 +343,11 @@ class CHL7v2Segment extends CHL7v2Entity {
       $xcn13 = "RI";
     }
     if ($object instanceof CMediusers) {
-      $xcn1  = CValue::first($object->rpps, $object->adeli, $id400->id400, $object->_id);
+      $xcn1  = CValue::first($id400->id400, $object->adeli, $object->rpps, $object->_id);
       $xcn2  = $object->_user_last_name;
       $xcn3  = $object->_user_first_name;
       $xcn9  = $this->getXCN9($object, $id400, $actor);
-      $xcn13 = $object->adeli ? "ADELI" : ($object->rpps ? "RPPS" : "RI");
+      $xcn13 = ($id400->id400 ? "RI" : ($object->adeli ? "ADELI" : ($object->rpps ? "RPPS" : "RI")));
     }
     
     if ($repeatable && ($actor->_configs["build_PV1_7"] == "repeatable") && $object instanceof CMediusers) {
