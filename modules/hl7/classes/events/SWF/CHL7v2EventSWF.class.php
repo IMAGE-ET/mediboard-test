@@ -104,6 +104,8 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
    */
   function addAIG(CMbObject $scheduling) {
     $AIG = CHL7v2Segment::create("AIG", $this->message);
+    $AIG->set_id = 1;
+    $AIG->scheduling = $scheduling;
     $AIG->build($this);
   }
   
@@ -112,6 +114,8 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
    */
   function addAIL(CMbObject $scheduling) {
     $AIL = CHL7v2Segment::create("AIL", $this->message);
+    $AIL->set_id = 1;
+    $AIL->scheduling = $scheduling;
     $AIL->build($this);
   }
 }

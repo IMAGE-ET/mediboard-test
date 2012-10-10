@@ -15,7 +15,7 @@
 
 <form name="hl7v2-input-form" action="?" onsubmit="return highlightER7(this)" method="get" class="prepared">
   <pre style="padding: 0; max-height: none;"><textarea name="message" rows="12" style="width: 100%; border: none; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; margin: 0; resize: vertical;">{{$message}}</textarea></pre>
-  <button class="change">Highlight</button>
+  <button class="change">Valider</button>
 </form>
 
 <div id="highlighted"></div>
