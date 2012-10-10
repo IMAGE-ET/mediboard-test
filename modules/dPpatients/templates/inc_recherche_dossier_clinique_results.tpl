@@ -34,9 +34,9 @@
         {{mb_value object=$_patient field=naissance}}
       </td>
       <td class="text">
-        {{$_patient->adresse|spancate:30}} -
+        {{$_patient->adresse|smarty:nodefaults|spancate:30}} -
         {{$_patient->cp}}
-        {{$_patient->ville|spancate:20}}
+        {{$_patient->ville|smarty:nodefaults|spancate:20}}
       </td>
       <td>
         <button type="button" class="search notext compact" onclick="Patient.view({{$_patient->_id}})">

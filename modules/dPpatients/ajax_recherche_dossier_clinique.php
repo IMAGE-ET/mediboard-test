@@ -13,8 +13,9 @@ $ljoin = array();
 
 $user_id = CValue::get("user_id");
 $type_prescription = CValue::get("type_prescription");
-
+CValue::setSession("produit", CValue::get("produit"));
 CValue::setSession("user_id", $user_id);
+CValue::setSession("type_prescription", $type_prescription);
 $start = intval(CValue::get("start", 0));
 
 $patient = new CPatient;
@@ -103,11 +104,13 @@ if (!empty($sejour_data["entree"]) || !empty($sejour_data["sortie"])) {
 
 // CPatient ---------------------------
 if (!empty($data["CPatient"]["_age_min"])) {
-  $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 > {$data['CPatient']['_age_min']}";
+  $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 > {$data['CPatient']['_age_min']} OR ".
+    "DATEDIFF(CONCAT(plageconsult.date, ' ', consultation.heure), patients.naissance)/365 > {$data['CPatient']['_age_min']}";
   //$where[] = "patients.naissance < '".mbDate("-".$data["CPatient"]["_age_min"]. "YEARS")."'";
 }
 if (!empty($data["CPatient"]["_age_max"])) {
-  $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 <= {$data['CPatient']['_age_max']}";
+  $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 <= {$data['CPatient']['_age_max']} OR ".
+  "DATEDIFF(CONCAT(plageconsult.date, ' ', consultation.heure), patients.naissance)/365 <= {$data['CPatient']['_age_max']}";
   //$where[] = "patients.naissance > '".mbDate("-".$data["CPatient"]["_age_max"]. "YEARS")."'";
 }
 if (!empty($data["CPatient"]["medecin_traitant"])) {
@@ -174,6 +177,7 @@ $ljoin["antecedent"] = "antecedent.dossier_medical_id = dossier_medical.dossier_
 $ljoin["traitement"] = "traitement.dossier_medical_id = dossier_medical.dossier_medical_id";
 $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
 $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+$ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
 
 $list_patient = array();
 $count_patient = array();

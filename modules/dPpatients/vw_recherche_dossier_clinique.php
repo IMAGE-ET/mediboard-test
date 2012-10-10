@@ -39,6 +39,14 @@ $traitement = new CTraitement();
 bindHashToObject($_GET + $_SESSION["dPpatients"], $traitement);
 $traitement->loadRefsFwd();
 
+$prescription = new CPrescription();
+$prescription->type = CValue::getOrSession("type_prescription");
+
+$line_med = new CPrescriptionLineMedicament();
+$line_med->code_ucd = CValue::getOrSession("code_ucd");
+$line_med->code_cis = CValue::getOrSession("code_cis");
+$line_med->_ucd_view = CValue::getOrSession("produit");
+
 $user = new CMediusers();
 $user->load($user_id);
 
@@ -59,6 +67,7 @@ $smarty->assign("traitement", $traitement);
 $smarty->assign("consult", $consult);
 $smarty->assign("sejour", $sejour);
 $smarty->assign("interv", $interv);
-$smarty->assign("prescription", new CPrescription);
+$smarty->assign("prescription", $prescription);
+$smarty->assign("line_med", $line_med);
 
 $smarty->display("vw_recherche_dossier_clinique.tpl");

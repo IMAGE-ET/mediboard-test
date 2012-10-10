@@ -32,7 +32,9 @@ Main.add(function() {
       else {
         $V(input.form.code_ucd, selected.select(".code-ucd")[0].innerHTML);
       }
-      $V(input, selected.select(".libelle")[0].innerHTML);
+      var libelle_ucd = selected.select(".libelle_ucd")[0].innerHTML;
+      libelle_ucd = libelle_ucd.replace(/(^\s+|\s+$)/g, '').replace(/<em>|<\/em>/g, '');
+      $V(input, libelle_ucd);
     }
   } );
   form.onsubmit();
@@ -229,27 +231,32 @@ Main.add(function() {
             <th>{{mb_label object=$prescription field=type}}</th>
             <td>
               <label>
-                <input type="radio" name="type_prescription" value="externe" checked/> Externe
+                <input type="radio" name="type_prescription" value="externe"
+                  {{if !$prescription->type || $prescription->type == "externe"}}checked{{/if}} /> Externe
               </label>
               <label>
-                <input type="radio" name="type_prescription" value="pre_admission" /> Pré-admission
+                <input type="radio" name="type_prescription" value="pre_admission"
+                  {{if $prescription->type == "pre_admission"}}checked{{/if}}/> Pré-admission
               </label>
               <label>
-                <input type="radio" name="type_prescription" value="sejour" /> Séjour
+                <input type="radio" name="type_prescription" value="sejour"
+                  {{if $prescription->type == "sejour"}}checked{{/if}} /> Séjour
               </label>
               <label>
-                <input type="radio" name="type_prescription" value="sortie" /> Sortie
+                <input type="radio" name="type_prescription" value="sortie"
+                  {{if $prescription->type == "sortie"}}checked{{/if}} /> Sortie
               </label>
             </td>
           </tr>
           <tr>
             <th>Produit</th>
             <td>
-              <input type="hidden" name="code_cis" />
-              <input type="hidden" name="code_ucd" />
-              <input type="text" name="produit" value="&mdash; {{tr}}CPrescription.select_produit{{/tr}}" size="20"
+              <input type="hidden" name="code_cis" value="{{$line_med->code_cis}}"/>
+              <input type="hidden" name="code_ucd" value="{{$line_med->code_ucd}}"/>
+              <input type="text" name="produit"
+                value="{{if $line_med->code_cis || $line_med->code_ucd}}{{$line_med->_ucd_view}}{{else}}&mdash; {{tr}}CPrescription.select_produit{{/tr}}{{/if}}" size="20"
                 style="font-weight: bold; font-size: 1.3em; width: 300px;" class="autocomplete"
-                onclick="$V(this, '')"/>
+                onclick="$V(this, ''); $V(this.form.code_cis, ''); $V(this.form.code_ucd, '');"/>
               <div style="display:none; width: 350px;" class="autocomplete" id="produit_auto_complete"></div>
             </td>
           </tr>
