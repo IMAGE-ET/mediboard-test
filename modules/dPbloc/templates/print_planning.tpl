@@ -29,7 +29,7 @@ function popPlanning(form) {
   url.addParam("_intervention", $V(form._intervention));
   url.addElement(form._prat_id);
   url.addElement(form._specialite);
-  url.addElement(form._bloc_id);
+  url.addParam("_bloc_id[]", $V(form.elements["_bloc_id[]"]), true);
   url.addElement(form.salle_id);
   url.addElement(form.type);
   url.addParam("_ccam_libelle"  , $V(form._ccam_libelle));
@@ -47,7 +47,7 @@ function printPlanningPersonnel(form) {
   url.addElement(form._date_min);
   url.addElement(form._date_max);
   url.addElement(form.salle_id);
-  url.addElement(form._bloc_id);
+  url.addParam("_bloc_id[]", $V(form.elements["_bloc_id[]"]), true);
   url.addElement(form._prat_id);
   url.addElement(form._specialite);
   url.popup(900, 500, 'Planning du personnel');
@@ -57,7 +57,8 @@ function printFullPlanning(form) {
   var url = new Url("bloc", "print_full_planning");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
-  url.addElement(form._bloc_id);
+  url.addParam("_bloc_id[]", $V(form.elements["_bloc_id[]"]), true);
+  console.log(url);
   url.addParam("_intervention", $V(form._intervention));
   url.popup(900, 550, 'Planning');
 }
@@ -213,21 +214,22 @@ function showCheckboxAnesth(element){
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_bloc_id"}}</th>
-          <td>
-            <select name="_bloc_id" style="width: 15em;">
+          <td valign="top">
+            <select name="_bloc_id[]" style="width: 15em;" onchange="this.form.salle_id.selectedIndex=0">
               <option value="0">&mdash; Tous les blocs</option>
               {{foreach from=$listBlocs item=curr_bloc}}
-                <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $filter->_bloc_id}}selected="selected"{{/if}}>
+                <option value="{{$curr_bloc->_id}}">
                   {{$curr_bloc->_view}}
                 </option>
               {{/foreach}}
             </select>
+            <input type="checkbox" onclick="this.form.elements['_bloc_id[]'].writeAttribute('multiple', this.checked ? 'multiple' : null)"/>
           </td>
         </tr>
         <tr class="not-full">
           <th>{{mb_label object=$filter field="salle_id"}}</th>
           <td>
-            <select name="salle_id" style="width: 15em;">
+            <select name="salle_id" style="width: 15em;" onchange="this.form.elements['_bloc_id[]'].selectedIndex=0">
               <option value="0">&mdash; Toutes les salles</option>
               {{foreach from=$listBlocs item=curr_bloc}}
                 <optgroup label="{{$curr_bloc->_view}}">

@@ -20,6 +20,8 @@ $bloc_id  = CValue::get("_bloc_id");
 $prat_id  = CValue::get("_prat_id");
 $specialite = CValue::get("_specialite");
 
+CMbArray::removeValue("0", $bloc_id);
+
 $dates = array();
 $date_temp = $date_min;
 
@@ -67,7 +69,10 @@ if ($specialite) {
 
 $salle = new CSalle();
 $whereSalle = array();
-$whereSalle["bloc_id"] = CSQLDataSource::prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)), $bloc_id);
+$whereSalle["bloc_id"] =
+  CSQLDataSource::prepareIn(count($bloc_id) ?
+    $bloc_id :
+    array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)));
 
 if ($salle_id) {
   $whereSalle["sallesbloc.salle_id"] = "= '$salle_id'";

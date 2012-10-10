@@ -30,6 +30,8 @@ $_coordonnees            = CValue::get("_coordonnees");
 $_print_numdoss          = CValue::get("_print_numdoss");
 $_print_annulees         = CValue::get("_print_annulees");
 
+CMbArray::removeValue("0", $filter->_bloc_id);
+
 $filterSejour = new CSejour;
 $filterSejour->type = CValue::get("type");
 
@@ -107,8 +109,13 @@ $whereOperations["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($p
 // En fonction de la salle
 $salle = new CSalle();
 $whereSalle = array();
-$whereSalle["sallesbloc.bloc_id"] = CSQLDataSource::prepareIn(array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)), $filter->_bloc_id);
-if($filter->salle_id) {
+
+$whereSalle["sallesbloc.bloc_id"] =
+  CSQLDataSource::prepareIn(count($filter->_bloc_id) ?
+    $filter->_bloc_id :
+    array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)));
+
+if ($filter->salle_id) {
   $whereSalle["sallesbloc.salle_id"] = "= $filter->salle_id";
 }
 $listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
@@ -170,7 +177,7 @@ foreach($plagesop as &$plage) {
 
   foreach ($listOp as $operation) {
     $operation->loadRefPlageOp(1);
-  	$operation->loadRefPraticien(1);
+    $operation->loadRefPraticien(1);
     $operation->loadExtCodesCCAM();
     $operation->updateHeureUS();
     $sejour = $operation->loadRefSejour(1);
@@ -198,11 +205,11 @@ foreach($plagesop as &$plage) {
 
   // Initialisation des tableaux de stockage des affectation pour les op et les panseuses
   $affectations_plage[$plage->_id]["iade"]        = array();
-	$affectations_plage[$plage->_id]["op"]          = array();
+  $affectations_plage[$plage->_id]["op"]          = array();
   $affectations_plage[$plage->_id]["op_panseuse"] = array();
 
   if (null !== $plage->_ref_affectations_personnel) {
-  	$affectations_plage[$plage->_id]["iade"]        = $plage->_ref_affectations_personnel["iade"];
+    $affectations_plage[$plage->_id]["iade"]        = $plage->_ref_affectations_personnel["iade"];
     $affectations_plage[$plage->_id]["op"]          = $plage->_ref_affectations_personnel["op"];
     $affectations_plage[$plage->_id]["op_panseuse"] = $plage->_ref_affectations_personnel["op_panseuse"];
   }

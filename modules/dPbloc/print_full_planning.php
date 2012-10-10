@@ -16,11 +16,13 @@ $date_max = CValue::get("_date_max");
 
 $bloc_id  = CValue::get("_bloc_id", null);
 
+CMbArray::removeValue("0", $bloc_id);
+
 $bloc  = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList();
 
 if ($bloc_id) {
-  $blocs = array_intersect_key($blocs, array($bloc_id => ""));
+  $blocs = array_intersect_key($blocs, array_flip($bloc_id));
 }
 
 $date_min = mbDate("LAST SUNDAY +1 DAY", $date_min);
