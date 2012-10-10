@@ -31,7 +31,7 @@ class CHL7v2EventSIUS12 extends CHL7v2EventSWF implements CHL7EventSIUS12 {
     // Scheduling Activity Information
     $this->addSCH($scheduling);
     
-    $patient = $scheduling->_ref_patient;
+    $patient = $scheduling->loadRefPatient();
     // Patient Identification
     $this->addPID($patient);
     

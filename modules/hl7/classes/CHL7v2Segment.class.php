@@ -304,9 +304,9 @@ class CHL7v2Segment extends CHL7v2Entity {
     
   }
   
-  function getXCN9(CMbObject $object, CIdSante400 $id400, CInteropActor $actor) {
+  function getXCN9(CMbObject $object, CIdSante400 $id400 = null, CInteropActor $actor = null) {
     // Autorité d'affectation de l'idex
-    if ($id400->id400) {
+    if ($id400 && $id400->id400) {
       return $this->getAssigningAuthority("actor", null, $actor);
     } 
     
@@ -326,7 +326,7 @@ class CHL7v2Segment extends CHL7v2Entity {
   
   function getXCN(CMbObject $object, CInteropReceiver $actor, $repeatable = false) {
     $xcn1 = $xcn2 = $xcn3 = $xcn9 = $xcn13 = null;
-    
+
     if ($object instanceof CMedecin) {
       $id400 = $object->loadLastId400();
       
@@ -345,7 +345,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
     if ($object instanceof CMediusers) {
       $id400 = CIdSante400::getMatch("CMediusers", $actor->_tag_mediuser, null, $object->_id);  
-      
+
       $xcn1  = CValue::first($id400->id400, $object->adeli, $object->rpps, $object->_id);
       $xcn2  = $object->_user_last_name;
       $xcn3  = $object->_user_first_name;

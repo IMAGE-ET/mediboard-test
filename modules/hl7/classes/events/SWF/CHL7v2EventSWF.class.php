@@ -53,6 +53,7 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
    */
   function addSCH(CMbObject $scheduling) {
     $SCH = CHL7v2Segment::create("SCH", $this->message);
+    $SCH->scheduling = $scheduling;
     $SCH->build($this);
   }
   
