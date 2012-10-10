@@ -161,42 +161,17 @@ var Main = {
    */
   init: function() {
     this.callbacks.each(function(callback) { 
-      //try {
+      try {
         callback();
-      //}
-      //catch (e) {
-      //  errorHandler("Main.add exception", location.href, null, e);
-      //  console.error(e);
-      //}
+      }
+      catch (e) {
+        var msg = "Main.add exception";
+        errorHandler(msg, location.href, -1, e);
+        console.error(msg, e);
+      }
     });
     
     this.initialized = true;
-  }
-};
-
-/**
- * References manipulation
- */
-var References = {
-  /**
-   * Clean references involved in memory leaks
-   */
-  clean: function(obj) {
-    var i, j, e, 
-        elements = obj.childElements(), 
-        le = elements.length, la;
-    for (j = 0; j < le; j++) {
-      e = elements[j];
-      if (e) {
-        if (e.attributes) {
-          la = e.attributes.length;
-          for (i = 0; i < la; i++) {
-            if (Object.isFunction(e.attributes[i])) e.attributes[i] = null;
-          }
-        }
-        Element.remove(e);
-      }
-    }
   }
 };
 
