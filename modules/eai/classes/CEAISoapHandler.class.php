@@ -26,7 +26,9 @@ class CEAISoapHandler extends CSoapHandler {
       "parameters" => array(
         "message" => "string"
       ),
-      "return" => array()
+      "return" => array(
+        "response" => "string"
+      )
     )
   );
   

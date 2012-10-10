@@ -17,7 +17,9 @@ class CHprimSoapHandler extends CSoapHandler {
       "parameters" => array(
         "messagePatient" => "string"
       ),
-      "return" => array()
+      "return" => array(
+        "response" => "string"
+      )
     ),
     "evenementServeurActes" => array(
       "parameters" => array(
