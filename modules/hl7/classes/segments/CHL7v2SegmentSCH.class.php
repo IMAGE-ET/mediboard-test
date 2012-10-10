@@ -71,18 +71,18 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     $data[] = null;
     
     // SCH-6: Event Reason (CE)
-    $data[] = null;
-    
-    // SCH-7: Appointment Reason (CE) (optional)
-    $data[] = null;
-    
-    // SCH-8: Appointment Type (CE) (optional)
     $data[] = array(
       array(
         null,
         $scheduling->motif
       )
     );
+    
+    // SCH-7: Appointment Reason (CE) (optional)
+    $data[] = null;
+    
+    // SCH-8: Appointment Type (CE) (optional)
+    $data[] = null;
     
     // SCH-9: Appointment Duration (NM) (optional)
     $data[] = null;
@@ -103,8 +103,7 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     );
     
     // SCH-12: Placer Contact Person (XCN) (optional repeating)
-    $last_log = $scheduling->_ref_last_log;
-    $data[] = $this->getXCN($last_log->loadRefUser()->loadRefMediuser(), $receiver);
+    $data[] = $this->getXCN($scheduling->_ref_praticien, $receiver);
     
     // SCH-13: Placer Contact Phone Number (XTN) (optional)
     $data[] = null;
@@ -116,7 +115,9 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     $data[] = null;
     
     // SCH-16: Filler Contact Person (XCN) ( repeating)
-    $data[] = null;
+    $first_log = $scheduling->loadFirstLog();
+    $mediuser = $first_log->loadRefUser()->loadRefMediuser();
+    $data[] = $this->getXCN($mediuser, $receiver);
     
     // SCH-17: Filler Contact Phone Number (XTN) (optional)
     $data[] = null;
@@ -128,7 +129,7 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     $data[] = null;
     
     // SCH-20: Entered By Person (XCN) ( repeating)
-    $data[] = null;
+    $data[] = $this->getXCN($mediuser, $receiver);
     
     // SCH-21: Entered By Phone Number (XTN) (optional repeating)
     $data[] = null;

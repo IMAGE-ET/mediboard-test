@@ -94,6 +94,8 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
    */
   function addRGS(CMbObject $scheduling) {
     $RGS = CHL7v2Segment::create("RGS", $this->message);
+    $RGS->set_id = 1;
+    $RGS->scheduling = $scheduling;
     $RGS->build($this);
   }
   
