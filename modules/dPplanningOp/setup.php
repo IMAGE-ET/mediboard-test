@@ -1495,6 +1495,7 @@ class CSetupdPplanningOp extends CSetup {
       CHANGE `cote_consult_anesth` `cote_consult_anesth` ENUM ('droit','gauche','haut','bas','bilatéral','total','inconnu'),
       CHANGE `cote_hospi` `cote_hospi` ENUM ('droit','gauche','haut','bas','bilatéral','total','inconnu'),
       CHANGE `cote_bloc` `cote_bloc` ENUM ('droit','gauche','haut','bas','bilatéral','total','inconnu');";
+    $this->addQuery($query);
     
     $this->makeRevision("1.61");
     $query = "ALTER TABLE `operations`
