@@ -92,7 +92,7 @@ html, body {
   border: none;
 }
 
-#headerMenu a {
+#headerMenu .dropdown-menu a {
   display: block;
   padding: 2px;
   vertical-align: middle;
@@ -100,14 +100,14 @@ html, body {
   border-radius: 2px;
 }
 
-#headerMenu a,
-#headerMenu a:hover,
-#headerMenu a:visited {
+#headerMenu .dropdown-menu a,
+#headerMenu .dropdown-menu a:hover,
+#headerMenu .dropdown-menu a:visited {
   text-decoration: none;
 }
 
 #headerMenu .dropdown-menu:hover,
-#headerMenu a:hover {
+#headerMenu .dropdown-menu a:hover {
   border: 1px solid #AECFF7;
   background-color: #EEF2F6;
 }
@@ -116,11 +116,11 @@ html, body {
   background-image: url(./images/icons/menuHover.png);
 }
 
-#headerMenu a.selected {
+#headerMenu .dropdown-menu a.selected {
   background: #AECFF7;
 }
 
-#headerMenu a:hover.selected {
+#headerMenu .dropdown-menu a:hover.selected {
   border-color: #71ADF2;
 }
 
