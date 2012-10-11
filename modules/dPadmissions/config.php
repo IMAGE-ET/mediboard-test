@@ -12,6 +12,8 @@
  */
 
 $dPconfig["dPadmissions"] = array(
+  "fiche_admission" => "a4",
+  "show_dh"         => "1",
   "show_deficience" => 0,
   "show_prestations_sorties" => 0,
   "use_recuse" => "0"
