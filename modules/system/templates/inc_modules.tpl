@@ -34,8 +34,8 @@ var Module = {
   
   updateAll: function() {
     Module.list = $("installed").select("form.upgrade").sort(function(form){
-      return form.get("dependencies");
-    }).reverse();
+      return parseInt(form.get("dependencies"), 10);
+    });
     
     Module.updateChain(Module.list.shift());
   },
