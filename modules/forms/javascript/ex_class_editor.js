@@ -10,43 +10,14 @@ ExClass = {
   },
   edit: function(id) {
     this.id = id || this.id;
-    var url = new Url("forms", "ajax_edit_ex_class");
-    url.addParam("ex_class_id", this.id);
     
-    id = this.id;
-    url.requestUpdate("exClassEditor", { onComplete: function(){
-      if (ExField.latest._id && ExField.latest._ex_class_id == id) {
-        ExField.edit(ExField.latest._id);
+    MbObject.edit("CExClass-"+id, {
+      onComplete:function(){
+        if (ExField.latest._id && ExField.latest._ex_class_id == id) {
+          ExField.edit(ExField.latest._id);
+        }
       }
-    }});
-  },
-  editCallback: function(id) {
-    ExClass.edit(id);
-    ExClass.refreshList();
-  },
-  refreshList: function(){
-    var url = new Url("forms", "ajax_list_ex_class");
-    url.requestUpdate("exClassList");
-  },
-  toggleConditional: function(auto) {
-    var form = getForm("editExClass");
-    
-    /*if (auto) {
-      $V(form.conditional, "0");
-      $V(form.__conditional, false);
-    }
-    
-    form.__conditional.disabled = auto;*/
-  },
-  setEvent: function(select) {
-    var form = select.form;
-    var selected = select.options[select.selectedIndex];
-    var parts = $V(select).split(".");
-    $V(form.host_class, parts[0]);
-    $V(form.event, parts[1]);
-    
-    var auto = !!selected.get("auto");
-    ExClass.toggleConditional(auto);
+    });
   },
   submitLayout: function(drag, drop) {
     var coord_x = drop.get("x"),
@@ -131,7 +102,7 @@ ExClass = {
     $V(form.ex_class_host_field_id, drag.get("field_id") || "");
     $V(form.elements.field, drag.get("field") || "");
     $V(form.elements.ex_group_id, drag.get("ex_group_id") || "");
-    $V(form.elements.host_type, drag.get("host_type") || "");
+    $V(form.elements.host_class, drag.get("host_class") || "");
     $V(form["coord_"+type+"_x"].enable(), coord_x);
     $V(form["coord_"+type+"_y"].enable(), coord_y);
     
@@ -331,7 +302,9 @@ ExClass = {
     
     draggables.each(function(d){
       d.observe("mousedown", function(event){
-        if (!ExClass.pickMode) return;
+        if (!ExClass.pickMode) {
+          return;
+        }
         
         Event.stop(event);
         
@@ -416,15 +389,21 @@ ExClass = {
     
     $$(".droppable").each(function(drop){
       drop.observe("mousedown", function(event){
-        if (!ExClass.pickMode) return;
+        if (!ExClass.pickMode || event.element().hasClassName("dont-lock")) {
+          return;
+        }
         
         Event.stop(event);
         
-        if (drop.childElements().length) return;
+        if (drop.childElements().length) {
+          return;
+        }
         
         var drag = $$(".picked")[0];
         
-        if (!drag) return;
+        if (!drag) {
+          return;
+        }
         
         dropCallback(drag, drop);
         drop.insert(drag.removeClassName("picked"));
@@ -547,14 +526,44 @@ ExFieldSpec = {
 };
 
 ExConstraint = {
-  edit: function(id, ex_class_id) {
+  edit: function(id, ex_class_event_id) {
     var url = new Url("forms", "ajax_edit_ex_constraint");
     url.addParam("ex_constraint_id", id);
+    url.addParam("ex_class_event_id", ex_class_event_id);
+    url.requestModal(600, 400);
+  },
+  create: function(ex_class_event_id) {
+    this.edit("0", ex_class_event_id);
+  },
+  editCallback: function(ex_class_event_id) {
+    ExClassEvent.edit(ex_class_event_id);
+    Control.Modal.close();
+  }
+};
+
+ExClassEvent = {
+  edit: function(id, ex_class_id) {
+    var url = new Url("forms", "ajax_edit_ex_class_event");
+    url.addParam("ex_class_event_id", id);
     url.addParam("ex_class_id", ex_class_id);
-    url.requestUpdate("exConstraintEditor");
+    url.requestUpdate("exClassEventEditor", function(){
+      $$("[data-event_id="+id+"]")[0].addUniqueClassName("selected");
+    });
   },
   create: function(ex_class_id) {
     this.edit("0", ex_class_id);
+  },
+  setEvent: function(select) {
+    var form = select.form;
+    var selected = select.options[select.selectedIndex];
+    var parts = $V(select).split(".");
+    $V(form.host_class, parts[0]);
+    $V(form.event_name, parts[1]);
+    
+    var label = form.down("label[for="+form.name+"_unicity_host] strong");
+    if (label) {
+      label.update($T(parts[0]));
+    }
   }
 };
 

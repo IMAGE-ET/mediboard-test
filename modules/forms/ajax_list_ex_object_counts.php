@@ -42,14 +42,10 @@ if ($concept_search) {
 }
 
 $ex_classes = $ex_class->loadList($where, "name", null, null, $ljoin);
-$ex_objects_counts_by_event = array();
+$ex_objects_counts = array();
 
 foreach($ex_classes as $_ex_class_id => $_ex_class) {
-  $ex_class_key = "$_ex_class->host_class-event-$_ex_class->event";
-
-  $_ex_object = new CExObject;
-  $_ex_object->_ex_class_id = $_ex_class_id;
-  $_ex_object->setExClass();
+  $_ex_object = new CExObject($_ex_class_id);
 
   $where = array(
     "group_id" => "= '$group_id'",
@@ -68,12 +64,12 @@ foreach($ex_classes as $_ex_class_id => $_ex_class) {
   $_ex_objects_count = $_ex_object->countList($where, null, $ljoin);
 
   if ($_ex_objects_count) {
-    $ex_objects_counts_by_event[$_ex_class->host_class][$ex_class_key][$_ex_class_id] = $_ex_objects_count;
+    $ex_objects_counts[$_ex_class_id] = $_ex_objects_count;
   }
 }
 
 // Création du template
 $smarty = new CSmartyDP("modules/forms");
-$smarty->assign("ex_objects_counts_by_event", $ex_objects_counts_by_event);
+$smarty->assign("ex_objects_counts", $ex_objects_counts);
 $smarty->assign("ex_classes", $ex_classes);
 $smarty->display("inc_list_ex_object_counts.tpl");

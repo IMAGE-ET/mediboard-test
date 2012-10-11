@@ -10,12 +10,12 @@
 
 CCanDo::checkEdit();
 
-$ex_class_id = CValue::get("ex_class_id");
+$ex_class_event_id = CValue::get("ex_class_event_id");
 $keywords = CValue::get("_host_field_view");
 
-$ex_class = new CExClass;
-$ex_class->load($ex_class_id);
-$list = $ex_class->buildHostFieldsList();
+$ex_class_event = new CExClassEvent;
+$ex_class_event->load($ex_class_event_id);
+$list = $ex_class_event->buildHostFieldsList();
 
 $show_views = false;
 
@@ -36,7 +36,7 @@ if ($keywords) {
 }
 
 $smarty = new CSmartyDP();
-$smarty->assign("ex_class", $ex_class);
+$smarty->assign("ex_class_event", $ex_class_event);
 $smarty->assign("host_fields", $list);
 $smarty->assign("show_views", $show_views);
 $smarty->display("inc_autocomplete_hostfields.tpl");

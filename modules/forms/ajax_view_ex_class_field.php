@@ -17,9 +17,8 @@ $value = CValue::get("value");
 $ex_class_field = new CExClassField;
 $ex_class_field->load($ex_class_field_id);
 
-$ex_object = new CExObject;
-$ex_object->_ex_class_id = $ex_class_field->loadRefExGroup()->ex_class_id;
-$ex_object->setExClass();
+$ex_class_id = $ex_class_field->loadRefExGroup()->ex_class_id;
+$ex_object = new CExObject($ex_class_id);
 
 $ex_object->{$ex_class_field->name} = $value;
 

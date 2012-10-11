@@ -42,7 +42,7 @@
   
   {{if $go}}
     {{* <span style="color: #4086FF;">{{$_ex_group}}</span> *}}
-    <h4 style="margin: 0.5em;">{{$_ex_group}}</h4>
+    <h4 style="margin: 0.5em; border-bottom: 1px solid #666;">{{$_ex_group}}</h4>
     
     <ul>
     {{assign var=any value=false}}

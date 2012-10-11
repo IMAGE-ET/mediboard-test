@@ -6,7 +6,7 @@
     Main.add(function(){
       ExObject.register("ex_class-{{$uid}}", {
         object_guid: "{{$object->_guid}}",
-        event: "{{$event}}", 
+        event_name: "{{$event_name}}", 
         title: "{{$object}}"
       });
     });

@@ -18,120 +18,6 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("all");
     
-    $this->makeRevision("1.0.00");
-    $query = "CREATE TABLE `access_log` (
-      `accesslog_id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
-      `module` VARCHAR( 40 ) NOT NULL ,
-      `action` VARCHAR( 40 ) NOT NULL ,
-      `period` DATETIME NOT NULL ,
-      `hits` TINYINT DEFAULT '0' NOT NULL ,
-      `duration` DOUBLE NOT NULL,
-      PRIMARY KEY ( `accesslog_id` )) /*! ENGINE=MyISAM */";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `access_log` 
-      ADD UNIQUE `triplet` (`module` , `action` , `period`)";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `access_log`
-       ADD INDEX ( `module` )";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `access_log` 
-      ADD INDEX ( `action` )";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.0.01");
-    $query = "ALTER TABLE `access_log` CHANGE `
-      hits` `hits` INT UNSIGNED DEFAULT '0' NOT NULL ";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `access_log` 
-      ADD `request` DOUBLE NOT NULL ;";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.0.02");
-    $query = "ALTER TABLE `access_log` 
-      DROP INDEX `action_2` ;";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.0.03");
-    $this->setTimeLimit(300);
-    $query = "ALTER TABLE `user_log` 
-      CHANGE `type` `type` ENUM( 'create', 'store', 'delete' ) NOT NULL; ";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `user_log` 
-      ADD `fields` TEXT;";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.0.04");
-    $this->setTimeLimit(300);
-    $query = "ALTER TABLE `access_log`
-      CHANGE `accesslog_id` `accesslog_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-      CHANGE `module` `module` VARCHAR(255) NOT NULL,
-      CHANGE `action` `action` VARCHAR(255) NOT NULL,
-      CHANGE `hits` `hits` int(11) unsigned NOT NULL DEFAULT '0',
-      CHANGE `duration` `duration` float NOT NULL DEFAULT '0',
-      CHANGE `request` `request` float NOT NULL DEFAULT '0'; ";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `message` 
-      CHANGE `message_id` `message_id` int(11) unsigned NOT NULL AUTO_INCREMENT; ";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `user_log`
-      CHANGE `user_log_id` `user_log_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-      CHANGE `user_id` `user_id` int(11) unsigned NOT NULL DEFAULT '0',
-      CHANGE `object_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0'; ";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.0.05");
-    $this->setTimeLimit(300);
-    $query = "DELETE FROM `user_log` 
-      WHERE `object_id` = '0'";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.0.06");
-    $query = "CREATE TABLE `note` (
-      `note_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-      `user_id` INT( 11 ) UNSIGNED NOT NULL ,
-      `object_id` INT( 11 ) UNSIGNED NOT NULL ,
-      `object_class` VARCHAR( 25 ) NOT NULL ,
-      `public` ENUM('0','1') NOT NULL DEFAULT '0',
-      `degre` ENUM('low','high') NOT NULL DEFAULT 'low',
-      `date` DATETIME NOT NULL ,
-      `libelle` VARCHAR( 255 ) NOT NULL ,
-      `text` TEXT NULL ,
-      INDEX ( `user_id` , `object_id` , `object_class` , `public` , `degre` , `date` )
-    ) /*! ENGINE=MyISAM */ COMMENT = 'Table des notes sur les objets';";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.0.07");
-    $this->addPrefQuery("MenuPosition", "top");
-    
-    $this->makeRevision("1.0.08");
-    $query = "ALTER TABLE `message`
-      ADD `urgence` ENUM('normal','urgent') DEFAULT 'normal' NOT NULL;";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.0.09");
-    $query = "ALTER TABLE `message`
-      ADD `module_id` INT(11) UNSIGNED;";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.0.10");
-    $query = "ALTER TABLE `user_log`
-      CHANGE `object_class` `object_class` VARCHAR(255) NOT NULL;";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.0.11");
-    $query = "ALTER TABLE `user_log` 
-      CHANGE `type` `type` ENUM ('create','store','merge','delete') NOT NULL,
-      ADD INDEX (`date`);";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.0.12");
-    $query = "ALTER TABLE `access_log` 
-      ADD `size` INT (11) UNSIGNED,
-      ADD `errors` INT (11) UNSIGNED,
-      ADD `warnings` INT (11)  UNSIGNED,
-      ADD `notices` INT (11) UNSIGNED;";
-    $this->addQuery($query);
-    
     $this->makeRevision("1.0.13");
     $this->addPrefQuery("touchscreen", "0");
     
@@ -188,24 +74,6 @@ class CSetupsystem extends CSetup {
       ADD INDEX (`object_class`),
       ADD INDEX (`tag`);";
     $this->addQuery($query);
-    
-    $this->makeRevision("1.0.21");
-    $query = "UPDATE user_preferences 
-      SET value = 'e-cap' 
-      WHERE value = 'tonkin';";
-    $this->addQuery($query);
-    $query = "UPDATE user_preferences 
-      SET value = 'e-cap' 
-      WHERE value = 'K-Open';";
-    $this->addQuery($query);
-    $query = "UPDATE user_preferences 
-      SET value = 'mediboard' 
-      WHERE value = 'mediboard_lite';";
-    $this->addQuery($query);
-    $query = "UPDATE user_preferences 
-      SET value = 'mediboard' 
-      WHERE value = 'mediboard_super_lite';";
-    $this->addQuery($query);    
         
     $this->makeRevision("1.0.26");
     $query = "DELETE FROM `modules` 
@@ -521,7 +389,7 @@ class CSetupsystem extends CSetup {
       
       if ($ds) {
         $ex_classes = $ds->loadList("SELECT * FROM ex_class");
-        foreach($ex_classes as $_ex_class) {
+        foreach ($ex_classes as $_ex_class) {
           $_ex_class['host_class'] = strtolower($_ex_class['host_class']);
           
           $old_name = "ex_{$_ex_class['host_class']}_{$_ex_class['event']}_{$_ex_class['ex_class_id']}";
@@ -675,7 +543,7 @@ class CSetupsystem extends CSetup {
       // Changement des chirurgiens
       $query = "SELECT ex_class_id FROM ex_class";
       $list_ex_class = $ds->loadHashAssoc($query);
-      foreach($list_ex_class as $key => $hash) {
+      foreach ($list_ex_class as $key => $hash) {
         $query = "ALTER TABLE `ex_object_$key` 
               ADD `reference_id` INT (11) UNSIGNED AFTER `object_class`,
               ADD `reference_class` VARCHAR(80) AFTER `object_class`";
@@ -703,7 +571,7 @@ class CSetupsystem extends CSetup {
       // Changement des chirurgiens
       $query = "SELECT ex_class_id FROM ex_class";
       $list_ex_class = $ds->loadHashAssoc($query);
-      foreach($list_ex_class as $key => $hash) {
+      foreach ($list_ex_class as $key => $hash) {
         $query = "ALTER TABLE `ex_object_$key` 
               ADD `reference2_id` INT (11) UNSIGNED AFTER `reference_id`,
               ADD `reference2_class` VARCHAR(80) AFTER `reference_id`";
@@ -892,7 +760,7 @@ class CSetupsystem extends CSetup {
       // Changement des chirurgiens
       $query = "SELECT ex_class_id FROM ex_class";
       $list_ex_class = $ds->loadHashAssoc($query);
-      foreach($list_ex_class as $key => $hash) {
+      foreach ($list_ex_class as $key => $hash) {
         $query = "ALTER TABLE `ex_object_$key` 
               ADD INDEX(`reference_id`),
               ADD INDEX(`reference_class`),
@@ -947,7 +815,7 @@ class CSetupsystem extends CSetup {
       // Changement des chirurgiens
       $query = "SELECT ex_class_id, host_class FROM ex_class";
       $list_ex_class = $ds->loadHashAssoc($query);
-      foreach($list_ex_class as $key => $hash) {
+      foreach ($list_ex_class as $key => $hash) {
         $query = "ALTER TABLE `ex_object_$key` 
               ADD `group_id` INT (11) UNSIGNED NOT NULL AFTER `ex_object_id`";
         $ds->exec($query);
@@ -1064,14 +932,10 @@ class CSetupsystem extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("1.1.06");
-    $query = "LOCK TABLE `datasource_log` WRITE";
-    $this->addQuery($query);
     $query = "DELETE FROM `datasource_log`";
     $this->addQuery($query);
     $query = "ALTER TABLE `datasource_log` 
-      ADD UNIQUE `doublon` (`datasource` , `accesslog_id`)";
-    $this->addQuery($query);
-    $query = "UNLOCK TABLES";
+                ADD UNIQUE `doublon` (`datasource` , `accesslog_id`)";
     $this->addQuery($query);
     
     $this->makeRevision("1.1.07");
@@ -1137,6 +1001,117 @@ class CSetupsystem extends CSetup {
     $this->makeRevision("1.1.12");
     $this->addPrefQuery("notes_anonymous", "0");
     
-    $this->mod_version = "1.1.13";
+    $this->makeRevision("1.1.13");
+    $query = "CREATE TABLE `ex_class_event` (
+              `ex_class_event_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `ex_class_id` INT (11) UNSIGNED NOT NULL,
+              `host_class` VARCHAR (255) NOT NULL,
+              `event_name` VARCHAR (255) NOT NULL,
+              `disabled` ENUM ('0','1') NOT NULL DEFAULT '1',
+              `unicity` ENUM ('no','host') NOT NULL DEFAULT 'no'
+             ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_event` 
+                ADD INDEX (`ex_class_id`), 
+                ADD INDEX (`host_class`), 
+                ADD INDEX (`event_name`), 
+                ADD INDEX (`disabled`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_constraint` 
+                ADD `ex_class_event_id` INT (11) UNSIGNED NOT NULL;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field` 
+                ADD `report_class` VARCHAR(80) AFTER `report_level`";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_host_field` 
+                ADD `host_class` VARCHAR(80) AFTER `host_type`";
+    $this->addQuery($query);
+    
+    $this->makeRevision("1.1.14");
+    function createExClassEvents($setup){
+      $ds = $setup->ds;
+      
+      $ex_classes = $ds->loadList("SELECT * FROM ex_class");
+      
+      $specs = array();
+      
+      foreach ($ex_classes as $_ex_class) {
+        $_ex_class = array_map(array($ds, "escape"), $_ex_class);
+        extract($_ex_class);
+        
+        // Insert events
+        $query = "INSERT INTO ex_class_event(ex_class_id, host_class, event_name, disabled, unicity)
+                         VALUES ('$ex_class_id', '$host_class', '$event', '$disabled', '$unicity')";
+        $ds->query($query);
+        $event_id = $ds->insertId();
+        
+        // Update constraints to stick to the event
+        $query = "UPDATE ex_class_constraint 
+                  SET ex_class_constraint.ex_class_event_id = '$event_id' 
+                  WHERE ex_class_id = '$ex_class_id'";
+        $ds->query($query);
+        
+        $spec = null;
+        if (isset($specs[$host_class])) {
+          $spec = $specs[$host_class];
+        }
+        elseif ($host_class) {
+          $instance = new $host_class;
+          $spec = $specs[$host_class] = $instance->_spec->events;
+        }
+        
+        if (!$spec) {
+          continue;
+        }
+        
+        // Update host fields to stick to the event and ex_group_id
+        $ex_groups = $ds->loadList("SELECT * FROM ex_class_field_group WHERE ex_class_id = '$ex_class_id'"); 
+        foreach ($ex_groups as $_ex_group) {
+          $_ex_group = array_map(array($ds, "escape"), $_ex_group);
+          $_ex_group_id = $_ex_group["ex_class_field_group_id"];
+          
+          // Ex class field report level (HOST)
+          $query = "UPDATE ex_class_field
+                    SET report_class = '$host_class' 
+                    WHERE ex_group_id = '$_ex_group_id' AND report_level = 'host'";
+          $ds->query($query);
+          
+          // Ex class host field (HOST)
+          $query = "UPDATE ex_class_host_field
+                    SET host_class = '$host_class' 
+                    WHERE ex_group_id = '$_ex_group_id' AND host_type = 'host'";
+          $ds->query($query);
+          
+          // Ex class field report levl (ref 1 and 2)
+          foreach (array(1, 2) as $i) {
+            $_class = $spec[$event]["reference$i"][0];
+            
+            // Ex class field report level (REF)
+            $query = "UPDATE ex_class_field
+                      SET report_class = '$_class' 
+                      WHERE ex_group_id = '$_ex_group_id' AND report_level = '$i'";
+            $ds->query($query);
+            
+          // Ex class host field (REF)
+            $query = "UPDATE ex_class_host_field
+                      SET host_class = '$_class' 
+                      WHERE ex_group_id = '$_ex_group_id' AND host_type = 'reference$i'";
+            $ds->query($query);
+          }
+        }
+      }
+      
+      return true;
+    }
+
+    //createExClassEvents($this);
+    $this->addFunction("createExClassEvents");
+    
+    /*$query = "ALTER TABLE user_log
+                DROP INDEX object_id,
+                ADD INDEX object_id_object_class (`object_id`, `object_class`)";
+    $this->addQuery($query);*/
+    
+    $this->mod_version = "1.1.15";
   }
 }

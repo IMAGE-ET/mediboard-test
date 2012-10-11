@@ -55,7 +55,7 @@ ExObjectForms.{{$ex_form_hash}} = {
             window.opener.ExObject.register.defer(element_id, {
               ex_class_id: "{{$ex_class_id}}", 
               object_guid: "{{$object_guid}}", 
-              event: "{{$event}}", 
+              event_name: "{{$event_name}}", 
               _element_id: element_id
             });
           }
@@ -83,7 +83,7 @@ ExObjectForms.{{$ex_form_hash}} = {
 Main.add(function(){
   var form = getForm("editExObject_{{$ex_form_hash}}");
   
-  ExObject.current = {object_guid: "{{$object_guid}}", event: "{{$event}}"};
+  ExObject.current = {object_guid: "{{$object_guid}}", event_name: "{{$event_name}}"};
   new ExObjectFormula({{$formula_token_values|@json}}, form);
   ExObject.initPredicates({{$ex_object->_fields_display_struct|@json}}, form);
 });
@@ -93,14 +93,21 @@ Main.add(function(){
           onsubmit="return onSubmitFormAjax(this)"}}
   {{mb_key object=$ex_object}}
   {{mb_field object=$ex_object field=_ex_class_id hidden=true}}
+  {{mb_field object=$ex_object field=group_id hidden=true}}
+  
   {{mb_field object=$ex_object field=object_class hidden=true}}
   {{mb_field object=$ex_object field=object_id hidden=true}}
-  {{mb_field object=$ex_object field=group_id hidden=true}}
+  
+  {{mb_field object=$ex_object field=reference_class hidden=true}}
+  {{mb_field object=$ex_object field=reference_id hidden=true}}
+  
+  {{mb_field object=$ex_object field=reference2_class hidden=true}}
+  {{mb_field object=$ex_object field=reference2_id hidden=true}}
   
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="ExObjectForms.{{$ex_form_hash}}.closeOnSuccess" />
   
-  {{if !$print}}
+  {{if !$print && !$preview_mode}}
     <iframe id="printIframe" width="0" height="0" style="display: none;"></iframe>
     <button type="button" class="print singleclick" onclick="ExObjectForms.{{$ex_form_hash}}.confirmSavePrint(this.form)" style="float: right;">
       {{tr}}Print{{/tr}}
@@ -136,6 +143,16 @@ Main.add(function(){
       </span>
     {{/if}}
     
+    &ndash;
+    <span style="color: #0000AA;" {{if $ex_object->_id}} onmouseover="ObjectTooltip.createEx(this, 'CExObject_{{$ex_object->_ex_class_id}}-{{$ex_object->_id}}', 'objectViewHistory')" {{/if}}>
+      {{if $ex_object->_id}}
+        <img src="images/icons/history.gif" width="16" height="16"/>
+      {{else}}
+        <img src="images/icons/new.png" width="16" height="16"/>
+      {{/if}}
+      {{$ex_object->_ref_last_log->_ref_user}}
+    </span>
+    
     <hr style="border-color: #333; margin: 4px 0;" />
     {{*<span style="float: right;">{{$ex_object->_ref_group}}</span>*}}
     
@@ -157,6 +174,8 @@ Main.add(function(){
       }
     });
   </script>
+  
+  {{$ui_msg|smarty:nodefaults}}
   
   <ul id="ex_class-groups-tabs-{{$ex_form_hash}}" class="control_tabs" style="clear: left;">
     {{foreach from=$grid key=_group_id item=_grid}}
@@ -220,7 +239,13 @@ Main.add(function(){
               </th>
             {{else}}
               <td>
-                {{mb_value object=$_host_field->_ref_host_object field=$_host_field->field}}
+                {{if $_host_field->_ref_host_object->_id}}
+                  {{mb_value object=$_host_field->_ref_host_object field=$_host_field->field}}
+                {{elseif $preview_mode}}
+                  [{{mb_title object=$_host_field->_ref_host_object field=$_host_field->field}}]
+                {{else}}
+                  <div class="info empty opacity-30">Information non disponible</div>
+                {{/if}}
               </td>
             {{/if}}
           {{else}}
@@ -382,6 +407,16 @@ function switchMode(){
               {{$ex_object->_ref_reference_object_1}}
             </span>
           {{/if}}
+                
+          &ndash;
+          <span style="color: #0000AA;">
+            {{if $ex_object->_id}}
+              <img src="images/icons/history.gif" width="16" height="16"/>
+            {{else}}
+              <img src="images/icons/new.png" width="16" height="16"/>
+            {{/if}}
+            {{$ex_object->_ref_last_log->_ref_user}}
+          </span>
           
           <br />
           {{$ex_object->_ref_ex_class->name}} - {{$object}}
@@ -397,6 +432,13 @@ function switchMode(){
     <tr>
       <td colspan="4">
         {{mb_include module=forms template=inc_vw_ex_object ex_object=$ex_object}}
+        
+        {{foreach from=$ex_object->_native_views item=_object key=_name}}
+          {{if $_object && $_object->_id}}
+            <h4 style="margin: 0.5em; border-bottom: 1px solid #666;">{{tr}}CExClass.native_views.{{$_name}}{{/tr}}</h4>
+            {{mb_include module=forms template="inc_native_view_`$_name`_print" object=$_object}}
+          {{/if}}
+        {{/foreach}}
       </td>
     </tr>
     
@@ -503,6 +545,20 @@ function switchMode(){
     {{/if}}
     {{/foreach}}
   
+    {{foreach from=$ex_object->_native_views item=_object key=_name}}
+      {{if $_object && $_object->_id}}
+      <tbody>
+        <tr>
+          <th class="title" colspan="4">
+            {{tr}}CExClass.native_views.{{$_name}}{{/tr}}
+          </th>
+        </tr>
+        <tr>
+          <td colspan="4">{{mb_include module=forms template="inc_native_view_`$_name`_print" object=$_object}}</td>
+        </tr>
+      </tbody>
+      {{/if}}
+    {{/foreach}}
   {{/if}}
     
 </table>

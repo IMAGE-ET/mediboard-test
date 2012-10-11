@@ -18,9 +18,9 @@ $load_observations = CValue::get("observations");
 $refresh = CValue::get("refresh");
 
 if($date == mbDate()){
-	$date_max = mbDateTime();
+  $date_max = mbDateTime();
 } else {
-  $date_max = mbDate("+ 1 DAY", $date)." 00:00:00"; 	
+  $date_max = mbDate("+ 1 DAY", $date)." 00:00:00";   
 }
 
 $nb_hours = CAppUI::conf("soins transmissions_hours");
@@ -45,17 +45,17 @@ if($user_id){
 }
 if($degre){
   if($degre == "urg_normal"){
-    $where[] = "degre = 'low' OR degre = 'high'";
+    $where["degre"] = "IN('low', 'high')";
   }
   if($degre == "urg"){
-    $where[] = "degre = 'high'";
+    $where["degre"] = "= 'high'";
   }
 }
-	
+  
 // Chargement des transmissions
 if($load_transmissions == "1"){
-	$ljoin["sejour"] = "transmission_medicale.sejour_id = sejour.sejour_id";
-	$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+  $ljoin["sejour"] = "transmission_medicale.sejour_id = sejour.sejour_id";
+  $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
   $ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
   $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
   $ljoin["service"]  = "service.service_id = chambre.service_id";
@@ -65,7 +65,7 @@ if($load_transmissions == "1"){
 
 // Chargement des observations
 if($load_observations == "1"){
-	$ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
+  $ljoin["sejour"] = "observation_medicale.sejour_id = sejour.sejour_id";
   $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
   $ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
   $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";

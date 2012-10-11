@@ -4,9 +4,12 @@ Main.add(function(){
   Control.Tabs.create("field_groups_layout");
   //ExClass.putCellSpans($$(".drop-grid")[0]);
 });
-</script>
 
-<div class="small-info">Glissez-déposez les champs et leur libellé dans la grille "Disposition"</div>
+toggleList = function(select) {
+  $$(".hostfield-list").invoke("hide");
+  $$(".hostfield-"+$V(select))[0].show();
+}
+</script>
 
 <form name="form-layout-field" method="post" action="" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="system" />
@@ -37,7 +40,7 @@ Main.add(function(){
   <input type="hidden" name="ex_class_host_field_id" value="" />
   <input type="hidden" name="ex_class_id" value="{{$ex_class->_id}}" />
   <input type="hidden" name="ex_group_id" value="" />
-  <input type="hidden" name="host_type" value="" />
+  <input type="hidden" name="host_class" value="" />
   <input type="hidden" name="field" value="" />
   <input type="hidden" name="callback" value="" />
   
@@ -86,11 +89,9 @@ Main.add(function(){
     <li>
       <a href="#outofgrid-messages-{{$_group_id}}">Textes / Messages</a>
     </li>
-    {{if $ex_class->host_class != "CMbObject"}}
     <li>
       <a href="#outofgrid-hostfields-{{$_group_id}}">Champs de Mediboard</a>
     </li>
-    {{/if}}
   </ul>
   <hr class="control_tabs" />
   
@@ -136,7 +137,6 @@ Main.add(function(){
             {{mb_include module=forms template=inc_ex_message_draggable _type="message_title"}}
           {{/foreach}}
         </td>
-    
         <td class="message_text-list" data-x="" data-y="" style="padding: 4px; vertical-align: top;">
           {{foreach from=$out_of_grid.$_group_id.message_text item=_field}}
             {{mb_include module=forms template=inc_ex_message_draggable _type="message_text"}}
@@ -147,88 +147,35 @@ Main.add(function(){
   </div>
   
   <!-- Host fields -->
-  {{if $ex_class->host_class != "CMbObject"}}
   <div id="outofgrid-hostfields-{{$_group_id}}" style="display: none;">
-    <table class="main tbl" style="table-layout: fixed;">
-      {{assign var=class_options value=$ex_class->_host_class_options}}
-      {{assign var=_host_class value=$ex_class->host_class}}
-      
+    <table class="main layout">
       <tr>
-        <th>{{tr}}{{$ex_class->host_class}}{{/tr}}</th>
-
-        {{if $class_options.reference1.0}}
-          <th>
-            {{if $class_options.reference1.1|strpos:"." === false}}
-              {{tr}}{{$_host_class}}-{{$class_options.reference1.1}}{{/tr}}
-            {{else}}
-              {{tr}}{{$class_options.reference1.0}}{{/tr}}
-            {{/if}}
-          </th>
-        {{/if}}
-        
-        {{if $class_options.reference2.0}}
-          <th>
-            {{if $class_options.reference2.1|strpos:"." === false}}
-              {{tr}}{{$_host_class}}-{{$class_options.reference2.1}}{{/tr}}
-            {{else}}
-              {{tr}}{{$class_options.reference2.0}}{{/tr}}
-            {{/if}}
-          </th>
-        {{/if}}
-      </tr>
-    </table>
-    
-    <table class="main layout" style="table-layout: fixed;" >
-      <tr>
-        <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
-          <div style="height: 100%; overflow-y: scroll; min-height: 140px;">
-            <ul>
-            {{foreach from=$host_object->_specs item=_spec key=_field}}
-              {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
-                <li>
-                  {{mb_include module=forms template=inc_ex_host_field_draggable ex_group_id=$_group_id host_object=$host_object host_type="host"}}
-                </li>
-              {{/if}}
+        <td class="narrow">
+          <select onchange="toggleList(this)" class="dont-lock">
+            {{foreach from=$ex_class->_host_objects item=_object key=_class}}
+              <option value="{{$_class}}">{{tr}}{{$_class}}{{/tr}}</option>
             {{/foreach}}
-            </ul>
-          </div>
+          </select>
         </td>
-
-        {{if $class_options.reference1.0}}
-          <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
-            <div style="height: 100%; overflow-y: scroll; min-height: 140px;">
+        <td>
+          {{foreach from=$ex_class->_host_objects item=_object key=_class name=_host_objects}}
+            <div style="overflow-y: scroll; min-height: 140px; max-height: 140px; {{if !$smarty.foreach._host_objects.first}} display: none; {{/if}}" 
+                 class="hostfield-{{$_class}} hostfield-list" data-x="" data-y="">
               <ul>
-              {{foreach from=$reference1->_specs item=_spec key=_field}}
+              {{foreach from=$_object->_specs item=_spec key=_field}}
                 {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
                   <li>
-                    {{mb_include module=forms template=inc_ex_host_field_draggable ex_group_id=$_group_id host_object=$reference1 host_type="reference1"}}
+                    {{mb_include module=forms template=inc_ex_host_field_draggable ex_group_id=$_group_id host_object=$_object}}
                   </li>
                 {{/if}}
               {{/foreach}}
               </ul>
             </div>
-          </td>
-        {{/if}}
-        
-        {{if $class_options.reference2.0}}
-          <td class="hostfield-list" data-x="" data-y="" style="padding: 4px; height: 2em; vertical-align: top;">
-            <div style="height: 100%; overflow-y: scroll; min-height: 140px;">
-              <ul>
-              {{foreach from=$reference2->_specs item=_spec key=_field}}
-                {{if $_spec->show == 1 || $_field == "_view" || ($_spec->show == "" && $_field.0 !== "_")}}
-                  <li>
-                    {{mb_include module=forms template=inc_ex_host_field_draggable ex_group_id=$_group_id host_object=$reference2 host_type="reference2"}}
-                  </li>
-                {{/if}}
-              {{/foreach}}
-              </ul>
-            </div>
-          </td>
-        {{/if}}
+          {{/foreach}}
+        </td>
       </tr>
     </table>
   </div>
-  {{/if}}
 </div>
 
 <table class="main drop-grid" style="border-collapse: collapse;">
@@ -277,20 +224,15 @@ Main.add(function(){
                            _field=$_group.object 
                            _type=$_group.type}}
             {{elseif $_group.object instanceof CExClassHostField}}
-              {{if $_group.object->host_type == "host"}}
-                {{assign var=_host_object value=$host_object}}
-              {{elseif $_group.object->host_type == "reference1"}}
-                {{assign var=_host_object value=$reference1}}
-              {{elseif $_group.object->host_type == "reference2"}}
-                {{assign var=_host_object value=$reference2}}
-              {{/if}}
+              {{assign var=_host_field value=$_group.object}}
+              {{assign var=_host_class value=$_host_field->host_class}}
+              {{assign var=_host_object value=$ex_class->_host_objects.$_host_class}}
             
               {{mb_include module=forms template=inc_ex_host_field_draggable 
                            _host_field=$_group.object 
                            ex_group_id=$_group_id 
                            _field=$_group.object->field 
-                           _type=$_group.type 
-                           host_type=$_group.object->host_type
+                           _type=$_group.type
                            host_object=$_host_object}}
             {{else}}
               {{mb_include module=forms template=inc_ex_message_draggable 

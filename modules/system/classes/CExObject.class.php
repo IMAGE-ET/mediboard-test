@@ -56,7 +56,7 @@ class CExObject extends CMbMetaObject {
   static $_locales_ready = false;
   static $_locales_cache_enabled = true;
 
-  function __construct(){
+  function __construct($ex_class_id = null){
     parent::__construct();
   
     if (self::$_multiple_load) {
@@ -67,9 +67,17 @@ class CExObject extends CMbMetaObject {
       unset(self::$backProps[$class]);
       unset(self::$backSpecs[$class]);
     }
+    
+    if ($ex_class_id) {
+      $this->setExClass($ex_class_id);
+    }
   }
 
-  function setExClass() {
+  function setExClass($ex_class_id = null) {
+    if ($ex_class_id) {
+      $this->_ex_class_id = $ex_class_id;
+    }
+    
     if ($this->_specs_already_set || !$this->_ex_class_id && !$this->_own_ex_class_id) {
       return;
     }
@@ -152,7 +160,7 @@ class CExObject extends CMbMetaObject {
       $ds = CSQLDataSource::get("std");
       $list = $ds->loadList($request->getRequest());
       
-      foreach($list as $_item) {
+      foreach ($list as $_item) {
         $key = "CExObject_{$_item['ex_class_id']}-{$_item['name']}";
         $_locales[$key]         = $_item["std"];
         $_locales["$key-desc"]  = $_item["desc"];
@@ -192,7 +200,7 @@ class CExObject extends CMbMetaObject {
         }
           
         $enum_list = $ds->loadHashList($request->getRequest());
-        foreach($enum_list as $_value => $_locale) {
+        foreach ($enum_list as $_value => $_locale) {
           $_locales["$key.$_value"] = $_locale;
         }
       }
@@ -230,13 +238,13 @@ class CExObject extends CMbMetaObject {
     return $this->_ref_group = $this->loadFwdRef("group_id", $cache);
   }
   
-  function loadNativeViews(){
+  function loadNativeViews(CExClassEvent $event){
     $this->_native_views = array();
     
-    $views = $this->_ref_ex_class->getAvailableNativeViews();
+    $views = $event->getAvailableNativeViews();
     $selected_views = explode('|', $this->_ref_ex_class->native_views);
     
-    foreach($views as $_name => $_class) {
+    foreach ($views as $_name => $_class) {
       if (in_array($_name, $selected_views)) {
         $this->_native_views[$_name] = $this->getReferenceObject($_class);
       }
@@ -267,7 +275,7 @@ class CExObject extends CMbMetaObject {
   /*
    * attention aux dates, il faut surement checker le log de derniere modif des champs du concept
    */
-  function getReportedValues(){
+  function getReportedValues(CExClassEvent $event){
     if ($this->_id) return;
     
     self::$_multiple_load = true;
@@ -277,12 +285,13 @@ class CExObject extends CMbMetaObject {
     
     $ex_class = $this->_ref_ex_class;
     
-    $this->_ref_reference_object_1 = $ex_class->resolveReferenceObject($object, 1);
-    $this->_ref_reference_object_2 = $ex_class->resolveReferenceObject($object, 2);
+    $this->loadRefReferenceObjects();
     
-    $latest_1 = $ex_class->getLatestExObject($this->_ref_reference_object_1, 1);
-    $latest_2 = $ex_class->getLatestExObject($this->_ref_reference_object_2, 2);
-    $latest_host = $ex_class->getLatestExObject($this->_ref_object, "host");
+    $latest_ex_objects = array(
+      $ex_class->getLatestExObject($this->_ref_reference_object_1),
+      $ex_class->getLatestExObject($this->_ref_reference_object_2),
+      $ex_class->getLatestExObject($this->_ref_object),
+    );
     
     $fields = $this->_ref_ex_class->loadRefsAllFields(true);
     
@@ -291,7 +300,7 @@ class CExObject extends CMbMetaObject {
     $ex_classes = array();
     
     // on cherche les champs reportés de l'objet courant
-    foreach($fields as $_field) {
+    foreach ($fields as $_field) {
       $field_name = $_field->name;
       $this->_reported_fields[$field_name] = null;
       
@@ -300,9 +309,11 @@ class CExObject extends CMbMetaObject {
       $this->$field_name = CExClassField::unescapeProp($spec_obj->default);
       
       // si champ pas reporté, on passe au suivant
-      if (!$_field->report_level) continue;
+      if (!$_field->report_class) {
+        continue;
+      }
       
-      $_level = $_field->report_level;
+      $_report_class = $_field->report_class;
       
       // si champ basé sur un concept, il faut parcourir 
       // tous les formulaires qui ont un champ du meme concept
@@ -312,7 +323,7 @@ class CExObject extends CMbMetaObject {
           $_concept = $_field->loadRefConcept();
           $_concept_fields = $_concept->loadRefClassFields();
           
-          foreach($_concept_fields as $_concept_field) {
+          foreach ($_concept_fields as $_concept_field) {
             if (!isset($ex_classes[$_concept_field->ex_group_id])) {
               $ex_classes[$_concept_field->ex_group_id] = $_concept_field->loadRefExClass();
             }
@@ -332,20 +343,32 @@ class CExObject extends CMbMetaObject {
         
         $_latest = null;
         $_latest_value = null;
+        $_found_a_concept = false;
         
         // on regarde tous les champs du concept
-        foreach($_concept_fields as $_concept_field) {
+        foreach ($_concept_fields as $_concept_field) {
           $_ex_class = $_concept_field->_ref_ex_class;
+
+          $_concept_latest = null;
           
-          // en fonction du niveau
-          switch($_level) {
-            case 1:      $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_1, 1); break;
-            case 2:      $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_2, 2); break;
-            case "host": $_concept_latest = $_ex_class->getLatestExObject($this->_ref_object, "host");
+          if ($this->_ref_object->_class == $_report_class) {
+            $_concept_latest = $_ex_class->getLatestExObject($this->_ref_object);
+          }
+          elseif ($this->_ref_reference_object_1->_class == $_report_class) {
+            $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_1);
+          }
+          elseif ($this->_ref_reference_object_2->_class == $_report_class) {
+            $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_2);
+          }
+          
+          if ($_concept_latest && $_concept_latest->_id) {
+            $_found_a_concept = true;
           }
           
           // si pas d'objet precedemment enregistré
-          if (!$_concept_latest->_id || $_concept_latest->{$_concept_field->name} == "") continue;
+          if (!$_concept_latest || !$_concept_latest->_id || $_concept_latest->{$_concept_field->name} == "") {
+            continue;
+          }
           
           // on regarde le log pour voir lequel a été saisi en dernier
           //$_log = $_concept_latest->loadLastLogForField($_concept_field->name); // FIXME ne donne rien quand type=create 
@@ -361,29 +384,62 @@ class CExObject extends CMbMetaObject {
               $_latest_value = $_latest->{$_concept_field->name};
             }
           }
-          
-          //mbTrace($_latest->{$_concept_field->name}, "field de $_concept_field->_ref_ex_class");
         }
         
         if ($_latest) {
+          $_latest->loadTargetObject()->loadComplete();
+          
           $this->_reported_fields[$field_name] = $_latest;
-          $_latest->loadTargetObject();
           $this->$field_name = self::typeSetSpecIntersect($_field, $_latest_value);
         }
-      }
-      else {
-        // ceux de la meme exclass
-        if (!$latest_1->_id && !$latest_2->_id && !$latest_host->_id) continue;
         
-        switch($_level) {
-          case 1:      $_base = $latest_1;    break;
-          case 2:      $_base = $latest_2;    break;
-          case "host": $_base = $latest_host; break;
+        if ($this->_ref_object->_id && !$_found_a_concept) {
+          $_field_view = CAppUI::tr("$this->_class-$_field->name");
+          CAppUI::setMsg("Report de données impossible pour le champ '$_field_view'", UI_MSG_WARNING);
+        }
+      }
+
+      // Ceux de la meme exclass
+      else {
+        $escape = true;
+        foreach ($latest_ex_objects as $_latest_ex_object) {
+          if ($_latest_ex_object->_id) {
+            $escape = false;
+            break;
+          }
         }
         
-        if ($_base->$field_name == "") continue;
+        if ($escape) {
+          continue;
+        }
         
-        $_base->loadTargetObject();
+        $_base = null;
+        foreach ($latest_ex_objects as $_latest_ex_object) {
+          if ($_latest_ex_object->_ref_reference_object_1->_class == $_report_class) {
+            $_base = $_latest_ex_object->_ref_reference_object_1;
+            break;
+          }
+          elseif ($_latest_ex_object->_ref_reference_object_2->_class == $_report_class) {
+            $_base = $_latest_ex_object->_ref_reference_object_2;
+            break;
+          }
+          elseif ($_latest_ex_object->_ref_object->_class == $_report_class) {
+            $_base = $_latest_ex_object->_ref_object;
+            break;
+          }
+        }
+        
+        if ($this->_ref_object->_id && !$_base) {
+          $_field_view = CAppUI::tr("$this->_class-$_field->name");
+          CAppUI::setMsg("Report de données impossible pour le champ '$_field_view'", UI_MSG_WARNING);
+          continue;
+        }
+        
+        if ($_base->$field_name == "") {
+          continue;
+        }
+        
+        $_base->loadTargetObject()->loadComplete();
         $_base->loadLastLog();
         
         $this->_reported_fields[$field_name] = $_base;
@@ -393,24 +449,6 @@ class CExObject extends CMbMetaObject {
     
     self::$_multiple_load = false;
     CExClassField::$_load_lite = false;
-  
-    /*
-    if (!$latest_1->_id && !$latest_2->_id) return;
-    
-    $fields = $this->_ref_ex_class->loadRefsAllFields(true);
-    
-    foreach($fields as $_field) {
-      $field_name = $_field->name;
-      
-      $spec_obj = $_field->getSpecObject();
-      $this->$field_name = $spec_obj->default;
-      
-      if (!$_field->report_level) continue;
-      
-      $level = $_field->report_level;
-      
-      $this->$field_name = (($level == 1) ? $latest_1->$field_name : $latest_2->$field_name);
-    }*/
   }
   
   function loadOldObject() {
@@ -429,7 +467,7 @@ class CExObject extends CMbMetaObject {
     
     $this->_fields_display_struct = array();
     
-    foreach($fields as $_field) {
+    foreach ($fields as $_field) {
       if (!$_field->predicate_id) {
         continue;
       }
@@ -453,22 +491,8 @@ class CExObject extends CMbMetaObject {
       return $msg;
     }
     
-    if (!$this->_id) {
-      $object = $this->loadTargetObject();
-      
-      if (!$this->reference_id && !$this->reference_class) {
-        $reference = $this->_ref_ex_class->resolveReferenceObject($object, 1);
-        $this->setReferenceObject_1($reference);
-      }
-      
-      if (!$this->reference2_id && !$this->reference2_class) {
-        $reference = $this->_ref_ex_class->resolveReferenceObject($object, 2);
-        $this->setReferenceObject_2($reference);
-      }
-      
-      if (!$this->group_id) {
-        $this->group_id = CGroups::loadCurrent()->_id;
-      }
+    if (!$this->_id && !$this->group_id) {
+      $this->group_id = CGroups::loadCurrent()->_id;
     }
     
     return parent::store();
@@ -567,8 +591,12 @@ class CExObject extends CMbMetaObject {
     
     $fields = $this->_ref_ex_class->loadRefsAllFields(true);
     
-    foreach($fields as $_field) {
-      if (isset($this->{$_field->name})) break; // don't redeclare them more than once
+    foreach ($fields as $_field) {
+      // don't redeclare them more than once
+      if (isset($this->{$_field->name})) {
+        break; 
+      }
+      
       $this->{$_field->name} = null; // declaration of the field
       $props[$_field->name] = $_field->prop; // declaration of the field spec
       $this->_fields_display[$_field->name] = true; // display the field by default
@@ -587,7 +615,7 @@ class CExObject extends CMbMetaObject {
     
     $specs = @parent::getSpecs(); // sometimes there is "list|"
         
-    foreach($specs as $_field => $_spec) {
+    foreach ($specs as $_field => $_spec) {
       if ($_spec instanceof CEnumSpec) {
         foreach ($_spec->_locales as $key => $locale) {
           $specs[$_field]->_locales[$key] = CAppUI::tr("$this->_class.$_field.$key");
@@ -611,7 +639,7 @@ class CExObject extends CMbMetaObject {
     $this->_ref_logs = $log->loadList($where, "date DESC", 100);
 
     // loadRefsFwd will fail because the ExObject's class doesn't really exist
-    foreach($this->_ref_logs as &$_log) {
+    foreach ($this->_ref_logs as &$_log) {
       $_log->loadRefUser();
     }
     
@@ -627,7 +655,7 @@ class CExObject extends CMbMetaObject {
       "reference2_class" => "reference2_id", 
     );
     
-    foreach($fields as $_class => $_id) {
+    foreach ($fields as $_class => $_id) {
       if ($this->$_class == $class) {
         return $this->loadFwdRef($_id);
       }
@@ -644,10 +672,6 @@ class CExObject extends CMbMetaObject {
       return false;
     }
     
-    $ex_object = new CExObject();
-    $ex_object->_ex_class_id = $ex_class->_id;
-    $ex_object->setExClass();
-    
-    return $ex_object;
+    return new CExObject($ex_class->_id);
   }
 }

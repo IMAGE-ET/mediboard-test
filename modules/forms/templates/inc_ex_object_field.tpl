@@ -2,6 +2,12 @@
 {{mb_default var=mode value=normal}}
 {{mb_default var=is_predicate value=false}}
 
+{{if !isset($ex_class|smarty:nodefaults)}}
+  {{assign var=ex_class value=$ex_object->_ref_ex_class}}
+{{else}}
+  {{assign var=ex_object value=$ex_class->_ex_object}}
+{{/if}}
+
 {{assign var=_field_name value=$ex_field->name}}
 {{assign var=_spec value=$ex_object->_specs.$_field_name}}
 

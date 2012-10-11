@@ -248,51 +248,14 @@ Main.add(function(){
     </tr>
     
     <tr>
-      <th>Report de valeur</th>
-      <td colspan="3">
-        {{assign var=class_options value=$ex_field->_ref_ex_group->_ref_ex_class->_host_class_options}}
-        {{assign var=_host_class value=$ex_field->_ref_ex_group->_ref_ex_class->host_class}}
-      
-        {{if $ex_field->_id}}
-          <select name="report_level" style="max-width: 16em;">
-            <option value="">Aucun</option>
-            
-          {{if $_host_class != "CMbObject"}}
-            <option value="host" {{if $ex_field->report_level == "host"}} selected="selected" {{/if}}>
-              {{tr}}{{$_host_class}}{{/tr}}
-            </option>
-          {{/if}}
-          
-          {{if $class_options.reference1.0}}
-            <option value="1" {{if $ex_field->report_level == "1"}} selected="selected" {{/if}}>
-              {{if $class_options.reference1.1|strpos:"." === false}}
-                {{tr}}{{$_host_class}}-{{$class_options.reference1.1}}{{/tr}}
-              {{else}}
-                {{tr}}{{$class_options.reference1.0}}{{/tr}}
-              {{/if}}
-            </option>
-          {{/if}}
-          
-          {{if $class_options.reference2.0}}
-            <option value="2" {{if $ex_field->report_level == "2"}} selected="selected" {{/if}}>
-              {{if $class_options.reference2.1|strpos:"." === false}}
-                {{tr}}{{$_host_class}}-{{$class_options.reference2.1}}{{/tr}}
-              {{else}}
-                {{tr}}{{$class_options.reference2.0}}{{/tr}}
-              {{/if}}
-            </option>
-          {{/if}}
-          </select>
-        {{else}}
-          <em>Enregistrez le champ avant de définir le type de report</em>
-        {{/if}}
-      </td>
+      <th>{{mb_label object=$ex_field field=report_class}}</th>
+      <td colspan="3">{{mb_field object=$ex_field field=report_class typeEnum=select emptyLabel="Aucun"}}</td>
     </tr>
     
     <tr>
       <th>{{mb_label object=$ex_field field=predicate_id}}</th>
       <td colspan="3">
-        <div class="small-warning" id="notNull-predicate-warning">
+        <div class="small-warning" id="notNull-predicate-warning" style="display: none;">
           Le champ est à la fois <strong>obligatoire et conditionnel</strong>, 
           ceci peut provoquer des problèmes lors de la saisie du formulaire. 
         </div>
@@ -354,7 +317,9 @@ Main.add(function(){
 <div id="fieldSpecEditor" style="white-space: normal; display: none;"></div>
 
 <div id="fieldFormulaEditor" style="display: none;">
-  Enregistrez le champ pour modifier sa formule
+  {{if !$ex_field->_id}}
+    Enregistrez le champ pour modifier sa formule
+  {{/if}}
 </div>
 
 <div id="fieldPredicates" style="display: none;">

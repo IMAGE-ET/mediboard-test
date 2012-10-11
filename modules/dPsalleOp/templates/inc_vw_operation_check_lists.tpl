@@ -57,7 +57,7 @@ Main.add(function(){
       
       <button class="print" onclick="(new Url('dPsalleOp', 'print_check_list_operation')).addParam('operation_id', {{$selOp->_id}}).popup(800, 600, 'check_list')">{{tr}}Print{{/tr}}</button>
       
-      {{mb_include module=forms template=inc_widget_ex_class_register object=$selOp event=checklist cssStyle="display: inline-block; font-size: 0.8em;"}}
+      {{mb_include module=forms template=inc_widget_ex_class_register object=$selOp event_name=checklist cssStyle="display: inline-block; font-size: 0.8em;"}}
     </th>
   </tr>
   

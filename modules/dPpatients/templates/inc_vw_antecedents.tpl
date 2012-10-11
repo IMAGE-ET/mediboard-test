@@ -1,8 +1,9 @@
 {{mb_default var=type value=""}}
 {{mb_default var=readonly value=0}}
+{{mb_default var=show_all value=false}}
 
 {{assign var=antecedents value=$patient->_ref_dossier_medical->_ref_antecedents_by_type}}
-{{if isset($antecedents.$type|smarty:nodefaults)}}
+{{if !$show_all && isset($antecedents.$type|smarty:nodefaults)}}
   {{if $readonly}}
     <img src="images/icons/{{$type}}.png" {{if !$antecedents.$type|@count}}class="opacity-40"{{/if}}
       onmouseover="ObjectTooltip.createDOM(this, 'div_atcd_{{$patient->_id}}');"/>
@@ -15,7 +16,8 @@
     </button>
   {{/if}}
 {{/if}}
-<div id="div_atcd_{{$patient->_id}}" style="display: none;">
+
+<div id="div_atcd_{{$patient->_id}}" {{if !$show_all}} style="display: none;" {{/if}}>
   <ul>
     {{foreach from=$antecedents key=name item=cat}}
       {{if ($type == "" || ($type == $name) ) && $cat|@count}}

@@ -42,7 +42,6 @@ else {
 }
 
 $ex_class->loadRefsGroups();
-$ex_class->getHostClassOptions();
 
 $other_fields = array();
 

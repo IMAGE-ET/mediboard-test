@@ -11,45 +11,46 @@
 //CCanDo::checkAdmin();
 
 $object_guids = CValue::get("object_guids", array());
-$event        = CValue::get("event");
+$event_name   = CValue::get("event_name");
 
-$ex_classes = array();
+$ex_class_events = array();
 $group_id = CGroups::loadCurrent()->_id;
+$ex_class_event = new CExClassEvent;
+$ds = $ex_class_event->_spec->ds;
+
+$where = array(
+  "ex_class_event.event_name"  => $ds->prepare("=%", $event_name),
+  "ex_class_event.disabled"    => $ds->prepare("=%", 0),
+  "ex_class.conditional"       => $ds->prepare("=%", 0),
+  $ds->prepare("ex_class.group_id = % OR ex_class.group_id IS NULL", $group_id),
+);
+$ljoin = array(
+  "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id",
+);
 
 foreach($object_guids as $object_guid) {
   $object = CMbObject::loadFromGuid($object_guid);
+
+  $where["ex_class_event.host_class"] = $ds->prepare("=%", $object->_class);
+  $_ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
   
-  $ex_class = new CExClass;
-  $ds = $ex_class->_spec->ds;
-  
-  $where = array(
-    "host_class"  => $ds->prepare("=%", $object->_class),
-    "event"       => $ds->prepare("=%", $event),
-    "disabled"    => $ds->prepare("=%", 0),
-    "conditional" => $ds->prepare("=%", 0),
-    //"required"    => $ds->prepare("=%", 1),
-    "group_id"    => $ds->prepare("=% OR group_id IS NULL", $group_id),
-    //"ex_class_id" => $ds->prepareNotIn(array_keys($ex_classes)), // On exclut les formulaires deja dans le tableau
-  );
-  
-  $_ex_classes = $ex_class->loadList($where);
-  
-  foreach($_ex_classes as $_id => $_ex_class) {
-    if ($_ex_class->checkConstraints($object)) {
-      $_ex_class->_host_object = $object;
-      $ex_classes[] = $_ex_class;
+  foreach ($_ex_class_events as $_id => $_ex_class_event) {
+    if ($_ex_class_event->checkConstraints($object)) {
+      $_ex_class_event->_host_object = $object;
+      $ex_class_events[] = $_ex_class_event;
     }
   }
 }
 
-$ex_classes_struct = array();
+$ex_class_events_struct = array();
 
-foreach($ex_classes as $_ex_class) {
-  $ex_classes_struct[] = array(
-    "ex_class_id" => $_ex_class->_id,
-    "event"       => $event,
+foreach($ex_class_events as $_ex_class_event) {
+  $ex_class_events_struct[] = array(
+    "ex_class_event_id" => $_ex_class_event->_id,
+    "ex_class_id" => $_ex_class_event->ex_class_id,
+    "event_name"  => $event_name,
     "object_guid" => $_ex_class->_host_object->_guid,
   );
 }
 
-CApp::json($ex_classes_struct);
+CApp::json($ex_class_events_struct);

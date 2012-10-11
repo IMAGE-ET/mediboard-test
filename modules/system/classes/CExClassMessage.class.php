@@ -50,7 +50,7 @@ class CExClassMessage extends CMbObject {
   function updateFormFields(){
     parent::updateFormFields();
     
-    $this->_view = ($this->title ? $this->title : CMbString::truncate($this->text, 20));
+    $this->_view = ($this->title ? $this->title : CMbString::truncate($this->text, 30));
   }
   
   function loadRefExGroup($cache = true){

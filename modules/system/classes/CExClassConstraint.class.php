@@ -11,7 +11,8 @@
 class CExClassConstraint extends CMbObject {
   var $ex_class_constraint_id = null;
   
-  var $ex_class_id   = null;
+  //var $ex_class_id   = null;
+  var $ex_class_event_id = null;
   var $field         = null;
   var $operator      = null;
   var $value         = null;
@@ -19,32 +20,25 @@ class CExClassConstraint extends CMbObject {
   /**
    * @var CExClass
    */
-  var $_ref_ex_class = null;
+  var $_ref_ex_class_event = null;
   var $_ref_target_object = null;
   var $_ref_target_spec = null;
-  
-  var $_locale = null;
-  var $_locale_desc = null;
-  var $_locale_court = null;
 
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "ex_class_constraint";
     $spec->key   = "ex_class_constraint_id";
-    $spec->uniques["constraint"] = array("ex_class_id", "field", "value");
+    $spec->uniques["constraint"] = array("ex_class_event_id", "field", "value");
     return $spec;
   }
 
   function getProps() {
     $props = parent::getProps();
-    $props["ex_class_id"] = "ref notNull class|CExClass";
+    //$props["ex_class_id"] = "ref notNull class|CExClass";
+    $props["ex_class_event_id"] = "ref notNull class|CExClassEvent";
     $props["field"]       = "str notNull";
     $props["operator"]    = "enum notNull list|=|!=|>|>=|<|<=|startsWith|endsWith|contains default|=";
     $props["value"]       = "str notNull";
-    
-    $props["_locale"]     = "str";
-    $props["_locale_desc"]  = "str";
-    $props["_locale_court"] = "str";
     return $props;
   }
   
@@ -53,7 +47,7 @@ class CExClassConstraint extends CMbObject {
     
     if (strpos($field, "CONNECTED_USER") === 0) {
       $object = CMediusers::get();
-      $object->_specs = CExClass::getHostObjectSpecs($object);
+      $object->_specs = CExClassEvent::getHostObjectSpecs($object);
       
       if ($field != "CONNECTED_USER") {
         $field = substr($field, 15);
@@ -130,14 +124,14 @@ class CExClassConstraint extends CMbObject {
   }
   
   function loadTargetObject(){
-    $this->loadRefExClass();
+    $this->loadRefExClassEvent();
     $this->completeField("field", "value");
     
     if (!$this->_id) {
       return $this->_ref_target_object = new CMbObject;
     }
     
-    $ref_object = new $this->_ref_ex_class->host_class;
+    $ref_object = new $this->_ref_ex_class_event->host_class;
     
     $spec = $this->resolveSpec($ref_object);
     
@@ -157,9 +151,9 @@ class CExClassConstraint extends CMbObject {
   function updateFormFields(){
     parent::updateFormFields();
     
-    $this->loadRefExClass();
+    $this->loadRefExClassEvent();
     
-    $host_class = $this->_ref_ex_class->host_class;
+    $host_class = $this->_ref_ex_class_event->host_class;
     
     list($object, $field) = $this->getFieldAndObject(new $host_class);
     $host_class = $object->_class;
@@ -233,7 +227,7 @@ class CExClassConstraint extends CMbObject {
     return CExClass::compareValues($value, $this->operator, $this->value);
   }
   
-  function loadRefExClass(){
-    return $this->_ref_ex_class = $this->loadFwdRef("ex_class_id");
+  function loadRefExClassEvent(){
+    return $this->_ref_ex_class_event = $this->loadFwdRef("ex_class_event_id");
   }
 }

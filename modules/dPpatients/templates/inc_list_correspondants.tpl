@@ -1,30 +1,38 @@
+{{mb_default var=readonly value=false}}
+
+{{if !$readonly}}
 <script type="text/javascript">
   Main.add(function() {
     Control.Tabs.setTabCount("correspondance", "{{$nb_correspondants}}");
   });
 </script>
+{{/if}}
+
 <table style="width: 100%;" class="tbl">
   <thead>
     <tr>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=nom}}</th>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=prenom}}</th>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=naissance}}</th>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=adresse}}</th>
-      <th class="title">
-        {{mb_label class=CCorrespondantPatient field=cp}} / {{mb_label class=CCorrespondantPatient field=ville}}
+      <th class="category">{{mb_title class=CCorrespondantPatient field=nom}}</th>
+      <th class="category">{{mb_title class=CCorrespondantPatient field=prenom}}</th>
+      <th class="category">{{mb_title class=CCorrespondantPatient field=naissance}}</th>
+      <th class="category">{{mb_title class=CCorrespondantPatient field=adresse}}</th>
+      <th class="category">
+        {{mb_title class=CCorrespondantPatient field=cp}} / {{mb_title class=CCorrespondantPatient field=ville}}
       </th>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=tel}}</th>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=mob}}</th>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=fax}}</th>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=parente}}</th>
+      <th class="category">{{mb_title class=CCorrespondantPatient field=tel}}</th>
+      <th class="category">{{mb_title class=CCorrespondantPatient field=mob}}</th>
+      <th class="category">{{mb_title class=CCorrespondantPatient field=fax}}</th>
+      <th class="category">{{mb_title class=CCorrespondantPatient field=parente}}</th>
       {{if $conf.ref_pays == 1}}
-        <th class="title">{{mb_label class=CCorrespondantPatient field=urssaf}}</th>
+        <th class="category">{{mb_title class=CCorrespondantPatient field=urssaf}}</th>
       {{/if}}
-      <th class="title">{{mb_label class=CCorrespondantPatient field=email}}</th>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=remarques}}</th>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=date_debut}}</th>
-      <th class="title">{{mb_label class=CCorrespondantPatient field=date_fin}}</th>
-      <th class="title" style="width: 1%"></th>
+      <th class="category">{{mb_title class=CCorrespondantPatient field=email}}</th>
+      <th class="category">{{mb_title class=CCorrespondantPatient field=remarques}}</th>
+      <th class="category">{{mb_title class=CCorrespondantPatient field=date_debut}}</th>
+      <th class="category">{{mb_title class=CCorrespondantPatient field=date_fin}}</th>
+      
+      {{if !$readonly}}
+        <th class="category" style="width: 1%"></th>
+      {{/if}}
     </tr>
   </thead>
   {{if $nb_correspondants > 0}}
@@ -71,9 +79,12 @@
             </td>            
             <td>{{mb_value object=$_correspondant field=date_debut}}</td>
             <td>{{mb_value object=$_correspondant field=date_fin}}</td>
+            
+            {{if !$readonly}}
             <td>
               <button type="button" class="edit notext" onclick="Correspondant.edit('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))"></button>
             </td>
+            {{/if}}
           </tr>
         {{foreachelse}}
           <tr>

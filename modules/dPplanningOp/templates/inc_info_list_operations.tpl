@@ -49,7 +49,7 @@
     <button class="print" style="width: 100%; min-width: 10em;" type="button" onclick="printFicheBloc('{{$_operation->_id}}');">
       Feuille de bloc
     </button>
-    {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event=liaison}}
+    {{mb_include module=forms template=inc_widget_ex_class_register object=$_operation event_name=liaison}}
   </td>
 </tr>
 

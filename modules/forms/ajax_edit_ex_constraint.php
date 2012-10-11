@@ -10,26 +10,26 @@
 
 CCanDo::checkEdit();
 
-$ex_constraint_id = CValue::get("ex_constraint_id");
-$ex_class_id      = CValue::get("ex_class_id");
+$ex_constraint_id  = CValue::get("ex_constraint_id");
+$ex_class_event_id = CValue::get("ex_class_event_id");
 
 $ex_constraint = new CExClassConstraint;
 $ex_constraint->_ref_object = null;
   
 if (!$ex_constraint->load($ex_constraint_id)) {
-  $ex_constraint->ex_class_id = $ex_class_id;
+  $ex_constraint->ex_class_event_id = $ex_class_event_id;
 }
 else {
   $ex_constraint->loadRefsNotes();
 }
 
-$ex_constraint->loadRefExClass();
 $ex_constraint->loadTargetObject();
+$event = $ex_constraint->loadRefExClassEvent();
 
-$options = $ex_constraint->_ref_ex_class->getHostClassOptions();
+$options = $event->getHostClassOptions();
 $host_field_suggestions = CValue::read($options, "hostfield_sugg", array());
 
-$list = $ex_constraint->_ref_ex_class->buildHostFieldsList();
+$list = $event->buildHostFieldsList();
 
 $smarty = new CSmartyDP();
 $smarty->assign("ex_constraint", $ex_constraint);

@@ -77,11 +77,11 @@ Main.add(function() {
     </tr>
 
     <tr>
-      <td />
+      <td></td>
       <td>
         <button type="submit" class="hslip">{{tr}}Comparer{{/tr}}</button>
       </td>
-      <th />
+      <th></th>
       <td>
         {{if !$alternative_mode}}
           <button type="button" class="add notext" onclick="addObjectField()">{{tr}}Add{{/tr}}</button>

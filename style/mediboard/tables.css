@@ -534,8 +534,12 @@ table.print th.title {
   background: #68f;
   border: #aaa 2px solid;
   padding: 2px;
-  font-size: 1.4em;
   color: #006;
+}
+
+/** Pour eviter d'avoir des titres enormes */
+table.print > * > tr > th.title {
+  font-size: 1.4em;
 }
 
 table.print th.category {
@@ -544,7 +548,7 @@ table.print th.category {
   background: #abf;
   padding: 2px;
   border: #aaa 2px solid;
-  font-size: 12pt;
+  font-size: 10pt;
 }
 
 table.print td {

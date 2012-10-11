@@ -55,7 +55,7 @@ if ($ex_class_id) {
 
 if (empty(CExClass::$_list_cache)) {
   $ex_class = new CExClass;
-  CExClass::$_list_cache = $ex_class->loadList($where);
+  CExClass::$_list_cache = $ex_class->loadList($where, "name");
 
   if (!CExObject::$_locales_cache_enabled && $detail > 1) {
     foreach(CExClass::$_list_cache as $_ex_class) {
@@ -70,9 +70,9 @@ if (empty(CExClass::$_list_cache)) {
 }
 
 $all_ex_objects = array();
-$ex_objects_by_event = array();
-$ex_classes_by_event = array();
-$ex_objects_counts_by_event = array();
+$ex_objects = array();
+$ex_classes = array();
+$ex_objects_counts = array();
 $ex_classes_creation = array();
 
 $limit = null;
@@ -107,9 +107,9 @@ if ($concept_search) {
   $search = CExConcept::parseSearch($concept_search);
 }
 
-foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
-  $ex_class_key = "$_ex_class->host_class-event-$_ex_class->event";
+$ex_class_event = new CExClassEvent;
 
+foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
   $_ex_object = new CExObject;
   $_ex_object->_ex_class_id = $_ex_class_id;
   $_ex_object->setExClass();
@@ -139,21 +139,46 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     $ljoin = array();
   }
 
-  $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit, null, $ljoin);
+  $_ex_objects = array();
+  
+  if ($detail >= 1) {
+    $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit, null, $ljoin);
+  }
+  
   $_ex_objects_count = $_ex_object->countList($where, null, $ljoin);
 
   $total = max($_ex_objects_count, $total);
 
   if ($_ex_objects_count) {
-    $ex_objects_counts_by_event[$ex_class_key][$_ex_class_id] = $_ex_objects_count;
-  }
-
-  if (!isset($ex_classes_creation[$ex_class_key])) {
-    $ex_classes_creation[$ex_class_key] = array();
+    $ex_objects_counts[$_ex_class_id] = $_ex_objects_count;
   }
 
   // Masquer les sous formulaires !!!
   
+  if (!$_ex_class->conditional) {
+    $where = array(
+      "ex_class.ex_class_id"      => "= '$_ex_class_id'",
+      "ex_class_event.host_class" => "= '$reference_class'",
+      "ex_class_event.disabled"   => "= '0'",
+    );
+    $ljoin = array(
+      "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id",
+    );
+    
+    $_ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
+    
+    // TODO checkConstraints + canCreateNew
+    
+    if (count($_ex_class_events)) {
+      $ex_classes_creation[$_ex_class_id] = $_ex_class_events;
+    }
+  }
+
+  if ($detail == 0) {
+    continue;
+  }
+  
+  /*
   if ( $_ex_class->host_class == $reference_class && // Possible context
       !$_ex_class->disabled && // Not disabled
        $_ex_class->checkConstraints($reference) && // Passes constraints
@@ -164,20 +189,9 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     }
 
     if (count($_ex_objects) == 0){
-      $ex_objects_by_event[$ex_class_key][$_ex_class_id] = array();
+      $ex_objects[$_ex_class_id] = array();
     }
-  }
-
-  if ($detail == 0) {
-    // suppression de tableaux vides
-    foreach ($ex_classes_creation as $_event_key => $_ex_classes) {
-      if (count($_ex_classes) == 0) {
-        unset($ex_classes_creation[$_event_key]);
-      }
-    }
-
-    continue;
-  }
+  }*/
 
   foreach($_ex_objects as $_ex) {
     $_ex->_ex_class_id = $_ex_class_id;
@@ -203,37 +217,35 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     }
 
     $all_ex_objects["$_log->date $_ex->_id"] = $_ex;
-    $ex_objects_by_event[$ex_class_key][$_ex_class_id]["$_log->date $_ex->_id"] = $_ex;
+    $ex_objects[$_ex_class_id]["$_log->date $_ex->_id"] = $_ex;
   }
 
-  if (isset($ex_objects_by_event[$ex_class_key][$_ex_class_id])) {
-    krsort($ex_objects_by_event[$ex_class_key][$_ex_class_id]);
+  if (isset($ex_objects[$_ex_class_id])) {
+    krsort($ex_objects[$_ex_class_id]);
   }
 }
 
 if ($detail == 2) {
-  foreach($ex_objects_by_event as $ex_objects_by_class) {
-    foreach($ex_objects_by_class as $_ex_objects) {
-      $first = reset($_ex_objects);
+  foreach($ex_objects as $_ex_class_id => $_ex_objects) {
+    $first = reset($_ex_objects);
 
-      if (!$first) {
-        continue;
-      }
+    if (!$first) {
+      continue;
+    }
+    
+    $_ex_class = $first->_ref_ex_class;
 
-      $_ex_class = $first->_ref_ex_class;
+    foreach ($_ex_class->_ref_groups as $_ex_group) {
+      $_ex_group->_empty = true;
 
-      foreach ($_ex_class->_ref_groups as $_ex_group) {
-        $_ex_group->_empty = true;
+      foreach ($_ex_group->_ref_fields as $_ex_field) {
+        $_ex_field->_empty = true;
 
-        foreach ($_ex_group->_ref_fields as $_ex_field) {
-          $_ex_field->_empty = true;
-
-          foreach ($_ex_objects as $_ex_object) {
-            if ($_ex_object->{$_ex_field->name} != "") {
-              $_ex_field->_empty = false;
-              $_ex_group->_empty = false;
-              break;
-            }
+        foreach($_ex_objects as $_ex_object) {
+          if ($_ex_object->{$_ex_field->name} != "") {
+            $_ex_field->_empty = false;
+            $_ex_group->_empty = false;
+            break;
           }
         }
       }
@@ -241,7 +253,7 @@ if ($detail == 2) {
   }
 }
 
-ksort($ex_objects_by_event);
+ksort($ex_objects);
 ksort($all_ex_objects);
 
 // Création du template
@@ -250,8 +262,8 @@ $smarty->assign("reference_class", $reference_class);
 $smarty->assign("reference_id",    $reference_id);
 $smarty->assign("reference",       $reference);
 $smarty->assign("all_ex_objects",  $all_ex_objects);
-$smarty->assign("ex_objects_by_event", $ex_objects_by_event);
-$smarty->assign("ex_objects_counts_by_event", $ex_objects_counts_by_event);
+$smarty->assign("ex_objects",      $ex_objects);
+$smarty->assign("ex_objects_counts", $ex_objects_counts);
 $smarty->assign("limit",           $limit);
 $smarty->assign("step",            $step);
 $smarty->assign("total",           $total);

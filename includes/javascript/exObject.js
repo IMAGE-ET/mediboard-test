@@ -12,13 +12,13 @@ var ExObject = {
     options = Object.extend({
       ex_class_id: null,
       object_guid: null,
-      event: null
+      event_name:  null
     }, options);
     
     var url = new Url("forms", "ajax_widget_ex_classes_new");
     url.addParam("object_guid", options.object_guid);
     url.addParam("ex_class_id", options.ex_class_id);
-    url.addParam("event", options.event);
+    url.addParam("event_name",  options.event_name);
     url.addParam("_element_id", this.container.identify());
     url.requestUpdate(container, options);
   },
@@ -27,7 +27,7 @@ var ExObject = {
     ExObject.register(ExObject.container);
   },
   
-  trigger: function(object_guid, event, options) {
+  trigger: function(object_guid, event_name, options) {
     options = Object.extend({
       onTriggered: function(){}
     }, options);
@@ -36,13 +36,13 @@ var ExObject = {
     if (Object.isArray(object_guid)) {
       var url = new Url("forms", "ajax_trigger_ex_classes_multiple");
       url.addParam("object_guids[]", object_guid, true);
-      url.addParam("event", event);
+      url.addParam("event_name", event_name);
       url.requestJSON(function(datas){
         datas.reverse(false).each(function(data){
-          showExClassForm(data.ex_class_id, data.object_guid, data.object_guid+"_"+data.event+"_"+data.ex_class_id, "", data.event);
+          showExClassForm(data.ex_class_id, data.object_guid, data.object_guid+"_"+data.event_name+"_"+data.ex_class_id, "", data.event_name);
         });
         
-        options.onTriggered(datas, event);
+        options.onTriggered(datas, event_name);
       });
     }
     
@@ -50,20 +50,20 @@ var ExObject = {
     else {
       var url = new Url("forms", "ajax_trigger_ex_classes");
       url.addParam("object_guid", object_guid);
-      url.addParam("event", event);
-      url.requestJSON(function(ex_classes_id){
-        ex_classes_id.each(function(id){
-          showExClassForm(id, object_guid, /*object_guid+"_"+*/event+"_"+id, "", event);
+      url.addParam("event_name", event_name);
+      url.requestJSON(function(datas){
+        datas.reverse(false).each(function(data){
+          showExClassForm(data.ex_class_id, data.object_guid, data.event_name+"_"+data.ex_class_id, "", data.event_name);
         });
         
-        options.onTriggered(object_guid, event);
+        options.onTriggered(object_guid, event_name);
       });
     }
   },
   
   triggerMulti: function(forms) {
     $A(forms).each(function(data){
-      showExClassForm(data.ex_class_id, data.object_guid, data.object_guid+"_"+data.event+"_"+data.ex_class_id, "", data.event);
+      showExClassForm(data.ex_class_id, data.object_guid, data.object_guid+"_"+data.event_name+"_"+data.ex_class_id, "", data.event_name);
     });
   },
   
@@ -84,8 +84,8 @@ var ExObject = {
       if (ex_class_id) {
         var form = input.form;
         var object_guid = ExObject.current.object_guid;
-        var event = ExObject.current.event;
-        showExClassForm(ex_class_id, object_guid, /*object_guid+"_"+*/event+"_"+ex_class_id, "", event, null, parent_view);
+        var event_name = ExObject.current.event_name;
+        showExClassForm(ex_class_id, object_guid, /*object_guid+"_"+*/event_name+"_"+ex_class_id, "", event_name, null, parent_view);
       }
     }
     
@@ -110,12 +110,16 @@ var ExObject = {
     if (mode == "display" || mode == "print") {
       url.addParam("readonly", 1);
     }
+    if (mode == "preview") {
+      url.addParam("preview", 1);
+    }
+    
     /*else {
       window["callback_"+ex_class_id] = function(ex_class_id, object_guid){
         ExObject.register(this.container, {
           ex_class_id: ex_class_id, 
           object_guid: object_guid, 
-          event: event
+          event_name: event_name
         });
       }.bind(this).curry(ex_class_id, object_guid);
     }*/
@@ -138,6 +142,10 @@ var ExObject = {
   
   edit: function(ex_object_id, ex_class_id, object_guid, element_id){
     ExObject.show("edit", ex_object_id, ex_class_id, object_guid, element_id);
+  },
+  
+  preview: function(ex_class_id, object_guid){
+    ExObject.show("preview", null, ex_class_id, object_guid);
   },
   
   history: function(ex_object_id, ex_class_id){
@@ -169,11 +177,11 @@ var ExObject = {
     target.writeAttribute("data-detail",          detail);
     
     var url = new Url("forms", "ajax_list_ex_object");
-    url.addParam("detail", detail);
-    url.addParam("reference_id", object_id);
+    url.addParam("detail",          detail);
+    url.addParam("reference_id",    object_id);
     url.addParam("reference_class", object_class);
-    url.addParam("ex_class_id", ex_class_id);
-    url.addParam("target_element", target.identify());
+    url.addParam("ex_class_id",     ex_class_id);
+    url.addParam("target_element",  target.identify());
     url.mergeParams(options);
     url.requestUpdate(target, {onComplete: options.onComplete});
   },
@@ -289,7 +297,8 @@ var ExObject = {
   
   toggleField: function(name, v, triggerField, targetField) {
     $$("div.field-"+name).each(function(container){
-      container.setClassName("opacity-20", !v);
+      //container.setClassName("opacity-20", !v);
+      container.setVisibility(v);
       
       Form.getInputsArray(targetField).each(function(input){
         input.disabled = !v;
@@ -521,20 +530,20 @@ var ExObjectFormula = Class.create({
 });
 
 // TODO put this in the object
-function selectExClass(element, object_guid, event, _element_id) {
+function selectExClass(element, object_guid, event_name, _element_id) {
   var view = element.options ? element.options[element.options.selectedIndex].innerHTML : element.innerHTML;
-  showExClassForm($V(element) || element.value, object_guid, view, null, event, _element_id);
+  showExClassForm($V(element) || element.value, object_guid, view, null, event_name, _element_id);
   element.selectedIndex = 0;
 }
 
-function showExClassForm(ex_class_id, object_guid, title, ex_object_id, event, _element_id, parent_view, ajax_container) {
+function showExClassForm(ex_class_id, object_guid, title, ex_object_id, event_name, _element_id, parent_view, ajax_container) {
   var url = new Url("forms", "view_ex_object_form");
-  url.addParam("ex_class_id", ex_class_id);
-  url.addParam("object_guid", object_guid);
+  url.addParam("ex_class_id",  ex_class_id);
+  url.addParam("object_guid",  object_guid);
   url.addParam("ex_object_id", ex_object_id);
-  url.addParam("event", event);
-  url.addParam("_element_id", _element_id);
-  url.addParam("parent_view", parent_view);
+  url.addParam("event_name",   event_name);
+  url.addParam("_element_id",  _element_id);
+  url.addParam("parent_view",  parent_view);
 
   /*window["callback_"+ex_class_id] = function(){
     ExObject.register(_element_id, {

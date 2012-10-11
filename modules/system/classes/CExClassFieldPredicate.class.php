@@ -46,9 +46,7 @@ class CExClassFieldPredicate extends CMbObject {
     
     $field = $this->loadRefExClassField();
     
-    $ex_object = new CExObject;
-    $ex_object->_ex_class_id = $field->loadRefExGroup()->ex_class_id;
-    $ex_object->setExClass();
+    $ex_object = new CExObject($field->loadRefExGroup()->ex_class_id);
     $ex_object->{$field->name} = $this->value;
     
     $this->_value = "";

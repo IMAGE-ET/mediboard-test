@@ -10,18 +10,12 @@
 
 <script type="text/javascript">
 Main.add(function(){
-  var line = $("exClassConstraintList").down("tr[data-constraint_id={{$ex_constraint->_id}}]");
-	
-	if (line) {
-	  line.addUniqueClassName("selected");
-	}
-	
   var form = getForm("editConstraint");
+  
   toggleObjectSelector(form.elements.field, form.elements.field);
-	
-  var form = getForm("editConstraint");
+  
   var url = new Url("forms", "ajax_autocomplete_hostfields");
-  url.addParam("ex_class_id", "{{$ex_constraint->ex_class_id}}");
+  url.addParam("ex_class_event_id", "{{$ex_constraint->ex_class_event_id}}");
   url.autoComplete(form.elements._host_field_view, null, {
     minChars: 2,
     method: "get",
@@ -31,7 +25,7 @@ Main.add(function(){
       toggleObjectSelector(field, selected);
       $V(field.form.elements.field, selected.get("value"));
       $V(field.form.elements._host_field_view, selected.down(".view").getText().strip());
-			
+      
       /*if ($V(field.form.elements._host_field_view) == "") {
         $V(field.form.elements._host_field_view, selected.down('.view').innerHTML);
       }*/
@@ -42,19 +36,19 @@ Main.add(function(){
 toggleObjectSelector = function(input, selected) {
   var prop = $(selected).get("prop");
   var specType = prop.split(" ")[0];
-	var dummy = DOM.input({className: prop});
+  var dummy = DOM.input({className: prop});
   var spec = dummy.getProperties();
-	
-	var reset = selected.name !== "field";
-	
+  
+  var reset = selected.name !== "field";
+  
   $$('.specfield').invoke("disableInputs", reset);
-	
-	// if "selected" is not the input 
-	if (reset) {
-	  $V(input.form.elements.value, "");
-	}
-	
-	input.form.elements.value.enable();
+  
+  // if "selected" is not the input 
+  if (reset) {
+    $V(input.form.elements.value, "");
+  }
+  
+  input.form.elements.value.enable();
   
   var specElements = $$('.spectype-'+specType);
   
@@ -73,16 +67,16 @@ toggleObjectSelector = function(input, selected) {
       break;
       
     case "enum":
-		  var container = specElements[0];
-		  var options = {"":null}; // empty first element
-			
-			spec.list.each(function(v){
-			  options[v] = $T($(selected).get("field").replace(/(-)/g, ".")+"."+v);
-			});
-			
-			var select = Form.Element.getSelect(options);
+      var container = specElements[0];
+      var options = {"":null}; // empty first element
+      
+      spec.list.each(function(v){
+        options[v] = $T($(selected).get("field").replace(/(-)/g, ".")+"."+v);
+      });
+      
+      var select = Form.Element.getSelect(options);
       $V(select, input.form.elements.value.value);
-			select.observe("change", function(){ $V(this.form.elements.value, this.value); }.bind(select));
+      select.observe("change", function(){ $V(this.form.elements.value, this.value); }.bind(select));
       container.update().insert(select);
       break;
   }
@@ -91,17 +85,17 @@ toggleObjectSelector = function(input, selected) {
 selectSugg = function(button) {
   var form = button.form;
   $V(form.elements.field, button.get("value")); 
-	$V(form.elements._host_field_view, button.getText().strip());
-	toggleObjectSelector(button, button);
+  $V(form.elements._host_field_view, button.getText().strip());
+  toggleObjectSelector(button, button);
 }
 </script>
 
-<form name="editConstraint" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_constraint->ex_class_id}})})">
+<form name="editConstraint" method="post" action="?" onsubmit="return onSubmitFormAjax(this, ExConstraint.editCallback.curry({{$ex_constraint->ex_class_event_id}}))">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_constraint_aed" />
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$ex_constraint}}
-  {{mb_field object=$ex_constraint field=ex_class_id hidden=true}}
+  {{mb_field object=$ex_constraint field=ex_class_event_id hidden=true}}
   
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$ex_constraint colspan="2"}}
@@ -111,22 +105,22 @@ selectSugg = function(button) {
         {{mb_label object=$ex_constraint field=field}}
       </th>
       <td>
-      	{{if $host_field_suggestions|@count}}
-				  <strong>Suggestions</strong>:<br />
-	      	{{foreach from=$host_field_suggestions item=_sugg}}
-					  <button type="button" class="tick" data-value="{{$_sugg}}" data-field="{{$class_fields.$_sugg.field}}" data-prop="{{$class_fields.$_sugg.prop}}" onclick="selectSugg(this)">
-					  	{{$class_fields.$_sugg.view}}
-						</button><br />
-					{{/foreach}}
-					
-					<br />
-					<strong>Autres</strong>:<br />
-				{{/if}}
-				
+        {{if $host_field_suggestions|@count}}
+          <strong>Suggestions</strong>:<br />
+          {{foreach from=$host_field_suggestions item=_sugg}}
+            <button type="button" class="tick" data-value="{{$_sugg}}" data-field="{{$class_fields.$_sugg.field}}" data-prop="{{$class_fields.$_sugg.prop}}" onclick="selectSugg(this)">
+              {{$class_fields.$_sugg.view}}
+            </button><br />
+          {{/foreach}}
+          
+          <br />
+          <strong>Autres</strong>:<br />
+        {{/if}}
+        
         {{assign var=field value=$ex_constraint->field}}
-			  <input type="text" class="autocomplete" name="_host_field_view" value="{{$ex_constraint}}" size="60" />
+        <input type="text" class="autocomplete" name="_host_field_view" value="{{$ex_constraint}}" size="60" />
         <input type="hidden" name="field" class="{{$ex_constraint->_props.field}}" tabIndex="1" 
-				       value="{{$ex_constraint->field}}" 
+               value="{{$ex_constraint->field}}" 
                data-prop="{{if $ex_constraint->_id}}{{$class_fields.$field.prop}}{{/if}}"
                data-field="{{if $ex_constraint->_id}}{{$class_fields.$field.field}}{{/if}}" />
       </td>
@@ -136,11 +130,11 @@ selectSugg = function(button) {
       <td>{{mb_field object=$ex_constraint field=_locale tabIndex="4"}}</td>
       *}}
     </tr>
-		<tr>
-			<td colspan="2">
-				<hr />
-			</td>
-		</tr>
+    <tr>
+      <td colspan="2">
+        <hr />
+      </td>
+    </tr>
     <tr>
       <th>{{mb_label object=$ex_constraint field=operator}}</th>
       <td>{{mb_field object=$ex_constraint field=operator tabIndex="2"}}</td>
@@ -168,31 +162,31 @@ selectSugg = function(button) {
               L'objet cible n'existe plus
             </div>
           {{else}}
-	          <input type="hidden" name="_object_class" value="{{$ex_constraint->_ref_target_object->_class}}" />
-	          <input type="text" name="_object_view" readonly="readonly" ondblclick="ObjectSelector.init()" value="{{$ex_constraint->_ref_target_object}}" size="60" />
-	          <button type="button" class="search notext" onclick="ObjectSelector.init()">{{tr}}Search{{/tr}}</button>
-	          <script type="text/javascript">
-	            ObjectSelector.init = function(){  
-	              this.sForm     = "editConstraint";
-	              this.sId       = "value";
-	              this.sView     = "_object_view";
-	              this.sClass    = "_object_class";
-	              this.onlyclass = "true";
-	              this.pop();
-	            }
-	            
-	            ObjectSelector.set = function(oObject) {
-	              var oForm = getForm(this.sForm);
-	              
-	              if (oForm.elements[this.sView]) {
-	                $V(oForm.elements[this.sView], oObject.view);
-	              }
-	              
-	              $V(oForm.elements[this.sClass], oObject.objClass);
-	              $V(oForm.elements[this.sId], oObject.objClass+"-"+oObject.id);
-	            }
-	          </script>
-					{{/if}}
+            <input type="hidden" name="_object_class" value="{{$ex_constraint->_ref_target_object->_class}}" />
+            <input type="text" name="_object_view" readonly="readonly" ondblclick="ObjectSelector.init()" value="{{$ex_constraint->_ref_target_object}}" size="60" />
+            <button type="button" class="search notext" onclick="ObjectSelector.init()">{{tr}}Search{{/tr}}</button>
+            <script type="text/javascript">
+              ObjectSelector.init = function(){  
+                this.sForm     = "editConstraint";
+                this.sId       = "value";
+                this.sView     = "_object_view";
+                this.sClass    = "_object_class";
+                this.onlyclass = "true";
+                this.pop();
+              }
+              
+              ObjectSelector.set = function(oObject) {
+                var oForm = getForm(this.sForm);
+                
+                if (oForm.elements[this.sView]) {
+                  $V(oForm.elements[this.sView], oObject.view);
+                }
+                
+                $V(oForm.elements[this.sClass], oObject.objClass);
+                $V(oForm.elements[this.sId], oObject.objClass+"-"+oObject.id);
+              }
+            </script>
+          {{/if}}
         </div>
         
         <div class="specfield spectype-enum">
@@ -211,7 +205,7 @@ selectSugg = function(button) {
       <td colspan="1">
         {{if $ex_constraint->_id}}
           <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
-          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'la contrainte ',objName:'{{$ex_constraint->_view|smarty:nodefaults|JSAttribute}}'})">
+          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'la contrainte ',objName:'{{$ex_constraint->_view|smarty:nodefaults|JSAttribute}}'}, ExConstraint.editCallback.curry({{$ex_constraint->ex_class_event_id}}))">
             {{tr}}Delete{{/tr}}
           </button>
         {{else}}

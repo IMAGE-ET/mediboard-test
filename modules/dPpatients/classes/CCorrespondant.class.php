@@ -14,20 +14,26 @@
 class CCorrespondant extends CMbObject {
   
   // DB Table key
-	var $correspondant_id = null;
+  var $correspondant_id = null;
 
   // DB Fields
-	var $medecin_id = null;
+  var $medecin_id = null;
   var $patient_id = null;
 
-  // Object References
+  /**
+   * @var CMedecin
+   */
   var $_ref_medecin = null;
+  
+  /**
+   * @var CPatient
+   */
   var $_ref_patient = null;
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'correspondant';
-    $spec->key   = 'correspondant_id';
+    $spec->table = "correspondant";
+    $spec->key   = "correspondant_id";
     return $spec;
   }
     
@@ -43,12 +49,17 @@ class CCorrespondant extends CMbObject {
     $this->loadRefMedecin();
   }
   
+  /**
+   * @return CPatient
+   */
   function loadRefPatient() {
     return $this->_ref_patient = $this->loadFwdRef("patient_id");
   }
   
+  /**
+   * @return CMedecin
+   */
   function loadRefMedecin() {
     return $this->_ref_medecin = $this->loadFwdRef("medecin_id");
   }
 }
-?>

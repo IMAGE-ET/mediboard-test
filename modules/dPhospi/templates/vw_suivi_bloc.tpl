@@ -98,7 +98,7 @@ Main.add(function () {
       {{elseif $currOp->entree_bloc}}   Entré(e) au bloc
       {{else}} Attente bloc
       {{/if}}
-      {{mb_include module=forms template=inc_widget_ex_class_register object=$currOp event=liaison}}
+      {{mb_include module=forms template=inc_widget_ex_class_register object=$currOp event_name=liaison}}
     </td>
     <td>
       <span onmouseover="ObjectTooltip.createEx(this, '{{$currOp->_ref_sejour->_ref_patient->_guid}}')">

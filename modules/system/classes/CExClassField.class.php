@@ -14,7 +14,8 @@ class CExClassField extends CExListItemsOwner {
   var $ex_group_id = null;
   var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
   var $prop = null; 
-  var $report_level = null;
+  //var $report_level = null;
+  var $report_class = null;
   var $concept_id = null;
   var $predicate_id = null;
   
@@ -143,7 +144,8 @@ class CExClassField extends CExListItemsOwner {
     $props["ex_group_id"] = "ref class|CExClassFieldGroup cascade";
     $props["concept_id"]  = "ref class|CExConcept autocomplete|name";
     $props["name"]        = "str notNull protected canonical";
-    $props["report_level"]= "enum list|1|2|host";
+    //$props["report_level"]= "enum list|1|2|host";
+    $props["report_class"]= "enum list|".implode("|", CExClassEvent::getReportableClasses());
     $props["prop"]        = "text notNull";
     $props["predicate_id"]= "ref class|CExClassFieldPredicate autocomplete|_view|true";
     
@@ -185,9 +187,9 @@ class CExClassField extends CExListItemsOwner {
     if (!self::$_load_lite) {
       $this->_ex_class_id = $this->loadRefExGroup()->ex_class_id;
       // must be called in the class editor
-      //if (!CExObject::$_locales_cache_enabled) {
+      if (!CExObject::$_locales_cache_enabled) {
         $this->updateTranslation();
-      //}
+      }
     }
   }
   

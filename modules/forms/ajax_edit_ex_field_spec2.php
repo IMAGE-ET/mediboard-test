@@ -125,9 +125,7 @@ if ($spec instanceof CEnumSpec) {
   }
 
   if ($ex_field->ex_class_id) {
-    $ex_object = new CExObject;
-    $ex_object->_ex_class_id = $ex_field->ex_class_id;
-    $ex_object->setExClass();
+    $ex_object = new CExObject($ex_field->ex_class_id);
     
     if ($ex_object->_specs[$field] instanceof CEnumSpec) {
       $spec = $ex_object->_specs[$field];
@@ -140,7 +138,8 @@ if ($spec instanceof CEnumSpec) {
   }
 }*/
 
-$triggerables = array();
+$triggerables_cond = array();
+$triggerables_others = array();
 
 if ($context instanceof CExClassField) {
   $context->loadTriggeredData();
@@ -148,14 +147,23 @@ if ($context instanceof CExClassField) {
   if (!$ex_class->conditional) {
     $triggerable = new CExClass;
     
+    $group_id = CGroups::loadCurrent()->_id;
     $where = array(
-    //"conditional" => "= 1",
-      "host_class"  => "= '$ex_class->host_class'",
-      "event"       => "= '$ex_class->event'",
+      "group_id" => "= '$group_id'",
+    );
+    
+    $where = array(
+      "group_id"    => "= '$group_id'",
+      "conditional" => "= '1'",
       $triggerable->_spec->key => "!= '$ex_class->_id'",
     );
     
-    $triggerables = $triggerable->loadList($where, "conditional DESC");
+    // TODO charger les ex_class qui ont un event avec la meme classe que ... quel evenement ???
+    
+    $triggerables_cond = $triggerable->loadList($where, "conditional DESC, name");
+    
+    $where["conditional"] = "= '0'";
+    $triggerables_others = $triggerable->loadList($where, "conditional DESC, name");
   }
   
   if (!empty($context->concept_id)) {
@@ -184,5 +192,6 @@ $smarty->assign("form_name", $form_name);
 $smarty->assign("classes", $classes);
 $smarty->assign("list_owner", $list_owner);
 $smarty->assign("context", $context);
-$smarty->assign("triggerables", $triggerables);
+$smarty->assign("triggerables_cond", $triggerables_cond);
+$smarty->assign("triggerables_others", $triggerables_others);
 $smarty->display("inc_edit_ex_field_spec2.tpl");

@@ -14,7 +14,7 @@ $ex_class_id  = CValue::get("ex_class_id");
 $ex_object_id = CValue::get("ex_object_id");
 $object_guid  = CValue::get("object_guid");
 $_element_id  = CValue::get("_element_id");
-$event        = CValue::get("event");
+$event_name   = CValue::get("event_name");
 $parent_view  = CValue::get("parent_view");
 
 $readonly     = CValue::get("readonly");
@@ -22,6 +22,7 @@ $print        = CValue::get("print");
 $autoprint    = CValue::get("autoprint");
 $only_filled  = CValue::get("only_filled");
 $noheader     = CValue::get("noheader");
+$preview      = CValue::get("preview");
 
 if (!$ex_class_id) {
   $msg = "Impossible d'afficher le formulaire sans connaître la classe de base";
@@ -30,37 +31,54 @@ if (!$ex_class_id) {
   return;
 }
 
-$preview = $object_guid === "preview";
+// searching for a CExClassEvent
+//$ex_class_event = new CExClassEvent;
+//$ex_class_event->host_class = 
 
-if ($preview) {
-  $ex_class = new CExClass;
-  $ex_class->load($ex_class_id);
-  $object = new $ex_class->host_class;
-}
-else {
-  $object = CMbObject::loadFromGuid($object_guid);
+$object = CMbObject::loadFromGuid($object_guid);
+
+if ($object->_id) {
   $object->loadComplete();
 }
+
+// searching for a CExClassEvent
+$ex_class_event = new CExClassEvent;
+$ex_class_event->host_class = $object->_class;
+$ex_class_event->event_name = $event_name;
+$ex_class_event->ex_class_id = $ex_class_id;
+$ex_class_event->loadMatchingObject();
 
 if (!$ex_object_id) {
   $ex_class = new CExClass;
   $ex_class->load($ex_class_id);
-  $ex_objects = $ex_class->getExObjectForHostObject($object);
+  $ex_objects = $ex_class_event->getExObjectForHostObject($object);
   
   $ex_object = reset($ex_objects);
+
+  if (!$ex_object) {
+    $ex_object = $ex_class->getExObjectInstance();
+  }
 }
 else {
-  $ex_object = new CExObject;
+  $ex_object = new CExObject($ex_class_id);
 }
 
-if (!$ex_object) {
-  $ex_object = $ex_class->getExObjectInstance();
-}
-  
+// Host and reference objects
 $ex_object->setObject($object);
-$ex_object->_ex_class_id = $ex_class_id;
-$ex_object->setExClass();
 
+if (!$ex_object->_id) {
+  if (!$ex_object->reference_id && !$ex_object->reference_class) {
+    $reference = $ex_class_event->resolveReferenceObject($object, 1);
+    $ex_object->setReferenceObject_1($reference);
+  }
+  
+  if (!$ex_object->reference2_id && !$ex_object->reference2_class) {
+    $reference = $ex_class_event->resolveReferenceObject($object, 2);
+    $ex_object->setReferenceObject_2($reference);
+  }
+}
+
+// Layout grid
 list($grid, $out_of_grid, $groups) = $ex_object->_ref_ex_class->getGrid();
 
 /*foreach($groups as $_group) {
@@ -91,43 +109,31 @@ foreach($ex_object->_specs as $_field => $_spec) {
   }
 }
 
-$ex_object->getReportedValues();
+$ex_object->getReportedValues($ex_class_event);
 $ex_object->loadRefReferenceObjects();
 $ex_object->setFieldsDisplay();
 
 if (!$ex_object->_id) {
   if (!$ex_object->reference_id && !$ex_object->reference_class) {
-    $reference = $ex_class->resolveReferenceObject($object, 1);
+    $reference = $ex_class_event->resolveReferenceObject($object, 1);
     $ex_object->setReferenceObject_1($reference);
   }
   
   if (!$ex_object->reference2_id && !$ex_object->reference2_class) {
-    $reference = $ex_class->resolveReferenceObject($object, 2);
+    $reference = $ex_class_event->resolveReferenceObject($object, 2);
     $ex_object->setReferenceObject_2($reference);
   }
 }
 
 // depends on setReferenceObject_1 and setReferenceObject_2
-$ex_object->loadNativeViews();
+$ex_object->loadNativeViews($ex_class_event);
 
 $fields = array();
 foreach($groups as $_group) {
   $fields = array_merge($_group->_ref_fields, $fields);
   
   foreach($_group->_ref_host_fields as $_host_field) {
-    switch ($_host_field->host_type) {
-      case "host":
-        $_host_field->_ref_host_object = $object; 
-      break;
-      
-      case "reference1":
-        $_host_field->_ref_host_object = $ex_object->_ref_reference_object_1;
-      break;
-      
-      case "reference2":
-        $_host_field->_ref_host_object = $ex_object->_ref_reference_object_2;
-      break;
-    }
+    $_host_field->getHostObject($ex_object);
   }
 }
 
@@ -174,7 +180,14 @@ foreach($fields as $_field) {
 $can_delete = false;
 
 if ($ex_object->_id) {
+  $ex_object->loadLastLog()->loadRefUser();
   $can_delete = ($ex_object->loadFirstLog()->user_id == CUser::get()->_id);
+}
+else {
+  $log = new CUserLog;
+  $log->user_id = CUser::get()->_id;
+  $log->loadRefUser();
+  $ex_object->_ref_last_log = $log;
 }
 
 $can_delete = $can_delete || CModule::getInstalled("forms")->canAdmin();
@@ -187,7 +200,7 @@ $smarty->assign("ex_class_id",  $ex_class_id);
 $smarty->assign("object_guid",  $object_guid);
 $smarty->assign("object",       $object);
 $smarty->assign("_element_id",  $_element_id);
-$smarty->assign("event",        $event);
+$smarty->assign("event_name",   $event_name);
 $smarty->assign("grid",         $grid);
 $smarty->assign("out_of_grid",  $out_of_grid);
 $smarty->assign("groups",       $groups);
@@ -195,6 +208,7 @@ $smarty->assign("formula_token_values", $formula_token_values);
 $smarty->assign("can_delete",   $can_delete);
 $smarty->assign("parent_view",  $parent_view);
 $smarty->assign("preview_mode", $preview);
+$smarty->assign("ui_msg",       CAppUI::getMsg());
 
 $smarty->assign("readonly",     $readonly);
 $smarty->assign("print",        $print);

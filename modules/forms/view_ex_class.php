@@ -10,12 +10,13 @@
 
 CCanDo::checkEdit();
 
-$ex_class_id = CValue::getOrSession("ex_class_id");
+$_GET["object_class"] = "CExClass";
+$_GET["tree_width"] = "15%";
+$_GET["group_id"] = CGroups::loadCurrent()->_id;
 
-$ex_class = new CExClass;
-$ex_class->load($ex_class_id);
+echo <<<HTML
+<div class='small-info'>Il est maintenant possible de lier un formulaire à plusieurs évènements 
+depuis le volet <strong>Evènements déclencheurs</strong>, et de classer les formulaires par <strong>Tag</strong></div>
+HTML;
 
-// Création du template
-$smarty = new CSmartyDP();
-$smarty->assign("ex_class", $ex_class);
-$smarty->display("view_ex_class.tpl");
+CAppUI::requireModuleFile("system", "vw_object_tree_explorer");

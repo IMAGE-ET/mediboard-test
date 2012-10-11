@@ -13,7 +13,8 @@ class CExClassHostField extends CMbObject {
   
   var $ex_group_id = null;
   
-  var $host_type = null;
+  //var $host_type = null;
+  var $host_class = null;
   var $field = null;
   
   var $coord_label_x = null;
@@ -34,9 +35,10 @@ class CExClassHostField extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["ex_group_id"]   = "ref notNull class|CExClassFieldGroup cascade";
+    $props["ex_group_id"]       = "ref notNull class|CExClassFieldGroup cascade";
     
-    $props["host_type"]     = "enum list|host|reference1|reference2 default|host";
+    //$props["host_type"]     = "enum list|host|reference1|reference2 default|host";
+    $props["host_class"]    = "str notNull";
     $props["field"]         = "str notNull canonical";
     
     $props["coord_value_x"] = "num min|0 max|100";
@@ -66,5 +68,21 @@ class CExClassHostField extends CMbObject {
     }
     
     return parent::updatePlainFields();
+  }
+  
+  function getHostObject(CExObject $ex_object) {
+    if ($this->host_class == $ex_object->object_class) {
+      return $this->_ref_host_object = $ex_object->_ref_object;
+    }
+    
+    if ($this->host_class == $ex_object->reference_class) {
+      return $this->_ref_host_object = $ex_object->_ref_reference_object_1;
+    }
+    
+    if ($this->host_class == $ex_object->reference2_class) {
+      return $this->_ref_host_object = $ex_object->_ref_reference_object_2;
+    }
+    
+    $this->_ref_host_object = new $this->host_class;
   }
 }

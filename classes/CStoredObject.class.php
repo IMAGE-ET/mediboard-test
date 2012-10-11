@@ -132,7 +132,10 @@ class CStoredObject extends CModelObject {
   static function loadFromGuid($guid, $cached = false) {
     list($class, $id) = explode('-', $guid);
     if ($class) {
-      $object = new $class;
+      $object = CExObject::getValidObject($class);
+      if (!$object) {
+        $object = new $class;
+      }
       
       if ($id && $id !== "none") {
         return $cached ? $object->getCached($id) : $object->load($id);

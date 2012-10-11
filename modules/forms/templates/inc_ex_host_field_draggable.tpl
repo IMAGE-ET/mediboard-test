@@ -7,7 +7,7 @@
         data-type="value" 
         data-ex_group_id="{{$ex_group_id}}" 
         data-ex_group_id="{{$ex_group_id}}" 
-        data-host_type="{{$host_type}}" 
+        data-host_class="{{$host_object->_class}}" 
         {{if $_host_field}}
           data-field_id="{{$_host_field->_id}}"
         {{/if}}>
@@ -20,7 +20,7 @@
           data-field="{{$_field}}" 
           data-type="label" 
           data-ex_group_id="{{$ex_group_id}}" 
-          data-host_type="{{$host_type}}" 
+          data-host_class="{{$host_object->_class}}" 
           {{if $_host_field}}
             data-field_id="{{$_host_field->_id}}"
           {{/if}}>
@@ -34,7 +34,7 @@
           data-field="{{$_field}}" 
           data-type="value" 
           data-ex_group_id="{{$ex_group_id}}" 
-          data-host_type="{{$host_type}}" 
+          data-host_class="{{$host_object->_class}}" 
           {{if $_host_field}}
             data-field_id="{{$_host_field->_id}}"
           {{/if}}>
