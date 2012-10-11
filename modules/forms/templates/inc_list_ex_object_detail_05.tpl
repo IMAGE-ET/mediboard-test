@@ -65,7 +65,7 @@ filterExClasses = function(input){
       </label>
       
       {{if $ex_classes_creation|@count}}
-      <select onchange="showExClassFormSelect(this)">
+      <select onchange="showExClassFormSelect(this)" style="width: 20em;">
         <option value=""> &ndash; Remplir nouveau formulaire </option>
         {{foreach from=$ex_classes_creation item=_ex_class_events key=_ex_class_id}}
           {{if $_ex_class_events|@count > 1}}
