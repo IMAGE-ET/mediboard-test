@@ -169,8 +169,8 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     
     // TODO checkConstraints + canCreateNew
     foreach ($_ex_class_events as $_id => $_ex_class_event) {
-      if ($reference && (!$_ex_class_event->checkConstraints($reference) || 
-                         !$_ex_class_event->canCreateNew($reference))) {
+      if ($reference && (!$_ex_class_event->checkConstraints($reference)/* || 
+                         !$_ex_class_event->canCreateNew($reference)*/)) {
         unset($_ex_class_events[$_id]);
       }
     }

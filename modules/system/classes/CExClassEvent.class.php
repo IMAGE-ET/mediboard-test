@@ -465,9 +465,9 @@ class CExClassEvent extends CMbObject {
         if ($ex_object->countMatchingList() > 0) {
           return false;
         }*/
-        
-        return true;
     }
+    
+    return true;
   }
   
   static function getJStrigger($ex_class_events) {
