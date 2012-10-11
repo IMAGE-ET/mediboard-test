@@ -55,7 +55,7 @@ class CCodeCCAM {
   /**
    * Constructeur à partir du code CCAM
    */
-  function CCodeCCAM($code) {
+  function CCodeCCAM($code = null) {
     // Static initialisation
     if (!self::$spec) {
       self::$spec = new CMbObjectSpec();
@@ -92,7 +92,7 @@ class CCodeCCAM {
 	static function get($code, $niv = self::MEDIUM) {
 		self::$useCount[$niv]++;
 		
-    if (!CAppUI::conf("dPccam CCodeCCAM use_cache")) {
+    if (!CAppUI::conf("ccam CCodeCCAM use_cache")) {
 		  $codeCCAM = new CCodeCCAM($code);
 		  $codeCCAM->load($niv);
 		  return $codeCCAM;

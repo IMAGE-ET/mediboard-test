@@ -9,11 +9,22 @@
 *}}
 
 <ul>
-  {{foreach from=$result item=ccam}}
+  {{foreach from=$codes item=_code}}
     <li>
-      <strong>{{$ccam.CODE}}</strong>
+      <div class="compact" style="float: right;">
+        {{foreach from=$_code->activites item=_activite}}
+          {{foreach from=$_activite->phases item=_phase}}
+             {{if $_phase->tarif}}
+             <span title="activité {{$_activite->numero}}, phase {{$_phase->phase}}">
+               {{$_phase->tarif|currency}}
+             </span>
+             {{/if}}
+          {{/foreach}}
+        {{/foreach}}
+      </div>
+      <strong>{{$_code->code}}</strong>
       <br />
-      <small>{{$ccam.LIBELLELONG|smarty:nodefaults|emphasize:$_codes_ccam}}</small>
+      <small>{{$_code->libelleLong|smarty:nodefaults|emphasize:$keywords}}</small>
     </li>
   {{/foreach}}
 </ul>

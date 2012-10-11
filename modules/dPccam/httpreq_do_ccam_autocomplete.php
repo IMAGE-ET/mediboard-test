@@ -8,23 +8,22 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$ds = CSQLDataSource::get("ccamV2");
-
-$codeacte = @$_POST["_codes_ccam"];
-
-if ($codeacte == '') $codeacte = '%%';
-
 CCanDo::checkRead();
 
-$code = new CCodeCCAM(null);
-$result = $code->findCodes($codeacte, $codeacte);
+$keywords = CValue::request("_codes_ccam", "%%");
+
+$codes = array();
+$code = new CCodeCCAM();
+foreach ($code->findCodes($keywords, $keywords) as $_code) {
+  $codes[$_code["CODE"]] = CCodeCCAM::get($_code["CODE"], CCodeCCAM::MEDIUM);
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->debugging = false;
 
-$smarty->assign("_codes_ccam"  , $codeacte);
-$smarty->assign("result"    , $result);
+$smarty->assign("keywords"  , $keywords);
+$smarty->assign("codes"    , $codes);
 $smarty->assign("nodebug", true);
 
 $smarty->display("httpreq_do_ccam_autocomplete.tpl");
