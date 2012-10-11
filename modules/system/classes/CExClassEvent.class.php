@@ -442,15 +442,31 @@ class CExClassEvent extends CMbObject {
         return true;
         
       case "host":
+        // Host
         $ex_object = new CExObject($this->_id);
         $ex_object->setObject($host);
-        return $ex_object->countMatchingList() == 0;
         
+        if ($ex_object->countMatchingList() > 0) {
+          return false;
+        }
         /*
-      case "reference2": $level++;
-      case "reference1": 
-        $reference_object = $this->resolveReferenceObject($host, $level);
-        return array($this->getLatestExObject($reference_object, $level));*/
+        // Reférence 1
+        $ex_object = new CExObject($this->_id);
+        $ex_object->setReferenceObject_1($host);
+        
+        if ($ex_object->countMatchingList() > 0) {
+          return false;
+        }
+        
+        // Référence 2
+        $ex_object = new CExObject($this->_id);
+        $ex_object->setReferenceObject_2($host);
+        
+        if ($ex_object->countMatchingList() > 0) {
+          return false;
+        }*/
+        
+        return true;
     }
   }
   

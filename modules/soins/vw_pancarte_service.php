@@ -273,6 +273,40 @@ foreach($prescriptions as $_prescription){
   $where["administration.dateTime"] = " BETWEEN '$date_min' AND '$date_max'";
   $administrations = $administration->loadList($where, null, null, null, $ljoin);
   
+  /*
+  // Chargement des administrations
+  $administration = new CAdministration();
+  $administrations = array();
+  
+  $where = array();
+  $where["prescription.prescription_id"] = " = '$_prescription->_id'";
+  $where["administration.dateTime"] = " BETWEEN '$date_min' AND '$date_max'";
+  
+  // CPrescriptionLineMedicament
+  $ljoin = array(
+    "prescription_line_medicament" => "(prescription_line_medicament.prescription_line_medicament_id = administration.object_id) 
+                                             AND (administration.object_class = 'CPrescriptionLineMedicament')",
+    "prescription"                 => "prescription_line_medicament.prescription_id = prescription.prescription_id",
+  );
+  $administrations = array_merge($administrations, $administration->loadList($where, null, null, null, $ljoin));
+  
+  // CPrescriptionLineElement
+  $ljoin = array(
+    "prescription_line_element"    => "(prescription_line_element.prescription_line_element_id = administration.object_id) 
+                                             AND (administration.object_class = 'CPrescriptionLineElement')",
+    "prescription"                 => "prescription_line_element.prescription_id = prescription.prescription_id",
+  );
+  $administrations = array_merge($administrations, $administration->loadList($where, null, null, null, $ljoin));
+  
+  // CPrescriptionLineMixItem
+  $ljoin = array(
+    "prescription_line_mix_item"   => "(prescription_line_mix_item.prescription_line_mix_item_id = administration.object_id) 
+                                             AND (administration.object_class = 'CPrescriptionLineMixItem')",
+    "prescription_line_mix"        => "prescription_line_mix_item.prescription_line_mix_id = prescription_line_mix.prescription_line_mix_id",
+    "prescription"                 => "prescription_line_mix.prescription_id = prescription.prescription_id",
+  );
+  $administrations = array_merge($administrations, $administration->loadList($where, null, null, null, $ljoin));
+  */
   foreach($administrations as $_administration){
     $time = mbTransformTime($_administration->dateTime,null,"%H").":00:00";
     $_date = mbDate($_administration->dateTime);
