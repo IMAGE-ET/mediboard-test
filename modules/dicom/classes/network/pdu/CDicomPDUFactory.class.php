@@ -24,7 +24,7 @@ class CDicomPDUFactory {
    * 
    * @return CDicomPDU The PDU
    */
-  static function decodePDU($pdu_content, $transfer_syntax) {
+  static function decodePDU($pdu_content, $transfer_syntax = null) {
     $stream = fopen("php://temp", 'w+');
     fwrite($stream, $pdu_content);
     
@@ -46,6 +46,8 @@ class CDicomPDUFactory {
     $pdu->decodePDU($stream_reader);
     
     $stream_reader->close();
+    
+    $pdu->setPacket($stream_reader->buf);
     
     return $pdu;
   }

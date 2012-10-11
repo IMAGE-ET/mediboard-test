@@ -8,7 +8,7 @@
  */
 
 /**
- * An A-Associate-RJ PDU
+ * An A-Abort PDU
  */
 class CDicomPDUAAbort extends CDIcomPDU {
   
@@ -62,6 +62,7 @@ class CDicomPDUAAbort extends CDIcomPDU {
    */
   function __construct(array $datas = array()) {
     $this->setType("07");
+    $this->setTypeStr("A-Abort");
     foreach ($datas as $key => $value) {
       $method = 'set' . ucfirst($key);
       if (method_exists($this, $method)) {

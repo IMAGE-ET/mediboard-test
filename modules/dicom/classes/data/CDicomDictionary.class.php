@@ -420,5 +420,27 @@ class CDicomDictionary {
   static function getDataSet($group, $element) {
     return self::$data_sets[$group][$element];
   }
+  
+  /**
+   * Check if the SOP class is supported by Mediboard
+   * 
+   * @param string $uid The UID of the SOP class
+   * 
+   * @return boolean
+   */
+  static function isSOPClassSupported($uid) {
+    return array_key_exists($uid, self::$sop_classes);
+  }
+  
+  /**
+   * Check if the transfer syntax is supported by Mediboard
+   * 
+   * @param string $uid The UID of the transfer syntax
+   * 
+   * @return boolean
+   */
+  static function isTransferSyntaxSupported($uid) {
+    return array_key_exists($uid, self::$transfer_syntaxes);
+  }
 }
 ?>

@@ -8,7 +8,7 @@
  */
 
 /**
- * An A-Associate-RJ PDU
+ * An A-Release-RQ PDU
  */
 class CDicomPDUAReleaseRQ extends CDIcomPDU {
  
@@ -20,6 +20,7 @@ class CDicomPDUAReleaseRQ extends CDIcomPDU {
    */
   function __construct(array $datas = array()) {
     $this->setType("05");
+    $this->setTypeStr("A-Release-RQ");
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
       $method = 'set';

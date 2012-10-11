@@ -87,6 +87,7 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
    */
   function __construct(array $datas = array()) {
     $this->setType("03");
+    $this->setTypeStr("A-Associate-RJ");
     foreach ($datas as $key => $value) {
       $method = 'set' . ucfirst($key);
       if (method_exists($this, $method)) {

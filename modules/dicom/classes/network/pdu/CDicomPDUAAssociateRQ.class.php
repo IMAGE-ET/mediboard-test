@@ -62,6 +62,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    */
   function __construct(array $datas = array()) {
     $this->setType("01");
+    $this->setTypeStr("A-Associate-RQ");
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
       $method = 'set';
@@ -151,12 +152,6 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    */
   function decodePDU(CDicomStreamReader $stream_reader) {
     $this->protocol_version = $stream_reader->readHexByte(2);
-    
-    // On vérifie que la version du protocole est bien 0001
-    if ($this->protocol_version != 0001) {
-      // Erreur
-      echo "Protocol version differente de 1";
-    }
     
     $stream_reader->skip(2);
     

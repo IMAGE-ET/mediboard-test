@@ -34,6 +34,7 @@ class CDicomPDUPDataTF extends CDIcomPDU {
    */
   function __construct(array $datas = array()) {
     $this->setType("04");
+    $this->setTypeStr("P-Data-TF");
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
       $method = 'set';

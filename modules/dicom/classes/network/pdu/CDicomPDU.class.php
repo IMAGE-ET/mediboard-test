@@ -14,11 +14,18 @@
 class CDicomPDU {
   
   /**
-   * The type of the PDU
+   * The type of the PDU, in number
    * 
    * @var string
    */
   var $type = null;
+  
+  /**
+   * The type of the PDU, in string
+   * 
+   * @var string
+   */
+  var $type_str = null;
   
   /**
    * The length of the PDU
@@ -56,6 +63,16 @@ class CDicomPDU {
     $this->type = $type;
   }
   
+  /**
+   * Set the type
+   * 
+   * @param string $type The type of the PDU
+   *  
+   * @return null
+   */
+  function setTypeStr($type) {
+    $this->type_str = $type;
+  }
   
   /**
    * Return the encoded pdu
