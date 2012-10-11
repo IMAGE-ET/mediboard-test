@@ -409,7 +409,7 @@ function switchMode(){
           {{/if}}
                 
           &ndash;
-          <span style="color: #0000AA;">
+          <span style="color: #0000AA;" {{if $ex_object->_id}} onmouseover="ObjectTooltip.createEx(this, 'CExObject_{{$ex_object->_ex_class_id}}-{{$ex_object->_id}}', 'objectViewHistory')" {{/if}}>
             {{if $ex_object->_id}}
               <img src="images/icons/history.gif" width="16" height="16"/>
             {{else}}
