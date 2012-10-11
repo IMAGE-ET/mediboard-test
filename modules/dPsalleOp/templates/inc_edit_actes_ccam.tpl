@@ -363,13 +363,9 @@
   </table>
 </fieldset>
 {{foreachelse}}
-<table class="main">
-  <tr>
-    <td>
-      <em>Pas d'acte à coder</em>
-    </td>
-  </tr>
-</table>
+<div class="empty">
+  Pas d'acte à coder
+</div>
 {{/foreach}}
 
 {{if !$confCCAM.openline}}
