@@ -16,23 +16,38 @@
   <tr>
     <td class="narrow" style="min-width: 20em; vertical-align: top;">
       <table class="main tbl">
+        
         {{if $ex_classes_creation|@count}}
-          <select onchange="showExClassFormSelect(this)" style="float: right; width: 100%; max-width: 20em;">
-            <option value=""> &ndash; Remplir nouveau formulaire </option>
-            {{foreach from=$ex_classes_creation item=_ex_class_events key=_ex_class_id}}
+        <select onchange="showExClassFormSelect(this)" style="width: 20em;">
+          <option value=""> &ndash; Remplir nouveau formulaire </option>
+          {{foreach from=$ex_classes_creation item=_ex_class_events key=_ex_class_id}}
+            {{if $_ex_class_events|@count > 1}}
               <optgroup label="{{$ex_classes.$_ex_class_id}}">
-                {{foreach from=$_ex_class_events item=_ex_class_event}}
-                  <option value="{{$_ex_class_event->ex_class_id}}" 
-                          data-reference_class="{{$reference_class}}" 
-                          data-reference_id="{{$reference_id}}"
-                          data-host_class="{{$_ex_class_event->host_class}}"
-                          data-event_name="{{$_ex_class_event->event_name}}">
-                    {{$_ex_class_event}}
-                  </option>
-                {{/foreach}}
+            
+              {{foreach from=$_ex_class_events item=_ex_class_event}}
+                <option value="{{$_ex_class_event->ex_class_id}}" 
+                        data-reference_class="{{$reference_class}}" 
+                        data-reference_id="{{$reference_id}}"
+                        data-host_class="{{$_ex_class_event->host_class}}"
+                        data-event_name="{{$_ex_class_event->event_name}}">
+                  {{$_ex_class_event}}
+                </option>
+              {{/foreach}}
+              
               </optgroup>
-            {{/foreach}}
-          </select>
+            {{else}}
+              {{foreach from=$_ex_class_events item=_ex_class_event}}
+                <option value="{{$_ex_class_event->ex_class_id}}" 
+                        data-reference_class="{{$reference_class}}" 
+                        data-reference_id="{{$reference_id}}"
+                        data-host_class="{{$_ex_class_event->host_class}}"
+                        data-event_name="{{$_ex_class_event->event_name}}">
+                  {{$ex_classes.$_ex_class_id}}
+                </option>
+              {{/foreach}}
+            {{/if}}
+          {{/foreach}}
+        </select>
         {{/if}}
         
         {{foreach from=$ex_objects_counts item=_ex_objects_count key=_ex_class_id}}
