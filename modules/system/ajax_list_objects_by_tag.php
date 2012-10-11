@@ -21,7 +21,7 @@ $tag = new CTag;
 
 $where = array();
 if ($group_id) {
-  $where["group_id"] = "= '$group_id'";
+  $where["group_id"] = "= '$group_id' OR group_id IS NULL";
 }
 
 /*if ($keywords){
@@ -79,7 +79,7 @@ else {*/
     // filter by group_id
     if ($group_id) {
       foreach ($objects as $_id => $_object) {
-        if ($_object->group_id != $group_id) {
+        if ($_object->group_id && $_object->group_id != $group_id) {
           unset($objects[$_id]);
         }
       }
