@@ -14,7 +14,7 @@
  * Record admit, message XML HL7
  */
 class CHL7v2RecordAdmit extends CHL7v2MessageXML {
-  static $event_codes = "A01 A02 A03 A04 A05 A06 A07 A08 A11 A12 A13 A14 A16 A25 A38 A44 A54 A55 Z80 Z81 Z4 Z85 Z99";
+  static $event_codes = "A01 A02 A03 A04 A05 A06 A07 A08 A11 A12 A13 A14 A16 A25 A38 A44 A54 A55 Z80 Z81 Z84 Z85 Z99";
   
   var $_object_found_by_vn = null;
   
