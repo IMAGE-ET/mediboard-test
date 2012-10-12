@@ -174,8 +174,8 @@
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="sortie_reveil" value="" />
-        <button class="tick notext" type="button" onclick="$V(this.form.sortie_reveil, 'current') ; submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
+        <input type="hidden" name="sortie_reveil_possible" value="" />
+        <button class="tick notext" type="button" onclick="$V(this.form.sortie_reveil_possible, 'current') ; submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
       </form>
       {{else}}-{{/if}}
       

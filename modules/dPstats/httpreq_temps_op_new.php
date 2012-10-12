@@ -24,22 +24,22 @@ function buildPartialTables($tableName, $tableFields, $queryFields, $querySelect
   $joinedFields = join(", ", $queryFields);
   
   // Intervale de temps
-	$intervalle = CValue::get("intervalle");
-	
-	switch ($intervalle) {
-	  case "month" : $deb = mbDate("-1 month");
-	  case "6month": $deb = mbDate("-6 month");
-	  case "year"  : $deb = mbDate("-1  year");
-	  default      : $deb = mbDate("-10 year");
-	}
-	
-	$fin = mbDate();
+  $intervalle = CValue::get("intervalle");
+  
+  switch ($intervalle) {
+    case "month" : $deb = mbDate("-1 month");
+    case "6month": $deb = mbDate("-6 month");
+    case "year"  : $deb = mbDate("-1  year");
+    default      : $deb = mbDate("-10 year");
+  }
+  
+  $fin = mbDate();
 
-	// Suppression si existe
+  // Suppression si existe
   $drop = "DROP TABLE IF EXISTS `$tableName`";
   $ds->exec($drop);
     
-	// Création de la table partielle
+  // Création de la table partielle
   $create = "CREATE TABLE `$tableName` (" .
     "\n`chir_id` int(11) unsigned NOT NULL default '0'," .
     "$tableFields" . 
@@ -141,11 +141,11 @@ $tableName   = "op_reveil";
 $tableFields = "\n`reveil_moy` time NOT NULL default '00:00:00',";
 $tableFields.= "\n`reveil_ecart` time NOT NULL default '00:00:00',";
 $queryFields = array("reveil_moy", "reveil_ecart");
-$querySelect = "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.sortie_reveil)-TIME_TO_SEC(operations.entree_reveil))) as reveil_moy,";
-$querySelect.= "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.sortie_reveil)-TIME_TO_SEC(operations.entree_reveil))) as reveil_ecart,";
+$querySelect = "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.sortie_reveil_possible)-TIME_TO_SEC(operations.entree_reveil))) as reveil_moy,";
+$querySelect.= "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.sortie_reveil_possible)-TIME_TO_SEC(operations.entree_reveil))) as reveil_ecart,";
 $queryWhere  = "\nAND operations.entree_reveil IS NOT NULL";
-$queryWhere .= "\nAND operations.sortie_reveil IS NOT NULL";
-$queryWhere .= "\nAND operations.entree_reveil < operations.sortie_reveil";
+$queryWhere .= "\nAND operations.sortie_reveil_possible IS NOT NULL";
+$queryWhere .= "\nAND operations.entree_reveil < operations.sortie_reveil_possible";
 
 buildPartialTables($tableName, $tableFields, $queryFields, $querySelect, $queryWhere);
 

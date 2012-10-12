@@ -9,20 +9,39 @@
  * @version    $Revision$
  */
 
-$operation_id = CValue::get("operation_id");
-$date_move    = CValue::get("date_move");
-$callback     = CValue::get("callback");
+$operation_id  = CValue::get("operation_id");
+$sejour_id     = CValue::get("sejour_id");
+$date_move     = CValue::get("date_move");
+$callback      = CValue::get("callback");
+$entree_prevue = CValue::get("entree_prevue");
+$sortie_prevue = CValue::get("sortie_prevue");
 
-$operation = new COperation;
-$operation->load($operation_id);
-
-$sejour = $operation->loadRefSejour();
+if ($operation_id) {
+  $operation = new COperation();
+  $operation->load($operation_id);
+  
+  $sejour = $operation->loadRefSejour();
+}
+else {
+  $sejour = new CSejour();
+  $sejour->load($sejour_id);
+}
 
 if (!$date_move) {
   $date_move = "$operation->date $operation->time_operation";
 }
 
-$nb_days = mbDaysRelative("$operation->date $operation->time_operation", $date_move);
+if ($entree_prevue && $sortie_prevue) {
+  $sejour->entree_prevue = $entree_prevue;
+  $sejour->sortie_prevue = $sortie_prevue;
+}
+
+if (isset($operation)) {
+  $nb_days = mbDaysRelative("$operation->date $operation->time_operation", $date_move);
+}
+else {
+  $nb_days = mbDaysRelative($sejour->entree_prevue, $entree_prevue);
+}
 
 if ($nb_days > 0 ) {
   $sejour->entree_prevue = mbDateTime("+$nb_days day", $sejour->entree_prevue);
@@ -35,7 +54,7 @@ else {
 
 $smarty = new CSmartyDP;
 
-$smarty->assign("operation", $operation);
+$smarty->assign("sejour"   , $sejour);
 $smarty->assign("date_move", $date_move);
 $smarty->assign("callback" , $callback);
 

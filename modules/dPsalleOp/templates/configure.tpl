@@ -42,8 +42,9 @@
     <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
   </tr>
 
-  {{mb_include module=system template=inc_config_bool var=mode}}  
-  {{mb_include module=system template=inc_config_bool var=modif_salle}}  
+  {{mb_include module=system template=inc_config_bool var=mode}}
+  {{mb_include module=system template=inc_config_bool var=modif_salle}}
+  {{mb_include module=system template=inc_config_bool var=use_sortie_reveil_reel}}
   
   {{assign var="var" value="modif_actes"}}
   <tr>
@@ -94,15 +95,15 @@
   <tr>
     <th class="title" colspan="2">Cocher la bonne réponse par défaut dans les checklists de : </th>
   </tr>
-	<tr>
-		<td colspan="2">
-			<div class="small-info">
-				Choisir "Oui" signifie que la réponse cochée par défaut est celle qui serait choisie si le point à vérifier est positif.
-				<br />
-				<strong>Attention, une réponse positive peut être "Non" si par exemple la question est "Risque de saignement important".</strong>
-			</div>
-		</td>
-	</tr>
+  <tr>
+    <td colspan="2">
+      <div class="small-info">
+        Choisir "Oui" signifie que la réponse cochée par défaut est celle qui serait choisie si le point à vérifier est positif.
+        <br />
+        <strong>Attention, une réponse positive peut être "Non" si par exemple la question est "Risque de saignement important".</strong>
+      </div>
+    </td>
+  </tr>
   {{mb_include module=system template=inc_config_bool var=default_good_answer_COperation}}
   {{mb_include module=system template=inc_config_bool var=default_good_answer_CSalle}}
   {{mb_include module=system template=inc_config_bool var=default_good_answer_CBlocOperatoire}}

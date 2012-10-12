@@ -84,7 +84,8 @@ class COperation extends CCodable implements IPatientRelated {
   var $retrait_garrot    = null;
   var $sortie_salle      = null;
   var $entree_reveil     = null;
-  var $sortie_reveil     = null;
+  var $sortie_reveil_possible = null;
+  var $sortie_reveil_reel = null;
   var $induction_debut   = null;
   var $induction_fin     = null;
   
@@ -209,7 +210,7 @@ class COperation extends CCodable implements IPatientRelated {
         "reference1" => array("CSejour",  "sejour_id"),
         "reference2" => array("CPatient", "sejour_id.patient_id"),
       ),
-      "sortie_reveil" => array(
+      "sortie_reveil_possible" => array(
         "reference1" => array("CSejour",  "sejour_id"),
         "reference2" => array("CPatient", "sejour_id.patient_id"),
       ),
@@ -261,7 +262,8 @@ class COperation extends CCodable implements IPatientRelated {
     $props["fin_op"]               = "time show|0";
     $props["retrait_garrot"]       = "time show|0";
     $props["entree_reveil"]        = "time show|0";
-    $props["sortie_reveil"]        = "time show|0";
+    $props["sortie_reveil_possible"] = "time show|0";
+    $props["sortie_reveil_reel"]   = "time show|0";
     $props["induction_debut"]      = "time show|0";
     $props["induction_fin"]        = "time show|0";
     $props["entree_bloc"]          = "time show|0";
@@ -458,8 +460,8 @@ class COperation extends CCodable implements IPatientRelated {
     if ($this->entree_salle && $this->sortie_salle && $this->sortie_salle>$this->entree_salle) {
       $this->_presence_salle = mbSubTime($this->entree_salle,$this->sortie_salle);
     }
-    if ($this->entree_reveil && $this->sortie_reveil && $this->sortie_reveil > $this->entree_reveil) {
-      $this->_duree_sspi = mbSubTime($this->entree_reveil,$this->sortie_reveil);
+    if ($this->entree_reveil && $this->sortie_reveil_possible && $this->sortie_reveil_possible > $this->entree_reveil) {
+      $this->_duree_sspi = mbSubTime($this->entree_reveil,$this->sortie_reveil_possible);
     }
     
     if ($this->plageop_id) {
@@ -663,7 +665,12 @@ class COperation extends CCodable implements IPatientRelated {
         $this->duree_preop = "00:" . CAppUI::conf("dPplanningOp COperation duree_preop_enfant") . ":00";
       }
     }
-
+    
+    // On recopie la sortie réveil possible sur le réel si pas utilisée en config
+    if (!CAppUI::conf("dPsalleOp COperation use_sortie_reveil_reel")) {
+      $this->sortie_reveil_reel = $this->sortie_reveil_possible;
+    }
+    
     // Standard storage
     if ($msg = parent::store()) {
       return $msg;

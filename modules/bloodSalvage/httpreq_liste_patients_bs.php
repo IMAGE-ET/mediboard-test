@@ -28,7 +28,7 @@ $listReveil = new COperation;
 $where = array();
 $where[] = "`plageop_id` ".CSQLDataSource::prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
 $where["entree_reveil"] = "IS NOT NULL";
-$where["sortie_reveil"] = "IS NULL";
+$where["sortie_reveil_possible"] = "IS NULL";
 $leftjoin["blood_salvage"] = "operations.operation_id = blood_salvage.operation_id";
 $where["blood_salvage.operation_id"] = "IS NOT NULL";
 $order = "entree_reveil";

@@ -1515,7 +1515,17 @@ class CSetupdPplanningOp extends CSetup {
       ADD `raison_medicale` TEXT AFTER `isolement_date`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.63";
+    $this->makeRevision("1.63");
+    $query = "ALTER TABLE `operations`
+      CHANGE `sortie_reveil` `sortie_reveil_possible` TIME,
+      ADD `sortie_reveil_reel` TIME AFTER `sortie_reveil_possible`;";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `operations`
+      SET `sortie_reveil_reel` = `sortie_reveil_possible`";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.64";
   }
 }
 ?>

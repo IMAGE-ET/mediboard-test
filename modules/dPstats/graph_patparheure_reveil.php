@@ -57,7 +57,7 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
                 WHERE 
                   sallesbloc.stats = '1' AND 
                   plagesop.date BETWEEN '$debut' AND '$fin' AND 
-                  '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil AND
+                  '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil_possible AND
                   operations.annulee = '0'";
       
     if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
@@ -96,7 +96,7 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
     WHERE 
       sallesbloc.stats = '1' AND 
       plagesop.date BETWEEN '$debut' AND '$fin' AND 
-      (operations.entree_reveil IS NULL OR operations.sortie_reveil IS NULL) AND
+      (operations.entree_reveil IS NULL OR operations.sortie_reveil_possible IS NULL) AND
       operations.annulee = '0'";
     
   if($prat_id)  $query      .= "\nAND operations.chir_id = '$prat_id'";

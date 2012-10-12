@@ -8,8 +8,6 @@
  * @version    $Revision$
  *}}
 
-{{assign var=sejour value=$operation->_ref_sejour}}
-
 {{if $date_move < $sejour->entree_prevue || $date_move > $sejour->sortie_prevue}}
   <div class="small-warning">
     L'intervention du {{$date_move|date_format:$conf.datetime}} n'est pas dans les bornes du séjour
@@ -38,6 +36,7 @@
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="_check_bounds" value="0" />
   {{mb_key object=$sejour}}
+  {{mb_field object=$sejour field=patient_id hidden=1}}
   
   <table class="form">
     <tr>

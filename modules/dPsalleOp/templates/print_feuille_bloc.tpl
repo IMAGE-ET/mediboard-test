@@ -244,8 +244,8 @@ Main.add(function(){
           <td class="halfPane">{{mb_value object=$operation field=entree_reveil}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$operation field=sortie_reveil}}</th>
-          <td class="halfPane">{{mb_value object=$operation field=sortie_reveil}}</td>
+          <th>{{mb_label object=$operation field=sortie_reveil_possible}}</th>
+          <td class="halfPane">{{mb_value object=$operation field=sortie_reveil_possible}}</td>
         </tr>
       </table>    
       

@@ -101,7 +101,7 @@ if($mode == "csv") {
         $line .= '"'.$curr_op->sortie_salle.'";';
         $line .= '"'.$curr_op->_pat_next.'";';
         $line .= '"'.$curr_op->entree_reveil.'";';
-        $line .= '"'.$curr_op->sortie_reveil.'"
+        $line .= '"'.$curr_op->sortie_reveil_possible.'"
 ';
         fwrite($csvFile, $line);
       }

@@ -12,6 +12,8 @@
   }
 </script>
 
+{{assign var=use_sortie_reveil_reel value=$conf.dPsalleOp.COperation.use_sortie_reveil_reel}}
+
 <table class="tbl">
   <tr>
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
@@ -21,6 +23,9 @@
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
     <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
+    {{if $use_sortie_reveil_reel}}
+      <th>{{tr}}SSPI.SortieReveilReel{{/tr}}</th>
+    {{/if}}
     <th class="narrow"></th>
   </tr> 
   {{foreach from=$listOperations key=key item=_operation}}
@@ -94,12 +99,27 @@
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
         {{if $modif_operation}}
-          {{mb_field object=$_operation field=sortie_reveil register=true form="editSortieReveilOutFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
+          {{mb_field object=$_operation field=sortie_reveil_possible register=true form="editSortieReveilOutFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
         {{else}}
-          {{mb_value object=$_operation field="sortie_reveil"}}
+          {{mb_value object=$_operation field="sortie_reveil_possible"}}
         {{/if}}
       </form>      
     </td>
+    {{if $use_sortie_reveil_reel}}
+      <td class="button">
+        <form name="editSortieReveilReelOutFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="dosql" value="do_planning_aed" />
+          <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+          <input type="hidden" name="del" value="0" />
+          {{if $modif_operation}}
+            {{mb_field object=$_operation field=sortie_reveil_reel register=true form="editSortieReveilReelOutFrm$_operation_id" onchange="submitSortieForm(this.form);"}}
+          {{else}}
+            {{mb_value object=$_operation field="sortie_reveil_reel"}}
+          {{/if}}
+        </form>      
+      </td>
+    {{/if}}
     <td>
       <button type="button" class="print notext"
         onclick="printDossier('{{$_operation->sejour_id}}', '{{$_operation->_id}}')"></button>

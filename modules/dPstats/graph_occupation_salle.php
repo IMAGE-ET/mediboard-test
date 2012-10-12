@@ -13,15 +13,15 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   $ds = CSQLDataSource::get("std");
   
   if ($type_duree == "MONTH") {
-	  $type_duree_fr = "mois";
+    $type_duree_fr = "mois";
     $date_format = "%m/%Y";
     $order_key = "%Y%m";
-	}
-	else {
-	  $type_duree_fr = "jour";
-	  $date_format = "%d/%m/%Y";
-		$order_key = "%Y%m%d";
-	}
+  }
+  else {
+    $type_duree_fr = "jour";
+    $date_format = "%d/%m/%Y";
+    $order_key = "%Y%m%d";
+  }
   
   if (!$debut) $debut = mbDate("-1 YEAR");
   if (!$fin) $fin = mbDate();
@@ -283,7 +283,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     'label' => utf8_encode("Salle de reveil")
   );
   $query = "SELECT COUNT(*) AS nbInterv,
-    AVG(TIME_TO_SEC(operations.sortie_reveil)-TIME_TO_SEC(operations.entree_reveil)) AS moyenne,
+    AVG(TIME_TO_SEC(operations.sortie_reveil_possible)-TIME_TO_SEC(operations.entree_reveil)) AS moyenne,
     DATE_FORMAT(plagesop.date, '$date_format') AS $type_duree_fr,
     DATE_FORMAT(plagesop.date, '$order_key') AS orderitem
     FROM operations
@@ -302,14 +302,14 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     AND operations.date IS NULL
     AND operations.plageop_id IS NOT NULL
     AND operations.entree_reveil IS NOT NULL
-    AND operations.sortie_reveil IS NOT NULL
-    AND operations.entree_reveil < operations.sortie_reveil
+    AND operations.sortie_reveil_possible IS NOT NULL
+    AND operations.entree_reveil < operations.sortie_reveil_possible
     GROUP BY $type_duree_fr ORDER BY orderitem";
   $result = $ds->loadList($query);
   
   if ($hors_plage) {
     $query_hors_plage = "SELECT COUNT(*) AS nbInterv,
-      AVG(TIME_TO_SEC(operations.sortie_reveil)-TIME_TO_SEC(operations.entree_reveil)) AS moyenne,
+      AVG(TIME_TO_SEC(operations.sortie_reveil_possible)-TIME_TO_SEC(operations.entree_reveil)) AS moyenne,
       DATE_FORMAT(operations.date, '$date_format') AS $type_duree_fr,
       DATE_FORMAT(operations.date, '$order_key') AS orderitem
       FROM operations
@@ -327,8 +327,8 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     if($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
     $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
       AND operations.entree_reveil IS NOT NULL
-      AND operations.sortie_reveil IS NOT NULL
-      AND operations.entree_reveil < operations.sortie_reveil
+      AND operations.sortie_reveil_possible IS NOT NULL
+      AND operations.entree_reveil < operations.sortie_reveil_possible
       GROUP BY $type_duree_fr ORDER BY orderitem";
     $result_hors_plage = $ds->loadList($query_hors_plage);
   }

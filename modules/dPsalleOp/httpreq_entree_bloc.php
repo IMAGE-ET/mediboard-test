@@ -22,7 +22,7 @@ $plages = $plages->loadList($where);
 $listReveil = new COperation;
 $where = array();
 $where[] = "`plageop_id` ".CSQLDataSource::prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
-$where[] = "((`sejour`.type = 'exte' AND `sortie_salle` IS NOT NULL) OR (`sejour`.type != 'exte' AND `entree_reveil` IS NOT NULL)) AND `sortie_reveil` IS NULL";
+$where[] = "((`sejour`.type = 'exte' AND `sortie_salle` IS NOT NULL) OR (`sejour`.type != 'exte' AND `entree_reveil` IS NOT NULL)) AND `sortie_reveil_possible` IS NULL";
 
 $ljoin = array();
 $ljoin["sejour"] = "`sejour`.`sejour_id` = `operations`.`sejour_id`";

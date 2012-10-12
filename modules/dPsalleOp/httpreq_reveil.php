@@ -53,17 +53,17 @@ switch($type){
   case 'ops':
     $where["sortie_salle"] = "IS NOT NULL";
     $where["entree_reveil"] = "IS NULL";
-    $where["sortie_reveil"] = "IS NULL";
+    $where["sortie_reveil_possible"] = "IS NULL";
     $order = "sortie_salle";
     break;
   case 'reveil':
     $where["entree_reveil"] = "IS NOT NULL";
-    $where["sortie_reveil"] = "IS NULL";
+    $where["sortie_reveil_possible"] = "IS NULL";
     $order = "entree_reveil";
     break;
   case 'out':
-    $where["sortie_reveil"] = "IS NOT NULL";
-    $order = "sortie_reveil DESC";
+    $where["sortie_reveil_possible"] = "IS NOT NULL";
+    $order = "sortie_reveil_possible DESC";
     break;
 }
 

@@ -166,7 +166,7 @@ Main.add(function () {
     <td class="text">{{$curr_op->sortie_salle|date_format:$conf.time}}</td>
     <td class="text">{{$curr_op->_pat_next|date_format:$conf.time}}</td>
     <td class="text">{{$curr_op->entree_reveil|date_format:$conf.time}}</td>
-    <td class="text">{{$curr_op->sortie_reveil|date_format:$conf.time}}</td>
+    <td class="text">{{$curr_op->sortie_reveil_possible|date_format:$conf.time}}</td>
   </tr>
   {{/foreach}}
   {{/foreach}}

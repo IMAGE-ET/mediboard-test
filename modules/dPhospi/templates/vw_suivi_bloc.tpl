@@ -59,7 +59,7 @@ Main.add(function () {
   {{foreach from=$currService item=currOp}}
   <tr>
     <td class="button narrow"
-    {{if $currOp->sortie_reveil}}
+    {{if $currOp->sortie_reveil_possible}}
       style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"
     {{elseif $currOp->entree_bloc || $currOp->entree_salle}}
       style="background-color:#cfc"
@@ -72,12 +72,12 @@ Main.add(function () {
       {{/if}}
     </td>
     <td class="button narrow"
-    {{if $currOp->sortie_reveil}}
+    {{if $currOp->sortie_reveil_possible}}
       style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"
     {{elseif $currOp->entree_bloc || $currOp->entree_salle}}
       style="background-color:#cfc"
     {{/if}}>
-      {{if $currOp->sortie_reveil}}     {{$currOp->sortie_reveil|date_format:$conf.time}}
+      {{if $currOp->sortie_reveil_possible}}     {{$currOp->sortie_reveil_possible|date_format:$conf.time}}
       {{elseif $currOp->entree_reveil}} {{$currOp->entree_reveil|date_format:$conf.time}}
       {{elseif $currOp->sortie_salle}}  {{$currOp->sortie_salle|date_format:$conf.time}}
       {{elseif $currOp->entree_salle}}  {{$currOp->entree_salle|date_format:$conf.time}}
@@ -86,12 +86,12 @@ Main.add(function () {
       {{/if}}
     </td> 
     <td
-    {{if $currOp->sortie_reveil}}
+    {{if $currOp->sortie_reveil_possible}}
       style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"
     {{elseif $currOp->entree_bloc || $currOp->entree_salle}}
       style="background-color:#cfc"
     {{/if}}>
-      {{if $currOp->sortie_reveil}}     Sorti(e) du bloc
+      {{if $currOp->sortie_reveil_possible}}     Sorti(e) du bloc
       {{elseif $currOp->entree_reveil}} En SSPI
       {{elseif $currOp->sortie_salle}}  Attente SSPI
       {{elseif $currOp->entree_salle}}  En salle d'interv.
