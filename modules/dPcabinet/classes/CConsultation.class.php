@@ -81,6 +81,7 @@ class CConsultation extends CCodable {
   var $_function_secondary_id = null;
   var $_semaine_grossesse = null;
   var $_type           = null;  // Type de la consultation
+  var $_duree          = null; 
     
   // Fwd References
   var $_ref_patient      = null; // Declared in CCodable
@@ -113,6 +114,7 @@ class CConsultation extends CCodable {
   var $_ref_facture            = null;
   var $_ref_prescription       = null;
   var $_ref_categorie          = null;
+  var $_ref_group              = null;
 
   // Distant fields
   var $_ref_chir                 = null;
@@ -307,7 +309,9 @@ class CConsultation extends CCodable {
     $this->loadRefPlageConsult(true);
     $plageconsult = $this->_ref_plageconsult;
     $this->_date_fin = "$plageconsult->date ". mbTime("+".mbMinutesRelative("00:00:00", $plageconsult->freq)*$this->duree." MINUTES", $this->heure);
-
+    
+    $this->_duree = mbMinutesRelative("00:00:00", $plageconsult->freq) * $this->duree;
+    
     $this->_exam_fields = $this->getExamFields();
   }
 
@@ -1215,6 +1219,10 @@ TESTS A EFFECTUER
 
   function loadRefFacture() {
     return $this->_ref_facture = $this->loadFwdRef("factureconsult_id", true);
+  }
+  
+  function loadRefGroup() {
+    return $this->_ref_group = $this->loadRefPraticien()->loadRefFunction()->loadRefGroup();
   }
 
   /**

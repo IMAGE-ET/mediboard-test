@@ -34,17 +34,7 @@ class CHL7v2SegmentRGS extends CHL7v2Segment {
     $data[] = $this->set_id;
     
     // RGS-2: Segment Action Code (ID) (optional)
-    switch ($event->code) {
-      case 'S12':
-        $data[] = "A";
-        break;
-      case 'S13' : case 'S14' :
-        $data[] = "U";
-        break;
-      case 'S15' :
-        $data[] = "D";
-        break;
-    }
+    $data[] = $this->getSegmentActionCode($event);
     
     // RGS-3: Resource Group ID (CE) (optional)
     $data[] = $this->scheduling->_id;

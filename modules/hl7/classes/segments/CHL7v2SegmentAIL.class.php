@@ -18,20 +18,39 @@
 
 class CHL7v2SegmentAIL extends CHL7v2Segment {
   var $name = "AIL";
+  var $set_id = null;
+  
+  /**
+   * @var CConsultation
+   */
+  var $scheduling = null;
   
   function build(CHL7v2Event $event) {
     parent::build($event);
+    
+    $scheduling = $this->scheduling;
         
     $data = array();
     
     // AIL-1: Set ID - AIL (SI)
-    $data[] = null;
+    $data[] = $this->set_id;
     
     // AIL-2: Segment Action Code (ID) (optional)
-    $data[] = null;
+    $data[] = $this->getSegmentActionCode($event);
     
     // AIL-3: Location Resource ID (PL) (optional repeating)
-    $data[] = null;
+    $data[] = array(
+      array(
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        // Building
+        $scheduling->loadRefGroup()->_view
+      )
+    );
     
     // AIL-4: Location Type-AIL (CE) (optional)
     $data[] = null;
@@ -58,7 +77,7 @@ class CHL7v2SegmentAIL extends CHL7v2Segment {
     $data[] = null;
     
     // AIL-12: Filler Status Code (CE) (optional)
-    $data[] = null;
+    $data[] = $this->getFillerStatutsCode($scheduling);
     
     $this->fill($data);
   }    

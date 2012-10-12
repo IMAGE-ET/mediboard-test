@@ -741,4 +741,43 @@ class CHL7v2Segment extends CHL7v2Entity {
   function getModeProvenance(CSejour $sejour) {
     return ($sejour->provenance == "8") ? "5" : $sejour->provenance;  
   }
+  
+  function getSegmentActionCode(CHL7v2Event $event) {
+    switch ($event->code) {
+      case 'S12':
+        return "A";
+      case 'S13' : case 'S14' :
+        return "U";
+      case 'S15' :
+        return "D";
+    }
+  }
+  
+  function getFillerStatutsCode(CConsultation $scheduling) {
+    // Table - 0278
+    // Pending   - Appointment has not yet been confirmed  
+    // Waitlist  - Appointment has been placed on a waiting list for a particular slot, or set of slots  
+    // Booked    - The indicated appointment is booked   
+    // Started   - The indicated appointment has begun and is currently in progress  
+    // Complete  - The indicated appointment has completed normally (was not discontinued, canceled, or deleted)   
+    // Cancelled - The indicated appointment was stopped from occurring (canceled prior to starting)   
+    // Dc        - The indicated appointment was discontinued (DC'ed while in progress, discontinued parent appointment, or discontinued child appointment)  
+    // Deleted   - The indicated appointment was deleted from the filler application   
+    // Blocked   - The indicated time slot(s) is(are) blocked  
+    // Overbook  - The appointment has been confirmed; however it is confirmed in an overbooked state  
+    // Noshow    - The patient did not show up for the appointment 
+    
+    switch ($scheduling->chrono) {
+      case '32': case '48':
+        return "Started";
+      case '64':
+        return "Complete";
+    }
+    
+    if ($scheduling->annule) {
+      return "Cancelled";
+    }
+    
+    return "Booked";
+  }
 }

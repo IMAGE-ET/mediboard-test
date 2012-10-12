@@ -144,31 +144,7 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     $data[] = null;
     
     // SCH-25: Filler Status Code (CE) (optional)
-    // Table - 0278
-    // Pending   - Appointment has not yet been confirmed  
-    // Waitlist  - Appointment has been placed on a waiting list for a particular slot, or set of slots  
-    // Booked    - The indicated appointment is booked   
-    // Started   - The indicated appointment has begun and is currently in progress  
-    // Complete  - The indicated appointment has completed normally (was not discontinued, canceled, or deleted)   
-    // Cancelled - The indicated appointment was stopped from occurring (canceled prior to starting)   
-    // Dc        - The indicated appointment was discontinued (DC'ed while in progress, discontinued parent appointment, or discontinued child appointment)  
-    // Deleted   - The indicated appointment was deleted from the filler application   
-    // Blocked   - The indicated time slot(s) is(are) blocked  
-    // Overbook  - The appointment has been confirmed; however it is confirmed in an overbooked state  
-    // Noshow    - The patient did not show up for the appointment 
-    $status_code = "Booked";
-    switch ($scheduling->chrono) {
-      case '32': case '48':
-        $status_code = "Started";
-        break;
-      case '64':
-        $status_code = "Complete";
-        break;
-    }
-    if ($scheduling->annule) {
-      $status_code = "Cancelled";
-    }
-    $data[] = $status_code;
+    $data[] = $this->getFillerStatutsCode($scheduling);
     
     // SCH-26: Placer Order Number (EI) (optional repeating)
     $data[] = null;

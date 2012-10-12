@@ -18,26 +18,51 @@
 
 class CHL7v2SegmentAIG extends CHL7v2Segment {
   var $name = "AIG";
+  var $set_id = null;
+  
+  /**
+   * @var CConsultation
+   */
+  var $scheduling = null;
   
   function build(CHL7v2Event $event) {
     parent::build($event);
+    
+    $scheduling = $this->scheduling;
         
     $data = array();
     
     // AIG-1: Set ID - AIG (SI)
-    $data[] = null;
+    $data[] = $this->set_id;
     
     // AIG-2: Segment Action Code (ID) (optional)
-    $data[] = null;
+    $data[] = $this->getSegmentActionCode($event);
     
     // AIG-3: Resource ID (CE) (optional)
-    $data[] = null;
+    $praticien = $scheduling->_ref_praticien;
+    $data[] = array (
+      array(
+        $praticien->_id,
+        $praticien->_view
+      )
+    );
     
     // AIG-4: Resource Type (CE)
-    $data[] = null;
+    $data[] = array (
+      array(
+        $praticien->_id,
+        $praticien->_view
+      )
+    );
     
     // AIG-5: Resource Group (CE) (optional repeating)
-    $data[] = null;
+    $function = $praticien->loadRefFunction();
+    $data[] = array (
+      array(
+        $function->_id,
+        $function->_view
+      )
+    );
     
     // AIG-6: Resource Quantity (NM) (optional)
     $data[] = null;
@@ -64,7 +89,7 @@ class CHL7v2SegmentAIG extends CHL7v2Segment {
     $data[] = null;
     
     // AIG-14: Filler Status Code (CE) (optional)
-    $data[] = null;
+    $data[] = $this->getFillerStatutsCode($scheduling);
     
     $this->fill($data);
   }  
