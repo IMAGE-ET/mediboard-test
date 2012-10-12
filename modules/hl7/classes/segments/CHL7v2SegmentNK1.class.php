@@ -29,6 +29,7 @@ class CHL7v2SegmentNK1 extends CHL7v2Segment {
     parent::build($event);
     
     $correspondant = $this->correspondant;
+    $message       = $event->message;
     
     // NK1-1: Set ID - NK1 (SI)
     $data[] = $this->set_id;
@@ -46,10 +47,11 @@ class CHL7v2SegmentNK1 extends CHL7v2Segment {
     );
     
     // NK1-4: Address (XAD) (optional repeating)
+    $linesAdress = explode("\n", $correspondant->adresse, 2);
     $data[] = array(
       array(
-        $correspondant->adresse,
-        null,
+        CValue::read($linesAdress, 0),
+        str_replace("\n", $message->componentSeparator, CValue::read($linesAdress, 1)),
         $correspondant->ville,
         null,
         $correspondant->cp,
