@@ -25,13 +25,13 @@ class CHL7v2EventSIUS14 extends CHL7v2EventSWF implements CHL7EventSIUS12 {
   /**
    * @see parent::build()
    */
-  function build($scheduling) {
-    parent::build($scheduling);
+  function build($appointment) {
+    parent::build($appointment);
     
     // Scheduling Activity Information
-    $this->addSCH($scheduling);
+    $this->addSCH($appointment);
     
-    $patient = $scheduling->loadRefPatient();
+    $patient = $appointment->loadRefPatient();
     // Patient Identification
     $this->addPID($patient);
     
@@ -39,16 +39,16 @@ class CHL7v2EventSIUS14 extends CHL7v2EventSWF implements CHL7EventSIUS12 {
     $this->addPD1($patient);
     
     // Patient Visit
-    $this->addPV1($scheduling);
+    $this->addPV1($appointment);
     
     // Resource Group
-    $this->addRGS($scheduling);
+    $this->addRGS($appointment);
     
     // Appointment Information - General Resource
-    $this->addAIG($scheduling);
+    $this->addAIG($appointment);
     
     // Appointment Information - Location Resource
-    $this->addAIL($scheduling);
+    $this->addAIL($appointment);
   }
 }
 

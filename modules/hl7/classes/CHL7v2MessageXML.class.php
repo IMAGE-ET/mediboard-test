@@ -50,8 +50,13 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     }    
     
     // Création des résultats d'observations  
-    if ($event_type == "CHL7v2EventORU") {
+    if ($event_type == "CHL7v2EventDEC") {
       return new CHL7v2RecordObservationResultSet($encoding);  
+    }
+    
+    // Création des consultations
+    if ($event_type == "CHL7v2EventSWF") {
+      return new CHL7v2RecordAppointment($encoding);  
     }
     
     return new CHL7v2MessageXML($encoding);

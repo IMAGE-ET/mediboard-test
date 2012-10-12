@@ -22,7 +22,7 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
   /**
    * @var CConsultation
    */
-  var $scheduling = null;
+  var $appointment = null;
   
   function build(CHL7v2Event $event) {
     parent::build($event);
@@ -30,7 +30,7 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     $receiver = $event->_receiver;
     $group    = $receiver->_ref_group;
     
-    $scheduling = $this->scheduling;
+    $appointment = $this->appointment;
         
     $data = array();
     
@@ -40,14 +40,14 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     // SCH-2: Filler Appointment ID (EI) (optional)
     $identifiers[] = array(
       // Entity identifier
-      $scheduling->_id,
+      $appointment->_id,
       // Autorité assignement
       CAppUI::conf("hl7 assigning_authority_namespace_id"),
       CAppUI::conf("hl7 assigning_authority_universal_id"),
       CAppUI::conf("hl7 assigning_authority_universal_type_id"),
     );
     
-    $idex = CIdSante400::getMatch("CConsultation", $receiver->_tag_consultation, null, $scheduling->_id);
+    $idex = CIdSante400::getMatch("CConsultation", $receiver->_tag_consultation, null, $appointment->_id);
     if ($idex->_id) {
       $configs = $receiver->_configs;
       $identifiers[] = array(
@@ -74,7 +74,7 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     $data[] = array(
       array(
         null,
-        $scheduling->motif
+        $appointment->motif
       )
     );
     
@@ -96,14 +96,14 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
         null,
         null,
         // Durée (M puis le nb de minutes)
-        "M".$scheduling->_duree,
-        $scheduling->_datetime,
-        $scheduling->_date_fin,
+        "M".$appointment->_duree,
+        $appointment->_datetime,
+        $appointment->_date_fin,
       )
     );
     
     // SCH-12: Placer Contact Person (XCN) (optional repeating)
-    $data[] = $this->getXCN($scheduling->_ref_praticien, $receiver);
+    $data[] = $this->getXCN($appointment->_ref_praticien, $receiver);
     
     // SCH-13: Placer Contact Phone Number (XTN) (optional)
     $data[] = null;
@@ -115,7 +115,7 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     $data[] = null;
     
     // SCH-16: Filler Contact Person (XCN) ( repeating)
-    $first_log = $scheduling->loadFirstLog();
+    $first_log = $appointment->loadFirstLog();
     $mediuser = $first_log->loadRefUser()->loadRefMediuser();
     $data[] = $this->getXCN($mediuser, $receiver);
     
@@ -144,7 +144,7 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     $data[] = null;
     
     // SCH-25: Filler Status Code (CE) (optional)
-    $data[] = $this->getFillerStatutsCode($scheduling);
+    $data[] = $this->getFillerStatutsCode($appointment);
     
     // SCH-26: Placer Order Number (EI) (optional repeating)
     $data[] = null;

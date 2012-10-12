@@ -753,7 +753,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
   }
   
-  function getFillerStatutsCode(CConsultation $scheduling) {
+  function getFillerStatutsCode(CConsultation $appointment) {
     // Table - 0278
     // Pending   - Appointment has not yet been confirmed  
     // Waitlist  - Appointment has been placed on a waiting list for a particular slot, or set of slots  
@@ -767,14 +767,14 @@ class CHL7v2Segment extends CHL7v2Entity {
     // Overbook  - The appointment has been confirmed; however it is confirmed in an overbooked state  
     // Noshow    - The patient did not show up for the appointment 
     
-    switch ($scheduling->chrono) {
+    switch ($appointment->chrono) {
       case '32': case '48':
         return "Started";
       case '64':
         return "Complete";
     }
     
-    if ($scheduling->annule) {
+    if ($appointment->annule) {
       return "Cancelled";
     }
     

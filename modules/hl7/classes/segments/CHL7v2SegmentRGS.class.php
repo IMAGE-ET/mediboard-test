@@ -23,7 +23,7 @@ class CHL7v2SegmentRGS extends CHL7v2Segment {
   /**
    * @var CConsultation
    */
-  var $scheduling = null;
+  var $appointment = null;
   
   function build(CHL7v2Event $event) {
     parent::build($event);
@@ -37,7 +37,7 @@ class CHL7v2SegmentRGS extends CHL7v2Segment {
     $data[] = $this->getSegmentActionCode($event);
     
     // RGS-3: Resource Group ID (CE) (optional)
-    $data[] = $this->scheduling->_id;
+    $data[] = $this->appointment->_id;
     
     $this->fill($data);
   }  

@@ -51,9 +51,9 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
   /**
    * SCH - Represents an HL7 SCH segment (Scheduling Activity Information) 
    */
-  function addSCH(CMbObject $scheduling) {
+  function addSCH(CMbObject $appointment) {
     $SCH = CHL7v2Segment::create("SCH", $this->message);
-    $SCH->scheduling = $scheduling;
+    $SCH->appointment = $appointment;
     $SCH->build($this);
   }
   
@@ -82,7 +82,7 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
    * Represents an HL7 PV1 message segment (Patient Visit)
    * @param CSejour Admit
    */
-  function addPV1(CMbObject $scheduling = null, $set_id = 1) {    
+  function addPV1(CMbObject $appointment = null, $set_id = 1) {    
     $PV1 = CHL7v2Segment::create("PV1", $this->message);
     $PV1->sejour = null;
     $PV1->set_id = 1;
@@ -92,30 +92,30 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
   /**
    * RGS - Represents an HL7 SCH segment (Resource Group) 
    */
-  function addRGS(CMbObject $scheduling) {
+  function addRGS(CMbObject $appointment) {
     $RGS = CHL7v2Segment::create("RGS", $this->message);
     $RGS->set_id = 1;
-    $RGS->scheduling = $scheduling;
+    $RGS->appointment = $appointment;
     $RGS->build($this);
   }
   
   /**
    * AIG - Represents an HL7 SCH segment (Appointment Information - General Resource) 
    */
-  function addAIG(CMbObject $scheduling) {
+  function addAIG(CMbObject $appointment) {
     $AIG = CHL7v2Segment::create("AIG", $this->message);
     $AIG->set_id = 1;
-    $AIG->scheduling = $scheduling;
+    $AIG->appointment = $appointment;
     $AIG->build($this);
   }
   
   /**
    * AIL - Represents an HL7 AIL segment (Appointment Information - Location Resource) 
    */
-  function addAIL(CMbObject $scheduling) {
+  function addAIL(CMbObject $appointment) {
     $AIL = CHL7v2Segment::create("AIL", $this->message);
     $AIL->set_id = 1;
-    $AIL->scheduling = $scheduling;
+    $AIL->appointment = $appointment;
     $AIL->build($this);
   }
 }
