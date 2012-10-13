@@ -51,7 +51,8 @@ $user_clone = $user;
 // Chargement des modules
 $modules = CPermModule::getVisibleModules();
 foreach ($modules as $module) {
-  include("./modules/$module->mod_name/index.php");
+  // Module might not be present
+  @include "./modules/$module->mod_name/index.php";
 }
 $user = $user_clone;
 
