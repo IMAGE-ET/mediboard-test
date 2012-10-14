@@ -10,7 +10,7 @@
  * @link     http://www.mediboard.org
  */
 
-$source = CExchangeSource::get("system-message", "smtp", true, null, false
+$source = CExchangeSource::get("system-message", "smtp", true, null, true);
 
 try {
   // Source init
