@@ -196,6 +196,24 @@ var WaitingMessage = {
   }
 };
 
+var Profiler = {
+  trace: function(getParams, performance, targetElement) {
+    try {
+      // If Firebug or Chrome console
+      if (console.firebug || console._inspectorCommandLineAPI) {
+        console.log(getParams, " ", performance);
+      }
+      this.profile(getParams, performance, null, targetElement);
+    } catch (e) {}
+  },
+  profile: function (getParams, performance, win, targetElement) {
+    var parent = window.opener || window.parent;
+    if (parent && parent !== window && parent.Profiler) {
+      parent.Profiler.profile(getParams, performance, win || window, targetElement);
+    }
+  }
+};
+
 /**
  * Detects the Skype scripts and stylesheets to check whether the extension is active or not
  * This extension slows down Firefox
@@ -767,7 +785,8 @@ Object.extend (Control.Tabs, {
           }
           
           Control.Tabs.storeTab(name, tab.id);
-        }
+        };
+
         var tabName = Control.Tabs.loadTab(name);
         if (tabName) {
           tab.setActiveTab(tabName);
@@ -1025,7 +1044,7 @@ window.open = function(element, title, options) {
 
 window._close = function() {
   window.close();
-}
+};
 
 // We replace the window.close method for iframes (modal windows)
 if (window.parent && window.parent != window && window.parent.Mediboard) {
@@ -1053,7 +1072,7 @@ window.scrollToTop = function(){
   
   document.documentElement.scrollTop = 0;
   document.body.scrollTop = 0;
-}
+};
 
 window.scrollReset = function(){
   if (!window.scrollTopSave) {
@@ -1062,7 +1081,7 @@ window.scrollReset = function(){
   
   document.documentElement.scrollTop = window.scrollTopSave;
   document.body.scrollTop = window.scrollTopSave;
-}
+};
 
 // Multiple mocals
 Object.extend(Control.Modal,{
@@ -1316,7 +1335,8 @@ Element.addMethods({
     return element;
   },
   getSelection: function(element) {
-    if ((doc = element.ownerDocument) && (win = doc.defaultView) && 
+    var doc, win, selection, range;
+    if ((doc = element.ownerDocument) && (win = doc.defaultView) &&
         win.getSelection && doc.createRange && 
         (selection = window.getSelection()) && 
         selection.removeAllRanges) {
@@ -1362,7 +1382,7 @@ Element.addMethods({
           if (e.href) {
             var matchHref = e.href.match(/(.*\/)[^\/]+$/);
             var pattern = /@import\s*(?:url\s*\(\s*)?["']?([^"'\)]+)\)?["']?/g;
-            var i = 50;
+            var i = 50, match;
             
             if (matchHref) {
               // on regarde tous ses @import pour les importer "à la main"
@@ -1453,13 +1473,13 @@ App.print = function(){
     window.focus();
     window.print();
   }
-}
+};
 
 App.deferClose = function(){
   (function(){
     window.close();
   }).defer();
-}
+};
 
 /**
  * Adds column highlighting to a table

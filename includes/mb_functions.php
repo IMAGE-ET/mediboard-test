@@ -89,7 +89,7 @@ function mbGetObjectFromGetOrSession($class_key, $id_key, $guid_key = null) {
  */
 function toBool($value) {
   if (!$value) {
-  	return false;
+    return false;
   }
   
   return $value === true || preg_match('/^on|1|true|yes$/i', $value);
@@ -152,7 +152,6 @@ function mbWorkDaysInMonth($date = null) {
     $date = mbDate();
   }
 
-  $year = mbTransformTime("+0 DAY", $date, "%Y");
   $debut = $date;
   $rectif = mbTransformTime("+0 DAY", $debut, "%d")-1;
   $debut = mbDate("-$rectif DAYS", $debut);
@@ -295,8 +294,8 @@ function mbTimeGetNearestMinsWithInterval($reference, $mins_interval) {
   $borne_inf = $mins_interval * $div;
   $borne_sup = $mins_interval * ($div + 1);
   $mins_replace = ($min_reference - $borne_inf) < ($borne_sup - $min_reference) ? 
-  	$borne_inf : 
-  	$borne_sup;
+    $borne_inf : 
+    $borne_sup;
   
   $reference = ($mins_replace == 60) ?
     sprintf('%02d:00:00',   mbTransformTime(null, $reference, "%H")+1) :
@@ -403,7 +402,7 @@ function mbMinutesRelative($from, $to) {
   }
   $from = intval(strtotime($from) / 60);
   $to   = intval(strtotime($to  ) / 60);
-  return intval($to - $from);	
+  return intval($to - $from);  
 }
 
 /**
@@ -557,7 +556,7 @@ class CMbDate {
   /**
    * Give a Dirac hash of given datetime
    * 
-   * @param enum     $period   One of minute, hour, day, week, month or year
+   * @param string   $period   One of minute, hour, day, week, month or year
    * @param datetime $datetime Datetime
    *  
    * @return datetime Hash
@@ -586,7 +585,7 @@ class CMbDate {
    * 
    * @param dateTime $datetime  Datetime
    * @param dateTime $reference Reference
-   * @param enum     $period    One of 1hour, 6hours, 1day
+   * @param string   $period    One of 1hour, 6hours, 1day
    * 
    * @return float
    */
@@ -617,7 +616,7 @@ class CMbDate {
       $default_timezone = date_default_timezone_get();
     }
     
-    // Temporory change timezone to UTC
+    // Temporary change timezone to UTC
     date_default_timezone_set("UTC");
     $datetime = strtotime($datetime) * 1000; // in ms;
     date_default_timezone_set($default_timezone);
@@ -839,20 +838,20 @@ function luhn ($code) {
  */
 function url_exists($url, $method = null) {
   $old = ini_set('default_socket_timeout', 5); 
-	
-	if ($method) {
-		// By default get_headers uses a GET request to fetch the headers. 
-		// If you want to send a HEAD request instead, 
-		// you can change method with a stream context
-		stream_context_set_default(
-    	array(
+  
+  if ($method) {
+    // By default get_headers uses a GET request to fetch the headers. 
+    // If you want to send a HEAD request instead, 
+    // you can change method with a stream context
+    stream_context_set_default(
+      array(
         'http' => array(
           'method' => $method
         )
-    	)
-		);
-	}
-	
+      )
+    );
+  }
+  
   $headers = @get_headers($url);
   ini_set('default_socket_timeout', $old); 
   return (preg_match("|200|", $headers[0])); 
@@ -905,7 +904,6 @@ function url_response_time($url, $port) {
   $starttime     = microtime(true);
   $file          = @fsockopen($url, $port, $errno, $errstr, 5);
   $stoptime      = microtime(true);
-  $response_time = 0;
   
   if (!$file) {
     $response_time = -1;  // Site is down

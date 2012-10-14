@@ -38,7 +38,7 @@ html, body {
 }
 
 #headerMenu td.titlecell {
-  height: 0%;
+  height: 0;
   font-size: 1.5em;
   font-weight: bold;
   color: #000;
@@ -68,7 +68,6 @@ html, body {
   position: absolute;
   left: 0;
   top: 21px;
-  margin-top: 2px;
   z-index: 100;
   list-style-type: none;
   padding: 2px;

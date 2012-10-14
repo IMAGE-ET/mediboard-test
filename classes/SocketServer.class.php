@@ -587,12 +587,12 @@ class SocketServer {
         
         // Request handler asks to shutdown server
         if (false === $response) {
-          // Tell everyone that server is shuting down
-          foreach ($pool as $conn) {
-            if ($this->__socket !== $conn) {
-              $msg = '*** Server is shuting down by request'."\n";
-              @fwrite($conn, $msg, strlen($msg));
-              @fclose($conn);
+          // Tell everyone that server is shutting down
+          foreach ($pool as $_conn) {
+            if ($this->__socket !== $_conn) {
+              $msg = '*** Server is shutting down by request'."\n";
+              @fwrite($_conn, $msg, strlen($msg));
+              @fclose($_conn);
             }
           }
           

@@ -76,9 +76,9 @@ var ElementChecker = {
   //---------------------------------------------------------------------------------
   
   getCastFunction: function() {
-    if (this.oProperties["num"])   return function(value) { return parseInt(value, 10); }
-    if (this.oProperties["float"]) return function(value) { return parseFloat(value, 10); }
-    if (this.oProperties["date"])  return function(value) { return Date.fromDATE(value); }
+    if (this.oProperties["num"])   return function(value) { return parseInt(value, 10); };
+    if (this.oProperties["float"]) return function(value) { return parseFloat(value); };
+    if (this.oProperties["date"])  return function(value) { return Date.fromDATE(value); };
     return Prototype.K;
   },
   
@@ -90,9 +90,9 @@ var ElementChecker = {
     
     var fCaster = this.getCastFunction();
     this.oCompare = {
-      source : this.sValue               ? fCaster(this.sValue) : null,
-      target : this.oTargetElement.value ? fCaster(this.oTargetElement.value) : null
-    }
+      source: this.sValue               ? fCaster(this.sValue) : null,
+      target: this.oTargetElement.value ? fCaster(this.oTargetElement.value) : null
+    };
     return null;
   },
   
@@ -399,15 +399,15 @@ Object.extend(ElementChecker, {
     // bool
     bool: function() {
       this.toNumeric(true);
-      if(this.sValue != 0 && this.sValue != 1)
+      if (this.sValue != 0 && this.sValue != 1) {
         this.addError("bool", "Ne peut être différent de 0 ou 1");
+      }
     },
     
     // enum
     "enum": function() {
       if (!this.oProperties.list && !this.oProperties['class']) {
         console.error("Spécification 'list' ou 'class' manquante pour le champ " + this.sLabel);
-        return;
       }
     },
     
@@ -415,7 +415,6 @@ Object.extend(ElementChecker, {
     "set": function() {
       if (!this.oProperties.list) {
         console.error("Spécification 'list' manquante pour le champ " + this.sLabel);
-        return;
       }
     },
     
@@ -623,13 +622,12 @@ function checkForm(oForm) {
   if (oFormErrors.length) {
     var sMsg = "Merci de remplir/corriger les champs suivants : \n";
     oFormErrors.each(function (formError) {
-      var oElement = oForm.elements[formError.element];
-      
       sMsg += "  "+String.fromCharCode(8226)+" "+formError.title.strip()+":\n";
       formError.errors.each(function (error) {
         sMsg += "     - " + (error.message || error).strip() + "\n";
       });
     });
+
     alert(sMsg);
     
     if (oElementFirstFailed && oElementFirstFailed.type != "hidden") {

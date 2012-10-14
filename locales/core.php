@@ -15,14 +15,14 @@ $shared_name = "locales-$locale";
 // Load from shared memory if possible
 if (null == $locales = SHM::get($shared_name)) {
   foreach (CAppUI::getLocaleFilesPaths($locale) as $_path) {
-  	require_once($_path);
+    include_once $_path;
   }
   $locales = array_filter($locales, "stringNotEmpty");
-  foreach($locales as &$_locale) {
+  foreach ($locales as &$_locale) {
     $_locale = CMbString::unslash($_locale);
   }
   SHM::put($shared_name, $locales);
 }
 
 // Encoding definition
-require("$root_dir/locales/$locale/meta.php");
+require "$root_dir/locales/$locale/meta.php";

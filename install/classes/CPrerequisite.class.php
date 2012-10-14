@@ -21,7 +21,9 @@ abstract class CPrerequisite extends CCheckable {
 
   /**
    * Check prerequisite
-   * 
+   *
+   * @param bool $strict Check also warnings
+   *
    * @return bool
    */
   abstract function check($strict = true);

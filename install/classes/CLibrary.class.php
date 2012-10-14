@@ -31,19 +31,20 @@ class CLibrary {
     $libsDir = $mbpath."lib";
     
     /// Clear out all libraries
-    if (!$libSel){
+    if (!$libSel) {
       foreach (glob("$libsDir/*") as $libDir) {
         if (strpos($libDir, '.svn') === false) {
           CMbPath::remove($libDir);
         }
       }
+
       return;
     } 
 
     // Clear out selected lib
     $library = self::$all[$libSel];
     if ($targetDir = $library->targetDir) {
-      return @CMbPath::remove("$libsDir/$targetDir");
+      @CMbPath::remove("$libsDir/$targetDir");
     }
   }
   
@@ -65,14 +66,7 @@ class CLibrary {
     
   function countLibraries() {
     global $mbpath;
-    $libsDir = $mbpath."lib";
-    $libsCount = 0;
-    
-    foreach (glob("$libsDir/*") as $libDir) {
-      $libsCount++;
-    }
-    
-    return $libsCount;
+    return count(glob($mbpath."lib/*"));
   }
   
   function install() {

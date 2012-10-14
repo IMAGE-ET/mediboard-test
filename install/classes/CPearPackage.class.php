@@ -18,6 +18,8 @@ class CPearPackage extends CPrerequisite {
 
   /**
    * Check file inclusion
+   *
+   * @param bool $strict Check also warnings
    * 
    * @see parent::check
    * 

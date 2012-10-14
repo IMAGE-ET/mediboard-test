@@ -74,8 +74,15 @@ class CAppUI {
   var $user_prefs = array();
   var $update_hash = null;
   
-  /** @var string Default page for a redirect call*/
+  /**
+   * @var string Default page for a redirect call
+   */
   var $defaultRedirect = "";
+
+  /**
+   * @var string Session name
+   */
+  var $session_name = "";
 
   /**
    * Initializes the CAppUI singleton
@@ -256,17 +263,22 @@ class CAppUI {
   /**
    * Returns the CSS class corresponding to a message type
    * 
-   * @param int $type [optional] Message type as a UI constant
+   * @param int $type Message type as a UI constant
    * 
    * @return string The CSS class
    */
   static function getErrorClass($type = UI_MSG_OK) {
     switch ($type) {
-      case UI_MSG_ERROR   : return "error" ;
-      case UI_MSG_WARNING : return "warning";
+      case UI_MSG_ERROR:
+        return "error";
+
+      case UI_MSG_WARNING:
+        return "warning";
+
       default:
-      case UI_MSG_OK      : 
-      case UI_MSG_ALERT   : return "info";
+      case UI_MSG_OK:
+      case UI_MSG_ALERT:
+        return "info";
     }
   }
   

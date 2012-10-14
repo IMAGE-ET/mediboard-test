@@ -10,13 +10,15 @@
  */
 
 // PEAR Throws 
-require_once ("Archive/Tar.php");
+require_once "Archive/Tar.php";
 
 abstract class CMbPath {
   /**
-   * Ensures a directory exists by building all tree sub-diriectories if possible
-   * @param string $dir directory path
-   * @param octal $chmod like value
+   * Ensures a directory exists by building all tree sub-directories if possible
+   *
+   * @param string $dir  Directory path
+   * @param int    $mode chmod like value
+   *
    * @return boolean job done
    */
   static function forceDir($dir, $mode = 0755) {
@@ -35,9 +37,11 @@ abstract class CMbPath {
   
     return false;
   }
-  
+
   /**
-   * @returns true if directory is empty
+   * @param string $dir Directory path
+   *
+   * @return bool true if directory is empty
    */
   static function isEmptyDir($dir) {
     if (false === $dh = opendir($dir)) {
@@ -51,12 +55,15 @@ abstract class CMbPath {
 
     closedir($dh);
 
-    return $file === null;             
+    return $file === null;
   }
-  
+
   /**
    * Removes all empty sub-directories of a given directory
-   * @return integer removed directories count
+   *
+   * @param string $dir Directory from which we want to remove empty directories
+   *
+   * @return integer Removed directories count
    */
   static function purgeEmptySubdirs($dir) {
     $removedDirsCount = 0;
@@ -83,12 +90,26 @@ abstract class CMbPath {
     
     return $removedDirsCount;
   }
-  
+
+  /**
+   * Get the extension of a file
+   *
+   * @param string $path Path from which we want the extension
+   *
+   * @return string The extension
+   */
   static function getExtension($path) {
     $info = pathinfo($path);
     return $info['extension'];
   }
-  
+
+  /**
+   * Guess the mime type of a file from its extension
+   *
+   * @param string $file The file from which we want to guess the mime type
+   *
+   * @return string
+   */
   static function guessMimeType($file) {
     $ext = strtolower(self::getExtension($file));
     

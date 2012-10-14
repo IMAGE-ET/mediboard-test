@@ -17,9 +17,11 @@ class CPHPVersion extends CPrerequisite {
 
   /**
    * Compare PHP version
-   * 
+   *
+   * @param bool $strict Check also warnings
+   *
    * @see parent::check
-   * 
+   *
    * @return bool
    */
   function check($strict = true) {

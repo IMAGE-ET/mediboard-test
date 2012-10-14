@@ -135,7 +135,7 @@ var Url = Class.create({
   
   redirect: function(sBaseUrl) {
     var uri = decodeURI(this.make(!!sBaseUrl));
-    (this.oWindow || window).location.href = (sBaseUrl ? sBaseUrl : "") + uri    
+    (this.oWindow || window).location.href = (sBaseUrl ? sBaseUrl : "") + uri;
     return this;
   },
   
@@ -672,6 +672,7 @@ var Url = Class.create({
     }
     
     var element = $(ioTarget);
+    //this.addParam("__dom", element.id);
     
     if (!element) {
       console.warn(ioTarget+" doesn't exist");

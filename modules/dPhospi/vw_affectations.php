@@ -46,8 +46,6 @@ $services = new CService;
 $order = "externe, nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
-global $phpChrono;
-
 // Chargement des services
 foreach ($services as &$service) {
   if (!in_array($service->_id, $services_ids)){
@@ -55,8 +53,8 @@ foreach ($services as &$service) {
   }
 	
   loadServiceComplet($service, $date, $mode);
-	$phpChrono->stop("Load Service Complet : '$service->_view'");
-  $phpChrono->start();
+	CApp::$chrono->stop("Load Service Complet : '$service->_view'");
+  CApp::$chrono->start();
   $totalLits += $service->_nb_lits_dispo;
 }
 
@@ -89,8 +87,8 @@ if($filterFunction){
 
 $sejour = new CSejour();
 $alerte = $sejour->countList($where, null, $leftjoin);
-$phpChrono->stop("Patient à placer dans la semaine");
-$phpChrono->start();
+CApp::$chrono->stop("Patient à placer dans la semaine");
+CApp::$chrono->start();
 
 // Liste des patients à placer
 $groupSejourNonAffectes = array();
@@ -127,20 +125,20 @@ if ($can->edit) {
   $dayBefore = mbDate("-1 days", $date);
 	$where["sejour.entree"] = "BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
   $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order);
-	$phpChrono->stop("Non affectés: veille");
-	$phpChrono->start();
+	CApp::$chrono->stop("Non affectés: veille");
+	CApp::$chrono->start();
   
   // Admissions du matin
   $where["sejour.entree"] = "BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'";
   $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order);
-  $phpChrono->stop("Non affectés: matin");
-  $phpChrono->start();
+  CApp::$chrono->stop("Non affectés: matin");
+  CApp::$chrono->start();
   
   // Admissions du soir
   $where["sejour.entree"] = "BETWEEN '$date $heureLimit' AND '$date 23:59:59'";
   $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order);
-  $phpChrono->stop("Non affectés: soir");
-  $phpChrono->start();
+  CApp::$chrono->stop("Non affectés: soir");
+  CApp::$chrono->start();
   
   // Admissions antérieures
   $twoDaysBefore = mbDate("-2 days", $date);
@@ -148,8 +146,8 @@ if ($can->edit) {
   $where["sejour.sortie"] = ">= '$date 00:00:00'";
 
   $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order);
-  $phpChrono->stop("Non affectés: avant");
-  $phpChrono->start();
+  CApp::$chrono->stop("Non affectés: avant");
+  CApp::$chrono->start();
   
   // Affectations dans les couloirs
   $where = array();
@@ -203,7 +201,7 @@ $smarty->assign("functions_filter"      , $functions_filter);
 $smarty->display("vw_affectations.tpl");
 
 if (CAppUI::pref("INFOSYSTEM")) {
-  mbTrace(CMbArray::pluck($phpChrono->report, "total"), "Rapport uniquement visible avec les informations système");
+  mbTrace(CMbArray::pluck(CApp::$chrono->report, "total"), "Rapport uniquement visible avec les informations système");
 }
 
 

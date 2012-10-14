@@ -38,7 +38,7 @@ z-index ordering (foreground to background) :
 div.cancelled {
   color: #fff;
   background-color: #f88;
-  text-shadow: 0 0 0 transparent, 0 0 2px rgba(0, 0, 0, 0.7);  
+  text-shadow: 0 0 0 rgba(0, 0, 0, .0), 0 0 2px rgba(0, 0, 0, .7);
   text-transform: uppercase;
   font-weight: bold;
   text-align: center;
@@ -422,11 +422,11 @@ table.planningBloc td.plageop {
   vertical-align: top; 
   text-align: center; 
   white-space: normal;  
-  text-shadow:  0 0 0 transparent,
-               -1px  0  .0px rgba(255,255,255,.3), 
-                0   1px .0px rgba(255,255,255,.3), 
-                1px  0  .0px rgba(255,255,255,.3), 
-                0  -1px .0px rgba(255,255,255,.3);
+  text-shadow:  0   0   0 rgba(0, 0, 0, 0),
+               -1px 0   0 rgba(255,255,255,.3),
+                0   1px 0 rgba(255,255,255,.3),
+                1px 0   0 rgba(255,255,255,.3),
+                0  -1px 0 rgba(255,255,255,.3);
 }
 
 /** dPpatients */
@@ -676,7 +676,6 @@ table#weeklyPlanning th.today {
 
 .planning .consultation.selected,  .planning .operation.selected{
   opacity: 1;
-  filter: none; /* IE lt 8 */
   -ms-filter: none; /* IE 8 */
 }
 
@@ -1801,7 +1800,7 @@ div.sniff-bar {
   width: 100px; 
   height: 10px; 
   border: 1px solid #888; 
-  margin: 1px 10px 1px 0px; 
+  margin: 1px 10px 1px 0;
 }
 
 div.sniff-bar div {
@@ -1900,7 +1899,7 @@ tr.transmission_haute td {
 }
 
 div.scroll_shadow {
-  box-shadow: 0px 3px 8px rgba(0,0,0,.3);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .3);
 }
 
 div.planning_ressource {

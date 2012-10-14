@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * Compat functions emulations
  *
@@ -45,7 +45,7 @@ if (!function_exists('array_diff_key')) {
       }
       $valuesDiff[$valueKey] = $valueData;
     }
-		
+    
     return $valuesDiff;
   }
 }
@@ -56,20 +56,20 @@ if (!function_exists('array_diff_key')) {
  * @param string $function Callback to apply
  * @param array  $array    Array to apply callback on
  * 
- * @return arrray
+ * @return array
  */
 function array_map_recursive($function, $array) {
-	// Recursion closure
-	if (!is_array($array)) {
-		return call_user_func($function, $array);
-	}
-	
-	// Rercursive call
-	$result = array();
+  // Recursion closure
+  if (!is_array($array)) {
+    return call_user_func($function, $array);
+  }
+  
+  // Rercursive call
+  $result = array();
   foreach ($array as $key => $value ) {
     $result[$key] = array_map_recursive($function, $value);
   }
-	
+  
   return $result;
 }
 
@@ -80,7 +80,7 @@ function array_map_recursive($function, $array) {
  * @param array $haystack The array.
  * @param bool  $strict   If true also check value types
  * 
- * @return true if needle is found in the array, false otherwise. 
+ * @return bool true if needle is found in the array, false otherwise.
  */
 function in_array_recursive($needle, $haystack, $strict = false) {
   if (in_array($needle, $haystack, $strict)) {
@@ -100,8 +100,8 @@ if (!function_exists('array_replace_recursive')) {
   /**
    * Array recursive replace recurse closure
    * 
-   * @param object $array  Merge host array
-   * @param object $array1 Merged array
+   * @param array $array  Merge host array
+   * @param array $array1 Merged array
    * 
    * @return array
    * @link  http://php.net/array_replace_recursive
@@ -126,13 +126,12 @@ if (!function_exists('array_replace_recursive')) {
    * Replaces elements from passed arrays into the first array recursively
    * (PHP 5 >= 5.3.0)
    * 
-   * @param object $array  Merge host array
-   * @param object $array1 Merged array
+   * @param object $array Merge host array
    * 
    * @return array
    * @link   http://php.net/array_replace_recursive
    */
-  function array_replace_recursive($array, $array1) {
+  function array_replace_recursive($array) {
     // handle the arguments, merge one by one
     $args = func_get_args();
     $array = $args[0];
@@ -158,22 +157,22 @@ if (!function_exists('array_fill_keys')) {
    * @return array Filled array
    * @link   http://php.net/array_fill_keys
    */
-	function array_fill_keys($keys, $value) {
+  function array_fill_keys($keys, $value) {
     return array_combine($keys, array_fill(0, count($keys), $value));
   }
 }
 
 if (!function_exists('property_exists')) {
-	/**
-	 * property_exists Computes the difference of arrays using keys for comparison 
+  /**
+   * property_exists Computes the difference of arrays using keys for comparison 
    * (PHP 5 >= 5.1.0)
-	 * 
-	 * @param mixed  $context  Object or class name to inspect
-	 * @param string $property Name of property
-	 * 
-	 * @return boolean
-	 * @link http://php.net/property_exists
-	 */
+   * 
+   * @param mixed  $context  Object or class name to inspect
+   * @param string $property Name of property
+   * 
+   * @return boolean
+   * @link http://php.net/property_exists
+   */
   function property_exists($context, $property) {
     $vars = is_object($context) ? 
       get_object_vars($context) : 
@@ -183,16 +182,16 @@ if (!function_exists('property_exists')) {
 } 
 
 if (!function_exists('memory_get_usage')) {
-	/**
-	 * Returns the amount of memory allocated to PHP, 
-	 * (PHP 4 >= 4.3.2, PHP 5)
-	 * requires compiling with --enable-memory-limit before 5.2.1
-	 * 
-	 * @param bool $real_usage Real memory if true, emalloc() if false
-	 * 
-	 * @return int Number of bytes
-	 * @link http://php.net/memory_get_usage
-	 */
+  /**
+   * Returns the amount of memory allocated to PHP, 
+   * (PHP 4 >= 4.3.2, PHP 5)
+   * requires compiling with --enable-memory-limit before 5.2.1
+   * 
+   * @param bool $real_usage Real memory if true, emalloc() if false
+   * 
+   * @return int Number of bytes
+   * @link http://php.net/memory_get_usage
+   */
   function memory_get_usage($real_usage = false) {
     return -1;
   }
@@ -234,15 +233,15 @@ if (!function_exists('getrusage')) {
 }
 
 if (!function_exists('timezone_identifiers_list')) {
-	/**
-	 * Returns numerically index array with all timezone identifiers
-	 * (PHP 5 >= 5.1.0)
-	 * 
-	 * @param int    $what    One of DateTimeZone class constants
-	 * @param string $country A two-letter ISO 3166-1 compatible country code. 
-	 * 
-	 * @return array The identifiers
-	 */
+  /**
+   * Returns numerically index array with all timezone identifiers
+   * (PHP 5 >= 5.1.0)
+   * 
+   * @param int    $what    One of DateTimeZone class constants
+   * @param string $country A two-letter ISO 3166-1 compatible country code. 
+   * 
+   * @return array The identifiers
+   */
   function timezone_identifiers_list($what = null, $country = null) {
     return include "timezones.php";
   }

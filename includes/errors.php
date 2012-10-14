@@ -347,8 +347,6 @@ set_error_handler("errorHandler");
  * @return null
  */
 function exceptionHandler($exception) {
-  global $divClasses, $types, $errorCategories;
-  
   $divClass = "big-warning";
   
   // Contextes 
@@ -417,4 +415,3 @@ function exceptionHandler($exception) {
 set_exception_handler("exceptionHandler");
 
 build_error_log();
-?>

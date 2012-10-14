@@ -176,7 +176,7 @@ var VitaleVision = {
   fillForm: function(form, id) {
     var benef = VitaleVision.xmlDocument.getElementsByTagName("listeBenef")[0].childNodes[id],
         ident = benef.getElementsByTagName("ident")[0],
-        amo = benef.getElementsByTagName("amo")[0];
+        amo = benef.getElementsByTagName("amo")[0],
         cmu = benef.getElementsByTagName("cmu")[0];
   
     form.insert(DOM.input({type: 'hidden', name: 'date_lecture_vitale', value: 'now'}));
@@ -281,7 +281,6 @@ var VitaleVision = {
       pair.value.each(function(rule){
         if(codeExo == 0 && libelleExo.match(new RegExp(rule, "i"))) {
           codeExo = pair.key;
-          return;
         }
       });
     });

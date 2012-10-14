@@ -103,7 +103,7 @@ printStackTrace.implementation.prototype = {
      * 
      * @param {Object} context of execution (e.g. window)
      * @param {String} functionName to instrument
-     * @param {Function} function to call with a stack trace on invocation
+     * @param {Function} callback to call with a stack trace on invocation
      */
     instrumentFunction: function(context, functionName, callback) {
         context = context || window;

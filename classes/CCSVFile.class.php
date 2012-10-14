@@ -22,6 +22,10 @@ class CCSVFile {
   var $handle       = null;
   var $delimiter    = ',';
   var $enclosure    = '"';
+
+  /**
+   * @var array
+   */
   var $column_names = null;
   
   static $profiles = array(
@@ -34,14 +38,14 @@ class CCSVFile {
       "enclosure" => '"',
     ),
   );
-  
+
   /**
-   * Standard constructor 
-   * 
-   * @param mixed $handle       File handle of file path
-   * @param enum  $profile_name Profile name, one of openoffice and excel 
-   * 
-   * @return void
+   * Standard constructor
+   *
+   * @param mixed  $handle       File handle of file path
+   * @param string $profile_name Profile name, one of openoffice and excel
+   *
+   * @return CCSVFile
    */
   function __construct($handle = null, $profile_name = self::PROFILE_EXCEL) {
     if ($handle) {
@@ -128,7 +132,7 @@ class CCSVFile {
    * 
    * @param array $values An array of strings
    * 
-   * @return arrat The same array, with NULL instead of empty strings
+   * @return array The same array, with NULL instead of empty strings
    */
   function nullifyEmptyValues($values) {
     foreach ($values as &$_value) {
@@ -161,7 +165,7 @@ class CCSVFile {
    * 
    * @param string $file_name File name for the browser
    * 
-   * @return unknown_type
+   * @return string
    */
   function stream($file_name) {
     $content = $this->getContent();

@@ -82,7 +82,7 @@ $chrono = new Chronometer();
 $chrono->start();
 
 function showHeader() {
-  global $stepsText, $currentStepKey, $currentStep, $steps, $version;
+  global $currentStepKey, $currentStep, $steps, $version;
   
   ob_end_clean(); // Turn off output buffering
 
@@ -106,9 +106,8 @@ function showHeader() {
   showToc();
 }
 
-function showToc($validTab = null) {
+function showToc() {
   global $stepsText;
-  $steps = array_keys($stepsText);
   $currentStep = basename($_SERVER["PHP_SELF"], ".php");
 
   // 01
@@ -124,7 +123,10 @@ function showToc($validTab = null) {
   $library     = new CLibrary;
 
   $valid = array(
-    "01_check"      => $version->checkAll(false) && $extension->checkAll(false) && $package->checkAll(false) && $restriction->checkAll(false),
+    "01_check"      => $version->checkAll(false) &&
+                       $extension->checkAll(false) &&
+                       $package->checkAll(false) &&
+                       $restriction->checkAll(false),
     "02_fileaccess" => $pathAccess->checkAll(false),
     "03_install"    => $library->checkAll(false),
   );

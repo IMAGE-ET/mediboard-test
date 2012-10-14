@@ -59,6 +59,10 @@ class CUser extends CMbObject {
   
   // Object references
   var $_ref_preferences = null;
+
+  /**
+   * @var CMediusers
+   */
   var $_ref_mediuser    = null;
   
   // Object collections
@@ -189,7 +193,7 @@ class CUser extends CMbObject {
   /**
    * Lazy access to a given user, defaultly connected user
    * 
-   * @param $user_id ref|CUser The user id, connected user if null;
+   * @param integer $user_id The user id, connected user if null;
    * 
    * @return CUser
    */
@@ -346,17 +350,17 @@ class CUser extends CMbObject {
       }
 
       // notContaining
-      if(($target = $pwdSpecs->notContaining) && ($field = $this->$target) && stristr($pwd, $field)) {
+      if (($target = $pwdSpecs->notContaining) && ($field = $this->$target) && stristr($pwd, $field)) {
         return "Le mot de passe ne doit pas contenir '$field'";
       }
       
       // notNear
-      if(($target = $pwdSpecs->notNear) && ($field = $this->$target) && (levenshtein($pwd, $field) < 3)) {
+      if (($target = $pwdSpecs->notNear) && ($field = $this->$target) && (levenshtein($pwd, $field) < 3)) {
         return "Le mot de passe ressemble trop à '$field'";
       }
        
       // alphaAndNum
-      if($pwdSpecs->alphaAndNum && (!preg_match("/[A-z]/", $pwd) || !preg_match("/\d+/", $pwd))) {
+      if ($pwdSpecs->alphaAndNum && (!preg_match("/[A-z]/", $pwd) || !preg_match("/\d+/", $pwd))) {
         return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
       }
     }
@@ -443,8 +447,10 @@ class CUser extends CMbObject {
   /**
    * Merges an array of objects
    * @see parent
-   * @param array An array of CMbObject to merge
-   * @param bool $fast Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
+   *
+   * @param CUser[] $objects An array of CMbObject to merge
+   * @param bool  $fast    Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
+   *
    * @return CMbObject
    */
   function merge($objects, $fast = false) {
@@ -513,7 +519,7 @@ class CUser extends CMbObject {
     $perms = $perms->loadList("user_id = '$user_id'");
 
     // Copy them
-    foreach($perms as $perm) {
+    foreach ($perms as $perm) {
       $perm->perm_module_id = null;
       $perm->user_id = $this->user_id;
       $perm->store();
@@ -524,7 +530,7 @@ class CUser extends CMbObject {
     $perms = $perms->loadList("user_id = '$user_id'");
 
     // Copy them
-    foreach($perms as $perm) {
+    foreach ($perms as $perm) {
       $perm->perm_object_id = null;
       $perm->user_id = $this->user_id;
       $perm->store();

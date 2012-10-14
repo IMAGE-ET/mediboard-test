@@ -87,7 +87,7 @@ var ExObject = {
         var event_name = ExObject.current.event_name;
         showExClassForm(ex_class_id, object_guid, /*object_guid+"_"+*/event_name+"_"+ex_class_id, "", event_name, null, parent_view);
       }
-    }
+    };
     
     inputs.each(function(input){
       var callback = triggerFunc.curry(input, triggers);

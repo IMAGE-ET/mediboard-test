@@ -32,8 +32,8 @@ Class.extend(Function, {
  * @return {Object} recursively merged Object
  */
 Object.merge = function(src, dest){
-  var i, v, result = dest || {};
-  for(i in src){
+  var v, result = dest || {};
+  for(var i in src){
     v = src[i];
     result[i] = (v && typeof(v) === 'object' && !(v.constructor === Array || v.constructor === RegExp) && !Object.isElement(v)) ? Object.merge(v, dest[i]) : result[i] = v;
   }
@@ -686,7 +686,7 @@ Element.addMethods({
   },
   "set": function(element, key, data) {
     return element.writeAttribute("data-"+key, data);
-  },
+  }
 });
 
 Element.addMethods(['input', 'textarea'], {
@@ -1003,7 +1003,7 @@ Element.addMethods("img", {
       ctx.drawImage(element, 0, 0);
       element.src = canvas.toDataURL();
       element.onload = null;
-    }
+    };
     
     if (element.complete) element.onload();
     
@@ -1029,7 +1029,7 @@ Function.getEvent = function(){
       return caller.arguments[0];
     }
   }
-}
+};
 
 Element.findDuplicates = function(attr, tag) {
   var ids = $$((tag || "*")+"["+attr+"]").sort(function(e){return e[attr]});
@@ -1048,7 +1048,7 @@ Element.findDuplicates = function(attr, tag) {
   }
   
   return results;
-}
+};
 
 Element._duplicates = [];
 Element._idConflicts = [];
@@ -1106,4 +1106,4 @@ Event.initKeyboardEvents = function() {
       Event.stop(e);
     }
   });
-}
+};

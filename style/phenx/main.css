@@ -190,7 +190,7 @@ th.category.modify {
 .cancelled {
   color: #fff;
   background-color: #f88 !important;
-  text-shadow: 0 0 0 transparent, 0 0 2px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 0 0 rgba(0, 0, 0, 0.0), 0 0 2px rgba(0, 0, 0, 0.7);
   text-transform: uppercase;
   font-weight: bold;
   text-align: center;
@@ -308,7 +308,7 @@ table.tbl th {
 table.tbl th.title {
   background: #bbb;
   border: none;
-  text-shadow:  0 0 0 transparent,
+  text-shadow:  0 0 0 rgba(0, 0, 0, 0.0),
               -1px  0  .0px rgba(0,0,0,.3), 
                0   1px .0px rgba(0,0,0,.3), 
                1px  0  .0px rgba(0,0,0,.3), 
@@ -360,11 +360,11 @@ table.form th.title {
   font-size: 1.3em;
   background-color: #bbb;
   border: none;
-  text-shadow:  0 0 0 transparent,
-              -1px  0  .0px rgba(0,0,0,.3), 
-               0   1px .0px rgba(0,0,0,.3), 
-               1px  0  .0px rgba(0,0,0,.3), 
-               0  -1px .0px rgba(0,0,0,.3);
+  text-shadow: 0    0  0 rgba(0,0,0,.0),
+              -1px  0  0 rgba(0,0,0,.3),
+               0   1px 0 rgba(0,0,0,.3),
+               1px  0  0 rgba(0,0,0,.3),
+               0  -1px 0 rgba(0,0,0,.3);
 }
 
 table.form th.category {

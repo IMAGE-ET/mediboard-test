@@ -657,7 +657,7 @@ var Calendar = {
       if (elementView != element) {
         elementView.fire("ui:change");
       }
-    }
+    };
     
     element.addClassName('datepicker');
     

@@ -22,6 +22,8 @@ class CPathAccess extends CCheckable {
 
   /**
    * Actually check path is writable
+   *
+   * @param bool $strict Check also warnings
    * 
    * @return bool
    */

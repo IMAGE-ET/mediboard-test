@@ -113,5 +113,3 @@ $config_files = glob("./modules/*/config.php");
 foreach ($config_files as $file) {
   include_once $file;
 }
-
-?>

@@ -36,15 +36,15 @@ class CFTP {
   
   /**
    * Magic method (do not call directly).
-   * @param  string  method name
-   * @param  array   arguments
+   * @param string $name method name
+   * @param array  $args arguments
+   *
    * @return mixed
+   *
    * @throws Exception
    * @throws CMbException
    */
   function __call($name, $args) {
-    global $phpChrono;
-    
     $name = strtolower($name);
     $silent = strncmp($name, 'try', 3) === 0;
     $function_name = $silent ? substr($name, 3) : $name;
@@ -74,7 +74,7 @@ class CFTP {
     
     $echange_ftp->function_name = $name;
     
-    $phpChrono->stop();
+    CApp::$chrono->stop();
     $chrono = new Chronometer();
     $chrono->start();
     $output = null;
@@ -84,11 +84,11 @@ class CFTP {
     catch(CMbException $fault) {
       $echange_ftp->output    = $fault->getMessage();
       $echange_ftp->ftp_fault = 1;
-      $phpChrono->start();
+      CApp::$chrono->start();
       throw $fault;
     }
     $chrono->stop();
-    $phpChrono->start();
+    CApp::$chrono->start();
     
      // response time
     $echange_ftp->response_time = $chrono->total;
@@ -250,7 +250,7 @@ class CFTP {
       throw new CMbException("CSourceFTP-connexion-failed", $this->hostname);
     }
     
-    $tmpfile = tempnam("","");    
+    $tmpfile = tempnam("", "");
     file_put_contents($tmpfile, $source_content);
     $result = $this->_sendFile($tmpfile, $destination_file);
     unlink($tmpfile);
@@ -327,5 +327,3 @@ class CFTP {
     return @ftp_mkdir($this->connexion, $directory);
   }
 }
-
-?>

@@ -39,9 +39,6 @@ CJSLoader::$files = array(
   
   "lib/scriptaculous/lib/prototype.js",
   "lib/scriptaculous/src/scriptaculous.js",
-  
-  //"lib/nwmatcher/nwmatcher.js",
-  //"lib/nwmatcher/adapter.js",
  
   "includes/javascript/console.js",
 
@@ -339,38 +336,8 @@ else {
   $module->showAction();
 }
 
-$phpChrono->stop();
-
-arsort(CMbObject::$cachableCounts);
-arsort(CMbObject::$objectCounts);
-arsort(CApp::$performance["autoload"]);
-
-CApp::$performance["genere"]         = number_format($phpChrono->total, 3);
-CApp::$performance["memoire"]        = CHTMLResourceLoader::getOutputMemory();
-CApp::$performance["objets"]         = CMbObject::$objectCount;
-CApp::$performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
-CApp::$performance["cachableCounts"] = CMbObject::$cachableCounts;
-CApp::$performance["objectCounts"]   = CMbObject::$objectCounts;
-CApp::$performance["ip"]  = $_SERVER["SERVER_ADDR"];
-
-CApp::$performance["size"] = CHTMLResourceLoader::getOutputLength();
-CApp::$performance["ccam"] = array (
-  "cacheCount" => class_exists('CCodeCCAM') ? CCodeCCAM::$cacheCount : 0,
-  "useCount"   => class_exists('CCodeCCAM') ? CCodeCCAM::$useCount : 0
-);
-
-// Data sources performances
-foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
-  if (!$ds) {
-    continue;
-  }
-  
-  $chrono = $ds->chrono;
-  CApp::$performance["dataSources"][$dsn] = array(
-    "count" => $chrono->nbSteps,
-    "time" => $chrono->total,
-  );
-}
+CApp::$chrono->stop();
+CApp::preparePerformance();
 
 // Unlocalized strings
 if (!$suppressHeaders || $ajax) {

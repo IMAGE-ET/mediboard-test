@@ -16,9 +16,11 @@
 class CPHPExtension  extends CPrerequisite {
   /**
    * Check extension load
-   * 
+   *
+   * @param bool $strict Check also warnings
+   *
    * @see parent::check
-   * 
+   *
    * @return bool
    */
   function check($strict = true) {

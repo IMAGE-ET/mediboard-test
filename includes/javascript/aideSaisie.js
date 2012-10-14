@@ -144,24 +144,22 @@ var AideSaisie = {
       
       toolbar.doShow = function() {
         if (toolbar.timeout) {
-          window.clearTimeout(toolbar.timeout)
+          window.clearTimeout(toolbar.timeout);
           toolbar.timeout = null;
         }
         toolbar.show();
-      }
+      };
       
       toolbar.doHide = function() {
         if (toolbar.timeout) {
           return;
         }
         
-        tryHide = function() {
-          toolbar.hide(); 
+        toolbar.timeout = (function() {
+          toolbar.hide();
           toolbar.select(".sub-toolbar").invoke("hide");
           toolbar.canHide = false;
-        }
-        
-        toolbar.timeout = tryHide.delay(0.5);
+        }).delay(0.5);
       };
       
       this.searchField.up().

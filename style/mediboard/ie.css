@@ -5,7 +5,7 @@
 button img, 
 a.button img {
   vertical-align: middle;
-  margin-top: 0 2px;
+  margin: 0 2px;
 }
 
 /* the :not pseudo selector is not recognized, 

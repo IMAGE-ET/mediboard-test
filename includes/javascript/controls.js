@@ -31,11 +31,7 @@ Element.addMethods(['input', 'textarea'], {
       // Text replacement
       var selected = element.value.substring(begin, end);
       if (value) {
-        var s;
-        s = element.value.substring(0, begin) + 
-            value + 
-            element.value.substring(end, element.value.length);
-        element.value = s;
+        element.value = element.value.substring(0, begin) + value + element.value.substring(end, element.value.length);
       }
       
       // Gecko, Opera
@@ -130,7 +126,7 @@ Element.addMethods(['input', 'textarea'], {
     else {
       var offsetToRangeCharacterMove = function(el, offset) {
         return offset - (el.value.slice(0, offset).split("\r\n").length - 1);
-      }
+      };
       
       var range = el.createTextRange();
       var startCharMove = offsetToRangeCharacterMove(el, start);
@@ -151,13 +147,8 @@ Element.addMethods(['input', 'textarea'], {
     
     element.tryFocus();
     var sel = element.getInputSelection(forceFocus);
-    var selected = element.value.substring(sel.start, sel.end);
-    var s = element.value.substring(0, sel.start) + 
-        text + 
-        element.value.substring(sel.end, element.value.length);
-        
-    element.value = s;
-    
+    var value = element.value;
+    element.value = value.substring(0, sel.start) + text + value.substring(sel.end, value.length);
     element.setInputSelection(sel.start, sel.start+text.length);
   },
   setInputPosition: function(element, position) {
@@ -251,7 +242,7 @@ Element.addMethods('input', {
             buffer[start] = element.options.placeholder;
             if(Prototype.Browser.Opera) {
               //Opera won't let you cancel the backspace, so we'll let it backspace over a dummy character.
-              s = writeBuffer();
+              var s = writeBuffer();
               element.value = s.substring(0, start)+" "+s.substring(start);
               element.setInputPosition(start+1);
             }
@@ -425,7 +416,7 @@ Element.addMethods('input', {
       return element.value;
     }
     
-    for (i = 0; i <= maskArray.length; i++) {
+    for (var i = 0; i <= maskArray.length; i++) {
       if (!maskArray[i]) { // To manage the latest char
         reMask += "("+charmap[prevChar]+"{"+count+"})";
         break;
@@ -466,11 +457,11 @@ Element.addMethods('input', {
     if (matches) {
       if (!format) {
         format = '';
-        for (i = 1; (i < matches.length && i < 10); i++) {
+        for (var i = 1; (i < matches.length && i < 10); i++) {
           format += "$"+i;
         }
       }
-      for (i = 1; (i < matches.length && i < 10); i++) {
+      for (var i = 1; (i < matches.length && i < 10); i++) {
         format = format.replace("$"+i, matches[i]);
       }
     } else {
@@ -717,7 +708,7 @@ Element.addMethods('input', {
       
       updateFractionEvent: function(event){
         var element = Event.element(event);
-        element.spinner.updateFraction(element.value, " / ");
+        element.spinner.updateFraction(element.value);
       }
     };
     
@@ -740,7 +731,7 @@ Element.addMethods('input', {
     table.down('.field').update(element);
     
     if (options.showFraction) {
-      element.spinner.updateFraction(element.value, " / ");
+      element.spinner.updateFraction(element.value);
       element.observe("ui:change", element.spinner.updateFractionEvent);
       element.observe("change", element.spinner.updateFractionEvent);
     }

@@ -28,26 +28,31 @@ class CApp {
    */
   static $performance = array(
     // Performance
-    "genere" => null,
+    "genere"  => null,
     "memoire" => null,
-    "size" => null,
-    "objets" => 0,
-    "ip" => null,
+    "size"    => null,
+    "objets"  => 0,
+    "ip"      => null,
     
     // Errors
-    "error" => 0,
+    "error"   => 0,
     "warning" => 0,
-    "notice" => 0,
+    "notice"  => 0,
     
     // Cache
-    "cachableCount" => null,
+    "cachableCount"  => null,
     "cachableCounts" => null,
     
     // Objects
     "objectCounts" => null,
   );
+
+  /**
+   * @var Chronometer Main application chronometer
+   */
+  static $chrono;
     
-  static $handlers = null;
+  static $handlers;
   
   /**
    * Will trigger an error for logging purpose whenever the application dies unexpectedly
@@ -124,15 +129,15 @@ class CApp {
     echo json_encode($data);
     self::rip();
   }
-  
+
   /**
    * Fetch an HTML content of a module view, as a HTTP GET call would do
    * Very useful to assemble multiple views
-   * 
+   *
    * @param object $module    The module name or the file path
    * @param object $file      [optional] The file of the module, or null
-   * @param object $arguments [optional] The GET arguments
-   * 
+   * @param array  $arguments [optional] The GET arguments
+   *
    * @return string The fetched content
    */
   static function fetch($module, $file = null, $arguments = array()) {
@@ -207,14 +212,14 @@ class CApp {
       }
     }
   }
-  
+
   /**
    * Return all child classes of a given class having given properties
-   * 
-   * @param array $parent        [optional] Parent class
-   * @param array $properties    [optional] No property checking if empty
-   * @param bool  $active_module [optional] If true, filter on active modules
-   * 
+   *
+   * @param string $parent        [optional] Parent class
+   * @param array  $properties    [optional] No property checking if empty
+   * @param bool   $active_module [optional] If true, filter on active modules
+   *
    * @return array Class names
    * @todo Default parent class should probably be CModelObject
    */
@@ -387,6 +392,44 @@ class CApp {
       catch (Exception $e) {
         CAppUI::setMsg($e, UI_MSG_ERROR);
       }
+    }
+  }
+
+  /**
+   * Prepare performance data to be displayed
+   *
+   * @return void
+   */
+  static function preparePerformance(){
+    arsort(CMbObject::$cachableCounts);
+    arsort(CMbObject::$objectCounts);
+    arsort(self::$performance["autoload"]);
+
+    self::$performance["genere"]         = number_format(self::$chrono->total, 3);
+    self::$performance["memoire"]        = CHTMLResourceLoader::getOutputMemory();
+    self::$performance["objets"]         = CMbObject::$objectCount;
+    self::$performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
+    self::$performance["cachableCounts"] = CMbObject::$cachableCounts;
+    self::$performance["objectCounts"]   = CMbObject::$objectCounts;
+    self::$performance["ip"]             = $_SERVER["SERVER_ADDR"];
+
+    self::$performance["size"] = CHTMLResourceLoader::getOutputLength();
+    self::$performance["ccam"] = array (
+      "cacheCount" => class_exists("CCodeCCAM") ? CCodeCCAM::$cacheCount : 0,
+      "useCount"   => class_exists("CCodeCCAM") ? CCodeCCAM::$useCount : 0
+    );
+
+    // Data sources performance
+    foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
+      if (!$ds) {
+        continue;
+      }
+
+      $chrono = $ds->chrono;
+      self::$performance["dataSources"][$dsn] = array(
+        "count" => $chrono->nbSteps,
+        "time"  => $chrono->total,
+      );
     }
   }
 }

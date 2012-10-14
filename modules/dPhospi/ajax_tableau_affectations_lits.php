@@ -46,17 +46,15 @@ if (reset($services_ids)) {
   $where_service = "sejour.service_id IN (".join($services_ids, ',').") OR sejour.service_id IS NULL"; 
 }
 
-global $phpChrono;
-
 // Chargement des services
 foreach ($services as &$service) {
-  if (!in_array($service->_id, $services_ids)){
+  if (!in_array($service->_id, $services_ids)) {
     continue;
   }
   
   loadServiceComplet($service, $date, $mode);
-  $phpChrono->stop("Load Service Complet : '$service->_view'");
-  $phpChrono->start();
+  CApp::$chrono->stop("Load Service Complet : '$service->_view'");
+  CApp::$chrono->start();
   $totalLits += $service->_nb_lits_dispo;
 }
 
@@ -90,8 +88,8 @@ if($filterFunction){
 
 $sejour = new CSejour();
 $alerte = $sejour->countList($where, null, $leftjoin);
-$phpChrono->stop("Patient à placer dans la semaine");
-$phpChrono->start();
+CApp::$chrono->stop("Patient à placer dans la semaine");
+CApp::$chrono->start();
 
 $affectation = new CAffectation();
 $affectation->entree = mbAddDateTime("08:00:00",$date);
@@ -116,7 +114,7 @@ $smarty->assign("prestations"           , CPrestation::loadCurrentList());
 $smarty->display("inc_tableau_affectations_lits.tpl");
 
 if (CAppUI::pref("INFOSYSTEM")) {
-  mbTrace(CMbArray::pluck($phpChrono->report, "total"), "Rapport uniquement visible avec les informations système");
+  mbTrace(CMbArray::pluck(CApp::$chrono->report, "total"), "Rapport uniquement visible avec les informations système");
 }
 
 ?>

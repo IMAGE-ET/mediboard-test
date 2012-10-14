@@ -31,17 +31,17 @@ class CSOAPClient {
   /**
    * The constructor
    * 
-   * @param string $source The SOAP source
+   * @param string $type The client type
    * 
-   * @return null
+   * @return self
    */
   function __construct($type = "CMbSOAPClient") {
     $this->type_client = $type;
   }
-  
+
   /**
    * Test if the WSDL is reachable, and create the object SOAPClient
-   * 
+   *
    * @param string  $rooturl        The url of the WSDL
    * @param string  $login          The login
    * @param string  $password       The password
@@ -51,7 +51,8 @@ class CSOAPClient {
    * @param string  $stream_context HTTP method (GET, POST, HEAD, PUT, ...)
    * @param string  $local_cert     Path of the certifacte
    * @param string  $passphrase     Pass phrase for the certificate
-   * 
+   *
+   * @throws CMbException
    * @return CMbSOAPClient | CNuSOAPClient
    */
   public function make($rooturl, $login = null, $password = null, $type = null, $options = array(), $loggable = null, $stream_context = null, $local_cert = null, $passphrase = null) {
@@ -60,12 +61,13 @@ class CSOAPClient {
     }
 
     if (($login && $password) || (array_key_exists('login', $options) && array_key_exists('password', $options))) {
-
-      if (preg_match('#\%u#', $rooturl)) 
+      if (preg_match('#\%u#', $rooturl)) {
         $rooturl = str_replace('%u', $login ? $login : $options['login'], $rooturl);
+      }
     
-      if (preg_match('#\%p#', $rooturl)) 
+      if (preg_match('#\%p#', $rooturl)) {
         $rooturl = str_replace('%p', $password ? $password : $options['password'], $rooturl);
+      }
     }
 
     switch($this->type_client) {
@@ -91,18 +93,17 @@ class CSOAPClient {
 
   /**
    * Call a SOAP function
-   * 
+   *
    * @param string $function_name  The name of the SOAP function to call
    * @param array  $arguments      An array of argument to pass to the function
    * @param array  $options        An associative array of options to pass to the client
-   * @param array  $input_headers  An array of headers to be sent along with the SOAP request. 
-   * @param array  $output_headers If supplied, this array will be filled with the headers from the SOAP response. 
-   * 
+   * @param array  $input_headers  An array of headers to be sent along with the SOAP request.
+   * @param array  $output_headers If supplied, this array will be filled with the headers from the SOAP response.
+   *
+   * @throws SoapFault
    * @return string The result of the call
    */
   public function call($function_name, $arguments, $options = null, $input_headers = null, &$output_headers = null) {
-    global $phpChrono;
-
     $client = $this->client;
     
     if (!is_array($arguments)) {
@@ -138,7 +139,7 @@ class CSOAPClient {
     $echange_soap->type         = $client->type_echange_soap;
 
     $url  = parse_url($client->wsdl_url);
-    $path = explode("/",$url['path']);
+    $path = explode("/", $url['path']);
     $echange_soap->web_service_name = end($path);
     
     $echange_soap->function_name = $function_name;
@@ -150,7 +151,7 @@ class CSOAPClient {
     
     $echange_soap->store();
     
-    $phpChrono->stop();
+    CApp::$chrono->stop();
     $chrono = new Chronometer();
     $chrono->start();
 
@@ -168,13 +169,13 @@ class CSOAPClient {
       $echange_soap->soapfault    = 1;
       $echange_soap->store();
       
-      $phpChrono->start();
+      CApp::$chrono->start();
       
       throw $fault;
     }
     
     $chrono->stop();
-    $phpChrono->start();
+    CApp::$chrono->start();
     $echange_soap->date_echange = mbDateTime();
     // trace
     if (CAppUI::conf("webservices trace")) {

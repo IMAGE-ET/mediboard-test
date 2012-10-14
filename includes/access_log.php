@@ -36,7 +36,7 @@ $log->period   = mbTransformTime(null, null, "%Y-%m-%d %H:00:00");;
 // Probe aquisition
 $rusage = getrusage();
 $log->hits++;
-$log->duration    += $phpChrono->total;
+$log->duration    += CApp::$chrono->total;
 $log->processus   += floatval($rusage["ru_utime.tv_usec"]) / 1000000 + $rusage["ru_utime.tv_sec"];
 $log->processor   += floatval($rusage["ru_stime.tv_usec"]) / 1000000 + $rusage["ru_stime.tv_sec"];
 $log->request     += $ds->chrono->total;

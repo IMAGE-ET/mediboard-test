@@ -155,5 +155,5 @@ TreeView.prototype = {
   collapseAll: function(){
     this.extractBranches().each(this.collapse);
   }
-}
+};
 

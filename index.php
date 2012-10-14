@@ -70,9 +70,9 @@ require "./classes/CSessionHandler.class.php"; // Explicit include before sessio
 require "./includes/session.php";
 
 // Start chrono (after session_start as it may be locked by another request)
-$phpChrono = new Chronometer;
-$phpChrono->main = true;
-$phpChrono->start();
+CApp::$chrono = new Chronometer;
+CApp::$chrono->main = true;
+CApp::$chrono->start();
 
 // Load default preferences if not logged in
 if (!CAppUI::$instance->user_id) {
@@ -227,8 +227,8 @@ if ($user->isInstalled()) {
 
 // Load DB-stored configuration schema
 $configurations = glob("./modules/*/configuration.php");
-foreach($configurations as $_configuration) {
-  require $_configuration;
+foreach ($configurations as $_configuration) {
+  include $_configuration;
 }
 
 // Init output filter
@@ -238,7 +238,8 @@ CApp::notify("BeforeMain");
 
 
 // Check if the mobile feature is available and if the user agent is a mobile
-if (is_file("./mobile/main.php") && !empty($_SESSION["browser"]["mobile"]) && (CAppUI::pref("MobileUI") || !CAppUI::$user->_id)) {
+$enable_mobile_ui = CAppUI::pref("MobileUI") || !CAppUI::$user->_id;
+if (is_file("./mobile/main.php") && !empty($_SESSION["browser"]["mobile"]) && $enable_mobile_ui) {
   include "./mobile/main.php";
 }
 else {

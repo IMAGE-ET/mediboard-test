@@ -50,7 +50,7 @@ span.vertical .orig {
 
 @media screen {
   .ua-msie span.vertical {
-    filter: flipv fliph;
+    -ms-filter: flipv fliph;
     background-color: inherit;
   }
 }

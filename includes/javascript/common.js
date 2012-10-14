@@ -33,7 +33,7 @@ function errorHandler(errorMsg, url, lineNumber, exception) {
   } catch (e) {}
   
   return Preferences.INFOSYSTEM == 0; // true to ignore errors
-};
+}
 
 /*
  * @author Rob Reid
@@ -248,7 +248,7 @@ var Localize = {
   onSubmit: function(form) {
     return onSubmitFormAjax(form, location.reload.bind(location));
   }
-}
+};
 
 var $T = Localize.that;
 

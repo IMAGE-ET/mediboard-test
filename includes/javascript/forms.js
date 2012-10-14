@@ -34,7 +34,7 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
   // Add the del hidden field when missing
   // @todo Remove all del hidden fields in code !!!
   if (oForm.del == undefined) {
-	oForm.insert(DOM.input({ name: 'del', type: 'hidden', value: '' }));
+    oForm.insert(DOM.input({ name: 'del', type: 'hidden', value: '' }));
   }
   
   oForm.del.value = 1;
@@ -54,7 +54,7 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
   * @param element A form element (Form.Element or id) : input, textarea, select, group of radio buttons, group of checkboxes
   * @param value   If set, sets the value to the element. Can be an array of values : ['elementvalue1', 'elementvalue2', ...] 
   * @param fire    Determines wether the onchange callback has to be called or not
-  * @return        An array of values for multiple selectable elements, a boolean for 
+  * @return        An array of values for multiple selectable elements, a boolean for
   *                single checkboxes/radios, a string for textareas and text inputs
   */
 function $V (element, value, fire) {
@@ -159,16 +159,6 @@ var FormObserver = {
     this.lastFCKChange = timer;
   }
 };
-
-function isKeyAllowed(event, allowed){
-  var key = Event.key(event);
-  if (!(key >= 48 && key <= 90 || 
-        key >= 96 && key <= 111 || 
-        key >= 186 && key <= 222)) return true;
-  
-  var c = String.fromCharCode(key);
-  if (allowed.test(c)) return c;
-}
 
 function prepareForm(oForm) {
   var sFormName;
@@ -347,27 +337,31 @@ function prepareForm(oForm) {
       
       if (applets.length) {
         if (!window._focusElement) {
-        window._focusElement = oElement;
-        
-        var inactiveApplets;
-        var tries = 50;
-            
-        var waitForApplet = function() {
-          inactiveApplets = applets.length;
-          for(var i = 0; i < applets.length; i++) {
-            if (Prototype.Browser.IE || "isActive" in applets[i] && 
-                Object.isFunction(applets[i].isActive) && 
-                applets[i].isActive()) inactiveApplets--;
-            else break;
-          }
-          if (inactiveApplets == 0) {
-            window._focusElement.focus();
-            return;
-          }
-          else if (tries--) setTimeout(waitForApplet, 200);
-        }
+          window._focusElement = oElement;
 
-        waitForApplet();
+          var inactiveApplets;
+          var tries = 50;
+
+          var waitForApplet = function() {
+            inactiveApplets = applets.length;
+            for(var i = 0; i < applets.length; i++) {
+              if (Prototype.Browser.IE || "isActive" in applets[i] &&
+                  Object.isFunction(applets[i].isActive) && applets[i].isActive()) {
+                inactiveApplets--;
+              }
+              else {
+                break;
+              }
+            }
+            if (inactiveApplets == 0) {
+              window._focusElement.focus();
+            }
+            else if (tries--) {
+              setTimeout(waitForApplet, 200);
+            }
+          };
+
+          waitForApplet();
         }
       }
       else oElement.focus();
@@ -587,8 +581,12 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
 /**
  * Submit a form in Ajax mode
  * New version to plage in onsubmit event of the form
- * @param oForm Form element
- * @return false to prevent page reloading
+ *
+ * @param {HTMLFormElement} oForm    Form element
+ * @param {Object}          oOptions Options
+ * @param {HTMLElement}     ioTarget Target in the DOM
+ *
+ * @return {Boolean} false to prevent page reloading
  */
 function onSubmitFormAjax(oForm, oOptions, ioTarget) {
   // onComplete callback definition shortcut

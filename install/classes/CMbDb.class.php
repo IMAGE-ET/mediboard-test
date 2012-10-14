@@ -24,17 +24,17 @@ class CMbDb {
   
   var $_db;
   var $_errors = array();
-  
+
   /**
    * Constructor
-   * 
-   * @param string $host SQL server hostname
-   * @param string $user Username
-   * @param string $pass Password
-   * @param string $base Database name
-   * @param string $port Used port
-   * 
-   * @return void
+   *
+   * @param string      $host SQL server hostname
+   * @param string      $user Username
+   * @param string      $pass Password
+   * @param bool|string $base Database name
+   * @param string      $port Used port
+   *
+   * @return CMbDb
    */
   function __construct($host, $user, $pass, $base = false, $port = "3306") {
     $this->dsn = array(

@@ -32,7 +32,7 @@ class CUrlRestriction extends CCheckable {
   
     $response = false;
     if (is_array($headers)) {
-      foreach ($headers as $key => $header) {
+      foreach ($headers as $header) {
         if (substr($header, 0, 4) == "HTTP") {
           $response = explode(" ", $header);
           $response = $response[1];

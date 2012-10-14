@@ -29,7 +29,6 @@ class CViewSender extends CMbObject {
   var $max_archives  = null;
   var $last_duration = null;
   var $last_size     = null;
-    
   
   // Form fields
   var $_params = null;
@@ -135,11 +134,9 @@ class CViewSender extends CMbObject {
   }
 
   function makeFile() {
-    
     $file = tempnam("", "view");
-    
-    global $phpChrono;
-    $phpChrono->stop();
+
+    CApp::$chrono->stop();
     $chrono = new Chronometer();
     $chrono->start();
     
@@ -148,7 +145,7 @@ class CViewSender extends CMbObject {
     
     if (file_put_contents($file, $contents) === false) {
       $chrono->stop();
-      $phpChrono->start();
+      CApp::$chrono->start();
       
       $this->clearTempFiles();
       
@@ -156,7 +153,7 @@ class CViewSender extends CMbObject {
     }
     
     $chrono->stop();
-    $phpChrono->start();
+    CApp::$chrono->start();
     
     // Trace but don't user log
     $this->_spec->loggable = false;
@@ -168,10 +165,8 @@ class CViewSender extends CMbObject {
   }
   
   function sendFile() {
-    global $phpChrono;
-       
     // On transmet aux sources le fichier
-    foreach($this->loadRefSendersSource() as $_sender_source) {
+    foreach ($this->loadRefSendersSource() as $_sender_source) {
       $_sender_source->last_datetime = mbDateTime();
       $_sender_source->last_status   = "triggered";
       $_sender_source->last_duration = null;
@@ -247,10 +242,11 @@ class CViewSender extends CMbObject {
   /**
    * Populate archive directory up to max_archives files
    * 
-   * @param CFTP $ftp        FTP connector 
-   * @param string $basename Base name for archive directory
+   * @param CFTP    $ftp        FTP connector
+   * @param string  $basename   Base name for archive directory
    * @param boolean $compressed True if file is an archive
-   * @return int             Current archive count
+   *
+   * @return int Current archive count
    */
   function archiveFile(CFTP $ftp, $basename, $compressed) {
     try {
@@ -279,5 +275,3 @@ class CViewSender extends CMbObject {
     return count($ftp->getListFiles($directory));
   }
 }
-
-?>
