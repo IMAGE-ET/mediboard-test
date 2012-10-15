@@ -1833,7 +1833,40 @@ class CSetupdPpatients extends CSetup {
               ADD `drain_shirley` FLOAT UNSIGNED AFTER `drain_mediastinal`";
     $this->addQuery($query);
     
-    $this->mod_version = "1.58";
+    $this->makeRevision("1.58");
+    
+    $query = "CREATE TABLE `correspondant_modele` (
+      `correspondant_modele_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `group_id` INT (11) UNSIGNED,
+      `relation` ENUM ('assurance','autre','confiance','employeur','inconnu','prevenir'),
+      `relation_autre` VARCHAR (255),
+      `nom` VARCHAR (255),
+      `nom_jeune_fille` VARCHAR (255),
+      `prenom` VARCHAR (255),
+      `naissance` CHAR (10),
+      `adresse` TEXT,
+      `cp` INT (5) UNSIGNED ZEROFILL,
+      `ville` VARCHAR (255),
+      `tel` VARCHAR (20),
+      `mob` VARCHAR (20),
+      `fax` VARCHAR (20),
+      `urssaf` BIGINT (11) UNSIGNED ZEROFILL,
+      `parente` ENUM ('ami','ascendant','autre','beau_fils','colateral','collegue','compagnon','conjoint','directeur','divers','employeur','employe','enfant','enfant_adoptif','entraineur','epoux','frere','grand_parent','mere','pere','petits_enfants','proche','proprietaire','soeur','tuteur'),
+      `parente_autre` VARCHAR (255),
+      `email` VARCHAR (255),
+      `remarques` TEXT,
+      `ean` VARCHAR (30),
+      `num_assure` VARCHAR (30),
+      `employeur` INT (11) UNSIGNED
+     ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `correspondant_modele` 
+      ADD INDEX (`group_id`),
+      ADD INDEX (`employeur`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.59";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

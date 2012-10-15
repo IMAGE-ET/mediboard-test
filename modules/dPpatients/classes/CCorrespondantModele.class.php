@@ -1,0 +1,85 @@
+<?php 
+/**
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage dPpatients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
+
+/**
+ * Correspondants du patient
+ */
+
+class CCorrespondantModele extends CMbObject {
+  
+  // DB Table key
+  var $correspondant_modele_id = null;
+  
+  // DB References
+  var $group_id   = null;
+  
+  // DB Fields
+  var $relation   = null;
+  var $relation_autre = null;
+  var $nom        = null;
+  var $nom_jeune_fille = null;
+  var $prenom     = null;
+  var $naissance  = null;
+  var $adresse    = null;
+  var $cp         = null;
+  var $ville      = null;
+  var $tel        = null;
+  var $mob        = null;
+  var $fax        = null;
+  var $urssaf     = null;
+  var $parente    = null;
+  var $parente_autre = null;
+  var $email      = null;
+  var $remarques  = null;
+  var $ean        = null;
+  var $num_assure = null;
+  var $employeur  = null;
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = "correspondant_modele";
+    $spec->key   = "correspondant_modele_id";
+    return $spec;
+  }
+  
+  function getProps() {
+    $specs = parent::getProps();
+    $specs["group_id"]   = "ref class|CGroups";
+    $specs["relation"]   = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir";
+    $specs["relation_autre"] = "str";
+    $specs["nom"]        = "str confidential seekable";
+    $specs["nom_jeune_fille"] = "str";
+    $specs["prenom"]     = "str";
+    $specs["naissance"]  = "birthDate mask|99/99/9999 format|$3-$2-$1";
+    $specs["adresse"]    = "text";
+    $specs["cp"]         = "numchar minLength|4 maxLength|5";
+    $specs["ville"]      = "str confidential";
+    $specs["tel"]        = "phone confidential";
+    $specs["mob"]        = "phone confidential";
+    $specs["fax"]        = "phone confidential";
+    $specs["urssaf"]     = "numchar length|11 confidential";
+    $specs["parente"]    = "enum list|ami|ascendant|autre|beau_fils|colateral|collegue|compagnon|conjoint|directeur|divers|employeur|employe|enfant|enfant_adoptif|entraineur|epoux|frere|grand_parent|mere|pere|petits_enfants|proche|proprietaire|soeur|tuteur";
+    $specs["parente_autre"] = "str";
+    $specs["email"]      = "str maxLength|255";
+    $specs["remarques"]  = "text";
+    $specs["ean"]        = "str maxLength|30";
+    $specs["num_assure"] = "str maxLength|30";
+    $specs["employeur"]  = "ref class|CCorrespondantPatient";
+    return $specs;
+  }
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->relation ?
+      CAppUI::tr("CCorrespondantPatient.relation.".$this->relation) :
+      $this->relation_autre;
+  }
+}

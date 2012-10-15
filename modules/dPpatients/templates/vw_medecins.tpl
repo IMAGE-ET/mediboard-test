@@ -47,7 +47,7 @@ function onSubmitCorrespondant(form) {
       <input type="hidden" name="a" value="vw_medecins" />
       <input type="hidden" name="dialog" value="1" />
       {{else}}
-      <input type="hidden" name="tab" value="{{$tab}}" />
+      <input type="hidden" name="tab" value="vw_correspondants" />
       {{/if}}
       <input type="hidden" name="new" value="1" />
       
@@ -120,8 +120,13 @@ function onSubmitCorrespondant(form) {
           {{/if}}
           <th>{{mb_title class=CMedecin field=nom}}</th>
           <th>{{mb_title class=CMedecin field=adresse}}</th>
-          <th>{{mb_colonne class=CMedecin field=cp    order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_medecins"}}</th>
-          <th>{{mb_colonne class=CMedecin field=ville order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_medecins"}}</th>
+          {{if $dialog}}
+            <th>{{mb_colonne class=CMedecin field=cp    order_col=$order_col order_way=$order_way url="?m=$m&a=vw_medecins&dialog=1"}}</th>
+            <th>{{mb_colonne class=CMedecin field=ville order_col=$order_col order_way=$order_way url="?m=$m&a=vw_medecins&dialog=1"}}</th>
+          {{else}}
+            <th>{{mb_colonne class=CMedecin field=cp    order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_correspondants"}}</th>
+            <th>{{mb_colonne class=CMedecin field=ville order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_correspondants"}}</th>
+          {{/if}}
           <th>{{mb_title class=CMedecin field=type}}</th>
           <th>{{mb_title class=CMedecin field=disciplines}}</th>
           <th>{{mb_title class=CMedecin field=tel}}</th>
@@ -140,7 +145,7 @@ function onSubmitCorrespondant(form) {
         {{foreach from=$medecins item=_medecin}}
         {{assign var=medecin_id value=$_medecin->_id}}
         <tr {{if $medecin->_id == $_medecin->_id}}class="selected"{{/if}}>
-          {{mb_ternary var=href test=$dialog value="#choose" other="?m=$m&tab=$tab&medecin_id=$medecin_id"}}
+          {{mb_ternary var=href test=$dialog value="#choose" other="?m=$m&tab=vw_correspondants&medecin_id=$medecin_id"}}
 
           {{if !$dialog}}
           <td><input type="checkbox" name="objects_id[]" value="{{$_medecin->_id}}" /></td>
@@ -177,7 +182,7 @@ function onSubmitCorrespondant(form) {
     </td>
     
     <td id="addCorres" {{if $dialog}}style="display:none"{{/if}}>
-      {{mb_script module="dPpatients" script="autocomplete"}}
+      {{mb_script module="dPpatients" script="autocomplete" ajax=true}}
       <script type="text/javascript">
       Main.add(function () {
         InseeFields.initCPVille("editFrm", "cp", "ville","tel");

@@ -1,11 +1,59 @@
+{{*
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage dPpatients
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ *}}
+
 {{mb_script module="patients" script="autocomplete" ajax=true}}
+{{mb_default var=mode_modele value=0}}
 
 <script type="text/javascript">
   InseeFields.initCPVille("editCorrespondant", "cp", "ville", "tel");
 
   Main.add(function() {
-    Calendar.regField(getForm("editCorrespondant").date_debut, null, { noView: false } );
-    Calendar.regField(getForm("editCorrespondant").date_fin  , null, { noView: false } );
+    var form = getForm("editCorrespondant");
+    Calendar.regField(form.date_debut, null, { noView: false } );
+    Calendar.regField(form.date_fin  , null, { noView: false } );
+    
+    {{if !$mode_modele}}
+      // Autocomplete sur le nom du correspondant
+      var url = new Url("system", "ajax_seek_autocomplete");
+      url.addParam("object_class", "CCorrespondantModele");
+      url.addParam("where[group_id]", "{{$g}}");
+      url.addParam("input_field", "nom");
+      url.autoComplete(form.nom, null, {
+        minChars: 2,
+        method: "get",
+        select: "view",
+        callback: function(input, queryString){
+          var form = getForm("editCorrespondant");
+          return queryString+"&where[relation]="+$V(form.relation);
+        },
+        afterUpdateElement: function(field, selected){
+          var form = field.form;
+          var selected = selected.select(".view")[0];
+          $V(form.nom, selected.get("nom"));
+          $V(form.nom_jeune_fille, selected.get("nom_jeune_fille"));
+          $V(form.prenom, selected.get("prenom"));
+          $V(form.adresse, selected.get("adresse"));
+          $V(form.cp, selected.get("cp"));
+          $V(form.ville, selected.get("ville"));
+          $V(form.tel, selected.get("tel"));
+          $V(form.mob, selected.get("mob"));
+          $V(form.fax, selected.get("fax"));
+          $V(form.urssaf, selected.get("urssaf"));
+          $V(form.ean, selected.get("ean"));
+          $V(form.parente, selected.get("parente"));
+          $V(form.email, selected.get("email"));
+          $V(form.remarques, selected.get("remarques"));
+        }
+      });
+    {{/if}}
+    
   } );
   toggleUrrsafParente = function(elt) {
 
@@ -102,10 +150,18 @@
 
 <form name="editCorrespondant" method="post" action="?">
   <input type="hidden" name="m" value="dPpatients" />
-  <input type="hidden" name="dosql" value="do_correspondant_patient_aed" />
+  {{if $mode_modele}}
+    <input type="hidden" name="dosql" value="do_correspondant_modele_aed" />
+    <input type="hidden" name="callback" value="CorrespondantModele.afterSave" />
+    <input type="hidden" name="group_id" value="{{$g}}" />
+  {{else}}
+    <input type="hidden" name="dosql" value="do_correspondant_patient_aed" />
+    {{mb_field object=$correspondant field="patient_id" hidden=true}}
+  {{/if}}
+  
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$correspondant}}
-  {{mb_field object=$correspondant field="patient_id" hidden=true}}
+  
 
   <table class="form">
     <tr>
@@ -129,7 +185,13 @@
     </tr>
     <tr>
       <th style="width: 30%;">{{mb_label object=$correspondant field="nom"}}</th>
-      <td>{{mb_field object=$correspondant field="nom"}}</td>
+      <td>
+        {{if $mode_modele}}
+          {{mb_field object=$correspondant field="nom"}}
+        {{else}}
+          <input type="text" name="nom" class="autocomplete" />
+        {{/if}}
+      </td>
     </tr>
     <tr {{if $correspondant->relation != "confiance"}}style="display: none;"{{/if}} id="nom_jeune_fille">
       <th>{{mb_label object=$correspondant field="nom_jeune_fille"}}</th>
@@ -210,23 +272,26 @@
     </tr>
     <tr>
       <th>{{mb_label object=$correspondant field="remarques"}}</th>
-      <td>{{mb_field object=$correspondant field="remarques" onchange="this.form.onsubmit()"}}</td>
+      <td>{{mb_field object=$correspondant field="remarques"}}</td>
     </tr>
 
     <tr id="ean"  {{if ($correspondant->relation != "assurance" && $correspondant->_id) || $conf.ref_pays == 1}} style="display: none;"{{/if}}>
       <th>{{mb_label object=$correspondant field="ean"}}</th>
       <td>{{mb_field object=$correspondant field="ean"}}</td>
     </tr>
-
-    <tr id="date_debut" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
-      <th>{{mb_label object=$correspondant field="date_debut"}}</th>
-      <td>{{mb_field object=$correspondant field="date_debut"}}</td>
-    </tr>
-
-    <tr id="date_fin" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
-      <th>{{mb_label object=$correspondant field="date_fin"}}</th>
-      <td>{{mb_field object=$correspondant field="date_fin"}}</td>
-    </tr>
+    
+    {{if !$mode_modele}}
+      <tr id="date_debut" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
+        <th>{{mb_label object=$correspondant field="date_debut"}}</th>
+        <td>{{mb_field object=$correspondant field="date_debut"}}</td>
+      </tr>
+  
+      <tr id="date_fin" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
+        <th>{{mb_label object=$correspondant field="date_fin"}}</th>
+        <td>{{mb_field object=$correspondant field="date_fin"}}</td>
+      </tr>
+    {{/if}}
+    
     <tr>
       <td colspan="2" style="text-align:center;">
         <button type="button" class="save" onclick="Correspondant.onSubmit(this.form);" style="margin: auto;">
