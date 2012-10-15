@@ -13,11 +13,11 @@
  */
 class CHprim21Patient extends CHprim21Object {
   // DB Table key
-	var $hprim21_patient_id = null;
+  var $hprim21_patient_id = null;
   
   // DB references
   var $patient_id = null;
-	
+  
   // Patient DB Fields
   var $nom                       = null;
   var $prenom                    = null;
@@ -96,7 +96,7 @@ class CHprim21Patient extends CHprim21Object {
   }
   
   function getProps() {
-  	$specsParent = parent::getProps();
+    $specsParent = parent::getProps();
     $specs = array (
       // Patient
       "patient_id"                => "ref class|CPatient",
@@ -110,7 +110,7 @@ class CHprim21Patient extends CHprim21Object {
       "nom_soundex2"              => "str",
       "prenom_soundex2"           => "str",
       "nomjf_soundex2"            => "str",
-      "naissance"                 => "birthDate mask|99/99/9999 format|$3-$2-$1",
+      "naissance"                 => "birthDate",
       "sexe"                      => "enum list|M|F|U",
       "adresse1"                  => "str",
       "adresse2"                  => "str",
@@ -168,25 +168,25 @@ class CHprim21Patient extends CHprim21Object {
     return array_merge($specsParent, $specs);
   }
     
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps["hprim21_complementaires"] = "CHprim21Complementaire hprim21_patient_id";
-	  $backProps["hprim21_sejours"]         = "CHprim21Sejour hprim21_patient_id";
-	  return $backProps;
-	}
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["hprim21_complementaires"] = "CHprim21Complementaire hprim21_patient_id";
+    $backProps["hprim21_sejours"]         = "CHprim21Sejour hprim21_patient_id";
+    return $backProps;
+  }
 
   function updatePlainFields() {
-  	
-  	parent::updatePlainFields();
-  	 
+    
+    parent::updatePlainFields();
+     
     $soundex2 = new soundex2;
     if ($this->nom) {
-  	  $this->nom = strtoupper($this->nom);
+      $this->nom = strtoupper($this->nom);
       $this->nom_soundex2 = $soundex2->build($this->nom);
     }
     
     if ($this->nom_jeune_fille) {
-  	  $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);
+      $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);
       $this->nomjf_soundex2 = $soundex2->build($this->nom_jeune_fille);
     }
 
@@ -296,7 +296,7 @@ class CHprim21Patient extends CHprim21Object {
   }
   
   function updateFormFields() {
-  	parent::updateFormFields();
+    parent::updateFormFields();
     $this->_view = "$this->civilite $this->nom $this->prenom [$this->external_id]";
   }
   

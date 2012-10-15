@@ -27,7 +27,7 @@
     </tbody>
   {{foreachelse}}
     <tr>
-      <td colspan="6" class="empty">Aucun serveur actif</td>
+      <td colspan="7" class="empty">Aucun serveur actif</td>
     </tr>
   {{/foreach}}
 </table>

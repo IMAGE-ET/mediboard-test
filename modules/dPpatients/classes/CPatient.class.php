@@ -319,9 +319,7 @@ class CPatient extends CMbObject {
     $props["avs"]               = "str maxLength|15";// mask|999.99.999.999";
     
     $conf = CAppUI::conf("dPpatients CPatient identitovigilence");
-    $props["naissance"] = $conf === "date" || $conf === "doublons" ? 
-      "birthDate mask|99/99/9999 format|$3-$2-$1 notNull" :
-      "birthDate mask|99/99/9999 format|$3-$2-$1";  
+    $props["naissance"] = $conf === "date" || $conf === "doublons" ? "birthDate notNull" : "birthDate";
 
     $props["deces"]             = "date progressive";
     $props["rques"]             = "text";

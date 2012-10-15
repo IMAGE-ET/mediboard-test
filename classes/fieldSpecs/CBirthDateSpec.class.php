@@ -43,6 +43,10 @@ class CBirthDateSpec extends CMbFieldSpec {
     }
   }
   
+  function getPropSuffix() {
+    return "mask|99/99/9999 format|$3-$2-$1";
+  }
+  
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);
     
