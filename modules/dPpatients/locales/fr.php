@@ -191,6 +191,7 @@ $locales['CConstantesMedicales-_drain_3_cumul'] = 'Cumul drain 3';
 $locales['CConstantesMedicales-_drain_mediastinal_cumul'] = 'Cumul drain mediastinal';
 $locales['CConstantesMedicales-_drain_pleural_1_cumul'] = 'Cumul drain pleural 1';
 $locales['CConstantesMedicales-_drain_pleural_2_cumul'] = 'Cumul drain pleural 2';
+$locales['CConstantesMedicales-_drain_shirley_cumul'] = 'Cumul drain Shirley';
 $locales['CConstantesMedicales-_drain_thoracique_1_cumul'] = 'Cumul drain thoracique 1';
 $locales['CConstantesMedicales-_drain_thoracique_2_cumul'] = 'Cumul drain thoracique 2';
 $locales['CConstantesMedicales-_ecpa_total'] = 'ECPA total';
@@ -1416,12 +1417,12 @@ $locales['Intermax.error.-23'] = 'La FSE ne peut être mise en attente parce qu\'
 $locales['Intermax.error.-24'] = 'La FSE ne peut être sortie de l\'attente parce qu\'elle n\'est pas en attente';
 $locales['Intermax.error.-25'] = 'La DRE Initiale n\'a jamais été transmise ou nla convention utilisée ne permet la création d\'une DRE telle DRE';
 $locales['Intermax.error.-26'] = 'La DRE d\'Annulation ne peut être créée 
-	- si la DRE Initiale n\'a jamais été transmise ou 
-	- si la convention utilisée ne';
+  - si la DRE Initiale n\'a jamais été transmise ou 
+  - si la convention utilisée ne';
 $locales['Intermax.error.-29'] = 'l\'action sur FSE est inconnue';
 $locales['Intermax.error.-30'] = 'Le praticien de Mediboard ne correspond à aucune fiche praticien de LogicMax. Vérifiez que : 
-	1. Le code Adeli est bien paramétré dans Mediboard
-	2. Le praticien est configuré dans LogicMax avec le même code Adeli';
+  1. Le code Adeli est bien paramétré dans Mediboard
+  2. Le praticien est configuré dans LogicMax avec le même code Adeli';
 $locales['Intermax.error.-31'] = 'La praticien est salarié ou remplaçant non autorisé à facturer';
 $locales['Intermax.error.-32'] = 'Le praticien est non actif ou non autorisé à facturer';
 $locales['Intermax.error.-33'] = 'Aucun praticien référencé dans la base de LogicMax';
@@ -1447,8 +1448,8 @@ $locales['Intermax.error.0'] = 'Exécution interrompue, aucun résultat.';
 $locales['Intermax.error.100'] = 'Il n\'est plus utile de cliquer sur les boutons pour récupérer les données LogicMax, car le retour des résultats est désormais automatique !
 
 Si toutefois vous voulez forcer la lecture, il semble que le retour LogicMax soit non accessible. Vérifiez que :
-	1. LogicMax est bien lancé
-	2. Une fonction LogicMax a bien été déclenchée depuis la dernière récupération de résultats';
+  1. LogicMax est bien lancé
+  2. Une fonction LogicMax a bien été déclenchée depuis la dernière récupération de résultats';
 $locales['Intermax.error.110'] = 'Il n\'est plus utile de cliquer sur les boutons pour récupérer les données LogicMax, car le retour des résultats est désormais automatique !
 
 Si toutefois vous voulez forcer la lecture, il semble que le retour LogicMax récupéré ne correspond pas à la fonction demandée. nEssayez de relancer la fonction demandée.
