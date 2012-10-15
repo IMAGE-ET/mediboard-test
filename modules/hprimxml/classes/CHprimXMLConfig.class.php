@@ -26,11 +26,20 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     // Handle
     "use_sortie_matching",
     "fully_qualified",
+    
+    // Format
+    "encoding", 
+    
+    // Purge
+    "purge_idex_movements",
+    
+    // Repair
+    "repair_patient"
   );
   
   var $hprimxml_config_id  = null;
 
-  // Object configs
+  // Digit
   var $type_sej_hospi      = null;
   var $type_sej_ambu       = null;
   var $type_sej_urg        = null;
@@ -40,10 +49,18 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
   var $type_sej_dialyse    = null;
   var $type_sej_pa         = null;
  
+  // Handle
   var $use_sortie_matching = null;
   var $fully_qualified     = null;
   
+  // Format
   var $encoding            = null;
+  
+  // Purge
+  var $purge_idex_movements = null;
+  
+  // Repair
+  var $repair_patient       = null;
  
   var $_categories = array(
     // Format
@@ -67,6 +84,16 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
       "type_sej_chimio",
       "type_sej_dialyse",
       "type_sej_pa",
+    ),
+    
+    // Purge
+    "purge" => array(
+      "purge_idex_movements"
+    ),
+    
+    // Repair
+    "auto-repair" => array(
+      "repair_patient"
     )
   );
   
@@ -97,6 +124,12 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     // Handle
     $props["use_sortie_matching"] = "bool default|1";
     $props["fully_qualified"]     = "bool default|1";
+        
+    // Repair
+    $props["repair_patient"]       = "bool default|1";
+    
+    // Purge
+    $props["purge_idex_movements"] = "bool default|0";
     
     return $props;
   }

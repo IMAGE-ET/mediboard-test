@@ -26,18 +26,23 @@ class CDestinataireHprimConfig extends CMbObject {
   var $receive_ack          = null;
   
   var $_categories = array(
+    // Format
     "format" => array(
       "encoding", 
       "uppercase_fields",
     ),
+    
+    // Application
     "application" => array(
       "receive_ack" 
     ),
+    
+    // Send
     "send" => array(
       "send_sortie_prevue", 
       "send_all_patients",
       "send_default_serv_with_type_sej",
-    ),
+    )
   );  
   
   function getSpec() {
@@ -62,7 +67,7 @@ class CDestinataireHprimConfig extends CMbObject {
     $props["send_default_serv_with_type_sej"] = "bool default|0";
     
     // Application
-    $props["receive_ack"] = "bool default|1";
+    $props["receive_ack"]          = "bool default|1";
     
     return $props;
   }

@@ -327,6 +327,7 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
     // Si CIP
     else {      
       $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $idSourcePatient);
+     
       // idSource non connu
       if (!$IPP->_id) {
         // idCible fourni
@@ -345,10 +346,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             // Mapping du patient
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);
           
-            // Notifier les autres destinataires autre que le sender
-            $newPatient->_eai_initiateur_group_id = $sender->group_id;
-            $msgPatient = $newPatient->store();
-        
+            // On store le patient
+            $msgPatient = CEAIPatient::storePatient($newPatient, $sender);
+
             $modified_fields = CEAIPatient::getModifiedFields($newPatient);
             
             $_code_IPP      = "I021";
@@ -362,8 +362,6 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
         }
         // Mapping du patient
         $newPatient = $this->mappingPatient($data['patient'], $newPatient);
-        // Notifier les autres destinataires autre que le sender
-        $newPatient->_eai_initiateur_group_id = $sender->group_id;
               
         if (!$newPatient->_id) {
           // Patient retrouvé
@@ -371,7 +369,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             // Mapping du patient
             $newPatient = $this->mappingPatient($data['patient'], $newPatient);
             
-            $msgPatient = $newPatient->store();
+            // On store le patient
+            $msgPatient = CEAIPatient::storePatient($newPatient, $sender);
         
             $modified_fields = CEAIPatient::getModifiedFields($newPatient);
             
@@ -379,7 +378,8 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $_modif_patient = true; 
             $commentaire    = "Patient modifié : $newPatient->_id.  Les champs mis à jour sont les suivants : $modified_fields.";           
           } else {
-            $msgPatient = $newPatient->store();
+            // On store le patient
+            $msgPatient = CEAIPatient::storePatient($newPatient, $sender);
           
             $commentaire = "Patient créé : $newPatient->_id. ";
           }
@@ -428,9 +428,9 @@ class CHPrimXMLEnregistrementPatient extends CHPrimXMLEvenementsPatients {
             $_code_IPP = "A020";
           }
         }
-        // Notifier les autres destinataires autre que le sender
-        $newPatient->_eai_initiateur_group_id = $sender->group_id;
-        $msgPatient = $newPatient->store();
+        
+        // On store le patient
+        $msgPatient = CEAIPatient::storePatient($newPatient, $sender);
         
         $modified_fields = CEAIPatient::getModifiedFields($newPatient);
         

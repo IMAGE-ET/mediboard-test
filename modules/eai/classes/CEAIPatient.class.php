@@ -94,7 +94,7 @@ class CEAIPatient extends CEAIMbObject {
       
       return $IPP->store();  
     }
-      
+
     // Génération de l'IPP ? 
     // Non
     if (!$group->_configs["sip_idex_generator"]) {
@@ -111,8 +111,14 @@ class CEAIPatient extends CEAIMbObject {
       return $IPP->store();  
     }
     else {
+      $IPP_temp = CIdSante400::getMatch("CPatient", $sender->_tag_patient, null, $patient->_id);
+
       // Pas d'IPP passé
       if (!$IPP->id400) {
+        if ($IPP_temp->_id) {
+          return null; 
+        }
+        
         if (!CIncrementer::generateIdex($patient, $sender->_tag_patient, $sender->group_id)) {
           return CAppUI::tr("CEAIPatient-error-generate-idex");
         }
@@ -120,7 +126,6 @@ class CEAIPatient extends CEAIMbObject {
         return null;
       }
       else {
-        $IPP_temp = CIdSante400::getMatch("CPatient", $sender->_tag_patient, null, $patient->_id);
         // Si j'ai déjà un identifiant
         if ($IPP_temp->_id) {
           // On passe l'IPP courant en trash

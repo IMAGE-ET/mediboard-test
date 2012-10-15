@@ -406,8 +406,20 @@ class CSetuphprimxml extends CSetup {
     $query = "ALTER TABLE `hprimxml_config` 
                 CHANGE `sender_class` `sender_class` VARCHAR (80);";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.43");
+    
+    $query = "ALTER TABLE `hprimxml_config` 
+                ADD `repair_patient` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.44");
+    
+    $query = "ALTER TABLE `hprimxml_config` 
+                ADD `purge_idex_movements` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
         
-    $this->mod_version = "0.43";
+    $this->mod_version = "0.45";
   }
 }
 
