@@ -14,7 +14,7 @@
   Veuillez indiquez les champs suivants dans un fichier CSV (<strong>au format ISO</strong>) dont les champs sont séparés par
   <strong>;</strong> et les textes par <strong>"</strong>, la première ligne étant ignorée :
   <ul>
-    <li>Nom ddu bloc *</li>
+    <li>Nom du bloc *</li>
     <li>Nom de la salle *</li>
   </ul>
   <em>* : champs obligatoires</em>
