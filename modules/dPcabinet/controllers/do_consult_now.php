@@ -36,8 +36,8 @@ if ($sejour->type === "urg" && !$_in_suivi) {
     CAppUI::redirect("m=dPurgences");
   }
   
-	$sejour->loadRefsConsultations();
-	if ($sejour->_ref_consult_atu->_id) {
+  $sejour->loadRefsConsultations();
+  if ($sejour->_ref_consult_atu->_id) {
     CAppUI::setMsg("Patient déjà pris en charge par un praticien", UI_MSG_ERROR);
     CAppUI::redirect("m=dPurgences");
   }
@@ -79,14 +79,14 @@ $plage->loadObject($where);
 
 if(!$plage->_id) {
   // Cas ou on a des plage en collision
-	$where = array();
-	$where["chir_id"] = "= '$chir->_id'";
-	$where["date"]    = "= '$day_now'";
-	$where["debut"]   = "<= '$hour_now'";
-	$where["fin"]     = ">= '$hour_now'";
+  $where = array();
+  $where["chir_id"] = "= '$chir->_id'";
+  $where["date"]    = "= '$day_now'";
+  $where["debut"]   = "<= '$hour_now'";
+  $where["fin"]     = ">= '$hour_now'";
   $plageBefore->loadObject($where);
-	$where["debut"]   = "<= '$hour_next'";
-	$where["fin"]     = ">= '$hour_next'";
+  $where["debut"]   = "<= '$hour_next'";
+  $where["fin"]     = ">= '$hour_next'";
   $plageAfter->loadObject($where);
   if($plageBefore->_id) {
     if($plageAfter->_id) {
@@ -125,6 +125,7 @@ $consult->arrivee = "$day_now $time_now";
 $consult->duree = 1;
 $consult->chrono = CConsultation::PATIENT_ARRIVE;
 $consult->date_at = CValue::post("date_at");
+$consult->_operation_id = $_operation_id;
 
 if ($type) {
   $consult->type = $type;
@@ -139,9 +140,9 @@ if ($sejour->type == "urg") {
   // Motif de la consultation
   $consult->motif = "";
   if (CAppUI::conf('dPurgences motif_rpu_view')) {
-	  $consult->motif .= "RPU: ";
+    $consult->motif .= "RPU: ";
   }
-	$sejour->loadRefRPU();
+  $sejour->loadRefRPU();
   $consult->motif.= $sejour->_ref_rpu->diag_infirmier;
 } 
 
