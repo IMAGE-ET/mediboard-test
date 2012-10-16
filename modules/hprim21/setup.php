@@ -416,7 +416,7 @@ class CSetuphprim21 extends CSetup {
     $this->makeRevision("0.24");
     
     $query = "ALTER TABLE `echange_hprim21` 
-                ADD `reprocess` TINYINT (4) UNSIGNED;";
+                ADD `reprocess` TINYINT (4) UNSIGNED DEFAULT '0';";
     $this->addQuery($query);
     
     $this->mod_version = "0.25";

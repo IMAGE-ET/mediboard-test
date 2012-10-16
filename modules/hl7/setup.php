@@ -899,7 +899,7 @@ class CSetuphl7 extends CSetup {
     $this->makeRevision("0.39");
     
     $query = "ALTER TABLE `exchange_ihe` 
-                ADD `reprocess` TINYINT (4) UNSIGNED;";
+                ADD `reprocess` TINYINT (4) UNSIGNED DEFAULT '0';";
     $this->addQuery($query);
     
     $this->mod_version = "0.40";
