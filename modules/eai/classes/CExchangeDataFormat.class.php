@@ -252,6 +252,10 @@ class CExchangeDataFormat extends CMbMetaObject {
   }
   
   function reprocessing() {
+    if ($this->reprocess >= CAppUI::conf("eai max_reprocess_retries")) {
+      throw new CMbException("CExchangeDataFormat-too_many_retries", $this->reprocess);
+    }
+    
     $sender = new $this->sender_class;
     $sender->load($this->sender_id);
     
@@ -303,6 +307,7 @@ class CExchangeDataFormat extends CMbMetaObject {
     $this->date_echange        = mbDateTime();
     $this->acquittement_valide = $ack_valid ? 1 : 0;
     $this->_acquittement       = $ack_data;
+    $this->reprocess++;
     if ($msg = $this->store()) {
       throw new CMbException("CMbObject-msg-store-failed", $msg);
     }

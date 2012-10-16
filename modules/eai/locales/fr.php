@@ -119,6 +119,7 @@ $locales['CExchangeAny.sender_class.CSenderFileSystem'] = 'File System';
 $locales['CExchangeAny.sender_class.CSenderMLLP'] = 'Expéditeur MLLP';
 $locales['CExchangeAny.sender_class.CSenderSOAP'] = 'Expéditeur SOAP';
 $locales['CExchangeDataFormat'] = 'Formats d\'échanges';
+$locales['CExchangeDataFormat-too_many_retries'] = 'Trop grand nombre de tentatives de retraitement';
 $locales['CExchangeDataFormat-_count_ack_invalide'] = 'ACK invalide';
 $locales['CExchangeDataFormat-_count_exchanges'] = 'Echanges';
 $locales['CExchangeDataFormat-_count_msg_invalide'] = 'MSG invalide';

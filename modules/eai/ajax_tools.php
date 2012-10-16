@@ -60,7 +60,7 @@ switch ($tool) {
         $_exchange->reprocessing();
       }
       catch (CMbException $e) {
-        $e->stepAjax(UI_MSG_ERROR);
+        $e->stepAjax(UI_MSG_WARNING);
       }
       
       if (!$exchange->_id) {

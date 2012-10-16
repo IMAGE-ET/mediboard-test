@@ -43,10 +43,16 @@
       </button>
     </form>
     {{if $object->_self_receiver}}
-      <button class="change notext" onclick="ExchangeDataFormat.reprocessing('{{$object->_guid}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
+      <button class="change" type="button" {{if $object->reprocess >= $conf.eai.max_reprocess_retries}}disabled{{/if}} 
+        onclick="ExchangeDataFormat.reprocessing('{{$object->_guid}}')" 
+        title="{{tr}}Reprocess{{/tr}} ({{$object->reprocess}}/{{$conf.eai.max_reprocess_retries}} fois)">
+          {{if $object->reprocess}}{{$object->reprocess}}{{/if}}
+      </button>
     {{/if}}
     {{if $object->_self_sender}}
-      <button class="send notext" onclick="ExchangeDataFormat.sendMessage('{{$object->_guid}}')" type="button">{{tr}}Reprocess{{/tr}}</button>
+      <button class="send notext" onclick="ExchangeDataFormat.sendMessage('{{$object->_guid}}')" 
+        type="button" title="{{tr}}Send{{/tr}}">
+      </button>
     {{/if}}
   </td>
   <td class="narrow">
