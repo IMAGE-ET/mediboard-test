@@ -408,8 +408,23 @@ PlanSoins = {
       element.hide();
     }
     
-    PlanSoins.composition_dossier.each(function(moment){
+    /*PlanSoins.composition_dossier.each(function(moment){
       element.select('.' + moment).invoke("setVisible", moment == periode_visible);
+    });*/
+   
+    PlanSoins.composition_dossier.each(function(moment){
+      listToHide = element.select('.'+moment);
+      listToHide.each(function(elt) { 
+        elt.show();
+      });  
+    });
+    PlanSoins.composition_dossier.each(function(moment){
+      if(moment != periode_visible){
+        listToHide = element.select('.'+moment);
+        listToHide.each(function(elt) { 
+          elt.hide();
+        });  
+      }
     });
     
     PlanSoins.viewDossierSoin(element);
