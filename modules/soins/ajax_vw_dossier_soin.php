@@ -21,6 +21,10 @@ $unite_prise  = CValue::get("unite_prise");
 $without_check_date = CValue::get("without_check_date", "0");
 $hide_close  = CValue::get("hide_close", 0);
 
+if (!$date) {
+  $date = mbDate();
+}
+
 // Permet de gerer le cas ou des unites de prises contiennent des '
 $unite_prise = stripslashes(preg_replace('~&#0*([0-9]+);~e', 'chr(\\1)', $unite_prise));
 
@@ -117,6 +121,7 @@ if (CModule::getActive("dPprescription")) {
   $count_composition_dossier = array();
   
   $tabHours = CAdministration::getTimingPlanSoins($date, $configs);
+  
   foreach($tabHours as $_key_date => $_period_date){
     foreach($_period_date as $_key_periode => $_period_dates){
       $count_composition_dossier[$_key_date][$_key_periode] = $planif_manuelle ? 3 : 2;
