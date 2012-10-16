@@ -34,6 +34,7 @@ class CExchangeDataFormat extends CMbMetaObject {
   var $id_permanent              = null;
   var $object_id                 = null;
   var $object_class              = null;
+  var $reprocess                 = null;
   
   // Filter fields
   var $_date_min                 = null;
@@ -89,6 +90,7 @@ class CExchangeDataFormat extends CMbMetaObject {
     $props["acquittement_valide"] = "bool show|0";
     $props["id_permanent"]        = "str";
     $props["object_id"]           = "ref class|CMbObject meta|object_class";
+    $props["reprocess"]           = "num min|0 max|".CAppUI::conf("eai max_reprocess_retries");
     
     $props["_self_sender"]        = "bool";
     $props["_self_receiver"]      = "bool notNull";

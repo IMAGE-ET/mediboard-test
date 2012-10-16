@@ -896,7 +896,13 @@ class CSetuphl7 extends CSetup {
                 CHANGE `object_class` `object_class` VARCHAR (80);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.39";
+    $this->makeRevision("0.39");
+    
+    $query = "ALTER TABLE `exchange_ihe` 
+                ADD `reprocess` TINYINT (4) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.40";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

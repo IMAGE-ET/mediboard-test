@@ -413,6 +413,12 @@ class CSetuphprim21 extends CSetup {
                 CHANGE `sender_class` `sender_class` VARCHAR (80);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    
+    $query = "ALTER TABLE `echange_hprim21` 
+                ADD `reprocess` TINYINT (4) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.25";
   }
 }

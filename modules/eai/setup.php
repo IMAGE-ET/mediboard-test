@@ -99,7 +99,13 @@ class CSetupeai extends CSetup {
                 CHANGE `sender_class` `sender_class` VARCHAR (80);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.07";
+    $this->makeRevision("0.07");
+    
+    $query = "ALTER TABLE `echange_any` 
+                ADD `reprocess` TINYINT (4) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.08";
   }
 }
 

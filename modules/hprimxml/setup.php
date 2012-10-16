@@ -418,8 +418,14 @@ class CSetuphprimxml extends CSetup {
     $query = "ALTER TABLE `hprimxml_config` 
                 ADD `purge_idex_movements` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.45");
+    
+    $query = "ALTER TABLE `echange_hprim` 
+                ADD `reprocess` TINYINT (4) UNSIGNED;";
+    $this->addQuery($query);
         
-    $this->mod_version = "0.45";
+    $this->mod_version = "0.46";
   }
 }
 
