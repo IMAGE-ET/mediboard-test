@@ -14,41 +14,146 @@
   </div>
 {{else}}
 
+<div style="width: 100%; padding-bottom: 5px; height: 20px;" class="not-printable">
+  <button type="button" style="float: right;" class="close" onclick="Control.Modal.close();">
+    {{tr}}Close{{/tr}}
+  </button>
+  <button type="button" style="float: left;" class="hslip" onclick="exportResults();">Export Texte</button>
+  <button type="button" style="float: left;" class="print" onclick="modal_results.print();">{{tr}}Print{{/tr}}
+</div>
+
 {{mb_include module=system template=inc_pagination 
      total=$count_patient change_page="changePage" step=30 current=$start}}
 
+{{if $from || $to}}
+  <h1 style="text-align: center; page-break-before: avoid;">
+    {{if $from}}
+      {{if $to}}
+        Période du {{$from|date_format:$conf.date}} au {{$to|date_format:$conf.date}}
+      {{else}}
+        A partir du {{$from|date_format:$conf.date}}
+      {{/if}}  
+    {{elseif $to}}
+      Jusqu'au {{$to|date_format:$conf.date}}
+    {{/if}}
+  </h1>
+{{/if}}
+
 <table class="main tbl">
   <tr>
-    <th></th>
-    <th class="narrow">{{mb_title class=CPatient field=naissance}}</th>
-    <th>{{mb_title class=CPatient field=adresse}}</th>
-    <th class="narrow"></th>
+    <th>
+      {{mb_label class=CSejour field=patient_id}}
+    </th>
+    <th>
+      Age à l'époque
+    <th>
+      Dossier Médical
+    </th>
+    <th>
+      Evénement
+    </th>
+    <th>
+      Prescription
+    </th>
   </tr>
-    
   {{foreach from=$list_patient item=_patient}}
     <tr>
       <td>
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">{{$_patient}}</span>
+        <span onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}')">
+          <a href="?m=patients&tab=vw_full_patients&patient_id={{$_patient->_id}}" target="_blank">
+            {{$_patient->_view}} ({{$_patient->sexe|strtoupper}})
+          </a>
+        </span>
       </td>
       <td>
-        {{mb_value object=$_patient field=naissance}}
-      </td>
-      <td class="text">
-        {{$_patient->adresse|smarty:nodefaults|spancate:30}} -
-        {{$_patient->cp}}
-        {{$_patient->ville|smarty:nodefaults|spancate:20}}
+        {{if isset($_patient->_age_epoque|smarty:nodefaults)}}
+          {{$_patient->_age_epoque}} ans 
+        {{else}}
+          {{$_patient->_age}}
+        {{/if}}
       </td>
       <td>
-        <button type="button" class="search notext compact" onclick="Patient.view({{$_patient->_id}})">
-          Dossier complet
-        </button>
+        {{if isset($_patient->_ref_antecedent|smarty:nodefaults)}}
+          {{assign var=atcd value=$_patient->_ref_antecedent}}
+          <strong>
+            {{if $atcd->type == "alle"}}
+              Allergie :
+            {{else}}
+              Antécédent :
+            {{/if}}
+          </strong>
+          <br />
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$atcd->_guid}}')">
+            {{$atcd}}
+          </span> 
+        {{else}}
+          {{if isset($_patient->_refs_antecedents|smarty:nodefaults) && $_patient->_refs_antecedents|@count}}
+            <strong>
+              Antécédents :
+            </strong>
+            <ul>
+              {{foreach from=$_patient->_refs_antecedents item=_atcd}}
+                {{if $_atcd->type != "alle"}}
+                  <li>
+                    <span onmouseover="ObjectTooltip.createEx(this, '{{$_atcd->_guid}}')">
+                      {{$_atcd}}
+                    </span>
+                  </li>
+                {{/if}}
+              {{/foreach}}
+            </ul>
+          {{/if}}
+          {{if isset($_patient->_refs_allergies|smarty:nodefaults) && $_patient->_refs_allergies|@count}}
+            <strong>
+              Allergies :
+            </strong>
+            <ul>
+              {{foreach from=$_patient->_refs_allergies item=_allergie}}
+                <li>
+                  <span onmouseover="ObjectTooltip.createEx(this, '{{$_allergie->_guid}}')">
+                    {{$_allergie}}
+                  </span>
+                </li>
+             {{/foreach}}
+            </ul>
+          {{/if}}
+        {{/if}}
+      </td>
+      <td>
+        {{if isset($_patient->_distant_object|smarty:nodefaults)}}
+          {{assign var=object value=$_patient->_distant_object}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$object->_guid}}')">
+            {{if $object instanceof CConsultation}}
+              <a href="?m=dPcabinet&tab=edit_consultation&selConsult={{$object->_id}}" target="_blank">
+                Consultation du {{$object->_ref_plageconsult->date|date_format:$conf.date}} à {{mb_value object=$object field=heure}}
+              </a>
+            {{elseif $object instanceof CSejour}}
+              Séjour du {{mb_value object=$object field=entree}} au {{mb_value object=$object field=sortie}}
+            {{else}}
+              Intervention du {{$object->_datetime_best|date_format:$conf.date}}
+            {{/if}}
+          </span>
+        {{else}}
+          &mdash;
+        {{/if}}
+      </td>
+      <td>
+        {{if isset($_patient->_distant_line|smarty:nodefaults)}}
+          {{assign var=line value=$_patient->_distant_line}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$line->_guid}}')">
+            {{$line->_ucd_view}}
+          </span>
+        {{else}}
+          &mdash;
+        {{/if}}
       </td>
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="4">Aucun dossier</td>
+      <td class="empty" colspan="5">
+        Aucun résultat
+      </td>
     </tr>
   {{/foreach}}
 </table>
-
 {{/if}}

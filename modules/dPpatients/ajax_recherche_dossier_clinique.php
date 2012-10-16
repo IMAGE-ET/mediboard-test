@@ -8,17 +8,42 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+ini_set("memory_limit", "768M");
+
 $where = array();
 $ljoin = array();
 
-$user_id = CValue::get("user_id");
-$type_prescription = CValue::get("type_prescription");
-CValue::setSession("produit", CValue::get("produit"));
-CValue::setSession("user_id", $user_id);
-CValue::setSession("type_prescription", $type_prescription);
+$user_id            = CValue::get("user_id");
+$classes_atc        = CValue::get("classes_atc");
+$keywords_atc       = CValue::get("keywords_atc");
+$code_cis           = CValue::get("code_cis");
+$code_ucd           = CValue::get("code_ucd");
+$keywords_composant = CValue::get("keywords_composant");
+$composant          = CValue::get("composant");
+$keywords_indication = CValue::get("keywords_indication");
+$indication         = CValue::get("indication");
+$type_indication    = CValue::get("type_indication");
+$commentaire        = CValue::get("commentaire");
+$section            = CValue::get("section_choose");
+$export             = CValue::get("export", 0);
+
+CValue::setSession("produit"            , CValue::get("produit"));
+CValue::setSession("user_id"            , $user_id);
+CValue::setSession("classes_atc"        , $classes_atc);
+CValue::setSession("keywords_atc"       , $keywords_atc);
+CValue::setSession("code_cis"           , $code_cis);
+CValue::setSession("code_ucd"           , $code_ucd);
+CValue::setSession("keywords_composant" , $keywords_composant);
+CValue::setSession("composant"          , $composant);
+CValue::setSession("keywords_indication", $keywords_indication);
+CValue::setSession("indication"         , $indication);
+CValue::setSession("type_indication"    , $type_indication);
+CValue::setSession("commentaire"        , $commentaire);
+
 $start = intval(CValue::get("start", 0));
 
-$patient = new CPatient;
+$patient = new CPatient();
+
 $ds = $patient->_spec->ds;
 
 // fields
@@ -58,15 +83,22 @@ $fields = array(
     "codes_ccam" => null,
     "_rques_interv" => null,
   ),
-  "CPrescriptionLineMedicament" => array(
-    "code_cis" => "=",
-    "code_ucd" => "="
-  )
 );
 
-$one_field = false;
+$one_field_presc = $code_cis || $code_ucd || $classes_atc || $composant || $indication || $commentaire;
 
-foreach($fields as $_class => $_fields) {
+$one_field = false || $one_field_presc;
+$one_field_traitement = false;
+$one_field_atcd = false;
+$sejour_filled  = false;
+$consult_filled = false;
+$interv_filled  = false;
+
+
+$from = null;
+$to   = null;
+
+foreach ($fields as $_class => $_fields) {
   $data[$_class] = array_intersect_key($_GET, $_fields);
   $object = new $_class;
   $prefix = $object->_spec->table;
@@ -78,44 +110,167 @@ foreach($fields as $_class => $_fields) {
       $one_field = true;
     }
     
-    if ( $_value === "" || !$_fields[$_field]) continue;
+    if ( $_value === "" || !$_fields[$_field]) {
+      continue;
+    }
     
-    if ($_fields[$_field] == "=")
-      $where["$prefix.$_field"] = $ds->prepare(" = % ", $_value);
-    else
-      $where["$prefix.$_field"] = $ds->prepareLike("%$_value%");
+    switch ($_fields[$_field]) {
+      case "=":
+        $where["$prefix.$_field"] = $ds->prepare(" = % ", $_value);
+        break;
+      default:
+        $where["$prefix.$_field"] = $ds->prepareLike("%$_value%");
+    }
   }
 }
 
-$sejour_data = $data["CSejour"];
-if (!empty($sejour_data["entree"]) || !empty($sejour_data["sortie"])) {
-  if (!empty($sejour_data["entree"])) {
-    $where[] = "sejour.entree >=  '{$sejour_data['entree']}'";
-    $where[] = "operations.date  >= '{$sejour_data['entree']}' OR 
-                plagesop.date >= '{$sejour_data['entree']}'";
-  }
-  
-  if (!empty($sejour_data["sortie"])) {
-    $where[] = "sejour.entree <  '{$sejour_data['sortie']}'";
-    $where[] = "operations.date  < '{$sejour_data['sortie']}' OR 
-                plagesop.date < '{$sejour_data['sortie']}'";
-  }
+switch ($section) {
+  case "consult":
+    $consult_data = $data["CConsultation"];
+    
+    if (empty($consult_data["motif"]) && empty($consult_data["_rques_consult"]) &&
+        empty($consult_data["_examen_consult"]) && empty($consult_data["conclusion"]) && !$one_field_presc) {
+      break;
+    }
+    
+    $consult_filled = true;
+    $ljoin["patients"] = "patients.patient_id = consultation.patient_id";
+    $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
+    
+    // CConsultation ---------------------------
+    $consult_data = $data["CConsultation"];
+    
+    if (!empty($consult_data["_rques_consult"])) {
+      $where["consultation.rques"] = $ds->prepareLike("%{$consult_data['_rques_consult']}%");  
+    }
+    
+    if (!empty($consult_data["_examen_consult"])) {
+      $where["consultation.examen"] = $ds->prepareLike("%{$consult_data['_examen_consult']}%");
+    }
+    
+    $sejour_data = $data["CSejour"];
+    if (!empty($sejour_data["_rques_sejour"])) {
+      $where["sejour.rques"] = $ds->prepareLike("%{$sejour_data['_rques_sejour']}%");
+    }
+    if (!empty($sejour_data["entree"])) {
+      $from = mbDate($sejour_data['entree']);
+      $where["plageconsult.date"] = ">= '" .mbDate($sejour_data['entree'])."'";
+    }
+    if (!empty($sejour_data["sortie"])) {
+      $to = mbDate($sejour_data['sortie']);
+      $where["plageconsult.date"] = "< '" .mbDate($sejour_data['sortie'])."'";
+    }
+    $data_patient = $data["CPatient"];
+    if (!empty($data_patient["_age_min"])) {
+      $where[] = "DATEDIFF(plageconsult.date, patients.naissance)/365 > {$data_patient['_age_min']}";
+    }
+    if (!empty($data_patient["_age_max"])) {
+      $where[] = "DATEDIFF(plageconsult.date, patients.naissance)/365 <= {$data_patient['_age_max']}";
+    }
+    break;
+  case "sejour":
+    $sejour_data = $data["CSejour"];
+    
+    if (empty($sejour_data["libelle"]) && empty($sejour_data["type"])
+        && empty($sejour_data["_rques_sejour"]) && empty($sejour_data["convalescence"]) && !$one_field_presc) {
+      break;
+    }
+    
+    $sejour_filled = true;
+    $ljoin["patients"] = "patients.patient_id = sejour.patient_id";
+    
+    if (!empty($sejour_data["entree"])) {
+      $from = $sejour_data["entree"];
+      $where[] = "sejour.entree >=  '{$sejour_data['entree']}'";
+      $where[] = "operations.date  >= '{$sejour_data['entree']}' OR 
+                  plagesop.date >= '{$sejour_data['entree']}'";
+      $where[] = "plageconsult.date >= '".mbDate($sejour_data['entree'])."'";
+    }
+    
+    // CSejour ----------------------------
+    if (!empty($sejour_data["_rques_sejour"])) {
+      $where["sejour.rques"] = $ds->prepareLike("%{$sejour_data['_rques_sejour']}%");
+    }
+    if (!empty($sejour_data["entree"])) {
+      $from = mbDate($sejour_data['entree']);
+      $where["plageconsult.date"] = ">= '".mbDate($sejour_data['entree'])."'";
+    }
+    if (!empty($sejour_data["sortie"])) {
+      $to = mbDate($sejour_data['sortie']);
+      $where["sejour.entree"] = "<  '{$sejour_data['sortie']}'";
+    }
+    $ljoin["dossier_medical"] = "dossier_medical.object_id = sejour.sejour_id";
+    $where[] = "dossier_medical.object_class = 'CSejour' OR dossier_medical.dossier_medical_id IS NULL";
+    
+    $data_patient = $data["CPatient"];
+    if (!empty($data_patient["_age_min"])) {
+      $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 > {$data_patient['_age_min']}";
+    }
+    if (!empty($data_patient["_age_max"])) {
+      $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 <= {$data_patient['_age_max']}";
+    }
+    break;
+  case "operation":
+    // COperations ---------------------------
+    $interv_data = $data["COperation"];
+    
+    if (empty($interv_data["_libelle_interv"]) && empty($interv_data["_rques_interv"])
+    && empty($interv_data["examen"]) && empty($interv_data["materiel"]) && empty($interv_data["codes_ccam"]) && !$one_field_presc) {
+      break;
+    }
+    
+    $interv_filled = true;
+    
+    $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+    $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
+    $ljoin["patients"] = "patients.patient_id = sejour.patient_id";
+    
+    if (!empty($interv_data["codes_ccam"])) {
+      $codes = preg_split("/[\s,]+/", $interv_data["codes_ccam"]);
+      
+      $where_code = array();
+      foreach($codes as $_code) {
+        $where_code[] = "operations.codes_ccam ".$ds->prepareLike("%$_code%");
+      }
+      
+      $where[] = implode(" AND ", $where_code);
+    }
+    if (!empty($interv_data["_rques_interv"])) {
+      $where["operations.rques"] = $ds->prepareLike("%{$interv_data['_rques_interv']}%");
+    }
+    if (!empty($interv_data["_libelle_interv"])) {
+      $where["operations.libelle"] = $ds->prepareLike("%{$interv_data['_libelle_interv']}%");
+    }
+    $where[] = "operations.chir_id = '$user_id' OR operations.chir_id IS NULL";
+    $where[] = "operations.annulee = '0' OR operations.annulee IS NULL";
+    
+    $sejour_data = $data["CSejour"];
+    if (!empty($sejour_data["entree"])) {
+      $from = mbDate($sejour_data['entree']);
+      $where[] = "operations.date  >= '{$sejour_data['entree']}' OR 
+                  plagesop.date >= '{$sejour_data['entree']}'";
+    }
+    if (!empty($sejour_data["sortie"])) {
+      $to = mbDate($sejour_data['sortie']);
+      $where[] = "operations.date  < '{$sejour_data['sortie']}' OR 
+                  plagesop.date < '{$sejour_data['sortie']}'";
+    }
+    
+    $data_patient = $data["CPatient"];
+    if (!empty($data_patient["_age_min"])) {
+      $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 > {$data_patient['_age_min']}";
+    }
+    if (!empty($data_patient["_age_max"])) {
+      $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 <= {$data_patient['_age_max']}";
+    }
 }
 
 // CPatient ---------------------------
-if (!empty($data["CPatient"]["_age_min"])) {
-  $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 > {$data['CPatient']['_age_min']} OR ".
-    "DATEDIFF(CONCAT(plageconsult.date, ' ', consultation.heure), patients.naissance)/365 > {$data['CPatient']['_age_min']}";
-  //$where[] = "patients.naissance < '".mbDate("-".$data["CPatient"]["_age_min"]. "YEARS")."'";
-}
-if (!empty($data["CPatient"]["_age_max"])) {
-  $where[] = "DATEDIFF(sejour.entree_reelle, patients.naissance)/365 <= {$data['CPatient']['_age_max']} OR ".
-  "DATEDIFF(CONCAT(plageconsult.date, ' ', consultation.heure), patients.naissance)/365 <= {$data['CPatient']['_age_max']}";
-  //$where[] = "patients.naissance > '".mbDate("-".$data["CPatient"]["_age_max"]. "YEARS")."'";
-}
-if (!empty($data["CPatient"]["medecin_traitant"])) {
+$data_patient = $data["CPatient"];
+
+if (!empty($data_patient["medecin_traitant"])) {
   $one_field = true;
-  $medecin_traitant_id = $data["CPatient"]["medecin_traitant"];
+  $medecin_traitant_id = $data_patient["medecin_traitant"];
   if (CValue::get("only_medecin_traitant")) {
     $where[] = "patients.medecin_traitant = '$medecin_traitant_id'";
   }
@@ -128,87 +283,331 @@ if (!empty($data["CPatient"]["medecin_traitant"])) {
 
 // CAntecedent ---------------------------
 $dm_data = $data["CAntecedent"];
-$where[] = "
-  dossier_medical.object_class = 'CPatient' OR
-  dossier_medical.dossier_medical_id IS NULL
-";
 
-
-// CConsultation ---------------------------
-$consult_data = $data["CConsultation"];
-if (!empty($consult_data["_rques_consult"])) {
-  $where["consultation.rques"] = $ds->prepareLike("%{$consult_data['_rques_consult']}%");
-}
-if (!empty($consult_data["_examen_consult"])) {
-  $where["consultation.examen"] = $ds->prepareLike("%{$consult_data['_examen_consult']}%");
+if (!empty($dm_data["rques"])) {
+  $ljoin["dossier_medical"] = "dossier_medical.object_id = patients.patient_id";
+  $ljoin["antecedent"] = "antecedent.dossier_medical_id = dossier_medical.dossier_medical_id";
+  $where[] = "dossier_medical.object_class = 'CPatient' OR dossier_medical.dossier_medical_id IS NULL";
+  $one_field_atcd = true;
 }
 
+// CTraitement ---------------------------
+$traitement_data = $data["CTraitement"];
 
-// CSejour ----------------------------
-if (!empty($sejour_data["_rques_sejour"])) {
-  $where["sejour.rques"] = $ds->prepareLike("%{$sejour_data['_rques_sejour']}%");
+if (!empty($traitement_data["traitement"])) {
+  $ljoin["dossier_medical"] = "dossier_medical.object_id = patients.patient_id";
+  $ljoin["traitement"] = "traitement.dossier_medical_id = dossier_medical.dossier_medical_id";
+  $where[] = "dossier_medical.object_class = 'CPatient' OR dossier_medical.dossier_medical_id IS NULL";
+  $one_field_traitement = true;
 }
-
-// COperations ---------------------------
-$interv_data = $data["COperation"];
-if (!empty($interv_data["codes_ccam"])) {
-  $codes = preg_split("/[\s,]+/", $interv_data["codes_ccam"]);
-  
-  $where_code = array();
-  foreach($codes as $_code) {
-    $where_code[] = "operations.codes_ccam ".$ds->prepareLike("%$_code%");
-  }
-  
-  $where[] = implode(" AND ", $where_code);
-}
-if (!empty($interv_data["_rques_interv"])) {
-  $where["operations.rques"] = $ds->prepareLike("%{$interv_data['_rques_interv']}%");
-}
-if (!empty($interv_data["_libelle_interv"])) {
-  $where["operations.libelle"] = $ds->prepareLike("%{$interv_data['_libelle_interv']}%");
-}
-$where[] = "operations.chir_id = '$user_id' OR operations.chir_id IS NULL";
-$where[] = "operations.annulee = '0' OR operations.annulee IS NULL";
-
-$ljoin["consultation"] = "consultation.patient_id = patients.patient_id";
-$ljoin["sejour"] = "sejour.patient_id = patients.patient_id";
-$ljoin["dossier_medical"] = "dossier_medical.object_id = patients.patient_id";
-$ljoin["antecedent"] = "antecedent.dossier_medical_id = dossier_medical.dossier_medical_id";
-$ljoin["traitement"] = "traitement.dossier_medical_id = dossier_medical.dossier_medical_id";
-$ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
-$ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
-$ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
 
 $list_patient = array();
-$count_patient = array();
+$count_patient = 0;
+
+$rjoinMed = array();
+$rjoinMix = array();
+$whereMed = array();
+$whereMix = array();
 
 // CPrescription ----------------------------
-$prescription_data = $data["CPrescriptionLineMedicament"];
-
-if (!empty($prescription_data["code_cis"]) || !empty($prescription_data["code_ucd"])) {
-  switch ($type_prescription) {
-    case "externe":
+if ($one_field_presc) {
+  
+  $one_field_presc = true;
+  $one_field = true;
+  switch ($section) {
+    case "consult":
       $ljoin["prescription"] = "prescription.object_class = 'CConsultation' AND prescription.object_id = consultation.consultation_id";
+      $where["prescription.type"] = "= 'externe'";
       break;
-    case "pre_admission":
     case "sejour":
-    case "sortie":
+    case "operation":
       $ljoin["prescription"] = "prescription.object_class = 'CSejour' AND prescription.object_id = sejour.sejour_id";
+      $where["prescription.type"] = "IN ('pre_admission', 'sejour', 'sortie')";
   }
-  $where["prescription.type"] = "= '$type_prescription'";
-  $ljoin["prescription_line_medicament"] = "prescription_line_medicament.prescription_id = prescription.prescription_id";
+  
+  $rjoinMed["prescription_line_medicament"] = "prescription_line_medicament.prescription_id = prescription.prescription_id";
+  
+  if (!$commentaire) {
+    $rjoinMix["prescription_line_mix"] = "prescription_line_mix.prescription_id = prescription.prescription_id";
+    $rjoinMix["prescription_line_mix_item"] = "prescription_line_mix_item.prescription_line_mix_id = prescription_line_mix.prescription_line_mix_id";
+  }
+  
+  if ($code_cis) {
+    $whereMed[] = "prescription_line_medicament.code_cis = '$code_cis'";
+    $whereMix[] = "prescription_line_mix_item.code_cis = '$code_cis'";
+  }
+  else if ($code_ucd) {
+    $whereMed[] = "prescription_line_medicament.code_ucd = '$code_ucd'".
+    $whereMix[] = "prescription_line_mix_item.code_ucd = '$code_ucd'";
+  }
+  else if ($classes_atc) {
+    $whereMed[] = "prescription_line_medicament.atc RLIKE '(^$classes_atc)'";
+    $whereMix[] = "prescription_line_mix_item.atc RLIKE '(^$classes_atc)'";
+  }
+  else if ($composant) {
+    $composition = new CBcbComposition();
+    $composition->Produits($composant);
+    $codes_cip = CMbArray::pluck($composition->distObj->TabProduit, "CodeCIP");
+    $whereMed[] = "prescription_line_medicament.code_cip " . CSQLDataSource::prepareIn($codes_cip);
+    $whereMix[] = "prescription_line_mix_item.code_cis ".CSQLDataSource::prepareIn($codes_cip);
+  }
+  else if ($indication) {
+    $bcb_indication = new CBcbIndication();
+    $produits = $bcb_indication->searchProduits($indication, $type_indication);
+    $codes_cip = CMbArray::pluck($produits, "Code_CIP");
+    $whereMed[] = "prescription_line_medicament.code_cip " . CSQLDataSource::prepareIn($codes_cip);
+    $whereMix[] = "prescription_line_mix_item.code_cis ".CSQLDataSource::prepareIn($codes_cip);
+  }
+  else if ($commentaire) {
+    $whereMed["prescription_line_medicament.commentaire"] = "LIKE '%".addslashes($commentaire)."%'";
+  }
 }
 
+$list_objects = array();
+
 if ($one_field) {
-  $list_patient = $patient->loadList($where, "patients.nom, patients.prenom", "$start,30", "patients.patient_id", $ljoin);
-  $count_patient = count($patient->countMultipleList($where, null, "patients.patient_id", $ljoin));
+  // Pour la recherche sur la prescription :
+  // deux passages obligés (une pour les lignes de médicament, l'autre pour les lignes de prescription)
+  
+  $other_fields = "";
+  
+  if ($one_field_presc) {
+    $other_fields = ", prescription_line_medicament.prescription_line_medicament_id";
+  }
+  
+  if ($one_field_atcd) {
+    $other_fields .= ", antecedent.antecedent_id";
+  }
+  
+  if ($one_field_traitement) {
+    $other_fields .= ", traitement.traitement_id";
+  }
+  
+  // Première requête (éventuellement pour les lignes de médicament)
+  $request = new CRequest();
+  
+  if ($consult_filled) {
+    $request->addSelect("consultation.consultation_id, patients.patient_id" . $other_fields);
+    $request->addTable("consultation");
+    $request->addOrder("patients.nom ASC, plageconsult.date ASC");
+  }
+  elseif ($sejour_filled) {
+    $request->addSelect("sejour.sejour_id, patients.patient_id" . $other_fields);
+    $request->addTable("sejour");
+    $request->addOrder("patients.nom ASC, sejour.entree_prevue ASC");
+  }
+  elseif ($interv_filled) {
+    $request->addSelect("operations.operation_id" . $other_fields);
+    $request->addTable("operations");
+    $request->addOrder("patients.nom ASC, operations.date ASC, plagesop.date ASC");
+  }
+  else {
+    $request->addSelect("patients.patient_id");
+    $request->addTable("patients");
+    $request->addOrder("patients.nom ASC");
+  }
+  $request->addLJoin($ljoin);
+  $request->addRJoin($rjoinMed);
+  $request->addWhere($where);
+  $request->addWhere($whereMed);
+  
+  if (!$export) {
+    $request->setLimit("$start,30");
+  }
+  
+  $results = $ds->loadList($request->getRequest());
+  
+  // Eventuelle deuxième requête (pour les lines mixes)
+  if (!$commentaire && $one_field_presc) {
+    $request_b = new CRequest();
+    
+    if ($one_field_presc) {
+      $other_fields = ", prescription_line_mix_item.prescription_line_mix_item_id";
+    }
+    
+    if ($one_field_atcd) {
+      $other_fields .= ", antecedent.antecedent_id";
+    }
+    
+    if ($one_field_traitement) {
+      $other_fields .= ", traitement.traitement_id";
+    }
+    
+    if ($consult_filled) {
+      $request_b->addSelect("consultation.consultation_id, patients.patient_id" . $other_fields);
+      $request_b->addTable("consultation");
+      $request_b->addOrder("patients.nom ASC, plageconsult.date ASC");
+    }
+    elseif ($sejour_filled) {
+      $request_b->addSelect("sejour.sejour_id, patients_patient_id" . $other_fields);
+      $request_b->addTable("sejour");
+      $request_b->addOrder("patients.nom ASC, sejour.entree_prevue ASC");
+    }
+    elseif ($interv_filled) {
+      $request_b->addSelect("operations.operation_id" . $other_fields);
+      $request_b->addTable("operations");
+      $request_b->addOrder("patients.nom ASC, operations.date ASC, plagesop.date ASC");
+    }
+    else {
+      $request_b->addSelect("patients.patient_id");
+      $request_b->addTable("patients");
+      $request_b->addOrder("patients.nom ASC");
+    }
+    
+    $request_b->addLJoin($ljoin);
+    $request_b->addRJoin($rjoinMix);
+    $request_b->addWhere($where);
+    $request_b->addWhere($whereMix);
+    
+    if (!$export) {
+      $request_b->setLimit("$start,30");
+    }
+    
+    $results = array_merge($results, $ds->loadList($request_b->getRequest()));
+  }
+  
+  
+  foreach ($results as $_result) {
+    $_patient_id = $_result["patient_id"];
+    $pat = new CPatient();
+    $pat->load($_patient_id);
+    
+    // Recherche sur un antécédent
+    if (isset($_result["antecedent_id"])) {
+      $_atcd = new CAntecedent();
+      $_atcd->load($_result["antecedent_id"]);
+      $pat->_ref_antecedent = $_atcd;
+    }
+    
+    // On affiche tous les antécédents du patient
+    else {
+      $dossier_medical = $pat->loadRefDossierMedical(false);
+      $pat->_refs_antecedents = $dossier_medical->loadRefsAntecedents();
+      $pat->_refs_allergies   = $dossier_medical->loadRefsAllergies();
+    }
+    
+    if (isset($_result["prescription_line_medicament_id"])) {
+      $line = new CPrescriptionLineMedicament();
+      $line->load($_result["prescription_line_medicament_id"]);
+      $pat->_distant_line = $line;
+    }
+    else if (isset($_result["prescription_line_mix_item_id"])) {
+      $line = new CPrescriptionLineMixItem();
+      $line->load($_result["prescription_line_mix_item_id"]);
+      $pat->_distant_line = $line;
+    }
+    if ($sejour_filled) {
+      $sejour = new CSejour();
+      $sejour->load($_result["sejour_id"]);
+      $pat->_distant_object = $sejour;
+      $pat->_age_epoque = intval(mbDaysRelative($pat->naissance, $sejour->entree)/365);
+    }
+    else if ($consult_filled) {
+      $consult = new CConsultation();
+      $consult->load($_result["consultation_id"]);
+      $pat->_distant_object = $consult;
+      $pat->_age_epoque = intval(mbDaysRelative($pat->naissance, $consult->_ref_plageconsult->date)/365);
+    }
+    else if ($interv_filled) {
+      $interv = new COperation();
+      $interv->load($_result["operation_id"]);
+      $interv->loadRefPlageOp();
+      $pat->_distant_object = $interv;
+      $pat->_age_epoque = intval(mbDaysRelative($pat->naissance, $interv->_datetime_best)/365);
+    }
+    $list_patient[] = $pat;
+  }
+  
+  // Le count total
+  $request->select = array("count(*)");
+  $count_patient = $ds->loadResult($request->getRequest());
+  
+  if (!$commentaire && $one_field_presc) {
+    $request_b->select = array("count(*)");
+    $count_patient += $ds->loadResult($request_b->getRequest());
+  }
+}
+
+if ($export) {
+  $csv = new CCSVFile();
+  $csv->writeLine(array(
+    "Patient",
+    "Age à l'époque",
+    "Dossier Médical",
+    "Evenement",
+    "Prescription"
+  ));
+  
+  foreach ($list_patient as $_patient) {
+    
+    $dossier_medical = "";
+    
+    if (isset($_patient->_ref_antecedent)) {
+      $dossier_medical .= "Antécédents :\n $_patient->_ref_traitement->_view";
+    }
+    elseif (isset($_patient->_refs_antecedents) && count($_patient->_refs_antecedents)) {
+      $dossier_medical .= "Antécédents :\n";
+      foreach ($_patient->_refs_antecedents as $_antecedent) {
+        if ($_antecedent->type == "alle") {
+          continue;
+        }
+        $dossier_medical .= $_antecedent->_view . "\n";
+      }
+    }
+    
+    if (isset($_patient->_refs_allergies) && count($_patient->_refs_allergies)) {
+      $dossier_medical .= "Allergies :\n";
+      foreach ($_patient->_refs_allergies as $_allergie) {
+        $dossier_medical .= $_allergie->_view . "\n";
+      }
+    }
+    
+    $object_view = "";
+    
+    if (isset($_patient->_distant_object)) {
+      $object = $_patient->_distant_object;
+      switch (get_class($object)) {
+        case "CConsultation":
+          $object_view = "Consultation du " . mbDateToLocale($object->_ref_plageconsult->date) .
+            " à ".mbTransformTime(null, $object->heure, "%Hh:%M");
+          break;
+        case "CSejour":
+          $object_view = "Séjour du " . mbDateToLocale(mbDate($object->entree)) . "au " . mbDateToLocale(mbDate($object->sortie));
+        case "COperation":
+          $object_view = "Intervention du " . mbDateToLocale(mbDate($object->_datetime_best));
+      }
+    }
+    
+    $content_line = "";
+    
+    if (isset($_patient->_distant_line)) {
+      $content_line = $_patient->_distant_line->_view;
+    }
+    
+    $csv->writeLine(array(
+      $_patient->_view . " (".strtoupper($_patient->sexe).")",
+      $_patient->_age_epoque,
+      $dossier_medical,
+      $object_view,
+      $content_line
+    ));
+  }
+  
+  $csv->stream("recherche_dossiers_clinique");
+  CApp::rip();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("one_field", $one_field);
+$smarty->assign("one_field_presc", $one_field_presc);
 $smarty->assign("start", $start);
 $smarty->assign("user_id", $user_id);
 $smarty->assign("list_patient", $list_patient);
 $smarty->assign("count_patient", $count_patient);
+$smarty->assign("from", $from);
+$smarty->assign("to", $to);
+
 $smarty->display("inc_recherche_dossier_clinique_results.tpl");
+

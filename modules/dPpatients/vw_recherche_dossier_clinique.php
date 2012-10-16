@@ -47,6 +47,18 @@ $line_med->code_ucd = CValue::getOrSession("code_ucd");
 $line_med->code_cis = CValue::getOrSession("code_cis");
 $line_med->_ucd_view = CValue::getOrSession("produit");
 
+$classes_atc  = CValue::getOrSession("classes_atc");
+$keywords_atc = CValue::getOrSession("keywords_atc");
+
+$composant    = CValue::getOrSession("composant");
+$keywords_composant = CValue::getOrSession("keywords_composant");
+
+$indication = CValue::getOrSession("indication");
+$type_indication = CValue::getOrSession("type_indication");
+$keywords_indication = CValue::getOrSession("keywords_indication");
+
+$commentaire = CValue::getOrSession("commentaire");
+
 $user = new CMediusers();
 $user->load($user_id);
 
@@ -69,5 +81,13 @@ $smarty->assign("sejour", $sejour);
 $smarty->assign("interv", $interv);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("line_med", $line_med);
+$smarty->assign("classes_atc", $classes_atc);
+$smarty->assign("keywords_atc", $classes_atc);
+$smarty->assign("composant", $composant);
+$smarty->assign("keywords_composant", $keywords_composant);
+$smarty->assign("indication", $indication);
+$smarty->assign("keywords_indication", $keywords_indication);
+$smarty->assign("type_indication", $type_indication);
+$smarty->assign("commentaire", $commentaire);
 
 $smarty->display("vw_recherche_dossier_clinique.tpl");

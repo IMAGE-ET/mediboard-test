@@ -191,12 +191,7 @@ class CPatient extends CMbObject {
   var $_overweight    = null;
   var $_age_min       = null;
   var $_age_max       = null;
-  var $_ref_lines            = array();
-  var $_ref_antecedents      = array();
-  var $_ref_traitements      = array();
-  var $_ref_guid_lines       = array();
-  var $_ref_guid_antecedents = array();
-  var $_ref_guid_traitements = array();
+  
   // Vitale behaviour
   var $_bind_vitale   = null;
   var $_update_vitale = null;
