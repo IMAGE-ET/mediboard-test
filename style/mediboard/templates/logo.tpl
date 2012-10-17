@@ -27,10 +27,11 @@
 
 <a href="{{$href}}" title="{{tr}}Home{{/tr}}">
 <img src="{{$logo}}" 
-     {{if @$width}}width="{{$width}}"{{/if}} 
-     {{if @$height}}height="{{$height}}"{{/if}}
-     {{if @$alt}}alt="{{$alt}}"{{/if}}
-     {{if @$title}}title="{{$title}}"{{/if}}
-     {{if @$class}}class="{{$class}}"{{/if}}
-     {{if @$id}}id="{{$id}}"{{/if}} />
+  title="Version {{$version.version}} - Révision {{$version.build}}"
+  {{if @$width}}width="{{$width}}"{{/if}} 
+  {{if @$height}}height="{{$height}}"{{/if}}
+  {{if @$alt}}alt="{{$alt}}"{{/if}}
+  {{if @$title}}title="{{$title}}"{{/if}}
+  {{if @$class}}class="{{$class}}"{{/if}}
+  {{if @$id}}id="{{$id}}"{{/if}} />
 </a>

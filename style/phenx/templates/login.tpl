@@ -38,7 +38,7 @@
 </div>
 
 {{if !$dialog}}
-  <div id="version" title="Plateforme Open Source pour les Etablissements de Santé">v.{{$version.string}}</div>
+  <div id="version" title="Plateforme Open Source pour les Etablissements de Santé">Version {{$version.version}} - Révision {{$version.build}}</div>
 {{/if}}
 
 

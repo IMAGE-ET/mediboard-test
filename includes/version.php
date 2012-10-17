@@ -20,3 +20,4 @@ $version = array (
 );
 
 $version["string"] = implode(".", $version);
+$version["version"] = "{$version['major']}.{$version['minor']}.{$version['patch']}";
