@@ -161,58 +161,13 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     // TTY      - Teletypewriter
     $phones = array();
     if ($patient->tel) {
-      $phones[] = array(
-        null,
-        // Table - 0201
-        "PRN",
-        // Table - 0202
-        "PH",
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        $patient->tel
-      );
+      $phones[] = $this->getXTN($receiver, $patient->tel, "PRN", "PH");
     }
     if ($patient->tel2) {
-      $phones[] = array(
-        null,
-        // Table - 0201
-        "PRN",
-        // Table - 0202
-        "CP",
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        $patient->tel2
-      );
+      $phones[] = $this->getXTN($receiver, $patient->tel2, "PRN", "CP");
     }
     if ($patient->tel_autre) {
-      $phones[] = array(
-        null,
-        // Table - 0201
-        "ORN",
-        // Table - 0202
-        "PH",
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        $patient->tel_autre
-      );
+      $phones[] = $this->getXTN($receiver, $patient->tel2, "ORN", "PH");
     }
     if ($patient->email) {
       $phones[] = array(

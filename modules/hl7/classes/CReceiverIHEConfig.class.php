@@ -44,14 +44,17 @@ class CReceiverIHEConfig extends CMbObject {
   var $iti31_temporary_patient_transfer_tracking = null;
   var $iti31_historic_movement                   = null;
   
-  // Send / build
-  var $send_all_patients        = null;
-  var $send_default_affectation = null;
+  // Send
+  var $send_all_patients                  = null;
+  var $send_default_affectation           = null;
   var $send_change_medical_responsibility = null;
   var $send_change_nursing_ward           = null;
   var $send_change_attending_doctor       = null;
-  var $build_mode               = null;
-  var $build_NDA                = null;
+  
+  // Build
+  var $build_mode             = null;
+  var $build_NDA              = null;
+  var $build_telephone_number = null;
   
   // PV1
   var $build_PV1_3_2 = null;
@@ -88,10 +91,12 @@ class CReceiverIHEConfig extends CMbObject {
       "iti31_temporary_patient_transfer_tracking",
       "iti31_historic_movement",
     ),
-    "send / build" => array(
+    "build" => array(
       "build_mode",
       "build_NDA",
-      
+      "build_telephone_number"
+    ),
+    "send" => array(  
       "send_change_medical_responsibility",
       "send_change_nursing_ward",
       "send_change_attending_doctor",
@@ -146,14 +151,17 @@ class CReceiverIHEConfig extends CMbObject {
     $props["iti31_temporary_patient_transfer_tracking"] = "bool default|0";
     $props["iti31_historic_movement"]                   = "bool default|1";
     
-    // Send / Build
+    // Send
     $props["send_change_medical_responsibility"] = "enum list|A02|Z80|Z99 default|Z80";
     $props["send_change_nursing_ward"]           = "enum list|A02|Z84|Z99 default|Z84";
     $props["send_change_attending_doctor"]       = "enum list|A54|Z99 default|A54";
     $props["send_all_patients"]        = "bool default|0";
     $props["send_default_affectation"] = "bool default|0";
-    $props["build_mode"]               = "enum list|normal|simple default|normal";
-    $props["build_NDA"]                = "enum list|PID_18|PV1_19 default|PID_18";
+    
+    // Build
+    $props["build_mode"]             = "enum list|normal|simple default|normal";
+    $props["build_NDA"]              = "enum list|PID_18|PV1_19 default|PID_18";
+    $props["build_telephone_number"] = "enum list|XTN_1|XTN_12 default|XTN_12";
     
     // PV1
     $props["build_PV1_3_2"] = "enum list|name|config_value|idex default|name";

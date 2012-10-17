@@ -902,7 +902,12 @@ class CSetuphl7 extends CSetup {
                 ADD `reprocess` TINYINT (4) UNSIGNED DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.40";
+    $this->makeRevision("0.40");
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `build_telephone_number` ENUM ('XTN_1','XTN_12') DEFAULT 'XTN_12';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.41";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
