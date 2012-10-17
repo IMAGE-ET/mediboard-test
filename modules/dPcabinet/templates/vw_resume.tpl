@@ -164,10 +164,23 @@ function newExam(sAction, consultation_id) {
                   </div>
                 {{/foreach}}
                 {{foreach from=$_consult->_ref_files item=_file}}
-                <a href="#" onclick="popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')">
-                  {{$_file->file_name}}
-                </a>
+                  <div>
+                    <a href="#" onclick="popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')">
+                      {{$_file->file_name}}
+                    </a>
+                  </div>
                 {{/foreach}}
+                {{if isset($_consult->_ref_prescriptions.externe|smarty:nodefaults)}}
+                  {{assign var=_prescription value=$_consult->_ref_prescriptions.externe}}
+                  {{foreach from=$_prescription->_ref_files item=_file}}
+                    <div>
+                      <a class="button print notext" target="_blank" href="?m=files&a=fileviewer&file_id={{$_file->_id}}"></a>
+                      <a href="#" onclick="popFile('{{$_file->object_class}}','{{$_file->object_id}}','{{$_file->_class}}','{{$_file->_id}}')" style="display: inline-block;">
+                        {{$_file->file_name}}
+                      </a>
+                    </div>
+                  {{/foreach}}
+                {{/if}}
               </td>
               
               <td  class="compta" style="text-align: center">
