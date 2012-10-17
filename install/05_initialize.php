@@ -53,7 +53,7 @@ showHeader();
 
   <tr>
     <th><label for="adminhost" title="Nom de l'hôte">Nom de l'hôte</label></th>
-    <td><input type="text" size="40" name="adminhost" value="localhost" /></td>
+    <td><input type="text" size="40" name="adminhost" value="<?php echo $dbConfigs["std"]["dbhost"]; ?>" /></td>
   </tr>
 
   <tr>

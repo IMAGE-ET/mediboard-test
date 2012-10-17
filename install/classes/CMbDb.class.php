@@ -36,13 +36,14 @@ class CMbDb {
    *
    * @return CMbDb
    */
-  function __construct($host, $user, $pass, $base = false, $port = "3306") {
+  function __construct($host, $user, $pass, $base = false) {
+    $parts = explode(":", $host);
     $this->dsn = array(
       "phptype"  => "mysql",
       "username" => $user,
       "password" => $pass,
-      "hostspec" => $host,
-      "port"     => $port,
+      "hostspec" => $parts[0],
+      "port"     => isset($parts[1]) ? $parts[1] : 3306,
       "database" => $base,
     );
   }
