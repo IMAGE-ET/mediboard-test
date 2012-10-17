@@ -48,6 +48,8 @@
             <button class="trash notext" type="button" onclick="File.remove(this, '{{$object_id}}', '{{$object_class}}')">
               {{tr}}Delete{{/tr}}
             </button>
+            <a class="button print notext" target="_blank"
+              href="?m=files&a=fileviewer&file_id={{$_file->_id}}"></a>
           </span>
         </form>
       </td>
