@@ -16,9 +16,9 @@ ExchangeDataFormat = {
   
   refreshExchanges : function(exchange_class, exchange_type, exchange_group_id){
     var url = new Url("eai", "ajax_refresh_exchanges");
-    url.addParam("exchange_class", exchange_class);
+    url.addParam("exchange_class"   , exchange_class);
     url.addParam("exchange_type"    , exchange_type);
-    url.addParam("exchange_group_id"  , exchange_group_id);
+    url.addParam("exchange_group_id", exchange_group_id);
     url.requestUpdate("exchanges", { onComplete : function() {
       if (!exchange_type) {
         return;
@@ -100,5 +100,10 @@ ExchangeDataFormat = {
     
   toggle: function() {
     this[$(this.target).visible() ? "hide" : "show"](); 
+  },
+  
+  viewAll: function() {
+    var url = new Url("eai", "ajax_view_all_exchanges");
+    url.requestUpdate("vw_all_exchanges");
   }
 }

@@ -58,5 +58,4 @@ $smarty->assign("keywords_msg"  , $keywords_msg);
 $smarty->assign("keywords_ack"  , $keywords_ack);
 $smarty->display("inc_filters_exchanges.tpl");
 
-
 ?>

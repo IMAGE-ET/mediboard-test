@@ -12,6 +12,9 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="6">
+      <a style="float: right" class="button lookup notext" href="#" onclick="ExchangeDataFormat.viewAll();">
+        {{tr}}CExchangeDataFormat-view_all{{/tr}}
+      </a>
       {{tr}}CExchangeDataFormat{{/tr}}
     </th>
   </tr>
