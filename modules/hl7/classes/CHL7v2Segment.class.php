@@ -532,7 +532,7 @@ class CHL7v2Segment extends CHL7v2Entity {
 
   function getXTN(CInteropReceiver $receiver, $tel_number, $tel_use_code, $tel_equipment_type) {
     return array(
-      ($receiver->_configs["build_telephone_number"] == "XTN.1") ? $tel_number : null,
+      ($receiver->_configs["build_telephone_number"] == "XTN_1") ? $tel_number : null,
       // Table - 0201
       $tel_use_code,
       // Table - 0202
@@ -545,7 +545,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       null,
       null,
       null,
-      ($receiver->_configs["build_telephone_number"] == "XTN.12") ? $tel_number : null,
+      ($receiver->_configs["build_telephone_number"] == "XTN_12") ? $tel_number : null,
     );
   }
 
