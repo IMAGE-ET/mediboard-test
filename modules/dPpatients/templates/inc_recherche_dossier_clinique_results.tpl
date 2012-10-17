@@ -8,19 +8,21 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<div style="width: 100%; padding-bottom: 5px; height: 20px;" class="not-printable">
+  <button type="button" style="float: right;" class="close" onclick="Control.Modal.close();">
+    {{tr}}Close{{/tr}}
+  </button>
+  {{if $one_field}}
+    <button type="button" style="float: left;" class="hslip" onclick="exportResults();">Export Texte</button>
+    <button type="button" style="float: left;" class="print" onclick="modal_results.print();">{{tr}}Print{{/tr}}
+  {{/if}}
+</div>
+
 {{if !$one_field}}
   <div class="small-info">
     Veuillez renseigner au moins un champ dans le formulaire de gauche pour effectuer une recherche
   </div>
 {{else}}
-
-<div style="width: 100%; padding-bottom: 5px; height: 20px;" class="not-printable">
-  <button type="button" style="float: right;" class="close" onclick="Control.Modal.close();">
-    {{tr}}Close{{/tr}}
-  </button>
-  <button type="button" style="float: left;" class="hslip" onclick="exportResults();">Export Texte</button>
-  <button type="button" style="float: left;" class="print" onclick="modal_results.print();">{{tr}}Print{{/tr}}
-</div>
 
 {{mb_include module=system template=inc_pagination 
      total=$count_patient change_page="changePage" step=30 current=$start}}
