@@ -10,6 +10,7 @@
 
 {{mb_script module=patients script=patient}}
 {{mb_script module=planningOp script=ccam_selector}}
+{{mb_script module=patients script=pat_selector}}
 
 <script type="text/javascript">
 function changePage (start) {
@@ -71,12 +72,6 @@ function emptyCommentaire() {
   $V(form.commentaire, '');
 }
 
-function viewLines(patient_id) {
-  var form = getForm("rechercheDossierClinique");
-  $V(form.patient_id, patient_id);
-  form.onsubmit();
-}
-
 function exportResults() {
   var form = getForm("rechercheDossierClinique");
   $V(form.export, 1);
@@ -90,6 +85,14 @@ Main.add(function() {
   Control.Tabs.create("tabs-prescription", true);
   
   var form = getForm("rechercheDossierClinique");
+  
+  // Pat Selector
+  PatSelector.init = function(){
+    this.sForm      = "rechercheDossierClinique";
+    this.sId        = "patient_id";
+    this.sView      = "_pat_name";
+    this.pop();
+  }
   
   // Autocomplete des medicaments
   var url = new Url("dPmedicament", "httpreq_do_medicament_autocomplete");
@@ -171,7 +174,6 @@ Main.add(function() {
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="a" value="ajax_recherche_dossier_clinique" />
   <input type="hidden" name="start" value="0" onchange="this.form.onsubmit()" />
-  <input type="hidden" name="patient_id" />
   <input type="hidden" name="export" value="0"/>
   <input type="hidden" name="suppressHeaders" value="0"/>
   
@@ -204,6 +206,15 @@ Main.add(function() {
           
           <tr>
             <th colspan="2" class="title">{{tr}}CPatient{{/tr}}</th>
+          </tr>
+          
+          <tr>
+            <th>{{mb_label class=CConsultation field=patient_id}}</th>
+            <td>
+              {{mb_field object=$patient field="patient_id" hidden=1 ondblclick="PatSelector.init()"}}
+              <input type="text" name="_pat_name" style="width: 15em;" value="{{$pat->_view}}" readonly="readonly" onfocus="PatSelector.init()" />
+              <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>  
+            </td>
           </tr>
           
           <tr>

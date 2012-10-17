@@ -53,6 +53,7 @@ $fields = array(
     "_age_min" => null, 
     "_age_max" => null, 
     "medecin_traitant" => null,
+    "patient_id" => "="
   ),
   "CAntecedent" => array(
     "rques" => "LIKE", 
