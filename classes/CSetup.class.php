@@ -380,13 +380,13 @@ class CSetup {
         // Former pure SQL system
         // Cannot check against module version or fresh install will generate errors
         if (self::isOldPrefSystem($core_upgrade)) {
-          $query = "SELECT * FROM `user_preferences` WHERE `pref_user` = '0' && `pref_name` = '$_name'";
+          $query = "SELECT * FROM `user_preferences` WHERE `pref_user` = '0' AND `pref_name` = '$_name'";
           $result = $this->ds->exec($query);
           
           if (!$this->ds->numRows($result)) {
             $query = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )
               VALUES ('0', '$_name', '$_default');";
-            $this->addQuery($query);
+            $this->ds->exec($query);
           }
         }
         // Latter object oriented system
