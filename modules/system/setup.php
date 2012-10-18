@@ -641,7 +641,7 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.74");
     
-    $this->addPrefQuery("showCounterTip", "1");
+    $this->addPrefQuery("showCounterTip", 1);
     
     $this->makeRevision("1.0.75");
     
