@@ -44,7 +44,6 @@ $compte_rendu->loadRefsNotes();
 
 if (!$compte_rendu->_id) {
   $compte_rendu->valueDefaults();
-  $compte_rendu->author_id = CAppUI::$user->_id;
 }
 
 if ($compte_rendu->object_id) {

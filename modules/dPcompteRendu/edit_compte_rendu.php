@@ -29,7 +29,6 @@ if ($compte_rendu_id) {
 // Création à partir d'un modèle vide
 else if ($modele_id == 0 && !$pack_id) {
   $compte_rendu->valueDefaults();
-  $compte_rendu->author_id = CAppUI::$user->_id;
   $compte_rendu->object_id = $object_id;
   $compte_rendu->object_class = $target_class;
   $compte_rendu->_ref_object = new $target_class;
@@ -47,7 +46,7 @@ else {
   $compte_rendu->object_id = $object_id;
   $compte_rendu->_ref_object = null;
   $compte_rendu->modele_id = $modele_id;
-  $compte_rendu->author_id = CAppUI::$user->_id;
+  
   $header_id = null;
   $footer_id = null;
   

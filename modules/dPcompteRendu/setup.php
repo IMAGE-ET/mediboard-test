@@ -844,7 +844,25 @@ class CSetupdPcompteRendu extends CSetup {
       CHANGE `font` `font` ENUM ('arial','calibri','comic','courier','georgia','lucida','symbol','tahoma','times','trebuchet','verdana','zapfdingbats')";
     $this->addQuery($query);
     
-    $this->mod_version = "0.87";
+    $this->makeRevision("0.87");
+    // Table temporaire de mappage entre le author_id (user_id du first log) et le compte_rendu_id
+    // Les compte-rendus affectés sont principalement ceux en édition rapide
+    $query = "CREATE TEMPORARY TABLE `owner_doc` (
+      `compte_rendu_id` INT(11), `author_id` INT(11)) AS
+      SELECT `compte_rendu_id`, `user_log`.`user_id` as `author_id`
+      FROM `compte_rendu`, `user_log`
+      WHERE `user_log`.`object_class` = 'CCompteRendu'
+      AND `compte_rendu`.`author_id` IS NULL
+      AND `user_log`.`object_id` = `compte_rendu`.`compte_rendu_id`
+      AND `user_log`.`type` = 'create';";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `compte_rendu`
+      JOIN `owner_doc` ON `compte_rendu`.`compte_rendu_id` = `owner_doc`.`compte_rendu_id`
+      SET `compte_rendu`.`author_id` = `owner_doc`.`author_id`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.88";
   }
 }
 ?>

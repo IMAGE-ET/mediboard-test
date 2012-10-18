@@ -167,6 +167,7 @@ Main.add(function() {
   <input type="hidden" name="margin_top" value="{{$compte_rendu->margin_top}}"/>
   <input type="hidden" name="margin_bottom" value="{{$compte_rendu->margin_bottom}}"/>
   
+  {{mb_field object=$compte_rendu field="author_id" hidden=1}}
   {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
   {{mb_field object=$compte_rendu field="object_class" hidden=1 prop=""}}
   

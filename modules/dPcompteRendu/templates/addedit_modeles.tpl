@@ -214,7 +214,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
       <input type="hidden" name="private" value="0"/>
       {{mb_key object=$compte_rendu}}
       {{mb_field object=$compte_rendu field="object_id" hidden=1}}
-      {{mb_field object=$compte_rendu field="author_id" hidden=1}}
+      
       {{if $compte_rendu->_id}}
         <button class="new" type="button" onclick="Modele.create()">
           {{tr}}CCompteRendu-title-create{{/tr}}

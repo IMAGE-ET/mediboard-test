@@ -65,6 +65,7 @@ class CCompteRendu extends CDocumentItem {
   
   // Referenced objects
   var $_ref_user         = null;
+  var $_ref_author       = null;
   var $_ref_category     = null;
   var $_ref_function     = null;
   var $_ref_group        = null;
@@ -400,6 +401,10 @@ class CCompteRendu extends CDocumentItem {
     return $this->_ref_file = $this->loadUniqueBackRef("files");
   }
   
+  function loadRefAuthor() {
+    return $this->_ref_author = $this->loadFwdRef("author_id");
+  }
+  
   function loadRefsFwd() {
     parent::loadRefsFwd();
 
@@ -661,6 +666,15 @@ class CCompteRendu extends CDocumentItem {
     if (!($this->_ref_user || $this->_ref_function || $this->_ref_group) || !$this->_ref_object) {
       $this->loadRefsFwd();
     }
+    
+    $this->loadRefAuthor();
+    
+    if ($this->_ref_author->_id == CMediusers::get()->_id) {
+      $can = new CCanDo();
+      $can->read = $can->edit = 1;
+      return $can;
+    }
+    
     if ($this->_ref_object->_id) {
       $can = $this->_ref_object->getPerm($permType);
     }
@@ -790,6 +804,10 @@ class CCompteRendu extends CDocumentItem {
     
     if (!$this->content_id ) {
       $this->content_id = $this->_ref_content->_id;
+    }
+    
+    if (!$this->_id) {
+      $this->author_id = CAppUI::$user->_id;
     }
     
     return parent::store();
