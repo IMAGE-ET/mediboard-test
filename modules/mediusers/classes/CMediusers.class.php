@@ -122,61 +122,61 @@ class CMediusers extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
+    $props = parent::getProps();
 
     // Note: notamment utile pour les seeks
     // Dans les faits c'est plus logique puisque la classe n'est pas autoincremented
-    $specs["user_id"]                = "ref class|CUser seekable show|0";
+    $props["user_id"]                = "ref class|CUser seekable show|0";
     
-    $specs["remote"]                 = "bool default|1 show|0";
-    $specs["adeli"]                  = "numchar length|9 confidential mask|99S9S99999S9 control|luhn";
-    $specs["rpps"]                   = "numchar length|11 confidential mask|99999999999 control|luhn";
-    $specs["cps"]                    = "str";
-    $specs["function_id"]            = "ref notNull class|CFunctions seekable";
-    $specs["discipline_id"]          = "ref class|CDiscipline";
-    $specs["titres"]                 = "text";
-    $specs["commentaires"]           = "text";
-    $specs["actif"]                  = "bool default|1";
-    $specs["deb_activite"]           = "date";
-    $specs["fin_activite"]           = "date";
-    $specs["spec_cpam_id"]           = "ref class|CSpecCPAM";
-    $specs["compte"]                 = "code rib confidential mask|99999S99999S99999999999S99 show|0";
-    $specs["banque_id"]              = "ref class|CBanque show|0";
-    $specs["code_intervenant_cdarr"] = "str length|2";
-    $specs["secteur"]                = "enum list|1|2";
-    $specs["cab"]                    = "str";
-    $specs["conv"]                   = "str";  
-    $specs["zisd"]                   = "str";
-    $specs["ik"]                     = "str";
-    $specs["ean"]                    = "str";
-    $specs["rcc"]                    = "str";
-    $specs["adherent"]               = "str";
-    $specs["mail_apicrypt"]          = "email";
-    $specs["compta_deleguee"]       = "bool default|0";
+    $props["remote"]                 = "bool default|1 show|0";
+    $props["adeli"]                  = "numchar length|9 confidential mask|99S9S99999S9 control|luhn";
+    $props["rpps"]                   = "numchar length|11 confidential mask|99999999999 control|luhn";
+    $props["cps"]                    = "str";
+    $props["function_id"]            = "ref notNull class|CFunctions seekable";
+    $props["discipline_id"]          = "ref class|CDiscipline";
+    $props["titres"]                 = "text";
+    $props["commentaires"]           = "text";
+    $props["actif"]                  = "bool default|1";
+    $props["deb_activite"]           = "date";
+    $props["fin_activite"]           = "date";
+    $props["spec_cpam_id"]           = "ref class|CSpecCPAM";
+    $props["compte"]                 = "code rib confidential mask|99999S99999S99999999999S99 show|0";
+    $props["banque_id"]              = "ref class|CBanque show|0";
+    $props["code_intervenant_cdarr"] = "str length|2";
+    $props["secteur"]                = "enum list|1|2";
+    $props["cab"]                    = "str";
+    $props["conv"]                   = "str";  
+    $props["zisd"]                   = "str";
+    $props["ik"]                     = "str";
+    $props["ean"]                    = "str";
+    $props["rcc"]                    = "str";
+    $props["adherent"]               = "str";
+    $props["mail_apicrypt"]          = "email";
+    $props["compta_deleguee"]       = "bool default|0";
     
-    $specs["_group_id"]              = "ref notNull class|CGroups";
+    $props["_group_id"]              = "ref notNull class|CGroups";
     
-    $specs["_user_username"]         = "str notNull minLength|3 reported";
-    $specs["_user_password2"]        = "password sameAs|_user_password reported";
-    $specs["_user_first_name"]       = "str reported";
-    $specs["_user_last_name"]        = "str notNull confidential reported";
-    $specs["_user_email"]            = "str confidential reported";
-    $specs["_user_phone"]            = "phone confidential reported";
-    $specs["_user_adresse"]          = "str confidential reported";
-    $specs["_user_last_login"]       = "dateTime reported";
-    $specs["_user_cp"]               = "num length|5 confidential reported";
-    $specs["_user_ville"]            = "str confidential reported";
-    $specs["_profile_id"]            = "ref reported class|CUser";
-    $specs["_user_type"]             = "num notNull min|0 max|20 reported";
-    $specs["_user_type_view"]        = "str";
+    $props["_user_username"]         = "str notNull minLength|3 reported";
+    $props["_user_password2"]        = "password sameAs|_user_password reported";
+    $props["_user_first_name"]       = "str reported";
+    $props["_user_last_name"]        = "str notNull confidential reported";
+    $props["_user_email"]            = "str confidential reported";
+    $props["_user_phone"]            = "phone confidential reported";
+    $props["_user_adresse"]          = "str confidential reported";
+    $props["_user_last_login"]       = "dateTime reported";
+    $props["_user_cp"]               = "num length|5 confidential reported";
+    $props["_user_ville"]            = "str confidential reported";
+    $props["_profile_id"]            = "ref reported class|CUser";
+    $props["_user_type"]             = "num notNull min|0 max|20 reported";
+    $props["_user_type_view"]        = "str";
     
     // The different levels of security are stored to be usable in JS
-    $specs["_user_password_weak"]    = "password minLength|4";
-    $specs["_user_password_strong"]  = "password minLength|6 notContaining|_user_username notNear|_user_username alphaAndNum";
+    $props["_user_password_weak"]    = "password minLength|4";
+    $props["_user_password_strong"]  = "password minLength|6 notContaining|_user_username notNear|_user_username alphaAndNum";
 
-    $specs["_user_password"]         = $specs["_user_password_weak"]." reported";
+    $props["_user_password"]         = $props["_user_password_weak"]." reported";
 
-    return $specs;
+    return $props;
   }
   
   /** Update the object's specs */
@@ -742,8 +742,8 @@ class CMediusers extends CMbObject {
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
     $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
     // Filtre sur l'établissement
-    $g = CGroups::loadCurrent();
-    $where["functions_mediboard.group_id"] = "= '$g->_id'";
+    $group = CGroups::loadCurrent();
+    $where["functions_mediboard.group_id"] = "= '$group->_id'";
     
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
