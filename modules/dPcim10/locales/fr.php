@@ -19,6 +19,7 @@ $locales['CFavoriCIM10.none'] = 'Pas de favoris CIM';
 $locales['CFavoriCIM10.one'] = 'Un favori CIM';
 $locales['CUser-back-favoris_CIM10'] = 'Favoris CIM';
 $locales['mod-dPcim10-tab-code_finder'] = 'Recherche du code CIM';
+$locales['mod-dPcim10-tab-code_selector_cim10'] = 'Recherche de code CIM';
 $locales['mod-dPcim10-tab-configure'] = 'Configuration';
 $locales['mod-dPcim10-tab-vw_find_code'] = 'Rechercher un code';
 $locales['mod-dPcim10-tab-vw_full_code'] = 'Afficher un code';
