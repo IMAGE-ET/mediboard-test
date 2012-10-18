@@ -12,6 +12,7 @@ $user_id = CValue::getOrSession("user_id", CAppUI::$user->_id);
 // save form info
 $patient = new CPatient();
 bindHashToObject($_GET + $_SESSION["dPpatients"], $patient);
+$patient->_id = "";
 $patient->loadRefsFwd();
 
 $consult = new CConsultation();
