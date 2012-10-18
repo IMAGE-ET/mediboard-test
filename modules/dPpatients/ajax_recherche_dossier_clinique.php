@@ -138,6 +138,8 @@ switch ($section) {
     $ljoin["patients"] = "patients.patient_id = consultation.patient_id";
     $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
     
+    $where["plageconsult.chir_id"] = " = '$user_id'";
+    
     // CConsultation ---------------------------
     $consult_data = $data["CConsultation"];
     
@@ -187,6 +189,8 @@ switch ($section) {
                   plagesop.date >= '{$sejour_data['entree']}'";
       $where[] = "plageconsult.date >= '".mbDate($sejour_data['entree'])."'";
     }
+    
+    $where["sejour.chir_id"] = "= '$user_id'";
     
     // CSejour ----------------------------
     if (!empty($sejour_data["_rques_sejour"])) {
