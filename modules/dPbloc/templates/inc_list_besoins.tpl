@@ -22,7 +22,7 @@
           {{if $object_id}}
             onclick="onDelBesoin('{{$_besoin->_id}}', '{{$type_ressource->libelle}}')"
           {{else}}
-            onclick="delBesoinNonStored()"
+            onclick="delBesoinNonStored('{{$type_ressource->_id}}')"
           {{/if}}></button>
         {{if $type == "operation_id"}}
           <button type="button" class="modele_etiquette notext"
