@@ -16,6 +16,7 @@
   <input type="hidden" name="a" value="print_etiquettes" />
   <input type="hidden" name="object_class" value="{{$object->_class}}" />
   <input type="hidden" name="object_id" value="{{$object->_id}}" />
+  <input type="hidden" name="modele_etiquette_id" />
   <input type="hidden" name="suppressHeaders" value="1" />
   <input type="hidden" name="dialog" value="1" />
 </form>
@@ -126,10 +127,16 @@
   </form>
 
 {{/if}}
-{{if $nb_modeles_etiquettes}}
-  <button type="button" class="modele_etiquette" onclick="ModeleEtiquette.print('{{$object_class}}', '{{$object_id}}')">Etiquettes</button>
-{{/if}}
 
+{{if $nb_modeles_etiquettes > 0}}
+  <button type="button" class="modele_etiquette"
+    {{if $nb_modeles_etiquettes == 1}}
+      onclick="ModeleEtiquette.print('{{$object_class}}', '{{$object_id}}')"
+    {{else}}
+      onclick="ModeleEtiquette.chooseModele('{{$object_class}}', '{{$object_id}}')"
+    {{/if}}>Etiquettes</button>
+{{/if}}
+ 
 <table class="form" id="docs_{{$object_class}}{{$object_id}}">
   {{mb_include module="dPcompteRendu" template="inc_widget_list_documents"}}
 </table>

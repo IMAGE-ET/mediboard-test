@@ -7,6 +7,7 @@
         var url = new Url("dPhospi", "print_etiquettes");
         url.addParam("object_id", '{{$object_id}}');
         url.addParam("object_class", '{{$object_class}}');
+        url.addParam("modele_etiquette_id", '{{$modele_etiquette_id}}');
         url.addParam("printer_id", id);
         url.requestUpdate("systemMsg");
         $$('.modal')[0].select('.close')[0].click();

@@ -126,10 +126,13 @@ $praticien->canDo();
 $modele_etiquette = new CModeleEtiquette;
 
 $where = array();
-$where['object_class'] = " IN ('COperation', 'CSejour')";
+$where['object_class'] = "= 'COperation'";
 $where["group_id"] = " = '".CGroups::loadCurrent()->_id."'";
 
-$nb_modeles_etiquettes = $modele_etiquette->countList($where);
+$nb_modeles_etiquettes_operation = $modele_etiquette->countList($where);
+
+$where['object_class'] = "= 'CSejour'";
+$nb_modeles_etiquettes_sejour = $modele_etiquette->countList($where);
 
 $nb_printers = 0;
 
@@ -155,7 +158,8 @@ $smarty->assign("nb_canceled"   , $nb_canceled);
 $smarty->assign("board"         , $board);
 $smarty->assign("nb_printers"   , $nb_printers);
 $smarty->assign("can_doc"       , $compte_rendu->loadPermClass());
-$smarty->assign("nb_modeles_etiquettes", $nb_modeles_etiquettes);
+$smarty->assign("nb_modeles_etiquettes_sejour", $nb_modeles_etiquettes_sejour);
+$smarty->assign("nb_modeles_etiquettes_operation", $nb_modeles_etiquettes_operation);
 
 $smarty->display("inc_list_operations.tpl");
 

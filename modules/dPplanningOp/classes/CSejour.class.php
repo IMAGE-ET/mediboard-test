@@ -141,6 +141,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_naissance          = null;
   var $_isolement_date     = null;
   var $_collisions         = null;
+  var $_count_modeles_etiq = null;
   
   // Behaviour fields
   var $_check_bounds  = true;
@@ -1707,6 +1708,13 @@ class CSejour extends CCodable implements IPatientRelated {
       $function      = $user_printers->loadRefFunction();
       $this->_nb_printers = $function->countBackRefs("printers");
     }
+    
+    // On compte les modèles d'étiquettes pour :
+    // - stream si un seul
+    // - modale de choix si plusieurs
+    $modele_etiquette = new CModeleEtiquette();
+    $modele_etiquette->setObject($this);
+    $this->_count_modeles_etiq = $modele_etiquette->countMatchingList();
   }
 
 /**

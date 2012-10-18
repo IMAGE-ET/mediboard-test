@@ -1,5 +1,5 @@
 {{mb_script module=planningOp script=prestations ajax=1}}
-
+{{mb_script module=hospi script=modele_etiquette ajax=1}}
 {{assign var=sejour       value=$object}}
 {{assign var=patient      value=$object->_ref_patient}}
 {{assign var=operations   value=$object->_ref_operations}}
@@ -12,26 +12,16 @@
     url.addParam('sejour_id', sejour_id);
     url.requestModal(700, 550);
   }
-  printEtiquettes = function() {
-    var nb_printers = {{$sejour->_nb_printers|@json}};
-    if (nb_printers > 0) {
-      var url = new Url('compteRendu', 'ajax_choose_printer');
-      url.addParam('mode_etiquette', 1);
-      url.addParam('object_class', '{{$sejour->_class}}');
-      url.addParam('object_id', '{{$sejour->_id}}');
-      url.requestModal(400);
-    }
-    else {
-      getForm('download_etiq_{{$sejour->_id}}').submit();
-    }
-  }
+  
+  ModeleEtiquette.nb_printers = {{$sejour->_nb_printers|@json}};
 </script>
 
-<form name="download_etiq_{{$sejour->_id}}" style="display: none;" action="?" target="_blank" method="get" class="prepared">
+<form name="download_etiq_{{$object->_class}}_{{$sejour->_id}}" style="display: none;" action="?" target="_blank" method="get" class="prepared">
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="a" value="print_etiquettes" />
   <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="object_class" value="{{$sejour->_class}}" />
+  <input type="hidden" name="modele_etiquette_id" />
   <input type="hidden" name="suppressHeaders" value="1" />
   <input type="hidden" name="dialog" value="1" />
 </form>
@@ -102,7 +92,12 @@
       
       {{if @$modules.dPhospi->_can->read}}
         <br />
-        <button type="button" class="print" onclick="printEtiquettes()">
+        <button type="button" class="print"
+          {{if $sejour->_count_modeles_etiq > 1}}
+            onclick="ModeleEtiquette.print('{{$sejour->_class}}', '{{$sejour->_id}}');"
+          {{else}}
+            onclick="ModeleEtiquette.chooseModele('{{$sejour->_class}}', '{{$sejour->_id}}')"
+          {{/if}}>
           {{tr}}CModeleEtiquette.print_labels{{/tr}}
         </button>
       {{/if}}

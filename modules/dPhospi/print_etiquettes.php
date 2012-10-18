@@ -16,6 +16,7 @@ ignore_user_abort(true);
 $printer_id   = CValue::get("printer_id");
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
+$modele_etiquette_id = CValue::get("modele_etiquette_id");
 
 $object = new $object_class;
 $object->load($object_id);
@@ -28,6 +29,14 @@ $object->completeLabelFields($fields);
 
 // Chargement des modèles d'étiquettes
 $modele_etiquette = new CModeleEtiquette;
+$modele_etiquette->load($modele_etiquette_id);
+
+if ($modele_etiquette->_id) {
+  $modele_etiquette->completeLabelFields($fields);
+  $modele_etiquette->replaceFields($fields);
+  $modele_etiquette->printEtiquettes($printer_id);
+  CApp::rip();
+}
 
 $where = array();
 
