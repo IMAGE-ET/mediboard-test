@@ -199,15 +199,26 @@
    * @return CIdSante400 The matching external ID
    */
   static function getMatch($object_class, $tag, $id400, $object_id = null) {
-    $id_ext               = new self;
-    $id_ext->object_class = $object_class;
-    $id_ext->tag          = $tag;
-    $id_ext->id400        = $id400;
-    $id_ext->object_id    = $object_id;
-    $id_ext->loadMatchingObject();
+    $idex               = new self;
+    $idex->object_class = $object_class;
+    $idex->tag          = $tag;
+    $idex->id400        = $id400;
+    $idex->object_id    = $object_id;
+    $idex->loadMatchingObject();
     
     return $id_ext;
   }
+
+  /**
+   * Static alternative to loadLatestFor()
+   * 
+   * @return CIdSante400 
+   */
+  static function getLatestFor($mbObject, $tag = null) {
+    $idex = new CIdSante400();
+    $idex->loadLatestFor($mbObject, $tag);
+    return $idex;
+  } 
 }
 
 ?>
