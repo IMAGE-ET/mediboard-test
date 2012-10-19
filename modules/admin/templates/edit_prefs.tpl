@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=admin script=preferences  ajax=true}}
+
 <table class="main">
   <tr>
     <td class="narrow">
@@ -30,14 +32,11 @@
 
 <script type="text/javascript">
 Main.add(Control.Tabs.create.curry('tab-modules', true));
-Preferences.onSubmit = function(form) {
-  return onSubmitFormAjax(form, {onComplete: Preferences.refresh || Prototype.emptyFunction});
-}
 </script>
 
     </td><td>
 
-<form name="form-edit-preferences" action="?m=admin{{if !$ajax}}&amp;{{$actionType}}={{$action}}{{/if}}" method="post" onsubmit="return Preferences.onSubmit(this)">
+<form name="form-edit-preferences" action="?m=admin{{if !$ajax}}&amp;{{$actionType}}={{$action}}{{/if}}" method="post" onsubmit="return Preferences.onSubmitAll(this)">
 
 <input type="hidden" name="dosql" value="do_preference_aed" />
 <input type="hidden" name="m" value="admin" />
@@ -56,7 +55,7 @@ Preferences.onSubmit = function(form) {
   {{/if}}
   
   <tr>
-    <th class="category">
+    <th class="category" {{if $can->admin}} colspan="2" {{/if}} >
       {{tr}}Preference{{/tr}}
     </th>
     <th class="category">
@@ -116,14 +115,14 @@ Preferences.onSubmit = function(form) {
   
   {{foreach from=$prefs key=module item=_prefs}}
     {{if $module != "common" && $module|module_active}}
-    <tbody style="display: none" id="module-{{$module}}">
+    <tbody style="display: none;" id="module-{{$module}}">
       {{mb_include module=$module template=preferences}}
     </tbody>
     {{/if}}
   {{/foreach}}
     
   <tr>
-    <td class="button" colspan="4">
+    <td class="button" colspan="5">
       <button type="submit" class="submit singleclick">{{tr}}Save{{/tr}}</button>
     </td>
   </tr>

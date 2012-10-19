@@ -1,4 +1,5 @@
-{{mb_script module="dPpatients" script="autocomplete"}}
+{{mb_script module=admin    script=preferences  ajax=true}}
+{{mb_script module=patients script=autocomplete ajax=true}}
 
 <script type="text/javascript">
 
@@ -15,14 +16,7 @@ Main.add(function () {
 	</li>
 		
   <li>
-		<script type="text/javascript">
-		Preferences.refresh = function () {
-		  var url = new Url("admin", "edit_prefs");
-		  url.addParam("user_id", "{{$user->_id}}");
-		  url.requestUpdate("edit-preferences");
-		};
-		</script>
-  	<a href="#edit-preferences" onmouseup="Preferences.refresh()">
+  	<a href="#edit-preferences" onmouseup="Preferences.refresh('{{$user->_id}}')">
   		{{tr}}Preferences{{/tr}}
 		</a>
 	</li>

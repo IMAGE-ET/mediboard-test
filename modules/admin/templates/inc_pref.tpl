@@ -11,6 +11,13 @@
 {{mb_default var=readonly value=0}}
 
 <tr>
+  {{if $can->admin}} 
+  <td class="narrow">
+    <button class="search notext compact" type="button" onclick="Preferences.report('{{$var}}');">
+      {{tr}}Report{{/tr}}
+    </button>
+  </td>
+  {{/if}}
   <th>
     <label for="pref[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">{{tr}}pref-{{$var}}{{/tr}}</label>
   </th>

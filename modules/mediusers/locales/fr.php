@@ -296,6 +296,7 @@ $locales['actions-mediusers'] = 'Actions des Mediusers';
 $locales['config-mediusers'] = 'Configuration des Mediusers';
 $locales['config-mediusers-tag_mediuser'] = 'Tag Mediusers';
 $locales['config-mediusers-tag_mediuser-desc'] = 'Tag Mediusers';
+$locales['mod-admin-tab-ajax_edit_pref'] = 'Modification de préférence';
 $locales['mod-mediusers-tab-ajax_edit_mediuser'] = 'Formulaire d\'utilisateur';
 $locales['mod-mediusers-tab-color_selector'] = 'Sélection d\'une couleur';
 $locales['mod-mediusers-tab-configure'] = 'Configuration';
