@@ -212,7 +212,7 @@ Main.add(function() {
             <th>{{mb_label class=CConsultation field=patient_id}}</th>
             <td>
               {{mb_field object=$patient field="patient_id" hidden=1 ondblclick="PatSelector.init()"}}
-              <input type="text" name="_pat_name" style="width: 15em;" value="{{$pat->_view}}" readonly="readonly" onfocus="PatSelector.init()" />
+              <input type="text" name="_pat_name" style="width: 15em;" readonly="readonly" onfocus="PatSelector.init()" />
               <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>  
             </td>
           </tr>
