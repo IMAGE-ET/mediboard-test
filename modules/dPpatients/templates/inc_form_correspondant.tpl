@@ -18,7 +18,9 @@
     var form = getForm("editCorrespondant");
     Calendar.regField(form.date_debut, null, { noView: false } );
     Calendar.regField(form.date_fin  , null, { noView: false } );
-
+    
+    toggleUrrsafParente(form.relation);
+    
     {{if !$mode_modele}}
       // Autocomplete sur le nom du correspondant
       var url = new Url("system", "ajax_seek_autocomplete");
@@ -56,8 +58,8 @@
     {{/if}}
 
   } );
+  
   toggleUrrsafParente = function(elt) {
-
     $("parente").toggle();
     if ($V(elt) == "employeur") {
       $("urssaf").setStyle({display: "table-row"});
@@ -67,6 +69,11 @@
       $V(form.parente_autre, "");
       $V(form.relation_autre, "");
       elt.form.parente.selectedIndex = 0;
+    }
+    else if ($V(elt) == "assurance") {
+      $("urssaf").setStyle({display: "none"});
+      $("parente").setStyle({display: "none"});
+      $("parente_autre").setStyle({display: "none"});
     }
     else {
       $("parente").setStyle({display: "table-row"});
@@ -202,25 +209,27 @@
       <th>{{mb_label object=$correspondant field="prenom"}}</th>
       <td>{{mb_field object=$correspondant field="prenom"}}</td>
     </tr>
-
+    
     <tr id="num_assure" {{if $correspondant->relation != "employeur" || !$correspondant->_id || $conf.ref_pays == 1}}style="display: none;"{{/if}}>
       <th>{{mb_label object=$correspondant field="num_assure"}}</th>
       <td>{{mb_field object=$correspondant field="num_assure"}}</td>
     </tr>
-
-    <tr id="employeur" {{if ($correspondant->relation != "assurance" && $correspondant->_id) || $conf.ref_pays == 1}} style="display: none;"{{/if}}>
-      <th>{{mb_label object=$correspondant field="employeur"}}</th>
-      <td>
-        <select name="employeur">
-          <option value="">-- Choisir</option>
-          {{foreach from=$patient->_ref_correspondants_patient item=_correspondant}}
-            {{if $_correspondant->relation == "employeur"}}
-              <option value="{{$_correspondant->_id}}" {{if $correspondant->employeur == $_correspondant->_id}}selected="selected"{{/if}}>{{$_correspondant->nom}}</option>
-            {{/if}}
-          {{/foreach}}
-        </select>
-      </td>
-    </tr>
+    
+    {{if !$mode_modele}}
+      <tr id="employeur" {{if ($correspondant->relation != "assurance" && $correspondant->_id) || $conf.ref_pays == 1}} style="display: none;"{{/if}}>
+        <th>{{mb_label object=$correspondant field="employeur"}}</th>
+        <td>
+          <select name="employeur">
+            <option value="">-- Choisir</option>
+            {{foreach from=$patient->_ref_correspondants_patient item=_correspondant}}
+              {{if $_correspondant->relation == "employeur"}}
+                <option value="{{$_correspondant->_id}}" {{if $correspondant->employeur == $_correspondant->_id}}selected="selected"{{/if}}>{{$_correspondant->nom}}</option>
+              {{/if}}
+            {{/foreach}}
+          </select>
+        </td>
+      </tr>
+    {{/if}}
 
     <tr {{if $correspondant->relation != "confiance"}}style="display: none;"{{/if}} id="naissance">
       <th>{{mb_label object=$correspondant field="naissance"}}</th>
