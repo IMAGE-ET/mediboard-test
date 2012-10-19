@@ -12,7 +12,7 @@ $object_class = CValue::get('object_class');
 $field        = CValue::get('field');
 $view_field   = CValue::get('view_field', $field);
 $input_field  = CValue::get('input_field', $view_field);
-
+$show_view    = CValue::get('show_view', 'false') == 'true';
 $keywords     = CValue::get($input_field);
 $limit        = CValue::get('limit', 30);
 $where        = CValue::get('where', array());
@@ -45,7 +45,7 @@ $smarty = new CSmartyDP();
 $smarty->assign('matches'   , $matches);
 $smarty->assign('field'     , $field);
 $smarty->assign('view_field', $view_field);
-$smarty->assign('show_view' , 1);
+$smarty->assign('show_view' , $show_view);
 $smarty->assign('template'  , $template);
 $smarty->assign('nodebug'   , true);
 $smarty->assign("input"     , "");

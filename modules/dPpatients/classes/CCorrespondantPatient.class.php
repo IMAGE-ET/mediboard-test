@@ -61,7 +61,7 @@ class CCorrespondantPatient extends CMbObject {
     $specs["patient_id"] = "ref class|CPatient cascade";
     $specs["relation"]   = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir";
     $specs["relation_autre"] = "str";
-    $specs["nom"]        = "str confidential";
+    $specs["nom"]        = "str seekable confidential";
     $specs["nom_jeune_fille"] = "str";
     $specs["prenom"]     = "str";
     $specs["naissance"]  = "birthDate mask|99/99/9999 format|$3-$2-$1";

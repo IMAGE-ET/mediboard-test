@@ -25,6 +25,7 @@
       url.addParam("object_class", "CCorrespondantPatient");
       url.addParam("whereComplex[patient_id]", "IS NULL");
       url.addParam("input_field", "nom");
+      url.addParam("view_field", "nom");
       url.autoComplete(form.nom, null, {
         minChars: 2,
         method: "get",
