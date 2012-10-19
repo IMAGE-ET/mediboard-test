@@ -607,7 +607,7 @@ var Url = Class.create({
         overflowX: 'hidden',
         height: iHeight ? iHeight+'px' : '',
         maxHeight: oOptions.maxHeight ? oOptions.maxHeight+'px' : '',
-        maxWidth : oOptions.maxWidth  ? oOptions.maxWidth+'px' : '',
+        maxWidth : oOptions.maxWidth  ? oOptions.maxWidth +'px' : '',
         width: iWidth ? iWidth+'px' : ''
       })
     );
@@ -615,7 +615,7 @@ var Url = Class.create({
     $(document.body).insert(div);
 
     // Decoration preparing
-    var closeButton  = DOM.button({type: "button", className: "close notext"}, $T('Close'));
+    var closeButton  = DOM.button({type: "button", className: "close notext" }, $T('Close' ));
     var reloadButton = DOM.button({type: "button", className: "change notext"}, $T('Reload'));
     var titleElement = DOM.div({className: "title"}, oOptions.title);
     
@@ -654,13 +654,15 @@ var Url = Class.create({
     
     this.requestUpdate(div.down('.content'), oOptions);
   
-    reloadButton.onclick = function() {
-      this.requestUpdate(div.down('.content'), oOptions);
-    }.bind(this);
+    reloadButton.onclick = this.reloadModal.bind(this);
     
     return this;
   },
 
+  reloadModal: function() {
+    this.requestUpdate(this.modalObject.container.down('.content'));
+  },
+  
   requestUpdate: function(ioTarget, oOptions) {
     this.addParam("ajax", 1);
     
