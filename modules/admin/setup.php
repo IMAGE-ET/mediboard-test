@@ -97,23 +97,32 @@ class CSetupadmin extends CSetup {
     $this->addDependency("system", "1.1.12");
     
     $query = "CREATE TABLE `view_access_token` (
-              `view_access_token_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `user_id` INT (11) UNSIGNED NOT NULL,
-              `datetime_start` DATETIME NOT NULL,
-              `ttl_hours` INT (11) UNSIGNED NOT NULL,
-              `first_use` DATETIME,
-              `params` VARCHAR (255) NOT NULL,
-              `hash` CHAR (40) NOT NULL
-             ) /*! ENGINE=MyISAM */;";
+      `view_access_token_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `user_id` INT (11) UNSIGNED NOT NULL,
+      `datetime_start` DATETIME NOT NULL,
+      `ttl_hours` INT (11) UNSIGNED NOT NULL,
+      `first_use` DATETIME,
+      `params` VARCHAR (255) NOT NULL,
+      `hash` CHAR (40) NOT NULL
+     ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `view_access_token` 
-              ADD INDEX (`user_id`),
-              ADD INDEX (`datetime_start`),
-              ADD INDEX (`first_use`),
-              ADD INDEX (`hash`);";
+      ADD INDEX (`user_id`),
+      ADD INDEX (`datetime_start`),
+      ADD INDEX (`first_use`),
+      ADD INDEX (`hash`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.0.26");
+    $query = "ALTER TABLE  
+      `user_preferences` CHANGE `user_id` `user_id` INT( 11 ) UNSIGNED NULL";
+    $this->addQuery($query);
+    $query = "UPDATE `user_preferences` 
+      SET `user_id` = NULL
+      WHERE `user_id` = '0'";
     $this->addQuery($query);
     
-    $this->mod_version = "1.0.26";
+    $this->mod_version = "1.0.27";
   }
 }
 ?>

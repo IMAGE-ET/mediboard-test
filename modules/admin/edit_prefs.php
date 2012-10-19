@@ -13,11 +13,11 @@ $user =  CUser::get($user_id);
 $prof = $user->profile_id ? CUser::get($user->profile_id) : new CUser;
 
 if ($user_id == "default") {
-  $user->_id = "0";
+  $user->_id = null;
 }
 
 $prefvalues = array(
-  "default"  => CPreferences::get(0),
+  "default"  => CPreferences::get(),
   "template" => $user->profile_id ? CPreferences::get($user->profile_id) : array(),
   "user"     => $user->_id !== "" ? CPreferences::get($user->_id       ) : array(),
 );

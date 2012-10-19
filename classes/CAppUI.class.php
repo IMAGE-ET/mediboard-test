@@ -746,7 +746,7 @@ class CAppUI {
    * 
    * @return void
    */
-  static function loadPrefs($user_id = 0) {
+  static function loadPrefs($user_id = null) {
     // Former pure SQL system
     $ds = CSQLDataSource::get("std");
     if ($ds->loadField("user_preferences", "pref_name")) {

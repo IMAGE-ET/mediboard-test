@@ -32,23 +32,23 @@ class CPreferences extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-		// @FIXME: use null for global preferences
-    $specs["user_id"] = "num min|0"; //"ref class|CUser"; // Needed for the default preferences
-    $specs["key"]     = "str notNull maxLength|40";
-    $specs["value"]   = "str";
-    return $specs;
+    $props = parent::getProps();
+    $props["user_id"] = "ref class|CUser";
+    $props["key"]     = "str notNull maxLength|40";
+    $props["value"]   = "str";
+    return $props;
   }
   
-  static function get($user_id = 0) {
-    $where["user_id"] = "= '$user_id'";
-		if ($user_id != 0) {
-      $where["value"] = "IS NOT NULL";
+  static function get($user_id = null) {
+    $where["user_id"] = "IS NULL";
+		if ($user_id) {
+      $where["user_id"] = "= '$user_id'";
+      $where["value"  ] = "IS NOT NULL";
 		}
 
   	$preferences = array();
     $pref = new self;
-  	foreach($pref->loadList($where) as $_pref) {
+  	foreach ($pref->loadList($where) as $_pref) {
   		$preferences[$_pref->key] = $_pref->value;
   	}
 
