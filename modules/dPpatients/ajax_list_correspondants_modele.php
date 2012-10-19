@@ -1,7 +1,7 @@
-<?php 
+<?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage dPpatients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
@@ -11,10 +11,13 @@
 
 $correspondant_id = CValue::getOrSession("correspondant_id", 0);
 
-$correspondant = new CCorrespondantModele();
-$correspondant->group_id = CGroups::loadCurrent()->_id;
+$correspondant = new CCorrespondantPatient();
 
-$correspondants = $correspondant->loadMatchingList("nom");
+$where = array();
+$where["patient_id"] = "IS NULL";
+
+$correspondants = $correspondant->loadList($where);
+//$correspondants = $correspondant->loadMatchingList("nom");
 
 $smarty = new CSmartyDP();
 

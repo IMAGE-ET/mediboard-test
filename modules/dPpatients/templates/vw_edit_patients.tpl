@@ -15,9 +15,14 @@
 {{assign var=modFSE value="fse"|module_active}}
 {{assign var=patient_id value=$patient->_id}}
 
+
+{{if "covercard"|module_active}}
+  {{mb_script module="covercard" script="updatePatientFieldFromCC"}}
+{{/if}}
+
 {{if $app->user_prefs.VitaleVision}}
   {{mb_include template=inc_vitalevision}}
-  
+
 	<script type="text/javascript">
 		var lireVitale = VitaleVision.read;
 	</script>
@@ -37,11 +42,11 @@ function copyAssureValues(element) {
 	// Hack pour gérer les form fields
 	var sPrefix = element.name[0] == "_" ? "_assure" : "assure_";
   eOther = element.form[sPrefix + element.name];
-  
+
   // Copy value
   $V(eOther, $V(element));
-  
-  // Radio buttons seem to be null, et valuable with $V 
+
+  // Radio buttons seem to be null, et valuable with $V
   if (element.type != 'radio') {
     eOther.fire("mask:check");
   }
@@ -101,7 +106,7 @@ function reloadListFileEditPatient(sAction, category_id){
   }
   var url = new Url("dPfiles", "httpreq_vw_listfiles");
   url.addParam("selKey", document.FrmClass.selKey.value);
-  url.addParam("selClass", document.FrmClass.selClass.value);  
+  url.addParam("selClass", document.FrmClass.selClass.value);
   url.addParam("typeVue", document.FrmClass.typeVue.value);
   if (category_id != undefined) {
     url.addParam("category_id", category_id);
@@ -125,14 +130,14 @@ var tabs;
 Main.add(function () {
   initPaysField("editFrm", "_pays_naissance_insee", "profession");
   initPaysField("editFrm", "pays", "tel");
-  
+
   InseeFields.initCPVille("editFrm", "cp", "ville","pays");
   InseeFields.initCPVille("editFrm", "cp_naissance", "lieu_naissance","_pays_naissance_insee");
   InseeFields.initCPVille("editFrm", "assure_cp", "assure_ville","assure_pays_insee");
   InseeFields.initCPVille("editFrm", "assure_cp_naissance", "assure_lieu_naissance","_assure_pays_naissance_insee");
 
   InseeFields.initCSP("editFrm", "_csp_view");
-	
+
   initPaysField("editFrm", "_assure_pays_naissance_insee", "assure_profession");
   initPaysField("editFrm", "assure_pays", "assure_tel");
 
@@ -140,8 +145,8 @@ Main.add(function () {
 
   {{if $patient->_id}}
     setObject( {
-      objClass: '{{$patient->_class}}', 
-      keywords: '', 
+      objClass: '{{$patient->_class}}',
+      keywords: '',
       id: '{{$patient->_id}}',
       view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' });
   {{/if}}
@@ -175,6 +180,7 @@ Main.add(function () {
 </a>
 {{/if}}
 
+<!-- modale Vitale -->
 <div id="modal-beneficiaire" style="display:none; text-align:center;">
   <p id="msg-multiple-benef">
     Cette carte vitale semble contenir plusieurs bénéficiaires, merci de sélectionner la personne voulue :
@@ -193,6 +199,11 @@ Main.add(function () {
   </div>
 </div>
 
+<!-- modale CoverCard -->
+{{if "covercard"|module_active}}
+{{mb_include module=covercard template=inc_input_covercard}}
+{{/if}}
+<!-- main -->
 <table class="main">
   <tr>
   {{if $patient->_id}}
@@ -204,21 +215,27 @@ Main.add(function () {
       {{elseif $modFSE && $modFSE->canRead()}}
         {{mb_include module=fse template=inc_button_vitale}}
       {{/if}}
-    
+
 			{{if $patient->date_lecture_vitale}}
       <div style="float: right;">
 	      <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
       </div>
       {{/if}}
-      
+
       {{mb_include module=system template=inc_object_idsante400 object=$patient}}
       {{mb_include module=system template=inc_object_history    object=$patient}}
-      Modification du dossier de {{$patient}} 
+      Modification du dossier de {{$patient}}
       {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
       {{if $patient->_bind_vitale}}{{tr}}UseVitale{{/tr}}{{/if}}
     </th>
   {{else}}
     <th class="title" colspan="5">
+      {{if "covercard"|module_active}}
+      <button class="search singleclick" type="button" onclick="modalCoverCard();">
+         Lire covercard
+      </button>
+      {{/if}}
+
       {{if $app->user_prefs.VitaleVision}}
         <button class="search singleclick" type="button" onclick="lireVitale();" style="float: left;">
          Lire Vitale
@@ -245,7 +262,7 @@ Main.add(function () {
           {{if $patient->_id}}onmousedown="reloadListFileEditPatient('load')"{{/if}}>Documents ({{$patient->_nb_files_docs}})</a></li>
       </ul>
       <hr class="control_tabs" />
-      
+
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return confirmCreation(this)">
         <input type="hidden" name="dosql" value="do_patients_aed" />
         <input type="hidden" name="del" value="0" />
@@ -255,17 +272,17 @@ Main.add(function () {
         {{if $patient->_bind_vitale}}
         <input type="hidden" name="_bind_vitale" value="1" />
         {{/if}}
-        
+
         <button type="submit" style="display: none;">&nbsp;</button>
-                
+
         {{if !$patient->_id}}
 				{{mb_field object=$patient field="medecin_traitant" hidden=1}}
 				{{/if}}
-				
+
         {{if $dialog}}
         <input type="hidden" name="dialog" value="{{$dialog}}" />
         {{/if}}
-        
+
         <div id="identite">
           {{mb_include template=inc_acc/inc_acc_identite}}
         </div>
@@ -273,7 +290,7 @@ Main.add(function () {
           {{mb_include template=inc_acc/inc_acc_assure}}
         </div>
         <div id="beneficiaire" style="display: none;">
-          {{mb_include template=inc_acc/inc_acc_beneficiaire}}   
+          {{mb_include template=inc_acc/inc_acc_beneficiaire}}
         </div>
       </form>
       <div id="correspondance" style="display: none;">
@@ -287,7 +304,7 @@ Main.add(function () {
       </div>
     </td>
   </tr>
-  
+
   <tr>
     <td class="button" colspan="5" style="text-align:center;" id="button">
       <div id="divSiblings" style="display:none;"></div>
@@ -298,16 +315,16 @@ Main.add(function () {
           &amp; {{tr}}BindVitale{{/tr}}
           {{/if}}
         </button>
-        
+
         <button type="button" class="print" onclick="Patient.print('{{$patient->_id}}')">
           {{tr}}Print{{/tr}}
         </button>
-        
+
         <button type="button" class="trash" onclick="confirmDeletion(document.editFrm,{typeName:'le patient',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
           {{tr}}Delete{{/tr}}
         </button>
 
-        {{if $can->admin}}        
+        {{if $can->admin}}
         <script type="text/javascript">
           function confirmPurge() {
           	var oForm = document.editFrm;
@@ -320,11 +337,11 @@ Main.add(function () {
 	          }
 	        }
         </script>
-			
+
         <button type="button" class="cancel" onclick="confirmPurge();">
           {{tr}}Purge{{/tr}}
         </button>
-        {{/if}} 
+        {{/if}}
 
       {{else}}
         <button tabindex="400" id="submit-patient" type="submit" class="submit" onclick="return document.editFrm.onsubmit();">

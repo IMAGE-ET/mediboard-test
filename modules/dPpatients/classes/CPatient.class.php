@@ -5,7 +5,7 @@
  * @package    Mediboard
  * @subpackage dPpatients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -17,31 +17,31 @@ class CPatient extends CMbObject {
     "dPcabinet" => "?m=dPcabinet&tab=vw_dossier&patSel=",
     "dPpatients" => "?m=dPpatients&tab=vw_full_patients&patient_id="
   );
- 
+
   // http://www.msa47.fr/front/id/msa47/S1153385038825/S1153385272497/S1153385352251
   static $libelle_exo_guess = array(
     "code_exo" => array(
       //0 => null,
       4 => array(
-        "affection", 
-        "ald", 
+        "affection",
+        "ald",
         "hors liste"
       ),
       /*3 => array(
-        "stérilité", 
-        "prématuré", 
+        "stérilité",
+        "prématuré",
         "HIV"
       ),*/
       5 => array(
-        "rente AT", 
-        "pension d'invalidité", 
-        "pension militaire", 
-        "enceinte", 
+        "rente AT",
+        "pension d'invalidité",
+        "pension militaire",
+        "enceinte",
         "maternité",
       ),
       9 => array(
-        "FSV", 
-        "FNS", 
+        "FSV",
+        "FNS",
         "vieillesse"
       ),
     ),
@@ -61,14 +61,14 @@ class CPatient extends CMbObject {
       "autreCasAlsaceMoselle" => array(),
     ),
   );
-  
+
   static $rangToQualBenef = array(
     "01" => 0,
     "31" => 1,
     "02" => 2,
     "11" => 6,
   );
-  
+
   // DB Table key
   var $patient_id = null;
 
@@ -95,7 +95,7 @@ class CPatient extends CMbObject {
   var $email            = null;
   var $vip              = null;
   var $tutelle          = null;
-  
+
   var $medecin_traitant_declare = null;
   var $medecin_traitant = null;
   var $incapable_majeur = null;
@@ -103,7 +103,7 @@ class CPatient extends CMbObject {
   var $matricule        = null;
   var $INSC             = null;
   var $avs              = null;
-  
+
   var $code_regime      = null;
   var $caisse_gest      = null;
   var $centre_gest      = null;
@@ -122,12 +122,12 @@ class CPatient extends CMbObject {
   var $code_sit         = null;
   var $regime_am        = null;
   var $mutuelle_types_contrat = null;
-  
+
   var $rang_beneficiaire= null;
   var $qual_beneficiaire= null; // LogicMax, VitaleVision
   var $rang_naissance   = null;
   var $fin_validite_vitale = null;
-  
+
   var $pays                 = null;
   var $pays_insee           = null;
   var $lieu_naissance       = null;
@@ -136,7 +136,7 @@ class CPatient extends CMbObject {
   var $profession           = null;
   var $csp                  = null; // Catégorie socioprofessionnelle
   var $patient_link_id      = null; // Patient link
-  
+
   // Assuré
   var $assure_nom                   = null;
   var $assure_nom_jeune_fille       = null;
@@ -161,17 +161,17 @@ class CPatient extends CMbObject {
   var $assure_rques                 = null;
   var $assure_matricule             = null;
   var $assure_avs                   = null;
-  
+
   // Other fields
   var $INSC_date                    = null;
   var $date_lecture_vitale          = null;
   var $_pays_naissance_insee        = null;
   var $_assure_pays_naissance_insee = null;
-  
-  // Behaviour fields 
+
+  // Behaviour fields
   var $_anonyme                     = null;
   var $_generate_IPP                = true;
-  
+
   // Form fields
   var $_vip           = null;
   var $_annees        = null;
@@ -191,18 +191,22 @@ class CPatient extends CMbObject {
   var $_overweight    = null;
   var $_age_min       = null;
   var $_age_max       = null;
-  
+
   // Vitale behaviour
   var $_bind_vitale   = null;
   var $_update_vitale = null;
   var $_id_vitale     = null;
-  
+
+  //ean (for switzerland)
+  var $_assuranceCC_ean        = null;
+  var $_assuranceCC_id         = null;
+
   // Navigation Fields
   var $_dossier_cabinet_url = null;
-  
+
   // EAI Fields
   var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
-  
+
   // HPRIM Fields
   var $_prenoms          = null; // multiple
   var $_nom_naissance    = null; // +/- = nom_jeune_fille
@@ -212,7 +216,7 @@ class CPatient extends CMbObject {
   var $_IPP              = null;
   var $_fusion           = null; // fusion
   var $_patient_elimine  = null; // fusion
-  
+
   // Object References
   var $_nb_docs                     = null;
   var $_ref_sejours                 = null;
@@ -222,22 +226,22 @@ class CPatient extends CMbObject {
   var $_ref_last_grossesse          = null;
   var $_ref_first_constantes        = null;
   var $_ref_patient_links           = null;
-  
+
   /**
    * @var CAffectation
    */
   var $_ref_curr_affectation        = null;
-  
+
   /**
    * @var CAffectation
    */
   var $_ref_next_affectation        = null;
-  
+
   var $_ref_medecin_traitant        = null;
   var $_ref_medecins_correspondants = null;
   var $_ref_correspondants_patient  = null;
   var $_ref_cp_by_relation          = null;
-  
+
   /**
    * @var CDossierMedical
    */
@@ -246,10 +250,10 @@ class CPatient extends CMbObject {
   var $_ref_IPP                     = null;
   var $_ref_vitale_idsante400       = null;
   var $_ref_constantes_medicales    = null;
-  
+
   // Distant fields
   var $_ref_praticiens = null; // Praticiens ayant participé à la pec du patient
-  
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'patients';
@@ -279,11 +283,11 @@ class CPatient extends CMbObject {
     $backProps["patient_observation_result_sets"] = "CObservationResultSet patient_id"; // interfere avec CMbObject-back-observation_result_sets
     $backProps["patient_links"]         = "CPatient patient_link_id";
     return $backProps;
-  }  
-  
+  }
+
   function getProps() {
     $props = parent::getProps();
-    
+
     $props["nom"]               = "str notNull confidential seekable|begin";
     $props["prenom"]            = "str notNull seekable|begin";
     $props["prenom_2"]          = "str";
@@ -317,7 +321,7 @@ class CPatient extends CMbObject {
     $props["incapable_majeur"]  = "bool";
     $props["ATNC"]              = "bool";
     $props["avs"]               = "str maxLength|15";// mask|999.99.999.999";
-    
+
     $conf = CAppUI::conf("dPpatients CPatient identitovigilence");
     $props["naissance"] = $conf === "date" || $conf === "doublons" ? "birthDate notNull" : "birthDate";
 
@@ -338,7 +342,7 @@ class CPatient extends CMbObject {
     $props["code_sit"]          = "numchar length|4";
     $props["regime_am"]         = "bool default|0";
     $props["mutuelle_types_contrat"] = "text";
-    
+
     $props["pays"]                 = "str";
     $props["pays_insee"]           = "str";
     $props["lieu_naissance"]       = "str";
@@ -347,7 +351,7 @@ class CPatient extends CMbObject {
     $props["profession"]           = "str autocomplete";
     $props["csp" ]                 = "numchar length|2";
     $props["patient_link_id"]      = "ref class|CPatient";
-    
+
     $props["assure_nom"]                  = "str confidential";
     $props["assure_prenom"]               = "str";
     $props["assure_prenom_2"]             = "str";
@@ -377,7 +381,7 @@ class CPatient extends CMbObject {
     $props["_pays_naissance_insee"]       = "str";
     $props["_assure_pays_naissance_insee"]= "str";
     $props["_art115"]                     = "bool";
-    
+
     $types_exo = array(
       "aldHorsListe",
       "aldListe",
@@ -388,30 +392,33 @@ class CPatient extends CMbObject {
       "autreCasAlsaceMoselle",
       "fns",
     );
-    
+
     $props["_type_exoneration"]           = "enum list|".implode("|", $types_exo);
     $props["_annees"]                     = "num show|1";
     $props["_age"]                        = "str";
     $props["_vip"]                        = "bool";
     $props["_age_assure"]                 = "num";
-    
+
     $props["_age_min"]                    = "num min|0";
     $props["_age_max"]                    = "num min|0";
-    
+
+    $props["_assuranceCC_id"]             = "str length|5";
+    $props["_assuranceCC_ean"]            = "str";
+
     $props["_IPP"]                        = "str";
-    
+
     return $props;
   }
-  
+
   function checkMerge($patients = array()/*<CPatient>*/) {
     if ($msg = parent::checkMerge($patients)) {
       return $msg;
     }
-    
+
     $sejour = new CSejour;
     $where["patient_id"] = CSQLDataSource::prepareIn(CMbArray::pluck($patients, "_id"));
     $sejours = $sejour->loadList($where);
-    
+
     foreach ($sejours as $_sejour1) {
       foreach ($sejours as $_sejour2) {
         if ($_sejour1->collides($_sejour2)) {
@@ -422,7 +429,7 @@ class CPatient extends CMbObject {
       }
     }
   }
-  
+
   function merge($objects = array/*<CPatient>*/(), $fast = false) {
     // Load the matching CDossierMedical objects
     if ($this->_id) {
@@ -438,13 +445,13 @@ class CPatient extends CMbObject {
     );
     $dossier_medical = new CDossierMedical();
     $list = $dossier_medical->loadList($where);
-    
+
     foreach ($objects as $object) {
       $object->loadIPP();
     }
-    
+
     if ($msg = parent::merge($objects, $fast)) return $msg;
-    
+
     // Merge them
     if (count($list) > 1) {
       if ($msg = $dossier_medical->mergePlainFields($list)) return $msg;
@@ -453,7 +460,7 @@ class CPatient extends CMbObject {
       return $dossier_medical->merge($list);
     }
   }
-  
+
   function check(){
     // Standard check
     if ($msg = parent::check()) {
@@ -467,45 +474,64 @@ class CPatient extends CMbObject {
       }
     }
   }
-  
+
   function store() {
     //$this->INSC      = "1075102722581011056235";
     //$this->INSC_date = " 2012-03-12 16:59:21";
-    
+
     $this->completeField("patient_link_id");
     if ($this->_id && $this->_id == $this->patient_link_id) {
       $this->patient_link_id = "";
     }
-    
+
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
-    
+
     if ($this->checkAnonymous()) {
       $this->nom = $this->_id;
       $this->_anonyme = true;
       $this->store();
     }
-    
+
     // Vitale
     if (CModule::getActive("fse")) {
       $cv = CFseFactory::createCV();
       if ($cv) {
         if ($msg = $cv->bindVitale($this)) {
           return $msg;
-        }  
+        }
       }
     }
-    
-    // Génération de l'IPP ? 
+
+    // covercard
+    if (CModule::getActive("covercard")) {
+      $corres = new CCorrespondantPatient();
+      $where = array(
+        "patient_id" => "IS NULL",
+        "relation"   => "= 'assurance'",
+      );
+      if ($this->_assuranceCC_ean) {
+        $where["ean"] = "= '$this->_assuranceCC_ean'";
+      }
+      if ($this->_assuranceCC_id) {
+        $where["ean_id"] = "= '$this->_assuranceCC_id'";
+      }
+      $corres->loadObject($where);
+      $corres->patient_id = $this->_id;
+      $corres->_id = null;
+      $corres->store();
+    }
+
+    // Génération de l'IPP ?
     if ($this->_generate_IPP) {
       if ($msg = $this->generateIPP()) {
         return $msg;
       }
     }
   }
-  
+
   function generateIPP() {
     $group = CGroups::loadCurrent();
     $group->loadConfigValues();
@@ -520,15 +546,15 @@ class CPatient extends CMbObject {
       }
     }
   }
-  
+
   function guessExoneration(){
     $this->completeField("libelle_exo");
-   
+
     if (!$this->libelle_exo) return;
-    
+
     foreach (self::$libelle_exo_guess as $field => $values) {
       if ($this->$field !== null) continue;
-      
+
       foreach ($values as $value => $rules) {
         foreach ($rules as $rule) {
           if (preg_match("/$rule/i", $this->libelle_exo)) {
@@ -539,33 +565,33 @@ class CPatient extends CMbObject {
       }
     }
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
-    
+
     // Noms
     $this->nom = CMbString::upper($this->nom);
     $this->nom_jeune_fille = CMbString::upper($this->nom_jeune_fille);
     $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
-    
-    $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom; 
+
+    $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom;
     $this->_prenoms = array($this->prenom, $this->prenom_2, $this->prenom_3, $this->prenom_4);
-  
+
     if ($this->libelle_exo) {
       $this->_art115 = preg_match("/pension militaire/i", $this->libelle_exo);
     }
-    
+
     $relative = CMbDate::relative($this->naissance);
-    
+
     if ($relative["count"] < 0) {
       $relative["count"] = 0;
     }
-    
-    $this->evalAge();    
+
+    $this->evalAge();
     $this->_age = $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : "") .($relative["unit"] == "year" ? "_old" : ""));
-    
+
     $this->checkVIP();
-    
+
     $this->_civilite = CAppUI::tr("CPatient.civilite.$this->civilite");
     if ($this->civilite === "enf") {
       $this->_civilite_long = $this->sexe === "m" ? CAppUI::tr("CPatient.civilite.le_jeune") : CAppUI::tr("CPatient.civilite.la_jeune");
@@ -573,7 +599,7 @@ class CPatient extends CMbObject {
     else {
       $this->_civilite_long = CAppUI::tr("CPatient.civilite.$this->civilite-long");
     }
-    
+
     $this->_assure_civilite = CAppUI::tr("CPatient.civilite.$this->assure_civilite");
     if ($this->assure_civilite === "enf") {
       $this->_assure_civilite_long = $this->assure_sexe === "m" ? CAppUI::tr("CPatient.civilite.le_jeune") : CAppUI::tr("CPatient.civilite.la_jeune");
@@ -581,7 +607,7 @@ class CPatient extends CMbObject {
     else {
       $this->_assure_civilite_long = CAppUI::tr("CPatient.civilite.$this->assure_civilite-long");
     }
-    
+
     $nom_naissance   = $this->nom_jeune_fille && $this->nom_jeune_fille != $this->nom ? " ($this->nom_jeune_fille)" : "";
     $this->_view     = "$this->_civilite $this->nom$nom_naissance $this->prenom";
     $this->_longview = "$this->_civilite_long $this->nom$nom_naissance $this->prenom";
@@ -589,7 +615,7 @@ class CPatient extends CMbObject {
     $this->_view .= $this->deces ? " [Décès.]" : "";
     $this->_longview .= $this->vip ? " [Conf.]" : "";
     $this->_longview .= $this->deces ? " [Décès.]" : "";
-    
+
    // Navigation fields
     //$this->_dossier_cabinet_url = self::$dossier_cabinet_prefix[CAppUI::pref("DossierCabinet")] . $this->_id;
     $this->_dossier_cabinet_url = self::$dossier_cabinet_prefix["dPpatients"] . $this->_id;
@@ -602,7 +628,7 @@ class CPatient extends CMbObject {
       $this->_csp_view = $this->getCSPName();
     }
   }
-  
+
   /**
    * Calcul l'âge du patient en années
    * @param date $date Date de référence pour le calcul, maintenant si null
@@ -612,7 +638,7 @@ class CPatient extends CMbObject {
     $achieved = CMbDate::achievedDurations($this->naissance, $date);
     return $this->_annees = $achieved["year"];
   }
-  
+
   /**
    * Calcul l'aspect confidentiel du patient
    * @return bool on a accès ou pas
@@ -621,21 +647,21 @@ class CPatient extends CMbObject {
     if ($this->_vip !== null) {
       return;
     }
-    
+
     $this->_vip = false;
     $user = CMediusers::get();
-    
+
     if ($this->vip&& !CModule::getCanDo("dPpatient")->admin()) {
-      
+
       // Test si le praticien est présent dans son dossier
-      
+
       $praticiens = $this->loadRefsPraticiens();
       $user_in_list_prat = array_key_exists($user->_id, $praticiens);
-      
+
       // Test si un l'utilisateur est présent dans les logs
       $user_in_logs      = false;
       $this->loadLogs();
-      
+
       foreach ($this->_ref_logs as $_log) {
         if ($user->_id == $_log->user_id) {
           $user_in_logs = true;
@@ -648,7 +674,7 @@ class CPatient extends CMbObject {
       CValue::setSession("patient_id", 0);
     }
   }
-  
+
   /**
    * Calcul l'âge de l'assuré en années
    * @param date $date Date de référence pour le calcul, maintenant si null
@@ -668,7 +694,7 @@ class CPatient extends CMbObject {
     $achieved = CMbDate::achievedDurations($this->naissance, $date);
     return $achieved["month"];
   }
-  
+
   /**
    * Calcul l'âge du patient en semaines
    */
@@ -676,7 +702,7 @@ class CPatient extends CMbObject {
     $jours = $this->evalAgeJours($date);
     return intval($jours/7);
   }
-  
+
   /**
    * Calcul l'âge du patient en jours
    */
@@ -687,16 +713,16 @@ class CPatient extends CMbObject {
     }
     return mbDaysRelative($this->naissance, $date);
   }
-      
+
   function updatePlainFields() {
     parent::updatePlainFields();
-     
+
     $soundex2 = new soundex2;
     if ($this->nom) {
       $this->nom = CMbString::upper($this->nom);
       $this->nom_soundex2 = $soundex2->build($this->nom);
     }
-    
+
     if ($this->nom_jeune_fille) {
       $this->nom_jeune_fille = CMbString::upper($this->nom_jeune_fille);
       $this->nomjf_soundex2 = $soundex2->build($this->nom_jeune_fille);
@@ -706,15 +732,15 @@ class CPatient extends CMbObject {
       $this->prenom = CMbString::capitalize(CMbString::lower($this->prenom));
       $this->prenom_soundex2 = $soundex2->build($this->prenom);
     }
-    
+
     if ($this->cp === "00000") {
       $this->cp = "";
     }
-    
+
     if ($this->assure_nom) {
       $this->assure_nom = CMbString::upper($this->assure_nom);
     }
-    
+
     if ($this->assure_nom_jeune_fille) {
       $this->assure_nom_jeune_fille = CMbString::upper($this->assure_nom_jeune_fille);
     }
@@ -722,27 +748,27 @@ class CPatient extends CMbObject {
     if ($this->assure_prenom) {
       $this->assure_prenom = CMbString::capitalize(CMbString::lower($this->assure_prenom));
     }
-    
+
     if ($this->assure_cp === "00000") {
       $this->assure_cp = "";
     }
-    
+
     if ($this->_pays_naissance_insee) {
       $this->pays_naissance_insee = $this->updatePatNumPaysInsee($this->_pays_naissance_insee);
     }
-    
+
     if ($this->pays) {
       $this->pays_insee = $this->updatePatNumPaysInsee($this->pays);
     }
-    
+
     if ($this->_assure_pays_naissance_insee) {
       $this->assure_pays_naissance_insee = $this->updatePatNumPaysInsee($this->_assure_pays_naissance_insee);
     }
-    
+
     if ($this->assure_pays) {
       $this->assure_pays_insee = $this->updatePatNumPaysInsee($this->assure_pays);
     }
-    
+
     // Détermine la civilité du patient automatiquement (utile en cas d'import)
     $this->completeField("civilite");
     if ($this->civilite === "guess" || !$this->civilite) {
@@ -750,7 +776,7 @@ class CPatient extends CMbObject {
       $this->civilite = ($this->_annees < CAppUI::conf("dPpatients CPatient adult_age")) ?
         "enf" : (($this->sexe === "m") ? "m" : "mme");
     }
-    
+
     // Détermine la civilité de l'assure automatiquement (utile en cas d'import)
     $this->completeField("assure_civilite");
     if ($this->assure_civilite === "guess" || !$this->assure_civilite) {
@@ -761,13 +787,13 @@ class CPatient extends CMbObject {
         "enf" : (($sexe === "m") ? "m" : "mme");
     }
   }
-  
+
   // Backward references
   function loadRefsSejours($where = null) {
     if (!$this->_id) {
       return $this->_ref_sejours = array();
     }
-    
+
     $sejour = new CSejour;
     if ($where === null) {
       $where = array();
@@ -777,16 +803,16 @@ class CPatient extends CMbObject {
     $order = "entree DESC";
     return $this->_ref_sejours = $sejour->loadList($where, $order);
   }
-  
+
   function getCurrSejour($dateTime = null) {
     if (!$dateTime) {
       $dateTime = mbDateTime();
     }
-    
+
     $where[] = "'$dateTime' BETWEEN entree AND sortie";
     $this->loadRefsSejours($where);
   }
-  
+
   /**
    * Get patient links
    */
@@ -797,11 +823,11 @@ class CPatient extends CMbObject {
 
    // return $this->_ref_patient_links = $this->loadBackRefs("patient_links");
   }
-  
+
   /*
    * Get the next sejour from today or from a given date
    * @return array(CSejour, COperation);
-   */ 
+   */
   function getNextSejourAndOperation($date = null, $withOperation = true) {
     $sejour = new CSejour;
     $op     = new COperation;
@@ -821,7 +847,7 @@ class CPatient extends CMbObject {
             $sejour = $_sejour;
           }
         }
-        
+
         if ($withOperation) {
           if (!$_sejour->_ref_operations) {
             $_sejour->loadRefsOperations(array("annulee" => "= '0'"));
@@ -840,13 +866,13 @@ class CPatient extends CMbObject {
         }
       }
     }
-    
+
     $sejour->loadRefPraticien()->loadRefFunction();
     $op->loadRefPraticien()->loadRefFunction();
-    
+
     return array("CSejour" => $sejour, "COperation" => $op);
   }
-  
+
   /**
    * Get an associative array of uncancelled sejours and their dates
    * @return array Sejour ID => array("entree_prevue" => DATE, "sortie_prevue" => DATE)
@@ -854,7 +880,7 @@ class CPatient extends CMbObject {
   function getSejoursCollisions() {
     $sejours_collision = array();
     $group_id = CGroups::loadCurrent()->_id;
-    
+
     if ($this->_ref_sejours) {
       foreach ($this->_ref_sejours as $_sejour) {
         if (!$_sejour->annule && $_sejour->group_id == $group_id && !in_array($_sejour->type, array("urg", "seances", "consult"))) {
@@ -865,10 +891,10 @@ class CPatient extends CMbObject {
         }
       }
     }
-    
+
     return $sejours_collision;
   }
-  
+
   /**
    * Charge le patient ayant les traits suivants :
    * - Même nom à la casse et aux séparateurs près
@@ -876,22 +902,22 @@ class CPatient extends CMbObject {
    * - Strictement la même date de naissance
    * @param $other
    * @param $loadObject Permet de ne pas charger le patient, seulement renvoyer le nombre de matches
-   * @return Nombre d'occurences trouvées 
+   * @return Nombre d'occurences trouvées
    */
   function loadMatchingPatient($other = false, $loadObject = true) {
     $ds = $this->_spec->ds;
-    
+
     if ($other && $this->_id) {
        $where["patient_id"] = " != '$this->_id'";
     }
-        
+
     $whereOr[] = "nom "             . $ds->prepareLikeName($this->nom);
     $whereOr[] = "nom_jeune_fille " . $ds->prepareLikeName($this->nom);
 
     if ($this->nom_jeune_fille) {
       $whereOr[] = "nom "             . $ds->prepareLikeName($this->nom_jeune_fille);
       $whereOr[] = "nom_jeune_fille " . $ds->prepareLikeName($this->nom_jeune_fille);
-    } 
+    }
 
     $where[] = implode(" OR ", $whereOr);
     $where["prenom"]          = $ds->prepareLikeName($this->prenom);
@@ -901,16 +927,16 @@ class CPatient extends CMbObject {
     if ($this->prenom_4) $where["prenom_4"] = $ds->prepareLikeName($this->prenom_4);
 
     $where["naissance"] = $ds->prepare("= %", $this->naissance);
-    
+
     if ($loadObject) {
       $this->loadObject($where);
     }
-    
+
     return $this->countList($where);
   }
-  
+
   /**
-   * Finds patient siblings with at least two exact matching traits out of 
+   * Finds patient siblings with at least two exact matching traits out of
    * nom, prenom, naissance
    * Optimized version with split queries for index usage forcing
    * @return array[CPatient] Array of siblings
@@ -923,9 +949,9 @@ class CPatient extends CMbObject {
       "prenom" => $ds->prepareLikeName($this->prenom),
       "patient_id" => "!= '$this->_id'",
     );
-    
+
     $siblings = $this->loadList($where);
-    
+
     if ($this->naissance !== "0000-00-00") {
       $where = array (
         "nom"       => $ds->prepareLikeName($this->nom),
@@ -941,10 +967,10 @@ class CPatient extends CMbObject {
       );
       $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where));
     }
-    
+
     return $siblings;
   }
-    
+
   /**
    * Find patient phoning similar
    * @param $date restrict to a venue collide date
@@ -957,8 +983,8 @@ class CPatient extends CMbObject {
     if ($this->nomjf_soundex2) {
       $whereNom[] = "nom_soundex2    LIKE '$this->nomjf_soundex2%'";
       $whereNom[] = "nomjf_soundex2  LIKE '$this->nomjf_soundex2%'";
-    } 
-    
+    }
+
     $where[] = implode(" OR ", $whereNom);
     $where["prenom_soundex2"] = "LIKE '$this->prenom_soundex2%'";
     $where["patients.patient_id"] = "!= '$this->_id'";
@@ -972,17 +998,17 @@ class CPatient extends CMbObject {
       $whereDate[] = "sejour.entree_prevue BETWEEN '$min' AND '$max'";
       $where[] = implode(" OR ", $whereDate);
     }
-    
+
     return $this->loadList($where, null, null, null, $join);
   }
 
 
   function checkSimilar($nom, $prenom, $strict = true) {
     $soundex2 = new soundex2;
-    
+
     $testNom    = CMbString::lower($this->nom_soundex2)    == CMbString::lower($soundex2->build($nom));
     $testPrenom = CMbString::lower($this->prenom_soundex2) == CMbString::lower($soundex2->build($prenom));
-    
+
     if ($strict) {
       return($testNom && $testPrenom);
     }
@@ -990,7 +1016,7 @@ class CPatient extends CMbObject {
       return($testNom || $testPrenom);
     }
   }
-  
+
   function loadRefsConsultations($where = null) {
     $consultation = new CConsultation();
     $curr_user = CAppUI::$user;
@@ -1010,69 +1036,69 @@ class CPatient extends CMbObject {
       $leftjoin["functions_mediboard"] = "users_mediboard.function_id = functions_mediboard.function_id";
       return $this->_ref_consultations = $consultation->loadList($where, $order, null, null, $leftjoin);
     }
-    
+
     return $this->_ref_consultations = array();
   }
-  
+
   /**
    * @return CDossierMedical
    */
   function loadRefDossierMedical($load_refs_back = true) {
     $this->_ref_dossier_medical = $this->loadUniqueBackRef("dossier_medical");
-    
+
     if ($load_refs_back) {
       $this->_ref_dossier_medical->loadRefsBack();
     }
-    
+
     return $this->_ref_dossier_medical;
   }
-  
+
   function loadRefsDevenirDentaire() {
     return $this->_refs_devenirs_dentaires = $this->loadBackRefs("devenirs_dentaires");
   }
-  
+
   function loadRefsAffectations($date = null) {
     $affectation = new CAffectation();
-    
+
     // Affectations inactives
     if (!$affectation->_ref_module) {
       $this->_ref_curr_affectation = null;
-      $this->_ref_next_affectation = null;      
+      $this->_ref_next_affectation = null;
     }
-    
+
     if (!$date) {
       $date = mbDateTime();
     }
-    
+
     $sejours = $this->loadRefsSejours();
     $group = CGroups::loadCurrent();
-    
+
     // Affectation actuelle et prochaine affectation
     $where["affectation.sejour_id"] = CSQLDataSource::prepareIn(array_keys($sejours));
     $where["sejour.group_id"]       = "= '$group->_id'";
     $order = "affectation.entree";
-    
+
     // @FIXME A quoi sert cette jointure ?
     $ljoin["sejour"]                = "sejour.sejour_id = affectation.sejour_id";
-    
+
     // Affection courante
     $this->_ref_curr_affectation = new CAffectation();
     $where["affectation.entree"] = "<  '$date'";
     $where["affectation.sortie"] = ">= '$date'";
     $this->_ref_curr_affectation->loadObject($where, $order, null, $ljoin);
-    
+
     // Prochaine affectations
     $this->_ref_next_affectation = new CAffectation();
     $where["affectation.entree"] = "> '$date'";
     $this->_ref_next_affectation->loadObject($where, $order, null, $ljoin);
   }
-  
+
   function loadRefsDocs() {
     $docs_valid = parent::loadRefsDocs();
     if ($docs_valid)
       $this->_nb_docs .= "$docs_valid";
   }
-  
+
   function loadRefsPrescriptions($perm = null) {
     if (CModule::getInstalled("dPlabo")) {
       $prescription = new CPrescriptionLabo();
@@ -1081,20 +1107,20 @@ class CPatient extends CMbObject {
       $this->_ref_prescriptions = $prescription->loadListWithPerms($perm, $where, $order);
     }
   }
-  
+
   function loadRefConstantesMedicales($where = array()) {
     $latest = CConstantesMedicales::getLatestFor($this, $where);
-    
+
     list($this->_ref_constantes_medicales, $dates) = $latest;
     $this->_ref_constantes_medicales->updateFormFields();
-    
+
     return $latest;
   }
-  
+
   function loadRefsGrossesses($order="terme_prevu desc") {
     return $this->_ref_grossesses = $this->loadBackRefs("grossesses", $order);
   }
-  
+
   function loadRefsBack() {
     parent::loadRefsBack();
     $this->loadRefsFiles();
@@ -1114,12 +1140,12 @@ class CPatient extends CMbObject {
       }
     }
   }
-  
+
   // Forward references
   function loadRefsFwd() {
     $this->loadIdVitale();
   }
-      
+
   function loadComplete(){
     parent::loadComplete();
     $this->loadIPP();
@@ -1130,14 +1156,14 @@ class CPatient extends CMbObject {
     $this->_ref_dossier_medical->loadRefsAntecedents();
     $this->_ref_dossier_medical->loadRefsTraitements();
     $prescription = $this->_ref_dossier_medical->loadRefPrescription();
-    
+
     if ($prescription && is_array($prescription->_ref_prescription_lines)) {
       foreach ($prescription->_ref_prescription_lines as $_line) {
         $_line->loadRefsPrises();
       }
     }
   }
-  
+
   function loadRefsPraticiens() {
     // Consultations
     $this->loadRefsConsultations();
@@ -1161,10 +1187,10 @@ class CPatient extends CMbObject {
     }
     return $this->_ref_praticiens;
   }
-  
+
   function loadDossierComplet($permType = null) {
     $this->_ref_praticiens = array();
-    
+
     if (!$this->_id) {
       return;
     }
@@ -1172,20 +1198,20 @@ class CPatient extends CMbObject {
     // Patient permission
     $this->canRead();
     $this->canEdit();
-    
+
     // Doc items
     $this->loadRefsFiles();
     $this->loadRefsDocs();
     $this->countDocItems($permType);
 
-    // Photos et Notes 
+    // Photos et Notes
     $this->loadRefPhotoIdentite();
     $this->loadRefsNotes();
-    
+
     // Correspondants
     $this->loadRefsCorrespondants();
     $this->loadRefsCorrespondantsPatient();
-    
+
     // Affectations courantes
     $this->loadRefsAffectations();
     $affectation =& $this->_ref_curr_affectation;
@@ -1193,19 +1219,19 @@ class CPatient extends CMbObject {
       $affectation->loadRefsFwd();
       $affectation->_ref_lit->loadCompleteView();
     }
-    
+
     $affectation =& $this->_ref_next_affectation;
     if ($affectation && $affectation->affectation_id) {
       $affectation->loadRefsFwd();
       $affectation->_ref_lit->loadCompleteView();
     }
-        
+
     $maternite_active = CModule::getActive("maternite");
-    
+
     if ($maternite_active) {
       $this->loadRefsGrossesses();
     }
-    
+
     // Consultations
     $this->loadRefsConsultations();
     foreach ($this->_ref_consultations as $consult) {
@@ -1213,24 +1239,24 @@ class CPatient extends CMbObject {
         unset($this->_ref_consultations[$consult->_id]);
         continue;
       }
-      
+
       // Permission
       $consult->canRead();
       $consult->canEdit();
-      
+
       $consult->loadRefConsultAnesth();
       $consult->loadRefsFichesExamen();
       $consult->loadExamsComp();
       $consult->countDocItems($permType);
-      
+
       // Praticien
       $consult->getType();
       $praticien = $consult->_ref_praticien;
       $this->_ref_praticiens[$praticien->_id] = $praticien;
       $praticien->loadRefFunction()->loadRefGroup();
-      
+
       $consult->loadRefConsultAnesth()->countDocItems();
-      
+
       // Grossesse
       if ($maternite_active && $consult->grossesse_id) {
         $consult->_semaine_grossesse = ceil((mbDaysRelative($this->_ref_grossesses[$consult->grossesse_id]->_date_fecondation, $consult->_date))/7);
@@ -1243,58 +1269,58 @@ class CPatient extends CMbObject {
       // Permission
       $_sejour->canRead();
       $_sejour->canEdit();
-      
-      // 
+
+      //
       $_sejour->loadNDA();
       $_sejour->loadRefsAffectations();
       $_sejour->countDocItems($permType);
-      
+
       // Praticien
       $praticien = $_sejour->loadRefPraticien(1);
       $this->_ref_praticiens[$praticien->_id] = $praticien;
-      
+
       $_sejour->countDocItems($permType);
       if ($maternite_active && $_sejour->grossesse_id) {
         $this->_ref_grossesses[$_sejour->grossesse_id]->_ref_sejours[$_sejour->_id] = $_sejour;
       }
-      
+
       $_sejour->loadRefsOperations();
       foreach ($_sejour->_ref_operations as $_operation) {
         $_operation->canRead();
         $_operation->canEdit();
-        
+
         // Praticien
         $praticien = $_operation->loadRefPraticien(1);
         $praticien->loadRefFunction();
         $this->_ref_praticiens[$praticien->_id] = $praticien;
-                
+
         // Autres
         $_operation->loadRefPlageOp(1);
         $_operation->countDocItems($permType);
-        
+
         // Consultation d'anesthésie
         $consult_anesth = $_operation->loadRefsConsultAnesth();
         $consult_anesth->countDocItems();
-    
+
         $consultation = $consult_anesth->loadRefConsultation();
         $consultation->countDocItems();
         $consultation->canRead();
         $consultation->canEdit();
       }
-      
+
       // RPU
       $rpu = $_sejour->loadRefRPU();
       if ($rpu && $rpu->_id) {
         $rpu->countDocItems($permType);
       }
-      
+
       $_sejour->loadRefsConsultations();
       foreach ($_sejour->_ref_consultations as $_consult) {
         $_consult->loadRefConsultAnesth();
         $_consult->loadRefsFichesExamen();
         $_consult->loadExamsComp();
         $_consult->countDocItems($permType);
-        
+
         $_consult->loadRefsFwd(1);
         $_consult->_ref_sejour = $_sejour;
         $_consult->getType();
@@ -1305,12 +1331,12 @@ class CPatient extends CMbObject {
       }
     }
   }
-  
+
   function loadRefsCorrespondants() {
     // Médecin traitant
     $this->_ref_medecin_traitant = new CMedecin();
     $this->_ref_medecin_traitant->load($this->medecin_traitant);
-    
+
     // Autres correspondant
     $this->_ref_medecins_correspondants = $this->loadBackRefs("correspondants");
     foreach ($this->_ref_medecins_correspondants as &$corresp) {
@@ -1319,24 +1345,24 @@ class CPatient extends CMbObject {
 
     return $this->_ref_medecins_correspondants;
   }
-  
+
   // Prévenir - Confiance - Employeur
   function loadRefsCorrespondantsPatient() {
     $this->_ref_correspondants_patient = $this->loadBackRefs("correspondants_patient");
-    
+
     $correspondant = new CCorrespondantPatient;
     $this->_ref_cp_by_relation = array();
     foreach (explode("|", $correspondant->_specs["relation"]->list) as $_relation) {
       $this->_ref_cp_by_relation[$_relation] = array();
     }
-    
+
     foreach ($this->_ref_correspondants_patient as $_correspondant) {
       $this->_ref_cp_by_relation[$_correspondant->relation][$_correspondant->_id] = $_correspondant;
     }
-    
+
     return $this->_ref_correspondants_patient;
   }
-  
+
   /**
    * Construit le tag IPP en fonction des variables de configuration
    * @param $group_id Permet de charger l'IPP pour un établissement donné si non null
@@ -1353,13 +1379,13 @@ class CPatient extends CMbObject {
     if (!$group_id) {
       $group_id = $group->_id;
     }
-    
+
     // Si on est dans le cas d'un établissement gérant la numérotation
     $group->loadConfigValues();
     if ($group->_configs["sip_idex_generator"]) {
       $tag_ipp = CAppUI::conf("sip tag_ipp");
     }
-    
+
     // Préférer un identifiant externe de l'établissement
     if ($tag_group_idex = CAppUI::conf("dPpatients CPatient tag_ipp_group_idex")) {
       $idex = new CIdSante400();
@@ -1378,12 +1404,12 @@ class CPatient extends CMbObject {
     if (!$this->_id) {
       return;
     }
-    
+
     // Prevent loading twice
     if ($this->_IPP) {
       return;
     }
-    
+
     // Pas de tag IPP => pas d'affichage d'IPP
     if (null == $tag_ipp = $this->getTagIPP($group_id)) {
       $this->_IPP = str_pad($this->_id, 6, "0", STR_PAD_LEFT);
@@ -1392,13 +1418,13 @@ class CPatient extends CMbObject {
 
     // Récupération du premier IPP créé, utile pour la gestion des doublons
     $order = "id400 ASC";
-    
+
     // Recuperation de la valeur de l'id400
     $idex = new CIdSante400();
     $idex->setObject($this);
     $idex->tag = $tag_ipp;
     $idex->loadMatchingObject($order);
-    
+
     // Stockage de la valeur de l'id400
     $this->_ref_IPP = $idex;
     $this->_IPP     = $idex->id400;
@@ -1408,12 +1434,12 @@ class CPatient extends CMbObject {
     if (!$this->_IPP) {
       return;
     }
-    
+
     // Pas de tag IPP => pas d'affichage d'IPP
     if (null == $tag_ipp = $this->getTagIPP($group_id)) {
       return;
     }
-    
+
     // Recuperation de la valeur de l'id400
     $idex = new CIdSante400();
     $idex->object_class= 'CPatient';
@@ -1423,46 +1449,46 @@ class CPatient extends CMbObject {
 
     $this->load($idex->object_id);
   }
-  
+
   function loadRefPhotoIdentite() {
     $file = CFile::loadNamed($this, "identite.jpg");
     $this->_can_see_photo = 1;
     if ($file->_id) {
       $author = $file->loadRefAuthor();
       global $can;
-      $this->_can_see_photo = $can->admin 
-        || CAppUI::$user->function_id == $author->function_id; 
+      $this->_can_see_photo = $can->admin
+        || CAppUI::$user->function_id == $author->function_id;
     }
-    
+
     return $this->_ref_photo_identite = $file;
   }
-  
+
   function loadLastGrossesse() {
     $grossesse = new CGrossesse;
     $grossesse->parturiente_id = $this->_id;
     $grossesse->loadMatchingObject("terme_prevu desc");
     return $this->_ref_last_grossesse = $grossesse;
   }
-  
+
   function getTemplateClasses(){
     $tab = array();
     $tab['CPatient'] = $this->_id;
     $tab['CSejour'] = 0;
     $tab['COperation'] = 0;
-    
+
     return $tab;
   }
-  
+
   function getFirstConstantes() {
     $constantes = new CConstantesMedicales;
     $constantes->patient_id = $this->_id;
     $constantes->loadMatchingObject("datetime ASC");
     return $this->_ref_first_constantes = $constantes;
   }
-  
+
   function fillLimitedTemplate(&$template) {
     CDestinataire::makeAllFor($this);
-    
+
     $destinataires = CDestinataire::$destByClass;
 
     foreach ($destinataires as $_destinataires_by_class) {
@@ -1474,13 +1500,13 @@ class CPatient extends CMbObject {
                 "tag"   => $_destinataire->tag);
       }
     }
-    
+
     $this->loadRefsFwd();
     $this->loadRefConstantesMedicales();
     $this->loadIPP();
-    
+
     $this->notify("BeforeFillLimitedTemplate", $template);
-    
+
     $template->addProperty("Patient - article"           , $this->_civilite  );
     $template->addProperty("Patient - article long"      , ucfirst($this->_civilite_long));
     $template->addProperty("Patient - article long (minuscule)", strtolower($this->_civilite_long));
@@ -1509,7 +1535,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - Numéro de sécurité sociale", $this->getFormattedValue("matricule"));
     $template->addBarcode ("Patient - Code barre ID"     , "PID$this->_id"   );
     $template->addBarcode ("Patient - Code barre IPP"    , "IPP$this->_IPP"  );
-    
+
     if ($this->sexe === "m") {
       $template->addProperty("Patient - il/elle"         , "il"              );
       $template->addProperty("Patient - Il/Elle (majuscule)", "Il"           );
@@ -1526,7 +1552,7 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - du/de la"        , "de la"           );
       $template->addProperty("Patient - accord genre"    , "e"               );
     }
-    
+
     if ($this->medecin_traitant) {
       $medecin = $this->_ref_medecin_traitant;
       $template->addProperty("Patient - médecin traitant"          , "$medecin->nom $medecin->prenom");
@@ -1536,20 +1562,20 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - médecin traitant");
       $template->addProperty("Patient - médecin traitant - adresse");
     }
-    
+
     // Employeur
     $this->loadRefsCorrespondantsPatient();
     $correspondants = $this->_ref_cp_by_relation;
-    
+
     foreach ($correspondants as $relation => $_correspondants) {
       $_correspondant = @reset($_correspondants);
-      
+
       // Dans le cas d'un modèle, création d'un correspondant pour chaque type de relation
       if (!count($_correspondants)) {
         $_correspondant = new CCorrespondantPatient;
         $_correspondant->relation = $relation;
       }
-      
+
       switch($_correspondant->relation) {
         case "employeur" :
           $template->addProperty("Patient - employeur - nom"    , $_correspondant->nom);
@@ -1580,7 +1606,7 @@ class CPatient extends CMbObject {
           $template->addProperty("Patient - confiance - parente", $_correspondant->parente);
       }
     }
-  
+
     // Vider les anciens holders
     for ($i = 1; $i < 4; $i++) {
       $template->addProperty("Patient - médecin correspondant $i");
@@ -1601,12 +1627,12 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - médecin correspondant $i - adresse", "{$medecin->adresse}\n{$medecin->cp} {$medecin->ville}");
       $template->addProperty("Patient - médecin correspondant $i - spécialité", htmlentities($medecin->disciplines));
     }
-    
+
     $template->addProperty("Patient - médecins correspondants", implode(" - ", $noms));
 
     //Liste des séjours du patient
     $this->loadRefsSejours();
-    
+
     if (is_array($this->_ref_sejours)) {
       foreach ($this->_ref_sejours as $_sejour) {
         $_sejour->loadRefPraticien();
@@ -1614,34 +1640,34 @@ class CPatient extends CMbObject {
       $smarty = new CSmartyDP("modules/dPpatients");
       $smarty->assign("sejours", $this->_ref_sejours);
       $sejours = $smarty->fetch("print_closed_sejours.tpl",'','',0);
-      $sejours = preg_replace('`([\\n\\r])`', '', $sejours); 
+      $sejours = preg_replace('`([\\n\\r])`', '', $sejours);
     }
     else {
       $sejours = CAppUI::tr("CSejour.none");
     }
     $template->addProperty("Patient - liste des séjours", $sejours, '', false);
-    
+
     $const_med = $this->_ref_constantes_medicales;
-    
+
     $grid_complet = CConstantesMedicales::buildGrid(array($const_med), true);
     $grid_minimal = CConstantesMedicales::buildGrid(array($const_med), false);
     $grid_valued  = CConstantesMedicales::buildGrid(array($const_med), false, true);
-    
+
     $smarty = new CSmartyDP("modules/dPpatients");
 
     // Horizontal
     $smarty->assign("constantes_medicales_grid", $grid_complet);
     $constantes_complet_horiz = $smarty->fetch("print_constantes.tpl",'','',0);
-    $constantes_complet_horiz = preg_replace('`([\\n\\r])`', '', $constantes_complet_horiz); 
-    
+    $constantes_complet_horiz = preg_replace('`([\\n\\r])`', '', $constantes_complet_horiz);
+
     $smarty->assign("constantes_medicales_grid" , $grid_minimal);
     $constantes_minimal_horiz = $smarty->fetch("print_constantes.tpl",'','',0);
     $constantes_minimal_horiz = preg_replace('`([\\n\\r])`', '', $constantes_minimal_horiz);
-    
+
     $smarty->assign("constantes_medicales_grid" , $grid_valued);
     $constantes_valued_horiz  = $smarty->fetch("print_constantes.tpl",'','',0);
     $constantes_valued_horiz  = preg_replace('`([\\n\\r])`', '', $constantes_valued_horiz);
-    
+
     // Vertical
     $smarty->assign("constantes_medicales_grid", $grid_complet);
     $constantes_complet_vert  = $smarty->fetch("print_constantes_vert.tpl",'','',0);
@@ -1654,16 +1680,16 @@ class CPatient extends CMbObject {
     $smarty->assign("constantes_medicales_grid" , $grid_valued);
     $constantes_valued_vert   = $smarty->fetch("print_constantes_vert.tpl",'','',0);
     $constantes_valued_vert   = preg_replace('`([\\n\\r])`', '', $constantes_valued_vert);
-    
+
     // Liste des fichiers
     $this->loadRefsFiles();
     $list = CMbArray::pluck($this->_ref_files, "file_name");
     $template->addListProperty("Patient - Liste des fichiers", $list);
-    
+
     // Identité
     $identite = $this->loadNamedFile("identite.jpg");
     $template->addImageProperty("Patient - Photo d'identite", $identite->_id);
-    
+
     $template->addProperty("Patient - Constantes - mode complet horizontal", $constantes_complet_horiz, '', false);
     $template->addProperty("Patient - Constantes - mode minimal horizontal", $constantes_minimal_horiz, '', false);
     $template->addProperty("Patient - Constantes - mode avec valeurs horizontal", $constantes_valued_horiz, '', false);
@@ -1677,7 +1703,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - VST",    $const_med->_vst);
     $template->addProperty("Patient - température", $const_med->temperature."°");
     $template->addProperty("Patient - TA",     ($const_med->ta ? "$const_med->_ta_systole / $const_med->_ta_diastole" : ""));
-    
+
     // Assuré social
     $template->addProperty("Patient - Assuré social - nom", $this->assure_nom);
     $template->addProperty("Patient - Assuré social - nom jeune fille", $this->assure_nom_jeune_fille);
@@ -1694,7 +1720,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - Assuré social - cp naissance", $this->assure_cp_naissance);
     $template->addProperty("Patient - Assuré social - lieu de naissance", $this->assure_lieu_naissance);
     $template->addProperty("Patient - Assuré social - profession", $this->assure_profession);
-    
+
     // Bénéficiaire de soins
     $template->addProperty("Patient - Bénéficiaire de soin - code régime", $this->code_regime);
     $template->addProperty("Patient - Bénéficiaire de soin - caisse gest", $this->caisse_gest);
@@ -1714,10 +1740,10 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - Bénéficiaire de soin - notes amo"  , addslashes($this->notes_amo));
     $template->addProperty("Patient - Bénéficiaire de soin - libellé exo", addslashes($this->libelle_exo));
     $template->addProperty("Patient - Bénéficiaire de soin - notes amc"  , addslashes($this->notes_amc));
-    
+
     $this->notify("AfterFillLimitedTemplate", $template);
   }
-  
+
   function fillTemplate(&$template) {
     $this->fillLimitedTemplate($template);
 
@@ -1725,7 +1751,7 @@ class CPatient extends CMbObject {
     $this->loadRefDossierMedical();
     $this->_ref_dossier_medical->fillTemplate($template);
   }
-  
+
   function getLabelTable() {
     return
         array ("[NOM]"        => $this->nom,
@@ -1735,7 +1761,7 @@ class CPatient extends CMbObject {
                "[DATE NAISS]" => $this->naissance,
                "[NUM SECU]"   => $this->matricule);
   }
-  
+
   function updateNomPaysInsee() {
     $pays = new CPaysInsee();
     if ($this->pays_naissance_insee) {
@@ -1753,39 +1779,39 @@ class CPatient extends CMbObject {
       $this->_assure_pays_naissance_insee = $pays->nom_fr;
     }
   }
-  
+
   function updatePatNomPays($pays_insee) {
     $pays = new CPaysInsee();
     $where = array(
       "numerique" => $pays->_spec->ds->prepare("= %", $pays_insee),
     );
     $pays->loadObject($where);
-    
+
     return $pays->nom_fr;
   }
-  
+
   function getCSPName() {
     // Query
     $select = "SELECT LIBELLE FROM categorie_socioprofessionnelle";
     $where  = "WHERE CODE = '$this->csp'";
     $query  = "$select $where";
-    
+
     $ds = CSQLDataSource::get("INSEE");
 
     return $ds->loadResult($query);
   }
-  
+
   function updatePatNumPaysInsee($nomPays) {
     $pays = new CPaysInsee();
     $pays->nom_fr = $this->_spec->ds->escape($nomPays);
     $pays->loadMatchingObject();
     return $pays->numerique;
   }
-  
+
   function checkAnonymous() {
     return $this->nom === "ANONYME" && $this->prenom === "Anonyme";
   }
-  
+
   function toVcard(CMbvCardExport $vcard) {
     $vcard->addName($this->prenom, $this->nom, ucfirst($this->civilite));
     $vcard->addBirthDate($this->naissance);
@@ -1801,13 +1827,13 @@ class CPatient extends CMbObject {
       $vcard->addPicture($this->_ref_photo_identite);
     }
   }
-  
+
   function isIPPConflict($ipp) {
     // Pas de tag IPP => pas d'affichage d'IPP
     if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
       return;
     }
-    
+
     $idex = new CIdSante400();
     $idex->object_class= 'CPatient';
     $idex->tag = $tag_ipp;
@@ -1816,16 +1842,16 @@ class CPatient extends CMbObject {
 
     return $idex->_id;
   }
-  
+
   function countMatchingPatients() {
     $ds = CSQLDataSource::get("std");
 
     $res = $ds->query("SELECT COUNT(*) AS total,
-      CONVERT( GROUP_CONCAT(`patient_id` SEPARATOR '|') USING latin1 ) AS ids , 
-      LOWER( CONCAT_WS( '-', 
-        REPLACE( REPLACE( REPLACE( REPLACE( `nom` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) , 
-        REPLACE( REPLACE( REPLACE( REPLACE( `prenom` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) , 
-        `naissance`  
+      CONVERT( GROUP_CONCAT(`patient_id` SEPARATOR '|') USING latin1 ) AS ids ,
+      LOWER( CONCAT_WS( '-',
+        REPLACE( REPLACE( REPLACE( REPLACE( `nom` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) ,
+        REPLACE( REPLACE( REPLACE( REPLACE( `prenom` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) ,
+        `naissance`
         , QUOTE( REPLACE( REPLACE( REPLACE( REPLACE( `nom_jeune_fille` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) )
         , QUOTE( REPLACE( REPLACE( REPLACE( REPLACE( `prenom_2` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) )
         , QUOTE( REPLACE( REPLACE( REPLACE( REPLACE( `prenom_3` , '\\\\', '' ) , \"'\", '' ) , '-', '' ) , ' ', '' ) )
@@ -1834,17 +1860,17 @@ class CPatient extends CMbObject {
       FROM `patients`
       GROUP BY hash
       HAVING total > 1");
-    
+
     return intval($ds->numRows($res));
   }
-  
+
   function loadView() {
     parent::loadView();
     $this->loadIPP();
     $this->loadRefPhotoIdentite();
     $this->loadRefsCorrespondants();
   }
-  
+
   function countNbEnfants() {
     $this->_nb_enfants = 0;
     foreach ($this->loadRefsGrossesses() as $_grossesse) {
@@ -1852,12 +1878,12 @@ class CPatient extends CMbObject {
     }
     return $this->_nb_enfants;
   }
-  
+
   function completeLabelFields(&$fields) {
     $this->loadIPP();
     $medecin_traitant = new CMedecin();
     $medecin_traitant->load($this->medecin_traitant);
-    
+
     $fields = array_merge($fields, array("DATE NAISS"     => mbDateToLocale($this->naissance), "IPP"    => $this->_IPP,
                  "LIEU NAISSANCE" => $this->lieu_naissance,
                  "NOM"            => $this->nom,       "NOM JF" => $this->nom_jeune_fille,
@@ -1868,17 +1894,17 @@ class CPatient extends CMbObject {
                  "ADRESSE"        => "$this->adresse \n$this->cp $this->ville",
                  "MED. TRAITANT"  => "Dr $medecin_traitant->nom $medecin_traitant->prenom"));
   }
-  
+
   function docsEditable() {
     return true;
   }
-  
+
   function calculINS_C($prenom=null, $naissance=null, $matricule=null) {
     // Fonction non implémentée avant php <= 5.1
     if (!function_exists("hash")) return;
-    
+
     $norm = $prenom;
-    
+
     if ($norm !== null) {
       if (!$norm) {
         $norm=" ";
@@ -1886,7 +1912,7 @@ class CPatient extends CMbObject {
     }
     else {
       $norm = $this->prenom;
-  
+
       if ($this->prenom_2) {
         $norm .= " " . $this->prenom_2;
       }
@@ -1900,9 +1926,9 @@ class CPatient extends CMbObject {
         $norm = " ";
       }
     }
-    
+
     // Normalisation des caractères
-    // Remplace les caractères accentués et spéciaux                
+    // Remplace les caractères accentués et spéciaux
     $norm = CMbString::removeDiacritics($norm);
     $norm = strtr($norm, "ÆæÐðÝýyßŠšŸ",
                          "AADDYYYBSSY");
@@ -1910,15 +1936,15 @@ class CPatient extends CMbObject {
     $norm = preg_replace(array("/NBSP/","/\(c\)/","/\(r\)/")," ", $norm);
     // Remplace tous les autres caractères par un espace
     $norm = preg_replace("/([^A-Za-z])/"," ", $norm);
-    // Change les minuscules en majuscules               
+    // Change les minuscules en majuscules
     $norm = mb_strtoupper($norm);
-     
+
     /*...supprimer les espaces du prénom
      * retenir les 10 premiers caractères
-     * tester si <10 ajouter des espaces 
+     * tester si <10 ajouter des espaces
      * .....*/
     $norm = str_replace(" ", "", $norm);
-    
+
     if (strlen($norm) < 10) {
       $norm = str_pad($norm, 10);
     }
@@ -1926,7 +1952,7 @@ class CPatient extends CMbObject {
     if (strlen($norm) > 10) {
       $norm = substr($norm, 0, 10);
     }
-    
+
     // check birthdate
     $birthdate = $naissance;
     if ($birthdate === null) {
@@ -1952,13 +1978,13 @@ class CPatient extends CMbObject {
       return "date de naissance non valide";
     }
 
-    // Check $nir 
+    // Check $nir
     // Contrôler avec la clef
     $nir = $matricule;
     if ($nir === null) {
       $nir = $this->matricule;
     }
-    
+
     if (preg_match("/^([0-9]{7,8}[A-Z])$/i", $nir)) {
       return "Matricule incomplet";
     }
@@ -1967,36 +1993,36 @@ class CPatient extends CMbObject {
     if (!preg_match("/^([12478][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $nir, $matches)) {
       return "Matricule incorrect";
     }
- 
+
     $code = preg_replace(array('/2A/i', '/2B/i'), array(19, 18), $matches[1]);
     $cle  = $matches[2];
-      
+
     if (97 - bcmod($code, 97) != $cle) {
       return "Matricule incorrect, la clé n'est pas valide";
     }
-      
+
     // Création de la graine
     $seed = $norm.$birthdate.$code;
-    
+
     // Hash de la graine
     $hash_seed = hash("sha256", $seed);
-    
+
     // Calcul de l'INS-C
     $sha_hex = substr($hash_seed, 0, 16);
     $sha_dec = CPatient::bchexdec($sha_hex);
     $sha_dec = explode(".", $sha_dec);
     $sha_dec = $sha_dec[0];
-    
+
     if (strlen($sha_dec) < 20) {
       $sha_dec = str_pad($sha_dec, 20, "0", STR_PAD_LEFT);
     }
-    
+
     $cle = 97 - bcmod($sha_dec, 97);
-    
+
     if (strlen($cle)<2) {
       $cle = str_pad($cle, 2, "0", STR_PAD_LEFT);
     }
-    
+
     if ($prenom !== null && $naissance !== null && $matricule !== null) {
       return array(
         "prenom_norm" => $norm,
@@ -2010,9 +2036,9 @@ class CPatient extends CMbObject {
     else {
       $this->INSC = $sha_dec . $cle;
       $this->INSC_date = mbDateTime();
-    } 
+    }
   }
-  
+
   function bchexdec($hex) {
     $dec = 0;
     $len = strlen($hex);
@@ -2021,7 +2047,7 @@ class CPatient extends CMbObject {
     }
     return $dec;
   }
-  
+
   function getIncrementVars() {
     return array();
   }

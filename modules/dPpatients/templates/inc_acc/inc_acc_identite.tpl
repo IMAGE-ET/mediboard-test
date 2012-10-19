@@ -9,18 +9,18 @@ toggleNomNaissance = function(element) {
 {{if $nom_jeune_fille_mandatory}}
   var nom_jeune_fille = element.form.nom_jeune_fille;
   var nom_jeune_fille_label = nom_jeune_fille.up().previous().down();
-  // Si on choisit Féminin 
+  // Si on choisit Féminin
   if (element.value == 'f') {
-    
+
       // Rajout de la classe notnull sur Le label et l'input
       nom_jeune_fille.addClassName('notNull');
       nom_jeune_fille_label.addClassName('notNull');
-  
+
       // Ajout des observeurs sur l'input
       nom_jeune_fille.observe("change", notNullOK)
       .observe("keyup",  notNullOK)
       .observe("ui:change", notNullOK);
-  
+
       // Si l'input contient déjà du texte, le déclenchement de l'événement ui:change
       // permet de le passer en classe notNullOK
       nom_jeune_fille.fire("ui:change");
@@ -30,8 +30,8 @@ toggleNomNaissance = function(element) {
       nom_jeune_fille_label.removeClassName('notNull');
       nom_jeune_fille_label.removeClassName('notNullOK');
       nom_jeune_fille_label.removeClassName('error');
-  
-      // On n'observe plus l'input 
+
+      // On n'observe plus l'input
       nom_jeune_fille.stopObserving("change", notNullOK)
       .stopObserving("keyup",  notNullOK)
       .stopObserving("ui:change", notNullOK);
@@ -53,7 +53,7 @@ disableOptions = function (select, list) {
   $A(select.options).each(function (o) {
     o.disabled = list.include(o.value);
   });
-  
+
   if (select.value == '' || select.options[select.selectedIndex].disabled) {
     selectFirstEnabled(select);
   }
@@ -63,7 +63,7 @@ changeCiviliteForSexe = function(element, assure) {
   var form = document.editFrm.elements;
   var valueSexe = $V(element);
   var civilite = (assure ? 'assure_' : '') + 'civilite';
-  
+
   switch (valueSexe) {
     case 'm':
     disableOptions($(form[civilite]), $w('mme mlle vve'));
@@ -95,13 +95,13 @@ changeCiviliteForDate = function(element, assure) {
 }
 
 anonymous = function() {
-  $V("editFrm_nom"   , "anonyme");   
-  $V("editFrm_prenom", "anonyme");   
+  $V("editFrm_nom"   , "anonyme");
+  $V("editFrm_prenom", "anonyme");
 }
 
 checkDoublon = function() {
   var oForm = document.editFrm;
-  
+
   if ($V("editFrm_nom") && $V("editFrm_prenom") && $V("editFrm_naissance")) {
     SiblingsChecker.submit = false;
     SiblingsChecker.request(oForm);
@@ -118,7 +118,7 @@ refreshInfoTutelle = function(tutelle) {
 }
 
 Main.add(function() {
-  var i, 
+  var i,
       list = $("patient_identite").select(".prenoms_list input"),
       button = $("patient_identite").select("button.down.notext");
   for (i = 0; i < list.length; i++) {
@@ -132,7 +132,7 @@ Main.add(function() {
   {{if $patient->_id}}
     refreshInfoTutelle('{{$patient->tutelle}}');
   {{/if}}
-}); 
+});
 </script>
 
 <table style="width: 100%">
@@ -148,10 +148,10 @@ Main.add(function() {
         <tr>
           <td colspan="3" class="text">
             <div class="small-warning" id="doublon-warning" style="display: none;">
-              
+
             </div>
             <div class="small-error" id="doublon-error" style="display: none;">
-            
+
             </div>
           </td>
         </tr>
@@ -174,26 +174,26 @@ Main.add(function() {
         <tr>
           <th>{{mb_label object=$patient field="prenom"}}</th>
           <td>
-            {{mb_field object=$patient field="prenom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}} 
-            <button type="button" class="down notext" onclick="togglePrenomsList(this)" tabIndex="1000">{{tr}}Add{{/tr}}</button> 
+            {{mb_field object=$patient field="prenom" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}
+            <button type="button" class="down notext" onclick="togglePrenomsList(this)" tabIndex="1000">{{tr}}Add{{/tr}}</button>
           </td>
         </tr>
-        
+
         <tr class="prenoms_list" style="display: none;">
           <th>{{mb_label object=$patient field="prenom_2"}}</th>
           <td>{{mb_field object=$patient field="prenom_2" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}} </td>
         </tr>
-        
+
         <tr class="prenoms_list" style="display: none;">
           <th>{{mb_label object=$patient field="prenom_3"}}</th>
           <td>{{mb_field object=$patient field="prenom_3" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}}</td>
         </tr>
-        
+
         <tr class="prenoms_list" style="display: none;">
           <th>{{mb_label object=$patient field="prenom_4"}}</th>
           <td>{{mb_field object=$patient field="prenom_4" onchange="checkDoublon(); copyIdentiteAssureValues(this)"}} </td>
         </tr>
-        
+
         <tr>
           <th>{{mb_label object=$patient field="nom_jeune_fille"}}</th>
           <td>
@@ -218,11 +218,11 @@ Main.add(function() {
         <tr>
           <th>{{mb_label object=$patient field="civilite"}}</th>
           <td>
-            {{assign var=civilite_locales value=$patient->_specs.civilite}} 
+            {{assign var=civilite_locales value=$patient->_specs.civilite}}
             <select name="civilite" onchange="copyIdentiteAssureValues(this);">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-              {{foreach from=$civilite_locales->_locales key=key item=_civilite}} 
-              <option value="{{$key}}" {{if $key == $patient->civilite}} selected="selected" {{/if}}> 
+              {{foreach from=$civilite_locales->_locales key=key item=_civilite}}
+              <option value="{{$key}}" {{if $key == $patient->civilite}} selected="selected" {{/if}}>
                 {{tr}}CPatient.civilite.{{$key}}-long{{/tr}} - ({{$_civilite}})
               </option>
               {{/foreach}}
@@ -285,7 +285,7 @@ Main.add(function() {
           <th>{{mb_label object=$patient field="deces"}}</th>
           <td colspan="2">{{mb_field object=$patient field="deces" register=true form=editFrm}}</td>
         </tr>
-      </table>  
+      </table>
     </td>
     <td>
       <table class="form">
@@ -313,19 +313,19 @@ Main.add(function() {
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="tel"}}</th>
-          <td>{{mb_field object=$patient field="tel" onchange="copyAssureValues(this)"}}</td>  
+          <td>{{mb_field object=$patient field="tel" onchange="copyAssureValues(this)"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="tel2"}}</th>
-          <td>{{mb_field object=$patient field="tel2" onchange="copyAssureValues(this)"}}</td>  
+          <td>{{mb_field object=$patient field="tel2" onchange="copyAssureValues(this)"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="tel_autre"}}</th>
-          <td>{{mb_field object=$patient field="tel_autre"}}</td>  
+          <td>{{mb_field object=$patient field="tel_autre"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="email"}}</th>
-          <td>{{mb_field object=$patient field="email"}}</td>  
+          <td>{{mb_field object=$patient field="email"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$patient field="rques"}}</th>
@@ -333,6 +333,16 @@ Main.add(function() {
                  tabs.changeTabAndFocus('beneficiaire', this.form.regime_sante) :
                  tabs.changeTabAndFocus('assure', this.form.assure_nom);"}}</td>
         </tr>
+        {{if "covercard"|module_active}}
+        <tr>
+          <th>{{mb_label object=$patient field="_assuranceCC_id"}}</th>
+          <td>{{mb_field object=$patient field="_assuranceCC_id"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$patient field="_assuranceCC_ean"}}</th>
+          <td>{{mb_field object=$patient field="_assuranceCC_ean"}}</td>
+        </tr>
+        {{/if}}
       </table>
     </td>
   </tr>

@@ -1,7 +1,7 @@
-<?php 
+<?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage dPpatients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
@@ -11,7 +11,7 @@
 
 $correspondant_id = CValue::get("correspondant_id");
 
-$correspondant = new CCorrespondantModele();
+$correspondant = new CCorrespondantPatient();
 $correspondant->load($correspondant_id);
 
 $smarty = new CSmartyDP();

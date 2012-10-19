@@ -1,6 +1,6 @@
 {{*
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage dPpatients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
@@ -18,12 +18,12 @@
     var form = getForm("editCorrespondant");
     Calendar.regField(form.date_debut, null, { noView: false } );
     Calendar.regField(form.date_fin  , null, { noView: false } );
-    
+
     {{if !$mode_modele}}
       // Autocomplete sur le nom du correspondant
       var url = new Url("system", "ajax_seek_autocomplete");
-      url.addParam("object_class", "CCorrespondantModele");
-      url.addParam("where[group_id]", "{{$g}}");
+      url.addParam("object_class", "CCorrespondantPatient");
+      url.addParam("whereComplex[patient_id]", "IS NULL");
       url.addParam("input_field", "nom");
       url.autoComplete(form.nom, null, {
         minChars: 2,
@@ -53,7 +53,7 @@
         }
       });
     {{/if}}
-    
+
   } );
   toggleUrrsafParente = function(elt) {
 
@@ -142,7 +142,7 @@
         $("prenom").setStyle({display: "table-row"});
         $("date_debut").setStyle({display: "none"});
         $("date_fin").setStyle({display: "none"});
-        
+
       }
     {{/if}}
   }
@@ -150,18 +150,17 @@
 
 <form name="editCorrespondant" method="post" action="?">
   <input type="hidden" name="m" value="dPpatients" />
+  <input type="hidden" name="dosql" value="do_correspondant_patient_aed" />
   {{if $mode_modele}}
-    <input type="hidden" name="dosql" value="do_correspondant_modele_aed" />
     <input type="hidden" name="callback" value="CorrespondantModele.afterSave" />
     <input type="hidden" name="group_id" value="{{$g}}" />
   {{else}}
-    <input type="hidden" name="dosql" value="do_correspondant_patient_aed" />
     {{mb_field object=$correspondant field="patient_id" hidden=true}}
   {{/if}}
-  
+
   <input type="hidden" name="del" value="0" />
   {{mb_key object=$correspondant}}
-  
+
 
   <table class="form">
     <tr>
@@ -265,7 +264,7 @@
       <th>{{mb_label object=$correspondant field="urssaf"}}</th>
       <td>{{mb_field object=$correspondant field="urssaf"}}</td>
     </tr>
-    
+
     <tr>
       <th>{{mb_label object=$correspondant field="email"}}</th>
       <td>{{mb_field object=$correspondant field="email"}}</th>
@@ -279,19 +278,23 @@
       <th>{{mb_label object=$correspondant field="ean"}}</th>
       <td>{{mb_field object=$correspondant field="ean"}}</td>
     </tr>
-    
+    <tr>
+      <th>{{mb_label object=$correspondant field="ean_id"}}</th>
+      <td>{{mb_field object=$correspondant field="ean_id"}}</td>
+    </tr>
+
     {{if !$mode_modele}}
       <tr id="date_debut" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="date_debut"}}</th>
         <td>{{mb_field object=$correspondant field="date_debut"}}</td>
       </tr>
-  
+
       <tr id="date_fin" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="date_fin"}}</th>
         <td>{{mb_field object=$correspondant field="date_fin"}}</td>
       </tr>
     {{/if}}
-    
+
     <tr>
       <td colspan="2" style="text-align:center;">
         <button type="button" class="save" onclick="Correspondant.onSubmit(this.form);" style="margin: auto;">

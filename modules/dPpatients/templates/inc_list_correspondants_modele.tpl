@@ -1,6 +1,6 @@
 {{*
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage dPpatients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
@@ -61,6 +61,6 @@
   </tr>
 {{foreachelse}}
   <tr>
-    <td colspan="12">{{tr}}CCorrespondantModele.none{{/tr}}</td>
+    <td colspan="12">{{tr}}CCorrespondantPatient.none{{/tr}}</td>
   </tr>
 {{/foreach}}

@@ -5,7 +5,7 @@
  * @package    Mediboard
  * @subpackage dPpatients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -14,10 +14,10 @@
  */
 
 class CCorrespondantPatient extends CMbObject {
-  
+
   // DB Table key
   var $correspondant_patient_id = null;
-  
+
   // DB Fields
   var $patient_id = null;
   var $relation   = null;
@@ -38,26 +38,27 @@ class CCorrespondantPatient extends CMbObject {
   var $email      = null;
   var $remarques  = null;
   var $ean        = null;
+  var $ean_id     = null;
   var $date_debut = null;
   var $date_fin   = null;
   var $num_assure = null;
   var $employeur  = null;
-  
+
   var $_eai_initiateur_group_id = null;
-  
+
   // Form fields
   var $_ref_patient = null;
-  
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "correspondant_patient";
     $spec->key   = "correspondant_patient_id";
     return $spec;
   }
-  
+
   function getProps() {
     $specs = parent::getProps();
-    $specs["patient_id"] = "ref notNull class|CPatient";
+    $specs["patient_id"] = "ref class|CPatient cascade";
     $specs["relation"]   = "enum list|assurance|autre|confiance|employeur|inconnu|prevenir";
     $specs["relation_autre"] = "str";
     $specs["nom"]        = "str confidential";
@@ -76,28 +77,29 @@ class CCorrespondantPatient extends CMbObject {
     $specs["email"]      = "str maxLength|255";
     $specs["remarques"]  = "text";
     $specs["ean"]        = "str maxLength|30";
+    $specs["ean_id"]     = "str maxLength|5";
     $specs["date_debut"] = "date";
     $specs["date_fin"]   = "date";
     $specs["num_assure"] = "str maxLength|30";
     $specs["employeur"]  = "ref class|CCorrespondantPatient";
     return $specs;
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->relation ?
       CAppUI::tr("CCorrespondantPatient.relation.".$this->relation) :
       $this->relation_autre;
   }
-  
-  
+
+
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
     $backProps["assurance"] = "CFactureConsult assurance";
     return $backProps;
-  }  
-  
+  }
+
   function loadRefPatient() {
     return $this->_ref_patient = $this->loadFwdRef("patient_id");
   }

@@ -1,6 +1,6 @@
 {{*
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage dPpatients
  * @author     SARL OpenXtrem <dev@openxtrem.com>
@@ -15,7 +15,7 @@
       url.addParam("correspondant_id", correspondant_id);
       url.requestModal(600, 400);
     },
-    
+
     refreshList: function(correspondant_id) {
       var url = new Url("patients", "ajax_list_correspondants_modele");
       if (correspondant_id) {
@@ -23,12 +23,12 @@
       }
       url.requestUpdate("list_correspondants");
     },
-    
+
     afterSave: function(correspondant_id) {
       Control.Modal.close();
       CorrespondantModele.refreshList(correspondant_id ? correspondant_id : null);
     },
-    
+
     updateSelected: function(elt) {
       $("list_correspondants").select("tr").invoke("removeClassName", "selected");
       if (elt) {
@@ -36,7 +36,7 @@
       }
     }
   };
-  
+
   Main.add(function() {
     CorrespondantModele.refreshList();
   });
@@ -48,20 +48,20 @@
 
 <table class="tbl">
   <tr>
-    <th>{{mb_title class=CCorrespondantModele field=nom}}</th>
-    <th>{{mb_title class=CCorrespondantModele field=prenom}}</th>
-    <th>{{mb_title class=CCorrespondantModele field=naissance}}</th>
-    <th>{{mb_title class=CCorrespondantModele field=adresse}}</th>
-    <th>{{mb_title class=CCorrespondantModele field=cp}}/{{mb_title class=CCorrespondantModele field=ville}}</th>
-    <th>{{mb_title class=CCorrespondantModele field=tel}}</th>
-    <th>{{mb_title class=CCorrespondantModele field=mob}}</th>
-    <th>{{mb_title class=CCorrespondantModele field=fax}}</th>
-    <th>{{mb_title class=CCorrespondantModele field=relation}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=nom}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=prenom}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=naissance}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=adresse}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=cp}}/{{mb_title class=CCorrespondantPatient field=ville}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=tel}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=mob}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=fax}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=relation}}</th>
     {{if $conf.ref_pays == 1}}
-      <th>{{mb_title class=CCorrespondantModele field=urssaf}}</th>
+      <th>{{mb_title class=CCorrespondantPatient field=urssaf}}</th>
     {{/if}}
-    <th>{{mb_title class=CCorrespondantModele field=email}}</th>
-    <th>{{mb_title class=CCorrespondantModele field=remarques}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=email}}</th>
+    <th>{{mb_title class=CCorrespondantPatient field=remarques}}</th>
   </tr>
   <tbody id="list_correspondants"></tbody>
 </table>

@@ -29,7 +29,7 @@
       <th class="category">{{mb_title class=CCorrespondantPatient field=remarques}}</th>
       <th class="category">{{mb_title class=CCorrespondantPatient field=date_debut}}</th>
       <th class="category">{{mb_title class=CCorrespondantPatient field=date_fin}}</th>
-      
+
       {{if !$readonly}}
         <th class="category" style="width: 1%"></th>
       {{/if}}
@@ -75,11 +75,11 @@
             <td>{{mb_value object=$_correspondant field=email}}</td>
             <td>
               {{mb_value object=$_correspondant field=remarques}}
-              {{mb_value object=$_correspondant field=ean}}
-            </td>            
+              {{mb_value object=$_correspondant field=ean}} ({{mb_value object=$_correspondant field=ean_id}})
+            </td>
             <td>{{mb_value object=$_correspondant field=date_debut}}</td>
             <td>{{mb_value object=$_correspondant field=date_fin}}</td>
-            
+
             {{if !$readonly}}
             <td>
               <button type="button" class="edit notext" onclick="Correspondant.edit('{{$_correspondant->_id}}', null, Correspondant.refreshList.curry('{{$patient_id}}'))"></button>
