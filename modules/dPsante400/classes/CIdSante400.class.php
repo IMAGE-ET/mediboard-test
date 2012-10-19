@@ -206,7 +206,7 @@
     $idex->object_id    = $object_id;
     $idex->loadMatchingObject();
     
-    return $id_ext;
+    return $idex;
   }
 
   /**
