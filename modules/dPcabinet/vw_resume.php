@@ -47,7 +47,12 @@ foreach ($consultations as &$consultation) {
   $consultation->loadRefsBack();
   $consultation->loadRefsReglements();
   $consultation->loadRefPlageConsult();
-	$consultation->_ref_plageconsult->_ref_chir->loadRefFunction();
+  $consultation->_ref_plageconsult->_ref_chir->loadRefFunction();
+  // Affichage des ordonnances
+  $consultation->loadRefsPrescriptions();
+  if (isset($consultation->_ref_prescriptions["externe"])) {
+    $consultation->_ref_prescriptions["externe"]->loadRefsFiles();
+  }
 }
 
 // Sejours
