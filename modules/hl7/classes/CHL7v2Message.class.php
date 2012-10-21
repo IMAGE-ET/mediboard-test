@@ -259,8 +259,12 @@ class CHL7v2Message extends CHL7v2SegmentGroup {
       $this->event_name = preg_replace("/[^A-Z0-9]/", "", $message_type[2]);
       $this->name       = substr($message_type[2], 0, 3);
     }
-
-    $this->description = (string)$this->getSpecs()->description;
+    
+    if (!$spec = $this->getSpecs()) {
+      throw new CHL7v2Exception(CHL7v2Exception::UNKNOWN_MSG_CODE);
+    }
+    
+    $this->description = (string)$spec->description;
     
     $this->readHeader();
     
