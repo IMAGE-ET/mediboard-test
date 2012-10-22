@@ -83,6 +83,12 @@ var Url = Class.create({
     return this;
   },
   
+  addNotNullParam :function(sName, sValue, bAcceptArray){
+    if (sValue){
+      this.addParam(sName, sValue, bAcceptArray);
+    }
+  },
+  
   addObjectParam: function(sName, oObject) {
     if (typeof oObject != "object") {
       return this.addParam(sName, oObject);
