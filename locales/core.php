@@ -9,7 +9,7 @@
  */
 
 $root_dir = CAppUI::conf("root_dir");
-$locale = CAppUI::pref("LOCALE");
+$locale = CAppUI::pref("LOCALE", "fr");
 $shared_name = "locales-$locale";
 
 // Load from shared memory if possible
