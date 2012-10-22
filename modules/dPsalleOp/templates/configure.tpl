@@ -45,6 +45,7 @@
   {{mb_include module=system template=inc_config_bool var=mode}}
   {{mb_include module=system template=inc_config_bool var=modif_salle}}
   {{mb_include module=system template=inc_config_bool var=use_sortie_reveil_reel}}
+  {{mb_include module=system template=inc_config_bool var=postdater_reveil}}
   
   {{assign var="var" value="modif_actes"}}
   <tr>

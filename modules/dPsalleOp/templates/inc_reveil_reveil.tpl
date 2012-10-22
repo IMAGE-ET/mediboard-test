@@ -174,8 +174,14 @@
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="sortie_reveil_possible" value="" />
-        <button class="tick notext" type="button" onclick="$V(this.form.sortie_reveil_possible, 'current') ; submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
+        {{if $conf.dPsalleOp.COperation.postdater_reveil}}
+          {{mb_field object=$_operation field=sortie_reveil_possible form=editSortieReveilReveilFrm`$_operation->_id` value="now"}}
+          <button class="tick notext" type="button" onclick="submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
+        {{else}}
+          <input type="hidden" name="sortie_reveil_possible" value="" />
+          <button class="tick notext" type="button" onclick="$V(this.form.sortie_reveil_possible, 'current') ; submitReveilForm(this.form);">{{tr}}Modify{{/tr}}</button>
+        {{/if}}
+        
       </form>
       {{else}}-{{/if}}
       
