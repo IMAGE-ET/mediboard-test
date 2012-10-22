@@ -896,13 +896,7 @@ class COperation extends CCodable implements IPatientRelated {
   
   
   function loadRefPoste() {
-    if ($this->poste_sspi_id) {
-      return $this->_ref_poste = $this->loadFwdRef("poste_sspi_id");
-    }
-    if ($this->salle_id) {
-      return $this->_ref_poste = $this->updateSalle()->loadRefBloc()->loadRefPoste();
-    }
-    return $this->_ref_poste = new CPosteSSPI();
+    return $this->_ref_poste = $this->loadFwdRef("poste_sspi_id");
   }
   
   /**

@@ -15,6 +15,7 @@ class CPosteSSPI extends CMbObject {
   
   // DB References
   var $group_id      = null;
+  var $bloc_id       = null;
   
   // DB Fields
   var $nom           = null;
@@ -33,8 +34,10 @@ class CPosteSSPI extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     
+    $props["bloc_id"]  = "ref class|CBlocOperatoire";
     $props["group_id"] = "ref class|CGroups notNull";
     $props["nom"]      = "str notNull seekable";
+    
     return $props;
   }
   
@@ -44,15 +47,7 @@ class CPosteSSPI extends CMbObject {
     $this->_view = $this->nom;
   }
   
-  function getBackProps() {
-    $backProps = parent::getBackProps();
-    $backProps["bloc"] = "CBlocOperatoire poste_sspi_id";
-    
-    return $backProps;
-  }
-  
   function loadRefBloc() {
-    return $this->_ref_bloc = $this->loadUniqueBackRef("bloc");
+    return $this->_ref_bloc = $this->loadFwdRef("bloc_id");
   }
-  
 }

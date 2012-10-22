@@ -190,9 +190,6 @@ class CGroups extends CMbObject {
     if ($load_salles) {
       foreach ($this->_ref_blocs as &$bloc) {
         $bloc->loadRefsSalles();
-        if ($use_poste) {
-          $bloc->loadRefPoste();
-        }
       }
     }
     return $this->_ref_blocs;

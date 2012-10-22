@@ -42,17 +42,11 @@ Main.add(function () {
         <table class="tbl">
           <tr>
             <th>{{tr}}CBlocOperatoire-nom{{/tr}}</th>
-            {{if $use_poste}}
-              <th>{{tr}}CBlocOperatoire-poste_sspi_id{{/tr}}</th>
-            {{/if}}
             <th>{{tr}}CBlocOperatoire-back-salles{{/tr}}</th>
           </tr>
           {{foreach from=$blocs_list item=_bloc}}
           <tr {{if $_bloc->_id == $bloc->_id}}class="selected"{{/if}}>
             <td><a href="?m={{$m}}&tab={{$tab}}&bloc_id={{$_bloc->_id}}">{{$_bloc}}</a></td>
-            {{if $use_poste}}
-              <td>{{$_bloc->_ref_poste}}</td>
-            {{/if}}
             <td>
               {{foreach from=$_bloc->_ref_salles item=_salle}}
                  <div>{{$_salle}}</div>
@@ -82,43 +76,6 @@ Main.add(function () {
               <th>{{mb_label object=$bloc field="days_locked"}}</th>
               <td>{{mb_field object=$bloc field="days_locked"}}</td>
             </tr>
-            {{if $use_poste}}
-              <tr>
-                <th>{{mb_label object=$bloc field="poste_sspi_id"}}</th>
-                <td>
-                  <input type="hidden" name="poste_sspi_id" value="{{$bloc->poste_sspi_id}}"/>
-                  <input type="text" name="_poste_sspi_id_autocomplete" value="{{$bloc->_ref_poste}}"/>
-                  <script type="text/javascript">
-                    Main.add(function() {
-                      var form=getForm("bloc-edit");
-                      var url = new Url("system", "ajax_seek_autocomplete");
-                      url.addParam("object_class", "CPosteSSPI");
-                      url.addParam('show_view', true);
-                      url.addParam("input_field", "_poste_sspi_id_autocomplete");
-                      url.autoComplete(form.elements._poste_sspi_id_autocomplete, null, {
-                        minChars: 2,
-                        method: "get",
-                        select: "view",
-                        dropdown: true,
-                        afterUpdateElement: function(field,selected) {
-                          var guid = selected.getAttribute('id');
-                          if (guid) {
-                            $V(field.form['poste_sspi_id'], guid.split('-')[2]);
-                          }
-                        },
-                        callback:  function(input, queryString) {
-                          queryString += "&ljoin[bloc_operatoire]=bloc_operatoire.poste_sspi_id  = poste_sspi.poste_sspi_id";
-                          queryString += "&whereComplex[]=(bloc_operatoire.bloc_operatoire_id IS NULL OR bloc_operatoire.bloc_operatoire_id = "+{{$bloc->_id}}+")";
-                          return queryString;
-                        }
-                      });
-                    });
-                  </script>
-                  <button type="button" class="cancel notext"
-                    onclick="$V(this.form.poste_sspi_id, ''), $V(this.form._poste_sspi_id_autocomplete, '')"></button>
-                </td>
-              </tr>
-            {{/if}}
             <tr>
               <td class="button" colspan="2">
                 {{if $bloc->_id}}
@@ -250,6 +207,16 @@ Main.add(function () {
                 <th>{{mb_label object=$poste field="nom"}}</th>
                 <td>{{mb_field object=$poste field="nom"}}</td>
               </tr>
+              <tr>
+                <th>{{mb_label object=$poste field="bloc_id"}}</th>
+                <td>
+                  <select name="bloc_id">
+                    <option value="">&mdash; Choisir un bloc</option>
+                    {{foreach from=$blocs_list item=_bloc}}
+                      <option value="{{$_bloc->_id}}" {{if $poste->bloc_id == $_bloc->_id}}selected{{/if}}>{{$_bloc}}</option>
+                    {{/foreach}}
+                  </select>
+                </td>
               <tr>
                 <td class="button" colspan="2">
                   {{if $poste->_id}}

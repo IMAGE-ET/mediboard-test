@@ -31,8 +31,8 @@ $where["annulee"] = "= '0'";
 $ljoin = array();
 
 if (CAppUI::conf("dPplanningOp COperation use_poste")) {
-  $ljoin["bloc_operatoire"] = "bloc_operatoire.poste_sspi_id = operations.poste_sspi_id";
-  $where[] = "(operations.poste_sspi_id IS NOT NULL AND bloc_operatoire.bloc_operatoire_id = '$bloc_id')
+  $ljoin["poste_sspi"] = "poste_sspi.poste_sspi_id = operations.poste_sspi_id";
+  $where[] = "(operations.poste_sspi_id IS NOT NULL AND poste_sspi.bloc_id = '$bloc_id')
               OR (operations.poste_sspi_id IS NULL AND operations.salle_id ". CSQLDataSource::prepareIn(array_keys($listSalles)) . ")";
 }
 else {

@@ -24,10 +24,6 @@ $postes_list = CGroups::loadCurrent()->loadPostes(PERM_EDIT);
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
 
-if (CAppUI::conf("dPplanningOp COperation use_poste")) {
-  $bloc->loadRefPoste();
-}
-
 // Récupération de la salle à ajouter / modifier
 $salle = new CSalle();
 $salle->load($salle_id);
