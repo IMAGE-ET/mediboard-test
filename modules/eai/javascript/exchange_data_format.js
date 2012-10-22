@@ -102,8 +102,12 @@ ExchangeDataFormat = {
     this[$(this.target).visible() ? "hide" : "show"](); 
   },
   
-  viewAll: function() {
+  viewAll: function(form) {
     var url = new Url("eai", "ajax_view_all_exchanges");
-    url.requestUpdate("vw_all_exchanges");
+    if (form) {
+      url.addFormData(form);
+    }
+    url.requestUpdate("exchanges");
+    return false;
   }
 }

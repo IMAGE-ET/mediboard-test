@@ -14,6 +14,7 @@ CCanDo::checkRead();
 
 $_date_min = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
 $_date_max = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
+$group_id  = CValue::getOrSession('group_id' , CGroups::loadCurrent()->_id);
 
 $total_exchanges = 0;
 $exchanges       = array();
@@ -23,15 +24,15 @@ foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {
     $exchange->_date_min = $_date_min;
     $exchange->_date_max = $_date_max;
     
-    $group_id = CGroups::loadCurrent()->_id;
     $where["group_id"] = " = '$group_id'";
     $exchange->group_id = $group_id;
     $exchange->loadRefGroups();
     
     $forceindex[] = "date_production";
     $total_exchanges += $exchange->countList($where, null, null, $forceindex);
-        
-    $exchanges[$_under_class] = $exchange->loadList($where, null, "0, 10", null, null, $forceindex);
+    
+    $order = "date_production DESC";    
+    $exchanges[$_under_class] = $exchange->loadList($where, $order, "0, 10", null, null, $forceindex);
     foreach ($exchanges[$_under_class] as $_exchange) {
       $_exchange->loadRefsBack();
       $_exchange->getObservations();
@@ -41,11 +42,14 @@ foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {
 }
 
 $exchange_df = new CExchangeDataFormat();
-
+$exchange_df->_date_min = $_date_min;
+$exchange_df->_date_max = $_date_max;
+$exchange_df->group_id  = $group_id;
+    
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("exchanges"  , $exchanges);
 $smarty->assign("exchange_df", $exchange_df);
-$smarty->display("vw_all_exchanges.tpl");
+$smarty->display("inc_vw_all_exchanges.tpl");
 
 ?>
