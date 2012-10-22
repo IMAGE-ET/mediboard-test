@@ -260,7 +260,8 @@ class CFactureConsult extends CMbObject {
     }
     else {
       $this->_montant_factures   = array();
-      $this->_montant_factures[] = ($this->du_patient + $this->du_tiers) * $this->_coeff - $this->remise;
+      $this->_montant_factures[] = $this->du_patient + $this->du_tiers - $this->remise;
+      $this->loadNumerosBVR();      
     }
   }
           
@@ -314,7 +315,7 @@ class CFactureConsult extends CMbObject {
   function loadRefsReglements($cache = 1) {
     $this->_montant_sans_remise = 0;
     
-    if (!CModule::getActive("tarmed") || !CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+    if (CModule::getActive("tarmed") || CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
       if (count($this->_montant_factures)>1) {
         foreach ($this->_montant_factures as $_montant) {
           $this->_montant_sans_remise += $_montant;
@@ -336,7 +337,7 @@ class CFactureConsult extends CMbObject {
     // Application du coeff
     // @todo A améliorer
     if ($this->_coeff) {
-      $this->_du_restant_patient = $this->_du_restant_patient * $this->_coeff - $this->remise;
+      $this->_du_restant_patient = $this->_montant_avec_remise  - $this->remise;
     }
     
     // Calcul des dus
@@ -502,8 +503,9 @@ class CFactureConsult extends CMbObject {
         $this->_montant_factures_caisse = $this->_montant_factures;
       }
       $genre = "01";
-      if ($this->_ref_chir) {
-        $adherent2 = str_replace(' ','',$this->_ref_chir->compte);
+      
+      if ($this->_ref_praticien) {
+        $adherent2 = str_replace(' ','',$this->_ref_praticien->adherent);
         $adherent2 = str_replace('-','',$adherent2);
       
         foreach ($this->_montant_factures_caisse as $montant_facture) {

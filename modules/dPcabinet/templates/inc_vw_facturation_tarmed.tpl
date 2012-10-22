@@ -90,144 +90,144 @@
 {{/if}}
 
 {{foreach from=$facture->_ref_consults item=_consultation}}
-{{foreach from=$_consultation->_ref_actes_tarmed item=_acte_tarmed}}
-  <tr>
-    <td style="text-align:center;width:100px;">
-      {{if $_acte_tarmed->date}}
-        {{mb_value object=$_acte_tarmed field="date"}} 
-      {{else}}
-        {{$_consultation->_date}}
-      {{/if}}
-    </td>
-    {{if $_acte_tarmed->code}} 
-    <td style="background-color:#BA55D3; width:140px;">
-       {{mb_value object=$_acte_tarmed field="code"}}
-    </td>
-    {{else}}
-    <td>
-    </td>
-    {{/if}}
-    <td style="white-space: pre-wrap;">
-      {{if $_acte_tarmed->libelle}}
-        {{$_acte_tarmed->libelle}}
-      {{else}}
-        {{$_acte_tarmed->_ref_tarmed->libelle}}
-      {{/if}}
-    </td>
-    <td style="text-align:right;">
-      {{if $_acte_tarmed->quantite}}
-        {{$_acte_tarmed->montant_base/$_acte_tarmed->quantite|string_format:"%0.2f"}}
-      {{else}}
-        {{$_acte_tarmed->montant_base|string_format:"%0.2f"}}
-      {{/if}}
-    </td>
-    <td style="text-align:right;">{{mb_value object=$_acte_tarmed field="quantite"}}</td>
-    <td style="text-align:right;">{{$facture->_coeff}}</td>
-    <td style="text-align:right;">{{$_acte_tarmed->montant_base*$facture->_coeff|string_format:"%0.2f"}}</td>
-  </tr>
-{{/foreach}}
-
-{{foreach from=$_consultation->_ref_actes_caisse item=_acte_caisse}}
-  {{assign var="caisse" value=$_acte_caisse->_ref_caisse_maladie}}
-  {{if $facture->type_facture == "accident"}}
-    {{assign var="coeff_caisse" value=$_acte_caisse->_ref_caisse_maladie->coeff_accident}}
-  {{else}}
-    {{assign var="coeff_caisse" value=$_acte_caisse->_ref_caisse_maladie->coeff_maladie}}
-  {{/if}}
-  <tr>
-    <td style="text-align:center;width:100px;">{{$_consultation->_date|date_format:"%d/%m/%Y"}}</td>
-    <td  {{if $_acte_caisse->code}} style="background-color:#DA70D6; width:140px;">{{mb_value object=$_acte_caisse field="code"}}{{else}}>{{/if}}</td>
-    <td style="white-space: pre-wrap;">{{$_acte_caisse->_ref_prestation_caisse->libelle}}</td>
-    <td style="text-align:right;">
-      {{if $_acte_caisse->quantite}}
-        {{$_acte_caisse->montant_base/$_acte_caisse->quantite|string_format:"%0.2f"}}
-      {{else}}
-        {{$_acte_caisse->montant_base|string_format:"%0.2f"}}
-      {{/if}}
-    </td>
-    <td style="text-align:right;">{{mb_value object=$_acte_caisse field="quantite"}}</td>
-    <td style="text-align:right;">{{$coeff_caisse}}
-    </td>
-    <td style="text-align:right;">{{$_acte_caisse->montant_base*$coeff_caisse|string_format:"%0.2f"}}</td>
-  </tr>
-{{/foreach}}
-
-  <tbody class="hoverable">
-    {{assign var="nb_montants" value=$facture->_montant_factures|@count }}
-    {{if $nb_montants > 1}}
-      {{foreach from=$facture->_montant_factures item=_montant key=key }}
-        <tr>
-          {{if $key == 0}}
-          <td colspan="4" rowspan="{{$nb_montants+2}}"></td>
-          {{/if}}
-          <td colspan="2">Montant n°{{$key+1}}</td>
-          <td style="text-align:right;">{{$_montant|string_format:"%0.2f"}}</td>
-        </tr>
-      {{/foreach}}
-    {{/if}}
-    
+  {{foreach from=$_consultation->_ref_actes_tarmed item=_acte_tarmed}}
     <tr>
-      <td colspan="2"><b>{{mb_label object=$facture field="remise"}}</b></td>
-      <td style="text-align: right;"> 
-        <form name="modif_remise" method="post" onsubmit="Facture.modifCloture(this.form);">
-          {{mb_class object=$facture}}
-          {{mb_key   object=$facture}}
-          <input type="hidden" name="patient_id" value="{{$facture->patient_id}}" />
-          <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />                
-          
-          {{if $facture->cloture}}
-            {{mb_value object=$facture field="remise"}} 
-          {{else}}
-            <input name="remise" type="text" value="{{$facture->remise}}" onchange="Facture.modifCloture(this.form);" size="4" />
-          {{/if}}
-          
-          <br/>soit 
-          {{if $facture->_montant_sans_remise!=0 && $facture->remise}}
-            <strong>{{math equation="(y/x)*100" x=$facture->_montant_sans_remise y=$facture->remise format="%.2f"}} %</strong>
-          {{else}}
-            <strong>0 %</strong>
-          {{/if}}
-        </form>
-      </td>
-    </tr>
-    
-    <tr>
-      <td colspan="3"></td>
-      <td colspan="2"><b>Montant Total</b></td>
-      <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
-    <tr>
-
-  </tbody>
-
-  {{if !$facture->_reglements_total_patient}}
-    <tr>
-      <td colspan="7">
-        {{if $facture->_nb_factures == 1}}
-          <form name="change_type_facture" method="post">
-            {{mb_class object=$facture}}
-            {{mb_key   object=$facture}}
-            <input type="hidden" name="cloture" value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
-            <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-            {{if !$facture->cloture}}
-              <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
-            {{elseif !isset($reglement|smarty:nodefaults) || ($facture->_ref_reglements|@count == 0)}}
-              <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button>
-            {{/if}}
-          </form>
+      <td style="text-align:center;width:100px;">
+        {{if $_acte_tarmed->date}}
+          {{mb_value object=$_acte_tarmed field="date"}} 
         {{else}}
-          <form name="fusionner_eclatements" method="post">
-            <input type="hidden" name="dosql" value="do_fusion_facture_aed" />
-            <input type="hidden" name="m" value="dPcabinet" />
-            <input type="hidden" name="del" value="0" />
-            {{mb_key   object=$facture}}
-            <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-            <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" > Fusionner les éclats de facture </button>
-          </form>
+          {{$_consultation->_date|date_format:"%d/%m/%Y"}}
         {{/if}}
       </td>
+      {{if $_acte_tarmed->code}} 
+      <td style="background-color:#BA55D3; width:140px;">
+         {{mb_value object=$_acte_tarmed field="code"}}
+      </td>
+      {{else}}
+      <td>
+      </td>
+      {{/if}}
+      <td>
+        {{if $_acte_tarmed->libelle}}
+          {{$_acte_tarmed->libelle}}
+        {{else}}
+          {{$_acte_tarmed->_ref_tarmed->libelle}}
+        {{/if}}
+      </td>
+      <td style="text-align:right;">
+        {{if $_acte_tarmed->quantite}}
+          {{$_acte_tarmed->montant_base/$_acte_tarmed->quantite|string_format:"%0.2f"}}
+        {{else}}
+          {{$_acte_tarmed->montant_base|string_format:"%0.2f"}}
+        {{/if}}
+      </td>
+      <td style="text-align:right;">{{mb_value object=$_acte_tarmed field="quantite"}}</td>
+      <td style="text-align:right;">{{$facture->_coeff}}</td>
+      <td style="text-align:right;">{{$_acte_tarmed->montant_base*$facture->_coeff|string_format:"%0.2f"|currency}}</td>
     </tr>
-  {{/if}}
+  {{/foreach}}
+
+  {{foreach from=$_consultation->_ref_actes_caisse item=_acte_caisse}}
+    {{assign var="caisse" value=$_acte_caisse->_ref_caisse_maladie}}
+    {{if $facture->type_facture == "accident"}}
+      {{assign var="coeff_caisse" value=$_acte_caisse->_ref_caisse_maladie->coeff_accident}}
+    {{else}}
+      {{assign var="coeff_caisse" value=$_acte_caisse->_ref_caisse_maladie->coeff_maladie}}
+    {{/if}}
+    <tr>
+      <td style="text-align:center;width:100px;">{{$_consultation->_date|date_format:"%d/%m/%Y"}}</td>
+      <td  {{if $_acte_caisse->code}} style="background-color:#DA70D6; width:140px;">{{mb_value object=$_acte_caisse field="code"}}{{else}}>{{/if}}</td>
+      <td style="white-space: pre-wrap;">{{$_acte_caisse->_ref_prestation_caisse->libelle}}</td>
+      <td style="text-align:right;">
+        {{if $_acte_caisse->quantite}}
+          {{$_acte_caisse->montant_base/$_acte_caisse->quantite|string_format:"%0.2f"}}
+        {{else}}
+          {{$_acte_caisse->montant_base|string_format:"%0.2f"}}
+        {{/if}}
+      </td>
+      <td style="text-align:right;">{{mb_value object=$_acte_caisse field="quantite"}}</td>
+      <td style="text-align:right;">{{$coeff_caisse}}
+      </td>
+      <td style="text-align:right;">{{$_acte_caisse->montant_base*$coeff_caisse|string_format:"%0.2f"|currency}}</td>
+    </tr>
+  {{/foreach}}
 
 {{foreachelse}}
   <tr><td colspan="10" class="empty">{{tr}}CConsultation.none{{/tr}}</td></tr>
 {{/foreach}}
+
+<tbody class="hoverable">
+  {{assign var="nb_montants" value=$facture->_montant_factures|@count }}
+  {{if $nb_montants > 1}}
+    {{foreach from=$facture->_montant_factures item=_montant key=key }}
+      <tr>
+        {{if $key == 0}}
+        <td colspan="4" rowspan="{{$nb_montants+2}}"></td>
+        {{/if}}
+        <td colspan="2">Montant n°{{$key+1}}</td>
+        <td style="text-align:right;">{{$_montant|string_format:"%0.2f"|currency}}</td>
+      </tr>
+    {{/foreach}}
+  {{/if}}
+  
+  <tr>
+    <td colspan="2"><b>{{mb_label object=$facture field="remise"}}</b></td>
+    <td style="text-align: right;"> 
+      <form name="modif_remise" method="post" onsubmit="Facture.modifCloture(this.form);">
+        {{mb_class object=$facture}}
+        {{mb_key   object=$facture}}
+        <input type="hidden" name="patient_id" value="{{$facture->patient_id}}" />
+        <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />                
+        
+        {{if $facture->cloture}}
+          {{mb_value object=$facture field="remise"}} 
+        {{else}}
+          <input name="remise" type="text" value="{{$facture->remise}}" onchange="Facture.modifCloture(this.form);" size="4" />
+        {{/if}}
+        
+        <br/>soit 
+        {{if $facture->_montant_sans_remise!=0 && $facture->remise}}
+          <strong>{{math equation="(y/x)*100" x=$facture->_montant_sans_remise y=$facture->remise format="%.2f"}} %</strong>
+        {{else}}
+          <strong>0 %</strong>
+        {{/if}}
+      </form>
+    </td>
+  </tr>
+  
+  <tr>
+    <td></td>
+    <td><b>Montant Total</b></td>
+    <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
+  </tr>
+
+</tbody>
+
+{{if !$facture->_reglements_total_patient}}
+  <tr>
+    <td colspan="7">
+      {{if $facture->_nb_factures == 1}}
+        <form name="change_type_facture" method="post">
+          {{mb_class object=$facture}}
+          {{mb_key   object=$facture}}
+          <input type="hidden" name="cloture" value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
+          <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+          {{if !$facture->cloture}}
+            <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
+          {{elseif !isset($reglement|smarty:nodefaults) || ($facture->_ref_reglements|@count == 0)}}
+            <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button>
+          {{/if}}
+        </form>
+      {{else}}
+        <form name="fusionner_eclatements" method="post">
+          <input type="hidden" name="dosql" value="do_fusion_facture_aed" />
+          <input type="hidden" name="m" value="dPcabinet" />
+          <input type="hidden" name="del" value="0" />
+          {{mb_key   object=$facture}}
+          <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+          <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" > Fusionner les éclats de facture </button>
+        </form>
+      {{/if}}
+    </td>
+  </tr>
+{{/if}}
