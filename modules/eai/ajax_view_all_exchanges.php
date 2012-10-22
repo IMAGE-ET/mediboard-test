@@ -12,23 +12,35 @@
 
 CCanDo::checkRead();
 
-$_date_min = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
-$_date_max = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
-$group_id  = CValue::getOrSession('group_id' , CGroups::loadCurrent()->_id);
+$_date_min    = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
+$_date_max    = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
+$group_id     = CValue::getOrSession('group_id' , CGroups::loadCurrent()->_id);
+$id_permanent = CValue::getOrSession("id_permanent");
+$object_id    = CValue::getOrSession("object_id");
 
 $total_exchanges = 0;
 $exchanges       = array();
+
+$where = array();
+if ($id_permanent) {
+  $where["id_permanent"] = " = '$id_permanent'";
+}
+if ($object_id) {
+  $where["object_id"] = " = '$object_id'";
+}
+
+$where["group_id"] = " = '$group_id'";
+
+$forceindex[] = "date_production";
+
 foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {  
   foreach (CApp::getChildClasses($_exchange_class, array(), true) as $under_key => $_under_class) {    
     $exchange = new $_under_class;
     $exchange->_date_min = $_date_min;
     $exchange->_date_max = $_date_max;
-    
-    $where["group_id"] = " = '$group_id'";
     $exchange->group_id = $group_id;
     $exchange->loadRefGroups();
     
-    $forceindex[] = "date_production";
     $total_exchanges += $exchange->countList($where, null, null, $forceindex);
     
     $order = "date_production DESC";    
@@ -41,10 +53,12 @@ foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {
   }
 }
 
-$exchange_df = new CExchangeDataFormat();
-$exchange_df->_date_min = $_date_min;
-$exchange_df->_date_max = $_date_max;
-$exchange_df->group_id  = $group_id;
+$exchange_df               = new CExchangeDataFormat();
+$exchange_df->_date_min    = $_date_min;
+$exchange_df->_date_max    = $_date_max;
+$exchange_df->group_id     = $group_id;
+$exchange_df->id_permanent = $id_permanent;
+$exchange_df->object_id    = $object_id;
     
 // Création du template
 $smarty = new CSmartyDP();
