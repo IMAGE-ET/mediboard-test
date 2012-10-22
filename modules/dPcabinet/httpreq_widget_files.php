@@ -17,7 +17,6 @@ $object->canDo();
 
 if ($object->_ref_files) {
   foreach ($object->_ref_files as $_file) {
-    $_file->loadRefCategory();
     $_file->canDo();
   }
 }

@@ -161,9 +161,18 @@ class CFile extends CDocumentItem {
   function getPerm($permType) {
     // Delegate on target object
     $this->loadTargetObject();
-    return $this->_ref_object->_id ?
-      $this->_ref_object->getPerm($permType) :
-      false;
+    if ($this->_ref_object->_id) {
+      $author = $this->loadRefAuthor();
+      
+      if ($author->_id == CMediusers::get()->_id) {
+        $can = new CCanDo();
+        $can->read = $can->edit = 1;
+        return $can;
+      }
+      
+      return $this->_ref_object->getPerm($permType);
+    }
+    return false;
   }
   
   function fillFields(){

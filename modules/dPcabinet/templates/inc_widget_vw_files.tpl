@@ -13,7 +13,7 @@
 </form>
 {{/if}}
 
-{{if $canDoFiles->permission == PERM_EDIT && $object->_can->edit}}
+{{if $canDoFiles->permission == PERM_EDIT && $object->_can->read}}
   <button class="new" type="button" onclick="File.upload('{{$object->_class}}','{{$object->_id}}', '')" >
     {{tr}}CFile-title-create{{/tr}}
   </button>

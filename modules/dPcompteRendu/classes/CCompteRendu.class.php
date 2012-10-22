@@ -401,10 +401,6 @@ class CCompteRendu extends CDocumentItem {
     return $this->_ref_file = $this->loadUniqueBackRef("files");
   }
   
-  function loadRefAuthor() {
-    return $this->_ref_author = $this->loadFwdRef("author_id");
-  }
-  
   function loadRefsFwd() {
     parent::loadRefsFwd();
 

@@ -141,7 +141,7 @@ class CDocumentItem extends CMbMetaObject {
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefCategory();
-    $this->_ref_author = $this->loadFwdRef("author_id");
+    $this->loadRefAuthor();
   }
   
   function loadRefCategory() {
@@ -153,7 +153,7 @@ class CDocumentItem extends CMbMetaObject {
       return;
     }
     
-    return $this->_ref_author = CMediusers::get($this->author_id);
+    return $this->_ref_author = $this->loadFwdRef("author_id", true);
   }
   
   function canRead() {
