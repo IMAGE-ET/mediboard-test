@@ -195,6 +195,12 @@
         {{/if}}
       </td>
     </tr>
+    {{foreachelse}}
+      <tr>
+        <td colspan="13" class="empty">
+          {{tr}}{{$_exchange_classname}}.none{{/tr}}
+        </td>
+      </tr>
     {{/foreach}}
   {{/foreach}}
 </table>
