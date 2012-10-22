@@ -20,7 +20,9 @@ $bloc_id  = CValue::get("_bloc_id");
 $prat_id  = CValue::get("_prat_id");
 $specialite = CValue::get("_specialite");
 
-CMbArray::removeValue("0", $bloc_id);
+if (is_array($bloc_id)) {
+  CMbArray::removeValue("0", $bloc_id);
+}
 
 $dates = array();
 $date_temp = $date_min;

@@ -32,6 +32,11 @@
     {{/if}}
     {{if !$curr_code->_code7}}</strong>{{/if}}
   {{/foreach}}
+  {{if $curr_op->_ref_consult_anesth && $curr_op->_ref_consult_anesth->_intub_difficile}}
+    <div class="small-warning" style="font-weight: bold; color:#f00;">
+      {{tr}}CConsultAnesth-_intub_difficile{{/tr}}
+    </div>
+  {{/if}}
 </td>
 <td class="button">{{$curr_op->cote|truncate:1:""|capitalize}}</td>
 <td class="{{if $curr_op->type_anesth != null}}text{{else}}button{{/if}}">

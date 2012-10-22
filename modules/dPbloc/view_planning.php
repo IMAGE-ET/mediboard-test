@@ -30,7 +30,9 @@ $_coordonnees            = CValue::get("_coordonnees");
 $_print_numdoss          = CValue::get("_print_numdoss");
 $_print_annulees         = CValue::get("_print_annulees");
 
-CMbArray::removeValue("0", $filter->_bloc_id);
+if (is_array($filter->_bloc_id)) {
+  CMbArray::removeValue("0", $filter->_bloc_id);
+}
 
 $filterSejour = new CSejour;
 $filterSejour->type = CValue::get("type");
@@ -56,8 +58,8 @@ $user = CMediusers::get();
 $praticien = new CMediusers();
 $praticien->load($filter->_prat_id);
 
-//dans le cas d'un anesthesiste, vider le prat_id si l'anesthesiste veut voir tous
-//les plannings sinon laisser son prat_id pour afficher son planning perso
+// dans le cas d'un anesthesiste, vider le prat_id si l'anesthesiste veut voir tous
+// les plannings sinon laisser son prat_id pour afficher son planning perso
 if($praticien->isFromType(array("Anesthésiste"))&& !$filter->_planning_perso) {
   $filter->_prat_id = null;
 }
@@ -67,7 +69,7 @@ $function = new CFunctions();
 $functions = array();
 $praticiens = array();
 // Aucun filtre de séléctionné : tous les éléments auxquels on a le droit
-if(!$filter->_specialite && !$filter->_prat_id) {
+if (!$filter->_specialite && !$filter->_prat_id) {
   if(!$user->isFromType(array("Anesthésiste")) && !$praticien->isFromType(array("Anesthésiste"))) {
     $functions  = $function->loadListWithPerms(PERM_READ);
     $praticiens = $user->loadPraticiens();
@@ -76,7 +78,7 @@ if(!$filter->_specialite && !$filter->_prat_id) {
     $praticiens = $praticien->loadList();
   }
 // Filtre sur la specialité : la spec et ses chirs primaires et secondaires
-} elseif($filter->_specialite) {
+} elseif ($filter->_specialite) {
   $function->load($filter->_specialite);
   $function->loadBackRefs("users");
   $function->loadBackRefs("secondary_functions");
@@ -89,7 +91,7 @@ if(!$filter->_specialite && !$filter->_prat_id) {
     }
   }
 // Filtre sur le chir : le chir et ses specs primaires et secondaires
-} elseif($filter->_prat_id) {
+} elseif ($filter->_prat_id) {
   $praticien->loadRefFunction();
   $praticien->loadBackRefs("secondary_functions");
   $praticiens[$praticien->_id] = $praticien;
@@ -119,7 +121,7 @@ if ($filter->salle_id) {
   $whereSalle["sallesbloc.salle_id"] = "= $filter->salle_id";
 }
 $listSalles = $salle->loadListWithPerms(PERM_READ, $whereSalle);
-if($filter->salle_id || $filter->_bloc_id) {
+if ($filter->salle_id || $filter->_bloc_id) {
   $whereOperations["operations.salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 }
 
@@ -135,7 +137,7 @@ $ljoin = array();
 $ljoin["sejour"] = "operations.sejour_id = sejour.sejour_id";
 $where = array();
 $where["operations.chir_id"] = CSQLDataSource::prepareIn(array_keys($praticiens));
-if(!$_print_annulees) {
+if (!$_print_annulees) {
   $where["operations.annulee"] = "= '0'";
   $whereOperations["operations.annulee"] = "= '0'";
 }
@@ -167,7 +169,7 @@ $order = "operations.rank, operations.horaire_voulu, sejour.entree_prevue";
 $listDates = array();
 
 // Operations de chaque plage
-foreach($plagesop as &$plage) {
+foreach ($plagesop as &$plage) {
   $plage->loadRefsFwd(1);
 
   $where["operations.plageop_id"] = "= '$plage->_id'";
@@ -177,6 +179,7 @@ foreach($plagesop as &$plage) {
 
   foreach ($listOp as $operation) {
     $operation->loadRefPlageOp(1);
+    $operation->loadRefsConsultAnesth();
     $operation->loadRefPraticien(1);
     $operation->loadExtCodesCCAM();
     $operation->updateHeureUS();
@@ -217,8 +220,9 @@ foreach($plagesop as &$plage) {
   $listDates[$plage->date][$plage->_id] = $plage;
 }
 
-foreach($operations as $operation) {
+foreach ($operations as $operation) {
   $operation->loadRefPlageOp(1);
+  $operation->loadRefsConsultAnesth();
   $operation->loadRefPraticien(1);
   $operation->loadExtCodesCCAM();
   $operation->updateHeureUS();

@@ -16,7 +16,9 @@ $date_max = CValue::get("_date_max");
 
 $bloc_id  = CValue::get("_bloc_id", null);
 
-CMbArray::removeValue("0", $bloc_id);
+if (is_array($bloc_id)) {
+  CMbArray::removeValue("0", $bloc_id);
+}
 
 $bloc  = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList();
