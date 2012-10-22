@@ -210,7 +210,7 @@ class COperation extends CCodable implements IPatientRelated {
         "reference1" => array("CSejour",  "sejour_id"),
         "reference2" => array("CPatient", "sejour_id.patient_id"),
       ),
-      "sortie_reveil_possible" => array(
+      "sortie_reveil" => array(
         "reference1" => array("CSejour",  "sejour_id"),
         "reference2" => array("CPatient", "sejour_id.patient_id"),
       ),
