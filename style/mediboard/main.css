@@ -676,6 +676,7 @@ table#weeklyPlanning th.today {
 
 .planning .consultation.selected,  .planning .operation.selected{
   opacity: 1;
+  filter: none; /* IE lt 8 */
   -ms-filter: none; /* IE 8 */
 }
 
