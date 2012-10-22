@@ -32,9 +32,16 @@
     {{/if}}
     {{if !$curr_code->_code7}}</strong>{{/if}}
   {{/foreach}}
-  {{if $curr_op->_ref_consult_anesth && $curr_op->_ref_consult_anesth->_intub_difficile}}
-    <div class="small-warning" style="font-weight: bold; color:#f00;">
-      {{tr}}CConsultAnesth-_intub_difficile{{/tr}}
+  {{assign var=consult_anesth value=$curr_op->_ref_consult_anesth}}
+  {{if $curr_op->rques || ($consult_anesth && $consult_anesth->_intub_difficile)}}
+    <div class="small-warning">
+      <em>{{mb_label object=$curr_op field=rques}}</em> :
+      {{mb_value object=$curr_op field=rques}}
+      {{if $consult_anesth->_id && $consult_anesth->_intub_difficile}}
+        <div style="font-weight: bold; color:#f00;">
+          {{tr}}CConsultAnesth-_intub_difficile{{/tr}}
+        </div>
+      {{/if}}
     </div>
   {{/if}}
 </td>
