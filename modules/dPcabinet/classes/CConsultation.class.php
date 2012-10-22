@@ -1123,7 +1123,7 @@ TESTS A EFFECTUER
     if ($msg = parent::store()) {
       return $msg;
     }
-
+    
     $this->createConsultAnesth();
 
     // Forfait SE et facturable. A laisser apres le store()
@@ -1553,6 +1553,15 @@ TESTS A EFFECTUER
   }
 
   function fillLimitedTemplate(&$template) {
+    $chir = $this->_ref_plageconsult->_ref_chir;
+    
+    // Ajout du praticien pour les destinataires possibles (dans l'envoi d'un email)
+    $template->destinataires[] = array(
+      "nom"   => "Dr " . $chir->_user_last_name . " " . $chir->_user_first_name,
+      "email" => $chir->_user_email,
+      "tag"   => "Praticien"
+    );
+    
     $this->updateFormFields();
     $this->loadRefsFwd();
 
