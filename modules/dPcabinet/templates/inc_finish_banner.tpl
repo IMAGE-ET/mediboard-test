@@ -47,6 +47,9 @@ function changePratPec(prat_id) {
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 {{mb_key   object=$consult}}
 {{mb_field object=$consult field="chrono" hidden=1}}
+{{if $_is_anesth}}
+  <input type="hidden" name="_consult_anesth_id" value="{{$consult_anesth->_id}}" />
+{{/if}}
 
 <table class="form">
   <tr>

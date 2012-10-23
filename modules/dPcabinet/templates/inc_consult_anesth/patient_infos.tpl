@@ -1,3 +1,5 @@
+{{assign var=multiple_dossiers_anesth value=$conf.dPcabinet.CConsultAnesth.multiple_dossiers_anesth}}
+
 <table class="form">
   <tr>
     <th class="category">
@@ -16,17 +18,24 @@
     <th class="category">{{tr}}CPatient-back-correspondants{{/tr}}</th>
   </tr>
   <tr>
-    <td class="text">
-      {{include file="../../dPcabinet/templates/inc_patient_infos.tpl"}}
+    <td class="text" {{if $multiple_dossiers_anesth}}rowspan="2"{{/if}}>
+      {{mb_include module=cabinet template=inc_patient_infos}}
     </td>
-    <td class="text" id="consultAnesth">
-      {{include file="../../dPcabinet/templates/inc_consult_anesth/interventions.tpl"}}
+    <td class="text" id="consultAnesth" {{if $multiple_dossiers_anesth}}rowspan="2"{{/if}}>
+      {{mb_include module=cabinet template=inc_consult_anesth/interventions}}
     </td>
     <td>
-      {{include file="../../dPcabinet/templates/inc_patient_history.tpl"}}
+      {{mb_include module=cabinet template=inc_patient_history}}
     </td>
     <td class="text">
-      {{include file="../../dPcabinet/templates/inc_patient_medecins.tpl"}}
+      {{mb_include module=cabinet template=inc_patient_medecins}}
     </td>
   </tr>
+  {{if $multiple_dossiers_anesth}}
+    <tr>
+      <td colspan="2" id="dossiers_anesth_area">
+        {{mb_include module=cabinet template=inc_multi_consult_anesth}}
+      </td>
+    </tr>
+  {{/if}}
 </table>

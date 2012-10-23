@@ -11,6 +11,7 @@ CCanDo::checkEdit();
 
 // Utilisateur sélectionné ou utilisateur courant
 $prat_id = CValue::getOrSession("chirSel", 0);
+$dossier_anesth_id = CValue::get("dossier_anesth_id");
 
 $userSel = CMediusers::get($prat_id);
 $userSel->loadRefs();
@@ -40,14 +41,19 @@ if ($selConsult) {
   
   $consult->loadRefsFwd();
 
-  // Chargment de la consult anesthésie
+  // Chargement de la consult anesthésie
   $consult->loadRefConsultAnesth();
   $consultAnesth = $consult->_ref_consult_anesth;
+  
+  if ($dossier_anesth_id) {
+    $consultAnesth = $consult->_refs_dossiers_anesth[$dossier_anesth_id];
+  }
+  
   if ($consultAnesth->_id) {
     $consultAnesth->loadRefOperation();
     $consultAnesth->loadRefConsultation();
     $consultAnesth->_ref_consultation->loadRefPraticien();
-		$consultAnesth->_ref_operation->loadRefChir(true);
+    $consultAnesth->_ref_operation->loadRefChir(true);
     $consultAnesth->_ref_sejour->loadRefDossierMedical();
     $consultAnesth->_ref_sejour->loadRefPraticien(true);
   }
@@ -57,8 +63,8 @@ if ($selConsult) {
   foreach ($patient->_ref_sejours as $_sejour) {
     $_sejour->loadRefsOperations();
     foreach ($_sejour->_ref_operations as $_operation) {
-	    $_operation->loadRefPlageOp(true);
-	    $_operation->loadRefChir(true);
+      $_operation->loadRefPlageOp(true);
+      $_operation->loadRefChir(true);
     }
   }
 } 
@@ -70,7 +76,7 @@ $consult_anesth =& $consult->_ref_consult_anesth;
 $nextSejourAndOperation = $patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
 
 $listChirs = CAppUI::pref("pratOnlyForConsult", 1) ?
-	$userSel->loadPraticiens() :
+  $userSel->loadPraticiens() :
   $userSel->loadProfessionnelDeSante();
 
 // Création du template

@@ -41,6 +41,12 @@ class CPosteSSPI extends CMbObject {
     return $props;
   }
   
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["operations"] = "COperation poste_sspi_id";
+    return $backProps;
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     

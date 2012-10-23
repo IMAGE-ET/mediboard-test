@@ -49,7 +49,8 @@ $dPconfig["dPcabinet"] = array(
     "format_auto_rques"  => "%T %E %e",
     "view_premedication" => "0",
     "show_facteurs_risque" => "0",
-    "show_mallampati" => "0"
+    "show_mallampati" => "0",
+    "multiple_dossiers_anesth" => "0"
   ),
   "CPrescription" => array (
     "view_prescription" => "0"

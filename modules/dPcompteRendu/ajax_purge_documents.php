@@ -18,7 +18,7 @@ $where["purgeable"] = "= '1'";
 $modeles = $modele->loadList($where);
 
 foreach ($modeles as $_modele) {
-  $documents = $_modele->loadBackRefs("documents", null, $limit);
+  $documents = $_modele->loadBackRefs("documents_generated", null, $limit);
   foreach ($documents as $_doc) {
     $_doc->delete();
   }

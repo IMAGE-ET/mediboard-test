@@ -27,6 +27,7 @@ if (!isset($current_m)) {
 
 $prat_id      = CValue::getOrSession("chirSel", $user->_id);
 $selConsult   = CValue::getOrSession("selConsult");
+$dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
 
 $listChirs = CAppUI::pref("pratOnlyForConsult", 1) ?
   $user->loadPraticiens(null) :
@@ -109,7 +110,19 @@ if ($consult->_id) {
   $consult->loadRefs();  
   
   // Chargment de la consultation d'anesthésie
-  if ($consultAnesth->_id) {
+  
+  // Chargement de la vue de chacun des dossiers
+  foreach ($consult->_refs_dossiers_anesth as $_dossier) {
+    $_dossier->loadRefConsultation();
+    $_dossier->loadRefOperation()->loadRefPlageOp();
+  }
+  
+  // Si on a passé un id de dossier d'anesth
+  if ($dossier_anesth_id && isset($consult->_refs_dossiers_anesth[$dossier_anesth_id])) {
+    $consultAnesth = $consult->_refs_dossiers_anesth[$dossier_anesth_id];
+  }
+  
+  if (!is_array($consultAnesth) && $consultAnesth->_id) {
     $consultAnesth->loadRefs();
     if ($consultAnesth->_ref_operation->_id || $consultAnesth->_ref_sejour->_id) {
       if ($consultAnesth->_ref_operation->passage_uscpo === null) {

@@ -125,7 +125,7 @@ class CCompteRendu extends CDocumentItem {
     $backProps["modeles_footed"] = "CCompteRendu footer_id";
     $backProps["modeles_prefaced"] = "CCompteRendu preface_id";
     $backProps["modeles_ended"]  = "CCompteRendu ending_id";
-    $backProps["documents"]      = "CCompteRendu modele_id";
+    $backProps["documents_generated"] = "CCompteRendu modele_id";
     $backProps["pack_links"]     = "CModeleToPack modele_id";
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier compte_rendu_id";
     return $backProps;

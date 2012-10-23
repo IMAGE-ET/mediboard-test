@@ -35,11 +35,11 @@ function submitOpConsult() {
 function submitAll() {
   var oForm;
   
-	/*
+  /*
   oForm = getForm('edit-constantes-medicales');
   onSubmitFormAjax(oForm);
   */
-	
+  
   oForm = getForm("editFrmIntubation");
   onSubmitFormAjax(oForm);
   
@@ -50,7 +50,7 @@ function submitAll() {
 function printFiche() {
   var url = new Url("dPcabinet", "print_fiche"); 
   url.addElement(document.editFrmFinish.consultation_id);
-	url.addParam("print", true);
+  url.addParam("print", true);
   url.popup(700, 500, "printFiche");
 }
 
@@ -83,13 +83,14 @@ function reloadConsultAnesth() {
   // Reload Infos Anesth
   var infosAnesthUrl = new Url("dPcabinet", "httpreq_vw_choix_anesth");
   infosAnesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
+  infosAnesthUrl.addParam("dossier_anesth_id", document.editFrmFinish._consult_anesth_id.value);
   infosAnesthUrl.requestUpdate('InfoAnesth');
  
   Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null,'', null, false);
 
   if($('facteursRisque')){
-	  refreshFacteursRisque();
-	}
+    refreshFacteursRisque();
+  }
 }
 
 Main.add(function () {

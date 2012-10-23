@@ -102,6 +102,7 @@ class CConsultation extends CCodable {
 
   // Back References
   var $_ref_consult_anesth     = null;
+  var $_refs_dossiers_anesth   = null;   
   var $_ref_examaudio          = null;
   var $_ref_examcomp           = null;
   var $_ref_examnyha           = null;
@@ -115,7 +116,7 @@ class CConsultation extends CCodable {
   var $_ref_prescription       = null;
   var $_ref_categorie          = null;
   var $_ref_group              = null;
-
+  
   // Distant fields
   var $_ref_chir                 = null;
   var $_date                     = null;
@@ -1349,7 +1350,13 @@ TESTS A EFFECTUER
     // On ajoute les documents de la consultation d'anesthésie
     $this->loadRefConsultAnesth();
     $consult_anesth =& $this->_ref_consult_anesth;
-    if ($consult_anesth->_id) {
+    if (is_array($consult_anesth)) {
+      foreach ($consult_anesth as $_consult_anesth) {
+        $_consult_anesth->loadRefsDocs();
+        $this->_ref_documents = CMbArray::mergeKeys($this->_ref_documents, $_consult_anesth->_ref_documents);
+      }
+    }
+    else if ($consult_anesth->_id) {
       $consult_anesth->loadRefsDocs();
       $this->_ref_documents = CMbArray::mergeKeys($this->_ref_documents, $consult_anesth->_ref_documents);
     }
@@ -1377,8 +1384,15 @@ TESTS A EFFECTUER
     $nbDocs = parent::countDocs();
 
     // Ajout des documents de la consultation d'anesthésie
-     $this->loadRefConsultAnesth();
-    if ($this->_ref_consult_anesth->_id) {
+    $this->loadRefConsultAnesth();
+    $consult_anesth = $this->_ref_consult_anesth;
+    
+    if (is_array($consult_anesth)) {
+      foreach ($consult_anesth as $_consult_anesth) {
+        $nbDocs += $_consult_anesth->countDocs();
+      }
+    }
+    else if ($this->_ref_consult_anesth->_id) {
       $nbDocs += $this->_ref_consult_anesth->countDocs();
     }
 
@@ -1386,9 +1400,14 @@ TESTS A EFFECTUER
   }
 
   function loadRefConsultAnesth() {
-    return $this->_ref_consult_anesth = $this->loadUniqueBackRef("consult_anesth");
+    $this->loadRefsDossiersAnesth();
+    return $this->_ref_consult_anesth = @$this->loadUniqueBackRef("consult_anesth");
   }
-
+  
+  function loadRefsDossiersAnesth() {
+    $this->_refs_dossiers_anesth = $this->loadBackRefs("consult_anesth");
+  }
+  
   function loadRefsExamAudio(){
     // @todo Ne pas utiliser la backref => ne fonctionne pas
     //$this->_ref_examaudio = $this->loadUniqueBackRef("examaudio");
