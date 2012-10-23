@@ -10,9 +10,9 @@
 
 set_min_memory_limit("512M");
 
-function getCurrentLit($sejour, $_date, $_hour, &$lits, &$affectations){
+function getCurrentLit($sejour, $_date, $_hour, $service_id, &$lits, &$affectations){
   if(!isset($affectations[$sejour->_id]["$_date $_hour:00:00"])){
-    $sejour->loadRefCurrAffectation("$_date $_hour:00:00");
+    $sejour->loadRefCurrAffectation("$_date $_hour:00:00", $service_id);
     $lit =& $sejour->_ref_curr_affectation->_ref_lit;
     if($lit){
       $lits[$lit->_ref_chambre->nom] = $lit;
@@ -313,7 +313,7 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
                   if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
                     continue;
                   }
-                  $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+                  $lit = getCurrentLit($sejour, $_date, $_hour, $service_id, $lits, $affectations);
                   if(!$lit) continue;
                   
                   foreach($_prescription_line_mix->_ref_lines as $_perf_line){
@@ -350,7 +350,7 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
                     if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
                       continue;
                     }
-                    $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+                    $lit = getCurrentLit($sejour, $_date, $_hour, $service_id, $lits, $affectations);
                     if(!$lit) continue;                    
                     
                     $key1 = $by_patient ? $lit->_ref_chambre->nom : "med";
@@ -396,7 +396,7 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
                              if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
                                continue;
                              }
-                            $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+                            $lit = getCurrentLit($sejour, $_date, $_hour, $service_id, $lits, $affectations);
                             if(!$lit) continue;
                             if($prise_prevue["total"]){
                               
@@ -472,7 +472,7 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
                        if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
                          continue;
                        }
-                        $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+                        $lit = getCurrentLit($sejour, $_date, $_hour, $service_id, $lits, $affectations);
                         if(!$lit) continue;        
                         if($prise_prevue["total"]){
 
@@ -500,7 +500,7 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
                            continue;
                          }
                              
-                        $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+                        $lit = getCurrentLit($sejour, $_date, $_hour,$service_id, $lits, $affectations);
                         if(!$lit) continue;        
                         $quantite = @$administrations_by_hour["quantite"];
                         if($quantite){
