@@ -107,7 +107,7 @@
       <td>
       </td>
       {{/if}}
-      <td>
+      <td class="compact" style="white-space: pre-line;">
         {{if $_acte_tarmed->libelle}}
           {{$_acte_tarmed->libelle}}
         {{else}}
@@ -137,7 +137,7 @@
     <tr>
       <td style="text-align:center;width:100px;">{{$_consultation->_date|date_format:"%d/%m/%Y"}}</td>
       <td  {{if $_acte_caisse->code}} style="background-color:#DA70D6; width:140px;">{{mb_value object=$_acte_caisse field="code"}}{{else}}>{{/if}}</td>
-      <td style="white-space: pre-wrap;">{{$_acte_caisse->_ref_prestation_caisse->libelle}}</td>
+      <td style="white-space: pre-line;" class="compact">{{$_acte_caisse->_ref_prestation_caisse->libelle}}</td>
       <td style="text-align:right;">
         {{if $_acte_caisse->quantite}}
           {{$_acte_caisse->montant_base/$_acte_caisse->quantite|string_format:"%0.2f"}}
