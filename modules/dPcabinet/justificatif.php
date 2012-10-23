@@ -64,7 +64,7 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
     array(""      , "Loi", "$loi"),
     array(""      , "N° contrat", ""),
     array(""      , "Motif traitement", "$facture->type_facture"),
-    array(""      , "Traitement", mbTransformTime(null, $facture->ouverture, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
+    array(""      , "Traitement", mbTransformTime(null, $facture->ouverture, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->_ref_last_consult->_date, "%d.%m.%Y")),
     array(""      , "Rôle/ Localité", "-"),
     array("Mandataire", "N° EAN/N° RCC", $praticien->ean." - ".$praticien->rcc." "),
     array("Diagnostic", "Contrat", "ICD--"),
@@ -224,7 +224,7 @@ foreach ($factures as $facture) {
       $pdf->setFont("vera", '', 8);
     
       if ($acte->_ref_tarmed->tp_al == 0.00 && $acte->_ref_tarmed->tp_tl == 0.00) {
-        if ($acte->code_ref) {
+        if ($acte->code_ref && (ereg("Réduction", $acte->libelle) || ereg("Majoration", $acte->libelle)) ) {
           $acte_ref = null;
           foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
             if ($acte_tarmed->code == $acte->code_ref) {
@@ -273,7 +273,7 @@ foreach ($factures as $facture) {
             $valeur = $acte->quantite;
           }
           
-          if ($acte->code_ref) {
+          if ($acte->code_ref && (ereg("Réduction", $acte->libelle) || ereg("Majoration", $acte->libelle))) {
             $acte_ref = null;
             foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
               if ($acte_tarmed->code == $acte->code_ref) {

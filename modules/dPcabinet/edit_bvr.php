@@ -58,7 +58,7 @@ if ($edition_bvr) {
     foreach ($facture->_ref_consults as $consult) {
       foreach ($consult->_ref_actes_tarmed as $acte) {
         if ($acte->_ref_tarmed->tp_al == 0.00 && $acte->_ref_tarmed->tp_tl == 0.00) {
-          if ($acte->code_ref) {
+          if ($acte->code_ref && (ereg("Réduction", $acte->libelle) || ereg("Majoration", $acte->libelle))) {
             $acte_ref = null;
             foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
               if ($acte_tarmed->code == $acte->code_ref) {
