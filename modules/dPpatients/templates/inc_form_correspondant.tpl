@@ -196,7 +196,7 @@
         {{if $mode_modele}}
           {{mb_field object=$correspondant field="nom"}}
         {{else}}
-          <input type="text" name="nom" class="autocomplete" />
+          <input type="text" name="nom" class="autocomplete" value="{{$correspondant->nom}}"/>
         {{/if}}
       </td>
     </tr>
