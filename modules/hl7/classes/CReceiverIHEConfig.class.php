@@ -56,6 +56,9 @@ class CReceiverIHEConfig extends CMbObject {
   var $build_NDA              = null;
   var $build_telephone_number = null;
   
+  // PID
+  var $build_PID_31  = null;
+  
   // PV1
   var $build_PV1_3_2 = null;
   var $build_PV1_3_3 = null;
@@ -102,6 +105,9 @@ class CReceiverIHEConfig extends CMbObject {
       "send_change_attending_doctor",
       "send_all_patients",
       "send_default_affectation",
+    ),
+    "PID" => array(
+      "build_PID_31"
     ),
     "PV1" => array(
       "build_PV1_3_2",
@@ -162,6 +168,9 @@ class CReceiverIHEConfig extends CMbObject {
     $props["build_mode"]             = "enum list|normal|simple default|normal";
     $props["build_NDA"]              = "enum list|PID_18|PV1_19 default|PID_18";
     $props["build_telephone_number"] = "enum list|XTN_1|XTN_12 default|XTN_12";
+    
+    // PID
+    $props["build_PID_31"]  = "enum list|avs|none default|none";
     
     // PV1
     $props["build_PV1_3_2"] = "enum list|name|config_value|idex default|name";

@@ -912,7 +912,16 @@ class CSetuphl7 extends CSetup {
                 ADD `handle_telephone_number` ENUM ('XTN_1','XTN_12') DEFAULT 'XTN_12';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.42";
+    $this->makeRevision("0.42");
+    $query = "ALTER TABLE `hl7_config` 
+                ADD `handle_PID_31` ENUM ('avs','none') DEFAULT 'none';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `hl7_config` 
+                ADD `build_PID_31` ENUM ('avs','none') DEFAULT 'none';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.43";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

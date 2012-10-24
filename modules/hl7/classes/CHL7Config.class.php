@@ -38,6 +38,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle_mode",
     "handle_NDA",
     "handle_telephone_number",
+    "handle_PID_31",
     "handle_PV1_3",
     "handle_PV1_10",
     "handle_PV1_14",
@@ -74,6 +75,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $handle_mode             = null;
   var $handle_NDA              = null;
   var $handle_telephone_number = null;
+  var $handle_PID_31           = null;
   var $handle_PV1_3            = null;
   var $handle_PV1_10           = null;
   var $handle_PV1_14           = null;
@@ -111,6 +113,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_mode",
       "handle_NDA",
       "handle_telephone_number",
+      "handle_PID_31",
       "handle_PV1_3",
       "handle_PV1_10",
       "handle_PV1_14",
@@ -163,8 +166,9 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["handle_telephone_number"] = "enum list|XTN_1|XTN_12 default|XTN_12";
     
     // => PID
-    $props["handle_NDA"] = "enum list|PID_18|PV1_19 default|PID_18";
-    $props["handle_NSS"] = "enum list|PID_3|PID_19 default|PID_3";
+    $props["handle_NDA"]    = "enum list|PID_18|PV1_19 default|PID_18";
+    $props["handle_NSS"]    = "enum list|PID_3|PID_19 default|PID_3";
+    $props["handle_PID_31"] = "enum list|avs|none default|none";
     
     // => PV1
     $props["handle_PV1_3"]  = "enum list|name|config_value|idex default|name";

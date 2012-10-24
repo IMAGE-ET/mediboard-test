@@ -282,6 +282,11 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $newPatient->INSC = $data["personIdentifiers"]["INSC"];
     }
     
+    // AVS ?
+    if ($sender->_configs["handle_PID_31"] == "avs") {
+      $newPatient->avs = $this->queryTextNode("PID.31", $node);
+    }
+    
     // Rang naissance
     $this->getRangNaissance($node, $newPatient);
   }

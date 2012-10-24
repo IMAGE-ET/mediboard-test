@@ -291,7 +291,15 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = ($patient->deces) ? "Y" : "N";
     
     // PID-31: Identity Unknown Indicator (ID) (optional)
-    $data[] = null;
+    switch ($receiver->_configs["build_PID_31"]) {
+      case 'avs':
+        $data[] = $patient->avs;
+        break;
+      
+      default:
+        $data[] = null;
+        break;
+    }
     
     // PID-32: Identity Reliability Code (IS) (optional repeating)
     $data[] =  array (
