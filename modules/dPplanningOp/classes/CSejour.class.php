@@ -1169,7 +1169,7 @@ class CSejour extends CCodable implements IPatientRelated {
    * @return CAffectation
    */
   /* @todo A dédoublonner avec getCurrAffectation  */
-  function loadRefCurrAffectation($date = "") {
+  function loadRefCurrAffectation($date = "", $service_id = "") {
     if (!$date) {
       $date = mbDateTime();
     }
@@ -1177,6 +1177,9 @@ class CSejour extends CCodable implements IPatientRelated {
     $affectation = new CAffectation();
     $where = array();
     $where["sejour_id"] = " = '$this->_id'";
+    if ($service_id) {
+      $where["service_id"] = " = '$service_id'";
+    }
     $where[] = "'$date' BETWEEN entree AND sortie";
     $affectation->loadObject($where);
     if ($affectation->_id) {
