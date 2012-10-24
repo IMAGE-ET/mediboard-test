@@ -506,7 +506,7 @@ class CPatient extends CMbObject {
     }
 
     // covercard
-    if (CModule::getActive("covercard")) {
+    if (CModule::getActive("covercard") && ($this->_assuranceCC_ean || $this->_assuranceCC_id)) {
       $corres = new CCorrespondantPatient();
       $where = array(
         "patient_id" => "IS NULL",
