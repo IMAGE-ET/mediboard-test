@@ -1364,16 +1364,16 @@ class CSejour extends CCodable implements IPatientRelated {
   }
 
   function loadRefsObservations($important = false) {
+    $order = "date DESC";
     if ($important) {
       $obs = new CObservationMedicale;
       $where = array();
       $where["sejour_id"] = " = '$this->_id'";
       $where["degre"]     = " = 'high'";
-      $order = "date DESC";
-      return $this->_ref_observations = $obs->loadList($where);
+      return $this->_ref_observations = $obs->loadList($where, $order);
     }
     else {
-      return $this->_ref_observations = $this->loadBackRefs("observations");
+      return $this->_ref_observations = $this->loadBackRefs("observations", $order);
     }
   }
 
