@@ -75,7 +75,8 @@
             <td>{{mb_value object=$_correspondant field=email}}</td>
             <td>
               {{mb_value object=$_correspondant field=remarques}}
-              {{mb_value object=$_correspondant field=ean}} ({{mb_value object=$_correspondant field=ean_id}})
+              {{mb_value object=$_correspondant field=ean}}
+              {{if $_correspondant->ean_id}}({{mb_value object=$_correspondant field=ean_id}}){{/if}}
             </td>
             <td>{{mb_value object=$_correspondant field=date_debut}}</td>
             <td>{{mb_value object=$_correspondant field=date_fin}}</td>
