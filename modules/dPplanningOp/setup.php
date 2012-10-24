@@ -1525,7 +1525,12 @@ class CSetupdPplanningOp extends CSetup {
       SET `sortie_reveil_reel` = `sortie_reveil_possible`";
     $this->addQuery($query);
     
-    $this->mod_version = "1.64";
+    $this->makeRevision("1.64");
+    $query = "ALTER TABLE `sejour`
+      ADD `isolement_fin` DATETIME AFTER `isolement_date`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.65";
   }
 }
 ?>

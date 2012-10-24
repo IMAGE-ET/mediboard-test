@@ -989,12 +989,21 @@ Main.add( function(){
   </tr>
   <tr class="isolement_area {{if !$conf.dPplanningOp.CSejour.easy_isolement}}modeExpert{{/if}}" {{if !$sejour->isolement}}style="display: none"{{/if}}>
     <th>
+      {{mb_label object=$sejour field=isolement_fin}}
+    </th>
+    <td colspan="3">
+      {{mb_field object=$sejour field=isolement_fin form=editSejour register=true}}
+    </td>
+  </tr>
+  <tr class="isolement_area {{if !$conf.dPplanningOp.CSejour.easy_isolement}}modeExpert{{/if}}" {{if !$sejour->isolement}}style="display: none"{{/if}}>
+    <th>
       {{mb_label object=$sejour field=raison_medicale}}
     </th>
     <td colspan="3">
       {{mb_field object=$sejour field=raison_medicale form=editSejour}}
     </td>
   </tr>
+  
 {{/if}}
 
 {{if $conf.dPhospi.systeme_prestations == "standard"}} 

@@ -76,6 +76,7 @@ class CSejour extends CCodable implements IPatientRelated {
   var $lit_accompagnant    = null;
   var $isolement           = null;
   var $isolement_date      = null;
+  var $isolement_fin       = null;
   var $raison_medicale     = null;
   var $television          = null;
   var $repas_diabete       = null;
@@ -333,6 +334,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["lit_accompagnant"]         = "bool";
     $props["isolement"]                = "bool";
     $props["isolement_date"]           = "dateTime";
+    $props["isolement_fin"]            = "dateTime";
     $props["raison_medicale"]          = "text helped";
     $props["television"]               = "bool";
 
@@ -732,8 +734,11 @@ class CSejour extends CCodable implements IPatientRelated {
     // Si gestion en mode expert de l'isolement
     if (CAppUI::conf("dPplanningOp CSejour systeme_isolement") == "expert") {
       $this->isolement_date =
-        $this->_isolement_date !== $this->entree ?
+        $this->_isolement_date !== $this->entree && $this->isolement ?
         $this->_isolement_date : "";
+      if (!$this->isolement) {
+        $this->isolement_fin = "";
+      }
     }
     
     // On fait le store du séjour
