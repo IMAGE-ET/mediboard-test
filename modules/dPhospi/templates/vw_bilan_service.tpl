@@ -485,11 +485,11 @@
       
       {{foreach from=$prises_by_dates key=date item=prises_by_hour name="foreach_date"}}
       <tr>
-        <td style="border:none;" class="narrow"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
-        <th style="width: 250px; border:none;">Libellé</th> 
-        <th style="width: 50px; border:none;">Prévues</th>
-        <th style="width: 50px; border:none;">Effectuées</th>
-        <th style="width: 150px; border:none;">Unité adm.</th>
+        <th style="border: none;" class="section narrow"><strong>{{$date|date_format:"%d/%m/%Y"}}</strong></td>
+        <th style="border: none; width: 250px;">Libellé</th> 
+        <th style="border: none; width:  50px;">Prévues</th>
+        <th style="border: none; width:  50px;">Effectuées</th>
+        <th style="border: none; width: 150px;">Unité adm.</th>
       </tr>
       {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
         {{assign var=_date_time value="$date $hour:00:00"}}
