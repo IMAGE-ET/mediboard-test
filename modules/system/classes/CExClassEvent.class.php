@@ -59,7 +59,7 @@ class CExClassEvent extends CMbObject {
   static function getReportableClasses(){
     $classes = array_merge(array("CPatient", "CSejour"), self::$_extendable_classes);
     $classes[] = "CMediusers";
-    return $classes;
+    return array_filter($classes, "class_exists");
   }
 
   function getSpec() {
