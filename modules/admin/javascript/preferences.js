@@ -20,7 +20,7 @@ Preferences = {
 	var url = new Url('admin', 'ajax_edit_pref');
 	url.addParam('pref_id', pref_id);
     url.requestModal();
-    url.modalObject.observe('afterClose', this.back_url.reloadModal.bind(this.back_url));
+    url.modalObject.observe('afterClose', this.back_url.refreshModal.bind(this.back_url));
   },
 
   onSubmit: function(form) {

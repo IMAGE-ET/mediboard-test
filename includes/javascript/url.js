@@ -665,7 +665,7 @@ var Url = Class.create({
     return this;
   },
 
-  reloadModal: function() {
+  refreshModal: function() {
     this.requestUpdate(this.modalObject.container.down('.content'));
   },
   
