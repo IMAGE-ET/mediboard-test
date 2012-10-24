@@ -315,7 +315,7 @@ class CFactureConsult extends CMbObject {
   function loadRefsReglements($cache = 1) {
     $this->_montant_sans_remise = 0;
     
-    if (CModule::getActive("tarmed") || CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
       if (count($this->_montant_factures)>1) {
         foreach ($this->_montant_factures as $_montant) {
           $this->_montant_sans_remise += $_montant;
