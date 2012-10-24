@@ -22,7 +22,10 @@ class CSaEventHprimXMLObjectHandler extends CHprimXMLObjectHandler {
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
-
+  
+  /**
+   * @see parent::onAfterStore()
+   */ 
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return;
@@ -50,6 +53,24 @@ class CSaEventHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     $operation->completeField("date");
     
     $this->sendEvenementPMSI("CHPrimXMLEvenementsServeurIntervention", $operation);   
+  }
+  
+  /**
+   * @see parent::onBeforeDelete()
+   */  
+  function onBeforeDelete(CMbObject $mbObject) {
+    if (!$this->isHandled($mbObject)) {
+      return false;
+    }
+  }
+  
+  /**
+   * @see parent::onAfterDelete()
+   */  
+  function onAfterDelete(CMbObject $mbObject) {
+    if (!$this->isHandled($mbObject)) {
+      return false;
+    }
   }
 }
 ?>
