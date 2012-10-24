@@ -25,11 +25,16 @@
   }
 </script>
 
+{{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
+
 <table class="tbl">
   <tr>
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
     <th>{{tr}}SSPI.Praticien{{/tr}}</th>
     <th>{{tr}}SSPI.Patient{{/tr}}</th>
+    {{if $use_poste}}
+      <th>{{tr}}SSPI.Poste{{/tr}}</th>
+    {{/if}}
     {{if $isbloodSalvageInstalled}}
       <th>{{tr}}SSPI.RSPO{{/tr}}</th>
     {{/if}}
@@ -60,7 +65,39 @@
         </span>
       </a>
     </td>
-    
+    {{if $use_poste}}
+      <td>
+        <form name="editPoste{{$_operation->_id}}" method="post">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="dosql" value="do_planning_aed" />
+          {{mb_key object=$_operation}}
+          <input type="hidden" name="poste_sspi_id" value="{{$_operation->poste_sspi_id}}"
+            onchange="submitOperationForm(this.form)"/>
+          <input type="text" name="_poste_sspi_id_autocomplete" value="{{$_operation->_ref_poste}}"/>
+          <script type="text/javascript">
+            Main.add(function() {
+              var form=getForm("editPoste{{$_operation->_id}}");
+              var url = new Url("system", "ajax_seek_autocomplete");
+              url.addParam("object_class", "CPosteSSPI");
+              url.addParam('show_view', true);
+              url.addParam("input_field", "_poste_sspi_id_autocomplete");
+              url.autoComplete(form.elements._poste_sspi_id_autocomplete, null, {
+                minChars: 2,
+                method: "get",
+                select: "view",
+                dropdown: true,
+                afterUpdateElement: function(field,selected) {
+                  var guid = selected.getAttribute('id');
+                  if (guid) {
+                    $V(field.form['poste_sspi_id'], guid.split('-')[2]);
+                  }
+                },
+              });
+            });
+          </script>
+        </form>
+      </td>
+    {{/if}}
     {{if $isbloodSalvageInstalled}}
       <td>
         {{if $_operation->blood_salvage->_id}}
@@ -87,11 +124,11 @@
     {{/if}}
     <td>
       {{if $can->edit}}
-      <form name="editSortieBlocOpsFrm{{$_operation->operation_id}}" action="?m={{$m}}" method="post">
+      <form name="editSortieBlocOpsFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
         {{assign var=_operation_id value=$_operation->_id}}
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$_operation->operation_id}}" />
+        {{mb_key object=$_operation}}
         <input type="hidden" name="del" value="0" />
         {{mb_field object=$_operation field="sortie_salle" register=true form="editSortieBlocOpsFrm$_operation_id"}}
         <button class="tick notext" type="button" onclick="submitOperationForm(this.form);">{{tr}}Modify{{/tr}}</button>

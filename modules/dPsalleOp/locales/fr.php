@@ -288,6 +288,7 @@ $locales['SSPI.Chambre'] = 'Chambre';
 $locales['SSPI.Encours'] = 'En cours d\'intervention';
 $locales['SSPI.EntreeReveil'] = 'Entrée réveil';
 $locales['SSPI.Patient'] = 'Patient';
+$locales['SSPI.Poste'] = 'Poste SSPI';
 $locales['SSPI.Praticien'] = 'Praticien';
 $locales['SSPI.Preop'] = 'Préparation préop';
 $locales['SSPI.RSPO'] = 'Cell Saver';

@@ -71,6 +71,8 @@ switch($type){
 $operation = new COperation();
 $listOperations = $operation->loadList($where, $order, null, null, $ljoin);
 
+$use_poste = CAppUI::conf("dPplanningOp COperation use_poste");
+
 foreach($listOperations as $key => &$op) {
   $sejour = $op->loadRefSejour(1);
   $sejour->loadNDA();
@@ -79,12 +81,16 @@ foreach($listOperations as $key => &$op) {
     unset($listOperations[$key]);
     continue;
   }
-  
+    
   $op->loadRefChir(1);
   $op->_ref_chir->loadRefFunction();
   $op->loadRefPlageOp(1);
   $op->loadRefPatient(1);
   $op->loadAffectationsPersonnel();
+  
+  if ($use_poste) {
+    $op->loadRefPoste();
+  }
   
   if (($type == "ops" || $type == "reveil") && CModule::getActive("bloodSalvage")) {
     $op->blood_salvage= new CBloodSalvage;
