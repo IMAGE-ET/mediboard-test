@@ -38,6 +38,8 @@
       <th class="title" colspan="2">Planning</th>
     </tr>
     {{mb_include module=system template=inc_config_enum var=debut_planning values=$hours}}
+    {{mb_include module=system template=inc_config_enum var=diff_hour_urgence values="12|24|36|48"}}
+    
     <tr>
       <th></th>
       <td class="text">
@@ -46,6 +48,7 @@
         {{/foreach}}
       </td>
     </tr>
+    
     {{mb_include module=system template=inc_config_str var=subject_mail size=100}}
     {{mb_include module=system template=inc_config_str var=text_mail textarea=1}}
     

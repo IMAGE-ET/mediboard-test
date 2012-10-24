@@ -46,30 +46,34 @@
     });
   }
   
-  cutIntervention = function(operation_id, elt) {
-    if ((window.cut_operation_id && window.cut_operation_id != operation_id)) {
+  pasteIntervention = function(operation_id, salle_id, heure, sejour_id, duree) {
+    var heure = heure+":00:00";
+    var date = window.calendar_planning.altElement.defaultValue;
+    var datetime_interv = date + " " + heure;
+    
+    // Mode copier
+    // Ouverture de modale pour modifier éventuellement les dates du séjour
+    if (sejour_id) {
+      window.save_copy_operation =
+      { "operation_id": operation_id,
+        "date": date,
+        "duree": duree,
+        "time_operation": heure,
+        "salle_id": salle_id,
+      };
+      
+      // Création d'un nouveau séjour si la date d'intervention ne colle pas
+      if (datetime_interv < window.save_entree_prevue || datetime_interv > window.save_sortie_prevue) {
+        modifSejour(null, datetime_interv, sejour_id, null, null, true, "afterCopy");
+      }
+      // Sinon, on passe le sejour_id pour une modification
+      else {
+        modifSejour(null, datetime_interv, sejour_id, window.save_entree_prevue, window.save_sortie_prevue, false, "afterCopy");
+      }
       return;
     }
     
-    if (elt.hasClassName("opacity-50")) {
-      elt.removeClassName("opacity-50");
-      window.cut_operation_id = null;
-    }
-    else {
-      elt.addClassName("opacity-50");
-      window.cut_operation_id = operation_id;
-      var span_infos = elt.up('div.toolbar').next('div.body').down('span').down('span');
-      window.save_entree_prevue = span_infos.get("entree_prevue");
-      window.save_sortie_prevue = span_infos.get("sortie_prevue");
-    }
-    updateStatusCut();
-  }
-  
-  pasteIntervention = function(operation_id, salle_id, heure) {
-    var heure = heure+":00:00"
-    var date = window.calendar_planning.altElement.defaultValue;
-    var datetime_interv = date+ " " + heure;
-    
+    // Mode couper
     if (datetime_interv < window.save_entree_prevue || datetime_interv > window.save_sortie_prevue) {
       window.save_cut_operation =
       { "operation_id": operation_id,
@@ -78,7 +82,7 @@
         "salle_id": salle_id
       };
       
-      modifSejour(operation_id, datetime_interv, "afterModifSejour");
+      modifSejour(operation_id, datetime_interv, null, null, null, null, "afterModifSejour");
       return;
     }
     
@@ -99,21 +103,43 @@
   updateStatusCut = function() {
     var div = $("status_cut");
     if (window.cut_operation_id) {
-      div.update("En cours");
+      div.update("Couper en cours");
+      div.setStyle({borderColor: "#080"});
+    }
+    else if (window.copy_operation_id) {
+      div.update("Copier en cours");
       div.setStyle({borderColor: "#080"});
     }
     else {
       div.update();
       div.setStyle({borderColor: "#ddd"});
+      if (window.save_elem) {
+        window.save_elem.removeClassName("opacity-50");
+      }
     }
   }
   
-  modifSejour = function(operation_id, date_move, callback) {
+  modifSejour = function(operation_id, date_move, sejour_id, entree_prevue, sortie_prevue, new_sejour, callback) {
     var url = new Url("dPplanningOp", "ajax_edit_dates_sejour");
-    url.addParam("operation_id", operation_id);
+    if (sejour_id) {
+      url.addParam("sejour_id", sejour_id);
+      url.addParam("new_sejour", new_sejour ? 1 : 0);
+      if (new_sejour) {
+        url.addParam("hour_intervention", window.save_copy_operation.time_operation);
+        url.addParam("duree", window.save_copy_operation.duree);
+      }
+    }
+    else {
+      url.addParam("operation_id", operation_id);
+    }
+    
     url.addParam("date_move", date_move);
     if (callback) {
       url.addParam("callback", callback);
+    }
+    if (entree_prevue && sortie_prevue) {
+      url.addParam("entree_prevue", entree_prevue);
+      url.addParam("sortie_prevue", sortie_prevue);
     }
     url.requestModal(300);
     url.modalObject.observe("afterClose", refreshPlanning);
@@ -135,10 +161,12 @@
         onSubmitFormAjax(getForm("editSejour"), {onComplete: Control.Modal.close});
         }
       });
-      window_save_operation = null;
+      window.save_cut_operation = null;
       return;
     }
-    // Après un couper coller
+    
+    
+    // Après un couper
     if (window.save_cut_operation) {
       var form = getForm("cutOperation");
       $V(form.operation_id, window.save_cut_operation.operation_id);
@@ -174,6 +202,19 @@
     url.requestModal(500, 300);
     url.modalObject.observe("afterClose", refreshPlanning);
   }
+  
+  afterCopy = function(sejour_id, sejour) {
+    // Après la copie de séjour et intervention,
+    // on ne vide pas l'opération sauvegardée
+    // pour continuer à la coller
+    var form = getForm("copyOperation");
+    $V(form.copy_operation_id, window.save_copy_operation.operation_id);
+    $V(form.salle_id, window.save_copy_operation.salle_id);
+    $V(form.sejour_id, sejour_id);
+    $V(form.date, window.save_copy_operation.date);
+    $V(form.time_operation, window.save_copy_operation.time_operation);
+    onSubmitFormAjax(form, {onComplete: Control.Modal.close});
+  }
 </script>
 
 <form name="editOperation" method="post">
@@ -192,6 +233,16 @@
   <input type="hidden" name="date" />
   <input type="hidden" name="time_operation" />
   <input type="hidden" name="salle_id" />
+</form>
+
+<form name="copyOperation" method="post">
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="dosql" value="do_copy_operation" />
+  <input type="hidden" name="copy_operation_id" />
+  <input type="hidden" name="salle_id" />
+  <input type="hidden" name="sejour_id" />
+  <input type="hidden" name="date" />
+  <input type="hidden" name="time_operation" />
 </form>
 
 <form name="editCommentairePlanning" method="post">
@@ -253,7 +304,8 @@
         </label>
       </td>
       <td class="narrow">
-        <div id="status_cut" style="width: 100px; height: 14px; border: 2px dashed #ddd; font-weight: bold; text-align: center;">
+        <div id="status_cut" style="width: 100px; height: 14px; border: 2px dashed #ddd; font-weight: bold; text-align: center; cursor: pointer;"
+          onclick="window.cut_operation_id = null; window.copy_operation_id = null; updateStatusCut();">
         </div>
       </td>
     </tr>

@@ -15,6 +15,9 @@ $date_move     = CValue::get("date_move");
 $callback      = CValue::get("callback");
 $entree_prevue = CValue::get("entree_prevue");
 $sortie_prevue = CValue::get("sortie_prevue");
+$new_sejour    = CValue::get("new_sejour");
+$hour_intervention = CValue::get("hour_intervention");
+$duree         = CValue::get("duree");
 
 if ($operation_id) {
   $operation = new COperation();
@@ -25,6 +28,11 @@ if ($operation_id) {
 else {
   $sejour = new CSejour();
   $sejour->load($sejour_id);
+  if ($new_sejour) {
+    $sejour->_id = null;
+    $entree_prevue = mbDate($date_move) . " " . $hour_intervention;
+    $sortie_prevue = mbAddDateTime($duree, $entree_prevue);
+  }
 }
 
 if (!$date_move) {

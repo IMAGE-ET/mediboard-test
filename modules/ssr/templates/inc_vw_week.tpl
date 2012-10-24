@@ -195,7 +195,7 @@ Main.add(function() {
                               <div style="height:100%; width:5px; background-color:#{{if isset($_event->plage.color|smarty:nodefaults)}}{{$_event->plage.color}}{{else}}DDDDDD{{/if}};"> </div>
                             {{/if}}
                             
-                           {{if $_event->menu|@count <= 3}}
+                           {{if $_event->menu|@count > 0 && $_event->menu|@count <= 4}}
                             <div class="toolbar" {{if $_event->hour == 0}}style="top:100%;"{{/if}}>
                               {{foreach from=$_event->menu item=element}}
                                 <a class="button {{$element.class}} notext"

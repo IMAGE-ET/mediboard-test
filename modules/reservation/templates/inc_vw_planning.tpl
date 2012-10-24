@@ -37,6 +37,9 @@
     planning.salles_ids = {{$salles_ids|@json}};
     
     planning.onMenuClick = function(event, object_id, elem) {
+      window.cut_operation_id = null;
+      window.copy_operation_id = null;
+      
       switch (event) {
         case 'edit':
           // Commentaire
@@ -49,10 +52,38 @@
           }
           break;
         case 'cut':
-          cutIntervention(object_id, elem);
+        case 'copy':
+          window.cut_operation_id = null;
+          window.copy_operation_id = null;
+          
+          if (window.save_elem && window.save_elem != elem) {
+            window.save_elem.removeClassName("opacity-50");
+          }
+          
+          if (elem.hasClassName("opacity-50")) {
+            elem.removeClassName("opacity-50");
+            window.save_elem = null;
+          }
+          else {
+            elem.addClassName("opacity-50");
+            if (event == "cut") {
+              window.cut_operation_id = object_id;
+            }
+            else {
+              window.copy_operation_id = object_id;
+            }
+            var span_infos = elem.up('div.toolbar').next('div.body').down('span').down('span');
+            window.save_entree_prevue = span_infos.get("entree_prevue");
+            window.save_sortie_prevue = span_infos.get("sortie_prevue");
+            window.save_sejour_id     = span_infos.get("sejour_id");
+            window.save_chir_id       = span_infos.get("chir_id");
+            window.save_duree         = span_infos.get("duree");
+            window.save_elem = elem;
+          }
+          updateStatusCut();
           break;
         case 'clock':
-          modifSejour(object_id, null, "Control.Modal.close");
+          modifSejour(object_id, null, null, null, null, null, "Control.Modal.close");
       }
     }
     
@@ -100,7 +131,7 @@
       // dans le cas où la date et heure d'intervention n'est pas dans cet intervalle
       
       if ("{{$date_planning}} "+time_operation < entree_prevue) {
-        modifSejour(object_id, "{{$date_planning}} "+time_operation, "afterModifSejour");
+        modifSejour(object_id, "{{$date_planning}} "+time_operation, null, null, null, "afterModifSejour");
         
         window.save_operation =
           {"operation_id": object_id,
@@ -143,6 +174,12 @@
           // - Couper coller
           if (window.cut_operation_id) {
             pasteIntervention(window.cut_operation_id, salle_id, hour);
+            return;
+          }
+          
+          // - Copier coller
+          if (window.copy_operation_id) {
+            pasteIntervention(window.copy_operation_id, salle_id, hour, window.save_sejour_id, window.save_duree);
             return;
           }
           

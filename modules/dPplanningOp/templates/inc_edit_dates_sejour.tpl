@@ -27,7 +27,7 @@
 <form name="editSejour" method="post"
   onsubmit="if (checkDates(this)){
     {{if $callback}}
-      return onSubmitFormAjax(this, {onComplete: {{$callback}} });
+      return onSubmitFormAjax(this);
     {{else}}
       afterModifSejour(); return false;
     {{/if}}
@@ -35,9 +35,14 @@
   <input type="hidden" name="m" value="dPplanningOp" />
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="_check_bounds" value="0" />
+  {{if $callback}}
+    <input type="hidden" name="callback" value="{{$callback}}" />
+  {{/if}}
+  
   {{mb_key object=$sejour}}
   {{mb_field object=$sejour field=patient_id hidden=1}}
-  
+  {{mb_field object=$sejour field=praticien_id hidden=1}}
+  {{mb_field object=$sejour field=group_id hidden=1}}
   <table class="form">
     <tr>
       <th colspan="2" class="title">

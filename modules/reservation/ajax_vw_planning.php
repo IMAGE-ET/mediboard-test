@@ -166,10 +166,15 @@ foreach ($plages as $_plage) {
 // Ajout des événements (opérations)
 $can_edit = CCanDo::edit();
 
+$diff_hour_urgence = CAppUI::conf("reservation diff_hour_urgence");
+
 foreach ($operations_by_salle as $salle_id => $_operations) {
   $i = array_search($salle_id, $salles_ids);
   foreach ($_operations as $_operation) {
     $_operation->_ref_salle = $_operation->loadFwdRef("salle_id");
+    
+    $first_log = $_operation->loadFirstLog();
+    
     $chir    = $_operation->loadRefChir();
     $chir->loadRefFunction();
     $chir_2  = $_operation->loadRefChir2();
@@ -200,8 +205,14 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $duree = mbMinutesRelative($_operation->time_operation, $fin_op);
     }
     
-    $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue' data-sortie_prevue='$sejour->sortie_prevue'></span>".
-    "<span onmouseover='ObjectTooltip.createEx(this, \"".htmlentities($patient->_guid)."\")'>".htmlentities($patient->nom. " " .$patient->prenom)."</span>, ".$patient->getFormattedValue("naissance").
+    $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue' ".
+      "data-sortie_prevue='$sejour->sortie_prevue' data-sejour_id='$sejour->_id' data-duree='$_operation->temp_operation'></span>";
+    
+    if (abs(mbHoursRelative("$_operation->date $debut_op", $first_log->date)) <= $diff_hour_urgence) {
+      $libelle .= "<span style='float: right' title='Intervention en urgence'><img src='images/icons/attente_fourth_part.png' /></span>";
+    }
+    
+    $libelle .= "<span onmouseover='ObjectTooltip.createEx(this, \"".htmlentities($patient->_guid)."\")'>".htmlentities($patient->nom. " " .$patient->prenom)."</span>, ".$patient->getFormattedValue("naissance").
     "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".mbTransformTime($debut_op, null, "%H:%M")." - ".mbTransformTime($fin_op, null, "%H:%M")."</span>".
     "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>".
     "\n<span style='font-size: 11px; font-weight: bold;'>".htmlentities($_operation->libelle)."</span>".
@@ -259,6 +270,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     if ($can_edit) {
       $event->addMenuItem("edit" , "Modifier cette opération");
       $event->addMenuItem("cut"  , "Couper cette opération");
+      $event->addMenuItem("copy"  , "Copier cette opération");
       $event->addMenuItem("clock", "Modifier les dates d'entrée et sortie du séjour");
     }
     
