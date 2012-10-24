@@ -1878,7 +1878,13 @@ class CSetupdPpatients extends CSetup {
     $query = "DROP TABLE `correspondant_modele`";
     $this->addQuery($query);
 
-    $this->mod_version = "1.61";
+    $this->makeRevision("1.61");
+
+    $query = "ALTER TABLE `patients` 
+              CHANGE `avs` `avs` VARCHAR (16);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.62";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

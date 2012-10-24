@@ -320,7 +320,7 @@ class CPatient extends CMbObject {
     $props["tutelle"]           = "enum list|aucune|tutelle|curatelle default|aucune";
     $props["incapable_majeur"]  = "bool";
     $props["ATNC"]              = "bool";
-    $props["avs"]               = "str maxLength|15";// mask|999.99.999.999";
+    $props["avs"]               = "str maxLength|16";// mask|999.99.999.999";
 
     $conf = CAppUI::conf("dPpatients CPatient identitovigilence");
     $props["naissance"] = $conf === "date" || $conf === "doublons" ? "birthDate notNull" : "birthDate";
