@@ -23,24 +23,24 @@
 {{if $app->user_prefs.VitaleVision}}
   {{mb_include template=inc_vitalevision}}
 
-	<script type="text/javascript">
-		var lireVitale = VitaleVision.read;
-	</script>
+  <script type="text/javascript">
+    var lireVitale = VitaleVision.read;
+  </script>
 {{else}}
-	<script type="text/javascript">
-		var urlFSE = new Url;
-	  urlFSE.addParam("m", "dPpatients");
-	  urlFSE.addParam("{{$actionType}}",  "vw_edit_patients");
-	  urlFSE.addParam("dialog",  "{{$dialog}}");
-	  urlFSE.addParam("useVitale", 1);
-	</script>
+  <script type="text/javascript">
+    var urlFSE = new Url;
+    urlFSE.addParam("m", "dPpatients");
+    urlFSE.addParam("{{$actionType}}",  "vw_edit_patients");
+    urlFSE.addParam("dialog",  "{{$dialog}}");
+    urlFSE.addParam("useVitale", 1);
+  </script>
 {{/if}}
 
 <script type="text/javascript">
 
 function copyAssureValues(element) {
-	// Hack pour gérer les form fields
-	var sPrefix = element.name[0] == "_" ? "_assure" : "assure_";
+  // Hack pour gérer les form fields
+  var sPrefix = element.name[0] == "_" ? "_assure" : "assure_";
   eOther = element.form[sPrefix + element.name];
 
   // Copy value
@@ -53,13 +53,13 @@ function copyAssureValues(element) {
 }
 
 function copyIdentiteAssureValues(element) {
-	if (element.form.qual_beneficiaire.value == "0") {
-		copyAssureValues(element);
-	}
+  if (element.form.qual_beneficiaire.value == "0") {
+    copyAssureValues(element);
+  }
 }
 
 function delAssureValues() {
-	var form = getForm("editFrm");
+  var form = getForm("editFrm");
   $V(form.assure_nom            , "");
   $V(form.assure_prenom         , "");
   $V(form.assure_prenom_2       , "");
@@ -71,11 +71,11 @@ function delAssureValues() {
   $V(form.assure_cp_naissance  , "");
   $V(form._assure_pays_naissance_insee, "");
   $V(form.assure_lieu_naissance, "");
-	$V(form.assure_profession    , "");
+  $V(form.assure_profession    , "");
 }
 
 function copieAssureValues() {
-	var form = getForm("editFrm");
+  var form = getForm("editFrm");
   $V(form.assure_nom            , $V(form.nom));
   $V(form.assure_prenom         , $V(form.prenom));
   $V(form.assure_prenom_2       , $V(form.prenom_2));
@@ -189,13 +189,13 @@ Main.add(function () {
     Vous êtes sur le point de remplacer les données du formulaire par les données de la carte. <br />
     Veuillez vérifier le nom du bénéficiaire :
   </p>
-	<p id="benef-nom">
-	  <select id="modal-beneficiaire-select"></select>
+  <p id="benef-nom">
+    <select id="modal-beneficiaire-select"></select>
     <span></span>
   </p>
   <div>
-  	<button type="button" class="tick" onclick="VitaleVision.fillForm(getForm('editFrm'), $V($('modal-beneficiaire-select'))); VitaleVision.modalWindow.close();">{{tr}}Choose{{/tr}}</button>
-	  <button type="button" class="cancel" onclick="VitaleVision.modalWindow.close();">{{tr}}Cancel{{/tr}}</button>
+    <button type="button" class="tick" onclick="VitaleVision.fillForm(getForm('editFrm'), $V($('modal-beneficiaire-select'))); VitaleVision.modalWindow.close();">{{tr}}Choose{{/tr}}</button>
+    <button type="button" class="cancel" onclick="VitaleVision.modalWindow.close();">{{tr}}Cancel{{/tr}}</button>
   </div>
 </div>
 
@@ -216,9 +216,9 @@ Main.add(function () {
         {{mb_include module=fse template=inc_button_vitale}}
       {{/if}}
 
-			{{if $patient->date_lecture_vitale}}
+      {{if $patient->date_lecture_vitale}}
       <div style="float: right;">
-	      <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
+        <img src="images/icons/carte_vitale.png" title="{{tr}}CPatient-date-lecture-vitale{{/tr}} : {{mb_value object=$patient field="date_lecture_vitale" format=relative}}" />
       </div>
       {{/if}}
 
@@ -243,7 +243,7 @@ Main.add(function () {
       {{elseif $modFSE && $modFSE->canRead()}}
         {{mb_include module=fse template=inc_button_vitale}}
       {{/if}}
-			{{tr}}Create{{/tr}}
+      {{tr}}Create{{/tr}}
       {{if $patient->_bind_vitale}}{{tr}}UseVitale{{/tr}}{{/if}}
     </th>
   {{/if}}
@@ -256,8 +256,12 @@ Main.add(function () {
         <li><a href="#identite">Patient</a></li>
         <li><a href="#medecins" {{if !$count_correspondants}}class="empty"{{/if}}>Correspondants médicaux <small>({{$count_correspondants}})</small></a></li>
         <li><a href="#correspondance" {{if !$patient->_ref_correspondants_patient|@count}}class="empty"{{/if}}>Correspondance <small>({{$patient->_ref_correspondants_patient|@count}})</small></a></li>
-        <li><a href="#assure">Assuré social</a></li>
-        <li><a href="#beneficiaire">Bénéficiaire de soins</a></li>
+        {{if $conf.ref_pays == 1}}
+          <li><a href="#assure">Assuré social</a></li>
+          <li><a href="#beneficiaire">Bénéficiaire de soins</a></li>
+        {{else}}
+          <li><a href="#beneficiaire" style="display:none;">Bénéficiaire de soins</a></li>
+        {{/if}}
         <li><a href="#listView" {{if $patient->_nb_files_docs == 0}}class="empty"{{/if}}
           {{if $patient->_id}}onmousedown="reloadListFileEditPatient('load')"{{/if}}>Documents ({{$patient->_nb_files_docs}})</a></li>
       </ul>
@@ -266,7 +270,7 @@ Main.add(function () {
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return confirmCreation(this)">
         <input type="hidden" name="dosql" value="do_patients_aed" />
         <input type="hidden" name="del" value="0" />
-			  <input type="hidden" name="_purge" value="0" />
+        <input type="hidden" name="_purge" value="0" />
         {{mb_key object=$patient}}
 
         {{if $patient->_bind_vitale}}
@@ -276,8 +280,8 @@ Main.add(function () {
         <button type="submit" style="display: none;">&nbsp;</button>
 
         {{if !$patient->_id}}
-				{{mb_field object=$patient field="medecin_traitant" hidden=1}}
-				{{/if}}
+        {{mb_field object=$patient field="medecin_traitant" hidden=1}}
+        {{/if}}
 
         {{if $dialog}}
         <input type="hidden" name="dialog" value="{{$dialog}}" />
@@ -286,6 +290,7 @@ Main.add(function () {
         <div id="identite">
           {{mb_include template=inc_acc/inc_acc_identite}}
         </div>
+        
         <div id="assure" style="display: none;">
           {{mb_include template=inc_acc/inc_acc_assure}}
         </div>
@@ -327,15 +332,15 @@ Main.add(function () {
         {{if $can->admin}}
         <script type="text/javascript">
           function confirmPurge() {
-          	var oForm = document.editFrm;
-          	if (confirm("ATTENTION : Vous êtes sur le point de purger le dossier de ce patient")) {
-          	  oForm._purge.value = "1";
-	          	confirmDeletion(oForm,	{
-	          		typeName:'le patient',
-	          		objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'
-	          	} );
-	          }
-	        }
+            var oForm = document.editFrm;
+            if (confirm("ATTENTION : Vous êtes sur le point de purger le dossier de ce patient")) {
+              oForm._purge.value = "1";
+              confirmDeletion(oForm,	{
+                typeName:'le patient',
+                objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'
+              } );
+            }
+          }
         </script>
 
         <button type="button" class="cancel" onclick="confirmPurge();">
