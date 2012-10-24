@@ -171,6 +171,10 @@ class CMbXMLDocument extends DOMDocument {
     $this->addElement($elParent, $elName, mbTransformTime(null, $dateValue, "%Y-%m-%dT%H:%M:%S"));
   }
   
+  function addDateTimeAttribute($elParent, $atName, $dateValue = null) {
+    $this->addAttribute($elParent, $atName, mbTransformTime(null, $dateValue, "%Y-%m-%dT%H:%M:%S"));
+  }
+  
   function addAttribute($elParent, $atName, $atValue) {
     $atName  = utf8_encode($atName );
     $atValue = utf8_encode($atValue);
@@ -255,10 +259,13 @@ class CMbXMLDocument extends DOMDocument {
   static function insertTextElement($element, $name, $value, $attrs = null) {
     $root = $element->ownerDocument;
     $tag = $root->createElement($name);
-    $value = utf8_encode($value);
-    $value_elt = $root->createTextNode($value);
-    $tag->appendChild($value_elt);
-    $element->appendChild($tag);
+    
+    if($value){
+      $value = utf8_encode($value);
+      $value_elt = $root->createTextNode($value);
+      $tag->appendChild($value_elt);  
+    }
+    $element->appendChild($tag);   
     
     if ($attrs) {
       foreach ($attrs as $key => $value) {
@@ -268,5 +275,6 @@ class CMbXMLDocument extends DOMDocument {
         $tag->appendChild($att);
       }
     }
+    return $tag;
   }
 }
