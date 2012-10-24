@@ -65,7 +65,6 @@ CancelAction = {
 
 </form>
 
-
 <div id="following_consultations" style="display: none; width: 500px; max-height: 600px; overflow-y: auto;">
   <table class="tbl">
     {{if count($following_consultations)}} 

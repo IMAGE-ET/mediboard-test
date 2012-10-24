@@ -1,10 +1,10 @@
 <!-- $Id$ -->
 
-{{mb_script module="dPpatients"    script="pat_selector" ajax=true}}
-{{mb_script module="dPcabinet"     script="plage_selector" ajax=true}}
-{{mb_script module="dPcabinet"     script="file" ajax=true}}
-{{mb_script module="dPcompteRendu" script="document" ajax=true}}
-{{mb_script module="dPcompteRendu" script="modele_selector" ajax=true}}
+{{mb_script module=patient     script=pat_selector    ajax=true}}
+{{mb_script module=cabinet     script=plage_selector  ajax=true}}
+{{mb_script module=cabinet     script=file            ajax=true}}
+{{mb_script module=compteRendu script=document        ajax=true}}
+{{mb_script module=compteRendu script=modele_selector ajax=true}}
 
 {{if $consult->_id}}
   {{mb_ternary var=object_consult test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
