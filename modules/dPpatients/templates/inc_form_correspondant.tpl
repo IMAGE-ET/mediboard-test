@@ -18,9 +18,9 @@
     var form = getForm("editCorrespondant");
     Calendar.regField(form.date_debut, null, { noView: false } );
     Calendar.regField(form.date_fin  , null, { noView: false } );
-    
+
     toggleUrrsafParente(form.relation);
-    
+
     {{if !$mode_modele}}
       // Autocomplete sur le nom du correspondant
       var url = new Url("system", "ajax_seek_autocomplete");
@@ -58,7 +58,7 @@
     {{/if}}
 
   } );
-  
+
   toggleUrrsafParente = function(elt) {
     $("parente").toggle();
     if ($V(elt) == "employeur") {
@@ -72,7 +72,7 @@
     }
     else if ($V(elt) == "assurance") {
       $("urssaf").setStyle({display: "none"});
-      $("parente").setStyle({display: "none"});
+      $("parente").setStyle({display: "table-row"});
       $("parente_autre").setStyle({display: "none"});
     }
     else {
@@ -205,16 +205,16 @@
       <td>{{mb_field object=$correspondant field="nom_jeune_fille"}}</td>
     </tr>
 
-    <tr id="prenom" {{if !$correspondant->_id || ($correspondant->relation == "employeur" && $correspondant->relation == "assurance")}}style="display: none;"{{/if}}>
+    <tr id="prenom" {{if !$correspondant->_id || ($correspondant->relation == "employeur" || $correspondant->relation == "assurance")}}style="display: none;"{{/if}}>
       <th>{{mb_label object=$correspondant field="prenom"}}</th>
       <td>{{mb_field object=$correspondant field="prenom"}}</td>
     </tr>
-    
+
     <tr id="num_assure" {{if $correspondant->relation != "employeur" || !$correspondant->_id || $conf.ref_pays == 1}}style="display: none;"{{/if}}>
       <th>{{mb_label object=$correspondant field="num_assure"}}</th>
       <td>{{mb_field object=$correspondant field="num_assure"}}</td>
     </tr>
-    
+
     {{if !$mode_modele}}
       <tr id="employeur" {{if ($correspondant->relation != "assurance" && $correspondant->_id) || $conf.ref_pays == 1}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="employeur"}}</th>
