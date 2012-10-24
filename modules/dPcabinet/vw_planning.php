@@ -26,11 +26,12 @@ $hide_annulees = CValue::getOrSession("hide_annulees", 1);
 $chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
 
 // Période
-$today = mbDate();
-$debut = CValue::getOrSession("debut", $today);
-$debut = mbDate("last sunday", $debut);
-$fin   = mbDate("next sunday", $debut);
-$debut = mbDate("+1 day", $debut);
+$today         = mbDate();
+$debut         = CValue::getOrSession("debut", $today);
+$debut         = mbDate("last sunday", $debut);
+$fin           = mbDate("next sunday", $debut);
+$debut         = mbDate("+1 day", $debut);
+$bank_holidays = array_merge(mbBankHolidays($debut), mbBankHolidays($fin));
 
 $is_in_period = ($today >= $debut) && ($today <= $fin);
 
@@ -214,21 +215,21 @@ for ($i = 0; $i < 7; $i++) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("planning"          , $planning);
-$smarty->assign("hide_payees"       , $hide_payees);
-$smarty->assign("hide_annulees"     , $hide_annulees);
-$smarty->assign("chirSel"           , $chirSel);
-$smarty->assign("plageSel"          , $plageSel);
-$smarty->assign("listChirs"         , $listChir);
-$smarty->assign("today"             , $today);
-$smarty->assign("debut"             , $debut);
-$smarty->assign("fin"               , $fin);
-$smarty->assign("prec"              , $prec);
-$smarty->assign("suiv"              , $suiv);
-$smarty->assign("plageconsult_id"    , $plageconsult_id);
+$smarty->assign("planning"            , $planning);
+$smarty->assign("hide_payees"         , $hide_payees);
+$smarty->assign("hide_annulees"       , $hide_annulees);
+$smarty->assign("chirSel"             , $chirSel);
+$smarty->assign("plageSel"            , $plageSel);
+$smarty->assign("listChirs"           , $listChir);
+$smarty->assign("today"               , $today);
+$smarty->assign("debut"               , $debut);
+$smarty->assign("fin"                 , $fin);
+$smarty->assign("prec"                , $prec);
+$smarty->assign("suiv"                , $suiv);
+$smarty->assign("plageconsult_id"     , $plageconsult_id);
 $smarty->assign("count_si_desistement", $count_si_desistement);
-$smarty->assign("bank_holidays"     , mbBankHolidays($today));
-$smarty->assign("mediuser"          , $mediuser);
+$smarty->assign("bank_holidays"       , $bank_holidays);
+$smarty->assign("mediuser"            , $mediuser);
 
 $smarty->display("vw_planning.tpl");
 ?>

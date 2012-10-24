@@ -7,7 +7,7 @@
       </tr>
       {{foreach from=$listPlage item=_plage}}
       <tr {{if $_plage->_id == $plageconsult_id}}class="selected"{{/if}} id="plage-{{$_plage->_id}}">
-        <td>
+        <td {{if in_array($_plage->date, $bank_holidays)}}style="background: #fc0"{{/if}}>
           {{include file=inc_plage_etat.tpl}}
         </td>
         <td class="text">

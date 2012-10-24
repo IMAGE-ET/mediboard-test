@@ -21,11 +21,12 @@ $prat = new CMediusers;
 $prat->load($chir_id);
 
 //Planning au format  CPlanningWeek
-$today = mbDate();
-$debut = $date;
-$debut = mbDate("-1 week", $debut);
-$debut = mbDate("next monday", $debut);
-$fin   = mbDate("next sunday", $debut);
+$today         = mbDate();
+$debut         = $date;
+$debut         = mbDate("-1 week", $debut);
+$debut         = mbDate("next monday", $debut);
+$fin           = mbDate("next sunday", $debut);
+$bank_holidays = array_merge(mbBankHolidays($debut), mbBankHolidays($fin));
 
 // Nombre de jours
 $nbDays = 5;
@@ -123,7 +124,7 @@ $smarty->assign("function_id"    , $function_id);
 $smarty->assign("plageconsult_id", $plageconsult_id);
 $smarty->assign("plage"          , $plage);
 $smarty->assign("planning"       , $planning);
-$smarty->assign("bank_holidays"  , mbBankHolidays($today));
+$smarty->assign("bank_holidays"  , $bank_holidays);
 $smarty->assign("print"          , $print);
 
 $smarty->display("inc_plage_selector_weekly.tpl");

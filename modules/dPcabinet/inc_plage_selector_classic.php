@@ -40,29 +40,32 @@ if ($hide_finished) {
   $where[] = $ds->prepare("`date` >= %", mbDate());
 }
 
-$minDate = $maxDate = mbDate(null, $date);
+$minDate = $maxDate = $refDate = mbDate(null, $date);
 // Filtre de la période
 switch ($period) {
   case "day":
-    $minDate = mbDate(null, $date);
-    $maxDate = mbDate(null, $date);
+    $minDate = $maxDate = $refDate = mbDate(null, $date);
     break;
 
   case "week":
     $minDate = mbDate("last sunday", $date);
     $maxDate = mbDate("next saturday", $date);
+    $refDate = mbDate("+1 day", $minDate);
     break;
 
   case "month":
     $minDate = mbTransformTime(null, $date, "%Y-%m-01");
     $maxDate = mbTransformTime("+1 month", $minDate, "%Y-%m-01");
     $maxDate = mbDate("-1 day", $maxDate);
+    $refDate = $minDate;
     break;
 
   default:
     trigger_error("Période '$period' inconnue");
     break;
 }
+
+$bank_holidays = array_merge(mbBankHolidays($minDate), mbBankHolidays($maxDate));
 
 $where["date"] = $ds->prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
 $where[] = "libelle != 'automatique' OR libelle IS NULL";
@@ -96,9 +99,10 @@ $smarty->assign("hour"           , $hour);
 $smarty->assign("hours"          , CPlageconsult::$hours);
 $smarty->assign("hide_finished"  , $hide_finished);
 $smarty->assign("date"           , $date);
-$smarty->assign("refDate"        , mbDate("+1 day", $minDate));
+$smarty->assign("refDate"        , $refDate);
 $smarty->assign("ndate"          , $ndate);
 $smarty->assign("pdate"          , $pdate);
+$smarty->assign("bank_holidays"  , $bank_holidays);
 $smarty->assign("chir_id"        , $chir_id);
 $smarty->assign("function_id"    , $function_id);
 $smarty->assign("plageconsult_id", $plageconsult_id);
