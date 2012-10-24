@@ -330,11 +330,11 @@ class CHL7v2Segment extends CHL7v2Entity {
     if ($object instanceof CMedecin) {
       $id400 = $object->loadLastId400();
       
-      $xcn1  = CValue::first($id400->id400, $object->adeli, $object->rpps, $object->_id);
+      $xcn1  = CValue::first($object->adeli, $object->rpps, $id400->id400, $object->_id);
       $xcn2  = $object->nom;
       $xcn3  = $object->prenom;      
       $xcn9  = $this->getXCN9($object, $id400, $actor);
-      $xcn13 = ($id400->id400 ? "RI" : ($object->adeli ? "ADELI" : ($object->rpps ? "RPPS" : "RI")));
+      $xcn13 = ($object->adeli ? "ADELI" : ($object->rpps ? "RPPS" : "RI"));
     }
     if ($object instanceof CUser) {
       $xcn1  = $object->_id;
