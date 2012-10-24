@@ -228,7 +228,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     
     $code = "A31";
         
-    if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $code, $receiver)) {
+    if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
       return;
     }
     
