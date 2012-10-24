@@ -917,11 +917,13 @@ class CSetuphl7 extends CSetup {
                 ADD `handle_PID_31` ENUM ('avs','none') DEFAULT 'none';";
     $this->addQuery($query);
     
-    $query = "ALTER TABLE `hl7_config` 
+    $this->makeRevision("0.43");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
                 ADD `build_PID_31` ENUM ('avs','none') DEFAULT 'none';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.43";
+    $this->mod_version = "0.44";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
