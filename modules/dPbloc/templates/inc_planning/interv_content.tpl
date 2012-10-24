@@ -52,6 +52,9 @@
   {{else}}
   &mdash;
   {{/if}}
+  {{if $curr_op->anesth_id}}
+    <br /> {{$curr_op->_ref_anesth->_view}}
+  {{/if}}
 </td>
 <td class="text">
   {{if $curr_op->exam_extempo}}

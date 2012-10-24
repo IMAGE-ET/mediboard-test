@@ -252,16 +252,25 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $libelle .= "</span>";
     }
     
+    // Rouge
     if ($sejour->annule) {
       $color = "#f22";
     }
     else {
       switch ($sejour->recuse) {
         case "0":
-          $color = "#{$chir->_ref_function->color}";
+          // Orange
+          if ($sejour->type == "ambu")  {
+            $color = "#fa2";
+          }
+          // Vert
+          else if ($sejour->type == "comp") {
+            $color = "#7f6";
+          }
           break;
+        // Bleu
         case "-1" :
-          $color = "#88f";
+          $color = "#68f";
       }
     }
     
