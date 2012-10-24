@@ -223,6 +223,7 @@ class CDossierMedical extends CMbMetaObject {
   
   /*
    * Compte les antecedents de type allergies
+   * tout en tenant de la config pour ignorer certaines allergies
    */
   function countAllergies(){
     if (!$this->_id) {
@@ -230,10 +231,12 @@ class CDossierMedical extends CMbMetaObject {
     }
     
     $antecedent = new CAntecedent();
-    $antecedent->type = "alle";
-    $antecedent->annule = "0";
-    $antecedent->dossier_medical_id = $this->_id;
-    return $this->_count_allergies = $antecedent->countMatchingList();
+    $where["type"] = "= 'alle'";
+    $where["annule"] = " ='0'";
+    $where["dossier_medical_id"] = " = '$this->_id'";
+    $where["rques"] = 'NOT IN ("'.str_replace('|', '","', CAppUI::conf('soins ignore_allergies')) . '")';
+    
+    return $this->_count_allergies = $antecedent->countList($where);
   }
   
   function loadRefsAntecedentsOfType($type) {
