@@ -2,6 +2,13 @@
   {{mb_return}}
 {{/if}}
 
+<script>
+  refreshAssurance = function(){
+    var oForm = getForm("assurance_patient");
+    return onSubmitFormAjax(oForm);
+  }
+</script>
+  
 <tr>
   <th class="category">Date</th>
   <th class="category">Code</th>
@@ -58,11 +65,9 @@
         <select name="assurance" style="width: 15em;" onchange="refreshAssurance();">
           <option value="" {{if !$facture->assurance}}selected="selected" {{/if}}>&mdash; Choisir une assurance</option>
           {{foreach from=$facture->_ref_patient->_ref_correspondants_patient item=_assurance}}
-            {{if $_assurance->relation == "assurance"}}
             <option value="{{$_assurance->_id}}" {{if $facture->assurance == $_assurance->_id}} selected="selected" {{/if}}>
               {{$_assurance->nom}}
             </option>
-            {{/if}}
           {{/foreach}}
         </select>
       </form>

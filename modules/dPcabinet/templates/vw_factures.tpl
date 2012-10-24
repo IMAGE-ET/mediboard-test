@@ -19,11 +19,6 @@ refreshList = function(){
   url.redirect();
 }
 
-refreshAssurance = function(){
-  var oForm = getForm("assurance_patient");
-  return onSubmitFormAjax(oForm);
-}
-  
 viewFacture = function(element, factureconsult_id){
   if (element) {
     element.up("tr").addUniqueClassName("selected");
