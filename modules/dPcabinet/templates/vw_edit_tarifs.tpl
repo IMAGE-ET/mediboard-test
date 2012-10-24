@@ -176,7 +176,9 @@ Main.add(function () {
             <th>Total</th>
             <td>
                 {{mb_field object=$tarif field=secteur1 onchange="Tarif.updateTotal();"}}
+                <input type="hidden" name="secteur2" />
                 <input type="hidden" name="_tarif" />
+                <input type="hidden" name="_somme" />
             </td>
           </tr>
         {{/if}}
