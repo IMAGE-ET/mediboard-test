@@ -23,11 +23,13 @@ $ljoin = array();
 $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
 
 $where = array();
-$where["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($salles));
+$where[] = "plagesop.salle_id " . CSQLDataSource::prepareIn(array_keys($salles)) .
+           "OR operations.salle_id " . CSQLDataSource::prepareIn(array_keys($salles));
 
 $where["materiel"] = "!= ''";
-$where["operations.plageop_id"] = "IS NOT NULL";
-$where["plagesop.date"] = ">= '".mbDate("-7 day")."'";
+$where[] = "(operations.plageop_id IS NOT NULL AND plagesop.date >= '".mbDate("-7 day")."')".
+          " OR (operations.plageop_id IS NULL AND operations.date >= '".mbDate("-7 day")."')";
+
 
 $order = "plagesop.date, rank";
 
@@ -41,8 +43,8 @@ $where["commande_mat"] = "= '1'";
 $where["annulee"]      = "= '1'";
 $operations["1"] = $operation->loadList($where, $order, null, null, $ljoin);
 
-foreach($operations as &$_operations) {
-  foreach($_operations as $_operation) {
+foreach ($operations as &$_operations) {
+  foreach ($_operations as $_operation) {
     $_operation->loadRefPatient(1);
     $_operation->loadRefChir(1);
     $_operation->_ref_chir->loadRefFunction();

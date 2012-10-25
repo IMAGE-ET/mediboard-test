@@ -44,7 +44,11 @@
     
     <td class="text">
       {{if !$dialog}}
-      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
+        {{if $_operation->date}}
+          <a href="?m=planningOp&tab=vw_edit_urgence&operation_id={{$_operation->_id}}">
+        {{else}}
+          <a href="?m=planningOp&tab=vw_edit_planning&operation_id={{$_operation->_id}}">
+        {{/if}}
       {{/if}}
 
       {{mb_include module=planningOp template=inc_vw_operation _operation=$_operation}}
