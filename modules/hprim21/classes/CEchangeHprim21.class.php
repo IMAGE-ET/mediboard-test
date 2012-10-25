@@ -10,9 +10,8 @@
 
 class CEchangeHprim21 extends CExchangeTabular {
   static $messages = array(
-     "L" => "CHprim21Liaison", 
-     "C" => "CHprim21Liaison",
-     "R" => "CHprim21Liaison"  
+    "ADM" => "CADM",
+    "REG" => "CREG",
   );
   
   // DB Table key
@@ -28,10 +27,12 @@ class CEchangeHprim21 extends CExchangeTabular {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
+    
     $backProps["complementaire_hprim21"] = "CHprim21Complementaire echange_hprim21_id";
     $backProps["medecins_hprim21"]       = "CHprim21Medecin echange_hprim21_id";
     $backProps["patients_hprim21"]       = "CHprim21Patient echange_hprim21_id";
     $backProps["sejours_hprim21"]        = "CHprim21Sejour echange_hprim21_id";
+    
     return $backProps;
   }
   
@@ -41,7 +42,28 @@ class CEchangeHprim21 extends CExchangeTabular {
     $props["receiver_id"]  = "ref class|CDestinataireHprim21";
     $props["object_class"] = "enum list|CPatient|CSejour|CMedecin show|0";
     
+    $props["_message"]      = "hpr";
+    $props["_acquittement"] = "hpr";
+    
     return $props;
+  }
+  
+  function handle() {
+    return COperatorIHE::event($this);
+  }
+
+  function getFamily() {
+    return self::$messages;
+  }
+  
+  function isWellFormed($data, CInteropActor $actor = null) {
+    return true; 
+  }
+  
+  function understand($data, CInteropActor $actor = null) {
+    if (!$this->isWellFormed($data, $actor)) {
+      return false;
+    }
   }
 }
 ?>

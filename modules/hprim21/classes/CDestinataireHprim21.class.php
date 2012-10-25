@@ -20,16 +20,10 @@ class CDestinataireHprim21 extends CInteropReceiver {
     $spec->table = 'destinataire_hprim21';
     $spec->key   = 'dest_hprim21_id';
     $spec->messages = array(
-      "C" => array ( 
-        "All",
-      ),
-      "L" => array ( 
-        "All",
-      ),
-      "R" => array ( 
-        "All",
-      ),
+      "ADM" => array ("ADM"),
+      "REG" => array ("REG"),
     );
+
     return $spec;
   }
   
@@ -46,19 +40,14 @@ class CDestinataireHprim21 extends CInteropReceiver {
     return $backProps;
   }
   
-  function lastMessage() {
-    $echg_hprim21 = new CEchangeHprim21();
-    $where = array();
-    $where["sender_id"] = " = '$this->_id'";    
-    $key = $echg_hprim21->_spec->key;
-    $echg_hprim21->loadObject($where, "$key DESC");
-    $this->_ref_last_message = $echg_hprim21; 
-  }
-  
   function getFormatObjectHandler(CEAIObjectHandler $objectHandler) {
     return null;
-      
   }
+  
+  function sendEvent($evenement, CMbObject $mbObject) {
+    $evenement->_receiver = $this;
+    
+  }  
 }
 
 ?>

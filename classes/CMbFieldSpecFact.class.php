@@ -40,6 +40,7 @@ class CMbFieldSpecFact {
     "xml"          => "CXmlSpec",
     "php"          => "CPhpSpec",       // @todo: Make a sourceCode spec/
     "er7"          => "CER7Spec",
+    "hpr"          => "CHPRSpec",
     "ipAddress"    => "CIpAddressSpec",
   );
    
