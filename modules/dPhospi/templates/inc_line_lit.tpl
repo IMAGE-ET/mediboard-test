@@ -17,7 +17,7 @@
   style="text-align: left; {{if $_lit->_lines|@count}}height: {{math equation=x*y x=$_lit->_lines|@count y=$height_affectation}}em{{/if}}"
   data-rank="{{$_lit->_selected_item->rank}}">
   
-  {{if $_lit->_id}}
+  {{if $_lit->_id && !$conf.dPhospi.hide_alertes_temporel}}
     <span style="float: right;">
       {{if $_lit->_lines|@count > 1 && !$suivi_affectation}}
         <img src="modules/dPhospi/images/surb.png" title="Collision">

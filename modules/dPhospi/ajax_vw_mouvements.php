@@ -266,8 +266,10 @@ foreach ($lits as $_lit) {
   }
 }
 
-foreach ($lits as $_lit) {
-  $_lit->_ref_chambre->checkChambre();
+if (!CAppUI::conf("dPhospi hide_alertes_temporel")) {
+  foreach ($lits as $_lit) {
+    $_lit->_ref_chambre->checkChambre();
+  }
 }
 
 $smarty = new CSmartyDP;

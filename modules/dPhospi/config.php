@@ -22,7 +22,7 @@ $dPconfig["dPhospi"] = array (
   "max_services_view" => "6",
   "systeme_prestations" => "standard",
   "use_vue_topologique" => "0",
-  
+  "hide_alertes_temporel" => "0",
   "CLit" => array(
     "prefixe"         => "",
     "show_in_tableau" => 0,

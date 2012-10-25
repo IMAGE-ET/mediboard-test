@@ -32,6 +32,7 @@
   
   {{mb_include module=system template=inc_config_bool var=stats_for_all}}
   
+  {{mb_include module=system template=inc_config_bool var=hide_alertes_temporel}}
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
