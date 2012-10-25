@@ -104,11 +104,11 @@
     <tr>
       <th>Total réglé</th>
       {{assign var=regle value=$recapReglement.total.du_patient+$recapReglement.total.du_tiers}}
-      <td colspan="7">{{$regle|currency}}</td>
+      <td colspan="8">{{$regle|currency}}</td>
     </tr>
     <tr>
       <th>Total non réglé</th>
-      <td colspan="7">{{$total_du-$regle|currency}}</td>
+      <td colspan="8">{{$total_du-$regle|currency}}</td>
     </tr>
   {{/if}}
 </table>
