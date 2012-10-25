@@ -117,29 +117,47 @@ class CSourceFileSystem extends CExchangeSource {
      * $this->_files = CMbPath::getFiles($path); => pas optimisé pour un listing volumineux
      * */
     $i = 1;
-    $this->_files = array();
-    
-    /* Limite de 1000 fichiers par défaut */
-    $limit = (isset($this->_limit) ? $this->_limit : 1000);
+    $files = array();
+
+    $limit = 5000;
     while (false !== ($entry = readdir($handle))) {
       $entry = "$path/$entry";
-            if ($i == $limit) {
+      if ($i == $limit) {
         break;
       }
       
-      /* Suppression des dossier */
+      /* We ignore folders */
       if (is_dir($entry)) {
         continue;
-      } 
-      
-      $this->_files[] = $entry;
-      
+      }
+
+      $files[] = $entry;
+
       $i++;
     }
     
     closedir($handle);
+
+    switch($this->sort_files_by) {
+      default:
+      case "name": sort($files); break;
+      case "date": usort($files, array($this, "sortByDate")); break;
+      case "size": usort($files, array($this, "sortBySize")); break;
+    }
+
+    if (isset($this->_limit)) {
+      $files = array_slice($files, 0, $this->_limit);
+    }
     
-    return $this->_files;
+    return $this->_files = $files;
+  }
+
+  function sortByDate($a, $b) {
+    return filemtime($a) - filemtime($b);
+  }
+
+  function sortBySize($a, $b) {
+    return filesize($a) - filesize($b);
   }
   
   function send($evenement_name = null) {
