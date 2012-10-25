@@ -7,15 +7,16 @@
 * @author Romain OLLIVIER
 */
 
-$compte_rendu_id = CValue::get("compte_rendu_id"   , 0);
-$modele_id       = CValue::get("modele_id"         , null);
-$praticien_id    = CValue::get("praticien_id"      , 0);
-$type            = CValue::get("type"              , 0);
-$pack_id         = CValue::get("pack_id"           , 0);
-$object_id       = CValue::get("object_id"         , 0);
-$switch_mode     = CValue::get("switch_mode"       , 0);
+$compte_rendu_id = CValue::get("compte_rendu_id", 0);
+$modele_id       = CValue::get("modele_id"      , null);
+$praticien_id    = CValue::get("praticien_id"   , 0);
+$type            = CValue::get("type"           , 0);
+$pack_id         = CValue::get("pack_id"        , 0);
+$object_id       = CValue::get("object_id"      , 0);
+$switch_mode     = CValue::get("switch_mode"    , 0);
 $target_id       = CValue::get("target_id");
 $target_class    = CValue::get("target_class");
+$force_fast_edit = CValue::get("force_fast_edit", 0);
 
 // Faire ici le test des différentes variables dont on a besoin
 $compte_rendu = new CCompteRendu;
@@ -222,7 +223,7 @@ $pdf_and_thumbs = CAppUI::pref("pdf_and_thumbs");
 if (CValue::get("reloadzones") == 1) {
   $smarty->display("inc_zones_fields.tpl");
 }
-else if (!$compte_rendu_id && !$switch_mode && ($compte_rendu->fast_edit || ($compte_rendu->fast_edit_pdf && $pdf_thumbnails && $pdf_and_thumbs))) {
+else if (!$compte_rendu_id && !$switch_mode && ($compte_rendu->fast_edit || $force_fast_edit || ($compte_rendu->fast_edit_pdf && $pdf_thumbnails && $pdf_and_thumbs))) {
   $printers = $function->loadBackRefs("printers");
   
   if (is_array($printers)) {

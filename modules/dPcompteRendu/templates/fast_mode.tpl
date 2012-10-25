@@ -121,12 +121,10 @@ Main.add(function() {
       {{else}}
         $V(oForm.callback, 'printDoc');
       {{/if}}
-        oForm.onsubmit();
+      oForm.onsubmit();
     {{/if}}
   {{/if}}
 });
-
-
 </script>
 
 <form name="stream-pdf-{{$uid_fast_mode}}" method="post" action="?" target="_blank">

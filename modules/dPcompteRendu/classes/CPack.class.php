@@ -37,6 +37,7 @@ class CPack extends CMbObject {
   var $_owner        = null;
   var $_header_found = null;
   var $_footer_found = null;
+  var $_modeles_ids  = null;
   
   // Referenced objects
   var $_ref_user     = null;
@@ -272,6 +273,16 @@ class CPack extends CMbObject {
       $this->loadRefsFwd();
     }
     return $this->_ref_user->getPerm($permType);
+  }
+  
+  function getModelesIds() {
+    $ds = $this->_spec->ds;
+    
+    $request = new CRequest();
+    $request->addSelect("modele_id");
+    $request->addTable("modele_to_pack");
+    $request->addWhere("pack_id = '$this->_id'");
+    $this->_modeles_ids = $ds->loadColumn($request->getRequest());
   }
 }
 

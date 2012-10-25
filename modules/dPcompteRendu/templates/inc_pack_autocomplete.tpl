@@ -15,7 +15,7 @@
       {{assign var=owner_icon value="group"}}
     {{/if}}
       
-    <li>
+    <li data-modeles_ids="{{'|'|implode:$_pack->_modeles_ids}}">
       <img style="float: right; clear: both; margin: -1px;" 
         src="images/icons/{{$owner_icon}}.png" />
         {{if $_pack->fast_edit_pdf && $_pack->fast_edit && $pdf_thumbnails && $pdf_and_thumbs}}
@@ -27,7 +27,7 @@
           <img style="float: right;" src="images/icons/lightning.png"/>
         {{/if}}
       
-      <div class="{{if $_pack->fast_edit}}fast_edit{{elseif !$_pack->merge_docs}}merge_docs{{/if}}">{{$_pack->nom|emphasize:$keywords}}</div>
+      <div class="{{if $_pack->fast_edit}}fast_edit{{/if}} {{if !$_pack->merge_docs}}merge_docs{{/if}}">{{$_pack->nom|emphasize:$keywords}}</div>
       
       <div style="display: none;" class="id">{{$_pack->_id}}</div>
     </li>

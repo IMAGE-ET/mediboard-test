@@ -28,8 +28,14 @@ $order = "nom";
 $pack = new CPack();
 $packs = $pack->seek($keywords, $where, null, null, null, $order);
 
+foreach ($packs as $_pack) {
+  $_pack->getModelesIds();
+}
+
 $smarty = new CSmartyDP();
+
 $smarty->assign("packs", $packs);
 $smarty->assign("nodebug", true);
 $smarty->assign("keywords", $keywords);
+
 $smarty->display("inc_pack_autocomplete.tpl");

@@ -4,6 +4,11 @@ Document = {
     height: 800
   },
   iframe: null,
+  modeles_ids: null,
+  object_class: null,
+  object_id: null,
+  unique_id: null,
+  
   /**
    * @param ... A DECRIRE
    */
@@ -53,7 +58,7 @@ Document = {
     url.popup(Document.popupSize.width, Document.popupSize.height, multiple_docs);
   },
   
-  fastMode: function(object_class, modele_id, object_id, target_id, target_class, unique_id) {
+  fastMode: function(object_class, modele_id, object_id, unique_id, just_save) {
     if (!modele_id) return;
     
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
@@ -61,17 +66,43 @@ Document = {
     url.addParam("object_id"   , object_id);
     url.addParam("object_class", object_class);
     url.addParam("unique_id"   , unique_id);
-    url.requestModal(750, 400, {onComplete: function() { modalWindow.position(); }});
+    if (just_save) {
+      url.addParam("force_fast_edit", 1);
+    }
+    url.addParam("just_save"   , just_save ? 1 : 0);
+    url.requestModal(750, 400);
+    
+    // En mode non fusion et édition rapide de pack
+    // A la fermeture de la modale, lancement du modèle suivant
+    if (Document.modeles_ids.length) {
+      url.modalObject.observe("afterClose", function() {
+        Document.fastMode(Document.object_class, Document.modeles_ids.shift(), Document.object_id, Document.unique_id, true);
+      });
+    }
   },
-  fastModePack: function(pack_id, object_id, unique_id) {
+  
+  fastModePack: function(pack_id, object_id, object_class, unique_id, modeles_ids) {
     if (!pack_id) return;
     
-    var url = new Url("dPcompteRendu", "edit_compte_rendu");
-    url.addParam("pack_id", pack_id);
-    url.addParam("object_id", object_id);
-    url.addParam("unique_id", unique_id);
-    url.requestModal(750, 400, {onComplete: function() { modalWindow.position(); }});
+    // Mode normal
+    if (!modeles_ids) {
+      var url = new Url("dPcompteRendu", "edit_compte_rendu");
+      url.addParam("pack_id", pack_id);
+      url.addParam("object_id", object_id);
+      url.addParam("unique_id", unique_id);
+      url.requestModal(750, 400);
+      return;
+    }
+    
+    // Mode un doc par modèle du pack (lancement du premier modèle)
+    Document.modeles_ids  = modeles_ids.split("|");
+    Document.object_class = object_class;
+    Document.object_id    = object_id;
+    Document.unique_id    = unique_id;
+    
+    Document.fastMode(object_class, Document.modeles_ids.shift(), object_id, unique_id, true);
   },
+  
   edit: function(compte_rendu_id){
     var url = new Url("dPcompteRendu", "edit_compte_rendu");
     url.addParam("compte_rendu_id", compte_rendu_id);

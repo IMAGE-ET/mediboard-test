@@ -73,7 +73,7 @@
       }
       
       if (selected.select(".fast_edit").length) {
-        Document.fastMode('{{$object_class}}', id, '{{$object_id}}', null, null, '{{$unique_id}}');
+        Document.fastMode('{{$object_class}}', id, '{{$object_id}}', '{{$unique_id}}');
       } else {
         Document.create(id, '{{$object_id}}', null, object_class, null);
       }
@@ -83,7 +83,7 @@
   
     function createPack(input, selected) {
       if (selected.select(".fast_edit").length) {
-        Document.fastModePack(selected.down(".id").innerHTML, '{{$object_id}}');
+        Document.fastModePack(selected.down(".id").innerHTML, '{{$object_id}}', '{{$object_class}}', '{{$unique_id}}', selected.select(".merge_docs").length ? selected.get("modeles_ids") : null);
       }
       else if (selected.select(".merge_docs").length){
         var form = getForm("unmergePack_{{$object->_guid}}");
