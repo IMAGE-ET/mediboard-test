@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-{{mb_script module=patient     script=pat_selector    ajax=true}}
+{{mb_script module=patients    script=pat_selector    ajax=true}}
 {{mb_script module=cabinet     script=plage_selector  ajax=true}}
 {{mb_script module=cabinet     script=file            ajax=true}}
 {{mb_script module=compteRendu script=document        ajax=true}}
