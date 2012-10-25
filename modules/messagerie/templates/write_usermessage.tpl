@@ -75,6 +75,7 @@ Main.add(function() {
                 var url = new Url("system", "ajax_seek_autocomplete");
                 url.addParam("object_class", "CMediusers");
                 url.addParam("input_field", element.name);
+                url.addParam("show_view", true);
                 url.autoComplete(element, null, {
                   minChars: 3,
                   method: "get",
@@ -140,7 +141,7 @@ Main.add(function() {
       {{elseif $usermessage->to == $app->user_id}}
       <tr>
         <td colspan="2" style="text-align: center;">
-          <button type="button" onclick="window.parent.Control.Modal.close(); window.parent.UserMessage.create({{$usermessage->_ref_user_from->_id}}, 'Reponse'); ">
+          <button type="button" onclick="window.parent.Control.Modal.close(); window.parent.UserMessage.create({{$usermessage->_ref_user_from->_id}}, 'Re: {{$usermessage->subject}}'); ">
             <img src="images/icons/usermessage.png" alt="message"/>
             {{tr}}CUserMessage.answer{{/tr}}
           </button>

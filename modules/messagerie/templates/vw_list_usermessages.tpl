@@ -64,16 +64,18 @@ Main.add(function () {
 	      {{foreach from=$listInbox item=_mail}}
 
 	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
-	        <td>{{$_mail->_ref_user_from}}</td>
-	        <td class="text"><a href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
+	        <td class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_from}}</td>
+	        <td class="text">{{$_mail->subject}}</td>
 	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
 	        <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
-	        <td>
-	          <div style="float: right">
-	            <a href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Reponse')">
-                <img src="images/icons/usermessage.png" alt="message" title="Envoyer un message" />
-              </a>
-	          </div>
+	        <td class="text">
+            <a style="display: inline;" href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">
+              {{tr}}CUserMessage.read{{/tr}}
+            </a>
+            /
+            <a style="display: inline;" href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Re: {{$_mail->subject}}')">
+              {{tr}}CUserMessage.answer{{/tr}}
+            </a>
 	          <!-- Forward / Archive -->
 	        </td>
 	      </tr>
