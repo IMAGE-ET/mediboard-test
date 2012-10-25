@@ -75,7 +75,7 @@ Main.add(function () {
               {{tr}}CUserMessage.read{{/tr}}
             </a>
             /
-            <a style="display: inline;" href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Re: {{$_mail->subject}}')">
+            <a style="display: inline;" href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Re: {{$_mail->_clean_subject}}')">
               {{tr}}CUserMessage.answer{{/tr}}
             </a>
 	        </td>
@@ -105,7 +105,7 @@ Main.add(function () {
               {{tr}}CUserMessage.read{{/tr}}
             </a>
             /
-            <a style="display: inline;" href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Re: {{$_mail->subject}}')">
+            <a style="display: inline;" href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Re: {{$_mail->_clean_subject}}')">
               {{tr}}CUserMessage.answer{{/tr}}
             </a>
           </td>
@@ -137,7 +137,7 @@ Main.add(function () {
               {{tr}}CUserMessage.read{{/tr}}
             </a>
             /
-            <a style="display: inline;" href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_to->_id}}, 'Re: {{$_mail->subject}}')">
+            <a style="display: inline;" href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_to->_id}}, 'Re: {{$_mail->_clean_subject}}')">
               {{tr}}CUserMessage.answer{{/tr}}
             </a>
           </td>

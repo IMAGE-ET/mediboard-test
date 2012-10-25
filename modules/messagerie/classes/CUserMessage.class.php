@@ -91,7 +91,9 @@ class CUserMessage extends CMbObject {
     if ($this->date_sent) $this->_to_state = "received";
     if ($this->date_read) $this->_to_state = "read";
     if ($this->archived ) $this->_to_state = "archived";
-    if ($this->starred  ) $this->_to_state = "starred";    
+    if ($this->starred  ) $this->_to_state = "starred"; 
+    
+    $this->_clean_subject = ltrim($this->subject, "Re: ");
   }
   
   function loadRefUserFrom($cache = 0) {
