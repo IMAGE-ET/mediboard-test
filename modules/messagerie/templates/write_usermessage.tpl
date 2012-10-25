@@ -25,7 +25,7 @@ Main.add(function() {
 <hr class="control_tabs" />
 
 <div id="tab_mail">
-  <form name="EditMbMail" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+  <form name="EditUserMessage" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="dosql" value="do_usermessage_aed" />
     <input type="hidden" name="del" value="0" />
@@ -70,7 +70,7 @@ Main.add(function() {
             
             <script type="text/javascript">
               Main.add(function(){
-                var form = getForm("EditMbMail");
+                var form = getForm("EditUserMessage");
                 var element = form.elements._to_autocomplete_view;
                 var url = new Url("system", "ajax_seek_autocomplete");
                 url.addParam("object_class", "CMediusers");
@@ -140,7 +140,7 @@ Main.add(function() {
       {{elseif $usermessage->to == $app->user_id}}
       <tr>
         <td colspan="2" style="text-align: center;">
-          <button type="button" onclick="window.parent.Control.Modal.close(); window.parent.MbMail.create({{$usermessage->_ref_user_from->_id}}, 'Reponse'); ">
+          <button type="button" onclick="window.parent.Control.Modal.close(); window.parent.UserMessage.create({{$usermessage->_ref_user_from->_id}}, 'Reponse'); ">
             <img src="images/icons/usermessage.png" alt="message"/>
             {{tr}}CUserMessage.answer{{/tr}}
           </button>

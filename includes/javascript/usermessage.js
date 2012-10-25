@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-var MbMail = {
+var UserMessage = {
   edit: function(usermessage_id) {
     var url = new Url("messagerie", "write_usermessage");
     url.addParam("usermessage_id", usermessage_id);

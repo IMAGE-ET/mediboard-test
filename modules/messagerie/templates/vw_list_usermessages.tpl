@@ -9,7 +9,7 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td colspan="2">
-      <a class="button new" href="#nothing" onclick="MbMail.create()">
+      <a class="button new" href="#nothing" onclick="UserMessage.create()">
         {{tr}}CUserMessage-title-create{{/tr}}
       </a>
     </td>
@@ -65,12 +65,12 @@ Main.add(function () {
 
 	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
 	        <td>{{$_mail->_ref_user_from}}</td>
-	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
+	        <td class="text"><a href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
 	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
 	        <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
 	        <td>
 	          <div style="float: right">
-	            <a href="#nothing" onclick="MbMail.create({{$_mail->_ref_user_from->_id}}, 'Reponse')">
+	            <a href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Reponse')">
                 <img src="images/icons/usermessage.png" alt="message" title="Envoyer un message" />
               </a>
 	          </div>
@@ -95,11 +95,11 @@ Main.add(function () {
 	      {{foreach from=$listArchived item=_mail}}
 	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
 	        <td>{{$_mail->_ref_user_from}}</td>
-	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
+	        <td class="text"><a href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
 	        <td>{{mb_value object=$_mail field=date_sent}}</td>
 	        <td>
 	          <div style="float: right">
-	            <a href="#nothing" onclick="MbMail.create({{$_mail->_ref_user_from->_id}}, 'Reponse')">
+	            <a href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Reponse')">
                 <img src="images/icons/usermessage.png" alt="message" title="Envoyer un message" />
               </a>
 	          </div>
@@ -125,7 +125,7 @@ Main.add(function () {
 	      {{foreach from=$listSent item=_mail}}
 	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
 	        <td>{{$_mail->_ref_user_to}}</td>
-	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
+	        <td class="text"><a href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
 	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
 	        <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
 	        <td><!-- Forward --></td>
@@ -148,7 +148,7 @@ Main.add(function () {
 	      {{foreach from=$listDraft item=_mail}}
 	      <tr>
 	        <td>{{$_mail->_ref_user_to}}</td>
-	        <td class="text"><a href="#nothing" onclick="MbMail.edit({{$_mail->_id}})"">{{$_mail->subject}}</a></td>
+	        <td class="text"><a href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})"">{{$_mail->subject}}</a></td>
 	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
 	        <td><!-- Edit / Send / Delete --></td>
 	      </tr>

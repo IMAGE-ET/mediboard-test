@@ -225,7 +225,7 @@
           <div class="mediuser" style="border-color: #{{$_mail->_ref_user_from->_ref_function->color}};">{{$_mail->_ref_user_from}}</div>
         </td>
         <td>
-          <a href="#Read-{{$_mail->_guid}}" onclick="MbMail.edit({{$_mail->_id}})">{{$_mail->subject}}</a>
+          <a href="#Read-{{$_mail->_guid}}" onclick="UserMessage.edit({{$_mail->_id}})">{{$_mail->subject}}</a>
         </td>
         <td>
           <label title="{{mb_value object=$_mail field=date_sent}}">
