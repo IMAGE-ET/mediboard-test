@@ -93,6 +93,8 @@
           <th style="width: 20%;">{{mb_title class=CConsultation field=du_tiers}}</th>
           {{/if}}
           
+          <th></th>
+          <th>{{mb_title class=CConsultation field=patient_date_reglement}}</th>
         </tr>
         
         {{foreach from=$_plage.factures item=_facture}}
@@ -199,9 +201,30 @@
               </tr>
               {{/if}}
             </table>
-
           </td>
           {{/if}}
+          <td>
+            <form name="edit-date-aquittement-{{$_facture->_guid}}" action="#" method="post">
+              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="del" value="0" />
+              {{if $_facture->_id}}
+                <input type="hidden" name="dosql" value="do_factureconsult_aed" />
+                <input type="hidden" name="factureconsult_id" value="{{$_facture->_id}}" />
+              {{else}}
+                <input type="hidden" name="dosql" value="do_consultation_aed" />
+                <input type="hidden" name="consultation_id" value="{{$_facture->_ref_last_consult->_id}}" />
+              {{/if}}
+
+              <input type="hidden" name="patient_date_reglement" class="date" value="{{$_facture->patient_date_reglement}}" />
+              <button type="button" class="submit notext" onclick="onSubmitFormAjax(this.form);"></button>
+              <script>
+                Main.add(function(){
+                  Calendar.regField(getForm("edit-date-aquittement-{{$_facture->_guid}}").patient_date_reglement);
+                });
+              </script>
+            </form>
+          </td>
+          
         </tr>
         
         {{/foreach}}

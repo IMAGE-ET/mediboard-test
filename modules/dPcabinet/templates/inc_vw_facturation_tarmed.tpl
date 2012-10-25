@@ -163,17 +163,15 @@
 
 <tbody class="hoverable">
   {{assign var="nb_montants" value=$facture->_montant_factures|@count }}
-  {{if $nb_montants > 1}}
-    {{foreach from=$facture->_montant_factures item=_montant key=key }}
-      <tr>
-        {{if $key == 0}}
-        <td colspan="4" rowspan="{{$nb_montants+2}}"></td>
-        {{/if}}
-        <td colspan="2">Montant n°{{$key+1}}</td>
-        <td style="text-align:right;">{{$_montant|string_format:"%0.2f"|currency}}</td>
-      </tr>
-    {{/foreach}}
-  {{/if}}
+  {{foreach from=$facture->_montant_factures item=_montant key=key }}
+    <tr>
+      {{if $key == 0}}
+      <td colspan="4" rowspan="{{$nb_montants+2}}"></td>
+      {{/if}}
+      <td colspan="2">Montant{{if $nb_montants > 1}} n°{{$key+1}}{{/if}}</td>
+      <td style="text-align:right;">{{$_montant|string_format:"%0.2f"|currency}}</td>
+    </tr>
+  {{/foreach}}
   
   <tr>
     <td colspan="2"><b>{{mb_label object=$facture field="remise"}}</b></td>
@@ -201,11 +199,9 @@
   </tr>
   
   <tr>
-    <td></td>
-    <td><b>Montant Total</b></td>
+    <td colspan="2"><b>Montant Total</b></td>
     <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
   </tr>
-
 </tbody>
 
 {{if !$facture->_reglements_total_patient}}

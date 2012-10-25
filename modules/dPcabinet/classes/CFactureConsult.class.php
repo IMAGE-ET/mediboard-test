@@ -200,6 +200,8 @@ class CFactureConsult extends CMbObject {
       
     $this->_ref_consults = $this->loadBackRefs("consultations", "consultation_id");
     
+    $this->loadRefCoeffFacture();
+    
     // Eclatement des factures
     $this->_nb_factures = 1;
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
@@ -218,17 +220,33 @@ class CFactureConsult extends CMbObject {
     return $this->_ref_consults;
   } 
 
+  /**
+   * Mise à jour des montant secteur 1, 2 et totaux, utilisés pour la comtpa
+   * 
+   * @return void
+  **/
   function updateMontants() {
     $this->_montant_secteur1 = 0.0;
     $this->_montant_secteur1 = 0.0;
     $this->_montant_total    = 0.0;
-    foreach ($this->_ref_consults as $_consult) {
-      $this->_montant_secteur1 += $_consult->secteur1;
-      $this->_montant_secteur2 += $_consult->secteur2;
-      $this->_montant_total    += $_consult->_somme;
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+      $this->_montant_secteur1 += $this->_montant_sans_remise;
+      $this->_montant_total    += $this->_montant_avec_remise;
+    }
+    else {
+      foreach ($this->_ref_consults as $_consult) {
+        $this->_montant_secteur1 += $_consult->secteur1;
+        $this->_montant_secteur2 += $_consult->secteur2;
+        $this->_montant_total    += $_consult->_somme;
+      }
     }
   }
 
+  /**
+   * Eclatement des montants de la facture utilisé uniquement en Suisse 
+   * 
+   * @return void
+  **/
   function eclatementTarmed() {
       
     if ($this->npq) {
@@ -316,15 +334,13 @@ class CFactureConsult extends CMbObject {
     $this->_montant_sans_remise = 0;
     
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
-      if (count($this->_montant_factures)>1) {
-        foreach ($this->_montant_factures as $_montant) {
-          $this->_montant_sans_remise += $_montant;
-        }
-        $this->_montant_avec_remise = $this->_montant_sans_remise;
+      foreach ($this->_montant_factures as $_montant) {
+        $this->_montant_sans_remise += $_montant;
       }
+      $this->_montant_avec_remise = $this->_montant_sans_remise;
     }
     
-    if ($this->_montant_sans_remise == 0) {
+    if (!$this->_montant_sans_remise) {
       $this->_montant_sans_remise = $this->du_patient  + $this->du_tiers;
       $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
     }
@@ -353,13 +369,14 @@ class CFactureConsult extends CMbObject {
         $this->_du_restant_patient       -= $_reglement->montant;
         $this->_reglements_total_patient += $_reglement->montant;
       }
-
+      
       if ($_reglement->emetteur == "tiers") {
         $this->_ref_reglements_tiers[] = $_reglement;
         $this->_du_restant_tiers       -= $_reglement->montant;
         $this->_reglements_total_tiers += $_reglement->montant;
       }
     }
+    $this->_du_restant_patient = round($this->_du_restant_patient, 2);
     
     return $this->_ref_reglements;
   }
@@ -394,7 +411,7 @@ class CFactureConsult extends CMbObject {
   **/
   function loadRefCoeffFacture() {
     $this->_coeff = 1;
-    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
       $this->_coeff = $this->type_facture == "accident" ?
         CAppUI::conf("tarmed CCodeTarmed pt_accident") :
         CAppUI::conf("tarmed CCodeTarmed pt_maladie");
@@ -458,7 +475,7 @@ class CFactureConsult extends CMbObject {
    * @return void
   **/
   function loadNumerosBVR($select = "_id"){
-    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") && !count($this->_montant_factures_caisse)) {
       $total_tarmed = 0;
       $total_caisse = array();
           
@@ -502,17 +519,18 @@ class CFactureConsult extends CMbObject {
       else {
         $this->_montant_factures_caisse = $this->_montant_factures;
       }
+    
+      if (!$this->_ref_praticien) {
+        $this->loadRefPraticien();
+      }
+      
       $genre = "01";
-      
-      if ($this->_ref_praticien) {
-        $adherent2 = str_replace(' ','',$this->_ref_praticien->adherent);
-        $adherent2 = str_replace('-','',$adherent2);
-      
-        foreach ($this->_montant_factures_caisse as $montant_facture) {
-          $montant = sprintf('%010d', $montant_facture*100);
-          $cle = $this->getNoControle($genre.$montant);
-          $this->_num_bvr[$montant_facture] = $genre.$montant.$cle.">".$this->_num_reference."+ ".$adherent2.">";
-        }
+      $adherent2 = str_replace(' ','',$this->_ref_praticien->adherent);
+      $adherent2 = str_replace('-','',$adherent2);
+      foreach ($this->_montant_factures_caisse as $montant_facture) {
+        $montant = sprintf('%010d', $montant_facture*100);
+        $cle = $this->getNoControle($genre.$montant);
+        $this->_num_bvr[$montant_facture] = $genre.$montant.$cle.">".$this->_num_reference."+ ".$adherent2.">";
       }
     }
     return $this->_num_bvr;

@@ -65,6 +65,29 @@ editReglementDate = function(reglement_id, date){
   });
 }
 
+editAquittementDate = function(object_id, date){
+  var oForm = getForm('edit-date-aquittement');
+  {{if isset($facture|smarty:nodefaults)}}
+    $V(oForm.factureconsult_id , object_id);
+    $V(oForm.dosql      , 'do_factureconsult_aed');
+  {{elseif isset($consult|smarty:nodefaults)}}
+    $V(oForm.consultation_id, object_id);
+    $V(oForm.dosql          , 'do_consultation_aed');
+  {{/if}}
+  $V(oForm.patient_date_reglement,     date);
+  
+  return onSubmitFormAjax(oForm, function() {
+    var url = new Url('dPcabinet', 'ajax_view_facture');
+    {{if isset($facture|smarty:nodefaults)}}
+      url.addParam('factureconsult_id', '{{$facture->_id}}');
+    {{elseif isset($consult|smarty:nodefaults)}}
+      url.addParam('consult_id',        '{{$consult->_id}}');
+    {{/if}}
+    url.requestUpdate('load_facture');
+    Reglement.reload(true);
+  });  
+}
+
 addReglement = function (oForm){
   return onSubmitFormAjax(oForm, function() {
     {{if isset($facture|smarty:nodefaults)}}
@@ -110,6 +133,16 @@ modifMontantBVR = function (num_bvr){
         <input type="hidden" name="dosql" value="do_reglement_aed" />
         <input type="hidden" name="reglement_id" value="" />
         <input type="hidden" name="date" value="" />
+      </form>
+      
+      <form name="edit-date-aquittement" action="#" method="post">
+        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="" />
+        <input type="hidden" name="factureconsult_id" value="" />
+        <input type="hidden" name="consultation_id" value="" />
+        <input type="hidden" name="patient_id" value="{{$object->patient_id}}" />
+        <input type="hidden" name="patient_date_reglement" value="" />
       </form>
       
       <form name="reglement-add" action="" method="post" onsubmit="return addReglement(this);">
@@ -194,19 +227,20 @@ modifMontantBVR = function (num_bvr){
               <strong>{{mb_value object=$object field=_du_restant_patient}} restant</strong>
             </td>
           </tr>
-
-          {{if $object->patient_date_reglement}}
           <tr>
             <td colspan="5" style="text-align: center;">
               <strong>
                 {{mb_label object=$object field=patient_date_reglement}}
-                le 
-                {{mb_value object=$object field=patient_date_reglement}}
+                <input type="hidden" name="patient_date_reglement" class="date" value="{{$object->patient_date_reglement}}" />
+                <button type="button" class="submit notext" onclick="editAquittementDate('{{$object->_id}}', this.up('td').down('input[name=patient_date_reglement]').value);"></button>
               </strong>
+              <script>
+                Main.add(function(){
+                  Calendar.regField(getForm("reglement-add").patient_date_reglement);
+                });
+              </script>
             </td>
           </tr>
-          {{/if}}
-
         </table>
       </form>
     {{/if}}

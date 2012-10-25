@@ -113,7 +113,7 @@ class CReglement extends CMbMetaObject {
     $this->loadRefsFwd();
     
     // Cas de la consultation
-    if ($this->object_class == "CConsultation"){
+    if ($this->object_class == "CConsultation") {
       $consult = $this->_ref_object;
       $consult->loadRefsReglements();
       
@@ -131,8 +131,9 @@ class CReglement extends CMbMetaObject {
     }
     
     // Cas de la facture
-    if ($this->_update_facture && $this->object_class == "CFactureConsult"){
+    if ($this->_update_facture && $this->object_class == "CFactureConsult" && !$this->_ref_object->patient_date_reglement) {
       $facture = $this->_ref_object;
+      $facture->loadRefsConsults();
       $facture->loadRefsReglements();
       
       // Acquitement patient
