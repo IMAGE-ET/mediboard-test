@@ -123,6 +123,9 @@ Main.add(function () {
           </script> 
           <img src="images/icons/warning.png" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
         {{/if}}
+        {{if $_op->_is_urgence}}
+          <img src="images/icons/attente_fourth_part.png" title="Intervention en urgence" />
+        {{/if}}
       </span>
       <a href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={{$_op->_id}}">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}');">

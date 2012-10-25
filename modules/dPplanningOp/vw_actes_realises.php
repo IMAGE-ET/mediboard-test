@@ -47,7 +47,7 @@ $sejour = new CSejour;
 $ljoin = array();
 $where = array();
 
-$where["entree_prevue"] = "BETWEEN '$_date_min' AND '$_date_max'";
+$where["entree_prevue"] = "BETWEEN '$_date_min 00:00:00' AND '$_date_max 23:59:59'";
 $ljoin["acte_ngap"] = "acte_ngap.object_id = sejour.sejour_id AND acte_ngap.object_class = 'CSejour'";
 
 $sejours = $sejour->loadList($where, null, null, null, $ljoin);

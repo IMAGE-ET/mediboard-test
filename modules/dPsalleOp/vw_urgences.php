@@ -25,6 +25,10 @@ $where = array (
   "date" => "= '$date'",
 );
 $urgences = $operation->loadGroupList($where, "salle_id, chir_id");
+
+$reservation_installed = CModule::getActive("reservation");
+$diff_hour_urgence = CAppUI::conf("reservation diff_hour_urgence");
+
 foreach ($urgences as &$urgence) {
   $urgence->loadRefsFwd();
   $patient = $urgence->_ref_sejour->loadRefPatient();
@@ -33,6 +37,13 @@ foreach ($urgences as &$urgence) {
   $dossier_medical->countAntecedents();
   $dossier_medical->countAllergies();
   $urgence->_ref_chir->loadRefsFwd();
+  
+  if ($reservation_installed) {
+    $first_log = $urgence->loadFirstLog();
+    if (abs(mbHoursRelative($urgence->_datetime_best, $first_log->date)) <= $diff_hour_urgence) {
+      $urgence->_is_urgence = true;
+    }
+  }
   
   // Chargement des plages disponibles pour cette intervention
   $urgence->_ref_chir->loadBackRefs("secondary_functions");
@@ -48,7 +59,7 @@ foreach ($urgences as &$urgence) {
   $order = "salle_id, debut";
   $plage = new CPlageOp;
   $urgence->_alternate_plages = $plage->loadList($where, $order);
-  foreach($urgence->_alternate_plages as $curr_plage) {
+  foreach ($urgence->_alternate_plages as $curr_plage) {
     $curr_plage->loadRefsFwd();
   }
 }

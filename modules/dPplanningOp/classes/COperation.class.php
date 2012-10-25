@@ -134,6 +134,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $_place_after_interv_id = null;
   var $_heure_us        = null;
   var $_types_ressources_ids = null;
+  var $_is_urgence      = null;
   
   // Distant fields
   var $_datetime          = null;
