@@ -198,7 +198,6 @@
 <!-- Mails -->
 {{if !$dialog && @count($mails)}}
 <div class="small-mail not-printable" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
-  <label>
     {{tr}}CUserMessage{{/tr}} :
     
     {{if array_key_exists("received", $mails)}}
@@ -210,10 +209,9 @@
     {{if array_key_exists("starred", $mails)}}
       {{$mails.starred|@count}} {{tr}}CUserMessage._to_state.starred{{/tr}}
     {{/if}}
-  </label>
 </div>
 
-<div id="mail-details not-printable" style="display: none;">
+<div id="mail-details" class="not-printable" style="display: none;">
   <table class="tbl">
   {{foreach from=$mails key=to_state item=_mails}}
     <tr>
@@ -221,16 +219,15 @@
     </tr>
     {{foreach from=$_mails item=_mail}}
       <tr>
-        <td>
-          <div class="mediuser" style="border-color: #{{$_mail->_ref_user_from->_ref_function->color}};">{{$_mail->_ref_user_from}}</div>
-        </td>
-        <td>
-          <a href="#Read-{{$_mail->_guid}}" onclick="UserMessage.edit({{$_mail->_id}})">{{$_mail->subject}}</a>
-        </td>
+        <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_from}}</td>
+        <td>{{$_mail->subject}}</td>
         <td>
           <label title="{{mb_value object=$_mail field=date_sent}}">
             {{mb_value object=$_mail field=date_sent format=relative}}
           </label>
+        </td>
+        <td>
+          <a href="#Read-{{$_mail->_guid}}" onclick="UserMessage.edit({{$_mail->_id}})">{{tr}}CUserMessage.read{{/tr}}</a>
         </td>
       </tr>
     {{/foreach}}
