@@ -57,7 +57,7 @@ Main.add(function () {
               
               <script type="text/javascript">
                 Main.add(function(){
-                  ExObject.loadExObjects("{{$consult->_class}}", "{{$consult->_id}}", "{{$unique_id_exam_forms}}", 1);
+                  ExObject.loadExObjects("{{$consult->_class}}", "{{$consult->_id}}", "{{$unique_id_exam_forms}}", 0.5);
                 });
               </script>
               
