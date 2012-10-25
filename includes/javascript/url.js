@@ -660,7 +660,7 @@ var Url = Class.create({
     
     this.requestUpdate(div.down('.content'), oOptions);
   
-    reloadButton.onclick = this.reloadModal.bind(this);
+    reloadButton.onclick = this.refreshModal.bind(this);
     
     return this;
   },
