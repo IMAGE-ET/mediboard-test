@@ -1,7 +1,9 @@
 <script type="text/javascript">
 
+UserMessage.refresh = window.location.reload;
+
 Main.add(function () {
-  Control.Tabs.create("tab-usermessages", false);
+  Control.Tabs.create("tab-usermessages", true);
 });
 
 </script>
@@ -68,7 +70,7 @@ Main.add(function () {
 	        <td class="text">{{$_mail->subject}}</td>
 	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
 	        <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
-	        <td class="text">
+	        <td>
             <a style="display: inline;" href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">
               {{tr}}CUserMessage.read{{/tr}}
             </a>
@@ -76,7 +78,6 @@ Main.add(function () {
             <a style="display: inline;" href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Re: {{$_mail->subject}}')">
               {{tr}}CUserMessage.answer{{/tr}}
             </a>
-	          <!-- Forward / Archive -->
 	        </td>
 	      </tr>
 	      {{/foreach}}
@@ -96,17 +97,18 @@ Main.add(function () {
 
 	      {{foreach from=$listArchived item=_mail}}
 	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
-	        <td>{{$_mail->_ref_user_from}}</td>
-	        <td class="text"><a href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
-	        <td>{{mb_value object=$_mail field=date_sent}}</td>
-	        <td>
-	          <div style="float: right">
-	            <a href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Reponse')">
-                <img src="images/icons/usermessage.png" alt="message" title="Envoyer un message" />
-              </a>
-	          </div>
-	          <!-- Forward -->
-	        </td>
+	        <td class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_from}}</td>
+	        <td class="text">{{$_mail->subject}}</td>
+	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
+          <td>
+            <a style="display: inline;" href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">
+              {{tr}}CUserMessage.read{{/tr}}
+            </a>
+            /
+            <a style="display: inline;" href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_from->_id}}, 'Re: {{$_mail->subject}}')">
+              {{tr}}CUserMessage.answer{{/tr}}
+            </a>
+          </td>
 	      </tr>
 	      {{/foreach}}
 	    </table>
@@ -126,11 +128,19 @@ Main.add(function () {
 
 	      {{foreach from=$listSent item=_mail}}
 	      <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
-	        <td>{{$_mail->_ref_user_to}}</td>
-	        <td class="text"><a href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">{{$_mail->subject}}</a></td>
+	        <td class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_to}}</td>
+	        <td class="text">{{$_mail->subject}}</td>
 	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
 	        <td>{{mb_value object=$_mail field=date_read format=relative}}</td>
-	        <td><!-- Forward --></td>
+          <td>
+            <a style="display: inline;" href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">
+              {{tr}}CUserMessage.read{{/tr}}
+            </a>
+            /
+            <a style="display: inline;" href="#nothing" onclick="UserMessage.create({{$_mail->_ref_user_to->_id}}, 'Re: {{$_mail->subject}}')">
+              {{tr}}CUserMessage.answer{{/tr}}
+            </a>
+          </td>
 	      </tr>
 	      {{/foreach}}
 	    </table>
@@ -149,10 +159,14 @@ Main.add(function () {
 
 	      {{foreach from=$listDraft item=_mail}}
 	      <tr>
-	        <td>{{$_mail->_ref_user_to}}</td>
-	        <td class="text"><a href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})"">{{$_mail->subject}}</a></td>
+	        <td class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_mail->_ref_user_to}}</td>
+	        <td class="text">{{$_mail->subject}}</td>
 	        <td>{{mb_value object=$_mail field=date_sent format=relative}}</td>
-	        <td><!-- Edit / Send / Delete --></td>
+	        <td>
+            <a style="display: inline;" href="#nothing" onclick="UserMessage.edit({{$_mail->_id}})">
+              {{tr}}CUserMessage.read{{/tr}}
+            </a>
+	        </td>
 	      </tr>
 	      {{/foreach}}
 	    </table>

@@ -13,6 +13,7 @@ var UserMessage = {
     var url = new Url("messagerie", "write_usermessage");
     url.addParam("usermessage_id", usermessage_id);
     url.modal(800, 500);
+    url.modalObject.observe('afterClose', UserMessage.refresh);
   },
   
   create: function(to_id, subject) {
@@ -25,5 +26,8 @@ var UserMessage = {
       url.addParam("subject", subject);
     }
     url.modal(800, 800);
-  }
+    url.modalObject.observe('afterClose', UserMessage.refresh);
+  },
+  
+  refresh: function() {}
 };
