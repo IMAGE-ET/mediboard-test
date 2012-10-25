@@ -52,7 +52,7 @@ if (!$listPlage->countList($where)) {
   }
 }
 
-
+$bank_holidays = array_merge(mbBankHolidays($debut), mbBankHolidays($fin));
 
 // Planning Week
 $planning = new CPlanningWeek($debut, $debut, $fin, $nbDays, false, "auto");
@@ -162,6 +162,7 @@ $smarty->assign("prev"     , $prev);
 $smarty->assign("next"     , $next);
 $smarty->assign("chirSel"  , $chirSel);
 $smarty->assign("today"    , $today);
+$smarty->assign("bank_holidays", $bank_holidays);
 $smarty->assign("count_si_desistement", $count_si_desistement);
 
 $smarty->display("inc_vw_planning.tpl");
