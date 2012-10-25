@@ -376,7 +376,7 @@ class CSetup {
       // Preferences
       foreach ($this->preferences[$currRevision] as $_pref) {
         list($_name, $_default) = $_pref;
-        
+       
         // Former pure SQL system
         // Cannot check against module version or fresh install will generate errors
         if (self::isOldPrefSystem($core_upgrade)) {
@@ -392,11 +392,15 @@ class CSetup {
         // Latter object oriented system
         else {
           $pref = new CPreferences;
-          $pref->user_id = 0;
-          $pref->key = $_name;
-          if (!$pref->loadMatchingObject()) {
+          
+          $where = array();
+          $where["user_id"] = " IS NULL";
+          $where["key"] = " = '$_name'";
+         
+          if (!$pref->loadObject($where)) {
+            $pref->key = $_name;
             $pref->value = $_default;
-            $pref->store();
+            $msg = $pref->store();
           }
         }
       }
