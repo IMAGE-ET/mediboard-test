@@ -40,11 +40,17 @@
   Main.add(function() {
     CorrespondantModele.refreshList();
   });
+
+  function popupImport() {
+  var url = new Url('patients', 'assurance_import_csv');
+  url.popup(800, 600, 'Import des assurances');
+  }
 </script>
 
 <button type="button" class="new" onclick="CorrespondantModele.editCorrespondant(0)">
   {{tr}}CCorrespondant-title-create{{/tr}}
 </button>
+<button type="button" class="upload" onclick="popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
 
 <table class="tbl">
   <tr>

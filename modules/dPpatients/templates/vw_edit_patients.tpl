@@ -203,6 +203,7 @@ Main.add(function () {
 {{if "covercard"|module_active}}
 {{mb_include module=covercard template=inc_input_covercard}}
 {{/if}}
+
 <!-- main -->
 <table class="main">
   <tr>
@@ -290,7 +291,7 @@ Main.add(function () {
         <div id="identite">
           {{mb_include template=inc_acc/inc_acc_identite}}
         </div>
-        
+
         <div id="assure" style="display: none;">
           {{mb_include template=inc_acc/inc_acc_assure}}
         </div>
