@@ -21,6 +21,8 @@ $canUser->needsEdit();
 // Consultation courante
 $consult = new CConsultation();
 $consult->load($consult_id);
+$consult->loadRefConsultAnesth();
+
 CCanDo::checkObject($consult);
 $canConsult = $consult->canDo();
 $canConsult->needsEdit();
@@ -39,7 +41,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("_is_anesth", $_is_anesth);
 $smarty->assign("consult"   , $consult);
+$smarty->assign("consult_anesth", $consult->_ref_consult_anesth);
 
 $smarty->display("inc_finish_banner.tpl");
-
-?>
