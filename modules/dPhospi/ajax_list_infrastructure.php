@@ -72,9 +72,9 @@ if ($type_name == "UF") {
   
   // Récupération des ufs
   $order = "group_id, code";
-  $ufs = array("hebergement" => $uf->loadList(array("type" => "= 'hebergement'"), $order),
-               "medicale"    => $uf->loadList(array("type" => "= 'medicale'"), $order),
-               "soins"       => $uf->loadList(array("type" => "= 'soins'"), $order));
+  $ufs = array("hebergement" => $uf->loadGroupList(array("type" => "= 'hebergement'"), $order),
+               "medicale"    => $uf->loadGroupList(array("type" => "= 'medicale'"), $order),
+               "soins"       => $uf->loadGroupList(array("type" => "= 'soins'"), $order));
 }
 if ($type_name == "prestations") {
   // Chargement de la prestation à ajouter/éditer
