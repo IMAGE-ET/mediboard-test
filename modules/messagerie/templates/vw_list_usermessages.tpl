@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  Control.Tabs.create("tab-mbmails", false);
+  Control.Tabs.create("tab-usermessages", false);
 });
 
 </script>
@@ -10,38 +10,38 @@ Main.add(function () {
   <tr>
     <td colspan="2">
       <a class="button new" href="#nothing" onclick="MbMail.create()">
-        {{tr}}CMbMail-title-create{{/tr}}
+        {{tr}}CUserMessage-title-create{{/tr}}
       </a>
     </td>
   </tr>
   <tr>
     <td style="vertical-align: top;" class="narrow">
-      <ul id="tab-mbmails" class="control_tabs_vertical">
+      <ul id="tab-usermessages" class="control_tabs_vertical">
         <li>
           {{assign var=count value=$listInbox|@count}}
           <a href="#inbox" style="white-space: nowrap;" {{if !$count}}class="empty"{{/if}}>
-        		{{tr}}CMbMail-inbox{{/tr}}
+        		{{tr}}CUserMessage-inbox{{/tr}}
         		<small>({{$count}})</small>
         	</a>
         </li>
         <li>
           {{assign var=count value=$listArchived|@count}}
           <a href="#archive" style="white-space: nowrap;" {{if !$count}}class="empty"{{/if}}>
-        		{{tr}}CMbMail-archive{{/tr}}
+        		{{tr}}CUserMessage-archive{{/tr}}
         		<small>({{$count}})</small>
         	</a>
         </li>
         <li>
           {{assign var=count value=$listSent|@count}}
           <a href="#sentbox" style="white-space: nowrap;" {{if !$count}}class="empty"{{/if}}>
-        		{{tr}}CMbMail-sentbox{{/tr}}
+        		{{tr}}CUserMessage-sentbox{{/tr}}
         		<small>({{$count}})</small>
         	</a>
         </li>
         <li>
           {{assign var=count value=$listDraft|@count}}
           <a href="#draft" style="white-space: nowrap;" {{if !$count}}class="empty"{{/if}}>
-        		{{tr}}CMbMail-draft{{/tr}}
+        		{{tr}}CUserMessage-draft{{/tr}}
         		<small>({{$count}})</small>
         	</a>
         </li>
@@ -51,14 +51,14 @@ Main.add(function () {
     <td>
 	    <table class="main tbl" id="inbox" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="10">{{tr}}CMbMail-inbox{{/tr}}</th>
+	        <th class="title" colspan="10">{{tr}}CUserMessage-inbox{{/tr}}</th>
 	      </tr>
 
 	      <tr>
-	        <th>{{mb_title class=CMbMail field=from}}</th>
-	        <th>{{mb_title class=CMbMail field=subject}}</th>
-	        <th>{{mb_title class=CMbMail field=date_sent}}</th>
-	        <th>{{mb_title class=CMbMail field=date_read}}</th>
+	        <th>{{mb_title class=CUserMessage field=from}}</th>
+	        <th>{{mb_title class=CUserMessage field=subject}}</th>
+	        <th>{{mb_title class=CUserMessage field=date_sent}}</th>
+	        <th>{{mb_title class=CUserMessage field=date_read}}</th>
 	        <th>{{tr}}Action{{/tr}}</th>
 	      </tr>
 	      {{foreach from=$listInbox item=_mail}}
@@ -71,7 +71,7 @@ Main.add(function () {
 	        <td>
 	          <div style="float: right">
 	            <a href="#nothing" onclick="MbMail.create({{$_mail->_ref_user_from->_id}}, 'Reponse')">
-                <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
+                <img src="images/icons/usermessage.png" alt="message" title="Envoyer un message" />
               </a>
 	          </div>
 	          <!-- Forward / Archive -->
@@ -82,13 +82,13 @@ Main.add(function () {
 
 	    <table class="main tbl" id="archive" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="10">{{tr}}CMbMail-archive{{/tr}}</th>
+	        <th class="title" colspan="10">{{tr}}CUserMessage-archive{{/tr}}</th>
 	      </tr>
 
 	      <tr>
-	        <th>{{mb_title class=CMbMail field=from}}</th>
-	        <th>{{mb_title class=CMbMail field=subject}}</th>
-	        <th>{{mb_title class=CMbMail field=date_sent format=relative}}</th>
+	        <th>{{mb_title class=CUserMessage field=from}}</th>
+	        <th>{{mb_title class=CUserMessage field=subject}}</th>
+	        <th>{{mb_title class=CUserMessage field=date_sent format=relative}}</th>
 	        <th>{{tr}}Action{{/tr}}</th>
 	      </tr>
 
@@ -100,7 +100,7 @@ Main.add(function () {
 	        <td>
 	          <div style="float: right">
 	            <a href="#nothing" onclick="MbMail.create({{$_mail->_ref_user_from->_id}}, 'Reponse')">
-                <img src="images/icons/mbmail.png" alt="message" title="Envoyer un message" />
+                <img src="images/icons/usermessage.png" alt="message" title="Envoyer un message" />
               </a>
 	          </div>
 	          <!-- Forward -->
@@ -111,14 +111,14 @@ Main.add(function () {
 
 	    <table class="main tbl" id="sentbox" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="10">{{tr}}CMbMail-sentbox{{/tr}}</th>
+	        <th class="title" colspan="10">{{tr}}CUserMessage-sentbox{{/tr}}</th>
 	      </tr>
 
 	      <tr>
-	        <th>{{mb_title class=CMbMail field=to}}</th>
-	        <th>{{mb_title class=CMbMail field=subject}}</th>
-	        <th>{{mb_title class=CMbMail field=date_sent format=relative}}</th>
-	        <th>{{mb_title class=CMbMail field=date_read format=relative}}</th>
+	        <th>{{mb_title class=CUserMessage field=to}}</th>
+	        <th>{{mb_title class=CUserMessage field=subject}}</th>
+	        <th>{{mb_title class=CUserMessage field=date_sent format=relative}}</th>
+	        <th>{{mb_title class=CUserMessage field=date_read format=relative}}</th>
 	        <th>{{tr}}Action{{/tr}}</th>
 	      </tr>
 
@@ -135,13 +135,13 @@ Main.add(function () {
 
 	    <table class="main tbl" id="draft" style="display: none;">
 	      <tr>
-	        <th class="title" colspan="10">{{tr}}CMbMail-draft{{/tr}}</th>
+	        <th class="title" colspan="10">{{tr}}CUserMessage-draft{{/tr}}</th>
 	      </tr>
 
 	      <tr>
-	        <th>{{mb_title class=CMbMail field=to}}</th>
-	        <th>{{mb_title class=CMbMail field=subject}}</th>
-	        <th>{{mb_title class=CMbMail field=date_sent}}</th>
+	        <th>{{mb_title class=CUserMessage field=to}}</th>
+	        <th>{{mb_title class=CUserMessage field=subject}}</th>
+	        <th>{{mb_title class=CUserMessage field=date_sent}}</th>
 	        <th>{{tr}}Action{{/tr}}</th>
 	      </tr>
 

@@ -199,16 +199,16 @@
 {{if !$dialog && @count($mails)}}
 <div class="small-mail not-printable" onmouseover="ObjectTooltip.createDOM(this, 'mail-details');">
   <label>
-    {{tr}}CMbMail{{/tr}} :
+    {{tr}}CUserMessage{{/tr}} :
     
     {{if array_key_exists("received", $mails)}}
-      {{$mails.received|@count}} {{tr}}CMbMail._to_state.received{{/tr}}
+      {{$mails.received|@count}} {{tr}}CUserMessage._to_state.received{{/tr}}
     {{/if}}
     
     {{if count($mails) == 2}}&ndash;{{/if}}
     
     {{if array_key_exists("starred", $mails)}}
-      {{$mails.starred|@count}} {{tr}}CMbMail._to_state.starred{{/tr}}
+      {{$mails.starred|@count}} {{tr}}CUserMessage._to_state.starred{{/tr}}
     {{/if}}
   </label>
 </div>
@@ -217,7 +217,7 @@
   <table class="tbl">
   {{foreach from=$mails key=to_state item=_mails}}
     <tr>
-      <th class="category" colspan="10">{{tr}}CMbMail._to_state.{{$to_state}}{{/tr}}</th>
+      <th class="category" colspan="10">{{tr}}CUserMessage._to_state.{{$to_state}}{{/tr}}</th>
     </tr>
     {{foreach from=$_mails item=_mail}}
       <tr>

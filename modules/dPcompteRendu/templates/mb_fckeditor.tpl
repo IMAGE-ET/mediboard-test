@@ -17,7 +17,7 @@ CKEDITOR.plugins.addExternal("mbprinting"  , "../../modules/dPcompteRendu/fcke_p
 CKEDITOR.plugins.addExternal("mbprintPDF"  , "../../modules/dPcompteRendu/fcke_plugins/mbprintPDF/plugin.js");
 CKEDITOR.plugins.addExternal("mbpagebreak" , "../../modules/dPcompteRendu/fcke_plugins/mbpagebreak/plugin.js");
 CKEDITOR.plugins.addExternal("mblineheight", "../../modules/dPcompteRendu/fcke_plugins/mblineheight/plugin.js");
-CKEDITOR.plugins.addExternal("mbmail"      , "../../modules/dPcompteRendu/fcke_plugins/mbmail/plugin.js");
+CKEDITOR.plugins.addExternal("usermessage"      , "../../modules/dPcompteRendu/fcke_plugins/usermessage/plugin.js");
 {{if $can->admin}}
   CKEDITOR.plugins.addExternal("mbthumbs"  , "../../modules/dPcompteRendu/fcke_plugins/mbthumbs/plugin.js");
 {{/if}}
@@ -105,7 +105,7 @@ CKEDITOR.editorConfig = function(config) {
     config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,';
     config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbbreakage';
     {{if !$templateManager->isModele}}
-      config.extraPlugins += ',mbmail';
+      config.extraPlugins += ',usermessage';
     {{/if}}    
     config.toolbar_Full = [
       ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Find', 'Undo', 'Redo'],
@@ -116,7 +116,7 @@ CKEDITOR.editorConfig = function(config) {
       ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike', 'mbbreakage', 'mbcap'],
       ['Subscript', 'Superscript', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'NumberedList', 'BulletedList'],'/',
       ['Outdent', 'Indent', 'mblineheight', 'TextColor', 'BGColor'],'/',
-      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'mbmail', {{/if}}{{if $can->admin}}'mbthumbs'{{/if}}]];
+      [{{if !$templateManager->isModele && $mode_play}}'mbplay', {{/if}} 'mbfields', {{if $templateManager->isModele}}'mblists', 'mbfreetext', {{/if}}{{if !$templateManager->isModele}}'mbhelpers', 'usermessage', {{/if}}{{if $can->admin}}'mbthumbs'{{/if}}]];
 
     window.parent.fields = [];
     window.parent.listeChoix = [];

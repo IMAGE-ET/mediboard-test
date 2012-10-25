@@ -38,8 +38,14 @@ class CSetupmessagerie extends CSetup {
     $this->makeRevision("0.10");
     $query = "ALTER TABLE `mbmail` CHANGE `date_archived` `archived` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.11");
+    $query = "RENAME TABLE `mbmail` TO `usermessage`;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `usermessage` CHANGE `mbmail_id` `usermessage_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT;";
+    $this->addQuery($query);
         
-    $this->mod_version = "0.11";
+    $this->mod_version = "0.12";
   }
 }
 ?>

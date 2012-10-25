@@ -219,8 +219,8 @@ class CMediusers extends CMbObject {
     $backProps["forum_threads"]                   = "CForumThread user_id";
     $backProps["hprim21_medecins"]                = "CHprim21Medecin user_id";
     $backProps["listes_choix"]                    = "CListeChoix user_id";
-    $backProps["mails_sent"]                      = "CMbMail from";
-    $backProps["mails_received"]                  = "CMbMail to";
+    $backProps["mails_sent"]                      = "CUserMessage from";
+    $backProps["mails_received"]                  = "CUserMessage to";
     $backProps["owned_notes"]                     = "CNote user_id";
     $backProps["observations"]                    = "CObservationMedicale user_id";
     $backProps["operations_chir"]                 = "COperation chir_id";

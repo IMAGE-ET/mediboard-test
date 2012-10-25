@@ -7,7 +7,7 @@
  * @author Thomas despoix
  */
 
-$do = new CDoObjectAddEdit("CMbMail", "mbmail_id");
+$do = new CDoObjectAddEdit("CUserMessage", "usermessage_id");
 $do->doIt();
 
 ?>

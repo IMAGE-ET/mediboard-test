@@ -10,7 +10,7 @@
 CCanDo::checkRead();
 $user = CUser::get();
 
-$mbmail = new CMbMail();
+$usermessage = new CUserMessage();
 
 // Liste des messages reçus
 $where = array();
@@ -18,7 +18,7 @@ $where["to"]        = "= '$user->_id'";
 $where["date_sent"] = "IS NOT NULL";
 $where["archived"]  = "!= '1'";
 $order = "date_sent DESC";
-$listInbox = $mbmail->loadList($where, $order);
+$listInbox = $usermessage->loadList($where, $order);
 foreach($listInbox as &$mail) {
   $mail->loadRefsFwd();
 }
@@ -29,7 +29,7 @@ $where["to"]        = "= '$user->_id'";
 $where["date_sent"] = "IS NOT NULL";
 $where["archived"]  = "= '1'";
 $order = "date_sent DESC";
-$listArchived = $mbmail->loadList($where, $order);
+$listArchived = $usermessage->loadList($where, $order);
 foreach($listArchived as &$mail) {
   $mail->loadRefsFwd();
 }
@@ -39,7 +39,7 @@ $where = array();
 $where["from"]      = "= '$user->_id'";
 $where["date_sent"] = "IS NOT NULL";
 $order = "date_sent DESC";
-$listSent = $mbmail->loadList($where, $order);
+$listSent = $usermessage->loadList($where, $order);
 foreach($listSent as &$mail) {
   $mail->loadRefsFwd();
 }
@@ -49,7 +49,7 @@ $where = array();
 $where["from"]      = "= '$user->_id'";
 $where["date_sent"] = "IS NULL";
 $order = "date_sent DESC";
-$listDraft = $mbmail->loadList($where, $order);
+$listDraft = $usermessage->loadList($where, $order);
 foreach($listDraft as &$mail) {
   $mail->loadRefsFwd();
 }
@@ -62,6 +62,6 @@ $smarty->assign("listArchived", $listArchived);
 $smarty->assign("listSent"    , $listSent);
 $smarty->assign("listDraft"   , $listDraft);
 
-$smarty->display("vw_list_mbmails.tpl");
+$smarty->display("vw_list_usermessages.tpl");
 
 ?>

@@ -93,7 +93,7 @@ CJSLoader::$files = array(
   "includes/javascript/browserDetect.js",
   "includes/javascript/configuration.js",
 
-  "includes/javascript/mbmail.js",
+  "includes/javascript/usermessage.js",
 );
 
 $support = "modules/support/javascript/support.js";
@@ -268,7 +268,7 @@ if (!$suppressHeaders) {
   $messages = $messages->loadPublications("present", $m, $g);
   
   // Mails
-  $mail = new CMbMail();
+  $mail = new CUserMessage();
   $mails = $mail->loadVisibleList();
   
   // Load the SVN latest update info

@@ -8,12 +8,12 @@
  */
 
 /**
- * The CMbMail class
+ * The CUserMessage class
  */
   
-class CMbMail extends CMbObject {
+class CUserMessage extends CMbObject {
   // DB Fields
-  var $mbmail_id     = null;
+  var $usermessage_id     = null;
   var $from          = null;
   var $to            = null;
   var $subject       = null;
@@ -33,8 +33,8 @@ class CMbMail extends CMbObject {
 
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = "mbmail";
-    $spec->key   = "mbmail_id";
+    $spec->table = "usermessage";
+    $spec->key   = "usermessage_id";
     return $spec;
   }
 
