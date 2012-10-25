@@ -24,13 +24,13 @@
 
 
 {{if $can_doc->permission >= PERM_READ}}
-<form name="unmergePack_{{$object->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-  <input type="hidden" name="m" value="dPcompteRendu" />
-  <input type="hidden" name="dosql" value="do_pack_multi_aed" />
-  <input type="hidden" name="pack_id" value="" />
-  <input type="hidden" name="object_id" value="{{$object->_id}}" />
-  <input type="hidden" name="callback" value="Document.afterUnmerge" />
-</form>
+  <form name="unmergePack_{{$object->_guid}}" method="post" onsubmit="return onSubmitFormAjax(this);">
+    <input type="hidden" name="m" value="dPcompteRendu" />
+    <input type="hidden" name="dosql" value="do_pack_multi_aed" />
+    <input type="hidden" name="pack_id" value="" />
+    <input type="hidden" name="object_id" value="{{$object->_id}}" />
+    <input type="hidden" name="callback" value="Document.afterUnmerge" />
+  </form>
 
   <script type="text/javascript">
   
@@ -100,6 +100,19 @@
   //Création via ModeleSelector
   modeleSelector[{{$object_id}}] = new ModeleSelector("DocumentAdd-{{$unique_id}}-{{$object->_guid}}", null, "_modele_id", "_object_id");
   </script>
+  
+  {{if $can->admin}}
+    <form name="DeleteAll-{{$object->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <input type="hidden" name="m" value="dPcompteRendu" />
+      <input type="hidden" name="dosql" value="do_compte_rendu_multi_delete" />
+      <input type="hidden" name="del" value="1" />
+      <input type="hidden" name="object_guid" value="{{$object->_guid}}">
+       
+      <button class="trash" type="button" style="float: right;" onclick="Document.removeAll(this, '{{$object->_guid}}')">
+        {{tr}}Delete-all{{/tr}}
+      </button>
+    </form>
+  {{/if}}
   
   <form name="DocumentAdd-{{$unique_id}}-{{$object->_guid}}" action="?m={{$m}}" method="post" class="prepared">
     {{if $object->_can->read && $can_doc->permission == PERM_EDIT}}

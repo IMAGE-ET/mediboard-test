@@ -221,6 +221,21 @@ Document = {
   afterUnmerge: function(compte_rendu_id, obj) {
     Document.refreshList(obj.file_category_id, obj.object_class, obj.object_id);
     Document.edit(compte_rendu_id);
-  }
+  },
+  
+  removeAll: function(oButton, object_guid){
+    var oOptions = {
+      typeName: 'tous les documents',
+      objName: '',
+      ajax: 1,
+      target: 'systemMsg'
+    };
+    
+    object_guid = object_guid.split('-');
+    var oAjaxOptions = {
+      onComplete: function() { Document.refreshList(null, object_guid[0], object_guid[1]); } 
+    };
+    confirmDeletion(oButton.form, oOptions, oAjaxOptions);
+  },
 };
 
