@@ -40,7 +40,6 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $corres->relation     = "assurance";
     $corres->loadMatchingObject();
 
-
     if($corres->_id) {
       //update
 
@@ -49,10 +48,13 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $corres->ville = $results[$i]["localite"];
 
       if($corres->ean == "" || $corres->nom == "") {
-        $msg = "CCorrespondant-import-missing";
+        $msg = "CCorrespondant-import-missing1";
       }
       else {
         $msg = $corres->store();
+        if(!$msg){
+          $msg = "update";
+        }
       }
 
       if($msg) {
@@ -64,11 +66,16 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
 
     } else {
       // create
-      if($corres->nom  && $corres->ean ) {
-        $msg = $corres->store();
-      } else {
-        $msg="CCorrespondant-import-missing";
+      $corres->nom = $results[$i]["nom"];
+      $corres->adresse = $results[$i]["rue"];
+      $corres->ville = $results[$i]["localite"];
+      $corres->ean = $results[$i]["ean"];
+
+      if(!$corres->nom  && !$corres->ean ) {
+        $msg="CCorrespondant-import-missing2";
+        continue;
       }
+      $msg = $corres->store();
 
       if($msg) {
         CAppUI::setMsg($msg, UI_MSG_WARNING);
