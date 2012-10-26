@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<segment>
+    <name>SPEC</name>
+    <description>Codification - Name</description>
+    <elements>
+        <field minOccurs="0" maxOccurs="0">
+            <name>SPEC.1</name>
+            <description>Codification</description>
+            <datatype>ST</datatype>
+        </field>
+        <field minOccurs="0" maxOccurs="0">
+            <name>SPEC.2</name>
+            <description>Name</description>
+            <datatype>ST</datatype>
+        </field>
+    </elements>
+</segment>
