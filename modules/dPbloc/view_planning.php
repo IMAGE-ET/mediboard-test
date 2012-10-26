@@ -190,7 +190,7 @@ foreach ($plagesop as &$plage) {
     }
 
     // On utilise la first_affectation pour contenir l'affectation courante du patient
-    $affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));
+    $affectation = $sejour->getCurrAffectation($operation->_datetime_best);
     if ($affectation->_id) {
       $affectation->loadRefLit()->loadCompleteView();
     }
