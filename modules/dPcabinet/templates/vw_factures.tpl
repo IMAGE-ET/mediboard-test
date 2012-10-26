@@ -30,10 +30,7 @@ viewFacture = function(element, factureconsult_id){
 }
 
 printFacture = function(factureconsult_id, edit_justificatif, edit_bvr) {
-//  var url = new Url('dPcabinet', 'edit_bvr_avec_preimpression');
-  var url = new Url('dPcabinet', 'edit_bvr');
-//  var url = new Url('tarmed', 'edit_facture_xml');
-//  var url = new Url('tarmed', 'edit_justificatif_xml');
+  var url = new Url('dPcabinet', 'ajax_edit_bvr');
   url.addParam('factureconsult_id', factureconsult_id);
   url.addParam('edition_justificatif', edit_justificatif);
   url.addParam('edition_bvr', edit_bvr);

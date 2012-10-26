@@ -63,7 +63,7 @@ function viewActes(etab){
 
 printFacture = function(edit_justificatif, edit_bvr) {
   var oForm = document.printFrm;
-  var url = new Url('dPcabinet', 'edit_bvr');
+  var url = new Url('dPcabinet', 'ajax_edit_bvr');
   url.addParam('edition_justificatif', edit_justificatif);
   url.addParam('edition_bvr', edit_bvr);
   url.addParam('_date_min', oForm._date_min.value);

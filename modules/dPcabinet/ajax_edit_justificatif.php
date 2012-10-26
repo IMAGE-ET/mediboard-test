@@ -224,7 +224,7 @@ foreach ($factures as $facture) {
       $pdf->setFont("vera", '', 8);
     
       if ($acte->_ref_tarmed->tp_al == 0.00 && $acte->_ref_tarmed->tp_tl == 0.00) {
-        if ($acte->code_ref && (ereg("Réduction", $acte->libelle) || ereg("Majoration", $acte->libelle)) ) {
+        if ($acte->code_ref && (preg_match("Réduction", $acte->libelle) || preg_match("Majoration", $acte->libelle)) ) {
           $acte_ref = null;
           foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
             if ($acte_tarmed->code == $acte->code_ref) {
@@ -273,7 +273,7 @@ foreach ($factures as $facture) {
             $valeur = $acte->quantite;
           }
           
-          if ($acte->code_ref && (ereg("Réduction", $acte->libelle) || ereg("Majoration", $acte->libelle))) {
+          if ($acte->code_ref && (preg_match("Réduction", $acte->libelle) || preg_match("Majoration", $acte->libelle))) {
             $acte_ref = null;
             foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
               if ($acte_tarmed->code == $acte->code_ref) {
