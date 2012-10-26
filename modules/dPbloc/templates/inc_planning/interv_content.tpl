@@ -50,7 +50,7 @@
     <br />
   {{/if}}
   {{assign var=consult_anesth value=$curr_op->_ref_consult_anesth}}
-  {{mb_include module=bloc template=inc_rques_intub operation=$curr_op show_label=0}}
+  {{mb_include module=bloc template=inc_rques_intub operation=$curr_op}}
 </td>
 <td class="text">
   {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}
