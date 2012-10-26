@@ -13,7 +13,7 @@
 {{else}}
   {{assign var=f value=$view_field}}
 {{/if}}
-{{$f}}
+
 <ul>
 {{foreach from=$matches item=match}}
   <li id="autocomplete-{{$match->_guid}}" data-id="{{$match->_id}}" data-guid="{{$match->_guid}}">
