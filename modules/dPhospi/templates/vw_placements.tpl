@@ -61,7 +61,10 @@
             Draggables.unregister(elt);
           });
           {{if "reservation"|module_active}}
-            $("tableau_vue_temporel").select(".mouvement_lit").invoke("stopObserving", "click");
+            var tableau_vue_temporel = $("tableau_vue_temporel");
+            if (tableau_vue_temporel) {
+              tableau_vue_temporel.select(".mouvement_lit").invoke("stopObserving", "click");
+            }
           {{/if}}
           
           var view_affectations = $("view_affectations");
