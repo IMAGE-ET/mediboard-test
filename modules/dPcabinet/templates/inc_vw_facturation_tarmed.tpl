@@ -2,13 +2,6 @@
   {{mb_return}}
 {{/if}}
 
-<script>
-  refreshAssurance = function(){
-    var oForm = getForm("assurance_patient");
-    return onSubmitFormAjax(oForm);
-  }
-</script>
-  
 <tr>
   <th class="category">Date</th>
   <th class="category">Code</th>
@@ -24,7 +17,7 @@
     <td colspan="10">
       <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 0, 1);">Edition des BVR</button>
       <button class="cut" onclick="Facture.cutFacture('{{$facture->_id}}');"
-        {{if $facture->_nb_factures != 1 || $facture->_reglements_total_patient}}disabled="disabled"{{/if}}> Eclatement</button>
+        {{if $facture->_nb_factures != 1 || $facture->cloture}}disabled="disabled"{{/if}}> Eclatement</button>
       <button class="print" onclick="printFacture('{{$facture->_id}}', 1, 0);">Justificatif de remboursement</button>
     </td>
   </tr>
@@ -62,7 +55,8 @@
       <form name="assurance_patient" method="post" action="" style="margin-left:40px;"> 
         {{mb_class object=$facture}}
         {{mb_key   object=$facture}}
-        <select name="assurance" style="width: 15em;" onchange="refreshAssurance();">
+        {{mb_label object=$facture field=assurance}}
+        <select name="assurance" style="width: 15em;" onchange="return onSubmitFormAjax(this.form);">
           <option value="" {{if !$facture->assurance}}selected="selected" {{/if}}>&mdash; Choisir une assurance</option>
           {{foreach from=$facture->_ref_patient->_ref_correspondants_patient item=_assurance}}
             <option value="{{$_assurance->_id}}" {{if $facture->assurance == $_assurance->_id}} selected="selected" {{/if}}>
@@ -72,6 +66,13 @@
         </select>
       </form>
     {{/if}}
+    
+    <form name="statut_pro" method="post" action="" style="margin-left:30px;"> 
+      {{mb_class object=$facture}}
+      {{mb_key   object=$facture}}
+      {{mb_label object=$facture field=statut_pro}}
+      {{mb_field object=$facture field=statut_pro emptyLabel="Choisir un status" onchange="Facture.cut(this.form);"}} 
+    </form>
   </td>
 </tr>
 

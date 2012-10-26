@@ -1664,7 +1664,12 @@ class CSetupdPcabinet extends CSetup {
                 ADD `reference` VARCHAR (255)";
     $this->addQuery($query);
         
-    $this->mod_version = "1.77";
+    $this->makeRevision("1.77");
+    $query = "ALTER TABLE `factureconsult` 
+              ADD `statut_pro` ENUM ('chomeur','salarie','independant','non_travailleur','sans_emploi','etudiant');";
+    $this->addQuery($query);
+        
+    $this->mod_version = "1.78";
   }
 }
 ?>

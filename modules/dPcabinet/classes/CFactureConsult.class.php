@@ -33,6 +33,7 @@ class CFactureConsult extends CMbObject {
   var $assurance              = null;
   var $facture                = null;
   var $ref_accident           = null;
+  var $statut_pro             = null;
   
   // Form fields
   var $_nb_factures         = null;
@@ -111,6 +112,7 @@ class CFactureConsult extends CMbObject {
     $props["assurance"]                 = "ref class|CCorrespondantPatient";
     $props["facture"]                   = "enum notNull list|-1|0|1 default|0";
     $props["ref_accident"]              = "text";
+    $props["statut_pro"]                = "enum list|chomeur|etudiant|non_travailleur|independant|salarie|sans_emploi";
     
     $props["_du_restant_patient"]       = "currency";
     $props["_du_restant_tiers"]         = "currency";
@@ -412,9 +414,14 @@ class CFactureConsult extends CMbObject {
   function loadRefCoeffFacture() {
     $this->_coeff = 1;
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
-      $this->_coeff = $this->type_facture == "accident" ?
-        CAppUI::conf("tarmed CCodeTarmed pt_accident") :
-        CAppUI::conf("tarmed CCodeTarmed pt_maladie");
+      if ($this->statut_pro && ($this->statut_pro == "sans_emploi" || $this->statut_pro == "etudiant" || $this->statut_pro == "non_travailleur") && $this->type_facture == "accident") {
+        $this->_coeff = CAppUI::conf("tarmed CCodeTarmed pt_maladie");
+      }
+      else {
+        $this->_coeff = $this->type_facture == "accident" ?
+          CAppUI::conf("tarmed CCodeTarmed pt_accident") :
+          CAppUI::conf("tarmed CCodeTarmed pt_maladie");
+      }
     }
   }
   
