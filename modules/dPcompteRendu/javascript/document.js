@@ -74,7 +74,7 @@ Document = {
     
     // En mode non fusion et édition rapide de pack
     // A la fermeture de la modale, lancement du modèle suivant
-    if (Document.modeles_ids.length) {
+    if (Document.modeles_ids && Document.modeles_ids.length) {
       url.modalObject.observe("afterClose", function() {
         Document.fastMode(Document.object_class, Document.modeles_ids.shift(), Document.object_id, Document.unique_id, true);
       });

@@ -65,6 +65,7 @@
     ModeleEtiquette.nb_printers  = {{$nb_printers|@json}};
     
     function createDoc(input, selected) {
+      $V(input, '');
       var id = selected.down(".id").innerHTML;
       var object_class = null;
   
@@ -77,11 +78,10 @@
       } else {
         Document.create(id, '{{$object_id}}', null, object_class, null);
       }
-      
-      $V(input, '');
     }
   
     function createPack(input, selected) {
+      $V(input, '');
       if (selected.select(".fast_edit").length) {
         Document.fastModePack(selected.down(".id").innerHTML, '{{$object_id}}', '{{$object_class}}', '{{$unique_id}}', selected.select(".merge_docs").length ? selected.get("modeles_ids") : null);
       }
@@ -93,7 +93,6 @@
       else {
         Document.createPack(selected.down(".id").innerHTML, '{{$object_id}}');
       }
-      $V(input, '');
     }
   });
   
