@@ -422,7 +422,7 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
                             if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
                                continue;
                             }
-                            $lit = getCurrentLit($sejour, $_date, $_hour, $lits, $affectations);
+                            $lit = getCurrentLit($sejour, $_date, $_hour, $service_id, $lits, $affectations);
                             if(!$lit) continue;        
                             $quantite = @$administrations_by_hour["quantite"];
                             
