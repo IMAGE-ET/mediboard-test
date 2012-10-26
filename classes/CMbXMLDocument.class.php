@@ -259,12 +259,9 @@ class CMbXMLDocument extends DOMDocument {
   static function insertTextElement($element, $name, $value, $attrs = null) {
     $root = $element->ownerDocument;
     $tag = $root->createElement($name);
-    
-    if($value){
-      $value = utf8_encode($value);
-      $value_elt = $root->createTextNode($value);
-      $tag->appendChild($value_elt);  
-    }
+    $value = utf8_encode($value);
+    $value_elt = $root->createTextNode($value);
+    $tag->appendChild($value_elt);
     $element->appendChild($tag);   
     
     if ($attrs) {
