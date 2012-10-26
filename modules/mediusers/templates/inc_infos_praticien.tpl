@@ -35,52 +35,52 @@
     </select>
   </td>
 </tr>
-
-<tr>
-  <th>{{mb_label object=$object field="adeli"}}</th>
-  <td>{{mb_field object=$object field="adeli"}}</td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$object field="rpps"}}</th>
-  <td>{{mb_field object=$object field="rpps"}}</td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$object field="cps"}}</th>
-  <td>{{mb_field object=$object field="cps"}}</td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$object field="mail_apicrypt"}}</th>
-  <td>{{mb_field object=$object field="mail_apicrypt"}}</td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$object field="secteur"}}</th>
-  <td>{{mb_field object=$object field="secteur" emptyLabel="Choose"}}</td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$object field="cab"}}</th>
-  <td>{{mb_field object=$object field="cab"}}</td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$object field="conv"}}</th>
-  <td>{{mb_field object=$object field="conv"}}</td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$object field="zisd"}}</th>
-  <td>{{mb_field object=$object field="zisd"}}</td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$object field="ik"}}</th>
-  <td>{{mb_field object=$object field="ik"}}</td>
-</tr>
-
+{{if $conf.ref_pays == 1}}
+  <tr>
+    <th>{{mb_label object=$object field="adeli"}}</th>
+    <td>{{mb_field object=$object field="adeli"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$object field="rpps"}}</th>
+    <td>{{mb_field object=$object field="rpps"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$object field="cps"}}</th>
+    <td>{{mb_field object=$object field="cps"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$object field="mail_apicrypt"}}</th>
+    <td>{{mb_field object=$object field="mail_apicrypt"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$object field="secteur"}}</th>
+    <td>{{mb_field object=$object field="secteur" emptyLabel="Choose"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$object field="cab"}}</th>
+    <td>{{mb_field object=$object field="cab"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$object field="conv"}}</th>
+    <td>{{mb_field object=$object field="conv"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$object field="zisd"}}</th>
+    <td>{{mb_field object=$object field="zisd"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$object field="ik"}}</th>
+    <td>{{mb_field object=$object field="ik"}}</td>
+  </tr>
+{{/if}}
 
 <tr>
   <th>{{mb_label object=$object field="titres"}}</th>
@@ -92,29 +92,31 @@
   <td>{{mb_field object=$object field="compta_deleguee"}}</td>
 </tr>
 
-<tr>
-  <th>{{mb_label object=$object field="compte"}}</th>
-  <td>{{mb_field object=$object field="compte"}}</td>
-</tr>
-
-{{if is_array($banques)}}
-<!-- Choix de la banque quand disponible -->
-<tr>
-  <th>{{mb_label object=$object field="banque_id"}}</th>
-  <td>
-    <select name="banque_id" style="width: 150px;">
-      <option value="">&mdash; Choix d'une banque</option>
-      {{foreach from=$banques item="banque"}}
-      <option value="{{$banque->_id}}" {{if $object->banque_id == $banque->_id}}selected = "selected"{{/if}}>
-        {{$banque->_view}}
-      </option>
-      {{/foreach}}
-    </select>
-  </td>
-</tr>
+{{if $conf.ref_pays == 1}}
+  <tr>
+    <th>{{mb_label object=$object field="compte"}}</th>
+    <td>{{mb_field object=$object field="compte"}}</td>
+  </tr>
+  
+  {{if is_array($banques)}}
+  <!-- Choix de la banque quand disponible -->
+  <tr>
+    <th>{{mb_label object=$object field="banque_id"}}</th>
+    <td>
+      <select name="banque_id" style="width: 150px;">
+        <option value="">&mdash; Choix d'une banque</option>
+        {{foreach from=$banques item="banque"}}
+        <option value="{{$banque->_id}}" {{if $object->banque_id == $banque->_id}}selected = "selected"{{/if}}>
+          {{$banque->_view}}
+        </option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
+  {{/if}}
 {{/if}}
 
-{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+{{if $conf.ref_pays == 2}}
   <tr>
     <th>{{mb_label object=$object field="ean"}}</th>
     <td>{{mb_field object=$object field="ean"}}</td>
