@@ -68,130 +68,105 @@
             <description>Doctor</description>
             <datatype>CNA</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="250" table="0296">
+        <field minOccurs="0" maxOccurs="0" length="60">
+            <name>P.14</name>
+            <description>Open String One</description>
+            <datatype>ST</datatype>
+        </field>
+        <field minOccurs="0" maxOccurs="0" length="60">
             <name>P.15</name>
-            <description>Primary Language</description>
-            <datatype>CE</datatype>
+            <description>Open String Two</description>
+            <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="250" table="0002">
+        <field minOccurs="0" maxOccurs="0" length="10">
             <name>P.16</name>
-            <description>Marital Status</description>
-            <datatype>CE</datatype>
+            <description>Size</description>
+            <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" forbidden="true" length="250" table="0006">
+        <field minOccurs="0" maxOccurs="0" length="10">
             <name>P.17</name>
-            <description>Religion</description>
-            <datatype>CE</datatype>
+            <description>Weight</description>
+            <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="250">
+        <field minOccurs="0" maxOccurs="unbounded" length="200">
             <name>P.18</name>
-            <description>Patient Account Number</description>
-            <datatype>CX</datatype>
+            <description>Diagnosis</description>
+            <datatype>CE</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" forbidden="true" length="16">
+        <field minOccurs="0" maxOccurs="unbounded" length="200">
             <name>P.19</name>
-            <description>Ssn Number - Patient</description>
+            <description>Treatment</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" forbidden="true" length="25">
+        <field minOccurs="0" maxOccurs="0" length="200">
             <name>P.20</name>
-            <description>Driver's License Number - Patient</description>
-            <datatype>DLN</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="unbounded" length="250">
-            <name>P.21</name>
-            <description>Mother's Identifier</description>
-            <datatype>CX</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="unbounded" forbidden="true" length="250" table="0189">
-            <name>P.22</name>
-            <description>Ethnic Group</description>
-            <datatype>CE</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="0" length="250">
-            <name>P.23</name>
-            <description>Birth Place</description>
+            <description>Diet</description>
             <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="1" table="0136">
-            <name>P.24</name>
-            <description>Multiple Birth Indicator</description>
-            <datatype>ID</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="0" length="2">
-            <name>P.25</name>
-            <description>Birth Order</description>
-            <datatype>NM</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="unbounded" length="250" table="0171">
-            <name>P.26</name>
-            <description>Citizenship</description>
+        <field minOccurs="0" maxOccurs="0" length="60">
+            <name>P.21</name>
+            <description>Comment One</description>
             <datatype>CE</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="250" table="0172">
-            <name>P.27</name>
-            <description>Veterans Military Status</description>
-            <datatype>CE</datatype>
+        <field minOccurs="0" maxOccurs="0" length="60">
+            <name>P.22</name>
+            <description>Comment Two</description>
+            <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" forbidden="true" length="250" table="0212">
-            <name>P.28</name>
-            <description>Nationality</description>
-            <datatype>CE</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="0" length="26">
-            <name>P.29</name>
-            <description>Patient Death Date and Time</description>
+        <field minOccurs="0" maxOccurs="unbounded" length="53">
+            <name>P.23</name>
+            <description>Date/Time of Movement</description>
             <datatype>TS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="1" table="0136">
+        <field minOccurs="0" maxOccurs="0" length="2">
+            <name>P.24</name>
+            <description>Admission Status</description>
+            <datatype>ID</datatype>
+        </field>
+        <field minOccurs="0" maxOccurs="0" length="100">
+            <name>P.25</name>
+            <description>Location</description>
+            <datatype>PL</datatype>
+        </field>
+        <field minOccurs="0" maxOccurs="0" length="100">
+            <name>P.26</name>
+            <description>CIM</description>
+            <datatype>CE</datatype>
+        </field>
+        <field minOccurs="0" maxOccurs="0" forbidden="true" length="250">
+            <name>P.27</name>
+            <description>Religion</description>
+            <datatype>ST</datatype>
+        </field>
+        <field minOccurs="0" maxOccurs="0" length="2">
+            <name>P.28</name>
+            <description>Marital Status</description>
+            <datatype>ID</datatype>
+        </field>
+        <field minOccurs="0" maxOccurs="0" length="20">
+            <name>P.29</name>
+            <description>Caution</description>
+            <datatype>ID</datatype>
+        </field>
+        <field minOccurs="0" maxOccurs="0" length="20">
             <name>P.30</name>
-            <description>Patient Death Indicator</description>
-            <datatype>ID</datatype>
+            <description>Primary Language</description>
+            <datatype>ST</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" forbidden="true" length="1" table="0136">
+        <field minOccurs="0" maxOccurs="0" length="20">
             <name>P.31</name>
-            <description>Identity Unknown Indicator</description>
+            <description>VIP Indicator</description>
             <datatype>ID</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="unbounded" length="20" table="0445">
-            <name>P.32</name>
-            <description>Identity Reliability Code</description>
-            <datatype>IS</datatype>
         </field>
         <field minOccurs="0" maxOccurs="0" length="26">
-            <name>P.33</name>
+            <name>P.32</name>
             <description>Last Update Date/Time</description>
             <datatype>TS</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="241">
-            <name>P.34</name>
-            <description>Last Update Facility</description>
-            <datatype>HD</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="0" length="250" table="0446">
-            <name>P.35</name>
-            <description>Species Code</description>
-            <datatype>CE</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="0" length="250" table="0447">
-            <name>P.36</name>
-            <description>Breed Code</description>
-            <datatype>CE</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="0" length="80">
-            <name>P.37</name>
-            <description>Strain</description>
-            <datatype>ST</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="0" length="250" table="0429">
-            <name>P.38</name>
-            <description>Production Class Code</description>
-            <datatype>CE</datatype>
-        </field>
-        <field minOccurs="0" maxOccurs="unbounded" length="250" table="0171">
-            <name>P.39</name>
-            <description>Tribal Citizenship</description>
-            <datatype>CWE</datatype>
+        <field minOccurs="0" maxOccurs="0" length="26">
+            <name>P.33</name>
+            <description>Patient Death Date and Time</description>
+            <datatype>TS</datatype>
         </field>
     </elements>
 </segment>
