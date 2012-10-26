@@ -32,18 +32,6 @@
     {{/if}}
     {{if !$curr_code->_code7}}</strong>{{/if}}
   {{/foreach}}
-  {{assign var=consult_anesth value=$curr_op->_ref_consult_anesth}}
-  {{if $curr_op->rques || ($consult_anesth && $consult_anesth->_intub_difficile)}}
-    <div class="small-warning">
-      <em>{{mb_label object=$curr_op field=rques}}</em> :
-      {{mb_value object=$curr_op field=rques}}
-      {{if $consult_anesth->_id && $consult_anesth->_intub_difficile}}
-        <div style="font-weight: bold; color:#f00;">
-          {{tr}}CConsultAnesth-_intub_difficile{{/tr}}
-        </div>
-      {{/if}}
-    </div>
-  {{/if}}
 </td>
 <td class="button">{{$curr_op->cote|truncate:1:""|capitalize}}</td>
 <td class="{{if $curr_op->type_anesth != null}}text{{else}}button{{/if}}">
@@ -61,7 +49,8 @@
     <strong>{{mb_title object=$curr_op field=exam_extempo}}</strong>
     <br />
   {{/if}}
-  {{$curr_op->rques|nl2br}}
+  {{assign var=consult_anesth value=$curr_op->_ref_consult_anesth}}
+  {{mb_include module=bloc template=inc_rques_intub operation=$curr_op show_label=0}}
 </td>
 <td class="text">
   {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}

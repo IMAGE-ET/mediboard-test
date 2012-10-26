@@ -162,17 +162,7 @@
         <em>{{mb_label object=$_op field=materiel}}</em> :
         {{mb_value object=$_op field=materiel}}
       {{/if}}
-      {{if $_op->rques || ($consult_anesth->_ref_consultation->_id && $consult_anesth->_intub_difficile)}}
-      <div class="small-warning">
-        <em>{{mb_label object=$_op field=rques}}</em> :
-        {{mb_value object=$_op field=rques}}
-        {{if $consult_anesth->_ref_consultation->_id && $consult_anesth->_intub_difficile}}
-          <div style="font-weight: bold; color:#f00;">
-            {{tr}}CConsultAnesth-_intub_difficile{{/tr}}
-          </div>
-        {{/if}}
-      </div>
-      {{/if}}
+      {{mb_include module=bloc template=inc_rques_intub operation=$_op}}
     </td>
     
     <td class="narrow" style="text-align: center;">
