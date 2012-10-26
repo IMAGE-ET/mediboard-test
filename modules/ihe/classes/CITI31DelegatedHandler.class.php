@@ -56,12 +56,16 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if (CAppUI::conf('smp server')) {} 
       // Si Client
       else {
-        $code = $this->getCodeSejour($sejour);
+        if ($sejour->_eai_initiateur_group_id) {
+          return;
+        }
         
+        $code = $this->getCodeSejour($sejour);
+
         // Cas où : 
         // * on est l'initiateur du message 
         // * le destinataire ne supporte pas le message
-        if ($sejour->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+        if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
           return;
         }
         
@@ -284,7 +288,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
   }
 
-  static function getBasculeCode(CSejour $from, CSejour $to) {
+  function getBasculeCode(CSejour $from, CSejour $to) {
     $matrix = array(    // comp/M   comp/C   comp/O   bebe/*   ambu/*   urg/*   seances/* exte/*
       "comp/M"    => array( null,   "A06",   "A06",   "A06",   "A06",   "A07",   "A06",   "A07"),
       "comp/C"    => array("A06",    null,   "A06",   "A06",   "A06",   "A07",   "A06",   "A07"),
@@ -333,7 +337,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($columns === null) {
       return $this->getModificationAdmitCode($from->_receiver);
     }
-    
+
     return $row[$col_num];
   }
   
@@ -398,7 +402,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       // Bascule du type et type_pec
       if ($sejour->fieldModified("type")) {
-        return self::getBasculeCode($sejour, $sejour->_old);
+        return $this->getBasculeCode($sejour, $sejour->_old);
       }
       
       // Annulation du médecin responsable
