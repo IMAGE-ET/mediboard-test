@@ -59,6 +59,7 @@ class CFactureConsult extends CMbObject {
   var $_ref_assurance     = null;
   var $_ref_consults      = null;
   var $_ref_last_consult  = null;
+  var $_ref_first_consult = null;
   var $_ref_reglements    = null;
   var $_ref_reglements_patient = null;
   var $_ref_reglements_tiers   = null;
@@ -218,6 +219,7 @@ class CFactureConsult extends CMbObject {
     
     $this->updateMontants();
     $this->_ref_last_consult = end($this->_ref_consults);
+    $this->_ref_first_consult = reset($this->_ref_consults);
           
     return $this->_ref_consults;
   } 

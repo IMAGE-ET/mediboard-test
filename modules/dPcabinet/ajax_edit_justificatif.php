@@ -64,7 +64,7 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
     array(""      , "Loi", "$loi"),
     array(""      , "N° contrat", ""),
     array(""      , "Motif traitement", "$facture->type_facture"),
-    array(""      , "Traitement", mbTransformTime(null, $facture->ouverture, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->_ref_last_consult->_date, "%d.%m.%Y")),
+    array(""      , "Traitement", mbTransformTime(null, $facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
     array(""      , "Rôle/ Localité", "-"),
     array("Mandataire", "N° EAN/N° RCC", $praticien->ean." - ".$praticien->rcc." "),
     array("Diagnostic", "Contrat", "ICD--"),
