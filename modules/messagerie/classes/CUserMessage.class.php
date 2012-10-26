@@ -93,7 +93,7 @@ class CUserMessage extends CMbObject {
     if ($this->archived ) $this->_to_state = "archived";
     if ($this->starred  ) $this->_to_state = "starred"; 
     
-    $this->_clean_subject = ltrim($this->subject, "Re: ");
+    $this->_clean_subject = preg_replace("/^Re: /", "", $this->subject);
   }
   
   function loadRefUserFrom($cache = 0) {
