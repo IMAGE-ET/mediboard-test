@@ -20,7 +20,7 @@ $order_col = CValue::getOrSession("order_col", "_pec_transport");
 $selAffichage = CValue::postOrSession("selAffichage", CAppUI::conf("dPurgences default_view"));
 
 // Type d'affichage UHCD
-$uhcd_affichage = CValue::postOrSession("uhcd_affichage");
+$uhcd_affichage = CValue::postOrSession("uhcd_affichage", CAppUI::conf("dPurgences default_view"));
 
 // Selection de la date
 $date = CValue::getOrSession("date", mbDate());
