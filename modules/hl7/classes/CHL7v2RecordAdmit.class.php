@@ -922,7 +922,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }  
     
     // Si pas de lit on retourne une affectation vide
-    if (!$this->queryTextNode("PL.3", $PV1_3)) {
+    if (!$PV1_3 || !$this->queryTextNode("PL.3", $PV1_3)) {
       // On essaye de récupérer le service dans ce cas depuis l'UF d'hébergement
       $uf           = new CUniteFonctionnelle();
       $uf->group_id = $newVenue->group_id;
