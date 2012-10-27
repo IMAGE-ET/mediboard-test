@@ -37,12 +37,10 @@ if ($patient->_id) {
   foreach ($patient->_ref_sejours as $_sejour) {
     $_sejour->loadNDA();
     $_sejour->loadRefsOperations();
-    $_sejour->canRead();
-    $_sejour->canEdit();
+    $_sejour->canDo();
     foreach ($_sejour->_ref_operations as $_operation) {
       $_operation->countDocItems();
-      $_operation->canRead();
-      $_operation->canEdit();
+      $_operation->canDo();
     }
   }
 }

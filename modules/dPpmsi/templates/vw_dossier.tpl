@@ -237,10 +237,10 @@ Main.add(function () {
           {{elseif $conf.dPpatients.CPatient.multi_group == "limited" && !$_sejour->annule}}
           <tr>
             <td>
-              Le {{$_sejour->_datetime|date_format:$conf.datetime}}
+              {{$_sejour->_shortview}}
             </td>
             <td style="background-color:#afa">
-              {{$_sejour->_ref_chir->_ref_function->_ref_group->text|upper}}
+              {{$_sejour->_ref_group->text|upper}}
             </td>
           </tr>
           {{/if}}
