@@ -74,7 +74,7 @@
           {{$_patient->_age}}
         {{/if}}
       </td>
-      <td>
+      <td class="text compact">
         {{if isset($_patient->_ref_antecedent|smarty:nodefaults)}}
           {{assign var=atcd value=$_patient->_ref_antecedent}}
           <strong>
