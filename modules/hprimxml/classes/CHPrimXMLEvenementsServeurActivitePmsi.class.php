@@ -231,14 +231,23 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     return $mediuser;
   }
   
-  function getSalle($node) {
+  function getSalle($node, CSejour $sejour) {
     $xpath = new CHPrimXPath($node->ownerDocument);
+    $name = $xpath->queryTextNode("hprim:uniteFonctionnelle/hprim:code", $node);
     
     // Recherche de la salle
-    $salle      = new CSalle();
-    $salle->nom = $xpath->queryTextNode("hprim:uniteFonctionnelle/hprim:code", $node);
-    $salle->loadMatchingObject();
+    $salle = new CSalle();
     
+    $where = array(
+      "salle.nom"                => $salle->_spec->ds->prepare("=%", $name),
+      "bloc_operatoire.group_id" => "= '$sejour->group_id'"
+    );
+    $ljoin = array(
+      "bloc_operatoire" => "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id"
+    );
+    
+    $salle->loadObject($where, null, null, $ljoin);
+            
     return $salle;
   }
     
