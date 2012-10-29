@@ -75,7 +75,7 @@ editEvenementPerop = function(guid, operation_id, datetime) {
   url.addParam("evenement_guid", guid);
   url.addParam("operation", operation_id);
   url.addParam("datetime", datetime);
-  url.requestModal(400, 200);
+  url.requestModal(600, 400);
   
   return false;
 }
@@ -173,7 +173,7 @@ editEvenementPerop = function(guid, operation_id, datetime) {
               <div class="marking">
                 <!--<span>{{$_evenement.datetime|date_format:$conf.datetime}}</span>-->
               </div>
-              <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}}">
+              <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}} - {{if $_evenement.unit}}{{$_evenement.unit}}{{/if}} {{$_evenement.label}}">
                 {{if $_evenement.editable}} 
                   <a href="#{{$_evenement.object->_guid}}" onclick="return editEvenementPerop('{{$_evenement.object->_guid}}', '{{$interv->_id}}')">
                 {{/if}}
@@ -183,9 +183,9 @@ editEvenementPerop = function(guid, operation_id, datetime) {
                     <img src="{{$images.$_icon}}" />
                   {{/if}}
                   {{if $_evenement.unit}}
-                    {{$_evenement.unit}} <strong>{{$_evenement.label}}</strong>
+                    {{$_evenement.unit}} <strong>{{$_evenement.label|truncate:30}}</strong>
                   {{else}}
-                    {{$_evenement.label}}
+                    {{$_evenement.label|truncate:30}}
                   {{/if}}
                 
                 {{if $_evenement.editable}} 

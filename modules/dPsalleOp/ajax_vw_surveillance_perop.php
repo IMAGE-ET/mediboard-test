@@ -84,15 +84,16 @@ $interv->loadAffectationsPersonnel();
 foreach ($interv->_ref_affectations_personnel as $emplacement => $affectations) {
   foreach($affectations as $_affectation) {
     if (!$_affectation->debut || !$_affectation->fin) continue;
-    
+
+    $debut = max($_affectation->debut, $time_debut_op_iso);
     $evenements["CAffectationPersonnel"][$_affectation->_id] = array(
       "icon" => null,
       "label" => $_affectation->_ref_personnel,
       "unit"  => null,
       "alert" => false,
       "datetime" => $_affectation->debut,
-      "position" => getPosition($_affectation->debut),
-      "width" => getWidth($_affectation->debut, $_affectation->fin),
+      "position" => getPosition($debut),
+      "width" => getWidth($debut, min($_affectation->fin, $time_fin_op_iso)),
       "object" => $_affectation,
       "editable" => false,
     );
@@ -105,15 +106,16 @@ $plageop->loadAffectationsPersonnel();
 foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations) {
   foreach($affectations as $_affectation) {
     if (!$_affectation->debut || !$_affectation->fin) continue;
-    
+
+    $debut = max($_affectation->debut, $time_debut_op_iso);
     $evenements["CAffectationPersonnel"][$_affectation->_id] = array(
       "icon" => null,
       "label" => $_affectation->_ref_personnel,
       "unit"  => null,
       "alert" => false,
       "datetime" => $_affectation->debut,
-      "position" => getPosition($_affectation->debut),
-      "width" => getWidth($_affectation->debut, $_affectation->fin),
+      "position" => getPosition($debut),
+      "width" => getWidth($debut, min($_affectation->fin, $time_fin_op_iso)),
       "object" => $_affectation,
       "editable" => false,
     );
