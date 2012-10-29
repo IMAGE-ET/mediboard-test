@@ -68,7 +68,7 @@
     <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$_operation->_id}}" title="Coder l'intervention">
       {{if ($urgence && $salle) || $_operation->_ref_plageop->spec_id}}
         {{$_operation->_ref_chir->_view}} -
-      {{if $_operation->_ref_anesth->_id && $vueReduite}}
+      {{if $vueReduite && $_operation->_ref_anesth->_id}}
         {{$_operation->_ref_anesth->_view}} -
       {{/if}}
       {{/if}}
