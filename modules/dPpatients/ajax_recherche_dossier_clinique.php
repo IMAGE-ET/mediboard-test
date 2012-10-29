@@ -273,6 +273,15 @@ switch ($section) {
 // CPatient ---------------------------
 $data_patient = $data["CPatient"];
 
+if (!$one_field_presc && !$sejour_filled && !$consult_filled && !$interv_filled) {
+  if (!empty($data_patient["_age_min"])) {
+    $where[] = "DATEDIFF('".mbDateTime() . "', patients.naissance)/365 > {$data_patient['_age_min']}";
+  }
+  if (!empty($data_patient["_age_max"])) {
+    $where[] = "DATEDIFF('".mbDateTime() . "', patients.naissance)/365 <= {$data_patient['_age_max']}";
+  }
+}
+
 if (!empty($data_patient["medecin_traitant"])) {
   $one_field = true;
   $medecin_traitant_id = $data_patient["medecin_traitant"];
