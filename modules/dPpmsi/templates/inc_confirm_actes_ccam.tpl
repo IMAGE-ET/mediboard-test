@@ -39,7 +39,9 @@
       <input type="hidden" name="m" value="dPsalleOp" />
       <input type="hidden" name="dosql" value="do_acteccam_aed" />
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
+      {{mb_key object=$curr_acte}}
+      {{mb_field object=$curr_acte field=code_acte hidden=true}}
+      
       <select name="code_association" onchange="this.form.onsubmit()">
         <option value="" {{if !$curr_acte->code_association}}selected="selected"{{/if}}
         style="border-left: 4px solid #{{if !$curr_acte->_guess_association}}9f9{{else}}fc9{{/if}};">
