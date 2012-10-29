@@ -103,6 +103,21 @@ editEvenementPerop = function(guid, operation_id, datetime) {
 </table>
 <hr />
 
+{{if $can->admin}}
+<form name="generate-sample-observation-results" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadSurveillancePerop})">
+  <input type="hidden" name="m" value="dPpatients" />
+  <input type="hidden" name="dosql" value="do_sample_observation_results_generate" />
+  <input type="hidden" name="suppressHeaders" value="1" />
+  <input type="hidden" name="context_class" value="{{$interv->_class}}" />
+  <input type="hidden" name="context_id" value="{{$interv->_id}}" />
+  <input type="hidden" name="patient_id" value="{{$interv->_ref_sejour->patient_id}}" />
+  <input type="hidden" name="datetime_start" value="{{$time_debut_op_iso}}" />
+  <input type="hidden" name="datetime_end" value="{{$time_fin_op_iso}}" />
+  <button class="change">Générer un jeu de données aléatoires</button>
+</form>
+{{/if}}
+
+{{*
 <table class="main layout">
   <tr>
     <td class="narrow">
@@ -138,6 +153,7 @@ editEvenementPerop = function(guid, operation_id, datetime) {
   </tr>
 </table>
 <hr />
+*}}
 
 <div style="position: relative;" class="supervision">
   {{foreach from=$graphs item=_graph key=i}}
@@ -183,9 +199,9 @@ editEvenementPerop = function(guid, operation_id, datetime) {
                     <img src="{{$images.$_icon}}" />
                   {{/if}}
                   {{if $_evenement.unit}}
-                    {{$_evenement.unit}} <strong>{{$_evenement.label|truncate:30}}</strong>
+                    {{$_evenement.unit}} <strong>{{$_evenement.label|truncate:40}}</strong>
                   {{else}}
-                    {{$_evenement.label|truncate:30}}
+                    {{$_evenement.label|truncate:40}}
                   {{/if}}
                 
                 {{if $_evenement.editable}} 

@@ -61,7 +61,7 @@ class CObservationResultSet extends CMbObject {
   }
   
   /**
-   * @return CPatient
+   * @return array
    */
   function loadRefPatient($cache = true) {
     return $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
@@ -99,5 +99,50 @@ class CObservationResultSet extends CMbObject {
     }
     
     return array($data, array_values($times));
+  }
+
+  static function buildGraphs(COperation $interv) {
+    list($results, $times) = CObservationResultSet::getResultsFor($interv);
+
+    $time_min = $interv->entree_salle;
+    $time_max = mbTime("+".mbMinutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
+
+    $date = mbDate($interv->_datetime);
+
+    $time_debut_op_iso = "$date $time_min";
+    $time_fin_op_iso   = "$date $time_max";
+
+    $round_minutes = 10;
+    $round = $round_minutes * 60000;
+
+    $time_min = floor(CMbDate::toUTCTimestamp("$date $time_min") / $round) * $round;
+    $time_max =  ceil(CMbDate::toUTCTimestamp("$date $time_max") / $round) * $round;
+
+    $graph_object = new CSupervisionGraph;
+    $graph_objects = $graph_object->loadList(array(
+      "disabled" => "= '0'",
+    ));
+
+    $graphs = array();
+    foreach($graph_objects as $_go) {
+      $graphs[] = $_go->buildGraph($results, $time_min, $time_max);
+    }
+
+    $yaxes_count = 0;
+    foreach($graphs as $_graph) {
+      $yaxes_count = max($yaxes_count, count($_graph["yaxes"]));
+    }
+
+    foreach($graphs as &$_graph) {
+      if (count($_graph["yaxes"]) < $yaxes_count) {
+        $_graph["yaxes"] = array_pad($_graph["yaxes"], $yaxes_count, CSupervisionGraphAxis::$default_yaxis);
+      }
+    }
+
+    return array(
+      $graphs, $yaxes_count,
+      $time_min, $time_max,
+      $time_debut_op_iso, $time_fin_op_iso,
+    );
   }
 }

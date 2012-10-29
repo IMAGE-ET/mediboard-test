@@ -19,47 +19,16 @@ $interv->loadRefPlageOp();
 
 $consult_anesth = $interv->loadRefsConsultAnesth();
 
-list($results, $times) = CObservationResultSet::getResultsFor($interv);
-
 global $time_min, $time_max;
 
-$time_min = $interv->entree_salle;
-$time_max = mbTime("+".mbMinutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
+list(
+  $graphs, $yaxes_count,
+  $time_min, $time_max,
+  $time_debut_op_iso, $time_fin_op_iso
+) = CObservationResultSet::buildGraphs($interv);
 
-$date = mbDate($interv->_datetime);
-
-$time_debut_op_iso = "$date $time_min";
-$time_debut_op     = CMbDate::toUTCTimestamp($time_debut_op_iso);
-
-$time_fin_op_iso   = "$date $time_max";
-$time_fin_op       = CMbDate::toUTCTimestamp($time_fin_op_iso);
-
-$round_minutes = 10;
-$round = $round_minutes * 60000;
-
-$time_min = floor(CMbDate::toUTCTimestamp("$date $time_min") / $round) * $round;
-$time_max =  ceil(CMbDate::toUTCTimestamp("$date $time_max") / $round) * $round;
-
-$graph_object = new CSupervisionGraph;
-$graph_objects = $graph_object->loadList(array(
-  "disabled" => "= '0'",
-));
-
-$graphs = array();
-foreach($graph_objects as $_go) {
-  $graphs[] = $_go->buildGraph($results, $time_min, $time_max);;
-}
-
-$yaxes_count = 0;
-foreach($graphs as $_graph) {
-  $yaxes_count = max($yaxes_count, count($_graph["yaxes"]));
-}
-
-foreach($graphs as &$_graph) {
-  if (count($_graph["yaxes"]) < $yaxes_count) {
-    $_graph["yaxes"] = array_pad($_graph["yaxes"], $yaxes_count, CSupervisionGraphAxis::$default_yaxis);
-  }
-}
+$time_debut_op = CMbDate::toUTCTimestamp($time_debut_op_iso);
+$time_fin_op   = CMbDate::toUTCTimestamp($time_fin_op_iso);
 
 function getPosition($datetime){
   global $time_min, $time_max;
@@ -85,15 +54,14 @@ foreach ($interv->_ref_affectations_personnel as $emplacement => $affectations) 
   foreach($affectations as $_affectation) {
     if (!$_affectation->debut || !$_affectation->fin) continue;
 
-    $debut = max($_affectation->debut, $time_debut_op_iso);
     $evenements["CAffectationPersonnel"][$_affectation->_id] = array(
       "icon" => null,
       "label" => $_affectation->_ref_personnel,
       "unit"  => null,
       "alert" => false,
       "datetime" => $_affectation->debut,
-      "position" => getPosition($debut),
-      "width" => getWidth($debut, min($_affectation->fin, $time_fin_op_iso)),
+      "position" => getPosition($_affectation->debut),
+      "width" => getWidth($_affectation->debut, $_affectation->fin),
       "object" => $_affectation,
       "editable" => false,
     );
@@ -107,15 +75,14 @@ foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations)
   foreach($affectations as $_affectation) {
     if (!$_affectation->debut || !$_affectation->fin) continue;
 
-    $debut = max($_affectation->debut, $time_debut_op_iso);
     $evenements["CAffectationPersonnel"][$_affectation->_id] = array(
       "icon" => null,
       "label" => $_affectation->_ref_personnel,
       "unit"  => null,
       "alert" => false,
       "datetime" => $_affectation->debut,
-      "position" => getPosition($debut),
-      "width" => getWidth($debut, min($_affectation->fin, $time_fin_op_iso)),
+      "position" => getPosition($_affectation->debut),
+      "width" => getWidth($_affectation->debut, $_affectation->fin),
       "object" => $_affectation,
       "editable" => false,
     );
@@ -154,7 +121,7 @@ if($prescription->_id){
     }
     elseif ($_line instanceof CPrescriptionLineMix) {
       foreach ($_line->_ref_lines as $_mix_item) {
-        $_view .= "$_mix_item->_ucd_view<br />";
+        $_view .= "$_mix_item->_ucd_view / ";
       }
     }
     else {

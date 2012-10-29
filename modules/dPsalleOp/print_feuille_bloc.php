@@ -78,7 +78,6 @@ foreach ($sejour->_list_constantes_medicales as $_constante_medicale) {
   }
 }
 
-
 if ($prescription_id) {
   // Chargements des perfusions pour afficher les poses et les retraits
   $prescription_line_mix = new CPrescriptionLineMix();
@@ -98,13 +97,39 @@ if ($prescription_id) {
 }
 ksort($perops);
 
+$perop_graphs = array();
+$time_debut_op = null;
+$time_fin_op = null;
+
+if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
+  CJSLoader::$files = array(
+    "lib/flot/jquery.min.js",
+    "lib/flot/jquery.flot.min.js",
+    "lib/flot/jquery.flot.symbol.min.js",
+    "lib/flot/jquery.flot.crosshair.min.js",
+    "lib/flot/jquery.flot.resize.min.js",
+  );
+  echo CJSLoader::loadFiles();
+  CAppUI::js('$.noConflict()');
+
+  list(
+    $perop_graphs, $yaxes_count,
+    $time_min, $time_max,
+    $time_debut_op_iso, $time_fin_op_iso
+  ) = CObservationResultSet::buildGraphs($operation);
+
+  $time_debut_op = CMbDate::toUTCTimestamp($time_debut_op_iso);
+  $time_fin_op   = CMbDate::toUTCTimestamp($time_fin_op_iso);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("patient"  , $operation->_ref_sejour->_ref_patient);
 $smarty->assign("operation", $operation);
 $smarty->assign("perops"   , $perops);
+$smarty->assign("perop_graphs", $perop_graphs);
+$smarty->assign("time_debut_op", $time_debut_op);
+$smarty->assign("time_fin_op", $time_fin_op);
 
 $smarty->display("print_feuille_bloc.tpl");
-
-?>

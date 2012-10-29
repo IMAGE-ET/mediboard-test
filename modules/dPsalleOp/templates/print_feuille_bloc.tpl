@@ -364,6 +364,67 @@ Main.add(function(){
   {{/foreach}}
 </table>
 
+{{if $conf.dPsalleOp.enable_surveillance_perop}}
+<script type="text/javascript">
+  Main.add(function(){
+    (function ($){
+      var ph, series, xaxes;
+
+      {{foreach from=$perop_graphs item=_graph key=i name=graphs}}
+        ph = $("#placeholder-{{$i}}");
+        series = {{$_graph.series|@json}};
+        xaxes  = {{$_graph.xaxes|@json}};
+
+        {{if !$smarty.foreach.graphs.last}}
+          xaxes[0].tickFormatter = function(){return " "};
+        {{/if}}
+
+        $.plot(ph, series, {
+          grid: { hoverable: true, markings: [
+            // Debut op
+            {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
+            {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
+
+            // Fin op
+            {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.05)"},
+            {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
+          ] },
+          series: { points: { show: true, radius: 3 } },
+          xaxes: xaxes,
+          yaxes: {{$_graph.yaxes|@json}}
+        });
+      {{/foreach}}
+
+    })(jQuery);
+  });
+</script>
+
+<table class="main print">
+  <tr>
+    <th class="category" colspan="4">Surveillance</th>
+  </tr>
+  <tr>
+    <td>
+      <div style="position: relative;" class="supervision">
+        {{foreach from=$perop_graphs item=_graph key=i}}
+          <div class="yaxis-labels">
+            {{foreach from=$_graph.yaxes|@array_reverse item=_yaxis}}
+              <div>
+                {{$_yaxis.label}}
+                <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
+              </div>
+            {{/foreach}}
+            <span class="title">{{$_graph.title}}</span>
+          </div>
+          <div id="placeholder-{{$i}}" style="width:{{$width}}px;height:200px;"></div>
+          <br />
+        {{/foreach}}
+      </div>
+    </td>
+  </tr>
+</table>
+{{/if}}
+
 <div id="constantes"></div>
 
 {{if "forms"|module_installed}}
