@@ -143,7 +143,7 @@ if ($consult->_id) {
   // Chargement de ses consultations
   foreach ($patient->_ref_consultations as $_consultation) {
     $_consultation->loadRefsFwd();
-    $_consultation->_ref_chir->loadRefFunction();
+    $_consultation->_ref_chir->loadRefFunction()->loadRefGroup();
   }
   
   // Chargement de ses séjours
@@ -152,7 +152,7 @@ if ($consult->_id) {
     $_sejour->loadRefsOperations();
     foreach ($_sejour->_ref_operations as $_operation) {
       $_operation->loadRefsFwd();
-      $_operation->_ref_chir->loadRefFunction();
+      $_operation->_ref_chir->loadRefFunction()->loadRefGroup();
       // Tableaux de correspondances operation_id => sejour_id
       $tabSejour[$_operation->_id] = $_sejour->_id;
     }

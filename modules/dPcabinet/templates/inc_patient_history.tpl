@@ -1,4 +1,5 @@
 <!-- Séjour et interventions -->
+
 {{if !$app->user_prefs.simpleCabinet}}
 <div>
 	<span onmouseover="ObjectTooltip.createDOM(this, 'sejours');">
@@ -8,15 +9,18 @@
   
 <table class="tbl" id="sejours" style="display: none;">
   {{foreach from=$patient->_ref_sejours item=_sejour}}
+  {{if $_sejour->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
   <tr>
     <td>
-      {{mb_include module=system template=inc_interval_date from=$_sejour->entree to=$_sejour->sortie}}
+      <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}"
+        onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+        {{mb_include module=system template=inc_interval_date from=$_sejour->entree to=$_sejour->sortie}}
+      </a>
 		</td>
 		<td>
     	{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
 		</td>
 	</tr>
-
   {{foreach from=$_sejour->_ref_operations item=_op}}
   <tr>
   	<td style="padding-left: 1em;">
@@ -35,7 +39,17 @@
        {{tr}}COperation.none{{/tr}}
   	</td>
 	</tr>
-  {{/foreach}}
+	{{/foreach}}
+  {{else}}
+  <tr>
+    <td>
+      {{mb_include module=system template=inc_interval_date from=$_sejour->entree to=$_sejour->sortie}}
+    </td>
+    <td style="background-color:#afa">
+      {{$_sejour->_ref_group->text|upper}}
+    </td>
+  </tr>
+  {{/if}}
 
   {{foreachelse}}
   <tr>
@@ -55,6 +69,7 @@
 <table class="tbl" id="consultations" style="display: none;">
   
   {{foreach from=$patient->_ref_consultations item=_consult}}
+  {{if $_consult->_ref_chir->_ref_function->group_id == $g || $conf.dPpatients.CPatient.multi_group == "full"}}
   <tr>
     <td>
       <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}"
@@ -69,6 +84,17 @@
     <td>
     </td>
   </tr>
+  {{elseif $conf.dPpatients.CPatient.multi_group == "limited"}}
+  <tr>
+    <td>le {{$_consult->_datetime|date_format:$conf.date}}</td>
+    <td style="background-color:#afa">
+      {{$_consult->_ref_chir->_ref_function->_ref_group->text|upper}}
+    </td>
+
+    <td>
+    </td>
+  </tr>
+  {{/if}}
   {{foreachelse}}
   
   <tr>
