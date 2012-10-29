@@ -84,9 +84,11 @@ editEvenementPerop = function(guid, operation_id, datetime) {
 {{assign var=images value="CPrescription"|static:"images"}}
 {{assign var=width value=800}}
 
+{{*
 <div class="small-warning">
   Cette vue est en cours de développement et n'est qu'un aperçu. 
 </div>
+*}}
 
 <table class="main tbl">
   <tr>
