@@ -1869,7 +1869,7 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("1.59");
 
     $query = "ALTER TABLE `correspondant_patient`
-              CHANGE `patient_id` `patient_id` INT (11) UNSIGNED, 
+              CHANGE `patient_id` `patient_id` INT (11) UNSIGNED,
               ADD `ean_id` VARCHAR (20)";
     $this->addQuery($query);
 
@@ -1880,11 +1880,18 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("1.61");
 
-    $query = "ALTER TABLE `patients` 
+    $query = "ALTER TABLE `patients`
               CHANGE `avs` `avs` VARCHAR (16);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.62";
+
+    $this->makeRevision("1.62");
+
+    $query = "ALTER TABLE `correspondant_patient`
+    CHANGE `cp` `cp` VARCHAR (5)";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.63";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
