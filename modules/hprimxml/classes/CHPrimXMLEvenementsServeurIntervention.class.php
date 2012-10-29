@@ -174,7 +174,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     }
     
     // Recherche de la salle
-    $salle = $this->getSalle($data['intervention']);
+    $salle = $this->getSalle($data['intervention'], $sejour);
     if ($salle->nom && !$salle->_id) {
       $comment = "Salle '$salle->nom' inconnue dans l'infrastructure de l'établissement";
       return $exchange_hprim->setAckError($dom_acq, "E202", $comment, $mbObject);
