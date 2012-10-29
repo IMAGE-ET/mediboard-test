@@ -60,7 +60,10 @@
           <option value="" {{if !$facture->assurance}}selected="selected" {{/if}}>&mdash; Choisir une assurance</option>
           {{foreach from=$facture->_ref_patient->_ref_correspondants_patient item=_assurance}}
             <option value="{{$_assurance->_id}}" {{if $facture->assurance == $_assurance->_id}} selected="selected" {{/if}}>
-              {{$_assurance->nom}}
+              {{$_assurance->nom}}  
+              {{if $_assurance->date_debut && $_assurance->date_fin}}
+               Du {{$_assurance->date_debut|date_format:"%d/%m/%Y"}} au {{$_assurance->date_fin|date_format:"%d/%m/%Y"}}
+              {{/if}}
             </option>
           {{/foreach}}
         </select>
