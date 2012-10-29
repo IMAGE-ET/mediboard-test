@@ -19,7 +19,7 @@ function newExam(sAction, consultation_id) {
 {{mb_script module=dPcompteRendu script=document}}
 {{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
 
-<table style="border-spacing: 0; border-collapse: collapse; padding: 2px; vertical-align: middle; white-space: nowrap;">
+<table style="width: 100%; border-spacing: 0; border-collapse: collapse; padding: 2px; vertical-align: middle; white-space: nowrap;">
   <thead>
     <tr>
       <td>
