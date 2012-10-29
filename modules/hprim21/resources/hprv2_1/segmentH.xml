@@ -61,7 +61,7 @@
         <field minOccurs="1" maxOccurs="0" length="10">
             <name>H.12</name>
             <description>Version and Type</description>
-            <datatype>SPEC</datatype>
+            <datatype>HD</datatype>
         </field>
         <field minOccurs="1" maxOccurs="0" length="26">
             <name>H.13</name>

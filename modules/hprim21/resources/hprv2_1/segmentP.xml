@@ -11,7 +11,7 @@
         <field minOccurs="1" maxOccurs="0" length="36">
             <name>P.2</name>
             <description>Sending Patient ID</description>
-            <datatype>SPEC</datatype>
+            <datatype>FNM</datatype>
         </field>
         <field minOccurs="0" maxOccurs="0" length="16">
             <name>P.3</name>
@@ -46,7 +46,7 @@
         <field minOccurs="0" maxOccurs="0" forbidden="true" length="250">
             <name>P.9</name>
             <description>Race</description>
-            <datatype>XPN</datatype>
+            <datatype>ST</datatype>
         </field>
         <field minOccurs="0" maxOccurs="0" length="200">
             <name>P.10</name>
