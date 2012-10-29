@@ -61,7 +61,15 @@ class CUserMessage extends CMbObject {
    * @return array
    */
   function loadVisibleList() {
-    if (!$this->_ref_module) return null;
+    // Module may not be visible
+    if (!$this->_ref_module) {
+      return null;
+    }
+    
+    // Table may not be renamed yet.
+    if ($this->_ref_module->mod_version < "0.11") {
+      return null;
+    }
     
     $user = CUser::get();
     $where["to"]        = "= '$user->_id'";
