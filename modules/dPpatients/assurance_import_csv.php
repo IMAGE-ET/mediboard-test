@@ -30,13 +30,17 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["nom"]       = addslashes(trim($line[1]));
     $results[$i]["adress"]    = addslashes(trim($line[2]));
     $results[$i]["rue"]       = addslashes(trim($line[3]));
-    $results[$i]["localite"]  = addslashes(trim($line[4]));
+    $explode                  = explode(" ",addslashes(trim($line[4])),2);
+    $results[$i]["cp"]        = $explode[0];
+    $results[$i]["localite"]  = $explode[1];
     $results[$i]["ean"]       = addslashes(trim($line[9]));
     $results[$i]["error"]     = 0;
+
 
     // Fonction
     $corres = new CCorrespondantPatient();
     $corres->ean = $results[$i]["ean"];
+    $corres->nom = $results[$i]["nom"];
     $corres->relation     = "assurance";
     $corres->loadMatchingObject();
 
@@ -45,6 +49,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
 
       $corres->nom = $results[$i]["nom"];
       $corres->adresse = $results[$i]["rue"];
+      $corres->cp = $results[$i]["cp"];
       $corres->ville = $results[$i]["localite"];
 
       if($corres->ean == "" || $corres->nom == "") {
@@ -68,6 +73,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       // create
       $corres->nom = $results[$i]["nom"];
       $corres->adresse = $results[$i]["rue"];
+      $corres->cp = $results[$i]["cp"];
       $corres->ville = $results[$i]["localite"];
       $corres->ean = $results[$i]["ean"];
 

@@ -43,6 +43,7 @@
     <th>{{tr}}CCorrespondantPatient-nom{{/tr}}</th>
     <th>{{tr}}CCorrespondantPatient-adresse{{/tr}}</th>
     <th>{{tr}}CCorrespondantPatient-adresse{{/tr}} 2</th>
+    <th>{{tr}}CCorrespondantPatient-cp{{/tr}}</th>
     <th>{{tr}}CCorrespondantPatient-ville{{/tr}}</th>
     <th>{{tr}}CCorrespondantPatient-ean-desc{{/tr}}</th>
 
@@ -59,6 +60,7 @@
     <td>{{$_corres.nom}}</td>
     <td>{{$_corres.adress}}</td>
     <td>{{$_corres.rue}}</td>
+    <td>{{$_corres.cp}}</td>
     <td>{{$_corres.localite}}</td>
     <td>{{$_corres.ean}}</td>
   </tr>
