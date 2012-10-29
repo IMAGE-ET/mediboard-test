@@ -72,17 +72,32 @@ printFacture = function(edit_justificatif, edit_bvr) {
   url.addParam('suppressHeaders', '1');
   url.popup(1000, 600);
 }
-sendBill = function(oForm2) {
+checkBills = function(){
   var oForm = getForm("printFrm");
+//  var oForm2 = getForm("send_bill");
   var url = new Url('tarmed', 'ajax_send_file_http');
   url.addParam('prat_id'  , oForm.chir.value);
   url.addParam('date_min' , $V(oForm._date_min));
   url.addParam('date_max' , $V(oForm._date_max));
-  url.addParam('user'     , $V(oForm2.user));
-  url.addParam('pwd'      , $V(oForm2.pwd));
-  url.addParam('suppressHeaders', '1');
-//  url.requestUpdate("response_send_bill");
-  url.popup(1000, 600);
+  url.addParam('check'    ,true);
+//  url.addParam('user'     , $V(oForm2.user));
+//  url.addParam('pwd'      , $V(oForm2.pwd));
+  url.requestUpdate("response_send_bill", sendBill);
+  
+}
+sendBill = function() {
+  if (!$('not_create')) {
+    var oForm = getForm("printFrm");
+//    var oForm2 = getForm("send_bill");
+    var url = new Url('tarmed', 'ajax_send_file_http');
+    url.addParam('prat_id', oForm.chir.value);
+    url.addParam('date_min', $V(oForm._date_min));
+    url.addParam('date_max', $V(oForm._date_max));
+//    url.addParam('user', $V(oForm2.user));
+//    url.addParam('pwd', $V(oForm2.pwd));
+    url.addParam('suppressHeaders', '1');
+    url.popup(1000, 600);
+  }
 }
 </script>
 
@@ -255,9 +270,9 @@ sendBill = function(oForm2) {
                 {{*
                 Identifiant:  <input name="user" type="text" value="" /><br/>
                 Mot de passe: <input name="pwd"  type="password" value="" /><br/>
-                <button type="button" class="send" onclick="sendBill(this.form);">Envoi à la Caisse des Medecins</button>
+                <button type="button" class="send" onclick="checkBills();">Envoi à la Caisse des Medecins</button>
                 *}}
-                <button type="button" class="send" onclick="sendBill(this.form);">Générer dossier pour la Caisse des medecins</button>
+                <button type="button" class="send" onclick="checkBills();">Générer dossier pour la Caisse des medecins</button>
               </form>
             </td>
           </tr>
