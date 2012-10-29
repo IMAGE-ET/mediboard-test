@@ -20,6 +20,16 @@ class CHL7v2Event extends CHL7Event {
     parent::__construct($i18n);
   }
   
+  private function getSegmentTerminator($st) {
+    $terminators = array(
+      "CR"   => "\r",
+      "LF"   => "\n",
+      "CRLF" => "\r\n",
+    );
+    
+    return CValue::read($terminators, $st, CHL7v2Message::DEFAULT_SEGMENT_TERMINATOR);
+  }
+  
   /**
    * @see parent::build()
    */
@@ -34,12 +44,7 @@ class CHL7v2Event extends CHL7Event {
     // Génération de l'échange
     $this->generateExchange();
  
-    $terminators = array(
-      "CR"   => "\r",
-      "LF"   => "\n",
-      "CRLF" => "\r\n",
-    );
-    $terminator = CValue::read($terminators, $this->_receiver->_configs["ER7_segment_terminator"], CHL7v2Message::DEFAULT_SEGMENT_TERMINATOR);
+    $terminator = $this->getSegmentTerminator($this->_receiver->_configs["ER7_segment_terminator"]);
     
     // Création du message HL7
     $message = new CHL7v2Message($this->version);
@@ -48,12 +53,18 @@ class CHL7v2Event extends CHL7Event {
    
     $this->message = $message;
   }
-    
+  
   function handle($msg_hl7) {
     $this->message = new CHL7v2Message();
 
     if ($this->_data_format) {
-      $this->message->strict_segment_terminator = $this->_data_format->_configs_format->strict_segment_terminator;
+      $strict = $this->_data_format->_configs_format->strict_segment_terminator;
+      $this->message->strict_segment_terminator = $strict;
+      
+      if ($strict) {
+        $terminator = $this->getSegmentTerminator($this->_data_format->_configs_format->segment_terminator);
+        $this->message->segmentTerminator = $terminator;
+      }
     }
     
     $this->message->parse($msg_hl7);

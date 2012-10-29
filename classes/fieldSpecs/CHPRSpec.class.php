@@ -21,19 +21,25 @@ class CHPRSpec extends CTextSpec {
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementTextarea($object, $params, $value, $className);
   }
-  
+
   function getValue($object, $smarty = null, $params = array()) {
     $value = $object->{$this->fieldName};
-    
-    return $value;
+
+    if (isset($params["advanced"]) && $params["advanced"]) {
+      $message = new CHPrim21Message();
+      $message->parse($value);
+      return $message->flatten(true);
+    }
+
+    return CHPrim21Message::highlight($value);
   }
   
   function sample(&$object, $consistent = true){
-    $object->{$this->fieldName} = <<<EOD
+    $object->{$this->fieldName} = <<<HPR
 H|^~&\|C152203.HPR||111111^MEDIBOARD ATL||ADM|||MDB^MEDIBOARD|LS1||H2.1^C|201210251522
 P|1|00209272||12411338|NOM^PRENOM^^^M^||19810508|M|||||||||||||||||
 A|||||||||
 L|1|||
-EOD;
+HPR;
   }
 }

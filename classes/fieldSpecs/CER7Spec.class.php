@@ -31,13 +31,13 @@ class CER7Spec extends CTextSpec {
       return $message->flatten(true);
     }
     
-    return CHL7v2Message::highlightER7($value);
+    return CHL7v2Message::highlight($value);
   }
   
   function sample(&$object, $consistent = true){
-    $object->{$this->fieldName} = <<<EOD
+    $object->{$this->fieldName} = <<<ER7
 MSH|^~\&|MYSENDER|MYRECEIVER|MYAPPLICATION||200612211200||QRY^A19|1234|P|2.5
 QRD|200612211200|R|I|GetPatient|||1^RD|0101701234|DEM||
-EOD;
+ER7;
   }
 }

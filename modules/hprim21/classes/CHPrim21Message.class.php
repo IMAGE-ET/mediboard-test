@@ -1,103 +1,57 @@
 <?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage hl7
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
 /**
- * Class CHL7v2Message 
+ * Class CHL7v2Message
  * Message HL7
  */
-class CHL7v2Message extends CHMessage {
-  static $enteredHeaders     = array("MSH", "FHS", "BHS");
-  
-  static $build_mode         = "normal";
-  static $handle_mode        = "normal";
+class CHPrim21Message extends CHMessage {
+  static $header_segment_name = "H";
+  static $segment_header_pattern = "H|P|A|C|L|OBR|OBX|FAC|ACT|REG|AP|AC|ERR";
 
-  static $header_segment_name = "MSH";
-  static $segment_header_pattern = "[A-Z]{2}[A-Z0-9]";
+  protected $keep_original = array("H.1");
 
-  protected $keep_original = array("MSH.1", "MSH.2", "NTE.3", "OBX.5");
-
-  var $version      = "2.5";
-  
-  function __construct($version = null) {
-    if (preg_match("/([A-Z]{2})_(.*)/", $version, $matches)) {
-      $this->extension = $version;
-      $this->i18n_code = $matches[2];
-      $this->version   = "2.5";
-    }
-    else {
-      parent::__construct($version);
-    }  
-  }
+  var $version      = "2.1";
+  var $type         = null;
+  var $extension    = null;
 
   function getHeaderSegmentName() {
     return self::$header_segment_name;
   }
 
-  static function setBuildMode($build_mode) {
-    self::$build_mode = $build_mode;
-  }
-  
-  static function resetBuildMode() {
-    self::$build_mode = "normal";
-  }
-  
-  static function setHandleMode($handle_mode) {
-    self::$handle_mode = $handle_mode;
-  }
-  
-  static function resetHandleMode() {
-    self::$handle_mode = "normal";
-  }
-  
-  function getI18NEventName() {
-    if ($this->i18n_code) {
-      return "{$this->event_name}_{$this->i18n_code}";
-    }
-    
-    return $this->event_name;
-  }
-
-  function getXMLName(){
-    $field = $this->children[0]->fields[8]->items[0];
-    if ($field->children[0]->data == "ACK") {
-      return $field->children[0]->data;
-    }
-
-    return $field->children[0]->data."_".$field->children[1]->data;
-  }
-  
   static function isWellFormed($data, $strict_segment_terminator = false) {
-    // remove all chars before MSH
+    // remove all chars before H
     $msh_pos = strpos($data, self::$header_segment_name);
+
     if ($msh_pos === false) {
       throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $data);
     }
-    
+
     $data = substr($data, $msh_pos);
     $data = self::fixRawER7($data, $strict_segment_terminator);
-  
+
     // first tokenize the segments
     if (($data == null) || (strlen($data) < 4)) {
       throw new CHL7v2Exception(CHL7v2Exception::EMPTY_MESSAGE, $data);
     }
-    
-    $fieldSeparator = $data[3];
-    
+
+    $fieldSeparator = $data[1];
+
     // valid separator
     if (!preg_match("/[^a-z0-9]/i", $fieldSeparator) ) {
       throw new CHL7v2Exception(CHL7v2Exception::INVALID_SEPARATOR, substr($data, 0, 10));
     }
-    
-    $lines = CHL7v2::split(self::DEFAULT_SEGMENT_TERMINATOR, $data);
-    
+
+    $lines = self::split(self::DEFAULT_SEGMENT_TERMINATOR, $data);
+
     // validation de la syntaxe : chaque ligne doit commencer par 3 lettre + un separateur + au moins une donnée
     $sep_preg = preg_quote($fieldSeparator);
 
@@ -107,8 +61,16 @@ class CHL7v2Message extends CHMessage {
         throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $_line);
       }
     }
-    
+
     return true;
+  }
+
+  function getXMLName(){
+    return $this->children[0]->fields[6]->data;
+  }
+
+  function loadDataType($datatype) {
+    return CHprim21DataType::load($this, $datatype, $this->getVersion(), $this->type);
   }
 
   function parse($data, $parse_body = true) {
@@ -119,162 +81,129 @@ class CHL7v2Message extends CHMessage {
       //return false;
     }
 
-     // remove all chars before MSH
+    // remove all chars before MSH
     $msh_pos = strpos($data, self::$header_segment_name);
-    
+
     if ($msh_pos === false) {
       throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $data);
     }
-    
+
     $data = substr($data, $msh_pos);
     $data = self::fixRawER7($data, $this->strict_segment_terminator);
-    
+
+    // handle "A" segments
+    $field_sep = preg_quote($this->fieldSeparator);
+    $patt = "/[\r\n]+A$field_sep([^\r\n]+)/s";
+    $data = preg_replace($patt, "\\1", $data);
+
+    // remove "C" segments
+    $patt = "/[\r\n]+C$field_sep([^\r\n]+)/s";
+    $data = preg_replace($patt, "", $data);
+
     parent::parse($data);
-    
+
     $message = $this->data;
-    
-    // 4 to 7
-    if (!isset($message[7])) {
+
+    // 2 to 5
+    if (!isset($message[5])) {
       throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $message);
     }
-    
-    $this->fieldSeparator = $message[3];
-    
-    $nextDelimiter = strpos($message, $this->fieldSeparator, 4);
+
+    $this->fieldSeparator = $message[1];
+
+    $nextDelimiter = strpos($message, $this->fieldSeparator, 2);
     if ($nextDelimiter > 4) {
       // usually ^
-      $this->componentSeparator = $message[4];
+      $this->componentSeparator = $message[2];
+    }
+    if ($nextDelimiter > 3) {
+      // usually ~
+      $this->repetitionSeparator = $message[3];
+    }
+    if ($nextDelimiter > 4) {
+      // usually \
+      $this->escapeCharacter = $message[4];
     }
     if ($nextDelimiter > 5) {
-      // usually ~
-      $this->repetitionSeparator = $message[5];
-    }
-    if ($nextDelimiter > 6) {
-      // usually \
-      $this->escapeCharacter = $message[6];
-    }
-    if ($nextDelimiter > 7) {
       // usually &
-      $this->subcomponentSeparator = $message[7];
+      $this->subcomponentSeparator = $message[5];
     }
 
     // replace the special case of ^~& with ^~\&
-    if ("^~&|" == substr($message, 4, 4)) {
+    if ("^~&|" == substr($message, 2, 4)) {
       $this->escapeCharacter       = "\\";
       $this->subcomponentSeparator = "&";
       $this->repetitionSeparator   = "~";
       $this->componentSeparator    = "^";
     }
-    
+
     $this->initEscapeSequences();
-    
+
     $this->lines = CHL7v2::split($this->segmentTerminator, $this->data);
-    
+
     // we extract the first line info "by hand"
     $first_line = CHL7v2::split($this->fieldSeparator, reset($this->lines));
-    
-    if (!isset($first_line[11])) {
+
+    if (!isset($first_line[12])) {
       throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $message);
     }
-    
+
     // version
-    if (array_key_exists(16, $first_line)) {
-      $this->parseRawVersion($first_line[11], $first_line[16]);
-    }
-    else {
-      $this->parseRawVersion($first_line[11]);
-    }
-    
+    $this->parseRawVersion($first_line[12]);
+
     // message type
-    $message_type = explode($this->componentSeparator, $first_line[8]);
+    $message_type = explode($this->componentSeparator, $first_line[6]);
+    $this->name  = $message_type[0];
+    $this->event_name = $message_type[0];
 
-    if ($message_type[0]) {
-      $this->name  = $message_type[0];
-
-      if ($this->name == "ACK") {
-        $this->event_name = $message_type[0];
-      }
-      else {
-        if (strlen($message_type[0]) != 3 || strlen($message_type[1]) != 3) {
-          $msg = $message_type[0].$this->componentSeparator.$message_type[1];
-          throw new CHL7v2Exception(CHL7v2Exception::WRONG_MESSAGE_TYPE, $msg);
-        }
-
-        $this->event_name = $message_type[0].$message_type[1];
-      }
-    }
-    else {
-      $this->event_name = preg_replace("/[^A-Z0-9]/", "", $message_type[2]);
-      $this->name       = substr($message_type[2], 0, 3);
-    }
-    
     if (!$spec = $this->getSpecs()) {
       throw new CHL7v2Exception(CHL7v2Exception::UNKNOWN_MSG_CODE);
     }
-    
+
     $this->description = (string)$spec->description;
-    
+
     $this->readHeader();
-    
+
     if ($parse_body) {
       $this->readSegments();
     }
   }
-  
+
   private function parseRawVersion($raw, $country_code = null){
     $parts = explode($this->componentSeparator, $raw);
-   
+
     CMbArray::removeValue("", $parts);
-    
-    $this->version = $version = $parts[0];
-    
+
+    $this->version = $parts[0];
+
     // Version spécifique française spécifiée
     if (count($parts) > 1) {
-      $this->i18n_code = $parts[1];
-      $this->extension = $version = "$parts[1]_$parts[2]";
-    } 
-    // Recherche depuis le code du pays
-    /* @todo Pas top */
-    elseif ($country_code == "FRA") {
-      $this->i18n_code = "FR";
-      $this->extension = $version = "FR_2.3";
+      $this->type = $parts[1];
     }
 
     // Dans le cas où la version passée est incorrecte on met par défaut 2.5
-    if (!in_array($version, self::$versions)) {
-      $this->version = CAppUI::conf("hl7 default_version");
+    if (!in_array($this->version, self::$versions)) {
+      $this->version = CAppUI::conf("hprim21 default_version");
     }
   }
 
   function getSchema($type, $name) {
-    $extension = $this->extension;
-
-    /*if (empty(self::$schemas)) {
-      self::$schemas = SHM::get("hl7-v2-schemas");
-    }*/
-
     $version = $this->getVersion();
 
-    if (isset(self::$schemas[$version][$type][$name][$extension])) {
-      return self::$schemas[$version][$type][$name][$extension];
+    if (isset(self::$schemas[$version][$type][$name][$this->type])) {
+      return self::$schemas[$version][$type][$name][$this->type];
     }
 
     if (!in_array($version, self::$versions)) {
       $this->error(CHL7v2Exception::VERSION_UNKNOWN, $version);
     }
 
-    if ($extension && $extension !== "none" && preg_match("/([A-Z]{2})_(.*)/", $extension, $matches)) {
-      $lang = strtolower($matches[1]);
-      $v    = "v".str_replace(".", "_", $matches[2]);
-      $version_dir = "extensions/$lang/$v";
-    }
-    else {
-      $version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);
-    }
-
+    // TODO $type_liaison
+    $version = strtoupper($version);
+    $version_dir = preg_replace("/[^H0-9]/", "_", $version);
     $name_dir = preg_replace("/[^A-Z0-9_]/", "", $name);
 
-    $this->spec_filename = self::LIB_HL7."/$version_dir/$type$name_dir.xml";
+    $this->spec_filename = "modules/hprim21/resources/$version_dir/$type$name_dir.xml";
 
     if (!file_exists($this->spec_filename)) {
       $this->error(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
@@ -282,15 +211,9 @@ class CHL7v2Message extends CHMessage {
 
     $schema = @simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");
 
-    self::$schemas[$version][$type][$name][$extension] = $schema;
-
-    //SHM::put("hl7-v2-schemas", self::$schemas);
+    self::$schemas[$version][$type][$name][$this->type] = $schema;
 
     return $this->specs = $schema;
-  }
-
-  function loadDataType($datatype) {
-    return CHL7v2DataType::load($this, $datatype, $this->getVersion(), $this->extension);
   }
 
   static function highlight($msg){
@@ -313,5 +236,32 @@ class CHL7v2Message extends CHMessage {
     );
 
     return "<pre class='er7'>".strtr($msg, $pat)."</pre>";
+  }
+
+  function flatten($highlight = false){
+    $string = parent::flatten($highlight);
+
+    if ($highlight) {
+      return $string;
+    }
+
+    $lines = preg_split("/[\r\n]+/", $string);
+    $lines_after = array();
+
+    $max_length = 210;
+    // 200 pour être "large" (220 normalement)
+
+    foreach ($lines as $_line) {
+      if (strlen($_line) < $max_length) {
+        $lines_after[] = $_line;
+        continue;
+      }
+
+      $pos = strpos($_line, $this->fieldSeparator, $max_length-1);
+      $lines_after[] = substr($_line, 0, $pos);
+      $lines_after[] = "A{$this->fieldSeparator}".substr($_line, $pos);
+    }
+
+    return implode("\r\n", $lines_after);
   }
 }

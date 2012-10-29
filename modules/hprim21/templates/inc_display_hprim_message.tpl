@@ -19,13 +19,13 @@
   <hr class="control_tabs" />
    
   <div id="message-{{$key}}-tree" style="display: none;">
-    <ul class="hpr-tree">
+    <ul class="hl7-tree">
       {{mb_include module=hprim21 template=inc_segment_group_children segment_group=$message}}
     </ul>
   </div>
   
   <div id="message-{{$key}}-hpr-input" style="display: none;">
-    {{$message->highlightHPR($message->data)|smarty:nodefaults}}
+    {{$message->highlight($message->data)|smarty:nodefaults}}
   </div>
   
   <div id="message-{{$key}}-hpr-output" style="display: none;">
@@ -37,10 +37,10 @@
   </div>
   
   <div id="message-{{$key}}-warnings" style="display: none;">
-    {{mb_include module=hl7 template=inc_hprim_errors errors=$message->errors level=1}}
+    {{mb_include module=hprim21 template=inc_hprim_errors errors=$message->errors level=1}}
   </div>
   
   <div id="message-{{$key}}-errors" style="display: none;">
-    {{mb_include module=hl7 template=inc_hprim_errors errors=$message->errors level=2}}
+    {{mb_include module=hprim21 template=inc_hprim_errors errors=$message->errors level=2}}
   </div>
 </div>

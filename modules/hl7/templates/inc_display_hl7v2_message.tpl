@@ -25,7 +25,7 @@
   </div>
   
   <div id="message-{{$key}}-er7-input" style="display: none;">
-    {{$message->highlightER7($message->data)|smarty:nodefaults}}
+    {{$message->highlight($message->data)|smarty:nodefaults}}
   </div>
   
   <div id="message-{{$key}}-er7-output" style="display: none;">

@@ -69,6 +69,15 @@ abstract class CHL7v2Entity extends CHL7v2 {
   function fill($items) {
     
   }
+
+  /**
+   * Tells whether to keep the entity as is or not
+   *
+   * @return boolean Whether to keep the entity as is or not
+   */
+  function keep() {
+    return in_array($this->name, $this->getMessage()->getKeepOriginal());
+  }
   
   /**
    * Appends an error object in the errors array

@@ -147,13 +147,26 @@ foreach ($classes as $class) {
     }
     
     if ($spec instanceof CRefSpec && $prop[0] != "_") {
-      $fwdClass = $spec->class;
-      $fwdObject = new $fwdClass;
-      
-      // Find corresponding back name
-      $backName = array_search("$spec->className $spec->fieldName", $fwdObject->_backProps);
-      addLocale($classname, $prop, "$spec->class-back-$backName");
-      addLocale($classname, $prop, "$spec->class-back-$backName.empty");
+      if ($spec->meta && $object->_specs[$spec->meta] instanceof CEnumSpec) {
+        $classes = $object->_specs[$spec->meta]->_list;
+        foreach($classes as $fwdClass) {
+          $fwdObject = new $fwdClass;
+          
+          // Find corresponding back name
+          $backName = array_search("$spec->className $spec->fieldName", $fwdObject->_backProps);
+          addLocale($classname, $prop, "$spec->class-back-$backName");
+          addLocale($classname, $prop, "$spec->class-back-$backName.empty");
+        }
+      }
+      else {
+        $fwdClass = $spec->class;
+        $fwdObject = new $fwdClass;
+        
+        // Find corresponding back name
+        $backName = array_search("$spec->className $spec->fieldName", $fwdObject->_backProps);
+        addLocale($classname, $prop, "$spec->class-back-$backName");
+        addLocale($classname, $prop, "$spec->class-back-$backName.empty");
+      }
     }
   }
   

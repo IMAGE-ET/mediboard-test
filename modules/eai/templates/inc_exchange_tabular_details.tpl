@@ -74,7 +74,7 @@
       
       <div id="msg-message-er7-input" style="display: none;">
         <div id="msg-message-er7-input-view">
-          {{$msg_segment_group->highlightER7($msg_segment_group->data)|smarty:nodefaults}}
+          {{$msg_segment_group->highlight($msg_segment_group->data)|smarty:nodefaults}}
           <button type="button" class="edit" onclick="$('msg-message-er7-input-view').toggle(); $('msg-message-er7-edit').toggle();">{{tr}}Edit{{/tr}}</button>
         </div>
         

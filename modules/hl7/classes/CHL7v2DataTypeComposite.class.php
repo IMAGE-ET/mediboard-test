@@ -13,15 +13,15 @@ class CHL7v2DataTypeComposite extends CHL7v2DataType {
   var $components = array();
   var $description = null;
   
-  protected function __construct($datatype, $version, $extension) {
-    parent::__construct($datatype, $version, $extension);
+  /*protected */function __construct($message, $datatype, $version, $extension) {
+    parent::__construct($message, $datatype, $version, $extension);
     
     $specs = $this->getSpecs();
     $this->description = (string)$specs->description;
     /*
     $_component_specs = $specs->getItems();
     foreach($_component_specs as $field) {
-      $comp = CHL7v2DataType::load((string)$field->datatype, $this->version, $this->extension);
+      $comp = CHL7v2DataType::load($field->getMessage(), (string)$field->datatype, $this->version, $this->extension);
       
       $comp->length = (int)$field->attributes()->length;
       $comp->table = (int)$field->attributes()->table;

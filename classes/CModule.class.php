@@ -55,8 +55,8 @@ class CModule extends CMbObject {
   var $_dsns = null;
   
   // Other collections
-  var $_tabs      = null;  // List of tabs with permission
-  var $_can       = null;  // Rights
+  var $_tabs      = array(); // List of tabs with permission
+  var $_can       = null;    // Rights
   var $_canView   = null;
 
   function CModule() {
@@ -194,13 +194,13 @@ class CModule extends CMbObject {
       
       if (!$modules) {
         $module = new self;
-        $modules = $module->loadList(null, "mod_ui_order"); 
+        $modules = $module->loadList(null, "mod_ui_order");
         SHM::put("modules", $modules);
       }
     }
     else {
       $module = new self;
-      $modules = $module->loadList(null, "mod_ui_order"); 
+      $modules = $module->loadList(null, "mod_ui_order");
     }
 
     // Catagories
@@ -325,15 +325,20 @@ class CModule extends CMbObject {
   
   /**
    * Check if a module exist
-   * @param string $moduleName
-   * @return bool
+   *
+   * @param string $moduleName Module name
+   *
+   * @return bool true if the module exists
    */
   static function exists($moduleName) {
     return is_file("./modules/$moduleName/index.php"); 
   }
-  
+
   /**
    * Returns all or a named installed module
+   *
+   * @param string $moduleName Module name
+   *
    * @return array|CModule
    */
   static function getInstalled($moduleName = null) {
@@ -346,6 +351,9 @@ class CModule extends CMbObject {
 
   /**
    * Returns all or a named active module
+   *
+   * @param string $moduleName Module name
+   *
    * @return array|CModule
    */
   static function getActive($moduleName = null) {
@@ -358,6 +366,9 @@ class CModule extends CMbObject {
    
   /**
    * Returns all or a named visible module
+   *
+   * @param string $moduleName Module name
+   *
    * @return array|CModule
    */
   static function getVisible($moduleName = null) {
@@ -367,10 +378,13 @@ class CModule extends CMbObject {
 
     return self::$visible;
   }
-  
+
   /**
-   * get CanDo object for given installed module, 
-   * @return CanDo with no permission if module not installed 
+   * get CanDo object for given installed module,
+   *
+   * @param string $moduleName Module name
+   *
+   * @return CCanDo with no permission if module not installed
    */
   static function getCanDo($moduleName) {
     $module = self::getInstalled($moduleName);

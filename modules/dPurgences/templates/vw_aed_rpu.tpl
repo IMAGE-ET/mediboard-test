@@ -220,7 +220,7 @@
     
     {{if "forms"|module_active}}
       if ($("ex-forms-rpu")) {
-        ExObject.loadExObjects("{{$rpu->_class}}", "{{$rpu->_id}}", "ex-forms-rpu", 1);
+        ExObject.loadExObjects("{{$rpu->_class}}", "{{$rpu->_id}}", "ex-forms-rpu", 0.5);
       }
     {{/if}}
     

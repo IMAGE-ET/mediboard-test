@@ -84,7 +84,7 @@ class CHL7v2Component extends CHL7v2Entity {
     $this->description = (string)$specs->description;
     $this->self_pos    = $self_pos;
     
-    $this->props = CHL7v2DataType::load($this->datatype, $this->getVersion(), $this->getMessage()->extension);
+    $this->props = $this->getMessage()->loadDataType($this->datatype);
   }
   
   /**
@@ -149,7 +149,7 @@ class CHL7v2Component extends CHL7v2Entity {
     // Is composite
     if (isset($this->separator[0]) && $this->props instanceof CHL7v2DataTypeComposite) {
       $parts = CHL7v2::split($this->separator[0], $data, $keep_original);
-      
+
       $component_specs = $this->getSpecs()->getItems();
       foreach ($component_specs as $i => $_component_spec) {
         if (array_key_exists($i, $parts)) {
@@ -219,7 +219,7 @@ class CHL7v2Component extends CHL7v2Entity {
    * @return CHL7v2DataType
    */
   function getSpecs(){
-    return $this->getSchema(self::PREFIX_COMPOSITE_NAME, $this->datatype, $this->getMessage()->extension);
+    return $this->getMessage()->getSchema(self::PREFIX_COMPOSITE_NAME, $this->datatype, $this->getMessage()->extension);
   }
   
   /**

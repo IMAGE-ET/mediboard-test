@@ -8,6 +8,11 @@
             <description>Field Separator</description>
             <datatype>ST</datatype>
         </field>
+        <field minOccurs="1" maxOccurs="0">
+            <name>H.1</name>
+            <description>Encoding Characters</description>
+            <datatype>ST</datatype>
+        </field>
         <field minOccurs="0" maxOccurs="0" length="12">
             <name>H.2</name>
             <description>Message ID</description>

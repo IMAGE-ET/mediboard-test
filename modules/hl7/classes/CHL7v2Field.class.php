@@ -24,7 +24,10 @@ class CHL7v2Field extends CHL7v2Entity {
   var $forbidden     = null;
   var $unbounded     = null;
   var $items         = array();
-    
+
+  /**
+   * @var CHL7v2SimpleXMLElement
+   */
   var $meta_spec     = null;
   
   private $_ts_fixed = false;
@@ -122,7 +125,7 @@ class CHL7v2Field extends CHL7v2Entity {
   }
   
   function getSpecs(){
-    $specs = $this->getSchema(self::PREFIX_COMPOSITE_NAME, $this->datatype, $this->getMessage()->extension);
+    $specs = $this->getMessage()->getSchema(self::PREFIX_COMPOSITE_NAME, $this->datatype, $this->getMessage()->extension);
     
     // The timestamp case, where Time contains TimeStamp data
     /*if (!$this->_ts_fixed && $this->datatype === "TS") {

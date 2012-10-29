@@ -48,7 +48,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $this->description = (string)$specs->description;
     
-    if ($this->name === "MSH") {
+    if ($this->name === $message->getHeaderSegmentName()) {
       array_unshift($fields, $message->fieldSeparator);
     }
     
@@ -79,7 +79,6 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
     
     $specs = $this->getSpecs();
-    $message = $this->getMessage();
 
     $_segment_specs = $specs->getItems();
     foreach ($_segment_specs as $i => $_spec) {
@@ -138,7 +137,7 @@ class CHL7v2Segment extends CHL7v2Entity {
    * @return CHL7v2SimpleXMLElement
    */
   function getSpecs(){
-    return $this->getSchema(self::PREFIX_SEGMENT_NAME, $this->name, $this->getMessage()->extension);
+    return $this->getMessage()->getSchema(self::PREFIX_SEGMENT_NAME, $this->name);
   }
   
   function getPath($separator = ".", $with_name = false){
@@ -183,7 +182,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     $fields = $this->fields;
     
-    if ($this->name === "MSH") {
+    if ($this->name === $this->getMessage()->getHeaderSegmentName()) {
       array_shift($fields);
     }
     

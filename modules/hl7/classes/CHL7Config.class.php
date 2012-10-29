@@ -33,6 +33,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
     
     // Encoding
     "encoding",
+    "strict_segment_terminator",
+    "segment_terminator",
     
     // Handle
     "handle_mode",
@@ -71,6 +73,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   
   var $encoding      = null;
   var $strict_segment_terminator = null;
+  var $segment_terminator = null;
   
   var $handle_mode             = null;
   var $handle_NDA              = null;
@@ -91,6 +94,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "format" => array(
       "encoding", 
       "strict_segment_terminator",
+      "segment_terminator",
     ),
     
     "application" => array(
@@ -160,6 +164,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     // Encoding
     $props["encoding"] = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
     $props["strict_segment_terminator"] = "bool default|0";
+    $props["segment_terminator"] = "enum list|CR|LF|CRLF";
     
     // Handle
     $props["handle_mode"]             = "enum list|normal|simple default|normal";

@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-class CHL7v2DataType extends CHDataType {
+class CHprim21DataType extends CHDataType {
   /**
    * Get the spec object of a data type
    * 

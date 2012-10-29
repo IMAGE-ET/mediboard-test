@@ -18,7 +18,7 @@
             <description>Number Segment P</description>
             <datatype>NM</datatype>
         </field>
-        <field minOccurs="1" maxOccurs="0" length="10">
+        <field minOccurs="0" maxOccurs="0" length="10">
             <name>L.4</name>
             <description>Number Segment of Message</description>
             <datatype>NM</datatype>

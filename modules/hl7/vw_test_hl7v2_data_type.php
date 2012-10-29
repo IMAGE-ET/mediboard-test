@@ -98,7 +98,7 @@ $dummy_field = new CHL7v2Field($dummy_segment, new CHL7v2SimpleXMLElement('<?xml
 
 foreach($test_suite as $type => $systems) {
   echo "<h1>$type</h1>";
-  $dt = CHL7v2DataType::load($type, "2.5", "none");
+  $dt = CHL7v2DataType::load($dummy_message, $type, "2.5", "none");
   
   foreach($systems as $system => $tests) {
     echo "<h2>vers $system</h2>";

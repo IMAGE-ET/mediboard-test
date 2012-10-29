@@ -195,7 +195,7 @@ class CAppUI {
     $files = array();
 
     if ($handle = opendir($subpath)) {
-      while (false !== ($file = readdir($handle))) { 
+      while (false !== ($file = readdir($handle))) {
         if ($file !== "." && 
             $file !== ".." && 
             preg_match("/$filter/", $file)
@@ -831,6 +831,12 @@ class CAppUI {
    * @var boolean
    */
   static $localize = true;
+
+  /**
+   * Mask of strings to ignore for the localization warning
+   * @var string
+   */
+  static $localize_ignore = '/(^CExObject|^CMbObject\.dummy)/';
   
   /**
    * Localize given statement
@@ -855,7 +861,7 @@ class CAppUI {
       }
       // Other wise keep it in a stack...
       else {
-        if (!in_array($str, self::$unlocalized)) {
+        if (!in_array($str, self::$unlocalized) && !preg_match(self::$localize_ignore, $str)) {
           self::$unlocalized[] = $str;
         }
         // ... and decorate

@@ -19,9 +19,9 @@ if (!$message_string) {
 $message_string = stripslashes($message_string);
 
 CValue::setSession("message", $message_string);
-/*
+
 try {
-  $message = new CHL7v2Message;
+  $message = new CHPrim21Message();
   $message->parse($message_string);
   
   $message->_errors_msg   = !$message->isOK(CHL7v2Error::E_ERROR);
@@ -30,7 +30,7 @@ try {
 } catch (CHL7v2Exception $e) {
   CAppUI::stepMessage(UI_MSG_ERROR, $e->getMessage()." (".$e->extraData.")");
   return;
-}*/
+}
 
 // Création du template
 $smarty = new CSmartyDP();

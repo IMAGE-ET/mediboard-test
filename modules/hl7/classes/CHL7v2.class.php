@@ -32,14 +32,17 @@ abstract class CHL7v2 {
     // Extension française
     "FR_2.1", 
     "FR_2.2", 
-    "FR_2.3"
+    "FR_2.3",
+
+    // Hprim 2.1
+    "H2.1",
   );
-  
-  static $keep_original = array("MSH.1", "MSH.2", "NTE.3", "OBX.5");
   
   static $schemas = array();
   
   static $ds = false;
+
+  //protected $keep_original = array();
   
   /**
    * When explode() is passed an empty $string, it returns a one element array
@@ -56,15 +59,6 @@ abstract class CHL7v2 {
     }
     
     return ($dont_split ? array($data) : explode($delimiter, $data));
-  }
-  
-  /**
-   * Tells whether to keep the entity as is or not
-   * 
-   * @return boolean Whether to keep the entity as is or not
-   */
-  function keep() {
-    return in_array($this->name, self::$keep_original);
   }
   
   /**
@@ -179,57 +173,7 @@ abstract class CHL7v2 {
    * @return string The version
    */
   abstract function getVersion();
-  
-  /**
-   * Get the schema of the entity
-   * 
-   * @param string $type      The type of schema to get
-   * @param string $name      The name of the entity to get the schema of
-   * @param string $extension The name of the extension (none, fr, us, ...)
-   *
-   * @return CHL7v2SimpleXMLElement The schema
-   */
-  function getSchema($type, $name, $extension = "none") {
-    /*if (empty(self::$schemas)) {
-      self::$schemas = SHM::get("hl7-v2-schemas");
-    }*/
-    
-    $version = $this->getVersion();
-    
-    if (isset(self::$schemas[$version][$type][$name][$extension])) {
-      return self::$schemas[$version][$type][$name][$extension];
-    }
 
-    if (!in_array($version, self::$versions)) {
-      $this->error(CHL7v2Exception::VERSION_UNKNOWN, $version);
-    }
-    
-    if ($extension && $extension !== "none" && preg_match("/([A-Z]{2})_(.*)/", $extension, $matches)) {
-      $lang = strtolower($matches[1]);
-      $v    = "v".str_replace(".", "_", $matches[2]);
-      $version_dir = "extensions/$lang/$v";
-    }
-    else {
-      $version_dir = "hl7v".preg_replace("/[^0-9]/", "_", $version);
-    }
-    
-    $name_dir = preg_replace("/[^A-Z0-9_]/", "", $name);
-    
-    $this->spec_filename = self::LIB_HL7."/$version_dir/$type$name_dir.xml";
-    
-    if (!file_exists($this->spec_filename)) {
-      $this->error(CHL7v2Exception::SPECS_FILE_MISSING, $this->spec_filename);
-    }
-
-    $schema = @simplexml_load_file($this->spec_filename, "CHL7v2SimpleXMLElement");
-    
-    self::$schemas[$version][$type][$name][$extension] = $schema;
-    
-    //SHM::put("hl7-v2-schemas", self::$schemas);
-    
-    return $this->specs = $schema;
-  }
-  
   /**
    * Debug output
    * 
