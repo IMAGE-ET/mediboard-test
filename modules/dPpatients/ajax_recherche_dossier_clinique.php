@@ -402,7 +402,7 @@ if ($one_field) {
     $request->addOrder("patients.nom ASC, sejour.entree_prevue ASC");
   }
   elseif ($interv_filled) {
-    $request->addSelect("operations.operation_id" . $other_fields);
+    $request->addSelect("operations.operation_id, patients.patient_id" . $other_fields);
     $request->addTable("operations");
     $request->addOrder("patients.nom ASC, operations.date ASC, plagesop.date ASC");
   }
@@ -449,7 +449,7 @@ if ($one_field) {
       $request_b->addOrder("patients.nom ASC, sejour.entree_prevue ASC");
     }
     elseif ($interv_filled) {
-      $request_b->addSelect("operations.operation_id" . $other_fields);
+      $request_b->addSelect("operations.operation_id, patients.patient_id" . $other_fields);
       $request_b->addTable("operations");
       $request_b->addOrder("patients.nom ASC, operations.date ASC, plagesop.date ASC");
     }
@@ -525,10 +525,12 @@ if ($one_field) {
   
   // Le count total
   $request->select = array("count(*)");
+  $request->limit = null;
   $count_patient = $ds->loadResult($request->getRequest());
   
   if (!$commentaire && $one_field_presc) {
     $request_b->select = array("count(*)");
+    $request_b->limit = null;
     $count_patient += $ds->loadResult($request_b->getRequest());
   }
 }
