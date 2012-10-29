@@ -348,7 +348,7 @@ Main.add(function() {
               </td>
             </tr>
             
-            {{if $attach_consult_sejour}}
+            {{if $consult->sejour_id}}
               <tr>
                 <th>{{mb_label object=$consult field="brancardage"}}</th> 
                 <td>
@@ -456,7 +456,7 @@ Main.add(function() {
             <td>{{mb_field object=$consult field="si_desistement" typeEnum="checkbox"}}</td>
           </tr>
           
-          {{if $conf.dPcabinet.CConsultation.attach_consult_sejour}}
+          {{if $attach_consult_sejour}}
           <tr>
             <th>{{mb_label object=$consult field="_forfait_se"}}</th>
             <td>{{mb_field object=$consult field="_forfait_se" typeEnum="checkbox"}}</td>
