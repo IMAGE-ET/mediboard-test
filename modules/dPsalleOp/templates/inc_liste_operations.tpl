@@ -65,7 +65,9 @@
   {{else}}
   <td class="text" rowspan="{{$rowspan}}">
   {{/if}}
-    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$_operation->_id}}" title="Coder l'intervention">
+    {{if $salle}}
+      <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$_operation->_id}}" title="Coder l'intervention">
+    {{/if}}
       {{if ($urgence && $salle) || $_operation->_ref_plageop->spec_id}}
         {{$_operation->_ref_chir->_view}} -
       {{if $vueReduite && $_operation->_ref_anesth->_id}}
@@ -91,11 +93,12 @@
           </div>
         {{/if}}
       {{/if}}
-    </a>
+    {{if $salle}}
+      </a>
+    {{/if}}
     {{if $vueReduite && $systeme_materiel == "expert"}}
       <button class="print notext not-printable" onclick="printFicheBloc({{$_operation->_id}})">{{tr}}Print{{/tr}}</button>
       {{if $urgence && $salle && $_operation->_ref_besoins|@count}}
-        
         <img src="style/mediboard/images/icons/equipement.png" onmouseover="ObjectTooltip.createDOM(this, 'besoins_{{$_operation->_id}}')"/>
         <div id="besoins_{{$_operation->_id}}" style="display: none;">
           {{tr}}CBesoinRessource.all{{/tr}} :
@@ -128,7 +131,9 @@
   
   {{else}}
   <td class="text">
-    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}">
+    {{if $salle}}
+      <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}">
+    {{/if}}
     <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
           onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
       {{$_operation->_ref_patient->_view}}
@@ -143,12 +148,16 @@
         {{$_operation->_ref_affectation->_ref_lit->_view}}
       </div>
     {{/if}}
-    </a>
+    {{if $salle}}
+      </a>
+    {{/if}}
   </td>
   
   <td class="text">
     {{mb_ternary var=direction test=$urgence value=vw_edit_urgence other=vw_edit_planning}}
-    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" {{if $_operation->_count_actes == "0"}}style="border-color: #F99" class="mediuser"{{/if}}>
+    {{if $salle}}
+      <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" {{if $_operation->_count_actes == "0"}}style="border-color: #F99" class="mediuser"{{/if}}>
+    {{/if}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')" >
       {{if $_operation->libelle}}
         {{$_operation->libelle}}
@@ -163,7 +172,9 @@
          ({{$_operation->_ref_sejour->type|truncate:1:""|capitalize}})
       {{/if}}
       </span>
-    </a>
+    {{if $salle}}
+      </a>
+    {{/if}}
   </td>
   <td>
     {{if $conf.dPplanningOp.COperation.verif_cote && ($_operation->cote == "droit" || $_operation->cote == "gauche") && !$vueReduite}}
@@ -192,7 +203,9 @@
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
     <select name="salle_id" onchange="this.form.submit();">
-
+      {{if $urgence && !$_operation->salle_id}}
+        <option value="">&mdash; Choisir une salle</option>
+      {{/if}}
       {{foreach from=$listBlocs item=curr_bloc}}
       <optgroup label="{{$curr_bloc->nom}}">
         {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
