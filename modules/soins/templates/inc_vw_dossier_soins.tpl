@@ -195,7 +195,10 @@ Main.add(function () {
     PlanSoins.moveDossierSoin($('tbody_date'));
   }
   
-  new Control.Tabs('tab_dossier_soin');
+  var tab_dossier_soin = new Control.Tabs('tab_dossier_soin');
+  {{if $app->_ref_user->isPraticien()}}
+    tab_dossier_soin.setActiveTab("dossier_suivi");
+  {{/if}}
   if($('tab_categories')){
     tabs = Control.Tabs.create('tab_categories', true);
   }
