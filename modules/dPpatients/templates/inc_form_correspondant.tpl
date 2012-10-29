@@ -19,7 +19,9 @@
     Calendar.regField(form.date_debut, null, { noView: false } );
     Calendar.regField(form.date_fin  , null, { noView: false } );
 
-    toggleUrrsafParente(form.relation);
+    {{if !$correspondant->_id}}
+      toggleUrrsafParente(form.relation);
+    {{/if}}
 
     {{if !$mode_modele}}
       // Autocomplete sur le nom du correspondant
@@ -78,6 +80,7 @@
     else {
       $("parente").setStyle({display: "table-row"});
       $("urssaf").setStyle({display: "none"});
+      console.log(elt);
       $V(elt.form.urrsaf, "");
     }
   }

@@ -50,6 +50,7 @@
 <button type="button" class="new" onclick="CorrespondantModele.editCorrespondant(0)">
   {{tr}}CCorrespondant-title-create{{/tr}}
 </button>
+
 <button type="button" class="upload" onclick="popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
 
 <table class="tbl">
