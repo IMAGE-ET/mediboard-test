@@ -408,6 +408,7 @@ $locales['link_hprim_objects'] = 'Association des objets';
 $locales['mod-hprim21-tab-configure'] = 'Configurer';
 $locales['mod-hprim21-tab-pat_hprim_selector'] = 'Selecteur de patient';
 $locales['mod-hprim21-tab-sejour_hprim_selector'] = 'Recherche de séjour';
+$locales['mod-hprim21-tab-vw_display_hprim_message'] = 'Highlight HPR';
 $locales['mod-hprim21-tab-vw_hprim_files'] = 'Lecture et association des objets';
 $locales['mod-hprim21-tab-vw_idx_echange_hprim21'] = 'Echanges HPRIM 2.1';
 $locales['mod-hprim21-tab-vw_patients'] = 'Patients';
