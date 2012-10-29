@@ -37,6 +37,10 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     
     // Création/MAJ d'un correspondant patient
     if ($mbObject instanceof CCorrespondantPatient) {
+      if (!$mbObject->patient_id) {
+        return; 
+      }
+      
       $mbObject                           = $mbObject->loadRefPatient();
       $mbObject->_receiver                = $receiver;
       $mbObject->_eai_initiateur_group_id = $eai_initiateur_group_id;
