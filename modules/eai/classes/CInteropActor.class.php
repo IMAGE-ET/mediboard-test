@@ -99,7 +99,9 @@ class CInteropActor extends CMbObject {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
+    
     $backProps["messages_supported"] = "CMessageSupported object_id";
+    $backProps["domains"]            = "CDomain actor_id";
     
     return $backProps;
   }

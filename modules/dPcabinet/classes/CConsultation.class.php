@@ -149,6 +149,7 @@ class CConsultation extends CCodable {
 
   function getSpec() {
     $spec = parent::getSpec();
+    
     $spec->table = 'consultation';
     $spec->key   = 'consultation_id';
     $spec->measureable = true;
@@ -158,11 +159,13 @@ class CConsultation extends CCodable {
         "reference2" => array("CPatient", "patient_id"),
       ),
     );
+    
     return $spec;
   }
 
   function getBackProps() {
     $backProps = parent::getBackProps();
+    
     $backProps["consult_anesth"]    = "CConsultAnesth consultation_id";
     $backProps["examaudio"]         = "CExamAudio consultation_id";
     $backProps["examcomp"]          = "CExamComp consultation_id";
@@ -172,11 +175,14 @@ class CConsultation extends CCodable {
     $backProps["reglements"]        = "CReglement object_id";
     $backProps["actes_dentaires"]   = "CActeDentaire consult_id";
     $backProps["echanges_hprimxml"] = "CEchangeHprim object_id";
+    $backProps["exchanges_ihe"]     = "CExchangeIHE object_id";
+    
     return $backProps;
   }
 
   function getProps() {
     $props = parent::getProps();
+    
     $props["sejour_id"]         = "ref class|CSejour";
     $props["plageconsult_id"]   = "ref notNull class|CPlageconsult seekable show|1";
     $props["patient_id"]        = "ref class|CPatient purgeable seekable show|1";

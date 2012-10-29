@@ -105,7 +105,37 @@ class CSetupeai extends CSetup {
                 ADD `reprocess` TINYINT (4) UNSIGNED DEFAULT '0';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.08";
+    $this->makeRevision("0.08");
+    
+    $query = "CREATE TABLE `domain` (
+                `domain_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `incrementer_id` INT (11) UNSIGNED NOT NULL,
+                `actor_id` INT (11) UNSIGNED,
+                `tag` VARCHAR (255) NOT NULL,
+                `actor_class` VARCHAR (80) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `domain` 
+                ADD INDEX (`incrementer_id`),
+                ADD INDEX (`actor_id`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `group_domain` (
+                `group_domain_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `group_id` INT (11) UNSIGNED NOT NULL,
+                `domain_id` INT (11) UNSIGNED NOT NULL,
+                `object_class` ENUM ('CPatient','CSejour') NOT NULL,
+                `master` ENUM ('0','1') NOT NULL DEFAULT '0'
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `group_domain` 
+                ADD INDEX (`group_id`),
+                ADD INDEX (`domain_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.09";
   }
 }
 
