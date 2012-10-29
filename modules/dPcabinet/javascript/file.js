@@ -112,6 +112,11 @@ var File = {
     url.addParam("dialog", 1);
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
+    var elt = $("list_"+object_class+object_id);
+    if (elt.up().up().hasClassName("name_readonly")) {
+      url.addParam("name_readonly", 1);
+    }
+    
     url.requestUpdate("td_CFile-"+id);
   },
   
