@@ -44,7 +44,9 @@ if ($object->_id) {
 // searching for a CExClassEvent
 $ex_class_event = new CExClassEvent;
 $ex_class_event->host_class = $object->_class;
-$ex_class_event->event_name = $event_name;
+if ($event_name) {
+  $ex_class_event->event_name = $event_name;
+}
 $ex_class_event->ex_class_id = $ex_class_id;
 $ex_class_event->loadMatchingObject();
 
