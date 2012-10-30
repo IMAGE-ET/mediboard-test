@@ -36,7 +36,9 @@ $table            = $content_exchange->_spec->table;
 $ljoin[$table]    = $exchange->_spec->table.".acquittement_content_id = $table.content_id";
     
 $where = array();
-$where["$table.content"] = " LIKE '%$error_code%'";
+$where["$table.content"]  = " LIKE '%$error_code%'";
+
+$where["date_production"] = " BETWEEN '$date_min' AND '$date_max'";
 
 $forceindex[] = "date_production";
 
