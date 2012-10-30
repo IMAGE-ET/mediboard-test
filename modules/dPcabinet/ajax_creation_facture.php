@@ -77,7 +77,9 @@ else {
   $facture->du_tiers      = $du_tiers;
   $facture->type_facture  = $type_facture;
   $facture->ouverture     = mbDate();
-  $facture->cloture       = mbDate();
+  if(CAppUI::conf("ref_pays") == 1){
+    $facture->cloture       = mbDate();
+  }
 }
 
 // Enregistrement des modifications si besoin
