@@ -16,7 +16,7 @@ $count          = CValue::get("count", 20);
 $continue       = CValue::get("continue"); 
 $error_code     = CValue::get("error_code"); 
 $exchange_class = CValue::get("exchange_class"); 
-$group_id       = CValue::get("group_id");
+$group_id       = CValue::get("group_id", CGroups::loadCurrent()->_id);
 $tool           = CValue::get("tool"); 
 $date_min       = CValue::getOrSession('date_min', mbDateTime("-7 day"));
 $date_max       = CValue::getOrSession('date_max', mbDateTime("+1 day"));
@@ -39,6 +39,7 @@ $where = array();
 $where["$table.content"]  = " LIKE '%$error_code%'";
 
 $where["date_production"] = " BETWEEN '$date_min' AND '$date_max'";
+$where["group_id"]        = " = '$group_id'";
 
 $forceindex[] = "date_production";
 
