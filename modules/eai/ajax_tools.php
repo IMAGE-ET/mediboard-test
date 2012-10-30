@@ -65,7 +65,7 @@ switch ($tool) {
         $e->stepAjax(UI_MSG_WARNING);
       }
       
-      if (!$exchange->_id) {
+      if (!$_exchange->_id) {
         CAppUI::stepAjax("CExchangeAny-msg-delete", UI_MSG_ALERT);
       }
       
