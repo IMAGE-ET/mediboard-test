@@ -38,7 +38,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
       "delete" => "suppression"
     );
     $action = (!$operation->loadLastLog()) ? "modification" : $actionConversion[$operation->_ref_last_log->type];
-    if ($operation->fieldModified("annulee", 1)) {
+    if ($operation->fieldModified("annulee", 1) || $operation->annulee) {
       $action = "suppression";
     }
     $this->addAttribute($evenementServeurIntervention, "action", $action);
