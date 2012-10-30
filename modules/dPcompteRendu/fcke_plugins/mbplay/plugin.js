@@ -167,7 +167,18 @@ function mbplay_onclick(editor) {
   // Scroll dans l'éditeur
   // Besoin d'un délai pour IE.
   window_parent.save_scroll = editor_element.offsetTop;
-  setTimeout(function() { bodyEditor.scrollTop = editor_element.offsetTop }, 10);
+  setTimeout(function() { bodyEditor.scrollTop = editor_element.offsetTop}, 10);
+  
+  // Focus automatique
+  // - Zone de texte libre
+  if (elt = element.down("textarea")) {
+    elt.focus();
+  }
+  // - Liste de choix
+  else {
+    element.focus();
+    element.selectedIndex = 0;
+  }
   
 }
 
