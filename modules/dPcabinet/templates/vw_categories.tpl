@@ -91,24 +91,11 @@
       <tr>
         <th>{{mb_label object=$categorie field="duree"}}</th>
         <td>
+          {{foreach from=1|range:15 item=i}}
             <label>
-              <input type="radio" value="1" name="duree" {{if $categorie->duree == 1}}checked="checked"{{/if}}>x1
+              <input type="radio" value="{{$i}}" name="duree" {{if $categorie->duree == $i}}checked{{/if}}>x{{$i}}
             </label>
-            <label>
-              <input type="radio" value="2" name="duree" {{if $categorie->duree == 2}}checked="checked"{{/if}}>x2
-            </label>
-            <label>
-              <input type="radio" value="3" name="duree" {{if $categorie->duree == 3}}checked="checked"{{/if}}>x3
-            </label>
-            <label>
-              <input type="radio" value="4" name="duree" {{if $categorie->duree == 4}}checked="checked"{{/if}}>x4
-            </label>
-            <label>
-              <input type="radio" value="5" name="duree" {{if $categorie->duree == 5}}checked="checked"{{/if}}>x5
-            </label>
-            <label>
-              <input type="radio" value="6" name="duree" {{if $categorie->duree == 6}}checked="checked"{{/if}}>x6
-            </label>
+          {{/foreach}}
         </td>
       </tr>
       <tr>

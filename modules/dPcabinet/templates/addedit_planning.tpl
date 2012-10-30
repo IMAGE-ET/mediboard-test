@@ -475,12 +475,9 @@ Main.add(function() {
             <th>{{mb_label object=$consult field="duree"}}</th>
             <td>
               <select name="duree">
-                <option value="1" {{if $consult->duree == 1}} selected="selected" {{/if}}>x1</option>
-                <option value="2" {{if $consult->duree == 2}} selected="selected" {{/if}}>x2</option>
-                <option value="3" {{if $consult->duree == 3}} selected="selected" {{/if}}>x3</option>
-                <option value="4" {{if $consult->duree == 4}} selected="selected" {{/if}}>x4</option>
-                <option value="5" {{if $consult->duree == 5}} selected="selected" {{/if}}>x5</option>
-                <option value="6" {{if $consult->duree == 6}} selected="selected" {{/if}}>x6</option>
+                {{foreach from=1|range:15 item=i}}
+                  <option value="{{$i}}" {{if $consult->duree == $i}}selected{{/if}}>x{{$i}}</option>
+                {{/foreach}}
               </select>
             </td>
           </tr>

@@ -8,7 +8,7 @@
 */
 
 class CConsultationCategorie extends CMbObject {
-	
+  
   // DB Table key
   var $categorie_id = null;
 
@@ -29,23 +29,23 @@ class CConsultationCategorie extends CMbObject {
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["function_id"]   = "ref notNull class|CFunctions";
     $specs["nom_categorie"] = "str notNull";
     $specs["nom_icone"]     = "str notNull";
-    $specs["duree"]         = "num min|1 max|9 notNull default|1 show|0";
+    $specs["duree"]         = "num min|1 max|15 notNull default|1 show|0";
     $specs["commentaire"]   = "text helped seekable";
     return $specs;
   }
   
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps["consultations"] = "CConsultation categorie_id";
-	  return $backProps;
-	}
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["consultations"] = "CConsultation categorie_id";
+    return $backProps;
+  }
 
   function updateFormFields() {
-  	parent::updateFormFields();
+    parent::updateFormFields();
     $this->_view = $this->nom_categorie;
   }  
 }

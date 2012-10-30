@@ -194,7 +194,7 @@ class CConsultation extends CCodable {
     $props["motif"]             = "text helped seekable";
     $props["type"]              = "enum list|classique|entree|chimio default|classique";
     $props["heure"]             = "time notNull show|0";
-    $props["duree"]             = "num min|1 max|9 notNull default|1 show|0";
+    $props["duree"]             = "num min|1 max|15 notNull default|1 show|0";
     $props["secteur1"]          = "currency min|0 show|0";
     $props["secteur2"]          = "currency show|0";
     $props["chrono"]            = "enum notNull list|16|32|48|64 show|0";

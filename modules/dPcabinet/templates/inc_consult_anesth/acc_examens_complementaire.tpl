@@ -57,13 +57,15 @@ function calculPSA () {
             <tr>
               <td>
                 <input type="hidden" name="_hidden_examen" value="" />
-                {{mb_field object=$examComp field="examen" rows="4" onblur="if(!$(this).emptyValue()){ExamComp.submit(this.form);}" form="addExamCompFrm"
+                {{mb_field object=$examComp field="examen" rows="4" form="addExamCompFrm"
                   aidesaisie="validateOnBlur: 0"}}
               </td>
             </tr>
             <tr>
               <td class="button" colspan="3">
-                <button class="add" type="button">{{tr}}CExamComp-title-create{{/tr}}</button>
+                <button class="add" type="button" onclick="if ($V(this.form.examen)) { ExamComp.submit(this.form); }">
+                  {{tr}}CExamComp-title-create{{/tr}}
+                </button>
               </td>
             </tr>
           </table>     
