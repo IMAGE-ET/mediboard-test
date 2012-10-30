@@ -51,7 +51,9 @@ foreach ($chambres_non_placees as $ch) {
   $ch->loadRefEmplacement();
 }
 
-$grille = array_fill(0, 10, array_fill(0, 10, 0));
+$conf_nb_colonnes = CAppUI::conf("dPhospi nb_colonnes_vue_topologique");
+
+$grille = array_fill(0, $conf_nb_colonnes, array_fill(0, $conf_nb_colonnes, 0));
 
 if ($service_id!="") {
   foreach ($chambre_places as $chambre) {

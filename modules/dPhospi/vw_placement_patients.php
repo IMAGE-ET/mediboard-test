@@ -43,9 +43,12 @@ foreach ($services as $serv) {
 $chambres = array();
 $grilles = array();
 $ensemble_lits_charges = array();
+
+$conf_nb_colonnes = CAppUI::conf("dPhospi nb_colonnes_vue_topologique");
+
 foreach ($services as $serv) {  
   $grille = null;
-  $grille = array_fill(0, 10, array_fill(0, 10, 0));
+  $grille = array_fill(0, $conf_nb_colonnes, array_fill(0, $conf_nb_colonnes, 0));
   
   $chambres = $serv->loadRefsChambres();
     
@@ -99,16 +102,16 @@ foreach ($services as $serv) {
       }
     }
     //suppression des lignes inutiles
-    if ($nb==10) {
+    if ($nb==$conf_nb_colonnes) {
       unset($grille[$j]);
     }
   }
   
   //Traitement des colonnes vides
-  for ($i=0;$i<10;$i++) {
+  for ($i=0;$i<$conf_nb_colonnes;$i++) {
     $nb=0;
     $total=0;
-    for ($j=0;$j<10;$j++) {
+    for ($j=0;$j<$conf_nb_colonnes;$j++) {
       $total++;
       if (!isset($grille[$j][$i]) || $grille[$j][$i]=="0") {
         if ($i == 0 || $i == 9) {
@@ -121,7 +124,7 @@ foreach ($services as $serv) {
     }
     //suppression des colonnes inutiles
     if ($nb==$total) {
-      for ($a=0;$a<10;$a++) {
+      for ($a=0;$a<$conf_nb_colonnes;$a++) {
        unset($grille[$a][$i]);
       }
     }

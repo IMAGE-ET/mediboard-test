@@ -30,6 +30,8 @@
 
   {{mb_include module=system template=inc_config_bool var=use_vue_topologique}}
   
+  {{mb_include module=system template=inc_config_str var=nb_colonnes_vue_topologique}}
+  
   {{mb_include module=system template=inc_config_bool var=stats_for_all}}
   
   {{mb_include module=system template=inc_config_bool var=hide_alertes_temporel}}

@@ -33,9 +33,11 @@ $where["service.group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
 $where["emplacement.plan_x"] = "IS NOT NULL";
 $chambres_uhcd = $chambre->loadList($where, null, null, null, $ljoin);
 
+$conf_nb_colonnes = CAppUI::conf("dPhospi nb_colonnes_vue_topologique");
+
 $grille = array(
-  "urgence" => array_fill(0, 10, array_fill(0, 10, 0)),
-  "uhcd"    => array_fill(0, 10, array_fill(0, 10, 0))
+  "urgence" => array_fill(0, $conf_nb_colonnes, array_fill(0, $conf_nb_colonnes, 0)),
+  "uhcd"    => array_fill(0, $conf_nb_colonnes, array_fill(0, $conf_nb_colonnes, 0))
 );
 
 $listSejours = array(
@@ -127,16 +129,16 @@ for ($num = 0; $num <= 1; $num++) {
         }
       }
     //suppression des lignes inutiles
-    if ($nb == 10) {
+    if ($nb == $conf_nb_colonnes) {
       unset($grille[$nom][$j]);
     }
   }
   
   //Traitement des colonnes vides
-  for ($i = 0; $i < 10; $i++) {
+  for ($i = 0; $i < $conf_nb_colonnes; $i++) {
     $nb = 0;
     $total = 0;
-    for ($j = 0; $j < 10; $j++) {
+    for ($j = 0; $j < $conf_nb_colonnes; $j++) {
       $total++;
       if (!isset($grille[$nom][$j][$i]) || $grille[$nom][$j][$i] == "0") {
         if ($i == 0 || $i == 9) {
@@ -151,7 +153,7 @@ for ($num = 0; $num <= 1; $num++) {
     }
     //suppression des colonnes inutiles
     if ($nb == $total) {
-      for ($a = 0; $a < 10; $a++) {
+      for ($a = 0; $a < $conf_nb_colonnes; $a++) {
        unset($grille[$nom][$a][$i]);
       }
     }
