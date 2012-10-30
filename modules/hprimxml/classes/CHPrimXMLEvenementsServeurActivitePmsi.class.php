@@ -239,7 +239,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $salle = new CSalle();
     
     $where = array(
-      "salle.nom"                => $salle->_spec->ds->prepare("=%", $name),
+      "sallesbloc.nom"           => $salle->_spec->ds->prepare("=%", $name),
       "bloc_operatoire.group_id" => "= '$sejour->group_id'"
     );
     $ljoin = array(
