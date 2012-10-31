@@ -184,7 +184,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $plageOps          = $plageOp->loadMatchingList();
     foreach ($plageOps as $_plage) {
       // Si notre intervention est dans la plage Mediboard
-      if ($_plage->debut <= $time_op && (mbAddTime($temps_op, $time_op) <= $_plage->fin)) {
+      if ($_plage->debut <= $time_op && (mbTime($fin) <= $_plage->fin)) {
         $plageOp = $_plage;
         
         break;
