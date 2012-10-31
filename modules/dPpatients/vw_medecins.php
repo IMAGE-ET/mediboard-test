@@ -45,27 +45,37 @@ if($dialog) {
 }
 
 $where = array();
-if ($medecin_nom   ) $where["nom"]      = "LIKE '$medecin_nom%'";
-if ($medecin_prenom) $where["prenom"]   = "LIKE '$medecin_prenom%'";
+
+if ($medecin_nom) {
+  $where["nom"]      = "LIKE '".addslashes($medecin_nom)."%'";
+}
+
+if ($medecin_prenom) {
+  $where["prenom"]   = "LIKE '".addslashes($medecin_prenom)."%'";
+}
+
 if ($medecin_cp && $medecin_cp != "00") {
   $cps = preg_split("/\s*[\s\|,]\s*/", $medecin_cp);
   CMbArray::removeValue("", $cps);
-	
+  
   $where_cp = array();
   foreach($cps as $cp) {
     $where_cp[] = "cp LIKE '".$cp."%'";
   }
-	
+  
   $where[] = implode(" OR ", $where_cp);
 }
-if ($medecin_type)   $where["type"]     = "= '$medecin_type'";
+
+if ($medecin_type) {
+  $where["type"]     = "= '$medecin_type'";
+}
+
+$order = "nom, prenom";
 
 if ($order_col == "cp") {
   $order = "cp $order_way, nom, prenom";
 } else if ($order_col == "ville") {
-	$order = "ville $order_way, nom, prenom";
-} else {
-	$order = "nom, prenom";
+  $order = "ville $order_way, nom, prenom";
 }
 
 $medecins = new CMedecin();

@@ -16,10 +16,10 @@
       url.addParam("medecin_id", "{{$medecin_id}}");
     {{/if}}
     {{if $medecin_nom}}
-      url.addParam("medecin_nom", "{{$medecin_nom}}");
+      url.addParam("medecin_nom", "{{$medecin_nom|smarty:nodefaults}}");
     {{/if}}
     {{if $medecin_prenom}}
-      url.addParam("medecin_prenom", "{{$medecin_prenom}}");
+      url.addParam("medecin_prenom", "{{$medecin_prenom|smarty:nodefaults}}");
     {{/if}}
     {{if $medecin_cp}}
       url.addParam("medecin_cp", "{{$medecin_cp}}");
