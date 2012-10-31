@@ -218,8 +218,15 @@ class CFactureConsult extends CMbObject {
     }
     
     $this->updateMontants();
-    $this->_ref_last_consult = end($this->_ref_consults);
-    $this->_ref_first_consult = reset($this->_ref_consults);
+  
+    if (count($this->_ref_consults) > 0) {
+      $this->_ref_last_consult = end($this->_ref_consults);
+      $this->_ref_first_consult = reset($this->_ref_consults);
+    }
+    else {
+      $this->_ref_last_consult = new CConsultation();
+      $this->_ref_first_consult  = new CConsultation();
+    }
           
     return $this->_ref_consults;
   } 
