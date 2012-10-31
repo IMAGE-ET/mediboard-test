@@ -104,7 +104,7 @@ for ($i = 0; $i < $nbDays; $i++) {
         if ($_consult->derniere) {
           $color = "#faf";
         }
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, $color, true, "droppable", $_consult->_guid);
+        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view . "\n" . $_consult->motif, $color, true, "droppable", $_consult->_guid);
       } else {
         $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->motif ? $_consult->motif : "[PAUSE]", "#ffa", true, null, null);
       }

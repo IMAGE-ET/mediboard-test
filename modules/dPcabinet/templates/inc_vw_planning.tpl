@@ -22,6 +22,10 @@
     var button_desistement = $("desistement_count");
     button_desistement.writeAttribute("disabled" {{if $count_si_desistement}}, null{{/if}});
     button_desistement.down("span").update("({{$count_si_desistement}})");
+    
+    $$(".body").each(function(elt) {
+      elt.setStyle({backgroundColor: elt.up().getStyle("backgroundColor")});
+    });
   });
 </script>
 
