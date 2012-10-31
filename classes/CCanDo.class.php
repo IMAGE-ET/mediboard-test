@@ -154,4 +154,12 @@ class CCanDo {
     global $can;
     return $can->admin;
   }
+  
+  /**
+   * Dummy check method with no control
+   * Enables differenciation between no-check and undefined-check views
+   * @return void
+   */
+  static function check() {
+  }
 }
