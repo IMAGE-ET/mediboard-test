@@ -99,7 +99,7 @@
     <tr>
       <th>{{mb_label class=CConsultation field=_somme}}</th>
       {{assign var=total_du value=$recapReglement.total.secteur1+$recapReglement.total.secteur2}}
-      <td colspan="8">{{$recapReglement.total.secteur1+$recapReglement.total.secteur2|currency}}</td>
+      <td colspan="8">{{$total_du|currency}}</td>
     </tr>
     <tr>
       <th>Total réglé</th>
