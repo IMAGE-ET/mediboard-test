@@ -630,7 +630,7 @@ table#weeklyPlanning th.today {
 
 .planning .range {
   position: absolute; 
-  width: 20%;
+  width: 10%;
   left: 0; 
   top: 0;
   z-index: 0;
@@ -648,12 +648,18 @@ table#weeklyPlanning th.today {
   display: none;
   border: 1px solid #AAA;
   border-radius: 3px;
-  width: 490%;
+  width: 1000%;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
 .planning.range .range-container:hover .libelle {
   display: block;
+}
+
+.planning.range .range-container:hover > * {
+  z-index: 100;
+  zoom: 1.01;
 }
 
 .planning.range .event-container {
