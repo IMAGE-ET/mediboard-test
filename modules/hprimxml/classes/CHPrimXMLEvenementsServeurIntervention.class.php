@@ -182,7 +182,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     $operation->salle_id = $salle->_id;
     
     // Mapping du chirurgien
-    $mediuser = $this->getParticipant($data['intervention']);
+    $mediuser = $this->getParticipant($data['intervention'], $sejour);
     if (($mediuser->adeli && !$mediuser->_id) || !$mediuser->adeli) {
       $comment = $mediuser->adeli ? "Participant '$mediuser->adeli' inconnu" : "Le code ADELI n'est pas renseigné";
       return $exchange_hprim->setAckError($dom_acq, "E203", $comment, $mbObject);

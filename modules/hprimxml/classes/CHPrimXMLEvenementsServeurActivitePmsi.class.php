@@ -214,7 +214,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     return $this->getDateHeure($xpath->queryUniqueNode("hprim:fin", $node, false));
   } 
   
-  function getParticipant($node) {
+  function getParticipant($node, CSejour $sejour = null) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     $adeli = $xpath->queryTextNode("hprim:participants/hprim:participant/hprim:medecin/hprim:numeroAdeli", $node);
@@ -225,8 +225,15 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
       return $mediuser;
     }
     
-    $mediuser->adeli = $adeli;
-    $mediuser->loadMatchingObject();
+    $where = array(
+      "users_mediboard.adeli"        => $mediuser->_spec->ds->prepare("=%", $adeli),
+      "functions_mediboard.group_id" => "= '$sejour->group_id'"
+    );
+    $ljoin = array(
+      "functions_mediboard" => "functions_mediboard.function_id = users_mediboard.function_id"
+    );
+    
+    $mediuser->loadObject($where, null, null, $ljoin);
     
     return $mediuser;
   }
