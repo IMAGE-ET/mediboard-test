@@ -75,7 +75,8 @@ if (count($service_id)) {
                         ON lit.chambre_id = chambre.chambre_id
                       LEFT JOIN service
                         ON chambre.service_id = service.service_id";
-  $filterService = "AND service.service_id " . CSQLDataSource::prepareIn($service_id);
+  $in_services = CSQLDataSource::prepareIn($service_id);
+  $filterService = "AND (service.service_id $in_services OR affectation.service_id $in_services)";
 }
 else {
   $leftjoinService = $filterService = "";

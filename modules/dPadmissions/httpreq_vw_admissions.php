@@ -49,7 +49,8 @@ if (count($service_id)) {
   $ljoin["lit"]                = "affectation.lit_id = lit.lit_id";
   $ljoin["chambre"]            = "lit.chambre_id = chambre.chambre_id";
   $ljoin["service"]            = "chambre.service_id = service.service_id";
-  $where["service.service_id"] = CSQLDataSource::prepareIn($service_id);
+  $in_services = CSQLDataSource::prepareIn($service_id);
+  $where[] = "service.service_id $in_services OR affectation.service_id $in_services";
 }
 
 // Filtre sur le type du séjour
