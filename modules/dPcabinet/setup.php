@@ -299,7 +299,7 @@ class CSetupdPcabinet extends CSetup {
              "\nAND users.user_type='$id_anesth'";
       $result = $ds->loadList($query);
       $listAnesthid = array();
-      foreach($result as $keyresult => $resultAnesth){
+      foreach ($result as $keyresult => $resultAnesth) {
         $listAnesthid[$keyresult] = $result[$keyresult]["user_id"];
       } 
        
@@ -310,7 +310,7 @@ class CSetupdPcabinet extends CSetup {
              "\nAND consultation_anesth.consultation_anesth_id IS NULL" ;  
       $result = $ds->loadList($query);
 
-      foreach($result as $keyresult => $resultAnesth){
+      foreach ($result as $keyresult => $resultAnesth) {
         $consultAnesth = new CConsultAnesth;
         $consultAnesth->consultation_anesth_id = 0;
         $consultAnesth->consultation_id = $result[$keyresult]["consultation_id"];
@@ -501,10 +501,10 @@ class CSetupdPcabinet extends CSetup {
       $query->addTable("consultation_anesth");
       $query->addWhere($where);
       $aKeyxAnesth = $ds->loadColumn($query->getRequest());
-      if($aKeyxAnesth === false){
+      if ($aKeyxAnesth === false) {
         return false;
       }
-      if(count($aKeyxAnesth)) {
+      if (count($aKeyxAnesth)) {
         $query = "UPDATE consultation_anesth SET operation_id = NULL WHERE (consultation_anesth_id ".CSQLDataSource::prepareIn($aKeyxAnesth).")";
         if (!$ds->exec($query)) {
           return false;
@@ -1668,8 +1668,17 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `factureconsult` 
               ADD `statut_pro` ENUM ('chomeur','salarie','independant','non_travailleur','sans_emploi','etudiant');";
     $this->addQuery($query);
+    $this->makeRevision("1.78");
+    
+    $query = "ALTER TABLE `plageconsult` 
+              ADD `pour_compte_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `plageconsult` 
+              ADD INDEX (`pour_compte_id`);";
+    $this->addQuery($query);
         
-    $this->mod_version = "1.78";
+    $this->mod_version = "1.79";
   }
 }
 ?>

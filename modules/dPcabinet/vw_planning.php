@@ -82,7 +82,7 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
   $consultation->loadRefCategorie(1);
   $consultation->countDocItems();    
 }
-if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel) {
+if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel && $plageSel->pour_compte_id != $chirSel) {
   $plageconsult_id = null;
   $plageSel = new CPlageconsult();
 }
@@ -152,7 +152,7 @@ $planning->pauses = array("07", "12", "19");
 $plage = new CPlageconsult();
 
 $where = array();
-$where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel'";
+$where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel' OR pour_compte_id = '$chirSel'";
 
 for ($i = 0; $i < 7; $i++) {
   $jour = mbDate("+$i day", $debut);
@@ -180,6 +180,9 @@ for ($i = 0; $i < 7; $i++) {
       elseif ($_plage->remplacant_id && $_plage->remplacant_ok) {
         $color = "#BFB";
       }
+    }
+    elseif ($_plage->pour_compte_id) {
+      $color = "#EDC";
     }
     $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null);
 

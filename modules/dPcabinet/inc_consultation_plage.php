@@ -31,7 +31,7 @@ $plageSel = new CPlageconsult();
 if (($plageconsult_id === null) && $chirSel && $is_in_period) {
   $nowTime = mbTime();
   $where = array(
-    "chir_id = '$chirSel' OR remplacant_id = '$chirSel'",
+    "chir_id = '$chirSel' OR remplacant_id = '$chirSel' OR pour_compte_id = '$chirSel'",
     "date"    => "= '$today'",
     "debut"   => "<= '$nowTime'",
     "fin"     => ">= '$nowTime'"
@@ -73,7 +73,7 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
   $consultation->countDocItems();    
 }
 
-if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel) {
+if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel &&  $plageSel->pour_compte_id != $chirSel) {
   $plageconsult_id = null;
   $plageSel = new CPlageconsult();
 }

@@ -20,6 +20,7 @@ class CPlageconsult extends CMbObject {
   // DB References
   var $chir_id = null;
   var $remplacant_id = null;
+  var $pour_compte_id = null;
   
   // DB fields
   var $date    = null;
@@ -57,6 +58,7 @@ class CPlageconsult extends CMbObject {
   var $_ref_chir          = null;
   var $_ref_consultations = null;
   var $_ref_remplacant    = null;
+  var $_ref_pour_compte    = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -76,6 +78,7 @@ class CPlageconsult extends CMbObject {
     $specs = array (
       "chir_id"       => "ref notNull class|CMediusers seekable",
       "remplacant_id" => "ref class|CMediusers seekable",
+      "pour_compte_id" => "ref class|CMediusers seekable",
       "date"          => "date notNull",
       "freq"          => "time notNull",
       "debut"         => "time notNull",
@@ -203,6 +206,7 @@ class CPlageconsult extends CMbObject {
   function loadRefsFwd($cache = 0) {
     $this->_ref_chir = $this->loadFwdRef("chir_id");
     $this->_ref_remplacant = $this->loadFwdRef("remplacant_id");
+    $this->_ref_pour_compte = $this->loadFwdRef("pour_compte_id");
   }
   
   function getPerm($permType) {
@@ -352,6 +356,7 @@ class CPlageconsult extends CMbObject {
     $color   = $this->color;
     $desistee       = $this->desistee;
     $remplacant_id  = $this->remplacant_id;
+    $pour_compte_id  = $this->pour_compte_id;
 
     // Recherche de la plage suivante
     $where["date"]    = "= '$this->date'";
@@ -370,6 +375,7 @@ class CPlageconsult extends CMbObject {
     $this->color   = $color;
     $this->desistee       = $desistee;
     $this->remplacant_id  = $remplacant_id;
+    $this->pour_compte_id  = $pour_compte_id;
     $this->updateFormFields();
     return $week_jumped;
   }    

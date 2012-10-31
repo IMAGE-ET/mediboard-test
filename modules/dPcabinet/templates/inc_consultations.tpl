@@ -20,6 +20,8 @@
            remplacement de {{$plageSel->_ref_chir->_view}}
           {{elseif $plageSel->remplacant_id}}
            remplacé par {{$plageSel->_ref_remplacant->_view}} 
+          {{elseif $plageSel->pour_compte_id}}
+           pour le compte de {{$plageSel->_ref_pour_compte->_view}} 
           {{/if}}
       {{else}}
         {{tr}}CPlageconsult.none{{/tr}}

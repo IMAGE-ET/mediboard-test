@@ -274,6 +274,7 @@ class CMediusers extends CMbObject {
     $backProps["documents_crees"]                 = "CCompteRendu author_id";
     $backProps["devenirs_dentaires"]              = "CDevenirDentaire etudiant_id";
     $backProps["plages_remplacees"]               = "CPlageconsult remplacant_id";
+    $backProps["plages_pour_compte_de"]           = "CPlageconsult pour_compte_id";
     $backProps["poses_disp_vasc_operateur"]       = "CPoseDispositifVasculaire operateur_id";
     $backProps["poses_disp_vasc_encadrant"]       = "CPoseDispositifVasculaire encadrant_id";
     $backProps["praticien_facture"]               = "CFactureConsult praticien_id";

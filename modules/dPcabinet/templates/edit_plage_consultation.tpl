@@ -9,14 +9,36 @@
 *}}
 
 <script type="text/javascript">
-  modifEtatDistement = function(valeur){
-    if(valeur == 1){
+  modifEtatDesistement = function(valeur){
+    if(valeur != 0){
       $('remplacant_plage').setVisible(valeur);
+      $$('.remplacement_plage').invoke('setVisible', valeur);
+      $$('.retrocession').invoke('setVisible', valeur);
     }
     else{
-      $('remplacant_plage').hide();
       var form = getForm('editFrm');
-      form.remplacant_id.value = "";
+      form.remplacant_id.value = '';
+      if(form.pour_compte_id.value == ""){
+        $('remplacant_plage').hide();
+        $$('.remplacement_plage').invoke('hide');
+        $$('.retrocession').invoke('hide');
+      }
+      else{
+        $$('.remplacement_plage').invoke('hide');
+      }
+    }
+  }
+  
+  modifPourCompte = function(valeur){
+    if(valeur != 0){
+      $('remplacant_plage').setVisible(valeur);
+      $$('.retrocession').invoke('setVisible', valeur);
+    }
+    else{
+      var form = getForm('editFrm');
+      if(form.desistee.value == 0){
+        $('remplacant_plage').hide();
+      }
     }
   }
   
@@ -134,20 +156,37 @@
   </tr>
   <tr>
     <th>{{mb_label object=$plageSel field="desistee"}}</th>
-    <td>{{mb_field object=$plageSel field="desistee"  typeEnum="checkbox" onchange="modifEtatDistement(this.value);" }}</td>
-    <th></th>
-    <td></td>
-  </tr>
-  <tr id="remplacant_plage" {{if !$plageSel->desistee}} style="display:none"{{/if}}>
-    <th>{{mb_label object=$plageSel field="remplacant_id"}}</th>
+    <td>{{mb_field object=$plageSel field="desistee"  typeEnum="checkbox" onchange="modifEtatDesistement(this.value);" }}</td>
+    <th>{{mb_label object=$plageSel field="pour_compte_id"}}</th>
     <td>
-      <select name="remplacant_id" style="width: 15em;">
+      <select name="pour_compte_id" style="width: 15em;"  onchange="modifPourCompte(this.value);">
+        <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs selected=$plageSel->pour_compte_id}}
+      </select>
+    </td>
+  </tr>
+  <tr id="remplacant_plage" {{if !$plageSel->desistee && !$plageSel->pour_compte_id}} style="display:none"{{/if}}>
+    <th>
+      <span class="remplacement_plage" {{if !$plageSel->desistee}}style="display:none;"{{/if}}>
+      {{mb_label object=$plageSel field="remplacant_id"}}
+      </span>
+      </th>
+    <td>
+      <select name="remplacant_id" style="width: 15em;{{if !$plageSel->desistee}}display:none;{{/if}}" class="remplacement_plage">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{mb_include module=mediusers template=inc_options_mediuser list=$listChirs selected=$plageSel->remplacant_id}}
       </select>
     </td>
-    <th>{{mb_label object=$plageSel field="pct_retrocession"}}</th>
-    <td>{{mb_field object=$plageSel field="pct_retrocession" size="2" increment=true form=editFrm }}</td>
+    <th>
+      <span class="retrocession">
+        {{mb_label object=$plageSel field="pct_retrocession"}}
+      </span>
+    </th>
+    <td>
+      <span class="retrocession">
+        {{mb_field object=$plageSel field="pct_retrocession" size="2" increment=true form=editFrm  class="retrocession"}}
+      </span>
+    </td>
   </tr>
   <tr>
     <td colspan="4" class="text">
