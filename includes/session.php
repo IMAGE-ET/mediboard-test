@@ -1,14 +1,14 @@
 <?php
 /**
  * Session handling and initialisation
- * 
+ *
  * @package    Mediboard
  * @subpackage includes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Id$
  */
- 
+
 // Load AppUI from session
 global $rootName;
 
@@ -32,11 +32,11 @@ if (isset($_SESSION["token_expiration"])) {
 // Reset session if it expired
 if (CAppUI::isTokenSessionExpired()) {
   CAppUI::$token_expiration = null;
-  
+
   // Free the session data
   session_unset();
   @session_destroy(); // Escaped because of an unknown error
-  
+
   // Start it back
   session_start();
 }
@@ -50,13 +50,13 @@ CAppUI::$instance =& $_SESSION["AppUI"];
 CAppUI::$instance->session_name = $session_name;
 
 if (!isset($_SESSION["locked"])) {
-  $_SESSION["locked"] = false;  
+  $_SESSION["locked"] = false;
 }
 
 CAppUI::checkSessionUpdate();
 
 if (!isset($_SESSION['browser'])) {
-  /** Basic browser detection */ 
+  /** Basic browser detection */
   $browser = array(
     'version'   => '0.0.0',
     'majorver'  => 0,
@@ -67,14 +67,14 @@ if (!isset($_SESSION['browser'])) {
     'deprecated'=> false,
     'useragent' => '',
   );
-  
+
   $browsers = array(
     'firefox', 'msie', 'opera', 'chrome', 'safari', 'mozilla', 'seamonkey', 'konqueror', 'netscape',
     'gecko', 'navigator', 'mosaic', 'lynx', 'amaya', 'omniweb', 'avant', 'camino', 'flock', 'aol'
   );
-  
+
   $minimal_versions = CAppUI::conf("browser_compat");
-  
+
   if (isset($_SERVER['HTTP_USER_AGENT'])) {
     $browser['useragent'] = $_SERVER['HTTP_USER_AGENT'];
     $user_agent = strtolower($browser['useragent']);
@@ -82,30 +82,34 @@ if (!isset($_SESSION['browser'])) {
       if (preg_match("/($_browser)[\/ ]?([0-9.]*)/", $user_agent, $match)) {
         $browser['name'] = $match[1];
         $browser['version'] = $match[2];
-        
+
         // Special case of Opera http://dev.opera.com/articles/view/opera-ua-string-changes/
         if ($browser['name'] == "opera" && preg_match("/(version)\/([0-9.]*)/", $user_agent, $match)) {
           $browser['version'] = $match[2];
         }
-        
+
         @list($browser['majorver'], $browser['minorver'], $browser['build']) = explode('.', $browser['version']);
         break;
       }
     }
-    
+
     $ios = preg_match("/(ipad|iphone)/", $user_agent, $matches);
     if ($ios) {
       $browser['name'] = $matches[1];
     }
-    
-    $browser['mobile'] = ($browser['name'] !== 'ipad' && preg_match("/mobi|phone|symbian/i", $user_agent));
+
+    //detect if the browser is host on mobile device
+    $mobile = new Mobile_Detect();
+    $browser['mobile'] = ($mobile->isMobile() || $mobile->isTablet());
+
+    $browser['tablet'] = $mobile->isTablet();
   }
-  
-  $browser['deprecated'] = isset($minimal_versions[$browser['name']]) && 
-                             version_compare($browser['version'],  $minimal_versions[$browser['name']], "<") && 
+
+  $browser['deprecated'] = isset($minimal_versions[$browser['name']]) &&
+                             version_compare($browser['version'],  $minimal_versions[$browser['name']], "<") &&
                              !$browser['mobile'];
-  
-  $_SESSION['browser'] =& $browser; 
+
+  $_SESSION['browser'] =& $browser;
 }
 else {
   $browser =& $_SESSION['browser'];
