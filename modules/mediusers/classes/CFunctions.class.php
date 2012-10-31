@@ -130,7 +130,7 @@ class CFunctions extends CMbObject {
   }
   
   function loadRefsUsers($type = null) {
-    if(!$type) {
+    if (!$type) {
       $where = array(
         "function_id" => "= '$this->function_id'",
         "actif"       => "= '1'"

@@ -35,6 +35,9 @@
             url.addElement(form.period);
             url.addElement(form.date);
             url.requestModal(1000, 600);
+          },
+          checkParams: function() {
+            new Url('cabinet', 'check_params').requestModal(800, 600);
           }
         };
         Main.add(function() {
@@ -51,9 +54,17 @@
           <option value="year" >{{tr}}Year {{/tr}}</option>
         </select>
         <button class="modify" type="button" onclick="Consultations.macroStats(this);">
-          {{tr}}mod-dPcabinet-tab-macro_stats{{/tr}}
+          {{tr}}mod-cabinet-tab-macro_stats{{/tr}}
         </button> 
       </form>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="button">
+      <button class="search" type="button" onclick="Consultations.checkParams();">
+        {{tr}}mod-cabinet-tab-check_params{{/tr}}
+      </button> 
     </td>
   </tr>
 

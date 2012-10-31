@@ -131,7 +131,7 @@ class CPlageconsult extends CMbObject {
     $consultation->plageconsult_id = $this->_id;
     $where["plageconsult_id"] = "= '$this->_id'";
     $where["patient_id"] = " IS NOT NULL";
-    $this->_nb_patients = $consultation->countList($where);
+    return $this->_nb_patients = $consultation->countList($where);
   }
   
   function loadRefsBack($withCanceled = true) {
