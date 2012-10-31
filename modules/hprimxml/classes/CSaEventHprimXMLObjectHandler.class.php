@@ -49,8 +49,7 @@ class CSaEventHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     $patient->loadIPP($receiver->group_id);
     
     // Chargement des actes du codable
-    $operation->loadRefsActes();  
-    $operation->completeField("date");
+    $operation->loadRefsActes(); 
     
     $this->sendEvenementPMSI("CHPrimXMLEvenementsServeurIntervention", $operation);   
   }
