@@ -11,6 +11,7 @@ $locales['Auto'] = 'Auto';
 $locales['Autre'] = 'Autre';
 $locales['Bill'] = 'Facture';
 $locales['Browse'] = 'Parcourir';
+$locales['Browser'] = 'Navigateur';
 $locales['CANCEL'] = 'ANNULER';
 $locales['CMbFieldSpec.adeli'] = 'Numéro Adeli';
 $locales['CMbFieldSpec.alphaAndNum'] = 'Alphanumérique';

@@ -23,7 +23,7 @@ Main.add(function () {
 	
 	{{if @$modules.dPpersonnel->_can->read}}
   <li>
-    {{mb_script module="dPpersonnel" script="plage"}}
+    {{mb_script module=personnel script=plage}}
     <script type="text/javascript">
     	PlageConge.refresh = function() {
 	      PlageConge.content();
@@ -36,7 +36,14 @@ Main.add(function () {
 		</a>
 	</li>
 	{{/if}}
-	
+  
+  {{if $can->admin}}
+  <li>
+    <a href="#browser-check" onmouseup="new Url('system', 'browser_check').requestUpdate('browser-check');">
+      {{tr}}Browser{{/tr}}
+    </a>
+  </li>
+  {{/if}}
 </ul>
 
 <hr class="control_tabs" />
@@ -47,7 +54,6 @@ Main.add(function () {
     <td class="halfPane">
       {{mb_include template=inc_info_mediuser}}
       {{mb_include template=inc_info_exchange_source}}
-
     </td>
     
     <td class="halfPane">
@@ -58,6 +64,9 @@ Main.add(function () {
 </div>
 
 <div id="edit-preferences" style="display: none;">
+</div>
+
+<div id="browser-check" style="display: none;">
 </div>
 
 {{if @$modules.dPpersonnel->_can->read}}

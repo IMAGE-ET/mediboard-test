@@ -6,8 +6,8 @@
 * @version $Revision$
 * @author Sébastien Fillonneau
 */
-global $m;
 
+CCanDo::check();
 
 $mediuser = CMediusers::get();
 $mediuser->loadRefsFwd();
