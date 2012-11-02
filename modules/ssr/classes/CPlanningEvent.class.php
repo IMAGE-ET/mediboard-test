@@ -71,9 +71,9 @@ class CPlanningEvent  {
   function collides(self $event) {
     if ($event == $this || $this->length == 0 || $event->length == 0) return false;
     
-    return ($event->start <  $this->end   && $event->end >  $this->end  ) || 
-           ($event->start <  $this->start && $event->end >  $this->start) || 
-           ($event->start >= $this->start && $event->end <= $this->end  );
+    return ($event->start <=  $this->end   && $event->end >=  $this->end  ) || 
+           ($event->start <=  $this->start && $event->end >=  $this->start) || 
+           ($event->start >=  $this->start && $event->end <=  $this->end  );
   }
   
   function addMenuItem($type, $title){

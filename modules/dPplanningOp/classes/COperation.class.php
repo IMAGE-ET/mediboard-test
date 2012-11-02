@@ -1183,7 +1183,7 @@ class COperation extends CCodable implements IPatientRelated {
     $template->addProperty("Opération - salle"                , @$this->_ref_salle->nom);
     $template->addProperty("Opération - côté"                 , $this->cote);
     
-    $template->addDateProperty("Opération - date"             , $this->_datetime);
+    $template->addDateProperty("Opération - date"             , $this->_datetime_best);
     $template->addTimeProperty("Opération - heure"            , $this->time_operation);
     $template->addTimeProperty("Opération - durée"            , $this->temp_operation);    
     $template->addTimeProperty("Opération - durée réelle"     , $this->_duree_interv);
