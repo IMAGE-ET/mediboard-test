@@ -144,7 +144,7 @@ $templateManager = new CTemplateManager($_GET);
 $templateManager->isModele = false;
 $object->fillTemplate($templateManager);
 $templateManager->document = $compte_rendu->_source;
-$templateManager->loadHelpers($user->_id, $compte_rendu->object_class);
+$templateManager->loadHelpers($user->_id, $compte_rendu->object_class, CAppUI::$user->function_id);
 $templateManager->loadLists($user->_id);
 $templateManager->applyTemplate($compte_rendu);
 

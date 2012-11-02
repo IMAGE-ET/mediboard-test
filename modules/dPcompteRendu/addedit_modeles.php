@@ -75,7 +75,6 @@ if ($compte_rendu->_id) {
     $prat_id = $compte_rendu->user_id;
     $templateManager->valueMode = false;
     $templateManager->loadLists($compte_rendu->user_id, $compte_rendu->_id);
-    $templateManager->loadHelpers($compte_rendu->user_id, $compte_rendu->object_class);
     $templateManager->applyTemplate($compte_rendu);
   }
 

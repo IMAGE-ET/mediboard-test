@@ -490,7 +490,7 @@ class CTemplateManager {
     }
   }
   
-  function loadHelpers($user_id, $modeleType) {
+  function loadHelpers($user_id, $modeleType, $other_function_id = "") {
     $compte_rendu = new CCompteRendu();
     $ds = $compte_rendu->_spec->ds;
     
@@ -509,7 +509,8 @@ class CTemplateManager {
     
     // Where function_id
     $whereFunc = array();
-    $whereFunc["function_id"] = $ds->prepare("= %", $currUser->function_id);
+    $whereFunc["function_id"] = $other_function_id ?
+      "IN ($currUser->function_id, $other_function_id)" : $ds->prepare("= %", $currUser->function_id);
     $whereFunc["class"]       = $ds->prepare("= %", $compte_rendu->_class);
     
     // Where group_id
