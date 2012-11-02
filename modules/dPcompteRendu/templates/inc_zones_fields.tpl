@@ -5,7 +5,7 @@
   {{if $isCourrier}}
     <tr>
       <td class="destinataireCR text" id="destinataire" colspan="2">
-        <button type="button" class="mail"
+        <button type="button" class="mail singleclick"
           onclick="
           {{if $compte_rendu->_id}}
             openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}', 1);
