@@ -220,6 +220,7 @@ class CMbObject extends CStoredObject {
   function loadView() {
     $this->loadRefsNotes();
     $this->loadAllFwdRefs();
+    $this->canDo();
   }
   
   /**

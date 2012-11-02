@@ -8,6 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 {{assign var=evenement_ssr value=$object}}
 {{assign var=evenement_ssr_id value=$evenement_ssr->_id}}
 {{assign var=unique_id value=""|uniqid}}

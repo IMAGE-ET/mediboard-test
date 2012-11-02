@@ -1,3 +1,10 @@
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 {{mb_script module=planningOp script=prestations ajax=1}}
 {{mb_script module=hospi script=modele_etiquette ajax=1}}
 {{assign var=sejour       value=$object}}
@@ -50,7 +57,7 @@
     <td class="button">
       {{mb_script module=planningOp script=sejour ajax=true}}
 
-      {{if $can->edit}}
+      {{if $object->_can->edit}}
       <button type="button" class="edit" onclick="Sejour.edit('{{$sejour->_id}}');">
         {{tr}}Modify{{/tr}}
       </button>

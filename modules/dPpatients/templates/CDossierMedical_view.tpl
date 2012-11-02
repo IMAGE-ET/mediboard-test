@@ -1,3 +1,9 @@
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
 
 <table class="form">
   <tr>

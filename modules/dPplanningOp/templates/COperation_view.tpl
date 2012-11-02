@@ -1,3 +1,10 @@
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 {{assign var=operation value=$object}}
 {{assign var=sejour    value=$object->_ref_sejour}}
 {{assign var=patient   value=$sejour->_ref_patient}}
@@ -101,7 +108,7 @@
     <td class="button" colspan="3">
       {{mb_script module="dPplanningOp" script="operation" ajax="true"}}
       
-      {{if $can->edit}}
+      {{if $object->_can->edit}}
         <button type="button" class="edit" onclick="Operation.edit('{{$operation->_id}}', '{{$operation->plageop_id}}');">
           {{tr}}Modify{{/tr}}
         </button>

@@ -146,6 +146,7 @@ class CDossierMedical extends CMbMetaObject {
   }
   
   function loadView() {
+    parent::loadView();
     $this->loadComplete();
   }
     

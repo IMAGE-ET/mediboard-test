@@ -1,3 +1,10 @@
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 {{assign var="medecin" value=$object}}  
 <table class="tbl tooltip">
   <tr>
@@ -63,7 +70,7 @@
     </td>
   </tr>
   {{/if}}
-  {{if $can->edit}}
+  {{if $object->_can->edit}}
   <tr>
     <td colspan="2" class="button">
       {{mb_script module="dPpatients" script="medecin" ajax="true"}}

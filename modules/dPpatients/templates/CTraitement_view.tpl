@@ -1,3 +1,10 @@
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 {{include file=CMbObject_view.tpl}}
 
 {{if $object->_ref_dossier_medical->object_class == "CPatient"}}

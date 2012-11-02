@@ -8,6 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 {{unique_id var=consumption_id}}
 
 <script type="text/javascript">
@@ -22,7 +29,7 @@ Main.add(function(){
 
 <div id="product-consumption-{{$consumption_id}}"></div>
 
-{{if $object->canEdit()}}
+{{if $object->_can->edit}}
   <table class="main tbl">
     <tr>
       <td class="button">

@@ -1,5 +1,12 @@
 {{mb_include module=cabinet template=CConsultation_view object=$object->_ref_consultation}}
 
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 <table class="tbl">
   <tr>
     <th>

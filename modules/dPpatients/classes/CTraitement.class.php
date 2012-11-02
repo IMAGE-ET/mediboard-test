@@ -61,6 +61,7 @@ class CTraitement extends CMbObject {
   }
   
   function loadView(){
+    parent::loadView();
     $this->loadLogs();
     $this->loadRefDossierMedical();
   }

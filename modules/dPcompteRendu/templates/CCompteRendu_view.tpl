@@ -1,3 +1,10 @@
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 {{mb_script module=compteRendu script=document ajax=1}}
 
 {{mb_script module=compteRendu script=document}}{{assign var=pdf_thumbnails value=$conf.dPcompteRendu.CCompteRendu.pdf_thumbnails}}
@@ -38,7 +45,7 @@
     <td class="button">
       <strong>{{$document->_source|count_words}} {{tr}}CCompteRendu-words{{/tr}}</strong>
       <br/>
-      {{if $can->edit}}
+      {{if $document->_can->edit}}
         {{if !$document->object_id}}
           <a class="button search" href="?m=compteRendu&tab=addedit_modeles&compte_rendu_id={{$document->_id}}">
             {{tr}}Open{{/tr}}

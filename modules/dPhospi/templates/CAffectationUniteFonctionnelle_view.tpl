@@ -8,8 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var="affectations" value=$object}}
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
 
+{{assign var="affectations" value=$object}}
 <table class="tbl tooltip">
   <tr>
     <th class="title text">

@@ -116,6 +116,7 @@ class CGrossesse extends CMbObject{
   }
   
   function loadView() {
+    parent::loadView();
     $naissances = $this->loadRefsNaissances();
     $sejours = CMbObject::massLoadFwdRef($naissances, "sejour_enfant_id");
     CMbObject::massLoadFwdRef($sejours, "patient_id");

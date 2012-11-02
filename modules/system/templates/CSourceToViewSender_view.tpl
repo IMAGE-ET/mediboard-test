@@ -8,6 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 {{mb_include module=system template=CMbObject_view}}
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -18,7 +25,7 @@
   <table class="tbl tooltip">
     <tr>
       <td class="button">
-        {{if $can->edit}}
+        {{if $object->_can->edit}}
         <button class="trash" type="button" onclick="SourceToViewSender.confirmDeletion(this.form)">
           {{tr}}Delete{{/tr}}
         </button>

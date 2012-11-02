@@ -77,6 +77,7 @@ class CAntecedent extends CMbObject {
   }
   
   function loadView(){
+    parent::loadView();
     $this->loadLogs();
     $this->loadRefDossierMedical();
   }

@@ -1,3 +1,10 @@
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 {{assign var="patient" value=$object}}  
 <table class="tbl tooltip">
   <tr>
@@ -81,7 +88,7 @@
         {{tr}}Print{{/tr}}
       </button>
       
-      {{if $can->edit}}
+      {{if $object->_can->edit}}
       <button type="button" class="edit" onclick="Patient.edit('{{$patient->_id}}')">
         {{tr}}Modify{{/tr}}
       </button>

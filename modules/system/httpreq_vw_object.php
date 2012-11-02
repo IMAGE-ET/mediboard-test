@@ -16,11 +16,6 @@ $options = CMbArray::filterPrefix($_GET, "view_");
 
 $object->loadView();
 
-global $can;
-$can->read = $object->canRead();
-$can->edit = $object->canEdit();
-$can->needsRead();
-
 // If no template is defined, use generic
 $template = $object->makeTemplatePath("view");
 $template = is_file("modules/$template") ?

@@ -1,3 +1,10 @@
+{{if !$object->_can->read}}
+  <div class="small-info">
+    {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
+  </div>
+  {{mb_return}}
+{{/if}}
+
 {{mb_script module=planningOp script=prestations ajax=1}}
 {{mb_script module=hospi script=affectation ajax=1}}
 {{assign var=sejour     value=$object->_ref_sejour}}
@@ -17,7 +24,7 @@
   {{/if}}
 </table>
 
-{{if $can->edit}}
+{{if $object->_can->edit}}
   <!-- Formulaire de suppression d'affectation -->
   <form name="delAffect_{{$object->_id}}" method="post" action="?">
     <input type="hidden" name="m" value="dPhospi" />
