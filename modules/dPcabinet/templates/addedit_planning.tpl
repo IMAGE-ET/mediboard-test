@@ -42,9 +42,11 @@ refreshListCategorie = function(praticien_id){
 }
 
 refreshFunction = function(chir_id) {
-  var url = new Url("dPcabinet", "ajax_refresh_secondary_functions");
-  url.addParam("chir_id", chir_id);
-  url.requestUpdate("secondary_functions");
+  {{if !$consult->_id && $conf.dPcabinet.CConsultation.create_consult_sejour}}
+    var url = new Url("dPcabinet", "ajax_refresh_secondary_functions");
+    url.addParam("chir_id", chir_id);
+    url.requestUpdate("secondary_functions");
+  {{/if}}
 }
 
 changePause = function(){
