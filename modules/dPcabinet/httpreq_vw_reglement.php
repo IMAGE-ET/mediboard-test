@@ -132,7 +132,12 @@ $facture = new CFactureConsult();
 $facture_patient = new CFactureConsult();
 $where = array();
 $where["patient_id"] = "= '$consult->patient_id'";
-$where["praticien_id"]  = "= '$prat_id'";
+if ($consult->_ref_plageconsult->pour_compte_id) {
+  $where["praticien_id"] = "= '".$consult->_ref_plageconsult->pour_compte_id."'";
+}
+else {
+  $where["praticien_id"] = "= '$prat_id'";
+}
 
 // On essaie de retrouver une ancienne facture ouverte
 $where["cloture"] = " IS NULL";

@@ -27,7 +27,11 @@
     <tr>
       <td colspan="2">
         <strong onclick="PlageConsult.refresh('{{$_plage->_id}}')">
-          Remplacement de {{$_plage->_ref_chir}}
+          {{if $_plage->_ref_remplacant->_id}}
+            Remplacement de {{$_plage->_ref_chir}}
+          {{elseif $_plage->_ref_pour_compte->_id}}
+            Pour le compte de {{$_plage->_ref_pour_compte}}
+          {{/if}}
           &mdash; {{$_plage->date|date_format:$conf.longdate}}
           de {{$_plage->debut|date_format:$conf.time}} 
           à  {{$_plage->fin|date_format:$conf.time}} 
@@ -60,9 +64,15 @@
                 </a>
               </td>
               <td>
-                <span class="mediuser" onmouseover="ObjectTooltip.createEx(this, '{{$_plage->_ref_remplacant->_guid}}')">
-                  {{$_plage->_ref_remplacant->_view}}
-                </span>
+                {{if $_plage->_ref_remplacant->_id}}
+                  <span class="mediuser" onmouseover="ObjectTooltip.createEx(this, '{{$_plage->_ref_remplacant->_guid}}')">
+                    {{$_plage->_ref_remplacant->_view}}
+                  </span>
+                {{elseif $_plage->_ref_pour_compte->_id}}
+                  <span class="mediuser" onmouseover="ObjectTooltip.createEx(this, '{{$_plage->_ref_chir->_guid}}')">
+                    {{$_plage->_ref_chir->_view}}
+                  </span>
+                {{/if}}
               </td>
               <td class="text">
                 {{if $_consultation->tarif}} 

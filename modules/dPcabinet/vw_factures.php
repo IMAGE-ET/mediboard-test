@@ -55,7 +55,7 @@ if ($chirSel) {
   $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id" ;
   
   $where["consultation.factureconsult_id"] =" IS NOT NULL ";
-  $where["plageconsult.chir_id"] =" = '$chirSel' ";
+  $where["factureconsult.praticien_id"] =" = '$chirSel' ";
 
   if ($patient_id) {
     $where["factureconsult.patient_id"] =" = '$patient_id' ";

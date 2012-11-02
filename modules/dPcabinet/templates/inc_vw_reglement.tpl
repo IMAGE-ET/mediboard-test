@@ -3,8 +3,13 @@
 
 {{mb_script module="dPcabinet" script="facture" ajax="true"}}
 
+{{if $consult->_ref_plageconsult->pour_compte_id}}
+  {{assign var=pour_compte_praticien_id value=$consult->_ref_plageconsult->pour_compte_id}}
+{{else}}
+  {{assign var=pour_compte_praticien_id value=$praticien->_id}}
+{{/if}}
+
 <script type="text/javascript">
-  
 pursueTarif = function() {
   var form = document.tarifFrm;
   $V(form.tarif, "pursue");
@@ -46,7 +51,7 @@ validTarif = function(){
 }
 
 loadFacture = function() {
-  Facture.load(document.tarifFrm, '{{$consult->patient_id}}', '{{$praticien->_id}}', '{{$consult->_id}}', 1);
+  Facture.load(document.tarifFrm, '{{$consult->patient_id}}', '{{$pour_compte_praticien_id}}', '{{$consult->_id}}', 1);
 }
 reloadFacture = function() {
   {{if $consult->factureconsult_id}}

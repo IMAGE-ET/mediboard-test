@@ -175,7 +175,7 @@
           {{/if}}
           
           <td class="text">
-            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$listPrat.$prat_id}}
+            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$facture->_ref_praticien}}
           </td>
 
           <td class="text">

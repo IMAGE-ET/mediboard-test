@@ -69,7 +69,8 @@ $prat->loadRefFunction();
 $listPrat = ($prat->_id) ? 
   array($prat->_id => $prat) :
   $listPrat = $mediuser->loadPraticiensCompta();
-$where["plageconsult.chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat));
+$where[] = "plageconsult.chir_id ".CSQLDataSource::prepareIn(array_keys($listPrat))
+    ." OR plageconsult.pour_compte_id ".CSQLDataSource::prepareIn(array_keys($listPrat));
 
 $where["consultation.factureconsult_id"] = "IS NULL";
 $order = "plageconsult.date, plageconsult.debut, plageconsult.chir_id";

@@ -32,8 +32,12 @@ $plageconsult = new CPlageconsult();
 $ljoin = array();
 $ljoin["consultation"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
 $where = array();
-$where[] = "plageconsult.remplacant_id ".CSQLDataSource::prepareIn(array_keys($listPrat))."OR (plageconsult.chir_id ".CSQLDataSource::prepareIn(array_keys($listPrat))." AND remplacant_id IS NOT NULL)";
+
+$where[] = "plageconsult.remplacant_id ".CSQLDataSource::prepareIn(array_keys($listPrat))."
+  OR plageconsult.pour_compte_id ".CSQLDataSource::prepareIn(array_keys($listPrat))."
+  OR (plageconsult.chir_id ".CSQLDataSource::prepareIn(array_keys($listPrat))." AND remplacant_id IS NOT NULL)";
 $where[] = "plageconsult.date >= '$filter->_date_min' AND plageconsult.date <= '$filter->_date_max'";
+
 $where["consultation.annule"] = "= '0'";
 $order = "chir_id ASC";
 

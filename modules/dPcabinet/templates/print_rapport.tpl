@@ -56,6 +56,10 @@
       <br />
       <strong onclick="Rapport.refresh('{{$_plage.plage->_id}}')">
         {{$_plage.plage->_ref_chir}}
+        {{if $_plage.plage->_ref_pour_compte->_id}}
+          pour le compte de {{$_plage.plage->_ref_pour_compte->_view}}
+        {{/if}}
+        
         &mdash; {{$_plage.plage->date|date_format:$conf.longdate}}
         de {{$_plage.plage->debut|date_format:$conf.time}} 
         à  {{$_plage.plage->fin|date_format:$conf.time}} 
@@ -63,7 +67,6 @@
         {{if $_plage.plage->libelle}} 
         : {{mb_value object=$_plage.plage field=libelle}}	   
         {{/if}}
-
       </strong>
     </td>
   </tr>
