@@ -18,7 +18,6 @@ $prat_id              = CValue::get("prat_id");
 $date_min             = CValue::get("_date_min", mbDate());
 $date_max             = CValue::get("_date_max", mbDate());
 
-$group = CGroups::loadCurrent();
 $user = CMediusers::get();
 
 $factures = array();
@@ -98,9 +97,9 @@ if ($edition_bvr) {
     
     // Praticien selectionné
     $praticien = $facture->_ref_praticien;
-    
+    $function_prat = $praticien->loadRefFunction();
+    $function_prat->adresse = str_replace(CHR(13).CHR(10),' ', $function_prat->adresse);
     $adherent = $praticien->adherent;
-    $group->adresse = str_replace(CHR(13).CHR(10),' ', $group->adresse);
     
     $acompte = 0;
     $nb_factures = count($facture->_montant_factures_caisse);
@@ -134,16 +133,16 @@ if ($edition_bvr) {
         $auteur = array(
           "50" => "Auteur facture",
           $user->_view,
-          "$group->_view",
-          substr($group->adresse, 0, 30),
-          substr($group->adresse, 30),
-          $group->cp." ".$group->ville,
+          "$function_prat->_view",
+          substr($function_prat->adresse, 0, 30),
+          substr($function_prat->adresse, 30),
+          $function_prat->cp." ".$function_prat->ville,
           "80" => "Four. de prestations",
           "Dr. ".$praticien->_view,
-          "$group->_view",
-          substr($group->adresse, 0, 30),
-          substr($group->adresse, 30),
-          $group->cp." ".$group->ville,
+          "$function_prat->_view",
+          substr($function_prat->adresse, 0, 30),
+          substr($function_prat->adresse, 30),
+          $function_prat->cp." ".$function_prat->ville,
         );
         $tab[$colonne1] = $auteur;
         
@@ -328,14 +327,14 @@ if ($edition_bvr) {
           $pdf->SetTextColor(0);
           $pdf->setFont($font, '', 8);
           $pdf->Text($l_colonne + $decalage, $h_ligne*3+$haut_doc , $praticien->_view);
-          $pdf->Text($l_colonne + $decalage, $h_ligne*4+$haut_doc , $group->_view);
+          $pdf->Text($l_colonne + $decalage, $h_ligne*4+$haut_doc , $function_prat->_view);
           //Si le texte dépasse la largeur de la colonne => retour à la ligne
-          $longeur = strlen($group->adresse);
+          $longeur = strlen($function_prat->adresse);
           for ($j=0; $j < $longeur/30; $j++) {
-            $report = substr($group->adresse, 0+30*$j, 30);
+            $report = substr($function_prat->adresse, 0+30*$j, 30);
             $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $report);
           }		
-          $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $group->ville);
+          $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $function_prat->ville);
           
           $pdf->Text(16.75*$l_colonne + $decalage, $h_ligne*13.25+$haut_doc   , ".");			  
           //Numéro adhérent, CHF, Montant1 et Montant2

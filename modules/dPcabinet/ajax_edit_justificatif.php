@@ -152,7 +152,11 @@ foreach ($factures as $facture) {
       $praticien = new CMediusers();
       $praticien->load($chirSel);
     }
-  ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes);
+    
+  $function_prat = $praticien->loadRefFunction();
+  $function_prat->adresse = str_replace(CHR(13).CHR(10),' ', $function_prat->adresse);
+  
+  ajoutEntete1($pdf, $facture, $user, $praticien, $function_prat, $colonnes);
   $pdf->setFont("vera", '', 8);
   $tailles_colonnes = array(
             "Date" => 9,
@@ -197,7 +201,7 @@ foreach ($factures as $facture) {
         $pdf->setFont("vera", '', 8);
         $pdf->AddPage();  
         $nb_pages++;
-        ajoutEntete2($pdf, $nb_pages, $facture, $user, $praticien, $group, $colonnes);
+        ajoutEntete2($pdf, $nb_pages, $facture, $user, $praticien, $function_prat, $colonnes);
         $pdf->setXY(10,$pdf->getY()+4);
         $pdf->Cell($colonnes[0]+$colonnes[1], "", "Patient");
         $pdf->Cell($colonnes[2], "", $facture->_ref_patient->nom." ".$facture->_ref_patient->prenom." ".$facture->_ref_patient->naissance);
@@ -335,7 +339,7 @@ foreach ($factures as $facture) {
         $pdf->setFont("vera", '', 8);
         $pdf->AddPage();
         $nb_pages++;
-        ajoutEntete2($pdf, $nb_pages, $facture, $user, $praticien, $group, $colonnes);
+        ajoutEntete2($pdf, $nb_pages, $facture, $user, $praticien, $function_prat, $colonnes);
         $pdf->setXY(10,$pdf->getY()+4);
         $pdf->Cell($colonnes[0]+$colonnes[1], "", "Patient");
         $pdf->Cell($colonnes[2], "", $facture->_ref_patient->nom." ".$facture->_ref_patient->prenom." ".$facture->_ref_patient->naissance);
