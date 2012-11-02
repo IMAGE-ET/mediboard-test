@@ -26,6 +26,8 @@ class COperation extends CCodable implements IPatientRelated {
   var $plageop_id = null;
   var $salle_id   = null;
   var $poste_sspi_id = null;
+  var $examen_operation_id = null;
+  
   // DB Fields S@nté.com communication
   var $code_uf    = null;
   var $libelle_uf = null;
@@ -232,6 +234,7 @@ class COperation extends CCodable implements IPatientRelated {
     $props["pause"]                = "time show|0";
     $props["salle_id"]             = "ref class|CSalle";
     $props["poste_sspi_id"]        = "ref class|CPosteSSPI";
+    $props["examen_operation_id"]  = "ref class|CExamenOperation";
     $props["date"]                 = "date";
     $props["code_uf"]              = "str length|3";
     $props["libelle_uf"]           = "str maxLength|35";

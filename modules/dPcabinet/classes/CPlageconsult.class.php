@@ -204,9 +204,9 @@ class CPlageconsult extends CMbObject {
   }
   
   function loadRefsFwd($cache = 0) {
-    $this->_ref_chir = $this->loadFwdRef("chir_id");
-    $this->_ref_remplacant = $this->loadFwdRef("remplacant_id");
-    $this->_ref_pour_compte = $this->loadFwdRef("pour_compte_id");
+    $this->_ref_chir = $this->loadFwdRef("chir_id", $cache);
+    $this->_ref_remplacant = $this->loadFwdRef("remplacant_id", $cache);
+    $this->_ref_pour_compte = $this->loadFwdRef("pour_compte_id", $cache);
   }
   
   function getPerm($permType) {

@@ -1530,7 +1530,13 @@ class CSetupdPplanningOp extends CSetup {
       ADD `isolement_fin` DATETIME AFTER `isolement_date`;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.65";
+    $this->makeRevision("1.65");
+    $query = "ALTER TABLE `operations`
+      ADD `examen_operation_id` INT (11) UNSIGNED,
+      ADD INDEX (`examen_operation_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.66";
   }
 }
 ?>

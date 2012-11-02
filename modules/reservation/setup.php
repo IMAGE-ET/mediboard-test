@@ -39,6 +39,23 @@ class CSetupreservation extends CSetup {
       ADD `color` CHAR (6) DEFAULT 'DDDDDD' AFTER `commentaire`;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.03";
+    $this->makeRevision("0.03");
+    $query = "CREATE TABLE `examen_operation` (
+      `examen_operation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `completed` ENUM ('0','1') DEFAULT '0',
+      `acheminement` ENUM ('courrier','fax','autre'),
+      `labo` TEXT,
+      `groupe_rh` ENUM ('0','1') DEFAULT '0',
+      `flacons` INT (11) UNSIGNED,
+      `auto_transfusion` ENUM ('0','1') DEFAULT '0',
+      `ecg` ENUM ('0','1') DEFAULT '0',
+      `radio_thorax` ENUM ('0','1') DEFAULT '0',
+      `radios_autres` TEXT,
+      `physio_preop` TEXT,
+      `physio_postop` TEXT
+    ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.04";
   }
 }

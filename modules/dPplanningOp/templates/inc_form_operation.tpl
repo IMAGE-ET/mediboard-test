@@ -86,6 +86,7 @@ addBesoins = function(types_ressources_ids) {
 <input type="hidden" name="_horaire_voulu" value="{{$op->_horaire_voulu}}" />
 <input type="hidden" name="annulee" value="{{$op->annulee|default:"0"}}" />
 <input type="hidden" name="salle_id" value="{{$op->salle_id}}" />
+<input type="hidden" name="examen_operation_id" value="{{$op->examen_operation_id}}" />
 
 <!-- Form Fields -->
 <input type="hidden" name="_group_id" value="{{$sejour->group_id}}" />
@@ -488,7 +489,15 @@ addBesoins = function(types_ressources_ids) {
       {{mb_field object=$op field="info" typeEnum="checkbox"}}
     </td>
   </tr>
-
+  
+  {{if "reservation"|module_active}}
+    <tr>
+      <th></th>
+      <td>
+        {{mb_include module="reservation" template="inc_button_examen" form="editOp"}}
+      </td>
+    </tr>
+  {{/if}}
 </table>
 
 </form>
