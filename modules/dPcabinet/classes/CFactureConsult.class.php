@@ -290,7 +290,6 @@ class CFactureConsult extends CMbObject {
     else {
       $this->_montant_factures   = array();
       $this->_montant_factures[] = $this->du_patient + $this->du_tiers - $this->remise;
-      $this->loadNumerosBVR();      
     }
   }
           
