@@ -1,8 +1,9 @@
 <?php
-$locales['CCodeCIM10'] = 'Code CIM10';
-$locales['CFavoriCIM10-msg-create'] = 'Favori CIM10 créé';
-$locales['CFavoriCIM10-msg-delete'] = 'Favori CIM10 supprimé';
-$locales['CFavoriCIM10-msg-modify'] = 'Favori CIM10 modifié';
+$locales['CCodeCIM10'] = 'Code CIM';
+$locales['CCodeCIM10.none'] = 'Aucun Code CIM';
+$locales['CFavoriCIM10-msg-create'] = 'Favori CIM créé';
+$locales['CFavoriCIM10-msg-delete'] = 'Favori CIM supprimé';
+$locales['CFavoriCIM10-msg-modify'] = 'Favori CIM modifié';
 $locales['CFavoriCIM10'] = 'Favori CIM';
 $locales['CFavoriCIM10-favoris_code'] = 'Code CIM';
 $locales['CFavoriCIM10-favoris_code-court'] = 'Code';
@@ -23,10 +24,10 @@ $locales['mod-dPcim10-tab-code_selector_cim10'] = 'Recherche de code CIM';
 $locales['mod-dPcim10-tab-configure'] = 'Configuration';
 $locales['mod-dPcim10-tab-vw_find_code'] = 'Rechercher un code';
 $locales['mod-dPcim10-tab-vw_full_code'] = 'Afficher un code';
-$locales['mod-dPcim10-tab-vw_idx_chapter'] = 'Sommaire de la CIM10';
+$locales['mod-dPcim10-tab-vw_idx_chapter'] = 'Sommaire de la CIM';
 $locales['mod-dPcim10-tab-vw_idx_favoris'] = 'Mes favoris';
-$locales['module-dPcim10-court'] = 'CIM10';
-$locales['module-dPcim10-long'] = 'Aide au codage CIM10';
+$locales['module-dPcim10-court'] = 'CIM';
+$locales['module-dPcim10-long'] = 'Aide au codage CIM';
 $locales['pref-new_search_cim10'] = 'Nouvelle recherche de code CIM';
 $locales['pref-new_search_cim10-desc'] = 'Nouvelle ergonomie de recherche de code CIM';
 ?>
