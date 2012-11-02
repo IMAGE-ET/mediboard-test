@@ -30,9 +30,9 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
   $pdf->Rect(10, 38, 180, 100,'DF');
   $_ref_assurance = "";
   $nom_entreprise = "";
-  if ($facture->type_facture == "accident" && $facture->_ref_assurance->_id && $facture->_ref_assurance->employeur) {
+  if ($facture->type_facture == "accident" && $facture->_ref_assurance_base->_id && $facture->_ref_assurance_base->employeur) {
     $employeur = new CCorrespondantPatient();
-    $employeur->load($facture->_ref_assurance->employeur);
+    $employeur->load($facture->_ref_assurance_base->employeur);
     $_ref_assurance = $employeur->num_assure;
     $nom_entreprise = $employeur->nom;
   }
@@ -131,13 +131,11 @@ $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(false);
 
 foreach ($factures as $facture) {
-  $pdf->AddPage();  
-  
-  $facture->loadRefs("nom");
+  $pdf->AddPage();
+  $facture->loadRefs();
   
   $pm = 0;
   $pt = 0;
-  
   $hauteur_en_tete = 100;
 // Praticien selectionné
     if ($prat_id) {
@@ -154,7 +152,7 @@ foreach ($factures as $facture) {
     }
     
   $function_prat = $praticien->loadRefFunction();
-  $function_prat->adresse = str_replace(CHR(13).CHR(10),' ', $function_prat->adresse);
+  $function_prat->adresse = str_replace('\r\n',' ', $function_prat->adresse);
   
   ajoutEntete1($pdf, $facture, $user, $praticien, $function_prat, $colonnes);
   $pdf->setFont("vera", '', 8);
@@ -430,20 +428,10 @@ foreach ($factures as $facture) {
   $x = 3;
   $i = 0;
   $y = 0;
-  foreach ($facture->_montant_factures_caisse as $key => $value) {
-    if (!is_int($key)) {
-      $i++;
-      if ($i%2 == 1 ) {
-        $x = 3;
-        $y += 70; 
-      }
-      else {
-        $x = 6;
-      }
-      $pdf->setXY($y, $ligne+$x);
-      $pdf->Cell($l, "", "$key", null, null, "R");
-      $pdf->Cell($l, "", $value, null, null, "R");
-    }
+  if ($facture->_montant_factures_caisse[1]) {
+    $pdf->setXY(70, $ligne+3);
+    $pdf->Cell($l, "", "Autres", null, null, "R");
+    $pdf->Cell($l, "", $facture->_montant_factures_caisse[1], null, null, "R");
   }
   
   $pdf->setXY(20, $ligne+9);

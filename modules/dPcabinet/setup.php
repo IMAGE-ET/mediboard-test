@@ -1678,7 +1678,19 @@ class CSetupdPcabinet extends CSetup {
               ADD INDEX (`pour_compte_id`);";
     $this->addQuery($query);
         
-    $this->mod_version = "1.79";
+    $this->makeRevision("1.79");
+    
+    $query = "ALTER TABLE `factureconsult` 
+              CHANGE `assurance` `assurance_base` INT (11) UNSIGNED,
+              ADD `assurance_complementaire` INT (11) UNSIGNED,
+              CHANGE `statut_pro` `statut_pro` ENUM ('chomeur','etudiant','non_travailleur','independant','salarie','sans_emploi');";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `factureconsult` 
+              ADD INDEX (`assurance_base`),
+              ADD INDEX (`assurance_complementaire`);";
+    $this->addQuery($query);
+    $this->mod_version = "1.80";
   }
 }
 ?>

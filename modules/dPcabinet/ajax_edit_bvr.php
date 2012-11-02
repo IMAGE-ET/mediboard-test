@@ -50,7 +50,7 @@ if ($edition_bvr) {
   $pdf->setPrintFooter(false);
   
   foreach ($factures as $facture) {
-    $facture->loadRefs("nom");
+    $facture->loadRefs();
       
     $pm = 0;
     $pt = 0;
@@ -78,27 +78,20 @@ if ($edition_bvr) {
     }
     $pt = sprintf("%.2f", $pt * $facture->_coeff);
     $pm = sprintf("%.2f", $pm * $facture->_coeff);
-    $facture->_ref_patient->adresse = str_replace(CHR(13).CHR(10),' ', $facture->_ref_patient->adresse);
+    $facture->_ref_patient->adresse = str_replace('\r\n',' ', $facture->_ref_patient->adresse);
     
     $pre_tab = array();
     $pre_tab["Medical:"]  = $pm;
     $pre_tab["Tarmed:"]   = $pt;
-    $total_pre_tab = 0;
     
-    foreach ($facture->_montant_factures_caisse as $key => $value) {
-      if (!is_int($key)) {
-        $pre_tab["$key:"]   = $value;
-      }
-    }
-    
-    if (count($pre_tab) == 2 && count($facture->_montant_factures_caisse) > 1) {
+    if (count($facture->_montant_factures_caisse) > 1) {
       $pre_tab["Autres:"]   = sprintf("%.2f", $facture->_montant_sans_remise - $pm - $pt);
     }
     
     // Praticien selectionné
     $praticien = $facture->_ref_praticien;
     $function_prat = $praticien->loadRefFunction();
-    $function_prat->adresse = str_replace(CHR(13).CHR(10),' ', $function_prat->adresse);
+    $function_prat->adresse = str_replace('\r\n',' ', $function_prat->adresse);
     $adherent = $praticien->adherent;
     
     $acompte = 0;
@@ -111,8 +104,6 @@ if ($edition_bvr) {
         $pdf->AddPage();
         $colonne1 = 10;
         $colonne2 = 120;
-        
-        $font = "vera";
         
         $font = "verab";
         $pdf->setFont($font, '', 12);
@@ -130,18 +121,20 @@ if ($edition_bvr) {
         $pdf->setFont($font, '', 8);
         
         //Auteur de la facture
+        $adresse_part1 = substr($function_prat->adresse, 0, 30);
+        $adresse_part2 = substr($function_prat->adresse, 30);
         $auteur = array(
           "50" => "Auteur facture",
           $user->_view,
           "$function_prat->_view",
-          substr($function_prat->adresse, 0, 30),
-          substr($function_prat->adresse, 30),
+          $adresse_part1,
+          $adresse_part2,
           $function_prat->cp." ".$function_prat->ville,
           "80" => "Four. de prestations",
           "Dr. ".$praticien->_view,
           "$function_prat->_view",
-          substr($function_prat->adresse, 0, 30),
-          substr($function_prat->adresse, 30),
+          $adresse_part1,
+          $adresse_part2,
           $function_prat->cp." ".$function_prat->ville,
         );
         $tab[$colonne1] = $auteur;
@@ -160,25 +153,22 @@ if ($edition_bvr) {
            "cp"=> $facture->_ref_patient->cp." ".$facture->_ref_patient->ville,
         );
          
-        if ($facture->cession_creance || $facture->type_facture == "accident") {
+//        if ($facture->cession_creance || $facture->type_facture == "accident") {
           $correspondant = new CCorrespondantPatient();
-          if ($facture->assurance) { 
-            $correspondant->load($facture->assurance);
+          
+          if ($facture->assurance_base && $cle_facture == 0) {
+            $correspondant->load($facture->assurance_base);
           }
-          else {
-            $facture->_ref_patient->loadRefsCorrespondantsPatient();
-            foreach ($facture->_ref_patient->_ref_correspondants_patient as $correspondant_patient) {
-              if ($correspondant_patient->relation == "assurance") {
-                $correspondant = $correspondant_patient;break;
-              }
-            }
+          elseif ($facture->assurance_complementaire && $cle_facture == 1) {
+            $correspondant->load($facture->assurance_complementaire);
           }
+          
           if ($correspondant->_id) {
             $destinataire["nom"] = $correspondant->nom." ".$correspondant->prenom;
             $destinataire["adresse"] = $correspondant->adresse;
             $destinataire["cp"] = $correspondant->cp." ".$correspondant->ville;
           }
-        }
+//        }
         
         //Destinataire de la facture
         $patient = array(
@@ -221,19 +211,20 @@ if ($edition_bvr) {
         
         $x = $y = 0;
         foreach ($tab as $k => $v) {
-          $colonne = $k;
           foreach ($v as $key => $value) {
-            if ($key == "50" || $key == "80" ) {
-              $y = $key;
-              $x=0;
-            }
-            $pdf->setXY($colonne, $y+$x);
-            $pdf->Cell(30, "", $value);
-            if ($key == "50" || $key == "80") {
-              $x+=5;
-            }
-            else {
-              $x +=3;
+            if ($value) {
+              if ($key == "50" || $key == "80" ) {
+                $y = $key;
+                $x=0;
+              }
+              $pdf->setXY($k, $y+$x);
+              $pdf->Cell(30, "", $value);
+              if ($key == "50" || $key == "80") {
+                $x+=5;
+              }
+              else {
+                $x +=3;
+              }
             }
           }
         }
@@ -268,13 +259,20 @@ if ($edition_bvr) {
           $title_montant = "n° ".$num_fact;
         }
         
+        $montant_total = 0;
         $tarif = array( "Tarif"         => "CHF");
         foreach ($pre_tab as $cles => $valeur) {
-          $tarif[$cles] = $valeur;
+          if (($cle_facture == 0 && $cles != "Autres:") || ($cle_facture == 1 && $cles == "Autres:")) {
+              $tarif[$cles] = $valeur;
+              $montant_total += $valeur;
+          }
+          else {
+              $tarif[$cles] = "0.00";
+          }
         }
         $tarif["Remise:"]         = sprintf('%0.2f', -$facture->remise);
-        $tarif["Montant total:"]  = sprintf('%0.2f', $facture->_montant_avec_remise);
-        $tarif["Acompte:"]        = sprintf('%0.2f', $acompte);
+        $tarif["Montant total:"]  = sprintf('%0.2f', $montant_total);
+        $tarif["Acompte:"]        = "0.00";
         $tarif["Montant dû $title_montant:"]  = $montant_facture;
         
         $acompte += $montant_facture;
@@ -334,7 +332,7 @@ if ($edition_bvr) {
             $report = substr($function_prat->adresse, 0+30*$j, 30);
             $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $report);
           }		
-          $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $function_prat->ville);
+          $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $function_prat->cp." ".$function_prat->ville);
           
           $pdf->Text(16.75*$l_colonne + $decalage, $h_ligne*13.25+$haut_doc   , ".");			  
           //Numéro adhérent, CHF, Montant1 et Montant2

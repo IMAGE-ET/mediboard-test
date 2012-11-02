@@ -2,19 +2,9 @@
   {{mb_return}}
 {{/if}}
 
-<tr>
-  <th class="category">Date</th>
-  <th class="category">Code</th>
-  <th class="category">Libelle</th>
-  <th class="category">Coût</th>
-  <th class="category">Qte</th>
-  <th class="category">Coeff</th>        
-  <th class="category">Montant</th>
-</tr>
-
 {{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures)}}
   <tr>
-    <td colspan="10">
+    <td colspan="8">
       <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 0, 1);">Edition des BVR</button>
       <button class="cut" onclick="Facture.cutFacture('{{$facture->_id}}');"
         {{if $facture->_nb_factures != 1 || $facture->cloture}}disabled="disabled"{{/if}}> Eclatement</button>
@@ -23,24 +13,27 @@
   </tr>
 {{/if}}
 <tr>
-  <td colspan="2"> Type de la facture:
+  <td colspan="2"> {{tr}}CFactureConsult-type_facture{{/tr}}:
     <form name="type_facture" method="post" action=""> 
       {{mb_class object=$facture}}
       {{mb_key   object=$facture}}
       <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-      <input type="radio" name="type_facture" value="maladie" {{if $facture->type_facture == 'maladie'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" />
-      <label for="maladie">Maladie</label>
-      <input type="radio" name="type_facture" value="accident" {{if $facture->type_facture == 'accident'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" />
-      <label for="accident">Accident</label>
+      <input type="radio" name="type_facture" value="maladie" {{if $facture->type_facture == 'maladie'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" 
+      {{if $facture->type_facture}}disabled="disabled"{{/if}}/>
+      <label for="maladie">{{tr}}CFactureConsult.type_facture.maladie{{/tr}}</label>
+      <input type="radio" name="type_facture" value="accident" {{if $facture->type_facture == 'accident'}}checked{{/if}}
+      {{if $facture->type_facture}}disabled="disabled"{{/if}} onchange="Facture.modifCloture(this.form);" />
+      <label for="accident">{{tr}}CFactureConsult.type_facture.accident{{/tr}}</label>
     </form>
   </td>
-  <td colspan="8">
+  <td colspan="6">
     <form name="cession_facture" method="post" action=""> 
       {{mb_class object=$facture}}
       {{mb_key   object=$facture}}
       <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
       <input type="hidden" name="cession_creance" value="{{if $facture->cession_creance == 1}}0{{else}}1{{/if}}" />
-      <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}} onclick="Facture.modifCloture(this.form);" />
+      <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}}
+      {{if $facture->type_facture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
       {{mb_label object=$facture field=cession_creance}}
     </form>
     <form name="npq_facture" method="post" action=""> 
@@ -48,18 +41,35 @@
       {{mb_key   object=$facture}}
       <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
       <input type="hidden" name="npq" value="{{if $facture->npq == 1}}0{{else}}1{{/if}}" />
-      <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}} onclick="Facture.modifCloture(this.form);" />
+      <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}}
+      {{if $facture->type_facture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
       {{mb_label object=$facture field=npq}}
     </form>
+  </td>
+</tr>
+<tr>
+  <td colspan="8">
     {{if count($facture->_ref_patient->_ref_correspondants_patient)}}
       <form name="assurance_patient" method="post" action="" style="margin-left:40px;"> 
         {{mb_class object=$facture}}
         {{mb_key   object=$facture}}
-        {{mb_label object=$facture field=assurance}}
-        <select name="assurance" style="width: 15em;" onchange="return onSubmitFormAjax(this.form);">
-          <option value="" {{if !$facture->assurance}}selected="selected" {{/if}}>&mdash; Choisir une assurance</option>
+        {{mb_label object=$facture field=assurance_base}}
+        <select name="assurance_base" style="width: 15em;" onchange="return onSubmitFormAjax(this.form);">
+          <option value="" {{if !$facture->assurance_base}}selected="selected" {{/if}}>&mdash; Choisir une assurance</option>
           {{foreach from=$facture->_ref_patient->_ref_correspondants_patient item=_assurance}}
-            <option value="{{$_assurance->_id}}" {{if $facture->assurance == $_assurance->_id}} selected="selected" {{/if}}>
+            <option value="{{$_assurance->_id}}" {{if $facture->assurance_base == $_assurance->_id}} selected="selected" {{/if}}>
+              {{$_assurance->nom}}  
+              {{if $_assurance->date_debut && $_assurance->date_fin}}
+               Du {{$_assurance->date_debut|date_format:"%d/%m/%Y"}} au {{$_assurance->date_fin|date_format:"%d/%m/%Y"}}
+              {{/if}}
+            </option>
+          {{/foreach}}
+        </select>
+        {{mb_label object=$facture field=assurance_complementaire}}
+        <select name="assurance_complementaire" style="width: 15em;" onchange="return onSubmitFormAjax(this.form);">
+          <option value="" {{if !$facture->assurance_complementaire}}selected="selected" {{/if}}>&mdash; Choisir une assurance</option>
+          {{foreach from=$facture->_ref_patient->_ref_correspondants_patient item=_assurance}}
+            <option value="{{$_assurance->_id}}" {{if $facture->assurance_complementaire == $_assurance->_id}} selected="selected" {{/if}}>
               {{$_assurance->nom}}  
               {{if $_assurance->date_debut && $_assurance->date_fin}}
                Du {{$_assurance->date_debut|date_format:"%d/%m/%Y"}} au {{$_assurance->date_fin|date_format:"%d/%m/%Y"}}
@@ -68,6 +78,8 @@
           {{/foreach}}
         </select>
       </form>
+    {{else}}
+      <div class="small-warning" style="display:inline">Pas d'assurance</div>
     {{/if}}
     
     <form name="statut_pro" method="post" action="" style="margin-left:30px;"> 
@@ -97,6 +109,16 @@
     <td colspan="9"></td>
   </tr>
 {{/if}}
+
+<tr>
+  <th class="category">Date</th>
+  <th class="category">Code</th>
+  <th class="category">Libelle</th>
+  <th class="category">Coût</th>
+  <th class="category">Qte</th>
+  <th class="category">Coeff</th>        
+  <th class="category">Montant</th>
+</tr>
 
 {{foreach from=$facture->_ref_consults item=_consultation}}
   {{foreach from=$_consultation->_ref_actes_tarmed item=_acte_tarmed}}
@@ -166,8 +188,8 @@
 {{/foreach}}
 
 <tbody class="hoverable">
-  {{assign var="nb_montants" value=$facture->_montant_factures|@count }}
-  {{foreach from=$facture->_montant_factures item=_montant key=key }}
+  {{assign var="nb_montants" value=$facture->_montant_factures|@count}}
+  {{foreach from=$facture->_montant_factures item=_montant key=key}}
     <tr>
       {{if $key == 0}}
       <td colspan="4" rowspan="{{$nb_montants+2}}"></td>

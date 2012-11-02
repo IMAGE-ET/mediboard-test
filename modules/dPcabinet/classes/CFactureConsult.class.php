@@ -19,7 +19,7 @@ class CFactureConsult extends CMbObject {
   
   // DB Fields
   var $patient_id   = null; 
-  var $praticien_id   = null; 
+  var $praticien_id = null; 
   var $remise       = null; 
   var $ouverture    = null; 
   var $cloture      = null;
@@ -30,7 +30,8 @@ class CFactureConsult extends CMbObject {
   var $tiers_date_reglement   = null;
   var $npq                    = null;
   var $cession_creance        = null;
-  var $assurance              = null;
+  var $assurance_base         = null;
+  var $assurance_complementaire = null;
   var $facture                = null;
   var $ref_accident           = null;
   var $statut_pro             = null;
@@ -56,7 +57,8 @@ class CFactureConsult extends CMbObject {
   // Object References
   var $_ref_patient       = null;
   var $_ref_praticien     = null;
-  var $_ref_assurance     = null;
+  var $_ref_assurance_base            = null;
+  var $_ref_assurance_complementaire  = null;
   var $_ref_consults      = null;
   var $_ref_last_consult  = null;
   var $_ref_first_consult = null;
@@ -110,7 +112,8 @@ class CFactureConsult extends CMbObject {
     $props["tiers_date_reglement"]      = "date";
     $props["npq"]                       = "enum notNull list|0|1 default|0";
     $props["cession_creance"]           = "enum notNull list|0|1 default|0";
-    $props["assurance"]                 = "ref class|CCorrespondantPatient";
+    $props["assurance_base"]            = "ref class|CCorrespondantPatient";
+    $props["assurance_complementaire"]  = "ref class|CCorrespondantPatient";
     $props["facture"]                   = "enum notNull list|-1|0|1 default|0";
     $props["ref_accident"]              = "text";
     $props["statut_pro"]                = "enum list|chomeur|etudiant|non_travailleur|independant|salarie|sans_emploi";
@@ -290,6 +293,7 @@ class CFactureConsult extends CMbObject {
     else {
       $this->_montant_factures   = array();
       $this->_montant_factures[] = $this->du_patient + $this->du_tiers - $this->remise;
+      $this->loadNumerosBVR();
     }
   }
           
@@ -403,15 +407,13 @@ class CFactureConsult extends CMbObject {
   /**
    * loadRefs
    * 
-   * @param string $select le champ à sélectionner pour l'affichage des totaux des prestations
-   * 
    * @return void
   **/
-  function loadRefs($select = "_id"){
+  function loadRefs(){
     $this->loadRefCoeffFacture();
     $this->loadRefsFwd();
     $this->loadRefsBack();
-    $this->loadNumerosBVR($select);
+    $this->loadNumerosBVR();
   }
   
   /**
@@ -440,11 +442,10 @@ class CFactureConsult extends CMbObject {
   **/
   function loadRefAssurance() {
     $assurance = new CCorrespondantPatient();
-    if ($this->assurance) {
-      $assurance->load($this->assurance);
-    }
-    $this->_ref_assurance = $assurance;
-    return $this->_ref_assurance;
+    $this->_ref_assurance_base = $assurance->load($this->assurance_base);
+    $this->_ref_assurance_complementaire = $assurance->load($this->assurance_complementaire);
+    
+    return $this->_ref_assurance_base;
   }
   
   /**
@@ -485,20 +486,12 @@ class CFactureConsult extends CMbObject {
   /**
    * Chargement des différents numéros de BVR de la facture 
    * 
-   * @param string $select le champ à sélectionner pour l'affichage des totaux des prestations
-   * 
    * @return void
   **/
-  function loadNumerosBVR($select = "_id"){
+  function loadNumerosBVR(){
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") && !count($this->_montant_factures_caisse)) {
       $total_tarmed = 0;
-      $total_caisse = array();
-          
-      $caisse = new CCaisseMaladie();
-      $caisses_maladie = $caisse->loadList(null, "nom");
-      foreach ($caisses_maladie as $caisse) {
-        $total_caisse[$caisse->$select] = 0;
-      }
+      $total_caisse = 0;
       
       foreach ($this->_ref_consults as $consult) {
         $consult->loadRefsActes();
@@ -507,8 +500,7 @@ class CFactureConsult extends CMbObject {
         }
         foreach ($consult->_ref_actes_caisse as $acte_caisse) {
           $coeff = "coeff_".$this->type_facture;
-          $total_caisse[$acte_caisse->_ref_caisse_maladie->$select] 
-            += ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
+          $total_caisse +=  ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
         }
       }
       $montant_prem = $total_tarmed * $this->_coeff;
@@ -519,14 +511,12 @@ class CFactureConsult extends CMbObject {
       if ($total_tarmed) {
          $this->_montant_factures_caisse[] = sprintf("%.2f",$montant_prem - $this->remise);
       }
-      
-      $this->_montant_sans_remise = sprintf("%.2f",$montant_prem);
-      foreach ($total_caisse as $cle => $caisse) {
-        if ($caisse) {
-          $this->_montant_factures_caisse[$cle] = sprintf("%.2f", $caisse);
-          $this->_montant_sans_remise += sprintf("%.2f",$caisse);
-        }
+      if ($total_caisse >0) {
+        $this->_montant_factures_caisse[] = $total_caisse;
       }
+      
+      $this->_montant_sans_remise = sprintf("%.2f",$montant_prem + $total_caisse);
+      
       $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
       if (count($this->_montant_factures) == 1) {
         $this->_montant_factures = $this->_montant_factures_caisse;
