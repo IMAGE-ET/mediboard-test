@@ -166,7 +166,13 @@
       {{assign var="coeff_caisse" value=$_acte_caisse->_ref_caisse_maladie->coeff_maladie}}
     {{/if}}
     <tr>
-      <td style="text-align:center;width:100px;">{{$_consultation->_date|date_format:"%d/%m/%Y"}}</td>
+      <td style="text-align:center;width:100px;">
+        {{if $_acte_caisse->date}}
+          {{mb_value object=$_acte_caisse field="date"}} 
+        {{else}}
+          {{$_consultation->_date|date_format:"%d/%m/%Y"}}
+        {{/if}}
+      </td>
       <td  {{if $_acte_caisse->code}} style="background-color:#DA70D6; width:140px;">{{mb_value object=$_acte_caisse field="code"}}{{else}}>{{/if}}</td>
       <td style="white-space: pre-line;" class="compact">{{$_acte_caisse->_ref_prestation_caisse->libelle}}</td>
       <td style="text-align:right;">

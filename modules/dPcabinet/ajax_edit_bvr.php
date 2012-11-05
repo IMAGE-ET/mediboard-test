@@ -139,16 +139,8 @@ if ($edition_bvr) {
         );
         $tab[$colonne1] = $auteur;
         
-        $nom_dest = "";
-        if ($facture->_ref_patient->assure_nom) {
-          $nom_dest =  $facture->_ref_patient->_assure_civilite." ".$facture->_ref_patient->assure_nom." ".$facture->_ref_patient->assure_prenom;
-        }
-        else {
-          $nom_dest = $facture->_ref_patient->_view; 
-        }
-        
         $destinataire = array(
-           "nom"=> "$nom_dest",
+           "nom"=> $facture->_ref_patient->_view,
            "adresse"=> $facture->_ref_patient->adresse,
            "cp"=> $facture->_ref_patient->cp." ".$facture->_ref_patient->ville,
         );
@@ -219,12 +211,7 @@ if ($edition_bvr) {
               }
               $pdf->setXY($k, $y+$x);
               $pdf->Cell(30, "", $value);
-              if ($key == "50" || $key == "80") {
-                $x+=5;
-              }
-              else {
-                $x +=3;
-              }
+              $x = ($key == "50" || $key == "80") ? $x+5 : $x+3;
             }
           }
         }

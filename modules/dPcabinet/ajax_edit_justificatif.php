@@ -138,18 +138,18 @@ foreach ($factures as $facture) {
   $pt = 0;
   $hauteur_en_tete = 100;
 // Praticien selectionné
-    if ($prat_id) {
-      $praticien = new CMediusers();
-      $praticien->load($prat_id);
-    }
-    else {
-      $praticien = $facture->_ref_chir;
-    }
-    if (!$praticien) {
-      $chirSel = CValue::getOrSession("chirSel", "-1");
-      $praticien = new CMediusers();
-      $praticien->load($chirSel);
-    }
+  if ($prat_id) {
+    $praticien = new CMediusers();
+    $praticien->load($prat_id);
+  }
+  else {
+    $praticien = $facture->_ref_chir;
+  }
+  if (!$praticien) {
+    $chirSel = CValue::getOrSession("chirSel", "-1");
+    $praticien = new CMediusers();
+    $praticien->load($chirSel);
+  }
     
   $function_prat = $praticien->loadRefFunction();
   $function_prat->adresse = str_replace('\r\n',' ', $function_prat->adresse);
@@ -246,12 +246,7 @@ foreach ($factures as $facture) {
           $valeur = "";
           $cote = "C";
           if ($key == "Date") {
-            if ($acte->date) {
-              $valeur = $acte->date;
-            }
-            else {
-              $valeur = $consult->_date;
-            }
+            $valeur = ($acte->date) ? $acte->date : $consult->_date;
             $valeur= mbTransformTime(null, $valeur, "%d.%m.%Y");
           }
           if ($key == "Tarif") {
@@ -261,12 +256,7 @@ foreach ($factures as $facture) {
             $valeur = $acte->code;
           }
           if ($key == "Code réf") {
-            if ($acte->code_ref) {
-              $valeur = $acte->code_ref;
-            }
-            else {
-              $valeur = $acte->_ref_tarmed->procedure_associe[0][0];
-            }
+            $valeur = ($acte->code_ref) ? $acte->code_ref : $acte->_ref_tarmed->procedure_associe[0][0];
           }
           if ($key == "Sé Cô") {
              $valeur = "1";
@@ -371,7 +361,8 @@ foreach ($factures as $facture) {
           $valeur = "";
           $cote = "C";
           if ($key == "Date") {
-            $valeur= mbTransformTime(null,  $consult->_date, "%d.%m.%Y");
+            $valeur = ($acte->date) ? $acte->date : $consult->_date;
+            $valeur= mbTransformTime(null, $valeur, "%d.%m.%Y");
           }
           if ($key == "Tarif") {
             $valeur = $acte->_ref_caisse_maladie->code;
