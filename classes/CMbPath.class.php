@@ -100,7 +100,9 @@ abstract class CMbPath {
    */
   static function getExtension($path) {
     $info = pathinfo($path);
-    return $info['extension'];
+    if (array_key_exists('extension', $info)) {
+      return $info['extension'];
+    }
   }
 
   /**

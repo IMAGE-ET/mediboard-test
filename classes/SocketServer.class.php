@@ -197,6 +197,9 @@ class SocketServer {
     if (PHP_NORMAL_READ !== $mode && PHP_BINARY_READ !== $mode) {
       $this->__raiseError('Unknown read mode.');
     }
+    else {
+      
+    }
   }
 
   
@@ -566,8 +569,6 @@ class SocketServer {
           $pool[$conn_id] = false;
           continue;
         }
-        
-        $request = trim($request);
         
         // Skip to next if client tells nothing
         if (0 == strlen($request)) {

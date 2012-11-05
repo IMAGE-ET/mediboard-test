@@ -260,6 +260,29 @@ class CSocketBasedServer {
   }
   
   /**
+   * Encode the request and return it
+   * 
+   * @param string $request The request
+   * 
+   * @return string
+   */
+  function encodeClientRequest($buffer, $request) {
+    $buffer .= substr($request, 0, -1);
+    return trim($buffer);
+  }
+  
+  /**
+   * Decode the response and return it
+   * 
+   * @param string $ack The response
+   * 
+   * @param string
+   */
+  function decodeResponse($ack) {
+    return $ack;
+  }
+  
+  /**
    * Return the server type
    * 
    * @return string
@@ -283,7 +306,7 @@ class CSocketBasedServer {
     $buffer = &$this->clients[$id]["buffer"];
     
     // Commands
-    switch($request) {
+    switch(trim($request)) {
       case "__STOP__":
         $buffer = "";
         return false;
@@ -306,10 +329,9 @@ class CSocketBasedServer {
     
     // Si on recoit le flag de fin de message, on effectue la requete web
     if ($this->isMessageFull($request)) {
-      $buffer .= substr($request, 0, -1);
       
       echo sprintf(" > Got a full message from %d\n", $id);
-      
+      $buffer = $this->encodeClientRequest($buffer, $request);
       $post = array(
         "m"       => $this->module,
         "dosql"   => $this->controller,
@@ -326,15 +348,15 @@ class CSocketBasedServer {
       // We must keep m=$module in the GET because of user permissions
       $url = "$this->call_url/index.php?login=$this->username:$this->password&m=$this->module";
       $ack = $this->requestHttpPost($url, $post);
-      
       $this->request_count++;
       $time = microtime(true) - $start;
       echo sprintf(" > Request done in %f s\n", $time);
       
       $buffer = "";
-      return $this->formatAck($ack);
+      return $this->decodeResponse($this->formatAck($ack));
     }
     else {
+      echo "Mise en buffer du message!";
       // Mise en buffer du message
       $buffer .= "$request\n";
     }
@@ -472,7 +494,6 @@ class CSocketBasedServer {
     );
     
     $ctx = stream_context_create($options);
-    
     return file_get_contents($url, false, $ctx);
   }
   
