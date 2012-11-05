@@ -49,6 +49,10 @@ switch(true) {
   case $exchange instanceof CEchangeXML:
     $smarty->display("inc_exchange_xml_details.tpl");
     break;
+
+  case $exchange instanceof CExchangeDicom :
+    $smarty->display("inc_exchange_dicom_details.tpl");
+    break;
   
   default:
     $exchange->guessDataType();

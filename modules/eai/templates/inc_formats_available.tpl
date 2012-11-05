@@ -48,3 +48,23 @@
   {{/if}}
 </fieldset>
 {{/if}}
+
+{{if !empty($formats_binary|smarty:nodefaults)}}
+<fieldset> 
+  <legend>{{tr}}CExchangeBinary{{/tr}}</legend>
+  
+  {{foreach from=$formats_binary item=_format_binary}}
+    <button onclick="InteropActor.viewMessagesSupported('{{$actor_guid}}', '{{$_format_binary->_class}}')">
+      <img src="modules/{{$_format_binary->_ref_module->mod_name}}/images/icon.png" width="16"/>{{tr}}{{$_format_binary->_class}}{{/tr}}
+    </button>
+  {{/foreach}}
+  
+  {{if !empty($messages_binary|smarty:nodefaults)}}
+    {{foreach from=$messages_binary key=_message_binary item=_messages_binary_supported}}
+      {{mb_include template="inc_messages_available" message=$_message_binary messages_supported=$_messages_binary_supported}}
+    {{/foreach}}
+  {{else}}
+    <div class="small-warning">{{tr}}CMessageSupported.none{{/tr}}</div>
+  {{/if}}
+</fieldset>
+{{/if}}

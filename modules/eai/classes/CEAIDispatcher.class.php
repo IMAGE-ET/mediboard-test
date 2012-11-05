@@ -39,8 +39,15 @@ class CEAIDispatcher {
    * 
    * @return string Dispatch response
    */  
-  static function dispatch($data, CInteropSender $actor = null, $exchange_id = null, $to_treatment = true) {
-    if ($actor && isset($actor->_configs["encoding"]) && $actor->_configs["encoding"] == "UTF-8") {
+  static function dispatch($data, CInteropSender $actor = null, $exchange_id = null, $to_treatment = true) { 
+    $contexts = null;
+    // Dicom a besoin des contextes de présentation afin de pouvoir déchiffrer le message
+    if (is_array($data)) {
+      $contexts = $data["pres_contexts"];
+      $data    = $data["msg"];
+    }
+      
+    if ($actor && isset($actor->_configs["encoding"]) && $actor->_configs["encoding"] == "UTF-8") { 
       $data = utf8_decode($data);
     }
     
@@ -51,7 +58,7 @@ class CEAIDispatcher {
       return self::dispatchError($data, $actor);
     }
     
-    if (($data_format = self::understand($data, $actor)) === null) {
+    if (($data_format = self::understand($data, $actor, $contexts)) === null) {
       self::$errors[] = CAppUI::tr("CEAIDispatcher-no_understand");
       return self::dispatchError($data, $actor);
     }
@@ -60,7 +67,7 @@ class CEAIDispatcher {
     $supported = false;
     $family_message_class = (!$data_format->_family_message_class) ? 
                                 get_class($data_format->_family_message) : $data_format->_family_message_class; 
-    
+
     $msg_supported_classes = $data_format->getMessagesSupported($actor->_guid, false, null, true);
     foreach ($msg_supported_classes as $_msg_supported_class => $_msg_supported) {
       if ($family_message_class == $_msg_supported_class) {
@@ -77,7 +84,7 @@ class CEAIDispatcher {
       return self::dispatchError($data, $actor);
     }
     
-    CAppUI::stepAjax("CEAIDispatcher-understand");
+    //CAppUI::stepAjax("CEAIDispatcher-understand");
     
     $actor->_data_format        = $data_format;
     
@@ -104,10 +111,11 @@ class CEAIDispatcher {
    * 
    * @param string         $data  Data
    * @param CInteropSender $actor Actor data
+   * @param mixed          $contexts Used with Dicom, the presentation contexts
    * 
    * @return bool Understood ? 
    */  
-  static function understand($data, $actor = null) {
+  static function understand($data, $actor = null, $contexts = null) {
     foreach (CExchangeDataFormat::getAll() as $key => $_exchange_class) {  
       foreach (CApp::getChildClasses($_exchange_class, array(), true) as $under_key => $_data_format) {
         /**
@@ -116,7 +124,12 @@ class CEAIDispatcher {
         $data_format = new $_data_format;
         
         // Test si le message est compris
-        $understand = $data_format->understand($data, $actor);    
+        if ($contexts) {
+          $understand = $data_format->understand($data, $actor, $contexts); 
+        }
+        else {
+          $understand = $data_format->understand($data, $actor); 
+        }   
         if ($understand) {
           return $data_format;
         }

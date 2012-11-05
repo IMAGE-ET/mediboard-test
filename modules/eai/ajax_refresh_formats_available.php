@@ -14,8 +14,8 @@ CCanDo::checkRead();
 
 $actor_guid = CValue::getOrSession("actor_guid");
 
-$formats_xml  = $formats_tabular  = array();
-$messages_xml = $messages_tabular = array();
+$formats_xml  = $formats_tabular  = $formats_binary  = array();
+$messages_xml = $messages_tabular = $messages_binary = array();
 
 $actor = CMbObject::loadFromGuid($actor_guid);
 // Expéditeur d'intégration
@@ -34,6 +34,14 @@ if ($actor instanceof CInteropSender) {
     
     $temp = $_format_tabular->getMessagesSupported($actor_guid, false, null, true);
     $messages_tabular = array_merge($messages_tabular, $temp);
+  }
+  
+  $formats_binary = CExchangeDataFormat::getAll("CExchangeBinary");
+  foreach ($formats_binary as &$_format_binary) {
+    $_format_binary = new $_format_binary;
+    
+    $temp = $_format_binary->getMessagesSupported($actor_guid, false, null, true);
+    $messages_binary = array_merge($messages_binary, $temp);
   }
 }
 // Destinataire d'intégration 
@@ -61,6 +69,9 @@ $smarty->assign("formats_xml"     , $formats_xml);
 $smarty->assign("messages_xml"    , $messages_xml);
 $smarty->assign("formats_tabular" , $formats_tabular);
 $smarty->assign("messages_tabular", $messages_tabular);
+$smarty->assign("formats_binary"  , $formats_binary);
+$smarty->assign("messages_binary" , $messages_binary);
+
 $smarty->display("inc_formats_available.tpl");
 
 ?>
