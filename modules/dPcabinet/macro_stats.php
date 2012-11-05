@@ -53,15 +53,24 @@ $query = "SELECT COUNT(*) total, chir_id, $sql_cast AS refdate
   ORDER BY refdate DESC
 ";
 
-$totaux = array();
+$totals = array();
 foreach ($result = $ds->loadList($query) as $_row) {
-  $totaux[$_row["chir_id"]][$_row["refdate"]] = $_row["total"];
+  $totals[$_row["chir_id"]][$_row["refdate"]] = $_row["total"];
 }
 
 $user = CMediusers::get();
-$users = $user->loadAll(array_keys($totaux));
+$users     = $user->loadAll(array_keys($totals));
+$functions = CStoredObject::massLoadFwdRef($users, "function_id");
+$groups    = CStoredObject::massLoadFwdRef($functions, "group_id");
+
 foreach ($users as $_user) {
   $_user->loadRefFunction();
+  
+  $function = $functions[$_user->function_id];
+  $function->_ref_users[$_user->_id] = $_user;
+  
+  $group = $groups[$function->group_id];
+  $group->_ref_functions[$function->_id] = $function;
 }
 
 // Création du template
@@ -70,7 +79,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("period", $period);
 $smarty->assign("dates" , $dates );
 $smarty->assign("users" , $users );
-$smarty->assign("totaux", $totaux);
+$smarty->assign("groups", $groups);
+$smarty->assign("totals", $totals);
 
 $smarty->display("macro_stats.tpl");
 ?>

@@ -45,8 +45,7 @@ ViewSender = {
   confirmDeletion: function(form) {
     var options = {
       typeName:'export', 
-      objName: $V(form.name),
-      ajax: 1
+      objName: $V(form.name)
     }
     
     var ajax = {

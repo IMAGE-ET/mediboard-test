@@ -14,11 +14,22 @@
     {{/foreach}}
   </tr>
  
-  {{foreach from=$totaux key=_user_id item=_dates}}
+  {{foreach from=$groups item=_group}}
+  <tr>
+    <th class="category" colspan="31">{{$_group}}</th>
+  </tr>
+  {{foreach from=$_group->_ref_functions item=_function}}
+  <tr>
+    <th class="section" colspan="31" style="text-align: left;">
+      {{mb_include module=mediusers template=inc_vw_function function=$_function}}
+    </th>
+  </tr>
+  {{foreach from=$_function->_ref_users key=user_id item=_user}}
   <tr>
     <td>
-      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$users.$_user_id}}
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_user}}
     </td>
+    {{assign var=_dates value=$totals.$user_id}}
     {{foreach from=$dates item=_date}}     
     <td style="text-align: center;">
       {{if array_key_exists($_date, $_dates)}}
@@ -26,9 +37,11 @@
       {{else}}
         &ndash;
       {{/if}}
-    {{/foreach}}
     </td>
-  </tr>     
+    {{/foreach}}
+  </tr>
+  {{/foreach}}
+  {{/foreach}}
   {{foreachelse}}
   <tr><td class="empty" colspan=31">{{tr}}CConsultation.none{{/tr}}</td></tr>
   {{/foreach}}
