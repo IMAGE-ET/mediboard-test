@@ -1535,8 +1535,11 @@ class CSetupdPplanningOp extends CSetup {
       ADD `examen_operation_id` INT (11) UNSIGNED,
       ADD INDEX (`examen_operation_id`);";
     $this->addQuery($query);
+     
+    $this->makeRevision("1.66");
+    $this->getFieldRenameQueries("COperation", "sortie_reveil", "sortie_reveil_possible");
     
-    $this->mod_version = "1.66";
+    $this->mod_version = "1.67";
   }
 }
 ?>
