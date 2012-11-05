@@ -72,7 +72,8 @@ if ($edition_bvr) {
             $acte->_ref_tarmed->tp_al = $acte->montant_base;
           }
         }
-        if ($acte->montant_base != $acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite) {
+        $somme = ($acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl + $acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al)  * $acte->quantite;
+        if ($acte->montant_base != $somme) {
           $pm += $acte->montant_base;
         }
         else {
@@ -84,9 +85,6 @@ if ($edition_bvr) {
     $pt = sprintf("%.2f", $pt * $facture->_coeff);
     $pm = sprintf("%.2f", $pm * $facture->_coeff);
     
-    $facture->_ref_patient->adresse = str_replace(CHR(13).CHR(10),' ', $facture->_ref_patient->adresse);
-//    $facture->_ref_patient->adresse = str_replace('\r\n',' ', $facture->_ref_patient->adresse);
-    
     $pre_tab = array();
     $pre_tab["Medical:"]  = $pm;
     $pre_tab["Tarmed:"]   = $pt;
@@ -95,8 +93,6 @@ if ($edition_bvr) {
     // Praticien selectionné
     $praticien = $facture->_ref_praticien;
     $function_prat = $praticien->loadRefFunction();
-    $function_prat->adresse = str_replace(CHR(13).CHR(10),' ', $function_prat->adresse);
-//    $function_prat->adresse = str_replace('\r\n',' ', $function_prat->adresse);
     $adherent = $praticien->adherent;
     
     $acompte = 0;
@@ -126,10 +122,20 @@ if ($edition_bvr) {
         $pdf->setFont($font, '', 8);
         
         //Auteur de la facture
-        $adresse_part1 = substr($function_prat->adresse, 0, 30);
-        $adresse_part2 = substr($function_prat->adresse, 30);
-        $function_prat->cp =  substr($function_prat->cp, 1);
-        $facture->_ref_patient->cp =  substr($facture->_ref_patient->cp, 1);
+        if (stristr($function_prat->adresse, "\r\n")) {
+          $adresse_part1 = stristr($function_prat->adresse, "\r\n", true);
+          $adresse_part2 = stristr($function_prat->adresse, "\r\n");
+        }
+        else {
+          $adresse_part1 = substr($function_prat->adresse, 0, 30);
+          $adresse_part2 = substr($function_prat->adresse, 30);
+        }
+        if (strlen($function_prat->cp)>4) {
+          $function_prat->cp =  substr($function_prat->cp, 1);
+        }
+        if (strlen($facture->_ref_patient->cp)>4) {
+          $facture->_ref_patient->cp =  substr($facture->_ref_patient->cp, 1);
+        }
         $auteur = array(
           "50" => "Auteur facture",
           $user->_view,
@@ -146,9 +152,20 @@ if ($edition_bvr) {
         );
         $tab[$colonne1] = $auteur;
         
+        $adresse1 = $adresse2 = "";
+        if (stristr($facture->_ref_patient->adresse, "\r\n")) {
+          $adresse1 = stristr($facture->_ref_patient->adresse, "\r\n", true);
+          $adresse2 = stristr($facture->_ref_patient->adresse, "\r\n");
+          $adresse2 = str_replace("\r\n",'',$adresse2);
+        }
+        else {
+          $adresse1 = substr($function_prat->adresse, 0, 30);
+          $adresse2 = substr($function_prat->adresse, 30);
+        }
         $destinataire = array(
            "nom"=> $facture->_ref_patient->_view,
-           "adresse"=> $facture->_ref_patient->adresse,
+           "adresse1"=> $adresse1,
+           "adresse2"=> $adresse2,
            "cp"=> $facture->_ref_patient->cp." ".$facture->_ref_patient->ville,
         );
          
@@ -163,9 +180,20 @@ if ($edition_bvr) {
           }
           
           if ($correspondant->_id) {
+            if (strlen($correspondant->cp)>4) {
+              $correspondant->cp = substr($correspondant->cp, 1);
+            }
             $destinataire["nom"] = $correspondant->nom." ".$correspondant->prenom;
-            $destinataire["adresse"] = $correspondant->adresse;
-            $destinataire["cp"] =  substr($correspondant->cp, 1)." ".$correspondant->ville;
+            if (stristr($correspondant->adresse, "\r\n")) {
+              $destinataire["adresse1"] = stristr($correspondant->adresse, "\r\n", true);
+              $destinataire["adresse2"] = stristr($correspondant->adresse, "\r\n");
+              $adresse2 = str_replace("\r\n",'',$adresse2);
+            }
+            else {
+              $destinataire["adresse1"] = $correspondant->adresse;
+              $destinataire["adresse2"] = "";
+            }
+            $destinataire["cp"] =  $correspondant->cp." ".$correspondant->ville;
           }
 //        }
         
@@ -173,12 +201,14 @@ if ($edition_bvr) {
         $patient = array(
           "50" => "Destinataire",
           $destinataire["nom"],
-          $destinataire["adresse"],
+          $destinataire["adresse1"],
+          $destinataire["adresse2"],
           $destinataire["cp"],
           "80" => "Patient",
           "n° AVS: ".$facture->_ref_patient->avs, 
           $facture->_ref_patient->_view,
-          $facture->_ref_patient->adresse,
+          $adresse1,
+          $adresse2,
           $facture->_ref_patient->cp." ".$facture->_ref_patient->ville
         );
         
@@ -320,12 +350,12 @@ if ($edition_bvr) {
           $pdf->setFont($font, '', 8);
           $pdf->Text($l_colonne + $decalage, $h_ligne*3+$haut_doc , $praticien->_view);
           $pdf->Text($l_colonne + $decalage, $h_ligne*4+$haut_doc , $function_prat->_view);
-          //Si le texte dépasse la largeur de la colonne => retour à la ligne
-          $longeur = strlen($function_prat->adresse);
-          for ($j=0; $j < $longeur/30; $j++) {
-            $report = substr($function_prat->adresse, 0+30*$j, 30);
-            $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $report);
-          }		
+          $j = 0;
+          $pdf->Text($l_colonne + $decalage, $h_ligne*5+$haut_doc , $adresse_part1);
+          if ($adresse_part2) {
+            $pdf->Text($l_colonne + $decalage, $h_ligne*6+$haut_doc , $adresse_part2);
+            $j = 1;
+          }
           $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $function_prat->cp." ".$function_prat->ville);
           
           $pdf->Text(16.75*$l_colonne + $decalage, $h_ligne*13.25+$haut_doc   , ".");			  
@@ -360,13 +390,15 @@ if ($edition_bvr) {
         $pdf->Text($l_colonne, $h_ligne*16+$haut_doc , $destinataire["nom"]);
         $pdf->Text(49*$l_colonne, $h_ligne*12+$haut_doc , $destinataire["nom"]);
         
-        $longeur = strlen($destinataire["adresse"]);
-        //Si le texte dépasse la largeur de la colonne => retour à la ligne
-        for ($j=0; $j < $longeur/30; $j++) {
-          $report = substr($destinataire["adresse"], 0+30*$j, 30);
-          $pdf->Text($l_colonne, $h_ligne*(17+$j)+$haut_doc , $report);
-          $pdf->Text(49*$l_colonne, $h_ligne*(13+$j)+$haut_doc , $report);
+        $pdf->Text($l_colonne, $h_ligne*17+$haut_doc , $destinataire["adresse1"]);
+        $pdf->Text(49*$l_colonne, $h_ligne*13+$haut_doc , $destinataire["adresse1"]);
+        $j = 1;
+        if ($adresse2) {
+          $pdf->Text($l_colonne, $h_ligne*(18)+$haut_doc , $destinataire["adresse2"]);
+          $pdf->Text(49*$l_colonne, $h_ligne*14+$haut_doc , $destinataire["adresse2"]);
+          $j = 2;
         }
+        
         $pdf->Text($l_colonne, $h_ligne*(17+$j)+$haut_doc , $destinataire["cp"]);
         $pdf->Text(49*$l_colonne, $h_ligne*(13+$j)+$haut_doc , $destinataire["cp"]);
         
