@@ -131,7 +131,7 @@ class CReglement extends CMbMetaObject {
     }
     
     // Cas de la facture
-    if ($this->_update_facture && $this->object_class == "CFactureConsult" && !$this->_ref_object->patient_date_reglement) {
+    if ($this->_update_facture && $this->object_class == "CFactureConsult") {
       $facture = $this->_ref_object;
       $facture->loadRefsConsults();
       $facture->loadRefsReglements();
