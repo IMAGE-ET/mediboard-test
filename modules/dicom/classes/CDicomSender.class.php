@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -19,13 +19,6 @@ class CDicomSender extends CInteropSender {
    * @var integer
    */
   public $dicom_sender_id = null;
-  
-  /**
-   * The exchange source
-   * 
-   * @var CSourceDicom
-   */
-  public $_ref_exchange_source = null;
   
   /**
    * Initialize the class specifications
@@ -58,10 +51,8 @@ class CDicomSender extends CInteropSender {
    * 
    * @return void
    */
-  function loadRefExchangeSource() {
-    if ($this->_ref_exchange_source === null) {
-      $this->_ref_exchange_source = CExchangeSource::get("$this->_guid", "dicom", true, $this->_type_echange, false);
-    }
+  function loadRefsExchangesSources() {
+    $this->_ref_exchanges_sources[] = CExchangeSource::get("$this->_guid", "dicom", true, $this->_type_echange, false);
   }
 }
 ?>

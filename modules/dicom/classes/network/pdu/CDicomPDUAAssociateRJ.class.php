@@ -10,7 +10,7 @@
 /**
  * An A-Associate-RJ PDU
  */
-class CDicomPDUAAssociateRJ extends CDIcomPDU {
+class CDicomPDUAAssociateRJ extends CDicomPDU {
   
   /**
    * The result of the association request.
@@ -86,7 +86,7 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
-    $this->setType("03");
+    $this->setType(0x03);
     $this->setTypeStr("A-Associate-RJ");
     foreach ($datas as $key => $value) {
       $method = 'set' . ucfirst($key);
@@ -153,7 +153,7 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
   function encodePDU(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt32($this->length);
     $stream_writer->skip(1);
@@ -188,16 +188,16 @@ class CDicomPDUAAssociateRJ extends CDIcomPDU {
    * 
    * @return string
    */
-  function __toString() {
+  function toString() {
     $str = "<h1>A-Associate-RJ</h1><br>
             <ul>
-              <li>Type : $this->type</li>
+              <li>Type : " . sprintf("%02X", $this->type) . "</li>
               <li>Length : $this->length</li>
               <li>Result : " . self::$result_enum[$this->result] . "</li>
               <li>Source : " . self::$source_enum[$this->source] . "</li>
               <li>Diagnostic : " . self::$diagnostic_enum[$this->source][$this->diagnostic] . "</li>
             </ul>";
-    return $str;
+    echo $str;
   }
 }
 ?>

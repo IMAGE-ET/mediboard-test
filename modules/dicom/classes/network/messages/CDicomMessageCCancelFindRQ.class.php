@@ -22,7 +22,7 @@ class CDicomMessageCCancelFindRQ {
   protected $command_group_length = null;
   
   /**
-   * Identify the DIMSE-C operation, here C-Ccancel-Find-RQ
+   * Identify the DIMSE-C operation, here C-Cancel-Find-RQ
    * 
    * @var CDicomDataSet
    */
@@ -41,6 +41,20 @@ class CDicomMessageCCancelFindRQ {
    * @var CDicomDataSet
    */
   protected $command_data_set = null;
+  
+  /**
+   * The type of the message
+   * 
+   * @var string
+   */
+  public $type = "C-Cancel-Find-RQ";
+  
+  /**
+   * The encoded content of the message
+   * 
+   * @var string
+   */
+  protected $content = null;
   
   /**
    * The constructor.
@@ -140,6 +154,26 @@ class CDicomMessageCCancelFindRQ {
   }
   
   /**
+   * Return the encoded content
+   * 
+   * @return string
+   */
+  function getContent() {
+    return $this->content;
+  }
+  
+  /**
+   * Set the encoded content
+   * 
+   * @param string $content The content
+   * 
+   * @return string
+   */
+  function setContent($content) {
+    $this->content = $content;
+  }
+  
+  /**
    * Encode the message
    * 
    * @param CDicomStreamWriter $stream_writer   The stream writer
@@ -165,6 +199,7 @@ class CDicomMessageCCancelFindRQ {
     
     $this->command_group_length->encode($stream_writer, $transfer_syntax);
     
+    $this->setContent($group_stream->buf);
     $stream_writer->write($group_stream->buf);
     
     $group_stream->close();

@@ -48,7 +48,7 @@ class CDicomPDUItemRoleSelection extends CDicomPDUItem {
    * @param array $datas The datas, default null. 
    */
   function __construct($datas = array()) {
-    $this->setType("54");
+    $this->setType(0x54);
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
       $method = 'set';
@@ -127,10 +127,10 @@ class CDicomPDUItemRoleSelection extends CDicomPDUItem {
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $this->uid_length = $stream_reader->readUnsignedInt16();
+    $this->uid_length = $stream_reader->readUInt16();
     $this->sop_class_uid = $stream_reader->readUID($this->uid_length);
-    $this->scu_role = $stream_reader->readUnsignedInt8();
-    $this->scp_role = $stream_reader->readUnsignedInt8();
+    $this->scu_role = $stream_reader->readUInt8();
+    $this->scp_role = $stream_reader->readUInt8();
   }
   
   /**
@@ -143,13 +143,13 @@ class CDicomPDUItemRoleSelection extends CDicomPDUItem {
   function encodeItem(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUnsignedInt16($this->uid_length);
+    $stream_writer->writeUInt16($this->length);
+    $stream_writer->writeUInt16($this->uid_length);
     $stream_writer->writeUID($this->sop_class_uid, $this->uid_length);
-    $stream_writer->writeUnsignedInt8($this->scu_role);
-    $stream_writer->writeUnsignedInt8($this->scp_role);
+    $stream_writer->writeUInt8($this->scu_role);
+    $stream_writer->writeUInt8($this->scp_role);
   }
 
   /**
@@ -182,7 +182,7 @@ class CDicomPDUItemRoleSelection extends CDicomPDUItem {
   function __toString() {
     return "Role selection :
             <ul>
-              <li>Item type : $this->type</li>
+              <li>Item type : " . sprintf("%02X", $this->type) . "</li>
               <li>Item length : $this->length</li>
               <li>UID length : $this->uid_length</li>
               <li>SOP class UID : $this->sop_class_uid</li>

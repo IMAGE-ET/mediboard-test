@@ -51,6 +51,22 @@ class CDicomMessageCEchoRQ {
   protected $command_data_set = null;
   
   /**
+   * The encoded content of the message
+   * 
+   * @var string
+   */
+  protected $content = null;
+  
+  /**
+   * The type of the message
+   * 
+   * @var string
+   */
+  public $type = "C-Echo-RQ";
+  
+  static $type_int = 0x0030; 
+  
+  /**
    * The constructor.
    * 
    * @param array $datas Default null. 
@@ -166,6 +182,26 @@ class CDicomMessageCEchoRQ {
   }
   
   /**
+   * Return the encoded content
+   * 
+   * @return string
+   */
+  function getContent() {
+    return $this->content;
+  }
+  
+  /**
+   * Set the encoded content
+   * 
+   * @param string $content The content
+   * 
+   * @return string
+   */
+  function setContent($content) {
+    $this->content = $content;
+  }
+  
+  /**
    * Encode the message
    * 
    * @param CDicomStreamWriter $stream_writer   The stream writer
@@ -192,6 +228,7 @@ class CDicomMessageCEchoRQ {
     
     $this->command_group_length->encode($stream_writer, $transfer_syntax);
     
+    $this->setContent($group_stream->buf);
     $stream_writer->write($group_stream->buf);
     
     $group_stream->close();
@@ -257,8 +294,7 @@ class CDicomMessageCEchoRQ {
    * @return string
    */
   function __toString() {
-    return "C-Echo-RQ :
-            <table>
+    return "<table>
               <tr>
                 <th>Tag</th><th>Name</th><th>VR</th><th>Length</th><th>Value</th>
               </tr>

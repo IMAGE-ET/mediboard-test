@@ -138,7 +138,7 @@ class CDicomStreamWriter {
    * @return integer or false on error
    */
   function writeHexByteLE($hexa, $length = 1) {
-    $bin = pack("h*", $hexa);
+    $bin = pack("C*", str_pad(strrev(hexdec($hexa)), $length*2, 0, STR_PAD_LEFT));
     return $this->write($bin, $length);
   }
   

@@ -59,7 +59,7 @@ class CDicomPDUItemSopClassExtendedNegociation extends CDicomPDUItem {
    * @param array $datas The datas, default null. 
    */
   function __construct($datas = array()) {
-    $this->setType("56");
+    $this->setType(0x56);
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
       $method = 'set';
@@ -123,7 +123,7 @@ class CDicomPDUItemSopClassExtendedNegociation extends CDicomPDUItem {
    * 
    * @return null
    */
-  function setScaDigitalSignatureSupport($element_coercion) {
+  function setScaElementCoercion($element_coercion) {
     $this->sca_element_coercion = $element_coercion;
   }
   
@@ -150,13 +150,13 @@ class CDicomPDUItemSopClassExtendedNegociation extends CDicomPDUItem {
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $this->uid_length = $stream_reader->readUnsignedInt16();
+    $this->uid_length = $stream_reader->readUInt16();
     $this->sop_class_uid = $stream_reader->readUID($this->uid_length);
-    $this->sca_support = $stream_reader->readUnsignedInt8();
+    $this->sca_support = $stream_reader->readUInt8();
     $stream_reader->skip(1);
-    $this->sca_digital_signature_support = $stream_reader->readUnsignedInt8();
+    $this->sca_digital_signature_support = $stream_reader->readUInt8();
     $stream_reader->skip(1);
-    $this->sca_element_coercion = $stream_reader->readUnsignedInt8();
+    $this->sca_element_coercion = $stream_reader->readUInt8();
     $stream_reader->skip(1);
   }
   
@@ -170,16 +170,16 @@ class CDicomPDUItemSopClassExtendedNegociation extends CDicomPDUItem {
   function encodeItem(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUnsignedInt16($this->uid_length);
+    $stream_writer->writeUInt16($this->length);
+    $stream_writer->writeUInt16($this->uid_length);
     $stream_writer->writeUID($this->sop_class_uid, $this->uid_length);
-    $stream_writer->writeUnsignedInt8($this->sca_support);
+    $stream_writer->writeUInt8($this->sca_support);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt8($this->sca_digital_signature_support);
+    $stream_writer->writeUInt8($this->sca_digital_signature_support);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt8($this->sca_element_coercion);
+    $stream_writer->writeUInt8($this->sca_element_coercion);
     $stream_writer->skip(1);
   }
 
@@ -213,7 +213,7 @@ class CDicomPDUItemSopClassExtendedNegociation extends CDicomPDUItem {
   function __toString() {
     return "SOP class extended negociation : 
             <ul>
-              <li>Item type : $this->type</li>
+              <li>Item type : " . sprintf("%02X", $this->type) . "</li>
               <li>Item length : $this->length</li>
               <li>SOP class UID length : $this->uid_length</li>
               <li>SOP class UID : $this->sop_class_uid</li>

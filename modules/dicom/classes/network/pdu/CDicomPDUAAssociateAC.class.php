@@ -10,7 +10,7 @@
 /**
  * An A-Associate-AC PDU
  */
-class CDicomPDUAAssociateAC extends CDIcomPDU {
+class CDicomPDUAAssociateAC extends CDicomPDU {
   
   /**
    * Protocol version, must be equal to 1
@@ -61,7 +61,7 @@ class CDicomPDUAAssociateAC extends CDIcomPDU {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
-    $this->setType("02");
+    $this->setType(0x02);
     $this->setTypeStr("A-Associate-AC");
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
@@ -164,10 +164,10 @@ class CDicomPDUAAssociateAC extends CDIcomPDU {
    * @return null
    */
   function decodePDU(CDicomStreamReader $stream_reader) {
-    $this->protocol_version = $stream_reader->readHexByte(2);
+    $this->protocol_version = $stream_reader->readUInt16();
     
     // On vérifie que la version du protocole est bien 0001
-    if ($this->protocol_version != 0001) {
+    if ($this->protocol_version != 0x0001) {
       // Erreur
       echo "Protocol version differente de 1";
     }
@@ -185,7 +185,7 @@ class CDicomPDUAAssociateAC extends CDIcomPDU {
     $stream_reader->skip(32);
     
     $this->application_context = CDicomPDUItemFactory::decodeItem($stream_reader);
-    $this->presentation_contexts = CDicomPDUItemFactory::decodeConsecutiveItemsByType($stream_reader, "21");
+    $this->presentation_contexts = CDicomPDUItemFactory::decodeConsecutiveItemsByType($stream_reader, 0x21);
     $this->user_info = CDicomPDUItemFactory::decodeItem($stream_reader);
   }
   
@@ -199,7 +199,7 @@ class CDicomPDUAAssociateAC extends CDIcomPDU {
   function encodePDU(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt32($this->length);
     $stream_writer->writeUInt16($this->protocol_version);
@@ -247,10 +247,10 @@ class CDicomPDUAAssociateAC extends CDIcomPDU {
    * 
    * @return string
    */
-  function __toString() {
+  function toString() {
     $str = "<h1>A-Associate-AC</h1><br>
             <ul>
-              <li>Type : $this->type</li>
+              <li>Type : " . sprintf("%02X", $this->type) . "</li>
               <li>Length : $this->length</li>
               <li>Called AE title : $this->called_AE_title</li>
               <li>Calling AE title : $this->calling_AE_title</li>
@@ -259,7 +259,7 @@ class CDicomPDUAAssociateAC extends CDIcomPDU {
       $str .= "<li>{$pres_context->__toString()}</li>";
     }
     $str .= "<li>{$this->user_info->__toString()}</li></ul>";
-    return $str;
+    echo $str;
   }
 }
 ?>

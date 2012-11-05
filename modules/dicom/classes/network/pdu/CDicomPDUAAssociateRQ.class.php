@@ -61,7 +61,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
-    $this->setType("01");
+    $this->setType(0x01);
     $this->setTypeStr("A-Associate-RQ");
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
@@ -151,7 +151,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * @return null
    */
   function decodePDU(CDicomStreamReader $stream_reader) {
-    $this->protocol_version = $stream_reader->readHexByte(2);
+    $this->protocol_version = $stream_reader->readUInt16();
     
     $stream_reader->skip(2);
     
@@ -166,7 +166,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
     $stream_reader->skip(32);
     
     $this->application_context = CDicomPDUItemFactory::decodeItem($stream_reader);
-    $this->presentation_contexts = CDicomPDUItemFactory::decodeConsecutiveItemsByType($stream_reader, "20");
+    $this->presentation_contexts = CDicomPDUItemFactory::decodeConsecutiveItemsByType($stream_reader, 0x20);
     $this->user_info = CDicomPDUItemFactory::decodeItem($stream_reader);
   }
   
@@ -180,7 +180,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
   function encodePDU(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt32($this->length);
     $stream_writer->skip(1);
@@ -228,10 +228,10 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * 
    * @return string
    */
-  function __toString() {
+  function toString() {
     $str = "<h1>A-Associate-RQ</h1><br>
             <ul>
-              <li>Type : $this->type</li>
+              <li>Type : " . sprintf("%02X", $this->type) . "</li>
               <li>Length : $this->length</li>
               <li>Called AE title : $this->called_AE_title</li>
               <li>Calling AE title : $this->calling_AE_title</li>
@@ -240,7 +240,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
       $str .= "<li>{$pres_context->__toString()}</li>";
     }
     $str .= "<li>{$this->user_info->__toString()}</li></ul>";
-    return $str;
+    echo $str;
   }
 }
 ?>

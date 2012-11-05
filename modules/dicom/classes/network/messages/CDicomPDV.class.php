@@ -12,7 +12,7 @@
  * 
  * @see DICOM Standard PS 11_08, section 9.3.5.1 and Annexe E
  */
-class CDicomPDV extends CDIcomPDU {
+class CDicomPDV {
   
   /**
    * The length of the PDV
@@ -27,6 +27,21 @@ class CDicomPDV extends CDIcomPDU {
    * @var integer
    */
   protected $pres_context_id = null;
+  
+  
+  /**
+   * The presentation contexts
+   * 
+   * @var array
+   */
+  protected $presentation_contexts = null;
+  
+  /**
+   * The transfer syntax
+   * 
+   * @var string
+   */
+   protected $transfer_syntax = null;
   
   /**
    * The message control header
@@ -48,18 +63,18 @@ class CDicomPDV extends CDIcomPDU {
   );
   
   /**
-   * The transfer syntax used in this PDV, represented as the UID of the corresponding tranfer syntax
-   * 
-   * @var string 
-   */
-  protected $transfer_syntax = null;
-  
-  /**
    * The message
    * 
    * @var CDicomMessage
    */
   protected $message = null;
+  
+  /**
+   * The binary string of the pdv
+   * 
+   * @var string
+   */
+  protected $binary_content = null;
   
   /**
    * The constructor.
@@ -141,23 +156,51 @@ class CDicomPDV extends CDIcomPDU {
   }
   
   /**
-   * Return the transfer syntax UID
+   * Set the presentation contexts
    * 
-   * @return string
+   * @param array $presentation_contexts The presentation contexts
+   * 
+   * @return null
    */
-  function getTransferSyntax() {
-    return $this->transfer_syntax;
+  function setPresentationContexts($presentation_contexts) {
+    $this->presentation_contexts = $presentation_contexts;
+  }
+  
+  /**
+   * Get the presentation contexts
+   * 
+   * @return array
+   */
+  function getPresentationContexts() {
+    return $this->presentation_contexts;
   }
   
   /**
    * Set the transfer syntax
    * 
-   * @param string $transfer_syntax The transfer syntax's UID
+   * @param string $transfer_syntax The transfer syntax
    * 
    * @return null
    */
   function setTransferSyntax($transfer_syntax) {
     $this->transfer_syntax = $transfer_syntax;
+  }
+  
+  /**
+   * Get the transfer syntax.
+   * If the transfer syntax is not set, get it from the presentation context
+   * 
+   * @return string
+   */
+  function getTransferSyntax() {
+    if (!$this->transfer_syntax) {
+      foreach ($this->presentation_contexts as $_pres_context) {
+        if ($_pres_context->id == $this->pres_context_id) {
+          $this->transfer_syntax = $_pres_context->transfer_syntax;
+        }
+      }
+    }
+    return $this->transfer_syntax;
   }
   
   /**
@@ -167,6 +210,26 @@ class CDicomPDV extends CDIcomPDU {
    */
   function getMessage() {
     return $this->message;
+  }
+  
+  /**
+   * Set the binary content
+   * 
+   * @param string $content The content
+   * 
+   * @return null
+   */
+  function setBinaryContent($content) {
+    $this->binary_content = $content;
+  }
+  
+  /**
+   * Get the binary content
+   * 
+   * @return string
+   */
+  function getBinaryContent() {
+    return $this->binary_content;
   }
   
   /**
@@ -185,10 +248,12 @@ class CDicomPDV extends CDIcomPDU {
   /**
    * Calculate the length of the pdv, without the field "length"
    * 
+   * @param integer $message_length The length of the message
+   * 
    * @return null
    */
-  protected function calculateLength() {
-    $this->length = 2 + $this->message->getTotalLength();
+  protected function calculateLength($message_length) {
+    $this->length = 2 + $message_length;
   }
   
   /**
@@ -197,8 +262,8 @@ class CDicomPDV extends CDIcomPDU {
    * @return integer 
    */
   function getTotalLength() {
-    if (!$this->length) {
-      $this->calculateLength();
+    if (!$this->length && $this->message) {
+      $this->calculateLength(strlen($this->message->getContent()));
     }
     return $this->length + 4;
   }
@@ -211,13 +276,25 @@ class CDicomPDV extends CDIcomPDU {
    * @return null
    */
   function encode(CDicomStreamWriter $stream_writer) {
-    $this->calculateLength();
+    $handle = fopen("php://temp", "w+");
+    $message_stream = new CDicomStreamwriter($handle);
+    
+    if (!$this->transfer_syntax = $this->getTransferSyntax()) {
+      /** @todo throw exception **/
+      return;
+    }
+    
+    $this->message->encode($message_stream, $this->transfer_syntax);
+    
+    $this->calculateLength(strlen($message_stream->buf));
     
     $stream_writer->writeUInt32($this->length);
     $stream_writer->writeUInt8($this->pres_context_id);
     $stream_writer->writeUInt8($this->message_control_header);
     
-    $this->message->encode($stream_writer, $this->transfer_syntax);
+    $stream_writer->write($message_stream->buf, strlen($message_stream->buf));
+    $message_stream->close();
+    $this->setBinaryContent($stream_writer->buf);
   }
   
   /**
@@ -240,9 +317,18 @@ class CDicomPDV extends CDIcomPDU {
     fwrite($handle, $message_content);
     
     $message_stream = new CDicomStreamReader($handle);
+    $message_stream->rewind();
     $message_stream->setStreamLength($message_length);
     
-    $this->message = CDicomMessageFactory::encodeMessage($message_stream, $this->transfer_syntax);
+    if (!$this->transfer_syntax = $this->getTransferSyntax()) {
+      /** @todo throw exception **/
+    }
+    
+    $this->message = CDicomMessageFactory::decodeMessage($message_stream, $this->message_control_header, $this->transfer_syntax);
+    $message_stream->close();
+    
+    $content = substr($stream_reader->buf, 13) . $message_stream->buf;
+    $this->setBinaryContent($content);
   }
   
   /**
@@ -251,8 +337,7 @@ class CDicomPDV extends CDIcomPDU {
    * @return string
    */
   function __toString() {
-    $str = "PDV :
-            <ul>
+    $str = "<ul>
               <li>Length : $this->length</li>
               <li>Presentation context ID : $this->pres_context_id</li>
               <li>Message control header : ". self::$message_control_header_values[$this->message_control_header] . "</li>

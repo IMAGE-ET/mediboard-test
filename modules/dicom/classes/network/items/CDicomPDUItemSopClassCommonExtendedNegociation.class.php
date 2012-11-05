@@ -60,7 +60,7 @@ class CDicomPDUItemSopClassCommonExtendedNegociation extends CDicomPDUItem {
    * @param array $datas The datas, default null. 
    */
   function __construct($datas = array()) {
-    $this->setType("57");
+    $this->setType(0x57);
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
       $method = 'set';
@@ -170,11 +170,11 @@ class CDicomPDUItemSopClassCommonExtendedNegociation extends CDicomPDUItem {
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $this->sop_uid_length = $stream_reader->readUnsignedInt16();
+    $this->sop_uid_length = $stream_reader->readUInt16();
     $this->sop_class_uid = $stream_reader->readUID($this->sop_uid_length);
-    $this->service_uid_length = $stream_reader->readUnsignedInt16();
+    $this->service_uid_length = $stream_reader->readUInt16();
     $this->service_class_uid = $stream_reader->readUID($this->service_uid_length);
-    $this->related_sop_classes_id_length = $stream_reader->readUnsignedInt16();
+    $this->related_sop_classes_id_length = $stream_reader->readUInt16();
     
     if ($this->related_sop_classes_id_length > 0) {
       $related_sop_classes_content = $stream_reader->read($this->related_sop_classes_id_length);
@@ -201,14 +201,14 @@ class CDicomPDUItemSopClassCommonExtendedNegociation extends CDicomPDUItem {
   function encodeItem(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUnsignedInt16($this->sop_uid_length);
+    $stream_writer->writeUInt16($this->length);
+    $stream_writer->writeUInt16($this->sop_uid_length);
     $stream_writer->writeUID($this->sop_class_uid, $this->sop_uid_length);
-    $stream_writer->writeUnsignedInt16($this->service_uid_length);
+    $stream_writer->writeUInt16($this->service_uid_length);
     $stream_writer->writeUID($this->service_class_uid, $this->service_uid_length);
-    $stream_writer->writeUnsignedInt16($this->related_sop_classes_id_length);
+    $stream_writer->writeUInt16($this->related_sop_classes_id_length);
     
     foreach ($this->related_sop_classes_id as $_related_sop_class_id) {
       $_related_sop_class_id->encodeItem($stream_writer);
@@ -250,7 +250,7 @@ class CDicomPDUItemSopClassCommonExtendedNegociation extends CDicomPDUItem {
   function __toString() {
     $str = "Sop class common extended negociation :
             <ul>
-              <li>Item type : $this->type</li>
+              <li>Item type : " . sprintf("%02X", $this->type) . "</li>
               <li>Item length : $this->length</li>
               <li>SOP class UID length : $this->sop_uid_length</li>
               <li>SOP class UID : $this->sop_class_uid</li>

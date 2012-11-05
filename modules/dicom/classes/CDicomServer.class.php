@@ -34,8 +34,9 @@ class CDicomServer extends CSocketBasedServer {
    * @return boolean
    */
   function isMessageFull($message) {
+    echo bin2hex($message) . "\n";
     $length = unpack("N", substr($message, 2, 4));
-    if ($length == strlen($message) - 6) {
+    if ($length[1] == strlen($message) - 6) {
       return true;
     }
     return false;
@@ -55,7 +56,7 @@ class CDicomServer extends CSocketBasedServer {
       "m"       => $this->module,
       "dosql"   => $this->controller,
       "port"    => $this->port,
-      "message" => "TCP_Open",
+      "message" => base64_encode("TCP_Open"),
       "client_addr" => $addr,
       "client_port" => $port,
       "suppressHeaders" => 1,
@@ -64,7 +65,7 @@ class CDicomServer extends CSocketBasedServer {
     $url = $this->call_url."/index.php?login=$this->username:$this->password";
     $this->requestHttpPost($url, $post);
     
-    parent::onOpen($id, $addr, $port);
+    return parent::onOpen($id, $addr, $port);
   }
   
   /**
@@ -81,7 +82,7 @@ class CDicomServer extends CSocketBasedServer {
       "m"       => $this->module,
       "dosql"   => $this->controller,
       "port"    => $this->port,
-      "message" => "TCP_Closed",
+      "message" => base64_encode("TCP_Closed"),
       "client_addr" => $client["addr"],
       "client_port" => $client["port"],
       "suppressHeaders" => 1,
@@ -103,18 +104,32 @@ class CDicomServer extends CSocketBasedServer {
    * @return string
    */
   function formatAck($ack, $conn_id = null) {
-    if (array_key_exists("action", $ack)) {
-      if ($ack["action"] == "start_timer" && array_key_exists("timestamp", $ack)) {
-        $this->server->startTimer($ack["timestamp"], $conn_id);
-      }
-      elseif ($action == "stop_timer") {
-        $this->server->stopTimer($conn_id);
-      }
-    }  
-    if (array_key_exists("response", $ack)) {
-      return $ack["response"];
-    }
-    return "";
+    return $ack;
+  }
+  
+  /**
+   * Encode the request and return it
+   * 
+   * @param string $buffer  The buffer
+   * 
+   * @param string $request The request
+   * 
+   * @return string
+   */
+  function encodeClientRequest($buffer, $request) {
+    $buffer .= $request;
+    return base64_encode($buffer);
+  }
+  
+  /**
+   * Decode the response and return it
+   * 
+   * @param string $ack The response
+   * 
+   * @return string
+   */
+  function decodeResponse($ack) {
+    return base64_decode($ack);
   }
   
   /**

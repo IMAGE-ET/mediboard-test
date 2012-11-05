@@ -10,7 +10,7 @@
 /**
  * An P-Data-TF PDU
  */
-class CDicomPDUPDataTF extends CDIcomPDU {
+class CDicomPDUPDataTF extends CDicomPDU {
  
   /**
    * The presentation data value
@@ -20,11 +20,11 @@ class CDicomPDUPDataTF extends CDIcomPDU {
   protected $pdv = array();
   
   /**
-   * The transfer syntax used in this PDV, represented as the UID of the corresponding tranfer syntax
+   * The presentation contexts
    * 
-   * @var string 
+   * @var array 
    */
-  protected $transfer_syntax = null;
+  protected $presentation_contexts = null;
  
   /**
    * The constructor.
@@ -33,7 +33,7 @@ class CDicomPDUPDataTF extends CDIcomPDU {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
-    $this->setType("04");
+    $this->setType(0x04);
     $this->setTypeStr("P-Data-TF");
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
@@ -50,7 +50,7 @@ class CDicomPDUPDataTF extends CDIcomPDU {
   /**
    * Set the PDV
    * 
-   * @param array $pd_datas The pdv datas
+   * @param array $pdv_datas The pdv datas
    * 
    * @return null
    */
@@ -68,23 +68,23 @@ class CDicomPDUPDataTF extends CDIcomPDU {
   }
   
   /**
-   * Return the transfer syntax UID
+   * Return the presentation contexts
    * 
-   * @return string
+   * @return array 
    */
-  function getTransferSyntax() {
-    return $this->transfer_syntax;
+  function getPresentationContexts() {
+    return $this->presentation_contexts;
   }
   
   /**
    * Set the transfer syntax
    * 
-   * @param string $transfer_syntax The transfer syntax's UID
+   * @param array $presentation_contexts The presentation contexts
    * 
    * @return null
    */
-  function setTransferSyntax($transfer_syntax) {
-    $this->transfer_syntax = $transfer_syntax;
+  function setPresentationContexts($presentation_contexts) {
+    $this->presentation_contexts = $presentation_contexts;
   }
   
   /**
@@ -116,7 +116,7 @@ class CDicomPDUPDataTF extends CDIcomPDU {
    * @return null
    */
   function decodePDU(CDicomStreamReader $stream_reader) {
-    $this->pdv = new CDicomPDV(array("transfer_syntax" => $this->transfer_syntax));
+    $this->pdv = new CDicomPDV(array("presentation_contexts" => $this->presentation_contexts));
     $this->pdv->decode($stream_reader);
   }
   
@@ -128,12 +128,17 @@ class CDicomPDUPDataTF extends CDIcomPDU {
    * @return null
    */
   function encodePDU(CDicomStreamWriter $stream_writer) {
+    $handle = fopen("php://temp", "w+");
+    $pdv_stream = new CDicomStreamWriter($handle);
+    $this->pdv->setPresentationContexts($this->presentation_contexts);
+    $this->pdv->encode($pdv_stream);
+    
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt32($this->length);
-    $this->pdv->encode($stream_writer);
+    $stream_writer->write($pdv_stream->buf);
   }
   
   /**
@@ -141,14 +146,14 @@ class CDicomPDUPDataTF extends CDIcomPDU {
    * 
    * @return string
    */
-  function __toString() {
+  function toString() {
     $str = "<h1>P-Data-TF</h1><br>
             <ul>
-              <li>Type : $this->type</li>
+              <li>Type : " . sprintf("%02X", $this->type) . "</li>
               <li>Length : $this->length</li>
               <li>" . $this->pdv->__toString() . "</li>
             </ul>";
-    return $str;
+    echo $str;
   }
 }
 ?>

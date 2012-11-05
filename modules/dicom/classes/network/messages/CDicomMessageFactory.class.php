@@ -72,6 +72,9 @@ class CDicomMessageFactory {
       case 0x0020 :
         $class = "CDicomMessageCFindRQ";
         break;
+      case 0x8020 :
+        $class = "CDicomMessageCFindRSP";
+        break;
       case 0x0FFF :
         $class = "CDicomMessageCCancelFindRQ";
         break;

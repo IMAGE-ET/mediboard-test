@@ -2,41 +2,43 @@
 
 /**
  * @package Mediboard
- * @subpackage 
+ * @subpackage dicom
  * @version $Revision$
  * @author SARL OpenXtrem
  */
 
 /**
+ * The Dicom session
  * 
+ * @todo Modifier la facon dont le presentation context est stocké : faire un mix entre le reply et le request
  */
 class CDicomSession extends CMbObject {
   
-  const sta1 = "Sta1";
+  const STA1 = "Sta1";
   
-  const sta2 = "Sta2";
+  const STA2 = "Sta2";
   
-  const sta3 = "Sta3";
+  const STA3 = "Sta3";
   
-  const sta4 = "Sta4";
+  const STA4 = "Sta4";
   
-  const sta5 = "Sta5";
+  const STA5 = "Sta5";
   
-  const sta6 = "Sta6";
+  const STA6 = "Sta6";
   
-  const sta7 = "Sta7";
+  const STA7 = "Sta7";
   
-  const sta8 = "Sta8";
+  const STA8 = "Sta8";
   
-  const sta9 = "Sta9";
+  const STA9 = "Sta9";
   
-  const sta10 = "Sta10";
+  const STA10 = "Sta10";
   
-  const sta11 = "Sta11";
+  const STA11 = "Sta11";
   
-  const sta12 = "Sta12";
+  const STA12 = "Sta12";
   
-  const sta13 = "Sta13";
+  const STA13 = "Sta13";
   
   /**
    * The id of the session
@@ -83,11 +85,53 @@ class CDicomSession extends CMbObject {
   public $messages = null;
   
   /**
+   * The status of the session
+   * 
+   * @var string
+   */
+  public $status = null;
+  
+  /**
    * The id of the Dicom exchange, containing only the data pdus
    * 
    * @var integer
    */
   public $dicom_exchange_id = null;
+  
+  /**
+   * The sender id
+   * 
+   * @var integer
+   */
+  public $sender_id = null;
+  
+  /**
+   * The receiver id
+   * 
+   * @var integer
+   */
+  public $receiver_id = null;
+  
+  /**
+   * The group
+   * 
+   * @var integer
+   */
+  public $group_id = null;
+  
+  /**
+   * The current state of the DICOM UL State machine
+   * 
+   * @var string
+   */
+  public $state = null;
+  
+  /**
+   * The duration of the session, in milliseconds
+   * 
+   * @var integer
+   */
+  public $_duration = null;
   
   /**
    * The messages
@@ -98,6 +142,13 @@ class CDicomSession extends CMbObject {
   public $_messages = null;
   
   /**
+   * The presentation contexts, in string
+   * 
+   * @var string
+   */
+  public $presentation_contexts = null;
+  
+  /**
    * The ARTIM timer
    * 
    * @var
@@ -105,18 +156,11 @@ class CDicomSession extends CMbObject {
   protected $_artim_timer = null;
   
   /**
-   * The current state of the DICOM UL State machine
+   * The presentation contexts
    * 
-   * @var string
+   * @var array
    */
-  protected $_state = null;
-  
-  /**
-   * The presentation context
-   * 
-   * @var CDicomItemPresentationContext
-   */
-  protected $_presentation_context = null;
+  protected $_presentation_contexts = null;
   
   /**
    * The last PDU received
@@ -130,14 +174,28 @@ class CDicomSession extends CMbObject {
    * 
    * @var CExchangeDicom
    */
-  protected $_ref_dicom_exchange = null;
+  public $_ref_dicom_exchange = null;
   
   /**
    * The actor, the sender or the receiver
    * 
    * @var CInteropActor
    */
-  protected $_ref_actor = null;
+  public $_ref_actor = null;
+  
+  /**
+   * Used for the filters
+   * 
+   * @var dateTime
+   */
+  public $_date_min = null;
+  
+  /**
+   * Used for the filters
+   * 
+   * @var dateTime
+   */
+  public $_date_max = null;
   
   /**
    * The DICOM UL state machine
@@ -148,164 +206,171 @@ class CDicomSession extends CMbObject {
    */
   protected static $_state_machine = array(
     "Sta1" => array(
-      "AAssociateRQ_Prepared" => "AE_1",
-      "TCP_Open"              => "AE_5",
+      "AAssociateRQ_Prepared" => "AE1",
+      "TCP_Open"              => "AE5",
+      "TCP_Closed"            => "AA5",
     ),
     "Sta2" => array(
-      "AAssociateAC_Received" => "AA_1",
-      "AAssociateRJ_Received" => "AA_1",
-      "AAssociateRQ_Received" => "AE_6",
-      "PDataTF_Received"      => "AA_1",
-      "AReleaseRQ_Received"   => "AA_1",
-      "AReleaseRP_Received"   => "AA_1",
-      "AAbort_Received"       => "AA_2",
-      "TCP_Closed"            => "AA_5",
-      "ARTIMTimeOut"          => "AA_2",
-      "InvalidPDU"            => "AA_1",
+      "AAssociateAC_Received" => "AA1",
+      "AAssociateRJ_Received" => "AA1",
+      "AAssociateRQ_Received" => "AE6",
+      "PDataTF_Received"      => "AA1",
+      "AReleaseRQ_Received"   => "AA1",
+      "AReleaseRP_Received"   => "AA1",
+      "AAbort_Received"       => "AA2",
+      "TCP_Closed"            => "AA5",
+      "ARTIMTimeOut"          => "AA2",
+      "InvalidPDU"            => "AA1",
     ),
     "Sta3" => array(
-      "AAssociateAC_Received" => "AA_8",
-      "AAssociateRJ_Received" => "AA_8",
-      "AAssociateRQ_Received" => "AA_8",
-      "AAssociateAC_Prepared" => "AE_7",
-      "AAssociateRJ_Prepared" => "AE_8",
-      "PDataTF_Received"      => "AA_8",
-      "AReleaseRQ_Received"   => "AA_8",
-      "AReleaseRP_Received"   => "AA_8",
-      "AAbort_Prepared"       => "AA_1",
-      "AAbort_Received"       => "AA_3",
-      "TCP_Closed"            => "AA_4",
-      "InvalidPDU"            => "AA_8",
+      "AAssociateAC_Received" => "AA8",
+      "AAssociateRJ_Received" => "AA8",
+      "AAssociateRQ_Received" => "AA8",
+      "AAssociateAC_Prepared" => "AE7",
+      "AAssociateRJ_Prepared" => "AE8",
+      "PDataTF_Received"      => "AA8",
+      "AReleaseRQ_Received"   => "AA8",
+      "AReleaseRP_Received"   => "AA8",
+      "AAbort_Prepared"       => "AA1",
+      "AAbort_Received"       => "AA3",
+      "TCP_Closed"            => "AA4",
+      "InvalidPDU"            => "AA8",
     ),
     "Sta4" => array(
-      "TCP_Indication"        => "AE_2",
-      "AAbort_Prepared"       => "AA_2",
-      "TCP_Closed"            => "AA_4",
+      "TCP_Indication"        => "AE2",
+      "AAbort_Prepared"       => "AA2",
+      "TCP_Closed"            => "AA4",
     ),
     "Sta5" => array(
-      "AAssociateAC_Received" => "AE_3",
-      "AAssociateRJ_Received" => "AE_4",
-      "AAssociateRQ_Received" => "AA_8",
-      "PDataTF_Received"      => "AA_8",
-      "AReleaseRQ_Received"   => "AA_8",
-      "AReleaseRP_Received"   => "AA_8",
-      "AAbort_Prepared"       => "AA_1",
-      "AAbort_Received"       => "AA_3",
-      "TCP_Closed"            => "AA_4",
-      "InvalidPDU"            => "AA_8",
+      "AAssociateAC_Received" => "AE3",
+      "AAssociateRJ_Received" => "AE4",
+      "AAssociateRQ_Received" => "AA8",
+      "PDataTF_Received"      => "AA8",
+      "AReleaseRQ_Received"   => "AA8",
+      "AReleaseRP_Received"   => "AA8",
+      "AAbort_Prepared"       => "AA1",
+      "AAbort_Received"       => "AA3",
+      "TCP_Closed"            => "AA5",
+      "InvalidPDU"            => "AA8",
     ),
     "Sta6" => array(
-      "AAssociateAC_Received" => "AA_8",
-      "AAssociateRJ_Received" => "AA_8",
-      "AAssociateRQ_Received" => "AA_8",
-      "PDataTF_Prepared"      => "DT_1",
-      "PDataTF_Received"      => "DT_2",
-      "AReleaseRQ_Prepared"   => "AR_1",
-      "AReleaseRQ_Received"   => "AR_2",
-      "AReleaseRP_Received"   => "AA_8",
-      "AAbort_Prepared"       => "AA_1",
-      "AAbort_Received"       => "AA_3",
-      "TCP_Closed"            => "AA_4",
-      "InvalidPDU"            => "AA_8",
+      "AAssociateAC_Received" => "AA8",
+      "AAssociateRJ_Received" => "AA8",
+      "AAssociateRQ_Received" => "AA8",
+      "PDataTF_Prepared"      => "DT1",
+      "PDataTF_Received"      => "DT2",
+      "AReleaseRQ_Prepared"   => "AR1",
+      "AReleaseRQ_Received"   => "AR2",
+      "AReleaseRP_Received"   => "AA8",
+      "AAbort_Prepared"       => "AA1",
+      "AAbort_Received"       => "AA3",
+      "TCP_Closed"            => "AA5",
+      "InvalidPDU"            => "AA8",
     ),
     "Sta7" => array(
-      "AAssociateAC_Received" => "AA_8",
-      "AAssociateRJ_Received" => "AA_8",
-      "AAssociateRQ_Received" => "AA_8",
-      "PDataTF_Received"      => "AR_6",
-      "AReleaseRQ_Received"   => "AR_8",
-      "AReleaseRP_Received"   => "AR_3",
-      "AAbort_Prepared"       => "AA_1",
-      "AAbort_Received"       => "AA_3",
-      "TCP_Closed"            => "AA_4",
-      "InvalidPDU"            => "AA_8",
+      "AAssociateAC_Received" => "AA8",
+      "AAssociateRJ_Received" => "AA8",
+      "AAssociateRQ_Received" => "AA8",
+      "PDataTF_Received"      => "AR6",
+      "AReleaseRQ_Received"   => "AR8",
+      "AReleaseRP_Received"   => "AR3",
+      "AAbort_Prepared"       => "AA1",
+      "AAbort_Received"       => "AA3",
+      "TCP_Closed"            => "AA4",
+      "InvalidPDU"            => "AA8",
     ),
     "Sta8" => array(
-      "AAssociateAC_Received" => "AA_8",
-      "AAssociateRJ_Received" => "AA_8",
-      "AAssociateRQ_Received" => "AA_8",
-      "PDataTF_Prepared"      => "AR_7",
-      "PDataTF_Received"      => "AA_8",
-      "AReleaseRQ_Received"   => "AA_8",
-      "AReleaseRP_Received"   => "AA_8",
-      "AReleaseRP_Prepared"   => "AR_4",
-      "AAbort_Prepared"       => "AA_1",
-      "AAbort_Received"       => "AA_3",
-      "TCP_Closed"            => "AA_4",
-      "InvalidPDU"            => "AA_8",
+      "AAssociateAC_Received" => "AA8",
+      "AAssociateRJ_Received" => "AA8",
+      "AAssociateRQ_Received" => "AA8",
+      "PDataTF_Prepared"      => "AR7",
+      "PDataTF_Received"      => "AA8",
+      "AReleaseRQ_Received"   => "AA8",
+      "AReleaseRP_Received"   => "AA8",
+      "AReleaseRP_Prepared"   => "AR4",
+      "AAbort_Prepared"       => "AA1",
+      "AAbort_Received"       => "AA3",
+      "TCP_Closed"            => "AA4",
+      "InvalidPDU"            => "AA8",
     ),
     "Sta9" => array(
-      "AAssociateAC_Received" => "AA_8",
-      "AAssociateRJ_Received" => "AA_8",
-      "AAssociateRQ_Received" => "AA_8",
-      "PDataTF_Received"      => "AA_8",
-      "AReleaseRQ_Received"   => "AA_8",
-      "AReleaseRP_Received"   => "AA_8",
-      "AReleaseRP_Prepared"   => "AR_9",
-      "AAbort_Prepared"       => "AA_1",
-      "AAbort_Received"       => "AA_3",
-      "TCP_Closed"            => "AA_4",
-      "InvalidPDU"            => "AA_8",
+      "AAssociateAC_Received" => "AA8",
+      "AAssociateRJ_Received" => "AA8",
+      "AAssociateRQ_Received" => "AA8",
+      "PDataTF_Received"      => "AA8",
+      "AReleaseRQ_Received"   => "AA8",
+      "AReleaseRP_Received"   => "AA8",
+      "AReleaseRP_Prepared"   => "AR9",
+      "AAbort_Prepared"       => "AA1",
+      "AAbort_Received"       => "AA3",
+      "TCP_Closed"            => "AA4",
+      "InvalidPDU"            => "AA8",
     ),
     "Sta10" => array(
-      "AAssociateAC_Received" => "AA_8",
-      "AAssociateRJ_Received" => "AA_8",
-      "AAssociateRQ_Received" => "AA_8",
-      "PDataTF_Received"      => "AA_8",
-      "AReleaseRQ_Received"   => "AA_8",
-      "AReleaseRP_Received"   => "AR_10",
-      "AAbort_Prepared"       => "AA_1",
-      "AAbort_Received"       => "AA_3",
-      "TCP_Closed"            => "AA_4",
-      "InvalidPDU"            => "AA_8",
+      "AAssociateAC_Received" => "AA8",
+      "AAssociateRJ_Received" => "AA8",
+      "AAssociateRQ_Received" => "AA8",
+      "PDataTF_Received"      => "AA8",
+      "AReleaseRQ_Received"   => "AA8",
+      "AReleaseRP_Received"   => "AR10",
+      "AAbort_Prepared"       => "AA1",
+      "AAbort_Received"       => "AA3",
+      "TCP_Closed"            => "AA4",
+      "InvalidPDU"            => "AA8",
     ),
     "Sta11" => array(
-      "AAssociateAC_Received" => "AA_8",
-      "AAssociateRJ_Received" => "AA_8",
-      "AAssociateRQ_Received" => "AA_8",
-      "PDataTF_Received"      => "AA_8",
-      "AReleaseRQ_Received"   => "AA_8",
-      "AReleaseRP_Received"   => "AR_3",
-      "AAbort_Prepared"       => "AA_1",
-      "AAbort_Received"       => "AA_3",
-      "TCP_Closed"            => "AA_4",
-      "InvalidPDU"            => "AA_8",
+      "AAssociateAC_Received" => "AA8",
+      "AAssociateRJ_Received" => "AA8",
+      "AAssociateRQ_Received" => "AA8",
+      "PDataTF_Received"      => "AA8",
+      "AReleaseRQ_Received"   => "AA8",
+      "AReleaseRP_Received"   => "AR3",
+      "AAbort_Prepared"       => "AA1",
+      "AAbort_Received"       => "AA3",
+      "TCP_Closed"            => "AA4",
+      "InvalidPDU"            => "AA8",
     ),
     "Sta12" => array(
-      "AAssociateAC_Received" => "AA_8",
-      "AAssociateRJ_Received" => "AA_8",
-      "AAssociateRQ_Received" => "AA_8",
-      "PDataTF_Received"      => "AA_8",
-      "AReleaseRQ_Received"   => "AA_8",
-      "AReleaseRP_Received"   => "AA_8",
-      "AReleaseRP_Prepared"   => "AR_4",
-      "AAbort_Prepared"       => "AA_1",
-      "AAbort_Received"       => "AA_3",
-      "TCP_Closed"            => "AA_4",
-      "InvalidPDU"            => "AA_8",
+      "AAssociateAC_Received" => "AA8",
+      "AAssociateRJ_Received" => "AA8",
+      "AAssociateRQ_Received" => "AA8",
+      "PDataTF_Received"      => "AA8",
+      "AReleaseRQ_Received"   => "AA8",
+      "AReleaseRP_Received"   => "AA8",
+      "AReleaseRP_Prepared"   => "AR4",
+      "AAbort_Prepared"       => "AA1",
+      "AAbort_Received"       => "AA3",
+      "TCP_Closed"            => "AA4",
+      "InvalidPDU"            => "AA8",
     ),
     "Sta13" => array(
-      "AAssociateAC_Received" => "AA_6",
-      "AAssociateRJ_Received" => "AA_6",
-      "AAssociateRQ_Received" => "AA_7",
-      "PDataTF_Received"      => "AA_6",
-      "AReleaseRQ_Received"   => "AA_6",
-      "AReleaseRP_Received"   => "AA_6",
-      "AAbort_Received"       => "AA_2",
-      "TCP_Closed"            => "AR_5",
-      "ARTIM_TimeOut"         => "AA_2",
-      "InvalidPDU"            => "AA_7",
+      "AAssociateAC_Received" => "AA6",
+      "AAssociateRJ_Received" => "AA6",
+      "AAssociateRQ_Received" => "AA7",
+      "PDataTF_Received"      => "AA6",
+      "AReleaseRQ_Received"   => "AA6",
+      "AReleaseRP_Received"   => "AA6",
+      "AAbort_Received"       => "AA2",
+      "TCP_Closed"            => "AR5",
+      "ARTIM_TimeOut"         => "AA2",
+      "InvalidPDU"            => "AA7",
     ),
   );
   
   /**
    * The constructor
    * 
+   * @param CInteropActor $actor The actor
    * 
+   * @return null
    */
-  function __construct($actor) {
-    $this->setActor($actor);
-    $this->_state = "sta1";
+  function __construct($actor = null) {
+    parent::__construct();
+    if ($actor) {
+      $this->setActor($actor);
+    }
+    $this->group_id = CGroups::loadCurrent()->_id;
+    $this->state = self::STA1;
     $this->begin_date = mbDateTime();
     $this->messages = "";
   }
@@ -330,19 +395,62 @@ class CDicomSession extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["receiver"]          = "str notNull";
-    $props["sender"]            = "str notNull";
-    $props["begin_date"]        = "dateTime notNull";
-    $props["end_date"]          = "dateTime";
-    $props["messages"]          = "str notNull";
-    $props["dicom_exchange_id"] = "ref class|CExchangeDicom";
+    $props["receiver"]              = "str notNull";
+    $props["sender"]                = "str notNull";
+    $props["begin_date"]            = "dateTime notNull";
+    $props["end_date"]              = "dateTime";
+    $props["messages"]              = "text";
+    $props["status"]                = "enum list|null|Rejected|Completed|Aborted";
+    $props["dicom_exchange_id"]     = "ref class|CExchangeDicom";
+    $props["group_id"]              = "ref notNull class|CGroups autocomplete|text";
+    $props["sender_id"]             = "ref class|CDicomSender autocomplete|nom";
+    $props["receiver_id"]           = "ref class|CDicomReceiver autocomplete|nom";
+    $props["state"]                 = "str notNull show|0";
+    $props["presentation_contexts"] = "str show|0";
+    
+    $props["_duration"]             = "num";
+    $props["_date_min"]             = "dateTime";
+    $props["_date_max"]             = "dateTime";
     return $props;
   }
   
+  /**
+   * Load the dicom exchange
+   * 
+   * @return null
+   */
   function loadRefDicomExchange() {
     if ($this->dicom_exchange_id !== null && $this->_ref_dicom_exchange === null) {
-      $this->_ref_dicom_exchange = new CDicomExchange();
+      $this->_ref_dicom_exchange = new CExchangeDicom();
+      $this->_ref_dicom_exchange->load($this->dicom_exchange_id);
     }
+  }
+  
+  /**
+   * Load the group
+   * 
+   * @return null
+   */
+  function loadRefGroups() {
+    $this->_ref_group = new CGroups;
+    $this->_ref_group->load($this->group_id);
+  }
+  
+  /**
+   * Load the actor
+   * 
+   * @return null
+   */ 
+  function loadRefActor() {
+    if ($this->sender_id) {
+      $this->_ref_actor = new CDicomSender;
+      $this->_ref_actor->load($this->sender_id);
+    }
+    elseif ($this->receiver_id) {
+      $this->_ref_actor = new CDicomReceiver;
+      $this->_ref_actor->load($this->receiver_id);
+    }
+    
   }
   
   /**
@@ -354,16 +462,18 @@ class CDicomSession extends CMbObject {
    */
   function setActor(CInteropActor $actor) {
     if (get_class($actor) == "CDicomSender" ) {
-      $actor->loadRefExchangeSource();
-      $this->sender = $actor->_ref_exchange_source->host . ":" . $actor->_ref_exchange_source->port;
+      $actor->loadRefsExchangesSources();
+      $this->sender = $actor->_ref_exchanges_sources[0]->host . ":" . $actor->_ref_exchanges_sources[0]->port;
       $this->receiver = "[SELF]";
+      $this->sender_id = $actor->_id;
     }
     elseif (get_class($actor) == "CDicomReceiver" ) {
-      $actor->loadRefExchangeSource();
-      $this->receiver = $actor->_ref_exchange_source->host . ":" . $actor->_ref_exchange_source->port;
+      $actor->loadRefsExchangesSources();
+      $this->receiver = $actor->_ref_exchanges_sources[0]->host . ":" . $actor->_ref_exchanges_sources[0]->port;
       $this->sender = "[SELF]";
+      $this->receiver_id = $actor->_id;
     } 
-    $this->_actor = $actor;
+    $this->_ref_actor = $actor;
   }
   
   /**
@@ -372,24 +482,27 @@ class CDicomSession extends CMbObject {
    * @return CInteropActor
    */
   function getActor() {
-    return $this->_actor;
+    if (!$this->_ref_actor) {
+      $this->loadRefActor();
+    }
+    return $this->_ref_actor;
   }
   
   /**
    * Add a message to the field messages
    * 
-   * @param string $type    The type of the message
+   * @param string    $type    The type of the message
    * 
-   * @param string $message The message
+   * @param CDicomPDU $message The message
    * 
    * @return null
    */
   function addMessage($type, $message) {
-    if (!$this->messages) {
-      $this->messages = "$type/$message";
+    if (!$this->_messages) {
+      $this->_messages = array($type => $message);
     }
     else {
-      $this->messages .= "|$type/$message";
+      $this->_messages[$type] = $message; 
     }
   }
   
@@ -401,23 +514,139 @@ class CDicomSession extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
+    if ($this->presentation_contexts) {
+      $pres_contexts_array = explode('|', $this->presentation_contexts);
+      $this->_presentation_contexts = array();
+      
+      foreach ($pres_contexts_array as $_pres_context) {
+        $_pres_context = explode('/', $_pres_context);
+        
+        $this->_presentation_contexts[] = new CDicomPresentationContext($_pres_context[0], $_pres_context[1], $_pres_context[2]);
+      }
+    }
+    
+    if ($this->end_date && $this->begin_date) {
+      $this->_duration = $this->end_date - $this->begin_date;
+    }
+  }
+  
+  /**
+   * Update the plin fields
+   * 
+   * @return null
+   */
+  function updatePlainFields() {
+    parent::updatePlainFields();
+    
+    if ($this->_presentation_contexts && !$this->presentation_contexts) {
+      foreach ($this->_presentation_contexts as $_pres_context) {
+        if (!$this->presentation_contexts) {
+          $this->presentation_contexts = "$_pres_context->id/
+            $_pres_context->abstract_syntax/$_pres_context->transfer_syntax";
+        }
+        else {
+          $this->presentation_contexts .= "|$_pres_context->id/
+            $_pres_context->abstract_syntax/$_pres_context->transfer_syntax";
+        }
+      }
+    }
+    
+    if ($this->_messages) {
+      foreach ($this->_messages as $type => $msg) {
+        if (!$this->messages) {
+          $this->messages = "$type/" . $msg->getPacket();
+        }
+        else {
+          $this->messages .= "|$type/" . $msg->getPacket();
+        }
+      }
+    }
+  }
+  
+  /**
+   * Decode the messages
+   * 
+   * @return null
+   */
+  function loadMessages() {
+    $this->loadRefDicomExchange();
+    if ($this->_ref_dicom_exchange) {
+      $this->_ref_dicom_exchange->loadContent();
+    }  
+      
     $this->_messages = array();
     
     $msg_array = explode('|', $this->messages);
     
     foreach ($msg_array as $msg) {
       $msg = explode('/', $msg);
-      $this->_messages[$msg[0]] = $msg[1];
+      $pdu = CDicomPDUFactory::decodePDU($msg[1]);
+      $this->_messages[$msg[0]] = $pdu;
+      
+      if ($msg[0] == "A-Associate-AC" && $this->_ref_dicom_exchange) {
+        $i = 1;  
+        foreach ($this->_ref_dicom_exchange->_requests as $_request) {
+          $name = "$_request->type_str-RQ$i";  
+          $this->_messages[$name] = $_request;
+          $i++;
+        }
+        
+        $i = 1;  
+        foreach ($this->_ref_dicom_exchange->_responses as $_response) {
+          $name = "$_response->type_str-RSP$i";  
+          $this->_messages[$name] = $_response;
+          $i++;
+        }
+      }
     }
   }
   
   /**
    * Return the action corresponing to the current state and to the event
    * 
+   * @param string $event The event
+   * 
    * @return string
    */
   protected function getAction($event) {
-    return self::$_state_machine[$this->_state][$event];
+    return self::$_state_machine[$this->state][$event];
+  }
+  
+  /**
+   * Return the presentation context linked to the presentation context
+   * 
+   * @return string or null
+   */
+  function getTransferSyntaxByID() {
+    foreach ($this->presentation_contexts as $_pres_context) {
+      if ($_pres_context->id = $this->pres_context_id) {
+        return $_pres_context->transfer_syntax->name;
+      }
+    }
+    return null;
+  }
+  
+  /**
+   * Set the presentation contexts, from the A-Associate-RQ and the A-Associate-AC pdus
+   * 
+   * @return null
+   */
+  function setPresentationContexts() {
+    if (array_key_exists("A-Associate-RQ", $this->_messages) && array_key_exists("A-Associate-AC", $this->_messages)) {
+      $_rq_pres_contexts = $this->_messages["A-Associate-RQ"]->presentation_contexts;
+      $_ac_pres_contexts = $this->_messages["A-Associate-AC"]->presentation_contexts;
+      
+      $this->_presentation_contexts = array();
+      foreach ($_rq_pres_contexts as $rq_pres_context) {
+        foreach ($_ac_pres_contexts as $ac_pres_context) {
+          if ($rq_pres_context->id == $ac_pres_context->id) {
+            $_pres_context = new CDicomPresentationContext($rq_pres_context->id, $rq_pres_context->abstract_syntax->name);
+            $_pres_context->transfer_syntax = $ac_pres_context->transfer_syntax->name;
+            $this->_presentation_contexts[] = $_pres_context;
+          }
+        }
+      }
+    }
   }
   
   /**
@@ -460,23 +689,25 @@ class CDicomSession extends CMbObject {
   /**
    * Prepare the datas for creating a A-Associate-AC PDU
    * 
-   * @todo handle the user info sub items
-   * 
    * @param CDicomPDUAAssociateRQ $associate_rq The A-Associate-RQ PDU
    * 
    * @return array
+   * 
+   * @todo handle the user info sub items
    */
   protected function prepareAAssociateACPDU(CDicomPDUAAssociateRQ $associate_rq) {
     $datas = array(
       "protocol_version"      => 1,
-      "called_AE_title"       => $associate_rq->called_AE_title,
-      "calling_AE_title"      => $associate_rq->calling_AE_title,
+      "called_AEtitle"       => $associate_rq->called_AE_title,
+      "calling_AEtitle"      => $associate_rq->calling_AE_title,
       "application_context"   => array("name" => $associate_rq->application_context->name),
       "presentation_contexts" => array(),
       "user_info"             => array(
-        "CDicomPDUItemMaximumLength" => 32768,
-        "CDicomPDUItemImplementationClassUID" => "1.2.250.1.2.3.4",
-        "CDicomPDUItemImplementationVersionName" => "mediboard",
+        "sub_items" => array(
+          "CDicomPDUItemMaximumLength" => array("maximum_length" => 32768),
+          "CDicomPDUItemImplementationClassUID" => array("uid" =>CAppUI::conf("dicom implementation_sop_class")),
+          "CDicomPDUItemImplementationVersionName" => array("version_name" => CAppUI::conf("dicom implementation_version")),
+        ), 
       ),
     );
       
@@ -539,7 +770,6 @@ class CDicomSession extends CMbObject {
   function handleEvent($event, $datas = null) {
     $action = $this->getAction($event);
     $method = "do$action";
-    
     if (method_exists($this, $method)) {
       return $this->$method($datas);
     }
@@ -553,14 +783,16 @@ class CDicomSession extends CMbObject {
    * 
    * Open a TCP connection with the server, only used in client mode
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAE_1($datas) {
+  protected function doAE1($datas) {
     // Open a TCP Connection with the server
+    
+    $this->begin_date = mbDateTime();
   }
   
   /**
@@ -568,13 +800,13 @@ class CDicomSession extends CMbObject {
    * 
    * Send the prepared A-ASSOCIATE-RQ PDU to the server, only used in client mode
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAE_2($datas) {
+  protected function doAE2($datas) {
     
   }
   
@@ -583,20 +815,23 @@ class CDicomSession extends CMbObject {
    * 
    * Decode a A-ASSOCIATE-AC PDU
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAE_3($datas) {
+  protected function doAE3($datas) {
     $associate_ac = CDicomPDUFactory::decodePDU($datas);
     
-    $this->_last_PDU_received = $associate_ac;
-    $this->addMessage($associate_ac->type_str, $associate_ac->getPacket());
+    $this->setPresentationContexts();
+    $this->addMessage($associate_ac->type_str, $associate_ac);
     
-    $this->_state = self::sta6;
+    $this->state = self::STA6;
     
+    /**
+     * @todo envoyer les données
+     */
   }
   
   /**
@@ -604,20 +839,21 @@ class CDicomSession extends CMbObject {
    * 
    * Decode a A-ASSOCIATE-RJ PDU
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAE_4($datas) {
+  protected function doAE4($datas) {
     $associate_rj = CDicomPDUFactory::decodePDU($datas);
     
-    $this->_last_PDU_received = $associate_rj;
-    $this->addMessage($associate_rj->type_str, $associate_rj->getPacket());
+    $this->addMessage($associate_rj->type_str, $associate_rj);
     
-    $this->_state = self::sta1;
-    /** Close connection **/
+    $this->state = self::STA1;
+    
+    $this->end_date = mbDateTime();  
+    $this->status = "Rejected";
   }
   
   /**
@@ -625,15 +861,17 @@ class CDicomSession extends CMbObject {
    * 
    * Start ARTIM timer, wait for A-ASSOCIATE-RQ
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAE_5($datas) {
+  protected function doAE5($datas) {
     // start ARTIM timer
-    $this->_state = self::sta2;
+    $this->state = self::STA2;
+    
+    $this->begin_date = mbDateTime();
   }
   
   /**
@@ -641,25 +879,21 @@ class CDicomSession extends CMbObject {
    * 
    * Stop ARTIM timer, and decode the A-ASSOCIATE-RQ PDU
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAE_6($datas) {
+  protected function doAE6($datas) {
     // stop ARTIM timer
     $associate_rq = CDicomPDUFactory::decodePDU($datas);
-    
-    $this->_last_PDU_received = $associate_rq;
-    $this->addMessage($pdu->type_str, $pdu->getPacket());
+    $this->addMessage($associate_rq->type_str, $associate_rq);
     
     $valid = $this->isAAssociateRQValid($associate_rq);
-    
-    $this->_state = self::sta3;
+    $this->state = self::STA3;
     
     if ($valid === true) {
-      
       return $this->handleEvent("AAssociateAC_Prepared", $this->prepareAAssociateACPDU($associate_rq));
     }
     else {
@@ -672,18 +906,19 @@ class CDicomSession extends CMbObject {
    * 
    * Send A-ASSOCIATE-AC PDU
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAE_7($datas) {
+  protected function doAE7($datas) {
     $pdu = CDicomPDUFactory::encodePDU("02", $datas);
     
-    $this->addMessage($pdu->type_str, $pdu->getPacket());
-    
-    $this->_state = self::sta6;
+    $this->addMessage($pdu->type_str, $pdu);
+
+    $this->setPresentationContexts();
+    $this->state = self::STA6;
     return $pdu->getPacket();
   }
   
@@ -692,18 +927,19 @@ class CDicomSession extends CMbObject {
    * 
    * Send A-ASSOCIATE-RJ PDU
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAE_8($datas) {
+  protected function doAE8($datas) {
     $pdu = CDicomPDUFactory::encodePDU("03", $datas);
     
-    $this->addMessage($pdu->type_str, $pdu->getPacket());
+    $this->addMessage($pdu->type_str, $pdu);
+    $this->status = "Rejected";
     
-    $this->_state = self::sta13;
+    $this->state = self::STA13;
     return $pdu->getPacket();
   }
   
@@ -712,29 +948,38 @@ class CDicomSession extends CMbObject {
    * 
    * Send a P-DATA-TF PDU
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doDT_1($datas) {
+  protected function doDT1($datas) {
+    $pdu = $datas;
     
+    return $pdu->getPacket();
   }
   
   /**
    * The action DT-2
    * 
-   * Decode the P-DATA-FT PDU
-   * 
-   * @see DICOM Standard PS 3.8 Section 9.2
+   * Decode the P-DATA-TF PDU
    * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doDT_2($datas) {
-    
+  protected function doDT2($datas) {
+    $ack = CEAIDispatcher::dispatch(array("msg" => $datas, "pres_contexts" => $this->_presentation_contexts), $this->_ref_actor, $this->dicom_exchange_id);
+    if (array_key_exists("event", $ack) && array_key_exists("datas", $ack) && array_key_exists("exchange_id", $ack)) {
+      if (!$this->dicom_exchange_id) {    
+        $this->dicom_exchange_id = $ack["exchange_id"];
+      }
+      
+      return $this->handleEvent($ack["event"], $ack["datas"]);
+    }
   }
   
   /**
@@ -742,18 +987,18 @@ class CDicomSession extends CMbObject {
    * 
    * Send a A-RELEASE-RQ PDU
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAR_1($datas = null) {
+  protected function doAR1($datas = null) {
     $pdu = CDicomPDUFactory::encodePDU("05", $datas);
     
-    $this->addMessage($pdu->type_str, $pdu->getPacket());
+    $this->addMessage($pdu->type_str, $pdu);
     
-    $this->_state = self::sta7;
+    $this->state = self::STA7;
     return $pdu->getPacket();
   }
   
@@ -762,19 +1007,19 @@ class CDicomSession extends CMbObject {
    * 
    * Decode the A-RELEASE-RQ PDU
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAR_2($datas) {
+  protected function doAR2($datas) {
     $release_rq = CDicomPDUFactory::decodePDU($datas);
     
     $this->_last_PDU_received = $release_rq;
-    $this->addMessage($release_rq->type_str, $release_rq->getPacket());
+    $this->addMessage($release_rq->type_str, $release_rq);
     
-    $this->_state = self::sta8;
+    $this->state = self::STA8;
     
     return $this->handleEvent("AReleaseRP_Prepared");
   }
@@ -784,22 +1029,23 @@ class CDicomSession extends CMbObject {
    * 
    * Decode the A-RELEASE-RP PDU
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAR_3($datas) {
+  protected function doAR3($datas) {
     $release_rp = CDicomPDUFactory::decodePDU($datas);
     
     $this->_last_PDU_received = $release_rp;
-    $this->addMessage($release_rp->type_str, $release_rp->getPacket());
+    $this->addMessage($release_rp->type_str, $release_rp);
     
-    $this->_state = self::sta1;
+    $this->state = self::STA1;
     
-    /** @todo close the connection **/
-    return "";
+    $this->status = "Completed";
+    
+    $this->end_date = mbDateTime();
   }
   
   /**
@@ -807,19 +1053,23 @@ class CDicomSession extends CMbObject {
    * 
    * Send a A-RELEASE-RP PDU and start ARTIM timer
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAR_4($datas = null) {
-    $pdu = CDicomPDUFactory::encodePDU("06");
+  protected function doAR4($datas = null) {
+    $pdu = CDicomPDUFactory::encodePDU(0x06);
     
-    $this->addMessage($pdu->type_str, $pdu->getPacket());
+    $this->addMessage($pdu->type_str, $pdu);
     
-    $this->_state = self::sta13;
+    $this->state = self::STA13;
     /** @todo start ARTIM timer **/
+    
+    $this->status = "Completed";
+    $this->end_date = mbDateTime();
+    
     return $pdu->getPacket();
   }
   
@@ -828,40 +1078,40 @@ class CDicomSession extends CMbObject {
    * 
    * Stop ARTIM timer
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAR_5($datas) {
+  protected function doAR5($datas) {
     /** @todo stop ARTIM timer **/
-    $this->_state = self::sta1;
+    $this->state = self::STA1;
   }
   
   /**
    * The action AR-6
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAR_6($datas) {
+  protected function doAR6($datas) {
     
   }
   
   /**
    * The action AR-7
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAR_7($datas) {
+  protected function doAR7($datas) {
     
   }
   
@@ -870,43 +1120,42 @@ class CDicomSession extends CMbObject {
    * 
    * Handle the case of A-Release-RQ collision
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAR_8($datas) {
+  protected function doAR8($datas) {
     $release_rq = CDicomPDUFactory::decodePDU($datas);
     
     $this->_last_PDU_received = $release_rq;
-    $this->addMessage($release_rq->type_str, $release_rq->getPacket());
+    $this->addMessage($release_rq->type_str, $release_rq);
     
     if ($this->sender) {
-      $this->_state = self::sta9;
+      $this->state = self::STA9;
       return $this->handleEvent("AReleaseRP_Prepared");      
     }
     else {
-      $this->_state = self::sta9;
-      return "";
+      $this->state = self::STA9;
     }
   }
   
   /**
    * The action AR-9
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAR_9($datas = null) {
+  protected function doAR9($datas = null) {
     $pdu = CDicomPDUFactory::encodePDU("06");
     
-    $this->addMessage($pdu->type_str, $pdu->getPacket());
+    $this->addMessage($pdu->type_str, $pdu);
     
-    $this->_state = self::sta11;
+    $this->state = self::STA11;
     
     return $pdu->getPacket();
   }
@@ -914,19 +1163,19 @@ class CDicomSession extends CMbObject {
   /**
    * The action AR-10
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAR_10($datas) {
+  protected function doAR10($datas) {
     $release_rp = CDicomPDUFactory::decodePDU($datas);
     
     $this->_last_PDU_received = $release_rp;
-    $this->addMessage($release_rp->type_str, $release_rp->getPacket());
+    $this->addMessage($release_rp->type_str, $release_rp);
     
-    $this->_state = self::sta12;
+    $this->state = self::STA12;
     return $this->handleEvent("AReleaseRP_Prepared");      
   }
   
@@ -935,22 +1184,22 @@ class CDicomSession extends CMbObject {
    * 
    * Send a A-ABORT PDU and start ARTIM timer
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAA_1($datas) {
+  protected function doAA1($datas) {
     $diagnostic = 0;
     if ($datas && is_integer($datas)) {
       $diagnostic = $datas;
     }
     $pdu = CDicomPDUFactory::encodePDU("07", array("source" => 0, "diagnostic" => $diagnostic));
     
-    $this->addMessage($pdu->type_str, $pdu->getPacket());
-    
-    $this->_state = self::sta13;
+    $this->addMessage($pdu->type_str, $pdu);
+    $this->status ="Aborted";
+    $this->state = self::STA13;
     
     return $pdu->getPacket();
   }
@@ -958,120 +1207,123 @@ class CDicomSession extends CMbObject {
   /**
    * The action AA-2
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAA_2($datas) {
+  protected function doAA2($datas) {
     /**
      Stop ARTIM timer
      Close connection
      **/
-    $this->_state = self::sta1;
+    $this->state = self::STA1;
   }
   
   /**
    * The action AA-3
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAA_3($datas) {
-    $pdu = CDicomPDUFactory::decodePDU($datas);
+  protected function doAA3($datas) {
+     $pdu = CDicomPDUFactory::decodePDU($datas);
     
-    $this->addMessage($pdu->type_str, $pdu->getPacket());
+    $this->addMessage($pdu->type_str, $pdu);
     
     /** close connection **/
-    $this->_state = self::sta1;
+    $this->state = self::STA1;
+    $this->status ="Aborted";
+    $this->end_date = mbDateTime();
   }
   
   /**
    * The action AA-4
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAA_4($datas) {
+  protected function doAA4($datas) {
     $pdu = CDicomPDUFactory::decodePDU($datas);
     
-    $this->addMessage($pdu->type_str, $pdu->getPacket());
-    
-    $this->_state = self::sta1;
+    $this->addMessage($pdu->type_str, $pdu);
+    $this->status ="Aborted";
+    $this->state = self::STA1;
   }
   
   /**
    * The action AA-5
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAA_5($datas) {
+  protected function doAA5($datas) {
     /** Stop ARTIM timer **/  
-    $this->_state = self::sta1;
+    $this->state = self::STA1;
   }
   
   /**
    * The action AA-6
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAA_6($datas) {
-    $this->_state = self::sta13;
+  protected function doAA6($datas) {
+    $this->state = self::STA13;
   }
   
   /**
    * The action AA-7
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAA_7($datas) {
+  protected function doAA7($datas) {
     $pdu = CDicomPDUFactory::encodePDU("07", array("source" => 2, "diagnostic" => 0));
     
-    $this->addMessage($pdu->type_str, $pdu->getPacket());
+    $this->addMessage($pdu->type_str, $pdu);
     
-    $this->_state = self::sta13;
-    
+    $this->state = self::STA13;
+    $this->status ="Aborted";
     return $pdu->getPacket();
   }
   
   /**
    * The action AA-8
    * 
-   * @see DICOM Standard PS 3.8 Section 9.2
-   * 
    * @param mixed $datas The datas
    * 
    * @return string
+   * 
+   * @see DICOM Standard PS 3.8 Section 9.2
    */
-  protected function doAA_8($datas) {
+  protected function doAA8($datas) {
     $diagnostic = 0;
     if ($datas && is_integer($datas)) {
       $diagnostic = $datas;
     }
     $pdu = CDicomPDUFactory::encodePDU("07", array("source" => 2, "diagnostic" => $diagnostic));
     
-    $this->addMessage($pdu->type_str, $pdu->getPacket());
+    $this->addMessage($pdu->type_str, $pdu);
+    $this->status ="Aborted";
     
-    $this->_state = self::sta13;
+    $this->state = self::STA13;
     
     return $pdu->getPacket();
   }

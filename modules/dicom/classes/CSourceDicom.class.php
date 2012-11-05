@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -9,7 +9,7 @@
  */ 
  
 /**
- * Description
+ * The Dicom exchange source
  */
 class CSourceDicom extends CExchangeSource {
   
@@ -41,8 +41,8 @@ class CSourceDicom extends CExchangeSource {
    */
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table	= "source_dicom";
-    $spec->key		= "source_dicom_id";
+    $spec->table	= "dicom_source";
+    $spec->key		= "dicom_source_id";
     return $spec;	
   }
   
@@ -53,7 +53,7 @@ class CSourceDicom extends CExchangeSource {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["port"]  = "num";
+    $props["port"]  = "num notNull";
     return $props;
   }
   
@@ -83,10 +83,10 @@ class CSourceDicom extends CExchangeSource {
   /**
    * Initiate a connection with the source and send an echo message
    * 
-   * @return 
+   * @return null
    */
   function sendEcho() {
-    
+    return;
   }
   
   /**

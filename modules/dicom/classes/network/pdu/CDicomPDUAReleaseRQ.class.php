@@ -10,7 +10,7 @@
 /**
  * An A-Release-RQ PDU
  */
-class CDicomPDUAReleaseRQ extends CDIcomPDU {
+class CDicomPDUAReleaseRQ extends CDicomPDU {
  
   /**
    * The constructor.
@@ -19,7 +19,7 @@ class CDicomPDUAReleaseRQ extends CDIcomPDU {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
-    $this->setType("05");
+    $this->setType(0x05);
     $this->setTypeStr("A-Release-RQ");
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
@@ -54,7 +54,7 @@ class CDicomPDUAReleaseRQ extends CDIcomPDU {
   function encodePDU(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt16($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt32($this->length);
     $stream_writer->skip(4);
@@ -86,13 +86,13 @@ class CDicomPDUAReleaseRQ extends CDIcomPDU {
    * 
    * @return string
    */
-  function __toString() {
+  function toString() {
     $str = "<h1>A-Release-RQ</h1><br>
             <ul>
-              <li>Type : $this->type</li>
+              <li>Type : " . sprintf("%02X", $this->type) . "</li>
               <li>Length : $this->length</li>
             </ul>";
-    return $str;
+    echo $str;
   }
 }
 ?>

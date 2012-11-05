@@ -31,6 +31,22 @@ class CDicomMessageCFindData {
   protected $datasets = array();
   
   /**
+   * The encoded content of the message
+   * 
+   * @var string
+   */
+  protected $content = null;
+  
+  /**
+   * The type of the message
+   * 
+   * @var string
+   */
+  public $type = "Datas";
+  
+  static $type_int = "data"; 
+  
+  /**
    * The constructor
    * 
    * @param array $attributes The attributes
@@ -68,6 +84,26 @@ class CDicomMessageCFindData {
    */
   function getDatasets() {
     return $this->datasets;
+  }
+  
+  /**
+   * Return the encoded content
+   * 
+   * @return string
+   */
+  function getContent() {
+    return $this->content;
+  }
+  
+  /**
+   * Set the encoded content
+   * 
+   * @param string $content The content
+   * 
+   * @return string
+   */
+  function setContent($content) {
+    $this->content = $content;
   }
   
   /**
@@ -112,6 +148,7 @@ class CDicomMessageCFindData {
       $group_length_dataset->encode($stream_writer, $transfer_syntax);
       $this->datasets[$group_number][0x0000] = $group_length_dataset;
       
+      $this->setContent($group_writer->buf);
       $stream_writer->write($group_writer->buf);
     
       $group_writer->close();
@@ -155,8 +192,7 @@ class CDicomMessageCFindData {
    * @return string
    */
   function __toString() {
-    $str = "C-Find-Data :
-            <table>
+    $str = "<table>
               <tr>
                 <th>Tag</th><th>Name</th><th>VR</th><th>Length</th><th>Value</th>
               </tr>";

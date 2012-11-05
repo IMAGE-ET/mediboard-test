@@ -165,8 +165,8 @@ class CDicomStreamReader {
    * @return hexadecimal number
    */
   function readHexByteLE($length = 1) {
-    $tmp = unpack("h*", $this->read($length));
-    return $tmp[1];
+    $tmp = unpack("H*", $this->read($length));
+    return str_pad(strrev(dechex($tmp[1])), $length*2, 0, STR_PAD_LEFT);
   }
   
   /**

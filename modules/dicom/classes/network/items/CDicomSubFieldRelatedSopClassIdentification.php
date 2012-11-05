@@ -77,7 +77,7 @@ class CDicomSubFieldRelatedSopClassIdentification {
    * @return null
    */
   function decodeField(CDicomStreamReader $stream_reader) {
-    $this->class_uid_length = $stream_reader->readUnsignedInt8();
+    $this->class_uid_length = $stream_reader->readUInt8();
     $this->class_uid = $stream_reader->readUID($this->class_uid_length);
   }
   
@@ -89,7 +89,7 @@ class CDicomSubFieldRelatedSopClassIdentification {
    * @return null
    */
   function encodeField(CDicomStreamWriter $stream_writer) {
-    $stream_writer->writeUnsignedInt8($this->class_uid_length);
+    $stream_writer->writeUInt8($this->class_uid_length);
     $stream_writer->writeUID($this->class_uid, $this->class_uid_length);
   }
   

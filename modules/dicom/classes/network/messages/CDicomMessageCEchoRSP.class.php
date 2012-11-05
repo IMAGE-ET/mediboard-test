@@ -57,6 +57,22 @@ class CDicomMessageCEchoRSP {
   protected $status = null;
   
   /**
+   * The encoded content of the message
+   * 
+   * @var string
+   */
+  protected $content = null;
+  
+  /**
+   * The type of the message
+   * 
+   * @var string
+   */
+  public $type = "C-Echo-RSP";
+  
+  static $type_int = 0x8030; 
+  
+  /**
    * The constructor.
    * 
    * @param array $datas Default null. 
@@ -92,8 +108,9 @@ class CDicomMessageCEchoRSP {
    * @return null
    */
   function setCommandGroupLength($length) {
-    if ($length) {
+    if ($length != null) {
       $this->command_group_length = new CDicomDataSet(array("group_number" => 0x0000, "element_number" => 0x0000, "value" => $length));
+      $this->command_group_length->setDataSet();
     }
   }
   
@@ -113,6 +130,7 @@ class CDicomMessageCEchoRSP {
    */
   function setAffectedSopClass() {
     $this->affected_sop_class = new CDicomDataSet(array("group_number" => 0x0000, "element_number" => 0x0002, "value" => "1.2.840.10008.1.1"));
+    $this->affected_sop_class->setDataSet();
   }
   
   /**
@@ -131,6 +149,7 @@ class CDicomMessageCEchoRSP {
    */
   function setCommandField() {
     $this->command_field = new CDicomDataSet(array("group_number" => 0x0000, "element_number" => 0x0100, "value" => 0x8030));
+    $this->command_field->setDataSet();
   }
   
   /**
@@ -151,6 +170,7 @@ class CDicomMessageCEchoRSP {
    */
   function setMessageIdRequest($id) {
     $this->message_id_request = new CDicomDataSet(array("group_number" => 0x0000, "element_number" => 0x0120, "value" => $id));
+    $this->message_id_request->setDataSet();
   }
   
   /**
@@ -169,6 +189,7 @@ class CDicomMessageCEchoRSP {
    */
   function setCommandDataSet() {
     $this->command_data_set = new CDicomDataSet(array("group_number" => 0x0000, "element_number" => 0x0800, "value" => 0x0101));
+    $this->command_data_set->setDataSet();
   }
   
   /**
@@ -189,6 +210,27 @@ class CDicomMessageCEchoRSP {
    */
   function setStatus($status) {
     $this->status = new CDicomDataSet(array("group_number" => 0x0000, "element_number" => 0x0900, "value" => $status));
+    $this->status->setDataSet();
+  }
+  
+  /**
+   * Return the encoded content
+   * 
+   * @return string
+   */
+  function getContent() {
+    return $this->content;
+  }
+  
+  /**
+   * Set the encoded content
+   * 
+   * @param string $content The content
+   * 
+   * @return string
+   */
+  function setContent($content) {
+    $this->content = $content;
   }
   
   /**
@@ -213,14 +255,12 @@ class CDicomMessageCEchoRSP {
     $this->message_id_request->encode($group_stream, $transfer_syntax);
     $this->command_data_set->encode($group_stream, $transfer_syntax);
     $this->status->encode($group_stream, $transfer_syntax);
-    
     $group_length = strlen($group_stream->buf);
     $this->setCommandGroupLength($group_length);
-    
     $this->command_group_length->encode($stream_writer, $transfer_syntax);
     
     $stream_writer->write($group_stream->buf);
-    
+    $this->setContent($stream_writer->buf);
     $group_stream->close();
   }
   
@@ -292,8 +332,7 @@ class CDicomMessageCEchoRSP {
    * @return string
    */
   function __toString() {
-    return "C-Echo-RSP :
-            <table>
+    return "<table>
               <tr>
                 <th>Tag</th><th>Name</th><th>VR</th><th>Length</th><th>Value</th>
               </tr>

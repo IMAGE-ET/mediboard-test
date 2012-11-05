@@ -83,7 +83,7 @@ class CDicomPDUItemFactory {
 
     $item_type = self::readItemType($stream_reader);
     
-    while ($item_type && $stream_reader->getPos() <= $endOfItem) {
+    while ($item_type && $stream_reader->getPos() < $endOfItem) {
       if (!$item_type) {
         break;
       }
@@ -94,8 +94,10 @@ class CDicomPDUItemFactory {
       
       $item->decodeItem($stream_reader);
       $items[] = $item;
-
-      $item_type = self::readItemType($stream_reader);
+      
+      if ($stream_reader->getPos() < $endOfItem) {
+        $item_type = self::readItemType($stream_reader);
+      }
     }
     
     return $items;
@@ -124,7 +126,7 @@ class CDicomPDUItemFactory {
   static function readItemType(CDicomStreamReader $stream_reader) {
     $item_type = null;
     if (!self::$next_item) {
-      $tmp = $stream_reader->readHexByte();
+      $tmp = $stream_reader->readUInt8();
       $stream_reader->skip(1);
 
       if (!$tmp) {
@@ -160,49 +162,49 @@ class CDicomPDUItemFactory {
   static function getItemClass($type) {
     $class = "";
     switch ($type) {
-      case "10" :
+      case 0x10 :
         $class = "CDicomPDUItemApplicationContext";
         break;
-      case "20" :
+      case 0x20 :
         $class = "CDicomPDUItemPresentationContext";
         break;
-      case "21" :
+      case 0x21 :
         $class = "CDicomPDUItemPresentationContextReply";
         break;
-      case "30" :
+      case 0x30 :
         $class = "CDicomPDUItemAbstractSyntax";
         break;
-      case "40" :
+      case 0x40 :
         $class = "CDicomPDUItemTransferSyntax";
         break;
-      case "50" :
+      case 0x50 :
         $class = "CDicomPDUItemUserInfo";
         break;
-      case "51" :
+      case 0x51 :
         $class = "CDicomPDUItemMaximumLength";
         break;
-      case "52" :
+      case 0x52 :
         $class = "CDicomPDUItemImplementationClassUID";
         break;
-      case "53" :
+      case 0x53 :
         $class = "CDicomPDUItemAsynchronousOperations";
         break;
-      case "54" :
+      case 0x54 :
         $class = "CDicomPDUItemRoleSelection";
         break;
-      case "55" :
+      case 0x55 :
         $class = "CDicomPDUItemImplementationVersionName";
         break;
-      case "56" :
+      case 0x56 :
         $class = "CDicomPDUItemSopClassExtendedNegociation";
         break;
-      case "57" :
+      case 0x57 :
         $class = "CDicomPDUItemSopClassCommonExtendedNegociation";
         break;
-      case "58" :
+      case 0x58 :
         $class = "CDicomPDUItemUserIdentityNegociationRQ";
         break;
-      case "59" :
+      case 0x59 :
         $class = "CDicomPDUItemUserIdentityNegociationRP";
         break;
       default :

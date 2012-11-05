@@ -33,7 +33,7 @@ class CDicomPDUItemUserIdentityNegociationRP extends CDicomPDUItem {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
-    $this->setType("59");
+    $this->setType(0x59);
     foreach ($datas as $key => $value) {
       $method = 'set' . ucfirst($key);
       if (method_exists($this, $method)) {
@@ -72,7 +72,7 @@ class CDicomPDUItemUserIdentityNegociationRP extends CDicomPDUItem {
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $this->server_response_length = $stream_reader->readUnsignedInt16();
+    $this->server_response_length = $stream_reader->readUInt16();
     if ($this->server_response_length > 0 ) {
       $this->server_response = $stream_redaer->readString($this->server_response_length);
     }
@@ -88,10 +88,10 @@ class CDicomPDUItemUserIdentityNegociationRP extends CDicomPDUItem {
   function encodeItem(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUnsignedInt16($this->server_response_length);
+    $stream_writer->writeUInt16($this->length);
+    $stream_writer->writeUInt16($this->server_response_length);
     if ($this->server_response_length > 0) {
       $stream_writer->writeString($this->server_response, $this->server_response_length);
     }
@@ -132,7 +132,7 @@ class CDicomPDUItemUserIdentityNegociationRP extends CDicomPDUItem {
   function __toString() {
     $str = "User identity negociation RP :
             <ul>
-              <li>Item type : $this->type</li>
+              <li>Item type : " . sprintf("%02X", $this->type) . "</li>
               <li>Item length : $this->length</li>
               <li>Server response length : $this->server_response_length</li>";
     if ($this->server_response_length > 0) {

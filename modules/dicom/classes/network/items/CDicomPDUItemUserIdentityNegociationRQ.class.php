@@ -163,11 +163,11 @@ class CDicomPDUItemUserIdentityNegociationRQ extends CDicomPDUItem {
    * @return null
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
-    $this->user_identity_type = $stream_reader->readUnsignedInt8();
-    $this->positive_response_requested = $stream_reader->readUnsignedInt8();
-    $this->primary_field_length = $stream_reader->readUnsignedInt16();
+    $this->user_identity_type = $stream_reader->readUInt8();
+    $this->positive_response_requested = $stream_reader->readUInt8();
+    $this->primary_field_length = $stream_reader->readUInt16();
     $this->primary_field = $stream_reader->readString($this->primary_field_length);
-    $this->secondary_field_length = $stream_reader->readUnsignedInt16();
+    $this->secondary_field_length = $stream_reader->readUInt16();
     if ($this->secondary_field_length > 0 ) {
       $this->secondary_field = $stream_redaer->readString($this->secondary_field_length);
     }
@@ -183,14 +183,14 @@ class CDicomPDUItemUserIdentityNegociationRQ extends CDicomPDUItem {
   function encodeItem(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
-    $stream_writer->writeUnsignedInt16($this->length);
-    $stream_writer->writeUnsignedInt8($this->user_identity_type);
-    $stream_writer->writeUnsignedInt8($this->positive_response_requested);
-    $stream_writer->writeUnsignedInt16($this->primary_field_length);
+    $stream_writer->writeUInt16($this->length);
+    $stream_writer->writeUInt8($this->user_identity_type);
+    $stream_writer->writeUInt8($this->positive_response_requested);
+    $stream_writer->writeUInt16($this->primary_field_length);
     $stream_writer->writeString($this->primary_field, $this->primary_field_length);
-    $stream_writer->writeUnsignedInt16($this->secondary_field_length);
+    $stream_writer->writeUInt16($this->secondary_field_length);
     if ($this->secondary_field_length > 0) {
       $stream_writer->writeString($this->secondary_field, $this->secondary_field_length);
     }
@@ -232,7 +232,7 @@ class CDicomPDUItemUserIdentityNegociationRQ extends CDicomPDUItem {
   function __toString() {
     $str = "User identity negociation RQ :
             <ul>
-              <li>Item type : $this->type</li>
+              <li>Item type : " . sprintf("%02X", $this->type) . "</li>
               <li>Item length : $this->length</li>
               <li>User identity type : " . self::$user_identity_type_values[$this->user_identity_type] . "</li>
               <li>Positive response requested : " . self::$positive_response_requested_values[$this->positive_response_requested] . "</li>

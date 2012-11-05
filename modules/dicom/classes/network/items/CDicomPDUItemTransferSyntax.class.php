@@ -26,7 +26,7 @@ class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
-    $this->setType("40");
+    $this->setType(0x40);
     foreach ($datas as $key => $value) {
       $method = 'set' . ucfirst($key);
       if (method_exists($this, $method)) {
@@ -65,7 +65,7 @@ class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
    * @return null
    */
   function encodeItem(CDicomStreamWriter $stream_writer) {
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt16($this->length);
     $stream_writer->writeUID($this->name, $this->length);
@@ -100,7 +100,7 @@ class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
   function __toString() {
     return "Transfer syntax :
             <ul>
-              <li>Item type : $this->type</li>
+              <li>Item type : " . sprintf("%02X", $this->type) . "</li>
               <li>Item length : $this->length</li>
               <li>Transfer syntax name : $this->name</li>
             </ul>";

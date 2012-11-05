@@ -79,7 +79,7 @@ class CDicomDataSet {
       }
     }
     
-    if ($group != null && $element != null) {
+    if ($this->group_number != null && $this->element_number != null) {
       $this->setDataSet();
     }
   }
@@ -229,6 +229,11 @@ class CDicomDataSet {
     }
     else {
       $this->length = strlen($this->value);
+      if ($this->vr == "UI") {
+        if ($this->length&1) {
+          $this->length++;
+        }
+      }
     }
   }
   
@@ -267,27 +272,30 @@ class CDicomDataSet {
    * @return null
    */
   public function encode(CDicomStreamWriter $stream_writer, $transfer_syntax = "1.2.840.10008.1.2") {
+    if (!$transfer_syntax) {
+      return;
+    }  
+    
     $vr_encoding = "";
     $endianness = "";
     switch ($transfer_syntax) {
       case "1.2.840.10008.1.2" :
         $vr_encoding = "Implicit";
-        $endiannes = "LE";
+        $endianness = "LE";
         break;
       case "1.2.840.10008.1.2.1" :
         $vr_encoding = "Explicit";
-        $endiannes = "LE";
+        $endianness = "LE";
         break;
       case "1.2.840.10008.1.2.2" :
         $vr_encoding = "Explicit";
-        $endiannes = "BE";
+        $endianness = "BE";
         break;
       default :
         
         break;
     }
     $this->calculateLength();
-    
     $method = "encode$vr_encoding";
     $this->$method($stream_writer, $endianness);
   }
@@ -302,8 +310,8 @@ class CDicomDataSet {
    * @return null
    */
   protected function encodeImplicit(CDicomStreamWriter $stream_writer, $endianness) {
-    $stream_writer->writeHexByte($this->group_number, 2, $endiannes);
-    $stream_writer->writeHexByte($this->element_number, 2, $endiannes);
+    $stream_writer->writeUInt16($this->group_number, $endianness);
+    $stream_writer->writeUInt16($this->element_number, $endianness);
     $stream_writer->writeUInt32($this->length, $endianness);
     $this->encodeValue($stream_writer, $endianness);
   }
@@ -318,8 +326,8 @@ class CDicomDataSet {
    * @return null
    */
   protected function encodeExplicit(CDicomStreamWriter $stream_writer, $endianness) {
-    $stream_writer->writeHexByte($this->group_number, 2, $endiannes);
-    $stream_writer->writeHexByte($this->element_number, 2, $endiannes);
+    $stream_writer->writeUInt16($this->group_number, $endianness);
+    $stream_writer->writeUInt16($this->element_number, $endianness);
     $stream_writer->writeString($this->vr, 2);
     if (in_array($this->vr, array("OB", "OW", "OF", "SQ", "UT", "UN"))) {
       $stream_writer->skip(2);
@@ -369,8 +377,8 @@ class CDicomDataSet {
         $stream_writer->writeString($this->value, $this->length);
         break;
       case 'AT' :
-        $stream_writer->writeHexByte($this->value[0], 2, $endianness);
-        $stream_writer->writeHexByte($this->value[1], 2, $endianness);
+        $stream_writer->writeUInt16($this->value[0], $endianness);
+        $stream_writer->writeUInt16($this->value[1], $endianness);
         break;
       case 'SL' :
         $stream_writer->writeInt32($this->value, $endianness);
@@ -380,6 +388,9 @@ class CDicomDataSet {
         break;
       case 'UI' :
         $stream_writer->writeUID($this->value, $this->length);
+        if (strlen($this->value < $this->length)) {
+          $stream_writer->writeUInt8(0x00);
+        }
         break;
       case 'UL' :
         $stream_writer->writeUInt32($this->value, $endianness);
@@ -402,27 +413,26 @@ class CDicomDataSet {
    * 
    * @return null
    */
-  public function encode(CDicomStreamReader $stream_reader, $transfer_syntax = "1.2.840.10008.1.2") {
+  public function decode(CDicomStreamReader $stream_reader, $transfer_syntax = "1.2.840.10008.1.2") {
     $vr_encoding = "";
     $endianness = "";
     switch ($transfer_syntax) {
       case "1.2.840.10008.1.2" :
         $vr_encoding = "Implicit";
-        $endiannes = "LE";
+        $endianness = "LE";
         break;
       case "1.2.840.10008.1.2.1" :
         $vr_encoding = "Explicit";
-        $endiannes = "LE";
+        $endianness = "LE";
         break;
       case "1.2.840.10008.1.2.2" :
         $vr_encoding = "Explicit";
-        $endiannes = "BE";
+        $endianness = "BE";
         break;
       default :
         
         break;
     }
-    
     $method = "decode$vr_encoding";
     $this->$method($stream_reader, $endianness);
   }
@@ -437,9 +447,10 @@ class CDicomDataSet {
    * @return null
    */
   protected function decodeImplicit(CDicomStreamReader $stream_reader, $endianness) {
-    $this->group_number = $stream_reader->readHexByte(2, $endiannes);
-    $this->element_number = $stream_reader->readHexByte(2, $endiannes);
+    $this->group_number = $stream_reader->readUInt16($endianness);
+    $this->element_number = $stream_reader->readUInt16($endianness);
     $this->length = $stream_reader->readUInt32($endianness);
+
     $this->setDataSet();
     $this->decodeValue($stream_reader, $endianness);
   }
@@ -454,8 +465,8 @@ class CDicomDataSet {
    * @return null
    */
   protected function decodeExplicit(CDicomStreamReader $stream_reader, $endianness) {
-    $this->group_number = $stream_reader->readHexByte(2, $endiannes);
-    $this->element_number = $stream_reader->readHexByte(2, $endiannes);
+    $this->group_number = $stream_reader->readUInt16($endianness);
+    $this->element_number = $stream_reader->readUInt16($endianness);
     $this->vr = $stream_reader->readString(2);
     if (in_array($this->vr, array("OB", "OW", "OF", "SQ", "UT", "UN"))) {
       $stream_reader->skip(2);
@@ -506,8 +517,8 @@ class CDicomDataSet {
         break;
       case 'AT' :
         $this->value = array();
-        $this->value[] = $stream_reader->readHexByte(2, $endianness);
-        $this->value[] = $stream_reader->readHexByte(2, $endianness);
+        $this->value[] = $stream_reader->readUInt16($endianness);
+        $this->value[] = $stream_reader->readUInt16($endianness);
         break;
       case 'SL' :
         $this->value = $stream_reader->readInt32($endianness);
@@ -536,7 +547,7 @@ class CDicomDataSet {
    * @return string
    */
   function __toString() {
-    return "<td>($this->group_number,$this->element_number)</td>
+    return "<td>(" . sprintf("%04X", $this->group_number) . "," . sprintf("%04X", $this->element_number) . ")</td>
             <td>$this->name</td>
             <td>$this->vr</td>
             <td>$this->length</td>

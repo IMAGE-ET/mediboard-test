@@ -18,13 +18,13 @@ class CDicomPDUFactory {
   /**
    * Get the type of the PDU, and create the corresponding CDicomPDU
    * 
-   * @param string $pdu_content     The datas sent by the client
+   * @param string $pdu_content           The datas sent by the client
    * 
-   * @param string $transfer_syntax The transfer syntax
+   * @param array  $presentation_contexts The presentation contexts
    * 
    * @return CDicomPDU The PDU
    */
-  static function decodePDU($pdu_content, $transfer_syntax = null) {
+  static function decodePDU($pdu_content, $presentation_contexts = null) {
     $stream = fopen("php://temp", 'w+');
     fwrite($stream, $pdu_content);
     
@@ -32,15 +32,15 @@ class CDicomPDUFactory {
     $stream_reader->rewind();
     
     $pdu_class = self::readType($stream_reader);
-    if ($type == "Unknown type!") {
+    if ($pdu_class == "Unknown type!") {
       return null;
     }
     $length = self::readLength($stream_reader);
 
     $pdu = new $pdu_class(array("length" => $length));
     
-    if ($pdu_class == "CDicomPDUCDataTF") {
-      $pdu->setTransferSyntax($transfer_syntax);
+    if ($pdu_class == "CDicomPDUPDataTF") {
+      $pdu->setPresentationContexts($presentation_contexts);
     }
     
     $pdu->decodePDU($stream_reader);
@@ -55,20 +55,27 @@ class CDicomPDUFactory {
   /**
    * Create a PDU of the given type
    * 
-   * @param string $type  The type of the PDU you want to create
+   * @param string $type                  The type of the PDU you want to create
    * 
-   * @param array  $datas The differents datas of the PDU
+   * @param array  $datas                 The differents datas of the PDU
+   * 
+   * @param array  $presentation_contexts The presentation context
    * 
    * @return CDicomPDU The PDU
    */
-  static function encodePDU($type, $datas = null) {
+  static function encodePDU($type, $datas = array(), $presentation_contexts = null) {
     $stream = fopen("php://temp", 'w+');
     
     $stream_writer = new CDicomStreamWriter($stream);
 
-    $pdu_type = self::getPDuClass($type);
+    $pdu_class = self::getPDuClass($type);
     
-    $pdu = new $pdu_type($datas);
+    $pdu = new $pdu_class($datas);
+    
+    if ($pdu_class == "CDicomPDUPDataTF") {
+      $pdu->setPresentationContexts($presentation_contexts);
+    }
+    
     $pdu->encodePDU($stream_writer);
     
     $pdu->setPacket($stream_writer->buf);
@@ -85,7 +92,7 @@ class CDicomPDUFactory {
    * @return string
    */
   static function readType(CDicomStreamReader $stream) {
-    $tmp = $stream->readHexByte();
+    $tmp = $stream->readUInt8();
     $stream->skip(1);
     return self::getPDUClass($tmp);
   }
@@ -111,25 +118,25 @@ class CDicomPDUFactory {
   static function getPDUClass($type) {
     $class = "";
     switch ($type) {
-      case "01" :
+      case 0x01 :
         $class = "CDicomPDUAAssociateRQ";
         break;
-      case "02" :
+      case 0x02 :
         $class = "CDicomPDUAAssociateAC";
         break;
-      case "03" :
+      case 0x03 :
         $class = "CDicomPDUAAssociateRJ";
         break;
-      case "04" :
+      case 0x04 :
         $class = "CDicomPDUPDataTF";
         break;
-      case "05" :
+      case 0x05 :
         $class = "CDicomPDUAReleaseRQ";
         break;
-      case "06" :
+      case 0x06 :
         $class = "CDicomPDUAReleaseRP";
         break;
-      case "07" :
+      case 0x07 :
         $class = "CDicomPDUAAbort";
         break;
         

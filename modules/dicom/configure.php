@@ -7,7 +7,9 @@
  * @author SARL OpenXtrem
  */
 
-$module = CModule::getInstalled(basename(dirname(__FILE__)));
+CCanDo::checkAdmin();
 
-$module->registerTab("vw_idx_sessions", TAB_READ);
+$smarty = new CSmartyDP();
+
+$smarty->display("configure.tpl");
 ?>

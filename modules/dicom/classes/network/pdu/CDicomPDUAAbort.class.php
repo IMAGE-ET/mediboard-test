@@ -10,7 +10,7 @@
 /**
  * An A-Abort PDU
  */
-class CDicomPDUAAbort extends CDIcomPDU {
+class CDicomPDUAAbort extends CDicomPDU {
   
   /**
    * Identify the creating source of the result and diagnostic fields.
@@ -61,7 +61,7 @@ class CDicomPDUAAbort extends CDIcomPDU {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
-    $this->setType("07");
+    $this->setType(0x07);
     $this->setTypeStr("A-Abort");
     foreach ($datas as $key => $value) {
       $method = 'set' . ucfirst($key);
@@ -116,7 +116,7 @@ class CDicomPDUAAbort extends CDIcomPDU {
   function encodePDU(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt16($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt32($this->length);
     $stream_writer->skip(2);
@@ -155,10 +155,10 @@ class CDicomPDUAAbort extends CDIcomPDU {
    * 
    * @return string
    */
-  function __toString() {
+  function toString() {
     $str = "<h1>A-Abort</h1><br>
             <ul>
-              <li>Type : $this->type</li>
+              <li>Type : " . sprintf("%02X", $this->type) . "</li>
               <li>Length : $this->length</li>
               <li>Source : " . self::$source_enum[$this->source] . "</li>
               <li>Diagnostic : ";
@@ -168,7 +168,7 @@ class CDicomPDUAAbort extends CDIcomPDU {
     else {
       $str .= self::$diagnostic_enum[$this->source][$this->diagnostic] . "</li></ul>";
     }          
-    return $str;
+    echo $str;
   }
 }
 ?>

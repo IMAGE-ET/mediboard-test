@@ -26,7 +26,7 @@ class CDicomPDUItemUserInfo extends CDicomPDUItem {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
-    $this->setType("50");
+    $this->setType(0x50);
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
       $method = 'set';
@@ -50,9 +50,8 @@ class CDicomPDUItemUserInfo extends CDicomPDUItem {
    * @return null
    */
   function setSubItems($items) {
-    foreach ($items as $_type => $_data) {
-      $class = CDicomPDUItemFactory::getItemClass("$_type");
-      $this->sub_items[] = new $class($_data);
+    foreach ($items as $_class => $_data) {
+      $this->sub_items[] = new $_class($_data);
     }
   }
   /**
@@ -74,13 +73,20 @@ class CDicomPDUItemUserInfo extends CDicomPDUItem {
    * @return null
    */ 
   function encodeItem(CDicomStreamWriter $stream_writer) {
-    $stream_writer->writeHexByte($this->type, 2);
+    $items = fopen("php://temp", "w+");
+    
+    $items_stream = new CDicomStreamWriter($items);
+    foreach ($this->sub_items as $sub_item) {
+      $sub_item->encodeItem($items_stream);
+    }
+    
+    $this->calculateLength();
+    
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt16($this->length);
-    
-    foreach ($this->sub_items as $sub_item) {
-      $sub_item->encodeItem($stream_writer);
-    }
+    $stream_writer->write($items_stream->buf);
+    fclose($items);
   }
   
   /**
@@ -116,7 +122,7 @@ class CDicomPDUItemUserInfo extends CDicomPDUItem {
   function __toString() {
     $str = "User informations : 
             <ul>
-              <li>Item type : $this->type</li>
+              <li>Item type : " . sprintf("%02X", $this->type) . "</li>
               <li>Item length : $this->length</li>";
     foreach ($this->sub_items as $item) {
       $str .= "<li>{$item->__toString()}</li>";

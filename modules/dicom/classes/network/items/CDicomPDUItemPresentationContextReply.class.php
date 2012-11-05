@@ -54,7 +54,7 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
    * You can set all the field of the class by passing an array, the keys must be the name of the fields.
    */
   function __construct(array $datas = array()) {
-    $this->setType("21");
+    $this->setType(0x21);
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
       $method = 'set';
@@ -125,7 +125,7 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
   function encodeItem(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt16($this->length);
     $stream_writer->writeUInt8($this->id);
@@ -164,7 +164,7 @@ class CDicomPDUItemPresentationContextReply extends CDicomPDUItem {
   function __toString() {
     $str = "Presentation context reply : 
             <ul>
-              <li>Item type : $this->type</li>
+              <li>Item type : " . sprintf("%02X", $this->type) . "</li>
               <li>Item length : $this->length</li>
               <li>id : $this->id</li>
               <li>{$this->transfer_syntax->__toString()}</li>

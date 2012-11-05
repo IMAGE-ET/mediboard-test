@@ -25,7 +25,7 @@ class CDicomPDUItemImplementationClassUID extends CDicomPDUItem {
    * @param array $datas The datas, default null. 
    */
   function __construct($datas = array()) {
-    $this->setType("52");
+    $this->setType(0x52);
     foreach ($datas as $key => $value) {
       $words = explode('_', $key);
       $method = 'set';
@@ -79,7 +79,7 @@ class CDicomPDUItemImplementationClassUID extends CDicomPDUItem {
   function encodeItem(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
     
-    $stream_writer->writeHexByte($this->type, 2);
+    $stream_writer->writeUint8($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt16($this->length);
     $stream_writer->writeUID($this->uid, $this->length);
@@ -114,7 +114,7 @@ class CDicomPDUItemImplementationClassUID extends CDicomPDUItem {
   function __toString() {
     return "Implementation class UID :
             <ul>
-              <li>Item type : $this->type</li>
+              <li>Item type : " . sprintf("%02X", $this->type) . "</li>
               <li>Item length : $this->length</li>
               <li>UID : $this->uid</li>
             </ul>";
