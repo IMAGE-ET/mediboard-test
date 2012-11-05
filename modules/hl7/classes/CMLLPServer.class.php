@@ -36,6 +36,7 @@ class CMLLPServer extends CSocketBasedServer{
    * @return boolean
    */
   function isMessageFull($message) {
+    $message = trim($message);
     return strrpos($message, "\x1C") === strlen($message)-1;
   }
   
