@@ -19,10 +19,10 @@
       {{mb_key   object=$facture}}
       <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
       <input type="radio" name="type_facture" value="maladie" {{if $facture->type_facture == 'maladie'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" 
-      {{if $facture->type_facture}}disabled="disabled"{{/if}}/>
+      {{if $facture->cloture}}disabled="disabled"{{/if}}/>
       <label for="maladie">{{tr}}CFactureConsult.type_facture.maladie{{/tr}}</label>
       <input type="radio" name="type_facture" value="accident" {{if $facture->type_facture == 'accident'}}checked{{/if}}
-      {{if $facture->type_facture}}disabled="disabled"{{/if}} onchange="Facture.modifCloture(this.form);" />
+      {{if $facture->cloture}}disabled="disabled"{{/if}} onchange="Facture.modifCloture(this.form);" />
       <label for="accident">{{tr}}CFactureConsult.type_facture.accident{{/tr}}</label>
     </form>
   </td>
@@ -33,7 +33,7 @@
       <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
       <input type="hidden" name="cession_creance" value="{{if $facture->cession_creance == 1}}0{{else}}1{{/if}}" />
       <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}}
-      {{if $facture->type_facture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
+      {{if $facture->cloture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
       {{mb_label object=$facture field=cession_creance}}
     </form>
     <form name="npq_facture" method="post" action=""> 
@@ -42,7 +42,7 @@
       <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
       <input type="hidden" name="npq" value="{{if $facture->npq == 1}}0{{else}}1{{/if}}" />
       <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}}
-      {{if $facture->type_facture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
+      {{if $facture->cloture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
       {{mb_label object=$facture field=npq}}
     </form>
   </td>
