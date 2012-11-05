@@ -72,26 +72,31 @@ if ($edition_bvr) {
             $acte->_ref_tarmed->tp_al = $acte->montant_base;
           }
         }
-        $pt += $acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite;
-        $pm += $acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al * $acte->quantite;
+        if ($acte->montant_base != $acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl) {
+          $pm += $acte->montant_base * $acte->quantite;
+        }
+        else {
+          $pt += $acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite;
+          $pm += $acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al * $acte->quantite;
+        }
       }
     }
     $pt = sprintf("%.2f", $pt * $facture->_coeff);
     $pm = sprintf("%.2f", $pm * $facture->_coeff);
-    $facture->_ref_patient->adresse = str_replace('\r\n',' ', $facture->_ref_patient->adresse);
+    
+    $facture->_ref_patient->adresse = str_replace(CHR(13).CHR(10),' ', $facture->_ref_patient->adresse);
+//    $facture->_ref_patient->adresse = str_replace('\r\n',' ', $facture->_ref_patient->adresse);
     
     $pre_tab = array();
     $pre_tab["Medical:"]  = $pm;
     $pre_tab["Tarmed:"]   = $pt;
-    
-    if (count($facture->_montant_factures_caisse) > 1) {
-      $pre_tab["Autres:"]   = sprintf("%.2f", $facture->_montant_sans_remise - $pm - $pt);
-    }
+    $pre_tab["Autres:"]   = sprintf("%.2f", $facture->_montant_sans_remise - $pm - $pt);
     
     // Praticien selectionné
     $praticien = $facture->_ref_praticien;
     $function_prat = $praticien->loadRefFunction();
-    $function_prat->adresse = str_replace('\r\n',' ', $function_prat->adresse);
+    $function_prat->adresse = str_replace(CHR(13).CHR(10),' ', $function_prat->adresse);
+//    $function_prat->adresse = str_replace('\r\n',' ', $function_prat->adresse);
     $adherent = $praticien->adherent;
     
     $acompte = 0;
@@ -123,6 +128,8 @@ if ($edition_bvr) {
         //Auteur de la facture
         $adresse_part1 = substr($function_prat->adresse, 0, 30);
         $adresse_part2 = substr($function_prat->adresse, 30);
+        $function_prat->cp =  substr($function_prat->cp, 1);
+        $facture->_ref_patient->cp =  substr($facture->_ref_patient->cp, 1);
         $auteur = array(
           "50" => "Auteur facture",
           $user->_view,
@@ -158,7 +165,7 @@ if ($edition_bvr) {
           if ($correspondant->_id) {
             $destinataire["nom"] = $correspondant->nom." ".$correspondant->prenom;
             $destinataire["adresse"] = $correspondant->adresse;
-            $destinataire["cp"] = $correspondant->cp." ".$correspondant->ville;
+            $destinataire["cp"] =  substr($correspondant->cp, 1)." ".$correspondant->ville;
           }
 //        }
         

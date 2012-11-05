@@ -49,7 +49,7 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
     array("Patient", "Nom", $facture->_ref_patient->nom),
     array(""      , "Prénom", $facture->_ref_patient->prenom),
     array(""      , "Rue", $facture->_ref_patient->adresse),
-    array(""      , "NPA", $facture->_ref_patient->cp),
+    array(""      , "NPA",  substr($facture->_ref_patient->cp, 1)),
     array(""      , "Localité", $facture->_ref_patient->ville),
     array(""      , "Date de naissance", mbTransformTime(null, $facture->_ref_patient->naissance, "%d.%m.%Y")),
     array(""      , "Sexe", $facture->_ref_patient->sexe),
@@ -110,9 +110,9 @@ function ajoutEntete2($pdf, $nb, $facture, $user, $praticien, $group, $colonnes)
   $lignes = array(
     array("Document", "Identification", $facture->_id." ".mbTransformTime(null, null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
     array("Auteur", "N° EAN(B)", "$user->ean", "$user->_view", " Tél: $group->tel"),
-    array("Facture", "N° RCC(B)", "$user->rcc", substr($group->adresse, 0, 29)." ".$group->cp." ".$group->ville, "Fax: $group->fax"),
+    array("Facture", "N° RCC(B)", "$user->rcc", substr($group->adresse, 0, 29)." ". substr($group->cp, 1)." ".$group->ville, "Fax: $group->fax"),
     array("Four.de", "N° EAN(P)", "$praticien->ean", "DR.".$praticien->_view, " Tél: $group->tel"),
-    array("prestations", "N° RCC(B)", "$praticien->rcc", substr($group->adresse, 0, 29)." ".$group->cp." ".$group->ville, "Fax: $group->fax")
+    array("prestations", "N° RCC(B)", "$praticien->rcc", substr($group->adresse, 0, 29)." ". substr($group->cp, 1)." ".$group->ville, "Fax: $group->fax")
   );
   $font = "vera";
   $pdf->setFont($font, '', 8);
@@ -152,7 +152,8 @@ foreach ($factures as $facture) {
   }
     
   $function_prat = $praticien->loadRefFunction();
-  $function_prat->adresse = str_replace('\r\n',' ', $function_prat->adresse);
+  $function_prat->adresse = str_replace(CHR(13).CHR(10),' ', $function_prat->adresse);
+//  $function_prat->adresse = str_replace('\r\n',' ', $function_prat->adresse);
   
   ajoutEntete1($pdf, $facture, $user, $praticien, $function_prat, $colonnes);
   $pdf->setFont("vera", '', 8);
