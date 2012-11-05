@@ -72,8 +72,8 @@ if ($edition_bvr) {
             $acte->_ref_tarmed->tp_al = $acte->montant_base;
           }
         }
-        if ($acte->montant_base != $acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl) {
-          $pm += $acte->montant_base * $acte->quantite;
+        if ($acte->montant_base != $acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite) {
+          $pm += $acte->montant_base;
         }
         else {
           $pt += $acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite;
