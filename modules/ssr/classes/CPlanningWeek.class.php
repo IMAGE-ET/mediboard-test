@@ -124,6 +124,22 @@ class CPlanningWeek {
     foreach($this->days[$event->day] as $_event) {
       if ($_event->collides($event)) {
         $colliding[] = $_event;
+        if (count($this->events_sorted[$_event->day][$_event->hour])) {
+          foreach ($this->events_sorted[$_event->day][$_event->hour] as $__event) {
+            if ($__event === $_event || $__event === $event) {
+              continue;
+            }
+            $min = min($event->start, $_event->start);
+            $max = max($event->end  , $_event->end);
+            
+            if (($__event->start < $min && $__event->end <= $min) ||
+                ($__event->start >= $max && $__event->end > $max)) {
+              continue;
+            } 
+            
+            $colliding[] = $__event;
+          }
+        }
       }
     }
     

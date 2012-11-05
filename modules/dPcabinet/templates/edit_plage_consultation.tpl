@@ -58,7 +58,7 @@
 
 {{mb_script module="mediusers" script="color_selector" ajax=true}}
 
-<form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return PlageConsultation.checkForm(this);'>
+<form name='editFrm' action='?m=dPcabinet' method='post' onsubmit="this._type_repeat.disabled = ''; return PlageConsultation.checkForm(this);">
 
 <input type='hidden' name='dosql' value='do_plageconsult_multi_aed' />
 <input type='hidden' name='del' value='0' />
@@ -205,7 +205,14 @@
     {{else}}
     <td class="button" colspan="4">
       <button type="submit" class="modify">{{tr}}Modify{{/tr}}</button>
-      <button class="trash" type='button' onclick="confirmDeletion(this.form,{typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:$conf.longdate}}'})">
+      <button class="trash" type='button'
+        onclick="confirmDeletion(this.form, {
+          typeName:'la plage de consultations du',objName:'{{$plageSel->date|date_format:$conf.longdate}}',
+          callback: function() {
+            var form = getForm('editFrm');
+            form._type_repeat.disabled = '';
+            form.submit(); 
+          }})">
         {{tr}}Delete{{/tr}}
       </button>
     </td>
