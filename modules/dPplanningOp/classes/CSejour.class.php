@@ -708,8 +708,10 @@ class CSejour extends CCodable implements IPatientRelated {
         $patient->deces = "";
       }
 
-      if ($msg = $patient->store()) {
-        return $msg;
+      // On verifie que le champ a été modifié pour faire le store (sinon probleme lors de la fusion de patients)
+      if ($patient->fieldModified("deces")) {
+        // Ne pas faire de return $msg ici, car ce n'est pas "bloquant"
+        $patient->store();
       }
     }
 
