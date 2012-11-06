@@ -230,6 +230,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
     
     if ($update) {
+      if ($movement->original_trigger_code == "A02") {
+        $affectation->load($movement->affectation_id);
+      }
       $movement->start_of_movement = $this->getStartOfMovement($movement->original_trigger_code, $sejour, $affectation);
     }
     
