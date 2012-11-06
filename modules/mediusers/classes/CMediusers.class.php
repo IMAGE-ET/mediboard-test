@@ -95,6 +95,7 @@ class CMediusers extends CMbObject {
   var $_ref_intervenant_cdarr = null;
   var $_ref_protocoles             = array();
   var $_count_protocoles           = null;
+  var $_ref_current_functions      = null;
   
   // Object references per day
   var $_ref_plages                 = null;
@@ -112,7 +113,19 @@ class CMediusers extends CMbObject {
     $user = CAppUI::$instance->_ref_user;
     return $user_id ? $user->getCached($user_id) : $user;
   }
-
+  
+  static function loadCurrentFunctions() {
+    $user = CMediusers::get();
+    $group_id = CGroups::loadCurrent()->_id;
+    $secondary_function = new CSecondaryFunction();
+    $ljoin = array();
+    $where = array();
+    $where["group_id"] = "= '$group_id'";
+    $where["user_id"]  = "= '$user->_id'";
+    $ljoin["functions_mediboard"] = "functions_mediboard.function_id = secondary_function.function_id";
+    
+    return $user->_ref_current_functions = $secondary_function->loadList($where, null, null, null, $ljoin);
+  }
   
   function getSpec() {
     $spec = parent::getSpec();
