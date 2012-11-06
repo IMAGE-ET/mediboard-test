@@ -1690,7 +1690,17 @@ class CSetupdPcabinet extends CSetup {
               ADD INDEX (`assurance_base`),
               ADD INDEX (`assurance_complementaire`);";
     $this->addQuery($query);
-    $this->mod_version = "1.80";
+    $this->makeRevision("1.80");
+    
+    $query = "ALTER TABLE `factureconsult` DROP INDEX `assurance`";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `factureconsult` 
+              ADD `send_assur_base` ENUM ('0','1') DEFAULT '0',
+              ADD `send_assur_compl` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.81";
   }
 }
 ?>

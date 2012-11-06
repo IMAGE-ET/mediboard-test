@@ -172,10 +172,10 @@ if ($edition_bvr) {
 //        if ($facture->cession_creance || $facture->type_facture == "accident") {
           $correspondant = new CCorrespondantPatient();
           
-          if ($facture->assurance_base && $cle_facture == 0) {
+          if ($facture->assurance_base && $cle_facture == 0 && !$facture->send_assur_base) {
             $correspondant->load($facture->assurance_base);
           }
-          elseif ($facture->assurance_complementaire && $cle_facture == 1) {
+          elseif ($facture->assurance_complementaire && $cle_facture == 1 && !$facture->send_assur_compl) {
             $correspondant->load($facture->assurance_complementaire);
           }
           
@@ -266,7 +266,7 @@ if ($edition_bvr) {
         $pdf->Cell(25, "", $facture->_id, null, null, "L");
         $pdf->setXY($colonne1, $pdf->GetY()+3);
         $pdf->Cell(22, "", "Traitement du:", null, null, "R");
-        $pdf->Cell(25, "", mbTransformTime(null, $facture->ouverture, "%d %B %Y"), null, null, "L");
+        $pdf->Cell(25, "", mbTransformTime(null, $facture->_ref_first_consult->_date, "%d %B %Y"), null, null, "L");
         $pdf->setXY($colonne1, $pdf->GetY()+3);
         $pdf->Cell(22, "", "au:", null, null, "R");
         $pdf->Cell(25, "", mbTransformTime(null, $facture->cloture, "%d %B %Y"), null, null, "L");
