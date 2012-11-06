@@ -204,6 +204,7 @@ class CExClassField extends CExListItemsOwner {
     
     foreach($list as $_ex_field) {
       if ($keywords == "%" || $keywords == "" || preg_match($re, $_ex_field->_view)) {
+        $_ex_field->updateTranslation();
         $_group = $_ex_field->loadRefExGroup();
         $_ex_field->_view = "$_group->_view - $_ex_field->_view";
         
@@ -413,26 +414,26 @@ class CExClassField extends CExListItemsOwner {
     $list_owner = $this->getRealListOwner();
     $items = $list_owner->getItemNames();
     //$items = $list_owner->loadRefItems(true);
-    
+
     global $locales;
-    
+
     $ex_class = $this->loadRefExClass();
-    
+
     $key = $ex_class->getExClassName().".$this->name";
     $locales["{$key}."] = CAppUI::tr("Undefined");
-    
+
     foreach($items as $_id => $_item) {
       $locales["$key.$_id"] = $_item;
     }
     /*foreach($items as $_item) {
       $locales["{$key}.$_item->_id"] = $_item->name;
     }*/
-    
+
     $trans = $this->loadRefTranslation();
     $this->_locale       = $trans->std;
     $this->_locale_desc  = $trans->desc;
     $this->_locale_court = $trans->court;
-    
+
     $this->_view = $this->_locale;
   }
   
