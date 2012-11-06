@@ -193,15 +193,22 @@ Main.add(function(){
     {{/foreach}}
   </ul>
   <hr class="control_tabs" />
-  
+
+  {{assign var=_first_row value=$grid|@reset}}
+  {{assign var=_cols value=$_first_row|@reset}}
+  {{math equation="100/x" x=$_cols|@count assign=_pct}}
+
   <table class="main form ex-form">
-    
+    {{foreach from=$_cols item=_row}}
+      <col style="width: {{$_pct}}%;" />
+    {{/foreach}}
+
     {{foreach from=$grid key=_group_id item=_grid}}
     {{if $groups.$_group_id->_ref_fields|@count}}
     <tbody id="tab-{{$groups.$_group_id->_guid}}" style="display: none;">
     {{foreach from=$_grid key=_y item=_line}}
     <tr>
-      {{foreach from=$_line key=_x item=_group}}
+      {{foreach from=$_line key=_x item=_group name=_x}}
         {{if $_group.object}}
           {{if $_group.object instanceof CExClassField}}
             {{assign var=_field value=$_group.object}}
@@ -234,9 +241,26 @@ Main.add(function(){
             {{assign var=_host_field value=$_group.object}}
             
             {{if $_group.type == "label"}}
-              <th style="font-weight: bold; text-align: left;">
-                {{mb_title object=$_host_field->_ref_host_object field=$_host_field->field}}
-              </th>
+              {{assign var=_next_col value=$smarty.foreach._x.iteration}}
+              {{assign var=_next value=null}}
+
+              {{if array_key_exists($_next_col,$_line)}}
+                {{assign var=_tmp_next value=$_line.$_next_col}}
+
+                {{if $_tmp_next.object instanceof CExClassHostField}}
+                  {{assign var=_next value=$_line.$_next_col.object}}
+                {{/if}}
+              {{/if}}
+
+              {{if $_next && $_next->host_class == $_host_field->host_class && $_next->field == $_host_field->field}}
+                <th style="font-weight: bold; vertical-align: top;">
+                  {{mb_title object=$_host_field->_ref_host_object field=$_host_field->field}}
+                </th>
+              {{else}}
+                <td style="font-weight: bold; text-align: left;">
+                  {{mb_title object=$_host_field->_ref_host_object field=$_host_field->field}}
+                </td>
+              {{/if}}
             {{else}}
               <td>
                 {{if $_host_field->_ref_host_object->_id}}
@@ -454,7 +478,7 @@ function switchMode(){
       
     {{foreach from=$_grid key=_y item=_line}}
     <tr>
-      {{foreach from=$_line key=_x item=_group}}
+      {{foreach from=$_line key=_x item=_group name=_x}}
         {{if $_group.object}}
           {{if $_group.object instanceof CExClassField}}
             {{assign var=_field value=$_group.object}}
@@ -478,16 +502,33 @@ function switchMode(){
               </td>
             {{/if}}
           {{elseif $_group.object instanceof CExClassHostField}}
-            {{assign var=_host_field value=$_group.object}} 
-              {{if $_group.type == "label"}}
-                <th style="font-weight: bold; text-align: left; white-space: normal;">
+            {{assign var=_host_field value=$_group.object}}
+            {{if $_group.type == "label"}}
+              {{assign var=_next_col value=$smarty.foreach._x.iteration}}
+              {{assign var=_next value=null}}
+
+              {{if array_key_exists($_next_col,$_line)}}
+                {{assign var=_tmp_next value=$_line.$_next_col}}
+
+                {{if $_tmp_next.object instanceof CExClassHostField}}
+                  {{assign var=_next value=$_line.$_next_col.object}}
+                {{/if}}
+              {{/if}}
+
+              {{if $_next && $_next->host_class == $_host_field->host_class && $_next->field == $_host_field->field}}
+                <th style="font-weight: bold; vertical-align: top; white-space: normal;">
                   {{mb_title object=$_host_field->_ref_host_object field=$_host_field->field}}
                 </th>
               {{else}}
-                <td>
-                  {{mb_value object=$_host_field->_ref_host_object field=$_host_field->field}}
+                <td style="font-weight: bold; text-align: left; white-space: normal;">
+                  {{mb_title object=$_host_field->_ref_host_object field=$_host_field->field}}
                 </td>
               {{/if}}
+            {{else}}
+              <td>
+                {{mb_value object=$_host_field->_ref_host_object field=$_host_field->field}}
+              </td>
+            {{/if}}
           {{else}}
             {{assign var=_message value=$_group.object}} 
               {{if $_group.type == "message_title"}}
