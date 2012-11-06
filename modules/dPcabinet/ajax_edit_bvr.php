@@ -53,6 +53,7 @@ if ($edition_bvr) {
     $facture->loadRefs();
     $pm = 0;
     $pt = 0;
+    $autre_tarmed = 0;
     foreach ($facture->_ref_consults as $consult) {
       foreach ($consult->_ref_actes_tarmed as $acte) {
         if ($acte->_ref_tarmed->tp_al == 0.00 && $acte->_ref_tarmed->tp_tl == 0.00) {
@@ -80,6 +81,11 @@ if ($edition_bvr) {
           $pm += $acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al * $acte->quantite;
         }
       }
+      foreach ($consult->_ref_actes_caisse as $acte) {
+        if($acte->_ref_caisse_maladie->use_tarmed_bill){
+          $autre_tarmed += $acte->montant_base;
+        }
+      }
     }
     $pt = sprintf("%.2f", $pt * $facture->_coeff);
     $pm = sprintf("%.2f", $pm * $facture->_coeff);
@@ -87,7 +93,7 @@ if ($edition_bvr) {
     $pre_tab = array();
     $pre_tab["Medical:"]  = $pm;
     $pre_tab["Tarmed:"]   = $pt;
-    $pre_tab["Autres:"]   = sprintf("%.2f", $facture->_montant_sans_remise - $pm - $pt);
+    $pre_tab["Autres:"]   = sprintf("%.2f", $facture->_montant_sans_remise - $pm - $pt - $autre_tarmed);
     
     // Praticien selectionné
     $praticien = $facture->_ref_praticien;
@@ -289,6 +295,10 @@ if ($edition_bvr) {
           if (($cle_facture == 0 && $cles != "Autres:") || ($cle_facture == 1 && $cles == "Autres:")) {
               $tarif[$cles] = $valeur;
               $montant_total += $valeur;
+          }
+          elseif ($cle_facture == 0) {
+            $tarif[$cles] = sprintf('%0.2f', $autre_tarmed);
+            $montant_total += sprintf('%0.2f', $autre_tarmed);
           }
           else {
               $tarif[$cles] = "0.00";

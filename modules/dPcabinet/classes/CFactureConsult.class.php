@@ -495,7 +495,7 @@ class CFactureConsult extends CMbObject {
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") && !count($this->_montant_factures_caisse)) {
       $total_tarmed = 0;
       $total_caisse = 0;
-      
+      $autre_tarmed = 0;
       foreach ($this->_ref_consults as $consult) {
         $consult->loadRefsActes();
         foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
@@ -503,10 +503,16 @@ class CFactureConsult extends CMbObject {
         }
         foreach ($consult->_ref_actes_caisse as $acte_caisse) {
           $coeff = "coeff_".$this->type_facture;
-          $total_caisse +=  ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
+          $tarif_acte_caisse = ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
+          if ($acte_caisse->_ref_caisse_maladie->use_tarmed_bill) {
+             $autre_tarmed += $tarif_acte_caisse;
+          }
+          else {
+             $total_caisse +=  $tarif_acte_caisse;
+          }
         }
       }
-      $montant_prem = $total_tarmed * $this->_coeff;
+      $montant_prem = $total_tarmed * $this->_coeff + $autre_tarmed;
       
       if ($montant_prem < 0) {
         $montant_prem = 0;
