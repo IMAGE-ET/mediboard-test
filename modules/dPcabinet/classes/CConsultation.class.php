@@ -1810,7 +1810,7 @@ TESTS A EFFECTUER
   function createConsultAnesth(){
     $this->loadRefPlageConsult();
 
-    if (!$this->_is_anesth || !$this->patient_id || !$this->_id) {
+    if (!$this->_is_anesth || !$this->patient_id || !$this->_id || $this->type == "entree") {
       return;
     }
 
