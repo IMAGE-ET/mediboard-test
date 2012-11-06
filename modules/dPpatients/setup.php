@@ -1891,13 +1891,7 @@ class CSetupdPpatients extends CSetup {
     CHANGE `cp` `cp` VARCHAR (5)";
     $this->addQuery($query);
 
-    $this->makeRevision("1.63");
-
-    $query = "ALTER TABLE `patients`
-    ADD `assureCC_id` VARCHAR (20)";
-    $this->addQuery($query);
-
-    $this->mod_version = "1.64";
+    $this->mod_version = "1.63";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
