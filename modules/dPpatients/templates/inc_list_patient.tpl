@@ -11,7 +11,9 @@
        urlFSE.addParam("useVitale", 1);
      </script>
   {{/if}}
-  
+{{if "covercard"|module_active}}
+  {{mb_script module="covercard" script="updatePatientFieldFromCC"}}
+{{/if}}
   <script type="text/javascript">
     var Patient = {
       create : function(form) {
@@ -31,7 +33,7 @@
         return true;
       }
     }
-    
+
     doMerge = function(oForm) {
       var url = new Url();
       url.setModuleAction("system", "object_merger");
@@ -39,28 +41,28 @@
       url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
       url.popup(800, 600, "merge_patients");
     }
-    
+
     onMergeComplete = function() {
       location.reload();
     }
-    
+
     window.checkedMerge = [];
     checkOnlyTwoSelected = function(checkbox) {
       checkedMerge = checkedMerge.without(checkbox);
-      
+
       if (checkbox.checked)
         checkedMerge.push(checkbox);
-      
+
       if (checkedMerge.length > 2)
         checkedMerge.shift().checked = false;
     }
-    
+
     doLink = function(oForm) {
       var url = new Url();
       url.addParam("m", "dPpatients");
       url.addParam("dosql", "do_link");
       url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
-      url.requestUpdate("systemMsg", { 
+      url.requestUpdate("systemMsg", {
         method: 'post'
       });
     }
@@ -98,9 +100,14 @@ emptyForm = function() {
   form.nom.focus();
 }
 {{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id || $sexe}}
-  Main.add(toggleSearch); 
+  Main.add(toggleSearch);
 {{/if}}
 </script>
+
+{{if "covercard"|module_active}}
+  {{mb_include module=covercard template=inc_input_covercard}}
+{{/if}}
+
 
 <div id="modal-beneficiaire" style="display:none; text-align:center;">
   <p id="msg-multiple-benef">
@@ -139,7 +146,7 @@ emptyForm = function() {
     <th style="display: none;" class="field_advanced"><label for="cp" title="Code postal du patient à rechercher">Code postal</label></th>
     <td style="display: none;" class="field_advanced"><input tabindex="6" type="text" name="cp" value="{{$cp|stripslashes}}" /></td>
   </tr>
-  
+
   <tr>
     <th><label for="prenom" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
     <td><input tabindex="2" type="text" name="prenom" value="{{$prenom|stripslashes}}" /></td>
@@ -147,7 +154,7 @@ emptyForm = function() {
     <th style="display: none;" class="field_advanced"><label for="ville" title="Ville du patient à rechercher">Ville</label></th>
     <td style="display: none;" class="field_advanced"><input tabindex="7" type="text" name="ville" value="{{$ville|stripslashes}}" /></td>
   </tr>
-    
+
   <tr>
     <th>
       <label for="Date_Day" title="Date de naissance du patient à rechercher">
@@ -157,7 +164,7 @@ emptyForm = function() {
     <td>
       {{mb_include module=patients template=inc_select_date date=$naissance tabindex=3}}
     </td>
-    
+
     {{if $conf.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
     <td colspan="2" class="field_basic"></td>
     <th style="display: none;" class="field_advanced">IPP</th>
@@ -168,7 +175,7 @@ emptyForm = function() {
     <td colspan="2" />
     {{/if}}
   </tr>
-  
+
   <tr>
     <th class="field_advanced" style="display: none;">
       {{mb_label class=CPatient field=sexe}}
@@ -184,7 +191,7 @@ emptyForm = function() {
         </option>
       </select>
     </td>
-    
+
     <td class="field_advanced" colspan="2"></td>
     <th style="display: none;" class="field_advanced">
       <label for="prat" title="Praticien concerné">
@@ -198,13 +205,13 @@ emptyForm = function() {
       </select>
     </td>
   </tr>
-  
+
   <tr>
     <td class="button" colspan="4">
       <button type="button" class="cancel" onclick="emptyForm()"
           title="Vider les champs du formulaire">{{tr}}Empty{{/tr}}</button>
       <button class="search" tabindex="10" type="submit" {{if !$board}}onclick="Patient.search(this.form);"{{/if}}>{{tr}}Search{{/tr}}</button>
-      
+
       {{if !$board}}
         {{if $app->user_prefs.VitaleVision}}
           <button class="search singleclick" type="button" tabindex="11" onclick="VitaleVision.read();">
@@ -213,7 +220,13 @@ emptyForm = function() {
         {{elseif $modFSE && $modFSE->canRead()}}
           {{mb_include module=fse template=inc_button_vitale}}
         {{/if}}
-        
+
+        <!-- COVERCARD -->
+        {{if "covercard"|module_active}}
+          {{mb_include module=covercard template=inc_button_covercard}}
+        {{/if}}
+
+
         {{if $can->edit}}
           {{if $nom || $prenom || $patient_ipp || $naissance}}
           <button class="new" type="button" tabindex="15" onclick="Patient.create(this.form);">
@@ -230,17 +243,24 @@ emptyForm = function() {
 
 {{if $conf.dPpatients.CPatient.limit_char_search && ($nom != $nom_search || $prenom != $prenom_search)}}
 <div class="small-info">
-  La recherche est volontairement limitée aux {{$conf.dPpatients.CPatient.limit_char_search}} premiers caractères 
+  La recherche est volontairement limitée aux {{$conf.dPpatients.CPatient.limit_char_search}} premiers caractères
   <ul>
     {{if $nom != $nom_search}}
     <li>pour le <strong>nom</strong> : '{{$nom_search}}'</li>
-    {{/if}}  	
+    {{/if}}
     {{if $prenom != $prenom_search}}
     <li>pour le <strong>prénom</strong> : '{{$prenom_search}}'</li>
-    {{/if}}   
+    {{/if}}
   </ul>
 </div>
 {{/if}}
+
+
+<!-- modale CoverCard -->
+{{if "covercard"|module_active}}
+{{mb_include module=covercard template=inc_input_covercard}}
+{{/if}}
+
 
 <form name="fusion" action="?" method="get" onsubmit="return false;">
   <table class="tbl" id="list_patients">
@@ -265,15 +285,15 @@ emptyForm = function() {
       <th>{{tr}}CPatient-adresse{{/tr}}</th>
       <th class="narrow"></th>
     </tr>
-  
-    {{mb_ternary var="tabPatient" test=$board 
-       value="vw_full_patients&patient_id=" 
+
+    {{mb_ternary var="tabPatient" test=$board
+       value="vw_full_patients&patient_id="
        other="vw_idx_patients&patient_id="}}
-       
+
     <!-- Recherche exacte -->
     <tr>
       <th colspan="5">
-        <em>{{tr}}dPpatients-CPatient-exact-results{{/tr}} 
+        <em>{{tr}}dPpatients-CPatient-exact-results{{/tr}}
         {{if ($patients|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
       </th>
     </tr>
@@ -284,12 +304,12 @@ emptyForm = function() {
         <td colspan="100" class="empty">{{tr}}dPpatients-CPatient-no-exact-results{{/tr}}</td>
       </tr>
     {{/foreach}}
-    
+
     <!-- Recherche phonétique -->
     {{if $patientsSoundex|@count}}
       <tr>
         <th colspan="5">
-          <em>{{tr}}dPpatients-CPatient-close-results{{/tr}} 
+          <em>{{tr}}dPpatients-CPatient-close-results{{/tr}}
             {{if ($patientsSoundex|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
         </th>
       </tr>
@@ -298,4 +318,4 @@ emptyForm = function() {
       {{mb_include module=patients template=inc_list_patient_line}}
     {{/foreach}}
   </table>
-</form>  
+</form>

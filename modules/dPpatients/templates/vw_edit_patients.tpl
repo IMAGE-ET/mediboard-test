@@ -201,7 +201,7 @@ Main.add(function () {
 
 <!-- modale CoverCard -->
 {{if "covercard"|module_active}}
-{{mb_include module=covercard template=inc_input_covercard}}
+  {{mb_include module=covercard template=inc_input_covercard}}
 {{/if}}
 
 <!-- main -->
@@ -231,12 +231,6 @@ Main.add(function () {
     </th>
   {{else}}
     <th class="title" colspan="5">
-      {{if "covercard"|module_active}}
-      <button class="search singleclick" type="button" onclick="modalCoverCard();">
-         Lire covercard
-      </button>
-      {{/if}}
-
       {{if $app->user_prefs.VitaleVision}}
         <button class="search singleclick" type="button" onclick="lireVitale();" style="float: left;">
          Lire Vitale
@@ -248,6 +242,11 @@ Main.add(function () {
       {{if $patient->_bind_vitale}}{{tr}}UseVitale{{/tr}}{{/if}}
     </th>
   {{/if}}
+  {{if "covercard"|module_active}}
+      <button class="search singleclick" type="button" onclick="modalCoverCard();">
+         Lire covercard
+      </button>
+      {{/if}}
   </tr>
   {{mb_ternary var=x test=$patient->medecin_traitant value=1 other=0}}
   {{math equation="$x+y" y=$patient->_ref_medecins_correspondants|@count assign=count_correspondants}}

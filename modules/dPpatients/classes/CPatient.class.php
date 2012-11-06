@@ -198,8 +198,9 @@ class CPatient extends CMbObject {
   var $_id_vitale     = null;
 
   //ean (for switzerland)
-  var $_assuranceCC_ean        = null;
-  var $_assuranceCC_id         = null;
+  var $_assuranceCC_ean   = null;
+  var $assureCC_id       = null;
+  var $_assuranceCC_id    = null;
 
   // Navigation Fields
   var $_dossier_cabinet_url = null;
@@ -403,6 +404,7 @@ class CPatient extends CMbObject {
     $props["_age_max"]                    = "num min|0";
 
     $props["_assuranceCC_id"]             = "str length|5";
+    $props["assureCC_id"]                = "str maxLength|20";
     $props["_assuranceCC_ean"]            = "str";
 
     $props["_IPP"]                        = "str";
