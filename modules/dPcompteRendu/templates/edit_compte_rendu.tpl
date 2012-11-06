@@ -89,6 +89,10 @@ function submitCompteRendu(callback){
       }
       clearTimeout(window.thumbs_timeout);
       
+      if ($("destinataire").select("input[checked]").length) {
+        $V(form.do_merge, 1);
+      }
+      
       onSubmitFormAjax(form,{ useDollarV: true, onComplete: function() {
         Thumb.contentChanged = false;
         if ((!window.pdf_thumbnails || window.Preferences.pdf_and_thumbs == 0) && window.opener) {

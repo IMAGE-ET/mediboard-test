@@ -162,6 +162,12 @@ $lists = $templateManager->getUsedLists($userLists);
 // Afficher le bouton correpondant si on détecte un élément de publipostage
 $isCourrier = $templateManager->isCourrier();
 
+$destinataires = array();
+if ($isCourrier) {
+  CDestinataire::makeAllFor($object);
+  $destinataires = CDestinataire::$destByClass;
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -176,6 +182,7 @@ $smarty->assign("object_id"     , $object_id);
 $smarty->assign('object_class'  , CValue::get("object_class", $compte_rendu->object_class));
 $smarty->assign("nb_printers"   , $nb_printers);
 $smarty->assign("pack_id"       , $pack_id);
+$smarty->assign("destinataires" , $destinataires);
 
 preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i",$compte_rendu->_source, $matches);
 

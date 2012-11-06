@@ -223,7 +223,11 @@ if (isset($_POST["_source"])) {
       );
       
       if (!CAppUI::conf("dPcompteRendu CCompteRendu multiple_doc_correspondants")) {
-        for ($i = 0 ; $i < $_POST["_count_".$curr_dest[1]."_".$curr_dest[2]] ; $i++) {
+        $max = 1;
+        if (isset($_POST["_count_".$curr_dest[1]."_".$curr_dest[2]])) {
+          $max = $_POST["_count_".$curr_dest[1]."_".$curr_dest[2]];
+        }
+        for ($i = 0 ; $i < $max ; $i++) {
           $allSources[] = str_ireplace($fields, $values, $body);
         }
       }

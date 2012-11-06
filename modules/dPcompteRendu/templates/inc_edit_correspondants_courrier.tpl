@@ -1,6 +1,10 @@
 {{assign var=correspondants value=$compte_rendu->_refs_correspondants_courrier_by_tag_guid}}
 
 {{if $compte_rendu->_id}}
+  {{if $patient->_id}}
+    {{mb_script module=patients script=correspondant ajax=true}}
+    {{mb_script module=patients script=medecin       ajax=true}}
+  {{/if}}
   <script type="text/javascript">
     Main.add(function () {
       var form = getForm("editFrm");
@@ -32,11 +36,15 @@
         }
       });
     });
+    Medecin.set = function(medecin_id) {
+      var formCorres = getForm("addCorrespondant");
+      $V(formCorres.object_id, medecin_id);
+      $V(formCorres.compte_rendu_id, '{{$compte_rendu->_id}}');
+      onSubmitFormAjax(formCorres, {onComplete: function() {
+        openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}');
+      } });
+    }
   </script>
-  
-  {{if $patient->_id}}
-    {{mb_script module=patients script=correspondant ajax=true}}
-  {{/if}}
 {{/if}}
 
 <table class="tbl">
@@ -49,6 +57,8 @@
           {{tr}}CCorrespondantPatient{{/tr}}
         {{else}}
           <div style="float: left">
+            <button type="button" class="add notext"
+              onclick="Medecin.edit()"></button>
             <input type="text" name="_view" class="autocomplete"/>
             <label>
               <input type="checkbox" name="all_departements" /> Inclure tous les départements
