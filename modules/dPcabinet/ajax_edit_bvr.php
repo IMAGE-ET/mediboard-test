@@ -51,7 +51,6 @@ if ($edition_bvr) {
   
   foreach ($factures as $facture) {
     $facture->loadRefs();
-      
     $pm = 0;
     $pt = 0;
     foreach ($facture->_ref_consults as $consult) {
@@ -125,6 +124,7 @@ if ($edition_bvr) {
         if (stristr($function_prat->adresse, "\r\n")) {
           $adresse_part1 = stristr($function_prat->adresse, "\r\n", true);
           $adresse_part2 = stristr($function_prat->adresse, "\r\n");
+          $adresse_part2 = str_replace("\r\n",'',$adresse_part2);
         }
         else {
           $adresse_part1 = substr($function_prat->adresse, 0, 30);
@@ -159,8 +159,8 @@ if ($edition_bvr) {
           $adresse2 = str_replace("\r\n",'',$adresse2);
         }
         else {
-          $adresse1 = substr($function_prat->adresse, 0, 30);
-          $adresse2 = substr($function_prat->adresse, 30);
+          $adresse1 = substr($facture->_ref_patient->adresse, 0, 30);
+          $adresse2 = substr($facture->_ref_patient->adresse, 30);
         }
         $destinataire = array(
            "nom"=> $facture->_ref_patient->_view,
@@ -187,7 +187,7 @@ if ($edition_bvr) {
             if (stristr($correspondant->adresse, "\r\n")) {
               $destinataire["adresse1"] = stristr($correspondant->adresse, "\r\n", true);
               $destinataire["adresse2"] = stristr($correspondant->adresse, "\r\n");
-              $adresse2 = str_replace("\r\n",'',$adresse2);
+              $destinataire["adresse2"] = str_replace("\r\n",'',$destinataire["adresse2"]);
             }
             else {
               $destinataire["adresse1"] = $correspondant->adresse;
@@ -350,11 +350,11 @@ if ($edition_bvr) {
           $pdf->setFont($font, '', 8);
           $pdf->Text($l_colonne + $decalage, $h_ligne*3+$haut_doc , $praticien->_view);
           $pdf->Text($l_colonne + $decalage, $h_ligne*4+$haut_doc , $function_prat->_view);
-          $j = 0;
+          $j = 1;
           $pdf->Text($l_colonne + $decalage, $h_ligne*5+$haut_doc , $adresse_part1);
           if ($adresse_part2) {
             $pdf->Text($l_colonne + $decalage, $h_ligne*6+$haut_doc , $adresse_part2);
-            $j = 1;
+            $j = 2;
           }
           $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $function_prat->cp." ".$function_prat->ville);
           

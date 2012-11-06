@@ -156,10 +156,10 @@ foreach ($factures as $facture) {
   $function_prat->adresse = str_replace("\r\n",' ', $function_prat->adresse);
   $facture->_ref_patient->adresse = str_replace("\r\n",' ', $facture->_ref_patient->adresse);
   if (strlen($facture->_ref_patient->cp)>4) {
-    substr($facture->_ref_patient->cp, 1);
+    $facture->_ref_patient->cp = substr($facture->_ref_patient->cp, 1);
   }
   if (strlen($function_prat->cp)>4) {
-    substr($function_prat->cp, 1);
+    $function_prat->cp = substr($function_prat->cp, 1);
   }
   
   ajoutEntete1($pdf, $facture, $user, $praticien, $function_prat, $colonnes);
