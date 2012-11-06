@@ -27,6 +27,9 @@
     {{if $medecin_type}}
       url.addParam("medecin_type", "{{$medecin_type}}");
     {{/if}}
+    {{if $new}}
+      url.addParam("new", "{{$new}}");
+    {{/if}}
     url.addParam("order_way", "{{$order_way}}");
     url.addParam("order_col", "{{$order_col}}");
     url.requestUpdate("medicaux");

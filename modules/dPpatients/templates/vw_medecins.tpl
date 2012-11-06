@@ -198,7 +198,7 @@ function onSubmitCorrespondant(form) {
       <table class="form">
         {{if !$dialog && $medecin->_id}}
         <tr>
-          <td colspan="2"><a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;new=1">Créer un nouveau correspondant</a></td>
+          <td colspan="2"><a class="button new" href="?m={{$m}}&tab=vw_correspondants&new=1">Créer un nouveau correspondant</a></td>
         </tr>
         {{/if}}
         <tr>
