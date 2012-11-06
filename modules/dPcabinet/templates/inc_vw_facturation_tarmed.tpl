@@ -248,7 +248,7 @@
           {{if !$facture->cloture}}
             <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
           {{elseif !isset($reglement|smarty:nodefaults) || ($facture->_ref_reglements|@count == 0)}}
-            <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button>
+            <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button> Cloturée le {{$facture->cloture|date_format:"%d/%m/%Y"}}
           {{/if}}
         </form>
       {{else}}
