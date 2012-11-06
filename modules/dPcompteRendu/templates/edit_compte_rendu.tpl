@@ -89,7 +89,9 @@ function submitCompteRendu(callback){
       }
       clearTimeout(window.thumbs_timeout);
       
-      if ($("destinataire").select("input[checked]").length) {
+      var destinataires = $("destinataires");
+      
+      if (destinataires && destinataires.select("input[checked]").length) {
         $V(form.do_merge, 1);
       }
       
