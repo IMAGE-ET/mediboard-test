@@ -38,7 +38,7 @@ $guesses = array();
 $patients = array();
 foreach ($sejours as &$_sejour) {
   if ($module == "dPurgences") {
-  	// Look for multiple RPU
+    // Look for multiple RPU
     $_sejour->loadBackRefs("rpu");
   }
   
@@ -47,32 +47,32 @@ foreach ($sejours as &$_sejour) {
 
   // Chargement de l'IPP
   $_sejour->loadRefPatient();
-	
-	// Classement par patient
-	if (!isset($patients[$_sejour->patient_id])) {
-		$patients["$_sejour->patient_id"] = $_sejour->_ref_patient;
-	}
-	
-	$patients["$_sejour->patient_id"]->_ref_sejours[$_sejour->_id] = $_sejour;
+  
+  // Classement par patient
+  if (!isset($patients[$_sejour->patient_id])) {
+    $patients["$_sejour->patient_id"] = $_sejour->_ref_patient;
+  }
+  
+  $patients["$_sejour->patient_id"]->_ref_sejours[$_sejour->_id] = $_sejour;
 }
 
 // Chargement des détails sur les patients
 $mergeables_count = 0;
 foreach ($patients as $patient_id => $patient) {
   $patient->loadIPP();
-	
-	$guess = array();
+  
+  $guess = array();
   $nicer = array();
 
   $guess["mergeable"] = isset($guesses[$patient_id]) ? true : false;
-	
-	// Sibling patients
-	$siblings = $patient->getSiblings();
+  
+  // Sibling patients
+  $siblings = $patient->getSiblings();
   foreach ($guess["siblings"] = array_keys($siblings) as $sibling_id) {
-  	if (array_key_exists($sibling_id, $patients)) {
-  		$guesses[$sibling_id]["mergeable"] = true;
-		  $guess["mergeable"] = true;
-  	}
+    if (array_key_exists($sibling_id, $patients)) {
+      $guesses[$sibling_id]["mergeable"] = true;
+      $guess["mergeable"] = true;
+    }
   }
 
   // Phoning patients
@@ -83,15 +83,15 @@ foreach ($patients as $patient_id => $patient) {
       $guess["mergeable"] = true;
     }
   }
-	
-	// Multiple séjours 
-	if (count($patient->_ref_sejours) > 1) {
+  
+  // Multiple séjours 
+  if (count($patient->_ref_sejours) > 1) {
     $guess["mergeable"] = true;
-	}
+  }
   
   // Multiple Interventions
   foreach ($patient->_ref_sejours as $_sejour) {
-    $operations = $_sejour->loadRefCurrOperations($date);
+    $operations = $_sejour->loadRefsOperations();
     if (count($operations) > 1) {
       $guess["mergeable"] = true;
     }
@@ -103,12 +103,12 @@ foreach ($patients as $patient_id => $patient) {
       }
     }
   }  
-	
-	if ($guess["mergeable"]) {
-		$mergeables_count++;
-	}
+  
+  if ($guess["mergeable"]) {
+    $mergeables_count++;
+  }
 
-	$guesses[$patient->_id] = $guess;
+  $guesses[$patient->_id] = $guess;
 }
 
 // Tri sur la vue a posteriori : détruit les clés !
