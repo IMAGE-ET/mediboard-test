@@ -59,10 +59,10 @@
 <tr>
   <td colspan="3">
     {{if count($facture->_ref_patient->_ref_correspondants_patient)}}
-      <table class="main tbl">
-        <form name="assurance_patient" method="post" action="" style="margin-left:40px;"> 
-        {{mb_class object=$facture}}
-        {{mb_key   object=$facture}}
+      <form name="assurance_patient" method="post" action="" style="margin-left:40px;" > 
+      {{mb_class object=$facture}}
+      {{mb_key   object=$facture}}
+        <table class="main tbl">
           <tr>
             <td>
               {{mb_label object=$facture field=assurance_base}}
@@ -103,8 +103,8 @@
               {{mb_field object=$facture field=send_assur_compl onchange="return onSubmitFormAjax(this.form);"}}
             </td>
           </tr>
-        </form>
-      </table>
+        </table>
+      </form>
     {{else}}
       <div class="small-warning" style="display:inline">Pas d'assurance</div>
     {{/if}}
@@ -189,7 +189,7 @@
     <tr>
       <td style="text-align:center;width:100px;">
         {{if $_acte_caisse->date}}
-          {{mb_value object=$_acte_caisse field="date"}} 
+          {{mb_value object=$_acte_caisse field="date"}}
         {{else}}
           {{$_consultation->_date|date_format:"%d/%m/%Y"}}
         {{/if}}
