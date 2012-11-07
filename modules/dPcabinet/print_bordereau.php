@@ -67,6 +67,7 @@ $reglements = array_merge($reglements_consult, $reglements_facture);
 $montantTotal = 0.0;
 foreach ($reglements as $_reglement) {
   $_reglement->loadTargetObject()->loadRefPatient();
+  $_reglement->loadRefBanque();
   $montantTotal += $_reglement->montant;
 }
 $nbRemise = count($reglements);
