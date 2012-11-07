@@ -131,11 +131,11 @@ Main.add(function() {
             {{foreach from=$_sejour->_ref_operations item=_operation}}
             <div>
               {{if count($_sejour->_ref_operations) > 1}}
-              <input name="{{$_operation->_class}}-first" type="checkbox" value="{{$_operation->_id}}" onclick="IdentitoVigilance.highlite(this);" />
-              <input name="{{$_operation->_class}}-second" type="radio" value="{{$_operation->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
+                <input name="{{$_operation->_class}}-first" type="checkbox" value="{{$_operation->_id}}" onclick="IdentitoVigilance.highlite(this);" />
+                <input name="{{$_operation->_class}}-second" type="radio" value="{{$_operation->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
               {{/if}}
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
-                {{$_operation->_view}}
+                {{if !$_operation->plageop_id}}[HP]{{/if}} {{$_operation->_datetime|date_format:"%d/%m/%Y"}}
               </span>
             </div>
             {{/foreach}}
