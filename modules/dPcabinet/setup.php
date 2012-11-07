@@ -1699,8 +1699,13 @@ class CSetupdPcabinet extends CSetup {
               ADD `send_assur_base` ENUM ('0','1') DEFAULT '0',
               ADD `send_assur_compl` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
+    $this->makeRevision("1.81");
     
-    $this->mod_version = "1.81";
+    $query = "ALTER TABLE `factureconsult` 
+              ADD `num_reference` VARCHAR (27);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.82";
   }
 }
 ?>

@@ -82,7 +82,7 @@ if ($edition_bvr) {
         }
       }
       foreach ($consult->_ref_actes_caisse as $acte) {
-        if($acte->_ref_caisse_maladie->use_tarmed_bill){
+        if ($acte->_ref_caisse_maladie->use_tarmed_bill) {
           $autre_tarmed += $acte->montant_base;
         }
       }
@@ -266,7 +266,7 @@ if ($edition_bvr) {
         $pdf->Cell(25, "", "Données de la facture", null, null, "L");
         $pdf->setXY($colonne1, $pdf->GetY()+5);
         $pdf->Cell(22, "", "Date facture:", null, null, "R");
-        $pdf->Cell(25, "", mbTransformTime(null, null, "%d %B %Y"), null, null, "L");
+        $pdf->Cell(25, "", mbTransformTime(null, $facture->cloture, "%d %B %Y"), null, null, "L");
         $pdf->setXY($colonne1, $pdf->GetY()+3);
         $pdf->Cell(22, "", "N° facture:", null, null, "R");
         $pdf->Cell(25, "", $facture->_id, null, null, "L");
@@ -336,7 +336,7 @@ if ($edition_bvr) {
         $cle = $facture->getNoControle($genre.$montant);
         $adherent2 = str_replace(' ','',$praticien->adherent);
         $adherent2 = str_replace('-','',$adherent2);
-        $_num_reference = str_replace(' ','',$facture->_num_reference);
+        $_num_reference = str_replace(' ','',$facture->num_reference);
         $bvr = $genre.$montant.$cle.">".$_num_reference."+ ".$adherent2.">";
           
         // Dimensions du bvr
@@ -387,7 +387,7 @@ if ($edition_bvr) {
         
         //écriture de la référence
         $pdf->setFont($font, '', 11);
-        $pdf->Text(50*$l_colonne, $h_ligne*8.75+$haut_doc , $facture->_num_reference);
+        $pdf->Text(50*$l_colonne, $h_ligne*8.75+$haut_doc , $facture->num_reference);
         
         $pdf->setFont($font, '', 6);
         $pdf->Text(13*$l_colonne, $h_ligne*21+$haut_doc , "Die Annahmestelle");
@@ -395,7 +395,7 @@ if ($edition_bvr) {
         $pdf->Text(13*$l_colonne, $h_ligne*22+$haut_doc , "L'ufficio d'accettazione");
         
         $pdf->setFont($font, '', 8);
-        $pdf->Text($l_colonne, $h_ligne*15+$haut_doc , $facture->_num_reference);
+        $pdf->Text($l_colonne, $h_ligne*15+$haut_doc , $facture->num_reference);
         //Adresse du patient de la facture
         $pdf->Text($l_colonne, $h_ligne*16+$haut_doc , $destinataire["nom"]);
         $pdf->Text(49*$l_colonne, $h_ligne*12+$haut_doc , $destinataire["nom"]);

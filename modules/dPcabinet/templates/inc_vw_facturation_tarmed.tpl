@@ -9,6 +9,9 @@
       <button class="cut" onclick="Facture.cutFacture('{{$facture->_id}}');"
         {{if $facture->_nb_factures != 1 || $facture->cloture}}disabled="disabled"{{/if}}> Eclatement</button>
       <button class="print" onclick="printFacture('{{$facture->_id}}', 1, 0);">Justificatif de remboursement</button>
+      {{if !$facture->_ref_patient->avs}}
+        <div class="small-warning" style="display:inline">N° AVS manquant pour le patient</div>
+      {{/if}}
     </td>
   </tr>
 {{/if}}

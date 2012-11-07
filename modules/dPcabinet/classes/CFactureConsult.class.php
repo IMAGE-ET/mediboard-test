@@ -37,6 +37,7 @@ class CFactureConsult extends CMbObject {
   var $facture                = null;
   var $ref_accident           = null;
   var $statut_pro             = null;
+  var $num_reference          = null;
   
   // Form fields
   var $_nb_factures         = null;
@@ -52,7 +53,6 @@ class CFactureConsult extends CMbObject {
   var $_reglements_total_patient  = null;
   var $_reglements_total_tiers    = null;
   var $_montant_factures          = array();
-  var $_num_reference             = null;
   var $_num_bvr                   = array();
   var $_montant_factures_caisse   = array();
   
@@ -121,6 +121,7 @@ class CFactureConsult extends CMbObject {
     $props["facture"]                   = "enum notNull list|-1|0|1 default|0";
     $props["ref_accident"]              = "text";
     $props["statut_pro"]                = "enum list|chomeur|etudiant|non_travailleur|independant|salarie|sans_emploi";
+    $props["num_reference"]             = "str minLength|16 maxLength|27";
     
     $props["_du_restant_patient"]       = "currency";
     $props["_du_restant_tiers"]         = "currency";
@@ -131,8 +132,6 @@ class CFactureConsult extends CMbObject {
     $props["_montant_secteur1"]         = "currency";
     $props["_montant_secteur2"]         = "currency";
     $props["_montant_total"]            = "currency";
-    
-    $props["_num_reference"]            = "str";
     return $props;
   }
      
@@ -312,15 +311,17 @@ class CFactureConsult extends CMbObject {
     if (!$this->_ref_patient) {
       $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
       
-      // Le numéro de référence doit comporter 16 ou 27 chiffres
-      $_num_reference = sprintf("%027s",$this->_ref_patient->avs.$this->_id);
-      $_num_reference = str_replace(' ','',$_num_reference);
-      $_num_reference = str_replace('.','',$_num_reference);
-      $this->_num_reference = substr($_num_reference, 0, 2)." ".substr($_num_reference, 2, 5)." ".substr($_num_reference, 7, 5)." ".substr($_num_reference, 12, 5)." ".substr($_num_reference, 17, 5)." ".substr($_num_reference, 22, 5);
+      if (!$this->num_reference && $this->_ref_patient->avs) {
+        // Le numéro de référence doit comporter 16 ou 27 chiffres
+        $this->num_reference = str_replace(' ','',$this->_ref_patient->avs.$this->_id);
+        $this->num_reference = str_replace('.','', $this->num_reference);
+        $this->num_reference = sprintf("%027s", $this->num_reference);
+        $this->store();
+//        $this->num_reference = substr( $this->num_reference, 0, 2)." ". $this->num_reference( $this->num_reference, 2, 5)." ".substr( $this->num_reference, 7, 5)." ".substr( $this->num_reference, 12, 5)." ".substr( $this->num_reference, 17, 5)." ".substr( $this->num_reference, 22, 5);
+      }
     }
-    
     return $this->_ref_patient;
-  }  
+  }
    
   /**
    * Chargement du praticien de la facture
@@ -525,7 +526,6 @@ class CFactureConsult extends CMbObject {
       }
       
       $this->_montant_sans_remise = sprintf("%.2f",$montant_prem + $total_caisse);
-      
       $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
       if (count($this->_montant_factures) == 1) {
         $this->_montant_factures = $this->_montant_factures_caisse;
@@ -544,9 +544,23 @@ class CFactureConsult extends CMbObject {
       foreach ($this->_montant_factures_caisse as $montant_facture) {
         $montant = sprintf('%010d', $montant_facture*100);
         $cle = $this->getNoControle($genre.$montant);
-        $this->_num_bvr[$montant_facture] = $genre.$montant.$cle.">".$this->_num_reference."+ ".$adherent2.">";
+        $this->_num_bvr[$montant_facture] = $genre.$montant.$cle.">".$this->num_reference."+ ".$adherent2.">";
       }
     }
     return $this->_num_bvr;
+  }
+  
+  /**
+   * Fonction permettant à partir d'un numéro de référence de retrouver la facture correspondante
+   * 
+   * @param string $num_reference le numéro de référence 
+   * 
+   * @return $facture
+  **/
+  function findFacture($num_reference){
+    $facture = new CFactureConsult();
+    $facture->num_reference = $num_reference;
+    $facture->loadMatchingObject();
+    return $facture;
   }
 }
