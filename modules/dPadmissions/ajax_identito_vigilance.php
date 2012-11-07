@@ -92,6 +92,9 @@ foreach ($patients as $patient_id => $patient) {
   // Multiple Interventions
   foreach ($patient->_ref_sejours as $_sejour) {
     $operations = $_sejour->loadRefsOperations();
+    foreach ($operations as $_operation) {
+      $_operation->loadView();
+    }
     if (count($operations) > 1) {
       $guess["mergeable"] = true;
     }
