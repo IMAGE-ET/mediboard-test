@@ -18,9 +18,11 @@ if ($session) {
   $session->loadRefActor();
   $event = "";
   $datas = "";
-  if ($message == "TCP_Open" || $message == "TCP_Closed") {
+  if ($message == "TCP_Open") {
     $event = $message;
     $datas = null;
+  }
+  elseif ($message == "TCP_Closed") {
     CApp::rip();
   }
   else {

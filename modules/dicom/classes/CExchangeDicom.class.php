@@ -99,6 +99,19 @@ class CExchangeDicom extends CExchangeBinary {
   }
   
   /**
+   * Get backward reference specifications
+   * 
+   * @return array
+   */
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+
+    $backProps["dicom_session"]   = "CDicomSession dicom_exchange_id";
+
+    return $backProps;
+  }
+  
+  /**
    * Decode the messages
    * 
    * @return null

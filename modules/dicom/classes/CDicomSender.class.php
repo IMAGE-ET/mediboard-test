@@ -41,7 +41,8 @@ class CDicomSender extends CInteropSender {
   function getBackProps() {
     $backProps = parent::getBackProps();
 
-    $backProps["echanges_dicom"]   = "CDicomExchange sender_id";
+    $backProps["dicom_exchange"] = "CExchangeDicom sender_id";
+    $backProps["dicom_session"]  = "CDicomSession sender_id";
 
     return $backProps;
   }
