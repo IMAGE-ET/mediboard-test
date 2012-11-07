@@ -224,7 +224,7 @@ class CDossierMedical extends CMbMetaObject {
   
   /*
    * Compte les antecedents de type allergies
-   * tout en tenant de la config pour ignorer certaines allergies
+   * tout en tenant compte de la config pour ignorer certaines allergies
    */
   function countAllergies(){
     if (!$this->_id) {
@@ -276,9 +276,11 @@ class CDossierMedical extends CMbMetaObject {
   /**
    * Identifiant de dossier médical lié à l'objet fourni. 
    * Crée le dossier médical si nécessaire
-   * @param $object_id ref Identifiant de l'objet
-   * @param $object_class str Classe de l'objet
-   * @return ref|CDossierMedical
+   *
+   * @param integer $object_id    Identifiant de l'objet
+   * @param string  $object_class Classe de l'objet
+   *
+   * @return integer Id du dossier médical
    */
   static function dossierMedicalId($object_id, $object_class) {
     $dossier = new CDossierMedical();
@@ -452,5 +454,3 @@ class CDossierMedical extends CMbMetaObject {
     $template->addListProperty("$champ - Diagnostics", $list);
   }
 }
-
-?>

@@ -44,11 +44,7 @@ else {
   }
   
   // Pre-remplissage des constantes médicales: FC, TA, temp, diurese (l/jour)
-  $where = array();
-  $where["datetime"] = " <= '$date'";
-  
-  $patient->loadRefConstantesMedicales($where);
-  $constantes_medicales = $patient->_ref_constantes_medicales;
+  list($constantes_medicales, $dates) = CConstantesMedicales::getLatestFor($patient, $date);
   
   $FC = $constantes_medicales->pouls;
   if ($FC) {
@@ -104,7 +100,7 @@ else {
   }
 
   $diurese = $constantes_medicales->_diurese;
-  if($diurese) {
+  if($diurese && $diurese != " ") { // hacky
     $last_constantes["diurese"] = $diurese;
     if($diurese < 500){
       $exam_igs->diurese = '11'; 

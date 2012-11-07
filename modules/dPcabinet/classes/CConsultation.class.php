@@ -81,7 +81,7 @@ class CConsultation extends CCodable {
   var $_function_secondary_id = null;
   var $_semaine_grossesse = null;
   var $_type           = null;  // Type de la consultation
-  var $_duree          = null; 
+  var $_duree          = null;
     
   // Fwd References
   var $_ref_patient      = null; // Declared in CCodable
@@ -101,6 +101,9 @@ class CConsultation extends CCodable {
   var $_tarif_id       = null;
 
   // Back References
+  /**
+   * @var CConsultAnesth
+   */
   var $_ref_consult_anesth     = null;
   var $_refs_dossiers_anesth   = null;   
   var $_ref_examaudio          = null;
@@ -975,7 +978,7 @@ TESTS A EFFECTUER
         $sejour->group_id = $function->group_id;
         $sejour->type = "consult";
         $sejour->facturable = $facturable;
-        $datetime = ($this->_date && $this->heure) ? "$this->_date $this->heure" : NULL;
+        $datetime = ($this->_date && $this->heure) ? "$this->_date $this->heure" : null;
         if ($this->chrono == self::PLANIFIE) {
           $sejour->entree_prevue = $datetime;
         }

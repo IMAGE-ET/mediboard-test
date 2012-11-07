@@ -1110,8 +1110,8 @@ class CPatient extends CMbObject {
     }
   }
 
-  function loadRefConstantesMedicales($where = array()) {
-    $latest = CConstantesMedicales::getLatestFor($this, $where);
+  function loadRefConstantesMedicales($datetime = null) {
+    $latest = CConstantesMedicales::getLatestFor($this, $datetime);
 
     list($this->_ref_constantes_medicales, $dates) = $latest;
     $this->_ref_constantes_medicales->updateFormFields();
@@ -1119,7 +1119,7 @@ class CPatient extends CMbObject {
     return $latest;
   }
 
-  function loadRefsGrossesses($order="terme_prevu desc") {
+  function loadRefsGrossesses($order = "terme_prevu DESC") {
     return $this->_ref_grossesses = $this->loadBackRefs("grossesses", $order);
   }
 

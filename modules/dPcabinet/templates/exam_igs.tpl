@@ -8,7 +8,14 @@ checkSelect = function(){
     var radio_value = $V(oRadio);
     var checked_value = parseInt(radio_value,10);
     score_igs += checked_value;
-    oRadio.up('tr').down('.value').update(checked_value);
+
+    var value_content = checked_value;
+
+    if (checked_value === 0) {
+      value_content = DOM.strong({}, 0);
+    }
+
+    oRadio.up('tr').down('.value').update(value_content);
   });
   
   $V(oForm.scoreIGS, score_igs);

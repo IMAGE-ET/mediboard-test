@@ -596,7 +596,7 @@ class CConstantesMedicales extends CMbObject {
     // Afficher le champ diurèse dans le formulaire si une des valeurs n'est pas vide 
     // FIXME Utiliser "cumul_in"
     foreach(self::$list_constantes["_diurese"]["formula"] as $_field => $_sign) {
-      if ($this->{$_field}) {
+      if ($this->{$_field} && $this->_diurese == null) {
         $this->_diurese = " ";
         break;
       }
@@ -795,7 +795,7 @@ class CConstantesMedicales extends CMbObject {
     return parent::store();
   }
   
-  static function getLatestFor($patient, $where = array()) {
+  static function getLatestFor($patient, $datetime) {
     $patient_id = ($patient instanceof CPatient) ? $patient->_id : $patient;
     
     if (isset(self::$_latest_values[$patient_id])) {
@@ -811,8 +811,14 @@ class CConstantesMedicales extends CMbObject {
     $constante->patient_id = $patient_id;
     $constante->datetime = mbDateTime();
     $constante->loadRefPatient();
-    
-    $where["patient_id"] = "= '$patient_id'";
+
+    $where = array(
+      "patient_id" => "= '$patient_id'",
+    );
+
+    if ($datetime) {
+      $where["datetime"] = "<= '$datetime'";
+    }
     
     $list_datetimes = array();
     foreach (CConstantesMedicales::$list_constantes as $type => $params) {
@@ -830,6 +836,51 @@ class CConstantesMedicales extends CMbObject {
         $list_datetimes[$type] = $_const->datetime;
       }
     }
+
+    // Cumul de la diurese
+    if ($datetime) {
+      foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
+        if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
+          $day_defore = mbDateTime("-24 hours", $datetime);
+
+          // cumul simple sur le meme champ
+          if (isset($_params["cumul_for"])) {
+            $cumul_for = $_params["cumul_for"];
+
+            $_where = $where;
+            $_where[$cumul_for] = "IS NOT NULL";
+            $_where[] = "datetime >= '$day_defore'";
+            $_list = $constante->loadList($_where);
+
+            foreach ($_list as $_const) {
+              $constante->$_name += $_const->$cumul_for;
+            }
+          }
+
+          // cumul de plusieurs champs (avec formule)
+          else {
+            $formula = $_params["formula"];
+
+            foreach($formula as $_field => $_sign) {
+              $_where = $where;
+              $_where[$_field] = "IS NOT NULL";
+              $_where[] = "datetime >= '$day_defore'";
+
+              $_list = $constante->loadList($_where);
+
+              foreach ($_list as $_const) {
+                if ($_sign === "+") {
+                  $constante->$_name += $_const->$_field;
+                }
+                else {
+                  $constante->$_name -= $_const->$_field;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
     
     $constante->updateFormFields();
     
@@ -837,7 +888,7 @@ class CConstantesMedicales extends CMbObject {
   }
   
   static function getColor($value, $params, $default_color = "#4DA74D") {
-    $color = CValue::read($_params, "color", $default_color);
+    $color = CValue::read($params, "color", $default_color);
     
     // Low value alert
     if (isset($params["alert_low"])) {
