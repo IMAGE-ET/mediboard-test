@@ -392,11 +392,11 @@ class CExObject extends CMbMetaObject {
           $this->_reported_fields[$field_name] = $_latest;
           $this->$field_name = self::typeSetSpecIntersect($_field, $_latest_value);
         }
-        
-        if ($this->_ref_object->_id && !$_found_a_concept) {
+
+        /*if ($this->_ref_object->_id && !$_found_a_concept) {
           $_field_view = CAppUI::tr("$this->_class-$_field->name");
           CAppUI::setMsg("Report de données impossible pour le champ '$_field_view'", UI_MSG_WARNING);
-        }
+        }*/
       }
 
       // Ceux de la meme exclass
@@ -428,13 +428,13 @@ class CExObject extends CMbMetaObject {
             break;
           }
         }
-        
+
         if ($this->_ref_object->_id && !$_base) {
-          $_field_view = CAppUI::tr("$this->_class-$_field->name");
-          CAppUI::setMsg("Report de données impossible pour le champ '$_field_view'", UI_MSG_WARNING);
+          //$_field_view = CAppUI::tr("$this->_class-$_field->name");
+          //CAppUI::setMsg("Report de données impossible pour le champ '$_field_view'", UI_MSG_WARNING);
           continue;
         }
-        
+
         if ($_base->$field_name == "") {
           continue;
         }
