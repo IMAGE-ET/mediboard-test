@@ -199,7 +199,7 @@ class CPatient extends CMbObject {
 
   //ean (for switzerland)
   var $_assuranceCC_ean   = null;
-  var $assureCC_id       = null;
+  var $_assureCC_id       = null;
   var $_assuranceCC_id    = null;
 
   // Navigation Fields
@@ -404,7 +404,7 @@ class CPatient extends CMbObject {
     $props["_age_max"]                    = "num min|0";
 
     $props["_assuranceCC_id"]             = "str length|5";
-    $props["assureCC_id"]                = "str maxLength|20";
+    $props["_assureCC_id"]                = "str maxLength|20";
     $props["_assuranceCC_ean"]            = "str";
 
     $props["_IPP"]                        = "str";
@@ -505,25 +505,6 @@ class CPatient extends CMbObject {
           return $msg;
         }
       }
-    }
-
-    // covercard
-    if (CModule::getActive("covercard") && ($this->_assuranceCC_ean || $this->_assuranceCC_id)) {
-      $corres = new CCorrespondantPatient();
-      $where = array(
-        "patient_id" => "IS NULL",
-        "relation"   => "= 'assurance'",
-      );
-      if ($this->_assuranceCC_ean) {
-        $where["ean"] = "= '$this->_assuranceCC_ean'";
-      }
-      if ($this->_assuranceCC_id) {
-        $where["ean_id"] = "= '$this->_assuranceCC_id'";
-      }
-      $corres->loadObject($where);
-      $corres->patient_id = $this->_id;
-      $corres->_id = null;
-      $corres->store();
     }
 
     // Génération de l'IPP ?
