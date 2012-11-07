@@ -44,7 +44,7 @@
       {{mb_ditto name=date value=$_log->date|date_format:$conf.date}}
     </td>
     <td rowspan="{{$field_count}}" style="text-align: center;">
-      {{mb_ditto name=time value=$_log->date|date_format:$conf.time}}
+      <span title="{{$_log->date|iso_time}}">{{mb_ditto name=time value=$_log->date|date_format:$conf.time}}</span>
     </td>
     <td rowspan="{{$field_count}}"
       {{if !count($_log->_fields) && $object->_id}} colspan="4" {{/if}}>
