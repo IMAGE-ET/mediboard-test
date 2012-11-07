@@ -95,6 +95,7 @@ foreach ($patients as $patient_id => $patient) {
     foreach ($operations as $_operation) {
       $_operation->loadView();
     }
+    
     if (count($operations) > 1) {
       $guess["mergeable"] = true;
     }

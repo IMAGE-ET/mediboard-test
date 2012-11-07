@@ -130,7 +130,7 @@ Main.add(function() {
           <td class="text {{if ($_sejour->annule == 1)}}cancelled{{/if}}">
             {{foreach from=$_sejour->_ref_operations item=_operation}}
             <div>
-              {{if count($_sejour->_ref_curr_operations) > 1}}
+              {{if count($_sejour->_ref_operations) > 1}}
               <input name="{{$_operation->_class}}-first" type="checkbox" value="{{$_operation->_id}}" onclick="IdentitoVigilance.highlite(this);" />
               <input name="{{$_operation->_class}}-second" type="radio" value="{{$_operation->_id}}" style="visibility: hidden;" onclick="IdentitoVigilance.merge(this);"/>
               {{/if}}
