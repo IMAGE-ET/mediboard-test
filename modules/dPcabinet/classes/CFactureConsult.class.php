@@ -310,12 +310,12 @@ class CFactureConsult extends CMbObject {
   function loadRefPatient($cache = 1) {
     if (!$this->_ref_patient) {
       $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
-      
-      if (!$this->num_reference && $this->_ref_patient->avs) {
-        // Le numéro de référence doit comporter 16 ou 27 chiffres
-        $this->num_reference = str_replace(' ','',$this->_ref_patient->avs.$this->_id);
-        $this->num_reference = str_replace('.','', $this->num_reference);
-        $this->num_reference = sprintf("%027s", $this->num_reference);
+      // Le numéro de référence doit comporter 16 ou 27 chiffres
+      $num = str_replace(' ','',$this->_ref_patient->avs.$this->_id);
+      $num = str_replace('.','', $num);
+      $num = sprintf("%027s", $num);
+      if ((!$this->num_reference || $num != $this->num_reference) && $this->_ref_patient->avs) {
+        $this->num_reference = $num;
         $this->store();
 //        $this->num_reference = substr( $this->num_reference, 0, 2)." ". $this->num_reference( $this->num_reference, 2, 5)." ".substr( $this->num_reference, 7, 5)." ".substr( $this->num_reference, 12, 5)." ".substr( $this->num_reference, 17, 5)." ".substr( $this->num_reference, 22, 5);
       }
@@ -513,7 +513,8 @@ class CFactureConsult extends CMbObject {
           }
         }
       }
-      $montant_prem = $total_tarmed * $this->_coeff + $autre_tarmed;
+      $montant_prem = round($total_tarmed * $this->_coeff + $autre_tarmed, 1);
+      $total_caisse = round($total_caisse, 1);
       
       if ($montant_prem < 0) {
         $montant_prem = 0;
@@ -525,8 +526,8 @@ class CFactureConsult extends CMbObject {
         $this->_montant_factures_caisse[] = $total_caisse;
       }
       
-      $this->_montant_sans_remise = sprintf("%.2f",$montant_prem + $total_caisse);
-      $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
+      $this->_montant_sans_remise = round($montant_prem + $total_caisse, 1);
+      $this->_montant_avec_remise = round($this->_montant_sans_remise - $this->remise, 1);
       if (count($this->_montant_factures) == 1) {
         $this->_montant_factures = $this->_montant_factures_caisse;
       }
