@@ -21,7 +21,7 @@ $tag = new CTag;
 
 $where = array();
 if ($group_id) {
-  $where["group_id"] = "= '$group_id' OR group_id IS NULL";
+  $where[] = "(group_id = '$group_id' OR group_id IS NULL)";
 }
 
 /*if ($keywords){
