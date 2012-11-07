@@ -16,7 +16,7 @@ $sender_id  = CValue::getOrSession("sender_id");
 $receiver_id  = CValue::getOrSession("receiver_id");
 $status  = CValue::getOrSession("status");
 
-$page_number      = CValue::getOrSession("page_number", 0);
+$page      = CValue::getOrSession("page", 0);
 $order_col = CValue::getOrSession("order_col");
 $order_way = CValue::getOrSession("order_way");
 
@@ -46,8 +46,8 @@ if ($_date_min && $_date_max) {
 $order = "$order_col $order_way";
 $index[] = "begin_date";
 
-$sessions = $session->loadList($where, $order, "$page_number, 20", null, null, $index);
-$total_sessions = count($sessions);
+$sessions = $session->loadList($where, $order, "$page, 20", null, null, $index);
+$total_sessions = $session->countList($where, null, null, $index);
 
 foreach ($sessions as $_session) {
   $_session->loadRefGroups();
@@ -63,7 +63,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("session", $session);
 $smarty->assign("sessions", $sessions);
 $smarty->assign("total_sessions", $total_sessions);
-$smarty->assign("page_number", $page_number);
+$smarty->assign("page", $page);
 $smarty->assign("order_col", $order_col);
 $smarty->assign("order_way", $order_way);
 

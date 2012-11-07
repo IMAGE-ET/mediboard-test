@@ -19,6 +19,6 @@ $session->_date_max = $_date_max;
 
 $smarty = new CSmartyDP();
 $smarty->assign("session", $session);
-$smarty->assign("page_number", 0);
+$smarty->assign("page", 0);
 $smarty->display("vw_idx_sessions.tpl");
 ?>

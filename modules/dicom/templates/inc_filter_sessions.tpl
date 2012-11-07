@@ -16,9 +16,9 @@
   </tr>
   <tr>
     <td style="text-align: center;">
-      <form action="?" name="sessionsFilters" method="post" onsubmit="return DicomSession.refreshSessionsList(this)">
+      <form action="?" name="sessionsFilters" method="post" onsubmit="return DicomSession.refreshSessionsList(this);">
         <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="page_number" value="{{$page_number}}" onchange="this.form.onsubmit()"/>
+        <input type="hidden" name="page" value="{{$page}}" onchange="this.form.onsubmit();"/>
         <input type="hidden" name="order_col" value="begin_date" />
         <input type="hidden" name="order_way" value="DESC" />
         

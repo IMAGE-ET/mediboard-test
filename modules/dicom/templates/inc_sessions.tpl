@@ -10,7 +10,7 @@
 
 
 {{if $total_sessions != 0}}
-  {{mb_include module=system template=inc_pagination total=$total_sessions current=$page_number change_page='ExchangeDataFormat.changePage' jumper='10' step=25}}
+  {{mb_include module=system template=inc_pagination total=$total_sessions current=$page change_page='DicomSession.changePage' step=20}}
 {{/if}}
 
 <table class="tbl">

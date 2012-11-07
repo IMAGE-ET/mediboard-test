@@ -24,7 +24,11 @@
     viewSession : function(session_guid) {
       var url = new Url("dicom", "ajax_vw_session_details");
       url.addParam("session_guid", session_guid);
-      url.requestModal(1000,1000);
+      url.requestModal();
+    },
+    
+    changePage : function(page) {
+      $V(getForm('sessionsFilters').page,page);
     }
   }
 </script>
