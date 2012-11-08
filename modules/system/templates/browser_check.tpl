@@ -8,10 +8,12 @@
   * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
   *}}
 
+{{mb_script module=system script=browser_check}}
 
 <script type="text/javascript">
 
 Main.add(function() {
+  BandwidthTest.launchTest();
 });
 </script>
 
@@ -49,7 +51,34 @@ Main.add(function() {
 <h1>4. Bande passante</h1>
 <div class="compact">Comme toute application Mediboard a besoin d'un minimum de bande passante.</div>
 <div class="compact">Cette section vérifie les débits montants et descendants vers le serveur de Mediboard, le test prend quelques secondes.</div>
-<div class="small-warning">
-  <div>Débit montant de <strong>389kb/s</strong> supérieur au minimum de 80kb/s</div>
-  <div>Débit descendant de <strong>410kb/s</strong> inférieur au minimum de 512kb/s</div>
+
+<div class="compact">
+  <br />
+  Débit descendant
+  <div class="progressBar" style="width:300px; margin: 3px 1em; height: 20px;" id="dlspeedref">
+    <div class="bar normal" style="width: 100%"></div>
+    <div class="text" style="height: 100%; line-height: 20px;"><span></span> Kb/s</div>
+  </div>
+  <div class="progressBar" style="width:300px; margin: 3px 1em; height: 20px;" id="dlspeed">
+    <div class="bar normal" style="width: 0%"></div>
+    <div class="text" style="height: 100%; line-height: 20px;"><span><img src="style/mediboard/images/icons/loading.gif" /></span> Kb/s</div>
+  </div>
+
+  <br />
+  Débit montant
+  <div class="progressBar" style="width:300px; margin: 3px 1em; height: 20px;" id="ulspeedref">
+    <div class="bar normal" style="width: 100%"></div>
+    <div class="text" style="height: 100%; line-height: 20px;"><span></span> Kb/s</div>
+  </div>
+  <div class="progressBar" style="width:300px; margin: 3px 1em; height: 20px;" id="ulspeed">
+    <div class="bar normal" style="width: 0%"></div>
+    <div class="text" style="height: 100%; line-height: 20px;"><span><img src="style/mediboard/images/icons/loading.gif" /></span> Kb/s</div>
+  </div>
 </div>
+
+  <!--
+<div class="small-warning">
+  <div>Débit descendant de <strong>410kb/s</strong> inférieur au minimum de 512kb/s</div>
+  <div>Débit montant de <strong>389kb/s</strong> supérieur au minimum de 80kb/s</div>
+</div>
+  -->
