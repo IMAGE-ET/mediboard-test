@@ -19,6 +19,7 @@ if (!$tarif->getPerm(PERM_EDIT)) {
 }
 $tarif->loadRefsNotes();
 $tarif->getSecteur1Uptodate();
+$tarif->loadView();
 
 // L'utilisateur est-il praticien ?
 $user = CAppUI::$user;
@@ -78,7 +79,7 @@ foreach ($listeTarifsSpe as $_tarif) {
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
 if ($user->_is_secretaire) {
   $listPrat = CAppUI::pref("pratOnlyForConsult", 1) ?
-	  $user->loadPraticiens(PERM_READ) :
+    $user->loadPraticiens(PERM_READ) :
     $user->loadProfessionnelDeSante(PERM_READ);
 }
 else {

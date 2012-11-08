@@ -18,6 +18,7 @@ $order->load($order_id);
 $order->loadRefsBack();
 $order->loadRefsFwd();
 $order->updateCounts();
+$order->loadView();
 
 if ($order->date_ordered) {
   foreach($order->_ref_order_items as $_id => $_item) {
