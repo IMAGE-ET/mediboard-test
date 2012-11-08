@@ -77,11 +77,13 @@ Main.add(function(){
       <table class="tbl">
         <tr>
           <th>Chirurgien</th>
-          <th>Patient</th>
+          <th colspan="2">Patient</th>
           <th>Intervention</th>
           <th>Heure</th>
           <th>Chambre</th>
           <th>Consultation</th>
+          <th>Anesthésie</th>
+          <th>ASA</th>
           <th colspan="2">Visite</th>
         </tr>
         {{if $count_ops_by_type == 0}}
@@ -95,22 +97,28 @@ Main.add(function(){
             {{if $_list_intervs|@count}}
               <tr>
                 {{if $_key_service == "non_place"}}
-                <th colspan="8">Non placés</th>
+                <th colspan="11" class="section">Non placés</th>
                 {{else}}
-                <th colspan="8">Service {{$services.$_key_service->_view}}</th>
+                <th colspan="11" class="section">Service {{$services.$_key_service}}</th>
                 {{/if}}
               </tr>
               {{foreach from=$_list_intervs item=_operation}}
               <tr>
-                <td class="text {{if $_operation->annulee}}cancelled{{/if}}">
+                <td class="text {{if $_operation->annulee}} cancelled{{/if}}" style="text-align: left;">
                   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}
                 </td>
-                <td class="text {{if $_operation->annulee}}cancelled{{/if}}">
+                <td class="text {{if $_operation->annulee}} cancelled{{/if}}" style="text-align: left;">
                   <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}')">
-                    {{$_operation->_ref_sejour->_ref_patient->_view}}
+                    {{$_operation->_ref_sejour->_ref_patient}}
                   </span>
                 </td>
-                <td {{if $_operation->annulee}}class="cancelled"{{/if}}">
+                <td style="text-align: center;">
+                  {{assign var=constantes value=$_operation->_ref_sejour->_ref_patient->_ref_constantes_medicales}}
+                  {{if $constantes->poids}} {{$constantes->poids}}kg{{else}}-{{/if}}
+                  <br />
+                  {{if $constantes->taille}} {{$constantes->taille}}cm{{else}}-{{/if}}
+                </td>
+                <td class="text {{if $_operation->annulee}} cancelled {{/if}}" style="text-align: left;">
                   <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
                   {{if $_operation->libelle}}
                     {{$_operation->libelle}}
@@ -121,28 +129,47 @@ Main.add(function(){
                   {{/if}}
                   </span>
                 </td>
-                <td class="button {{if $_operation->annulee}}cancelled{{/if}}"">
+                <td class="button {{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;">
                   {{$_operation->time_operation|date_format:$conf.time}}
                 </td>
-                <td class="button {{if $_operation->annulee}}cancelled{{/if}}"">
+                <td class="button {{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;">
                   {{$_operation->_ref_affectation->_ref_lit->_view}}
                 </td>
-                <td class="text {{if $_operation->annulee}}cancelled{{/if}}"">
-                  {{if $_operation->_ref_consult_anesth->_id}}
-                  <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_operation->_ref_consult_anesth->_ref_consultation->_id}}">
-                    <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_consult_anesth->_guid}}')">
-                    Le {{mb_value object=$_operation->_ref_consult_anesth->_ref_consultation field="_date"}} par le Dr {{$_operation->_ref_consult_anesth->_ref_consultation->_ref_chir->_view}}
-                    </span>
-                  </a>
+                {{assign var=dossier_anesth value=$_operation->_ref_consult_anesth}}
+                {{assign var=consult_anesth value=$dossier_anesth->_ref_consultation}}
+
+                <td class="{{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;">
+                  {{if $dossier_anesth->_id}}
+                    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult_anesth->_ref_chir initials=border}}
+                    <a class="action" href="?m=cabinet&amp;tab=edit_consultation&amp;selConsult={{$consult_anesth->_id}}">
+                      <span onmouseover="ObjectTooltip.createEx(this, '{{$dossier_anesth->_guid}}')">
+                      le {{mb_value object=$consult_anesth field="_date"}} 
+                      </span>
+                    </a>
+                  {{else}}
+                    <div class="empty">non effectuée</div>
+                    
+                  {{/if}}
+                </td>
+
+                <td class="{{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;">
+                  {{$_operation->_ref_type_anesth}}
+                </td>
+
+                <td class="{{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;";>
+                  {{if $dossier_anesth->ASA}}
+                    <strong>{{$dossier_anesth->ASA[0]}}</strong>
                   {{else}}
                     -
                   {{/if}}
                 </td>
-                <td class="text {{if $_operation->annulee}}cancelled{{/if}} {{if !$_operation->date_visite_anesth}}empty{{/if}}">
+
+                <td class="{{if $_operation->annulee}}cancelled{{/if}} {{if !$_operation->date_visite_anesth}}empty{{/if}}">
                   {{if $_operation->date_visite_anesth}}
-                    Le {{$_operation->date_visite_anesth|date_format:$conf.date}} par le Dr {{$_operation->_ref_anesth_visite->_view}}
+                    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_anesth_visite initials=border}}
+                    le {{$_operation->date_visite_anesth|date_format:$conf.date}}
                   {{else}}
-                    Visite non effectuée
+                    non effectuée
                   {{/if}}
                 </td>
                 <td {{if $_operation->annulee}}class="cancelled"{{/if}}">

@@ -91,30 +91,12 @@ if ($selPraticien->isAnesth()) {
     
     $listInterv["ambu"][$_service->_id]       = $interv->loadList($whereAmbu , $order, null, null, $ljoin);
     $count_ops["ambu"] += count($listInterv["ambu"][$_service->_id]);
-    foreach ($listInterv["ambu"][$_service->_id] as &$_interv) {
-      $_interv->loadRefAffectation();
-      $_interv->loadRefsFwd(1);
-      $_interv->loadRefsConsultAnesth();
-      $_interv->_ref_chir->loadRefFunction();
-    }
     
     $listInterv["comp"][$_service->_id]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
     $count_ops["comp"] += count($listInterv["comp"][$_service->_id]);
-    foreach ($listInterv["comp"][$_service->_id] as &$_interv) {
-      $_interv->loadRefAffectation();
-      $_interv->loadRefsFwd(1);
-      $_interv->loadRefsConsultAnesth();
-      $_interv->_ref_chir->loadRefFunction();
-    }
     
     $listInterv["hors_plage"][$_service->_id] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
     $count_ops["hors_plage"] += count($listInterv["hors_plage"][$_service->_id]);
-    foreach ($listInterv["hors_plage"][$_service->_id] as &$_interv) {
-      $_interv->loadRefAffectation();
-      $_interv->loadRefsFwd(1);
-      $_interv->loadRefsConsultAnesth();
-      $_interv->_ref_chir->loadRefFunction();
-    }
   }
   
   $whereAmbu["service.service_id"]       = "IS NULL";
@@ -123,29 +105,25 @@ if ($selPraticien->isAnesth()) {
   
   $listInterv["ambu"]["non_place"]       = $interv->loadList($whereAmbu , $order, null, null, $ljoin);
   $count_ops["ambu"] += count($listInterv["ambu"]["non_place"]);
-  foreach ($listInterv["ambu"]["non_place"] as &$_interv) {
-    $_interv->loadRefAffectation();
-    $_interv->loadRefsFwd(1);
-    $_interv->loadRefsConsultAnesth();
-    $_interv->_ref_chir->loadRefFunction();
-  }
   
   $listInterv["comp"]["non_place"]      = $interv->loadList($whereHospi, $order, null, null, $ljoin);
   $count_ops["comp"] += count($listInterv["comp"]["non_place"]);
-  foreach ($listInterv["comp"]["non_place"] as &$_interv) {
-    $_interv->loadRefAffectation();
-    $_interv->loadRefsFwd(1);
-    $_interv->loadRefsConsultAnesth();
-    $_interv->_ref_chir->loadRefFunction();
-  }
   
   $listInterv["hors_plage"]["non_place"] = $interv->loadList($whereUrg  , $order, null, null, $ljoin);
   $count_ops["hors_plage"] += count($listInterv["hors_plage"]["non_place"]);
-  foreach ($listInterv["hors_plage"]["non_place"] as &$_interv) {
-    $_interv->loadRefAffectation();
-    $_interv->loadRefsFwd(1);
-    $_interv->loadRefsConsultAnesth();
-    $_interv->_ref_chir->loadRefFunction();
+  
+  // Complétion du chargement
+  foreach ($listInterv as $_intervs_by_type) {
+    foreach ($_intervs_by_type as $_intervs_by_service) {
+      foreach ($_intervs_by_service as $_interv) {
+        $_interv->loadRefAffectation();
+        $_interv->loadRefsFwd(1);
+        $_interv->loadRefsConsultAnesth();
+        $_interv->_ref_chir->loadRefFunction();
+        $patient = $_interv->_ref_sejour->_ref_patient;
+        $patient->loadRefConstantesMedicales();
+      } 
+    }
   }
 
   // Création du template
