@@ -2202,7 +2202,7 @@ class CSejour extends CCodable implements IPatientRelated {
 
     $this->loadRefsAffectations();
     $this->_ref_last_affectation->loadView();
-    $template->addProperty("Hospitalisation - Dernière affectation", $this->_ref_last_affectation);
+    $template->addProperty("Hospitalisation - Dernière affectation", $this->_ref_last_affectation->_view);
 
     // Diagnostics
     $this->loadExtDiagnostics();
