@@ -18,6 +18,7 @@ $naissance_day   = CValue::get("naissance_day");
 $naissance_month = CValue::get("naissance_month");
 $naissance_year  = CValue::get("naissance_year");
 $useVitale  = CValue::get("useVitale");
+$covercard =  CValue::get("covercard");
 
 $patient = new CPatient;
 $patient->load($patient_id);
@@ -39,7 +40,7 @@ if (!$patient_id) {
   $patient->prenom = $firstName;
 	$patient->assure_nom    = $name;
   $patient->assure_prenom = $firstName;
-	
+
 	if ($naissance_day && $naissance_month && $naissance_year) {
 		$patient->naissance = sprintf('%04d-%02d-%02d', $naissance_year, $naissance_month, $naissance_day);
 	}
@@ -55,6 +56,13 @@ if ($useVitale && !CAppUI::pref('VitaleVision') && CModule::getActive("fse")) {
     $patient->extendsWith($patVitale);
     $patient->updateFormFields();
     $patient->_bind_vitale = "1";
+  }
+}
+
+if ($covercard && CModule::getActive("covercard")) {
+  $covercardExec = CCoverCard::process($covercard);
+  if($covercardExec->queryNumber){
+    CCoverCard::updatePatientFromCC($patient, $covercardExec);
   }
 }
 

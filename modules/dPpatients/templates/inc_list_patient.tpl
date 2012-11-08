@@ -11,9 +11,6 @@
        urlFSE.addParam("useVitale", 1);
      </script>
   {{/if}}
-{{if "covercard"|module_active}}
-  {{mb_script module="covercard" script="updatePatientFieldFromCC"}}
-{{/if}}
   <script type="text/javascript">
     var Patient = {
       create : function(form) {
@@ -26,6 +23,7 @@
         url.addParam("naissance_day",  $V(form.Date_Day));
         url.addParam("naissance_month",$V(form.Date_Month));
         url.addParam("naissance_year", $V(form.Date_Year));
+        {{if "covercard"|module_active}}url.addParam("covercard", $V(form.covercard));{{/if}}
         url.redirect();
       },
       search : function(from) {
@@ -104,11 +102,6 @@ emptyForm = function() {
 {{/if}}
 </script>
 
-{{if "covercard"|module_active}}
-  {{mb_include module=covercard template=inc_input_covercard}}
-{{/if}}
-
-
 <div id="modal-beneficiaire" style="display:none; text-align:center;">
   <p id="msg-multiple-benef">
     Cette carte vitale semble contenir plusieurs bénéficiaires, merci de sélectionner la personne voulue :
@@ -176,6 +169,10 @@ emptyForm = function() {
     {{/if}}
   </tr>
 
+  {{if "covercard"|module_active}}
+  <input type="hidden" name="covercard" value="{{$covercard}}"/>
+  {{/if}}
+
   <tr>
     <th class="field_advanced" style="display: none;">
       {{mb_label class=CPatient field=sexe}}
@@ -221,17 +218,12 @@ emptyForm = function() {
           {{mb_include module=fse template=inc_button_vitale}}
         {{/if}}
 
-        <!-- COVERCARD -->
-        {{if "covercard"|module_active}}
-          {{mb_include module=covercard template=inc_button_covercard}}
-        {{/if}}
-
-
         {{if $can->edit}}
           {{if $nom || $prenom || $patient_ipp || $naissance}}
           <button class="new" type="button" tabindex="15" onclick="Patient.create(this.form);">
             {{tr}}Create{{/tr}}
             {{if $useVitale}}avec Vitale{{/if}}
+            {{if $useCoverCard}}avec Covercard{{/if}}
           </button>
           {{/if}}
         {{/if}}
@@ -254,13 +246,6 @@ emptyForm = function() {
   </ul>
 </div>
 {{/if}}
-
-
-<!-- modale CoverCard -->
-{{if "covercard"|module_active}}
-{{mb_include module=covercard template=inc_input_covercard}}
-{{/if}}
-
 
 <form name="fusion" action="?" method="get" onsubmit="return false;">
   <table class="tbl" id="list_patients">

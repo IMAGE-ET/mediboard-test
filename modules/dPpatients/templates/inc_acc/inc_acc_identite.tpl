@@ -335,8 +335,8 @@ Main.add(function() {
         </tr>
         {{if "covercard"|module_active}}
         <tr>
-          <th>{{mb_label object=$patient field="assureCC_id"}}</th>
-          <td>{{mb_field object=$patient field="assureCC_id"}}</td>
+          <th>{{mb_label object=$patient field="_assureCC_id"}}</th>
+          <td>{{mb_field object=$patient field="_assureCC_id"}}</td>
         </tr>
         <tr style="display:none;">
           <th>{{mb_label object=$patient field="_assuranceCC_id"}}</th>

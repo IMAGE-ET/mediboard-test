@@ -15,11 +15,6 @@
 {{assign var=modFSE value="fse"|module_active}}
 {{assign var=patient_id value=$patient->_id}}
 
-
-{{if "covercard"|module_active}}
-  {{mb_script module="covercard" script="updatePatientFieldFromCC"}}
-{{/if}}
-
 {{if $app->user_prefs.VitaleVision}}
   {{mb_include template=inc_vitalevision}}
 
@@ -199,11 +194,6 @@ Main.add(function () {
   </div>
 </div>
 
-<!-- modale CoverCard -->
-{{if "covercard"|module_active}}
-  {{mb_include module=covercard template=inc_input_covercard}}
-{{/if}}
-
 <!-- main -->
 <table class="main">
   <tr>
@@ -242,11 +232,6 @@ Main.add(function () {
       {{if $patient->_bind_vitale}}{{tr}}UseVitale{{/tr}}{{/if}}
     </th>
   {{/if}}
-  {{if "covercard"|module_active}}
-      <button class="search singleclick" type="button" onclick="modalCoverCard();">
-         Lire covercard
-      </button>
-      {{/if}}
   </tr>
   {{mb_ternary var=x test=$patient->medecin_traitant value=1 other=0}}
   {{math equation="$x+y" y=$patient->_ref_medecins_correspondants|@count assign=count_correspondants}}
