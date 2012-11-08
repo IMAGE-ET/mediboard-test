@@ -10,10 +10,7 @@
 
 <script>
   highlightMessage = function(form) {
-    var url = new Url("hprim21", "ajax_display_hprim_message");
-    url.addElement(form.message);
-    url.requestUpdate("highlighted");
-    return false;
+    return Url.update(form, "highlighted");
   }
   
   {{if $message}}
@@ -23,7 +20,7 @@
   {{/if}}
 </script>
 
-<form name="hpr-input-form" action="?" onsubmit="return highlightMessage(this)" method="get" class="prepared">
+<form name="hpr-input-form" action="?m=hprim21&a=ajax_display_hprim_message" onsubmit="return highlightMessage(this)" method="post" class="prepared">
   <pre style="padding: 0; max-height: none;"><textarea name="message" rows="12" style="width: 100%; border: none; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; margin: 0; resize: vertical;">{{$message}}</textarea></pre>
   <button class="change">Valider</button>
 </form>

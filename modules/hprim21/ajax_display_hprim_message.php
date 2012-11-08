@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$message_string = CValue::get("message");
+$message_string = CValue::post("message");
 
 if (!$message_string) {
   return;
