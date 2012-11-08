@@ -96,6 +96,7 @@ if ($facture->du_patient) {
     $consultation->store();
   }
   $facture->_ref_consults = null;
+  $facture->_montant_factures_caisse = null;
   $facture->loadRefs();
 }
 
