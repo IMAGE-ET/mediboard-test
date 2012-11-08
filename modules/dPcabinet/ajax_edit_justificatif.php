@@ -148,7 +148,6 @@ foreach ($factures as $facture) {
   foreach ($facture->_montant_factures_caisse as $cle_facture => $montant_facture) {
     $pdf->AddPage();
     $pm = $pt = 0;
-    $hauteur_en_tete = 100;
     
     ajoutEntete1($pdf, $facture, $user, $praticien, $function_prat, $colonnes);
     $pdf->setFont("vera", '', 8);
@@ -419,11 +418,9 @@ foreach ($factures as $facture) {
     $pdf->setXY(20, $ligne+6);
     $pdf->Cell($l, "", "Tarmed PT", null, null, "R");
     $pdf->Cell($l, "", $pt, null, null, "R");
-    
-    $x = 3;
-    $i = $y = 0;
-    
-    $autre = $cle_facture == 0 ? $montant_facture - $pm - $pt : $montant_facture;
+        
+    $autre_temp = $cle_facture == 0 ? $montant_facture - $pm - $pt : $montant_facture;
+    $autre = $autre_temp <= 0.05 ? 0.00 : $autre_temp;
     $pdf->setXY(70, $ligne+3);
     $pdf->Cell($l, "", "Autres", null, null, "R");
     $pdf->Cell($l, "",  sprintf("%.2f", $autre), null, null, "R");
@@ -437,8 +434,8 @@ foreach ($factures as $facture) {
     $pdf->Cell($l, "", "".$acompte, null, null, "R");
     $pdf->Cell($l, "", "", null, null, "R");
     
-    $total = $montant_intermediaire - $facture->_reglements_total_patient;
-    $total = $total<0 ? 0.00 : $total;
+    $total_temp = $montant_intermediaire - $facture->_reglements_total_patient;
+    $total = $total_temp<0 ? 0.00 : $total_temp;
     
     $pdf->Cell($l, "", "Montant dû", null, null, "R");
     $pdf->Cell($l, "", sprintf("%.2f",$total), null, null, "R");
