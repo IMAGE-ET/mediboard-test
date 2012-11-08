@@ -127,6 +127,10 @@
         </tr>
       {{/if}}
       <tr>
+        {{assign var="var" value="dompdf_host"}}
+        {{mb_include module=system template=inc_config_bool}}
+      </tr>
+      <tr>
         <th class="category" colspan="2">
           Horodatage pour les aides à la saisie
         </th>

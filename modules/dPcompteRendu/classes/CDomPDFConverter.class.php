@@ -32,8 +32,10 @@ class CDomPDFConverter extends CHtmlToPDFConverter {
     $this->dompdf = new dompdf();
     $this->dompdf->set_base_path(realpath(dirname(__FILE__)."/../../../../"));
     $this->dompdf->set_paper($format, $orientation);
-    //$this->dompdf->set_protocol(isset($_SERVER["HTTPS"]) ? "https://" : "http://");
-    //$this->dompdf->set_host($_SERVER["SERVER_NAME"]);
+    if (CAppUI::conf("dPcompteRendu CCompteRendu dompdf_host")) {
+      $this->dompdf->set_protocol(isset($_SERVER["HTTPS"]) ? "https://" : "http://");
+      $this->dompdf->set_host($_SERVER["SERVER_NAME"]);
+    }
   }
   
   /**
