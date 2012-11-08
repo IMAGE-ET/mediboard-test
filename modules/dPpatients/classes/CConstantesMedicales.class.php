@@ -795,7 +795,7 @@ class CConstantesMedicales extends CMbObject {
     return parent::store();
   }
   
-  static function getLatestFor($patient, $datetime) {
+  static function getLatestFor($patient, $datetime = null) {
     $patient_id = ($patient instanceof CPatient) ? $patient->_id : $patient;
     
     if (isset(self::$_latest_values[$patient_id])) {
