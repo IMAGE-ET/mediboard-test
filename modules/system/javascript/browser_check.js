@@ -51,11 +51,10 @@ BandwidthTest = {
 
     var options = {
       method: "post",
-      parameters: {
-        data: BandwidthTest.binfile
-      },
+      postBody: BandwidthTest.binfile,
       asynchronous: true,
       evalScripts: false,
+      contentType: "application/octet-stream",
       onComplete: function(){
         BandwidthTest.end = new Date().getTime();
         var diff = (BandwidthTest.end - BandwidthTest.start) / 1000;
