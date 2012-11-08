@@ -151,7 +151,7 @@ function mbDump($var, $label = null) {
  * @param string $label  Add an optionnal label
  * @param bool   $log    Log to file or echo data
  * 
- * @return string|int The processed log or the size of the data written in the log file 
+ * @return int The size of the data written in the log file
  **/
 function processLog($export, $label = null, $log = false) {
   $export = htmlspecialchars($export);
@@ -161,7 +161,9 @@ function processLog($export, $label = null, $log = false) {
   if ($log) {
     return file_put_contents(LOG_PATH, $msg, FILE_APPEND);
   }
+
   echo $msg;
+  return null;
 }
 
 /**
@@ -219,11 +221,11 @@ function hideUrlPassword($str) {
  * @param array  $var  HTTP params
  * @param string $name Optional var name
  * 
- * @return string HTML
+ * @return string|null HTML
  **/
 function print_infos($var, $name = '') {
   if (empty($var)) {
-    return; 
+    return null;
   }
   
   $ret = "\n<pre>";
@@ -286,22 +288,38 @@ function errorHandler($code, $text, $file, $line, $context, $backtrace = null) {
     }
   }
 
-  // Erreur générale
   $file = mbRelativePath($file);
-  $log .= "\n<strong>Time: </strong>$time
-             <strong>Type: </strong>$type
-             <strong>Text: </strong>$text
-             <strong>File: </strong>$file
-             <strong>Line: </strong>$line";
-  
-  $log .= print_infos($_GET, 'GET');
-  $log .= print_infos($_POST, 'POST');
-  
+  $log .= <<<HTML
+<strong>Time: </strong>$time
+<strong>Type: </strong>$type
+<strong>Text: </strong>$text
+<strong>File: </strong>$file
+<strong>Line: </strong>$line
+HTML;
+
   // Might noy be ready at the time error is thrown
   $session = isset($_SESSION) ? $_SESSION : array();
   unset($session['AppUI']);
   unset($session['dPcompteRendu']['templateManager']);
-  $log .= print_infos($session, 'SESSION');
+
+  $_all_params = array(
+    "GET"     => $_GET,
+    "POST"    => $_POST,
+    "SESSION" => $session,
+  );
+
+  // We replace passwords with a mask
+  $mask = "***";
+  $pattern = "/password/i";
+  foreach ($_all_params as $_type => $_params) {
+    foreach ($_params as $_key => $_value) {
+      if (!empty($_value) && preg_match($pattern, $_key)) {
+        $_all_params[$_type][$_key] = $mask;
+      }
+    }
+
+    $log .= print_infos($_all_params[$_type], $_type);
+  }
   
   foreach ($contexts as $context) {
     $function = isset($context["class"]) ? $context["class"] . ":" : "";
@@ -344,7 +362,7 @@ set_error_handler("errorHandler");
  * 
  * @param exception $exception Thrown exception
  * 
- * @return null
+ * @return void
  */
 function exceptionHandler($exception) {
   $divClass = "big-warning";
@@ -369,11 +387,13 @@ function exceptionHandler($exception) {
   $file = mbRelativePath($exception->getFile());
   $line = $exception->getLine();
   $text = $exception->getMessage();
-  $log .= "\n<strong>Time: </strong>$time
-             <strong>Type: </strong>$type
-             <strong>Text: </strong>$text
-             <strong>File: </strong>$file
-             <strong>Line: </strong>$line";
+  $log .= <<<HTML
+<strong>Time: </strong>$time
+<strong>Type: </strong>$type
+<strong>Text: </strong>$text
+<strong>File: </strong>$file
+<strong>Line: </strong>$line
+HTML;
              
   $log .= print_infos($_GET, 'GET');
   $log .= print_infos($_POST, 'POST');
