@@ -402,9 +402,13 @@ class COperation extends CCodable implements IPatientRelated {
     $sejour = $this->loadRefSejour();
     $this->loadRefPlageOp();
     
-    if (!$sejour->entree_reelle && mbTime($this->_datetime) != "00:00:00" && 
-        !CMbRange::in($this->_datetime, $sejour->entree_prevue, $sejour->sortie_prevue)) {
-      $msg .= "Intervention du $this->_datetime en dehors du séjour du $sejour->entree_prevue au $sejour->sortie_prevue";
+    if ($this->plageop_id !== null && !$sejour->entree_reelle) {
+      $date = mbDate($this->_datetime);
+      $entree = mbDate($sejour->entree_prevue);
+      $sortie = mbDate($sejour->sortie_prevue);
+      if (!CMbRange::in($date, $entree, $sortie)) {
+         $msg .= "Intervention du $date en dehors du séjour du $entree au $sortie";
+      }
     }
     
     // Vérification de la signature de l'anesthésiste pour la visite de pré-anesthésie
