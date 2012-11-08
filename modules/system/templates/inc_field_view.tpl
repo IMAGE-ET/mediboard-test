@@ -13,14 +13,14 @@
 
 {{if $spec->show !== "0"}} 
 {{if $prop.0 != "_" || $spec->show}}
-{{if $value || $spec->show}}
+{{if $value || $value == 0 || $spec->show}}
   <strong>{{mb_label object=$object field=$prop}}</strong> :
 
   {{if $spec instanceof CRefSpec}}
     {{if $prop == $object->_spec->key}}
       {{$object->$prop}}
     {{else}}
-  	  {{assign var=ref value=$object->_fwd.$prop}}
+      {{assign var=ref value=$object->_fwd.$prop}}
       <span onmouseover="ObjectTooltip.createEx(this, '{{$ref->_guid}}');">
         {{$ref}}
       </span>
@@ -31,13 +31,13 @@
 
   {{elseif $spec instanceof CTextSpec}}
     {{* FIXME: smarty:nodefault is required because HTML entities are double escaped *}}
-	  {{$value|smarty:nodefaults|truncate:200|nl2br}}
-		
+    {{$value|smarty:nodefaults|truncate:200|nl2br}}
+    
   {{else}}
     {{mb_value object=$object field=$prop}}
 
   {{/if}}
-	
+  
   <br />
 {{/if}}
 {{/if}}
