@@ -29,7 +29,7 @@ if ($factureconsult_id) {
 else {
   $where = array();
   $where["praticien_id"] = " = '$prat_id'";
-  $where[]  = "(ouverture >= '$date_min' AND cloture  <= '$date_max') OR (ouverture >= '$date_min' AND cloture  <= '$date_max') ";
+  $where[]  = "cloture  <= '$date_max' AND cloture >= '$date_min'";
   $factures = $facture->loadList($where, "factureconsult_id DESC", null, "patient_id");
   
   //Avant l'envoi par ftp des fichiers, création d'un fichier print.lock indiquant un envoi de fichiers en cours
