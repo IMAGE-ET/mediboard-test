@@ -95,6 +95,7 @@ if ($facture->du_patient) {
     $consultation->factureconsult_id = $facture->_id;
     $consultation->store();
   }
+  $facture->_ref_consults = null;
   $facture->loadRefs();
 }
 
