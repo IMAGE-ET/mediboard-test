@@ -257,7 +257,7 @@
       {{if $sejour->_ref_transmissions|@count}}
         <table class="tbl">
           <tr>
-            <th class="title" colspan="3">Transmisssions de synthèse</th>
+            <th class="title" colspan="3">Transmissions de synthèse</th>
           </tr>
           <tr>
             <th class="narrow">{{tr}}Date{{/tr}}</th>
