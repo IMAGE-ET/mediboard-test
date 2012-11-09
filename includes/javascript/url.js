@@ -8,11 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-/**
- * Url Class
- * Lazy poping and ajaxing
- */
-
 window.children = {};
 
 Ajax.Responders.register({
@@ -27,7 +22,18 @@ Ajax.Responders.register({
   }
 });
 
+/**
+ * Url Class
+ * Lazy poping and ajaxing
+ */
 var Url = Class.create({
+  /**
+   * Url constructor
+   *
+   * @param {String=} sModule Module name
+   * @param {String=} sAction Action name
+   * @param {String=} sMode   Mode: "action", "tab", "dosql" or "raw"
+   */
   initialize: function(sModule, sAction, sMode) {
     sMode = sMode || "action";
 
@@ -42,36 +48,84 @@ var Url = Class.create({
         case 'tab'    : this.setModuleTab   (sModule, sAction); break;
         case 'dosql'  : this.setModuleDosql (sModule, sAction); break;
         case 'raw'    : this.setModuleRaw   (sModule, sAction); break;
-        default: Console.debug('Url type incorrect : ' + sType)
+        default: console.error('Url type incorrect : ' + sMode);
       }
     }
   },
-  
+
+  /**
+   * Set module and action
+   *
+   * @param {String} sModule Module name
+   * @param {String} sAction Action name
+   *
+   * @return {Url}
+   */
   setModuleAction: function(sModule, sAction) {
     return this.addParam("m", sModule)
                .addParam("a", sAction);
   },
-  
+
+  /**
+   * Set module and tabulation
+   *
+   * @param {String} sModule Module name
+   * @param {String} sTab    Tabulation name
+   *
+   * @return {Url}
+   */
   setModuleTab: function(sModule, sTab) {
     return this.addParam("m", sModule)
                .addParam("tab", sTab);
   },
-  
+
+  /**
+   * Set module and dosql
+   *
+   * @param {String} sModule Module name
+   * @param {String} sDosql  Dosql name
+   *
+   * @return {Url}
+   */
   setModuleDosql: function(sModule, sDosql) {
     return this.addParam("m", sModule)
                .addParam("dosql", sDosql);
   },
 
+  /**
+   * Set the module name and "raw" flag
+   *
+   * @param {String} sModule Module name
+   * @param {String} sRaw    Raw action name
+   *
+   * @return {Url}
+   */
   setModuleRaw: function(sModule, sRaw) {
     return this.addParam("m", sModule)
                .addParam("raw", sRaw);
   },
-  
+
+  /**
+   * Set the URL fragment (part after the #), useful for popups
+   *
+   * @param {String} sFragment Fragment
+   *
+   * @return {Url}
+   */
   setFragment: function(sFragment) {
     this.sFragment = sFragment;
     return this;
   },
-  
+
+  /**
+   * Add a parameter value to the URL request
+   *
+   * @param {String}   sName        Parameter name
+   * @param {*}        sValue       Parameter value
+   * @param {Boolean=} bAcceptArray Accept array values
+   *
+   * @return {Url}
+   */
   addParam: function(sName, sValue, bAcceptArray) {
     if (bAcceptArray && Object.isArray(sValue)) {
       $A(sValue).each(function(elt, i) {
@@ -82,13 +136,32 @@ var Url = Class.create({
     this.oParams[sName] = sValue;
     return this;
   },
-  
+
+  /**
+   * Add a parameter value to the URL request only if its value evaluates to true
+   *
+   * @param {String}   sName        Parameter name
+   * @param {*}        sValue       Parameter value
+   * @param {Boolean=} bAcceptArray Accept array values
+   *
+   * @return {Url}
+   */
   addNotNullParam :function(sName, sValue, bAcceptArray){
     if (sValue){
-      this.addParam(sName, sValue, bAcceptArray);
+      return this.addParam(sName, sValue, bAcceptArray);
     }
+
+    return this;
   },
-  
+
+  /**
+   * Add an object parameter to the URL request
+   *
+   * @param {String} sName   Parameter name
+   * @param {Object} oObject Parameter value
+   *
+   * @return {Url}
+   */
   addObjectParam: function(sName, oObject) {
     if (typeof oObject != "object") {
       return this.addParam(sName, oObject);
@@ -101,17 +174,39 @@ var Url = Class.create({
     
     return this;
   },
-  
+
+  /**
+   * Add form data to the parameters
+   *
+   * @param {HTMLFormElement} oForm The form
+   *
+   * @return {Url}
+   */
   addFormData: function(oForm) {
     Object.extend(this.oParams, getForm(oForm).serialize(true));
     return this;
   },
-  
+
+  /**
+   * Merge the params with the object
+   *
+   * @param {Object} oObject
+   *
+   * @return {Url}
+   */
   mergeParams: function(oObject) {
     Object.extend(this.oParams, oObject);
     return this;
   },
-  
+
+  /**
+   * Add element value to the parameters
+   *
+   * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement} oElement The element to add to the data
+   * @param {String}      sParamName The parameter name
+   *
+   * @return {Url}
+   */
   addElement: function(oElement, sParamName) {
     if (!oElement) return this;
   
@@ -126,25 +221,43 @@ var Url = Class.create({
   
     return this.addParam(sParamName, value);
   },
-  
+
+  /**
+   * Build an URL string
+   *
+   * @param {Boolean=} questionMark Add the question mark or the ampersand at the beginning
+   *
+   * @return {String} The URL string
+   */
   make: function(questionMark) {
     var sUrl = (questionMark ? "&" : "?") + $H(this.oParams).toQueryString();
     if (this.sFragment) sUrl += "#"+this.sFragment;
     return sUrl;
   },
-  
+
+  /**
+   * @return {Url}
+   */
   open: function() {
     var uri = decodeURI(this.make());
     (this.oWindow || window).open(uri);
     return this;
   },
-  
+
+  /**
+   * @param {String=} sBaseUrl The base URL
+   *
+   * @return {Url}
+   */
   redirect: function(sBaseUrl) {
     var uri = decodeURI(this.make(!!sBaseUrl));
     (this.oWindow || window).location.href = (sBaseUrl ? sBaseUrl : "") + uri;
     return this;
   },
-  
+
+  /**
+   * @return {void}
+   */
   redirectOpener: function() {
     if (window.opener && !window.opener.closed) {
       window.opener.location.assign(this.make());
@@ -153,11 +266,27 @@ var Url = Class.create({
       this.redirect();
     }
   },
-  
+
+  /**
+   * @return {Object}
+   */
   getPopupFeatures: function(){
     return Object.clone(Url.popupFeatures);
   },
-  
+
+  /**
+   * Open a popup window
+   *
+   * @param {Integer}           iWidth
+   * @param {Integer}           iHeight
+   * @param {String=}           sWindowName
+   * @param {String=}           sBaseUrl
+   * @param {String=}           sPrefix
+   * @param {Object=}           oPostParameters
+   * @param {HTMLIFrameElement} iFrame
+   *
+   * @return {Url}
+   */
   pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters, iFrame) {  
     var features = this.getPopupFeatures();
     
@@ -210,7 +339,11 @@ var Url = Class.create({
       try {
         this.oWindow = window.open(oPostParameters ? "" : (sBaseUrl + this.make(questionMark)), sWindowName, sFeatures);
       } catch(e) {
-        return;
+        // window.open failed :(
+      }
+      
+      if (!this.oWindow) {
+        return this.showPopupBlockerAlert(sWindowName);
       }
       
       window.children[sWindowName] = this.oWindow;
@@ -222,9 +355,6 @@ var Url = Class.create({
           this.oWindow.resizeTo(features.width, features.height);
         }
       }
-      
-      if (!this.oWindow)
-        return this.showPopupBlockerAlert(sWindowName);
     }
     
     if (oPostParameters) {
@@ -251,7 +381,14 @@ var Url = Class.create({
     
     return this;
   },
-  
+
+  /**
+   * Open a modal window
+   *
+   * @param {Object} options
+   *
+   * @return {Url}
+   */
   modal: function(options) {
     var closeButton = DOM.button({type: "button", className: "close notext"});
 
@@ -319,7 +456,17 @@ var Url = Class.create({
   
     return this;
   },
-  
+
+  /**
+   * Opens a popup window
+   *
+   * @param {Integer=} iWidth
+   * @param {Integer=} iHeight
+   * @param {String=}  sWindowName
+   * @param {String=}  sBaseUrl
+   *
+   * @return {Url}
+   */
   popDirect: function(iWidth, iHeight, sWindowName, sBaseUrl) {
     iWidth = iWidth || 800;
     iHeight = iHeight || 600;
@@ -336,20 +483,24 @@ var Url = Class.create({
     this.oWindow = window.open(sBaseUrl + this.make(questionMark), sWindowName, sFeatures);
     window.children[sWindowName] = this.oWindow;
     
-    if (!this.oWindow)
+    if (!this.oWindow) {
       this.showPopupBlockerAlert(sWindowName);
+    }
     
     return this;
   },
-  
-  popunder: function(iWidth, iHeight, sWindowName) {
-    this.pop(iWidth, iHeight, sWindowName);
-    this.oWindow.blur();
-    window.focus();
-    
-    return this;
-  },
-  
+
+  /**
+   * Opens a popup window
+   *
+   * @param {Integer} iWidth          Popup width
+   * @param {Integer} iHeight         Popup height
+   * @param {String=} sWindowName     Popup internal name
+   * @param {String=} sPrefix         Popup name prefix
+   * @param {Object=} oPostParameters Popup POST parameters
+   *
+   * @return {Url}
+   */
   popup: function(iWidth, iHeight, sWindowName, sPrefix, oPostParameters) {
     this.pop(iWidth, iHeight, sWindowName, null, sPrefix, oPostParameters);
   
@@ -370,12 +521,28 @@ var Url = Class.create({
       
     return this;
   },
-  
+
+  /**
+   * Show an alert telling the popup could not be opened
+   *
+   * @param {String} popupName The name of the popup the message is referring to
+   *
+   * @return {Url}
+   */
   showPopupBlockerAlert: function(popupName){
     Modal.alert($T("Popup blocker alert", popupName));
     return this;
   },
-  
+
+  /**
+   * Initializes an autocompleter
+   *
+   * @param {HTMLInputElement} input    Input to autocomplete
+   * @param {HTMLElement}      populate The element which will receive the response list
+   * @param {Object=}          oOptions Various options
+   *
+   * @return {Ajax.Autocompleter|Boolean}
+   */
   autoComplete: function(input, populate, oOptions) {
     var saveInput = input;
     input = $(input);
@@ -385,12 +552,12 @@ var Url = Class.create({
         console.warn((saveInput || "$(input)") + " doesn't exist [Url.autoComplete]");
       } catch (e) {}
     
-      return;
+      return false;
     }
     
     if ($(input.form).isReadonly()) {
       input.removeClassName("autocomplete");
-      return;
+      return false;
     }
     
     var autocompleteDelays = {
@@ -589,12 +756,26 @@ var Url = Class.create({
     
     return autocompleter;
   },
-  
+
+  /**
+   * Close the popup window
+   *
+   * @return {Url}
+   */
   close: function() {
     if(this.oWindow) this.oWindow.close();
     return this;
   },
-  
+
+  /**
+   * Open a modal window via an Ajax request
+   *
+   * @param {Integer} iWidth
+   * @param {Integer} iHeight
+   * @param {Object=} oOptions
+   *
+   * @return {Url}
+   */
   requestModal: function(iWidth, iHeight, oOptions) {
     var m = this.oParams.m,
         a = this.oParams.a;
@@ -665,10 +846,23 @@ var Url = Class.create({
     return this;
   },
 
+  /**
+   * Refresh current modal
+   *
+   * @return void
+   */
   refreshModal: function() {
     this.requestUpdate(this.modalObject.container.down('.content'));
   },
-  
+
+  /**
+   * Make an Ajax request and update a DOM element with the result
+   *
+   * @param {HTMLElement,String} ioTarget
+   * @param {Object}             oOptions
+   *
+   * @return {Url}
+   */
   requestUpdate: function(ioTarget, oOptions) {
     this.addParam("ajax", 1);
     
@@ -684,7 +878,7 @@ var Url = Class.create({
     
     if (!element) {
       console.warn(ioTarget+" doesn't exist");
-      return;
+      return this;
     }
     
     var paramsString = $H(this.oParams).toQueryString();
@@ -710,7 +904,7 @@ var Url = Class.create({
       // Same query on the same node 
       if (lastQuery && (lastQuery === paramsString)) {
         Console.info("Chargement en double de l'élément '"+targetId+"'");
-        return;
+        return this;
       }
       /*else {
         // Different query on the same node, while the previous one is not finished
@@ -760,7 +954,15 @@ var Url = Class.create({
     
     return this;
   },
-  
+
+  /**
+   * Make an Ajax request and process the JSON response by passing it to the fCallback argument
+   *
+   * @param {Function} fCallback The callback to call
+   * @param {Object}   oOptions  Various options
+   *
+   * @return {Url}
+   */
   requestJSON: function(fCallback, oOptions) {
     this.addParam("suppressHeaders", 1);
     this.addParam("ajax", "");
@@ -782,7 +984,15 @@ var Url = Class.create({
     
     return this;
   },
-  
+
+  /**
+   * Make an Ajax request and update a DOM element with the result (offline version)
+   *
+   * @param {HTMLElement} ioTarget The element to update
+   * @param {Object}      oOptions Various options
+   *
+   * @return {Url}
+   */
   requestUpdateOffline: function(ioTarget, oOptions) {
     if (typeof netscape != 'undefined' && typeof netscape.security != 'undefined') {
       netscape.security.PrivilegeManager.enablePrivilege('UniversalBrowserRead');
@@ -801,14 +1011,22 @@ var Url = Class.create({
     
     return this;
   },
-  
+
+  /**
+   * Make a repetitive Ajax request and update a DOM element with the result
+   *
+   * @param {HTMLElement} ioTarget The element to update
+   * @param {Object}      oOptions Various options
+   *
+   * @return {Ajax.PeriodicalUpdater,null}
+   */
   periodicalUpdate: function(ioTarget, oOptions) {
     this.addParam("ajax", 1);
     
     var element = $(ioTarget);
     if (!element) {
       console.warn(ioTarget+" doesn't exist");
-      return;
+      return null;
     }
 
     // Empty holder gets a div for load notifying
@@ -861,7 +1079,7 @@ var Url = Class.create({
     }
     this.popup(785, 600, popupName);
   }
-} );
+});
 
 Url.activeRequests = {
   post: 0,
@@ -882,6 +1100,13 @@ Url.requestTimers = {
   // "target id" : "last query",
 };
 
+/**
+ * Build popup features as a string
+ *
+ * @param {Object} features
+ *
+ * @return {String}
+ */
 Url.buildPopupFeatures = function(features) {
   var a = [], value;
   $H(features).each(function(f){
@@ -892,17 +1117,22 @@ Url.buildPopupFeatures = function(features) {
   return a.join(',');
 };
 
-/** General purpose ping
- *  @return {Boolean} true if user is connected, false otherwise
+/**
+ * General purpose ping
+ *
+ * @return {Boolean} true if user is connected, false otherwise
  */
 Url.ping = function(options) {
   var url = new Url("system", "ajax_ping");
   url.requestUpdate("systemMsg", options);
 };
 
-/** Parses the URL to extract its components
+/**
+ * Parses the URL to extract its components
  * Based on the work of Steven Levithan <http://blog.stevenlevithan.com/archives/parseuri>
- * @param {String} url - The URL to parse
+ *
+ * @param {String=} url - The URL to parse
+ *
  * @return {Object} The URL components
  */
 Url.parse = function(url) {
@@ -919,6 +1149,14 @@ Url.parse = function(url) {
   return c;
 };
 
+/**
+ * Make an Ajax request with data from a form, to update an element
+ *
+ * @param {HTMLFormElement} form    The form to take the data from
+ * @param {HTMLElement}     element The element to update
+ *
+ * @return {Boolean}
+ */
 Url.update = function(form, element) {
   var method = form.getAttribute("method");
   var getParameters;
@@ -935,10 +1173,23 @@ Url.update = function(form, element) {
   return false;
 };
 
+/**
+ * Get the current page's query params
+ *
+ * @return {Object}
+ */
 Url.hashParams = function() {
   return window.location.hash.substr(1).toQueryParams();
 };
 
+/**
+ * Go to an URL, based on query params
+ *
+ * @param {Object} params Query params
+ * @param {String} hash   Hash (aka fragement)
+ *
+ * @return {Boolean}
+ */
 Url.go = function(params, hash) {
   var href = (params ? "?"+Object.toQueryString(params) : "")+(hash ? "#"+hash : "");
   location.assign(href);
