@@ -58,6 +58,7 @@ class CReceiverIHEConfig extends CMbObject {
   
   // PID
   var $build_PID_31  = null;
+  var $build_PID_34  = null;
   
   // PV1
   var $build_PV1_3_2 = null;
@@ -107,7 +108,8 @@ class CReceiverIHEConfig extends CMbObject {
       "send_default_affectation",
     ),
     "PID" => array(
-      "build_PID_31"
+      "build_PID_31",
+      "build_PID_34"
     ),
     "PV1" => array(
       "build_PV1_3_2",
@@ -171,6 +173,7 @@ class CReceiverIHEConfig extends CMbObject {
     
     // PID
     $props["build_PID_31"]  = "enum list|avs|none default|none";
+    $props["build_PID_34"]  = "enum list|finess|actor default|finess";
     
     // PV1
     $props["build_PV1_3_2"] = "enum list|name|config_value|idex default|name";

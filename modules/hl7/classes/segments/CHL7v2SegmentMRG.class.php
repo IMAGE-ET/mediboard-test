@@ -27,13 +27,14 @@ class CHL7v2SegmentMRG extends CHL7v2Segment {
   function build(CHL7v2Event $event) {
     parent::build($event);
     
-    $patient_eliminee  = $this->patient_eliminee;
-    $group             = $event->_receiver->_ref_group;
+    $receiver         = $event->_receiver;
+    $patient_eliminee = $this->patient_eliminee;
+    $group            = $receiver->_ref_group;
 
     $data = array();
     
     // MRG-1: Prior Patient Identifier List (CX) (repeating)
-    $data[] = $this->getPersonIdentifiers($patient_eliminee, $group);
+    $data[] = $this->getPersonIdentifiers($patient_eliminee, $group, $receiver);
     
     // MRG-2: Prior Alternate Patient ID (CX) (optional repeating)
     $data[] = null;

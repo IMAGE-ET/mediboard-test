@@ -928,7 +928,12 @@ class CSetuphl7 extends CSetup {
                 ADD `segment_terminator` ENUM ('CR','LF','CRLF')";
     $this->addQuery($query);
     
-    $this->mod_version = "0.45";
+    $this->makeRevision("0.45");
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `build_PID_34` ENUM ('finess','actor') DEFAULT 'finess';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.46";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

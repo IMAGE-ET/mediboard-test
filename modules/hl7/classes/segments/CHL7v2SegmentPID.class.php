@@ -47,7 +47,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-3: Patient Identifier List (CX) (repeating)
-    $data[] = $this->getPersonIdentifiers($patient, $group);
+    $data[] = $this->getPersonIdentifiers($patient, $group, $receiver);
     
     // PID-4: Alternate Patient ID - PID (CX) (optional repeating)
     $data[] = null;
@@ -195,6 +195,18 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     
     // PID-18: Patient Account Number (CX) (optional)
     if ($this->sejour && ($receiver->_configs["build_NDA"] == "PID_18")) {
+      
+      // Même traitement que pour l'IPP
+      switch ($receiver->_configs["build_PID_34"]) {
+        case 'actor':
+          $assigning_authority = $this->getAssigningAuthority("actor", null, $actor);
+          break;
+        
+        default:
+          $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
+          break;
+      } 
+      
       $sejour = $this->sejour;
       $sejour->loadNDA($group->_id);
       $data[] = $sejour->_NDA ? array( 
@@ -203,7 +215,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
                     null,
                     null,
                     // PID-3-4 Autorité d'affectation
-                    $this->getAssigningAuthority("FINESS", $group->finess),
+                    $assigning_authority,
                     "AN"
                   )
                 ) : null;

@@ -211,7 +211,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     $this->getMessage()->appendChild($this);
   }
   
-  function getAssigningAuthority($name = "mediboard", $value= null, $actor = null) {
+  function getAssigningAuthority($name = "mediboard", $value= null, CInteropActor $actor = null) {
     switch ($name) {
       case "actor" :
         $configs = $actor->_configs;
@@ -265,7 +265,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $this->getAssigningAuthority("FINESS", $group->finess);
   }
   
-  function getPersonIdentifiers(CPatient $patient, CGroups $group) {
+  function getPersonIdentifiers(CPatient $patient, CGroups $group, CInteropActor $actor = null) {
     if (!$patient->_IPP) {
       $patient->loadIPP($group->_id);
     }
@@ -282,6 +282,16 @@ class CHL7v2Segment extends CHL7v2Entity {
       
       return $identifiers;
     }
+    
+    switch ($receiver->_configs["build_PID_34"]) {
+      case 'actor':
+        $assigning_authority = $this->getAssigningAuthority("actor", null, $actor);
+        break;
+      
+      default:
+        $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
+        break;
+    }    
 
     if ($patient->_IPP) {
       $identifiers[] = array(
@@ -289,7 +299,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         null,
         null,
         // PID-3-4 Autorité d'affectation
-        $this->getAssigningAuthority("FINESS", $group->finess),
+        $assigning_authority,
         "PI"
       );
     }
