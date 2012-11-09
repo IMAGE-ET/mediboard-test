@@ -968,7 +968,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addProfessionnelSante($medecin, $operation->loadRefChir());
         
       // Libellé de l'opération
-      $this->addTexte($elParent, "libelle", $operation->libelle, 80);
+      $this->addTexte($elParent, "libelle", $operation->libelle, 4000);
     
       // Remarques sur l'opération
       $this->addTexte($elParent, "commentaire", "$operation->materiel - $operation->rques", 4000);
