@@ -14,6 +14,7 @@ $ex_field_id = CValue::get("ex_field_id");
 $ex_class_id = CValue::get("ex_class_id");
 $ex_group_id = CValue::get("ex_group_id");
 
+CExObject::$_locales_cache_enabled = false;
 $ex_field = new CExClassField;
 
 $spec_type = "enum";
