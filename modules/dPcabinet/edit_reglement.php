@@ -33,6 +33,10 @@ $banques = $banque->loadList(null, "nom");
 // Facture de contexte pour l'affichage
 if ($object instanceof CFactureConsult) {
   $facture = $object;
+  if (CAppUI::conf("ref_pays") == 2) {
+    $facture->loadRefsConsults();
+    $facture->loadNumerosBVR();
+  }
 }
 if ($object instanceof CConsultation) {
   $facture = $object->fakeRefFacture();

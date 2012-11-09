@@ -46,17 +46,33 @@ var Reglement = {
   },
   updateBanque: function(mode) {
     var banque_id = mode.form.banque_id;
-    if ($V(mode) == "cheque") {
-      banque_id.enable();
-    }
-    else {
-      banque_id.disable();
-      $V(banque_id, "");
+    var num_bvr   = mode.form.num_bvr;
+    
+    switch($V(mode)) {
+      case "cheque":
+        $('choice_banque').show();
+        $('numero_bvr').hide();
+        $V(num_bvr, 0);
+        break;
+      case "BVR":
+        $('numero_bvr').show();
+        $('choice_banque').hide();
+        $V(banque_id, "");
+        break;
+      default:
+        $('numero_bvr').hide();
+        $('choice_banque').hide();
+        $V(banque_id, "");
+        $V(num_bvr, 0);
     }
   },
-  regBanque: function(form) {
+  regBanque: function(form, mode) {
     Main.add(function() {
-      Reglement.updateBanque(getForm(form).mode[0]);
+      var index = 0;
+      if (mode == "BVR") {
+        index = 4;
+      }
+      Reglement.updateBanque(getForm(form).mode[index]);
     });
   }
 };
