@@ -25,6 +25,8 @@ if (!$date) {
   $date = mbDate();
 }
 
+CPrescription::$mode_plan_soins = true;
+
 // Permet de gerer le cas ou des unites de prises contiennent des '
 $unite_prise = stripslashes(preg_replace('~&#0*([0-9]+);~e', 'chr(\\1)', $unite_prise));
 
@@ -344,6 +346,7 @@ if (CAppUI::conf("dPprescription CPrescription show_perop_suivi_soins") && $pres
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("plan_soins_unite_prescription", CAppUI::conf("dPprescription CPrescription unite_prescription_plan_soins", CGroups::loadCurrent()));
 $smarty->assign("sortie_sejour"       , $sortie_sejour);
 $smarty->assign("signe_decalage"      , $signe_decalage);
 $smarty->assign("nb_decalage"         , abs($nb_decalage));
