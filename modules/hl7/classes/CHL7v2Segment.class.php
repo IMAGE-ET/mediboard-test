@@ -335,8 +335,10 @@ class CHL7v2Segment extends CHL7v2Entity {
   
   function getXCN(CMbObject $object, CInteropReceiver $actor, $repeatable = false) {
     $xcn1 = $xcn2 = $xcn3 = $xcn9 = $xcn13 = null;
-
+    
     if ($object instanceof CMedecin) {
+      $object->completeField("adeli", "rpps");
+      
       $id400 = $object->loadLastId400();
       
       $xcn1  = CValue::first($object->adeli, $object->rpps, $id400->id400, $object->_id);
@@ -353,6 +355,8 @@ class CHL7v2Segment extends CHL7v2Entity {
       $xcn13 = "RI";
     }
     if ($object instanceof CMediusers) {
+      $object->completeField("adeli", "rpps");
+      
       $id400 = CIdSante400::getMatch("CMediusers", $actor->_tag_mediuser, null, $object->_id);  
 
       $xcn1  = CValue::first($object->adeli, $object->rpps, $id400->id400, $object->_id);
