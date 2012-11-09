@@ -693,6 +693,10 @@ button.comment:before, a.button.comment:before {
   content: url(images/buttons/comment.png);
 }
 
+button.calcul:before, a.button.calcul:before {
+  content: url(images/buttons/calcul.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

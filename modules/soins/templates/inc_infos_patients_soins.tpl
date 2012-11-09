@@ -2,7 +2,7 @@
   <td style="width: 25%;">
     <strong>{{mb_title object=$patient->_ref_constantes_medicales field=poids}}:</strong>
     {{if $patient->_ref_constantes_medicales->poids}}
-      {{mb_value object=$patient->_ref_constantes_medicales field=poids}} kg
+      <span class="poids_patient">{{mb_value object=$patient->_ref_constantes_medicales field=poids}}</span> kg
     {{else}}
     &mdash;
     {{/if}}
