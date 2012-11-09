@@ -39,33 +39,21 @@
   {{/if}}
 
   <tbody class="hoverable">
-    {{assign var="nb_montants" value=$facture->_montant_factures|@count }}
-    {{if $nb_montants > 1}}
-      {{foreach from=$facture->_montant_factures item=_montant key=key}}
-        <tr>
-          {{if $key == 0}}
-          <td colspan="3" rowspan="{{$nb_montants+2}}"></td>
-           {{/if}}
-          <td colspan="2">Montant n°{{$key+1}}</td>
-          <td style="text-align:right;">{{$_montant|string_format:"%0.2f"}}</td>
-        </tr>
-      {{/foreach}}
-    {{/if}}
-    
     <tr>
       <td colspan="3" rowspan="4"></td>
-      <td colspan="2">Montant</td>
-      <td style="text-align:right;">{{mb_value object=$facture field="_montant_sans_remise"}}</td>
+      <td colspan="2">Dû Patient</td>
+      <td style="text-align:right;">{{mb_value object=$facture field="du_patient"}}</td>
     </tr>
-          
+    <tr>
+      <td colspan="2">Dû Tiers</td>
+      <td style="text-align:right;">{{mb_value object=$facture field="du_tiers"}}</td>
+    </tr>
     <tr>
       <td colspan="2"><b>Montant Total</b></td>
       <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
     <tr>
-
   </tbody>
   
 {{foreachelse}}
   <tr><td colspan="10" class="empty">{{tr}}CConsultation.none{{/tr}}</td></tr>
 {{/foreach}}
-
