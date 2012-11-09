@@ -317,7 +317,6 @@ class CFactureConsult extends CMbObject {
       if ((!$this->num_reference || $num != $this->num_reference) && $this->_ref_patient->avs) {
         $this->num_reference = $num;
         $this->store();
-//        $this->num_reference = substr( $this->num_reference, 0, 2)." ". $this->num_reference( $this->num_reference, 2, 5)." ".substr( $this->num_reference, 7, 5)." ".substr( $this->num_reference, 12, 5)." ".substr( $this->num_reference, 17, 5)." ".substr( $this->num_reference, 22, 5);
       }
     }
     return $this->_ref_patient;
@@ -369,9 +368,7 @@ class CFactureConsult extends CMbObject {
     $this->_du_restant_patient = $this->du_patient;
     $this->_du_restant_tiers   = $this->du_tiers  ;
     
-    // Application du coeff
-    // @todo A améliorer
-    if ($this->_coeff) {
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
       $this->_du_restant_patient = $this->_montant_avec_remise  - $this->remise;
     }
     
