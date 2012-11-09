@@ -22,7 +22,7 @@ class CDicomStreamWriter {
   /**
    * The content of the stream, used to keep a trace of the DICOM exchanges
    * 
-   * @var binary data
+   * @var string
    */
   var $buf = null;
   
@@ -41,7 +41,7 @@ class CDicomStreamWriter {
    * 
    * @param int $bytes The number of bytes you want to skip. This number can't be negative
    * 
-   * @return null
+   * @return void|int
    */
   function skip($bytes) {
     if ($bytes > 0) {
@@ -97,13 +97,11 @@ class CDicomStreamWriter {
   /**
    * Write hexadecimal numbers from the stream
    *  
-   * @param hexadecimal $hexa       The hexadecimal string
-   * 
+   * @param integer     $hexa       The hexadecimal string
    * @param int         $length     The length of the number, equal to 1 if not given
-   * 
    * @param string      $endianness Equal to BE if you need Big Endian, LE if Little Endian. Equal to BE if not given
    * 
-   * @return integer or false on error
+   * @return integer|void on error
    */
   function writeHexByte($hexa, $length = 1, $endianness = "BE") {
     if ($endianness == "BE") {
@@ -117,8 +115,7 @@ class CDicomStreamWriter {
   /**
    * Write hexadecimal numbers from the stream. Use Big Endian syntax
    * 
-   * @param hexadecimal $hexa   The hexadecimal string
-   * 
+   * @param integer     $hexa   The hexadecimal string
    * @param int         $length The length of the number, equal to 1 if not given
    * 
    * @return integer or false on error
@@ -131,8 +128,7 @@ class CDicomStreamWriter {
   /**
    * Write hexadecimal numbers from the stream. Use Little Endian syntax
    * 
-   * @param hexadecimal $hexa   The hexadecimal string
-   * 
+   * @param integer     $hexa   The hexadecimal string
    * @param int         $length The length of the number, equal to 1 if not given
    * 
    * @return integer or false on error
@@ -146,7 +142,6 @@ class CDicomStreamWriter {
    * Write unsigned 32 bits numbers.
    * 
    * @param integer $int        The unsigned integer
-   * 
    * @param string  $endianness Equal to BE if you need Big Endian, LE if Little Endian. Equal to BE if not given
    * 
    * @return integer or false on error
@@ -188,7 +183,6 @@ class CDicomStreamWriter {
    * Write unsigned 16 bits numbers.
    * 
    * @param integer $int        The unsigned integer
-   * 
    * @param string  $endianness Equal to BE if you need Big Endian, LE if Little Endian. Equal to BE if not given
    * 
    * @return integer or false on error

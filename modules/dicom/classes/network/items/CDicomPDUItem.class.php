@@ -15,7 +15,7 @@ class CDicomPDUItem {
   /**
    * The type of the Item
    * 
-   * @var hexadecimal umber
+   * @var integer
    */
   var $type = null;
   
@@ -31,7 +31,7 @@ class CDicomPDUItem {
    * 
    * @param string $type The type
    *  
-   * @return null
+   * @return void
    */
   function setType($type) {
     $this->type = $type;
@@ -42,7 +42,7 @@ class CDicomPDUItem {
    * 
    * @param integer $length The length
    *  
-   * @return null
+   * @return void
    */
   function setLength($length) {
     $this->length = $length;
@@ -53,7 +53,7 @@ class CDicomPDUItem {
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
    * 
-   * @return null
+   * @return void
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
     
@@ -64,7 +64,7 @@ class CDicomPDUItem {
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
    * 
-   * @return null
+   * @return void
    */
   function encodeItem(CDicomStreamWriter $stream_writer) {
     

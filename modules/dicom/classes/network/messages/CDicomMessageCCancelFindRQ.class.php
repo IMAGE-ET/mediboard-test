@@ -242,7 +242,7 @@ class CDicomMessageCCancelFindRQ {
       return false;
     }
     
-    if ($this->message_id->getGroupNumber() != 0x0000 || $this->message_id->getElementNumber() != 0x0120) {
+    if ($this->message_id_request->getGroupNumber() != 0x0000 || $this->message_id_request->getElementNumber() != 0x0120) {
       return false;
     }
     
@@ -271,4 +271,3 @@ class CDicomMessageCCancelFindRQ {
             </table>";
   }
 }
-?>

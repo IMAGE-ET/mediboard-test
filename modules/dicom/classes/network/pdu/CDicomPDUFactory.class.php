@@ -116,35 +116,23 @@ class CDicomPDUFactory {
    * @return string
    */
   static function getPDUClass($type) {
-    $class = "";
     switch ($type) {
       case 0x01 :
-        $class = "CDicomPDUAAssociateRQ";
-        break;
+        return "CDicomPDUAAssociateRQ";
       case 0x02 :
-        $class = "CDicomPDUAAssociateAC";
-        break;
+        return "CDicomPDUAAssociateAC";
       case 0x03 :
-        $class = "CDicomPDUAAssociateRJ";
-        break;
+        return "CDicomPDUAAssociateRJ";
       case 0x04 :
-        $class = "CDicomPDUPDataTF";
-        break;
+        return "CDicomPDUPDataTF";
       case 0x05 :
-        $class = "CDicomPDUAReleaseRQ";
-        break;
+        return "CDicomPDUAReleaseRQ";
       case 0x06 :
-        $class = "CDicomPDUAReleaseRP";
-        break;
+        return "CDicomPDUAReleaseRP";
       case 0x07 :
-        $class = "CDicomPDUAAbort";
-        break;
-        
+        return "CDicomPDUAAbort";
       default:
-        $class = "Unknown type!";
-        break;
+        return "Unknown type!";
     }
-    return $class;
   }
 }
-?>

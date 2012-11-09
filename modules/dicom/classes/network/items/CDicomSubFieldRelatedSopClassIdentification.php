@@ -25,6 +25,11 @@ class CDicomSubFieldRelatedSopClassIdentification {
    * @var string
    */
   var $class_uid = null;
+
+  /**
+   * @var int
+   */
+  var $length;
   
   /**
    * The constructor of the sub field

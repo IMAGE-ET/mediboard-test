@@ -41,10 +41,9 @@ class CDicomPDUItemFactory {
    * Decodes consecutive items of the given type
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
+   * @param integer            $wanted_type   The code of the wanted type
    * 
-   * @param hexadecimal        $wanted_type   The code of the wanted type
-   * 
-   * @return array of CDicomPDUItem The PDU items
+   * @return CDicomPDUItem[] The PDU items
    */
   static function decodeConsecutiveItemsByType(CDicomStreamReader $stream_reader, $wanted_type) {
     $items = array();
@@ -54,7 +53,7 @@ class CDicomPDUItemFactory {
 
     while ($item_type == $wanted_type) {
       $item_length = self::readItemLength($stream_reader);
-      
+
       $item = new $item_type(array("length" => $item_length));
       $item->decodeItem($stream_reader);
       $items[] = $item;
@@ -73,7 +72,7 @@ class CDicomPDUItemFactory {
    * 
    * @param integer            $length        The code of the wanted type
    * 
-   * @return array of CDicomPDUItem The PDU items
+   * @return CDicomPDUItem[] The PDU items
    */
   static function decodeConsecutiveItemsByLength(CDicomStreamReader $stream_reader, $length) {
     $items = array();
@@ -160,58 +159,39 @@ class CDicomPDUItemFactory {
    * @return string The name of the corresponding class
    */
   static function getItemClass($type) {
-    $class = "";
     switch ($type) {
       case 0x10 :
-        $class = "CDicomPDUItemApplicationContext";
-        break;
+        return "CDicomPDUItemApplicationContext";
       case 0x20 :
-        $class = "CDicomPDUItemPresentationContext";
-        break;
+        return "CDicomPDUItemPresentationContext";
       case 0x21 :
-        $class = "CDicomPDUItemPresentationContextReply";
-        break;
+        return "CDicomPDUItemPresentationContextReply";
       case 0x30 :
-        $class = "CDicomPDUItemAbstractSyntax";
-        break;
+        return "CDicomPDUItemAbstractSyntax";
       case 0x40 :
-        $class = "CDicomPDUItemTransferSyntax";
-        break;
+        return "CDicomPDUItemTransferSyntax";
       case 0x50 :
-        $class = "CDicomPDUItemUserInfo";
-        break;
+        return "CDicomPDUItemUserInfo";
       case 0x51 :
-        $class = "CDicomPDUItemMaximumLength";
-        break;
+        return "CDicomPDUItemMaximumLength";
       case 0x52 :
-        $class = "CDicomPDUItemImplementationClassUID";
-        break;
+        return "CDicomPDUItemImplementationClassUID";
       case 0x53 :
-        $class = "CDicomPDUItemAsynchronousOperations";
-        break;
+        return "CDicomPDUItemAsynchronousOperations";
       case 0x54 :
-        $class = "CDicomPDUItemRoleSelection";
-        break;
+        return "CDicomPDUItemRoleSelection";
       case 0x55 :
-        $class = "CDicomPDUItemImplementationVersionName";
-        break;
+        return "CDicomPDUItemImplementationVersionName";
       case 0x56 :
-        $class = "CDicomPDUItemSopClassExtendedNegociation";
-        break;
+        return "CDicomPDUItemSopClassExtendedNegociation";
       case 0x57 :
-        $class = "CDicomPDUItemSopClassCommonExtendedNegociation";
-        break;
+        return "CDicomPDUItemSopClassCommonExtendedNegociation";
       case 0x58 :
-        $class = "CDicomPDUItemUserIdentityNegociationRQ";
-        break;
+        return "CDicomPDUItemUserIdentityNegociationRQ";
       case 0x59 :
-        $class = "CDicomPDUItemUserIdentityNegociationRP";
-        break;
+        return "CDicomPDUItemUserIdentityNegociationRP";
       default :
-        $class = null;
-        break;
+        return null;
     }
-    return $class;
   }
 }
-?>

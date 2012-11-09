@@ -196,6 +196,11 @@ class CDicomSession extends CMbObject {
    * @var dateTime
    */
   public $_date_max = null;
+
+  /**
+   * @var CGroups
+   */
+  public $_ref_group;
   
   /**
    * The DICOM UL state machine
@@ -356,13 +361,13 @@ class CDicomSession extends CMbObject {
       "InvalidPDU"            => "AA7",
     ),
   );
-  
+
   /**
    * The constructor
-   * 
+   *
    * @param CInteropActor $actor The actor
-   * 
-   * @return null
+   *
+   * @return self
    */
   function __construct($actor = null) {
     parent::__construct();
@@ -413,17 +418,20 @@ class CDicomSession extends CMbObject {
     $props["_date_max"]             = "dateTime";
     return $props;
   }
-  
+
   /**
    * Load the dicom exchange
-   * 
-   * @return null
+   *
+   * @param bool $cache
+   *
+   * @return CExchangeDicom
    */
-  function loadRefDicomExchange() {
+  function loadRefDicomExchange($cache = true) {
     if ($this->dicom_exchange_id !== null && $this->_ref_dicom_exchange === null) {
-      $this->_ref_dicom_exchange = new CExchangeDicom();
-      $this->_ref_dicom_exchange->load($this->dicom_exchange_id);
+      $this->_ref_dicom_exchange = $this->loadFwdRef("dicom_exchange_id", $cache);
     }
+
+    return $this->_ref_dicom_exchange;
   }
   
   /**
@@ -509,7 +517,7 @@ class CDicomSession extends CMbObject {
   /**
    * Update the form fields
    * 
-   * @return nulls
+   * @return void
    */
   function updateFormFields() {
     parent::updateFormFields();
@@ -685,14 +693,14 @@ class CDicomSession extends CMbObject {
     
     return true;
   }
-  
+
   /**
    * Prepare the datas for creating a A-Associate-AC PDU
-   * 
+   *
    * @param CDicomPDUAAssociateRQ $associate_rq The A-Associate-RQ PDU
-   * 
+   *
    * @return array
-   * 
+   *
    * @todo handle the user info sub items
    */
   protected function prepareAAssociateACPDU(CDicomPDUAAssociateRQ $associate_rq) {
@@ -716,12 +724,11 @@ class CDicomSession extends CMbObject {
       if (!CDicomDictionary::isSOPClassSupported($presentation_context->abstract_syntax->name)) {
         $reason = 3;
       }
-      
-      $transfer_syntax = "";
+
       $transfer_syntaxes = array();
-      foreach ($presentation_context->transfer_syntaxes as $transfer_syntax) {
-        if (CDicomDictionary::isTransferSyntaxSupported($transfer_syntax->name)) {
-          $transfer_syntaxes[] = $transfer_syntax->name;
+      foreach ($presentation_context->transfer_syntaxes as $_transfer_syntax) {
+        if (CDicomDictionary::isTransferSyntaxSupported($_transfer_syntax->name)) {
+          $transfer_syntaxes[] = $_transfer_syntax->name;
         }
       }
       
@@ -734,6 +741,7 @@ class CDicomSession extends CMbObject {
         }
         $transfer_syntax = $transfer_syntaxes[0];
       }
+
       $datas["presentation_contexts"][] = array(
         "id" => $presentation_context->id,
         "reason" => $reason,

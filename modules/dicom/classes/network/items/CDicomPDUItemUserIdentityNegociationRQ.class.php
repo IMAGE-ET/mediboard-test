@@ -169,7 +169,7 @@ class CDicomPDUItemUserIdentityNegociationRQ extends CDicomPDUItem {
     $this->primary_field = $stream_reader->readString($this->primary_field_length);
     $this->secondary_field_length = $stream_reader->readUInt16();
     if ($this->secondary_field_length > 0 ) {
-      $this->secondary_field = $stream_redaer->readString($this->secondary_field_length);
+      $this->secondary_field = $stream_reader->readString($this->secondary_field_length);
     }
   }
   

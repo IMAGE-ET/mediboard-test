@@ -27,7 +27,7 @@ class COperatorDicom extends CEAIOperator {
       $dicom_exchange->load($data_format->_id);
       $dicom_exchange->loadContent();
       $dicom_exchange->_presentation_contexts = $pres_contexts;
-      $dicom_exchange->_requests = array_merge($dicom_exchange->_requests, $old_request);
+      $dicom_exchange->_requests = array_merge($dicom_exchange->_requests, $old_requests);
     }
     else {
       $dicom_exchange = $data_format;

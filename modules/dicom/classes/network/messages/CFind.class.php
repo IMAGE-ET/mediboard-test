@@ -30,7 +30,7 @@ class CFind {
   /**
    * Retrieve events list of data format
    * 
-   * @return array Events list
+   * @return string[] Events list
    */
   function getEvenements() {
     return self::$evenements;

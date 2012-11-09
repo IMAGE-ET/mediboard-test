@@ -57,7 +57,7 @@
        </label>
     {{else}}
       {{assign var=sender value=$object->_ref_actor}}
-      <a href="?m=eai&tab=vw_idx_interop_actors#interop_actor_guid={{sender->_guid}}">
+      <a href="?m=eai&tab=vw_idx_interop_actors#interop_actor_guid={{$sender->_guid}}">
         {{$sender->_view}}
       </a>
     {{/if}}
@@ -69,8 +69,8 @@
        </label>
     {{else}}
       {{assign var=receiver value=$object->_ref_actor}}
-      <a href="?m=eai&tab=vw_idx_interop_actors#interop_actor_guid={{receiver->_guid}}">
-        {{receiver->_view}}
+      <a href="?m=eai&tab=vw_idx_interop_actors#interop_actor_guid={{$receiver->_guid}}">
+        {{$receiver->_view}}
       </a>
     {{/if}}
   </td>

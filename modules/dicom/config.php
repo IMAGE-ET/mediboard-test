@@ -11,4 +11,3 @@ $dPconfig["dicom"] = array(
   "implementation_version"    => "Mediboard",
   "implementation_sop_class"  => "1.2.17.000.4"
 );
-?>

@@ -10,4 +10,3 @@
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
 $module->registerTab("vw_idx_sessions", TAB_READ);
-?>

@@ -15,11 +15,11 @@ class CEcho {
     "C-Echo-RQ"  => "CDicomMessageCEchoRQ",
     "C-Echo-RSP" => "CDicomMessageCEchoRSP",
   );
-  
+
   /**
    * The constructor
-   * 
-   * @return null
+   *
+   * @return self
    */
   function __construct() {
     $this->type = "Echo";
@@ -28,10 +28,9 @@ class CEcho {
   /**
    * Retrieve events list of data format
    * 
-   * @return array Events list
+   * @return string[] Events list
    */
   function getEvenements() {
     return self::$evenements;
   }
-}   
-?>
+}

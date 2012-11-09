@@ -22,7 +22,7 @@ class CDicomStreamReader {
   /**
    * The content of the stream, used to keep a trace of the DICOM exchanges
    * 
-   * @var binary data
+   * @var string
    */
   var $buf = null;
   
@@ -57,7 +57,7 @@ class CDicomStreamReader {
    * 
    * @param integer $length The stream length
    * 
-   * @return null
+   * @return void
    */
   function setStreamLength($length) {
     $this->stream_length = $length;
@@ -68,7 +68,7 @@ class CDicomStreamReader {
    * 
    * @param int $bytes The number of bytes you want to skip. This number can't be negative
    * 
-   * @return null
+   * @return void
    */
   function skip($bytes) {
     if ($bytes > 0) {
@@ -90,7 +90,7 @@ class CDicomStreamReader {
    * 
    * @param int $pos the position
    * 
-   * @return null
+   * @return void
    */
   function seek($pos) {
     fseek($this->stream, $pos, SEEK_CUR);
@@ -99,7 +99,7 @@ class CDicomStreamReader {
   /**
    * Rewind the position of the stream pointer
    * 
-   * @return null
+   * @return void
    */
   function rewind() {
     rewind($this->stream);
@@ -121,7 +121,7 @@ class CDicomStreamReader {
   /**
    * Close the stream
    * 
-   * @return null
+   * @return void
    */
   function close() {
     fclose($this->stream);
@@ -134,7 +134,7 @@ class CDicomStreamReader {
    * 
    * @param string $endianness Equal to BE if you need Big Endian, LE if Little Endian. Equal to BE if not given
    * 
-   * @return hexadecimal number
+   * @return int
    */
   function readHexByte($length = 1, $endianness = "BE") {
     if ($endianness == "BE") {
@@ -150,7 +150,7 @@ class CDicomStreamReader {
    * 
    * @param int $length The length of the number, equal to 1 if not given
    * 
-   * @return hexadecimal number
+   * @return int
    */
   function readHexByteBE($length = 1) {
     $tmp = unpack("H*", $this->read($length));
@@ -162,7 +162,7 @@ class CDicomStreamReader {
    * 
    * @param int $length The length of the number, equal to 1 if not given
    * 
-   * @return hexadecimal number
+   * @return int
    */
   function readHexByteLE($length = 1) {
     $tmp = unpack("H*", $this->read($length));
@@ -213,6 +213,8 @@ class CDicomStreamReader {
    * @return integer
    */
   function readInt32($endianness = "BE") {
+    $int = 0;
+
     if ($endianness == "BE") {
       $int = $this->readUInt32BE();
     }
@@ -223,6 +225,7 @@ class CDicomStreamReader {
     if ($int >= 0x80000000) {
       $int -= 0x100000000;
     }
+
     return $int;
   }
   
@@ -270,6 +273,8 @@ class CDicomStreamReader {
    * @return integer
    */
   function readInt16($endianness = "BE") {
+    $int = 0;
+
     if ($endianness == "BE") {
       $int = $this->readUInt16BE();
     }
@@ -280,6 +285,7 @@ class CDicomStreamReader {
     if ($int >= 0x8000) {
       $int -= 0x10000;
     }
+
     return $int;
   }
   
@@ -330,4 +336,3 @@ class CDicomStreamReader {
     return $tmp[1];
   }
 } 
-?>

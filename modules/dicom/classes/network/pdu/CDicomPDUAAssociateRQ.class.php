@@ -191,7 +191,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
     $stream_writer->skip(32);
     $this->application_context->encodeItem($stream_writer);
     foreach ($this->presentation_contexts as $_item) {
-      $item->encodeItem($stream_writer);
+      $_item->encodeItem($stream_writer);
     }
     $this->user_info->encodeItem($stream_writer);
   }

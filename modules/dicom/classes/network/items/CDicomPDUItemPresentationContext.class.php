@@ -29,9 +29,14 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
   /**
    * The transfer syntaxes
    * 
-   * @var array of CDicomPDUItemTransferSyntax
+   * @var CDicomPDUItemTransferSyntax[]
    */
   var $transfer_syntaxes = array();
+
+  /**
+   * @var int
+   */
+  var $reason;
   
   /**
    * The constructor.
@@ -58,7 +63,7 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
    * 
    * @param integer $id The id
    *  
-   * @return null
+   * @return void
    */
   function setId($id) {
     $this->id = $id;
@@ -69,7 +74,7 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
    * 
    * @param integer $reason The reason
    *  
-   * @return null
+   * @return void
    */
   function setReason($reason) {
     $this->reason = $reason;
@@ -80,7 +85,7 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
    * 
    * @param array $datas The data for create the abstract syntax
    * 
-   * @return null
+   * @return void
    */
   function setAbstractSyntax($datas) {
     $this->abstract_syntax = new CDicomPDUItemAbstractSyntax($datas);
@@ -91,7 +96,7 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
    * 
    * @param array $transfer_syntaxes The datas for create the transfer syntaxes
    * 
-   * @return null
+   * @return void
    */
   function setTransferSyntaxes($transfer_syntaxes) {
     foreach ($transfer_syntaxes as $datas) {
@@ -104,7 +109,7 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
    * 
-   * @return null
+   * @return void
    */
   function decodeItem(CDicomStreamReader $stream_reader) {
     $this->id = $stream_reader->readUInt8();
@@ -119,7 +124,7 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
    *  
-   * @return null
+   * @return void
    */ 
   function encodeItem(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
@@ -127,7 +132,7 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
     $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt16($this->length);
-    $stream_reader->skip(3);
+    $stream_writer->skip(3);
     $this->abstract_syntax->encodeItem($stream_writer);
     foreach ($this->transfer_syntaxes as $transfer_syntax) {
       $transfer_syntax->encodeItem($stream_writer);
@@ -137,7 +142,7 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
   /**
    * Calculate the length of the item (without the type and the length fields)
    * 
-   * @return null
+   * @return void
    */
   function calculateLength() {
     $this->length = 4 + $this->abstract_syntax->getTotalLength();

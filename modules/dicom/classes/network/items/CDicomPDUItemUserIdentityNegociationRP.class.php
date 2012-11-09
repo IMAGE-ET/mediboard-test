@@ -74,7 +74,7 @@ class CDicomPDUItemUserIdentityNegociationRP extends CDicomPDUItem {
   function decodeItem(CDicomStreamReader $stream_reader) {
     $this->server_response_length = $stream_reader->readUInt16();
     if ($this->server_response_length > 0 ) {
-      $this->server_response = $stream_redaer->readString($this->server_response_length);
+      $this->server_response = $stream_reader->readString($this->server_response_length);
     }
   }
   

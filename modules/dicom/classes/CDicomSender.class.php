@@ -56,4 +56,3 @@ class CDicomSender extends CInteropSender {
     $this->_ref_exchanges_sources[] = CExchangeSource::get("$this->_guid", "dicom", true, $this->_type_echange, false);
   }
 }
-?>

@@ -46,28 +46,28 @@ class CExchangeDicom extends CExchangeBinary {
    * 
    * @var string
    */
-  public $presentation_contexts = null;
+  public $presentation_contexts;
   
   /**
    * The request
    * 
-   * @var array
+   * @var CDicomPDU[]
    */
-  var $_requests = null;
+  var $_requests;
   
   /**
    * The response
    * 
-   * @var array
+   * @var CDicomPDU[]
    */
-  var $_responses = null;
+  var $_responses;
   
   /**
    * The presentation contexts
    * 
-   * @var array-of-CDicomPresentationContext
+   * @var CDicomPresentationContext[]
    */
-  var $_presentation_contexts = null;
+  var $_presentation_contexts;
   
   /**
    * Initialize the class specifications
@@ -137,7 +137,7 @@ class CExchangeDicom extends CExchangeBinary {
   /**
    * Update the form fields
    * 
-   * @return nulls
+   * @return void
    */
   function updateFormFields() {
     if ($this->presentation_contexts) {
@@ -225,7 +225,7 @@ class CExchangeDicom extends CExchangeBinary {
    * 
    * @param CInteropActor $actor The actor who sent the message
    * 
-   * @return true
+   * @return boolean
    */
   function isWellFormed($msg, CInteropActor $actor = null) {
     $stream = fopen("php://temp", 'w+');

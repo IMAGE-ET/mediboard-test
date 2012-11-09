@@ -16,7 +16,6 @@ class CDicomMessageCFindData {
   
   /**
    * The list of the differents attributes
-   * 
    * The keys are the group number, the values an array (key element number)
    * 
    * @var array
@@ -26,7 +25,7 @@ class CDicomMessageCFindData {
   /**
    * An array which contains the datasets
    * 
-   * @var arroy-of-CDicomDataSet
+   * @var CDicomDataSet[]
    */
   protected $datasets = array();
   
@@ -198,12 +197,12 @@ class CDicomMessageCFindData {
               </tr>";
     foreach ($this->datasets as $group) {
       foreach ($group as $element) {
-        $str = "<tr>" . $element->__toString() . "</tr>";
+        $str .= "<tr>" . $element->__toString() . "</tr>";
       }
     }              
 
-    $str = "</table>";
+    $str .= "</table>";
+
+    return $str;
   }
 }
-?>
-  

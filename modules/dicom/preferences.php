@@ -8,6 +8,4 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
- 
- // Préférences par Module
-?>
+// Préférences par Module
