@@ -403,35 +403,6 @@ class CConsultation extends CCodable {
   }
 
   /**
-   * Chargement des identifiants des FSE associées
-   * @return void
-   */
-  /*function loadIdsFSE() {
-    $id_fse = new CIdSante400();
-    $id_fse->setObject($this);
-    $id_fse->tag = "LogicMax FSENumero";
-    $id_fse = $id_fse->loadMatchingList();
-    $this->_ids_fse = CMbArray::pluck($id_fse, "id400");
-
-    // Chargement des FSE externes
-    $fse = @new CLmFSE();
-    if (!isset($fse->_spec->ds)) {
-      return;
-    }
-    $where = array();
-    $where["S_FSE_NUMERO_FSE"] = CSQLDataSource::prepareIn($this->_ids_fse);
-    $this->_ext_fses = $fse->loadList($where);
-
-    // Last FSE
-    $this->_current_fse = null;
-    foreach ($this->_ext_fses as $_ext_fse) {
-      if (!$_ext_fse->_annulee) {
-        $this->_current_fse = $_ext_fse;
-      }
-    }
-  }*/
-
-  /**
    * deleteActes() Redefinition
    * @return string Store-like message
    */
@@ -508,202 +479,6 @@ class CConsultation extends CCodable {
         return $msg;
       }
     }
-  }
-
-  /**
-   * Create a LogicMaxFSE from the consult
-   * Conterpart to Bind FSE
-   * @return void
-   */
-  /*function makeFSE() {
-    $this->_fse_intermax = array();
-
-    // Ajout des actes NGAP
-    $this->loadRefsActesNGAP();
-    if ($this->_ref_actes_ngap) {
-      foreach ($this->_ref_actes_ngap as $acte_ngap) {
-        $acteNumber = count($this->_fse_intermax)+1;
-        $this->_fse_intermax["ACTE_$acteNumber"] = array(
-          "PRE_ACTE_TYPE"   => 0,
-          "PRE_DEPASSEMENT" => $acte_ngap->montant_depassement,
-          "PRE_CODE"        => $acte_ngap->code,
-          "PRE_COEFFICIENT" => $acte_ngap->demi ? $acte_ngap->coefficient/2 : $acte_ngap->coefficient,
-          "PRE_QUANTITE"    => $acte_ngap->quantite,
-          "PRE_DEMI"        => $acte_ngap->demi,
-        );
-      }
-    }
-    // Ajout des actes CCAM
-    $this->loadRefsActesCCAM();
-    if ($this->_ref_actes_ccam) {
-      foreach ($this->_ref_actes_ccam as $acte_ccam) {
-        $acteNumber = count($this->_fse_intermax)+1;
-        $ACTE = array(
-          "PRE_ACTE_TYPE"     => 1,
-          "PRE_DEPASSEMENT"   => $acte_ccam->montant_depassement,
-          "PRE_CODE_CCAM"     => $acte_ccam->code_acte,
-          "PRE_CODE_ACTIVITE" => $acte_ccam->code_activite,
-          "PRE_CODE_PHASE"    => $acte_ccam->code_phase,
-          "PRE_ASSOCIATION"   => $acte_ccam->code_association,
-          "PRE_RMB_EXCEP"     => $acte_ccam->_rembex ? "O" : "N",
-          );
-
-        // Ajout des modificateurs
-        for ($i = 1; $i <= 4; $i++) {
-          $ACTE["PRE_MODIF_$i"] = @$acte_ccam->_modificateurs[$i-1];
-        }
-
-        $this->_fse_intermax["ACTE_$acteNumber"] = $ACTE;
-      }
-    }
-
-    // Section FSE
-    $this->_fse_intermax["FSE"] = array();
-
-    if ($this->date_at) {
-      $this->_fse_intermax["FSE"]["FSE_NATURE_ASSURANCE"] = "AT";
-      $this->_fse_intermax["FSE"]["FSE_DATE_AT"] = mbDateToLocale($this->date_at);
-    }
-
-    if ($this->concerne_ALD) {
-      $this->_fse_intermax["FSE"]["FSE_ALD"] = "1";
-    }
-
-    if (!count($this->_fse_intermax["FSE"])) {
-      unset($this->_fse_intermax["FSE"]);
-    }
-  }*/
-
-  /**
-   * Bind a FSE to current consult
-   * @return string Store-like message
-   */
-  function bindFSE() {
-    // Prevents recursion
-    $this->_bind_fse = false;
-
-    if (null == $intermax = CValue::postOrSessionAbs("intermax")) {
-      return;
-    }
-
-    // Make id externe
-    $fse = $intermax["FSE"];
-    $fseNumero = $fse["FSE_NUMERO_FSE"];
-    $id_fse = new CIdSante400();
-    $id_fse->object_class = $this->_class;
-    $id_fse->id400 = $fseNumero;
-    $id_fse->tag = "LogicMax FSENumero";
-    $id_fse->loadMatchingObject();
-
-    // Autre association ?
-    if ($id_fse->object_id && $id_fse->object_id != $this->_id) {
-      $id_fse->loadTargetObject();
-      $consOther =& $id_fse->_ref_object;
-      $consOther->loadRefsFwd();
-      return sprintf ("FSE déjà associée à la consultation du patient %s - %s le %s",
-        $consOther->_ref_patient->_view,
-        $consOther->_ref_chir->_view,
-        mbDateToLocale($consOther->_date));
-    }
-
-    $id_fse->object_id = $this->_id;
-    $id_fse->last_update = mbDateTime();
-
-    if ($msg = $id_fse->store()) {
-      return $msg;
-    }
-
-    // Ajout des actes CCAM et NGAP récupérés
-    for ($iActe = 1; $fseActe = @$intermax["ACTE_$iActe"]; $iActe++) {
-      switch ($typeActe = $fseActe["PRE_ACTE_TYPE"]) {
-        case "0":
-        $acte = new CActeNGAP();
-        $acte->setObject($this);
-        $acte->executant_id  = $this->getExecutantId();
-        $acte->code        = $fseActe["PRE_CODE"];
-        $acte->quantite    = $fseActe["PRE_QUANTITE"];
-        $acte->coefficient = $fseActe["PRE_COEFFICIENT"];
-        $acte->demi        = $fseActe["PRE_DEMI"];
-        $acte->getLibelle();
-
-        // Coefficient facial doublé
-        if ($acte->demi) {
-          $acte->coefficient *= 2;
-        }
-
-        break;
-
-        case "1":
-        $acte = new CActeCCAM();
-        $acte->setObject($this);
-        $acte->_adapt_object = true;
-        $acte->executant_id  = $this->getExecutantId($acte->code_acte);
-        $acte->code_acte     = $fseActe["PRE_CODE_CCAM"];
-        $acte->code_activite = $fseActe["PRE_CODE_ACTIVITE"];
-        $acte->code_phase    = $fseActe["PRE_CODE_PHASE"];
-        $acte->execution     = $this->_acte_execution;
-        if ($fseActe["PRE_RMB_EXCEP"]) {
-          $acte->rembourse     = "1";
-        }
-        $acte->modificateurs = null;
-
-        for ($iModif = 1; $iModif <= 4; $iModif++) {
-          $acte->modificateurs .= $fseActe["PRE_MODIF_$iModif"];
-        }
-
-        $acte->code_association = $fseActe["PRE_ASSOCIATION"];
-
-        break;
-
-        default:
-        return "Acte LogicMax de type inconnu (Numero = '$typeActe')";
-      }
-
-      $acte->montant_base = $fseActe["PRE_BASE"];
-      $acte->montant_depassement = $fseActe["PRE_MONTANT"] - $fseActe["PRE_BASE"];
-
-      if ($msg = $acte->store()) {
-        return $msg;
-      }
-    }
-
-    // Nom par défaut si non défini
-    $consult = new CConsultation();
-    $consult->load($this->_id);
-
-    // Sauvegarde des tarifs de la consultation
-    $consult->total_assure = $fse["FSE_TOTAL_ASSURE"];
-    $consult->total_amo    = $fse["FSE_TOTAL_AMO"];
-    $consult->total_amc    = $fse["FSE_TOTAL_AMC"];
-    $consult->date_at      = mbDateFromLocale($fse["FSE_DATE_AT"]);
-
-    $consult->du_patient = $consult->total_assure;
-    $consult->du_tiers   = $consult->total_amo + $consult->total_amc;
-
-    if (!in_array($fse["FSE_TIERS_PAYANT"], array("2", "3"))) {
-      $consult->du_patient += $consult->total_amo;
-      $consult->du_tiers   -= $consult->total_amo;
-    }
-
-    if (!in_array($fse["FSE_TIERS_PAYANT"], array("3", "4"))) {
-      $consult->du_patient += $consult->total_amc;
-      $consult->du_tiers   -= $consult->total_amc;
-    }
-
-    $consult->valide = '1';
-    if (!$consult->tarif) {
-      $consult->tarif = "FSE LogicMax";
-    }
-    
-    $consult->loadRefFacture();
-    
-    if ($consult->_ref_facture) {
-      $consult->_ref_facture->du_patient = $consult->du_patient;
-      $consult->_ref_facture->du_tiers = $consult->du_tiers;
-      $consult->_ref_facture->store();
-    }
-    
-    return $consult->store();
   }
 
   function precodeCCAM() {
@@ -1185,7 +960,12 @@ TESTS A EFFECTUER
 
     // Bind FSE
     if ($this->_bind_fse && $this->_id) {
-      return $this->bindFSE();
+      if (CModule::getActive("fse")) {
+        $fse = CFseFactory::createFSE();
+        if ($fse) {
+          $fse->bindFSE($this);
+        }
+      }
     }
   }
 
