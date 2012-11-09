@@ -14,6 +14,8 @@ $ex_class_id       = CValue::get("ex_class_id");
 $ex_class_field_id = CValue::get("ex_class_field_id");
 $keywords          = CValue::get("predicate_id_autocomplete_view");
 
+CExObject::$_locales_cache_enabled = false;
+
 $where = array(
   "ex_class_field_group.ex_class_id" => "= '$ex_class_id'",
 );
