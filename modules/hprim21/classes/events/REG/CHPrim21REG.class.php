@@ -15,8 +15,10 @@
  * Class CHPrim21REG 
  * Transfert de données de reglèment
  */
-class CHPrim21REG {
-  var $type_liaison = null;
+class CHPrim21REG extends CHPREvent {
+  function __construct() {
+    $this->type = "REG";
+  }
   
   /**
    * @see parent::build()

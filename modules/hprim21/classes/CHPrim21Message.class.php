@@ -14,28 +14,44 @@
  * Message HL7
  */
 class CHPrim21Message extends CHMessage {
-  static $header_segment_name = "H";
+  static $header_segment_name    = "H";
   static $segment_header_pattern = "H|P|A|C|L|OBR|OBX|FAC|ACT|REG|AP|AC|ERR";
-
+  
   protected $keep_original = array("H.1");
 
   var $version      = "2.1";
   var $type         = null;
   var $extension    = null;
+  var $type_liaison = null;
 
   function getHeaderSegmentName() {
     return self::$header_segment_name;
   }
+  
+  function toXML($event_code = null, $hpr_datatypes = true, $encoding = "utf-8") {
+    $name = $this->getXMLName();
+    
+    $dom = CHPrim21MessageXML::getEventType($event_code);
+    $root = $dom->addElement($dom, $name);
+    $dom->addNameSpaces($name);
+   
+    return $this->_toXML($root, $hpr_datatypes, $encoding);
+  }
+  
+
+  function getXMLName(){
+    return $this->children[0]->fields[6]->data;
+  }
 
   static function isWellFormed($data, $strict_segment_terminator = false) {
     // remove all chars before H
-    $msh_pos = strpos($data, self::$header_segment_name);
+    $h_pos = strpos($data, self::$header_segment_name);
 
-    if ($msh_pos === false) {
+    if ($h_pos === false) {
       throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $data);
     }
 
-    $data = substr($data, $msh_pos);
+    $data = substr($data, $h_pos);
     $data = self::fixRawER7($data, $strict_segment_terminator);
 
     // first tokenize the segments
@@ -52,7 +68,7 @@ class CHPrim21Message extends CHMessage {
 
     $lines = self::split(self::DEFAULT_SEGMENT_TERMINATOR, $data);
 
-    // validation de la syntaxe : chaque ligne doit commencer par 3 lettre + un separateur + au moins une donnée
+    // validation de la syntaxe : chaque ligne doit commencer par 1 lettre + un separateur + au moins une donnée
     $sep_preg = preg_quote($fieldSeparator);
 
     $pattern = self::$segment_header_pattern;
@@ -63,10 +79,6 @@ class CHPrim21Message extends CHMessage {
     }
 
     return true;
-  }
-
-  function getXMLName(){
-    return $this->children[0]->fields[6]->data;
   }
 
   function loadDataType($datatype) {
@@ -81,14 +93,14 @@ class CHPrim21Message extends CHMessage {
       //return false;
     }
 
-    // remove all chars before MSH
-    $msh_pos = strpos($data, self::$header_segment_name);
+    // remove all chars before H
+    $h_pos = strpos($data, self::$header_segment_name);
 
-    if ($msh_pos === false) {
+    if ($h_pos === false) {
       throw new CHL7v2Exception(CHL7v2Exception::SEGMENT_INVALID_SYNTAX, $data);
     }
 
-    $data = substr($data, $msh_pos);
+    $data = substr($data, $h_pos);
     $data = self::fixRawER7($data, $this->strict_segment_terminator);
 
     // handle "A" segments
@@ -163,6 +175,9 @@ class CHPrim21Message extends CHMessage {
     $this->description = (string)$spec->description;
 
     $this->readHeader();
+    
+    // type liaison
+    //$type_liaison
 
     if ($parse_body) {
       $this->readSegments();

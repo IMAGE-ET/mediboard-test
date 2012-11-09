@@ -18,6 +18,8 @@
 class CHPrim21REGC extends CHPrim21REG {
   function __construct() {
     $this->type_liaison = "C";
+    
+    parent::__construct();
   }
 }
 

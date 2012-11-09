@@ -13,7 +13,7 @@
  * Class CHL7v2MessageXML 
  * Message XML HL7
  */
-class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
+class CHL7v2MessageXML extends CMbXMLDocument {
   var $_ref_exchange_ihe = null;
   var $_ref_sender       = null;
   var $_ref_receiver     = null;
@@ -331,5 +331,5 @@ class CHL7v2MessageXML extends CMbXMLDocument implements CHL7MessageXML {
     $constante_medicale->store();
   }
   
-  function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {}
+  function handle($ack, CMbObject $newPatient, $data) {}
 }

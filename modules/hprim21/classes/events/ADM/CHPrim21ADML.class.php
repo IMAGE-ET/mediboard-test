@@ -18,6 +18,8 @@
 class CHPrim21ADML extends CHPrim21ADM {
   function __construct() {
     $this->type_liaison = "L";
+    
+    parent::__construct();
   }
 }
 

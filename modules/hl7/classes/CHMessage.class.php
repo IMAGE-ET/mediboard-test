@@ -57,21 +57,11 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
     return $this->keep_original;
   }
   
-  function toXML($event_code = null, $hl7_datatypes = true, $encoding = "utf-8") {
-    $name = $this->getXMLName();
-    
-    $dom = CHL7v2MessageXML::getEventType($event_code);
-    $root = $dom->addElement($dom, $name);
-    $dom->addNameSpaces($name);
-   
-    return $this->_toXML($root, $hl7_datatypes, $encoding);
-  }
-  
-  function _toXML(DOMNode $node, $hl7_datatypes, $encoding) {
+  function _toXML(DOMNode $node, $datatypes, $encoding) {
     $doc = $node->ownerDocument;
     
     foreach ($this->children as $_child) {
-      $_child->_toXML($node, $hl7_datatypes, $encoding);
+      $_child->_toXML($node, $datatypes, $encoding);
     }
     
     return $doc;

@@ -10,11 +10,11 @@
  */
 
 /**
- * Interface CHL7MessageXML
- * Message XML HL7
+ * Interface CHMessageXML
+ * Message XML
  */
-interface CHL7MessageXML {
+interface CHMessageXML {
   function getContentNodes();
   
-  function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data);
+  function handle($ack, CMbObject $object, $data);
 }

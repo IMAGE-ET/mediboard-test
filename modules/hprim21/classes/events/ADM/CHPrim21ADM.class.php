@@ -15,8 +15,10 @@
  * Class CHPrim21ADM 
  * Transfert de données d'admission
  */
-class CHPrim21ADM {
-  var $type_liaison = null;
+class CHPrim21ADM extends CHPREvent {
+  function __construct() {
+    $this->type = "ADM";
+  }
   
   /**
    * @see parent::build()

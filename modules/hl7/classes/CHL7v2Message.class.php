@@ -66,6 +66,16 @@ class CHL7v2Message extends CHMessage {
     
     return $this->event_name;
   }
+  
+  function toXML($event_code = null, $hl7_datatypes = true, $encoding = "utf-8") {
+    $name = $this->getXMLName();
+    
+    $dom = CHL7v2MessageXML::getEventType($event_code);
+    $root = $dom->addElement($dom, $name);
+    $dom->addNameSpaces($name);
+   
+    return $this->_toXML($root, $hl7_datatypes, $encoding);
+  }
 
   function getXMLName(){
     $field = $this->children[0]->fields[8]->items[0];
