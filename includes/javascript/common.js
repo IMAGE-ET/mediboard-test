@@ -193,12 +193,12 @@ var Localize = {
   },
   
   first: function() {
-  var strings = $A(arguments);
+    var strings = $A(arguments);
     var string = strings.find(function(string) {
       return Localize.that(string) != string;
     });
   
-  return Localize.that(string || strings.first());
+    return Localize.that(string || strings.first());
   },
   
   populate: function(strings) {

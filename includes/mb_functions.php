@@ -682,7 +682,7 @@ function mbLoadScriptsStorage(){
  * Set memory limit alternative with a minimal value approach
  * Shoud *always* be used
  * 
- * @param sring $limit Memory limit with ini_set() syntax
+ * @param string $limit Memory limit with ini_set() syntax
  * 
  * @return string The old value on success, false on failure
  * @todo Should me moved to CApp::memoryLimit()

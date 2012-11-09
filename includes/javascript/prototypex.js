@@ -769,6 +769,14 @@ Element.addMethods('form', {
       }
     });
   },
+
+  /**
+   * Tells if the app is in readonly mode
+   *
+   * @param {HTMLFormElement} form
+   *
+   * @return {Boolean}
+   */
   isReadonly: function(form) {
     return App.readonly && User.id && form.method === "post" && (!form.elements.dosql || App.notReadonlyForms.indexOf(form.elements.dosql.value) == -1);
   }
@@ -953,6 +961,22 @@ Class.extend(String, {
     return DOM.div({}, this).getText();
   }
 });
+
+/**
+ *
+ * @param {String}         string
+ * @param {String,Integer} defaultValue
+ *
+ * @return {*}
+ */
+Number.getInt = function(string, defaultValue) {
+  var number = parseInt(string, 10);
+  if (isNaN(number)) {
+    return defaultValue;
+  }
+
+  return number;
+}
 
 RegExp.escape = function(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");

@@ -10,6 +10,13 @@
 
 App.notReadonlyForms = ["do_configure", "do_login_as"];
 
+/**
+ * @param {HTMLFormElement} oForm
+ * @param {Object=}         oOptions
+ * @param {Object=}         oOptionsAjax
+ *
+ * @return {*}
+ */
 function confirmDeletion(oForm, oOptions, oOptionsAjax) {
   oOptions = Object.extend({
     typeName: "",
@@ -50,13 +57,17 @@ function confirmDeletion(oForm, oOptions, oOptionsAjax) {
   return oForm.submit();
 }
 
-/** Universal get/set function for form elements
-  * @param element A form element (Form.Element or id) : input, textarea, select, group of radio buttons, group of checkboxes
-  * @param value   If set, sets the value to the element. Can be an array of values : ['elementvalue1', 'elementvalue2', ...] 
-  * @param fire    Determines wether the onchange callback has to be called or not
-  * @return        An array of values for multiple selectable elements, a boolean for
-  *                single checkboxes/radios, a string for textareas and text inputs
-  */
+/**
+ * Universal get/set function for form elements
+ *
+ * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement,DOMNodeList} element A form element (Form.Element or id) :
+ *                                                                             input, textarea, select, group of radio buttons, group of checkboxes
+ * @param {String,Number,Boolean=} value If set, sets the value to the element. Can be an array of values : ['elementvalue1', 'elementvalue2', ...]
+ * @param {Boolean=false}          fire  Determines wether the onchange callback has to be called or not
+ *
+ * @return {*} An array of values for multiple selectable elements,
+ *             a boolean for single checkboxes/radios, a string for textareas and text inputs
+ */
 function $V (element, value, fire) {
   if (!(element = $(element))) return;
   
@@ -513,6 +524,11 @@ else {
   IEShim.fixTextareas = function(){};
 }
 
+/**
+ * Prepare forms from a container, or all the page
+ *
+ * @param {HTMLElement=} root The element containing the forms to prepare
+ */
 function prepareForms(root) {
   root = $(root || document.documentElement);
   
@@ -563,6 +579,16 @@ function serializeForm(form, options) {
   return result;
 }
 
+/**
+ * Submit a form in Ajax mode
+ * @deprecated Use onSubmitFormAjax instead
+ *
+ * @param {HTMLFormElement}    oForm    Form element
+ * @param {String,HTMLElement} ioTarget Target in the DOM
+ * @param {Object=}            oOptions Options
+ *
+ * @return void
+ */
 function submitFormAjax(oForm, ioTarget, oOptions) {
   // the second test is only for IE
   if (oForm.attributes.onsubmit &&
@@ -580,11 +606,11 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
 
 /**
  * Submit a form in Ajax mode
- * New version to plage in onsubmit event of the form
+ * New version to use in onsubmit event of the form
  *
- * @param {HTMLFormElement} oForm    Form element
- * @param {Object}          oOptions Options
- * @param {HTMLElement}     ioTarget Target in the DOM
+ * @param {HTMLFormElement}     oForm    Form element
+ * @param {Object=}             oOptions Options
+ * @param {String,HTMLElement=} ioTarget Target in the DOM
  *
  * @return {Boolean} false to prevent page reloading
  */
@@ -623,7 +649,6 @@ function onSubmitFormAjax(oForm, oOptions, ioTarget) {
   
   return false;
 }
-
 
 function submitFormAjaxOffline(oForm, ioTarget, oOptions) {
   // the second test is only for IE
@@ -689,7 +714,14 @@ Object.extend(Form, {
   }
 });
 
-// Form getter
+/**
+ * Form getter
+ *
+ * @param {String,HTMLFormElement} form    The name of the form to get
+ * @param {Boolean=true}           prepare Prepare the form
+ *
+ * @return {HTMLFormElement}
+ */
 function getForm (form, prepare) {
   if (Object.isString(form))
     form = $(document.forms[form]);

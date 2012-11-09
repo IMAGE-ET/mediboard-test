@@ -859,7 +859,7 @@ var Url = Class.create({
    * Make an Ajax request and update a DOM element with the result
    *
    * @param {HTMLElement,String} ioTarget
-   * @param {Object}             oOptions
+   * @param {Object=}            oOptions
    *
    * @return {Url}
    */
@@ -959,7 +959,7 @@ var Url = Class.create({
    * Make an Ajax request and process the JSON response by passing it to the fCallback argument
    *
    * @param {Function} fCallback The callback to call
-   * @param {Object}   oOptions  Various options
+   * @param {Object=}  oOptions  Various options
    *
    * @return {Url}
    */
@@ -989,7 +989,7 @@ var Url = Class.create({
    * Make an Ajax request and update a DOM element with the result (offline version)
    *
    * @param {HTMLElement} ioTarget The element to update
-   * @param {Object}      oOptions Various options
+   * @param {Object=}     oOptions Various options
    *
    * @return {Url}
    */
@@ -1016,7 +1016,7 @@ var Url = Class.create({
    * Make a repetitive Ajax request and update a DOM element with the result
    *
    * @param {HTMLElement} ioTarget The element to update
-   * @param {Object}      oOptions Various options
+   * @param {Object=}     oOptions Various options
    *
    * @return {Ajax.PeriodicalUpdater,null}
    */
@@ -1120,6 +1120,8 @@ Url.buildPopupFeatures = function(features) {
 /**
  * General purpose ping
  *
+ * @param {Object} options
+ *
  * @return {Boolean} true if user is connected, false otherwise
  */
 Url.ping = function(options) {
@@ -1131,7 +1133,7 @@ Url.ping = function(options) {
  * Parses the URL to extract its components
  * Based on the work of Steven Levithan <http://blog.stevenlevithan.com/archives/parseuri>
  *
- * @param {String=} url - The URL to parse
+ * @param {String=} url The URL to parse
  *
  * @return {Object} The URL components
  */
@@ -1185,8 +1187,8 @@ Url.hashParams = function() {
 /**
  * Go to an URL, based on query params
  *
- * @param {Object} params Query params
- * @param {String} hash   Hash (aka fragement)
+ * @param {Object=} params Query params
+ * @param {String=} hash   Hash (aka fragement)
  *
  * @return {Boolean}
  */
