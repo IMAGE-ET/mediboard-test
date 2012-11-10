@@ -27,7 +27,7 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
  * @param string $loginUsername Username used to send a mail when diskfull is detected
  * @param string $loginPassword Password for the username used to send a mail when diskfull is detected
  * 
- * @return None
+ * @return void
  */
 function baseBackup($method, $username, $password, $hostname, $port, $database, $backupPath, $time, $binary,
     $loginUsername, $loginPassword
@@ -78,7 +78,7 @@ function baseBackup($method, $username, $password, $hostname, $port, $database, 
   $mysql_data_root = "";
   $lines = file($mysql_conf);
   
-  foreach ( $lines as $line_num => $line ) {
+  foreach ( $lines as $line ) {
     if ( preg_match("/^(datadir)/m", $line) ) {
       $datadirPOS = strpos($line, "=");
       $mysql_data_root = trim(substr($line, $datadirPOS + 1));
@@ -141,7 +141,6 @@ function baseBackup($method, $username, $password, $hostname, $port, $database, 
       check_errs($mysqlhotcopy, null, "Failed to create MySQL hot copy", "MySQL hot copy done!");
       
       if ( $binary ) {
-        $databasebinlog = $database . "-" . $DATETIME . ".binlog.position";
         $link = mysql_connect($hostname . ":" . $port, $username, $password);
         check_errs($link, false, "Could not connect : ".mysql_error(), "Connected!");
     
@@ -202,7 +201,6 @@ function baseBackup($method, $username, $password, $hostname, $port, $database, 
       break;
     
     default:
-      $result = $database . "/";
       echo "Choose hotcopy or dump method\n";
       
       return 0;
@@ -308,7 +306,7 @@ function getFiles($directory, $exempt = array('.', '..', '.ds_store', '.svn'), &
   while ( false !== ( $resource = readdir($handle) ) ) {
     if ( !in_array(strtolower($resource), $exempt) ) {
       if ( is_dir($directory.$resource.'/') ) {
-        array_merge($files, self::getFiles($directory.$resource.'/', $exempt, $files));
+        array_merge($files, getFiles($directory.$resource.'/', $exempt, $files));
       }
       else {
         $files[] = $directory.$resource;
@@ -364,11 +362,11 @@ function formatSize($size) {
 /**
  * The Procedure for the basebackup function
  * 
- * @param object $backMenu The Menu for return
+ * @param Menu $backMenu The Menu for return
  * 
- * @return None
+ * @return void
  */
-function baseBackupProcedure( $backMenu ) {
+function baseBackupProcedure(Menu $backMenu) {
   $procedure = new Procedure();
   
   echo "Method:\n\n";
@@ -496,4 +494,3 @@ Options :
     return 1;
   }
 }
-?>

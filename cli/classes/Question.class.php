@@ -25,12 +25,10 @@ class Question extends Task {
    * @param string $qt  The question to ask for
    * @param string $def Default value
    * 
-   * @return
+   * @return void
    */
   function Question( $qt, $def = null ) {
     $this->qt   = $qt;
     $this->def  = $def;
   }
 }
-
-?>

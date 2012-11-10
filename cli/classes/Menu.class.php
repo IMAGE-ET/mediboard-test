@@ -16,30 +16,33 @@ require_once "Task.class.php";
  * Menu: Enable you to create a Menu of Tasks
  */
 class Menu extends Task {
-  
+  /**
+   * @var Task[]
+   */
   public $task_list;
+
   public $name;
 
   /**
    * Constructor
    * 
-   * @param object $name Name of the menu
+   * @param string $name Name of the menu
    * 
-   * @return 
+   * @return void
    */
-  function Menu( $name ) {
-    $this->task_list  = array();
-    $this->name       = $name;
+  function Menu($name) {
+    $this->task_list = array();
+    $this->name      = $name;
   }
 
   /**
    * Add a task to the menu
    * 
-   * @param object $task [optional] Task name
+   * @param object $task Task name
    * 
-   * @return None
+   * @return void
    */
-  function appendTask( $task = null ) {
+  function appendTask($task = null) {
     if ( $task instanceof Task ) {
       $this->task_list[] = $task;
     }
@@ -54,7 +57,7 @@ class Menu extends Task {
    * 
    * @param object $id [optional] If specified, get the task which matches with $id
    * 
-   * @return array
+   * @return Task[]
    */
   function getTaskList($id = null) {
     if ( is_null($id) ) {
@@ -68,16 +71,13 @@ class Menu extends Task {
   /**
    * Show the tasks on the screen, except the first ($id = 0)
    * 
-   * @return None
+   * @return void
    */
   function showTasks() {
     foreach ( $this->getTaskList() as $nb => $oneTask ) {
       if ($nb !== 0) {
-        echo "[".$nb."] ".$oneTask->description."\n";
+        echo sprintf("[%2d] %s\n", $nb, $oneTask->description);
       }
     }
   }
-
 }
-
-?>

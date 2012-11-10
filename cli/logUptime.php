@@ -18,11 +18,9 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
  * @param string $file     Target to log
  * @param string $hostname Hostname for uptime
  * 
- * @return None 
+ * @return void
  */
 function logUptime($file, $hostname) {
-
-  $currentDir = dirname(__FILE__);
 
   announce_script("Uptime logger");
 
@@ -58,11 +56,11 @@ function logUptime($file, $hostname) {
 /**
  * The Procedure for the loguptime function
  * 
- * @param object $backMenu The Menu for return
+ * @param Menu $backMenu The Menu for return
  * 
- * @return None
+ * @return void
  */
-function logUptimeProcedure( $backMenu ) {
+function logUptimeProcedure( Menu $backMenu ) {
   $procedure = new Procedure();
   
   $choice = "0";
@@ -110,4 +108,3 @@ Options :
     return 1;
   }
 }
-?>

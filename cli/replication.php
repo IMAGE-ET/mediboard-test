@@ -16,7 +16,7 @@ menu();
 /**
  * Main menu of replication
  * 
- * @return None
+ * @return void
  */
 function menu() {
   global $file;
@@ -53,6 +53,8 @@ function menu() {
   
   // Getting interactive input
   $task = trim(fgets(STDIN));
+
+  $server = null;
   
   // According to the task...
   switch ($task) {
@@ -241,7 +243,7 @@ function menu() {
  * 
  * @param string $file Used configuration file
  * 
- * @return None 
+ * @return void
  */
 function configServer($file) {
   echo exec("clear");
@@ -426,9 +428,6 @@ function chooseConfMethod($file, $name) {
   
   // Load the XML file
   check_errs($dom->load($file), false, "File ".$file." not correctly formed.", "File ".$file." is OK!");
-  
-  // Get the root node
-  $root = $dom->documentElement;
   
   // Get the server from the XML file
   $myServer = getServerByName($name, $file);
@@ -673,7 +672,7 @@ auto_increment_offset = 1
   * @param string $file Used configuration file
   * @param string $name Server name
   * 
-  * @return None
+  * @return void
   */
 function runSQLQueries($file, $name) {
   // Create a new DOMDocument object
@@ -978,7 +977,7 @@ function getOtherServerByName($name, $file) {
  * 
  * @param string $file XML file
  * 
- * @return None 
+ * @return void
  */
 function check_file($file) {
   // Check if the file exists and is readable
@@ -1034,7 +1033,7 @@ function getFileAndPosition($hostname, $DBUser, $DBPassword) {
  * @param string $password DB user password
  * @param string $sql      SQL query
  * 
- * @return None
+ * @return void
  */
 function executeSQLRequest($hostname, $username, $password, $sql) {
   $connection = mysql_connect($hostname, $username, $password);
@@ -1053,13 +1052,13 @@ function executeSQLRequest($hostname, $username, $password, $sql) {
 
 /**
  * Prompt a question and get the response
- * 
+ *
  * @param string $ask     Question to ask for
  * @param string $default [optional] Default response
- * 
+ *
  * @return string
  */
-function recup($ask, $default = false) {
+function recup($ask, $default = null) {
   echo $ask;
   $answer = trim(fgets(STDIN));
   
@@ -1109,7 +1108,7 @@ function check_errs($commandResult, $failureCode, $failureText, $successText) {
  * 
  * @param string $scriptName Name of the script
  * 
- * @return None
+ * @return void
  */
 function announce_script($scriptName) {
   cecho(" --- ".$scriptName." (".date("l d F H:i:s").") ---", "white", "bold", "red");
@@ -1121,7 +1120,7 @@ function announce_script($scriptName) {
  * 
  * @param string $info Text to print
  * 
- * @return None 
+ * @return void
  */
 function info_script($info) {
   cecho(">> info: ".$info, "", "bold");
@@ -1136,7 +1135,7 @@ function info_script($info) {
  * @param string $style      [optional] Font style
  * @param string $background [optional] Background color
  * 
- * @return None
+ * @return void
  */
 function cecho($message, $color = "default", $style = "default", $background = "default") {
   $text = "<c c=".$color." s=".$style." bg=".$background.">".$message."</c>";
@@ -1193,13 +1192,11 @@ function shColorText($text = '', $txtColor = '', $bgColor = '', $styleTxt = 'non
   $aBgColor['white']   = 47; 
   
   // Style text
-  $aStyle['none']      = 0;   //normal
-  $aStyle['bold']      = 1;   //gras
+  $aStyle['none']      = 0; //normal
+  $aStyle['bold']      = 1; //gras
   $aStyle['underline'] = 4; //souligné
   $aStyle['flashing']  = 5; //clignotant
-  $aStyle['reverse']   = 7;   //inversé
-  
-  $c = $__ESC.$__START;
+  $aStyle['reverse']   = 7; //inversé
 
   $a = null;
 
@@ -1284,7 +1281,7 @@ function parseShColorTag($str) {
  * In order to have a password prompt that works on many OS (works on Unix, Windows XP and Windows 2003 Server)
  * Source : http://stackoverflow.com/questions/187736/command-line-password-prompt-in-php
  * 
- * @param object $prompt [optional] Text to prompt
+ * @param string $prompt [optional] Text to prompt
  * 
  * @return string
  */
@@ -1316,4 +1313,3 @@ function prompt_silent($prompt = "Enter Password:") {
     return $password;
   }
 }
-?>

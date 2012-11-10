@@ -16,7 +16,7 @@ require_once "style.php";
  * 
  * @param string $dir Directory name
  * 
- * @return None 
+ * @return void
  */
 function force_dir($dir) {
   if (!(is_dir($dir))) {
@@ -68,10 +68,9 @@ function check_errs($commandResult, $failureCode, $failureText, $successText) {
  * 
  * @param string $scriptName Name of the script
  * 
- * @return None
+ * @return void
  */
 function announce_script($scriptName) {
-
   cecho(" --- " . $scriptName . " (" . date("l d F H:i:s") . ") ---", "white", "bold", "red");
   echo "\n";
 }
@@ -81,10 +80,9 @@ function announce_script($scriptName) {
  * 
  * @param string $info Text to print
  * 
- * @return None 
+ * @return void
  */
 function info_script($info) {
-
   cecho(">>info: " . $info, "", "bold");
   echo "\n";
 }
@@ -94,12 +92,10 @@ function info_script($info) {
  * 
  * @param string $file Filename
  * 
- * @return None
+ * @return void
  */
 function force_file($file) {
-
   if (!(file_exists($file))) {
-    
     touch($file);
   }
 }
@@ -112,7 +108,7 @@ function force_file($file) {
  * 
  * @return string
  */
-function recup($ask, $default = false) {
+function recup($ask, $default = null) {
   echo $ask;
   $answer = trim(fgets(STDIN));
   
@@ -131,7 +127,7 @@ function recup($ask, $default = false) {
  * @param string $url     URL where library can be found
  * @param string $version Version to get
  * 
- * @return None 
+ * @return void
  */
 function package_lib($libName, $url, $version) {
   echo "Retrieve dompdf from " . $url . "\n";
@@ -142,7 +138,7 @@ function package_lib($libName, $url, $version) {
       "tar cfz tmp/".$libName."-".$version.".tar.gz --directory ./tmp/ ".$libName." --exclude=.svn"
     );
     
-    if (check_errs(1, "Failed to load package " . $libName, $libName . "packaged!")) {
+    if (check_errs($svn, 1, "Failed to load package " . $libName, $libName . "packaged!")) {
       echo shell_exec("mv ./tmp/" . $libName . "-" . $version . ".tar.gz libpkg/") . "\n";
     }
   }
@@ -156,7 +152,7 @@ function package_lib($libName, $url, $version) {
  * @param string $style      [optional] Font style
  * @param string $background [optional] Background color
  * 
- * @return None
+ * @return void
  */
 function cecho($message, $color="default", $style="default", $background="default") {
   $text = "<c c=" . $color . " s=" . $style . " bg=" . $background . ">" . $message . "</c>";	
@@ -167,7 +163,7 @@ function cecho($message, $color="default", $style="default", $background="defaul
  * In order to have a password prompt that works on many OS (works on Unix, Windows XP and Windows 2003 Server)
  * Source : http://stackoverflow.com/questions/187736/command-line-password-prompt-in-php
  * 
- * @param object $prompt [optional] Text to prompt
+ * @param string $prompt [optional] Text to prompt
  * 
  * @return string
  */
@@ -199,5 +195,3 @@ function prompt_silent($prompt = "Enter Password:") {
     return $password;
   }
 }
-
-?>

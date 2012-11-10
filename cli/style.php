@@ -59,13 +59,11 @@ function shColorText($text = '', $txtColor = '', $bgColor = '', $styleTxt = 'non
   $aBgColor['white']   = 47; 
   
   // Style text
-  $aStyle['none']	     = 0;		//normal
-  $aStyle['bold']	     = 1;		//gras
-  $aStyle['underline'] = 4;	//souligné
-  $aStyle['flashing']  = 5;	//clignotant
-  $aStyle['reverse']   = 7;		//inversé
-  
-  $c = $__ESC.$__START;
+  $aStyle['none']	     = 0; //normal
+  $aStyle['bold']	     = 1; //gras
+  $aStyle['underline'] = 4; //souligné
+  $aStyle['flashing']  = 5; //clignotant
+  $aStyle['reverse']   = 7; //inversé
 
   $a = null;
 
@@ -145,4 +143,3 @@ function parseShColorTag($str) {
   }
   return $str;
 }
-?>

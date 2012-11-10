@@ -21,7 +21,7 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
  * @param string $binLogIndexFilename Name of the binlog-index file, ie log-bin.index
  * @param string $backup              Backup directory, ie /mbbackup/binlogs
  * 
- * @return None
+ * @return void
  */
 function rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFilename, $backup) {
   $currentDir = dirname(__FILE__);
@@ -99,11 +99,11 @@ function rotateBinlogs($userAdminDB, $passAdminDB, $binLogsDir, $binLogIndexFile
 /**
  * The Procedure for the rotatebinlogs function
  * 
- * @param object $backMenu The Menu for return
+ * @param Menu $backMenu The Menu for return
  * 
- * @return None
+ * @return void
  */
-function rotateBinlogsProcedure($backMenu) {
+function rotateBinlogsProcedure(Menu $backMenu) {
   $procedure = new Procedure();
   
   $choice = "0";
@@ -167,4 +167,3 @@ function rotateBinlogsCall( $command, $argv ) {
     return 1;
   }
 }
-?>

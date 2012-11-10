@@ -15,11 +15,11 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
 /**
  * The Procedure for the sendfileftp function
  * 
- * @param object $backMenu The Menu for return
+ * @param Menu $backMenu The Menu for return
  * 
- * @return None
+ * @return void
  */
-function sendFileFTPProcedure($backMenu) {
+function sendFileFTPProcedure(Menu $backMenu) {
   $procedure = new Procedure();
   
   $choice = "0";
@@ -122,4 +122,3 @@ Options :
     return 1;
   }
 }
-?>

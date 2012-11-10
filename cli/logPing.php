@@ -19,10 +19,9 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
  * @param string $fileLog  Filename for the output
  * @param string $dirLog   Directory where to create the filelog
  * 
- * @return None
+ * @return void
  */
 function logPing($hostname, $fileLog, $dirLog) {
-  $currentDir = dirname(__FILE__);
   announce_script("Ping logger");
   
   // Make the log line
@@ -60,11 +59,11 @@ function logPing($hostname, $fileLog, $dirLog) {
 /**
  * The Procedure for the logping function
  * 
- * @param object $backMenu The Menu for return
+ * @param Menu $backMenu The Menu for return
  * 
- * @return None
+ * @return void
  */
-function logPingProcedure($backMenu) {
+function logPingProcedure(Menu $backMenu) {
   $procedure = new Procedure();
   
   $choice = "0";
@@ -117,4 +116,4 @@ Options :
     return 1;
   }
 }
-?>
+

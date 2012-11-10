@@ -15,11 +15,11 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
 /**
  * The Procedure for the tuning-primer Shell script
  * 
- * @param object $backMenu The Menu for return
+ * @param Menu $backMenu The Menu for return
  * 
- * @return None
+ * @return void
  */
-function tuningPrimerProcedure($backMenu) {
+function tuningPrimerProcedure(Menu $backMenu) {
   $procedure = new Procedure();
   
   echo "Select a mode:\n\n";
@@ -118,4 +118,3 @@ banner      : show banner info\n\n";
     return 1;
   }
 }
-?>

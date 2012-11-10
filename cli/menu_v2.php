@@ -9,6 +9,12 @@
  * @link     http://www.mediboard.org
  */
 
+/**
+ * Notes for Windows:
+ *  - Install TortoiseSVN and make sure to check "Install command line tools"
+ *  - Install ANSICON to have colored shell (https://github.com/adoxa/ansicon/downloads) and run "ansicon -i"
+ */
+
 require_once dirname(__FILE__)."/classes/Task.class.php";
 
 require_once "logPing.php";
@@ -130,5 +136,3 @@ if ( $task != "" ) {
 // Affichage du menu
 $main->clearScreen();
 $main->showMenu($mainMenu, true);
-
-?>

@@ -20,18 +20,27 @@ class Task {
   
   public $procedure   = null;
   public $description = null;
-  
+
+  /**
+   * Tells if we are on Windows
+   *
+   * @return bool
+   */
+  static function isWindows() {
+    return stripos(PHP_OS, 'WIN') === 0;
+  }
+
   /**
    * Constructor
-   * 
+   *
    * @param string $procedure   The name of the procedure function associated to the Task, must be callable
-   * @param object $description The Task description
-   * 
-   * @return 
+   * @param string $description The Task description
+   *
+   * @return void
    */
-  function Task( $procedure, $description ) {
-    $this->procedure      = $procedure;
-    $this->description    = $description;
+  function Task($procedure, $description) {
+    $this->procedure   = $procedure;
+    $this->description = $description;
   }
   
   /**
@@ -39,19 +48,20 @@ class Task {
    * 
    * @param string $name The name of the Menu
    * 
-   * @return object
+   * @return Menu
    */
-  function createMenu( $name ) {
+  function createMenu($name) {
     return new Menu($name);
   }
   
   /**
    * To clear the screen
    * 
-   * @return None 
+   * @return void
    */
   function clearScreen() {
-    echo exec("clear") . "\n";
+    $cmd = self::isWindows() ? "cls" : "clear";
+    echo exec($cmd) . "\n";
   }
   
   /**
@@ -59,10 +69,10 @@ class Task {
    * 
    * @param string $description [optional] The description of the Menu
    * 
-   * @return None
+   * @return void
    */
-  function present( $description = false ) {
-    if ( $description ) {
+  function present($description = null) {
+    if ($description) {
       echo chr(27)."[1m--- ".$description." ( ".date("l d F H:i:s")." ) ---".chr(27)."[0m"."\n";
     }
     else {
@@ -73,12 +83,12 @@ class Task {
   /**
    * Show the Menu (its list of tasks)
    * 
-   * @param object $menu The Menu to show
-   * @param object $zero [optional] If true, we also show the Task with the ID 0, which is almost "Quit"
+   * @param Menu $menu The Menu to show
+   * @param bool $zero [optional] If true, we also show the Task with the ID 0, which is almost "Quit"
    * 
-   * @return None
+   * @return void
    */
-  function showMenu( $menu, $zero = false ) {
+  function showMenu(Menu $menu, $zero = false ) {
     $this->present($menu->name);
     echo "\nSelect a task:\n\n";
     
@@ -86,7 +96,7 @@ class Task {
     
     if ($zero) {
       echo "-------------------------------------------------------\n";
-      echo "[0] ".$menu->task_list[0]->description."\n";
+      echo "[ 0] ".$menu->task_list[0]->description."\n";
     }
     
     // Waiting for input
@@ -122,7 +132,7 @@ class Task {
   /**
    * To quit the program
    * 
-   * @return None 
+   * @return void
    */
   function quit() {
     $this->clearScreen();
@@ -130,22 +140,9 @@ class Task {
   }
   
   /**
-   * Show the Tasks for a Menu, except for the ID 0
-   * 
-   * @return None
-   */
-  function showTasks() {
-    foreach ( $this->getTaskList() as $nb => $oneTask ) {
-      if ($nb !== 0) {
-        echo "[".$nb."] ".$oneTask->description."\n";
-      }
-    }
-  }
-  
-  /**
    * Present a Task
    * 
-   * @return None
+   * @return void
    */
   function presentTask() {
     $line = "##";
@@ -164,13 +161,11 @@ class Task {
    * 
    * @param string $choice The string to input to return
    * 
-   * @return None
+   * @return void
    */
   function showReturnChoice( $choice ) {
     if ( $choice !== "" ) {
-      echo "[$choice] Return to main menu\n\n";
+      echo sprintf("[%2d] %s\n\n", $choice, "Return to main menu");
     }
   }
 }
-
-?>

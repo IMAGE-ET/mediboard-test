@@ -15,14 +15,19 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
 /**
  * Setup Mediboard
  * 
- * @param object $subDir    modules|style
- * @param object $apacheGrp Name of the primary group for apache user
+ * @param string $subDir    modules|style
+ * @param string $apacheGrp Name of the primary group for apache user
  * 
- * @return None
+ * @return void
  */
 function setup($subDir, $apacheGrp) {
   $currentDir = dirname(__FILE__);
   announce_script("Mediboard directories groups and mods");
+
+  if (Task::isWindows()) {
+    echo shColorText("This script does not work on Windows\n", "red");
+    return;
+  }
   
   $darwin_kernel = PHP_OS;
   
@@ -189,11 +194,11 @@ function chmod_R($path, $filemode, $dirmode) {
 /**
  * The Procedure for the setup function
  * 
- * @param object $backMenu The Menu for return
+ * @param Menu $backMenu The Menu for return
  * 
- * @return None
+ * @return void
  */
-function setupProcedure($backMenu) {
+function setupProcedure(Menu $backMenu) {
   $procedure = new Procedure();
   
   $choice = "0";
@@ -253,4 +258,3 @@ Options :
     return 1;
   }
 }
-?>

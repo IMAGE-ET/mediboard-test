@@ -13,12 +13,26 @@ require_once "utils.php";
 require_once dirname(__FILE__)."/classes/Procedure.class.php";
 
 /**
+ * @param array $messages
+ * @param array $prefixes
+ */
+function filter_commit_messages($messages, $prefixes = array("erg", "fnc", "fct", "bug", "war", "edi", "sys", "svn")) {
+  foreach ($messages as $_i => $_line) {
+    if (!preg_match("/^(".implode("|", $prefixes).")/i", $_line)) {
+      unset($messages[$_i]);
+    }
+  }
+
+  return $messages;
+}
+
+/**
  * Update Mediboard
  * 
  * @param string $action   action to perform: info|real|noup
  * @param string $revision revision number you want to update to
  * 
- * @return None
+ * @return void
  */
 function update($action, $revision) {
   $currentDir = dirname(__FILE__);
@@ -30,7 +44,7 @@ function update($action, $revision) {
   $dif = $MB_PATH . "/tmp/svnlog.dif";
   $status = $MB_PATH . "/tmp/svnstatus.txt";
   $event = $MB_PATH . "/tmp/svnevent.txt";
-  $prefixes = "erg|fnc|fct|bug|war|edi|sys|svn";
+  $prefixes = array("erg", "fnc", "fct", "bug", "war", "edi", "sys", "svn");
 
   if ($revision === "") {
     $revision = "HEAD";
@@ -39,49 +53,56 @@ function update($action, $revision) {
   // Choose the target revision
   switch($action) {
     case "info":
-      $svn = shell_exec("svn info " . $MB_PATH . " | awk 'NR==5'");
-      if (check_errs($svn, null, "SVN info error", "SVN info successful!")) {
-        echo $svn . "\n";
+      $out = array();
+      exec("svn info $MB_PATH", $out, $ret);
+      if (check_errs($ret, null, "SVN info error", "SVN info successful!")) {
+        echo $out[5]."\n";
       }
 
-      $svn = shell_exec("svn log " . $MB_PATH . " -r BASE:" . $revision . " | grep -i -E '(" . $prefixes . ")'");
-      if (check_errs($svn, null, "SVN log error", "SVN log successful!")) {
-        echo $svn . "\n";
+      $out = array();
+      exec("svn log $MB_PATH -r BASE:$revision", $out, $ret);
+      if (check_errs($ret, null, "SVN log error", "SVN log successful!")) {
+        $out = filter_commit_messages($out);
+        echo implode("\n", $out)."\n";
       }
 
-      $svn = shell_exec("svn info " . $MB_PATH . " -r " . $revision . " | awk 'NR==5'");
-      if (check_errs($svn, null, "SVN info error", "SVN info successful!")) {
-        echo $svn . "\n";
+      $out = array();
+      exec("svn info $MB_PATH -r $revision", $out, $ret);
+      if (check_errs($ret, null, "SVN info error", "SVN info successful!")) {
+        echo $out[5]."\n";
       }
       break;
 
     case "real":
       // Concat the source (BASE) revision number : 5th line of SVN info (!)
-      $svn = shell_exec("svn info " . $MB_PATH . " | awk 'NR==5'");
-      if (check_errs($svn, null, "Failed to get source revision info", "SVN Revision source info written!")) {
+      $out = array();
+      exec("svn info $MB_PATH", $out, $ret);
+      if (check_errs($ret, null, "Failed to get source revision info", "SVN Revision source info written!")) {
         $fic = fopen($tmp, "w");
         
         if (check_errs($fic, false, "Failed to open tmp file", "Tmp file opened!")) {
-          fwrite($fic, $svn . "\n");
+          fwrite($fic, $out[5]."\n");
           fclose($fic);
         }
       }
       
       // Concat SVN Log from BASE to target revision
-      $svn = shell_exec("svn log " . $MB_PATH . " -r BASE:" . $revision);
-      if (check_errs($svn, null, "Failed to retrieve SVN log", "SVN log retrieved!")) {
+      $out = array();
+      exec("svn log $MB_PATH -r BASE:$revision", $out, $ret);
+      if (check_errs($ret, null, "Failed to retrieve SVN log", "SVN log retrieved!")) {
         $fic = fopen($dif, "w");
         
         if (check_errs($fic, false, "Failed to open dif file", "Dif file opened!")) {
-          fwrite($fic, $svn . "\n");
+          fwrite($fic, implode("\n", $out) . "\n");
           fclose($fic);
           
           $fic = fopen($dif, "r");
           $fic2 = fopen($tmp, "a+");
-          
+
+          // TODO: use filter_commit_messages()
           while (!feof($fic)) {
             $buffer = fgets($fic);
-            
+
             if (preg_match("/(erg:|fnc:|fct:|bug:|war:|edi:|sys:|svn:)/i", $buffer)) {
               fwrite($fic2, $buffer);
             }
@@ -96,21 +117,23 @@ function update($action, $revision) {
       }
       
       // Perform actual update
-      $svn = shell_exec("svn update " . $MB_PATH . " --revision " . $revision);
-      echo $svn . "\n";
-      check_errs($svn, null, "Failed to perform SVN update", "SVN update performed!");
+      $out = array();
+      exec("svn update $MB_PATH --revision $revision", $out, $ret);
+      echo implode("\n", $out)."\n";
+      check_errs($ret, null, "Failed to perform SVN update", "SVN update performed!");
       
       // Concat the target revision number
       $fic = fopen($tmp, "a+");
-      $svn = shell_exec("svn info " . $MB_PATH . " | awk 'NR==5'");
-      if (check_errs($svn, null, "Failed to get target revision info", "SVN Revision target info written!")) {
-        fwrite($fic, "\n" . $svn);
+      $out = array();
+      exec("svn info $MB_PATH", $out, $ret);
+      if (check_errs($ret, null, "Failed to get target revision info", "SVN Revision target info written!")) {
+        fwrite($fic, "\n" . implode("\n", $out));
         fclose($fic);
       }
       
       // Contact dating info
       $fic = fopen($tmp, "a+");
-      fwrite($fic, "--- Updated Mediboard on " . date("l d F H:i:s") . " ---\n");
+      fwrite($fic, "--- Updated Mediboard on " . strftime("%Y-%m-%d %H:%M:%S") . " ---\n");
       fclose($fic);
       
       // Concat tmp file to log file //
@@ -134,7 +157,7 @@ function update($action, $revision) {
       $svn = shell_exec("svn info " . $MB_PATH . " | awk 'NR==5'");
       if (check_errs($svn, null, "Failed to write status file", "Status file written!")) {
         $fic = fopen($status, "w");
-        fwrite($fic, $svn . "Date: " . date("Y-m-d\TH:i:s") . "\n");
+        fwrite($fic, $svn . "Date: " . strftime("%Y-%m-%d %H:%M:%S") . "\n");
         fclose($fic);
         
         if (file_exists($event)) {
@@ -155,11 +178,11 @@ function update($action, $revision) {
 /**
  * The Procedure for the update function
  * 
- * @param object $backMenu The Menu for return
+ * @param Menu $backMenu The Menu for return
  * 
- * @return None
+ * @return void
  */
-function updateProcedure($backMenu) {
+function updateProcedure(Menu $backMenu) {
   $procedure = new Procedure();
   
   echo "Action to perform:\n\n";
@@ -228,4 +251,3 @@ Option:
     return 1;
   }
 }
-?>

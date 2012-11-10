@@ -15,18 +15,17 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
 /**
  * Launcher to request Mediboard
  * 
- * @param object $rootURL  Host to request (ie, https://localhost/mediboard)
- * @param object $username Username requesting
- * @param object $password Password of the user
- * @param object $params   Parameters to send (ie, "m=dPpatients&tab=vw_medecins")
- * @param object $times    How many repeats
- * @param object $delay    Delay (in seconds) between repeats
- * @param object $file     Output file
+ * @param string $rootURL  Host to request (ie, https://localhost/mediboard)
+ * @param string $username Username requesting
+ * @param string $password Password of the user
+ * @param string $params   Parameters to send (ie, "m=dPpatients&tab=vw_medecins")
+ * @param int    $times    How many repeats
+ * @param int    $delay    Delay (in seconds) between repeats
+ * @param string $file     Output file
  * 
- * @return None
+ * @return void
  */
 function request($rootURL, $username, $password, $params, $times, $delay, $file) {
-  $currentDir = dirname(__FILE__);
   announce_script("Mediboard request launcher");
     
   if ($times === "") {
@@ -68,11 +67,11 @@ function request($rootURL, $username, $password, $params, $times, $delay, $file)
 /**
  * The request function
  * 
- * @param object $url  URL to request
- * @param object $log  Log file
- * @param object $file Output file
+ * @param string $url  URL to request
+ * @param string $log  Log file
+ * @param string $file Output file
  * 
- * @return None
+ * @return void
  */
 function mediboard_request($url, $log, $file) {
   if ($file === "") {
@@ -96,11 +95,11 @@ function mediboard_request($url, $log, $file) {
 /**
  * The Procedure for the request function
  * 
- * @param object $backMenu The Menu for return
+ * @param Menu $backMenu The Menu for return
  * 
- * @return None
+ * @return void
  */
-function requestProcedure($backMenu) {
+function requestProcedure(Menu $backMenu) {
   $procedure = new Procedure();
   
   $choice = "0";
@@ -172,4 +171,3 @@ Options :
     return 1;
   }
 }
-?>

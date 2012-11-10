@@ -90,4 +90,3 @@ switch ($command) {
     echo "Unknown command '$command'\n";
     exit(1);
 }    
-?>

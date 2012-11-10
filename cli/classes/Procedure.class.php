@@ -16,22 +16,22 @@ require_once "Task.class.php";
  * Procedure: Enable you to set up a list a treatments to apply to one Task
  */
 class Procedure extends Task {
-  
+
   /**
    * Constructor
-   * 
-   * @return 
+   *
+   * @return Procedure
    */
   function Procedure() {
   }
-  
+
   /**
    * Create a Question
    * 
-   * @param object $question Question to ask for
-   * @param object $default  [optional] Default value for the answer
+   * @param string $question Question to ask for
+   * @param string $default  [optional] Default value for the answer
    * 
-   * @return object
+   * @return Question
    */
   function createQuestion( $question, $default = null ) {
     return new Question($question, $default);
@@ -48,7 +48,7 @@ class Procedure extends Task {
     if ( $question instanceOf Question ) {
       return recup($question->qt, $question->def);
     }
+
+    return null;
   }
 }
-
-?>

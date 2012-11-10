@@ -27,12 +27,9 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
  * @param string $port        [optional] SSH port of the target remote location
  * @param string $localCopy   To do a local copy
  * 
- * @return None
+ * @return void
  */
-function replaceBase(
-    $srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart, $safeCopy, $mysqlDir, $port, $localCopy
-) {
-  $currentDir = dirname(__FILE__);
+function replaceBase($srcLocation, $srcDir, $srcDB, $tgtDir, $tgtDB, $restart, $safeCopy, $mysqlDir, $port, $localCopy) {
   announce_script("Mediboard replace base");
   
   $restart = false; 
@@ -225,11 +222,11 @@ function replaceBase(
 /**
  * The Procedure for the replacebase function
  * 
- * @param object $backMenu The Menu for return
+ * @param Menu $backMenu The Menu for return
  * 
- * @return None
+ * @return void
  */
-function replacebaseProcedure($backMenu) {
+function replacebaseProcedure(Menu $backMenu) {
   $procedure = new Procedure();
   
   $choice = "0";
@@ -322,4 +319,3 @@ Options :
     return 1;
   }
 }
-?>

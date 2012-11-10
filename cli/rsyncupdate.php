@@ -19,7 +19,7 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
  * @param string $action   Action to perform: info|real|noup
  * @param string $revision Revision number you want to update to
  * 
- * @return None
+ * @return void
  */
 function rsyncupdate($action, $revision) {
   $currentDir = dirname(__FILE__);
@@ -131,11 +131,11 @@ function rsyncupdate($action, $revision) {
 /**
  * The Procedure for the rsyncupdate function
  * 
- * @param object $backMenu The Menu for return
+ * @param Menu $backMenu The Menu for return
  * 
- * @return None
+ * @return void
  */
-function rsyncUpdateProcedure($backMenu) {
+function rsyncUpdateProcedure(Menu $backMenu) {
   $procedure = new Procedure();
   
   echo "Action to perform:\n\n";
@@ -210,4 +210,3 @@ Option:
     return 1;
   }
 }
-?>
