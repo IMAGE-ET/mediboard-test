@@ -266,7 +266,7 @@
           </tr>
           {{foreach from=$sejour->_ref_transmissions item=_transmissions key=_cat_name name=foreach_trans}}
             <tr>
-              <th colspan="3">{{$_cat_name}}</th>
+              <th colspan="3" class="section">{{$_cat_name}}</th>
             </tr>
             {{foreach from=$_transmissions item=_trans}}
               <tr>
