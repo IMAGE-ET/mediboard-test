@@ -22,6 +22,7 @@ class CExchangeSource extends CMbObject {
     "smtp"        => "CSourceSMTP",
     "file_system" => "CSourceFileSystem",
     "http"        => "CSourceHTTP",
+    "dicom"       => "CSourceDicom",
   );
   
   // DB Fields

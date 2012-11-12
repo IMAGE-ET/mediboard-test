@@ -84,5 +84,9 @@
     <div id="CSourceHTTP-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceHTTP)}}block{{else}}none{{/if}};">
       {{mb_include module=system template=CExchangeSource_inc_config mod=system class="CSourceHTTP"}}  
     </div>
+    
+    <div id="CSourceDicom-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceDicom)}}block{{else}}none{{/if}};">
+      {{mb_include module=dicom template=CSourceDicom_inc_config mod=dicom class="CSourceDicom"}}  
+    </div>
   </div>
 {{/if}}
