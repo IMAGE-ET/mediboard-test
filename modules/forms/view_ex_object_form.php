@@ -37,6 +37,10 @@ if (!$ex_class_id) {
 
 $object = CMbObject::loadFromGuid($object_guid);
 
+if ($object_guid && !$object) {
+  CAppUI::stepAjax("Objet supprimé", UI_MSG_ERROR);
+}
+
 if ($object->_id) {
   $object->loadComplete();
 }
