@@ -401,6 +401,7 @@ class CExObject extends CMbMetaObject {
 
       // Ceux de la meme exclass
       else {
+        /*
         $escape = true;
         foreach ($latest_ex_objects as $_latest_ex_object) {
           if ($_latest_ex_object->_id) {
@@ -426,6 +427,13 @@ class CExObject extends CMbMetaObject {
           elseif ($_latest_ex_object->_ref_object->_class == $_report_class) {
             $_base = $_latest_ex_object->_ref_object;
             break;
+          }
+        }*/
+
+        $_base = null;
+        foreach ($latest_ex_objects as $_latest_ex_object) {
+          if ($_latest_ex_object->_id && $_latest_ex_object->_class == $_field->report_class) {
+            $_base = $latest_ex_objects;
           }
         }
 
