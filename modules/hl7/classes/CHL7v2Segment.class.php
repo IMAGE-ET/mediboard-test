@@ -277,7 +277,21 @@ class CHL7v2Segment extends CHL7v2Entity {
     $identifiers = array();
     if (CHL7v2Message::$build_mode == "simple") {
       $identifiers[] = array(
-        (!$patient->_IPP) ? 0 : $patient->_IPP
+        $patient->_IPP,
+        null,
+        null,
+        // PID-3-4 Autorité d'affectation
+        $assigning_authority,
+        "PI"
+      );
+      
+      $identifiers[] = array(
+        $patient->_id,
+        null,
+        null,
+        // PID-3-4 Autorité d'affectation
+        $this->getAssigningAuthority("mediboard"),
+        "RI"
       );
       
       return $identifiers;
