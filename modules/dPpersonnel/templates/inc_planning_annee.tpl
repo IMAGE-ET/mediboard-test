@@ -58,13 +58,13 @@ changeannee = function (sens) {
   </tr>
   <tr>
   <td colspan="2" style="text-align:center;">
-    <button class="left" onclick="changeannee('p')">
+    <button class="left" onclick="changeannee('p')" style="min-width:120px;text-align:left;">
       {{tr}}Previous year{{/tr}}
     </button>
     <button onclick="changeannee('t')">
       {{tr}}This year{{/tr}}
     </button>
-    <button class="right rtl" onclick="changeannee('n')">
+    <button class="right rtl" onclick="changeannee('n')" style="min-width:120px;text-align:right;">
       {{tr}}Next year{{/tr}}
     </button>
   </td>
