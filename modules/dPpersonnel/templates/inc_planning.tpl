@@ -4,15 +4,19 @@
 	changedate = function (sens) {
   var choix = {{$choix|@json}};
   var form = getForm("searchplanning");
-	
-  var date_courante = Date.fromDATE(form.elements.date_debut.value); 
-  
+
+  var date_courante = Date.fromDATE(form.elements.date_debut.value);
+  var today = Date.fromDATE( (new Date()).toDATE() );
+
   if (choix=="semaine") {
     if(sens=='p') {
       date_courante.addDays(-7);
     }
     else if(sens=='n'){
       date_courante.addDays(7);
+    }
+    else if(sens=='t'){
+      date_courante = today;
     }
   }
   else {
@@ -22,6 +26,9 @@
     else if(sens=='n'){
       date_courante.setMonth(date_courante.getMonth() + 1);
     }
+    else if(sens=='t'){
+      date_courante = today;
+    }
   }
   form.elements.date_debut.value = date_courante.toDATE();
   loadPlanning(form);
@@ -30,11 +37,14 @@
 <table class="main">
   <tr>
     <!-- Navigation par semaine ou mois-->
-    <td colspan="2">
-      <button class="left" onclick="changedate('p')" style="float: left;">
+    <td colspan="2" style="text-align: center;">
+      <button class="left" onclick="changedate('p')">
         {{if $choix=="semaine"}}{{tr}}Previous week{{/tr}}{{else}}{{tr}}Previous month{{/tr}}{{/if}}
       </button>
-      <button class="right rtl" onclick="changedate('n')" style="float: right;">
+      <button class="center" onclick="changedate('t')" style="text-align:center;">
+        {{if $choix=="semaine"}}{{tr}}This week{{/tr}}{{else}}{{tr}}This month{{/tr}}{{/if}}
+      </button>
+      <button class="right rtl" onclick="changedate('n')">
         {{if $choix=="semaine"}}{{tr}}Next week{{/tr}}{{else}}{{tr}}Next month{{/tr}}{{/if}}
       </button>
     </td>
@@ -127,10 +137,10 @@
       <tr>
         <td colspan="{{math equation="x+1" x=$tableau_periode|@count}}" class="empty">
           {{tr}}CPlageConge.none{{/tr}}
-        </td> 
+        </td>
       </tr>
       {{/foreach}}
-      </table>   
+      </table>
     </td>
   </tr>
 </table>

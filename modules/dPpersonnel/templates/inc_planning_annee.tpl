@@ -35,28 +35,40 @@ changemode = function(type, date, user_id) {
 changeannee = function (sens) {
   var choix = {{$choix|@json}};
   var form = getForm("searchplanning");
-  
-  var date_courante = Date.fromDATE(form.elements.date_debut.value); 
+
+  var date_courante = Date.fromDATE(form.elements.date_debut.value);
+  var today = Date.fromDATE( (new Date()).toDATE() );
   if(sens=='p') {
     date_courante.addYears(-1);
   }
   else if(sens=='n'){
     date_courante.addYears(1);
   }
-  
+  else if(sens=='t'){
+    date_courante= today;
+  }
+
   form.elements.date_debut.value = date_courante.toDATE();
   loadPlanning(form);
 }
 </script>
 <table class="main">
-  <td colspan="2">
-    <button class="left" onclick="changeannee('p')" style="float: left;">
+  <tr>
+    <td></td>
+  </tr>
+  <tr>
+  <td colspan="2" style="text-align:center;">
+    <button class="left" onclick="changeannee('p')">
       {{tr}}Previous year{{/tr}}
     </button>
-    <button class="right rtl" onclick="changeannee('n')" style="float: right;">
+    <button onclick="changeannee('t')">
+      {{tr}}This year{{/tr}}
+    </button>
+    <button class="right rtl" onclick="changeannee('n')">
       {{tr}}Next year{{/tr}}
     </button>
   </td>
+  </tr>
 </table>
 <table class="main">
 {{assign var="k" value=1}}
