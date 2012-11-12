@@ -111,6 +111,6 @@
     {{$_dossier|smarty:nodefaults}}
   </div>
   {{if !$smarty.foreach.dossier.last}}
-    <br style="page-break-after: always;"/>
+    <hr style="border: 0; page-break-after: always;"/>
   {{/if}}
 {{/foreach}}
