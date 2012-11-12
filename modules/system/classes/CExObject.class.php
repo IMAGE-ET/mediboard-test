@@ -286,12 +286,13 @@ class CExObject extends CMbMetaObject {
     $ex_class = $this->_ref_ex_class;
     
     $this->loadRefReferenceObjects();
-    
-    $latest_ex_objects = array(
+
+    $latest_ex_objects = null;
+    /*$latest_ex_objects = array(
       $ex_class->getLatestExObject($this->_ref_reference_object_1),
       $ex_class->getLatestExObject($this->_ref_reference_object_2),
       $ex_class->getLatestExObject($this->_ref_object),
-    );
+    );*/
     
     $fields = $this->_ref_ex_class->loadRefsAllFields(true);
     
@@ -429,6 +430,14 @@ class CExObject extends CMbMetaObject {
             break;
           }
         }*/
+
+        if ($latest_ex_objects === null) {
+          $latest_ex_objects = array(
+            $ex_class->getLatestExObject($this->_ref_reference_object_1),
+            $ex_class->getLatestExObject($this->_ref_reference_object_2),
+            $ex_class->getLatestExObject($this->_ref_object),
+          );
+        }
 
         $_base = null;
         foreach ($latest_ex_objects as $_latest_ex_object) {
