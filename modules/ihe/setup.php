@@ -242,7 +242,15 @@ class CSetupihe extends CSetup {
                 CHANGE `build_PV1_3_3` `build_PV1_3_3` ENUM ('name','config_value','idex') DEFAULT 'name';";
     $this->addQuery($query); 
     
-    $this->mod_version = "0.26";
+    $this->makeRevision("0.26");
+    
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `send_provisional_affectation` ENUM ('0','1') DEFAULT '0',
+                ADD `send_transfer_patient` ENUM ('A02','Z99') DEFAULT 'A02',
+                ADD `send_own_identifier` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query); 
+    
+    $this->mod_version = "0.27";
   }
 }
 

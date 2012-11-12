@@ -102,9 +102,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return;
       }
       
-      // On envoie pas les affectations prévisionnelles 
+      // Affectation non liée à un séjour
       $sejour = $affectation->loadRefSejour();
-      if (!$sejour->_id || $sejour->_etat == "preadmission") {
+      if (!$sejour->_id) {
+        return;
+      }
+      
+      // On envoie pas les affectations prévisionnelles 
+      if (!$receiver->_configs["send_provisional_affectation"] && $sejour->_etat == "preadmission") {
         return;
       }
       $first_affectation = $sejour->loadRefFirstAffectation();
@@ -473,7 +478,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       }
       
       // Création d'une affectation
-      return "A02";
+      switch ($configs["send_transfer_patient"]) {
+        case 'Z99':
+          return $this->getModificationAdmitCode($receiver);
+        default:
+          return "A02";
+      }
     }
     
     /* Affectation dans un service externe */

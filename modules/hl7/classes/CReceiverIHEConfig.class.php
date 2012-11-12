@@ -50,6 +50,9 @@ class CReceiverIHEConfig extends CMbObject {
   var $send_change_medical_responsibility = null;
   var $send_change_nursing_ward           = null;
   var $send_change_attending_doctor       = null;
+  var $send_provisional_affectation       = null;
+  var $send_transfer_patient              = null;
+  var $send_own_identifier                = null;
   
   // Build
   var $build_mode             = null;
@@ -106,6 +109,9 @@ class CReceiverIHEConfig extends CMbObject {
       "send_change_attending_doctor",
       "send_all_patients",
       "send_default_affectation",
+      "send_provisional_affectation",
+      "send_transfer_patient",
+      "send_own_identifier"
     ),
     "PID" => array(
       "build_PID_31",
@@ -163,8 +169,11 @@ class CReceiverIHEConfig extends CMbObject {
     $props["send_change_medical_responsibility"] = "enum list|A02|Z80|Z99 default|Z80";
     $props["send_change_nursing_ward"]           = "enum list|A02|Z84|Z99 default|Z84";
     $props["send_change_attending_doctor"]       = "enum list|A54|Z99 default|A54";
-    $props["send_all_patients"]        = "bool default|0";
-    $props["send_default_affectation"] = "bool default|0";
+    $props["send_all_patients"]                  = "bool default|0";
+    $props["send_default_affectation"]           = "bool default|0";
+    $props["send_provisional_affectation"]       = "bool default|0";
+    $props["send_transfer_patient"]              = "enum list|A02|Z99 default|A02";
+    $props["send_own_identifier"]                = "bool default|1";
     
     // Build
     $props["build_mode"]             = "enum list|normal|simple default|normal";

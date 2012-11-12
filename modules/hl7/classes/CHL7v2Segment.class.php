@@ -276,9 +276,30 @@ class CHL7v2Segment extends CHL7v2Entity {
     // INS-C - Identifiant national de santé calculé
     $identifiers = array();
     if (CHL7v2Message::$build_mode == "simple") {
-      $identifiers[] = array(
-        (!$patient->_IPP) ? 0 : $patient->_IPP
-      );
+      if ($receiver->_configs["send_own_identifier"]) {
+        $identifiers[] = array(
+          $patient->_IPP,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $assigning_authority,
+          "PI"
+        );
+        
+        $identifiers[] = array(
+          $patient->_id,
+          null,
+          null,
+          // PID-3-4 Autorité d'affectation
+          $this->getAssigningAuthority("mediboard"),
+          "RI"
+        );  
+      }
+      else {
+        $identifiers[] = array(
+          (!$patient->_IPP) ? 0 : $patient->_IPP
+        );
+      }  
       
       return $identifiers;
     }
