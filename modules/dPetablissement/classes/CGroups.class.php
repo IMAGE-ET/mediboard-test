@@ -164,7 +164,7 @@ class CGroups extends CMbObject {
       return $msg;
     }
     
-    if ($is_new) {
+    if ($is_new && CModule::getActive("dPprescription")) {
       CConfigService::emptySHM();
       CConfigMomentUnitaire::emptySHM();
       CConfigConstantesMedicales::emptySHM();
