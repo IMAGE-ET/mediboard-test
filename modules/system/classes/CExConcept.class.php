@@ -178,7 +178,15 @@ class CExConcept extends CExListItemsOwner {
   function loadView(){
     parent::loadView();
     $this->loadConceptSpec();
-    $this->loadBackRefs("class_fields");
+    $this->loadRefClassFields();
+  }
+
+  function loadEditView() {
+    parent::loadEditView();
+
+    foreach ($this->_ref_class_fields as $_field) {
+      $_field->loadRefExGroup()->loadRefExClass();
+    }
   }
   
   function loadConceptSpec(){
