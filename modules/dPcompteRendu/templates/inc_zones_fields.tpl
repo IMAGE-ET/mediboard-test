@@ -20,14 +20,16 @@
         <div class="modal" id="correspondants_courrier" style="display: none; width: 50%"></div>
       </td>
       {{if $destinataires|@count}}
-        <td id="destinataire">
+        <td id="destinataires" class="text">
           {{foreach from=$destinataires key=curr_class_name item=curr_class}}
             &bull; <strong>{{tr}}{{$curr_class_name}}{{/tr}}</strong> :
             {{foreach from=$curr_class key=curr_index item=curr_dest}}
-              <label>
+              <span>
+                <label>
                 <input type="checkbox" name="_dest_{{$curr_class_name}}_{{$curr_index}}" />
                   {{$curr_dest->nom}} ({{tr}}CDestinataire.tag.{{$curr_dest->tag}}{{/tr}});
                 </label>
+              </span>
             {{/foreach}}
             <br />
           {{/foreach}}

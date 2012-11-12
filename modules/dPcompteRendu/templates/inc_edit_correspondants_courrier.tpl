@@ -44,6 +44,11 @@
         openCorrespondants('{{$compte_rendu->_id}}', '{{$compte_rendu->_ref_object->_guid}}');
       } });
     }
+    
+    updateMergeButton = function() {
+      var button = $("merge_correspondants");
+      button.writeAttribute("disabled", $("correspondants_courrier").select("input[checked]").length ? null : true);
+    }
   </script>
 {{/if}}
 
@@ -86,7 +91,7 @@
       <tr>
         <td class="narrow">
           <input type="checkbox" name="_dest_{{$_class}}_{{$_index}}" id="editFrm__dest_{{$_class}}_{{$_index}}"
-            {{if $correspondant->_id}}checked="checked"{{/if}}/>
+            {{if $correspondant->_id}}checked{{/if}} onclick="updateMergeButton()"/>
         </td>
         <td>
           <label for="editFrm__dest_{{$_class}}_{{$_index}}">
@@ -111,6 +116,7 @@
   {{/foreach}}
 </table>
 <p style="text-align: center;">
-  <button type="button" class="tick" onclick="saveAndMerge();">Fusionner</button>
+  <button type="button" class="tick" onclick="saveAndMerge();" id="merge_correspondants"
+    {{if !$correspondants|@count}}disabled{{/if}}>Fusionner</button>
   <button type="button" class="cancel" onclick="Control.Modal.close();">Fermer</button>
 </p>
