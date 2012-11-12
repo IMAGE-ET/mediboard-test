@@ -351,13 +351,13 @@ class CExObject extends CMbMetaObject {
 
           $_concept_latest = null;
           
-          if ($this->_ref_object->_class == $_report_class) {
+          if ($this->_ref_object->_class == $_report_class && $this->_ref_object->_id) {
             $_concept_latest = $_ex_class->getLatestExObject($this->_ref_object);
           }
-          elseif ($this->_ref_reference_object_1->_class == $_report_class) {
+          elseif ($this->_ref_reference_object_1->_class == $_report_class && $this->_ref_reference_object_1->_id) {
             $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_1);
           }
-          elseif ($this->_ref_reference_object_2->_class == $_report_class) {
+          elseif ($this->_ref_reference_object_2->_class == $_report_class && $this->_ref_reference_object_2->_id) {
             $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_2);
           }
           
@@ -432,8 +432,9 @@ class CExObject extends CMbMetaObject {
 
         $_base = null;
         foreach ($latest_ex_objects as $_latest_ex_object) {
-          if ($_latest_ex_object->_id && $_latest_ex_object->_class == $_field->report_class) {
+          if ($_latest_ex_object->_id && $_latest_ex_object->_class == $_report_class) {
             $_base = $latest_ex_objects;
+            break;
           }
         }
 

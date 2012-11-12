@@ -113,7 +113,7 @@ class CExClass extends CMbObject {
   
   function loadEditView() {
     parent::loadEditView();
-    
+
     $this->loadRefsGroups();
     $events = $this->loadRefsEvents();
     
@@ -212,7 +212,12 @@ class CExClass extends CMbObject {
 
     return $where;
   }
-  
+
+  /**
+   * @param bool $cache
+   *
+   * @return CExObject
+   */
   function getExObjectInstance($cache = false){
     static $instances = array();
     
@@ -240,9 +245,9 @@ class CExClass extends CMbObject {
     }
 
     $whereOr = array(
-      "object_class     = '$object->_class' AND object_id     = '$object->_id'",
-      "reference_class  = '$object->_class' AND reference_id  = '$object->_id'",
-      "reference2_class = '$object->_class' AND reference2_id = '$object->_id'",
+      "(object_class     = '$object->_class' AND object_id     = '$object->_id')",
+      "(reference_class  = '$object->_class' AND reference_id  = '$object->_id')",
+      "(reference2_class = '$object->_class' AND reference2_id = '$object->_id')",
     );
     $where = implode(" OR ", $whereOr);
     
@@ -332,7 +337,7 @@ class CExClass extends CMbObject {
     
     foreach ($groups as $_ex_group) {
       $grid = array_fill(0, $h, array_fill(0, $w, array(
-        "type" => null, 
+        "type" => null,
         "object" => null,
       )));
       
