@@ -215,7 +215,6 @@ class CAccessLog extends CMbObject {
         SUM(`datasource_log`.`duration`) AS duration,
       DATE_FORMAT(`access_log`.`period`, '$period_format') AS `gperiod`
       FROM `datasource_log`, `access_log`
-      USE INDEX (`period`)
       WHERE `access_log`.`period` BETWEEN '$start' AND '$end'
         AND `access_log`.`accesslog_id` = `datasource_log`.`accesslog_id`";
         
