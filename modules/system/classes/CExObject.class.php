@@ -276,24 +276,24 @@ class CExObject extends CMbMetaObject {
    * attention aux dates, il faut surement checker le log de derniere modif des champs du concept
    */
   function getReportedValues(CExClassEvent $event){
-    if ($this->_id) return;
+    if ($this->_id) {
+      return;
+    }
     
     self::$_multiple_load = true;
     CExClassField::$_load_lite = true;
     
-    $object = $this->loadTargetObject();
-    
-    $ex_class = $this->_ref_ex_class;
-    
+    $this->loadTargetObject();
     $this->loadRefReferenceObjects();
 
+    $ex_class = $this->_ref_ex_class;
     $latest_ex_objects = array(
+      $ex_class->getLatestExObject($this->_ref_object),
       $ex_class->getLatestExObject($this->_ref_reference_object_1),
       $ex_class->getLatestExObject($this->_ref_reference_object_2),
-      $ex_class->getLatestExObject($this->_ref_object),
     );
     
-    $fields = $this->_ref_ex_class->loadRefsAllFields(true);
+    $fields = $ex_class->loadRefsAllFields(true);
     
     // Cache de concepts
     $concepts = array();

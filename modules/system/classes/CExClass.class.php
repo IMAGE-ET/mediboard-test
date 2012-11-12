@@ -251,7 +251,7 @@ class CExClass extends CMbObject {
     );
     $where = implode(" OR ", $whereOr);
     
-    $ex_object = $this->getExObjectInstance(true);
+    $ex_object = new CExObject($this->_id); // NE PAS UTILISER this->getExObjectInstance(true);
     $ex_object->loadObject($where, "ex_object_id DESC");
     $ex_object->load(); // needed !!!!!!!
 
