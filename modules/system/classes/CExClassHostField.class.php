@@ -22,6 +22,11 @@ class CExClassHostField extends CMbObject {
   var $coord_value_x = null;
   var $coord_value_y = null;
   
+  var $coord_left    = null;
+  var $coord_top     = null;
+  var $coord_width   = null;
+  var $coord_height  = null;
+  
   var $_ref_ex_group = null;
   var $_ref_host_object = null;
 
@@ -45,6 +50,12 @@ class CExClassHostField extends CMbObject {
     $props["coord_value_y"] = "num min|0 max|100";
     $props["coord_label_x"] = "num min|0 max|100";
     $props["coord_label_y"] = "num min|0 max|100";
+    
+    // Pixel positionned
+    $props["coord_left"]   = "num";
+    $props["coord_top"]    = "num";
+    $props["coord_width"]  = "num min|1";
+    $props["coord_height"] = "num min|1";
     return $props;
   }
   
@@ -56,18 +67,6 @@ class CExClassHostField extends CMbObject {
   
   function loadRefExGroup($cache = true){
     return $this->_ref_ex_group = $this->loadFwdRef("ex_group_id", $cache);
-  }
-  
-  function updatePlainFields(){
-    // If we change its group, we need to reset its coordinates
-    if ($this->fieldModified("ex_group_id")) {
-      $this->coord_title_x = "";
-      $this->coord_title_y = "";
-      $this->coord_text_x = "";
-      $this->coord_text_y = "";
-    }
-    
-    return parent::updatePlainFields();
   }
   
   function getHostObject(CExObject $ex_object) {

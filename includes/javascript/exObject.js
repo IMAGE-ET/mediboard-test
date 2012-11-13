@@ -2,6 +2,8 @@ var ExObject = {
   container: null,
   classes: {},
   refreshSelf: {},
+  defaultProperties: {},
+  pixelPositionning: false,
   register: function(container, options) {
     this.container = $(container);
     
@@ -82,7 +84,6 @@ var ExObject = {
       triggers[value] = null;
       
       if (ex_class_id) {
-        var form = input.form;
         var object_guid = ExObject.current.object_guid;
         var event_name = ExObject.current.event_name;
         showExClassForm(ex_class_id, object_guid, /*object_guid+"_"+*/event_name+"_"+ex_class_id, "", event_name, null, parent_view);
@@ -185,6 +186,7 @@ var ExObject = {
     url.mergeParams(options);
     url.requestUpdate(target, {onComplete: options.onComplete});
   },
+  
   getCastedInputValue: function(value, input){
     // input may be a nodeList (bool, etc)
     try {
@@ -197,105 +199,246 @@ var ExObject = {
       if (input.hasClassName("num") ||
           input.hasClassName("numchar") ||
           input.hasClassName("pct")) {
-        return parseInt(value);
+        return parseInt(value, 10);
       }
     } catch(e) {}
     
     return value;
   },
-  handlePredicates: function(predicates, form){
-    predicates.each(function(p){
-      var triggerField = form.elements[p.trigger];
-      var targetField  = form.elements[p.target];
-      var triggerValue = $V(triggerField);
-      
-      if (Object.isArray(triggerValue)) {
-        triggerValue = triggerValue.join("|");
-      }
-      else {
-        triggerValue += "";
-      }
-      
-      var refValue = p.value;
-      
-      if (["=", "!=", ">", ">=", "<", "<="].indexOf(p.operator) > -1) {
-        refValue     = ExObject.getCastedInputValue(p.value, triggerField);
-        triggerValue = ExObject.getCastedInputValue(triggerValue, triggerField);
-      }
-      
-      var display = (function(){
-        // An empty value hides the target
-        if (triggerValue === ""/* || isNaN(triggerValue)*/) { // pas isNaN car on peut avoir des dates ou du texte!!
+  
+  checkPredicate: function(predicate, triggerField) {
+    var refValue = predicate.value;
+    var triggerValue = $V(triggerField);
+    var firstInput = Form.getInputsArray(triggerField)[0];
+    
+    if (Object.isArray(triggerValue)) {
+      triggerValue = triggerValue.join("|");
+    }
+    else {
+      triggerValue += "";
+    }
+
+    // Consider "set"s differently:
+    // when operator is "="  -> interesetion
+    // when operator is "!=" -> !intersection
+    if (firstInput.hasClassName("set")) {
+      var triggerValues = triggerValue.split(/\|/g).without("");
+      var predicateValues = predicate.value.split(/\|/g).without("");
+
+      switch (predicate.operator) {
+        case "=":
+          return triggerValues.intersect(predicateValues).length > 0;
+
+        case "!=":
+          return triggerValues.intersect(predicateValues).length == 0;
+
+        default:
           return false;
-        }
-        
-        switch (p.operator) {
-          case "=": 
-            if (triggerValue == p.value) return true;
-            break;
-            
-          case "!=": 
-            if (triggerValue != p.value) return true;
-            break;
-            
-          case ">": 
-            if (triggerValue > refValue) return true;
-            break;
-            
-          case ">=": 
-            if (triggerValue >= refValue) return true;
-            break;
-            
-          case "<": 
-            if (triggerValue < refValue) return true;
-            break;
-            
-          case "<=": 
-            if (triggerValue <= refValue) return true;
-            break;
-            
-          case "startsWith": 
-            if (triggerValue.indexOf(p.value) == 0) return true;
-            break;
-            
-          case "endsWith": 
-            if (triggerValue.substr(-p.value.length) == p.value) return true;
-            break;
-            
-          case "contains": 
-            if (triggerValue.indexOf(p.value) > -1) return true;
-            break;
-            
-          case "hasValue": 
-            if (triggerValue != "") return true;
-            break;
-            
-          default: return true;
-        }
-        
-        return false;
-      })();
-      
-      ExObject.toggleField(p.target, display, triggerField, targetField);
-    });
+      }
+    }
+    
+    if (["=", "!=", ">", ">=", "<", "<="].indexOf(predicate.operator) > -1) {
+      refValue     = ExObject.getCastedInputValue(predicate.value, triggerField);
+      triggerValue = ExObject.getCastedInputValue(triggerValue, triggerField);
+    }
+
+    // An empty value hides the target
+    if (triggerValue === ""/* || isNaN(triggerValue)*/) { // pas isNaN car on peut avoir des dates ou du texte!!
+      return false;
+    }
+
+    switch (predicate.operator) {
+      case "=":
+        if (triggerValue == predicate.value) return true;
+        break;
+
+      case "!=":
+        if (triggerValue != predicate.value) return true;
+        break;
+
+      case ">":
+        if (triggerValue > refValue) return true;
+        break;
+
+      case ">=":
+        if (triggerValue >= refValue) return true;
+        break;
+
+      case "<":
+        if (triggerValue < refValue) return true;
+        break;
+
+      case "<=":
+        if (triggerValue <= refValue) return true;
+        break;
+
+      case "startsWith":
+        if (triggerValue.indexOf(predicate.value) == 0) return true;
+        break;
+
+      case "endsWith":
+        if (triggerValue.substr(-predicate.value.length) == predicate.value) return true;
+        break;
+
+      case "contains":
+        if (triggerValue.indexOf(predicate.value) > -1) return true;
+        break;
+
+      case "hasValue":
+        if (triggerValue != "") return true;
+        break;
+
+      default: return true;
+    }
+
+    return false;
   },
   
-  initPredicates: function(predicates, form){
-    var callback = ExObject.handlePredicates.curry(predicates, form);
-    callback();
+  getStyledElement: function(input) {
+    var visual;
     
-    predicates.each(function(p){
-      var inputs = Form.getInputsArray(form.elements[p.trigger]);
+    if (visual = input.get("visual-element")) {
+      return input.form[visual];
+    }
+
+    if (input.hasAttribute("defaultstyle")) {
+      return input;
+    }
+
+    return input.up("[defaultstyle]");
+  },
+  
+  handlePredicate: function(predicate, input, form){
+    var result = ExObject.checkPredicate(predicate, input);
+
+    // Display fields
+    predicate.display.fields.each(function(name){
+      ExObject.toggleField(name, result, form.elements[name]);
+    });
+
+    // Display messages
+    predicate.display.messages.each(function(guid){
+      var message = $("message-"+guid);
+
+      if (!message) {
+        return;
+      }
+
+      message.setVisible(result);
+    });
+
+    if (ExObject.pixelPositionning) {
+      // Display subgroups
+      predicate.display.subgroups.each(function(guid){
+        $("subgroup-"+guid).setVisible(result);
+      });
+    }
+    
+    // TODO To be optimized
+    
+    // Style
+    if (result) {
+      predicate.style.fields.each(function(style){
+        var input = Form.getInputsArray(form.elements[style.name])[0];
+        var styled = ExObject.getStyledElement(input);
+        styled.style[style.camelized] = style.value;
+      });
+
+      predicate.style.messages.each(function(style){
+        var message = $("message-"+style.guid);
+
+        if (!message) {
+          return;
+        }
+
+        message.style[style.camelized] = style.value;
+      });
+
+      if (ExObject.pixelPositionning) {
+        predicate.style.subgroups.each(function(style){
+          $("subgroup-"+style.guid).down("fieldset").style[style.camelized] = style.value;
+        });
+      }
+    }
+  },
+  
+  initPredicates: function(defaultProperties, fieldPredicates, form){
+    ExObject.defaultProperties = defaultProperties;
+
+    $H(fieldPredicates).each(function(pair){
+      var element = form.elements[pair.key];
+      var inputs = Form.getInputsArray(element);
+      var affects = pair.value.affects;
+
+      var resetStyle = (function(affects, form){
+        if (!affects) {
+          return;
+        }
+
+        $H(affects).each(function(p){
+          var guid = p.key;
+          var affected = p.value;
+          var css = ExObject.defaultProperties[guid];
+
+          if (!css) {
+            return;
+          }
+
+          var styledElement;
+
+          switch(affected.type) {
+            case "field":
+              var input = Form.getInputsArray(form.elements[affected.name])[0];
+              styledElement = ExObject.getStyledElement(input);
+              break;
+
+            case "message":
+              styledElement = $("message-"+guid);
+              break;
+
+            case "subgroup":
+              styledElement = $("subgroup-"+guid).down("fieldset");
+              break;
+          }
+
+          if (!styledElement) {
+            return;
+          }
+
+          // Firefox: do not use setStyle (needs camelcase)
+          $H(css).each(function(pair){
+            styledElement.style[pair.key.camelize()] = pair.value;
+          });
+        });
+      }).curry(affects, form);
+
+      resetStyle();
       
       inputs.each(function(input){
-        input.observe("change", callback)
-             .observe("ui:change", callback)
-             .observe("click", callback);
+        input.observe("change", resetStyle)
+             .observe("ui:change", resetStyle)
+             .observe("click", resetStyle);
+      });
+    
+      pair.value.predicates.each(function(predicate) {
+        var callback = (function(){
+          (function(){ 
+            ExObject.handlePredicate(predicate, element, form); 
+          }).defer();
+        }).curry(predicate, element, form);
+        
+        callback();
+  
+        inputs.each(function(input){
+          input.observe("change", callback)
+               .observe("ui:change", callback)
+               .observe("click", callback);
+        });
       });
     });
   },
   
-  toggleField: function(name, v, triggerField, targetField) {
+  toggleField: function(name, v, targetField) {
     $$("div.field-"+name).each(function(container){
       //container.setClassName("opacity-20", !v);
       container.setVisibility(v);
@@ -476,11 +619,11 @@ var ExObjectFormula = Class.create({
     
     var form = target.form;
     
-    var date = (new Date());
+    var date = new Date();
     date.resetTime();
     date = date.getTime();
     
-    var time = (new Date());
+    var time = new Date();
     time.resetDate();
     time = time.getTime();
     
@@ -516,7 +659,7 @@ var ExObjectFormula = Class.create({
     else {
       var props = target.getProperties();
       if (props.decimals) {
-        result = (result*1).toFixed(props.decimals);
+        result = parseFloat(result).toFixed(props.decimals);
       }
     }
     
@@ -570,4 +713,3 @@ function showExClassForm(ex_class_id, object_guid, title, ex_object_id, event_na
     url.modal();
   }
 }
-////////////////////

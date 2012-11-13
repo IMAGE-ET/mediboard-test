@@ -15,6 +15,8 @@
 {{/if}}
 
 {{mb_script module=forms script=ex_class_editor ajax=true}}
+{{mb_script module=forms script=ex_class_layout_editor ajax=true}}
+{{mb_script module=forms script=ex_class_layout_editor_pixel ajax=true}}
 {{mb_script module=system script=object_selector ajax=true}}
 
 <script type="text/javascript">
@@ -87,7 +89,13 @@ Main.add(function(){
                 <button type="submit" class="submit">{{tr}}Create{{/tr}}</button>
               {{/if}}
             </td>
-            <td colspan="2"></td>
+
+            {{if $conf.forms.CExClass.pixel_positionning}}
+              <th>{{mb_label object=$object field=pixel_positionning}}</th>
+              <td>{{mb_field object=$object field=pixel_positionning typeEnum=checkbox}}</td>
+            {{else}}
+              <td colspan="2"></td>
+            {{/if}}
           </tr>
         </table>
       </form>
@@ -107,7 +115,12 @@ Main.add(function(){
       
       var form = getForm("form-grid-layout").removeClassName("prepared");
       prepareForm(form);
-      ExClass.initLayoutEditor();
+      
+      {{if $object->pixel_positionning}}
+        ExClass.initPixelLayoutEditor();
+      {{else}}
+        ExClass.initLayoutEditor();
+      {{/if}}
     }
   });
   
@@ -127,7 +140,7 @@ toggleGroupLabelEdit = function(link) {
 </script>
 
 <ul class="control_tabs" id="ExClass-back">
-  <li><a href="#fields-specs" class="active">{{tr}}CExClass-back-fields{{/tr}}</a></li>
+  <li><a href="#fields-specs" class="active">{{tr}}CExClassFieldGroup-back-class_fields{{/tr}}</a></li>
   <li><a href="#fields-layout">{{tr}}CExClassField-layout{{/tr}}</a></li>
   <li><a href="#fields-events" {{if $object->_ref_events|@count == 0}} class="empty" {{/if}}>{{tr}}CExClass-back-events{{/tr}} <small>({{$object->_ref_events|@count}})</small></a></li>
 </ul>
@@ -205,87 +218,156 @@ toggleGroupLabelEdit = function(link) {
 
 <table class="main layout">
   <tr>
-    <td style="width: 16em; max-width: 300px;">
-      <table class="main tbl">
-        {{*<tr>
-          <th>{{mb_title class=CExClassField field=name}}</th>
-          <th>{{mb_title class=CExClassField field=prop}}</th>
-        </tr>*}}
-        {{foreach from=$object->_ref_groups item=_group}}
-          <tbody id="group-{{$_group->_guid}}" style="display: none;">
-            <tr>
-              <td style="text-align: right; min-width: 14em;">
-                <button type="button" class="new" onclick="ExField.create({{$object->_id}}, '{{$_group->_id}}')">
-                  {{tr}}CExClassField-title-create{{/tr}}
-                </button>
-              </td>
-            </tr>
-            {{foreach from=$_group->_ref_fields item=_field}}
-              <tr class="ex-class-field" data-ex_class_field_id="{{$_field->_id}}">
-                <td class="text">
-                  <span style="float: right;">
-                    {{if $_field->report_class}}
-                      <img src="./images/icons/reported.png" title="{{tr}}CExClassField-report_class{{/tr}} ({{tr}}{{$_field->report_class}}{{/tr}})"/>
-                    {{/if}}
-                    
-                    {{if $_field->formula}}
-                      <img src="style/mediboard/images/buttons/formula.png" />
-                    {{/if}}
-                    
-                    {{assign var=_spec_type value=$_field->_spec_object->getSpecType()}}
-                    {{assign var=_can_formula_arithmetic value="CExClassField::formulaCanArithmetic"|static_call:$_spec_type}}
-                    {{assign var=_can_formula_concat value="CExClassField::formulaCanConcat"|static_call:$_spec_type}}
-                    
-                    {{if $_can_formula_arithmetic || $_can_formula_concat}}
-                    <button class="right notext insert-formula {{if $_can_formula_arithmetic}}arithmetic{{/if}} {{if $_can_formula_concat}}concat{{/if}}" style="margin: -3px; margin-left: -1px; display: none;"
-                            onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
-                      {{tr}}CExClassField.add_to_formula{{/tr}}
-                    </button>
-                    {{/if}}
-                  </span>
-                  
-                  <a href="#1" onclick="ExField.edit('{{$_field->_id}}', null, null, '{{$_group->_id}}')">
-                    {{if $_field->_locale}}
-                      {{$_field->_locale}}
-                    {{else}}
-                      [{{$_field->name}}]
-                    {{/if}}
-                  </a>
+    <td style="width: 20em; max-width: 300px;">
+      {{foreach from=$object->_ref_groups item=_group}}
+        <div id="group-{{$_group->_guid}}" style="display: none;">
+          <script type="text/javascript">
+            Main.add(function(){
+              Control.Tabs.create("ExClassFieldGroup-{{$_group->_guid}}-items", true);
+            });
+          </script>
+
+          <ul class="control_tabs small" id="ExClassFieldGroup-{{$_group->_guid}}-items" style="white-space: nowrap;">
+            <li style="margin-right: 0;">
+              <a href="#list-fields-{{$_group->_guid}}" class="active" style="padding: 2px;">
+                {{tr}}CExClassFieldGroup-back-class_fields{{/tr}} <small>({{$_group->_ref_fields|@count}})</small>
+              </a>
+            </li>
+            <li style="margin-right: 0;">
+              <a href="#list-messages-{{$_group->_guid}}" style="padding: 2px;">
+                {{tr}}CExClassFieldGroup-back-class_messages{{/tr}} <small>({{$_group->_ref_messages|@count}})</small>
+              </a>
+            </li>
+            {{if !$object->_id || $object->pixel_positionning}}
+              <li style="margin-right: 0;">
+                <a href="#list-subgroups-{{$_group->_guid}}" style="padding: 2px;">
+                  {{tr}}CExClassFieldGroup-back-subgroups{{/tr}} <small>({{$_group->_ref_subgroups|@count}})</small>
+                </a>
+              </li>
+            {{/if}}
+          </ul>
+          <hr class="control_tabs" />
+
+          <table class="main tbl">
+            <tbody id="list-fields-{{$_group->_guid}}" style="display: none;">
+              <tr>
+                <td style="text-align: right; min-width: 14em;">
+                  <button type="button" class="new" onclick="ExField.create({{$object->_id}}, '{{$_group->_id}}')">
+                    {{tr}}CExClassField-title-create{{/tr}}
+                  </button>
                 </td>
               </tr>
-            {{foreachelse}}
+              {{foreach from=$_group->_ref_fields item=_field}}
+                <tr class="ex-class-field" data-ex_class_field_id="{{$_field->_id}}">
+                  <td class="text">
+                    {{if $_field->tab_index != null}}
+                    <span style="float: left; padding-right: 3px; color: #669966;" title="{{tr}}CExClassField-tab_index{{/tr}}">
+                      <small>{{$_field->tab_index}}</small>
+                    </span>
+                    {{/if}}
+
+                    <span style="float: right;">
+                      {{if $_field->report_class}}
+                        <img src="./images/icons/reported.png" title="{{tr}}CExClassField-report_class{{/tr}} ({{tr}}{{$_field->report_class}}{{/tr}})"/>
+                      {{/if}}
+
+                      {{if $_field->formula}}
+                        <img src="style/mediboard/images/buttons/formula.png" />
+                      {{/if}}
+
+                      {{if $_field->predicate_id}}
+                        <img src="./images/icons/showhide.png" title="{{tr}}CExClassField-predicate_id{{/tr}}"/>
+                      {{/if}}
+
+                      {{assign var=_spec_type value=$_field->_spec_object->getSpecType()}}
+                      {{assign var=_can_formula_arithmetic value="CExClassField::formulaCanArithmetic"|static_call:$_spec_type}}
+                      {{assign var=_can_formula_concat value="CExClassField::formulaCanConcat"|static_call:$_spec_type}}
+
+                      {{if $_can_formula_arithmetic || $_can_formula_concat}}
+                      <button class="right notext insert-formula {{if $_can_formula_arithmetic}}arithmetic{{/if}} {{if $_can_formula_concat}}concat{{/if}}" style="margin: -3px; margin-left: -1px; display: none;"
+                              onclick="ExFormula.insertText('[{{$_field->_locale|smarty:nodefaults|JSAttribute}}]')">
+                        {{tr}}CExClassField.add_to_formula{{/tr}}
+                      </button>
+                      {{/if}}
+                    </span>
+
+                    <a href="#1" onclick="ExField.edit('{{$_field->_id}}', null, null, '{{$_group->_id}}'); return false;">
+                      {{if $_field->_locale}}
+                        {{$_field->_locale}}
+                      {{else}}
+                        [{{$_field->name}}]
+                      {{/if}}
+                    </a>
+                  </td>
+                </tr>
+              {{foreachelse}}
+                <tr>
+                  <td colspan="2" class="empty">{{tr}}CExClassField.none{{/tr}}</td>
+                </tr>
+              {{/foreach}}
+            </tbody>
+
+            <tbody id="list-messages-{{$_group->_guid}}" style="display: none;">
               <tr>
-                <td colspan="2" class="empty">{{tr}}CExClassField.none{{/tr}}</td>
-              </tr>
-            {{/foreach}}
-            
-            <tr>
-              <th class="category">{{tr}}CExClassFieldGroup-back-class_messages{{/tr}}</th>
-            </tr>
-            <tr>
-              <td style="text-align: right;">
-                <button type="button" class="new" onclick="ExMessage.create('{{$_group->_id}}')">
-                  {{tr}}CExClassMessage-title-create{{/tr}}
-                </button>
-              </td>
-            </tr>
-            {{foreach from=$_group->_ref_messages item=_message}}
-              <tr class="ex-class-message" data-ex_class_message_id="{{$_message->_id}}">
-                <td class="text">
-                  <a href="#1" onclick="ExMessage.edit('{{$_message->_id}}', '{{$_group->_id}}')">
-                    {{$_message}}
-                  </a>
+                <td style="text-align: right;">
+                  <button type="button" class="new" onclick="ExMessage.create('{{$_group->_id}}')">
+                    {{tr}}CExClassMessage-title-create{{/tr}}
+                  </button>
                 </td>
               </tr>
-            {{foreachelse}}
+              {{foreach from=$_group->_ref_messages item=_message}}
+                <tr class="ex-class-message" data-ex_class_message_id="{{$_message->_id}}">
+                  <td class="text">
+                    <span style="float: right;">
+                      {{if $_message->predicate_id}}
+                        <img src="./images/icons/showhide.png" title="{{tr}}CExClassField-predicate_id{{/tr}}"/>
+                      {{/if}}
+                    </span>
+                    <a href="#1" onclick="ExMessage.edit('{{$_message->_id}}', '{{$_group->_id}}'); return false;">
+                      {{$_message}}
+                    </a>
+                  </td>
+                </tr>
+              {{foreachelse}}
+                <tr>
+                  <td class="empty">{{tr}}CExClassMessage.none{{/tr}}</td>
+                </tr>
+              {{/foreach}}
+            </tbody>
+
+            <tbody id="list-subgroups-{{$_group->_guid}}" style="display: none;">
               <tr>
-                <td colspan="2" class="empty">{{tr}}CExClassMessage.none{{/tr}}</td>
+                <td style="text-align: right;" colspan="2">
+                  <button type="button" class="new" onclick="ExSubgroup.create('{{$_group->_id}}')">
+                    {{tr}}CExClassSubgroup-title-create{{/tr}}
+                  </button>
+                </td>
               </tr>
-            {{/foreach}}
-            
-          </tbody>
-        {{/foreach}}
-      </table>
+              {{foreach from=$_group->_ref_subgroups item=_subgroup}}
+                <tr class="ex-class-subgroup" data-ex_subgroup_id="{{$_subgroup->_id}}">
+                  <td class="text">
+                    <span style="float: right;">
+                      {{if $_subgroup->predicate_id}}
+                        <img src="./images/icons/showhide.png" title="{{tr}}CExClassField-predicate_id{{/tr}}"/>
+                      {{/if}}
+                    </span>
+                    <a href="#1" onclick="ExSubgroup.edit('{{$_subgroup->_id}}', '{{$_group->_id}}'); return false;">
+                      {{$_subgroup}}
+                    </a>
+                  </td>
+                  <td>
+                    {{$_subgroup->_count.children_groups+$_subgroup->_count.children_fields+$_subgroup->_count.children_messages}}
+                  </td>
+                </tr>
+              {{foreachelse}}
+                <tr>
+                  <td colspan="2" class="empty">{{tr}}CExClassFieldSubgroup.none{{/tr}}</td>
+                </tr>
+              {{/foreach}}
+            </tbody>
+          </table>
+        </div>
+      {{/foreach}}
     </td>
     <td id="exFieldEditor" style="width: auto;">
       <!-- exFieldEditor -->&nbsp;
@@ -296,7 +378,11 @@ toggleGroupLabelEdit = function(link) {
 </div>
 
 <div id="fields-layout" style="display: none;">
-  {{mb_include module=forms template=inc_edit_fields_layout ex_class=$object grid=$object->_grid out_of_grid=$object->_out_of_grid}}
+  {{if $object->pixel_positionning}}
+    {{mb_include module=forms template=inc_edit_fields_pixel_layout ex_class=$object grid=$object->_grid out_of_grid=$object->_out_of_grid}}
+  {{else}}
+    {{mb_include module=forms template=inc_edit_fields_layout ex_class=$object grid=$object->_grid out_of_grid=$object->_out_of_grid}}
+  {{/if}}
 </div>
 
 <div id="fields-events" style="display: none;">

@@ -11,7 +11,7 @@
 CCanDo::checkEdit();
 
 $_GET["object_class"] = "CExClass";
-$_GET["tree_width"] = "15%";
+$_GET["tree_width"] = "12%";
 $_GET["group_id"] = CGroups::loadCurrent()->_id;
 
 echo <<<HTML

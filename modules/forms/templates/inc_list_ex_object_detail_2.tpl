@@ -15,7 +15,7 @@ prepareEmptyRows = function(){
     var empty = (emptyRows == allRows);
     
     if (!empty) {
-      tbody.select('th.ex_group').each(function(th){;
+      tbody.select('th.ex_group').each(function(th){
         th.addClassName("rowspan-changed");
         th.emptyRowSpan = allRows-emptyRows+1;
         th.origRowSpan = th.rowSpan;
@@ -34,7 +34,7 @@ prepareEmptyRows = function(){
       previous.addClassName("empty");
     }
   });
-}
+};
 
 toggleEmptyRows = function(){
   var container = $("ex_class-tables");
@@ -49,7 +49,7 @@ toggleEmptyRows = function(){
   });
   
   container.toggleClassName("hide-empty-rows", show);
-}
+};
 </script>
 
 <div id="ex_class-tables" class="hide-empty-rows">

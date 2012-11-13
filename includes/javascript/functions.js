@@ -10,7 +10,17 @@
 
 function main() {
   try {
-    if (window.sessionLocked) Session.lock();
+    // Fix for IE9 in IE8 mode
+    try {
+      if (Prototype.Browser.IE && document.documentMode == 8) {
+        $$("html")[0].removeClassName("ua-msie-9").addClassName("ua-msie-8");
+      }
+    } catch (e) {}
+
+    if (window.sessionLocked) {
+      Session.lock();
+    }
+
     prepareForms();
     SystemMessage.init();
     WaitingMessage.init();

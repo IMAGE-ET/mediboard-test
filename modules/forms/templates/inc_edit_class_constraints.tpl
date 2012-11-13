@@ -17,7 +17,7 @@
   {{foreach from=$constraints item=_constraint}}
     <tr data-constraint_id="{{$_constraint->_id}}">
       <td class="text">
-        <a href="#1" onclick="ExConstraint.edit({{$_constraint->_id}})">
+        <a href="#1" onclick="ExConstraint.edit({{$_constraint->_id}}); return false;">
           {{$_constraint}}
         </a>
       </td>

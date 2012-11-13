@@ -17,7 +17,7 @@
         {{foreach from=$ex_class->_ref_events item=_event}}
           <tr data-event_id="{{$_event->_id}}" {{if $_event->disabled}} class="opacity-50" {{/if}}>
             <td class="text">
-              <a href="#1" onclick="ExClassEvent.edit({{$_event->_id}})">
+              <a href="#1" onclick="ExClassEvent.edit({{$_event->_id}}); return false;">
                 {{$_event}}
               </a>
             </td>

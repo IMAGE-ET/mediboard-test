@@ -8,7 +8,13 @@
   {{assign var=ex_object value=$ex_class->_ex_object}}
 {{/if}}
 
+{{assign var=show_label value=$ex_class->pixel_positionning}}
+{{if $show_label}}
+  {{assign var=show_label value=$ex_field->show_label}}
+{{/if}}
+
 {{assign var=_field_name value=$ex_field->name}}
+{{assign var=_properties value=$ex_field->_default_properties}}
 {{assign var=_spec value=$ex_object->_specs.$_field_name}}
 
 {{if $mode == "normal" && $ex_field->_triggered_data|@count}}
@@ -25,38 +31,29 @@
   });
   </script>
 {{/if}}
-  
+
+{{assign var=_style value=""}}
+{{foreach from=$_properties key=_type item=_value}}
+  {{if $_value != ""}}
+    {{assign var=_style value="$_style $_type:$_value;"}}
+  {{/if}}
+{{/foreach}}
+
 {{if $mode == "normal" && $_spec instanceof CRefSpec}}
-  <script type="text/javascript">
-  Main.add(function(){
-    var form = getForm("{{$form}}");
-    var url = new Url("system", "ajax_seek_autocomplete");
-    url.addParam("object_class", "{{$_spec->class}}");
-    url.addParam("field", "{{$_field_name}}");
-    url.addParam("input_field", "_{{$_field_name}}_view");
-    url.autoComplete(form.elements["_{{$_field_name}}_view"], null, {
-      minChars: 3,
-      method: "get",
-      select: "view",
-      dropdown: true,
-      afterUpdateElement: function(field,selected){
-        $V(field.form["{{$_field_name}}"], selected.getAttribute("id").split("-")[2]);
-        if ($V(field.form.elements["_{{$_field_name}}_view"]) == "") {
-          $V(field.form.elements["_{{$_field_name}}_view"], selected.down('.view').innerHTML);
-        }
-      }
-    });
-  });
-  </script>
-  <input type="text" class="autocomplete" name="_{{$_field_name}}_view" value="{{$ex_object->_fwd.$_field_name}}" size="30" />
-  {{mb_field object=$ex_object field=$_field_name form=$form hidden=true}}
-{{elseif $_spec instanceof CEnumSpec && $_spec->vertical}}
-  <fieldset>
-    {{mb_field object=$ex_object field=$_field_name register=true increment=true form=$form}}
-  </fieldset>
+  {{mb_include module=forms template=inc_ex_object_field_autocomplete}}
+
+{{elseif ($_spec instanceof CEnumSpec && $_spec->typeEnum == "radio") || ($_spec instanceof CSetSpec && $_spec->typeEnum == "checkbox") || ($_spec instanceof CBoolSpec && $_spec->typeEnum == "radio")}}
+  {{mb_include module=forms template=inc_ex_object_field_fieldset}}
+
 {{elseif $ex_field->formula && !$is_predicate}}
-  {{mb_field object=$ex_object field=$_field_name readonly=true style="font-weight: bold; background-color: #aaff56;" class="noresize" rows=5 title=$ex_field->_formula}}
-  <button type="button" class="cancel notext" style="margin-left: -1px;" onclick="$V($(this).previous(),'')">Vider</button>
+  {{mb_include module=forms template=inc_ex_object_field_formula}}
+
+{{elseif $_spec instanceof CSetSpec && $_spec->typeEnum == "select"}}
+  {{mb_include module=forms template=inc_ex_object_field_select_multiple}}
+
+{{elseif $_spec instanceof CTextSpec || ($_spec instanceof CEnumSpec && $_spec->typeEnum == "select")}}
+  {{mb_include module=forms template=inc_ex_object_field_two_lines}}
+
 {{else}}
-  {{mb_field object=$ex_object field=$_field_name register=true increment=true form=$form emptyLabel=" "}}
+  {{mb_include module=forms template=inc_ex_object_field_standard}}
 {{/if}}

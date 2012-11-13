@@ -18,416 +18,11 @@ ExClass = {
         }
       }
     });
-  },
-  submitLayout: function(drag, drop) {
-    var coord_x = drop.get("x"),
-        coord_y = drop.get("y"),
-        type    = drag.get("type"),
-        form = getForm("form-layout-field");
-    
-    $(form).select('input.coord').each(function(coord){
-      $V(coord.disable(), '');
-    });
-    
-    $V(form.ex_class_field_id, drag.get("field_id"));
-    $V(form["coord_"+type+"_x"].enable(), coord_x);
-    $V(form["coord_"+type+"_y"].enable(), coord_y);
-    
-    form.onsubmit();
-    
-    // source parent
-    var oldParent = drag.up();
-    /*
-    var cell = oldParent.up(".cell");
-    ExClass.setRowSpan(cell, 1);
-    ExClass.setColSpan(cell, 1);
-      
-    drag.down(".size input").each(function(input){
-      input.value = 1;
-    });*/
-    
-    if (drop.hasClassName("grid")) {
-      drop.update(drag);
-    }
-    else {
-      drop.insert(drag);
-    }
-    
-    if (oldParent.hasClassName("grid")) {
-      oldParent.update("&nbsp;");
-    }
-  },
-  submitLayoutMessage: function(drag, drop) {
-    var coord_x = drop.get("x"),
-        coord_y = drop.get("y"),
-        type    = drag.get("type").split("_")[1],
-        form = getForm("form-layout-message");
-    
-    $(form).select('input.coord').each(function(coord){
-      $V(coord.disable(), '');
-    });
-    
-    $V(form.ex_class_message_id, drag.get("message_id"));
-    $V(form["coord_"+type+"_x"].enable(), coord_x);
-    $V(form["coord_"+type+"_y"].enable(), coord_y);
-    
-    form.onsubmit();
-    
-    // source parent
-    var oldParent = drag.up();
-    
-    if (drop.hasClassName("grid")) {
-      drop.update(drag);
-    }
-    else {
-      drop.insert(drag);
-    }
-    
-    if (oldParent.hasClassName("grid")) {
-      oldParent.update("&nbsp;");
-    }
-  },
-  submitLayoutHostField: function(drag, drop) {
-    var coord_x = drop.get("x"),
-        coord_y = drop.get("y"),
-        type    = drag.get("type"),
-        form = getForm("form-layout-hostfield");
-        
-    if (!drop.hasClassName("droppable")) return;
-    
-    $(form).select('input.coord').each(function(coord){
-      $V(coord.disable(), '');
-    });
-    
-    $V(form.ex_class_host_field_id, drag.get("field_id") || "");
-    $V(form.elements.field, drag.get("field") || "");
-    $V(form.elements.ex_group_id, drag.get("ex_group_id") || "");
-    $V(form.elements.host_class, drag.get("host_class") || "");
-    $V(form["coord_"+type+"_x"].enable(), coord_x);
-    $V(form["coord_"+type+"_y"].enable(), coord_y);
-    
-    $V(form.elements.callback, "");
-    $V(form.del, 0);
-      
-    // source parent
-    var oldParent = drag.up();
-      
-    // dest = LIST
-    if (drop.hasClassName("out-of-grid")) {
-      var del = drag.get("field_id");
-      
-      $V(form.elements.callback, "");
-    
-      if (del) {
-        drag.remove();
-        oldParent.update("&nbsp;");
-        $V(form.del, 1);
-      }
-      else {
-        return;
-      }
-    }
-    
-    // dest = GRID
-    else {
-      var fromGrid = true;
-      
-      if (!drag.up(".grid")) {
-        fromGrid = false;
-        drag = drag.clone(true);
-        ExClass.initDraggableHostField(drag);
-        drag.setStyle({
-          position: "static",
-          opacity: 1
-        });
-      }
-      
-      drop.update(drag);
-      
-      if (fromGrid) {
-        oldParent.update("&nbsp;");
-      }
-      
-      var id = drag.identify();
-      $V(form.elements.callback, "ExClass.setHostFieldId.curry("+id+")");
-    }
-    
-    onSubmitFormAjax(form);
-  },
-  setHostFieldId: function(element_id, object_id, obj) {
-    var drag = $(element_id);
-    if (drag) {
-      drag.setAttribute("data-field_id", object_id);
-    }
-  },
-  initDraggableHostField: function(d){
-    new Draggable(d, {
-      revert: 'failure', 
-      scroll: window, 
-      ghosting: true,
-      onStart: function(drag){
-        drag.element.addClassName("dragging");
-        $$(".out-of-grid").invoke("addClassName", "dropactive");
-      },
-      onEnd: function(drag){
-        drag.element.removeClassName("dragging");
-        $$(".out-of-grid").invoke("removeClassName", "dropactive");
-      }
-    });
-  },
-  
-  getSpanningCells: function(cell, span) {
-    span = span || {};
-    
-    var rowspan = parseInt(span.rowspan || parseInt(cell.getAttribute("rowspan")) || 1);
-    var colspan = parseInt(span.colspan || parseInt(cell.getAttribute("colspan")) || 1);
-    
-    var cellPosition = cell.previousSiblings().length;
-    var row = cell.up("tr");
-    
-    // get rows
-    var rowSiblings = row.nextSiblings();
-    rowSiblings.unshift(row);
-    rowSiblings = rowSiblings.slice(0, rowspan);
-    
-    // get cells in each row
-    var grid = [];
-    rowSiblings.each(function(r){
-      var cells = r.childElements().slice(cellPosition, cellPosition+colspan);
-      grid.push(cells);
-    });
-    
-    return grid;
-  },
-  
-  getMaxSpanning: function(grid) {
-    var maxEmpty = function(line, j) {
-      for (var i = 0; i < line.length; i++) {
-        if (i + j == 0) continue;
-        
-        if (line[i].down(".draggable")) {
-          return i;
-        }
-      }
-      return i;
-    }
-    
-    var linesMax = [];
-    for(var y = 0; y < grid.length; y++) {
-      var line = grid[y];
-      var maxX = maxEmpty(line, y);
-      if (maxX == 0) break;
-      linesMax.push(maxX);
-    }
-    
-    var max = {
-      x: linesMax.max(),
-      y: linesMax.length
-    };
-    
-    var newGrid = [];
-    grid.each(function(row, y){
-      if (y < max.y) {
-        newGrid.push(row.slice(0, max.x));
-      }
-    });
-    
-    return {grid: newGrid, width: max.x, height: max.y};
-  },
-  
-  putCellSpans: function(grid) {
-    grid.select(".size input").each(ExClass.setSpan);
-  },
-  
-  changeSpan: function(button) {
-    var value = button.value;
-    var input = button.up(".arrows").down("input");
-    var newValue = Math.max(1, parseInt(input.value) + parseInt(value));
-    input.value = newValue;
-    input.fire("ui:change");
-  },
-  
-  setRowSpan: function(cell, rowspan){
-    var currentGrid = ExClass.getSpanningCells(cell);
-    currentGrid.invoke("invoke", "show");
-    
-    var newGrid = ExClass.getMaxSpanning(ExClass.getSpanningCells(cell, {rowspan: rowspan}));
-    newGrid.grid.invoke("invoke", "hide");
-    cell.show();
-    
-    var max = newGrid.height;
-    cell.writeAttribute("rowspan", max);
-    return max;
-  },
-  
-  setColSpan: function(cell, colspan){
-    var currentGrid = ExClass.getSpanningCells(cell);
-    currentGrid.invoke("invoke", "show");
-    
-    var newGrid = ExClass.getMaxSpanning(ExClass.getSpanningCells(cell, {colspan: colspan}));
-    newGrid.grid.invoke("invoke", "hide");
-    cell.show();
-    
-    var max = newGrid.width;
-    cell.writeAttribute("colspan", max);
-    return max;
-  },
-  
-  setSpan: function(input) {
-    var type = input.className;
-    var cell = input.up(".cell");
-    
-    if (type == "rowspan") {
-      $V(input, ExClass.setRowSpan(cell, input.value));
-    }
-    else {
-      $V(input, ExClass.setColSpan(cell, input.value));
-    }
-  },
-  
-  initLayoutEditor: function(){
-    /*$$(".draggable .size").each(function(size) {
-      size.observe("mousedown", Event.stop);
-    });*/
-    
-    $$(".size input").each(function(select) {
-      select.observe("ui:change", function(event){
-        var elt = Event.element(event);
-        ExClass.setSpan(elt);
-      });
-    });
-    
-    // :not pseudo element is slow in IE
-    var draggables = $$(".draggable").notMatch(".hostfield");
-    
-    draggables.each(function(d){
-      d.observe("mousedown", function(event){
-        if (!ExClass.pickMode) {
-          return;
-        }
-        
-        Event.stop(event);
-        
-        var element = Event.element(event);
-        if (!element.hasClassName("draggable")) {
-          element = element.up(".draggable");
-        }
-        
-        var has = element.hasClassName("picked");
-        $$(".draggable.picked").invoke("removeClassName", "picked");
-        
-        if (!has){
-          element.toggleClassName("picked");
-        }
-      });
-      
-      new Draggable(d, {
-        revert: 'failure', 
-        scroll: window, 
-        ghosting: true,
-        onStart: function(draggable){
-          var element = draggable.element;
-          
-          if (!ExClass.pickMode && element.up(".out-of-grid")) {
-            element.up(".group-layout").down(".drop-grid").scrollTo();
-          }
-          
-          $$(".out-of-grid").invoke("addClassName", "dropactive");
-        },
-        onEnd: function(){
-          $$(".out-of-grid").invoke("removeClassName", "dropactive");
-        }
-      });
-    });
-    
-    $$(".draggable.hostfield").each(ExClass.initDraggableHostField);
-    
-    /*
-    $$(".draggable.hr").each(function(d){
-      new Draggable(d, {
-        //revert: true, 
-        scroll: window, 
-        ghosting: true
-      });
-    });*/
-    
-    function dropCallback(drag, drop) {
-      drag.style.position = ''; // a null value doesn't work on IE
-      
-      // prevent multiple fields in the same cell
-      if (drop.hasClassName('grid') && drop.select('.draggable').length) return;
-        
-      // grid to trash for ExFields
-      if (drop.hasClassName("out-of-grid") && !drag.hasClassName('hostfield')) {
-        if (drag.hasClassName('field')) {
-          drop = drop.down(".field-list");
-        }
-        
-        if (drag.hasClassName('label')) {
-          drop = drop.down(".label-list");
-        }
-        
-        if (drag.hasClassName('message_title')) {
-          drop = drop.down(".message_title-list");
-        }
-        
-        if (drag.hasClassName('message_text')) {
-          drop = drop.down(".message_text-list");
-        }
-      }
-      
-      if (drag.hasClassName('hostfield')) {
-        ExClass.submitLayoutHostField(drag, drop);
-      }
-      else if (drag.hasClassName('field') || drag.hasClassName('label')) {
-        ExClass.submitLayout(drag, drop);
-      }
-      else {
-        ExClass.submitLayoutMessage(drag, drop);
-      }
-    }
-    
-    $$(".droppable").each(function(drop){
-      drop.observe("mousedown", function(event){
-        if (!ExClass.pickMode || event.element().hasClassName("dont-lock")) {
-          return;
-        }
-        
-        Event.stop(event);
-        
-        if (drop.childElements().length) {
-          return;
-        }
-        
-        var drag = $$(".picked")[0];
-        
-        if (!drag) {
-          return;
-        }
-        
-        dropCallback(drag, drop);
-        drop.insert(drag.removeClassName("picked"));
-      });
-      
-      Droppables.add(drop, {
-        hoverclass: 'dropover',
-        onDrop: dropCallback
-      });
-    });
-    
-    ExClass.layourEditorReady = true;
   }
 };
 
 ExField = {
   latest: {},
-  saveLatest: function(id, obj) {
-    ExField.latest = {};
-    if (id) {
-      obj._id = id;
-      ExField.latest = obj;
-    }
-  },
   edit: function(id, ex_class_id, target, ex_group_id) {
     if (window.exClassTabs) {
       exClassTabs.setActiveTab("fields-specs");
@@ -461,10 +56,35 @@ ExList = {
 
 ExMessage = {
   edit: function(id, ex_group_id) {
+    if (window.exClassTabs) {
+      exClassTabs.setActiveTab("fields-specs");
+    }
     var url = new Url("forms", "ajax_edit_ex_message");
     url.addParam("ex_message_id", id);
     url.addParam("ex_group_id", ex_group_id);
-    url.requestUpdate("exFieldEditor");
+    url.requestUpdate("exFieldEditor", function(){
+      $$("tr[data-ex_class_message_id="+id+"]")[0].addUniqueClassName("selected");
+    });
+  },
+  editCallback: function(id, obj) {
+    // void
+  },
+  create: function(ex_group_id) {
+    this.edit("0", ex_group_id);
+  }
+};
+
+ExSubgroup = {
+  edit: function(id, ex_group_id) {
+    if (window.exClassTabs) {
+      exClassTabs.setActiveTab("fields-specs");
+    }
+    var url = new Url("forms", "ajax_edit_ex_subgroup");
+    url.addParam("ex_subgroup_id", id);
+    url.addParam("ex_group_id", ex_group_id);
+    url.requestUpdate("exFieldEditor", function(){
+      $$("tr[data-ex_subgroup_id="+id+"]")[0].addUniqueClassName("selected");
+    });
   },
   editCallback: function(id, obj) {
     // void
@@ -486,7 +106,7 @@ ExConcept.editCallback = function(id, obj) {
   ExConcept.refreshList();
 };
 
-ExConcept.createInModal = function(id, container){
+ExConcept.createInModal = function(id){
   var url = new Url("forms", "view_ex_concept");
   url.addParam("object_guid", "CExConcept-"+(id || 0));
   url.addParam("hide_tree", 1);
@@ -504,7 +124,7 @@ ExConcept.createInModal = function(id, container){
   
   url.modal({width: 800, height: 600});
   url.modalObject.observe("onRemoteContentLoaded", callback);*/
-}
+};
 
 ExFieldSpec = {
   options: {},
@@ -555,7 +175,6 @@ ExClassEvent = {
   },
   setEvent: function(select) {
     var form = select.form;
-    var selected = select.options[select.selectedIndex];
     var parts = $V(select).split(".");
     $V(form.host_class, parts[0]);
     $V(form.event_name, parts[1]);
@@ -621,7 +240,7 @@ ExFormula = {
     while (match = re.exec(text)) {
       if (ExFormula.tokens.indexOf(match[1].strip()) == -1) {
         bad.push(match[1]);
-      };
+      }
     }
     
     return bad;
@@ -703,8 +322,32 @@ ExFieldPredicate = {
     }
     
     url.requestModal(600, 300);
+    
+    return false;
   },
   create: function(ex_field_id, exclude_ex_field_id, form) {
     this.edit("0", ex_field_id, exclude_ex_field_id, form);
+  }
+};
+
+ExFieldProperty = {
+  edit: function(id, object_class, object_id, form) {
+    var url = new Url("forms", "ajax_edit_ex_field_property");
+    url.addParam("ex_field_property_id", id);
+    
+    if (object_id && object_class) {
+      url.addParam("object_class", object_class);
+      url.addParam("object_id",    object_id);
+    }
+    
+    if (form && id == 0) {
+      url.addParam("opener_field_value", form.predicate_id.identify());
+      url.addParam("opener_field_view",  form.predicate_id_autocomplete_view.identify());
+    }
+    
+    url.requestModal(600, 300);
+  },
+  create: function(object_class, object_id, form) {
+    this.edit("0", object_class, object_id, form);
   }
 };

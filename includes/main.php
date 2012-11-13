@@ -92,6 +92,7 @@ CJSLoader::$files = array(
   "includes/javascript/mbObject.js",
   "includes/javascript/browserDetect.js",
   "includes/javascript/configuration.js",
+  "includes/javascript/plugin.js",
 
   "includes/javascript/usermessage.js",
 );
@@ -148,8 +149,7 @@ if (!CAppUI::$instance->user_id) {
   }
   
   // Destroy the current session and output login page
-  session_unset();
-  @session_destroy(); // Escaped because of an unknown error
+  CSessionHandler::end(true);
   CApp::rip();
 }
 

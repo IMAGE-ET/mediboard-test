@@ -47,7 +47,8 @@ class CExObject extends CMbMetaObject {
   var $_reported_fields = array();
   var $_fields_display = array();
   var $_fields_display_struct = array();
-  
+  var $_fields_default_properties = array();
+
   static $_load_lite      = false;
   static $_multiple_load  = false;
   
@@ -230,8 +231,10 @@ class CExObject extends CMbMetaObject {
     $this->_ref_reference_object_1 = $this->loadFwdRef("reference_id");
     $this->_ref_reference_object_2 = $this->loadFwdRef("reference2_id");
   }
-  
+
   /**
+   * @param bool $cache
+   *
    * @return CGroups
    */
   function loadRefGroup($cache = true){
@@ -279,10 +282,10 @@ class CExObject extends CMbMetaObject {
     if ($this->_id) {
       return;
     }
-    
+
     self::$_multiple_load = true;
     CExClassField::$_load_lite = true;
-    
+
     $this->loadTargetObject();
     $this->loadRefReferenceObjects();
 
@@ -338,7 +341,7 @@ class CExObject extends CMbMetaObject {
           );
         }
         else {
-          list($_concept, $_concept_fields) = $concepts[$_field->concept_id];
+          list(, $_concept_fields) = $concepts[$_field->concept_id];
         }
         
         $_latest = null;
@@ -461,31 +464,117 @@ class CExObject extends CMbMetaObject {
     
     return $this->_old; 
   }
-  
+
+  private function camelize($str) {
+    return preg_replace("/-+(.)?/e", "ucwords('\\1')", $str);
+  }
+
   function setFieldsDisplay(){
     $fields = $this->_ref_ex_class->loadRefsAllFields(true);
-    
+
+    $default = array();
     $this->_fields_display_struct = array();
     
     foreach ($fields as $_field) {
-      if (!$_field->predicate_id) {
-        continue;
+      $_affected = array();
+      $_predicates = $_field->loadRefPredicates();
+
+      foreach ($_predicates as $_predicate) {
+        $_struct = array(
+          "operator" => $_predicate->operator,
+          "value"    => $_predicate->value,
+          "display"  => array(
+            "fields"    => array(),
+            "messages"  => array(),
+            "subgroups" => array(),
+          ),
+          "style"    => array(
+            "fields"    => array(),
+            "messages"  => array(),
+            "subgroups" => array(),
+          ),
+        );
+
+        // Fields
+        $_display_fields = $_predicate->loadBackRefs("display_fields");
+        foreach ($_display_fields as $_display) {
+          $_struct["display"]["fields"][] = $_display->name;
+        }
+
+        // Messages
+        $_display_messages = $_predicate->loadBackRefs("display_messages");
+        foreach ($_display_messages as $_display) {
+          $_struct["display"]["messages"][] = $_display->_guid;
+        }
+
+        // Subgroups
+        $_display_subgroups = $_predicate->loadBackRefs("display_subgroups");
+        foreach ($_display_subgroups as $_display) {
+          $_struct["display"]["subgroups"][] = $_display->_guid;
+        }
+
+        $_styles = $_predicate->loadRefProperties();
+        foreach ($_styles as $_style) {
+          $_ref_object = $_style->loadTargetObject();
+          $default[$_ref_object->_guid] = $_ref_object->getDefaultProperties();
+
+          switch ($_style->object_class) {
+            case "CExClassField":
+              $_field_name = $_ref_object->name;
+              $_struct["style"]["fields"][] = array(
+                "name"      => $_field_name,
+                "type"      => $_style->type,
+                "camelized" => $this->camelize($_style->type),
+                "value"     => $_style->value,
+              );
+
+              $_affected[$_ref_object->_guid] = array(
+                "type" => "field",
+                "name" => $_field_name,
+              );
+            break;
+
+            case "CExClassMessage":
+              $_struct["style"]["messages"][] = array(
+                "guid"      => $_ref_object->_guid,
+                "type"      => $_style->type,
+                "camelized" => $this->camelize($_style->type),
+                "value"     => $_style->value,
+              );
+
+              $_affected[$_ref_object->_guid] = array(
+                "type" => "message",
+                "guid" => $_ref_object->_guid,
+              );
+            break;
+
+            case "CExClassFieldSubgroup":
+              $_struct["style"]["subgroups"][] = array(
+                "guid"      => $_ref_object->_guid,
+                "type"      => $_style->type,
+                "camelized" => $this->camelize($_style->type),
+                "value"     => $_style->value,
+              );
+
+              $_affected[$_ref_object->_guid] = array(
+                "type" => "subgroup",
+                "guid" => $_ref_object->_guid,
+              );
+            break;
+          }
+        }
+
+        $this->_fields_display_struct[$_field->name]["predicates"][] = $_struct;
       }
-      
-      $_predicate = $_field->loadRefPredicate();
-      $_source_field = $_predicate->loadRefExClassField();
-      
-      $this->_fields_display[$_field->name] = $_predicate->checkValue($this->{$_source_field->name});
-      
-      $this->_fields_display_struct[] = array(
-        "target"   => $_field->name,
-        "trigger"  => $_source_field->name,
-        "operator" => $_predicate->operator,
-        "value"    => $_predicate->value,
-      );
+
+      if (!empty($_affected)) {
+        $this->_fields_display_struct[$_field->name]["affects"] = $_affected;
+      }
     }
+
+    $this->_fields_default_properties = $default;
   }
-  
+
   function store(){
     if ($msg = $this->check()) {
       return $msg;

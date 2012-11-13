@@ -11,13 +11,13 @@ selectConcept = function(field) {
   var url = new Url("forms","ajax_concept_value_choser");
   url.addParam("concept_id", id);
   url.requestUpdate("concept-value-chose");
-}
+};
 
 filterExObjects = function(form){
   $V(form.concept_search, Object.toJSON(getForm('filter-concept-value').serialize(true)));
   
   return Url.update(form, 'list-ex_object-counts');
-}
+};
 </script>
 
 <table class="main form">

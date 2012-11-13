@@ -17,14 +17,36 @@ class CExClassEvent extends CMbObject {
   var $event_name  = null;
   var $disabled    = null;
   var $unicity     = null;
-  
+
+  /**
+   * @var CExClass
+   */
   var $_ref_ex_class    = null;
+
+  /**
+   * @var CExClassConstraint[]
+   */
   var $_ref_constraints = null;
+
+  /**
+   * @var CExClassFieldTrigger[]
+   */
   var $_ref_triggers    = null;
-  
+
+  /**
+   * @var CMbFieldSpec[]
+   */
   var $_host_class_fields = null;
-  var $_host_class_options = null;
-  var $_available_native_views = null;
+
+  /**
+   * @var array
+   */
+  var $_host_class_options;
+
+  /**
+   * @var array
+   */
+  var $_available_native_views;
   
   static $_extendable_classes = array(
     "CPrescriptionLineElement",
@@ -37,7 +59,10 @@ class CExClassEvent extends CMbObject {
     "CAdministration",
     "CRPU",
   );
-  
+
+  /**
+   * @return array
+   */
   static function getExtendableSpecs(){
     $classes = self::$_extendable_classes;
     $specs = array();
@@ -55,7 +80,10 @@ class CExClassEvent extends CMbObject {
       
     return $specs;
   }
-  
+
+  /**
+   * @return string[]
+   */
   static function getReportableClasses(){
     $classes = array_merge(array("CPatient", "CSejour"), self::$_extendable_classes);
     $classes[] = "CMediusers";
@@ -72,7 +100,7 @@ class CExClassEvent extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["ex_class_id"] = "ref notNull class|CExClass";
+    $props["ex_class_id"] = "ref notNull class|CExClass cascade";
     $props["host_class"]  = "str notNull protected";
     $props["event_name"]  = "str notNull protected canonical";
     $props["disabled"]    = "bool notNull default|1";
@@ -92,7 +120,10 @@ class CExClassEvent extends CMbObject {
     
     $this->_view = CAppUI::tr($this->host_class)." - ".CAppUI::tr("$this->host_class-event-$this->event_name");
   }
-  
+
+  /**
+   * @return string[]
+   */
   function getAvailableNativeViews(){
     if (!$this->_id) {
       return $this->_available_native_views = array();
@@ -124,17 +155,22 @@ class CExClassEvent extends CMbObject {
     
     return $this->_available_native_views = $available_views;
   }
-  
+
+  /**
+   * @return null|string[]
+   */
   function getHostClassOptions(){
     if (!$this->host_class || !$this->event_name || $this->event_name === "void") {
-      return;
+      return null;
     }
     
     $object = new $this->host_class;
     return $this->_host_class_options = $object->_spec->events[$this->event_name];
   }
-  
+
   /**
+   * @param bool $cache
+   *
    * @return CExClass
    */
   function loadRefExClass($cache = true){
@@ -143,8 +179,10 @@ class CExClassEvent extends CMbObject {
   
   /**
    * Returns an instance of CExObject which corresponds to the unicity
+   *
    * @param CMbObject $host
-   * @return CExObject
+   *
+   * @return CExObject|CExObject[]
    */
   function getExObjectForHostObject(CMbObject $host) {
     if (!$host->_id) {
@@ -155,7 +193,6 @@ class CExClassEvent extends CMbObject {
     
     $existing = $this->loadRefExClass()->loadExObjects($host, $ex_object);
     $disabled = $this->disabled || !$this->checkConstraints($host);
-    $level = 1;
     
     switch($this->unicity) {
       case "no":
@@ -182,12 +219,20 @@ class CExClassEvent extends CMbObject {
     
     return array();
   }
-  
+
+  /**
+   * @param bool $cache
+   *
+   * @return CExObject
+   */
   function getExObjectInstance($cache = false){
     return $this->loadRefExClass()->getExObjectInstance($cache);
   }
-  
+
   /**
+   * @param CMbObject $object
+   * @param integer   $level
+   *
    * @return CMbObject
    */
   function resolveReferenceObject(CMbObject $object, $level = 1){
@@ -209,12 +254,21 @@ class CExClassEvent extends CMbObject {
     
     return $reference;
   }
-  
+
+  /**
+   * @return CExClassConstraint[]
+   */
   function loadRefsConstraints(){
     return $this->_ref_constraints = $this->loadBackRefs("constraints");
   }
-  
-  // constraint1 OR constraint2 OR ...
+
+  /**
+   * constraint1 OR constraint2 OR ...
+   *
+   * @param CMbObject $object
+   *
+   * @return bool
+   */
   function checkConstraints(CMbObject $object){
     $constraints = $this->loadRefsConstraints();
     
@@ -230,11 +284,30 @@ class CExClassEvent extends CMbObject {
     
     return false;
   }
-  
-  static function getHostObjectSpecs($object) {
+
+  /**
+   * @param $object
+   *
+   * @return CMbFieldSpec[]
+   */
+  static function getHostObjectSpecs(CMbObject $object) {
     $specs = array();
-    $specs["CONNECTED_USER"] = CMbFieldSpecFact::getSpec(CMediusers::get(), "CONNECTED_USER", "ref class|CMediusers show|1");;
+    $specs["CONNECTED_USER"] = self::getConnectedUserSpec();
     return array_merge($specs, $object->_specs);
+  }
+
+  /**
+   * @return CMbFieldSpec
+   */
+  static function getConnectedUserSpec() {
+    static $spec;
+    
+    if (!isset($spec)) {
+      $mediuser = new CMediusers;
+      $spec = CMbFieldSpecFact::getSpec($mediuser, "CONNECTED_USER", "ref class|CMediusers show|1");
+    }
+    
+    return $spec;
   }
   
   function check(){
@@ -249,7 +322,10 @@ class CExClassEvent extends CMbObject {
       }
     }
   }
-  
+
+  /**
+   * @return CMbFieldSpec[]
+   */
   function getAvailableFields(){
     $object = new $this->host_class;
     
@@ -341,7 +417,10 @@ class CExClassEvent extends CMbObject {
     
     return $this->_host_class_fields;
   }
-  
+
+  /**
+   * @return array
+   */
   function buildHostFieldsList() {
     $this->getAvailableFields();
     
@@ -434,7 +513,12 @@ class CExClassEvent extends CMbObject {
     
     return $list;
   }
-  
+
+  /**
+   * @param CMbObject $host
+   *
+   * @return bool
+   */
   function canCreateNew(CMbObject $host) {
     switch ($this->unicity) {
       default:
@@ -498,7 +582,15 @@ class CExClassEvent extends CMbObject {
     
     return array_values($forms);
   }
-  
+
+  /**
+   * @param CMbObject|string $object
+   * @param string           $event_name
+   * @param string           $type
+   * @param array            $exclude_ex_class_event_ids
+   *
+   * @return CExClassEvent[]
+   */
   static function getForObject($object, $event_name, $type = "required", $exclude_ex_class_event_ids = array()) {
     if (is_string($object)) {
       $object = CMbObject::loadFromGuid($object);

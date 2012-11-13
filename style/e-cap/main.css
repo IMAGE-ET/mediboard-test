@@ -277,11 +277,19 @@ input[type=tel],
 input[type=email], 
 input[type=number], 
 input[type=password], 
-select, 
+.textarea-container {
+  border: 1px #a5acb2 solid;
+}
+
+input[type=text], 
+input[type=tel], 
+input[type=email], 
+input[type=number], 
+input[type=password], 
+select,
 textarea {
   color: #082F54;
   background-color: #fff;
-  border: 1px #a5acb2 solid;
 }
 
 input[type=text]:focus, 
@@ -291,21 +299,12 @@ input[type=number]:focus,
 input[type=password]:focus, 
 select:focus, 
 textarea:focus {
-  border-style: inset;
+  border-color: #848a8e;
   background-color: #E0EAFF;
-}
-
-.textarea-container {
-  border: 1px #a5acb2 solid;
-  background-color: #fff;
 }
 
 .textarea-container textarea:focus {
-  background-color: #E0EAFF;
-}
-
-select {
-  border: 1px #a5acb2 solid;
+  border: none;
 }
 
 button, 

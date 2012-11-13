@@ -5,23 +5,31 @@
  * @subpackage system
  * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 class CExClassConstraint extends CMbObject {
   var $ex_class_constraint_id = null;
-  
+
   //var $ex_class_id   = null;
   var $ex_class_event_id = null;
   var $field         = null;
   var $operator      = null;
   var $value         = null;
-  
+
   /**
    * @var CExClass
    */
   var $_ref_ex_class_event = null;
+
+  /**
+   * @var CMbObject
+   */
   var $_ref_target_object = null;
+
+  /**
+   * @var CMbFieldSpec
+   */
   var $_ref_target_spec = null;
 
   function getSpec() {
@@ -41,35 +49,56 @@ class CExClassConstraint extends CMbObject {
     $props["value"]       = "str notNull";
     return $props;
   }
-  
-  function getFieldAndObject($object){
+
+  /**
+   * @param CMbObject $object
+   *
+   * @return array(CMbObject,string)
+   */
+  function getFieldAndObject(CMbObject $object){
     $field = $this->field;
-    
+
     if (strpos($field, "CONNECTED_USER") === 0) {
       $object = CMediusers::get();
       $object->_specs = CExClassEvent::getHostObjectSpecs($object);
-      
+
       if ($field != "CONNECTED_USER") {
         $field = substr($field, 15);
       }
     }
-    
+
     return array($object, $field);
   }
-  
-  function resolveSpec($ref_object){
+
+  /**
+   * @param CModelObject $ref_object
+   *
+   * @return CMbFieldSpec
+   */
+  function resolveSpec(CModelObject $ref_object){
     list($ref_object, $field) = $this->getFieldAndObject($ref_object);
-    
+
     $parts = explode("-", $field);
-    
+    $connected_user = CExClassEvent::getConnectedUserSpec();
+
     if (count($parts) == 1) {
-      $spec = $ref_object->_specs[$field];
+      if ($field == "CONNECTED_USER") {
+        $spec = $connected_user;
+      }
+      else {
+        $spec = $ref_object->_specs[$field];
+      }
     }
     else {
       $subparts = explode(".", $parts[0]);
-      
-      $_spec = $ref_object->_specs[$subparts[0]];
-      
+
+      if ($subparts[0] == "CONNECTED_USER") {
+        $_spec = $connected_user;
+      }
+      else {
+        $_spec = $ref_object->_specs[$subparts[0]];
+      }
+
       if (count($subparts) > 1) {
         $class = $subparts[1];
       }
@@ -77,22 +106,33 @@ class CExClassConstraint extends CMbObject {
         if (!$_spec->class) {
           return;
         }
-        
+
         $class = $_spec->class;
       }
-      
+
       $obj = new $class;
-      $spec = $obj->_specs[$parts[1]];
+
+      if ($parts[1] == "CONNECTED_USER") {
+        $spec = $connected_user;
+      }
+      else {
+        $spec = $obj->_specs[$parts[1]];
+      }
     }
-    
+
     return $spec;
   }
-  
-  function resolveObjectField($object){
+
+  /**
+   * @param CMbObject $object
+   *
+   * @return array(CMBobject,string)
+   */
+  function resolveObjectField(CMbObject $object){
     list($object, $field) = $this->getFieldAndObject($object);
-    
+
     $parts = explode("-", $field);
-    
+
     if (count($parts) == 1) {
       return array(
         "object" => $object,
@@ -102,39 +142,35 @@ class CExClassConstraint extends CMbObject {
     else {
       $subparts = explode(".", $parts[0]);
       $_field = $subparts[0];
-      
+
       $_spec = $object->_specs[$_field];
-      
-      if (count($subparts) > 1) {
-        $class = $subparts[1];
+
+      if (count($subparts) <= 1 && !$_spec->class) {
+        return;
       }
-      else {
-        if (!$_spec->class) {
-          return;
-        }
-        
-        $class = $_spec->class;
-      }
-      
+
       return array(
         "object" => $object->loadFwdRef($_field),
         "field"  => $parts[1],
       );
     }
   }
-  
+
+  /**
+   * @return CMbObject
+   */
   function loadTargetObject(){
     $this->loadRefExClassEvent();
     $this->completeField("field", "value");
-    
+
     if (!$this->_id) {
       return $this->_ref_target_object = new CMbObject;
     }
-    
+
     $ref_object = new $this->_ref_ex_class_event->host_class;
-    
+
     $spec = $this->resolveSpec($ref_object);
-    
+
     if ($spec instanceof CRefSpec && $this->value && preg_match("/[a-z][a-z0-9_]+-[0-9]+/i", $this->value)) {
       $this->_ref_target_object = CMbObject::loadFromGuid($this->value);
     }
@@ -142,25 +178,25 @@ class CExClassConstraint extends CMbObject {
       // empty object
       $this->_ref_target_object = new CMbObject;
     }
-    
+
     $this->_ref_target_spec = $spec;
-    
+
     return $this->_ref_target_object;
   }
-  
+
   function updateFormFields(){
     parent::updateFormFields();
-    
+
     $this->loadRefExClassEvent();
-    
+
     $host_class = $this->_ref_ex_class_event->host_class;
-    
+
     list($object, $field) = $this->getFieldAndObject(new $host_class);
     $host_class = $object->_class;
-    
+
     $parts = explode("-", $field);
     $subparts = explode(".", $parts[0]);
-    
+
     // first part
     if (count($subparts) > 1) {
       $this->_view = CAppUI::tr("$host_class-{$subparts[0]}")." de type ".CAppUI::tr("{$subparts[1]}");
@@ -174,7 +210,7 @@ class CExClassConstraint extends CMbObject {
         $this->_view = CAppUI::tr("$host_class-{$field}");
       }
     }
-    
+
     // 2 levels
     if (count($parts) > 1) {
       if (isset($subparts[1])) {
@@ -184,49 +220,57 @@ class CExClassConstraint extends CMbObject {
         $_spec = $object->_specs[$subparts[0]];
         $class = $_spec->class;
       }
-      
+
       /*if ($_spec instanceof CRefSpec) {
-        $class = 
+        $class =
       }*/
-      
+
       $this->_view .= " / ".CAppUI::tr("{$class}-{$parts[1]}");
     }
   }
-  
+
+  /**
+   * @param CMbObject $object
+   *
+   * @return bool
+   */
   function checkConstraint(CMbObject $object) {
     $this->completeField("field", "value");
-    
+
     $object_field = $this->resolveObjectField($object);
-    
+
     if (!$object_field) return false;
-    
+
     $object->loadView();
-    
+
     $object = $object_field["object"];
     $field  = $object_field["field"];
-    
+
     // cas ou l'objet retrouvé n'a pas le champ (meta objet avec classe differente)
     if (!isset($object->_specs[$field])) {
       return false;
     }
-    
+
     $object->loadView();
-    
+
     if ($field == "CONNECTED_USER") {
       $value = $object->_guid;
     }
     else {
       $value = $object->$field;
-    
+
       if ($object->_specs[$field] instanceof CRefSpec) {
         $_obj = $object->loadFwdRef($field);
         $value = $_obj->_guid;
       }
     }
-    
+
     return CExClass::compareValues($value, $this->operator, $this->value);
   }
-  
+
+  /**
+   * @return CExClassEvent
+   */
   function loadRefExClassEvent(){
     return $this->_ref_ex_class_event = $this->loadFwdRef("ex_class_event_id");
   }

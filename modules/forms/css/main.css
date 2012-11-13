@@ -23,19 +23,28 @@
   white-space: normal;
 }
 
-.grid .field:hover .field-info,
+.drop-grid .field:hover .field-info,
+.pixel-positionning .field:hover .field-info,
 .field-list .field .field-info {
   display: block !important;
   position: absolute;
   top: -1.5em;
   color: #333;
   background: #ddd;
-  padding: 0px 1em;
+  padding: 0 1em;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
 
-.grid .field:hover .field-info {
+.pixel-positionning .group-layout .field:hover .field-info {
+  top: -16px;
+  left: 0;
+  border-radius: 4px;
+  z-index: 200;
+  white-space: nowrap;
+}
+
+.group-layout .field:hover .field-info {
   color: #fff;
   background: #999;
 }
@@ -61,7 +70,7 @@
   max-height: 3.5em;
 }
 
-.draggable .overlay {
+.overlayed .overlay {
   position:absolute;
   top:0;
   left:0;
@@ -69,32 +78,9 @@
   right:0;
 }
 
-.draggable .size .arrows {
-  position: absolute;
-}
-
-.draggable .size .col {
-  right: 0;
-  top: 50%;
-  margin-top: -8px;
-}
-
-.draggable .size .row {
-  left: 50%;
-  bottom: 0;
-}
-
-.draggable .size button {
-  background: none;
-  border: none;
-}
-
-.draggable .size {
-  display: none;
-}
-
-.drop-grid .draggable:hover .size {
-  /*display: block;*/
+.ua-msie .overlayed .overlay {
+  background: #fff;
+  -ms-filter: "alpha(opacity=0)";
 }
 
 .grid .hostfield .field-name, 
@@ -125,6 +111,10 @@ div.ex-message-title {
   padding-top: 3px;
   position: absolute;
   white-space: nowrap;
+}
+
+.ex-message {
+  white-space: pre;
 }
 
 span.ex-message-title-spacer {
@@ -181,4 +171,228 @@ form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
 .ua-firefox form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
   outline: none;
   box-shadow: 0 0 0 2px green;
+}
+
+.pixel-grid {
+  border: 1px dashed #999;
+  background: #f9f9f9;
+  position: relative;
+  width: 1024px;
+  height: 760px;
+}
+
+.pixel-positionning .resizable {
+  position: absolute;
+}
+
+.pixel-positionning .subgroup > .overlayed > fieldset {
+  margin: 0;
+}
+
+.pixel-positionning .subgroup {
+  min-width: 4em;
+  height: 3em;
+}
+
+.pixel-positionning .field-input {
+  white-space: nowrap;
+}
+
+.pixel-positionning .field-input fieldset legend {
+  font-weight: normal;
+  margin: 2px;
+}
+
+.pixel-positionning .pixel-grid .resizable:focus,
+.pixel-positionning .pixel-grid .resizable.handle-focus {
+  outline: 1px dotted #999;
+  cursor: move;
+}
+
+.ua-firefox .pixel-positionning .pixel-grid .resizable:focus {
+  outline-offset: -4px;
+  /*z-index: 200;*/
+}
+
+
+.pixel-positionning .field .field-content {
+  overflow: visible;
+}
+
+.pixel-positionning .field-content,
+.pixel-positionning .field-content > table,
+.pixel-positionning .resizable > table,
+.pixel-positionning .resizable textarea.noresize {
+  position: relative;
+  height: 100%;
+  margin: 0;
+}
+
+.pixel-positionning .field-content > table.layout > tbody > tr > td {
+  padding: 1px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.pixel-positionning .input-label {
+  white-space: nowrap;
+}
+
+.pixel-positionning .resizable textarea.noresize {
+  resize: none;
+  min-width: 20px;
+  min-height: 16px;
+}
+
+.pixel-positionning .resizable fieldset {
+  margin: 1px;
+  padding: 1px;
+}
+
+.pixel-positionning .resizable fieldset legend {
+  padding: 0.05em 0.4em;
+  line-height: 1;
+}
+
+/** <IE8 specific> **/
+.ua-msie-8 .pixel-positionning .resizable fieldset {
+  padding-top: 0;
+}
+.ua-msie-8 .pixel-positionning .resizable fieldset legend {
+  margin-top: -1px;
+}
+/** </IE8 specific> **/
+
+.pixel-positionning .resizable fieldset .wrapper {
+  overflow-y: auto;
+  position: absolute;
+  top: 14px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+}
+
+.pixel-positionning .resizable.no-size > *,
+.pixel-positionning .resizable.no-size fieldset,
+.pixel-positionning .resizable.no-size fieldset .wrapper {
+  position: static;
+}
+
+.pixel-positionning .resizable fieldset.no-label .wrapper {
+  top: 2px;
+}
+
+.pixel-positionning input[type=checkbox],
+.pixel-positionning input[type=radio] {
+  margin: 0;
+  line-height: 10px;
+  vertical-align: top;
+}
+
+.pixel-positionning input.str,
+.pixel-positionning input.num,
+.pixel-positionning input.float,
+.pixel-positionning select {
+  width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/** fill box **/
+.pixel-positionning select.set[multiple],
+.pixel-positionning .resizable fieldset {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.pixel-positionning .handle {
+  display: none;
+}
+
+.pixel-positionning .overlayed {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.pixel-positionning .pixel-grid .resizable:focus > .handle,
+.pixel-positionning .pixel-grid .resizable.handle-focus > .handle  {
+  display: block;
+  position: absolute;
+  border: 1px solid #000;
+  background: #fff;
+  width: 5px;
+  height: 5px;
+  z-index: 100;
+}
+
+.pixel-positionning .handle.top-left,
+.pixel-positionning .handle.top-center,
+.pixel-positionning .handle.top-right {
+  top: 0;
+  margin-top: -4px;
+}
+
+.pixel-positionning .handle.bottom-left,
+.pixel-positionning .handle.bottom-center,
+.pixel-positionning .handle.bottom-right {
+  bottom: 0;
+  margin-bottom: -4px;
+}
+
+.pixel-positionning .handle.top-left,
+.pixel-positionning .handle.middle-left,
+.pixel-positionning .handle.bottom-left {
+  left: 0;
+  margin-left: -4px;
+}
+
+.pixel-positionning .handle.top-right,
+.pixel-positionning .handle.middle-right,
+.pixel-positionning .handle.bottom-right {
+  right: 0;
+  margin-right: -4px;
+}
+
+.pixel-positionning .handle.top-center,
+.pixel-positionning .handle.bottom-center {
+  left: 50%;
+  margin-left: -4px;
+}
+
+.pixel-positionning .handle.middle-left,
+.pixel-positionning .handle.middle-right {
+  top: 50%;
+  margin-top: -4px;
+}
+
+.pixel-positionning .handle.top-left {
+  cursor: nw-resize;
+}
+.pixel-positionning .handle.top-center {
+  cursor: n-resize;
+}
+.pixel-positionning .handle.top-right {
+  cursor: ne-resize;
+}
+.pixel-positionning .handle.middle-right {
+  cursor: e-resize;
+}
+.pixel-positionning .handle.bottom-right {
+  cursor: se-resize;
+}
+.pixel-positionning .handle.bottom-center {
+  cursor: s-resize;
+}
+.pixel-positionning .handle.bottom-left {
+  cursor: sw-resize;
+}
+.pixel-positionning .handle.middle-left {
+  cursor: w-resize;
 }

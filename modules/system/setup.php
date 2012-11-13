@@ -1107,11 +1107,87 @@ class CSetupsystem extends CSetup {
     //createExClassEvents($this);
     $this->addFunction("createExClassEvents");
     
+    $this->makeRevision("1.1.15");
+    $query = "CREATE TABLE `ex_class_field_property` (
+                `ex_class_field_property_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `object_class` VARCHAR (80),
+                `object_id` INT (11) UNSIGNED NOT NULL,
+                `type` VARCHAR (60),
+                `value` VARCHAR (255),
+                `predicate_id` INT (11) UNSIGNED
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field_property`
+                ADD INDEX (`object_class`),
+                ADD INDEX (`object_id`),
+                ADD INDEX (`predicate_id`);";
+    $this->addQuery($query);
+    
+    $this->makeRevision("1.1.16");
+    $query = "ALTER TABLE `ex_class_field` 
+                ADD `prefix` VARCHAR (255),
+                ADD `suffix` VARCHAR (255)";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field` 
+                ADD `coord_left` INT (11) AFTER `coord_label_x`,
+                ADD `coord_top` INT (11) AFTER `coord_left`,
+                ADD `coord_width` INT (11) UNSIGNED AFTER `coord_top`,
+                ADD `coord_height` INT (11) UNSIGNED AFTER `coord_width`,
+                ADD `subgroup_id` INT (11) UNSIGNED AFTER `ex_group_id`,
+                ADD `show_label` ENUM ('0','1') NOT NULL DEFAULT '1',
+                ADD `tab_index` INT (11)";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class` 
+                ADD `pixel_positionning` ENUM ('0','1') NOT NULL DEFAULT '0'";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_message` 
+                ADD `coord_left` INT (11),
+                ADD `coord_top` INT (11),
+                ADD `coord_width` INT (11) UNSIGNED,
+                ADD `coord_height` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_host_field` 
+                ADD `coord_left` INT (11),
+                ADD `coord_top` INT (11),
+                ADD `coord_width` INT (11) UNSIGNED,
+                ADD `coord_height` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "CREATE TABLE `ex_class_field_subgroup` (
+                `ex_class_field_subgroup_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `parent_class` ENUM ('CExClassFieldGroup','CExClassFieldSubgroup') NOT NULL,
+                `parent_id` INT (11) UNSIGNED NOT NULL,
+                `title` VARCHAR (255),
+                `coord_left` INT (11),
+                `coord_top` INT (11),
+                `coord_width` INT (11) UNSIGNED,
+                `coord_height` INT (11) UNSIGNED
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field_subgroup` 
+                ADD INDEX (`parent_class`),
+                ADD INDEX (`parent_id`)";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_message`
+                ADD `subgroup_id` INT (11) UNSIGNED AFTER `ex_group_id`";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_message`
+                ADD `predicate_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_message`
+                ADD INDEX (`predicate_id`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field_subgroup`
+                ADD `predicate_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `ex_class_field_subgroup`
+                ADD INDEX (`predicate_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.1.17";
+    
     /*$query = "ALTER TABLE user_log
                 DROP INDEX object_id,
                 ADD INDEX object_id_object_class (`object_id`, `object_class`)";
     $this->addQuery($query);*/
-    
-    $this->mod_version = "1.1.15";
   }
 }

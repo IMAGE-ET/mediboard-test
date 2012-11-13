@@ -195,6 +195,7 @@ class CMySQLSessionHandler implements ISessionHandler {
   */
 abstract class CSessionHandler {
   static private $engine = null;
+  static private $started = false;
   static $availableEngines = array(
     "files"    => "CFilesSessionHandler",
     "memcache" => "CMemcacheSessionHandler",
@@ -205,53 +206,113 @@ abstract class CSessionHandler {
    * Init the correct session handler
    */
   static function setHandler($engine = "files") {
+    if ($engine == "zebra") {
+      CAppUI::requireLibraryFile("zebra_session/Zebra_Session");
+
+      $dataSource = new CMySQLDataSource();
+      $dataSource->init("std");
+      $link = $dataSource->link;
+
+      // Auto add session_data table
+      $query = <<<SQL
+CREATE TABLE IF NOT EXISTS `session_data` (
+  `session_id` VARCHAR(32) NOT NULL DEFAULT '',
+  `http_user_agent` VARCHAR(32) NOT NULL DEFAULT '',
+  `session_data` BLOB NOT NULL,
+  `session_expire` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+SQL;
+      $dataSource->exec($query);
+
+      new Zebra_Session(
+        null, // $session_lifetime
+        null, // $gc_probability
+        null, // $gc_divisor
+        'mb', // $security_code, should be changed for UA spoofing
+        'session_data',  // $table_name
+        60, // $lock_timeout
+        $link // $link
+      );
+
+      self::$started = true;
+
+      return;
+    }
+
     if (!isset(self::$availableEngines[$engine])) {
       $engine = "files";
     }
+
     $engine = new self::$availableEngines[$engine];
+
     if (!$engine->init()) {
       $engine = new self::$availableEngines["files"];
       $engine->init();
     }
+
     if ($engine->useUserHandler()) {
       session_set_save_handler(
-        array("CSessionHandler", "open"),
-        array("CSessionHandler", "close"),
-        array("CSessionHandler", "read"),
-        array("CSessionHandler", "write"),
-        array("CSessionHandler", "destroy"),
-        array("CSessionHandler", "gc"));
+        array("CSessionHandler", "onOpen"),
+        array("CSessionHandler", "onClose"),
+        array("CSessionHandler", "onRead"),
+        array("CSessionHandler", "onWrite"),
+        array("CSessionHandler", "onDestroy"),
+        array("CSessionHandler", "onGC"));
     }
+
     self::$engine = $engine;
   }
   
-  static function open() {
+  static function onOpen() {
     return self::$engine->open();
   }
   
-  static function close() {
+  static function onClose() {
     return self::$engine->close();
   }
   
-  static function read($id) {
+  static function onRead($id) {
     return self::$engine->read($id);
   }
   
-  static function write($id, $data) {
+  static function onWrite($id, $data) {
     return self::$engine->write($id, $data);
   }
   
-  static function destroy($id) {
+  static function onDestroy($id) {
     return self::$engine->destroy($id);
   }
   
-  static function gc($max) {
+  static function onGC($max) {
     return self::$engine->gc($max);
+  }
+
+  static function start() {
+    if (self::$started) {
+      return;
+    }
+
+    session_start();
+    self::$started = true;
+  }
+
+  static function end($destroy = false){
+    if (!self::$started) {
+      return;
+    }
+
+    // Free the session data
+    session_unset();
+
+    if ($destroy) {
+      @session_destroy(); // Escaped because of an unknown error
+    }
+
+    self::$started = false;
   }
 }
 
 global $dPconfig;
 CSessionHandler::setHandler($dPconfig["session_handler"]);
 //mbTrace(get_class(CSessionHandler::$engine));
-
-?>

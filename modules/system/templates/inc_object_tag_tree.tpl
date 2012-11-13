@@ -14,22 +14,22 @@
   
   <table class="main tbl" data-columns="{{$_columns}}" data-object_class="{{$object_class}}">
     <tr>
-      <th colspan="{{$colspan}}">
+      <th colspan="{{$colspan}}" style="padding: 0;">
         <form name="filter-{{$object_class}}" method="get" action="?" onsubmit="return false">
           <input type="hidden" name="group_id" value="{{$group_id}}" />
           
-          Filtrer : 
+          Filtrer:
           <label>
             Tag
-            <input type="text" name="tag" onkeyup="Tag.filter(this)" size="10" />
+            <input type="text" name="tag" onkeyup="Tag.filter(this)" style="width: 5em;" />
           </label>
           <button class="cancel notext" type="button" onclick="Tag.cancelFilter(this.form.tag)" style="margin-left: -5px;">
             {{tr}}Cancel{{/tr}}
           </button>
-          &ndash;
+
           <label>
             Nom
-            <input type="text" name="object_name" size="10" onkeyup="Tag.launchFilterObject(this)" />
+            <input type="text" name="object_name" onkeyup="Tag.launchFilterObject(this)" style="width: 5em;" />
           </label>
           <button class="cancel notext" type="button" onclick="Tag.cancelFilterObject(this.form.object_name)" style="margin-left: -5px;">
             {{tr}}Cancel{{/tr}}

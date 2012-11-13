@@ -13,7 +13,7 @@ refreshConstantesMedicales = function(context_guid) {
   url.requestUpdate("tab-native_views-constantes", function(){
     loadConstantesMedicales = refreshConstantesMedicales; // FIXME
   });
-}
+};
 
 Main.add(function(){
   $$("a[href=#tab-native_views-constantes]")[0].observeOnce("mousedown", function(){

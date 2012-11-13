@@ -85,7 +85,14 @@ if (!$ex_object->_id) {
 }
 
 // Layout grid
-list($grid, $out_of_grid, $groups) = $ex_object->_ref_ex_class->getGrid();
+if ($ex_object->_ref_ex_class->pixel_positionning && !$readonly) {
+  $grid = null;
+  $out_of_grid = null;
+  $groups = $ex_object->_ref_ex_class->getPixelGrid();
+}
+else {
+  list($grid, $out_of_grid, $groups) = $ex_object->_ref_ex_class->getGrid();
+}
 
 /*foreach($groups as $_group) {
   foreach($_group->_ref_fields as $_field) {
@@ -137,8 +144,10 @@ $fields = array();
 foreach($groups as $_group) {
   $fields = array_merge($_group->_ref_fields, $fields);
   
-  foreach($_group->_ref_host_fields as $_host_field) {
-    $_host_field->getHostObject($ex_object);
+  if ($_group->_ref_host_fields) {
+    foreach($_group->_ref_host_fields as $_host_field) {
+      $_host_field->getHostObject($ex_object);
+    }
   }
 }
 
@@ -175,6 +184,10 @@ if ($ex_object->_ref_reference_object_2 instanceof CPatient) {
 
 $formula_token_values = array();
 foreach($fields as $_field) {
+  /*if ($_field->formula == null) {
+    continue;
+  } */
+
   $formula_token_values[$_field->name] = array(
     "values"  => $_field->getFormulaValues(),
     "formula" => $_field->formula,

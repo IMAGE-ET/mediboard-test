@@ -21,17 +21,28 @@ class CExClass extends CMbObject {
   var $group_id   = null;
   var $native_views = null;
   
-  var $_ref_fields = null;
-  var $_ref_events = null;
-  var $_ref_groups = null;
+  var $pixel_positionning = null;
+
+  /**
+   * @var CExClassField[]
+   */
+  var $_ref_fields;
+
+  /**
+   * @var CExClassEvent[]
+   */
+  var $_ref_events;
+
+  /**
+   * @var CExClassFieldGroup[]
+   */
+  var $_ref_groups;
   
   var $_fields_by_name = null;
   var $_dont_create_default_group = null;
   var $_duplicate = null;
   
   private $_latest_ex_object_cache = array();
-  
-  static $_groups_cache = array();
   
   static $_list_cache = array();
   
@@ -99,14 +110,15 @@ class CExClass extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    //$props["host_class"] = "str notNull protected";
-    //$props["event"]      = "str notNull protected canonical";
-    $props["name"]       = "str notNull seekable";
-    //$props["disabled"]   = "bool notNull default|1";
-    $props["conditional"]= "bool notNull default|0";
-    //$props["required"]   = "bool default|0";
-    //$props["unicity"]    = "enum notNull list|no|host default|no vertical"; //"enum notNull list|no|host|reference1|reference2 default|no vertical";
-    $props["group_id"]   = "ref class|CGroups";
+    //$props["host_class"]   = "str notNull protected";
+    //$props["event"]        = "str notNull protected canonical";
+    $props["name"]         = "str notNull seekable";
+    //$props["disabled"]     = "bool notNull default|1";
+    $props["conditional"]  = "bool notNull default|0";
+    $props["pixel_positionning"] = "bool notNull default|0";
+    //$props["required"]     = "bool default|0";
+    //$props["unicity"]      = "enum notNull list|no|host default|no vertical"; //"enum notNull list|no|host|reference1|reference2 default|no vertical";
+    $props["group_id"]     = "ref class|CGroups";
     $props["native_views"] = "set vertical list|".implode("|", array_keys(self::$_native_views));
     return $props;
   }
@@ -114,21 +126,36 @@ class CExClass extends CMbObject {
   function loadEditView() {
     parent::loadEditView();
 
-    $this->loadRefsGroups();
-    $events = $this->loadRefsEvents();
-    
+    CExObject::initLocales();
+
     CExObject::$_locales_cache_enabled = false;
-    
-    list($grid, $out_of_grid) = $this->getGrid(4, 30, false);
-    
-    $ex_object = $this->getExObjectInstance();
-    
+
+    if ($this->pixel_positionning) {
+      $grid = null;
+      $out_of_grid = null;
+      $this->getPixelGrid();
+
+      foreach ($this->_ref_groups as $_ex_group) {
+        $_ex_group->loadRefsSubgroups(true);
+        $_subgroups = $_ex_group->loadRefsSubgroups(true);
+        foreach ($_subgroups as $_subgroup) {
+          $_subgroup->countBackRefs("children_groups");
+          $_subgroup->countBackRefs("children_fields");
+          $_subgroup->countBackRefs("children_messages");
+        }
+      }
+    }
+    else {
+      list($grid, $out_of_grid) = $this->getGrid(4, 30, false);
+    }
+
+    $events = $this->loadRefsEvents();
     foreach($events as $_event) {
       $_event->countBackRefs("constraints");
     }
     
     $this->_groups = CGroups::loadGroups();
-    $this->_ex_object = $ex_object;
+    $this->_ex_object = $this->getExObjectInstance();
     
     $this->_grid = $grid;
     $this->_out_of_grid = $out_of_grid;
@@ -142,6 +169,7 @@ class CExClass extends CMbObject {
     foreach($classes as $_class) {
       $instances[$_class] = new $_class;
     }
+
     $this->_host_objects = $instances;
   }
 
@@ -150,6 +178,7 @@ class CExClass extends CMbObject {
     $backProps["field_groups"] = "CExClassFieldGroup ex_class_id";
     $backProps["events"]       = "CExClassEvent ex_class_id";
     $backProps["ex_triggers"]  = "CExClassFieldTrigger ex_class_triggered_id";
+    $backProps["identifiants"] = "CIdSante400 object_id cascade";
     return $backProps;
   }
   
@@ -183,7 +212,7 @@ class CExClass extends CMbObject {
       $_ds    = $_field->_spec->ds;
       $_col   = "$_table.$_field->name";
       
-      foreach ($search[$_field->concept_id] as $_i => $_val) {
+      foreach ($search[$_field->concept_id] as $_val) {
         $_val_a = $_val['a'];
         $_comp  = $_val['comp'];
         
@@ -267,21 +296,33 @@ class CExClass extends CMbObject {
     
     $this->_view = $this->name;
   }
-  
+
+  /**
+   * @param bool $cache
+   *
+   * @return CExClassFieldGroup[]
+   */
   function loadRefsGroups($cache = true){
-    if ($cache && isset(self::$_groups_cache[$this->_id])) {
-      return $this->_ref_groups = self::$_groups_cache[$this->_id];
+    static $groups_cache = array();
+
+    if ($cache && isset($groups_cache[$this->_id])) {
+      return $this->_ref_groups = $groups_cache[$this->_id];
     }
     
     $this->_ref_groups = $this->loadBackRefs("field_groups", "rank, ex_class_field_group_id");
     
     if ($cache) {
-      self::$_groups_cache[$this->_id] = $this->_ref_groups;
+      $groups_cache[$this->_id] = $this->_ref_groups;
     }
     
     return $this->_ref_groups;
   }
-  
+
+  /**
+   * @param bool $cache
+   *
+   * @return CExClassField[]
+   */
   function loadRefsAllFields($cache = false){
     $groups = $this->loadRefsGroups();
     $fields = array();
@@ -295,15 +336,27 @@ class CExClass extends CMbObject {
   /*function loadRefsConstraints(){
     return $this->_ref_constraints = $this->loadBackRefs("constraints");
   }*/
-  
+
+  /**
+   * @return CExClassEvent[]
+   */
   function loadRefsEvents(){
     return $this->_ref_events = $this->loadBackRefs("events");
   }
-  
+
+  /**
+   * @return string
+   */
   function getTableName(){
     return "ex_object_{$this->_id}";
   }
-  
+
+  /**
+   * @param CMbObject $object
+   * @param null      $ex_object
+   *
+   * @return CExObject[]
+   */
   function loadExObjects(CMbObject $object, &$ex_object = null) {
     $ex_object = new CExObject($this->_id);
     $ex_object->setObject($object);
@@ -316,7 +369,10 @@ class CExClass extends CMbObject {
     
     return $list;
   }
-  
+
+  /**
+   * @return CExClassFieldPredicate[]
+   */
   function loadRefsDisplayConditions(){
     $where = array(
       "ex_class_field_group.ex_class_id" => "= '$this->_id'",
@@ -329,35 +385,60 @@ class CExClass extends CMbObject {
     $ex_field_predicate = new CExClassFieldPredicate;
     return $ex_field_predicate->loadList($where, null, null, null, $ljoin);
   }
-  
+
+  /**
+   * @return CExClassFieldGroup[]
+   */
+  function getPixelGrid(){
+    $groups = $this->loadRefsGroups(true);
+
+    foreach ($groups as $_ex_group) {
+      // Subgroups
+      $_ex_group->loadRefsSubgroups(true);
+      foreach ($_ex_group->_ref_subgroups as $_ex_subgroup) {
+        $_ex_subgroup->getDefaultProperties();
+      }
+
+      // Fields
+      $_ex_group->loadRefsRootFields();
+
+      foreach ($_ex_group->_ref_fields as $_ex_field) {
+        $_ex_field->getSpecObject();
+        $_ex_field->getDefaultProperties();
+      }
+
+      // Messages
+      $_ex_group->loadRefsRootMessages();
+      foreach ($_ex_group->_ref_messages as $_ex_message) {
+        $_ex_message->getDefaultProperties();
+      }
+    }
+
+    return $groups;
+  }
+
   function getGrid($w = 4, $h = 30, $reduce = true) {
     $big_grid = array();
     $big_out_of_grid = array();
     $groups = $this->loadRefsGroups(true);
-    
+    $empty_cell = array("type" => null, "object" => null);
+
     foreach ($groups as $_ex_group) {
-      $grid = array_fill(0, $h, array_fill(0, $w, array(
-        "type" => null,
-        "object" => null,
-      )));
+      $grid = array_fill(0, $h, array_fill(0, $w, $empty_cell));
       
       $out_of_grid = array(
-        "field" => array(), 
-        "label" => array(),
+        "field"         => array(),
+        "label"         => array(),
         "message_title" => array(),
-        "message_text" => array(),
+        "message_text"  => array(),
       );
+
+      $_fields = $_ex_group->loadRefsFields();
       
-      /**
-       * @var CExClassFieldGroup
-       */
-      $_ex_group;
-      
-      $_ex_group->loadRefsFields();
-      
-      foreach ($_ex_group->_ref_fields as $_ex_field) {
+      foreach ($_fields as $_ex_field) {
         $_ex_field->getSpecObject();
-        
+        $_ex_field->getDefaultProperties();
+
         $label_x = $_ex_field->coord_label_x;
         $label_y = $_ex_field->coord_label_y;
         
@@ -369,7 +450,10 @@ class CExClass extends CMbObject {
           $out_of_grid["label"][$_ex_field->name] = $_ex_field;
         }
         else {
-          $grid[$label_y][$label_x] = array("type" => "label", "object" => $_ex_field);
+          $grid[$label_y][$label_x] = array(
+            "type"   => "label",
+            "object" => $_ex_field,
+          );
         }
         
         // field
@@ -377,13 +461,16 @@ class CExClass extends CMbObject {
           $out_of_grid["field"][$_ex_field->name] = $_ex_field;
         }
         else {
-          $grid[$field_y][$field_x] = array("type" => "field", "object" => $_ex_field);
+          $grid[$field_y][$field_x] = array(
+            "type"   => "field",
+            "object" => $_ex_field,
+          );
         }
       }
     
       // Host fields
-      $_ex_group->loadRefsHostFields();
-      foreach ($_ex_group->_ref_host_fields as $_host_field) {
+      $_host_fields = $_ex_group->loadRefsHostFields();
+      foreach ($_host_fields as $_host_field) {
         $label_x = $_host_field->coord_label_x;
         $label_y = $_host_field->coord_label_y;
         
@@ -392,18 +479,26 @@ class CExClass extends CMbObject {
         
         // label
         if ($label_x !== null && $label_y !== null) {
-          $grid[$label_y][$label_x] = array("type" => "label", "object" => $_host_field);
+          $grid[$label_y][$label_x] = array(
+            "type"   => "label",
+            "object" => $_host_field,
+          );
         }
         
         // value
         if ($value_x !== null && $value_y !== null) {
-          $grid[$value_y][$value_x] = array("type" => "value", "object" => $_host_field);
+          $grid[$value_y][$value_x] = array(
+            "type"   => "value",
+            "object" => $_host_field,
+          );
         }
       }
     
       // Messages
-      $_ex_group->loadRefsMessages();
-      foreach ($_ex_group->_ref_messages as $_message) {
+      $_ex_messages = $_ex_group->loadRefsMessages();
+      foreach ($_ex_messages as $_message) {
+        $_message->getDefaultProperties();
+
         $title_x = $_message->coord_title_x;
         $title_y = $_message->coord_title_y;
         
@@ -415,7 +510,10 @@ class CExClass extends CMbObject {
           $out_of_grid["message_title"][$_message->_id] = $_message;
         }
         else {
-          $grid[$title_y][$title_x] = array("type" => "message_title", "object" => $_message);
+          $grid[$title_y][$title_x] = array(
+            "type"   => "message_title",
+            "object" => $_message,
+          );
         }
         
         // value
@@ -423,7 +521,10 @@ class CExClass extends CMbObject {
           $out_of_grid["message_text"][$_message->_id] = $_message;
         }
         else {
-          $grid[$text_y][$text_x] = array("type" => "message_text", "object" => $_message);
+          $grid[$text_y][$text_x] = array(
+            "type"   => "message_text",
+            "object" => $_message,
+          );
         }
       }
       
@@ -435,14 +536,16 @@ class CExClass extends CMbObject {
           $x_filled = 0;
           
           foreach ($_line as $_x => $_cell) {
-            if ($_cell !== array("type" => null, "object" => null)) {
+            if ($_cell !== $empty_cell) {
               $n_filled++;
               $x_filled = max($_x, $x_filled);
             }
           }
           
-          if ($n_filled == 0) unset($grid[$_y]);
-          
+          if ($n_filled == 0) {
+            unset($grid[$_y]);
+          }
+
           $max_filled = max($max_filled, $x_filled);
         }
         
@@ -583,11 +686,6 @@ class CExClass extends CMbObject {
     
     // field_groups
     foreach ($this->loadRefsGroups() as $_group) {
-      /**
-       * @var CExClassFieldGroup
-       */
-      $_group;
-      
       if ($msg = $this->duplicateObject($_group, "ex_class_id", $new->_id, $_new_group)) {
         continue;
       }
@@ -597,11 +695,6 @@ class CExClass extends CMbObject {
       
       // class_fields
       foreach ($_group->loadRefsFields() as $_field) {
-        /**
-         * @var CExClassField
-         */
-        $_field;
-        
         if ($msg = $this->duplicateObject($_field, "ex_group_id", $_new_group->_id, $_new_field, array("predicate_id"))) {
           continue;
         }

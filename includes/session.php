@@ -21,7 +21,7 @@ if (get_cfg_var("session.auto_start") > 0) {
   session_write_close();
 }
 
-session_start();
+CSessionHandler::start();
 
 // Check if the session was made via a temporary token
 // and save its expiration date
@@ -34,11 +34,10 @@ if (CAppUI::isTokenSessionExpired()) {
   CAppUI::$token_expiration = null;
 
   // Free the session data
-  session_unset();
-  @session_destroy(); // Escaped because of an unknown error
+  CSessionHandler::end(true);
 
   // Start it back
-  session_start();
+  CSessionHandler::start();
 }
 
 // Check if session has previously been initialised

@@ -15,8 +15,18 @@ class CExClassFieldPredicate extends CMbObject {
   var $operator            = null;
   var $value               = null;
   var $_value              = null;
-  
+
+  /**
+   * @var CExClassField
+   */
   var $_ref_ex_class_field = null;
+
+  /**
+   * @var CExClassFieldProperty
+   */
+  var $_ref_properties = null;
+
+  static $_load_lite = false;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -37,13 +47,20 @@ class CExClassFieldPredicate extends CMbObject {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["display_fields"] = "CExClassField predicate_id";
+    $backProps["display_fields"]    = "CExClassField predicate_id";
+    $backProps["display_messages"]  = "CExClassMessage predicate_id";
+    $backProps["display_subgroups"] = "CExClassFieldSubgroup predicate_id";
+    $backProps["properties"]        = "CExClassFieldProperty predicate_id";
     return $backProps;
   }
   
   function updateFormFields(){
     parent::updateFormFields();
-    
+
+    if (self::$_load_lite) {
+      return;
+    }
+
     $field = $this->loadRefExClassField();
     
     $ex_object = new CExObject($field->loadRefExGroup()->ex_class_id);
@@ -59,6 +76,7 @@ class CExClassFieldPredicate extends CMbObject {
   
   /**
    * @param bool $cache [optional]
+   *
    * @return CExClassField
    */
   function loadRefExClassField($cache = true){
@@ -74,7 +92,7 @@ class CExClassFieldPredicate extends CMbObject {
     $re = str_replace("/", "\\/", $re);
     $re = "/($re)/i";
     
-    foreach($list as $_match) {
+    foreach ($list as $_match) {
       if ($keywords == "%" || $keywords == "" || preg_match($re, $_match->_view)) {
         $real_list[$_match->_id] = $_match;
       }
@@ -86,7 +104,7 @@ class CExClassFieldPredicate extends CMbObject {
     $empty = new self;
     $empty->_id = null;
     $empty->_guid = "$this->_class-$this->_id"; // FIXME
-    $empty->_view = " -- Toujours afficher -- ";
+    $empty->_view = " -- ";
     array_unshift($real_list, $empty);
     
     return $real_list;
@@ -94,5 +112,12 @@ class CExClassFieldPredicate extends CMbObject {
   
   function checkValue($value){
     return CExClass::compareValues($value, $this->operator, $this->value);
+  }
+
+  /**
+   * @return CExClassFieldProperty[]
+   */
+  function loadRefProperties(){
+    return $this->_ref_properties = $this->loadBackRefs("properties");
   }
 }

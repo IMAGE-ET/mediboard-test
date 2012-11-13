@@ -80,14 +80,14 @@ toggleObjectSelector = function(input, selected) {
       container.update().insert(select);
       break;
   }
-}
+};
 
 selectSugg = function(button) {
   var form = button.form;
   $V(form.elements.field, button.get("value")); 
   $V(form.elements._host_field_view, button.getText().strip());
   toggleObjectSelector(button, button);
-}
+};
 </script>
 
 <form name="editConstraint" method="post" action="?" onsubmit="return onSubmitFormAjax(this, ExConstraint.editCallback.curry({{$ex_constraint->ex_class_event_id}}))">
@@ -173,7 +173,7 @@ selectSugg = function(button) {
                 this.sClass    = "_object_class";
                 this.onlyclass = "true";
                 this.pop();
-              }
+              };
               
               ObjectSelector.set = function(oObject) {
                 var oForm = getForm(this.sForm);
@@ -184,7 +184,7 @@ selectSugg = function(button) {
                 
                 $V(oForm.elements[this.sClass], oObject.objClass);
                 $V(oForm.elements[this.sId], oObject.objClass+"-"+oObject.id);
-              }
+              };
             </script>
           {{/if}}
         </div>

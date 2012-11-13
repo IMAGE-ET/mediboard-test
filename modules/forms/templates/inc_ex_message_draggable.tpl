@@ -1,21 +1,14 @@
-<div class="draggable {{$_type}}" data-type="{{$_type}}" data-message_id="{{$_field->_id}}">
+<div class="{{if !$ex_class->pixel_positionning}} draggable {{/if}} {{$_type}} overlayed"
+     data-type="{{$_type}}"
+     data-message_id="{{$_field->_id}}"
+     ondblclick="ExMessage.edit({{$_field->_id}}); Event.stop(event);">
   <div style="position: relative;">
     {{if $_type == "message_title"}}
       <div class="field-info" style="display: none;">{{$_field->title}}</div>
-      <div class="field-content">
-      	{{$_field->title}}
-      </div>
+      <div class="field-content">{{$_field->title}}</div>
     {{else}}
-      {{if $_field->type == "title"}}
-        <div class="ex-message-title">
-          {{$_field->text}}
-        </div>
-      {{else}}
-        <div class="small-{{$_field->type}}">
-          {{mb_value object=$_field field=text}}
-        </div>
-      {{/if}}
+      {{mb_include module=forms template=inc_ex_message _message=$_field}}
     {{/if}}
-    <div class="overlay opacity-0"></div>
+    <div class="overlay"></div>
   </div>
 </div>

@@ -14,7 +14,6 @@ $ex_constraint_id  = CValue::get("ex_constraint_id");
 $ex_class_event_id = CValue::get("ex_class_event_id");
 
 $ex_constraint = new CExClassConstraint;
-$ex_constraint->_ref_object = null;
   
 if (!$ex_constraint->load($ex_constraint_id)) {
   $ex_constraint->ex_class_event_id = $ex_class_event_id;

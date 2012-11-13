@@ -30,6 +30,12 @@ var Action = {
       <th colspan="2" class="title">{{tr}}{{$class}}{{/tr}}</th>
     </tr>
     {{mb_include module=system template=inc_config_bool var=force_list}}
+
+    {{assign var=class value=CExClass}}
+      <tr>
+        <th colspan="2" class="title">{{tr}}{{$class}}{{/tr}}</th>
+      </tr>
+    {{mb_include module=system template=inc_config_bool var=pixel_positionning}}
     
     <tr>
       <td class="button" colspan="10">

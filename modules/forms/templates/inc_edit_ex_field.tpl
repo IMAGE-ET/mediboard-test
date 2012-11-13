@@ -35,7 +35,7 @@ toggleListCustom = function(form) {
   }
   
   ExFieldSpec.edit(form);
-}
+};
 
 selectConcept = function(input) {
   ExFieldSpec.edit(input.form);
@@ -43,14 +43,14 @@ selectConcept = function(input) {
   if (!$V(input.form._locale)) {
     $V(input.form._locale, input.form.concept_id_autocomplete_view.value);
   }
-}
+};
 
 warnNotNullPredicate = function() {
   var warning = $("notNull-predicate-warning");
   var form = getForm("editField");
   
   warning.setVisible($V(form.prop).indexOf(" notNull") > -1 && $V(form.predicate_id)); 
-}
+};
 
 Main.add(function(){
   var form = getForm("editField");
@@ -131,6 +131,10 @@ Main.add(function(){
   
   {{mb_key object=$ex_field}}
   {{mb_field object=$ex_field field=ex_group_id hidden=true}}
+  
+  {{foreach from=$ex_field->getPropertyFields() item=_property_field}}
+    {{mb_field object=$ex_field field=$_property_field hidden=true}}
+  {{/foreach}}
   
   <table class="form">
     
@@ -249,7 +253,7 @@ Main.add(function(){
     
     <tr>
       <th>{{mb_label object=$ex_field field=report_class}}</th>
-      <td colspan="3">{{mb_field object=$ex_field field=report_class typeEnum=select emptyLabel="Aucun"}}</td>
+      <td colspan="3">{{mb_field object=$ex_field field=report_class typeEnum=select emptyLabel="None"}}</td>
     </tr>
     
     <tr>
@@ -289,17 +293,23 @@ Main.add(function(){
   </table>
 </form>
 
-<ul class="control_tabs" id="ExClassField-param">
+<ul class="control_tabs small" id="ExClassField-param">
   <li><a href="#fieldSpecEditor">Propriétés</a></li>
 
   {{if $ex_field->_id}}
+    <li>
+      <a href="#fieldProperties" {{if !$ex_field->_ref_properties|@count}} class="empty" {{/if}} >
+        {{tr}}CExClassField-back-properties{{/tr}} <small>({{$ex_field->_ref_properties|@count}})</small>
+      </a>
+    </li>
+  
     {{assign var=_spec_type value=$ex_field->_spec_object->getSpecType()}}
     {{assign var=_can_formula value="CExClassField::formulaCanResult"|static_call:$_spec_type}}
     
     {{if $_can_formula}}
       <li>
         <a href="#fieldFormulaEditor" {{if !$ex_field->formula}} class="empty" {{/if}} 
-           style="background-image: url(style/mediboard/images/buttons/formula.png); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">
+           style="background-image: url('style/mediboard/images/buttons/formula.png'); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">
           Formule / concaténation
         </a>
       </li>
@@ -361,4 +371,8 @@ Main.add(function(){
       {{/foreach}}
     </table>
   {{/if}}
+</div>
+
+<div id="fieldProperties" style="display: none;">
+  {{mb_include module=forms template=inc_list_entity_properties object=$ex_field}}
 </div>

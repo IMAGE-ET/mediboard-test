@@ -11,14 +11,14 @@
 <script type="text/javascript">
 onUploadComplete = function(message){
   SystemMessage.notify(message);
-}
+};
 
 updateA = function(select){
   var form = select.form;
 	var qp = form.getAttribute("action").toQueryParams();
 	qp.a = $V(select) || "void";
 	form.setAttribute("action", "?"+Object.toQueryString(qp));
-}
+};
 </script>
 
 <form name="import-form" action="?m=forms&amp;a=do_import_fields" method="post" 

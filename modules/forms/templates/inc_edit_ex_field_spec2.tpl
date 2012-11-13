@@ -15,12 +15,15 @@ booleanSpecs = {{$boolean|@json}};
 
 updateFieldSpec = function(){
   var form = getForm("editFieldSpec");
+  var fieldForm = getForm("editField");
   if (!checkForm(form)) return;
   
   var data = form.serialize(true);
   var fields = {};
   var specType = "{{$spec->getSpecType()}}";
   var str = specType;
+
+  var notProps = {{"CExClassField"|static:_property_fields_all|@json}};
   
   var newData = {};
   Object.keys(data).each(function(k){
@@ -31,9 +34,17 @@ updateFieldSpec = function(){
   data = newData;
   
   Object.keys(data).each(function(k){
-    if (k.indexOf("__") === 0) return;
+    if (k.indexOf("__") === 0) {
+      return;
+    }
     
     var d = data[k];
+    
+    // The value is a CExClassField field
+    if (notProps.indexOf(k) > -1) {
+      $V(fieldForm[k], d);
+      return;
+    }
     
     if (d !== "") {
       if (Object.isArray(d)) {
@@ -69,27 +80,27 @@ updateFieldSpec = function(){
   
   var fieldForm = getForm("{{$form_name}}");
   $V(fieldForm.prop, str);
-}
+};
 
 avoidSpaces = function(event) {
   var key = Event.key(event);
   // space or pipe
   if (key == 32 || key == 124) Event.stop(event);
-}
+};
 
 cloneTemplate = function(input) {
   var template = $(input).up('table').down('.template');
   var clone = template.clone(true).observe("change", updateFieldSpec);
   template.insert({before: clone.show().removeClassName('template')});
   clone.down('input[type=text]').tryFocus();
-}
+};
 
 confirmDelEnum = function(button) {
   if (!confirm("Voulez-vous vraiment supprimer cette valeur ? Elles seront supprimées de la base.")) return false;
   $(button).up("tr").remove(); 
   updateFieldSpec();
   return true;
-}
+};
 
 updateTriggerData = function(trigger, value) {
   var fieldForm = getForm("{{$form_name}}");
@@ -105,7 +116,7 @@ updateTriggerData = function(trigger, value) {
   $V(fieldForm._triggered_data, Object.toJSON(trigger_object));
   
   $("save-to-take-effect").show();
-}
+};
 
 Main.add(function(){
   var form = getForm("editFieldSpec");
@@ -260,7 +271,12 @@ Main.add(function(){
           
         {{else}}
         
-          {{if !($_type == "list" || $_type == "bool" && $_name == "default" || $_type == "bool" && ($_name == "notNull" || $_name == "vertical"))}}
+          {{if !(
+            $_type == "list" ||
+            $_type == "bool" && $_name == "default" ||
+            $_type == "bool" && ($_name == "notNull" || $_name == "vertical") ||
+            $_type == "num" && $_name == "columns"
+          )}}
             <input type="hidden" name="{{$_name}}" value="{{$spec_value}}" />
           {{/if}}
         
@@ -270,7 +286,16 @@ Main.add(function(){
             
           {{* num *}}
           {{elseif $_type == "num"}}
-            {{$spec_value}}
+            {{if $_name == "columns"}}
+              <script type="text/javascript">
+                Main.add(function(){
+                  getForm("editFieldSpec")["{{$_name}}"].addSpinner();
+                });
+              </script>
+              <input type="text" name="{{$_name}}" value="{{$spec_value}}" class="float" size="2" />
+            {{else}}
+              {{$spec_value}}
+            {{/if}}
             
           {{* bool *}}
           {{elseif $_type == "bool"}}
@@ -360,6 +385,21 @@ Main.add(function(){
       </td>
     </tr>
   {{/foreach}}
+  
+  {{if $context instanceof CExClassField}}
+    {{foreach from=$context->getPropertyFields() item=_property_field}}
+    <tr>
+      <th>{{mb_label object=$context field=$_property_field}}</th>
+      <td>
+        {{if $context->_specs.$_property_field instanceof CNumSpec}}
+          {{mb_field object=$context field=$_property_field form=editFieldSpec increment=true size=3}}
+        {{else}}
+          {{mb_field object=$context field=$_property_field}}
+        {{/if}}
+      </td>
+    </tr>
+    {{/foreach}}
+  {{/if}}
 </table>
 
 <div class="small-info" style="display: none;" id="save-to-take-effect">

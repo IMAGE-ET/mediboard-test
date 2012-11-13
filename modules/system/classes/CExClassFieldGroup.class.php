@@ -12,16 +12,49 @@ class CExClassFieldGroup extends CMbObject {
   var $ex_class_field_group_id = null;
   
   var $ex_class_id = null;
-  var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
+  var $name = null; // != object_class, object_id, ex_ClassName_event_id,
   var $rank = null;
-  
-  var $_ref_ex_class = null;
-  var $_ref_fields = null;
-  var $_ref_messages = null;
+
+  /**
+   * @var CExClass
+   */
+  var $_ref_ex_class    = null;
+
+  /**
+   * @var CExClassField[]
+   */
+  var $_ref_fields      = null;
+
+  /**
+   * @var CExClassMessage[]
+   */
+  var $_ref_messages    = null;
+
+  /**
+   * @var CExClassHostField[]
+   */
   var $_ref_host_fields = null;
+
+  /**
+   * @var CExClassFieldSubgroup[]
+   */
+  var $_ref_subgroups   = null;
+
+  /**
+   * @var CExClassField[]
+   */
+  var $_ref_root_fields = null;
+
+  /**
+   * @var CExClassMessage[]
+   */
+  var $_ref_root_messages = null;
   
   var $_move = null;
-  
+
+  /**
+   * @var CExClassField[]
+   */
   static $_fields_cache = array();
 
   function getSpec() {
@@ -42,9 +75,11 @@ class CExClassFieldGroup extends CMbObject {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["class_fields"] = "CExClassField ex_group_id";
-    $backProps["host_fields"]  = "CExClassHostField ex_group_id";
+    $backProps["class_fields"]   = "CExClassField ex_group_id";
+    $backProps["host_fields"]    = "CExClassHostField ex_group_id";
     $backProps["class_messages"] = "CExClassMessage ex_group_id";
+    $backProps["subgroups"]      = "CExClassFieldSubgroup parent_id";
+    $backProps["identifiants"]   = "CIdSante400 object_id cascade";
     return $backProps;
   }
   
@@ -52,20 +87,68 @@ class CExClassFieldGroup extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->name;
   }
-  
+
   /**
+   * @param bool $cache
+   *
    * @return CExClass
    */
   function loadRefExClass($cache = true){
     return $this->_ref_ex_class = $this->loadFwdRef("ex_class_id", $cache);
   }
-  
+
+  /**
+   * @return CExClassFieldGroup
+   */
+  function getExGroup(){
+    return $this;
+  }
+
+  /**
+   * @param bool $cache
+   *
+   * @return CExClassField[]
+   */
+  function loadRefsRootFields($cache = true){
+    $fields = $this->loadRefsFields($cache);
+
+    foreach ($fields as $_id => $_field) {
+      if ($_field->subgroup_id) {
+        unset($fields[$_id]);
+      }
+    }
+
+    return $this->_ref_root_fields = $fields;
+  }
+
+  /**
+   * @param bool $cache
+   *
+   * @return CExClassMessage[]
+   */
+  function loadRefsRootMessages($cache = true){
+    $messages = $this->loadRefsMessages($cache);
+
+    foreach ($messages as $_id => $_message) {
+      if ($_message->subgroup_id) {
+        unset($messages[$_id]);
+      }
+    }
+
+    return $this->_ref_root_messages = $messages;
+  }
+
+  /**
+   * @param bool $cache
+   *
+   * @return CExClassField[]
+   */
   function loadRefsFields($cache = true){
     if ($cache && isset(self::$_fields_cache[$this->_id])) {
       return $this->_ref_fields = self::$_fields_cache[$this->_id];
     }
-    
-    $this->_ref_fields = $this->loadBackRefs("class_fields");
+
+    $this->_ref_fields = $this->loadBackRefs("class_fields", "IF(tab_index IS NULL, 10000, tab_index), ex_class_field_id");
     
     if ($cache) {
       self::$_fields_cache[$this->_id] = $this->_ref_fields;
@@ -93,7 +176,7 @@ class CExClassFieldGroup extends CMbObject {
         list($groups_ids[$self_index+$sign], $groups_ids[$self_index]) = array($groups_ids[$self_index], $groups_ids[$self_index+$sign]); 
       
         $new_groups = array();
-        foreach($groups_ids as $i => $id) {
+        foreach($groups_ids as $id) {
           $new_groups[$id] = $groups[$id];
         }
         
@@ -114,12 +197,41 @@ class CExClassFieldGroup extends CMbObject {
     
     return parent::store();
   }
-  
+
+  /**
+   * @return CExClassHostField[]
+   */
   function loadRefsHostFields(){
     return $this->_ref_host_fields = $this->loadBackRefs("host_fields");
   }
-  
-  function loadRefsMessages(){
+
+  /**
+   * @param bool $cache
+   *
+   * @return CExClassMessage[]
+   */
+  function loadRefsMessages($cache = true){
+    if ($cache && $this->_ref_messages) {
+      return $this->_ref_messages;
+    }
+
     return $this->_ref_messages = $this->loadBackRefs("class_messages");
+  }
+
+  /**
+   * @param bool $recurse
+   *
+   * @return CExClassFieldSubgroup[]
+   */
+  function loadRefsSubgroups($recurse = false){
+    $this->_ref_subgroups = $this->loadBackRefs("subgroups", "ex_class_field_subgroup_id");
+
+    if ($recurse) {
+      foreach ($this->_ref_subgroups as $_subgroup) {
+        $_subgroup->loadRefsChildrengroups($recurse);
+      }
+    }
+
+    return $this->_ref_subgroups;
   }
 }

@@ -12,11 +12,22 @@ class CExConcept extends CExListItemsOwner {
   var $ex_concept_id = null;
   
   var $ex_list_id = null;
-  var $name = null; // != object_class, object_id, ex_ClassName_event_id, 
-  var $prop = null; 
-  
+  var $name = null; // != object_class, object_id, ex_ClassName_event_id,
+  var $prop = null;
+
+  /**
+   * @var CExList
+   */
   var $_ref_ex_list = null;
+
+  /**
+   * @var CExClassField[]
+   */
   var $_ref_class_fields = null;
+
+  /**
+   * @var CMbFieldSpec
+   */
   var $_concept_spec = null;
   
   static $_options_order = array(
@@ -42,7 +53,14 @@ class CExConcept extends CExListItemsOwner {
     "class",
     "cascade",
   );
-  
+
+  /**
+   * Parse a search string, from the search form
+   *
+   * @param string $concept_search
+   *
+   * @return array
+   */
   static function parseSearch($concept_search) {
     $concept_search = utf8_encode($concept_search);
     $args = json_decode($concept_search);
@@ -52,7 +70,7 @@ class CExConcept extends CExListItemsOwner {
       $matches = array();
       
       if (preg_match('/^cv(\d+)_(\d+)_([a-z]+)$/', $_key, $matches)) {
-        list($p, $concept_id, $i, $k) = $matches;
+        list(, $concept_id, $i, $k) = $matches;
         if (!isset($search[$concept_id])){
           $search[$concept_id] = array();
         }
@@ -104,9 +122,23 @@ class CExConcept extends CExListItemsOwner {
     }
   }
   
+  function loadEditView() {
+    parent::loadEditView();
+    
+    $fields = $this->loadRefClassFields();
+    foreach ($fields as $_field) {
+      $_field->loadRefExClass();
+    }
+  }
+
+  /**
+   * @return void
+   */
   function updatePropFromList(){
     $spec = $this->loadConceptSpec();
-    if (!$spec instanceof CEnumSpec) return;
+    if (!$spec instanceof CEnumSpec) {
+      return;
+    }
     
     if ($this->ex_list_id) {
       $list = $this->loadRefExList();
@@ -165,12 +197,16 @@ class CExConcept extends CExListItemsOwner {
   
   /**
    * @param bool $cache [optional]
+   *
    * @return CExList
    */
   function loadRefExList($cache = true){
     return $this->_ref_ex_list = $this->loadFwdRef("ex_list_id", $cache);
   }
-  
+
+  /**
+   * @return CExClassField[]
+   */
   function loadRefClassFields(){
     return $this->_ref_class_fields = $this->loadBackRefs("class_fields");
   }
@@ -181,36 +217,11 @@ class CExConcept extends CExListItemsOwner {
     $this->loadRefClassFields();
   }
 
-  function loadEditView() {
-    parent::loadEditView();
-
-    foreach ($this->_ref_class_fields as $_field) {
-      $_field->loadRefExGroup()->loadRefExClass();
-    }
-  }
-  
+  /**
+   * @return CMbFieldSpec
+   */
   function loadConceptSpec(){
     return $this->_concept_spec = self::getConceptSpec($this->prop);
-  }
-  
-  function updateTranslation(){
-    $base = $this;
-    
-    if ($this->concept_id) {
-      $base = $this->loadRefConcept();
-    }
-    
-    $enum_trans = $base->loadRefEnumTranslations();
-    foreach($enum_trans as $_enum_trans) {
-      $_enum_trans->updateLocales($this);
-    }
-    
-    $trans = $this->loadRefTranslation();
-    $this->_locale       = $trans->std;
-    $this->_locale_desc  = $trans->desc;
-    $this->_locale_court = $trans->court;
-    
-    $this->_view = $this->_locale;
   }
     
   static function compareSpecs($a, $b) {
@@ -250,6 +261,7 @@ class CExConcept extends CExListItemsOwner {
   
   /**
    * @param string $prop
+   *
    * @return CMbFieldSpec
    */
   static function getConceptSpec($prop){
@@ -277,7 +289,10 @@ class CExConcept extends CExListItemsOwner {
     $spec->_options = $options;
     return $spec;
   }
-  
+
+  /**
+   * @return CExList|CExListItemsOwner
+   */
   function getRealListOwner(){
     if ($this->ex_list_id) {
       return $this->loadRefExList();

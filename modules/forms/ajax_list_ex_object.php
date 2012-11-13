@@ -46,7 +46,6 @@ CExObject::$_load_lite = $detail < 2;
 $group_id = ($group_id ? $group_id : CGroups::loadCurrent()->_id);
 $where = array(
   "group_id = $group_id OR group_id IS NULL",
-  //"disabled = '0'",
 );
 
 if ($ex_class_id) {
@@ -153,9 +152,7 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     $ex_objects_counts[$_ex_class_id] = $_ex_objects_count;
   }
 
-  // Masquer les sous formulaires !!!
-  
-  if (!$_ex_class->conditional) {
+  if ($detail <= 0.5 && !$_ex_class->conditional) {
     $where = array(
       "ex_class.ex_class_id"      => "= '$_ex_class_id'",
       "ex_class_event.host_class" => "= '$reference_class'",
@@ -167,7 +164,7 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     
     $_ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
     
-    // TODO checkConstraints + canCreateNew
+    // TODO canCreateNew
     foreach ($_ex_class_events as $_id => $_ex_class_event) {
       if ($reference && (!$_ex_class_event->checkConstraints($reference)/* || 
                          !$_ex_class_event->canCreateNew($reference)*/)) {

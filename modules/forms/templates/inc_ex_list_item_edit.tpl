@@ -7,7 +7,7 @@ editListItem = function(line) {
   var button = form.down('button');
   button.removeClassName('add').addClassName('save');
   form.down('button.cancel').setVisibility(true);
-}
+};
 
 cancelEditListItem = function(form) {
   $V(form.ex_list_item_id, "");
@@ -16,7 +16,7 @@ cancelEditListItem = function(form) {
   var button = form.down('button');
   button.removeClassName('save').addClassName('add');
   form.down('button.cancel').setVisibility(false);
-}
+};
   
 Main.add(function(){
   var form = getForm("edit-{{$context->_guid}}");
@@ -41,9 +41,9 @@ Main.add(function(){
 <form name="CExListItem-create" method="post" action="?" 
       onsubmit="return onSubmitFormAjax(this, {onComplete: 
         {{if $context instanceof CExClassField}} 
-          (function(){ if(!$V(this.elements.ex_list_item_id)) { (function(){ $('save-to-take-effect').show(); }).delay(1); } ExField.edit('{{$context->_id}}') }).bind(this) 
+          (function(){ if(!$V(this.elements.ex_list_item_id)) { (function(){ $('save-to-take-effect').show(); }).delay(1); } ExField.edit('{{$context->_id}}') }).bind(this)
         {{else}} 
-          MbObject.edit.curry('{{$context->_guid}}') 
+          MbObject.edit.curry('{{$context->_guid}}')
         {{/if}} })">
         
   {{mb_class class=CExListItem}}

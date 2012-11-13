@@ -106,7 +106,8 @@ class CMediusers extends CMbObject {
   /**
    * Lazy access to a given user, defaultly connected user
    * @param $user_id ref|CMediuser The user id, connected user if null;
-   * @return CMediuser
+   *
+   * @return CMediusers
    */
   static function get($user_id = null) {
     // CAppUI::$user is available *after* CAppUI::$instance->_ref_user
@@ -140,7 +141,7 @@ class CMediusers extends CMbObject {
     // Note: notamment utile pour les seeks
     // Dans les faits c'est plus logique puisque la classe n'est pas autoincremented
     $props["user_id"]                = "ref class|CUser seekable show|0";
-    
+
     $props["remote"]                 = "bool default|1 show|0";
     $props["adeli"]                  = "numchar length|9 confidential mask|99S9S99999S9 control|luhn";
     $props["rpps"]                   = "numchar length|11 confidential mask|99999999999 control|luhn";

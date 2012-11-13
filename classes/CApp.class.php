@@ -78,8 +78,7 @@ class CApp {
     // If the client doesn't support cookies, we destroy its session
     // Sometimes, the cookie is empty while the client support cookies (url auth in IE)
     /*if (empty($_COOKIE)) {
-      session_unset();
-      @session_destroy(); // Escaped because of an unknown error
+      CSessionHandler::end();
     }*/
     
     self::$inPeace = true;
@@ -118,8 +117,8 @@ class CApp {
   /**
    * Outputs JSON data after removing the Output Buffer, with a custom mime type
    * 
-   * @param object $data     The data to output
-   * @param string $mimeType [optional] The mime type of the data, application/json by default
+   * @param object|array $data     The data to output
+   * @param string       $mimeType [optional] The mime type of the data, application/json by default
    * 
    * @return void
    */

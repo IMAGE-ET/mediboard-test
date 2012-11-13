@@ -9,8 +9,6 @@
  */
 
 class CExClassFieldTranslation extends CMbObject {
-  protected static $cache = array();
-  
   var $ex_class_field_translation_id = null;
   
   var $ex_class_field_id = null;
@@ -19,7 +17,10 @@ class CExClassFieldTranslation extends CMbObject {
   var $std   = null;
   var $desc  = null;
   var $court = null;
-  
+
+  /**
+   * @var CExClassField
+   */
   var $_ref_ex_class_field = null;
 
   function getSpec() {
@@ -51,10 +52,12 @@ class CExClassFieldTranslation extends CMbObject {
    * @return CExClassFieldTranslation
    */
   static function tr($field_id) {
+    static $cache = array();
+
     $lang = CAppUI::pref("LOCALE");
     
-    if (isset(self::$cache[$lang][$field_id])) {
-      return self::$cache[$lang][$field_id];
+    if (isset($cache[$lang][$field_id])) {
+      return $cache[$lang][$field_id];
     }
     
     $trans = new self;
@@ -62,7 +65,7 @@ class CExClassFieldTranslation extends CMbObject {
     $trans->ex_class_field_id = $field_id;
     
     if ($trans->loadMatchingObject()) {
-      self::$cache[$lang][$field_id] = $trans;
+      $cache[$lang][$field_id] = $trans;
     }
     
     return $trans;
@@ -70,12 +73,13 @@ class CExClassFieldTranslation extends CMbObject {
   
   function updateFormFields(){
     parent::updateFormFields();
-    
-    global $locales;
+
+    /*global $locales;
     $key = $this->getKey();
     $locales[$key] = $this->std;
     $locales["{$key}-desc"]  = $this->desc  ? $this->desc  : $this->std;
     $locales["{$key}-court"] = $this->court ? $this->court : $this->std;
+    */
     
     $this->_view = $this->std;
   }

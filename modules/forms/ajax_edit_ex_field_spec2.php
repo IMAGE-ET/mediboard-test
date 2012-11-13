@@ -65,7 +65,7 @@ if ($spec instanceof CBoolSpec && strpos($prop, "default|") === false) {
   $spec->default = null;
 }
 
-if ($spec instanceof CEnumSpec) {
+if ($spec instanceof CEnumSpec || $spec instanceof CBoolSpec) {
   if ($spec->typeEnum === null || !in_array($spec->typeEnum, $spec->_options["typeEnum"])) {
     $spec->typeEnum = reset($spec->_options["typeEnum"]);
   }

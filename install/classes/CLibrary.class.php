@@ -413,3 +413,16 @@ $library->versionFile = "changelog";
 $library->versionString = "0.9.5";
 
 CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
+$library->name = "Zebra_Session";
+$library->url = "http://stefangabos.ro/php-libraries/zebra-session/";
+$library->fileName = "zebra_session.2.0.3.zip";
+$library->description = "MySQL session handler";
+$library->extraDir = "zebra_session";
+$library->sourceDir = "zebra_session";
+$library->targetDir = "zebra_session";
+$library->versionFile = "Zebra_Session.php";
+$library->versionString = "@version    2.0.3";
+
+CLibrary::$all[$library->name] = $library;

@@ -15,7 +15,7 @@ showField = function(field_id, field_name, value){
     form.removeClassName("prepared");
     prepareForm(form);
   });
-}
+};
 
 toggleNoValue = function(form){
   var field = form.elements[window.predicateFieldName];
@@ -43,7 +43,7 @@ toggleNoValue = function(form){
     
   $("field-view").show();
   $("field-view-novalue").hide();
-}
+};
 
 predicateCallback = function(id, obj) {
   {{if $opener_field_value && $opener_field_view}}
@@ -54,7 +54,7 @@ predicateCallback = function(id, obj) {
   {{/if}}
   
   Control.Modal.close();
-}
+};
 
 Main.add(function(){
   var form = getForm("ex_field_predicate-form");

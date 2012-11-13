@@ -9,14 +9,28 @@
  */
 
 class CExListItemsOwner extends CMbObject {
+  /**
+   * @var CExListItem[]
+   */
   var $_ref_items = null;
-  
+
+  /**
+   * @var bool
+   */
+  static $_order_list_items = true;
+
+  /**
+   * @return CExListItem[]
+   */
   function loadRefItems() {
     $items = $this->loadBackRefs("list_items");
     self::naturalSort($items, array("code"));
     return $this->_ref_items = $items;
   }
-  
+
+  /**
+   * @return string
+   */
   function getBackRefField(){
     $map = array(
       "CExList"       => "list_id",
@@ -25,15 +39,26 @@ class CExListItemsOwner extends CMbObject {
     );
     return CValue::read($map, $this->_class);
   }
-  
+
+  /**
+   * @return integer[]
+   */
   function getItemsKeys() {
     $item = new CExListItem;
     $where = array(
       $this->getBackRefField() => "= '$this->_id'"
     );
-    return $item->loadIds($where, "LPAD(code, 20, '0'), name"); // Natural sort, sort of ...
+    // TODO ne pas ordonner par nom dans certains cas
+
+    // Natural sort, sort of ...
+    $orderby = (self::$_order_list_items ? "LPAD(code, 20, '0'), name" : null);
+
+    return $item->loadIds($where, $orderby);
   }
-  
+
+  /**
+   * @return string[]
+   */
   function getItemNames(){
     $item = new CExListItem;
     $where = array(
@@ -52,11 +77,19 @@ class CExListItemsOwner extends CMbObject {
     $ds = $item->_spec->ds;
     return $ds->loadHashList($request->getRequest());
   }
-  
+
+  /**
+   * @return CExListItemsOwner
+   */
   function getRealListOwner(){
     return $this;
   }
-  
+
+  /**
+   * @param CEnumSpec $spec
+   *
+   * @return CEnumSpec
+   */
   function updateEnumSpec(CEnumSpec $spec){
     $items = $this->getItemNames();
     $empty = empty($spec->_locales);

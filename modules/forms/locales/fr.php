@@ -1,4 +1,6 @@
 <?php
+$locales['config-forms-CExClass-pixel_positionning'] = 'Activer le positionnement au pixel';
+$locales['config-forms-CExClass-pixel_positionning-desc'] = 'Le positionnement au pixel permet de faire des formulaires plus denses (expérimental)';
 $locales['config-forms-CExClassField-force_concept'] = 'Forcer l\'utilisation des concepts (vivement conseillé)';
 $locales['config-forms-CExClassField-force_concept-desc'] = 'Forcer l\'utilisation des concepts (vivement conseillé)';
 $locales['config-forms-CExConcept-force_list'] = 'Forcer l\'utilisation des listes';
@@ -7,6 +9,7 @@ $locales['mod-forms-tab-ajax_edit_ex_class_event'] = 'Evènement déclencheur';
 $locales['mod-forms-tab-ajax_edit_ex_constraint'] = 'Contrainte';
 $locales['mod-forms-tab-ajax_edit_ex_field'] = 'Champ';
 $locales['mod-forms-tab-ajax_edit_ex_field_predicate'] = 'Prédicat';
+$locales['mod-forms-tab-ajax_edit_ex_field_property'] = 'Style';
 $locales['mod-forms-tab-ajax_edit_ex_formula'] = 'Formule';
 $locales['mod-forms-tab-ajax_edit_ex_message'] = 'Message / titre';
 $locales['mod-forms-tab-ajax_ex_class_preview_events'] = 'Aperçu de formulaire';

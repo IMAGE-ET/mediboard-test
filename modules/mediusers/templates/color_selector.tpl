@@ -8,7 +8,7 @@
   
   function selectColor(color, cell) {
     colorGlobal = color;
-    $("color-view").setStyle({backgroundColor: '#'+color});
+    $("color-view").setStyle({backgroundColor: {{if !$add_sharp}}'#'+{{/if}}color});
     $("palette").select('td').each (function (td) {
       td.setStyle({outline: ''});
     });
@@ -21,14 +21,18 @@
       <table cellpadding="0" cellspacing="0" style="border: 1px solid #999; height: 100%; width: 16px; vertical-align: top;">
         {{foreach from=$hex item=h}}
           {{assign var=rgb value="$h$h$h"}}
+          
+          {{if $add_sharp}}
+            {{assign var=rgb value="#$rgb"}}
+          {{/if}}
           <tr>
-          	<td style="background-color: #{{$rgb}}; width: 14px; height: 24px; cursor: pointer; border: none; {{if $color==$rgb}}outline: 1px dotted #000;{{/if}}" 
+            <td style="background-color: {{if !$add_sharp}}#{{/if}}{{$rgb}}; width: 14px; height: 24px; cursor: pointer; border: none; {{if $color==$rgb}}outline: 1px dotted #000;{{/if}}" 
               onmouseover="selectColor('{{$rgb}}', this);"
-							onclick="selectColor('{{$rgb}}', this);"
+              onclick="selectColor('{{$rgb}}', this);"
               ondblclick="selectColor('{{$rgb}}', this); setClose();"
-              title="#{{$rgb}}"
-						/>
-					</tr>
+              title="{{$rgb}}"
+            />
+          </tr>
         {{/foreach}}
       </table>
     </td>
@@ -45,18 +49,22 @@
                 {{assign var=g_color value=$hex.$g}}
                 {{assign var=b_color value=$hex.$b}}
                 {{assign var=rgb value="$r_color$g_color$b_color"}}
-                <td style="background-color: #{{$rgb}}; width: 14px; height: 14px; cursor: pointer; border: none; {{if $color==$rgb}}outline: 1px dotted #000;{{/if}}" 
+                
+                {{if $add_sharp}}
+                  {{assign var=rgb value="#$rgb"}}
+                {{/if}}
+                <td style="background-color: {{if !$add_sharp}}#{{/if}}{{$rgb}}; width: 14px; height: 14px; cursor: pointer; border: none; {{if $color==$rgb}}outline: 1px dotted #000;{{/if}}" 
                   onmouseover="selectColor('{{$rgb}}', this);"
                   onclick="selectColor('{{$rgb}}', this);" 
                   ondblclick="selectColor('{{$rgb}}', this); setClose();"
-                  title="#{{$rgb}}"
-								/>
+                  title="{{$rgb}}"
+                />
               {{/foreach}}
              </tr>
             {{/foreach}}
           </table>
-      	</td>
-      	{{if $r==2 || $r==5}}</tr>{{/if}}
+        </td>
+        {{if $r==2 || $r==5}}</tr>{{/if}}
         {{/foreach}}
       </table>
     </td>

@@ -9,7 +9,7 @@ showExClassFormSelect = function(select){
   showExClassForm(selected.value, reference_class+"-"+reference_id, host_class+"-"+event_name, null, event_name, '@ExObject.refreshSelf.{{$self_guid}}');
   
   select.selectedIndex = 0;
-}
+};
 
 loadExObjectsList = function(element, reference_class, reference_id, ex_class_id){
   element = $(element);
@@ -34,9 +34,7 @@ loadExObjectsList = function(element, reference_class, reference_id, ex_class_id
   row.addClassName('selected');
   body.addClassName('opened');
   ExObject.loadExObjects(reference_class, reference_id, listContainer.down('td'), 1, ex_class_id);
-  
-  return false;
-}
+};
 
 filterExClasses = function(input){
   var keyword = input.value.toLowerCase();
@@ -52,7 +50,7 @@ filterExClasses = function(input){
   lines.filter(function(line){
     return line.get('name').toLowerCase().indexOf(keyword) > -1;
   }).invoke("show");
-}
+};
 </script>
 
 <table class="main tbl treegrid">
@@ -105,7 +103,7 @@ filterExClasses = function(input){
     <tbody data-name="{{$ex_classes.$_ex_class_id->name}}">
       <tr>
         <td class="text">
-          <a href="#1" class="tree-folding" onclick="return loadExObjectsList(this, '{{$reference_class}}', '{{$reference_id}}', '{{$_ex_class_id}}')">
+          <a href="#1" class="tree-folding" onclick="loadExObjectsList(this, '{{$reference_class}}', '{{$reference_id}}', '{{$_ex_class_id}}'); return false;">
             {{$ex_classes.$_ex_class_id->name}}
           </a>
         </td>

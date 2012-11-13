@@ -54,7 +54,7 @@
       }
       
       var Templates = {
-        id: "Templates",
+        id: "TemplatesLog",
         
         empty: function() {
           var url = new Url("system", "httpreq_do_empty_templates");
@@ -63,7 +63,7 @@
       }
       
       var SharedMemory = {
-        id : "SharedMemory", 
+        id : "SharedMemoryLog",
         
         empty: function(ie) {
           var url = new Url("system", "httpreq_do_empty_shared_memory");
@@ -93,7 +93,7 @@
               Vider les caches template Smarty
             </button>
           </td>
-          <td id="Templates"></td>
+          <td id="TemplatesLog"></td>
         </tr>
         <tr>
           <td>
@@ -101,7 +101,7 @@
               Vider les variables de la mémoire partagée
             </button>
           </td>
-          <td id="SharedMemory"></td>
+          <td id="SharedMemoryLog"></td>
         </tr>
       </table>
   </div>

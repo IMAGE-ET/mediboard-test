@@ -770,9 +770,9 @@ var Url = Class.create({
   /**
    * Open a modal window via an Ajax request
    *
-   * @param {Integer} iWidth
-   * @param {Integer} iHeight
-   * @param {Object=} oOptions
+   * @param {Integer=} iWidth
+   * @param {Integer=} iHeight
+   * @param {Object=}  oOptions
    *
    * @return {Url}
    */

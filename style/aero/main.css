@@ -191,11 +191,9 @@ input[type=number],
 input[type=email], 
 input[type=password], 
 select, 
-textarea,
-.textarea-container {
+textarea {
   background-color: #FFFFFF;
 }
-
 
 input[type=text]:focus, 
 input[type=tel]:focus, 
@@ -203,7 +201,6 @@ input[type=number]:focus,
 input[type=email]:focus, 
 input[type=password]:focus, 
 select:focus, 
-textarea:focus,
-.textarea-container.input-focus {
+textarea:focus {
   background-color: #EAEFF6;
 }

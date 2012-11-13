@@ -32,21 +32,21 @@ input,
 select, 
 textarea, 
 button, 
+textarea,
 .textarea-container {
+  font-size: 1em;
   margin: 1px;
   vertical-align: middle;
   font-family: inherit;
 }
 
-.control {
-  margin: 1px !important;
+input[type=radio],
+input[type=checkbox] {
+  padding: 0;
 }
 
-input, 
-select, 
-textarea {
-  padding: 1px;
-  font-size: 1em;
+.control {
+  margin: 1px !important;
 }
 
 input[type=text], 
@@ -55,6 +55,7 @@ input[type=number],
 input[type=email], 
 input[type=password],
 textarea {
+  padding: 1px;
   border-radius: 0;
   -webkit-appearance: none; /* To remove the "shadow" on iPad" */
 }
@@ -70,11 +71,31 @@ input[type=tel],
 input[type=number], 
 input[type=email], 
 input[type=password], 
-select, 
-textarea,
-.textarea-container {
+select,
+textarea {
   border: 1px #999 solid;
   background-color: #efe;
+}
+
+textarea {
+  width: 100%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: #efe;
+}
+
+.textarea-container {
+  border: 1px #999 solid;
+}
+
+.textarea-container textarea {
+  margin: 0;
+  width: 100%;
+  border: none;
+  overflow-x: hidden;
+  resize: none;
 }
 
 input[type=text]:focus, 
@@ -83,9 +104,12 @@ input[type=number]:focus,
 input[type=email]:focus, 
 input[type=password]:focus, 
 select:focus, 
-textarea:focus,
-.textarea-container.input-focus {
+textarea:focus {
   background-color: #fff;
+}
+
+.textarea-container textarea:focus {
+  outline: none;
 }
 
 input[type=checkbox].disabled {
@@ -104,15 +128,6 @@ input[type=checkbox].disabled {
   color: #999 !important;
 }
 /** </Two rules required> **/
-
-textarea {
-  padding-left: 2px;
-  width: 100%;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
-}
 
 select {
   padding: 0;
@@ -162,19 +177,19 @@ form hr {
 
 fieldset, 
 fieldset legend {
-  border: 1px solid #999;
+  border: 1px solid #aaa;
   border-radius: 3px;
 }
 
 fieldset {
+  background: #f3f3f3;
   background: rgba(220,220,220,0.3);
   margin-top: 0.5em;
-  padding: 0.4em;
+  padding: 0.2em;
 }
 
 fieldset legend {
   font-weight: bold;
-  border: none;
   background: #ddd;
   padding: 0.2em 1.2em;
   white-space: nowrap;
@@ -753,6 +768,11 @@ input[type=text][readonly]:focus {
   background: rgba(255,255,255,0.4);
 }
 
+.textarea-container textarea[readonly],
+.textarea-container textarea[readonly]:focus {
+  border: none;
+}
+
 input[type=text].date {
   width: 90px;
 }
@@ -991,12 +1011,17 @@ textarea#htmlarea {
   display: -moz-inline-box;
   display: inline-block;
   position: static; /* To allow filter:opacity in IE */
+  white-space: normal; /* To allow full width inputs in the forms module */
 }
 
 .numericField td {
   padding: 0!important;
   border: none!important;
 }
+
+/*.numericField .arrows {
+  width: 1%;
+}*/
 
 .numericField .arrows div {
   /*outline: 1px solid #999;*/
@@ -1073,28 +1098,6 @@ textarea#htmlarea {
   height: 14px;
   margin: 0;
   text-align: center;
-}
-
-.textarea-container {
-  padding: 1px;
-  border: 1px #999 solid;
-  background-color: #efe;
-}
-
-.textarea-container textarea {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  border: none;
-  overflow-x: hidden;
-  background: transparent;
-  resize: none;
-}
-
-.textarea-container textarea:focus {
-  border: none;
-  outline: none;
-  background-color: #fff;
 }
 
 .grippie-h {

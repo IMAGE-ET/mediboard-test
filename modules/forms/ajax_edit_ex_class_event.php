@@ -39,8 +39,12 @@ if ($ex_class_event->_id) {
   
   if ($ex_class_event->host_class != "CMbObject") {
     $host_object = new $ex_class_event->host_class;
-    $reference1  = new $ex_class_event->_host_class_options["reference1"][0];
-    $reference2  = new $ex_class_event->_host_class_options["reference2"][0];
+
+    $reference1_class = $ex_class_event->_host_class_options["reference1"][0];
+    $reference1  = new $reference1_class;
+
+    $reference2_class = $ex_class_event->_host_class_options["reference2"][0];
+    $reference2  = new $reference2_class;
   }
 }
 else {

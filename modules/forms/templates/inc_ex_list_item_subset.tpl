@@ -26,7 +26,7 @@ toggleListItem = function(button, value, active) {
   
   $("save-to-take-effect").show();
   updateFieldSpec();
-}
+};
 
 moveListItem = function(e, way){
   var currTr = $(e).up("tr");
@@ -41,7 +41,7 @@ moveListItem = function(e, way){
   
   $("save-to-take-effect").show();
   updateFieldSpec();
-}
+};
 
 </script>
 
