@@ -468,7 +468,7 @@ class CExClass extends CMbObject {
   function store(){
     if ($this->_id && $this->_duplicate) {
       $this->_duplicate = null;
-      return $this->duplicate();      
+      return $this->duplicate();
     }
     
     if ($msg = $this->check()) {
@@ -602,7 +602,7 @@ class CExClass extends CMbObject {
          */
         $_field;
         
-        if ($msg = $this->duplicateObject($_field, "ex_group_id", $_new_group->_id, $_new_field)) {
+        if ($msg = $this->duplicateObject($_field, "ex_group_id", $_new_group->_id, $_new_field, array("predicate_id"))) {
           continue;
         }
         
@@ -638,11 +638,16 @@ class CExClass extends CMbObject {
     CExObject::clearLocales();
   }
 
-  private function duplicateObject(CMbObject $object, $fwd_field, $fwd_value, &$new = null) {
+  private function duplicateObject(CMbObject $object, $fwd_field, $fwd_value, &$new = null, $exclude_fields = array()) {
     $class = $object->_class;
     
     $new = new $class;
     $new->cloneFrom($object);
+
+    foreach ($exclude_fields as $_field) {
+      $new->$_field = null;
+    }
+
     $new->$fwd_field = $fwd_value;
     
     return $new->store();

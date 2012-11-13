@@ -116,7 +116,6 @@ foreach($ex_object->_specs as $_field => $_spec) {
 }
 
 $ex_object->getReportedValues($ex_class_event);
-$ex_object->loadRefReferenceObjects();
 $ex_object->setFieldsDisplay();
 
 if (!$ex_object->_id) {

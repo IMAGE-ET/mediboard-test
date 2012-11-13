@@ -327,24 +327,18 @@ Main.add(function(){
         </tr>
       {{/if}}
     {{/foreach}}
-    
-      {{if $object->_id}}
+
       <tr>
         <td colspan="4" class="button">
-          {{if $ex_object->_id}}
-            <button class="modify singleclick" type="submit">{{tr}}Save{{/tr}}</button>
-            
-            {{if $can_delete}}
-              <button type="button" class="trash" onclick="confirmDeletion(this.form,{callback: (function(){ FormObserver.changes = 0; onSubmitFormAjax(this.form); }).bind(this), typeName:'', objName:'{{$ex_object->_view|smarty:nodefaults|JSAttribute}}'})">
-                {{tr}}Delete{{/tr}}
-              </button>
-            {{/if}}
-          {{else}}
-            <button class="submit singleclick" type="submit">{{tr}}Save{{/tr}}</button>
+          <button class="submit singleclick" type="submit" {{if $preview_mode}}disabled{{/if}}>{{tr}}Save{{/tr}}</button>
+
+          {{if $ex_object->_id && $can_delete && !$preview_mode}}
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{callback: (function(){ FormObserver.changes = 0; onSubmitFormAjax(this.form); }).bind(this), typeName:'', objName:'{{$ex_object->_ref_ex_class->name|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
+            </button>
           {{/if}}
         </td>
       </tr>
-      {{/if}}
       
     </tbody>
     {{/if}}
