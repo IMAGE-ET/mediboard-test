@@ -270,13 +270,23 @@ class CHL7v2Segment extends CHL7v2Entity {
       $patient->loadIPP($group->_id);
     }
     
+    switch ($actor->_configs["build_PID_34"]) {
+      case 'actor':
+        $assigning_authority = $this->getAssigningAuthority("actor", null, $actor);
+        break;
+      
+      default:
+        $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
+        break;
+    }  
+    
     // Table - 0203
     // RI - Resource identifier
     // PI - Patient internal identifier
     // INS-C - Identifiant national de santé calculé
     $identifiers = array();
     if (CHL7v2Message::$build_mode == "simple") {
-      if ($receiver->_configs["send_own_identifier"]) {
+      if ($actor->_configs["send_own_identifier"]) {
         $identifiers[] = array(
           $patient->_IPP,
           null,
@@ -302,17 +312,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       }  
       
       return $identifiers;
-    }
-    
-    switch ($receiver->_configs["build_PID_34"]) {
-      case 'actor':
-        $assigning_authority = $this->getAssigningAuthority("actor", null, $actor);
-        break;
-      
-      default:
-        $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
-        break;
-    }    
+    }  
 
     if ($patient->_IPP) {
       $identifiers[] = array(
