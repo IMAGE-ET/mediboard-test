@@ -45,7 +45,7 @@
       <td>{{$_actor->_ref_group->_view}}</td>
       <td>
         {{foreach from=$_actor->_ref_exchanges_sources item=_exchange_source}}
-          {{if !$_actor instanceof CSenderSOAP && !$_actor instanceof CSenderMLLP}}
+          {{if !$_actor instanceof CSenderSOAP && !$_actor instanceof CSenderMLLP && !$_actor instanceof CDicomSender}}
             {{mb_include module=system template=inc_img_status_source exchange_source=$_exchange_source}}
           {{/if}}
         {{/foreach}}
