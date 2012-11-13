@@ -86,7 +86,11 @@
     </div>
     
     <div id="CSourceDicom-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourceDicom)}}block{{else}}none{{/if}};">
-      {{mb_include module=dicom template=CSourceDicom_inc_config mod=dicom class="CSourceDicom"}}  
+      {{if !"dicom"|module_active}}
+        {{mb_include module=system template=module_missing mod=dicom}}
+      {{else}}
+        {{mb_include module=dicom template=CSourceDicom_inc_config mod=dicom class="CSourceDicom"}}
+      {{/if}}
     </div>
   </div>
 {{/if}}
