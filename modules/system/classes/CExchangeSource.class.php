@@ -22,7 +22,6 @@ class CExchangeSource extends CMbObject {
     "smtp"        => "CSourceSMTP",
     "file_system" => "CSourceFileSystem",
     "http"        => "CSourceHTTP",
-    "dicom"       => "CSourceDicom",
   );
   
   // DB Fields
@@ -204,5 +203,9 @@ class CExchangeSource extends CMbObject {
 
 if (CModule::getActive("hl7")) {
   CExchangeSource::$typeToClass = CExchangeSource::$typeToClass + array("mllp" => "CSourceMLLP");
+}
+
+if (CModule::getActive("dicom")) {
+  CExchangeSource::$typeToClass = CExchangeSource::$typeToClass + array("dicom" => "CSourceDicom");
 }
 ?>
