@@ -8,19 +8,21 @@
  * @version    $Revision$
  *}}
 
+{{assign var=unite_administration value=$line_item->_unite_administration}}
+
+{{if $line->type != "classique" && (!$line->volume_debit || !$line_item->quantite)}}
+  <div class="small-warning">
+    Le volume de référence et la quantité sont nécessaires pour calculer le débit volumique.
+  </div>
+  {{mb_return}}
+{{/if}}
 <script type="text/javascript">
   Main.add(function() {
     var form = getForm("calculPerf");
     form.debit.addSpinner({min: 0});
-    poids = $$(".poids_patient");
-    volume = {{$line->_quantite_totale}} - $V(form.rapport) * $V(form.quantite);
     
-    // On ne garde que les unités notées en mg
-    $A(form.unite.options).each(function(elt) {
-      if (!/(^mg)/.test(elt.innerHTML)) {
-        elt.remove();
-      }
-    });
+    poids = $$(".poids_patient");
+    volume = {{$line->_quantite_totale}};
     
     if (poids.length) {
       poids = parseInt(poids[0].innerHTML);
@@ -38,103 +40,114 @@
   });
   
   updateData = function() {
+    var rapport_unite_prise = {{$line_item->_ref_produit->rapport_unite_prise|@json}};
+    var unite_administration = "{{$unite_administration}}";
+    
     var form = getForm("calculPerf");
+    var unite_choisie = $V(form.unite);
     
-    // Débit massique nécessaire
-    var debit = $V(form.debit);
-    var unite = form.unite.selectedOptions[0].innerHTML.split(" ")[0];
+    // rapport_debit_choisi_ua
+    var rapport_debit_choisi_ua = rapport_unite_prise[$V(form.unite)][unite_administration];
+ 
+    // rapport_conditionnement_ua
+    var rapport_conditionnement_ua = rapport_unite_prise["{{$line_item->unite}}"][unite_administration];
     
-    var debit_necessaire = $("debit_necessaire");
-    var result_necessaire = debit;
+    // Rapport resultant des calculs précédents
+    var rapport_quantite_necessaire = rapport_debit_choisi_ua / rapport_conditionnement_ua;
     
-    if (/\/kg/.test(unite)) {
-      result_necessaire *= poids;
-    }
-    
-    debit_necessaire.update(result_necessaire + " " + unite.replace("/kg", ""));
-    
-    var rapport_conditionnement = $V(form.rapport);
-    var rapport_debit = parseFloat($V(form.unite));
+    var debit_choisi = $V(form.debit);
     
     {{if $line->type == "classique"}}
       var duree = parseFloat($("result_duree").innerHTML);
       
-      var qte = debit * duree * rapport_debit / rapport_conditionnement;
-      if (/\/kg/.test(unite)) {
-        qte *= poids;
+      // Calcul du débit nécessaire
+      var debit_necessaire = debit_choisi;
+      
+      if (/\/kg/.test(unite_choisie)) {
+        debit_necessaire *= poids;
       }
       
-      qte = Math.round(qte * 100) / 100;      
-      $("conditionnement").update("<strong>"+qte+"</strong>");
+      $("debit_necessaire").update(debit_necessaire + " " + unite_choisie.replace(/\/kg \(.*\)/, ""));
       
-      // Mise à jour du volume
-      var volume_produit = qte * rapport_conditionnement;
-      var volume_ref = Math.round((volume + volume_produit)*100) / 100;
-      $("volume_ref").update(volume_ref);
-      var debit_volumique = Math.round(($("volume_ref").innerHTML / duree) * 100) / 100;
-      $("debit_volumique").update("<strong>"+debit_volumique+"</strong>");
+      // Calcul de la quantité nécessaire
+      var quantite_necessaire = debit_choisi * rapport_quantite_necessaire * duree;
+      
+      if (/\/kg/.test(unite_choisie)) {
+        quantite_necessaire *= poids;
+      }
+            
+      $("quantite_necessaire").update(quantite_necessaire);
+      
+      // Calcul du volume de référence
+      var volume_total = volume;
+      
+      if (unite_administration == "ml") {
+        volume_total = Math.round((volume_total + quantite_necessaire * rapport_conditionnement_ua) * 100) / 100;
+      }
+      $("volume_ref").update(volume_total);
+      
     {{else}}
-      var qte = $V(form.quantite);
+      var quantite_choisie = parseFloat($("quantite_choisie").innerHTML);
       
-      if (/\/kg/.test(unite)) {
-        qte *= poids;
+      if (/\/kg/.test(unite_choisie)) {
+        quantite_choisie /= poids;
       }
       
-      var duree = Math.round((qte / rapport_debit/ debit * rapport_conditionnement) * 100) / 100;
+      // Calcul de la durée
+      var duree = Math.round(quantite_choisie * rapport_quantite_necessaire / debit_choisi * 100) / 100;
       
-      $("result_duree").update("<strong>"+(duree != "Infinity" ? duree : "-")+"</strong>");
-      var debit_volumique = Math.round(($("volume_ref").innerHTML / duree) * 100 * rapport_debit) / 100;
-      $("debit_volumique").update("<strong>"+debit_volumique+"</strong>");
+      if (duree == "Infinity") {
+        duree = "-";
+      }
+      
+      $("result_duree").update("<strong>"+duree+"</strong>");
+      
+      var volume_total = volume;
     {{/if}}
     
+    // Calcul du débit volumique
+    var debit_volumique = Math.round(volume_total / duree * 100) / 100;
     
+    if (isNaN(debit_volumique)) {
+      debit_volumique = "-";
+    }
+    $("debit_volumique").update(debit_volumique);
   }
   
   setValuesClassique = function() {
     var form = getForm("calculPerf");
     var formLineItem = getForm("editLinePerf-{{$line_item->_id}}")
-    var quantite = parseFloat($("conditionnement").down("strong").innerHTML);
-    $V(formLineItem.quantite, quantite, false);
-    //$V(formLineItem.unite, unite, false);
+    var formPerf = getForm("editPerf-{{$line->_id}}");
+    var formQteTotale = getForm("editQuantiteTotale-{{$line->_id}}");
+    var quantite = parseFloat($("quantite_necessaire").innerHTML);
     
-    onSubmitFormAjax(formLineItem, {onComplete: function() {
+    $V(formLineItem.quantite, quantite, false);
+    
+    onSubmitFormAjax(formLineItem, function() {
       Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
-        formLineItem.quantite.onchange();
-        Prescription.updateDebit('{{$line->_id}}');
-        Control.Modal.close();
+        $V(formPerf.volume_debit, $V(formQteTotale._quantite_totale));
       });
-    }});
+      Control.Modal.close();
+    });
   }
   
   setValuesOther = function() {
     var form = getForm("calculPerf");
-    var debit = $V(form.debit);
-    var unite = $V(form.unite);
-    var qte   = $V(form.quantite);
     var duree = $("result_duree").down("strong").innerHTML;
-    
+    var formQteTotale = getForm("editQuantiteTotale-{{$line->_id}}");
     var formPerf = getForm("editPerf-{{$line->_id}}");
-    $V(formPerf.duree_debit, duree, false);
     
-    var formLineItem = getForm("editLinePerf-{{$line_item->_id}}");
-    $V(formLineItem.quantite, qte, false);
-    $V(formLineItem.unite, unite, false);
-    
-    onSubmitFormAjax(formPerf, function() {
-      Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
-        onSubmitFormAjax(formLineItem, function() {
-          formLineItem.quantite.onchange();
-          Prescription.updateDebit('{{$line->_id}}');
-          Control.Modal.close();
-        });
-      });
+    Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
+      $V(formPerf.volume_debit, $V(formQteTotale._quantite_totale), false);
+      $V(formPerf.duree_debit, duree);
+      Control.Modal.close();
     });
   }
 </script>
 
 <div class="small-info">
   {{if $line->type == "classique"}}
-    Perfusion classique : <strong>Calcul de la quantité de produit</strong>
+    Perfusion classique : <strong>Calcul de la quantité de produit et du volume de référence</strong>
   {{else}}
     Perfusion électique ({{tr}}CPrescriptionLineMix.type.{{$line->type}}{{/tr}}) :
       <strong>Calcul du débit volumique</strong>
@@ -148,8 +161,7 @@
 <form name="calculPerf" method="get">
   {{mb_field object=$line_item field=quantite hidden=true}}
   {{assign var=unite value=$line_item->unite}}
-  <input type="hidden" name="rapport"
-    value="{{if preg_match("/^mg\/kg/", $unite)}}1{{else}}{{$line_item->_ref_produit->rapport_unite_prise.$unite.ml}}{{/if}}" />
+  
   <table class="form">
     <tr>
       <th class="title" colspan="2">
@@ -164,19 +176,9 @@
       <td>
         <input type="text" name="debit" size="5" onchange="updateData()" />
           <select name="unite" onchange="updateData()">
-            {{if $line_item->_ref_produit_prescription->_id}}
-               <option value="{{$line_item->_ref_produit_prescription->unite_prise}}">{{$line_item->_ref_produit_prescription->unite_prise}}</option>
-            {{else}}
-              {{foreach from=$line_item->_unites_prise item=_unite}}
-                {{if preg_match("/^mg\/kg/", $_unite)}}
-                  {{assign var=__unite value=$_unite|regex_replace:"/\/kg/":""}}
-                {{else}}
-                  {{assign var=__unite value=$_unite}}
-                {{/if}}
-                <option value="{{$line_item->_ref_produit->rapport_unite_prise.$__unite.ml}}"
-                  {{if $line_item->unite == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
-              {{/foreach}}
-            {{/if}}
+            {{foreach from=$line_item->_unites_prise item=_unite}}
+              <option value="{{$_unite}}" {{if $line_item->unite == $_unite}}selected{{/if}}>{{$_unite}}</option>
+            {{/foreach}}
           </select>
         / h
       </td>
@@ -218,10 +220,14 @@
         {{/if}}
       </th>
       <td>
-        <span id="conditionnement">
-          {{$line_item->quantite}}
+        <span id="quantite_{{if $line->type == "classique"}}necessaire{{else}}choisie{{/if}}">
+          {{if $line_item->quantite}}
+            {{$line_item->quantite}}
+          {{else}}
+            -
+          {{/if}}
         </span>
-        {{$line_item->_view_unite_prise}}
+        {{$line_item->unite|regex_replace:"/\(.*\)/":""}}
       </td>
     </tr>
      
@@ -237,6 +243,8 @@
         <span id="result_duree">
           {{if $line->type == "classique"}}
             {{$line->duree_debit}}
+          {{else}}
+            -
           {{/if}}
         </span> h
       </td>
