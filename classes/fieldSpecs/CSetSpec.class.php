@@ -30,7 +30,7 @@ class CSetSpec extends CEnumSpec {
   function getOptions(){
     return array(
       'list' => 'list',
-      'typeEnum' => array(/*'select', */'checkbox'),
+      'typeEnum' => array('checkbox', 'select'),
     ) + parent::getOptions();
   }
   
@@ -65,43 +65,39 @@ class CSetSpec extends CEnumSpec {
     $separator     = CMbArray::extract($params, "separator", $this->vertical ? "<br />" : null);
     $cycle         = CMbArray::extract($params, "cycle", 1);
     $alphabet      = CMbArray::extract($params, "alphabet", false);
-    $size          = CMbArray::extract($params, "size", min(3, count($locales)));
+    $size          = CMbArray::extract($params, "size", min(2, count($locales)));
     $onchange      = CMbArray::get($params, "onchange");
     $form          = CMbArray::extract($params, "form"); // needs to be extracted
     
     $extra         = CMbArray::makeXmlAttributes($params);
     $className     = htmlspecialchars(trim("$className $this->prop"));
-    
-    $uid = uniqid();
-    
-    $sHtml          = "<span id=\"set-container-$uid\">\n";
-    $sHtml         .= "<input type=\"hidden\" name=\"$field\" value=\"$value\" class=\"$className\" $extra />\n";
-    
-    $sHtml         .= "<script type=\"text/javascript\">
-      Main.add(function(){
-        var cont = \$('set-container-$uid'),
-            element = cont.down('input'),
-            tokenField = new TokenField(element, {" .($onchange ? "onChange: function(){ $onchange }.bind(element)" : "")."});
 
-        cont.select('input').invoke('observe', 'click', function(event){
-          var elt = Event.element(event);
-          tokenField.toggle(elt.value, elt.checked);
-        });
-      });
-    </script>";
-    
     if ($alphabet) {
       asort($locales); 
     }
-    
-    $value = $this->getListValues($value);
+
+    $uid = uniqid();
+    $value_array = $this->getListValues($value);
     
     switch ($typeEnum) {
       case "select":
-        /*$sHtml      .= "<select name=\"$field\" class=\"$className\" multiple=\"multiple\" size=\"$size\" $extra>";
+        $sHtml     = "<script type=\"text/javascript\">
+          Main.add(function(){
+            var select = \$\$('select[data-select_set=$uid]')[0],
+                element = select.previous(),
+                tokenField = new TokenField(element, {" .($onchange ? "onChange: function(){ $onchange }.bind(element)" : "")."});
+
+            select.observe('change', function(event){
+              element.fire('ui:change');
+              tokenField.setValues(\$A(select.selectedOptions).pluck('value'));
+            });
+          });
+        </script>";
+        $sHtml      .= "<input type=\"hidden\" name=\"$field\" value=\"$value\" class=\"$className\" $extra />\n";
+        $sHtml      .= "<select class=\"$className\" multiple=\"multiple\" size=\"$size\" data-select_set=\"$uid\" $extra>";
         
         foreach ($locales as $key => $item){
-          if (!empty($value) && in_array($key, $value)) {
+          if (!empty($value_array) && in_array($key, $value_array)) {
             $selected = " selected=\"selected\""; 
           }
           else {
@@ -111,15 +107,32 @@ class CSetSpec extends CEnumSpec {
         }
         
         $sHtml      .= "\n</select>";
-        */
+        break;
+
       default:
       case "checkbox":
+        $sHtml          = "<span id=\"set-container-$uid\">\n";
+        $sHtml         .= "<input type=\"hidden\" name=\"$field\" value=\"$value\" class=\"$className\" $extra />\n";
+
+        $sHtml         .= "<script type=\"text/javascript\">
+          Main.add(function(){
+            var cont = \$('set-container-$uid'),
+                element = cont.down('input[type=hidden]'),
+                tokenField = new TokenField(element, {" .($onchange ? "onChange: function(){ $onchange }.bind(element)" : "")."});
+
+            cont.select('input[type=checkbox]').invoke('observe', 'click', function(event){
+              element.fire('ui:change');
+              var elt = Event.element(event);
+              tokenField.toggle(elt.value, elt.checked);
+            });
+          });
+        </script>";
         $compteur = 0;
         
         foreach ($locales as $key => $item) {
           $selected = "";
           
-          if (!empty($value) && in_array($key, $value)) {
+          if (!empty($value_array) && in_array($key, $value_array)) {
             $selected = " checked=\"checked\""; 
           }
           
@@ -134,9 +147,10 @@ class CSetSpec extends CEnumSpec {
             $sHtml  .= $separator;
           }
         }
+
+        $sHtml .= "</span>\n";
     }
-    
-    $sHtml .= "</span>\n";
+
     return $sHtml;
   }
   

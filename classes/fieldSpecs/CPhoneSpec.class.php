@@ -54,6 +54,6 @@ class CPhoneSpec extends CMbFieldSpec {
     $form  = CMbArray::extract($params, "form");
     $extra = CMbArray::makeXmlAttributes($params);
     
-    return "<input type=\"tel\" name=\"$field\" value=\"$value\" class=\"$class\" $extra />";
+    return "<input type=\"tel\" name=\"$field\" value=\"$value\" class=\"$class styled-element\" $extra />";
   }
 }

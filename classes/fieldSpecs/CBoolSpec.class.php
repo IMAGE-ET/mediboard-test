@@ -12,6 +12,7 @@
 class CBoolSpec extends CMbFieldSpec {
   var $_list = null;
   var $_locales = null;
+  var $typeEnum = null;
 
   static $_default_no = true; // @todo : faire en sorte de se passer de ça
   
@@ -33,6 +34,7 @@ class CBoolSpec extends CMbFieldSpec {
   function getOptions(){
     return array(
       'default' => 'bool',
+      'typeEnum' => array('radio', 'select', 'checkbox'),
     ) + parent::getOptions();
   }
   
@@ -63,7 +65,7 @@ class CBoolSpec extends CMbFieldSpec {
   function getFormHtmlElement($object, $params, $value, $className){
     $sHtml         = "";
     $field         = htmlspecialchars($this->fieldName);
-    $typeEnum      = CMbArray::extract($params, "typeEnum", "radio");
+    $typeEnum      = CMbArray::extract($params, "typeEnum", $this->typeEnum ? $this->typeEnum : "radio");
     $separator     = CMbArray::extract($params, "separator");
     $disabled      = CMbArray::extract($params, "disabled");
     $readonly      = CMbArray::extract($params, "readonly"); 

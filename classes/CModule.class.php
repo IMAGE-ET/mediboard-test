@@ -125,7 +125,8 @@ class CModule extends CMbObject {
   
   /**
    * Load and compare a module to a given setup
-   * @param $setup CSetup
+   *
+   * @param CSetup $setup
    */
   function compareToSetup(CSetup $setup) {
     $this->mod_name = $setup->mod_name;
@@ -339,7 +340,7 @@ class CModule extends CMbObject {
    *
    * @param string $moduleName Module name
    *
-   * @return array|CModule
+   * @return CModule|CModule[]
    */
   static function getInstalled($moduleName = null) {
     if ($moduleName) {
@@ -354,7 +355,7 @@ class CModule extends CMbObject {
    *
    * @param string $moduleName Module name
    *
-   * @return array|CModule
+   * @return CModule|CModule[]
    */
   static function getActive($moduleName = null) {
     if ($moduleName) {
@@ -369,7 +370,7 @@ class CModule extends CMbObject {
    *
    * @param string $moduleName Module name
    *
-   * @return array|CModule
+   * @return CModule|CModule[]
    */
   static function getVisible($moduleName = null) {
     if ($moduleName) {

@@ -99,7 +99,7 @@ class CNumSpec extends CMbFieldSpec {
         return "Erreur système";
       }
       if ($propValue < $min) {
-        return "Soit avoir une valeur minimale de $min";
+        return "Doit avoir une valeur minimale de $min";
       }
     }
     
@@ -111,7 +111,7 @@ class CNumSpec extends CMbFieldSpec {
         return "Erreur système";
       }      
       if ($propValue > $max) {
-        return "Soit avoir une valeur maximale de $max";
+        return "Doit avoir une valeur maximale de $max";
       }
     }
     
@@ -178,9 +178,8 @@ class CNumSpec extends CMbFieldSpec {
     $showPlus   = CMbArray::extract($params, "showPlus");
     $deferEvent = CMbArray::extract($params, "deferEvent");
     $bigButtons = CMbArray::extract($params, "bigButtons");
+
     $field      = htmlspecialchars($this->fieldName);
-    $maxLength  = CValue::first($this->length, $this->maxLength, 11);
-    $fieldId    = $form.'_'.$field;
     
     $min = CMbArray::extract($params, "min");
     if ($min === null) {
@@ -199,8 +198,8 @@ class CNumSpec extends CMbFieldSpec {
     
     $step = CMbFieldSpec::checkNumeric(CMbArray::extract($params, "step"));
     
-    CMbArray::defaultValue($params, "size", min($maxLength, 20));
-    CMbArray::defaultValue($params, "maxlength", $maxLength);
+    CMbArray::defaultValue($params, "size", 4);
+
     if ($form && $increment) {
       $sHtml = $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className, "number");
       $sHtml .= '

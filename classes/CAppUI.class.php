@@ -983,8 +983,7 @@ class CAppUI {
     }
 
     $query = "SELECT GROUP_CONCAT(`mod_name`, `mod_version`) FROM `modules`";
-    $module = new CModule;
-    $hash  = $module->_spec->ds->loadResult($query);
+    $hash  = CSQLDataSource::get("std")->loadResult($query);
 
     $hash .= $version["build"];
 

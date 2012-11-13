@@ -40,7 +40,7 @@ class CEmailSpec extends CMbFieldSpec {
     $form  = CMbArray::extract($params, "form");
     $extra = CMbArray::makeXmlAttributes($params);
     
-    return "<input type=\"email\" name=\"$field\" value=\"$value\" class=\"$class\" $extra />";
+    return "<input type=\"email\" name=\"$field\" value=\"$value\" class=\"$class styled-element\" $extra />";
   }
   
   function sample(&$object, $consistent = true) {

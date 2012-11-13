@@ -109,11 +109,8 @@ class CFloatSpec extends CMbFieldSpec {
     $showFraction = CMbArray::extract($params, "showFraction");
     $deferEvent   = CMbArray::extract($params, "deferEvent");
     $bigButtons   = CMbArray::extract($params, "bigButtons");
-    $field        = htmlspecialchars($this->fieldName);
-    $maxLength    = 8;
-    CMbArray::defaultValue($params, "size", $maxLength);
-    CMbArray::defaultValue($params, "maxlength", $maxLength);
-    $fieldId = $form.'_'.$field;
+
+    $field = htmlspecialchars($this->fieldName);
     
     $min = CMbArray::extract($params, "min");
     if ($min === null) {
@@ -126,7 +123,9 @@ class CFloatSpec extends CMbFieldSpec {
     }
     
     $new_value = CMbArray::extract($params, "value");
-    if ($new_value !== null) $value = $new_value;
+    if ($new_value !== null) {
+      $value = $new_value;
+    }
     
     $decimals = CMbArray::extract($params, "decimals", $this->decimals);
     if ($decimals == null) {
@@ -135,8 +134,7 @@ class CFloatSpec extends CMbFieldSpec {
     
     $step = CMbFieldSpec::checkNumeric(CMbArray::extract($params, "step"), false);
     
-    CMbArray::defaultValue($params, "size", min($maxLength, 20));
-    CMbArray::defaultValue($params, "maxlength", $maxLength);
+    CMbArray::defaultValue($params, "size", 4);
 
     if ($form && $increment) {
       $sHtml  = $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className, "number");

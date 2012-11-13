@@ -776,12 +776,12 @@ class CMbFieldSpec {
         $sHtml  = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
                     class=\"".htmlspecialchars("$className $this->prop")."\" $extra />";
         $sHtml .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" 
-                    class=\"autocomplete\" onchange='if(!this.value){this.form[\"$field\"].value=\"\"}' $extra />";
+                    class=\"autocomplete styled-element\" onchange='if(!this.value){this.form[\"$field\"].value=\"\"}' $extra />";
         $ref = true;
       }
       else {
         $sHtml  = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-                    class=\"".htmlspecialchars("$className $this->prop")."\" $extra />";
+                    class=\"".htmlspecialchars("$className $this->prop")." styled-element\" $extra />";
       }
       
       $id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
@@ -825,7 +825,7 @@ class CMbFieldSpec {
       }
       
       $sHtml .= '});});</script>';
-      $sHtml .= '<div style="display:none; width:0;" class="autocomplete" id="'.$id.'_autocomplete"></div>';
+      $sHtml .= '<div style="display:none;width:0;" class="autocomplete" id="'.$id.'_autocomplete"></div>';
     }
     else {
       if ($multiline) {
@@ -845,7 +845,7 @@ class CMbFieldSpec {
         }
         else {
           $sHtml = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-                    class=\"".htmlspecialchars("$className $this->prop")."\" $extra/>";
+                    class=\"".htmlspecialchars("$className $this->prop")." styled-element\" $extra/>";
         }
         
         $sHtml .= '<button type="button" class="'.($has_CR ? "singleline" : "multiline").' notext" tabIndex="10000"
@@ -853,7 +853,7 @@ class CMbFieldSpec {
       }
       else {
         $sHtml = "<input type=\"$type\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-                  class=\"".htmlspecialchars("$className $this->prop")."\" $extra/>";
+                  class=\"".htmlspecialchars("$className $this->prop")." styled-element\" $extra/>";
       }
     }
     
@@ -885,7 +885,7 @@ class CMbFieldSpec {
     $extra = CMbArray::makeXmlAttributes($params);
     $prop = htmlspecialchars(trim("$className $this->prop"));
     $value = htmlspecialchars($value);
-    $sHtml = "<textarea name=\"$field\" rows=\"$rows\" class=\"$prop\" $extra>$value</textarea>";
+    $sHtml = "<textarea name=\"$field\" rows=\"$rows\" class=\"$prop styled-element\" $extra>$value</textarea>";
     
     if ($form && $this->helped) {
       $params_aidesaisie = array();
@@ -950,15 +950,16 @@ class CMbFieldSpec {
     
     $form     = CMbArray::extract($params, "form");
     $register = CMbArray::extract($params, "register");
+    $style    = CMbArray::extract($params, "style");
     
     // Tab index in display input
     $tabindex = CMbArray::extract($params, "tabindex");
   
     $extra = CMbArray::makeXmlAttributes($params);
     $html = array();
-    $html[] = '<input name="'.$field.'_da" type="text" value="'.$date.'" class="'.$class.'" 
-                      readonly="readonly" '.(isset($tabindex) ? 'tabindex="'.$tabindex.'" ' : '').'/>';
-    $html[] = '<input name="'.$field.'" type="hidden" value="'.$value.'" class="'.$class.'" '.$extra.' />';
+    $html[] = '<input name="'.$field.'_da" type="text" value="'.$date.'" class="'.$class.' styled-element" 
+                      readonly="readonly" '.(isset($tabindex) ? 'tabindex="'.$tabindex.'" ' : '').' style="'.$style.'" />';
+    $html[] = '<input name="'.$field.'" type="hidden" value="'.$value.'" class="'.$class.'" '.$extra.' data-visual-element="'.$field.'_da"  />';
 
     if ($form && ($register || $this instanceof CTimeSpec)) {
       $register = $this instanceof CDateSpec && $this->progressive ? 'regProgressiveField' : 'regField';
