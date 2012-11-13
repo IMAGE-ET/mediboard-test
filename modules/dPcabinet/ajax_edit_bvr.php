@@ -342,18 +342,18 @@ if ($edition_bvr) {
         // Dimensions du bvr
         $largeur_bvr = 210;
         $hauteur_bvr = 106;
-        $haut_doc = 297-106;
+        $haut_doc = 297-$hauteur_bvr;
         //Une ligne <=> 4,24 mm
-        $h_ligne = 106/25;
+        $h_ligne = $hauteur_bvr/25;
         //Une colonne <=> 2,53mm
-        $l_colonne = 210/83;
+        $l_colonne = $largeur_bvr/83;
         
         //Police par Défault du BVR
         $font = "vera";
         
         //Boucle utilisée pour dupliquer les Partie1 et 2 avec un décalage de colonnes
         for ($i = 0; $i<=1; $i++) {
-          $decalage = $i*24*$l_colonne;
+          $decalage = $i*24*$l_colonne+8;
           
           //Adresse du patient
           $pdf->SetTextColor(0);
@@ -383,6 +383,8 @@ if ($edition_bvr) {
           $pdf->Text($l_colonne*19 + $decalage, $h_ligne*13+$haut_doc , $cents);
         }
         
+        $decalage = 8;
+        
         $pdf->Text(28*$l_colonne, $h_ligne*18+$haut_doc , "609");
         
         //écriture de la référence
@@ -395,22 +397,22 @@ if ($edition_bvr) {
         $pdf->Text(13*$l_colonne, $h_ligne*22+$haut_doc , "L'ufficio d'accettazione");
         
         $pdf->setFont($font, '', 8);
-        $pdf->Text($l_colonne, $h_ligne*15+$haut_doc , $facture->num_reference);
+        $pdf->Text($l_colonne + $decalage, $h_ligne*15+$haut_doc , $facture->num_reference);
         //Adresse du patient de la facture
-        $pdf->Text($l_colonne, $h_ligne*16+$haut_doc , $destinataire["nom"]);
-        $pdf->Text(49*$l_colonne, $h_ligne*12+$haut_doc , $destinataire["nom"]);
+        $pdf->Text($l_colonne + $decalage, $h_ligne*16+$haut_doc , $destinataire["nom"]);
+        $pdf->Text(49*$l_colonne + $decalage, $h_ligne*12+$haut_doc , $destinataire["nom"]);
         
-        $pdf->Text($l_colonne, $h_ligne*17+$haut_doc , $destinataire["adresse1"]);
-        $pdf->Text(49*$l_colonne, $h_ligne*13+$haut_doc , $destinataire["adresse1"]);
+        $pdf->Text($l_colonne + $decalage, $h_ligne*17+$haut_doc , $destinataire["adresse1"]);
+        $pdf->Text(49*$l_colonne + $decalage, $h_ligne*13+$haut_doc , $destinataire["adresse1"]);
         $j = 1;
         if ($adresse2) {
-          $pdf->Text($l_colonne, $h_ligne*(18)+$haut_doc , $destinataire["adresse2"]);
-          $pdf->Text(49*$l_colonne, $h_ligne*14+$haut_doc , $destinataire["adresse2"]);
+          $pdf->Text($l_colonne + $decalage, $h_ligne*(18)+$haut_doc , $destinataire["adresse2"]);
+          $pdf->Text(49*$l_colonne + $decalage, $h_ligne*14+$haut_doc , $destinataire["adresse2"]);
           $j = 2;
         }
         
-        $pdf->Text($l_colonne, $h_ligne*(17+$j)+$haut_doc , $destinataire["cp"]);
-        $pdf->Text(49*$l_colonne, $h_ligne*(13+$j)+$haut_doc , $destinataire["cp"]);
+        $pdf->Text($l_colonne + $decalage, $h_ligne*(17+$j)+$haut_doc , $destinataire["cp"]);
+        $pdf->Text(49*$l_colonne + $decalage, $h_ligne*(13+$j)+$haut_doc , $destinataire["cp"]);
         
         //Ecriture du code bvr généré modulo10 récursif
         $font = "ocrbb";
