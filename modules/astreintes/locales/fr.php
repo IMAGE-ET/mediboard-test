@@ -1,0 +1,30 @@
+<?php
+$locales['CMediusers.allNonprofSante'] = 'Tous les utilisateurs administratifs';
+$locales['CMediusers.allnonprofSante'] = 'Tout le personnel administratif';
+$locales['CMediusers.allprofSante'] = 'Tous les professionnels de santé';
+$locales['CMediusers.profSante'] = 'Professionnels de santé';
+$locales['CPlageAstreinte'] = 'Astreinte';
+$locales['CPlageAstreinte-choix-periode'] = 'Affichage par';
+$locales['CPlageAstreinte-date_debut'] = 'Debut de l\'astreinte';
+$locales['CPlageAstreinte-date_debut-desc'] = 'Début de l\'astreinte';
+$locales['CPlageAstreinte-date_fin'] = 'Fin de l\'astreinte';
+$locales['CPlageAstreinte-date_fin-desc'] = 'Fin de l\'astreinte';
+$locales['CPlageAstreinte-libelle'] = 'Libellé';
+$locales['CPlageAstreinte-libelle-court'] = 'Intitulé des astreintes';
+$locales['CPlageAstreinte-libelle-desc'] = 'Nom donné à l\'astreinte';
+$locales['CPlageAstreinte-list'] = 'Liste des astreintes';
+$locales['CPlageAstreinte-replacer_id'] = 'Remplacant';
+$locales['CPlageAstreinte-title-create'] = 'Créer une plage d\'astreinte';
+$locales['CPlageAstreinte-title-modify'] = 'Modifier plage d\'astreinte';
+$locales['CPlageAstreinte-user_id'] = 'Utilisateur(s)';
+$locales['CPlageAstreinte-user_id-desc'] = 'Utilisateur(s) à afficher sur le planning';
+$locales['CPlageAstreinte.none'] = 'Aucune astreinte';
+$locales['CPlageAstreinte.plural'] = 'Astreintes';
+$locales['Days'] = 'jours';
+$locales['mod-astreintes-tab-ajax_edit_plage_astreinte'] = 'Edition/modification d\'une plage d\'astreinte';
+$locales['mod-astreintes-tab-ajax_vw_legend_astreinte'] = 'Légende astreinte';
+$locales['mod-astreintes-tab-vw_astreinte'] = 'Planning des astreintes';
+$locales['mod-astreintes-tab-vw_idx_plages_astreinte'] = 'Edition d\'une astreinte';
+$locales['module-astreintes-court'] = 'Astreintes';
+$locales['module-astreintes-long'] = 'Gestion des astreintes médicales et administratives';
+?>
