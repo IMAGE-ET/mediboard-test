@@ -20,6 +20,7 @@ $formulaires = null;
 $rpu = new CRPU();
 $rpu->load($rpu_id);
 $rpu->loadComplete();
+$rpu->loadRefSejourMutation();
 
 $sejour = $rpu->_ref_sejour;
 $sejour->loadRefsConsultations();
