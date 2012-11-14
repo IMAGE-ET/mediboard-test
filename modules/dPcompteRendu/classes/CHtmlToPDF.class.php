@@ -158,8 +158,9 @@ class CHtmlToPDF {
 
     $str = CMbString::convertHTMLToXMLEntities($str);
     $str = CHtmlToPDF::cleanWord($str);
-    // Suppression des caractères non ASCII
-    $str =  preg_replace('/[^(\x20-\x7F)]*/','', $str);
+    
+    // Suppression du caractère ETX (end of text)
+    $str = str_replace(chr(3), "", $str);
     $xml->loadXML(utf8_encode($str));
         
     $html =& $xml->getElementsByTagName("body")->item(0);
