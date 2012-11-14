@@ -17,6 +17,7 @@ class CMouvFactory {
       "sejour"       => "CMouvECapSejour",
       "intervention" => "CMouvECapIntervention",
       "attendue"     => "CMouvECapAttendue",
+      "patient"      => "CMouvECapPatient",
     ),
   );
 

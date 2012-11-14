@@ -141,6 +141,12 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
   {{/if}}
 
 </tr>
+{{foreachelse}}
+<tr>
+  <td class="empty" colspan="20"> 
+    {{tr}}CMouvement400.none{{/tr}}
+  </td>
+</tr>
 {{/foreach}}
 
 </table>

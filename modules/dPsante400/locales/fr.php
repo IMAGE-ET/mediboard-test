@@ -78,6 +78,7 @@ $locales['CMouvement400-type-attendue'] = 'Mouvement de DHE';
 $locales['CMouvement400-type-desc'] = 'Type de mouvement';
 $locales['CMouvement400-type-intervention'] = 'Mouvement d\'intervention';
 $locales['CMouvement400-type-sejour'] = 'Mouvement de séjour';
+$locales['CMouvement400-type-patient'] = 'Mouvement de patient';
 $locales['CTriggerMark'] = 'Marque de mouvement';
 $locales['CTriggerMark-create'] = 'Créer une marque';
 $locales['CTriggerMark-done'] = 'Mouvement traité';
