@@ -38,15 +38,15 @@ class CMouvement400 extends CRecordSante400 {
     // Analyse changed fields
     foreach (array_keys($this->data) as $beforeName) {
       $matches = array();
-    	if (!preg_match("/B_(\w*)/i", $beforeName, $matches)) {
-    	  continue;
-    	}
-    	
-    	$name = $matches[1];
-    	$afterName = "A_$name";
-    	if ($this->data[$beforeName] != $this->data[$afterName]) {
-    	  $this->changedFields[] = $name;
-    	}
+      if (!preg_match("/B_(\w*)/i", $beforeName, $matches)) {
+        continue;
+      }
+      
+      $name = $matches[1];
+      $afterName = "A_$name";
+      if ($this->data[$beforeName] != $this->data[$afterName]) {
+        $this->changedFields[] = $name;
+      }
     }
     
     // Initialize prefix
@@ -62,9 +62,9 @@ class CMouvement400 extends CRecordSante400 {
    */
   static function storeMark($mark) {
     if (CAppUI::conf("dPsante400 mark_row")) {
-	    if ($msg = $mark->store()) {
-	       trigger_error("Enable to store CTriggerMark: $msg", E_USER_WARNING);
-	    }
+      if ($msg = $mark->store()) {
+         trigger_error("Enable to store CTriggerMark: $msg", E_USER_WARNING);
+      }
     }
   }
   
@@ -93,7 +93,7 @@ class CMouvement400 extends CRecordSante400 {
     $query = "SELECT * FROM $this->base.$this->table";
     $query.= $this->getNewMarkedClause($marked, $max);
     $query.= $this->getFilterClause();
-		$query.= "\n ORDER BY $this->idField";
+    $query.= "\n ORDER BY $this->idField";
  
     $mouvs = CRecordSante400::loadMultiple($query, array(), $max, get_class($this));
 
@@ -105,15 +105,15 @@ class CMouvement400 extends CRecordSante400 {
             
     return $mouvs;
   }
-	
-	/**
-	 * Mark obsolete triggers
-	 * 
-	 * @param string $newest
-	 * @param integer $max [optional]
-	 * @return integer Number of marks, store-like message on error
-	 */
-	function markObsoleteTriggers($newest, $max = 100) {
+  
+  /**
+   * Mark obsolete triggers
+   * 
+   * @param string $newest
+   * @param integer $max [optional]
+   * @return integer Number of marks, store-like message on error
+   */
+  function markObsoleteTriggers($newest, $max = 100) {
     $mark = new CTriggerMark();
     $mark->trigger_class = get_class($this);
     $where["trigger_class"] = "= '$mark->trigger_class'";
@@ -121,23 +121,23 @@ class CMouvement400 extends CRecordSante400 {
     $where["mark"] = "!= '========'";
     $where["trigger_number"] = "<= '$newest'";
     
-		$marks = $mark->loadList($where, null, $max);
-		foreach($marks as $_mark) {
+    $marks = $mark->loadList($where, null, $max);
+    foreach($marks as $_mark) {
       $_mark->done = "1";    
       $_mark->mark = "obsolete"; 
-			if ($msg = $_mark->store()) {
-				return $msg;
-			}  
-		}
-		
-		return count($marks);
+      if ($msg = $_mark->store()) {
+        return $msg;
+      }  
+    }
+    
+    return count($marks);
   }
   
-	/**
-	 * Get a filter where clause
-	 * 
-	 * @return string SQL where clause
-	 */
+  /**
+   * Get a filter where clause
+   * 
+   * @return string SQL where clause
+   */
   function getFilterClause() {
     return;
   }
@@ -148,20 +148,20 @@ class CMouvement400 extends CRecordSante400 {
    * @return string SQL where clause
    */
   function getNewMarkedClause($marked, $max = 100) {
-	  $mark = new CTriggerMark();
-	  $mark->trigger_class = get_class($this);
+    $mark = new CTriggerMark();
+    $mark->trigger_class = get_class($this);
 
-	  if ($marked) {
+    if ($marked) {
       $where["trigger_class"] = "= '$mark->trigger_class'";
-	    $where["done"] = "= '0'";
+      $where["done"] = "= '0'";
       $where["mark"] = "!= '========'";
       $marks = $mark->loadList($where, null, $max);
       $clause = "\n WHERE $this->idField " . CSQLDataSource::prepareIn(CMbArray::pluck($marks, "trigger_number"));
     }
     else {
-	    $mark->loadMatchingObject("trigger_number DESC");
-	    $last_number = $mark->trigger_number ? $mark->trigger_number : 0;
-	    $clause = "\n WHERE $this->idField > '$last_number'";
+      $mark->loadMatchingObject("trigger_number DESC");
+      $last_number = $mark->trigger_number ? $mark->trigger_number : 0;
+      $clause = "\n WHERE $this->idField > '$last_number'";
     }
     return $clause;
   }
@@ -173,33 +173,33 @@ class CMouvement400 extends CRecordSante400 {
    * @param string  $oldest [optional]
    * @return interger
    */
-	function count($marked = false, $newest = null) {
+  function count($marked = false, $newest = null) {
 
     if ($marked) {
-	    $mark = new CTriggerMark();
-	    $mark->trigger_class = get_class($this);
+      $mark = new CTriggerMark();
+      $mark->trigger_class = get_class($this);
       $where["trigger_class"] = "= '$mark->trigger_class'";
       $where["done"] = "= '0'";
       $where["mark"] = "!= '========'";
-			
-			if ($newest) {
-				$where["trigger_number"] = "<= '$newest'";
-			}
-			
+      
+      if ($newest) {
+        $where["trigger_number"] = "<= '$newest'";
+      }
+      
       $total = $mark->countList($where);
     }
     else {
-	    $record = new CRecordSante400();
-	    $query = "SELECT COUNT(*) AS TOTAL FROM $this->base.$this->table";
-	    $query.= $this->getNewMarkedClause($marked);
-	    $query.= $this->getFilterClause();
+      $record = new CRecordSante400();
+      $query = "SELECT COUNT(*) AS TOTAL FROM $this->base.$this->table";
+      $query.= $this->getNewMarkedClause($marked);
+      $query.= $this->getFilterClause();
 
       if ($newest) {
         $query.= "AND $this->idField <= '$newest'";
       }
 
-	    $record->query($query);
-	    $total = $record->consume("TOTAL");
+      $record->query($query);
+      $total = $record->consume("TOTAL");
     }
     
     return $total;
@@ -213,7 +213,7 @@ class CMouvement400 extends CRecordSante400 {
    */
   function loadListWithFormerMark($max)  {
     $query = "SELECT * FROM $this->base.$this->table
-    	WHERE $this->markField NOT IN ('', 'OKOKOKOK')";
+      WHERE $this->markField NOT IN ('', 'OKOKOKOK')";
     $query.= $this->getFilterClause();
     $query.= "\n ORDER BY $this->idField DESC";
     $mouvs = CRecordSante400::loadMultiple($query, array(), $max, get_class($this));
@@ -230,7 +230,7 @@ class CMouvement400 extends CRecordSante400 {
    */
   function loadLatestSuccessWithFormerMark() {
     $query = "SELECT * FROM $this->base.$this->table
-    	WHERE $this->markField = 'OKOKOKOK'";
+      WHERE $this->markField = 'OKOKOKOK'";
     $query.= $this->getFilterClause();
     $query.= "\n ORDER BY $this->idField DESC";
     $this->loadOne($query);
@@ -255,34 +255,34 @@ class CMouvement400 extends CRecordSante400 {
     $this->initialize();
     $this->checkOut();     
   }
-	
+  
   /**
    * Load oldest mouvement in the table
    * 
    * @return void
    */
-	function loadOldest() {
+  function loadOldest() {
     $query = "SELECT * FROM $this->base.$this->table 
-			ORDER BY $this->idField ASC";
+      ORDER BY $this->idField ASC";
     $this->loadOne($query);
     $this->initialize();
-	}
-	
+  }
+  
   /**
    * Load latest mouvement in the table
    * 
    * @return void
    */
-	function loadLatest() {
+  function loadLatest() {
     $query = "SELECT * FROM $this->base.$this->table 
       ORDER BY $this->idField DESC";
     $this->loadOne($query);
     $this->initialize();
   }
-	
+  
   /**
    * Mark the mouvement row
-   * ======== : checked out
+   * ======== : checked out, not used anymore, caused some everlocked marks
    * OKOKOKOK : processed
    * 124--*-- : each of 8 steps are done :
    *      n : times
@@ -392,7 +392,8 @@ class CMouvement400 extends CRecordSante400 {
     try {
       $this->synchronize();
       $return = true;
-    } catch (Exception $e) {
+    } 
+    catch (Exception $e) {
       if (self::$verbose) {
         exceptionHandler($e);
       }
