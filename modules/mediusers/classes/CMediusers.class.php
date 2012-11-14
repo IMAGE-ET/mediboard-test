@@ -28,7 +28,7 @@ class CMediusers extends CMbObject {
   var $banque_id                   = null;
   var $mail_apicrypt               = null;
   var $compta_deleguee             = null;
-  
+
   // DB References
   var $function_id                 = null;
   var $discipline_id               = null;
@@ -39,13 +39,13 @@ class CMediusers extends CMbObject {
   var $secteur = null;
   // Champs utilisés pour l'affichage des ordonnances ALD
   var $cab  = null;
-  var $conv = null;  
+  var $conv = null;
   var $zisd = null;
   var $ik   = null;
   var $ean   = null;
   var $rcc   = null;
   var $adherent   = null;
-  
+
   // CUser reported fields fields
   var $_user_type                  = null;
   var $_user_username              = null;
@@ -77,7 +77,7 @@ class CMediusers extends CMbObject {
   var $_user_id                    = null;
   var $_keep_user                  = null;
   var $_user_type_view             = null;
-  
+
   // Distant fields
   var $_group_id                   = null;
 
@@ -96,13 +96,13 @@ class CMediusers extends CMbObject {
   var $_ref_protocoles             = array();
   var $_count_protocoles           = null;
   var $_ref_current_functions      = null;
-  
+
   // Object references per day
   var $_ref_plages                 = null;
   var $_ref_plages_conge        = null;
   var $_ref_urgences               = null;
   var $_ref_deplacees              = null;
-  
+
   /**
    * Lazy access to a given user, defaultly connected user
    * @param $user_id ref|CMediuser The user id, connected user if null;
@@ -114,7 +114,7 @@ class CMediusers extends CMbObject {
     $user = CAppUI::$instance->_ref_user;
     return $user_id ? $user->getCached($user_id) : $user;
   }
-  
+
   static function loadCurrentFunctions() {
     $user = CMediusers::get();
     $group_id = CGroups::loadCurrent()->_id;
@@ -124,10 +124,10 @@ class CMediusers extends CMbObject {
     $where["group_id"] = "= '$group_id'";
     $where["user_id"]  = "= '$user->_id'";
     $ljoin["functions_mediboard"] = "functions_mediboard.function_id = secondary_function.function_id";
-    
+
     return $user->_ref_current_functions = $secondary_function->loadList($where, null, null, null, $ljoin);
   }
-  
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'users_mediboard';
@@ -159,7 +159,7 @@ class CMediusers extends CMbObject {
     $props["code_intervenant_cdarr"] = "str length|2";
     $props["secteur"]                = "enum list|1|2";
     $props["cab"]                    = "str";
-    $props["conv"]                   = "str";  
+    $props["conv"]                   = "str";
     $props["zisd"]                   = "str";
     $props["ik"]                     = "str";
     $props["ean"]                    = "str";
@@ -167,9 +167,9 @@ class CMediusers extends CMbObject {
     $props["adherent"]               = "str";
     $props["mail_apicrypt"]          = "email";
     $props["compta_deleguee"]       = "bool default|0";
-    
+
     $props["_group_id"]              = "ref notNull class|CGroups";
-    
+
     $props["_user_username"]         = "str notNull minLength|3 reported";
     $props["_user_password2"]        = "password sameAs|_user_password reported";
     $props["_user_first_name"]       = "str reported";
@@ -183,7 +183,7 @@ class CMediusers extends CMbObject {
     $props["_profile_id"]            = "ref reported class|CUser";
     $props["_user_type"]             = "num notNull min|0 max|20 reported";
     $props["_user_type_view"]        = "str";
-    
+
     // The different levels of security are stored to be usable in JS
     $props["_user_password_weak"]    = "password minLength|4";
     $props["_user_password_strong"]  = "password minLength|6 notContaining|_user_username notNear|_user_username alphaAndNum";
@@ -192,20 +192,20 @@ class CMediusers extends CMbObject {
 
     return $props;
   }
-  
+
   /** Update the object's specs */
   function updateSpecs() {
     $oldSpec = $this->_specs['_user_password'];
-    
+
     $strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1") && ($this->remote == 0));
-    
+
     // If the global strong password config is set to TRUE and the user can connect remotely
     $this->_specs['_user_password'] = $strongPassword?
       $this->_specs['_user_password_strong']:
       $this->_specs['_user_password_weak'];
-    
+
     $this->_specs['_user_password']->fieldName = $oldSpec->fieldName;
-    
+
     $this->_props['_user_password'] = $strongPassword?
       $this->_props['_user_password_strong']:
       $this->_props['_user_password_weak'];
@@ -293,10 +293,10 @@ class CMediusers extends CMbObject {
     $backProps["poses_disp_vasc_encadrant"]       = "CPoseDispositifVasculaire encadrant_id";
     $backProps["praticien_facture"]               = "CFactureConsult praticien_id";
     $backProps["tokens"]                          = "CViewAccessToken user_id";
-    
+
     return $backProps;
   }
-   
+
   function createUser() {
     $user = new CUser();
     $user->user_id = ($this->_user_id) ? $this->_user_id : $this->user_id;
@@ -304,7 +304,7 @@ class CMediusers extends CMbObject {
     $user->user_username    = $this->_user_username;
     if (isset($this->_ldap_store)) {
       $user->user_password     = $this->_user_password;
-    } 
+    }
     else {
       $user->_user_password    = $this->_user_password;
     }
@@ -324,7 +324,7 @@ class CMediusers extends CMbObject {
 
   function delete() {
     $msg = null;
-    
+
     if (!isset($this->_keep_user)) {
       // Delete corresponding dP user first
       if (!$msg = $this->canDeleteEx()) {
@@ -334,12 +334,12 @@ class CMediusers extends CMbObject {
         }
       }
     }
-    
+
     $this->_keep_user = null;
 
     return parent::delete();
   }
-  
+
   function merge($objects = array/*<CMbObject>*/(), $fast = false) {
     if ($this->_force_merge) {
       return parent::merge($objects, $fast);
@@ -371,22 +371,22 @@ class CMediusers extends CMbObject {
       $this->_view            = "$this->_user_last_name $this->_user_first_name";
       $this->_shortview       = "";
 
-      // Initiales du prénom      
+      // Initiales du prénom
       foreach (explode("-", $this->_user_first_name) as $value) {
-        if ($value != '') 
+        if ($value != '')
           $this->_shortview .= $value[0];
       }
-      
+
       // Initiales du nom
       foreach (explode(" ", $this->_user_last_name) as $value) {
         if ($value != '')
           $this->_shortview .= $value[0];
-      } 
-      
+      }
+
       $this->_shortview = strtoupper($this->_shortview);
       $this->_user_type_view = CValue::read(CUser::$types, $this->_user_type);
     }
-    
+
     $this->_ref_user = $user;
     $this->updateSpecs();
   }
@@ -413,7 +413,7 @@ class CMediusers extends CMbObject {
   function loadRefProfile(){
     return $this->_ref_profile = $this->loadFwdRef("_profile_id", true);
   }
-  
+
   /**
    * @return CFunction
    */
@@ -434,13 +434,13 @@ class CMediusers extends CMbObject {
   function loadRefIntervenantCdARR() {
     return $this->_ref_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
-  
+
   function loadRefsFwd() {
     $this->loadRefFunction();
     $this->loadRefSpecCPAM();
     $this->loadRefDiscipline();
   }
-  
+
   function getPerm($permType) {
     if ($this->user_id == CAppUI::$user->_id) {
       return true;
@@ -461,15 +461,15 @@ class CMediusers extends CMbObject {
     $where = array(
       "protocole.chir_id = '$this->_id' OR protocole.function_id IN ($list_functions)"
     );
-    
+
     if ($type) {
       $where["type"] = "= '$type'";
     }
-    
+
     $protocole = new CProtocole();
     $this->_ref_protocoles = $protocole->loadList($where, "libelle_sejour, libelle, codes_ccam");
   }
-  
+
   function countProtocoles($type = null) {
     $this->loadRefFunction();
     $functions = array($this->function_id);
@@ -481,15 +481,15 @@ class CMediusers extends CMbObject {
     $where = array(
       "protocole.chir_id = '$this->_id' OR protocole.function_id IN ($list_functions)"
     );
-    
+
     if ($type) {
       $where["type"] = "= '$type'";
     }
-    
+
     $protocole = new CProtocole();
     $this->_count_protocoles = $protocole->countList($where);
   }
-  
+
   function getOwners() {
     $func = $this->loadRefFunction();
     $etab = $func->loadRefGroup();
@@ -502,9 +502,9 @@ class CMediusers extends CMbObject {
 
   function check() {
     // TODO: voir a fusionner cette fonction avec celle de admin.class.php qui est exactement la meme
-    // Chargement des specs des attributs du mediuser  
+    // Chargement des specs des attributs du mediuser
     $this->updateSpecs();
-    
+
     $specs = $this->getSpecs();
 
     // On se concentre dur le mot de passe (_user_password)
@@ -525,17 +525,17 @@ class CMediusers extends CMbObject {
         if ($field = $this->$target) {
           if (stristr($pwd, $field)) {
           return "Le mot de passe ne doit pas contenir '$field'";
-          } 
-        } 
+          }
+        }
       }
-      
+
       // notNear
       if ($target = $pwdSpecs->notNear) {
         if ($field = $this->$target) {
           if (levenshtein($pwd, $field) < 3) {
             return "Le mot de passe ressemble trop à '$field'";
       } } }
-       
+
       // alphaAndNum
       if ($pwdSpecs->alphaAndNum) {
         if (!preg_match("/[A-z]/", $pwd) || !preg_match("/\d+/", $pwd)) {
@@ -549,7 +549,7 @@ class CMediusers extends CMbObject {
 
     return parent::check();
   }
-  
+
   /**
    * @todo Use CStoredObject->store()
    */
@@ -558,9 +558,9 @@ class CMediusers extends CMbObject {
     $this->updatePlainFields();
 
     $this->loadOldObject();
-    
+
     if (CAppUI::conf("readonly")) {
-      return CAppUI::tr($this->_class) . 
+      return CAppUI::tr($this->_class) .
         CAppUI::tr("CMbObject-msg-store-failed") .
         CAppUI::tr("Mode-readonly-msg");
     }
@@ -570,7 +570,7 @@ class CMediusers extends CMbObject {
       CAppUI::tr("CMbObject-msg-check-failed") .
       CAppUI::tr($msg);
     }
-    
+
     // Trigger before event
     $this->notify("BeforeStore");
 
@@ -582,12 +582,12 @@ class CMediusers extends CMbObject {
       if ($msg = $user->store()) {
         return $msg;
       }
-  
+
       // User might have been re-created
       if ($this->user_id != $user->user_id) {
         $this->user_id = null;
       }
-  
+
       // Can't use parent::store cuz user_id don't auto-increment
       if ($this->user_id) {
         $ret = $spec->ds->updateObject($spec->table, $this, $spec->key, $spec->nullifyEmptyStrings);
@@ -600,32 +600,32 @@ class CMediusers extends CMbObject {
     /// </diff>
 
     if (!$ret) {
-      return CAppUI::tr($this->_class) . 
+      return CAppUI::tr($this->_class) .
         CAppUI::tr("CMbObject-msg-store-failed") .
         $spec->ds->error();
     }
-  
+
     /// <diff>
       // Bind CPS
       if ($this->_bind_cps && $this->_id && CModule::getActive("fse")) {
-        $cps = CFseFactory::createCPS();  
+        $cps = CFseFactory::createCPS();
         if ($cps) {
           if ($msg = $cps->bindCPS($this)) {
             return $msg;
           }
         }
       }
-    /// </diff>    
-    
+    /// </diff>
+
     // Préparation du log, doit être fait AVANT $this->load()
     $this->prepareLog();
-    
+
     // Load the object to get all properties
     //$this->load(); // peut poser probleme, à tester
-    
+
     // Enregistrement du log une fois le store terminé
     $this->doLog();
-    
+
     // Trigger event
     $this->notify("AfterStore");
 
@@ -681,11 +681,11 @@ class CMediusers extends CMbObject {
     }
   }
 
-  function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
-    
+  function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true, $reverse = false) {
+
     $where = array();
     $ljoin = array();
-    
+
     if ($function_id) {
       if ($secondary) {
         $ljoin["secondary_function"] = "`users_mediboard`.`user_id` = `secondary_function`.`user_id`";
@@ -695,18 +695,18 @@ class CMediusers extends CMbObject {
         $where["users_mediboard.function_id"] = "= '$function_id'";
       }
     }
-    
+
     if($actif) {
       $where["users_mediboard.actif"] = "= '1'";
     }
-    
+
     // Filters on users values
     $ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
 
     if ($name) {
       $where["users.user_last_name"] = "LIKE '$name%'";
     }
-    
+
     $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
     // Filter on current group
     $g = CGroups::loadCurrent();
@@ -717,16 +717,20 @@ class CMediusers extends CMbObject {
       foreach ($user_types as $key => $value) {
         $user_types[$key] = $utypes_flip[$value];
       }
-
-      $where["users.user_type"] = CSQLDataSource::prepareIn($user_types);
+      if ($reverse) {
+        $where["users.user_type"] = CSQLDataSource::prepareNotIn($user_types);
+      }
+      else {
+        $where["users.user_type"] = CSQLDataSource::prepareIn($user_types);
+      }
     }
 
     $order = "`users`.`user_last_name`, `users`.`user_first_name`";
-    
+
     // Get all users
     $mediuser = new CMediusers;
     $mediusers = $mediuser->loadListWithPerms($permType, $where, $order, null, null, $ljoin);
-    
+
     // Associate already loaded function
     foreach ($mediusers as $_mediuser) {
       $_mediuser->loadRefFunction();
@@ -770,7 +774,7 @@ class CMediusers extends CMbObject {
    * @return array<CFunctions> Found functions
    */
   static function loadFonctions($permType = PERM_READ, $group_id = null, $type = null) {
-    $group = CGroups::loadCurrent(); 
+    $group = CGroups::loadCurrent();
     $functions = new CFunctions;
     $functions->actif = 1;
     $functions->group_id = CValue::first($group_id, $group->_id);
@@ -816,7 +820,10 @@ class CMediusers extends CMbObject {
   function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
     return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary, $actif);
   }
-  
+
+  function loadNonProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary, $actif, true);
+  }
   function loadPraticiensCompta(){
     $is_admin      = in_array(CUser::$types[$this->_user_type], array("Administrator"));
     $is_secretaire = in_array(CUser::$types[$this->_user_type], array("Secrétaire"));
@@ -829,7 +836,7 @@ class CMediusers extends CMbObject {
       if (!CAppUI::conf("dPcabinet Comptabilite show_compta_tiers") && $this->_user_username != "admin") {
         $function = $this->function_id;
       }
-      
+
       if ($is_admin) {
         if (CAppUI::pref("pratOnlyForConsult", 1)) {
           $listPrat = $this->loadPraticiens(PERM_EDIT, $function);
@@ -850,15 +857,15 @@ class CMediusers extends CMbObject {
         $where[] = "users_mediboard.compta_deleguee = '1' ||  users_mediboard.user_id ". CSQLDataSource::prepareIn(array_keys($listPrat));
         // Filters on users values
         $where["users_mediboard.actif"] = "= '1'";
-    
+
         $ljoin["users"] = "users.user_id = users_mediboard.user_id";
         $order = "users.user_last_name, users.user_first_name";
-        
+
         $mediuser = new CMediusers();
         // les praticiens WithPerms sont déjà chargés
         // $mediusers = $mediuser->loadListWithPerms(PERM_EDIT, $where, $order, null, null, $ljoin);
         $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
-        
+
         // Associate already loaded function
         foreach ($mediusers as $key => $_mediuser) {
           $_mediuser->loadRefFunction();
@@ -869,10 +876,10 @@ class CMediusers extends CMbObject {
     else if ($this->isPraticien() && !$this->compta_deleguee) {
       $listPrat = array($this->_id => $this);
     }
-    
+
     return $listPrat;
   }
-  
+
   function loadPersonnels($permType = PERM_READ, $function_id = null, $name = null) {
     return $this->loadListFromType(array("Personnel"), $permType, $function_id, $name);
   }
@@ -904,12 +911,12 @@ class CMediusers extends CMbObject {
   
   /**
    * Check whether user is a dentist
-   * @return 
+   * @return
    */
   function isDentiste () {
     return $this->_is_dentiste = $this->isFromType(array("Dentiste"));
   }
-  
+
   /**
    * Check whether user is a nurse
    * @return bool
@@ -917,11 +924,11 @@ class CMediusers extends CMbObject {
   function isInfirmiere () {
     return $this->_is_infirmiere = $this->isFromType(array("Infirmière"));
   }
-  
+
   function isAideSoignant () {
     return $this->_is_aide_soignant = $this->isFromType(array("Aide soignant"));
   }
-  
+
   /**
    * Check whether user is a secretary
    * @return bool
@@ -929,7 +936,7 @@ class CMediusers extends CMbObject {
   function isSecretaire () {
     return $this->_is_secretaire = $this->isFromType(array("Secrétaire", "Administrator"));
   }
-  
+
   /**
    * Check whether user is a medical user
    * @return bool
@@ -937,11 +944,11 @@ class CMediusers extends CMbObject {
   function isMedical() {
     return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Rééducateur", "Sage Femme", "Dentiste"));
   }
-  
+
   function isExecutantPrescription() {
     return $this->isFromType(array("Infirmière", "Aide soignant", "Rééducateur"));
   }
-  
+
   /**
    * Check whether user is a kine
    * @return bool
@@ -961,7 +968,7 @@ class CMediusers extends CMbObject {
   function isUrgentiste () {
     return $this->_is_urgentiste = ($this->function_id == CGroups::loadCurrent()->service_urgences_id);
   }
-  
+
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_function->fillTemplate($template);
@@ -980,16 +987,16 @@ class CMediusers extends CMbObject {
     )));
     $template->addProperty("Praticien - E-mail"         , $this->_user_email);
     $template->addProperty("Praticien - E-mail Apicrypt", $this->mail_apicrypt);
-    
+
     // Identité
     $identite = $this->loadNamedFile("identite.jpg");
     $template->addImageProperty("Praticien - Photo d'identite", $identite->_id);
-    
+
     // Signature
     $signature = $this->loadNamedFile("signature.jpg");
     $template->addImageProperty("Praticien - Signature", $signature->_id);
   }
-  
+
   /**
    * Charge la liste de plages et interventions pour un jour donné
    * Analogue à CSalle::loadRefsForDay
@@ -1022,7 +1029,7 @@ class CMediusers extends CMbObject {
           $operation->loadRefPatient();
           $operation->loadExtCodesCCAM();
           $operation->updateSalle();
-        
+
           // Extraire les interventions non placées
           if ($operation->rank == 0) {
             $plage->_unordered_operations[$operation->_id] = $operation;
@@ -1031,7 +1038,7 @@ class CMediusers extends CMbObject {
         }
       }
     }
-    
+
     // Interventions déplacés
     $deplacees = new COperation;
     $ljoin = array();
@@ -1065,7 +1072,7 @@ class CMediusers extends CMbObject {
       $urgence->loadExtCodesCCAM();
     }
   }
-  
+
   function getBasicInfo(){
     $this->updateFormFields();
     $this->loadRefFunction()->loadRefGroup();
@@ -1087,30 +1094,30 @@ class CMediusers extends CMbObject {
       )
     );
   }
-  
+
   function makeUsernamePassword($first_name, $last_name, $id = null, $number = false, $prepass = "mdp") {
     $length = 20 - strlen($id);
     $this->_user_username = substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics(($first_name ? $first_name[0] : '').$last_name))),0,$length) . $id;
     $this->_user_password = $prepass . substr(preg_replace($number ? "/[^a-z0-9]/i" : "/[^a-z]/i", "", strtolower(CMbString::removeDiacritics($last_name))),0,$length) . $id;
   }
-  
+
   function getNbJoursPlanningSSR($date){
     $sunday = mbDate("next sunday", mbDate("- 1 DAY", $date));
     $saturday = mbDate("-1 DAY", $sunday);
-    
+
     $_evt = new CEvenementSSR();
     $where = array();
     $where["debut"] = "BETWEEN '$sunday 00:00:00' AND '$sunday 23:59:59'";
     $where["sejour_id"] = " = '$this->_id'";
     $count_event_sunday = $_evt->countList($where);
-    
+
     $nb_days = 7;
-    
+
     // Si aucun evenement le dimanche
     if (!$count_event_sunday) {
       $nb_days = 6;
       $where["debut"] = "BETWEEN '$saturday 00:00:00' AND '$saturday 23:59:59'";
-      $count_event_saturday= $_evt->countList($where);  
+      $count_event_saturday= $_evt->countList($where);
       // Aucun evenement le samedi et aucun le dimanche
       if (!$count_event_saturday) {
         $nb_days = 5;
@@ -1118,18 +1125,18 @@ class CMediusers extends CMbObject {
     }
     return $nb_days;
   }
-  
+
   function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin= null) {
     $ljoin = array_merge($ljoin, array("users" => "users.user_id = users_mediboard.user_id"));
     $list = $this->seek($keywords, $where, $limit, null, $ljoin, "users.user_last_name");
-    
+
     foreach ($list as $_mediuser) {
       $_mediuser->loadRefFunction();
     }
-    
+
     return $list;
   }
-  
+
   /**
    * Construit le tag Mediusers en fonction des variables de configuration
    * @param $group_id Permet de charger l'id externe d'un Mediuser pour un établissement donné si non null
@@ -1146,7 +1153,7 @@ class CMediusers extends CMbObject {
     if (!$group_id) {
       $group_id = $group->_id;
     }
-    
+
     return str_replace('$g', $group_id, $tag_mediusers);
   }
 }
