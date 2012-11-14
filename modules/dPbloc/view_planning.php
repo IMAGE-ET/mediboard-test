@@ -188,9 +188,10 @@ foreach ($plagesop as &$plage) {
     if ($_print_numdoss) {
       $sejour->loadNDA();
     }
-
-    // On utilise la first_affectation pour contenir l'affectation courante du patient
-    $affectation = $sejour->getCurrAffectation($operation->_datetime_best);
+    
+    // Chargement de l'affectation
+    $affectation = $operation->getAffectation();
+    
     if ($affectation->_id) {
       $affectation->loadRefLit()->loadCompleteView();
     }
@@ -232,8 +233,9 @@ foreach ($operations as $operation) {
     $sejour->loadNDA();
   }
 
-  // On utilise la first_affectation pour contenir l'affectation courante du patient
-  $affectation = $sejour->getCurrAffectation(mbDate($operation->_datetime));
+  // Chargement de l'affectation
+  $affectation = $operation->getAffectation();
+  
   if ($affectation->_id) {
     $affectation->loadRefLit()->loadCompleteView();
   }

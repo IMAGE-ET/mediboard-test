@@ -1252,6 +1252,48 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_heure_us = $this->duree_preop ? mbSubTime($this->duree_preop, $this->time_operation) : $this->time_operation;
   }
   
+  function getAffectation() {
+    $sejour = $this->_ref_sejour;
+    
+    if (!$this->_ref_sejour) {
+      $sejour = $this->loadRefSejour();
+    }
+    
+    if (!$this->_datetime_best) {
+      $this->loadRefPlageOp();
+    }
+    
+    $affectation = new CAffectation();
+    $order = "entree";
+    $where = array();
+    
+    $where["sejour_id"] = "= '$this->sejour_id'";
+    
+    $moment = $this->_datetime_best;
+    
+    // Si l'intervention est en dehors du séjour,
+    // on recadre dans le bon intervalle
+    if ($moment < $sejour->entree) {
+      $moment = $sejour->entree;
+    }
+    
+    if ($moment > $sejour->sortie) {
+      $moment = $sejour->sortie;
+    }
+    
+    if (mbTime(null, $moment) == "00:00:00") {
+      $where["entree"] = $this->_spec->ds->prepare("<= %", mbDate(null, $moment)." 23:59:59");
+      $where["sortie"] = $this->_spec->ds->prepare(">= %", mbDate(null, $moment)." 00:00:01");
+    } else {
+      $where["entree"] = $this->_spec->ds->prepare("<= %", $moment);
+      $where["sortie"] = $this->_spec->ds->prepare(">= %", $moment);
+    }
+    
+    $affectation->loadObject($where, $order);
+    
+    return $affectation;
+  }
+  
   function docsEditable() {
     if (parent::docsEditable()) {
       return true;
