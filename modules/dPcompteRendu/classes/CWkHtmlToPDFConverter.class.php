@@ -108,6 +108,7 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
     $this->html = preg_replace("/body\s*\{\s*margin-top:\s*[0-9]*px;\s*\}/", "", $this->html);
     if ($header_footer_common != null) {
       $header_footer_common = preg_replace("/body\s*\{\s*margin-top:\s*[0-9]*px;\s*\}/", "", $header_footer_common);
+      $header_footer_common = preg_replace("/<body>/", "<body onload='subst()'>", $header_footer_common);
     }
     $this->html = preg_replace("/hr.pagebreak\s*{\s*padding-top:\s*[0-9]*px;\s*}/", "", $this->html);
     
