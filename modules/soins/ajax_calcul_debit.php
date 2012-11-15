@@ -24,6 +24,18 @@ $line_item->loadRefProduitPrescription();
 
 $line_item->_unite_administration = $line_item->_ref_produit->libelle_unite_presentation;
 
+// Le tableau d'unité peut contenir des caractères spéciaux à encoder en utf8
+function utf8enc($array) {
+  if (!is_array($array)) return;
+  $helper = array();
+  foreach ($array as $key => $value) {
+    $helper[utf8_encode($key)] = is_array($value) ? utf8enc($value) : utf8_encode($value);
+  }
+  return $helper;
+}
+
+$line_item->_ref_produit->rapport_unite_prise = utf8enc($line_item->_ref_produit->rapport_unite_prise);
+
 // Smarty template
 $smarty = new CSmartyDP();
 
