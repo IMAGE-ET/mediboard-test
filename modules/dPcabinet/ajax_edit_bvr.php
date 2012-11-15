@@ -418,7 +418,7 @@ if ($edition_bvr) {
         $font = "ocrbb";
         $pdf->setFont($font, '', 12);
         
-        $w = (80- strlen($bvr)) *$l_colonne; 
+        $w = (80- strlen($bvr)) *$l_colonne - $decalage; 
         $pdf->Text($w, $h_ligne*21+$haut_doc, $bvr);
       }
     }
