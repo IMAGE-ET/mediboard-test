@@ -27,6 +27,7 @@ $where = array();
 $ljoin = array();
 
 $where["duree_uscpo"] = "> 0";
+$where["annulee"] = "!= '1'";
 
 $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
 if ($service_id) {
@@ -110,4 +111,3 @@ $smarty->assign("service_id", $service_id);
 $smarty->assign("dates"   , $dates);
 
 $smarty->display("inc_vw_stats_uscpo.tpl");
-?>

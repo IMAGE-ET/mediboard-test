@@ -21,6 +21,8 @@ $ljoin = array();
 $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
 
 $where["duree_uscpo"] = "> 0";
+$where["annulee"] = "!= '1'";
+
 $where[] = "(operations.date <= '$date' OR plagesop.date <= '$date') AND
   (DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) > '$date' OR
    DATE_ADD(operations.date, INTERVAL duree_uscpo DAY) = '$date')";
@@ -33,7 +35,7 @@ if ($service_id) {
 }
 
 // Prévues
-$operation = new COperation;
+$operation = new COperation();
 $operations_prevues = $operation->loadList($where, null, null, null, $ljoin);
 
 // Placées
@@ -58,11 +60,10 @@ foreach ($operations_placees as $_operation) {
   $_operation->loadRefChir()->loadRefFunction();
 }
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("operations_prevues", $operations_prevues);
 $smarty->assign("operations_placees", $operations_placees);
 
 $smarty->display("inc_stat_list_operations.tpl");
 
-?>

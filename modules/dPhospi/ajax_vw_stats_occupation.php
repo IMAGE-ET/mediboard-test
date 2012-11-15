@@ -56,7 +56,7 @@ $ljoin = array();
 
 $ljoin["chambre"] = "chambre.chambre_id = lit.chambre_id";
 $where["service_id"] = " = '$service_id'";
-$where["annule"] = " = '0'";
+$where["lit.annule"] = " = '0'";
 
 $nb_lits = $lit->countList($where, null, $ljoin);
 if (!$nb_lits) {
@@ -194,7 +194,7 @@ $options = CFlotrGraph::merge("bars", array(
 
 $graph = array("series" => $series, "options" => $options);
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("date_min"    , $date_min);
 $smarty->assign("date_max"    , $date_max);
@@ -205,4 +205,3 @@ $smarty->assign("display_stat", $display_stat);
 
 $smarty->display("inc_vw_stats_occupation.tpl");
 
-?>
