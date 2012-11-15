@@ -660,8 +660,9 @@ Main.add( function(){
         
         var url = new Url("system", "ajax_seek_autocomplete");
         url.addParam("object_class", "CLit");
-        url.addParam("field", "_unique_lit_id");
+        url.addParam("field", "lit_id");
         url.addParam("input_field", "_unique_lit_id_view");
+        url.addParam("show_view", "true");
         url.autoComplete(form.elements._unique_lit_id_view, null, {
           minChars: 2,
           method: "get",
@@ -672,13 +673,14 @@ Main.add( function(){
             $V(form._unique_lit_id, value);
           },
           callback: function(input, queryString){
-            if (service_id = $V(form.service_id)) {
+            var service_id = $V(form.service_id);
+            if (service_id) {
               queryString += "&where[chambre.service_id]="+service_id;
-              queryString += "&ljoin[chambre]=chambre.chambre_id = lit.chambre_id";
+              queryString += "&ljoin[chambre]=chambre.chambre_id=lit.chambre_id";
             }
             return queryString;
           }
-          });
+        });
       });
     </script>
   </td>
