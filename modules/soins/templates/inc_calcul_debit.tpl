@@ -46,6 +46,8 @@
     var form = getForm("calculPerf");
     var unite_choisie = $V(form.unite);
     
+    var unite_temps_debit = $V(form.unite_temps_debit);
+    
     // rapport_debit_choisi_ua
     var rapport_debit_choisi_ua = rapport_unite_prise[$V(form.unite)][unite_administration];
  
@@ -56,6 +58,8 @@
     var rapport_quantite_necessaire = rapport_debit_choisi_ua / rapport_conditionnement_ua;
     
     var debit_choisi = $V(form.debit);
+    
+    debit_choisi *= unite_temps_debit;
     
     // Calcul du débit nécessaire
     var debit_necessaire = debit_choisi;
@@ -180,7 +184,11 @@
               <option value="{{$_unite}}" {{if $line_item->unite == $_unite}}selected{{/if}}>{{$_unite}}</option>
             {{/foreach}}
           </select>
-        / h
+        /
+        <select name="unite_temps_debit" onchange="updateData()">
+          <option value="1">h</option>
+          <option value="60">min</option>
+        </select>
       </td>
     </tr>
     <tr id="calcul_perf_poids">
