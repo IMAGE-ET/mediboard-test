@@ -20,6 +20,10 @@ Main.add(function () {
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="function_id" value="{{$fonction->function_id}}" />
 <input type="hidden" name="del" value="0" />
+{{if !$fonction->canEdit()}}
+  <input type="hidden" name="_locked" value="1" />
+{{/if}}
+
 
 <table class="form">
   <tr>
@@ -51,11 +55,13 @@ Main.add(function () {
     <th>{{mb_label object=$fonction field="fax"}}</th>
     <td>{{mb_field object=$fonction field="fax"}}</td>
   </tr>
+  {{if $fonction->canEdit()}}
   <tr>
     <td colspan="2" class="button">
       <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
     </td>
   </tr>
+  {{/if}}
 </table>
 
 </form>
