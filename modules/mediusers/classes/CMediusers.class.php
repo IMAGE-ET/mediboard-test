@@ -28,12 +28,13 @@ class CMediusers extends CMbObject {
   var $banque_id                   = null;
   var $mail_apicrypt               = null;
   var $compta_deleguee             = null;
+  var $num_astreinte               = null;  //phone number for astreinte
 
   // DB References
   var $function_id                 = null;
   var $discipline_id               = null;
   var $spec_cpam_id                = null;
-  
+
   var $code_intervenant_cdarr      = null;
 
   var $secteur = null;
@@ -166,7 +167,8 @@ class CMediusers extends CMbObject {
     $props["rcc"]                    = "str";
     $props["adherent"]               = "str";
     $props["mail_apicrypt"]          = "email";
-    $props["compta_deleguee"]       = "bool default|0";
+    $props["compta_deleguee"]        = "bool default|0";
+    $props["num_astreinte"]          = "phone confidential";
 
     $props["_group_id"]              = "ref notNull class|CGroups";
 
@@ -426,11 +428,11 @@ class CMediusers extends CMbObject {
   function loadRefDiscipline() {
     return $this->_ref_discipline = $this->loadFwdRef("discipline_id", true);
   }
-  
+
   function loadRefSpecCPAM(){
     return $this->_ref_spec_cpam = $this->loadFwdRef("spec_cpam_id", true);
   }
-  
+
   function loadRefIntervenantCdARR() {
     return $this->_ref_intervenant_cdarr = CIntervenantCdARR::get($this->code_intervenant_cdarr);
   }
@@ -763,7 +765,7 @@ class CMediusers extends CMbObject {
     // Filtre sur l'établissement
     $group = CGroups::loadCurrent();
     $where["functions_mediboard.group_id"] = "= '$group->_id'";
-    
+
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
 
@@ -908,7 +910,7 @@ class CMediusers extends CMbObject {
   function isAnesth () {
     return $this->_is_anesth = $this->isFromType(array("Anesthésiste"));
   }
-  
+
   /**
    * Check whether user is a dentist
    * @return
