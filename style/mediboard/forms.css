@@ -28,10 +28,10 @@ button.intermax-result {
   opacity: .4;
 }
 
-input, 
-select, 
-textarea, 
-button, 
+input,
+select,
+textarea,
+button,
 textarea,
 .textarea-container {
   font-size: 1em;
@@ -49,10 +49,10 @@ input[type=checkbox] {
   margin: 1px !important;
 }
 
-input[type=text], 
-input[type=tel], 
-input[type=number], 
-input[type=email], 
+input[type=text],
+input[type=tel],
+input[type=number],
+input[type=email],
 input[type=password],
 textarea {
   padding: 1px;
@@ -66,11 +66,11 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-input[type=text], 
-input[type=tel], 
-input[type=number], 
-input[type=email], 
-input[type=password], 
+input[type=text],
+input[type=tel],
+input[type=number],
+input[type=email],
+input[type=password],
 select,
 textarea {
   border: 1px #999 solid;
@@ -98,12 +98,12 @@ textarea {
   resize: none;
 }
 
-input[type=text]:focus, 
-input[type=tel]:focus, 
-input[type=number]:focus, 
-input[type=email]:focus, 
-input[type=password]:focus, 
-select:focus, 
+input[type=text]:focus,
+input[type=tel]:focus,
+input[type=number]:focus,
+input[type=email]:focus,
+input[type=password]:focus,
+select:focus,
 textarea:focus {
   background-color: #fff;
 }
@@ -117,7 +117,7 @@ input[type=checkbox].disabled {
   -ms-filter: "alpha(opacity=70)";
 }
 
-/** <Two rules required> !! Don't merge them 
+/** <Two rules required> !! Don't merge them
  *  http://stackoverflow.com/a/2610741/92315
  */
 :-moz-placeholder {
@@ -163,7 +163,7 @@ option.novalue {
 
 option.checked {
   background: url(images/buttons/tick.png) no-repeat 12px;
-  padding-left: 30px; 
+  padding-left: 30px;
 }
 
 option[value=""] {
@@ -175,7 +175,7 @@ form hr {
   margin: 2px;
 }
 
-fieldset, 
+fieldset,
 fieldset legend {
   border: 1px solid #aaa;
   border-radius: 3px;
@@ -221,13 +221,13 @@ a.button {
   font-weight: normal;
   white-space: nowrap;
   display: inline-block;
-  
+
   color: #000 !important;
   background: #eee url(images/buttons/button.png) center center repeat-x;
-  
+
   border: 1px solid #999;
   border-radius: 3px;
-  
+
   vertical-align: middle;
   height: 20px;
   padding: 1px;
@@ -246,13 +246,13 @@ a.button {
   font-weight: normal;
   white-space: nowrap;
   display: inline-block;
-  
+
   color: #000 !important;
   background: #eee url(images/buttons/button.png) center center repeat-x;
-  
+
   border: 1px solid #999;
   border-radius: 3px;
-  
+
   vertical-align: middle;
   height: 20px;
   padding: 1px 3px;
@@ -261,7 +261,7 @@ a.button {
   box-sizing: border-box;
 }
 
-button:before, 
+button:before,
 a.button:before,
 button img {
   display: inline-block;
@@ -270,7 +270,7 @@ button img {
   vertical-align: middle;
 }
 
-button::-moz-focus-inner, 
+button::-moz-focus-inner,
 a.button::-moz-focus-inner {
   border: none;
   padding: 0;
@@ -291,7 +291,7 @@ form button:not([type]) {
   font-weight: bold;
 }
 
-button.notext, 
+button.notext,
 a.button.notext {
   font-size: 0 !important;
   color: rgba(0,0,0,0);
@@ -325,16 +325,16 @@ a.button:hover {
 }
 
 a.button.disabled,
-button[disabled], 
-input[disabled], 
-button[disabled="disabled"], 
+button[disabled],
+input[disabled],
+button[disabled="disabled"],
 input[disabled="disabled"] { /* For IE */
   cursor: not-allowed;
   opacity: 0.5;
   -ms-filter: "alpha(opacity=50)";
 }
 
-button[disabled]:hover, 
+button[disabled]:hover,
 a.button.disabled:hover,
 button[disabled="disabled"]:hover { /* For IE */
   outline: none;
@@ -358,6 +358,10 @@ a.button.big {
 
 button.copy:before, a.button.copy:before {
   content: url(images/buttons/copy.png);
+}
+
+button.phone:before, a.button.phone:before {
+  content: url(images/buttons/phone.png);
 }
 
 button.cut:before, a.button.cut:before {
@@ -418,7 +422,7 @@ button.close:before, a.button.close:before {
 
 button.carriage_return:before, a.button.carriage_return:before {
   content: url(images/buttons/carriage_return.png);
-} 
+}
 
 button.mail:before, a.button.mail:before {
   content: url(images/buttons/mail.png);
@@ -811,7 +815,7 @@ div.autocomplete ul em {
   font-style: normal;
 }
 
-div.autocomplete ul li.selected { 
+div.autocomplete ul li.selected {
   background-color: #fafaa4 !important;
   /*font-weight:bold;*/
 }
@@ -820,7 +824,7 @@ div.autocomplete ul li {
   list-style-type: none;
   display: block;
   margin: 0;
-  padding: 2px;  
+  padding: 2px;
   cursor: pointer;
   line-height: 100%;
   background-image: url(images/pictures/bg-gradient.png);
@@ -959,8 +963,8 @@ table.tbl .textarea-helped a {
 }
 
 .textarea-helped .sub-toolbar {
-  position: absolute; 
-  top: 20px; 
+  position: absolute;
+  top: 20px;
   background-color: #fff;
   margin-top: -1px;
   margin-left: -3px;
@@ -1145,7 +1149,7 @@ select.helper {
 }
 
 .color-view {
-  padding: 0 3px; 
+  padding: 0 3px;
   margin: 0 3px;
   border: 1px solid #aaa;
 }
