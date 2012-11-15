@@ -15,6 +15,7 @@
       var url = new Url("system", "ajax_seek_autocomplete");
       url.addParam("object_class", "CTypeRessource");
       url.addParam("field", "libelle");
+      url.addParam("where[group_id]", "{{$g}}");
       
       url.autoComplete(form.elements._keywords, "besoins_area", {
         minChars: 3,
