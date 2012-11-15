@@ -77,10 +77,15 @@ class CExchangeSource extends CMbObject {
     
     $exchange_objects = array();
     foreach (self::getExchangeClasses() as $_class) {
-      $exchange_objects[$_class] = new $_class;
-      $exchange_objects[$_class]->name = $name;
-      $exchange_objects[$_class]->loadMatchingObject();
-      $exchange_objects[$_class]->type_echange = $type_echange;
+      $object = new $_class;
+      if (!$object->_ref_module) {
+        continue;
+      }
+      $object->name = $name;
+      $object->loadMatchingObject();
+      $object->type_echange = $type_echange;
+      
+      $exchange_objects[$_class] = $object;
     }
     
     return $exchange_objects;
