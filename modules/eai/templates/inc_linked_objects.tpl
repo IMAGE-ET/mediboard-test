@@ -23,32 +23,36 @@
 <table class="form">
   {{if $linked_objects}}
     <tr>
-      <th class="category" colspan="2">{{tr}}CObjectToInteropSender{{/tr}}</th>
+      <th class="category">{{tr}}CObjectToInteropSender{{/tr}}</th>
     </tr>
     {{foreach from=$linked_objects key=_class item=_objects}}
       <tr>
-        <th colspan="2">{{tr}}{{$_class}}{{/tr}} - {{$_class}}</th>
+        <td>
+          <fieldset>
+            <legend>{{tr}}{{$_class}}{{/tr}} - {{$_class}}</legend>
+            <table class="form">
+              {{foreach from=$_objects item=_object}}
+                <tr>
+                  <td>
+                    <form name="delFrm_{{$_object->_guid}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete : InteropActor.refreshLinkedObjects.curry('{{$actor->_guid}}')});">
+                      {{mb_class object=$_object}}
+                      {{mb_key object=$_object}}
+                      <input type="hidden" name="del" value="1"/>
+                      <label for="btnDel_{{$_object->_guid}}">{{$_object->_ref_object->_view}}</label>
+                      <button id="btnDel_{{$_object->_guid}}" class="trash notext" type="button" onclick="this.form.onsubmit();">{{tr}}Delete{{/tr}}</button>
+                    </form>
+                  </td>
+                </tr>
+              {{/foreach}}
+            </table>
+          </fieldset>
+        </td>
       </tr>
-      {{foreach from=$_objects item=_object}}
-        <tr>
-          <td>
-            {{$_object->_ref_object->_view}}
-          </td>
-          <td>
-            <form name="delFrm_{{$_object->_guid}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete : InteropActor.refreshLinkedObjects.curry('{{$actor->_guid}}')});">
-              {{mb_class object=$_object}}
-              {{mb_key object=$_object}}
-              <input type="hidden" name="del" value="1"/>
-              <button class="trash notext" type="button" onclick="this.form.onsubmit();">{{tr}}Delete{{/tr}}</button>
-            </form>
-          </td>
-        </tr>
-      {{/foreach}}
     {{/foreach}}
   {{/if}}
 
   <tr>
-    <th class="category" colspan="2">{{tr}}CObjectToInteropSender-title-create{{/tr}}</th>
+    <th class="category">{{tr}}CObjectToInteropSender-title-create{{/tr}}</th>
   </tr>
   <tr>
     <td>
