@@ -57,17 +57,17 @@
     
     var debit_choisi = $V(form.debit);
     
+    // Calcul du débit nécessaire
+    var debit_necessaire = debit_choisi;
+    
+    if (/\/kg/.test(unite_choisie)) {
+      debit_necessaire *= poids;
+    }
+    
+    $("debit_necessaire").update(debit_necessaire + " " + unite_choisie.replace(/\/kg \(.*\)/, ""));
+    
     {{if $line->type == "classique"}}
       var duree = parseFloat($("result_duree").innerHTML);
-      
-      // Calcul du débit nécessaire
-      var debit_necessaire = debit_choisi;
-      
-      if (/\/kg/.test(unite_choisie)) {
-        debit_necessaire *= poids;
-      }
-      
-      $("debit_necessaire").update(debit_necessaire + " " + unite_choisie.replace(/\/kg \(.*\)/, ""));
       
       // Calcul de la quantité nécessaire
       var quantite_necessaire = debit_choisi * rapport_quantite_necessaire * duree;
