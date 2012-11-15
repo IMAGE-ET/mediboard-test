@@ -311,10 +311,9 @@ class CFactureConsult extends CMbObject {
     if (!$this->_ref_patient) {
       $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
       // Le numéro de référence doit comporter 16 ou 27 chiffres
-      $num = str_replace(' ','',$this->_ref_patient->avs.$this->_id);
-      $num = str_replace('.','', $num);
+      $num = $this->_id;
       $num = sprintf("%027s", $num);
-      if ((!$this->num_reference || $num != $this->num_reference) && $this->_ref_patient->avs) {
+      if ((!$this->num_reference || $num != $this->num_reference)) {
         $this->num_reference = $num;
         $this->store();
       }
