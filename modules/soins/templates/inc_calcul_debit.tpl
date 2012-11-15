@@ -10,9 +10,9 @@
 
 {{assign var=unite_administration value=$line_item->_unite_administration}}
 
-{{if $line->type != "classique" && (!$line->volume_debit || !$line_item->quantite)}}
+{{if $line->type != "classique" && !$line_item->quantite}}
   <div class="small-warning">
-    Le volume de référence et la quantité sont nécessaires pour calculer le débit volumique.
+    La quantité est nécessaire pour calculer le débit volumique.
   </div>
   {{mb_return}}
 {{/if}}
