@@ -90,5 +90,11 @@ InteropActor = {
     var url = new Url("eai", "ajax_refresh_tags");
     url.addParam("actor_guid", actor_guid);
     url.requestUpdate("tags_"+actor_guid);
+  },
+
+  refreshLinkedObjects : function(actor_guid) {
+    var url = new Url("eai", "ajax_refresh_linked_objects");
+    url.addParam("actor_guid", actor_guid);
+    url.requestUpdate("linked_objects_" + actor_guid);
   }
 };

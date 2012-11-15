@@ -134,8 +134,25 @@ class CSetupeai extends CSetup {
                 ADD INDEX (`group_id`),
                 ADD INDEX (`domain_id`);";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.09";
+
+    $this->makeRevision("0.09");
+
+    $query = "CREATE TABLE `object_to_interop_sender` (
+                `object_to_interop_sender_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `sender_class` VARCHAR (255) NOT NULL,
+                `sender_id` INT (11) UNSIGNED NOT NULL,
+                `object_class` VARCHAR (255) NOT NULL,
+                `object_id` INT (11) UNSIGNED NOT NULL
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `object_to_interop_sender`
+                ADD INDEX (`sender_id`),
+                ADD INDEX (`object_id`);";
+
+    $this->addQuery($query);
+
+    $this->mod_version = "0.10";
   }
 }
 
