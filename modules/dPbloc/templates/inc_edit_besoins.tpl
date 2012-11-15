@@ -14,7 +14,7 @@
       var form = getForm("addBesoin");
       var url = new Url("system", "ajax_seek_autocomplete");
       url.addParam("object_class", "CTypeRessource");
-      url.addParam("field", "_keywords");
+      url.addParam("field", "libelle");
       
       url.autoComplete(form.elements._keywords, "besoins_area", {
         minChars: 3,
