@@ -10,7 +10,7 @@
     </th>
   </tr>
   <tr>
-    <td class="text" style="width: 1px;" rowspan="3">
+    <td class="text" style="width: 1px;" rowspan="4">
       {{assign var=border value=$mediuser->_ref_function->color}}
       {{mb_include module=files template=inc_named_file name=identite.jpg default=identity_user.png size=50}}
     </td>
@@ -25,6 +25,14 @@
         {{mb_value object=$mediuser field=_user_phone}}
       </td>
     </tr>
+    {{if "astreintes"|module_active && $modules.astreintes->_can->edit && $mediuser->_user_astreinte}}
+    <tr>
+      <td>
+        {{mb_label object=$mediuser field=_user_astreinte}} :
+        {{mb_value object=$mediuser field=_user_astreinte}}
+      </td>
+    </tr>
+   {{/if}}
     <tr>
       <td>
         {{mb_label object=$mediuser field=_user_email}} :
@@ -80,18 +88,18 @@
             Congés
           </button>
         {{/if}}
-        {{if "astreintes"|module_active && $modules.astreintes->_can->edit}}
-          {{mb_script module=astreintes script=plage ajax=true}}
-          <button type="button" class="search" onclick="PlageAstreinte.showForUser('{{$mediuser->_id}}');">
-            {{tr}}CPlageAstreinte.plural{{/tr}}
-          </button>
-        {{/if}}
         {{if "messagerie"|module_active && $modules.messagerie->_can->edit}}
           <a class="action" href="#nothing" onclick="UserMessage.create('{{$mediuser->_id}}')">
             <button type="button">
               <img src="images/icons/usermessage.png" title="Envoyer un message" /> Message
             </button>
           </a>
+        {{/if}}
+        {{if "astreintes"|module_active && $modules.astreintes->_can->edit}}
+          {{mb_script module=astreintes script=plage ajax=true}}
+          <button type="button" class="search" onclick="PlageAstreinte.showForUser('{{$mediuser->_id}}');">
+            {{tr}}CPlageAstreinte.plural{{/tr}}
+          </button>
         {{/if}}
       </td>
     </tr>

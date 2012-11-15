@@ -14,8 +14,8 @@
 <tr>
   <th>{{mb_label object=$object field="_user_password"}}</th>
   <td>
-    <input type="password" name="_user_password" 
-          class="{{$object->_props._user_password}}{{if !$object->user_id}} notNull{{/if}}" 
+    <input type="password" name="_user_password"
+          class="{{$object->_props._user_password}}{{if !$object->user_id}} notNull{{/if}}"
           onkeyup="checkFormElement(this);" value="" />
     <span id="mediuser__user_password_message"></span>
   </td>
@@ -24,10 +24,10 @@
 <tr>
   <th>{{mb_label object=$object field="_user_password2"}}</th>
   <td>
-    <input 
-      type="password" 
-      name="_user_password2" 
-      value="" 
+    <input
+      type="password"
+      name="_user_password2"
+      value=""
       class="{{$object->_props._user_password2}}{{if !$object->user_id}} notNull{{/if}}"
     />
   </td>
@@ -50,7 +50,7 @@
   <th>{{mb_label object=$object field="deb_activite"}}</th>
   <td>{{mb_field object=$object field="deb_activite" form="mediuser" register=true}}</td>
 </tr>
-              
+
 <tr>
   <th>{{mb_label object=$object field="fin_activite"}}</th>
   <td>{{mb_field object=$object field="fin_activite" form="mediuser" register=true}}</td>
@@ -60,7 +60,7 @@
   <th>{{mb_label object=$object field="remote"}}</th>
   <td>{{mb_field object=$object field="remote" onchange="changeRemote(this)"}}</td>
 </tr>
-            
+
 <tr>
   <th>{{mb_label object=$object field="function_id"}}</th>
   <td>
@@ -92,7 +92,7 @@
     </select>
   </td>
 </tr>
-               
+
 <tr>
   <th>{{mb_label object=$object field="_profile_id"}}</th>
   <td>
@@ -104,7 +104,7 @@
     </select>
   </td>
 </tr>
-               
+
 <tr>
   <th>{{mb_label object=$object field="_user_last_name"}}</th>
   <td>
@@ -116,7 +116,7 @@
     {{/if}}
   </td>
 </tr>
- 
+
 <tr>
   <th>{{mb_label object=$object field="_user_first_name"}}</th>
   <td>
@@ -128,7 +128,7 @@
     {{/if}}
   </td>
 </tr>
-          
+
 <tr>
   <th>{{mb_label object=$object field="_user_email"}}</th>
   <td>
@@ -140,7 +140,7 @@
     {{/if}}
   </td>
 </tr>
-  
+
 <tr>
   <th>{{mb_label object=$object field="_user_phone"}}</th>
   <td>
@@ -152,9 +152,20 @@
     {{/if}}
   </td>
 </tr>
-  
+
+<tr>
+  <th>{{mb_label object=$object field="_user_astreinte"}}</th>
+  <td>
+    {{if !$readOnlyLDAP}}
+      {{mb_field object=$object field="_user_astreinte"}}
+    {{else}}
+      {{mb_value object=$object field="_user_astreinte"}}
+      {{mb_field object=$object field="_user_astreinte" hidden=true}}
+    {{/if}}
+  </td>
+</tr>
+
 <tr>
   <th>{{mb_label object=$object field="commentaires"}}</th>
   <td>{{mb_field object=$object field="commentaires"}}</td>
 </tr>
-  

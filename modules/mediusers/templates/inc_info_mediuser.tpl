@@ -50,13 +50,13 @@
       {{/if}}
     </td>
   </tr>
-  
+
   <tbody {{if ($user->_user_type != 3) && ($user->_user_type != 4) && ($user->_user_type != 13)}}style="display:none"{{/if}}>
-  
-    {{mb_include template="inc_infos_praticien" object=$user}}     
-    
+
+    {{mb_include template="inc_infos_praticien" object=$user}}
+
   </tbody>
-          
+
   <tr>
     <th>{{mb_label object=$user field="_user_email"}}</th>
     <td>
@@ -76,6 +76,17 @@
       {{else}}
         {{mb_value object=$user field="_user_phone"}}
         {{mb_field object=$user field="_user_phone" hidden=true}}
+      {{/if}}
+    </td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$user field="_user_astreinte"}}</th>
+    <td>
+      {{if !$readOnlyLDAP}}
+        {{mb_field object=$user field="_user_astreinte"}}
+      {{else}}
+        {{mb_value object=$user field="_user_astreinte"}}
+        {{mb_field object=$user field="_user_astreinte" hidden=true}}
       {{/if}}
     </td>
   </tr>

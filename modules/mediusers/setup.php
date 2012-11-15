@@ -506,7 +506,13 @@ class CSetupmediusers extends CSetup {
                  ADD `num_astreinte` VARCHAR (20)";
      $this->addQuery($query);
 
-     $this->mod_version = "0.44";
+     $this->makeRevision("0.44");
+
+     $query = "ALTER TABLE `users_mediboard`
+                 DROP `num_astreinte`";
+     $this->addQuery($query);
+
+     $this->mod_version = "0.45";
 
   }
 }

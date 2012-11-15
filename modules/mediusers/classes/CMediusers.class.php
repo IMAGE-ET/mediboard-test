@@ -28,7 +28,6 @@ class CMediusers extends CMbObject {
   var $banque_id                   = null;
   var $mail_apicrypt               = null;
   var $compta_deleguee             = null;
-  var $num_astreinte               = null;  //phone number for astreinte
 
   // DB References
   var $function_id                 = null;
@@ -56,6 +55,7 @@ class CMediusers extends CMbObject {
   var $_user_last_name             = null;
   var $_user_email                 = null;
   var $_user_phone                 = null;
+  var $_user_astreinte             = null;
   var $_user_adresse               = null;
   var $_user_cp                    = null;
   var $_user_ville                 = null;
@@ -168,7 +168,6 @@ class CMediusers extends CMbObject {
     $props["adherent"]               = "str";
     $props["mail_apicrypt"]          = "email";
     $props["compta_deleguee"]        = "bool default|0";
-    $props["num_astreinte"]          = "phone confidential";
 
     $props["_group_id"]              = "ref notNull class|CGroups";
 
@@ -178,6 +177,7 @@ class CMediusers extends CMbObject {
     $props["_user_last_name"]        = "str notNull confidential reported";
     $props["_user_email"]            = "str confidential reported";
     $props["_user_phone"]            = "phone confidential reported";
+    $props["_user_astreinte"]        = "phone confidential reported";
     $props["_user_adresse"]          = "str confidential reported";
     $props["_user_last_login"]       = "dateTime reported";
     $props["_user_cp"]               = "num length|5 confidential reported";
@@ -314,6 +314,7 @@ class CMediusers extends CMbObject {
     $user->user_last_name   = $this->_user_last_name;
     $user->user_email       = $this->_user_email;
     $user->user_phone       = $this->_user_phone;
+    $user->user_astreinte   = $this->_user_astreinte;
     $user->user_address1    = $this->_user_adresse;
     $user->user_zip         = $this->_user_cp;
     $user->user_city        = $this->_user_ville;
@@ -361,6 +362,7 @@ class CMediusers extends CMbObject {
       $this->_user_last_name  = CMbString::upper($user->user_last_name);
       $this->_user_email      = $user->user_email;
       $this->_user_phone      = $user->user_phone;
+      $this->_user_astreinte  = $user->user_astreinte;
       $this->_user_adresse    = $user->user_address1;
       $this->_user_cp         = $user->user_zip;
       $this->_user_ville      = $user->user_city;
