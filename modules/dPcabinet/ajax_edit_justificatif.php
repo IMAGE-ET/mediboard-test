@@ -23,7 +23,7 @@ $colonnes = array(20, 28, 25, 75, 30);
  * 
  * @return void
  */
-function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
+function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes, $cle_facture){
   ajoutEntete2($pdf, 1, $facture, $user, $praticien, $group, $colonnes);
   $pdf->SetFillColor(255, 255, 255);
   $pdf->SetDrawColor(0);
@@ -37,6 +37,13 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
     $_ref_assurance = $employeur->num_assure;
     $nom_entreprise = $employeur->nom;
   }
+  $typeRbt = "TG";
+  if($facture->assurance_base && $cle_facture == 0 && !$facture->send_assur_base) {
+    $typeRbt = "TP";
+  }
+  if($facture->assurance_complementaire && $cle_facture == 1 && !$facture->send_assur_compl){
+    $typeRbt = "TP";
+  }
   $loi = "LAMal";
   if ($facture->cession_creance) {
     //La LAI : Loi sur l'Assurance Invalidité
@@ -47,26 +54,26 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes){
     $loi = "LAA";
   }
   $lignes = array(
-    array("Patient", "Nom", $facture->_ref_patient->nom),
-    array(""      , "Prénom", $facture->_ref_patient->prenom),
-    array(""      , "Rue", $facture->_ref_patient->adresse),
-    array(""      , "NPA",  $facture->_ref_patient->cp),
-    array(""      , "Localité", $facture->_ref_patient->ville),
-    array(""      , "Date de naissance", mbTransformTime(null, $facture->_ref_patient->naissance, "%d.%m.%Y")),
-    array(""      , "Sexe", $facture->_ref_patient->sexe),
-    array(""      , "Date cas", mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
-    array(""      , "N° cas", "$facture->ref_accident"),
-    array(""      , "N° AVS", $facture->_ref_patient->avs),
-    array(""      , "N° assuré", "$_ref_assurance"),
-    array(""      , "Nom entreprise", "$nom_entreprise"),
-    array(""      , "Canton", "GE"),
-    array(""      , "Copie", "Non"),
-    array(""      , "Type de remb.", "TG"),
-    array(""      , "Loi", "$loi"),
-    array(""      , "N° contrat", ""),
-    array(""      , "Motif traitement", "$facture->type_facture"),
-    array(""      , "Traitement", mbTransformTime(null, $facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
-    array(""      , "Rôle/ Localité", "-"),
+    array("Patient"   , "Nom", $facture->_ref_patient->nom),
+    array(""          , "Prénom", $facture->_ref_patient->prenom),
+    array(""          , "Rue", $facture->_ref_patient->adresse),
+    array(""          , "NPA",  $facture->_ref_patient->cp),
+    array(""          , "Localité", $facture->_ref_patient->ville),
+    array(""          , "Date de naissance", mbTransformTime(null, $facture->_ref_patient->naissance, "%d.%m.%Y")),
+    array(""          , "Sexe", $facture->_ref_patient->sexe),
+    array(""          , "Date cas", mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
+    array(""          , "N° cas", "$facture->ref_accident"),
+    array(""          , "N° AVS", $facture->_ref_patient->avs),
+    array(""          , "N° assuré", "$_ref_assurance"),
+    array(""          , "Nom entreprise", "$nom_entreprise"),
+    array(""          , "Canton", "GE"),
+    array(""          , "Copie", "Non"),
+    array(""          , "Type de remb.", $typeRbt),
+    array(""          , "Loi", "$loi"),
+    array(""          , "N° contrat", ""),
+    array(""          , "Motif traitement", "$facture->type_facture"),
+    array(""          , "Traitement", mbTransformTime(null, $facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
+    array(""          , "Rôle/ Localité", "-"),
     array("Mandataire", "N° EAN/N° RCC", $praticien->ean." - ".$praticien->rcc." "),
     array("Diagnostic", "Contrat", "ICD--"),
     array("Liste EAN" , "", "1/".$praticien->ean." 2/".$user->ean),
@@ -149,7 +156,7 @@ foreach ($factures as $facture) {
     $pdf->AddPage();
     $pm = $pt = 0;
     
-    ajoutEntete1($pdf, $facture, $user, $praticien, $function_prat, $colonnes);
+    ajoutEntete1($pdf, $facture, $user, $praticien, $function_prat, $colonnes, $cle_facture);
     $pdf->setFont("vera", '', 8);
     $tailles_colonnes = array(
               "Date" => 9,
