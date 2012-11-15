@@ -133,8 +133,8 @@ class CApp {
    * Fetch an HTML content of a module view, as a HTTP GET call would do
    * Very useful to assemble multiple views
    *
-   * @param object $module    The module name or the file path
-   * @param object $file      [optional] The file of the module, or null
+   * @param string $module    The module name or the file path
+   * @param string $file      [optional] The file of the module, or null
    * @param array  $arguments [optional] The GET arguments
    *
    * @return string The fetched content

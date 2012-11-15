@@ -218,7 +218,7 @@ abstract class CSessionHandler {
 CREATE TABLE IF NOT EXISTS `session_data` (
   `session_id` VARCHAR(32) NOT NULL DEFAULT '',
   `http_user_agent` VARCHAR(32) NOT NULL DEFAULT '',
-  `session_data` BLOB NOT NULL,
+  `session_data` LONGBLOB NOT NULL,
   `session_expire` INT(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -308,6 +308,27 @@ SQL;
     if ($destroy) {
       @session_destroy(); // Escaped because of an unknown error
     }
+
+    self::$started = false;
+  }
+
+  static function writeClose(){
+    if (!self::$started) {
+      return;
+    }
+
+    session_write_close();
+
+    self::$started = false;
+  }
+
+  static function write(){
+    if (!self::$started) {
+      return;
+    }
+
+    self::writeClose();
+    self::start();
 
     self::$started = false;
   }

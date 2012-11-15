@@ -281,6 +281,17 @@ else {
   };
 }
 
+if (Prototype.Browser.IE && document.documentMode >= 10) {
+  Element.addMethods({
+    setOpacity: function(element, value) {
+      element = $(element);
+      element.style.opacity = (value == 1 || value === '') ? '' :
+        (value < 0.00001) ? 0 : value;
+      return element;
+    }
+  });
+}
+
 Class.extend(Ajax.Request, {
   abort: function() {
     this.transport.abort();
