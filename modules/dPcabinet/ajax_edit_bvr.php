@@ -383,7 +383,7 @@ if ($edition_bvr) {
           $pdf->Text($l_colonne*19 + $decalage, $h_ligne*13+$haut_doc , $cents);
         }
         
-        $decalage = 7;
+        $decalage = 7.36;
         
         $pdf->Text(28*$l_colonne, $h_ligne*18+$haut_doc , "609");
         
