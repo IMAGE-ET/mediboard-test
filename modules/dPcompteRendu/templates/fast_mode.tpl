@@ -168,6 +168,8 @@ Main.add(function() {
   {{mb_field object=$compte_rendu field="author_id" hidden=1}}
   {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
   {{mb_field object=$compte_rendu field="object_class" hidden=1 prop=""}}
+  {{mb_field object=$compte_rendu field="font" hidden=1}}
+  {{mb_field object=$compte_rendu field="size" hidden=1}}
   
   <!-- the div is needed (textarea-container) -->
   <div style="display: none;">
