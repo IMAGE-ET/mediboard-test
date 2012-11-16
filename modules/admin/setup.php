@@ -129,7 +129,7 @@ class CSetupadmin extends CSetup {
     
     $this->makeRevision("1.0.28");
     $query = "ALTER TABLE `user_preferences`
-      CHANGE `value` `value` VARCHAR (1024) NOT NULL;";
+      CHANGE `value` `value` TEXT NOT NULL;";
     $this->addQuery($query);
     
     $this->mod_version = "1.0.29";
