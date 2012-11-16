@@ -106,7 +106,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("debut_periode"  , $debut_periode);
 $smarty->assign("filter"         , $filter);
-$smarty->assign("plagesastreinte"    , $plagesastreinte);
+$smarty->assign("plagesastreinte", $plagesastreinte);
 $smarty->assign("choix"          , $choix);
 $smarty->assign("mediusers"      , $mediusers);
 $smarty->assign("tableau_periode", $tableau_periode);

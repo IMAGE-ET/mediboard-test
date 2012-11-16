@@ -18,7 +18,7 @@ class CSetupastreintes extends CSetup {
       ) /*! ENGINE=MyISAM */ COMMENT='table des astreintes'";
     $this->addQuery($query);
 
-    $this->makeRevision("0.1");
+    $this->mod_version = "0.1";
 
 
     }

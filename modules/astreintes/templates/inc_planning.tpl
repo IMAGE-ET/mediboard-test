@@ -92,6 +92,11 @@
            <div class="nom">
              {{assign var=mediuser value=$_plage1->_ref_user}}
              {{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser nodebug=true}}
+             {{if $mediuser->_user_astreinte}}
+              <div class="info phone">{{mb_value object=$mediuser field=_user_astreinte}}</div>
+             {{else}}
+              <div class="warning">{{tr}}CPlageAstreinte.noPhoneNumber{{/tr}}</div>
+             {{/if}}
            </div>
          </th>
        <td>
@@ -100,12 +105,12 @@
            {{if $_plage2->user_id == $indice}}
              <div id = "plage{{$_plage2->_id}}" class = "plage" style="{{if $_plage2->_ref_user->_user_type_view !="Administrator"}}background:#ffaeae;{{else}}background:#aed0ff;{{/if}}">
                <div class="content">
+                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_plage2->_guid}}')">
+                   {{if $_plage2->libelle}}<strong>{{$_plage2->libelle}}</strong>{{else}}<em>Pas de libelle</em>{{/if}}
+                 </span>
+                  <br/>
                  {{assign var=mediuser value=$_plage1->_ref_user}}
                  {{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser nodebug=true}}
-                 <br/>
-                 <span onmouseover="ObjectTooltip.createEx(this, '{{$_plage2->_guid}}')">
-                   {{$_plage2->libelle}}
-                 </span>
                  <script type="text/javascript">
                    Main.add(function(){
                      display_plage({{$_plage2->_id}},{{$_plage2->_deb}},{{$_plage2->_fin}});

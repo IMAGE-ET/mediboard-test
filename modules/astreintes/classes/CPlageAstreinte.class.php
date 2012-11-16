@@ -18,7 +18,9 @@ class CPlageAstreinte extends CMbObject {
   var $user_id     = null;
 
   // Object References
-  var $_ref_user  = null;
+  var $_num_astreinte  = null;
+  var $_ref_user       = null;
+
 
   // Form fields
   var $_duree      = null;
@@ -36,18 +38,25 @@ class CPlageAstreinte extends CMbObject {
   //spécification des propriétés
   function getProps() {
     $specs = parent::getProps();
-    $specs["user_id"]     = "ref class|CMediusers notNull";
-    $specs["date_debut"]  = "date notNull";
-    $specs["date_fin"]    = "date moreEquals|date_debut notNull";
-    $specs["libelle"]     = "str";
-    $specs["_duree"]      = "num";
-    $specs["_type"]      = "str";
+    $specs["user_id"]         = "ref class|CMediusers notNull";
+    $specs["_ref_user"]       = "ref class|CMediusers";
+    $specs["date_debut"]      = "date notNull";
+    $specs["date_fin"]        = "date moreEquals|date_debut notNull";
+    $specs["libelle"]         = "str";
+    $specs["_duree"]          = "num";
+    $specs["_num_astreinte"]  = "phone";
+    $specs["_type"]           = "enum list|medical|admin";
     return $specs;
   }
 
   function getBackProps() {
     $backProps = parent::getBackProps();
     return $backProps;
+  }
+
+  function loadView() {
+    parent::loadView();
+    $this->_ref_user = $this->loadRefUser();  //I need the Phone Astreinte
   }
 
   function updateFormFields() {
@@ -84,10 +93,33 @@ class CPlageAstreinte extends CMbObject {
     return $this->loadList($where, $order);
   }
 
+  function loadDays($debut, $fin) {
+    $this->_duree = mbDaysRelative($date_debut,$date_fin);
+  }
+
+  function loadType() {
+    if($this->_ref_user->isMedical()) {
+      $_plage->_type = 'medical';
+    }
+
+    if($this->_ref_user->isSecretaire()) {
+      $_plage->_type = 'admin';
+    }
+
+    return $_plage->_type;
+  }
+
   function loadRefUser() {
     $this->_ref_user = $this->loadFwdRef("user_id", true);
     $this->_ref_user->loadRefFunction();
+    $this->_num_astreinte = $this->_ref_user->_user_astreinte;
+    $this->_type = $this->_ref_user->_user_type;
     return $this->_ref_user;
+  }
+
+  function loadRefPhoneAstreinte() {
+    $this->_num_astreinte = $this->loadFwdRef("_user_astreinte", true);
+    return $this->_num_astreinte;
   }
 
   function getPerm($permType) {

@@ -1,5 +1,6 @@
-
 PlageAstreinte = {
+  module : "astreintes",
+
   showForUser: function(user_id) {
     new Url("astreintes", "ajax_plage_astreinte").
       addParam("user_id", user_id).
@@ -44,5 +45,11 @@ PlageAstreinte = {
         changedate();
       }
     });
+  },
+
+  modaleastreinteForDay: function(date) {
+    var url = new Url("astreintes", "ajax_list_day_astreinte");
+    url.addParam("date", date);
+    url.requestModal();
   }
 }

@@ -14,7 +14,7 @@ $user_id = CValue::getorSession("user_id");
 $user = new CMediusers();
 $user->load($user_id);
 
-// Plages de congés pour l'utilisateur
+// Plages d'astreinte pour l'utilisateur
 $plage_astreinte = new CPlageAstreinte();
 $plage_astreinte->user_id = $user_id;
 $plages_astreinte = $plage_astreinte->loadMatchingList("date_debut");

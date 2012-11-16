@@ -189,7 +189,7 @@ Main.add(function(){
   border-radius: 3px;
   border:  2px solid #aaa;
   z-index: 0;
-  overflow: visible;
+  overflow: hidden;
   padding: 2px 0;
   margin-top: 1px;
 }

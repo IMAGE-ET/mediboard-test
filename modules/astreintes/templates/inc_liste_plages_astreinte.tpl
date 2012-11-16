@@ -21,7 +21,11 @@
         <a href="#Edit-{{$_plageastreinte->_guid}}"
            onclick="PlageAstreinte.edit('{{$_plageastreinte->_id}}','{{$user->_id}}')">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_plageastreinte->_guid}}')">
-          {{mb_value object=$_plageastreinte field="libelle"}}
+          {{if $_plageastreinte->libelle}}
+            {{mb_value object=$_plageastreinte field="libelle"}}
+          {{else}}
+            {{tr}}CPlageAstreinte.noLibelle{{/tr}}
+          {{/if}}
           </span>
         </a>
       </td>
