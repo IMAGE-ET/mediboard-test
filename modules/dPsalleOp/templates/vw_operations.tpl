@@ -7,6 +7,7 @@
 {{assign var="object" value=$selOp}}
 {{mb_include module=salleOp template=js_codage_ccam}}
 {{mb_script module="soins" script="plan_soins"}}
+{{mb_include module=planningOp template=js_form_sejour only_ald=1}}
 
 <script type="text/javascript">
 
