@@ -30,6 +30,7 @@ Main.add(function () {
     <td>
       <button type="button" onclick="printTableau()" class="print">Impression</button>
       <button type="button" onclick="showRapport('{{$date}}')" class="print">Rapport</button>
+      {{if "astreintes"|module_active}}{{mb_include module=astreintes template=inc_button_astreinte_day date=$date}}{{/if}}
     </td>
     <td>
       <form name="chgAff" method="get" onsubmit="return onSubmitFormAjax(this, null, 'tableau')">
