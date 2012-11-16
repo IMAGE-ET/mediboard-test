@@ -33,7 +33,7 @@ Main.add(function () {
   var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_permissions");
   totalUpdater.addParam("date", "{{$date}}");
   totalUpdater.periodicalUpdate('allPermissions', { frequency: 120 });
-  
+
   var listUpdater = new Url("dPadmissions", "httpreq_vw_permissions");
   listUpdater.addParam("date", "{{$date}}");
   listUpdater.periodicalUpdate('listPermissions', { frequency: 120 });
@@ -45,6 +45,7 @@ Main.add(function () {
 <tr>
   <td>
     <a href="#legend" onclick="Admissions.showLegend()" class="button search">Légende</a>
+    {{if "astreintes"|module_active}}{{mb_include module=astreintes template=inc_button_astreinte_day date=$date}}{{/if}}
   </td>
 </tr>
   <tr>

@@ -83,17 +83,17 @@ function submitAdmission(oForm, bPassCheck) {
 var ExtRefManager = {
   sejour_id : null,
   patient_id: null,
-  
+
   submitIPPForm: function(patient_id) {
     ExtRefManager.patient_id = patient_id;
     var oForm = document.forms["editIPP" + patient_id];
     return onSubmitFormAjax(oForm, {onComplete: ExtRefManager.reloadIPPForm});
   },
-  
+
   reloadIPPForm: function() {
     reloadAdmission();
   },
-  
+
   submitNumdosForm: function(sejour_id) {
     ExtRefManager.sejour_id = sejour_id;
     var oForm = document.forms["editNumdos" + this.sejour_id];
@@ -125,13 +125,13 @@ SejourHprimSelector.doSet = function(){
     ExtRefManager.submitIPPForm(oFormIPP.object_id.value);
   }
   //submitAdmission(document["editAdmFrm"+oFormSejour.object_id.value]);
-}  
+}
 
 Main.add(function () {
   var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_presents");
   totalUpdater.addParam("date", "{{$date}}");
   Admissions.totalUpdater = totalUpdater.periodicalUpdate('allPresents', { frequency: 120 });
-  
+
   var listUpdater = new Url("dPadmissions", "httpreq_vw_presents");
   listUpdater.addParam("date", "{{$date}}");
   Admissions.listUpdater = listUpdater.periodicalUpdate('listPresents', {
@@ -152,6 +152,7 @@ Main.add(function () {
 <tr>
   <td>
     <a href="#legend" onclick="Admissions.showLegend()" class="button search">Légende</a>
+    {{if "astreintes"|module_active}}{{mb_include module=astreintes template=inc_button_astreinte_day date=$date}}{{/if}}
   </td>
   <td style="float: right">
     <form action="?" name="selType" method="get">

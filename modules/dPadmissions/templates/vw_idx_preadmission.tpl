@@ -25,7 +25,7 @@ Main.add(function () {
   var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_preadmissions");
   totalUpdater.addParam("date", "{{$date}}");
   totalUpdater.periodicalUpdate('allPreAdmissions', { frequency: 120 });
-  
+
   var listUpdater = new Url("dPadmissions", "httpreq_vw_preadmissions");
   listUpdater.addParam("date", "{{$date}}");
   listUpdater.periodicalUpdate('listPreAdmissions', { frequency: 120 });
@@ -37,6 +37,7 @@ Main.add(function () {
   <tr>
     <td colspan="2">
       <a href="#legend" onclick="Admissions.showLegend()" class="button search">Légende</a>
+      {{if "astreintes"|module_active}}{{mb_include module=astreintes template=inc_button_astreinte_day date=$date}}{{/if}}
     </td>
   </tr>
   <tr>

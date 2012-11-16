@@ -69,7 +69,7 @@ function reloadSorties(filterFunction) {
 }
 
 function submitSortie(oForm) {
-  
+
   if (!Object.isUndefined(oForm.elements["_sejours_enfants_ids"]) && $V(oForm._modifier_sortie) == 1) {
     sejours_enfants_ids = $V(oForm._sejours_enfants_ids);
     sejours_enfants_ids.split(",").each(function(elt) {
@@ -80,11 +80,11 @@ function submitSortie(oForm) {
         }
       }
     });
-    
+
     sejours_enfants_ids = undefined;
     return onSubmitFormAjax(oForm, { onComplete : reloadSorties });
   }
-  
+
   if (!Object.isUndefined(sejours_enfants_ids) && sejours_enfants_ids.indexOf($V(oForm.sejour_id)) != -1) {
     return onSubmitFormAjax(oForm);
   }
@@ -118,14 +118,14 @@ function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, 
       return false;
     }
   }
-  submitSortie(oForm);    
+  submitSortie(oForm);
 }
 
 Main.add(function () {
   var totalUpdater = new Url("dPadmissions", "httpreq_vw_all_sorties");
   totalUpdater.addParam("date", "{{$date}}");
   Admissions.totalUpdater = totalUpdater.periodicalUpdate('allSorties', { frequency: 120 });
-  
+
   var listUpdater = new Url("dPadmissions", "httpreq_vw_sorties");
   listUpdater.addParam("selSortis", "{{$selSortis}}");
   listUpdater.addParam("date", "{{$date}}");
@@ -148,6 +148,7 @@ Main.add(function () {
 <tr>
   <td>
     <a href="#legend" onclick="Admissions.showLegend()" class="button search">Légende</a>
+    {{if "astreintes"|module_active}}{{mb_include module=astreintes template=inc_button_astreinte_day date=$date}}{{/if}}
   </td>
   <td style="float: right">
     <form action="?" name="selType" method="get">
