@@ -1705,7 +1705,10 @@ class CSetupdPcabinet extends CSetup {
               ADD `num_reference` VARCHAR (27);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.82";
+    $this->makeRevision("1.82");
+    $this->addPrefQuery("order_mode_grille", "");
+    
+    $this->mod_version = "1.83";
   }
 }
 ?>

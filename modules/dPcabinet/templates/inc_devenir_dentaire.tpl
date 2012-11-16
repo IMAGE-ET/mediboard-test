@@ -76,21 +76,6 @@
     $V(form.rank, parseInt($V(form.rank))+increment);
   }
 </script>
-<style type="text/css">
-  .hr_rank {
-    border: none;
-    background: #ccc;
-    height: 8px;
-    margin: 0;
-  }
-  .rank-selected {
-    border: none;
-    background: #ccc;
-    height: 8px;
-    margin: 0;
-    outline: 3px #f88 solid;
-  }
-</style>
 
 <!-- Formulaire de changement d'ordre d'acte dentaire -->
 <form name="reorderActe" action="?" method="post">

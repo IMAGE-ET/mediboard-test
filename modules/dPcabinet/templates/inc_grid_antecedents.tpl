@@ -25,7 +25,7 @@ function addAntecedent(event, rques, type, appareil, input) {
 }
 
 var oFormAntFrmGrid;
- 
+
 Main.add(function () {
   Control.Tabs.create('tab-antecedents', false);
   
@@ -35,9 +35,79 @@ Main.add(function () {
   if(oFormAnt._sejour_id){
     $V(oFormAntFrmGrid._sejour_id,  oFormAnt._sejour_id.value);
   }
-});
+  
+  $$(".droppable").each(function(li) {
+    Droppables.add(li, {
+      onDrop: function(from, to, event) {
+        var parent = from.up("ul");
+        if (parent != to.up("ul") || !to) {
+          return;
+        }
+        // S'ils sont côte à côte, juste insérer le premier après le deuxième
+        if (from.next("li") == to) {
+          from = from.remove();
+          to.insert({after: from});
+          return;
+        }
+        if (from.previous("li") == to) {
+          from = from.remove();
+          to.insert({before: from});
+          return;
+        }
+        
+        // Sinon on sauvegarde la position et on insère
+        // Cas du dernier élément
+        var next = from.next("li");
+        if (next) {
+          from = from.remove();
+          to.insert({before: from});
+          to = to.remove();
+          next.insert({before: to});
+          return;
+        }
+        
+        var previous = from.previous("li")
+        if (previous) {
+          from = from.remove();
+          to.insert({after: from});
+          to = to.remove();
+          previous.insert({after: to});
+          return;
+        } 
+      },
+      accept: 'draggable',
+      hoverclass: "atcd_hover",
+    });
+  });
+  
+  $$(".draggable").each(function(li) {
+    new Draggable(li, {
+      onEnd: function() {
+        var form = getForm("editPref");
+        var pref_tabs ={};
+        
+        $("tab-antecedents").select("a").each(function(a) {
+          
+          var appareils = $(a.href.split("#")[1]).select("a").invoke("get", "appareil").join("|");
+          var type = a.get("type");
+          pref_tabs[type] = appareils;
+        });
+        
+        $V(form.elements["pref[order_mode_grille]"], Object.toJSON(pref_tabs));
+        onSubmitFormAjax(form);
+      },
+      revert: true });
+    });
+  });
 
 </script>
+
+<form name="editPref" method="post">
+  <input type="hidden" name="m" value="admin" />
+  <input type="hidden" name="dosql" value="do_preference_aed" />
+  <input type="hidden" name="user_id" value="{{$user_id}}" />
+  <input type="hidden" name="pref[order_mode_grille]" value="{{$order_mode_grille|@json}}" />
+</form>
 
 <div class="modal" id="complete_atcd" style="display: none; width: 400px; height: 180px;">
  <table class="form">
@@ -91,8 +161,8 @@ Main.add(function () {
     <td style="vertical-align: top;" class="narrow">
       <ul id="tab-antecedents" class="control_tabs_vertical">
       {{foreach from=$antecedent->_count_rques_aides item=count key=type}}
-        <li>
-          <a href="#antecedents_{{$type}}" style="white-space: nowrap;" {{if !$count}}class="empty"{{/if}}>
+        <li class="draggable droppable">
+          <a href="#antecedents_{{$type}}" style="white-space: nowrap;" class="{{if !$count}}empty{{/if}}" data-type="{{$type}}">
             {{tr}}CAntecedent.type.{{$type}}{{/tr}}
             {{if $count}}
             <small>({{$count}})</small>
@@ -118,7 +188,11 @@ Main.add(function () {
               
               <ul id="tab-{{$type}}" class="control_tabs">
                 {{foreach from=$aides_antecedent.$type item=_aides key=appareil}}
-                  <li><a href="#{{$type}}-{{$appareil}}">{{tr}}CAntecedent.appareil.{{$appareil}}{{/tr}} <small>({{$_aides|@count}})</small></a></li>
+                  <li class="draggable droppable">
+                    <a href="#{{$type}}-{{$appareil}}" data-appareil="{{$appareil}}">
+                      {{tr}}CAntecedent.appareil.{{$appareil}}{{/tr}} <small>({{$_aides|@count}})</small>
+                    </a>
+                  </li>
                 {{/foreach}}
               </ul>
             </td>  

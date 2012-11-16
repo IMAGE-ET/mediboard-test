@@ -29,6 +29,7 @@ CPreferences::$modules["dPcabinet"] = array (
   "choosePatientAfterDate",
   "viewFunctionPrats",
   "empty_form_atcd",
-  "new_semainier"
+  "new_semainier",
+  "order_mode_grille"
 );
 ?>
