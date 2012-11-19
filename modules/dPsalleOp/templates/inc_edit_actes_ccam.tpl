@@ -107,6 +107,7 @@
                 <div style="float: right;">
                   {{if !$acte->_id && (!$conf.dPsalleOp.CActeCCAM.signature ||
                      ($conf.dPsalleOp.CActeCCAM.signature &&
+                       $subject instanceof COperation &&
                      ( ($_activite->numero == 1 && !$subject->cloture_activite_1) ||
                        ($_activite->numero == 4 && !$subject->cloture_activite_4) )))}}
                   <button class="add" type="button" onclick="Event.stop(event);
