@@ -38,23 +38,28 @@
           var form = getForm("editCorrespondant");
           return queryString+"&where[relation]="+$V(form.relation);
         },
+        updateElement: function(selectedElement) {
+          this.afterUpdateElement(form.nom, selectedElement)
+        },
         afterUpdateElement: function(field, selected){
           var form = field.form;
           var selected = selected.select(".view")[0];
-          $V(form.nom, selected.get("nom"));
-          $V(form.nom_jeune_fille, selected.get("nom_jeune_fille"));
-          $V(form.prenom, selected.get("prenom"));
-          $V(form.adresse, selected.get("adresse"));
-          $V(form.cp, selected.get("cp"));
-          $V(form.ville, selected.get("ville"));
-          $V(form.tel, selected.get("tel"));
-          $V(form.mob, selected.get("mob"));
-          $V(form.fax, selected.get("fax"));
-          $V(form.urssaf, selected.get("urssaf"));
-          $V(form.ean, selected.get("ean"));
-          $V(form.parente, selected.get("parente"));
-          $V(form.email, selected.get("email"));
-          $V(form.remarques, selected.get("remarques"));
+          if (selected.innerHTML) {
+            $V(form.nom, selected.get("nom"));
+            $V(form.nom_jeune_fille, selected.get("nom_jeune_fille"));
+            $V(form.prenom, selected.get("prenom"));
+            $V(form.adresse, selected.get("adresse"));
+            $V(form.cp, selected.get("cp"));
+            $V(form.ville, selected.get("ville"));
+            $V(form.tel, selected.get("tel"));
+            $V(form.mob, selected.get("mob"));
+            $V(form.fax, selected.get("fax"));
+            $V(form.urssaf, selected.get("urssaf"));
+            $V(form.ean, selected.get("ean"));
+            $V(form.parente, selected.get("parente"));
+            $V(form.email, selected.get("email"));
+            $V(form.remarques, selected.get("remarques"));
+          }
         }
       });
     {{/if}}
