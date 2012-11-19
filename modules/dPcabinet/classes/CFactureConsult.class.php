@@ -516,10 +516,10 @@ class CFactureConsult extends CMbObject {
         $montant_prem = 0;
       }
       if ($total_tarmed) {
-         $this->_montant_factures_caisse[] = sprintf("%.2f",$montant_prem - $this->remise);
+         $this->_montant_factures_caisse[0] = sprintf("%.2f",$montant_prem - $this->remise);
       }
       if ($total_caisse >0) {
-        $this->_montant_factures_caisse[] = $total_caisse;
+        $this->_montant_factures_caisse[1] = $total_caisse;
       }
       
       $this->_montant_sans_remise = round($montant_prem + $total_caisse, 1);
