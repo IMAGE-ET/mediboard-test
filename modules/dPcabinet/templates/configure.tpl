@@ -20,7 +20,7 @@ Main.add(function () {
   <li><a href="#CConsultAnesth">{{tr}}CConsultAnesth{{/tr}}</a></li>
   <li><a href="#CPlageconsult">{{tr}}CPlageconsult{{/tr}}</a></li>
   <li><a href="#CPrescription">{{tr}}CPrescription{{/tr}}</a></li>
-  {{if $user->_user_username == "admin"}}
+  {{if $user->user_username == "admin"}}
     <li><a href="#compta">{{tr}}compta-config{{/tr}}</a></li>
   {{/if}}
   <li><a href="#tag">{{tr}}tag-config{{/tr}}</a></li>
@@ -55,7 +55,7 @@ Main.add(function () {
   {{mb_include template=CPrescription_config}}
 </div>
 
-{{if $user->_user_username == "admin"}}
+{{if $user->user_username == "admin"}}
 <div id="compta" style="display: none;">
  {{mb_include template=inc_config_compta}}
 </div>

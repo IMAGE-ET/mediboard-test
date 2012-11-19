@@ -23,7 +23,11 @@ class CHPREvent {
   var $type_liaison  = null;
   var $version       = null;
   
+  /**
+   * @var CHPrim21Message
+   */
   var $message       = null;
+  
   var $msg_hpr       = null;
 
   var $msg_codes     = array();

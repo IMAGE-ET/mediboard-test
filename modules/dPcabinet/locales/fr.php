@@ -1358,6 +1358,7 @@ $locales['CTechniqueComp-technique-desc'] = 'Ajouter une technique complementair
 $locales['Period.weekly'] = 'Semainier';
 $locales['RDV-config'] = 'Prise de RDV';
 $locales['Reglement'] = 'Règlement';
+$locales['compta-config'] = 'Comptabilité';
 $locales['config-dPcabinet-CConsultAnesth-feuille_anesthesie'] = 'Modèle de la feuille d\'anesthésie';
 $locales['config-dPcabinet-CConsultAnesth-feuille_anesthesie-desc'] = 'Modèle de la feuille d\'anesthésie à appliquer';
 $locales['config-dPcabinet-CConsultAnesth-feuille_anesthesie-print_fiche'] = 'Modèle standard';

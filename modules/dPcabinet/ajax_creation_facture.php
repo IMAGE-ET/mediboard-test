@@ -28,7 +28,7 @@ $where["cloture"]       = "IS NULL";
 if ($facture->loadObject($where)) {
   $facture->loadRefsConsults();
   if ($du_patient && !$ajout_consult) {
-    $somme = 0;
+    $somme  = 0;
     $somme2 = 0;
     foreach ($facture->_ref_consults as $consultation) {
       $somme  += $consultation->du_patient;
@@ -37,7 +37,7 @@ if ($facture->loadObject($where)) {
     
     $facture->du_patient = $somme + $du_patient;
     $facture->du_tiers   = $somme2 + $du_tiers;
-    $facture->tarif = null;
+    $facture->tarif      = null;
     $facture->store();
   }
   elseif ($du_patient && $ajout_consult) {
@@ -46,22 +46,24 @@ if ($facture->loadObject($where)) {
     $consult->valide = 0;
     $consult->store();
     
-    $acte_tarmed = new CActeTarmed();
-    $acte_tarmed->object_id = $consult_id;
-    $acte_tarmed->object_class = 'CConsultation';
-    $acte_tarmed->executant_id = $chirsel_id;
-    if (CValue::get("_libelle") && !CValue::get("code")) {
-      $acte_tarmed->libelle = CValue::get("_libelle");
+    if (CModule::getActive("tarmed")) {
+      $acte_tarmed = new CActeTarmed();
+      $acte_tarmed->object_id    = $consult_id;
+      $acte_tarmed->object_class = 'CConsultation';
+      $acte_tarmed->executant_id = $chirsel_id;
+      if (CValue::get("_libelle") && !CValue::get("code")) {
+        $acte_tarmed->libelle = CValue::get("_libelle");
+      }
+      $acte_tarmed->date = $date;
+      $acte_tarmed->code = CValue::get("code");
+      $acte_tarmed->montant_base = CValue::get("montant_base");
+      $acte_tarmed->quantite = CValue::get("quantite");
+      $acte_tarmed->store();
     }
-    $acte_tarmed->date = $date;
-    $acte_tarmed->code = CValue::get("code");
-    $acte_tarmed->montant_base = CValue::get("montant_base");
-    $acte_tarmed->quantite = CValue::get("quantite");
-    $acte_tarmed->store();
     
     $facture->du_patient = $facture->du_patient + $du_patient;
     $facture->du_tiers   = $facture->du_tiers   + $du_tiers  ;
-    $facture->tarif = null;
+    $facture->tarif      = null;
     $facture->store();
     
     $consult->valide = 1;
@@ -71,14 +73,14 @@ if ($facture->loadObject($where)) {
 
 // Sinon on la crée
 else {
-  $facture->patient_id    = $patient_id;
-  $facture->praticien_id  = $chirsel_id;
-  $facture->du_patient    = $du_patient;
-  $facture->du_tiers      = $du_tiers;
-  $facture->type_facture  = $type_facture;
-  $facture->ouverture     = mbDate();
+  $facture->patient_id   = $patient_id;
+  $facture->praticien_id = $chirsel_id;
+  $facture->du_patient   = $du_patient;
+  $facture->du_tiers     = $du_tiers;
+  $facture->type_facture = $type_facture;
+  $facture->ouverture    = mbDate();
   if(CAppUI::conf("ref_pays") == 1){
-    $facture->cloture       = mbDate();
+    $facture->cloture    = mbDate();
   }
 }
 

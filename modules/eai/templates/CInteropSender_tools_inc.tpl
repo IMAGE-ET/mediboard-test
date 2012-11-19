@@ -52,12 +52,12 @@
           <li>
             <a href="#configs_formats_{{$actor->_guid}}">{{tr}}{{$actor->_class}}_configs-formats{{/tr}}</a></li>
           <li>
-            <a href="#tags_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class}}_tags{{/tr}}</a></li>   
-          <li>
-            <a href="#actions_{{$actor->_guid}}">{{tr}}{{$actor->_class}}_actions{{/tr}}</a></li>
+            <a href="#tags_{{$actor->_guid}}">{{tr}}{{$actor->_parent_class}}_tags{{/tr}}</a></li>  
           <li>
             <a href="#linked_objects_{{$actor->_guid}}">{{tr}}CObjectToInteropSender{{/tr}}</a>
-          </li>
+          </li> 
+          <li>
+            <a href="#actions_{{$actor->_guid}}">{{tr}}{{$actor->_class}}_actions{{/tr}}</a></li>
         </ul>
         
         <hr class="control_tabs" />
@@ -72,11 +72,11 @@
         
         <div id="tags_{{$actor->_guid}}" style="display:none"></div>
         
+        <div id="linked_objects_{{$actor->_guid}}" style="display: none"></div>
+        
         <div id="actions_{{$actor->_guid}}" style="display:none">
           {{mb_include module=$mod_name template="`$actor->_class`_actions_inc"}}
         </div>
-
-        <div id="linked_objects_{{$actor->_guid}}" style="display: none"></div>
       </td>
     </tr>
   </table>

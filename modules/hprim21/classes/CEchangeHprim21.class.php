@@ -89,6 +89,37 @@ class CEchangeHprim21 extends CExchangeTabular {
   /**
    * @return CHPrim21Message
    */
+  function getMessage() {
+    if ($this->_message !== null) {
+      $hpr_message = $this->parseMessage($this->_message);
+      
+      $this->_doc_errors_msg   = !$hpr_message->isOK(CHL7v2Error::E_ERROR);
+      $this->_doc_warnings_msg = !$hpr_message->isOK(CHL7v2Error::E_WARNING);
+      
+      $this->_message_object   = $hpr_message;
+
+      return $hpr_message;
+    }
+  }
+  
+  /**
+   * @return CHPrim21Message
+   */
+  function getACK() {
+    if ($this->_acquittement !== null) {
+      $hpr_ack = new CHPrim21Message();
+      $hpr_ack->parse($this->_acquittement);
+      
+      $this->_doc_errors_ack   = !$hpr_ack->isOK(CHL7v2Error::E_ERROR);
+      $this->_doc_warnings_ack = !$hpr_ack->isOK(CHL7v2Error::E_WARNING);
+
+      return $hpr_ack;
+    }
+  }
+  
+  /**
+   * @return CHPrim21Message
+   */
   function parseMessage($string, $parse_body = true, $actor = null) {
     $hpr_message = new CHPrim21Message();
     
@@ -106,13 +137,13 @@ class CEchangeHprim21 extends CExchangeTabular {
     $this->group_id        = $data_format->group_id;
     $this->sender_id       = $data_format->sender_id;
     $this->sender_class    = $data_format->sender_class;
-    $this->version         = $event->message->extension ? $event->message->extension : $event->message->version;
-   /* $this->type            = $event->type;
-    $this->sous_type       = $event->t;
-    $this->_message        = $data_format->_message;*/
+    $this->version         = $event->message->version;
+    $this->type            = $event->type_liaison;
+    $this->sous_type       = $event->type;
+    $this->_message        = $data_format->_message;
   }
   
-  function populateErrorExchange(CHL7Acknowledgment $ack = null, CHL7Event $event = null) {
+  function populateErrorExchange(CHPrim21Acknowledgment $ack = null, CHL7Event $event = null) {
     /*if ($ack) {
       $msgAck = $ack->event_ack->msg_hl7;
       $this->_acquittement       = $ack->event_ack->msg_hl7;;
@@ -126,6 +157,37 @@ class CEchangeHprim21 extends CExchangeTabular {
     }*/
 
     $this->store();
+  }
+  
+  function populateExchangeACK(CHPrim21Acknowledgment $ack, $object) {
+    $msgAck = $ack->event_err->msg_hpr;
+
+    $this->statut_acquittement = $ack->ack_code;
+    $this->acquittement_valide = $ack->event_err->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
+
+    $this->_acquittement = $msgAck;
+    $this->date_echange  = mbDateTime();
+    $this->store();
+    
+    return $msgAck;
+  }
+  
+  function setAckI(CHPrim21Acknowledgment $ack, $errors, CMbObject $object = null) {
+    $ack->generateAcknowledgment("I", $errors, $object);
+        
+    return $this->populateExchangeACK($ack, $object);
+  }
+  
+  function setAckP(CHPrim21Acknowledgment $ack, $errors, CMbObject $object = null) {
+    $ack->generateAcknowledgment("P", $errors, $object);
+        
+    return $this->populateExchangeACK($ack, $object);
+  }
+  
+  function setAckT(CHPrim21Acknowledgment $ack, $mb_error_codes, $comments = null, CMbObject $mbObject = null) {
+    //$ack->generateAcknowledgment("T", $mb_error_codes, "0", "T", $comments, $object);
+
+    return $this->populateExchangeACK($ack, $object);               
   }
 }
 ?>

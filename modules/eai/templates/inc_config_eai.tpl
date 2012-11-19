@@ -21,6 +21,8 @@
     {{mb_include module=system template=inc_config_str var=exchange_format_delayed numeric=true}}
     
     {{mb_include module=system template=inc_config_str var=max_files_to_process numeric=true}}
+    
+    {{mb_include module=system template=inc_config_str var=max_reprocess_retries numeric=true}}
 
     <tr>
       <td class="button" colspan="10">

@@ -161,7 +161,7 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
     $specs = $this->getSpecs();
 
     /**
-     * Premier segment/groupe dans le fichier de spec venant de Mirth
+     * Premier segment/groupe dans le fichier de spec
      * 
      * @var CHL7v2SimpleXMLElement
      */
@@ -176,13 +176,14 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
     
     $lines_count = count($this->lines);
     
-    $n = 500; // pour eviter les boucles infinies !
+    $n = 100000; // pour eviter les boucles infinies !
 
     while ($n-- && trim($this->getCurrentLine())/* && $current_node && $this->current_line < $lines_count*/) {
       if (!$current_node && $this->current_line <= count($this->children)) {
         $this->error(CHL7v2Exception::UNEXPECTED_SEGMENT, $this->getCurrentLine());
         break;
       }
+        
       switch($current_node->getName()) {
         // SEGMENT //
         case "segment":
@@ -329,8 +330,8 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
     $error->code = $code;
     $error->data = $data;
     $error->level = $level;
-    
-    $this->errors[] = $error;
+
+   $this->errors[] = $error;
   }
   
   function isOK($min_level = 0) {

@@ -77,7 +77,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     if (!$this->name) {
       return;
     }
-    
+
     $specs = $this->getSpecs();
 
     $_segment_specs = $specs->getItems();
@@ -198,7 +198,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     return $str;
   }
   
-  function build(CHL7Event $event, $name = null) {
+  function build(/*CHL7Event*/ $event, $name = null) {
     if (!$event->msg_codes) {
       throw new CHL7v2Exception(CHL7v2Exception::MSG_CODE_MISSING);
     }

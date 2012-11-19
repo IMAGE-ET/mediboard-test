@@ -58,7 +58,6 @@ class COperatorHPR extends CEAIOperator {
       }
       
       // Acquittement d'erreur d'un document XML recu non valide
-      
       $exchange_hpr->populateExchange($data_format, $evt);
       $exchange_hpr->message_valide = 1;
 
@@ -80,12 +79,12 @@ class COperatorHPR extends CEAIOperator {
       // Chargement des configs de l'expéditeur
       $sender = $exchange_hpr->_ref_sender;
       $sender->getConfigs($data_format);
-      
+
       $dom_evt->_ref_exchange_hpr = $exchange_hpr;
       $ack->_ref_exchange_hpr     = $exchange_hpr;
 
       // Message ADM / REG 
-      //$msgAck = self::handleEvent($data, $exchange_hpr, $dom_evt, $ack);     
+      $msgAck = self::handleEvent($data, $exchange_hpr, $dom_evt, $ack);     
     } catch(Exception $e) {
       
     }
@@ -93,12 +92,12 @@ class COperatorHPR extends CEAIOperator {
     return $msgAck;
   }
   
-  static function handleEvent($data = array(), CEchangeHprim21 $exchange_hpr, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack) {
-   /* $newPatient = new CPatient();
-    
+  static function handleEvent($data = array(), CEchangeHprim21 $exchange_hpr, CHPrim21MessageXML $dom_evt, CHPrim21Acknowledgment $ack) {
     $data = array_merge($data, $dom_evt->getContentNodes());
-
-    return $dom_evt->handle($ack, $newPatient, $data);*/
+    
+    $object = new CSejour();
+    
+    return $dom_evt->handle($ack, $object, $data);
   }
 }
 

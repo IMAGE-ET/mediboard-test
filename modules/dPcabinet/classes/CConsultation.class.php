@@ -1675,6 +1675,35 @@ TESTS A EFFECTUER
     
     return str_replace('$g', $group_id, $tag_consultation);
   }
+  
+  function createFactureConsult($du_patient = null, $du_tiers = null, $type_facture = "maladie") {
+    $facture               = new CFactureConsult();
+    $facture->patient_id   = $this->patient_id;
+    $facture->praticien_id = $this->_praticien_id;
+    $facture->du_patient   = $du_patient;
+    $facture->du_tiers     = $du_tiers;
+    $facture->type_facture = $type_facture;
+    $facture->ouverture    = mbDate();
+    $facture->cloture      = mbDate();
+    
+    $facture->patient_date_reglement = $this->patient_date_reglement;
+    if (!$du_patient) {
+      $facture->patient_date_reglement = mbDate();
+    };
+    
+    $facture->patient_date_reglement = $this->tiers_date_reglement;
+    if (!$du_tiers) {
+      $facture->tiers_date_reglement = mbDate();
+    };    
+    
+    $facture->store();
+    
+    // Ajout de l'id de la facture dans la consultation
+    $this->factureconsult_id = $facture->_id;
+    $this->store();
+    
+    return $facture;
+  }
 }
 
 ?>

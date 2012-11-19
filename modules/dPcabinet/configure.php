@@ -19,9 +19,8 @@ $smarty->assign("hours"     , $hours);
 $smarty->assign("date"      , mbDate());
 $smarty->assign("intervals" , $intervals);
 
-$mediuser = CMediusers::get();
-$smarty->assign("anesths" , $mediuser->loadAnesthesistes());
-$smarty->assign("user"    , $mediuser);
+$smarty->assign("anesths" , CMediusers::get()->loadAnesthesistes());
+$smarty->assign("user"    , CUser::get());
 
 $smarty->display("configure.tpl");
 ?>

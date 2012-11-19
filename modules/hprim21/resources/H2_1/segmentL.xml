@@ -3,7 +3,7 @@
     <name>L</name>
     <description>Message Footer</description>
     <elements>
-        <field minOccurs="1" maxOccurs="0" length="1">
+        <field minOccurs="0" maxOccurs="0" length="1">
             <name>L.1</name>
             <description>Segment Row</description>
             <datatype>NM</datatype>

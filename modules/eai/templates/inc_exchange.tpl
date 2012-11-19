@@ -112,6 +112,8 @@
   <td class="{{if $object->sous_type == 'inconnu'}}error{{/if}} narrow">{{mb_value object=$object field="sous_type"}}</td>
   {{if $object instanceof CExchangeIHE}}
     <td class="narrow">{{mb_value object=$object field="code"}}</td>
+  {{/if}}
+  {{if $object instanceof CExchangeIHE || $object instanceof CEchangeHprim21}}
     <td class="narrow">{{mb_value object=$object field="version"}}</td>
   {{/if}}
   <td class="{{if $object->date_echange}}ok{{else}}warning{{/if}} narrow">

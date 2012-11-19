@@ -16,4 +16,5 @@ $dPconfig["hprim21"] = array (
     "fileextension" => "hpr",
   ),
   "mandatory_num_dos_ipp_adm" => "1",
+  "tag" => ""
 );
