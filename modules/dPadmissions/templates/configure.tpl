@@ -12,6 +12,23 @@
   {{mb_include module=system template=inc_config_bool var=show_dh}}
   {{mb_include module=system template=inc_config_bool var=show_prestations_sorties}}
   {{mb_include module=system template=inc_config_bool var=use_recuse}}
+  <tr>
+    {{assign var="var" value="hour_matin_soir"}}
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td class="greedyPane">
+      <select class="num" name="{{$m}}[{{$var}}]">
+      {{foreach from=0|range:24 item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $conf.$m.$var}} selected="selected" {{/if}}>
+          {{$_hour|string_format:"%02d"}}
+        </option>
+      {{/foreach}}
+      </select>
+    </td>
+  </tr>
   
   {{mb_include module=system template=inc_config_bool var=show_deficience}}
 

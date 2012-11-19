@@ -62,6 +62,8 @@ function reloadSorties(filterFunction) {
   url.addParam("type"      , $V(oForm._type_admission));
   url.addParam("service_id", [$V(oForm.service_id)].flatten().join(","));
   url.addParam("prat_id"   , $V(oForm.prat_id));
+  url.addParam("period"    , $V(oForm.period));
+  
   if(!Object.isUndefined(filterFunction)){
     url.addParam("filterFunction" , filterFunction);
   }
@@ -152,6 +154,11 @@ Main.add(function () {
   </td>
   <td style="float: right">
     <form action="?" name="selType" method="get">
+      <select name="period" onchange="reloadSorties();">
+        <option value=""      {{if !$period          }}selected{{/if}}>&mdash; Toute la journée</option>
+        <option value="matin" {{if $period == "matin"}}selected{{/if}}>Matin</option>
+        <option value="soir"  {{if $period == "soir" }}selected{{/if}}>Soir</option>
+      </select>
       {{mb_field object=$sejour field="_type_admission" emptyLabel="CSejour.all" onchange="reloadFullSorties();"}}
       <select name="service_id" onchange="reloadFullSorties();" {{if $sejour->service_id|@count > 1}}size="5" multiple="true"{{/if}}>
         <option value="">&mdash; Tous les services</option>

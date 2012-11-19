@@ -20,6 +20,12 @@ Main.add(function() {
 
 {{mb_include module=admissions template=inc_refresh_page_message}}
 
+{{if $period}}
+  <div class="small-info">
+    Vue partielle limitée au <strong>{{$period}}</strong>. Veuillez changer le filtre pour afficher toute la journée.
+  </div>
+{{/if}}
+
 <table class="tbl" id="admissions">
   <tr>
     <th class="title" colspan="10">

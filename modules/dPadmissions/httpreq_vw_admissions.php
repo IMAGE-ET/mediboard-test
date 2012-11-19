@@ -21,6 +21,7 @@ $order_way      = CValue::getOrSession("order_way", "ASC");
 $date           = CValue::getOrSession("date", mbDate());
 $next           = mbDate("+1 DAY", $date);
 $filterFunction = CValue::getOrSession("filterFunction");
+$period         = CValue::getOrSession("period");
 
 $service_id = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
@@ -33,6 +34,18 @@ $demain = mbDate("+ 1 day", $date);
 
 $date_min = mbDateTime("00:00:00", $date);
 $date_max = mbDateTime("23:59:59", $date);
+
+if ($period) {
+  $hour = CAppUI::conf("dPadmissions hour_matin_soir");
+  // Matin
+  if ($period == "matin") {
+    $date_max = mbDateTime("$hour:00:00", $date);
+  }
+  // Soir
+  else {
+    $date_min = mbDateTime("$hour:00:00", $date);
+  }
+}
 
 // Entrées de la journée
 $sejour = new CSejour;
@@ -179,7 +192,6 @@ $smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
 $smarty->assign("functions"     , $functions);
 $smarty->assign("filterFunction", $filterFunction);
+$smarty->assign("period"        , $period);
 
 $smarty->display("inc_vw_admissions.tpl");
-
-?>

@@ -19,6 +19,7 @@ $order_way      = CValue::getOrSession("order_way", "ASC");
 $date           = CValue::getOrSession("date", mbDate());
 $next           = mbDate("+1 DAY", $date);
 $filterFunction = CValue::getOrSession("filterFunction");
+$period         = CValue::getOrSession("period");
 
 $service_id = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
@@ -33,6 +34,19 @@ $date_min = mbDateTime("00:00:00", $date);
 $date_max = mbDateTime("23:59:59", $date);
 //$date_min = "2012-09-23 00:00:00";
 //$date_max = "2012-09-25 23:59:59";
+
+if ($period) {
+  $hour = CAppUI::conf("dPadmissions hour_matin_soir");
+  // Matin
+  if ($period == "matin") {
+    $date_max = mbDateTime("$hour:00:00", $date);
+  }
+  // Soir
+  else {
+    $date_min = mbDateTime("$hour:00:00", $date);
+  }
+}
+
 
 // Sorties de la journée
 $sejour = new CSejour;
@@ -101,7 +115,7 @@ $maternite_active = CModule::getActive("maternite");
 foreach ($sejours as $sejour_id => $_sejour) {
   // Filtre sur la fonction du praticien
   $praticien = $_sejour->loadRefPraticien(1);
-	if ($filterFunction && $filterFunction != $praticien->function_id) {
+  if ($filterFunction && $filterFunction != $praticien->function_id) {
     unset($sejours[$sejour_id]);
     continue;
   }
@@ -176,7 +190,5 @@ $smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
 $smarty->assign("functions"     , $functions);
 $smarty->assign("filterFunction", $filterFunction);
-
+$smarty->assign("period"        , $period);
 $smarty->display("inc_vw_sorties.tpl");
-
-?>

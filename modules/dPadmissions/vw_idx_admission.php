@@ -12,14 +12,15 @@ CCanDo::checkRead();
 
 // Filtres d'affichage
 
-$selAdmis  = CValue::getOrSession("selAdmis", "0");
-$selSaisis = CValue::getOrSession("selSaisis", "0");
-$order_way = CValue::getOrSession("order_way", "ASC");
-$order_col = CValue::getOrSession("order_col", "patient_id");
-$date      = CValue::getOrSession("date", mbDate());
+$selAdmis   = CValue::getOrSession("selAdmis", "0");
+$selSaisis  = CValue::getOrSession("selSaisis", "0");
+$order_way  = CValue::getOrSession("order_way", "ASC");
+$order_col  = CValue::getOrSession("order_col", "patient_id");
+$date       = CValue::getOrSession("date", mbDate());
 $type       = CValue::getOrSession("type");
 $service_id = CValue::getOrSession("service_id");
 $prat_id    = CValue::getOrSession("prat_id");
+$period     = CValue::getOrSession("period");
 
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain = mbDateTime("00:00:00","+ 1 day");
@@ -56,7 +57,6 @@ $smarty->assign("services"     , $services);
 $smarty->assign("prats"        , $prats);
 $smarty->assign("hier"         , $hier);
 $smarty->assign("demain"       , $demain);
+$smarty->assign("period"       , $period);
 
 $smarty->display("vw_idx_admission.tpl");
-
-?>
