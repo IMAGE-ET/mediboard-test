@@ -229,7 +229,7 @@ foreach ($factures as $facture) {
           $pdf->setFont("vera", '', 8);
         
           if ($acte->_ref_tarmed->tp_al == 0.00 && $acte->_ref_tarmed->tp_tl == 0.00) {
-            if ($acte->code_ref && (preg_match("Réduction", $acte->libelle) || preg_match("Majoration", $acte->libelle)) ) {
+            if ($acte->code_ref && (preg_match("/Réduction/", $acte->libelle) || preg_match("Majoration", $acte->libelle)) ) {
               $acte_ref = null;
               foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
                 if ($acte_tarmed->code == $acte->code_ref) {
@@ -268,7 +268,7 @@ foreach ($factures as $facture) {
                 $valeur = $acte->quantite;
               }
               
-              if ($acte->code_ref && (preg_match("Réduction", $acte->libelle) || preg_match("Majoration", $acte->libelle))) {
+              if ($acte->code_ref && (preg_match("/Réduction/", $acte->libelle) || preg_match("/Majoration/", $acte->libelle))) {
                 $acte_ref = null;
                 foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
                   if ($acte_tarmed->code == $acte->code_ref) {
@@ -312,7 +312,12 @@ foreach ($factures as $facture) {
           }
           $this_pt = ($acte->_ref_tarmed->tp_tl * $acte->_ref_tarmed->f_tl * $acte->quantite * $facture->_coeff);
           $this_pm = ($acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al * $acte->quantite * $facture->_coeff);
-          if ($acte->montant_base != ($this_pt + $this_pm)/$facture->_coeff) {
+          if (round($acte->montant_base, 2) != round(($this_pt + $this_pm)/$facture->_coeff, 2)) {
+          mbTrace($acte->montant_base, "Montant base", true);
+          mbTrace($this_pt, "PT", true);
+          mbTrace($this_pm, "PM", true);
+          mbTrace($facture->_coeff, "coeff", true);
+          mbTrace(($this_pt + $this_pm)/$facture->_coeff, "verif", true);
             $this_pt = 0;
             $this_pm = $acte->montant_base * $acte->quantite *$facture->_coeff;
           }
