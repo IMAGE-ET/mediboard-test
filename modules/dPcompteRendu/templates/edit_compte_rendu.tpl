@@ -168,6 +168,17 @@ function openWindowMail() {
   {{/if}}
 }
 
+function openWindowApicrypt() {
+  {{if $exchange_source->_id}}
+    var url = new Url("apicrypt", "ajax_view_apicrypt_mail");
+    url.addParam("object_id", '{{$compte_rendu->object_id}}');
+    url.addParam("object_class", '{{$compte_rendu->object_class}}');
+    url.requestModal(700, 320);
+  {{else}}
+    alert("Veuillez paramétrer votre compte mail (source smtp dans les préférences utilisateur).");
+  {{/if}}
+}
+
 function openModalPrinters() {
   // Mise à jour de la date d'impression
   $V(getForm("editFrm").date_print, "now");
