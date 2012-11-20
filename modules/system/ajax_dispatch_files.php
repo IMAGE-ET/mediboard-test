@@ -13,6 +13,7 @@
 CCanDo::checkRead();
 
 set_time_limit(240);
+set_min_memory_limit("712M");
 
 $actor_guid   = CValue::get("actor_guid");
 $to_treatment = CValue::get("to_treatment", 1);
@@ -28,13 +29,13 @@ $source = reset($sender->_ref_exchanges_sources);
 $path = $source->getFullPath($source->_path);
 $filename_excludes = "$path/mb_excludes.txt";
 
-$filename_lock = "$path/mb_lock.txt";
+/*$filename_lock = "$path/mb_lock.txt";
 if (file_exists($filename_lock)) {
   return;
 }  
 
 @touch($filename_lock);
-
+*/
 $count = $source->_limit = CAppUI::conf("eai max_files_to_process");
 
 $files = array();

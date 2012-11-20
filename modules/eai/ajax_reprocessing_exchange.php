@@ -10,6 +10,8 @@
  * @link     http://www.mediboard.org
  */
 
+set_min_memory_limit("512M");
+
 CCanDo::checkRead();
 
 $exchange_guid = CValue::get("exchange_guid");

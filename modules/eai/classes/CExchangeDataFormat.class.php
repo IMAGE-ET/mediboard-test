@@ -295,7 +295,13 @@ class CExchangeDataFormat extends CMbMetaObject {
       if ($ack_valid) {
         $exchange->statut_acquittement = $ack->getStatutAcquittement();
       }
-      
+    }
+    
+    if ($this instanceof CEchangeHprim21) {
+      $ack = new CHPrim21Acknowledgment($sender->_data_format->_family_message);
+      $ack->handle($ack_data);
+      $this->statut_acquittement = $ack->getStatutAcknowledgment(); 
+      $ack_valid = $ack->message->isOK(CHL7v2Error::E_ERROR);
     }
     
     if ($this instanceof CExchangeIHE) {

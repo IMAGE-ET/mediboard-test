@@ -46,7 +46,7 @@ class CEAIDispatcher {
       $contexts = $data["pres_contexts"];
       $data    = $data["msg"];
     }
-      
+
     if ($actor && isset($actor->_configs["encoding"]) && $actor->_configs["encoding"] == "UTF-8") { 
       $data = utf8_decode($data);
     }

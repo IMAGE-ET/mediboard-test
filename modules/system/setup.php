@@ -1183,7 +1183,12 @@ class CSetupsystem extends CSetup {
                 ADD INDEX (`predicate_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "1.1.17";
+    $this->makeRevision("1.1.17");
+    $query = "ALTER TABLE `content_tabular`
+                CHANGE `content` `content` LONGTEXT;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.1.18";
     
     /*$query = "ALTER TABLE user_log
                 DROP INDEX object_id,

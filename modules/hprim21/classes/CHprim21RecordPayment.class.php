@@ -37,6 +37,8 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
     
     $this->_ref_sender = $sender;
     
+    CMbObject::$useObjectCache = false;
+    
     // Rejets partiels du message
     $errors = array();
     
@@ -45,27 +47,27 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
       $sejour = new CSejour();
       
       $NDA         = $this->getNDA($_REG);
-      $user_reg     = $this->getUser($_REG);
+      $user_reg    = $this->getUser($_REG);
       $segment_row = $this->getREGSegmentRow($_REG);
       
       // Recherche si on retrouve le séjour
       if (!$this->admitFound($NDA, $sejour)) {
         $errors[] = $this->addError(
-                            "P", 
-                            null, 
-                            array(
-                              "REG", 
-                              $segment_row, 
-                              array(
-                                $NDA,
-                                $user_reg
-                              )
-                            ), 
-                            null, 
-                            $NDA, 
-                            "I", 
-                            CAppUI::tr("CHL7EventADT-P-01", $NDA)
-                     );
+                      "P", 
+                      null, 
+                      array(
+                        "REG", 
+                        $segment_row, 
+                        array(
+                          $NDA,
+                          $user_reg
+                        )
+                      ), 
+                      null, 
+                      $NDA, 
+                      "I", 
+                      CAppUI::tr("CHL7EventADT-P-01", $NDA)
+                    );
         continue;
       }
       
@@ -106,27 +108,47 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
         $consultation = end($consults);
       }
       
+      if (!$consultation || !$consultation->_id) {
+        $errors[] = $this->addError(
+                      "P", 
+                      null, 
+                      array(
+                        "REG", 
+                        $segment_row, 
+                        array(
+                          $NDA,
+                          $user_reg
+                        )
+                      ), 
+                      null, 
+                      $NDA, 
+                      "I", 
+                      CAppUI::tr("CHL7EventADT-P-02")
+                    );
+        continue;
+      }
+      
       $facture = $consultation->loadRefFacture();
       if (!$facture->_id) {
         /* @TODO avant de transposer la création de la facture dans le store */
         $facture = $consultation->createFactureConsult();
         if (!$facture->_id) {
           $errors[] = $this->addError(
-                            "P", 
-                            null, 
-                            array(
-                              "REG", 
-                              $segment_row, 
-                              array(
-                                $NDA,
-                                $user_reg
-                              )
-                            ), 
-                            null, 
-                            $NDA, 
-                            "I", 
-                            CAppUI::tr("CHL7EventADT-P-02")
-                     );
+                        "P", 
+                        null, 
+                        array(
+                          "REG", 
+                          $segment_row, 
+                          array(
+                            $NDA,
+                            $user_reg
+                          )
+                        ), 
+                        null, 
+                        $NDA, 
+                        "I", 
+                        CAppUI::tr("CHL7EventADT-P-03")
+                      );
           continue;
         }
       }
@@ -142,21 +164,21 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
       $return_payment = $this->mapAndStorePayment($_REG, $facture, $idex);
       if (is_string($return_payment)) {
         $errors[] = $this->addError(
-                            "P", 
-                            null, 
-                            array(
-                              "REG", 
-                              $segment_row, 
-                              array(
-                                $NDA,
-                                $user_reg
-                              )
-                            ), 
-                            null, 
-                            $NDA, 
-                            "I", 
-                            CAppUI::tr("CHL7EventADT-P-03", $return_payment)
-                     );
+                      "P", 
+                      null, 
+                      array(
+                        "REG", 
+                        $segment_row, 
+                        array(
+                          $NDA,
+                          $user_reg
+                        )
+                      ), 
+                      null, 
+                      $NDA, 
+                      "I", 
+                      CAppUI::tr("CHL7EventADT-P-04", $return_payment)
+                    );
         continue;
       }
     }

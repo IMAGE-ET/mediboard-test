@@ -10,6 +10,9 @@
  * @link     http://www.mediboard.org
  */
 
+set_time_limit(240);
+set_min_memory_limit("712M");
+
 CCanDo::checkRead();
 
 $exchange_guid = CValue::get("exchange_guid");
@@ -31,12 +34,13 @@ $smarty->assign("exchange", $exchange);
 switch(true) {
   case $exchange instanceof CExchangeTabular:
     $msg_segment_group = $exchange->getMessage();
-    
+
     if ($msg_segment_group) {
       $msg_segment_group->_xml = CMbString::highlightCode("xml", $msg_segment_group->toXML()->saveXML());
     }
     
     $ack_segment_group = $exchange->getACK();
+
     if ($ack_segment_group) {
       $ack_segment_group->_xml = CMbString::highlightCode("xml", $ack_segment_group->toXML()->saveXML());
     }
