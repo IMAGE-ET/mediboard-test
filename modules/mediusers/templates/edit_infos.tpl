@@ -36,6 +36,15 @@ Main.add(function () {
 		</a>
 	</li>
 	{{/if}}
+
+  {{if "astreintes"|module_active}}
+    <li>
+      {{mb_script module=astreintes script=plage}}
+      <a href="#edit-astreintes" onmouseup="new Url('astreintes', 'vw_idx_plages_astreinte').requestUpdate('edit-astreintes');">
+        {{tr}}CPlageAstreinte{{/tr}}
+        </a>
+    </li>
+  {{/if}}
   
   {{if $can->admin}}
   <li>
@@ -68,6 +77,12 @@ Main.add(function () {
 
 <div id="browser-check" style="display: none;">
 </div>
+
+{{if "astreintes"|module_active}}
+  <div id="edit-astreintes" style="display: none;">
+  </div>
+{{/if}}
+
 
 {{if @$modules.dPpersonnel->_can->read}}
 <div id="edit-holidays" style="display: none;">

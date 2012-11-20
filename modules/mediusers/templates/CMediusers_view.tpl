@@ -25,14 +25,12 @@
         {{mb_value object=$mediuser field=_user_phone}}
       </td>
     </tr>
-    {{if "astreintes"|module_active && $modules.astreintes->_can->edit && $mediuser->_user_astreinte}}
     <tr>
       <td>
         {{mb_label object=$mediuser field=_user_astreinte}} :
         {{mb_value object=$mediuser field=_user_astreinte}}
       </td>
     </tr>
-   {{/if}}
     <tr>
       <td>
         {{mb_label object=$mediuser field=_user_email}} :
