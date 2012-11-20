@@ -11,7 +11,7 @@
  */
 
 set_time_limit(240);
-set_min_memory_limit("712M");
+set_min_memory_limit("1024M");
 
 /*$profile = 0;
 
@@ -46,8 +46,10 @@ $smarty->assign("exchange", $exchange);
 
 switch(true) {
   case $exchange instanceof CExchangeTabular:
+    CMbObject::$useObjectCache = false;
+    
     $msg_segment_group = $exchange->getMessage();
-
+    
     if ($msg_segment_group) {
       $doc = $msg_segment_group->toXML();
       if (count($msg_segment_group->children) > $limit_size) {

@@ -19,7 +19,11 @@
       {{/if}}
     </td>
     <td> {{mb_value object=$_reglement field=reference}} </td>
-    <td> {{mb_value object=$_reglement field=montant}} </td>
+    <td> 
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_reglement->_guid}}');">
+        {{mb_value object=$_reglement field=montant}}
+      </span> 
+    </td>
     <td> {{mb_value object=$_reglement field=date format="%d/%m/%Y"}} </td>
   </tr>
   {{/foreach}}

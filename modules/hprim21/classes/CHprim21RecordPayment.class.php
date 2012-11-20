@@ -180,7 +180,7 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
                       CAppUI::tr("CHL7EventADT-P-04", $return_payment)
                     );
         continue;
-      }
+      }      
     }
 
     if (count($errors) > 0) {
@@ -244,41 +244,49 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
   function mapAndStorePayment(DOMNode $node, CFactureConsult $facture, CIdSante400 $idex) {
     $reglement = new CReglement();
     $reglement->load($idex->object_id);     
-       
+    
     // Recherche du règlement si pas retrouvé par son idex
     $reglement->setObject($facture);    
     $reglement->date     = $this->getDatePayment($node)." 00:00:00";
+    
     $amount_paid = $this->getAmountPaid($node);
     $reglement->montant  = $amount_paid;
+    
     $direction = $this->getDirection($node);
     if ($direction == "-") {
       $reglement->montant = $reglement->montant * -1;
     }
-    $reglement->emetteur = "patient";
+    $reglement->emetteur = "tiers";
     $reglement->mode     = "autre";
+    
+    $reglement->loadOldObject();
+    
+    if ($reglement->_old && round($reglement->montant, 3) == round($reglement->_old->montant, 3)) {
+      return $reglement;
+    }
+         
+    // Mise à jour du montant (du_tiers) de la facture         
+    $value = ($reglement->_old) ? ($reglement->montant - $reglement->_old->montant) : $reglement->montant; 
     
     // Acquittement de la facture associée ?
     if ($msg = $reglement->store()) {
       return $msg;
     }
-    
+
     // Gestion de l'idex
     if (!$idex->object_id) {
       $idex->object_id = $reglement->_id;
     }
-    
     $idex->last_update = mbDateTime();
     if ($msg = $idex->store()) {
       return $msg;
     }
 
-    
     if ($direction != "+") {
       return $reglement;
     }
-    
-    // Mise à jour du montant (du_tiers) de la facture
-    $facture->du_tiers += $amount_paid;
+
+    $facture->du_tiers += $value;
     if ($msg = $facture->store()) {
       return $msg;
     }
