@@ -20,6 +20,7 @@ $locales['CPlageAstreinte-replacer_id'] = 'Remplacant';
 $locales['CPlageAstreinte-title-create'] = 'Créer une plage d\'astreinte';
 $locales['CPlageAstreinte-title-modify'] = 'Modifier plage d\'astreinte';
 $locales['CPlageAstreinte-user_id'] = 'Utilisateur(s)';
+$locales['CPlageAstreinte-user'] = 'Utilisateur';
 $locales['CPlageAstreinte-user_id-desc'] = 'Utilisateur(s) à afficher sur le planning';
 $locales['CPlageAstreinte.For'] = 'Astreinte du';
 $locales['CPlageAstreinte._type.admin'] = 'Astreinte administrative';

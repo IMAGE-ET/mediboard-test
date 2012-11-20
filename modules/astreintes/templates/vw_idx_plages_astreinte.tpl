@@ -23,36 +23,40 @@ function raz(form) {
      <td>
       <table class="tbl">
         <tr>
-          <th class="title" colspan="2">{{tr}}CPlageAstreinte-list{{/tr}}</th>
+          <th class="title" colspan="4">{{tr}}CPlageAstreinte-list{{/tr}}</th>
         </tr>
         <tr>
-          <th class="category">
+          {{*<th class="category">
           {{tr}}CMediusers-_user_last_name{{/tr}} {{tr}}CMediusers-_user_first_name{{/tr}}
+          </th>*}}
+          <th class="catergory">
+            {{tr}}CPlageAstreinte-user{{/tr}}
           </th>
           <th class="category">
-          {{tr}}CPlageAstreinte-corresponding{{/tr}}
+          {{tr}}CPlageAstreinte-libelle{{/tr}}
+          </th>
+          <th class="category">
+          {{tr}}Date{{/tr}}
           </th>
         </tr>
         {{foreach from=$plages item=_plage}}
         <tr>
-          <td><a href="#{{$mediuser->_guid}}" onclick="PlageAstreinte.edit('{{$_plage->_id}}','{{$_plage->user_id}}');">{{$_plage->user_id}}</a></td>
-          <td>{{$_plage->libelle}}</td>
-        </tr>
-        {{*
-        {{foreach from=$found_users item=mediuser}}
-        <tr id="u{{$mediuser->_id}}" {{if $filter->user_id == $mediuser->_id}} class="selected" {{/if}}>
           <td>
-            <a href="#{{$mediuser->_guid}}"
-              onclick="PlageAstreinte.edit('','{{$mediuser->_id}}');">
-              {{mb_include module=mediusers template=inc_vw_mediuser object=$mediuser}}
+            {{$_plage->_ref_user}}
+          </td>
+          <td>
+            <a href="#" onclick="PlageAstreinte.edit('{{$_plage->_id}}','{{$_plage->user_id}}');">
+            {{if $_plage->libelle}}{{$_plage->libelle}}{{else}}<em>{{tr}}CPlageAstreinte.noLibelle{{/tr}}</em>{{/if}}
             </a>
           </td>
           <td>
-            {{assign var=_user_id value=$mediuser->_id}}
-            {{$plages_per_user.$_user_id}}
+            {{if $_plage->date_debut == $_plage->date_fin}}
+              {{$_plage->date_debut|date_format:$conf.longdate}}
+            {{else}}
+              {{$_plage->date_debut|date_format:$conf.longdate}} &rarr; {{$_plage->date_fin|date_format:$conf.longdate}}
+            {{/if}}
           </td>
         </tr>
-        *}}
         {{foreachelse}}
         <tr>
           <td colspan="2" class="empty">{{tr}}CMediusers.none{{/tr}}</td>

@@ -23,7 +23,6 @@ $plageastreinte->load($plage_id);
 $plageastreinte->loadRefsNotes();
 $plageastreinte->loadRefUser();
 
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("user",      $user);

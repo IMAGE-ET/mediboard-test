@@ -42,15 +42,20 @@
         </th>
       </tr>
     {{/if}}
-      <th>
-        {{mb_label object=$plageastreinte field="user_id"}}
-      </th>
-      <td>
-        <select name="user_id">
-           <option value="">{{tr}}CMediusers.all{{/tr}}</option>
-           {{mb_include module=mediusers template=inc_options_mediuser list=$users selected=$user->_id}}
-         </select>
-      </td>
+    <tr>
+      {{if $user->isAdmin()}}
+        <th>
+          {{mb_label object=$plageastreinte field="user_id"}}
+        </th>
+        <td>
+          <select name="user_id">
+            <option value="">{{tr}}CMediusers.all{{/tr}}</option>
+            {{mb_include module=mediusers template=inc_options_mediuser list=$users selected=$user->_id}}
+          </select>
+        </td>
+      {{else}}
+      <input type="hidden" name="user_id" value="$user->_id"/>
+      {{/if}}
     </tr>
     <tr>
       <th>
