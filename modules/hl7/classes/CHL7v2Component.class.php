@@ -83,8 +83,17 @@ class CHL7v2Component extends CHL7v2Entity {
     $this->datatype    = (string)$specs->datatype;
     $this->description = (string)$specs->description;
     $this->self_pos    = $self_pos;
-    
-    $this->props = $this->getMessage()->loadDataType($this->datatype);
+  }
+
+  /**
+   * @return CHL7v2DataType
+   */
+  function getProps(){
+    if (!$this->props) {
+      $this->props = $this->getMessage()->loadDataType($this->datatype);
+    }
+
+    return $this->props;
   }
   
   /**
@@ -100,7 +109,7 @@ class CHL7v2Component extends CHL7v2Entity {
     $doc = $node->ownerDocument;
     $field = $this->getField();
     
-    if ($this->props instanceof CHL7v2DataTypeComposite) {
+    if ($this->getProps() instanceof CHL7v2DataTypeComposite) {
       foreach ($this->children as $i => $_child) {
         $new_node = $doc->createElement("$this->datatype.".($i+1));
         $_child->_toXML($new_node, $hl7_datatypes, $encoding);
@@ -108,7 +117,7 @@ class CHL7v2Component extends CHL7v2Entity {
       }
     }
     else {
-      if ($this->datatype === "TS" && $this->props instanceof CHL7v2DataTypeDateTime) {
+      if ($this->datatype === "TS" && $this->getProps() instanceof CHL7v2DataTypeDateTime) {
         $new_node = $doc->createElement("$this->datatype.1");
         $node->appendChild($new_node);
         $node = $new_node;
@@ -121,7 +130,7 @@ class CHL7v2Component extends CHL7v2Entity {
         $str = $this->getMessage()->escape($this->data);
         
         if (!$hl7_datatypes && $str !== "") {
-          $str = $this->props->toMB($str, $field);
+          $str = $this->getProps()->toMB($str, $field);
         }
       }
         
@@ -147,7 +156,7 @@ class CHL7v2Component extends CHL7v2Entity {
     $keep_original = $this->getField()->keep();
     
     // Is composite
-    if (isset($this->separator[0]) && $this->props instanceof CHL7v2DataTypeComposite) {
+    if (isset($this->separator[0]) && $this->getProps() instanceof CHL7v2DataTypeComposite) {
       $parts = CHL7v2::split($this->separator[0], $data, $keep_original);
 
       $component_specs = $this->getSpecs()->getItems();
@@ -183,7 +192,7 @@ class CHL7v2Component extends CHL7v2Entity {
    */
   function fill($data) {
     // Is composite
-    if ($this->props instanceof CHL7v2DataTypeComposite) {
+    if ($this->getProps() instanceof CHL7v2DataTypeComposite) {
       if (!is_array($data)) {
         $data = array($data);
       }
@@ -209,7 +218,7 @@ class CHL7v2Component extends CHL7v2Entity {
         return;
       }
       
-      $this->data = trim($this->props->toHL7($data, $this->getField()));
+      $this->data = trim($this->getProps()->toHL7($data, $this->getField()));
     }
   }
   
@@ -228,7 +237,7 @@ class CHL7v2Component extends CHL7v2Entity {
    * @return bool true if the component is valid
    */
   function validate(){
-    $props = $this->props;
+    $props = $this->getProps();
     
     if ($props instanceof CHL7v2DataTypeComposite) {
       foreach ($this->children as $child) {
@@ -332,7 +341,7 @@ class CHL7v2Component extends CHL7v2Entity {
   function __toString(){
     $field = $this->getField();
     
-    if ($this->props instanceof CHL7v2DataTypeComposite) {
+    if ($this->getProps() instanceof CHL7v2DataTypeComposite) {
       $sep = $this->separator[0];
       
       if (CHL7v2Message::$decorateToString) {

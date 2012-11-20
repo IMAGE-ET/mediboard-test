@@ -60,9 +60,13 @@
           <hr class="control_tabs" />
            
           <div id="message-{{$key}}-tree" style="display: none;">
-            <ul class="hl7-tree">
-              {{mb_include module=hprim21 template=inc_segment_group_children segment_group=$msg_segment_group}}
-            </ul>
+            {{if $msg_segment_group->children|@count > $limit_size}}
+              <div class="small-info">Message trop volumineux pour être affiché</div>
+            {{else}}
+              <ul class="hl7-tree">
+                {{mb_include module=hprim21 template=inc_segment_group_children segment_group=$msg_segment_group}}
+              </ul>
+            {{/if}}
           </div>
           
           <div id="message-{{$key}}-hpr-input" style="display: none;">
@@ -70,7 +74,11 @@
           </div>
           
           <div id="message-{{$key}}-hpr-output" style="display: none;">
-            {{$msg_segment_group->flatten(true)|smarty:nodefaults}}
+            {{if $msg_segment_group->children|@count > $limit_size}}
+              <div class="small-info">Message trop volumineux pour être affiché (voir volet "Input")</div>
+            {{else}}
+              {{$msg_segment_group->flatten(true)|smarty:nodefaults}}
+            {{/if}}
           </div>
           
           <div id="message-{{$key}}-xml" style="display: none;">
@@ -110,12 +118,18 @@
         
         <hr class="control_tabs" />
             
-        <ul id="ack-message-tree" style="display: none;" class="hl7-tree">
-          {{mb_include module=hprim21 template=inc_segment_group_children segment_group=$ack_segment_group}}
+        <ul id="ack-message-tree" style="display: none;">
+          {{if $ack_segment_group->children|@count > $limit_size}}
+            <div class="small-info">Message trop volumineux pour être affiché</div>
+          {{else}}
+            <ul class="hl7-tree">
+              {{mb_include module=hprim21 template=inc_segment_group_children segment_group=$ack_segment_group}}
+            </ul>
+          {{/if}}
         </ul>
         
         <div id="ack-message-hpr" style="display: none;">
-          {{$ack_segment_group->flatten(true)|smarty:nodefaults}}
+          {{$ack_segment_group->highlight($ack_segment_group->data)|smarty:nodefaults}}
         </div>
         
         <div id="ack-message-xml" style="display: none;">

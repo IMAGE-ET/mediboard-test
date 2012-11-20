@@ -37,11 +37,11 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function parse($data) {
-    parent::parse($data);
+    //parent::parse($data);
     
     $message = $this->getMessage();
 
-    $fields = CHL7v2::split($message->fieldSeparator, $this->data);
+    $fields = CHL7v2::split($message->fieldSeparator, $data);
     $this->name = array_shift($fields);
     
     $specs = $this->getSpecs();
@@ -56,18 +56,18 @@ class CHL7v2Segment extends CHL7v2Entity {
     
     // Check the number of fields
     if (count($fields) > count($_segment_specs)) {
-      $this->error(CHL7v2Exception::TOO_MANY_FIELDS, $this->data, $this, CHL7v2Error::E_WARNING);
+      $this->error(CHL7v2Exception::TOO_MANY_FIELDS, $data, $this, CHL7v2Error::E_WARNING);
     }
    
     foreach ($_segment_specs as $i => $_spec) {
-      $field = new CHL7v2Field($this, $_spec);
-      
       if (array_key_exists($i, $fields)) {
+        $field = new CHL7v2Field($this, $_spec);
         $field->parse($fields[$i]);
         
         $this->fields[] = $field;
       }
       elseif ($_spec->isRequired()) {
+        $field = new CHL7v2Field($this, $_spec);
         $this->error(CHL7v2Exception::FIELD_EMPTY, null, $field);
       }
     }
@@ -82,10 +82,10 @@ class CHL7v2Segment extends CHL7v2Entity {
 
     $_segment_specs = $specs->getItems();
     foreach ($_segment_specs as $i => $_spec) {
-      $field = new CHL7v2Field($this, $_spec);
-      
       if (array_key_exists($i, $fields)) {
         $_data = $fields[$i];
+
+        $field = new CHL7v2Field($this, $_spec);
         
         if ($_data === null || $_data === "" || $_data === array()) {
           if ($_spec->isRequired()) {
@@ -101,12 +101,12 @@ class CHL7v2Segment extends CHL7v2Entity {
         if ($_data instanceof CMbObject) {
           throw new CHL7v2Exception($_data->_class, CHL7v2Exception::UNEXPECTED_DATA_TYPE);
         }
-        
         $field->fill($_data);
         
         $this->fields[] = $field;
       }
       elseif ($_spec->isRequired()) {
+        $field = new CHL7v2Field($this, $_spec);
         $this->error(CHL7v2Exception::FIELD_EMPTY, null, $field);
       }
     }
