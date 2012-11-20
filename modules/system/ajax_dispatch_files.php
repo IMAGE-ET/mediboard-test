@@ -29,13 +29,13 @@ $source = reset($sender->_ref_exchanges_sources);
 $path = $source->getFullPath($source->_path);
 $filename_excludes = "$path/mb_excludes.txt";
 
-/*$filename_lock = "$path/mb_lock.txt";
+$filename_lock = "$path/mb_lock.txt";
 if (file_exists($filename_lock)) {
   return;
 }  
 
 @touch($filename_lock);
-*/
+
 $count = $source->_limit = CAppUI::conf("eai max_files_to_process");
 
 $files = array();
