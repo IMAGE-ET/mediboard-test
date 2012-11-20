@@ -16,7 +16,11 @@
     
     $V(services_ids_hospi_elt, Object.toJSON(services_ids_hospi));
     return onSubmitFormAjax(formPref, {onComplete: function() {
-      form.onsubmit();
+      {{if $ajax_request}}
+        form.onsubmit();
+      {{else}}
+        form.submit();
+      {{/if}}
       Control.Modal.close();
     } });
   }
@@ -54,15 +58,18 @@
 {{math equation=x+1 x=$secteurs|@count assign=colspan}}
 
 <div style="overflow-x: auto;">
-  <form name="selectServices" method="get" onsubmit="return onSubmitFormAjax(this, null, '{{$view}}')">
+  <form name="selectServices" method="get" {{if $ajax_request}}onsubmit="return onSubmitFormAjax(this, null, '{{$view}}')"{{/if}}>
     <input type="hidden" name="m" value="dPhospi" />
-    {{if $view == "tableau"}}
+    {{if $view == "mouvements"}}
+      <input type="hidden" name="tab" value="edit_sorties" />
+    {{elseif $view == "tableau"}}
       <input type="hidden" name="a" value="vw_affectations" />
     {{elseif $view == "topologique"}}
       <input type="hidden" name="a" value="vw_placement_patients" />
     {{else}}
       <input type="hidden" name="a" value="vw_mouvements" />
     {{/if}}
+    <input type="hidden" name="services_ids[]" value="" />
     <table class="tbl">
       <tr>
         <th colspan="{{$colspan}}">
@@ -115,8 +122,7 @@
           {{if $view == "cut"}}
             <button type="button" class="tick" onclick="changeServicesScission(); ">{{tr}}Validate{{/tr}}</button>
           {{else}}
-            <button type="button" class="tick"
-              onclick="Control.Modal.close(); this.form.onsubmit();">{{tr}}Validate{{/tr}}</button>
+            <button {{if $ajax_request}}type="button" onclick="Control.Modal.close(); this.form.onsubmit();"{{/if}}class="tick">{{tr}}Validate{{/tr}}</button>
             <button type="button" class="save" onclick="savePref(form);">
               {{tr}}Validate{{/tr}} {{tr}}and{{/tr}} {{tr}}Save{{/tr}}
             </button>

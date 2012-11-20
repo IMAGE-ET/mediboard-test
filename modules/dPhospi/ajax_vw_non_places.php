@@ -19,13 +19,17 @@ $duree_uscpo     = CValue::getOrSession("duree_uscpo", "0");
 $prestation_id   = CValue::getOrSession("prestation_id", "");
 $item_prestation_id = CValue::getOrSession("item_prestation_id");
 
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
+
 $heureLimit = "16:00:00";
 $group_id = CGroups::loadCurrent()->_id;
 $where = array();
 $where["annule"] = "= '0'";
 $where["sejour.group_id"] = "= '$group_id'";
 $where[] = "(sejour.type != 'seances' && affectation.affectation_id IS NULL) || sejour.type = 'seances'";
-$where["sejour.service_id"] = "IS NULL OR `sejour`.`service_id` " . CSQLDataSource::prepareIn($services_ids);
+$where["sejour.service_id"] = "IS NULL " . (is_array($services_ids) && count($services_ids) ? "OR `sejour`.`service_id` " . CSQLDataSource::prepareIn($services_ids) : "");
 
 $order = null;
 switch ($triAdm) {
@@ -253,7 +257,9 @@ if ($prestation_id) {
 $where = array();
 $ljoin = array();
 $where["lit_id"] = "IS NULL";
-$where["service_id"] = CSQLDataSource::prepareIn($services_ids);
+if (is_array($services_ids) && count($services_ids)) {
+  $where["service_id"] = CSQLDataSource::prepareIn($services_ids);
+}
 $where["entree"] = "<= '$date_max'";
 $where["sortie"] = ">= '$date_min'";
 
@@ -357,4 +363,3 @@ $smarty->assign("affectations", $affectations);
 $smarty->assign("services", $services);
 
 $smarty->display("inc_vw_non_places.tpl");
-?>

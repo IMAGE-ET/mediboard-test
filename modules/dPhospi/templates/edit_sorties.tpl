@@ -58,6 +58,13 @@ function refreshList(order_col, order_way, type, type_mouvement) {
 function showDateDeces(sejour_id) {
   $('dateDeces'+sejour_id).show();
 }
+
+function selectServices() {
+  var url = new Url("hospi", "ajax_select_services");
+  url.addParam("view", "mouvements");
+  url.addParam("ajax_request", 0);
+  url.requestModal(null, null, {maxHeight: '600'});
+}
 </script>
 
 <table class="main">
@@ -75,12 +82,6 @@ function showDateDeces(sejour_id) {
             </option>
             {{/foreach}}
           </select>
-          <select name="service_id" style="width: 13em;" onchange="this.form.submit()">
-            <option value="">&mdash; Service</option>
-            {{foreach from=$services item=_service}}
-            <option value="{{$_service->_id}}" {{if $_service->_id == $service_id}}selected="selected"{{/if}}>{{$_service}}</option>
-            {{/foreach}}
-          </select>
           <select name="praticien_id" style="width: 13em;" onchange="this.form.submit()">
             <option value="">&mdash; Praticien</option>
             {{foreach from=$praticiens item=_prat}}
@@ -91,6 +92,7 @@ function showDateDeces(sejour_id) {
             <option value="0" {{if $vue == 0}} selected="selected"{{/if}}>Afficher les validés</option>
             <option value="1" {{if $vue == 1}} selected="selected"{{/if}}>Ne pas afficher les validés</option>
           </select>
+          <button type="button" onclick="selectServices();" class="search">Services</button>
         </form>
     </td>
   </tr>

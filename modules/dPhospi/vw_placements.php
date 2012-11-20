@@ -12,6 +12,10 @@ $services_ids = CValue::getOrSession("services_ids");
 $group_id     = CValue::get("g");
 $readonly     = CValue::getOrSession("readonly");
 
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
+
 // Détection du changement d'établissement
 if (!$services_ids || $group_id) {
   $group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;

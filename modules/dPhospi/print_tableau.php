@@ -18,6 +18,10 @@ $mode     = CValue::get("mode"    , 0);
 $services_ids = CValue::getOrSession("services_ids", "");
 $g        = CGroups::loadCurrent()->_id;
 
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids); 
+}
+
 if (!$services_ids) {
   $pref_services_ids = json_decode(CAppUI::pref("services_ids_hospi"));
   
@@ -60,5 +64,3 @@ $smarty->assign("demain"  , mbDate("+ 1 day", $date));
 $smarty->assign("services", $services);
 
 $smarty->display("print_tableau.tpl");
-
-?>

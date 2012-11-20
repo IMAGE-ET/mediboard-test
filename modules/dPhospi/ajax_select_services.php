@@ -12,6 +12,7 @@
 $services_ids = CValue::getOrSession("services_ids");
 $services_ids_suggest = CValue::get("services_ids_suggest", null);
 $view         = CValue::get("view");
+$ajax_request = CValue::get("ajax_request", 1);
 
 if (!is_array($services_ids_suggest) && !is_null($services_ids_suggest)) {
   $services_ids = explode(",", $services_ids_suggest);
@@ -55,7 +56,6 @@ $smarty->assign("all_services", $all_services);
 $smarty->assign("services_allowed", $services_allowed);
 $smarty->assign("group_id"    , CGroups::loadCurrent()->_id);
 $smarty->assign("secteurs"    , $secteurs);
+$smarty->assign("ajax_request" , $ajax_request);
 
 $smarty->display("inc_select_services.tpl");
-
-?>

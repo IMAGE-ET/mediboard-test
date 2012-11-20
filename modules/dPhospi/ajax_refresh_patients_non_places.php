@@ -18,6 +18,10 @@ global $g;
 $date  = CValue::getOrSession("date", mbDateTime());
 $services_ids    = CValue::getOrSession("services_ids");
 
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
+
 $date_min = mbDateTime($date);
 $date_max = mbDateTime("+1 day", $date_min);
 $listNotAff = array(
@@ -69,4 +73,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("list_patients_notaff"  , $listNotAff);
 
 $smarty->display("inc_patients_non_places.tpl");
-?>

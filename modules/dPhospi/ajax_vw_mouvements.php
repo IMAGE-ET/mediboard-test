@@ -16,6 +16,10 @@ $mode_vue_tempo = CValue::getOrSession("mode_vue_tempo", "classique");
 $readonly     = CValue::getOrSession("readonly", 0);
 $prestation_id = CValue::getOrSession("prestation_id", 0);
 
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
+
 if (!$services_ids) {
   $smarty = new CSmartyDP;
   $smarty->display("inc_no_services.tpl");

@@ -27,6 +27,10 @@ $triAdm          = CValue::getOrSession("triAdm", "praticien");
 $_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
 $filterFunction  = CValue::getOrSession("filterFunction");
 
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
+
 if (!$services_ids) {
   $smarty = new CSmartyDP;
   $smarty->display("inc_no_services.tpl");
@@ -51,9 +55,9 @@ foreach ($services as &$service) {
   if (!in_array($service->_id, $services_ids)){
     continue;
   }
-	
+  
   loadServiceComplet($service, $date, $mode);
-	CApp::$chrono->stop("Load Service Complet : '$service->_view'");
+  CApp::$chrono->stop("Load Service Complet : '$service->_view'");
   CApp::$chrono->start();
   $totalLits += $service->_nb_lits_dispo;
 }
@@ -81,7 +85,7 @@ $leftjoin["affectation"]  = "sejour.sejour_id = affectation.sejour_id";
 
 // Filtre sur les fonctions
 if($filterFunction){
-	$leftjoin["users_mediboard"] = "sejour.praticien_id = users_mediboard.user_id";
+  $leftjoin["users_mediboard"] = "sejour.praticien_id = users_mediboard.user_id";
   $where["users_mediboard.function_id"] = " = '$filterFunction'";
 }
 
@@ -94,11 +98,11 @@ CApp::$chrono->start();
 $groupSejourNonAffectes = array();
 
 if ($can->edit) {
-	$where = array();
-	$where["sejour.annule"] = "= '0'";
+  $where = array();
+  $where["sejour.annule"] = "= '0'";
   $where[] = "sejour.service_id IN (".join($services_ids, ',').") OR sejour.service_id IS NULL";
 
-	$order = null;
+  $order = null;
   switch ($triAdm) {
     case "date_entree" :
       $order = "entree_prevue ASC";
@@ -116,17 +120,17 @@ if ($can->edit) {
       $where[] = "sejour.type = 'ambu' OR sejour.type = 'comp'";
       break;
     case "0" :
-    	break;
+      break;
     default :
-    	$where["sejour.type"] = "= '$_type_admission'"; 
+      $where["sejour.type"] = "= '$_type_admission'"; 
   }
   
   // Admissions de la veille
   $dayBefore = mbDate("-1 days", $date);
-	$where["sejour.entree"] = "BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
+  $where["sejour.entree"] = "BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
   $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order);
-	CApp::$chrono->stop("Non affectés: veille");
-	CApp::$chrono->start();
+  CApp::$chrono->stop("Non affectés: veille");
+  CApp::$chrono->start();
   
   // Admissions du matin
   $where["sejour.entree"] = "BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'";
@@ -155,7 +159,7 @@ if ($can->edit) {
   $where["sejour.annule"] = " = '0'";
   $where[] = "(affectation.entree BETWEEN '$date 00:00:00' AND '$date 23:59:59')
             OR (affectation.sortie BETWEEN '$date 00:00:00' AND '$date 23:59:59')";
-	$groupSejourNonAffectes["couloir"] = loadAffectationsCouloirs($where, $order);
+  $groupSejourNonAffectes["couloir"] = loadAffectationsCouloirs($where, $order);
 }
 
 $functions_filter = array();
@@ -203,6 +207,3 @@ $smarty->display("vw_affectations.tpl");
 if (CAppUI::pref("INFOSYSTEM")) {
   mbTrace(CMbArray::pluck(CApp::$chrono->report, "total"), "Rapport uniquement visible avec les informations système");
 }
-
-
-?>

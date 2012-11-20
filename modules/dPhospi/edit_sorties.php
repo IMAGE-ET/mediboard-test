@@ -12,6 +12,7 @@ CCanDo::checkRead();
 $date       = CValue::getOrSession("date", mbDate());
 $type_hospi = CValue::getOrSession("type_hospi", null);
 $vue        = CValue::getOrSession("vue", 0);
+$group_id   = CValue::get("g");
 
 $mouvements = array("comp" => array("entrees" => array("place" => 0, "non_place" => 0),
                                     "sorties" => array("place" => 0, "non_place" => 0)),
@@ -32,8 +33,35 @@ $where = array(
          );
 $order      = "nom";
 $service    = new CService();
-$services   = $service->loadListWithPerms(PERM_READ, $where, $order);
-$service_id = CValue::getOrSession("service_id", null);
+$services_ids = CValue::getOrSession("services_ids", null);
+
+// Détection du changement d'établissement
+if (!isset($_SESSION["dPhospi"]["services_ids"]) || $group_id) {
+  $group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
+  
+  $pref_services_ids = json_decode(CAppUI::pref("services_ids_hospi"));
+  
+  // Si la préférence existe, alors on la charge
+  if (isset($pref_services_ids->{"g$group_id"})) {
+    $services_ids = $pref_services_ids->{"g$group_id"};
+    if ($services_ids) {
+      $services_ids = explode("|", $services_ids); 
+    }
+    CValue::setSession("services_ids", $services_ids);
+  }
+  // Sinon, chargement de la liste des services en accord avec le droit de lecture
+  else {
+    $service = new CService;
+    $where = array();
+    $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+    $services_ids = array_keys($service->loadListWithPerms(PERM_READ, $where, "externe, nom"));
+    CValue::setSession("services_ids", $services_ids);
+  }
+}
+
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
 
 // Récupération de la liste des praticiens et du praticien selectionné
 $praticien    = new CMediusers();
@@ -56,8 +84,9 @@ $ljoin["chambre"]            = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]            = "service.service_id = chambre.service_id";
 $where                       = array();
 $where["service.group_id"]   = "= '$group->_id'";
-$where["service.service_id"] = CSQLDataSource::prepareIn(array_keys($services), $service_id);
+$where["service.service_id"] = CSQLDataSource::prepareIn($services_ids);
 $where["sejour.type"]        = CSQLDataSource::prepareIn(array_keys($mouvements) , $type_hospi);
+
 if ($vue) {
   $where["sejour.confirme"] = " = '0'";
 }
@@ -74,10 +103,11 @@ $whereNP["sejour.group_id"]            = "= '$group->_id'";
 $whereNP["sejour.annule"]              = "= '0'";
 $whereNP["sejour.type"]                = CSQLDataSource::prepareIn(array_keys($mouvements), $type_hospi);
 $whereNP["affectation.affectation_id"] = "IS NULL";
-if($service_id) {
-  $whereNP["sejour.service_id"] = "= '$service_id'";
+
+if (count($services_ids)) {
+  $whereNP["sejour.service_id"] = CSQLDataSource::prepareIn($services_ids);
 }
-if($praticien_id) {
+if ($praticien_id) {
   $whereNP["sejour.praticien_id"] = "= '$praticien_id'";
 }
 
@@ -149,8 +179,6 @@ $smarty->assign("presentsNP"  , $presentsNP);
 $smarty->assign("mouvements"  , $mouvements);
 $smarty->assign("dep_entrants", $dep_entrants);
 $smarty->assign("dep_sortants", $dep_sortants);
-$smarty->assign("services"    , $services);
-$smarty->assign("service_id"  , $service_id);
 $smarty->assign("praticiens"  , $praticiens);
 $smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("type_hospi"  , $type_hospi);
@@ -159,5 +187,3 @@ $smarty->assign("date"        , $date);
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("edit_sorties.tpl");
-
-?>

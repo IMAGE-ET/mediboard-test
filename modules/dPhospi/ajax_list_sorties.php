@@ -13,17 +13,17 @@ $type           = CValue::get("type");
 $type_mouvement = CValue::get("type_mouvement");
 $vue            = CValue::getOrSession("vue"         , 0);
 $praticien_id   = CValue::getOrSession("praticien_id", null);
-$service_id     = CValue::getOrSession("service_id"  , null);
+$services_ids   = CValue::getOrSession("services_ids"  , null);
 $order_way      = CValue::getOrSession("order_way"   , "ASC");
 $order_col      = CValue::getOrSession("order_col"   , "_patient");
-
 $show_duree_preop = CAppUI::conf("dPplanningOp COperation show_duree_preop");
+
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
 
 $praticien = new CMediusers();
 $praticien->load($praticien_id);
-
-$service = new CService();
-$service->load($service_id);
 
 $dmi_active = CModule::getActive("dmi");
 
@@ -39,8 +39,6 @@ $sorties = array();
 $where = array();
 $where["externe"] = "= '0'";
 $where["group_id"] = "= '$group->_id'";
-
-$services = $service->loadListWithPerms(PERM_READ, $where);
 
 // Récupération de la journée à afficher
 $date  = CValue::getOrSession("date" , mbDate());
@@ -58,9 +56,9 @@ $ljoin["chambre"]                = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]                = "service.service_id = chambre.service_id";
 $where                           = array();
 $where["service.group_id"]       = "= '$group->_id'";
-$where["affectation.service_id"] = CSQLDataSource::prepareIn(array_keys($services)   , $service->_id);
+$where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
 $where["sejour.type"]            = CSQLDataSource::prepareIn($types_hospi, $type_hospi);
-if($praticien_id) {
+if ($praticien_id) {
   $where["sejour.praticien_id"] = "= '$praticien->_id'";
 }
 
@@ -75,31 +73,32 @@ $whereNP["sejour.group_id"]            = "= '$group->_id'";
 $whereNP["sejour.type"]                = CSQLDataSource::prepareIn($types_hospi, $type_hospi);
 $whereNP["affectation.affectation_id"] = "IS NULL";
 $whereNP["sejour.annule"]              = "= '0'";
-if($service->_id) {
-  $whereNP["sejour.service_id"] = "= '$service->_id'";
+
+if (count($services_ids)) {
+  $whereNP["sejour.service_id"] = CSQLDataSource::prepareIn($services_ids);
 }
-if($praticien->_id) {
+if ($praticien->_id) {
   $whereNP["sejour.praticien_id"] = "= '$praticien->_id'";
 }
 
 $order = $orderNP = null;
-if($order_col == "_patient"){
+if ($order_col == "_patient"){
   $order = $orderNP = "patients.nom $order_way, patients.prenom, sejour.entree";
 }
-if($order_col == "_praticien"){
+if ($order_col == "_praticien"){
   $order = $orderNP = "users.user_last_name $order_way, users.user_first_name";
 }
-if($order_col == "_chambre"){
+if ($order_col == "_chambre"){
   $order = "chambre.nom $order_way, patients.nom, patients.prenom";
   $orderNP = "patients.nom ASC, patients.prenom, sejour.entree";
 }
-if($order_col == "sortie"){
+if ($order_col == "sortie"){
   $order   = "affectation.sortie $order_way, patients.nom, patients.prenom";
   $orderNP = "sejour.sortie $order_way, patients.nom, patients.prenom";
 }
 
 // Récupération des présents du jour
-if($type == "presents") {
+if ($type == "presents") {
   // Patients placés
   $where[] = "'$date' BETWEEN DATE(affectation.entree) AND DATE(affectation.sortie)";
   if ($vue) {
@@ -127,7 +126,7 @@ if($type == "presents") {
     
     $_present->_ref_next->loadRefLit(1)->loadCompleteView();
   }
-  foreach($presentsNP as $sejour) {
+  foreach ($presentsNP as $sejour) {
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
@@ -281,7 +280,6 @@ if($type == "presents") {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("service"       , $service);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("type"          , $type);
 $smarty->assign("type_mouvement", $type_mouvement);
@@ -298,7 +296,8 @@ elseif($type == "presents") {
   $smarty->assign("mouvements"  , $presents);
   $smarty->assign("mouvementsNP", $presentsNP);
   $smarty->assign("update_count", count($presents)."/".count($presentsNP));
-} else {
+}
+else {
   $smarty->assign("mouvements"  , $mouvements);
   $smarty->assign("mouvementsNP", $mouvementsNP);
   $smarty->assign("update_count", count($mouvements)."/".count($mouvementsNP));
@@ -308,5 +307,3 @@ $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 
 $smarty->display("inc_list_sorties.tpl");
-
-?>

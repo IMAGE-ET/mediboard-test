@@ -34,6 +34,10 @@ $emptySejour->_type_admission = $_type_admission;
 
 $totalLits = 0;
 
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
+
 // Détection du changement d'établissement
 if (!$services_ids) {
   $pref_services_ids = json_decode(CAppUI::pref("services_ids_hospi"));
@@ -138,5 +142,3 @@ $smarty->display("inc_tableau_affectations_lits.tpl");
 if (CAppUI::pref("INFOSYSTEM")) {
   mbTrace(CMbArray::pluck(CApp::$chrono->report, "total"), "Rapport uniquement visible avec les informations système");
 }
-
-?>

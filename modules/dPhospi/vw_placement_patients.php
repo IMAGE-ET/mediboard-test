@@ -33,6 +33,16 @@ else {
   $services_ids = array_keys($service->loadListWithPerms(PERM_READ, $where, "externe, nom"));
 }
 
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
+
+if (!$services_ids) {
+  $smarty = new CSmartyDP;
+  $smarty->display("inc_no_services.tpl");
+  CApp::rip();
+}
+
 $service = new CService();
 $services = $service->loadAll($services_ids);
 
