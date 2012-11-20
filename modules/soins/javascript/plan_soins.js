@@ -621,7 +621,7 @@ PlanSoins = {
     url.requestUpdate("show_task_"+prescription_line_element_id);
   },
 
-  moveAllPlanifs: function(prise_id, object_id, object_class, datetime, nb_hours, quantite) {
+  moveAllPlanifs: function(prise_id, object_id, object_class, datetime, nb_hours, quantite, unite_prise) {
     if(confirm("Voulez vous décaler les prises suivantes de "+nb_hours+" heures ?")){
       var oForm = getForm("movePlanifs");
       $V(oForm.prise_id, prise_id);
@@ -630,6 +630,7 @@ PlanSoins = {
       $V(oForm.datetime, datetime);
       $V(oForm.nb_hours, nb_hours);
       $V(oForm.quantite, quantite);
+      $V(oForm.unite_prise, unite_prise);
       return onSubmitFormAjax(oForm, { onComplete: function(){         
         PlanSoins.loadTraitement(null,PlanSoins.date, $V(getForm("click").nb_decalage), 'planification', object_id, object_class, prise_id);
       } });

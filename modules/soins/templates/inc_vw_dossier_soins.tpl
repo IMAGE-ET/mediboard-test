@@ -247,6 +247,7 @@ Main.add(function () {
   <input type="hidden" name="datetime" value="" />
   <input type="hidden" name="nb_hours" value="" />
   <input type="hidden" name="quantite" value="" />
+  <input type="hidden" name="unite_prise" value="" />
 </form>
       
 {{if "dPprescription"|module_active && $multiple_prescription|@count > 1}}
