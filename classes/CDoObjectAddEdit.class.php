@@ -180,7 +180,7 @@ class CDoObjectAddEdit {
       CAppUI::callbackAjax("Form.onSubmitComplete", $guid, $fields);
     }
 
-    if(!$_SESSION["browser"]["mobile"]){
+    if(!CAppUI::$mobile){
       CApp::rip();
     }
 

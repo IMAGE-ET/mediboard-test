@@ -67,6 +67,9 @@ class CAppUI {
   // Language alert mask
   static $unlocalized  = array();
 
+  //mobile flag
+  static $mobile = false;
+
   static $token_expiration = null;
 
   // Global collections

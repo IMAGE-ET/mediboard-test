@@ -240,6 +240,7 @@ CApp::notify("BeforeMain");
 // Check if the mobile feature is available and if the user agent is a mobile
 $enable_mobile_ui = CAppUI::pref("MobileUI") || !CAppUI::$user->_id;
 if (is_file("./mobile/main.php") && !empty($_SESSION["browser"]["mobile"]) && $enable_mobile_ui) {
+  CAppUI::$mobile = true;
   include "./mobile/main.php";
 }
 else {
