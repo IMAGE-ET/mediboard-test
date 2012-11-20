@@ -200,7 +200,7 @@ class CExClassField extends CExListItemsOwner {
    * @return array
    */
   function getPropertyFields(){
-    if ($this->loadRefExClass()->pixel_positionning) {
+    if ($this->_id && $this->loadRefExClass()->pixel_positionning) {
       return self::$_property_fields_all;
     }
 

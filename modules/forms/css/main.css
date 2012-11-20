@@ -183,6 +183,8 @@ form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
 
 .pixel-positionning .resizable {
   position: absolute;
+  min-width: 10px;
+  min-height: 10px;
 }
 
 .pixel-positionning .subgroup > .overlayed > fieldset {
