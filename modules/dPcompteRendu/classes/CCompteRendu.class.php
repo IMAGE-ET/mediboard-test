@@ -149,7 +149,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["footer_id"]        = "ref class|CCompteRendu";
     $specs["preface_id"]       = "ref class|CCompteRendu";
     $specs["ending_id"]        = "ref class|CCompteRendu";
-    $specs["modele_id"]        = "ref class|CCompteRendu";
+    $specs["modele_id"]        = "ref class|CCompteRendu nullify";
     $specs["height"]           = "float min|0";
     $specs["margin_top"]       = "float notNull min|0 default|2 show|0";
     $specs["margin_bottom"]    = "float notNull min|0 default|2 show|0";
