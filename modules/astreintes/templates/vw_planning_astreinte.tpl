@@ -218,6 +218,10 @@ Main.add(function(){
         </button>
 <table class="main">
   <tr>
+    <th>{{tr}}CPlageAstreinte.filter{{/tr}}</th>
+  </tr>
+  <tr>
+  </tr>
     <td>
       <form name="searchplanning" method="get" onsubmit="return loadPlanning(this)">
         <input type="hidden" name="m" value="{{$m}}"/>

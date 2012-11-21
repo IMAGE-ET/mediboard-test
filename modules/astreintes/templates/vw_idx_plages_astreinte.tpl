@@ -18,6 +18,9 @@ function raz(form) {
 }
 
 </script>
+<button class="new" type="button" onclick="PlageAstreinte.edit('','')">
+{{tr}}CPlageAstreinte-title-create{{/tr}}
+</button>
 <table class="main">
   <tr>
      <td>
@@ -40,12 +43,14 @@ function raz(form) {
           </th>
         </tr>
         {{foreach from=$plages item=_plage}}
-        <tr>
+        <tr onclick="PlageAstreinte.edit('{{$_plage->_id}}','{{$_plage->user_id}}');">
           <td>
+            <a href="#" >
             {{$_plage->_ref_user}}
+            </a>
           </td>
           <td>
-            <a href="#" onclick="PlageAstreinte.edit('{{$_plage->_id}}','{{$_plage->user_id}}');">
+
             {{if $_plage->libelle}}{{$_plage->libelle}}{{else}}<em>{{tr}}CPlageAstreinte.noLibelle{{/tr}}</em>{{/if}}
             </a>
           </td>

@@ -38,13 +38,13 @@
   <tr>
     <!-- Navigation par semaine ou mois-->
     <td colspan="2" style="text-align: center;">
-      <button class="left" onclick="changedate('p')" style="min-width:120px;text-align:left;">
+      <button class="left" onclick="changedate('p')" style="min-width:100px;text-align:left;">
         {{if $choix=="semaine"}}{{tr}}Previous week{{/tr}}{{else}}{{tr}}Previous month{{/tr}}{{/if}}
       </button>
-      <button class="center" onclick="changedate('t')" style="text-align:center;">
+      <a class="center" onclick="changedate('t')" href="#1" style="text-align:center;">
         {{if $choix=="semaine"}}{{tr}}This week{{/tr}}{{else}}{{tr}}This month{{/tr}}{{/if}}
-      </button>
-      <button class="right rtl" onclick="changedate('n')" style="min-width:120px;text-align:right;">
+      </a>
+      <button class="right rtl" onclick="changedate('n')" style="min-width:100px;text-align:right;">
         {{if $choix=="semaine"}}{{tr}}Next week{{/tr}}{{else}}{{tr}}Next month{{/tr}}{{/if}}
       </button>
     </td>

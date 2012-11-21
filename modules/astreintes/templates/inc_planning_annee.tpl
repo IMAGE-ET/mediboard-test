@@ -7,17 +7,25 @@
   background: #fff;
 }
 
-.cal td.occuped {
-	background-color: #ccc;
-	font-weight: bold;
+.cal td.holidays {
+  background:#c3ffbb;
+  border:solid 1px black;
 }
 
+.cal td.weekend {
+  background:#ddf;
+}
+
+.cal td.occuped {
+	background-color: #57b6ff;
+	font-weight: bold;
+
 .cal td.occuped.start {
-  border-left: 2px solid #999;
+  border-left: 2px solid red;
 }
 
 .cal td.occuped.end {
-  border-right: 2px solid #999;
+  border-right: 2px solid red;
 }
 </style>
 
@@ -127,9 +135,9 @@ changeannee = function (sens) {
 			   <td
            {{assign var=weekend value=$date|date_format:"%A"|upper|substr:0:1}}
            {{if in_array($date, $bank_holidays)}}
-             style="background: #fc0;"
+             class="holidays"
            {{elseif $weekend == "S" || $weekend == "D"}}
-             style="background: #ddf;"
+             class="weekend"
            {{/if}}>
 			 {{/if}}
 				 {{assign var=jour value=$i-$start+1}}

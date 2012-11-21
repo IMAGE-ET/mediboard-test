@@ -25,9 +25,9 @@
     <tr>
       <td>
         {{if $astreinte->_num_astreinte}}
-          <a class="button phone">{{mb_value object=$astreinte field=_num_astreinte}}</a>
+          <img src="images/icons/phone.png" alt="{{tr}}CPlageAstreinte.PhoneNumber{{/tr}}"/>{{mb_value object=$astreinte field=_num_astreinte}}
         {{else}}
-          <a class="button warning">{{tr}}CPlageAstreinte.noPhoneNumber{{/tr}}</a>
+          <div class="small-warning">{{tr}}CPlageAstreinte.noPhoneNumber{{/tr}}</div>
         {{/if}}
       </td>
     </tr>
