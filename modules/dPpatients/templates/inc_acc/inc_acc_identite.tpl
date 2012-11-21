@@ -334,7 +334,7 @@ Main.add(function() {
                  tabs.changeTabAndFocus('assure', this.form.assure_nom);"}}</td>
         </tr>
         {{if "covercard"|module_active}}
-        <tr>
+        <tr style="display:none">
           <th>{{mb_label object=$patient field="_assureCC_id"}}</th>
           <td>{{mb_field object=$patient field="_assureCC_id"}}</td>
         </tr>

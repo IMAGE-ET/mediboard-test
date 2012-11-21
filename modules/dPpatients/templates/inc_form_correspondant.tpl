@@ -301,6 +301,11 @@
       <td>{{mb_field object=$correspondant field="ean_id"}}</td>
     </tr>
 
+    <tr>
+      <th>{{mb_label object=$correspondant field="assure_id"}}</th>
+      <td>{{mb_field object=$correspondant field="assure_id"}}</td>
+    </tr>
+
     {{if !$mode_modele}}
       <tr id="date_debut" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="date_debut"}}</th>

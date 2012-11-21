@@ -38,6 +38,7 @@ class CCorrespondantPatient extends CMbObject {
   var $email      = null;
   var $remarques  = null;
   var $ean        = null;
+  var $assure_id  = null;
   var $ean_id     = null;
   var $date_debut = null;
   var $date_fin   = null;
@@ -77,6 +78,7 @@ class CCorrespondantPatient extends CMbObject {
     $specs["email"]      = "str maxLength|255";
     $specs["remarques"]  = "text";
     $specs["ean"]        = "str maxLength|30";
+    $specs["assure_id"]  = "str maxLength|30";
     $specs["ean_id"]     = "str maxLength|5";
     $specs["date_debut"] = "date";
     $specs["date_fin"]   = "date";
