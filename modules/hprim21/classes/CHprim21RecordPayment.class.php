@@ -21,8 +21,8 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
     $sender       = $exchange_hpr->_ref_sender;
     $sender->loadConfigValues();    
     
-    $reg_patient = $this->queryNode("REG.PATIENT", null, $varnull, true);
-    $this->queryNodes("REG", $reg_patient, $data, true);
+    //$reg_patient = $this->queryNode("REG.PATIENT", null, $varnull, true);
+    $this->queryNodes("REG", null, $data, true);
 
     return $data;
   }
