@@ -444,7 +444,8 @@ class CAppUI {
       if (is_array($_arg)) {
         $_arg = array_map_recursive("utf8_encode", $_arg);
       }
-      else {
+
+      if (is_string($_arg)) {
         $_arg = utf8_encode($_arg);
       }
 
