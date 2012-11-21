@@ -20,15 +20,16 @@ $nb_months   = CValue::get("nb_months", 3);
 $period      = CValue::get("period", CAppUI::pref("DefaultPeriod"));
 
 // Récupération des plages de consultation disponibles
-$plage = new CPlageconsult;
+$plage = new CPlageconsult();
 $listPlage = array();
 $where = array();
 
 // Praticiens sélectionnés
 $praticien = new CMediusers;
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
+if (CAppUI::pref("pratOnlyForConsult", 1)) {
   $listPrat = $praticien->loadPraticiens(PERM_EDIT, $function_id);
-} else {
+}
+else {
   $listPrat = $praticien->loadProfessionnelDeSante(PERM_EDIT, $function_id);
 }
 
@@ -39,7 +40,7 @@ $order = "date, debut";
 // Chargement des plages par date
 $maxDate = mbDate("-1 DAYS", $date);
 
-for($i = 1; $i <= $nb_months; $i++) {
+for ($i = 1; $i <= $nb_months; $i++) {
   $minDate = mbDate("+1 DAYS", $maxDate);
   $maxDate = mbTransformTime("+1 MONTH", $minDate, "%Y-%m-01");
   $maxDate = mbDate("-1 DAYS", $maxDate);
@@ -47,12 +48,14 @@ for($i = 1; $i <= $nb_months; $i++) {
   $listPlages[mbTransformTime(null, $minDate, "%B %Y")] = $plage->loadList($where, $order);
 }
 
+$bank_holidays = array_merge(mbBankHolidays($date), mbBankHolidays($maxDate));
+
 // Chargement des places disponibles pour chaque plage
-foreach($listPlages as &$curr_month) {
+foreach ($listPlages as &$curr_month) {
   foreach ($curr_month as &$curr_plage) {
     $curr_plage->_ref_chir =& $listPrat[$curr_plage->chir_id];
     $curr_plage->loadRefs(false);
-		$curr_plage->_ref_chir->loadRefFunction();
+    $curr_plage->_ref_chir->loadRefFunction();
     $curr_plage->_listPlace = array();
     for ($i = 0; $i < $curr_plage->_total; $i++) {
       $minutes = $curr_plage->_freq * $i;
@@ -64,7 +67,7 @@ foreach($listPlages as &$curr_month) {
       // Chargement de la categorie
       $consultation->loadRefCategorie();
       $keyPlace = mbTimeCountIntervals($curr_plage->debut, $consultation->heure, $curr_plage->freq);
-      for  ($i = 0;  $i < $consultation->duree; $i++) {
+      for ($i = 0;  $i < $consultation->duree; $i++) {
         if (isset($curr_plage->_listPlace[($keyPlace + $i)])) {
           $curr_plage->_listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;
         }
@@ -81,7 +84,6 @@ $smarty->assign("chir_id"        , $chir_id);
 $smarty->assign("plageconsult_id", null);
 $smarty->assign("listPlages"     , $listPlages);
 $smarty->assign("online"         , false);
+$smarty->assign("bank_holidays"  , $bank_holidays);
 
 $smarty->display("offline_programme_consult.tpl");
-
-?>
