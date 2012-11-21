@@ -22,6 +22,11 @@ if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);
 }
 
+$services = new CService();
+$where = array();
+$where["service_id"] = CSQLDataSource::prepareIn($services_ids);
+$services = $services->loadList($where);
+
 $praticien = new CMediusers();
 $praticien->load($praticien_id);
 
@@ -165,7 +170,28 @@ if ($type == "presents") {
     $_deplacement->_ref_next->loadRefLit()->loadCompleteView();
     $_deplacement->_ref_prev->loadRefLit()->loadCompleteView();
   }
-
+  
+  $dep_entrants_by_service = array();
+  $dep_sortants_by_service = array();
+  
+  foreach ($dep_entrants as $_dep_entrant) {
+    if (!isset($dep_entrants_by_service[$_dep_entrant->service_id])) {
+      $dep_entrants_by_service[$_dep_entrant->service_id] = array();
+    }
+    $dep_entrants_by_service[$_dep_entrant->service_id][] = $_dep_entrant;
+  }
+  
+  $dep_entrants = $dep_entrants_by_service;
+  
+  foreach ($dep_sortants as $_dep_sortant) {
+    if (!isset($dep_sortants_by_service[$_dep_sortant->service_id])) {
+      $dep_sortants_by_service[$_dep_sortant->service_id] = array();
+    }
+    $dep_sortants_by_service[$_dep_sortant->service_id][] = $_dep_sortant;
+  }
+  
+  $dep_sortants = $dep_sortants_by_service;
+  
 // Récupération des entrées du jour
 } elseif($type_mouvement == "entrees") {
   // Patients placés
@@ -290,6 +316,7 @@ $smarty->assign("date"          , $date);
 if ($type == "deplacements") {
   $smarty->assign("dep_entrants", $dep_entrants);
   $smarty->assign("dep_sortants", $dep_sortants);
+  $smarty->assign("services", $services);
   $smarty->assign("update_count", count($dep_entrants)."/".count($dep_sortants));
 }
 elseif($type == "presents") {

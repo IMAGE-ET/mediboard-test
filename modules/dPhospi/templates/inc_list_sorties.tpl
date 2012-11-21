@@ -34,9 +34,6 @@
       <tr class="only-printable">
         <th class="title text" colspan="100">
           Déplacements entrants ({{$dep_entrants|@count}})
-          {{if $service->_id}}
-            &mdash; {{$service}}
-          {{/if}}
           {{if $praticien->_id}}
             &mdash; Dr {{$praticien}}
           {{/if}}
@@ -56,8 +53,15 @@
         <th>Provenance</th>
         <th>{{mb_colonne class="CAffectation" field="entree"     order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
       </tr>
-      {{foreach from=$dep_entrants item=_sortie}}
-        {{mb_include module=hospi template=inc_check_deplacement_line sens="entrants"}}
+      {{foreach from=$dep_entrants item=_dep_entrants_by_service key=_service_id}}
+        <tr>
+          <th class="title text" colspan="100">
+            {{$services.$_service_id}}
+          </th>
+        </tr>
+        {{foreach from=$_dep_entrants_by_service item=_sortie}}
+          {{mb_include module=hospi template=inc_check_deplacement_line sens="entrants"}}
+        {{/foreach}}
       {{foreachelse}}
         <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
       {{/foreach}}
@@ -68,9 +72,6 @@
       <tr class="only-printable">
         <th class="title text" colspan="100">
           Déplacements sortants ({{$dep_sortants|@count}})
-          {{if $service->_id}}
-            &mdash; {{$service}}
-          {{/if}}
           {{if $praticien->_id}}
             &mdash; Dr {{$praticien}}
           {{/if}}
@@ -90,8 +91,15 @@
         <th>Destination</th>
         <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
       </tr>
-      {{foreach from=$dep_sortants item=_sortie}}
-        {{mb_include module=hospi template=inc_check_deplacement_line sens="sortants"}}
+      {{foreach from=$dep_sortants item=_dep_sortants_by_service key=_service_id}}
+        <tr>
+          <th class="title text" colspan="100">
+            {{$services.$_service_id}}
+          </th>
+        </tr>
+        {{foreach from=$_dep_sortants_by_service item=_sortie key=_service_id}}
+          {{mb_include module=hospi template=inc_check_deplacement_line sens="sortants"}}
+        {{/foreach}}
       {{foreachelse}}
         <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
       {{/foreach}}
