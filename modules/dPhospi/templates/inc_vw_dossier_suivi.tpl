@@ -12,10 +12,10 @@ delCibleTransmission = function() {
 
 showListTransmissions = function(page, total) {
   page = page || 0;
-	
+  
   $$("div.list_trans").invoke("hide");
   $("list_"+page).show();
-	
+  
   var url = new Url("system", "ajax_pagination");
   
   if (total){
@@ -158,7 +158,7 @@ addObservation = function(sejour_id, user_id, observation_id) {
   if (observation_id != undefined) {
     url.addParam("observation_id", observation_id);
   }
-  url.requestModal(600);
+  url.requestModal(600, 400);
 }
 
 addPrescription = function(sejour_id, user_id, object_id, object_class) {
