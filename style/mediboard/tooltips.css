@@ -16,8 +16,9 @@ div.tooltip {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   
   /* IE specific shadow */
-  zoom: 1;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6)";
+  /* Commented out because of a possible bug with IE9 (2012-11-15)
+  /*zoom: 1;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(color='#969696', Direction=135, Strength=6)";*/
   
   /* Fun with box-shadows */
   /*box-shadow:
