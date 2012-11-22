@@ -1676,12 +1676,12 @@ TESTS A EFFECTUER
     return str_replace('$g', $group_id, $tag_consultation);
   }
   
-  function createFactureConsult($du_patient = null, $du_tiers = null, $type_facture = "maladie") {
+  function createFactureConsult($type_facture = "maladie") {
     $facture               = new CFactureConsult();
     $facture->patient_id   = $this->patient_id;
     $facture->praticien_id = $this->_praticien_id;
-    $facture->du_patient   = $du_patient;
-    $facture->du_tiers     = $du_tiers;
+    $facture->du_patient   = $this->du_patient;
+    $facture->du_tiers     = $this->du_tiers;
     $facture->type_facture = $type_facture;
     $facture->ouverture    = mbDate();
     $facture->cloture      = mbDate();
