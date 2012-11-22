@@ -38,7 +38,7 @@ $list = array();
 
 
 if($type_modif == "annule") {
-  $queryInPlage   = "SELECT SQL_NO_CACHE DISTINCT(operations.operation_id) AS op_id,
+  $queryInPlage   = "SELECT DISTINCT(operations.operation_id) AS op_id,
                        DATE_FORMAT(plagesop.date, '%Y - %m') AS mois,
                        plagesop.date AS orderitem
                      FROM operations
@@ -52,7 +52,7 @@ if($type_modif == "annule") {
                        AND DATE(user_log.date) = plagesop.date
                        AND user_log.fields LIKE '%annulee%'
                        AND operations.annulee = '1'";
-  $queryHorsPlage = "SELECT SQL_NO_CACHE DISTINCT(operations.operation_id) AS op_id,
+  $queryHorsPlage = "SELECT DISTINCT(operations.operation_id) AS op_id,
                        DATE_FORMAT(operations.date, '%Y - %m') AS mois,
                        operations.date AS orderitem
                      FROM operations
@@ -67,7 +67,7 @@ if($type_modif == "annule") {
                        AND operations.annulee = '1'";
 }
 else {
-  $queryInPlage   = "SELECT SQL_NO_CACHE DISTINCT(operations.operation_id) AS op_id,
+  $queryInPlage   = "SELECT DISTINCT(operations.operation_id) AS op_id,
                        DATE_FORMAT(plagesop.date, '%Y - %m') AS mois,
                        plagesop.date AS orderitem
                      FROM operations
@@ -80,7 +80,7 @@ else {
                        AND user_log.type = 'create'
                        AND DATE(user_log.date) = plagesop.date
                        AND operations.annulee = '0'";
-  $queryHorsPlage = "SELECT SQL_NO_CACHE DISTINCT(operations.operation_id) AS op_id,
+  $queryHorsPlage = "SELECT DISTINCT(operations.operation_id) AS op_id,
                        DATE_FORMAT(operations.date, '%Y - %m') AS mois,
                        operations.date AS orderitem
                      FROM operations
