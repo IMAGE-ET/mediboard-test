@@ -14,10 +14,10 @@ $type_modif = CValue::getOrSession("type_modif", "annule");
 $date_max   = CValue::getOrSession("_date_max", mbDate());
 if(phpversion() >= "5.3") {
   $date_max   = mbDate("last day of +0 months", $date_max); 
-  $date_min   = mbDate("first day of -3 months", $date_max);
+  $date_min   = mbDate("first day of -0 months", $date_max);
 } else {
   $date_max = mbTransformTime("+ 1 month", $date_max, "%Y-%m-01");
-  $date_min = mbDate("- 4 month", $date_max);
+  $date_min = mbDate("- 1 month", $date_max);
   $date_max = mbDate("- 1 day", $date_max);
 }
 $prat_id    = CValue::get("prat_id");
@@ -38,7 +38,7 @@ $list = array();
 
 
 if($type_modif == "annule") {
-  $queryInPlage   = "SELECT DISTINCT(operations.operation_id) AS op_id,
+  $queryInPlage   = "SELECT SQL_NO_CACHE DISTINCT(operations.operation_id) AS op_id,
                        DATE_FORMAT(plagesop.date, '%Y - %m') AS mois,
                        plagesop.date AS orderitem
                      FROM operations
@@ -52,7 +52,7 @@ if($type_modif == "annule") {
                        AND DATE(user_log.date) = plagesop.date
                        AND user_log.fields LIKE '%annulee%'
                        AND operations.annulee = '1'";
-  $queryHorsPlage = "SELECT DISTINCT(operations.operation_id) AS op_id,
+  $queryHorsPlage = "SELECT SQL_NO_CACHE DISTINCT(operations.operation_id) AS op_id,
                        DATE_FORMAT(operations.date, '%Y - %m') AS mois,
                        operations.date AS orderitem
                      FROM operations
@@ -67,7 +67,7 @@ if($type_modif == "annule") {
                        AND operations.annulee = '1'";
 }
 else {
-  $queryInPlage   = "SELECT DISTINCT(operations.operation_id) AS op_id,
+  $queryInPlage   = "SELECT SQL_NO_CACHE DISTINCT(operations.operation_id) AS op_id,
                        DATE_FORMAT(plagesop.date, '%Y - %m') AS mois,
                        plagesop.date AS orderitem
                      FROM operations
@@ -80,7 +80,7 @@ else {
                        AND user_log.type = 'create'
                        AND DATE(user_log.date) = plagesop.date
                        AND operations.annulee = '0'";
-  $queryHorsPlage = "SELECT DISTINCT(operations.operation_id) AS op_id,
+  $queryHorsPlage = "SELECT SQL_NO_CACHE DISTINCT(operations.operation_id) AS op_id,
                        DATE_FORMAT(operations.date, '%Y - %m') AS mois,
                        operations.date AS orderitem
                      FROM operations
@@ -102,6 +102,7 @@ if($codeCCAM) {
   $queryInPlage   .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   $queryHorsPlage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 }
+
 $queryInPlage   .= "\nAND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
 $queryHorsPlage .= "\nAND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
 $queryInPlage   .= "\nORDER BY orderitem, bloc_operatoire.nom, sallesbloc.nom";
@@ -120,7 +121,9 @@ for($rangeDate = $date_min; $rangeDate <= $date_max; $rangeDate = mbDate("+1 mon
 foreach($resultInPlage as $res) {
   $operation = new COperation();
   $operation->load($res['op_id']);
-  $operation->loadRefsFwd();
+  $operation->loadRefPatient(true);
+  $operation->loadRefPlageOp(true);
+  $operation->loadRefPraticien(true);
   
   $list[$res['mois']]['total']++;
   $list[$res['mois']]['inPlage'][$operation->_id] = $operation;
