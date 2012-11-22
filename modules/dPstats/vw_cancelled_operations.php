@@ -12,8 +12,14 @@ CCanDo::checkRead();
 
 $type_modif = CValue::getOrSession("type_modif", "annule");
 $date_max   = CValue::getOrSession("_date_max", mbDate());
-$date_max   = mbDate("last day of +0 months", $date_max); 
-$date_min   = mbDate("first day of -3 months", $date_max);
+if(phpversion() >= "5.3") {
+  $date_max   = mbDate("last day of +0 months", $date_max); 
+  $date_min   = mbDate("first day of -3 months", $date_max);
+} else {
+  $date_max = mbTransformTime("+ 1 month", $date_max, "%Y-%m-01");
+  $date_min = mbDate("- 4 month", $date_max);
+  $date_max = mbDate("- 1 day", $date_max);
+}
 $prat_id    = CValue::get("prat_id");
 $salle_id   = CValue::get("salle_id");
 $bloc_id    = CValue::get("bloc_id");
