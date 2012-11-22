@@ -35,7 +35,13 @@ updateObjectId{{$uid}} = function(id){
 					</button>
 				</th>
 	      <td class="values {{if $entity->_conf_object->$_conf == null}} opacity-50 {{/if}}">
-	      	{{mb_field object=$entity->_conf_object field=$_conf increment=true form="configure-constantes-`$entity->_guid`" emptyLabel=" " typeEnum="select"
+          {{assign var=typeEnum value=select}}
+
+          {{if $entity->_conf_object->_specs.$_conf instanceof CSetSpec}}
+            {{assign var=typeEnum value=checkbox}}
+          {{/if}}
+
+	      	{{mb_field object=$entity->_conf_object field=$_conf increment=true form="configure-constantes-`$entity->_guid`" emptyLabel=" " typeEnum=$typeEnum
 					           onchange="\$(this).up('tr.config-row').down('.values').setClassName('opacity-50',!this.value); this.form.onsubmit()"}}
 				</td>
 	    </tr>
