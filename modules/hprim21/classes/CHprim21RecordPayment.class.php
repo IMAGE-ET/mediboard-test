@@ -286,11 +286,6 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
       return $reglement;
     }
 
-    $facture->du_tiers += $value;
-    if ($msg = $facture->store()) {
-      return $msg;
-    }
-    
     return $reglement;
   } 
 }
