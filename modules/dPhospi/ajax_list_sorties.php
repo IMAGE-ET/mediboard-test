@@ -101,6 +101,11 @@ if ($order_col == "sortie"){
   $order   = "affectation.sortie $order_way, patients.nom, patients.prenom";
   $orderNP = "sejour.sortie $order_way, patients.nom, patients.prenom";
 }
+if ($order_col == "entree"){
+  $order   = "affectation.entree $order_way, patients.nom, patients.prenom";
+  $orderNP = "sejour.entree $order_way, patients.nom, patients.prenom";
+}
+
 
 // Récupération des présents du jour
 if ($type == "presents") {
@@ -141,6 +146,27 @@ if ($type == "presents") {
       $sejour->loadRefCurrOperation($date)->updateHeureUS();
     }
   }
+  
+  $presents_by_service = array();
+  $presentsNP_by_service = array();
+  
+  foreach ($presents as $_present) {
+    if (!isset($presents_by_service[$_present->service_id])) {
+      $presents_by_service[$_present->service_id] = array();
+    }
+    $presents_by_service[$_present->service_id][] = $_present;
+  }
+  
+  $presents = $presents_by_service;
+  
+  foreach ($presentsNP as $_present) {
+    if (!isset($presentsNP_by_service[$_present->service_id])) {
+      $presentsNP_by_service[$_present->service_id] = array();
+    }
+    $presentsNP_by_service[$_present->service_id][] = $_present;
+  }
+  
+  $presentsNP = $presentsNP_by_service;
   
 // Récupération des déplacements du jour
 } elseif ($type == "deplacements") {
@@ -245,6 +271,28 @@ if ($type == "presents") {
       }
     }
   }
+  
+  $mouvements_by_service = array();
+  $mouvementsNP_by_service = array();
+  
+  foreach ($mouvements as $_mouvement) {
+    if (!isset($mouvements_by_service[$_mouvement->service_id])) {
+      $mouvements_by_service[$_mouvement->service_id] = array();
+    }
+    $mouvements_by_service[$_mouvement->service_id][] = $_mouvement;
+  }
+  
+  $mouvements = $mouvements_by_service;
+  
+  foreach ($mouvementsNP as $_mouvement) {
+    if (!isset($mouvementsNP_by_service[$_mouvement->service_id])) {
+      $mouvementsNP_by_service[$_mouvement->service_id] = array();
+    }
+    $mouvementsNP_by_service[$_mouvement->service_id][] = $_mouvement;
+  }
+  
+  $mouvementsNP = $mouvementsNP_by_service;
+  
 // Récupération des sorties du jour
 } else {
   // Patients placés
@@ -301,6 +349,27 @@ if ($type == "presents") {
       }
     }
   }
+  
+  $mouvements_by_service = array();
+  $mouvementsNP_by_service = array();
+  
+  foreach ($mouvements as $_mouvement) {
+    if (!isset($mouvements_by_service[$_mouvement->service_id])) {
+      $mouvements_by_service[$_mouvement->service_id] = array();
+    }
+    $mouvements_by_service[$_mouvement->service_id][] = $_mouvement;
+  }
+  
+  $mouvements = $mouvements_by_service;
+  
+  foreach ($mouvementsNP as $_mouvement) {
+    if (!isset($mouvementsNP_by_service[$_mouvement->service_id])) {
+      $mouvementsNP_by_service[$_mouvement->service_id] = array();
+    }
+    $mouvementsNP_by_service[$_mouvement->service_id][] = $_mouvement;
+  }
+  
+  $mouvementsNP = $mouvementsNP_by_service;
 }
 
 // Création du template
@@ -313,10 +382,11 @@ $smarty->assign("type_hospi"    , $type_hospi);
 $smarty->assign("order_way"     , $order_way);
 $smarty->assign("order_col"     , $order_col);
 $smarty->assign("date"          , $date);
+$smarty->assign("services", $services);
+
 if ($type == "deplacements") {
   $smarty->assign("dep_entrants", $dep_entrants);
   $smarty->assign("dep_sortants", $dep_sortants);
-  $smarty->assign("services", $services);
   $smarty->assign("update_count", count($dep_entrants)."/".count($dep_sortants));
 }
 elseif($type == "presents") {

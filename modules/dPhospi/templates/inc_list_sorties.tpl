@@ -92,11 +92,13 @@
         <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
       </tr>
       {{foreach from=$dep_sortants item=_dep_sortants_by_service key=_service_id}}
-        <tr>
-          <th class="title text" colspan="100">
-            {{$services.$_service_id}}
-          </th>
-        </tr>
+        {{if isset($services.$_service_id|smarty:nodefaults)}}
+          <tr>
+            <th class="title text" colspan="100">
+              {{$services.$_service_id}}
+            </th>
+          </tr>
+        {{/if}}
         {{foreach from=$_dep_sortants_by_service item=_sortie key=_service_id}}
           {{mb_include module=hospi template=inc_check_deplacement_line sens="sortants"}}
         {{/foreach}}
@@ -133,9 +135,6 @@
         {{/if}}
         placé
         ({{$mouvements|@count}})
-        {{if $service->_id}}
-          &mdash; {{$service}}
-        {{/if}}
         {{if $praticien->_id}}
           &mdash; Dr {{$praticien}}
         {{/if}}
@@ -160,13 +159,24 @@
       <th>
         {{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
       </th>
-      <th>Entree</th>
+      <th>
+        {{mb_colonne class="CAffectation" field="entree"     order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
+      </th>
       <th colspan="2">
         {{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
       </th>
     </tr>
-    {{foreach from=$mouvements item=_sortie}}
-      {{mb_include module=hospi template=inc_check_sortie_line}}
+    {{foreach from=$mouvements item=_mouvements_by_service key=_service_id}}
+      {{if isset($services.$_service_id|smarty:nodefaults)}}
+        <tr>
+          <th class="title text" colspan="100">
+            {{$services.$_service_id}}
+          </th>
+        </tr>
+      {{/if}}
+      {{foreach from=$_mouvements_by_service item=_sortie}}
+        {{mb_include module=hospi template=inc_check_sortie_line}}
+      {{/foreach}}
     {{foreachelse}}
       <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
@@ -185,9 +195,6 @@
           {{/if}}
           non placé
           ({{$mouvementsNP|@count}})
-        {{if $service->_id}}
-          &mdash; {{$service}}
-        {{/if}}
         {{if $praticien->_id}}
           &mdash; Dr {{$praticien}}
         {{/if}}
@@ -210,11 +217,20 @@
         <th>
           {{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
         </th>
-        <th>Entree</th>
+        <th>{{mb_colonne class="CAffectation" field="entree" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
         <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
       </tr>
-      {{foreach from=$mouvementsNP item=_sortie}}
-        {{mb_include module=hospi template=inc_check_sortieNP_line}}
+      {{foreach from=$mouvementsNP item=_mouvemementsNP_by_service key=_service_id}}
+        {{if isset($services.$_service_id|smarty:nodefaults)}}
+          <tr>
+            <th class="title text" colspan="100">
+              {{$services.$_service_id}}
+            </th>
+          </tr>
+        {{/if}}
+        {{foreach from=$_mouvemementsNP_by_service item=_sortie}}
+          {{mb_include module=hospi template=inc_check_sortieNP_line}}
+        {{/foreach}}
       {{foreachelse}}
         <tr><td colspan="100" class="empty">{{tr}}CSejour.none{{/tr}}</td></tr>
     {{/foreach}}
