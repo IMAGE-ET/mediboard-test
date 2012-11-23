@@ -23,8 +23,9 @@ function selectCode(code,tarif) {
 
 function updateFields(selected) {
   Element.cleanWhitespace(selected);
-  var dn = selected.childNodes;
-  $V(getForm('findCode')._codes_ccam, dn[0].firstChild.nodeValue, false);
+  var form = getForm('findCode');
+  $V(form._codes_ccam, selected.down("strong").innerHTML, false);
+  form.submit();
 }
 
 Main.add(function () {
@@ -133,16 +134,16 @@ Main.add(function () {
           <td style="vertical-align: top; width: 100%">
             <ul>
               <li>
-              	Activité {{$_act->numero}} <em>({{$_act->type}}) {{$_act->libelle}}</em> :
+                Activité {{$_act->numero}} <em>({{$_act->type}}) {{$_act->libelle}}</em> :
                 <ul>
                   <li>Phase(s) :
                     <ul>
                       {{foreach from=$_act->phases item=_phase}}
                       <li>
-                      	Phase {{$_phase->phase}} <em>({{$_phase->libelle}})</em> : {{$_phase->tarif|currency}}
-                      	{{if $_phase->charges}}
-                      		<br />Charges supplémentaires de cabinets possibles : {{$_phase->charges|currency}}
-                      	{{/if}}
+                        Phase {{$_phase->phase}} <em>({{$_phase->libelle}})</em> : {{$_phase->tarif|currency}}
+                        {{if $_phase->charges}}
+                          <br />Charges supplémentaires de cabinets possibles : {{$_phase->charges|currency}}
+                        {{/if}}
                       </li>
                       {{/foreach}}
                     </ul>
