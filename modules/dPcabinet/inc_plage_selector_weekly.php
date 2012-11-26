@@ -109,6 +109,8 @@ for ($i = 0; $i < $nbDays; $i++) {
   }    
 }
 
+$week = CMbDate::weekNumber($debut);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -126,5 +128,6 @@ $smarty->assign("plage"          , $plage);
 $smarty->assign("planning"       , $planning);
 $smarty->assign("bank_holidays"  , $bank_holidays);
 $smarty->assign("print"          , $print);
+$smarty->assign("week"           , $week);
 
 $smarty->display("inc_plage_selector_weekly.tpl");

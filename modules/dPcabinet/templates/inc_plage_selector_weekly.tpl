@@ -66,7 +66,7 @@
               <a style="float:left" href="#1" onclick="$V(getForm('FilterTop').date, '{{$pdate}}')">&lt;&lt;&lt;</a>
               <a style="float:right" href="#1" onclick="$V(getForm('FilterTop').date, '{{$ndate}}')">&gt;&gt;&gt;</a>
               <strong>
-                {{$refDate|date_format:" semaine du %d %B %Y (%U)"}}
+                {{$refDate|date_format:" semaine du %d %B %Y"}} ({{$week}})
               </strong>
               <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit();" />
             </td>

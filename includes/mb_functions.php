@@ -534,6 +534,17 @@ class CMbDate {
   }
   
   /**
+   * Get the week number for a given datetime
+   * 
+   * @param datetime $date Datetime
+   * 
+   * @return int The week number
+   */
+  static function weekNumber($date) {
+    return intval(date("W", strtotime($date)));
+  }
+  
+  /**
    * Get the week number in the month
    * 
    * @param datetime $date Date
