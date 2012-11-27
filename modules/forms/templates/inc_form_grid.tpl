@@ -92,7 +92,9 @@
             {{/if}}
           {{else}}
             <td>
-              {{mb_include module=forms template=inc_ex_message}}
+              <div id="message-{{$_message->_guid}}">
+                {{mb_include module=forms template=inc_ex_message}}
+              </div>
             </td>
           {{/if}}
         {{/if}}
