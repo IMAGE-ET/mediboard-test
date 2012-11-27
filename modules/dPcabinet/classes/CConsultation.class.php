@@ -1687,14 +1687,14 @@ TESTS A EFFECTUER
     $facture->cloture      = mbDate();
     
     $facture->patient_date_reglement = $this->patient_date_reglement;
-    if (!$du_patient) {
+    if (!$this->du_patient) {
       $facture->patient_date_reglement = mbDate();
-    };
+    }
     
     $facture->patient_date_reglement = $this->tiers_date_reglement;
-    if (!$du_tiers) {
+    if (!$this->du_tiers) {
       $facture->tiers_date_reglement = mbDate();
-    };    
+    }
     
     $facture->store();
     
@@ -1705,5 +1705,3 @@ TESTS A EFFECTUER
     return $facture;
   }
 }
-
-?>
