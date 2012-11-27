@@ -22,7 +22,7 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
     $sender->loadConfigValues();    
     
     //$reg_patient = $this->queryNode("REG.PATIENT", null, $varnull, true);
-    $this->queryNodes("REG", null, $data, true);
+    $this->queryNodes("//REG", null, $data, true); // get ALL the REG segments
 
     return $data;
   }
@@ -41,9 +41,16 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
     
     // Rejets partiels du message
     $errors = array();
+
+    if (isset($data["REG"])) {
+      $regs = $data["REG"];
+    }
+    else {
+      $regs = $data["//REG"];
+    }
     
     // Récupération des règlements
-    foreach ($data["REG"] as $_REG) {
+    foreach ($regs as $_REG) {
       $sejour = new CSejour();
       
       $NDA         = $this->getNDA($_REG);
@@ -53,21 +60,21 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
       // Recherche si on retrouve le séjour
       if (!$this->admitFound($NDA, $sejour)) {
         $errors[] = $this->addError(
-                      "P", 
-                      null, 
-                      array(
-                        "REG", 
-                        $segment_row, 
-                        array(
-                          $NDA,
-                          $user_reg
-                        )
-                      ), 
-                      null, 
-                      $NDA, 
-                      "I", 
-                      CAppUI::tr("CHL7EventADT-P-01", $NDA)
-                    );
+          "P",
+          null,
+          array(
+            "REG",
+            $segment_row,
+            array(
+              $NDA,
+              $user_reg
+            )
+          ),
+          null,
+          $NDA,
+          "I",
+          CAppUI::tr("CHL7EventADT-P-01", $NDA)
+        );
         continue;
       }
       
@@ -76,7 +83,7 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
             
       // Sélection des consultations éligibles
       foreach ($consultations as $_consult) {
-        $user     = $_consult->loadRefPraticien();
+        $user = $_consult->loadRefPraticien();
         
         if ($user_reg) {
           if ($user->adeli == $user_reg) {
@@ -110,21 +117,21 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
       
       if (!$consultation || !$consultation->_id) {
         $errors[] = $this->addError(
-                      "P", 
-                      null, 
-                      array(
-                        "REG", 
-                        $segment_row, 
-                        array(
-                          $NDA,
-                          $user_reg
-                        )
-                      ), 
-                      null, 
-                      $NDA, 
-                      "I", 
-                      CAppUI::tr("CHL7EventADT-P-02")
-                    );
+          "P",
+          null,
+          array(
+            "REG",
+            $segment_row,
+            array(
+              $NDA,
+              $user_reg
+            )
+          ),
+          null,
+          $NDA,
+          "I",
+          CAppUI::tr("CHL7EventADT-P-02")
+        );
         continue;
       }
       
