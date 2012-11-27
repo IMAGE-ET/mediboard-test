@@ -65,7 +65,8 @@
     {{elseif $view == "tableau"}}
       <input type="hidden" name="a" value="vw_affectations" />
     {{elseif $view == "topologique"}}
-      <input type="hidden" name="a" value="vw_placement_patients" />
+      {{elseif $view == "etat_lits"}}
+      <input type="hidden" name="tab" value="vw_recherche" />
     {{else}}
       <input type="hidden" name="a" value="vw_mouvements" />
     {{/if}}

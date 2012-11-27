@@ -6,9 +6,15 @@ function printRecherche() {
   var url = new Url("dPhospi", "vw_recherche");
   url.addElement(form.typeVue);
   url.addElement(form.selPrat);
-  url.addElement(form.selService);
   url.addElement(form.date_recherche);
   url.popup(800, 700, 'Planning');
+}
+
+selectServices = function() {
+  var url = new Url("dPhospi", "ajax_select_services");
+  url.addParam("view", "etat_lits");
+  url.addParam("ajax_request", 0);
+  url.requestModal(null, null, {maxHeight: '600'});
 }
 
 Main.add(function () {
@@ -20,7 +26,7 @@ Main.add(function () {
 <form name="typeVue" action="?m={{$m}}" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
-  
+
   {{if $typeVue}}
   <button type="button" class="button print" style="float: right;" onclick="printRecherche()">{{tr}}Print{{/tr}}</button>
   
@@ -38,12 +44,8 @@ Main.add(function () {
     <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Afficher les patients présents</option>
   </select>
 
-  <select name="selService" onchange="this.form.submit()">
-    <option value="">&mdash; Tous les services</option>
-    {{foreach from=$services item="service"}}
-      <option value="{{$service->_id}}" {{if $selService == $service->_id}}selected="selected"{{/if}}>{{$service->_view}}</option>
-    {{/foreach}}
-  </select>
+  <button type="button" onclick="selectServices();" class="search">Services</button>
+
   <input type="hidden" name="date_recherche" class="dateTime" value="{{$date_recherche}}" onchange="this.form.submit()" />
 </form>
 {{/if}}
@@ -52,6 +54,7 @@ Main.add(function () {
   {{if $typeVue == 0}}
   <tr>
     <th class="title" colspan="4">
+      <button type="button" class="print not-printable notext" style="float: left;" onclick="this.up('table').print()"></button>
       {{$date_recherche|date_format:$conf.datetime}} : {{$libre|@count}} lit(s) disponible(s)
     </th>
   </tr>
@@ -75,11 +78,16 @@ Main.add(function () {
     <td class="text">{{$curr_lit.lit}}</td>
     <td class="text">{{$curr_lit.limite|date_format:"%A %d %B %Y à %Hh%M"}}
   </tr>
+  {{foreachelse}}
+    <tr>
+      <td class="empty" colspan="4">{{tr}}CLit.none{{/tr}}</td>
+    </tr>
   {{/foreach}}
   
   {{else}}
   <tr>
     <th class="title" colspan="9">
+      <button type="button" class="print not-printable notext" style="float: left;" onclick="this.up('table').print()"></button>
       {{if $selPrat}}
         Dr {{$listPrat.$selPrat->_view}} -
       {{/if}}
@@ -98,6 +106,13 @@ Main.add(function () {
     <th>Motif</th>
     <th>Bornes<br/>GHM</th>
   </tr>
+    {{if $listAff.Aff|@count == 0 && $listAff.NotAff|@count == 0}}
+        <tr>
+          <td colspan="9" class="empty">{{tr}}CLit.none{{/tr}}</td>
+        </tr>
+      </table>
+      {{mb_return}}
+    {{/if}}
   {{foreach from=$listAff key=_type_aff item=_liste_aff}}
   {{foreach from=$_liste_aff item=_affectation}}
   {{if $_type_aff == "Aff"}}

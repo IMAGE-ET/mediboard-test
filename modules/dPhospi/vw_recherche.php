@@ -14,9 +14,38 @@ $group = CGroups::loadCurrent();
 // Récupération des paramètres
 $typeVue = CValue::getOrSession("typeVue");
 $selPrat = CValue::getOrSession("selPrat");
-$selService = CValue::getOrSession("selService");
+$services_ids = CValue::getOrSession("services_ids");
+$group_id     = CValue::get("g");
 
 $date_recherche = CValue::getOrSession("date_recherche", mbDateTime());
+
+if (is_array($services_ids)) {
+  CMbArray::removeValue("", $services_ids);
+}
+
+// Détection du changement d'établissement
+if (!$services_ids || $group_id) {
+  $group_id = $group_id ? $group_id : CGroups::loadCurrent()->_id;
+
+  $pref_services_ids = json_decode(CAppUI::pref("services_ids_hospi"));
+
+  // Si la préférence existe, alors on la charge
+  if (isset($pref_services_ids->{"g$group_id"})) {
+    $services_ids = $pref_services_ids->{"g$group_id"};
+    if ($services_ids) {
+      $services_ids = explode("|", $services_ids);
+    }
+    CValue::setSession("services_ids", $services_ids);
+  }
+  // Sinon, chargement de la liste des services en accord avec le droit de lecture
+  else {
+    $service = new CService;
+    $where = array();
+    $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+    $services_ids = array_keys($service->loadListWithPerms(PERM_READ, $where, "externe, nom"));
+    CValue::setSession("services_ids", $services_ids);
+  }
+}
 
 // Liste des chirurgiens
 $listPrat = new CMediusers();
@@ -37,7 +66,8 @@ $ds    = CSQLDataSource::get("std");
 //
 // Cas de l'affichage des lits libres
 //
-if($typeVue == 0) {
+if ($typeVue == 0) {
+
   // Recherche de tous les lits disponibles
   $sql = "SELECT lit.lit_id
           FROM affectation
@@ -53,20 +83,23 @@ if($typeVue == 0) {
     $arrayIn[] = $occupe["lit_id"];
   }
   $notIn = count($arrayIn) > 0 ? implode(', ', $arrayIn) : 0;
-  
-  $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, chambre.caracteristiques as caracteristiques, service.nom AS service, MIN(affectation.entree) AS limite
-          FROM lit
-          LEFT JOIN affectation ON affectation.lit_id = lit.lit_id
-          AND (affectation.entree > '$date_recherche' OR affectation.entree IS NULL)
-          LEFT JOIN chambre ON chambre.chambre_id = lit.chambre_id
-          LEFT JOIN service ON service.service_id = chambre.service_id
-          WHERE lit.lit_id NOT IN($notIn)
-          AND chambre.annule = '0'
-          AND service.group_id = '$group->_id'
-          AND service.service_id ".CSQLDataSource::prepareIn(array_keys($services), $selService)."
-          GROUP BY lit.lit_id
-          ORDER BY service.nom, chambre.nom, lit.nom, limite DESC";
-  $libre = $ds->loadlist($sql);
+  $libre = array();
+
+  if (is_array($services_ids) && count($services_ids)) {
+    $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, chambre.caracteristiques as caracteristiques, service.nom AS service, MIN(affectation.entree) AS limite
+            FROM lit
+            LEFT JOIN affectation ON affectation.lit_id = lit.lit_id
+            AND (affectation.entree > '$date_recherche' OR affectation.entree IS NULL)
+            LEFT JOIN chambre ON chambre.chambre_id = lit.chambre_id
+            LEFT JOIN service ON service.service_id = chambre.service_id
+            WHERE lit.lit_id NOT IN($notIn)
+            AND chambre.annule = '0'
+            AND service.group_id = '$group->_id'
+            AND service.service_id ".CSQLDataSource::prepareIn($services_ids)."
+            GROUP BY lit.lit_id
+            ORDER BY service.nom, chambre.nom, lit.nom, limite DESC";
+    $libre = $ds->loadlist($sql);
+  }
 }
 
 //
@@ -76,40 +109,44 @@ else if ($typeVue == 1) {
   // Recherche des patients du praticien
   // Qui ont une affectation
   $listAff = array(
-   "Aff"    => array(),
-   "NotAff" => array()
+    "Aff"    => array(),
+    "NotAff" => array()
   );
-  $affectation = new CAffectation;
-  $ljoin = array(
-    "lit"     => "affectation.lit_id = lit.lit_id",
-    "chambre" => "chambre.chambre_id = lit.chambre_id",
-    "service" => "service.service_id = chambre.service_id",
-    "sejour"  => "sejour.sejour_id   = affectation.sejour_id"
-  );
-  $where = array(
-    "affectation.entree"  => "< '$date_recherche'",
-    "affectation.sortie"  => "> '$date_recherche'",
-    "service.service_id"  => CSQLDataSource::prepareIn(array_keys($services), $selService),
-    "sejour.praticien_id" => CSQLDataSource::prepareIn(array_keys($listPrat), $selPrat),
-    "sejour.group_id"     => "= '$group->_id'"
-  );
-  $order = "service.nom, chambre.nom, lit.nom";
-  $listAff["Aff"] = $affectation->loadList($where, $order, null, null, $ljoin);
-  foreach($listAff["Aff"] as &$_aff) {
-    $_aff->loadView();
-    $_aff->loadRefSejour();
-    $_aff->_ref_sejour->loadRefPatient();
-    $_aff->_ref_sejour->_ref_praticien =& $listPrat[$_aff->_ref_sejour->praticien_id];
-    $_aff->_ref_sejour->loadRefGHM();
 
-    $_aff->loadRefLit();
-    $_aff->_ref_lit->loadCompleteView();
-    foreach($_aff->_ref_sejour->_ref_operations as $_operation){
-      $_operation->loadExtCodesCCAM();
+  if (is_array($services_ids) && count($services_ids)) {
+
+    $affectation = new CAffectation;
+    $ljoin = array(
+      "lit"     => "affectation.lit_id = lit.lit_id",
+      "chambre" => "chambre.chambre_id = lit.chambre_id",
+      "service" => "service.service_id = chambre.service_id",
+      "sejour"  => "sejour.sejour_id   = affectation.sejour_id"
+    );
+    $where = array(
+      "affectation.entree"  => "< '$date_recherche'",
+      "affectation.sortie"  => "> '$date_recherche'",
+      "service.service_id"  => CSQLDataSource::prepareIn($services_ids),
+      "sejour.praticien_id" => CSQLDataSource::prepareIn(array_keys($listPrat), $selPrat),
+      "sejour.group_id"     => "= '$group->_id'"
+    );
+    $order = "service.nom, chambre.nom, lit.nom";
+    $listAff["Aff"] = $affectation->loadList($where, $order, null, null, $ljoin);
+    foreach($listAff["Aff"] as &$_aff) {
+      $_aff->loadView();
+      $_aff->loadRefSejour();
+      $_aff->_ref_sejour->loadRefPatient();
+      $_aff->_ref_sejour->_ref_praticien =& $listPrat[$_aff->_ref_sejour->praticien_id];
+      $_aff->_ref_sejour->loadRefGHM();
+
+      $_aff->loadRefLit();
+      $_aff->_ref_lit->loadCompleteView();
+      foreach($_aff->_ref_sejour->_ref_operations as $_operation){
+        $_operation->loadExtCodesCCAM();
+      }
     }
   }
-  // Qui n'ont pas d'affectation
-  if(!$selService) {
+  else {
+    // Qui n'ont pas d'affectation
     $sejour = new CSejour();
     $where = array(
       "sejour.entree"  => "< '$date_recherche'",
@@ -136,10 +173,6 @@ $smarty->assign("typeVue"       , $typeVue);
 $smarty->assign("selPrat"       , $selPrat);
 $smarty->assign("listPrat"      , $listPrat);
 $smarty->assign("listAff"       , $listAff);
-$smarty->assign("selService"    , $selService);
-$smarty->assign("services"      , $services);
 $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
 
 $smarty->display("vw_recherche.tpl");
-
-?>
