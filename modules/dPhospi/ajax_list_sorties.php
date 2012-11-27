@@ -17,6 +17,7 @@ $services_ids   = CValue::getOrSession("services_ids"  , null);
 $order_way      = CValue::getOrSession("order_way"   , "ASC");
 $order_col      = CValue::getOrSession("order_col"   , "_patient");
 $show_duree_preop = CAppUI::conf("dPplanningOp COperation show_duree_preop");
+$show_hour_anesth = CAppUI::conf("dPhospi show_hour_anesth_mvt");
 
 if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);
@@ -26,6 +27,8 @@ $services = new CService();
 $where = array();
 $where["service_id"] = CSQLDataSource::prepareIn($services_ids);
 $services = $services->loadList($where);
+
+$update_count = "";
 
 $praticien = new CMediusers();
 $praticien->load($praticien_id);
@@ -119,9 +122,11 @@ if ($type == "presents") {
   // Patients non placés
   $whereNP[]  = "'$date' BETWEEN DATE(sejour.entree) AND DATE(sejour.sortie)";
   $presentsNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
-  
+
+  $update_count = count($presents)."/".count($presentsNP);
+
   // Chargements des détails des séjours
-  foreach($presents as $_present) {
+  foreach ($presents as $_present) {
     $_present->loadRefsFwd();
     $sejour = $_present->_ref_sejour;
     $sejour->loadRefPatient(1);
@@ -130,8 +135,15 @@ if ($type == "presents") {
     $sejour->loadRefsOperations();
     $sejour->loadNDA();
     
-    if ($show_duree_preop) {
-      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+    if ($show_duree_preop || $show_hour_anesth) {
+      $op = $sejour->loadRefCurrOperation($date);
+      if ($show_duree_preop) {
+        $op->updateHeureUS();
+      }
+      if ($show_hour_anesth) {
+        $op->loadRefPlageOp();
+        $op->_ref_anesth->loadRefFunction();
+      }
     }
     
     $_present->_ref_next->loadRefLit(1)->loadCompleteView();
@@ -142,8 +154,15 @@ if ($type == "presents") {
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
     
-    if ($show_duree_preop) {
-      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+    if ($show_duree_preop || $show_hour_anesth) {
+      $op = $sejour->loadRefCurrOperation($date);
+      if ($show_duree_preop) {
+        $op->updateHeureUS();
+      }
+      if ($show_hour_anesth) {
+        $op->loadRefPlageOp();
+        $op->_ref_anesth->loadRefFunction();
+      }
     }
   }
   
@@ -186,8 +205,10 @@ if ($type == "presents") {
   $praticiens   = CMbObject::massLoadFwdRef($sejours, "praticien_id");
   CMbObject::massLoadFwdRef($praticiens, "function_id");
   CMbObject::massLoadFwdRef($deplacements, "lit_id");
-  
-  foreach($deplacements as $_deplacement) {
+
+  $update_count = count($dep_entrants)."/".count($dep_sortants);
+
+  foreach ($deplacements as $_deplacement) {
     $_deplacement->loadRefsFwd();
     $sejour = $_deplacement->_ref_sejour; 
     $sejour->loadRefPatient(1);
@@ -195,6 +216,12 @@ if ($type == "presents") {
     $sejour->loadNDA();
     $_deplacement->_ref_next->loadRefLit()->loadCompleteView();
     $_deplacement->_ref_prev->loadRefLit()->loadCompleteView();
+
+    if ($show_hour_anesth) {
+      $op = $sejour->loadRefCurrOperation($date);
+      $op->loadRefPlageOp();
+      $op->_ref_anesth->loadRefFunction();
+    }
   }
   
   $dep_entrants_by_service = array();
@@ -219,7 +246,7 @@ if ($type == "presents") {
   $dep_sortants = $dep_sortants_by_service;
   
 // Récupération des entrées du jour
-} elseif($type_mouvement == "entrees") {
+} elseif ($type_mouvement == "entrees") {
   // Patients placés
   $where["affectation.entree"] = "BETWEEN '$limit1' AND '$limit2'";
   $where["sejour.entree"]      = "= affectation.entree";
@@ -227,7 +254,7 @@ if ($type == "presents") {
   $mouvements = $affectation->loadList($where, $order, null, null, $ljoin);
   
   // Chargements des détails des séjours
-  foreach($mouvements as $_mouvement) {
+  foreach ($mouvements as $_mouvement) {
     $_mouvement->loadRefsFwd();
     $sejour = $_mouvement->_ref_sejour;
     $sejour->loadRefPatient(1);
@@ -235,9 +262,16 @@ if ($type == "presents") {
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
     $sejour->loadNDA();
-    
-    if ($show_duree_preop) {
-      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+
+    if ($show_duree_preop || $show_hour_anesth) {
+      $op = $sejour->loadRefCurrOperation($date);
+      if ($show_duree_preop) {
+        $op->updateHeureUS();
+      }
+      if ($show_hour_anesth) {
+        $op->loadRefPlageOp();
+        $op->_ref_anesth->loadRefFunction();
+      }
     }
     
     if ($dmi_active) {
@@ -262,8 +296,15 @@ if ($type == "presents") {
     $sejour->loadRefsOperations();
     $sejour->loadNDA();
     
-    if ($show_duree_preop) {
-      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+    if ($show_duree_preop || $show_hour_anesth) {
+      $op = $sejour->loadRefCurrOperation($date);
+      if ($show_duree_preop) {
+        $op->updateHeureUS();
+      }
+      if ($show_hour_anesth) {
+        $op->loadRefPlageOp();
+        $op->_ref_anesth->loadRefFunction();
+      }
     }
     if ($dmi_active) {
       foreach($sejour->_ref_operations as $_interv) {
@@ -271,7 +312,9 @@ if ($type == "presents") {
       }
     }
   }
-  
+
+  $update_count = count($mouvements)."/".count($mouvementsNP);
+
   $mouvements_by_service = array();
   $mouvementsNP_by_service = array();
   
@@ -303,9 +346,9 @@ if ($type == "presents") {
     $where["sejour.confirme"] = " = '0'";
   }
   $mouvements = $affectation->loadList($where, $order, null, null, $ljoin);
-  
+
   // Chargements des détails des séjours
-  foreach($mouvements as $_mouvement) {
+  foreach ($mouvements as $_mouvement) {
     $_mouvement->loadRefsFwd();
     $sejour = $_mouvement->_ref_sejour;
     $sejour->loadRefPatient(1);
@@ -314,9 +357,17 @@ if ($type == "presents") {
     $sejour->loadRefsOperations();
     $sejour->loadNDA();
     
-    if ($show_duree_preop) {
-      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+    if ($show_duree_preop ||  $show_hour_anesth) {
+      $op = $sejour->loadRefCurrOperation($date);
+      if ($show_duree_preop) {
+        $op->updateHeureUS();
+      }
+      if ($show_hour_anesth) {
+        $op->loadRefPlageOp();
+        $op->_ref_anesth->loadRefFunction();
+      }
     }
+
     if ($dmi_active) {
       foreach($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
@@ -332,27 +383,38 @@ if ($type == "presents") {
   $mouvementsNP = $sejour->loadList($whereNP, $orderNP, null, null, $ljoinNP);
   
   // Chargements des détails des séjours
-  foreach($mouvementsNP as $sejour) {
+  foreach ($mouvementsNP as $sejour) {
     $sejour->loadRefPatient(1);
     $sejour->loadRefPraticien(1);
     $sejour->checkDaysRelative($date);
     $sejour->loadRefsOperations();
     $sejour->loadNDA();
     
-    if ($show_duree_preop) {
-      $sejour->loadRefCurrOperation($date)->updateHeureUS();
+    if ($show_duree_preop || $show_hour_anesth) {
+      $op = $sejour->loadRefCurrOperation($date);
+      if ($show_duree_preop) {
+        $op->updateHeureUS();
+      }
+      if ($show_hour_anesth) {
+        $op->loadRefPlageOp();
+        $op->_ref_anesth->loadRefFunction();
+      }
     }
-    
+
     if ($dmi_active) {
       foreach($sejour->_ref_operations as $_interv) {
         $_interv->getDMIAlert();
       }
     }
   }
-  
+
+  $update_count = count($mouvements)."/".count($mouvementsNP);
+
   $mouvements_by_service = array();
   $mouvementsNP_by_service = array();
-  
+
+  $update_count = count($mouvements)."/".count($mouvementsNP);
+
   foreach ($mouvements as $_mouvement) {
     if (!isset($mouvements_by_service[$_mouvement->service_id])) {
       $mouvements_by_service[$_mouvement->service_id] = array();
@@ -382,22 +444,22 @@ $smarty->assign("type_hospi"    , $type_hospi);
 $smarty->assign("order_way"     , $order_way);
 $smarty->assign("order_col"     , $order_col);
 $smarty->assign("date"          , $date);
-$smarty->assign("services", $services);
+$smarty->assign("services"      , $services);
 
 if ($type == "deplacements") {
   $smarty->assign("dep_entrants", $dep_entrants);
   $smarty->assign("dep_sortants", $dep_sortants);
-  $smarty->assign("update_count", count($dep_entrants)."/".count($dep_sortants));
+  $smarty->assign("update_count", $update_count);
 }
 elseif($type == "presents") {
   $smarty->assign("mouvements"  , $presents);
   $smarty->assign("mouvementsNP", $presentsNP);
-  $smarty->assign("update_count", count($presents)."/".count($presentsNP));
+  $smarty->assign("update_count", $update_count);
 }
 else {
   $smarty->assign("mouvements"  , $mouvements);
   $smarty->assign("mouvementsNP", $mouvementsNP);
-  $smarty->assign("update_count", count($mouvements)."/".count($mouvementsNP));
+  $smarty->assign("update_count", $update_count);
 }
 $smarty->assign("vue"          , $vue);
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));

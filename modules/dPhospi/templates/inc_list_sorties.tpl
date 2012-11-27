@@ -1,4 +1,9 @@
 {{assign var=show_duree_preop value=$conf.dPplanningOp.COperation.show_duree_preop}}
+{{assign var=show_age_sexe_mvt value=$conf.dPhospi.show_age_sexe_mvt}}
+{{assign var=show_hour_anesth_mvt value=$conf.dPhospi.show_hour_anesth_mvt}}
+{{assign var=show_retour_mvt value=$conf.dPhospi.show_retour_mvt}}
+{{assign var=show_collation_mvt value=$conf.dPhospi.show_collation_mvt}}
+{{assign var=show_sortie_mvt value=$conf.dPhospi.show_sortie_mvt}}
 
 <script type="text/javascript">
   $('count_{{$type}}_{{$type_mouvement}}').update('('+'{{$update_count}}'+')');
@@ -14,6 +19,8 @@
   });
 </script>
 
+{{assign var=update_splitted value="/"|split:$update_count}}
+
 {{if $type == "deplacements"}}
   <script type="text/javascript">
     refreshList_deplacements = function(order_col, order_way) {
@@ -22,10 +29,10 @@
   </script>
   <ul id="tabs-edit-mouvements-{{$type}}" class="control_tabs">
     <li>
-      <a href="#places-{{$type}}_entrants">Entrants <small id="count_dep_entrants">({{$dep_entrants|@count}})</small></a>
+      <a href="#places-{{$type}}_entrants">Entrants <small id="count_dep_entrants">({{$update_splitted.0}})</small></a>
     </li>
     <li>
-      <a href="#places-{{$type}}_sortants">Sortants <small id="count_dep_sortants">({{$dep_sortants|@count}})</small></a>
+      <a href="#places-{{$type}}_sortants">Sortants <small id="count_dep_sortants">({{$update_splitted.1}})</small></a>
     </li>
   </ul>
   <hr class="control_tabs" />
@@ -47,8 +54,20 @@
         </th>
         {{assign var=url value="?m=$m&tab=$tab"}}
         <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
+        {{if $show_age_sexe_mvt}}
+          <th class="narrow">
+            {{mb_label class=CPatient field=sexe}}
+          </th>
+          <th class="narrow">
+            {{mb_label class=CPatient field=_age}}
+          </th>
+        {{/if}}
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>Motif</th>
+        {{if $show_hour_anesth_mvt}}
+          <th>Heure</th>
+          <th>Anesthésiste</th>
+        {{/if}}
         <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>Provenance</th>
         <th>{{mb_colonne class="CAffectation" field="entree"     order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
@@ -85,8 +104,16 @@
         </th>
         {{assign var=url value="?m=$m&tab=$tab"}}
         <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
+        {{if $show_age_sexe_mvt}}
+          <th class="narrow">{{mb_label class="CPatient" field="sexe"}}</th>
+          <th class="narrow">{{mb_label class="CPatient" field="_age"}}</th>
+        {{/if}}
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>Motif</th>
+        {{if $show_hour_anesth_mvt}}
+          <th>Heure</th>
+          <th>Anesthésiste</th>
+        {{/if}}
         <th>{{mb_colonne class="CAffectation" field="_chambre"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         <th>Destination</th>
         <th>{{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
@@ -115,10 +142,10 @@
   </script>
   <ul id="tabs-edit-mouvements-{{$type}}_{{$type_mouvement}}" class="control_tabs">
     <li>
-      <a href="#places-{{$type}}_{{$type_mouvement}}">Placés <small id="count_deplacements">({{$mouvements|@count}})</small></a>
+      <a href="#places-{{$type}}_{{$type_mouvement}}">Placés <small id="count_deplacements">({{$update_splitted.0}})</small></a>
     </li>
     <li>
-      <a href="#non-places-{{$type}}_{{$type_mouvement}}">Non placés <small id="count_presents">({{$mouvementsNP|@count}})</small></a>
+      <a href="#non-places-{{$type}}_{{$type_mouvement}}">Non placés <small id="count_presents">({{$update_splitted.1}})</small></a>
     </li>
   </ul>
   <hr class="control_tabs" />
@@ -134,7 +161,7 @@
           {{tr}}CSejour.type_mouvement.{{$type_mouvement}}{{/tr}} {{tr}}CSejour.type.{{$type}}{{/tr}}
         {{/if}}
         placé
-        ({{$mouvements|@count}})
+        ({{$update_splitted.0}})
         {{if $praticien->_id}}
           &mdash; Dr {{$praticien}}
         {{/if}}
@@ -149,10 +176,18 @@
         <button class="print notext" style="float:left;" onclick="$('places-{{$type}}_{{$type_mouvement}}').print()">{{tr}}Print{{/tr}}</button>
         {{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
       </th>
+      {{if $show_age_sexe_mvt}}
+        <th class="narrow">{{mb_label class="CPatient" field="sexe"}}</th>
+        <th class="narrow">{{mb_label class="CPatient" field="_age"}}</th>
+      {{/if}}
       <th>
         {{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
       </th>
       <th>Motif</th>
+      {{if $show_hour_anesth_mvt}}
+        <th>Heure</th>
+        <th>Anesthésiste</th>
+      {{/if}}
       {{if "dmi"|module_active}}
         <th class="narrow">{{tr}}CDMI{{/tr}}</th>
       {{/if}}
@@ -162,9 +197,20 @@
       <th>
         {{mb_colonne class="CAffectation" field="entree"     order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
       </th>
-      <th colspan="2">
+      <th>
         {{mb_colonne class="CAffectation" field="sortie"     order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
       </th>
+      {{if $type == "ambu"}}
+        {{if $show_retour_mvt}}
+          <th style="min-width: 100px; max-width: 100px; width: 100px;">Retour de bloc</th>
+        {{/if}}
+        {{if $show_collation_mvt}}
+          <th style="min-width: 100px; max-width: 100px; width: 100px;">Collation</th>
+        {{/if}}
+        {{if $show_sortie_mvt}}
+          <th style="min-width: 100px; max-width: 100px; width: 100px;">Sortie</th>
+        {{/if}}
+      {{/if}}
     </tr>
     {{foreach from=$mouvements item=_mouvements_by_service key=_service_id}}
       {{if isset($services.$_service_id|smarty:nodefaults)}}
@@ -185,7 +231,7 @@
   <div id="non-places-{{$type}}_{{$type_mouvement}}" style="display: none;">
     <table class="tbl">
       <tr class="only-printable">
-        <th class="title text" colspan="10">
+        <th class="title text" colspan="100">
           {{if $type == "presents"}}
             Patients présents
           {{elseif $type == "ambu"}}
@@ -194,7 +240,7 @@
             {{tr}}CSejour.type_mouvement.{{$type_mouvement}}{{/tr}} {{tr}}CSejour.type.{{$type}}{{/tr}}
           {{/if}}
           non placé
-          ({{$mouvementsNP|@count}})
+          ({{$update_splitted.1}})
         {{if $praticien->_id}}
           &mdash; Dr {{$praticien}}
         {{/if}}
@@ -209,8 +255,16 @@
           <button class="print notext not-printable" style="float:left;" onclick="$('non-places-{{$type}}_{{$type_mouvement}}').print()">{{tr}}Print{{/tr}}</button>
           {{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
         </th>
+        {{if $show_age_sexe_mvt}}
+          <th class="narrow">{{mb_label class="CPatient" field="sexe"}}</th>
+          <th class="narrow">{{mb_label class="CPatient" field="_age"}}</th>
+        {{/if}}
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
         <th>Motif</th>
+        {{if $show_hour_anesth_mvt}}
+          <th>Heure</th>
+          <th>Anesthésiste</th>
+        {{/if}}
         {{if "dmi"|module_active}}
           <th class="narrow">{{tr}}CDMI{{/tr}}</th>
         {{/if}}
@@ -219,6 +273,17 @@
         </th>
         <th>{{mb_colonne class="CAffectation" field="entree" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
         <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>
+        {{if $type == "ambu"}}
+          {{if $show_retour_mvt}}
+            <th style="min-width: 100px; max-width: 100px; width: 100px;">Retour de bloc</th>
+          {{/if}}
+          {{if $show_collation_mvt}}
+            <th style="min-width: 100px; max-width: 100px; width: 100px;">Collation</th>
+          {{/if}}
+          {{if $show_sortie_mvt}}
+            <th style="min-width: 100px; max-width: 100px; width: 100px;">Sortie</th>
+          {{/if}}
+        {{/if}}
       </tr>
       {{foreach from=$mouvementsNP item=_mouvemementsNP_by_service key=_service_id}}
         {{if isset($services.$_service_id|smarty:nodefaults)}}

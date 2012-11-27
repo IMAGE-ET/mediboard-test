@@ -15,7 +15,7 @@
   <table class="form">
   
   {{mb_include module=system template=inc_config_str var=tag_service}}
-  
+
   {{mb_include module=system template=inc_config_bool var=pathologies}}
   
   {{mb_include module=system template=inc_config_str var=nb_hours_trans}}
@@ -35,6 +35,17 @@
   {{mb_include module=system template=inc_config_bool var=stats_for_all}}
   
   {{mb_include module=system template=inc_config_bool var=hide_alertes_temporel}}
+
+  {{mb_include module=system template=inc_config_bool var=show_age_sexe_mvt}}
+
+  {{mb_include module=system template=inc_config_bool var=show_hour_anesth_mvt}}
+
+  {{mb_include module=system template=inc_config_bool var=show_retour_mvt}}
+
+  {{mb_include module=system template=inc_config_bool var=show_collation_mvt}}
+
+  {{mb_include module=system template=inc_config_bool var=show_sortie_mvt}}
+
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

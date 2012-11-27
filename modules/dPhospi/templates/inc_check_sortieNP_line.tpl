@@ -1,5 +1,7 @@
 {{assign var=sejour value=$_sortie}}
 {{assign var=patient value=$sejour->_ref_patient}}
+{{mb_default var=show_age_sexe_mvt value=0}}
+{{mb_default var=show_hour_anesth_mvt value=0}}
 
 <tr {{if $sejour->recuse == -1}}class="opacity-70"{{/if}}>
   {{if $show_duree_preop && $type_mouvement != "sorties"}}
@@ -25,12 +27,36 @@
       {{$patient}}
     </strong>
   </td>
+  {{if $show_age_sexe_mvt}}
+    <td>
+      {{mb_value object=$patient field=sexe}}
+    </td>
+    <td>
+      {{mb_value object=$patient field=_age}}
+    </td>
+  {{/if}}
+
   <td class="text">
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien}}
   </td>
   <td class="text">
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">{{$sejour->_motif_complet}}</strong>
   </td>
+
+  {{if $show_hour_anesth_mvt}}
+    {{assign var=op value=$sejour->_ref_curr_operation}}
+    <td>
+      {{if $op->_id}}
+        {{$op->_datetime_best|date_format:$conf.time}}
+      {{/if}}
+    </td>
+    <td>
+      {{if $op->_id}}
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$op->_ref_anesth}}
+      {{/if}}
+    </td>
+  {{/if}}
+
   {{if "dmi"|module_active}}
     <td class="button">
       {{foreach from=$sejour->_ref_operations item=_interv}}
