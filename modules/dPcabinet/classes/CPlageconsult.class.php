@@ -302,11 +302,17 @@ class CPlageconsult extends CMbObject {
 
     $this->_total = mbTimeCountIntervals($this->debut, $this->fin, $this->freq);
     $this->_freq  = substr($this->freq, 3, 2);
+    if($this->freq == "1:00:00") {
+      $this->_freq = "60";
+    }
   }
   
   function updatePlainFields() {
     if ($this->_freq !== null) {
       $this->freq  = "00:". $this->_freq. ":00";
+      if($this->_freq == "60") {
+        $this->freq  = "01:00:00";
+      }
     }
   
     // @todo: Still useful? Not so sure...
