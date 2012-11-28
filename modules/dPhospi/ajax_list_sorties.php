@@ -83,7 +83,10 @@ $whereNP["affectation.affectation_id"] = "IS NULL";
 $whereNP["sejour.annule"]              = "= '0'";
 
 if (count($services_ids)) {
-  $whereNP["sejour.service_id"] = CSQLDataSource::prepareIn($services_ids);
+  // Tenir compte des affectations sans lit_id (dans le couloir du service)
+  unset($whereNP["affectation.affectation_id"]);
+  $whereNP[] = "(sejour.service_id " . CSQLDataSource::prepareIn($services_ids) . " AND affectation.affectation_id IS NULL) OR "
+              ."(affectation.lit_id IS NULL AND affectation.service_id " . CSQLDataSource::prepareIn($services_ids) . ")";
 }
 if ($praticien->_id) {
   $whereNP["sejour.praticien_id"] = "= '$praticien->_id'";
@@ -192,11 +195,24 @@ if ($type == "presents") {
   if ($vue) {
     $where["effectue"] = "= '0'";
   }
+
   $whereEntrants = $whereSortants = $where;
   $whereSortants["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
   $whereEntrants["affectation.entree"] = "BETWEEN '$limit1' AND '$limit2'";
   $whereEntrants["sejour.entree"] = "!= affectation.entree";
   $whereSortants["sejour.sortie"] = "!= affectation.sortie";
+
+  // Tenir compte des affectations "dans les couloirs"
+  // (avec service_id mais pas de lit_id)
+  unset($whereEntrants["service.group_id"]);
+  unset($whereSortants["service.group_id"]);
+  unset($ljoin["lit"]);
+  unset($ljoin["chambre"]);
+  unset($ljoin["service"]);
+
+  $whereSortants["sejour.group_id"]       = "= '$group->_id'";
+  $whereSortants["sejour.group_id"]       = "= '$group->_id'";
+
   $dep_entrants = $affectation->loadList($whereEntrants, $order, null, null, $ljoin);
   $dep_sortants = $affectation->loadList($whereSortants, $order, null, null, $ljoin);
   $deplacements = array_merge($dep_entrants, $dep_sortants);
