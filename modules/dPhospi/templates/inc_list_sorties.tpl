@@ -56,7 +56,7 @@
         <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         {{if $show_age_sexe_mvt}}
           <th class="narrow">
-            {{mb_label class=CPatient field=sexe}}
+            <label title="Sexe">S</label>
           </th>
           <th class="narrow">
             {{mb_label class=CPatient field=_age}}
@@ -105,7 +105,9 @@
         {{assign var=url value="?m=$m&tab=$tab"}}
         <th>{{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
         {{if $show_age_sexe_mvt}}
-          <th class="narrow">{{mb_label class="CPatient" field="sexe"}}</th>
+          <th class="narrow">
+            <label title="Sexe">S</label>
+          </th>
           <th class="narrow">{{mb_label class="CPatient" field="_age"}}</th>
         {{/if}}
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_deplacements}}</th>
@@ -177,7 +179,9 @@
         {{mb_colonne class="CAffectation" field="_patient"   order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
       </th>
       {{if $show_age_sexe_mvt}}
-        <th class="narrow">{{mb_label class="CPatient" field="sexe"}}</th>
+        <th class="narrow">
+          <label title="Sexe">S</label>
+        </th>
         <th class="narrow">{{mb_label class="CPatient" field="_age"}}</th>
       {{/if}}
       <th>
@@ -256,7 +260,9 @@
           {{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}
         </th>
         {{if $show_age_sexe_mvt}}
-          <th class="narrow">{{mb_label class="CPatient" field="sexe"}}</th>
+          <th class="narrow">
+            <label title="Sexe">S</label>
+          </th>
           <th class="narrow">{{mb_label class="CPatient" field="_age"}}</th>
         {{/if}}
         <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way function=refreshList_$type$type_mouvement}}</th>

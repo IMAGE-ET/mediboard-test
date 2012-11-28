@@ -29,7 +29,7 @@
   </td>
   {{if $show_age_sexe_mvt}}
     <td>
-      {{mb_value object=$patient field=sexe}}
+      {{$patient->sexe|strtoupper}}
     </td>
     <td>
       {{mb_value object=$patient field=_age}}
