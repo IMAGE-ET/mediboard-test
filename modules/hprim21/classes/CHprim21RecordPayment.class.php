@@ -247,7 +247,6 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
   }
   
   function mapAndStorePayment(DOMNode $node, CFactureConsult $facture, CIdSante400 $idex) {
-    mbLog($idex->object_id);
     $reglement = new CReglement();
     $reglement->load($idex->object_id);     
     
