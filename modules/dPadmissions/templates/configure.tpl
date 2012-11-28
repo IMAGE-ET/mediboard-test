@@ -20,13 +20,10 @@
       </label>  
     </th>
     <td class="greedyPane">
-      <select class="num" name="{{$m}}[{{$var}}]">
-      {{foreach from=0|range:24 item=_hour}}
-        <option value="{{$_hour}}" {{if $_hour == $conf.$m.$var}} selected="selected" {{/if}}>
-          {{$_hour|string_format:"%02d"}}
-        </option>
-      {{/foreach}}
-      </select>
+      <input type="hidden" name="{{$m}}[{{$var}}]" class="time" value="{{$conf.$m.$var}}"/>
+      <script type="text/javascript">
+        Calendar.regField(getForm("editConfig").elements["{{$m}}[{{$var}}]"], null, {datePicker: false, timePicker: true});
+      </script>
     </td>
   </tr>
   

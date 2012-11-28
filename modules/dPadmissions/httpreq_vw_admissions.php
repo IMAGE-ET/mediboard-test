@@ -39,11 +39,11 @@ if ($period) {
   $hour = CAppUI::conf("dPadmissions hour_matin_soir");
   // Matin
   if ($period == "matin") {
-    $date_max = mbDateTime("$hour:00:00", $date);
+    $date_max = mbDateTime($hour, $date);
   }
   // Soir
   else {
-    $date_min = mbDateTime("$hour:00:00", $date);
+    $date_min = mbDateTime($hour, $date);
   }
 }
 
