@@ -160,11 +160,9 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
         }
       }
       
-      $filename = substr($exchange_hpr->nom_fichier, 0, strpos($exchange_hpr->nom_fichier, ".")); 
-      
       // Recherche d'un reglèment par tag + idex (nom fichier - id reg)
-      $id400 = $filename."_".$segment_row;
-      $tag   = CAppUI::conf("hprim21 tag");
+      $id400 = $NDA."_".$segment_row;
+      $tag   = CHprim21::getTag($sender->group_id);
       $idex  = CIdSante400::getMatch("CReglement", $tag, $id400);
       
       // Mapping des règlements
@@ -249,6 +247,7 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
   }
   
   function mapAndStorePayment(DOMNode $node, CFactureConsult $facture, CIdSante400 $idex) {
+    mbLog($idex->object_id);
     $reglement = new CReglement();
     $reglement->load($idex->object_id);     
     
