@@ -119,7 +119,7 @@ class CCodeCIM10 {
               FROM descr
               WHERE SID = '$this->sid'";
     $result = $ds->exec($query);
-    while($row = $ds->fetchArray($result)) {
+    while ($row = $ds->fetchArray($result)) {
       $query = "SELECT $this->_lang
                 FROM libelle
                 WHERE LID = '".$row["LID"]."'";
@@ -139,8 +139,7 @@ class CCodeCIM10 {
               FROM glossaire
               WHERE SID = '$this->sid'";
     $result = $ds->exec($query);
-    $i = 0;
-    while($row = $ds->fetchArray($result)) {
+    while ($row = $ds->fetchArray($result)) {
       $query = "SELECT $this->_lang
                 FROM memo
                 WHERE MID = '".$row["MID"]."'";
@@ -159,7 +158,7 @@ class CCodeCIM10 {
               FROM include
               WHERE SID = '$this->sid'";
     $result = $ds->exec($query);
-    while($row = $ds->fetchArray($result)) {
+    while ($row = $ds->fetchArray($result)) {
       $query = "SELECT $this->_lang
                 FROM libelle
                 WHERE LID = '".$row["LID"]."'";
@@ -178,7 +177,7 @@ class CCodeCIM10 {
               FROM indir
               WHERE SID = '$this->sid'";
     $result = $ds->exec($query);
-    while($row = $ds->fetchArray($result)) {
+    while ($row = $ds->fetchArray($result)) {
       $query = "SELECT $this->_lang
                 FROM libelle
                 WHERE LID = '".$row["LID"]."'";
@@ -197,8 +196,7 @@ class CCodeCIM10 {
               FROM note
               WHERE SID = '$this->sid'";
     $result = $ds->exec($query);
-    $i = 0;
-    while($row = $ds->fetchArray($result)) {
+    while ($row = $ds->fetchArray($result)) {
       $query = "SELECT $this->_lang
                 FROM memo
                 WHERE MID = '".$row["MID"]."'";
@@ -217,7 +215,7 @@ class CCodeCIM10 {
   }
   
   function loadRefs() {
-    if (!$this->loadLite($this->_lang, 0)){
+    if (!$this->loadLite($this->_lang, 0)) {
       return false;
     }
     
@@ -300,7 +298,7 @@ class CCodeCIM10 {
     $query = "SELECT * FROM chapter ORDER BY chap";
     $result = $ds->exec($query);
     $i = 0;
-    while($row = $ds->fetchArray($result)) {
+    while ($row = $ds->fetchArray($result)) {
       $chapter[$i]["rom"] = $row["rom"];
       $query = "SELECT * FROM master WHERE SID = '".$row["SID"]."'";
       $result2 = $ds->exec($query);
@@ -313,7 +311,7 @@ class CCodeCIM10 {
       $i++;
     }
   
-    return ($chapter);
+    return $chapter;
   }
   
   // Recherche de codes
@@ -332,11 +330,11 @@ class CCodeCIM10 {
     if ($keys != "") {
       $listLike = array();
       $codeLike = array();
-      foreach ($keywords as $key => $value) {
+      foreach ($keywords as $value) {
         $listLike[] = "libelle.$lang LIKE '%".addslashes($value)."%'";
       }
       if ($code != "") {
-        foreach ($codes as $key => $value) {
+        foreach ($codes as $value) {
           $codeLike[] = "master.abbrev LIKE '".addslashes($value) . "%'";
         }
         $query .= " AND ( (";
@@ -360,7 +358,7 @@ class CCodeCIM10 {
     if ($code && !$keys) {
       
       $codeLike = array();
-      foreach ($codes as $key => $value) {
+      foreach ($codes as $value) {
         $codeLike[] = "master.abbrev LIKE '".addslashes($value) . "%'";
       }
       $query .= " AND ". implode(" OR ", $codeLike);

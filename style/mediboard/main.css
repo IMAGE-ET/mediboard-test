@@ -205,22 +205,6 @@ table.findCode td {
   padding: 5px;
 }
 
-table.bookCode {
-  width: 100%;
-  background: #f9f;
-}
-
-table.bookCode th {
-  text-align: left;
-}
-
-table.bookCode td {
-  vertical-align: top;
-  width: 25%;
-  background: #fdf;
-  padding: 5px;
-}
-
 table.selectCode {
   width: 100%;
   background: #f9f;

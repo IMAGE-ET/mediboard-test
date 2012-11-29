@@ -10,24 +10,25 @@
 
 CCanDo::checkRead();
 
-$class = CValue::get("class","");
+$filter_class = CValue::get("filter_class");
+$tag_id       = CValue::get("tag_id");
+
 $list = array();
 
 $user = CUser::get();
 
 $actes = new CActeCCAM();
-$codes = $actes->getFavoris($user->_id,$class,"");
+$codes = $actes->getFavoris($user->_id, $filter_class);
 $i = 0;
 
-$codesByChap = CFavoriCCAM::getOrdered($user->_id,$class);
-
-foreach($codes as $key => $value) {	
+foreach ($codes as $value) {
   $code = CCodeCCAM::get($value["code_acte"], CCodeCCAM::LITE);
   $code->getChaps();
   
   $code->favoris_id = 0;
   $code->occ = $value["nb_acte"];
   $code->class = $value["object_class"];
+
   $chapitre =& $code->chapitres[0];
   $list[$chapitre["code"]]["nom"] = $chapitre["nom"];
   $list[$chapitre["code"]]["codes"][$value["code_acte"]]= $code;
@@ -35,23 +36,27 @@ foreach($codes as $key => $value) {
 
 $fusion = $list;
 
+$codesByChap = CFavoriCCAM::getOrdered($user->_id, $filter_class, true, $tag_id);
+
 //Fusion des deux tableaux
-foreach($codesByChap as $keychapter => $chapter){
-	if (!array_key_exists($keychapter, $fusion)) {
-		$fusion[$keychapter] = $chapter;
-		continue;
-	} 
-	
-	foreach($chapter["codes"] as $keycode => $code)
-	if (!array_key_exists($keycode, $fusion[$keychapter]["codes"])) {
-		$fusion[$keychapter]["codes"][$keycode] = $code;
-		continue;
-	}
+foreach ($codesByChap as $keychapter => $chapter) {
+  if (!array_key_exists($keychapter, $fusion)) {
+    $fusion[$keychapter] = $chapter;
+    continue;
+  }
+  
+  foreach ($chapter["codes"] as $keycode => $code) {
+    if (!array_key_exists($keycode, $fusion[$keychapter]["codes"])) {
+      $fusion[$keychapter]["codes"][$keycode] = $code;
+      continue;
+    }
+  }
 }
 
+$tag_tree = CFavoriCCAM::getTree($user->_id);
 
 $favoris = new CFavoriCCAM();
-$favoris->filter_class = $class;
+$favoris->filter_class = $filter_class;
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -59,6 +64,6 @@ $smarty->assign("favoris", $favoris);
 $smarty->assign("list", $list);
 $smarty->assign("fusion", $fusion);
 $smarty->assign("codesByChap", $codesByChap);
+$smarty->assign("tag_tree", $tag_tree);
+$smarty->assign("tag_id",   $tag_id);
 $smarty->display("vw_idx_favoris.tpl");
-
-?>

@@ -12,22 +12,35 @@ CCanDo::checkRead();
 
 $user = CUser::get();
 
-$lang = CValue::getOrSession("lang", CCodeCIM10::LANG_FR);
+$lang   = CValue::getOrSession("lang", CCodeCIM10::LANG_FR);
+$tag_id = CValue::getOrSession("tag_id");
 
 // Recherche des codes favoris
-
 $favoris = new CFavoriCIM10();
 $where = array();
 $where["favoris_user"] = "= '$user->_id'";
-$order = "favoris_code";
-$favoris = $favoris->loadList($where, $order);
+
+$ljoin = array();
+if ($tag_id) {
+  $ljoin["tag_item"] = "tag_item.object_id = favoris_id AND tag_item.object_class = 'CFavoriCIM10'";
+  $where["tag_item.tag_id"] = "= '$tag_id'";
+}
+
+$favoris = $favoris->loadList($where, "favoris_code", null, null, $ljoin);
 
 $codes = array();
-foreach($favoris as $key => $value) {
-  $codes[$value->favoris_code] = new CCodeCIM10($value->favoris_code);
-  $codes[$value->favoris_code]->loadLite($lang, 0);
-  $codes[$value->favoris_code]->_favoris_id = $value->favoris_id;
-  $codes[$value->favoris_code]->occ = "0";
+foreach ($favoris as $_favori) {
+  $favoris_code = $_favori->favoris_code;
+
+  $_favori->loadRefsTagItems();
+
+  $code = new CCodeCIM10($favoris_code);
+  $code->loadLite($lang, 0);
+  $code->_favoris_id = $_favori->favoris_id;
+  $code->_ref_favori = $_favori;
+  $code->occ = "0";
+
+  $codes[$favoris_code] = $code;
 }
 
 // Chargement des favoris calculés
@@ -43,22 +56,28 @@ $sql = "SELECT DP, count(DP) as nb_code
 $cimStat = $ds->loadlist($sql);
  
 $listCimStat = array();
-foreach($cimStat as $key => $value) {
-  $listCimStat[$value["DP"]] = new CCodeCIM10($value["DP"]);
-  $listCimStat[$value["DP"]]->loadLite();
-  $listCimStat[$value["DP"]]->_favoris_id = "0";
-  $listCimStat[$value["DP"]]->occ = $value["nb_code"];
+foreach ($cimStat as $value) {
+  $DP = $value["DP"];
+
+  $code = new CCodeCIM10($DP);
+  $code->loadLite();
+  $code->_favoris_id = "0";
+  $code->occ = $value["nb_code"];
+
+  $listCimStat[$DP] = $code;
 }
 
 // Fusion des deux tableaux de favoris
 $fusionCim = $listCimStat;
   
-foreach($codes as $keycode => $code){
-	if(!array_key_exists($keycode, $fusionCim)) {
-		$fusionCim[$keycode] = $code;
-		continue;
-	}
+foreach ($codes as $keycode => $code) {
+  if (!array_key_exists($keycode, $fusionCim)) {
+    $fusionCim[$keycode] = $code;
+    continue;
+  }
 }
+
+$tag_tree = CFavoriCIM10::getTree($user->_id);
   
 // Création du template
 $smarty = new CSmartyDP();
@@ -66,7 +85,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("lang" , $lang);
 $smarty->assign("cim10", new CCodeCIM10);
 $smarty->assign("fusionCim", $fusionCim);
+$smarty->assign("tag_tree", $tag_tree);
+$smarty->assign("tag_id", $tag_id);
 
 $smarty->display("vw_idx_favoris.tpl");
-
-?>

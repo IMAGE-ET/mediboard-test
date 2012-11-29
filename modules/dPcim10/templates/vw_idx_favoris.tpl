@@ -8,46 +8,77 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="bookCode">
-  <tr>
-    <th colspan="4">
-      <form action="?" name="selectLang" method="get">
-      {{include file="inc_select_lang.tpl"}}
+{{mb_script module=cim10 script=code_cim}}
 
-      <input type="hidden" name="m" value="dPcim10" />
-      <input type="hidden" name="tab" value="vw_idx_favoris" />
-      Codes favoris
+<script type="text/javascript">
+function tagCallback(){
+  location.reload();
+}
+</script>
+
+<table class="main tbl">
+  <tr>
+    <td colspan="4">
+      <form action="?" name="selectLang" method="get">
+        {{include file="inc_select_lang.tpl"}}
+
+        <input type="hidden" name="m" value="cim10" />
+        <input type="hidden" name="tab" value="vw_idx_favoris" />
+
+        <label for="tag_id">Tag</label>
+        <select name="tag_id" onchange="this.form.submit()" class="taglist">
+          <option value=""> &mdash; {{tr}}All{{/tr}} </option>
+        {{mb_include module=ccam template=inc_favoris_tag_select depth=0 show_empty=true}}
+        </select>
+
+        {{if $can->admin}}
+          <button style="float: right;" class="tag-edit" type="button" onclick="Tag.manage('CFavoriCIM10')">
+            Gérer les tags
+          </button>
+        {{/if}}
       </form>
-    </th>
+    </td>
   </tr>
   
   {{foreach from=$fusionCim item=curr_code key=curr_key name="fusion"}}
-  {{if $smarty.foreach.fusion.index % 3 == 0}}
   <tr>
-  {{/if}}
-  
-    <td>
-      <strong>
-        <span style="float:right">{{if $curr_code->occ==0}}Favoris{{else}}{{$curr_code->occ}} acte(s){{/if}}</span>
-        <a href="?m={{$m}}&amp;tab=vw_full_code&amp;code={{$curr_code->code|escape:'url'}}">{{$curr_code->code}}</a>
-      </strong><br />
-
-      {{$curr_code->libelle}}
-      
-      {{if $can->edit}}
-      <br />
-      <form name="delFavoris-{{$curr_key}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="dosql" value="do_favoris_aed" />
-        <input type="hidden" name="del" value="1" />
-        <input type="hidden" name="favoris_id" value="{{$curr_code->_favoris_id}}" />
-        {{if $curr_code->_favoris_id}}
-      	  <button class="trash" type="submit" name="btnFuseAction">Retirer de mes favoris</button>
-    	  {{/if}}
-  	  </form>
-	  {{/if}}
+    <td class="narrow">
+      {{if $can->edit && $curr_code->_favoris_id}}
+        <form name="delFavoris-{{$curr_key}}" action="?" method="post"
+              onsubmit="return onSubmitFormAjax(this, function(){location.reload()})">
+          {{mb_class class=CFavoriCIM10}}
+          <input type="hidden" name="del" value="{{$curr_code->_favoris_id}}" />
+          <input type="hidden" name="favoris_id" value="1" />
+          <button class="trash notext compact" type="submit">Retirer de mes favoris</button>
+        </form>
+      {{/if}}
     </td>
-  {{if $smarty.foreach.fusion.index % 3 == 4}}
+
+    <td style="font-weight: bold;">
+      <a href="#1" onclick="CodeCIM.show('{{$curr_code->code}}'); return false;">{{$curr_code->code}}</a>
+    </td>
+    <td>
+      {{if $curr_code->_favoris_id && $can->edit}}
+        <form name="favoris-tag-{{$curr_code->_favoris_id}}" action="?" method="post" style="float: right;">
+          {{if $curr_code->_favoris_id}}
+            {{mb_include module=system
+              template=inc_tag_binder_widget
+              object=$curr_code->_ref_favori
+              show_button=false
+              form_name="favoris-tag-`$curr_code->_favoris_id`"
+              callback="tagCallback"
+            }}
+          {{/if}}
+        </form>
+      {{/if}}
+
+      <a href="#1" onclick="CodeCIM.show('{{$curr_code->code}}'); return false;">{{$curr_code->libelle}}</a>
+    </td>
+    <td>{{if $curr_code->occ==0}}Favoris{{else}}{{$curr_code->occ}} acte(s){{/if}}</td>
   </tr>
-  {{/if}}
+    {{foreachelse}}
+  <tr>
+    <td class="empty" colspan="4">{{tr}}CFavoriCIM10.none{{/tr}}</td>
+  </tr>
   {{/foreach}}
 </table>

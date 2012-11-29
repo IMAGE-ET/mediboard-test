@@ -22,7 +22,7 @@
           {{/foreach}}
         {{/foreach}}
       </div>
-      <strong>{{$_code->code}}</strong>
+      <strong class="code">{{$_code->code}}</strong>
       <br />
       <small>{{$_code->libelleLong|smarty:nodefaults|emphasize:$keywords}}</small>
     </li>

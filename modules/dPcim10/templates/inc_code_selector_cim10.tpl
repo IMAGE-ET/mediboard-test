@@ -1,6 +1,6 @@
 <script type="text/javascript">
   Main.add(function() {
-    new Control.Tabs('tabs-code', true);
+    Control.Tabs.create('tabs-code', true);
   });
 
   showDetail = function(code, object_class) {
@@ -37,19 +37,15 @@ em {
   <div id="{{$profile}}_code" style="display: none; height: 110%; overflow-y: scroll;">
     <table class="tbl">
       <tr>
-        <th>
-          Code
-        </th>
-        <th>
-          Libellé
-        </th>
+        <th>Code</th>
+        <th>Libellé</th>
         <th></th>
         <th></th>
       </tr>
       {{foreach from=$list item=curr_code name=fusion}}
         <tr>
           <td>
-            <button type="button" class="save notext" onclick="addCIM10Favori('{{$curr_code->code}}');"
+            <button type="button" class="save notext compact" onclick="addCIM10Favori('{{$curr_code->code}}');"
               {{if $can->edit && array_key_exists($curr_code->code, $list_favoris)}}disabled="disabled"{{/if}}>
               Ajouter aux favoris
             </button>
@@ -66,8 +62,8 @@ em {
               -
             {{/if}}
           </td>
-          <td>
-            <button type="button" class="tick" onclick="CIM10Selector.set('{{$curr_code->code}}'); Control.Modal.close();">Sélectionner</button>
+          <td class="narrow">
+            <button type="button" class="tick compact" onclick="CIM10Selector.set('{{$curr_code->code}}'); Control.Modal.close();">Sélectionner</button>
           </td>
         </tr>
       {{foreachelse}}

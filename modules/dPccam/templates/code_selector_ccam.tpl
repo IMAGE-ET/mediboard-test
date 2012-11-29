@@ -1,4 +1,4 @@
-<div class="info">
+<div class="small-info">
   Nouvelle interface de recherche de codes CCAM par mots-clés. <br />
   Vous pouvez retrouver l'ancienne recherche dans les préférences utilisateur (volet CCAM).
 </div>
@@ -13,16 +13,27 @@
   <input type="hidden" name="object_class" value="{{$object_class}}" />
   <table class="tbl">
     <tr>
-      <th>
+      <th colspan="3">
         Filtre de recherche
       </th>
     </tr>
+    <tr>
       <td>
-        Mot-clé : <input type="text" name="_keywords_code"/> <button type="submit" class="search notext"></button>
-        <br />
+        Mot-clé : <input type="text" name="_keywords_code"/>
+        <button type="submit" class="search notext"></button>
+      </td>
+      <td>
         <label>
-          <input type="checkbox" id="_all_codes_view" onchange="$V(this.form._all_codes, this.checked ? 1 : 0)"/> Chercher dans toute la base CCAM
+          <input type="checkbox" id="_all_codes_view" onchange="$V(this.form._all_codes, this.checked ? 1 : 0)"/>
+          Chercher dans toute la base CCAM
         </label>
+      </td>
+      <td>
+        <label for="tag_id">Tag</label>
+        <select name="tag_id" onchange="this.form.onsubmit()" class="taglist">
+          <option value=""> &mdash; {{tr}}All{{/tr}} </option>
+          {{mb_include module=ccam template=inc_favoris_tag_select depth=0}}
+        </select>
       </td>
     </tr>
   </table>

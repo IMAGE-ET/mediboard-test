@@ -5,11 +5,10 @@
     oForm.onsubmit();
   }
 </script>
-<div class="info">
+<div class="small-info">
   Nouvelle interface de recherche de codes CIM10 par mots-clés. <br />
   Vous pouvez retrouver l'ancienne recherche dans les préférences utilisateur (volet CIM10).
 </div>
-
 
 <form name="addFavoris" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
   <input type="hidden" name="m" value="dPcim10" />
@@ -29,22 +28,34 @@
   <input type="hidden" name="chir" value="{{$chir}}" />
   <input type="hidden" name="anesth" value="{{$anesth}}" />
   <input type="hidden" name="object_class" value="{{$object_class}}" />
-  <table class="tbl">
+  <table class="main tbl">
     <tr>
-      <th>
+      <th colspan="3">
         Filtre de recherche
       </th>
     </tr>
+    <tr>
       <td>
-        Mot-clé : <input type="text" name="_keywords_code"/> <button type="submit" class="search notext"></button>
-        <br />
+        Mot-clé : <input type="text" name="_keywords_code"/>
+        <button type="submit" class="search notext"></button>
+      </td>
+      <td>
         <label>
-          <input type="checkbox" id="_all_codes_view" onchange="$V(this.form._all_codes, this.checked ? 1 : 0)"/> Chercher dans toute la base CIM10
+          <input type="checkbox" id="_all_codes_view" onchange="$V(this.form._all_codes, this.checked ? 1 : 0)"/>
+          Chercher dans toute la base CIM10
         </label>
+      </td>
+      <td>
+        <label for="tag_id">Tag</label>
+        <select name="tag_id" onchange="this.form.onsubmit()" class="taglist">
+          <option value=""> &mdash; {{tr}}All{{/tr}} </option>
+        {{mb_include module=ccam template=inc_favoris_tag_select depth=0}}
+        </select>
       </td>
     </tr>
   </table>
 </form>
+
 <div id="code_area" style="height: 60%; text-align: left;">
   {{mb_include module=cim10 template=inc_code_selector_cim10}}
 </div>

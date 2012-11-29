@@ -42,7 +42,7 @@ CCAMSelector = {
       this.oUrl.addParam("object_class", oForm[this.sClass].value);
       this.oUrl.addParam("mode", this.options.mode);
       
-      this.oUrl.requestModal(700,400);
+      this.oUrl.requestModal(750, 500);
     }
   },
   
@@ -50,7 +50,7 @@ CCAMSelector = {
     this.prepared.code  = code;
     this.prepared.tarif = tarif;
     
-    window.setTimeout(window.CCAMSelector.doSet , 1);
+    window.setTimeout(window.CCAMSelector.doSet, 1);
   },
   
   doSet: function(){

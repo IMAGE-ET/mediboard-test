@@ -14,6 +14,8 @@ $_keywords_code = CValue::get("_keywords_code");
 $_all_codes     = CValue::get("_all_codes", 0);
 $object_class   = CValue::get("object_class");
 $only_list      = CValue::get("only_list", 0);
+$tag_id         = CValue::get("tag_id");
+
 $user   = CUser::get();
 $ds     = CSQLDataSource::get("std");
 $profiles = array (
@@ -52,9 +54,16 @@ foreach ($profiles as $profile => $_user_id) {
   // Favoris
   $code = new CFavoriCCAM;
   $where = array();
-  $where["favoris_user"] = " = '$_user_id'";
-  $where["object_class"] = " = '$object_class'";
-  $codes_favoris = $code->loadList($where, null, 100);
+  $where["ccamfavoris.favoris_user"] = " = '$_user_id'";
+  $where["ccamfavoris.object_class"] = " = '$object_class'";
+
+  $ljoin = array();
+  if ($tag_id) {
+    $where["tag_item.tag_id"] = "= '$tag_id'";
+    $ljoin["tag_item"] = "tag_item.object_id = ccamfavoris.favoris_id AND tag_item.object_class = 'CFavoriCCAM'";
+  }
+
+  $codes_favoris = $code->loadList($where, null, 100, null, $ljoin);
   
   foreach ($codes_favoris as $key => $_code) {
     $codes_favoris[$_code->favoris_code] = $_code;
@@ -66,25 +75,8 @@ foreach ($profiles as $profile => $_user_id) {
   $where = null;
 
   if (!$_all_codes && (count($codes_stats) || count($codes_favoris))) {
-    $where = "CODE IN (";
-    foreach ($codes_stats as $key => $_code) {
-      $where .= "'" . $key . "'";
-      if ($_code != end($codes_stats)) {
-        $where .= ",";
-      }
-    }
-    
-    if (count($codes_stats) && count($codes_favoris)) {
-      $where .= ",";
-    }
-    
-    foreach ($codes_favoris as $key => $_code) {
-      $where .= "'" . $key . "'";
-      if ($_code != end($codes_favoris)) {
-        $where .= ",";
-      }
-    }
-    $where .= ")";
+    $codes_keys = array_keys(array_merge($codes_stats, $codes_favoris));
+    $where = "CODE ".$ds->prepareIn($codes_keys);
   }
   
   // Si pas de stat et pas de favoris, et que la recherche se fait sur ceux-ci,
@@ -97,7 +89,7 @@ foreach ($profiles as $profile => $_user_id) {
     $codes = $code->findCodes($_keywords_code, $_keywords_code, null, $where);
   }
   
-  foreach($codes as $key=>$value) {
+  foreach ($codes as $value) {
     $val_code = $value["CODE"];
     $list[$val_code] = CCodeCCAM::get($val_code, CCodeCCAM::MEDIUM);
     $nb_acte = 0;
@@ -119,13 +111,17 @@ foreach ($profiles as $profile => $_user_id) {
   $listByProfile[$profile]["list"]    = $list;
 }
 
+$tag_tree = CFavoriCCAM::getTree($user->_id);
+
 $smarty = new CSmartyDP;
 
-$smarty->assign("listByProfile", $listByProfile);
-$smarty->assign("users"        , $users);
-$smarty->assign("object_class" , $object_class);
+$smarty->assign("listByProfile" , $listByProfile);
+$smarty->assign("users"         , $users);
+$smarty->assign("object_class"  , $object_class);
 $smarty->assign("_keywords_code", $_keywords_code);
-$smarty->assign("_all_codes"   , $_all_codes);
+$smarty->assign("_all_codes"    , $_all_codes);
+$smarty->assign("tag_tree"      , $tag_tree);
+$smarty->assign("tag_id"        , $tag_id);
 
 if ($only_list) {
   $smarty->display("inc_code_selector_ccam.tpl");
@@ -135,4 +131,3 @@ else {
   $smarty->assign("anesth"       , $anesth);
   $smarty->display("code_selector_ccam.tpl");
 }
-?>
