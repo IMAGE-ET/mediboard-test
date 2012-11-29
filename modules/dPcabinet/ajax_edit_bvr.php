@@ -112,9 +112,12 @@ if ($edition_bvr) {
         $colonne2 = 120;
         
         $font = "verab";
+
+        // A
         $pdf->setFont($font, '', 12);
         $pdf->WriteHTML("<h4>Facture du patient</h4>");
-        
+
+        // B
         $font = "vera";
         $pdf->setFont($font, '', 6);
         $pdf->setXY($colonne1, 17);  
@@ -126,7 +129,7 @@ if ($edition_bvr) {
         
         $pdf->setFont($font, '', 8);
         
-        //Auteur de la facture
+        // C + D : Auteur de la facture
         if (stristr($function_prat->adresse, "\r\n")) {
           $adresse_part1 = stristr($function_prat->adresse, "\r\n", true);
           $adresse_part2 = stristr($function_prat->adresse, "\r\n");
@@ -157,22 +160,23 @@ if ($edition_bvr) {
           $function_prat->cp." ".$function_prat->ville,
         );
         $tab[$colonne1] = $auteur;
-        
+
+        // E
         $adresse1 = $adresse2 = "";
         if (stristr($facture->_ref_patient->adresse, "\r\n")) {
           $adresse1 = stristr($facture->_ref_patient->adresse, "\r\n", true);
           $adresse2 = stristr($facture->_ref_patient->adresse, "\r\n");
-          $adresse2 = str_replace("\r\n",'',$adresse2);
+          $adresse2 = str_replace("\r\n", '', $adresse2);
         }
         else {
           $adresse1 = substr($facture->_ref_patient->adresse, 0, 30);
           $adresse2 = substr($facture->_ref_patient->adresse, 30);
         }
         $destinataire = array(
-           "nom"=> $facture->_ref_patient->_view,
-           "adresse1"=> $adresse1,
-           "adresse2"=> $adresse2,
-           "cp"=> $facture->_ref_patient->cp." ".$facture->_ref_patient->ville,
+          "nom"=> $facture->_ref_patient->_view,
+          "adresse1"=> $adresse1,
+          "adresse2"=> $adresse2,
+          "cp"=> $facture->_ref_patient->cp." ".$facture->_ref_patient->ville,
         );
          
 //        if ($facture->cession_creance || $facture->type_facture == "accident") {
@@ -203,7 +207,7 @@ if ($edition_bvr) {
           }
 //        }
         
-        //Destinataire de la facture
+        // E + F : Destinataire de la facture
         $patient = array(
           "50" => "Destinataire",
           $destinataire["nom"],
@@ -243,7 +247,8 @@ if ($edition_bvr) {
           $pdf->SetTextColor(0,0,0);
           $pdf->setFont($font, '', 8);
         }
-        
+
+        // Ecriture de C, D, E, F
         $x = $y = 0;
         foreach ($tab as $k => $v) {
           foreach ($v as $key => $value) {
@@ -259,7 +264,7 @@ if ($edition_bvr) {
           }
         }
         
-        //Données de la facture
+        // G : Données de la facture
         $pdf->SetDrawColor(0);
         $pdf->Line($colonne1, 122, $colonne1+40, 122);
         $pdf->setXY($colonne1, 120);
@@ -282,7 +287,7 @@ if ($edition_bvr) {
           $montant_facture = sprintf('%0.2f', 0);
         }
         
-        //Tarif
+        // H : Tarif
         $title_montant = "";
         if ($nb_factures>1) {
           $num_fact++;
@@ -343,17 +348,21 @@ if ($edition_bvr) {
         $largeur_bvr = 210;
         $hauteur_bvr = 106;
         $haut_doc = 297-$hauteur_bvr;
-        //Une ligne <=> 4,24 mm
-        $h_ligne = $hauteur_bvr/25;
-        //Une colonne <=> 2,53mm
-        $l_colonne = $largeur_bvr/83;
+
+        // Une ligne = 1/6 pouce = 4.2333 mm
+        $h_ligne = 4.2333; // $hauteur_bvr/25;
+
+        // Une colonne = 1/10 pouce = 2.54 mm
+        $l_colonne = 2.54; // $largeur_bvr/83;
         
         //Police par Défault du BVR
         $font = "vera";
-        
+
+        $left_offset = 84 * $l_colonne - $largeur_bvr;
+
         //Boucle utilisée pour dupliquer les Partie1 et 2 avec un décalage de colonnes
         for ($i = 0; $i<=1; $i++) {
-          $decalage = $i*24*$l_colonne+8;
+          $decalage = $i*24*$l_colonne + $left_offset;
           
           //Adresse du patient
           $pdf->SetTextColor(0);
@@ -367,11 +376,15 @@ if ($edition_bvr) {
             $j = 2;
           }
           $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $function_prat->cp." ".$function_prat->ville);
-          
-          $pdf->Text(16.75*$l_colonne + $decalage, $h_ligne*13.25+$haut_doc   , ".");			  
+
+          // Deja sur la feuille
+          //$pdf->Text(16.75*$l_colonne + $decalage, $h_ligne*13.25+$haut_doc   , ".");
+
           //Numéro adhérent, CHF, Montant1 et Montant2
           $pdf->Text($l_colonne*11 + $decalage, $h_ligne*10.75+$haut_doc , $adherent);
-          $pdf->Text($l_colonne + $decalage, $h_ligne*11.5+$haut_doc , "CHF");
+
+          // Deja sur la feuille
+          //$pdf->Text($l_colonne + $decalage, $h_ligne*11.5+$haut_doc , "CHF");
             
           $pdf->setFont($font, '', 10);
           $pdf->Text($l_colonne*(17-strlen($montant_facture*100)) + $decalage, $h_ligne*13+$haut_doc , sprintf("%d", $montant_facture));
@@ -383,19 +396,23 @@ if ($edition_bvr) {
           $pdf->Text($l_colonne*19 + $decalage, $h_ligne*13+$haut_doc , $cents);
         }
         
-        $decalage = 7.36;
-        
-        $pdf->Text(28*$l_colonne, $h_ligne*18+$haut_doc , "609");
+        $decalage = $left_offset; // 7.36 // 8;
+
+        // Deja sur la feuille
+        //$pdf->Text(28*$l_colonne, $h_ligne*18+$haut_doc , "609");
         
         //écriture de la référence
+        $num_reference = preg_replace("/^(\d{2})(\d{5})(\d{5})(\d{5})(\d{5})$/", '\\1 \\2 \\3 \\4 \\5 \\6', $facture->num_reference);
         $pdf->setFont($font, '', 11);
-        $pdf->Text(50*$l_colonne, $h_ligne*8.75+$haut_doc , $facture->num_reference);
-        
+        $pdf->Text(50*$l_colonne, $h_ligne*8.75+$haut_doc , $num_reference);
+
+        /* // Deja imprimé sur la feuille
         $pdf->setFont($font, '', 6);
         $pdf->Text(13*$l_colonne, $h_ligne*21+$haut_doc , "Die Annahmestelle");
         $pdf->Text(13*$l_colonne, $h_ligne*21.5+$haut_doc , "L'office de dépôt");
         $pdf->Text(13*$l_colonne, $h_ligne*22+$haut_doc , "L'ufficio d'accettazione");
-        
+        */
+
         $pdf->setFont($font, '', 8);
         $pdf->Text($l_colonne + $decalage, $h_ligne*15+$haut_doc , $facture->num_reference);
         //Adresse du patient de la facture
