@@ -268,7 +268,7 @@ Main.add(function() {
                               <span style="color: #000;">
                               <strong>{{$_event->start|date_format:"%H:%M"}}</strong>
                               {{if $_event->icon}}
-                                <img src="{{$_event->icon}}" style="height: 12px; width: 12px;" alt="{{$_event->icon_desc}}" title="{{$_event->icon_desc}}" />
+                                <img src="{{$_event->icon}}" style="height: 12px; width: 12px;" alt="{{$_event->icon_desc}}" title="{{$_event->icon_desc|smarty:nodefaults}}" />
                               {{/if}}
                               {{$_event->title|smarty:nodefaults|nl2br}}
                             {{else}}
