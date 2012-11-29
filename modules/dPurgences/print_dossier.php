@@ -19,7 +19,13 @@ $formulaires = null;
 //Création du rpu
 $rpu = new CRPU();
 $rpu->load($rpu_id);
-$rpu->loadComplete();
+
+if ($offline) {
+  $rpu->loadRefSejour();
+}
+else {
+  $rpu->loadComplete();
+}
 $rpu->loadRefSejourMutation();
 
 $sejour = $rpu->_ref_sejour;
@@ -56,7 +62,7 @@ if (CModule::getActive("forms")) {
     "target_element" => "ex-objects-$sejour->_id",
     "print" => 1,
   );
-  
+
   $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);
 }
 
@@ -70,14 +76,14 @@ if (CModule::getActive("dPprescription")){
   $prescription->object_class = "CSejour";
   $prescription->type = "sejour";
   $prescription->object_id = $sejour->_id;
-  
+
   $prescription->loadMatchingObject();
-  
+
   // Chargement des lignes
   $prescription->loadRefsLinesMedComments("1", "", "", "0", "1");
   $prescription->loadRefsLinesElementsComments();
   $prescription->loadRefsPrescriptionLineMixes();
-  
+
   if (count($prescription->_ref_prescription_line_mixes)) {
     foreach($prescription->_ref_prescription_line_mixes as $_prescription_line_mix){
       $_prescription_line_mix->loadRefsLines();
@@ -95,7 +101,7 @@ if (CModule::getActive("dPprescription")){
       }
     }
   }
-  
+
   // Parcours des lignes de medicament et stockage du dossier cloturé
   if (count($prescription->_ref_lines_med_comments["med"])) {
     foreach($prescription->_ref_lines_med_comments["med"] as $_atc => $lines_by_type){
@@ -106,7 +112,7 @@ if (CModule::getActive("dPprescription")){
       foreach($lines_by_type as $med_id => $_line_med){
         $_line_med->_ref_produit->loadConditionnement();
         $list_lines["medicament"][$_line_med->_id] = $_line_med;
-      
+
         $_line_med->loadRefsAdministrations();
         foreach($_line_med->_ref_administrations as $_administration_med){
           $_administration_med->loadRefAdministrateur();
@@ -117,7 +123,7 @@ if (CModule::getActive("dPprescription")){
       }
     }
   }
-  
+
   // Parcours des lignes d'elements
   if (count($prescription->_ref_lines_elements_comments)) {
     foreach($prescription->_ref_lines_elements_comments as $chap => $_lines_by_chap){

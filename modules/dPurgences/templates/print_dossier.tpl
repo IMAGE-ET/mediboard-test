@@ -38,7 +38,14 @@
 <br />
 <table class="{{$tbl_class}}">
   <tr><th class="title" colspan="2">Antécédents</th></tr>
-  
+  <thead>
+    <tr>
+      <th class="title" colspan="2">
+        {{$sejour->_view}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
+      </th>
+    </tr>
+  </thead>
   <tr>
     <th style="width: 50%;">{{mb_label object=$rpu field="motif"}}</th>
     <td>{{mb_value object=$rpu field="motif"}}</td>
@@ -54,6 +61,14 @@
 {{/if}}
 
 <table class="{{$tbl_class}}">
+  <thead>
+    <tr>
+      <th class="title" colspan="4">
+        {{$sejour->_view}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
+      </th>
+    </tr>
+  </thead>
   <tr><th class="title" colspan="4">Transmissions paramédicales de passage aux urgences</th></tr>
     
   <tr>
@@ -98,6 +113,14 @@
 {{mb_include module=hospi template=inc_list_transmissions list_transmissions=$sejour->_ref_suivi_medical readonly=true}}
 
 <table class="{{$tbl_class}}">
+  <thead>
+    <tr>
+      <th class="title" colspan="2">
+        {{$sejour->_view}}
+        {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
+      </th>
+    </tr>
+  </thead>
   <tr>
     <th style="width: 50%;">Documents</th>
     <td>
@@ -272,8 +295,20 @@
     <tr>
       <th class="title">Formulaires</th>
     </tr>
+    <thead>
+      <tr>
+        <th class="title">
+          {{$sejour->_view}}
+            {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
+        </th>
+      </tr>
+    </thead>
+    <tr>
+      <td>
+        <div id="ex-objects-{{$sejour->_id}}">{{$formulaires|smarty:nodefaults}}</div>
+      </td>
+    </tr>
   </table>
-  <div id="ex-objects-{{$sejour->_id}}">{{$formulaires|smarty:nodefaults}}</div>
 {{/if}}
 </div>
 

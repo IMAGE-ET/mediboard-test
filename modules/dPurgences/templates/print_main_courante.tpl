@@ -9,24 +9,28 @@
 *}}
 
 <script type="text/javascript">
-{{if !$offline}}
-  Main.add(window.print);
-{{/if}}
-
-function printPage(element){
-  {{if !$offline}}window.print(); return;{{/if}}
-  
-  var mainCourante = $("main-courante-container").clone(true);
-  var container = DOM.div({}, mainCourante);
-  var dossiers = mainCourante.select('div.dossier > .content');
-  
-  dossiers.each(function(e){
-    container.insert(e);
-  });
-  
-  container.print();
-}
+  {{if !$offline}}
+    Main.add(window.print);
+  {{/if}}
 </script>
+
+<style type="text/css">
+  @media print {
+    div.dossier {
+      display: block !important;
+      height: auto !important;
+      width: 100% !important;
+      font-size: 8pt !important;
+      left: auto !important;
+      top: auto !important;
+      position: static !important;
+    }
+    table {
+      width: 100% !important;
+      font-size: inherit; !important
+    }
+  }
+</style>
 
 <div id="main-courante-container">
   
@@ -34,8 +38,8 @@ function printPage(element){
   <tr>
     <th>
       {{if $offline}}
-        <button style="float: left;" onclick="window.print()" class="print not-printable">Main courante</button>
-        <button style="float: left;" onclick="printPage(this)" class="print not-printable">Dossiers</button>
+        <button style="float: left;" onclick="$('main-courante-container').print()" class="print not-printable">Main courante</button>
+        <button style="float: left;" onclick="window.print()" class="print not-printable">Dossiers</button>
         <span style="float: right;">
           {{$dateTime|date_format:$conf.datetime}}
         </span>
@@ -150,23 +154,6 @@ function printPage(element){
           </td>
         {{/if}}
         </tr>
-        
-        <!-- Modal window -->
-        <tr style="display: none;" class="modal-row">
-          <td colspan="8">
-            {{if $offline && $rpu->_id}}
-              {{assign var=sejour_id value=$sejour->_id}}
-              <div id="modal-{{$sejour->_id}}" style="height: 90%; min-width: 700px; overflow: auto;" class="dossier">
-                <button style="float: right" class="cancel not-printable" onclick="modalwindow.close(); $('modal-{{$sejour->_id}}').up('tr').hide()">{{tr}}Close{{/tr}}</button>
-                <button style="float: right" class="print not-printable" onclick="$(this).next('.content').print()">{{tr}}Print{{/tr}}</button>
-                
-                <div class="content" style="page-break-before: always;">
-                  {{$offlines.$sejour_id|smarty:nodefaults}}
-                </div>
-              </div>
-            {{/if}}
-          </td>
-        </tr>
         {{/foreach}}
       </table>
     </td>
@@ -238,5 +225,22 @@ function printPage(element){
     </td>
   </tr>
 </table>
-
 </div>
+
+{{if $offline}}
+  {{foreach from=$sejours item=sejour}}
+    {{if $rpu->_id}}
+      {{assign var=rpu value=$sejour->_ref_rpu}}
+      {{assign var=patient value=$sejour->_ref_patient}}
+      {{assign var=consult value=$rpu->_ref_consult}}
+      {{assign var=sejour_id value=$sejour->_id}}
+    <div id="modal-{{$sejour->_id}}" style="display: none; height: 90%; min-width: 700px; overflow: auto; page-break-before: always;" class="dossier">
+      <button style="float: right" class="cancel not-printable" onclick="Control.Modal.close()">{{tr}}Close{{/tr}}</button>
+      <button style="float: right" class="print not-printable" onclick="$(this).next('.content').print()">{{tr}}Print{{/tr}}</button>
+      <div class="content">
+        {{$offlines.$sejour_id|smarty:nodefaults}}
+      </div>
+    </div>
+    {{/if}}
+  {{/foreach}}
+{{/if}}

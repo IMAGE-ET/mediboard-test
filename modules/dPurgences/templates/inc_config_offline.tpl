@@ -13,8 +13,11 @@
 <table class="tbl">
   <tr>
     <td>
-      <a class="button search" href="?m={{$m}}&amp;a=print_main_courante&amp;offline=1&amp;dialog=1&amp;_aio=1">
+      <a class="button search" href="?m={{$m}}&a=print_main_courante&offline=1&dialog=1&_aio=1">
         Main courante
+      </a>
+      <a class="button search" href="?m=hospi&a=vw_bilan_service&token_cat=all&dialog=1&mode_urgences=1&offline=1">
+        Bilan
       </a>
     </td>
   </tr>

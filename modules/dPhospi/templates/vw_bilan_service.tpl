@@ -138,7 +138,7 @@
   <input type="hidden" name="do" value="1" />
   <table class="form">
     <tr>
-      <th class="title" colspan="5">Bilan du service {{$service->_view}}</th>
+      <th class="title" colspan="5">Bilan du service {{if !$mode_urgences}}{{$service->_view}}{{/if}}</th>
     </tr>
     <tr>
       <th class="category" colspan="4">Paramètres d'impression</th>
@@ -336,8 +336,9 @@
 <br />
 <table class="tbl">
   <tr>
-    <th colspan="7" class="title">Transmissions  - 
-    {{$service->_view}} - du {{$dateTime_min|date_format:$conf.datetime}} au {{$dateTime_max|date_format:$conf.datetime}}
+    <th colspan="7" class="title">Transmissions {{if !$mode_urgences}}-
+        {{$service->_view}} - du {{$dateTime_min|date_format:$conf.datetime}} au {{$dateTime_max|date_format:$conf.datetime}}
+      {{/if}}
     </th>
   </tr>
   {{foreach from=$trans_and_obs key=patient_id item=_trans_and_obs_by_patient}}
@@ -354,31 +355,33 @@
           {{assign var=operation value=$sejour->_ref_last_operation}}
           <tr>
             <th colspan="7" class="text">
-              <span style="float: left; text-align: left;">
-                {{foreach from=$sejour->_ref_affectations item=_affectation}}
-                   <strong
-                    {{if $_affectation->entree < $dateTime_min &&
-                      ($_affectation->sortie < $dateTime_min || $_affectation->sortie > $dateTime_max)}}
-                      style="color: #666"
-                    {{/if}}>
-                      {{if $conf.soins.show_only_lit_bilan}}
-                        {{$_affectation->_ref_lit->_shortview}}
-                      {{else}}
-                        {{$_affectation->_view}}
-                      {{/if}}
-                    </strong>
-                   {{if $sejour->_ref_affectations|@count > 1}}
-                   <small
-                    {{if $_affectation->entree < $dateTime_min &&
-                      ($_affectation->sortie < $dateTime_min || $_affectation->sortie > $dateTime_max)}}
-                      style="color: #666"
-                    {{/if}}>
-                     (du {{$_affectation->entree|date_format:$conf.date}} au {{$_affectation->sortie|date_format:$conf.date}})
-                   </small>
-                  {{/if}}
-                  <br />
-                {{/foreach}}
-              </span>
+              {{if !$mode_urgences}}
+                <span style="float: left; text-align: left;">
+                  {{foreach from=$sejour->_ref_affectations item=_affectation}}
+                     <strong
+                      {{if $_affectation->entree < $dateTime_min &&
+                        ($_affectation->sortie < $dateTime_min || $_affectation->sortie > $dateTime_max)}}
+                        style="color: #666"
+                      {{/if}}>
+                        {{if $conf.soins.show_only_lit_bilan}}
+                          {{$_affectation->_ref_lit->_shortview}}
+                        {{else}}
+                          {{$_affectation->_view}}
+                        {{/if}}
+                      </strong>
+                     {{if $sejour->_ref_affectations|@count > 1}}
+                     <small
+                      {{if $_affectation->entree < $dateTime_min &&
+                        ($_affectation->sortie < $dateTime_min || $_affectation->sortie > $dateTime_max)}}
+                        style="color: #666"
+                      {{/if}}>
+                       (du {{$_affectation->entree|date_format:$conf.date}} au {{$_affectation->sortie|date_format:$conf.date}})
+                     </small>
+                    {{/if}}
+                    <br />
+                  {{/foreach}}
+                </span>
+              {{/if}}
               <span style="float: right">
                 DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
                 DS:  {{$sejour->_sortie|date_format:"%d/%m/%Y"}}
@@ -423,8 +426,8 @@
 <table class="tbl" {{if !$smarty.foreach.foreach_chapitres.first || $trans_and_obs|@count}}style="page-break-before: always;"{{/if}}>
   {{if !$by_patient}}
   <tr>
-    <th colspan="6" class="title">{{tr}}CPrescription._chapitres.{{$key1}}{{/tr}} - 
-    {{$service->_view}} - du {{$dateTime_min|date_format:$conf.datetime}} au {{$dateTime_max|date_format:$conf.datetime}}</th>
+    <th colspan="6" class="title">{{tr}}CPrescription._chapitres.{{$key1}}{{/tr}} {{if !$mode_urgences}}-
+    {{$service->_view}} - du {{$dateTime_min|date_format:$conf.datetime}} au {{$dateTime_max|date_format:$conf.datetime}}{{/if}}</th>
   </tr>
   {{/if}}
   
@@ -432,7 +435,9 @@
     {{foreach from=$_lines_by_patient key=key3 item=prises_by_dates name="foreach_prises"}}
 
       {{if $by_patient}}
-        {{assign var=lit value=$lits.$key1}}
+        {{if !$mode_urgences}}
+          {{assign var=lit value=$lits.$key1}}
+        {{/if}}
         {{assign var=sejour value=$sejours.$key2}}
       {{else}}
         {{assign var=lit value=$lits.$key2}}
@@ -447,11 +452,13 @@
       <tr>
         <th colspan="6" class="text title">
           <span style="float: left">
-            {{if !$conf.soins.show_only_lit_bilan}}
+            {{if !$mode_urgences}}
+              {{if !$conf.soins.show_only_lit_bilan}}
                 <strong>{{$lit->_ref_chambre->_view}}</strong>
                 <br />
               {{/if}}
-            <strong>{{$lit->_shortview}}</strong>
+              <strong>{{$lit->_shortview}}</strong>
+            {{/if}}
           </span>
           <span style="float: right">
             DE: {{$sejour->_entree|date_format:"%d/%m/%Y"}}<br />
