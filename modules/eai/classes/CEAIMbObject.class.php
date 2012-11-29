@@ -69,8 +69,7 @@ class CEAIMbObject {
           break;
         // Fusion des patients
         case "merge" : 
-          $comment  = "Le patient avec l'IC '$object->_id' a été fusionné avec 
-                       le patient dont l'IC est '$otherObject->_id'.";
+          $comment  = "Le patient avec l'IC '$object->_id' a été fusionné avec le patient dont l'IC est '$otherObject->_id'.";
           break;
         default :
           $comment = "";
