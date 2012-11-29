@@ -1187,8 +1187,13 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `content_tabular`
                 CHANGE `content` `content` LONGTEXT;";
     $this->addQuery($query);
+
+    $this->makeRevision("1.1.18");
+    $query = "ALTER TABLE `ex_class_field_predicate`
+              CHANGE `operator` `operator` ENUM ('=','!=','>','>=','<','<=','startsWith','endsWith','contains','hasValue','hasNoValue') NOT NULL DEFAULT '=';";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.1.18";
+    $this->mod_version = "1.1.19";
     
     /*$query = "ALTER TABLE user_log
                 DROP INDEX object_id,
