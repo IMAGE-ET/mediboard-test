@@ -28,7 +28,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="2" class="empty">{{tr}}CPlageAstreinte.none{{/tr}}</td>
+      <td colspan="2" class="empty" style="height: 40px;">{{tr}}CPlageAstreinte.none{{/tr}}</td>
     </tr>
   {{/foreach}}
   {{mb_include module=astreintes template=inc_legend_planning_astreinte}}
