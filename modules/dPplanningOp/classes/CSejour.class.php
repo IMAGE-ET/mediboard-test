@@ -2152,7 +2152,7 @@ class CSejour extends CCodable implements IPatientRelated {
 
   function fillLimitedTemplate(&$template) {
     // Ajout du praticien pour les destinataires possibles (dans l'envoi d'un email)
-    $chir = $this->_ref_praticien;
+    $chir = $this->loadRefPraticien();
     $template->destinataires[] = array(
       "nom"   => "Dr " . $chir->_user_last_name . " " . $chir->_user_first_name,
       "email" => $chir->_user_email,
