@@ -33,12 +33,14 @@ class CExClassFieldProperty extends CMbMetaObject {
     "font-style"       => "font",
     "font-size"        => "font",
     "font-family"      => "font",
+    "text-decoration"  => "font",
   );
 
   static $_style_values = array(
-    "font-weight" => array("bold",   "normal"),
-    "font-style"  => array("italic", "normal"),
-    "font-family" => array("sans-serif", "serif", "monospace", "cursive"),
+    "font-weight"     => array("bold", "normal"),
+    "font-style"      => array("italic", "normal"),
+    "font-family"     => array("sans-serif", "serif", "monospace", "cursive"),
+    "text-decoration" => array("underline", "overline", "line-through"),
   );
 
   function getSpec() {

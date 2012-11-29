@@ -82,7 +82,7 @@ Main.add(function(){
     </tr>
     {{/foreach}}
     
-    {{mb_include module=system template=inc_config_bool var=browser_enable_ie9 m=null}}
+    {{mb_include module=system template=inc_config_enum var=browser_enable_ie9 m=null values="0|1|2"}}
     
     <tr>
       <th colspan="2" class="title">

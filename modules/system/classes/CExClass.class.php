@@ -95,6 +95,10 @@ class CExClass extends CMbObject {
       case "hasValue": 
         if ($a != "") return true;
         break;
+
+      case "hasNoValue":
+        if ($a == "") return true;
+        break;
     }
     
     return false;

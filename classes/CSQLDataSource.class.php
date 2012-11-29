@@ -22,13 +22,25 @@ abstract class CSQLDataSource {
     "pdo_mysql"  => "CPDOMySQLDataSource",
     "pdo_oci"    => "CPDOOracleDataSource",
   );
-  
+
+  /**
+   * @var CSQLDataSource[]
+   */
   static $dataSources = array();
   static $trace       = false;
     
   public $dsn         = null;
   public $link        = null;
+
+  /**
+   * @var Chronometer
+   */
   public $chrono      = null;
+
+  /**
+   * @var Chronometer
+   */
+  public $chronoFetch = null;
 
   // Columns to be never quoted: hack for some SQLDataSources unable to cast implicitly
   public $unquotable = array(
@@ -41,7 +53,8 @@ abstract class CSQLDataSource {
    * Init a chronometer
    */
   function __construct() {
-    $this->chrono = new Chronometer;
+    $this->chrono      = new Chronometer();
+    $this->chronoFetch = new Chronometer();
   }
   
   /**
@@ -53,7 +66,7 @@ abstract class CSQLDataSource {
    * 
    * @return CSQLDataSource or null if unhandled type
    */
-  static function get($dsn, $quiet = false) {    
+  static function get($dsn, $quiet = false) {
     if (!array_key_exists($dsn, self::$dataSources)) {
 
       if ($quiet) {
@@ -331,7 +344,7 @@ abstract class CSQLDataSource {
    * @param string $dumpPath  The dump path
    * @param bool   $utfDecode Set to true if the $dumpPath data is encoded in UTF-8
    * 
-   * @return int number of queried lines, false if failed
+   * @return int Number of queried lines, false if failed
    */
   function queryDump($dumpPath, $utfDecode = false) {
     $sqlLines  = file($dumpPath);
@@ -375,15 +388,20 @@ abstract class CSQLDataSource {
    * 
    * @param string $sql The SQL query
    * 
-   * @return The value returned in the query or null if the query failed.
+   * @return array|null The value returned in the query or null if the query failed.
    */
   function loadResult($sql) {
     $cur = $this->exec($sql);
     $cur or CApp::rip();
+
+    $this->chronoFetch->start();
+
     $ret = null;
     if ($row = $this->fetchRow($cur)) {
       $ret = reset($row);
     }
+
+    $this->chronoFetch->stop();
     
     $this->freeResult($cur);
     return $ret;
@@ -398,6 +416,8 @@ abstract class CSQLDataSource {
    * 
    * @param string $sql     The SQL query
    * @param object &$object The address of variable
+   *
+   * @return bool
    */
   function loadObject($sql, &$object) {
     if ($object != null) {
@@ -411,7 +431,14 @@ abstract class CSQLDataSource {
     else {
       $cur = $this->exec($sql);
       $cur or CApp::rip();
-      if ($object = $this->fetchObject($cur)) {
+
+      $this->chronoFetch->start();
+
+      $object = $this->fetchObject($cur);
+
+      $this->chronoFetch->stop();
+
+      if ($object) {
         $this->freeResult($cur);
         return true;
       }
@@ -432,7 +459,13 @@ abstract class CSQLDataSource {
   function loadHash($query) {
     $cur = $this->exec($query);
     $cur or CApp::rip();
+
+    $this->chronoFetch->start();
+
     $hash = $this->fetchAssoc($cur);
+
+    $this->chronoFetch->stop();
+
     $this->freeResult($cur);
     return $hash;
   }
@@ -441,14 +474,22 @@ abstract class CSQLDataSource {
    * Returns a array as result of query where column 0 is key and column 1 is value
    * 
    * @param string $query The SQL query
+   *
+   * @return array
    */
   function loadHashList($query) {
     $cur = $this->exec($query);
     $cur or CApp::rip();
+
+    $this->chronoFetch->start();
+
     $hashlist = array();
     while ($hash = $this->fetchArray($cur)) {
       $hashlist[$hash[0]] = $hash[1];
     }
+
+    $this->chronoFetch->stop();
+
     $this->freeResult($cur);
     return $hashlist;
   }
@@ -457,15 +498,23 @@ abstract class CSQLDataSource {
    * Returns a array as result of query where column 0 is key and all columns are values
    * 
    * @param string $query The SQL query
+   *
+   * @return array
    */
   function loadHashAssoc($query) {
     $cur = $this->exec($query);
     $cur or CApp::rip();
+
+    $this->chronoFetch->start();
+
     $hashlist = array();
     while ($hash = $this->fetchAssoc($cur)) {
       $key = reset($hash);
       $hashlist[$key] = $hash;
     }
+
+    $this->chronoFetch->stop();
+
     $this->freeResult($cur);
     return $hashlist;
   }
@@ -484,7 +533,9 @@ abstract class CSQLDataSource {
       CAppUI::setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
-    
+
+    $this->chronoFetch->start();
+
     $list = array();
     while ($hash = $this->fetchAssoc($result)) {
       $list[] = $hash;
@@ -492,6 +543,8 @@ abstract class CSQLDataSource {
         break;
       }
     }
+
+    $this->chronoFetch->stop();
     
     $this->freeResult($result);
     return $list;
@@ -502,8 +555,12 @@ abstract class CSQLDataSource {
       CAppUI::setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
-    
+
+    $this->chronoFetch->start();
+
     $count = $this->numRows($result);
+
+    $this->chronoFetch->stop();
 
     $this->freeResult($result);
     return $count;
@@ -522,6 +579,8 @@ abstract class CSQLDataSource {
       CAppUI::setMsg($this->error(), UI_MSG_ERROR);
       return false;
     }
+
+    $this->chronoFetch->start();
     
     $list = array();
     while ($row = $this->fetchRow($cur)) {
@@ -530,6 +589,8 @@ abstract class CSQLDataSource {
         break;
       }
     }
+
+    $this->chronoFetch->stop();
     
     $this->freeResult($cur);
     return $list;
@@ -743,7 +804,9 @@ abstract class CSQLDataSource {
     $fields = array();
     
     foreach ($list_fields as $curr_field) {
-      if (!$field) continue;
+      if (!$field) {
+        continue;
+      }
       
       $field_name = $curr_field['Field'];
       $fields[$field_name] = array();
@@ -762,14 +825,16 @@ abstract class CSQLDataSource {
       
       if ($reduce_strings && is_array($props['params'])) {
         foreach ($props['params'] as &$v) {
-          if ($v[0] === "'") 
+          if ($v[0] === "'") {
             $v = trim($v, "'");
-          else 
+          }
+          else {
             $v = (int)$v;
+          }
         }
       }
       
-      $_field['params']   = $props['params'];
+      $_field['params'] = $props['params'];
       
       if ($field === $field_name) {
         return $_field;
@@ -898,4 +963,3 @@ abstract class CSQLDataSource {
     return $tab_name;
   } 
 }
-?>

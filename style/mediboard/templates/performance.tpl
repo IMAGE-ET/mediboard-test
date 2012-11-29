@@ -22,10 +22,16 @@
     <div class="performance-bar" title="{{$ratio}} % du temps passé en requêtes au SGBD"><div style="width: {{$ratio}}%;"></div></div>
     <ul>
       {{foreach from=$performance.dataSources key=dsn item=dataSource}}
-        <li>
-          <strong>{{$dsn}}</strong> 
-          <span class="performance-count">{{$dataSource.count}}</span> / 
-          <span class="performance-time">{{$dataSource.time|string_format:"%.3f"}} s</span>
+        <li style="clear: both;">
+          <strong>{{$dsn}}</strong>
+
+          <span style="background-color: rgba(200,200,255,0.6); float: right; margin-left: 3px;" title="Temps de fetch">
+            {{*<span class="performance-count">{{$dataSource.countFetch}}</span> /*}}
+            <span class="performance-time">{{$dataSource.timeFetch*1000|string_format:"%.3f"}} ms</span>
+          </span>
+
+          <span class="performance-count">{{$dataSource.count}}</span> /
+          <span class="performance-time">{{$dataSource.time*1000|string_format:"%.3f"}} ms</span>
         </li>
       {{/foreach}}
     </ul>

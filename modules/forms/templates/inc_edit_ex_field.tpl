@@ -355,7 +355,7 @@ Main.add(function(){
           </td>
           <td style="text-align: right;">{{mb_value object=$_predicate field=operator}}</td>
           <td>
-            {{if $_predicate->operator != "hasValue"}}
+            {{if $_predicate->operator != "hasValue" && $_predicate->operator != "hasNoValue"}}
               {{mb_value object=$_predicate field=_value}}
             {{else}}
               <div class="empty">N/A</div>

@@ -41,7 +41,7 @@ class CTag extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["children"] = "CTag parent_id";
-    $backProps["items"   ] = "CTagItem tag_id";
+    $backProps["items"]    = "CTagItem tag_id";
     return $backProps;
   }
 
@@ -50,19 +50,31 @@ class CTag extends CMbObject {
     $parent = $this->loadRefParent();
     $this->_view = ($parent->_id ? "$parent->_view &raquo; " : "").$this->name;
   }
-  
+
+  /**
+   * @return CTagItem[]
+   */
   function loadRefItems(){
     return $this->_ref_items = $this->loadBackRefs("items");
   }
-  
+
+  /**
+   * @return self[]
+   */
   function loadRefChildren(){
     return $this->_ref_children = $this->loadBackRefs("children");
   }
-  
+
+  /**
+   * @return int
+   */
   function countChildren(){
     return $this->countBackRefs("children");
   }
-  
+
+  /**
+   * @return self
+   */
   function loadRefParent(){
     return $this->_ref_parent = $this->loadFwdRef("parent_id");
   }
@@ -72,10 +84,12 @@ class CTag extends CMbObject {
       return $msg;
     }
     
-    if (!$this->parent_id) return;
+    if (!$this->parent_id) {
+      return;
+    }
     
     $tag = $this;
-    while($tag->parent_id) {
+    while ($tag->parent_id) {
       $parent = $tag->loadRefParent();
       if ($parent->_id == $this->_id) {
         return "Récurcivité détectée, un des ancêtres du tag est lui-même";
@@ -108,7 +122,7 @@ class CTag extends CMbObject {
       $tree = self::getTree($this->object_class);
       self::appendItemsRecursive($list, $tree);
       
-      foreach($list as $_tag) {
+      foreach ($list as $_tag) {
         $_tag->_view = $_tag->name;
       }
     }
@@ -118,25 +132,42 @@ class CTag extends CMbObject {
     
     return $list;
   }
-  
+
+  /**
+   * @param self[] $list
+   * @param array  $tree
+   */
   private static function appendItemsRecursive(&$list, $tree) {
     if ($tree["parent"]) {
       $list[] = $tree["parent"];
     }
     
-    foreach($tree["children"] as $_child) {
+    foreach ($tree["children"] as $_child) {
       self::appendItemsRecursive($list, $_child);
     }
   }
-  
+
+  /**
+   * @param int $d
+   *
+   * @return int
+   */
   function getDeepness($d = 0){
     if ($this->parent_id) {
       $d++;
       $d = $this->loadRefParent()->getDeepness($d);
     }
+
     return $this->_deepness = $d;
   }
-  
+
+  /**
+   * @param string $object_class
+   * @param CTag   $parent
+   * @param array  $tree
+   *
+   * @return array
+   */
   static function getTree($object_class, CTag $parent = null, &$tree = array()) {
     $tag = new self;
     $where = array(
@@ -149,7 +180,7 @@ class CTag extends CMbObject {
     
     $tags = $tag->loadList($where, "name");
     
-    foreach($tags as $_tag) {
+    foreach ($tags as $_tag) {
       $_tag->getDeepness();
       self::getTree($object_class, $_tag, $sub_tree);
       $tree["children"][] = $sub_tree;

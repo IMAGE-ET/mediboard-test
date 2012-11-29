@@ -288,6 +288,10 @@ var ExObject = {
         if (triggerValue != "") return true;
         break;
 
+      case "hasNoValue":
+        if (triggerValue == "") return true;
+        break;
+
       default: return true;
     }
 

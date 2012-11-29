@@ -424,10 +424,14 @@ class CApp {
         continue;
       }
 
-      $chrono = $ds->chrono;
+      $chrono      = $ds->chrono;
+      $chronoFetch = $ds->chronoFetch;
+
       self::$performance["dataSources"][$dsn] = array(
-        "count" => $chrono->nbSteps,
-        "time"  => $chrono->total,
+        "count"      => $chrono->nbSteps,
+        "time"       => $chrono->total,
+        "countFetch" => $chronoFetch->nbSteps,
+        "timeFetch"  => $chronoFetch->total,
       );
     }
   }

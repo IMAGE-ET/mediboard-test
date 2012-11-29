@@ -36,7 +36,7 @@ Main.add(function () {
 </script>
 
 <!-- Control tabs -->
-<ul id="tab-classes" class="control_tabs">
+<ul id="tab-classes" class="control_tabs small">
   {{foreach from=$items key=class item=_item}}
   <li>
     <a href="#class-{{$class}}" {{if $completions.$class.percent < 100}} class="wrong" {{/if}}>

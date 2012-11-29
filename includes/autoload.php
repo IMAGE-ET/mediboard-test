@@ -91,7 +91,7 @@ function mbAutoload($class) {
   
   SHM::put("class-paths", CApp::$classPaths);
   
-  CApp::$performance["autoload"][$class] = microtime(true) - $time;
+  CApp::$performance["autoload"][$class] = (microtime(true) - $time) * 1000;
   
   return $class_path !== false;
 }

@@ -13,7 +13,7 @@
 <head>
   <!-- Content-Type meta tags need to be the first in the page (even before title) -->
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeInfo.charset}}" />
-  <meta http-equiv="X-UA-Compatible" content="IE={{if $conf.browser_enable_ie9}}9{{else}}8{{/if}}" /> {{* For IE in All-in-one mode *}}
+  <meta http-equiv="X-UA-Compatible" content="IE={{if $conf.browser_enable_ie9 == 0}}8{{elseif $conf.browser_enable_ie9 == 1}}9{{else}}edge{{/if}}" /> {{* For IE in All-in-one mode *}}
   
   <title>
     {{if !$dialog}}
@@ -71,7 +71,7 @@
             log_js_errors: {{if $conf.log_js_errors}}true{{else}}false{{/if}}
           },
           readonly: "{{$conf.readonly}}" == 1 && User.id != null,
-          touchDevice: /^ipad|iphone$/i.test("{{$browser.name}}")
+          touchDevice: /^ipad|iphone|nexus 7$/i.test("{{$browser.name}}")
         };
     
     var Mediboard = {{$version|@json}};
@@ -110,7 +110,7 @@
   </script>
 </head>
 
-<body class="{{if @$app->user_prefs.touchscreen == 1 || $browser.name == 'ipad'}} touchscreen {{else}} desktop {{/if}} {{if $browser.name == 'ipad'}} ipad {{/if}}">
+<body class="{{if @$app->user_prefs.touchscreen == 1 || $browser.name == 'ipad' || $browser.useragent|stripos:'nexus 7' !== false}} touchscreen {{else}} desktop {{/if}} {{if $browser.name == 'ipad'}} ipad {{/if}}">
 
 {{if $browser.name == "msie"}}
   {{include file="../../mediboard/templates/ie.tpl" nodebug=true}}

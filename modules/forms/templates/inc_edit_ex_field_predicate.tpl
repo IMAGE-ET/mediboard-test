@@ -19,8 +19,9 @@ showField = function(field_id, field_name, value){
 
 toggleNoValue = function(form){
   var field = form.elements[window.predicateFieldName];
-  
-  if ($V(form.elements.operator) == "hasValue") {
+  var operator = $V(form.elements.operator);
+
+  if (operator == "hasValue" || operator == "hasNoValue") {
     $("field-view").hide();
     $("field-view-novalue").show();
     

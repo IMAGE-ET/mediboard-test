@@ -385,7 +385,7 @@ var Url = Class.create({
   /**
    * Open a modal window
    *
-   * @param {Object} options
+   * @param {Object=} options
    *
    * @return {Url}
    */
@@ -537,9 +537,9 @@ var Url = Class.create({
   /**
    * Initializes an autocompleter
    *
-   * @param {HTMLInputElement} input    Input to autocomplete
-   * @param {HTMLElement}      populate The element which will receive the response list
-   * @param {Object=}          oOptions Various options
+   * @param {HTMLInputElement,String} input    Input to autocomplete
+   * @param {HTMLElement,String}      populate The element which will receive the response list
+   * @param {Object=}                 oOptions Various options
    *
    * @return {Ajax.Autocompleter|Boolean}
    */
