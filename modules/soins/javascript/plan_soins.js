@@ -80,8 +80,14 @@ PlanSoins = {
       return;
     }
     
+    // Replanification depuis la fenetre
+    var replanif = 0;
+    if (quantite != '-' && ($V(document.mode_dossier_soin.mode_dossier) == "planification")) {
+      replanif = 1;
+    }
+    
     // On ne permet pas de faire des planifications sur des lignes de medicament    
-    if(!planification_id && (object_class == "CPrescriptionLineMedicament") && ($V(document.mode_dossier_soin.mode_dossier) == "planification") && (PlanSoins.manual_planif == 0)){
+    if(!replanif && quantite != "-" && !planification_id && (object_class == "CPrescriptionLineMedicament") && ($V(document.mode_dossier_soin.mode_dossier) == "planification") && (PlanSoins.manual_planif == 0)){
       return;
     }
     
@@ -96,18 +102,24 @@ PlanSoins = {
     url.addParam("date_sel", PlanSoins.date);
     url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
     url.addParam("multiple_adm", multiple_adm);
+    url.addParam("replanification", replanif);
     url.popup(800,600,"Administration");
   },
   
-  addAdministrationPerf: function(prescription_line_mix_id, date, hour, time_prevue, sejour_id){
+  addAdministrationPerf: function(prescription_line_mix_id, date, hour, time_prevue, sejour_id, replanification){
+    var mode_dossier = $V(document.mode_dossier_soin.mode_dossier);
+    
     var url = new Url("dPprescription", "httpreq_add_administration_perf");
     url.addParam("prescription_line_mix_id", prescription_line_mix_id);
     url.addParam("date", date);
     url.addParam("hour", hour);
     url.addParam("time_prevue", time_prevue);
-    url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
+    url.addParam("mode_dossier", mode_dossier);
     url.addParam("sejour_id", sejour_id);
     url.addParam("date_sel", PlanSoins.date);
+    if (mode_dossier == "planification" && replanification) {
+      url.addParam("replanification", true);
+    }
     url.popup(800,600,"Administration d'une prescription_line_mix");
   },
 
