@@ -537,7 +537,13 @@
                   <tr>
                     <td></td>
                     <td class="text">
-                      <em>{{$perf_line->_ucd_view}}</em>
+                      <em>
+                        {{$perf_line->_ucd_view}}
+                        {{if $perf_line->quantite_debit && $perf_line->unite_debit}}
+                          : {{$perf_line->quantite_debit}} {{"/\(.*\)/"|preg_replace:"":$perf_line->unite_debit}} /
+                            {{if $perf_line->temps_debit > 1}}{{$perf_line->temps_debit}}{{/if}} {{if $perf_line->unite_temps_debit == "hour"}}h{{else}}{{$perf_line->unite_temps_debit}}{{/if}}
+                        {{/if}}
+                      </em>
                       {{if array_key_exists('prevu', $_perf) && array_key_exists('administre', $_perf) && $_perf.prevu == $_perf.administre}}
                         <img src="images/icons/tick.png" alt="Administrations effectuées" title="Administrations effectuées" />
                       {{/if}}
