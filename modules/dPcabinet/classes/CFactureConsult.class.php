@@ -515,10 +515,10 @@ class CFactureConsult extends CMbObject {
       if ($montant_prem < 0) {
         $montant_prem = 0;
       }
-      if ($total_tarmed) {
+      if ($total_tarmed || $autre_tarmed) {
          $this->_montant_factures_caisse[0] = sprintf("%.2f",$montant_prem - $this->remise);
       }
-      if ($total_caisse >0) {
+      if ($total_caisse > 0) {
         $this->_montant_factures_caisse[1] = $total_caisse;
       }
       
