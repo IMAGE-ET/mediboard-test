@@ -1510,6 +1510,7 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("1.62");
+    $this->setTimeLimit(1800);
     $query = "ALTER TABLE `sejour`
       ADD `isolement_date` DATETIME AFTER `isolement`,
       ADD `raison_medicale` TEXT AFTER `isolement_date`;";
