@@ -14,7 +14,7 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
   if (!$fin) $fin = mbDate();
 
   $totalWorkDays = 0;
-  for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
+  for ($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
     $totalWorkDays += mbWorkDaysInMonth(mbTransformTime("+0 DAY", $i, "%Y-%m-01"));
   }
   
@@ -25,25 +25,19 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
   $discipline->load($discipline_id);
 
   $ticks = array();
-  for($i = "7"; $i <= "21"; $i = $i + 1) {
+  for ($i = "7"; $i <= "21"; $i = $i + 1) {
     $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", "$i:00:00", "%Hh%M"));
   }
-  
-  $where = array();
-  $where["stats"] = " = '1'";
+
   $bloc = new CBlocOperatoire();
-  if($bloc_id) {
+  if ($bloc_id) {
     $bloc->load($bloc_id);
-    $where["bloc_id"] = "= '$bloc_id'";
   }
-  $salle = new CSalle();
-  $salles = $salle->loadList($where);
   
   $series = array();
-  $serie = array("data" => array());
 
   // Nombre de patients par heure
-  foreach($ticks as $i => $tick) {
+  foreach ($ticks as $i => $tick) {
     $query = "DROP TEMPORARY TABLE IF EXISTS pat_par_heure";
     $ds->exec($query);
     $query = "CREATE TEMPORARY TABLE pat_par_heure
@@ -60,33 +54,32 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
                   '".$tick[1].":00' BETWEEN operations.entree_reveil AND operations.sortie_reveil_possible AND
                   operations.annulee = '0'";
       
-    if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
-    if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+    if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
+    if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
-    if($bloc_id) {
+    if ($bloc_id) {
       $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
     }
     
     $query .= "\nGROUP BY plagesop.date";
-    $result = $ds->exec($query);
-    
-    
+    $ds->exec($query);
+
     $query = "SELECT SUM(total_by_day) AS total, MAX(total_by_day) AS max,heure
                 FROM pat_par_heure
                 GROUP BY heure";
     $result = $ds->loadlist($query);
-    if(count($result)) {
+    if (count($result)) {
       $serie_moyenne["data"][] = array($i, $result[0]["total"] / $totalWorkDays);
       $serie_max["data"][]     = array($i, $result[0]["max"]);
-    } else {
+    }
+    else {
       $serie_moyenne["data"][] = array($i, 0);
       $serie_max["data"][]     = array($i, 0);
     }
   }
   
   // Nombre de patients non renseignés
-  
   $query = "SELECT COUNT(operations.operation_id) AS total,
     'err' AS heure
     FROM operations
@@ -99,11 +92,11 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
       (operations.entree_reveil IS NULL OR operations.sortie_reveil_possible IS NULL) AND
       operations.annulee = '0'";
     
-  if($prat_id)  $query      .= "\nAND operations.chir_id = '$prat_id'";
-  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codeCCAM) $query      .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($prat_id)  $query      .= "\nAND operations.chir_id = '$prat_id'";
+  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if ($codeCCAM) $query      .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 
-  if($bloc_id) {
+  if ($bloc_id) {
     $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
   }
   
@@ -111,7 +104,8 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
   $result = $ds->loadlist($query);
   if(count($result)) {
     $serie_moyenne["data"][] = array(count($ticks), $result[0]["total"] / $totalWorkDays);
-  } else {
+  }
+  else {
     $serie_moyenne["data"][] = array(count($ticks), 0);
   }
   //$serie_max["data"][] = array(count($ticks), 0);
@@ -126,10 +120,10 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
   // Set up the title for the graph
   $title = "Patients moyens et max / heure du jour";
   $subtitle = "Moyenne sur tous les jours ouvrables";
-  if($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if($discipline_id) $subtitle .= " - $discipline->_view";
-  if($bloc_id)       $subtitle .= " - $bloc->_view";
-  if($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
+  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
+  if ($discipline_id) $subtitle .= " - $discipline->_view";
+  if ($bloc_id)       $subtitle .= " - $bloc->_view";
+  if ($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
 
   $options = array(
     'title' => utf8_encode($title),

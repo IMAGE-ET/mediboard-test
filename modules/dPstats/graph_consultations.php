@@ -32,7 +32,7 @@ function graphConsultations($debut = null, $fin = null, $prat_id = 0) {
     'markers' => array('show' => true),
     'bars' => array('show' => false)
   );
-  for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
+  for ($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
     $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
     $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
@@ -52,7 +52,7 @@ function graphConsultations($debut = null, $fin = null, $prat_id = 0) {
     WHERE plageconsult.date BETWEEN '$debutact' AND '$finact'
     AND consultation.annule = '0'";
     
-  if($prat_id) {
+  if ($prat_id) {
     $query .= "\nAND plageconsult.chir_id = '$prat_id'";
   }
   $query .= "\nGROUP BY mois ORDER BY orderitem";
@@ -62,10 +62,10 @@ function graphConsultations($debut = null, $fin = null, $prat_id = 0) {
   );
   
   $result = $ds->loadlist($query);
-  foreach($ticks as $i => $tick) {
+  foreach ($ticks as $i => $tick) {
     $f = true;
-    foreach($result as $r) {
-      if($tick[1] == $r["mois"]) {        
+    foreach ($result as $r) {
+      if ($tick[1] == $r["mois"]) {
         $serie["data"][] = array($i, $r["total"]);
         $serie_total["data"][$i][1] += $r["total"];
         $total += $r["total"];
@@ -73,7 +73,9 @@ function graphConsultations($debut = null, $fin = null, $prat_id = 0) {
         break;
       }
     }
-    if($f) $serie["data"][] = array(count($serie["data"]), 0);
+    if ($f) {
+      $serie["data"][] = array(count($serie["data"]), 0);
+    }
   }
   $series[] = $serie;
   
@@ -81,7 +83,7 @@ function graphConsultations($debut = null, $fin = null, $prat_id = 0) {
   $title = "Nombre de consultations";
   $subtitle = "- $total consultations -";
   
-  if($prat_id) {
+  if ($prat_id) {
     $subtitle .= " Dr $pratSel->_view -";
   }
   

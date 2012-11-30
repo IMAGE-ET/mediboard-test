@@ -91,8 +91,8 @@ Main.add(function(){
         <option value="reelle" {{if $type_data == "reelle"}}selected="selected"{{/if}}>Réelles</option>
       </select>
     </td>
-    <th />
-    <td />
+    <th></th>
+    <td></td>
   </tr>
 
   <tr>

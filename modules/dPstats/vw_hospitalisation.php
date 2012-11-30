@@ -161,5 +161,3 @@ $smarty->assign("qualite"        , $qualite);
 $smarty->assign("graphs"         , $graphs);
 
 $smarty->display("vw_hospitalisation.tpl");
-
-?>

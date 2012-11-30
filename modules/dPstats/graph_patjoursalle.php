@@ -22,19 +22,11 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
   $discipline->load($discipline_id);
 
   $ticks = array();
-  for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
+  for ($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
     $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
   }
 
-  $where = array();
-  $where['stats'] = " = '1'";
-  if($salle_id) {
-    $where['salle_id'] = " = '$salle_id'";
-  } elseif($bloc_id) {
-    $where['bloc_id'] = "= '$bloc_id'";
-  }
-  
-  $salles = $salle->loadList($where);
+  //$salles = CSalle::getSallesStats($salle_id, $bloc_id);
   $series = array();
   $serie = array('data' => array());
 
@@ -53,13 +45,14 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
       plagesop.date BETWEEN '$debut' AND '$fin' AND 
       operations.annulee = '0'";
   
-  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
-  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
+  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 
-  if($salle_id) {
+  if ($salle_id) {
     $query .= "\nAND sallesbloc.salle_id = '$salle_id'";
-  } elseif($bloc_id) {
+  }
+  elseif ($bloc_id) {
     $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
   }
   
@@ -83,13 +76,14 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
         operations.date BETWEEN '$debut' AND '$fin' AND 
         operations.annulee = '0'";
     
-    if($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-    if($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+    if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
+    if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if ($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
-    if($salle_id) {
+    if ($salle_id) {
       $query_hors_plage .= "\nAND sallesbloc.salle_id = '$salle_id'";
-    } elseif($bloc_id) {
+    }
+    elseif($bloc_id) {
       $query_hors_plage .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
     }
     $query_hors_plage .= "\nGROUP BY mois ORDER BY orderitem";
@@ -97,13 +91,13 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
 
   }
 
-  foreach($ticks as $i => $tick) {
+  foreach ($ticks as $i => $tick) {
     $f = true;
-    foreach($result as $r) {
+    foreach ($result as $r) {
       if ($tick[1] == $r["mois"]) {
         $res = $r["total"]/($r["nb_days"]*$r["nb_salles"]);
         if ($hors_plage) {
-          foreach($result_hors_plage as &$_r_h) {
+          foreach ($result_hors_plage as &$_r_h) {
             if ($tick[1] == $_r_h["mois"]) {
               $res_hors_plage = $_r_h["total"]/($_r_h["nb_days"]*$_r_h["nb_salles"]);
               $res = ($res * $r["total"] + $res_hors_plage * $_r_h["total"]) / ($r["total"] + $_r_h["total"]);
@@ -119,7 +113,9 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
         $f = false;
       }
     }
-    if($f) $serie["data"][] = array(count($serie["data"]), 0);
+    if($f) {
+      $serie["data"][] = array(count($serie["data"]), 0);
+    }
   }
 
   $series[] = $serie;
@@ -127,10 +123,10 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
   // Set up the title for the graph
   $title = "Patients / jour / salle active dans le mois";
   $subtitle = "Uniquement les jours d'activité";
-  if($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if($discipline_id) $subtitle .= " - $discipline->_view";
-  if($salle_id)      $subtitle .= " - $salle->nom";
-  if($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
+  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
+  if ($discipline_id) $subtitle .= " - $discipline->_view";
+  if ($salle_id)      $subtitle .= " - $salle->nom";
+  if ($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
 
   $options = array(
     'title' => utf8_encode($title),

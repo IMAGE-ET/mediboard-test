@@ -53,29 +53,32 @@ class CTempsHospi extends CMbObject {
     $this->_ref_praticien = $this->loadFwdRef("praticien_id", 1);
     $this->_ref_praticien->loadRefFunction();
   }
-  
+
   /**
    * Durée moyenne d'hospitlisation en jours
-   * @param object $praticien_id [optional]
-   * @param object $ccam [optional]
+   *
+   * @param int          $praticien_id [optional]
+   * @param array|string $ccam         [optional]
+   * @param string       $type
+   *
    * @return int Durée en jours, 0 si aucun séjour, false si temps non calculé
    */
   static function getTime($praticien_id = 0, $ccam = null, $type = null){
-    $time = 0;
     $where = array();
     $total = array();
     $total["duree_somme"]  = 0;
     $total["nbSejours"]    = 0;
     $where["praticien_id"] = "= '$praticien_id'";
-    if($type) {
+    if ($type) {
       $where["type"] = "= '$type'";
     }
     
-    if(is_array($ccam)) {
-      foreach($ccam as $keyccam => $code){
+    if (is_array($ccam)) {
+      foreach ($ccam as $code){
         $where[] = "ccam LIKE '%".strtoupper($code)."%'";
       }
-    } elseif($ccam) {
+    }
+    elseif ($ccam) {
       $where["ccam"] = "LIKE '%".strtoupper($ccam)."%'";
     }
     
@@ -84,18 +87,18 @@ class CTempsHospi extends CMbObject {
       return;
     }
 
-    foreach($liste as $keyTemps => $temps) {
+    foreach ($liste as $temps) {
       $total["nbSejours"]   += $temps->nb_sejour;
       $total["duree_somme"] += $temps->nb_sejour * $temps->duree_moy;
     }
 
-    if($total["nbSejours"]) {
+    if ($total["nbSejours"]) {
       $time = $total["duree_somme"] / $total["nbSejours"];
-    } else {
+    }
+    else {
       $time = 0;
     }
 
     return $time;
   }
 }
-?>

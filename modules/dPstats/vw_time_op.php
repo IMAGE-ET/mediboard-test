@@ -57,5 +57,3 @@ $smarty->assign("typeVue"       , $typeVue);
 $smarty->assign("nb_sejour_mini", $nb_sejour_mini);
 
 $smarty->display("vw_time_op.tpl");
-
-?>

@@ -17,36 +17,30 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
   
   $discipline = new CDiscipline;
   $discipline->load($discipline_id);
+
+  $group_id = CGroups::loadCurrent()->_id;
   
   $salle = new CSalle;
   $salle->load($salle_id);
   
   $ticks = array();
   $serie_total = array(
-    'label' => 'Total',
-    'data' => array(),
+    'label'   => 'Total',
+    'data'    => array(),
     'markers' => array('show' => true),
-    'bars' => array('show' => false)
+    'bars'    => array('show' => false),
   );
-  for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
+  for ($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
     $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
     $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
   
-  $where = array();
-  $where['stats'] = " = '1'";
-  if($salle_id) {
-    $where['salle_id'] = " = '$salle_id'";
-  } elseif($bloc_id) {
-    $where['bloc_id'] = "= '$bloc_id'";
-  }
-  
-  $salles = $salle->loadList($where);
+  $salles = CSalle::getSallesStats($salle_id, $bloc_id);
   $ds = $salle->_spec->ds;
   
   $total = 0;
   $series = array();
-  foreach($salles as $salle) {
+  foreach ($salles as $salle) {
     $serie = array(
       'label' => utf8_encode($bloc_id ? $salle->nom : $salle->_view),
       'data' => array()
@@ -62,24 +56,24 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
       INNER JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
       INNER JOIN users_mediboard ON operations.chir_id = users_mediboard.user_id
       WHERE
-        sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
+        sejour.group_id = '$group_id' AND
         plagesop.date BETWEEN '$debut' AND '$fin' AND 
         (operations.annulee = '0' OR operations.annulee IS NULL)";
         
-    if($type_hospi) {
+    if ($type_hospi) {
       $query .= "\nAND sejour.type = '$type_hospi'";
     }
-    if($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
+    if ($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
       $query .= "\nAND operations.chir_id = '$prat_id'";
     }
-    if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
+    if ($prat_id && $prat->isFromType(array("Anesthésiste"))) {
       $query .= "\nAND (operations.anesth_id = '$prat_id' OR 
                        (plagesop.anesth_id = '$prat_id' AND (operations.anesth_id = '0' OR operations.anesth_id IS NULL)))";
     }
-    if($discipline_id) {
+    if ($discipline_id) {
       $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
     }
-    if($codes_ccam) {
+    if ($codes_ccam) {
       $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
     }
     $query .= "\nAND sallesbloc.salle_id = '$salle->_id'";
@@ -103,19 +97,19 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
         operations.date BETWEEN '$debut' AND '$fin' AND 
         (operations.annulee = '0' OR operations.annulee IS NULL)";
         
-      if($type_hospi) {
+      if ($type_hospi) {
         $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
       }
-      if($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
+      if ($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
         $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
       }
-      if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
+      if ($prat_id && $prat->isFromType(array("Anesthésiste"))) {
         $query_hors_plage .= "\nAND operations.anesth_id = '$prat_id'";
       }
-      if($discipline_id) {
+      if ($discipline_id) {
         $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
       }
-      if($codes_ccam) {
+      if ($codes_ccam) {
         $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
       }
       $query_hors_plage .= "\nAND sallesbloc.salle_id = '$salle->_id'";
@@ -124,18 +118,19 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
       $result_hors_plage = $ds->loadlist($query_hors_plage);
     }
     
-    foreach($ticks as $i => $tick) {
+    foreach ($ticks as $i => $tick) {
       $f = true;
-      foreach($result as $r) {
-        if($tick[1] == $r["mois"]) {
+      foreach ($result as $r) {
+        if ($tick[1] == $r["mois"]) {
           if ($hors_plage) {
-            foreach($result_hors_plage as &$_r_h) {
+            foreach ($result_hors_plage as &$_r_h) {
               if ($tick[1] == $_r_h["mois"]) {
                 $r["total"] += $_r_h["total"];
                 unset($_r_h); break;
               }
             }
           }
+
           $serie["data"][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
           $total += $r["total"];
@@ -143,7 +138,9 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
           break;
         }
       }
-      if($f) $serie["data"][] = array(count($serie["data"]), 0);
+      if ($f) {
+        $serie["data"][] = array(count($serie["data"]), 0);
+      }
     }
     $series[] = $serie;
   }
@@ -151,13 +148,15 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
   $series[] = $serie_total;
   
   // Set up the title for the graph
-  if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
+  if ($prat_id && $prat->isFromType(array("Anesthésiste"))) {
     $title = "Nombre d'anesthésie par salle";
     $subtitle = "$total anesthésies";
-  } else {
+  }
+  else {
     $title = "Nombre d'interventions par salle";
     $subtitle = "$total interventions";
   }
+
   if($prat_id)       $subtitle .= " - Dr $prat->_view";
   if($discipline_id) $subtitle .= " - $discipline->_view";
   if($codes_ccam)    $subtitle .= " - CCAM : $codes_ccam";
@@ -185,5 +184,3 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
   
   return array('series' => $series, 'options' => $options);
 }
-
-?>

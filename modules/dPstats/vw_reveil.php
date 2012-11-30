@@ -70,4 +70,3 @@ $smarty->assign("listDisciplines"		  		, $listDisciplines   );
 $smarty->assign("graphs"		  	        	, $graphs            );
 
 $smarty->display("vw_reveil.tpl");
-?>

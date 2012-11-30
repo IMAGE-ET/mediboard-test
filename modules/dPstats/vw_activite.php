@@ -20,5 +20,3 @@ $smarty->assign("debutact", $debutact);
 $smarty->assign("finact"  , $finact);
 
 $smarty->display("vw_activite.tpl");
-
-?>

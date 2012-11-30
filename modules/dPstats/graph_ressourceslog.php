@@ -96,4 +96,3 @@ function graphRessourceLog($module, $date, $element = 'duration', $interval = 'd
 		
 	return array('series' => $series, 'options' => $options);
 }
-?>

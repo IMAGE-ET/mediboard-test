@@ -9,5 +9,3 @@
  */
 
 CAppUI::requireModuleFile('dPprescription', 'vw_stats_prescriptions');
-
-?>

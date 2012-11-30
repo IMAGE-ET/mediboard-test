@@ -25,22 +25,21 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
     'markers' => array('show' => true),
     'bars' => array('show' => false)
   );
-	for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
+	for ($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
 	  $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
     $serie_total['data'][] = array(count($serie_total['data']), 0);
 	}
 	
 	$where = array();
-	if($service_id) {
+	if ($service_id) {
 	  $where["service_id"] = "= '$service_id'";
 	}
 	$service = new CService;
-	$services = $service->loadGroupList($where);
 	
 	$sejour = new CSejour;
 	$listHospis = array();
-	foreach($sejour->_specs["type"]->_locales as $key => $type){
-	  if((($key == "comp" || $key == "ambu") && $type_adm == 1) || 
+	foreach ($sejour->_specs["type"]->_locales as $key => $type) {
+	  if ((($key == "comp" || $key == "ambu") && $type_adm == 1) ||
 		   ($type_adm == $key) || 
 			 ($type_adm == null)){
 	    $listHospis[$key] = utf8_encode($type);
@@ -49,7 +48,7 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
 	
 	$total = 0;
 	$series = array();
-	foreach($listHospis as $key => $type) {
+	foreach ($listHospis as $key => $type) {
 	  $serie = array(
 		  'label' => $type,
 			'data' => array()
@@ -69,24 +68,26 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
 				sejour.group_id = '".CGroups::loadCurrent()->_id."' AND
 				sejour.type = '$key' AND
 				sejour.annule = '0'";
-	  if($service_id)    $query .= "\nAND service.service_id = '$service_id'";
-	  if($prat_id)       $query .= "\nAND sejour.praticien_id = '$prat_id'";
-	  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+	  if ($service_id)    $query .= "\nAND service.service_id = '$service_id'";
+	  if ($prat_id)       $query .= "\nAND sejour.praticien_id = '$prat_id'";
+	  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
 		
 	  $query .= "\nGROUP BY mois ORDER BY orderitem";
 	
 	  $result = $sejour->_spec->ds->loadlist($query);
-	  foreach($ticks as $i => $tick) {
+	  foreach ($ticks as $i => $tick) {
 	    $f = true;
-	    foreach($result as $r) {
-	      if($tick[1] == $r["mois"]) {
+	    foreach ($result as $r) {
+	      if ($tick[1] == $r["mois"]) {
 	        $serie["data"][] = array($i, $r["total"]);
           $serie_total["data"][$i][1] += $r["total"];
 	        $total += $r["total"];
 	        $f = false;
 	      }
 	    }
-	    if($f) $serie["data"][] = array(count($serie["data"]), 0);
+	    if ($f) {
+        $serie["data"][] = array(count($serie["data"]), 0);
+      }
 	  }
 		$series[] = $serie;
 	}
@@ -94,8 +95,8 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
   $series[] = $serie_total;
 	
 	$subtitle = "$total patients";
-	if($prat_id)       $subtitle .= " - Dr $prat->_view";
-	if($discipline_id) $subtitle .= " - $discipline->_view";
+	if ($prat_id)       $subtitle .= " - Dr $prat->_view";
+	if ($discipline_id) $subtitle .= " - $discipline->_view";
 	
 	$options = array(
 		'title' => utf8_encode("Nombre d'admissions par type d'hospitalisation - $type_data"),

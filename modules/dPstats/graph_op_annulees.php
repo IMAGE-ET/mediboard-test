@@ -25,24 +25,16 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
     'markers' => array('show' => true),
     'bars' => array('show' => false)
   );
-  for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
+  for ($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
     $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
     $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
 
-  $where = array();
-  $where['stats'] = " = '1'";
-  if($salle_id) {
-    $where['salle_id'] = " = '$salle_id'";
-  } elseif($bloc_id) {
-    $where['bloc_id'] = "= '$bloc_id'";
-  }
-  
-  $salles = $salle->loadList($where);
+  $salles = CSalle::getSallesStats($salle_id, $bloc_id);
   $series = array();
   $total = 0;
 
-  foreach($salles as $salle) {
+  foreach ($salles as $salle) {
     $serie = array(
       'label' => utf8_encode($bloc_id ? $salle->nom : $salle->_view),
       'data' => array()
@@ -63,11 +55,11 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
                 AND user_log.fields LIKE '%annulee%'
                 AND operations.annulee = '1'";
   
-    if($type_hospi) {
+    if ($type_hospi) {
       $query .= "\nAND sejour.type = '$type_hospi'";
     }
-    if($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id'";
-    if($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+    if ($prat_id)  $query .= "\nAND operations.chir_id = '$prat_id'";
+    if ($codeCCAM) $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 
     $query .= "\nAND sallesbloc.salle_id = '$salle->_id'";
   
@@ -94,11 +86,11 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
                 AND user_log.fields LIKE '%annulee%'
                 AND operations.annulee = '1'";
   
-      if($type_hospi) {
+      if ($type_hospi) {
         $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
       }
-      if($prat_id)  $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-      if($codeCCAM) $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+      if ($prat_id)  $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
+      if ($codeCCAM) $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
       $query_hors_plage .= "\nAND sallesbloc.salle_id = '$salle->_id'";
     
@@ -108,12 +100,12 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
       $result_hors_plage = $prat->_spec->ds->loadlist($query_hors_plage);
     }
     
-    foreach($ticks as $i => $tick) {
+    foreach ($ticks as $i => $tick) {
       $f = true;
-      foreach($result as $r) {
-        if($tick[1] == $r["mois"]) {
+      foreach ($result as $r) {
+        if ($tick[1] == $r["mois"]) {
           if ($hors_plage) {
-            foreach($result_hors_plage as &$_r_h) {
+            foreach ($result_hors_plage as &$_r_h) {
               if ($tick[1] == $_r_h["mois"]) {
                 $r["total"] += $_r_h["total"];
                 unset($_r_h);
@@ -128,7 +120,9 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
           break;
         }
       }
-      if($f) $serie["data"][] = array(count($serie["data"]), 0);
+      if ($f) {
+        $serie["data"][] = array(count($serie["data"]), 0);
+      }
     }
 
     $series[] = $serie;
@@ -139,10 +133,10 @@ function graphOpAnnulees($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   // Set up the title for the graph
   $title = "Interventions annulées le jour même";
   $subtitle = "$total interventions";
-  if($prat_id)  $subtitle   .= " - Dr $prat->_view";
-  if($salle_id) $subtitle   .= " - $salle->nom";
-  if($codeCCAM) $subtitle   .= " - CCAM : $codeCCAM";
-  if($type_hospi) $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
+  if ($prat_id)  $subtitle   .= " - Dr $prat->_view";
+  if ($salle_id) $subtitle   .= " - $salle->nom";
+  if ($codeCCAM) $subtitle   .= " - CCAM : $codeCCAM";
+  if ($type_hospi) $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
 
   $options = array(
     'title' => utf8_encode($title),

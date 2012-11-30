@@ -33,5 +33,3 @@ $graphs = array(
 $smarty = new CSmartyDP();
 $smarty->assign("graphs", $graphs);
 $smarty->display("vw_graph_activite_zoom.tpl");
-
-?>

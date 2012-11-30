@@ -50,5 +50,3 @@ $smarty->assign("users"   , $users);
 $smarty->assign("interval", $interval);
 
 $smarty->display("vw_user_logs.tpl");
-
-?>

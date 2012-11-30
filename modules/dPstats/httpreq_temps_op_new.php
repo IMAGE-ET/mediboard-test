@@ -149,7 +149,4 @@ $queryWhere .= "\nAND operations.entree_reveil < operations.sortie_reveil_possib
 
 buildPartialTables($tableName, $tableFields, $queryFields, $querySelect, $queryWhere);
 
-  
 //echo "Liste des temps opératoire mise à jour (".count($listOps)." lignes trouvées)";
-
-?>

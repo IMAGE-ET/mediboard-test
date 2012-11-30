@@ -22,19 +22,20 @@ $pratSel->load($prat_id);
 $service = new CSalle;
 $service->load($service_id);
 
-for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
+for ($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
   $datax[] = mbTransformTime("+0 DAY", $i, "%m/%Y");
 }
 
 $sql = "SELECT * FROM service WHERE";
-if($service_id)
+if ($service_id) {
   $sql .= "\nAND id = '$service_id'";
+}
   
 $ds = CSQLDataSource::get("std");
 $services = $ds->loadlist($sql);
 
 $opbysalle = array();
-foreach($services as $service) {
+foreach ($services as $service) {
   $id = $service["service_id"];
   $opbysalle[$id]["nom"] = $salle["nom"];
   $sql = "SELECT COUNT(sejour.sejour_id) AS total," .
@@ -44,8 +45,9 @@ foreach($services as $service) {
     "\nFROM sejour, affectation, services, chambre, lit" .
     "\nWHERE sejour.annule = '0'" .
     "\nAND sejour.entree_prevue BETWEEN '$debut' AND '$fin'";
-  if($prat_id)
+  if ($prat_id) {
     $sql .= "\nAND sejour.praticien_id = '$prat_id'";
+  }
   $sql .= "\nAND service.service_id = chambre.service_id" .
     "\nAND chambre.chambre_id = lit.chambre_id" .
     "\nAND lit.affectation_id = affectation.affectation_id" .
@@ -55,15 +57,15 @@ foreach($services as $service) {
     "\nORDER BY orderitem";
     
   $result = $ds->loadlist($sql);
-  foreach($datax as $x) {
+  foreach ($datax as $x) {
     $f = true;
-    foreach($result as $totaux) {
-      if($x == $totaux["mois"]) {
+    foreach ($result as $totaux) {
+      if ($x == $totaux["mois"]) {
         $opbysalle[$id]["sejour"][] = $totaux["total"];
         $f = false;
       }
     }
-    if($f) {
+    if ($f) {
       $opbysalle[$id]["sejour"][] = 0;
     }
   }
@@ -78,16 +80,16 @@ $graph->SetMarginColor("lightblue");
 // Set up the title for the graph
 $title = "Interventions par mois";
 $subtitle = "";
-if($prat_id) {
+if ($prat_id) {
   $subtitle .= "- Dr $pratSel->_view ";
 }
-if($salle_id) {
+if ($salle_id) {
   $subtitle .= "- $salleSel->nom ";
 }
-if($codeCCAM) {
+if ($codeCCAM) {
   $subtitle .= "- CCAM : $codeCCAM ";
 }
-if($subtitle) {
+if ($subtitle) {
   $subtitle .= "-";
   $graph->subtitle->Set($subtitle);
 }
@@ -131,7 +133,7 @@ $colors = array("#aa5500",
                 "#ff00ff",
                 "#00ffff",);
 $listPlots = array();
-foreach($opbysalle as $key => $value) {
+foreach ($opbysalle as $key => $value) {
   $bplot = new BarPlot($value["sejour"]);
   $from = $colors[$key];
   $to = "#EEEEEE";

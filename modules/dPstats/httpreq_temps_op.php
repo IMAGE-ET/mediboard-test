@@ -25,33 +25,28 @@ switch ($intervalle) {
 
 $fin = mbDate();
 
-
-$sql = "SELECT operations.chir_id, " .
-       "\nCOUNT(operations.operation_id) AS total," .
-       "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.sortie_salle)-TIME_TO_SEC(operations.entree_salle))) as duree_bloc," .
-       "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.sortie_salle)-TIME_TO_SEC(operations.entree_salle))) as ecart_bloc," .
-       "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op))) as duree_operation," .
-       "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op))) as ecart_operation," .
-       "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.temp_operation))) AS estimation,";
-
-$sql.= "\noperations.codes_ccam AS ccam";
-$sql.= "\nFROM operations" .
-       "\nLEFT JOIN users" .
-       "\nON operations.chir_id = users.user_id" .
-       "\nLEFT JOIN plagesop" .
-       "\nON operations.plageop_id = plagesop.plageop_id" .
-       "\nWHERE operations.annulee = '0'" .
-       "\nAND operations.entree_salle IS NOT NULL" .
-       "\nAND operations.debut_op IS NOT NULL" .
-       "\nAND operations.fin_op IS NOT NULL" .
-       "\nAND operations.sortie_salle IS NOT NULL" .
-       "\nAND operations.entree_salle < operations.debut_op";
-       "\nAND operations.debut_op < operations.fin_op";
-       "\nAND operations.fin_op < operations.sortie_salle";
-       "\nAND ((plagesop.date BETWEEN '$deb' AND '$fin') OR (plagesop.date BETWEEN '$deb' AND '$fin'))";
-
-$sql.= "\nGROUP BY operations.chir_id, ccam" .
-       "\nORDER BY ccam";
+$sql = "SELECT operations.chir_id,
+          COUNT(operations.operation_id) AS total,
+          SEC_TO_TIME(AVG(TIME_TO_SEC(operations.sortie_salle)-TIME_TO_SEC(operations.entree_salle))) as duree_bloc,
+          SEC_TO_TIME(STD(TIME_TO_SEC(operations.sortie_salle)-TIME_TO_SEC(operations.entree_salle))) as ecart_bloc,
+          SEC_TO_TIME(AVG(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op))) as duree_operation,
+          SEC_TO_TIME(STD(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op))) as ecart_operation,
+          SEC_TO_TIME(AVG(TIME_TO_SEC(operations.temp_operation))) AS estimation,
+          operations.codes_ccam AS ccam
+        FROM operations
+          LEFT JOIN users    ON operations.chir_id = users.user_id
+          LEFT JOIN plagesop ON operations.plageop_id = plagesop.plageop_id
+        WHERE operations.annulee = '0'
+          AND operations.entree_salle IS NOT NULL
+          AND operations.debut_op IS NOT NULL
+          AND operations.fin_op IS NOT NULL
+          AND operations.sortie_salle IS NOT NULL
+          AND operations.entree_salle < operations.debut_op
+          AND operations.debut_op < operations.fin_op
+          AND operations.fin_op < operations.sortie_salle
+          AND ((plagesop.date BETWEEN '$deb' AND '$fin') OR (plagesop.date BETWEEN '$deb' AND '$fin'))
+        GROUP BY operations.chir_id, ccam
+        ORDER BY ccam";
        
 $listOps = $ds->loadList($sql);       
 
@@ -72,5 +67,3 @@ foreach ($listOps as $keylistOps => $curr_listOps) {
 }
 
 echo "Liste des temps opératoire mise à jour (".count($listOps)." lignes trouvées)";
-
-?>

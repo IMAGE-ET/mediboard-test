@@ -34,4 +34,3 @@ foreach($listTemps as $temps) {
 if ($total["nbPrep"] !=0 ) {
   $total["moyenne"] = $total["somme"] / $total["nbPrep"];
 }
-?>

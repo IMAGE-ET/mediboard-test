@@ -19,12 +19,26 @@ class CSalle extends CMbObject {
   var $nom         = null;
   var $stats       = null;
   var $dh          = null;
-  
+
+  /**
+   * @var CBlocOperatoire
+   */
   var $_ref_bloc = null;
   
   // Object references per day
+  /**
+   * @var CPlageOp[]
+   */
   var $_ref_plages = null;
+
+  /**
+   * @var COperation
+   */
   var $_ref_urgences = null;
+
+  /**
+   * @var COperation
+   */
   var $_ref_deplacees = null;
   
   // Form fields
@@ -59,8 +73,8 @@ class CSalle extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefBloc();
-    $bloc = &$this->_ref_bloc;
+
+    $bloc = $this->loadRefBloc();
     
     $where = array(
       'group_id' => "= '$bloc->group_id'"
@@ -89,7 +103,10 @@ class CSalle extends CMbObject {
     $this->loadRefBloc();
     return $this->_ref_bloc->getPerm($permType) && parent::getPerm($permType);
   }
-  
+
+  /**
+   * @return CBlocOperatoire
+   */
   function loadRefBloc(){
     return $this->_ref_bloc = $this->loadFwdRef("bloc_id", true);
   }
@@ -123,7 +140,7 @@ class CSalle extends CMbObject {
         $operation->loadExtCodesCCAM();
         $operation->loadRefPlageOp(1);
 
-        if(CAppUI::conf("dPbloc CPlageOp chambre_operation")) {
+        if (CAppUI::conf("dPbloc CPlageOp chambre_operation")) {
           $operation->loadRefAffectation();
         }
         
@@ -160,7 +177,7 @@ class CSalle extends CMbObject {
     $where["salle_id"] = "= '$this->_id'";
     $order = "time_operation, chir_id";
     $this->_ref_urgences = $urgences->loadList($where, $order);
-    foreach($this->_ref_urgences as &$urgence) {
+    foreach ($this->_ref_urgences as &$urgence) {
       $urgence->loadRefChir(1);
       $urgence->loadRefPatient(1);
       $urgence->loadExtCodesCCAM();
@@ -195,5 +212,33 @@ class CSalle extends CMbObject {
     
     return $blocage->loadList($where);
   }
+
+  /**
+   * @param int $salle_id
+   * @param int $bloc_id
+   *
+   * @return self[]
+   */
+  static function getSallesStats($salle_id = null, $bloc_id = null) {
+    $group_id = CGroups::loadCurrent()->_id;
+
+    $where = array();
+    $where['stats'] = " = '1'";
+
+    $ljoin = array();
+
+    if ($salle_id) {
+      $where['salle_id'] = " = '$salle_id'";
+    }
+    elseif ($bloc_id) {
+      $where['bloc_id'] = "= '$bloc_id'";
+    }
+    else {
+      $where['bloc_operatoire.group_id'] = "= '$group_id'";
+      $ljoin['bloc_operatoire'] = 'bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id';
+    }
+
+    $salle = new self;
+    return $salle->loadList($where, null, null, null, $ljoin);
+  }
 }
-?>

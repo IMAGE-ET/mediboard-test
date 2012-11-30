@@ -96,5 +96,3 @@ if($total["nbInterventions"] != 0){
   $total["duree_moy"]  = $total["duree_somme"]  / $total["nbInterventions"];
   $total["reveil_moy"] = $total["reveil_somme"] / $total["nbInterventions"];
 }
-
-?>

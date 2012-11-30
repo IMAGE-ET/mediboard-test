@@ -135,5 +135,3 @@ if($mode == "csv") {
 
   $smarty->display("vw_bloc2.tpl");
 }
-
-?>

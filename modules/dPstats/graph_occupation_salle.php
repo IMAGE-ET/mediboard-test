@@ -39,19 +39,11 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   $discipline->load($discipline_id);
   
   $ticks = array();
-  for($i = $debut; $i <= $fin; $i = mbDate("+1 $type_duree", $i)) {
+  for ($i = $debut; $i <= $fin; $i = mbDate("+1 $type_duree", $i)) {
     $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, $date_format));
   }
 
-  $where = array();
-  $where['stats'] = "= '1'";
-  if($salle_id) {
-    $where["salle_id"] = "= '$salle_id'";
-  }
-  if($bloc_id) {
-    $where["bloc_id"] = "= '$bloc_id'";
-  }
-  $salles = $salle->loadGroupList($where);
+  $salles = CSalle::getSallesStats($salle_id, $bloc_id);
   
   // requete de récupération des interventions
   $query = "SELECT COUNT(*) AS total,
@@ -68,12 +60,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     AND operations.debut_op < operations.fin_op
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-  if($type_hospi) {
+  if ($type_hospi) {
     $query .= "\nAND sejour.type = '$type_hospi'";
   }
-  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
-  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   
   $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
     GROUP BY $type_duree_fr ORDER BY orderitem";
@@ -100,12 +92,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     WHERE operations.annulee = '0'
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-  if($type_hospi) {
+  if ($type_hospi) {
     $query .= "\nAND sejour.type = '$type_hospi'";
   }
-  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
-  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
     AND operations.date IS NULL
     AND operations.plageop_id IS NOT NULL
@@ -129,19 +121,19 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
     
-    if($type_hospi) {
+    if ($type_hospi) {
       $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
     }
     
-    if($prat_id) {
+    if ($prat_id) {
       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'"; 
     }
     
-    if($discipline_id) {
+    if ($discipline_id) {
       $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'"; 
     }
     
-    if($codeCCAM) {
+    if ($codeCCAM) {
       $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
     } 
     
@@ -154,16 +146,16 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     $result_hors_plage = $ds->loadList($query_hors_plage);
   }
   
-  foreach($ticks as $i => $tick) {
+  foreach ($ticks as $i => $tick) {
     $f = true;
-    if(!isset($nbInterventions[$i])) {
+    if (!isset($nbInterventions[$i])) {
       $nbInterventions[$i] = array("total" => 0);
     }
-    foreach($result as $j=>$r) {
+    foreach ($result as $j=>$r) {
       $nb_interv = $nbInterventions[$j]["total"];
-      if($tick[1] == $r["$type_duree_fr"]) {
+      if ($tick[1] == $r["$type_duree_fr"]) {
         if ($hors_plage) {
-          foreach($result_hors_plage as &$r_h) {
+          foreach ($result_hors_plage as &$r_h) {
             if ($tick[1] == $r_h["$type_duree_fr"]) {
               $r["moyenne"] = ($r_h["moyenne"] * $r_h["nbInterv"] + $r["moyenne"] * $nb_interv) / ($r_h["nbInterv"] + $nb_interv);
               $nb_interv += $r_h["nbInterv"];
@@ -179,7 +171,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
         $f = false;
       }
     }
-    if($f) {
+    if ($f) {
       $serieMoy["data"][] = array(count($serieMoy["data"]), 0);
       $serieTot["data"][] = array(count($serieTot["data"]), 0);
     }
@@ -204,12 +196,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     WHERE operations.annulee = '0'
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-  if($type_hospi) {
+  if ($type_hospi) {
     $query .= "\nAND sejour.type = '$type_hospi'";
   }
-  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
-  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
     AND operations.date IS NULL
     AND operations.plageop_id IS NOT NULL
@@ -232,12 +224,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     AND operations.plageop_id IS NULL
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-  if($type_hospi) {
+  if ($type_hospi) {
     $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
   }
-  if($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-  if($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
+  if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if ($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
   $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
     AND operations.entree_salle IS NOT NULL
     AND operations.sortie_salle IS NOT NULL
@@ -246,13 +238,13 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   $result_hors_plage = $ds->loadList($query_hors_plage);
   }
   
-  foreach($ticks as $i => $tick) {
+  foreach ($ticks as $i => $tick) {
     $f = true;
-    foreach($result as $j=>$r) {
-      if($tick[1] == $r["$type_duree_fr"]) {
+    foreach ($result as $j=>$r) {
+      if ($tick[1] == $r["$type_duree_fr"]) {
         $nb_interv = $nbInterventions[$j]["total"];
         if ($hors_plage) {
-          foreach($result_hors_plage as &$r_h) {
+          foreach ($result_hors_plage as &$r_h) {
             if ($tick[1] == $r_h["$type_duree_fr"]) {
               $r["moyenne"] = ($r_h["moyenne"] * $r_h["nbInterv"] + $r["moyenne"] * $nb_interv) / ($r_h["nbInterv"] + $nb_interv);
               $nb_interv += $r_h["nbInterv"];
@@ -268,7 +260,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
         $f = false;
       }
     }
-    if($f) {
+    if ($f) {
       $serieMoy["data"][] = array(count($serieMoy["data"]), 0);
       $serieTot["data"][] = array(count($serieTot["data"]), 0);
     }
@@ -293,11 +285,11 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     WHERE operations.annulee = '0'
     AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-  if($type_hospi) {
+  if ($type_hospi) {
     $query .= "\nAND sejour.type = '$type_hospi'";
   }
-  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
-  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id' AND plagesop.chir_id = '$prat_id'";
+  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
     AND operations.date IS NULL
     AND operations.plageop_id IS NOT NULL
@@ -320,11 +312,11 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
       AND operations.plageop_id IS NULL
       AND sejour.group_id = '".CGroups::loadCurrent()->_id."'
       AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
-    if($type_hospi) {
+    if ($type_hospi) {
       $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
     }
-    if($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-    if($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
+    if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
     $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
       AND operations.entree_reveil IS NOT NULL
       AND operations.sortie_reveil_possible IS NOT NULL
@@ -333,13 +325,13 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
     $result_hors_plage = $ds->loadList($query_hors_plage);
   }
 
-  foreach($ticks as $i => $tick) {
+  foreach ($ticks as $i => $tick) {
     $f = true;
-    foreach($result as $j=>$r) {
-      if($tick[1] == $r[$type_duree_fr]) {
+    foreach ($result as $j=>$r) {
+      if ($tick[1] == $r[$type_duree_fr]) {
         $nb_interv = $nbInterventions[$j]["total"];
         if ($hors_plage) {
-          foreach($result_hors_plage as &$r_h) {
+          foreach ($result_hors_plage as &$r_h) {
             if ($tick[1] == $r[$type_duree_fr]) {
               $r["moyenne"] = ($r_h["moyenne"] * $r_h["nbInterv"] + $r["moyenne"] * $nb_interv) / ($r_h["nbInterv"] + $nb_interv);
               $nb_interv += $r_h["nbInterv"];
@@ -356,7 +348,7 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
         $f = false;
       }
     }
-    if($f) {
+    if ($f) {
       $serieMoy["data"][] = array(count($serieMoy["data"]), 0);
       $serieTot["data"][] = array(count($serieTot["data"]), 0);
     }
@@ -367,12 +359,12 @@ function graphOccupationSalle($debut = null, $fin = null, $prat_id = 0, $salle_i
   
   // Set up the title for the graph
   $subtitle = "";
-  if($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if($discipline_id) $subtitle .= " - $discipline->_view";
-  if($salle_id)      $subtitle .= " - $salle->nom";
-  if($bloc_id)       $subtitle .= " - $bloc->nom";
-  if($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
-  if($type_hospi)    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
+  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
+  if ($discipline_id) $subtitle .= " - $discipline->_view";
+  if ($salle_id)      $subtitle .= " - $salle->nom";
+  if ($bloc_id)       $subtitle .= " - $bloc->nom";
+  if ($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
+  if ($type_hospi)    $subtitle .= " - ".CAppUI::tr("CSejour.type.$type_hospi");
 
   $optionsMoy = CFlotrGraph::merge("lines", array(
     'title'    => utf8_encode("Durées moyennes d'occupation du bloc (en minutes)"),

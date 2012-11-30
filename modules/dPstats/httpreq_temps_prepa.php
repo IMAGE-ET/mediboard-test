@@ -94,4 +94,3 @@ foreach($listPrats as $_prat) {
   }
 }
 echo("Liste des temps de Préparation mise à jour");
-?>

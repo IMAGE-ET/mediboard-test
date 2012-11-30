@@ -25,16 +25,11 @@ function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id =
                  array("4", "Jeudi"),
                  array("5", "Vendredi"),
                  array("6", "Samedi"));
-  
-  $where = array();
-  $where["stats"] = " = '1'";
+
   $bloc = new CBlocOperatoire();
-  if($bloc_id) {
+  if ($bloc_id) {
     $bloc->load($bloc_id);
-    $where["bloc_id"] = "= '$bloc_id'";
   }
-  $salle = new CSalle();
-  $salles = $salle->loadList($where);
   
   $series = array();
   $serie = array("data" => array());
@@ -53,26 +48,28 @@ function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id =
       plagesop.date BETWEEN '$debut' AND '$fin' AND
       operations.annulee = '0'";
     
-  if($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
-  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($prat_id)       $query .= "\nAND operations.chir_id = '$prat_id'";
+  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
 
-  if($bloc_id) {
+  if ($bloc_id) {
     $query .= "\nAND sallesbloc.bloc_id = '$bloc_id'";
   }
   
   $query .= "\nGROUP BY jour ORDER BY orderitem";
   $result = $prat->_spec->ds->loadlist($query);
   
-  foreach($ticks as $i => $tick) {
+  foreach ($ticks as $i => $tick) {
     $f = true;
-    foreach($result as $r) {
-      if($i == $r["orderitem"]) {
+    foreach ($result as $r) {
+      if ($i == $r["orderitem"]) {
         $serie["data"][] = array($tick[0], $r["total"]/$r["nb_days"]);
         $f = false;
       }
     }
-    if($f) $serie["data"][] = array(count($serie["data"]), 0);
+    if ($f) {
+      $serie["data"][] = array(count($serie["data"]), 0);
+    }
   }
   
   $serie["label"] = "moyenne";
@@ -82,10 +79,10 @@ function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id =
   // Set up the title for the graph
   $title = "Patients moyens / jour de la semaine";
   $subtitle = "Uniquement les jours d'activité";
-  if($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if($discipline_id) $subtitle .= " - $discipline->_view";
-  if($bloc_id)       $subtitle .= " - $bloc->_view";
-  if($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
+  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
+  if ($discipline_id) $subtitle .= " - $discipline->_view";
+  if ($bloc_id)       $subtitle .= " - $bloc->_view";
+  if ($codeCCAM)      $subtitle .= " - CCAM : $codeCCAM";
 
   $options = array(
     'title' => utf8_encode($title),

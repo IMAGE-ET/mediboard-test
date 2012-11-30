@@ -61,26 +61,28 @@ class CTempsOp extends CMbObject {
     $this->_ref_praticien = $this->loadFwdRef("chir_id", 1);
     $this->_ref_praticien->loadRefFunction();
   }
-  
-	/**
-	 * Durée moyenne d'intervention
-	 * @param object $chir_id [optional]
-	 * @param object $ccam [optional]
-	 * @return int Durée en minutes, 0 si aucune intervention, false si temps non calculé
-	 */
+
+  /**
+   * Durée moyenne d'intervention
+   *
+   * @param int          $chir_id [optional]
+   * @param array|string $ccam    [optional]
+   *
+   * @return int Durée en minutes, 0 si aucune intervention, false si temps non calculé
+   */
   static function getTime($chir_id = 0, $ccam = null){
-    $time = 0;
     $where = array();
     $total = array();
     $total["occup_somme"] = 0;
     $total["nbInterventions"] = 0;
     $where["chir_id"] = "= '$chir_id'";
     
-    if(is_array($ccam)){
-      foreach($ccam as $keyccam => $code){
+    if (is_array($ccam)){
+      foreach ($ccam as $code){
         $where[] = "ccam LIKE '%".strtoupper($code)."%'";
       }
-    }elseif($ccam){
+    }
+    elseif ($ccam){
       $where["ccam"] = "LIKE '%".strtoupper($ccam)."%'";
     }
     
@@ -89,18 +91,18 @@ class CTempsOp extends CMbObject {
     	return;
     }
 		
-    foreach($liste as $temps) {
+    foreach ($liste as $temps) {
       $total["nbInterventions"] += $temps->nb_intervention;
       $total["occup_somme"] += $temps->nb_intervention * strtotime($temps->occup_moy);
     }
 		
-    if($total["nbInterventions"]) {
+    if ($total["nbInterventions"]) {
       $time = $total["occup_somme"] / $total["nbInterventions"];
-    } else {
+    }
+    else {
       $time = 0;
     }
 		
     return $time;
   }
 }
-?>

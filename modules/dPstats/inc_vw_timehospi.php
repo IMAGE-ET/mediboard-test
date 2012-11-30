@@ -80,5 +80,3 @@ foreach($listTemps as $keyTemps => $temps) {
 if($total["nbSejours"] != 0) {
   $total["duree_moy"] = $total["duree_somme"] / $total["nbSejours"];
 }
-
-?>

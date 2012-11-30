@@ -65,4 +65,3 @@ foreach($listSejours as $keylistSejours => $curr_listSejours){
 }
 
 echo "Liste des temps d'hospitalisation mise à jour (".count($listSejours)." lignes trouvées)";
-?>

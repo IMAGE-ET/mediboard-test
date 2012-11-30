@@ -103,5 +103,3 @@ $smarty->assign("hors_plage"              , $hors_plage        );
 $smarty->assign("graphs"                  , $graphs            );
 
 $smarty->display("vw_bloc.tpl");
-
-?>

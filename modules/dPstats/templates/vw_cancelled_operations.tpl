@@ -46,7 +46,6 @@ Main.add(function(){
           <span onmouseover="ObjectTooltip.createEx(this, '{{$op->_guid}}')">
             {{mb_value object=$op field=_datetime}}
           </span>
-          </a>
         </td>
         <td class="text">{{mb_value object=$op field=salle_id}}</td>
         <td>{{mb_value object=$op field=chir_id}}</td>
@@ -72,7 +71,6 @@ Main.add(function(){
           <span onmouseover="ObjectTooltip.createEx(this, '{{$op->_guid}}')">
             {{mb_value object=$op field=_datetime}}
           </span>
-          </a>
         </td>
         <td>{{mb_value object=$op field=salle_id}}</td>
         <td>{{mb_value object=$op field=chir_id}}</td>

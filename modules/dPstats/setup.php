@@ -95,4 +95,3 @@ class CSetupdPstats extends CSetup {
     $this->mod_version = "0.16";
   }
 }
-?>

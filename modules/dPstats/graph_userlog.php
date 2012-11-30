@@ -288,4 +288,3 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
   
   return array('series' => $series, 'options' => $options, 'module' => $module_name);
 }
-?>

@@ -39,19 +39,11 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   $discipline->load($discipline_id);
   
   $ticks = array();
-  for($i = $debut; $i <= $fin; $i = mbDate("+1 $type_duree", $i)) {
+  for ($i = $debut; $i <= $fin; $i = mbDate("+1 $type_duree", $i)) {
     $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, $date_format));
   }
 
-  $where = array();
-  $where['stats'] = "= '1'";
-  if($salle_id) {
-    $where["salle_id"] = "= '$salle_id'";
-  }
-  if($bloc_id) {
-    $where["bloc_id"] = "= '$bloc_id'";
-  }
-  $salles = $salle->loadGroupList($where);
+  $salles = CSalle::getSallesStats($salle_id, $bloc_id);
   
   $seriesTot = array();
   $totalTot = 0;
@@ -106,10 +98,10 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
     AND affectation_personnel.object_class = 'COperation'
     AND operations.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
   
-    if($type_hospi)    $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
-    if($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
-    if($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+    if ($type_hospi)    $query_hors_plage .= "\nAND sejour.type = '$type_hospi'";
+    if ($prat_id)       $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
+    if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if ($codeCCAM)      $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
     
     $query_hors_plage .=  "\nAND operations.date BETWEEN '$debut' AND '$fin'
       GROUP BY $type_duree_fr HAVING total > 0 ORDER BY orderitem";
@@ -118,19 +110,19 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   }
   
   $calcul_temp = array();
-  foreach($result as $r) {
+  foreach ($result as $r) {
     if (!isset($calcul_temp[$r[$type_duree_fr]])) {
       $calcul_temp[$r[$type_duree_fr]] = 0;
     }
     $calcul_temp[$r[$type_duree_fr]] += $r['total'];
   }
   
-  foreach($ticks as $i => $tick) {
+  foreach ($ticks as $i => $tick) {
     $f = true;
-    foreach($calcul_temp as $key => $r) {
-      if($tick[1] == $key) {
+    foreach ($calcul_temp as $key => $r) {
+      if ($tick[1] == $key) {
         if ($hors_plage) {
-          foreach($result_hors_plage as &$_r_h) {
+          foreach ($result_hors_plage as &$_r_h) {
             if ($tick[1] == $_r_h[$type_duree_fr]) {
               $r += $_r_h["total"];
               unset($_r_h);
@@ -143,7 +135,7 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
         $f = false;
       }
     }
-    if($f) {
+    if ($f) {
       $serieTot["data"][] = array(count($serieTot["data"]), 0);
     }
   }
@@ -170,17 +162,17 @@ function graphTempsSalle($debut = null, $fin = null, $prat_id = 0, $salle_id = 0
   $query .= "WHERE operations.entree_salle < operations.sortie_salle
   AND plagesop.salle_id ".CSQLDataSource::prepareIn(array_keys($salles));
   
-  if($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
-  if($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
-  if($prat_id)       $query .= "\nAND plagesop.chir_id = '$prat_id'";
-  if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+  if ($codeCCAM)      $query .= "\nAND operations.codes_ccam LIKE '%$codeCCAM%'";
+  if ($type_hospi)    $query .= "\nAND sejour.type = '$type_hospi'";
+  if ($prat_id)       $query .= "\nAND plagesop.chir_id = '$prat_id'";
+  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   $query .=  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'
     GROUP BY operations.plageop_id ORDER BY orderitem";
   
   $result = $ds->loadlist($query);
   
   $calcul_temp = array();
-  foreach($result as $r) {
+  foreach ($result as $r) {
     if (!isset($calcul_temp[$r[$type_duree_fr]])) {
       $calcul_temp[$r[$type_duree_fr]] = 0;
     }

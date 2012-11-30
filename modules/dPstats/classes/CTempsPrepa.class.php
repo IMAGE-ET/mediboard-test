@@ -44,4 +44,3 @@ class CTempsPrepa extends CMbObject {
 		$this->_ref_praticien->loadRefFunction();
   }
 }
-?>

@@ -44,7 +44,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
   
   $datax = array();
   $i = 0;
-  for($d = $startx; $d <= $endx; $d = mbDateTime($step, $d)) {
+  for ($d = $startx; $d <= $endx; $d = mbDateTime($step, $d)) {
     $datax[] = array($i, mbTransformTime(null, $d, $period_format));
     $i++;
   }
@@ -64,7 +64,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     $size = array();
     
     $errors_total = 0;
-    foreach($datax as $x) {
+    foreach ($datax as $x) {
       // Needed
       $duration[$x[0]]    = array($x[0], 0);
       $processus[$x[0]]   = array($x[0], 0);
@@ -78,8 +78,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
       $hits[$x[0]] = array($x[0], 0);
       $size[$x[0]] = array($x[0], 0);
       
-      foreach($logs as $log) {
-        if($x[1] == mbTransformTime(null, $log->period, $period_format)) {
+      foreach ($logs as $log) {
+        if ($x[1] == mbTransformTime(null, $log->period, $period_format)) {
           $duration[$x[0]]    = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'duration'});
           $processus[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'processus'});
           $processor[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'processor'});
@@ -97,14 +97,14 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     }
     
     if ($interval == 'month') {
-      foreach($datax as $i => &$x) {
+      foreach ($datax as $i => &$x) {
         if ($i % 2) $x[1] = '';
       }
     }
     
     $title = '';
-    if($module_name) $title .= CAppUI::tr("module-$module_name-court");
-    if($action_name) $title .= " - $action_name";
+    if ($module_name) $title .= CAppUI::tr("module-$module_name-court");
+    if ($action_name) $title .= " - $action_name";
     
     $subtitle = mbTransformTime(null, $endx, CAppUI::conf("longdate"));
     
@@ -177,7 +177,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
        'data' => $request,
        'lines' => array('show' => true),
       );
-    } elseif($left[0] == 'cpu_time') {
+    }
+    elseif ($left[0] == 'cpu_time') {
       $series[] = array(
        'label' => 'Page (s)',
        'data' => $duration,
@@ -202,7 +203,6 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
        'lines' => array('show' => true),
       );
     }
-    
     elseif ($left[0] == 'errors') {
       if ($errors_total == 0) {
         $options['yaxis']['max'] = 1;
@@ -229,7 +229,6 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
        'lines' => array('show' => true),
       );
     }
-    
     else {
       $series[] = array(
        'label' => 'Pic (byte)',
@@ -321,4 +320,3 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
   
   return array('series' => $series, 'options' => $options, 'module' => $module_name);
 }
-?>

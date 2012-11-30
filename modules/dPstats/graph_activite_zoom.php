@@ -35,25 +35,17 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
     'markers' => array('show' => true),
     'bars' => array('show' => false)
   );
-  for($i = $debut; $i <= $fin; $i = mbDate($step, $i)) {
+  for ($i = $debut; $i <= $fin; $i = mbDate($step, $i)) {
     $ticks[] = array(count($ticks), mbTransformTime(null, $i, "%a %d"));
     $ticks2[] = array(count($ticks), mbTransformTime(null, $i, "%d"));
     $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
-  
-  // Chargement des salles
-  $where = array();
-  $where['stats'] = " = '1'";
-  if($salle_id) {
-    $where['salle_id'] = " = '$salle_id'";
-  } elseif($bloc_id) {
-    $where['bloc_id'] = "= '$bloc_id'";
-  }
-  $salles = $salle->loadList($where);
+
+  $salles = CSalle::getSallesStats($salle_id, $bloc_id);
   
   $series = array();
   $total = 0;
-  foreach($salles as $salle) {
+  foreach ($salles as $salle) {
     $serie = array(
       'data' => array(),
       'label' => utf8_encode($salle->nom)
@@ -71,15 +63,15 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
         operations.annulee = '0' AND 
         sallesbloc.salle_id = '$salle->_id'";
         
-    if($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
+    if ($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
       $query .= "\nAND operations.chir_id = '$prat_id'";
     }
-    if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
+    if ($prat_id && $prat->isFromType(array("Anesthésiste"))) {
       $query .= "\nAND (operations.anesth_id = '$prat_id' OR 
                        (plagesop.anesth_id = '$prat_id' AND (operations.anesth_id = '0' OR operations.anesth_id IS NULL)))";
     }
-    if($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-    if($codes_ccam)    $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+    if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if ($codes_ccam)    $query .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
     
     $query .= "\nGROUP BY jour ORDER BY jour";
     
@@ -99,26 +91,26 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
         operations.annulee = '0' AND 
         sallesbloc.salle_id = '$salle->_id'";
         
-      if($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
+      if ($prat_id && !$prat->isFromType(array("Anesthésiste"))) {
         $query_hors_plage .= "\nAND operations.chir_id = '$prat_id'";
       }
-      if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
+      if ($prat_id && $prat->isFromType(array("Anesthésiste"))) {
         $query_hors_plage .= "\nAND operations.anesth_id = '$prat_id'"; 
       }
-      if($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-      if($codes_ccam)    $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+      if ($discipline_id) $query_hors_plage .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+      if ($codes_ccam)    $query_hors_plage .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
       
       $query_hors_plage .= "\nGROUP BY jour ORDER BY jour";
       
       $result_hors_plage = $salle->_spec->ds->loadlist($query_hors_plage);
     }
     
-    foreach($ticks2 as $i => $tick) {
+    foreach ($ticks2 as $i => $tick) {
       $f = true;
-      foreach($result as $r) {
-        if($tick[1] == $r["jour"]) {
+      foreach ($result as $r) {
+        if ($tick[1] == $r["jour"]) {
           if ($hors_plage) {
-            foreach($result_hors_plage as &$_r_h) {
+            foreach ($result_hors_plage as &$_r_h) {
               if ($tick[1] == $_r_h["jour"]) {
                 $r["total"] += $_r_h["total"];
                 unset($_r_h);
@@ -132,7 +124,9 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
           $f = false;
         }
       }
-      if($f) $serie["data"][] = array(count($serie["data"]), 0);
+      if ($f) {
+        $serie["data"][] = array(count($serie["data"]), 0);
+      }
     }
     
     $series[] = $serie;
@@ -141,17 +135,18 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
   $series[] = $serie_total;
   
   // Set up the title for the graph
-  if($prat_id && $prat->isFromType(array("Anesthésiste"))) {
+  if ($prat_id && $prat->isFromType(array("Anesthésiste"))) {
     $title = "Nombre d'anesthésie par salle - ".mbTransformTime(null, $debut, "%m/%Y");
     $subtitle = "$total anesthésies";
-  } else {
+  }
+  else {
     $title = "Nombre d'interventions par salle - ".mbTransformTime(null, $debut, "%m/%Y");
     $subtitle = "$total interventions";
   }
 
-  if($prat_id)       $subtitle .= " - Dr $prat->_view";
-  if($discipline_id) $subtitle .= " - $discipline->_view";
-  if($codes_ccam)    $subtitle .= " - CCAM : $codes_ccam";
+  if ($prat_id)       $subtitle .= " - Dr $prat->_view";
+  if ($discipline_id) $subtitle .= " - $discipline->_view";
+  if ($codes_ccam)    $subtitle .= " - CCAM : $codes_ccam";
 
   $options = CFlotrGraph::merge("bars", array(
     'title' => utf8_encode($title),
@@ -162,5 +157,3 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
   
   return array('series' => $series, 'options' => $options);
 }
-
-?>

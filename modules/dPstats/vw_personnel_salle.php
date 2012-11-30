@@ -141,5 +141,3 @@ $smarty->assign("listPlages"    , $listPlages);
 $smarty->assign("total"         , $total);
 
 $smarty->display("vw_personnel_salle.tpl");
-
-?>
