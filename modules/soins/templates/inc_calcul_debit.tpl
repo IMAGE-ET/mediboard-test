@@ -19,7 +19,9 @@
 <script type="text/javascript">
   Main.add(function() {
     var form = getForm("calculPerf");
-    form.debit.addSpinner({min: 0});
+    form.quantite_debit.addSpinner({min: 0});
+    
+    limitSelect(form.temps_debit);
     
     poids = $$(".poids_patient");
     volume = {{$line->_quantite_totale}};
@@ -27,16 +29,20 @@
     if (poids.length) {
       poids = parseInt(poids[0].innerHTML);
       $("view_poids").update("<strong>"+poids+" kg</strong>");
+      $V(form._poids, poids);
     }
     else {
-      $("alert_poids").show();
       $("calcul_perf_poids").hide();
-      $A(form.unite.options).each(function(elt) {
+      poids = 0;
+      
+      /*$A(form.unite_debit.options).each(function(elt) {
         if (/\/kg/.test(elt.innerHTML)) {
           elt.writeAttribute("disabled");
         }
-      });
+      });*/
     }
+    
+    updateData();
   });
   
   updateData = function() {
@@ -44,12 +50,27 @@
     var unite_administration = "{{$unite_administration}}";
     
     var form = getForm("calculPerf");
-    var unite_choisie = $V(form.unite);
+    var unite_choisie = $V(form.unite_debit);
     
-    var unite_temps_debit = $V(form.unite_temps_debit);
+    // Si le poids n'est pas renseigné et que l'on choisit une unité/kg, alors on cache
+    // les infos de calcul
+    
+    if (!poids && /\/kg/.test(unite_choisie)) {
+      $("calcul_debit_area").hide();
+      {{if !$mode_protocole}}
+        $("alert_poids").show();
+      {{/if}}
+      return;
+    }
+    
+    $("calcul_debit_area").show();
+    $("alert_poids").hide();
+    
+    var unite_temps_debit = parseInt(form.unite_temps_debit.selectedOptions[0].get("facteur"));
+    var temps_debit = $V(form.temps_debit);
     
     // rapport_debit_choisi_ua
-    var rapport_debit_choisi_ua = rapport_unite_prise[$V(form.unite)][unite_administration];
+    var rapport_debit_choisi_ua = rapport_unite_prise[unite_choisie][unite_administration];
  
     // rapport_conditionnement_ua
     var rapport_conditionnement_ua = rapport_unite_prise["{{$line_item->unite}}"][unite_administration];
@@ -57,9 +78,11 @@
     // Rapport resultant des calculs précédents
     var rapport_quantite_necessaire = rapport_debit_choisi_ua / rapport_conditionnement_ua;
     
-    var debit_choisi = $V(form.debit);
+    var debit_choisi = $V(form.quantite_debit);
     
     debit_choisi *= unite_temps_debit;
+    
+    debit_choisi /= temps_debit;
     
     // Calcul du débit nécessaire
     var debit_necessaire = debit_choisi;
@@ -68,7 +91,7 @@
       debit_necessaire *= poids;
     }
     
-    $("debit_necessaire").update(debit_necessaire + " " + unite_choisie.replace(/\/kg \(.*\)/, ""));
+    $("debit_necessaire").update((Math.round(debit_necessaire * 100) / 100) + " " + unite_choisie.replace(/\/kg \(.*\)/, ""));
     
     {{if $line->type == "classique"}}
       var duree = parseFloat($("result_duree").innerHTML);
@@ -80,7 +103,7 @@
         quantite_necessaire *= poids;
       }
             
-      $("quantite_necessaire").update(quantite_necessaire);
+      $("quantite_necessaire").update(Math.round(quantite_necessaire * 100) / 100);
       
       // Calcul du volume de référence
       var volume_total = volume;
@@ -120,32 +143,83 @@
   
   setValuesClassique = function() {
     var form = getForm("calculPerf");
-    var formLineItem = getForm("editLinePerf-{{$line_item->_id}}")
-    var formPerf = getForm("editPerf-{{$line->_id}}");
-    var formQteTotale = getForm("editQuantiteTotale-{{$line->_id}}");
-    var quantite = parseFloat($("quantite_necessaire").innerHTML);
+    var unite_choisie = $V(form.unite_debit);
     
-    $V(formLineItem.quantite, quantite, false);
+    onSubmitFormAjax(form, function() {
+      var formLineItem = getForm("editLinePerf-{{$line_item->_id}}");
+      
+      // Si on a choisi une unité/kg et que le poids du patient n'est pas dispo,
+      // on ne peut que vider la quantité de produit et tagger la perfusion en sans poids
+      if (/\/kg/.test(unite_choisie) && !poids) {
+        formLineItem.quantite.onchange();
+        onSubmitFormAjax(getForm("tagSansPoids"), function() {
+          Control.Modal.close();
+        });
+        return;
+      }
+      
+      var formPerf = getForm("editPerf-{{$line->_id}}");
+      var formQteTotale = getForm("editQuantiteTotale-{{$line->_id}}");
+      var quantite = parseFloat($("quantite_necessaire").innerHTML);
     
-    onSubmitFormAjax(formLineItem, function() {
-      Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
-        $V(formPerf.volume_debit, $V(formQteTotale._quantite_totale));
+      $V(formLineItem.quantite, quantite, false);
+      
+      onSubmitFormAjax(formLineItem, function() {
+        Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
+          $V(formPerf.volume_debit, $V(formQteTotale._quantite_totale));
+        });
+        Control.Modal.close();
       });
-      Control.Modal.close();
     });
   }
   
   setValuesOther = function() {
     var form = getForm("calculPerf");
-    var duree = $("result_duree").down("strong").innerHTML;
-    var formQteTotale = getForm("editQuantiteTotale-{{$line->_id}}");
-    var formPerf = getForm("editPerf-{{$line->_id}}");
+    var unite_choisie = $V(form.unite_debit);
     
-    Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
-      $V(formPerf.volume_debit, $V(formQteTotale._quantite_totale), false);
-      $V(formPerf.duree_debit, duree);
-      Control.Modal.close();
+    onSubmitFormAjax(form, function() {
+      // Si on a choisi une unité/kg et que l'on n'a pas de poids
+      // on déclenche le onchange de la quantité et on enregistre la perfusion avec le flag sans poids
+      if (/\/kg/.test(unite_choisie) && !poids) {
+        var formLineItem = getForm("editLinePerf-{{$line_item->_id}}")
+        formLineItem.quantite.onchange();
+        onSubmitFormAjax(getForm("tagSansPoids"), function() {
+          Control.Modal.close();
+        });
+        return;
+      }
+      
+      var duree = $("result_duree").down("strong").innerHTML;
+      var formQteTotale = getForm("editQuantiteTotale-{{$line->_id}}");
+      var formPerf = getForm("editPerf-{{$line->_id}}");
+      
+      Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
+        $V(formPerf.volume_debit, $V(formQteTotale._quantite_totale), false);
+        $V(formPerf.duree_debit, duree);
+        Control.Modal.close();
+      });
     });
+  }
+  
+  limitSelect = function(elt) {
+    var form = elt.form;
+    var temps = form.temps_debit;
+    var show = elt.selectedOptions[0].innerHTML == "min";
+    
+    $A(temps.options).each(function(option) {
+      if (option.value > 24) {
+        if (show) {
+          option.show();
+        }
+        else {
+          option.hide();
+        }
+      }
+    });
+    
+    if (!show && temps.value > 24) {
+      temps.selectedIndex = 0;
+    }
   }
 </script>
 
@@ -159,12 +233,22 @@
 </div>
 
 <div class="small-warning" style="display: none;" id="alert_poids">
-  Le poids du patient n'est pas renseigné. Veuillez le renseigner pour accéder aux unités relatives au poids. 
+  Le poids du patient n'est pas renseigné. Veuillez le renseigner pour générer le plan de soins. 
 </div>
 
-<form name="calculPerf" method="get">
+<form name="tagSansPoids" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_line_mix_aed" />
+  {{mb_key object=$line}}
+  <input type="hidden" name="sans_poids" value="1" />
+</form>
+
+<form name="calculPerf" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_line_mix_item_aed" />
+  <input type="hidden" name="_poids" />
+  {{mb_key object=$line_item}}
   {{mb_field object=$line_item field=quantite hidden=true}}
-  {{assign var=unite value=$line_item->unite}}
   
   <table class="form">
     <tr>
@@ -178,16 +262,21 @@
         Débit choisi
       </th>
       <td>
-        <input type="text" name="debit" size="5" onchange="updateData()" />
-          <select name="unite" onchange="updateData()">
+        <input type="text" name="quantite_debit" size="5" onchange="updateData()" value="{{$line_item->quantite_debit}}"/>
+          <select name="unite_debit" onchange="updateData()">
             {{foreach from=$line_item->_unites_prise item=_unite}}
-              <option value="{{$_unite}}" {{if $line_item->unite == $_unite}}selected{{/if}}>{{$_unite}}</option>
+              <option value="{{$_unite}}" {{if $line_item->unite_debit == $_unite}}selected{{/if}}>{{$_unite}}</option>
             {{/foreach}}
           </select>
         /
-        <select name="unite_temps_debit" onchange="updateData()">
-          <option value="1">h</option>
-          <option value="60">min</option>
+        <select name="temps_debit" onchange="updateData()">
+          {{foreach from=1|range:60 item=i}}
+            <option value="{{$i}}" {{if $line_item->temps_debit == $i}}selected{{/if}}>{{$i}}</option>
+          {{/foreach}}
+        </select>
+        <select name="unite_temps_debit" onchange="updateData(); limitSelect(this)">
+          <option value="hour"  {{if $line_item->unite_temps_debit == "hour"}}selected{{/if}} data-facteur="1">h</option>
+          <option value="min"   {{if $line_item->unite_temps_debit == "min"}}selected{{/if}}  data-facteur="60">min</option>
         </select>
       </td>
     </tr>
@@ -195,85 +284,87 @@
       <th>Poids du patient</th>
       <td id="view_poids"></td>
     </tr>
-    <tr>
-      <th>
-        Débit nécessaire
-      </th>
-      <td >
-        <span id="debit_necessaire">-</span>/h
-      </td>
-    </tr>
     
-    <tr>
-      <td colspan="2">
-        <hr />
-      </td>
-    </tr>
-    
-    <tr>
-      <th>
-        Conditionnement choisi
-      </th>
-      <td>
-        {{$line_item->unite}}
-      </td>
-    </tr>
-    
-    <tr>
-      <th>
-        {{if $line->type == "classique"}}
-          Quantité nécessaire pour la durée de référence
-        {{else}}
-          Quantité choisie
-        {{/if}}
-      </th>
-      <td>
-        <span id="quantite_{{if $line->type == "classique"}}necessaire{{else}}choisie{{/if}}">
-          {{if $line_item->quantite}}
-            {{$line_item->quantite}}
-          {{else}}
-            -
-          {{/if}}
-        </span>
-        {{$line_item->unite|regex_replace:"/\(.*\)/":""}}
-      </td>
-    </tr>
-     
-    <tr>
-      <td colspan="2">
-        <hr />
-      </td>
-    </tr>
-    
-    <tr>
-      <th>Durée de référence</th>
-      <td>
-        <span id="result_duree">
+    <tbody id="calcul_debit_area">
+      <tr>
+        <th>
+          Débit nécessaire
+        </th>
+        <td >
+          <span id="debit_necessaire">-</span>/h
+        </td>
+      </tr>
+      
+      <tr>
+        <td colspan="2">
+          <hr />
+        </td>
+      </tr>
+      
+      <tr>
+        <th>
+          Conditionnement choisi
+        </th>
+        <td>
+          {{$line_item->unite}}
+        </td>
+      </tr>
+      
+      <tr>
+        <th>
           {{if $line->type == "classique"}}
-            {{$line->duree_debit}}
+            Quantité nécessaire pour la durée de référence
           {{else}}
-            -
+            Quantité choisie
           {{/if}}
-        </span> h
-      </td>
-    </tr>
-    <tr>
-      <th>
-        Volume de référence
-      </th>
-      <td>
-        <span id="volume_ref">{{$line->_quantite_totale}}</span> ml
-      </td>
-    </tr>
-    <tr>
-      <th>
-        Débit volumique
-      </th>
-      <td>
-        <span id="debit_volumique">-</span> ml/h
-      </td>
-    </tr>
-    
+        </th>
+        <td>
+          <span id="quantite_{{if $line->type == "classique"}}necessaire{{else}}choisie{{/if}}">
+            {{if $line_item->quantite}}
+              {{$line_item->quantite}}
+            {{else}}
+              -
+            {{/if}}
+          </span>
+          {{$line_item->unite|regex_replace:"/\(.*\)/":""}}
+        </td>
+      </tr>
+       
+      <tr>
+        <td colspan="2">
+          <hr />
+        </td>
+      </tr>
+      
+      <tr>
+        <th>Durée de référence</th>
+        <td>
+          <span id="result_duree">
+            {{if $line->type == "classique"}}
+              {{$line->duree_debit}}
+            {{else}}
+              -
+            {{/if}}
+          </span> h
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Volume de référence
+        </th>
+        <td>
+          <span id="volume_ref">{{$line->_quantite_totale}}</span> ml
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Débit volumique
+        </th>
+        <td>
+          <span id="debit_volumique">-</span> ml/h
+        </td>
+      </tr>
+    </tbody>
     <tr>
       <td class="button" colspan="2">
         {{if $line->type =="classique"}}

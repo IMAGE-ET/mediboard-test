@@ -10,9 +10,10 @@
 
 CCanDo::checkEdit();
 
-$line_id      = CValue::get("line_id");
-$line_item_id = CValue::get("line_item_id");
-
+$line_id        = CValue::get("line_id");
+$line_item_id   = CValue::get("line_item_id");
+$mode_protocole = CValue::get("mode_protocole");
+ 
 $line = new CPrescriptionLineMix();
 $line->load($line_id);
 $line->calculQuantiteTotal();
@@ -39,7 +40,8 @@ $line_item->_ref_produit->rapport_unite_prise = utf8enc($line_item->_ref_produit
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign("line"     , $line);
-$smarty->assign("line_item", $line_item);
+$smarty->assign("line"          , $line);
+$smarty->assign("line_item"     , $line_item);
+$smarty->assign("mode_protocole", $mode_protocole);
 
 $smarty->display("inc_calcul_debit.tpl");
