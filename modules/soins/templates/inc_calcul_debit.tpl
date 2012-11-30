@@ -66,7 +66,8 @@
     $("calcul_debit_area").show();
     $("alert_poids").hide();
     
-    var unite_temps_debit = parseInt(form.unite_temps_debit.selectedOptions[0].get("facteur"));
+    var unite_temps_debit_select = form.unite_temps_debit;
+    var unite_temps_debit = parseInt(unite_temps_debit_select.options[unite_temps_debit_select.selectedIndex].get("facteur"));
     var temps_debit = $V(form.temps_debit);
     
     // rapport_debit_choisi_ua
@@ -204,7 +205,7 @@
   limitSelect = function(elt) {
     var form = elt.form;
     var temps = form.temps_debit;
-    var show = elt.selectedOptions[0].innerHTML == "min";
+    var show = elt.options[elt.selectedIndex].innerHTML == "min";
     
     $A(temps.options).each(function(option) {
       if (option.value > 24) {
