@@ -428,7 +428,7 @@ class CConstantesMedicales extends CMbObject {
   );
   
   function __construct() {
-    foreach(self::$list_constantes as $_constant => $_params) {
+    foreach (self::$list_constantes as $_constant => $_params) {
       $this->$_constant = null;
       
       // Champs "composites"
@@ -442,9 +442,14 @@ class CConstantesMedicales extends CMbObject {
     parent::__construct();
     
     // Conversion des specs
-    if (self::$_specs_converted) return;
+    if (self::$_specs_converted) {
+      return;
+    }
+
+    $func_min = create_function('$matches', 'return "min|".$matches[1]*10;');
+    $func_max = create_function('$matches', 'return "max|".$matches[1]*10;');
     
-    foreach(self::$list_constantes as $_constant => &$_params) {
+    foreach (self::$list_constantes as $_constant => &$_params) {
       $unit = "mmHg";
 
       if (isset($_params["conversion"][$unit])) {
@@ -459,20 +464,28 @@ class CConstantesMedicales extends CMbObject {
         if (isset($_params["formfields"])) {
           foreach ($_params["formfields"] as $_formfield) {
             $spec = $this->_specs[$_formfield];
-            $this->_specs[$_formfield]->prop = preg_replace_callback("/min\|([0-9]+)/", create_function('$matches', 'return "min|".$matches[1]*10;'), $spec);
-            $this->_specs[$_formfield]->prop = preg_replace_callback("/max\|([0-9]+)/", create_function('$matches', 'return "max|".$matches[1]*10;'), $spec);
+            $this->_specs[$_formfield]->prop = preg_replace_callback("/min\|([0-9]+)/", $func_min, $spec);
+            $this->_specs[$_formfield]->prop = preg_replace_callback("/max\|([0-9]+)/", $func_max, $spec);
             
-            if (isset($spec->min)) $spec->min *= $conv;
-            if (isset($spec->max)) $spec->max *= $conv;
+            if (isset($spec->min)) {
+              $spec->min *= $conv;
+            }
+            if (isset($spec->max)) {
+              $spec->max *= $conv;
+            }
           }
         }
         else {
           $spec = $this->_specs[$_constant];
-          $this->_specs[$_formfield]->prop = preg_replace_callback("/min\|([0-9]+)/", create_function('$matches', 'return "min|".$matches[1]*10;'), $spec);
-          $this->_specs[$_formfield]->prop = preg_replace_callback("/max\|([0-9]+)/", create_function('$matches', 'return "max|".$matches[1]*10;'), $spec);
+          $this->_specs[$_formfield]->prop = preg_replace_callback("/min\|([0-9]+)/", $func_min, $spec);
+          $this->_specs[$_formfield]->prop = preg_replace_callback("/max\|([0-9]+)/", $func_max, $spec);
           
-          if (isset($spec->min)) $spec->min *= $conv;
-          if (isset($spec->max)) $spec->max *= $conv;
+          if (isset($spec->min)) {
+            $spec->min *= $conv;
+          }
+          if (isset($spec->max)) {
+            $spec->max *= $conv;
+          }
         }
       }
     }
@@ -589,13 +602,13 @@ class CConstantesMedicales extends CMbObject {
     $this->loadRefPatient();
     
     // Calcul de l'Indice de Masse Corporelle
-    if($this->poids && $this->taille) {
+    if ($this->poids && $this->taille) {
       $this->_imc = round($this->poids / ($this->taille * $this->taille * 0.0001), 2);
     }
     
     // Afficher le champ diurèse dans le formulaire si une des valeurs n'est pas vide 
     // FIXME Utiliser "cumul_in"
-    foreach(self::$list_constantes["_diurese"]["formula"] as $_field => $_sign) {
+    foreach (self::$list_constantes["_diurese"]["formula"] as $_field => $_sign) {
       if ($this->{$_field} && $this->_diurese == null) {
         $this->_diurese = " ";
         break;
@@ -610,7 +623,7 @@ class CConstantesMedicales extends CMbObject {
       
       if ($this->_imc < $seuils[0]) {
         $this->_imc_valeur = 'Maigreur';
-      } 
+      }
       elseif ($this->_imc > $seuils[1] && $this->_imc <= 30) {
         $this->_imc_valeur = 'Surpoids';
       }
@@ -757,7 +770,9 @@ class CConstantesMedicales extends CMbObject {
         break;
       }
     }
-    if (!$ok) return CAppUI::tr("CConstantesMedicales-min_one_constant");
+    if (!$ok) {
+      return CAppUI::tr("CConstantesMedicales-min_one_constant");
+    }
   }
   
   function store () {
@@ -772,8 +787,9 @@ class CConstantesMedicales extends CMbObject {
           break;
         }
       }
-      if (!$ok)
+      if (!$ok) {
         return parent::delete();
+      }
     }
     
     if (!$this->_id && !$this->_new_constantes_medicales) {
@@ -794,17 +810,33 @@ class CConstantesMedicales extends CMbObject {
     }
     return parent::store();
   }
-  
-  static function getLatestFor($patient, $datetime = null) {
+
+  /**
+   * Get the latest constantes values
+   *
+   * @param int|CPatient $patient   The patient to load the constantes for
+   * @param string       $datetime  The reference datetime
+   * @param array        $selection A selection of constantes to load
+   *
+   * @return array The constantes values and dates
+   */
+  static function getLatestFor($patient, $datetime = null, $selection = array()) {
     $patient_id = ($patient instanceof CPatient) ? $patient->_id : $patient;
     
-    if (isset(self::$_latest_values[$patient_id])) {
-      return self::$_latest_values[$patient_id];
+    if (isset(self::$_latest_values[$patient_id][$datetime])) {
+      return self::$_latest_values[$patient_id][$datetime];
+    }
+
+    if (empty($selection)) {
+      $list_constantes = CConstantesMedicales::$list_constantes;
+    }
+    else {
+      $list_constantes = array_intersect_key(CConstantesMedicales::$list_constantes, array_keys($selection));
     }
     
     // Constante que l'on va construire
     $constante = new CConstantesMedicales();
-    if(!$patient_id) {
+    if (!$patient_id) {
       return array($constante, array());
     }
     
@@ -821,10 +853,12 @@ class CConstantesMedicales extends CMbObject {
     }
     
     $list_datetimes = array();
-    foreach (CConstantesMedicales::$list_constantes as $type => $params) {
+    foreach ($list_constantes as $type => $params) {
       $list_datetimes[$type] = null;
       
-      if ($type[0] == "_") continue;
+      if ($type[0] == "_") {
+        continue;
+      }
       
       $_where = $where;
       $_where[$type] = "IS NOT NULL";
@@ -839,7 +873,7 @@ class CConstantesMedicales extends CMbObject {
 
     // Cumul de la diurese
     if ($datetime) {
-      foreach (CConstantesMedicales::$list_constantes as $_name => $_params) {
+      foreach ($list_constantes as $_name => $_params) {
         if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
           $day_defore = mbDateTime("-24 hours", $datetime);
 
@@ -861,7 +895,7 @@ class CConstantesMedicales extends CMbObject {
           else {
             $formula = $_params["formula"];
 
-            foreach($formula as $_field => $_sign) {
+            foreach ($formula as $_field => $_sign) {
               $_where = $where;
               $_where[$_field] = "IS NOT NULL";
               $_where[] = "datetime >= '$day_defore'";
@@ -883,8 +917,13 @@ class CConstantesMedicales extends CMbObject {
     }
     
     $constante->updateFormFields();
+
+    // Don't cache partial loadings
+    if (empty($selection)) {
+      self::$_latest_values[$patient_id][$datetime] = array($constante, $list_datetimes);
+    }
     
-    return self::$_latest_values[$patient_id] = array($constante, $list_datetimes);
+    return array($constante, $list_datetimes);
   }
   
   static function getColor($value, $params, $default_color = "#4DA74D") {
@@ -978,7 +1017,7 @@ class CConstantesMedicales extends CMbObject {
             else {
               $formula  = $_params["formula"];
               
-              foreach($formula as $_field => $_sign) {
+              foreach ($formula as $_field => $_sign) {
                 $_value = $_constante_medicale->$_field;
                 
                 if ($_constante_medicale->$_field !== null) {
@@ -1004,7 +1043,7 @@ class CConstantesMedicales extends CMbObject {
             
             if (isset($spec["formfields"])) {
               $arr = array();
-              foreach($spec["formfields"] as $ff) {
+              foreach ($spec["formfields"] as $ff) {
                 if ($_constante_medicale->$ff != "") {
                   $arr[] = $_constante_medicale->$ff;
                 }
@@ -1022,10 +1061,10 @@ class CConstantesMedicales extends CMbObject {
       }
     }
     
-    foreach($cumuls_day as $_name => &$_days) {
+    foreach ($cumuls_day as $_name => &$_days) {
       $_params = CConstantesMedicales::$list_constantes[$_name];
       
-      foreach($_days as $_day => &$_values) {
+      foreach ($_days as &$_values) {
         $_color = CConstantesMedicales::getColor($_values["value"], $_params, null);
         $_values["color"] = $_color;
         
@@ -1044,7 +1083,7 @@ class CConstantesMedicales extends CMbObject {
   static function sortConstNames($names) {
     $new_names = array();
     
-    foreach(self::$list_constantes as $key => $params) {
+    foreach (self::$list_constantes as $key => $params) {
       if (in_array($key, $names)) {
         $new_names[] = $key;
       }
@@ -1064,8 +1103,11 @@ class CConstantesMedicales extends CMbObject {
     }
     
     $whereOr = array();
-    foreach($selection as $name) {
-      if ($name[0] === "_") continue;
+    foreach ($selection as $name) {
+      if ($name[0] === "_") {
+        continue;
+      }
+
       $whereOr[] = "`$name` IS NOT NULL";
     }
     $where[] = implode(" OR ", $whereOr);
@@ -1086,7 +1128,7 @@ class CConstantesMedicales extends CMbObject {
     // make a copy of the array as it will be modified
     $list_constantes = CConstantesMedicales::$list_constantes;
     
-    foreach($list_constantes as $_constant => &$_params) {
+    foreach ($list_constantes as $_constant => &$_params) {
       self::$list_constantes_type[$_params["type"]][$_constant] = &$_params;
       
       // Conversion des unités
@@ -1116,15 +1158,18 @@ class CConstantesMedicales extends CMbObject {
         }
         
         if (empty($_params["formula"])) {
-          CMbArray::insertAfterKey(CConstantesMedicales::$list_constantes, $_constant, "_{$_constant}_cumul", array(
-            "cumul_for" => $_constant,
-            "unit"      => $_params["unit"],
-          ));
+          CMbArray::insertAfterKey(
+            CConstantesMedicales::$list_constantes, $_constant, "_{$_constant}_cumul",
+            array(
+              "cumul_for" => $_constant,
+              "unit"      => $_params["unit"],
+            )
+          );
           
           CConstantesMedicales::$list_constantes[$_constant]["cumul_in"][] = "_{$_constant}_cumul";
         }
         else {
-          foreach($_params["formula"] as $_const => $_sign) {
+          foreach ($_params["formula"] as $_const => $_sign) {
             CConstantesMedicales::$list_constantes[$_const]["cumul_in"][] = $_constant;
           }
         }
