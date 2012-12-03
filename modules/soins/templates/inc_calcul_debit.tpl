@@ -122,7 +122,7 @@
       }
       
       // Calcul de la durée
-      var duree = Math.round(quantite_choisie * rapport_quantite_necessaire / debit_choisi * 100) / 100;
+      var duree = Math.round(quantite_choisie / rapport_quantite_necessaire / debit_choisi * 100) / 100;
       
       if (duree == "Infinity") {
         duree = "-";
