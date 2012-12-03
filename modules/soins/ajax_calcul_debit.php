@@ -21,7 +21,6 @@ $line->calculQuantiteTotal();
 $line_item = new CPrescriptionLineMixItem();
 $line_item = $line->_ref_lines[$line_item_id];
 $line_item->loadRefsFwd();
-$line_item->loadRefProduitPrescription();
 
 $line_item->_unite_administration = $line_item->_ref_produit->libelle_unite_presentation;
 

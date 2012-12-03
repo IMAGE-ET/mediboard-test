@@ -104,17 +104,16 @@ foreach($lines as $_line_element){
   }
   
   // Chargement des administrations et des transmissions
-  foreach($_dates as $_date){
-    $_line_element->calculAdministrations($_date);
+  $_line_element->calculPrises($prescription, $_dates, $name_chap, $name_cat, 1, $planif_manuelle);
+  $_line_element->calculAdministrations($_dates);
 
+  foreach($_dates as $_date){
     // Pre-remplissage des prises prevues dans le dossier de soin
     if(($_date >= $_line_element->debut && $_date <= mbDate($_line_element->_fin_reelle))){
       // Si aucune prise  
       if ((count($_line_element->_ref_prises) < 1) && (!isset($prescription->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
         $prescription->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-       
       }
-      $_line_element->calculPrises($prescription, $_date, $name_chap, $name_cat, 1, $planif_manuelle);
     }
   }
 

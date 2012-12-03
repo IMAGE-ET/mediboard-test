@@ -62,7 +62,8 @@ $sejour->loadRefPraticien();
 // Chargement des caracteristiques du patient
 $patient =& $sejour->_ref_patient;
 $patient->loadRefPhotoIdentite();
-$patient->loadRefConstantesMedicales();
+$patient->loadRefConstantesMedicales(null, array("poids", "taille"));
+
 $patient->loadRefDossierMedical();
 $dossier_medical = $patient->_ref_dossier_medical;
 
@@ -155,39 +156,34 @@ if (CModule::getActive("dPprescription")) {
       $line->countVariantes();
       $line->countBackRefs("administration");
       $line->loadRefsVariantes();
+      $line->_ref_produit->loadClasseATC();
+      $line->_ref_produit->loadRefsFichesATC();
     }
   
-    foreach($_dates as $curr_date){
-      // Refresh d'une ligne de medicament
-      if($line instanceof CPrescriptionLineMedicament){
-         if(!$line->_fin_reelle){
-          $line->_fin_reelle = $prescription->_ref_object->_sortie;
-        }
-        $line->calculAdministrations($curr_date);
-        $line->_ref_produit->loadClasseATC();
-        $line->_ref_produit->loadRefsFichesATC();
-        if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){     
-          $line->calculPrises($prescription, $curr_date, null, null, true, $planif_manuelle);
-        }
-        $line->removePrisesPlanif();
-      }
-       
-      // refresh d'une ligne d'element
-      if($line instanceof CPrescriptionLineElement) {
-        $element = $line->_ref_element_prescription;
-        $name_cat = $element->category_prescription_id;
-        $element->loadRefCategory();
-        $name_chap = $element->_ref_category_prescription->chapitre;
-         $line->calculAdministrations($curr_date);  
-        if(($curr_date >= $line->debut && $curr_date <= mbDate($line->_fin_reelle))){
-          $line->calculPrises($prescription, $curr_date, $name_chap, $name_cat, true, $planif_manuelle);
-        }
-        $line->removePrisesPlanif();
-      }
+    if($line instanceof CPrescriptionLineElement) {
+      $element = $line->_ref_element_prescription;
+      $name_cat = $element->category_prescription_id;
+      $element->loadRefCategory();
+      $name_chap = $element->_ref_category_prescription->chapitre;
     }
-      
+    
+    if ($line instanceof CPrescriptionLineMedicament) {
+      if(!$line->_fin_reelle){
+         $line->_fin_reelle = $prescription->_ref_object->_sortie;
+      }
+      $line->calculPrises($prescription, $_dates, null, null, true, $planif_manuelle);
+      $line->calculAdministrations($_dates);
+      $line->removePrisesPlanif();
+    }
+    
+    if ($line instanceof CPrescriptionLineElement) {
+      $line->calculAdministrations($_dates);  
+      $line->calculPrises($prescription, $_dates, $name_chap, $name_cat, true, $planif_manuelle);
+      $line->removePrisesPlanif();
+    }  
+
     if($line instanceof CPrescriptionLineMix){
-       $line->countVariantes();
+      $line->countVariantes();
       $line->loadRefsVariantes();
       $line->loadRefsLines();
       $line->loadVoies();
@@ -224,13 +220,13 @@ if (CModule::getActive("dPprescription")) {
     if($prescription->_id){
       // Chargement des lignes de medicament
       if($chapitre == "med" || $chapitre == "inj"){
+        
         $prescription->loadRefsLinesMedByCat("1","1");
         foreach($prescription->_ref_prescription_lines as &$_line_med){
           $_line_med->loadRefLogSignee();
           $_line_med->countVariantes();
           $_line_med->countBackRefs("administration");
           $_line_med->loadRefsVariantes();
-          $_line_med->loadRefProduitPrescription();
         }
       } elseif($chapitre == "perfusion" || $chapitre == "aerosol" || $chapitre == "alimentation" || $chapitre == "oxygene") {
         // Chargement des prescription_line_mixes
@@ -276,8 +272,9 @@ if (CModule::getActive("dPprescription")) {
       }
       
       $with_calcul = $chapitre ? true : false; 
+      
       $prescription->calculPlanSoin($_dates, 0, null, null, null, $with_calcul, "");
-  
+
       // Chargement des operations
       if($prescription->_ref_object instanceof CSejour){
         $operation = new COperation();
@@ -294,8 +291,8 @@ if (CModule::getActive("dPprescription")) {
             } else {
               $date_operation = $_operation->date;
             }
-              $hour_op = $_operation->debut_op ? $_operation->debut_op : $_operation->time_operation; 
-              $hour_operation = mbTransformTime(null, $hour_op, '%H');
+            $hour_op = $_operation->debut_op ? $_operation->debut_op : $_operation->time_operation; 
+            $hour_operation = mbTransformTime(null, $hour_op, '%H');
             $hour_operation .= ":00:00";
             $operations["$date_operation $hour_operation"] = $hour_op;
             $operations["$date_operation $hour_operation object"] = $_operation;

@@ -559,11 +559,7 @@
                       {{/if}}
                     </td>
                     <td style="text-align: center;">
-                      {{if $perf_line->_ref_produit_prescription->_id}}
-                        {{$perf_line->_ref_produit_prescription->unite_prise}}
-                      {{else}}
-                        {{$perf_line->_unite_administration}}
-                      {{/if}}
+                      {{$perf_line->_unite_administration}}
                     </td>
                   </tr>
                {{/foreach}}
@@ -596,11 +592,7 @@
                   <td style="width: 50px; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
                   <td style="width: 150px; text-align: center;" class="text">
                     {{if $line_class=="CPrescriptionLineMedicament"}}
-                      {{if $line->_ref_produit_prescription->_id}}
-                        {{$line->_ref_produit_prescription->unite_prise}}
-                      {{else}}
-                        {{$line->_ref_produit->libelle_unite_presentation}}
-                      {{/if}}
+                      {{$line->_ref_produit->libelle_unite_presentation}}
                     {{else}}
                       {{$line->_unite_prise}}
                     {{/if}}

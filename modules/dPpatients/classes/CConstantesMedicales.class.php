@@ -831,7 +831,7 @@ class CConstantesMedicales extends CMbObject {
       $list_constantes = CConstantesMedicales::$list_constantes;
     }
     else {
-      $list_constantes = array_intersect_key(CConstantesMedicales::$list_constantes, array_keys($selection));
+      $list_constantes = array_intersect_key(CConstantesMedicales::$list_constantes, array_flip($selection));
     }
     
     // Constante que l'on va construire

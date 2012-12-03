@@ -377,7 +377,6 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
             }
             // Administrations effectuees
             foreach($_prescription_line_mix->_ref_lines as $_perf_line){
-              $_perf_line->loadRefProduitPrescription();
               $list_lines[$_perf_line->_class][$_perf_line->_id] = $_perf_line;
               if(is_array($_perf_line->_administrations)){
                 foreach($_perf_line->_administrations as $_date => $_adm_by_hour){
@@ -427,7 +426,6 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
                   if (!$_line_med->stupefiant && $do_stupefiants) {
                     continue;
                   }
-                  $_line_med->loadRefProduitPrescription();
                   $list_lines[$_line_med->_class][$_line_med->_id] = $_line_med;
                   // Prises prevues
                   if(is_array($_line_med->_quantity_by_date)){
