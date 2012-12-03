@@ -20,6 +20,7 @@ class CExchangeSource extends CMbObject {
     "ftp"         => "CSourceFTP",
     "soap"        => "CSourceSOAP",
     "smtp"        => "CSourceSMTP",
+    "pop"         => "CSourcePOP",
     "file_system" => "CSourceFileSystem",
     "http"        => "CSourceHTTP",
   );
@@ -135,7 +136,7 @@ class CExchangeSource extends CMbObject {
     $source->type_echange = $type_echange;
     $source->_wanted_type = $type;
     $source->_allowed_instances = self::getObjects($name, $type, $type_echange);
-    
+
     return $source;
   }
   

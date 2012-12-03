@@ -92,5 +92,13 @@
         {{mb_include module=dicom template=CSourceDicom_inc_config mod=dicom class="CSourceDicom"}}
       {{/if}}
     </div>
+
+    <div id="CSourcePOP-{{$sourcename}}" class="source" style="display:{{if !$source->_allowed_instances && ($source instanceof CSourcePOP)}}block{{else}}none{{/if}};">
+      {{if !"messagerie"|module_active}}
+        {{mb_include module=system template=module_missing mod=messagerie}}
+      {{else}}
+        {{mb_include module=system template=CExchangeSource_inc_config mod=system class="CSourcePOP"}}
+      {{/if}}
+    </div>
   </div>
 {{/if}}

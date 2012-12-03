@@ -1192,9 +1192,28 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_class_field_predicate`
               CHANGE `operator` `operator` ENUM ('=','!=','>','>=','<','<=','startsWith','endsWith','contains','hasValue','hasNoValue') NOT NULL DEFAULT '=';";
     $this->addQuery($query);
-    
-    $this->mod_version = "1.1.19";
-    
+
+    $this->makeRevision("1.1.19");
+
+    $query = "CREATE TABLE `source_pop` (
+                `source_pop_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `name` VARCHAR (255) NOT NULL,
+                `user` VARCHAR (255) NOT NULL,
+                `password` VARCHAR (255) NOT NULL,
+                `role` ENUM ('prod', 'qualif') NOT NULL DEFAULT 'qualif',
+                `type` ENUM ('pop3','imap') NOT NULL DEFAULT 'imap',
+                `active` ENUM ('0','1') NOT NULL DEFAULT '1',
+                `loggable` ENUM ('0','1') NOT NULL DEFAULT '1',
+                `port` INT (11) NOT NULL,
+                `host` VARCHAR (50) NOT NULL,
+                `auth_ssl` ENUM ('None','SSL/TLS','STARTTLS') NOT NULL,
+                `timeout` INT NOT NULL
+              );";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.20";
+
+
     /*$query = "ALTER TABLE user_log
                 DROP INDEX object_id,
                 ADD INDEX object_id_object_class (`object_id`, `object_class`)";
