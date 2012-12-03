@@ -45,6 +45,11 @@ input[type=checkbox] {
   padding: 0;
 }
 
+input[type=image] {
+  margin: 0;
+  border: 0;
+}
+
 .control {
   margin: 1px !important;
 }
@@ -778,15 +783,15 @@ input[type=text][readonly]:focus {
 }
 
 input[type=text].date {
-  width: 90px;
+  width: 80px;
 }
 
 input[type=text].time {
-  width: 60px;
+  width: 50px;
 }
 
 input[type=text].dateTime {
-  width: 120px;
+  width: 110px;
 }
 
 div.autocomplete {

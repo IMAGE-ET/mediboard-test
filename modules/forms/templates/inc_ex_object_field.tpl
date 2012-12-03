@@ -54,6 +54,9 @@
 {{elseif $_spec instanceof CTextSpec || ($_spec instanceof CEnumSpec && $_spec->typeEnum == "select")}}
   {{mb_include module=forms template=inc_ex_object_field_two_lines}}
 
+{{elseif $ex_class->pixel_positionning && ($_spec instanceof CDateSpec || $_spec instanceof CDateTimeSpec || $_spec instanceof CTimeSpec)}}
+  {{mb_include module=forms template=inc_ex_object_field_date}}
+
 {{else}}
   {{mb_include module=forms template=inc_ex_object_field_standard}}
 {{/if}}
