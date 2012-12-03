@@ -24,10 +24,11 @@ var MbObject = {
     url.requestUpdate(options.target, function(){
       var listContainer = $("tag-tree");
       var lines = listContainer.select("a[data-object_guid="+object_guid+"]").invoke("up", "tr");
-      if (lines.length == 0) return;
-      
-      listContainer.select("tr.selected").invoke("removeClassName", "selected");
-      lines.invoke("addClassName", "selected");
+
+      if (lines.length > 0) {
+        listContainer.select("tr.selected").invoke("removeClassName", "selected");
+        lines.invoke("addClassName", "selected");
+      }
       
       options.onComplete && options.onComplete();
     });

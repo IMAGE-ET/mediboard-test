@@ -13,6 +13,7 @@ CCanDo::checkEdit();
 $ex_field_id           = CValue::get("ex_field_id");
 $ex_field_predicate_id = CValue::get("ex_field_predicate_id");
 $exclude_ex_field_id   = CValue::get("exclude_ex_field_id");
+$ex_group_id           = CValue::get("ex_group_id");
 $opener_field_value    = CValue::get("opener_field_value");
 $opener_field_view     = CValue::get("opener_field_view");
 
@@ -27,7 +28,15 @@ $ex_field_predicate->loadRefExClassField();
 
 $ex_field = new CExClassField;
 $ex_field->load($ex_field_id);
-$ex_class = $ex_field->loadRefExClass();
+
+if ($ex_group_id && !$ex_field->_id) {
+  $ex_group = new CExClassFieldGroup();
+  $ex_group->load($ex_group_id);
+  $ex_class = $ex_group->loadRefExClass();
+}
+else {
+  $ex_class = $ex_field->loadRefExClass();
+}
 
 $smarty = new CSmartyDP();
 $smarty->assign("ex_field_predicate",  $ex_field_predicate);

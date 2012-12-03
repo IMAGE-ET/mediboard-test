@@ -669,25 +669,33 @@ class CSetupdPhospi extends CSetup {
     $this->addQuery($query);
     
     $query = "ALTER TABLE `emplacement` 
-              ADD INDEX (`chambre_id`);";
+                ADD INDEX (`chambre_id`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.71");
     
     $query = "ALTER TABLE `uf` 
-      ADD `type` ENUM ('hebergement','soins','medicale');";
+                ADD `type` ENUM ('hebergement','soins','medicale');";
     $this->addQuery($query);
     
     $query = "UPDATE `uf`
-      SET `type` = 'medicale' WHERE `type` IS NULL";
+                SET `type` = 'medicale' WHERE `type` IS NULL";
     $this->addQuery($query);
     
     $this->makeRevision("0.72");
     $query = "ALTER TABLE `lit` 
-      ADD `annule` ENUM ('0','1') DEFAULT '0';";
+                ADD `annule` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.73");
+    $query = "ALTER TABLE `transmission_medicale`
+                ADD INDEX (`sejour_id`)";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `observation_medicale`
+                ADD INDEX (`sejour_id`)";
     $this->addQuery($query);
     
-    $this->mod_version = "0.73";
+    $this->mod_version = "0.74";
   }
 }
 ?>

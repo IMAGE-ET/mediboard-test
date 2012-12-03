@@ -114,6 +114,12 @@ class CExClassFieldPredicate extends CMbObject {
     return CExClass::compareValues($value, $this->operator, $this->value);
   }
 
+  function store(){
+    CExObject::$_locales_cache_enabled = false;
+
+    return parent::store();
+  }
+
   /**
    * @return CExClassFieldProperty[]
    */

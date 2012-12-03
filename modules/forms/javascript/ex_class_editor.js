@@ -1,6 +1,6 @@
 exClassTabs = null;
 
-ExClass = {
+ExClass = window.ExClass || {
   id: null,
   layourEditorReady: false,
   pickMode: true,
@@ -10,7 +10,7 @@ ExClass = {
   },
   edit: function(id) {
     this.id = id || this.id;
-    
+
     MbObject.edit("CExClass-"+id, {
       onComplete:function(){
         if (ExField.latest._id && ExField.latest._ex_class_id == id) {
@@ -21,13 +21,21 @@ ExClass = {
   }
 };
 
-ExField = {
+ExField = window.ExField || {
   latest: {},
+  saveCallback: function(id, obj) {
+    ExField.latest = obj;
+    ExField.latest._id = id;
+
+    if (obj._ex_class_id) {
+      ExClass.edit(obj._ex_class_id);
+    }
+  },
   edit: function(id, ex_class_id, target, ex_group_id) {
     if (window.exClassTabs) {
       exClassTabs.setActiveTab("fields-specs");
     }
-    
+
     var url = new Url("forms", "ajax_edit_ex_field");
     
     url.addParam("ex_field_id", id);
@@ -42,8 +50,6 @@ ExField = {
     this.edit("0", ex_class_id, null, ex_group_id);
   }
 };
-
-
 
 ExList = {
   createInModal: function(){
@@ -311,9 +317,14 @@ ExFieldPredicate = {
     if (ex_field_id) {
       url.addParam("ex_field_id", ex_field_id);
     }
-    
+
     if (exclude_ex_field_id) {
       url.addParam("exclude_ex_field_id", exclude_ex_field_id);
+    }
+
+    var ex_group_id = $V(form.ex_group_id);
+    if (ex_group_id) {
+      url.addParam("ex_group_id", ex_group_id);
     }
     
     if (form && id == 0) {

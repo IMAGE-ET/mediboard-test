@@ -7,7 +7,7 @@ Main.add(function(){
 
 toggleList = function(select) {
   $$(".hostfield-list").invoke("hide");
-  $$(".hostfield-"+$V(select))[0].show();
+  $$(".hostfield-"+$V(select))[0].setStyle({display: "inline-block"});
 }
 </script>
 

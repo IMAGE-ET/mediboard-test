@@ -164,6 +164,7 @@ $locales['CConsultAnesth-ht-desc'] = 'Hématocrite';
 $locales['CConsultAnesth-ht_final'] = 'Ht final';
 $locales['CConsultAnesth-ht_final-court'] = 'Ht final';
 $locales['CConsultAnesth-ht_final-desc'] = 'Hématocrite finale';
+$locales['CConsultAnesth-intub_difficile'] = 'Intubation difficile prévisible';
 $locales['CConsultAnesth-k'] = 'K+';
 $locales['CConsultAnesth-k-court'] = 'K+';
 $locales['CConsultAnesth-k-desc'] = 'K+';

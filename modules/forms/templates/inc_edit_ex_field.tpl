@@ -121,11 +121,11 @@ Main.add(function(){
 });
 </script>
 
-<form name="editField" method="post" action="?" data-object_guid="{{$ex_field->_guid}}" onsubmit="return onSubmitFormAjax(this, {onComplete: ExClass.edit.curry({{$ex_class->_id}})})">
+<form name="editField" method="post" action="?" data-object_guid="{{$ex_field->_guid}}" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="dosql" value="do_ex_class_field_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="callback" value="ExField.saveLatest" />
+  <input type="hidden" name="callback" value="ExField.saveCallback" />
   
   <input type="hidden" name="_triggered_data" value="{{$ex_field->_triggered_data|@json|smarty:nodefaults|JSAttribute}}" />
   
@@ -274,7 +274,7 @@ Main.add(function(){
       <td colspan="3">
         {{if $ex_field->_id}}
           <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
-          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le champ ',objName:'{{$ex_field->_view|smarty:nodefaults|JSAttribute}}'})">
+          <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le champ ',objName:'{{$ex_field->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: ExClass.edit.curry('{{$ex_class->_id}}')})">
             {{tr}}Delete{{/tr}}
           </button>
         {{else}}

@@ -139,6 +139,7 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
     $css = str_replace(";}", "}", $css); // ;} >> }
     $css = str_replace("/./", "/", $css); // /./ >> /
     $css = CMbPath::reduce($css); // foo/../ >> /
+    //$css = preg_replace("/#([0-9A-F])\\1([0-9A-F])\\2([0-9A-F])\\3/i", "#\\1\\2\\3", $css); // Reduce #6699FF to #69F
     return $css;
   }
 }
