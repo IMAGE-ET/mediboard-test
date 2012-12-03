@@ -895,6 +895,20 @@ class CAppUI {
   }
 
   /**
+   * Get all the available languages
+   *
+   * @return array All the languages (2 letters)
+   */
+  static function getAvailableLanguages() {
+    $languages = array();
+    foreach (glob("./locales/*", GLOB_ONLYDIR) as $lng) {
+      $languages[] = basename($lng);
+    }
+
+    return $languages;
+  }
+
+  /**
    * Return the configuration setting for a given path
    *
    * @param string $path    Tokenized path, eg "module class var", dP proof

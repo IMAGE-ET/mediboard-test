@@ -93,8 +93,11 @@ else {
   
   CAppUI::stepAjax("ConfigValues-shm-rem-ok", UI_MSG_OK);
 }
-  
-CJSLoader::writeLocaleFile();
+
+foreach (CAppUI::getAvailableLanguages() as $_language) {
+  CJSLoader::writeLocaleFile($_language);
+}
+
 CAppUI::stepAjax("Locales-javascript-cache-allup", UI_MSG_OK);
 
 // Module specific removals

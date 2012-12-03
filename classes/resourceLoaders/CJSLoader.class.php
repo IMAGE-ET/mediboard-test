@@ -142,27 +142,14 @@ abstract class CJSLoader extends CHTMLResourceLoader {
    * 
    * @return void
    */
-  static function writeLocaleFile($language = null, $locales = null, $label = null) {
+  static function writeLocaleFile($language, $locales = null, $label = null) {
     global $version;
     
-    // It will update all the locale files
-    if (!$language) {
-      $languages = array();
-      foreach (glob("./locales/*", GLOB_ONLYDIR) as $lng) {
-        $languages[] = basename($lng);
-      }
-    }
-    else {
-      $languages = array($language);
-    }
-    
     if (!$locales) {
-      foreach ($languages as $language) {
-        $localeFiles = array_merge(
-          glob("./locales/$language/*.php"), 
-          glob("./modules/*/locales/$language.php")
-        );
-      }
+      $localeFiles = array_merge(
+        glob("./locales/$language/*.php"),
+        glob("./modules/*/locales/$language.php")
+      );
       
       foreach ($localeFiles as $localeFile) {
         if (basename($localeFile) != "meta.php") {
@@ -170,63 +157,61 @@ abstract class CJSLoader extends CHTMLResourceLoader {
         }
       }
     }
-    
-    foreach ($languages as $language) {
-      $path = self::getLocaleFilePath($language, $label);
-      
-      if ($fp = fopen($path, 'w')) {
-        // The callback will filter on empty strings (without it, "0" will be removed too).
-        $locales = array_filter($locales, "stringNotEmpty");
-        // TODO: change the invalid keys (with accents) of the locales to simplify this
-        $keys   = array_map('utf8_encode', array_keys($locales));
-        $values = array_map('utf8_encode', array_values($locales));
-        
-        foreach ($values as &$_value) {
-          $_value = CMbString::unslash($_value);
-        }
-        
-        $compress = false;
-        
-        if ($compress) {
-          $delim = "/([\.-])/";
-          $arr = new stdClass;
-          foreach ($keys as $_pos => $_key) {
-            $parts = preg_split($delim, $_key, null, PREG_SPLIT_DELIM_CAPTURE);
-            
-            $_arr = $arr;
-            $last_key = count($parts)-1;
-            
-            foreach ($parts as $i => $_token) {
-              $last = ($i == $last_key);
-              if ($_token === "") {
-                $_token = '_$_';
-              }
-              
-              if ($last) {
-                $_arr->{$_token} = (object)array('$' => $values[$_pos]);
-                break;
-              }
-              elseif (!isset($_arr->{$_token})) {
-                $_arr->{$_token} = new stdClass;
-              }
-              
-              $_arr = $_arr->{$_token};
-            }
-            
-            //unset($_arr);
-          }
-          
-          self::clearLocalesKeys($arr);
-          $json = $arr;
-        }
-        else {
-          $json = array_combine($keys, $values);
-        }
-        
-        $script = '//'.$version['build']."\nwindow.locales=".json_encode($json).";";
-        fwrite($fp, $script);
-        fclose($fp);
+
+    $path = self::getLocaleFilePath($language, $label);
+
+    if ($fp = fopen($path, 'w')) {
+      // The callback will filter on empty strings (without it, "0" will be removed too).
+      $locales = array_filter($locales, "stringNotEmpty");
+      // TODO: change the invalid keys (with accents) of the locales to simplify this
+      $keys   = array_map('utf8_encode', array_keys($locales));
+      $values = array_map('utf8_encode', array_values($locales));
+
+      foreach ($values as &$_value) {
+        $_value = CMbString::unslash($_value);
       }
+
+      $compress = false;
+
+      if ($compress) {
+        $delim = "/([\.-])/";
+        $arr = new stdClass;
+        foreach ($keys as $_pos => $_key) {
+          $parts = preg_split($delim, $_key, null, PREG_SPLIT_DELIM_CAPTURE);
+
+          $_arr = $arr;
+          $last_key = count($parts)-1;
+
+          foreach ($parts as $i => $_token) {
+            $last = ($i == $last_key);
+            if ($_token === "") {
+              $_token = '_$_';
+            }
+
+            if ($last) {
+              $_arr->{$_token} = (object)array('$' => $values[$_pos]);
+              break;
+            }
+            elseif (!isset($_arr->{$_token})) {
+              $_arr->{$_token} = new stdClass;
+            }
+
+            $_arr = $_arr->{$_token};
+          }
+
+          //unset($_arr);
+        }
+
+        self::clearLocalesKeys($arr);
+        $json = $arr;
+      }
+      else {
+        $json = array_combine($keys, $values);
+      }
+
+      $script = '//'.$version['build']."\nwindow.locales=".json_encode($json).";";
+      fwrite($fp, $script);
+      fclose($fp);
     }
   }
   
