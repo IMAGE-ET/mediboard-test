@@ -218,9 +218,16 @@ class CPatient extends CMbObject {
   var $_fusion           = null; // fusion
   var $_patient_elimine  = null; // fusion
 
-  // Object References
   var $_nb_docs                     = null;
+
+  /**
+   * @var CSejour[]
+   */
   var $_ref_sejours                 = null;
+
+  /**
+   * @var CConsultation[]
+   */
   var $_ref_consultations           = null;
   var $_ref_prescriptions           = null;
   var $_ref_grossesses              = null;
@@ -238,8 +245,19 @@ class CPatient extends CMbObject {
    */
   var $_ref_next_affectation        = null;
 
+  /**
+   * @var CMedecin
+   */
   var $_ref_medecin_traitant        = null;
+
+  /**
+   * @var CCorrespondant[]
+   */
   var $_ref_medecins_correspondants = null;
+
+  /**
+   * @var CCorrespondantPatient[]
+   */
   var $_ref_correspondants_patient  = null;
   var $_ref_cp_by_relation          = null;
 
@@ -407,7 +425,7 @@ class CPatient extends CMbObject {
     $props["_assureCC_id"]                = "str maxLength|20";
     $props["_assuranceCC_ean"]            = "str";
 
-    $props["_IPP"]                        = "str";
+    $props["_IPP"]                        = "str show|1";
 
     return $props;
   }
@@ -432,6 +450,12 @@ class CPatient extends CMbObject {
     }
   }
 
+  /**
+   * @param self[] $objects
+   * @param bool   $fast
+   *
+   * @return CMbObject|CModelObject
+   */
   function merge($objects = array/*<CPatient>*/(), $fast = false) {
     // Load the matching CDossierMedical objects
     if ($this->_id) {
@@ -452,11 +476,16 @@ class CPatient extends CMbObject {
       $object->loadIPP();
     }
 
-    if ($msg = parent::merge($objects, $fast)) return $msg;
+    if ($msg = parent::merge($objects, $fast)) {
+      return $msg;
+    }
 
     // Merge them
     if (count($list) > 1) {
-      if ($msg = $dossier_medical->mergePlainFields($list)) return $msg;
+      if ($msg = $dossier_medical->mergePlainFields($list)) {
+        return $msg;
+      }
+
       $dossier_medical->object_class = $this->_class;
       $dossier_medical->object_id = $this->_id;
       return $dossier_medical->merge($list);
@@ -519,7 +548,6 @@ class CPatient extends CMbObject {
     $group = CGroups::loadCurrent();
     $group->loadConfigValues();
     if ($group->_configs["sip_idex_generator"]) {
-      $IPP = new CIdSante400();
       $this->loadIPP($group->_id);
       if ($this->_IPP) {
         return;
@@ -533,10 +561,14 @@ class CPatient extends CMbObject {
   function guessExoneration(){
     $this->completeField("libelle_exo");
 
-    if (!$this->libelle_exo) return;
+    if (!$this->libelle_exo) {
+      return;
+    }
 
     foreach (self::$libelle_exo_guess as $field => $values) {
-      if ($this->$field !== null) continue;
+      if ($this->$field !== null) {
+        continue;
+      }
 
       foreach ($values as $value => $rules) {
         foreach ($rules as $rule) {
@@ -571,13 +603,15 @@ class CPatient extends CMbObject {
     }
 
     $this->evalAge();
-    $this->_age = $relative["count"] . " " . CAppUI::tr($relative["unit"] . ($relative["count"] > 1 ? "s" : "") .($relative["unit"] == "year" ? "_old" : ""));
+
+    $str = $relative["unit"] . ($relative["count"] > 1 ? "s" : "") .($relative["unit"] == "year" ? "_old" : "");
+    $this->_age = $relative["count"] . " " . CAppUI::tr($str);
 
     $this->checkVIP();
 
     $this->_civilite = CAppUI::tr("CPatient.civilite.$this->civilite");
     if ($this->civilite === "enf") {
-      $this->_civilite_long = $this->sexe === "m" ? CAppUI::tr("CPatient.civilite.le_jeune") : CAppUI::tr("CPatient.civilite.la_jeune");
+      $this->_civilite_long = CAppUI::tr("CPatient.civilite.".($this->sexe === "m" ? "le_jeune" : "la_jeune"));
     }
     else {
       $this->_civilite_long = CAppUI::tr("CPatient.civilite.$this->civilite-long");
@@ -585,7 +619,7 @@ class CPatient extends CMbObject {
 
     $this->_assure_civilite = CAppUI::tr("CPatient.civilite.$this->assure_civilite");
     if ($this->assure_civilite === "enf") {
-      $this->_assure_civilite_long = $this->assure_sexe === "m" ? CAppUI::tr("CPatient.civilite.le_jeune") : CAppUI::tr("CPatient.civilite.la_jeune");
+      $this->_assure_civilite_long = CAppUI::tr("CPatient.civilite.".($this->assure_sexe === "m" ? "le_jeune" : "la_jeune"));
     }
     else {
       $this->_assure_civilite_long = CAppUI::tr("CPatient.civilite.$this->assure_civilite-long");
@@ -599,7 +633,7 @@ class CPatient extends CMbObject {
     $this->_longview .= $this->vip ? " [Conf.]" : "";
     $this->_longview .= $this->deces ? " [Décès.]" : "";
 
-   // Navigation fields
+    // Navigation fields
     //$this->_dossier_cabinet_url = self::$dossier_cabinet_prefix[CAppUI::pref("DossierCabinet")] . $this->_id;
     $this->_dossier_cabinet_url = self::$dossier_cabinet_prefix["dPpatients"] . $this->_id;
 
@@ -614,7 +648,9 @@ class CPatient extends CMbObject {
 
   /**
    * Calcul l'âge du patient en années
-   * @param date $date Date de référence pour le calcul, maintenant si null
+   *
+   * @param string $date Date de référence pour le calcul, maintenant si null
+   *
    * @return int l'age du patient en années
    */
   function evalAge($date = null) {
@@ -624,6 +660,7 @@ class CPatient extends CMbObject {
 
   /**
    * Calcul l'aspect confidentiel du patient
+   *
    * @return bool on a accès ou pas
    */
   function checkVIP() {
@@ -660,7 +697,9 @@ class CPatient extends CMbObject {
 
   /**
    * Calcul l'âge de l'assuré en années
-   * @param date $date Date de référence pour le calcul, maintenant si null
+   *
+   * @param string $date Date de référence pour le calcul, maintenant si null
+   *
    * @return int l'age de l'assuré en années
    */
   function evalAgeAssure($date = null) {
@@ -670,7 +709,9 @@ class CPatient extends CMbObject {
 
   /**
    * Calcul l'âge du patient en mois
-   * @param date $date Date de référence pour le calcul, maintenant si null
+   *
+   * @param string $date Date de référence pour le calcul, maintenant si null
+   *
    * @return int l'age du patient en mois
    */
   function evalAgeMois($date = null){
@@ -804,7 +845,7 @@ class CPatient extends CMbObject {
       return $this->_ref_patient_links = array($this->loadFwdRef("patient_link_id"));
     }
 
-   // return $this->_ref_patient_links = $this->loadBackRefs("patient_links");
+    // return $this->_ref_patient_links = $this->loadBackRefs("patient_links");
   }
 
   /*
@@ -858,6 +899,7 @@ class CPatient extends CMbObject {
 
   /**
    * Get an associative array of uncancelled sejours and their dates
+   *
    * @return array Sejour ID => array("entree_prevue" => DATE, "sortie_prevue" => DATE)
    */
   function getSejoursCollisions() {
@@ -883,15 +925,17 @@ class CPatient extends CMbObject {
    * - Même nom à la casse et aux séparateurs près
    * - Même prénom à la casse et aux séparateurs près
    * - Strictement la même date de naissance
-   * @param $other
-   * @param $loadObject Permet de ne pas charger le patient, seulement renvoyer le nombre de matches
-   * @return Nombre d'occurences trouvées
+   *
+   * @param bool $other      Vérifier qu'on n'inclut pas $this
+   * @param bool $loadObject Permet de ne pas charger le patient, seulement renvoyer le nombre de matches
+   *
+   * @return int Nombre d'occurences trouvées
    */
   function loadMatchingPatient($other = false, $loadObject = true) {
     $ds = $this->_spec->ds;
 
     if ($other && $this->_id) {
-       $where["patient_id"] = " != '$this->_id'";
+      $where["patient_id"] = " != '$this->_id'";
     }
 
     $whereOr[] = "nom "             . $ds->prepareLikeName($this->nom);
@@ -922,7 +966,8 @@ class CPatient extends CMbObject {
    * Finds patient siblings with at least two exact matching traits out of
    * nom, prenom, naissance
    * Optimized version with split queries for index usage forcing
-   * @return array[CPatient] Array of siblings
+   *
+   * @return CPatient[] Array of siblings
    */
   function getSiblings() {
     $ds =& $this->_spec->ds;
@@ -956,8 +1001,10 @@ class CPatient extends CMbObject {
 
   /**
    * Find patient phoning similar
-   * @param $date restrict to a venue collide date
-   * @return array[CPatient] Array of phoning patients
+   *
+   * @param string $date restrict to a venue collide date
+   *
+   * @return CPatient[] Array of phoning patients
    */
   function getPhoning($date = null) {
     $whereNom[] = "nom_soundex2    LIKE '$this->nom_soundex2%'";
@@ -1078,8 +1125,9 @@ class CPatient extends CMbObject {
 
   function loadRefsDocs() {
     $docs_valid = parent::loadRefsDocs();
-    if ($docs_valid)
+    if ($docs_valid) {
       $this->_nb_docs .= "$docs_valid";
+    }
   }
 
   function loadRefsPrescriptions($perm = null) {
@@ -1094,7 +1142,7 @@ class CPatient extends CMbObject {
   function loadRefConstantesMedicales($datetime = null, $selection = array()) {
     $latest = CConstantesMedicales::getLatestFor($this, $datetime, $selection);
 
-    list($this->_ref_constantes_medicales, $dates) = $latest;
+    list($this->_ref_constantes_medicales, /*$dates*/) = $latest;
     $this->_ref_constantes_medicales->updateFormFields();
 
     return $latest;
@@ -1348,7 +1396,9 @@ class CPatient extends CMbObject {
 
   /**
    * Construit le tag IPP en fonction des variables de configuration
-   * @param $group_id Permet de charger l'IPP pour un établissement donné si non null
+   *
+   * @param int $group_id Permet de charger l'IPP pour un établissement donné si non null
+   *
    * @return string
    */
   static function getTagIPP($group_id = null) {
@@ -1381,7 +1431,10 @@ class CPatient extends CMbObject {
 
   /**
    * Charge l'IPP du patient pour l'établissement courant
-   * @param $group_id Permet de charger l'IPP pour un établissement donné si non null
+   *
+   * @param int $group_id Permet de charger l'IPP pour un établissement donné si non null
+   *
+   * @return void
    */
   function loadIPP($group_id = null) {
     if (!$this->_id) {
@@ -1439,8 +1492,7 @@ class CPatient extends CMbObject {
     if ($file->_id) {
       $author = $file->loadRefAuthor();
       global $can;
-      $this->_can_see_photo = $can->admin
-        || CAppUI::$user->function_id == $author->function_id;
+      $this->_can_see_photo = $can->admin || CAppUI::$user->function_id == $author->function_id;
     }
 
     return $this->_ref_photo_identite = $file;
@@ -1476,11 +1528,15 @@ class CPatient extends CMbObject {
 
     foreach ($destinataires as $_destinataires_by_class) {
       foreach ($_destinataires_by_class as $_destinataire) {
-        if (!isset($_destinataire->nom) || strlen($_destinataire->nom) == 0 || $_destinataire->nom === " ") continue;
-        $template->destinataires[] =
-          array("nom"   => $_destinataire->nom,
-                "email" => $_destinataire->email,
-                "tag"   => $_destinataire->tag);
+        if (!isset($_destinataire->nom) || strlen($_destinataire->nom) == 0 || $_destinataire->nom === " ") {
+          continue;
+        }
+
+        $template->destinataires[] = array(
+          "nom"   => $_destinataire->nom,
+          "email" => $_destinataire->email,
+          "tag"   => $_destinataire->tag,
+        );
       }
     }
 
@@ -1736,13 +1792,14 @@ class CPatient extends CMbObject {
   }
 
   function getLabelTable() {
-    return
-        array ("[NOM]"        => $this->nom,
-               "[PRENOM]"     => $this->prenom,
-               "[SEXE]"       => $this->sexe,
-               "[NOM JF]"     => $this->nom_jeune_fille,
-               "[DATE NAISS]" => $this->naissance,
-               "[NUM SECU]"   => $this->matricule);
+    return array (
+      "[NOM]"        => $this->nom,
+      "[PRENOM]"     => $this->prenom,
+      "[SEXE]"       => $this->sexe,
+      "[NOM JF]"     => $this->nom_jeune_fille,
+      "[DATE NAISS]" => $this->naissance,
+      "[NUM SECU]"   => $this->matricule,
+    );
   }
 
   function updateNomPaysInsee() {
@@ -1867,15 +1924,20 @@ class CPatient extends CMbObject {
     $medecin_traitant = new CMedecin();
     $medecin_traitant->load($this->medecin_traitant);
 
-    $fields = array_merge($fields, array("DATE NAISS"     => mbDateToLocale($this->naissance), "IPP"    => $this->_IPP,
-                 "LIEU NAISSANCE" => $this->lieu_naissance,
-                 "NOM"            => $this->nom,       "NOM JF" => $this->nom_jeune_fille,
-                 "NUM SECU"       => $this->matricule, "PRENOM" => $this->prenom,
-                 "SEXE"           => $this->sexe, "CIVILITE" => $this->civilite,
-                 "CIVILITE LONGUE" => $this->_civilite_long, "ACCORD GENRE" => $this->sexe == "f" ? "e" : "",
-                 "CODE BARRE IPP" => "@BARCODE_" . $this->_IPP."@",
-                 "ADRESSE"        => "$this->adresse \n$this->cp $this->ville",
-                 "MED. TRAITANT"  => "Dr $medecin_traitant->nom $medecin_traitant->prenom"));
+    $fields = array_merge(
+      $fields,
+      array(
+        "DATE NAISS"     => mbDateToLocale($this->naissance), "IPP"    => $this->_IPP,
+        "LIEU NAISSANCE" => $this->lieu_naissance,
+        "NOM"            => $this->nom,       "NOM JF" => $this->nom_jeune_fille,
+        "NUM SECU"       => $this->matricule, "PRENOM" => $this->prenom,
+        "SEXE"           => $this->sexe, "CIVILITE" => $this->civilite,
+        "CIVILITE LONGUE" => $this->_civilite_long, "ACCORD GENRE" => $this->sexe == "f" ? "e" : "",
+        "CODE BARRE IPP" => "@BARCODE_" . $this->_IPP."@",
+        "ADRESSE"        => "$this->adresse \n$this->cp $this->ville",
+        "MED. TRAITANT"  => "Dr $medecin_traitant->nom $medecin_traitant->prenom",
+      )
+    );
   }
 
   function docsEditable() {
@@ -2035,5 +2097,3 @@ class CPatient extends CMbObject {
     return array();
   }
 }
-
-?>

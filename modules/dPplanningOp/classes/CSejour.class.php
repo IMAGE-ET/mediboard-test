@@ -396,7 +396,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["_date_min_stat"]    = "date";
     $props["_date_max_stat"]    = "date moreEquals|_date_min_stat";
     $props["_filter_type"]      = "enum list|comp|ambu|exte|seances|ssr|psy|urg|consult";
-    $props["_NDA"]              = "str";
+    $props["_NDA"]              = "str show|1";
     $props["_ccam_libelle"]     = "bool default|0";
     $props["_coordonnees"]      = "bool default|0";
     $props["_adresse_par"]      = "bool";
