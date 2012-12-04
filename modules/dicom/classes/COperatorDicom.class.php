@@ -235,7 +235,7 @@ class COperatorDicom extends CEAIOperator {
           'salle_id' => " = $linked_object->object_id",
           'date'     => " = '" . mbDate() . "'"
         );
-        mbLog($where);
+
         $unplanned_operations = $operation->loadList($where);
 
         $ljoin = array(
@@ -250,7 +250,7 @@ class COperatorDicom extends CEAIOperator {
         $operations = $operation->loadList($where, null, null, null, $ljoin);
 
         $operations = array_merge($operations, $unplanned_operations);
-        mbLog($operations);
+
         foreach ($operations as $_operation) {
           $responses[] = $find_rsp_pending;
 
