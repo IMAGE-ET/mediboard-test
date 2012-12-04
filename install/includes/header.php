@@ -12,8 +12,8 @@
 
 set_time_limit(180);
 
-$session_name = basename(dirname(dirname($_SERVER["REQUEST_URI"])));
-$session_name = preg_replace("/[^a-z0-9]/i", "", $session_name);
+$session_name = basename(dirname(dirname(dirname(__FILE__))));
+$session_name = preg_replace("/[^a-z0-9]/i", "", $session_name)."-installer";
 
 session_name($session_name);
 session_start();
