@@ -1,14 +1,12 @@
-<?php
-
+<?php 
 /**
- * maternite
- *  
- * @category dPpmsi
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ * 
+ * @package    Mediboard
+ * @subpackage dPpmsi
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 $cat_docs        = CValue::getOrSession("cat_docs");
@@ -16,6 +14,15 @@ $specialite_docs = CValue::getOrSession("specialite_docs");
 $prat_docs       = CValue::getOrSession("prat_docs");
 $date_docs_min   = CValue::getOrSession("date_docs_min");
 $date_docs_max   = CValue::getOrSession("date_docs_max");
+$entree_min      = CValue::getOrSession("entree_min");
+$entree_max      = CValue::getOrSession("entree_max");
+$sortie_min      = CValue::getOrSession("sortie_min");
+$sortie_max      = CValue::getOrSession("sortie_max");
+$intervention_min = CValue::getOrSession("intervention_min");
+$intervention_max = CValue::getOrSession("intervention_max");
+$prat_interv     = CValue::getOrSession("prat_interv");
+$section_search  = CValue::getOrSession("section_search");
+$type            = CValue::getOrSession("type");
 $page            = CValue::get("page");
 
 $docs  = array();
@@ -27,7 +34,60 @@ $long_period = mbDaysRelative($date_docs_min, $date_docs_max) > 10;
 $total_docs = 0;
 
 if (($cat_docs || $specialite_docs || $prat_docs || ($date_docs_min && $date_docs_max)) && !$long_period) {
-  $where["compte_rendu.object_class"] = " IN ('COperation', 'CSejour', 'CPatient')";
+  
+  switch ($section_search) {
+    case "sejour":
+      $ljoin["sejour"] = "sejour.sejour_id = compte_rendu.object_id OR sejour.sejour_id IS NULL";
+      $where["compte_rendu.object_class"] = "= 'CSejour'";
+      if ($type) {
+        $where["sejour.type"] = "= '$type'";
+      }
+      if ($entree_min) {
+        if ($entree_max) {
+          $where[] = "sejour.entree BETWEEN '$entree_min 00:00:00' AND '$entree_max 23:59:59'";
+        }
+        else {
+          $where[] = "sejour.entree >= '$entree_min 00:00:00'";
+        }
+      }
+      else if ($entree_max) {
+        $where[] = "sejour.entree <= '$entree_max 23:59:59'";
+      }
+      
+      if ($sortie_min) {
+        if ($sortie_max) {
+          $where[] = "sejour.sortie BETWEEN '$sortie_min 00:00:00' AND '$sortie_max 23:59:59'";
+        }
+        else {
+          $where[] = "sejour.sortie >= '$sortie_min 00:00:00'";
+        }
+      }
+      else if ($sortie_max) {
+        $where[] = "sejour.sortie <= '$sortie_max '23:59:59'";
+      }
+      
+      break;
+    case "intervention":
+      $ljoin["operations"] = "operations.operation_id = compte_rendu.object_id OR operations.operation_id IS NULL";
+      $where["compte_rendu.object_class"] = "= 'COperation'";
+      if ($intervention_min || $intervention_max) {
+        $ljoin["plagesop"] = "plagesop.plageop_id = operations.plageop_id";
+        if ($intervention_min) {
+          if ($intervention_max) {
+            $where[] = "(operations.plageop_id IS NULL AND operations.date BETWEEN '$intervention_min' AND '$intervention_max') OR (plagesop.date BETWEEN '$intervention_min' AND '$intervention_max')";
+          }
+          else {
+            $where[] = "(operations.plageop_id IS NULL AND operations.date >= '$intervention_min') OR (plagesop.date >= '$intervention_min')";
+          }
+        }
+        else if ($intervention_max) {
+          $where[] = "(operations.plageop_id IS NULL AND operations.date <= '$intervention_max') OR (plagesop.date <= '$intervention_max')";
+        }
+      }
+      if ($prat_interv) {
+        $where["operations.chir_id"] = "= '$prat_interv'";
+      }
+  }
   
   if ($cat_docs) {
     $where["file_category_id"] = " = '$cat_docs'";
@@ -48,11 +108,38 @@ if (($cat_docs || $specialite_docs || $prat_docs || ($date_docs_min && $date_doc
     $ljoin["users_mediboard"] = "user_log.user_id = users_mediboard.user_id";
     $where["users_mediboard.function_id"] = " = '$specialite_docs'";
   }
-  $total_docs = $cr->countList($where, null, $ljoin);
-  $docs = $cr->loadList($where, "date desc", "$page, 30", null, $ljoin);
   
-  foreach ($docs as $_doc) {
-    $_doc->_date = $_doc->loadFirstLog()->date;
+  $total_docs = $cr->countList($where, null, $ljoin);
+  $docs = $cr->loadList($where, "user_log.date desc", "$page, 30", null, $ljoin);
+  
+  switch ($section_search) {
+    case "sejour":
+      $sejours = CMbObject::massLoadFwdRef($docs, "object_id", "CSejour");
+      CMbObject::massLoadFwdRef($sejours, "patient_id");
+      
+      foreach ($docs as $_doc) {
+        $sejour = $_doc->loadTargetObject();
+        $sejour->loadRefPatient();
+        $sejour->loadNDA();
+        $sejour->loadRefsOperations();
+        $_doc->_date = $_doc->loadFirstLog()->date;
+      }
+      break;
+    case "intervention";
+      $operations = CMbObject::massLoadFwdRef($docs, "object_id", "COperation");
+      CMbObject::massLoadFwdRef($operations, "patient_id");
+      $prats = CMbObject::massLoadFwdRef($operations, "chir_id");
+      CMbObject::massLoadFwdRef($prats, "function_id");
+      
+      foreach ($docs as $_doc) {
+        $operation = $_doc->loadTargetObject();
+        $operation->loadExtCodesCCAM();
+        $operation->loadRefPlageOp();
+        $operation->loadRefPatient();
+        $chir = $operation->loadRefChir();
+        $chir->loadRefFunction();
+        $_doc->_date = $_doc->loadFirstLog()->date;
+      }
   }
 }
 
@@ -67,4 +154,6 @@ $smarty->assign("docs"     , $docs);
 $smarty->assign("long_period", $long_period);
 $smarty->assign("page"     , $page);
 $smarty->assign("total_docs", $total_docs);
+$smarty->assign("section_search", $section_search);
+
 $smarty->display("inc_refresh_last_docs.tpl");
