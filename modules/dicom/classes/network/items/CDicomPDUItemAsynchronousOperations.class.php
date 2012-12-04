@@ -144,4 +144,3 @@ class CDicomPDUItemAsynchronousOperations extends CDicomPDUItem {
       </ul>";
   }
 }
-?>

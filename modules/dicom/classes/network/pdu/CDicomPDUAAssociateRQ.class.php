@@ -162,7 +162,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
     $this->calling_AE_title = $stream_reader->readString(16);
     
     
-    // On passe 32 octets, réservés par Dicom
+    // On passe 32 octets, rï¿½servï¿½s par Dicom
     $stream_reader->skip(32);
     
     $this->application_context = CDicomPDUItemFactory::decodeItem($stream_reader);
@@ -243,4 +243,3 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
     echo $str;
   }
 }
-?>

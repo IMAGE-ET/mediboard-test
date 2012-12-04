@@ -23,7 +23,7 @@ class CDicomDictionary {
     '1.2.840.10008.1.1' => 'Verification SOP Class',
     '1.2.840.10008.3.1.1.1' => 'DICOM Application Context Name',
     '1.2.840.10008.5.1.4.31' => 'Modality Worklist Information Model - FIND',
-  );
+    '1.2.840.10008.3.1.2.3.3' => 'Modality Performed Procedure Step SOP Class');
   
   /**
    * The DICOM Network transfer syntaxes
@@ -375,6 +375,12 @@ class CDicomDictionary {
     ),
   );
   
+  protected static $groups = array(
+    0x000 => "Command",
+    0x008 => "Study",
+    0x010 => "Patient"
+  );
+  
   /**
    * Get the name of the SOP class
    * 
@@ -418,7 +424,30 @@ class CDicomDictionary {
    * @return array
    */
   static function getDataSet($group, $element) {
+    if (!array_key_exists($group, self::$data_sets) || !array_key_exists($element, self::$data_sets[$group])) {
+      return null;
+    }
     return self::$data_sets[$group][$element];
+  }
+  
+  /**
+   * Get the group and all its datasets
+   * 
+   * @param integer $group The group number
+   * 
+   * @return array
+   */
+  static function getGroupsDataSet($group) {
+    return self::$data_sets[$group];
+  }
+  
+  /**
+   * Get the groups names
+   * 
+   * @return array
+   */
+  static function getGroupsNames() {
+    return self::$groups;
   }
   
   /**
@@ -443,4 +472,3 @@ class CDicomDictionary {
     return array_key_exists($uid, self::$transfer_syntaxes);
   }
 }
-?>

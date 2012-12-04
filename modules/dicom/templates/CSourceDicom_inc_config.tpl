@@ -29,7 +29,6 @@
         <input type="hidden" name="m" value="dicom" />
         <input type="hidden" name="dosql" value="do_source_dicom_aed" />
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="name" value="{{$source->name}}" />
         
         <table class="form">
           <tr>

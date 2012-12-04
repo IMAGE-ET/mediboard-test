@@ -141,4 +141,3 @@ class CDicomPDUItemUserIdentityNegociationRP extends CDicomPDUItem {
     return "$str</ul>";
   }
 }
-?>

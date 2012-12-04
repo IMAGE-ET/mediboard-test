@@ -106,4 +106,3 @@ class CDicomPDUItemTransferSyntax extends CDicomPDUItem {
             </ul>";
   }
 }
-?>

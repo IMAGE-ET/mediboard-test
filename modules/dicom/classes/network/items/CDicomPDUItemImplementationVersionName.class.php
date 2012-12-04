@@ -120,4 +120,3 @@ class CDicomPDUItemImplementationVersionName extends CDicomPDUItem {
             </ul>";
   }
 }
-?>

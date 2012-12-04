@@ -200,4 +200,3 @@ class CDicomPDUAAssociateRJ extends CDicomPDU {
     echo $str;
   }
 }
-?>

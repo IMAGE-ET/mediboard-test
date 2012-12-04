@@ -15,9 +15,9 @@ class CDicomPDUPDataTF extends CDicomPDU {
   /**
    * The presentation data value
    * 
-   * @var CDicomPDV
+   * @var CDicomPDV[]
    */
-  protected $pdv = array();
+  protected $pdvs = array();
   
   /**
    * The presentation contexts
@@ -48,23 +48,48 @@ class CDicomPDUPDataTF extends CDicomPDU {
   }
   
   /**
-   * Set the PDV
+   * Set a PDV
    * 
    * @param array $pdv_datas The pdv datas
    * 
    * @return null
    */
   function setPDV($pdv_datas) {
-    $this->pdv = new CDicomPDV($pdv_datas);
+    $this->pdvs[] = new CDicomPDV($pdv_datas);
   }
   
   /**
-   * Return the PDV
+   * Return a PDV
+   *
+   * @param integer $index The index of the PDV
    * 
    * @return CDicomPDV
    */
-  function getPDV() {
-    return $this->pdv;
+  function getPDV($index) {
+    return $this->pdvs[$index];
+  }
+
+  /**
+   * Set the PDVs
+   *
+   * @param array $pdvs An array of pdv datas array
+   *
+   * @return void
+   */
+  function setPDVs($pdvs) {
+    $this->pdvs = array();
+    foreach ($pdvs as $_pdv_datas) {
+      $this->setPDV($_pdv_datas);
+    }
+  }
+
+  /**
+   * Return the PDVs
+   *
+   * @return CDicomPDV[]
+   */
+  function getPDVs() {
+    return $this->pdvs;
   }
   
   /**
@@ -93,7 +118,10 @@ class CDicomPDUPDataTF extends CDicomPDU {
    * @return null
    */
   function calculateLength() {
-    $this->length = $this->pdv->getTotalLength();
+    $this->length = 0;
+    foreach ($this->pdvs as $_pdv) {
+      $this->length = $_pdv->getTotalLength();
+    }
   }
 
   /**
@@ -116,8 +144,21 @@ class CDicomPDUPDataTF extends CDicomPDU {
    * @return null
    */
   function decodePDU(CDicomStreamReader $stream_reader) {
-    $this->pdv = new CDicomPDV(array("presentation_contexts" => $this->presentation_contexts));
-    $this->pdv->decode($stream_reader);
+    $this->pdvs = array();
+    $stream_reader->setStreamLength($this->getTotalLength());
+
+    while ($stream_reader->getPos() < $stream_reader->getStreamLength()) {
+      $pdv_length = $stream_reader->readUInt32();// + 4;
+      //$stream_reader->seek(-4);
+      $pdv_content = $stream_reader->read($pdv_length);
+      $pdv_handle = fopen('php://temp', 'w+');
+      fwrite($pdv_handle, $pdv_content, $pdv_length);
+      $pdv_stream = new CDicomStreamReader($pdv_handle);
+      $pdv_stream->rewind();
+      $pdv = new CDicomPDV(array("presentation_contexts" => $this->presentation_contexts, "length" => $pdv_length));
+      $pdv->decode($pdv_stream);
+      $this->pdvs[] = $pdv;
+    }
   }
   
   /**
@@ -130,8 +171,11 @@ class CDicomPDUPDataTF extends CDicomPDU {
   function encodePDU(CDicomStreamWriter $stream_writer) {
     $handle = fopen("php://temp", "w+");
     $pdv_stream = new CDicomStreamWriter($handle);
-    $this->pdv->setPresentationContexts($this->presentation_contexts);
-    $this->pdv->encode($pdv_stream);
+
+    foreach($this->pdvs as $_pdv) {
+      $_pdv->setPresentationContexts($this->presentation_contexts);
+      $_pdv->encode($pdv_stream);
+    }
     
     $this->calculateLength();
     
@@ -150,10 +194,11 @@ class CDicomPDUPDataTF extends CDicomPDU {
     $str = "<h1>P-Data-TF</h1><br>
             <ul>
               <li>Type : " . sprintf("%02X", $this->type) . "</li>
-              <li>Length : $this->length</li>
-              <li>" . $this->pdv->__toString() . "</li>
+              <li>Length : $this->length</li>";
+    foreach ($this->pdvs as $_pdv) {
+      $str .= "<li>" . $_pdv->__toString() . "</li>
             </ul>";
+    }
     echo $str;
   }
 }
-?>

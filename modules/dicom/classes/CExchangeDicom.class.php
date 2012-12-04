@@ -89,8 +89,8 @@ class CExchangeDicom extends CExchangeBinary {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["requests"]              = "text notNull";
-    $props["responses"]             = "text notNull";
+    $props["requests"]              = "text";
+    $props["responses"]             = "text";
     $props["presentation_contexts"] = "str show|0";
     //$props["receiver_id"]         = "ref class|CDicomReceiver";
     $props["sender_class"]          = "enum list|CDicomSender show|0";
@@ -116,42 +116,38 @@ class CExchangeDicom extends CExchangeBinary {
    * 
    * @return null
    */
-  function loadContent() {
-    $request_msgs = explode("|", $this->requests);
-    $this->_requests = array();
-    
-    foreach ($request_msgs as $msg) {
-      $pdu = CDicomPDUFactory::decodePDU($msg, $this->_presentation_contexts);
-      $this->_requests[] = $pdu;
-    }
-    
-    $response_msgs = explode("|", $this->responses);
-    $this->_responses = array();
-    
-    foreach ($response_msgs as $msg) {
-      $pdu = CDicomPDUFactory::decodePDU($msg, $this->_presentation_contexts);
-      $this->_responses[] = $pdu;
-    }
-  }
-  
-  /**
-   * Update the form fields
-   * 
-   * @return void
-   */
-  function updateFormFields() {
-    if ($this->presentation_contexts) {
+  function decodeContent() {
+    if ($this->presentation_contexts && !$this->_presentation_contexts) {
       $pres_contexts_array = explode('|', $this->presentation_contexts);
       $this->_presentation_contexts = array();
-      
+
       foreach ($pres_contexts_array as $_pres_context) {
         $_pres_context = explode('/', $_pres_context);
-        
+
         $this->_presentation_contexts[] = new CDicomPresentationContext($_pres_context[0], $_pres_context[1], $_pres_context[2]);
       }
     }
-    
-    parent::updateFormFields();
+
+    if ($this->requests && !$this->_requests && $this->_presentation_contexts) {
+      $request_msgs = explode("|", $this->requests);
+      $this->_requests = array();
+
+      foreach ($request_msgs as $msg) {
+        $msg = base64_decode($msg);
+        $pdu = CDicomPDUFactory::decodePDU($msg, $this->_presentation_contexts);
+        $this->_requests[] = $pdu;
+      }
+    }
+
+    if ($this->responses && !$this->_responses && $this->_presentation_contexts) {
+      $response_msgs = explode("|", $this->responses);
+      $this->_responses = array();
+
+      foreach ($response_msgs as $msg) {
+        $pdu = CDicomPDUFactory::decodePDU(base64_decode($msg), $this->_presentation_contexts);
+        $this->_responses[] = $pdu;
+      }
+    }
   }
   
   /**
@@ -161,7 +157,7 @@ class CExchangeDicom extends CExchangeBinary {
    */
   function updatePlainFields() {
     parent::updatePlainFields();
-    
+
     if ($this->_presentation_contexts && !$this->presentation_contexts) {
       foreach ($this->_presentation_contexts as $_pres_context) {
         if (!$this->presentation_contexts) {
@@ -179,10 +175,10 @@ class CExchangeDicom extends CExchangeBinary {
       $this->requests = null;
       foreach ($this->_requests as $_request) {
         if (!$this->requests) {
-          $this->requests = $_request->getPacket();
+          $this->requests = base64_encode($_request->getPacket());
         }
         else {
-          $this->requests .= "|" . $_request->getPacket();
+          $this->requests .= "|" . base64_encode($_request->getPacket());
         }  
       }
     }
@@ -191,10 +187,10 @@ class CExchangeDicom extends CExchangeBinary {
       $this->responses = null;
       foreach ($this->_responses as $_response) {
         if (!$this->responses) {
-          $this->responses = $_response->getPacket();
+          $this->responses = base64_encode($_response->getPacket());
         }
         else {
-          $this->responses .= "|" . $_response->getPacket();
+          $this->responses .= "|" . base64_encode($_response->getPacket());
         }  
       }
     }
@@ -269,20 +265,45 @@ class CExchangeDicom extends CExchangeBinary {
     }
     
     $pdu = CDicomPDUFactory::decodePDU($msg, $this->_presentation_contexts);
-    
-    if (!$this->_requests) {
-      $this->_requests = array();
+    $pdvs = $pdu->getPDVs();
+
+    $msg_types = array();
+    $msg_classes = array();
+
+    foreach ($pdvs as $pdv) {
+      $msg = $pdv->getMessage();
+      $msg_types[] = $msg->type;
+      $msg_classes[] = get_class($msg);
     }
-    $pdv = $pdu->getPDV();
-    $this->_requests[] = $pdu;
+
     
-    $msg = $pdv->getMessage();
+    if ($msg_types[0] == "C-Find-RQ" || $msg_types[0] == "C-Echo-RQ") {
+      if (!$this->_requests) {
+        $this->_requests = array();
+      }
+      $this->_requests[] = $pdu;
+    }
+    elseif ($msg_types[0] == "C-Echo-RSP" || $msg_types[0] == "C-Find-RSP") {
+      if (!$this->_responses) {
+        $this->_responses = array();
+      }
+      $this->_responses[] = $pdu;
+    }
+    elseif ($msg_types[0] == "Datas") {
+      if ($this->_responses) {
+        $this->_responses[] = $pdu;
+      }
+      else {
+        $this->_requests[] = $pdu;
+      }
+    }
+    
     foreach ($this->getFamily() as $_family) {
       $family_class = new $_family;
       $events = $family_class->getEvenements();
-      if (array_key_exists($msg->type, $events)) {
+      if (array_key_exists($msg_types[0], $events)) {
         $this->_family_message_class = $_family;
-        $this->_family_message = get_class($msg);
+        $this->_family_message = $msg_classes[0];
         $this->message_valide = 1;
         return true;
       }
@@ -290,4 +311,3 @@ class CExchangeDicom extends CExchangeBinary {
     return false;
   }
 }
-?>

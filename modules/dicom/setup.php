@@ -14,8 +14,8 @@ class CSetupdicom extends CSetup {
 
   /**
    * The constructor
-   * 
-   * @return null
+   *
+   * @return \CSetupdicom
    */
   function __construct() {
     parent::__construct();
@@ -94,7 +94,25 @@ class CSetupdicom extends CSetup {
     $query = "ALTER TABLE `dicom_exchange`
                 ADD INDEX (`date_production`);";
     
-    $this->mod_version = "0.1";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.1");
+    
+//    $query = "CREATE TABLE `dicom_table_entry` (
+//                `dicom_table_entry_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+//                `group_number` INT (11) NOT NULL,
+//                `element_number` INT (11) NOT NULL,
+//                `mb_object_class` VARCHAR (255) NOT NULL,
+//                `mb_object_attr` VARCHAR (255) NOT NULL,
+//                `group_id` INT (11) NOT NULL
+//              ) /*! ENGINE=MyISAM */;";
+//    $this->addQuery($query);
+
+    $query = "ALTER TABLE `dicom_exchange`
+                MODIFY `requests` TEXT,
+                MODIFY `responses` TEXT;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.2";
   }
 }
-?>

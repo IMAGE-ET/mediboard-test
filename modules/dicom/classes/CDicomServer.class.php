@@ -34,7 +34,6 @@ class CDicomServer extends CSocketBasedServer {
    * @return boolean
    */
   function isMessageFull($message) {
-    echo bin2hex($message) . "\n";
     $length = unpack("N", substr($message, 2, 4));
     if ($length[1] == strlen($message) - 6) {
       return true;
@@ -120,12 +119,12 @@ class CDicomServer extends CSocketBasedServer {
     $buffer .= $request;
     return base64_encode($buffer);
   }
-  
+
   /**
    * Decode the response and return it
-   * 
+   *
    * @param string $ack The response
-   * 
+   *
    * @return string
    */
   function decodeResponse($ack) {
@@ -141,4 +140,3 @@ class CDicomServer extends CSocketBasedServer {
     return "";
   }
 }
-?> 

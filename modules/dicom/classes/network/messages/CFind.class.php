@@ -17,11 +17,11 @@ class CFind {
     "C-Cancel-Find-RQ"  => "CDicomMessageCCancelFindRQ",
     "Datas"             => "CDicomMessageCFindData",
   );
-  
+
   /**
    * The constructor
-   * 
-   * @return null
+   *
+   * @return \CFind
    */
   function __construct() {
     $this->type = "Find";
@@ -35,5 +35,4 @@ class CFind {
   function getEvenements() {
     return self::$evenements;
   }
-}   
-?>
+}

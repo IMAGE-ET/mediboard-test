@@ -182,4 +182,3 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
     return $str;
   }
 }
-?>

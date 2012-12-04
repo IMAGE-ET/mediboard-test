@@ -68,4 +68,3 @@ $smarty->assign("order_col", $order_col);
 $smarty->assign("order_way", $order_way);
 
 $smarty->display("inc_sessions.tpl");
-?>

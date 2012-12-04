@@ -206,7 +206,7 @@ class CDicomPDV {
   /**
    * Return the message
    * 
-   * @return CDicomService
+   * @return CDicomMessage
    */
   function getMessage() {
     return $this->message;
@@ -306,7 +306,7 @@ class CDicomPDV {
    */
   function decode(CDicomStreamReader $stream_reader) {
     // On fait un stream temp pour le message
-    $this->length = $stream_reader->readUInt32();
+    //$this->length = $stream_reader->readUInt32();
     $this->pres_context_id = $stream_reader->readUInt8();
     $this->message_control_header = $stream_reader->readUInt8();
     
@@ -315,7 +315,7 @@ class CDicomPDV {
     
     $handle = fopen("php://temp", "w+");
     fwrite($handle, $message_content);
-    
+
     $message_stream = new CDicomStreamReader($handle);
     $message_stream->rewind();
     $message_stream->setStreamLength($message_length);
@@ -323,7 +323,7 @@ class CDicomPDV {
     if (!$this->transfer_syntax = $this->getTransferSyntax()) {
       /** @todo throw exception **/
     }
-    
+
     $this->message = CDicomMessageFactory::decodeMessage($message_stream, $this->message_control_header, $this->transfer_syntax);
     $message_stream->close();
     

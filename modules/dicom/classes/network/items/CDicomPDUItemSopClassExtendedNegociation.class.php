@@ -228,4 +228,3 @@ class CDicomPDUItemSopClassExtendedNegociation extends CDicomPDUItem {
             </ul>";
   }
 }
-?>

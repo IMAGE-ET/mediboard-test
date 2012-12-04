@@ -41,7 +41,7 @@ class CDicomPDUItemMaximumLength extends CDicomPDUItem {
   /**
    * Set the maximum length
    * 
-   * @param interer $max_length The maximum length of PDU
+   * @param integer $max_length The maximum length of PDU
    * 
    * @return null
    */
@@ -120,4 +120,3 @@ class CDicomPDUItemMaximumLength extends CDicomPDUItem {
             </ul>";
   }
 }
-?>

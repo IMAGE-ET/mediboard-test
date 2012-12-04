@@ -108,4 +108,3 @@ class CDicomPDUItemApplicationContext extends CDicomPDUItem {
             </ul>";
   }
 }
-?>

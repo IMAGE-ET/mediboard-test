@@ -79,7 +79,7 @@ class CDicomDataSet {
       }
     }
     
-    if ($this->group_number != null && $this->element_number != null) {
+    if (!is_null($this->group_number) && !is_null($this->element_number)) {
       $this->setDataSet();
     }
   }
@@ -183,6 +183,26 @@ class CDicomDataSet {
   public function getVm() {
     return $this->vm;
   }
+
+  /**
+   * Set the length of the value
+   *
+   * @param integer $length The length
+   *
+   * @return void
+   */
+  public function setLength($length) {
+    $this->length = $length;
+  }
+
+  /**
+   * Get the length of the value
+   *
+   * @return integer
+   */
+  public function getLength() {
+    return $this->length;
+  }
   
   /**
    * Set the value
@@ -211,10 +231,11 @@ class CDicomDataSet {
    * @return null
    */
   public function setDataSet() {
-    $dataset = CDicomDictionary::getDataSet($this->group_number, $this->element_number);
-    $this->vr = $dataset[0];
-    $this->vm = $dataset[1];
-    $this->name = $dataset[2];
+    if (is_array($dataset = CDicomDictionary::getDataSet($this->group_number, $this->element_number))) {
+      $this->vr = $dataset[0];
+      $this->vm = $dataset[1];
+      $this->name = $dataset[2];
+    }
   }
   
   /**
@@ -229,11 +250,6 @@ class CDicomDataSet {
     }
     else {
       $this->length = strlen($this->value);
-      if ($this->vr == "UI") {
-        if ($this->length&1) {
-          $this->length++;
-        }
-      }
     }
   }
   
@@ -310,10 +326,15 @@ class CDicomDataSet {
    * @return null
    */
   protected function encodeImplicit(CDicomStreamWriter $stream_writer, $endianness) {
+    $handle = fopen("php://temp", "w+");
+    $value_writer = new CDicomStreamWriter($handle);
+    $this->encodeValue($value_writer, $endianness);
+    $value_writer->close();
+
     $stream_writer->writeUInt16($this->group_number, $endianness);
     $stream_writer->writeUInt16($this->element_number, $endianness);
     $stream_writer->writeUInt32($this->length, $endianness);
-    $this->encodeValue($stream_writer, $endianness);
+    $stream_writer->write($value_writer->buf);
   }
   
   /**
@@ -326,6 +347,11 @@ class CDicomDataSet {
    * @return null
    */
   protected function encodeExplicit(CDicomStreamWriter $stream_writer, $endianness) {
+    $handle = fopen("php://temp", "w+");
+    $value_writer = new CDicomStreamWriter($handle);
+    $this->encodeValue($value_writer, $endianness);
+    $value_writer->close();
+
     $stream_writer->writeUInt16($this->group_number, $endianness);
     $stream_writer->writeUInt16($this->element_number, $endianness);
     $stream_writer->writeString($this->vr, 2);
@@ -336,7 +362,7 @@ class CDicomDataSet {
     else {
       $stream_writer->writeUInt16($this->length, $endianness);
     }
-    $this->encodeValue($stream_writer, $endianness);
+    $stream_writer->write($value_writer->buf);
   }
   
   /**
@@ -374,6 +400,11 @@ class CDicomDataSet {
       case 'TM' :
       case 'UN' :
       case 'UT' :
+        if ($this->length & 1) {
+          $this->value .= " ";
+          $this->length++;
+        }
+
         $stream_writer->writeString($this->value, $this->length);
         break;
       case 'AT' :
@@ -388,8 +419,9 @@ class CDicomDataSet {
         break;
       case 'UI' :
         $stream_writer->writeUID($this->value, $this->length);
-        if (strlen($this->value < $this->length)) {
+        if ($this->length & 1) {
           $stream_writer->writeUInt8(0x00);
+          $this->length++;
         }
         break;
       case 'UL' :
@@ -429,12 +461,12 @@ class CDicomDataSet {
         $vr_encoding = "Explicit";
         $endianness = "BE";
         break;
-      default :
-        
-        break;
     }
+
     $method = "decode$vr_encoding";
-    $this->$method($stream_reader, $endianness);
+    if ($method != "decode" && method_exists($this, $method)) {
+      $this->$method($stream_reader, $endianness);
+    }
   }
   
   /**
@@ -450,9 +482,10 @@ class CDicomDataSet {
     $this->group_number = $stream_reader->readUInt16($endianness);
     $this->element_number = $stream_reader->readUInt16($endianness);
     $this->length = $stream_reader->readUInt32($endianness);
-
     $this->setDataSet();
-    $this->decodeValue($stream_reader, $endianness);
+    if ($this->length > 0) {
+      $this->decodeValue($stream_reader, $endianness);
+    }
   }
   
   /**
@@ -475,14 +508,16 @@ class CDicomDataSet {
     else {
       $stream_reader->readUInt16($this->length, $endianness);
     }
-    $this->decodeValue($stream_reader, $endianness);
+
+    if ($this->length > 0) {
+      $this->decodeValue($stream_reader, $endianness);
+    }
   }
   
   /**
    * Decode the value
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
-   * 
    * @param string						 $endianness		The endianness, must be equal to "BE" (Big Endian) or "LE" (Little Endian)
    * 
    * @return null
@@ -554,4 +589,3 @@ class CDicomDataSet {
             <td>$this->value</td>";
   }
 }
-?>

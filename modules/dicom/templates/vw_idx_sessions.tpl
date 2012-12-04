@@ -8,30 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-  DicomSession = {
-    refreshSession : function() {
-      
-    },
-    
-    refreshSessionsList : function(form) {
-      var url = new Url("dicom", "ajax_refresh_session_list");
-      url.addFormData(form);
-      url.requestUpdate("sessionsList");
-      return false;
-    },
-    
-    viewSession : function(session_guid) {
-      var url = new Url("dicom", "ajax_vw_session_details");
-      url.addParam("session_guid", session_guid);
-      url.requestModal();
-    },
-    
-    changePage : function(page) {
-      $V(getForm('sessionsFilters').page,page);
-    }
-  }
-</script>
+{{mb_script module=dicom script=DicomSession ajax=true}}
 
 <table class="main layout">
   <tr>

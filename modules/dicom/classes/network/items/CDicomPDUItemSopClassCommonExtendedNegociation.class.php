@@ -267,4 +267,3 @@ class CDicomPDUItemSopClassCommonExtendedNegociation extends CDicomPDUItem {
     return "$str</ul></li></ul>";
   }
 }
-?>

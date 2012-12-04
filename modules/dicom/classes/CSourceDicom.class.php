@@ -91,7 +91,9 @@ class CSourceDicom extends CExchangeSource {
   
   /**
    * Check if the source is reachable
-   * 
+   *
+   * @todo Faire un vrai isReachable (envoi de CEcho)
+   *
    * @return boolean
    */
   function isReachableSource() {
@@ -106,4 +108,3 @@ class CSourceDicom extends CExchangeSource {
     return true;
   }
 }
-?>

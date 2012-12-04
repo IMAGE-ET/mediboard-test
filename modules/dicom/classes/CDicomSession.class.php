@@ -10,7 +10,7 @@
 /**
  * The Dicom session
  * 
- * @todo Modifier la facon dont le presentation context est stocké : faire un mix entre le reply et le request
+ * @todo Modifier la facon dont le presentation context est stockï¿½ : faire un mix entre le reply et le request
  */
 class CDicomSession extends CMbObject {
   
@@ -422,7 +422,7 @@ class CDicomSession extends CMbObject {
   /**
    * Load the dicom exchange
    *
-   * @param bool $cache
+   * @param bool $cache True if the cache is used, false if not
    *
    * @return CExchangeDicom
    */
@@ -579,7 +579,7 @@ class CDicomSession extends CMbObject {
   function loadMessages() {
     $this->loadRefDicomExchange();
     if ($this->_ref_dicom_exchange) {
-      $this->_ref_dicom_exchange->loadContent();
+      $this->_ref_dicom_exchange->decodeContent();
     }  
       
     $this->_messages = array();
@@ -838,7 +838,7 @@ class CDicomSession extends CMbObject {
     $this->state = self::STA6;
     
     /**
-     * @todo envoyer les données
+     * @todo envoyer les donnï¿½es
      */
   }
   
@@ -963,9 +963,18 @@ class CDicomSession extends CMbObject {
    * @see DICOM Standard PS 3.8 Section 9.2
    */
   protected function doDT1($datas) {
-    $pdu = $datas;
-    
-    return $pdu->getPacket();
+    $response = "";
+    if (is_array($datas)) {
+      foreach ($datas as $pdu) {
+        $response .= $pdu->getPacket();
+      }
+    }
+    else {
+      $pdu = $datas;
+      $response = $pdu->getPacket();
+    }
+
+    return $response;
   }
   
   /**
@@ -981,13 +990,16 @@ class CDicomSession extends CMbObject {
    */
   protected function doDT2($datas) {
     $ack = CEAIDispatcher::dispatch(array("msg" => $datas, "pres_contexts" => $this->_presentation_contexts), $this->_ref_actor, $this->dicom_exchange_id);
-    if (array_key_exists("event", $ack) && array_key_exists("datas", $ack) && array_key_exists("exchange_id", $ack)) {
+    if (!is_null($ack) && array_key_exists("exchange_id", $ack)) {
       if (!$this->dicom_exchange_id) {    
         $this->dicom_exchange_id = $ack["exchange_id"];
       }
-      
-      return $this->handleEvent($ack["event"], $ack["datas"]);
+
+      if (array_key_exists("event", $ack) && array_key_exists("datas", $ack)) {
+        return $this->handleEvent($ack["event"], $ack["datas"]);
+      }
     }
+    return '';
   }
   
   /**
@@ -1336,4 +1348,3 @@ class CDicomSession extends CMbObject {
     return $pdu->getPacket();
   }
 }
-?>

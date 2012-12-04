@@ -95,4 +95,3 @@ class CDicomPDUAReleaseRP extends CDicomPDU {
     echo $str;
   }
 }
-?>

@@ -41,12 +41,15 @@ class CDicomMessageFactory {
       $dataset->decode($stream_reader, $transfer_syntax);
       $datasets[$dataset->getElementNumber()] = $dataset;
       $stream_reader->rewind();
-      
+
+      if (!array_key_exists(0x0100, $datasets)) {
+        return null;
+      }
       $message_class = self::getMessageClass($datasets[0x0100]->getValue());
     }
     $message = new $message_class();
     $message->decode($stream_reader, $transfer_syntax);
-    
+
     return $message;
   }
   
@@ -84,4 +87,3 @@ class CDicomMessageFactory {
     return $class;
   }
 }
-?>

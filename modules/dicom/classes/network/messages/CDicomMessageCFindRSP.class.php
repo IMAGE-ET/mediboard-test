@@ -343,4 +343,3 @@ class CDicomMessageCFindRSP {
             </table>";
   }
 }
-?>

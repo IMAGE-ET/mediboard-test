@@ -306,4 +306,3 @@ class CDicomMessageCEchoRQ {
             </table>";
   }
 }
-?>

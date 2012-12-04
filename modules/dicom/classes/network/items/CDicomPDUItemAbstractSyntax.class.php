@@ -108,4 +108,3 @@ class CDicomPDUItemAbstractSyntax extends CDicomPDUItem {
             </ul>";
   }
 }
-?>

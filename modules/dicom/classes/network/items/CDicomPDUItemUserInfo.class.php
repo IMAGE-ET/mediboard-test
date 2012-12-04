@@ -131,4 +131,3 @@ class CDicomPDUItemUserInfo extends CDicomPDUItem {
     return $str;
   }
 }
-?>

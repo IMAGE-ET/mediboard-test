@@ -51,6 +51,7 @@ class CDicomStreamWriter {
       }
       return $this->write($bin, $bytes);
     }
+    return;
   }
   
   /**
@@ -97,9 +98,9 @@ class CDicomStreamWriter {
   /**
    * Write hexadecimal numbers from the stream
    *  
-   * @param integer     $hexa       The hexadecimal string
-   * @param int         $length     The length of the number, equal to 1 if not given
-   * @param string      $endianness Equal to BE if you need Big Endian, LE if Little Endian. Equal to BE if not given
+   * @param integer $hexa       The hexadecimal string
+   * @param int     $length     The length of the number, equal to 1 if not given
+   * @param string  $endianness Equal to BE if you need Big Endian, LE if Little Endian. Equal to BE if not given
    * 
    * @return integer|void on error
    */
@@ -115,8 +116,8 @@ class CDicomStreamWriter {
   /**
    * Write hexadecimal numbers from the stream. Use Big Endian syntax
    * 
-   * @param integer     $hexa   The hexadecimal string
-   * @param int         $length The length of the number, equal to 1 if not given
+   * @param integer $hexa   The hexadecimal string
+   * @param int     $length The length of the number, equal to 1 if not given
    * 
    * @return integer or false on error
    */
@@ -128,8 +129,8 @@ class CDicomStreamWriter {
   /**
    * Write hexadecimal numbers from the stream. Use Little Endian syntax
    * 
-   * @param integer     $hexa   The hexadecimal string
-   * @param int         $length The length of the number, equal to 1 if not given
+   * @param integer $hexa   The hexadecimal string
+   * @param int     $length The length of the number, equal to 1 if not given
    * 
    * @return integer or false on error
    */
@@ -316,5 +317,4 @@ class CDicomStreamWriter {
     $bin = pack("A*", $uid);
     return $this->write($bin, $length);
   }
-} 
-?>
+}

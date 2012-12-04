@@ -171,4 +171,3 @@ class CDicomPDUAAbort extends CDicomPDU {
     echo $str;
   }
 }
-?>

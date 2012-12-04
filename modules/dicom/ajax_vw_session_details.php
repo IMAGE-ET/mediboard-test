@@ -22,4 +22,3 @@ $session->loadMessages();
 $smarty = new CSmartyDP();
 $smarty->assign("session", $session);
 $smarty->display("inc_session_details.tpl");
-?>

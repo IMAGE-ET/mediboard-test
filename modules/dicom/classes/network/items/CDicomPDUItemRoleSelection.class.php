@@ -191,4 +191,3 @@ class CDicomPDUItemRoleSelection extends CDicomPDUItem {
             </ul>";
   }
 }
-?>

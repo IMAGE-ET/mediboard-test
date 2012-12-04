@@ -43,7 +43,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
   /**
    * The presentation contexts
    * 
-   * @var array of CDicomPDUItemPresentationContext
+   * @var CDicomPDUItemPresentationContext[]
    */
   var $presentation_contexts = array();
   
@@ -166,7 +166,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
   function decodePDU(CDicomStreamReader $stream_reader) {
     $this->protocol_version = $stream_reader->readUInt16();
     
-    // On vérifie que la version du protocole est bien 0001
+    // On vï¿½rifie que la version du protocole est bien 0001
     if ($this->protocol_version != 0x0001) {
       // Erreur
       echo "Protocol version differente de 1";
@@ -181,7 +181,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
     $this->calling_AE_title = $stream_reader->readString(16);
     
     
-    // On passe 32 octets, réservés par Dicom
+    // On passe 32 octets, rï¿½servï¿½s par Dicom
     $stream_reader->skip(32);
     
     $this->application_context = CDicomPDUItemFactory::decodeItem($stream_reader);
@@ -194,7 +194,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
    * 
    * @param CDicomStreamWriter $stream_writer The stream writer
    *  
-   * @return null
+   * @return void
    */
   function encodePDU(CDicomStreamWriter $stream_writer) {
     $this->calculateLength();
@@ -262,4 +262,3 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
     echo $str;
   }
 }
-?>

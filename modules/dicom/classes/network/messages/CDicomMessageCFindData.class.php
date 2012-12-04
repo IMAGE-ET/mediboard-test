@@ -20,12 +20,12 @@ class CDicomMessageCFindData {
    * 
    * @var array
    */
-  protected $attributes = null;
+  protected $attributes;
   
   /**
    * An array which contains the datasets
    * 
-   * @var CDicomDataSet[]
+   * @var array
    */
   protected $datasets = array();
   
@@ -34,7 +34,7 @@ class CDicomMessageCFindData {
    * 
    * @var string
    */
-  protected $content = null;
+  protected $content;
   
   /**
    * The type of the message
@@ -161,9 +161,12 @@ class CDicomMessageCFindData {
    * 
    * @param string             $transfer_syntax The UID of the transfer syntax
    * 
-   * @return null
+   * @return void
    */
   function decode(CDicomStreamReader $stream_reader, $transfer_syntax) {
+    if (!$transfer_syntax) {
+      return;
+    }
     $this->attributes = array();
     $this->datasets = array();
     $stream_length = $stream_reader->getStreamLength();
@@ -184,7 +187,33 @@ class CDicomMessageCFindData {
       $this->attributes[$group][$element] = $dataset->getValue();
     }
   }
-  
+
+  /**
+   * Return the list of the requested datas, when the message follows a C-Find-RQ
+   *
+   * @return array|void
+   */
+  function getRequestedDatas() {
+    if (!$this->datasets) {
+      return null;
+    }
+    $requested_datas = array();
+    foreach ($this->datasets as $_group_number => $_group) {
+      foreach ($_group as $_element_number => $element) {
+        if ($_element_number == 0x000 || $element->getLength() != 0) {
+          continue;
+        }
+
+        if (!array_key_exists($_group_number, $_group)) {
+          $requested_datas[$_group_number] = array();
+        }
+        $requested_datas[$_group_number][] = $_element_number;
+      }
+    }
+
+    return $requested_datas;
+  }
+
   /**
    * Return a string representation of the class
    * 

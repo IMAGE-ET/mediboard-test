@@ -118,4 +118,3 @@ function getEventName($type) {
   }
   return $event;
 }
-?>

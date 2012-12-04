@@ -21,4 +21,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("session", $session);
 $smarty->assign("page", 0);
 $smarty->display("vw_idx_sessions.tpl");
-?>

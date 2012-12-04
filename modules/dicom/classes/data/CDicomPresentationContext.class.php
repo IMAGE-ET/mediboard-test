@@ -32,17 +32,17 @@ class CDicomPresentationContext {
    * @var string
    */
   var $transfer_syntax = null;
-  
+
   /**
    * The constructor
-   * 
+   *
    * @param integer $id              The id
-   * 
+   *
    * @param string  $abstract_syntax The abstract syntax
-   * 
+   *
    * @param string  $transfer_syntax The transfer syntax
-   * 
-   * @return null
+   *
+   * @return \CDicomPresentationContext
    */
   function __construct($id, $abstract_syntax, $transfer_syntax = null) {
     $this->id = $id;
@@ -50,4 +50,3 @@ class CDicomPresentationContext {
     $this->transfer_syntax = $transfer_syntax;
   }
 }
-?>

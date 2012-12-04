@@ -120,4 +120,3 @@ class CDicomPDUItemImplementationClassUID extends CDicomPDUItem {
             </ul>";
   }
 }
-?>
