@@ -29,9 +29,10 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $results[$i]["lastname"]      = addslashes(trim($line[0]));
     $results[$i]["firstname"]     = addslashes(trim($line[1]));
     $results[$i]["login"]         = addslashes(trim($line[2]));
-    $results[$i]["type"]          = addslashes(trim($line[3]));
-    $results[$i]["function_name"] = addslashes(trim($line[4]));
-    $results[$i]["profil_name"]   = addslashes(trim($line[5]));
+    $results[$i]["password"]      = addslashes(trim($line[3]));
+    $results[$i]["type"]          = addslashes(trim($line[4]));
+    $results[$i]["function_name"] = addslashes(trim($line[5]));
+    $results[$i]["profil_name"]   = addslashes(trim($line[6]));
     
     $results[$i]["error"] = 0;
     
@@ -40,17 +41,18 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $function->group_id = CGroups::loadCurrent()->_id;
     $function->text     = $results[$i]["function_name"];
     $function->loadMatchingObject();
-    if(!$function->_id) {
+    if (!$function->_id) {
       if(in_array($results[$i]["type"], array("3", "4", "13"))) {
         $function->type = "cabinet";
-      } else {
+      }
+      else {
         $function->type = "administratif";
       }
       $function->color              = "ffffff";
       $function->compta_partagee    = 0;
       $function->consults_partagees = 1;
       $msg = $function->store();
-      if($msg) {
+      if ($msg) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
         $results[$i]["error"] = $msg;
         $results[$i]["username"] = "";
@@ -72,21 +74,25 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $user->_user_last_name  = $results[$i]["lastname"];
     $user->_user_first_name = $results[$i]["firstname"];
     $user->_user_type       = $results[$i]["type"];
-    if($profil->_id) {
+    if ($profil->_id) {
       $user->_profile_id       = $profil->_id;
-    } else {
+    }
+    else {
       $results[$i]["profil_name"] .= " : Non trouvé";
     }
     $user->makeUsernamePassword($results[$i]["firstname"], $results[$i]["lastname"]);
-    if($results[$i]["login"]) {
+    if ($results[$i]["login"]) {
       $user->_user_username = $results[$i]["login"];
-    };
+    }
+    if ($results[$i]["password"]) {
+      $user->_user_password = $results[$i]["password"];
+    }
     $user->actif  = 1;
     $user->remote = 0;
     $user->function_id = $function->_id;
     
     $msg = $user->store();
-    if($msg) {
+    if ($msg) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
       $results[$i]["error"] = $msg;
       $results[$i]["username"] = "";

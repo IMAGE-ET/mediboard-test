@@ -17,6 +17,7 @@
     <li>Nom *</li>
     <li>Prénom *</li>
     <li>Login</li>
+    <li>Mot de passe</li>
     <li>Type (code numérique) *</li>
     <li>Fonction (nom) *</li>
     <li>Profil (username)</li>
