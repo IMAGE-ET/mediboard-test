@@ -26,6 +26,10 @@ class CPearPackage extends CPrerequisite {
    * @return bool
    */
   function check($strict = true) {
+    if (!$this->mandatory && !$strict) {
+      return true;
+    }
+
     return @include_once "$this->name.php";
   }
   
