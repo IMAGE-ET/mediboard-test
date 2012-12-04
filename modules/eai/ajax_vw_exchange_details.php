@@ -85,6 +85,7 @@ switch(true) {
     break;
 
   case $exchange instanceof CExchangeDicom :
+    $exchange->decodeContent();
     $smarty->display("inc_exchange_dicom_details.tpl");
     break;
   
