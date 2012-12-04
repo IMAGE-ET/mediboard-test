@@ -83,7 +83,8 @@ Main.add(function() {
            {{if array_key_exists($_day, $planning->day_labels)}}
              {{assign var=_labels_for_day value=$planning->day_labels.$_day}}
              {{foreach from=$_labels_for_day item=_days_label}}
-               <label style="background: {{$_days_label.color}};" title="{{$_days_label.detail}}">
+               {{assign var=onclick value=$_days_label.onclick}}
+               <label style="background: {{$_days_label.color}}; {{if $onclick}}cursor: pointer{{/if}}" title="{{$_days_label.detail}}" {{if $onclick}}onclick="{{$onclick|smarty:nodefaults|escape:"javascript"}}"{{/if}}>
                  {{$_days_label.text}}
                </label>
              {{/foreach}}

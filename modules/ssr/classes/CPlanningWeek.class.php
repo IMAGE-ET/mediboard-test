@@ -210,11 +210,12 @@ class CPlanningWeek {
    * @param object $detail [optional] Details about the label
    * @param object $color [optional] The label's color
    */
-  function addDayLabel($day, $text, $detail = null, $color = null) {
+  function addDayLabel($day, $text, $detail = null, $color = null, $onclick = null) {
     $this->day_labels[$this->no_dates ? $day : mbDate($day)][] = array(
       "text"   => $text, 
       "detail" => $detail, 
       "color"  => $color,
+      "onclick" => $onclick
     );
   }
   

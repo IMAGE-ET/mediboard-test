@@ -15,27 +15,34 @@ function viewItem(guid, id, date, oTd) {
   oTd.up("table").select(".event").invoke("removeClassName", "selected");
   oTd.up(".event").addClassName("selected");
    
-  //Affichage de la partie droite correspondante
-  var url = new Url;
+  // Affichage de la partie droite correspondante
+  var sClass = guid.split("-")[0];
+  
+  viewList(date, id, sClass);  
+}
+
+function viewList(date, id, sClass) {
+  var url = new Url();
   url.addParam("board"     , "1");
   url.addParam("boardItem" , "1");
   
   url.addParam("date"    , date);
-
-  var sClass = guid.split("-")[0];
   
-  if(sClass == "CPlageconsult"){
-    url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
-    url.addParam("chirSel" , "{{$chirSel}}");
-    url.addParam("plageconsult_id", id);
-    url.addParam("selConsult"     , "");
-  } 
-  else if(sClass == "CPlageOp"){
-    url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
-    url.addParam("pratSel" , "{{$chirSel}}");
-    url.addParam("urgences", "0");
-  } else return;
-
+  switch (sClass) {
+    case "CPlageconsult":
+      url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
+      url.addParam("chirSel" , "{{$chirSel}}");
+      url.addParam("plageconsult_id", id);
+      url.addParam("selConsult"     , "");
+      break;
+    case "CPlageOp":
+      url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
+      url.addParam("pratSel" , "{{$chirSel}}");
+      url.addParam("urgences", "0");
+      break;
+    default:
+      return;
+  }
   url.requestUpdate('viewTooltip');
 }
 

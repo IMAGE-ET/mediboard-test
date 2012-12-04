@@ -76,11 +76,24 @@ for ($i = 0; $i < 7; $i++) {
 
 $where = array();
 $where[] = "chir_id = '$chirSel' OR anesth_id = '$chirSel'";
+$operation = new COperation();
 
 for ($i = 0; $i < 7; $i++) {
   $date             = mbDate("+$i day", $debut);
   $where["date"]    = "= '$date'";
   $plagesOp = $plageOp->loadList($where);
+  
+  // Affichage en label du nombre d'interventions hors plage dans la journée
+  $where["annulee"] = " = '0'";
+  
+  $nb_hors_plages = $operation->countList($where);
+  
+  if ($nb_hors_plages) {
+    $onclick = "viewList('$date', null, 'CPlageOp')";
+    $planning->addDayLabel($date, "$nb_hors_plages intervention(s) hors-plage", null, "#ffd700", $onclick);
+  }
+  
+  unset($where["annulee"]);
   
   foreach ($plagesOp as $_op) {
     $_op->loadRefSalle();

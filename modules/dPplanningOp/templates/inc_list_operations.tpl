@@ -182,9 +182,7 @@
     <tr>
       {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
       
-      {{if !$board}}
-        <td rowspan="2" class="narrow"></td>
-      {{/if}}
+      <td rowspan="2" class="narrow"></td>
       
       <td class="top text" class="top" {{if !$board}}rowspan="2"{{/if}}>
         {{if $patient->_ref_dossier_medical->_id && $patient->_ref_dossier_medical->_count_allergies}}
