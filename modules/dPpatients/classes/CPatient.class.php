@@ -1622,6 +1622,7 @@ class CPatient extends CMbObject {
           $template->addProperty("Patient - employeur - cp"     , $_correspondant->cp);
           $template->addProperty("Patient - employeur - ville"  , $_correspondant->ville);
           $template->addProperty("Patient - employeur - tel"    , $_correspondant->getFormattedValue("tel"));
+          $template->addProperty("Patient - employeur - mobile" , $_correspondant->getFormattedValue("mob"));
           $template->addProperty("Patient - employeur - urssaf" , $_correspondant->urssaf);
           break;
         case "prevenir":
@@ -1631,6 +1632,7 @@ class CPatient extends CMbObject {
           $template->addProperty("Patient - prévenir - cp"     , $_correspondant->cp);
           $template->addProperty("Patient - prévenir - ville"  , $_correspondant->ville);
           $template->addProperty("Patient - prévenir - tel"    , $_correspondant->getFormattedValue("tel"));
+          $template->addProperty("Patient - prévenir - mobile" , $_correspondant->getFormattedValue("mob"));
           $template->addProperty("Patient - prévenir - parente", $_correspondant->parente);
           break;
         case "confiance":
@@ -1642,6 +1644,7 @@ class CPatient extends CMbObject {
           $template->addProperty("Patient - confiance - cp"     , $_correspondant->cp);
           $template->addProperty("Patient - confiance - ville"  , $_correspondant->ville);
           $template->addProperty("Patient - confiance - tel"    , $_correspondant->getFormattedValue("tel"));
+          $template->addProperty("Patient - confiance - mobile" , $_correspondant->getFormattedValue("mob"));
           $template->addProperty("Patient - confiance - parente", $_correspondant->parente);
       }
     }
