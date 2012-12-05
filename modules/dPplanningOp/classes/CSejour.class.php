@@ -2155,7 +2155,7 @@ class CSejour extends CCodable implements IPatientRelated {
 
     $this->notify("BeforeFillLimitedTemplate", $template);
 
-    $template->addProperty("Admission - Date longue"          , $this->getFormattedValue("entree_prevue"));
+    $template->addLongDateProperty("Admission - Date longue"  , $this->entree_prevue);
     $template->addDateProperty("Admission - Date"             , $this->entree_prevue);
     $template->addTimeProperty("Admission - Heure"            , $this->entree_prevue);
     $template->addProperty("Admission - Type"                 , $this->getFormattedValue("type"));
@@ -2168,6 +2168,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $template->addBarcode ("Sejour - Code barre NDOS"         , "NDOS$this->_NDA");
 
     $template->addDateProperty("Sejour - Date entrée"         , $this->entree);
+    $template->addLongDateProperty("Sejour - Date entrée (longue)", $this->entree);
     $template->addTimeProperty("Sejour - Heure entrée"        , $this->entree);
     $template->addDateProperty("Sejour - Date sortie"         , $this->sortie);
     $template->addTimeProperty("Sejour - Heure sortie"        , $this->sortie);
