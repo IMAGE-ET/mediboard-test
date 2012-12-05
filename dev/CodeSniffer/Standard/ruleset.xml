@@ -4,6 +4,8 @@
 
   <!-- File exclusions -->
   <exclude-pattern>/*.js</exclude-pattern>
+  <exclude-pattern>/en.php</exclude-pattern>
+  <exclude-pattern>/fr.php</exclude-pattern>
   <exclude-pattern>/dev/</exclude-pattern>
   <exclude-pattern>/config.php</exclude-pattern>
   <exclude-pattern>/files/</exclude-pattern>
@@ -12,7 +14,36 @@
   <exclude-pattern>/libpkg/</exclude-pattern>
   <exclude-pattern>/locales/</exclude-pattern>
   <exclude-pattern>/templates/</exclude-pattern>
+  <!--<exclude-pattern>/modules/a*</exclude-pattern>
+  <exclude-pattern>/modules/b*</exclude-pattern>
+  <exclude-pattern>/modules/c*</exclude-pattern>
+  <exclude-pattern>/modules/d*</exclude-pattern>
+  <exclude-pattern>/modules/dP*</exclude-pattern>
+  <exclude-pattern>/modules/e*</exclude-pattern>
+  <exclude-pattern>/modules/f*</exclude-pattern>
+  <exclude-pattern>/modules/g*</exclude-pattern>
+  <exclude-pattern>/modules/h*</exclude-pattern>
+  <exclude-pattern>/modules/i*</exclude-pattern>
+  <exclude-pattern>/modules/j*</exclude-pattern>
+  <exclude-pattern>/modules/k*</exclude-pattern>
+  <exclude-pattern>/modules/l*</exclude-pattern>
+  <exclude-pattern>/modules/m*</exclude-pattern>
+  <exclude-pattern>/modules/n*</exclude-pattern>
+  <exclude-pattern>/modules/o*</exclude-pattern>
+  <exclude-pattern>/modules/p*</exclude-pattern>
+  <exclude-pattern>/modules/q*</exclude-pattern>
+  <exclude-pattern>/modules/r*</exclude-pattern>
+  <exclude-pattern>/modules/s*</exclude-pattern>
+  <exclude-pattern>/modules/t*</exclude-pattern>
+  <exclude-pattern>/modules/u*</exclude-pattern>
+  <exclude-pattern>/modules/v*</exclude-pattern>
+  <exclude-pattern>/modules/w*</exclude-pattern>
+  <exclude-pattern>/modules/x*</exclude-pattern>
+  <exclude-pattern>/modules/y*</exclude-pattern>
+  <exclude-pattern>/modules/z*</exclude-pattern>-->
+  <exclude-pattern>/tests/</exclude-pattern>
   <exclude-pattern>/tmp/</exclude-pattern>
+  <exclude-pattern>*/vendor/*</exclude-pattern>
 
   <!-- Include some additional sniffs from the Generic standard -->
   <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
@@ -20,13 +51,18 @@
   <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
   <rule ref="Generic.Commenting.Todo"/>
   <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
-  <rule ref="Generic.Metrics.CyclomaticComplexity"/>
   <rule ref="Generic.Metrics.NestingLevel"/>
   <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
   <rule ref="Generic.PHP.LowerCaseConstant"/>
   <rule ref="Generic.PHP.DisallowShortOpenTag"/>
   <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
   <rule ref="Generic.WhiteSpace.ScopeIndent"/>
+  
+  <rule ref="Generic.Metrics.CyclomaticComplexity">
+    <properties>
+      <property name="complexity" value="15"/>
+    </properties>
+  </rule>
 
   <!-- Use 2 spaces indent -->
   <rule ref="Generic.WhiteSpace.ScopeIndent">
@@ -38,17 +74,17 @@
   <!-- Lines length -->
   <rule ref="Generic.Files.LineLength">
     <properties>
-      <property name="lineLimit" value="125"/>
-      <property name="absoluteLineLimit" value="125"/>
+      <property name="lineLimit" value="135"/>
+      <property name="absoluteLineLimit" value="135"/>
     </properties>
   </rule>
 
   <!-- Use Unix newlines -->
-  <rule ref="Generic.Files.LineEndings">
+  <!--<rule ref="Generic.Files.LineEndings">
     <properties>
-      <property name="eolChar" value="\n"/>
+      <property name="eolChar" value="\r\n"/>
     </properties>
-  </rule>
+  </rule>-->
 
   <!-- Use warnings for inline control structures -->
   <rule ref="Generic.ControlStructures.InlineControlStructure">
@@ -135,6 +171,14 @@
   <rule ref="PEAR.NamingConventions.ValidFunctionName.FunctionNoCaptial">
     <severity>0</severity>
   </rule>
+  
+  <rule ref="PEAR.NamingConventions.ValidFunctionName.PublicUnderscore">
+    <severity>0</severity>
+  </rule>
+  
+  <rule ref="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore">
+    <severity>0</severity>
+  </rule>
 
   <rule ref="PEAR.NamingConventions.ValidVariableName.PublicUnderscore">
     <severity>0</severity>
@@ -143,6 +187,16 @@
   <rule ref="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore">
     <severity>0</severity>
   </rule>
+
+  <!--
+  <rule ref="PEAR.Files.IncludingFile.UseInclude">
+    <severity>0</severity>
+  </rule>
+  
+  <rule ref="PEAR.Files.IncludingFile.UseIncludeOnce">
+    <severity>0</severity>
+  </rule>
+  -->
 
   <rule ref="PEAR.WhiteSpace.ScopeClosingBrace">
     <properties>

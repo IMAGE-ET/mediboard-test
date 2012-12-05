@@ -47,6 +47,7 @@ class Standard_Sniffs_ControlStructures_ControlSignatureSniff
       'while (...) {EOL',
       'for (...) {EOL',
       'if (...) {EOL',
+      'switch (...) {EOL',
       'foreach (...) {EOL',
       '}EOLelse if (...) {EOL',
       '}EOLelseif (...) {EOL',
