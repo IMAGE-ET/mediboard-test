@@ -21,38 +21,59 @@ interface ISharedMemory {
   /**
    * Initialize the shared memory
    * Returns true if shared memory is available
+   *
    * @return bool
    */
   function init();
 
   /**
    * Get a variable from shared memory
-   * @param string $key of value to retrieve
+   *
+   * @param string $key Key of value to retrieve
+   *
    * @return mixed the value, null if failed
    */
   function get($key);
 
   /**
    * Put a variable into shared memory
-   * @param string $key of value to store
-   * @param mixed $value the value
+   *
+   * @param string $key   Key of value to store
+   * @param mixed  $value The value
+   *
+   * @return void
    */
   function put($key, $value);
 
   /**
    * Remove a variable from shared memory
-   * @param string $key of value to remove
+   *
+   * @param string $key Key of value to remove
+   *
    * @return bool job-done
    */
   function rem($key);
 
   /**
    * Clears the shared memory
+   *
    * @return bool job-done
    */
   //function clear();
+
+  /**
+   * Return the list of keys
+   *
+   * @param string $prefix The keys' prefix
+   *
+   * @return array Keys list
+   */
+  function listKeys($prefix);
 }
 
+/**
+ * Disk based shared memory
+ */
 class DiskSharedMemory implements ISharedMemory {
   private $dir = null;
 
@@ -81,8 +102,10 @@ class DiskSharedMemory implements ISharedMemory {
   }
 
   function rem($key) {
-    if (is_writable($this->dir.$key))
+    if (is_writable($this->dir.$key)) {
       return unlink($this->dir.$key);
+    }
+
     return false;
   }
 
@@ -93,39 +116,17 @@ class DiskSharedMemory implements ISharedMemory {
     foreach ($files as $file)
       unlink($file);
   }*/
-}
 
+  function listKeys($prefix){
+    $list = array_map("basename", glob($this->dir.$prefix."*"));
+    $len = strlen($prefix);
 
-/**
- * EAccelerator based Memory class
- */
-class EAcceleratorSharedMemory implements ISharedMemory {
-  function init() {
-    return (function_exists('eaccelerator_get') &&
-    function_exists('eaccelerator_put') &&
-    function_exists('eaccelerator_rm'));
-  }
-
-  function get($key) {
-    if ($get = eaccelerator_get($key)) {
-      return unserialize($get);
+    foreach ($list as &$_item) {
+      $_item = substr($_item, $len);
     }
-    return false;
-  }
 
-  function put($key, $value) {
-    return eaccelerator_put($key, serialize($value));
+    return $list;
   }
-
-  function rem($key) {
-    return eaccelerator_rm($key);
-  }
-
-  /*function clear() {
-    eaccelerator_list_keys();
-    eaccelerator_clear();
-    return true;
-  }*/
 }
 
 /**
@@ -133,9 +134,9 @@ class EAcceleratorSharedMemory implements ISharedMemory {
  */
 class APCSharedMemory implements ISharedMemory {
   function init() {
-    return (function_exists('apc_fetch') &&
-    function_exists('apc_store') &&
-    function_exists('apc_delete'));
+    return function_exists('apc_fetch') &&
+           function_exists('apc_store') &&
+           function_exists('apc_delete');
   }
 
   function get($key) {
@@ -153,22 +154,56 @@ class APCSharedMemory implements ISharedMemory {
   /*function clear() {
     return apc_clear_cache('user');
   }*/
+
+  function listKeys($prefix) {
+    $info = apc_cache_info("user");
+    $cache_list = $info["cache_list"];
+    $len = strlen($prefix);
+
+    $keys = array();
+    foreach ($cache_list as $_cache) {
+      $keys[] = substr($_cache["info"], $len);
+    }
+
+    return $keys;
+  }
 }
 
 /** Shared memory container */
 abstract class SHM {
-  static private $engine = null;
-  static private $prefix = null;
+  /**
+   * @var ISharedMemory
+   */
+  static private $engine;
+
+  /**
+   * @var string
+   */
+  static private $prefix;
+
+  /**
+   * Available engines
+   *
+   * @var array
+   */
   static $availableEngines = array(
-    "disk"         => "DiskSharedMemory",
-    "eaccelerator" => "EAcceleratorSharedMemory",
-    "apc"          => "APCSharedMemory",
+    "disk" => "DiskSharedMemory",
+    "apc"  => "APCSharedMemory",
   );
-  
+
+  /**
+   * Initialize the shared memory
+   *
+   * @param string $engine Engine type
+   * @param string $prefix Prefix to use
+   *
+   * @return void
+   */
   static function init($engine = "disk", $prefix = "") {
     if (!isset(self::$availableEngines[$engine])) {
       $engine = "disk";
     }
+
     $engine = new self::$availableEngines[$engine];
     if (!$engine->init()) {
       $engine = new self::$availableEngines["disk"];
@@ -178,17 +213,75 @@ abstract class SHM {
     self::$prefix = "$prefix-";
     self::$engine = $engine;
   }
-  
+
+  /**
+   * Get a value from the shared memory
+   *
+   * @param string $key The key of the value to get
+   *
+   * @return mixed
+   */
   static function get($key) {
     return self::$engine->get(self::$prefix.$key);
   }
-  
+
+  /**
+   * Save a value in the shared memory
+   *
+   * @param string $key   The key to pu the value in
+   * @param mixed  $value The value to put in the shared memory
+   *
+   * @return bool
+   */
   static function put($key, $value) {
     return self::$engine->put(self::$prefix.$key, $value);
   }
-  
+
+  /**
+   * Remove a valur from the shared memory
+   *
+   * @param string $key The key to remove
+   *
+   * @return bool
+   */
   static function rem($key) {
     return self::$engine->rem(self::$prefix.$key);
+  }
+
+  /**
+   * List all the keys in the shared memory
+   *
+   * @return array
+   */
+  static function listKeys() {
+    return self::$engine->listKeys(self::$prefix);
+  }
+
+  /**
+   * Remove a list of keys corresponding to a pattern (* is a wildcard)
+   *
+   * @param string $pattern Pattern with "*" wildcards
+   *
+   * @return int The number of removed key/value pairs
+   */
+  static function remKeys($pattern) {
+    $list = self::listKeys();
+
+    $char = chr(255);
+    $pattern = str_replace("*", $char, $pattern);
+    $pattern = preg_quote($pattern);
+    $pattern = str_replace($char, ".+", $pattern);
+    $pattern = "/^$pattern$/";
+
+    $n = 0;
+    foreach ($list as $_key) {
+      if (preg_match($pattern, $_key)) {
+        self::rem($_key);
+        $n++;
+      }
+    }
+
+    return $n;
   }
 }
 
