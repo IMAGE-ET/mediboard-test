@@ -52,8 +52,6 @@ foreach ($administrations as $_adm) {
   
   if ($_adm->_ref_object instanceof CPrescriptionLineMedicament || $_adm->_ref_object instanceof CPrescriptionLineMixItem) {
     $_produit = $_adm->_ref_object->_ref_produit;
-    
-    $_produit->loadUnitePresentation();
     $_produit->loadRapportUnitePriseByCIS();
     $_produit->updateRatioMassique();
     

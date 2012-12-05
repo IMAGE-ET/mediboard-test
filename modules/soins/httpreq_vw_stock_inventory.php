@@ -38,7 +38,6 @@ foreach($administrations as $_administration){
   $destockages[$code_cip]["quantite"] += $_administration->quantite;
   // Tableaux de cache de medicaments
   if(!isset($medicaments[$code_cip])){
-  	$line->_ref_produit->loadConditionnement();
     $medicaments[$code_cip] =& $line->_ref_produit;
   }
 }

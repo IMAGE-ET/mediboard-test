@@ -156,7 +156,6 @@ if (CModule::getActive("dPprescription")) {
       $line->countVariantes();
       $line->countBackRefs("administration");
       $line->loadRefsVariantes();
-      $line->_ref_produit->loadClasseATC();
       $line->_ref_produit->loadRefsFichesATC();
     }
   

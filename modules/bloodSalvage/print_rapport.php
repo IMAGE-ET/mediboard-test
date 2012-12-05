@@ -29,7 +29,7 @@ if($blood_salvage_id) {
 	if(CModule::getActive("dPmedicament")){
 		$anticoag = new CBcbProduit();
 		if($blood_salvage->anticoagulant_cip) {
-	  	$anticoag->load($blood_salvage->anticoagulant_cip);
+	  	$anticoag = CBcbProduit::get($blood_salvage->anticoagulant_cip);
 		}
 	} else {
 		$list = CAppUI::conf("bloodSalvage AntiCoagulantList");

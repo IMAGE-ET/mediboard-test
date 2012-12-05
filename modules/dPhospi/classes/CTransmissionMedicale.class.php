@@ -86,7 +86,6 @@ class CTransmissionMedicale extends CMbMetaObject {
     if($this->object_id && $this->object_class){
       // Ligne de medicament, cible => classe ATC
       if($this->object_class == "CPrescriptionLineMedicament"){
-        $this->_ref_object->_ref_produit->loadClasseATC();
         $libelle_ATC = $this->_ref_object->_ref_produit->_ref_ATC_2_libelle;
         $this->_cible = $libelle_ATC;
         if(!isset($cibles["ATC"]) || !in_array($libelle_ATC, $cibles["ATC"])){
@@ -105,8 +104,7 @@ class CTransmissionMedicale extends CMbMetaObject {
       if($this->object_class == "CAdministration"){
         if($this->_ref_object->object_class == "CPrescriptionLineMedicament"){
           $this->_ref_object->loadTargetObject();
-          $this->_ref_object->_ref_object->_ref_produit->loadClasseATC();
-	        $libelle_ATC = $this->_ref_object->_ref_object->_ref_produit->_ref_ATC_2_libelle;
+          $libelle_ATC = $this->_ref_object->_ref_object->_ref_produit->_ref_ATC_2_libelle;
 	        $this->_cible = $libelle_ATC;
 	        if(!isset($cibles["ATC"]) || !in_array($libelle_ATC, $cibles["ATC"])){
 	          $cibles["ATC"][] = $libelle_ATC;

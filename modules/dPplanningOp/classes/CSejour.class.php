@@ -1417,14 +1417,8 @@ class CSejour extends CCodable implements IPatientRelated {
         $curr_trans->loadRefsFwd();
         if ($curr_trans->_ref_object instanceof CAdministration) {
           $curr_trans->_ref_object->loadRefsFwd();
-          if ($curr_trans->_ref_object->_ref_object instanceof CPrescriptionLineMedicament) {
-            $curr_trans->_ref_object->_ref_object->_ref_produit->loadClasseATC();
-          }
         }
         
-        if ($curr_trans->_ref_object instanceof CPrescriptionLineMedicament) {
-          $curr_trans->_ref_object->_ref_produit->loadClasseATC();
-        }
         $this->_ref_suivi_medical[$curr_trans->date.$curr_trans->_id."trans"][] = $curr_trans;
       }
     }

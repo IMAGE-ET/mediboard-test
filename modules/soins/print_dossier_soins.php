@@ -136,7 +136,6 @@ if(CModule::getActive("dPprescription")){
         $atc_classes[$_atc] = $classe_atc->getLibelle($_atc);
       }
       foreach($lines_by_type as $med_id => $_line_med){
-        $_line_med->_ref_produit->loadConditionnement();
         $list_lines["medicament"][$_line_med->_id] = $_line_med;
       
         $_line_med->loadRefsAdministrations();
