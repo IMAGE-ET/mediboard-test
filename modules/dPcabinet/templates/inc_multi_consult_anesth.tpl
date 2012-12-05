@@ -44,7 +44,7 @@
       {{assign var=_op value=$_dossier->_ref_operation}}
       <option value="{{$_dossier->_id}}" {{if $consult_anesth->_id == $_dossier->_id}}selected{{/if}}>
         
-        Dossier d'anesthésie {{if $_op->_id}}(Intervention du {{$_op->_datetime|date_format:$conf.date}}){{/if}}
+        Dossier d'anesthésie {{$_dossier->_id}} {{if $_op->_id}}(Intervention du {{$_op->_datetime|date_format:$conf.date}}){{/if}}
         {{* Consult. anesth. du {{$_dossier->_ref_consultation->_ref_plageconsult->date|date_format:$conf.date}} à
         {{$_dossier->_ref_consultation->heure|date_format:$conf.time}} *}}
       </option>

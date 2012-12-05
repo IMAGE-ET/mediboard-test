@@ -9,19 +9,25 @@
 *}}
 
 {{assign var="patient" value=$curr_consult->_ref_patient}}
-{{assign var="curr_adm" value=$curr_consult->_ref_consult_anesth->_ref_sejour}}
-{{if !$curr_adm->_id}}
-{{if $curr_consult->_next_sejour_and_operation.COperation->_id}}
-{{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.COperation->_ref_sejour}}
-{{assign var="type_event" value="COperation"}}
+{{assign var=dossiers_anesth value=$curr_consult->_refs_dossiers_anesth}}
+{{assign var=dossier_anesth value=""}}
+
+{{if $curr_consult->_dossier_anesth_completed_id}}
+  {{assign var=dossier_anesth_id value=$curr_consult->_dossier_anesth_completed_id}}
+  {{assign var=dossier_anesth value=$dossiers_anesth.$dossier_anesth_id}}
+  {{assign var="curr_adm" value=$dossier_anesth->_ref_sejour}}
 {{else}}
-{{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.CSejour}}
-{{assign var="type_event" value="CSejour"}}
-{{/if}}
+  {{if $curr_consult->_next_sejour_and_operation.COperation->_id}}
+    {{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.COperation->_ref_sejour}}
+    {{assign var="type_event" value="COperation"}}
+  {{else}}
+    {{assign var="curr_adm" value=$curr_consult->_next_sejour_and_operation.CSejour}}
+    {{assign var="type_event" value="CSejour"}}
+  {{/if}}
 {{/if}}
 
 <td class="text">
-  {{if $curr_adm->_id && !$curr_adm->annule && $curr_consult->_ref_consult_anesth->_ref_sejour->_id}}
+  {{if $curr_adm->_id && !$curr_adm->annule && $dossier_anesth && $dossier_anesth->_ref_sejour->_id}}
   {{foreach from=$curr_adm->_ref_operations item=curr_op}}
   <a class="action" style="float: right" title="Imprimer la DHE de l'intervention" href="#1" onclick="Admissions.printDHE('operation_id', {{$curr_op->_id}}); return false;">
     <img src="images/icons/print.png" />
@@ -70,7 +76,7 @@
   le {{$curr_adm->_entree|date_format:$conf.date}}
   </span>
 </td>
-{{if !$curr_adm->annule && $curr_consult->_ref_consult_anesth->_ref_sejour->_id}}
+{{if !$curr_adm->annule && $dossier_anesth && $dossier_anesth->_ref_sejour->_id}}
 <td class="text" style="{{$cell_style}}">
   {{mb_include template=inc_form_prestations sejour=$curr_adm edit=$canAdmissions->edit}}
   {{mb_include module=hospi template=inc_placement_sejour sejour=$curr_adm}}
@@ -141,7 +147,15 @@
   <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="m" value="dPcabinet" />
-  {{mb_key object=$curr_consult->_ref_consult_anesth}}
+  {{if $dossiers_anesth|@count > 1}}
+    <select name="consultation_anesth_id">
+      {{foreach from=$dossiers_anesth item=_dossier_anesth}}
+        <option value="{{$_dossier_anesth->_id}}">{{$_dossier_anesth}}</option>
+      {{/foreach}}
+    </select>
+  {{else}}
+    {{mb_key object=$dossiers_anesth|@reset}}
+  {{/if}}
   <input type="hidden" name="operation_id" value="{{$curr_consult->_next_sejour_and_operation.COperation->_id}}" />
   <button type="submit" class="tick">
     Associer l'intervention
@@ -159,7 +173,15 @@
   <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="m" value="dPcabinet" />
-  {{mb_key object=$curr_consult->_ref_consult_anesth}}
+  {{if $dossiers_anesth|@count > 1}}
+    <select name="consultation_anesth_id">
+      {{foreach from=$dossiers_anesth item=_dossier_anesth}}
+        <option value="{{$_dossier_anesth->_id}}">{{$_dossier_anesth}}</option>
+      {{/foreach}}
+    </select>
+  {{else}}
+    {{mb_key object=$dossiers_anesth|@reset}}
+  {{/if}}
   <input type="hidden" name="sejour_id" value="{{$curr_adm->_id}}" />
   <button type="submit" class="tick">
     Associer le séjour

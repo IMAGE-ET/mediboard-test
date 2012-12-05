@@ -126,11 +126,6 @@ foreach ($sejours as $sejour_id => $_sejour) {
   $_sejour->loadRefsOperations($whereOperations);
   foreach ($_sejour->_ref_operations as $operation) {
     $operation->loadRefsActes();
-    $operation->loadRefsConsultAnesth();
-    $consult_anesth = $operation->_ref_consult_anesth; 
-    $consult_anesth->loadRefConsultation();
-    $consult_anesth->_ref_consultation->loadRefPlageConsult(1);
-    $consult_anesth->_date_consult = $consult_anesth->_ref_consultation->_date;
   }
 
   // Chargement de l'affectation

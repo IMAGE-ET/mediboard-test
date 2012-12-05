@@ -49,27 +49,36 @@ if ($order_col_pre == "patient_id"){
 
 $listConsultations = $consult->loadList($where, $order, null, null, $ljoin);
 
-foreach ($listConsultations as $_consult) {
+foreach ($listConsultations as $key => $_consult) {
   $_consult->loadRefPatient();
   $_consult->loadRefPlageconsult();
   $_consult->_ref_chir->loadRefFunction();
+  
   $_consult->loadRefConsultAnesth();
-  $_consult->_ref_consult_anesth->loadRefOperation();
-  $_sejour = $_consult->_ref_consult_anesth->_ref_sejour;
-  if ($_sejour->_id) {
-    $_sejour->loadRefPatient();
-    $_sejour->loadRefPraticien();
-    $_sejour->loadNDA();
-    $_sejour->loadRefsNotes();
-    $_sejour->countPrestationsSouhaitees();
-    $_sejour->loadRefsOperations();
-    $_sejour->loadRefsAffectations();
-    foreach($_sejour->_ref_affectations as $_aff) {
-      $_aff->loadView();
+  
+  if (count($_consult->_refs_dossiers_anesth) == 0) {
+    unset($listConsultations[$key]);
+    continue;
+  }
+  foreach ($_consult->_refs_dossiers_anesth as $_dossier) {
+    $_dossier->loadRefOperation();
+    $_sejour = $_dossier->_ref_sejour;
+    if ($_sejour->_id) {
+      $_sejour->loadRefPatient();
+      $_sejour->loadRefPraticien();
+      $_sejour->loadNDA();
+      $_sejour->loadRefsNotes();
+      $_sejour->countPrestationsSouhaitees();
+      $_sejour->loadRefsOperations();
+      $_sejour->loadRefsAffectations();
+      foreach($_sejour->_ref_affectations as $_aff) {
+        $_aff->loadView();
+      }
+      $_sejour->getDroitsCMU();
+      $_consult->_dossier_anesth_completed_id = $_dossier->_id;
+      break;
     }
-    $_sejour->getDroitsCMU();
-  } 
-  else {
+    
     $next = $_consult->_ref_patient->getNextSejourAndOperation($_consult->_ref_plageconsult->date);
     if ($next["COperation"]->_id) {
       $next["COperation"]->loadRefSejour();
@@ -105,5 +114,3 @@ $smarty->assign("canPatients"      , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp"    , CModule::getCanDo("dPplanningOp"));
 
 $smarty->display("inc_vw_preadmissions.tpl");
-
-?>
