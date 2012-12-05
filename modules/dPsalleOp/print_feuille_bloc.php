@@ -31,7 +31,7 @@ $sejour->loadRefPrescriptionSejour();
 
 $administrations = array();
 
-if (CModule::getActive("dPprescription")){
+if (CModule::getActive("dPprescription")) {
 	$prescription_id = $sejour->_ref_prescription_sejour->_id;
   $administrations = array();
 	if ($prescription_id) {
@@ -102,15 +102,7 @@ $time_debut_op = null;
 $time_fin_op = null;
 
 if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
-  CJSLoader::$files = array(
-    "lib/flot/jquery.min.js",
-    "lib/flot/jquery.flot.min.js",
-    "lib/flot/jquery.flot.symbol.min.js",
-    "lib/flot/jquery.flot.crosshair.min.js",
-    "lib/flot/jquery.flot.resize.min.js",
-  );
-  echo CJSLoader::loadFiles();
-  CAppUI::js('$.noConflict()');
+  CSupervisionGraph::includeFlot();
 
   list(
     $perop_graphs, $yaxes_count,

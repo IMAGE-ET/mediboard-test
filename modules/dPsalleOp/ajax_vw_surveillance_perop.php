@@ -25,7 +25,7 @@ list(
   $graphs, $yaxes_count,
   $time_min, $time_max,
   $time_debut_op_iso, $time_fin_op_iso
-) = CObservationResultSet::buildGraphs($interv);
+) = CObservationResultSet::buildGraphs($interv, 2 /* FIXME pack_id */);
 
 $time_debut_op = CMbDate::toUTCTimestamp($time_debut_op_iso);
 $time_fin_op   = CMbDate::toUTCTimestamp($time_fin_op_iso);
@@ -51,8 +51,10 @@ $evenements = array(
 // Personnel de l'interv
 $interv->loadAffectationsPersonnel();
 foreach ($interv->_ref_affectations_personnel as $emplacement => $affectations) {
-  foreach($affectations as $_affectation) {
-    if (!$_affectation->debut || !$_affectation->fin) continue;
+  foreach ($affectations as $_affectation) {
+    if (!$_affectation->debut || !$_affectation->fin) {
+      continue;
+    }
 
     $evenements["CAffectationPersonnel"][$_affectation->_id] = array(
       "icon" => null,
@@ -72,8 +74,10 @@ foreach ($interv->_ref_affectations_personnel as $emplacement => $affectations) 
 $plageop = $interv->_ref_plageop;
 $plageop->loadAffectationsPersonnel();
 foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations) {
-  foreach($affectations as $_affectation) {
-    if (!$_affectation->debut || !$_affectation->fin) continue;
+  foreach ($affectations as $_affectation) {
+    if (!$_affectation->debut || !$_affectation->fin) {
+      continue;
+    }
 
     $evenements["CAffectationPersonnel"][$_affectation->_id] = array(
       "icon" => null,
@@ -91,7 +95,7 @@ foreach ($plageop->_ref_affectations_personnel as $emplacement => $affectations)
 
 // Gestes perop
 $interv->loadRefsAnesthPerops();
-foreach($interv->_ref_anesth_perops as $_perop) {
+foreach ($interv->_ref_anesth_perops as $_perop) {
   $evenements["CAnesthPerop"][$_perop->_id] = array(
     "icon" => null,
     "label" => $_perop->libelle,
@@ -108,10 +112,10 @@ foreach($interv->_ref_anesth_perops as $_perop) {
 $sejour = $interv->loadRefSejour();
 $prescription = $sejour->loadRefPrescriptionSejour();
 
-if($prescription->_id){
+if ($prescription->_id){
   $lines = $prescription->loadPeropLines(false);
   
-  foreach($lines as $_guid => $_line_array) {
+  foreach ($lines as $_guid => $_line_array) {
     $_line = $_line_array["object"];
     
     $_view = "";
@@ -198,5 +202,6 @@ $smarty->assign("consult_anesth", $consult_anesth);
 $smarty->assign("now", $now);
 $smarty->assign("time_debut_op_iso", $time_debut_op_iso);
 $smarty->assign("time_fin_op_iso",   $time_fin_op_iso);
+$smarty->assign("nb_minutes", mbMinutesRelative($time_debut_op_iso, $time_fin_op_iso));
 
 $smarty->display("inc_vw_surveillance_perop.tpl");

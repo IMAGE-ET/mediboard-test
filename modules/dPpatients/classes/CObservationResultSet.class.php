@@ -19,9 +19,20 @@ class CObservationResultSet extends CMbObject {
   var $datetime              = null;
   var $context_class         = null;
   var $context_id            = null;
-  
+
+  /**
+   * @var CMbObject
+   */
   var $_ref_context          = null;
+
+  /**
+   * @var CPatient
+   */
   var $_ref_patient          = null;
+
+  /**
+   * @var CObservationResult[]
+   */
   var $_ref_results          = null;
   
   function getSpec() {
@@ -52,25 +63,37 @@ class CObservationResultSet extends CMbObject {
     
     $this->_view = $this->getFormattedValue("datetime");
   }
-  
+
   /**
+   * @param bool $cache
+   *
    * @return CMbObject
    */
   function loadRefContext($cache = true) {
     return $this->_ref_context = $this->loadFwdRef("context_id", $cache);
   }
-  
+
   /**
-   * @return array
+   * @param bool $cache
+   *
+   * @return CPatient
    */
   function loadRefPatient($cache = true) {
     return $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
   }
-  
+
+  /**
+   * @return CObservationResult[]
+   */
   function loadRefsResults(){
     return $this->_ref_results = $this->loadBackRefs("observation_results");
   }
-  
+
+  /**
+   * @param CMbObject $object
+   *
+   * @return array
+   */
   static function getResultsFor(CMbObject $object) {
     $request = new CRequest;
     $request->addTable("observation_result");
@@ -82,13 +105,14 @@ class CObservationResultSet extends CMbObject {
       "observation_result_set.context_class" => "= '$object->_class'",
       "observation_result_set.context_id"    => "= '$object->_id'",
     ));
+    $request->addOrder("observation_result.observation_result_id");
     
     $results = $object->_spec->ds->loadList($request->getRequest());
     
     $times = array();
     $data = array();
     
-    foreach($results as $_result) {
+    foreach ($results as $_result) {
       $_time = CMbDate::toUTCTimestamp($_result["datetime"]);
       $times[$_time] = $_time;
       
@@ -101,8 +125,13 @@ class CObservationResultSet extends CMbObject {
     return array($data, array_values($times));
   }
 
-  static function buildGraphs(COperation $interv) {
-    list($results, $times) = CObservationResultSet::getResultsFor($interv);
+  /**
+   * @param COperation $interv
+   *
+   * @return array
+   */
+  static function buildGraphs(COperation $interv, $pack_id) {
+    list($results, /*$times*/) = CObservationResultSet::getResultsFor($interv);
 
     $time_min = $interv->entree_salle;
     $time_max = mbTime("+".mbMinutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
@@ -113,29 +142,48 @@ class CObservationResultSet extends CMbObject {
     $time_fin_op_iso   = "$date $time_max";
 
     $round_minutes = 10;
-    $round = $round_minutes * 60000;
+    $round = $round_minutes * 60000; // FIXME
 
     $time_min = floor(CMbDate::toUTCTimestamp("$date $time_min") / $round) * $round;
     $time_max =  ceil(CMbDate::toUTCTimestamp("$date $time_max") / $round) * $round;
 
+    $pack = new CSupervisionGraphPack();
+    $pack->load($pack_id);
+    $graph_links = $pack->loadRefsGraphLinks();
+
+    $graphs = array();
+    foreach ($graph_links as $_gl) {
+      $_go = $_gl->loadRefGraph();
+      $graphs[] = $_go;
+
+      if ($_go instanceof CSupervisionGraph) {
+        $_go->buildGraph($results, $time_min, $time_max);
+      }
+    }
+
+    /*
     $graph_object = new CSupervisionGraph;
     $graph_objects = $graph_object->loadList(array(
       "disabled" => "= '0'",
     ));
 
     $graphs = array();
-    foreach($graph_objects as $_go) {
+    foreach ($graph_objects as $_go) {
       $graphs[] = $_go->buildGraph($results, $time_min, $time_max);
-    }
+    }*/
 
     $yaxes_count = 0;
-    foreach($graphs as $_graph) {
-      $yaxes_count = max($yaxes_count, count($_graph["yaxes"]));
+    foreach ($graphs as $_graph) {
+      if ($_graph instanceof CSupervisionGraph) {
+        $yaxes_count = max($yaxes_count, count($_graph->_graph_data["yaxes"]));
+      }
     }
 
-    foreach($graphs as &$_graph) {
-      if (count($_graph["yaxes"]) < $yaxes_count) {
-        $_graph["yaxes"] = array_pad($_graph["yaxes"], $yaxes_count, CSupervisionGraphAxis::$default_yaxis);
+    foreach ($graphs as $_graph) {
+      if ($_graph instanceof CSupervisionGraph) {
+        if (count($_graph->_graph_data["yaxes"]) < $yaxes_count) {
+          $_graph->_graph_data["yaxes"] = array_pad($_graph->_graph_data["yaxes"], $yaxes_count, CSupervisionGraphAxis::$default_yaxis);
+        }
       }
     }
 

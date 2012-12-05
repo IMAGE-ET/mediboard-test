@@ -1,11 +1,11 @@
 
 <script type="text/javascript">
-previousPoint = null;
+window.previousPoint = null;
 plothover = function (event, pos, item) {
   if (item) {
     var key = item.dataIndex+"-"+item.seriesIndex;
     if (previousPoint != key) {
-      previousPoint = key;
+      window.previousPoint = key;
       jQuery("#flot-tooltip").remove();
       
       var x = item.datapoint[0],
@@ -27,7 +27,7 @@ plothover = function (event, pos, item) {
   }
   else {
     jQuery("#flot-tooltip").remove();
-    previousPoint = null;            
+    window.previousPoint = null;
   }
 }
 
@@ -41,32 +41,40 @@ Main.add(function(){
     var ph, series, xaxes;
     
     {{foreach from=$graphs item=_graph key=i name=graphs}}
-      ph = $("#placeholder-{{$i}}");
-      series = {{$_graph.series|@json}};
-      xaxes  = {{$_graph.xaxes|@json}};
-      
-      {{if !$smarty.foreach.graphs.last}}
-        xaxes[0].tickFormatter = function(){return " "};
+      {{if $_graph instanceof CSupervisionGraph}}
+        {{assign var=_graph_data value=$_graph->_graph_data}}
+
+        ph = $("#placeholder-{{$i}}");
+        series = {{$_graph_data.series|@json}};
+        xaxes  = {{$_graph_data.xaxes|@json}};
+
+        {{if !$smarty.foreach.graphs.last}}
+          xaxes[0].tickFormatter = function(){return " "};
+          xaxes[0].labelHeight = 0;
+          //xaxes[0].show = false;
+        {{/if}}
+
+        ph.bind("plothover", plothover);
+
+        var plot = $.plot(ph, series, {
+          grid: {
+            hoverable: true,
+            markings: [
+              // Debut op
+              {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
+              {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
+
+              // Fin op
+              {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.05)"},
+              {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
+            ]
+          },
+          series: SupervisionGraph.defaultSeries,
+          xaxes: xaxes,
+          yaxes: {{$_graph_data.yaxes|@json}}
+        });
       {{/if}}
-      
-      ph.bind("plothover", plothover);
-      
-      $.plot(ph, series, {
-        grid: { hoverable: true, markings: [
-          // Debut op
-          {xaxis: {from: 0, to: {{$time_debut_op}}}, color: "rgba(0,0,0,0.05)"},
-          {xaxis: {from: {{$time_debut_op}}, to: {{$time_debut_op+1000}}}, color: "black"},
-          
-          // Fin op
-          {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.05)"},
-          {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
-        ] },
-        series: { points: { show: true, radius: 3 } },
-        xaxes: xaxes,
-        yaxes: {{$_graph.yaxes|@json}}
-      });
     {{/foreach}}
-    
   })(jQuery);
 });
 
@@ -105,7 +113,7 @@ editEvenementPerop = function(guid, operation_id, datetime) {
 </table>
 <hr />
 
-{{if $can->admin}}
+{{if $can->admin && 0}}
 <form name="generate-sample-observation-results" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: reloadSurveillancePerop})">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="dosql" value="do_sample_observation_results_generate" />
@@ -115,6 +123,7 @@ editEvenementPerop = function(guid, operation_id, datetime) {
   <input type="hidden" name="patient_id" value="{{$interv->_ref_sejour->patient_id}}" />
   <input type="hidden" name="datetime_start" value="{{$time_debut_op_iso}}" />
   <input type="hidden" name="datetime_end" value="{{$time_fin_op_iso}}" />
+  <!--<input type="hidden" name="period" value="1800" />-->
   <button class="change">Générer un jeu de données aléatoires</button>
 </form>
 {{/if}}
@@ -159,21 +168,40 @@ editEvenementPerop = function(guid, operation_id, datetime) {
 
 <div style="position: relative;" class="supervision">
   {{foreach from=$graphs item=_graph key=i}}
-    <div class="yaxis-labels">
-      {{foreach from=$_graph.yaxes|@array_reverse item=_yaxis}}
-        <div>
-          {{$_yaxis.label}}
-          <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
-        </div>
-      {{/foreach}}
-      <span class="title">{{$_graph.title}}</span>
-    </div>
-    <div id="placeholder-{{$i}}" style="width:{{$width}}px;height:200px;"></div>
-    <br />
+    {{if $_graph instanceof CSupervisionGraph}}
+      {{assign var=_graph_data value=$_graph->_graph_data}}
+      <div class="yaxis-labels">
+        {{foreach from=$_graph_data.yaxes|@array_reverse item=_yaxis}}
+          <div>
+            {{$_yaxis.label}}
+            {{if $_yaxis.symbolChar}}
+              <div class="symbol">{{$_yaxis.symbolChar|smarty:nodefaults}}</div>
+            {{/if}}
+          </div>
+        {{/foreach}}
+        <span class="title">{{$_graph_data.title}}</span>
+      </div>
+      <div id="placeholder-{{$i}}" style="width:{{$width}}px; height:{{$_graph->height}}px;" class="graph-placeholder"></div>
+    {{else}}
+      <table class="main evenements" style="table-layout: fixed; width: {{$width}}px; margin-top: -1px;">
+        <col style="width: {{$yaxes_count*78-12}}px;" />
+
+        <tr>
+          <th style="word-wrap: break-word;">{{$_graph->title}}</th>
+          {{math assign=_periods equation="minutes/period" minutes=$nb_minutes period=$_graph->period}}
+          {{foreach from=1|range:$_periods item=n}}
+            <td style="padding: 0; height: 18px; position: relative;">
+              <textarea class="noresize" style="position: absolute; top:0;left:0;right:0;bottom:0; resize: none; border:none; margin: 0;"></textarea>
+            </td>
+          {{/foreach}}
+        </tr>
+      </table>
+    {{/if}}
+
   {{/foreach}}
   
   <table class="main evenements" style="table-layout: fixed; width: {{$width}}px;">
-    <col style="width: {{$yaxes_count*38-14}}px;" />
+    <col style="width: {{$yaxes_count*78-12}}px;" />
     
     {{foreach from=$evenements key=_label item=_evenements}}
       <tr>
@@ -187,13 +215,15 @@ editEvenementPerop = function(guid, operation_id, datetime) {
           {{/if}}
           
           <div style="padding-left: {{$_evenement.position}}%; {{if $_evenement.alert}} color: red; {{/if}} {{if array_key_exists('width', $_evenement)}} margin-bottom: 2px; {{/if}}" class="evenement">
-            <div onmouseover="ObjectTooltip.createEx(this, '{{$_evenement.object->_guid}}');" style="{{$evenement_width}}">
+            <div onmouseover="ObjectTooltip.createEx(this, '{{$_evenement.object->_guid}}');" style="{{$evenement_width}}; {{if $_evenement.alert}} background: red; {{/if}}">
               <div class="marking">
                 <!--<span>{{$_evenement.datetime|date_format:$conf.datetime}}</span>-->
               </div>
               <div class="label" title="{{$_evenement.datetime|date_format:$conf.datetime}} - {{if $_evenement.unit}}{{$_evenement.unit}}{{/if}} {{$_evenement.label}}">
                 {{if $_evenement.editable}} 
-                  <a href="#{{$_evenement.object->_guid}}" onclick="return editEvenementPerop('{{$_evenement.object->_guid}}', '{{$interv->_id}}')">
+                  <a href="#{{$_evenement.object->_guid}}"
+                     onclick="return editEvenementPerop('{{$_evenement.object->_guid}}', '{{$interv->_id}}')"
+                    {{if $_evenement.alert}} style="color: red;" {{/if}}>
                 {{/if}}
                 
                   {{if $_evenement.icon}}

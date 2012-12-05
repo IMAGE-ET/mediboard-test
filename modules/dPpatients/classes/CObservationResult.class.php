@@ -13,18 +13,19 @@
  * http://www.interfaceware.com/hl7-standard/hl7-segment-OBX.html
  */
 class CObservationResult extends CMbObject {
-  var $observation_result_id = null;
+  var $observation_result_id;
   
-  var $observation_result_set_id = null;
-  var $value_type_id         = null; // OBX.3
-  var $unit_id               = null; // OBX.6
-  var $value                 = null; // OBX.2
-  var $method                = null; // OBX.17
-  var $status                = null; // OBX.11
+  var $observation_result_set_id;
+  var $value_type_id; // OBX.3
+  var $unit_id;       // OBX.6
+  var $value;         // OBX.2
+  var $method;        // OBX.17
+  var $status;        // OBX.11
   
-  var $_ref_context          = null;
-  var $_ref_value_type       = null;
-  var $_ref_value_unit       = null;
+  var $_ref_context;
+  var $_ref_value_type;
+  var $_ref_value_unit;
+  var $_ref_result_set;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -43,25 +44,29 @@ class CObservationResult extends CMbObject {
     $props["status"]                    = "enum list|C|D|F|I|N|O|P|R|S|U|W|X default|F";
     return $props;
   }
-  
+
   /**
-   * @return CObservationRequest
+   * @param bool $cache
+   *
+   * @return CObservationResultSet
    */
   function loadRefResultSet($cache = true) {
     return $this->_ref_result_set = $this->loadFwdRef("observation_result_set_id", $cache);
   }
-  
+
   /**
+   * @param bool $cache
+   *
    * @return CObservationValueType
    */
   function loadRefValueType($cache = true) {
     return $this->_ref_value_type = $this->loadFwdRef("value_type_id", $cache);
   }
-  
+
   /**
    * @return CObservationValueUnit
    */
-  function loadRefValueUnit($cache = true) {
+  function loadRefValueUnit() {
     return $this->_ref_value_unit = CObservationValueUnit::get($this->unit_id);
   }
   

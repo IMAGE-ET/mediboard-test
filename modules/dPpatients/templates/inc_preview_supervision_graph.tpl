@@ -4,9 +4,8 @@ Main.add(function(){
   var series = {{$data.series|@json}};
   
   //ph.bind("plothover", plothover);
-  
   jQuery.plot(ph, series, {
-    series: { points: { show: true, radius: 3 } },
+    series: SupervisionGraph.defaultSeries,
     xaxes: {{$data.xaxes|@json}},
     yaxes: {{$data.yaxes|@json}}
   });

@@ -389,7 +389,7 @@ Main.add(function(){
             {xaxis: {from: {{$time_fin_op}}, to: Number.MAX_VALUE}, color: "rgba(0,0,0,0.05)"},
             {xaxis: {from: {{$time_fin_op}}, to: {{$time_fin_op+1000}}}, color: "black"}
           ] },
-          series: { points: { show: true, radius: 3 } },
+          series: SupervisionGraph.defaultSeries,
           xaxes: xaxes,
           yaxes: {{$_graph.yaxes|@json}}
         });

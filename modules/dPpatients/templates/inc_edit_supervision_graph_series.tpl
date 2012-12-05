@@ -32,6 +32,11 @@ ColorSelector.init = function() {
       <th>{{mb_label object=$series field=value_unit_id}}</th>
       <td>{{mb_field object=$series field=value_unit_id autocomplete="true,1,50,true,true" form="edit-supervision-graph-series"}}</td>
     </tr>
+
+    <tr>
+      <th>{{mb_label object=$series field=integer_values}}</th>
+      <td>{{mb_field object=$series field=integer_values}}</td>
+    </tr>
     
     <tr>
       <th>{{mb_label object=$series field=color}}</th>

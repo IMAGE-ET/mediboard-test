@@ -16,75 +16,77 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("all");
     $query = "CREATE TABLE `patients` (
-              `patient_id` INT(11) NOT NULL AUTO_INCREMENT,
-              `nom` VARCHAR(50) NOT NULL DEFAULT '',
-              `prenom` VARCHAR(50) NOT NULL DEFAULT '',
-              `naissance` DATE NOT NULL DEFAULT '0000-00-00',
-              `sexe` ENUM('m','f') NOT NULL DEFAULT 'm',
-              `adresse` VARCHAR(50) NOT NULL DEFAULT '',
-              `ville` VARCHAR(50) NOT NULL DEFAULT '',
-              `cp` VARCHAR(5) NOT NULL DEFAULT '',
-              `tel` VARCHAR(10) NOT NULL DEFAULT '',
-              `medecin_traitant` INT(11) NOT NULL DEFAULT '0',
-              `incapable_majeur` ENUM('o','n') NOT NULL DEFAULT 'n',
-              `ATNC` ENUM('o','n') NOT NULL DEFAULT 'n',
-              `matricule` VARCHAR(15) NOT NULL DEFAULT '',
-              `SHS` VARCHAR(10) NOT NULL DEFAULT '',
-              PRIMARY KEY  (`patient_id`),
-              UNIQUE KEY `patient_id` (`patient_id`),
-              KEY `matricule` (`matricule`,`SHS`),
-              KEY `nom` (`nom`,`prenom`)
-            ) /*! ENGINE=MyISAM */;";
+                `patient_id` INT(11) NOT NULL AUTO_INCREMENT,
+                `nom` VARCHAR(50) NOT NULL DEFAULT '',
+                `prenom` VARCHAR(50) NOT NULL DEFAULT '',
+                `naissance` DATE NOT NULL DEFAULT '0000-00-00',
+                `sexe` ENUM('m','f') NOT NULL DEFAULT 'm',
+                `adresse` VARCHAR(50) NOT NULL DEFAULT '',
+                `ville` VARCHAR(50) NOT NULL DEFAULT '',
+                `cp` VARCHAR(5) NOT NULL DEFAULT '',
+                `tel` VARCHAR(10) NOT NULL DEFAULT '',
+                `medecin_traitant` INT(11) NOT NULL DEFAULT '0',
+                `incapable_majeur` ENUM('o','n') NOT NULL DEFAULT 'n',
+                `ATNC` ENUM('o','n') NOT NULL DEFAULT 'n',
+                `matricule` VARCHAR(15) NOT NULL DEFAULT '',
+                `SHS` VARCHAR(10) NOT NULL DEFAULT '',
+                PRIMARY KEY  (`patient_id`),
+                UNIQUE KEY `patient_id` (`patient_id`),
+                KEY `matricule` (`matricule`,`SHS`),
+                KEY `nom` (`nom`,`prenom`)
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
     $this->makeRevision("0.1");
-    $query = "ALTER TABLE patients" .
-            "\nADD tel2 VARCHAR( 10 ) AFTER tel ," .
-            "\nADD medecin1 INT( 11 ) AFTER medecin_traitant ," .
-            "\nADD medecin2 INT( 11 ) AFTER medecin1 ," .
-            "\nADD medecin3 INT( 11 ) AFTER medecin2 ," .
-            "\nADD rques TEXT;";
+    $query = "ALTER TABLE patients
+                ADD tel2 VARCHAR( 10 ) AFTER tel ,
+                ADD medecin1 INT( 11 ) AFTER medecin_traitant ,
+                ADD medecin2 INT( 11 ) AFTER medecin1 ,
+                ADD medecin3 INT( 11 ) AFTER medecin2 ,
+                ADD rques TEXT;";
     $this->addQuery($query);
-    $query = "CREATE TABLE medecin (" .
-            "\nmedecin_id INT(11) NOT NULL AUTO_INCREMENT," .
-            "\nnom VARCHAR(50) NOT NULL DEFAULT ''," .
-            "\nprenom VARCHAR(50) NOT NULL DEFAULT ''," .
-            "\ntel VARCHAR(10) DEFAULT NULL," .
-            "\nfax VARCHAR(10) DEFAULT NULL," .
-            "\nemail VARCHAR(50) DEFAULT NULL," .
-            "\nadresse VARCHAR(50) DEFAULT NULL," .
-            "\nville VARCHAR(50) DEFAULT NULL," .
-            "\ncp VARCHAR(5) DEFAULT NULL," .
-            "\nPRIMARY KEY  (`medecin_id`))" .
-            "\n/*! ENGINE=MyISAM */ COMMENT='Table des medecins correspondants';";
+    $query = "CREATE TABLE medecin (
+                medecin_id INT(11) NOT NULL AUTO_INCREMENT,
+                nom VARCHAR(50) NOT NULL DEFAULT '',
+                prenom VARCHAR(50) NOT NULL DEFAULT '',
+                tel VARCHAR(10) DEFAULT NULL,
+                fax VARCHAR(10) DEFAULT NULL,
+                email VARCHAR(50) DEFAULT NULL,
+                adresse VARCHAR(50) DEFAULT NULL,
+                ville VARCHAR(50) DEFAULT NULL,
+                cp VARCHAR(5) DEFAULT NULL,
+                PRIMARY KEY  (`medecin_id`)
+              )/*! ENGINE=MyISAM */ COMMENT='Table des medecins correspondants';";
     $this->addQuery($query);
 
     $this->makeRevision("0.2");
-    $query = "ALTER TABLE medecin ADD specialite TEXT AFTER prenom ;";
+    $query = "ALTER TABLE medecin
+                ADD specialite TEXT AFTER prenom ;";
     $this->addQuery($query);
 
     $this->makeRevision("0.21");
-    $query = "ALTER TABLE medecin ADD disciplines TEXT AFTER prenom ;";
+    $query = "ALTER TABLE medecin
+                ADD disciplines TEXT AFTER prenom ;";
     $this->addQuery($query);
 
     $this->makeRevision("0.22");
-    $query = "ALTER TABLE `medecin` CHANGE `adresse` `adresse` TEXT DEFAULT NULL ;";
+    $query = "ALTER TABLE `medecin`
+                CHANGE `adresse` `adresse` TEXT DEFAULT NULL ;";
     $this->addQuery($query);
 
     $this->makeRevision("0.23");
-    $query = "ALTER TABLE `medecin` ADD INDEX ( `nom` ) ;";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `medecin` ADD INDEX ( `prenom` ) ;";
-    $this->addQuery($query);
-    $query = "ALTER TABLE `medecin` ADD INDEX ( `cp` ) ;";
+    $query = "ALTER TABLE `medecin`
+                ADD INDEX ( `nom` ),
+                ADD INDEX ( `prenom` ),
+                ADD INDEX ( `cp` ) ;";
     $this->addQuery($query);
 
     $this->makeRevision("0.24");
-    $query = "ALTER TABLE `patients` ADD `nom_jeune_fille` VARCHAR( 50 ) NOT NULL AFTER `nom` ;";
+    $query = "ALTER TABLE `patients`
+                ADD `nom_jeune_fille` VARCHAR( 50 ) NOT NULL AFTER `nom` ;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `patients`" .
-            "\nCHANGE `sexe` `sexe` ENUM( 'm', 'f', 'j' )" .
-            "\nDEFAULT 'm' NOT NULL ";
+    $query = "ALTER TABLE `patients`
+                CHANGE `sexe` `sexe` ENUM( 'm', 'f', 'j' ) DEFAULT 'm' NOT NULL";
     $this->addQuery($query);
 
     $this->makeRevision("0.25");
@@ -100,16 +102,15 @@ class CSetupdPpatients extends CSetup {
                 `rques` TEXT,
                 PRIMARY KEY ( `antecedent_id` ) ,
                 INDEX ( `patient_id` )
-                ) /*! ENGINE=MyISAM */ COMMENT = 'antecedents des patients';";
+              ) /*! ENGINE=MyISAM */ COMMENT = 'antecedents des patients';";
     $this->addQuery($query);
 
     $this->makeRevision("0.27");
-    $query = "ALTER TABLE `antecedent`" .
-            "CHANGE `type` `type`" .
-            "ENUM( 'trans', 'obst', 'chir', 'med', 'fam' )" .
-            "DEFAULT 'med' NOT NULL;";
+    $query = "ALTER TABLE `antecedent`
+                CHANGE `type` `type` ENUM( 'trans', 'obst', 'chir', 'med', 'fam' ) DEFAULT 'med' NOT NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `patients` ADD `listCim10` TEXT DEFAULT NULL ;";
+    $query = "ALTER TABLE `patients`
+                ADD `listCim10` TEXT DEFAULT NULL ;";
     $this->addQuery($query);
     $query = "CREATE TABLE `traitement` (
                 `traitement_id` BIGINT NOT NULL AUTO_INCREMENT ,
@@ -119,15 +120,18 @@ class CSetupdPpatients extends CSetup {
                 `traitement` TEXT,
                 PRIMARY KEY ( `traitement_id` ) ,
                 INDEX ( `patient_id` )
-                ) /*! ENGINE=MyISAM */ COMMENT = 'traitements des patients';";
+              ) /*! ENGINE=MyISAM */ COMMENT = 'traitements des patients';";
     $this->addQuery($query);
 
     $this->makeRevision("0.28");
-    $query = "ALTER TABLE `patients` CHANGE `SHS` `regime_sante` VARCHAR( 40 );";
+    $query = "ALTER TABLE `patients`
+                CHANGE `SHS` `regime_sante` VARCHAR( 40 );";
     $this->addQuery($query);
-    $query = "ALTER TABLE `patients` ADD `SHS` VARCHAR( 8 ) AFTER `matricule`;";
+    $query = "ALTER TABLE `patients`
+                ADD `SHS` VARCHAR( 8 ) AFTER `matricule`;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `patients` ADD INDEX ( `SHS` );";
+    $query = "ALTER TABLE `patients`
+                ADD INDEX ( `SHS` );";
     $this->addQuery($query);
 
     $this->makeRevision("0.29");
@@ -141,7 +145,8 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("0.30");
-    $query = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'trans', 'obst', 'chir', 'med', 'fam', 'alle' ) NOT NULL DEFAULT 'med';";
+    $query = "ALTER TABLE `antecedent` CHANGE `type` `type`
+                ENUM( 'trans', 'obst', 'chir', 'med', 'fam', 'alle' ) NOT NULL DEFAULT 'med';";
     $this->addQuery($query);
 
     $this->makeRevision("0.31");
@@ -179,99 +184,104 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("0.34");
-    $query = "ALTER TABLE `patients` " .
-           "\nADD `pays` VARCHAR( 50 )," .
-           "\nADD `nationalite` ENUM( 'local', 'etranger' ) NOT NULL DEFAULT 'local'," .
-           "\nADD `lieu_naissance` VARCHAR( 50 )," .
-           "\nADD `profession` VARCHAR( 50 )," .
-           "\nADD `employeur_nom` VARCHAR( 50 )," .
-           "\nADD `employeur_adresse` TEXT," .
-           "\nADD `employeur_cp` VARCHAR( 5 )," .
-           "\nADD `employeur_ville` VARCHAR( 50 )," .
-           "\nADD `employeur_tel` VARCHAR( 10 )," .
-           "\nADD `employeur_urssaf` VARCHAR( 11 )," .
-           "\nADD `prevenir_nom` VARCHAR( 50 )," .
-           "\nADD `prevenir_prenom` VARCHAR( 50 )," .
-           "\nADD `prevenir_adresse` TEXT," .
-           "\nADD `prevenir_cp` VARCHAR( 5 )," .
-           "\nADD `prevenir_ville` VARCHAR( 50 )," .
-           "\nADD `prevenir_tel` VARCHAR( 10 )," .
-           "\nADD `prevenir_parente` ENUM( 'conjoint', 'enfant', 'ascendant', 'colateral', 'divers' ) ;";
+    $query = "ALTER TABLE `patients`
+                ADD `pays` VARCHAR( 50 ),
+                ADD `nationalite` ENUM( 'local', 'etranger' ) NOT NULL DEFAULT 'local',
+                ADD `lieu_naissance` VARCHAR( 50 ),
+                ADD `profession` VARCHAR( 50 ),
+                ADD `employeur_nom` VARCHAR( 50 ),
+                ADD `employeur_adresse` TEXT,
+                ADD `employeur_cp` VARCHAR( 5 ),
+                ADD `employeur_ville` VARCHAR( 50 ),
+                ADD `employeur_tel` VARCHAR( 10 ),
+                ADD `employeur_urssaf` VARCHAR( 11 ),
+                ADD `prevenir_nom` VARCHAR( 50 ),
+                ADD `prevenir_prenom` VARCHAR( 50 ),
+                ADD `prevenir_adresse` TEXT,
+                ADD `prevenir_cp` VARCHAR( 5 ),
+                ADD `prevenir_ville` VARCHAR( 50 ),
+                ADD `prevenir_tel` VARCHAR( 10 ),
+                ADD `prevenir_parente` ENUM( 'conjoint', 'enfant', 'ascendant', 'colateral', 'divers' ) ;";
     $this->addQuery($query);
 
     $this->makeRevision("0.35");
-    $query = "ALTER TABLE `antecedent` CHANGE `type` `type` ENUM( 'med', 'alle', 'trans', 'obst', 'chir', 'fam', 'anesth' ) NOT NULL DEFAULT 'med';";
+    $query = "ALTER TABLE `antecedent` CHANGE `type` `type`
+                ENUM( 'med', 'alle', 'trans', 'obst', 'chir', 'fam', 'anesth' ) NOT NULL DEFAULT 'med';";
     $this->addQuery($query);
 
     $this->makeRevision("0.36");
     $this->setTimeLimit(1800);
-    $query = "ALTER TABLE `antecedent` " .
-               "\nCHANGE `antecedent_id` `antecedent_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0';";
+    $query = "ALTER TABLE `antecedent`
+                CHANGE `antecedent_id` `antecedent_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `medecin` " .
-               "\nCHANGE `medecin_id` `medecin_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
-               "\nCHANGE `prenom` `prenom` varchar(255) NOT NULL," .
-               "\nCHANGE `jeunefille` `jeunefille` varchar(255) NULL," .
-               "\nCHANGE `ville` `ville` varchar(255) NULL," .
-               "\nCHANGE `cp` `cp` int(5) unsigned zerofill NULL," .
-               "\nCHANGE `tel` `tel` bigint(10) unsigned zerofill NULL," .
-               "\nCHANGE `fax` `fax` bigint(10) unsigned zerofill NULL," .
-               "\nCHANGE `email` `email` varchar(255) NULL;";
+    $query = "ALTER TABLE `medecin`
+                CHANGE `medecin_id` `medecin_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `nom` `nom` varchar(255) NOT NULL,
+                CHANGE `prenom` `prenom` varchar(255) NOT NULL,
+                CHANGE `jeunefille` `jeunefille` varchar(255) NULL,
+                CHANGE `ville` `ville` varchar(255) NULL,
+                CHANGE `cp` `cp` int(5) unsigned zerofill NULL,
+                CHANGE `tel` `tel` bigint(10) unsigned zerofill NULL,
+                CHANGE `fax` `fax` bigint(10) unsigned zerofill NULL,
+                CHANGE `email` `email` varchar(255) NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `patients` " .
-               "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `nom` `nom` varchar(255) NOT NULL," .
-               "\nCHANGE `nom_jeune_fille` `nom_jeune_fille` varchar(255) NULL," .
-               "\nCHANGE `prenom` `prenom` varchar(255) NOT NULL," .
-               "\nCHANGE `ville` `ville` varchar(255) NOT NULL," .
-               "\nCHANGE `medecin_traitant` `medecin_traitant` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `medecin1` `medecin1` int(11) unsigned NULL," .
-               "\nCHANGE `medecin2` `medecin2` int(11) unsigned NULL," .
-               "\nCHANGE `medecin3` `medecin3` int(11) unsigned NULL," .
-               "\nCHANGE `regime_sante` `regime_sante` varchar(255) NULL," .
-               "\nCHANGE `pays` `pays` varchar(255) NULL," .
-               "\nCHANGE `cp` `cp` int(5) unsigned zerofill NULL," .
-               "\nCHANGE `tel` `tel` bigint(10) unsigned zerofill NULL," .
-               "\nCHANGE `tel2` `tel2` bigint(10) unsigned zerofill NULL," .
-               "\nCHANGE `SHS` `SHS` int(8) unsigned zerofill NULL," .
-               "\nCHANGE `employeur_cp` `employeur_cp` int(5) unsigned zerofill NULL," .
-               "\nCHANGE `employeur_tel` `employeur_tel` bigint(10) unsigned zerofill NULL," .
-               "\nCHANGE `employeur_urssaf` `employeur_urssaf` bigint(11) unsigned zerofill NULL," .
-               "\nCHANGE `prevenir_cp` `prevenir_cp` int(5) unsigned zerofill NULL," .
-               "\nCHANGE `prevenir_tel` `prevenir_tel` bigint(10) unsigned zerofill NULL," .
-               "\nCHANGE `lieu_naissance` `lieu_naissance` varchar(255) NULL," .
-               "\nCHANGE `profession` `profession` varchar(255) NULL," .
-               "\nCHANGE `employeur_nom` `employeur_nom` varchar(255) NULL," .
-               "\nCHANGE `employeur_ville` `employeur_ville` varchar(255) NULL," .
-               "\nCHANGE `prevenir_nom` `prevenir_nom` varchar(255) NULL," .
-               "\nCHANGE `prevenir_prenom` `prevenir_prenom` varchar(255) NULL," .
-               "\nCHANGE `prevenir_ville` `prevenir_ville` varchar(255) NULL;";
+    $query = "ALTER TABLE `patients` 
+                CHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `nom` `nom` varchar(255) NOT NULL,
+                CHANGE `nom_jeune_fille` `nom_jeune_fille` varchar(255) NULL,
+                CHANGE `prenom` `prenom` varchar(255) NOT NULL,
+                CHANGE `ville` `ville` varchar(255) NOT NULL,
+                CHANGE `medecin_traitant` `medecin_traitant` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `medecin1` `medecin1` int(11) unsigned NULL,
+                CHANGE `medecin2` `medecin2` int(11) unsigned NULL,
+                CHANGE `medecin3` `medecin3` int(11) unsigned NULL,
+                CHANGE `regime_sante` `regime_sante` varchar(255) NULL,
+                CHANGE `pays` `pays` varchar(255) NULL,
+                CHANGE `cp` `cp` int(5) unsigned zerofill NULL,
+                CHANGE `tel` `tel` bigint(10) unsigned zerofill NULL,
+                CHANGE `tel2` `tel2` bigint(10) unsigned zerofill NULL,
+                CHANGE `SHS` `SHS` int(8) unsigned zerofill NULL,
+                CHANGE `employeur_cp` `employeur_cp` int(5) unsigned zerofill NULL,
+                CHANGE `employeur_tel` `employeur_tel` bigint(10) unsigned zerofill NULL,
+                CHANGE `employeur_urssaf` `employeur_urssaf` bigint(11) unsigned zerofill NULL,
+                CHANGE `prevenir_cp` `prevenir_cp` int(5) unsigned zerofill NULL,
+                CHANGE `prevenir_tel` `prevenir_tel` bigint(10) unsigned zerofill NULL,
+                CHANGE `lieu_naissance` `lieu_naissance` varchar(255) NULL,
+                CHANGE `profession` `profession` varchar(255) NULL,
+                CHANGE `employeur_nom` `employeur_nom` varchar(255) NULL,
+                CHANGE `employeur_ville` `employeur_ville` varchar(255) NULL,
+                CHANGE `prevenir_nom` `prevenir_nom` varchar(255) NULL,
+                CHANGE `prevenir_prenom` `prevenir_prenom` varchar(255) NULL,
+                CHANGE `prevenir_ville` `prevenir_ville` varchar(255) NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `traitement` " .
-               "\nCHANGE `traitement_id` `traitement_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0';";
+    $query = "ALTER TABLE `traitement` 
+                CHANGE `traitement_id` `traitement_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `patients` " .
-               "\nCHANGE `ATNC` `ATNC` enum('o','n','0','1') NOT NULL DEFAULT 'n'," .
-               "\nCHANGE `incapable_majeur` `incapable_majeur` enum('o','n','0','1') NOT NULL DEFAULT 'n';";
+    $query = "ALTER TABLE `patients` 
+                CHANGE `ATNC` `ATNC` enum('o','n','0','1') NOT NULL DEFAULT 'n',
+                CHANGE `incapable_majeur` `incapable_majeur` enum('o','n','0','1') NOT NULL DEFAULT 'n';";
     $this->addQuery($query);
-    $query = "UPDATE `patients` SET `ATNC`='0' WHERE `ATNC`='n';";                             $this->addQuery($query);
-    $query = "UPDATE `patients` SET `ATNC`='1' WHERE `ATNC`='o';";                         $this->addQuery($query);
-    $query = "UPDATE `patients` SET `incapable_majeur`='0' WHERE `incapable_majeur`='n';"; $this->addQuery($query);
-    $query = "UPDATE `patients` SET `incapable_majeur`='1' WHERE `incapable_majeur`='o';"; $this->addQuery($query);
-    $query = "ALTER TABLE `patients` " .
-               "\nCHANGE `ATNC` `ATNC` enum('0','1') NOT NULL DEFAULT '0'," .
-               "\nCHANGE `incapable_majeur` `incapable_majeur` enum('0','1') NOT NULL DEFAULT '0';";
+    $query = "UPDATE `patients` SET `ATNC`='0' WHERE `ATNC`='n';";
+    $this->addQuery($query);
+    $query = "UPDATE `patients` SET `ATNC`='1' WHERE `ATNC`='o';";
+    $this->addQuery($query);
+    $query = "UPDATE `patients` SET `incapable_majeur`='0' WHERE `incapable_majeur`='n';";
+    $this->addQuery($query);
+    $query = "UPDATE `patients` SET `incapable_majeur`='1' WHERE `incapable_majeur`='o';";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `patients` 
+                CHANGE `ATNC` `ATNC` enum('0','1') NOT NULL DEFAULT '0',
+                CHANGE `incapable_majeur` `incapable_majeur` enum('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
     $this->makeRevision("0.37");
     $this->setTimeLimit(1800);
-    $query = "ALTER TABLE `patients` " .
-               "\nADD `nom_soundex2`    VARCHAR(255) DEFAULT NULL AFTER `nom_jeune_fille`," .
-               "\nADD `prenom_soundex2` VARCHAR(255) DEFAULT NULL AFTER `nom_soundex2`," .
-               "\nADD `nomjf_soundex2`  VARCHAR(255) DEFAULT NULL AFTER `prenom_soundex2`;";
+    $query = "ALTER TABLE `patients` 
+                ADD `nom_soundex2`    VARCHAR(255) DEFAULT NULL AFTER `nom_jeune_fille`,
+                ADD `prenom_soundex2` VARCHAR(255) DEFAULT NULL AFTER `nom_soundex2`,
+                ADD `nomjf_soundex2`  VARCHAR(255) DEFAULT NULL AFTER `prenom_soundex2`;";
     $this->addQuery($query);
     function setup_soundex(){
       $where = array("nom_soundex2" => "IS NULL", "nom" => "!= ''");
@@ -300,13 +310,13 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("0.40");
-    $query = "ALTER TABLE `antecedent` " .
-           "\nCHANGE `patient_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-           "\nADD `object_class` enum('CPatient','CConsultAnesth') NOT NULL DEFAULT 'CPatient';";
+    $query = "ALTER TABLE `antecedent`
+                CHANGE `patient_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0',
+                ADD `object_class` enum('CPatient','CConsultAnesth') NOT NULL DEFAULT 'CPatient';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `traitement` " .
-           "\nCHANGE `patient_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-           "\nADD `object_class` enum('CPatient','CConsultAnesth') NOT NULL DEFAULT 'CPatient';";
+    $query = "ALTER TABLE `traitement`
+                CHANGE `patient_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0',
+                ADD `object_class` enum('CPatient','CConsultAnesth') NOT NULL DEFAULT 'CPatient';";
     $this->addQuery($query);
 
     $this->makeRevision("0.41");
@@ -323,58 +333,60 @@ class CSetupdPpatients extends CSetup {
 
     $this->makeRevision("0.42");
     $this->addDependency("dPcabinet", "0.60");
-    $query = "ALTER TABLE `addiction` CHANGE `object_class` `object_class` enum('CPatient','CConsultAnesth') NOT NULL DEFAULT 'CPatient';";
+    $query = "ALTER TABLE `addiction`
+                CHANGE `object_class` `object_class` enum('CPatient','CConsultAnesth') NOT NULL DEFAULT 'CPatient';";
     $this->addQuery($query);
 
     $this->makeRevision("0.43");
-    $query = "ALTER TABLE `antecedent` CHANGE `type` `type` enum('med','alle','trans','obst','chir','fam','anesth','gyn') NOT NULL DEFAULT 'med';";
+    $query = "ALTER TABLE `antecedent`
+                CHANGE `type` `type` enum('med','alle','trans','obst','chir','fam','anesth','gyn') NOT NULL DEFAULT 'med';";
     $this->addQuery($query);
 
     $this->makeRevision("0.44");
     $query = "ALTER TABLE `patients`
-            ADD `assure_nom` VARCHAR(255),
-            ADD `assure_nom_jeune_fille` VARCHAR(255),
-            ADD `assure_prenom` VARCHAR(255),
-            ADD `assure_naissance` DATE,
-            ADD `assure_sexe` ENUM('m','f','j'),
-            ADD `assure_adresse` TEXT,
-            ADD `assure_ville` VARCHAR(255),
-            ADD `assure_cp` INT(5) UNSIGNED ZEROFILL,
-            ADD `assure_tel` BIGINT(10) UNSIGNED ZEROFILL,
-            ADD `assure_tel2` BIGINT(10) UNSIGNED ZEROFILL,
-            ADD `assure_pays` VARCHAR(255),
-            ADD `assure_nationalite` ENUM('local','etranger') NOT NULL,
-            ADD `assure_lieu_naissance` VARCHAR(255),
-            ADD `assure_profession` VARCHAR(255),
-            ADD `assure_rques` TEXT;";
+                ADD `assure_nom` VARCHAR(255),
+                ADD `assure_nom_jeune_fille` VARCHAR(255),
+                ADD `assure_prenom` VARCHAR(255),
+                ADD `assure_naissance` DATE,
+                ADD `assure_sexe` ENUM('m','f','j'),
+                ADD `assure_adresse` TEXT,
+                ADD `assure_ville` VARCHAR(255),
+                ADD `assure_cp` INT(5) UNSIGNED ZEROFILL,
+                ADD `assure_tel` BIGINT(10) UNSIGNED ZEROFILL,
+                ADD `assure_tel2` BIGINT(10) UNSIGNED ZEROFILL,
+                ADD `assure_pays` VARCHAR(255),
+                ADD `assure_nationalite` ENUM('local','etranger') NOT NULL,
+                ADD `assure_lieu_naissance` VARCHAR(255),
+                ADD `assure_profession` VARCHAR(255),
+                ADD `assure_rques` TEXT;";
     $this->addQuery($query);
 
     $this->makeRevision("0.45");
     $query = "ALTER TABLE `patients`
-            CHANGE `rang_beneficiaire` `rang_beneficiaire` ENUM('01','02','11','12','13');";
+                CHANGE `rang_beneficiaire` `rang_beneficiaire` ENUM('01','02','11','12','13');";
     $this->addQuery($query);
 
     $this->makeRevision("0.46");
     $query = "ALTER TABLE `patients`
-            ADD `assure_matricule` VARCHAR(15);";
+                ADD `assure_matricule` VARCHAR(15);";
     $this->addQuery($query);
 
     $this->makeRevision("0.47");
     $query = "ALTER TABLE `patients`
-            ADD `rang_naissance` ENUM('1','2','3','4','5','6');";
+                ADD `rang_naissance` ENUM('1','2','3','4','5','6');";
     $this->addQuery($query);
 
     $this->makeRevision("0.48");
     $query = "ALTER TABLE `patients`
-            ADD `code_regime` TINYINT(2) UNSIGNED ZEROFILL,
-            ADD `caisse_gest` MEDIUMINT(3) UNSIGNED ZEROFILL,
-            ADD `centre_gest` MEDIUMINT(4) UNSIGNED ZEROFILL,
-            ADD `fin_validite_vitale` DATE;";
+                ADD `code_regime` TINYINT(2) UNSIGNED ZEROFILL,
+                ADD `caisse_gest` MEDIUMINT(3) UNSIGNED ZEROFILL,
+                ADD `centre_gest` MEDIUMINT(4) UNSIGNED ZEROFILL,
+                ADD `fin_validite_vitale` DATE;";
     $this->addQuery($query);
 
     $this->makeRevision("0.49");
     $query = "ALTER TABLE `patients`
-            CHANGE `rang_beneficiaire` `rang_beneficiaire` ENUM('01','02','09','11','12','13','14','15','16','31');";
+                CHANGE `rang_beneficiaire` `rang_beneficiaire` ENUM('01','02','09','11','12','13','14','15','16','31');";
     $this->addQuery($query);
 
 
@@ -386,60 +398,62 @@ class CSetupdPpatients extends CSetup {
     $this->addDependency("dPcabinet", "0.78");
 
     $query = "CREATE TABLE `dossier_medical` (
-            `dossier_medical_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-            `listCim10` TEXT,
-            `object_id` INT(11) UNSIGNED NOT NULL,
-            `object_class` VARCHAR(25) NOT NULL,
-            PRIMARY KEY (`dossier_medical_id`)) /*! ENGINE=MyISAM */;";
+                `dossier_medical_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `listCim10` TEXT,
+                `object_id` INT(11) UNSIGNED NOT NULL,
+                `object_class` VARCHAR(25) NOT NULL,
+                PRIMARY KEY (`dossier_medical_id`)
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-
-
 
     // Insertion des patients dans la table dossier_medical
     $query = "INSERT INTO `dossier_medical`
-            SELECT '', patients.listCim10, patients.patient_id, 'CPatient'
-            FROM `patients`;";
+                SELECT '', patients.listCim10, patients.patient_id, 'CPatient'
+                FROM `patients`;";
     $this->addQuery($query);
 
 
     // Insertion des sejours dans la table dossier_medical
     $query = "INSERT INTO `dossier_medical`
-            SELECT '', GROUP_CONCAT(consultation_anesth.listCim10 SEPARATOR '|'), sejour.sejour_id, 'CSejour'
-            FROM `consultation_anesth`, `operations`,`sejour`
-            WHERE consultation_anesth.operation_id = operations.operation_id
-            AND operations.sejour_id = sejour.sejour_id
-            GROUP BY sejour.sejour_id;";
+                SELECT '', GROUP_CONCAT(consultation_anesth.listCim10 SEPARATOR '|'), sejour.sejour_id, 'CSejour'
+                FROM `consultation_anesth`, `operations`,`sejour`
+                WHERE consultation_anesth.operation_id = operations.operation_id
+                AND operations.sejour_id = sejour.sejour_id
+                GROUP BY sejour.sejour_id;";
     $this->addQuery($query);
 
 
     // Suppression des '|' en debut de liste
     $query = "UPDATE `dossier_medical` SET `listCim10` = TRIM(LEADING '|' FROM listCim10)
-            WHERE listCim10 LIKE '|%'";
+                WHERE listCim10 LIKE '|%'";
     $this->addquery($query);
 
 
     // Ajout du champ dossier_medical_id aux tables addiction/antecedent/traitement
     $query = "ALTER TABLE `addiction`
-            ADD `dossier_medical_id` INT(11) UNSIGNED;";
+                ADD `dossier_medical_id` INT(11) UNSIGNED;";
     $this->addQuery($query);
 
-    $query = "ALTER TABLE `addiction` ADD INDEX ( `dossier_medical_id` ) ;";
+    $query = "ALTER TABLE `addiction`
+                ADD INDEX ( `dossier_medical_id` ) ;";
     $this->addQuery($query);
 
 
     $query = "ALTER TABLE `antecedent`
-            ADD `dossier_medical_id` INT(11) UNSIGNED;";
+                ADD `dossier_medical_id` INT(11) UNSIGNED;";
     $this->addQuery($query);
 
-    $query = "ALTER TABLE `antecedent` ADD INDEX ( `dossier_medical_id` ) ;";
+    $query = "ALTER TABLE `antecedent`
+                ADD INDEX ( `dossier_medical_id` ) ;";
     $this->addQuery($query);
 
 
     $query = "ALTER TABLE `traitement`
-            ADD `dossier_medical_id` INT(11) UNSIGNED;";
+                ADD `dossier_medical_id` INT(11) UNSIGNED;";
     $this->addQuery($query);
 
-    $query = "ALTER TABLE `traitement` ADD INDEX ( `dossier_medical_id` ) ;";
+    $query = "ALTER TABLE `traitement`
+                ADD INDEX ( `dossier_medical_id` ) ;";
     $this->addQuery($query);
 
 
@@ -449,27 +463,25 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $query = "UPDATE `addiction`, `dossier_medical` SET addiction.dossier_medical_id = dossier_medical.dossier_medical_id
-            WHERE dossier_medical.object_class = 'CPatient'
-            AND dossier_medical.object_id = addiction.object_id
-            AND addiction.object_class = 'CPatient'";
+                WHERE dossier_medical.object_class = 'CPatient'
+                AND dossier_medical.object_id = addiction.object_id
+                AND addiction.object_class = 'CPatient'";
     $this->addQuery($query);
 
     // Table antecedent
     $query = "UPDATE `antecedent`, `dossier_medical` SET antecedent.dossier_medical_id = dossier_medical.dossier_medical_id
-            WHERE dossier_medical.object_class = 'CPatient'
-            AND dossier_medical.object_id = antecedent.object_id
-            AND antecedent.object_class = 'CPatient'";
+                WHERE dossier_medical.object_class = 'CPatient'
+                AND dossier_medical.object_id = antecedent.object_id
+                AND antecedent.object_class = 'CPatient'";
     $this->addQuery($query);
 
 
     // Table Traitement
     $query = "UPDATE `traitement`, `dossier_medical` SET traitement.dossier_medical_id = dossier_medical.dossier_medical_id
-            WHERE dossier_medical.object_class = 'CPatient'
-            AND dossier_medical.object_id = traitement.object_id
-            AND traitement.object_class = 'CPatient'";
+                WHERE dossier_medical.object_class = 'CPatient'
+                AND dossier_medical.object_id = traitement.object_id
+                AND traitement.object_class = 'CPatient'";
     $this->addQuery($query);
-
-
 
     // Mise a jour du champs dossier_medical_id dans le cas du Sejour
     // Table addiction
@@ -712,7 +724,7 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("0.65");
-    $query = "ALTER TABLE `patients` DROP `SHS";
+    $query = "ALTER TABLE `patients` DROP `SHS`";
     $this->addQuery($query);
 
     $this->makeRevision("0.66");
@@ -1862,15 +1874,15 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $query = "ALTER TABLE `correspondant_modele`
-      ADD INDEX (`group_id`),
-      ADD INDEX (`employeur`);";
+                ADD INDEX (`group_id`),
+                ADD INDEX (`employeur`);";
     $this->addQuery($query);
 
     $this->makeRevision("1.59");
 
     $query = "ALTER TABLE `correspondant_patient`
-              CHANGE `patient_id` `patient_id` INT (11) UNSIGNED,
-              ADD `ean_id` VARCHAR (20)";
+                CHANGE `patient_id` `patient_id` INT (11) UNSIGNED,
+                ADD `ean_id` VARCHAR (20)";
     $this->addQuery($query);
 
     $this->makeRevision("1.60");
@@ -1881,14 +1893,13 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("1.61");
 
     $query = "ALTER TABLE `patients`
-              CHANGE `avs` `avs` VARCHAR (16);";
+                CHANGE `avs` `avs` VARCHAR (16);";
     $this->addQuery($query);
-
 
     $this->makeRevision("1.62");
 
     $query = "ALTER TABLE `correspondant_patient`
-    CHANGE `cp` `cp` VARCHAR (5)";
+                CHANGE `cp` `cp` VARCHAR (5)";
     $this->addQuery($query);
 
     $this->makeRevision("1.63");
@@ -1897,7 +1908,62 @@ class CSetupdPpatients extends CSetup {
     ADD `assure_id` VARCHAR (25) AFTER ean";
     $this->addQuery($query);
 
-    $this->mod_version = "1.64";
+    $this->makeRevision("1.64");
+
+    $query = "ALTER TABLE `supervision_graph_axis`
+                CHANGE `display` `display` ENUM ('points','lines','bars','stack','bandwidth');";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_graph_series`
+                ADD `integer_values` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    $query = "CREATE TABLE `supervision_graph_pack` (
+                `supervision_graph_pack_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `owner_class` ENUM ('CGroups') NOT NULL,
+                `owner_id` INT (11) UNSIGNED NOT NULL,
+                `title` VARCHAR (255) NOT NULL,
+                `disabled` ENUM ('0','1') NOT NULL DEFAULT '1'
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_graph_pack`
+                ADD INDEX `owner` (`owner_class`, `owner_id`)";
+    $this->addQuery($query);
+    $query = "CREATE TABLE `supervision_graph_to_pack` (
+                `supervision_graph_to_pack_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `graph_class` ENUM ('CSupervisionGraph','CSupervisionTimedData'),
+                `graph_id` INT (11) UNSIGNED NOT NULL,
+                `pack_id` INT (11) UNSIGNED NOT NULL,
+                `rank` INT (11) NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_graph_to_pack`
+                ADD INDEX (`graph_id`),
+                ADD INDEX (`pack_id`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_graph`
+                ADD `height` INT (11) UNSIGNED NOT NULL DEFAULT 200;";
+    $this->addQuery($query);
+    $query = "CREATE TABLE `supervision_timed_data` (
+                `supervision_timed_data_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `owner_class` ENUM ('CGroups') NOT NULL,
+                `owner_id` INT (11) UNSIGNED NOT NULL,
+                `title` VARCHAR (255) NOT NULL,
+                `disabled` ENUM ('0','1') NOT NULL DEFAULT '1',
+                `period` ENUM ('1','5','10','15','20','30','60') NOT NULL
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `supervision_timed_data`
+                ADD INDEX (`owner_id`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("1.65");
+    $query = "ALTER TABLE  `constantes_medicales`
+                DROP INDEX `context_id`,
+                ADD  INDEX `patient_id_datetime` (`patient_id`, `datetime`),
+                ADD  INDEX `context_class` (`context_class`),
+                ADD  INDEX `context` (`context_class`, `context_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.66";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

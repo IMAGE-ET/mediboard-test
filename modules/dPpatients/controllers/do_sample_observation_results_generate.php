@@ -36,7 +36,7 @@ while(--$n > 0 && ($datetime < $datetime_end)) {
   $observation_result_set->store();
   
   $times[$datetime] = $observation_result_set;
-  
+
   $datetime = mbDateTime("+$period SECONDS", $datetime);
 }
 

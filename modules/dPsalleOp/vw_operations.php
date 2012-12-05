@@ -237,15 +237,7 @@ $operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_i
 
 // Lib Flot pour les graphiques de surveillance perop
 if (CAppUI::conf("dPsalleOp enable_surveillance_perop")) {
-  CJSLoader::$files = array(
-    "lib/flot/jquery.min.js",
-    "lib/flot/jquery.flot.min.js",
-    "lib/flot/jquery.flot.symbol.min.js",
-    "lib/flot/jquery.flot.crosshair.min.js",
-    "lib/flot/jquery.flot.resize.min.js",
-  );
-  echo CJSLoader::loadFiles();
-  CAppUI::js('$.noConflict()');
+  CSupervisionGraph::includeFlot();
 }
 
 $smarty->assign("soustotal_base" , $soustotal_base);

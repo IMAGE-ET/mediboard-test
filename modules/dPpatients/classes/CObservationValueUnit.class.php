@@ -28,8 +28,10 @@ class CObservationValueUnit extends CObservationValueCodingSystem {
     $backProps["supervison_graph_series"] = "CSupervisionGraphSeries value_unit_id";
     return $backProps;
   }
-  
+
   /**
+   * @param int $unit_id
+   *
    * @return CObservationValueUnit
    */
   static function get($unit_id) {

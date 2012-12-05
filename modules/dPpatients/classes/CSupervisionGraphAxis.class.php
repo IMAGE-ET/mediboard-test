@@ -12,21 +12,29 @@
  * A supervision graph Y axis
  */
 class CSupervisionGraphAxis extends CMbObject {
-  var $supervision_graph_axis_id = null;
+  var $supervision_graph_axis_id;
   
-  var $supervision_graph_id      = null;
-  var $title                     = null;
-  var $limit_low                 = null;
-  var $limit_high                = null;
-  var $display                   = null;
-  var $show_points               = null;
-  var $symbol                    = null;
-  
-  var $_ref_series               = null;
+  var $supervision_graph_id;
+  var $title;
+  var $limit_low;
+  var $limit_high;
+  var $display;
+  var $show_points;
+  var $symbol;
+
+  /**
+   * @var CSupervisionGraphSeries[]
+   */
+  var $_ref_series;
+
+  /**
+   * @var CSupervisionGraph
+   */
+  var $_ref_graph;
   
   static $default_yaxis = array(
     "position" => "left", 
-    "labelWidth" => 20, 
+    "labelWidth" => 60, // FIXME
     "ticks" => 6, 
     "reserveSpace" => true,
     "label" => "",
@@ -34,7 +42,11 @@ class CSupervisionGraphAxis extends CMbObject {
   );
   
   function getSymbolChar() {
-    $this->completeField("symbol");
+    $this->completeField("symbol", "show_points", "display");
+
+    if (!$this->show_points && $this->display != "points") {
+      return null;
+    }
     
     return CMbArray::get(array(
       "circle"   => "&#x25CB;",
@@ -50,7 +62,10 @@ class CSupervisionGraphAxis extends CMbObject {
       "symbolChar" => $this->getSymbolChar(),
       "label"      => $this->title,
     ) + self::$default_yaxis;
-    
+
+    $height = $this->loadRefGraph()->height;
+    $axis_data["ticks"] = round($height / 25);
+
     if ($count_yaxes) {
       $axis_data["alignTicksWithAxis"] = 1;
     }
@@ -75,11 +90,11 @@ class CSupervisionGraphAxis extends CMbObject {
   
   function getProps() {
     $props = parent::getProps();
-    $props["supervision_graph_id"] = "ref notNull class|CSupervisionGraph";
+    $props["supervision_graph_id"] = "ref notNull class|CSupervisionGraph cascade";
     $props["title"]                = "str notNull";
     $props["limit_low"]            = "float"; // null => auto
     $props["limit_high"]           = "float"; // null => auto
-    $props["display"]              = "enum list|points|lines"; // |bars
+    $props["display"]              = "enum list|points|lines|bars|stack|bandwidth";
     $props["show_points"]          = "bool notNull default|1";
     $props["symbol"]               = "enum notNull list|circle|square|diamond|cross|triangle";
     return $props;
@@ -90,14 +105,19 @@ class CSupervisionGraphAxis extends CMbObject {
     $backProps["series"] = "CSupervisionGraphSeries supervision_graph_axis_id";
     return $backProps;
   }
-  
+
   /**
+   * @param bool $cache
+   *
    * @return CSupervisionGraph
    */
   function loadRefGraph($cache = true) {
     return $this->_ref_graph = $this->loadFwdRef("supervision_graph_id", $cache);
   }
-  
+
+  /**
+   * @return CSupervisionGraphSeries[]
+   */
   function loadRefsSeries() {
     return $this->_ref_series = $this->loadBackRefs("series");
   }
