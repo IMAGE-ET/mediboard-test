@@ -41,10 +41,8 @@ $do            = CValue::get("do");
 if($offline){
   $by_patient = true;
   $do = 1;
-  //$dateTime_min = mbDateTime(" - 12 HOURS");
-  //$dateTime_max = mbDateTime(" + 24 HOURS");
-  $dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
-  $dateTime_max = CValue::getOrSession("_dateTime_max", "$date 23:59:59");
+  $dateTime_min = mbDateTime(" - 12 HOURS");
+  $dateTime_max = mbDateTime(" + 24 HOURS");
 
 } else {
   $dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
