@@ -107,7 +107,8 @@ $count_etab_externe = $etab->countList();
 // Récupération des services
 $service = new CService();
 $where = array();
-$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$where["group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
+$where["cancelled"] = "= '0'";
 $order = "nom";
 $listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
 

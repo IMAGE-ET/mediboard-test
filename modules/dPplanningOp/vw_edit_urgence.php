@@ -178,8 +178,9 @@ $heure_entree_jour   = $config["heure_entree_jour"];
 
 // Récupération de la liste des services
 $where = array();
-$where["externe"]  = "= '0'";
-$service = new CService;
+$where["externe"]   = "= '0'";
+$where["cancelled"] = "= '0'";
+$service = new CService();
 $services = $service->loadGroupList($where);
 
 $sortie_sejour = mbDateTime();

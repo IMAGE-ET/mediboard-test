@@ -171,8 +171,9 @@ $mins_duree = range(0, 59, $config["min_intervalle"]);
 
 // Récupération de la liste des services
 $where = array();
-$where["externe"]  = "= '0'";
-$service = new CService;
+$where["externe"]    = "= '0'";
+$where["cancelled"]  = "= '0'";
+$service = new CService();
 $services = $service->loadGroupList($where);
 
 // Compter les prestations journalières
