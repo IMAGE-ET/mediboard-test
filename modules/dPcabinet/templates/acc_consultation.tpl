@@ -131,7 +131,7 @@ Main.add(function () {
   {{/if}}
   
   <li><a href="#fdrConsult">Documents</a></li>
-  <li onclick="Reglement.reload(true);"><a href="#reglement">Réglements</a></li>
+  <li onmousedown="Reglement.reload(true);"><a href="#reglement">Réglements</a></li>
 </ul>
 <hr class="control_tabs" />
 
