@@ -205,8 +205,8 @@ Main.add(function () {
    // fait crasher IE quand ouvert dans une iframe dans un showModalDialog:
    // l'evenement est lancé sur la balise html et ca plante
     try {
-      if (!Event.element(e).up(".tooltip")){
-        $$(".tooltip").invoke("hide");
+      if (!Event.element(e).up("div.tooltip")){
+        $$("div.tooltip").invoke("hide");
       }
     } catch(e) {}
   });
