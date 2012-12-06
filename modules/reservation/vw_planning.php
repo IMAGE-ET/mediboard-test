@@ -31,7 +31,7 @@ foreach ($praticiens as $_prat) {
   $_prat->loadRefFunction();
 }
 
-$bloc = new CBlocOperatoire;
+$bloc = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList();
 
 $smarty = new CSmartyDP("modules/reservation");
