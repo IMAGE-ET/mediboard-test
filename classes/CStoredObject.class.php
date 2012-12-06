@@ -1627,11 +1627,15 @@ class CStoredObject extends CModelObject {
    * Will check for uniqueness
    *
    * @param string $backName The collection name
+   * @param array|string $order    Order SQL statement
+   * @param string       $limit    MySQL limit clause
+   * @param array|string $group    Group by SQL statement
+   * @param array        $ljoin    Array of left join clauses
    *
    * @return CMbObject Unique back reference if exist, concrete type empty object otherwise 
    */
-  function loadUniqueBackRef($backName) {
-    if (null === $backRefs = $this->loadBackRefs($backName)) {
+  function loadUniqueBackRef($backName, $order = null, $limit = null, $group = null, $ljoin = null) {
+    if (null === $backRefs = $this->loadBackRefs($backName, $order, $limit, $group, $ljoin)) {
       return null;
     }
 
