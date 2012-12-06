@@ -604,7 +604,7 @@ checkAnesth = function(oField){
       <!-- Tab titles -->
       <ul id="tab-sejour" class="control_tabs">
         <li>
-          <button type="button" class="hslip notext" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
+          <button type="button" class="hslip notext compact" style="vertical-align: bottom;" onclick="$('left-column').toggle();" title="Afficher/cacher la colonne de gauche"></button>
         </li>
         <li><a href="#suivi_clinique" onmousedown="loadSuiviClinique(document.form_prescription.sejour_id.value)">{{tr}}CSejour.suivi_clinique{{/tr}}</a></li>
         <li onmousedown="refreshConstantesMedicales('CSejour-'+document.form_prescription.sejour_id.value, 1)"><a href="#constantes-medicales">{{tr}}CPatient.surveillance{{/tr}}</a></li>

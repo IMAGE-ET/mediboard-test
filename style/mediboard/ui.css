@@ -211,9 +211,24 @@ ul#nav-vert {
 .touchscreen input[type=email],
 .touchscreen input[type=password] {
   min-width: 3em;
+  padding-top: 5px;
 }
 
-.touchscreen input,
+.touchscreen input[type=radio],
+.touchscreen input[type=checkbox] {
+  width: 18px;
+  height: 18px;
+  -webkit-transform: scale(1.4);
+  -moz-transform: scale(1.4);
+  transform: scale(1.4);
+}
+
+/** No need to transform in IE9+ **/
+.ua-msie .touchscreen input[type=radio],
+.ua-msie .touchscreen input[type=checkbox] {
+  transform: none;
+}
+
 .touchscreen option,
 .touchscreen form label {
   padding-top: 5px;
@@ -301,20 +316,28 @@ ul#nav-vert {
 
 /* control tabs */
 hr.control_tabs {
-  clear: both;
-  border: none;
-  border-top: 1px solid #458;
-  margin-bottom: 0;
+  display: none;
 }
-  
+
 ul.control_tabs,
 ul.control_tabs_vertical {
   list-style: none;
-  clear: both;
-  padding: 1px 6px;
   line-height: normal;
+  clear: right;
+  display: block;
+  padding: 0;
 }
-  
+
+ul.control_tabs {
+  border-bottom: 1px solid #458;
+  padding-left: 1px;
+  margin-top: 1px;
+}
+
+ul.control_tabs_vertical {
+  border-right: 1px solid #458;
+}
+
 ul.full_width li,
 ul.control_tabs.wide li {
   width: 100%;
@@ -322,10 +345,14 @@ ul.control_tabs.wide li {
 
 ul.control_tabs li, 
 ul.control_tabs_vertical li {
-  float: left;
-  margin: 0 2px;
+  margin: 1px 1px 0;
   text-align: center;
-  margin-top: 2px;
+  display: -moz-inline-box;
+  display: inline-block;
+}
+
+ul.control_tabs_vertical li {
+  display: block;
 }
 
 ul.control_tabs li.linebreak, 
@@ -435,14 +462,12 @@ ul.control_tabs_vertical .separator {
 }
 
 ul.control_tabs_vertical {
-  float: left;
   border-right: 1px solid #458;
   padding: 0;
   padding-top: 6px;
 }
 
 ul.control_tabs_vertical li {
-  float: none;
   text-align: right;
   margin-right: -1px;
 }

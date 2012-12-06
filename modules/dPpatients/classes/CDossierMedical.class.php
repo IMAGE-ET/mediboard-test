@@ -103,10 +103,13 @@ class CDossierMedical extends CMbMetaObject {
     $this->loadRefsAntecedents();
     $this->loadRefsTraitements();
   }
-  
+
+  /**
+   * @return CPrescription
+   */
   function loadRefPrescription(){
     $this->_ref_prescription = $this->loadUniqueBackRef("prescription");  
-    if ($this->_ref_prescription && $this->_ref_prescription->_id){
+    if ($this->_ref_prescription && $this->_ref_prescription->_id) {
       $this->_ref_prescription->loadRefsLinesMed();
     }
     return $this->_ref_prescription;

@@ -455,6 +455,10 @@ var ExObject = {
         $V(targetField, "");
       }
     });
+  },
+
+  toggleDateField: function(checkbox) {
+    checkbox.up().select('input').without(checkbox).invoke(checkbox.checked ? 'enable' : 'disable');
   }
 };
 

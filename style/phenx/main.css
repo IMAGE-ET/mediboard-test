@@ -214,9 +214,7 @@ table.titleblock td.titlecell {
 
 #tabmenu td {
   height: 24px;
-  padding: 5px;
-  padding-top: 3px;
-  padding-bottom: 0;
+  padding: 3px 5px 0;
   background: url(images/pictures/tab_background.png) repeat-x top;
 }
 
@@ -648,34 +646,9 @@ span.hilite {
 }
 
 /* control tabs */
-hr.control_tabs {
-  display: none;
-}
-
-ul.control_tabs {
-  border-bottom: 1px solid #458;
-}
-
-ul.control_tabs_vertical {
-  border-right: 1px solid #458;
-}
-
 ul.control_tabs, 
 ul.control_tabs_vertical {
-  clear: right;
   border-bottom-color: #F60;
-  display: block;
-  padding: 0;
-  margin-bottom: 2px;
-}
-
-ul.control_tabs li, 
-ul.control_tabs_vertical li {
-  display: -moz-inline-box;
-  display: inline-block;
-  float: none;
-  margin-left: 2px;
-  margin-top: 2px;
 }
 
 ul.control_tabs li a, 
@@ -755,7 +728,6 @@ ul.control_tabs_vertical {
 }
 
 ul.control_tabs_vertical li {
-  display: block;
   margin-bottom: 0;
 }
 

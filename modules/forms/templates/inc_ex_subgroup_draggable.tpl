@@ -1,7 +1,11 @@
 
 <div class="resizable subgroup" tabIndex="0" data-subgroup_id="{{$_subgroup->_id}}"
      style="left:{{$_subgroup->coord_left}}px; top:{{$_subgroup->coord_top}}px; width:{{$_subgroup->coord_width}}px; height:{{$_subgroup->coord_height}}px; "
-     ondblclick="ExSubgroup.edit({{$_subgroup->_id}})">
+     ondblclick="ExSubgroup.edit({{$_subgroup->_id}}); Event.stop(event);"
+     onclick="this.up('.resizable').focus(); Event.stop(event);"
+     unselectable="on"
+     onselectstart="return false;"
+  >
 {{mb_include module=forms template=inc_resizable_handles}}
   <div class="overlayed">
     <fieldset {{if !$_subgroup->title}} class="no-label" {{/if}}>

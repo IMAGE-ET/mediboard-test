@@ -398,3 +398,9 @@ form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
 .pixel-positionning .handle.middle-left {
   cursor: w-resize;
 }
+
+.pixel-positionning input.date-toggle {
+  line-height: 16px;
+  vertical-align: middle;
+  margin-right: -3px;
+}

@@ -1,7 +1,11 @@
-<div class="{{if !$ex_class->pixel_positionning}} draggable {{/if}} {{$_type}} overlayed" 
+<div class="{{if !$ex_class->pixel_positionning}} draggable {{/if}} {{$_type}} overlayed"
      data-type="{{$_type}}" 
      data-field_id="{{$_field->_id}}" 
-     ondblclick="ExField.edit({{$_field->_id}}); Event.stop(event);">
+     ondblclick="ExField.edit({{$_field->_id}}); Event.stop(event);"
+     onclick="this.up('.resizable').focus(); Event.stop(event);"
+     unselectable="on"
+     onselectstart="return false;"
+  >
   <div style="position: relative; height: 100%;">
     {{if $_type == "field"}}
       {{if !$ex_class->pixel_positionning || !$_field->show_label}}

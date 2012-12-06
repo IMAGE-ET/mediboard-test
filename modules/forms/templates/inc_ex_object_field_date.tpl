@@ -1,3 +1,10 @@
+{{assign var=disabled value=true}}
+{{unique_id var=checkbox_uid}}
+
+{{if $ex_object->_id}}
+  {{assign var=disabled value=false}}
+{{/if}}
+
 {{if $show_label}}
   <table class="main layout">
     <tr>
@@ -5,8 +12,7 @@
       <td style="text-align: right;">
         {{$ex_field->prefix}}
         <div style="display: inline-block;">
-          <input type="checkbox" style="line-height: 16px; vertical-align: middle; margin-right: -3px;" checked
-                 onclick="this.up().select('input').without(this).invoke(this.checked?'enable':'disable')" />
+          <input class="date-toggle" type="checkbox" checked id="cb-{{$checkbox_uid}}" onclick="ExObject.toggleDateField(this)" />
           {{mb_field
             object=$ex_object
             field=$_field_name
@@ -26,8 +32,7 @@
 {{else}}
   {{$ex_field->prefix}}
   <div style="display: inline-block;">
-    <input type="checkbox" style="line-height: 16px; vertical-align: middle; margin-right: -3px;" checked
-           onclick="this.up().select('input').without(this).invoke(this.checked?'enable':'disable')" />
+    <input class="date-toggle" type="checkbox" checked id="cb-{{$checkbox_uid}}" onclick="ExObject.toggleDateField(this)" />
     {{mb_field
       object=$ex_object
       field=$_field_name
@@ -41,4 +46,14 @@
     }}
   </div>
   {{$ex_field->suffix}}
+{{/if}}
+
+{{if $disabled}}
+<script type="text/javascript">
+Main.add(function(){
+  var cb = $("cb-{{$checkbox_uid}}");
+  cb.checked = false;
+  cb.onclick();
+});
+</script>
 {{/if}}
