@@ -16,10 +16,12 @@ $fin        = CValue::get("fin"       , mbDate());
 $prat_id    = CValue::get("prat_id"   , 0);
 $service_id = CValue::get("service_id", 0);
 
+$ds = CSQLDataSource::get("std");
+
 $pratSel = new CMediusers;
 $pratSel->load($prat_id);
 
-$service = new CService;
+$service = new CService();
 $service->load($service_id);
 
 $datax = array("ticks" => array(), "date" => array());
@@ -28,11 +30,12 @@ for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
   $datax["date"][]  = mbTransformTime("+0 DAY", $i, "%Y-%m");
 }
 
-$sql = "SELECT * FROM service";
-if($service_id)
-  $sql .= "\nWHERE service_id = '$service_id'";
-$ds = CSQLDataSource::get("std");
-$services = $ds->loadlist($sql);
+$where = array();
+if($service_id) {
+  $where["service_id"] = "= '$service_id";
+}
+$where["cancelled"]  = "= '0'";
+$services = $service->loadGroupList($where);
 
 $maxDuree = 0;
 $hoursByService = array();

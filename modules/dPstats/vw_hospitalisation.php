@@ -137,8 +137,10 @@ if (count($result)) {
 $user = new CMediusers;
 $listPrats = $user->loadPraticiens(PERM_READ);
 
-$listServices = new CService;
-$listServices = $listServices->loadGroupList();
+$service = new CService();
+$where = array();
+$where["cancelled"] = "= '0'";
+$listServices = $service->loadGroupList();
 
 $listDisciplines = new CDiscipline();
 $listDisciplines = $listDisciplines->loadUsedDisciplines();

@@ -30,13 +30,7 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
     $serie_total['data'][] = array(count($serie_total['data']), 0);
 	}
 	
-	$where = array();
-	if ($service_id) {
-	  $where["service_id"] = "= '$service_id'";
-	}
-	$service = new CService;
-	
-	$sejour = new CSejour;
+	$sejour = new CSejour();
 	$listHospis = array();
 	foreach ($sejour->_specs["type"]->_locales as $key => $type) {
 	  if ((($key == "comp" || $key == "ambu") && $type_adm == 1) ||

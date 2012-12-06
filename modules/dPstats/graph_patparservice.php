@@ -34,7 +34,8 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
 	if($service_id) {
 	  $where["service_id"] = "= '$service_id'";
 	}
-	$service = new CService;
+  $where["cancelled"] = "= '0'";
+	$service = new CService();
 	$services = $service->loadGroupList($where);
 	
 	$sejour = new CSejour;
