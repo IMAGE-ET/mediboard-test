@@ -64,7 +64,7 @@
       <select name="pathologie">
         <option value="">&mdash; Choisir</option>
         {{foreach from=$pathos->_specs.categorie->_locales item=curr_patho}}
-        <option {{if $curr_patho == $curr_sejour->pathologie}}selected="selected"{{/if}}>
+        <option {{if $curr_patho == $curr_sejour->pathologie}}selected="selected"{{/if}} value="{{$curr_patho}}">
         {{$curr_patho}}
         </option>
         {{/foreach}}
