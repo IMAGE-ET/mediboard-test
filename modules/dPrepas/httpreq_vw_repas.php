@@ -17,9 +17,10 @@ $date       = CValue::getOrSession("date"       , mbDate());
 $service = null;
 
 // Liste des services
-$services = new CService;
+$services = new CService();
 $where = array();
 $where["group_id"] = "= '$group->_id'";
+$where["cancelled"] = "= '0'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 

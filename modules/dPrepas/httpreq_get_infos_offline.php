@@ -24,7 +24,8 @@ $etablissements = $etablissements->loadEtablissements(PERM_READ);
 $order = "group_id, nom";
 $where = array();
 $where["group_id"] = CSQLDataSource::prepareIn(array_keys($etablissements));
-$services = new CService;
+$where["cancelled"] = "= '0'";
+$services = new CService();
 $services = $services->loadList($where, $order);
 
 $listTypeRepas = new CTypeRepas;
