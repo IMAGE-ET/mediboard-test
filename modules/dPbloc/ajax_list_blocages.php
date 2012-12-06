@@ -19,7 +19,7 @@ $date_replanif = CValue::getOrSession("date_replanif", mbDate());
 $date_min = mbTransformTime(null, $date_replanif, "%Y-%m-01");
 $date_max = mbDate("-1 day", mbDate("+1 month", $date_min));
 
-$bloc = new CBlocOperatoire;
+$bloc = new CBlocOperatoire();
 $where = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
 $blocs = $bloc->loadListWithPerms(PERM_READ, $where, "nom");
 
@@ -30,7 +30,7 @@ foreach ($blocs as $_bloc) {
   $salles[$_bloc->_id] = $_bloc->loadRefsSalles();
   
   foreach ($salles[$_bloc->_id] as $_salle) {
-    $blocage = new CBlocage;
+    $blocage = new CBlocage();
     $whereBloc = array();
     $whereBloc["salle_id"] = "= '$_salle->_id'";
     $whereBloc[] = "deb <= '$date_max' AND fin >= '$date_min'";

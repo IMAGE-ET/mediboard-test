@@ -16,8 +16,9 @@ $bloc_id     = CValue::getOrSession("bloc_id");
 $order_way   = CValue::getOrSession("order_way", "_heure_us");
 $order_col   = CValue::getOrSession("order_col", "ASC");
 
-$bloc = new CBlocOperatoire;
-$blocs = $bloc->loadListWithPerms(PERM_READ, null, "nom");
+$bloc = new CBlocOperatoire();
+$where = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
+$blocs = $bloc->loadListWithPerms(PERM_READ, $where, "nom");
 
 $smarty = new CSmartyDP;
 

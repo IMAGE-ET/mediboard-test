@@ -22,8 +22,9 @@ if (!$blocage->_id) {
   $blocage->deb = $blocage->fin = mbDate();
 }
 
-$bloc = new CBlocOperatoire;
-$blocs = $bloc->loadListWithPerms(PERM_READ, null, "nom");
+$bloc = new CBlocOperatoire();
+$where = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
+$blocs = $bloc->loadListWithPerms(PERM_READ, $where, "nom");
 
 foreach ($blocs as $_bloc) {
   $_bloc->loadRefsSalles();
