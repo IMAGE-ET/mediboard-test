@@ -14,14 +14,15 @@ CCanDo::checkRead();
 $service_id   = CValue::postOrSession("service_id");
 
 //Chargement de tous les services
-$service_selectionne = new CService();
-$where = array();
-$where["service_id"] = " = '$service_id'";
-$where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
-$service_selectionne->loadObject($where);
-
 $service = new CService();
-$services = $service->loadGroupList(null, "nom ASC");
+$where = array();
+$where["group_id"]   = "= '".CGroups::loadCurrent()->_id."'";
+$where["cancelled"]  = "= '0'";
+$services = $service->loadGroupList($where, "nom ASC");
+
+$service_selectionne = new CService();
+$where["service_id"] = " = '$service_id'";
+$service_selectionne->loadObject($where);
 
 $chambre = new CChambre();
 $where = array();

@@ -19,7 +19,7 @@
     
         {{foreach from=$services item=_service}}
           <tr {{if $_service->_id == $service->_id}} class="selected" {{/if}}>
-            <td>
+            <td {{if $_service->cancelled}} class="cancelled" {{/if}}>
               <a href="#" onclick="showInfrastructure('service_id', '{{$_service->_id}}', 'infrastructure_service')">
                 {{mb_value object=$_service field=nom}}
               </a>

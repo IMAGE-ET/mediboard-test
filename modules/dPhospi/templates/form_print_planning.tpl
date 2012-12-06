@@ -144,7 +144,7 @@ function toggleMultiple(select, multiple) {
         <tr>
           <th>{{mb_label object=$filter field="praticien_id"}}</th>
           <td colspan="2">
-            <select name="praticien_id" style="width: 20em;">
+            <select name="praticien_id" style="width: 15em;">
               <option value="0">&mdash; {{tr}}All{{/tr}}</option>
               {{foreach from=$listPrat item=curr_prat}}
                 <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
@@ -158,7 +158,7 @@ function toggleMultiple(select, multiple) {
         <tr>
           <th>{{mb_label object=$filter field="_specialite"}}</th>
           <td colspan="2">
-            <select name="_specialite" style="width: 20em;">
+            <select name="_specialite" style="width: 15em;">
               <option value="0">&mdash; {{tr}}All{{/tr}}</option>
               {{foreach from=$listSpec item=curr_spec}}
                 <option class="mediuser" style="border-color: #{{$curr_spec->color}};" value="{{$curr_spec->function_id}}">{{$curr_spec->text}}</option>

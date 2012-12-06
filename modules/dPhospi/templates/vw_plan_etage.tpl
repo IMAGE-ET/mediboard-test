@@ -47,20 +47,20 @@
 
 <table class="main" style="text-align:center;">
   <tr>
-    <th class="title">Chambres</th>
-    <th class="title">{{if $service_selectionne->_id}}Plan du service '{{$service_selectionne->nom}}'{{else}}Plan{{/if}}</th>
-  </tr>
-  <tr id="rechargement_grille">
-    <td class="conteneur_chambres_non_places">
+    <th>
       <form action="?m=dPhospi&tab=vw_plan_etage" method="post">
-          <select name="service_id" onchange="this.form.submit()">
+          <select name="service_id" onchange="this.form.submit()" style="width: 12em;">
             <option value="">&mdash; Service</option>
             {{foreach from=$services item=_service}}    
               <option value="{{$_service->_id}}" {{if $service_id!="" && $service_id==$_service->_id}}selected="selected"{{/if}}>{{ $_service->nom}}</option>
             {{/foreach}}
           </select>
-      </form><br/>
-      
+      </form>
+    </th>
+    <th class="title">{{if $service_selectionne->_id}}Plan du service '{{$service_selectionne->nom}}'{{else}}Plan{{/if}}</th>
+  </tr>
+  <tr id="rechargement_grille">
+    <td class="conteneur_chambres_non_places">
       <div id="list-chambres-non-placees" >
       {{foreach from=$chambres_non_placees item=_chambre}}
         <div data-chambre-id="{{$_chambre->_id}}" class="chambre draggable" 

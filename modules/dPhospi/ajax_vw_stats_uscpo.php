@@ -90,8 +90,13 @@ $options = CFlotrGraph::merge("bars", array(
 
 $graph = array('series' => $series, 'options' => $options);
 
-$service = new CService;
-$services = $service->loadListWithPerms(PERM_READ);
+$group   = CGroups::loadCurrent();
+$service = new CService();
+$where   = array();
+$where["group_id"]  = "= '$group->_id'";
+$where["cancelled"] = "= '0'";
+$order = "nom";
+$services = $service->loadListWithPerms(PERM_READ,$where, $order);
 
 $dates = array();
 $day = $date_min;

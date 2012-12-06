@@ -20,7 +20,8 @@ $listOps = array();
 // Liste des services
 $service = new CService();
 $where = array();
-$where["group_id"] = "= '$group->_id'";
+$where["group_id"]  = "= '$group->_id'";
+$where["cancelled"] = "= '0'";
 $order = "nom";
 $services = $service->loadListWithPerms(PERM_READ,$where, $order);
 

@@ -18,8 +18,13 @@ $date_max    = CValue::getOrSession("date_max", mbDate());
 $service_id  = CValue::getOrSession("service_id");
 $display_stat = CValue::getOrSession("display_stat", array("ouvert" => 1, "prevu" => 1, "reel" => 1, "entree" => 1));
 
-$service = new CService;
-$services = $service->loadListWithPerms(PERM_READ);
+$group = CGroups::loadCurrent();
+$service = new CService();
+$where = array();
+$where["group_id"]  = "= '$group->_id'";
+$where["cancelled"] = "= '0'";
+$order = "nom";
+$services = $service->loadListWithPerms(PERM_READ,$where, $order);
 
 // Template avec échec
 $smarty = new CSmartyDP;

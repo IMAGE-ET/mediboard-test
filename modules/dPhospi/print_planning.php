@@ -51,7 +51,7 @@ $sejourReq->addWhereClause("sejour.type", "!= 'urg'");
 
 // Clause de filtre par spécialité / chir
 if ($filter->_specialite or $filter->praticien_id) {
-  $speChirs = new CMediusers;
+  $speChirs = new CMediusers();
   $speChirs = $speChirs->loadList(array ("function_id" => "= '$filter->_specialite'"));
   
   if (count($filter->praticien_id)) {
@@ -97,18 +97,19 @@ $listDays = array();
 $listPrats = array();
 
 // Liste des services
-$services = new CService;
+$service = new CService();
 $where = array();
-$where["group_id"] = "= '$group->_id'";
+$where["group_id"]  = "= '$group->_id'";
+$where["cancelled"] = "= '0'";
 $order = "nom";
-$services = $services->loadListWithPerms(PERM_READ,$where, $order);
+$services = $service->loadListWithPerms(PERM_READ,$where, $order);
 
-foreach ($sejours as $key => &$sejour) {
+foreach ($sejours as $key => $sejour) {
   $sejour->loadRefsAffectations();
   $sejour->loadRefsOperations();
-  $sejour->loadRefPatient(1);
+  $sejour->loadRefPatient();
   $sejour->_ref_first_affectation->loadRefLit();
-  $affectation =& $sejour->_ref_first_affectation;
+  $affectation = $sejour->_ref_first_affectation;
   $affectation->_ref_lit->loadCompleteView();
 
   if (count($filter->_service) && !in_array($affectation->_ref_lit->_ref_chambre->service_id, $filter->_service)) {
@@ -118,10 +119,10 @@ foreach ($sejours as $key => &$sejour) {
     unset($sejours[$key]);
     continue;
   } 
-  $sejour->loadRefPraticien(1);
+  $sejour->loadRefPraticien();
 
-  foreach($sejour->_ref_operations as &$operation) {
-    $operation->loadRefsFwd(1);
+  foreach($sejour->_ref_operations as $operation) {
+    $operation->loadRefsFwd();
   }
 
   $curr_date = mbDate(null, $sejour->{$filter->_horodatage});

@@ -12,6 +12,7 @@ CCanDo::checkAdmin();
 
 $service = new CService();
 $service->group_id = CGroups::loadCurrent()->_id;
+$service->cancelled = 0;
 $order = "nom ASC";
 $services = $service->loadMatchingList($order);
 

@@ -56,7 +56,7 @@ $lit->loadRefChambre();
 $where = array();
 $where["group_id"] = "= '$group->_id'";
 $order = "nom";
-$services = $service->loadListWithPerms(PERM_READ,$where, $order);
+$services = $service->loadListWithPerms(PERM_READ, $where, $order);
 foreach ($services as $_service) {
   foreach ($_service->loadRefsChambres() as $_chambre) {
     $_chambre->loadRefs();

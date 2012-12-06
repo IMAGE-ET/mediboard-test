@@ -8,13 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$services_ids = CValue::getOrSession("services_ids", null);
-$readonly     = CValue::get("readonly", 0);
-$granularite  = CValue::getOrSession("granularite", "day");
-$date         = CValue::getOrSession("date", mbDate());
+$services_ids   = CValue::getOrSession("services_ids", null);
+$readonly       = CValue::get("readonly", 0);
+$granularite    = CValue::getOrSession("granularite", "day");
+$date           = CValue::getOrSession("date", mbDate());
 $mode_vue_tempo = CValue::getOrSession("mode_vue_tempo", "classique");
-$readonly     = CValue::getOrSession("readonly", 0);
-$prestation_id = CValue::getOrSession("prestation_id", 0);
+$readonly       = CValue::getOrSession("readonly", 0);
+$prestation_id  = CValue::getOrSession("prestation_id", 0);
 
 if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);

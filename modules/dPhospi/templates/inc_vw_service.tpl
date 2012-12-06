@@ -16,7 +16,12 @@
     <tr>
       <th>{{mb_label object=$service field=nom}}</th>
       <td>{{mb_field object=$service field=nom}}</td>
-    </tr>       
+    </tr>
+  
+    <tr>
+      <th>{{mb_label object=$service field=cancelled}}</th>
+      <td>{{mb_field object=$service field=cancelled}}</td>
+    </tr>      
   
     <tr>
       <th>{{mb_label object=$service field=responsable_id}}</th>
@@ -51,11 +56,6 @@
     <tr>
       <th>{{mb_label object=$service field=externe}}</th>
       <td>{{mb_field object=$service field=externe}}</td>
-    </tr>
-  
-    <tr>
-      <th>{{mb_label object=$service field=cancelled}}</th>
-      <td>{{mb_field object=$service field=cancelled}}</td>
     </tr>
     
     <tr>

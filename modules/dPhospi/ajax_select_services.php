@@ -20,9 +20,10 @@ if (!is_array($services_ids_suggest) && !is_null($services_ids_suggest)) {
 
 $group_id = CGroups::loadCurrent()->_id;
 
-$service = new CService;
+$service = new CService();
 $where = array();
 $where["group_id"] = "= '$group_id'";
+$where["cancelled"] = "= '0'";
 $where["secteur_id"] = "IS NULL";
 $order = "externe, nom";
 $all_services = $service->loadList($where, $order);
@@ -32,7 +33,7 @@ $services_allowed = $service->loadListWithPerms(PERM_READ, $where, $order);
 
 $where = array();
 $where["group_id"] = "= '$group_id'";
-$secteur = new CSecteur;
+$secteur = new CSecteur();
 $secteurs = $secteur->loadList($where, "nom");
 
 foreach ($secteurs as $_secteur) {
