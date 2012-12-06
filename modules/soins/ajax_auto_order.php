@@ -12,7 +12,7 @@ $service_id = CValue::get('service_id');
 $date_min = CValue::get('date_min');
 $date_max = CValue::get('date_max');
 
-$service = new CService;
+$service = new CService();
 $orders = array();
 
 if ($service->load($service_id) && $date_min && $date_max) {

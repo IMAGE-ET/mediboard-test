@@ -17,7 +17,10 @@ $endowment_id = CValue::getOrSession('endowment_id');
 
 // Services list
 $service = new CService();
-$list_services = $service->loadListWithPerms(PERM_READ);
+$where = array();
+$where["group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
+$where["cancelled"] = "= '0'";
+$list_services = $service->loadListWithPerms(PERM_READ, $where);
 
 if ($m == "dPurgences") {
   foreach($list_services as $_id => $_service) {

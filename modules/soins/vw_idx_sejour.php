@@ -41,8 +41,9 @@ if($_is_praticien && !$service_id && !$praticien_id) {
 
 // Récupération de la liste des services
 $where = array();
-$where["externe"]  = "= '0'";
-$service = new CService;
+$where["externe"]   = "= '0'";
+$where["cancelled"] = "= '0'";
+$service = new CService();
 $services = $service->loadGroupList($where);
   
 $changeSejour = CValue::get("service_id") || CValue::get("praticien_id");
@@ -62,7 +63,7 @@ $totalLits = 0;
 $heureLimit = "16:00:00";
 
 // Initialisation
-$service = new CService;
+$service = new CService();
 $groupSejourNonAffectes = array();
 $sejoursParService = array();
 

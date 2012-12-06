@@ -25,7 +25,9 @@ for ($i = 0; $i < $nb_periods; $i++) {
 }
 
 $service = new CService();
-$services = $service->loadGroupList();
+$where = array();
+$where["cancelled"] = "= '0'";
+$services = $service->loadGroupList($where);
 
 // Chargement des sejours pour le service selectionné
 $sejours = array();

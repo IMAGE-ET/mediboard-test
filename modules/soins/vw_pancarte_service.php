@@ -51,8 +51,9 @@ $filter_line->debut = $date;
 
 // Récupération de la liste des services
 $where = array();
-$where["externe"]  = "= '0'";
-$service = new CService;
+$where["externe"]   = "= '0'";
+$where["cancelled"] = "= '0'";
+$service = new CService();
 $services = $service->loadGroupList($where);
 
 // Initialisations

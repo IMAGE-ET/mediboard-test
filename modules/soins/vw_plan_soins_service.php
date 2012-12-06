@@ -92,8 +92,9 @@ foreach($elements as $_element){
 
 // Récupération de la liste des services
 $where = array();
-$where["externe"]  = "= '0'";
-$_service = new CService;
+$where["externe"]   = "= '0'";
+$where["cancelled"] = "= '0'";
+$_service = new CService();
 $services = $_service->loadGroupList($where);
  
 // Création du template
