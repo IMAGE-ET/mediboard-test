@@ -258,7 +258,7 @@ class CTemplateManager {
    * @return void 
    */
   function addLongDateProperty($field, $value) {
-    $value = ucfirst(mbTransformTime(null, $value, CAppUI::conf("longdate")));
+    $value = $value ? ucfirst(mbTransformTime(null, $value, CAppUI::conf("longdate"))) : "";
     $this->addProperty($field, $value);
   }
   
