@@ -20,9 +20,11 @@ $hierEntree = mbDate("- 1 day", $dateEntree);
 $hierEntree = mbDateTime("23:59:00", $hierEntree);
 
 // Chargement des services
-$services = new CService;
-$whereServices = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
-$services = $services->loadListWithPerms(PERM_READ, $whereServices, "nom");
+$service = new CService();
+$whereServices = array();
+$whereServices["group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
+$whereServices["cancelled"] = "= '0'";
+$services = $service->loadListWithPerms(PERM_READ, $whereServices, "nom");
 
 // Initialisations
 $totalHospi = 0;

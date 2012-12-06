@@ -16,8 +16,9 @@ $etablissements = $etablissements->loadEtablissements(PERM_READ);
 // Récupération des services
 $order = "group_id, nom";
 $where = array();
-$where["group_id"] = CSQLDataSource::prepareIn(array_keys($etablissements));
-$services = new CService;
+$where["group_id"]  = CSQLDataSource::prepareIn(array_keys($etablissements));
+$where["cancelled"] = "= '0'";
+$services = new CService();
 $services = $services->loadList($where, $order);
 
 

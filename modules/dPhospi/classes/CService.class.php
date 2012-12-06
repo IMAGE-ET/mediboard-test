@@ -177,7 +177,8 @@ class CService extends CMbObject {
   static function loadServicesUrgence() {
     $service = new CService();
     $service->group_id = CGroups::loadCurrent()->_id;
-    $service->urgence = "1";
+    $service->urgence   = "1";
+    $service->cancelled = "0";
     $services = $service->loadMatchingList();
     foreach ($services as $_service) {
       $_service->loadRefsChambres(false);
@@ -196,7 +197,8 @@ class CService extends CMbObject {
   static function loadServicesUHCD() {
     $service = new CService();
     $service->group_id = CGroups::loadCurrent()->_id;
-    $service->uhcd     = "1";
+    $service->uhcd      = "1";
+    $service->cancelled = "0";
     $services = $service->loadMatchingList();
     foreach ($services as $_service) {
       $_service->loadRefsBack();

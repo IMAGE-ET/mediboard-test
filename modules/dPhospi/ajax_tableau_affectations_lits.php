@@ -52,9 +52,10 @@ if (!$services_ids) {
   }
   // Sinon, chargement de la liste des services en accord avec le droit de lecture
   else {
-    $service = new CService;
+    $service = new CService();
     $where = array();
-    $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+    $where["group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
+    $where["cancelled"] = "= '0'";
     $services_ids = array_keys($service->loadListWithPerms(PERM_READ, $where, "externe, nom"));
     CValue::setSession("services_ids", $services_ids);
   }
@@ -62,8 +63,9 @@ if (!$services_ids) {
 
 // Récupération des chambres/services
 $where = array();
-$where["group_id"] = "= '$g'";
-$services = new CService;
+$where["group_id"]  = "= '$g'";
+$where["cancelled"] = "= '0'";
+$services = new CService();
 $order = "externe, nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 

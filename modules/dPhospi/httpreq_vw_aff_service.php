@@ -18,7 +18,7 @@ $mode       = CValue::getOrSession("mode", 0);
 $service_id = CValue::get("service_id");
 
 // Chargement du service
-$service = new CService;
+$service = new CService();
 $service->load($service_id);
 loadServiceComplet($service, $date, $mode);
 

@@ -35,7 +35,7 @@ $listSpec = $listSpec->loadSpecialites(PERM_READ);
 $where = array();
 $where["externe"]    = "= '0'";
 $where["cancelled"]  = "= '0'";
-$service = new CService;
+$service = new CService();
 $services = $service->loadGroupList($where);
 
 $yesterday  = mbDate("-1 day", $today);

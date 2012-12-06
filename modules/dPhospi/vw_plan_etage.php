@@ -16,8 +16,8 @@ $service_id   = CValue::postOrSession("service_id");
 //Chargement de tous les services
 $service = new CService();
 $where = array();
-$where["group_id"]   = "= '".CGroups::loadCurrent()->_id."'";
-$where["cancelled"]  = "= '0'";
+$where["group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
+$where["cancelled"] = "= '0'";
 $services = $service->loadGroupList($where, "nom ASC");
 
 $service_selectionne = new CService();

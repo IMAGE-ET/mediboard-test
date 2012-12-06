@@ -29,7 +29,8 @@ if (isset($pref_services_ids->{"g$group_id"})) {
 else {
   $service = new CService();
   $where = array();
-  $where["group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+  $where["group_id"]  = "= '".CGroups::loadCurrent()->_id."'";
+  $where["cancelled"] = "= '0'";
   $services_ids = array_keys($service->loadListWithPerms(PERM_READ, $where, "externe, nom"));
 }
 

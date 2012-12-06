@@ -45,8 +45,9 @@ $totalLits = 0;
 
 // Récupération des chambres/services
 $where = array();
-$where["group_id"] = "= '$g'";
-$services = new CService;
+$where["group_id"]  = "= '$g'";
+$where["cancelled"] = "= '0'";
+$services = new CService();
 $order = "externe, nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
