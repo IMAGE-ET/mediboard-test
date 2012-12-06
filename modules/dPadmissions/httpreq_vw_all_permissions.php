@@ -52,8 +52,9 @@ for ($day = $month_min; $day < $nextmonth; $day = mbDate("+1 DAY", $day)) {
 
 // Récupération de la liste des services
 $where = array();
-$where["externe"]  = "= '1'";
-$service = new CService;
+$where["externe"]   = "= '1'";
+$where["cancelled"] = "= '0'";
+$service = new CService();
 $services = $service->loadGroupList($where);
 
 // filtre sur les types d'admission

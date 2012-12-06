@@ -25,10 +25,11 @@ $hier          = mbDate("- 1 day", $date);
 $demain        = mbDate("+ 1 day", $date);
 
 // Récupération de la liste des services
-$where             = array();
-$where["externe"]  = "= '0'";
-$service           = new CService();
-$services          = $service->loadGroupList($where);
+$where              = array();
+$where["externe"]   = "= '0'";
+$where["cancelled"] = "= '0'";
+$service            = new CService();
+$services           = $service->loadGroupList($where);
 
 // Récupération de la liste des praticiens
 $prat = CMediusers::get();
