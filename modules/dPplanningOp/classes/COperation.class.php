@@ -834,7 +834,7 @@ class COperation extends CCodable implements IPatientRelated {
   /**
    * @return CMediusers
    */
-  function loadRefChir($cache = 0) {
+  function loadRefChir($cache = true) {
     $this->_ref_chir = $this->loadFwdRef("chir_id", $cache);
     $this->_praticien_id = $this->_ref_chir->_id;
     return $this->_ref_chir;
@@ -844,7 +844,7 @@ class COperation extends CCodable implements IPatientRelated {
    * @param boolean cache
    * @return CMediusers
    */
-  function loadRefChir2($cache = 0) {
+  function loadRefChir2($cache = true) {
     return $this->_ref_chir_2 = $this->loadFwdRef("chir_2_id", $cache);
   }
   
@@ -852,7 +852,7 @@ class COperation extends CCodable implements IPatientRelated {
    * @param boolean cache
    * @return CMediusers
    */
-  function loadRefChir3($cache = 0) {
+  function loadRefChir3($cache = true) {
     return $this->_ref_chir_3 = $this->loadFwdRef("chir_3_id", $cache);
   }
   
@@ -860,14 +860,14 @@ class COperation extends CCodable implements IPatientRelated {
    * @param boolean cache
    * @return CMediusers
    */
-  function loadRefChir4($cache = 0) {
+  function loadRefChir4($cache = true) {
     return $this->_ref_chir_4 = $this->loadFwdRef("chir_4_id", $cache);
   }
   
   /**
    * @return CMediusers
    */
-  function loadRefPraticien($cache = 0) {
+  function loadRefPraticien($cache = true) {
     $this->_ref_praticien = $this->loadRefChir($cache);
     $this->_ref_executant = $this->_ref_praticien;
     return $this->_ref_praticien;
@@ -922,14 +922,14 @@ class COperation extends CCodable implements IPatientRelated {
     }
   }
   
-  function loadRefAnesth($cache = 0) {
+  function loadRefAnesth($cache = true) {
     return $this->_ref_anesth = $this->loadFwdRef("anesth_id", $cache);
   }
   
   /**
    * @return CPlageOp
    */
-  function loadRefPlageOp($cache = 0) {
+  function loadRefPlageOp($cache = true) {
     $this->loadRefAnesth($cache);
     $this->_ref_anesth_visite = $this->loadFwdRef("prat_visite_anesth_id", $cache);
     
@@ -1013,17 +1013,13 @@ class COperation extends CCodable implements IPatientRelated {
     }
     
     $order = "consultation_anesth_id ASC";
-    $this->_ref_consult_anesth = new CConsultAnesth();
-    $this->_ref_consult_anesth->operation_id = $this->_id;
-    $this->_ref_consult_anesth->loadMatchingObject($order);
-    
-    return $this->_ref_consult_anesth;
+    return $this->_ref_consult_anesth = $this->loadUniqueBackRef("dossiers_anesthesie", $order);
   }
   
   /**
    * @return CSejour
    */
-  function loadRefSejour($cache = false) {
+  function loadRefSejour($cache = true) {
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
   }
   
@@ -1052,16 +1048,16 @@ class COperation extends CCodable implements IPatientRelated {
   /**
    * @return CPatient
    */
-  function loadRefPatient($cache = false) {
-    $this->loadRefSejour($cache);
-    $this->_ref_sejour->loadRefPatient($cache);
-    $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
-    $this->_patient_id = $this->_ref_patient->_id;
+  function loadRefPatient($cache = true) {
+    $sejour = $this->loadRefSejour($cache);
+    $patient = $sejour->loadRefPatient($cache);
+    $this->_ref_patient = $patient;
+    $this->_patient_id = $patient->_id;
     $this->loadFwdRef("_patient_id", $cache);
-    return $this->_ref_patient;
+    return $patient;
   }
   
-  function loadRefsFwd($cache = false) {
+  function loadRefsFwd($cache = true) {
     $consult_anesth = $this->loadRefsConsultAnesth();
     $consult_anesth->countDocItems();
 

@@ -1289,7 +1289,7 @@ class CSejour extends CCodable implements IPatientRelated {
     return $observation->countList($where);
   }
 
-  function loadRefPatient($cache = 1) {
+  function loadRefPatient($cache = true) {
     $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
     $this->getDroitsCMU();
 
@@ -1301,7 +1301,7 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_patient;
   }
 
-  function loadRefPraticien($cache = 0) {
+  function loadRefPraticien($cache = true) {
     $this->_ref_praticien = $this->loadFwdRef("praticien_id", $cache);
     $this->_ref_executant = $this->_ref_praticien;
     $this->_ref_praticien->loadRefFunction();
@@ -1644,7 +1644,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->_list_constantes_medicales = $constantes->loadList($where, 'datetime ASC');
   }
 
-  function loadRefsFwd($cache = 0) {
+  function loadRefsFwd($cache = true) {
     $this->loadRefPatient($cache);
     $this->loadRefPraticien($cache);
     $this->loadRefEtablissement($cache);
