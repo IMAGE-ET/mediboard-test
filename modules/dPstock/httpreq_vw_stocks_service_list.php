@@ -12,15 +12,18 @@ CCanDo::checkEdit();
 
 $stock_id    = CValue::getOrSession('stock_service_id');
 $category_id = CValue::get('category_id');
-$service_id  = CValue::get('service_id');
+$object_id   = CValue::get('object_id');
 $keywords    = CValue::get('keywords');
 $start       = CValue::get('start');
 
 CValue::setSession('category_id', $category_id);
 
-$where = array();
-if ($service_id) {
-  $where['product_stock_service.object_id']    = " = '$service_id'";
+$where = array(
+  "service.group_id" => "= '".CProductStockGroup::getHostGroup()."'",
+);
+
+if ($object_id) {
+  $where['product_stock_service.object_id']    = " = '$object_id'";
   $where['product_stock_service.object_class'] = " = 'CService'"; // XXX
 }
 if ($category_id) {
@@ -31,14 +34,17 @@ if ($keywords) {
               product.name LIKE '%$keywords%' OR 
               product.description LIKE '%$keywords%'";
 }
-$orderby = 'product.name ASC';
 
-$leftjoin = array();
-$leftjoin['product'] = 'product.product_id = product_stock_service.product_id'; // product to stock
+$leftjoin = array(
+  "product" => "product.product_id = product_stock_service.product_id", // product to stock
+  "service" => "service.service_id = product_stock_service.object_id",
+);
 
 $stock = new CProductStockService();
 $list_stocks_count = $stock->countList($where, null, $leftjoin);
-$list_stocks = $stock->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProductStockService pagination_size"), null, $leftjoin);
+
+$pagination_size = CAppUI::conf("dPstock CProductStockService pagination_size");
+$list_stocks = $stock->loadList($where, 'product.name ASC', intval($start).",$pagination_size", null, $leftjoin);
 
 // Smarty template
 $smarty = new CSmartyDP();
@@ -50,5 +56,3 @@ $smarty->assign('list_stocks_count', $list_stocks_count);
 $smarty->assign('start',             $start);
 
 $smarty->display('inc_stocks_list.tpl');
-
-?>

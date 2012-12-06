@@ -19,8 +19,10 @@ $only_ordered_stocks = CValue::get('only_ordered_stocks');
 
 CValue::setSession('category_id', $category_id);
 
-$where = array();
-$where["product_stock_group.group_id"] = "= '".CProductStockGroup::getHostGroup()."'";
+$where = array(
+  "product_stock_group.group_id" => "= '".CProductStockGroup::getHostGroup()."'",
+  "product.name" => ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'"),
+);
 
 if ($category_id) {
   $where['product.category_id'] = " = $category_id";
@@ -31,12 +33,10 @@ if ($keywords) {
               product.name LIKE '%$keywords%' OR 
               product.description LIKE '%$keywords%'";
 }
-$where["product.name"] = ($letter === "#" ? "RLIKE '^[^A-Z]'" : "LIKE '$letter%'");
 
-$orderby = 'product.name ASC';
-
-$leftjoin = array();
-$leftjoin['product'] = 'product.product_id = product_stock_group.product_id'; // product to stock
+$leftjoin = array(
+  'product' => 'product.product_id = product_stock_group.product_id', // product to stock
+);
 
 if ($only_ordered_stocks) {
   $where['product_order.cancelled'] = '= 0'; // order not cancelled
@@ -55,17 +55,21 @@ if ($only_ordered_stocks) {
   )';
 }
 
-$stock = new CProductStockGroup();
-$list_stocks = $stock->loadList($where, $orderby, intval($start).",".CAppUI::conf("dPstock CProductStockGroup pagination_size"), "product_stock_group.stock_id", $leftjoin);
+$pagination_size = CAppUI::conf("dPstock CProductStockGroup pagination_size");
 
-foreach($list_stocks as $_stock) {
+$stock = new CProductStockGroup();
+$list_stocks = $stock->loadList($where, 'product.name ASC', intval($start).",$pagination_size", "product_stock_group.stock_id", $leftjoin);
+
+foreach ($list_stocks as $_stock) {
   $_stock->_ref_product->getPendingOrderItems(false);
 }
 
-if (!$only_ordered_stocks)
+if (!$only_ordered_stocks) {
   $list_stocks_count = $stock->countList($where, null, $leftjoin);
-else 
+}
+else {
   $list_stocks_count = count($stock->loadList($where, null, null, "product_stock_group.stock_id", $leftjoin));
+}
 
 // Smarty template
 $smarty = new CSmartyDP();
@@ -77,4 +81,3 @@ $smarty->assign('list_stocks_count', $list_stocks_count);
 $smarty->assign('start',             $start);
 
 $smarty->display('inc_stocks_list.tpl');
-?>
