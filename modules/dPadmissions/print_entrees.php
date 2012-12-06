@@ -19,7 +19,7 @@ $service = new CService();
 $service->load($service_id);
 $group = CGroups::loadCurrent();
 
-$sejour = new CSejour;
+$sejour = new CSejour();
 $where = array();
 $where["sejour.entree"]   = "BETWEEN '$date' AND '$date_next'";
 $where["sejour.annule"]   = "= '0'";

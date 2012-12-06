@@ -18,9 +18,12 @@ $service_id = CValue::getOrSession("service_id");
 $sejour = new CSejour();
 $sejours = array();
 
-// Chargement des services
+// Récupération de la liste des services
+$where = array();
+$where["externe"]   = "= '0'";
+$where["cancelled"] = "= '0'";
 $service = new CService();
-$services = $service->loadList(null, "nom");
+$services = $service->loadGroupList($where);
 
 // Récupération des sorties du jour
 $limit1 = $date." 00:00:00";
