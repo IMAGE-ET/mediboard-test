@@ -427,11 +427,12 @@ switch ($axe) {
     
     $series = &$data[$axe]['series'];
     
-    $service = new CService;
-    $service->group_id = CGroups::loadCurrent()->_id;
+    $service = new CService();
+    $service->group_id  = CGroups::loadCurrent()->_id;
+    $service->cancelled = 0;
     $services = $service->loadMatchingList("nom");
     
-    $services["none"] = new CService;
+    $services["none"] = new CService();
     $services["none"]->_view = "Non renseigné";
     
     $where["sejour.mode_sortie"] = "= 'mutation'";

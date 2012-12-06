@@ -71,8 +71,10 @@ foreach ($listSejours as &$_sejour) {
 }
 
 // Chargement des services
+$where = array();
+$where["cancelled"] = "= '0'";
 $service = new CService();
-$services = $service->loadList(null, "nom");
+$services = $service->loadGroupList($where);
 
 // Contraintes sur le mode de sortie / destination
 $contrainteDestination["mutation"]  = array("", 1, 2, 3, 4);

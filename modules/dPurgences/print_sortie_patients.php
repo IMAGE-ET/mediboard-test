@@ -66,8 +66,11 @@ foreach ($listSejours as &$_sejour) {
 }
 
 // Chargement des services
+$where = array();
+$where["externe"]   = "= '0'";
+$where["cancelled"] = "= '0'";
 $service = new CService();
-$services = $service->loadList(null, "nom");
+$services = $service->loadGroupList($where);
 
 // Création du template
 $smarty = new CSmartyDP();
