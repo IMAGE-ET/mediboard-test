@@ -89,7 +89,7 @@
       {{if !"dicom"|module_active}}
         {{mb_include module=system template=module_missing mod=dicom}}
       {{else}}
-        {{mb_include module=dicom template=CSourceDicom_inc_config mod=dicom class="CSourceDicom"}}
+        {{mb_include module=system template=CExchangeSource_inc_config mod=dicom class="CSourceDicom"}}
       {{/if}}
     </div>
 
