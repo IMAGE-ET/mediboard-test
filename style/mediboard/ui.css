@@ -204,6 +204,9 @@ ul#nav-vert {
 .touchscreen input {
   height: 18px;
 }
+.touchscreen input[type=image] {
+  width: 18px;
+}
 
 .touchscreen input[type=text],
 .touchscreen input[type=tel],
@@ -216,17 +219,8 @@ ul#nav-vert {
 
 .touchscreen input[type=radio],
 .touchscreen input[type=checkbox] {
-  width: 18px;
-  height: 18px;
-  -webkit-transform: scale(1.4);
-  -moz-transform: scale(1.4);
-  transform: scale(1.4);
-}
-
-/** No need to transform in IE9+ **/
-.ua-msie .touchscreen input[type=radio],
-.ua-msie .touchscreen input[type=checkbox] {
-  transform: none;
+  width: 24px;
+  height: 24px;
 }
 
 .touchscreen option,

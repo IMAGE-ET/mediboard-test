@@ -59,6 +59,7 @@ input[type=tel],
 input[type=number],
 input[type=email],
 input[type=password],
+input[type=image],
 textarea {
   padding: 1px;
   border-radius: 0;
