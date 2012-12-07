@@ -3,7 +3,9 @@
 
 {{assign var=_style value=""}}
 {{foreach from=$_properties key=_type item=_value}}
-  {{assign var=_style value="$_style $_type:$_value;"}}
+  {{if $_value != ""}}
+    {{assign var=_style value="$_style $_type:$_value;"}}
+  {{/if}}
 {{/foreach}}
 
 {{if $_message->type == "title"}}

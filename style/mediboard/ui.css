@@ -130,10 +130,7 @@ ul#nav-vert {
   width: 48px;
 }
 
-#menubar.uniconed #nav img {
-  display: none;
-}
-
+#menubar.uniconed #nav img,
 #menubar.uniconed #nav-vert li.nonSelected img {
   display: none;
 }

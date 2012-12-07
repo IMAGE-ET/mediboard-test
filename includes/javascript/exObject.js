@@ -33,7 +33,7 @@ var ExObject = {
     options = Object.extend({
       onTriggered: function(){}
     }, options);
-    
+
     // Multiple objects
     if (Object.isArray(object_guid)) {
       var url = new Url("forms", "ajax_trigger_ex_classes_multiple");

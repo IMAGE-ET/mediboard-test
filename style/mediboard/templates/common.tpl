@@ -48,19 +48,19 @@
       {{/if}}
     {{/foreach}}
   {{/if}}
-  
+
   <script type="text/javascript">
     // This needs to be at the very beginning of the page
     __loadStart = (new Date).getTime();
-    
+
     {{if $offline}}
     var config = {{$configOffline|@json}};
     {{/if}}
-    
+
     var Preferences = {{"utf8_encode"|array_map_recursive:$app->user_prefs|@json}},
         User = {{if $app->_ref_user}}{{"utf8_encode"|array_map_recursive:$app->_ref_user->_basic_info|@json}}{{else}}{}{{/if}},
         sessionLocked = {{$smarty.session.locked|@json}},
-        App = { 
+        App = {
           m: "{{$m}}",
           a: "{{$a}}",
           tab: "{{$tab}}",
@@ -73,7 +73,7 @@
           readonly: "{{$conf.readonly}}" == 1 && User.id != null,
           touchDevice: /^ipad|iphone|nexus 7$/i.test("{{$browser.name}}")
         };
-    
+
     var Mediboard = {{$version|@json}};
   </script>
 
@@ -83,7 +83,7 @@
   <!--[if lte IE 8]>
   <link rel="stylesheet" type="text/css" href="style/mediboard/ie.css?build={{$version.build}}" media="all" />
   <![endif]-->
-  
+
   {{$mediboardScript|smarty:nodefaults}}
   
   <script type="text/javascript">

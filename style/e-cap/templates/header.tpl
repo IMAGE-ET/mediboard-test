@@ -83,7 +83,7 @@ var Menu = {
         <img src="style/{{$uistyle}}/images/icons/lock.png" alt="{{tr}}menu-lockSession{{/tr}}" />
       </a>
       <a href="#1" onclick="UserSwitch.popup()" title="{{tr}}menu-switchUser{{/tr}}">
-        <img src="./images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" />
+        <img src="images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" />
       </a>
       <a href="?logout=-1" title="{{tr}}menu-logout{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />
@@ -193,7 +193,7 @@ var Menu = {
         <img src="style/{{$uistyle}}/images/icons/lock.png" alt="{{tr}}menu-lockSession{{/tr}}" />
       </a>
       <a href="#1" onclick="UserSwitch.popup()" title="{{tr}}menu-switchUser{{/tr}}">
-        <img src="./images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" />
+        <img src="images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" />
       </a>
       <a href="?logout=-1" title="{{tr}}menu-logout{{/tr}}">
         <img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />

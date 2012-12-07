@@ -978,6 +978,10 @@ div.about div.nav {
   display: inline-block;
 }
 
+#performance strong.title {
+  display: none;
+}
+
 #performance > li {
   display: inline-block;
   width: 10em;
@@ -1030,9 +1034,26 @@ div.about div.nav {
   background-image: url(../../images/icons/kilogram_weight.png);
 }
 
+#performance > li.performance-l10n:before {
+  background-image: url(../../images/icons/flag-fr.png);
+}
+
 #performance > li.close {
   width: 1em;
   color: #666;
+}
+
+#performance > li.export {
+  width: 2em;
+}
+
+#performance > li.export:before {
+  background-image: url(images/buttons/submit.png);
+}
+
+#performance > li.warning {
+  background-color: rgba(255,0,0,0.6)!important;
+  font-weight: bold;
 }
 
 #performance > li.close:before {

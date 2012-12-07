@@ -69,7 +69,7 @@
           
           <li>
             <a href="#1" onclick="UserSwitch.popup()">
-              <img src="./images/icons/switch.png" title="{{tr}}menu-switchUser{{/tr}}" />
+              <img src="images/icons/switch.png" title="{{tr}}menu-switchUser{{/tr}}" />
               {{tr}}menu-switchUser{{/tr}}
             </a>
           </li>

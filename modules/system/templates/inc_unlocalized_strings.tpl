@@ -3,20 +3,6 @@
 <!-- Locales warns -->
 
 {{if !$ajax}}
-<div class="small-warning" id="UnlocDiv" style="display: none; position: fixed; bottom: 10px; right: 10px;">
-  {{tr}}system-msg-unlocalized_warning{{/tr}} : 
-  <div style="text-align: center; font-size: 200%;"><strong>-</strong> !<br />
-
-  <button class="change" type="button" onclick="Localize.showForm();">
-    {{tr}}system-button-unlocalized_fix{{/tr}}
-  </button>
-
-  <button class="cancel notext opacity-10" type="button" onclick="if (confirm($T('UnlocDiv-AYRRS'))) if (confirm($T('UnlocDiv-RRRS'))) $('UnlocDiv').hide(); ">
-    {{tr}}Close{{/tr}}
-  </button>
-  </div>
-</div>
-
 <form action="?m={{$m}}" name="UnlocForm" style="display: none" method="post" class="prepared" onsubmit="return Localize.onSubmit(this);">
 
 <input type="hidden" name="{{$actionType}}" value="{{$action}}" />

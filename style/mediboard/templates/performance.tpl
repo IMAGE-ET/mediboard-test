@@ -9,7 +9,8 @@
 *}}
 
 <ul id="performance">
-  <li class="performance-time" style="width: 10em;">
+  <li class="performance-time">
+    <strong class="title">Temps de génération</strong>
     <span class="performance-time">{{$performance.genere}} s</span>
     
     {{assign var=dsTime value=0}}
@@ -22,26 +23,24 @@
     <div class="performance-bar" title="{{$ratio}} % du temps passé en requêtes au SGBD"><div style="width: {{$ratio}}%;"></div></div>
     <ul>
       {{foreach from=$performance.dataSources key=dsn item=dataSource}}
-        <li style="clear: both;">
+        <li>
           <strong>{{$dsn}}</strong>
-
-          <span style="background-color: rgba(200,200,255,0.6); float: right; margin-left: 3px;" title="Temps de fetch">
-            {{*<span class="performance-count">{{$dataSource.countFetch}}</span> /*}}
-            <span class="performance-time">{{$dataSource.timeFetch*1000|string_format:"%.3f"}} ms</span>
-          </span>
-
           <span class="performance-count">{{$dataSource.count}}</span> /
           <span class="performance-time">{{$dataSource.time*1000|string_format:"%.3f"}} ms</span>
+          -
+          <span class="performance-time">{{$dataSource.timeFetch*1000|string_format:"%.3f"}} ms</span>
         </li>
       {{/foreach}}
     </ul>
   </li>
   
   <li class="performance-memory">
+    <strong class="title">Mémoire PHP</strong>
     {{$performance.memoire}}
   </li>
   
   <li class="performance-objects" title="Objets chargés / cachables">
+    <strong class="title">Objets chargés / cachables</strong>
     <span class="performance-count">{{$performance.objets}}</span> / 
     <span class="performance-count">{{$performance.cachableCount}}</span>
     <ul>
@@ -51,7 +50,7 @@
           <span class="performance-count">{{$objectCount}}</span>
         </li>
       {{/foreach}}
-      <li> <hr /> </li>
+      <li class="separator"> --- </li>
       {{foreach from=$performance.cachableCounts key=objectClass item=cachableCount}}
         <li>
           <strong>{{$objectClass}}</strong> 
@@ -62,6 +61,7 @@
   </li>
   
   <li class="performance-autoload" title="Classes chargées / pas encore en cache">
+    <strong class="title">Classes chargées / pas encore en cache</strong>
     <span class="performance-count">{{$performance.autoloadCount}}</span>
     <ul>
       {{foreach from=$performance.autoload key=objectClass item=time}}
@@ -94,13 +94,20 @@
     </ul>
   </li>
   *}}
-  
+
   <li class="performance-pagesize">
+    <strong class="title">Taille de la page</strong>
     {{$performance.size}}
+  </li>
+
+  <li class="performance-l10n" id="i10n-alert" onclick="Localize.showForm()" title="{{tr}}system-msg-unlocalized_warning{{/tr}}">
+    0
   </li>
   
   <li class="performance-network">
+    <strong class="title">Adresse IP</strong>
     {{$performance.ip}}
   </li>
+  <li class="export" onclick="window.open('data:text/html;charset=utf-8,'+encodeURIComponent(this.up('ul').innerHTML))" title="{{tr}}Export{{/tr}}"></li>
   <li class="close" onclick="this.up('ul').remove()" title="{{tr}}Close{{/tr}}"></li>
 </ul>

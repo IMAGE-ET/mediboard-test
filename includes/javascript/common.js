@@ -215,10 +215,10 @@ var Localize = {
     this.strings.push(string);
 
     // Try and show unloc warning
-    var div = $('UnlocDiv');
-    if (div) {
-      div.down('strong').update(this.strings.length);
-      div.show();
+    var counter = $('i10n-alert');
+
+    if (counter) {
+      counter.addClassName('warning').update(" "+this.strings.length);
     }
     
     // Add a row in form

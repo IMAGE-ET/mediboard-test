@@ -65,7 +65,7 @@ class CSetSpec extends CEnumSpec {
     $separator     = CMbArray::extract($params, "separator", $this->vertical ? "<br />" : null);
     $cycle         = CMbArray::extract($params, "cycle", 1);
     $alphabet      = CMbArray::extract($params, "alphabet", false);
-    $size          = CMbArray::extract($params, "size", min(2, count($locales)));
+    $size          = CMbArray::extract($params, "size", 0);
     $onchange      = CMbArray::get($params, "onchange");
     $form          = CMbArray::extract($params, "form"); // needs to be extracted
     
@@ -96,7 +96,7 @@ class CSetSpec extends CEnumSpec {
         $sHtml      .= "<input type=\"hidden\" name=\"$field\" value=\"$value\" class=\"$className\" $extra />\n";
         $sHtml      .= "<select class=\"$className\" multiple=\"multiple\" size=\"$size\" data-select_set=\"$uid\" $extra>";
         
-        foreach ($locales as $key => $item){
+        foreach ($locales as $key => $item) {
           if (!empty($value_array) && in_array($key, $value_array)) {
             $selected = " selected=\"selected\""; 
           }

@@ -88,7 +88,7 @@ var Menu = {
         <img src="style/mediboard/images/icons/myinfos.png" alt="{{tr}}menu-myInfo{{/tr}}" />
       </a>
       <a title="{{tr}}menu-switchUser{{/tr}}" href="#1" onclick="UserSwitch.popup()">
-        <img src="./images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" />
+        <img src="images/icons/switch.png" alt="{{tr}}menu-switchUser{{/tr}}" />
       </a>
       <a title="{{tr}}menu-lockSession{{/tr}}" href="#1" onclick="Session.lock()">
         <img src="style/mediboard/images/icons/lock.png" alt="{{tr}}menu-lockSession{{/tr}}" />
