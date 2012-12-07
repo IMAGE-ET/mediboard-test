@@ -1216,7 +1216,7 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `source_pop` (
       ADD `libelle` VARCHAR (255) NOT NULL AFTER `name`
     );";
-    $query->addQuery($query);
+    $this->addQuery($query);
 
     $this->mod_version = "1.1.21";
 
