@@ -171,6 +171,8 @@ class APCSharedMemory implements ISharedMemory {
 
 /** Shared memory container */
 abstract class SHM {
+  const GZ = "__gz__";
+
   /**
    * @var ISharedMemory
    */
@@ -222,18 +224,32 @@ abstract class SHM {
    * @return mixed
    */
   static function get($key) {
-    return self::$engine->get(self::$prefix.$key);
+    $value = self::$engine->get(self::$prefix.$key);
+
+    // If data is compressed
+    if (is_array($value) && isset($value[self::GZ])) {
+      $value = unserialize(gzuncompress($value[self::GZ]));
+    }
+
+    return $value;
   }
 
   /**
    * Save a value in the shared memory
    *
-   * @param string $key   The key to pu the value in
-   * @param mixed  $value The value to put in the shared memory
+   * @param string $key      The key to pu the value in
+   * @param mixed  $value    The value to put in the shared memory
+   * @param bool   $compress Compress data
    *
    * @return bool
    */
-  static function put($key, $value) {
+  static function put($key, $value, $compress = false) {
+    if ($compress) {
+      $value = array(
+        self::GZ => gzcompress(serialize($value))
+      );
+    }
+
     return self::$engine->put(self::$prefix.$key, $value);
   }
 
