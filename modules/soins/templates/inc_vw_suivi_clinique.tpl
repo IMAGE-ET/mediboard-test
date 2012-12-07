@@ -184,6 +184,9 @@
             {{tr}}CCorrespondantPatient-nom{{/tr}} / {{tr}}CCorrespondantPatient-prenom{{/tr}}
           </th>
           <th class="category">
+            {{tr}}CCorrespondantPatient-mob{{/tr}}
+          </th>
+          <th class="category">
             {{tr}}CCorrespondantPatient-tel{{/tr}}
           </th>
         </tr>
@@ -198,6 +201,9 @@
                   {{mb_value object=$_correspondant field="nom"}}
                   {{mb_value object=$_correspondant field="prenom"}}
                 </span>
+              </td>
+              <td>
+                {{mb_value object=$_correspondant field="mob"}}
               </td>
               <td>
                 {{mb_value object=$_correspondant field="tel"}}
