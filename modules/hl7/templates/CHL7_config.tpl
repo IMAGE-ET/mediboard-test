@@ -13,6 +13,8 @@
   <input type="hidden" name="m" value="system" />
   
   <table class="form">
+    {{mb_include module=system template=inc_config_str var=tag_default}}
+    
   	{{mb_include module=system template=inc_config_str var=sending_application}}
   	{{mb_include module=system template=inc_config_str var=sending_facility}}
   	

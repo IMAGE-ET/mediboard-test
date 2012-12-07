@@ -735,9 +735,25 @@ class CHL7v2Segment extends CHL7v2Entity {
     switch ($receiver->_configs["build_PV2_45"]) {
       // Transmission de l'intervention
       case 'operation' :
+        $datetime = mbTransformTime($operation->_datetime, null, "%Y%m%d%H%M%S");
         
+        $type_anesth = null;
+        if ($operation->type_anesth) {
+          $tag_hl7     = $receiver->_tag_hl7;
+          $type_anesth = CIdSante400::getMatch("CTypeAnesth", $tag_hl7, null, $operation->type_anesth);
+        }
         
-        return $advance_directive_code;
+        $idex_chir   = CIdSante400::getLatestFor($operation->loadRefChir(), $receiver->_tag_mediuser);  
+        
+        $anesth      = $operation->loadRefAnesth();
+        $idex_anesth = null;
+        if ($anesth->_id) {
+          $idex_anesth = CIdSante400::getLatestFor($operation->loadRefAnesth(), $receiver->_tag_mediuser);  
+        }
+        
+        $libelle = $operation->libelle;
+        
+        return "$datetime#$type_anesth#$idex_chir#$idex_anesth#$libelle";
       default:
         return null;
     }

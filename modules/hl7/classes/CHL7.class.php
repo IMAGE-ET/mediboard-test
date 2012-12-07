@@ -15,6 +15,21 @@
  */
 class CHL7 {
   static $versions = array ();
+  
+  static function getDefaultTag($group_id = null) {
+    // Pas de tag hl7
+    if (null == $tag_hl7 = CAppUI::conf("hl7 tag_default")) {
+      return;
+    }
+
+    // Permettre des id externes en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+    
+    return str_replace('$g', $group_id, $tag_hl7);
+  } 
 }
 
 CHL7::$versions = array (

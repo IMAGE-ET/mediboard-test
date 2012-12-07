@@ -151,9 +151,9 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    */
   function addPV1(CSejour $sejour = null, $set_id = 1) {    
     $segment_name = $this->_is_i18n ? "PV1_FR" : "PV1";
-    $PV1 = CHL7v2Segment::create($segment_name, $this->message);
-    $PV1->sejour = $sejour;
-    $PV1->set_id = 1;
+    $PV1          = CHL7v2Segment::create($segment_name, $this->message);
+    $PV1->sejour  = $sejour;
+    $PV1->set_id  = 1;
     if ($sejour) {
       $PV1->curr_affectation = $sejour->_ref_hl7_affectation;
     }
@@ -165,8 +165,9 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @param CSejour Admit
    */
   function addPV2(CSejour $sejour = null) {
-    $PV2 = CHL7v2Segment::create("PV2", $this->message);
-    $PV2->sejour = $sejour;
+    $PV2            = CHL7v2Segment::create("PV2", $this->message);
+    $PV2->sejour    = $sejour;
+    $PV2->operation = $sejour->_operation;
     $PV2->build($this);
   }
   

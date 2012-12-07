@@ -933,7 +933,12 @@ class CSetuphl7 extends CSetup {
                 ADD `build_PID_34` ENUM ('finess','actor') DEFAULT 'finess';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.46";
+    $this->makeRevision("0.46");
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `build_PV2_45` ENUM ('operation','none') DEFAULT 'none';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.47";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

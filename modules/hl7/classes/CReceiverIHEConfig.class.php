@@ -72,6 +72,9 @@ class CReceiverIHEConfig extends CMbObject {
   var $build_PV1_14  = null;
   var $build_PV1_36  = null;
   
+  // PV2
+  var $build_PV2_45 = null;
+  
   var $_categories = array(
     "format" => array(
       "encoding", 
@@ -111,7 +114,7 @@ class CReceiverIHEConfig extends CMbObject {
       "send_default_affectation",
       "send_provisional_affectation",
       "send_transfer_patient",
-      "send_own_identifier"
+      "send_own_identifier",
     ),
     "PID" => array(
       "build_PID_31",
@@ -126,6 +129,9 @@ class CReceiverIHEConfig extends CMbObject {
       "build_PV1_14",
       "build_PV1_36",
     ),
+    "PV2" => array(
+      "build_PV2_45",
+    )
   );
   
   function getSpec() {
@@ -193,6 +199,9 @@ class CReceiverIHEConfig extends CMbObject {
     $props["build_PV1_14"]  = "enum list|admit_source|ZFM default|admit_source";
     $props["build_PV1_36"]  = "enum list|discharge_disposition|ZFM default|discharge_disposition";
     
+    // PV2
+    $props["build_PV2_45"]  = "enum list|operation|none default|none";
+        
     return $props;
   }
 }

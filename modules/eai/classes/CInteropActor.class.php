@@ -36,7 +36,9 @@ class CInteropActor extends CMbObject {
   var $_tag_movement             = null;
   var $_tag_visit_number         = null;
   var $_tag_hprimxml             = null;
+  var $_tag_hl7                  = null;
   var $_tag_consultation         = null;
+
   var $_tags                     = array(); // All tags
   
   // Forward references
@@ -66,6 +68,7 @@ class CInteropActor extends CMbObject {
     $props["_tag_movement"]     = "str";
     $props["_tag_visit_number"] = "str";
     $props["_tag_hprimxml"]     = "str";
+    $props["_tag_hl7"]          = "str";
     
     if (CModule::getActive("phast")) {
       $props["_tag_phast"]        = "str";
@@ -91,6 +94,7 @@ class CInteropActor extends CMbObject {
     $this->_tag_visit_number  = CSmp::getTagVisitNumber($this->group_id);
 
     $this->_tag_hprimxml      = CHprimXML::getDefaultTag($this->group_id);
+    $this->_tag_hl7           = CHL7::getDefaultTag($this->group_id);
     
     if (CModule::getActive("phast")) {
       $this->_tag_phast  = CPhast::getTagPhast($this->group_id);
@@ -210,6 +214,21 @@ class CInteropActor extends CMbObject {
   
   function getFormatObjectHandlers() {
     return array();
+  }
+  
+  /**
+   * Get objects
+   * 
+   * @return array CInteropReceiver/CInteropSender collection 
+   */
+  function getObjects() {
+    $receiver = new CInteropReceiver(); 
+    $sender   = new CInteropSender(); 
+    
+    return array(
+      "CInteropReceiver" => $receiver->getObjects(),
+      "CInteropSender"   => $sender->getObjects()
+    );
   }
 }
 

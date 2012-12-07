@@ -17,6 +17,7 @@ $dPconfig["hl7"] = array(
     "PV1_3_3" => "",
     "ignore_unexpected_z_segment" => "0",
   ),
+  "tag_default" => ""
 );
 
 $dPconfig["db"]["hl7v2"] = array(
