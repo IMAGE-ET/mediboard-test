@@ -290,4 +290,7 @@ $locales['tous'] = 'Tous';
 $locales['utilities-source-dicom'] = 'Utilitaires Dicom';
 $locales['utilities-source-dicom-connexion'] = 'Test de la connexion';
 $locales['utilities-source-dicom-send'] = 'Test d\'envoi';
+$locales['CEcho'] = 'Service C-Echo';
+$locales['CExchangeBinary'] = 'Echanges binaires';
+$locales['CFind'] = 'Service C-Find';
 ?>
