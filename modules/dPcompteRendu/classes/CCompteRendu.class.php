@@ -109,6 +109,12 @@ class CCompteRendu extends CDocumentItem {
     "zapfdingbats" => "ZapfDingBats"
   );
   
+  // Noms de modèles réservés
+  static $templateNames = array(
+    "CConsultAnesth" =>
+      array("[FICHE ANESTH]" => "body")
+  );
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'compte_rendu';
@@ -1271,6 +1277,58 @@ class CCompteRendu extends CDocumentItem {
       GROUP BY `object_class`, `category_id`";
     return $ds->loadList($query);
   }
+  
+  function getFullContentFromModel() {
+    $this->loadContent();
+    $margins = array(
+      $this->margin_top, 
+      $this->margin_right, 
+      $this->margin_bottom, 
+      $this->margin_left);
+    $this->loadContent();
+    $content = $this->generateDocFromModel();
+    return $this->loadHTMLcontent($content, '', $margins, CCompteRendu::$fonts[$this->font], $this->size);
+  }
+  
+  static function streamDocForObject($compte_rendu, $object, $factory = "") {
+    ob_clean();
+    $template = new CTemplateManager();
+    $source = $compte_rendu->getFullContentFromModel();
+    $object->fillTemplate($template);
+    $template->renderDocument($source);
+    $htmltopdf = new CHtmlToPDF($factory);
+    $htmltopdf->generatePDF($template->document, 1, $compte_rendu->_page_format, $compte_rendu->_orientation, new CFile());
+    CApp::rip();
+  }
+  
+  static function getReservedModel($user, $object_class, $name) {
+    $compte_rendu = new CCompteRendu();
+    $compte_rendu->nom = $name;
+    $compte_rendu->object_class = $object_class;
+    $compte_rendu->type = CCompteRendu::$templateNames[$object_class][$name];
+    
+    // Utilisateur
+    $compte_rendu->user_id = $user->_id;
+    $compte_rendu->loadMatchingObject();
+    if ($compte_rendu->_id) {
+      return $compte_rendu;
+    }
+    
+    
+    // Fonction
+    $compte_rendu->user_id = null;
+    $compte_rendu->function_id = $user->function_id;
+    $compte_rendu->loadMatchingObject();
+    if ($compte_rendu->_id) {
+      return $compte_rendu;
+    }
+    
+    // Etablissement
+    $user->loadRefFunction();
+    $compte_rendu->function_id = null;
+    $compte_rendu->group_id = $user->_ref_function->group_id;
+    $compte_rendu->loadMatchingObject();
+    
+    return $compte_rendu;
+  }
 }
-
-?>

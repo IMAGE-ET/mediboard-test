@@ -252,6 +252,7 @@ $locales['CCompteRendu._page_format.letter'] = 'Letter (21,6 cm x 27,9 cm)';
 $locales['CCompteRendu._page_format.tabloid'] = 'Tabloid (27,9 cm x 43,2 cm)';
 $locales['CCompteRendu.all'] = 'Tous les documents/modèles';
 $locales['CCompteRendu.auto_height'] = 'Générer hauteur auto';
+$locales['CCompteRendu.description_[FICHE ANESTH]'] = 'Fiche d\'anesthésie';
 $locales['CCompteRendu.document_fast_edit'] = 'Document en édition rapide';
 $locales['CCompteRendu.etat_envoi.non'] = 'Non';
 $locales['CCompteRendu.etat_envoi.obsolete'] = 'Obsolète';

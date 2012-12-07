@@ -181,6 +181,6 @@ $smarty->assign("prefaces"            , $prefaces);
 $smarty->assign("endings"             , $endings);
 $smarty->assign("footers"             , $footers);
 $smarty->assign("formats"             , $formats);
-$smarty->display("addedit_modeles.tpl");
+$smarty->assign("names_reserved"      , CCompteRendu::$templateNames);
 
-?>
+$smarty->display("addedit_modeles.tpl");

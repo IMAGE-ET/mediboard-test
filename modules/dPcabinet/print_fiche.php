@@ -77,6 +77,14 @@ if ($consultation_id) {
   $consult->load($consultation_id);
   $consult->loadRefsDocs();
   $consult->loadRefConsultAnesth();
+  
+  // Si le modèle est redéfini, on l'utilise
+  $model = CCompteRendu::getReservedModel($consult->_ref_chir, "CConsultAnesth", "[FICHE ANESTH]");
+
+  if ($model->_id) {
+    CCompteRendu::streamDocForObject($model, $consult->_ref_consult_anesth);
+  }
+  
   $consult->loadRefsFwd();
   $consult->loadExamsComp();
   $consult->loadRefsExamNyha();
@@ -225,4 +233,3 @@ $smarty->assign("dossier_medical_sejour", $consult->_ref_consult_anesth->_ref_se
 $template = CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie");
 
 $smarty->display($template.".tpl");
-?>

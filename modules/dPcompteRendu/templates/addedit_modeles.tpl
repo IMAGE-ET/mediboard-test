@@ -155,6 +155,14 @@ function reloadHeadersFooters() {
   {{/if}}
 }
 
+function setTemplateName(object_class, name, type) {
+  var form = getForm("editFrm");
+  $V(form.object_class, object_class);
+  $V(form.nom, name);
+  $V(form.type, type);
+  Control.Modal.close();
+}
+
 </script>
 
 {{mb_script module=compteRendu script=thumb}}
@@ -175,6 +183,40 @@ Main.add(function () {
 Main.add(Control.Tabs.create.curry('tabs-edit'));
 
 </script>
+
+<div id="choose_template_name" class="modal" style="display: none; width: 600px;">
+  <table class="tbl">
+    <tr>
+      <th class="title narrow">Nom</th>
+      <th class="title">Description</th>
+      <th class="title narrow"></th>
+    </tr>
+    {{foreach from=$names_reserved item=_names_by_class key=_class}}
+      <tr>
+        <th class="category" colspan="3">{{tr}}{{$_class}}{{/tr}}</th>
+      </tr>
+      {{foreach from=$_names_by_class key=_name item=_type}}
+        <tr>
+          <td>
+            {{$_name}}
+          </td>
+          <td class="text">
+            {{tr}}CCompteRendu.description_{{$_name}}{{/tr}}
+          </td>
+          <td class="narrow">
+            <button type="button" class="tick notext"
+              onclick="setTemplateName('{{$_class}}', '{{$_name}}', '{{$_type}}');"></button>
+          </td>
+        </tr>
+      {{/foreach}}
+    {{/foreach}}
+    <tr>
+      <td class="button" colspan="3">
+        <button class="cancel" onclick="Control.Modal.close();">{{tr}}Close{{/tr}}</button>
+      </td>
+    </tr>
+  </table>
+</div>
 
 {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
   <form style="display: none;" name="download-pdf-form" target="_blank" method="post"
@@ -250,7 +292,8 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
           <th>{{mb_label object=$compte_rendu field="nom"}}</th>
           <td>
           {{if $droit}}
-            {{mb_field object=$compte_rendu field="nom" style="width: 15em"}}
+            {{mb_field object=$compte_rendu field="nom" style="width: 12em"}}
+            <button type="button" class="search notext" title="Choisir un nom réservé" onclick="modal('choose_template_name')"></button>
           {{else}}
             {{mb_field object=$compte_rendu field="nom" readonly="readonly"}}
           {{/if}}
