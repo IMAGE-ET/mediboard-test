@@ -448,11 +448,18 @@ class CDossierMedical extends CMbMetaObject {
       }
     }
     
-    // Maladie thrombo-embolique
-    /*if ($champ == "Sejour") {
-      $template->addProperty("Anesthésie - Maladie thrombo-embolique - Patient"  , $this->getFormattedValue("risque_thrombo_patient"));
-      $template->addProperty("Anesthésie - Maladie thrombo-embolique - Chirurgie", $this->getFormattedValue("risque_thrombo_chirurgie"));
-    }*/
+    // Facteurs de risque
+    switch ($champ) {
+      case "Sejour":
+        $template->addProperty("Anesthésie - Maladie thrombo embolique - Chirurgie", $this->getFormattedValue("risque_thrombo_chirurgie"));
+        $template->addProperty("Anesthésie - MCJ - Chirurgie", $this->getFormattedValue("risque_MCJ_chirurgie"));
+        $template->addProperty("Anesthésie - Risque Anesthesique - Antibioprophylaxie", $this->getFormattedValue("risque_antibioprophylaxie"));
+        $template->addProperty("Anesthésie - Risque Anesthesique - Thrombo prophylaxie", $this->getFormattedValue("risque_prophylaxie"));
+        break;
+      case "Patient":
+        $template->addProperty("Anesthésie - Maladie thrombo embolique - Patient"  , $this->getFormattedValue("risque_thrombo_patient"));
+        $template->addProperty("Anesthésie - MCJ - Patient", $this->getFormattedValue("risque_MCJ_patient"));
+    }
     
     $template->addListProperty("$champ - Diagnostics", $list);
   }

@@ -1163,7 +1163,7 @@ TESTS A EFFECTUER
     if (!$this->_nb_files_docs) {
       parent::countDocItems($permType);
     }
-
+    
     if ($this->_nb_files_docs) {
       $this->getEtat();
       $this->_etat .= " ($this->_nb_files_docs)";
@@ -1173,17 +1173,11 @@ TESTS A EFFECTUER
   function countDocs(){
     $nbDocs = parent::countDocs();
 
-    // Ajout des documents de la consultation d'anesthésie
+    // Ajout des documents des dossiers d'anesthésie
     $this->loadRefConsultAnesth();
-    $consult_anesth = $this->_ref_consult_anesth;
     
-    if (is_array($consult_anesth)) {
-      foreach ($consult_anesth as $_consult_anesth) {
-        $nbDocs += $_consult_anesth->countDocs();
-      }
-    }
-    else if ($this->_ref_consult_anesth->_id) {
-      $nbDocs += $this->_ref_consult_anesth->countDocs();
+    foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
+      $nbDocs += $_dossier_anesth->countDocs();
     }
 
     return $nbDocs;
@@ -1414,7 +1408,15 @@ TESTS A EFFECTUER
     $template->addProperty("Consultation - Reprise de travail", mbDateToLocale(mbDate($this->reprise_at)));
     $template->addProperty("Consultation - Accident de travail sans arrêt de travail", $this->getFormattedValue("at_sans_arret"));
     $template->addProperty("Consultation - Arrêt maladie", $this->getFormattedValue("arret_maladie"));
-
+    
+    $this->loadExamsComp();
+    $exam = new CExamComp();
+    
+    foreach ($exam->_specs["realisation"]->_locales as $key => $locale) {
+      $exams = isset($this->_types_examen[$key]) ? $this->_types_examen[$key] : array();
+      $template->addListProperty("Consultation - Examens complémentaires - $locale", $exams);
+    }
+    
     $this->notify("AfterFillLimitedTemplate", $template);
   }
 

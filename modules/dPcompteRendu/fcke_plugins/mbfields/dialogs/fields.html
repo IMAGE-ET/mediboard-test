@@ -20,9 +20,9 @@
       window.onload = function () {
         var section = $("section");
         $A(fields).each(function(item, i){
-          var sItem = item[0]; var iter = 1;
-          while (sItem.length != "undefined" && iter < sItem.length) {
-            sItem = item[iter]; iter++;
+          var sItem = item[0];
+          if (sItem.length) {
+            sItem = sItem[0];
           }
           section.insert("<option value='" + i + "'>"+ sItem.section + "</option>");
         });
