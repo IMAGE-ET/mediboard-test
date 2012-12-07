@@ -647,7 +647,12 @@ class CHL7v2Segment extends CHL7v2Entity {
     switch ($receiver->_configs["build_PV1_10"]) {
       // idex du service
       case 'service':
+        if (!$sejour->service_id) {
+          return null;
+        }
+        
         return CIdSante400::getMatch("CService", $receiver->_tag_service, null, $sejour->service_id)->id400;
+        
       // Discipline médico-tarifaire
       default:
         return $sejour->discipline_id;
@@ -723,7 +728,20 @@ class CHL7v2Segment extends CHL7v2Entity {
         $discharge_disposition = $sejour->confirme ? "3": "4";
         return CHL7v2TableEntry::mapTo("112", $discharge_disposition);    
     }
-  }   
+  }
+  
+  function getPV245 (CInteropReceiver $receiver, CSejour $sejour, COperation $operation) {
+    // Advance Directive Code
+    switch ($receiver->_configs["build_PV2_45"]) {
+      // Transmission de l'intervention
+      case 'operation' :
+        
+        
+        return $advance_directive_code;
+      default:
+        return null;
+    }
+  }     
   
   function getPL(CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
     $group       = $sejour->loadRefEtablissement();
