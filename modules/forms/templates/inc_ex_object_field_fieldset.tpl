@@ -33,7 +33,7 @@
     {{if $show_label}}
       <legend>{{mb_label object=$ex_object field=$_field_name}}</legend>
     {{/if}}
-    <div class="wrapper {{if $_spec->columns > 1}} columns-{{$_spec->columns}} {{/if}}" >
+    <div class="wrapper {{if $_spec instanceof CEnumSpec && $_spec->columns > 1}} columns-{{$_spec->columns}} {{/if}}" >
       {{$ex_field->prefix}}
       {{mb_field object=$ex_object field=$_field_name form=$form tabindex=$ex_field->tab_index}}
       {{$ex_field->suffix}}

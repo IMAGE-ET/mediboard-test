@@ -28,7 +28,7 @@ $ljoin = array(
   "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id",
 );
 
-foreach($object_guids as $object_guid) {
+foreach ($object_guids as $object_guid) {
   $object = CMbObject::loadFromGuid($object_guid);
 
   $where["ex_class_event.host_class"] = $ds->prepare("=%", $object->_class);
@@ -44,12 +44,12 @@ foreach($object_guids as $object_guid) {
 
 $ex_class_events_struct = array();
 
-foreach($ex_class_events as $_ex_class_event) {
+foreach ($ex_class_events as $_ex_class_event) {
   $ex_class_events_struct[] = array(
     "ex_class_event_id" => $_ex_class_event->_id,
     "ex_class_id" => $_ex_class_event->ex_class_id,
     "event_name"  => $event_name,
-    "object_guid" => $_ex_class->_host_object->_guid,
+    "object_guid" => $_ex_class_event->_host_object->_guid,
   );
 }
 
