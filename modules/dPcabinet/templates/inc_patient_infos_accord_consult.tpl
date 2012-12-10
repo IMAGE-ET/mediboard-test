@@ -66,7 +66,13 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
     <td class="button">
       {{if !$app->user_prefs.simpleCabinet}}
         {{if @$modules.ecap->mod_active}}
-          {{mb_include module=ecap template=inc_button_dhe patient_id=$consult->patient_id praticien_id=$consult->_praticien_id}}
+          {{mb_include
+            module=ecap
+            template=inc_button_dhe
+            patient_id=$consult->patient_id
+            praticien_id=$consult->_praticien_id
+            show_non_prevue=false
+          }}
         {{else}}
         {{if $m != "dPurgences"}}
         <button class="new" type="button" onclick="newOperation({{$consult->_praticien_id}},{{$consult->patient_id}})" style="width: 12em;">
