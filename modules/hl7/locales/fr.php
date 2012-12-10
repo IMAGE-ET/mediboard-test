@@ -377,6 +377,7 @@ $locales['CHL7EventADTA40'] = 'ITI30 - ADT^A40';
 $locales['CHL7EventADTA40_FR'] = 'ITI30 - ADT^A40';
 $locales['CHL7EventADTA44'] = 'ITI31 - ADT^A44';
 $locales['CHL7EventADTA44_FR'] = 'ITI31 - ADT^A44';
+$locales['CHL7EventADTA46'] = 'ITI30 - ADT^A46';
 $locales['CHL7EventADTA47'] = 'ITI30 - ADT^A47';
 $locales['CHL7EventADTA47_FR'] = 'ITI30 - ADT^A47';
 $locales['CHL7EventADTA52'] = 'ITI31 - ADT^A52';
