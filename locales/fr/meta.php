@@ -7,4 +7,4 @@ $locale_info = array(
   'alpha3' => 'fra'
 );
 
-$locale_info['names'] = array("fr_FR", "fr_FR.".$locale_info['charset'], "fr_FR@euro", "fr_FR.utf8", "fra");
+$locale_info['names'] = array("fr_FR.".$locale_info['charset'], "fr_FR.ISO8859-1", "fr_FR@euro", "fr_FR.utf8", "fr_FR", "fra");
