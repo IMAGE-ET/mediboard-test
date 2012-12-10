@@ -730,11 +730,15 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
   }
   
-  function getPV245 (CInteropReceiver $receiver, CSejour $sejour, COperation $operation) {
+  function getPV245 (CInteropReceiver $receiver, CSejour $sejour, COperation $operation = null) {
     // Advance Directive Code
     switch ($receiver->_configs["build_PV2_45"]) {
       // Transmission de l'intervention
       case 'operation' :
+        if (!$operation) {
+          return null;
+        }
+        
         $datetime = mbTransformTime($operation->_datetime, null, "%Y%m%d%H%M%S");
         
         $type_anesth = null;
@@ -753,7 +757,12 @@ class CHL7v2Segment extends CHL7v2Entity {
         
         $libelle = $operation->libelle;
         
-        return "$datetime#$type_anesth#$idex_chir#$idex_anesth#$libelle";
+        return array(
+          // CE-1
+          null,
+          // CE-2
+          "$datetime#$type_anesth#$idex_chir#$idex_anesth#$libelle"
+        );
       default:
         return null;
     }
