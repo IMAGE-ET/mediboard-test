@@ -2358,17 +2358,19 @@ class CSejour extends CCodable implements IPatientRelated {
 
     // Dossier médical
     $this->loadRefDossierMedical()->fillTemplate($template, "Sejour");
-
+    
     // Prescription
     if (CModule::getActive('dPprescription')){
       $this->loadRefsPrescriptions();
+      $prescription = isset($this->_ref_prescriptions["pre_admission"]) ? $this->_ref_prescriptions["pre_admission"] : new CPrescription();
+      $prescription->type = "pre_admission";
+      $prescription->fillLimitedTemplate($template);
       $prescription = isset($this->_ref_prescriptions["sejour"]) ? $this->_ref_prescriptions["sejour"] : new CPrescription();
       $prescription->type = "sejour";
       $prescription->fillLimitedTemplate($template);
       $prescription = isset($this->_ref_prescriptions["sortie"]) ? $this->_ref_prescriptions["sortie"] : new CPrescription();
       $prescription->type = "sortie";
       $prescription->fillLimitedTemplate($template);
-
     }
 
     // RPU

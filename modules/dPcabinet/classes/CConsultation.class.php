@@ -1345,14 +1345,22 @@ TESTS A EFFECTUER
 
     $sejour = $this->loadRefSejour();
 
-    if ($sejour->_id) {
-      $sejour->fillLimitedTemplate($template);
-      $rpu = $sejour->loadRefRPU();
-      if ($rpu && $rpu->_id) {
-        $rpu->fillLimitedTemplate($template);
-      }
+    $sejour->fillLimitedTemplate($template);
+    $rpu = $sejour->loadRefRPU();
+    if ($rpu && $rpu->_id) {
+      $rpu->fillLimitedTemplate($template);
     }
-
+    
+    $sejour->loadRefsPrescriptions();
+    $prescription = isset($sejour->_ref_prescriptions["pre_admission"]) ? $sejour->_ref_prescriptions["pre_admission"] : new CPrescription();
+    $prescription->type = "pre_admission";
+    $prescription->fillLimitedTemplate($template);
+    $prescription = isset($sejour->_ref_prescriptions["sejour"]) ? $sejour->_ref_prescriptions["sejour"] : new CPrescription();
+    $prescription->type = "sejour";
+    $prescription->fillLimitedTemplate($template);
+    $prescription = isset($sejour->_ref_prescriptions["sortie"]) ? $sejour->_ref_prescriptions["sortie"] : new CPrescription();
+    $prescription->type = "sortie";
+    $prescription->fillLimitedTemplate($template);
   }
 
   function fillLimitedTemplate(&$template) {
