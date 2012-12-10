@@ -21,11 +21,11 @@ $exchange_source = CExchangeSource::get($exchange_source_name, "pop", true, null
 if (!$exchange_source->_id) {
   CAppUI::stepAjax("Veuillez tout d'abord enregistrer vos paramètres de connexion", UI_MSG_ERROR);
 }
-$exchange_source->init();
+$pop = new CPop($exchange_source);
 
 if ($type_action == "connexion") {
   try {
-    if($exchange_source->mailboxOpen()) {
+    if ($pop->open()) {
       CAppUI::stepAjax("Connecté au serveur $exchange_source->host sur le port $exchange_source->port");
     }
   } catch(CMbException $e) {

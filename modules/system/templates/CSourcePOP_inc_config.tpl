@@ -51,6 +51,10 @@
             <td>{{mb_field object=$source field="auth_ssl"}}</td>
           </tr>
           <tr>
+            <th>{{mb_label object=$source field="libelle"}}</th>
+            <td>{{mb_field object=$source field="libelle"}}</td>
+          </tr>
+          <tr>
             <th>{{mb_label object=$source field="user"}}</th>
             <td>{{mb_field object=$source field="user"}}</td>
           </tr>
