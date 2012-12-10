@@ -100,9 +100,11 @@
     {{$performance.size}}
   </li>
 
+  {{if $conf.locale_warn}}
   <li class="performance-l10n" id="i10n-alert" onclick="Localize.showForm()" title="{{tr}}system-msg-unlocalized_warning{{/tr}}">
     0
   </li>
+  {{/if}}
   
   <li class="performance-network">
     <strong class="title">Adresse IP</strong>
