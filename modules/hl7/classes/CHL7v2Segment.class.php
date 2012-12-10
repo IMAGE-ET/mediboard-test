@@ -758,10 +758,12 @@ class CHL7v2Segment extends CHL7v2Entity {
         $libelle = $operation->libelle;
         
         return array(
-          // CE-1
-          null,
-          // CE-2
-          "$datetime#$type_anesth#$idex_chir#$idex_anesth#$libelle"
+          array(
+            // CE-1
+            null,
+            // CE-2
+            "$datetime#$type_anesth#$idex_chir#$idex_anesth#$libelle"
+          )
         );
       default:
         return null;
