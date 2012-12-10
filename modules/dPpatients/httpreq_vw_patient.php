@@ -17,7 +17,8 @@ $patient = new CPatient();
 if (CValue::get("new", 0)) {
   $patient->load(NULL);
   CValue::setSession("id", null);
-} else {
+} 
+else {
   $patient->load($patient_id);
 }
 

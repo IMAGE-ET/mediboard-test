@@ -82,7 +82,8 @@ class CMediusers extends CMbObject {
   // Distant fields
   var $_group_id                   = null;
 
-  // CPS
+  // Behaviour fields 
+  static $user_autoload            = true;
   var $_bind_cps                   = null;
   var $_id_cps                     = null;
 
@@ -304,12 +305,14 @@ class CMediusers extends CMbObject {
     $user->user_id = ($this->_user_id) ? $this->_user_id : $this->user_id;
     $user->user_type        = $this->_user_type;
     $user->user_username    = $this->_user_username;
+		
     if (isset($this->_ldap_store)) {
       $user->user_password     = $this->_user_password;
     }
     else {
       $user->_user_password    = $this->_user_password;
     }
+    
     $user->user_first_name  = $this->_user_first_name;
     $user->user_last_name   = $this->_user_last_name;
     $user->user_email       = $this->_user_email;
@@ -318,9 +321,9 @@ class CMediusers extends CMbObject {
     $user->user_address1    = $this->_user_adresse;
     $user->user_zip         = $this->_user_cp;
     $user->user_city        = $this->_user_ville;
-    $user->template         = 0;
     $user->profile_id       = $this->_profile_id;
-
+    $user->template         = 0;
+    
     $user->_merging = $this->_merging;
     return $user;
   }
@@ -354,7 +357,13 @@ class CMediusers extends CMbObject {
     parent::updateFormFields();
 
     $user = new CUser();
-    if ($user->load($this->user_id)) {
+	
+	  // Usefull hack for mass preloading
+		if (self::$user_autoload) {
+      $user = $user->getCached($this->user_id);
+		}
+		
+    if ($user->_id) {
       $this->_user_type       = $user->user_type;
       $this->_user_username   = $user->user_username;
       $this->_user_password   = $user->user_password;
@@ -700,7 +709,7 @@ class CMediusers extends CMbObject {
       }
     }
 
-    if($actif) {
+    if ($actif) {
       $where["users_mediboard.actif"] = "= '1'";
     }
 
@@ -712,31 +721,44 @@ class CMediusers extends CMbObject {
     }
 
     $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+    
     // Filter on current group
-    $g = CGroups::loadCurrent();
-    $where["functions_mediboard.group_id"] = "= '$g->_id'";
+    $group = CGroups::loadCurrent();
+    $where["functions_mediboard.group_id"] = "= '$group->_id'";
 
-    $utypes_flip = array_flip(CUser::$types);
+		// Filter on user type
     if (is_array($user_types)) {
-      foreach ($user_types as $key => $value) {
-        $user_types[$key] = $utypes_flip[$value];
+      $utypes_flip = array_flip(CUser::$types);
+      foreach ($user_types as &$_type) {
+        $_type = $utypes_flip[$_type];
       }
-      if ($reverse) {
-        $where["users.user_type"] = CSQLDataSource::prepareNotIn($user_types);
-      }
-      else {
-        $where["users.user_type"] = CSQLDataSource::prepareIn($user_types);
-      }
+      
+      $where["users.user_type"] = $reverse ?
+        CSQLDataSource::prepareNotIn($user_types) :
+        CSQLDataSource::prepareIn($user_types);
     }
 
     $order = "`users`.`user_last_name`, `users`.`user_first_name`";
 
     // Get all users
+    CMediusers::$user_autoload = false;
     $mediuser = new CMediusers;
-    $mediusers = $mediuser->loadListWithPerms($permType, $where, $order, null, null, $ljoin);
+    $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
+    
+		// Mass fonction standard preloading
+		CMbObject::massLoadFwdRef($mediusers, "function_id");
+		
+		// Filter a posteriori to unable mass preloading of function
+    self::filterByPerm($mediusers, $permType);
 
+    // Mass user speficic preloading
+    $user = new CUser;
+    $user->loadAll(array_keys($mediusers));
+		
     // Associate already loaded function
+    CMediusers::$user_autoload = true;
     foreach ($mediusers as $_mediuser) {
+      $_mediuser->updateFormFields();
       $_mediuser->loadRefFunction();
     }
 
@@ -747,16 +769,7 @@ class CMediusers extends CMbObject {
     // Liste de Tous les établissements
     $group = new CGroups;
     $order = "text";
-    $groups = $group->loadList(null, $order);
-
-    // Filtre
-    foreach ($groups as $keyGroupe => $groupe) {
-      if (!$groupe->getPerm($permType)) {
-        unset($groups[$keyGroupe]);
-      }
-    }
-
-    return $groups;
+    return $group->loadListWithPerms($permType, null, $order);
   }
 
   /**
@@ -779,25 +792,23 @@ class CMediusers extends CMbObject {
    */
   static function loadFonctions($permType = PERM_READ, $group_id = null, $type = null) {
     $group = CGroups::loadCurrent();
-    $functions = new CFunctions;
-    $functions->actif = 1;
-    $functions->group_id = CValue::first($group_id, $group->_id);
+    $function = new CFunctions;
+    $function->actif = 1;
+    $function->group_id = CValue::first($group_id, $group->_id);
 
     if ($type) {
-      $functions->type = $type;
+      $function->type = $type;
     }
 
     $order = "text";
-    $functions = $functions->loadMatchingList($order);
-
-    if ($permType && $functions) {
-      foreach ($functions as $_id => &$function) {
-        if (!$function->getPerm($permType)) {
-          unset($functions[$_id]);
-        }
-        $function->_ref_group = $group;
-      }
+    $functions = $function->loadMatchingList($order);
+		CMbObject::filterByPerm($functions, $permType);
+		
+		// Group association
+    foreach ($functions as $function) {
+      $function->_ref_group = $group;
     }
+		
     return $functions;
   }
 
