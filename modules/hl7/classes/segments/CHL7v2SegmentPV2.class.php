@@ -226,7 +226,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     $data[] = null;
     
     // PV2-45: Advance Directive Code (CE) (optional repeating)
-    $data[] = $this->getPV245($receiver, $sejour, $operation);
+    $data[] = $this->getPV245($receiver, $this->sejour, $this->operation);
     
     // PV2-46: Patient Status Effective Date (DT) (optional)
     $data[] = null;
