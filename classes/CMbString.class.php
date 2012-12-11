@@ -434,5 +434,23 @@ abstract class CMbString {
     
     return $words;
   }
+
+
+  /**
+   * Convert an HTML text to plain text.
+   * Replace the <br> tags with '\n', and the html special chars by their equivalent in the chosen encoding
+   *
+   * @param string $html     The HTML to convert
+   * @param string $encoding The encoding, default UTF-8
+   *
+   * @return string
+   */
+  static function htmlToText($html, $encoding = "UTF-8") {
+    $text = str_replace("<br />", "\n", $html);
+    $text = strip_tags($text);
+    $text = html_entity_decode($text, ENT_QUOTES, $encoding);
+
+    return $text;
+  }
 }
 ?>

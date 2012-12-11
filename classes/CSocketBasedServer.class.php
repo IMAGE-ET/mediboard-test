@@ -153,7 +153,7 @@ class CSocketBasedServer {
    * 
    * @param string $url The url
    * 
-   * @return null
+   * @return void
    */
   function setCallUrl($url) {
     $this->call_url = $url;
@@ -164,7 +164,7 @@ class CSocketBasedServer {
    * 
    * @param string $username The userame
    * 
-   * @return null
+   * @return void
    */
   function setUsername($username) {
     $this->username = $username;
@@ -175,7 +175,7 @@ class CSocketBasedServer {
    * 
    * @param string $password The password
    * 
-   * @return null
+   * @return void
    */
   function setPassword($password) {
     $this->password = $password;
@@ -193,9 +193,9 @@ class CSocketBasedServer {
   /**
    * Set the port
    * 
-   * @param integer $url The port
+   * @param integer $port The port
    * 
-   * @return null
+   * @return void
    */
   function setPort($port) {
     $this->port = $port;
@@ -262,12 +262,11 @@ class CSocketBasedServer {
   /**
    * Encode the request and return it
    * 
-   * @param string $request The request
+   * @param string $buffer The buffer
    * 
    * @return string
    */
-  function encodeClientRequest($buffer, $request) {
-    $buffer .= substr($request, 0, -1);
+  function encodeClientRequest($buffer) {
     return trim($buffer);
   }
   
@@ -276,7 +275,7 @@ class CSocketBasedServer {
    * 
    * @param string $ack The response
    * 
-   * @param string
+   * @return string
    */
   function decodeResponse($ack) {
     return $ack;
@@ -326,12 +325,13 @@ class CSocketBasedServer {
     }
     
     echo sprintf(" > Got %d bytes from %d\n", strlen($request), $id);
-    
+
+    $buffer .= $request;
     // Si on recoit le flag de fin de message, on effectue la requete web
-    if ($this->isMessageFull($request)) {
+    if ($this->isMessageFull($buffer)) {
       
       echo sprintf(" > Got a full message from %d\n", $id);
-      $buffer = $this->encodeClientRequest($buffer, $request);
+      $buffer = $this->encodeClientRequest($buffer);
       $post = array(
         "m"       => $this->module,
         "dosql"   => $this->controller,
@@ -356,9 +356,9 @@ class CSocketBasedServer {
       return $this->decodeResponse($this->formatAck($ack));
     }
     else {
-      echo "Mise en buffer du message!";
+      echo "Mise en buffer du message!\n";
       // Mise en buffer du message
-      $buffer .= "$request\n";
+      $buffer = $this->appendRequest($buffer);
     }
     
     return "";
@@ -373,6 +373,17 @@ class CSocketBasedServer {
    */
   function isMessageFull($message) {
     
+  }
+
+  /**
+   * Format the buffer
+   *
+   * @param string $buffer The buffer
+   *
+   * @return string
+   */
+  function appendRequest($buffer) {
+    return $buffer;
   }
   
   /**
@@ -641,4 +652,3 @@ EOT;
     return $types;
   }
 }
-?>
