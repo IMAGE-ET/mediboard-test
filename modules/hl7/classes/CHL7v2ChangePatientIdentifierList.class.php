@@ -14,7 +14,7 @@
  * Change patient identifier list, message XML HL7
  */
 class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
-  static $event_codes = "A47";
+  static $event_codes = "A46 A47";
   
   function getContentNodes() {
     $data = parent::getContentNodes();
@@ -25,6 +25,41 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
   }
   
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+    $event_temp = $ack->event;
+
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    $sender       = $exchange_ihe->_ref_sender;
+    $sender->loadConfigValues();
+
+    $this->_ref_sender = $sender;
+
+    // Acquittement d'erreur : identifiants RI et PI non fournis
+    if (!$data['personIdentifiers']) {
+      return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
+    }
+ 
+    $function_handle = "handle$exchange_ihe->code";
+    
+    if (!method_exists($this, $function_handle)) {
+      return $exchange_ihe->setAckAR($ack, "E006", null, $newPatient);
+    }
+    
+    return $this->$function_handle($ack, $newPatient, $data); 
+  } 
+  
+  function handleA46(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+    $handle_mode = CHL7v2Message::$handle_mode;
+    
+    CHL7v2Message::$handle_mode = "simple";
+    
+    $msg = $this->handleA47($ack, $newPatient, $data);
+    
+    CHL7v2Message::$handle_mode = $handle_mode;
+    
+    return $msg;
+  }
+  
+  function handleA47(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
     // Traitement du message des erreurs
     $comment = $warning = "";
     
@@ -34,17 +69,16 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
    
     $this->_ref_sender = $sender;
     
-    // Acquittement d'erreur : identifiants RI et PI non fournis
-    if (!$data['personIdentifiers']) {
-      return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
-    }
-    
     $incorrect_identifier = null;
-    $MRG_1 = $this->queryNodes("MRG.1", $data["MRG"])->item(0);
+    
     if (CHL7v2Message::$handle_mode == "simple") {
-      /* @todo En mode simple, est-ce toujours le PI ? */
+      $MRG_4 = $this->queryNodes("MRG.4", $data["MRG"])->item(0);
+      
+      $incorrect_identifier = $this->queryTextNode("CX.1", $MRG_4);
     }
     else {
+      $MRG_1 = $this->queryNodes("MRG.1", $data["MRG"])->item(0);
+      
       if ($this->queryTextNode("CX.5", $MRG_1) == "PI") {
         $incorrect_identifier = $this->queryTextNode("CX.1", $MRG_1);
       }

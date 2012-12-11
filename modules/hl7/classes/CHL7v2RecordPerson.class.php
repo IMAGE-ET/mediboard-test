@@ -27,8 +27,31 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
     return $data;
   }
- 
+  
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+    $event_temp = $ack->event;
+
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    $sender       = $exchange_ihe->_ref_sender;
+    $sender->loadConfigValues();
+
+    $this->_ref_sender = $sender;
+
+    // Acquittement d'erreur : identifiants RI et PI non fournis
+    if (!$data['personIdentifiers']) {
+      return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
+    }
+ 
+    $function_handle = "handle$exchange_ihe->code";
+    
+    if (!method_exists($this, $function_handle)) {
+      return $exchange_ihe->setAckAR($ack, "E006", null, $newPatient);
+    }
+    
+    return $this->$function_handle($ack, $newPatient, $data); 
+  } 
+
+  function handleA28(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
     // Traitement du message des erreurs
     $comment = $warning = $code_IPP = "";
     $_modif_patient = false;
@@ -38,11 +61,6 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $sender->loadConfigValues();
    
     $this->_ref_sender = $sender;
-
-    // Acquittement d'erreur : identifiants RI et PI non fournis
-    if (!$data['personIdentifiers']) {
-      return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
-    }
     
     $patientRI       = CValue::read($data['personIdentifiers'], "RI");
     $patientRISender = CValue::read($data['personIdentifiers'], "RI_Sender");
@@ -179,7 +197,11 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     }
     
     return $exchange_ihe->setAckAA($ack, $codes, $comment, $newPatient);
-  }    
+  } 
+
+  function handleA31(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+    return $this->handleA28($ack, $newPatient, $data);
+  } 
   
   function primaryMappingPatient($data, CPatient $newPatient) {
     // Segment PID
