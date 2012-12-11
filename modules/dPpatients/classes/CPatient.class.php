@@ -515,6 +515,11 @@ class CPatient extends CMbObject {
       $this->patient_link_id = "";
     }
 
+    if ($this->fieldModified("naissance") || $this->fieldModified("sexe")) {
+      // _guid is not valued yet !!
+      SHM::remKeys("bcb-alertes-*-CPatient-".$this->_id);
+    }
+
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
