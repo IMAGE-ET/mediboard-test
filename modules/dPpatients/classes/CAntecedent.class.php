@@ -83,12 +83,35 @@ class CAntecedent extends CMbObject {
   }
   
   function store() {
+    $this->completeField("type");
+    if ($this->type == "alle") {
+      $this->loadRefDossierMedical();
+      $dossier_medical = $this->_ref_dossier_medical;
+      if ($dossier_medical->object_class == "CPatient") {
+        SHM::remKeys("bcb-alertes-*-CPatient-".$dossier_medical->object_id);
+      }
+    }
+    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
     // DossierMedical store
     $this->checkCodeCim10();
+  }
+  
+  function delete() {
+    $this->completeField("type", "dossier_medical_id");
+    
+    if ($this->type == "alle") {
+      $this->loadRefDossierMedical();
+      $dossier_medical = $this->_ref_dossier_medical;
+      if ($dossier_medical->object_class == "CPatient") {
+        SHM::remKeys("bcb-alertes-*-CPatient-".$dossier_medical->object_id);
+      }
+    }
+    
+    return parent::delete();
   }
   
   function checkCodeCim10(){

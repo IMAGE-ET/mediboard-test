@@ -307,17 +307,20 @@ class CDossierMedical extends CMbMetaObject {
         CAppUI::setMsg("Le code CIM saisi n'est pas valide", UI_MSG_WARNING);
         return;
       }
-      
       $this->_codes_cim[] = $this->_added_code_cim;
     }
-
 
     if ($this->_deleted_code_cim) {
       CMbArray::removeValue($this->_deleted_code_cim, $this->_codes_cim);
     }
 
     $this->codes_cim = implode("|", array_unique($this->_codes_cim));
-
+    
+    $this->completeField("object_id", "object_class");
+    if ($this->object_class == "CPatient" && $this->fieldModified("codes_cim")) {
+      SHM::remKeys("bcb-alertes-*-CPatient-".$this->object_id);
+    }
+    
     return parent::store();
   }
   

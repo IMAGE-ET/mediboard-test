@@ -778,6 +778,11 @@ class CConstantesMedicales extends CMbObject {
   function store () {
     // S'il ne reste plus qu'un seul champ et que sa valeur est passée à vide,
     // alors on supprime la constante.
+    if (($this->_id && ($this->fieldModified("taille") || $this->fieldModified("poids"))) || (!$this->_id && ($this->taille || $this->poids))) {
+      $this->completeField("patient_id");
+      SHM::remKeys("bcb-alertes-*-CPatient-".$this->patient_id);
+    }
+    
     if ($this->_id) {
       $ok = false;
       foreach (CConstantesMedicales::$list_constantes as $const => $params) {
@@ -809,6 +814,14 @@ class CConstantesMedicales extends CMbObject {
       }
     }
     return parent::store();
+  }
+  
+  function delete() {
+    $this->completeField("taille", "poids", "patient_id");
+    if ($this->taille || $this->poids) {
+      SHM::remKeys("bcb-alertes-*-CPatient-".$this->patient_id);
+    }
+    return parent::delete();
   }
 
   /**
