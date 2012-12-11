@@ -292,19 +292,23 @@
       <td>{{mb_field object=$correspondant field="remarques"}}</td>
     </tr>
 
-    <tr id="ean"  {{if ($correspondant->relation != "assurance" && $correspondant->_id) || $conf.ref_pays == 1}} style="display: none;"{{/if}}>
-      <th>{{mb_label object=$correspondant field="ean"}}</th>
-      <td>{{mb_field object=$correspondant field="ean"}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$correspondant field="ean_id"}}</th>
-      <td>{{mb_field object=$correspondant field="ean_id"}}</td>
-    </tr>
 
-    <tr>
-      <th>{{mb_label object=$correspondant field="assure_id"}}</th>
-      <td>{{mb_field object=$correspondant field="assure_id"}}</td>
-    </tr>
+    {{* Switzerland *}}
+    {{if $conf.ref_pays == 2}}
+      <tr id="ean">
+        <th>{{mb_label object=$correspondant field="ean"}}</th>
+        <td>{{mb_field object=$correspondant field="ean"}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$correspondant field="ean_id"}}</th>
+        <td>{{mb_field object=$correspondant field="ean_id"}}</td>
+      </tr>
+
+      <tr>
+        <th>{{mb_label object=$correspondant field="assure_id"}}</th>
+        <td>{{mb_field object=$correspondant field="assure_id"}}</td>
+      </tr>
+    {{/if}}
 
     {{if !$mode_modele}}
       <tr id="date_debut" {{if $correspondant->relation != "assurance" && $correspondant->relation != "employeur" && $correspondant->_id}} style="display: none;"{{/if}}>
