@@ -39,6 +39,17 @@ class CMLLPServer extends CSocketBasedServer{
     $message = trim($message);
     return strrpos($message, "\x1C") === strlen($message)-1;
   }
+
+  /**
+   * Format the buffer
+   *
+   * @param string $buffer The buffer
+   *
+   * @return string
+   */
+  function appendRequest($buffer) {
+    return "$buffer\n";
+  }
   
   /**
    * Format the acknowledgement
