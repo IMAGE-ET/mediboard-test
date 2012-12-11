@@ -111,12 +111,9 @@ class CDicomServer extends CSocketBasedServer {
    * 
    * @param string $buffer  The buffer
    * 
-   * @param string $request The request
-   * 
    * @return string
    */
-  function encodeClientRequest($buffer, $request) {
-    $buffer .= $request;
+  function encodeClientRequest($buffer) {
     return base64_encode($buffer);
   }
 

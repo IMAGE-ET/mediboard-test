@@ -94,6 +94,12 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * @return null
    */
   function setCalledAETitle($called_AE_title) {
+    if (strlen($called_AE_title) < 16) {
+      $nb_space = 16 - strlen($called_AE_title);
+      for ($i = 0; $i < $nb_space; $i++) {
+        $called_AE_title .= " ";
+      }
+    }
     $this->called_AE_title = $called_AE_title;
   }
   
@@ -105,6 +111,12 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * @return null
    */
   function setCallingAETitle($calling_AE_title) {
+    if (strlen($calling_AE_title) < 16) {
+      $nb_space = 16 - strlen($calling_AE_title);
+      for ($i = 0; $i < $nb_space; $i++) {
+        $calling_AE_title .= " ";
+      }
+    }
     $this->calling_AE_title = $calling_AE_title;
   }
   
@@ -140,7 +152,7 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
    * @return null
    */
   function setUserInfo($datas) {
-    $this->user_info = new CDicomPDUItemTransferSyntax($datas);
+    $this->user_info = new CDicomPDUItemUserInfo($datas);
   }
   
   /**
@@ -186,8 +198,8 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
     $stream_writer->skip(1);
     $stream_writer->writeUInt16($this->protocol_version);
     $stream_writer->skip(2);
-    $stream_writer->writeUInt16($this->called_AE_title);
-    $stream_writer->writeUInt8($this->calling_AE_title);
+    $stream_writer->writeString($this->called_AE_title, 16);
+    $stream_writer->writeString($this->calling_AE_title, 16);
     $stream_writer->skip(32);
     $this->application_context->encodeItem($stream_writer);
     foreach ($this->presentation_contexts as $_item) {

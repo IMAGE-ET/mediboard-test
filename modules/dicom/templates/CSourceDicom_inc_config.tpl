@@ -15,7 +15,8 @@
     },
     
     send: function () {
-      
+      var url=  new Url("dicom", "ajax_test_connection");
+      url.requestUpdate("test-send");
     }
   }
 </script>
@@ -79,6 +80,11 @@
             <button type="button" class="search" onclick="Dicom.send();">
               {{tr}}utilities-source-dicom-send{{/tr}}
             </button>
+          </td>
+        </tr>
+        <tr>
+          <td id="test-send">
+            
           </td>
         </tr>
       </table>
