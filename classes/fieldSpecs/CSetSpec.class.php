@@ -89,7 +89,7 @@ class CSetSpec extends CEnumSpec {
 
             select.observe('change', function(event){
               element.fire('ui:change');
-              tokenField.setValues(\$A(select.selectedOptions).pluck('value'));
+              tokenField.setValues(\$A(select.options).filter(function(o){return o.selected}).pluck('value'));
             });
           });
         </script>";
