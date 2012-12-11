@@ -234,7 +234,7 @@
   
   <!-- ALD et CMU -->
   <tbody id="ald_patient_easy" {{if !$conf.dPplanningOp.CSejour.easy_ald_cmu}} style="display: none;"{{/if}}>
-    {{mb_include module=planningOp template=inc_check_ald patient=$sejour->_ref_patient}}
+    {{mb_include module=planningOp template=inc_check_ald patient=$sejour->_ref_patient onchange="Value.synchronize(this, 'editSejour');"}}
   </tbody>
   
   

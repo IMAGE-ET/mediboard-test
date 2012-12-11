@@ -36,9 +36,9 @@
     {{/if}}
     {{mb_label object=$sejour field=ald}}
     {{if $patient && $patient->ald}}
-      {{mb_field object=$sejour typeEnum=checkbox field=ald onchange=$onchange}}
+      {{mb_field object=$sejour typeEnum=checkbox field=ald onchange=$onchange|smarty:nodefaults}}
     {{else}}
-      {{mb_field object=$sejour typeEnum=checkbox field=ald disabled=disabled onchange=$onchange}}
+      {{mb_field object=$sejour typeEnum=checkbox field=ald disabled=disabled onchange=$onchange|smarty:nodefaults}}
     {{/if}}
   </td>
 </tr>
