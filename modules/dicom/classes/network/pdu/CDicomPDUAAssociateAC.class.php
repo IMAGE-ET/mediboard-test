@@ -80,7 +80,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
    * 
    * @param integer $protocol_version The protocol_version
    *  
-   * @return null
+   * @return void
    */
   function setProtocolVersion($protocol_version) {
     $this->protocol_version = $protocol_version;
@@ -91,16 +91,10 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
    * 
    * @param integer $called_AE_title The called AE title
    * 
-   * @return null
+   * @return void
    */
   function setCalledAETitle($called_AE_title) {
-    if (strlen($called_AE_title) < 16) {
-      $nb_space = 16 - strlen($called_AE_title);
-      for ($i = 0; $i < $nb_space; $i++) {
-        $called_AE_title .= " ";
-      }
-    }
-    $this->called_AE_title = $called_AE_title;
+    $this->called_AE_title = str_pad($called_AE_title, 16);
   }
   
   /**
@@ -108,16 +102,10 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
    * 
    * @param integer $calling_AE_title The calling AE title
    * 
-   * @return null
+   * @return void
    */
   function setCallingAETitle($calling_AE_title) {
-    if (strlen($calling_AE_title) < 16) {
-      $nb_space = 16 - strlen($calling_AE_title);
-      for ($i = 0; $i < $nb_space; $i++) {
-        $calling_AE_title .= " ";
-      }
-    }
-    $this->calling_AE_title = $calling_AE_title;
+    $this->calling_AE_title = str_pad($calling_AE_title, 16);
   }
   
   /**
@@ -125,7 +113,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
    * 
    * @param array $datas The data for create the application context
    * 
-   * @return null
+   * @return void
    */
   function setApplicationContext($datas) {
     $this->application_context = new CDicomPDUItemApplicationContext($datas);
@@ -136,7 +124,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
    * 
    * @param array $pres_contexts The datas for create the transfer syntaxes
    * 
-   * @return null
+   * @return void
    */
   function setPresentationContexts($pres_contexts) {
     foreach ($pres_contexts as $datas) {
@@ -149,7 +137,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
    * 
    * @param array $datas The data for create the user informations
    * 
-   * @return null
+   * @return void
    */
   function setUserInfo($datas) {
     $this->user_info = new CDicomPDUItemUserInfo($datas);
@@ -161,7 +149,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
    * 
    * @param CDicomStreamReader $stream_reader The stream reader
    *  
-   * @return null
+   * @return void
    */
   function decodePDU(CDicomStreamReader $stream_reader) {
     $this->protocol_version = $stream_reader->readUInt16();
@@ -218,7 +206,7 @@ class CDicomPDUAAssociateAC extends CDicomPDU {
   /**
    * Calculate the length of the item (without the type and the length fields)
    * 
-   * @return null
+   * @return void
    */
   function calculateLength() {
     $this->length = 68 + $this->application_context->getTotalLength();
