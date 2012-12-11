@@ -132,7 +132,7 @@ ProtocoleSelector = {
       oSejourForm[this.sUf_soins_id].value = protocole.uf_soins_id;
     }
     if (this.sTypePec) {
-      oSejourForm[this.sTypePec].value = protocole.type_pec; 
+      $V(oSejourForm[this.sTypePec], protocole.type_pec); 
     }
     if(this.sServiceId && (!oSejourForm.sejour_id.value || !oSejourForm[this.sServiceId].value)) {
       $V(oSejourForm[this.sServiceId], protocole.service_id);
