@@ -90,6 +90,7 @@ foreach ($services as &$service) {
 $today   = mbDate()." 01:00:00";
 $endWeek = mbDateTime("+7 days", $today);
 
+$where = array();
 $where["annule"]          = "= '0'";
 $where["sejour.entree"]   = "BETWEEN '$today' AND '$endWeek'";
 $where["sejour.group_id"] = "= '$g'";
