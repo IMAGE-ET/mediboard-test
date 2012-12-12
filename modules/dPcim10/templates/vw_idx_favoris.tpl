@@ -57,7 +57,7 @@ function tagCallback(){
     <td style="font-weight: bold;">
       <a href="#1" onclick="CodeCIM.show('{{$curr_code->code}}'); return false;">{{$curr_code->code}}</a>
     </td>
-    <td>
+    <td class="text">
       {{if $curr_code->_favoris_id && $can->edit}}
         <form name="favoris-tag-{{$curr_code->_favoris_id}}" action="?" method="post" style="float: right;">
           {{if $curr_code->_favoris_id}}

@@ -19,18 +19,18 @@
     </tr>
     <tr>
       <td>
-        Mot-clé : <input type="text" name="_keywords_code"/>
+        Mot-clé : <input type="text" name="_keywords_code" onchange="$V(this.form.tag_id, '', false)"/>
         <button type="submit" class="search notext"></button>
       </td>
       <td>
         <label>
-          <input type="checkbox" id="_all_codes_view" onchange="$V(this.form._all_codes, this.checked ? 1 : 0)"/>
+          <input type="checkbox" id="_all_codes_view" onchange="$V(this.form._all_codes, this.checked ? 1 : 0); $V(this.form.tag_id, '', false)"/>
           Chercher dans toute la base CCAM
         </label>
       </td>
       <td>
         <label for="tag_id">Tag</label>
-        <select name="tag_id" onchange="this.form.onsubmit()" class="taglist">
+        <select name="tag_id" onchange="$V(this.form._keywords_code, ''); this.form._all_codes_view.checked = false; $V(this.form._all_codes, 0); this.form.onsubmit()" class="taglist">
           <option value=""> &mdash; {{tr}}All{{/tr}} </option>
           {{mb_include module=ccam template=inc_favoris_tag_select depth=0}}
         </select>

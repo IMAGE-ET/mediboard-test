@@ -67,7 +67,7 @@ function tagCallback(){
         <td style="background-color: #{{$curr_code->couleur}}; font-weight: bold;">
           <a href="#1" onclick="CodeCCAM.show('{{$curr_code->code}}', '{{$curr_code->class}}'); return false;">{{$curr_code->code}}</a>
         </td>
-        <td>
+        <td class="text">
           {{if $curr_code->favoris_id && $can->edit}}
             <form name="favoris-tag-{{$curr_code->favoris_id}}" action="?" method="post" style="float: right;">
               {{if $curr_code->favoris_id}}
