@@ -10,7 +10,7 @@
 /**
  * Description
  */
-class CPop extends CMbObject{
+class CPop{
 
   var $source         = null;
 
