@@ -435,7 +435,7 @@ class CRPU extends CMbObject {
   function loadComplete() {
     parent::loadComplete();
 
-    $this->_ref_sejour->loadComplete();
+    $this->loadRefSejour()->loadComplete();
   }
 
   function getCirconstance() {
