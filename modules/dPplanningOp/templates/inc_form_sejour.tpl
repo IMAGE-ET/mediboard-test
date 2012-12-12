@@ -260,8 +260,10 @@ function updateListCPI(form){
   {{/if}}
   
   url.requestUpdate(field, function(){
-    $V(field, ""); // To check the field
-    $V(field, "{{$sejour->charge_id}}");
+    if (field.type == "hidden") {
+      $V(field, ""); // To check the field
+    }
+    $V(field, "{{$sejour->charge_id}}", true);
   });
 }
 
