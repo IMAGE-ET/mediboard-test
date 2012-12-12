@@ -14,6 +14,8 @@ CCAMSelector = {
 	  tarif : null
 	},
   
+  preparedMulti: null,
+  
   options : {
     width : 800,
     height: 600
@@ -53,12 +55,33 @@ CCAMSelector = {
     window.setTimeout(window.CCAMSelector.doSet, 1);
   },
   
-  doSet: function(){
+  setMulti: function(elts) {
+    this.preparedMulti = elts;
+    
+    window.setTimeout(window.CCAMSelector.doSetMulti, 1);
+  },
+  
+  doSet: function() {
     var oForm = getForm(CCAMSelector.sForm);
 
     $V(oForm[CCAMSelector.sView], CCAMSelector.prepared.code);
+    
     if (this.sTarif) {
 	    $V(oForm[CCAMSelector.sTarif], CCAMSelector.prepared.tarif);
     }
+  },
+  
+  doSetMulti: function() {
+    var form = getForm(CCAMSelector.sForm);
+    
+    var codes = [];
+    
+    CCAMSelector.preparedMulti.each(function(elt) {
+      codes.push(elt.value);
+    });
+    codes = codes.join("|");
+    
+    $V(form[CCAMSelector.sView], codes);
+    CCAMSelector.preparedMulti = null;
   }
 };

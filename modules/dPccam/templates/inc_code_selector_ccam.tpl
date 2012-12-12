@@ -9,6 +9,15 @@
     url.addParam("object_class", "{{$object_class}}");
     url.requestModal(600, 400);
   }
+  
+  addMultiples = function() {
+    var div = $("code_area");
+    var inputs = div.select(".multiples_codes[checked]");
+    if (inputs.length) {
+      CCAMSelector.setMulti(inputs);
+      Control.Modal.close();
+    }
+  }
 </script>
 
 <style type="text/css">
@@ -27,6 +36,9 @@ em {
     </a>
   </li>
 {{/foreach}}
+  <li style="float: right;">
+    <button type="button" class="tick" onclick="addMultiples()">Ajouter la sélection</button>
+  </li>
 </ul>
 <hr class="control_tabs" />
 
@@ -40,7 +52,8 @@ em {
         <th>Code</th>
         <th>Libellé</th>
         <th>Occurences</th>
-        <th></th>
+        <th class="narrow"></th>
+        <th class="narrow"></th>
       </tr>
       {{foreach from=$list item=curr_code name=fusion}}
         <tr>
@@ -61,6 +74,9 @@ em {
           </td>
           <td>
             <button type="button" class="tick compact" onclick="CCAMSelector.set('{{$curr_code->code}}', '{{$curr_code->_default}}'); Control.Modal.close();">Sélectionner</button>
+          </td>
+          <td>
+            <input type="checkbox" class="multiples_codes" value="{{$curr_code->code}}"/>
           </td>
         </tr>
       {{foreachelse}}
