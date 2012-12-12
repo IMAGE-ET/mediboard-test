@@ -299,8 +299,8 @@ $library->fileName = "flot-0.7.tar.gz";
 $library->description = "Création de graphiques en JS";
 $library->sourceDir = "flot";
 $library->targetDir = "flot";
-$library->versionFile = "jquery.flot.js";
-$library->versionString = 'v. 0.7';
+$library->versionFile = "jquery.flot.bandwidth.js";
+$library->versionString = 'drawBandwidthDefault';
 
 CLibrary::$all[$library->name] = $library;
 
