@@ -44,8 +44,13 @@ class CSetupmessagerie extends CSetup {
     $this->addQuery($query);
     $query = "ALTER TABLE `usermessage` CHANGE `mbmail_id` `usermessage_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT;";
     $this->addQuery($query);
-        
-    $this->mod_version = "0.12";
+
+    $this->makeRevision("0.12");
+
+    $this->addPrefQuery("ViewMailAsHtml", 1);
+    $this->mod_version = "0.13";
+
+
   }
 }
 ?>

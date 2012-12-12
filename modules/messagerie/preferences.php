@@ -9,4 +9,7 @@
 
  
  // Préférences par Module
+CPreferences::$modules["messagerie"] = array (
+  "ViewMailAsHtml"
+  );
 ?>

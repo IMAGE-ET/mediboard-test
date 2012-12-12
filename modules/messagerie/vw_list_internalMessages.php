@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage dPportail
+* @subpackage messagerie
 * @version $Revision$
 * @author Fabien
 */

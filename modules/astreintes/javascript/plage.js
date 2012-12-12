@@ -50,6 +50,6 @@ PlageAstreinte = {
   modaleastreinteForDay: function(date) {
     var url = new Url("astreintes", "ajax_list_day_astreinte");
     url.addParam("date", date);
-    url.requestModal();
+    url.requestModal(300,200);
   }
 }
