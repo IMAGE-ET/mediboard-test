@@ -36,8 +36,11 @@
   </tr>
   <tr>
     <td colspan="2" style="text-align: left;">
-      <textarea id="mailarea">{{$mail->content.text.html|smarty:nodefaults}}</textarea>
-
+      {{if $mail->content.text.html|@count && $app->user_prefs.ViewMailAsHtml}}
+        <textarea id="mailarea">{{$mail->content.text.html|smarty:nodefaults}}</textarea>
+      {{else}}
+        {{$mail->content.text.plain}}
+      {{/if}}
     </td>
   </tr>
   <tr>
