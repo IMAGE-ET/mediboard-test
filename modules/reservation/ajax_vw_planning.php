@@ -40,6 +40,10 @@ $order = "bloc_operatoire.nom";
 if ($bloc_id) {
   $where["bloc_id"] = "= '$bloc_id'";
 }
+else {
+  $blocs = $bloc->loadGroupList();
+  $where["bloc_id"] = CSQLDataSource::prepareIn(array_keys($blocs));
+} 
 
 $where["group_id"] = "= '$group->_id'";
 $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
@@ -60,10 +64,14 @@ if (!$show_cancelled) {
 $where["operations.plageop_id"] = "IS NULL";
 $where["operations.salle_id"] = CSQLDataSource::prepareIn($salles_ids);
 
+$ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
+$ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
+
 if ($bloc_id) {
   $where["sallesbloc.bloc_id"] = "= '$bloc_id'";
-  $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
-  $ljoin["bloc_operatoire"] = "bloc_operatoire.bloc_operatoire_id = sallesbloc.bloc_id";
+}
+else {
+  $where["sallesbloc.bloc_id"] = CSQLDataSource::prepareIn(array_keys($blocs));
 }
 
 if ($praticien_id) {
