@@ -10,16 +10,16 @@
 
 // Check params
 if (null == $exchange_source_name = CValue::get("exchange_source_name")) {
-  CAppUI::stepAjax("Aucun nom de source d'échange spécifié", UI_MSG_ERROR);
+  CAppUI::stepAjax("CExchangeSource-error-noSourceName", UI_MSG_ERROR);
 }
 if (null == $type_action = CValue::get("type_action")) {
-  CAppUI::stepAjax("Aucun type de test spécifié", UI_MSG_ERROR);
+  CAppUI::stepAjax("CExchangeSource-error-noTestDefined", UI_MSG_ERROR);
 }
 
 $exchange_source = CExchangeSource::get($exchange_source_name, "pop", true, null, false);
 
 if (!$exchange_source->_id) {
-  CAppUI::stepAjax("Veuillez tout d'abord enregistrer vos paramètres de connexion", UI_MSG_ERROR);
+  CAppUI::stepAjax("CExchangeSource-error-unsavedParameters", UI_MSG_ERROR);
 }
 $pop = new CPop($exchange_source);
 
