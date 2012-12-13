@@ -136,21 +136,8 @@
   Main.add(function() {
     tab_sejour = Control.Tabs.create('tab-sejour');
     tab_sejour.setActiveTab('{{$default_tab}}');
-    
-    {{if $default_tab == "dossier_traitement"}}
-    loadSuiviSoins();
-    {{/if}}
-    
-    {{if $default_tab == "prescription_sejour"}}
-    loadPrescription();
-    {{/if}}
-    
-    {{if $isImedsInstalled}}
-      if($('Imeds')){
-        loadResultLabo('{{$sejour->_id}}');
-      }
-    {{/if}}
-		
+    tab_sejour.activeLink.onmousedown();
+   
 		window.DMI_operation_id = "{{$operation_id}}";
   });
 </script>
@@ -162,7 +149,7 @@
     <li><a href="#prescription_sejour" onmousedown="loadPrescription();">Prescription</a></li>
   {{/if}}
   {{if $isImedsInstalled}}
-    <li><a href="#Imeds">Labo</a></li>
+    <li><a href="#Imeds" onmousedown="loadResultLabo('{{$sejour->_id}}');">Labo</a></li>
   {{/if}}
   <li><a href="#constantes" onmousedown="loadConstantes();">{{tr}}CPatient.surveillance{{/tr}}</a></li>
   <li><a href="#docs" onmousedown="loadDocuments();">{{tr}}CMbObject-back-documents{{/tr}}</a></li>
