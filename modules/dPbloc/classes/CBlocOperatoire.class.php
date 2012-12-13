@@ -66,7 +66,7 @@ class CBlocOperatoire extends CMbObject {
     $g = CGroups::loadCurrent();
     $where["group_id"] = "= '$g->_id'";
     
-    $list = $this->loadList($where, $order, $limit, $groupby, $ljoin);
+    $list = $this->loadListWithPerms(PERM_READ, $where, $order, $limit, $groupby, $ljoin);
     foreach ($list as &$bloc) {
       $bloc->loadRefsSalles();
     }
