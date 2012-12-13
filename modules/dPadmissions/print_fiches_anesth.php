@@ -31,8 +31,9 @@ foreach ($sejours as $_sejour) {
 }
 
 // Tri par nom de patient
-$sorter = CMbArray::pluck($sejours, "_ref_patient", "nom");
-array_multisort($sorter, SORT_ASC, $sejours);
+$sorter_nom    = CMbArray::pluck($sejours, "_ref_patient", "nom");
+$sorter_prenom = CMbArray::pluck($sejours, "_ref_patient", "prenom");
+array_multisort($sorter_nom, SORT_ASC, $sorter_prenom, SORT_ASC, $sejours);
 
 foreach ($sejours as $_sejour) {
   $_operation = $_sejour->loadRefLastOperation();
