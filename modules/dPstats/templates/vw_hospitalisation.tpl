@@ -91,8 +91,8 @@ Main.add(function(){
         <option value="reelle" {{if $type_data == "reelle"}}selected="selected"{{/if}}>Réelles</option>
       </select>
     </td>
-    <th></th>
-    <td></td>
+    <th>Uniquement {{mb_label object=$filter field="septique"}}</th>
+    <td>{{mb_field object=$filter field="septique"}}</td>
   </tr>
 
   <tr>

@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0, $type_data = "prevue") {
+function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0, $septique = 0, $type_data = "prevue") {
 	if (!$debut) $debut = mbDate("-1 YEAR");
 	if (!$fin) $fin = mbDate();
 	
@@ -65,6 +65,7 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
 	  if ($service_id)    $query .= "\nAND service.service_id = '$service_id'";
 	  if ($prat_id)       $query .= "\nAND sejour.praticien_id = '$prat_id'";
 	  if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if ($septique)       $query .= "\nAND sejour.septique = '$septique'";
 		
 	  $query .= "\nGROUP BY mois ORDER BY orderitem";
 	
@@ -91,12 +92,13 @@ function graphPatParTypeHospi($debut = null, $fin = null, $prat_id = 0, $service
 	$subtitle = "$total patients";
 	if ($prat_id)       $subtitle .= " - Dr $prat->_view";
 	if ($discipline_id) $subtitle .= " - $discipline->_view";
+  if($septique)      $subtitle .= " - Septiques";
 	
 	$options = array(
 		'title' => utf8_encode("Nombre d'admissions par type d'hospitalisation - $type_data"),
 		'subtitle' => utf8_encode($subtitle),
 		'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
-		'yaxis' => array('autoscaleMargin' => 1),
+		'yaxis' => array('min' => 0, 'autoscaleMargin' => 1),
 		'bars' => array('show' => true, 'stacked' => true, 'barWidth' => 0.8),
 		'HtmlText' => false,
 		'legend' => array('show' => true, 'position' => 'nw'),

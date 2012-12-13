@@ -26,10 +26,11 @@ $filter->_date_max_stat = mbDate("-$rectif DAYS", $filter->_date_max_stat);
 $filter->_date_max_stat = mbDate("+ 1 MONTH", $filter->_date_max_stat);
 $filter->_date_max_stat = mbDate("-1 DAY", $filter->_date_max_stat);
 
-$filter->_service = CValue::getOrSession("service_id", 0);
-$filter->type = CValue::getOrSession("type", 1);
+$filter->_service     = CValue::getOrSession("service_id", 0);
+$filter->type         = CValue::getOrSession("type", 1);
 $filter->praticien_id = CValue::getOrSession("prat_id", 0);
-$filter->_specialite = CValue::getOrSession("discipline_id", 0);
+$filter->_specialite  = CValue::getOrSession("discipline_id", 0);
+$filter->septique     = CValue::getOrSession("septique", 0);
 
 $type_data = CValue::getOrSession("type_data", "prevue");
 
@@ -51,6 +52,7 @@ $query = "SELECT COUNT(sejour.sejour_id) AS total, 1 as group_field
 if($filter->_service)     $query .= "\nAND service.service_id = '$filter->_service'";
 if($filter->praticien_id) $query .= "\nAND sejour.praticien_id = '$filter->praticien_id'";
 if($filter->_specialite)  $query .= "\nAND users_mediboard.discipline_id = '$filter->_specialite'";
+if($filter->septique)     $query .= "\nAND sejour.septique = '$filter->septique'";
 if($filter->type) {
   if($filter->type == 1)
     $query .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
@@ -81,6 +83,7 @@ $query = "SELECT COUNT(sejour.sejour_id) AS total, 1 as group_field
 if($filter->_service)     $query .= "\nAND service.service_id = '$filter->_service'";
 if($filter->praticien_id) $query .= "\nAND sejour.praticien_id = '$filter->praticien_id'";
 if($filter->_specialite)  $query .= "\nAND users_mediboard.discipline_id = '$filter->_specialite'";
+if($filter->septique)     $query .= "\nAND sejour.septique = '$filter->septique'";
 if($filter->type) {
   if($filter->type == 1)
     $query .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
@@ -116,6 +119,7 @@ $query = "SELECT COUNT(sejour.sejour_id) AS total, 1 as group_field
 if($filter->_service)     $query .= "\nAND service.service_id = '$filter->_service'";
 if($filter->praticien_id) $query .= "\nAND sejour.praticien_id = '$filter->praticien_id'";
 if($filter->_specialite)  $query .= "\nAND users_mediboard.discipline_id = '$filter->_specialite'";
+if($filter->septique)     $query .= "\nAND sejour.septique = '$filter->septique'";
 if($filter->type) {
   if($filter->type == 1)
     $query .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
@@ -140,15 +144,15 @@ $listPrats = $user->loadPraticiens(PERM_READ);
 $service = new CService();
 $where = array();
 $where["cancelled"] = "= '0'";
-$listServices = $service->loadGroupList();
+$listServices = $service->loadGroupList($where);
 
 $listDisciplines = new CDiscipline();
 $listDisciplines = $listDisciplines->loadUsedDisciplines();
 
 $graphs = array(
-  graphPatParService($filter->_date_min_stat, $filter->_date_max_stat, $filter->praticien_id, $filter->_service, $filter->type, $filter->_specialite, $type_data),
-	graphPatParTypeHospi($filter->_date_min_stat, $filter->_date_max_stat, $filter->praticien_id, $filter->_service, $filter->type, $filter->_specialite, $type_data),
-	graphJoursParService($filter->_date_min_stat, $filter->_date_max_stat, $filter->praticien_id, $filter->_service, $filter->type, $filter->_specialite, $type_data)
+  graphPatParService($filter->_date_min_stat, $filter->_date_max_stat, $filter->praticien_id, $filter->_service, $filter->type, $filter->_specialite, $filter->septique, $type_data),
+	graphPatParTypeHospi($filter->_date_min_stat, $filter->_date_max_stat, $filter->praticien_id, $filter->_service, $filter->type, $filter->_specialite, $filter->septique, $type_data),
+	graphJoursParService($filter->_date_min_stat, $filter->_date_max_stat, $filter->praticien_id, $filter->_service, $filter->type, $filter->_specialite, $filter->septique, $type_data)
 );
 
 // Création du template

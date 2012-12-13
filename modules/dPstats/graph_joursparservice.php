@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0, $type_data = "prevue") {
+function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0, $septique = 0, $type_data = "prevue") {
   if (!$debut) $debut = mbDate("-1 YEAR");
   if (!$fin) $fin = mbDate();
   
@@ -34,7 +34,6 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
   if ($service_id) {
     $where["service_id"] = "= '$service_id'";
   }
-  $where["cancelled"] = "= '0'";
   $service = new CService();
   $services = $service->loadGroupList($where);
   
@@ -45,6 +44,9 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
   
   $total = 0;
   $series = array();
+  
+  // Patients placés
+  
   foreach ($services as $service) {
     $serie = array(
       'data' => array(),
@@ -74,6 +76,7 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
         
       if ($prat_id)       $query .= "\nAND sejour.praticien_id = '$prat_id'";
       if ($discipline_id) $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+      if ($septique)      $query .= "\nAND sejour.septique = '$septique'";
     
       if ($type_adm) {
       if($type_adm == 1)
@@ -115,6 +118,15 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
     }
     $series[] = $serie;
   }
+
+  // Patients non placés
+  
+  if(!$service_id) {
+    $serie = array(
+      'data' => array(),
+      'label' => utf8_encode("Non placés")
+    );
+  }
   
   $series[] = $serie_total;
   
@@ -122,12 +134,13 @@ function graphJoursParService($debut = null, $fin = null, $prat_id = 0, $service
   if ($prat_id)       $subtitle .= " - Dr $prat->_view";
   if ($discipline_id) $subtitle .= " - $discipline->_view";
   if ($type_adm)      $subtitle .= " - ".$listHospis[$type_adm];
+  if($septique)      $subtitle .= " - Septiques";
   
   $options = array(
     'title' => utf8_encode("Nombre de nuits par service"),
     'subtitle' => utf8_encode($subtitle),
     'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
-    'yaxis' => array('autoscaleMargin' => 1),
+    'yaxis' => array('min' => 0, 'autoscaleMargin' => 1),
     'bars' => array('show' => true, 'stacked' => true, 'barWidth' => 0.8),
     'HtmlText' => false,
     'legend' => array('show' => true, 'position' => 'nw'),

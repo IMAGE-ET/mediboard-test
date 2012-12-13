@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0, $type_data = "prevue") {
+function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_id = 0, $type_adm = 0, $discipline_id = 0, $septique = 0, $type_data = "prevue") {
 	if (!$debut) $debut = mbDate("-1 YEAR");
 	if (!$fin) $fin = mbDate();
 	
@@ -34,7 +34,6 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
 	if($service_id) {
 	  $where["service_id"] = "= '$service_id'";
 	}
-  $where["cancelled"] = "= '0'";
 	$service = new CService();
 	$services = $service->loadGroupList($where);
 	
@@ -45,12 +44,15 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
 	
 	$total = 0;
 	$series = array();
+  
+  // Patients placés
+  
 	foreach($services as $service) {
 		$serie = array(
 		  'data' => array(),
 			'label' => utf8_encode($service->nom)
 		);
-
+    
 	  $query = "SELECT COUNT(DISTINCT affectation.sejour_id) AS total, service.nom AS nom,
 	    DATE_FORMAT(affectation.entree, '%m/%Y') AS mois,
 	    DATE_FORMAT(affectation.entree, '%Y%m') AS orderitem
@@ -62,12 +64,13 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
 	    INNER JOIN service ON chambre.service_id = service.service_id
 	    WHERE 
 			  sejour.annule = '0' AND
-			  affectation.entree BETWEEN '$debut' AND '$fin' AND 
+			  affectation.entree BETWEEN '$debut 00:00:00' AND '$fin 23:59:59' AND 
 				service.service_id = '$service->_id'";
 				
-	  if($type_data == "reelle") $query .= "\nAND sejour.entree_reelle BETWEEN '$debut' AND '$fin'";
-	  if($prat_id)              $query .= "\nAND sejour.praticien_id = '$prat_id'";
-	  if($discipline_id)        $query .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+	  if($type_data == "reelle") $query .= "\nAND sejour.entree_reelle BETWEEN  '$debut 00:00:00' AND '$fin 23:59:59'";
+	  if($prat_id)              $query  .= "\nAND sejour.praticien_id = '$prat_id'";
+	  if($discipline_id)        $query  .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if($septique)             $query  .= "\nAND sejour.septique = '$septique'";
 		
 	  if($type_adm) {
 	    if($type_adm == 1)
@@ -78,6 +81,7 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
 	  $query .= "\nGROUP BY mois ORDER BY orderitem";
 		
 	  $result = $sejour->_spec->ds->loadlist($query);
+    
 	  foreach($ticks as $i => $tick) {
 	    $f = true;
 	    foreach($result as $r) {
@@ -93,6 +97,55 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
 	  }
 		$series[] = $serie;
 	}
+
+	// Patients non placés
+
+	if(!$service_id) {
+    $serie = array(
+      'data' => array(),
+      'label' => utf8_encode("Non placés")
+    );
+      
+    $query = "SELECT COUNT(DISTINCT sejour.sejour_id) AS total, 'Non placés' AS nom,
+      DATE_FORMAT(sejour.entree_$type_data, '%m/%Y') AS mois,
+      DATE_FORMAT(sejour.entree_$type_data, '%Y%m') AS orderitem
+      FROM sejour
+      INNER JOIN users_mediboard ON sejour.praticien_id = users_mediboard.user_id
+      LEFT JOIN  affectation ON sejour.sejour_id = affectation.sejour_id
+      WHERE 
+        sejour.annule = '0' AND
+        sejour.entree_$type_data BETWEEN  '$debut 00:00:00' AND '$fin 23:59:59' AND 
+        affectation.affectation_id IS NULL";
+  
+    if($prat_id)              $query  .= "\nAND sejour.praticien_id = '$prat_id'";
+    if($discipline_id)        $query  .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+    if($septique)             $query  .= "\nAND sejour.septique = '$septique'";
+    
+    if($type_adm) {
+      if($type_adm == 1)
+        $query .= "\nAND (sejour.type = 'comp' OR sejour.type = 'ambu')";
+      else
+        $query .= "\nAND sejour.type = '$type_adm'";
+    }
+    $query .= "\nGROUP BY mois ORDER BY orderitem";
+    
+    $resultNP = $sejour->_spec->ds->loadlist($query);
+      
+    foreach($ticks as $i => $tick) {
+      $f = true;
+      foreach($resultNP as $r) {
+        if($tick[1] == $r["mois"]) {
+          $serie["data"][] = array($i, $r["total"]);
+          $serie_total["data"][$i][1] += $r["total"];
+          $total += $r["total"];
+          $f = false;
+          break;
+        }
+      }
+      if($f) $serie["data"][] = array(count($serie["data"]), 0);
+    }
+    $series[] = $serie;
+  }
   
   $series[] = $serie_total;
 	
@@ -100,12 +153,13 @@ function graphPatParService($debut = null, $fin = null, $prat_id = 0, $service_i
 	if($prat_id)       $subtitle .= " - Dr $prat->_view";
 	if($discipline_id) $subtitle .= " - $discipline->_view";
 	if($type_adm)      $subtitle .= " - ".$listHospis[$type_adm];
+  if($septique)      $subtitle .= " - Septiques";
 	
 	$options = array(
 		'title' => utf8_encode("Nombre de patients par service - $type_data"),
 		'subtitle' => utf8_encode($subtitle),
 		'xaxis' => array('labelsAngle' => 45, 'ticks' => $ticks),
-		'yaxis' => array('autoscaleMargin' => 1),
+		'yaxis' => array('min' => 0, 'autoscaleMargin' => 1),
 		'bars' => array('show' => true, 'stacked' => true, 'barWidth' => 0.8),
 		'HtmlText' => false,
 		'legend' => array('show' => true, 'position' => 'nw'),
