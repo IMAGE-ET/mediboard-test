@@ -384,7 +384,7 @@ class CDossierMedical extends CMbMetaObject {
       $list = array();
       foreach ($this->_ref_traitements as $_traitement) {
         $debut     = $_traitement->debut ? " depuis "   . $_traitement->getFormattedValue("debut") : "";
-        $fin       = $_traitement->debut ? " jusqu'au " . $_traitement->getFormattedValue("fin"  ) : "";
+        $fin       = $_traitement->fin ? " jusqu'au " . $_traitement->getFormattedValue("fin"    ) : "";
         $colon  = $debut || $fin ? ": " : "";
         $list[] = $debut . $fin . $colon . $_traitement->traitement;
       }
@@ -394,16 +394,11 @@ class CDossierMedical extends CMbMetaObject {
       if ($prescription && $prescription->_id) {
         $prescription->loadRefsLinesMed();
         foreach ($prescription->_ref_prescription_lines as $_line) {
+          if ($_line->fin && $_line->fin <= mbDate()) {
+            continue;
+          }
           $view = $_line->_ucd_view;
           $prises = $_line->loadRefsPrises();
-          $debut = "";
-          $fin = "";
-          if ($_line->debut) {
-            $debut = " depuis " . $_line->getFormattedValue("debut");
-          }
-          if ($_line->fin) {
-            $fin = " jusqu'au" . $_line->getFormattedValue("fin");
-          }
           $posologie = implode(" - ", CMbArray::pluck($prises, "_view"));
           $posologie = $posologie ? " ($posologie)" : "";
           $list[] = $view . $posologie;
