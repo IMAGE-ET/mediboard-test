@@ -299,7 +299,7 @@ class CSmartyMB extends Smarty {
       // check for the multiple translation
       $vars = array();
       foreach ($params as $key => $value) {
-        if(preg_match("/^[var]+[0-9]?/", $key)) {
+        if(preg_match("/^var\d+/", $key)) {
           $vars[]=$value;
         }
       }
