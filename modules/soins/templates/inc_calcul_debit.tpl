@@ -264,11 +264,11 @@
       </th>
       <td>
         <input type="text" name="quantite_debit" size="5" onchange="updateData()" value="{{$line_item->quantite_debit}}"/>
-          <select name="unite_debit" onchange="updateData()">
-            {{foreach from=$line_item->_unites_prise item=_unite}}
-              <option value="{{$_unite}}" {{if $line_item->unite_debit == $_unite}}selected{{/if}}>{{$_unite}}</option>
-            {{/foreach}}
-          </select>
+        <select name="unite_debit" onchange="updateData()" style="width: 13em;">
+          {{foreach from=$line_item->_unites_prise item=_unite}}
+            <option value="{{$_unite}}" {{if $line_item->unite_debit == $_unite}}selected{{/if}}>{{$_unite}}</option>
+          {{/foreach}}
+        </select>
         /
         <select name="temps_debit" onchange="updateData()">
           {{foreach from=1|range:60 item=i}}
