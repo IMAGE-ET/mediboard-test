@@ -101,7 +101,10 @@
       <th>{{mb_label object=$plageSel field="fin"}}</th>
       <td>{{mb_field object=$plageSel field="fin"}}</td>
       <th><label for="_repeat" title="Nombre de semaines de répétition">Nombre de semaines</label></th>
-      <td><input type="text" size="2" name="_repeat" value="1" onchange="this.form._type_repeat.disabled = this.value <= 1 ? 'disabled' : '';"/></td>
+      <td>
+        <input type="text" size="2" name="_repeat" value="1"
+          onchange="this.form._type_repeat.disabled = this.value <= 1 ? 'disabled' : '';"
+          onKeyUp="this.form._type_repeat.disabled = this.value <= 1 ? 'disabled' : '';" /></td>
   </tr>      
 
   <tr>
