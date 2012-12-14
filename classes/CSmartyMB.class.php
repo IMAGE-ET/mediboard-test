@@ -295,7 +295,17 @@ class CSmartyMB extends Smarty {
    */
   function tr($params, $content, &$smarty, &$repeat) {
     if (isset($content)) {
-      $content = CAppUI::tr($content);
+
+      // check for the multiple translation
+      $vars = array();
+      foreach ($params as $key => $value) {
+        if(preg_match("/^[var]+[0-9]?/", $key)) {
+          $vars[]=$value;
+        }
+      }
+      
+      //CAppUI translation
+      $content = CAppUI::tr($content,$vars);
       
       foreach ($params as $_key => $_val) {
         switch ($_key) {
