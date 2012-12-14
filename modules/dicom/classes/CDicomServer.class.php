@@ -34,11 +34,40 @@ class CDicomServer extends CSocketBasedServer {
    * @return boolean
    */
   function isMessageFull($message) {
+    $type = unpack("C", substr($message, 0, 1));
+    
+    if (!$this->isPDUTypeValid($type[1])) {
+      return false;
+    }
+    
     $length = unpack("N", substr($message, 2, 4));
-    if ($length[1] == strlen($message) - 6) {
+    $length = $length[1] + 6;
+    if ($length == strlen($message)) {
       return true;
     }
-    return false;
+    else {
+      if ($length > strlen($message)) {
+        return false;
+      }
+      
+      $nextPDU = substr($message, $length);
+      return $this->isMessageFull($nextPDU);
+    }
+  }
+  
+  function isPDUTypeValid($type) {
+    switch ($type) {
+      case 0x01 :
+      case 0x02 :
+      case 0x03 :
+      case 0x04 :
+      case 0x05 :
+      case 0x06 :
+      case 0x07 :
+        return true;
+      default :
+        return false;
+    }
   }
   
   /**

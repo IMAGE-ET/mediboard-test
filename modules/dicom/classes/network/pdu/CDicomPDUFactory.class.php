@@ -32,7 +32,7 @@ class CDicomPDUFactory {
     $stream_reader->rewind();
     
     $pdu_class = self::readType($stream_reader);
-    if ($pdu_class == "Unknown type!") {
+    if ($pdu_class === false) {
       return null;
     }
     $length = self::readLength($stream_reader);
@@ -132,7 +132,7 @@ class CDicomPDUFactory {
       case 0x07 :
         return "CDicomPDUAAbort";
       default:
-        return "Unknown type!";
+        return false;
     }
   }
 }

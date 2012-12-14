@@ -31,6 +31,10 @@ class CDicomPDUItemFactory {
     $item_type = self::readItemType($stream_reader);
     $item_length = self::readItemLength($stream_reader);
     
+    if ($item_type === false) {
+      return null;
+    }
+    
     $item = new $item_type(array("length" => $item_length));
     $item->decodeItem($stream_reader);
     
@@ -191,7 +195,7 @@ class CDicomPDUItemFactory {
       case 0x59 :
         return "CDicomPDUItemUserIdentityNegociationRP";
       default :
-        return null;
+        return false;
     }
   }
 }
