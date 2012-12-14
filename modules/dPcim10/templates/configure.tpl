@@ -27,7 +27,24 @@ function diffCIM10Atih(del) {
   url.requestUpdate(del ? "cim10_remove" : "cim10_add");
 }
 
+function modalImportFavoris() {
+  new Url("ccam", "ajax_import_favoris")
+  .addParam("nomenclature", "cim10")
+  .pop(640, 400);
+}
+
 </script>
+
+<table class="form">
+  <tr>
+    <th class="category">Outils</th>
+  </tr>
+  <tr>
+    <td>
+      <button type="button" onclick="modalImportFavoris()" class="hslip">Import CSV de favoris CIM10</button>
+    </td>
+  </tr>
+</table>
 
 <h2>Import de la base de données CIM10</h2>
 

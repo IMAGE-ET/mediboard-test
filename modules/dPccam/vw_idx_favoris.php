@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$filter_class = CValue::get("filter_class");
+$_filter_class = CValue::get("_filter_class");
 $tag_id       = CValue::get("tag_id");
 
 $list = array();
@@ -18,7 +18,7 @@ $list = array();
 $user = CUser::get();
 
 $actes = new CActeCCAM();
-$codes = $actes->getFavoris($user->_id, $filter_class);
+$codes = $actes->getFavoris($user->_id, $_filter_class);
 $i = 0;
 
 foreach ($codes as $value) {
@@ -36,7 +36,7 @@ foreach ($codes as $value) {
 
 $fusion = $list;
 
-$codesByChap = CFavoriCCAM::getOrdered($user->_id, $filter_class, true, $tag_id);
+$codesByChap = CFavoriCCAM::getOrdered($user->_id, $_filter_class, true, $tag_id);
 
 //Fusion des deux tableaux
 foreach ($codesByChap as $keychapter => $chapter) {
@@ -56,7 +56,7 @@ foreach ($codesByChap as $keychapter => $chapter) {
 $tag_tree = CFavoriCCAM::getTree($user->_id);
 
 $favoris = new CFavoriCCAM();
-$favoris->filter_class = $filter_class;
+$favoris->_filter_class = $_filter_class;
 
 // Création du template
 $smarty = new CSmartyDP();

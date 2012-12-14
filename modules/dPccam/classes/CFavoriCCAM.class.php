@@ -11,11 +11,13 @@
 class CFavoriCCAM extends CMbObject {
   var $favoris_id   = null;
 
+  // DB Fields
   var $object_class = null;
   var $favoris_user = null;
   var $favoris_code = null;
-  var $filter_class = null;
   
+  // Form fields
+  var $_filter_class = null;
   var $_ref_code = null;
 
   function getSpec() {
@@ -30,7 +32,7 @@ class CFavoriCCAM extends CMbObject {
     $specs["favoris_user"] = "ref notNull class|CUser";
     $specs["favoris_code"] = "str notNull length|7 seekable";
     $specs["object_class"] = "str notNull";
-    $specs["filter_class"] = "enum list|CConsultation|COperation|CSejour";
+    $specs["_filter_class"] = "enum list|CConsultation|COperation|CSejour";
     return $specs;
   }
   

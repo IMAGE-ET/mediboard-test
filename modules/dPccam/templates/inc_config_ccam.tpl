@@ -32,6 +32,17 @@
   </table>
 </form>
 
+<table class="form">
+  <tr>
+    <th class="category">Outils</th>
+  </tr>
+  <tr>
+    <td>
+      <button type="button" onclick="modalImportFavoris()" class="hslip">Import CSV de favoris CCAM</button>
+    </td>
+  </tr>
+</table>
+
 {{mb_include module=system template=configure_dsn dsn=ccamV2}}
 
 <h2>Import de la base de données CCAM</h2>

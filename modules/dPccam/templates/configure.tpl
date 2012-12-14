@@ -11,33 +11,38 @@
 <script type="text/javascript">
 
 function startCCAM() {
-  var url = new Url("dPccam", "httpreq_do_add_ccam");
-  url.requestUpdate("ccam");
+  new Url("ccam", "httpreq_do_add_ccam")
+  .requestUpdate("ccam");
 }
 
 function startNGAP(){
-  var url = new Url("dPccam", "httpreq_do_add_ngap");
-  url.requestUpdate("ngap");
+  new Url("ccam", "httpreq_do_add_ngap")
+  .requestUpdate("ngap");
 }
 
 function startCCAM_ICR() {
-  var url = new Url("dPccam", "ajax_do_add_ccam_ICR");
-  url.requestUpdate("ccam_icr");
+  new Url("ccam", "ajax_do_add_ccam_ICR")
+  .requestUpdate("ccam_icr");
 }
 
 function startCCAM_radio() {
-  var url = new Url("dPccam", "ajax_do_add_ccam_radio");
-  url.requestUpdate("ccam_radio");
+  new Url("ccam", "ajax_do_add_ccam_radio")
+  .requestUpdate("ccam_radio");
 }
 
 function startCCAM_ngap() {
-  var url = new Url("dPccam", "ajax_do_add_ccam_ngap");
-  url.requestUpdate("ccam_ngap");
+  new Url("dPccam", "ajax_do_add_ccam_ngap")
+  .requestUpdate("ccam_ngap");
 }
 
 function startForfaits(){
-  var url = new Url("dPccam", "httpreq_do_add_forfaits");
-  url.requestUpdate("forfaits");
+  new Url("dPccam", "httpreq_do_add_forfaits")
+  .requestUpdate("forfaits");
+}
+
+function modalImportFavoris() {
+  new Url("ccam", "ajax_import_favoris")
+  .pop(640, 400);
 }
 
 Main.add(Control.Tabs.create.curry('tabs-configure', true));

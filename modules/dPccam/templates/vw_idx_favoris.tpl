@@ -29,8 +29,8 @@ function tagCallback(){
         <input type="hidden" name="m" value="ccam" />
         <input type="hidden" name="tab" value="vw_idx_favoris" />
 
-        {{mb_label object=$favoris field="filter_class"}}
-        {{mb_field object=$favoris field="filter_class" emptyLabel="All" onchange="this.form.submit()"}}
+        {{mb_label object=$favoris field="_filter_class"}}
+        {{mb_field object=$favoris field="_filter_class" emptyLabel="All" onchange="this.form.submit()"}}
 
         <label for="tag_id">Tag</label>
         <select name="tag_id" onchange="this.form.submit()" class="taglist">
@@ -83,7 +83,7 @@ function tagCallback(){
 
           <a href="#1" onclick="CodeCCAM.show('{{$curr_code->code}}', '{{$curr_code->class}}'); return false;"> {{$curr_code->libelleLong}}</a>
         </td>
-        <td>{{tr}}CFavoriCCAM.filter_class.{{$curr_code->class}}{{/tr}}</td>
+        <td>{{tr}}CFavoriCCAM._filter_class.{{$curr_code->class}}{{/tr}}</td>
         <td>
           {{if $curr_code->occ==0}}
             Favoris
