@@ -26,11 +26,11 @@ $pop = new CPop($exchange_source);
 if ($type_action == "connexion") {
   try {
     if ($pop->open()) {
-      CAppUI::stepAjax("Connecté au serveur $exchange_source->host sur le port $exchange_source->port");
+      CAppUI::stepAjax("CSourcePOP-info-connection-established",UI_MSG_OK,$exchange_source->host,$exchange_source->port);
     }
   } catch(CMbException $e) {
     $e->stepAjax(UI_MSG_WARNING);
   }
 } else {
-  CAppUI::stepAjax("Type de test non supporté : $type_action", UI_MSG_ERROR);
+  CAppUI::stepAjax("CExchange-unknown-test", UI_MSG_ERROR,$type_action);
 }
