@@ -26,6 +26,8 @@ em {
 }
 </style>
 
+{{assign var=multiple_select value=$app->user_prefs.multiple_select_ccam}}
+
 <ul id="tabs-code" class="control_tabs">
 {{foreach from=$listByProfile key=profile item=list}}
   {{assign var=user value=$users.$profile}}
