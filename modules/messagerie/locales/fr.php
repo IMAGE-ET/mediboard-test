@@ -1,4 +1,5 @@
 <?php
+$locales['Attachments'] = 'Pièces jointes';
 $locales['CExchangeSource.pop-desc'] = 'Reception POP';
 $locales['CExchangeSource.smtp-desc'] = 'Envoi SMTP';
 $locales['CMediusers-back-mails_received'] = 'Messages reçus';
@@ -31,6 +32,7 @@ $locales['CSourcePOP.role.prod'] = 'Production';
 $locales['CSourcePOP.role.qualif'] = 'Qualification';
 $locales['CSourcePOP.type.imap'] = 'IMAP';
 $locales['CSourcePOP.type.pop3'] = 'POP';
+$locales['CTEST-toto'] = 'Coucou, vous avez choisi %s sur le port %s';
 $locales['CUserMail-content'] = 'Contenu';
 $locales['CUserMail-content-desc'] = 'Contenu du message';
 $locales['CUserMail-date'] = 'Date';

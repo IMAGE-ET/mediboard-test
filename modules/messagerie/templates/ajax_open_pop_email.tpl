@@ -17,7 +17,6 @@
   });
 </script>
 
-
 <table class="tbl">
   <tr>
     <th>{{mb_label object=$mail field=subject}}</th><td style="text-align: left;">{{mb_value object=$mail field=subject}}</td>
@@ -43,15 +42,37 @@
       {{/if}}
     </td>
   </tr>
+  {{if $mail->content.attachments|count}}
+  <tr><th colspan="2">{{tr}}Attachments{{/tr}}</th></tr>
   <tr>
+    <style>
+      svg,img {
+        max-width:300px;
+        max-height:300px;
+        float:left;
+      }
+    </style>
     <td colspan="2">
-      {{*
-      {{if $mail->content.attachments|count}}
-        {{$mail->content.attachments.0}}
-      {{/if}}
-*}}
+      {{foreach from= $mail->content.attachments key=type item=_attachment}}
+        {{if $type=="IMG"}}
+          {{foreach from=$_attachment item=_img}}
+            <a href="data:image/png;base64,{{$_img}}"><img src="data:image/png;base64,{{$_img}}" alt=""/></a>
+          {{/foreach}}
+        {{elseif $type=="SVG"}}
+          {{foreach from=$_attachment item=_img}}
+            {{$_img|smarty:nodefaults}}
+          {{/foreach}}
+        {{else}}
+          {{foreach from=$_attachment item=_file}}
+            <a href="{{$_file}}">test</a>
+          {{/foreach}}
+
+        {{/if}}
+      {{/foreach}}
+
     </td>
   </tr>
+  {{/if}}
 </table>
 
 

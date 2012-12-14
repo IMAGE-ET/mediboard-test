@@ -90,8 +90,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("listMails", $listMails);
 $smarty->assign("account_ok",   $AcountSet);
 $smarty->display("vw_POP_messages.tpl");
-
-
-
-
-//get the mails

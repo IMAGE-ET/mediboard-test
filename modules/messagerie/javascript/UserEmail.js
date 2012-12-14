@@ -15,7 +15,7 @@ messagerie = {
   modalPOPOpen: function(id) {
     var url = new Url(messagerie.module, "ajax_open_pop_email");
     url.addParam("mail_id"    , id);
-    url.requestModal();
+    url.requestModal(800,700);
   },
 
   refresh : function() {}

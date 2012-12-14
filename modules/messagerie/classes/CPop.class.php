@@ -146,6 +146,7 @@ class CPop{
 
     if(!$structure) {
       $structure = $this->structure($mail_id);
+      mbTrace($structure);
     }
 
     if ($structure) {
@@ -157,19 +158,19 @@ class CPop{
         $part_number = "0";
       }
 
-      switch($structure->subtype) {
-        case("PLAIN"):
-          $this->content["text"]["plain"] = self::decodeMail($structure->encoding, self::openPart($mail_id,$part_number));
-          break;
+      switch ($structure->type) {
+        case 0: //text
+          if ($structure->subtype == "PLAIN") {
+            $this->content["text"]["plain"] = self::decodeMail($structure->encoding, self::openPart($mail_id,$part_number));
+          }
+          if ($structure->subtype == "HTML") {
+            $this->content["text"]["html"] = self::decodeMail($structure->encoding, self::openPart($mail_id,$part_number));
+          }
 
-        case("HTML"):
-          $this->content["text"]["html"] = self::decodeMail($structure->encoding, self::openPart($mail_id,$part_number));
           break;
-
-        case("ALTERNATIVE"):
-        case("MIXED"):
+        case 1: //multipart
           while (list($index, $sub_structure) = each($structure->parts)) {
-            if($part_number) {
+            if ($part_number) {
               $prefix = $part_number.'.';
             } else {
               $prefix = null;
@@ -178,9 +179,29 @@ class CPop{
           }
           break;
 
-        default:
-          $this->content["attachments"][] = self::decodeMail($structure->encoding, $this->openPart($mail_id,$part_number));
+        case 2: //message
           break;
+
+        case 3: //application
+
+          break;
+
+        case 4: //audio
+          break;
+
+        case 5: //images
+          if ($structure->subtype == "SVG+XML") { //vector image
+            $this->content["attachments"]["SVG"][] = self::decodeMail($structure->encoding, $this->openPart($mail_id,$part_number));
+          } else {
+            $this->content["attachments"]["IMG"][] = base64_encode(self::decodeMail($structure->encoding, $this->openPart($mail_id,$part_number)));
+          }
+          break;
+
+        case 6: //video
+          break;
+
+        default:  //other!
+          $this->content["attachments"]["OTHER"] = base64_encode(self::decodeMail($structure->encoding, $this->openPart($mail_id,$part_number)));
       }
     }
     return $this->content;

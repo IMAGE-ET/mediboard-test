@@ -29,9 +29,6 @@ $pop->open();
   $mail = new CUserMail();
   $mail->loadHeaderFromSource($pop->header($mail_id));
   $mail->loadContentFromSource($pop->getFullBody($mail_id));
-  //$test = $log_pop->mailboxLoadComplete($mail_id);
-  //$mail->loadHeaderFromSource($test["head"]);
-  //$mail->loadContentFromSource($test["content"]);
 $pop->close();
 
 

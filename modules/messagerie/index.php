@@ -21,7 +21,3 @@ if ($dPconfig["messagerie"]["enable_external"]) {
 
 //direct access to POP/IMAP (admin only)
 $module->registerTab("vw_list_POPMessages", TAB_ADMIN);
-
-//$module->registerTab("write_usermessage" , TAB_READ);
-
-?>
