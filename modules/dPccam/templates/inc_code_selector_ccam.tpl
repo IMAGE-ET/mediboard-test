@@ -98,3 +98,8 @@ em {
     </table>
   </div>
 {{/foreach}}
+{{if $multiple_select}}
+  <div style="text-align: center">
+    <button type="button" class="tick" onclick="addMultiples()">Ajouter la sélection</button>
+  </div>
+{{/if}}
