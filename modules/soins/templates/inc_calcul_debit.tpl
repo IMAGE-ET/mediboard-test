@@ -79,7 +79,7 @@
     // Rapport resultant des calculs précédents
     var rapport_quantite_necessaire = rapport_debit_choisi_ua / rapport_conditionnement_ua;
     
-    var debit_choisi = $V(form.quantite_debit);
+    var debit_choisi = parseFloat($V(form.quantite_debit).replace(/,/, "."));
     
     debit_choisi *= unite_temps_debit;
     
@@ -168,6 +168,10 @@
       onSubmitFormAjax(formLineItem, function() {
         Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
           $V(formPerf.volume_debit, $V(formQteTotale._quantite_totale));
+          console.log(formPerf.volume_debit.readonly);
+          if (formPerf.volume_debit.readOnly) {
+            formPerf.volume_debit.onchange();
+          }
         });
         Control.Modal.close();
       });
@@ -263,7 +267,7 @@
         Débit choisi
       </th>
       <td>
-        <input type="text" name="quantite_debit" size="5" onchange="updateData()" value="{{$line_item->quantite_debit}}"/>
+        <input type="number" name="quantite_debit" size="5" onchange="updateData()" value="{{$line_item->quantite_debit}}"/>
         <select name="unite_debit" onchange="updateData()" style="width: 13em;">
           {{foreach from=$line_item->_unites_prise item=_unite}}
             <option value="{{$_unite}}" {{if $line_item->unite_debit == $_unite}}selected{{/if}}>{{$_unite}}</option>
