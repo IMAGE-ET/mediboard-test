@@ -36,9 +36,6 @@ em {
     </a>
   </li>
 {{/foreach}}
-  <li style="float: right;">
-    <button type="button" class="tick" onclick="addMultiples()">Ajouter la sélection</button>
-  </li>
 </ul>
 <hr class="control_tabs" />
 
@@ -51,8 +48,8 @@ em {
       <tr>
         <th>Code</th>
         <th>Libellé</th>
+        <th>Tarifs</th>
         <th>Occurences</th>
-        <th class="narrow"></th>
         <th class="narrow"></th>
       </tr>
       {{foreach from=$list item=curr_code name=fusion}}
@@ -62,6 +59,17 @@ em {
             {{$curr_code->code}}
           </td>
           <td class="text compact">{{$curr_code->libelleLong|emphasize:$_keywords_code}}</td>
+          <td class="compact" style="cursor: pointer">
+            {{foreach from=$curr_code->activites item=_activite}}
+              {{foreach from=$_activite->phases item=_phase}}
+                 {{if $_phase->tarif}}
+                 <div title="activité {{$_activite->numero}}, phase {{$_phase->phase}}">
+                   {{$_phase->tarif|currency}}
+                 </div>
+                 {{/if}}
+              {{/foreach}}
+            {{/foreach}}
+          </td>
           <td>
             {{if array_key_exists($curr_code->code, $list_stats)}}
               {{assign var=_code value=$curr_code->code}}
@@ -73,10 +81,11 @@ em {
             {{/if}}
           </td>
           <td>
-            <button type="button" class="tick compact" onclick="CCAMSelector.set('{{$curr_code->code}}', '{{$curr_code->_default}}'); Control.Modal.close();">Sélectionner</button>
-          </td>
-          <td>
-            <input type="checkbox" class="multiples_codes" value="{{$curr_code->code}}"/>
+            {{if $multiple_select}}
+              <input type="checkbox" class="multiples_codes" value="{{$curr_code->code}}"/>
+            {{else}}
+              <button type="button" class="tick compact" onclick="CCAMSelector.set('{{$curr_code->code}}', '{{$curr_code->_default}}'); Control.Modal.close();">Sélectionner</button>
+            {{/if}}
           </td>
         </tr>
       {{foreachelse}}

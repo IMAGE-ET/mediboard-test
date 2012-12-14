@@ -106,6 +106,8 @@ $locales['module-dPccam-court'] = 'CCAM';
 $locales['module-dPccam-long'] = 'Aide au codage CCAM';
 $locales['pref-ccam_consultation'] = 'Cotation des consultations (actes CCAM, NGAP, diagnistics CIM)';
 $locales['pref-ccam_sejour'] = 'Cotation des séjours (actes CCAM, NGAP, diagnistics CIM)';
+$locales['pref-multiple_select_ccam'] = 'Sélection multiple de codes';
+$locales['pref-multiple_select_ccam-desc'] = 'Sélection multiple de codes';
 $locales['pref-new_search_ccam'] = 'Nouvelle recherche de code CCAM';
 $locales['pref-new_search_ccam-desc'] = 'Nouvelle ergonomie de recherche de code CCAM';
 ?>

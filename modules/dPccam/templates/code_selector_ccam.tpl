@@ -30,7 +30,8 @@
       </td>
       <td>
         <label for="tag_id">Tag</label>
-        <select name="tag_id" onchange="$V(this.form._keywords_code, ''); this.form._all_codes_view.checked = false; $V(this.form._all_codes, 0); this.form.onsubmit()" class="taglist">
+        <select name="tag_id" onchange="$V(this.form._keywords_code, ''); this.form._all_codes_view.checked = false; $V(this.form._all_codes, 0); this.form.onsubmit()"
+          class="taglist" style="width: 18em">
           <option value=""> &mdash; {{tr}}All{{/tr}} </option>
           {{mb_include module=ccam template=inc_favoris_tag_select depth=0}}
         </select>
@@ -38,6 +39,14 @@
     </tr>
   </table>
 </form>
+
+{{assign var=multiple_select value=$app->user_prefs.multiple_select_ccam}}
 <div id="code_area" style="height: 60%; text-align: left;">
   {{mb_include module=ccam template=inc_code_selector_ccam}}
+  {{if $multiple_select}}
+    <div style="text-align: center">
+      <button type="button" class="tick" onclick="addMultiples()">Ajouter la sélection</button>
+    </div>
+{{/if}}
 </div>
+

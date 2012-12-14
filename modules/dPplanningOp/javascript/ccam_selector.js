@@ -83,5 +83,10 @@ CCAMSelector = {
     
     $V(form[CCAMSelector.sView], codes);
     CCAMSelector.preparedMulti = null;
+    
+    var buttons = form.select("button.add");
+    if (buttons.length) {
+      buttons[0].click();
+    }
   }
 };
