@@ -741,24 +741,29 @@ class CMediusers extends CMbObject {
     $order = "`users`.`user_last_name`, `users`.`user_first_name`";
 
     // Get all users
-    CMediusers::$user_autoload = false;
     $mediuser = new CMediusers;
+    CMediusers::$user_autoload = false;
     $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
-    
-		// Mass fonction standard preloading
-		CMbObject::massLoadFwdRef($mediusers, "function_id");
-		
-		// Filter a posteriori to unable mass preloading of function
-    self::filterByPerm($mediusers, $permType);
+    CMediusers::$user_autoload = true;
 
-    // Mass user speficic preloading
+		// Mass user speficic preloading
     $user = new CUser;
     $user->loadAll(array_keys($mediusers));
 		
-    // Associate already loaded function
-    CMediusers::$user_autoload = true;
+    // Attach cached user
     foreach ($mediusers as $_mediuser) {
       $_mediuser->updateFormFields();
+    }
+            
+		// Mass fonction standard preloading
+		CMbObject::massLoadFwdRef($mediusers, "function_id");
+
+				
+		// Filter a posteriori to unable mass preloading of function
+    self::filterByPerm($mediusers, $permType);
+
+    // Associate cached function
+    foreach ($mediusers as $_mediuser) {
       $_mediuser->loadRefFunction();
     }
 
