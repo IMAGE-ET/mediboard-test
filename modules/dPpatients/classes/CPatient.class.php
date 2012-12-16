@@ -1285,10 +1285,8 @@ class CPatient extends CMbObject {
       $consult->countDocItems($permType);
 
       // Praticien
-      mbTrace($consult->_ref_praticien ? $consult->_ref_praticien->getProperties(true): "none");
       $consult->getType();
       $praticien = $consult->_ref_praticien;
-      mbTrace($consult->_ref_praticien ? $consult->_ref_praticien->getProperties(true): "none");
 			
       $this->_ref_praticiens[$praticien->_id] = $praticien;
       $praticien->loadRefFunction()->loadRefGroup();
