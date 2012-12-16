@@ -74,44 +74,43 @@ class CPlageconsult extends CMbObject {
   }
 
   function getProps() {
-    $parentSpecs = parent::getProps();
-    $specs = array (
-      "chir_id"       => "ref notNull class|CMediusers seekable",
-      "remplacant_id" => "ref class|CMediusers seekable",
-      "pour_compte_id" => "ref class|CMediusers seekable",
-      "date"          => "date notNull",
-      "freq"          => "time notNull",
-      "debut"         => "time notNull",
-      "fin"           => "time notNull moreThan|debut",
-      "libelle"       => "str seekable",
-      "locked"        => "bool default|0",
-      "remplacant_ok" => "bool default|0",
-      "desistee"      => "bool default|0",
-      "color"         => "str length|6 default|DDDDDD",
-      "pct_retrocession" => "pct default|70",
-      
-      // Form fields
-      "_freq"        => "",
-      "_affected"    => "",
-      "_total"       => "",
-      "_fill_rate"   => "",
-      "_type_repeat" => "enum list|simple|double|triple|quadruple|sameweek",
-      
-      // Filter fields
-      "_date_min"          => "date",
-      "_date_max"          => "date moreThan|_date_min",
-      "_function_id"       => "ref class|CFunctions",
-      "_other_function_id" => "ref class|CFunctions",
-      "_user_id"           => 'ref class|CMediusers'
-      );
+    $props = parent::getProps();
+    
+    $props["chir_id"]          = "ref notNull class|CMediusers seekable";
+    $props["remplacant_id"]    = "ref class|CMediusers seekable";
+    $props["pour_compte_id"]   = "ref class|CMediusers seekable";
+    $props["date"]             = "date notNull";
+    $props["freq"]             = "time notNull";
+    $props["debut"]            = "time notNull";
+    $props["fin"]              = "time notNull moreThan|debut";
+    $props["libelle"]          = "str seekable";
+    $props["locked"]           = "bool default|0";
+    $props["remplacant_ok"]    = "bool default|0";
+    $props["desistee"]         = "bool default|0";
+    $props["color"]            = "str length|6 default|DDDDDD";
+    $props["pct_retrocession"] = "pct default|70";
+    
+    // Form fields
+    $props["_freq"]        = "";
+    $props["_affected"]    = "";
+    $props["_total"]       = "";
+    $props["_fill_rate"]   = "";
+    $props["_type_repeat"] = "enum list|simple|double|triple|quadruple|sameweek";
+    
+    // Filter fields
+    $props["_date_min"]          = "date";
+    $props["_date_max"]          = "date moreThan|_date_min";
+    $props["_function_id"]       = "ref class|CFunctions";
+    $props["_other_function_id"] = "ref class|CFunctions";
+    $props["_user_id"]           = "ref class|CMediusers";
 
-    return array_merge($parentSpecs, $specs);
+    return $props;
   }
   
   /**
    * Load consultations
    * @param bool $withCanceled Include cancelled consults
-   * @param bool $withClosed Include closed consults
+   * @param bool $withClosed   Include closed consults
    */
   function loadRefsConsultations($withCanceled = true, $withClosed = true) {
     $where["plageconsult_id"] = "= '$this->_id'";
@@ -204,8 +203,8 @@ class CPlageconsult extends CMbObject {
   }
   
   function loadRefsFwd($cache = 0) {
-    $this->_ref_chir = $this->loadFwdRef("chir_id", $cache);
-    $this->_ref_remplacant = $this->loadFwdRef("remplacant_id", $cache);
+    $this->_ref_chir        = $this->loadFwdRef("chir_id"       , $cache);
+    $this->_ref_remplacant  = $this->loadFwdRef("remplacant_id" , $cache);
     $this->_ref_pour_compte = $this->loadFwdRef("pour_compte_id", $cache);
   }
   
@@ -218,48 +217,28 @@ class CPlageconsult extends CMbObject {
       && $this->_ref_module->getPerm($permType);
   }
 
-  function checkFrequence() {
-    return true;
-
-    $oldValues = new CPlageconsult();
-    $oldValues->load($this->plageconsult_id);
-    $oldValues->loadRefs();
-
-    return $oldValues->_freq == $this->_freq 
-      or count($oldValues->_ref_consultations) == 0;
-  }
-  
 /*
  * returns collision message, null for no collision
  */
   function hasCollisions() {
-    $this->completeField("date");
-    
+    $this->completeField("chir_id", "date", "debut", "fin");
+        
     // Get all other plages the same day
+    $where["plageconsult_id"] = "!= '$this->plageconsult_id'";
     $where["chir_id"]         = "= '$this->chir_id'";
     $where["date"]            = "= '$this->date'";
-    $where["plageconsult_id"] = "!= '$this->plageconsult_id'";
+    $where["debut"]           = "< '$this->fin'";
+    $where["fin"]             = "> '$this->debut'";
+		
     $plages = new CPlageconsult;
-    $plages = $plages->loadList($where);
+    $this->_colliding_plages = $plages->loadList($where);
     
-    $msg = null;
-    $this->_colliding_plages = array();
-    
-    $this->completeField("debut");
-    $this->completeField("fin");
-    
-    $this->_fin = $this->fin == "00:00:00" ? "23:59:59" : $this->fin;
-    foreach ($plages as $plage) {
-      $plage->_fin = $plage->fin == "00:00:00" ? "23:59:59" : $plage->fin;
-      if (($plage->debut <  $this->_fin   and $plage->_fin >  $this->_fin  )
-        or($plage->debut <  $this->debut and $plage->_fin >  $this->debut)
-        or($plage->debut >= $this->debut and $plage->_fin <= $this->_fin  )) {
-        $msg .= "Collision avec la plage du $this->date, de $plage->debut à $plage->_fin.";
-        $this->_colliding_plages[$plage->_id] = $plage;
-      }
+    $msgs = array();
+    foreach ($this->_colliding_plages as $_plage) {
+      $msgs[] = "Collision avec la plage de '$_plage->debut' à '$_plage->fin'";
     }
     
-    return $msg;
+    return count($msgs) ? implode(", ", $msgs) : null;
   }
 
   function check() {
@@ -280,12 +259,6 @@ class CPlageconsult extends CMbObject {
     
     if ($msg = $this->hasCollisions()) {
       return $msg;
-    }
-    
-    if ($this->plageconsult_id) {
-      if (!$this->checkFrequence()) {
-        return "Vous ne pouvez pas modifier la fréquence de cette plage";
-      }
     }
 
     return parent::store();
@@ -315,7 +288,7 @@ class CPlageconsult extends CMbObject {
       }
     }
   
-    // @todo: Still useful? Not so sure...
+    // Usefull for automatic plages coming from instant consult in emergency
     if ($this->fin && $this->fin == "00:00:00") {
       $this->fin = "23:59:59";
     }

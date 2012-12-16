@@ -1503,7 +1503,7 @@ TESTS A EFFECTUER
   }
 
   function canEdit() {
-    if (!$this->sejour_id || CCanDo::admin() || !CAppUI::conf("dPcabinet CConsultation consult_readonly")) {
+    if (!$this->sejour_id || CCanDo::admin() || !CAppUI::conf("cabinet CConsultation consult_readonly")) {
       return parent::canEdit();
     }
 
