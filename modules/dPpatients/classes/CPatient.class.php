@@ -1250,20 +1250,19 @@ class CPatient extends CMbObject {
 
     // Affectations courantes
     $this->loadRefsAffectations();
-    $affectation =& $this->_ref_curr_affectation;
+    $affectation = $this->_ref_curr_affectation;
     if ($affectation && $affectation->_id) {
       $affectation->loadRefsFwd();
       $affectation->_ref_lit->loadCompleteView();
     }
 
-    $affectation =& $this->_ref_next_affectation;
+    $affectation = $this->_ref_next_affectation;
     if ($affectation && $affectation->affectation_id) {
       $affectation->loadRefsFwd();
       $affectation->_ref_lit->loadCompleteView();
     }
 
     $maternite_active = CModule::getActive("maternite");
-
     if ($maternite_active) {
       $this->loadRefsGrossesses();
     }
@@ -1286,8 +1285,11 @@ class CPatient extends CMbObject {
       $consult->countDocItems($permType);
 
       // Praticien
+      mbTrace($consult->_ref_praticien ? $consult->_ref_praticien->getProperties(true): "none");
       $consult->getType();
       $praticien = $consult->_ref_praticien;
+      mbTrace($consult->_ref_praticien ? $consult->_ref_praticien->getProperties(true): "none");
+			
       $this->_ref_praticiens[$praticien->_id] = $praticien;
       $praticien->loadRefFunction()->loadRefGroup();
 

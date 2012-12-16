@@ -24,13 +24,13 @@ $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 // Récuperation du patient sélectionné
 $patient = new CPatient;
 $patient->load($patient_id);
-if(!$patient->_id || $patient->_vip) {
+if (!$patient->_id || $patient->_vip) {
   CAppUI::setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);
-  CAppUI::redirect("m=dPpatients&tab=0");
+  CAppUI::redirect("m=patients&tab=vw_idx_patients");
 }
 $patient->loadDossierComplet(PERM_READ);
 
-//Chargement de l'IPP
+// Chargement de l'IPP
 $patient->loadIPP();
 
 // Chargement du dossier medical du patient
@@ -40,15 +40,15 @@ $dossier_medical->loadRefsAntecedents();
 $prescription = $dossier_medical->loadRefPrescription();
 
 if ($prescription && is_array($prescription->_ref_prescription_lines)) {
-  foreach($prescription->_ref_prescription_lines as $_line) {
+  foreach ($prescription->_ref_prescription_lines as $_line) {
     $_line->loadRefsPrises();
   }
 }
 
 // Suppression des consultations d'urgences
-foreach($patient->_ref_consultations as $keyConsult => $consult){
-  if($consult->motif == "Passage aux urgences"){
-    unset($patient->_ref_consultations[$keyConsult]);
+foreach ($patient->_ref_consultations as $consult) {
+  if ($consult->motif == "Passage aux urgences") {
+    unset($patient->_ref_consultations[$consult->_id]);
   }
 }
 
