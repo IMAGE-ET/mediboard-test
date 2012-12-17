@@ -16,29 +16,34 @@ $session = getSession($addr, $port);
 if ($session) {
   $session->updateFormFields();
   $session->loadRefActor();
-  $event = "";
-  $datas = "";
-  if ($message == "TCP_Open") {
-    $event = $message;
-    $datas = null;
-  }
-  elseif ($message == "TCP_Closed") {
-    CApp::rip();
-  }
-  else {
-    $datas = $message;
-    $type = unpack("H*", substr($message, 0, 1));
-    $event = getEventName($type[1]);
-  }
-  $ack = $session->handleEvent($event, $datas);
-  $session->store();
   
-  if ($ack) {
-    echo base64_encode($ack);
-  }
-  else {
-    echo " ";
-  }
+  $pdus = cutPacket($message);
+
+  foreach ($pdus as $key => $pdu) {
+    $event = "";
+    $datas = "";
+    if ($pdu == "TCP_Open") {
+      $event = $pdu;
+      $datas = null;
+    }
+    elseif ($pdu == "TCP_Closed") {
+      CApp::rip();
+    }
+    else {
+      $datas = $pdu;
+      $type = unpack("H*", substr($pdu, 0, 1));
+      $event = getEventName($type[1]);
+    }
+    $ack = $session->handleEvent($event, $pdu);
+    $session->store();
+    
+    if ($ack) {
+      echo base64_encode($ack);
+    }
+    else {
+      echo " ";
+    }
+  } 
 }
 CApp::rip();
 
@@ -117,4 +122,26 @@ function getEventName($type) {
       break; 
   }
   return $event;
+}
+
+/**
+ * Check if the message contains multiple PDUs
+ * 
+ * @param string $message The message
+ * 
+ * @return array An array of pdu
+ */
+function cutPacket($message) {
+  $messages = array();
+  
+  $packet_size = strlen($message);
+  $pos = 0;
+  while ($pos < $packet_size) {
+    $length = unpack("N", substr($message, $pos + 2, 4));
+    $length = $length[1] + 6;
+    $messages[] = substr($message, $pos, $length);
+    $pos += $length;
+  }
+  
+  return $messages;
 }

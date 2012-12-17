@@ -183,7 +183,6 @@ class CDicomPDUAAssociateRQ extends CDicomPDU {
     $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt32($this->length);
-    $stream_writer->skip(1);
     $stream_writer->writeUInt16($this->protocol_version);
     $stream_writer->skip(2);
     $stream_writer->writeString($this->called_AE_title, 16);

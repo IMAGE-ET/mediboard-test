@@ -990,7 +990,7 @@ class CDicomSession extends CMbObject {
    */
   protected function doDT2($datas) {
     $ack = CEAIDispatcher::dispatch(array("msg" => $datas, "pres_contexts" => $this->_presentation_contexts), $this->_ref_actor, $this->dicom_exchange_id);
-    if (!is_null($ack) && array_key_exists("exchange_id", $ack)) {
+    if (is_array($ack) && array_key_exists("exchange_id", $ack)) {
       if (!$this->dicom_exchange_id) {    
         $this->dicom_exchange_id = $ack["exchange_id"];
       }

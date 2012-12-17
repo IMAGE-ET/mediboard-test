@@ -132,6 +132,7 @@ class CDicomPDUItemPresentationContext extends CDicomPDUItem {
     $stream_writer->writeUInt8($this->type);
     $stream_writer->skip(1);
     $stream_writer->writeUInt16($this->length);
+    $stream_writer->writeUInt8($this->id);
     $stream_writer->skip(3);
     $this->abstract_syntax->encodeItem($stream_writer);
     foreach ($this->transfer_syntaxes as $transfer_syntax) {
