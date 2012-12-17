@@ -1528,6 +1528,7 @@ $locales['CTraitement.none'] = 'Aucun Traitement';
 $locales['CTraitement.one'] = 'traitement';
 $locales['CTraitement.unknown'] = 'Traitement non renseigné';
 $locales['Champs manquants'] = 'Dossier Patient';
+$locales['Diagnostics'] = 'Diagnostics';
 $locales['IDossierMedical-back-addictions'] = 'Addicitions';
 $locales['IDossierMedical-back-antecedents'] = 'Antécédents';
 $locales['IDossierMedical-back-traitements'] = 'Traitements';

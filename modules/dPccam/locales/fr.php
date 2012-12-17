@@ -1,4 +1,5 @@
 <?php
+$locales['CActe'] = 'Actes';
 $locales['CActeCCAM-title-modify'] = 'Modification Acte CCAM';
 $locales['CCAM'] = 'CCAM';
 $locales['CCodable'] = 'Codable';
