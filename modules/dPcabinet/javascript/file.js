@@ -52,14 +52,14 @@ var File = {
     if (only_files == undefined || only_files == 1) {
       url.addParam("only_files", 1);
       var elt = $("list_"+object_class+object_id);
-      if (elt.up("name_readonly")) {
+      if (elt.up(".name_readonly")) {
         url.addParam("name_readonly", 1);
       }
       url.requestUpdate("list_"+object_class+object_id);
     }
     else {
       var elt = $("files-"+object_id+"-"+object_class);
-      if (elt.up("name_readonly")) {
+      if (elt.up(".name_readonly")) {
         url.addParam("name_readonly", 1);
       }
       url.requestUpdate("files-"+object_id+"-"+object_class);
