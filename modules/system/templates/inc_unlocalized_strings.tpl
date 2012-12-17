@@ -52,7 +52,7 @@
 {{/if}}
 
 <script type="text/javascript">
-Localize.populate({{$app|static:unlocalized|@json}});
+Main.add(Localize.populate.curry({{$app|static:unlocalized|@json}}));
 </script>
 
 {{/if}}
