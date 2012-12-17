@@ -282,28 +282,30 @@ class CActeCCAM extends CActe {
     */
     
     // Cas des incompatibilités
-    foreach ($this->_linked_actes as $_acte) {
-      $_acte->loadRefCodeCCAM();
-      $_acte->_ref_code_ccam->getActesIncomp();
-      $incomps = CMbArray::pluck($_acte->_ref_code_ccam->incomps, "code");
-      if (in_array($this->code_acte, $incomps)) {
-        return "Acte incompatible avec le codage de " . $_acte->_ref_code_ccam->code;
-      }
-    }
-    
-    // Cas des associations d'anesthésie
-    if ($this->_ref_code_ccam->chapitres["1"]["rang"] == "18.01.") {
-      $asso_possible = false;
+    if(CAppUI::conf("dPsalleOp CActeCCAM check_incompatibility")) {
       foreach ($this->_linked_actes as $_acte) {
         $_acte->loadRefCodeCCAM();
-        $_acte->_ref_code_ccam->getActivites();
-        $activites = CMbArray::pluck($_acte->_ref_code_ccam->activites, "numero");
-        if (!in_array("4", $activites)) {
-          $asso_possible = true;
+        $_acte->_ref_code_ccam->getActesIncomp();
+        $incomps = CMbArray::pluck($_acte->_ref_code_ccam->incomps, "code");
+        if (in_array($this->code_acte, $incomps)) {
+          return "Acte incompatible avec le codage de " . $_acte->_ref_code_ccam->code;
         }
       }
-      if (!$asso_possible) {
-        return "Aucun acte codé ne permet actuellement d'associer une Anesthésie Complémentaire";
+      
+      // Cas des associations d'anesthésie
+      if ($this->_ref_code_ccam->chapitres["1"]["rang"] == "18.01.") {
+        $asso_possible = false;
+        foreach ($this->_linked_actes as $_acte) {
+          $_acte->loadRefCodeCCAM();
+          $_acte->_ref_code_ccam->getActivites();
+          $activites = CMbArray::pluck($_acte->_ref_code_ccam->activites, "numero");
+          if (!in_array("4", $activites)) {
+            $asso_possible = true;
+          }
+        }
+        if (!$asso_possible) {
+          return "Aucun acte codé ne permet actuellement d'associer une Anesthésie Complémentaire";
+        }
       }
     }
   }

@@ -13,9 +13,6 @@
   <input type="hidden" name="m" value="system" />
   
   <table class="form">
-    <tr>
-      <th class="title" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
-    </tr>
     {{mb_include module=system template=inc_config_bool var=DAS}}
     <tr>
       <td class="button" colspan="2">
