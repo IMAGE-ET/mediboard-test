@@ -15,7 +15,7 @@ $pdu = CDicomPDUFactory::encodePDU(0x01, array(
     array(
       "id" => 1,
       "abstract_syntax" => array(
-        "name" => "1.2.840.10008.1.1"
+        "name" => "1.2.840.10008.5.1.4.31"
       ),
       "transfer_syntaxes" => array(
         array(
@@ -39,8 +39,7 @@ $pdu = CDicomPDUFactory::encodePDU(0x01, array(
   )
 ));
 
-/*$data = $pdu->getPacket();
-fwrite($client, $data, strlen($data));*/
+echo "A-Associate-RQ :\n" . bin2hex($pdu->getPacket()) . "\n";
 
 $data1 = substr($pdu->getPacket(), 0, 50);
 $data2 = substr($pdu->getPacket(), 50);
@@ -49,3 +48,93 @@ fwrite($client, $data1, strlen($data1));
 sleep(2);
 fwrite($client, $data2, strlen($data2));
 
+stream_set_timeout($client, 10);
+
+$tmp = @fread($client, 2048);
+
+echo "A-Associate-AC :\n" . bin2hex($tmp) . "\n";
+$response = fopen("php://temp", "w");
+
+$stream = new CDicomStreamWriter($response);
+
+/** C-Find-RQ **/
+$stream->writeUInt8(0x04);
+$stream->skip(1);
+$stream->writeUInt32(88);
+$stream->writeUInt32(84);
+$stream->writeUInt8(0x01);
+$stream->writeUInt8(0x03);
+$stream->writeUInt16(0x0000, "LE");
+$stream->writeUInt16(0x0000, "LE");
+$stream->writeUInt32(4, "LE");
+$stream->writeUInt32(70, "LE");
+$stream->writeUInt16(0x0000, "LE");
+$stream->writeUInt16(0x0002, "LE");
+$stream->writeUInt32(22, "LE");
+$stream->writeString("1.2.840.10008.5.1.4.31", 22);
+$stream->writeUInt16(0x0000, "LE");
+$stream->writeUInt16(0x0100, "LE");
+$stream->writeUInt32(2, "LE");
+$stream->writeUInt16(0x0020, "LE");
+$stream->writeUInt16(0x0000, "LE");
+$stream->writeUInt16(0x0110, "LE");
+$stream->writeUInt32(2, "LE");
+$stream->writeUInt16(1, "LE");
+$stream->writeUInt16(0x0000, "LE");
+$stream->writeUInt16(0x0700, "LE");
+$stream->writeUInt32(2, "LE");
+$stream->writeUInt16(0, "LE");
+$stream->writeUInt16(0x0000, "LE");
+$stream->writeUInt16(0x0800, "LE");
+$stream->writeUInt32(2, "LE");
+$stream->writeUInt16(0xfefe, "LE");
+
+/** C-Find-Data **/
+$stream->writeUInt8(0x04);
+$stream->skip(1);
+$stream->writeUInt32(94);
+$stream->writeUInt32(90);
+$stream->writeUInt8(0x01);
+$stream->writeUInt8(0x02);
+
+$stream->writeUInt16(0x0008, "LE");
+$stream->writeUInt16(0x0000, "LE");
+$stream->writeUInt32(4, "LE");
+$stream->writeUInt32(32, "LE");
+$stream->writeUInt16(0x0008, "LE");
+$stream->writeUInt16(0x0020, "LE");
+$stream->writeUInt32(0, "LE");
+$stream->writeUInt16(0x0008, "LE");
+$stream->writeUInt16(0x0050, "LE");
+$stream->writeUInt32(0, "LE");
+$stream->writeUInt16(0x0008, "LE");
+$stream->writeUInt16(0x0090, "LE");
+$stream->writeUInt32(0, "LE");
+$stream->writeUInt16(0x0008, "LE");
+$stream->writeUInt16(0x1030, "LE");
+
+$stream->writeUInt32(0, "LE");
+$stream->writeUInt16(0x0010, "LE");
+$stream->writeUInt16(0x0000, "LE");
+$stream->writeUInt32(4, "LE");
+$stream->writeUInt32(32, "LE");
+$stream->writeUInt16(0x0010, "LE");
+$stream->writeUInt16(0x0020, "LE");
+$stream->writeUInt32(0, "LE");
+$stream->writeUInt16(0x0010, "LE");
+$stream->writeUInt16(0x0010, "LE");
+$stream->writeUInt32(0, "LE");
+$stream->writeUInt16(0x0010, "LE");
+$stream->writeUInt16(0x0030, "LE");
+$stream->writeUInt32(0, "LE");
+$stream->writeUInt16(0x0010, "LE");
+$stream->writeUInt16(0x0040, "LE");
+$stream->writeUInt32(0, "LE");
+
+echo "C-Find-RQ :\n" . bin2hex($stream->buf) . "\n";
+
+fwrite($client, $stream->buf, strlen($stream->buf));
+
+$tmp = @fread($client, 2048);
+
+echo "C-Find-RSP :\n" . bin2hex($tmp) . "\n";
