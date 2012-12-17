@@ -113,9 +113,11 @@ class CDicomStreamReader {
    * @return string
    */
   function read($length = 1) {
-    $tmp = fread($this->stream, $length);
-    $this->buf .= $tmp;
-    return $tmp;
+    if ($length < 65535) {
+      $tmp = fread($this->stream, $length);
+      $this->buf .= $tmp;
+      return $tmp;
+    }
   }
   
   /**
