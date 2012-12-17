@@ -85,10 +85,10 @@ class CPlageconsult extends CMbObject {
     $props["fin"]              = "time notNull moreThan|debut";
     $props["libelle"]          = "str seekable";
     $props["locked"]           = "bool default|0";
-    $props["remplacant_ok"]    = "bool default|0";
-    $props["desistee"]         = "bool default|0";
+    $props["remplacant_ok"]    = "bool default|0 show|0";
+    $props["desistee"]         = "bool default|0 show|0";
     $props["color"]            = "str length|6 default|DDDDDD";
-    $props["pct_retrocession"] = "pct default|70";
+    $props["pct_retrocession"] = "pct default|70 show|0";
     
     // Form fields
     $props["_freq"]        = "";
@@ -109,8 +109,11 @@ class CPlageconsult extends CMbObject {
   
   /**
    * Load consultations
+   *
    * @param bool $withCanceled Include cancelled consults
    * @param bool $withClosed   Include closed consults
+   *
+   * @return CConsultation[]
    */
   function loadRefsConsultations($withCanceled = true, $withClosed = true) {
     $where["plageconsult_id"] = "= '$this->_id'";
@@ -127,7 +130,10 @@ class CPlageconsult extends CMbObject {
     $consult = new CConsultation();
     return $this->_ref_consultations = $consult->loadList($where, $order);
   }
-  
+
+  /**
+   * @return int The patient count
+   */
   function countPatients(){
     $consultation = new CConsultation();
     $consultation->plageconsult_id = $this->_id;
@@ -161,10 +167,11 @@ class CPlageconsult extends CMbObject {
   
   function getUtilisation() {
     $this->loadRefsConsultations(false);
-    $i = $this->debut;
+
     for ($i = $this->debut; $i < $this->fin; $i = mbAddTime("+".$this->freq, $i)) {
       $utilisation[$i] = 0;
     }
+
     foreach ($this->_ref_consultations as $_consult) {
       if (!isset($utilisation[$_consult->heure])) {
         continue;
@@ -296,7 +303,7 @@ class CPlageconsult extends CMbObject {
   
   function becomeNext() {
     $week_jumped = 0;
-    switch($this->_type_repeat) {
+    switch ($this->_type_repeat) {
       case "quadruple": 
         $this->date = mbDate("+1 WEEK", $this->date); // 4
         $week_jumped++;
@@ -323,7 +330,7 @@ class CPlageconsult extends CMbObject {
           (CMbDate::monthNumber($this->date)       <  $next_month) ||
           (CMbDate::weekNumberInMonth($this->date) != $week_number)
         );
-      break;
+        break;
     }
     
     // Stockage des champs modifiés
@@ -362,9 +369,9 @@ class CPlageconsult extends CMbObject {
 
 $pcConfig = CAppUI::conf("dPcabinet CPlageconsult");
 
-CPlageconsult::$hours_start = str_pad($pcConfig["hours_start"],2,"0",STR_PAD_LEFT);
-CPlageconsult::$hours_stop  = str_pad($pcConfig["hours_stop" ],2,"0",STR_PAD_LEFT);
-CPlageconsult::$minutes_interval = CValue::first($pcConfig["minutes_interval"],"15");
+CPlageconsult::$hours_start = str_pad($pcConfig["hours_start"], 2, "0", STR_PAD_LEFT);
+CPlageconsult::$hours_stop  = str_pad($pcConfig["hours_stop" ], 2, "0", STR_PAD_LEFT);
+CPlageconsult::$minutes_interval = CValue::first($pcConfig["minutes_interval"], "15");
 
 $hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
 $mins  = range(0, 59, CPlageconsult::$minutes_interval);
@@ -376,5 +383,3 @@ foreach ($hours as $key => $hour) {
 foreach ($mins as $key => $min) {
   CPlageconsult::$minutes[] = str_pad($min, 2, "0", STR_PAD_LEFT);
 }
-
-?>
