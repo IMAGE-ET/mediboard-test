@@ -61,7 +61,7 @@ em {
             {{$curr_code->code}}
           </td>
           <td class="text compact">{{$curr_code->libelleLong|emphasize:$_keywords_code}}</td>
-          <td class="compact" style="cursor: pointer">
+          <td class="compact" style="cursor: pointer; text-align: right;">
             {{foreach from=$curr_code->activites item=_activite}}
               {{foreach from=$_activite->phases item=_phase}}
                  {{if $_phase->tarif}}
