@@ -19,6 +19,26 @@ onSubmitObjectConfigs = function(oForm, object_instance_id, object_guid) {
 }
 </script>
 
+<script type="text/javascript">
+
+importConfig = function(object_config_guid) {
+  var url = new Url("system", "import_config");
+  url.addParam("object_config_guid", object_config_guid);
+  url.popup(800, 600, "Import config XML");
+  
+  return false;
+}
+
+</script>
+
+<a class="button download" target="_blank" href="?m=system&amp;a=export_config&amp;suppressHeaders=1&object_guid={{$object->_guid}}">
+  {{tr}}Export{{/tr}}
+</a>
+
+<button class="upload" onclick="importConfig('{{$object->_guid}}');">
+  {{tr}}Import{{/tr}}
+</button>
+
 <form name="editObjectConfig-{{$object->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitObjectConfigs(this, '{{$object->object_id}}', '{{$object->_guid}}') ">
   <input type="hidden" name="m" value="system" />
   <input type="hidden" name="del" value="0" /> 

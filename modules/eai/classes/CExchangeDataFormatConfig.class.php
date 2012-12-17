@@ -16,7 +16,7 @@
  * Echange Data Format Config
  */
 
-class CExchangeDataFormatConfig extends CMbObject { 
+class CExchangeDataFormatConfig extends CMbObjectConfig { 
   static $config_fields = array();
   
   // DB Fields

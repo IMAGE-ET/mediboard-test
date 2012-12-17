@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CDestinataireHprimConfig extends CMbObject {
+class CDestinataireHprimConfig extends CMbObjectConfig {
   var $dest_hprim_config_id = null;
   
   var $object_id            = null; // CDestinataireHprim

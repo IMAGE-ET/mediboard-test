@@ -14,7 +14,7 @@
 /**
  * IHE receiver config
  */
-class CReceiverIHEConfig extends CMbObject {
+class CReceiverIHEConfig extends CMbObjectConfig {
   var $receiver_ihe_config_id   = null;
   
   var $object_id                = null; // CReceiverIHE

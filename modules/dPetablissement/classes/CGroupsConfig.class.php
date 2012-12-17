@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-class CGroupsConfig extends CMbObject {
+class CGroupsConfig extends CMbObjectConfig {
   var $groups_config_id = null;
   
   var $object_id = null; // CGroups
