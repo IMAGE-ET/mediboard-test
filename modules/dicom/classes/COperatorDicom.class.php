@@ -295,7 +295,8 @@ class COperatorDicom extends CEAIOperator {
             $date = utf8_encode($date);
             $chir_name = utf8_encode($chir_name);
           }
-          
+          mbLog($_patient->_IPP, "IPP");
+          mbLog($_sejour->_NDA, "NDA");
           $find_rsp_datas = array(
             "PDVs" => array(
               array(
