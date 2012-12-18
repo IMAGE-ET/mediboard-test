@@ -395,7 +395,6 @@ class CDicomDataSet {
       case 'OW' :
       case 'PN' :
       case 'SH' :
-      case 'SQ' :
       case 'ST' :
       case 'TM' :
       case 'UN' :
@@ -429,6 +428,11 @@ class CDicomDataSet {
         break;
       case 'US' :
         $stream_writer->writeUInt16($this->value, $endianness);
+        break;
+      case 'SQ' :
+        $this->length = 8;
+        $stream_writer->writeUInt32(0xfeff00e0, "BE");
+        $stream_writer->writeUInt32(0x00000000, "BE");
         break;
       default :
         
@@ -543,7 +547,6 @@ class CDicomDataSet {
       case 'OW' :
       case 'PN' :
       case 'SH' :
-      case 'SQ' :
       case 'ST' :
       case 'TM' :
       case 'UN' :
@@ -569,6 +572,9 @@ class CDicomDataSet {
         break;
       case 'US' :
         $this->value = $stream_reader->readUInt16($endianness);
+        break;
+      case 'SQ' :
+        $this->value = bin2hex($stream_reader->read(8));
         break;
       default :
         

@@ -287,6 +287,15 @@ class COperatorDicom extends CEAIOperator {
             $date = str_replace("-", "", $_operation->_ref_plageop->date);
           }
           
+          $time = "";
+          if ($_operation->time_operation) {
+            $time = str_replace(":", "", $_operation->time_operation);
+            $time .= ".000000";
+          }
+          else {
+            $time = "000000.000000";
+          }
+          
           $chir_name = "$_chir->_user_last_name^$_chir->_user_first_name";
           
           /** Encodage des données **/
@@ -294,9 +303,9 @@ class COperatorDicom extends CEAIOperator {
             $libelle = utf8_encode($libelle);
             $date = utf8_encode($date);
             $chir_name = utf8_encode($chir_name);
+            $time = utf8_encode($time);
           }
-          mbLog($_patient->_IPP, "IPP");
-          mbLog($_sejour->_NDA, "NDA");
+          
           $find_rsp_datas = array(
             "PDVs" => array(
               array(
@@ -314,9 +323,15 @@ class COperatorDicom extends CEAIOperator {
                     0x0008 => array(
                       0x0005 => $encoding,
                       0x0020 => $date,
+                      0x0030 => $time,
                       0x0050 => "$_sejour->_NDA",
                       0x0090 => $chir_name,
-                      0x1030 => $libelle
+                      0x1030 => $libelle,
+                      0x103E => $libelle,
+                      0x1050 => $chir_name,
+                      0x1070 => $chir_name,
+                      0x1110 => "",
+                      0x1120 => ""
                     )
                   ),
                 )
