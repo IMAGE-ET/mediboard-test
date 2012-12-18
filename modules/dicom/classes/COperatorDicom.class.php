@@ -250,7 +250,16 @@ class COperatorDicom extends CEAIOperator {
         $operations = $operation->loadList($where, null, null, null, $ljoin);
 
         $operations = array_merge($operations, $unplanned_operations);
-
+        
+        /** Detection de l'encodage demandé **/
+        $encoding = null;
+        $rq_datasets = $find_data_pdv->getMessage()->getDatasets();
+        
+        if (array_key_exists(0x0008, $rq_datasets) && array_key_exists(0x0005, $rq_datasets[0x0008])) {
+          $encoding_dataset = $rq_datasets[0x0008][0x0005];
+          $encoding = $encoding_dataset->getValue();
+        }
+        
         foreach ($operations as $_operation) {
           $responses[] = $find_rsp_pending;
 
@@ -264,10 +273,10 @@ class COperatorDicom extends CEAIOperator {
 
           $libelle = "";
           if ($_operation->libelle) {
-            $libelle = utf8_encode(substr($_operation->libelle, 0, 64));
+            $libelle = substr($_operation->libelle, 0, 64);
           }
           else {
-            $libelle = utf8_encode("Pas de libellé");
+            $libelle = "Pas de libellé";
           }
 
           $date = "";
@@ -277,7 +286,16 @@ class COperatorDicom extends CEAIOperator {
           else {
             $date = str_replace("-", "", $_operation->_ref_plageop->date);
           }
-
+          
+          $chir_name = "$_chir->_user_last_name^$_chir->_user_first_name";
+          
+          /** Encodage des données **/
+          if ($encoding == "ISO_IR 192") {
+            $libelle = utf8_encode($libelle);
+            $date = utf8_encode($date);
+            $chir_name = utf8_encode($chir_name);
+          }
+          
           $find_rsp_datas = array(
             "PDVs" => array(
               array(
@@ -287,15 +305,16 @@ class COperatorDicom extends CEAIOperator {
                   "type"  => "data",
                   "datas" => array(
                     0x0010 => array(
-                      0x0020 => $_patient->_IPP,
+                      0x0020 => "$_patient->_IPP",
                       0x0010 => "$_patient->nom^$_patient->prenom",
                       0x0030 => str_replace("-", "", $_patient->naissance),
                       0x0040 => $_patient->sexe
                     ),
                     0x0008 => array(
+                      0x0005 => $encoding,
                       0x0020 => $date,
-                      0x0050 => $_sejour->_NDA,
-                      0x0090 => "$_chir->_user_last_name^$_chir->_user_first_name",
+                      0x0050 => "$_sejour->_NDA",
+                      0x0090 => $chir_name,
                       0x1030 => $libelle
                     )
                   ),

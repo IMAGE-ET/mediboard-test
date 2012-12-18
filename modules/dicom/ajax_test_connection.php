@@ -92,15 +92,19 @@ $stream->writeUInt16(0xfefe, "LE");
 /** C-Find-Data **/
 $stream->writeUInt8(0x04);
 $stream->skip(1);
-$stream->writeUInt32(94);
-$stream->writeUInt32(90);
+$stream->writeUInt32(112);
+$stream->writeUInt32(108);
 $stream->writeUInt8(0x01);
 $stream->writeUInt8(0x02);
 
 $stream->writeUInt16(0x0008, "LE");
 $stream->writeUInt16(0x0000, "LE");
 $stream->writeUInt32(4, "LE");
-$stream->writeUInt32(32, "LE");
+$stream->writeUInt32(50, "LE");
+$stream->writeUInt16(0x0008, "LE");
+$stream->writeUInt16(0x0005, "LE");
+$stream->writeUInt32(10, "LE");
+$stream->writeString("ISO_IR 100", 10);
 $stream->writeUInt16(0x0008, "LE");
 $stream->writeUInt16(0x0020, "LE");
 $stream->writeUInt32(0, "LE");
