@@ -164,7 +164,8 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       $phones[] = $this->getXTN($receiver, $patient->tel, "PRN", "PH");
     }
     if ($patient->tel2) {
-      $phones[] = $this->getXTN($receiver, $patient->tel2, "PRN", "CP");
+      // Pour le portable on met soit PRN ou ORN
+      $phones[] = $this->getXTN($receiver, $patient->tel2, $receiver->_configs["build_cellular_phone"], "CP");
     }
     if ($patient->tel_autre) {
       $phones[] = $this->getXTN($receiver, $patient->tel2, "ORN", "PH");

@@ -938,7 +938,12 @@ class CSetuphl7 extends CSetup {
                 ADD `build_PV2_45` ENUM ('operation','none') DEFAULT 'none';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.47";
+    $this->makeRevision("0.47");
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `build_cellular_phone` ENUM ('PRN','ORN') DEFAULT 'PRN';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.48";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
