@@ -887,7 +887,9 @@ class CAppUI {
         $args = func_get_args();
         unset($args[0]);
       }
-      $str = vsprintf($str, $args);
+      if ($args) {
+        $str = vsprintf($str, $args);
+      }
     }
 
 
