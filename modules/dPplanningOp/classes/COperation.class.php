@@ -402,13 +402,9 @@ class COperation extends CCodable implements IPatientRelated {
     $sejour = $this->loadRefSejour();
     $this->loadRefPlageOp();
     
-    if ($this->plageop_id !== null && !$sejour->entree_reelle) {
-      $date = mbDate($this->_datetime);
-      $entree = mbDate($sejour->entree_prevue);
-      $sortie = mbDate($sejour->sortie_prevue);
-      if (!CMbRange::in($date, $entree, $sortie)) {
-         $msg .= "Intervention du $date en dehors du séjour du $entree au $sortie";
-      }
+    if (!$sejour->entree_reelle && mbTime($this->_datetime) != "00:00:00" && 
+        !CMbRange::in($this->_datetime, $sejour->entree_prevue, $sejour->sortie_prevue)) {
+      $msg .= "Intervention du $this->_datetime en dehors du séjour du $sejour->entree_prevue au $sejour->sortie_prevue";
     }
     
     // Vérification de la signature de l'anesthésiste pour la visite de pré-anesthésie
@@ -622,7 +618,7 @@ class COperation extends CCodable implements IPatientRelated {
     return $alerte->store(); 
   }
   
-  function store($reorder = true) {
+  function store($reorder = false) {
     $old_object = $this->loadOldObject();
     
     $this->completeField(
@@ -936,15 +932,17 @@ class COperation extends CCodable implements IPatientRelated {
     if (!$this->_ref_plageop) {
       $this->_ref_plageop = $this->loadFwdRef("plageop_id", $cache);
     }
+    $plageOp = $this->_ref_plageop;
+    
     // Avec plage d'opération
-    if ($this->_ref_plageop->_id) {
-      $this->_ref_plageop->loadRefsFwd($cache);
+    if ($plageOp->_id) {
+      $plageOp->loadRefsFwd($cache);
       
       if (!$this->anesth_id) {
-        $this->_ref_anesth =& $this->_ref_plageop->_ref_anesth;
+        $this->_ref_anesth =& $plageOp->_ref_anesth;
       }
       
-      $date = $this->_ref_plageop->date;
+      $date = $plageOp->date;
     }
     // Hors plage
     else {
@@ -963,8 +961,8 @@ class COperation extends CCodable implements IPatientRelated {
     elseif ($this->horaire_voulu && $this->horaire_voulu != "00:00:00") {
       $this->_datetime = "$date $this->horaire_voulu"; 
     }
-    elseif ($this->_ref_plageop->_id) {
-      $this->_datetime = "$date ".$this->_ref_plageop->debut;
+    elseif ($plageOp->_id) {
+      $this->_datetime = "$date ".$plageOp->debut;
     }
     else {
       $this->_datetime = "$date 00:00:00";
@@ -987,7 +985,7 @@ class COperation extends CCodable implements IPatientRelated {
       $this->_acte_execution = mbAddDateTime($this->temp_operation, $this->_datetime);
     } 
     else {
-      $this->_acte_execution = mbDateTime();
+      $this->_acte_execution = $this->_datetime;
     }
 
     $this->_view = "Intervention ";
