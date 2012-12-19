@@ -51,7 +51,9 @@ em {
         <th>Code</th>
         <th>Libellé</th>
         <th>Tarifs</th>
-        <th>Occurences</th>
+        {{if !$tag_id}}
+          <th>Occurences</th>
+        {{/if}}
         <th class="narrow"></th>
       </tr>
       {{foreach from=$list item=curr_code name=fusion}}
@@ -72,16 +74,18 @@ em {
               {{/foreach}}
             {{/foreach}}
           </td>
-          <td>
-            {{if array_key_exists($curr_code->code, $list_stats)}}
-              {{assign var=_code value=$curr_code->code}}
-              {{$list_stats.$_code.nb_acte}}
-            {{elseif array_key_exists($curr_code->code, $list_favoris)}}
-              Favoris
-            {{else}}
-              -
-            {{/if}}
-          </td>
+          {{if !$tag_id}}
+            <td>
+              {{if array_key_exists($curr_code->code, $list_stats)}}
+                {{assign var=_code value=$curr_code->code}}
+                {{$list_stats.$_code.nb_acte}}
+              {{elseif array_key_exists($curr_code->code, $list_favoris)}}
+                Favoris
+              {{else}}
+                -
+              {{/if}}
+            </td>
+          {{/if}}
           <td>
             {{if $multiple_select}}
               <input type="checkbox" class="multiples_codes" value="{{$curr_code->code}}"/>

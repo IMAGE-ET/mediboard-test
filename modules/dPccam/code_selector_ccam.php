@@ -102,10 +102,15 @@ foreach ($profiles as $profile => $_user_id) {
     $list[$val_code]->nb_acte = $nb_acte;
   }
   
-  $sorter = CMbArray::pluck($list, "nb_acte");
+  if ($tag_id) {
+    $sorter = CMbArray::pluck($list, "code");
+    array_multisort($sorter, SORT_ASC, $list);
+  }
+  else {
+    $sorter = CMbArray::pluck($list, "nb_acte");
+    array_multisort($sorter, SORT_DESC, $list);
+  }
   
-  array_multisort($sorter, SORT_DESC, $list);
-
   $listByProfile[$profile]["favoris"] = $codes_favoris;
   $listByProfile[$profile]["stats"]   = $codes_stats;
   $listByProfile[$profile]["list"]    = $list;
