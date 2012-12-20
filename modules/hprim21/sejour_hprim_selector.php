@@ -24,8 +24,8 @@ if($patient->naissance) {
   //$findday   = mbTransformTime(null, $patient->naissance, "%d");
 }
 
-$name          = CValue::get("name"      , $patient->nom);
-$firstName     = CValue::get("firstName" , $patient->prenom);
+$name          = utf8_decode(CValue::get("name"      , $patient->nom));
+$firstName     = utf8_decode(CValue::get("firstName" , $patient->prenom));
 $nomjf         = CValue::get("nomjf"     , $patient->nom_jeune_fille);
 $patient_year  = CValue::get("Date_Year" , $findyear);
 $patient_month = CValue::get("Date_Month", $findmonth);
