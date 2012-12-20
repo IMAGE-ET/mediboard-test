@@ -955,6 +955,7 @@ class CSejour extends CCodable implements IPatientRelated {
     }
 
     // Motif complet du séjour
+    $this->_motif_complet .= $this->libelle;
     if (CAppUI::conf("dPplanningOp CSejour use_recuse")) {
       $this->_motif_complet = "";
       if ($this->recuse == -1) {
