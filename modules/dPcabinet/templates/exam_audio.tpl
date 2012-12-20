@@ -276,7 +276,7 @@ if(window.opener && window.opener.ExamDialog) {
         <tr>
           <td class="button" colspan="9">
             {{if $exam_audio->_id}}
-            <button class="submit" type="button" onclick="this.onSubmitFormAjax(this.form, { onComplete : reloadGraphTympan})">{{tr}}Save{{/tr}}</button>
+            <button class="submit" type="button" onclick="onSubmitFormAjax(this.form, { onComplete : reloadGraphTympan})">{{tr}}Save{{/tr}}</button>
             {{else}}
             <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
             {{/if}}

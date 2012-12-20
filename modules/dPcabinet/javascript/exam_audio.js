@@ -171,14 +171,15 @@ var iMaxKey = 7;
 function changeVocalValue(sCote, iKey, iNewDBValue, iNewPcValue) {
   var oForm = document.editFrm;
   var sElements = printf("_%s_vocale[%i]", sCote, iKey);
-
+  
   var oElementDB = oForm.elements[sElements + "[0]"];
+  
   if (!iNewDBValue) {
     sInvite = printf("Modifier la valeur de réponse pour le point #%d concernant l'oreille %s", iKey, sCote);
     sAdvice = printf("Merci de fournir une valeur comprise (en dB) entre %i et %i", iMinVocalDB, iMaxVocalDB);
 
     iNewDBValue = prompt(sInvite + "\n" + sAdvice, oElementDB.value);
-
+    
     // Do not user !iNewValue which is also true for empty string    
     if (iNewDBValue == null) {
       return;
@@ -207,7 +208,16 @@ function changeVocalValue(sCote, iKey, iNewDBValue, iNewPcValue) {
       return;
     }
   }
-
+  
+  // Si une des deux valeurs est une chaîne vide, alors c'est une suppression de point
+  if (iNewPcValue == "") {
+    iNewDBValue = "";
+  }
+  
+  if (iNewDBValue == "") {
+    iNewPcValue = "";
+  }
+  
   oElementDB.value = iNewDBValue;
   oElementPc.value = iNewPcValue;
   oForm.action += "#vocal";
