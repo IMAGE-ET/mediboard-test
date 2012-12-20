@@ -15,7 +15,7 @@
         <segment>ZBE</segment>
         <segment>ZFP</segment>
         <segment>ZFV</segment>
-        <segment>ZFM</segment>
+        <segment minOccurs="0">ZFM</segment>
         <segment minOccurs="0">ZFD</segment>
         <segment minOccurs="0" maxOccurs="unbounded">ROL</segment>
         <segment minOccurs="0" maxOccurs="unbounded">DB1</segment>
