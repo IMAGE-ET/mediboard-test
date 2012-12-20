@@ -789,6 +789,12 @@ class CDicomDictionary {
       0xE010 =>  array('UT', '1', 'RetrieveURI'),
       0xE011 =>  array('UI', '1', 'RetrieveLocationUID'),
     ),
+    
+    0xFFFE => array(
+      0xE000 => array('LO', '1', 'ItemBeginDelimitation'),
+      0xE00D => array('LO', '1', 'ItemEndDelimitation'),
+      0xE0DD => array('LO', '1', 'SequenceEndDelimitation')
+    )
   );
   
   protected static $groups = array(

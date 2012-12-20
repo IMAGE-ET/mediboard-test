@@ -316,46 +316,13 @@ class COperatorDicom extends CEAIOperator {
                 "message"                => array(
                   "type"  => "data",
                   "datas" => array(
-                    /*0x0008 => array(
-                      0x0005 => $encoding,
-                      0x0020 => $date,
-                      0x0030 => $time,
-                      0x0050 => "$_sejour->_NDA",
-                      0x0090 => $chir_name,
-                      0x1030 => $libelle,
-                      0x103E => $libelle,
-                      0x1050 => $chir_name,
-                      0x1070 => $chir_name,
-                      0x1110 => "",
-                      0x1120 => ""
-                    ),*/
                     0x0010 => array(
                       0x0010 => "$_patient->nom^$_patient->prenom",
                       0x0020 => "$_patient->_IPP",
                       0x0030 => str_replace("-", "", $_patient->naissance),
-                      0x0040 => $_patient->sexe,
-                      /*0x1010 => $age,
-                      0x1030 => 0,
-                      0x2000 => "",
-                      0x2110 => "",
-                      0x21C0 => 0,*/
+                      0x0040 => $_patient->sexe
                     ),
-                    /*0x0020 => array(
-                      0x000D => "$_sejour->_id"
-                    ),
-                    0x0032 => array(
-                      0x1032 => $chir_name,
-                      0x1060 => $libelle,
-                      0x1064 => ""
-                    ),
-                    0x0038 => array(
-                      0x0010 => "$_sejour->_NDA",
-                      0x0050 => "",
-                      0x0300 => "",
-                      0x0500 => ""
-                    ),*/
                     0x0040 => array(
-                      //0x0008 => "",
                       0x0100 => array(
                         array(
                           array("group_number" => 0x0040, "element_number" => 0x0002, "value" => $date),
@@ -365,8 +332,6 @@ class COperatorDicom extends CEAIOperator {
                           array("group_number" => 0x0040, "element_number" => 0x0009, "value" => $_sejour->_NDA),
                         ),
                       ),
-                      //0x1001 => "$_sejour->_id",
-                      //0x3001 => ""
                     ),
                   ),
                 )

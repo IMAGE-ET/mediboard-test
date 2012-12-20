@@ -556,7 +556,7 @@ class CDicomDataSet {
       $stream_reader->readUInt16($this->length, $endianness);
     }
 
-    if ($this->length > 0) {
+    if (($this->length > 0 && $this->length < 0xFFFFFFFF) || $this->vr == "SQ") {
       $this->decodeValue($stream_reader, $endianness);
     }
   }
@@ -617,26 +617,70 @@ class CDicomDataSet {
         $this->value = $stream_reader->readUInt16($endianness);
         break;
       case 'SQ' :
-        $content = $stream_reader->read($this->length);
-        $this->value = array();
-        
-        $value_stream = new CDicomStreamReader();
-        fwrite($value_stream->stream, $content, $this->length);
-        $value_stream->rewind();
-        
-        while ($value_stream->getPos() < $this->length) {
-          $value_stream->skip(4);
-          $sequence_length = $value_stream->readUInt32($endianness);
-          $sequence = array();
-          $sequence_end = $value_stream->getPos() + $sequence_length;
-          
-          while($value_stream->getPos() < $sequence_end) {
-            $dataset = new CDicomDataSet();
-            $dataset->decode($value_stream, $this->transfer_syntax);
-            $sequence[] = $dataset;
+        $tmp_value = array();
+        /** Sequence of items with undefined length **/
+        if ($this->length == 0xFFFFFFFF) {
+          $delimiter = new CDicomDataSet();
+          $delimiter->decode($stream_reader, $this->transfer_syntax);
+
+          while ($delimiter->group_number == 0xFFFE && $delimiter->element_number != 0xE0DD) {
+            $sequence = array($delimiter);
+            
+            if ($delimiter->length == 0xFFFFFFFF) {
+              $item_delimiter = new CDicomDataSet();
+              $item_delimiter->decode($stream_reader, $this->transfer_syntax);
+              $sequence[] = $item_delimiter;
+              
+              while ($item_delimiter->group_number == 0xFFFE && $item_delimiter->element_number != 0xE00D) {
+                mbLog("while 2");
+                $dataset = new CDicomDataSet();
+                $dataset->decode($value_stream, $this->transfer_syntax);
+                $sequence[] = $dataset;
+                
+                $item_delimiter = new CDicomDataSet();
+                $item_delimiter->decode($stream_reader, $this->transfer_syntax);
+                $sequence[] = $item_delimiter;
+              }
+            }
+            else {
+              $sequence_end = $value_stream->getPos() + $sequence_length;
+            
+              while($value_stream->getPos() < $sequence_end) {
+                $dataset = new CDicomDataSet();
+                $dataset->decode($value_stream, $this->transfer_syntax);
+                $sequence[] = $dataset;
+              }
+            }
+            
+            $delimiter = new CDicomDataSet();
+            $delimiter->decode($stream_reader, $this->transfer_syntax);
+            $sequence[] = $delimiter;
+            $tmp_value[] = $sequence;
           }
-          $this->value[] = $sequence;
         }
+        /** Sequence of items with defined length **/
+        else {
+          $content = $stream_reader->read($this->length);
+          
+          $value_stream = new CDicomStreamReader();
+          fwrite($value_stream->stream, $content, $this->length);
+          $value_stream->rewind();
+          
+          while ($value_stream->getPos() < $this->length) {
+            $value_stream->skip(4);
+            $sequence_length = $value_stream->readUInt32($endianness);
+            $sequence = array();
+            $sequence_end = $value_stream->getPos() + $sequence_length;
+            
+            while($value_stream->getPos() < $sequence_end) {
+              $dataset = new CDicomDataSet();
+              $dataset->decode($value_stream, $this->transfer_syntax);
+              $sequence[] = $dataset;
+            }
+            $tmp_value[] = $sequence;
+          }
+        }
+        $this->value = $tmp_value;
         break;
       default :
         
