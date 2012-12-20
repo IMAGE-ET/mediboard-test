@@ -99,6 +99,7 @@ $locales['CMbObject-msg-nodelete-backrefs'] = 'Suppression impossible en raison 
 $locales['CMbObject-msg-store-failed'] = ': Enregistrement impossible,';
 $locales['CMbObject.none'] = 'Aucun objet';
 $locales['CModule'] = 'Module';
+$locales['CPlageHoraire-collision_keys'] = 'La classe \'%s\' qui dérive de CPlageHoraire n\'a pas défini les clés de collision (collision_keys)';
 $locales['Cancel'] = 'Annuler';
 $locales['Cancelled'] = 'Annulé';
 $locales['Change'] = 'Changer';

@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-class CPlageconsult extends CMbObject {
+class CPlageconsult extends CPlageHoraire {
   static $minutes = array();
   static $hours = array();
   static $hours_start = null;
@@ -23,10 +23,7 @@ class CPlageconsult extends CMbObject {
   var $pour_compte_id = null;
   
   // DB fields
-  var $date    = null;
   var $freq    = null;
-  var $debut   = null;
-  var $fin     = null;
   var $libelle = null;
   var $locked  = null;
   var $remplacant_ok = null;
@@ -41,7 +38,6 @@ class CPlageconsult extends CMbObject {
   var $_fill_rate            = null;
   var $_nb_patients          = null;
   var $_consult_by_categorie = null;
-  var $_colliding_plages     = null;
   var $_type_repeat          = null;
   
   // Field pour le calcul de collision (fin à 00:00:00)
@@ -62,15 +58,16 @@ class CPlageconsult extends CMbObject {
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'plageconsult';
-    $spec->key   = 'plageconsult_id';
+    $spec->table          = "plageconsult";
+    $spec->key            = "plageconsult_id";
+    $spec->collision_keys = array("chir_id");
     return $spec;
   }
   
   function getBackProps() {
-      $backProps = parent::getBackProps();
-      $backProps["consultations"] = "CConsultation plageconsult_id";
-     return $backProps;
+    $backProps = parent::getBackProps();
+    $backProps["consultations"] = "CConsultation plageconsult_id";
+    return $backProps;
   }
 
   function getProps() {
@@ -224,30 +221,6 @@ class CPlageconsult extends CMbObject {
       && $this->_ref_module->getPerm($permType);
   }
 
-/*
- * returns collision message, null for no collision
- */
-  function hasCollisions() {
-    $this->completeField("chir_id", "date", "debut", "fin");
-        
-    // Get all other plages the same day
-    $where["plageconsult_id"] = "!= '$this->plageconsult_id'";
-    $where["chir_id"]         = "= '$this->chir_id'";
-    $where["date"]            = "= '$this->date'";
-    $where["debut"]           = "< '$this->fin'";
-    $where["fin"]             = "> '$this->debut'";
-		
-    $plages = new CPlageconsult;
-    $this->_colliding_plages = $plages->loadList($where);
-    
-    $msgs = array();
-    foreach ($this->_colliding_plages as $_plage) {
-      $msgs[] = "Collision avec la plage de '$_plage->debut' à '$_plage->fin'";
-    }
-    
-    return count($msgs) ? implode(", ", $msgs) : null;
-  }
-
   function check() {
     // Data checking
     $msg = null;
@@ -261,25 +234,8 @@ class CPlageconsult extends CMbObject {
     return $msg . parent::check();
   }
   
-  function store() {
-    $this->updatePlainFields();
-    
-    if ($msg = $this->hasCollisions()) {
-      return $msg;
-    }
-
-    return parent::store();
-  }
-  
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = sprintf(
-      "Plage du %s de %s à %s",
-      mbTransformTime($this->date , null, CAppUI::conf("date")),
-      mbTransformTime($this->debut, null, CAppUI::conf("time")),
-      mbTransformTime($this->fin  , null, CAppUI::conf("time"))
-    );
-
     $this->_total = mbTimeCountIntervals($this->debut, $this->fin, $this->freq);
     $this->_freq  = substr($this->freq, 3, 2);
     if($this->freq == "1:00:00") {
@@ -288,16 +244,13 @@ class CPlageconsult extends CMbObject {
   }
   
   function updatePlainFields() {
+  	parent::updatePlainFields();
+		
     if ($this->_freq !== null) {
       $this->freq  = "00:". $this->_freq. ":00";
       if($this->_freq == "60") {
         $this->freq  = "01:00:00";
       }
-    }
-  
-    // Usefull for automatic plages coming from instant consult in emergency
-    if ($this->fin && $this->fin == "00:00:00") {
-      $this->fin = "23:59:59";
     }
   }
   

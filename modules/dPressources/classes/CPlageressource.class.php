@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-class CPlageressource extends CMbObject {
+class CPlageressource extends CPlageHoraire {
   const OUT     = "#aaa";  // plage échue
   const FREE    = "#aae";  // plage libre
   const FREEB   = "#88c";  // plage libre à plus d'1 mois
@@ -22,9 +22,6 @@ class CPlageressource extends CMbObject {
   var $prat_id = null;
 
   // DB fields
-  var $date    = null;
-  var $debut   = null;
-  var $fin     = null;
   var $tarif   = null;
   var $libelle = null;
   var $paye    = null;
@@ -46,27 +43,23 @@ class CPlageressource extends CMbObject {
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->table = 'plageressource';
-    $spec->key   = 'plageressource_id';
+    $spec->table          = "plageressource";
+    $spec->key            = "plageressource_id";
+    $spec->collision_keys = array();
     return $spec;
   }
   
   function getProps() {
-  	$specsParent = parent::getProps();
-    $specs = array (
-      "prat_id" 		=> "ref class|CMediusers seekable",
-      "date"    		=> "date notNull",
-      "debut"   		=> "time notNull",
-      "fin"     		=> "time notNull",
-      "tarif"   		=> "currency notNull min|0 confidential",
-      "libelle" 		=> "str confidential seekable",
-      "paye"    		=> "bool",
-      "_date_min" 	=> "date",
-      "_date_max" 	=> "date moreEquals|_date_min",
-      "_hour_deb"   => "time",
-      "_hour_fin"   => "time",
-    );
-    return array_merge($specsParent, $specs);
+  	$props = parent::getProps();
+    $props["prat_id"] = "ref class|CMediusers seekable";
+    $props["tarif"] = "currency notNull min|0";
+    $props["libelle"] = "str confidential seekable";
+    $props["paye"] = "bool";
+    $props["_date_min"] = "date";
+    $props["_date_max"] = "date moreEquals|_date_min";
+    $props["_hour_deb"] = "time";
+    $props["_hour_fin"] = "time";
+    return $props;
   }
   
   function loadRefsFwd() {
@@ -79,44 +72,6 @@ class CPlageressource extends CMbObject {
       $this->loadRefsFwd();
     }
     return $this->_ref_prat->getPerm($permType);
-  }
-
-/*
- * returns collision message, null for no collision
- */
-  function hasCollisions() {
-    // Get all other plages the same day
-    $where["date"] = "= '$this->date'";
-    $where["plageressource_id"] = "!= '$this->plageressource_id'";
-    $plages = new CPlageressource;
-    $plages = $plages->loadList($where);
-    $msg = null;
-    
-    foreach ($plages as $plage) {
-      if (($plage->debut < $this->fin and $plage->fin > $this->fin)
-        or($plage->debut < $this->debut and $plage->fin > $this->debut)
-        or($plage->debut >= $this->debut and $plage->fin <= $this->fin)) {
-        $msg .= "Collision avec la plage du $this->date, de $plage->debut à $plage->fin.";
-      }
-    }
-    
-    return $msg;
-  }
-/*
-  function check() {
-    // Data checking
-    $msg = null;
-    return $msg . parent::check();
-  }
-*/
-  function store() {
-    $this->updatePlainFields();
-    
-    if ($msg = $this->hasCollisions()) {
-      return $msg;
-    }
-
-    return parent::store();
   }
   
   function updateFormFields() {
@@ -162,7 +117,6 @@ class CPlageressource extends CMbObject {
 
     $this->date = mbDate("+7 DAYS", $this->date);
     $where["date"] = "= '$this->date'";
-    //$where["prat_id"] = "= '$this->prat_id'";
     $where[] = "`debut` = '$this->debut' OR `fin` = '$this->fin'";
     if (!$this->loadObject($where)) {
       $this->plageressource_id = null;
