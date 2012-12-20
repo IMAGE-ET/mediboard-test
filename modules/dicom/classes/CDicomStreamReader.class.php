@@ -38,7 +38,11 @@ class CDicomStreamReader {
    * 
    * @param resource $stream The stream
    */
-  function __construct($stream) {
+  function __construct($stream = null) {
+    if (is_null($stream)) {
+      $stream = fopen("php://temp", "w+");  
+    }
+    
     $this->stream = $stream;
     $this->buf = "";
   }

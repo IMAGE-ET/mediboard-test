@@ -255,7 +255,7 @@ class COperatorDicom extends CEAIOperator {
         $encoding = null;
         $rq_datasets = $find_data_pdv->getMessage()->getDatasets();
         
-        if (array_key_exists(0x0008, $rq_datasets) && array_key_exists(0x0005, $rq_datasets[0x0008])) {
+        if (isset($rq_datasets[0x0008][0x0005])) {
           $encoding_dataset = $rq_datasets[0x0008][0x0005];
           $encoding = $encoding_dataset->getValue();
         }
@@ -307,7 +307,7 @@ class COperatorDicom extends CEAIOperator {
             $chir_name = utf8_encode($chir_name);
             $time = utf8_encode($time);
           }
-          mbLog($age);
+          
           $find_rsp_datas = array(
             "PDVs" => array(
               array(
@@ -316,7 +316,7 @@ class COperatorDicom extends CEAIOperator {
                 "message"                => array(
                   "type"  => "data",
                   "datas" => array(
-                    0x0008 => array(
+                    /*0x0008 => array(
                       0x0005 => $encoding,
                       0x0020 => $date,
                       0x0030 => $time,
@@ -328,7 +328,7 @@ class COperatorDicom extends CEAIOperator {
                       0x1070 => $chir_name,
                       0x1110 => "",
                       0x1120 => ""
-                    ),
+                    ),*/
                     0x0010 => array(
                       0x0010 => "$_patient->nom^$_patient->prenom",
                       0x0020 => "$_patient->_IPP",
@@ -340,7 +340,7 @@ class COperatorDicom extends CEAIOperator {
                       0x2110 => "",
                       0x21C0 => 0,*/
                     ),
-                    0x0020 => array(
+                    /*0x0020 => array(
                       0x000D => "$_sejour->_id"
                     ),
                     0x0032 => array(
@@ -353,13 +353,21 @@ class COperatorDicom extends CEAIOperator {
                       0x0050 => "",
                       0x0300 => "",
                       0x0500 => ""
-                    ),
-                    /*0x0040 => array(
-                      0x0008 => "",
-                      0x0100 => "",
-                      0x1001 => "$_sejour->_id",
-                      0x3001 => ""
                     ),*/
+                    0x0040 => array(
+                      //0x0008 => "",
+                      0x0100 => array(
+                        array(
+                          array("group_number" => 0x0040, "element_number" => 0x0002, "value" => $date),
+                          array("group_number" => 0x0040, "element_number" => 0x0003, "value" => $time),
+                          array("group_number" => 0x0040, "element_number" => 0x0006, "value" => $chir_name),
+                          array("group_number" => 0x0040, "element_number" => 0x0007, "value" => $libelle),
+                          array("group_number" => 0x0040, "element_number" => 0x0009, "value" => $_sejour->_NDA),
+                        ),
+                      ),
+                      //0x1001 => "$_sejour->_id",
+                      //0x3001 => ""
+                    ),
                   ),
                 )
               ),

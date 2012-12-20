@@ -62,6 +62,13 @@ class CDicomDataSet {
   protected $value = null;
   
   /**
+   * The transfer syntax
+   * 
+   * @var string
+   */
+  protected $transfer_syntax;
+  
+  /**
    * The constructor.
    * 
    * @param array $datas Default null. 
@@ -248,6 +255,9 @@ class CDicomDataSet {
     if ($vr_def['Fixed'] == 1) {
       $this->length = $vr_def['Length'];
     }
+    elseif (is_array($this->value)) {
+      $this->length = 0;
+    }
     else {
       $this->length = strlen($this->value);
     }
@@ -290,7 +300,8 @@ class CDicomDataSet {
   public function encode(CDicomStreamWriter $stream_writer, $transfer_syntax = "1.2.840.10008.1.2") {
     if (!$transfer_syntax) {
       return;
-    }  
+    }
+    $this->transfer_syntax = $transfer_syntax;
     
     $vr_encoding = "";
     $endianness = "";
@@ -430,12 +441,42 @@ class CDicomDataSet {
         $stream_writer->writeUInt16($this->value, $endianness);
         break;
       case 'SQ' :
-        $this->length = 8;
-        $stream_writer->writeUInt32(0xfeff00e0, "BE");
-        $stream_writer->writeUInt32(0x00000000, "BE");
+        $value_stream = new CDicomStreamWriter();
+        $value_tmp = array();
+        
+        if (is_array($this->value)) {
+          foreach ($this->value as $_sequence) {
+            $sequence = array();
+            
+            $sequence_stream = new CDicomStreamWriter();
+            
+            foreach ($_sequence as $_item) {
+              $dataset = new CDicomDataSet($_item);
+              $dataset->encode($sequence_stream, $this->transfer_syntax);
+              $sequence[] = $dataset;
+            }
+            
+            $sequence_length = strlen($sequence_stream->buf);
+            
+            $value_stream->writeUInt16(0xFFFE, $endianness);
+            $value_stream->writeUInt16(0xE000, $endianness);
+            $value_stream->writeUInt32($sequence_length, $endianness);
+            $value_stream->write($sequence_stream->buf, $sequence_length);
+            $this->length += 8 + $sequence_length;
+            
+            $value_tmp[] = $sequence;
+          }
+          $stream_writer->write($value_stream->buf, $this->length);
+          $this->value = $value_tmp;
+        }
+        else {
+          $this->length = 8;
+          $stream_writer->writeUInt16(0xFFFE, $endianness);
+          $stream_writer->writeUInt16(0xE000, $endianness);
+          $stream_writer->writeUInt32(0, $endianness);
+        }
         break;
       default :
-        
         break;
     }
   }
@@ -450,6 +491,8 @@ class CDicomDataSet {
    * @return null
    */
   public function decode(CDicomStreamReader $stream_reader, $transfer_syntax = "1.2.840.10008.1.2") {
+    $this->transfer_syntax = $transfer_syntax;  
+      
     $vr_encoding = "";
     $endianness = "";
     switch ($transfer_syntax) {
@@ -574,7 +617,35 @@ class CDicomDataSet {
         $this->value = $stream_reader->readUInt16($endianness);
         break;
       case 'SQ' :
-        $this->value = bin2hex($stream_reader->read(8));
+        $content = $stream_reader->read($this->length);
+        $this->value = array();
+        
+        $log = fopen("/var/www/log_dicom.txt", "a+");
+        $str = bin2hex($content);
+        fwrite($log, $str, strlen($str));
+        fclose($log);
+        
+        $value_stream = new CDicomStreamReader();
+        fwrite($value_stream->stream, $content, $this->length);
+        $value_stream->rewind();
+        
+        while ($value_stream->getPos() < $this->length) {
+          $value_stream->skip(4);
+          $sequence_length = $value_stream->readUInt32($endianness);
+          $sequence = array();
+          $sequence_end = $value_stream->getPos() + $sequence_length;
+          
+          while($value_stream->getPos() < $sequence_end) {
+            $log = fopen("/var/www/log_dicom.txt", "a+");
+            $str = "Pos :" . $value_stream->getPos() . ", Length:$sequence_end, $sequence_length\n";
+            fwrite($log, $str, strlen($str));
+            fclose($log);
+            $dataset = new CDicomDataSet();
+            $dataset->decode($value_stream, $this->transfer_syntax);
+            $sequence[] = $dataset;
+          }
+          $this->value[] = $sequence;
+        }
         break;
       default :
         
@@ -588,10 +659,25 @@ class CDicomDataSet {
    * @return string
    */
   function __toString() {
-    return "<td>(" . sprintf("%04X", $this->group_number) . "," . sprintf("%04X", $this->element_number) . ")</td>
+    $str = "<td>(" . sprintf("%04X", $this->group_number) . "," . sprintf("%04X", $this->element_number) . ")</td>
             <td>$this->name</td>
             <td>$this->vr</td>
-            <td>$this->length</td>
-            <td>$this->value</td>";
+            <td>$this->length</td>";
+    if ($this->vr == "SQ") {
+      $str .= "<td><ul>";
+      foreach ($this->value as $_sequence) {
+        $str .= "<li><table>";
+        
+        foreach ($_sequence as $_dataset) {
+          $str .= "<tr>" . $_dataset->__toString() . "</tr>";
+        }
+        $str .= "</table></li>";
+      }
+      $str .= "</td></ul>";
+    }
+    else {
+      $str .= "<td>$this->value</td>";
+    }
+    return $str;
   }
 }

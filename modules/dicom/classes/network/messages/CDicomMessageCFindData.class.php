@@ -146,12 +146,11 @@ class CDicomMessageCFindData {
       
       $group_length_dataset->encode($stream_writer, $transfer_syntax);
       $this->datasets[$group_number][0x0000] = $group_length_dataset;
-      
-      $this->setContent($group_writer->buf);
       $stream_writer->write($group_writer->buf);
     
       $group_writer->close();
     }
+    $this->setContent($stream_writer->buf);
   }
   
   /**
