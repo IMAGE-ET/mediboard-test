@@ -31,7 +31,8 @@ class CFunctions extends CMbObject {
   var $compta_partagee    = null;
   var $admission_auto     = null;
   var $consults_partagees = null;
-  var $quotas    = null;
+  var $quotas             = null;
+  var $facturable         = null;
   
   // Object References
   var $_ref_group = null;
@@ -86,23 +87,26 @@ class CFunctions extends CMbObject {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["group_id"]           = "ref notNull class|CGroups";
-    $specs["type"]               = "enum notNull list|administratif|cabinet";
-    $specs["text"]               = "str notNull confidential seekable";
-    $specs["color"]              = "str notNull length|6 default|ffffff";
-    $specs["adresse"]            = "text";
-    $specs["cp"]                 = "numchar length|5";
-    $specs["ville"]              = "str maxLength|50";
-    $specs["tel"]                = "phone";
-    $specs["fax"]                = "phone";
-    $specs["soustitre"]          = "text";
-    $specs["compta_partagee"]    = "bool default|0 notNull";
-    $specs["consults_partagees"] = "bool default|1 notNull";
-    $specs["admission_auto"]     = "bool";
-    $specs["actif"]              = "bool default|1";
-    $specs["quotas"]             = "num pos";
-    return $specs;
+    $props = parent::getProps();
+    
+    $props["group_id"]           = "ref notNull class|CGroups";
+    $props["type"]               = "enum notNull list|administratif|cabinet";
+    $props["text"]               = "str notNull confidential seekable";
+    $props["color"]              = "str notNull length|6 default|ffffff";
+    $props["adresse"]            = "text";
+    $props["cp"]                 = "numchar length|5";
+    $props["ville"]              = "str maxLength|50";
+    $props["tel"]                = "phone";
+    $props["fax"]                = "phone";
+    $props["soustitre"]          = "text";
+    $props["compta_partagee"]    = "bool default|0 notNull";
+    $props["consults_partagees"] = "bool default|1 notNull";
+    $props["admission_auto"]     = "bool";
+    $props["actif"]              = "bool default|1";
+    $props["quotas"]             = "num pos";
+    $props["facturable"]         = "bool default|1";
+    
+    return $props;
   }
     
   function updateFormFields() {

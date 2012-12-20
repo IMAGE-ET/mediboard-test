@@ -108,6 +108,10 @@
       <td>{{mb_field object=$function field="admission_auto"}}</td>
     </tr>
     <tr>
+      <th>{{mb_label object=$function field="facturable"}}</th>
+      <td>{{mb_field object=$function field="facturable"}}</td>
+    </tr>
+    <tr>
       <td class="button" colspan="2">
       {{if $function->function_id}}
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

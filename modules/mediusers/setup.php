@@ -511,8 +511,14 @@ class CSetupmediusers extends CSetup {
      $query = "ALTER TABLE `users_mediboard`
                  DROP `num_astreinte`";
      $this->addQuery($query);
+     
+     $this->makeRevision("0.45");
 
-     $this->mod_version = "0.45";
+     $query = "ALTER TABLE `functions_mediboard`
+                 ADD `facturable` ENUM ('0','1') DEFAULT '1';";
+     $this->addQuery($query);
+
+     $this->mod_version = "0.46";
 
   }
 }
