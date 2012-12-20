@@ -87,7 +87,7 @@ else {
   // Limitation du nombre de caractères
   $patient_nom_search    = trim($patient_nom);
   $patient_prenom_search = trim($patient_prenom);
-  if ($limit_char_search = CAppUI::conf("dPpatients CPatient limit_char_search")) {
+  if ($limit_char_search = $patient->conf("limit_char_search")) {
     $patient_nom_search    = substr($patient_nom_search   , 0, $limit_char_search);
     $patient_prenom_search = substr($patient_prenom_search, 0, $limit_char_search);
   }
