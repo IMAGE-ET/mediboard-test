@@ -403,7 +403,7 @@ class CPlageOp extends CMbObject {
    * return the number of weeks jumped
    * @return int
    */
-  function becomeNext() {
+  function becomeNext($init_salle_id = null, $init_chir_id = null, $init_spec_id = null) {
     $week_jumped = 0;
     if(!$this->_type_repeat) {
       $this->_type_repeat = "simple";
@@ -439,6 +439,9 @@ class CPlageOp extends CMbObject {
     }
     
     // Stockage des champs modifiés
+    $salle_id         = $this->salle_id;
+    $chir_id          = $this->chir_id;
+    $spec_id          = $this->spec_id;
     $debut            = $this->debut;
     $fin              = $this->fin;
     $temps_inter_op   = $this->temps_inter_op;
@@ -449,15 +452,15 @@ class CPlageOp extends CMbObject {
     $type_repeat      = $this->_type_repeat;
     $unique_chir      = $this->unique_chir;
     
-    // Recherche de la plafe suivante
+    // Recherche de la plage suivante
     $where             = array();
     $where["date"]     = "= '$this->date'";
     $where[]           = "`debut` = '$this->debut' OR `fin` = '$this->fin'";
-    $where["salle_id"] = "= '$this->salle_id'";
-    if($this->chir_id) {
-      $where["chir_id"] = "= '$this->chir_id'";
+    $where["salle_id"] = $init_salle_id ? "= '$init_salle_id'" : "= '$this->salle_id'";
+    if($this->chir_id || $init_chir_id) {
+      $where["chir_id"] = $init_chir_id ? "= '$init_chir_id'" : "= '$this->chir_id'";
     } else {
-      $where["spec_id"] = "= '$this->spec_id'";
+      $where["spec_id"] = $init_spec_id ? "= '$init_spec_id'" : "= '$this->spec_id'";
     }
     $plages           = $this->loadList($where);
     if(count($plages) > 0) {
@@ -470,6 +473,9 @@ class CPlageOp extends CMbObject {
     if(!$this->spec_id) $this->spec_id = "";
     
     // Remise en place des champs modifiés
+    $this->salle_id         = $salle_id;
+    $this->chir_id          = $chir_id;
+    $this->spec_id          = $spec_id;
     $this->debut            = $debut;
     $this->fin              = $fin;
     $this->temps_inter_op   = $temps_inter_op;

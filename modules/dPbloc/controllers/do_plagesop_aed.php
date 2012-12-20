@@ -56,6 +56,11 @@ if ($del) {
 } else {
   //Modification des plages
   if ($obj->_id != 0) {
+    $oldObj = new CPlageOp();
+    $oldObj->load($obj->_id);
+    $salle_id = $oldObj->salle_id;
+    $chir_id  = $oldObj->chir_id;
+    $spec_id  = $oldObj->spec_id;
     while ($repeat > 0) {
       if ($obj->_id) {
         if ($msg = $obj->store()) {
@@ -67,7 +72,7 @@ if ($del) {
         }
         managePersonnel($obj);  
       }
-      $repeat -= $obj->becomeNext();
+      $repeat -= $obj->becomeNext($salle_id, $chir_id, $spec_id);
     }
   }
   // Création des plages
