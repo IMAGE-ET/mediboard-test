@@ -517,8 +517,14 @@ class CSetupmediusers extends CSetup {
      $query = "ALTER TABLE `functions_mediboard`
                  ADD `facturable` ENUM ('0','1') DEFAULT '1';";
      $this->addQuery($query);
+     
+     $this->makeRevision("0.46");
+     
+     $query = "ALTER TABLE `users_mediboard`
+              ADD `initials` VARCHAR (255);";
+     $this->addQuery($query);
 
-     $this->mod_version = "0.46";
+     $this->mod_version = "0.47";
 
   }
 }

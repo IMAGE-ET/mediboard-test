@@ -130,6 +130,13 @@
 </tr>
 
 <tr>
+  <th>{{mb_label object=$object field="initials"}}</th>
+  <td>
+    {{mb_field object=$object field="initials"}}
+  </td>
+</tr>
+
+<tr>
   <th>{{mb_label object=$object field="_user_email"}}</th>
   <td>
     {{if !$readOnlyLDAP}}

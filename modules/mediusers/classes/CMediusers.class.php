@@ -20,6 +20,7 @@ class CMediusers extends CMbObject {
   var $rpps                        = null;
   var $cps                         = null;
   var $titres                      = null;
+  var $initials                    = null;
   var $commentaires                = null;
   var $actif                       = null;
   var $deb_activite                = null;
@@ -151,6 +152,7 @@ class CMediusers extends CMbObject {
     $props["function_id"]            = "ref notNull class|CFunctions seekable";
     $props["discipline_id"]          = "ref class|CDiscipline";
     $props["titres"]                 = "text";
+    $props["initials"]               = "str";
     $props["commentaires"]           = "text";
     $props["actif"]                  = "bool default|1";
     $props["deb_activite"]           = "date";
@@ -384,18 +386,19 @@ class CMediusers extends CMbObject {
       $this->_view            = "$this->_user_last_name $this->_user_first_name";
       $this->_shortview       = "";
 
-      // Initiales du prénom
-      foreach (explode("-", $this->_user_first_name) as $value) {
-        if ($value != '')
-          $this->_shortview .= $value[0];
-      }
+      // Initiales
+      if(!$this->_shortview = $this->initials) {
+        foreach (explode("-", $this->_user_first_name) as $value) {
+          if ($value != '')
+            $this->_shortview .= $value[0];
+        }
 
-      // Initiales du nom
-      foreach (explode(" ", $this->_user_last_name) as $value) {
-        if ($value != '')
-          $this->_shortview .= $value[0];
+        // Initiales du nom
+        foreach (explode(" ", $this->_user_last_name) as $value) {
+          if ($value != '')
+            $this->_shortview .= $value[0];
+        }
       }
-
       $this->_shortview = strtoupper($this->_shortview);
       $this->_user_type_view = CValue::read(CUser::$types, $this->_user_type);
     }
