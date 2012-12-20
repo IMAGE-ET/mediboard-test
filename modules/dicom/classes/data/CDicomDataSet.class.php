@@ -620,11 +620,6 @@ class CDicomDataSet {
         $content = $stream_reader->read($this->length);
         $this->value = array();
         
-        $log = fopen("/var/www/log_dicom.txt", "a+");
-        $str = bin2hex($content);
-        fwrite($log, $str, strlen($str));
-        fclose($log);
-        
         $value_stream = new CDicomStreamReader();
         fwrite($value_stream->stream, $content, $this->length);
         $value_stream->rewind();
@@ -636,10 +631,6 @@ class CDicomDataSet {
           $sequence_end = $value_stream->getPos() + $sequence_length;
           
           while($value_stream->getPos() < $sequence_end) {
-            $log = fopen("/var/www/log_dicom.txt", "a+");
-            $str = "Pos :" . $value_stream->getPos() . ", Length:$sequence_end, $sequence_length\n";
-            fwrite($log, $str, strlen($str));
-            fclose($log);
             $dataset = new CDicomDataSet();
             $dataset->decode($value_stream, $this->transfer_syntax);
             $sequence[] = $dataset;
