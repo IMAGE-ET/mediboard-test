@@ -12,6 +12,9 @@
 {{if $show_label}}
   {{assign var=show_label value=$ex_field->show_label}}
 {{/if}}
+{{if $is_predicate}}
+  {{assign var=show_label value=false}}
+{{/if}}
 
 {{assign var=_field_name value=$ex_field->name}}
 {{assign var=_properties value=$ex_field->_default_properties}}
@@ -54,7 +57,7 @@
 {{elseif $_spec instanceof CTextSpec || ($_spec instanceof CEnumSpec && $_spec->typeEnum == "select")}}
   {{mb_include module=forms template=inc_ex_object_field_two_lines}}
 
-{{elseif $ex_class->pixel_positionning && ($_spec instanceof CDateSpec || $_spec instanceof CDateTimeSpec || $_spec instanceof CTimeSpec)}}
+{{elseif $ex_class->pixel_positionning && !$is_predicate && ($_spec instanceof CDateSpec || $_spec instanceof CDateTimeSpec || $_spec instanceof CTimeSpec)}}
   {{mb_include module=forms template=inc_ex_object_field_date}}
 
 {{else}}

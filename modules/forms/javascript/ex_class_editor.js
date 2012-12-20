@@ -322,15 +322,19 @@ ExFieldPredicate = {
       url.addParam("exclude_ex_field_id", exclude_ex_field_id);
     }
 
-    var ex_group_id = $V(form.ex_group_id);
-    if (ex_group_id) {
-      url.addParam("ex_group_id", ex_group_id);
+    if(form) {
+      var ex_group_id = $V(form.ex_group_id);
+      if (ex_group_id) {
+        url.addParam("ex_group_id", ex_group_id);
+      }
+
+      if (id == 0) {
+        url.addParam("opener_field_value", form.predicate_id.identify());
+        url.addParam("opener_field_view",  form.predicate_id_autocomplete_view.identify());
+      }
     }
     
-    if (form && id == 0) {
-      url.addParam("opener_field_value", form.predicate_id.identify());
-      url.addParam("opener_field_view",  form.predicate_id_autocomplete_view.identify());
-    }
+
     
     url.requestModal(600, 300);
     

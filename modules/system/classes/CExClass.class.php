@@ -154,7 +154,7 @@ class CExClass extends CMbObject {
     }
 
     $events = $this->loadRefsEvents();
-    foreach($events as $_event) {
+    foreach ($events as $_event) {
       $_event->countBackRefs("constraints");
     }
     
@@ -170,7 +170,7 @@ class CExClass extends CMbObject {
     
     $classes = CExClassEvent::getReportableClasses();
     $instances = array();
-    foreach($classes as $_class) {
+    foreach ($classes as $_class) {
       $instances[$_class] = new $_class;
     }
 
@@ -224,7 +224,7 @@ class CExClass extends CMbObject {
           $where[$_col] = $_ds->prepare($comp_map[$_comp]."%", $_val_a);
         }
         else {
-          switch($_comp) {
+          switch ($_comp) {
             case "contains": 
               $where[$_col] = $_ds->prepareLike("%$_val_a%");
               break;

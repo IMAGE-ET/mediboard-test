@@ -269,7 +269,7 @@ Main.add(function(){
             
           {{/if}}
           
-        {{else}}
+        {{else}} {{* concept based *}}
         
           {{if !(
             $_type == "list" ||
@@ -299,7 +299,7 @@ Main.add(function(){
             
           {{* bool *}}
           {{elseif $_type == "bool"}}
-            {{if $_name == "notNull" || 
+            {{if $_name == "notNull" ||
                  $_name == "vertical"}}
               {{if !in_array($_name, $boolean)}}
                 <label><input type="radio" name="{{$_name}}" value=""  {{if $spec_value === null || $spec_value === ""}}checked="checked"{{/if}} /> {{tr}}Undefined{{/tr}}</label>

@@ -410,36 +410,6 @@ class CConfiguration extends CMbMetaObject {
   }
 
   /**
-   * Apply inheritance to resolve an object
-   *
-   * @param array     &$configs   Configs
-   * @param string    $path       Path to the config
-   * @param string    $parent_fwd Parent forward name
-   * @param CMbObject $object     Object to get the configs of
-   *
-   * @return CMbObject The resolved next object
-   */
-  static protected function _inheritConfigs(&$configs, $path, $parent_fwd, CMbObject $object) {
-    if (!$object) {
-      return;
-    }
-
-    $new_object = null;
-
-    foreach ($this->_inherit[$object->_class] as $_fwd) {
-      $object = $object->loadFwdRef($_fwd);
-
-      if (!$new_object) {
-        $new_object = $object;
-      }
-    }
-
-    $configs = array_merge($configs, self::getSelfConfig($object->_class, $object->_id));
-
-    return $new_object;
-  }
-
-  /**
    * Get the configuration values of an object, without inheritance
    *
    * @param string  $object_class Object class

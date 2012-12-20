@@ -311,6 +311,10 @@ form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
   right: 0;
 }
 
+.ua-msie .pixel-positionning select.set[multiple] {
+  height: 100%;
+}
+
 .pixel-positionning .handle {
   display: none;
 }
