@@ -562,10 +562,10 @@ class CDicomSession extends CMbObject {
     if ($this->_messages) {
       foreach ($this->_messages as $type => $msg) {
         if (!$this->messages) {
-          $this->messages = "$type/" . $msg->getPacket();
+          $this->messages = "$type\\" . base64_encode($msg->getPacket());
         }
         else {
-          $this->messages .= "|$type/" . $msg->getPacket();
+          $this->messages .= "|$type\\" . base64_encode($msg->getPacket());
         }
       }
     }
@@ -587,8 +587,8 @@ class CDicomSession extends CMbObject {
     $msg_array = explode('|', $this->messages);
     
     foreach ($msg_array as $msg) {
-      $msg = explode('/', $msg);
-      $pdu = CDicomPDUFactory::decodePDU($msg[1]);
+      $msg = explode('\\', $msg);
+      $pdu = CDicomPDUFactory::decodePDU(base64_decode($msg[1]));
       $this->_messages[$msg[0]] = $pdu;
       
       if ($msg[0] == "A-Associate-AC" && $this->_ref_dicom_exchange) {
