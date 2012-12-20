@@ -98,7 +98,7 @@ class CCompteRendu extends CDocumentItem {
     "arial"     => "Arial",
     "calibri"   => "Calibri",
     "comic"     => "Comic Sans MS",
-    "courier"   => "Courrier New",
+    "courier"   => "Courier New",
     "georgia"   => "Georgia",
     "lucida"    => "Lucida Sans Unicode",
     "symbol"    => "Symbol",
@@ -934,9 +934,11 @@ class CCompteRendu extends CDocumentItem {
          margin-bottom: {$margins[2]}cm;
          margin-left:   {$margins[3]}cm;
        }
-       body {
+       body, table {
          font-family: $default_font;
          font-size: $default_size;
+       }
+       body {
          margin:  0;
          padding: 0;
        }
