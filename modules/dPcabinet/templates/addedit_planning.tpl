@@ -279,10 +279,18 @@ Main.add(function() {
                 <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
               </th>
               <td>
-                <select name="chir_id" style="width: 15em;" class="notNull" onChange="ClearRDV(); refreshListCategorie(this.value); refreshFunction(this.value); if (this.value != '') $V(this.form._function_id, '');">
+                <select name="chir_id" style="width: 15em;" class="notNull"
+                  onChange="ClearRDV(); refreshListCategorie(this.value); refreshFunction(this.value);
+                    if (this.value != '') { 
+                      $V(this.form._function_id, '');
+                      var facturable = this.options[this.selectedIndex].get('facturable');
+                      this.form.___facturable.checked = facturable ? 'checked' : '';
+                      $V(this.form._facturable, facturable);
+                    }">
                   <option value="">&mdash; Choisir un praticien</option>
                   {{foreach from=$listPraticiens item=curr_praticien}}
-                  <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
+                  <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}"
+                    {{if $chir->_id == $curr_praticien->user_id}} selected="selected" {{/if}} data-facturable="{{$curr_praticien->_ref_function->facturable}}">
                     {{$curr_praticien->_view}}
                     {{if $app->user_prefs.viewFunctionPrats}}
                       - {{$curr_praticien->_ref_function->_view}}
