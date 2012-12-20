@@ -16,7 +16,7 @@ $module->registerTab("stats_identifiants", TAB_READ);
 $module->registerTab("synchro_sante400"  , TAB_EDIT);
 $module->registerTab("view_marks"        , TAB_READ);
 $module->registerTab("delete_duplicates" , TAB_ADMIN);
-$module->registerTab("vw_incrementers"   , TAB_ADMIN);
+//$module->registerTab("vw_incrementers"   , TAB_ADMIN);
 //$module->registerTab("easycom"         , TAB_EDIT);
 
 ?>

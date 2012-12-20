@@ -23,6 +23,8 @@
     {{mb_include module=system template=inc_config_str var=max_files_to_process numeric=true}}
     
     {{mb_include module=system template=inc_config_str var=max_reprocess_retries numeric=true}}
+    
+    {{mb_include module=system template=inc_config_bool var=use_domain}}
 
     <tr>
       <td class="button" colspan="10">
@@ -57,10 +59,10 @@
     {{assign var=config value=$_group->_configs}}
     <tr>
       <td>{{$_group}}</td>
-      <td class="{{if $config.sip_idex_generator}}ok{{else}}error{{/if}}">
-        {{tr}}bool.{{$config.sip_idex_generator}}{{/tr}}</td>
-      <td class="{{if $config.smp_idex_generator}}ok{{else}}error{{/if}}">
-        {{tr}}bool.{{$config.smp_idex_generator}}{{/tr}}</td>
+      <td class="{{if $_group->_is_ipp_supplier}}ok{{else}}error{{/if}}">
+        {{tr}}bool.{{$_group->_is_ipp_supplier}}{{/tr}}</td>
+      <td class="{{if $_group->_is_nda_supplier}}ok{{else}}error{{/if}}">
+        {{tr}}bool.{{$_group->_is_nda_supplier}}{{/tr}}</td>
       <td></td>
       <td></td>
       <td class="{{if $config.sip_notify_all_actors}}ok{{else}}error{{/if}}">

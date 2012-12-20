@@ -151,8 +151,99 @@ class CSetupeai extends CSetup {
                 ADD INDEX (`object_id`);";
 
     $this->addQuery($query);
+    
+    $this->makeRevision("0.10");
+    
+    $query = "ALTER TABLE `domain` 
+                CHANGE `incrementer_id` `incrementer_id` INT (11) UNSIGNED,
+                CHANGE `actor_class` `actor_class` VARCHAR (80);";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.11");
+    
+    function createDomain($setup) {
+      $ds = $setup->ds;
+      
+      $groups = $ds->loadList("SELECT * FROM groups_mediboard");
+      
+      $specs = array();
+      
+      $tab = array(
+        "CPatient", "CSejour"
+      );
 
-    $this->mod_version = "0.10";
+      foreach ($groups as $_group) {
+        $group_id = $_group["group_id"];
+        
+        $group_configs = $ds->loadHash("SELECT * FROM groups_config WHERE object_id = '$group_id'");
+        
+        foreach ($tab as $object_class) {
+          if ($object_class == "CPatient") {
+            $range_min = $group_configs["ipp_range_min"];
+            $range_max = $group_configs["ipp_range_max"];
+            
+            $tag_group = CPatient::getTagIPP($group_id);
+          }
+          else {
+            $range_min = $group_configs["nda_range_min"];
+            $range_max = $group_configs["nda_range_max"];
+            
+            $tag_group = CSejour::getTagNDA($group_id);
+          }
+
+          // Insert domain
+          
+          
+          $query = "INSERT INTO `domain` (`domain_id`, `incrementer_id`, `actor_id`, `actor_class`, `tag`) 
+                      VALUES (NULL, NULL, NULL, NULL, '$tag_group');";
+          $ds->query($query);
+          $domain_id = $ds->insertId();
+          
+          // Insert group domain
+          $query = "INSERT INTO `group_domain` (`group_domain_id`, `group_id`, `domain_id`, `object_class`, `master`) 
+                      VALUES (NULL, '$group_id', '$domain_id', '$object_class', '1');";
+          $ds->query($query);
+          
+          // Select incrementer for this group
+          $incrementer = $ds->loadHash("SELECT * FROM incrementer WHERE `object_class` = '$object_class' AND `group_id` = '$group_id' ");
+          
+          $incrementer_id = $incrementer["incrementer_id"];
+          
+          if ($incrementer_id) {
+            // Update domain with incrementer_id
+            $query = "UPDATE `domain` 
+                      SET `incrementer_id` = '$incrementer_id'
+                      WHERE `domain_id` = '$domain_id';";
+            $ds->query($query);
+            
+            // Update incrementer
+            $query = "UPDATE `incrementer` 
+                      SET `range_min` = '$range_min', `range_max` = '$range_max'
+                      WHERE `incrementer_id` = '$incrementer_id';";
+            $ds->query($query);
+          }
+        }
+      }
+        
+        // Update constraints to stick to the event
+      return true;
+    }
+
+    $this->addFunction("createDomain");
+    
+    $this->makeRevision("0.12");
+    
+    $query = "ALTER TABLE `domain` 
+                ADD `libelle` VARCHAR (255);";
+    $this->addQuery($query);
+    
+    $this->makeRevision("0.13");
+    
+    $query = "ALTER TABLE `domain` 
+                ADD `derived_from_idex` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.14";
   }
 }
 

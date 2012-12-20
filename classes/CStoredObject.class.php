@@ -822,10 +822,11 @@ class CStoredObject extends CModelObject {
    * @param array|string $order  Group by statement
    * @param array        $ljoin  Array of left join clauses
    * @param array        $fields Append fields to the SELECT
+   * @param array|string $index  Force index
    *
    * @return self[]
    */
-  function countMultipleList($where = null, $order = null, $group = null, $ljoin = null, $fields = array()) {
+  function countMultipleList($where = null, $order = null, $group = null, $ljoin = null, $fields = array(), $index = null) {
     if (!$this->_ref_module) {
       return null;
     }
@@ -835,6 +836,7 @@ class CStoredObject extends CModelObject {
     $request->addOrder($order);
     $request->addGroup($group);
     $request->addLJoin($ljoin);
+    $request->addForceIndex($index);
     
     $ds = $this->_spec->ds;
     return $ds->loadList($request->getCountRequest($this, $fields));

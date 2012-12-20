@@ -21,9 +21,9 @@ class CGroupDomain extends CMbObject {
   var $group_domain_id = null;
   
   // DB fields
+  var $object_class    = null;
   var $group_id        = null;
   var $domain_id       = null;
-  var $object_class    = null;
   var $master          = null;
   
   /**
@@ -46,9 +46,9 @@ class CGroupDomain extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     
+    $props["object_class"] = "enum notNull list|CPatient|CSejour";
     $props["group_id"]     = "ref notNull class|CGroups autocomplete|text";
     $props["domain_id"]    = "ref notNull class|CDomain";
-    $props["object_class"] = "enum notNull list|CPatient|CSejour";
     $props["master"]       = "bool notNull";
 
     return $props;
@@ -58,6 +58,10 @@ class CGroupDomain extends CMbObject {
    * @return CGroup
    */
   function loadRefGroup() {
+    if ($this->_ref_group) {
+      return;
+    }
+    
     return $this->_ref_group = $this->loadFwdRef("group_id", 1);
   }
   
@@ -65,8 +69,58 @@ class CGroupDomain extends CMbObject {
    * @return CDomain
    */
   function loadRefDomain() {
+    if ($this->_ref_domain) {
+      return;
+    }
+    
     return $this->_ref_domain = $this->loadFwdRef("domain_id", 1);
   }
   
+  function loadView() {
+    parent::loadView();
+  }
   
+  function check() {
+    parent::check();
+    
+    $this->completeField("domain_id", "object_class", "group_id");
+    
+    // Recherche si on a un établissement du domaine déjà en master avec le même type d'objet et le même établissement
+    if ($this->master) {
+      $group_domain               = new CGroupDomain();
+      $group_domain->object_class = $this->object_class;
+      $group_domain->group_id     = $this->group_id;
+      $group_domain->master       = 1;
+  
+      if ($group_domain->loadMatchingObject()) {
+        return "CGroupDomain-master_already_exist";
+      }
+    }
+    
+    // Recherche si on a pas déjà un établissement du domaine pour un type d'objet différent
+    $ljoin = array(
+      "domain" => "domain.domain_id = group_domain.domain_id"
+    );
+    $where = array(
+      "domain.domain_id" => " = '$this->domain_id'",
+      "incrementer_id"   => "IS NOT NULL",
+      "object_class"     => " != '$this->object_class'"
+    );
+    $group_domain = new CGroupDomain();
+    if ($group_domain->countList($where, null, $ljoin) > 0) {
+      return "CGroupDomain-object_class_already_exist";
+    }
+  }
+
+  function merge() {
+    return "CGroupDomain-merge_impossible";
+  }
+  
+  function isMasterIPP() {
+    return $this->master && ($this->object_class == "CPatient");
+  }
+  
+  function isMasterNDA() {
+    return $this->master && ($this->object_class == "CSejour");
+  }
 } 

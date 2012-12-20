@@ -138,8 +138,14 @@ class CSetupdPsante400 extends CSetup {
                 ADD INDEX ( `trigger_class` ),
                 ADD INDEX ( `trigger_number` );";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.25");
+    $query = "ALTER TABLE `incrementer` 
+                ADD `range_min` INT (11) UNSIGNED,
+                ADD `range_max` INT (11);";
+    $this->addQuery($query);
               
-    $this->mod_version = "0.25";
+    $this->mod_version = "0.26";
   } 
 }
 ?>

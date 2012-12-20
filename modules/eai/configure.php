@@ -33,6 +33,8 @@ $group = new CGroups();
 $groups = $group->loadList();
 foreach ($groups as $_group) {
   $_group->loadConfigValues(); 
+  $_group->isIPPSupplier();
+  $_group->isNDASupplier();
 }      
 
 // Création du template

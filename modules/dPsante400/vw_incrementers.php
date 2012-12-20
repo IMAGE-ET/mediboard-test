@@ -16,7 +16,6 @@ $incrementer_id = CValue::getOrSession("incrementer_id");
 $incrementer = new CIncrementer();
 $incrementers = $incrementer->loadMatchingList();
 foreach ($incrementers as $_incrementer) {
-  $_incrementer->loadRefGroup();
 }
 
 // Récupération due l'incrementeur à ajouter/editer 

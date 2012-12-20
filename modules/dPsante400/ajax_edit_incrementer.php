@@ -15,9 +15,7 @@ $incrementer_id = CValue::getOrSession("incrementer_id");
 // Récupération due l'incrementeur à ajouter/editer 
 $incrementer = new CIncrementer;
 $incrementer->load($incrementer_id);
-if (!$incrementer->_id) {
-  $incrementer->group_id = CGroups::loadCurrent()->_id;
-}
+$incrementer->loadMasterDomain();
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -1,7 +1,7 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * View server socket EAI
+ * Domain aed
  *  
  * @category EAI
  * @package  Mediboard
@@ -11,13 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
-CCanDo::checkAdmin();
-
-$processes = CSocketBasedServer::getPsStatus();
-
-// Création du template
-$smarty = new CSmartyDP();
-$smarty->assign("processes", $processes);
-$smarty->display("vw_servers_socket.tpl");
+$do = new CDoObjectAddEdit("CDomain");
+$do->doIt();
 
 ?>

@@ -551,15 +551,16 @@ class CPatient extends CMbObject {
 
   function generateIPP() {
     $group = CGroups::loadCurrent();
-    $group->loadConfigValues();
-    if ($group->_configs["sip_idex_generator"]) {
-      $this->loadIPP($group->_id);
-      if ($this->_IPP) {
-        return;
-      }
-      if (!$IPP = CIncrementer::generateIdex($this, self::getTagIPP($group->_id), $group->_id)) {
-        return CAppUI::tr("CIncrementer_undefined");
-      }
+    if (!$group->isIPPSupplier()) {
+      return;
+    }
+
+    $this->loadIPP($group->_id);
+    if ($this->_IPP) {
+      return;
+    }
+    if (!$IPP = CIncrementer::generateIdex($this, self::getTagIPP($group->_id), $group->_id)) {
+      return CAppUI::tr("CIncrementer_undefined");
     }
   }
 
@@ -1407,6 +1408,11 @@ class CPatient extends CMbObject {
    * @return string
    */
   static function getTagIPP($group_id = null) {
+    // Gestion du tag IPP par son domaine d'identification
+    if (CAppUI::conf("eai use_domain")) {
+      return CDomain::getTagMasterDomain("CPatient", $group_id);
+    }
+    
     // Pas de tag IPP => pas d'affichage d'IPP
     if (null == $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp")) {
       return;

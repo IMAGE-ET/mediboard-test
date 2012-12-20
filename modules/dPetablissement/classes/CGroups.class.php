@@ -32,7 +32,11 @@ class CGroups extends CMbObject {
   var $pharmacie_id        = null;
   var $finess              = null;
   var $chambre_particuliere= null;
-  var $_cp_court = null;
+  
+  // Form fields
+  var $_cp_court           = null;
+  var $_is_ipp_supplier    = false;
+  var $_is_nda_supplier    = false;
   
   // Object References
   var $_ref_functions      = null;
@@ -145,8 +149,9 @@ class CGroups extends CMbObject {
     $props["web"]                 = "str";
     $props["finess"]              = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
     $props["chambre_particuliere"]= "bool notNull default|0";
-    $props["_cp_court"]           = "numchar length|2";
     
+    $props["_cp_court"]           = "numchar length|2";
+       
     return $props;
   }
   
@@ -311,5 +316,32 @@ class CGroups extends CMbObject {
     return $idex->id400;
   }
   
+  function isNumberSupplier($domain_type) {
+    if (!$this->_id) {
+      return false;  
+    }
+    
+    $group_domain = new CGroupDomain();
+    $group_domain->object_class = $domain_type;
+    $group_domain->group_id     = $this->_id;
+    $group_domain->master       = true;
+    $group_domain->loadMatchingObject();
+    
+    if (!$group_domain->_id) {
+      return false;  
+    }
+    
+    $domain = $group_domain->loadRefDomain();
+    
+    return $domain->loadRefIncrementer()->_id ? 1 : 0;
+  }
+  
+  function isIPPSupplier() {
+    return $this->_is_ipp_supplier = $this->isNumberSupplier("CPatient");
+  }
+  
+  function isNDASupplier() {
+    return $this->_is_nda_supplier = $this->isNumberSupplier("CSejour");
+  }
 }
 ?>

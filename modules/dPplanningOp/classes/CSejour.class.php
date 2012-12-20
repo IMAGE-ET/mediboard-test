@@ -1771,6 +1771,11 @@ class CSejour extends CCodable implements IPatientRelated {
    * @return string
    */
   static function getTagNDA($group_id = null, $type_tag = "tag_dossier") {
+    // Gestion du tag NDA par son domaine d'identification
+    if (CAppUI::conf("eai use_domain")) {
+      return CDomain::getTagMasterDomain("CPatient", $group_id);
+    }
+    
     $tag_NDA = CAppUI::conf("dPplanningOp CSejour tag_dossier");
 
     if ($type_tag != "tag_dossier") {
