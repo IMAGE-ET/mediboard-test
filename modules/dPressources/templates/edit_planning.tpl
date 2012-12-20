@@ -42,7 +42,7 @@ Main.add(function () {
                     {{/if}}
                     {{$_plage->tarif|currency}}
                     <br />
-                    {{$_plage->debut|date_format:"%H"}}h - {{$_plage->fin|date_format:"%H"}}h
+                    {{$_plage->_hour_deb}}h - {{$_plage->_hour_fin}}h
                     {{if $_plage->prat_id}}
                     <br />
                     {{$_plage->_ref_prat->_view}}

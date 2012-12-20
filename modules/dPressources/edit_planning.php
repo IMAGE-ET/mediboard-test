@@ -13,11 +13,6 @@ CCanDo::checkEdit();
 $listPrat = new CMediusers;
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
-// Plage selectionnée
-$plage_id = CValue::getOrSession("plage_id", null);
-$plage = new CPlageressource;
-$plage->load($plage_id);
-
 // Période
 $today = mbDate();
 $debut = CValue::getOrSession("debut", $today);
@@ -28,15 +23,21 @@ $debut = mbDate("+1 day", $debut);
 $prec = mbDate("-1 week", $debut);
 $suiv = mbDate("+1 week", $debut);
 
+// Plage selectionnée
+$plage_id = CValue::getOrSession("plage_id", null);
+$plage = new CPlageressource;
+$plage->date = $debut;
+$plage->load($plage_id);
+$plage->loadRefsNotes();
+
 // Sélection des plages
 $plages = array();
-$curr_plage = new CPlageressource();
 for ($i = 0; $i < 7; $i++) {
   $date = mbDate("+$i day", $debut);
   $where["date"] = "= '$date'";
-  $plagesPerDay = $curr_plage->loadList($where);
-  foreach($plagesPerDay as $key => $value) {
-    $plagesPerDay[$key]->loadRefs();
+  $plagesPerDay = $plage->loadList($where);
+  foreach ($plagesPerDay as $_plage) {
+    $_plage->loadRefs();
   }
   $plages[$date] = $plagesPerDay;
 }

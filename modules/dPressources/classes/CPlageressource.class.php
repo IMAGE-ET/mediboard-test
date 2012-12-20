@@ -76,31 +76,31 @@ class CPlageressource extends CPlageHoraire {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_hour_deb = intval(substr($this->debut, 0, 2));
-    $this->_min_deb  = intval(substr($this->debut, 3, 2));
-    $this->_hour_fin = intval(substr($this->fin, 0, 2));
-    $this->_min_fin  = intval(substr($this->fin, 3, 2));
-    if($this->paye == 1) {
+    
+    $this->_hour_deb = mbTransformTime($this->debut, null, "%H");
+    $this->_hour_fin = mbTransformTime($this->fin  , null, "%H");
+		
+		// State rules
+    if ($this->paye == 1) {
       $this->_state = self::PAYED;
-    } elseif($this->date < mbDate()) {
+    } 
+    elseif($this->date < mbDate()) {
       $this->_state = self::OUT;
-    } elseif($this->prat_id) {
+    } 
+    elseif($this->prat_id) {
       if (mbDate("+ 15 DAYS") > $this->date) {
         $this->_state = self::BLOCKED;
-      } else
+      } 
+      else {
         $this->_state = self::BUSY;
-    } elseif (mbDate("+ 1 MONTH") < $this->date) {
+      }
+    } 
+    elseif (mbDate("+ 1 MONTH") < $this->date) {
       $this->_state = self::FREEB;
-    } else {
+    } 
+    else {
       $this->_state = self::FREE;
     }
-  }
-  
-  function updatePlainFields() {
-  	if ($this->_hour_deb !== null)
-      $this->debut = $this->_hour_deb.":00:00";
-    if ($this->_hour_fin !== null)
-      $this->fin   = $this->_hour_fin.":00:00";
   }
   
   function becomeNext() {
