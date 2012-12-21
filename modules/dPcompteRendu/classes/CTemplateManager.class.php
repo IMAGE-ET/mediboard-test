@@ -85,14 +85,14 @@ class CTemplateManager {
     }
     
     // Initials
-    $elements_first_name = split("[ -]", $user->_user_first_name);
+    $elements_first_name = preg_split("/[ -]/", $user->_user_first_name);
     $initials_first_name = "";
     
     foreach ($elements_first_name as $_element) {
       $initials_first_name .= strtoupper(substr($_element, 0, 1));
     }
     
-    $elements_last_name = split("[ -]", $user->_user_last_name);
+    $elements_last_name = preg_split("/[ -]/", $user->_user_last_name);
     $initials_last_name = "";
     
     foreach ($elements_last_name as $_element) {
@@ -155,7 +155,7 @@ class CTemplateManager {
     }
     
     $sec = explode(' - ', $field, 3);
-    switch(count($sec)) {
+    switch (count($sec)) {
       case 3:
         $section  = $sec[0];
         $item     = $sec[1];
@@ -252,8 +252,8 @@ class CTemplateManager {
   /**
    * Ajoute un champ de type date longue
    * 
-   * @param string $field  nom du champ
-   * @param string $value valeur du champ
+   * @param string $field Nom du champ
+   * @param string $value Valeur du champ
    * 
    * @return void 
    */
@@ -265,8 +265,8 @@ class CTemplateManager {
   /**
    * Ajoute un champ de type heure
    * 
-   * @param object $field nom du champ
-   * @param object $value [optional] valeur du champ
+   * @param string $field Nom du champ
+   * @param string $value Valeur du champ
    * 
    * @return void 
    */
@@ -278,8 +278,8 @@ class CTemplateManager {
   /**
    * Ajoute un champ de type date et heure
    * 
-   * @param string $field nom du champ
-   * @param string $value [optional] valeur du champ
+   * @param string $field Nom du champ
+   * @param string $value Valeur du champ
    * 
    * @return void 
    */
@@ -290,8 +290,9 @@ class CTemplateManager {
   
   /**
    * Ajoute un champ de type liste
-   * @param string $field  nom du champ
-   * @param array  $items  liste de valeurs
+   *
+   * @param string $field Nom du champ
+   * @param array  $items Liste de valeurs
    * 
    * @return void 
    */
@@ -302,8 +303,8 @@ class CTemplateManager {
   /**
    * Ajoute un champ de type image
    * 
-   * @param string $field   nom du champ
-   * @param int    $file_id identifiant du fichier
+   * @param string $field   Nom du champ
+   * @param int    $file_id Identifiant du fichier
    * 
    * @return void
    */
@@ -353,7 +354,6 @@ class CTemplateManager {
         // Hack: obligé de décoder car dans ce mode le template manager 
         // le fera une seconde fois s'il ne détecte pas d'entités HTML
         $items = array_map("html_entity_decode", $items);
-        $html = "";
         $separator = CAppUI::pref("listInlineSeparator");
         $html = implode(" $separator ", $items);
         break;
@@ -370,9 +370,9 @@ class CTemplateManager {
   /**
    * Ajoute un champ de type graphique
    * 
-   * @param string $field champ
-   * @param array  $data tableau de données
-   * @param array  $options [optional]
+   * @param string $field   Champ
+   * @param array  $data    Tableau de données
+   * @param array  $options Options
    * 
    * @return void
    */
@@ -385,14 +385,15 @@ class CTemplateManager {
     
     $this->addProperty($field, $field, null, false);
   }
-  
+
   /**
    * Ajoute un champ de type code-barre
-   * 
-   * @param object $field champ
-   * @param object $data 
-   * @param object $options [optional]
-   * @return 
+   *
+   * @param string $field   Nom du champ
+   * @param object $data    Code barre
+   * @param array  $options Options
+   *
+   * @return void
    */
   function addBarcode($field, $data, $options = array()) {
     $options = array_replace_recursive(array(
@@ -412,7 +413,8 @@ class CTemplateManager {
       "name" => $name,
       // @todo : passer en regexp
       //"nameHTML" => $this->makeSpan("name", "[Liste - {$name}]"));
-      "nameHTML" => htmlentities("[Liste - {$name}]"));
+      "nameHTML" => htmlentities("[Liste - {$name}]")
+    );
   }
   
   function addHelper($name, $text) {
@@ -431,8 +433,8 @@ class CTemplateManager {
       }
       
       $this->renderDocument($template->_source);
-    
-    } else {
+    }
+    else {
       /** FIXME: ?? */
       if (!$this->valueMode) {
         $this->setFields("hospitalisation");
@@ -452,7 +454,7 @@ class CTemplateManager {
   }
   
   function setFields($modeleType) {
-    if ($modeleType){
+    if ($modeleType) {
       $object = new $modeleType;
       $object->fillTemplate($this);
     }
@@ -460,14 +462,13 @@ class CTemplateManager {
   
   function loadLists($user_id, $compte_rendu_id = 0) {
     // Liste de choix
-    $user = new CMediusers;
     $compte_rendu = new CCompteRendu();
     $compte_rendu->load($compte_rendu_id);
     
     $where = array();
     $user = CMediusers::get($user_id);
     $user->loadRefFunction();
-    if($user_id){
+    if ($user_id) {
       $where[] = "(
         user_id = '$user->user_id' OR 
         function_id = '$user->function_id' OR 
@@ -481,7 +482,7 @@ class CTemplateManager {
       )";
     }
     
-    $where[] = $compte_rendu->_spec->ds->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %",$compte_rendu_id); 
+    $where[] = $compte_rendu->_spec->ds->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %", $compte_rendu_id);
     $order = "nom ASC";
     $lists = new CListeChoix();
     $lists = $lists->loadList($where, $order);
@@ -497,9 +498,7 @@ class CTemplateManager {
     // Chargement de l'utilisateur courant
     $currUser = new CMediusers();
     $currUser->load($user_id);
-    
-    $aidesUser = array();
-    $aidesFunc = array();
+
     $order = "name";
     
     // Where user_id
@@ -521,32 +520,34 @@ class CTemplateManager {
     
     // Chargement des aides
     $aide = new CAideSaisie();
-    $aidesUser   = $aide->loadList($whereUser,$order);
-    $aidesFunc   = $aide->loadList($whereFunc,$order);
-    $aidesGroup  = $aide->loadList($whereGroup,$order);
+    $aidesUser   = $aide->loadList($whereUser, $order);
+    $aidesFunc   = $aide->loadList($whereFunc, $order);
+    $aidesGroup  = $aide->loadList($whereGroup, $order);
 
     $this->helpers["Aide de l'utilisateur"] = array();
-    foreach($aidesUser as $aideUser){
-      if($aideUser->depend_value_1 == $modeleType || $aideUser->depend_value_1 == ""){
+    foreach ($aidesUser as $aideUser) {
+      if ($aideUser->depend_value_1 == $modeleType || $aideUser->depend_value_1 == "") {
         $this->helpers["Aide de l'utilisateur"][htmlentities($aideUser->name)] = htmlentities($aideUser->text);
       }
     }
     $this->helpers["Aide de la fonction"] = array();
-    foreach($aidesFunc as $aideFunc){
-      if($aideFunc->depend_value_1 == $modeleType || $aideFunc->depend_value_1 == ""){
+    foreach ($aidesFunc as $aideFunc) {
+      if ($aideFunc->depend_value_1 == $modeleType || $aideFunc->depend_value_1 == "") {
         $this->helpers["Aide de la fonction"][htmlentities($aideFunc->name)] = htmlentities($aideFunc->text);
       } 
     }
     $this->helpers["Aide de l'&eacute;tablissement"] = array();
-    foreach($aidesGroup as $aideGroup){
-      if($aideGroup->depend_value_1 == $modeleType || $aideGroup->depend_value_1 == ""){
+    foreach ($aidesGroup as $aideGroup) {
+      if ($aideGroup->depend_value_1 == $modeleType || $aideGroup->depend_value_1 == "") {
         $this->helpers["Aide de l'&eacute;tablissement"][htmlentities($aideGroup->name)] = htmlentities($aideGroup->text);
       } 
     }
   }
   
   function getBarcodeDataUri($code, $options) {
-    if (!$code) return;
+    if (!$code) {
+      return;
+    }
     
     $size = "{$options['width']}x{$options['width']}";
     
@@ -579,10 +580,10 @@ class CTemplateManager {
   function renderDocument($_source) {
     $fields = array();
     $values = array();
-    foreach($this->sections as $properties) {
-      foreach($properties as $key=>$property) {
+    foreach ($this->sections as $properties) {
+      foreach ($properties as $key=>$property) {
         if (strpos($key, ' - ') === false) {
-          foreach($property as $_property) {
+          foreach ($property as $_property) {
             $fields[] = $_property["fieldHTML"];
             $values[] = nl2br($_property["valueHTML"]);
           }
@@ -603,7 +604,7 @@ class CTemplateManager {
           $values[] = "src=\"$src\"";
         }
         else {
-          $property["fieldHTML"] = preg_replace("/'/",'&#39;', $property["fieldHTML"]);
+          $property["fieldHTML"] = preg_replace("/'/", '&#39;', $property["fieldHTML"]);
           $fields[] = $property["fieldHTML"];
           $values[] =  nl2br($property["valueHTML"]);
         }
@@ -618,12 +619,12 @@ class CTemplateManager {
   // Obtention des listes utilisées dans le document
   function getUsedLists($lists) {
     $this->usedLists = array();
-    foreach($lists as $key => $value) {
+    foreach ($lists as $value) {
       
       // Remplacer 039 par 39 car ckeditor remplace ' par &#39;
-      $nom = str_replace("#039;", "#39;", htmlentities(stripslashes("[Liste - $value->nom]"),ENT_QUOTES));
+      $nom = str_replace("#039;", "#39;", htmlentities(stripslashes("[Liste - $value->nom]"), ENT_QUOTES));
       $pos = strpos($this->document, $nom);
-      if($pos !== false) {
+      if ($pos !== false) {
         $this->usedLists[$pos] = $value;
       }
     }
@@ -634,10 +635,9 @@ class CTemplateManager {
   // Vérification s'il s'agit d'un courrier
   function isCourrier() {
     $pos = strpos($this->document, "[Courrier -");
-    if($pos) {
+    if ($pos) {
       $this->isCourrier = true;
     }
     return $this->isCourrier;
   }
 }
-?>

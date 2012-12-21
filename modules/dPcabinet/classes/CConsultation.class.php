@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 class CConsultation extends CCodable {
   const PLANIFIE       = 16;
@@ -319,7 +321,9 @@ class CConsultation extends CCodable {
     // pour récuperer le praticien depuis la plage consult
     $this->loadRefPlageConsult(true);
     $plageconsult = $this->_ref_plageconsult;
-    $this->_date_fin = "$plageconsult->date ". mbTime("+".mbMinutesRelative("00:00:00", $plageconsult->freq)*$this->duree." MINUTES", $this->heure);
+
+    $time = mbTime("+".mbMinutesRelative("00:00:00", $plageconsult->freq)*$this->duree." MINUTES", $this->heure);
+    $this->_date_fin = "$plageconsult->date $time";
     
     $this->_duree = mbMinutesRelative("00:00:00", $plageconsult->freq) * $this->duree;
     
@@ -328,7 +332,7 @@ class CConsultation extends CCodable {
 
   function updatePlainFields() {
     if (($this->_hour !== null) && ($this->_min !== null)) {
-      $this->heure = $this->_hour.":".$this->_min.":00";
+      $this->heure = sprintf("%02d:%02d:00", $this->_hour, $this->_min);
     }
 
     // Liaison FSE prioritaire sur l'état
@@ -378,13 +382,15 @@ class CConsultation extends CCodable {
     */
     if (!($this->_merging || $this->_mergeDeletion) && $this->_old->valide === "1" && $this->valide === "1") {
       // Modification du tarif déjà validé
-      if ($this->fieldModified("secteur1")
-       || $this->fieldModified("secteur2")
-       || $this->fieldModified("total_assure")
-       || $this->fieldModified("total_amc")
-       || $this->fieldModified("total_amo")
-       || $this->fieldModified("du_patient")
-       || $this->fieldModified("du_tiers")) {
+      if (
+        $this->fieldModified("secteur1") ||
+        $this->fieldModified("secteur2") ||
+        $this->fieldModified("total_assure") ||
+        $this->fieldModified("total_amc") ||
+        $this->fieldModified("total_amo") ||
+        $this->fieldModified("du_patient") ||
+        $this->fieldModified("du_tiers")
+      ) {
         //$msg .= $this->du_patient." vs. ".$this->_old->du_patient." (".$this->fieldModified("du_patient").")";
         $msg .= "Vous ne pouvez plus modifier le tarif, il est déjà validé";
       }
@@ -486,7 +492,7 @@ class CConsultation extends CCodable {
     $this->loadRefPlageConsult();
     // Explode des codes_ccam du tarif
     $listCodesCCAM = explode("|", $this->codes_ccam);
-    foreach ($listCodesCCAM as $key => $code) {
+    foreach ($listCodesCCAM as $code) {
       $acte = new CActeCCAM();
       $acte->_adapt_object = true;
 
@@ -511,8 +517,8 @@ class CConsultation extends CCodable {
   }
 
   function precodeNGAP() {
-    $listCodesNGAP = explode("|",$this->_tokens_ngap);
-    foreach ($listCodesNGAP as $key => $code_ngap) {
+    $listCodesNGAP = explode("|", $this->_tokens_ngap);
+    foreach ($listCodesNGAP as $code_ngap) {
       if ($code_ngap) {
         $acte = new CActeNGAP();
         $acte->_preserve_montant = true;
@@ -531,8 +537,8 @@ class CConsultation extends CCodable {
   }
 
   function precodeTARMED() {
-    $listCodesTarmed = explode("|",$this->_tokens_tarmed);
-    foreach ($listCodesTarmed as $key => $code_tarmed) {
+    $listCodesTarmed = explode("|", $this->_tokens_tarmed);
+    foreach ($listCodesTarmed as $code_tarmed) {
       if ($code_tarmed) {
         $acte = new CActeTarmed();
         $acte->_preserve_montant = true;
@@ -551,8 +557,8 @@ class CConsultation extends CCodable {
   }
 
   function precodeCAISSE() {
-    $listCodesCaisse = explode("|",$this->_tokens_caisse);
-    foreach ($listCodesCaisse as $key => $code_caisse) {
+    $listCodesCaisse = explode("|", $this->_tokens_caisse);
+    foreach ($listCodesCaisse as $code_caisse) {
       if ($code_caisse) {
         $acte = new CActeCaisse();
         $acte->_preserve_montant = true;
@@ -819,11 +825,13 @@ TESTS A EFFECTUER
           if ($_consultation->_id != $this->_id) {
             $_consultation->loadRefPlageConsult();
 
-            if ($_consultation->_datetime < $entree)
+            if ($_consultation->_datetime < $entree) {
               $entree = $_consultation->_datetime;
+            }
 
-            if ($_consultation->_datetime > $sortie)
-               $sortie = mbDate($_consultation->_datetime) . " 23:59:59";
+            if ($_consultation->_datetime > $sortie) {
+              $sortie = mbDate($_consultation->_datetime) . " 23:59:59";
+            }
           }
         }
 
@@ -953,7 +961,7 @@ TESTS A EFFECTUER
     }
 
     // Gestion du tarif et precodage des actes
-    if ($this->_bind_tarif && $this->_id){
+    if ($this->_bind_tarif && $this->_id) {
       if ($msg = $this->bindTarif()) {
         return $msg;
       }
@@ -989,7 +997,7 @@ TESTS A EFFECTUER
   /**
    * Chargement du sejour et du RPU dans le cas d'une urgence
    *
-   * @var CSejour
+   * @return CSejour
    */
   function loadRefSejour($cache = 1) {
     $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
