@@ -167,7 +167,7 @@
 <div id="suivi_clinique" style="display: none;"></div>
 <div id="dossier_traitement" style="display: none;"></div>
 {{if $isPrescriptionInstalled}}
-  <div id="prescription_sejour" style="display: none;"></div>
+  <div id="prescription_sejour" style="text-align: left; display: none;"></div>
 {{/if}}
 {{if $isImedsInstalled}}
   <div id="Imeds" style="display: none;"></div>

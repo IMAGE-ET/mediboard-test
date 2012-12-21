@@ -357,7 +357,7 @@ Main.add(function () {
       {{mb_include module=soins template=inc_infos_patients_soins}}
     </table>
     
-    <ul id="tab_dossier_soin" class="control_tabs">
+    <ul id="tab_dossier_soin" class="control_tabs" style="text-align: left;">
       {{if "dPprescription"|module_active}}
       <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med', '{{$hide_close}}'); refreshTabState();"><a href="#jour">Journée</a></li>
       <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
