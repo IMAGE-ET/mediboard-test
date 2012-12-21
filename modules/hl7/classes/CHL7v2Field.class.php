@@ -64,7 +64,7 @@ class CHL7v2Field extends CHL7v2Entity {
     
     if ($this->data === "" || $this->data === null) { // === $message->nullValue) { // nullValue ("") or null ??
       if ($this->required) {
-        $this->error(CHL7v2Exception::FIELD_EMPTY, null, $this);
+        $this->error(CHL7v2Exception::FIELD_EMPTY, $this->getPathString(), $this);
       }
     }
     else {

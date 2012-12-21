@@ -68,7 +68,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       }
       elseif ($_spec->isRequired()) {
         $field = new CHL7v2Field($this, $_spec);
-        $this->error(CHL7v2Exception::FIELD_EMPTY, null, $field);
+        $this->error(CHL7v2Exception::FIELD_EMPTY, $field->getPathString(), $field);
       }
     }
   }
@@ -89,7 +89,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         
         if ($_data === null || $_data === "" || $_data === array()) {
           if ($_spec->isRequired()) {
-            $this->error(CHL7v2Exception::FIELD_EMPTY, null, $field);
+            $this->error(CHL7v2Exception::FIELD_EMPTY, $field->getPathString(), $field);
           }
         }
         else {
@@ -107,7 +107,7 @@ class CHL7v2Segment extends CHL7v2Entity {
       }
       elseif ($_spec->isRequired()) {
         $field = new CHL7v2Field($this, $_spec);
-        $this->error(CHL7v2Exception::FIELD_EMPTY, null, $field);
+        $this->error(CHL7v2Exception::FIELD_EMPTY, $field->getPathString(), $field);
       }
     }
   }
