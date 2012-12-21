@@ -79,7 +79,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
 
     $specs = $this->getSpecs();
-
+    
     $_segment_specs = $specs->getItems();
     foreach ($_segment_specs as $i => $_spec) {
       if (array_key_exists($i, $fields)) {

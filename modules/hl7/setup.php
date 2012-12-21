@@ -943,7 +943,12 @@ class CSetuphl7 extends CSetup {
                 ADD `build_cellular_phone` ENUM ('PRN','ORN') DEFAULT 'PRN';";
     $this->addQuery($query);
     
-    $this->mod_version = "0.48";
+    $this->makeRevision("0.48");
+    $query = "ALTER TABLE `receiver_ihe_config` 
+                ADD `send_first_affectation` ENUM ('A02','Z99') DEFAULT 'Z99';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.49";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

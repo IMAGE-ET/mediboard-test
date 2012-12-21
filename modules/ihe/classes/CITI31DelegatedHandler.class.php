@@ -477,7 +477,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($current_log->type == "create") {
       // Dans le cas où il s'agit de la première affectation du séjour on ne fait pas une mutation mais une modification
       if ($first_affectation && ($first_affectation->_id == $affectation->_id)) {
-        return $this->getModificationAdmitCode($receiver);
+        switch ($configs["send_first_affectation"]) {
+          case 'Z99':
+            return $this->getModificationAdmitCode($receiver);
+          default:
+            return "A02";
+        }
       }
       
       // Création d'une affectation
