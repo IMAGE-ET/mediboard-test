@@ -26,47 +26,47 @@ class CPlageHoraire extends CMbObject {
   
   function getSpec() {
     $spec = parent::getSpec();
-		
-		// Collision keys mandatory definition to determine which references identify collisions
-		// Has to be an array, be it empty
+    
+    // Collision keys mandatory definition to determine which references identify collisions
+    // Has to be an array, be it empty
     $spec->collision_keys = null;
 
     return $spec;
   }
-	
+  
   /**
    * Check collision with another plage regarding defined in class spec
    *
    * @return string Collision message
    */
   function hasCollisions() {
-  	// Check whether mandatory collision keys are defined
-		$keys = $this->_spec->collision_keys;
-  	if (!is_array($keys)) {
+    // Check whether mandatory collision keys are defined
+    $keys = $this->_spec->collision_keys;
+    if (!is_array($keys)) {
       trigger_error(CAppUI::tr("CPlageHoraire-collision_keys", $this->_class), E_USER_ERROR);
-			return;
-  	}
-		
-		$keys = $this->_spec->collision_keys;
+      return;
+    }
+    
+    $keys = $this->_spec->collision_keys;
     $this->completeField("date", "debut", "fin");
-    $this->completeField($keys);		
+    $this->completeField($keys);    
         
     // Get all other plages the same day
     $where[$this->_spec->key] = "!= '$this->_id'";
     $where["date"]            = "= '$this->date'";
     $where["debut"]           = "< '$this->fin'";
     $where["fin"]             = "> '$this->debut'";
-		// Append collision keys clauses
-		foreach ($keys as $_key) {
-			$where[$_key] = "= '{$this->$_key}'";
-		}
 
-		// Load collision
+    // Append collision keys clauses
+    foreach ($keys as $_key) {
+      $where[$_key] = "= '{$this->$_key}'";
+    }
+
+    // Load collision
     $plages = new $this->_class;
-		CSQLDataSource::$trace = true;
     $this->_colliding_plages = $plages->loadList($where);
     
-		// Build collision message
+    // Build collision message
     $msgs = array();
     foreach ($this->_colliding_plages as $_plage) {
       $msgs[] = "Collision avec la plage de '$_plage->debut' à '$_plage->fin'";
@@ -76,11 +76,11 @@ class CPlageHoraire extends CMbObject {
   }
 
   function store() {
-  	if ($msg = $this->hasCollisions()) {
-  		return $msg;
-  	}
+    if ($msg = $this->hasCollisions()) {
+      return $msg;
+    }
     
-		return parent::store();
+    return parent::store();
   }
   
   function updateFormFields() {
@@ -100,4 +100,3 @@ class CPlageHoraire extends CMbObject {
     }
   }
 }
-?>
