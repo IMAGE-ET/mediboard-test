@@ -33,7 +33,7 @@ if ($AcountSet) {
   $pop->open();
   //$newMsg = $log_pop->mailboxSearch("SINCE 02-Dec-2012",true);
   $unseen           = $pop->search('UNSEEN');
-  $received         = $pop->search('TO "'.$log_pop->user.'" ');
+  $received         = $pop->search('TO "'.$log_pop->user.'"');
   $sent             = $pop->search('FROM "'.$log_pop->user.'" ');
   $bin              = $pop->search('DELETED');
 

@@ -21,9 +21,6 @@
   });
 </script>
 
-{{* Error, POP config not found
-
-*}}
 {{if !$account_ok}}
   <div class="small-warning">
     {{tr}}CSourcePOP-error-AccountNotFound{{/tr}} (<a href="?m=mediusers&a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a>)
@@ -65,8 +62,8 @@
           </tr>
           {{foreach from=$_list item=_msg}}
             <tr>
-              <td>{{$_msg->date|date_format:"%d/%m/%Y @%H:%M"}}</td>
-              <td><a href="#{{$_msg->msgno}}"  onclick="messagerie.modalPOPOpen({{$_msg->msgno}});"><strong>{{$_msg->subject|truncate:100:"(...)"}}</strong></a></td>
+              <td>{{mb_value object=$_msg field=date_inbox format=relative}}</td>
+              <td><a href="#{{$_msg->_msgno}}"  onclick="messagerie.modalPOPOpen({{$_msg->_msgno}});">{{if $_msg->subject}}{{mb_include template=inc_vw_type_message subject=$_msg->subject}}<strong>{{$_msg->subject|truncate:100:"(...)"}}</strong>{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}</a></td>
               <td><label title="{{$_msg->from}}">{{$_msg->_from}}</label></td>
               <td><label title="{{$_msg->to}}">{{$_msg->_to}}</label></td>
             </tr>

@@ -92,12 +92,12 @@ class CPop{
    *
    * @return array
    */
-  function search($string,$uid=false) {
+  function search($string,$uid=true) {
     if(!is_string($string)) {
       CAppUI::stepAjax("CPop-error-search-notString",UI_MSG_ERROR);
     }
     if ($uid) {
-      return imap_search($this->_mailbox,$string, SE_UID);
+      return imap_sort($this->_mailbox,SORTDATE,1,SE_UID,$string);
     }
     return imap_sort($this->_mailbox,SORTDATE,1,0,$string);
   }
@@ -110,7 +110,7 @@ class CPop{
    * @return array
    */
   function header($id) {
-    return imap_fetch_overview($this->_mailbox, $id);
+    return imap_fetch_overview($this->_mailbox, $id,FT_UID);
   }
 
   /**
@@ -120,7 +120,7 @@ class CPop{
    * @return object
    */
   function structure($id) {
-    return imap_fetchstructure($this->_mailbox, $id);
+    return imap_fetchstructure($this->_mailbox, $id, FT_UID);
   }
 
 
@@ -131,7 +131,11 @@ class CPop{
    *
    * @return string
    */
-  function openPart($msgId,$partId) {
+  function openPart($msgId,$partId,$uid=true) {
+    if ($uid) {
+      return imap_fetchbody($this->_mailbox, $msgId, $partId, FT_UID);
+    }
+
     return imap_fetchbody($this->_mailbox, $msgId, $partId);
   }
 
@@ -142,15 +146,13 @@ class CPop{
    *
    * @return array
    */
-  function getFullBody($mail_id,$structure = false, $part_number = false) {
+  function getFullBody($mail_id,$structure = false, $part_number = false, $only_text = false) {
 
     if(!$structure) {
       $structure = $this->structure($mail_id);
-      mbTrace($structure);
     }
 
     if ($structure) {
-
       if(!isset($structure->parts) && !$part_number) {  //plain text only, no recursive
         $part_number = "1";
       }
@@ -159,16 +161,17 @@ class CPop{
       }
 
       switch ($structure->type) {
-        case 0: //text
+        case 0: //text or html
           if ($structure->subtype == "PLAIN") {
             $this->content["text"]["plain"] = self::decodeMail($structure->encoding, self::openPart($mail_id,$part_number));
           }
           if ($structure->subtype == "HTML") {
+
             $this->content["text"]["html"] = self::decodeMail($structure->encoding, self::openPart($mail_id,$part_number));
           }
 
           break;
-        case 1: //multipart
+        case 1: //multipart, alternatived
           while (list($index, $sub_structure) = each($structure->parts)) {
             if ($part_number) {
               $prefix = $part_number.'.';
@@ -179,33 +182,33 @@ class CPop{
           }
           break;
 
-        case 2: //message
-          break;
+        case 2:     //message
+        case 3:     //application
+        case 4:     //audio
+        case 5:     //images
+        case 6:     //video
+        default:    //other
+        if ($only_text) {
+          $attach  = new CPopAttachments();
+          $attach->loadFromHeader($structure);
+          $attach->loadContentFromPop($this->openPart($mail_id,$part_number));
 
-        case 3: //application
-
-          break;
-
-        case 4: //audio
-          break;
-
-        case 5: //images
-          if ($structure->subtype == "SVG+XML") { //vector image
-            $this->content["attachments"]["SVG"][] = self::decodeMail($structure->encoding, $this->openPart($mail_id,$part_number));
-          } else {
-            $this->content["attachments"]["IMG"][] = base64_encode(self::decodeMail($structure->encoding, $this->openPart($mail_id,$part_number)));
+          //inline attachments
+          if ($attach->id && $attach->subtype!="SVG+XML") {
+            $id= 'cid:'.str_replace(array("<",">"), array("",""), $attach->id);
+            $this->content["text"]["html"] = str_replace($id, "data:image/$attach->subtype|strtolower;base64,".$attach->content, $this->content["text"]["html"]);
+          } else {  //attachments below
+            $this->content["attachments"][] = $attach;
           }
-          break;
-
-        case 6: //video
-          break;
-
-        default:  //other!
-          $this->content["attachments"]["OTHER"] = base64_encode(self::decodeMail($structure->encoding, $this->openPart($mail_id,$part_number)));
+        }
       }
     }
     return $this->content;
   }
+
+
+
+  /** TOOLS **/
 
   /**
    * get the right decoding string from mail structure
@@ -231,6 +234,10 @@ class CPop{
     }
   }
 
+  function inlineAttach() {
+    
+  }
+
   /* Close the mailBox
    *
    * @return bool
@@ -240,4 +247,46 @@ class CPop{
   }
 
 
+}
+
+
+/* CLASS CPopATTACHMENTS */
+
+class CPopAttachments {
+
+  var $type         = null;
+  var $encoding     = null;
+  var $subtype      = null;
+  var $id           = null;
+  var $bytes        = null;
+  var $disposition  = null;
+
+  var $name         = null;
+
+  var $content      = null;
+
+  function loadFromHeader($header) {
+    $this->type = $header->type;
+    $this->encoding = $header->encoding;
+    if ($header->ifsubtype) {$this->subtype = $header->subtype;}
+    if ($header->ifid) {$this->id = $header->id;}
+    $this->bytes = $header->bytes;
+    if ($header->ifdisposition) {$this->disposition = $header->disposition;}
+    if ($header->ifdparameters) {$this->name = $header->dparameters[0]->value;}
+    if ($header->ifparameters) {$this->name = $header->parameters[0]->value;}
+
+  }
+
+  function loadContentFromPop($content) {
+    switch ($this->subtype) {
+      case 'SVG+XML':
+        $this->content = CPop::decodeMail($this->encoding, $content);
+        break;
+      
+      default:
+        $this->content = base64_encode(CPop::decodeMail($this->encoding, $content));
+        break;
+    }
+    return true;
+  }
 }

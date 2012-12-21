@@ -48,7 +48,28 @@ class CSetupmessagerie extends CSetup {
     $this->makeRevision("0.12");
 
     $this->addPrefQuery("ViewMailAsHtml", 1);
-    $this->mod_version = "0.13";
+
+    $this->makeRevision("0.13");
+    $query = "CREATE TABLE `user_mail` (
+              `user_mail_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `user_id` INT (11) UNSIGNED NOT NULL,
+              `subject` VARCHAR (255),
+              `from` VARCHAR (255),
+              `to` VARCHAR (255),
+              `date_inbox` DATETIME,
+              `date_read` DATETIME,
+              `uid` INT (11),
+              `answered` ENUM ('0','1') DEFAULT '0',
+              `in_reply_to_id` INT (11) UNSIGNED,
+              `text_plain_id` INT (11) UNSIGNED,
+              `text_html_id` INT (11) UNSIGNED
+) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `user_mail` 
+              ADD INDEX (`date_inbox`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.14";
 
 
   }

@@ -19,59 +19,46 @@
 
 <table class="tbl">
   <tr>
-    <th>{{mb_label object=$mail field=subject}}</th><td style="text-align: left;">{{mb_value object=$mail field=subject}}</td>
+    <th>{{mb_label object=$mail field=subject}}</th><td style="text-align: left;" colspan="3">{{mb_value object=$mail field=subject}}</td>
   </tr>
   <tr>
-    <th>{{mb_label object=$mail field=from}}</th><td style="text-align: left;">{{mb_value object=$mail field=from}}</td>
+    <th>{{mb_label object=$mail field=from}}</th><td style="text-align: left;" colspan="3">{{mb_value object=$mail field=from}}</td>
   </tr>
   <tr>
-    <th>{{mb_label object=$mail field=to}}</th><td style="text-align: left;">{{mb_value object=$mail field=to}}</td>
+    <th>{{mb_label object=$mail field=to}}</th><td style="text-align: left;" colspan="3">{{mb_value object=$mail field=to}}</td>
   </tr>
   <tr>
-    <th>{{mb_label object=$mail field=date}}</th><td>{{mb_value object=$mail field=date}}</td>
+    <th>{{mb_label object=$mail field=date_inbox}}</th><td colspan="3">{{mb_value object=$mail field=date_inbox}}</td>
   </tr>
   <tr>
-    <th colspan="2">{{mb_label object=$mail field=content}}</th>
+    <th colspan="4">{{mb_label object=$mail field=text_plain}}</th>
   </tr>
   <tr>
-    <td colspan="2" style="text-align: left;">
-      {{if $mail->content.text.html|@count && $app->user_prefs.ViewMailAsHtml}}
-        <textarea id="mailarea">{{$mail->content.text.html|smarty:nodefaults}}</textarea>
+    <td colspan="4" style="text-align: left;">
+      {{if $mail->text_html|@count && $app->user_prefs.ViewMailAsHtml}}
+        {{* <textarea id="mailarea">{{$mail->content.text.html|smarty:nodefaults}}</textarea> *}}
+        {{$mail->text_html|smarty:nodefaults}}
       {{else}}
-        {{$mail->content.text.plain}}
+        {{$mail->text_plain}}
       {{/if}}
     </td>
   </tr>
-  {{if $mail->content.attachments|count}}
-  <tr><th colspan="2">{{tr}}Attachments{{/tr}}</th></tr>
-  <tr>
+  {{if $mail->attachments|count}}
+    <tr><th colspan="4">{{tr}}Attachments{{/tr}}</th></tr>
     <style>
       svg,img {
-        max-width:300px;
-        max-height:300px;
-        float:left;
+        max-width:100%;
+        max-height:30%;
       }
     </style>
-    <td colspan="2">
-      {{foreach from= $mail->content.attachments key=type item=_attachment}}
-        {{if $type=="IMG"}}
-          {{foreach from=$_attachment item=_img}}
-            <a href="data:image/png;base64,{{$_img}}"><img src="data:image/png;base64,{{$_img}}" alt=""/></a>
-          {{/foreach}}
-        {{elseif $type=="SVG"}}
-          {{foreach from=$_attachment item=_img}}
-            {{$_img|smarty:nodefaults}}
-          {{/foreach}}
-        {{else}}
-          {{foreach from=$_attachment item=_file}}
-            <a href="{{$_file}}">test</a>
-          {{/foreach}}
-
-        {{/if}}
-      {{/foreach}}
-
-    </td>
-  </tr>
+    {{foreach from= $mail->attachments key=type item=_attachment}}
+      <tr>
+        <td style="text-align:center;">{{mb_include template=inc_show_attachments}}</td>
+        <td>{{$_attachment->name}}</td>
+        <td>{{$_attachment->subtype}}</td>
+        <td>{{$_attachment->bytes}} bytes</td>
+      </tr>
+    {{/foreach}}
   {{/if}}
 </table>
 

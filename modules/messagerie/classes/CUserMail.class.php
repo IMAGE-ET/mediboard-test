@@ -16,39 +16,34 @@ class CUserMail extends CMbObject{
 
   var $user_mail_id = null;  //key
 
+  var $user_id      = null; //user_id
   //headers
-  var $subject      =null;  //subject of the mail
-  var $from         =null;  //who sent it
-  var $to           =null;  //complete recipient
-  var $_to          =null;  //recipient readable
-  var $date         =null;  //sent date
-  var $message_id   =null;  //Message-ID
-  var $msgno        =null;  //message sequence number in the mailbox
-  var $recent       =null;  //this message is flagged as recent
-  var $flagged      =null;  //this message is flagged
-  var $answered     =null;  //this message is flagged as answered
-  var $deleted      =null;  //this message is flagged for deletion
-  var $seen         =null;  //this message is flagged as already read
-  var $draft        =null;  //this message is flagged as being a draft
+  var $subject        = null;  //subject of the mail
+  var $from           = null;  //who sent it
+  var $_from           = null; //who sent it, readable
+  var $to             = null;  //complete recipient
+  var $_to            = null;  //recipient readable
+  var $date_inbox     = null;  //sent date
+  var $date_read      = null;  //date of the first read of the mail
+  var $_msgno         = null;  //message sequence number in the mailbox
+  var $uid            = null;
+  var $answered       = null;  //this message is flagged as answered
 
-  var $update       =null;  //timestamp update
-
-  var $references   =null; //is a reference to this message id
-  var $in_reply_to  =null; //is a reply to this message id
+  //var $msg_references = null; //is a reference to this message id
+  var $in_reply_to_id    = null; //is a reply to this message id
 
   //body
-  var $type         =null;  //Primary body type
-  var $_encoding    =null;  //Body transfer encoding
-  var $ifsubtype    =null;  //TRUE if there is a subtype string
-  var $subtype 	    =null;  //MIME subtype
-  var $parts        =null;
+  var $text_plain_id     = null; //plain text (no html)
+  var $_text_plain      = null;
 
+  var $text_html_id      = null; //html text
+  var $_text_html       = null;
 
+  var $_attachments     = null; //attachments
 
+  var $_parts         = null;
 
-  var $content      =null;
-
-  var $_size        =null; //size in bytes
+  var $_size          = null; //size in bytes
 
 
   function getSpec() {
@@ -61,12 +56,22 @@ class CUserMail extends CMbObject{
   function getProps() {
     $props = parent::getProps();
     $props["subject"]       = "str";
+    $props["user_id"]       = "ref notNull class|CMediusers";
     $props["from"]          = "str";
+    $props["_from"]         = "str";
     $props["to"]            = "str";
-    $props["_to"]            = "str";
-    $props["date"]          = "dateTime";
-    $props["answered"]      = "bool";
-    $props["content"]       = "html";
+    $props["_to"]           = "str";
+    $props["date_inbox"]    = "dateTime";
+    $props["date_read"]     = "dateTime";
+    $props["_msgno"]        = "num";
+    $props["uid"]           = "num";
+    $props["answered"]      = "bool default|0";
+    //$props["msg_references"]= "str";
+    $props["in_reply_to_id"]   = "ref class|CUserMail";
+
+    $props["text_plain_id"]    = "ref class|CContentAny show|0";
+    $props["text_html_id"]     = "ref class|CContentHTML show|0";
+
     return $props;
   }
 
@@ -87,14 +92,17 @@ class CUserMail extends CMbObject{
       $this->subject      = self::flatMimeDecode($s->subject);
     }
     $this->from         = self::flatMimeDecode($s->from);
-    $this->_from        = self::adressToUser($this->from);
     $this->to           = self::flatMimeDecode($s->to);
-    $this->_to          = self::adressToUser($this->to);
-    $this->date         = strtotime($s->date);
-    $this->_size        = $s->size;
-    $this->msgno        = $s->msgno;
+    $this->date_inbox   = mbDateTime($s->date);
+    //$this->_msgno       = $s->msgno;
+    $this->uid          = $s->uid;
 
     return true;
+  }
+
+  function loadComplete() {
+    $this->_from = $this->adressToUser($this->from);
+    $this->_to   = $this->adressToUser($this->to);
   }
 
   /**
@@ -103,7 +111,9 @@ class CUserMail extends CMbObject{
    * @param $contentsource
    */
   function loadContentFromSource($contentsource) {
-      $this->content      = $contentsource;
+    $this->_text_plain   = $contentsource["text"]["plain"];
+    $this->_text_html    = $contentsource["text"]["html"];
+    $this->_attachments  = $contentsource["attachments"];
   }
 
   /**
@@ -150,9 +160,19 @@ class CUserMail extends CMbObject{
     return $string;
   }
 
+  function loadContentPlain() {
+    return $this->_text_plain = $this->loadFwdRef("text_plain_id");
+  }
 
+  function loadContentHTML() {
+    return $this->_text_html = $this->loadFwdRef("text_html_id");
+  }
 
-
-
+  
+  function loadRefsFwd() {
+    parent::loadRefsFwd();
+    $this->loadContentHTML();
+    $this->loadContentPlain();
+  }
 
 }
