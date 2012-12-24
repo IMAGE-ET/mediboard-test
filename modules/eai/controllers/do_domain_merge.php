@@ -13,35 +13,46 @@
 
 CCanDo::checkAdmin();
 
-$domain_1_id    = CValue::post("domain_1_id");
-$domain_2_id    = CValue::post("domain_2_id");
+$d1_id          = CValue::post("domain_1_id");
+$d2_id          = CValue::post("domain_2_id");
 $incrementer_id = CValue::post("incrementer_id");
 $actor_id       = CValue::post("actor_id");
 $actor_class    = CValue::post("actor_class");
 $tag            = CValue::post("tag");
 $libelle        = CValue::post("libelle");
 
-$domain_1 = new CDomain();
-$domain_1->load($domain_1_id);
+$d1 = new CDomain();
+$d1->load($d1_id);
+$d1->isMaster();
 
-$domain_2 = new CDomain();
-$domain_2->load($domain_2_id);
+$d2 = new CDomain();
+$d2->load($d2_id);
+$d2->isMaster();
+
+$and = null;
+if ($d1->_is_master_ipp || $d2->_is_master_ipp) {
+  $and .= "AND object_class = 'CPatient'";
+}
+if ($d1->_is_master_nda || $d2->_is_master_nda) {
+  $and .= "AND object_class = 'CSejour'";
+}
 
 $ds = CSQLDataSource::get("std");
 
-$tag_search =  ($tag == $domain_1->tag) ? $domain_2->tag : $domain_1->tag;
+$tag_search =  ($tag == $d1->tag) ? $d2->tag : $d1->tag;
 
 // 1. On change les tags de tous les objets liés à ce domaine
 $query = "UPDATE `id_sante400` 
             SET `tag` = REPLACE(`tag`, '$tag_search', '$tag'),
                 `last_update` = '". mbDateTime() . "'
-            WHERE `tag` LIKE '%$tag_search%';";
+            WHERE `tag` LIKE '%$tag_search%'
+            $and;";
 $ds->query($query);
 
 // 2. On fusionne les domaines
-$domain_1->bind($_POST);
-$domain_1->_force_merge = true;
-if ($msg = $domain_1->merge(array($domain_2))) {
+$d1->bind($_POST);
+$d1->_force_merge = true;
+if ($msg = $d1->merge(array($d2))) {
   CAppUI::stepAjax($msg, UI_MSG_WARNING);
 } 
 
