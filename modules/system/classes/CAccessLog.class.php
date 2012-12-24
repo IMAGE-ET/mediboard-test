@@ -47,24 +47,24 @@ class CAccessLog extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["module"]      = "str notNull";
-    $specs["action"]      = "str notNull";
-    $specs["period"]      = "dateTime notNull";
-    $specs["hits"]        = "num pos";
-    $specs["duration"]    = "float";
-    $specs["processus"]   = "float";
-    $specs["processor"]   = "float";
-    $specs["request"]     = "float";
-    $specs["peak_memory"] = "num min|0";
-    $specs["size"]        = "num min|0";
-    $specs["errors"]      = "num min|0";
-    $specs["warnings"]    = "num min|0";
-    $specs["notices"]     = "num min|0";
+    $props = parent::getProps();
+    $props["module"]      = "str notNull";
+    $props["action"]      = "str notNull";
+    $props["period"]      = "dateTime notNull";
+    $props["hits"]        = "num pos notNull";
+    $props["duration"]    = "float notNull";
+    $props["request"]     = "float notNull";
+    $props["processus"]   = "float";
+    $props["processor"]   = "float";
+    $props["peak_memory"] = "num min|0";
+    $props["size"]        = "num min|0";
+    $props["errors"]      = "num min|0";
+    $props["warnings"]    = "num min|0";
+    $props["notices"]     = "num min|0";
 
-    $specs["_average_duration"] = "num min|0";
+    $props["_average_duration"] = "num min|0";
     
-    return $specs;
+    return $props;
   }
   
   /**
