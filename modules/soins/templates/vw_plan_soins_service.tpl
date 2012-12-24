@@ -76,7 +76,7 @@ selectTr = function(counter){
 }
 
 addTransmission = function(sejour_id, user_id, transmission_id, object_id, object_class, libelle_ATC, update_plan_soin) {
-  var url = new Url("dPhospi", "ajax_transmission");
+  var url = new Url("hospi", "ajax_transmission");
   url.addParam("sejour_id", sejour_id);
   url.addParam("user_id", user_id);
   url.addParam("update_plan_soin", update_plan_soin);
@@ -99,10 +99,17 @@ addCibleTransmission = function(sejour_id, object_class, object_id, libelle_ATC,
 }
 
 viewBilanService = function(service_id, date){
-  var url = new Url("dPhospi", "vw_bilan_service");
+  var url = new Url("hospi", "vw_bilan_service");
   url.addParam("service_id", service_id);
   url.addParam("date", date);
   url.popup(800,500,"Bilan par service");
+}
+
+printBons = function(service_id, date) {
+  var url = new Url("prescription", "print_bon");
+  url.addParam("service_id", service_id);
+  url.addParam("debut", date);
+  url.popup(800, 500);
 }
 
 Main.add(function(){
@@ -122,7 +129,7 @@ Main.add(function(){
 
 <form name="addPlanif" action="" method="post">
   <input type="hidden" name="dosql" value="do_administration_aed" />
-  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="m" value="prescription" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="administration_id" value="" />
   <input type="hidden" name="planification" value="1" />
@@ -137,7 +144,7 @@ Main.add(function(){
 </form>
 
 <form name="addPlanifs" action="" method="post">
-  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="m" value="prescription" />
   <input type="hidden" name="dosql" value="do_administrations_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="decalage" value="" />
@@ -149,6 +156,7 @@ Main.add(function(){
 	<tr>
 		<th class="title" colspan="3">
       <span style="float: right;">
+        <button class="print" onclick="printBons('{{$service->_id}}', '{{$date}}')">Bons</button>
         <button class="search" onclick="viewBilanService('{{$service->_id}}', '{{$date}}');">Bilan</button>
       </span>
 			<form name="updateActivites" action="?" method="get">

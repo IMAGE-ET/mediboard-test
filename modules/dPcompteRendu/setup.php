@@ -847,7 +847,7 @@ class CSetupdPcompteRendu extends CSetup {
     $this->makeRevision("0.87");
     // Table temporaire de mappage entre le author_id (user_id du first log) et le compte_rendu_id
     // Les compte-rendus affectés sont principalement ceux en édition rapide
-    $query = "CREATE TEMPORARY TABLE `owner_doc` (
+    $query = "CREATE TEMPORARY TABLE IF NOT EXISTS `owner_doc` (
       `compte_rendu_id` INT(11), `author_id` INT(11)) AS
       SELECT `compte_rendu_id`, `user_log`.`user_id` as `author_id`
       FROM `compte_rendu`, `user_log`
@@ -862,7 +862,20 @@ class CSetupdPcompteRendu extends CSetup {
       SET `compte_rendu`.`author_id` = `owner_doc`.`author_id`;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.88";
+    $this->makeRevision("0.88");
+    $query = "UPDATE `compte_rendu`
+      SET `nom` = '[ENTETE ORDONNANCE]'
+      WHERE `object_class` = 'CPrescription'
+      AND `type` = 'header'";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `compte_rendu`
+      SET `nom` = '[PIED DE PAGE ORDONNANCE]'
+      WHERE `object_class` = 'CPrescription'
+      AND `type` = 'footer'";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.89";
   }
 }
 ?>

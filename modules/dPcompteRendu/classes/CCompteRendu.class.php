@@ -112,7 +112,12 @@ class CCompteRendu extends CDocumentItem {
   // Noms de modèles réservés
   static $templateNames = array(
     "CConsultAnesth" =>
-      array("[FICHE ANESTH]" => "body")
+      array("[FICHE ANESTH]" => "body"),
+    "CPrescription"  =>
+      array("[ENTETE ORDONNANCE]"       => "header",
+            "[PIED DE PAGE ORDONNANCE]" => "footer",
+            "[ENTETE BON]"              => "header",
+            "[PIED DE PAGE BON]"        => "footer")
   );
   
   function getSpec() {
