@@ -559,6 +559,7 @@ class CPatient extends CMbObject {
     if ($this->_IPP) {
       return;
     }
+    
     if (!$IPP = CIncrementer::generateIdex($this, self::getTagIPP($group->_id), $group->_id)) {
       return CAppUI::tr("CIncrementer_undefined");
     }

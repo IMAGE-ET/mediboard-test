@@ -829,17 +829,18 @@ class CSejour extends CCodable implements IPatientRelated {
   }
 
   function generateNDA() {
-    $group = $this->loadRefEtablissement();
-    $group->loadConfigValues();
-    if ($group->_configs["smp_idex_generator"]) {
-      $NDA = new CIdSante400();
-      $this->loadNDA($group->_id);
-      if ($this->_NDA) {
-        return;
-      }
-      if (!$NDA = CIncrementer::generateIdex($this, self::getTagNDA($group->_id), $group->_id)) {
-        return CAppUI::tr("CIncrementer_undefined");
-      }
+    $group = CGroups::loadCurrent();
+    if (!$group->isNDASupplier()) {
+      return;
+    }
+
+    $this->loadNDA($group->_id);
+    if ($this->_NDA) {
+      return;
+    }
+    
+    if (!$NDA = CIncrementer::generateIdex($this, self::getTagNDA($group->_id), $group->_id)) {
+      return CAppUI::tr("CIncrementer_undefined");
     }
   }
 
@@ -1773,7 +1774,7 @@ class CSejour extends CCodable implements IPatientRelated {
   static function getTagNDA($group_id = null, $type_tag = "tag_dossier") {
     // Gestion du tag NDA par son domaine d'identification
     if (CAppUI::conf("eai use_domain")) {
-      return CDomain::getTagMasterDomain("CPatient", $group_id);
+      return CDomain::getTagMasterDomain("CSejour", $group_id);
     }
     
     $tag_NDA = CAppUI::conf("dPplanningOp CSejour tag_dossier");
