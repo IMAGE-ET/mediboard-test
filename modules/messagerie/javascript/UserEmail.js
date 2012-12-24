@@ -25,13 +25,13 @@ messagerie = {
     url.requestUpdate(type);
   },
 
-  getLastMessages : function(user_id) {
+  getLastMessages : function(user_id,type) {
+    if(!type) { type = 'all';}
     var url = new Url(messagerie.module, "ajax_get_last_email");
     url.addParam("user_id"    , user_id);
     url.requestUpdate("systemMsg", function() {
-      this.refreshList();
+      messagerie.refreshList(type);
     });
    }
-
 
 }

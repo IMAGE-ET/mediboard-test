@@ -29,9 +29,9 @@ if(count($unseen)>0){
 
   //how many
   if (count($unseen)>1) {
-    CAppUI::setMsg("CPOP-msg-newMsgs",UI_MSG_OK,count($unseen));
+    CAppUI::setMsg("CPop-msg-newMsgs",UI_MSG_OK,count($unseen));
   } else {
-    CAppUI::setMsg("CPOP-msg-newMsg",UI_MSG_OK,count($unseen));
+    CAppUI::setMsg("CPop-msg-newMsg",UI_MSG_OK,count($unseen));
   }
 
   //traitement
@@ -40,14 +40,13 @@ if(count($unseen)>0){
     $mail_unseen->loadHeaderFromSource($pop->header($_mail));
     $mail_unseen->loadMatchingObject();
     if(!$mail_unseen->_id) {
+      $mail_unseen->loadContentFromSource($pop->getFullBody($_mail,false,false,true));
       $mail_unseen->user_id = $user_id;
       if ($msg = $mail_unseen->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
-      } else {
-        CAppUI::setMsg("CUserMail-msg-mailAdded",UI_MSG_OK);
       }
     } else {
-      mbTrace($mail_unseen);
+      //mbTrace($mail_unseen);
     }
 
   }
@@ -56,7 +55,7 @@ if(count($unseen)>0){
 
 }
 else {
-  CAppUI::setMsg("CPOP-msg-nonewMsg",UI_MSG_OK,$user_id);
+  CAppUI::setMsg("CPop-msg-nonewMsg",UI_MSG_OK,$user_id);
 }
 
 $pop->close();

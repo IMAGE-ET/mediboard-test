@@ -33,13 +33,13 @@ $pop->open();
 $mail = new CUserMail();
 $head = $pop->header($mail_id);
 $mail->uid = $head[0]->uid;
-mbTrace($mail->uid);
 $mail->loadMatchingObject();
 if ($mail->_id && !$mail->text_plain_id) {
 	$mail->loadHeaderFromSource($head);
 	$mail->loadContentFromSource($pop->getFullBody($mail_id,false,false,true));
 	$mail->date_read = mbDateTime();
   $mail->user_id = $user->_id;
+
 
 	//text plain
 	if($mail->_text_plain) {
@@ -53,19 +53,17 @@ if ($mail->_id && !$mail->text_plain_id) {
 
 	//text html
 	if($mail->_text_html) {
-		$smarty = new CSmartyDP("modules/dPcompteRendu");
-		$smarty->assign("content", $mail->_text_html);
-	    $content = $smarty->fetch("htmlheader.tpl");
-	    $content = preg_replace("/<[b|h]r([^>]*)>/", "<br $1/>", $content);
-	    $content = preg_replace("/<img([^>]+)>/", "<img$1/>", $content);
-	    $textH = new CContentHTML();
-		$textH->content = $content;
-		mbTrace($content);
+    $textH = new CContentHTML();
+	    $text = new CMbXMLDocument();
+      $text = $text->sanitizeHTML($mail->_text_html); //cleanup
+	  $textH->content = $text;
+
 		if ($msg = $textH->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
-		}
+		} else {
+      $mail->text_html_id = $textH->_id;
+    }
 
-		$mail->text_html_id = $textH->_id;
 	}
 
   $msg = $mail->store();
@@ -76,14 +74,12 @@ if ($mail->_id && !$mail->text_plain_id) {
 }
 
 $mail->loadRefsFwd();
-
 $pop->close();
 
-mbTrace($mail);
 
-/*
+
+mbTrace($mail->_text_html->content);
 //Smarty
 $smarty = new CSmartyDP();
 $smarty->assign("mail", $mail);
 $smarty->display("ajax_open_pop_email.tpl");
-*/

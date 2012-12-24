@@ -10,16 +10,6 @@
 
 
 {{mb_script module=messagerie script=UserEmail}}
-{{mb_script path="lib/ckeditor/ckeditor.js"}}
-
-<script type="text/javascript">
-  CKEDITOR.editorConfig = function(config) {
-    config.toolbar = [['Preview', 'Print', '-','Find']];
-  }
-  Main.add(function () {
-  Control.Tabs.create("tab-mail", true);
-  });
-</script>
 
 {{if !$account_ok}}
   <div class="small-warning">
@@ -63,7 +53,7 @@
           {{foreach from=$_list item=_msg}}
             <tr>
               <td>{{mb_value object=$_msg field=date_inbox format=relative}}</td>
-              <td><a href="#{{$_msg->_msgno}}"  onclick="messagerie.modalPOPOpen({{$_msg->_msgno}});">{{if $_msg->subject}}{{mb_include template=inc_vw_type_message subject=$_msg->subject}}<strong>{{$_msg->subject|truncate:100:"(...)"}}</strong>{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}</a></td>
+              <td><a href="#{{$_msg->uid}}"  onclick="messagerie.modalPOPOpen({{$_msg->uid}});">{{if $_msg->subject}}{{mb_include template=inc_vw_type_message subject=$_msg->subject}}<strong>{{$_msg->subject|truncate:100:"(...)"}}</strong>{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}</a></td>
               <td><label title="{{$_msg->from}}">{{$_msg->_from}}</label></td>
               <td><label title="{{$_msg->to}}">{{$_msg->_to}}</label></td>
             </tr>

@@ -133,7 +133,7 @@ class CPop{
    */
   function openPart($msgId,$partId,$uid=true) {
     if ($uid) {
-      return imap_fetchbody($this->_mailbox, $msgId, $partId, FT_UID);
+      return imap_fetchbody($this->_mailbox, $msgId, $partId, FT_UID,FT_PEEK);
     }
 
     return imap_fetchbody($this->_mailbox, $msgId, $partId);
