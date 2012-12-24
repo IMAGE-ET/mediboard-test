@@ -12,6 +12,7 @@
  */
  
 set_time_limit(240);
+set_min_memory_limit("512M");
 
 CCanDo::checkAdmin();
 
