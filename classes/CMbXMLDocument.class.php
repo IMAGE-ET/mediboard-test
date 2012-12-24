@@ -274,4 +274,36 @@ class CMbXMLDocument extends DOMDocument {
     }
     return $tag;
   }
+
+  static function sanitizeHTML($html) {
+    //check if html is present
+    if (!preg_match("/<html/",$html)) {
+      $html = '<html><head></head><body>'.$html.'</body></html>';
+    }
+
+    //load & repair dom
+    $document = new CMbXMLDocument();
+    $document->preserveWhiteSpace = false;
+    @$document->loadHTML($html);
+
+    //remove scripts tag
+    $xpath = new DOMXpath($document);
+    $filter = array("//script", "//style", "//meta");
+    foreach ($filter as $_filter) {
+      $elements = $xpath->query($_filter);
+      foreach($elements as $_element) {
+        $_element->parentNode->removeChild($_element);
+      }
+    }
+
+    $html = $document->saveHTML();
+
+    //Cleanup after save
+    $html = preg_replace("/<!DOCTYPE(.*?)>/",'',$html);
+    $html = preg_replace("/\/\/>/mu", "/>", $html);
+    $html = preg_replace("/<[b|h]r([^>]*)>/", "<br $1/>", $html);
+    $html = preg_replace("/<img([^>]+)>/", "<img$1/>", $html);
+
+    return $html;
+  }
 }
