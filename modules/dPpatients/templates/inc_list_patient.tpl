@@ -277,9 +277,9 @@ emptyForm = function() {
 
     <!-- Recherche exacte -->
     <tr>
-      <th colspan="5">
-        <em>{{tr}}dPpatients-CPatient-exact-results{{/tr}}
-        {{if ($patients|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
+      <th colspan="5" class="section">
+       {{tr}}dPpatients-CPatient-exact-results{{/tr}}
+        {{if ($patients|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}
       </th>
     </tr>
     {{foreach from=$patients item=_patient}}
@@ -293,9 +293,9 @@ emptyForm = function() {
     <!-- Recherche phonétique -->
     {{if $patientsSoundex|@count}}
       <tr>
-        <th colspan="5">
-          <em>{{tr}}dPpatients-CPatient-close-results{{/tr}}
-            {{if ($patientsSoundex|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
+        <th colspan="5" class="section">
+          {{tr}}dPpatients-CPatient-close-results{{/tr}}
+          {{if ($patientsSoundex|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}
         </th>
       </tr>
     {{/if}}
