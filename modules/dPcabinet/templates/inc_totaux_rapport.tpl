@@ -29,7 +29,8 @@
       {{foreach from=$reglement->_specs.mode->_list item=_mode}}
       <td>{{$recapReglement.$_mode.$nb_reglement_name}}</td>
       {{/foreach}}
-      <td>{{$recapReglement.total.$nb_reglement_name}}</td>
+      {{assign var=impaye_name value="nb_impayes_$emetteur"}}
+      <td>{{$recapReglement.total.$impaye_name}}</td>
     </tr>
 
     <tr>
