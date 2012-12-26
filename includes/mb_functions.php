@@ -183,11 +183,16 @@ function mbWorkDaysInMonth($date = null) {
  * @return string The transformed date
  **/
 function mbTransformTime($relative, $ref, $format) {
+  static $system_datetime = null;
+  if($system_datetime === null) {
+    $system_datetime = CAppUI::conf("system_date");
+  }
+  
   if ($relative === "last sunday") {
     $relative .= " 12:00:00";
   }
   
-  $timestamp = $ref ? strtotime($ref) : time();
+  $timestamp = $ref ? strtotime($ref) : ($system_datetime ? strtotime($system_datetime." ".date("H:i:s")) : time());
   if ($relative) {
     $timestamp = strtotime($relative, $timestamp);
   } 

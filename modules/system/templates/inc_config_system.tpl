@@ -14,6 +14,11 @@ Main.add(function(){
   input.className = "date";
   input.type = "hidden";
   Calendar.regField(input);
+  
+  input = getForm("editConfig-system")["system_date"];
+  input.className = "date";
+  input.type = "hidden";
+  Calendar.regField(input);
 });
 </script>
 
@@ -25,6 +30,7 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_str var=root_dir size=40}}
     {{mb_include module=system template=inc_config_enum var=instance_role values="prod|qualif"}}
     {{mb_include module=system template=inc_config_str var=mb_id}}
+    {{mb_include module=system template=inc_config_str var=system_date}}
     {{mb_include module=system template=inc_config_bool var=debug}}
     {{mb_include module=system template=inc_config_bool var=readonly}}
     {{mb_include module=system template=inc_config_bool var=log_js_errors}}
