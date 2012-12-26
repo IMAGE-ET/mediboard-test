@@ -123,6 +123,16 @@ class CPop{
     return imap_fetchstructure($this->_mailbox, $id, FT_UID);
   }
 
+  /**
+   * @param $id
+   * @param $flag
+   *
+   * @return bool
+   */
+  function setFlag($id, $flag) {
+    return imap_setflag_full($this->_mailbox,$id,$flag,ST_UID);
+  }
+
 
   /**
    * Open a part of an email
@@ -133,10 +143,10 @@ class CPop{
    */
   function openPart($msgId,$partId,$uid=true) {
     if ($uid) {
-      return imap_fetchbody($this->_mailbox, $msgId, $partId, FT_UID,FT_PEEK);
+      return imap_fetchbody($this->_mailbox, $msgId, $partId, FT_UID | FT_PEEK);
     }
 
-    return imap_fetchbody($this->_mailbox, $msgId, $partId);
+    return imap_fetchbody($this->_mailbox, $msgId, $partId,FT_PEEK);
   }
 
   /**

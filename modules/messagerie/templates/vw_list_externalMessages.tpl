@@ -12,8 +12,8 @@
 <script type="text/javascript">
   Main.add(function () {
     var tabs =Control.Tabs.create("tab-mail", true);
-    //tabs.activeLink.onmousedown();
-    messagerie.getLastMessages({{$user->_id}},null);
+    tabs.activeLink.onmousedown();
+    //messagerie.getLastMessages({{$user->_id}},null);
   });
 </script>
 

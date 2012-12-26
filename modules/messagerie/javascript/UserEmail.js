@@ -19,6 +19,13 @@ messagerie = {
     url.modalObject.observe("afterClose", this.refreshList.curry(type));
   },
 
+  modalExternalOpen: function(id, type) {
+    var url = new Url(messagerie.module, "ajax_open_external_email");
+    url.addParam("mail_id"    , id);
+    url.requestModal(800,600);
+    url.modalObject.observe("afterClose", this.refreshList.curry(type));
+  },
+
   refreshList : function(type) {
     var url = new Url(messagerie.module, "ajax_list_mails");
     url.addParam("type", type);

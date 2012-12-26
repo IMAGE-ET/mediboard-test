@@ -42,14 +42,36 @@ if(count($unseen)>0){
     if(!$mail_unseen->_id) {
       $mail_unseen->loadContentFromSource($pop->getFullBody($_mail,false,false,true));
       $mail_unseen->user_id = $user_id;
+
+      //text plain
+      if($mail_unseen->_text_plain) {
+        $textP = new CContentAny();
+        $textP->content = $mail_unseen->_text_plain;
+        if ($msg = $textP->store()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
+        $mail_unseen->text_plain_id = $textP->_id;
+      }
+
+      //text html
+      if($mail_unseen->_text_html) {
+        $textH = new CContentHTML();
+        $text = new CMbXMLDocument();
+        $text = $text->sanitizeHTML($mail_unseen->_text_html); //cleanup
+        $textH->content = $text;
+
+        if ($msg = $textH->store()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        } else {
+          $mail_unseen->text_html_id = $textH->_id;
+        }
+      } //if html
+
       if ($msg = $mail_unseen->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
       }
-    } else {
-      //mbTrace($mail_unseen);
-    }
-
-  }
+    } //if id
+  } //foreach
 
 
 
