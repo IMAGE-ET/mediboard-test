@@ -42,7 +42,7 @@ cancelTarif = function(action, callback) {
 validTarif = function(){
   var form = document.tarifFrm;
   
-  $V(form.du_tiers,  $V(form._somme) - $V(form.du_patient));
+  $V(form.du_tiers,  Math.round(($V(form._somme) - $V(form.du_patient))*100)/100);
   
   if ($V(form.tarif) == ""){
     $V(form.tarif, "manuel");
@@ -232,7 +232,7 @@ Main.add( function(){
               // Mise a jour de du_patient
               var form = document.forms['tarifFrm'];
               if(form && form.du_patient && form.du_patient.value == "0"){
-                $V(form.du_patient, $V(form._somme)); 
+                $V(form.du_patient, Math.round($V(form._somme)*100)/100); 
               }
             } );
           </script>
