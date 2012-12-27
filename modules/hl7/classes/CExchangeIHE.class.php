@@ -21,7 +21,8 @@ class CExchangeIHE extends CExchangeTabular {
     "PAM"    => "CPAM",
     "PAM_FR" => "CPAMFR",
     "DEC"    => "CDEC",
-    "SWF"    => "CSWF"
+    "SWF"    => "CSWF",
+    "PDQ"    => "CPDQ"
   );
   
   // DB Table key

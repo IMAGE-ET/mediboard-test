@@ -21,7 +21,7 @@ Main.add(function(){
 <table class="main">
   <tr>
     <td class="halfPane">
-      {{include file="inc_list_patient.tpl"}}
+      {{mb_include template="inc_list_patient"}}
     </td>
     <td class="halfPane" id="vwPatient">
       <div class="small-info">

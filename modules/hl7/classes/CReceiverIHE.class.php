@@ -32,6 +32,7 @@ class CReceiverIHE extends CInteropReceiver {
       "PAM_FR" => array ("evenementsPatient"),
       "DEC"    => array ("CDEC"),
       "SWF"    => array ("CSWF"),
+      "PDQ"    => array ("CPDQ"),
     );
     
     return $spec;
