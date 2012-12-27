@@ -76,9 +76,6 @@ if ($mail->_id && !$mail->text_plain_id) {
 $mail->loadRefsFwd();
 $pop->close();
 
-
-
-mbTrace($mail->_text_html->content);
 //Smarty
 $smarty = new CSmartyDP();
 $smarty->assign("mail", $mail);

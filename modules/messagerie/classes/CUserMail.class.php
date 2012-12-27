@@ -76,12 +76,35 @@ class CUserMail extends CMbObject{
   }
 
   /**
+   * @return null|string
+   */
+  function delete() {
+    $this->loadRefsFwd();
+
+    if ($msg = parent::delete()) {
+      return $msg;
+    }
+    // Remove content
+    if ($this->_text_html->_id) {
+      if ($msg = $this->_text_html->delete()) {
+        return $msg;
+      }
+    }
+
+    if ($this->_text_plain->_id) {
+      if($this->_text_plain->delete()) {
+        return $msg;
+      }
+    }
+  }
+
+  /**
    * used to load the mail from SourcePOP
    *
    * @param $s : stdout from IMAP
    */
 
-  function loadHeaderFromSource($s) {
+  function loadMatchingFromSource($s) {
 
     if(!count($s)>0 || !isset($s[0]->to)) {
       return false;
@@ -91,13 +114,16 @@ class CUserMail extends CMbObject{
     if (isset($s->subject)) {
       $this->subject      = self::flatMimeDecode($s->subject);
     }
+
     $this->from         = self::flatMimeDecode($s->from);
     $this->to           = self::flatMimeDecode($s->to);
     $this->date_inbox   = mbDateTime($s->date);
     //$this->_msgno       = $s->msgno;
     $this->uid          = $s->uid;
 
-    return true;
+    $this->loadMatchingObject();
+    $this->unescapeValues();
+    return $this->_id;
   }
 
   function loadComplete() {
@@ -141,7 +167,24 @@ class CUserMail extends CMbObject{
     foreach ($array as $key => $part) {
       $str .= $part->text;
     }
-    return @$str;
+    return addslashes($str);
+  }
+
+
+  function checkInlineAttachments() {
+    if (!count($this->_attachments) || !$this->_text_html->content) {
+      return false;
+    }
+
+    foreach($this->_attachments as $_attachment) {
+      if (isset($_attachment->id) && $_attachment->disposition == "INLINE") {
+        $_attachment->id = preg_replace("/(<|>)/", "", $_attachment->id);
+        if (preg_match("/$_attachment->id/",$this->_text_html->content)) {
+          $this->_text_html->content = str_replace("cid:$_attachment->id","data:image/".strtolower($_attachment->subtype).";base64,".$_attachment->content,$this->_text_html->content);
+        }
+      }
+    }
+    return true;
   }
 
   /**

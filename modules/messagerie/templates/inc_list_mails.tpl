@@ -20,9 +20,13 @@
   {{foreach from=$mails item=_mail}}
     <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
       <td>
-        <button class="trash notext" title="button.trash notext">trash</button>
-        <button class="hslip notext" title="button.hslip notext">hslip</button>
-        <button class="print notext" title="button.print notext">print</button>
+        <form name="editMail{{$_mail->_id}}" action="" method="post">
+          <input type="hidden" name="m" value="{{$m}}" />
+          <input type="hidden" name="dosql" value="do_usermail_aed" />
+          <input type="hidden" name="del" value="1" />
+          <input type="hidden" name="user_mail_id" value="{{$_mail->_id}}"/>
+          <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$_mail->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: messagerie.refreshList })">trash</button>
+        </form>
         <button class="tag notext" title="button.tag notext">tag</button>
       </td>
       <td>{{mb_value object=$_mail field=date_inbox format=relative}}</td>

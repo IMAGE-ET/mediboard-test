@@ -37,9 +37,8 @@ if(count($unseen)>0){
   //traitement
   foreach($unseen as $_mail) {
     $mail_unseen = new CUserMail();
-    $mail_unseen->loadHeaderFromSource($pop->header($_mail));
-    $mail_unseen->loadMatchingObject();
-    if(!$mail_unseen->_id) {
+
+    if(!$mail_unseen->loadMatchingFromSource($pop->header($_mail))) {
       $mail_unseen->loadContentFromSource($pop->getFullBody($_mail,false,false,true));
       $mail_unseen->user_id = $user_id;
 
@@ -71,6 +70,10 @@ if(count($unseen)>0){
         CAppUI::setMsg($msg, UI_MSG_ERROR);
       }
     } //if id
+    $mail_unseen->_attachments = $pop->getListAttachments($_mail,false);
+    mbTrace($mail_unseen);
+
+
   } //foreach
 
 

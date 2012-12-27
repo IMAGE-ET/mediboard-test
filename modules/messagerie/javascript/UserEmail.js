@@ -28,6 +28,10 @@ messagerie = {
 
   refreshList : function(type) {
     var url = new Url(messagerie.module, "ajax_list_mails");
+
+    if (Object.isUndefined(type)) {
+      type = 'all';
+    }
     url.addParam("type", type);
     url.requestUpdate(type);
   },

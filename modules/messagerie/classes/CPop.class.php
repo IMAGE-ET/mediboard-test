@@ -150,9 +150,10 @@ class CPop{
   }
 
   /**
-   * get the text from email
-   *
-   * @param $mail_id
+   *   @param      $mail_id
+   * @param bool $structure
+   * @param bool $part_number
+   * @param bool $only_text
    *
    * @return array
    */
@@ -218,6 +219,53 @@ class CPop{
 
 
 
+  function getListAttachments($mail_id, $getcontent = false, $structure = false, $part_number = false ) {
+
+    if(!$structure) {
+      $structure = $this->structure($mail_id);
+    }
+
+    if ($structure) {
+      if(!isset($structure->parts) && !$part_number) {  //plain text only, no recursive
+        $part_number = "1";
+      }
+      if(!$part_number) {
+        $part_number = "0";
+      }
+
+      switch ($structure->type) {
+        case 1: //multipart, alternatived
+          while (list($index, $sub_structure) = each($structure->parts)) {
+            if ($part_number) {
+              $prefix = $part_number.'.';
+            } else {
+              $prefix = null;
+            }
+            self::getListAttachments($mail_id,$getcontent,$sub_structure,$prefix . ($index + 1));
+          }
+          break;
+
+        case 2:     //message
+        case 3:     //application
+        case 4:     //audio
+        case 5:     //images
+        case 6:     //video
+        $attach  = new CPopAttachments();
+        $attach->loadFromHeader($structure);
+        $attach->part = $part_number;
+
+        if ($getcontent) {
+        $attach->loadContentFromPop($this->openPart($mail_id,$part_number));
+        }
+        //inline attachments
+        $this->content["attachments"][] = $attach;
+          break;
+        default:    //other
+      }
+    }
+  return $this->content["attachments"];
+  }
+
   /** TOOLS **/
 
   /**
@@ -244,9 +292,6 @@ class CPop{
     }
   }
 
-  function inlineAttach() {
-    
-  }
 
   /* Close the mailBox
    *
@@ -270,8 +315,10 @@ class CPopAttachments {
   var $id           = null;
   var $bytes        = null;
   var $disposition  = null;
+  var $part         = null;
 
   var $name         = null;
+  var $extension    = null;
 
   var $content      = null;
 
@@ -284,6 +331,10 @@ class CPopAttachments {
     if ($header->ifdisposition) {$this->disposition = $header->disposition;}
     if ($header->ifdparameters) {$this->name = $header->dparameters[0]->value;}
     if ($header->ifparameters) {$this->name = $header->parameters[0]->value;}
+
+    //extension
+    $infos = pathinfo($this->name);
+    $this->extension = strtolower($infos["extension"]);
 
   }
 
