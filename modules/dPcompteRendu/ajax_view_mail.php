@@ -8,10 +8,12 @@
  *  @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$type = CValue::get("type", "doc");
+CCanDo::checkRead();
 
-$smarty = new CSmartyDP;
-$smarty->assign("type", $type);
+$object_guid = CValue::get("object_guid");
+
+$smarty = new CSmartyDP();
+
+$smarty->assign("object_guid", $object_guid);
+
 $smarty->display("inc_view_mail.tpl");
-
-?>

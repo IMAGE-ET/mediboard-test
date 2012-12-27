@@ -209,6 +209,7 @@ $locales['CCompteRendu-size-desc'] = 'Taille de police par défaut du modèle';
 $locales['CCompteRendu-source'] = 'Contenu';
 $locales['CCompteRendu-source-court'] = 'Contenu';
 $locales['CCompteRendu-source-desc'] = 'Contenu du document';
+$locales['CCompteRendu-store_to_send'] = 'Enregistez le document pour pouvoir l\'envoyer.';
 $locales['CCompteRendu-thumbnail'] = 'Vignette';
 $locales['CCompteRendu-title-create'] = 'Nouveau modèle';
 $locales['CCompteRendu-title-modify'] = 'Modifier le modèle';

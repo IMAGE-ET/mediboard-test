@@ -10,12 +10,11 @@ window.onbeforeunload= function () {
 
 function openWindowMail() {
   var url = new Url("dPcompteRendu", "ajax_view_mail");
-  url.addParam("type", "file");
+  url.addParam("object_guid", "{{$fileSel->_guid}}");
   url.requestModal(700, 320);
 }
 
 window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|smarty:nodefaults}};
-window.file_id = {{$fileSel->_id}};
 </script>
 
 <table class="main form">

@@ -8,6 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !preg_match("/-[0-9]+/", $object_guid)}}
+  <h2>{{tr}}CCompteRendu-store_to_send{{/tr}}</h2>
+  {{mb_return}}
+{{/if}}
+
 <script type="text/javascript">
   Main.add(function() {
     var tabMail = $("tabMail");
@@ -72,12 +77,8 @@
       var url = new Url("dPcompteRendu", "ajax_send_mail");
       url.addParam("nom", nom);
       url.addParam("email", email);
-      url.addParam("type", '{{$type}}');
-      {{if $type == "doc"}}
-        url.addParam("content", CKEDITOR.instances.htmlarea.getData());
-      {{else}}
-        url.addParam("file_id", file_id);
-      {{/if}}
+      url.addParam("object_guid", '{{$object_guid}}');
+
       document.body.down("#systemMsg").style.display="block";
       url.requestUpdate(document.body.down("#systemMsg"), {method: 'post', getParameters: {m: 'dPcompteRendu', a: 'ajax_send_mail'}});
       Control.Modal.close();
