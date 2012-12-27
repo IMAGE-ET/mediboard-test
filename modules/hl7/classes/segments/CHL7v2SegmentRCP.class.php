@@ -23,7 +23,7 @@ class CHL7v2SegmentRCP extends CHL7v2Segment {
     parent::build($event);
 
     // RCP-1: Query Priority (ID) (optional)
-    $data[] = null;
+    $data[] = "I";
     
     // RCP-2: Quantity Limited Request (CQ) (optional)
     $data[] = null;

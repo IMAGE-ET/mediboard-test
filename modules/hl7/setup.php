@@ -947,8 +947,15 @@ class CSetuphl7 extends CSetup {
     $query = "ALTER TABLE `receiver_ihe_config` 
                 ADD `send_first_affectation` ENUM ('A02','Z99') DEFAULT 'Z99';";
     $this->addQuery($query);
+
+    $this->makeRevision("0.49");
+
+    $query = "ALTER TABLE `receiver_ihe_config`
+                ADD `ITI21_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5') DEFAULT '2.5',
+                ADD `ITI22_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5') DEFAULT '2.5';";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.49";
+    $this->mod_version = "0.50";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

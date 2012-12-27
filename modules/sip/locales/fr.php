@@ -37,6 +37,7 @@ $locales['config-sip-tag_ipp'] = 'Tag IPP du SIP';
 $locales['config-sip-tag_ipp-desc'] = 'Tag IPP du SIP';
 $locales['config-traitement-sip'] = 'Traitement du mode SIP';
 $locales['mod-sip-tab-configure'] = 'Configuration';
+$locales['mod-sip-tab-find_candidates'] = 'Find Candidates';
 $locales['module-sip-court'] = 'SIP';
 $locales['module-sip-long'] = 'Serveur d\'Identité Patient';
 $locales['sip-export-class'] = 'Export de la table';

@@ -18,18 +18,21 @@
 
 class CHL7v2SegmentQPD extends CHL7v2Segment {
   var $name   = "QPD";
-  
+
+
   function build(CHL7v2Event $event) {
     parent::build($event);
 
     // QPD-1: Message Query Name (CE)
-    $data[] = null;
+    $data[] = "IHE PDQ Query";
     
     // QPD-2: Query Tag (ST)
-    $data[] = null;
+    $data[] = "PDQPDC.".mbTransformTime(null, null, "%Y%m%d%H%M%S");
     
     // QPD-3: User Parameters (in successive fields) (Varies)
-    $data[] = null;
+    $data[] = array(
+
+    );
 
     $this->fill($data);
   }

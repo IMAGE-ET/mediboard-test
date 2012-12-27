@@ -29,16 +29,19 @@
     <td style="vertical-align: top;">
       <ul id="tabs-messages-supported" class="control_tabs_vertical">
         {{foreach from=$messages key=_message item=_messages_supported}}
-          <li>
+          <li style="width: 260px">
             <a href="#{{$_message}}"> {{tr}}{{$_message}}{{/tr}} (<span id="span-{{$_message}}">-</span>/{{$_messages_supported|@count}}) </a>
           </li>
         {{/foreach}}
       </ul>
     </td>
-    <td style="vertical-align: top;">
+    <td style="vertical-align: top; width: 100%">
       {{foreach from=$messages key=_message item=_messages_supported}}
       <div id="{{$_message}}" style="display: none;">
         <table class="tbl form">
+          <tr>
+            <th class="title" colspan="2">{{tr}}CIHE-transactions{{/tr}}</th>
+          </tr>
           {{foreach from=$_messages_supported item=_message_supported}}
           <tr>
             <th width="20%">{{tr}}{{$_message_supported->message}}{{/tr}}</th>
