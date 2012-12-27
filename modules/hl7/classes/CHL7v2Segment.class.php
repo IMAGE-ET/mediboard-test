@@ -762,7 +762,7 @@ class CHL7v2Segment extends CHL7v2Entity {
             // CE-1
             null,
             // CE-2
-            "$datetime#$type_anesth#$idex_chir->id400#$idex_anesth->id400#$libelle"
+            "$datetime#$type_anesth->id400#$idex_chir->id400#$idex_anesth->id400#$libelle"
           )
         );
       default:
