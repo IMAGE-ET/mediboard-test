@@ -93,23 +93,27 @@ foreach ($selected_classes as $_class) {
       //mbTrace($spec);
       $details['fields'][$k]['object']['db_spec'] = CMbFieldSpec::parseDBSpec($spec->getDBSpec());
       
-      //$specs_obj = $object->getSpecs();
       $db_spec = &$details['fields'][$k]['object']['db_spec'];
-      $db_spec['index'] = (isset($spec->class) || 
-                           $spec instanceof CDateTimeSpec || 
-                           $spec instanceof CDateSpec || 
-                           //$spec instanceof CTimeSpec || 
-                           $k == $details['key']);
+      $db_spec['index'] = (
+        in_array(array($k), $object->_spec->uniques) ||
+        isset($spec->class) || 
+        $spec instanceof CDateTimeSpec || 
+        $spec instanceof CDateSpec || 
+        $k == $details['key']
+		  );
       $db_spec['null'] = !(isset($spec->notNull)) && !$is_key;
       
       $default = null;
-      if (isset($spec->default)) {
+      if (isset($spec->default) || $spec->notNull) {
         if ($spec->default === "NULL") {
           $default = "NULL";
         }
-        else if ($spec->default !== null) {
+        elseif ($spec->default !== null) {
           $default = "{$spec->default}";
         }
+				elseif ($spec->notNull && ($spec instanceof CNumSpec || $spec instanceof CFloatSpec  || $spec instanceof CRefSpec) ) {
+          $default = "0";
+				}
       }
       
       $db_spec['default'] = $default;
