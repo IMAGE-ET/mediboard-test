@@ -8,19 +8,30 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=patients script=autocomplete}}
+
 <script type="text/javascript">
-editCGroups = function(group_id){
-  var url = new Url("dPetablissement", "ajax_vw_groups");
-  url.addParam("group_id", group_id);
-  url.requestUpdate('group_etab'); 
+Group = {
+  edit: function(group_id) {
+    var url = new Url('etablissement', 'ajax_vw_groups');
+    url.addParam('group_id', group_id);
+    url.requestUpdate('group_etab');
+    
+    var row = $('row-CGroups-'+group_id);
+    if (row) {
+      row.addUniqueClassName('selected');
+    }  
+  }
 }
+
+Main.add(Group.edit.curry('{{$group_id}}'));
 </script>
 
 <table class="main">
   <tr>
     <td class="halfPane">
       {{if $can->edit}}
-      <button onclick="editCGroups('0')" class="new">
+      <button onclick="Group.edit('0')" class="new">
         {{tr}}CGroups-title-create{{/tr}}
       </button>
       {{/if}}
@@ -31,10 +42,10 @@ editCGroups = function(group_id){
           <th>Fonctions associées</th>
         </tr>
         {{foreach from=$groups item=_group}}
-        <tr {{if $_group->_id == $group->_id}} class="selected" {{/if}}>
+        <tr id="row-{{$_group->_guid}}">
           <td>
             {{if $can->edit}}
-            <a href="#" onclick="editCGroups('{{$_group->_id}}')">
+            <a href="#{{$_group->_guid}}" onclick="Group.edit('{{$_group->_id}}')">
               {{$_group->text}}
             </a>
             {{else}}
@@ -42,13 +53,7 @@ editCGroups = function(group_id){
             {{/if}}
           </td>
           <td>
-            {{if $can->edit}}
-            <a href="#" onclick="editCGroups('{{$_group->_id}}')">
-              {{$_group->_ref_functions|@count}}
-            </a>
-            {{else}}
-              {{$_group->_ref_functions|@count}}
-            {{/if}}
+            {{$_group->_ref_functions|@count}}
           </td>
         </tr>
         {{/foreach}}
@@ -56,7 +61,6 @@ editCGroups = function(group_id){
     </td>
     {{if $can->edit}}
     <td class="halfPane" id="group_etab">
-      {{mb_include module=etablissement template=inc_vw_groups}}
     </td>
     {{/if}}
   </tr>

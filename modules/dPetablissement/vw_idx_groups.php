@@ -11,12 +11,10 @@
 CCanDo::checkRead();
 
 // Récupération du groupe selectionné
-$group = new CGroups;
-$group->load(CValue::getOrSession("group_id"));
-$group->loadFunctions();
-$group->loadRefsNotes();
+$group_id = CValue::getOrSession("group_id");
 
 // Récupération des fonctions
+$group = new CGroups;
 $groups = $group->loadListWithPerms(PERM_READ);
 foreach ($groups as $_group) {
   $_group->loadFunctions();
@@ -24,8 +22,8 @@ foreach ($groups as $_group) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("group" , $group);
-$smarty->assign("groups", $groups);
+$smarty->assign("group_id" , $group_id);
+$smarty->assign("groups"   , $groups);
 
 $smarty->display("vw_idx_groups.tpl");
 

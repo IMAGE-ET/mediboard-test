@@ -7,7 +7,7 @@ Main.add(function () {
   
   var row = $('{{$etab_externe->_guid}}-row');
   if (row) {
-    row.addUniqueClassName('selected');
+    row.addUniqueClassName('selected'); 
   }
 });
 </script>
@@ -19,6 +19,7 @@ Main.add(function () {
 <form name="etabExterne" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
   {{mb_class object=$etab_externe}}
   {{mb_key   object=$etab_externe}}
+  
   <table class="form">
     {{mb_include module=system template=inc_form_table_header object=$etab_externe}}
 
