@@ -189,4 +189,16 @@ abstract class CHL7v2 {
     
     echo "<pre style='color:$color;'>$str</pre>";
   }
+
+  /**
+   * Transforms absolute or relative time into a HL7 format
+   *
+   * @param string $relative A relative time
+   * @param string $ref      An absolute time to transform
+   *
+   * @return string The transformed date
+   **/
+  static function getDateTime($relative = null, $ref = null) {
+    return mbTransformTime($relative, $ref, "%Y%m%d%H%M%S");
+  }
 }

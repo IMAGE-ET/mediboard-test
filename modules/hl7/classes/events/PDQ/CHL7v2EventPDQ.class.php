@@ -51,15 +51,16 @@ class CHL7v2EventPDQ extends CHL7v2Event implements CHL7EventPDQ {
   /**
    * QPD - Represents an HL7 QPD message segment (Query Parameter Definition)
    */
-  function addQPD() {
+  function addQPD($patient) {
     $QPD = CHL7v2Segment::create("QPD", $this->message);
+    $QPD->patient = $patient;
     $QPD->build($this);
   }
 
   /**
    * RCP - Represents an HL7 RCP message segment (Response Control Parameter)
    */
-  function addRCP() {
+  function addRCP($patient) {
     $RCP = CHL7v2Segment::create("RCP", $this->message);
     $RCP->build($this);
   }

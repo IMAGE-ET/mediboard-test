@@ -739,8 +739,8 @@ class CHL7v2Segment extends CHL7v2Entity {
           return null;
         }
         
-        $datetime = mbTransformTime($operation->_datetime, null, "%Y%m%d%H%M%S");
-        
+        $datetime = CHL7v2::getDateTime($operation->_datetime);
+
         $type_anesth = null;
         if ($operation->type_anesth) {
           $tag_hl7     = $receiver->_tag_hl7;

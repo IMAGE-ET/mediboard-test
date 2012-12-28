@@ -23,7 +23,30 @@ $patient_day        = CValue::request("Date_Day"  , "");
 $patient_month      = CValue::request("Date_Month", "");
 $patient_year       = CValue::request("Date_Year" , "");
 
+$patient_naissance = null;
+if(($patient_year) || ($patient_month) || ($patient_day)){
+  $patient_naissance = "on";
+}
+
+$naissance = null;
+if ($patient_naissance == "on"){
+  $year =($patient_year)?"$patient_year-":"%-";
+  $month =($patient_month)?"$patient_month-":"%-";
+  $day =($patient_day)?"$patient_day":"%";
+  if ($day!="%") {
+    $day = str_pad($day,2,"0",STR_PAD_LEFT);
+  }
+
+  $naissance = $year.$month.$day;
+}
+
 $patient = new CPatient();
+$patient->nom             = $patient_nom;
+$patient->prenom          = $patient_prenom;
+$patient->nom_jeune_fille = $patient_jeuneFille;
+$patient->naissance       = $naissance;
+$patient->ville           = $patient_ville;
+$patient->cp              = $patient_cp;
 
 $receiver_ihe           = new CReceiverIHE();
 $receiver_ihe->actif    = 1;
