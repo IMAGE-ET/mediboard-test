@@ -156,7 +156,7 @@ class CWkHtmlToPDFConverter extends CHtmlToPDFConverter {
   function render() {
     global $root_dir;
     
-    $command = "$root_dir/lib/wkhtmltopdf/wkhtmltopdf-".CAppUI::conf("dPcompteRendu CCompteRendu arch_wkhtmltopdf")." ";
+    $command = "$root_dir/lib/wkhtmltopdf/wkhtmltopdf-".CAppUI::conf("dPcompteRendu CCompteRendu arch_wkhtmltopdf")." -q ";
     $result = tempnam("./tmp", "result");
     $options = "--print-media-type ";
 
