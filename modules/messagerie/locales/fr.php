@@ -2,6 +2,7 @@
 $locales['Attachments'] = 'Pièces jointes';
 $locales['CExchangeSource.pop-desc'] = 'Reception POP';
 $locales['CExchangeSource.smtp-desc'] = 'Envoi SMTP';
+$locales['CMailAttachments'] = 'Pièces Jointes';
 $locales['CMediusers-back-mails_received'] = 'Messages reçus';
 $locales['CMediusers-back-mails_sent'] = 'Messages envoyés';
 $locales['CPop-error-imap_open'] = 'Impossible de se connecter au serveur';
@@ -151,6 +152,7 @@ $locales['mod-dPmessagerie-tab-ajax_open_email'] = 'Aperçu de l\'email';
 $locales['mod-dPmessagerie-tab-ajax_open_external_email'] = 'Lecture du mail';
 $locales['mod-messagerie-tab-ajax_open_external_email'] = 'Lecture du mail';
 $locales['mod-messagerie-tab-ajax_open_pop_email'] = 'Aperçu de l\'email';
+$locales['mod-messagerie-tab-get_pop_attachment'] = 'Récupération de pièce jointe';
 $locales['mod-messagerie-tab-vw_list_POPMessages'] = 'Messagerie POP';
 $locales['mod-messagerie-tab-vw_list_externalMessages'] = 'Messagerie externe';
 $locales['mod-messagerie-tab-vw_list_internalMessages'] = 'Messagerie interne';

@@ -18,6 +18,8 @@ class CPop{
   var $_server        = null;
   var $_mailbox_info  = null;
 
+  var $_parts         = array();
+
   var $content = array (
     "text" => array(
       "plain" => null,
@@ -136,6 +138,7 @@ class CPop{
 
   /**
    * Open a part of an email
+   * ft_peek is defined, the mail is not mark as read on imap servers
    * @param $msgId
    * @param $partId
    *
@@ -200,7 +203,7 @@ class CPop{
         case 6:     //video
         default:    //other
         if ($only_text) {
-          $attach  = new CPopAttachments();
+          $attach  = new CMailAttachments();
           $attach->loadFromHeader($structure);
           $attach->loadContentFromPop($this->openPart($mail_id,$part_number));
 
@@ -219,7 +222,7 @@ class CPop{
 
 
 
-  function getListAttachments($mail_id, $getcontent = false, $structure = false, $part_number = false ) {
+  function getListAttachments($mail_id, $getcontent = false, $structure = false, $part_number = false, $part_temp=false ) {
 
     if(!$structure) {
       $structure = $this->structure($mail_id);
@@ -236,12 +239,19 @@ class CPop{
       switch ($structure->type) {
         case 1: //multipart, alternatived
           while (list($index, $sub_structure) = each($structure->parts)) {
-            if ($part_number) {
+            if ($part_number !== false) {
               $prefix = $part_number.'.';
             } else {
               $prefix = null;
             }
-            self::getListAttachments($mail_id,$getcontent,$sub_structure,$prefix . ($index + 1));
+
+            if ($part_temp !== false) {
+              $prefix_temp = $part_temp.'.';
+            } else {
+              $prefix_temp = null;
+            }
+
+            self::getListAttachments($mail_id, $getcontent, $sub_structure, $prefix . ($index + 1), $prefix_temp.$index);
           }
           break;
 
@@ -250,12 +260,13 @@ class CPop{
         case 4:     //audio
         case 5:     //images
         case 6:     //video
-        $attach  = new CPopAttachments();
+        $attach  = new CMailAttachments();
         $attach->loadFromHeader($structure);
-        $attach->part = $part_number;
+        $attach->part = $part_temp;
+
 
         if ($getcontent) {
-        $attach->loadContentFromPop($this->openPart($mail_id,$part_number));
+          $attach->loadContentFromPop($this->openPart($mail_id,$attach->getpartDL()));
         }
         //inline attachments
         $this->content["attachments"][] = $attach;
@@ -275,7 +286,7 @@ class CPop{
    *
    * @return string
    */
-  function decodeMail($encoding, $text) {
+  static function decodeMail($encoding, $text) {
     switch ($encoding) {
       /* 0 : 7 bit / 1 : 8 bit / 2 ; binary / 5 : other  => default  */
       case(3):  //base64
@@ -302,52 +313,4 @@ class CPop{
   }
 
 
-}
-
-
-/* CLASS CPopATTACHMENTS */
-
-class CPopAttachments {
-
-  var $type         = null;
-  var $encoding     = null;
-  var $subtype      = null;
-  var $id           = null;
-  var $bytes        = null;
-  var $disposition  = null;
-  var $part         = null;
-
-  var $name         = null;
-  var $extension    = null;
-
-  var $content      = null;
-
-  function loadFromHeader($header) {
-    $this->type = $header->type;
-    $this->encoding = $header->encoding;
-    if ($header->ifsubtype) {$this->subtype = $header->subtype;}
-    if ($header->ifid) {$this->id = $header->id;}
-    $this->bytes = $header->bytes;
-    if ($header->ifdisposition) {$this->disposition = $header->disposition;}
-    if ($header->ifdparameters) {$this->name = $header->dparameters[0]->value;}
-    if ($header->ifparameters) {$this->name = $header->parameters[0]->value;}
-
-    //extension
-    $infos = pathinfo($this->name);
-    $this->extension = strtolower($infos["extension"]);
-
-  }
-
-  function loadContentFromPop($content) {
-    switch ($this->subtype) {
-      case 'SVG+XML':
-        $this->content = CPop::decodeMail($this->encoding, $content);
-        break;
-      
-      default:
-        $this->content = base64_encode(CPop::decodeMail($this->encoding, $content));
-        break;
-    }
-    return true;
-  }
 }

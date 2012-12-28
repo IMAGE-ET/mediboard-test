@@ -69,7 +69,27 @@ class CSetupmessagerie extends CSetup {
               ADD INDEX (`date_inbox`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.14";
+
+    $this->makeRevision("0.14");
+    $query = "CREATE TABLE `user_mail_attachment` (
+              `user_mail_attachment_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `mail_id` INT (11) UNSIGNED NOT NULL,
+              `type` INT (11) NOT NULL,
+              `encoding` INT (11),
+              `subtype` VARCHAR (255),
+              `id` VARCHAR (255),
+              `bytes` INT (11),
+              `disposition` VARCHAR (255),
+              `part` VARCHAR (255) NOT NULL,
+              `name` VARCHAR (255) NOT NULL,
+              `extension` VARCHAR (255) NOT NULL
+) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `user_mail_attachment`
+              ADD INDEX (`mail_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.15";
 
 
   }

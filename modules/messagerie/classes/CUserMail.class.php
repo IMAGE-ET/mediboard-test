@@ -211,11 +211,19 @@ class CUserMail extends CMbObject{
     return $this->_text_html = $this->loadFwdRef("text_html_id");
   }
 
+  function loadAttachments() {
+    $attach = new CMailAttachments();
+    $attach->mail_id = $this->_id;
+    $attachs = $attach->loadMatchingList();
+    return $this->_attachments = $attachs;
+  }
+
   
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadContentHTML();
     $this->loadContentPlain();
+    $this->loadAttachments();
   }
 
 }

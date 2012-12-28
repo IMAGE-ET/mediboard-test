@@ -24,6 +24,7 @@ foreach ($mails as $_mail) {
   $_mail->loadRefsFwd();
 }
 
+
 $smarty = new CSmartyDP();
 $smarty->assign("mails", $mails);
 $smarty->assign("type", $type);

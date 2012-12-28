@@ -38,6 +38,7 @@ if(count($unseen)>0){
   foreach($unseen as $_mail) {
     $mail_unseen = new CUserMail();
 
+
     if(!$mail_unseen->loadMatchingFromSource($pop->header($_mail))) {
       $mail_unseen->loadContentFromSource($pop->getFullBody($_mail,false,false,true));
       $mail_unseen->user_id = $user_id;
@@ -69,9 +70,18 @@ if(count($unseen)>0){
       if ($msg = $mail_unseen->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
       }
+
+      //attachments
+      $attachs = $pop->getListAttachments($_mail,false);
+      foreach ($attachs as $_attch) {
+        $_attch->mail_id = $mail_unseen->_id;
+        if($msg = $_attch->store()) {
+          CAppUI::setMsg("CMailAttachments-error-unsave",UI_MSG_ERROR);
+        }
+      }
     } //if id
-    $mail_unseen->_attachments = $pop->getListAttachments($_mail,false);
-    mbTrace($mail_unseen);
+
+
 
 
   } //foreach
