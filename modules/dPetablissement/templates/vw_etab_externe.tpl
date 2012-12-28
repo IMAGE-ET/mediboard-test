@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 editCEtabExterne = function(etab_id){
-  var url = new Url("dPetablissement", "ajax_etab_externe");
+  var url = new Url("etablissement", "ajax_etab_externe");
   url.addParam("etab_id", etab_id);
   url.requestUpdate('group_externe'); 
 }

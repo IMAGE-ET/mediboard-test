@@ -1,14 +1,13 @@
 
-{{mb_script module="dPpatients" script="autocomplete"}}
+{{mb_script module=patients script=autocomplete}}
 
 <script type="text/javascript">
 Main.add(function () {
-  InseeFields.initCPVille("etabExterne", "cp", "ville","tel");
+  InseeFields.initCPVille('etabExterne', 'cp', 'ville', 'tel');
   
-  var row = $("{{$etab_externe->_guid}}-row");
-  
+  var row = $('{{$etab_externe->_guid}}-row');
   if (row) {
-    row.addUniqueClassName("selected");
+    row.addUniqueClassName('selected');
   }
 });
 </script>
@@ -17,23 +16,12 @@ Main.add(function () {
   {{tr}}CEtabExterne-title-create{{/tr}}
 </button>
 
-<form name="etabExterne" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-  <input type="hidden" name="dosql" value="do_etabExterne_aed" />
-  <input type="hidden" name="etab_id" value="{{$etab_externe->_id}}" />
-  <input type="hidden" name="del" value="0" />
+<form name="etabExterne" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+  {{mb_class object=$etab_externe}}
+  {{mb_key   object=$etab_externe}}
   <table class="form">
-    <tr>
-      {{if $etab_externe->_id}}
-      <th class="title text modify" colspan="2">
-        {{mb_include module=system template=inc_object_idsante400 object=$etab_externe}}
-        {{mb_include module=system template=inc_object_history object=$etab_externe}}
-        Modification de l'établissement '{{$etab_externe->nom}}'
-      {{else}}
-      <th class="title" colspan="2">
-        Création d'un établissement externe
-      {{/if}}
-      </th>
-    </tr>
+    {{mb_include module=system template=inc_form_table_header object=$etab_externe}}
+
     <tr>
       <th>{{mb_label object=$etab_externe field="nom"}}</th>
       <td>{{mb_field object=$etab_externe field="nom" tabindex="1" size=40}}</td>
@@ -84,7 +72,7 @@ Main.add(function () {
         <button class="modify" type="submit" name="modify">
           {{tr}}Save{{/tr}}
         </button>
-        <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'établissement',objName:'{{$etab_externe->nom|smarty:nodefaults|JSAttribute}}'})">
+        <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form, {typeName:'l\'établissement', objName: $V(this.form.nom) })">
           {{tr}}Delete{{/tr}}
         </button>
       {{else}}

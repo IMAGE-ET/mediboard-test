@@ -20,8 +20,9 @@ $etab_externe = new CEtabExterne();
 $list_tab_externes   = $etab_externe->seek(($keywords ? $keywords : "%"), null, "$start, 40", true, null, "nom, cp, ville");
 $total_etab_externes = $etab_externe->_totalSeek;
 
-if($etab_id){
+if ($etab_id) {
   $etab_externe->load($etab_id);
+  $etab_externe->loadRefsNotes();
 }
 
 // Création du template

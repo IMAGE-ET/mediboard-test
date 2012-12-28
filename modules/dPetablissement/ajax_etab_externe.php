@@ -15,8 +15,9 @@ $etab_id = CValue::getOrSession("etab_id");
 
 // Récupération des etablissements externes
 $etab_externe = new CEtabExterne();
-if($etab_id){
+if ($etab_id){
   $etab_externe->load($etab_id);
+  $etab_externe->loadRefsNotes($etab_id);
 }
 
 // Création du template
