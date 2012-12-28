@@ -214,6 +214,7 @@ $locales['Optimize'] = 'Optimiser';
 $locales['Other'] = 'Autre';
 $locales['Owner'] = 'Propriétaire';
 $locales['Parameters'] = 'Paramètres';
+$locales['Parse'] = 'Analyser';
 $locales['Password'] = 'Mot de passe';
 $locales['Period.day'] = 'Quotidien';
 $locales['Period.month'] = 'Mensuel';
