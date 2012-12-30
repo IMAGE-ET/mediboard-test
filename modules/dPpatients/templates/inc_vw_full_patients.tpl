@@ -314,50 +314,53 @@ onMergeComplete = function() {
   {{if $app->user_prefs.simpleCabinet}}
   <tr>
     <td class="button" colspan="2">
-      <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
+      <a class="button new" href="?m=cabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
         Consultation
       </a>
     </td>
   </tr>
   {{else}}
-  <tr>
-    <td class="button" {{if @$modules.ecap->mod_active}}colspan="2"{{/if}}> 
-      <a class="button new" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
-        Consultation
-      </a>
-    </td>
-    {{if !@$modules.ecap->mod_active}}
-    <td class="button">
-      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
-        Intervention
-      </a>      
-    </td>
-    {{/if}}
-  </tr>
-  <tr>
-    {{if @$modules.ecap->mod_active}}
-    <td class="button" colspan="2">
-      {{mb_include module=ecap template=inc_button_dhe patient_id=$patient->_id praticien_id=""}}
-    {{else}}
-    <td class="button">
-      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
-        Séjour
-      </a>
-    </td>
-    <td class="button">
-      <a class="button new" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
-        Interv. hors plage
-      </a>
-    {{/if}}
-    </td>
-  </tr>
+    {{assign var=ecap_active value='ecap'|module_active}} 
+    {{assign var=ecap_idex   value=$current_group|idex:'ecap'}} 
+    {{math assign=ecap_dhe equation="a * b" a=$ecap_active|strlen b=$ecap_idex|strlen}}
+    <tr>
+      <td class="button" {{if $ecap_dhe}} colspan="2" {{/if}}> 
+        <a class="button new" href="?m=cabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
+          Consultation
+        </a>
+      </td>
+      {{if !$ecap_dhe}}
+      <td class="button">
+        <a class="button new" href="?m=planningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+          Intervention
+        </a>      
+      </td>
+      {{/if}}
+    </tr>
+    <tr>
+      {{if $ecap_dhe}}
+      <td class="button" colspan="2">
+        {{mb_include module=ecap template=inc_button_dhe patient_id=$patient->_id praticien_id=""}}
+      {{else}}
+      <td class="button">
+        <a class="button new" href="?m=planningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->_id}}&amp;sejour_id=0">
+          Séjour
+        </a>
+      </td>
+      <td class="button">
+        <a class="button new" href="?m=planningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->_id}}&amp;operation_id=0&amp;sejour_id=0">
+          Interv. hors plage
+        </a>
+      {{/if}}
+      </td>
+    </tr>
   {{/if}}
 
   {{if $listPrat|@count && $canCabinet->edit}}
   <tr><th class="category" colspan="2">Consultation immédiate</th></tr>
   <tr>
     <td class="button" colspan="2">
-      <form name="addConsFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
+      <form name="addConsFrm" action="?m=cabinet" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="dosql" value="do_consult_now" />
       <input type="hidden" name="del" value="0" />
