@@ -72,6 +72,9 @@ class CSmartyMB extends Smarty {
     $this->register_function("thumb"             , array($this,"thumb"));
     $this->register_function("unique_id"         , array($this,"unique_id"));
     
+    $this->register_modifier("idex"              , array($this,"idex"));
+    $this->register_modifier("conf"              , array($this,"conf"));
+
     $this->register_modifier("pad"               , array($this,"pad"));
     $this->register_modifier("json"              , array($this,"json"));
     $this->register_modifier("iso_date"          , array($this,"iso_date"));
@@ -79,8 +82,6 @@ class CSmartyMB extends Smarty {
     $this->register_modifier("iso_datetime"      , array($this,"iso_datetime"));
     $this->register_modifier("rel_datetime"      , array($this,"rel_datetime"));
     $this->register_modifier("week_number_month" , array($this,"week_number_month"));
-    $this->register_modifier("conf"              , array($this,"conf"));
-    
     $this->register_modifier("const"             , array($this,"_const"));
     $this->register_modifier("static"            , array($this,"_static"));
     $this->register_modifier("static_call"       , array($this,"static_call"));
@@ -120,6 +121,7 @@ class CSmartyMB extends Smarty {
     $this->assign("ajax", $ajax);
     $this->assign("modules", $modules);
     $this->assign("base_url", CApp::getBaseUrl());
+    $this->assign("current_group", CGroups::loadCurrent());
   }
   
   
@@ -433,6 +435,18 @@ class CSmartyMB extends Smarty {
    */
   function conf($path, $context = null) {
     return CAppUI::conf($path, $context);
+  }
+  
+  /**
+   * Idex loader and accessor
+   * 
+   * @param CStoredObject $object  The configuration path
+   * @param string        $tag     The context
+   * 
+   * @return string The idex scalar value, empty string if undefined
+   */
+  function idex($object, $tag = null) {
+    return $object->loadLastId400($tag)->id400;
   }
   
   /**

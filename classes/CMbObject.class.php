@@ -11,7 +11,7 @@
 
 /**
  * @abstract Mediboard business object layer 
- * Handles: notes, documents, aides, views, affectations personnels (!), model templates, echanges
+ * Handles: notes, documents, aides, views, model templates, echanges, idex, affectations personnels (!)
  */
 class CMbObject extends CStoredObject {
   var $_aides         = array(); // Aides à la saisie
