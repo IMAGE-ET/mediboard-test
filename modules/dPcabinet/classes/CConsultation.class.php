@@ -742,6 +742,7 @@ TESTS A EFFECTUER
       $minutes_before_consult_sejour = CAppUI::conf("dPcabinet CConsultation minutes_before_consult_sejour");
       $where = array();
       $where['annule']     = " = '0'";
+      $where['type']       = " != 'seances'";
       $where['patient_id'] = " = '$this->patient_id'";
       if (!CAppUI::conf("dPcabinet CConsultation search_sejour_all_groups")) {
         $where['group_id']   = " = '$function->group_id'";
