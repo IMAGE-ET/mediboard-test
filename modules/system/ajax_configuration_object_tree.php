@@ -7,8 +7,6 @@
  * @version  SVN: $Id$
  */
 
-CCanDo::checkRead();
-
 $inherit = CValue::get("inherit");
 
 $object_tree = CConfiguration::getObjectTree($inherit);

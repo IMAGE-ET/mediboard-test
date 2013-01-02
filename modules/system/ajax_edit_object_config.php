@@ -7,8 +7,6 @@
  * @version  SVN: $Id$
  */
 
-CCanDo::checkRead();
-
 $object_guid = CValue::get("object_guid");
 $module      = CValue::get("module");
 $inherit     = CValue::get("inherit");
@@ -20,10 +18,16 @@ if ($object_guid && $object_guid != "global") {
   $configs = CConfiguration::getClassConfigs($object->_class, $module);
 }
 else {
+  if (!CAppUI::$user->isAdmin()) {
+    global $can;
+    $can->redirect();
+    return;
+  }
+
   $model = CConfiguration::getModuleConfigs($module);
   
   $configs = array();
-  foreach($model as $_model) {
+  foreach ($model as $_model) {
     $configs = array_merge($configs, $_model);
   }
 }

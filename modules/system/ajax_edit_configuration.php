@@ -7,8 +7,6 @@
  * @version  SVN: $Id$
  */
 
-CCanDo::checkRead();
-
 $inherit = CValue::get("inherit");
 $module = CValue::get("module");
 

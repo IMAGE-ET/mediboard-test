@@ -45,7 +45,9 @@ toggleCustomValue = function(button, b) {
           {{foreach from=$ancestor_configs item=_ancestor name=ancestor}}
             <th>
               {{if $_ancestor.object != "default" && !$smarty.foreach.ancestor.last}} {{*  && $object_guid != $_ancestor.object->_guid *}}
-                <button type="button" class="edit notext" onclick="$V($('object_guid-selector'), '{{if $_ancestor.object instanceof CMbObject}}{{$_ancestor.object->_guid}}{{else}}{{$_ancestor.object}}{{/if}}')"></button>
+                {{if $_ancestor.object != "global" || $app->_ref_user->isAdmin()}}
+                  <button type="button" class="edit notext" onclick="$V($('object_guid-selector'), '{{if $_ancestor.object instanceof CMbObject}}{{$_ancestor.object->_guid}}{{else}}{{$_ancestor.object}}{{/if}}')"></button>
+                {{/if}}
               {{/if}}
               {{if $_ancestor.object == "default" || $_ancestor.object == "global"}}
                 {{tr}}config-inherit-{{$_ancestor.object}}{{/tr}}

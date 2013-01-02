@@ -397,7 +397,7 @@ class CConfiguration extends CMbMetaObject {
      * @var CMbObject
      */
     $_obj = new $class;
-    $_list = $_obj->loadList($where);
+    $_list = $_obj->loadListWithPerms(PERM_READ, $where);
     
     foreach ($_list as $_object) {
       $subtree[$_object->_guid] = array(
@@ -508,7 +508,7 @@ class CConfiguration extends CMbMetaObject {
       "config"        => $parent_config,
       "config_parent" => $parent_config,
     );
-    
+
     $configs[] = array(
       "object"        => "global", 
       "config"        => self::getSelfConfig(null, null, $config_keys),
