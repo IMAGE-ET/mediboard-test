@@ -36,7 +36,7 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     $data[] = "PDQPDC.".CHL7v2::getDateTime();
     
     // QPD-3: User Parameters (in successive fields) (Varies)
-    $data[] = array(
+    $QPD3 = array(
       // Nom
       $this->addParameters($patient, "nom", "5.1.1"),
 
@@ -55,6 +55,9 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
       // CP
       $this->addParameters($patient, "cp", "11.5"),
     );
+
+    CMbArray::removeValue("", $QPD3);
+    $data[] = $QPD3;
 
     $this->fill($data);
   }

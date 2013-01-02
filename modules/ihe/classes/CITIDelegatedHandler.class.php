@@ -50,7 +50,7 @@ class CITIDelegatedHandler {
     
     $hl7_version = $receiver->getHL7Version($transaction);
     $class       = "CHL7".$hl7_version."Event".$message.$code.$i18n_code;
-   
+
     if (!class_exists($class)) {
       trigger_error("class-CHL7".$hl7_version."Event".$message.$code.$i18n_code."-not-found", E_USER_ERROR);
       return;  
@@ -59,8 +59,8 @@ class CITIDelegatedHandler {
     $event              = new $class;
     $event->profil      = $profil;
     $event->transaction = $transaction;
-     
-    $receiver->sendEvent($event, $mbObject);
+
+    return $receiver->sendEvent($event, $mbObject);
   }
   
 }

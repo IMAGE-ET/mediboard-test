@@ -80,6 +80,14 @@ class CReceiverIHE extends CInteropReceiver {
     
     return $this->_i18n_code;
   }
+
+  function getEventMessage($profil) {
+    if (!array_key_exists($profil, $this->_spec->messages)) {
+      return;
+    }
+
+    return reset($this->_spec->messages[$profil]);
+  }
   
   function sendEvent($evenement, CMbObject $mbObject) {
     $evenement->_receiver = $this;
@@ -88,14 +96,15 @@ class CReceiverIHE extends CInteropReceiver {
     $this->loadConfigValues();
     CHL7v2Message::setBuildMode($this->_configs["build_mode"]); 
     $evenement->build($mbObject);  
-    CHL7v2Message::resetBuildMode(); 
+    CHL7v2Message::resetBuildMode();
 
     if (!$msg = $evenement->flatten()) {
       return;
     }
 
-    $source = CExchangeSource::get("$this->_guid-evenementsPatient");
-   
+    $evt    = $this->getEventMessage($evenement->profil);
+    $source = CExchangeSource::get("$this->_guid-$evt");
+
     if (!$source->_id || !$source->active) {
       return;
     }
@@ -108,7 +117,7 @@ class CReceiverIHE extends CInteropReceiver {
     
     $source->setData($msg, null, $exchange);
     try {
-      $source->send();
+      //$source->send();
     } catch (Exception $e) {
       throw new CMbException("CExchangeSource-no-response");
     }
@@ -116,6 +125,7 @@ class CReceiverIHE extends CInteropReceiver {
     $exchange->date_echange = mbDateTime();
 
     $ack_data = $source->getACQ();
+
     if (!$ack_data) {
       $exchange->store();
       return;
@@ -130,6 +140,8 @@ class CReceiverIHE extends CInteropReceiver {
     $exchange->acquittement_valide = $ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
     $exchange->_acquittement       = $ack_data;
     $exchange->store();
+
+    return $ack_data;
   }
 }
 ?>

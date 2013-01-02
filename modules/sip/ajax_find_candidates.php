@@ -40,7 +40,7 @@ if ($patient_naissance == "on"){
   $naissance = $year.$month.$day;
 }
 
-$patient = new CPatient();
+$patient                   = new CPatient();
 $patient->nom             = $patient_nom;
 $patient->prenom          = $patient_prenom;
 $patient->nom_jeune_fille = $patient_jeuneFille;
@@ -68,12 +68,16 @@ foreach ($receivers as $_receiver) {
   $patient->_receiver = $_receiver;
 
   // Envoi de l'évènement
-  $iti_handler->sendITI($profil, $transaction, $message, $code, $patient);
+  $ack_data = $iti_handler->sendITI($profil, $transaction, $message, $code, $patient);
 }
+
+$ack_event = new CHL7v2EventPDQK22();
+$patients  = $ack_event->handle($ack_data)->handle();
 
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("patient" , $patient);
+$smarty->assign("patients", $patients);
 $smarty->display("inc_list_patients.tpl");
 
 CApp::rip();

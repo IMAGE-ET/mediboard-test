@@ -261,9 +261,21 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     
     // E-mail
     $this->getEmail($node, $newPatient);
-    
+
+    // Rang naissance
+    $this->getRangNaissance($node, $newPatient);
+
+    // Mapping de l'INS-C
+    if ($data && array_key_exists("INSC", $data["personIdentifiers"])) {
+      $newPatient->INSC = $data["personIdentifiers"]["INSC"];
+    }
+
     //NSS
     $sender = $this->_ref_sender;
+    if (!$sender) {
+      return;
+    }
+
     switch ($sender->_configs["handle_NSS"]) {
       // PID_19
       case 'PID_19':
@@ -277,18 +289,10 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         break; 
     }
     
-    // Mapping de l'INS-C
-    if (array_key_exists("INSC", $data["personIdentifiers"])) {
-      $newPatient->INSC = $data["personIdentifiers"]["INSC"];
-    }
-    
     // AVS ?
     if ($sender->_configs["handle_PID_31"] == "avs") {
       $newPatient->avs = $this->queryTextNode("PID.31", $node);
     }
-    
-    // Rang naissance
-    $this->getRangNaissance($node, $newPatient);
   }
   
   function getNames(DOMNode $node, CPatient $newPatient, DOMNodeList $PID5) {

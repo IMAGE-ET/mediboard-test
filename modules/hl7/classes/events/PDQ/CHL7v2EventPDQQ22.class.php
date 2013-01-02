@@ -16,7 +16,8 @@
  * Q22 - Find Candidates
  */
 class CHL7v2EventPDQQ22 extends CHL7v2EventPDQ implements CHL7EventPDQQ22 {
-  var $code = "Q22";
+  var $code        = "Q22";
+  var $struct_code = "Q21";
   
   function __construct($i18n = null) {
     parent::__construct($i18n);

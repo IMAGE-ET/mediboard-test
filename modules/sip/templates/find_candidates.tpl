@@ -67,7 +67,9 @@
       </form>
     </td>
   </tr>
-  <tbody id="find_candidates">
+  <tr>
+    <td id="find_candidates">
 
-  </tbody>
+    </td>
+  </tr>
 </table>

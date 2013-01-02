@@ -24,7 +24,7 @@ class CHL7v2EventPDQ extends CHL7v2Event implements CHL7EventPDQ {
     $this->profil      = "PDQ";
     $this->msg_codes   = array ( 
       array(
-        $this->event_type, $this->code
+        $this->event_type, $this->code, "{$this->event_type}_{$this->struct_code}"
       )
     );
 

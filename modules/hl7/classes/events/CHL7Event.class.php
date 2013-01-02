@@ -39,9 +39,14 @@ class CHL7Event {
    * @var CInteropSender
    */
   var $_sender       = null;
+
+  /**
+   * @var CExchangeDataFormat
+   */
+  var $_data_format = null;
   
-  var $_exchange_ihe = null; 
-  var $_is_i18n      = null; 
+  var $_exchange_ihe = null;
+  var $_is_i18n      = null;
   
   function __construct($i18n = null) {
     $this->_is_i18n = $i18n;

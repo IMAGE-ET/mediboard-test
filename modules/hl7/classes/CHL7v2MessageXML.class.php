@@ -58,6 +58,11 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     if ($event_type == "CHL7v2EventSWF") {
       return new CHL7v2RecordAppointment($encoding);  
     }
+
+    // Récupération des résultats du PDQ
+    if ($event_type == "CHL7v2EventPDQ") {
+      return new CHL7v2ReceivePatientDemographicsResponse($encoding);
+    }
     
     return new CHL7v2MessageXML($encoding);
   }
