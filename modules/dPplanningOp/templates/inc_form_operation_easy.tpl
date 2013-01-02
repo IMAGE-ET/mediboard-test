@@ -29,6 +29,16 @@
         class="notext {{if $op->chir_2_id || $op->chir_3_id || $op->chir_4_id}}up{{else}}down{{/if}}"></button>
     </td>
   </tr>
+  {{if $conf.dPplanningOp.COperation.show_secondary_function}}
+    <tr>
+      <th>
+        {{mb_label class=CMediusers field=function_id}}
+      </th>
+      <td id="secondary_functions_easy" colspan="2">
+        {{mb_include module=dPcabinet template=inc_refresh_secondary_functions chir=$chir change_active=0}}
+      </td>
+    </tr>
+  {{/if}}
   <tr class="other_prats" {{if !$op->chir_2_id && !$op->chir_3_id && !$op->chir_4_id}}style="display: none"{{/if}}>
     <th>
       {{mb_label object=$op field="chir_2_id"}}

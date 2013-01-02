@@ -60,7 +60,10 @@ refreshFunction = function(chir_id) {
   url.addParam("chir_id"   , chir_id);
   url.addParam("field_name", "secondary_function_id");
   url.addParam("type_onchange", "sejour");
-  url.requestUpdate("secondary_functions");
+  url.requestUpdate("secondary_functions", {onSuccess:
+  function(request) {
+    $("secondary_functions_easy").update(request.responseText);
+  }});
 }
 
 </script>

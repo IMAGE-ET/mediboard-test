@@ -12,36 +12,40 @@
 {{mb_default var=selected value=""}}
 {{mb_default var=empty_function_principale value=0}}
 {{mb_default var=type_onchange value="consult"}}
+{{mb_default var=change_active value="1"}}
 
-<script type="text/javascript">
-  secondaryChange = function(type, elt) {
-    if (!type) {
-      return;
+{{if $change_active}}
+  <script type="text/javascript">
+    secondaryChange = function(type, elt) {
+      if (!type) {
+        return;
+      }
+      switch(type) {
+        case "consult":
+          var form = elt.form;
+          var facturable = elt.options[elt.selectedIndex].get('facturable');
+          form.___facturable.checked = facturable == '1' ? 'checked' : '';
+          $V(elt.form._facturable, facturable);
+          break;
+        case "sejour":
+          var form = getForm("editSejour");
+          var facturable = elt.options[elt.selectedIndex].get('facturable');
+          form.facturable[facturable == '1' ? 0 : 1].checked = "checked";
+      }
     }
-    switch(type) {
-      case "consult":
-        var form = elt.form;
-        var facturable = elt.options[elt.selectedIndex].get('facturable');
-        form.___facturable.checked = facturable == '1' ? 'checked' : '';
-        $V(elt.form._facturable, facturable);
-        break;
-      case "sejour":
-        var form = getForm("editSejour");
-        var facturable = elt.options[elt.selectedIndex].get('facturable');
-        form.facturable[facturable == '1' ? 0 : 1].checked = "checked";
-    }
-  }
 
-  Main.add(function() {
-    var select = $("select_secondary_func");
-    if (select) {
-      select.onchange();
-    }
-  });
-</script>
+    Main.add(function() {
+      var select = $("select_secondary_func");
+      if (select) {
+        select.onchange();
+      }
+    });
+  </script>
+{{/if}}
 
 {{if $chir->_id && $chir->isPraticien()}}
-  <select id="select_secondary_func"  name="{{$field_name}}" style="width: 15em;" onchange="secondaryChange('{{$type_onchange}}', this)">
+  <select {{if $change_active}}id="select_secondary_func"{{/if}}  name="{{$field_name}}" style="width: 15em;"
+    {{if $change_active}}onchange="secondaryChange('{{$type_onchange}}', this)"{{/if}}>
       <option
         {{if $empty_function_principale}}
           value=""
