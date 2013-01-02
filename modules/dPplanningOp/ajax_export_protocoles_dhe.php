@@ -49,15 +49,20 @@ $csv->writeLine(array(
   "UF médicale",
 ));
 
+CMbObject::massLoadFwdRef($protocoles, "chir_id");
+CMbObject::massLoadFwdRef($protocoles, "function_id");
+
 foreach ($protocoles as $_protocole) {
   $_protocole->loadRefUfHebergement();
   $_protocole->loadRefUfMedicale();
   $_protocole->loadRefUfSoins();
-  
+  $_protocole->loadRefChir();
+  $_protocole->loadRefFunction();
+
   $csv->writeLine(array(
-    $function->text,
-    $chir->_user_last_name,
-    $chir->_user_first_name,
+    $_protocole->_ref_function->text,
+    $_protocole->_ref_chir->_user_last_name,
+    $_protocole->_ref_chir->_user_first_name,
     $_protocole->libelle,
     mbTransformTime($_protocole->temp_operation, null, "%H:%M"),
     $_protocole->codes_ccam,
