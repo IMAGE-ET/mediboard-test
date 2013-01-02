@@ -43,9 +43,7 @@ Document.refreshList = function() {
     </tr>
     <tr>
       <td class="button" colspan="10">
-        {{assign var=ecap_active value='ecap'|module_active}} 
-        {{assign var=ecap_idex   value=$current_group|idex:'ecap'}} 
-        {{math assign=ecap_dhe equation="a * b" a=$ecap_active|strlen b=$ecap_idex|strlen}}
+        {{math assign=ecap_dhe equation="a * b" a='ecap'|module_active|strlen b=$current_group|idex:'ecap'|strlen}}
         {{if $ecap_dhe}}
           {{mb_include module=ecap template=inc_button_dhe patient_id=$patient->_id praticien_id=""}}
         {{else}}

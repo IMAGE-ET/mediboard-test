@@ -65,9 +65,7 @@ function newConsultation(chir_id, pat_id, consult_urgence_id) {
     </td>
     <td class="button">
       {{if !$app->user_prefs.simpleCabinet}}
-        {{assign var=ecap_active value='ecap'|module_active}} 
-        {{assign var=ecap_idex   value=$current_group|idex:'ecap'}} 
-        {{math assign=ecap_dhe equation="a * b" a=$ecap_active|strlen b=$ecap_idex|strlen}}
+        {{math assign=ecap_dhe equation="a * b" a='ecap'|module_active|strlen b=$current_group|idex:'ecap'|strlen}}
         {{if $ecap_dhe}}
           {{mb_include
             module=ecap
