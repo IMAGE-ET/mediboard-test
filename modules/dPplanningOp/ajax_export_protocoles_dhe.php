@@ -73,4 +73,4 @@ foreach ($protocoles as $_protocole) {
   ));
 }
 
-$csv->stream("export-protocoles-".($chir_id ? $chir->_view : $function->name));
+$csv->stream("export-protocoles-".($chir_id ? $chir->_view : $function->text));
