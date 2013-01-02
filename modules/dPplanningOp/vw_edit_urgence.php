@@ -209,8 +209,13 @@ foreach($blocages_lit as $key => $blocage){
   }
 }
 
-
 $exchange_source = CExchangeSource::get("mediuser-" . CAppUI::$user->_id, "smtp");
+
+$_functions = array();
+
+if ($chir->_id) {
+  $_functions = $chir->loadBackRefs("secondary_functions");
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -232,6 +237,7 @@ $smarty->assign("praticien" , $chir);
 $smarty->assign("patient"   , $patient );
 $smarty->assign("sejours"   , $sejours);
 $smarty->assign("ufs"       , CUniteFonctionnelle::getUFs());
+$smarty->assign("_functions", $_functions);
 
 $smarty->assign("modurgence", 1);
 $smarty->assign("date_min", mbDate());

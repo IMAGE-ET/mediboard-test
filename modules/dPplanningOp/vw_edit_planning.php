@@ -215,6 +215,12 @@ if (CAppUI::conf("dPplanningOp COperation use_poste")) {
   $op->loadRefPoste();
 }
 
+$_functions = array();
+
+if ($chir->_id) {
+  $_functions = $chir->loadBackRefs("secondary_functions");
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -240,6 +246,7 @@ $smarty->assign("modurgence", 0);
 $smarty->assign("today"     , $today);
 $smarty->assign("tomorow"   , $tomorow);
 $smarty->assign("ufs"       , CUniteFonctionnelle::getUFs());
+$smarty->assign("_functions", $_functions);
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);
