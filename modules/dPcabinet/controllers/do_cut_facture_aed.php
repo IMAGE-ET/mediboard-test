@@ -37,6 +37,7 @@ if ($nbmax > 1) {
     if ($key!=0) {
       $facture_sup = new CFactureConsult();
       $facture_sup->type_facture  = $facture->type_facture;
+      $facture_sup->praticien_id  = $facture->praticien_id;
       $facture_sup->patient_id    = $facture->patient_id;
       $facture_sup->ouverture     = $facture->ouverture;
       $facture_sup->cloture       = $facture->cloture;
