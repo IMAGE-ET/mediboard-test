@@ -13,10 +13,12 @@
           height="{{if $app->user_prefs.debug_yoplet == 1}}400{{else}}1{{/if}}"
           code="org.yoplet.Yoplet.class" archive="includes/applets/yoplet2.jar">
     <param name="debug" value="true" />
+    <param name="codebase_lookup" value="false" />
     <param name="action" value="" />
     <param name="url" value="{{$base_url}}/index.php?m=dPfiles&a=ajax_yoplet_upload" />
     <param name="content" value="a" />
     <param name="cookies" value="{{$app->session_name}}" />
+    <param name="java_arguments" value="-Djnlp.packEnabled=true"/>
   </applet>
   
   {{if $app->user_prefs.debug_yoplet}}
