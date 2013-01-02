@@ -209,6 +209,7 @@ abstract class CSessionHandler {
     if ($engine == "zebra") {
       CAppUI::requireLibraryFile("zebra_session/Zebra_Session");
 
+      // Must use the MySQL connector (not MySQLi)
       $dataSource = new CMySQLDataSource();
       $dataSource->init("std");
       $link = $dataSource->link;
@@ -231,7 +232,7 @@ SQL;
         null, // $gc_divisor
         'mb', // $security_code, should be changed for UA spoofing
         'session_data',  // $table_name
-        60, // $lock_timeout
+        300,  // $lock_timeout
         $link // $link
       );
 

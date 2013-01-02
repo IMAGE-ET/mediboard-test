@@ -97,6 +97,17 @@ class CApp {
     $limit = CMbString::toDecaSI($limit, "");
     return ini_set("memory_limit", $limit);
   }
+
+  /**
+   * Set time limit in seconds
+   *
+   * @param integer $seconds The time limit in seconds
+   *
+   * @return void
+   */
+  static function setTimeLimit($seconds) {
+    set_time_limit($seconds);
+  }
   
   /**
    * Redirect to empty the POST data, 
@@ -303,13 +314,12 @@ class CApp {
   
   /**
    * Return all storable CMbObject classes which module is installed
-   * 
-   * @param array $properties [optional] Filter on properties
-   * @param array $classes    [optional] Restrain to given classes
+   *
+   * @param array $classes [optional] Restrain to given classes
    * 
    * @return array Class names
    */
-  static function getInstalledClasses($properties = array(), $classes = array()) {
+  static function getInstalledClasses($classes = array()) {
     if (empty($classes)) {
       $classes = self::getMbClasses();
     }

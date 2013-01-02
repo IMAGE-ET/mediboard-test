@@ -9,16 +9,38 @@
  * @version    $Revision$
  */
 
-if(!defined("TAB_READ")) {
-  define("TAB_READ"  , 0);
-  define("TAB_EDIT"  , 1);
-  define("TAB_ADMIN" , 2);
+if (!defined("TAB_READ")) {
+  /**
+   * Read permissions on the view
+   */
+  define("TAB_READ" , 0);
+
+  /**
+   * Edit permissions on the view
+   */
+  define("TAB_EDIT" , 1);
+
+  /**
+   * Admin permissions on the view
+   */
+  define("TAB_ADMIN", 2);
 }
 
-if(!defined("PERM_DENY")) {
-  define("PERM_DENY" , 0);
-  define("PERM_READ" , 1);
-  define("PERM_EDIT" , 2);
+if (!defined("PERM_DENY")) {
+  /**
+   * No permission on the object
+   */
+  define("PERM_DENY", 0);
+
+  /**
+   * Read permission on the object
+   */
+  define("PERM_READ", 1);
+
+  /**
+   * Edit permission on the object
+   */
+  define("PERM_EDIT", 2);
 }
 
 /**
@@ -68,7 +90,9 @@ class CModule extends CMbObject {
   
   /**
    * Get all classes for a given module
-   * @param $module string Module name
+   *
+   * @param string $module Module name
+   *
    * @return array[string] Class names
    **/
   static function getClassesFor($module) {
@@ -126,7 +150,7 @@ class CModule extends CMbObject {
   /**
    * Load and compare a module to a given setup
    *
-   * @param CSetup $setup
+   * @param CSetup $setup The CSetup object to compare to
    */
   function compareToSetup(CSetup $setup) {
     $this->mod_name = $setup->mod_name;
@@ -221,7 +245,7 @@ class CModule extends CMbObject {
   }
   
   function registerTab($file, $permType) {
-    switch($permType) {
+    switch ($permType) {
       case TAB_READ:
         if ($this->canRead()) {
           $this->_tabs[] = $file;
@@ -257,7 +281,7 @@ class CModule extends CMbObject {
   function addConfigureTab() {
     // Add configure tab if exist
     $configPath = "./modules/$this->mod_name/configure.php";
-    if (is_file($configPath) && (CAppUI::$instance->user_type == 1)){
+    if (is_file($configPath) && (CAppUI::$instance->user_type == 1)) {
       $this->registerTab("configure", TAB_ADMIN);
     }
   }
@@ -418,13 +442,13 @@ class CModule extends CMbObject {
 
   function remove() {
     $sql = "DELETE FROM modules WHERE mod_id = $this->mod_id";
-    if (!$this->_spec->ds->exec( $sql )) {
+    if (!$this->_spec->ds->exec($sql)) {
       return $this->_spec->ds->error();
     }
     else {
       $this->reorder();
       $sql = "DELETE FROM perm_module WHERE mod_id = $this->mod_id";
-      $this->_spec->ds->exec( $sql );
+      $this->_spec->ds->exec($sql);
       return null;
     }
   }
