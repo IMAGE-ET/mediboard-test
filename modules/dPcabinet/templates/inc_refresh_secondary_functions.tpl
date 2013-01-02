@@ -7,15 +7,51 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  *}}
- 
+
+{{mb_default var=field_name value=_function_secondary_id}}
+{{mb_default var=selected value=""}}
+{{mb_default var=empty_function_principale value=0}}
+{{mb_default var=type_onchange value="consult"}}
+
+<script type="text/javascript">
+  secondaryChange = function(type, elt) {
+    if (!type) {
+      return;
+    }
+    switch(type) {
+      case "consult":
+        var form = elt.form;
+        var facturable = elt.options[elt.selectedIndex].get('facturable');
+        form.___facturable.checked = facturable == '1' ? 'checked' : '';
+        $V(elt.form._facturable, facturable);
+        break;
+      case "sejour":
+        var form = getForm("editSejour");
+        var facturable = elt.options[elt.selectedIndex].get('facturable');
+        form.facturable[facturable == '1' ? 0 : 1].checked = "checked";
+    }
+  }
+
+  Main.add(function() {
+    var select = $("select_secondary_func");
+    if (select) {
+      select.onchange();
+    }
+  });
+</script>
+
 {{if $chir->_id && $chir->isPraticien()}}
-  <select name="_function_secondary_id" style="width: 15em;"
-    onchange="var facturable = this.options[this.selectedIndex].get('facturable');
-      this.form.___facturable.checked = facturable == '1' ? 'checked' : '';
-      $V(this.form._facturable, facturable);">
-      <option value="{{$chir->function_id}}" data-facturable="{{$chir->_ref_function->facturable}}">{{$chir->_ref_function}}</option>
+  <select id="select_secondary_func"  name="{{$field_name}}" style="width: 15em;" onchange="secondaryChange('{{$type_onchange}}', this)">
+      <option
+        {{if $empty_function_principale}}
+          value=""
+        {{else}}
+          value="{{$chir->function_id}}"
+        {{/if}}
+         data-facturable="{{$chir->_ref_function->facturable}}">{{$chir->_ref_function}}</option>
     {{foreach from=$_functions item=_function}}
-      <option value="{{$_function->function_id}}" data-facturable="{{$_function->_ref_function->facturable}}">{{$_function}}</option>
+      <option value="{{$_function->function_id}}" data-facturable="{{$_function->_ref_function->facturable}}"
+        {{if $_function->function_id == $selected}}selected{{/if}}>{{$_function}}</option>
     {{/foreach}}
   </select>
 {{else}}

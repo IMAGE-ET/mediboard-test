@@ -55,6 +55,14 @@ addBesoins = function(types_ressources_ids) {
   });
 }
 
+refreshFunction = function(chir_id) {
+  var url = new Url("dPcabinet", "ajax_refresh_secondary_functions");
+  url.addParam("chir_id"   , chir_id);
+  url.addParam("field_name", "secondary_function_id");
+  url.addParam("type_onchange", "sejour");
+  url.requestUpdate("secondary_functions");
+}
+
 </script>
 
 <form name="addBesoinOp" method="post">
@@ -123,7 +131,7 @@ addBesoins = function(types_ressources_ids) {
     </th>
     <td colspan="2">
       <select name="chir_id" class="{{$op->_props.chir_id}}"
-        onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true);"
+        onchange="synchroPrat(); Value.synchronize(this); removePlageOp(true); refreshFunction(this.value)"
         style="width: 15em">
         <option value="">&mdash; Choisir un chirurgien</option>
         {{mb_include module=mediusers template=inc_options_mediuser list=$listPraticiens selected=$chir->_id}}
@@ -132,6 +140,16 @@ addBesoins = function(types_ressources_ids) {
         class="notext {{if $op->chir_2_id || $op->chir_3_id || $op->chir_4_id}}up{{else}}down{{/if}}"></button>
     </td>
   </tr>
+  {{if $conf.dPplanningOp.COperation.show_secondary_function}}
+    <tr>
+      <th>
+        {{mb_label class=CMediusers field=function_id}}
+      </th>
+      <td id="secondary_functions" colspan="2">
+        {{mb_include module=dPcabinet template=inc_refresh_secondary_functions chir=$chir type_onchange="sejour"}}
+      </td>
+    </tr>
+  {{/if}}
   <tr class="other_prats" {{if !$op->chir_2_id && !$op->chir_3_id && !$op->chir_4_id}}style="display: none"{{/if}}>
     <th>
       {{mb_label object=$op field="chir_2_id"}}

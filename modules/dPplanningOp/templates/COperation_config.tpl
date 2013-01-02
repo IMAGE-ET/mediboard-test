@@ -31,7 +31,9 @@
     {{mb_include module=system template=inc_config_bool var=fiche_rques   }}
     
     {{mb_include module=system template=inc_config_enum var=min_intervalle values=$intervals skip_locales=true}}
-    
+
+    {{mb_include module=system template=inc_config_bool var=show_secondary_function}}
+
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

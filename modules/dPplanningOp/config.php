@@ -37,6 +37,7 @@ $dPconfig["dPplanningOp"]= array(
     "fiche_rques"        => "0",
     "nb_jours_urgence"   => "1",
     "use_poste"          => "0",
+    "show_secondary_function" => "0"
    ),
   "CSejour" => array (
     "check_collisions"    => "date",
@@ -94,7 +95,7 @@ $dPconfig["dPplanningOp"]= array(
     "systeme_isolement"  => "standard",
     "easy_isolement"     => "0",
     "show_cmu_ald"       => "1",
-    "show_days_duree"    => "0"
+    "show_days_duree"    => "0",
   ),
 );
 
