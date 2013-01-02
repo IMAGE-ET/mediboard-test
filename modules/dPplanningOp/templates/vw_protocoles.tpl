@@ -110,7 +110,6 @@ Main.add(function(){
   var url = new Url('planningOp', 'ajax_protocoles_autocomplete');
   url.addParam('field'            , 'protocole_id');
   url.addParam('input_field'      , 'search_protocole');
-  url.addParam('chir_id'          , $V(oForm.chir_id));
   if ('{{$singleType}}' == 'interv') {
     url.addParam('for_sejour', '0');
   } 
@@ -125,6 +124,9 @@ Main.add(function(){
     afterUpdateElement: function(field, selected){
       chooseProtocole(selected.id.split('-')[2]);
       $V(field, "");
+    },
+    callback: function(input, queryString){
+      return queryString + "&chir_id=" + $V(input.form.chir_id);
     }
   });
 });
