@@ -92,7 +92,7 @@ class CFile extends CDocumentItem {
   /**
    * Load a file with a specific name associated with an object
    * 
-   * @param CMbOjbect $object Context object
+   * @param CMbObject $object Context object
    * @param string    $name   File name with extension
    * 
    * @return CFile
@@ -177,8 +177,12 @@ class CFile extends CDocumentItem {
   
   function fillFields(){
     if (!$this->_id) {
-      if (!$this->file_date)          $this->file_date = mbDateTime();
-      if (!$this->file_real_filename) $this->file_real_filename = uniqid(rand());
+      if (!$this->file_date) {
+        $this->file_date = mbDateTime();
+      }
+      if (!$this->file_real_filename) {
+        $this->file_real_filename = uniqid(rand());
+      }
     }
   }
   
@@ -209,9 +213,7 @@ class CFile extends CDocumentItem {
           $suffixe = sprintf(" %02s", $indice);
           $file_name = "$base_name$suffixe.$extension";
           $where["file_name"] = $ds->prepare("= %", $file_name);
-          
-        } 
-        while ($this->countList($where));
+        } while ($this->countList($where));
         $this->file_name = $file_name;
       }
       
@@ -236,14 +238,16 @@ class CFile extends CDocumentItem {
     }
     
     $this->rotation = $this->rotation % 360;
-    if ($this->rotation < 0) { $this->rotation += 360; }
+    if ($this->rotation < 0) {
+      $this->rotation += 360;
+    }
     return parent::store();
   }
   
   function delete() {
     // Remove previews
     $this->loadRefsFiles();
-    foreach($this->_ref_files as $_file) {
+    foreach ($this->_ref_files as $_file) {
       $_file->delete();
     }
     
@@ -263,19 +267,28 @@ class CFile extends CDocumentItem {
 
   /**
    * move a file from a temporary (uploaded) location to the file system
+   *
+   * @param string $file The temporary file name
+   *
    * @return boolean job-done
-   */ 
+   */
   function moveTemp($file) {
     return $this->moveFile($file, true);
   }
-  
+
   /**
    * Move a file from a location to the file system or from the PHP temp directory
+   *
+   * @param string $file     File path
+   * @param bool   $uploaded Is it an uploaded file ?
+   * @param bool   $copy     Copy the file instead of moving it
+   *
    * @return boolean job-done
    */
-  function moveFile($file, $uploaded = false) {
-    if (!$uploaded && !is_file($file))
+  function moveFile($file, $uploaded = false, $copy = false) {
+    if (!$uploaded && !is_file($file)) {
       return false;
+    }
       
     $this->updateFormFields();
     
@@ -284,12 +297,17 @@ class CFile extends CDocumentItem {
     }
   
     // Actually move any file
-    if ($uploaded)
+    if ($uploaded) {
       return move_uploaded_file($file["tmp_name"], $this->_file_path);
-    else
+    }
+
+    if (!$copy) {
       // https://bugs.php.net/bug.php?id=50676
-      // Problem while renaming across volumes : trigger the warning "Operation is not permitted" 
+      // Problem while renaming across volumes : trigger the warning "Operation is not permitted"
       return @rename($file, $this->_file_path);
+    }
+
+    return copy($file, $this->_file_path);
   }
     
   function oldImageMagick() {
@@ -303,43 +321,44 @@ class CFile extends CDocumentItem {
   }
   
   function loadNbPages(){
-    if(strpos($this->file_type, "pdf") !== false && file_exists($this->_file_path)){
+    if (strpos($this->file_type, "pdf") !== false && file_exists($this->_file_path)) {
       // Fichier PDF Tentative de récupération
       $string_recherche = "/Count";
       $dataFile = file_get_contents($this->_file_path);
       $nb_count = substr_count($dataFile, $string_recherche);
 
-      if ($this->oldImageMagick() && preg_match("/\/Rotate ([0-9]+)/", $dataFile, $matches)){
+      if ($this->oldImageMagick() && preg_match("/\/Rotate ([0-9]+)/", $dataFile, $matches)) {
         $this->rotation = 360 - $matches[1];
       }
       
-      if(strpos($dataFile, "%PDF-1.4") !== false && $nb_count >= 2){
+      if (strpos($dataFile, "%PDF-1.4") !== false && $nb_count >= 2) {
         // Fichier PDF 1.4 avec plusieurs occurence
         $splitFile = preg_split("/obj\r<</", $dataFile);
         
-        foreach($splitFile as $splitval){
-          if(!$this->_nb_pages){
+        foreach ($splitFile as $splitval) {
+          if (!$this->_nb_pages) {
             $splitval = str_replace(array("\r", "\n"), "", $splitval);
             $position_fin = stripos($splitval, ">>");
-            if($position_fin !== false){
+            if ($position_fin !== false) {
               $splitval = substr($splitval, 0, $position_fin);
-              if(strpos($splitval, "/Title") === false
-                 && strpos($splitval, "/Parent") === false
-                 && strpos($splitval, "/Pages") !== false
-                 && strpos($splitval, $string_recherche) !== false){
+              if (strpos($splitval, "/Title") === false
+                  && strpos($splitval, "/Parent") === false
+                  && strpos($splitval, "/Pages") !== false
+                  && strpos($splitval, $string_recherche) !== false
+              ) {
                 // Nombre de page ici
                 $position_count = strripos($splitval, $string_recherche) + strlen($string_recherche);
-                $nombre_temp = explode (" ", trim(substr($splitval,$position_count,strlen($splitval)-$position_count)) , 2 );
+                $nombre_temp = explode(" ", trim(substr($splitval, $position_count, strlen($splitval)-$position_count)), 2);
                 $this->_nb_pages = intval(trim($nombre_temp[0]));
               }
             }
           }
         }
       }
-      elseif(strpos($dataFile, "%PDF-1.3") !== false || strpos($dataFile, "%PDF-1.6") !== false || $nb_count == 1){
+      elseif (strpos($dataFile, "%PDF-1.3") !== false || strpos($dataFile, "%PDF-1.6") !== false || $nb_count == 1) {
         // Fichier PDF 1.3 ou 1 seule occurence
         $position_count = strripos($dataFile, $string_recherche) + strlen($string_recherche);
-        $nombre_temp = explode (" ", trim(substr($dataFile,$position_count, strlen($dataFile)-$position_count)), 2);
+        $nombre_temp = explode(" ", trim(substr($dataFile, $position_count, strlen($dataFile)-$position_count)), 2);
         $this->_nb_pages = intval(trim($nombre_temp[0]));
       }
       
@@ -352,10 +371,10 @@ class CFile extends CDocumentItem {
   
   static function loadDocItemsByObject(CMbObject $object) {
     global $can;
-    if (!$object->_ref_files){
+    if (!$object->_ref_files) {
       $object->loadRefsFiles();
     }
-    if (!$object->_ref_documents){
+    if (!$object->_ref_documents) {
       $object->loadRefsDocs();
     }
     
@@ -378,20 +397,22 @@ class CFile extends CDocumentItem {
     foreach ($object->_ref_files as $keyFile=>&$_file) {
       $cat_id = $_file->file_category_id ? $_file->file_category_id : 0;
       $affichageFile[$cat_id]["items"]["$_file->file_name-$_file->_guid"] =& $_file;
-      if (!isset($affichageFile[$cat_id]["name"]))
+      if (!isset($affichageFile[$cat_id]["name"])) {
         $affichageFile[$cat_id]["name"] = '';
+      }
     }
     
     //Ajout des document dans le tableau
     foreach ($object->_ref_documents as $keyDoc=>&$_doc) {
       $cat_id = $_doc->file_category_id ? $_doc->file_category_id : 0;
       $affichageFile[$cat_id]["items"]["$_doc->nom-$_doc->_guid"] =& $_doc;
-      if (!isset($affichageFile[$cat_id]["name"]))
+      if (!isset($affichageFile[$cat_id]["name"])) {
         $affichageFile[$cat_id]["name"] = '';
+      }
     }
     
     // Classement des Fichiers et des document par Ordre alphabétique
-    foreach($affichageFile as $keyFile => $currFile){
+    foreach ($affichageFile as $keyFile => $currFile) {
       ksort($affichageFile[$keyFile]["items"]);
     }
 
@@ -428,14 +449,14 @@ class CFile extends CDocumentItem {
   }
   
   static function openoffice_overload($force_restart = 0) {
-    $a = exec("sh shell/ooo_overload.sh $force_restart");
+    exec("sh shell/ooo_overload.sh $force_restart");
   }
   
   function convertToPDF($file_path = null, $pdf_path = null) {
     global $rootName;
     
     // Vérifier si openoffice est lancé
-    if (!CFile::openoffice_launched()){
+    if (!CFile::openoffice_launched()) {
       return 0;
     }
     
@@ -509,25 +530,25 @@ class CFile extends CDocumentItem {
   }
   
   static function convertTifPagesToPDF($tif_files){
-    if (!class_exists("FPDF")){
+    if (!class_exists("FPDF")) {
       CAppUI::requireLibraryFile("PDFMerger/fpdf/fpdf");
     }
     
     $pngs = array();
-    foreach($tif_files as $tif) {
+    foreach ($tif_files as $tif) {
       $pngs[] = self::convertTifToPng($tif); // "C:\\ImageMagick6.6.0-Q16\\"
     }
     
     $pdf = new FPDF();
     
-    foreach($pngs as $png) {
+    foreach ($pngs as $png) {
       $pdf->AddPage();
       $pdf->Image($png, 5, 5, 200); // millimeters
     }
     
     $out = $pdf->Output("", 'S');
     
-    foreach($pngs as $png) {
+    foreach ($pngs as $png) {
       unlink($png);
     }
     
@@ -617,5 +638,3 @@ class CFile extends CDocumentItem {
 
 // We have to replace the backslashes with slashes because of PHPthumb on Windows
 CFile::$directory = str_replace('\\', '/', realpath(CAppUI::conf("dPfiles CFile upload_directory")));
-
-?>
