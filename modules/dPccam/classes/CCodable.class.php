@@ -89,7 +89,7 @@ class CCodable extends CMbObject {
     }
     $this->_tokens_ngap = "";
     
-    if(CModule::getActive("tarmed")){
+    if (CModule::getActive("tarmed")) {
       // Suppression des anciens actes Tarmed
       $this->loadRefsActesTarmed();
       foreach ($this->_ref_actes_tarmed as $acte) { 
@@ -111,6 +111,7 @@ class CCodable extends CMbObject {
   
   /**
    * Store redefinition
+   * 
    * @return string Store-like message
    */
   function store() {
@@ -147,8 +148,8 @@ class CCodable extends CMbObject {
       return $msg;
     }
     
-    if ($this->_delete_actes && $this->_id){
-      if ($msg = $this->deleteActes()){
+    if ($this->_delete_actes && $this->_id) {
+      if ($msg = $this->deleteActes()) {
         return $msg;    
       }
     }
@@ -223,7 +224,7 @@ class CCodable extends CMbObject {
   function getAssociationCodesActes() {
     $this->updateFormFields();
     $this->loadRefsActesCCAM();
-    if($this->_ref_actes_ccam){
+    if ($this->_ref_actes_ccam) {
       foreach ($this->_ref_actes_ccam as &$acte_ccam) {
         $acte_ccam->loadRefExecutant();
       }
@@ -232,19 +233,19 @@ class CCodable extends CMbObject {
     $listCodes = $this->_codes_ccam;
     $listCodes = $this->_ext_codes_ccam;
     $listActes = $this->_ref_actes_ccam;
-    foreach($listCodes as $key_code => $curr_code) {
+    foreach ($listCodes as $key_code => $curr_code) {
       $ccam     = $curr_code->code;
       $phase    = $curr_code->_phase;
       $activite = $curr_code->_activite;
       $this->_associationCodesActes[$key_code]["code"]    = $curr_code->code;
       $this->_associationCodesActes[$key_code]["nbActes"] = 0;
       $this->_associationCodesActes[$key_code]["ids"]     = "";
-      foreach($listActes as $key_acte => $curr_acte) {
+      foreach ($listActes as $key_acte => $curr_acte) {
         $test = ($curr_acte->code_acte == $ccam);
         $test = $test && ($phase === null || $curr_acte->code_phase == $phase);
         $test = $test && ($activite === null || $curr_acte->code_activite == $activite);
         $test = $test && (!isset($this->_associationCodesActes[$key_code]["actes"][$curr_acte->code_phase][$curr_acte->code_activite]));
-        if($test) {
+        if ($test) {
           $this->_associationCodesActes[$key_code]["actes"][$curr_acte->code_phase][$curr_acte->code_activite] = $curr_acte;
           $this->_associationCodesActes[$key_code]["nbActes"]++;
           $this->_associationCodesActes[$key_code]["ids"] .= "$curr_acte->_id|";
@@ -283,9 +284,9 @@ class CCodable extends CMbObject {
 
   function correctActes() {
     $this->loadRefsActes();
-    foreach($this->_ref_actes_ccam as $_acte) {
+    foreach ($this->_ref_actes_ccam as $_acte) {
       $_acte->guessAssociation();
-      if($_acte->_guess_association != "X") {
+      if ($_acte->_guess_association != "X") {
         $_acte->code_association = $_acte->_guess_association;
         $_acte->_calcul_montant_base = true;
         $_acte->store();
@@ -300,19 +301,19 @@ class CCodable extends CMbObject {
     $this->loadRefsActesNGAP();  
     $this->loadRefsActesTarmed();
     $this->loadRefsActesCaisse();
-    foreach($this->_ref_actes_ccam as $acte_ccam){
+    foreach ($this->_ref_actes_ccam as $acte_ccam) {
       $this->_ref_actes[] = $acte_ccam;
     }
-    foreach($this->_ref_actes_ngap as $acte_ngap){
+    foreach ($this->_ref_actes_ngap as $acte_ngap) {
       $this->_ref_actes[] = $acte_ngap;
     }
-    if($this->_ref_actes_tarmed){
-      foreach($this->_ref_actes_tarmed as $acte_tarmed){
+    if ($this->_ref_actes_tarmed) {
+      foreach ($this->_ref_actes_tarmed as $acte_tarmed) {
         $this->_ref_actes[] = $acte_tarmed;
       }
     }
-    if($this->_ref_actes_caisse){
-      foreach($this->_ref_actes_caisse as $acte_caisse){
+    if ($this->_ref_actes_caisse) {
+      foreach ($this->_ref_actes_caisse as $acte_caisse) {
         $this->_ref_actes[] = $acte_caisse;
       }
     }
@@ -361,7 +362,7 @@ class CCodable extends CMbObject {
     }
     
     $this->_codes_ngap = array();
-    foreach ($this->_ref_actes_ngap as $_acte_ngap){
+    foreach ($this->_ref_actes_ngap as $_acte_ngap) {
       $this->_codes_ngap[] = $_acte_ngap->makeFullCode(); 
       $_acte_ngap->loadRefExecutant();
       $_acte_ngap->getLibelle();
@@ -371,18 +372,21 @@ class CCodable extends CMbObject {
   
   /**
    * Charge les actes Tarmed codés
+   * 
+   * return array
    */
   function loadRefsActesTarmed(){
     $this->_ref_actes_tarmed = array();
+    $totaux = array("base" => 0, "dh" => 0);
     
-    if(CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
       //Classement des actes par ordre chonologique et par code
       $ljoin = array();
       $ljoin["consultation"] = "acte_tarmed.object_id = consultation.consultation_id";
       $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
       
       $where = array();
-      $where["acte_tarmed.object_class"] = " = 'CConsultation'";
+      $where["acte_tarmed.object_class"] = " = '$this->_class'";
       $where["acte_tarmed.object_id"] = " = '$this->_id'";
       
       //Dans le cas ou la date est nulle on prend celle de la plage de consultation correspondante
@@ -396,31 +400,35 @@ class CCodable extends CMbObject {
       }
       
       $this->_codes_tarmed = array();
-      foreach ($this->_ref_actes_tarmed as $_acte_tarmed){
-        $this->_codes_tarmed[] = $_acte_tarmed->makeFullCode(); 
+      foreach ($this->_ref_actes_tarmed as $_acte_tarmed) {
+        $this->_codes_tarmed[] = $_acte_tarmed->makeFullCode();
         $_acte_tarmed->loadRefExecutant();
         $_acte_tarmed->loadRefTarmed();
         $_acte_tarmed->countActesAssocies();
+        $totaux["base"] += $_acte_tarmed->montant_base;
+        $totaux["dh"]   += $_acte_tarmed->montant_depassement;
       }
       $this->_tokens_tarmed = implode("|", $this->_codes_tarmed);
     }
+    return $totaux;
   }
   
   /**
    * Charge les actes Caisse codés
+   * 
+   * return array
    */
   function loadRefsActesCaisse(){
     $this->_ref_actes_caisse = array();
+    $totaux = array("base" => 0, "dh" => 0);
     
-    if(CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ){
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
       //Classement des actes par ordre chonologique et par code
-      
       $where = array();
-      $where["acte_caisse.object_class"] = " = 'CConsultation'";
+      $where["acte_caisse.object_class"] = " = '$this->_class'";
       $where["acte_caisse.object_id"] = " = '$this->_id'";
       
       $order = "caisse_maladie_id, code ASC";
-      
       $acte_caisse = new CActeCaisse();
       $this->_ref_actes_caisse = $acte_caisse->loadList($where, $order);
       
@@ -429,14 +437,17 @@ class CCodable extends CMbObject {
       }
       
       $this->_codes_caisse = array();
-      foreach ($this->_ref_actes_caisse as $_acte_caisse){
+      foreach ($this->_ref_actes_caisse as $_acte_caisse) {
         $this->_codes_caisse[] = $_acte_caisse->makeFullCode(); 
         $_acte_caisse->loadRefExecutant();
         $_acte_caisse->loadRefPrestationCaisse();
         $_acte_caisse->loadRefCaisseMaladie();
+        $totaux["base"] += $_acte_caisse->montant_base;
+        $totaux["dh"]   += $_acte_caisse->montant_depassement;
       }
       $this->_tokens_caisse = implode("|", $this->_codes_caisse);
     }
+    return $totaux;
   }
   
   /**
@@ -453,7 +464,7 @@ class CCodable extends CMbObject {
   
   function loadRefsFraisDivers(){
     $this->_ref_frais_divers = $this->loadBackRefs("frais_divers");
-    foreach($this->_ref_frais_divers as $_frais) {
+    foreach ($this->_ref_frais_divers as $_frais) {
       $_frais->loadRefType();
     }
     return $this->_ref_frais_divers;
@@ -479,8 +490,8 @@ class CCodable extends CMbObject {
 
     // Transformation du tableau de codes ccam
     $codes_ccam = array();
-    foreach($oldObject->_codes_ccam as $key => $code) {
-      if (strlen($code) > 7){
+    foreach ($oldObject->_codes_ccam as $key => $code) {
+      if (strlen($code) > 7) {
         // si le code est de la forme code-activite-phase
         $detailCode = explode("-", $code);
         $code = $detailCode[0];
@@ -489,8 +500,8 @@ class CCodable extends CMbObject {
     }
     
     // Test entre les deux tableaux
-    foreach(array_keys($codes_ccam_minimal) as $_code ){
-      if (!array_key_exists($_code, $codes_ccam)){
+    foreach (array_keys($codes_ccam_minimal) as $_code) {
+      if (!array_key_exists($_code, $codes_ccam)) {
         return "Impossible de supprimer le code";
       }
     }
