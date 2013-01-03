@@ -44,7 +44,7 @@ var Consultation = {
   
   edit: function(consult_id) {
     var url = new Url("dPcabinet", "edit_consultation");
-    url.addParam("consult_id", consult_id);
+    url.addParam("selConsult", consult_id);
     url.redirect();
   },
   
