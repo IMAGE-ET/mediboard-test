@@ -57,7 +57,7 @@ class CEAIDispatcher {
       CEAIDispatcher::$errors[] = CAppUI::tr("CEAIDispatcher-no_actor");
       return self::dispatchError($data, $actor);
     }
-    
+
     if (($data_format = self::understand($data, $actor, $contexts)) === null) {
       self::$errors[] = CAppUI::tr("CEAIDispatcher-no_understand");
       return self::dispatchError($data, $actor);
@@ -66,7 +66,7 @@ class CEAIDispatcher {
     // est-ce que je comprend la famille de messages ?
     $supported = false;
     $family_message_class = (!$data_format->_family_message_class) ? 
-                                get_class($data_format->_family_message) : $data_format->_family_message_class; 
+                                get_class($data_format->_family_message) : $data_format->_family_message_class;
 
     $msg_supported_classes = $data_format->getMessagesSupported($actor->_guid, false, null, true);
     foreach ($msg_supported_classes as $_msg_supported_class => $_msg_supported) {
@@ -84,8 +84,6 @@ class CEAIDispatcher {
       return self::dispatchError($data, $actor);
     }
     
-    //CAppUI::stepAjax("CEAIDispatcher-understand");
-    
     $actor->_data_format        = $data_format;
     
     $data_format->sender_id     = $actor->_id;
@@ -95,7 +93,7 @@ class CEAIDispatcher {
     $data_format->_message      = $data;
     $data_format->_exchange_id  = $exchange_id;
     $data_format->_to_treatment = $to_treatment;
-    
+
     // Traitement par le handler du format
     try {
       return $data_format->handle();
@@ -109,8 +107,8 @@ class CEAIDispatcher {
   /**
    * Message understood ?
    * 
-   * @param string         $data  Data
-   * @param CInteropSender $actor Actor data
+   * @param string         $data     Data
+   * @param CInteropSender $actor    Actor data
    * @param mixed          $contexts Used with Dicom, the presentation contexts
    * 
    * @return bool Understood ? 

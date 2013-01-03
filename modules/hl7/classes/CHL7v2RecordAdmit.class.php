@@ -17,7 +17,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   static $event_codes = "A01 A02 A03 A04 A05 A06 A07 A08 A11 A12 A13 A14 A16 A25 A38 A44 A54 A55 Z80 Z81 Z84 Z85 Z99";
   
   var $_object_found_by_vn = null;
-  
+
+  /**
+   * Get data nodes
+   *
+   * @return array Get nodes
+   */
   function getContentNodes() {
     $data  = parent::getContentNodes();
 
@@ -61,7 +66,16 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
        return CValue::read($data['personIdentifiers'], "AN");
     }
   }
-  
+
+  /**
+   * Handle event
+   *
+   * @param CHL7Acknowledgment $ack        Acknowledgement
+   * @param CPatient           $newPatient Person
+   * @param array              $data       Nodes data
+   *
+   * @return null|string
+   */
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
     $event_temp = $ack->event;
 

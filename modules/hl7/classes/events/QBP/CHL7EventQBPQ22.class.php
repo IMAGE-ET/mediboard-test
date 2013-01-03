@@ -12,9 +12,9 @@
  */
 
 /**
- * Interface CHL7EventPDQQ22
+ * Interface CHL7EventQBPQ22
  * Q22 - Find Candidates
  */
-interface CHL7EventPDQQ22 extends CHL7EventPDQ {}
+interface CHL7EventQBPQ22 extends CHL7EventQBP {}
 
 ?>

@@ -17,6 +17,7 @@ $client_addr = CValue::post("client_addr");
 $message     = stripslashes(CValue::post("message"));
 
 $source_mllp          = new CSourceMLLP;
+
 $source_mllp->host    = $client_addr;
 $source_mllp->active = 1;
 $source_mllp->loadMatchingObject();

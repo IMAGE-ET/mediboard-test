@@ -16,11 +16,18 @@
  * Operator IHE
  */
 class COperatorIHE extends CEAIOperator {
+  /**
+   * Event
+   *
+   * @param CExchangeDataFormat $data_format Data format
+   *
+   * @return null|string
+   */
   function event(CExchangeDataFormat $data_format) {
     $msg               = $data_format->_message;
     $evt               = $data_format->_family_message;
     $evt->_data_format = $data_format;
-    
+
     // Récupération des informations du message - CHL7v2MessageXML
     $dom_evt = $evt->handle($msg);
     $dom_evt->_is_i18n = $evt->_is_i18n;
@@ -102,8 +109,8 @@ class COperatorIHE extends CEAIOperator {
       $dom_evt->_ref_exchange_ihe = $exchange_ihe;
       $ack->_ref_exchange_ihe     = $exchange_ihe;
 
-      // Message PAM / DEC 
-      $msgAck = self::handleEvent($data, $exchange_ihe, $dom_evt, $ack);
+      // Message PAM / DEC / PDQ
+      $msgAck = self::handleEvent($exchange_ihe, $dom_evt, $ack, $data);
       
       CHL7v2Message::resetBuildMode(); 			
     } catch(Exception $e) {
@@ -123,12 +130,22 @@ class COperatorIHE extends CEAIOperator {
     }
 
     return $msgAck;
-  }
-  
-  static function handleEvent($data = array(), CExchangeIHE $exchange_ihe, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack) {
+}
+
+  /**
+   * Handle event PAM / DEC / PDQ message
+   *
+   * @param CExchangeIHE       $exchange_ihe Exchange IHE
+   * @param CHL7v2MessageXML   $dom_evt      DOM Event
+   * @param CHL7Acknowledgment $ack          Acknowledgment
+   * @param array              $data         Nodes data
+   *
+   * @return null|string
+   */
+  static function handleEvent(CExchangeIHE $exchange_ihe, CHL7v2MessageXML $dom_evt, CHL7Acknowledgment $ack, $data = array()) {
     $newPatient = new CPatient();
     $newPatient->_eai_exchange_initiator_id = $exchange_ihe->_id;
-    
+
     $data = array_merge($data, $dom_evt->getContentNodes());
 
     return $dom_evt->handle($ack, $newPatient, $data);

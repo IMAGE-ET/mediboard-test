@@ -18,9 +18,19 @@
 
 class CReceiverIHE extends CInteropReceiver {
   // DB Table key
+  /**
+   * @var null
+   */
   var $receiver_ihe_id  = null;
-  
+
+  /**
+   * @var null
+   */
   var $_extension       = null;
+
+  /**
+   * @var null
+   */
   var $_i18n_code       = null;
   
   function getSpec() {
@@ -53,24 +63,46 @@ class CReceiverIHE extends CInteropReceiver {
       $this->loadConfigValues();
     }
   }
-  
+
+  /**
+   * Get object handler
+   *
+   * @param CEAIObjectHandler $objectHandler Object handler
+   *
+   * @return mixed
+   */
   function getFormatObjectHandler(CEAIObjectHandler $objectHandler) {
     $ihe_object_handlers = CIHE::getObjectHandlers();
     $object_handler_class  = get_class($objectHandler);
     if (array_key_exists($object_handler_class, $ihe_object_handlers)) {
       return new $ihe_object_handlers[$object_handler_class];
     }
-  }
-  
+}
+
+  /**
+   * Get HL7 version for one transaction
+   *
+   * @param string $transaction Transaction name
+   *
+   * @return int|string
+   */
   function getHL7Version($transaction) {
     $iti_hl7_version = $this->_configs[$transaction."_HL7_version"];
+
     foreach (CHL7::$versions as $_version => $_sub_versions) {      
       if (in_array($iti_hl7_version, $_sub_versions)) {
         return $_version;
       }
     }
   }
-  
+
+  /**
+   * Get internationalization code
+   *
+   * @param string $transaction Transaction name
+   *
+   * @return null
+   */
   function getInternationalizationCode($transaction) {
     $iti_hl7_version = $this->_configs[$transaction."_HL7_version"];
     
@@ -79,16 +111,33 @@ class CReceiverIHE extends CInteropReceiver {
     }
     
     return $this->_i18n_code;
-  }
+}
 
+  /**
+   * Get event message
+   *
+   * @param string $profil Profil name
+   *
+   * @return mixed
+   */
   function getEventMessage($profil) {
     if (!array_key_exists($profil, $this->_spec->messages)) {
       return;
     }
 
     return reset($this->_spec->messages[$profil]);
-  }
-  
+}
+
+  /**
+   * Send event
+   *
+   * @param CHL7Event $evenement Event type
+   * @param CMbObject $mbObject  Object
+   *
+   * @return null
+   *
+   * @throws CMbException
+   */
   function sendEvent($evenement, CMbObject $mbObject) {
     $evenement->_receiver = $this;
     

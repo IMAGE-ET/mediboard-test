@@ -16,21 +16,33 @@
  * Patient Administration Management
  */
 class CPAM extends CIHE {
+  /**
+   * @var array
+   */
   static $versions = array (
     "2.1", "2.2", "2.3", "2.4", "2.5"  
   );
-  
+
+  /**
+   * @var array
+   */
   static $transaction_iti30 = array(
     "A24", "A37", "A28", "A28", "A31", "A40", "A46", "A47"
   );
-  
+
+  /**
+   * @var array
+   */
   static $transaction_iti31 = array(
     "A01", "A02", "A03", "A04", "A05", "A06", "A07",
     "A08", "A11", "A12", "A13", "A14", "A16", "A21",
     "A22", "A25", "A38", "A44", "A52", "A53", "A54", 
     "A55", "Z99"
   );
-  
+
+  /**
+   * @var array
+   */
   static $evenements = array(
     // ITI-30
     "A24" => "CHL7EventADTA24",
@@ -73,6 +85,7 @@ class CPAM extends CIHE {
   
   /**
    * Retrieve events list of data format
+   *
    * @return array Events list
    */
   function getEvenements() {
@@ -81,7 +94,9 @@ class CPAM extends CIHE {
   
   /**
    * Retrieve transaction name
-   * @param $code Event code
+   *
+   * @param string $code Event code
+   *
    * @return string Transaction name
    */
   static function getTransaction($code) {
@@ -96,7 +111,9 @@ class CPAM extends CIHE {
   
   /**
    * Return data format object
-   * @param exchange Instance of exchange
+   *
+   * @param CExchangeDataFormat $exchange Instance of exchange
+   *
    * @return object An instance of data format
    */
   static function getEvent(CExchangeDataFormat $exchange) {

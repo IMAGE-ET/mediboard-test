@@ -15,7 +15,12 @@
  */
 class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   static $event_codes = "R01";
-  
+
+  /**
+   * Get data nodes
+   *
+   * @return array Get nodes
+   */
   function getContentNodes() {
     $data = $patient_results = array();
     
@@ -56,7 +61,16 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     
     return $data;
   }
- 
+
+  /**
+   * Handle event
+   *
+   * @param CHL7Acknowledgment $ack     Acknowledgement
+   * @param CPatient           $patient Person
+   * @param array              $data    Nodes data
+   *
+   * @return null|string
+   */
   function handle(CHL7Acknowledgment $ack, CPatient $patient, $data) {
     // Traitement du message des erreurs
     $comment = "";

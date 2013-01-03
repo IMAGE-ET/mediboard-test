@@ -15,7 +15,7 @@
  * Class CHL7v2EventPDQ
  * Patient Demographics Query
  */
-class CHL7v2EventPDQ extends CHL7v2Event implements CHL7EventPDQ {
+class CHL7v2EventQBP extends CHL7v2Event implements CHL7EventQBP {
   var $event_type = "QBP";
   
   function __construct() {

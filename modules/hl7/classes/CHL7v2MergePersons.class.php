@@ -15,7 +15,12 @@
  */
 class CHL7v2MergePersons extends CHL7v2MessageXML {
   static $event_codes = "A40";
-  
+
+  /**
+   * Get data nodes
+   *
+   * @return array Get nodes
+   */
   function getContentNodes() {
     $data = array();
     

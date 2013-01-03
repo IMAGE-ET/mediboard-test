@@ -16,17 +16,26 @@
  * Patient Administration Management - National extension France
  */
 class CPAMFR extends CPAM {
+  /**
+   * @var array
+   */
   static $transaction_iti30 = array(
     "A24", "A37", "A28", "A28", "A31", "A40", "A47"
   );
-  
+
+  /**
+   * @var array
+   */
   static $transaction_iti31 = array(
     "A01", "A02", "A03", "A04", "A05", "A06", "A07",
     "A11", "A12", "A13", "A14", "A16", "A21", "A22", 
     "A25", "A38", "A44", "A54", "A55", "Z80", "Z81", 
     "Z84", "Z85", "Z99"
   );
-  
+
+  /**
+   * @var array
+   */
   static $evenements = array(
     // ITI-30
     "A24" => "CHL7EventADTA24_FR",
@@ -69,15 +78,18 @@ class CPAMFR extends CPAM {
 
   /**
    * Retrieve events list of data format
+   *
    * @return array Events list
    */
   function getEvenements() {
     return self::$evenements;
   }
-  
+
   /**
    * Retrieve transaction name
-   * @param $code Event code
+   *
+   * @param string $code Event code
+   *
    * @return string Transaction name
    */
   static function getTransaction($code) {
@@ -92,7 +104,9 @@ class CPAMFR extends CPAM {
   
   /**
    * Return data format object
-   * @param exchange Instance of exchange
+   *
+   * @param CExchangeDataFormat $exchange Instance of exchange
+   *
    * @return object An instance of data format
    */
   static function getEvent(CExchangeDataFormat $exchange) {

@@ -16,14 +16,23 @@
  * Scheduled Workflow
  */
 class CSWF extends CIHE {
+  /**
+   * @var array
+   */
   static $versions = array (
     "2.3", "2.4", "2.5"  
   );
-  
+
+  /**
+   * @var array
+   */
   static $transaction_rad48 = array(
     "S12", "S13", "S14", "S15" 
   );
-  
+
+  /**
+   * @var array
+   */
   static $evenements = array(
     // SIU
     "S12" => "CHL7EventSIUS12",
@@ -38,6 +47,7 @@ class CSWF extends CIHE {
   
   /**
    * Retrieve events list of data format
+   *
    * @return array Events list
    */
   function getEvenements() {
@@ -46,7 +56,9 @@ class CSWF extends CIHE {
   
   /**
    * Retrieve transaction name
-   * @param $code Event code
+   *
+   * @param string $code Event code
+   *
    * @return string Transaction name
    */
   static function getTransaction($code) {
@@ -57,7 +69,9 @@ class CSWF extends CIHE {
 
   /**
    * Return data format object
-   * @param exchange Instance of exchange
+   *
+   * @param CExchangeDataFormat $exchange Instance of exchange
+   *
    * @return object An instance of data format
    */
   static function getEvent(CExchangeDataFormat $exchange) {

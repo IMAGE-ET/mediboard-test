@@ -15,7 +15,12 @@
  */
 class CHL7v2RecordAppointment extends CHL7v2MessageXML {
   static $event_codes = "S12 S13 S14 S15";
-  
+
+  /**
+   * Get data nodes
+   *
+   * @return array Get nodes
+   */
   function getContentNodes() {
     $data = $resources = array();
     
@@ -30,13 +35,19 @@ class CHL7v2RecordAppointment extends CHL7v2MessageXML {
     $data["personIdentifiers"] = $this->getPersonIdentifiers("PID.3", $PID, $sender);
 
     $this->queryNode("PD1", null, $data, true);
-    
-    
-    
-    
+
     return $data;
   }
- 
+
+  /**
+   * Handle event
+   *
+   * @param CHL7Acknowledgment $ack     Acknowledgement
+   * @param CPatient           $patient Person
+   * @param array              $data    Nodes data
+   *
+   * @return null|string
+   */
   function handle(CHL7Acknowledgment $ack, CPatient $patient, $data) {
     // Traitement du message des erreurs
     $comment = "";

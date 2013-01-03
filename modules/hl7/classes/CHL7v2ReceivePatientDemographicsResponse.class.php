@@ -14,8 +14,16 @@
  * Receive patient demographics response, message XML HL7
  */
 class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
+  /**
+   * @var string
+   */
   static $event_codes = "K22";
 
+  /**
+   * Get data nodes
+   *
+   * @return array Get nodes
+   */
   function getContentNodes() {
     $data  = array();
 
@@ -32,6 +40,11 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
     return $data;
   }
 
+  /**
+   * Handle event
+   *
+   * @return null|string
+   */
   function handle() {
     $data = $this->getContentNodes();
 
@@ -57,8 +70,16 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
     }
 
     return $patients;
-  } 
- 
+  }
+
+
+  /**
+   * Get query response status
+   *
+   * @param DOMNode $node QAK element
+   *
+   * @return string
+   */
   function getQueryResponseStatus(DOMNode $node) {
     return $this->queryTextNode("QAK.2", $node);
   }

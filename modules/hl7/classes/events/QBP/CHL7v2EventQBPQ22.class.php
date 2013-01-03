@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Q22 - Find Candidates response - HL7
+ * Q22 - Find Candidates - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,11 +12,12 @@
  */
 
 /**
- * Class CHL7v2EventPDQK22
- * Q22 - Find Candidates response
+ * Class CHL7v2EventPDQQ22
+ * Q22 - Find Candidates
  */
-class CHL7v2EventPDQK22 extends CHL7v2EventDEC implements CHL7EventPDQK22 {
-  var $code = "K22";
+class CHL7v2EventQBPQ22 extends CHL7v2EventQBP implements CHL7EventQBPQ22 {
+  var $code        = "Q22";
+  var $struct_code = "Q21";
   
   function __construct($i18n = null) {
     parent::__construct($i18n);
@@ -28,11 +29,11 @@ class CHL7v2EventPDQK22 extends CHL7v2EventDEC implements CHL7EventPDQK22 {
   function build($patient) {
     parent::build($patient);
 
-    // MSA
-
-    // QAK
-
     // QPD
+    $this->addQPD($patient);
+
+    // RCP
+    $this->addRCP($patient);
   }
 }
 

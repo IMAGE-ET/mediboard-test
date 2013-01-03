@@ -15,7 +15,12 @@
  */
 class CHL7v2RecordPerson extends CHL7v2MessageXML {
   static $event_codes = "A28 A31";
-  
+
+  /**
+   * Get data nodes
+   *
+   * @return array Get nodes
+   */
   function getContentNodes() {
     $data = parent::getContentNodes();
     
@@ -27,7 +32,16 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
     return $data;
   }
- 
+
+  /**
+   * Handle event
+   *
+   * @param CHL7Acknowledgment $ack        Acknowledgement
+   * @param CPatient           $newPatient Person
+   * @param array              $data       Nodes data
+   *
+   * @return null|string
+   */
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
     // Traitement du message des erreurs
     $comment = $warning = $code_IPP = "";

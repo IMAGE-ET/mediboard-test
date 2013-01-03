@@ -17,6 +17,9 @@
  */
 
 class CExchangeIHE extends CExchangeTabular {
+  /**
+   * @var array
+   */
   static $messages = array(
     "PAM"    => "CPAM",
     "PAM_FR" => "CPAMFR",
@@ -26,8 +29,14 @@ class CExchangeIHE extends CExchangeTabular {
   );
   
   // DB Table key
+  /**
+   * @var null
+   */
   var $exchange_ihe_id = null;
-  
+
+  /**
+   * @var null
+   */
   var $code            = null;
   
   /**
@@ -58,15 +67,33 @@ class CExchangeIHE extends CExchangeTabular {
 
     return $props;
   }
-  
+
+  /**
+   * Handle exchange
+   *
+   * @return null|string|void
+   */
   function handle() {
     return COperatorIHE::event($this);
   }
 
+  /**
+   * Get exchange IHE families
+   *
+   * @return array Families
+   */
   function getFamily() {
     return self::$messages;
   }
-  
+
+  /**
+   * Check if data is well formed
+   *
+   * @param string        $data  Data
+   * @param CInteropActor $actor Actor
+   *
+   * @return bool|void
+   */
   function isWellFormed($data, CInteropActor $actor = null) {
     try {
       $sender = ($actor ? $actor : $this->loadRefSender());
@@ -77,9 +104,13 @@ class CExchangeIHE extends CExchangeTabular {
       return false;
     }
   }
-  
+
   /**
-   * @return CHL7Config
+   * Get HL7 config for one actor
+   *
+   * @param string $actor_guid Actor GUID
+   *
+   * @return CHL7Config|void
    */
   function getConfigs($actor_guid) {
     list($sender_class, $sender_id) = explode("-", $actor_guid);
@@ -91,15 +122,24 @@ class CExchangeIHE extends CExchangeTabular {
     
     return $this->_configs_format = $sender_hl7_config;
   }
-  
+
+  /**
+   * Check if data is understood
+   *
+   * @param string        $data  Data
+   * @param CInteropActor $actor Actor
+   *
+   * @return bool|void
+   */
   function understand($data, CInteropActor $actor = null) {
     if (!$this->isWellFormed($data, $actor)) {
       return false;
     }
 
     $hl7_message = $this->parseMessage($data, false, $actor);
-    
+
     $hl7_message_evt = "CHL7Event$hl7_message->event_name";
+
     if ($hl7_message->i18n_code) {
       $hl7_message_evt = $hl7_message_evt."_".$hl7_message->i18n_code;
     }
@@ -116,16 +156,24 @@ class CExchangeIHE extends CExchangeTabular {
           $this->_family_message_class = $_message;
           $this->_family_message       = CHL7Event::getEventVersion($hl7_message->version, $hl7_message->getI18NEventName());
         }
-        
+
         return true;
       }
     }
   }
-  
-  function getErrors() {}
-  
+
   /**
-   * @return CHL7v2Message
+   * Get exchange errors
+   *
+   * @return bool|void
+   */
+  function getErrors() {
+  }
+
+  /**
+   * Get Message
+   *
+   * @return CHL7v2Message|void
    */
   function getMessage() {
     if ($this->_message !== null) {
@@ -139,8 +187,14 @@ class CExchangeIHE extends CExchangeTabular {
       return $hl7_message;
     }
   }
-  
+
   /**
+   * Parse HL7 message
+   *
+   * @param string $string     Data
+   * @param bool   $parse_body Parse only header ?
+   * @param null   $actor      Actor
+   *
    * @return CHL7v2Message
    */
   function parseMessage($string, $parse_body = true, $actor = null) {
@@ -161,9 +215,11 @@ class CExchangeIHE extends CExchangeTabular {
     
     return $hl7_message;
   }
-  
+
   /**
-   * @return CHL7v2Message
+   * Get HL7 acquittement
+   *
+   * @return CHL7v2Message|void
    */
   function getACK() {
     if ($this->_acquittement !== null) {
@@ -176,11 +232,24 @@ class CExchangeIHE extends CExchangeTabular {
       return $hl7_ack;
     }
   }
-  
+
+  /**
+   * Get message encoding
+   *
+   * @return string|void
+   */
   function getEncoding(){
     return $this->_message_object->getEncoding();
   }
- 
+
+  /**
+   * Populate exchange
+   *
+   * @param CExchangeDataFormat $data_format Data format
+   * @param CHL7Event           $event       Event HL7
+   *
+   * @return string|void
+   */
   function populateExchange(CExchangeDataFormat $data_format, CHL7Event $event) {
     $this->group_id        = $data_format->group_id;
     $this->sender_id       = $data_format->sender_id;
@@ -192,7 +261,15 @@ class CExchangeIHE extends CExchangeTabular {
     $this->code            = $event->code;
     $this->_message        = $data_format->_message;
   }
-  
+
+  /**
+   * Populate error exchange
+   *
+   * @param CHL7Acknowledgment $ack   Acknowledgment
+   * @param CHL7Event          $event Event HL7
+   *
+   * @return string|void
+   */
   function populateErrorExchange(CHL7Acknowledgment $ack = null, CHL7Event $event = null) {
     if ($ack) {
       $msgAck = $ack->event_ack->msg_hl7;
@@ -200,7 +277,7 @@ class CExchangeIHE extends CExchangeTabular {
       /* @todo Comment gérer ces informations ? */
       $this->statut_acquittement = $ack->ack_code;
       $this->acquittement_valide = $ack->event_ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
-    } 
+    }
     else {
       $this->message_valide      = $event->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
       $this->date_production     = mbDateTime();
@@ -209,7 +286,15 @@ class CExchangeIHE extends CExchangeTabular {
 
     $this->store();
   }
-  
+
+  /**
+   * Populate ACK exchange
+   *
+   * @param CHL7Acknowledgment $ack      Acknowledgment
+   * @param CMbObject          $mbObject Object
+   *
+   * @return string
+   */
   function populateExchangeACK(CHL7Acknowledgment $ack, $mbObject) {
     $msgAck = $ack->event_ack->msg_hl7;
 
@@ -227,19 +312,46 @@ class CExchangeIHE extends CExchangeTabular {
     
     return $msgAck;
   }
-  
+
+  /**
+   * Generate 'Application Accept' acknowledgment
+   *
+   * @param CHL7Acknowledgment $ack            Acknowledgment
+   * @param array              $mb_error_codes Mediboard errors codes
+   * @param null               $comments       Comments
+   * @param CMbObject          $mbObject       Object
+   *
+   * @return string
+   */
   function setAckAA(CHL7Acknowledgment $ack, $mb_error_codes, $comments = null, CMbObject $mbObject = null) {
     $ack->generateAcknowledgment("AA", $mb_error_codes, "0", "I", $comments, $mbObject);
         
     return $this->populateExchangeACK($ack, $mbObject);
   }
-  
+
+  /**
+   * Generate 'Application Reject' acknowledgment
+   *
+   * @param CHL7Acknowledgment $ack            Acknowledgment
+   * @param array              $mb_error_codes Mediboard errors codes
+   * @param null               $comments       Comments
+   * @param CMbObject          $mbObject       Object
+   *
+   * @return string
+   */
   function setAckAR(CHL7Acknowledgment $ack, $mb_error_codes, $comments = null, CMbObject $mbObject = null) {
     $ack->generateAcknowledgment("AR", $mb_error_codes, "207", "E", $comments, $mbObject);
 
     return $this->populateExchangeACK($ack, $mbObject);               
   }
-  
+
+  /**
+   * Get exchange observation
+   *
+   * @param bool $display_errors Display errors ?
+   *
+   * @return array|void
+   */
   function getObservations($display_errors = false) {
     if ($this->_acquittement) {
       $acq = $this->_acquittement;
@@ -252,8 +364,9 @@ class CExchangeIHE extends CExchangeTabular {
       
       // quick regex
       // ERR|~~~207^0^0^E201||207|E|code^libelle|||commentaire
-      if (preg_match_all("/ERR\|[^\|]*\|[^\|]*\|[^\|]*\|([^\|]*)\|([^\^]+)\^([^\|]+)\|[^\|]*\|[^\|]*\|([^\r\n\|]*)/ms", $acq, $matches, PREG_SET_ORDER)) {
-        foreach($matches as $match) {
+      $pattern = "/ERR\|[^\|]*\|[^\|]*\|[^\|]*\|([^\|]*)\|([^\^]+)\^([^\|]+)\|[^\|]*\|[^\|]*\|([^\r\n\|]*)/ms";
+      if (preg_match_all($pattern, $acq, $matches, PREG_SET_ORDER)) {
+        foreach ($matches as $match) {
           if ($match[1] == "E") {
             $this->_observations[$match[2]] = array(
               "code"        => $match[2],
@@ -267,7 +380,12 @@ class CExchangeIHE extends CExchangeTabular {
       }
     }
   }
-  
+
+  /**
+   * Load view
+   *
+   * @return array|void
+   */
   function loadView() {
     parent::loadView();
     

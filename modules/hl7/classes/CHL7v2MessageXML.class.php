@@ -60,8 +60,8 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     }
 
     // Récupération des résultats du PDQ
-    if ($event_type == "CHL7v2EventPDQ") {
-      return new CHL7v2ReceivePatientDemographicsResponse($encoding);
+    if ($event_type == "CHL7v2EventQBP") {
+      return new CHL7v2GeneratePatientDemographicsResponse($encoding);
     }
     
     return new CHL7v2MessageXML($encoding);
@@ -93,14 +93,24 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     
     return $xpath->query($nodeName);
   }
-  
+
+  /**
+   * Get the node corresponding to an XPath
+   *
+   * @param string       $nodeName    The XPath to the node
+   * @param DOMNode|null $contextNode The context node from which the XPath starts
+   * @param array|null   &$data       Nodes data
+   * @param boolean      $root        Is root node ?
+   *
+   * @return DOMNode The node
+   */
   function queryNode($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {
     $xpath = new CHL7v2MessageXPath($contextNode ? $contextNode->ownerDocument : $this);   
         
     return $data[$nodeName] = $xpath->queryUniqueNode($root ? "//$nodeName" : "$nodeName", $contextNode);
   }
   
-  function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {    
+  function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {
     $nodeList = $this->query("$nodeName", $contextNode);
     foreach ($nodeList as $_node) {
       $data[$nodeName][] = $_node;

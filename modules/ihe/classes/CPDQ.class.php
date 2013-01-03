@@ -16,27 +16,38 @@
  * Patient Demographics Query
  */
 class CPDQ extends CIHE {
+  /**
+   * @var array
+   */
   static $versions = array (
     "2.1", "2.2", "2.3", "2.4", "2.5"
   );
 
+  /**
+   * @var array
+   */
   static $transaction_iti21 = array(
     "Q22", "K22"
   );
 
+  /**
+   * @var array
+   */
   static $transaction_iti22 = array(
     "ZV1", "ZV2"
   );
 
-
+  /**
+   * @var array
+   */
   static $evenements = array(
     // ITI-21
-    "Q22" => "CHL7EventPDQQ22",
-    "K22" => "CHL7EventPDQK22",
+    "Q22" => "CHL7EventQBPQ22",
+    "K22" => "CHL7EventQBPK22",
 
     // ITI-22
-    "ZV1" => "CHL7EventPDQZV1",
-    "ZV2" => "CHL7EventPDQZV2",
+    "ZV1" => "CHL7EventQBPZV1",
+    "ZV2" => "CHL7EventQBPZV2",
   );
 
   function __construct() {
@@ -45,6 +56,7 @@ class CPDQ extends CIHE {
 
   /**
    * Retrieve events list of data format
+   *
    * @return array Events list
    */
   function getEvenements() {
@@ -52,8 +64,10 @@ class CPDQ extends CIHE {
   }
 
   /**
-   * Retrieve transaction name
-   * @param $code Event code
+   * Retrieve transaction name,
+   *
+   * @param string $code Event code
+   *
    * @return string Transaction name
    */
   static function getTransaction($code) {
@@ -68,7 +82,9 @@ class CPDQ extends CIHE {
 
   /**
    * Return data format object
-   * @param exchange Instance of exchange
+   *
+   * @param CExchangeDataFormat $exchange Instance of exchange
+   *
    * @return object An instance of data format
    */
   static function getEvent(CExchangeDataFormat $exchange) {
@@ -77,7 +93,7 @@ class CPDQ extends CIHE {
 
     foreach (CHL7::$versions as $_version => $_sub_versions) {
       if (in_array($version, $_sub_versions)) {
-        $classname = "CHL7{$_version}EventPDQ$code";
+        $classname = "CHL7{$_version}EventQBP$code";
         return new $classname;
       }
     }

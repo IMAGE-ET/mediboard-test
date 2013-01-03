@@ -1,7 +1,7 @@
 <?php
 
 /**
- * K22 - Find Candidates response - HL7
+ * Patient Demographics Query HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,9 +12,13 @@
  */
 
 /**
- * Interface CHL7EventPDQK22
- * K22 - Find Candidates response
+ * Interface CHL7EventQBP
+ * Patient Demographics Query
  */
-interface CHL7EventPDQK22 extends CHL7EventPDQ {}
+interface CHL7EventQBP {
+  function __construct();
+  
+  function build($object);
+}
 
 ?>

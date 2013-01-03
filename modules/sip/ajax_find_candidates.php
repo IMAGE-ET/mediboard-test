@@ -71,8 +71,11 @@ foreach ($receivers as $_receiver) {
   $ack_data = $iti_handler->sendITI($profil, $transaction, $message, $code, $patient);
 }
 
-$ack_event = new CHL7v2EventPDQK22();
-$patients  = $ack_event->handle($ack_data)->handle();
+$patients = array();
+if ($ack_data) {
+  $ack_event = new CHL7v2EventPDQK22();
+  $patients  = $ack_event->handle($ack_data)->handle();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
