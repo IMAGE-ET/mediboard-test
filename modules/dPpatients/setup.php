@@ -1963,7 +1963,13 @@ class CSetupdPpatients extends CSetup {
                 ADD  INDEX `context` (`context_class`, `context_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.66";
+    $this->makeRevision("1.66");
+    
+    $query = "ALTER TABLE `patients`
+              DROP `assure_avs`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.67";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

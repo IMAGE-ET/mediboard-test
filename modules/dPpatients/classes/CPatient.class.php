@@ -160,7 +160,6 @@ class CPatient extends CMbObject {
   var $assure_profession            = null;
   var $assure_rques                 = null;
   var $assure_matricule             = null;
-  var $assure_avs                   = null;
 
   // Other fields
   var $INSC_date                    = null;
@@ -393,7 +392,6 @@ class CPatient extends CMbObject {
     $props["assure_profession"]           = "str autocomplete";
     $props["assure_rques"]                = "text";
     $props["assure_matricule"]            = "code insee confidential mask|9S99S99S99S999S999S99";
-    $props["assure_avs"]                  = "str maxLength|15";
     $props["INSC_date"]                   = "dateTime";
     $props["date_lecture_vitale"]         = "dateTime";
     $props["_id_vitale"]                  = "num";
@@ -1289,7 +1287,7 @@ class CPatient extends CMbObject {
       // Praticien
       $consult->getType();
       $praticien = $consult->_ref_praticien;
-			
+      
       $this->_ref_praticiens[$praticien->_id] = $praticien;
       $praticien->loadRefFunction()->loadRefGroup();
 
