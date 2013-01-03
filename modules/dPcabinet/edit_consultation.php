@@ -109,7 +109,7 @@ $consult->_ref_chir =& $userSel;
 if ($consult->_id) {
   $consult->loadRefs();  
   
-  // Chargment de la consultation d'anesthésie
+  // Chargement de la consultation d'anesthésie
   
   // Chargement de la vue de chacun des dossiers
   foreach ($consult->_refs_dossiers_anesth as $_dossier) {

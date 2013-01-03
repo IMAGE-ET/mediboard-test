@@ -52,7 +52,7 @@
         <br/>
     {{/if}}
     {{if $canCabinet->read && !@$offline}}
-      <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}" title="Modifier le RDV" {{if $mode_vue == "vertical"}}style="float: right;"{{/if}}>
+      <a href="#1" onclick="Consultation.editRDV('{{$_consult->_id}}'); return false;" title="Modifier le RDV" {{if $mode_vue == "vertical"}}style="float: right;"{{/if}}>
         <img src="images/icons/planning.png" title="{{tr}}Edit{{/tr}}" />
       </a>
       {{if $mode_vue == "horizontal"}}
@@ -62,9 +62,9 @@
     
     {{if $patient->_id}}
     {{if $canCabinet->read && !@$offline}}
-      <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}" style="margin-bottom: 4px;">
+      <a href="#1" onclick="Consultation.edit('{{$_consult->_id}}'); return false;" style="margin-bottom: 4px;">
     {{else}}
-      <a href="#1" title="Impossible de modifier le RDV"> {{if $mode_vue == "horizontal"}}<br />{{/if}}
+      <a href="#1" title="Impossible d'accéder à la consultation"> {{if $mode_vue == "horizontal"}}<br />{{/if}}
     {{/if}}
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_consult->_guid}}')">
          {{$_consult->heure|truncate:5:"":true}}
@@ -105,10 +105,10 @@
         </div>
         
         <a href="#1" onclick="modalWindow = modal($('{{$patient->_guid}}-dossier'))">
-      {{elseif $canCabinet->read}}
-        <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
+      {{elseif $canCabinet->edit}}
+        <a href="#1" onclick="Consultation.edit('{{$_consult->_id}}'); return false;">
       {{else}}
-        <a href="#1" title="Impossible de modifier le RDV">
+        <a href="#1" title="Impossible d'accéder à la consultation">
       {{/if}}
       
         <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
@@ -162,10 +162,10 @@
     
 
     {{if $patient->_id}}
-    {{if $canCabinet->read && !@$offline}}
-      <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}">
+    {{if $canCabinet->edit && !@$offline}}
+      <a href="#1" onclick="Consultation.edit('{{$_consult->_id}}'); return false;">
     {{else}}
-      <a href="#1" title="Impossible de modifier le RDV">
+      <a href="#1" title="Impossible de modifier la consultation">
     {{/if}}
         {{$_consult->motif|spancate:40:"...":true}}
       </a>

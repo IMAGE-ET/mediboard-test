@@ -8,10 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module="dPcompteRendu" script="document"}}
-{{mb_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="dPcabinet" script="edit_consultation"}}
 
 <script type="text/javascript">
+
+Consultation.edit = Consultation.editModal;
+
 function hideIcon(frame) {
   $("icon-" + frame).hide();
 }
@@ -28,6 +30,16 @@ function updateListConsults() {
   url.addParam("selConsult", "");
   url.addParam("board"     , "1");
   url.requestUpdate("consultations");
+}
+
+function initUpdateListConsults() {
+  var url = new Url("dPcabinet", "httpreq_vw_list_consult");
+  url.addParam("chirSel"   , "{{$prat->_id}}");
+  url.addParam("date"      , "{{$date}}");
+  url.addParam("vue2"      , "{{$vue}}");
+  url.addParam("selConsult", "");
+  url.addParam("board"     , "1");
+  url.periodicalUpdate("consultations", { frequency: 90 } );
 }
 
 function updateListOperations() {
@@ -74,7 +86,7 @@ Main.add(function () {
   hideIcon("hospi");
   hideIcon("patients");
   {{if $prat->_id}}
-    updateListConsults();
+    initUpdateListConsults();
     updateListOperations();
     updateListPatients();
     updateListHospi();

@@ -33,3 +33,25 @@ var ListConsults = {
     this[$(this.target).visible() ? "hide" : "show"](); 
   }
 }
+
+var Consultation = {
+  
+  editRDV: function(consult_id) {
+    var url = new Url("dPcabinet", "edit_planning");
+    url.addParam("consult_id", consult_id);
+    url.redirect();
+  },
+  
+  edit: function(consult_id) {
+    var url = new Url("dPcabinet", "edit_consultation");
+    url.addParam("consult_id", consult_id);
+    url.redirect();
+  },
+  
+  editModal: function (consult_id) {
+    var url = new Url("dPcabinet", "ajax_full_consult");
+    url.addParam("consult_id", consult_id);
+    url.modal();
+  }
+  
+}
