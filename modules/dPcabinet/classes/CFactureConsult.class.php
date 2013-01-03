@@ -310,13 +310,6 @@ class CFactureConsult extends CMbObject {
   function loadRefPatient($cache = 1) {
     if (!$this->_ref_patient) {
       $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
-      // Le numéro de référence doit comporter 16 ou 27 chiffres
-      $num = $this->_id;
-      $num = sprintf("%027s", $num);
-      if ((!$this->num_reference || $num != $this->num_reference)) {
-        $this->num_reference = $num;
-        $this->store();
-      }
     }
     return $this->_ref_patient;
   }
@@ -533,6 +526,15 @@ class CFactureConsult extends CMbObject {
     
       if (!$this->_ref_praticien) {
         $this->loadRefPraticien();
+      }
+      
+      // Le numéro de référence doit comporter 16 ou 27 chiffres
+      $num = $this->_id;
+      $num = sprintf("%07s", $num);
+      $num = sprintf("%027s",$this->_ref_praticien->debut_bvr.$num);
+      if ((!$this->num_reference || $num != $this->num_reference)) {
+        $this->num_reference = $num;
+        $this->store();
       }
       
       $genre = "01";
