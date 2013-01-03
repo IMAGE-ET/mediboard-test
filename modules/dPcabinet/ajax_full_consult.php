@@ -126,6 +126,8 @@ $smarty->assign("traitement"     , new CTraitement);
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("acte_tarmed"    , $acte_tarmed);
 $smarty->assign("acte_caisse"    , $acte_caisse);
+$smarty->assign("soustotal_base" , $soustotal_base);
+$smarty->assign("soustotal_dh"   , $soustotal_dh);
 $smarty->assign("total"          , $total);
 if(CModule::getActive("dPprescription")){
   $smarty->assign("line"           , new CPrescriptionLineMedicament);
