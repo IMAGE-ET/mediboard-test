@@ -97,7 +97,7 @@
       <input type="hidden" name="del" value="0" />
       {{mb_key object=$rpu}}
       {{mb_field object=$rpu field="_destination" emptyLabel="CRPU-_destination" onchange="this.form.onsubmit()"}}<br />
-      {{mb_field object=$rpu field="orientation" emptyLabel="CRPU-orientation" onchange="this.form.onsubmit()"}}
+      {{mb_field object=$rpu field="orientation"  emptyLabel="CRPU-orientation"  onchange="this.form.onsubmit()"}}
     </form>
   {{/if}}
 </td>
@@ -125,9 +125,14 @@
   {{/if}}
   
 	{{if $sejour->sortie_reelle || $sejour->mode_sortie == "mutation"}} 
+    <button class="ecap notext singleclick" style="float: right;" onclick="DHE.closeDHE('{{$sejour->_id}}')">
+      {{tr}}Close{{/tr}}
+    </button>
+    
     <button class="edit notext" style="float: right;" onclick="Sortie.edit('{{$rpu->_id}}')">
 		  {{tr}}Edit{{/tr}} {{mb_label object=$sejour field=sortie}}
 		</button>
+		
 	  {{mb_title object=$sejour field=sortie}} :
 	  {{mb_value object=$sejour field=mode_sortie}}
 	
@@ -141,7 +146,7 @@
 	    <br />&gt; <strong>{{$service}}</strong>
 	  {{/if}}
 		
-		<em>{{mb_value object=$sejour field=commentaires_sortie}}</em>
+		<div class="compact">{{mb_value object=$sejour field=commentaires_sortie}}</div>
     
 	{{else}}
     {{if $sejour->mode_sortie != "normal"}}

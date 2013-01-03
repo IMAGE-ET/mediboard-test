@@ -1497,10 +1497,18 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->_ref_suivi_medical = array_merge($constantes,$this->_ref_suivi_medical);
   }
 
+  /**
+   * Load associated Group
+   * @return CGroup
+   */
   function loadRefEtablissement($cache = true) {
     return $this->_ref_group = $this->loadFwdRef("group_id", $cache);
   }
 
+  /**
+   * Load associated RPU
+   * @return CRPU
+   */
   function loadRefRPU() {
     return $this->_ref_rpu = $this->loadUniqueBackRef("rpu");
   }

@@ -8,8 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module=urgences script=main_courante}}
-{{mb_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_script module=urgences   script=main_courante}}
+{{mb_script module=planningOp script=cim10_selector}}
+
+{{mb_script module=ecap script=dhe}}
 
 <script type="text/javascript">
 var refreshExecuter;
