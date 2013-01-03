@@ -115,16 +115,6 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td id="listConsult" style="width: 240px;"></td>
-    <td> 
-    {{if $consult->_id}}
-      {{assign var="patient" value=$consult->_ref_patient}}
-      {{include file="../../dPcabinet/templates/inc_consult_anesth/patient_infos.tpl"}}
-      <div id="finishBanner">
-      {{include file="../../dPcabinet/templates/inc_finish_banner.tpl"}}
-      </div>
-      {{include file="../../dPcabinet/templates/inc_consult_anesth/accord.tpl"}}
-    {{/if}}
-
-    </td>
+    <td></td>
   </tr>
 </table>

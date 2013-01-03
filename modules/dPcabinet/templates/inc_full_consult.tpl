@@ -13,11 +13,19 @@
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 
 {{if $consult->_id}}
-{{assign var="patient" value=$consult->_ref_patient}}
-<div id="finishBanner">
-{{include file="../../dPcabinet/templates/inc_finish_banner.tpl"}}
-</div>
-{{include file="../../dPcabinet/templates/inc_patient_infos_accord_consult.tpl"}}
-{{include file="../../dPcabinet/templates/acc_consultation.tpl"}}
+  {{assign var="patient" value=$consult->_ref_patient}}
+  {{if $consult_anesth}}
+    {{include file="../../dPcabinet/templates/inc_consult_anesth/patient_infos.tpl"}}
+  {{/if}}
+  <div id="finishBanner">
+    {{include file="../../dPcabinet/templates/inc_finish_banner.tpl"}}
+  </div>
+  {{if $consult_anesth}}
+    {{include file="../../dPcabinet/templates/inc_consult_anesth/accord.tpl"}}
+  {{else}}
+    {{include file="../../dPcabinet/templates/inc_patient_infos_accord_consult.tpl"}}
+    {{include file="../../dPcabinet/templates/acc_consultation.tpl"}}
+  {{/if}}
 {{/if}}
+
     
