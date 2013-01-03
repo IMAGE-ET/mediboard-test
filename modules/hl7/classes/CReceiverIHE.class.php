@@ -117,7 +117,7 @@ class CReceiverIHE extends CInteropReceiver {
     
     $source->setData($msg, null, $exchange);
     try {
-      //$source->send();
+      $source->send();
     } catch (Exception $e) {
       throw new CMbException("CExchangeSource-no-response");
     }
