@@ -1,4 +1,7 @@
+{{mb_script module="dPcabinet" script="edit_consultation" ajax=$ajax}}
+
 <script type="text/javascript">
+
 Main.add(function () {
   if (document.selCabinet && "{{$offline}}" == 0){
     Calendar.regField(getForm("selCabinet").date, null, {noView: true});

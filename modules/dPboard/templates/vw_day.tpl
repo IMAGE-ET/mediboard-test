@@ -12,7 +12,7 @@
 
 <script type="text/javascript">
 
-Consultation.edit = Consultation.editModal;
+Consultation.useModal();
 
 function hideIcon(frame) {
   $("icon-" + frame).hide();

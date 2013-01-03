@@ -1,6 +1,6 @@
 // $Id: $
 
-var ListConsults = {
+ListConsults = {
   target: "listConsult",
   request: null,
 
@@ -34,7 +34,7 @@ var ListConsults = {
   }
 }
 
-var Consultation = {
+Consultation = {
   
   editRDV: function(consult_id) {
     var url = new Url("dPcabinet", "edit_planning");
@@ -43,7 +43,7 @@ var Consultation = {
   },
   
   edit: function(consult_id) {
-    var url = new Url("dPcabinet", "edit_consultation");
+    var url = new Url("dPcabinet", "edit_consultation", "tab");
     url.addParam("selConsult", consult_id);
     url.redirect();
   },
@@ -52,6 +52,14 @@ var Consultation = {
     var url = new Url("dPcabinet", "ajax_full_consult");
     url.addParam("consult_id", consult_id);
     url.modal();
+  },
+  
+  useModal: function() {
+    this.edit = this.editModal;
+  },
+  
+  test: function() {
+    alert('toto');
   }
   
 }
