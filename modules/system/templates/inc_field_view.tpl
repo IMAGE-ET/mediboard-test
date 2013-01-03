@@ -13,7 +13,7 @@
 
 {{if $spec->show !== "0"}} 
 {{if $prop.0 != "_" || $spec->show}}
-{{if $value || $value == 0 || $spec->show}}
+{{if $value || $value === "0" || $value === 0 || $spec->show}}
   <strong>{{mb_label object=$object field=$prop}}</strong> :
 
   {{if $spec instanceof CRefSpec}}

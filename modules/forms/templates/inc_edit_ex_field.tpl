@@ -309,7 +309,7 @@ Main.add(function(){
     {{if $_can_formula}}
       <li>
         <a href="#fieldFormulaEditor" {{if !$ex_field->formula}} class="empty" {{/if}} 
-           style="background-image: url('style/mediboard/images/buttons/formula.png'); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">
+           style="background-image: url(style/mediboard/images/buttons/formula.png); background-repeat: no-repeat; background-position: 2px 2px; padding-left: 18px;">
           Formule / concaténation
         </a>
       </li>

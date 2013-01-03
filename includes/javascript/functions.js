@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-function main() {
+document.observe('dom:loaded', function(){
   try {
     // Fix for IE9 in IE8 mode
     try {
@@ -34,9 +34,7 @@ function main() {
   catch (e) {
     errorHandler(e.extMessage || e.message || e.description || e, e.fileName, e.lineNumber, e);
   }
-}
-
-document.observe('dom:loaded', main);
+});
 
 var UAInfo = {
   string: "",
@@ -1557,7 +1555,7 @@ var BarcodeParser = {
           var message = input.next(".barcode-message");
           
           if (!message) {
-            message = DOM.span({style: "color: red; display: none;", className: "barcode-message"}, "Ce n'est pas un code valide");
+            message = DOM.span({style: "display: none;", className: "barcode-message warning"}, "Code possiblement invalide");
             input.up().insert({bottom: message});
           }
           message.setVisible(alert);

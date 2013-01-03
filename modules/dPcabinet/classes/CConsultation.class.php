@@ -88,6 +88,10 @@ class CConsultation extends CCodable {
   // Fwd References
   var $_ref_patient      = null; // Declared in CCodable
   var $_ref_sejour       = null; // Declared in CCodable
+
+  /**
+   * @var CPlageconsult
+   */
   var $_ref_plageconsult = null;
   var $_ref_adresse_par_prat = null;
 
@@ -107,7 +111,7 @@ class CConsultation extends CCodable {
    * @var CConsultAnesth
    */
   var $_ref_consult_anesth     = null;
-  var $_refs_dossiers_anesth   = null;   
+  var $_refs_dossiers_anesth   = null;
   var $_ref_examaudio          = null;
   var $_ref_examcomp           = null;
   var $_ref_examnyha           = null;
@@ -979,7 +983,7 @@ TESTS A EFFECTUER
     }
   }
 
-  function loadRefCategorie($cache = 0) {
+  function loadRefCategorie($cache = false) {
     $this->_ref_categorie = $this->loadFwdRef("categorie_id", $cache);
   }
 
@@ -991,16 +995,23 @@ TESTS A EFFECTUER
     }
   }
 
-  function loadRefPatient($cache = 1) {
+  /**
+   * @param bool $cache Use cache
+   *
+   * @return CPatient
+   */
+  function loadRefPatient($cache = true) {
     return $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
   }
 
   /**
    * Chargement du sejour et du RPU dans le cas d'une urgence
    *
+   * @param bool $cache Use cache
+   *
    * @return CSejour
    */
-  function loadRefSejour($cache = 1) {
+  function loadRefSejour($cache = true) {
     $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
     $this->_ref_sejour->loadRefRPU();
 
