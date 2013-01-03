@@ -115,18 +115,18 @@ class CSocketBasedServer {
    * @var array
    */
   protected $clients = array();
-  
+
   /**
    * The socket based server constructor
-   * 
+   *
    * @param string  $call_url    The Mediboard root URL to call
    * @param string  $username    The Mediboard user name
    * @param string  $password    The Mediboard user password
    * @param integer $port        The port number to listen on
    * @param string  $certificate The path to the SSL/TLS certificate
    * @param string  $passphrase  The SSL/TLS certificate passphrase
-   * 
-   * @return void
+   *
+   * @return CSocketBasedServer
    */
   function __construct($call_url, $username, $password, $port, $certificate = null, $passphrase = null){
     $this->call_url    = rtrim($call_url, " /");
@@ -267,7 +267,7 @@ class CSocketBasedServer {
    * @return string
    */
   function encodeClientRequest($buffer) {
-    return trim($buffer);
+    return $buffer;
   }
   
   /**
@@ -305,7 +305,7 @@ class CSocketBasedServer {
     $buffer = &$this->clients[$id]["buffer"];
     
     // Commands
-    switch(trim($request)) {
+    switch (trim($request)) {
       case "__STOP__":
         $buffer = "";
         return false;
@@ -536,20 +536,21 @@ EOT;
     $server->setOnWriteErrorHandler(array($this, "writeError"));
     $server->run();
   }
-  
+
   /**
    * Send a request
-   * 
+   *
    * @param string  $host    The client's IP to send the request to
    * @param integer $port    The client's port number
    * @param string  $message The message to send
-   * 
+   *
+   * @throws Exception
    * @return string The client's response
    */
   static function send($host, $port, $message) {
     $root_dir = dirname(__FILE__);
     
-    require_once "$root_dir/SocketClient.class.php";
+    include_once "$root_dir/SocketClient.class.php";
     
     try {
       if (!self::$client) {
@@ -627,7 +628,7 @@ EOT;
   static function getTmpDir() {
     $root_dir = dirname(__FILE__);
     
-    require_once "$root_dir/CMbPath.class.php";
+    include_once "$root_dir/CMbPath.class.php";
     
     $tmp_dir = "$root_dir/../tmp/socket_server";
     CMbPath::forceDir($tmp_dir);

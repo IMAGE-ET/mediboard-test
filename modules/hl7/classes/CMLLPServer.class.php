@@ -76,6 +76,17 @@ class CMLLPServer extends CSocketBasedServer{
   }
 
   /**
+   * Encode the request and return it
+   *
+   * @param string $buffer The buffer
+   *
+   * @return string
+   */
+  function encodeClientRequest($buffer) {
+    return rtrim($buffer, "\r\n\t\0\x0B\x1C");
+  }
+
+  /**
    * A sample ORU message formatted in ER7
    * 
    * @return string A sample ORU message formatted in ER7
