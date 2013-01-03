@@ -387,14 +387,14 @@ class CConsultation extends CCodable {
     if (!($this->_merging || $this->_mergeDeletion) && $this->_old->valide === "1" && $this->valide === "1") {
       // Modification du tarif déjà validé
       if (
-        $this->fieldModified("secteur1") ||
-        $this->fieldModified("secteur2") ||
-        $this->fieldModified("total_assure") ||
-        $this->fieldModified("total_amc") ||
-        $this->fieldModified("total_amo") ||
-        $this->fieldModified("du_patient") ||
-        $this->fieldModified("du_tiers")
-      ) {
+          $this->fieldModified("secteur1") ||
+          $this->fieldModified("secteur2") ||
+          $this->fieldModified("total_assure") ||
+          $this->fieldModified("total_amc") ||
+          $this->fieldModified("total_amo") ||
+          $this->fieldModified("du_patient") ||
+          $this->fieldModified("du_tiers")
+        ) {
         //$msg .= $this->du_patient." vs. ".$this->_old->du_patient." (".$this->fieldModified("du_patient").")";
         $msg .= "Vous ne pouvez plus modifier le tarif, il est déjà validé";
       }
@@ -592,20 +592,17 @@ class CConsultation extends CCodable {
     $secteur2_CAISSE  = 0;
     $count_actes = 0;
 
-    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
       // Chargement des actes Tarmed
-      $this->loadRefsActesTarmed();
-      foreach ($this->_ref_actes_tarmed as $actetarmed) {
-        $count_actes++;
-        $secteur1_TARMED += round($actetarmed->montant_base , 2);
-        $secteur2_TARMED += round($actetarmed->montant_depassement, 2);
-      }
-      $this->loadRefsActesCaisse();
-      foreach ($this->_ref_actes_caisse as $actecaisse) {
-        $count_actes++;
-        $secteur1_CAISSE += round($actecaisse->montant_base , 2);
-        $secteur2_CAISSE += round($actecaisse->montant_depassement, 2);
-      }
+      $totaux_tarmed = $this->loadRefsActesTarmed();
+      $count_actes += count($this->_ref_actes_tarmed);
+      $secteur1_TARMED += round($totaux_tarmed["base"], 2);
+      $secteur2_TARMED += round($totaux_tarmed["dh"], 2);
+      
+      $totaux_caisse = $this->loadRefsActesCaisse();
+      $count_actes += count($this->_ref_actes_caisse);
+      $secteur1_CAISSE += round($totaux_caisse["base"] , 2);
+      $secteur2_CAISSE += round($totaux_caisse["dh"] , 2);
     }
 
     // Chargement des actes NGAP
@@ -854,7 +851,7 @@ TESTS A EFFECTUER
         // Pas le permettre si admission est déjà faite
         $max_hours = CAppUI::conf("dPcabinet CConsultation hours_after_changing_prat");
         if ($this->_ref_sejour->entree_reelle &&
-           (mbDateTime("+ $max_hours HOUR", $this->_ref_sejour->entree_reelle) < mbDateTime())) {
+            (mbDateTime("+ $max_hours HOUR", $this->_ref_sejour->entree_reelle) < mbDateTime())) {
           return CAppUI::tr("CConsultation-denyPratChange", $max_hours);
         }
 
