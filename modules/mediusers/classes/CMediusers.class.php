@@ -46,6 +46,7 @@ class CMediusers extends CMbObject {
   var $ean   = null;
   var $rcc   = null;
   var $adherent   = null;
+  var $debut_bvr  = null;
 
   // CUser reported fields fields
   var $_user_type                  = null;
@@ -169,6 +170,7 @@ class CMediusers extends CMbObject {
     $props["ean"]                    = "str";
     $props["rcc"]                    = "str";
     $props["adherent"]               = "str";
+    $props["debut_bvr"]              = "str maxLength|10";
     $props["mail_apicrypt"]          = "email";
     $props["compta_deleguee"]        = "bool default|0";
 
@@ -307,7 +309,7 @@ class CMediusers extends CMbObject {
     $user->user_id = ($this->_user_id) ? $this->_user_id : $this->user_id;
     $user->user_type        = $this->_user_type;
     $user->user_username    = $this->_user_username;
-		
+    
     if (isset($this->_ldap_store)) {
       $user->user_password     = $this->_user_password;
     }
@@ -359,12 +361,12 @@ class CMediusers extends CMbObject {
     parent::updateFormFields();
 
     $user = new CUser();
-	
-	  // Usefull hack for mass preloading
-		if (self::$user_autoload) {
+  
+    // Usefull hack for mass preloading
+    if (self::$user_autoload) {
       $user = $user->getCached($this->user_id);
-		}
-		
+    }
+    
     if ($user->_id) {
       $this->_user_type       = $user->user_type;
       $this->_user_username   = $user->user_username;
@@ -387,7 +389,7 @@ class CMediusers extends CMbObject {
       $this->_shortview       = "";
 
       // Initiales
-      if(!$this->_shortview = $this->initials) {
+      if (!$this->_shortview = $this->initials) {
         foreach (explode("-", $this->_user_first_name) as $value) {
           if ($value != '')
             $this->_shortview .= $value[0];
@@ -729,7 +731,7 @@ class CMediusers extends CMbObject {
     $group = CGroups::loadCurrent();
     $where["functions_mediboard.group_id"] = "= '$group->_id'";
 
-		// Filter on user type
+    // Filter on user type
     if (is_array($user_types)) {
       $utypes_flip = array_flip(CUser::$types);
       foreach ($user_types as &$_type) {
@@ -749,20 +751,20 @@ class CMediusers extends CMbObject {
     $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
     CMediusers::$user_autoload = true;
 
-		// Mass user speficic preloading
+    // Mass user speficic preloading
     $user = new CUser;
     $user->loadAll(array_keys($mediusers));
-		
+    
     // Attach cached user
     foreach ($mediusers as $_mediuser) {
       $_mediuser->updateFormFields();
     }
             
-		// Mass fonction standard preloading
-		CMbObject::massLoadFwdRef($mediusers, "function_id");
+    // Mass fonction standard preloading
+    CMbObject::massLoadFwdRef($mediusers, "function_id");
 
-				
-		// Filter a posteriori to unable mass preloading of function
+        
+    // Filter a posteriori to unable mass preloading of function
     self::filterByPerm($mediusers, $permType);
 
     // Associate cached function
@@ -810,13 +812,13 @@ class CMediusers extends CMbObject {
 
     $order = "text";
     $functions = $function->loadMatchingList($order);
-		CMbObject::filterByPerm($functions, $permType);
-		
-		// Group association
+    CMbObject::filterByPerm($functions, $permType);
+    
+    // Group association
     foreach ($functions as $function) {
       $function->_ref_group = $group;
     }
-		
+    
     return $functions;
   }
 

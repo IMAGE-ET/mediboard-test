@@ -524,7 +524,13 @@ class CSetupmediusers extends CSetup {
               ADD `initials` VARCHAR (255);";
      $this->addQuery($query);
 
-     $this->mod_version = "0.47";
+     $this->makeRevision("0.47");
+     
+     $query = "ALTER TABLE `users_mediboard` 
+              ADD `debut_bvr` VARCHAR (10);";
+     $this->addQuery($query);
+
+     $this->mod_version = "0.48";
 
   }
 }

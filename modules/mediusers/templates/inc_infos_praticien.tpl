@@ -129,4 +129,8 @@
     <th>{{mb_label object=$object field="adherent"}}</th>
     <td>{{mb_field object=$object field="adherent"}}</td>
   </tr>
+  <tr>
+    <th>{{mb_label object=$object field="debut_bvr"}}</th>
+    <td>{{mb_field object=$object field="debut_bvr"}}</td>
+  </tr>
 {{/if}}
