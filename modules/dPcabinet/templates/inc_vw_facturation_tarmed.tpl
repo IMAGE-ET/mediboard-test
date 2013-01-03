@@ -216,9 +216,9 @@
 
 <tbody class="hoverable">
   {{assign var="nb_montants" value=$facture->_montant_factures|@count}}
-  {{foreach from=$facture->_montant_factures item=_montant key=key name=foo}}
+  {{foreach from=$facture->_montant_factures item=_montant key=key name=montants}}
     <tr>
-      {{if $smarty.foreach.foo.first}}
+      {{if $smarty.foreach.montants.first}}
       <td colspan="4" rowspan="{{$nb_montants+2}}"></td>
       {{/if}}
       <td colspan="2">Montant{{if $nb_montants > 1}} n°{{$key+1}}{{/if}}</td>
