@@ -498,11 +498,12 @@ var Url = Class.create({
    * @param {String=} sWindowName     Popup internal name
    * @param {String=} sPrefix         Popup name prefix
    * @param {Object=} oPostParameters Popup POST parameters
+   * @param {String=} sBaseUrl
    *
    * @return {Url}
    */
-  popup: function(iWidth, iHeight, sWindowName, sPrefix, oPostParameters) {
-    this.pop(iWidth, iHeight, sWindowName, null, sPrefix, oPostParameters);
+  popup: function(iWidth, iHeight, sWindowName, sPrefix, oPostParameters, sBaseUrl) {
+    this.pop(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix, oPostParameters);
   
     // Prefixed window collection
     if (sPrefix) {
