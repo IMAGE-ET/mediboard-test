@@ -89,19 +89,20 @@ if ($op) {
                   3=>array("tp","tca","tsivy","ecbu")
                   );
   $cAnesth =& $selOp->_ref_consult_anesth;
-  foreach($listChamps as $keyCol=>$aColonne){
-    foreach($aColonne as $keyChamp=>$champ){
+  foreach ($listChamps as $keyCol=>$aColonne) {
+    foreach ($aColonne as $keyChamp=>$champ) {
       $verifchamp = true;
-      if($champ=="tca"){
+      if ($champ=="tca") {
         $champ2 = $cAnesth->tca_temoin;
-      }else{
+      }
+      else {
         $champ2 = false;
-        if(($champ=="ecbu" && $cAnesth->ecbu=="?") || ($champ=="tsivy" && $cAnesth->tsivy=="00:00:00")){
+        if (($champ=="ecbu" && $cAnesth->ecbu=="?") || ($champ=="tsivy" && $cAnesth->tsivy=="00:00:00")) {
           $verifchamp = false;
         }
       }
       $champ_exist = $champ2 || ($verifchamp && $cAnesth->$champ);
-      if(!$champ_exist){
+      if (!$champ_exist) {
         unset($listChamps[$keyCol][$keyChamp]);
       }
     }
@@ -111,7 +112,7 @@ if ($op) {
   $selOp->_ref_consult_anesth->_ref_consultation->loadRefPraticien()->loadRefFunction();
   
   // Chargement de la prescription de sejour
-  if (CModule::getActive("dPprescription")){
+  if (CModule::getActive("dPprescription")) {
     $prescription = new CPrescription();
     $prescription->object_id = $selOp->sejour_id;
     $prescription->object_class = "CSejour";
@@ -120,11 +121,11 @@ if ($op) {
   }
   
   $anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
-  if($anesth_id && CModule::getActive('dPprescription')){
+  if ($anesth_id && CModule::getActive('dPprescription')) {
     $protocoles = CPrescription::getAllProtocolesFor($anesth_id, null, null, 'CSejour','sejour');
   }
 
-  if(!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
+  if (!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
     $selOp->prat_visite_anesth_id = $selOp->_ref_anesth->_id;
   }
 }
@@ -154,13 +155,10 @@ $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
-$soustotal_base = array("tarmed" => 0, "caisse" => 0);
-$soustotal_dh   = array("tarmed" => 0, "caisse" => 0);
+// Si le module Tarmed est installé chargement d'un acte tarmed et caisse
 $acte_tarmed = null;
 $acte_caisse = null;
-
-if (CModule::getActive("tarmed")){
-  //Initialisation d'un acte Tarmed
+if (CModule::getActive("tarmed")) {
   $acte_tarmed = new CActeTarmed();
   $acte_tarmed->quantite = 1;
   $acte_tarmed->loadListExecutants();
@@ -170,23 +168,14 @@ if (CModule::getActive("tarmed")){
   $acte_caisse->loadListExecutants();
   $acte_caisse->loadRefExecutant();
   $acte_caisse->loadListCaisses();
-  if($selOp->_ref_actes_tarmed){
-    foreach($selOp->_ref_actes_tarmed as $acte){
-      $soustotal_base["tarmed"] += $acte->montant_base;
-      $soustotal_dh["tarmed"]   += $acte->montant_depassement;  
-    }
-  }
-  if($selOp->_ref_actes_caisse){
-    foreach($selOp->_ref_actes_caisse as $acte){
-      $soustotal_base["caisse"] += $acte->montant_base;
-      $soustotal_dh["caisse"]   += $acte->montant_depassement;  
-    }
-  }
 }
-$total["tarmed"] = $soustotal_base["tarmed"] + $soustotal_dh["tarmed"];
-$total["caisse"] = $soustotal_base["caisse"] + $soustotal_dh["caisse"];
-$total["tarmed"] = round($total["tarmed"],2);
-$total["caisse"] = round($total["caisse"],2);
+
+$total_tarmed = $selOp->loadRefsActesTarmed();
+$total_caisse = $selOp->loadRefsActesCaisse();
+$soustotal_base = array("tarmed" => $total_tarmed["base"], "caisse" => $total_caisse["base"]);
+$soustotal_dh   = array("tarmed" => $total_tarmed["dh"], "caisse" => $total_caisse["dh"]);
+$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"],2);
+$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"],2);
 
 // Vérification de la check list journalière
 $daily_check_list = CDailyCheckList::getList($salle, $date);
@@ -206,7 +195,7 @@ $cat = new CDailyCheckItemCategory;
 $cat->target_class = "COperation";
 
 // Pre-anesth, pre-op, post-op
-foreach($operation_check_list->_specs["type"]->_list as $type) {
+foreach ($operation_check_list->_specs["type"]->_list as $type) {
   $list = CDailyCheckList::getList($selOp, null, $type);
   $list->loadItemTypes();
   $list->loadRefsFwd();
@@ -225,7 +214,7 @@ $anesth->load($anesth_id);
 // Création du template
 $smarty = new CSmartyDP();
 
-if ($selOp->_id){
+if ($selOp->_id) {
   $smarty->assign("listChamps", $listChamps);
 }
 
@@ -265,8 +254,8 @@ $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"))
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("codage_prat"            , $group->_configs["codage_prat"]);
-if (CModule::getActive("dPprescription")){
-  if(!isset($prescription)){
+if (CModule::getActive("dPprescription")) {
+  if (!isset($prescription)) {
     $prescription = new CPrescription();
   }
   $smarty->assign("prescription"           , $prescription);
