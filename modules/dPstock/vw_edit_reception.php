@@ -16,13 +16,15 @@ $letter       = CValue::getOrSession('letter', "%");
 
 $reception = new CProductReception();
 
-if ($order_id)
+if ($order_id) {
   $reception->findFromOrder($order_id);
-else
+}
+else {
   $reception->load($reception_id);
+}
   
 $reception->loadRefsBack();
-foreach($reception->_ref_reception_items as $_reception) {
+foreach ($reception->_ref_reception_items as $_reception) {
   $_reception->loadRefOrderItem()->loadReference();
 }
 
@@ -34,15 +36,15 @@ $order = new CProductOrder;
 $order->load($order_id);
 $order->updateCounts();
 
-foreach($order->_ref_order_items as $_id => $_item) {
+foreach ($order->_ref_order_items as $_id => $_item) {
   if (!$_item->renewal) {
     unset($order->_ref_order_items[$_id]);
   }
 }
 
-foreach($order->_ref_order_items as $_item) {
+foreach ($order->_ref_order_items as $_item) {
   $_item->loadRefsReceptions();
-  foreach($_item->_ref_receptions as $_reception) {
+  foreach ($_item->_ref_receptions as $_reception) {
     $_reception->loadRefReception();
   }
 }
@@ -50,6 +52,8 @@ foreach($order->_ref_order_items as $_item) {
 if (!$reception->bill_date) {
   $reception->bill_date = mbDate();
 }
+
+$order->loadView();
 
 $smarty = new CSmartyDP();
 
