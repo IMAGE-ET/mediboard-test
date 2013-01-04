@@ -57,7 +57,7 @@ $iti_handler = new CITIDelegatedHandler();
 
 $profil      = "PDQ";
 $transaction = "ITI21";
-$message     = "PDQ";
+$message     = "QBP";
 $code        = "Q22";
 
 foreach ($receivers as $_receiver) {
