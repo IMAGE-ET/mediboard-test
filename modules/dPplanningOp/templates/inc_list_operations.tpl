@@ -150,7 +150,10 @@
         {{mb_label object=$_operation field=temp_operation}} : {{mb_value object=$_operation field=temp_operation}}
       </td>
       <td class="text top">
-        <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
+        <button type="button" class="edit" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}')">
+          Dossier bloc
+        </button>
+        <a href="#1" onclick="Operation.edit('{{$_operation->_id}}', '{{$_operation->plageop_id}}')">
           {{mb_include template=inc_vw_operation}}
           ({{mb_label object=$_operation field=cote}} {{mb_value object=$_operation field=cote}})
         </a>
@@ -188,25 +191,27 @@
         {{if $patient->_ref_dossier_medical->_id && $patient->_ref_dossier_medical->_count_allergies}}
           <img src="images/icons/warning.png" style="float: right" onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}', 'allergies');" />
         {{/if}}
+
         {{if $_operation->annulee}}
           [ANNULEE]
         {{else}}
           <strong>
-            {{mb_value object=$_operation field=_datetime}}
+            {{mb_value object=$_operation field=time_operation}}
           </strong>
-          <br />
-          ({{mb_value object=$_operation field=temp_operation}})
         {{/if}}
         
         <a href="{{$patient->_dossier_cabinet_url}}">
-          <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-          {{$patient->_view}}
-          </span>
+          <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">{{$patient}}</strong>
         </a>
+        {{mb_label object=$_operation field=temp_operation}} : {{mb_value object=$_operation field=temp_operation}}
+        
       </td>
       <td class="text top">
-        <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$_operation->_id}}">
-          {{if $_operation->salle_id}}Déplacé en salle {{$_operation->_ref_salle}}{{/if}}
+        <button type="button" class="edit" style="float: right;" onclick="Operation.dossierBloc('{{$_operation->_id}}')">
+          Dossier bloc
+        </button>
+        <a href="#1" onclick="Operation.edit('{{$_operation->_id}}', '{{$_operation->plageop_id}}')">
+          {{if $_operation->salle_id}}Effectué en salle {{$_operation->_ref_salle}}{{/if}}
           {{mb_include template=inc_vw_operation}}
           ({{mb_label object=$_operation field=cote}} {{mb_value object=$_operation field=cote}})  
         </a>

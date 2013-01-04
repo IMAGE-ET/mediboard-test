@@ -51,15 +51,11 @@ Consultation = {
   editModal: function (consult_id) {
     var url = new Url("dPcabinet", "ajax_full_consult");
     url.addParam("consult_id", consult_id);
-    url.modal();
+    url.modal({width: 1000, height: 700});
   },
   
   useModal: function() {
     this.edit = this.editModal;
   },
-  
-  test: function() {
-    alert('toto');
-  }
   
 }

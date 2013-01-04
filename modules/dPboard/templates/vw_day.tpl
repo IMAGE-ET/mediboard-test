@@ -9,10 +9,12 @@
 *}}
 
 {{mb_script module="dPcabinet" script="edit_consultation"}}
+{{mb_script module="dPplanningOp" script="operation"}}
 
 <script type="text/javascript">
 
 Consultation.useModal();
+Operation.useModal();
 
 function hideIcon(frame) {
   $("icon-" + frame).hide();

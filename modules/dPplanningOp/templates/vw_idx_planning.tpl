@@ -1,6 +1,7 @@
 <!-- $Id$ -->
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 {{mb_script module="dPcompteRendu" script="document"}}
+{{mb_script module="dPplanningOp" script="operation"}}
 
 <script type="text/javascript">
 

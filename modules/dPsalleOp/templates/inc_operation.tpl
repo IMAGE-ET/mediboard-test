@@ -1,20 +1,113 @@
+{{assign var="sejour" value=$selOp->_ref_sejour}}
+{{assign var="patient" value=$sejour->_ref_patient}}
+{{assign var="module" value="dPsalleOp"}}
+{{assign var="object" value=$selOp}}
+{{assign var="do_subject_aed" value="do_planning_aed"}}
+
 {{if "dPmedicament"|module_active}}
-  {{mb_script module="dPmedicament" script="medicament_selector"}}
-  {{mb_script module="dPmedicament" script="equivalent_selector"}}
+  {{mb_script module="dPmedicament" script="medicament_selector" ajax=$ajax}}
+  {{mb_script module="dPmedicament" script="equivalent_selector" ajax=$ajax}}
 {{/if}}
 
 {{if "dPprescription"|module_active}}
-  {{mb_script module="dPprescription" script="element_selector"}}
-  {{mb_script module="dPprescription" script="prescription"}}
+  {{mb_script module="dPprescription" script="element_selector" ajax=$ajax}}
+  {{mb_script module="dPprescription" script="prescription" ajax=$ajax}}
 {{/if}}
 
-{{mb_script module="bloodSalvage" script="bloodSalvage"}}
-
-{{assign var="sejour" value=$selOp->_ref_sejour}}
-{{assign var="patient" value=$sejour->_ref_patient}}
+{{mb_script module="bloodSalvage" script="bloodSalvage" ajax=$ajax}}
+{{mb_script module="soins" script="plan_soins" ajax=$ajax}}
+{{mb_script module="dPplanningOp" script="cim10_selector" ajax=$ajax}}
+{{mb_include module=planningOp template=js_form_sejour only_ald=1}}
+{{mb_include module=salleOp template=js_codage_ccam}}
 
 <script type="text/javascript">
+
+printFicheAnesth = function(consult_id) {
+  var url = new Url("dPcabinet", "print_fiche"); 
+  url.addParam("consultation_id", consult_id);
+  url.popup(700, 500, "printFiche");
+}
+
+submitTiming = function(oForm) {
+  submitFormAjax(oForm, 'systemMsg', { 
+    onComplete : function() { 
+      reloadTiming(oForm.operation_id.value);
+    } 
+  });
+}
+
+reloadTiming = function(operation_id){
+  {{if $object->_id}}
+  var url = new Url("dPsalleOp", "httpreq_vw_timing");
+  url.addParam("operation_id", operation_id);
+  url.requestUpdate("timing", { onComplete: function() { ActesCCAM.refreshList({{$object->_id}},{{$object->_praticien_id}});} } );
+  {{/if}}
+}
+
+submitAnesth = function(oForm) {
+  submitFormAjax(oForm, 'systemMsg', { 
+    onComplete: function() {
+      if(Prescription.updatePerop){
+        Prescription.updatePerop('{{$selOp->sejour_id}}');
+      }
+      reloadAnesth(oForm.operation_id.value);
+      if(document.visiteAnesth && document.visiteAnesth.date_visite_anesth.value == 'current'){
+        $V(document.visiteAnesth.prat_visite_anesth_id, oForm.anesth_id.value);
+      }
+    }
+  });
+}
+
+signVisiteAnesth = function(anesth_id) {
+  alert('anesth numéro ' + anesth_id);
+}
+
+reloadAnesth = function(operation_id){
+  var url = new Url("dPsalleOp", "httpreq_vw_anesth");
+  url.addParam("operation_id", operation_id);
+  url.requestUpdate("anesth", { 
+    onComplete: function() { 
+      if(reloadDocumentsAnesth) {
+        reloadDocumentsAnesth();
+      }
+      ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}"); 
+    }
+  } );  
+}
+
+reloadDiagnostic = function(sejour_id, modeDAS) {
+  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
+  url.addParam("sejour_id", sejour_id);
+  url.addParam("modeDAS", modeDAS);
+  url.requestUpdate("cim");
+}
+
+reloadPersonnel = function(operation_id){
+  var url = new Url("dPsalleOp", "httpreq_vw_personnel");
+  url.addParam("operation_id", operation_id);
+  url.requestUpdate("listPersonnel");
+}
+
+confirmeCloture = function() {
+  return confirm("Action irréversible. Seul le service PSMI pourra modifier le codage de vos actes. Confirmez-vous la cloture de votre cotation pour aujourd'hui ?");
+}
+
 Main.add(function () {
+  
+  // Initialisation des onglets
+  if ($('main_tab_group')){
+    Control.Tabs.create('main_tab_group', true);
+    var tabName = Control.Tabs.loadTab('main_tab_group');
+    {{if "maternite"|module_active}}
+      if (tabName && tabName == "grossesse") {
+        refreshGrossesse('{{$selOp->_id}}');
+      }
+    {{/if}}      
+  }  
+  
+  // Sauvegarde de l'operation_id selectionné (utile pour l'ajout de DMI dans la prescription)
+  window.DMI_operation_id = "{{$selOp->_id}}";
+  
   // Chargement de la gestion du personnel pour l'intervention
   reloadPersonnel('{{$selOp->_id}}');
 
@@ -55,7 +148,7 @@ Main.add(function () {
   }
 });
 
-function printFicheBloc(interv_id) {
+printFicheBloc = function(interv_id) {
   var url = new Url("dPsalleOp", "print_feuille_bloc");
   url.addParam("operation_id", interv_id);
   url.popup(700, 700, 'FeuilleBloc');
@@ -79,7 +172,7 @@ refreshConstantesMedicales = function(context_guid) {
   }
 }
 
-function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
+loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
   if(sejour_id) {
     var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
@@ -98,7 +191,7 @@ function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) 
   }
 }
 
-function submitSuivi(oForm) {
+submitSuivi = function(oForm) {
   sejour_id = oForm.sejour_id.value;
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
     loadSuivi(sejour_id); 
@@ -110,12 +203,12 @@ function submitSuivi(oForm) {
 }
 
 {{if $isPrescriptionInstalled}}
-function reloadPrescription(prescription_id){
+reloadPrescription = function(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '', null, null, null, null, null);
 }
 {{/if}}
 
-function reloadSurveillancePerop(){
+reloadSurveillancePerop = function() {
   if($('surveillance_perop')){
     var url = new Url("dPsalleOp", "ajax_vw_surveillance_perop");
     url.addParam("operation_id","{{$selOp->_id}}");
@@ -123,7 +216,7 @@ function reloadSurveillancePerop(){
   }
 }
 
-function loadPosesDispVasc(){
+loadPosesDispVasc = function() {
   var url = new Url("dPplanningOp", "ajax_list_pose_disp_vasc");
   url.addParam("operation_id", "{{$selOp->_id}}");
   url.addParam("sejour_id",    "{{$selOp->sejour_id}}");
@@ -139,7 +232,7 @@ function loadPosesDispVasc(){
   }
 {{/if}}
 
-function infoAnapath(field) {
+infoAnapath = function(field) {
   if($V(field) == 1) {
     var url = new Url("salleOp", "ajax_info_anapath");
     url.addParam("operation_id", $V(field.form.operation_id));
@@ -148,7 +241,7 @@ function infoAnapath(field) {
   submitFormAjax(field.form, 'systemMsg');
 }
 
-function infoBacterio(field) {
+infoBacterio = function(field) {
   if($V(field) == 1) {
     var url = new Url("salleOp", "ajax_info_bacterio");
     url.addParam("operation_id", $V(field.form.operation_id));
