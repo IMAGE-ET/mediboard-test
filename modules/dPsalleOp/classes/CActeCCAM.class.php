@@ -309,8 +309,10 @@ class CActeCCAM extends CActe {
       }
     }
   }
-  
-  function store() {
+
+  function checkFacturable() {
+    $this->completeField("facturable");
+
     // Si acte non facturable on met le code d'asso à aucun
     if (!$this->facturable) {
       $this->code_association = "";
@@ -322,6 +324,11 @@ class CActeCCAM extends CActe {
       $this->motif_depassement    = "";
       $this->_calcul_montant_base = true;
     }
+  }
+  
+  function store() {
+    // On test si l'acte CCAM est facturable
+    $this->checkFacturable();
 
     // Sauvegarde du montant de base
     if ($this->_calcul_montant_base) {
