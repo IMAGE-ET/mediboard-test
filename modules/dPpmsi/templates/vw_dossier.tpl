@@ -174,6 +174,9 @@ Main.add(function () {
     <td class="narrow">
       <form name="patFrm" action="?" method="get">
         <table class="form">
+           <tr>
+             <th class="category" colspan="4">Recherche par patient ou NDA</th>
+           </tr>
           <tr>
             <th><label for="patNom" title="Merci de choisir un patient pour voir son dossier">Choix du patient</label></th>
             <td>
@@ -190,9 +193,17 @@ Main.add(function () {
               }
               </script>
             </td>
+
+            <th><label for="NDA" title="Merci de choisir un NDA pour voir son dossier">Numéro de dossier (NDA)</label></th>
+            <td>
+              <input type="text" name="NDA" value="{{$NDA}}" />
+              <button class="search" type="button" onclick="this.form.submit()">Chercher</button>
+            </td>
           </tr>
         </table>
       </form>
+
+
       {{if $patient->_id}}
       <div id="vwPatient">
         {{mb_include module=patients template=inc_vw_identite_patient}}
@@ -246,6 +257,8 @@ Main.add(function () {
           {{/if}}
         {{/foreach}}
       </table>
+      {{else}}
+        <div class="small-info">Aucun résultat ne correspond à votre recherche</div>
       {{/if}}
     </td>
     {{if $patient->_id}}
