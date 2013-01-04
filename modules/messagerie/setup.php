@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -89,8 +89,19 @@ class CSetupmessagerie extends CSetup {
               ADD INDEX (`mail_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.15";
+    $this->makeRevision("0.15");
+    $this->addPrefQuery("getAttachmentOnUpdate", 0);
 
+    $this->makeRevision("0.16");
+    $query = "ALTER TABLE `user_mail_attachment`
+              ADD `linked` VARCHAR (255) AFTER `part`;";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.17");
+    $this->addPrefQuery("LinkAttachment", 1);
+
+
+    $this->mod_version = "0.18";
 
   }
 }

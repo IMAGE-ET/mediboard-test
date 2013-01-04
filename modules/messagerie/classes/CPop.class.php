@@ -30,10 +30,11 @@ class CPop{
 
 
   /**
-   * constructor
-   * INIT function : Initialisation of the remote connexion to IMAP/POP
+   * CPop constructor
    *
-   * @return string
+   * @param CExchangeSource $source IMAP source
+   *
+   * @return string $_server
    */
   function CPop($source) {
     //stock the source
@@ -44,7 +45,7 @@ class CPop{
     }
 
     //initialise open TIMEOUT
-    imap_timeout( 1, $this->source->timeout );
+    imap_timeout(1, $this->source->timeout);
 
 
     //lets create the string for stream
@@ -60,13 +61,13 @@ class CPop{
    */
   function open() {
 
-    if(!isset($this->_server)) {
-      CAppUI::stepAjax("CPop-error-notInitiated",UI_MSG_ERROR);
+    if (!isset($this->_server)) {
+      CAppUI::stepAjax("CPop-error-notInitiated", UI_MSG_ERROR);
     }
 
 
-    $this->_mailbox = @imap_open($this->_server, $this->source->user, $this->source->password,0, 0);
-    if($this->_mailbox === false ) {
+    $this->_mailbox = @imap_open($this->_server, $this->source->user, $this->source->password, 0, 0);
+    if ($this->_mailbox === false ) {
       CAppUI::stepAjax("CPop-error-imap_open", UI_MSG_ERROR);
     }
     //get the basics
@@ -89,19 +90,19 @@ class CPop{
   /**
    * search for a mail using specific string
    *
-   * @param      $string
-   * @param bool $uid
+   * @param string $string TEST
+   * @param bool   $uid    TEST
    *
    * @return array
    */
   function search($string,$uid=true) {
-    if(!is_string($string)) {
-      CAppUI::stepAjax("CPop-error-search-notString",UI_MSG_ERROR);
+    if (!is_string($string)) {
+      CAppUI::stepAjax("CPop-error-search-notString", UI_MSG_ERROR);
     }
     if ($uid) {
-      return imap_sort($this->_mailbox,SORTDATE,1,SE_UID,$string);
+      return imap_sort($this->_mailbox, SORTDATE, 1, SE_UID, $string);
     }
-    return imap_sort($this->_mailbox,SORTDATE,1,0,$string);
+    return imap_sort($this->_mailbox, SORTDATE, 1, 0, $string);
   }
 
   /**
@@ -112,12 +113,13 @@ class CPop{
    * @return array
    */
   function header($id) {
-    return imap_fetch_overview($this->_mailbox, $id,FT_UID);
+    return imap_fetch_overview($this->_mailbox, $id, FT_UID);
   }
 
   /**
    * get the structure of the mail (parts)
-   * @param $id
+   *
+   * @param int $id uid of the mail
    *
    * @return object
    */
@@ -126,62 +128,66 @@ class CPop{
   }
 
   /**
-   * @param $id
-   * @param $flag
+   * send a flag to the server
+   *
+   * @param int    $id   test
+   * @param string $flag test
    *
    * @return bool
    */
   function setFlag($id, $flag) {
-    return imap_setflag_full($this->_mailbox,$id,$flag,ST_UID);
+    return imap_setflag_full($this->_mailbox, $id, $flag, ST_UID);
   }
 
 
   /**
    * Open a part of an email
-   * ft_peek is defined, the mail is not mark as read on imap servers
-   * @param $msgId
-   * @param $partId
    *
-   * @return string
+   * @param integer $msgId  test
+   * @param string  $partId test
+   * @param boolean $uid    test
+   *
+   * @return STDout $object
    */
   function openPart($msgId,$partId,$uid=true) {
     if ($uid) {
       return imap_fetchbody($this->_mailbox, $msgId, $partId, FT_UID | FT_PEEK);
     }
-
-    return imap_fetchbody($this->_mailbox, $msgId, $partId,FT_PEEK);
+    return imap_fetchbody($this->_mailbox, $msgId, $partId, FT_PEEK);
   }
 
   /**
-   *   @param      $mail_id
-   * @param bool $structure
-   * @param bool $part_number
-   * @param bool $only_text
+   * Get the body of the mail : HTML & plain text if available!
+   *
+   * @param int  $mail_id     test
+   * @param bool $structure   test
+   * @param bool $part_number test
+   * @param bool $only_text   test
    *
    * @return array
    */
-  function getFullBody($mail_id,$structure = false, $part_number = false, $only_text = false) {
+  function getFullBody($mail_id, $structure = false, $part_number = false, $only_text = false) {
 
-    if(!$structure) {
+    if (!$structure) {
       $structure = $this->structure($mail_id);
     }
 
     if ($structure) {
-      if(!isset($structure->parts) && !$part_number) {  //plain text only, no recursive
+      if (!isset($structure->parts) && !$part_number) {  //plain text only, no recursive
         $part_number = "1";
       }
-      if(!$part_number) {
+      if (!$part_number) {
         $part_number = "0";
       }
 
       switch ($structure->type) {
         case 0: //text or html
           if ($structure->subtype == "PLAIN") {
-            $this->content["text"]["plain"] = self::decodeMail($structure->encoding, self::openPart($mail_id,$part_number));
+            $this->content["text"]["plain"] = self::decodeMail($structure->encoding, self::openPart($mail_id, $part_number));
           }
           if ($structure->subtype == "HTML") {
 
-            $this->content["text"]["html"] = self::decodeMail($structure->encoding, self::openPart($mail_id,$part_number));
+            $this->content["text"]["html"] = self::decodeMail($structure->encoding, self::openPart($mail_id, $part_number));
           }
 
           break;
@@ -189,10 +195,11 @@ class CPop{
           while (list($index, $sub_structure) = each($structure->parts)) {
             if ($part_number) {
               $prefix = $part_number.'.';
-            } else {
+            }
+            else {
               $prefix = null;
             }
-            self::getFullBody($mail_id,$sub_structure,$prefix . ($index + 1));
+            self::getFullBody($mail_id, $sub_structure, $prefix . ($index + 1));
           }
           break;
 
@@ -202,37 +209,47 @@ class CPop{
         case 5:     //images
         case 6:     //video
         default:    //other
-        if ($only_text) {
-          $attach  = new CMailAttachments();
-          $attach->loadFromHeader($structure);
-          $attach->loadContentFromPop($this->openPart($mail_id,$part_number));
+          if ($only_text) {
+            $attach  = new CMailAttachments();
+            $attach->loadFromHeader($structure);
+            $attach->loadContentFromPop($this->openPart($mail_id, $part_number));
 
-          //inline attachments
-          if ($attach->id && $attach->subtype!="SVG+XML") {
-            $id= 'cid:'.str_replace(array("<",">"), array("",""), $attach->id);
-            $this->content["text"]["html"] = str_replace($id, "data:image/$attach->subtype|strtolower;base64,".$attach->content, $this->content["text"]["html"]);
-          } else {  //attachments below
-            $this->content["attachments"][] = $attach;
+            //inline attachments
+            if ($attach->id && $attach->subtype!="SVG+XML") {
+              $id= 'cid:'.str_replace(array("<",">"), array("",""), $attach->id);
+              $url = "data:image/$attach->subtype|strtolower;base64,".$attach->content;
+              $this->content["text"]["html"] = str_replace($id, $url, $this->content["text"]["html"]);
+            }
+            else {  //attachments below
+              $this->content["attachments"][] = $attach;
+            }
           }
-        }
       }
     }
     return $this->content;
   }
 
+  /**
+   * Get the attachments of a mail_id
+   *
+   * @param int  $mail_id     id of the mail (warning, UID and not ID)
+   * @param bool $structure   structure
+   * @param bool $part_number part number
+   * @param bool $part_temp   part for get the part later
+   *
+   * @return mixed
+   */
+  function getListAttachments($mail_id, $structure = false, $part_number = false, $part_temp=false) {
 
-
-  function getListAttachments($mail_id, $getcontent = false, $structure = false, $part_number = false, $part_temp=false ) {
-
-    if(!$structure) {
+    if (!$structure) {
       $structure = $this->structure($mail_id);
     }
 
     if ($structure) {
-      if(!isset($structure->parts) && !$part_number) {  //plain text only, no recursive
+      if (!isset($structure->parts) && !$part_number) {  //plain text only, no recursive
         $part_number = "1";
       }
-      if(!$part_number) {
+      if (!$part_number) {
         $part_number = "0";
       }
 
@@ -241,17 +258,19 @@ class CPop{
           while (list($index, $sub_structure) = each($structure->parts)) {
             if ($part_number !== false) {
               $prefix = $part_number.'.';
-            } else {
+            }
+            else {
               $prefix = null;
             }
 
             if ($part_temp !== false) {
               $prefix_temp = $part_temp.'.';
-            } else {
+            }
+            else {
               $prefix_temp = null;
             }
 
-            self::getListAttachments($mail_id, $getcontent, $sub_structure, $prefix . ($index + 1), $prefix_temp.$index);
+            self::getListAttachments($mail_id, $sub_structure, $prefix . ($index + 1), $prefix_temp.$index);
           }
           break;
 
@@ -260,29 +279,26 @@ class CPop{
         case 4:     //audio
         case 5:     //images
         case 6:     //video
-        $attach  = new CMailAttachments();
-        $attach->loadFromHeader($structure);
-        $attach->part = $part_temp;
+          $attach = new CMailAttachments();
+          $attach->loadFromHeader($structure);
+          $attach->part = $part_temp;
 
-
-        if ($getcontent) {
-          $attach->loadContentFromPop($this->openPart($mail_id,$attach->getpartDL()));
-        }
-        //inline attachments
-        $this->content["attachments"][] = $attach;
+          //inline attachments
+          $this->content["attachments"][] = $attach;
           break;
         default:    //other
       }
     }
-  return $this->content["attachments"];
+    return $this->content["attachments"];
   }
 
   /** TOOLS **/
 
   /**
    * get the right decoding string from mail structure
-   * @param $encoding
-   * @param $text
+   *
+   * @param int    $encoding encoding number (from structure)
+   * @param string $text     the text to decode
    *
    * @return string
    */
@@ -290,7 +306,7 @@ class CPop{
     switch ($encoding) {
       /* 0 : 7 bit / 1 : 8 bit / 2 ; binary / 5 : other  => default  */
       case(3):  //base64
-         return imap_base64($text);
+        return imap_base64($text);
         break;
 
       case(4):
@@ -303,8 +319,8 @@ class CPop{
     }
   }
 
-
-  /* Close the mailBox
+  /**
+   * close the stream
    *
    * @return bool
    */

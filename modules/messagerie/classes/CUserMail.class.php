@@ -39,13 +39,17 @@ class CUserMail extends CMbObject{
   var $text_html_id      = null; //html text
   var $_text_html       = null;
 
-  var $_attachments     = null; //attachments
+  var $_attachments     = array(); //attachments
 
   var $_parts         = null;
 
   var $_size          = null; //size in bytes
 
-
+  /**
+   * get specs
+   *
+   * @return CMbObjectSpec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'user_mail';
@@ -53,6 +57,11 @@ class CUserMail extends CMbObject{
     return $spec;
   }
 
+  /**
+   * get Props
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["subject"]       = "str";
@@ -76,6 +85,8 @@ class CUserMail extends CMbObject{
   }
 
   /**
+   * delete (delete html & text
+   *
    * @return null|string
    */
   function delete() {
@@ -84,16 +95,29 @@ class CUserMail extends CMbObject{
     if ($msg = parent::delete()) {
       return $msg;
     }
-    // Remove content
+
+    // Remove html content
     if ($this->_text_html->_id) {
       if ($msg = $this->_text_html->delete()) {
         return $msg;
       }
     }
 
+    //remove text content
     if ($this->_text_plain->_id) {
-      if($this->_text_plain->delete()) {
+      if ($msg = $this->_text_plain->delete()) {
         return $msg;
+      }
+    }
+
+    //remove the unlinked attachments
+    if (count($this->_attachments)) {
+      foreach ($this->_attachments as $_attach) {
+        if (!$_attach->linked) {
+          if ($msg = $_attach->delete()) {
+            return $msg;
+          }
+        }
       }
     }
   }
@@ -101,12 +125,13 @@ class CUserMail extends CMbObject{
   /**
    * used to load the mail from SourcePOP
    *
-   * @param $s : stdout from IMAP
+   * @param array|object $s object from imap structure
+   *
+   * @return bool|int|null
    */
-
   function loadMatchingFromSource($s) {
 
-    if(!count($s)>0 || !isset($s[0]->to)) {
+    if (!count($s)>0 || !isset($s[0]->to)) {
       return false;
     }
     $s = $s[0];
@@ -118,7 +143,6 @@ class CUserMail extends CMbObject{
     $this->from         = self::flatMimeDecode($s->from);
     $this->to           = self::flatMimeDecode($s->to);
     $this->date_inbox   = mbDateTime($s->date);
-    //$this->_msgno       = $s->msgno;
     $this->uid          = $s->uid;
 
     $this->loadMatchingObject();
@@ -126,30 +150,41 @@ class CUserMail extends CMbObject{
     return $this->_id;
   }
 
+  /**
+   * load the visual fields
+   *
+   * @return null
+   */
   function loadComplete() {
     $this->_from = $this->adressToUser($this->from);
     $this->_to   = $this->adressToUser($this->to);
+    return;
   }
 
   /**
    * load mail content from CcoursePOP source
    *
-   * @param $contentsource
+   * @param array $contentsource test
+   *
+   * @return null
    */
   function loadContentFromSource($contentsource) {
     $this->_text_plain   = $contentsource["text"]["plain"];
     $this->_text_html    = $contentsource["text"]["html"];
     $this->_attachments  = $contentsource["attachments"];
+    return;
   }
 
   /**
    * Load Complete email
    *
-   * @param $header
-   * @param $content
+   * @param object $header  test
+   * @param array  $content test
+   *
+   * @return CUserMail
    */
   function loadMail($header,$content){
-    self::loadHeaderFromSource($header);
+    self::loadMatchingFromSource($header);
     self::loadContentFromSource($content);
     return $this;
   }
@@ -157,7 +192,7 @@ class CUserMail extends CMbObject{
   /**
    * used for decoding a multi mime string into one line
    *
-   * @param $string
+   * @param string $string decode mime string
    *
    * @return string
    */
@@ -170,17 +205,25 @@ class CUserMail extends CMbObject{
     return addslashes($str);
   }
 
-
+  /**
+   * check if html content has image inline and return true if an image has been found.
+   *
+   * @return bool
+   */
   function checkInlineAttachments() {
     if (!count($this->_attachments) || !$this->_text_html->content) {
       return false;
     }
 
-    foreach($this->_attachments as $_attachment) {
-      if (isset($_attachment->id) && $_attachment->disposition == "INLINE") {
+    foreach ($this->_attachments as $_attachment) {
+      $_attachment->loadRefsFwd();
+      if (isset($_attachment->_id) && $_attachment->disposition == "INLINE") {
         $_attachment->id = preg_replace("/(<|>)/", "", $_attachment->id);
-        if (preg_match("/$_attachment->id/",$this->_text_html->content)) {
-          $this->_text_html->content = str_replace("cid:$_attachment->id","data:image/".strtolower($_attachment->subtype).";base64,".$_attachment->content,$this->_text_html->content);
+        if (preg_match("/$_attachment->id/", $this->_text_html->content)) {
+          if (isset($_attachment->_file->_id)) {
+            $url = "?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=".$_attachment->_file->_id. "&amp;phpThumb=1&amp;f=png";
+            $this->_text_html->content = str_replace("cid:$_attachment->id", $url , $this->_text_html->content);
+          }
         }
       }
     }
@@ -190,7 +233,7 @@ class CUserMail extends CMbObject{
   /**
    * used for show the cleaned from string
    *
-   * @param $string
+   * @param string $string
    */
   private function adressToUser($string) {
     $email_complex = '/^(.+)(<[A-Za-z0-9._%-@ +]+>)$/';

@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -10,6 +10,7 @@
  
  // Préférences par Module
 CPreferences::$modules["messagerie"] = array (
-  "ViewMailAsHtml"
+  "ViewMailAsHtml",
+  "getAttachmentOnUpdate",
+  "LinkAttachment"
   );
-?>

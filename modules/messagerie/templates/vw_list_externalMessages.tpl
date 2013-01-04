@@ -9,6 +9,7 @@
 *}}
 
 {{mb_script module=messagerie script=UserEmail}}
+
 <script type="text/javascript">
   Main.add(function () {
     var tabs =Control.Tabs.create("tab-mail", true);
@@ -17,9 +18,14 @@
   });
 </script>
 
-<button class="change" onclick="messagerie.getLastMessages({{$user->_id}});">Récupérer les nouveaux messages</button>
-
-<table class="main">
+<div>
+<button class="button change" onclick="messagerie.getLastMessages({{$user->_id}});">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
+  <select style="width: 50px;" name="action">
+    <option va>{{tr}}CUserMail-option-More{{/tr}}</option>
+    <option value="">{{tr}}CUserMail-option-allmarkasread{{/tr}}</option>
+  </select>
+</div>
+<table class="main" id="list_external_mail">
   <tr>
     <td style="width:200px;">
       <ul id="tab-mail" class="control_tabs_vertical">
