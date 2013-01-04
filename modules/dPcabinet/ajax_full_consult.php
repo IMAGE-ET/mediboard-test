@@ -105,7 +105,7 @@ if ($consult->_id) {
   
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
-} 
+}
 else {
   $consultAnesth->consultation_anesth_id = 0;
 }
@@ -161,7 +161,7 @@ if ($consult->sejour_id) {
 }
 
 // Chargement du sejour
-if ($consult->_ref_sejour && $sejour->_id){
+if ($consult->_ref_sejour && $sejour->_id) {
   $sejour->loadExtDiagnostics();
   $sejour->loadRefDossierMedical();
   $sejour->loadNDA();
@@ -191,22 +191,6 @@ $acte_ngap->quantite    = 1;
 $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
-// Si le module Tarmed est installé chargement d'un acte
-$acte_tarmed = null;
-$acte_caisse = null;
-if (CModule::getActive("tarmed")) {
-  // Initialisation d'un acte Tarmed
-  $acte_tarmed = new CActeTarmed();
-  $acte_tarmed->quantite = 1;
-  $acte_tarmed->loadListExecutants();
-  $acte_tarmed->loadRefExecutant();
-  $acte_caisse = new CActeCaisse();
-  $acte_caisse->quantite = 1;
-  $acte_caisse->loadListExecutants();
-  $acte_caisse->loadRefExecutant();
-  $acte_caisse->loadListCaisses();
-}
-
 // Tableau de contraintes pour les champs du RPU
 // Contraintes sur le mode d'entree / provenance
 //$contrainteProvenance[6] = array("", 1, 2, 3, 4);
@@ -234,26 +218,21 @@ if ($consult->_id) {
   }
 }
 
-$consult->loadRefsActesTarmed();
-$consult->loadRefsActesCaisse();
-$soustotal_base = array("tarmed" => 0, "caisse" => 0);
-$soustotal_dh   = array("tarmed" => 0, "caisse" => 0);
-if ($consult->_ref_actes_tarmed) {
-  foreach($consult->_ref_actes_tarmed as $acte){
-    $soustotal_base["tarmed"] += $acte->montant_base;
-    $soustotal_dh["tarmed"]   += $acte->montant_depassement; 
-  }
+// Si le module Tarmed est installé chargement d'un acte
+$acte_tarmed = null;
+$acte_caisse = null;
+if (CModule::getActive("tarmed")) {
+  $acte_tarmed = new CActeTarmed();
+  $acte_tarmed->createEmptyActeTarmed();
+  $acte_caisse = new CActeCaisse();
+  $acte_caisse->createEmptyActeCaisse();
 }
-if ($consult->_ref_actes_caisse) {
-  foreach($consult->_ref_actes_caisse as $acte){
-    $soustotal_base["caisse"] += $acte->montant_base;
-    $soustotal_dh["caisse"]   += $acte->montant_depassement; 
-  }
-}
-$total["tarmed"] = $soustotal_base["tarmed"] + $soustotal_dh["tarmed"];
-$total["caisse"] = $soustotal_base["caisse"] + $soustotal_dh["caisse"];
-$total["tarmed"] = round($total["tarmed"],2);
-$total["caisse"] = round($total["caisse"],2);
+$total_tarmed = $consult->loadRefsActesTarmed();
+$total_caisse = $consult->loadRefsActesCaisse();
+$soustotal_base = array("tarmed" => $total_tarmed["base"], "caisse" => $total_caisse["base"]);
+$soustotal_dh   = array("tarmed" => $total_tarmed["dh"], "caisse" => $total_caisse["dh"]);
+$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"],2);
+$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"],2);
 
 if (CModule::getActive("maternite")) {
   $consult->loadRefGrossesse();
@@ -295,7 +274,7 @@ $smarty->assign("_is_anesth"     , $consult->_is_anesth);
 $smarty->assign("_is_dentiste"   , $consult->_is_dentiste);
 $smarty->assign("list_etat_dents", $list_etat_dents);
 
-if(CModule::getActive("dPprescription")){
+if (CModule::getActive("dPprescription")) {
   $smarty->assign("line"           , new CPrescriptionLineMedicament());
 }
 
@@ -314,7 +293,7 @@ if ($consult->_is_dentiste) {
   $smarty->assign("devenirs_dentaires", $devenirs_dentaires);
 }
 
-if($consult->_is_anesth) {
+if ($consult->_is_anesth) {
   $nextSejourAndOperation = $consult->_ref_patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
   
   $secs = range(0, 60-1, 1);
@@ -325,7 +304,8 @@ if($consult->_is_anesth) {
   $smarty->assign("mins"                  , $mins);
   $smarty->assign("consult_anesth"        , $consultAnesth);
   $smarty->display("../../dPcabinet/templates/inc_full_consult.tpl");  
-} else {
+}
+else {
   $where = array();
   $where["entree"] = "<= '".mbDateTime()."'";
   $where["sortie"] = ">= '".mbDateTime()."'";
@@ -336,12 +316,11 @@ if($consult->_is_anesth) {
   
   $where["function_id"] = "IS NULL";
   
-  foreach($blocages_lit as $blocage){
+  foreach ($blocages_lit as $blocage) {
     $blocage->loadRefLit()->loadRefChambre()->loadRefService();
     $where["lit_id"] = "= '$blocage->lit_id'";
     
-    if($affectation->loadObject($where))
-    {
+    if ($affectation->loadObject($where)) {
       $affectation->loadRefSejour();
       $affectation->_ref_sejour->loadRefPatient();
       $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";

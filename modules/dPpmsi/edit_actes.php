@@ -22,15 +22,14 @@ $selOp->countExchanges();
 $selOp->isCoded();
 $selOp->canDo();
 $selOp->_ref_sejour->loadRefsFwd();
-foreach($selOp->_ext_codes_ccam as $key => $value) {
-	$selOp->_ext_codes_ccam[$key] = CCodeCCAM::get($value->code, CCodeCCAM::FULL);
+foreach ($selOp->_ext_codes_ccam as $key => $value) {
+  $selOp->_ext_codes_ccam[$key] = CCodeCCAM::get($value->code, CCodeCCAM::FULL);
 }
 $selOp->getAssociationCodesActes();
 $selOp->loadPossibleActes();
 $selOp->_ref_plageop->loadRefsFwd();
 
 // Chargement des praticiens
-
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes();
 
@@ -44,12 +43,9 @@ $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
 $acte_tarmed = null;
-if (CModule::getActive("tarmed")){
-	//Initialisation d'un acte Tarmed
-	$acte_tarmed = new CActeTarmed();
-	$acte_tarmed->quantite = 1;
-	$acte_tarmed->loadListExecutants();
-	$acte_tarmed->loadRefExecutant();
+if (CModule::getActive("tarmed")) {
+  $acte_tarmed = new CActeTarmed();
+  $acte_tarmed->createEmptyActeTarmed();
 }
 // Création du template
 $smarty = new CSmartyDP();

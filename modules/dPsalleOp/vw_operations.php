@@ -11,7 +11,7 @@
 CCanDo::checkRead();
 $user = CUser::get();
 
-// Ne pas supprimer, utilisé pour mettre le particien en session
+// Ne pas supprimer, utilisé pour mettre le praticien en session
 $praticien_id    = CValue::getOrSession("praticien_id");
 $hide_finished   = CValue::getOrSession("hide_finished", 0);
 $salle_id        = CValue::getOrSession("salle");
@@ -160,16 +160,10 @@ $acte_tarmed = null;
 $acte_caisse = null;
 if (CModule::getActive("tarmed")) {
   $acte_tarmed = new CActeTarmed();
-  $acte_tarmed->quantite = 1;
-  $acte_tarmed->loadListExecutants();
-  $acte_tarmed->loadRefExecutant();
+  $acte_tarmed->createEmptyActeTarmed();
   $acte_caisse = new CActeCaisse();
-  $acte_caisse->quantite = 1;
-  $acte_caisse->loadListExecutants();
-  $acte_caisse->loadRefExecutant();
-  $acte_caisse->loadListCaisses();
+  $acte_caisse->createEmptyActeCaisse();
 }
-
 $total_tarmed = $selOp->loadRefsActesTarmed();
 $total_caisse = $selOp->loadRefsActesCaisse();
 $soustotal_base = array("tarmed" => $total_tarmed["base"], "caisse" => $total_caisse["base"]);

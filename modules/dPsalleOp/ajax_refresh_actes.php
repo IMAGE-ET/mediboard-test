@@ -17,7 +17,7 @@ $operation->countExchanges();
 $operation->isCoded();
 $operation->canDo();
 $operation->_ref_sejour->loadRefsFwd();
-foreach($operation->_ext_codes_ccam as $key => $value) {
+foreach ($operation->_ext_codes_ccam as $key => $value) {
   $operation->_ext_codes_ccam[$key] = CCodeCCAM::get($value->code, CCodeCCAM::FULL);
 }
 $operation->getAssociationCodesActes();
@@ -25,7 +25,6 @@ $operation->loadPossibleActes();
 $operation->_ref_plageop->loadRefsFwd();
 
 // Chargement des praticiens
-
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 
@@ -39,12 +38,9 @@ $acte_ngap->coefficient = 1;
 $acte_ngap->loadListExecutants();
 
 $acte_tarmed = null;
-if(CModule::getActive("tarmed")){
-	//Initialisation d'un acte Tarmed
-	$acte_tarmed = new CActeTarmed();
-	$acte_tarmed->quantite = 1;
-	$acte_tarmed->loadListExecutants();
-	$acte_tarmed->loadRefExecutant();
+if (CModule::getActive("tarmed")) {
+  $acte_tarmed = new CActeTarmed();
+  $acte_tarmed->createEmptyActeTarmed();
 }
 // Création du template
 $smarty = new CSmartyDP("modules/dPsalleOp");
