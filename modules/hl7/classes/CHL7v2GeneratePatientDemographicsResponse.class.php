@@ -48,7 +48,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     $this->getQPD($data["QPD"], $patient);
 
-
+    $patient->loadMatchingPatient();
   }
 
   /**
@@ -60,7 +60,10 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    * @return string
    */
   function getQPD(DOMNode $node, CPatient $patient) {
+    // PID
     $this->addQPD3PID($node, $patient);
+
+    // PV1
   }
 
   /**
@@ -72,7 +75,19 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    * @return string
    */
   function addQPD3PID(DOMNode $node, CPatient $patient) {
+    // Patient Name
+    $patient->nom             = $this->getDemographicsFields($node, $patient, "5.1.1");
+    $patient->prenom          = $this->getDemographicsFields($node, $patient, "5.2");
 
+    // Maiden name
+    $patient->nom_jeune_fille = $this->getDemographicsFields($node, $patient, "6.1.1");
+
+    // Date of birth
+    $patient->naissance       = $this->getDemographicsFields($node, $patient, "7.1");
+
+    // Patient Adress
+    $patient->ville           = $this->getDemographicsFields($node, $patient, "11.3");
+    $patient->cp              = $this->getDemographicsFields($node, $patient, "11.5");
   }
 
   /**
@@ -84,5 +99,33 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    */
   function getQuantityLimitedRequest(DOMNode $node) {
     return $this->queryTextNode("RCP.2/CQ.1", $node);
+  }
+
+  /**
+   * Get QPD-3 demographics fields
+   *
+   * @param DOMNode   $node   Node
+   * @param CMbObject $object Object
+   * @param string    $field  The number of a field
+   *
+   * @return array
+   */
+  function getDemographicsFields(DOMNode $node, CMbObject $object, $field) {
+
+    $seg = null;
+    switch ($object->_class) {
+      case "CPatient" :
+        $seg = "PID";
+        break;
+      case "CSejour" :
+        $seg = "PV1";
+        break;
+    }
+
+    foreach ($this->queryNodes("QPD.3", $node) as $_QPD_3) {
+      if ("@$seg.$field" == $this->queryTextNode("QIP.1", $_QPD_3)) {
+        return $this->queryTextNode("QIP.2", $_QPD_3);
+      }
+    }
   }
 }
