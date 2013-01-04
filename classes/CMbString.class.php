@@ -13,7 +13,7 @@ abstract class CMbString {
   const LOWERCASE = 1;
   const UPPERCASE = 2;
   const BOTHCASES = 3;
-  
+
   static $glyphs = array (
     "a" => "אבגדהו",
     "c" => "ח",
@@ -24,16 +24,18 @@ abstract class CMbString {
     "y" => "ÿ",
     "n" => "ס",
   );
-  
+
   static $allographs = array (
     "withdiacritics"    => "אבגדהועףפץצרטיךכחלםמןשתûüÿס",
     "withoutdiacritics" => "aaaaaaooooooeeeeciiiiuuuuyn",
   );
-  
+
   /**
    * Remove diacritics from a string
+   *
    * @param string $string The string
-   * @param constant $filter one of LOWERCASE, UPPERCASE or BOTHCASES (default)
+   * @param int    $filter one of LOWERCASE, UPPERCASE or BOTHCASES (default)
+   *
    * @return string Result string
    **/
   static function removeDiacritics($string, $filter = self::BOTHCASES) {
@@ -43,69 +45,76 @@ abstract class CMbString {
     switch ($filter) {
       case self::LOWERCASE:
       break;
-      
+
       case self::UPPERCASE:
       $from = mb_strtoupper($from);
       $to   = mb_strtoupper($to);
       break;
-      
+
       default:
       case self::BOTHCASES:
       $from .= mb_strtoupper($from);
       $to   .= mb_strtoupper($to);
       break;
     }
-        
+
     return strtr($string, $from, $to);
   }
-  
+
   /**
    * Allow any kind of glyphs variants with diacritics in regular expression
+   *
    * @param string $regexp The regexp string
+   *
    * @return string Result regexp string
    **/
   static function allowDiacriticsInRegexp($regexp) {
     $regexp = self::removeDiacritics(strtolower($regexp));
     $fromto = array();
-    foreach(self::$glyphs as $glyph => $allographs) {
+    foreach (self::$glyphs as $glyph => $allographs) {
       $fromto[$glyph] = "[$glyph$allographs]";
     }
     return strtr($regexp, $fromto);
   }
-  
+
   /**
    * Truncate a string to a given maximum length
-   * @param string $string The string to truncate
-   * @param int $max The max length of the resulting string, default to 25
+   *
+   * @param string $string      The string to truncate
+   * @param int    $max         The max length of the resulting string, default to 25
    * @param string $replacement The string that replaces the characters removed, default to '...'
+   *
    * @return string The truncated string
    */
   static function truncate($string, $max = 25, $replacement = '...'){
     if (is_object($string)) {
       return $string;
     }
-    
+
     if (strlen($string) > $max) {
       return substr($string, 0, $max - strlen($replacement)).$replacement;
     }
     return $string;
   }
-  
+
   static function upper($string) {
     return mb_strtoupper($string, CApp::$encoding);
   }
-  
+
   static function lower($string) {
     return mb_strtolower($string, CApp::$encoding);
   }
-  
+
   static function capitalize($string) {
     return mb_ucwords($string);
   }
 
   /**
    * Convert a number to the deca-binary syntax
-   * @param integer $number
+   *
+   * @param integer $value Number
+   * @param string  $unit  Unit
+   *
    * @return string Deca-binary equivalent
    */
   static function toDecaBinary($value, $unit = "o") {
@@ -114,96 +123,105 @@ abstract class CMbString {
 
   /**
    * Convert a number to the deca-binary syntax
-   * @param integer $number
+   *
+   * @param integer $value Number
+   * @param string  $unit  Unit
+   *
    * @return string Deca-binary equivalent
    */
   static function toDecaSI($value, $unit = "o") {
     return self::fromBytes($value, true).$unit;
   }
-  
+
   private static function fromBytes($value, $si = false) {
     $bytes = $value;
     $suffix = "";
     $ratio = ($si ? 1000 : 1024);
-  
+
     $bytes = $bytes / $ratio;
     if ($bytes >= 1) {
       $value = $bytes;
       $suffix = ($si ? "k" : "K");
     }
-  
+
     $bytes = $bytes / $ratio;
     if ($bytes >= 1) {
       $value = $bytes;
       $suffix = "M";
     }
-  
+
     $bytes = $bytes / $ratio;
     if ($bytes >= 1) {
       $value = $bytes;
       $suffix = "G";
     }
-  
+
     $bytes = $bytes / $ratio;
     if ($bytes >= 1) {
       $value = $bytes;
       $suffix = "T";
     }
-    
+
     // Value with 3 significant digits
     $value = round($value, 2 - intval(log10($value)));
     return "$value$suffix";
   }
-  
+
   private static function toBytes($string, $si = false) {
     $ratio = ($si ? 1000 : 1024);
     $string = strtolower(trim($string));
-    
+
     if (!preg_match("/^([,\.\d]+)([kmgt])/", $string, $matches)) {
       return intval($string);
     }
-    
+
     list($string, $value, $suffix) = $matches;
-    
-    switch($suffix) {
+
+    switch ($suffix) {
       case 't': $value *= $ratio;     
       case 'g': $value *= $ratio;
       case 'm': $value *= $ratio;
       case 'k': $value *= $ratio;
     }
-    
+
     return intval($value);
   }
-  
+
   /**
    * Convert a deca-binary string to a integer
+   *
    * @param string $string Deca-binary string
+   *
    * @return integer Integer equivalent
    */
   static function fromDecaBinary($string) {
     return self::toBytes($string, false);
   }
-  
+
   /**
    * Convert a deca-SI string to a integer
+   *
    * @param string $string Deca-SI string
+   *
    * @return integer Integer equivalent
    */
   static function fromDecaSI($string) {
     return self::toBytes($string, true);
   }
-  
+
   static function unslash($str) {
     return strtr($str, array(
       "\\n" => "\n",
       "\\t" => "\t",
     ));
   }
-  
+
   /**
    * Encodes HTML entities from a string
+   *
    * @param string $string The string to encode
-   * @return 
+   *
+   * @return string
    */
   static function htmlEncode($string) {
     // Strips MS Word entities
@@ -215,16 +233,42 @@ abstract class CMbString {
       chr(150) => '&#8211;',
       chr(151) => '&#8212;',
     );
-    
+
     $string = htmlentities($string);
     return strtr($string, $ent);
   }
-  
+
+  /**
+   * Equivalent to htmlspecialchars
+   *
+   * @param string $string Input string
+   * @param int    $flags  Flags
+   *
+   * @return string
+   */
+  static function htmlSpecialChars($string, $flags = ENT_COMPAT) {
+    return htmlspecialchars($string, $flags, CApp::$encoding);
+  }
+
+  /**
+   * Equivalent to htmlentities
+   *
+   * @param string $string Input string
+   * @param int    $flags  Flags
+   *
+   * @return string
+   */
+  static function htmlEntities($string, $flags = ENT_COMPAT) {
+    return htmlentities($string, $flags, CApp::$encoding);
+  }
+
   /**
    * Remove a token in the string
+   *
    * @param string $string The string to reduce
-   * @param string $glue Implode/explode like glue
-   * @param string $token Token ton remove
+   * @param string $glue   Implode/explode like glue
+   * @param string $token  Token to remove
+   *
    * @return string
    */
   static function removeToken($string, $glue, $token) {
@@ -235,7 +279,7 @@ abstract class CMbString {
 
   static function isUTF8($string) {
     return mb_detect_encoding($string) === "UTF-8";
-    
+
     /* // א tester :
     $invalidchars = '[\xC0-\xDF]([^\x80-\xBF]|$)' .
       '|[\xE0-\xEF].{0,1}([^\x80-\xBF]|$)' .
@@ -251,11 +295,11 @@ abstract class CMbString {
       '|[\xFC-\xFD].....[\x80-\xBF]' .
       '|[\xFE-\xFE]......[\x80-\xBF]' .
       '|^[\x80-\xBF]';
-      
+
     return !preg_match("!$invalidchars!", $string);
-    
+
     $length = strlen($string);
-    
+
     for ($i=0; $i < $length; $i++) {
       $c = ord($string[$i]);
            if ($c < 0x80) $n = 0; # 0bbbbbbb
@@ -265,7 +309,7 @@ abstract class CMbString {
       elseif (($c & 0xFC) == 0xF8) $n=4; # 111110bb
       elseif (($c & 0xFE) == 0xFC) $n=5; # 1111110b
       else return false; # Does not match any model
-      
+
       for ($j=0; $j<$n; $j++) { # n bytes matching 10bbbbbb follow ?
         if ((++$i == $length) || ((ord($string[$i]) & 0xC0) != 0x80))
         return false;
@@ -273,12 +317,14 @@ abstract class CMbString {
     }
     return true;*/
   }
-  
+
   /**
    * Get a query string from params array. (reciproque parse_str)
+   *
    * @param array $params Parameters
+   *
    * @return string Query string
-   **/
+   */
   static function toQuery($params) {
     $_params = array();
     foreach ($params as $key => $value) {
@@ -286,28 +332,31 @@ abstract class CMbString {
     }
     return implode("&", $_params);
   }
-  
+
   /**
    * Turns HTML break tags to ascii new line
    * Reciproque for nl2br
-   * @param string $string
+   *
+   * @param string $string HTML code
+   *
    * @return string
    */
   static function br2nl($string) {
     // Actually just rmove break tag
     return str_ireplace("<br />", "", $string);
   }
-  
+
   /**
    * Create hyperlinks around URLs in a string
    * 
    * @param string $str The string
+   *
    * @return string The string with hyperlinks
    */
   static function makeUrlHyperlinks($str) {
     return preg_replace('@(https?://([-\w\.]+)+(:\d+)?(/([\w/_\.#-]*(\?\S+)?)?)?)@', '<a href="$1" target="_blank">$1</a>', $str);
   }
-  
+
   // Table extraite de :
   // - http://www.sourcerally.net/Scripts/39-Convert-HTML-Entities-to-XML-Entities
   // - http://yost.com/computers/htmlchars/html40charsbynumber.html
@@ -399,8 +448,8 @@ abstract class CMbString {
                   '&lang;'    , '&rang;'   , 
                   '&loz;'     , '&spades;' , '&clubs;'   , '&hearts;'  , '&diams;'   );
 
-    $str = str_replace($html,$xml,$str);
-    $str = str_ireplace($html,$xml,$str);
+    $str = str_replace($html, $xml, $str);
+    $str = str_ireplace($html, $xml, $str);
     return $str;
   }
 
@@ -408,33 +457,32 @@ abstract class CMbString {
     if (!class_exists("GeSHi", false)) {
       CAppUI::requireLibraryFile("geshi/geshi");
     }
-    
+
     $geshi = new GeSHi($code, $language);
     $geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
     $geshi->set_overall_style($style);
     $geshi->set_overall_class("geshi");
-    
+
     if ($enable_classes) {
       $geshi->enable_classes();
     }
-    
+
     return $geshi->parse_code();
   }
-  
+
   static function toWords($num) {
     @list($whole, $decimal) = @preg_split('/[.,]/', $num);
-    
+
     $nw = new nuts($whole, "");
     $words = $nw->convert("fr-FR");
-    
+
     if ($decimal) {
       $nw = new nuts($decimal, "");
       $words .= " virgule ".$nw->convert("fr-FR");
     }
-    
+
     return $words;
   }
-
 
   /**
    * Convert an HTML text to plain text.
@@ -453,4 +501,3 @@ abstract class CMbString {
     return $text;
   }
 }
-?>
