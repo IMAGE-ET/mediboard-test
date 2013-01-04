@@ -1571,7 +1571,7 @@ table.tbl tr.ssr-prevu   td.cancelled {
 table.tbl tr.ssr-kine-conges td,
 table.tbl tr.ssr-kine-conges th {
   text-align: center;
-  background-image: url("./images/pictures/unavailable.png");
+  background-image: url(./images/pictures/unavailable.png);
 }
 
 table.tbl tr  td.ssr-far {

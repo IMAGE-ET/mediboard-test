@@ -66,8 +66,8 @@ textarea {
   -webkit-appearance: none; /* To remove the "shadow" on iPad" */
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+.numericField input[type=number]::-webkit-inner-spin-button,
+.numericField input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }

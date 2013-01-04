@@ -108,6 +108,17 @@ class CApp {
   static function setTimeLimit($seconds) {
     set_time_limit($seconds);
   }
+
+  /**
+   * Set memory limit in megabytes
+   *
+   * @param integer $megabytes The memory limit in megabytes
+   *
+   * @return string Previous memory limit
+   */
+  static function setMemoryLimit($megabytes) {
+    return ini_set("memory_limit", "{$megabytes}M");
+  }
   
   /**
    * Redirect to empty the POST data, 

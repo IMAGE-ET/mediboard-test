@@ -1078,7 +1078,7 @@ var Url = Class.create({
     if(sfn != 0){
       this.addParam("sfn", sfn);
     }
-    this.popup(785, 600, popupName);
+    this.popup(900, 800, popupName);
   }
 });
 

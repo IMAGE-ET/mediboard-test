@@ -946,6 +946,27 @@ class CAppUI {
     return $conf;
   }
 
+  /**
+   * Change a configuration value
+   *
+   * @param string $path  Configuration path
+   * @param null   $value New value
+   *
+   * @return mixed Old value
+   */
+  static function setConf($path = "", $value = null) {
+    if (!CAppUI::$user->isAdmin()) {
+      return;
+    }
+
+    $config = new CMbConfig;
+    $old_value = $config->get($path);
+
+    $config->set($path, $value);
+    $config->update($config->values, true);
+
+    return $old_value;
+  }
 
   /**
    * @var int Global unique id

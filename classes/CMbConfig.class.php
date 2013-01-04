@@ -11,7 +11,7 @@
  
  
 // Throws some E_STRICT errors
-@require_once("Config.php");
+@require_once "Config.php";
 
 class CMbConfig {
   var $options = array("name" => "dPconfig");
@@ -71,7 +71,7 @@ class CMbConfig {
     }
     
     if (!count($newValues)) {
-      if (is_file($this->targetPath)){
+      if (is_file($this->targetPath)) {
         unlink($this->targetPath);
       }
       return;
@@ -91,8 +91,10 @@ class CMbConfig {
     
     $items = explode(' ', $path);
     foreach ($items as $part) {
-      if (!array_key_exists($part, $conf))
+      if (!array_key_exists($part, $conf)) {
         $conf[$part] = array();
+      }
+
       $conf = &$conf[$part];
     }
     $conf = $value;
@@ -113,5 +115,3 @@ class CMbConfig {
     return $conf;
   }
 }
-
-?>

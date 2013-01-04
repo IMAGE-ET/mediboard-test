@@ -31,6 +31,7 @@ $catFileSel       = null;
 $acces_denied     = true;      // droit d'affichage du fichier demandé
 $arrNumPages      = array();   // navigation par pages (PDF)
 $isConverted      = false;
+$display_as_is    = false;
 
 $pdf_active = (CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1 ) &&
   (CAppUI::pref("pdf_and_thumbs") == 1);
@@ -63,10 +64,10 @@ if($objectClass && $objectId && $elementClass && $elementId){
       $listFile =& $object->$type;
       $listFile[$elementId]->canRead();
       $acces_denied = !$listFile[$elementId]->_canRead;
-      if($listFile[$elementId]->_canRead) {
+      if ($listFile[$elementId]->_canRead) {
         $fileSel = $listFile[$elementId];
         $file_id = $fileSel->_id;
-        if($pdf_active && $type == "_ref_documents") {
+        if ($pdf_active && $type == "_ref_documents") {
           $compte_rendu = new CCompteRendu;
           $compte_rendu->load($elementId);
           $compte_rendu->loadFile();
@@ -92,11 +93,11 @@ if($objectClass && $objectId && $elementClass && $elementId){
 $show_editor = true;
 
 // Gestion des pages pour les Fichiers PDF et fichiers TXT
-if($fileSel && $elementClass == "CFile" && !$acces_denied){
+if ($fileSel && $elementClass == "CFile" && !$acces_denied) {
   if (file_exists($fileSel->_file_path)) {
     $raw_content = file_get_contents($fileSel->_file_path);
     
-    switch($fileSel->file_type) {
+    switch ($fileSel->file_type) {
       case "text/osoft":
         if (class_exists("COsoftHistorique")) {
           $osoft_histo = new COsoftHistorique;
@@ -104,7 +105,7 @@ if($fileSel && $elementClass == "CFile" && !$acces_denied){
           $show_editor = false;
           break;
         }
-        
+
       case "application/osoft":
         if (class_exists("COsoftDossier")) {
           $osoft_dossier = new COsoftDossier;
@@ -112,6 +113,12 @@ if($fileSel && $elementClass == "CFile" && !$acces_denied){
           $show_editor = false;
           break;
         }
+
+      case "application/x-hprim":
+        $includeInfosFile = CHprim21::formatHPRIMBiologie($raw_content);
+        $display_as_is = true;
+        $show_editor = false;
+        break;
         
       case "text/plain": 
         $includeInfosFile = "<pre>".htmlspecialchars($raw_content)."</pre>";
@@ -138,20 +145,23 @@ if($fileSel && $elementClass == "CFile" && !$acces_denied){
     $fileSel->loadNbPages();
   }
   
-  if($fileSel->_nb_pages){
-    if($sfn>$fileSel->_nb_pages || $sfn<0){$sfn = 0;}
-    if($sfn!=0){
+  if ($fileSel->_nb_pages) {
+    if ($sfn > $fileSel->_nb_pages || $sfn < 0) {
+      $sfn = 0;
+    }
+
+    if ($sfn != 0) {
       $page_prev = $sfn - 1; 
     }
-    if($sfn<($fileSel->_nb_pages-1)){
+    if ($sfn < ($fileSel->_nb_pages-1)) {
       $page_next = $sfn + 1;
     }
-    for($i=1;$i<=$fileSel->_nb_pages;$i++){
+    for ($i = 1; $i <= $fileSel->_nb_pages; $i++) {
       $arrNumPages[] = $i;
     }
   }
 }
-elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied && !$pdf_active){
+elseif ($fileSel && $elementClass == "CCompteRendu" && !$acces_denied && !$pdf_active) {
   $fileSel->loadContent();
   $includeInfosFile = $fileSel->_source;
 }
@@ -198,6 +208,7 @@ $smarty->assign("acces_denied"    , $acces_denied);
 $smarty->assign("file_id"         , $file_id);
 $smarty->assign("isConverted"     , $isConverted);
 $smarty->assign("show_editor"     , $show_editor);
+$smarty->assign("display_as_is"   , $display_as_is);
 
 if($popup==1){
   $listCat  = null;

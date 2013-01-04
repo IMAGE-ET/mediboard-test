@@ -59,6 +59,7 @@ window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|
     {{/if}}
   {{/if}}
 </div>
+</td></tr></table>
 
 <div style="text-align: center;">
   <script type="text/javascript">
@@ -106,7 +107,7 @@ window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|
         Page suivante 
       </button>
     {{/if}}
-      
+
     <br />
     {{if $includeInfosFile}}
       {{include file="inc_preview_contenu_file.tpl"}}
@@ -123,4 +124,3 @@ window.destinataires = {{"utf8_encode"|array_map_recursive:$destinataires|@json|
   <a class="button save" target="_blank" href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$file_id_original}}">{{tr}}CFile.save_original{{/tr}}</a>
 {{/if}}
 *}}
-</td></tr></table>
