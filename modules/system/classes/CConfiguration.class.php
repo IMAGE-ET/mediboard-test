@@ -397,7 +397,9 @@ class CConfiguration extends CMbMetaObject {
      * @var CMbObject
      */
     $_obj = new $class;
-    $_list = $_obj->loadListWithPerms(PERM_READ, $where);
+
+    // Attention il faut generer les configurations de TOUS les objets, donc ne pas utiliser loadListWitfPerms
+    $_list = $_obj->loadList($where);
     
     foreach ($_list as $_object) {
       $subtree[$_object->_guid] = array(
