@@ -74,39 +74,39 @@ class CMbXMLDocument extends DOMDocument {
 
   function libxml_display_error($error) {
      $return = "<br/>\n";
-     switch ($error->level) {
-         case LIBXML_ERR_WARNING:
-             $return .= "<b>Warning $error->code</b>: ";
-             break;
-         case LIBXML_ERR_ERROR:
-             $return .= "<b>Error $error->code</b>: ";
-             break;
-         case LIBXML_ERR_FATAL:
-             $return .= "<b>Fatal Error $error->code</b>: ";
-             break;
-     }
-     $return .= trim($error->message);
-     if ($error->file) {
-         $return .=    " in <b>$error->file</b>";
-     }
-     $return .= " on line <b>$error->line</b>\n";
+    switch ($error->level) {
+      case LIBXML_ERR_WARNING:
+        $return .= "<b>Warning $error->code</b>: ";
+        break;
+      case LIBXML_ERR_ERROR:
+        $return .= "<b>Error $error->code</b>: ";
+        break;
+      case LIBXML_ERR_FATAL:
+        $return .= "<b>Fatal Error $error->code</b>: ";
+        break;
+    }
+    $return .= trim($error->message);
+    if ($error->file) {
+      $return .=    " in <b>$error->file</b>";
+    }
+    $return .= " on line <b>$error->line</b>\n";
   
-     return $return;
+    return $return;
   }
   
   function libxml_display_errors($display_errors = true) {
-     $errors = libxml_get_errors();
-     $chain_errors = "";
-     
-     foreach ($errors as $error) {
-        $chain_errors .= preg_replace('/( in\ \/(.*))/', '', strip_tags($this->libxml_display_error($error)))."\n";
-       if ($display_errors) {
-         trigger_error($this->libxml_display_error($error), E_USER_WARNING);
-       }
-     }
-     libxml_clear_errors();
+    $errors = libxml_get_errors();
+    $chain_errors = "";
 
-     return $chain_errors;
+    foreach ($errors as $error) {
+      $chain_errors .= preg_replace('/( in\ \/(.*))/', '', strip_tags($this->libxml_display_error($error)))."\n";
+      if ($display_errors) {
+        trigger_error($this->libxml_display_error($error), E_USER_WARNING);
+      }
+    }
+    libxml_clear_errors();
+
+    return $chain_errors;
   }
   
   /**
@@ -203,7 +203,7 @@ class CMbXMLDocument extends DOMDocument {
     if ($node->childNodes) {
       // Copy childNodes array
       $childNodes = array();
-      foreach($node->childNodes as $childNode) {
+      foreach ($node->childNodes as $childNode) {
         $childNodes[] = $childNode;
       }
  
@@ -241,7 +241,7 @@ class CMbXMLDocument extends DOMDocument {
     $file->file_real_filename = uniqid(rand());
     $file->author_id          = $user->_id;
     $file->private            = 0;
-     if (!$file->moveFile($this->documentfilename)) {
+    if (!$file->moveFile($this->documentfilename)) {
       return "error-CFile-move-file";
     }
 
@@ -275,10 +275,18 @@ class CMbXMLDocument extends DOMDocument {
     return $tag;
   }
 
+  /**
+   * Nettoie du code HTML
+   *
+   * @param string $html the html string
+   *
+   * @return string the cleaned html
+   */
   static function sanitizeHTML($html) {
+
     //check if html is present
-    if (!preg_match("/<html/",$html)) {
-      $html = '<html><head></head><body>'.$html.'</body></html>';
+    if (!preg_match("/<html/", $html)) {
+      $html = '<html><head><title>E-mail</title></head><body>'.$html.'</body></html>';
     }
 
     //load & repair dom
@@ -288,10 +296,10 @@ class CMbXMLDocument extends DOMDocument {
 
     //remove scripts tag
     $xpath = new DOMXpath($document);
-    $filter = array("//script", "//style", "//meta");
+    $filter = array("//script", "//style", "//meta", "//applet", "//basefont", "//iframe"); //some dangerous
     foreach ($filter as $_filter) {
       $elements = $xpath->query($_filter);
-      foreach($elements as $_element) {
+      foreach ($elements as $_element) {
         $_element->parentNode->removeChild($_element);
       }
     }
@@ -299,11 +307,13 @@ class CMbXMLDocument extends DOMDocument {
     $html = $document->saveHTML();
 
     //Cleanup after save
-    $html = preg_replace("/<!DOCTYPE(.*?)>/",'',$html);
+    $html = preg_replace("/<!DOCTYPE(.*?)>/", '', $html);
     $html = preg_replace("/\/\/>/mu", "/>", $html);
+    $html = preg_replace("/nowrap/", '', $html);
     $html = preg_replace("/<[b|h]r([^>]*)>/", "<br $1/>", $html);
     $html = preg_replace("/<img([^>]+)>/", "<img$1/>", $html);
 
+    mbTrace($html);
     return $html;
   }
 }

@@ -115,9 +115,10 @@ class CSourceSMTP extends CExchangeSource {
   /**
    * Add a bcc-address
    * 
-   * @param $adress E-mail address
-   * @param $name   Display name
-   * @return bool   Job done
+   * @param string $adress E-mail address
+   * @param string $name   Display name
+   *
+   * @return boolean   Job done
    */
   function addBcc($address, $name = '') {
     return $this->_mail->AddBCC($address, $name);
@@ -143,7 +144,8 @@ class CSourceSMTP extends CExchangeSource {
   }
   
   function addAttachment($file_path, $name='') {
-    $this->_mail->AddAttachment($file_path, $name);
+    $type = mime_content_type($file_path);
+    $this->_mail->AddAttachment($file_path, $name, 'base64', $type);
   }
   
   function addEmbeddedImage($file_path, $cid) {

@@ -1422,6 +1422,7 @@ $locales['CSourceHTTP.one'] = 'Une source HTTP';
 $locales['CSourceHTTP.role.prod'] = 'Production';
 $locales['CSourceHTTP.role.qualif'] = 'Qualification';
 $locales['CSourcePOP-error-imap_open'] = 'Impossible d\'ouvrir la boite mail';
+$locales['CSourcePOP-error-noAccount'] = 'Aucun compte lié à l\'utilisateur %s';
 $locales['CSourcePOP-error-mail_id'] = 'Identifiant du message incorrect (mail_id)';
 $locales['CSourcePOP-error-no_imap_lib'] = 'bibliothèque IMAP PHP non installée';
 $locales['CSourcePOP-error-notInitiated'] = 'Source POP non initialisée (init requis)';

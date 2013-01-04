@@ -1,12 +1,12 @@
 var file_preview = null;
 var file_deleted = null;
 
-function popFile(objectClass, objectId, elementClass, elementId, sfn){
+ popFile = function(objectClass, objectId, elementClass, elementId, sfn){
   var url = new Url;
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
 }
 
-function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
+ZoomAjax = function(objectClass, objectId, elementClass, elementId, sfn){
   file_preview = elementId;
   var url = new Url('files', 'preview_files');
   url.addParam('objectClass', objectClass);
@@ -19,7 +19,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   url.requestUpdate('bigView');
 }
 
-function setObject(oObject){
+setObject = function(oObject){
   var oForm = getForm('FrmClass');
   oForm.selKey.value = oObject.id;
   oForm.selView.value = oObject.view;
@@ -35,7 +35,7 @@ function setObject(oObject){
   }
 }
 
-function reloadListFileDossier(sAction){
+reloadListFileDossier = function(sAction){
   var oForm = getForm('FrmClass');
   var sSelClass = oForm.selClass.value;
   var sSelKey   = oForm.selKey.value;
@@ -52,19 +52,19 @@ function reloadListFileDossier(sAction){
   url.requestUpdate('File'+sSelClass+sSelKey);
 }
 
-function reloadAfterUploadFile(category_id){
+reloadAfterUploadFile = function(category_id){
   reloadListFile('add', category_id);
 }
 
-function reloadAfterMoveFile(category_id){
+reloadAfterMoveFile = function(category_id){
   reloadListFile('move', category_id);
 }
 
-function reloadAfterDeleteFile(category_id){
+reloadAfterDeleteFile = function(category_id){
   reloadListFile('delete', category_id);
 }
 
-function reloadListFile(sAction, category_id){
+reloadListFile = function(sAction, category_id){
   if(sAction == 'delete' && file_preview == file_deleted){
     ZoomAjax('','','','', 0);
   }
@@ -86,7 +86,7 @@ function reloadListFile(sAction, category_id){
   }
 }
 
-function submitFileChangt(oForm){
+submitFileChangt = function(oForm){
   file_deleted = null;
   onSubmitFormAjax(oForm, reloadAfterMoveFile);
 }
