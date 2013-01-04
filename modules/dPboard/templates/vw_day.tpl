@@ -16,15 +16,15 @@
 Consultation.useModal();
 Operation.useModal();
 
-function hideIcon(frame) {
+hideIcon = function(frame) {
   $("icon-" + frame).hide();
 }
 
-function showIcon(frame) {
+showIcon = function(frame) {
   $("icon-" + frame).show();
 }
 
-function updateListConsults() {
+updateListConsults = function() {
   var url = new Url("dPcabinet", "httpreq_vw_list_consult");
   url.addParam("chirSel"   , "{{$prat->_id}}");
   url.addParam("date"      , "{{$date}}");
@@ -34,7 +34,7 @@ function updateListConsults() {
   url.requestUpdate("consultations");
 }
 
-function initUpdateListConsults() {
+initUpdateListConsults = function() {
   var url = new Url("dPcabinet", "httpreq_vw_list_consult");
   url.addParam("chirSel"   , "{{$prat->_id}}");
   url.addParam("date"      , "{{$date}}");
@@ -44,16 +44,16 @@ function initUpdateListConsults() {
   url.periodicalUpdate("consultations", { frequency: 90 } );
 }
 
-function updateListOperations() {
+updateListOperations = function() {
   var url = new Url("dPplanningOp", "httpreq_vw_list_operations");
-  url.addParam("chirSel" , "{{$prat->_id}}");
+  url.addParam("pratSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("urgences", "0");
   url.addParam("board"   , "1");
   url.requestUpdate("operations");
 }
 
-function updateListPatients() {
+updateListPatients = function() {
   var url = new Url("dPpatients", "httpreq_list_patients");
   
   var oForm = getForm("find");
@@ -74,7 +74,7 @@ function updateListPatients() {
   return false;
 }
 
-function updateListHospi() {
+updateListHospi = function() {
   var url = new Url("dPboard", "httpreq_vw_hospi");
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
