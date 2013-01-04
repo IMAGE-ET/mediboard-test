@@ -53,6 +53,15 @@ updateListOperations = function() {
   url.requestUpdate("operations");
 }
 
+initUpdateListOperations = function() {
+  var url = new Url("dPplanningOp", "httpreq_vw_list_operations");
+  url.addParam("pratSel" , "{{$prat->_id}}");
+  url.addParam("date"    , "{{$date}}");
+  url.addParam("urgences", "0");
+  url.addParam("board"   , "1");
+  url.periodicalUpdate("operations", { frequency: 90 } );
+}
+
 updateListPatients = function() {
   var url = new Url("dPpatients", "httpreq_list_patients");
   
@@ -89,7 +98,7 @@ Main.add(function () {
   hideIcon("patients");
   {{if $prat->_id}}
     initUpdateListConsults();
-    updateListOperations();
+    initUpdateListOperations();
     updateListPatients();
     updateListHospi();
   {{/if}}
