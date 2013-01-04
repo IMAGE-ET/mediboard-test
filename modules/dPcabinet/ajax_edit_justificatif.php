@@ -14,12 +14,13 @@ $colonnes = array(20, 28, 25, 75, 30);
 /**
  * Création du premier type d'en-tête possible d'un justificatif 
  * 
- * @param object $pdf       le pdf
- * @param object $facture   la facture courante
- * @param object $user      l'utilisateur
- * @param object $praticien le praticien de la facture
- * @param object $group     l'établissement
- * @param object $colonnes  les colonnes
+ * @param object $pdf         le pdf
+ * @param object $facture     la facture courante
+ * @param object $user        l'utilisateur
+ * @param object $praticien   le praticien de la facture
+ * @param object $group       l'établissement
+ * @param object $colonnes    les colonnes
+ * @param object $cle_facture clé de la facture
  * 
  * @return void
  */
@@ -38,10 +39,8 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes, $cle
     $nom_entreprise = $employeur->nom;
   }
   $typeRbt = "TG";
-  if($facture->assurance_base && $cle_facture == 0 && !$facture->send_assur_base) {
-    $typeRbt = "TP";
-  }
-  if($facture->assurance_complementaire && $cle_facture == 1 && !$facture->send_assur_compl){
+  if (($facture->assurance_base && $cle_facture == 0 && !$facture->send_assur_base) 
+      || ($facture->assurance_complementaire && $cle_facture == 1 && !$facture->send_assur_compl)) {
     $typeRbt = "TP";
   }
   $loi = "LAMal";
@@ -427,7 +426,8 @@ foreach ($factures as $facture) {
     $pdf->Cell($l, "", $pt, null, null, "R");
         
     $autre_temp = $cle_facture == 0 ? $montant_facture - $pm - $pt : $montant_facture;
-    $autre = $autre_temp <= 0.05 ? 0.00 : $autre_temp;
+    $autre_temp = round("%.2f", $autre_temp);
+    $autre = ($autre_temp <= 0.05) ? 0.00 : $autre_temp;
     $pdf->setXY(70, $ligne+3);
     $pdf->Cell($l, "", "Autres", null, null, "R");
     $pdf->Cell($l, "",  sprintf("%.2f", $autre), null, null, "R");

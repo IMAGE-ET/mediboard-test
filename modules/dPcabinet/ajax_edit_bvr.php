@@ -223,30 +223,24 @@ if ($edition_bvr) {
         );
         
         $tab[$colonne2] = $patient;
+        $pdf->SetTextColor(80,80,80);
         if ($facture->_reglements_total_patient) {
-          $pdf->SetTextColor(80,80,80);
           $pdf->setFont($font, '', 25);
           $pdf->setXY(100,20);
           $pdf->Write("", "DUPLICATA");
-          $pdf->SetTextColor(0,0,0);
-          $pdf->setFont($font, '', 8);
         }
         if ($facture->type_facture == "accident") {
-          $pdf->SetTextColor(80,80,80);
           $pdf->setFont($font, '', 15);
           $pdf->setXY(80,40);
           $pdf->Write("", "Accident");
-          $pdf->SetTextColor(0,0,0);
-          $pdf->setFont($font, '', 8);
         }
         if ($facture->cession_creance) {
-          $pdf->SetTextColor(80,80,80);
           $pdf->setFont($font, '', 15);
           $pdf->setXY(80,30);
           $pdf->Write("", "Cession de créance");
-          $pdf->SetTextColor(0,0,0);
-          $pdf->setFont($font, '', 8);
         }
+        $pdf->SetTextColor(0,0,0);
+        $pdf->setFont($font, '', 8);
 
         // Ecriture de C, D, E, F
         $x = $y = 0;
