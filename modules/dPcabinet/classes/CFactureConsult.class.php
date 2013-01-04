@@ -530,8 +530,9 @@ class CFactureConsult extends CMbObject {
       
       // Le numéro de référence doit comporter 16 ou 27 chiffres
       $num = $this->_id;
-      $num = sprintf("%07s", $num);
-      $num = sprintf("%027s",$this->_ref_praticien->debut_bvr.$num);
+      $nbcolonnes = 27 - strlen($this->_ref_praticien->debut_bvr);
+      $num = sprintf("%0".$nbcolonnes."s", $num);
+      $num = $this->_ref_praticien->debut_bvr.$num;
       if ((!$this->num_reference || $num != $this->num_reference)) {
         $this->num_reference = $num;
         $this->store();
