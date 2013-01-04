@@ -17,13 +17,23 @@
  */
 
 class CHL7v2SegmentIN1 extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name    = "IN1";
   
   /**
    * @var CPatient
    */
   var $patient = null;
-  
+
+  /**
+   * Build IN1 segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     

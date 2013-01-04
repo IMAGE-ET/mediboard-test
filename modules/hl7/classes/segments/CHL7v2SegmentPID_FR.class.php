@@ -17,6 +17,14 @@
  */
 
 class CHL7v2SegmentPID_FR extends CHL7v2SegmentPID {
+  /**
+   * Fill other identifiers
+   *
+   * @param array    &$identifiers Identifiers
+   * @param CPatient $patient      Person
+   *
+   * @return null
+   */
   function fillOtherIdentifiers(&$identifiers, CPatient $patient) {
     if ($patient->INSC) {
       $identifiers[] = array(

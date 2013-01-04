@@ -17,7 +17,13 @@
  */
 
 class CHL7v2SegmentPID extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name    = "PID";
+  /**
+   * @var null
+   */
   var $set_id  = null;
   
   /**
@@ -29,7 +35,14 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
    * @var CSejour
    */
   var $sejour  = null;
-  
+
+  /**
+   * Build PID segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     
@@ -362,6 +375,14 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $this->fill($data);
   }
 
+  /**
+   * Fill other identifiers
+   *
+   * @param array    &$identifiers Identifiers
+   * @param CPatient $patient      Person
+   *
+   * @return null
+   */
   function fillOtherIdentifiers(&$identifiers, CPatient $patient) {
     $identifiers[] = array(
       $patient->_id,

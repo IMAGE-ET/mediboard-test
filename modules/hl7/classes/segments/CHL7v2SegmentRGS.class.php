@@ -17,14 +17,27 @@
  */
 
 class CHL7v2SegmentRGS extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name   = "RGS";
+  /**
+   * @var null
+   */
   var $set_id = null;
   
   /**
    * @var CConsultation
    */
   var $appointment = null;
-  
+
+  /**
+   * Build RGS segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
         

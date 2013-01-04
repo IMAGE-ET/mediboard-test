@@ -17,6 +17,9 @@
  */
 
 class CHL7v2SegmentERR extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name           = "ERR";
   
   /**
@@ -28,7 +31,14 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
    * @var CHL7v2Error
    */
   var $error          = null;
-  
+
+  /**
+   * Build ERR segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     
@@ -83,30 +93,30 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       }
       
       // ERR-6: Application Error Parameter (ST) (optional repeating)
-      $data[] = null; 
+      $data[] = null;
       
       // ERR-7: Diagnostic Information (TX) (optional)
-      $data[] = null; 
+      $data[] = null;
       
       // ERR-8: User Message (TX) (optional)
       $data[] = CAppUI::tr("CHL7v2Exception-$error->code") . "($error->data)";
       
       // ERR-9: Inform Person Indicator (IS) (optional repeating)
-      $data[] = null; 
+      $data[] = null;
       
       // ERR-10: Override Type (CWE) (optional)
-      $data[] = null; 
+      $data[] = null;
       
       // ERR-11: Override Reason Code (CWE) (optional repeating)
-      $data[] = null; 
+      $data[] = null;
       
       // ERR-12: Help Desk Contact Point (XTN) (optional repeating) 
-      $data[] = null; 
+      $data[] = null;
     } else {
       // ERR-1: Error Code and Location (ELD) (optional repeating)
       if ($version < "2.5") {
         $data[] = array(
-          null, 
+          null,
           null,
           null,
           array(

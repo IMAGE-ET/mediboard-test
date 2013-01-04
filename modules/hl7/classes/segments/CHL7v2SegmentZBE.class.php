@@ -17,6 +17,9 @@
  */
 
 class CHL7v2SegmentZBE extends CHL7v2Segment {
+  /**
+   * @var array
+   */
   static $actions = array(
     "INSERT" => array(
       "A05", "A01", "A14", "A04", "A06", "A07", "A54", "A02", "A15", 
@@ -30,7 +33,10 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
       "A25", "A52", "A53", "Z81", "Z83", "Z85", "Z87", "Z89"
     ),
   );
-  
+
+  /**
+   * @var string
+   */
   var $name   = "ZBE";
   
   /**
@@ -52,7 +58,14 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
    * @var CAffectation
    */
   var $other_affectation = null;
-  
+
+  /**
+   * Build ZBE segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     
@@ -145,6 +158,11 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
     $this->fill($data);
   }
 
+  /**
+   * @param             $data
+   * @param             $ufs
+   * @param CHL7v2Event $event
+   */
   function fillOtherSegments(&$data, $ufs, CHL7v2Event $event) {}
 }
 

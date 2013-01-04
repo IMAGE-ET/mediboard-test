@@ -17,14 +17,27 @@
  */
 
 class CHL7v2SegmentAIG extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name = "AIG";
+  /**
+   * @var null
+   */
   var $set_id = null;
   
   /**
    * @var CConsultation
    */
   var $appointment = null;
-  
+
+  /**
+   * Build AIG segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     

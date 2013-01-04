@@ -17,13 +17,23 @@
  */
 
 class CHL7v2SegmentMRG extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name             = "MRG";
   
   /**
    * @var CPatient
    */
   var $patient_eliminee = null;
-  
+
+  /**
+   * Build MRG segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     

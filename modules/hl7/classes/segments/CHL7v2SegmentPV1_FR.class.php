@@ -29,7 +29,14 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
    * @var CAffectation
    */
   var $curr_affectation = null;
-  
+
+  /**
+   * Build PV1 (FR) segment
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     

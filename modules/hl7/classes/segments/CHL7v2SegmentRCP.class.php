@@ -17,8 +17,18 @@
  */
 
 class CHL7v2SegmentRCP extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name   = "RCP";
-  
+
+  /**
+   * Build RCP segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
 

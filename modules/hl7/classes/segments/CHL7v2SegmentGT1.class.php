@@ -17,7 +17,13 @@
  */
 
 class CHL7v2SegmentGT1 extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name   = "GT1";
+  /**
+   * @var null
+   */
   var $set_id = null;
   
   /**
@@ -29,7 +35,14 @@ class CHL7v2SegmentGT1 extends CHL7v2Segment {
    * @var CSejour
    */
   var $sejour = null;
-  
+
+  /**
+   * Build GT1 segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     $data = array();
     

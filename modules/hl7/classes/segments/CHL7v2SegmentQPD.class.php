@@ -34,6 +34,13 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
    */
   var $affectation = null;
 
+  /**
+   * Build QPD segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
 
@@ -64,32 +71,57 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     $this->fill($data);
   }
 
+  /**
+   * Add PID in QPD segment
+   *
+   * @param CPatient $patient Person
+   *
+   * @return array
+   */
   function addQPD3PID(CPatient $patient) {
     return array(
       // Patient Name
-      $this->addParameters($patient, "nom", "5.1.1"),
-      $this->addParameters($patient, "prenom", "5.2"),
+      $this->setDemographicsFields($patient, "nom", "5.1.1"),
+      $this->setDemographicsFields($patient, "prenom", "5.2"),
 
       // Maiden name
-      $this->addParameters($patient, "nom_jeune_fille", "6.1.1"),
+      $this->setDemographicsFields($patient, "nom_jeune_fille", "6.1.1"),
 
       // Date of birth
-      $this->addParameters($patient, "naissance", "7.1"),
+      $this->setDemographicsFields($patient, "naissance", "7.1"),
 
       // Patient Adress
-      $this->addParameters($patient, "ville", "11.3"),
-      $this->addParameters($patient, "cp", "11.5")
+      $this->setDemographicsFields($patient, "ville", "11.3"),
+      $this->setDemographicsFields($patient, "cp", "11.5")
     );
   }
 
+  /**
+   * Add PV1 in QPD segment
+   *
+   * @param CSejour      $sejour      Visit
+   * @param CAffectation $affectation Location
+   *
+   * @return array
+   */
   function addQPD3PV1(CSejour $sejour, CAffectation $affectation = null) {
     return array(
       // Patient class
-      $this->addParameters($sejour, "type", "2.1", "4"),
+      $this->setDemographicsFields($sejour, "type", "2.1", "4"),
     );
   }
 
-  function addParameters(CMbObject $object, $spec, $field, $mapTo = null) {
+  /**
+   * Populating QPD-3 demographics fields
+   *
+   * @param CMbObject $object Object
+   * @param string    $spec   Field spec
+   * @param string    $field  The number of a field
+   * @param null      $mapTo  Map to table HL7
+   *
+   * @return array
+   */
+  function setDemographicsFields(CMbObject $object, $spec, $field, $mapTo = null) {
     if (!$object->$spec) {
       return;
     }

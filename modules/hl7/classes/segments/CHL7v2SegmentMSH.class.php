@@ -17,8 +17,18 @@
  */
 
 class CHL7v2SegmentMSH extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name = "MSH";
-  
+
+  /**
+   * Build MSH segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     
@@ -53,7 +63,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = mbDateTime(); 
     
     // MSH-8: Security (ST) (optional)
-    $data[] = null; 
+    $data[] = null;
     
     // MSH-9: Message Type (MSG)
     $data[] = $event->msg_codes; 
@@ -72,10 +82,10 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = CHL7v2::prepareHL7Version($event->version); 
     
     // MSH-13: Sequence Number (NM) (optional)
-    $data[] = null; 
+    $data[] = null;
     
     // MSH-14: Continuation Pointer (ST) (optional)
-    $data[] = null; 
+    $data[] = null;
     
     // MSH-15: Accept Acknowledgment Type (ID) (optional)
     // Table 155
@@ -107,14 +117,21 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     ); 
     
     // MSH-20: Alternate Character Set Handling Scheme (ID) (optional)
-    $data[] = null; 
+    $data[] = null;
     
     // MSH-21: Message Profile Identifier (EI) (optional repeating) 
     $data[] = null;
     
     $this->fill($data);
   }
-  
+
+  /**
+   * Fill fields
+   *
+   * @param array $fields Fields
+   *
+   * return void
+   */
   function fill($fields) {
     $message = $this->getMessage();
     

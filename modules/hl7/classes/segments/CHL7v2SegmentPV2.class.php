@@ -17,6 +17,9 @@
  */
 
 class CHL7v2SegmentPV2 extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name   = "PV2";
   
   /**
@@ -28,7 +31,14 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
    * @var COperation
    */
   var $operation = null;
-    
+
+  /**
+   * Build PV2 segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     $data = array();
     

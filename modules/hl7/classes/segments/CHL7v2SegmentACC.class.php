@@ -17,13 +17,23 @@
  */
 
 class CHL7v2SegmentACC extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name   = "ACC";
   
   /**
    * @var CSejour
    */
   var $sejour = null;
-  
+
+  /**
+   * Build ACC segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     $data = array();
     

@@ -17,14 +17,27 @@
  */
 
 class CHL7v2SegmentNK1 extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name          = "NK1";
+  /**
+   * @var null
+   */
   var $set_id        = null;
   
   /**
    * @var CCorrespondantPatient
    */
   var $correspondant = null;
-  
+
+  /**
+   * Build NK1 segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     
@@ -42,7 +55,7 @@ class CHL7v2SegmentNK1 extends CHL7v2Segment {
     $data[] = array(
       array(
         CHL7v2TableEntry::mapTo("63", $correspondant->parente),
-        ($correspondant->parente == "autre") ? $correspondant->parente_autre : null, 
+        ($correspondant->parente == "autre") ? $correspondant->parente_autre : null,
       )
     );
     
@@ -140,7 +153,7 @@ class CHL7v2SegmentNK1 extends CHL7v2Segment {
     $data[] = array(
       array(
         CHL7v2TableEntry::mapTo("131", $correspondant->relation),
-        ($correspondant->relation == "autre") ? $correspondant->relation_autre : null, 
+        ($correspondant->relation == "autre") ? $correspondant->relation_autre : null,
       )
     );
     

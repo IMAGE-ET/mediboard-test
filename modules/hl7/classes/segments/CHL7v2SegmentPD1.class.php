@@ -17,13 +17,23 @@
  */
 
 class CHL7v2SegmentPD1 extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name    = "PD1";
   
   /**
    * @var CPatient
    */
   var $patient = null;
-  
+
+  /**
+   * Build PD1 segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
         

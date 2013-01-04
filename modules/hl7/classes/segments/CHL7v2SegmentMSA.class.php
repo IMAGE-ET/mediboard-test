@@ -17,13 +17,23 @@
  */
 
 class CHL7v2SegmentMSA extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name           = "MSA";
   
   /**
    * @var CHL7v2Acknowledgment
    */
   var $acknowledgment = null;
-  
+
+  /**
+   * Build MSA segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     
@@ -45,16 +55,16 @@ class CHL7v2SegmentMSA extends CHL7v2Segment {
     $data[] = $acknowledgment->message_control_id; 
     
     // MSA-3: Text Message (ST) (optional)
-    $data[] = null; 
+    $data[] = null;
     
     // MSA-4: Expected Sequence Number (NM) (optional)
-    $data[] = null; 
+    $data[] = null;
     
     // MSA-5: Delayed Acknowledgment Type (ID) (optional)
-    $data[] = null; 
+    $data[] = null;
     
     // MSA-6: Error Condition (CE) (optional)
-    $data[] = null; 
+    $data[] = null;
     
     $this->fill($data);
   }

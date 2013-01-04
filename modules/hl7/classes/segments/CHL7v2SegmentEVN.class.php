@@ -17,10 +17,26 @@
  */
 
 class CHL7v2SegmentEVN extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name             = "EVN";
+  /**
+   * @var null
+   */
   var $planned_datetime = null;
+  /**
+   * @var null
+   */
   var $occured_datetime = null;
-  
+
+  /**
+   * Build EVN segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     

@@ -17,13 +17,23 @@
  */
 
 class CHL7v2SegmentZFD extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name   = "ZFD";
   
   /**
    * @var CPatient
    */
   var $patient = null;
-  
+
+  /**
+   * Build ZFD segement
+   *
+   * @param CHL7v2Event $event Event
+   *
+   * @return null
+   */
   function build(CHL7v2Event $event) {
     parent::build($event);
     
