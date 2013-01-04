@@ -277,12 +277,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function addActeCCAM($elParent, CActeCCAM $mbActeCCAM, CCodable $codable) {
     $acteCCAM = $this->addElement($elParent, "acteCCAM");
+
+    // Gestion des attributs
     $this->addAttribute($acteCCAM, "action", "création");
-    $this->addAttribute($acteCCAM, "facturable", "oui");
+    $this->addAttribute($acteCCAM, "facturable", $mbActeCCAM->facturable ? "oui" : "non");
     $this->addAttribute($acteCCAM, "valide", "oui");
     $this->addAttribute($acteCCAM, "documentaire", "non");
     $this->addAttribute($acteCCAM, "gratuit", "non");
-    if($mbActeCCAM->_rembex) {
+    if ($mbActeCCAM->_rembex) {
       $this->addAttribute($acteCCAM, "remboursementExceptionnel", "oui");
     }
     
