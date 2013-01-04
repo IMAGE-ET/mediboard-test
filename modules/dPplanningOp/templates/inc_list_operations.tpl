@@ -64,8 +64,17 @@
   <tbody class="hoverable">
     <tr>
       {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
-      
-      <td rowspan="2" class="narrow {{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;">
+      {{assign var=background value=""}}
+      {{if $_operation->entree_salle && $_operation->sortie_salle}}
+        {{assign var=background value="background-image:url(images/icons/ray.gif); background-repeat:repeat;"}}
+      {{elseif $_operation->entree_salle}}
+        {{assign var=background value="background-color:#cfc;"}}
+      {{elseif $_operation->sortie_salle}}
+        {{assign var=background value="background-color:#fcc;"}}
+      {{elseif $_operation->entree_bloc}}
+        {{assign var=background value="background-color:#ffa;"}}
+      {{/if}}
+      <td rowspan="2" class="narrow {{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center; {{$background}}">
         {{if !$_operation->annulee}}
         {{if !$board && !$_operation->rank && (!$prev_interv || $prev_interv && !$prev_interv->rank) && !($curr_plage->spec_id && !$curr_plage->unique_chir)}}
           {{if $_operation->rank_voulu || $_operation->horaire_voulu}}
@@ -185,7 +194,17 @@
     <tr>
       {{assign var=patient value=$_operation->_ref_sejour->_ref_patient}}
       
-      <td rowspan="2" class="narrow"></td>
+      {{assign var=background value=""}}
+      {{if $_operation->entree_salle && $_operation->sortie_salle}}
+        {{assign var=background value="background-image:url(images/icons/ray.gif); background-repeat:repeat;"}}
+      {{elseif $_operation->entree_salle}}
+        {{assign var=background value="background-color:#cfc;"}}
+      {{elseif $_operation->sortie_salle}}
+        {{assign var=background value="background-color:#fcc;"}}
+      {{elseif $_operation->entree_bloc}}
+        {{assign var=background value="background-color:#ffa;"}}
+      {{/if}}
+      <td rowspan="2" class="narrow" style="{{$background}}"></td>
       
       <td class="top text" class="top" {{if !$board}}rowspan="2"{{/if}}>
         {{if $patient->_ref_dossier_medical->_id && $patient->_ref_dossier_medical->_count_allergies}}
