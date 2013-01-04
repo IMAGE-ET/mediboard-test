@@ -39,7 +39,7 @@ class CActeCCAM extends CActe {
   var $regle_dh            = null;
   var $signe               = null;
   var $sent                = null;
-  
+
   // Form fields
   var $_modificateurs     = array();
   var $_rembex            = null;
@@ -311,12 +311,24 @@ class CActeCCAM extends CActe {
   }
   
   function store() {
+    // Si acte non facturable on met le code d'asso à aucun
+    if (!$this->facturable) {
+      $this->code_association = "";
+    }
+
+    // Si on repasse le facturable à 1 on remet à la montant base à la valeur de l'acte et le dépassement à 0
+    if ($this->fieldModified("facturable", 1)) {
+      $this->montant_depassement  = 0;
+      $this->motif_depassement    = "";
+      $this->_calcul_montant_base = true;
+    }
+
     // Sauvegarde du montant de base
     if ($this->_calcul_montant_base) {
       $this->updateFormFields();
       $this->updateMontantBase();
     }
-   
+
     // En cas d'une modification autre que signe, on met signe à 0
     if (!$this->signe) {
       // Chargement du oldObject
@@ -397,6 +409,7 @@ class CActeCCAM extends CActe {
     $where["acte_id"]       = "<> '$this->_id'";
     $where["object_class"]  = "= '$this->object_class'";
     $where["object_id"]     = "= '$this->object_id'";
+    $where["facturable"]    = "= '1'";
     //$where["code_activite"] = "= '$this->code_activite'";
     if ($same_executant) {
       $where["executant_id"]  = "= '$this->executant_id'";
@@ -412,11 +425,19 @@ class CActeCCAM extends CActe {
      */
 
     // Chargements initiaux
+    if (!$this->facturable) {
+      $this->_guess_association = "";
+      $this->_guess_regle_asso  = "X";
+
+      return $this->_guess_association;
+    }
+
     $this->loadRefCodeCCAM();
     $this->getLinkedActes();
     if (count($this->_linked_actes) > 3) {
       $this->_guess_association = "?";
       $this->_guess_regle_asso  = "?";
+
       return $this->_guess_association;
     }
     foreach ($this->_linked_actes as &$acte) {

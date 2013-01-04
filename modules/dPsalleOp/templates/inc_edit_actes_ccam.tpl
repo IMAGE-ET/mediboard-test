@@ -227,33 +227,44 @@
               </tr>
       
               {{if !$modifs_compacts}}
-              <!-- Remboursable + Dépassement -->
-              <tr class="{{$view}}">
-                <th>
-                  {{mb_label object=$acte field=rembourse}}<br />
-                  <small><em>({{tr}}CCodeCCAM.remboursement.{{$_code->remboursement}}{{/tr}})</em></small>
-                </th>
-                <td>
-                  {{assign var=disabled value=""}}
-                  {{if $_code->remboursement == 1}}{{assign var=disabled value=0}}{{/if}}
-                  {{if $_code->remboursement == 2}}{{assign var=disabled value=1}}{{/if}}
-          
-                  {{assign var=default value="1"}}
-                  {{if $_code->remboursement == 1}}{{assign var=default value=1}}{{/if}}
-                  {{if $_code->remboursement == 2}}{{assign var=default value=0}}{{/if}}
-                  
-                  {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
-                </td>
-              </tr>
-              {{if $can_view_dh && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
-              <tr class="{{$view}}">
-                <th>{{mb_label object=$acte field=montant_depassement}}</th>
-                <td>
-                  {{mb_field object=$acte field=montant_depassement}}
-                  {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement"}}
-                </td>
-              </tr>
-              {{/if}}
+                <!-- Remboursable + Dépassement -->
+                <tr class="{{$view}}">
+                  <th>
+                    {{mb_label object=$acte field=rembourse}}<br />
+                    <small><em>({{tr}}CCodeCCAM.remboursement.{{$_code->remboursement}}{{/tr}})</em></small>
+                  </th>
+                  <td>
+                    {{assign var=disabled value=""}}
+                    {{if $_code->remboursement == 1}}{{assign var=disabled value=0}}{{/if}}
+                    {{if $_code->remboursement == 2}}{{assign var=disabled value=1}}{{/if}}
+
+                    {{assign var=default value="1"}}
+                    {{if $_code->remboursement == 1}}{{assign var=default value=1}}{{/if}}
+                    {{if $_code->remboursement == 2}}{{assign var=default value=0}}{{/if}}
+
+                    {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
+                  </td>
+                </tr>
+
+                <!-- Facturable -->
+                <tr class="{{$view}}">
+                  <th>
+                    {{mb_label object=$acte field=facturable}}
+                  </th>
+                  <td>
+                    {{mb_field object=$acte field=facturable}}
+                  </td>
+                </tr>
+
+                {{if $acte->facturable && $can_view_dh && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
+                <tr class="{{$view}}">
+                  <th>{{mb_label object=$acte field=montant_depassement}}</th>
+                  <td>
+                    {{mb_field object=$acte field=montant_depassement}}
+                    {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement"}}
+                  </td>
+                </tr>
+                {{/if}}
               {{/if}}
       
               <!-- Commentaire -->
@@ -279,6 +290,7 @@
             </tbody>
       
             <!-- Code d'association -->
+            {{if $acte->facturable}}
             <tr>
               <td colspan="10" class="text">
                 {{if $acte->_id}}
@@ -348,10 +360,11 @@
                 {{/if}}
                 {{/if}}
                 </td>
-              </tr>    
+              </tr>
+              {{/if}}
             </table>
           </form>
-  
+
           {{if $ajax}}
           <script type="text/javascript">
             prepareForm($('acte{{$key}}').getSurroundingForm());

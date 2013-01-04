@@ -16,6 +16,7 @@ class CActe extends CMbMetaObject {
   
   // DB References
   var $executant_id        = null;
+  var $facturable          = null;
 
   // Form fields
   var $_preserve_montant   = null; 
@@ -85,13 +86,17 @@ class CActe extends CMbMetaObject {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["object_id"]           = "ref notNull class|CCodable meta|object_class";
-    $specs["executant_id"]        = "ref notNull class|CMediusers";
-    $specs["montant_base"]        = "currency";
-    $specs["montant_depassement"] = "currency";
-    $specs["_montant_facture"]    = "currency";
-    return $specs;
+    $props = parent::getProps();
+
+    $props["object_id"]           = "ref notNull class|CCodable meta|object_class";
+    $props["executant_id"]        = "ref notNull class|CMediusers";
+    $props["montant_base"]        = "currency";
+    $props["montant_depassement"] = "currency";
+    $props["facturable"]          = "bool notNull default|1 show|0";
+
+    $props["_montant_facture"]    = "currency";
+
+    return $props;
   }
   
   /**

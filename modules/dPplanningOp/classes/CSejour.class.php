@@ -1939,9 +1939,9 @@ class CSejour extends CCodable implements IPatientRelated {
       return;
     }
 
-    $idDossier = new CIdSante400();
-    $idDossier->id400 = $nda;
-    $idDossier->tag = $tag_NDA;
+    $idDossier               = new CIdSante400();
+    $idDossier->id400        = $nda;
+    $idDossier->tag          = $tag_NDA;
     $idDossier->object_class = $this->_class;
     $idDossier->loadMatchingObject();
 

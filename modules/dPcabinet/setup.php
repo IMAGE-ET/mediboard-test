@@ -1707,8 +1707,14 @@ class CSetupdPcabinet extends CSetup {
     
     $this->makeRevision("1.82");
     $this->addPrefQuery("order_mode_grille", "");
+
+    $this->makeRevision("1.83");
+
+    $query = "ALTER TABLE `acte_ngap`
+                ADD `facturable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.83";
+    $this->mod_version = "1.84";
   }
 }
 ?>

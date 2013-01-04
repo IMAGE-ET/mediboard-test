@@ -15,8 +15,7 @@ class CFraisDivers extends CActe {
   var $type_id     = null;
   var $coefficient = null;
   var $quantite    = null;
-  var $facturable  = null;
-  
+
   var $_execution  = null;
   var $_montant    = null;
   
@@ -27,8 +26,7 @@ class CFraisDivers extends CActe {
     $specs["type_id"]     = "ref notNull class|CFraisDiversType autocomplete|code";
     $specs["coefficient"] = "float notNull default|1";
     $specs["quantite"]    = "num min|0";
-    $specs["facturable"]  = "bool notNull default|1";
-    
+
     $specs["_execution"]  = "dateTime";
     $specs["_montant"]    = "currency";
     return $specs;

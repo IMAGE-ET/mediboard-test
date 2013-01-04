@@ -999,8 +999,14 @@ class CSetupdPsalleOp extends CSetup {
     );
     
     $this->addNewCheckList($check_list, "CPoseDispositifVasculaire");
-    
-    $this->mod_version = "0.42";
+
+    $this->makeRevision("0.42");
+
+    $query = "ALTER TABLE `acte_ccam`
+                ADD `facturable` ENUM ('0','1') NOT NULL DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.43";
   }
   
   function addNewCheckList($check_list, $object_class = 'COperation') {
