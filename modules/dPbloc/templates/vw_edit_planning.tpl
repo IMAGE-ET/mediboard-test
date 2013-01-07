@@ -52,7 +52,7 @@
             {{tr}}Week{{/tr}}
           </option>
         </select>
-        <button type="button" class="print" onclick="print();">{{tr}}Print{{/tr}}</button>
+        <button type="button" class="print" onclick="window.print();">{{tr}}Print{{/tr}}</button>
       </form>
     </td>
     <td rowspan="100" class="not-printable">
