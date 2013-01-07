@@ -167,8 +167,8 @@
       
       onSubmitFormAjax(formLineItem, function() {
         Prescription.updateVolumeTotal('{{$line->_id}}', 1, null, null, null, function() {
-          $V(formPerf.volume_debit, $V(formQteTotale._quantite_totale));
-          console.log(formPerf.volume_debit.readonly);
+          $V(formPerf.volume_debit, $("volume_ref").innerHTML);
+
           if (formPerf.volume_debit.readOnly) {
             formPerf.volume_debit.onchange();
           }
