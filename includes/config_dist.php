@@ -16,15 +16,16 @@
 global $dPconfig; 
 
 // No trailing slash, no backslashes for Win users (use slashes instead)
-$dPconfig["root_dir"]          = "/var/www/mediboard";  
+$dPconfig["root_dir"]          = "/var/www/mediboard";
 $dPconfig["company_name"]      = "mediboard.org";
 $dPconfig["page_title"]        = "Mediboard SIH";
 $dPconfig["base_url"]          = "http://localhost/mediboard/";
 
-$dPconfig["offline"]           = "0";     
+$dPconfig["offline"]           = "0";
+$dPconfig["offline_non_admin"] = "0";
 $dPconfig["instance_role"]     = "qualif";
-$dPconfig["http_redirections"] = "0";      
-$dPconfig["mb_id"]             = "";     
+$dPconfig["http_redirections"] = "0";
+$dPconfig["mb_id"]             = "";
 $dPconfig["system_date"]       = "";
 $dPconfig["minify_javascript"] = "1";
 $dPconfig["minify_css"]        = "1";

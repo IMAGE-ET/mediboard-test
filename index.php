@@ -229,6 +229,12 @@ if ($user->isInstalled()) {
   $user->getBasicInfo();
   CAppUI::$user = $user;
   CAppUI::$instance->_ref_user =& CAppUI::$user;
+
+  // Offline mode for non-admins
+  if ($dPconfig["offline_non_admin"] && CAppUI::$user->_id != 0 && !CAppUI::$user->isAdmin()) {
+    header("Location: offline.php");
+    CApp::rip();
+  }
 }
 
 // Load DB-stored configuration schema
@@ -241,7 +247,6 @@ foreach ($configurations as $_configuration) {
 CHTMLResourceLoader::initOutput(CValue::get("_aio"));
 
 CApp::notify("BeforeMain");
-
 
 // Check if the mobile feature is available and if the user agent is a mobile
 $enable_mobile_ui = CAppUI::pref("MobileUI") || !CAppUI::$user->_id;

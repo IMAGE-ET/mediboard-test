@@ -1,7 +1,7 @@
-<?php 
+<?php
 /**
  * Mediboard system offline page
- * 
+ *
  * @package Mediboard
  * @author  SARL OpenXtrem <dev@openxtrem.com>
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
@@ -12,16 +12,16 @@ require "includes/config_all.php";
 
 $reason = isset($_GET["reason"]) ? $_GET["reason"] : null;
 
-switch($reason) {
+switch ($reason) {
   case "bdd":
     $msg = "La base de données n'est pas accessible.";
     break;
 
   default :
-    if ($dPconfig["offline"] != 1) {
+    if (!($dPconfig["offline"] || $dPconfig["offline_non_admin"])) {
       header("Location: index.php");
     }
-  
+
     $msg = "Le système est désactivé pour cause de maintenance.";
 }
 

@@ -1,12 +1,12 @@
 <?php
 /**
  * Installation main configure form
- *  
+ *
  * @package    Mediboard
  * @subpackage Intaller
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    SVN: $Id$ 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    SVN: $Id$
  * @link       http://www.mediboard.org
  */
 
@@ -39,7 +39,7 @@ showHeader();
 
 <table class="form">
   <col style="width: 50%" />
-  
+
   <tr>
     <th class="category" colspan="3">Configuration générale</th>
   </tr>
@@ -53,7 +53,7 @@ showHeader();
     <th><label for="base_url" title="Url Racine pour le système">Url racine</label></th>
     <td colspan="2"><input type="text" size="40" name="base_url" value="<?php echo $dPconfig['base_url'] ?>" /></td>
   </tr>
-  
+
   <tr>
     <th><label for="instance_role">Rôle de l'instance</label></th>
     <td colspan="2">
@@ -63,7 +63,7 @@ showHeader();
       </select>
     </td>
   </tr>
-  
+
   <tr>
     <th><label for="http_redirections" title="Active les redirections http définies dans Mediboard">Redirections http actives</label></th>
     <td colspan="2">
@@ -75,22 +75,17 @@ showHeader();
   </tr>
 
   <tr>
-    <th><label for="offline">Mode maintenance</label></th>
-    <td colspan="2">
-      <input type="radio" name="offline" value="0" id="offline_0" <?php if ($dPconfig['offline'] == "0") echo 'checked="1"'; ?> />
-      <label for="offline_0">Non</label>
-      <input type="radio" name="offline" value="1" id="offline_1" <?php if ($dPconfig['offline'] == "1") echo 'checked="1"'; ?> />
-      <label for="offline_1">Oui</label>
+    <th><label for="shared_memory" title="Choisir quelle extension doit tenter de gérer la mémoire partagée (celle-ci doit être installée)">Mémoire partagée</label></th>
+    <td>
+      <select name="shared_memory" size="1">
+        <option value="none" <?php if ($dPconfig['shared_memory'] == 'none') { echo 'selected="selected"'; } ?> >Disque</option>
+        <option value="apc"  <?php if ($dPconfig['shared_memory'] == 'apc' ) { echo 'selected="selected"'; } ?> >APC</option>
+      </select>
     </td>
-  </tr>
-  
-  <tr>
-    <th><label for="migration[active]" title="Affiche une page avec les nouvelles adresse de Mediboard aux utilisateurs">Mode migration</label></th>
-    <td colspan="2">
-      <input type="radio" name="migration[active]" value="0" id="migration[active]_0" <?php if ($dPconfig['migration']['active'] == "0") echo 'checked="1"'; ?> />
-      <label for="migration[active]_0">Non</label>
-      <input type="radio" name="migration[active]" value="1" id="migration[active]_1" <?php if ($dPconfig['migration']['active'] == "1") echo 'checked="1"'; ?> />
-      <label for="migration[active]_1">Oui</label>
+    <td>
+      <div class="small-info">
+        <?php require_once "includes/empty_shared_memory.php"; ?>
+      </div>
     </td>
   </tr>
 
@@ -111,22 +106,41 @@ showHeader();
       </div>
     </td>
   </tr>
-  
+
   <tr>
-    <th><label for="shared_memory" title="Choisir quelle extension doit tenter de gérer la mémoire partagée (celle-ci doit être installée)">Mémoire partagée</label></th>
-    <td>
-      <select name="shared_memory" size="1">
-        <option value="none" <?php if ($dPconfig['shared_memory'] == 'none') { echo 'selected="selected"'; } ?> >Disque</option>
-        <option value="apc"  <?php if ($dPconfig['shared_memory'] == 'apc' ) { echo 'selected="selected"'; } ?> >APC</option>
-      </select>
-    </td>
-    <td>
-      <div class="small-info">
-        <?php require_once "includes/empty_shared_memory.php"; ?>
-      </div>
+    <th class="category" colspan="3">Mode maintenance</th>
+  </tr>
+
+  <tr>
+    <th><label for="offline">Mode maintenance</label></th>
+    <td colspan="2">
+      <input type="radio" name="offline" value="0" id="offline_0" <?php if ($dPconfig['offline'] == "0") echo 'checked="1"'; ?> />
+      <label for="offline_0">Non</label>
+      <input type="radio" name="offline" value="1" id="offline_1" <?php if ($dPconfig['offline'] == "1") echo 'checked="1"'; ?> />
+      <label for="offline_1">Oui</label>
     </td>
   </tr>
-  
+
+  <tr>
+    <th><label for="offline_non_admin">Mode maintenance accessible aux admins</label></th>
+    <td colspan="2">
+      <input type="radio" name="offline_non_admin" value="0" id="offline_non_admin_0" <?php if ($dPconfig['offline_non_admin'] == "0") echo 'checked="1"'; ?> />
+      <label for="offline_non_admin_0">Non</label>
+      <input type="radio" name="offline_non_admin" value="1" id="offline_non_admin_1" <?php if ($dPconfig['offline_non_admin'] == "1") echo 'checked="1"'; ?> />
+      <label for="offline_non_admin_1">Oui</label>
+    </td>
+  </tr>
+
+  <tr>
+    <th><label for="migration[active]" title="Affiche une page avec les nouvelles adresse de Mediboard aux utilisateurs">Mode migration</label></th>
+    <td colspan="2">
+      <input type="radio" name="migration[active]" value="0" id="migration[active]_0" <?php if ($dPconfig['migration']['active'] == "0") echo 'checked="1"'; ?> />
+      <label for="migration[active]_0">Non</label>
+      <input type="radio" name="migration[active]" value="1" id="migration[active]_1" <?php if ($dPconfig['migration']['active'] == "1") echo 'checked="1"'; ?> />
+      <label for="migration[active]_1">Oui</label>
+    </td>
+  </tr>
+
   <tr>
     <th class="category" colspan="3">Configuration de la base de données principale</th>
   </tr>
