@@ -95,7 +95,7 @@ class CEnumSpec extends CMbFieldSpec {
 
     // Empty label
     if ($emptyLabel = CMbArray::extract($params, "emptyLabel")) {
-      $emptyLabel = "&mdash; ". CAppUI::tr($emptyLabel);
+      $emptyLabel = CAppUI::tr($emptyLabel);
     }
     
     // Extra info por HTML generation
@@ -116,7 +116,8 @@ class CEnumSpec extends CMbFieldSpec {
     switch ($typeEnum) {
       default:
       case "select":
-        
+        $emptyLabel = "&mdash; $emptyLabel";
+         
         $html .= "<select name=\"$field\" class=\"$className\" $disabled $extra>";
         
         // Empty option label
@@ -145,6 +146,18 @@ class CEnumSpec extends CMbFieldSpec {
       case "radio":
         $compteur = 0;
         
+        // Empty radio label
+        if ($emptyLabel) {
+          if ($value === null) {
+            $html .= "\n<input type=\"radio\" name=\"$field\" value=\"\" checked=\"checked\" />";
+          }
+          else {
+            $html .= "\n<input type=\"radio\" name=\"$field\" value=\"\" />";
+          }
+          $html .= "<label for=\"{$field}_\">$emptyLabel</label> ";
+        }
+        
+        // All other radios
         foreach ($locales as $key => $item) {
           $selected = "";
           if (($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default")) {
