@@ -75,6 +75,8 @@ class CSourceMLLP extends CExchangeSource {
     if (!$this->_socket_client) {
       throw new CMbException("CSourceMLLP-unreachable-source", $this->name);
     }
+    mbLog($errno);
+    mbLog($errstr);
     stream_set_blocking($this->_socket_client, 0);
     
     return $this->_socket_client;
@@ -82,12 +84,14 @@ class CSourceMLLP extends CExchangeSource {
   
   function recv(){
     $servers = array($this->getSocketClient());
-    
-    while (@stream_select($servers, $write = null, $except = null, 5) === false);
-    
+
     $data = "";
-    $data = stream_get_contents($this->_socket_client);
-    //$data = fread($this->_socket_client, 10240);
+    do {
+      while (@stream_select($servers, $write = null, $except = null, 5) === false);
+      $buf = stream_get_contents($this->_socket_client);
+      $data .= $buf;
+    }
+    while ($buf);
     
     return $data;
   }
