@@ -153,14 +153,15 @@ class CHtmlToPDF {
    * @return string 
    */
   function fixBlockElements($str) {
-
     $xml = new DOMDocument('1.0', 'iso-8859-1');
 
     $str = CMbString::convertHTMLToXMLEntities($str);
     $str = CHtmlToPDF::cleanWord($str);
     
-    // Suppression du caractère ETX (end of text)
+    // Suppression des caractères ETX (3) (end of text) et BEL (7)
     $str = str_replace(chr(3), "", $str);
+    $str = str_replace(chr(7), "", $str);
+
     $xml->loadXML(utf8_encode($str));
         
     $html =& $xml->getElementsByTagName("body")->item(0);
