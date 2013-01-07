@@ -8,27 +8,26 @@
  * @version  SVN: $Id:$
  * @link     http://www.mediboard.org
  */
-console.log("toto");
 messagerie = {
-  module : "messagerie",
-  url : null,
+  module:"messagerie",
+  url:   null,
 
-  modalPOPOpen: function(id, type) {
+  modalPOPOpen:function (id, type) {
     var url = new Url(messagerie.module, "ajax_open_pop_email");
-    url.addParam("mail_id"    , id);
-    url.requestModal(800,600);
+    url.addParam("mail_id", id);
+    url.requestModal(800, 600);
     url.modalObject.observe("afterClose", this.refreshList.curry(type));
   },
 
-  modalExternalOpen: function(id, type) {
+  modalExternalOpen:function (id, type) {
     var url = new Url(messagerie.module, "ajax_open_external_email");
-    url.addParam("mail_id"    , id);
-    url.requestModal(900,800);
+    url.addParam("mail_id", id);
+    url.requestModal(900, 800);
     url.modalObject.observe("afterClose", this.refreshList.curry(type));
     messagerie.url = url;
   },
 
-  refreshList : function(type) {
+  refreshList:function (type) {
     var url = new Url(messagerie.module, "ajax_list_mails");
 
     if (Object.isUndefined(type)) {
@@ -38,32 +37,34 @@ messagerie = {
     url.requestUpdate(type);
   },
 
-  getLastMessages : function(user_id,type) {
-    if(!type) { type = 'all';}
+  getLastMessages:function (user_id, type) {
+    if (!type) {
+      type = 'all';
+    }
     var url = new Url(messagerie.module, "ajax_get_last_email");
-    url.addParam("user_id"    , user_id);
-    url.requestUpdate("systemMsg", function() {
+    url.addParam("user_id", user_id);
+    url.requestUpdate("systemMsg", function () {
       messagerie.refreshList(type);
     });
-   },
+  },
 
   /*
    * Get the attachment from POP serveur but not save it in mediboard, only for preview
    */
-  AttachFromPOP : function(mail_id, part) {
+  AttachFromPOP:  function (mail_id, part) {
     var url = new Url("messagerie", "get_pop_attachment");
     url.addParam("mail_id", mail_id);
     url.addParam("part", part);
-    url.requestModal(800,800);
+    url.requestModal(800, 800);
   },
 
-  getAttachment : function(attachment_id) { //récupère les attachments et les lie aux CMailAttachment (création des CFile)
+  getAttachment:function (attachment_id) { //récupère les attachments et les lie aux CMailAttachment (création des CFile)
     var url = new Url("messagerie", "pop_attachment_to_cfile");
-    url.addParam("attachment_id",attachment_id);
-    url.requestUpdate("systemMsg", function() {
+    url.addParam("attachment_id", attachment_id);
+    url.requestUpdate("systemMsg", function () {
       messagerie.url.refreshModal();
     });
-},
+  },
   /**
    * Toggle a list of checkbox
    *
@@ -71,21 +72,21 @@ messagerie = {
    * @param status
    * @param item_class
    */
-  toggleSelect: function(table_id, status, item_class) {
+  toggleSelect: function (table_id, status, item_class) {
     var table = $(table_id);
-      table.select("input[name="+item_class+"]").each(function(elt) {
-        elt.checked = status ? "checked" : "";
-      });
+    table.select("input[name=" + item_class + "]").each(function (elt) {
+      elt.checked = status ? "checked" : "";
+    });
   },
 
   /**
    * Link a list of attachment to a folder.
    */
-  linkAttachment : function(mail_id) {
-    var url = new Url("messagerie","ajax_link_attachments");
+  linkAttachment:function (mail_id) {
+    var url = new Url("messagerie", "ajax_link_attachments");
+    url.addParam("mail_id", mail_id);
     url.requestModal();
     //var selected = table.select("input[name='attach_item']:checked");
 
   }
-
-}
+};
