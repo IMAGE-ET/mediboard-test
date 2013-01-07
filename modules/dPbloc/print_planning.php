@@ -18,7 +18,7 @@ $filter->_date_max     = CValue::get("_date_max", $now);
 $filter->_prat_id      = CValue::getOrSession("_prat_id");
 $filter->salle_id      = CValue::getOrSession("salle_id");
 $filter->_plage        = CValue::getOrSession("_plage", CAppUI::conf("dPbloc CPlageOp plage_vide"));
-$filter->_intervention = CValue::getOrSession("_intervention");
+$filter->_ranking      = CValue::getOrSession("_ranking");
 $filter->_specialite   = CValue::getOrSession("_specialite");
 $filter->_codes_ccam   = CValue::getOrSession("_codes_ccam");
 $filter->_ccam_libelle = CValue::getOrSession("_ccam_libelle", CAppUI::conf("dPbloc CPlageOp libelle_ccam"));
@@ -44,9 +44,9 @@ $listSpec = new CFunctions();
 $listSpec = $listSpec->loadSpecialites(PERM_READ, 1);
 
 $bloc = new CBlocOperatoire();
-$g = CGroups::loadCurrent();
+$group = CGroups::loadCurrent();
 $where = array();
-$where["group_id"] = "= '$g->_id'";
+$where["group_id"] = "= '$group->_id'";
 $listBlocs = $bloc->loadListWithPerms(PERM_READ, $where, "nom");
 foreach($listBlocs as &$bloc) {
   $bloc->loadRefsSalles();

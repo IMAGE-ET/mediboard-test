@@ -1,53 +1,50 @@
 <!-- $Id$ -->
-{{mb_script module="dPplanningOp" script="ccam_selector"}}
+{{mb_script module=planningOp script=ccam_selector}}
 
 
 <script type="text/javascript">
-function checkFormPrint() {
-  var form = document.paramFrm;
-    
-  if(!(checkForm(form))){
+function checkPrint(form) {
+  if (!checkForm(form)) {
     return false;
   }
   
-  popPlanning();
+  popPrint(form);
 }
 
   
-function popPlanning() {
-  form = document.paramFrm;
-  var url = new Url;
-  url.setModuleAction("dPpmsi", "print_planning");
+function popPrint(form) {
+  var url = new Url('pmsi', 'print_planning');
   url.addElement(form._date_min);
   url.addElement(form._date_max);
-  url.addParam("_plage", $V(form._plage));
   url.addElement(form._codes_ccam);
-  url.addElement(form._intervention);
   url.addElement(form._prat_id);
   url.addElement(form._specialite);
   url.addElement(form.salle_id);
   url.addElement(form.type);
-  url.addParam("_ccam_libelle", $V(form._ccam_libelle));
+  url.addRadio(form._plage);
+  url.addRadio(form._ranking);
+  url.addRadio(form._cotation);
+  url.addRadio(form._ccam_libelle);
   url.popup(900, 550, 'Planning');
 }
 
-function changeDate(sDebut, sFin){
-  var oForm = document.paramFrm;
-  oForm._date_min.value = sDebut;
-  oForm._date_max.value = sFin;
-  oForm_date_min_da.value = Date.fromDATE(sDebut).toLocaleDate();
-  oForm_date_max_da.value = Date.fromDATE(sFin).toLocaleDate();  
+function changeDate(input, sMin, sMax){
+  var form = input.form;
+  form._date_min.value = sMin;
+  form._date_max.value = sMax;
+  form._date_min_da.value = Date.fromDATE(sMin).toLocaleDate();
+  form._date_max_da.value = Date.fromDATE(sMax).toLocaleDate();  
 }
 
-function changeDateCal(){
-  var oForm = document.paramFrm;
-  oForm.select_days[0].checked = false;
-  oForm.select_days[1].checked = false;
+function changeDateCal(input) {
+  var form = input.form;
+  form.select_days[0].checked = false;
+  form.select_days[1].checked = false;
 }
 </script>
 
 
-<form name="paramFrm" action="?m=dPpmsi" method="post" onsubmit="return checkFormPrint()">
+<form name="paramFrm" action="?m=pmsi" method="post" onsubmit="return checkPrint(this)">
 <input type="hidden" name="_class" value="COperation" />
 <input type="hidden" name="_chir" value="{{$chir}}" />
 <table class="main">
@@ -59,18 +56,18 @@ function changeDateCal(){
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_date_min"}}</th>
-          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
+          <td>{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal(this)" register=true}} </td>
           <td rowspan="2">
-            <input type="radio" name="select_days" onclick="changeDate('{{$yesterday}}','{{$yesterday}}');" value="yesterday" /> 
+            <input type="radio" name="select_days" onclick="changeDate(this, '{{$yesterday}}','{{$yesterday}}');" value="yesterday" /> 
             <label for="select_days_yesterday">Jour précédent</label>
             <br />
-            <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
+            <input type="radio" name="select_days" onclick="changeDate(this, '{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
             <label for="select_days_day">Jour courant</label>
           </td>
         </tr>
         <tr>
            <th>{{mb_label object=$filter field="_date_max"}}</th>
-           <td>{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()" register=true}} </td>
+           <td>{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal(this)" register=true}} </td>
         </tr>
       </table>
 
@@ -79,52 +76,49 @@ function changeDateCal(){
 
       <table class="form">
         <tr>
-          <th class="category" colspan="2">Choix des paramètres de tri</th>
+          <th class="category" colspan="2">Choix des filtres</th>
         </tr>
+        
         <tr>
-          <th>{{mb_label object=$filter field="_intervention"}}</th>
-          <td><select name="_intervention">
-            <option value="0">&mdash; Toutes les interventions &mdash;</option>
-            <option value="1">insérées dans le planning</option>
-            <option value="2">à insérer dans le planning</option>
-          </select></td>
+          <th>{{mb_label object=$filter field=_ranking}}</th>
+          <td>{{mb_field object=$filter field=_ranking emptyLabel=All typeEnum=radio}}</td>
         </tr>
+        
+        <tr>
+          <th>{{mb_label object=$filter field=_cotation}}</th>
+          <td>{{mb_field object=$filter field=_cotation emptyLabel=All typeEnum=radio}}</td>
+        </tr>
+
         <tr>
           <th>{{mb_label object=$filter field="_prat_id"}}</th>
           <td>
             <select name="_prat_id">
-              <option value="0">&mdash; Tous les praticiens &mdash;</option>
-              {{foreach from=$listPrat item=curr_prat}}
-                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" >
-                  {{$curr_prat->_view}}
-                </option>
-              {{/foreach}}
+              <option value="0">&mdash; Tous</option>
+              {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat}}
             </select>
           </td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$filter field="_specialite"}}</th>
           <td>
             <select name="_specialite">
-              <option value="0">&mdash; Toutes les spécialités &mdash;</option>
-              {{foreach from=$listSpec item=curr_spec}}
-                <option value="{{$curr_spec->function_id}}" class="mediuser" style="border-color: #{{$curr_spec->color}};">
-                  {{$curr_spec->text}}
-                </option>
-              {{/foreach}}
+              <option value="0">&mdash; Toutes</option>
+              {{mb_include module=mediusers template=inc_options_function list=$listSpec}}
             </select>
           </td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$filter field="salle_id"}}</th>
           <td>
             <select name="salle_id">
-              <option value="0">&mdash; {{tr}}CSalle.all{{/tr}}</option>
-              {{foreach from=$listBlocs item=curr_bloc}}
-              <optgroup label="{{$curr_bloc->nom}}">
-                {{foreach from=$curr_bloc->_ref_salles item=curr_salle}}
-                <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
-                  {{$curr_salle->nom}}
+              <option value="0">&mdash; Toutes</option>
+              {{foreach from=$listBlocs item=_bloc}}
+              <optgroup label="{{$_bloc}}">
+                {{foreach from=$_bloc->_ref_salles item=_salle}}
+                <option value="{{$_salle->_id}}" {{if $_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
+                  {{$_salle}}
                 </option>
                 {{foreachelse}}
                 <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>
@@ -134,31 +128,33 @@ function changeDateCal(){
             </select>
           </td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$filterSejour field="type"}}</th>
           <td>{{mb_field object=$filterSejour field="type" canNull=true emptyLabel="All"}}</td>
         </tr>
-           <tr>
+        
+        <tr>
           <th>{{mb_label object=$filter field="_codes_ccam"}}</th>
           <td><input type="text" name="_codes_ccam" size="10" value="" />
           <button type="button" class="search" onclick="CCAMSelector.init()">sélectionner un code</button>
           <script type="text/javascript">
             CCAMSelector.init = function(){
-              this.sForm  = "paramFrm";
-              this.sClass = "_class";
-              this.sChir  = "_chir";
-              this.sView  = "_codes_ccam";
+              this.sForm  = 'paramFrm';
+              this.sClass = '_class';
+              this.sChir  = '_chir';
+              this.sView  = '_codes_ccam';
               this.pop();
             }
             Main.add(function() {
-              var oForm = getForm("paramFrm");
-              var url = new Url("dPccam", "httpreq_do_ccam_autocomplete");
+              var oForm = getForm('paramFrm');
+              var url = new Url('ccam', 'httpreq_do_ccam_autocomplete');
               url.autoComplete(oForm._codes_ccam, '', {
                 minChars: 1,
                 dropdown: true,
-                width: "250px",
+                width: '250px',
                 updateElement: function(selected) {
-                  $V(oForm._codes_ccam, selected.down("strong").innerHTML);
+                  $V(oForm._codes_ccam, selected.down('strong').innerHTML);
                 }
               });
             });
@@ -182,20 +178,20 @@ function changeDateCal(){
           <th style="width: 50%">{{mb_label object=$filter field="_plage"}}</th>
           <td>  
             {{assign var="var" value="plage_vide"}}
-      <label for="_plage">Oui</label>
-      <input type="radio" name="_plage" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="_plage">Non</label>
-      <input type="radio" name="_plage" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked="checked"{{/if}}/> 
+            <label for="_plage">Oui</label>
+            <input type="radio" name="_plage" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked="checked"{{/if}}/> 
+            <label for="_plage">Non</label>
+            <input type="radio" name="_plage" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked="checked"{{/if}}/> 
           </td>
         </tr>
          <tr>
           <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
           <td>  
             {{assign var="var" value="libelle_ccam"}}
-      <label for="_ccam_libelle">Oui</label>
-      <input type="radio" name="_ccam_libelle" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="_ccam_libelle">Non</label>
-      <input type="radio" name="_ccam_libelle" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked="checked"{{/if}}/> 
+            <label for="_ccam_libelle">Oui</label>
+            <input type="radio" name="_ccam_libelle" value="1" {{if $conf.dPbloc.$class.$var == "1"}}checked="checked"{{/if}}/> 
+            <label for="_ccam_libelle">Non</label>
+            <input type="radio" name="_ccam_libelle" value="0" {{if $conf.dPbloc.$class.$var == "0"}}checked="checked"{{/if}}/> 
           </td>
         </tr>
       </table>
@@ -203,7 +199,7 @@ function changeDateCal(){
   </tr>
   <tr>
     <td colspan="2">
-      <table class="form"><tr><td class="button"><button class="print" type="button" onclick="checkFormPrint()">Afficher</button></td></tr></table>
+      <table class="form"><tr><td class="button"><button class="print" type="button" onclick="checkPrint(this.form)">Afficher</button></td></tr></table>
     </td>
   </tr>
 </table>

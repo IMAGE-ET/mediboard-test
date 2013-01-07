@@ -23,22 +23,24 @@ function popPlanning(form) {
   var url = new Url("bloc", "view_planning");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
-  url.addParam("_plage", $V(form._plage));
   url.addElement(form._codes_ccam);
   url.addElement(form.exam_extempo);
-  url.addParam("_intervention", $V(form._intervention));
   url.addElement(form._prat_id);
   url.addElement(form._specialite);
-  url.addParam("_bloc_id[]", $V(form.elements["_bloc_id[]"]), true);
   url.addElement(form.salle_id);
   url.addElement(form.type);
-  url.addParam("_ccam_libelle"  , $V(form._ccam_libelle));
-  url.addParam("_coordonnees"   , $V(form._coordonnees));
-  url.addParam("_print_numdoss" , $V(form._print_numdoss));
-  url.addParam("_print_annulees", $V(form._print_annulees));
+  url.addRadio(form._coordonnees);
+  url.addRadio(form._print_numdoss);
+  url.addRadio(form._print_annulees);
+  url.addRadio(form._plage);
+  url.addRadio(form._ranking);
+  url.addRadio(form._ccam_libelle);
+  url.addParam("_bloc_id[]", $V(form.elements["_bloc_id[]"]), true);
+  
   if (form.planning_perso.checked){ // pour l'affichage du planning perso d'un anesthesiste
     url.addParam("planning_perso", true);
   }
+  
   url.popup(900, 550, 'Planning');
 }
 
@@ -57,9 +59,9 @@ function printFullPlanning(form) {
   var url = new Url("bloc", "print_full_planning");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
+  url.addRadio(form._ranking);
   url.addParam("_bloc_id[]", $V(form.elements["_bloc_id[]"]), true);
   console.log(url);
-  url.addParam("_intervention", $V(form._intervention));
   url.popup(900, 550, 'Planning');
 }
 
@@ -158,15 +160,8 @@ function showCheckboxAnesth(element){
           <th class="category" colspan="3">Types d'intervention</th>
         </tr>
         <tr class="not-full">
-          <th>{{mb_label object=$filter field="_intervention"}}</th>
-          <td colspan="2">
-            <input type="radio" name="_intervention" value="0" checked="checked" />
-            <label for="_intervention_0">Toutes</label>
-            <input type="radio" name="_intervention" value="1" />
-            <label for="_intervention_1">Validées</label>
-            <input type="radio" name="_intervention" value="2" />
-            <label for="_intervention_2">Non validées (NP)</label>
-          </td>
+          <th>{{mb_label object=$filter field=_ranking}}</th>
+          <td colspan="2">{{mb_field object=$filter field=_ranking emptyLabel=All typeEnum=radio}}</td>
         </tr>
         <tr class="not-full">
           <th>{{mb_label object=$filterSejour field="type"}}</th>

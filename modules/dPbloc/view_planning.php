@@ -20,7 +20,7 @@ $filter->_prat_id        = CValue::get("_prat_id");
 $filter->_bloc_id        = CValue::get("_bloc_id");
 $filter->salle_id        = CValue::get("salle_id");
 $filter->_plage          = CValue::get("_plage", CAppUI::conf("dPbloc CPlageOp plage_vide"));
-$filter->_intervention   = CValue::get("_intervention");
+$filter->_ranking        = CValue::get("_ranking");
 $filter->_specialite     = CValue::get("_specialite");
 $filter->_codes_ccam     = CValue::get("_codes_ccam");
 $filter->exam_extempo    = CValue::get("exam_extempo");
@@ -142,10 +142,11 @@ if (!$_print_annulees) {
   $whereOperations["operations.annulee"] = "= '0'";
 }
 
-switch ($filter->_intervention) {
-  case "1" : $where["operations.rank"] = "!= '0'"; break;
-  case "2" : $where["operations.rank"] = "= '0'"; break;
+switch ($filter->_ranking) {
+  case "ok" : $where["operations.rank"] = "!= '0'"; break;
+  case "ko" : $where["operations.rank"] = "= '0'"; break;
 }
+
 if ($filter->_codes_ccam) {
   $where["operations.codes_ccam"]           = "LIKE '%$filter->_codes_ccam%'";
   $whereOperations["operations.codes_ccam"] = "LIKE '%$filter->_codes_ccam%'";

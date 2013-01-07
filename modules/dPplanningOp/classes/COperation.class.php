@@ -183,7 +183,8 @@ class COperation extends CCodable implements IPatientRelated {
   var $_date_max      = null;
   var $_plage         = null;
   var $_service       = null;
-  var $_intervention  = null;
+  var $_ranking       = null;
+  var $_cotation      = null;
   var $_specialite    = null;
   var $_scodes_ccam   = null;
   var $_prat_id       = null;
@@ -323,8 +324,11 @@ class COperation extends CCodable implements IPatientRelated {
     $props["_date_min"]               = "date";
     $props["_date_max"]               = "date moreEquals|_date_min";
     $props["_plage"]                  = "bool";
-    $props["_intervention"]           = "text";
-    $props["_prat_id"]                = "text";
+
+    $props["_ranking"]                = "enum list|ok|ko";
+    $props["_cotation"]               = "enum list|ok|ko";
+    
+    $props["_prat_id"]                = "text"; // ?? misdefined
     $props["_patient_id"]             = "ref class|CPatient show|1";
     $props["_bloc_id"]                = "ref class|CBlocOperatoire";
     $props["_specialite"]             = "text";
