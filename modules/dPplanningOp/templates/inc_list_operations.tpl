@@ -48,7 +48,7 @@
   
   {{foreach from=$listDay item=curr_plage}}
   <tr>
-    <th colspan="3">
+    <th colspan="3" class="section">
       {{$curr_plage->_ref_salle->_view}} : 
       de {{$curr_plage->debut|date_format:$conf.time}} 
       à {{$curr_plage->fin|date_format:$conf.time}}
@@ -185,7 +185,7 @@
   
   {{if $listUrgences|@count}}
   <tr>
-    <th colspan="10">Hors plage</th>
+    <th colspan="10" class="section">Hors plage</th>
   </tr>
   {{/if}}
   
