@@ -110,6 +110,7 @@ if (!$source_mllp->_id) {
   $now  = mbTransformTime(null, null, "%Y%m%d%H%M%S");
   $ACK  = "MSH|^~\&|".CAppUI::conf("hl7 sending_application")."|".CAppUI::conf("hl7 sending_facility").
           "|||$now||ACK|$now|P|2.5||||||".CHL7v2TableEntry::mapTo("211", CApp::$encoding);
+  $ACK .= "\r"."MSA|AR|$now";
   $ACK .= "\r"."ERR||0^0|207|E|E200^Acteur inconnu|||||||";
     
   ob_clean();
