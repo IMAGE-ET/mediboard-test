@@ -73,7 +73,7 @@ foreach ($receivers as $_receiver) {
 
 $patients = array();
 if ($ack_data) {
-  $ack_event = new CHL7v2EventPDQK22();
+  $ack_event = new CHL7v2EventQBPK22();
   $patients  = $ack_event->handle($ack_data)->handle();
 }
 
