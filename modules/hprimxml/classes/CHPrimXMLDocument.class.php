@@ -1112,14 +1112,28 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     // Diagnostics RUM
     $diagnosticsRum = $this->addElement($elParent, "diagnosticsRum");
-    $diagnosticPrincipal = $this->addElement($diagnosticsRum, "diagnosticPrincipal");
-    $this->addElement($diagnosticPrincipal, "codeCim10", strtoupper($mbSejour->DP));
-    if ($mbSejour->DR) {
-      $diagnosticRelie = $this->addElement($diagnosticsRum, "diagnosticRelie");
-      $this->addElement($diagnosticRelie, "codeCim10", strtoupper($mbSejour->DR));
+    if (!CAppUI::conf("hprimxml send_only_das_diags")) {
+      $diagnosticPrincipal = $this->addElement($diagnosticsRum, "diagnosticPrincipal");
+      $this->addElement($diagnosticPrincipal, "codeCim10", strtoupper($mbSejour->DP));
+      if ($mbSejour->DR) {
+        $diagnosticRelie = $this->addElement($diagnosticsRum, "diagnosticRelie");
+        $this->addElement($diagnosticRelie, "codeCim10", strtoupper($mbSejour->DR));
+      }
     }
+
     if (count($mbSejour->_ref_dossier_medical->_codes_cim)) {
       $diagnosticsSignificatifs = $this->addElement($diagnosticsRum, "diagnosticsSignificatifs");
+      // Dans le cas où l'on envoie tous les diagnostics en DAS
+      if (CAppUI::conf("hprimxml send_only_das_diags")) {
+        if ($mbSejour->DP) {
+          $diagnosticSignificatif = $this->addElement($diagnosticsSignificatifs, "diagnosticSignificatif");
+          $this->addElement($diagnosticSignificatif, "codeCim10", strtoupper($mbSejour->DP));
+        }
+        if ($mbSejour->DR) {
+          $diagnosticSignificatif = $this->addElement($diagnosticsSignificatifs, "diagnosticSignificatif");
+          $this->addElement($diagnosticSignificatif, "codeCim10", strtoupper($mbSejour->DR));
+        }
+      }
       foreach ($mbSejour->_ref_dossier_medical->_codes_cim as $curr_code) {
         $diagnosticSignificatif = $this->addElement($diagnosticsSignificatifs, "diagnosticSignificatif");
         $this->addElement($diagnosticSignificatif, "codeCim10", strtoupper($curr_code));
@@ -1249,14 +1263,16 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
   
   function addDiagnosticsEtat($elParent, CSejour $mbSejour) {
-    $this->addDiagnosticEtat($elParent, strtoupper($mbSejour->DP), "dp");
+    $send_only_das_diags = CAppUI::conf("hprimxml send_only_das_diags");
+    $this->addDiagnosticEtat($elParent, strtoupper($mbSejour->DP), $send_only_das_diags ? "ds" : "dp");
     if ($mbSejour->DR) {
-      $this->addDiagnosticEtat($elParent, strtoupper($mbSejour->DR), "dr");
+      $this->addDiagnosticEtat($elParent, strtoupper($mbSejour->DR), $send_only_das_diags ? "ds" : "dr");
     }
-    
+
     $mbSejour->loadRefDossierMedical();
-    if (count($mbSejour->_ref_dossier_medical->_codes_cim)) {
-      foreach($mbSejour->_ref_dossier_medical->_codes_cim as $_diag_significatif) {
+    $codes_cim = $mbSejour->_ref_dossier_medical->_codes_cim;
+    if (count($codes_cim)) {
+      foreach($codes_cim as $_diag_significatif) {
         $this->addDiagnosticEtat($elParent, strtoupper($_diag_significatif), "ds");
       }
     }

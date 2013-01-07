@@ -30,6 +30,7 @@
     {{mb_include module=system template=inc_config_enum var=send_diagnostic values=evt_pmsi|evt_serveuretatspatient}}
     {{mb_include module=system template=inc_config_bool var=send_actes_ngap}}
     {{mb_include module=system template=inc_config_str  var=actes_ngap_excludes}}
+    {{mb_include module=system template=inc_config_bool var=send_only_das_diags}}
     
     <tr>
       <td class="button" colspan="10">

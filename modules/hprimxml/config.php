@@ -55,7 +55,8 @@ $dPconfig["hprimxml"] = array (
   "send_diagnostic"            => "evt_pmsi",
   "send_actes_ngap"            => "0",
   "actes_ngap_excludes"        => "",
-  "tag_default"                => ""
+  "tag_default"                => "",
+  "send_only_das_diags"        => "0"
 );
 
 
