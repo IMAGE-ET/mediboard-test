@@ -201,7 +201,8 @@ var Url = Class.create({
 
   /**
    * Add element value to the parameters
-   *
+   * Won't work with radio button, use addRadio() instead
+   * 
    * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement} oElement The element to add to the data
    * @param {String}      sParamName The parameter name
    *
@@ -221,6 +222,27 @@ var Url = Class.create({
   
     return this.addParam(sParamName, value);
   },
+
+  /**
+   * Add radio button value to the parameters
+   *
+   * @param {NodeList} oButtons   The buttons
+   * @param {String}   sParamName The parameter name
+   *
+   * @return {Url}
+   */
+  addRadio: function(oButtons, sParamName) {
+    if (!oButtons) return this;
+  
+    if (!sParamName) {
+      sParamName = oButtons[0].name;
+    }
+    
+    var value = $V(oButtons);
+  
+    return this.addParam(sParamName, value);
+  },
+
 
   /**
    * Build an URL string
