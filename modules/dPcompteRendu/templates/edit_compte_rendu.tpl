@@ -161,8 +161,9 @@ function refreshZones(id, obj) {
 
 function openWindowMail() {
   {{if $exchange_source->_id}}
+    var form = getForm("editFrm");
     var url = new Url("dPcompteRendu", "ajax_view_mail");
-    url.addParam("object_guid", '{{$compte_rendu->_guid}}');
+    url.addParam("object_guid", "CCompteRendu-"+$V(form.compte_rendu_id));
     url.requestModal(700, 320);
   {{else}}
     alert("Veuillez paramétrer votre compte mail (source smtp dans les préférences utilisateur).");
