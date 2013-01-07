@@ -75,8 +75,7 @@ class CSourceMLLP extends CExchangeSource {
     if (!$this->_socket_client) {
       throw new CMbException("CSourceMLLP-unreachable-source", $this->name);
     }
-    mbLog($errno);
-    mbLog($errstr);
+
     stream_set_blocking($this->_socket_client, 0);
     
     return $this->_socket_client;
