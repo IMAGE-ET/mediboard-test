@@ -2,13 +2,13 @@
 {{assign var=patient value=$_consult->_ref_patient}}
   
 {{if !$patient->_id}}
-  {{assign var="style" value="background: #ffa;"}}          
+  {{assign var="style" value="background-color: #ffa;"}}          
 {{elseif $_consult->premiere}} 
-  {{assign var="style" value="background: #faa;"}}          
+  {{assign var="style" value="background-color: #faa;"}}          
 {{elseif $_consult->derniere}} 
-  {{assign var="style" value="background: #faf;"}}
+  {{assign var="style" value="background-color: #faf;"}}
 {{elseif $_consult->_ref_sejour->_id}} 
-  {{assign var="style" value="background: #cfa;"}}
+  {{assign var="style" value="background-color: #cfa;"}}
 {{else}} 
   {{assign var="style" value=""}}
 {{/if}}
@@ -22,9 +22,9 @@
 
 <tbody class="hoverable">
 
-<tr class="{{if $_consult->_id == $consult->_id}}selected{{/if}}{{if $_consult->chrono == $_consult|const:'TERMINE'}} hatching{{/if}}">
+<tr class="{{if $_consult->_id == $consult->_id}}selected{{/if}}">
   {{assign var=categorie value=$_consult->_ref_categorie}}
-  <td {{if $_consult->annule}}class="cancelled"{{/if}} style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} class="text">
+  <td class="{{if $_consult->annule}}cancelled{{/if}} {{if $_consult->chrono == $_consult|const:'TERMINE'}}hatching{{/if}}" style="{{if $_consult->_id != $consult->_id}}{{$style}}{{/if}}" {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} class="text">
     {{if $destinations && !@$offline && $mode_vue == "horizontal"}}
       <form name="ChangePlage-{{$_consult->_guid}}" action="?m={{$current_m}}" method="post">
         
