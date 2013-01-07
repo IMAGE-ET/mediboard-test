@@ -1466,6 +1466,7 @@ $locales['mod-dPcabinet-tab-ajax_edit_bvr'] = 'Edition de facture';
 $locales['mod-dPcabinet-tab-ajax_edit_justificatif'] = 'Edition de justificatifs de remboursement';
 $locales['mod-dPcabinet-tab-ajax_refresh_reglement'] = 'Rafraîchissement des règlements';
 $locales['mod-dPcabinet-tab-ajax_short_consult'] = 'Consultation immédiate';
+$locales['mod-dPcabinet-tab-ajax_total_cotation'] = 'Totaux des cotations';
 $locales['mod-dPcabinet-tab-ajax_view_facture'] = 'Voir une facture';
 $locales['mod-dPcabinet-tab-configure'] = 'Configuration';
 $locales['mod-dPcabinet-tab-edit_consultation'] = 'Consultation';

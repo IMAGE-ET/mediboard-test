@@ -97,6 +97,15 @@ sendBill = function() {
     url.popup(1000, 600);
   }
 }
+
+viewTotaux = function() {
+  var oForm = getForm("printFrm");
+  var url = new Url("dPcabinet", "ajax_total_cotation");
+  url.addParam("chir_id", $V(oForm.chir));
+  url.addParam('date_min', $V(oForm._date_min));
+  url.addParam('date_max', $V(oForm._date_max));
+  url.popup(1000, 600);
+}
 </script>
 
 {{if count($listPrat)}}
@@ -320,6 +329,17 @@ sendBill = function() {
           <td class="button" colspan="2">
             <button type="button" class="search" onclick="viewActes();">Validation paiements</button>
           </td>
+        </tr>
+        <tr>
+          <th class="category" colspan="4">
+            Totaux
+          </th>
+        </tr>
+        <tr>
+          <td colspan="2" class="button">
+            <button type="button" class="search" onclick="viewTotaux();">Totaux des cotations</button>
+          </td>
+          <td colspan="2"></td>
         </tr>
       </table>
       </form>
