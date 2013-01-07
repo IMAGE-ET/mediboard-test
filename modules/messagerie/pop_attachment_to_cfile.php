@@ -20,13 +20,11 @@ $log_pop->loadMatchingObject();
 
 //load attachment
 $attachment = new CMailAttachments();
-$attachment->_id = $attachment_id;
-$attachment->loadMatchingObject();
+$attachment->load($attachment_id);
 
 //load email
 $mail = new CUserMail();
-$mail->_id = $attachment->mail_id;
-$mail->loadMatchingObject();
+$mail->load($attachment->mail_id);
 
 //CFile
 $file = new CFile();

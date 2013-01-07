@@ -20,6 +20,8 @@
 
 <div>
 <button class="button change" onclick="messagerie.getLastMessages({{$user->_id}});">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
+<button class="button mail" onclick="messagerie.modalwriteMessage();">{{tr}}CUserMAil-button-writeMail{{/tr}}</button>
+
   <select style="width: 50px;" name="action">
     <option va>{{tr}}CUserMail-option-More{{/tr}}</option>
     <option value="">{{tr}}CUserMail-option-allmarkasread{{/tr}}</option>

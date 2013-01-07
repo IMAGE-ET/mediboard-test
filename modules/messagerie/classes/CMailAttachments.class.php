@@ -24,7 +24,7 @@ class CMailAttachments extends CMbObject{
   var $bytes        = null;
   var $disposition  = null;
   var $part         = null;
-  var $linked       = null;
+  var $linked       = null; //Cfile id
 
   var $name         = null;
   var $extension    = null;

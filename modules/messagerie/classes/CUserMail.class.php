@@ -20,7 +20,7 @@ class CUserMail extends CMbObject{
   //headers
   var $subject        = null;  //subject of the mail
   var $from           = null;  //who sent it
-  var $_from           = null; //who sent it, readable
+  var $_from          = null; //who sent it, readable
   var $to             = null;  //complete recipient
   var $_to            = null;  //recipient readable
   var $date_inbox     = null;  //sent date

@@ -81,7 +81,10 @@ messagerie = {
   /**
    * Link a list of attachment to a folder.
    */
-  linkSelectedAttachment : function() {
+  linkAttachment : function(mail_id) {
+    var url = new Url("messagerie","ajax_link_attachments");
+    url.requestModal();
+    //var selected = table.select("input[name='attach_item']:checked");
 
   }
 

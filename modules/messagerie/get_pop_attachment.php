@@ -28,8 +28,7 @@ if (!$mail_id) {
 }
 
 $mail = new CUserMail();
-$mail->_id = $mail_id;
-$mail->loadMatchingObject();
+$mail->load($mail_id);
 
 if ($mail->_id) {
   $pop = new CPop($log_pop);

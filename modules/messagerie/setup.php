@@ -100,8 +100,10 @@ class CSetupmessagerie extends CSetup {
     $this->makeRevision("0.17");
     $this->addPrefQuery("LinkAttachment", 1);
 
+    $this->makeRevision("0.18");
+    $this->addPrefQuery("showImgInMail", 0);
 
-    $this->mod_version = "0.18";
+    $this->mod_version = "0.19";
 
   }
 }
