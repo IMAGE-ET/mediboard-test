@@ -22,6 +22,9 @@
     <th>{{mb_title class=CSejour      field=sortie}}</th>
     <th>{{mb_title class=CSejour      field=patient_id}}</th>
     <th>{{mb_title class=CSejour      field=libelle}}</th>
+    {{if $praticien->_is_anesth}}
+      <th>{{mb_title class=CSejour      field=praticien_id}}</th>
+    {{/if}}
   </tr>
   {{foreach from=$listSejours item=curr_sejour}}
   <tr>
@@ -56,6 +59,11 @@
         </span>
       </a>
     </td>
+    {{if $praticien->_is_anesth}}
+      <td class="text">
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_sejour->_ref_praticien}}
+      </td>
+    {{/if}}
   </tr>
   {{/foreach}}        
 </table>

@@ -54,6 +54,7 @@ foreach($listSejours as &$_sejour) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("date"       , $date);
+$smarty->assign("praticien"  , $praticien);
 $smarty->assign("listSejours", $listSejours);
 
 $smarty->display("inc_vw_hospi.tpl");
