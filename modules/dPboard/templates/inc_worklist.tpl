@@ -12,7 +12,10 @@ updateNbPrescriptions = function(nb) {
 }
 
 updateActes = function() {
-  return false;
+  var url = new Url("board", "ajax_list_interv_non_cotees");
+  url.addParam("praticien_id", "{{$chirSel}}");
+  url.addParam("board"       , "1");
+  url.requestUpdate("actes_non_cotes");
 }
 
 updateNbActes = function() {
@@ -29,8 +32,8 @@ Main.add(function () {
 
 
 <ul id="tab-worklist" class="control_tabs">
-  <li><a href="#prescriptions_non_signees">Prescriptions <span id=nb_prescriptions></span></a></li>
-  <li style="display: none;"><a href="#actes_non_cotes">Actes</a></li>
+  <li><a href="#prescriptions_non_signees">Prescriptions <span id="nb_prescriptions"></span></a></li>
+  <li><a href="#actes_non_cotes">Actes <span id="nb_actes"></span></a></li>
 </ul>
 
 <div id="prescriptions_non_signees">
