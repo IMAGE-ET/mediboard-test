@@ -14,11 +14,31 @@
  * Message XML HL7
  */
 class CHL7v2MessageXML extends CMbXMLDocument {
+  /**
+   * @var CExchangeIHE
+   */
   var $_ref_exchange_ihe = null;
+  /**
+   * @var CInteropSender
+   */
   var $_ref_sender       = null;
+  /**
+   * @var CInteropReceiver
+   */
   var $_ref_receiver     = null;
+  /**
+   * @var string
+   */
   var $_is_i18n          = null;
-  
+
+  /**
+   * Get event
+   *
+   * @param string $event_name Event name
+   * @param string $encoding   Encoding
+   *
+   * @return CHL7v2ChangePatientIdentifierList|CHL7v2GeneratePatientDemographicsResponse|CHL7v2MergePersons|CHL7v2MessageXML|CHL7v2ReceivePatientDemographicsResponse|CHL7v2RecordAdmit|CHL7v2RecordAppointment|CHL7v2RecordObservationResultSet|CHL7v2RecordPerson
+   */
   static function getEventType($event_name = null, $encoding = "utf-8") {
     if (!$event_name) {
       return new CHL7v2MessageXML($encoding);
@@ -61,29 +81,66 @@ class CHL7v2MessageXML extends CMbXMLDocument {
 
     // Récupération des résultats du PDQ
     if ($event_type == "CHL7v2EventQBP") {
-      return new CHL7v2GeneratePatientDemographicsResponse($encoding);
+      // Analyse d'une réponse reçu après une requête
+      if (CMbArray::in($event_code, CHL7v2ReceivePatientDemographicsResponse::$event_codes)) {
+        return new CHL7v2ReceivePatientDemographicsResponse($encoding);
+      }
+
+      // Produire une réponse sur une requête
+      if (CMbArray::in($event_code, CHL7v2GeneratePatientDemographicsResponse::$event_codes)) {
+        return new CHL7v2GeneratePatientDemographicsResponse($encoding);
+      }
     }
     
     return new CHL7v2MessageXML($encoding);
-  }
-  
+}
+
+  /**
+   * Construct
+   *
+   * @param string $encoding Encoding
+   *
+   * @return \CHL7v2MessageXML
+   */
   function __construct($encoding = "utf-8") {
     parent::__construct($encoding);
 
     $this->formatOutput = true;
-  }
-  
+}
+
+  /**
+   * Add namespaces
+   *
+   * @param string $name Schema
+   *
+   * @return void
+   */
   function addNameSpaces($name) {
     // Ajout des namespace pour XML Spy
     $this->addAttribute($this->documentElement, "xmlns", "urn:hl7-org:v2xml");
     $this->addAttribute($this->documentElement, "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
     $this->addAttribute($this->documentElement, "xsi:schemaLocation", "urn:hl7-org:v2xml $name.xsd");
-  }
-  
+}
+
+  /**
+   * Add element
+   *
+   * @param string $elParent
+   * @param string $elName
+   * @param string $elValue
+   * @param string $elNS
+   *
+   * @return mixed
+   */
   function addElement($elParent, $elName, $elValue = null, $elNS = "urn:hl7-org:v2xml") {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
-  }
-  
+}
+
+  /**
+   * @param         $nodeName
+   * @param DOMNode $contextNode
+   * @return DOMNodeList
+   */
   function query($nodeName, DOMNode $contextNode = null) {
     $xpath = new CHL7v2MessageXPath($contextNode ? $contextNode->ownerDocument : $this);   
     
@@ -109,7 +166,14 @@ class CHL7v2MessageXML extends CMbXMLDocument {
         
     return $data[$nodeName] = $xpath->queryUniqueNode($root ? "//$nodeName" : "$nodeName", $contextNode);
   }
-  
+
+  /**
+   * @param         $nodeName
+   * @param DOMNode $contextNode
+   * @param null    $data
+   * @param bool    $root
+   * @return DOMNodeList
+   */
   function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {
     $nodeList = $this->query("$nodeName", $contextNode);
     foreach ($nodeList as $_node) {
@@ -117,15 +181,25 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     }
     
     return $nodeList;
-  }
-  
+}
+
+  /**
+   * @param         $nodeName
+   * @param DOMNode $contextNode
+   * @param bool    $root
+   * @return string
+   */
   function queryTextNode($nodeName, DOMNode $contextNode, $root = false) {
     $xpath = new CHL7v2MessageXPath($contextNode ? $contextNode->ownerDocument : $this);   
     
     return $xpath->queryTextNode($nodeName, $contextNode);
-  }
-  
-  function getSegment($name, $data, $object) {
+}
+
+  /**
+   * @param $name
+   * @param $data
+   * @param $object
+   */function getSegment($name, $data, $object) {
     if (!array_key_exists($name, $data) || $data[$name] === null) {
       return;
     }
@@ -133,8 +207,11 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $function = "get$name";
     
     $this->$function($data[$name], $object);
-  }
-  
+}
+
+  /**
+   * @return array
+   */
   function getMSHEvenementXML() {
     $data = array();
     
@@ -144,8 +221,12 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $data['identifiantMessage']  = $this->queryTextNode("MSH.10", $MSH);
     
     return $data;
-  }
-  
+}
+
+  /**
+   * @param DOMNode $node
+   * @param         $data
+   */
   function getPIIdentifier(DOMNode $node, &$data) {
     if (CHL7v2Message::$handle_mode == "simple") {
       $data["PI"] = $this->queryTextNode("CX.1", $node);
@@ -155,8 +236,12 @@ class CHL7v2MessageXML extends CMbXMLDocument {
         $data["PI"] = $this->queryTextNode("CX.1", $node);
       }
     }
-  }
-  
+}
+
+  /**
+   * @param DOMNode $node
+   * @param         $data
+   */
   function getANIdentifier(DOMNode $node, &$data) {
     if (CHL7v2Message::$handle_mode == "simple") {
       $data["AN"] = $this->queryTextNode("CX.1", $node);
@@ -166,32 +251,50 @@ class CHL7v2MessageXML extends CMbXMLDocument {
         $data["AN"] = $this->queryTextNode("CX.1", $node);
       }
     }
-  }
-  
+}
+
+  /**
+   * @param DOMNode $node
+   * @return string
+   */
   function getANMotherIdentifier(DOMNode $node) {
     $PID_21 = $this->queryNodes("PID.21", $node);
     foreach ($PID_21 as $_PID21) {
       if ($this->queryTextNode("CX.5", $_PID21) == "AN") {
         return $this->queryTextNode("CX.1", $_PID21);
       }
-    } 
-  }
-  
+    }
+}
+
+  /**
+   * @param DOMNode $node
+   * @return string
+   */
   function getPIMotherIdentifier(DOMNode $node) {
     $PID_21 = $this->queryNodes("PID.21", $node);
     foreach ($PID_21 as $_PID21) {
       if ($this->queryTextNode("CX.5", $_PID21) == "PI") {
         return $this->queryTextNode("CX.1", $_PID21);
       }
-    } 
-  }
-  
+    }
+}
+
+  /**
+   * @param DOMNode        $node
+   * @param                $data
+   * @param CInteropSender $sender
+   */
   function getVNIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
     if (($this->queryTextNode("CX.5", $node) == "VN")) {
       $data["VN"] = $this->queryTextNode("CX.1", $node);
     }
-  }
-  
+}
+
+  /**
+   * @param DOMNode        $node
+   * @param                $data
+   * @param CInteropSender $sender
+   */
   function getRIIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
     // Notre propre RI
     if (($this->queryTextNode("CX.5", $node) == "RI") && 
@@ -211,15 +314,25 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     if (($this->queryTextNode("CX.5", $node) == "RI")) {
       $data["RI_Others"] = $this->queryTextNode("CX.1", $node);
     }
-  }
-  
+}
+
+  /**
+   * @param DOMNode $node
+   * @param         $data
+   */
   function getNPAIdentifiers(DOMNode $node, &$data) {
     if (($this->queryTextNode("CX.5", $node) == "RI") && 
         ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))) {
       $data["NPA"] = $this->queryTextNode("CX.1", $node);
     }
-  }
-  
+}
+
+  /**
+   * @param                $nodeName
+   * @param DOMNode        $contextNode
+   * @param CInteropSender $sender
+   * @return array
+   */
   function getPersonIdentifiers($nodeName, DOMNode $contextNode, CInteropSender $sender) {
     $data = array();
     
@@ -247,8 +360,13 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     }    
  
     return $data;
-  }
-  
+}
+
+  /**
+   * @param DOMNode        $contextNode
+   * @param CInteropSender $sender
+   * @return array
+   */
   function getAdmitIdentifiers(DOMNode $contextNode, CInteropSender $sender) {
     $data = array();
     
@@ -278,8 +396,11 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     }
         
     return $data;
-  }
-  
+}
+
+  /**
+   * @return array
+   */
   function getContentNodes() {
     $data  = array();
     
@@ -298,19 +419,30 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $this->queryNode("PD1", null, $data, true);
     
     return $data;
-  }
-  
+}
+
+  /**
+   * @param $value
+   * @return int
+   */
   function getBoolean($value) {
     return ($value == "Y") ? 1 : 0;
-  }
-  
+}
+
+  /**
+   * @param $string
+   * @return mixed
+   */
   function getPhone($string) {
     return preg_replace("/[^0-9]/", "", $string);
-  }
+}
 
+  /**
+   * @param DOMNode   $node
+   * @param CMbObject $mbObject
+   * @param           $data
+   */
   function getOBX(DOMNode $node, CMbObject $mbObject, $data) {
-    $sender = $this->_ref_sender;
-    
     $type  = $this->queryTextNode("OBX.3/CE.2", $node);
     $value = floatval($this->queryTextNode("OBX.5", $node));
     
@@ -345,6 +477,33 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     // Pour le moment pas de retour d'erreur dans l'acquittement
     $constante_medicale->store();
   }
-  
-  function handle($ack, CMbObject $newPatient, $data) {}
+
+  /**
+   * Handle event
+   *
+   * @param CHL7Acknowledgment $ack    Acknowledgment
+   * @param CMbObject          $object Object
+   * @param array              $data   Data
+   *
+   * @return void|string
+   */
+  function handle($ack, CMbObject $object, $data) {
+  }
+
+  /**
+   * Get event acknowledgment
+   *
+   * @param CHL7Event $event Event
+   *
+   * @return CHL7v2Acknowledgment|CHL7v2PatientDemographicsAndVisitResponse
+   */
+  function getEventACK(CHL7Event $event) {
+    // Pour l'acquittement du PDQ on retourne une réponse à la requête
+    if ($this instanceof CHL7v2GeneratePatientDemographicsResponse) {
+      return new CHL7v2PatientDemographicsAndVisitResponse($event);
+    }
+
+    // Génère un acquittement classique
+    return new CHL7v2Acknowledgment($event);
+  }
 }

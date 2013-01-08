@@ -41,8 +41,7 @@ class COperatorIHE extends CEAIOperator {
       $data = $dom_evt->getMSHEvenementXML();
 
       // Gestion de l'acquittement
-      /* @todo Gestion que de la version 2 pour le moment */
-      $ack = new CHL7v2Acknowledgment($evt);
+      $ack = $dom_evt->getEventACK($evt);
       $ack->message_control_id = $data['identifiantMessage'];
 
       // Message non supporté pour cet utilisateur

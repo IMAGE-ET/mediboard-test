@@ -44,50 +44,70 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    * @return null|string
    */
   function handle(CHL7Acknowledgment $ack, CPatient $patient, $data) {
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    $sender       = $exchange_ihe->_ref_sender;
+    $sender->loadConfigValues();
+
+    $this->_ref_sender = $sender;
+
     $quantity_limited_request = $this->getQuantityLimitedRequest($data["RCP"]);
 
-    $this->getQPD($data["QPD"], $patient);
+    $ds    = $patient->_spec->ds;
+    $where = array();
+    foreach ($this->getQPD($data["QPD"]) as $field => $value) {
+      if (!$value) {
+        continue;
+      }
 
-    $patient->loadMatchingPatient();
+      $where[$field] = $ds->prepare("= %", $value);
+    }
+
+    $patients = $patient->loadList($where);
+
+    return $exchange_ihe->setPDRAA($ack, "I001", null, $patients);
   }
 
   /**
    * Get QPD element
    *
-   * @param DOMNode  $node    QPD element
-   * @param CPatient $patient Person
+   * @param DOMNode $node QPD element
    *
    * @return string
    */
-  function getQPD(DOMNode $node, CPatient $patient) {
+  function getQPD(DOMNode $node) {
+    $datas = array();
+
     // PID
-    $this->addQPD3PID($node, $patient);
+    $datas = array_merge($datas, $this->addQPD3PID($node));
 
     // PV1
+
+    return $datas;
   }
 
   /**
    * Get PID QPD element
    *
-   * @param DOMNode  $node    QPD element
-   * @param CPatient $patient Person
+   * @param DOMNode $node QPD element
    *
    * @return string
    */
-  function addQPD3PID(DOMNode $node, CPatient $patient) {
-    // Patient Name
-    $patient->nom             = $this->getDemographicsFields($node, $patient, "5.1.1");
-    $patient->prenom          = $this->getDemographicsFields($node, $patient, "5.2");
+  function addQPD3PID(DOMNode $node) {
+    return array(
+      // Patient Name
+      "nom"             => $this->getDemographicsFields($node, "CPatient", "5.1.1"),
+      "prenom"          => $this->getDemographicsFields($node, "CPatient", "5.2"),
 
     // Maiden name
-    $patient->nom_jeune_fille = $this->getDemographicsFields($node, $patient, "6.1.1");
+      "nom_jeune_fille" => $this->getDemographicsFields($node, "CPatient", "6.1.1"),
 
-    // Date of birth
-    $patient->naissance       = $this->getDemographicsFields($node, $patient, "7.1");
+    // Date of birth"
+      "naissance"       => $this->getDemographicsFields($node, "CPatient", "7.1"),
 
     // Patient Adress
-    $patient->ville           = $this->getDemographicsFields($node, $patient, "11.3");
-    $patient->cp              = $this->getDemographicsFields($node, $patient, "11.5");
+      "ville"           => $this->getDemographicsFields($node, "CPatient", "11.3"),
+      "cp "             => $this->getDemographicsFields($node, "CPatient", "11.5")
+    );
   }
 
   /**
@@ -104,16 +124,16 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
   /**
    * Get QPD-3 demographics fields
    *
-   * @param DOMNode   $node   Node
-   * @param CMbObject $object Object
-   * @param string    $field  The number of a field
+   * @param DOMNode $node         Node
+   * @param string  $object_class Object Class
+   * @param string  $field        The number of a field
    *
    * @return array
    */
-  function getDemographicsFields(DOMNode $node, CMbObject $object, $field) {
+  function getDemographicsFields(DOMNode $node, $object_class, $field) {
 
     $seg = null;
-    switch ($object->_class) {
+    switch ($object_class) {
       case "CPatient" :
         $seg = "PID";
         break;

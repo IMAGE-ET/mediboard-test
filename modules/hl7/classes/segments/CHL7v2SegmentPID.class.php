@@ -48,7 +48,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     
     $message  = $event->message;
     $receiver = $event->_receiver;
-    $group    = $receiver->_ref_group;
+    $group    = $receiver->loadRefGroup();
     
     $patient  = $this->patient;
     

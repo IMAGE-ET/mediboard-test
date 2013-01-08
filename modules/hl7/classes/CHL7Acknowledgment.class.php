@@ -14,9 +14,7 @@
  * Acknowledgment HL7
  */
 interface CHL7Acknowledgment {
-  function __construct(CHL7Event $event = null); 
-  
-  function generateAcknowledgment($ack_code, $mb_error_code, $hl7_error_code = null, $severity = "E", $comments = null, $object = null);
-  
+  function __construct(CHL7Event $event = null);
+
   function getStatutAcknowledgment();
 }

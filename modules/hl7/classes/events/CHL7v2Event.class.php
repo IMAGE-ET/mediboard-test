@@ -66,9 +66,9 @@ class CHL7v2Event extends CHL7Event {
         $this->message->segmentTerminator = $terminator;
       }
     }
-    
+
     $this->message->parse($msg_hl7);
-    
+
     return $this->message->toXML(get_class($this), false, CApp::$encoding);
   }
   

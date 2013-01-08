@@ -332,6 +332,7 @@ $locales['CHL7EventADT-AR-E231'] = 'Discordance entre l\'identifiant source et l
 $locales['CHL7EventADT-AR-E301'] = 'Aucune intervention sur le séjour à la date d\'observation donnée';
 $locales['CHL7EventADT-AR-E302'] = 'Erreur lors de l\'enregistrement de l\'observation';
 $locales['CHL7EventADT-AR-E303'] = 'Erreur lors de l\'enregistrement du résultat d\'observation';
+$locales['CHL7EventQBP-AA-I001'] = 'Requête effectuée avec succès';
 $locales['CHL7EventADTA01'] = 'ITI31 - ADT^A01';
 $locales['CHL7EventADTA01_FR'] = 'ITI31 - ADT^A01';
 $locales['CHL7EventADTA02'] = 'ITI31 - ADT^A02';

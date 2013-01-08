@@ -295,7 +295,7 @@ class CExchangeIHE extends CExchangeTabular {
    *
    * @return string
    */
-  function populateExchangeACK(CHL7Acknowledgment $ack, $mbObject) {
+  function populateExchangeACK(CHL7Acknowledgment $ack, $mbObject = null) {
     $msgAck = $ack->event_ack->msg_hl7;
 
     $this->statut_acquittement = $ack->ack_code;
@@ -334,7 +334,7 @@ class CExchangeIHE extends CExchangeTabular {
    *
    * @param CHL7Acknowledgment $ack            Acknowledgment
    * @param array              $mb_error_codes Mediboard errors codes
-   * @param null               $comments       Comments
+   * @param string             $comments       Comments
    * @param CMbObject          $mbObject       Object
    *
    * @return string
@@ -343,6 +343,22 @@ class CExchangeIHE extends CExchangeTabular {
     $ack->generateAcknowledgment("AR", $mb_error_codes, "207", "E", $comments, $mbObject);
 
     return $this->populateExchangeACK($ack, $mbObject);               
+  }
+
+  /**
+   * Generate 'Patient Demographics Response' acknowledgment
+   *
+   * @param CHL7Acknowledgment $ack            Acknowledgment
+   * @param array              $mb_error_codes Mediboard errors codes
+   * @param string             $comments       Comments
+   * @param array              $objects        Objects
+   *
+   * @return string
+   */
+  function setPDRAA(CHL7Acknowledgment $ack, $mb_error_codes, $comments = null, $objects = array()) {
+    $ack->generateAcknowledgment("AA", $mb_error_codes, "0", "I", $comments, $objects);
+
+    return $this->populateExchangeACK($ack);
   }
 
   /**

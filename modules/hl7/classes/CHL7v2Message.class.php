@@ -247,10 +247,10 @@ class CHL7v2Message extends CHMessage {
     } 
     // Recherche depuis le code du pays
     /* @todo Pas top */
-    elseif ($country_code == "FRA") {
+    /*elseif ($country_code == "FRA") {
       $this->i18n_code = "FR";
       $this->extension = $version = "FR_2.3";
-    }
+    }*/
 
     // Dans le cas où la version passée est incorrecte on met par défaut 2.5
     if (!in_array($version, self::$versions)) {

@@ -52,7 +52,8 @@ class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
         $object->_mb_error_code = $_mb_error_code;
         $this->addERR($object);
       }
-    } else {
+    }
+    else {
       $object->_mb_error_code = $object->mb_error_codes;
       $this->addERR($object);
     }  

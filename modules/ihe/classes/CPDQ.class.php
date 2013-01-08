@@ -27,14 +27,14 @@ class CPDQ extends CIHE {
    * @var array
    */
   static $transaction_iti21 = array(
-    "Q22", "K22"
+    "Q22"
   );
 
   /**
    * @var array
    */
   static $transaction_iti22 = array(
-    "ZV1", "ZV2"
+    "ZV1"
   );
 
   /**
@@ -43,11 +43,9 @@ class CPDQ extends CIHE {
   static $evenements = array(
     // ITI-21
     "Q22" => "CHL7EventQBPQ22",
-    "K22" => "CHL7EventQBPK22",
 
     // ITI-22
     "ZV1" => "CHL7EventQBPZV1",
-    "ZV2" => "CHL7EventQBPZV2",
   );
 
   function __construct() {

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * K22 - Find Candidates response - HL7
+ * Represents a RSP message structure HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,9 +12,13 @@
  */
 
 /**
- * Interface CHL7EventQBPK22
- * K22 - Find Candidates response
+ * Interface CHL7EventRSP
+ * Represents a RSP message structure
  */
-interface CHL7EventQBPK22 extends CHL7EventQBP {}
+interface CHL7EventRSP {
+  function __construct(CHL7Event $trigger_event);
+  
+  function build($object);
+}
 
 ?>
