@@ -13,12 +13,16 @@
 </script>
 
 {{assign var=use_sortie_reveil_reel value=$conf.dPsalleOp.COperation.use_sortie_reveil_reel}}
+{{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
 
 <table class="tbl">
   <tr>
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
     <th>{{tr}}SSPI.Praticien{{/tr}}</th>
     <th>{{tr}}SSPI.Patient{{/tr}}</th>
+    {{if $use_poste}}
+      <th>{{tr}}SSPI.Poste{{/tr}}</th>
+    {{/if}}
     <th>{{tr}}SSPI.Chambre{{/tr}}</th>
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
@@ -51,7 +55,13 @@
       </span>
       </a>
     </td>
-    
+
+    {{if $use_poste}}
+      <td>
+        {{mb_include module=dPsalleOp template=inc_form_toggle_poste_sspi type="out"}}
+      </td>
+    {{/if}}
+
     <td class="text">
       {{mb_include module=hospi template=inc_placement_sejour sejour=$_operation->_ref_sejour}}
     </td>
