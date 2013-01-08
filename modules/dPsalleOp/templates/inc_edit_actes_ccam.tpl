@@ -222,8 +222,16 @@
                   
                   {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
                 </td>
-                
-                {{if $can_view_dh && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
+
+                <!-- Facturable -->
+                <th>
+                  {{mb_label object=$acte field=facturable}}
+                </th>
+                <td>
+                  {{mb_field object=$acte field=facturable}}
+                </td>
+
+                {{if ($acte->facturable || !$acte->_id)  && $can_view_dh && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
                 <th>{{mb_label object=$acte field=montant_depassement}}</th>
                 <td>{{mb_field object=$acte field=montant_depassement}}</td>
                 {{/if}}
