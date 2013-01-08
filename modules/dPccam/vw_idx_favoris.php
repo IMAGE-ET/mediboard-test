@@ -50,6 +50,9 @@ foreach ($codesByChap as $keychapter => $chapter) {
       $fusion[$keychapter]["codes"][$keycode] = $code;
       continue;
     }
+    // Référence vers le favoris pour l'ajout de tags
+    $fusion[$keychapter]["codes"][$keycode]->favoris_id = $code->favoris_id;
+    $fusion[$keychapter]["codes"][$keycode]->_ref_favori = $code->_ref_favori;
   }
 }
 
