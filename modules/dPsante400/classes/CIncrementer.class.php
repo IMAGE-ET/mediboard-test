@@ -118,7 +118,7 @@ class CIncrementer extends CMbObject {
       return;
     }
     
-    $mutex = new CMbSemaphore("incrementer-$object->_class-$group_id");
+    $mutex = new CMbSemaphore("incrementer-$object->_class");
     $mutex->acquire();
     
     $incrementer = $group_domain->loadRefDomain()->loadRefIncrementer();
