@@ -31,7 +31,7 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
   }
   
   function doRedirect() {
-    if(CAppUI::conf("dPsalleOp CActeCCAM codage_strict") || !$this->_old->_id) {
+    if(CAppUI::conf("dPsalleOp CActeCCAM codage_strict") || !$this->_old->_id || !$this->_obj->_id) {
       $this->_ref_object->correctActes();
     }
     parent::doRedirect();
