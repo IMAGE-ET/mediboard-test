@@ -121,7 +121,7 @@ if ($fileSel && $elementClass == "CFile" && !$acces_denied) {
         break;
         
       case "text/plain": 
-        $includeInfosFile = "<pre>".htmlspecialchars($raw_content)."</pre>";
+        $includeInfosFile = "<pre>".CMbString::htmlSpecialChars($raw_content)."</pre>";
         break;
     }
   }

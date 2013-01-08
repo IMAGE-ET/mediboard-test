@@ -132,7 +132,7 @@ class CTemplateManager {
    */
   function makeSpan($spanClass, $text) {
     // Escape entities cuz CKEditor does so
-    $text = htmlentities($text);
+    $text = CMbString::htmlEntities($text);
     
     // Keep backslashed double quotes instead of quotes 
     // cuz CKEditor creates double quoted attributes
@@ -151,7 +151,7 @@ class CTemplateManager {
    */
   function addProperty($field, $value = null, $options = array(), $htmlescape = true) {
     if ($htmlescape) {
-      $value = htmlspecialchars($value);
+      $value = CMbString::htmlSpecialChars($value);
     }
     
     $sec = explode(' - ', $field, 3);
@@ -180,10 +180,10 @@ class CTemplateManager {
     
     if ($sub_item == '') {
       $this->sections[$section][$field] = array (
-        "view"      => htmlentities($item),
+        "view"      => CMbString::htmlEntities($item),
         "field"     => $field,
         "value"     => $value,
-        "fieldHTML" => htmlentities("[{$field}]"),
+        "fieldHTML" => CMbString::htmlEntities("[{$field}]"),
         "valueHTML" => $value,
         "shortview" => $section . " - " . $item,
         "options"   => $options
@@ -191,10 +191,10 @@ class CTemplateManager {
     }
     else {
       $this->sections[$section][$item][$sub_item] = array (
-        "view"      => htmlentities($sub_item),
+        "view"      => CMbString::htmlEntities($sub_item),
         "field"     => $field,
         "value"     => $value,
-        "fieldHTML" => htmlentities("[{$field}]"),
+        "fieldHTML" => CMbString::htmlEntities("[{$field}]"),
         "valueHTML" => $value,
         "shortview" => $section . " - " . $item . " - " . $sub_item,
         "options"   => $options
@@ -330,7 +330,7 @@ class CTemplateManager {
     }
     
     // Escape content
-    $items = array_map("htmlentities", $items);
+    $items = array_map("CMbString::htmlEntities", $items);
     
     // HTML production
     switch ($default = CAppUI::pref("listDefault")) {
@@ -413,7 +413,7 @@ class CTemplateManager {
       "name" => $name,
       // @todo : passer en regexp
       //"nameHTML" => $this->makeSpan("name", "[Liste - {$name}]"));
-      "nameHTML" => htmlentities("[Liste - {$name}]")
+      "nameHTML" => CMbString::htmlEntities("[Liste - {$name}]")
     );
   }
   
@@ -527,19 +527,19 @@ class CTemplateManager {
     $this->helpers["Aide de l'utilisateur"] = array();
     foreach ($aidesUser as $aideUser) {
       if ($aideUser->depend_value_1 == $modeleType || $aideUser->depend_value_1 == "") {
-        $this->helpers["Aide de l'utilisateur"][htmlentities($aideUser->name)] = htmlentities($aideUser->text);
+        $this->helpers["Aide de l'utilisateur"][CMbString::htmlEntities($aideUser->name)] = CMbString::htmlEntities($aideUser->text);
       }
     }
     $this->helpers["Aide de la fonction"] = array();
     foreach ($aidesFunc as $aideFunc) {
       if ($aideFunc->depend_value_1 == $modeleType || $aideFunc->depend_value_1 == "") {
-        $this->helpers["Aide de la fonction"][htmlentities($aideFunc->name)] = htmlentities($aideFunc->text);
+        $this->helpers["Aide de la fonction"][CMbString::htmlEntities($aideFunc->name)] = CMbString::htmlEntities($aideFunc->text);
       } 
     }
     $this->helpers["Aide de l'&eacute;tablissement"] = array();
     foreach ($aidesGroup as $aideGroup) {
       if ($aideGroup->depend_value_1 == $modeleType || $aideGroup->depend_value_1 == "") {
-        $this->helpers["Aide de l'&eacute;tablissement"][htmlentities($aideGroup->name)] = htmlentities($aideGroup->text);
+        $this->helpers["Aide de l'&eacute;tablissement"][CMbString::htmlEntities($aideGroup->name)] = CMbString::htmlEntities($aideGroup->text);
       } 
     }
   }
@@ -622,7 +622,7 @@ class CTemplateManager {
     foreach ($lists as $value) {
       
       // Remplacer 039 par 39 car ckeditor remplace ' par &#39;
-      $nom = str_replace("#039;", "#39;", htmlentities(stripslashes("[Liste - $value->nom]"), ENT_QUOTES));
+      $nom = str_replace("#039;", "#39;", CMbString::htmlEntities(stripslashes("[Liste - $value->nom]"), ENT_QUOTES, "ISO-8859-1"));
       $pos = strpos($this->document, $nom);
       if ($pos !== false) {
         $this->usedLists[$pos] = $value;

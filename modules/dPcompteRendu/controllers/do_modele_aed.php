@@ -92,7 +92,7 @@ if (isset($_POST["_source"])) {
   if (isset($_POST["_CListeChoix"])) {
     $listes = $_POST["_CListeChoix"];
     foreach ($listes as $list_id => $options) {
-      $options = array_map('htmlentities', $options);
+      $options = array_map('CMbString::htmlEntities', $options);
       $list = new CListeChoix;
       $list->load($list_id);
       $is_empty = false;
@@ -108,7 +108,7 @@ if (isset($_POST["_source"])) {
         CMbArray::removeValue("undef", $options);
         $values[] = nl2br(implode(", ", $options));
       }
-      $nom = str_replace("#039;", "#39;", htmlentities($list->nom, ENT_QUOTES));
+      $nom = str_replace("#039;", "#39;", CMbString::htmlEntities($list->nom, ENT_QUOTES));
       if ($is_empty) {
         $fields[] = "<span class=\"name\">[Liste - ".$nom."]</span>";
       }
@@ -177,13 +177,13 @@ if (isset($_POST["_source"])) {
     
     foreach($destinataires as &$curr_dest) {
       $fields = array(
-        htmlentities("[Courrier - nom destinataire]"),
-        htmlentities("[Courrier - adresse destinataire]"),
-        htmlentities("[Courrier - cp ville destinataire]"),
-        htmlentities("[Courrier - copie à - simple]"),
-        htmlentities("[Courrier - copie à - simple (multiligne)]"),
-        htmlentities("[Courrier - copie à - complet]"),
-        htmlentities("[Courrier - copie à - complet (multiligne)]")
+        CMbString::htmlEntities("[Courrier - nom destinataire]"),
+        CMbString::htmlEntities("[Courrier - adresse destinataire]"),
+        CMbString::htmlEntities("[Courrier - cp ville destinataire]"),
+        CMbString::htmlEntities("[Courrier - copie à - simple]"),
+        CMbString::htmlEntities("[Courrier - copie à - simple (multiligne)]"),
+        CMbString::htmlEntities("[Courrier - copie à - complet]"),
+        CMbString::htmlEntities("[Courrier - copie à - complet (multiligne)]")
       );
       
       // Champ copie à : on reconstruit en omettant le destinataire.

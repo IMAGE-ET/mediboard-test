@@ -18,6 +18,7 @@ class CDestinataire {
   var $adresse = null;
   var $cpville = null;
   var $email = null;
+  var $email_apicrypt = null;
   var $tag = null;
   var $_guid_object = null;
   
@@ -96,6 +97,9 @@ class CDestinataire {
       $dest->adresse = $medecin->adresse;
       $dest->cpville = "$medecin->cp $medecin->ville";
       $dest->email   = $medecin->email;
+      if ($medecin->email_apicrypt) {
+        $dest->email_apicrypt = $medecin->email_apicrypt;
+      }
       $dest->_guid_object = $medecin->_guid;
       self::$destByClass[$mbObject->_class][$medecin->_id] = $dest;
     }

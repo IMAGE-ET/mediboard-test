@@ -893,7 +893,7 @@ class CCompteRendu extends CDocumentItem {
     if (CModule::getActive("dPprescription")) {
       $all_classes[] = "CPrescription";
     }
-    $installed = CApp::getInstalledClasses($all_classes);
+    $installed = CApp::getInstalledClasses(null, $all_classes);
     
     foreach ($installed as $key => $class) {
       if (is_method_overridden($class, 'fillTemplate') || is_method_overridden($class, 'fillLimitedTemplate')) {
@@ -1283,6 +1283,21 @@ class CCompteRendu extends CDocumentItem {
       WHERE `author_id` $in_owner
       GROUP BY `object_class`, `category_id`";
     return $ds->loadList($query);
+  }
+
+  /**
+   * Return the content of the document in plain text
+   *
+   * @param string $encoding The encoding, default UTF-8
+   *
+   * @return string
+   */
+  function getPlainText($encoding = "UTF-8") {
+    if (!$this->_source) {
+      $this->loadContent(true);
+    }
+
+    return CMbString::htmlToText($this->_source, $encoding);
   }
   
   function getFullContentFromModel() {
