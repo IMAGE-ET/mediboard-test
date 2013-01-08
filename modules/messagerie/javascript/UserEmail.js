@@ -58,9 +58,10 @@ messagerie = {
     url.requestModal(800, 800);
   },
 
-  getAttachment:function (attachment_id) { //récupère les attachments et les lie aux CMailAttachment (création des CFile)
+  getAttachment:function (mail_id,all) { //récupère les attachments et les lie aux CMailAttachment (création des CFile)
     var url = new Url("messagerie", "pop_attachment_to_cfile");
-    url.addParam("attachment_id", attachment_id);
+    url.addParam("mail_id", mail_id);
+    url.addParam("attachment_id", all);
     url.requestUpdate("systemMsg", function () {
       messagerie.url.refreshModal();
     });
@@ -85,7 +86,7 @@ messagerie = {
   linkAttachment:function (mail_id) {
     var url = new Url("messagerie", "ajax_link_attachments");
     url.addParam("mail_id", mail_id);
-    url.requestModal();
+    url.requestModal(800,600);
     //var selected = table.select("input[name='attach_item']:checked");
 
   }

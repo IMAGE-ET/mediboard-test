@@ -47,11 +47,11 @@
         {{$mail->_text_plain->content|nl2br}}
       </div>
       {{else}}
-        {{tr}}CUserMail-msg-noContentText{{/tr}}
+        <h1>{{tr}}CUserMail-msg-noContentText{{/tr}}</h1>
       {{/if}}
 {{if $mail->_attachments|count}}
 <table class="form">
-  <tr><th class="title">{{tr}}Attachments{{/tr}}</th></tr>
+  <tr><th class="title">{{tr}}Attachments{{/tr}} ({{$nbAttachPicked}}/{{$nbAttachAll}}) {{if $nbAttachPicked != $nbAttachAll}}<a href="#" tilte="{{tr}}CMailAttachment-button-getAllAttachments-desc{{/tr}}" onclick="messagerie.getAttachment('{{$mail->_id}}','0')" class="button download">{{tr}}CMailAttachment-button-getAllAttachments{{/tr}}</a>{{/if}}</th></tr>
 </table>
   <ul id="list_attachment">
     <style>
@@ -105,7 +105,7 @@
                 </a>
               </p>
                 <a href="#test" class="button lookup notext" onclick="messagerie.AttachFromPOP('{{$mail->_id}}','{{$_attachment->part}}')">{{tr}}Preview{{/tr}}</a>
-              <a class="button download singleclick" href="#{{$_attachment->_id}}" onclick="messagerie.getAttachment('{{$_attachment->_id}}')">{{tr}}CMailAttachment-button-getTheAttachment{{/tr}}</a>
+              <a class="button download singleclick" href="#{{$_attachment->_id}}" onclick="messagerie.getAttachment('{{$mail->_id}}','{{$_attachment->_id}}')">{{tr}}CMailAttachment-button-getTheAttachment{{/tr}}</a>
             </li>
             <td></td>
         {{/if}}
@@ -118,7 +118,9 @@
     <tr>
       <td>
       <a href="#answer"  class="button"><img alt="message" src="images/icons/usermessage.png">{{tr}}CUserMail-button-answer{{/tr}}</a>
-      <a href="#{{$mail->_id}}" class="button copy" onclick="messagerie.linkAttachment('{{$mail->_id}}');">{{tr}}CMailAttachments-button-append{{/tr}}</a>
+        {{if $app->user_prefs.LinkAttachment}}
+          <a href="#{{$mail->_id}}" class="button copy" onclick="messagerie.linkAttachment('{{$mail->_id}}');">{{tr}}CMailAttachments-button-append{{/tr}}</a>
+        {{/if}}
       <a href="#{{$mail->_id}}" class="button change">{{tr}}CUserMail-button-archive{{/tr}}</a>
       </td>
     </tr>

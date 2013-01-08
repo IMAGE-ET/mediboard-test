@@ -37,8 +37,13 @@ if (!$mail->date_read) {
 }
 
 //get the CFile attachments
+$nbAttachPicked = 0;
+$nbAttach = count($mail->_attachments);
 foreach ($mail->_attachments as $_att) {
   $_att->loadRefsFwd();
+  if ($_att->_file->_id) {
+    $nbAttachPicked++;
+  }
 }
 
 $mail->checkInlineAttachments();
@@ -46,4 +51,6 @@ $mail->checkInlineAttachments();
 //Smarty
 $smarty = new CSmartyDP();
 $smarty->assign("mail", $mail);
+$smarty->assign("nbAttachPicked", $nbAttachPicked);
+$smarty->assign("nbAttachAll",  $nbAttach);
 $smarty->display("ajax_open_external_email.tpl");

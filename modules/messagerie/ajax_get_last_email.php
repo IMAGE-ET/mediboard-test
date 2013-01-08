@@ -86,7 +86,7 @@ if (count($unseen)>0) {
         }
 
         //attachments CFILE
-        //si preference à vrai OU que la piece jointe est incluse au texte
+        //si preference taille ok OU que la piece jointe est incluse au texte
         if (CAppUI::pref("getAttachmentOnUpdate") || $_attch->disposition == "INLINE") {
 
           $file = new CFile();
@@ -103,6 +103,10 @@ if (count($unseen)>0) {
             $file->putContent($file_pop);
             if ($str = $file->store()) {
               CAppUI::setMsg($str, UI_MSG_ERROR);
+            }
+            if ($file->_id) {
+              $_attch->linked = $file->_id;
+              $_attch->store();
             }
           }
         }

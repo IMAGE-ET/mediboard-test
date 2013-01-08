@@ -89,6 +89,9 @@ class CMailAttachments extends CMbObject{
     if ($header->ifdisposition) {
       $this->disposition = $header->disposition;
     }
+    else { //nothing for disposition ?
+      $this->disposition = 'INLINE';
+    }
     if ($header->ifdparameters) {
       $this->name = $header->dparameters[0]->value;
     }

@@ -11,47 +11,84 @@
 CCanDo::checkRead();
 
 $user = CMediusers::get();
-$attachment_id = CValue::get("attachment_id", 0);
+$mail_id = CValue::get("mail_id");
+$attachment_id = CValue::get("attachment_id");
 
 //connection log
 $log_pop = new CSourcePOP();
 $log_pop->name = "user-pop-".$user->_id;
 $log_pop->loadMatchingObject();
 
-//load attachment
-$attachment = new CMailAttachments();
-$attachment->load($attachment_id);
-
 //load email
 $mail = new CUserMail();
-$mail->load($attachment->mail_id);
-
-//CFile
-$file = new CFile();
-$file->setObject($attachment);
-$file->private = 0;
-$file->author_id  = $user->_id;
-$file->loadMatchingObject();
+$mail->load($mail_id);
 
 
-//create the file
-if (!$file->_id) {
-  $pop = new CPop($log_pop);
-  $pop->open();
+if ($attachment_id != 0) { //je récupère LA pièce jointe
+  //load attachment
+  $attachment = new CMailAttachments();
+  $attachment->load($attachment_id);
 
-  $file_pop = $pop->decodeMail($attachment->encoding, $pop->openPart($mail->uid, $attachment->getpartDL()));
-  $file->file_name  = $attachment->name;
-  $file->file_type  = $attachment->getType($attachment->type, $attachment->subtype);
-  $file->fillFields();
-  $file->putContent($file_pop);
-  if ($str = $file->store()) {
-    CAppUI::setMsg($str, UI_MSG_ERROR);
+
+  //CFile
+  $file = new CFile();
+  $file->setObject($attachment);
+  $file->private = 0;
+  $file->author_id  = $user->_id;
+  $file->loadMatchingObject();
+
+  //create the file
+  if (!$file->_id) {
+    $pop = new CPop($log_pop);
+    $pop->open();
+
+    $file_pop = $pop->decodeMail($attachment->encoding, $pop->openPart($mail->uid, $attachment->getpartDL()));
+    $file->file_name  = $attachment->name;
+    $file->file_type  = $attachment->getType($attachment->type, $attachment->subtype);
+    $file->fillFields();
+    $file->putContent($file_pop);
+    if ($str = $file->store()) {
+      CAppUI::setMsg($str, UI_MSG_ERROR);
+    }
+    else {
+      $attachment->linked = $file->_id;
+      $attachment->store();
+      CAppUI::setMsg("CMailAttachment-msg-attachmentsaved", UI_MSG_OK);
+    }
+
+    $pop->close();
   }
-  else {
-    CAppUI::setMsg("CMailAttachment-msg-attachmentsaved", UI_MSG_OK);
-  }
+}
+else {  //je récupère TOUTES les pièces jointes
+  $mail->loadRefsFwd();
+  foreach ($mail->_attachments as $_att) {
+    $file = new CFile();
+    $file->setObject($_att);
+    $file->private = 0;
+    $file->author_id  = $user->_id;
+    $file->loadMatchingObject();
 
-  $pop->close();
+    if (!$file->_id) {
+      $pop = new CPop($log_pop);
+      $pop->open();
+
+      $file_pop = $pop->decodeMail($_att->encoding, $pop->openPart($mail->uid, $_att->getpartDL()));
+      $file->file_name  = $_att->name;
+      $file->file_type  = $_att->getType($_att->type, $_att->subtype);
+      $file->fillFields();
+      $file->putContent($file_pop);
+      if ($str = $file->store()) {
+        CAppUI::setMsg($str, UI_MSG_ERROR);
+      }
+      else {
+        $_att->linked = $file->_id;
+        $_att->store();
+        CAppUI::setMsg("CMailAttachment-msg-attachmentsaved", UI_MSG_OK);
+      }
+
+      $pop->close();
+    }
+  }
 }
 
 echo CAppUI::getMsg();
