@@ -16,6 +16,7 @@ $signee            = CValue::getOrSession("signee"             , 0);         // 
 $date_min          = CValue::getOrSession("_date_entree_prevue", mbDate());  // par default, date du jour
 $date_max          = CValue::getOrSession("_date_sortie_prevue", mbDate());
 $type_prescription = CValue::getOrSession("type_prescription"  , "sejour");  // sejour - externe - sortie_manquante
+$board             = CValue::get("board", 0);
 
 $date_min = $date_min . " 00:00:00";
 $date_max = $date_max . " 23:59:59";
@@ -138,6 +139,7 @@ foreach($prescriptions as $_prescription){
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("prescriptions", $prescriptions);
+$smarty->assign("board"        , $board);
 $smarty->display('inc_vw_bilan_list_prescriptions.tpl');
 
 ?>

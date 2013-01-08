@@ -11,18 +11,22 @@
 {{mb_script module="dPcabinet" script="edit_consultation"}}
 {{mb_script module="dPplanningOp" script="operation"}}
 
+{{mb_script module="soins" script="plan_soins"}}
+
+{{if "dPprescription"|module_active}}
+  {{mb_script module="dPprescription" script="prescription"}}
+  {{mb_script module="dPprescription" script="element_selector"}}
+{{/if}}
+
+{{if "dPmedicament"|module_active}}
+  {{mb_script module="dPmedicament" script="medicament_selector"}}
+  {{mb_script module="dPmedicament" script="equivalent_selector"}}
+{{/if}}
+
 <script type="text/javascript">
 
 Consultation.useModal();
 Operation.useModal();
-
-hideIcon = function(frame) {
-  $("icon-" + frame).hide();
-}
-
-showIcon = function(frame) {
-  $("icon-" + frame).show();
-}
 
 updateListConsults = function() {
   var url = new Url("dPcabinet", "httpreq_vw_list_consult");
@@ -62,49 +66,41 @@ initUpdateListOperations = function() {
   url.periodicalUpdate("operations", { frequency: 90 } );
 }
 
-updateListPatients = function() {
-  var url = new Url("dPpatients", "httpreq_list_patients");
-  
-  var oForm = getForm("find");
-  if(oForm) {
-    url.addElement(oForm.nom);
-    url.addElement(oForm.prenom);
-    url.addElement(oForm.naissance);
-    url.addElement(oForm.Date_Day);
-    url.addElement(oForm.Date_Month);
-    url.addElement(oForm.Date_Year);
-    url.addElement(oForm.patient_ipp);
-    url.addElement(oForm.prat_id);
-    url.addElement(oForm.sexe);
-  }
-  url.addParam("board"   , 1);
-  url.requestUpdate("patients");
-  
-  return false;
-}
-
 updateListHospi = function() {
   var url = new Url("dPboard", "httpreq_vw_hospi");
   url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
-  url.addParam("board"   , "1");
   url.requestUpdate("hospi");
 }
 
+updateWorkList = function() {
+  var url = new Url("dPboard", "ajax_worklist");
+  url.addParam("chirSel" , "{{$prat->_id}}");
+  url.addParam("date"    , "{{$date}}");
+  url.requestUpdate("worklist");
+}
+
+showDossierSoins = function(sejour_id, date, default_tab){
+  $('dossier_sejour').update("");
+  var url = new Url("soins", "ajax_vw_dossier_sejour");
+  url.addParam("sejour_id", sejour_id);
+  if(default_tab){
+    url.addParam("default_tab", default_tab);
+  }
+  url.requestUpdate($('dossier_sejour'));
+  modalWindow = modal($('dossier_sejour'));
+}
+
 Main.add(function () {
-  hideIcon("consultations");
-  hideIcon("operations");
-  hideIcon("hospi");
-  hideIcon("patients");
   {{if $prat->_id}}
     initUpdateListConsults();
     initUpdateListOperations();
-    updateListPatients();
     updateListHospi();
+    updateWorkList();
   {{/if}}
   ViewPort.SetAvlHeight("consultations", 0.5);
   ViewPort.SetAvlHeight("operations", 0.5);
-  ViewPort.SetAvlHeight("patients", 1);
+  ViewPort.SetAvlHeight("worklist", 1);
   ViewPort.SetAvlHeight("hospi", 1);
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
@@ -130,18 +126,12 @@ Main.add(function () {
   <tr>
 
     <!--  Consultations -->
-    <td class="viewport" style="width: 50%" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
-      <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}&amp;chirSel={{$prat->_id}}" style="position:absolute" id="icon-consultations">
-        <img src="modules/dPcabinet/images/icon.png" height="24" width="24" />
-      </a>
+    <td class="viewport" style="width: 50%">
       <div id="consultations"></div>
     </td>
     
     <!-- Operations -->
-    <td class="viewport" style="width: 50%" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
-      <a href="?m=dPplanningOp&amp;tab=vw_idx_patients"style="position:absolute" id="icon-operations">
-        <img src="modules/dPplanningOp/images/icon.png" height="24" width="24" />
-      </a>
+    <td class="viewport" style="width: 50%">
       <div id="operations"></div>
     </td>
     
@@ -149,17 +139,13 @@ Main.add(function () {
   
   <tr>
   
-    <!-- Recherche de patients -->
-    <td class="viewport" style="width: 50%" id="patients-viewport" onmouseover="showIcon('patients')" onmouseout="hideIcon('patients')">
-      <a href="?m=dPpatients&amp;tab=vw_idx_planning&amp;date={{$date}}" style="position:absolute" id="icon-patients">
-        <img src="modules/dPpatients/images/icon.png" height="24" width="24" />
-      </a>
-      <div id="patients" style="overflow: auto"></div>
+    <!-- Volet des worklists -->
+    <td class="viewport" style="width: 50%">
+      <div id="worklist" style="overflow: auto"></div>
     </td>
 
     <!-- Patients hospitalisés -->
-    <td class="viewport" style="width: 50%" onmouseover="showIcon('hospi')" onmouseout="hideIcon('hospi')">
-      <img src="modules/dPhospi/images/icon.png" height="24" width="24" style="position:absolute" id="icon-hospi" />
+    <td class="viewport" style="width: 50%">
       <div id="hospi" style="overflow: auto"></div>
     </td>
     
@@ -168,3 +154,5 @@ Main.add(function () {
   </tbody>
   
 </table>
+
+<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto;"></div>

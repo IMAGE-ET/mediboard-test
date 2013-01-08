@@ -13,53 +13,38 @@ $ds = CSQLDataSource::get("std");
 // Récupération des paramètres
 $chirSel   = CValue::getOrSession("chirSel");
 $date      = CValue::getOrSession("date", mbDate());
-$board     = CValue::get("board", 0);
 
 $where = array();
-$where["praticien_id"] = "= '$chirSel'";
-$where["entree_prevue"] = "<= '$date 23:59:59'";
-$where["sortie_prevue"] = ">= '$date 00:00:00'";
+$where["sejour.praticien_id"] = "= '$chirSel'";
+$where["sejour.entree"]   = "<= '$date 23:59:59'";
+$where["sejour.sortie"]   = ">= '$date 00:00:00'";
+$where["sejour.annule"]   = "= '0'";
+$where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
-$order = "`sortie_prevue` ASC, `entree_prevue` DESC";
+$ljoin = array();
+$ljoin["affectation"] = "affectation.sejour_id = sejour.sejour_id";
+$ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
+$ljoin["chambre"]     = "chambre.chambre_id = lit.chambre_id";
+$ljoin["service"]     = "service.service_id = chambre.service_id";
+
+$order = "`service`.`nom`, `chambre`.`nom`, `lit`.`nom`, `sejour`.`sortie` ASC, `sejour`.`entree` DESC";
 
 $sejour = new CSejour();
-$listSejours = $sejour->loadList($where, $order);
+$listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
-$affectation = new CAffectation();
 foreach($listSejours as &$_sejour) {
   $_sejour->loadRefsFwd();
-  $_sejour->loadRefGHM();
-  $where = array();
-  $where["sejour_id"] = "= '$_sejour->_id'";
-  $where["entree"] = "<= '$date 00:00:00'";
-  $where["sortie"] = ">= '$date 23:59:59'";
-  
-  $order = "`entree` DESC";
-  
-  $_sejour->_curr_affectations = $affectation->loadList($where, $order);
-  foreach($_sejour->_curr_affectations as &$_aff) {
-    $_aff->loadRefLit();
-    $_aff->_ref_lit->loadCompleteView();
-  }
+  $_sejour->loadRefsOperations();
+  $_sejour->loadRefCurrAffectation($date);
+  $_sejour->_ref_curr_affectation->loadRefLit();
+  $_sejour->_ref_curr_affectation->_ref_lit->loadCompleteView();
 }
-
-// récupération des modèles de compte-rendu disponibles
-$where = array();
-$order = "nom";
-$where["object_class"] = "= 'COperation'";
-$where["user_id"] = $ds->prepare("= %", $chirSel);
-$crList    = CCompteRendu::loadModeleByCat("Opération", $where, $order, true);
-$hospiList = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("board"      , $board);
 $smarty->assign("date"       , $date);
 $smarty->assign("listSejours", $listSejours);
-$smarty->assign("crList"     , $crList);
-$smarty->assign("hospiList"  , $hospiList);
-$smarty->assign("nodebug"    , true);
 
 $smarty->display("inc_vw_hospi.tpl");
 
