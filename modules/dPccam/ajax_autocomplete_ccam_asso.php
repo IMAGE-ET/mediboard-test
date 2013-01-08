@@ -30,5 +30,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("codes", $codes);
 $smarty->assign("keywords", $keywords);
+$smarty->assign("nodebug" , true);
 
 $smarty->display("httpreq_do_ccam_autocomplete.tpl");
