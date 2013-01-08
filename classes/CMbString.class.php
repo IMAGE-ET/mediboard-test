@@ -234,7 +234,7 @@ abstract class CMbString {
       chr(151) => '&#8212;',
     );
 
-    $string = htmlentities($string);
+    $string = CMbString::htmlEntities($string);
     return strtr($string, $ent);
   }
 
@@ -489,12 +489,13 @@ abstract class CMbString {
    * Replace the <br> tags with '\n', and the html special chars by their equivalent in the chosen encoding
    *
    * @param string $html     The HTML to convert
-   * @param string $encoding The encoding, default UTF-8
+   * @param string $encoding The encoding, default ISO-8859-1
    *
    * @return string
    */
-  static function htmlToText($html, $encoding = "UTF-8") {
+  static function htmlToText($html, $encoding = "ISO-8859-1") {
     $text = str_replace("<br />", "\n", $html);
+    $text = str_replace("&nbsp;", "", $text);
     $text = strip_tags($text);
     $text = html_entity_decode($text, ENT_QUOTES, $encoding);
 

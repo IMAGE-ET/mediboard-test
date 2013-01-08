@@ -48,7 +48,7 @@ class CPlanningEvent  {
     
     $this->start = $date;
     $this->length = $length;
-    $this->title = $html_escape ? htmlentities($title) : $title;
+    $this->title = $html_escape ? CMbString::htmlEntities($title) : $title;
     $this->color = $color;
     $this->important = $important;
     $this->css_class = is_array($css_class) ? implode(" ", $css_class) : $css_class;

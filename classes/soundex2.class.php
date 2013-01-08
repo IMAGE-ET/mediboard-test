@@ -183,7 +183,7 @@ class soundex2 {
   * remove every special French letters
   */
   private function trimAccent () {
-     $this -> sString = htmlentities(strtolower($this -> sString ));
+     $this -> sString = CMbString::htmlEntities(strtolower($this -> sString ));
      $this -> sString = preg_replace("/&(.)(acute|cedil|circ|ring|tilde|uml|grave);/", "$1", $this -> sString );
      $this -> sString = preg_replace("/([^a-z0-9]+)/", "-", html_entity_decode($this -> sString ));
      $this -> sString = trim($this -> sString , "-");

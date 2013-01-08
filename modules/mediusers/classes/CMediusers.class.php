@@ -29,6 +29,7 @@ class CMediusers extends CMbObject {
   var $banque_id                   = null;
   var $mail_apicrypt               = null;
   var $compta_deleguee             = null;
+  var $last_ldap_checkout          = null;
 
   // DB References
   var $function_id                 = null;
@@ -176,6 +177,7 @@ class CMediusers extends CMbObject {
     $props["debut_bvr"]              = "str maxLength|10";
     $props["mail_apicrypt"]          = "email";
     $props["compta_deleguee"]        = "bool default|0";
+    $props["last_ldap_checkout"]     = "date";
 
     $props["_group_id"]              = "ref notNull class|CGroups";
 

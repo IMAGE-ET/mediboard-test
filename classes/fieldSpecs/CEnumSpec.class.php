@@ -60,7 +60,7 @@ class CEnumSpec extends CMbFieldSpec {
   function getValue($object, $smarty = null, $params = array()) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    return htmlspecialchars(CAppUI::tr("$object->_class.$fieldName.$propValue"));
+    return CMbString::htmlSpecialChars(CAppUI::tr("$object->_class.$fieldName.$propValue"));
   }
   
   function checkOptions(){
@@ -85,7 +85,7 @@ class CEnumSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    $field         = htmlspecialchars($this->fieldName);
+    $field         = CMbString::htmlSpecialChars($this->fieldName);
     $typeEnum      = CMbArray::extract($params, "typeEnum", $this->typeEnum ? $this->typeEnum : "select");
     $columns       = CMbArray::extract($params, "columns", $this->columns ? $this->columns : 1);
     $separator     = CMbArray::extract($params, "separator");
@@ -101,7 +101,7 @@ class CEnumSpec extends CMbFieldSpec {
     // Extra info por HTML generation
     $extra         = CMbArray::makeXmlAttributes($params);
     $locales       = $this->_locales;
-    $className     = htmlspecialchars(trim("$className $this->prop"));
+    $className     = CMbString::htmlSpecialChars(trim("$className $this->prop"));
     $html          = "";
     
     // Alpha sorting

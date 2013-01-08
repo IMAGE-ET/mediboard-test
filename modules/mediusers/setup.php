@@ -530,8 +530,12 @@ class CSetupmediusers extends CSetup {
               ADD `debut_bvr` VARCHAR (10);";
      $this->addQuery($query);
 
-     $this->mod_version = "0.48";
+     $this->makeRevision("0.48");
 
+     $query = "ALTER TABLE `medecin`
+                ADD `last_ldap_checkout` DATE;";
+
+     $this->mod_version = "0.49";
   }
 }
 

@@ -501,7 +501,7 @@ class CSmartyMB extends Smarty {
     CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.truncate");
     $string = html_entity_decode($string);
     $truncated = smarty_modifier_truncate($string, $length, $etc, $break_words, $middle);
-    $string = htmlentities($string);
+    $string = CMbString::htmlEntities($string);
     return strlen($string) > $length ? "<span title=\"$string\">$truncated</span>" : $truncated;
   }
   
@@ -587,7 +587,7 @@ class CSmartyMB extends Smarty {
       return $string;
     }
   
-    return htmlspecialchars($string, ENT_QUOTES);
+    return CMbString::htmlSpecialChars($string, ENT_QUOTES, "ISO-8859-1");
   }
   
   function stripslashes($string){

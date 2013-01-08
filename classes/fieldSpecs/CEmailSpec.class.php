@@ -33,9 +33,9 @@ class CEmailSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    $field = htmlspecialchars($this->fieldName);
-    $value = htmlspecialchars($value);
-    $class = htmlspecialchars("$className $this->prop");
+    $field = CMbString::htmlSpecialChars($this->fieldName);
+    $value = CMbString::htmlSpecialChars($value);
+    $class = CMbString::htmlSpecialChars("$className $this->prop");
     
     $form  = CMbArray::extract($params, "form");
     $extra = CMbArray::makeXmlAttributes($params);

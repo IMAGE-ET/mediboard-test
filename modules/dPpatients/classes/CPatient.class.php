@@ -1677,7 +1677,7 @@ class CPatient extends CMbObject {
       $noms[] = $nom;
       $template->addProperty("Patient - médecin correspondant $i", $nom);
       $template->addProperty("Patient - médecin correspondant $i - adresse", "{$medecin->adresse}\n{$medecin->cp} {$medecin->ville}");
-      $template->addProperty("Patient - médecin correspondant $i - spécialité", htmlentities($medecin->disciplines));
+      $template->addProperty("Patient - médecin correspondant $i - spécialité", CMbString::htmlEntities($medecin->disciplines));
     }
 
     $template->addProperty("Patient - médecins correspondants", implode(" - ", $noms));

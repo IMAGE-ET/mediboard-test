@@ -1969,8 +1969,14 @@ class CSetupdPpatients extends CSetup {
               DROP `assure_avs`;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.67";
+    $this->makeRevision("1.67");
 
+    $query = "ALTER TABLE `medecin`
+                ADD `email_apicrypt` VARCHAR (50),
+                ADD `last_ldap_checkout` DATE;";
+
+    $this->mod_version = "1.68";
+    
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
   }

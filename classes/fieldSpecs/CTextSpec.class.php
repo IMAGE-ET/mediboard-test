@@ -27,7 +27,7 @@ class CTextSpec extends CMbFieldSpec {
     if ($truncate = CValue::read($params, "truncate")) {
       $value = CMbString::truncate($value, $truncate === true ? null : $truncate);
     }
-    return $value ? '<p>'.nl2br(htmlspecialchars($value)).'</p>': "";
+    return $value ? '<p>'.nl2br(CMbString::htmlSpecialChars($value)).'</p>': "";
   }
   
   function sample(&$object, $consistent = true){

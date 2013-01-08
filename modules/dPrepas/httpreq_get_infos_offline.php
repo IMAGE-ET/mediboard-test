@@ -127,7 +127,7 @@ function delNoScalar(&$aObjects){
       if((!is_scalar($value) || $value === null) && $keyVar[0] == "_"){
         unset($object->$keyVar);
       }else{
-        $object->$keyVar = htmlentities($value);
+        $object->$keyVar = CMbString::htmlEntities($value);
       }
     }
   }

@@ -40,7 +40,7 @@ class CSetSpec extends CEnumSpec {
     
     $ret = array();
     foreach ($propValue as $_value) {
-      $ret[] = htmlspecialchars(CAppUI::tr("$object->_class.$fieldName.$_value"));
+      $ret[] = CMbString::htmlSpecialChars(CAppUI::tr("$object->_class.$fieldName.$_value"));
     }
     
     return implode(", ", $ret);
@@ -58,7 +58,7 @@ class CSetSpec extends CEnumSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    $field         = htmlspecialchars($this->fieldName);
+    $field         = CMbString::htmlSpecialChars($this->fieldName);
     $locales       = $this->_locales;
     
     $typeEnum      = CMbArray::extract($params, "typeEnum", $this->typeEnum ? $this->typeEnum : "checkbox");
@@ -70,7 +70,7 @@ class CSetSpec extends CEnumSpec {
     $form          = CMbArray::extract($params, "form"); // needs to be extracted
     
     $extra         = CMbArray::makeXmlAttributes($params);
-    $className     = htmlspecialchars(trim("$className $this->prop"));
+    $className     = CMbString::htmlSpecialChars(trim("$className $this->prop"));
 
     if ($alphabet) {
       asort($locales); 

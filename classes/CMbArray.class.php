@@ -288,7 +288,7 @@ abstract class CMbArray {
     $return = '';
     foreach ($array as $key => $value) {
       if ($value !== null) {
-        $value = trim(htmlspecialchars($value));
+        $value = trim(CMbString::htmlSpecialChars($value));
         $return .= "$key=\"$value\" ";
       }
     }

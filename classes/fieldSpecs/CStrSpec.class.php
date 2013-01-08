@@ -52,7 +52,7 @@ class CStrSpec extends CMbFieldSpec {
   
   function getValue($object, $smarty = null, $params = array()) {
     if ($this->class) {
-      return htmlspecialchars(CAppUI::tr($object->{$this->fieldName}));
+      return CMbString::htmlSpecialChars(CAppUI::tr($object->{$this->fieldName}));
     }
     
     return parent::getValue($object, $smarty, $params);

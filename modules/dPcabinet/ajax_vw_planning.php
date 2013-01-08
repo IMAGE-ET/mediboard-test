@@ -118,7 +118,7 @@ for ($i = 0; $i < $nbDays; $i++) {
       $_consult->loadRefCategorie();
       if($_consult->categorie_id) {
         $event->icon = "./modules/dPcabinet/images/categories/".$_consult->_ref_categorie->nom_icone;
-        $event->icon_desc = htmlentities($_consult->_ref_categorie->nom_categorie);
+        $event->icon_desc = CMbString::htmlEntities($_consult->_ref_categorie->nom_categorie);
       }
       
       if ($_consult->patient_id) {

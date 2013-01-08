@@ -64,14 +64,14 @@ class CBoolSpec extends CMbFieldSpec {
   
   function getFormHtmlElement($object, $params, $value, $className){
     $sHtml         = "";
-    $field         = htmlspecialchars($this->fieldName);
+    $field         = CMbString::htmlSpecialChars($this->fieldName);
     $typeEnum      = CMbArray::extract($params, "typeEnum", $this->typeEnum ? $this->typeEnum : "radio");
     $separator     = CMbArray::extract($params, "separator");
     $disabled      = CMbArray::extract($params, "disabled");
     $readonly      = CMbArray::extract($params, "readonly"); 
     $default       = CMbArray::extract($params, "default", $this->default);
     $form          = CMbArray::extract($params, "form"); // needs to be extracted
-    $className     = htmlspecialchars(trim("$className $this->prop"));
+    $className     = CMbString::htmlSpecialChars(trim("$className $this->prop"));
     $extra         = CMbArray::makeXmlAttributes($params);
     
     // Empty label

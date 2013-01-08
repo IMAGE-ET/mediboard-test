@@ -15,22 +15,24 @@ class CMedecin extends CMbObject {
   var $medecin_id = null;
 
   // DB Fields
-  var $nom             = null;
-  var $prenom          = null;
-  var $jeunefille      = null;
-  var $adresse         = null;
-  var $ville           = null;
-  var $cp              = null;
-  var $tel             = null;
-  var $fax             = null;
-  var $portable        = null;
-  var $email           = null;
-  var $disciplines     = null;
-  var $orientations    = null;
-  var $complementaires = null;
-  var $type            = null;
-  var $adeli           = null;
-  var $rpps            = null;
+  var $nom                = null;
+  var $prenom             = null;
+  var $jeunefille         = null;
+  var $adresse            = null;
+  var $ville              = null;
+  var $cp                 = null;
+  var $tel                = null;
+  var $fax                = null;
+  var $portable           = null;
+  var $email              = null;
+  var $disciplines        = null;
+  var $orientations       = null;
+  var $complementaires    = null;
+  var $type               = null;
+  var $adeli              = null;
+  var $rpps               = null;
+  var $email_apicrypt     = null;
+  var $last_ldap_checkout = null;
 
   // Object References
   var $_ref_patients = null;
@@ -58,22 +60,24 @@ class CMedecin extends CMbObject {
     
     $medecin_strict = (CAppUI::conf("dPpatients CMedecin medecin_strict") == 1 ? ' notNull' : '');
     
-    $specs["nom"]             = "str notNull confidential seekable";
-    $specs["prenom"]          = "str seekable";
-    $specs["jeunefille"]      = "str confidential";
-    $specs["adresse"]         = "text$medecin_strict confidential";
-    $specs["ville"]           = "str$medecin_strict confidential seekable";
-    $specs["cp"]              = "numchar$medecin_strict maxLength|5 confidential";
-    $specs["tel"]             = "phone confidential$medecin_strict";
-    $specs["fax"]             = "phone confidential";
-    $specs["portable"]        = "phone confidential";
-    $specs["email"]           = "str confidential";
-    $specs["disciplines"]     = "text seekable";
-    $specs["orientations"]    = "text";
-    $specs["complementaires"] = "text";
-    $specs["type"]            = "enum list|medecin|kine|sagefemme|infirmier|dentiste|podologue|pharmacie|maison_medicale|autre default|medecin";
-    $specs["adeli"]           = "numchar length|9 confidential mask|99S9S99999S9";
-    $specs["rpps"]            = "numchar length|11 confidential mask|99999999999 control|luhn";
+    $specs["nom"]                 = "str notNull confidential seekable";
+    $specs["prenom"]              = "str seekable";
+    $specs["jeunefille"]          = "str confidential";
+    $specs["adresse"]             = "text$medecin_strict confidential";
+    $specs["ville"]               = "str$medecin_strict confidential seekable";
+    $specs["cp"]                  = "numchar$medecin_strict maxLength|5 confidential";
+    $specs["tel"]                 = "phone confidential$medecin_strict";
+    $specs["fax"]                 = "phone confidential";
+    $specs["portable"]            = "phone confidential";
+    $specs["email"]               = "str confidential";
+    $specs["disciplines"]         = "text seekable";
+    $specs["orientations"]        = "text";
+    $specs["complementaires"]     = "text";
+    $specs["type"]                = "enum list|medecin|kine|sagefemme|infirmier|dentiste|podologue|pharmacie|maison_medicale|autre default|medecin";
+    $specs["adeli"]               = "numchar length|9 confidential mask|99S9S99999S9";
+    $specs["rpps"]                = "numchar length|11 confidential mask|99999999999 control|luhn";
+    $specs["email_apicrypt"]      = "email confidential";
+    $specs["last_ldap_checkout"]  = "date";
     
     return $specs;
   }

@@ -193,7 +193,7 @@ class CMbFieldSpec {
       $propValue = CAppUI::tr($default);
     }
     
-    return htmlspecialchars($propValue);
+    return CMbString::htmlSpecialChars($propValue);
   }
   
   function getHtmlValue($object, $smarty = null, $params = array()){
@@ -653,7 +653,7 @@ class CMbFieldSpec {
     $extra  = CMbArray::makeXmlAttributes($params);
 
     $desc  = CAppUI::tr("$object->_class-$this->fieldName-desc");
-    $desc = htmlentities($desc);
+    $desc = CMbString::htmlEntities($desc);
     $sHtml  = "<label for=\"$forName\" class=\"$className\" title=\"$desc\" $extra>";
     $sHtml .= CAppUI::tr("$object->_class-$this->fieldName");
     $sHtml .= "</label>";
@@ -671,7 +671,7 @@ class CMbFieldSpec {
    */
   function getTitleElement($object, $params) {
     $desc  = CAppUI::tr("$object->_class-$this->fieldName-desc");
-    $desc = htmlentities($desc);
+    $desc = CMbString::htmlEntities($desc);
     $title = CAppUI::tr("$object->_class-$this->fieldName-court");
     return "<label title=\"$desc\" >$title</label>";
   }
@@ -699,8 +699,8 @@ class CMbFieldSpec {
    * @return html HTML form string
    */
   function getFormHiddenElement($object, $params, $value, $className) {
-    $field = htmlspecialchars($this->fieldName);
-    $value = htmlspecialchars($value);
+    $field = CMbString::htmlSpecialChars($this->fieldName);
+    $value = CMbString::htmlSpecialChars($value);
     
     // Needs to be extracted
     CMbArray::extract($params, "form"); 
@@ -708,7 +708,7 @@ class CMbFieldSpec {
     // Input 
     $sHtml = "<input type=\"hidden\" name=\"$field\" value=\"$value\"";
     if ($this->prop) {
-      $prop = htmlspecialchars(trim("$className $this->prop"));
+      $prop = CMbString::htmlSpecialChars(trim("$className $this->prop"));
       $sHtml.= " class=\"$prop\"";
     }
     
@@ -730,7 +730,7 @@ class CMbFieldSpec {
    * @return html HTML form input string
    */
   function getFormElementText($object, $params, $value, $className, $type = "text"){
-    $field        = htmlspecialchars($this->fieldName);
+    $field        = CMbString::htmlSpecialChars($this->fieldName);
     $protected    = $value && $object->_id && isset($this->protected) && $this->protected;
     
     if ($protected) {
@@ -773,15 +773,15 @@ class CMbFieldSpec {
         $ref_object->load($value);
         $view = $ref_object->$view_field;
         
-        $sHtml  = "<input type=\"hidden\" name=\"$field\" value=\"".htmlspecialchars($value)."\" 
-                    class=\"".htmlspecialchars("$className $this->prop")."\" $extra />";
-        $sHtml .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".htmlspecialchars($view)."\" 
+        $sHtml  = "<input type=\"hidden\" name=\"$field\" value=\"".CMbString::htmlSpecialChars($value)."\"
+                    class=\"".CMbString::htmlSpecialChars("$className $this->prop")."\" $extra />";
+        $sHtml .= "<input type=\"text\" name=\"{$field}_autocomplete_view\" value=\"".CMbString::htmlSpecialChars($view)."\"
                     class=\"autocomplete styled-element\" onchange='if(!this.value){this.form[\"$field\"].value=\"\"}' $extra />";
         $ref = true;
       }
       else {
-        $sHtml  = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-                    class=\"".htmlspecialchars("$className $this->prop")." styled-element\" $extra />";
+        $sHtml  = "<input type=\"text\" name=\"$field\" value=\"".CMbString::htmlSpecialChars($value)."\"
+                    class=\"".CMbString::htmlSpecialChars("$className $this->prop")." styled-element\" $extra />";
       }
       
       $id = $form.'_'.$field.($ref ? '_autocomplete_view' : '');
@@ -838,22 +838,22 @@ class CMbFieldSpec {
           
           $params["style"] .= "width: auto;";
           $extra = CMbArray::makeXmlAttributes($params);
-          $prop = htmlspecialchars(trim("$className $this->prop"));
+          $prop = CMbString::htmlSpecialChars(trim("$className $this->prop"));
           $sHtml = "<textarea name=\"$field\" class=\"$prop noresize\" $extra>".
-                      htmlspecialchars($value).
+                      CMbString::htmlSpecialChars($value).
                    "</textarea>";
         }
         else {
-          $sHtml = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-                    class=\"".htmlspecialchars("$className $this->prop")." styled-element\" $extra/>";
+          $sHtml = "<input type=\"text\" name=\"$field\" value=\"".CMbString::htmlSpecialChars($value)."\"
+                    class=\"".CMbString::htmlSpecialChars("$className $this->prop")." styled-element\" $extra/>";
         }
         
         $sHtml .= '<button type="button" class="'.($has_CR ? "singleline" : "multiline").' notext" tabIndex="10000"
                            onclick="$(this).previous(\'input,textarea\').switchMultiline(this)"></button>';
       }
       else {
-        $sHtml = "<input type=\"$type\" name=\"$field\" value=\"".htmlspecialchars($value)."\"
-                  class=\"".htmlspecialchars("$className $this->prop")." styled-element\" $extra/>";
+        $sHtml = "<input type=\"$type\" name=\"$field\" value=\"".CMbString::htmlSpecialChars($value)."\"
+                  class=\"".CMbString::htmlSpecialChars("$className $this->prop")." styled-element\" $extra/>";
       }
     }
     
@@ -878,13 +878,13 @@ class CMbFieldSpec {
    * @return html HTML form textarea string
    */
   function getFormElementTextarea($object, $params, $value, $className){
-    $field = htmlspecialchars($this->fieldName);
+    $field = CMbString::htmlSpecialChars($this->fieldName);
     $rows  = CMbArray::extract($params, "rows", "3");
     $form  = CMbArray::extract($params, "form"); // needs to be extracted
     $aidesaisie = CMbArray::extract($params, "aidesaisie");
     $extra = CMbArray::makeXmlAttributes($params);
-    $prop = htmlspecialchars(trim("$className $this->prop"));
-    $value = htmlspecialchars($value);
+    $prop = CMbString::htmlSpecialChars(trim("$className $this->prop"));
+    $value = CMbString::htmlSpecialChars($value);
     $sHtml = "<textarea name=\"$field\" rows=\"$rows\" class=\"$prop styled-element\" $extra>$value</textarea>";
     
     if ($form && $this->helped) {
@@ -937,8 +937,8 @@ class CMbFieldSpec {
       $params["readonly"] = "readonly";
     }
 
-    $class = htmlspecialchars(trim("$className $this->prop"));
-    $field = htmlspecialchars($this->fieldName);
+    $class = CMbString::htmlSpecialChars(trim("$className $this->prop"));
+    $field = CMbString::htmlSpecialChars($this->fieldName);
     
     // Format the date
     $date = "";

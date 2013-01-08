@@ -35,7 +35,7 @@ class CPlanningRange  {
     
     $this->start = $date;
     $this->length = $length;
-    $this->title = htmlentities($title);
+    $this->title = CMbString::htmlEntities($title);
     $this->color = $color;
     $this->css_class = is_array($css_class) ? implode(" ", $css_class) : $css_class;
     

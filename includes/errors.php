@@ -154,7 +154,7 @@ function mbDump($var, $label = null) {
  * @return int The size of the data written in the log file
  **/
 function processLog($export, $label = null, $log = false) {
-  $export = htmlspecialchars($export);
+  $export = CMbString::htmlSpecialChars($export);
   $time = date("Y-m-d H:i:s");
   $msg = "\n<pre>[$time] $label: $export</pre>";
   

@@ -88,12 +88,12 @@ class CRPUXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "TRANSPORT", strtoupper($mbObject->_ref_sejour->transport));
     $this->addElement($elParent, "TRANSPORT_PEC", strtoupper($mbObject->pec_transport));
     
-    $motif = htmlspecialchars($mbObject->motif);
+    $motif = CMbString::htmlSpecialChars($mbObject->motif);
     if (CAppUI::conf("dPurgences gerer_circonstance")) {
       $module_orumip = CModule::getActive("orumip");
       $orumip_active = $module_orumip && $module_orumip->mod_active;
       
-      $motif = $orumip_active ? $mbObject->circonstance : htmlspecialchars($mbObject->_libelle_circonstance); 
+      $motif = $orumip_active ? $mbObject->circonstance : CMbString::htmlSpecialChars($mbObject->_libelle_circonstance);
     }
     
     $this->addElement($elParent, "MOTIF", $motif);

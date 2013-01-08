@@ -96,7 +96,7 @@ abstract class CHTMLResourceLoader {
   static function getTag($tagName, $attributes = array(), $content = "", $short = true) {
     $tag = "<$tagName";
     foreach ($attributes as $key => $value) {
-      $tag .= " $key=\"".htmlentities($value).'"';
+      $tag .= " $key=\"".CMbString::htmlEntities($value).'"';
     }
     if ($content != "") {
       $tag .= ">$content</$tagName>";

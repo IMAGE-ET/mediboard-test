@@ -314,7 +314,7 @@ class CAppUI {
   static function displayAjaxMsg($msg, $type = UI_MSG_OK, $_ = null) {
     $args = func_get_args();
     $msg = CAppUI::tr($msg, array_slice($args, 2));
-    $msg = htmlentities($msg);
+    $msg = CMbString::htmlEntities($msg);
     $class = self::getErrorClass($type);
     self::callbackAjax('$("systemMsg").show().insert', "<div class='$class'>$msg</div>");
   }

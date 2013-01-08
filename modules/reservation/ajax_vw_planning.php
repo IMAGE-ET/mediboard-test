@@ -220,29 +220,29 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $libelle .= "<span style='float: right' title='Intervention en urgence'><img src='images/icons/attente_fourth_part.png' /></span>";
     }
     
-    $libelle .= "<span onmouseover='ObjectTooltip.createEx(this, \"".htmlentities($patient->_guid)."\")'>".htmlentities($patient->nom. " " .$patient->prenom)."</span>, ".$patient->getFormattedValue("naissance").
+    $libelle .= "<span onmouseover='ObjectTooltip.createEx(this, \"".CMbString::htmlEntities($patient->_guid)."\")'>".CMbString::htmlEntities($patient->nom. " " .$patient->prenom)."</span>, ".$patient->getFormattedValue("naissance").
     "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".mbTransformTime($debut_op, null, "%H:%M")." - ".mbTransformTime($fin_op, null, "%H:%M")."</span>".
     "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>".
-    "\n<span style='font-size: 11px; font-weight: bold;'>".htmlentities($_operation->libelle)."</span>".
-    "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>".htmlentities($chir->_view)."</span>";
+    "\n<span style='font-size: 11px; font-weight: bold;'>".CMbString::htmlEntities($_operation->libelle)."</span>".
+    "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>".CMbString::htmlEntities($chir->_view)."</span>";
     
     if ($chir_2->_id) {
-      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_2->_guid."\")'>".htmlentities($chir_2->_view)."</span>";
+      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_2->_guid."\")'>".CMbString::htmlEntities($chir_2->_view)."</span>";
     }
     
     if ($chir_3->_id) {
-      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_3->_guid."\")'>".htmlentities($chir_3->_view)."</span>";
+      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_3->_guid."\")'>".CMbString::htmlEntities($chir_3->_view)."</span>";
     }
     
     if ($chir_4->_id) {
-      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_4->_guid."\")'>".htmlentities($chir_4->_view)."</span>";
+      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_4->_guid."\")'>".CMbString::htmlEntities($chir_4->_view)."</span>";
     }
     
     if ($anesth->_id) {
-      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>".htmlentities($anesth->_view)."</span>";
+      $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$anesth->_guid."\")'>".CMbString::htmlEntities($anesth->_view)."</span>";
     }
     
-    $libelle .= "\n".htmlentities($_operation->rques);
+    $libelle .= "\n".CMbString::htmlEntities($_operation->rques);
     
     if (count($besoins)) {
       CMbObject::massLoadFwdRef($besoins, "type_ressource_id");
@@ -252,7 +252,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $libelle .= "<span class='compact' style='color: #000'>";
       foreach ($besoins as $_besoin) {
         $_type_ressource = $_besoin->loadRefTypeRessource();
-        $libelle .= htmlentities($_type_ressource->libelle);
+        $libelle .= CMbString::htmlEntities($_type_ressource->libelle);
         if ($_besoin != $last_besoin) {
           $libelle .= " - ";
         }

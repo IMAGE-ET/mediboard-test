@@ -56,7 +56,7 @@ class CFloatSpec extends CMbFieldSpec {
       $propValue = self::formattedToMasked($propValue, $this->mask, $this->format);
     }
     
-    return htmlspecialchars($propValue);
+    return CMbString::htmlSpecialChars($propValue);
   }
   
   function checkProperty($object){
@@ -110,7 +110,7 @@ class CFloatSpec extends CMbFieldSpec {
     $deferEvent   = CMbArray::extract($params, "deferEvent");
     $bigButtons   = CMbArray::extract($params, "bigButtons");
 
-    $field = htmlspecialchars($this->fieldName);
+    $field = CMbString::htmlSpecialChars($this->fieldName);
     
     $min = CMbArray::extract($params, "min");
     if ($min === null) {

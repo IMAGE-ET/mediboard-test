@@ -106,8 +106,8 @@ class CRefSpec extends CMbFieldSpec {
    */
   function getFormHtmlElement($object, $params, $value, $className) {
     if ($options = CMbArray::extract($params, "options")) {
-      $field         = htmlspecialchars($this->fieldName);
-      $className     = htmlspecialchars(trim("$className $this->prop"));
+      $field         = CMbString::htmlSpecialChars($this->fieldName);
+      $className     = CMbString::htmlSpecialChars(trim("$className $this->prop"));
       $extra         = CMbArray::makeXmlAttributes($params);
       $choose        = CMbArray::extract($params, "choose", "Choose");
       $choose = CAppUI::tr($choose);

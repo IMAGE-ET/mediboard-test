@@ -77,12 +77,12 @@ class CPasswordSpec extends CMbFieldSpec {
   
   function getFormHtmlElement($object, $params, $value, $className){
     $form         = CMbArray::extract($params, "form"); // needs to be extracted
-    $field        = htmlspecialchars($this->fieldName);
+    $field        = CMbString::htmlSpecialChars($this->fieldName);
     $extra        = CMbArray::makeXmlAttributes($params);
-    $sHtml        = '<input type="password" name="'.$field.'" class="'.htmlspecialchars(trim($className.' '.$this->prop)).' styled-element" ';
+    $sHtml        = '<input type="password" name="'.$field.'" class="'.CMbString::htmlSpecialChars(trim($className.' '.$this->prop)).' styled-element" ';
     
     if ($this->revealable) {
-      $sHtml       .= ' value="'.htmlspecialchars($value).'" ';
+      $sHtml       .= ' value="'.CMbString::htmlSpecialChars($value).'" ';
     }
     
     $sHtml       .= $extra.' />';

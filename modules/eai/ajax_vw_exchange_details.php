@@ -54,7 +54,7 @@ switch(true) {
       $doc = $msg_segment_group->toXML();
       if (count($msg_segment_group->children) > $limit_size) {
         $doc->formatOutput = true;
-        $msg_segment_group->_xml = "<pre>".htmlentities($doc->saveXML())."</pre>";
+        $msg_segment_group->_xml = "<pre>".CMbString::htmlEntities($doc->saveXML())."</pre>";
       }
       else {
         $msg_segment_group->_xml = CMbString::highlightCode("xml", $doc->saveXML());
@@ -67,7 +67,7 @@ switch(true) {
       $doc = $ack_segment_group->toXML();
       if (count($ack_segment_group->children) > $limit_size) {
         $doc->formatOutput = true;
-        $ack_segment_group->_xml = "<pre>".htmlentities($doc->saveXML())."</pre>";
+        $ack_segment_group->_xml = "<pre>".CMbString::htmlEntities($doc->saveXML())."</pre>";
       }
       else {
         $ack_segment_group->_xml = CMbString::highlightCode("xml", $doc->saveXML());
