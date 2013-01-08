@@ -370,6 +370,15 @@ class CModelObject {
   }
   
   /**
+   * Returns the field's main locale
+   * @param string $field   Field name
+   * @return string The locale
+   */
+  function getLocale($field) {
+    return CAppui::tr("$this->_class-$field");
+  }
+  
+  /**
    * Bind an object with an array
    * @param array $hash  associative array of values to match with
    * @param bool  $strip true to strip slashes
