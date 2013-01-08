@@ -36,15 +36,12 @@ $object_classes = array("CConsultation", "CSejour", "COperation");
 $cotation = array();
 $total_by_prat = array();
 $total_by_class = array();
-$total = array("ccam", "ngap");
+$total = 0;
 
 foreach ($prats as $_chir_id => $_prat) {
   $_prat->loadRefFunction();
   $cotation[$_chir_id] = array();
-  @$total_by_prat[$_chir_id]["ccam"]["sec1"] = 0;
-  @$total_by_prat[$_chir_id]["ccam"]["sec2"] = 0;
-  @$total_by_prat[$_chir_id]["ngap"]["sec1"] = 0;
-  @$total_by_prat[$_chir_id]["ngap"]["sec2"] = 0;
+  @$total_by_prat[$_chir_id] = 0;
 
   foreach ($object_classes as $_object_class) {
     $cotation[$_chir_id][$_object_class] =
@@ -100,20 +97,27 @@ foreach ($prats as $_chir_id => $_prat) {
     $cotation[$_chir_id][$_object_class]["ngap"]["sect1"] = round($result["sect1"], 2);
     $cotation[$_chir_id][$_object_class]["ngap"]["sect2"] = round($result["sect2"], 2);
 
-    $total_by_prat[$_chir_id]["ccam"]["sec1"] += $cotation[$_chir_id][$_object_class]["ccam"]["sect1"];
-    $total_by_prat[$_chir_id]["ccam"]["sec2"] += $cotation[$_chir_id][$_object_class]["ccam"]["sect2"];
-    $total_by_prat[$_chir_id]["ngap"]["sec1"] += $cotation[$_chir_id][$_object_class]["ngap"]["sect1"];
-    $total_by_prat[$_chir_id]["ngap"]["sec2"] += $cotation[$_chir_id][$_object_class]["ngap"]["sect2"];
+    $total_by_prat[$_chir_id] += $cotation[$_chir_id][$_object_class]["ccam"]["sect1"];
+    $total_by_prat[$_chir_id] += $cotation[$_chir_id][$_object_class]["ccam"]["sect2"];
+    $total_by_prat[$_chir_id] += $cotation[$_chir_id][$_object_class]["ngap"]["sect1"];
+    $total_by_prat[$_chir_id] += $cotation[$_chir_id][$_object_class]["ngap"]["sect2"];
 
-    @$total_by_class[$_object_class]["ccam"]["sec1"] += $cotation[$_chir_id][$_object_class]["ccam"]["sect1"];
-    @$total_by_class[$_object_class]["ccam"]["sec2"] += $cotation[$_chir_id][$_object_class]["ccam"]["sect2"];
-    @$total_by_class[$_object_class]["ngap"]["sec1"] += $cotation[$_chir_id][$_object_class]["ngap"]["sect1"];
-    @$total_by_class[$_object_class]["ngap"]["sec2"] += $cotation[$_chir_id][$_object_class]["ngap"]["sect2"];
+    @$total_by_class[$_object_class]["ccam"] += $cotation[$_chir_id][$_object_class]["ccam"]["sect1"];
+    @$total_by_class[$_object_class]["ccam"] += $cotation[$_chir_id][$_object_class]["ccam"]["sect2"];
+    @$total_by_class[$_object_class]["ngap"] += $cotation[$_chir_id][$_object_class]["ngap"]["sect1"];
+    @$total_by_class[$_object_class]["ngap"] += $cotation[$_chir_id][$_object_class]["ngap"]["sect2"];
 
-    @$total["ccam"]["sec1"] += $cotation[$_chir_id][$_object_class]["ccam"]["sect1"];
-    @$total["ccam"]["sec2"] += $cotation[$_chir_id][$_object_class]["ccam"]["sect2"];
-    @$total["ngap"]["sec1"] += $cotation[$_chir_id][$_object_class]["ngap"]["sect1"];
-    @$total["ngap"]["sec2"] += $cotation[$_chir_id][$_object_class]["ngap"]["sect2"];
+    @$total += $cotation[$_chir_id][$_object_class]["ccam"]["sect1"];
+    @$total += $cotation[$_chir_id][$_object_class]["ccam"]["sect2"];
+    @$total += $cotation[$_chir_id][$_object_class]["ngap"]["sect1"];
+    @$total += $cotation[$_chir_id][$_object_class]["ngap"]["sect2"];
+  }
+}
+
+foreach ($total_by_prat as $_chir_id => $_total) {
+  if ($_total == 0) {
+    unset($total_by_prat[$_chir_id]);
+    unset($cotation[$_chir_id]);
   }
 }
 

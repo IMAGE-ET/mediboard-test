@@ -39,7 +39,9 @@ ActesNGAP = {
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete: function() { 
         ActesNGAP.refreshList();
-        if (Reglement) Reglement.reload(false);
+        if (window.Reglement) {
+          Reglement.reload(false);
+        }
       }
     } );
   }
