@@ -19,8 +19,9 @@
 
 {{foreach from=$subject->_ext_codes_ccam item=_code key=_key}}
 {{assign var=actes_ids value=$subject->_associationCodesActes.$_key.ids}}
+{{unique_id var=uid_autocomplete_asso}}
 <fieldset>
-  <legend class="text" style="width: 90%">
+  <legend class="text" style="width: 90%; height: 20px">
     {{assign var=can_delete value=1}}
     {{foreach from=$_code->activites item=_activite}}
       {{foreach from=$_activite->phases item=_phase}}
@@ -36,16 +37,28 @@
       </button>
     {{/if}}
     <!-- Codes d'associations -->
-    {{if count($_code->assos) > 0 && count($_code->assos) < 15}}
-    <select style="float:right; width: 160px;" name="asso" onchange="setCodeTemp(this.value)">
-      <option value="">&mdash; Choisir un code associé</option>
-      {{foreach from=$_code->assos item=_asso}}
-      <option value="{{$_asso.code}}">
-        {{$_asso.code}}
-        ({{$_asso.texte|truncate:35:"...":true}})
-      </option>
-      {{/foreach}}
-    </select>
+    {{if count($_code->assos) > 0}}
+      <div class="small" style="float:right;">
+        {{$_code->assos|@count}} codes associés
+        <form name="addAssoCode{{$uid_autocomplete_asso}}" method="get">
+          <input type="text" size="12" name="keywords" value="&mdash; Code associé" onclick="$V(this, '');"/>
+        </form>
+      </div>
+      <script>
+        Main.add(function() {
+          var form = getForm("addAssoCode{{$uid_autocomplete_asso}}");
+          var url = new Url("dPccam", "ajax_autocomplete_ccam_asso");
+          url.addParam("code", "{{$_code->code}}");
+          url.autoComplete(form.keywords, null, {
+            minChars: 2,
+            dropdown: true,
+            width: "250px",
+            updateElement: function(selected) {
+              setCodeTemp(selected.down("strong").innerHTML);
+            }
+          });
+        });
+      </script>
     {{/if}}
     <!-- Forfait spécifique -->
     <a href="#" {{if $confCCAM.contraste}}style="color: #fff;"{{/if}} onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')">
@@ -297,7 +310,7 @@
                   {{if $confCCAM.openline}}
                     <div style="float: right;">
                     <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
-                          ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}})
+                      onComplete: ActesCCAM.notifyChange.curry({{$subject->_id}},{{$subject->_praticien_id}})
                     })">
                       {{tr}}Modify{{/tr}} cet acte
                     </button>

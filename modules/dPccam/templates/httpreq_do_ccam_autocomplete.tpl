@@ -26,5 +26,9 @@
       <br />
       <small>{{$_code->libelleLong|smarty:nodefaults|emphasize:$keywords}}</small>
     </li>
+  {{foreachelse}}
+    <li>
+      <span style="font-style: italic;">{{tr}}No result{{/tr}}</span>
+    </li>
   {{/foreach}}
 </ul>

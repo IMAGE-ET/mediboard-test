@@ -401,13 +401,33 @@ class CCodeCCAM {
     }
   }
   
-  function getActesAsso() {
+  function getActesAsso($code = null, $limit = null) {
     $ds =& $this->_spec->ds;
     $queryEffet = $ds->prepare("SELECT MAX(DATEEFFET) as LASTDATE FROM associabilite WHERE CODEACTE = % GROUP BY CODEACTE", $this->code);
     $resultEffet = $ds->exec($queryEffet);
     $rowEffet = $ds->fetchArray($resultEffet);
     $lastDate = $rowEffet["LASTDATE"];
-    $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY ACTEASSO", $this->code);
+    if ($code) {
+      $code_explode = explode(" ", $code);
+      $codeLike = array();
+      foreach ($code_explode as $value) {
+        $codeLike[] = "LIBELLELONG LIKE '%".addslashes($value) . "%'";
+      }
+
+      $query = "SELECT * FROM associabilite
+        LEFT JOIN actes ON associabilite.ACTEASSO = actes.CODE
+        WHERE CODEACTE = '$this->code'
+        AND DATEEFFET = '$lastDate'
+        AND (CODE LIKE '$code%'
+          OR (".implode(" OR ",$codeLike)."))
+        GROUP BY ACTEASSO";
+    }
+    else {
+      $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % AND DATEEFFET = '$lastDate' GROUP BY ACTEASSO", $this->code);
+    }
+    if ($limit) {
+      $query .= " LIMIT $limit";
+    }
     $result = $ds->exec($query);
     $i = 0;
     while ($row = $ds->fetchArray($result)) {
