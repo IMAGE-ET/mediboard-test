@@ -14,14 +14,24 @@ $ds = CSQLDataSource::get("std");
 $chirSel   = CValue::getOrSession("chirSel");
 $date      = CValue::getOrSession("date", mbDate());
 
+$praticien = new CMediusers();
+$praticien->load($chirSel);
+
 $where = array();
-$where["sejour.praticien_id"] = "= '$chirSel'";
+$ljoin = array();
+if ($praticien->isAnesth()) {
+  $ljoin = array();
+  $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
+  $ljoin["plagesop"]   = "operations.plageop_id = plagesop.plageop_id";
+  $where[] = "operations.anesth_id = '$chirSel' OR (operations.anesth_id IS NULL AND plagesop.anesth_id = '$chirSel')";
+} else {
+  $where["sejour.praticien_id"] = "= '$chirSel'";
+}
 $where["sejour.entree"]   = "<= '$date 23:59:59'";
 $where["sejour.sortie"]   = ">= '$date 00:00:00'";
 $where["sejour.annule"]   = "= '0'";
 $where["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
 
-$ljoin = array();
 $ljoin["affectation"] = "affectation.sejour_id = sejour.sejour_id";
 $ljoin["lit"]         = "lit.lit_id = affectation.lit_id";
 $ljoin["chambre"]     = "chambre.chambre_id = lit.chambre_id";

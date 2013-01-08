@@ -2,7 +2,7 @@
 
 updatePrescriptions = function() {
   var url = new Url("soins", "httpreq_vw_bilan_list_prescriptions");
-  url.addParam("praticien_id" , "{{$chirSel}}");
+  url.addParam("prat_bilan_id" , "{{$chirSel}}");
   url.addParam("board" , "1");
   url.requestUpdate("prescriptions_non_signees");
 }
