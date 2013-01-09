@@ -10,24 +10,23 @@
 
 
 CCanDo::checkRead();
-$user = CUser::get();
-
+$user = CMediusers::get();
 //unseen
-$mail = new CUserMail();
-$mail->user_id = $user->_id;
 
-$where = array();
-$order = "date_inbox DESC";
+$account = new CSourcePOP();
+$account->object_class = $user->_class;
+$account->object_id = $user->_id;
+$accounts = $account->loadMatchingList();
 
-$mails_all = $mail->countMatchingList($order);
+$mailbox = array();
 
-
-$mails = array();
-$mails["all"]     = $mails_all;
-
+foreach ($accounts as $_account) {
+  $libelle = $_account->libelle ? $_account->libelle : $_account->_id;
+  $mailbox[$_account->_id]     = $libelle;
+}
 
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("user",  $user);
-$smarty->assign("mails", $mails);
+$smarty->assign("mails", $mailbox);
 $smarty->display("vw_list_externalMessages.tpl");

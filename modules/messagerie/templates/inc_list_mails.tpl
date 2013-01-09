@@ -25,7 +25,7 @@
           <input type="hidden" name="dosql" value="do_usermail_aed" />
           <input type="hidden" name="del" value="1" />
           <input type="hidden" name="user_mail_id" value="{{$_mail->_id}}"/>
-          <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$_mail->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: messagerie.refreshList })">trash</button>
+          <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$_mail->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: messagerie.refreshList.curry('{{$account}}') })">trash</button>
         </form>
         (<button class="tag notext" title="button.tag notext">tag</button>)
       </td>
@@ -37,7 +37,7 @@
         {{if count($_mail->_attachments)}}
           <img title="{{$_mail->_attachments|@count}}" src="modules/messagerie/images/attachments.png" alt="attachments"/>
         {{/if}}
-        <a href="#{{$_mail->_id}}"  onclick="messagerie.modalExternalOpen('{{$_mail->_id}}','{{$type}}');" style="display: inline; vertical-align: middle;">
+        <a href="#{{$_mail->_id}}"  onclick="messagerie.modalExternalOpen('{{$_mail->_id}}','{{$account}}');" style="display: inline; vertical-align: middle;">
           {{if $_mail->subject}}{{mb_include template=inc_vw_type_message subject=$_mail->subject}}{{$_mail->subject|truncate:100:"(...)"}}{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}
         </a>
       </td>

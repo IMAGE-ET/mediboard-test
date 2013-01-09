@@ -20,6 +20,7 @@
     url.addElement(oForm.patient_id);
     url.addElement(oForm.consultation_id);
     url.requestUpdate("recherche_patient");
+    return true;
   };
 </script>
 <style>
@@ -116,7 +117,9 @@
 
       <div id="recherche_patient"></div>
 
-      <button id="do_link_attachments" style="display: none;">{{tr}}Lier{{/tr}}</button>
     </td>
+  </tr>
+  <tr>
+    <td colspan="2"><button id="do_link_attachments" style="display: none;"><img src="style/mediboard/images/buttons/up.png" alt=""/>{{tr}}Lier{{/tr}}<img src="style/mediboard/images/buttons/up.png" alt=""/></button></td>
   </tr>
 </table>

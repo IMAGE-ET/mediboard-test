@@ -16,7 +16,7 @@ class CUserMail extends CMbObject{
 
   var $user_mail_id = null;  //key
 
-  var $user_id      = null; //user_id
+  var $account_id     = null; //POP account
   //headers
   var $subject        = null;  //subject of the mail
   var $from           = null;  //who sent it
@@ -35,6 +35,7 @@ class CUserMail extends CMbObject{
   //body
   var $text_plain_id     = null; //plain text (no html)
   var $_text_plain      = null;
+  var $_account_pop     = null;
 
   var $text_html_id      = null; //html text
   var $_text_html       = null;
@@ -65,7 +66,7 @@ class CUserMail extends CMbObject{
   function getProps() {
     $props = parent::getProps();
     $props["subject"]       = "str";
-    $props["user_id"]       = "ref notNull class|CMediusers";
+    $props["account_id"]    = "ref notNull class|CSourcePOP";
     $props["from"]          = "str";
     $props["_from"]         = "str";
     $props["to"]            = "str";
@@ -82,6 +83,14 @@ class CUserMail extends CMbObject{
     $props["text_html_id"]     = "ref class|CContentHTML show|0";
 
     return $props;
+  }
+
+
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps["mail_attachment"]            = "CMailAttachments mail_id";
+    $backProps["user_mail_reply"]            = "CUserMail in_reply_to_id";
+    return $backProps;
   }
 
   /**
@@ -231,13 +240,15 @@ class CUserMail extends CMbObject{
   }
 
   /**
-   * used for show the cleaned from string
+   * return the cleaned string
    *
-   * @param string $string
+   * @param string $string an address string example: <foo@bar.com>"Mr Foo"
+   *
+   * @return mixed
    */
   private function adressToUser($string) {
     $email_complex = '/^(.+)(<[A-Za-z0-9._%-@ +]+>)$/';
-    if (preg_match($email_complex,$string,$out)) {
+    if (preg_match($email_complex, $string, $out)) {
       if (count($out)>1) {
         $out = str_replace('"', "", $out);
         return $out[1];
@@ -246,12 +257,26 @@ class CUserMail extends CMbObject{
     return $string;
   }
 
+  /**
+   * load the text_plain ref
+   *
+   * @return CMbObject
+   */
   function loadContentPlain() {
     return $this->_text_plain = $this->loadFwdRef("text_plain_id");
   }
 
+  /**
+   * load the text_html ref
+   *
+   * @return CSourceHTML
+   */
   function loadContentHTML() {
     return $this->_text_html = $this->loadFwdRef("text_html_id");
+  }
+
+  function loadAccount() {
+    return $this->_account_pop = $this->loadFwdRef("account_id");
   }
 
   function loadAttachments() {
@@ -267,6 +292,7 @@ class CUserMail extends CMbObject{
     $this->loadContentHTML();
     $this->loadContentPlain();
     $this->loadAttachments();
+    $this->loadAccount();
   }
 
 }

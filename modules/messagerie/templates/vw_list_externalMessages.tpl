@@ -34,7 +34,8 @@
       {{foreach from=$mails key=k item=_mail}}
         <li>
           <a href="#{{$k}}" style="white-space: nowrap;" onmousedown="messagerie.refreshList('{{$k}}')"
-            {{if count($_mail)==0}}class="empty"{{/if}}>{{tr}}CUserMail.{{$k}}{{/tr}} <small>({{$_mail|@count}})</small> </a>
+            {{if count($_mail)==0}}class="empty"{{/if}}>{{$_mail}}
+          </a>
         </li>
       {{/foreach}}
       </ul>

@@ -19,32 +19,25 @@ messagerie = {
     url.modalObject.observe("afterClose", this.refreshList.curry(type));
   },
 
-  modalExternalOpen:function (id, type) {
+  modalExternalOpen:function (id, account) {
     var url = new Url(messagerie.module, "ajax_open_external_email");
     url.addParam("mail_id", id);
     url.requestModal(900, 800);
-    url.modalObject.observe("afterClose", this.refreshList.curry(type));
+    url.modalObject.observe("afterClose", this.refreshList.curry(account));
     messagerie.url = url;
   },
 
-  refreshList:function (type) {
+  refreshList:function (account) {
     var url = new Url(messagerie.module, "ajax_list_mails");
-
-    if (Object.isUndefined(type)) {
-      type = 'all';
-    }
-    url.addParam("type", type);
-    url.requestUpdate(type);
+    url.addParam("account", account);
+    url.requestUpdate(account);
   },
 
-  getLastMessages:function (user_id, type) {
-    if (!type) {
-      type = 'all';
-    }
+  getLastMessages:function (user_id, account) {
     var url = new Url(messagerie.module, "ajax_get_last_email");
     url.addParam("user_id", user_id);
     url.requestUpdate("systemMsg", function () {
-      messagerie.refreshList(type);
+      messagerie.refreshList(account);
     });
   },
 

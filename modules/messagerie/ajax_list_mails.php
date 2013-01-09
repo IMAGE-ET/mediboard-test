@@ -9,12 +9,12 @@
 
 CCanDo::checkRead();
 
-$type = CValue::get("type","all");
+$account = CValue::get("account");
 
 $user = CMediusers::get();
 
 $mail = new CUserMail();
-$mail->user_id = $user->_id;
+$mail->account_id = $account;
 $order = "date_inbox DESC";
 
 $mails = $mail->loadMatchingList($order);
@@ -27,5 +27,5 @@ foreach ($mails as $_mail) {
 
 $smarty = new CSmartyDP();
 $smarty->assign("mails", $mails);
-$smarty->assign("type", $type);
+$smarty->assign("account", $account);
 $smarty->display("inc_list_mails.tpl");

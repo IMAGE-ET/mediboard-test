@@ -80,6 +80,7 @@ $locales['CUserMail-from-desc'] = 'Expediteur du message';
 $locales['CUserMail-in_reply_to_id'] = 'En réponse à';
 $locales['CUserMail-msg-noContentText'] = 'Pas de corp de texte';
 $locales['CUserMail-no_subject'] = 'Pas de sujet';
+$locales['CUserMail-none'] = 'Aucun Email';
 $locales['CUserMail-option-More'] = 'Plus';
 $locales['CUserMail-option-allmarkasread'] = 'Tout marquer comme lu';
 $locales['CUserMail-subject'] = 'Sujet';

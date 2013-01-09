@@ -19,7 +19,7 @@
   <ul style="text-align: left;">
     <li><strong>Sejours</strong></li>
   {{foreach from=$patient->_ref_sejours item=_sejour}}
-    <li><input type="radio" name="object"/> {{$_sejour}}</li>
+    <li><input type="radio" name="object" onclick="checkrelation()"/> {{$_sejour}}</li>
     {{foreach from=$_sejour->_ref_operations item=_op}}
       <li style="margin-left:15px; padding-left: 15px; border-left: solid 1px grey;">
         <input type="radio" name="object" onclick="checkrelation()"/>

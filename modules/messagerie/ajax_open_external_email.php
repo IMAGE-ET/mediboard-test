@@ -22,8 +22,7 @@ $mail->loadRefsFwd();
 
 //pop account
 $log_pop = new CSourcePOP();
-$log_pop->name = "user-pop-".$user->_id;
-$log_pop->loadMatchingObject();
+$log_pop->load($mail->account_id);
 
 //if not read email, send the seen flag to server
 if (!$mail->date_read) {

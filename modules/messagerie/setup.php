@@ -103,7 +103,16 @@ class CSetupmessagerie extends CSetup {
     $this->makeRevision("0.18");
     $this->addPrefQuery("showImgInMail", 0);
 
-    $this->mod_version = "0.19";
+    $this->makeRevision("0.19");
+    $query = "ALTER TABLE `user_mail`
+              ADD `account_id` INT (11) NOT NULL AFTER `user_mail_id`,
+              DROP `user_id`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `user_mail` ADD INDEX (`accound_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.20";
 
   }
 }
