@@ -306,6 +306,8 @@ class CMediusers extends CMbObject {
     $backProps["poses_disp_vasc_encadrant"]       = "CPoseDispositifVasculaire encadrant_id";
     $backProps["praticien_facture"]               = "CFactureConsult praticien_id";
     $backProps["tokens"]                          = "CViewAccessToken user_id";
+    $backProps["sources_pop"]                     = "CSourcePOP object_id";
+
 
     return $backProps;
   }
@@ -1096,15 +1098,6 @@ class CMediusers extends CMbObject {
     return $this->_is_secretaire = $this->isFromType(array("Secrétaire", "Administrator"));
   }
 
-  /**
-   * load the list of POP account
-   *
-   * @return CStoredObject[]
-   */
-  function loadRefsSourcePop() {
-    return $this->_refs_source_pop = $this->loadBackRefs("sources_pop");
-  }
-
 
   /**
    * Check whether user is a medical user
@@ -1146,6 +1139,17 @@ class CMediusers extends CMbObject {
   function isUrgentiste () {
     return $this->_is_urgentiste = ($this->function_id == CGroups::loadCurrent()->service_urgences_id);
   }
+
+  /**
+   * load the list of POP account
+   *
+   * @return CStoredObject[]
+   */
+  function loadRefsSourcePop() {
+    return $this->_refs_source_pop = $this->loadBackRefs("sources_pop");
+  }
+
+
 
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
