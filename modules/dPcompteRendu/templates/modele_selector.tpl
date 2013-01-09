@@ -44,7 +44,7 @@ function setClose(modele_id, object_id) {
 	<!-- Choix du modèle praticien -->
 	<script type="text/javascript">
 		Main.add(function () {
-		  new Control.Tabs('tabs-modeles');
+		  Control.Tabs.create('tabs-modeles');
 		});
 	</script>
 	

@@ -21,7 +21,7 @@ function effectHighlight(){
 }
 
 Main.add(function () {
-  searchTabs = new Control.Tabs('main_tab_group');
+  searchTabs = Control.Tabs.create('main_tab_group');
   var periode = new PeriodicalExecuter(effectHighlight,1);
 });
 

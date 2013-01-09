@@ -6,7 +6,7 @@
 
 Main.add(function () {
   Calendar.regField(getForm("typeVue").date, null);
-  controlTabs = new Control.Tabs.create('tabs-edit-mouvements', true);
+  controlTabs        = Control.Tabs.create('tabs-edit-mouvements', true);
   var type           = controlTabs.activeContainer.id.split('_')[0];
   var type_mouvement = controlTabs.activeContainer.id.split('_')[1];
   refreshList(null, null, type, type_mouvement);

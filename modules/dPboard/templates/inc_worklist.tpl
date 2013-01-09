@@ -23,7 +23,7 @@ updateNbActes = function() {
 }
 
 Main.add(function () {
-  tabs = new Control.Tabs('tab-worklist');
+  var tabs = Control.Tabs.create('tab-worklist', true);
   updatePrescriptions();
   updateActes();
 });

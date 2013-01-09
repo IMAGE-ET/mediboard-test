@@ -81,7 +81,7 @@
   }
   
   Main.add(function() {
-    new Control.Tabs.create("manage_ressources", true);
+    Control.Tabs.create("manage_ressources", true);
     
     var tab_name = Control.Tabs.loadTab("manage_ressources");
     if (tab_name == "list_type_ressources" || !tab_name) {

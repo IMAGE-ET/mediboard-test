@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  var tabs = new Control.Tabs('tab-resultats');  
+  var tabs = Control.Tabs.create('tab-resultats');  
 });
 
 function changePageSejour(page) {

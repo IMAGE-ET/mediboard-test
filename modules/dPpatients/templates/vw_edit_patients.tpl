@@ -136,7 +136,7 @@ Main.add(function () {
   initPaysField("editFrm", "_assure_pays_naissance_insee", "assure_profession");
   initPaysField("editFrm", "assure_pays", "assure_tel");
 
-  tabs = new Control.Tabs('tab-patient');
+  tabs = Control.Tabs.create('tab-patient');
 
   {{if $patient->_id}}
     setObject( {

@@ -18,7 +18,7 @@ var Analyse = {
 }
 
 Main.add(function () {
-  var tabs = new Control.Tabs('tab-examen');
+  var tabs = Control.Tabs.create('tab-examen');
 });
 </script>
 

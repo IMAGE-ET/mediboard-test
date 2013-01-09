@@ -23,14 +23,14 @@
               {{$patient}}
             </span>
           </td>
-          <td>
+          <td class="text">
             <a href="#1" onclick="Operation.dossierBloc('{{$_operation->_id}}'); return false;">
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
                 {{$_operation}} ({{$_operation->_actes_non_cotes}} acte(s) non coté(s))
               </span>
             </a>
           </td>
-          <td>
+          <td class="text">
             {{if $_operation->libelle}}
               {{$_operation->libelle}}
             {{else}}
@@ -43,19 +43,32 @@
     {{if $hors_plage|@count}}
       <tr>
         <th>Hors plages</th>
-        {{foreach from=$hors_plage item=_operation}}
-          {{assign var=codes_ccam value=$_operation->codes_ccam}}
-          <tr>
-            <td>
-              <a href="#1" onclick="Operation.dossierBloc('{{$_operation->_id}}'); return false;">
-                <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
-                  {{$_operation}} ({{$_operation->_actes_non_cotes}} acte(s) non coté(s))
-                </span>
-              </a>
-            </td>
-          </tr>
-        {{/foreach}}
       </tr>
+      {{foreach from=$hors_plage item=_operation}}
+        {{assign var=codes_ccam value=$_operation->codes_ccam}}
+        <tr>
+          <td class="narrow">
+            {{assign var=patient value=$_operation->_ref_patient}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
+              {{$patient}}
+            </span>
+          </td>
+          <td class="text">
+            <a href="#1" onclick="Operation.dossierBloc('{{$_operation->_id}}'); return false;">
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
+                {{$_operation}} ({{$_operation->_actes_non_cotes}} acte(s) non coté(s))
+              </span>
+            </a>
+          </td>
+          <td class="text">
+            {{if $_operation->libelle}}
+              {{$_operation->libelle}}
+            {{else}}
+              {{" ; "|implode:$_operation->_codes_ccam}}
+            {{/if}}
+          </td>
+        </tr>
+      {{/foreach}}
     {{/if}}
   {{else}}
     <tr>

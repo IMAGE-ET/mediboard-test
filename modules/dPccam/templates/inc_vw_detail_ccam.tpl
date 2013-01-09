@@ -1,6 +1,6 @@
 <script type="text/javascript">
   Main.add(function() {
-    new Control.Tabs('tabs-detail');
+    Control.Tabs.create('tabs-detail');
   });
 </script>
 

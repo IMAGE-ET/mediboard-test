@@ -9,9 +9,9 @@
   $('count_{{$type}}_{{$type_mouvement}}').update('('+'{{$update_count}}'+')');
   Main.add(function () {
     {{if $type != "deplacements"}}
-      controlTabs = new Control.Tabs.create('tabs-edit-mouvements-{{$type}}_{{$type_mouvement}}', true);
+      controlTabs = Control.Tabs.create('tabs-edit-mouvements-{{$type}}_{{$type_mouvement}}', true);
     {{else}}
-      controlTabs = new Control.Tabs.create('tabs-edit-mouvements-{{$type}}', true);
+      controlTabs = Control.Tabs.create('tabs-edit-mouvements-{{$type}}', true);
     {{/if}}
     {{if $isImedsInstalled}}
       ImedsResultsWatcher.loadResults();

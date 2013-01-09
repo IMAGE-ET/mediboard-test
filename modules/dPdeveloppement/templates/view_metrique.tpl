@@ -11,7 +11,7 @@ function viewCurrent() {
 }
 
 Main.add(function () {
-  searchTabs = new Control.Tabs('main_tab_group');
+  searchTabs = Control.Tabs.create('main_tab_group');
   {{if $nb_etabs > 1}}
     viewGeneral();
   {{/if}}
