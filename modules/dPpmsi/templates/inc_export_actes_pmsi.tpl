@@ -15,7 +15,12 @@
     </div>
     {{/if}}
   {{else}}
-    <button class="tick singleclick" onclick="PMSI.exportActes('{{$object->_id}}', '{{$object->_class}}', null, '{{$confirmCloture}}', '{{$m}}')">
+    <button class="tick singleclick"
+     onclick="{{if $object instanceof COperation && $conf.dPsalleOp.CActeCCAM.del_actes_non_cotes}}
+         PMSI.checkActivites('{{$object->_id}}', '{{$object->_class}}', null, '{{$confirmCloture}}', '{{$m}}');
+       {{else}}
+         PMSI.exportActes('{{$object->_id}}', '{{$object->_class}}', null, '{{$confirmCloture}}', '{{$m}}');
+       {{/if}}">
       {{if $object->_class == "CSejour"}}
         Export des diagnostics et actes du séjour
       {{else}}

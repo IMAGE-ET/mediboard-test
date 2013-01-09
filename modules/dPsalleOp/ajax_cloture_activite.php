@@ -11,6 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
+CCAnDo::checkEdit();
+
 $object_id    = CValue::get("object_id");
 $object_class = CValue::get("object_class");
 
@@ -22,9 +24,11 @@ $anesth = new CMediusers();
 $non_signes_activite_1 = 0;
 $non_signes_activite_4 = 0;
 
+$actes_ccam = $object->loadRefsActesCCAM();
+
 if ($object instanceof CSejour) {
   $object->loadRefPraticien()->loadRefFunction();
-  $actes_ccam = $object->loadRefsActesCCAM();
+
   foreach ($actes_ccam as $_acte_ccam) {
     if ($_acte_ccam->code_activite == 4) {
       $anesth = $_acte_ccam->loadRefExecutant();
@@ -41,8 +45,7 @@ if ($object instanceof COperation) {
     $object->_ref_anesth->loadRefFunction();
   }
   $anesth = $object->_ref_anesth;
-  $actes_ccam = $object->loadRefsActesCCAM();
-  
+
   if (!$anesth->_id) {
     foreach ($actes_ccam as $_acte_ccam) {
       if ($_acte_ccam->code_activite == 4) {
@@ -53,10 +56,7 @@ if ($object instanceof COperation) {
   }
 }
 
-
 // Clôture possible que si tous les actes sont signés
-$actes_ccam = $object->loadRefsActesCCAM();
-
 foreach ($actes_ccam as $_acte_ccam) {
   if ($_acte_ccam->code_activite == 1 && !$_acte_ccam->signe) {
     $non_signes_activite_1 ++;
@@ -75,5 +75,3 @@ $smarty->assign("non_signes_activite_1", $non_signes_activite_1);
 $smarty->assign("non_signes_activite_4", $non_signes_activite_4);
 
 $smarty->display("inc_cloture_activite.tpl");
-
-?>

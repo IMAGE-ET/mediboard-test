@@ -15,38 +15,52 @@ if (null == $object_class = CValue::get("object_class")) {
 
 switch ($object_class) {
   case "COperation" :
-		$object = new COperation();
-		
-		// Chargement de l'opération et génération du document
-		$operation_id = CValue::post("mb_operation_id", CValue::getOrSession("object_id"));
-		if ($object->load($operation_id)) {
-		  $object->loadRefs();
-		  foreach ($object->_ref_actes_ccam as $acte_ccam) {
-		    $acte_ccam->loadRefsFwd();
-		  }
-		  $mbSejour =& $object->_ref_sejour;
-		  $mbSejour->loadRefsFwd();
-		  $mbSejour->loadNDA();
-		  $mbSejour->_ref_patient->loadIPP();
-		  if (isset($_POST["sc_patient_id"  ])) $mbSejour->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
-		  if (isset($_POST["sc_venue_id"    ])) $mbSejour->_NDA             = $_POST["sc_venue_id"    ];
-		  if (isset($_POST["cmca_uf_code"   ])) $object->code_uf            = $_POST["cmca_uf_code"   ];
-		  if (isset($_POST["cmca_uf_libelle"])) $object->libelle_uf         = $_POST["cmca_uf_libelle"];
-		}
-		break;
+    $object = new COperation();
+
+    // Chargement de l'opération et génération du document
+    $operation_id = CValue::post("mb_operation_id", CValue::getOrSession("object_id"));
+    if ($object->load($operation_id)) {
+      $object->loadRefs();
+      $codes = explode("|", $object->codes_ccam);
+      $actes = CMbArray::pluck($object->_ref_actes, "code_acte");
+
+      foreach ($object->_ref_actes_ccam as $acte_ccam) {
+        $acte_ccam->loadRefsFwd();
+      }
+
+      // Suppression des actes non codés
+      foreach ($codes as $_key => $_code) {
+        $key = array_search($_code, $actes);
+
+        if ($key === false) {
+          unset($codes[$_key]);
+        }
+      }
+      $object->_codes_ccam = $codes;
+
+      $mbSejour =& $object->_ref_sejour;
+      $mbSejour->loadRefsFwd();
+      $mbSejour->loadNDA();
+      $mbSejour->_ref_patient->loadIPP();
+      if (isset($_POST["sc_patient_id"  ])) $mbSejour->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
+      if (isset($_POST["sc_venue_id"    ])) $mbSejour->_NDA             = $_POST["sc_venue_id"    ];
+      if (isset($_POST["cmca_uf_code"   ])) $object->code_uf            = $_POST["cmca_uf_code"   ];
+      if (isset($_POST["cmca_uf_libelle"])) $object->libelle_uf         = $_POST["cmca_uf_libelle"];
+    }
+    break;
   case "CSejour" :
-		$object = new CSejour();
-				
-		// Chargement du séjour et génération du document
-		$sejour_id = CValue::post("mb_sejour_id", CValue::getOrSession("object_id"));
-		if ($object->load($sejour_id)) {
-		  $object->loadRefs();
-		  $object->loadRefDossierMedical();
-		  $object->loadNDA();
-		  $object->_ref_patient->loadIPP();
-		  if (isset($_POST["sc_patient_id"  ])) $object->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
-		  if (isset($_POST["sc_venue_id"    ])) $object->_NDA               = $_POST["sc_venue_id"    ];
-		}
+    $object = new CSejour();
+
+    // Chargement du séjour et génération du document
+    $sejour_id = CValue::post("mb_sejour_id", CValue::getOrSession("object_id"));
+    if ($object->load($sejour_id)) {
+      $object->loadRefs();
+      $object->loadRefDossierMedical();
+      $object->loadNDA();
+      $object->_ref_patient->loadIPP();
+      if (isset($_POST["sc_patient_id"  ])) $object->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
+      if (isset($_POST["sc_venue_id"    ])) $object->_NDA               = $_POST["sc_venue_id"    ];
+    }
     break;
 }
 
@@ -59,7 +73,7 @@ try {
   // Cas d'erreur on repasse à 0 la facturation
   $object->facture = 0;
   $object->store();
-  
+
   $e->stepAjax();
 }
 
@@ -79,5 +93,3 @@ $order = "date_production DESC";
 $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
 $smarty->display("../../dPpmsi/templates/inc_export_actes_pmsi.tpl");
-
-?>

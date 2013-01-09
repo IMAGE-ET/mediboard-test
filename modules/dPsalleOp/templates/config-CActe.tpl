@@ -25,6 +25,7 @@
     {{mb_include module=system template=inc_config_bool var=signature}}
     {{mb_include module=system template=inc_config_bool var=envoi_actes_salle}}
     {{mb_include module=system template=inc_config_bool var=envoi_motif_depassement}}
+    {{mb_include module=system template=inc_config_bool var=del_actes_non_cotes}}
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

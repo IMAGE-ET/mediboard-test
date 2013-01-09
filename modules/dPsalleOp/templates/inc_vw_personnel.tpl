@@ -78,30 +78,32 @@ submitPersonnel = function(oForm){
   <!-- Personnel prévu dans la plage op -->
   <td>
     {{foreach from=$tabPersonnel.plage item=affectation}}
-    <form name="affectationPersonnel-{{$affectation->_id}}" action="?m={{$m}}" method="post">
-    <input type="hidden" name="m" value="dPpersonnel" />
-    <input type="hidden" name="dosql" value="do_affectation_aed" />
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="affect_id" value="{{$affectation->_id}}" />
-    <input type="hidden" name="personnel_id" value="{{$affectation->_ref_personnel->_id}}" />
-    <input type="hidden" name="object_class" value="COperation" />
-    <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
-    <input type="hidden" name="realise" value="0" />
-    
-    {{assign var="affectation_id" value=$affectation->_id}}
-    {{assign var="form" value="affectationPersonnel-$affectation_id"}}
-		<table class="form">
-      <tr>
-      	<td style="width: 40%;" class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$affectation->_ref_personnel->_ref_user}}
-				<br />
-				<span class="opacity-60">{{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}</span>
-				</td>
-			  {{include file=inc_field_timing.tpl object=$affectation field=_debut}}
-			  {{include file=inc_field_timing.tpl object=$affectation field=_fin}}
-			</tr>
-    </table>
-   </form>
-   <hr style="margin-top: 0px;"/>
+      {{assign var="affectation_id" value=$affectation->_id}}
+      {{assign var=personnel_id value=$affectation->_ref_personnel->_id}}
+      {{assign var="form" value="affectationPersonnel-$personnel_id"}}
+
+      <form name="{{$form}}" action="?m={{$m}}" method="post">
+      <input type="hidden" name="m" value="dPpersonnel" />
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="affect_id" value="{{$affectation_id}}" />
+      <input type="hidden" name="personnel_id" value="{{$personnel_id}}" />
+      <input type="hidden" name="object_class" value="COperation" />
+      <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
+      <input type="hidden" name="realise" value="0" />
+
+      <table class="form">
+        <tr>
+          <td style="width: 40%;" class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$affectation->_ref_personnel->_ref_user}}
+          <br />
+          <span class="opacity-60">{{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}</span>
+          </td>
+          {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_debut}}
+          {{mb_include module=dPsalleOp template=inc_field_timing object=$affectation field=_fin}}
+        </tr>
+      </table>
+     </form>
+     <hr style="margin-top: 0px;"/>
    {{foreachelse}}
      <div class="small-info">Aucun personnel prévu</div>
    {{/foreach}}

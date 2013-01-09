@@ -1,9 +1,11 @@
 <?php
 $locales['Brancardage-patient-pret'] = 'Pre';
 $locales['CActeCCAM'] = 'Actes CCAM';
+$locales['CActeCCAM-_already_coded'] = 'Cet acte a déjà été codé sur cette intervention. Souhaitez-vous en coder un second ?';
 $locales['CActeCCAM-_montant_facture'] = 'Montant facturé';
 $locales['CActeCCAM-_montant_facture-court'] = 'Facture';
 $locales['CActeCCAM-_montant_facture-desc'] = 'Montant facturé (base secteur';
+$locales['CActeCCAM-_no_activite_4_cloture'] = 'Aucun acte d\'anesthésie coté. Souhaitez-vous clôturer le codage ?';
 $locales['CActeCCAM-_rembex'] = 'Remboursement Exceptionnel';
 $locales['CActeCCAM-_rembex-court'] = 'RembEx.';
 $locales['CActeCCAM-_rembex-desc'] = 'Acte exceptionnellement remboursé pour raison médical sur décision de l\'exécutant lorsque la nomenclature le permet';
@@ -312,6 +314,8 @@ $locales['config-dPsalleOp-CActeCCAM-commentaire'] = 'Affichage des commentaires
 $locales['config-dPsalleOp-CActeCCAM-commentaire-desc'] = 'Afficher les commentaires pour les actes CCAM';
 $locales['config-dPsalleOp-CActeCCAM-contraste'] = 'Affichage contrasté';
 $locales['config-dPsalleOp-CActeCCAM-contraste-desc'] = 'Affichage au contraste augmenté';
+$locales['config-dPsalleOp-CActeCCAM-del_actes_non_cotes'] = 'Supprimer les actes non cotés avant envoi';
+$locales['config-dPsalleOp-CActeCCAM-del_actes_non_cotes-desc'] = 'Supprimer les actes non cotés avant envoi';
 $locales['config-dPsalleOp-CActeCCAM-envoi_actes_salle'] = 'Envoi des actes en salle';
 $locales['config-dPsalleOp-CActeCCAM-envoi_actes_salle-desc'] = 'Envoi des actes en facturation depuis les salles de bloc';
 $locales['config-dPsalleOp-CActeCCAM-envoi_motif_depassement'] = 'Envoi du motif de dépassement d\'honoraire';

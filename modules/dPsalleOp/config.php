@@ -32,6 +32,7 @@ $dPconfig["dPsalleOp"] = array(
     "commentaire"             => "1",
     "envoi_actes_salle"       => "0",
     "envoi_motif_depassement" => "1",
+    "del_actes_non_cotes"     => "0"
   ),
   "CDossierMedical" => array (
     "DAS" => "0",

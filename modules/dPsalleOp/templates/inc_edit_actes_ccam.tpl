@@ -158,16 +158,19 @@
             <tbody class="acteEffect" id="acte{{$key}}" {{if !$confCCAM.openline}}style="display: none;"{{/if}}>
               <!-- Ligne cosmétique -->
               <tr class="{{$key}}">
-                <td class="narrow">
-                <td class="narrow">
-                <td class="narrow">
-                <td style="width: 100%;" />
+                <td class="narrow"></td>
+                <td class="narrow"></td>
+                <td class="narrow"></td>
+                <td style="width: 100%;"></td>
               </tr>
       
               <!-- Execution -->
               <tr {{if !$can->edit}}style="display: none;"{{/if}}>
                 <th>{{mb_label object=$acte field=execution}}</th>
                 <td colspan="10">
+                  {{if $acte->commentaire == ""}}
+                    <button type="button" class="edit" style="float: right;" onclick="this.up('tbody').down('tr.commentaire').toggle()">Commentaire</button>
+                  {{/if}}
                   {{mb_field object=$acte field=execution form="formActe-$view" register=true}}
                 </td>
               </tr>
@@ -290,7 +293,7 @@
       
               <!-- Commentaire -->
               {{if $confCCAM.commentaire}}
-              <tr class="{{$view}}">
+              <tr class="{{$view}} commentaire" {{if !$acte->commentaire}}style="display: none;"{{/if}}>
                 <th>{{mb_label object=$acte field=commentaire}}</th>
                 <td class="text" colspan="10">{{mb_field object=$acte field=commentaire}}</td>
               </tr>

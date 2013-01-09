@@ -5,7 +5,9 @@
 ActesCCAM = {
   notifyChange: function(subject_id, chir_id) {
 	  ActesCCAM.refreshList(subject_id, chir_id)
-    if (Reglement) Reglement.reload(false);
+    if (window.Reglement) {
+      Reglement.reload(false);
+    }
   },
   refreshList: function(subject_id, chir_id) {
     if($('viewSejourHospi')){
@@ -30,9 +32,16 @@ ActesCCAM = {
     var oCcamField = new TokenField(oForm.codes_ccam, {
       sProps : "notNull code ccam"
     } );
-    
+
+    // Alerte si ajout d'un acte déjà présent
+    if (oCcamField.getValues().indexOf(oForm._codes_ccam.value) != -1) {
+      if (!confirm($T('CActeCCAM-_already_coded'))) {
+        return;
+      }
+    }
+
     if(oCcamField.add(oForm._codes_ccam.value, true)){
-      $V(getForm("manageCodes")._codes_ccam, "");
+      $V(oForm._codes_ccam, "");
       submitFormAjax(oForm, 'systemMsg', oDefaultOptions);
     }
   },

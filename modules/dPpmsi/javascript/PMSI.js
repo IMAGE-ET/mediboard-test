@@ -10,12 +10,12 @@
  */
 
 PMSI = {
-  exportActes : function(object_id, object_class, oOptions, confirmCloture, module){
+  exportActes: function(object_id, object_class, oOptions, confirmCloture, module){
     if ((confirmCloture == 1) && !confirm("L'envoi des actes cloturera définitivement le codage de cette intervention pour le chirurgien et l'anesthésiste." +
           "\nConfirmez-vous l'envoi en facturation ?")) {
       return;
     } 
-    
+
     var oDefaultOptions = {
       onlySentFiles : false
     };
@@ -42,7 +42,7 @@ PMSI = {
     url.requestUpdate("export_" + object_class + "_" + object_id, oRequestOptions); 
   },
   
-  deverouilleDossier : function(object_id, object_class, confirmCloture, module) {
+  deverouilleDossier: function(object_id, object_class, confirmCloture, module) {
     var url = new Url("dPpmsi", "ajax_refresh_export_actes_pmsi");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
@@ -60,10 +60,24 @@ PMSI = {
     url.requestUpdate("export_" + object_class + "_" + object_id, oRequestOptions);     
   },
   
-  reloadActes : function(operation_id, module) {
+  reloadActes: function(operation_id, module) {
     var url = new Url("dPsalleOp", "ajax_refresh_actes");
     url.addParam("operation_id", operation_id);
     url.addParam("module", module);
     url.requestUpdate("codage_actes");
+  },
+
+  checkActivites: function(object_id, object_class, oOptions, confirmCloture, module) {
+    var url = new Url("dPsalleOp", "ajax_check_activites_cloture");
+    url.addParam("object_class", object_class);
+    url.addParam("object_id", object_id);
+    url.addParam("suppressHeaders", 1);
+    url.addParam("dialog", 1);
+    url.requestJSON(function(completed_activite_4) {
+      if (completed_activite_4 == 0 && !confirm($T('CActeCCAM-_no_activite_4_cloture'))) {
+        return;
+      }
+      PMSI.exportActes(object_id, object_class, oOptions, confirmCloture, module);
+    });
   }
 };
