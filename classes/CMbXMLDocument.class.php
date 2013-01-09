@@ -296,7 +296,7 @@ class CMbXMLDocument extends DOMDocument {
 
     //remove scripts tag
     $xpath = new DOMXpath($document);
-    $filter = array("//script", "//style", "//meta", "//applet", "//basefont", "//iframe"); //some dangerous
+    $filter = array("//script", "//meta", "//applet", "//iframe"); //some dangerous
     foreach ($filter as $_filter) {
       $elements = $xpath->query($_filter);
       foreach ($elements as $_element) {
@@ -313,7 +313,6 @@ class CMbXMLDocument extends DOMDocument {
     $html = preg_replace("/<[b|h]r([^>]*)>/", "<br $1/>", $html);
     $html = preg_replace("/<img([^>]+)>/", "<img$1/>", $html);
 
-    mbTrace($html);
     return $html;
   }
 }
