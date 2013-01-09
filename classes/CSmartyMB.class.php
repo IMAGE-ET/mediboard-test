@@ -587,7 +587,7 @@ class CSmartyMB extends Smarty {
       return $string;
     }
   
-    return CMbString::htmlSpecialChars($string, ENT_QUOTES, "ISO-8859-1");
+    return CMbString::htmlSpecialChars($string, ENT_QUOTES);
   }
   
   function stripslashes($string){

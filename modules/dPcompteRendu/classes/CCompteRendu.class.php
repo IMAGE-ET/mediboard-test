@@ -893,7 +893,7 @@ class CCompteRendu extends CDocumentItem {
     if (CModule::getActive("dPprescription")) {
       $all_classes[] = "CPrescription";
     }
-    $installed = CApp::getInstalledClasses(null, $all_classes);
+    $installed = CApp::getInstalledClasses($all_classes);
     
     foreach ($installed as $key => $class) {
       if (is_method_overridden($class, 'fillTemplate') || is_method_overridden($class, 'fillLimitedTemplate')) {

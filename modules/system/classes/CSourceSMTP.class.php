@@ -46,7 +46,7 @@ class CSourceSMTP extends CExchangeSource {
   
   function updatePlainFields() {
     parent::updatePlainFields();
-    //$this->role = "prod";
+    $this->role = "prod";
   }
   
   function updateFormFields() {

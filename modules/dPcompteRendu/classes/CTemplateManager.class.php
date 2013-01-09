@@ -330,7 +330,7 @@ class CTemplateManager {
     }
     
     // Escape content
-    $items = array_map("CMbString::htmlEntities", $items);
+    $items = array_map(array("CMbString", "htmlEntities"), $items);
     
     // HTML production
     switch ($default = CAppUI::pref("listDefault")) {
@@ -622,7 +622,7 @@ class CTemplateManager {
     foreach ($lists as $value) {
       
       // Remplacer 039 par 39 car ckeditor remplace ' par &#39;
-      $nom = str_replace("#039;", "#39;", CMbString::htmlEntities(stripslashes("[Liste - $value->nom]"), ENT_QUOTES, "ISO-8859-1"));
+      $nom = str_replace("#039;", "#39;", CMbString::htmlEntities(stripslashes("[Liste - $value->nom]"), ENT_QUOTES));
       $pos = strpos($this->document, $nom);
       if ($pos !== false) {
         $this->usedLists[$pos] = $value;

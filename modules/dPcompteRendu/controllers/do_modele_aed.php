@@ -92,7 +92,7 @@ if (isset($_POST["_source"])) {
   if (isset($_POST["_CListeChoix"])) {
     $listes = $_POST["_CListeChoix"];
     foreach ($listes as $list_id => $options) {
-      $options = array_map('CMbString::htmlEntities', $options);
+      $options = array_map(array('CMbString','htmlEntities'), $options);
       $list = new CListeChoix;
       $list->load($list_id);
       $is_empty = false;
