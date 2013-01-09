@@ -118,7 +118,7 @@ function changeDateCal(input) {
               <optgroup label="{{$_bloc}}">
                 {{foreach from=$_bloc->_ref_salles item=_salle}}
                 <option value="{{$_salle->_id}}" {{if $_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
-                  {{$_salle}}
+                  {{$_salle->nom}}
                 </option>
                 {{foreachelse}}
                 <option value="" disabled="disabled">{{tr}}CSalle.none{{/tr}}</option>

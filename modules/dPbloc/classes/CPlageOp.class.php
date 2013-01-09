@@ -122,12 +122,14 @@ class CPlageOp extends CMbObject {
   }
   
   function makeView(){
-    if($this->chir_id){
-      $this->_view = $this->_ref_chir->_view;
-    } elseif($this->spec_id){
+    if ($this->spec_id) {
       $this->_view = $this->_ref_spec->_shortview;
     }
-    if($this->anesth_id){
+    
+    if ($this->chir_id){
+      $this->_view = $this->_ref_chir->_view;
+    } 
+    if ($this->anesth_id){
       $this->_view .= " - ".$this->_ref_anesth->_shortview;
     }  
   }

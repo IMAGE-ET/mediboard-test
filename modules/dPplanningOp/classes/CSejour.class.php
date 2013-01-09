@@ -1175,7 +1175,7 @@ class CSejour extends CCodable implements IPatientRelated {
   /**
    * Load current affectation relative to a date
    *
-   * @param date $date Current date, now if null
+   * @param datetime $date Reference datetime, now if null
    *
    * @return CAffectation
    */

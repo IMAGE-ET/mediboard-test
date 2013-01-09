@@ -48,7 +48,7 @@ class CActeCCAM extends CActe {
   var $_linked_actes      = null;
   var $_guess_association = null;
   var $_guess_regle_asso  = null;
-  
+
   // Behaviour fields
   var $_adapt_object = false;
   var $_calcul_montant_base = false;
@@ -177,7 +177,8 @@ class CActeCCAM extends CActe {
    * @return string Serialised full code
    */
   function makeFullCode() {
-    return $this->code_acte.
+    return $this->_full_code = 
+      $this->code_acte.
       "-". $this->code_activite.
       "-". $this->code_phase.
       "-". $this->modificateurs.

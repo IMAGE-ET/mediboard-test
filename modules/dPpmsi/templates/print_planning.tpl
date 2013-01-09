@@ -4,24 +4,26 @@
   <tr>
     <th>
       <a href="#" onclick="window.print()">
-        Planning du {{$filter->_date_min|date_format:"%d/%m/%Y"}}
-        {{if $filter->_date_min != $filter->_date_max}}
-        au {{$filter->_date_max|date_format:"%d/%m/%Y"}}
-        {{/if}}
+        Planning 
+        {{mb_include module=system template=inc_interval_date from=$filter->_date_min to=$filter->_date_max}}
       </a>
     </th>
   </tr>
-  {{foreach from=$plagesop item=curr_plageop}}
+  {{foreach from=$plagesop item=_plage}}
   <tr>
     <td class="text">
-      {{if $curr_plageop->_id}}
-      <strong>Dr {{$curr_plageop->_ref_chir->_view}}</strong> -
-      <strong>{{$curr_plageop->_ref_salle->nom}}</strong>
-      de {{$curr_plageop->debut|date_format:$conf.time}} à {{$curr_plageop->fin|date_format:$conf.time}}
-      le {{$curr_plageop->date|date_format:"%d/%m/%Y"}}
+      {{if $_plage->_id}}
+      <strong>
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_plage->_ref_chir}} 
+        &ndash;
+        {{$_plage->_ref_salle}}
+      </strong>
+      de {{mb_value object=$_plage field=debut}} 
+      à  {{mb_value object=$_plage field=fin}}
+      le {{mb_value object=$_plage field=date}}
     
-      {{if $curr_plageop->anesth_id}}
-        - Anesthesiste : <strong>Dr {{$curr_plageop->_ref_anesth->_view}}</strong>
+      {{if $_plage->anesth_id}}
+        &ndash; Anesthesiste : <strong>Dr {{$_plage->_ref_anesth}}</strong>
       {{/if}}
       
       {{else}}
@@ -38,45 +40,45 @@
     <td>
       <table class="tbl">
         <tr>
-          {{if !$curr_plageop->_id}}
+          {{if !$_plage->_id}}
           <th class="title" colspan="2">Urgence</th>
           {{/if}}
           <th class="title" colspan="2">Patient</th>
           <th class="title" colspan="4">Sejour</th>
-          <th class="title" colspan="4">Intervention</th>
+          <th class="title" colspan="4">Intervention (x {{$_plage->_ref_operations|@count}})</th>
         </tr>
         <tr>
-          {{if !$curr_plageop->_id}}
+          {{if !$_plage->_id}}
           <!-- Cas des urgences -->
-          <th>Date</th>
-          <th>Praticien</th>
+          <th class="narrow">Date</th>
+          <th style="width: 8em;">Praticien</th>
           {{/if}}
           
           <!-- Patient -->
-          <th>Nom - Prénom</th>
-          <th>Naissance</th>
+          <th style="width: 12em;">Nom - Prénom</th>
+          <th class="narrow">Naissance</th>
 
           <!-- Sejour -->
-          <th>Entree</th>
-          <th>Sortie</th>
-          <th>Chambre</th>
-          <th>DP</th>
+          <th class="narrow">Entree</th>
+          <th class="narrow">Sortie</th>
+          <th class="narrow">Chambre</th>
+          <th style="width: 2em;">DP</th>
           
           <!-- Intervention -->
-          <th>Heure</th>
-          <th>Libellé</th>
-          <th>Codes prévus</th>
-          <th>Codage au bloc</th>
+          <th class="narrow">Heure</th>
+          <th style="width: 8em;">Libellé</th>
+          <th class="narrow">Codes<br/>prévus</th>
+          <th style="width: 16em;">Codage au bloc</th>
         </tr>
 
-        {{foreach from=$curr_plageop->_ref_operations item=curr_op}}
-        {{assign var=sejour value=$curr_op->_ref_sejour}}
+        {{foreach from=$_plage->_ref_operations item=_operation}}
+        {{assign var=sejour value=$_operation->_ref_sejour}}
         {{assign var=patient value=$sejour->_ref_patient}}
         <tr>
-          {{if !$curr_plageop->_id}}
+          {{if !$_plage->_id}}
           <!-- Cas des urgences -->
-          <td>{{$curr_op->date|date_format:"%d/%m/%Y"}}</td>
-          <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
+          <td>{{mb_value object=$_operation field=date}}</td>
+          <td class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_operation->_ref_chir}}</td>
           {{/if}}
           <!-- Patient -->
           <td class="text">
@@ -85,7 +87,7 @@
             </span>
           </td>
           <td>
-            {{$patient->naissance|date_format:"%d/%m/%Y"}}
+            {{mb_value object=$patient field=naissance}}
           </td>
       
           <!-- Sejour -->
@@ -98,7 +100,7 @@
             {{mb_value object=$sejour field=sortie}}
           </td>
           <td class="text">
-            {{mb_include module=hospi template=inc_placement_sejour sejour=$sejour}}
+            {{mb_include module=hospi template=inc_placement_sejour sejour=$sejour which=curr}}
           </td>
           <td>
             {{$sejour->DP}}
@@ -106,53 +108,37 @@
 
           <!-- Intervention -->
           <td>
-          {{if $curr_op->rank}}
-            {{$curr_op->time_operation|date_format:$conf.time}}
-          {{elseif $curr_op->date}}
-          URGENCE
-          {{else}}
-            NP
-          {{/if}}
+            {{$_operation->_datetime|date_format:$conf.time}}
           </td>
           <td class="text">
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$curr_op->_guid}}');">
-              {{$curr_op->libelle}}
+            <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}');">
+              {{$_operation->libelle}}
             </span>
           </td>
           <td>
-            <ul>
-            {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-              <li>{{$curr_code->code}}</li>
+            {{foreach from=$_operation->_ext_codes_ccam item=_code}}
+              <div>{{$_code->code}}</div>
             {{/foreach}}
-            </ul>
           </td>
           <td class="text">
-            <ul>
-            {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
-              <li>
-                Dr {{$curr_acte->_ref_executant->_view}} : {{$curr_acte->code_acte}}
-                <br />
-                Act. : {{$curr_acte->code_activite}}
-                &mdash; Phase : {{$curr_acte->code_phase}}
-                &mdash; Code asso : 
-                {{if $curr_acte->code_association}}
-                  {{$curr_acte->code_association}}
-                {{else}}
-                  aucun
+            {{foreach from=$_operation->_ref_actes_ccam item=_acte}}
+            <div>
+                {{$_acte->code_acte}} 
+                {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_acte->_ref_executant}}
+                
+                <div class="compact">
+                activité: {{$_acte->code_activite}}
+                &ndash; phase: {{$_acte->code_phase}}
+                &ndash; Asso:  {{$_acte->code_association|default:"aucun"}}
+                {{if $_acte->modificateurs}}
+                  &ndash; modifs: {{$_acte->modificateurs}}
                 {{/if}}
-                {{if $curr_acte->modificateurs}}
-                  &mdash; Modifs : {{$curr_acte->modificateurs}}
+                {{if $_acte->montant_depassement}}
+                  &ndash; DH: {{$_acte->montant_depassement|currency}} 
                 {{/if}}
-                {{if $curr_acte->montant_depassement}}
-                  &mdash; DH : {{$curr_acte->montant_depassement|currency}} 
-                {{/if}}
-                {{if $curr_acte->commentaire}}
-                  <br />
-                  Rques : {{$curr_acte->commentaire|nl2br}}
-                {{/if}}
-              </li>
+                </div>
+             </div>
             {{/foreach}}
-            </ul>
           </td>
         </tr>
         {{/foreach}}

@@ -8,7 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{assign var=affectation value=$sejour->_ref_first_affectation}}
+{{mb_default var=which assign=first}}
+{{if ($which == "first")}}{{assign var=affectation value=$sejour->_ref_first_affectation}}{{/if}}
+{{if ($which == "curr" )}}{{assign var=affectation value=$sejour->_ref_curr_affectation }}{{/if}}
+
 {{if $affectation->_id}}
   <div>{{$affectation->_ref_lit}}</div>
 {{else}}

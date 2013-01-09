@@ -22,6 +22,9 @@ class CActe extends CMbMetaObject {
   var $_preserve_montant   = null; 
   var $_montant_facture    = null;
   
+  // Derived fields
+  var $_full_code = null;
+  
   // Behaviour fields
   var $_check_coded  = true;
   var $_permissive   = null;
@@ -126,12 +129,13 @@ class CActe extends CMbMetaObject {
   }
   
   /**
-   * Return a full serialised code for precoding
+   * Return a full serialised code
    * @return string Serialised full code
    */
   function makeFullCode() {
+    return $this->_full_code = "";
   }
-  
+    
   /**
    * Precode with a full serialised code for the act
    * @param string $code Serialised full code

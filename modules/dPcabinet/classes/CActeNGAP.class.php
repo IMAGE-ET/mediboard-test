@@ -84,7 +84,8 @@ class CActeNGAP extends CActe {
    * @return string Serialised full code
    */
   function makeFullCode() {
-      return $this->quantite.
+      return $this->_full_code = 
+        $this->quantite.
         "-". $this->code.
         "-". $this->coefficient.
         "-". $this->montant_base.
