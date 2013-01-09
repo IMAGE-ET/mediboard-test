@@ -50,16 +50,16 @@
   {{if $consult_anesth->_id}}
   <tr>
     <th>
-      {{tr}}CConsultation{{/tr}} 
+      {{tr}}CConsultation{{/tr}}
       du {{$_consultation->_date|date_format:$conf.date}}
     </th>
-    
+
     {{if $_consultation->annule}}
     <td colspan="2" class="cancelled">[Consultation annulée]</td>
-    {{else}}    
+    {{else}}
     <td class="narrow">
-      Dr {{$_consultation->_ref_chir->_view}} 
-    </td> 
+      Dr {{$_consultation->_ref_chir->_view}}
+    </td>
     <td>
       {{if $consult_anesth->_ref_operation->_id}}
         Déjà associé :
@@ -68,7 +68,7 @@
         Déjà associé :
         <strong>{{$consult_anesth->_ref_sejour->_view}}</strong>
       {{else}}
-      
+
       <form name="addOpFrm" action="?m={{$m}}" method="post" onsubmit="{{$onSubmit}}">
 
       <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
@@ -78,7 +78,7 @@
       <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
 
       <button class="tick">{{tr}}Associate{{/tr}}</button>
-      
+
       </form>
       {{/if}}
     </td>
@@ -97,7 +97,7 @@
   <tr>
     <td colspan="3" class="button">
       <form name="createConsult" action="?m={{$m}}" method="post" onsubmit="{{$onSubmit}}">
-      
+
       <input type="hidden" name="dosql" value="do_consult_now" />
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
