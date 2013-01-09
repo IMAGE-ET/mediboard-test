@@ -115,6 +115,6 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td id="listConsult" style="width: 240px;"></td>
-    <td></td>
+    <td>{{mb_include module=dPcabinet template=inc_full_consult}}</td>
   </tr>
 </table>
