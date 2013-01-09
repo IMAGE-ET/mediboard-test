@@ -107,6 +107,7 @@ class CMediusers extends CMbObject {
   var $_ref_plages_conge        = null;
   var $_ref_urgences               = null;
   var $_ref_deplacees              = null;
+  var $_refs_source_pop            = null;
 
   /**
    * Lazy access to a given user, defaultly connected user
@@ -1094,6 +1095,16 @@ class CMediusers extends CMbObject {
   function isSecretaire () {
     return $this->_is_secretaire = $this->isFromType(array("Secrétaire", "Administrator"));
   }
+
+  /**
+   * load the list of POP account
+   *
+   * @return CStoredObject[]
+   */
+  function loadRefsSourcePop() {
+    return $this->_refs_source_pop = $this->loadBackRefs("sources_pop");
+  }
+
 
   /**
    * Check whether user is a medical user

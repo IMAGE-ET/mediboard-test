@@ -42,6 +42,7 @@ class CContentHTML extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["compte_rendus"] = "CCompteRendu content_id";
+    $backProps["usermail_html"]     = "CUserMail text_html_id";
     return $backProps;
   }
   
