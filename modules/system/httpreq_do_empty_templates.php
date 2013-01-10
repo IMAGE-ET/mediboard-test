@@ -16,4 +16,4 @@ foreach($paths as $tplPath) {
   CMbPath::remove($tplPath);
 }
 
-CAppUI::stepAjax(count($paths)." fichiers de cache supprimés", UI_MSG_OK);
+CAppUI::stepAjax("template-cache-removed", UI_MSG_OK, count($paths));

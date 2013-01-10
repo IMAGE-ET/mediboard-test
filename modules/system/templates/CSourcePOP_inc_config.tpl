@@ -20,6 +20,9 @@
         <input type="hidden" name="source_pop_id" value="{{$source->_id}}" />
         <input type="hidden" name="del" value="0" />
 
+        <input type="hidden" name="object_class" value="{{$source->object_class}}" />
+        <input type="hidden" name="object_id" value="{{$source->object_id}}" />
+
         <table class="form">
           <tr>
             <th class="category" colspan="2">

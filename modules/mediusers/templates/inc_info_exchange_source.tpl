@@ -21,35 +21,33 @@
   <tr>
     <td style="width:50%;"> {{mb_include module=system template=inc_config_exchange_source source=$smtp_source}} </td>
     <td style="width:50%;">
-      <script type="text/javascript">
-        Main.add(function () {
-          Control.Tabs.create('tabs-sources-pop');
-        });
-      </script>
-
-
-      <table class="main">
-        <tr>
-          <td style="vertical-align: top;" class="narrow">
-            <ul id="tabs-sources-pop" class="control_tabs_vertical">
-            {{foreach from=$sources_pop item=source_pop}}
-              <li>
-                <a href="#source_pop_{{$source_pop->_guid}}">
-                  {{$source_pop->libelle}}
-                </a>
-              </li>
+        <script type="text/javascript">
+          Main.add(function () {
+            Control.Tabs.create('tabs-sources-pop');
+          });
+        </script>
+        <table class="main">
+          <tr>
+            <td style="vertical-align: top;" class="narrow">
+              <ul id="tabs-sources-pop" class="control_tabs_vertical">
+              {{foreach from=$pop_source item=source_pop}}
+                <li>
+                  <a href="#source_pop_{{$source_pop->_guid}}">
+                    {{$source_pop->libelle}}
+                  </a>
+                </li>
+              {{/foreach}}
+              </ul>
+            </td>
+            <td style="vertical-align: top;">
+            {{foreach from=$pop_source item=_source_pop}}
+              <div id="source_pop_{{$_source_pop->_guid}}" style="display:none;">
+                {{mb_include module=system template=inc_config_exchange_source source=$_source_pop}}
+              </div>
             {{/foreach}}
-            </ul>
-          </td>
-          <td style="vertical-align: top;">
-          {{foreach from=$sources_pop item=source_pop}}
-            <div id="source_pop_{{$source_pop->_guid}}" style="display:none;">
-              {{mb_include module=system template=inc_config_exchange_source source=$source_pop}}
-            </div>
-          {{/foreach}}
-          </td>
-        </tr>
-      </table>
+            </td>
+          </tr>
+        </table>
     </td>
   </tr>
 </table>
