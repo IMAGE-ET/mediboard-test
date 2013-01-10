@@ -44,7 +44,7 @@ then
       echo "Do you want to update $line (y or n) [default n] ? \c" ; read REPLY < /dev/tty
       if [ "$REPLY" = "y" ] ; then
         echo "-- Rsync $line --"
-        rsync -avpz --stats $BASH_PATH/.. --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
+        eval rsync -avpz --stats $BASH_PATH/.. --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
           --exclude includes/config_overload.php \
           --exclude tmp \
           --exclude lib \
@@ -53,9 +53,9 @@ then
           --exclude modules/hprimxml/xsd \
           --exclude images/pictures/logo_custom.png
         check_errs $? "Failed to rsync $line" "Succesfully rsync-ed $line"
-        scp $BASH_PATH/../tmp/svnlog.txt $line/tmp/svnlog.txt
-        scp $BASH_PATH/../tmp/svnstatus.txt $line/tmp/svnstatus.txt
-        scp $BASH_PATH/../tmp/svnevent.txt $line/tmp/svnevent.txt
+        eval rsync -avzp $BASH_PATH/../tmp/svnlog.txt $line/tmp/
+        eval rsync -avzp $BASH_PATH/../tmp/svnstatus.txt $line/tmp/
+        eval rsync -avzp $BASH_PATH/../tmp/svnevent.txt $line/tmp/
       fi
     fi
   done < $BASH_PATH/rsyncupdate.conf
