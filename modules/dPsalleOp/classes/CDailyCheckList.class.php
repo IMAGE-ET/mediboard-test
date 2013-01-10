@@ -5,7 +5,7 @@
  * @subpackage dPsalleOp
  * @version $Revision$
  * @author Fabien Ménager
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be multiple objects for different dates
@@ -18,15 +18,15 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   var $type         = null;
   var $comments     = null;
   var $validator_id = null;
-  
+
   //var $specialist_id = null; // chir ou specialiste
   //var $anesth_id    = null;
   //var $coord_id     = null;
-  
+
   // Refs
   var $_ref_validator = null;
   var $_ref_object    = null;
-  
+
   // Form fields
   var $_ref_item_types = null;
   var $_items          = null;
@@ -34,37 +34,37 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   var $_readonly       = null;
   var $_date_min       = null;
   var $_date_max       = null;
-  
+
   static $types = array(
     // Secu patient
-    "preanesth" => "normal", 
+    "preanesth" => "normal",
     "preop"     => "normal",
     "postop"    => "normal",
-    
+
     // Endoscopie digestive
-    "preendoscopie"  => "endoscopie", 
+    "preendoscopie"  => "endoscopie",
     "postendoscopie" => "endoscopie",
-    
+
     // Endoscopie bronchique
-    "preendoscopie_bronchique"  => "endoscopie-bronchique", 
+    "preendoscopie_bronchique"  => "endoscopie-bronchique",
     "postendoscopie_bronchique" => "endoscopie-bronchique",
-    
+
     // Radiologie interventionnelle
     "preanesth_radio" => "radio",
     "preop_radio"     => "radio",
     "postop_radio"    => "radio",
-    
+
     // Pose dispositif vasculaire
     "disp_vasc_avant"   => "disp-vasc",
     "disp_vasc_pendant" => "disp-vasc",
     "disp_vasc_apres"   => "disp-vasc",
   );
-  
+
   static $_HAS_classes = array(
-    "COperation", 
+    "COperation",
     "CPoseDispositifVasculaire",
   );
-  
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'daily_check_list';
@@ -85,7 +85,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $specs['_date_max'] = 'date';
     return $specs;
   }
-  
+
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['items'] = 'CDailyCheckItem list_id';
@@ -97,55 +97,50 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $this->loadRefsFwd();
     $this->_view = "$this->_ref_object le $this->date ($this->_ref_validator)";
   }
-  
+
   function isReadonly() {
     $this->completeField("validator_id", "date");
     return $this->_readonly = ($this->_id && $this->validator_id && $this->date);
   }
-  
+
   function loadRefsFwd() {
-    if ($this->object_class)
+    if ($this->object_class) {
       $this->_ref_object = $this->loadFwdRef("object_id", true);
+    }
 
-    $this->_ref_validator = $this->loadFwdRef("validator_id", true); 
+    $this->_ref_validator = $this->loadFwdRef("validator_id", true);
   }
-  
-  function store() {
-    // Est-ce un nouvel objet
-    $is_new = !$this->_id;
-    
-    if ($msg = parent::store()) return $msg;
 
-    if ($is_new || $this->validator_id) {
-      // Sauvegarde des items cochés
-      $items = $this->_items ? $this->_items : array();
-      
-      $this->loadItemTypes();
-      foreach($this->_ref_item_types as $type) {
-        $check_item = new CDailyCheckItem;
-        $check_item->list_id = $this->_id;
-        $check_item->item_type_id = $type->_id;
-        $check_item->loadMatchingObject();
-        $check_item->checked = (isset($items[$type->_id]) ? $items[$type->_id] : "");
-        if ($msg = $check_item->store()) return $msg;
-      }
-      
-      // Vérification du mot de passe
-      if (!$this->_validator_password) {
-        return 'Veuillez taper votre mot de passe';
-      }
-      
+  function store() {
+    // Verification du mot de passe
+    if ($this->_validator_password && $this->validator_id) {
       $this->loadRefsFwd();
-      
       if (!CUser::checkPassword($this->_ref_validator->_user_username, $this->_validator_password)) {
         $this->validator_id = "";
-        $msg = 'Le mot de passe entré n\'est pas correct';
+        return 'Le mot de passe entré n\'est pas correct';
       }
-      
-      return $msg . parent::store();
+    }
+
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+
+    // Sauvegarde des items cochés
+    $items = $this->_items ? $this->_items : array();
+
+    $this->loadItemTypes();
+    foreach ($this->_ref_item_types as $type) {
+      $check_item = new CDailyCheckItem;
+      $check_item->list_id = $this->_id;
+      $check_item->item_type_id = $type->_id;
+      $check_item->loadMatchingObject();
+      $check_item->checked = (isset($items[$type->_id]) ? $items[$type->_id] : "");
+      if ($msg = $check_item->store()) {
+        return $msg;
+      }
     }
   }
-  
+
   static function getList($object, $date = null, $type = null){
     $list = new self;
     $list->object_class = $object->_class;
@@ -157,7 +152,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $list->isReadonly();
     return $list;
   }
-  
+
   function loadItemTypes() {
     $where = array(
       'active' => "= '1'",
@@ -169,9 +164,9 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $ljoin = array(
       'daily_check_item_category' => 'daily_check_item_category.daily_check_item_category_id = daily_check_item_type.category_id'
     );
-    
+
     $orderby = 'daily_check_item_category.title, ';
-    
+
     // Si liste des points de la HAS
     if (in_array($this->object_class, self::$_HAS_classes)) {
       $orderby .= "daily_check_item_type_id";
@@ -179,17 +174,17 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     else {
       $orderby .= "`index`, title";
     }
-    
+
     $itemType = new CDailyCheckItemType();
     $this->_ref_item_types = $itemType->loadGroupList($where, $orderby, null, null, $ljoin);
-    foreach($this->_ref_item_types as $type) {
+    foreach ($this->_ref_item_types as $type) {
       $type->loadRefsFwd();
     }
-    
+
     $items = $this->loadBackRefs('items');
-    
+
     if ($items) {
-      foreach($items as $item) {
+      foreach ($items as $item) {
         if (isset($this->_ref_item_types[$item->item_type_id])) {
           $this->_ref_item_types[$item->item_type_id]->_checked = $item->checked;
           $this->_ref_item_types[$item->item_type_id]->_answer = $item->getAnswer();

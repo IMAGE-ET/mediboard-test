@@ -234,6 +234,7 @@ $locales['CDailyCheckList-_date_max-desc'] = 'Jusqu\'au';
 $locales['CDailyCheckList-_date_min'] = 'A partir de ';
 $locales['CDailyCheckList-_date_min-court'] = 'A partir de ';
 $locales['CDailyCheckList-_date_min-desc'] = 'A partir de ';
+$locales['CDailyCheckList-_validator_password'] = 'Mot de passe';
 $locales['CDailyCheckList-back-items'] = 'Vérifications';
 $locales['CDailyCheckList-comments'] = 'Décision concertée en cas de non-conformité ou de réponse marquée d\'un *';
 $locales['CDailyCheckList-comments-court'] = 'Comm.';

@@ -31,7 +31,7 @@
         <td colspan="3" class="empty">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
       </tr>
     {{/foreach}}
-    
+
     {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio" || $check_list->type == "disp_vasc_apres"}}
     <tr>
       <td colspan="10">
@@ -40,41 +40,59 @@
       </td>
     </tr>
     {{/if}}
-    
+
     <tr>
       <td colspan="10">
-        <strong>Validé par {{mb_value object=$check_list field=validator_id}}</strong> 
+        <strong>Validé par {{mb_value object=$check_list field=validator_id}}</strong>
       </td>
     </tr>
   </table>
-  
-  
+
+
 {{else}}
 
 <script type="text/javascript">
+var HAS_classes = {{'CDailyCheckList'|static:_HAS_classes|@json}};
+
 confirmCheckList = function(form) {
   return checkForm(form) &&
-    confirm('Tous les points ont-ils été bien vérifiés ?') && 
-    onSubmitFormAjax(form, {onComplete: function(){
-      {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
-        location.reload();
-      {{/if}}
-    } });
+    confirm('Tous les points ont-ils été bien vérifiés ?') &&
+    onSubmitFormAjax(form, {
+      onComplete: function(){
+        if (HAS_classes.indexOf($V(form.object_class)) == -1) {
+          location.reload();
+        }
+      }
+    });
 }
 
 refreshCheckList{{$check_list->type}} = function(id){
-  if (!$("systemMsg").select(".warning, .error").length) {
+  var form = getForm("edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}");
+
+  if ($V(form.validator_id) && !$("systemMsg").select(".warning, .error").length) {
     $("{{$check_list->type}}-title").down("img").src = "images/icons/tick.png";
     var url = new Url("dPsalleOp", "httpreq_vw_check_list");
     url.addParam("check_list_id", id);
     url.requestUpdate("{{$check_list->type}}");
   }
   else {
-    var form =  getForm("edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}");
     if (!$V(form.daily_check_list_id)) {
       $V(form.daily_check_list_id, id);
     }
   }
+}
+
+submitCheckList = function(form, quicksave) {
+  if (!quicksave) {
+    return confirmCheckList(form);
+  }
+
+  $V(form.validator_id, "");
+  $V(form._validator_password, "");
+
+  return onSubmitFormAjax(form, {
+    check: function(){return true}
+  });
 }
 
 Main.add(function(){
@@ -82,7 +100,7 @@ Main.add(function(){
 });
 </script>
 
-<form name="edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}" method="post" action="?" onsubmit="return confirmCheckList(this)">
+<form name="edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}" method="post" action="?" onsubmit="return submitCheckList(this, false)">
   <input type="hidden" name="dosql" value="do_daily_check_list_aed" />
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="del" value="0" />
@@ -91,7 +109,7 @@ Main.add(function(){
   <input type="hidden" name="object_id" value="{{$check_list->object_id}}" />
   <input type="hidden" name="type" value="{{$check_list->type}}" />
   <input type="hidden" name="date" value="{{$check_list->date|ternary:$check_list->date:"now"}}" />
-  
+
   {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
     <input type="hidden" name="callback" value="refreshCheckList{{$check_list->type}}" />
   {{/if}}
@@ -124,7 +142,7 @@ Main.add(function(){
           <ul style="padding-left: 0; list-style-position: inside;">
             <li>{{mb_value object=$curr_type field=title}}</li>
           </ul>
-          
+
           {{if $curr_type->desc}}
             <br />
             <small style="text-indent: 1em; color: #666;">{{mb_value object=$curr_type field=desc}}</small>
@@ -133,7 +151,7 @@ Main.add(function(){
         <td style="text-align: left;">
           {{assign var=attr value=$curr_type->attribute}}
           {{assign var=default_value value=$curr_type->default_value}}
-          
+
           {{if $default_value == "yes"}}
             {{mb_include module=salleOp template=inc_check_list_field_yes}}
             {{mb_include module=salleOp template=inc_check_list_field_no}}
@@ -141,13 +159,13 @@ Main.add(function(){
             {{mb_include module=salleOp template=inc_check_list_field_no}}
             {{mb_include module=salleOp template=inc_check_list_field_yes}}
           {{/if}}
-          
+
           {{if $attr == "notrecommended"}}
             <div>
               {{mb_include module=salleOp template=inc_check_list_field_notrecommended}}
             </div>
           {{/if}}
-          
+
           {{if $attr == "notapplicable"}}
             <div>
               {{mb_include module=salleOp template=inc_check_list_field_notapplicable}}
@@ -162,28 +180,29 @@ Main.add(function(){
         <td colspan="3" class="empty">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
       </tr>
     {{/foreach}}
-    
+
     {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio" || $check_list->type == "disp_vasc_apres"}}
     <tr>
-      <td colspan="10" style="white-space: normal;">
+      <td colspan="10" class="text">
         <hr />
         {{mb_label object=$check_list field=comments}}<br />
-        {{mb_field object=$check_list field=comments}}
+        {{mb_field object=$check_list field=comments onchange="submitCheckList(this.form,true)"}}
         {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
           <div class="small-info">
-            Pour consulter les informations sur la version 2011 des check-lists, 
+            Pour consulter les informations sur la version 2011 des check-lists,
             <a href="http://www.has-sante.fr/portail/jcms/c_1019445/la-version-2011-de-la-check-list-securite-du-patient-au-bloc-operatoire" target="_blank" style="display: inline;">rendez-vous sur le site de la HAS en cliquant ici</a>.
           </div>
         {{/if}}
       </td>
     </tr>
     {{/if}}
-    
+
     <tr>
       <td colspan="10" class="button">
+        <label for="validator_id" style="display: none;">{{tr}}CDailyCheckList-validator_id{{/tr}}</label>
         <select name="validator_id" class="notNull ref" style="width: 10em;">
           <option value="" disabled="disabled" selected="selected">&mdash; Validateur</option>
-          
+
           {{if $check_list->object_class == "COperation"}}
             <optgroup label="Praticiens">
               {{assign var=_obj value=$check_list->_ref_object}}
@@ -192,7 +211,7 @@ Main.add(function(){
               <option value="{{$anesth->_id}}">{{$anesth}}</option>
               {{/if}}
             </optgroup>
-            
+
             <optgroup label="Personnel">
               {{foreach from=$personnel item=curr_personnel}}
                 {{assign var=curr_user value=$curr_personnel->_ref_user}}
@@ -205,10 +224,11 @@ Main.add(function(){
               <option value="{{$curr_user->_id}}" {{if $app->user_id == $curr_user->_id}}selected="selected"{{/if}}>{{$curr_user->_view}}</option>
             {{/foreach}}
           {{/if}}
-          
+
         </select>
+        <label for="_validator_password" style="display: none;">{{tr}}CDailyCheckList-_validator_password{{/tr}}</label>
         <input type="password" class="notNull str" size="10" maxlength="32" name="_validator_password" />
-        <button type="button" class="tick" onclick="this.form.onsubmit()">Signer</button>
+        <button type="button" class="tick" onclick="submitCheckList(this.form)">Signer</button>
       </td>
     </tr>
   </table>

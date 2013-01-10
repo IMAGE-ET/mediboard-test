@@ -21,7 +21,7 @@ PoseDispVasc = {
     url.addParam("object_guid", guid);
     url.addParam("type_group", "disp-vasc");
     url.addParam("validateur_ids", PoseDispVasc.operateurs);
-    url.requestModal(900, 600);
+    url.requestModal(1000, 800);
     url.modalObject.observe("afterClose", PoseDispVasc.onClose);
   },
   checkListCallback: function(id) {
@@ -47,7 +47,7 @@ PoseDispVasc = {
     <th>{{mb_title class=CPoseDispositifVasculaire field=operateur_id}}</th>
     <th>{{mb_title class=CPoseDispositifVasculaire field=voie_abord_vasc}}</th>
   </tr>
-  
+
   {{foreach from=$poses item=_pose}}
     <tr>
       <td>
@@ -58,8 +58,8 @@ PoseDispVasc = {
           {{tr}}CDailyCheckList{{/tr}}
         </button>
       </td>
-      <td {{if $_pose->_count.check_lists < 3}} class="error" {{elseif $_pose->_count.check_lists >= 3}} class="ok" {{/if}}>
-        {{$_pose->_count.check_lists}} / 3
+      <td {{if $_pose->_count_signed < 3}} class="error" {{elseif $_pose->_count_signed >= 3}} class="ok" {{/if}}>
+        {{$_pose->_count_signed}} / 3
       </td>
       <td>{{mb_value object=$_pose field=date}}</td>
       <td {{if $_pose->urgence}} class="warning" {{/if}}>{{mb_value object=$_pose field=urgence}}</td>
