@@ -20,8 +20,8 @@ $chir_id = CValue::getOrSession("chir_id");
 $prats = array();
 
 if (!$chir_id) {
-  $user = new CMediusers();
-  $prats = $user->loadPraticiens();
+  $user = CMediusers::get();
+  $prats = $user->loadPraticiensCompta();
 }
 else {
   $chir = CMediusers::get($chir_id);
