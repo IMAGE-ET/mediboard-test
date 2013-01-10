@@ -973,7 +973,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       $this->addTexte($elParent, "libelle", $operation->libelle, 4000);
     
       // Remarques sur l'opération
-      $this->addTexte($elParent, "commentaire", "$operation->materiel - $operation->rques", 4000);
+      $this->addTexte($elParent, "commentaire", CMbString::convertHTMLToXMLEntities("$operation->materiel - $operation->rques"), 4000);
       
       // Conventionnée ?
       $this->addElement($elParent, "convention", $operation->conventionne ? 1 : 0);
