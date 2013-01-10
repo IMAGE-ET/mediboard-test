@@ -177,7 +177,8 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
                     "AN"
                   )
                 ) : null;
-    } else {
+    }
+    else {
       /* @todo Gestion des séances */ 
       $data[] = array(
         array (
@@ -214,7 +215,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = null;
     
     // PV1-26: Contract Amount (NM) (optional repeating)
-    $data[] = null;
+    $data[] = $this->getPV126($receiver, $sejour);
     
     // PV1-27: Contract Period (NM) (optional repeating)
     $data[] = null;

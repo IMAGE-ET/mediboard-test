@@ -17,8 +17,14 @@
  */
 
 class CHL7v2SegmentQAK extends CHL7v2Segment {
+  /**
+   * @var string
+   */
   var $name   = "QAK";
 
+  /**
+   * @var array
+   */
   var $objects = array();
 
   /**

@@ -954,8 +954,13 @@ class CSetuphl7 extends CSetup {
                 ADD `ITI21_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5') DEFAULT '2.5',
                 ADD `ITI22_HL7_version` ENUM ('2.1','2.2','2.3','2.3.1','2.4','2.5') DEFAULT '2.5';";
     $this->addQuery($query);
+
+    $this->makeRevision("0.50");
+    $query = "ALTER TABLE `receiver_ihe_config`
+                ADD `build_PV1_26` ENUM ('movement_id','none') DEFAULT 'none';";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.50";
+    $this->mod_version = "0.51";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

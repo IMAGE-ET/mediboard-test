@@ -74,6 +74,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
   var $build_PV1_7   = null;
   var $build_PV1_10  = null;
   var $build_PV1_14  = null;
+  var $build_PV1_26  = null;
   var $build_PV1_36  = null;
   
   // PV2
@@ -140,6 +141,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
       "build_PV1_7",
       "build_PV1_10",
       "build_PV1_14",
+      "build_PV1_26",
       "build_PV1_36",
     ),
     "PV2" => array(
@@ -214,6 +216,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
     $props["build_PV1_7"]   = "enum list|unique|repeatable default|unique";
     $props["build_PV1_10"]  = "enum list|discipline|service default|discipline";
     $props["build_PV1_14"]  = "enum list|admit_source|ZFM default|admit_source";
+    $props["build_PV1_26"]  = "enum list|movement_id|none default|none";
     $props["build_PV1_36"]  = "enum list|discharge_disposition|ZFM default|discharge_disposition";
     
     // PV2

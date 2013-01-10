@@ -49,7 +49,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $message  = $event->message;
     $receiver = $event->_receiver;
     $group    = $receiver->loadRefGroup();
-    
+
     $patient  = $this->patient;
     
     $data = array();
@@ -209,7 +209,6 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     
     // PID-18: Patient Account Number (CX) (optional)
     if ($this->sejour && ($receiver->_configs["build_NDA"] == "PID_18")) {
-      
       // Même traitement que pour l'IPP
       switch ($receiver->_configs["build_PID_34"]) {
         case 'actor':
@@ -233,7 +232,8 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
                     "AN"
                   )
                 ) : null;
-    } else {
+    }
+    else {
       $data[] = null;
     }
     
@@ -241,7 +241,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     //$data[] = $patient->matricule;
     $data[] = null;
    
-   // PID-20: Driver's License Number - Patient (DLN) (optional)
+    // PID-20: Driver's License Number - Patient (DLN) (optional)
     $data[] = null;
     
     // PID-21: Mother's Identifier (CX) (optional repeating)
