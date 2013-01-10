@@ -32,7 +32,7 @@
   };
 </script>
 
-<table class="tbl" {{if $boardItem}}style="font-size: 9px;"{{/if}}>
+<table class="tbl" {{if $board}}style="font-size: 9px;"{{/if}}>
   <tr>
     <th class="title" colspan="3">Interventions</th>
   </tr>
@@ -154,7 +154,11 @@
         {{/if}}
         
         <a href="{{$patient->_dossier_cabinet_url}}">
-          <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">{{$patient}}</strong>
+          <strong
+            class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}}"
+            onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
+            {{$patient}}
+          </strong>
         </a>
         {{mb_label object=$_operation field=temp_operation}} : {{mb_value object=$_operation field=temp_operation}}
       </td>
@@ -220,7 +224,9 @@
         {{/if}}
         
         <a href="{{$patient->_dossier_cabinet_url}}">
-          <strong onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">{{$patient}}</strong>
+          <strong
+            class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}}"
+            onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">{{$patient}}</strong>
         </a>
         {{mb_label object=$_operation field=temp_operation}} : {{mb_value object=$_operation field=temp_operation}}
         
