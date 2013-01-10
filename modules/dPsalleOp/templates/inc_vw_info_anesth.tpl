@@ -6,14 +6,15 @@
 <script type="text/javascript">
 
 reloadDocumentsAnesth = function () {
-  if(oForm = getForm("anesthInterv")) {
+  var oForm = getForm("anesthInterv");
+  if(oForm) {
     var sAnesth_id = $V(oForm.anesth_id);
   } else {
     var sAnesth_id = $V(getForm("visiteAnesth").prat_anesth_id);
   }
   $$('.documents-CConsultAnesth-{{$consult_anesth->_id}}').each(function(doc){
     Document.refresh(doc, {praticien_id: sAnesth_id });
-  });    
+  });
 }
 
 refreshAnesthPerops = function(operation_id){
@@ -24,10 +25,10 @@ refreshAnesthPerops = function(operation_id){
 
 refreshFicheAnesth = function() {
   var url = new Url("cabinet", "print_fiche");
-  url.addParam("consultation_id", "{{$consult_anesth->consultation_id}}");
+  url.addParam("operation_id", "{{$selOp->_id}}");
   url.addParam("offline", true);
   url.addParam("display", true);
-  url.requestUpdate("fiche_anesth"); 
+  url.requestUpdate("fiche_anesth");
 }
 
 printIntervAnesth = function(){
@@ -58,12 +59,12 @@ Main.add(function(){
   if ($('anesth_tab_group')){
     Control.Tabs.create('anesth_tab_group');
   }
-  
+
   // Refresh tab perop
   if($("tab_perop").visible()){
     refreshAnesthPerops('{{$selOp->_id}}');
   }
-    
+
   {{if "dPprescription"|module_active}}
     if($('perop').visible()){
       Prescription.updatePerop('{{$selOp->sejour_id}}');
@@ -93,7 +94,7 @@ Main.add(function(){
 
 <div id="anesth">
   {{include file="inc_vw_anesth.tpl"}}
-</div>  
+</div>
 
 <div id="fiche_anesth"></div>
 
@@ -104,7 +105,7 @@ Main.add(function(){
       <td class="halfPane">
         <fieldset>
           {{mb_script module="dPcabinet" script="file"}}
-          <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>            
+          <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>
           <div id="files-anesth">
             <script type="text/javascript">
               File.register('{{$consult_anesth->consultation_id}}','CConsultation', 'files-anesth');
@@ -116,7 +117,7 @@ Main.add(function(){
         {{mb_script module="dPcompteRendu" script="document"}}
         {{mb_script module="dPcompteRendu" script="modele_selector"}}
         <fieldset>
-          <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>            
+          <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>
           <div id="documents-anesth">
             <script type="text/javascript">
               Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class}}','{{$modeles_prat_id}}','documents-anesth');
@@ -130,7 +131,7 @@ Main.add(function(){
   <div class="small-info">L'intervention n'est pas reliée à une consultation d'anesthésie, vous ne pouvez donc pas créer de documents</div>
   {{/if}}
 </div>
-  
+
 <div id="tab_preanesth" style="display: none;">
   {{mb_include module=salleOp template=inc_vw_visite_pre_anesth}}
 </div>
