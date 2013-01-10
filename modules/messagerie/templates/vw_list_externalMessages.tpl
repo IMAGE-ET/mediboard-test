@@ -10,13 +10,16 @@
 
 {{mb_script module=messagerie script=UserEmail}}
 
+
+{{if count($mails)}}
 <script type="text/javascript">
   Main.add(function () {
-    var tabs =Control.Tabs.create("tab-mail", true);
+    var tabs = Control.Tabs.create("tab-mail", true);
     tabs.activeLink.onmousedown();
-    //messagerie.getLastMessages({{$user->_id}},null);
+    //messagerie.getLastMessages({{$user->_id}}, null);
   });
 </script>
+{{/if}}
 
 <div>
 <button class="button change" onclick="messagerie.getLastMessages({{$user->_id}});">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
@@ -37,6 +40,8 @@
             {{if count($_mail)==0}}class="empty"{{/if}}>{{$_mail}}
           </a>
         </li>
+      {{foreachelse}}
+        <li>{{tr}}CUserMail-noAccount{{/tr}}</li>
       {{/foreach}}
       </ul>
     </td>

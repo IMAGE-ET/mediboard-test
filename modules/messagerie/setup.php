@@ -112,7 +112,11 @@ class CSetupmessagerie extends CSetup {
     $query = "ALTER TABLE `user_mail` ADD INDEX (`account_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.20";
+    $this->makeRevision("0.20");
+    $query = "ALTER TABLE `user_mail_attachment` CHANGE `linked` `file_id` INT (11) UNSIGNED ;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.21";
 
   }
 }

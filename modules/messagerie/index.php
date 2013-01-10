@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -17,7 +17,6 @@ if ($dPconfig["messagerie"]["enable_internal"]) {
 //external
 if ($dPconfig["messagerie"]["enable_external"]) {
   $module->registerTab("vw_list_externalMessages", TAB_READ);
-  $module->registerTab("vw_list_POPMessages", TAB_ADMIN);
 
 }
 

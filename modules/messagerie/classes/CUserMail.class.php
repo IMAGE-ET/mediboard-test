@@ -66,7 +66,7 @@ class CUserMail extends CMbObject{
   function getProps() {
     $props = parent::getProps();
     $props["subject"]       = "str";
-    $props["account_id"]    = "ref notNull class|CSourcePOP";
+    $props["account_id"]    = "ref notNull class|CSourcePOP cascade";
     $props["from"]          = "str";
     $props["_from"]         = "str";
     $props["to"]            = "str";
@@ -89,7 +89,6 @@ class CUserMail extends CMbObject{
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["mail_attachment"]            = "CMailAttachments mail_id";
-    $backProps["user_mail_reply"]            = "CUserMail in_reply_to_id";
     return $backProps;
   }
 
@@ -116,17 +115,6 @@ class CUserMail extends CMbObject{
     if ($this->_text_plain->_id) {
       if ($msg = $this->_text_plain->delete()) {
         return $msg;
-      }
-    }
-
-    //remove the unlinked attachments
-    if (count($this->_attachments)) {
-      foreach ($this->_attachments as $_attach) {
-        if (!$_attach->linked) {
-          if ($msg = $_attach->delete()) {
-            return $msg;
-          }
-        }
       }
     }
   }

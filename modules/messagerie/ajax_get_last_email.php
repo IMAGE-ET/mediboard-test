@@ -106,10 +106,6 @@ foreach ($log_pops as $_pop) {
               if ($str = $file->store()) {
                 CAppUI::setMsg($str, UI_MSG_ERROR);
               }
-              if ($file->_id) {
-                $_attch->linked = $file->_id;
-                $_attch->store();
-              }
             }
           }
         }
@@ -126,7 +122,7 @@ foreach ($log_pops as $_pop) {
     } //foreach
   }
   else {
-    CAppUI::setMsg("CPop-msg-nonewMsg", UI_MSG_OK, $user_id);
+    CAppUI::setMsg("CPop-msg-nonewMsg", UI_MSG_OK, $_pop->libelle);
   }
 
   $pop->close();

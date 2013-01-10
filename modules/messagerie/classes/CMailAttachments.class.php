@@ -24,7 +24,7 @@ class CMailAttachments extends CMbObject{
   var $bytes        = null;
   var $disposition  = null;
   var $part         = null;
-  var $linked       = null; //Cfile id
+  var $file_id       = null; //Cfile id
 
   var $name         = null;
   var $extension    = null;
@@ -53,7 +53,7 @@ class CMailAttachments extends CMbObject{
    */
   function getProps() {
     $props = parent::getProps();
-    $props["mail_id"]       = "ref notNull class|CUserMail";
+    $props["mail_id"]       = "ref notNull class|CUserMail cascade";
     $props["type"]          = "num notNull";
     $props["encoding"]      = "num";
     $props["subtype"]       = "str";
@@ -61,7 +61,7 @@ class CMailAttachments extends CMbObject{
     $props["bytes"]         = "num";
     $props["disposition"]   = "str";
     $props["part"]          = "str notNull";
-    $props["linked"]        = "str";
+    $props["file_id"]        = "ref class|CFile";
 
     $props["name"]          = "str notNull";
     $props["extension"]     = "str notNull";
@@ -69,6 +69,16 @@ class CMailAttachments extends CMbObject{
     return $props;
   }
 
+  /**
+   * recuperation des back props
+   *
+   * @return array
+   */
+  function getBackProps() {
+    $backprops = parent::getBackProps();
+    $backprops["files"] = "CFile object_id cascade";
+    return $backprops;
+  }
   /**
    * Load MailAttachment from POP Header
    *
@@ -165,7 +175,7 @@ class CMailAttachments extends CMbObject{
    */
   function loadFiles() {
     $file = new CFile();
-    $file->object_class = 'CMailAttachments';
+    $file->object_class = $this->_class;
     $file->object_id = $this->_id;
     $file->loadMatchingObject();
     $file->updateFormFields();
