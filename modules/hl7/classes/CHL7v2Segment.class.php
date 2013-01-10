@@ -699,6 +699,18 @@ class CHL7v2Segment extends CHL7v2Entity {
         return 90;
     }
   }
+
+  function getPV126 (CInteropReceiver $receiver, CSejour $sejour) {
+    // Identifiant du mouvement
+    switch ($receiver->_configs["build_PV1_26"]) {
+      case 'movement_id':
+        return $sejour->_ref_hl7_movement->_id;
+
+      // Ne rien envoyer
+      default:
+        return null;
+    }
+  }
   
   function getPV136 (CInteropReceiver $receiver, CSejour $sejour) {
     // Discharge Disposition
