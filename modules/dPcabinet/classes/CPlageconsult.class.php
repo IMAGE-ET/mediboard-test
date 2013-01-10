@@ -256,6 +256,7 @@ class CPlageconsult extends CPlageHoraire {
   
   function becomeNext() {
     $week_jumped = 0;
+
     switch ($this->_type_repeat) {
       case "quadruple": 
         $this->date = mbDate("+1 WEEK", $this->date); // 4
@@ -284,6 +285,8 @@ class CPlageconsult extends CPlageHoraire {
           (CMbDate::weekNumberInMonth($this->date) != $week_number)
         );
         break;
+      default:
+        return ++$week_jumped;
     }
     
     // Stockage des champs modifiés
