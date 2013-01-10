@@ -1,7 +1,7 @@
 BandwidthTest = {
   start: 0,
   end: 0,
-  binFile: "",
+  binFileContent: "",
   binFileUrl: "",
   binEmptyFileUrl: "",
   downloadLimit: 512,
