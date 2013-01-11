@@ -85,7 +85,7 @@ Main.add(function() {
              {{foreach from=$_labels_for_day item=_days_label}}
                {{assign var=onclick value=$_days_label.onclick}}
                <label style="background: {{$_days_label.color}}; {{if $onclick}}cursor: pointer{{/if}}" title="{{$_days_label.detail}}" {{if $onclick}}onclick="{{$onclick|smarty:nodefaults|escape:"javascript"}}"{{/if}}>
-                 {{$_days_label.text}}
+                 {{$_days_label.text|smarty:nodefaults}}
                </label>
              {{/foreach}}
            {{/if}}
