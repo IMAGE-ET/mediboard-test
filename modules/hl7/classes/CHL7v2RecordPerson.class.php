@@ -14,7 +14,10 @@
  * Record person, message XML HL7
  */
 class CHL7v2RecordPerson extends CHL7v2MessageXML {
-  static $event_codes = "A28 A31";
+  /**
+   * @var string
+   */
+  static $event_codes = "A28 A29 A31";
 
   /**
    * Get data nodes
@@ -43,21 +46,55 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
    * @return null|string
    */
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
-    // Traitement du message des erreurs
-    $comment = $warning = $code_IPP = "";
-    $_modif_patient = false;
+    $event_temp = $ack->event;
 
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $exchange_ihe->_ref_sender;
     $sender->loadConfigValues();
-   
+
     $this->_ref_sender = $sender;
 
     // Acquittement d'erreur : identifiants RI et PI non fournis
     if (!$data['personIdentifiers']) {
       return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
     }
-    
+
+    switch ($exchange_ihe->code) {
+      // A29 - Delete person information
+      case "A29" :
+        $eventCode = "A29";
+        break;
+      // All events
+      default :
+        $eventCode = "All";
+        break;
+    }
+
+    $function_handle = "handle$eventCode";
+    if (!method_exists($this, $function_handle)) {
+      return $exchange_ihe->setAckAR($ack, "E006", null, $newPatient);
+    }
+
+    return $this->$function_handle($ack, $newPatient, $data);
+  }
+
+  /**
+   * Handle all ITI-30 events
+   *
+   * @param CHL7Acknowledgment $ack        Acknowledgement
+   * @param CPatient           $newPatient Person
+   * @param array              $data       Nodes data
+   *
+   * @return null|string
+   */
+  function handleAll(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+    // Traitement du message des erreurs
+    $comment = $warning = $code_IPP = "";
+    $_modif_patient = false;
+
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    $sender       = $this->_ref_sender;
+
     $patientRI       = CValue::read($data['personIdentifiers'], "RI");
     $patientRISender = CValue::read($data['personIdentifiers'], "RI_Sender");
     $patientPI       = CValue::read($data['personIdentifiers'], "PI");
@@ -92,13 +129,14 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           }
                     
           $code_IPP      = "I121";
-          $_modif_patient = true; 
+          $_modif_patient = true;
         } 
         // Patient non retrouvé par son RI
         else {
           $code_IPP = "I120";
         }
-      } else {
+      }
+      else {
         // Aucun IPP fourni
         if (!$patientPI) {
           $code_IPP = "I125";
@@ -119,7 +157,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           $this->primaryMappingPatient($data, $newPatient);
                 
           $code_IPP      = "A121";
-          $_modif_patient = true; 
+          $_modif_patient = true;
         }
 
         // On store le patient
@@ -193,8 +231,74 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     }
     
     return $exchange_ihe->setAckAA($ack, $codes, $comment, $newPatient);
-  }    
-  
+  }
+
+  /**
+   * Handle A29 event - Delete person information
+   *
+   * @param CHL7Acknowledgment $ack        Acknowledgement
+   * @param CPatient           $newPatient Person
+   * @param array              $data       Nodes data
+   *
+   * @return null|string
+   */
+  function handleA29(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+    // Traitement du message des erreurs
+    $comment = $warning = "";
+
+    $exchange_ihe = $this->_ref_exchange_ihe;
+    $sender       = $this->_ref_sender;
+
+    $patientPI = CValue::read($data['personIdentifiers'], "PI");
+    $IPP = new CIdSante400();
+    if ($patientPI) {
+      $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
+    }
+
+    if (!$patientPI || !$IPP->_id) {
+      return $exchange_ihe->setAckAR($ack, "E150", null, $newPatient);
+    }
+
+    $newPatient->load($IPP->object_id);
+
+    // Passage en trash de l'IPP du patient
+    if ($msg = $newPatient->trashIPP($IPP)) {
+      return $exchange_ihe->setAckAR($ack, "E151", $msg, $newPatient);
+    }
+
+    // Annulation de tous les séjours du patient qui n'ont pas d'entrée réelle
+    $where = array();
+    $where['entree_reelle'] = "IS NULL";
+    $where['group_id']      = " = '$sender->group_id'";
+
+    $sejours = $newPatient->loadRefsSejours($where);
+
+    foreach ($sejours as $_sejour) {
+      // Notifier les autres destinataires autre que le sender
+      $_sejour->_eai_initiateur_group_id = $sender->group_id;
+      // Pas de génération de NDA
+      $_sejour->_generate_NDA = false;
+      // On ne check pas la cohérence des dates des consults/intervs
+      $_sejour->_skip_date_consistencies = true;
+
+      // On annule le séjour
+      $_sejour->annule = 1;
+      $_sejour->store();
+    }
+
+    $codes = array ("I150");
+
+    return $exchange_ihe->setAckAA($ack, $codes, $comment, $newPatient);
+  }
+
+  /**
+   * Primary mapping person
+   *
+   * @param array    $data       Datas
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
   function primaryMappingPatient($data, CPatient $newPatient) {
     // Segment PID
     $this->getPID($data["PID"], $newPatient, $data);
@@ -202,7 +306,15 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     // Segment PD1
     $this->getSegment("PD1", $data, $newPatient);
   }
-  
+
+  /**
+   * Secondary mapping person
+   *
+   * @param array    $data       Datas
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
   function secondaryMappingPatient($data, CPatient $newPatient) {
     $sender = $this->_ref_sender;
     
@@ -235,13 +347,30 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     
     // On store le patient
     return CEAIPatient::storePatient($newPatient, $sender);
-  }
+}
 
+  /**
+   * Check similar person
+   *
+   * @param CPatient $recoveredPatient Person recovered
+   * @param CPatient $newPatient       Person
+   *
+   * @return bool
+   */
   function checkSimilarPatient(CPatient $recoveredPatient, CPatient $newPatient) {
     return $recoveredPatient->checkSimilar($newPatient->nom, $newPatient->prenom, false);
-  }
-  
-  function getPID(DOMNode $node, CPatient $newPatient, $data = null) {    
+}
+
+  /**
+   * Get PID segment
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Person
+   * @param array    $data       Datas
+   *
+   * @return void
+   */
+  function getPID(DOMNode $node, CPatient $newPatient, $data = null) {
     $PID5 = $this->query("PID.5", $node);
     foreach ($PID5 as $_PID5) {
       // Nom(s)
@@ -308,11 +437,20 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $newPatient->avs = $this->queryTextNode("PID.31", $node);
     }
   }
-  
+
+  /**
+   * Get names
+   *
+   * @param DOMNode     $node       Node
+   * @param CPatient    $newPatient Person
+   * @param DOMNodeList $PID5       PID5
+   *
+   * @return void
+   */
   function getNames(DOMNode $node, CPatient $newPatient, DOMNodeList $PID5) {
     $fn1 = $this->queryTextNode("XPN.1/FN.1", $node);
 
-    switch($this->queryTextNode("XPN.7", $node)) {
+    switch ($this->queryTextNode("XPN.7", $node)) {
       case "D" :
         $newPatient->nom = $fn1;
         break;
@@ -329,9 +467,17 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       default:
         $newPatient->nom = $fn1;
         break;
-    }    
+    }
   }
-  
+
+  /**
+   * Get first name
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
   function getFirstNames(DOMNode $node, CPatient $newPatient) {
     $newPatient->prenom = $this->queryTextNode("XPN.2", $node);
     $first_names = explode(",", $this->queryTextNode("XPN.3", $node));
@@ -339,8 +485,16 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $newPatient->prenom_3 = CValue::read($first_names, 2);
     $newPatient->prenom_4 = CValue::read($first_names, 3);
   }
-  
-  function getAdresses(DOMNode $node, CPatient $newPatient) {    
+
+  /**
+   * Get adresses
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
+  function getAdresses(DOMNode $node, CPatient $newPatient) {
     $PID11 = $this->query("PID.11", $node);
     $addresses = array();
     foreach ($PID11 as $_PID11) {
@@ -363,28 +517,52 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     // Adresse
     if (array_key_exists("H", $addresses)) {
       $this->getAdress($addresses["H"], $newPatient);
-    } 
+    }
     else {
       foreach ($addresses as $adress_type => $_address) {
         $this->getAdress($_address, $newPatient);
       }
     }
   }
-  
-  function getAdress($adress, CPatient $newPatient) {    
+
+  /**
+   * Get first name
+   *
+   * @param string   $adress     Adress
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
+  function getAdress($adress, CPatient $newPatient) {
     $newPatient->adresse    = $adress["adresse"];
-  if ($adress["adresse_comp"]) {
-      $newPatient->adresse  .= $this->getCompAdress($adress["adresse_comp"]);
-  }
+    if ($adress["adresse_comp"]) {
+        $newPatient->adresse  .= $this->getCompAdress($adress["adresse_comp"]);
+    }
+
     $newPatient->ville      = $adress["ville"];
     $newPatient->cp         = $adress["cp"];
     $newPatient->pays_insee = $adress["pays_insee"];
   }
-  
+
+  /**
+   * Get formatted adress
+   *
+   * @param string $adress Adress
+   *
+   * @return string
+   */
   function getCompAdress($adress) {
     return "\n". str_replace("\\S\\", "\n", $adress);
   }
-  
+
+  /**
+   * Get phones
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
   function getPhones(DOMNode $node, CPatient $newPatient) {
     $PID13 = $this->query("PID.13", $node);
     
@@ -418,7 +596,15 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       }
     }
   }
-  
+
+  /**
+   * Get email
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
   function getEmail(DOMNode $node, CPatient $newPatient) {
     $PID13 = $this->query("PID.13", $node);
     
@@ -434,18 +620,42 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $newPatient->email = $this->queryTextNode("XTN.4", $_PID13);
     }
   }
-  
+
+  /**
+   * Get birth order
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
   function getRangNaissance(DOMNode $node, CPatient $newPatient) {
     if ($rang_naissance = $this->queryTextNode("PID.25", $node)) {
       $newPatient->rang_naissance = $rang_naissance;
     }
   }
-  
-  function getPD1(DOMNode $node, CPatient $newPatient) {    
+
+  /**
+   * Get PD1 segment
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
+  function getPD1(DOMNode $node, CPatient $newPatient) {
     // VIP ?
-    $newPatient->vip = ($this->queryTextNode("PD1.12", $node) == "Y") ? 1 : 0; 
+    $newPatient->vip = ($this->queryTextNode("PD1.12", $node) == "Y") ? 1 : 0;
   }
-  
+
+  /**
+   * Get ROL segment
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
   function getROL(DOMNode $node, CPatient $newPatient) {
     $sender = $this->_ref_sender;
     
@@ -468,7 +678,15 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
         break;
     }
   }
-  
+
+  /**
+   * Get NK1 segment
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
   function getNK1(DOMNode $node, CPatient $newPatient) {
     $sender = $this->_ref_sender;
         
@@ -515,8 +733,15 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     
     $corres_patient->store();
   }
-  
-  function getMedecin(DOMNode $node) {    
+
+  /**
+   * Get doctor
+   *
+   * @param DOMNode $node Node
+   *
+   * @return int
+   */
+  function getMedecin(DOMNode $node) {
     $xcn1  = $this->queryTextNode("XCN.1", $node);
     $xcn2  = $this->queryTextNode("XCN.2/FN.1", $node);
     $xcn3  = $this->queryTextNode("XCN.3", $node);

@@ -86,9 +86,8 @@ class CSipObjectHandler extends CEAIObjectHandler {
             if ($_id_400->id400 == $patient1_ipp) {
               continue;
             }
-            $_id_400->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$tap_IPP;
-            $_id_400->last_update = mbDateTime();
-            $_id_400->store();
+
+            $patient_elimine->trashIPP($_id_400);
           }
         }
         

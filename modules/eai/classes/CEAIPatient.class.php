@@ -83,8 +83,7 @@ class CEAIPatient extends CEAIMbObject {
       }
       
       // On passe l'IPP courant en trash
-      $ref_IPP->tag = CAppUI::conf("dPpatients CPatient tag_ipp_trash").$ref_IPP->tag;
-      $ref_IPP->store();
+      $patient->trashIPP($ref_IPP);
       
       // On sauvegarde le nouveau
       $IPP->tag          = $sender->_tag_patient;

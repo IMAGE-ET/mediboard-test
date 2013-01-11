@@ -413,7 +413,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $this->queryNode("EVN", null, $data, true);
     
     $PID = $this->queryNode("PID", null, $data, true);
-    
+
     $data["personIdentifiers"] = $this->getPersonIdentifiers("PID.3", $PID, $sender);
 
     $this->queryNode("PD1", null, $data, true);

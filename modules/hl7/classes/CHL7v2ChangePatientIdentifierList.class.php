@@ -98,9 +98,7 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
     $newPatient->load($IPP_incorrect->object_id);
 
     // Passage en trash de l'IPP du patient a éliminer
-    $IPP_incorrect->tag = CAppUI::conf('dPpatients CPatient tag_ipp_trash').$sender->_tag_patient;
-    $IPP_incorrect->last_update = mbDateTime();
-    if ($msg = $IPP_incorrect->store()) {
+    if ($msg = $newPatient->trashIPP($IPP_incorrect)) {
       return $exchange_ihe->setAckAR($ack, "E140", $msg, $newPatient);
     }  
     

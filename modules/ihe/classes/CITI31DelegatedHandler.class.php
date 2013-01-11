@@ -1,3 +1,4 @@
+
 <?php
 
 /**
@@ -391,8 +392,8 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     // Cas d'un séjour en cours (entrée réelle)
     if ($sejour->_etat == "encours") {
       // Admission faite
-      if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle ||
-          $sejour->entree_reelle && !$sejour->_old->entree_reelle) {
+      if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle
+          || $sejour->entree_reelle && !$sejour->_old->entree_reelle) {
         // Patient externe
         if (in_array($sejour->type, self::$outpatient)) {
           return "A04";
@@ -418,8 +419,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       // Annulation du médecin responsable
       $send_change_attending_doctor = $configs["send_change_attending_doctor"];
-      if ($sejour->fieldModified("praticien_id") && 
-         ($sejour->praticien_id != $sejour->_old->praticien_id)) {
+      if ($sejour->fieldModified("praticien_id") && ($sejour->praticien_id != $sejour->_old->praticien_id)) {
         return (($send_change_attending_doctor == "A54") ? "A55" : $this->getModificationAdmitCode($receiver));
       } 
       

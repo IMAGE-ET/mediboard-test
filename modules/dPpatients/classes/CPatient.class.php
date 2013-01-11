@@ -830,6 +830,7 @@ class CPatient extends CMbObject {
 
     $where["patient_id"] = "= '$this->_id'";
     $order = "entree DESC";
+
     return $this->_ref_sejours = $sejour->loadList($where, $order);
   }
 
@@ -1494,6 +1495,20 @@ class CPatient extends CMbObject {
     $idex->loadMatchingObject();
 
     $this->load($idex->object_id);
+  }
+
+  /**
+   * Trash IPP
+   *
+   * @param CIdSante400 $IPP IPP
+   *
+   * @return string
+   */
+  function trashIPP(CIdSante400 $IPP) {
+    $IPP->tag         = CAppUI::conf("dPpatients CPatient tag_ipp_trash").$IPP->tag;
+    $IPP->last_update = mbDateTime();
+
+    return $IPP->store();
   }
 
   function loadRefPhotoIdentite() {

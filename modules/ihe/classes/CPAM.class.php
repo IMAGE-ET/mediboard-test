@@ -27,7 +27,8 @@ class CPAM extends CIHE {
    * @var array
    */
   static $transaction_iti30 = array(
-    "A24", "A37", "A28", "A28", "A31", "A40", "A46", "A47"
+    "A24", "A37", "A28", "A29", "A31", "A40", "A46",
+    "A47"
   );
 
   /**
@@ -47,6 +48,7 @@ class CPAM extends CIHE {
     // ITI-30
     "A24" => "CHL7EventADTA24",
     "A28" => "CHL7EventADTA28",
+    "A29" => "CHL7EventADTA29",
     "A31" => "CHL7EventADTA31",
     "A37" => "CHL7EventADTA37",
     "A40" => "CHL7EventADTA40",

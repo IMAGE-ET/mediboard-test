@@ -16,7 +16,9 @@
     <th>{{tr}}CPatient-adresse{{/tr}}</th>
     <th class="narrow"></th>
   </tr>
-
+  <tr>
+    <th class="section" colspan="4">{{$patients|@count}} résultats </th>
+  </tr>
   {{foreach from=$patients item=_patient}}
 
     <tr>
