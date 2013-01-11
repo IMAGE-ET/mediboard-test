@@ -1,6 +1,6 @@
 {{mb_script module="dPpmsi" script="pmsi" ajax=$ajax}}
 
-<script type="text/javascript">
+<script>
   changeCodeToDel = function(subject_id, code_ccam, actes_ids){
     var oForm = getForm("manageCodes");
     $V(oForm._selCode, code_ccam);
@@ -77,7 +77,7 @@
             {{if !$subject->facture || $m == "dPpmsi" || $can->admin}}
             <script>
               Main.add(function () {
-                PMSI.loadExportActes('{{$subject->_id}}', '{{$subject->_class}}');
+                PMSI.loadExportActes('{{$subject->_id}}', '{{$subject->_class}}', 1);
               });
             </script>
             {{/if}}

@@ -10,22 +10,22 @@
  */
 
 PMSI = {
-  loadExportActes: function(object_id, object_class, confirmCloture, module) {
+  confirmCloture: 0,
+  
+  loadExportActes: function(object_id, object_class, confirmCloture) {
     var url = new Url("dPpmsi", "ajax_view_export_actes");
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
-    
-    if (confirmCloture == 1) {
-      oRequestOptions.onComplete = function() {
-        PMSI.reloadActes(object_id, module);
-      }
+    if(confirmCloture == 1) {
+      PMSI.confirmCloture = 1;
+      url.addParam("confirmCloture", confirmCloture);
     }
     
     url.requestUpdate("export_" + object_class + "_" + object_id); 
   },
   
-  exportActes: function(object_id, object_class, oOptions, confirmCloture, module){
-    if ((confirmCloture == 1) && !confirm("L'envoi des actes cloturera définitivement le codage de cette intervention pour le chirurgien et l'anesthésiste." +
+  exportActes: function(object_id, object_class, oOptions, module){
+    if ((PMSI.confirmCloture == 1) && !confirm("L'envoi des actes cloturera définitivement le codage de cette intervention pour le chirurgien et l'anesthésiste." +
           "\nConfirmez-vous l'envoi en facturation ?")) {
       return;
     } 
@@ -47,7 +47,7 @@ PMSI = {
         "Export des actes..."
     };
     
-    if (confirmCloture == 1) {
+    if (PMSI.confirmCloture == 1) {
       oRequestOptions.onComplete = function() {
         PMSI.reloadActes(object_id, module);
       }
@@ -56,7 +56,7 @@ PMSI = {
     url.requestUpdate("export_" + object_class + "_" + object_id, oRequestOptions); 
   },
   
-  deverouilleDossier: function(object_id, object_class, confirmCloture, module) {
+  deverouilleDossier: function(object_id, object_class, module) {
     var url = new Url("dPpmsi", "export_actes_pmsi");
     url.addParam("object_id"     , object_id);
     url.addParam("object_class"  , object_class);
@@ -65,8 +65,7 @@ PMSI = {
     var oRequestOptions = {
       waitingText: "Dévérouillage du dossier..."
     };
-    
-    if (confirmCloture == 1) {
+    if (PMSI.confirmCloture == 1) {
       oRequestOptions.onComplete = function() {
         PMSI.reloadActes(object_id, module);
       }
@@ -82,7 +81,7 @@ PMSI = {
     url.requestUpdate("codage_actes");
   },
 
-  checkActivites: function(object_id, object_class, oOptions, confirmCloture, module) {
+  checkActivites: function(object_id, object_class, oOptions, module) {
     var url = new Url("dPsalleOp", "ajax_check_activites_cloture");
     url.addParam("object_class", object_class);
     url.addParam("object_id", object_id);
@@ -92,7 +91,7 @@ PMSI = {
       if (completed_activite_4 == 0 && !confirm($T('CActeCCAM-_no_activite_4_cloture'))) {
         return;
       }
-      PMSI.exportActes(object_id, object_class, oOptions, confirmCloture, module);
+      PMSI.exportActes(object_id, object_class, oOptions, module);
     });
   }
 };

@@ -16,6 +16,8 @@ if (null == $object_class = CValue::get("object_class")) {
 $NDA = "";
 $IPP = "";
 
+$confirmCloture = CValue::get("confirmCloture", 0);
+
 switch ($object_class) {
   case "COperation" :
     $object = new COperation();
@@ -54,4 +56,5 @@ $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
 $smarty->assign("IPP"   , $IPP);
 $smarty->assign("NDA"   , $NDA);
+$smarty->assign("confirmCloture", $confirmCloture);
 $smarty->display("../../dPpmsi/templates/inc_export_actes_pmsi.tpl");

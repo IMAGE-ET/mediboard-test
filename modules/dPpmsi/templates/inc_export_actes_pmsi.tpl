@@ -5,11 +5,15 @@
 {{mb_default var=NDA value=""}}
 {{mb_default var=IPP value=""}}
 
+<script>
+  PMSI.confirmCloture = {{$confirmCloture}};
+</script>
+
 {{if !$conf.sa.send_only_with_ipp_nda || ($IPP && $NDA)}}
 <div id="export_{{$object->_class}}_{{$object->_id}}">
   {{if $object->facture}}
     {{if $m == "dPpmsi" || $can->admin}}
-    <button class="cancel " onclick="PMSI.deverouilleDossier('{{$object->_id}}', '{{$object->_class}}', '{{$confirmCloture}}', '{{$m}}')">
+    <button class="cancel " onclick="PMSI.deverouilleDossier('{{$object->_id}}', '{{$object->_class}}', '{{$m}}')">
       Déverrouiller le dossier
     </button>
     {{else}}
@@ -20,9 +24,9 @@
   {{else}}
     <button class="tick singleclick"
      onclick="{{if $object instanceof COperation && $conf.dPsalleOp.CActeCCAM.del_actes_non_cotes}}
-         PMSI.checkActivites('{{$object->_id}}', '{{$object->_class}}', null, '{{$confirmCloture}}', '{{$m}}');
+         PMSI.checkActivites('{{$object->_id}}', '{{$object->_class}}', null, '{{$m}}');
        {{else}}
-         PMSI.exportActes('{{$object->_id}}', '{{$object->_class}}', null, '{{$confirmCloture}}', '{{$m}}');
+         PMSI.exportActes('{{$object->_id}}', '{{$object->_class}}', null, '{{$m}}');
        {{/if}}">
       {{if $object->_class == "CSejour"}}
         Export des diagnostics et actes du séjour
