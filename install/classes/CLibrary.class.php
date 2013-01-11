@@ -1,18 +1,18 @@
 <?php
 /**
  * $Id$
- *  
+ *
  * @package    Mediboard
  * @subpackage Intaller
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    SVN: $Id$ 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    SVN: $Id$
  * @link       http://www.mediboard.org
  */
 
 class CLibrary {
   static $all = array();
-  
+
   var $name = "";
   var $url = "";
   var $fileName = "";
@@ -25,11 +25,11 @@ class CLibrary {
   var $versionString = "";
   var $patches = array();
   var $lib_ = null;
-  
+
   function clearLibraries($libSel) {
     global $mbpath;
     $libsDir = $mbpath."lib";
-    
+
     /// Clear out all libraries
     if (!$libSel) {
       foreach (glob("$libsDir/*") as $libDir) {
@@ -39,7 +39,7 @@ class CLibrary {
       }
 
       return;
-    } 
+    }
 
     // Clear out selected lib
     $library = self::$all[$libSel];
@@ -47,42 +47,42 @@ class CLibrary {
       @CMbPath::remove("$libsDir/$targetDir");
     }
   }
-  
+
   function getUpdateState() {
     global $mbpath;
     $dir = $mbpath."lib/$this->targetDir";
-    
+
     if ($this->versionFile && $this->versionString) {
       return (file_exists("$dir/$this->versionFile") &&
               strpos(file_get_contents("$dir/$this->versionFile"), $this->versionString) !== false);
     }
     return null;
   }
-  
+
   function isInstalled() {
     global $mbpath;
     return is_dir($mbpath."lib/$this->targetDir");
   }
-    
+
   function countLibraries() {
     global $mbpath;
     return count(glob($mbpath."lib/*"));
   }
-  
+
   function install() {
     global $mbpath;
     $pkgsDir = $mbpath."libpkg";
     $libsDir = $mbpath."lib";
     $filePath = "$pkgsDir/$this->fileName";
-    
+
     // For libraries archive not contained in directory
     if ($this->extraDir) {
       $libsDir .= "/$this->extraDir";
     }
-    
+
     return CMbPath::extract($filePath, $libsDir);
   }
-  
+
   function apply() {
     global $mbpath;
     $libsDir = $mbpath."lib";
@@ -91,14 +91,14 @@ class CLibrary {
     assert(is_dir($sourceDir));
     return rename($sourceDir, $targetDir);
   }
-  
+
   function checkAll($strict = true) {
     foreach (CLibrary::$all as $library) {
       if (!$library->getUpdateState()) {
         return false;
       }
     }
-    
+
     return true;
   }
 }
@@ -196,7 +196,7 @@ $library->description = "Composant Javascript de sélecteur de date/heure";
 $library->sourceDir = "datepicker";
 $library->targetDir = "datepicker";
 $library->versionFile = "datepicker.js";
-$library->versionString = "{type: \"image\"";
+$library->versionString = "r.2013-01-11";
 
 CLibrary::$all[$library->name] = $library;
 

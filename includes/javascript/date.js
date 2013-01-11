@@ -14,10 +14,10 @@ Object.extend(DateFormat, {
   },
   format: function(date,format) {
     if (!date) return;
-    
+
     format += "";
-    var result = "", 
-      i = 0, 
+    var result = "",
+      i = 0,
       c="",
       token="",
       y=date.getFullYear()+"",
@@ -105,7 +105,7 @@ Object.extend(DateFormat, {
       // Get next token from format string
       c=format.charAt(i_format);
       token="";
-      
+
       while ((format.charAt(i_format)==c) && (i_format < format.length))
         token += format.charAt(i_format++);
 
@@ -248,26 +248,26 @@ Object.extend(Date.prototype, {
 var ProgressiveCalendar = Class.create({
   initialize: function(element, options) {
     this.element = $(element);
-    
+
     this.options = Object.extend({
       icon: "images/icons/calendar.gif",
       container: $(document.body)
     }, options || {});
-    
+
     if (!(this.elementView = $(this.element.form.elements[this.element.name+'_da']))) {
       this.elementView = new Element('input', {type: 'text', readonly: 'readonly', className: this.element.className || 'date'});
       this.element.insert({before: this.elementView});
     }
-    
+
     this.date = this.getDate();
-    $V(this.elementView, (parseInt(this.date.day) ? this.pad(this.date.day)+'/':'') + 
-                         (parseInt(this.date.month) ? this.pad(this.date.month)+'/':'') + 
+    $V(this.elementView, (parseInt(this.date.day) ? this.pad(this.date.day)+'/':'') +
+                         (parseInt(this.date.month) ? this.pad(this.date.month)+'/':'') +
                          (parseInt(this.date.year) ? this.pad(this.date.year, 4) : ''));
-    
+
     if (this.options.icon) {
       var cont = new Element('div', {className:"datePickerWrapper", style: 'position:relative;border:none;padding:0;margin:0;display:inline-block;'});
       this.elementView.wrap(cont);
-      var icon = new Element('input', {type: "image", tabIndex: -1, src: this.options.icon, className: 'inputExtension'});
+      var icon = new Element('img', {src: this.options.icon, className: 'inputExtension'});
 
       // No icon padding specified, default to 3px and calculate dynamically on image load
       var padding = 3;
@@ -293,8 +293,8 @@ var ProgressiveCalendar = Class.create({
   },
   setDate: function(date){
     $V(this.element, this.pad(date.year,4)+'-'+this.pad(date.month)+'-'+this.pad(date.day));
-    $V(this.elementView, (parseInt(date.day) ? this.pad(date.day)+'/':'') + 
-                         (parseInt(date.month) ? this.pad(date.month)+'/':'') + 
+    $V(this.elementView, (parseInt(date.day) ? this.pad(date.day)+'/':'') +
+                         (parseInt(date.month) ? this.pad(date.month)+'/':'') +
                          (parseInt(date.year) ? this.pad(date.year, 4) : ''));
   },
   pad: function (str, length) {
@@ -306,7 +306,7 @@ var ProgressiveCalendar = Class.create({
     }
 
     var i, j, body = table.select('tbody').first(), origMin = min;
-    
+
     for (i = 0; i < rows; i++){
       var row = new Element('tr').addClassName('calendarRow');
       for (j = 0; j < cols; j++){
@@ -319,7 +319,7 @@ var ProgressiveCalendar = Class.create({
           }.bindAsEventListener(this));
           row.insert(before);
         }
-        
+
         if (min <= max) {
           var cell = new Element('td', {style:'padding:1px;width:16.7%;'}).addClassName('day').update(min);
           if (min++ == date[type]) cell.addClassName('current');
@@ -337,7 +337,7 @@ var ProgressiveCalendar = Class.create({
           }.bindAsEventListener(this));
           row.insert(cell);
         }
-          
+
         if (i == 0 && j == cols-1 && type == 'year') {
           var after = new Element('td', {rowSpan: rows, style: 'width:0.1%;padding:1px;', className: 'day'}).update('>');
           after.observe('click', function(e){
@@ -353,23 +353,23 @@ var ProgressiveCalendar = Class.create({
   },
   createTable: function(container, title, cols, rows, min, max, type, date) {
     container.insert('<div />');
-    
+
     var newContainer = container.childElements().last();
     newContainer.insert('<table style="width:100%;"><tbody /></table>');
     var table = newContainer.childElements().last();
 
     this.fillTable(table, cols, rows, min, max, type, date);
-    
+
     if (title) {
       newContainer.insert('<a href="#1" style="text-align:center;display:block;font-weight:bold;">'+title+' <img src="./images/icons/downarrow.png" height="12" /></a>');
     }
-    
+
     if (title) {
       table.nextSiblings().first().observe('click', function(e){
         e.stop();
         var element = e.findElement('a');
         if (!element.previousSiblings().first().select('.current').length) return;
-        
+
         var next = element.nextSiblings().first();
         if (next.visible()) {
           switch (type) {
@@ -393,11 +393,11 @@ var ProgressiveCalendar = Class.create({
         this.setDate(date);
       }.bindAsEventListener(this));
     }
-    
+
     return newContainer;
   },
   createPicker: function(e){
-    if (!this.picker) 
+    if (!this.picker)
       this.picker = new Element('div', {style: 'position:absolute;', className: 'datepickerControl'}).observe('click', Event.stop);
     if (ProgressiveCalendar.activePicker) ProgressiveCalendar.activePicker.hidePicker();
     var container,
@@ -410,29 +410,29 @@ var ProgressiveCalendar = Class.create({
       $V(this.elementView, '');
       this.hidePicker();
     }.bindAsEventListener(this));
-    
+
     container = this.createTable(this.picker, 'Mois', 4, 5, null, parseInt(now.getFullYear()), 'year', date);
     var monthContainer = this.createTable(container, 'Jour', 6, 2, 1, 12, 'month', date);
     var dayContainer = this.createTable(monthContainer, null, 6, 6, 1, 31, 'day', date);
-    
+
     var pos = this.elementView.cumulativeOffset();
     this.picker.setStyle({
       top: pos.top + this.elementView.getDimensions().height + 'px',
       left: pos.left+'px'
     });
-    
+
     container = $(this.options.container);
     if (container)
       container.insert(this.picker);
     else
       this.insert({after: this.picker});
-    
+
     if (monthContainer.firstChild.select('.current').length == 0)
       monthContainer.hide();
-    
+
     if (dayContainer.firstChild.select('.current').length == 0)
       dayContainer.hide();
-    
+
     e.stop();
     this.picker.show();
     document.observe('click', this.hidePicker = this.hidePicker.bindAsEventListener(this));
@@ -449,19 +449,19 @@ var Calendar = {
   // This function is bound to date specification
   dateProperties: function(date, dates) {
     if (!date) return {};
-    var properties = {}, 
+    var properties = {},
         sDate = date.toDATE();
-  
+
     if (dates.limit.start && dates.limit.start > sDate ||
         dates.limit.stop && dates.limit.stop < sDate) {
       properties.disabled = true;
     }
-  
-    if ((dates.current.start || dates.current.stop) && 
+
+    if ((dates.current.start || dates.current.stop) &&
        !(dates.current.start && dates.current.start > sDate || dates.current.stop && dates.current.stop < sDate)) {
       properties.className = "active";
     }
-    
+
     if (dates.spots.include(sDate)) {
       properties.label = "Date";
     }
@@ -475,17 +475,17 @@ var Calendar = {
     dates.limit.stop  = Calendar.prepareDate(dates.limit.stop);
     dates.spots = dates.spots.map(Calendar.prepareDate);
   },
-  
+
   prepareDate: function(date) {
     if (!date) return null;
     return Date.isDATETIME(date) ? Date.fromDATETIME(date).toDATE() : date;
   },
-  
+
   regField: function(element, dates, options){
     if (!$(element) || $V(element.form._locked) == 1) return;
 
     if (element.hasClassName('datepicker')) return;
-    
+
     if (dates) {
       dates.spots = $A(dates.spots);
     }
@@ -503,7 +503,7 @@ var Calendar = {
     }, dates);
 
     Calendar.prepareDates(dates);
-    
+
     // Default options
     options = Object.extend({
       datePicker: true,
@@ -511,8 +511,8 @@ var Calendar = {
       altElement: element,
       altFormat: 'yyyy-MM-dd',
       icon: window.Mobile?"mobile/images/icons/calendar.gif":"images/icons/calendar.gif",
-      locale: "fr_FR", 
-      timePickerAdjacent: !window.Mobile, 
+      locale: "fr_FR",
+      timePickerAdjacent: !window.Mobile,
       use24hrs: true,
       weekNumber: true,
       container: $(document.body),
@@ -520,22 +520,22 @@ var Calendar = {
       center: window.Mobile,
       editable: false
     }, options);
-    
+
     options.captureKeys = !options.inline;
     options.emptyButton = (!options.noView && !element.hasClassName('notNull'));
-    
+
     var elementView;
-    
+
     if (!(elementView = $(element.form.elements[element.name+'_da']))) {
       elementView = new Element('input', {type: 'text', readonly: 'readonly'});
       elementView.className = (element.className || 'date');
       element.insert({before: elementView});
     }
-    
+
     if(window.Mobile) {
       elementView.disabled = "disabled";
     }
-    
+
     if (element.hasClassName('dateTime')) {
       options.timePicker = true;
       options.altFormat = 'yyyy-MM-dd HH:mm:ss';
@@ -546,26 +546,26 @@ var Calendar = {
       options.altFormat = 'HH:mm:ss';
       options.icon = window.Mobile ? "mobile/images/icons/time.png" : "images/icons/time.png";
     }
-    
+
     var datepicker = new Control.DatePicker(elementView, options);
     if (options.editable) {
       var onChange = (function(){
         var date = DateFormat.parse(elementView.value, this.options.currentFormat);
         this.element.value = DateFormat.format(date, this.options.altFormat);
       }).bindAsEventListener(datepicker);
-      
+
       elementView.mask(datepicker.options.currentFormat.replace(/[a-z]/gi, "9"));
       elementView.observe("ui:change", onChange).observe("focus", onChange);
       elementView.writeAttribute("readonly", false);
     }
-    
+
     if (options.inline) {
       Event.stopObserving(document, 'click', datepicker.hidePickerListener);
     }
-    
+
     var showPicker = function(e){
       Event.stop(e);
-      
+
       // Focus will be triggered a second time when the date is selected
       if (Prototype.Browser.IE) {
         if (this._dontShow && e.type !== "click") {
@@ -579,18 +579,18 @@ var Calendar = {
           }).bind(this), 2000);
         }
       }
-      
+
       this.show.bind(datepicker)(e);
-      
+
       var dp = $(this.datepicker.element);
-      
+
       if(!dp) return;
-      
+
       dp.setStyle({zIndex: ""}). // FIXME do not set it in datepicker.js
          unoverflow();
-         
+
     }.bindAsEventListener(datepicker);
-    
+
     if (options.noView) {
       // @todo: Passer ça en classe CSS
       datepicker.element.setStyle({width: 0, border: 'none', background: 'none', position: 'absolute'}).addClassName("opacity-0");
@@ -607,37 +607,37 @@ var Calendar = {
       if(window.Mobile) {
         var div = new Element ('div',{style: 'position:absolute;opacity:0;'});
         var parent = elementView.up();
-        // solution pour éviter de créer plusieurs div quand les pages sont chargées en ajax 
+        // solution pour éviter de créer plusieurs div quand les pages sont chargées en ajax
         // les insertions se font sur "content" et "content" n'est pas rafraichi
-        // trouver un id 
+        // trouver un id
         parent.insert(div);
         div.clonePosition(elementView);
         var pos = elementView.cumulativeOffset();
-        
+
         div.observe('click', function(e){
           Event.stop(e);
           this.show.bind(datepicker)(e);
-          
+
           if(!this.datepicker.element) return;
           $(this.datepicker.element).centerHV(pos.top);
           Calendar.mobileHide(datepicker);
         }.bindAsEventListener(datepicker));
-      } 
+      }
       else {
         elementView.observe('click', showPicker).observe('focus', showPicker);
       }
     }
-    
+
     // We update the view
     if (element.value && !elementView.value) {
       var date = DateFormat.parse(element.value, datepicker.options.altFormat);
       elementView.value = DateFormat.format(date, datepicker.options.currentFormat) || '';
     }
-    
+
     if (datepicker.icon) {
       datepicker.icon.observe("click", function(){
         var element = this.datepicker ? this.datepicker.element : this.element;
-        
+
         if (options.center){
           var posIcon = this.icon.cumulativeOffset();
           $(element).centerHV(posIcon.top);
@@ -650,17 +650,17 @@ var Calendar = {
         }
       }.bindAsEventListener(datepicker));
     }
-    
+
     datepicker.handlers.onSelect = function(date) {
       element.fire("ui:change");
-      
+
       if (elementView != element) {
         elementView.fire("ui:change");
       }
     };
-    
+
     element.addClassName('datepicker');
-    
+
     return datepicker;
   },
   mobileHide: function (picker){
@@ -668,7 +668,7 @@ var Calendar = {
       $(picker).hide();
     });
   },
-  
+
   regProgressiveField: function(element, options) {
     new ProgressiveCalendar(element, options);
   }
@@ -686,7 +686,7 @@ Object.extend(Date, {
   hour: 60 * 60 * 1000,
   day: 24 * 60 * 60 * 1000,
   week: 7 * 24 * 60 * 60 * 1000,
-  
+
   // Approximative durations
   month: 30 * 24 * 60 * 60 * 1000,
   year: 365.2425 * 24 * 60 * 60 * 1000,
@@ -697,7 +697,7 @@ Object.extend(Date, {
   isDATETIME: function(sDateTime) {
     return /^\d{4}-\d{2}-\d{2}[ \+T]\d{2}:\d{2}:\d{2}$/.test(sDateTime);
   },
-  
+
   // sDate must be: YYYY-MM-DD
   fromDATE: function(sDate) {
     var match;
@@ -711,16 +711,16 @@ Object.extend(Date, {
   // sDateTime must be: YYYY-MM-DD HH:MM:SS
   fromDATETIME : function(sDateTime) {
     var match, re = /^(\d{4})-(\d{2})-(\d{2})[ \+T](\d{2}):(\d{2}):(\d{2})$/;
-        
+
     if (/^(\d{4})-(\d{2})-(\d{2})[ \+T](\d{2}):(\d{2})$/.exec(sDateTime))
       sDateTime += '-00';
-    
+
     if (!(match = re.exec(sDateTime)))
       Assert.that(match, "'%s' is not a valid DATETIME", sDateTime);
 
     return new Date(match[1], match[2] - 1, match[3], match[4], match[5], match[6]); // Js months are 0-11!!
   },
-  
+
   // sTime must be: HH:MM:SS
   fromTIME: function(sTime) {
     var match;
@@ -736,7 +736,7 @@ Object.extend(Date, {
     if (!(match = re.exec(sDate)))
       Assert.that(match, "'%s' is not a valid display date", sDate);
 
-    return new Date(match[3], match[2] - 1, match[1]); 
+    return new Date(match[3], match[2] - 1, match[1]);
   },
 
   fromLocaleDateTime : null
@@ -753,50 +753,50 @@ Class.extend(Date, {
     var h = this.getHours(),
         m = this.getMinutes(),
         s = this.getSeconds();
-    return printf("%02d:%02d:%02d", h, m, s);    
+    return printf("%02d:%02d:%02d", h, m, s);
   },
   toDATETIME: function(useSpace) {
     var h = this.getHours(),
         m = this.getMinutes(),
         s = this.getSeconds();
-    
+
     if(useSpace)
       return this.toDATE() + printf(" %02d:%02d:%02d", h, m, s);
     else
       return this.toDATE() + printf("+%02d:%02d:%02d", h, m, s);
   },
-  
+
   toLocaleDate: function() {
     var y = this.getFullYear();
     var m = this.getMonth()+1; // Js months are 0-11!!
     var d = this.getDate();
     return printf("%02d/%02d/%04d", d, m, y);
   },
-  
+
   toLocaleDateTime: function () {
     var h = this.getHours();
     var m = this.getMinutes();
     return this.toLocaleDate() + printf(" %02d:%02d", h, m);
   },
-  
+
   toLocaleTime: function () {
     var h = this.getHours();
     var m = this.getMinutes();
     return printf(" %02d:%02d", h, m);
   },
-  
+
   resetDate: function(){
     this.setFullYear(1970);
     this.setMonth(1);
     this.setDate(1);
   },
-  
+
   resetTime: function(){
     this.setHours(0);
     this.setMinutes(0);
     this.setSeconds(0, 0); // s, ms
   },
-  
+
   addDays: function(iDays) {
     this.setDate(this.getDate() + parseInt(iDays, 10));
     return this;
