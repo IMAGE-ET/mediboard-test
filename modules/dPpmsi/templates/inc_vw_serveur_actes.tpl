@@ -8,6 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script>
+
+Main.add(function () {
+  {{foreach from=$sejour->_ref_operations item=curr_op}}
+    PMSI.loadExportActes('{{$curr_op->_id}}', 'COperation');
+  {{/foreach}}
+});
+
+</script>
+
 <table class="form">
 {{foreach from=$sejour->_ref_operations item=curr_op}}
   <tr>
@@ -155,8 +165,7 @@
   </tr>
   {{/if}}
   <tr>
-    <td colspan="4">
-      {{mb_include template="inc_export_actes_pmsi" object=$curr_op}}
+    <td colspan="4" id="export_COperation_{{$curr_op->_id}}">
     </td>
   </tr>
 {{foreachelse}}  

@@ -12,6 +12,7 @@
 {{mb_script module="dPcompteRendu" script="document"}}
 {{mb_script module="dPcompteRendu" script="modele_selector"}}
 {{mb_script module="dPcabinet" script="file"}}
+{{mb_script module="dPpmsi" script="pmsi" ajax=$ajax}}
 
 {{if @$sejour->_id}}
   <script type="text/javascript">

@@ -1,3 +1,11 @@
+<script>
+
+Main.add(function () {
+  PMSI.loadExportActes('{{$sejour->_id}}', 'CSejour');
+});
+
+</script>
+
 {{assign var="GHM" value=$sejour->_ref_GHM}}
 <a style="float: right" title="Modifier les diagnostics" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$sejour->_id}}">
   <img src="images/icons/edit.png" alt="Planifier" />
@@ -56,8 +64,7 @@
   
 {{if $sejour->_ref_GHM->_CM || $sejour->_ref_actes_ccam}}
 <tr>
-  <td>
-    {{mb_include template="inc_export_actes_pmsi" object=$sejour}}
+  <td id="export_CSejour_{{$sejour->_id}}">
   </td>
 </tr>
 {{/if}}

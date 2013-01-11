@@ -10,6 +10,20 @@
  */
 
 PMSI = {
+  loadExportActes: function(object_id, object_class, confirmCloture, module) {
+    var url = new Url("dPpmsi", "ajax_view_export_actes");
+    url.addParam("object_id", object_id);
+    url.addParam("object_class", object_class);
+    
+    if (confirmCloture == 1) {
+      oRequestOptions.onComplete = function() {
+        PMSI.reloadActes(object_id, module);
+      }
+    }
+    
+    url.requestUpdate("export_" + object_class + "_" + object_id); 
+  },
+  
   exportActes: function(object_id, object_class, oOptions, confirmCloture, module){
     if ((confirmCloture == 1) && !confirm("L'envoi des actes cloturera définitivement le codage de cette intervention pour le chirurgien et l'anesthésiste." +
           "\nConfirmez-vous l'envoi en facturation ?")) {
@@ -43,9 +57,10 @@ PMSI = {
   },
   
   deverouilleDossier: function(object_id, object_class, confirmCloture, module) {
-    var url = new Url("dPpmsi", "ajax_refresh_export_actes_pmsi");
-    url.addParam("object_id", object_id);
-    url.addParam("object_class", object_class);
+    var url = new Url("dPpmsi", "export_actes_pmsi");
+    url.addParam("object_id"     , object_id);
+    url.addParam("object_class"  , object_class);
+    url.addParam("unlock_dossier", 1);
   
     var oRequestOptions = {
       waitingText: "Dévérouillage du dossier..."

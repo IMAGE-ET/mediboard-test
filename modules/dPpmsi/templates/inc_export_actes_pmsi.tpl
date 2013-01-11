@@ -2,7 +2,10 @@
 
 {{mb_script module=pmsi script=PMSI ajax=true}}
 {{mb_default var=confirmCloture value=0}}
+{{mb_default var=NDA value=""}}
+{{mb_default var=IPP value=""}}
 
+{{if !$conf.sa.send_only_with_ipp_nda || ($IPP && $NDA)}}
 <div id="export_{{$object->_class}}_{{$object->_id}}">
   {{if $object->facture}}
     {{if $m == "dPpmsi" || $can->admin}}
@@ -41,3 +44,16 @@
     {{/if}}
   </div>
 </div>
+{{else}}
+<div class="small-warning">
+  Vous ne pouvez pas exporter les actes pour les raisons suivantes :
+  <ul>
+    {{if !$NDA}}
+    <li>Numero de dossier manquant</li>
+    {{/if}}
+    {{if !$IPP}}
+    <li>IPP manquant</li>
+    {{/if}}
+  </ul>
+</div>
+{{/if}}

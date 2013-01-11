@@ -1,3 +1,5 @@
+{{mb_script module="dPpmsi" script="pmsi" ajax=$ajax}}
+
 <script type="text/javascript">
   changeCodeToDel = function(subject_id, code_ccam, actes_ids){
     var oForm = getForm("manageCodes");
@@ -72,15 +74,18 @@
         <fieldset>
           <legend>Validation du codage</legend>
           {{if $conf.dPsalleOp.CActeCCAM.envoi_actes_salle || $m == "dPpmsi" && $subject instanceof COperation}}
+            {{if !$subject->facture || $m == "dPpmsi" || $can->admin}}
+            <script>
+              Main.add(function () {
+                PMSI.loadExportActes('{{$subject->_id}}', '{{$subject->_class}}');
+              });
+            </script>
+            {{/if}}
             <table class="main layout">
               <tr>
-                {{if !$subject->facture || $m == "dPpmsi" || $can->admin}}
-                  {{mb_include module=pmsi template="inc_export_actes_pmsi" object=$subject confirmCloture=1}}
-                {{else}}
-                  <td>
-                    <div class="small-warning">Export PMSI impossible</div>
-                  </td>
-                {{/if}}
+                <td id="export_{{$subject->_class}}_{{$subject->_id}}">
+                  <div class="small-warning">Export PMSI impossible : dossier déjà envoyé en facturation</div>
+                </td>
               </tr>
             </table>
           {{/if}}
