@@ -25,7 +25,13 @@ refreshAnesthPerops = function(operation_id){
 
 refreshFicheAnesth = function() {
   var url = new Url("cabinet", "print_fiche");
-  url.addParam("operation_id", "{{$selOp->_id}}");
+
+  {{if $consult_anesth->_id}}
+    url.addParam("consultation_id", "{{$consult_anesth->consultation_id}}");
+  {{else}}
+    url.addParam("operation_id", "{{$selOp->_id}}");
+  {{/if}}
+
   url.addParam("offline", true);
   url.addParam("display", true);
   url.requestUpdate("fiche_anesth");
