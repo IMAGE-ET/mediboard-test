@@ -225,7 +225,7 @@ if ($module != "common") {
 $empty_locales = array_fill(0, 5, null);
 
 foreach ($all_locales as &$_locale) {
-  $_locale = str_replace(array('\n', '\t'), array("\n", "\t"), &$_locale);
+  $_locale = str_replace(array('\n', '\t'), array("\n", "\t"), $_locale);
 }
 
 // Création du template
