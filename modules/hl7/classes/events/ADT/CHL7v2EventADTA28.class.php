@@ -16,19 +16,23 @@
  * A28 - Add person information
  */
 class CHL7v2EventADTA28 extends CHL7v2EventADT implements CHL7EventADTA05 {
-  var $code        = "A28";
-  var $struct_code = "A05";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
-  function getEVNOccuredDateTime($sejour) {
-    return mbDateTime();
-  }
-  
   /**
+   * @var string
+   */
+  var $code        = "A28";
+  /**
+   * @var string
+   */
+  var $struct_code = "A05";
+
+  /**
+   * Build A28 event
+   *
+   * @param CPatient $patient Person
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($patient) {
     parent::build($patient);

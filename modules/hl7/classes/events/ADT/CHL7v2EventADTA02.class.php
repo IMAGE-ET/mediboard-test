@@ -16,19 +16,34 @@
  * A02 - Transfer a patient
  */
 class CHL7v2EventADTA02 extends CHL7v2EventADT implements CHL7EventADTA02 {
+  /**
+   * @var string
+   */
   var $code        = "A02";
+  /**
+   * @var string
+   */
   var $struct_code = "A02";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CAffectation $affectation Affectation
+   *
+   * @return DateTime Event occured
+   */
   function getEVNOccuredDateTime($affectation) {
     return $affectation->entree;
   }
   
   /**
+   * Build A02 event
+   *
+   * @param CAffectation $affectation Affectation
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($affectation) {
     $sejour                       = $affectation->_ref_sejour;
@@ -58,12 +73,17 @@ class CHL7v2EventADTA02 extends CHL7v2EventADT implements CHL7EventADTA02 {
     // Build specific segments (i18n)
     $this->buildI18nSegments($sejour);
   }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
   function buildI18nSegments($sejour) {
-    
     // Movement segment only used within the context of the "Historic Movement Management"
     if ($this->_receiver->_configs["iti31_historic_movement"]) {
       $this->addZBE($sejour);

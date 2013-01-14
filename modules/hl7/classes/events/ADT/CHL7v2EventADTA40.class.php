@@ -16,19 +16,23 @@
  * A40 - Merge patient
  */
 class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA39 {
+  /**
+   * @var string
+   */
   var $code        = "A40";
+  /**
+   * @var string
+   */
   var $struct_code = "A39";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
-  function getEVNOccuredDateTime($sejour) {
-    return mbDateTime();
-  }
 
   /**
+   * Build A40 event
+   *
+   * @param CPatient $patient Person
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($patient){
     parent::build($patient);

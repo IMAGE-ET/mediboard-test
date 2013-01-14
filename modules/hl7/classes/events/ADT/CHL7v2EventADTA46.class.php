@@ -16,15 +16,23 @@
  * A46 - Change Patient ID
  */
 class CHL7v2EventADTA46 extends CHL7v2EventADT implements CHL7EventADTA30 {
+  /**
+   * @var string
+   */
   var $code        = "A46";
+  /**
+   * @var string
+   */
   var $struct_code = "A30";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
 
   /**
+   * Build A46 event
+   *
+   * @param CPatient $patient Person
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($patient) {
     parent::build($patient);

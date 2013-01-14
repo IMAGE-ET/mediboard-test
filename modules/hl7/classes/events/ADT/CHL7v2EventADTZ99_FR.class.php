@@ -16,20 +16,39 @@
  * Z99 - Change admit
  */
 class CHL7v2EventADTZ99_FR  extends CHL7v2EventADTZ99 {
+  /**
+   * Construct
+   *
+   * @param string $i18n i18n
+   *
+   * @return \CHL7v2EventADTZ99_FR
+   */
   function __construct($i18n = "FR") {
     parent::__construct($i18n);
   }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CMbObject $object Object
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
   function buildI18nSegments($object) {
     if ($object instanceof CAffectation) {
-      $sejour                       = $object->_ref_sejour;
-      $sejour->_ref_hl7_affectation = $object;
+      $affectation = $object;
+
+      $sejour                       = $affectation->_ref_sejour;
+      $sejour->_ref_hl7_affectation = $affectation;
+
+      parent::build($affectation);
     }
     else {
       $sejour = $object;
+
+      parent::build($sejour);
     }
     
     // Movement segment

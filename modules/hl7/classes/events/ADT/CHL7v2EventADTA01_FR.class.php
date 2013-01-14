@@ -16,12 +16,25 @@
  * A01 - Admit/visit notification
  */
 class CHL7v2EventADTA01_FR extends CHL7v2EventADTA01 {
+  /**
+   * Construct
+   *
+   * @param string $i18n i18n
+   *
+   * @return \CHL7v2EventADTA01_FR
+   */
   function __construct($i18n = "FR") {
     parent::__construct($i18n);
   }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
   function buildI18nSegments($sejour) {
     

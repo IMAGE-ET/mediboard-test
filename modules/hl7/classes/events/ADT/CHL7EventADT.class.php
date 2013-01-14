@@ -16,10 +16,33 @@
  * Admit Discharge Transfer
  */
 interface CHL7EventADT {
+  /**
+   * Construct
+   *
+   * @return \CHL7EventADT
+   */
   function __construct();
-  
+
+  /**
+   * Build event
+   *
+   * @param CMbObject $object Object
+   *
+   * @see parent::build()
+   *
+   * @return void
+   */
   function build($object);
-  
+
+  /**
+   * Build i18n segements
+   *
+   * @param CMbObject $object Object
+   *
+   * @see parent::buildI18nSegments()
+   *
+   * @return void
+   */
   function buildI18nSegments($object);
 }
 

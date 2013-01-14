@@ -16,19 +16,34 @@
  * A16 - Pending Discharge
  */
 class CHL7v2EventADTA16 extends CHL7v2EventADT implements CHL7EventADTA16 {
+  /**
+   * @var string
+   */
   var $code        = "A16";
+  /**
+   * @var string
+   */
   var $struct_code = "A16";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return DateTime Event planned
+   */
   function getEVNPlannedDateTime(CSejour $sejour) {
     return $sejour->sortie_reelle;
   }
-  
+
   /**
+   * Build A16 event
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($sejour) {
     parent::build($sejour);
@@ -58,9 +73,15 @@ class CHL7v2EventADTA16 extends CHL7v2EventADT implements CHL7EventADTA16 {
     // Guarantor
     $this->addGT1($patient);
   }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
   function buildI18nSegments($sejour) {
     

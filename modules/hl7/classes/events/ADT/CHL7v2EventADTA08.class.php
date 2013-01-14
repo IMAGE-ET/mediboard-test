@@ -16,19 +16,34 @@
  * A08 - Update Patient Information
  */
 class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
+  /**
+   * @var string
+   */
   var $code        = "A08";
+  /**
+   * @var string
+   */
   var $struct_code = "A01";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CMbObject $object Object
+   *
+   * @return DateTime Event occured
+   */
   function getEVNOccuredDateTime($object) {
     return mbDateTime();
   }
-  
+
   /**
+   * Build A08 event
+   *
+   * @param CMbObject $object Object
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($object) {
     if ($object instanceof CAffectation) {

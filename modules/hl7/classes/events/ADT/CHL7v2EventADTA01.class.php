@@ -16,19 +16,34 @@
  * A01 - Admit/visit notification
  */
 class CHL7v2EventADTA01 extends CHL7v2EventADT implements CHL7EventADTA01 {
+  /**
+   * @var string
+   */
   var $code        = "A01";
+  /**
+   * @var string
+   */
   var $struct_code = "A01";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return DateTime Event occured
+   */
   function getEVNOccuredDateTime(CSejour $sejour) {
     return $sejour->entree_reelle;
   }
-  
+
   /**
+   * Build A01 event
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($sejour) {
     parent::build($sejour);
@@ -58,9 +73,15 @@ class CHL7v2EventADTA01 extends CHL7v2EventADT implements CHL7EventADTA01 {
     // Guarantor
     $this->addGT1($patient);
   }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
   function buildI18nSegments($sejour) {
     

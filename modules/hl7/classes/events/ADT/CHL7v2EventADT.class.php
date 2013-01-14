@@ -20,7 +20,14 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
    * @var string
    */
   var $event_type = "ADT";
-  
+
+  /**
+   * Construct
+   *
+   * @param string $i18n i18n
+   *
+   * @return \CHL7v2EventADT
+   */
   function __construct($i18n = null) {
     parent::__construct($i18n);
     

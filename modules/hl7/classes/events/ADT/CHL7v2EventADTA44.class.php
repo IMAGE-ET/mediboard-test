@@ -16,19 +16,34 @@
  * A44 - Move account information - patient account number
  */
 class CHL7v2EventADTA44 extends CHL7v2EventADT implements CHL7EventADTA43 {
+  /**
+   * @var string
+   */
   var $code        = "A44";
+  /**
+   * @var string
+   */
   var $struct_code = "A43";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return DateTime Event occured
+   */
   function getEVNPlannedDateTime($sejour) {
     return mbDateTime();
   }
-  
+
   /**
+   * Build A44 event
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($sejour) {
     parent::build($sejour);

@@ -16,19 +16,34 @@
  * A12 - Cancel transfer
  */
 class CHL7v2EventADTA12 extends CHL7v2EventADT implements CHL7EventADTA12 {
+  /**
+   * @var string
+   */
   var $code        = "A12";
+  /**
+   * @var string
+   */
   var $struct_code = "A12";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CAffectation $affectation Affectation
+   *
+   * @return DateTime Event occured
+   */
   function getEVNOccuredDateTime($affectation) {
     return mbDateTime();
   }
-  
+
   /**
+   * Build A12 event
+   *
+   * @param CAffectation $affectation Affectation
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($affectation) {
     $sejour                       = $affectation->_ref_sejour;

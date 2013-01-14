@@ -16,19 +16,34 @@
  * A06 - Change an outpatient to an inpatient
  */
 class CHL7v2EventADTA06 extends CHL7v2EventADT implements CHL7EventADTA06 {
+  /**
+   * @var string
+   */
   var $code        = "A06";
+  /**
+   * @var string
+   */
   var $struct_code = "A06";
- 
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return DateTime Event occured
+   */
   function getEVNOccuredDateTime($sejour) {
     return mbDateTime();
   }
-  
+
   /**
+   * Build A06 event
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($sejour) {
     parent::build($sejour);
@@ -52,9 +67,15 @@ class CHL7v2EventADTA06 extends CHL7v2EventADT implements CHL7EventADTA06 {
     // Build specific segments (i18n)
     $this->buildI18nSegments($sejour);
   }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
   function buildI18nSegments($sejour) {
     

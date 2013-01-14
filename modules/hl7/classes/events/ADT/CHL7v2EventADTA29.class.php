@@ -16,19 +16,34 @@
  * A29 - Delete person information
  */
 class CHL7v2EventADTA29 extends CHL7v2EventADT implements CHL7EventADTA21 {
+  /**
+   * @var string
+   */
   var $code        = "A29";
+  /**
+   * @var string
+   */
   var $struct_code = "A21";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return DateTime Event occured
+   */
   function getEVNOccuredDateTime($sejour) {
     return mbDateTime();
   }
-  
+
   /**
+   * Build A29 event
+   *
+   * @param CPatient $patient Person
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($patient) {
     parent::build($patient);

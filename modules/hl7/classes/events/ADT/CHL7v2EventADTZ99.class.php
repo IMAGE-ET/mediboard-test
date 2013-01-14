@@ -16,19 +16,34 @@
  * Z99 - Change admit - HL7
  */
 class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTA01 {
+  /**
+   * @var string
+   */
   var $code        = "Z99";
+  /**
+   * @var string
+   */
   var $struct_code = "A01";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CMbObject $object Object
+   *
+   * @return DateTime Event occured
+   */
   function getEVNOccuredDateTime($object) {
     return mbDateTime();
   }
-  
+
   /**
+   * Build Z99 event
+   *
+   * @param CMbObject $object Object
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($object) {
     if ($object instanceof CAffectation) {
@@ -70,9 +85,15 @@ class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTA01 {
     // Guarantor
     $this->addGT1($patient);
   }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
   function buildI18nSegments($sejour) {
     

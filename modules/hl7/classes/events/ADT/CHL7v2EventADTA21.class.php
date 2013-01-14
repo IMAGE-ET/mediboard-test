@@ -16,19 +16,34 @@
  * A21 - Patient goes on a _leave of absence_
  */
 class CHL7v2EventADTA21 extends CHL7v2EventADT implements CHL7EventADTA21 {
-  var $code        = "A21";
-  var $struct_code = "A21";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
-  function getEVNOccuredDateTime($sejour) {
-    return mbDateTime();
-  }
-  
   /**
+   * @var string
+   */
+  var $code        = "A21";
+  /**
+   * @var string
+   */
+  var $struct_code = "A21";
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CAffectation $affectation Affectation
+   *
+   * @return DateTime Event occured
+   */
+  function getEVNOccuredDateTime($affectation) {
+    return $affectation->entree;
+  }
+
+  /**
+   * Build A21 event
+   *
+   * @param CAffectation $affectation Affectation
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($affectation) {
     $sejour                       = $affectation->_ref_sejour;

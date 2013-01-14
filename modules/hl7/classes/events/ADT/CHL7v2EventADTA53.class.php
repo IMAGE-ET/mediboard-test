@@ -16,19 +16,34 @@
  * A53 - Cancel Leave of Absence for a Patient
  */
 class CHL7v2EventADTA53 extends CHL7v2EventADT implements CHL7EventADTA52 {
+  /**
+   * @var string
+   */
   var $code        = "A53";
+  /**
+   * @var string
+   */
   var $struct_code = "A52";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return DateTime Event occured
+   */
   function getEVNOccuredDateTime($sejour) {
     return mbDateTime();
   }
-  
+
   /**
+   * Build A53 event
+   *
+   * @param CAffectation $affectation Affectation
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($affectation) {
     $sejour                       = $affectation->_ref_sejour;

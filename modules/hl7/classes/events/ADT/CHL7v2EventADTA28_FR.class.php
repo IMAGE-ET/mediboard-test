@@ -16,6 +16,13 @@
  * A28 - Add person information
  */
 class CHL7v2EventADTA28_FR extends CHL7v2EventADTA28 {
+  /**
+   * Construct
+   *
+   * @param string $i18n i18n
+   *
+   * @return \CHL7v2EventADTA28_FR
+   */
   function __construct($i18n = "FR") {
     parent::__construct($i18n);
   }

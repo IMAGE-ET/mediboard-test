@@ -16,19 +16,34 @@
  * A14 - Pending Admit
  */
 class CHL7v2EventADTA14 extends CHL7v2EventADT implements CHL7EventADTA14 {
-  var $code        = "A14";
-  var $struct_code = "A14";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
-  function getEVNPlannedDateTime(CSejour $sejour) {
-    return $sejour->sortie_reelle;
-  }
-    
   /**
+   * @var string
+   */
+  var $code        = "A14";
+  /**
+   * @var string
+   */
+  var $struct_code = "A14";
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return DateTime Event planned
+   */
+  function getEVNPlannedDateTime(CSejour $sejour) {
+    return $sejour->entree_reelle;
+  }
+
+  /**
+   * Build A14 event
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($sejour) {
     parent::build($sejour);
@@ -58,9 +73,15 @@ class CHL7v2EventADTA14 extends CHL7v2EventADT implements CHL7EventADTA14 {
     // Guarantor
     $this->addGT1($patient);
   }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
   function buildI18nSegments($sejour) {
     

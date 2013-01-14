@@ -16,19 +16,34 @@
  * A37 - Unlink patient information
  */
 class CHL7v2EventADTA37 extends CHL7v2EventADT implements CHL7EventADTA37 {
+  /**
+   * @var string
+   */
   var $code        = "A37";
+  /**
+   * @var string
+   */
   var $struct_code = "A37";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return DateTime Event occured
+   */
   function getEVNOccuredDateTime($sejour) {
     return mbDateTime();
   }
-  
+
   /**
+   * Build A37 event
+   *
+   * @param CPatient $patient Person
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($patient) {
     parent::build($patient);

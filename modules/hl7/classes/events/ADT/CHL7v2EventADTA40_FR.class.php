@@ -16,6 +16,13 @@
  * A40 - Merge patient
  */
 class CHL7v2EventADTA40_FR extends CHL7v2EventADTA40 {
+  /**
+   * Construct
+   *
+   * @param string $i18n i18n
+   *
+   * @return \CHL7v2EventADTA40_FR
+   */
   function __construct($i18n = "FR") {
     parent::__construct($i18n);
   }

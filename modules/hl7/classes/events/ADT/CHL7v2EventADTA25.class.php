@@ -16,19 +16,34 @@
  * A25 - Cancel Pending Discharge
  */
 class CHL7v2EventADTA25 extends CHL7v2EventADT implements CHL7EventADTA25 {
+  /**
+   * @var string
+   */
   var $code        = "A25";
+  /**
+   * @var string
+   */
   var $struct_code = "A25";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return DateTime Event occured
+   */
   function getEVNOccuredDateTime($sejour) {
     return mbDateTime();
   }
-  
+
   /**
+   * Build A25 event
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($sejour) {
     parent::build($sejour);
@@ -58,9 +73,15 @@ class CHL7v2EventADTA25 extends CHL7v2EventADT implements CHL7EventADTA25 {
     // Guarantor
     $this->addGT1($patient);
   }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
   function buildI18nSegments($sejour) {
     

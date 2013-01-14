@@ -16,19 +16,34 @@
  * A38 - Cancel pre-admit 
  */
 class CHL7v2EventADTA38 extends CHL7v2EventADT implements CHL7EventADTA38 {
+  /**
+   * @var string
+   */
   var $code        = "A38";
+  /**
+   * @var string
+   */
   var $struct_code = "A38";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+
+  /**
+   * Get event planned datetime
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return DateTime Event occured
+   */
   function getEVNOccuredDateTime($sejour) {
     return mbDateTime();
   }
 
   /**
+   * Build A38 event
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($sejour) {
     parent::build($sejour);
@@ -55,9 +70,15 @@ class CHL7v2EventADTA38 extends CHL7v2EventADT implements CHL7EventADTA38 {
     // Build specific segments (i18n)
     $this->buildI18nSegments($sejour);
   }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
   function buildI18nSegments($sejour) {
     

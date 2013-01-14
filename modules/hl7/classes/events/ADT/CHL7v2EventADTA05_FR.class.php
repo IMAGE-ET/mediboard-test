@@ -16,16 +16,25 @@
  * A05 - Pre-admit a patient
  */
 class CHL7v2EventADTA05_FR extends CHL7v2EventADTA05 {
+  /**
+   * Construct
+   *
+   * @param string $i18n i18n
+   *
+   * @return \CHL7v2EventADTA05_FR
+   */
   function __construct($i18n = "FR") {
     parent::__construct($i18n);
   }
-  
-  function getEVNPlannedDateTime($sejour) {
-    return mbDateTime();
-  }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
   function buildI18nSegments($sejour) {
     // Movement segment
