@@ -143,6 +143,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_isolement_date     = null;
   var $_collisions         = null;
   var $_count_modeles_etiq = null;
+  var $_count_tasks        = null;
+  var $_count_pending_tasks = null;
   
   // Behaviour fields
   var $_check_bounds  = true;
@@ -1388,6 +1390,11 @@ class CSejour extends CCodable implements IPatientRelated {
     }
   }
 
+  function countTasks() {
+    $where["realise"] = "!= '1'";
+    $this->_count_pending_tasks =  $this->countBackRefs("tasks", $where);
+    return $this->_count_tasks = $this->countBackRefs("tasks");
+  }
 
   function loadRefsTasks() {
     return $this->_ref_tasks = $this->loadBackRefs("tasks");

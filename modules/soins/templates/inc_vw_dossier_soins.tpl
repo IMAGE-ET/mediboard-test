@@ -365,8 +365,8 @@ Main.add(function () {
           <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')"><a href="#perop_adm" {{if $count_perop_adm == 0}}class="empty"{{/if}}>Perop {{if $count_perop_adm}}<small>({{$count_perop_adm}})</small>{{/if}}</a></li>
         {{/if}}
       {{/if}}
-      <li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches</a></li>
-      <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">Trans. <span id="nb_trans"></span> / Obs. / Consult.{{if $conf.soins.constantes_show}} / Const.{{/if}}</a></li>
+      <li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches <small>(-)</small></a></li>
+      <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">Trans. <small id="nb_trans"></small> / Obs. / Consult.{{if $conf.soins.constantes_show}} / Const.{{/if}}</a></li>
     </ul>
     
     <span style="float: right;">

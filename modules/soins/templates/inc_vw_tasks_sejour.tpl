@@ -13,8 +13,13 @@ editTask = function(task_id){
 	url.addParam("sejour_id", "{{$sejour->_id}}");
 	url.requestModal(600, 200);
 }
-
 </script>
+
+{{if ($sejour->_count_tasks !== null)}}
+<script>
+Control.Tabs.setTabCount('tasks', {{$sejour->_count_pending_tasks}}, {{$sejour->_count_tasks}});
+</script>
+{{/if}}
 
 {{mb_default var=offline value=0}}
 {{mb_default var=header value=1}}
@@ -22,25 +27,23 @@ editTask = function(task_id){
 <div id="modal-task-{{$sejour->_id}}" style="display: none; width: 70%;">
 </div>
 
+{{if !$mode_realisation && !$readonly}}
+  <button type="button" class="add" onclick="editTask('0');">
+    {{tr}}CSejourTask-title-create{{/tr}}
+  </button>
+{{/if}}
+
 <table class="tbl print_tasks">
-  {{if $header}}
+  {{if $header}} 
     <thead>
       <tr>
         <th class="title" colspan="3">
-          {{$sejour->_view}}
+          {{$sejour}}
           {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
         </th>
       </tr>
     </thead>
   {{/if}}
-  <tr>
-    <th colspan="4" class="title">
-    	{{if !$mode_realisation && !$readonly}}
-    	  <button type="button" class="add notext" onclick="editTask('0');" style="float: right;"></button>
-			{{/if}}
-    	Tâches {{if $sejour->_ref_tasks}}({{$sejour->_ref_tasks|@count}}){{/if}}
-		</th>
-	</tr>		
 	<tr>
     <th colspan="2">{{mb_title class="CSejourTask" field="description"}}</th>
 		<th>{{mb_title class="CSejourTask" field="resultat"}}</th>
@@ -51,7 +54,7 @@ editTask = function(task_id){
 	{{foreach from=$sejour->_ref_tasks item=_task}}
 	  <tr>
 	  	<td class="narrow"><input type="checkbox" disabled="disabled" {{if $_task->realise}}checked="checked"{{/if}} /></td>
-	    <td {{if $_task->realise}}style="text-decoration: line-through"{{/if}}>{{mb_value object=$_task field="description"}}
+	    <td {{if $_task->realise}}style="text-decoration: line-through; color: #888;"{{/if}}>{{mb_value object=$_task field="description"}}
 			  {{if $_task->prescription_line_element_id}}
 				  <strong>{{$_task->_ref_prescription_line_element->_view}}</strong>
 				{{/if}}

@@ -14,16 +14,21 @@ $readonly = CValue::get("readonly", 0);
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
+$sejour->countTasks();
 $sejour->loadRefsTasks();
-foreach($sejour->_ref_tasks as $_task){
+foreach ($sejour->_ref_tasks as $_task){
   $_task->loadRefPrescriptionLineElement();	
 } 
+
+mbTrace($sejour->_count_pending_tasks, "pending");
+mbTrace($sejour->_count_tasks, "all");
 
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("sejour", $sejour);
 $smarty->assign("task", new CSejourTask());
 $smarty->assign("readonly", $readonly);
+$smarty->assign("header", "0");
 $smarty->assign("mode_realisation", $mode_realisation);
 $smarty->display("inc_vw_tasks_sejour.tpl");
 
