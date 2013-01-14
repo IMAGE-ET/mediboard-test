@@ -573,15 +573,4 @@ class CMbObject extends CStoredObject {
       }
     }
   }
-
-  /**
-   * Log shortcut to mbTrace
-   *
-   * @param string $label Add an optional label
-   *
-   * @return int The size of the data written in the log file
-   **/
-  function log($label = null) {
-    return mbTrace($this->getPlainFields(), $label, true);
-  }
 }

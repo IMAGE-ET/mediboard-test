@@ -539,4 +539,18 @@ class CModelObject {
     }
     return $fields;
   }
+
+
+
+  /**
+   * Log shortcut to mbTrace
+   *
+   * @param string $label Add an optional label
+   * @param bool   $log   Log to file or echo data
+   *
+   * @return int The size of the data written in the log file
+   **/
+  function log($label = null, $log = true) {
+    return mbTrace($this->getPlainFields(), $label, $log);
+  }
 }
