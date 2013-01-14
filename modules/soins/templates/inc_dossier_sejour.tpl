@@ -134,6 +134,8 @@
   }
   
   Main.add(function() {
+    Prescription.mode_pharma = "{{$mode_pharma}}";
+
     tab_sejour = Control.Tabs.create('tab-sejour');
     tab_sejour.setActiveTab('{{$default_tab}}');
     tab_sejour.activeLink.onmousedown();

@@ -76,6 +76,7 @@ $locales['CAlert.level.low'] = 'bas';
 $locales['CAlert.level.medium'] = 'moyen';
 $locales['CAlert.none'] = 'Aucune alerte';
 $locales['CAlert.one'] = 'l\'alerte';
+$locales['CConfigService-shm-ok'] = 'Cache de config par service  à jour';
 $locales['CConfiguration'] = 'Configuration';
 $locales['CConfiguration-configuration_id'] = 'Id';
 $locales['CConfiguration-configuration_id-court'] = 'Id';
