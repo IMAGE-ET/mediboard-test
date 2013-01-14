@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage forms
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -27,16 +28,16 @@ if ($ex_class_event->_id) {
   $ex_class_event->loadRefsConstraints();
   $ex_class_event->loadRefsNotes();
   $ex_class_event->getHostClassOptions();
-  
-  foreach($ex_class_event->_ref_constraints as $_ex_constraint) {
+
+  foreach ($ex_class_event->_ref_constraints as $_ex_constraint) {
     $_ex_constraint->loadTargetObject();
     if ($_ex_constraint->_ref_target_object instanceof CMediusers) {
       $_ex_constraint->_ref_target_object->loadRefFunction();
     }
   }
-  
+
   $unicity_spec->_locales["host"] = "Unique pour <strong>".CAppUI::tr($ex_class_event->host_class)."</strong>";
-  
+
   if ($ex_class_event->host_class != "CMbObject") {
     $host_object = new $ex_class_event->host_class;
 

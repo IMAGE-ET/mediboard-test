@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage forms
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -33,7 +34,7 @@ if (!$ex_class_id) {
 
 // searching for a CExClassEvent
 //$ex_class_event = new CExClassEvent;
-//$ex_class_event->host_class = 
+//$ex_class_event->host_class =
 
 $object = CMbObject::loadFromGuid($object_guid);
 
@@ -58,7 +59,7 @@ if (!$ex_object_id) {
   $ex_class = new CExClass;
   $ex_class->load($ex_class_id);
   $ex_objects = $ex_class_event->getExObjectForHostObject($object);
-  
+
   $ex_object = reset($ex_objects);
 
   if (!$ex_object) {
@@ -77,7 +78,7 @@ if (!$ex_object->_id) {
     $reference = $ex_class_event->resolveReferenceObject($object, 1);
     $ex_object->setReferenceObject_1($reference);
   }
-  
+
   if (!$ex_object->reference2_id && !$ex_object->reference2_class) {
     $reference = $ex_class_event->resolveReferenceObject($object, 2);
     $ex_object->setReferenceObject_2($reference);
@@ -110,12 +111,14 @@ else {
 $ex_object->loadRefGroup();
 
 // loadAllFwdRefs ne marche pas bien (a cause de la clé primaire)
-foreach($ex_object->_specs as $_field => $_spec) {
+foreach ($ex_object->_specs as $_field => $_spec) {
   if ($_spec instanceof CRefSpec && $_field != $ex_object->_spec->key) {
     $class = $_spec->meta ? $ex_object->{$_spec->meta} : $_spec->class;
-    
-    if (!$class) continue;
-    
+
+    if (!$class) {
+      continue;
+    }
+
     $obj = new $class;
     $obj->load($ex_object->$_field);
     $ex_object->_fwd[$_field] = $obj;
@@ -130,7 +133,7 @@ if (!$ex_object->_id) {
     $reference = $ex_class_event->resolveReferenceObject($object, 1);
     $ex_object->setReferenceObject_1($reference);
   }
-  
+
   if (!$ex_object->reference2_id && !$ex_object->reference2_class) {
     $reference = $ex_class_event->resolveReferenceObject($object, 2);
     $ex_object->setReferenceObject_2($reference);
@@ -141,11 +144,11 @@ if (!$ex_object->_id) {
 $ex_object->loadNativeViews($ex_class_event);
 
 $fields = array();
-foreach($groups as $_group) {
+foreach ($groups as $_group) {
   $fields = array_merge($_group->_ref_fields, $fields);
-  
+
   if ($_group->_ref_host_fields) {
-    foreach($_group->_ref_host_fields as $_host_field) {
+    foreach ($_group->_ref_host_fields as $_host_field) {
       $_host_field->getHostObject($ex_object);
     }
   }
@@ -163,14 +166,14 @@ if (in_array("IPatientRelated", class_implements($ex_object->object_class))) {
   }
   else {
     $rel_patient = new CPatient;
-    
+
     if ($preview) {
       $rel_patient->_view = "Patient exemple";
       $rel_patient->_IPP = "0123456";
       $ex_object->_ref_object->_view = CAppUI::tr($ex_object->_ref_object->_class)." test";
     }
   }
-  
+
   $ex_object->_rel_patient = $rel_patient;
 }
 
@@ -183,7 +186,7 @@ if ($ex_object->_ref_reference_object_2 instanceof CPatient) {
 }
 
 $formula_token_values = array();
-foreach($fields as $_field) {
+foreach ($fields as $_field) {
   /*if ($_field->formula == null) {
     continue;
   } */

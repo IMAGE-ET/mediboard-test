@@ -1,14 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage forms
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-//CCanDo::checkAdmin();
+//CCanDo::checkAdmin(); // Don't check permissions
 
 $object_guid = CValue::get("object_guid");
 $event_name  = CValue::get("event_name");
@@ -33,7 +34,7 @@ $ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
 
 $ex_class_events_struct = array();
 
-foreach($ex_class_events as $_ex_class_event) {
+foreach ($ex_class_events as $_ex_class_event) {
   if ($_ex_class_event->checkConstraints($object)) {
     $ex_class_events_struct[] = array(
       "ex_class_event_id" => $_ex_class_event->_id,

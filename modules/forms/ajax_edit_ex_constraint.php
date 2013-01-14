@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage forms
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -14,7 +15,7 @@ $ex_constraint_id  = CValue::get("ex_constraint_id");
 $ex_class_event_id = CValue::get("ex_class_event_id");
 
 $ex_constraint = new CExClassConstraint;
-  
+
 if (!$ex_constraint->load($ex_constraint_id)) {
   $ex_constraint->ex_class_event_id = $ex_class_event_id;
 }

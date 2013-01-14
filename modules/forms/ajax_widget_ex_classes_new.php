@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage forms
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 //CCanDo::checkAdmin();
@@ -38,7 +39,7 @@ $ex_objects = array();
 
 $count = 0;
 $count_available = count($ex_class_events);
-foreach($ex_class_events as $_id => $_ex_class_event) {
+foreach ($ex_class_events as $_id => $_ex_class_event) {
   $ex_classes[$_ex_class_event->ex_class_id] = $_ex_class_event->loadRefExClass();
   /*if (!$_ex_class->checkConstraints($object)) {
     unset($ex_classes[$_id]);
@@ -46,20 +47,20 @@ foreach($ex_class_events as $_id => $_ex_class_event) {
   }*/
 
   $objects = $_ex_class_event->getExObjectForHostObject($object);
-  
-  foreach($objects as $_object) {
+
+  foreach ($objects as $_object) {
     $_object->loadLogs();
-    foreach($_object->_ref_logs as $_log) {
+    foreach ($_object->_ref_logs as $_log) {
       $_log->loadRefUser()->loadRefMediuser()->loadRefFunction();
     }
   }
-  
+
   $count += count($objects);
-  
+
   $ex_objects[$_ex_class_event->ex_class_id] = $objects;
 }
 
-foreach($ex_objects as $_id => $_ex_object) {
+foreach ($ex_objects as $_id => $_ex_object) {
   if (!count($_ex_object)) {
     unset($ex_objects[$_id]);
   }

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage forms
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -28,7 +29,7 @@ $context->loadView();
 $list_owner = $context->getRealListOwner();
 $list_owner->loadView();
 
-if($concept_type == "list" && !$ex_concept_id && $context instanceof CExConcept) {
+if ($concept_type == "list" && !$ex_concept_id && $context instanceof CExConcept) {
   $ex_list = new CExList;
   $ex_list->load($ex_list_id);
   $ex_list_items = $ex_list->loadRefItems();
@@ -72,9 +73,9 @@ if ($spec instanceof CEnumSpec || $spec instanceof CBoolSpec) {
 }
 
 $exclude = array(
-  "confidential", "mask", "format", "reported", 
-  "perm", "seekable", "pattern", "autocomplete", 
-  "cascade", "delimiter", "canonical", "protected", 
+  "confidential", "mask", "format", "reported",
+  "perm", "seekable", "pattern", "autocomplete",
+  "cascade", "delimiter", "canonical", "protected",
   "class", "alphaAndNum", "byteUnit", "length" //  a cause de form.length qui pose probleme
 );
 
@@ -84,30 +85,30 @@ $boolean = array(
 
 $options = $spec->_options;
 
-foreach($exclude as $_exclude) {
+foreach ($exclude as $_exclude) {
   unset($options[$_exclude]);
 }
 
 function order_items($a, $b) {
   $order = $GLOBALS["items"];
-  
+
   $key_a = array_search($a, $order);
   $key_b = array_search($b, $order);
-  
+
   return ($key_a === false ? 1000 : $key_a) - ($key_b === false ? 1000 : $key_b);
 }
-  
+
 CExConcept::orderSpecs($options);
 
 $items_sub = array();
 $items_all = array();
 
 if ($spec instanceof CEnumSpec) {
-  if($list_owner->_id) {
+  if ($list_owner->_id) {
     $list_owner->updateEnumSpec($spec);
     $prop .= " ".implode("|", $spec->_list);
   }
-  
+
   $items_sub = $spec->_list;
   $items_all = $spec->_list;
 }
@@ -117,16 +118,16 @@ if ($spec instanceof CEnumSpec) {
 if ($spec instanceof CEnumSpec) {
   $ex_field = new CExClassField;
   $ex_field->load($ex_field_id);
-  
+
   $enum_trans = $ex_field->loadRefEnumTranslations();
-  
+
   foreach($enum_trans as $_enum_trans) {
     $_enum_trans->updateLocales();
   }
 
   if ($ex_field->ex_class_id) {
     $ex_object = new CExObject($ex_field->ex_class_id);
-    
+
     if ($ex_object->_specs[$field] instanceof CEnumSpec) {
       $spec = $ex_object->_specs[$field];
     }
@@ -146,26 +147,26 @@ if ($context instanceof CExClassField) {
   $ex_class = $context->loadRefExClass();
   if (!$ex_class->conditional) {
     $triggerable = new CExClass;
-    
+
     $group_id = CGroups::loadCurrent()->_id;
     $where = array(
       "group_id" => "= '$group_id'",
     );
-    
+
     $where = array(
       "group_id"    => "= '$group_id'",
       "conditional" => "= '1'",
       $triggerable->_spec->key => "!= '$ex_class->_id'",
     );
-    
+
     // TODO charger les ex_class qui ont un event avec la meme classe que ... quel evenement ???
-    
+
     $triggerables_cond = $triggerable->loadList($where, "conditional DESC, name");
-    
+
     $where["conditional"] = "= '0'";
     $triggerables_others = $triggerable->loadList($where, "conditional DESC, name");
   }
-  
+
   if (!empty($context->concept_id)) {
     if (!empty($context->_ref_concept->_ref_ex_list)) {
       $items_all = array_keys($context->_ref_concept->_ref_ex_list->_ref_items);

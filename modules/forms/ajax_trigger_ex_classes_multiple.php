@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage forms
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 //CCanDo::checkAdmin();
@@ -33,7 +34,7 @@ foreach ($object_guids as $object_guid) {
 
   $where["ex_class_event.host_class"] = $ds->prepare("=%", $object->_class);
   $_ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
-  
+
   foreach ($_ex_class_events as $_id => $_ex_class_event) {
     if ($_ex_class_event->checkConstraints($object)) {
       $_ex_class_event->_host_object = $object;

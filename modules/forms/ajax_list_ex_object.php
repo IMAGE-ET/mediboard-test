@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage forms
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -57,10 +58,10 @@ if (empty(CExClass::$_list_cache)) {
   CExClass::$_list_cache = $ex_class->loadList($where, "name");
 
   if (!CExObject::$_locales_cache_enabled && $detail > 1) {
-    foreach(CExClass::$_list_cache as $_ex_class) {
-      foreach($_ex_class->loadRefsGroups() as $_group) {
+    foreach (CExClass::$_list_cache as $_ex_class) {
+      foreach ($_ex_class->loadRefsGroups() as $_group) {
         $_group->loadRefsFields();
-        foreach($_group->_ref_fields as $_field) {
+        foreach ($_group->_ref_fields as $_field) {
           $_field->updateTranslation();
         }
       }
@@ -80,13 +81,15 @@ if ($print) {
   $limit = 5;
 }
 else {
-  switch($detail) {
+  switch ($detail) {
     case 3:
     case 2:
-      $limit = ($search_mode ? 50 : ($ex_class_id ? 20 : 10)); break;
+      $limit = ($search_mode ? 50 : ($ex_class_id ? 20 : 10));
+      break;
     case 1:
-      $limit = ($ex_class_id ? 50 : 25); break;
-  default:
+      $limit = ($ex_class_id ? 50 : 25);
+      break;
+    default:
     case 0:
   }
 }
@@ -108,7 +111,7 @@ if ($concept_search) {
 
 $ex_class_event = new CExClassEvent;
 
-foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
+foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
   $_ex_object = new CExObject;
   $_ex_object->_ex_class_id = $_ex_class_id;
   $_ex_object->setExClass();
@@ -139,11 +142,11 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
   }
 
   $_ex_objects = array();
-  
+
   if ($detail >= 1) {
     $_ex_objects = $_ex_object->loadList($where, "{$_ex_object->_spec->key} DESC", $limit, null, $ljoin);
   }
-  
+
   $_ex_objects_count = $_ex_object->countList($where, null, $ljoin);
 
   $total = max($_ex_objects_count, $total);
@@ -161,17 +164,16 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     $ljoin = array(
       "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id",
     );
-    
+
     $_ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
-    
+
     // TODO canCreateNew
     foreach ($_ex_class_events as $_id => $_ex_class_event) {
-      if ($reference && (!$_ex_class_event->checkConstraints($reference)/* || 
-                         !$_ex_class_event->canCreateNew($reference)*/)) {
+      if ($reference && (!$_ex_class_event->checkConstraints($reference)/* || !$_ex_class_event->canCreateNew($reference)*/)) {
         unset($_ex_class_events[$_id]);
       }
     }
-    
+
     if (count($_ex_class_events)) {
       $ex_classes_creation[$_ex_class_id] = $_ex_class_events;
     }
@@ -180,7 +182,7 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
   if ($detail == 0) {
     continue;
   }
-  
+
   /*
   if ( $_ex_class->host_class == $reference_class && // Possible context
       !$_ex_class->disabled && // Not disabled
@@ -196,7 +198,7 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     }
   }*/
 
-  foreach($_ex_objects as $_ex) {
+  foreach ($_ex_objects as $_ex) {
     $_ex->_ex_class_id = $_ex_class_id;
     $_ex->load();
 
@@ -229,13 +231,13 @@ foreach(CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
 }
 
 if ($detail == 2) {
-  foreach($ex_objects as $_ex_class_id => $_ex_objects) {
+  foreach ($ex_objects as $_ex_class_id => $_ex_objects) {
     $first = reset($_ex_objects);
 
     if (!$first) {
       continue;
     }
-    
+
     $_ex_class = $first->_ref_ex_class;
 
     foreach ($_ex_class->_ref_groups as $_ex_group) {
@@ -244,7 +246,7 @@ if ($detail == 2) {
       foreach ($_ex_group->_ref_fields as $_ex_field) {
         $_ex_field->_empty = true;
 
-        foreach($_ex_objects as $_ex_object) {
+        foreach ($_ex_objects as $_ex_object) {
           if ($_ex_object->{$_ex_field->name} != "") {
             $_ex_field->_empty = false;
             $_ex_group->_empty = false;

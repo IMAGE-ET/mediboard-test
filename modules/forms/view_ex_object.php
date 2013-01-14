@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage forms
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CCanDo::checkEdit();
@@ -18,13 +19,13 @@ $reference_classes = array(
 );
 
 if ($reference_class) {
-	$reference = new $reference_class;
-	if ($reference->load($reference_id)) {
-		$reference->loadComplete();
-	}
+  $reference = new $reference_class;
+  if ($reference->load($reference_id)) {
+    $reference->loadComplete();
+  }
 }
 else {
-	$reference = new CMbObject;
+  $reference = new CMbObject;
 }
 
 // Création du template
