@@ -819,8 +819,7 @@ Object.extend (Control.Tabs, {
     return anchors[0];
   },
     
-  setTabCount: function(tabName, count) {
-    count += ""; // String cast
+  setTabCount: function(tabName, count, total) {
     var anchor = this.getTabAnchor(tabName);
     
     //anchor.writeAttribute("data-count", count);
@@ -836,6 +835,7 @@ Object.extend (Control.Tabs, {
     }
     
     // Manage relative count
+    count += ''; // String cast
     if (count.charAt(0) == "+" || count.charAt(0) == "-") {
       count = parseInt(small.innerHTML.replace(/(\(|\))*/,"")) + parseInt(count);
     }
@@ -844,7 +844,8 @@ Object.extend (Control.Tabs, {
     anchor.setClassName('empty', count < 1);
     
      // Set count label
-    small.update('('+count+')');
+    var label = count + (total ? ' / ' + total : '');
+    small.update('('+label+')');
   }
 });
 
