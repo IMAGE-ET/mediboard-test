@@ -6,7 +6,7 @@
 * @author Sébastien Fillonneau
 */
 
-$templateManager = unserialize($_SESSION["dPcompteRendu"]["templateManager"]);
+$templateManager = unserialize(gzuncompress($_SESSION["dPcompteRendu"]["templateManager"]));
 header("Content-Type: text/javascript");
 
 $user = CMediusers::get();

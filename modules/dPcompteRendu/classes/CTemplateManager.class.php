@@ -1,7 +1,7 @@
 <?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage dPcompteRendu
  * @author     SARL OpenXtrem <dev@openxtrem.com>
@@ -14,18 +14,18 @@
  */
 class CTemplateManager {
   var $editor = "ckeditor";
-  
+
   var $sections      = array();
   var $helpers       = array();
   var $lists         = array();
   var $graphs        = array();
   var $textes_libres = array();
-  
+
   var $template      = null;
   var $document      = null;
   var $usedLists     = array();
   var $isCourrier    = null;
-  
+
   var $valueMode     = true; // @todo : changer en applyMode
   var $isModele      = true;
   var $printMode     = false;
@@ -34,20 +34,20 @@ class CTemplateManager {
   var $font          = null;
   var $size          = null;
   var $destinataires = array();
-  
+
   private static $barcodeCache = array();
-  
+
   /**
    * Constructeur
-   * 
+   *
    * @param array $parameters [optional]
-   * 
+   *
    * @return void
    */
   function CTemplateManager($parameters = array()) {
     $user = CMediusers::get();
     $this->parameters = $parameters;
-    
+
     if (!isset($parameters["isBody"]) || (isset($parameters["isBody"]) && $parameters["isBody"] == 1)) {
       $this->addProperty("Courrier - nom destinataire"     , "[Courrier - nom destinataire]");
       $this->addProperty("Courrier - adresse destinataire" , "[Courrier - adresse destinataire]");
@@ -57,12 +57,12 @@ class CTemplateManager {
       $this->addProperty("Courrier - copie à - complet", "[Courrier - copie à - complet]");
       $this->addProperty("Courrier - copie à - complet (multiligne)", "[Courrier - copie à - complet (multiligne)]");
     }
-    
+
     $now = mbDateTime();
     $this->addDateProperty("Général - date du jour", $now);
     $this->addLongDateProperty("Général - date du jour (longue)", $now);
     $this->addTimeProperty("Général - heure courante", $now);
-    
+
     // Connected user
     $user_complete = $user->_view;
     if ($user->isPraticien()) {
@@ -83,22 +83,22 @@ class CTemplateManager {
         $user_complete .= "\nE-mail : " . $user->_user_email;
       }
     }
-    
+
     // Initials
     $elements_first_name = preg_split("/[ -]/", $user->_user_first_name);
     $initials_first_name = "";
-    
+
     foreach ($elements_first_name as $_element) {
       $initials_first_name .= strtoupper(substr($_element, 0, 1));
     }
-    
+
     $elements_last_name = preg_split("/[ -]/", $user->_user_last_name);
     $initials_last_name = "";
-    
+
     foreach ($elements_last_name as $_element) {
       $initials_last_name .= strtoupper(substr($_element, 0, 1));
     }
-    
+
     $this->addProperty("Général - rédacteur"        , $user->_shortview);
     $this->addProperty("Général - rédacteur - prénom", $user->_user_first_name);
     $this->addProperty("Général - rédacteur - nom"  , $user->_user_last_name);
@@ -109,51 +109,51 @@ class CTemplateManager {
       $this->addProperty("Général - numéro de page", "[Général - numéro de page]");
     }
   }
-  
+
   /**
    * Retrouve un paramètre dans un tableau
-   * 
+   *
    * @param string $name    nom du paramètre
    * @param object $default [optional] valeur par défaut, si non retrouvé
-   * 
+   *
    * @return string
    */
   function getParameter($name, $default = null) {
     return CValue::read($this->parameters, $name, $default);
   }
-  
+
   /**
-   * Construit l'élément html pour les champs, listes de choix et textes libres. 
-   * 
+   * Construit l'élément html pour les champs, listes de choix et textes libres.
+   *
    * @param string $spanClass classe de l'élément
    * @param string $text      contenu de l'élément
-   * 
+   *
    * @return string
    */
   function makeSpan($spanClass, $text) {
     // Escape entities cuz CKEditor does so
     $text = CMbString::htmlEntities($text);
-    
-    // Keep backslashed double quotes instead of quotes 
+
+    // Keep backslashed double quotes instead of quotes
     // cuz CKEditor creates double quoted attributes
     return "<span class=\"{$spanClass}\">{$text}</span>";
   }
-  
+
   /**
    * Ajoute un champ
-   * 
+   *
    * @param string  $field      nom du champ
    * @param string  $value      [optional]
    * @param array   $options    [optional]
    * @param boolean $htmlescape [optional]
-   * 
+   *
    * @return void
    */
   function addProperty($field, $value = null, $options = array(), $htmlescape = true) {
     if ($htmlescape) {
       $value = CMbString::htmlSpecialChars($value);
     }
-    
+
     $sec = explode(' - ', $field, 3);
     switch (count($sec)) {
       case 3:
@@ -170,14 +170,14 @@ class CTemplateManager {
         trigger_error("Error while exploding the string", E_USER_ERROR);
         return;
     }
-    
+
     if (!array_key_exists($section, $this->sections)) {
       $this->sections[$section] = array();
     }
     if ($sub_item != '' && !array_key_exists($item, $this->sections[$section])) {
       $this->sections[$section][$item] = array();
     }
-    
+
     if ($sub_item == '') {
       $this->sections[$section][$field] = array (
         "view"      => CMbString::htmlEntities($item),
@@ -200,34 +200,34 @@ class CTemplateManager {
         "options"   => $options
       );
     }
-    
+
     if (isset($options["barcode"])) {
       $_field = &$this->sections[$section][$field];
-      
+
       if ($this->valueMode) {
         $src = $this->getBarcodeDataUri($_field['value'], $options["barcode"]);
       }
-      else { 
+      else {
         $src = $_field['fieldHTML'];
       }
-      
+
       $_field["field"] = "";
-      
+
       if ($options["barcode"]["title"]) {
         $_field["field"] .= $options["barcode"]["title"]."<br />";
       }
-      
+
       $_field["field"] .= "<img alt=\"$field\" src=\"$src\" ";
-      
+
       foreach ($options["barcode"] as $name => $attribute) {
         $_field["field"] .= " $name=\"$attribute\"";
       }
-      
+
       $_field["field"] .= "/>";
     }
-    
+
     if (isset($options["image"])) {
-      
+
       $_field = &$this->sections[$section][$field];
       $file = new CFile();
       $file->load($_field['value']);
@@ -235,89 +235,89 @@ class CTemplateManager {
       $_field["field"] = "<img src=\"$src\" />";
     }
   }
-  
+
   /**
    * Ajoute un champ de type date
-   * 
+   *
    * @param string $field nom du champ
    * @param string $value [optional]
-   * 
+   *
    * @return void
    */
   function addDateProperty($field, $value = null) {
     $value = $value ? mbTransformTime(null, $value, CAppUI::conf("date")) : "";
     $this->addProperty($field, $value);
   }
-  
+
   /**
    * Ajoute un champ de type date longue
-   * 
+   *
    * @param string $field Nom du champ
    * @param string $value Valeur du champ
-   * 
-   * @return void 
+   *
+   * @return void
    */
   function addLongDateProperty($field, $value) {
     $value = $value ? ucfirst(mbTransformTime(null, $value, CAppUI::conf("longdate"))) : "";
     $this->addProperty($field, $value);
   }
-  
+
   /**
    * Ajoute un champ de type heure
-   * 
+   *
    * @param string $field Nom du champ
    * @param string $value Valeur du champ
-   * 
-   * @return void 
+   *
+   * @return void
    */
   function addTimeProperty($field, $value = null) {
     $value = $value ? mbTransformTime(null, $value, CAppUI::conf("time")) : "";
     $this->addProperty($field, $value);
   }
-  
+
   /**
    * Ajoute un champ de type date et heure
-   * 
+   *
    * @param string $field Nom du champ
    * @param string $value Valeur du champ
-   * 
-   * @return void 
+   *
+   * @return void
    */
   function addDateTimeProperty($field, $value = null) {
     $value = $value ? mbTransformTime(null, $value, CAppUI::conf("datetime")) : "";
     $this->addProperty($field, $value);
   }
-  
+
   /**
    * Ajoute un champ de type liste
    *
    * @param string $field Nom du champ
    * @param array  $items Liste de valeurs
-   * 
-   * @return void 
+   *
+   * @return void
    */
   function addListProperty($field, $items = null) {
     $this->addProperty($field, $this->makeList($items), null, false);
   }
-  
+
   /**
    * Ajoute un champ de type image
-   * 
+   *
    * @param string $field   Nom du champ
    * @param int    $file_id Identifiant du fichier
-   * 
+   *
    * @return void
    */
   function addImageProperty($field, $file_id) {
     $this->addProperty($field, $file_id, array("image" => 1), false);
   }
-  
+
   /**
    * Génération de la source html pour la liste d'items
-   * 
+   *
    * @param array $items liste d'items
-   * 
-   * @return string
+   *
+   * @return string|null
    */
   function makeList($items) {
     if (!$items) {
@@ -328,10 +328,10 @@ class CTemplateManager {
     if (!is_array($items)) {
       $items = array($items);
     }
-    
+
     // Escape content
     $items = array_map(array("CMbString", "htmlEntities"), $items);
-    
+
     // HTML production
     switch ($default = CAppUI::pref("listDefault")) {
       case "ulli":
@@ -341,7 +341,7 @@ class CTemplateManager {
         }
         $html.= "</ul>";
         break;
-      
+
       case "br":
         $html = "";
         $prefix = CAppUI::pref("listBrPrefix");
@@ -349,40 +349,40 @@ class CTemplateManager {
           $html .= "<br />$prefix $item";
         }
         break;
-        
+
       case "inline":
-        // Hack: obligé de décoder car dans ce mode le template manager 
+        // Hack: obligé de décoder car dans ce mode le template manager
         // le fera une seconde fois s'il ne détecte pas d'entités HTML
         $items = array_map("html_entity_decode", $items);
         $separator = CAppUI::pref("listInlineSeparator");
         $html = implode(" $separator ", $items);
         break;
-          
-      default: 
+
+      default:
         $html = "";
         trigger_error("Default style for list is unknown '$default'", E_USER_WARNING);
         break;
-    }  
-  
+    }
+
     return $html;
   }
-  
+
   /**
    * Ajoute un champ de type graphique
-   * 
+   *
    * @param string $field   Champ
    * @param array  $data    Tableau de données
    * @param array  $options Options
-   * 
+   *
    * @return void
    */
   function addGraph($field, $data, $options = array()) {
     $this->graphs[utf8_encode($field)] = array(
-      "data" => $data, 
-      "options" => $options, 
+      "data" => $data,
+      "options" => $options,
       "name" => utf8_encode($field)
     );
-    
+
     $this->addProperty($field, $field, null, false);
   }
 
@@ -404,7 +404,7 @@ class CTemplateManager {
         "title"  => "",
       )
     ), $options);
-    
+
     $this->addProperty($field, $data, $options, false);
   }
 
@@ -416,22 +416,22 @@ class CTemplateManager {
       "nameHTML" => CMbString::htmlEntities("[Liste - {$name}]")
     );
   }
-  
+
   function addHelper($name, $text) {
     $this->helpers[$name] = $text;
   }
-  
+
   function applyTemplate($template) {
     assert($template instanceof CCompteRendu || $template instanceof CPack);
-    
+
     if ($template instanceof CCompteRendu) {
       $this->font = $template->font ? CCompteRendu::$fonts[$template->font] : "";
       $this->size = $template->size;
-      
+
       if (!$this->valueMode) {
         $this->setFields($template->object_class);
       }
-      
+
       $this->renderDocument($template->_source);
     }
     else {
@@ -443,45 +443,45 @@ class CTemplateManager {
       $this->renderDocument($template->_source);
     }
   }
-  
+
   function initHTMLArea () {
     // Don't use CValue::setSession which uses $m
-    $_SESSION["dPcompteRendu"]["templateManager"] = serialize($this);
-   
+    $_SESSION["dPcompteRendu"]["templateManager"] = gzcompress(serialize($this));
+
     $smarty = new CSmartyDP("modules/dPcompteRendu");
     $smarty->assign("templateManager", $this);
     $smarty->display("init_htmlarea.tpl");
   }
-  
+
   function setFields($modeleType) {
     if ($modeleType) {
       $object = new $modeleType;
       $object->fillTemplate($this);
     }
   }
-  
+
   function loadLists($user_id, $compte_rendu_id = 0) {
     // Liste de choix
     $compte_rendu = new CCompteRendu();
     $compte_rendu->load($compte_rendu_id);
-    
+
     $where = array();
     $user = CMediusers::get($user_id);
     $user->loadRefFunction();
     if ($user_id) {
       $where[] = "(
-        user_id = '$user->user_id' OR 
-        function_id = '$user->function_id' OR 
+        user_id = '$user->user_id' OR
+        function_id = '$user->function_id' OR
         group_id = '{$user->_ref_function->group_id}'
       )";
     }
     else {
       $where[] = "(
-        function_id IN('$user->function_id', '$compte_rendu->function_id') OR 
+        function_id IN('$user->function_id', '$compte_rendu->function_id') OR
         group_id IN('{$user->_ref_function->group_id}', '$compte_rendu->group_id')
       )";
     }
-    
+
     $where[] = $compte_rendu->_spec->ds->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %", $compte_rendu_id);
     $order = "nom ASC";
     $lists = new CListeChoix();
@@ -490,34 +490,34 @@ class CTemplateManager {
       $this->addList($list->nom);
     }
   }
-  
+
   function loadHelpers($user_id, $modeleType, $other_function_id = "") {
     $compte_rendu = new CCompteRendu();
     $ds = $compte_rendu->_spec->ds;
-    
+
     // Chargement de l'utilisateur courant
     $currUser = new CMediusers();
     $currUser->load($user_id);
 
     $order = "name";
-    
+
     // Where user_id
     $whereUser = array();
     $whereUser["user_id"] = $ds->prepare("= %", $user_id);
     $whereUser["class"]   = $ds->prepare("= %", $compte_rendu->_class);
-    
+
     // Where function_id
     $whereFunc = array();
     $whereFunc["function_id"] = $other_function_id ?
       "IN ($currUser->function_id, $other_function_id)" : $ds->prepare("= %", $currUser->function_id);
     $whereFunc["class"]       = $ds->prepare("= %", $compte_rendu->_class);
-    
+
     // Where group_id
     $whereGroup = array();
     $group = CGroups::loadCurrent();
     $whereGroup["group_id"] = $ds->prepare("= %", $group->_id);
     $whereGroup["class"]       = $ds->prepare("= %", $compte_rendu->_class);
-    
+
     // Chargement des aides
     $aide = new CAideSaisie();
     $aidesUser   = $aide->loadList($whereUser, $order);
@@ -534,49 +534,49 @@ class CTemplateManager {
     foreach ($aidesFunc as $aideFunc) {
       if ($aideFunc->depend_value_1 == $modeleType || $aideFunc->depend_value_1 == "") {
         $this->helpers["Aide de la fonction"][CMbString::htmlEntities($aideFunc->name)] = CMbString::htmlEntities($aideFunc->text);
-      } 
+      }
     }
     $this->helpers["Aide de l'&eacute;tablissement"] = array();
     foreach ($aidesGroup as $aideGroup) {
       if ($aideGroup->depend_value_1 == $modeleType || $aideGroup->depend_value_1 == "") {
         $this->helpers["Aide de l'&eacute;tablissement"][CMbString::htmlEntities($aideGroup->name)] = CMbString::htmlEntities($aideGroup->text);
-      } 
+      }
     }
   }
-  
+
   function getBarcodeDataUri($code, $options) {
     if (!$code) {
       return;
     }
-    
+
     $size = "{$options['width']}x{$options['width']}";
-    
+
     if (isset(self::$barcodeCache[$code][$size])) {
       return self::$barcodeCache[$code][$size];
     }
-    
+
     CAppUI::requireLibraryFile("tcpdf/barcode/barcode");
     CAppUI::requireLibraryFile("tcpdf/barcode/c128bobject");
     CAppUI::requireLibraryFile("tcpdf/barcode/cmb128bobject");
-    
+
     $bc_options = (BCD_DEFAULT_STYLE | BCS_DRAW_TEXT) & ~BCS_BORDER;
     $barcode = new CMb128BObject($options["width"] * 2, $options["height"] * 2, $bc_options, $code);
-    
+
     $barcode->SetFont(7);
     $barcode->DrawObject(2);
-    
+
     ob_start();
     $barcode->FlushObject();
     $image = ob_get_contents();
     ob_end_clean();
-    
+
     $barcode->DestroyObject();
-    
+
     $image = "data:image/png;base64,".urlencode(base64_encode($image));
-    
+
     return self::$barcodeCache[$code][$size] = $image;
   }
-  
+
   function renderDocument($_source) {
     $fields = array();
     $values = array();
@@ -590,9 +590,9 @@ class CTemplateManager {
         }
         else if ($property["valueHTML"] && isset($property["options"]["barcode"])) {
           $options = $property["options"]["barcode"];
-          
+
           $image = $this->getBarcodeDataUri($property["valueHTML"], $options);
-          
+
           $fields[] = "src=\"{$property['fieldHTML']}\"";
           $values[] = "src=\"$image\"";
         }
@@ -610,17 +610,17 @@ class CTemplateManager {
         }
       }
     }
-  
+
     if (count($fields)) {
       $this->document = str_ireplace($fields, $values, $_source);
     }
   }
-  
+
   // Obtention des listes utilisées dans le document
   function getUsedLists($lists) {
     $this->usedLists = array();
     foreach ($lists as $value) {
-      
+
       // Remplacer 039 par 39 car ckeditor remplace ' par &#39;
       $nom = str_replace("#039;", "#39;", CMbString::htmlEntities(stripslashes("[Liste - $value->nom]"), ENT_QUOTES));
       $pos = strpos($this->document, $nom);
@@ -631,7 +631,7 @@ class CTemplateManager {
     ksort($this->usedLists);
     return $this->usedLists;
   }
-  
+
   // Vérification s'il s'agit d'un courrier
   function isCourrier() {
     $pos = strpos($this->document, "[Courrier -");

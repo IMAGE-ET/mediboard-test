@@ -38,14 +38,14 @@ class CMediusers extends CMbObject {
 
   var $code_intervenant_cdarr      = null;
 
-  var $secteur = null;
+  var $secteur    = null;
   // Champs utilisés pour l'affichage des ordonnances ALD
-  var $cab  = null;
-  var $conv = null;
-  var $zisd = null;
-  var $ik   = null;
-  var $ean   = null;
-  var $rcc   = null;
+  var $cab        = null;
+  var $conv       = null;
+  var $zisd       = null;
+  var $ik         = null;
+  var $ean        = null;
+  var $rcc        = null;
   var $adherent   = null;
   var $debut_bvr  = null;
 
@@ -85,35 +85,66 @@ class CMediusers extends CMbObject {
   // Distant fields
   var $_group_id                   = null;
 
-  // Behaviour fields 
+  // Behaviour fields
   static $user_autoload            = true;
   var $_bind_cps                   = null;
   var $_id_cps                     = null;
 
-  // Object references
+  /**
+   * @var null CBanque
+   */
   var $_ref_banque                 = null;
+
+  /**
+   * @var CFunction
+   */
   var $_ref_function               = null;
+
+  /**
+   * @var CSpecCPAM
+   */
   var $_ref_spec_cpam              = null;
+
+  /**
+   * @var CDiscipline
+   */
   var $_ref_discipline             = null;
+
+  /**
+   * @var CUser
+   */
   var $_ref_profile                = null;
+
+  /**
+   * @var CUser
+   */
   var $_ref_user                   = null;
-  var $_ref_intervenant_cdarr = null;
+
+  /**
+   * @var CIntervenantCdARR
+   */
+  var $_ref_intervenant_cdarr      = null;
+
+  /**
+   * @var CProtocole[]
+   */
   var $_ref_protocoles             = array();
   var $_count_protocoles           = null;
   var $_ref_current_functions      = null;
 
   // Object references per day
   var $_ref_plages                 = null;
-  var $_ref_plages_conge        = null;
+  var $_ref_plages_conge           = null;
   var $_ref_urgences               = null;
   var $_ref_deplacees              = null;
   var $_refs_source_pop            = null;
 
   /**
    * Lazy access to a given user, defaultly connected user
-   * @param $user_id ref|CMediuser The user id, connected user if null;
    *
-   * @return CMediusers
+   * @param integer $user_id The user id, connected user if null
+   *
+   * @return self
    */
   static function get($user_id = null) {
     // CAppUI::$user is available *after* CAppUI::$instance->_ref_user
@@ -206,7 +237,9 @@ class CMediusers extends CMbObject {
     return $props;
   }
 
-  /** Update the object's specs */
+  /**
+   * Update the object's specs
+   */
   function updateSpecs() {
     $oldSpec = $this->_specs['_user_password'];
 
@@ -307,8 +340,6 @@ class CMediusers extends CMbObject {
     $backProps["praticien_facture"]               = "CFactureConsult praticien_id";
     $backProps["tokens"]                          = "CViewAccessToken user_id";
     $backProps["sources_pop"]                     = "CSourcePOP object_id";
-
-
     return $backProps;
   }
 
@@ -320,14 +351,14 @@ class CMediusers extends CMbObject {
     $user->user_id = ($this->_user_id) ? $this->_user_id : $this->user_id;
     $user->user_type        = $this->_user_type;
     $user->user_username    = $this->_user_username;
-    
+
     if (isset($this->_ldap_store)) {
       $user->user_password     = $this->_user_password;
     }
     else {
       $user->_user_password    = $this->_user_password;
     }
-    
+
     $user->user_first_name  = $this->_user_first_name;
     $user->user_last_name   = $this->_user_last_name;
     $user->user_email       = $this->_user_email;
@@ -338,7 +369,7 @@ class CMediusers extends CMbObject {
     $user->user_city        = $this->_user_ville;
     $user->profile_id       = $this->_profile_id;
     $user->template         = 0;
-    
+
     $user->_merging = $this->_merging;
     return $user;
   }
@@ -372,12 +403,12 @@ class CMediusers extends CMbObject {
     parent::updateFormFields();
 
     $user = new CUser();
-  
+
     // Usefull hack for mass preloading
     if (self::$user_autoload) {
       $user = $user->getCached($this->user_id);
     }
-    
+
     if ($user->_id) {
       $this->_user_type       = $user->user_type;
       $this->_user_username   = $user->user_username;
@@ -767,7 +798,7 @@ class CMediusers extends CMbObject {
     }
 
     $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
-    
+
     // Filter on current group
     $group = CGroups::loadCurrent();
     $where["functions_mediboard.group_id"] = "= '$group->_id'";
@@ -778,7 +809,7 @@ class CMediusers extends CMbObject {
       foreach ($user_types as &$_type) {
         $_type = $utypes_flip[$_type];
       }
-      
+
       $where["users.user_type"] = $reverse ?
         CSQLDataSource::prepareNotIn($user_types) :
         CSQLDataSource::prepareIn($user_types);
@@ -795,16 +826,16 @@ class CMediusers extends CMbObject {
     // Mass user speficic preloading
     $user = new CUser;
     $user->loadAll(array_keys($mediusers));
-    
+
     // Attach cached user
     foreach ($mediusers as $_mediuser) {
       $_mediuser->updateFormFields();
     }
-            
+
     // Mass fonction standard preloading
     CMbObject::massLoadFwdRef($mediusers, "function_id");
 
-        
+
     // Filter a posteriori to unable mass preloading of function
     self::filterByPerm($mediusers, $permType);
 
@@ -864,12 +895,12 @@ class CMediusers extends CMbObject {
     $order = "text";
     $functions = $function->loadMatchingList($order);
     CMbObject::filterByPerm($functions, $permType);
-    
+
     // Group association
     foreach ($functions as $function) {
       $function->_ref_group = $group;
     }
-    
+
     return $functions;
   }
 
