@@ -38,7 +38,7 @@ Consultation = {
   
   editRDV: function(consult_id) {
     var url = new Url("dPcabinet", "edit_planning");
-    url.addParam("consult_id", consult_id);
+    url.addParam("consultation_id", consult_id);
     url.redirect();
   },
   
