@@ -11,6 +11,8 @@
 messagerie = {
   module:"messagerie",
   url:   null,
+  tab:  null,
+  page: 0,
 
   modalPOPOpen:function (id, type) {
     var url = new Url(messagerie.module, "ajax_open_pop_email");
@@ -23,21 +25,28 @@ messagerie = {
     var url = new Url(messagerie.module, "ajax_open_external_email");
     url.addParam("mail_id", id);
     url.requestModal(900, 800);
-    url.modalObject.observe("afterClose", this.refreshList.curry(account));
+    url.modalObject.observe("afterClose", this.refreshList.curry(messagerie.page, account));
     messagerie.url = url;
   },
 
-  refreshList:function (account) {
+  refreshList:function (page,account) {
+    if( page != messagerie.page) {
+      messagerie.page = page;
+    }
+    if (account) {
+      messagerie.tab = account;
+    }
     var url = new Url(messagerie.module, "ajax_list_mails");
-    url.addParam("account", account);
-    url.requestUpdate(account);
+    url.addParam("account", messagerie.tab);
+    url.addParam("page", messagerie.page);
+    url.requestUpdate(messagerie.tab);
   },
 
-  getLastMessages:function (user_id, account) {
+  getLastMessages:function (user_id) {
     var url = new Url(messagerie.module, "ajax_get_last_email");
     url.addParam("user_id", user_id);
     url.requestUpdate("systemMsg", function () {
-      messagerie.refreshList(account);
+      messagerie.refreshList(0, messagerie.tab);
     });
   },
 
@@ -59,6 +68,16 @@ messagerie = {
       messagerie.url.refreshModal();
     });
   },
+
+
+  markallAsRead: function () {
+    var url = new Url("messagerie", "ajax_mark_all_mail_as_read");
+    url.addParam("account", messagerie.tab);
+    url.requestUpdate("systemMsg", function () {
+      messagerie.refreshList(0, messagerie.tab);
+    });
+  },
+
   /**
    * Toggle a list of checkbox
    *

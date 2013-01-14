@@ -9,7 +9,7 @@
 *}}
 
 <tr>
-  <th><input type="checkbox" value="" onclick="messagerie.toggleSelect('list_external_mail', this.checked,'item_mail')"/>{{tr}}Actions{{/tr}}</th>
+  <th style="width: 10px;"><input type="checkbox" value="" onclick="messagerie.toggleSelect('list_external_mail', this.checked,'item_mail')"/>{{tr}}Actions{{/tr}}</th>
   <th>{{tr}}CUserMail-date_inbox{{/tr}}</th>
   <th>{{tr}}CUserMail-from{{/tr}}</th>
   <th>{{tr}}CUserMail-subject{{/tr}}</th>
@@ -17,16 +17,18 @@
 </tr>
 <tbody>
   {{foreach from=$mails item=_mail}}
-    <tr {{if !$_mail->date_read}}style="font-weight: bold;"{{/if}}>
+    <tr {{if !$_mail->date_read}}style="font-weight: bold; background: red!important;"{{/if}}>
       <td>
         <input type="checkbox" name="item_mail" value="" />
-        <form name="editMail{{$_mail->_id}}" action="" method="post">
+
+        <form name="editMail{{$_mail->_id}}" method="post" action="">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_usermail_aed" />
           <input type="hidden" name="del" value="1" />
           <input type="hidden" name="user_mail_id" value="{{$_mail->_id}}"/>
-          <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$_mail->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: messagerie.refreshList.curry('{{$account}}') })">trash</button>
+          <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$_mail->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: messagerie.refreshList.curry(0,'{{$account}}')})">trash</button>
         </form>
+
         (<button class="tag notext" title="button.tag notext">tag</button>)
       </td>
       <td>{{mb_value object=$_mail field=date_inbox format=relative}}</td>
@@ -41,9 +43,17 @@
           {{if $_mail->subject}}{{mb_include template=inc_vw_type_message subject=$_mail->subject}}{{$_mail->subject|truncate:100:"(...)"}}{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}
         </a>
       </td>
-      <td>{{$_mail->_text_plain->content|truncate}}</td>
+      <td{{if $_mail->_text_plain->content == ""}} class="empty">({{tr}}CUserMail-content-empty{{/tr}}){{else}}>{{$_mail->_text_plain->content|truncate}}{{/if}}</td>
     </tr>
   {{foreachelse}}
-  <tr><td class="empty" colspan="5">{{tr}}CUserMail-none{{/tr}}</td></tr>
+    <tr><td class="empty" colspan="5">{{tr}}CUserMail-none{{/tr}}</td></tr>
   {{/foreach}}
+
+  {{if $nb_mails != 0}}
+  <tr>
+    <td colspan="5">
+      {{mb_include module=system template=inc_pagination total=$nb_mails current=$page change_page='messagerie.refreshList' step=$app->user_prefs.nbMailList}}
+    </td>
+  </tr>
+  {{/if}}
 </tbody>

@@ -68,7 +68,7 @@
       .attachments_list svg,.attachments_list img {
         max-width:200px;
         max-height:70px;
-        box-shadow: -2px -2px 2px black;
+        box-shadow: -2px -2px 2px grey;
       }
 
       .attachments_list {

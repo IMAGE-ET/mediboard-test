@@ -29,7 +29,7 @@ if (!$mail->date_read) {
   $pop = new CPop($log_pop);
   $pop->open();
   if ($pop->setflag($mail->uid, "\\Seen")) {
-    $mail->date_read = $mail->date_read = mbDateTime();
+    $mail->date_read = mbDateTime();
     $mail->store();
   }
   $pop->close();

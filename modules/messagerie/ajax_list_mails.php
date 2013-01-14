@@ -10,6 +10,8 @@
 CCanDo::checkRead();
 
 $account = CValue::get("account");
+$page = CValue::get("page", 0);
+$limit_list = CAppUI::pref("nbMailList", 20);
 
 $user = CMediusers::get();
 
@@ -17,7 +19,10 @@ $mail = new CUserMail();
 $mail->account_id = $account;
 $order = "date_inbox DESC";
 
-$mails = $mail->loadMatchingList($order);
+$limit= "$page, $limit_list";
+
+$nb_mails = $mail->countMatchingList();
+$mails = $mail->loadMatchingList($order, $limit);
 
 foreach ($mails as $_mail) {
   $_mail->loadComplete();
@@ -27,5 +32,7 @@ foreach ($mails as $_mail) {
 
 $smarty = new CSmartyDP();
 $smarty->assign("mails", $mails);
+$smarty->assign("page", $page);
+$smarty->assign("nb_mails", $nb_mails);
 $smarty->assign("account", $account);
 $smarty->display("inc_list_mails.tpl");

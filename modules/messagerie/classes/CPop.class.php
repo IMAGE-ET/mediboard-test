@@ -183,11 +183,11 @@ class CPop{
       switch ($structure->type) {
         case 0: //text or html
           if ($structure->subtype == "PLAIN") {
-            $this->content["text"]["plain"] = self::decodeMail($structure->encoding, self::openPart($mail_id, $part_number));
+            $this->content["text"]["plain"] = self::decodeMail($structure->encoding, self::openPart($mail_id, $part_number), $structure);
           }
-          if ($structure->subtype == "HTML") {
 
-            $this->content["text"]["html"] = self::decodeMail($structure->encoding, self::openPart($mail_id, $part_number));
+          if ($structure->subtype == "HTML") {
+            $this->content["text"]["html"] = self::decodeMail($structure->encoding, self::openPart($mail_id, $part_number), $structure);
           }
 
           break;
@@ -297,12 +297,13 @@ class CPop{
   /**
    * get the right decoding string from mail structure
    *
-   * @param int    $encoding encoding number (from structure)
-   * @param string $text     the text to decode
+   * @param int         $encoding  encoding number (from structure)
+   * @param string      $text      the text to decode
+   * @param object|null $structure an mail structure for additionnal decoding
    *
    * @return string
    */
-  static function decodeMail($encoding, $text) {
+  static function decodeMail($encoding, $text, $structure=null) {
     switch ($encoding) {
       /* 0 : 7 bit / 1 : 8 bit / 2 ; binary / 5 : other  => default  */
       case(3):  //base64
@@ -310,6 +311,16 @@ class CPop{
         break;
 
       case(4):
+        //Hack for bad defined encoding
+        if (!empty($structure->parameters)) {
+          for ($k = 0, $l = count($structure->parameters); $k < $l; $k++) {
+            $attribute = $structure->parameters[$k];
+            if ($attribute->attribute == 'CHARSET' && $attribute->value == 'utf-8') {
+              return utf8_decode(imap_qprint($text));
+            }
+          }
+        }
+
         return imap_qprint($text);
         break;
 

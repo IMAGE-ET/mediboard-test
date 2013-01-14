@@ -116,7 +116,10 @@ class CSetupmessagerie extends CSetup {
     $query = "ALTER TABLE `user_mail_attachment` CHANGE `linked` `file_id` INT (11) UNSIGNED ;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.21";
+    $this->makeRevision("0.21");
+    $this->addPrefQuery("nbMailList", 20);
+    $this->mod_version = "0.22";
+
 
   }
 }

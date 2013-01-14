@@ -13,5 +13,6 @@ CPreferences::$modules["messagerie"] = array (
   "ViewMailAsHtml",
   "getAttachmentOnUpdate",
   "LinkAttachment",
-  "showImgInMail"
+  "showImgInMail",
+  "nbMailList"
   );
