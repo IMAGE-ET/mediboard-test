@@ -262,7 +262,7 @@ class CMbXMLDocument extends DOMDocument {
     $value = utf8_encode($value);
     $value_elt = $root->createTextNode($value);
     $tag->appendChild($value_elt);
-    $element->appendChild($tag);   
+    $element->appendChild($tag);
     
     if ($attrs) {
       foreach ($attrs as $key => $value) {
@@ -288,6 +288,9 @@ class CMbXMLDocument extends DOMDocument {
     if (!preg_match("/<html/", $html)) {
       $html = '<html><head><title>E-mail</title></head><body>'.$html.'</body></html>';
     }
+
+    //=>XML
+    $html = CMbString::convertHTMLToXMLEntities($html);
 
     //load & repair dom
     $document = new CMbXMLDocument();
