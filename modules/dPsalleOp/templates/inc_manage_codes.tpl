@@ -1,4 +1,4 @@
-{{mb_script module="dPpmsi" script="pmsi" ajax=$ajax}}
+{{mb_script module="dPpmsi" script="PMSI" ajax=$ajax}}
 
 <script>
   changeCodeToDel = function(subject_id, code_ccam, actes_ids){
