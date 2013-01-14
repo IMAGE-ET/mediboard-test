@@ -27,7 +27,12 @@ class CHtmlSpec extends CMbFieldSpec {
     
     // Root node surrounding
     $source = utf8_encode("<div>$propValue</div>");
-    
+
+    //for external html content => no validation
+    if (stripos($source, "<html") !== false) {
+      return null;
+    }
+
     // Entity purge
     $source = preg_replace("/&\w+;/i", "", $source);
 
