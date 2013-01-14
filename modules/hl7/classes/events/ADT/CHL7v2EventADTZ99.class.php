@@ -32,15 +32,19 @@ class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTA01 {
    */
   function build($object) {
     if ($object instanceof CAffectation) {
-      $sejour                       = $object->_ref_sejour;
-      $sejour->_ref_hl7_affectation = $object;
+      $affectation = $object;
+
+      $sejour                       = $affectation->_ref_sejour;
+      $sejour->_ref_hl7_affectation = $affectation;
+
+      parent::build($affectation);
     }
     else {
       $sejour = $object;
+
+      parent::build($sejour);
     }
 
-    parent::build($sejour);
-    
     $patient = $sejour->_ref_patient;
     // Patient Identification
     $this->addPID($patient, $sejour);

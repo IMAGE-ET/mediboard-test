@@ -61,7 +61,8 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     $triggers = array("A01", "A05", "A06", "A14", "Z99");
     if ($sejour->type == "psy" && (in_array($event->code, $triggers))) {
       $data[] = CHL7v2TableEntry::mapTo("9000", $sejour->modalite);
-    } else {
+    }
+    else {
       $data[] = null;
     }
     
@@ -82,7 +83,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     // TH - hors résidence habituelle
     // TR - le patient est envoyé par le remplaçant du médecin traitant
     // MR - Médecin consulté = remplaçant du médecin traitant
-    // TO - patient orienté par le médecin traitant (le patient consulte un autre médecin sur conseil du médecin traitant: (séq. de soins))
+    // TO - patient orienté par le médecin traitant (le patient consulte un autre médecin sur conseil du médecin traitant)
     // ME - consultation du médecin traitant = médecin consulté
     // 1V - 1ère consultation du médecin traitant pour avis
     // IT - soins itératifs en accord avec le médecin traitant (D162-1-6 Alinéas 1 ou 2)
@@ -105,7 +106,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     // MA - Cas particulier de la caisse de Mayotte
     // AS - Autre situation
     $data[] = "TN";
-    
+
     // PV2-8: Expected Admit Date/Time (TS) (optional)
     $data[] = $sejour->entree_prevue;
     
@@ -213,7 +214,8 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     // 9 - Autre
     if ($sejour->type == "urg") {
       $data[] = CHL7v2TableEntry::mapTo("0430", $sejour->transport);
-    } else {
+    }
+    else {
       $data[] = null;
     }
     

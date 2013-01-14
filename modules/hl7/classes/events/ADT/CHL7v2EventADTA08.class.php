@@ -32,8 +32,12 @@ class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
    */
   function build($object) {
     if ($object instanceof CAffectation) {
-      $sejour                       = $object->_ref_sejour;
-      $sejour->_ref_hl7_affectation = $object;
+      $affectation= $object;
+
+      $sejour                       = $affectation->_ref_sejour;
+      $sejour->_ref_hl7_affectation = $affectation;
+
+      parent::build($affectation);
     }
     else {
       $sejour = $object;

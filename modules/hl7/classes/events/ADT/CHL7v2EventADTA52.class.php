@@ -34,7 +34,7 @@ class CHL7v2EventADTA52 extends CHL7v2EventADT implements CHL7EventADTA52 {
     $sejour                       = $affectation->_ref_sejour;
     $sejour->_ref_hl7_affectation = $affectation;
     
-    parent::build($sejour);
+    parent::build($affectation);
     
     $patient = $sejour->_ref_patient;
     // Patient Identification
