@@ -20,9 +20,6 @@ foreach ($sejour->_ref_tasks as $_task){
   $_task->loadRefPrescriptionLineElement();	
 } 
 
-mbTrace($sejour->_count_pending_tasks, "pending");
-mbTrace($sejour->_count_tasks, "all");
-
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("sejour", $sejour);
