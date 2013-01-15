@@ -41,7 +41,7 @@ if ($patient_id) {
 // Vérification des droits sur les praticiens
 $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
 $categorie_prat = array();
-foreach($listPraticiens as $keyPrat =>$prat){
+foreach ($listPraticiens as $keyPrat =>$prat) {
   $prat->loadRefsFwd();
   $categorie_prat[$keyPrat] = $prat->_ref_discipline->categorie;
 }
@@ -100,9 +100,10 @@ if (CModule::getActive("maternite")) {
 }
 
 $patient->loadRefsSejours();
+$patient->loadRefsCorrespondantsPatient();
 
 if (count($patient->_ref_sejours))
-  foreach($patient->_ref_sejours as $_sejour) {
+  foreach ($patient->_ref_sejours as $_sejour) {
     $_sejour->loadNDA();
     $_sejour->loadRefPraticien();
     $_sejour->loadRefEtablissement();
@@ -115,7 +116,7 @@ $correspondantsMedicaux = array();
 if ($patient->_ref_medecin_traitant->_id) {
   $correspondantsMedicaux["traitant"] = $patient->_ref_medecin_traitant;
 }
-foreach($patient->_ref_medecins_correspondants as $correspondant) {
+foreach ($patient->_ref_medecins_correspondants as $correspondant) {
   $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
 }
 
@@ -171,7 +172,7 @@ $where["function_id"] = "IS NOT NULL";
 $blocages_lit = $affectation->loadList($where);
 
 $where["function_id"] = "IS NULL";
-foreach($blocages_lit as $blocage) {
+foreach ($blocages_lit as $blocage) {
   $blocage->loadRefLit()->loadRefChambre()->loadRefService();
   $where["lit_id"] = "= '$blocage->lit_id'";
   if (!$sejour->_id && $affectation->loadObject($where)) {

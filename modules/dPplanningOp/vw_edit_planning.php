@@ -33,7 +33,7 @@ $chir = new CMediusers;
 if ($chir_id) {
   $testChir = new CMediusers();
   $testChir->load($chir_id);
-  if($testChir->isPraticien()) {
+  if ($testChir->isPraticien()) {
     $chir = $testChir;
   }
 }
@@ -50,12 +50,13 @@ if ($patient_id && !$operation_id && !$sejour_id) {
 // Vérification des droits sur les praticiens
 if ($user->isAnesth()) {
   $listPraticiens = $chir->loadPraticiens(null);
-} else {
+}
+else {
   $listPraticiens = $chir->loadPraticiens(PERM_EDIT);
 }
 
 $categorie_prat = array();
-foreach($listPraticiens as &$_prat){
+foreach ($listPraticiens as &$_prat) {
   $_prat->loadRefsFwd();
   $categorie_prat[$_prat->_id] = $_prat->_ref_discipline->categorie;
 }
@@ -63,11 +64,11 @@ foreach($listPraticiens as &$_prat){
 // On récupère le séjour
 $sejour = new CSejour;
 
-if($sejour_id && !$operation_id) {
+if ($sejour_id && !$operation_id) {
   $sejour->load($sejour_id);
   $sejour->loadRefsFwd();
   
-  if(!$chir_id) {
+  if (!$chir_id) {
     $chir = $sejour->_ref_praticien;
   }
   // On ne change a priori pas le praticien du séjour
@@ -86,12 +87,12 @@ $anesthesistes = $user->loadAnesthesistes(PERM_READ);
 // On récupère l'opération
 $op = new COperation;
 $op->load($operation_id);
-if ($op->_id){
+if ($op->_id) {
   $op->loadRefs();
   $op->loadRefsNotes();
   $op->_ref_chir->loadRefFunction();
   
-  foreach($op->_ref_actes_ccam as $acte) {
+  foreach ($op->_ref_actes_ccam as $acte) {
     $acte->loadRefExecutant();
   }
 
@@ -128,12 +129,13 @@ $sejour->loadRefsNotes();
 $patient->loadRefsSejours();
 $patient->loadRefsFwd();
 $patient->loadRefsCorrespondants();
+$patient->loadRefsCorrespondantsPatient();
 
 $correspondantsMedicaux = array();
 if ($patient->_ref_medecin_traitant->_id) {
   $correspondantsMedicaux["traitant"] = $patient->_ref_medecin_traitant;
 }
-foreach($patient->_ref_medecins_correspondants as $correspondant) {
+foreach ($patient->_ref_medecins_correspondants as $correspondant) {
   $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
 }
 
@@ -160,7 +162,7 @@ $heure_entree_jour   = $config["heure_entree_jour"];
 $list_hours_voulu = range(7, 20);
 $list_minutes_voulu = range(0, 59, $config["min_intervalle"]);
 
-foreach ($list_minutes_voulu as &$minute){
+foreach ($list_minutes_voulu as &$minute) {
   $minute = str_pad($minute, 2, '0', STR_PAD_LEFT);
 }
 
@@ -194,11 +196,10 @@ $blocages_lit = $affectation->loadList($where);
 
 $where["function_id"] = "IS NULL";
 
-foreach($blocages_lit as $key => $blocage){
+foreach ($blocages_lit as $key => $blocage) {
   $blocage->loadRefLit()->loadRefChambre()->loadRefService();
   $where["lit_id"] = "= '$blocage->lit_id'";
-  if(!$sejour->_id && $affectation->loadObject($where))
-  {
+  if (!$sejour->_id && $affectation->loadObject($where)) {
     $affectation->loadRefSejour();
     $affectation->_ref_sejour->loadRefPatient();
     $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";

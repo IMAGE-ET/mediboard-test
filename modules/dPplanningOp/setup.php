@@ -1540,7 +1540,19 @@ class CSetupdPplanningOp extends CSetup {
     $this->makeRevision("1.66");
     $this->getFieldRenameQueries("COperation", "sortie_reveil", "sortie_reveil_possible");
     
-    $this->mod_version = "1.67";
+    $this->makeRevision("1.67");
+    
+    $query = "ALTER TABLE `sejour` 
+              CHANGE `assurance_maladie` `assurance_maladie` INT (11) UNSIGNED,
+              CHANGE `assurance_accident` `assurance_accident` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `sejour` 
+              ADD INDEX (`assurance_maladie`),
+              ADD INDEX (`assurance_accident`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.68";
   }
 }
 ?>

@@ -370,9 +370,9 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["rques_transport_sortie"]   = "text";
     $props["type_pec"]                 = "enum list|M|C|O";
 
-    $props["assurance_maladie"]        = "str autocomplete";
+    $props["assurance_maladie"]        = "ref class|CCorrespondantPatient";
     $props["rques_assurance_maladie"]  = "text helped";
-    $props["assurance_accident"]       = "str autocomplete";
+    $props["assurance_accident"]       = "ref class|CCorrespondantPatient";
     $props["rques_assurance_accident"] = "text helped";
     $props["date_accident"]            = "date";
     $props["nature_accident"]          = "enum list|P|T|D|S|J|C|L|B|U";
@@ -558,7 +558,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $entree = $this->entree_reelle ? $this->entree_reelle : $this->entree_prevue;
     $sortie = $this->sortie_reelle ? $this->sortie_reelle : $this->sortie_prevue;
 
-    foreach($siblings as $_sibling) {
+    foreach ($siblings as $_sibling) {
       if ($_sibling->_id == $this->_id) {
         unset($siblings[$_sibling->_id]);
         continue;
@@ -852,7 +852,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $msg = null;
     // dPhospi might not be active
     if ($this->_ref_affectations) {
-      foreach($this->_ref_affectations as $key => $value) {
+      foreach ($this->_ref_affectations as $key => $value) {
         $msg .= $this->_ref_affectations[$key]->deleteOne();
       }
     }
@@ -864,7 +864,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->loadRefsOperations();
 
     $msg = null;
-    foreach($this->_ref_operations as $key => $value) {
+    foreach ($this->_ref_operations as $key => $value) {
       $value->annulee = 1;
       $msg .= $this->_ref_operations[$key]->store();
     }
@@ -1320,7 +1320,7 @@ class CSejour extends CCodable implements IPatientRelated {
   function loadDiagnosticsAssocies($split = true) {
     $this->_diagnostics_associes = array();
     if ($this->_ref_dossier_medical->_id) {
-      foreach($this->_ref_dossier_medical->_codes_cim as $code) {
+      foreach ($this->_ref_dossier_medical->_codes_cim as $code) {
         if ($split && strlen($code) >= 4) {
           $this->_diagnostics_associes[] = substr($code, 0, 3).".".substr($code, 3);
         }
@@ -1414,7 +1414,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->_ref_suivi_medical = array();
 
     if (isset($this->_back["observations"])) {
-      foreach($this->_back["observations"] as $curr_obs) {
+      foreach ($this->_back["observations"] as $curr_obs) {
         $curr_obs->loadRefsFwd();
         $curr_obs->_ref_user->loadRefFunction();
         $this->_ref_suivi_medical[$curr_obs->date.$curr_obs->_id."obs"] = $curr_obs;
@@ -1762,12 +1762,12 @@ class CSejour extends CCodable implements IPatientRelated {
       return;
     }
 
-    if ($this->_entree){
+    if ($this->_entree ) {
       $date_entree = mbDate($this->_entree);
       $where[] = "DATE(entree_prevue) = '$date_entree' OR DATE(entree_reelle) = '$date_entree'";
     }
     if ($useSortie) {
-      if ($this->_sortie){
+      if ($this->_sortie) {
         $date_sortie = mbDate($this->_sortie);
         $where[] = "DATE(sortie_prevue) = '$date_sortie' OR DATE(sortie_reelle) = '$date_sortie'";
       }
@@ -1969,7 +1969,7 @@ class CSejour extends CCodable implements IPatientRelated {
     if (!$this->_ref_group) {
       $this->loadRefEtablissement();
     }
-    switch($permType) {
+    switch ($permType) {
       case PERM_EDIT :
         return ($this->_ref_group->getPerm($permType) && $this->_ref_praticien->getPerm($permType));
         break;
@@ -1990,7 +1990,8 @@ class CSejour extends CCodable implements IPatientRelated {
     if (mbTime(null, $date) == "00:00:00") {
       $where["entree"] = $this->_spec->ds->prepare("< %", mbDate(null, $date)." 23:59:59");
       $where["sortie"] = $this->_spec->ds->prepare(">= %", mbDate(null, $date)." 00:00:01");
-    } else {
+    }
+    else {
       $where["entree"] = $this->_spec->ds->prepare("< %", $date);
       $where["sortie"] = $this->_spec->ds->prepare(">= %", $date);
     }
@@ -2081,10 +2082,11 @@ class CSejour extends CCodable implements IPatientRelated {
         $this->_motif_complet .= "[Att] ";
       }
       $motif = array();
-      foreach($this->_ref_operations as $_op) {
+      foreach ($this->_ref_operations as $_op) {
         if ($_op->libelle) {
           $motif[] = $_op->libelle;
-        } else {
+        }
+        else {
            $motif[] = implode("; ", $_op->_codes_ccam);
         }
       }
@@ -2098,7 +2100,8 @@ class CSejour extends CCodable implements IPatientRelated {
 
     if (count($this->_ref_operations) > 0) {
       $this->_ref_last_operation = reset($this->_ref_operations);
-    } else {
+    }
+    else {
       $this->_ref_last_operation = new COperation;
     }
     return $this->_ref_operations;
@@ -2213,7 +2216,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $list = CMbArray::pluck($this->_ref_files, "file_name");
     $template->addListProperty("Sejour - Liste des fichiers", $list);
 
-    if (CAppUI::conf("dPurgences old_rpu") == "1"){
+    if (CAppUI::conf("dPurgences old_rpu") == "1") {
       if (CModule::getActive("sherpa")) {
         $rpu = $this->loadRefRPU();
         $template->addProperty("Sejour - Provenance"         , $rpu->_id ? $rpu->getFormattedValue("urprov") : "");
@@ -2244,8 +2247,8 @@ class CSejour extends CCodable implements IPatientRelated {
 
     // Transmissions
     $transmissions = array();
-    if (isset($this->_back["transmissions"])){
-      foreach($this->_back["transmissions"] as $_trans){
+    if (isset($this->_back["transmissions"])) {
+      foreach ($this->_back["transmissions"] as $_trans) {
         $datetime = mbTransformTime(null, $_trans->date, CAppUI::conf('datetime'));
         $transmissions["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
       }
@@ -2279,8 +2282,8 @@ class CSejour extends CCodable implements IPatientRelated {
 
     // Observations
     $observations = array();
-    if (isset($this->_back["observations"])){
-      foreach($this->_back["observations"] as $_obs){
+    if (isset($this->_back["observations"])) {
+      foreach ($this->_back["observations"] as $_obs) {
         $datetime = mbTransformTime(null, $_obs->date, CAppUI::conf('datetime'));
         $observations["$_obs->date $_obs->_guid"] = "$_obs->text, le $datetime, {$_obs->_ref_user->_view}";
       }
@@ -2289,24 +2292,24 @@ class CSejour extends CCodable implements IPatientRelated {
 
     // Prescriptions
     $lines = array();
-    if (CModule::getActive('dPprescription')){
+    if (CModule::getActive('dPprescription')) {
 
       $prescription = $this->loadRefPrescriptionSejour();
       $prescription->loadRefsLinesAllComments();
       $prescription->loadRefsLinesElement();
 
-      if (isset($prescription->_ref_prescription_lines_all_comments)){
-        foreach($prescription->_ref_prescription_lines_all_comments as $_comment){
+      if (isset($prescription->_ref_prescription_lines_all_comments)) {
+        foreach ($prescription->_ref_prescription_lines_all_comments as $_comment) {
           $datetime = mbTransformTime(null, "$_comment->debut $_comment->time_debut", CAppUI::conf('datetime'));
           $lines["$_comment->debut $_comment->time_debut $_comment->_guid"] = "$_comment->_view, $datetime, {$_comment->_ref_praticien->_view}";
         }
       }
 
-      if (isset($prescription->_ref_prescription_lines_element)){
-        foreach($prescription->_ref_prescription_lines_element as $_line_element){
+      if (isset($prescription->_ref_prescription_lines_element)) {
+        foreach ($prescription->_ref_prescription_lines_element as $_line_element) {
           $datetime = mbTransformTime(null, "$_line_element->debut $_line_element->time_debut", CAppUI::conf('datetime'));
           $view = "$_line_element->_view";
-          if ($_line_element->commentaire){
+          if ($_line_element->commentaire) {
             $view .= " ($_line_element->commentaire)";
           }
           $view .= ", $datetime, ".$_line_element->_ref_praticien->_view;
@@ -2382,7 +2385,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $this->loadRefDossierMedical()->fillTemplate($template, "Sejour");
     
     // Prescription
-    if (CModule::getActive('dPprescription')){
+    if (CModule::getActive('dPprescription')) {
       $this->loadRefsPrescriptions();
       $prescription = isset($this->_ref_prescriptions["pre_admission"]) ? $this->_ref_prescriptions["pre_admission"] : new CPrescription();
       $prescription->type = "pre_admission";
@@ -2414,7 +2417,7 @@ class CSejour extends CCodable implements IPatientRelated {
     }
 
     foreach ($this->_ref_operations as $operation) {
-      if ($operation->annulee){
+      if ($operation->annulee) {
         continue;
       }
 
@@ -2439,7 +2442,7 @@ class CSejour extends CCodable implements IPatientRelated {
     }
 
     foreach ($this->_ref_consultations as &$consultation) {
-      if ($consultation->annule){
+      if ($consultation->annule) {
         continue;
       }
 
@@ -2556,12 +2559,12 @@ class CSejour extends CCodable implements IPatientRelated {
     $nb_days = 7;
 
     // Si aucun evenement le dimanche
-    if (!$count_event_sunday){
+    if (!$count_event_sunday) {
       $nb_days = 6;
       $where["evenement_ssr.debut"] = "BETWEEN '$saturday 00:00:00' AND '$saturday 23:59:59'";
       $count_event_saturday= $_evt->countList($where, null, $ljoin);
       // Aucun evenement le samedi et aucun le dimanche
-      if (!$count_event_saturday){
+      if (!$count_event_saturday) {
         $nb_days = 5;
       }
     }
@@ -2782,5 +2785,17 @@ class CSejour extends CCodable implements IPatientRelated {
 
   function loadRefUFSoins($cache = true) {
     return $this->_ref_uf_soins = $this->loadFwdRef("uf_soins_id", $cache);
+  }
+  
+  /**
+   * Chargement des assurances du séjour
+   * 
+   * @return object
+  **/
+  function loadRefAssurance() {
+    $this->_ref_assurance_maladie = $this->loadFwdRef("assurance_maladie", true);
+    $this->_ref_assurance_accident = $this->loadFwdRef("assurance_accident", true);
+        
+    return $this->_ref_assurance_maladie;
   }
 }

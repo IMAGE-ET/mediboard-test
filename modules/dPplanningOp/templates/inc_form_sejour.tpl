@@ -12,6 +12,8 @@
 {{mb_script module=patients   script=medecin}}
 {{mb_script module=planningOp script=cim10_selector}}
 {{mb_script module=planningOp script=prestations}}
+{{mb_script module=patients   script=correspondant}}
+{{mb_script module=patients   script=patient}}
 
 {{mb_default var=count_prestations value=0}}
 {{mb_default var=_duree_prevue value=0}}
@@ -280,6 +282,22 @@ function updateTypeAndPeC(select) {
   }
 }
 
+function reloadAssurance() {
+  {{if $conf.dPplanningOp.CSejour.assurances}}
+    var oForm = getForm("editSejour");
+    var patient_id = $V(oForm.patient_id);
+    var $sejour    = $V(oForm.sejour_id);
+  
+    if (!patient_id) {
+      return;
+    }
+  
+    var url = new Url("dPplanningOp", "ajax_list_assurances");
+    url.addParam("patient_id", patient_id);
+    url.requestUpdate("assurances_patient");
+  {{/if}}
+}
+
 function toggleIsolement(elt) {
   var isolement_area = $$(".isolement_area");
   
@@ -289,6 +307,11 @@ function toggleIsolement(elt) {
   else {
     isolement_area.invoke("hide");
   }
+}
+function rechargement() {
+  changePat();
+  reloadSejours();
+  reloadAssurance();
 }
 
 {{if $mode_operation}}
@@ -553,7 +576,7 @@ Main.add( function(){
     {{mb_include module=patients template=inc_button_pat_anonyme form=editSejour other_form=editOpEasy patient_id=$patient->_id}}
     
     <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" 
-      onchange="changePat(); reloadSejours(); $('button-edit-patient').setVisible(this.value);" />
+      onchange="rechargement(); $('button-edit-patient').setVisible(this.value);" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td colspan="3">
@@ -1090,30 +1113,8 @@ Main.add( function(){
 </tr>
 
 {{if $conf.dPplanningOp.CSejour.assurances}}
-  <tbody {{if !$conf.dPplanningOp.COperation.easy_assurances}}class="modeExpert"{{/if}}>
-    <tr>
-      <th colspan="4" class="category">Assurance</th>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$sejour field="assurance_maladie"}}</th>
-      <td colspan="3">{{mb_field object=$sejour field="assurance_maladie" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurances();"}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$sejour field="rques_assurance_maladie"}}</th>
-      <td colspan="3">
-        {{mb_field object=$sejour field="rques_assurance_maladie" onchange="checkAssurances();" form="editSejour"
-            aidesaisie="validateOnBlur: 0"}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$sejour field="assurance_accident"}}</th>
-      <td colspan="3">{{mb_field object=$sejour field="assurance_accident" form="editSejour" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurances();"}}</td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$sejour field="rques_assurance_accident"}}</th>
-      <td colspan="3">
-        {{mb_field object=$sejour field="rques_assurance_accident" onchange="checkAssurances();" form="editSejour"
-            aidesaisie="validateOnBlur: 0"}}</td>
-    </tr>
+  <tbody {{if !$conf.dPplanningOp.COperation.easy_assurances}}class="modeExpert"{{/if}} id="assurances_patient">
+    {{mb_include module=planningOp template="inc_vw_assurances" object=$sejour name="assurance_maladie"}}  
   </tbody>
 {{/if}}
 
