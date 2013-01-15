@@ -32,15 +32,15 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes, $cle
   $_ref_assurance = "";
   $nom_entreprise = "";
   
-  if ($facture->type_facture == "accident" && $facture->assurance_base && $facture->_ref_assurance_base->employeur) {
+  if ($facture->type_facture == "accident" && $facture->assurance_maladie && $facture->_ref_assurance_maladie->employeur) {
     $employeur = new CCorrespondantPatient();
-    $employeur->load($facture->_ref_assurance_base->employeur);
+    $employeur->load($facture->_ref_assurance_maladie->employeur);
     $_ref_assurance = $employeur->num_assure;
     $nom_entreprise = $employeur->nom;
   }
   $typeRbt = "TG";
-  if (($facture->assurance_base && $cle_facture == 0 && !$facture->send_assur_base) 
-      || ($facture->assurance_complementaire && $cle_facture == 1 && !$facture->send_assur_compl)) {
+  if (($facture->assurance_maladie && $cle_facture == 0 && !$facture->send_assur_base) 
+      || ($facture->assurance_accident && $cle_facture == 1 && !$facture->send_assur_compl)) {
     $typeRbt = "TP";
   }
   $loi = "LAMal";

@@ -1,7 +1,16 @@
 {{if !@$modules.tarmed->_can->read || !$conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
   {{mb_return}}
 {{/if}}
+{{mb_script module=patients   script=correspondant ajax="true"}}
 
+<script>
+  refreshAssurance = function() {
+      var url = new Url("cabinet", "ajax_list_assurances");
+      url.addParam("facture_id", '{{$facture->_id}}');
+      url.addParam("patient_id", '{{$facture->patient_id}}');
+      url.requestUpdate("refresh-assurance");
+  }
+</script>
 {{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures)}}
   <tr>
     <td colspan="8">
@@ -57,57 +66,8 @@
   </td>
 </tr>
 <tr>
-  <td colspan="3">
-    {{if count($facture->_ref_patient->_ref_correspondants_patient)}}
-      <form name="assurance_patient" method="post" action="" style="margin-left:40px;" > 
-      {{mb_class object=$facture}}
-      {{mb_key   object=$facture}}
-        <table class="main tbl">
-          <tr>
-            <td>
-              {{mb_label object=$facture field=assurance_base}}
-              <select name="assurance_base" style="width: 15em;" onchange="return onSubmitFormAjax(this.form);">
-                <option value="" {{if !$facture->assurance_base}}selected="selected" {{/if}}>&mdash; Choisir une assurance</option>
-                {{foreach from=$facture->_ref_patient->_ref_correspondants_patient item=_assurance}}
-                  <option value="{{$_assurance->_id}}" {{if $facture->assurance_base == $_assurance->_id}} selected="selected" {{/if}}>
-                    {{$_assurance->nom}}  
-                    {{if $_assurance->date_debut && $_assurance->date_fin}}
-                      Du {{$_assurance->date_debut|date_format:"%d/%m/%Y"}} au {{$_assurance->date_fin|date_format:"%d/%m/%Y"}}
-                    {{/if}}
-                  </option>
-                {{/foreach}}
-              </select>
-            </td>
-            <td>
-              {{mb_label object=$facture field=assurance_complementaire}}
-              <select name="assurance_complementaire" style="width: 15em;" onchange="return onSubmitFormAjax(this.form);">
-                <option value="" {{if !$facture->assurance_complementaire}}selected="selected" {{/if}}>&mdash; Choisir une assurance</option>
-                {{foreach from=$facture->_ref_patient->_ref_correspondants_patient item=_assurance}}
-                  <option value="{{$_assurance->_id}}" {{if $facture->assurance_complementaire == $_assurance->_id}} selected="selected" {{/if}}>
-                    {{$_assurance->nom}}  
-                    {{if $_assurance->date_debut && $_assurance->date_fin}}
-                      Du {{$_assurance->date_debut|date_format:"%d/%m/%Y"}} au {{$_assurance->date_fin|date_format:"%d/%m/%Y"}}
-                    {{/if}}
-                  </option>
-                {{/foreach}}
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              {{mb_label object=$facture field=send_assur_base}}
-              {{mb_field object=$facture field=send_assur_base onchange="return onSubmitFormAjax(this.form);"}}
-            </td>
-            <td>
-              {{mb_label object=$facture field=send_assur_compl}}
-              {{mb_field object=$facture field=send_assur_compl onchange="return onSubmitFormAjax(this.form);"}}
-            </td>
-          </tr>
-        </table>
-      </form>
-    {{else}}
-      <div class="small-warning" style="display:inline">Pas d'assurance</div>
-    {{/if}}
+  <td colspan="3" id="refresh-assurance">
+    {{mb_include module=cabinet template="inc_vw_assurances"}}
   </td>
   <td colspan="4"></td>
 </tr>

@@ -182,11 +182,11 @@ if ($edition_bvr) {
 //        if ($facture->cession_creance || $facture->type_facture == "accident") {
           $correspondant = new CCorrespondantPatient();
           
-          if ($facture->assurance_base && $cle_facture == 0 && !$facture->send_assur_base) {
-            $correspondant->load($facture->assurance_base);
+          if ($facture->assurance_maladie && $cle_facture == 0 && !$facture->send_assur_base) {
+            $correspondant->load($facture->assurance_maladie);
           }
-          elseif ($facture->assurance_complementaire && $cle_facture == 1 && !$facture->send_assur_compl) {
-            $correspondant->load($facture->assurance_complementaire);
+          elseif ($facture->assurance_accident && $cle_facture == 1 && !$facture->send_assur_compl) {
+            $correspondant->load($facture->assurance_accident);
           }
           
           if ($correspondant->_id) {

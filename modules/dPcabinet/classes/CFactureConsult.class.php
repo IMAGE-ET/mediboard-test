@@ -30,8 +30,8 @@ class CFactureConsult extends CMbObject {
   var $tiers_date_reglement   = null;
   var $npq                    = null;
   var $cession_creance        = null;
-  var $assurance_base         = null;
-  var $assurance_complementaire = null;
+  var $assurance_maladie      = null;
+  var $assurance_accident     = null;
   var $send_assur_base        = null;
   var $send_assur_compl       = null;
   var $facture                = null;
@@ -57,16 +57,16 @@ class CFactureConsult extends CMbObject {
   var $_montant_factures_caisse   = array();
   
   // Object References
-  var $_ref_patient       = null;
-  var $_ref_praticien     = null;
-  var $_ref_assurance_base            = null;
-  var $_ref_assurance_complementaire  = null;
-  var $_ref_consults      = null;
-  var $_ref_last_consult  = null;
-  var $_ref_first_consult = null;
-  var $_ref_reglements    = null;
-  var $_ref_reglements_patient = null;
-  var $_ref_reglements_tiers   = null;
+  var $_ref_patient             = null;
+  var $_ref_praticien           = null;
+  var $_ref_assurance_maladie   = null;
+  var $_ref_assurance_accident  = null;
+  var $_ref_consults            = null;
+  var $_ref_last_consult        = null;
+  var $_ref_first_consult       = null;
+  var $_ref_reglements          = null;
+  var $_ref_reglements_patient  = null;
+  var $_ref_reglements_tiers    = null;
   
   var $_ref_chir = null;
     
@@ -114,8 +114,8 @@ class CFactureConsult extends CMbObject {
     $props["tiers_date_reglement"]      = "date";
     $props["npq"]                       = "enum notNull list|0|1 default|0";
     $props["cession_creance"]           = "enum notNull list|0|1 default|0";
-    $props["assurance_base"]            = "ref class|CCorrespondantPatient";
-    $props["assurance_complementaire"]  = "ref class|CCorrespondantPatient";
+    $props["assurance_maladie"]         = "ref class|CCorrespondantPatient";
+    $props["assurance_accident"]        = "ref class|CCorrespondantPatient";
     $props["send_assur_base"]           = "bool default|0";
     $props["send_assur_compl"]          = "bool default|0";
     $props["facture"]                   = "enum notNull list|-1|0|1 default|0";
@@ -435,10 +435,10 @@ class CFactureConsult extends CMbObject {
    * @return object
   **/
   function loadRefAssurance() {
-    $this->_ref_assurance_base = $this->loadFwdRef("assurance_base", true);
-    $this->_ref_assurance_complementaire = $this->loadFwdRef("assurance_complementaire", true);
+    $this->_ref_assurance_maladie = $this->loadFwdRef("assurance_maladie", true);
+    $this->_ref_assurance_accident = $this->loadFwdRef("assurance_accident", true);
         
-    return $this->_ref_assurance_base;
+    return $this->_ref_assurance_maladie;
   }
   
   /**

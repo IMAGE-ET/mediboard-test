@@ -1713,8 +1713,14 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `acte_ngap`
                 ADD `facturable` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
+    $this->makeRevision("1.84");
+
+    $query = "ALTER TABLE `factureconsult` 
+              CHANGE `assurance_base` `assurance_maladie` INT (11) UNSIGNED,
+              CHANGE `assurance_complementaire` `assurance_accident` INT (11) UNSIGNED;";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.84";
+    $this->mod_version = "1.85";
   }
 }
 ?>
