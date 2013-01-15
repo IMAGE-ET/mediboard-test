@@ -10,7 +10,7 @@
 
 <tr>
   <th style="width: 10px;"><input type="checkbox" value="" onclick="messagerie.toggleSelect('list_external_mail', this.checked,'item_mail')"/>{{tr}}Actions{{/tr}}</th>
-  <th>{{tr}}CUserMail-date_inbox{{/tr}}</th>
+  <th style="width: 30px;">{{tr}}CUserMail-date_inbox{{/tr}}</th>
   <th>{{tr}}CUserMail-from{{/tr}}</th>
   <th>{{tr}}CUserMail-subject{{/tr}}</th>
   <th>{{tr}}CUserMail-abstract{{/tr}}</th>
@@ -19,15 +19,19 @@
   {{foreach from=$mails item=_mail}}
     <tr {{if !$_mail->date_read}}style="font-weight: bold; background: red!important;"{{/if}}>
       <td>
-        <input type="checkbox" name="item_mail" value="" />
+        <input type="checkbox" name="item_mail" value="{{$_mail->id}}" />
 
         <form name="editMail{{$_mail->_id}}" method="post" action="">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_usermail_aed" />
           <input type="hidden" name="del" value="1" />
           <input type="hidden" name="user_mail_id" value="{{$_mail->_id}}"/>
-          <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$_mail->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: messagerie.refreshList.curry(0,'{{$account}}')})">trash</button>
+          <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$_mail->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: messagerie.refreshList.curry(messagerie.page,'{{$account}}')})">Supprimer le message</button>
         </form>
+
+        {{if $app->_ref_user->isAdmin()}}
+          <button type="button" class="change notext" onclick="messagerie.reloadMail('{{$_mail->_id}}')">Recharger le message</button>
+        {{/if}}
 
         (<button class="tag notext" title="button.tag notext">tag</button>)
       </td>

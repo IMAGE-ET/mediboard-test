@@ -28,23 +28,28 @@
   <select style="width: 50px;" name="action">
     <option va>{{tr}}CUserMail-option-More{{/tr}}</option>
     <option value="AllMarkAsRead" onclick="messagerie.markallAsRead()">{{tr}}CUserMail-option-allmarkasread{{/tr}}</option>
+    <option value="AllMarkAsRead" onclick="">{{tr}}CUserMail-option-delete{{/tr}}</option>
   </select>
 </div>
 <table class="main" id="list_external_mail">
   <tr>
     <td style="width:200px;">
-      <ul id="tab-mail" class="control_tabs">
-      {{foreach from=$mails key=k item=_mail}}
-        <li>
-          <a href="#{{$k}}" style="white-space: nowrap;" onmousedown="messagerie.refreshList(messagerie.page,'{{$k}}')"
-            {{if count($_mail)==0}}class="empty"{{/if}}>{{$_mail}}
-          </a>
-        </li>
-      {{foreachelse}}
-        <li><div class="small-info">{{tr}}CUserMail-noAccount{{/tr}}<br/>
-        <a href="?m=mediusers&amp;a=edit_infos">{{tr}}CSourcePOP-add-acount{{/tr}}</a></div></li>
-      {{/foreach}}
-      </ul>
+      {{if count($mails)}}
+        <ul id="tab-mail" class="control_tabs">
+        {{foreach from=$mails key=k item=_mailbox}}
+          <li>
+            <a href="#{{$k}}" style="white-space: nowrap;" onmousedown="messagerie.refreshList(messagerie.page,'{{$k}}')"
+              {{if count($_mailbox)==0}}class="empty"{{/if}}>{{$_mailbox}}
+            </a>
+          </li>
+        {{/foreach}}
+        </ul>
+      {{else}}
+        <div class="small-info">{{tr}}CUserMail-noAccount{{/tr}}</div>
+        <div>
+          <a href="?m=mediusers&amp;a=edit_infos">{{tr}}CSourcePOP-add-acount{{/tr}}</a>
+        </div>
+      {{/if}}
     </td>
   </tr>
   <tr>
@@ -56,5 +61,4 @@
     </td>
   </tr>
 </table>
-
 

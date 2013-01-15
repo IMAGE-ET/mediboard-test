@@ -87,9 +87,8 @@ foreach ($log_pops as $_pop) {
             }
           }
 
-          //attachments CFILE
-          //si preference taille ok OU que la piece jointe est incluse au texte
-          if ((CAppUI::pref("getAttachmentOnUpdate") >= ($_attch->bytes/1024)) || $_attch->disposition == "INLINE") {
+          //si preference taille ok OU que la piece jointe est incluse au texte => CFile
+          if (($_attch->bytes <= CAppUI::pref("getAttachmentOnUpdate") ) || $_attch->disposition == "INLINE") {
 
             $file = new CFile();
             $file->setObject($_attch);
@@ -111,7 +110,7 @@ foreach ($log_pops as $_pop) {
         }
       }
       else {
-        //mail is unread on server and read on mediboard
+        //le mail est non lu sur MB mais lu sur IMAP => on le flag
         if ($mail_unseen->date_read) {
           if ($pop->setflag($_mail, "\\Seen")) {
             CAppUI::setMsg("CPop-msg-unreadfromPopReadfromMb", UI_MSG_OK, count($unseen));

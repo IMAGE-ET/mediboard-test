@@ -42,4 +42,4 @@ else {
 }
 
 //result
-CAppUI::getMsg();
+echo CAppUI::getMsg();

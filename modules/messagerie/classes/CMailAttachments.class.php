@@ -24,7 +24,7 @@ class CMailAttachments extends CMbObject{
   var $bytes        = null;
   var $disposition  = null;
   var $part         = null;
-  var $file_id       = null; //Cfile id
+  var $file_id       = null; //Cfile id if linked
 
   var $name         = null;
   var $extension    = null;
@@ -174,12 +174,21 @@ class CMailAttachments extends CMbObject{
    * @return CFile
    */
   function loadFiles() {
-    $file = new CFile();
-    $file->object_class = $this->_class;
-    $file->object_id = $this->_id;
-    $file->loadMatchingObject();
-    $file->updateFormFields();
-    return $this->_file = $file;
+    if ($this->file_id) {
+      $file = new CFile();
+      $file->load($this->file_id);
+      $file->updateFormFields();
+      return $this->_file = $file;
+    }
+    else {
+      $file = new CFile();
+      $file->object_class = $this->_class;
+      $file->object_id = $this->_id;
+      $file->loadMatchingObject();
+      $file->updateFormFields();
+      return $this->_file = $file;
+    }
+
   }
 
   /**

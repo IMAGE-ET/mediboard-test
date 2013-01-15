@@ -8,8 +8,6 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-
-{{* {{mb_script module=patients    script=pat_selector    ajax=true}} *}}
 <script>
   requestInfoPat = function() {
     var oForm = getForm("editFrm");
@@ -22,7 +20,41 @@
     url.requestUpdate("recherche_patient");
     return true;
   };
+
+  attach = {
+  object: null,
+  id : null,
+  files: "",
+
+  setObject: function(object_class, object_id) {
+    this.object = object_class;
+    this.id = object_id;
+  },
+
+  doattach: function() {
+    var url = new Url("messagerie","ajax_attach_codable");
+    url.addParam("object_class", attach.object);
+    url.addParam("object_id", attach.id);
+    url.addParam("attachments", attach.files);
+
+  }
+};
+
+  checkrelation = function() {
+    attach.files = "";
+    $$(".check input:checked").each(function(data) {
+      if (attach.files !="") {
+        attach.files = attach.files+"-";
+      }
+      attach.files = attach.files+data.value;
+    });
+
+    if (attach.object && attach.id && attach.files.length > 0) {
+      $("do_link_attachments").show();
+    }
+  };
 </script>
+
 <style>
   #linkAttachment textarea, #linkAttachment img{
     max-width: 100px;
@@ -49,13 +81,13 @@
         <tr>
           <th>Doc</th>
           <th>extension</th>
-          <th><input type="checkbox" onclick="messagerie.toggleSelect('list_attach', this.checked, 'checkbox_att');" checked="checked"/></th>
+          <th><input type="checkbox" onclick="messagerie.toggleSelect('list_attach', this.checked, 'checkbox_att'); checkrelation()" checked="checked" value="0"/></th>
         </tr>
       {{if $mail->_text_plain->_id && !$mail->_text_html->_id && $mail->_text_plain->content != ''}}
         <tr>
           <td><textarea>{{$mail->_text_plain->content}}</textarea></td>
           <td>{{tr}}CUserMail-body{{/tr}} (text)</td>
-          <td class="check"><input type="checkbox" name="checkbox_att" checked="checked"/></td>
+          <td class="check"><input type="checkbox" name="checkbox_att" class="check_att" checked="checked" value="plain"/></td>
         </tr>
       {{/if}}
 
@@ -63,13 +95,14 @@
         <tr>
           <td><iframe src="?m={{$m}}&amp;a=vw_html_content&amp;mail_id={{$mail->_id}}&amp;suppressHeaders=1" style="width:100%;"></iframe></td>
           <td>{{tr}}CUserMail-body{{/tr}} (html)</td>
-          <td class="check"><input type="checkbox" name="checkbox_att" checked="checked"/></td>
+          <td class="check"><input type="checkbox" name="checkbox_att" class="check_att" checked="checked" value="html"/></td>
         </tr>
       {{/if}}
         {{assign var=attachments value=$mail->_attachments}}
       {{foreach from=$attachments item=_attachment}}
         <tr class="attachment">
           <td style="text-align: center;">
+            {{if $_attachment->file_id}}<div style="float:left;" title="{{tr}}CMail-Attachment-linked{{/tr}}"><img src="style/mediboard/images/buttons/link.png" alt=""/><img src="style/mediboard/images/buttons/warning.png" alt=""/></div>{{/if}}
           {{assign var=file value=$_attachment->_file}}
           {{if $file->_id}}
             <div>
@@ -84,7 +117,7 @@
           {{/if}}
           </td>
           <td>{{$_attachment->extension}}</td>
-          <td class="check"><input type="checkbox" name="checkbox_att" checked="checked"/> </td>
+          <td class="check"><input type="checkbox" class="check_att" name="checkbox_att"  {{if !$_attachment->file_id}}checked="checked"{{/if}} value="{{$_attachment->_id}}" onclick="checkrelation()"/> </td>
         </tr>
       {{/foreach}}
 
@@ -116,10 +149,12 @@
       </form>
 
       <div id="recherche_patient"></div>
+      <div>
+        <button id="do_link_attachments" style="display: none;" onclick="messagerie.dolinkAttachment(attach, '{{$mail->_id}}')">
+          <img src="style/mediboard/images/buttons/up.png" alt=""/>{{tr}}Lier{{/tr}}<img src="style/mediboard/images/buttons/up.png" alt=""/>
+        </button>
+      </div>
 
     </td>
-  </tr>
-  <tr>
-    <td colspan="2"><button id="do_link_attachments" style="display: none;"><img src="style/mediboard/images/buttons/up.png" alt=""/>{{tr}}Lier{{/tr}}<img src="style/mediboard/images/buttons/up.png" alt=""/></button></td>
   </tr>
 </table>

@@ -14,13 +14,6 @@ messagerie = {
   tab:  null,
   page: 0,
 
-  modalPOPOpen:function (id, type) {
-    var url = new Url(messagerie.module, "ajax_open_pop_email");
-    url.addParam("mail_id", id);
-    url.requestModal(800, 600);
-    url.modalObject.observe("afterClose", this.refreshList.curry(type));
-  },
-
   modalExternalOpen:function (id, account) {
     var url = new Url(messagerie.module, "ajax_open_external_email");
     url.addParam("mail_id", id);
@@ -78,6 +71,12 @@ messagerie = {
     });
   },
 
+  reloadMail: function(mail_id) {
+    var url = new Url("messagerie", "ajax_reload_mail");
+    url.addParam("mail_id", mail_id);
+    url.requestUpdate("systemMsg");
+  },
+
   /**
    * Toggle a list of checkbox
    *
@@ -99,7 +98,16 @@ messagerie = {
     var url = new Url("messagerie", "ajax_link_attachments");
     url.addParam("mail_id", mail_id);
     url.requestModal(800,600);
-    //var selected = table.select("input[name='attach_item']:checked");
 
+  },
+
+  dolinkAttachment: function (attach, mail_id) {
+    var url = new Url("messagerie", "ajax_do_link_attachments");
+    url.addParam("object_id", attach.id);
+    url.addParam("object_class", attach.object);
+    url.addParam("attach_list", attach.files);
+    url.requestUpdate("systemMsg", function() {
+      messagerie.linkAttachment(mail_id);
+    });
   }
 };
