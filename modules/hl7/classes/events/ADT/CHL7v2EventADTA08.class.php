@@ -56,9 +56,9 @@ class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
     }
     else {
       $sejour = $object;
+
+      parent::build($sejour);
     }
-    
-    parent::build($sejour);
     
     $patient = $sejour->_ref_patient;
     // Patient Identification
