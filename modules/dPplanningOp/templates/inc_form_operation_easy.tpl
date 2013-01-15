@@ -320,29 +320,9 @@
   {{/if}}
 
   {{if $conf.dPplanningOp.CSejour.assurances && $conf.dPplanningOp.COperation.easy_assurances}}
-  <tr>
-    <th colspan="4" class="category">Assurance</th>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$sejour field="assurance_maladie"}}</th>
-    <td colspan="3">{{mb_field object=$sejour field="assurance_maladie" form="editOpEasy" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurancesEasy();"}}</td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$sejour field="rques_assurance_maladie"}}</th>
-    <td colspan="3">
-      {{mb_field object=$sejour field="rques_assurance_maladie" onchange="checkAssurancesEasy();" form="editOpEasy"
-        aidesaisie="validateOnBlur: 0"}}</td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$sejour field="assurance_accident"}}</th>
-    <td colspan="3">{{mb_field object=$sejour field="assurance_accident" form="editOpEasy" style="width: 12em" autocomplete="true,1,50,true,true" onchange="checkAssurancesEasy();"}}</td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$sejour field="rques_assurance_accident"}}</th>
-    <td colspan="3">
-      {{mb_field object=$sejour field="rques_assurance_accident" onchange="checkAssurancesEasy();" form="editOpEasy"
-        aidesaisie="validateOnBlur: 0"}}</td>
-  </tr>
+    <tbody id="assurances_patient">
+      {{mb_include module=planningOp template="inc_vw_assurances"}}
+    </tbody>
   {{/if}}
 </table>
 </form>
