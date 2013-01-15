@@ -52,48 +52,49 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($current_log->type == "create" && $sejour->_naissance) {
         return;
       }
-      
+
       // Si Serveur
-      if (CAppUI::conf('smp server')) {} 
-      // Si Client
-      else {
-        if ($sejour->_eai_initiateur_group_id) {
-          return;
-        }
-        
-        $code = $this->getCodeSejour($sejour);
-
-        // Cas où : 
-        // * on est l'initiateur du message 
-        // * le destinataire ne supporte pas le message
-        if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
-          return;
-        }
-        
-        if (!$sejour->_NDA) {
-          // Génération du NDA dans le cas de la création, ce dernier n'était pas créé
-          if ($msg = $sejour->generateNDA()) {
-            CAppUI::setMsg($msg, UI_MSG_ERROR);
-          }
-          
-          $NDA = new CIdSante400();
-          $NDA->loadLatestFor($sejour, $receiver->_tag_sejour);
-          $sejour->_NDA = $NDA->id400;
-        }
-        
-        $current_affectation = null;
-        // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
-        if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle) {
-          $current_affectation = $sejour->getCurrAffectation();
-        }
-
-        $this->createMovement($code, $sejour, $current_affectation);
-
-        // Envoi de l'événement
-        $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour);
+      if (CAppUI::conf('smp server')) {
+        return;
       }
+
+      // Si Client
+      if ($sejour->_eai_initiateur_group_id) {
+        return;
+      }
+
+      $code = $this->getCodeSejour($sejour);
+
+      // Cas où :
+      // * on est l'initiateur du message
+      // * le destinataire ne supporte pas le message
+      if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
+        return;
+      }
+
+      if (!$sejour->_NDA) {
+        // Génération du NDA dans le cas de la création, ce dernier n'était pas créé
+        if ($msg = $sejour->generateNDA()) {
+          CAppUI::setMsg($msg, UI_MSG_ERROR);
+        }
+
+        $NDA = new CIdSante400();
+        $NDA->loadLatestFor($sejour, $receiver->_tag_sejour);
+        $sejour->_NDA = $NDA->id400;
+      }
+
+      $current_affectation = null;
+      // Cas où lors de l'entrée réelle j'ai une affectation qui n'a pas été envoyée
+      if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle) {
+        $current_affectation = $sejour->getCurrAffectation();
+      }
+
+      $this->createMovement($code, $sejour, $current_affectation);
+
+      // Envoi de l'événement
+      $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour);
     }
-    
+
     // Traitement Affectation
     if ($mbObject instanceof CAffectation) {
       $affectation = $mbObject;

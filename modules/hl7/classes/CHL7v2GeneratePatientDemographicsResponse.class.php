@@ -51,6 +51,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
     $this->_ref_sender = $sender;
 
     $quantity_limited_request = $this->getQuantityLimitedRequest($data["RCP"]);
+    $quantity_limited_request = $quantity_limited_request ? $quantity_limited_request : 100;
 
     $ds    = $patient->_spec->ds;
     $where = array();
@@ -59,10 +60,11 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
         continue;
       }
 
-      $where[$field] = $ds->prepare("= %", $value);
+      $value = preg_replace("/[^a-z]/i", "_", $value);
+      $where[$field] = $ds->prepareLike($value);
     }
 
-    $patients = $patient->loadList($where);
+    $patients = $patient->loadList($where, null, $quantity_limited_request);
 
     return $exchange_ihe->setPDRAA($ack, "I001", null, $patients);
   }
