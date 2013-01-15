@@ -159,13 +159,12 @@ submitSuivi = function(oForm, del) {
   } });
 }
 
+// Cette fonction est dupliquée
 function updateNbTrans(sejour_id) {
-  var url = new Url("dPhospi", "ajax_count_transmissions");
+  var url = new Url("hospi", "ajax_count_transmissions");
   url.addParam("sejour_id", sejour_id);
   url.requestJSON(function(count)  {
-    var nb_trans = $("nb_trans");
-    nb_trans.up("a").setClassName("empty", !count);
-    nb_trans.update("("+count+")");
+    Control.Tabs.setTabCount('dossier_suivi', count);
   });
 }
 
@@ -358,17 +357,45 @@ Main.add(function () {
     </table>
     
     <ul id="tab_dossier_soin" class="control_tabs" style="text-align: left;">
+      
       {{if "dPprescription"|module_active}}
-      <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med', '{{$hide_close}}'); refreshTabState();"><a href="#jour">Journée</a></li>
-      <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');"><a href="#semaine">Semaine</a></li>
+      <!-- Plan de soins journée -->
+      <li onmousedown="PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}','','administration','','','','med', '{{$hide_close}}'); refreshTabState();">
+        <a href="#jour">Journée</a>
+      </li>
+      
+      <!-- Plan de soins semaine -->
+      <li onmousedown="calculSoinSemaine('{{$date}}','{{$prescription_id}}');">
+        <a href="#semaine">Semaine</a></li>
         {{if $conf.dPprescription.CPrescription.show_perop_suivi_soins}}
-          <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')"><a href="#perop_adm" {{if $count_perop_adm == 0}}class="empty"{{/if}}>Perop {{if $count_perop_adm}}<small>({{$count_perop_adm}})</small>{{/if}}</a></li>
+          <li onmousedown="PlanSoins.showPeropAdministrations('{{$prescription_id}}')">
+            <a href="#perop_adm" {{if $count_perop_adm == 0}}class="empty"{{/if}}>
+              Perop {{if $count_perop_adm}}<small>({{$count_perop_adm}})</small>{{/if}}
+            </a>
+          </li>
         {{/if}}
       {{/if}}
-      <li onmousedown="updateTasks('{{$sejour->_id}}');"><a href="#tasks">Tâches <small>(-)</small></a></li>
-      <li onmousedown="loadSuivi('{{$sejour->_id}}')"><a href="#dossier_suivi">Trans. <small id="nb_trans"></small> / Obs. / Consult.{{if $conf.soins.constantes_show}} / Const.{{/if}}</a></li>
+      
+      <!-- Tâches -->
+      <li onmousedown="updateTasks('{{$sejour->_id}}');">
+        <a href="#tasks">
+          Tâches 
+          <small>(&ndash; / &ndash;)</small>
+          <script>
+          Control.Tabs.setTabCount('tasks', {{$sejour->_count_pending_tasks}}, {{$sejour->_count_tasks}});
+          </script>
+        </a>
+      </li>
+
+      <!-- Transmissions -->
+      <li onmousedown="loadSuivi('{{$sejour->_id}}')">
+        <a href="#dossier_suivi">
+          Trans. <small id="nb_trans"></small> / Obs. / Consult.
+          {{if $conf.soins.constantes_show}}/ Const.{{/if}}
+        </a>
+      </li>
     </ul>
-    
+       
     <span style="float: right;">
       <button type="button" class="print"
             onclick="{{if isset($prescription|smarty:nodefaults)}}Prescription.printOrdonnance('{{$prescription->_id}}');{{/if}}" />Ordonnance</button>

@@ -181,12 +181,10 @@ function loadResultLabo(sejour_id) {
 
 // Cette fonction est dupliquée
 function updateNbTrans(sejour_id) {
-  var url = new Url("dPhospi", "ajax_count_transmissions");
+  var url = new Url("hospi", "ajax_count_transmissions");
   url.addParam("sejour_id", sejour_id);
   url.requestJSON(function(count)  {
-    var nb_trans = $("nb_trans");
-    nb_trans.up("a").setClassName("empty", !count);
-    nb_trans.update("("+count+")");
+    Control.Tabs.setTabCount('dossier_suivi', count);
   });
 }
 

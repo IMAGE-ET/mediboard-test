@@ -387,7 +387,7 @@ if($object_id && $object_class){
     $smarty->assign("_prescription_line_mix", $line);
     $smarty->display("../../dPprescription/templates/inc_vw_perf_dossier_soin.tpl");
   } else {
-    if($line->_class == "CPrescriptionLineElement"){
+    if ($line->_class == "CPrescriptionLineElement"){
       $smarty->assign("name_cat", $name_cat);
       $smarty->assign("name_chap", $name_chap);  
     }
@@ -412,20 +412,21 @@ else {
   } 
   // Affichage du plan de soin complet
   else {
-    
-  if (CModule::getActive("dPprescription")) {
-    // Multiple prescriptions existante pour le séjour (Fusion des prescriptions)
-    $prescription_multiple = new CPrescription;
-    $where = array(
-      "type" => " = 'sejour'",
-      "object_class" => " = 'CSejour'",
-      "object_id" => " = '$prescription->object_id'"
-    );
-    
-    $multiple_prescription = $prescription_multiple->loadIds($where);
+    if (CModule::getActive("dPprescription")) {
+      // Multiple prescriptions existante pour le séjour (Fusion des prescriptions)
+      $prescription_multiple = new CPrescription;
+      $where = array(
+        "type" => " = 'sejour'",
+        "object_class" => " = 'CSejour'",
+        "object_id" => " = '$prescription->object_id'"
+      );
+      
+      $multiple_prescription = $prescription_multiple->loadIds($where);
       $smarty->assign("multiple_prescription", $multiple_prescription);
     }
     
+    $sejour->countTasks();
+
     $smarty->assign("admin_prescription", CModule::getCanDo("dPprescription")->admin || CMediusers::get()->isPraticien());
     $smarty->assign("move_dossier_soin"   , false);
     $smarty->display("inc_vw_dossier_soins.tpl");

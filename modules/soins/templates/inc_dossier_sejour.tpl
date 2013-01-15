@@ -97,32 +97,35 @@
 
   if (!window.loadSuivi) {
     loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
-      if(!sejour_id) return;
+      if (!sejour_id) {
+        return;
+      }
+      
       updateNbTrans(sejour_id);
-      var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
-      urlSuivi.addParam("sejour_id", sejour_id);
-      urlSuivi.addParam("user_id", user_id);
-      urlSuivi.addParam("cible", cible);
+      
+      var url = new Url("hospi", "httpreq_vw_dossier_suivi");
+      url.addParam("sejour_id", sejour_id);
+      url.addParam("user_id", user_id);
+      url.addParam("cible", cible);
       if (!Object.isUndefined(show_obs)) {
-        urlSuivi.addParam("_show_obs", show_obs);
+        url.addParam("_show_obs", show_obs);
       }
       if (!Object.isUndefined(show_trans)) {
-        urlSuivi.addParam("_show_trans", show_trans);
+        url.addParam("_show_trans", show_trans);
       }
       if (!Object.isUndefined(show_const)) {
-        urlSuivi.addParam("_show_const", show_const);
+        url.addParam("_show_const", show_const);
       }
-      urlSuivi.requestUpdate("dossier_suivi");
+      url.requestUpdate("dossier_suivi");
     }
   }
   
+  // Cette fonction est dupliquée
   updateNbTrans = function (sejour_id) {
-    var url = new Url("dPhospi", "ajax_count_transmissions");
+    var url = new Url("hospi", "ajax_count_transmissions");
     url.addParam("sejour_id", sejour_id);
     url.requestJSON(function(count)  {
-      var nb_trans = $("nb_trans");
-      nb_trans.up("a").setClassName("empty", !count);
-      nb_trans.update("("+count+")");
+      Control.Tabs.setTabCount('dossier_suivi', count);
     });
   }
   
