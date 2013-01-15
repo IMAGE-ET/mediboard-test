@@ -79,7 +79,7 @@
     }
     else if ($V(elt) == "assurance") {
       $("urssaf").setStyle({display: "none"});
-      $("parente").setStyle({display: "table-row"});
+      $("parente").setStyle({display: "none"});
       $("parente_autre").setStyle({display: "none"});
     }
     else {
@@ -128,12 +128,13 @@
   }
 
   toggleAssurance = function(elt) {
-    {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
       if ($V(elt) == "assurance") {
          {{if $conf.ref_pays == 2}}
           $("ean").setStyle({display: "table-row"});
           $("employeur").setStyle({display: "table-row"});
           $("num_assure").setStyle({display: "none"});
+          $("ean_id").setStyle({display: "table-row"});
+          $("assure_id").setStyle({display: "table-row"});
         {{/if}}
         $("date_debut").setStyle({display: "table-row"});
         $("date_fin").setStyle({display: "table-row"});
@@ -144,6 +145,8 @@
           $("ean").setStyle({display: "none"});
           $("num_assure").setStyle({display: "table-row"});
           $("employeur").setStyle({display: "none"});
+          $("ean_id").setStyle({display: "none"});
+          $("assure_id").setStyle({display: "none"});
         {{/if}}
         $("prenom").setStyle({display: "none"});
         $("date_debut").setStyle({display: "table-row"});
@@ -154,13 +157,14 @@
           $("ean").setStyle({display: "none"});
           $("num_assure").setStyle({display: "none"});
           $("employeur").setStyle({display: "none"});
+          $("ean_id").setStyle({display: "none"});
+          $("assure_id").setStyle({display: "none"});
         {{/if}}
         $("prenom").setStyle({display: "table-row"});
         $("date_debut").setStyle({display: "none"});
         $("date_fin").setStyle({display: "none"});
 
       }
-    {{/if}}
   }
 </script>
 
@@ -299,12 +303,12 @@
         <th>{{mb_label object=$correspondant field="ean"}}</th>
         <td>{{mb_field object=$correspondant field="ean"}}</td>
       </tr>
-      <tr>
+      <tr id="ean_id" {{if $correspondant->relation != "assurance" && $correspondant->_id}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="ean_id"}}</th>
         <td>{{mb_field object=$correspondant field="ean_id"}}</td>
       </tr>
 
-      <tr>
+      <tr id="assure_id" {{if $correspondant->relation != "assurance" && $correspondant->_id}} style="display: none;"{{/if}}>
         <th>{{mb_label object=$correspondant field="assure_id"}}</th>
         <td>{{mb_field object=$correspondant field="assure_id"}}</td>
       </tr>
