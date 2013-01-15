@@ -1,7 +1,7 @@
 <td>
   <select name="{{$name}}" style="width: 15em;" {{if $object->_class == "CFactureConsult"}}onchange="return onSubmitFormAjax(this.form);"{{/if}}>
     <option value="" {{if !$object->$name}}selected="selected" {{/if}}>&mdash; Choisir une assurance</option>
-    {{foreach from=$object->_ref_patient->_ref_correspondants_patient item=_assurance}}
+    {{foreach from=$patient->_ref_correspondants_patient item=_assurance}}
       <option value="{{$_assurance->_id}}" {{if $object->$name == $_assurance->_id}} selected="selected" {{/if}}>
         {{$_assurance->nom}}  
         {{if $_assurance->date_debut && $_assurance->date_fin}}
