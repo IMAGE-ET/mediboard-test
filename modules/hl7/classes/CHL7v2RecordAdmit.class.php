@@ -62,8 +62,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     switch ($sender->_configs["handle_NDA"]) {
       case 'PV1_19':
         return CValue::read($data['admitIdentifiers'], "AN");
-      default:
-       return CValue::read($data['personIdentifiers'], "AN");
+      default :
+        return CValue::read($data['personIdentifiers'], "AN");
     }
   }
 
@@ -322,7 +322,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // RI non fourni
       if (!$venueRI) {
         $code_NDA = "I223"; 
-      } else {
+      }
+      else {
         $tmpVenue = new CSejour();
         // RI connu
         if ($tmpVenue->load($venueRI)) {
@@ -910,39 +911,117 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
 
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    
     $PV1_3 = $this->queryNode("PV1.3", $data["PV1"]);
         
     $affectation = new CAffectation();
     $affectation->sejour_id = $newVenue->_id;
     
-    // Chargement des affectations du séjour
+    // Récupération de la date de réalisation de l'évènement
     $datetime = $this->queryTextNode("EVN.6/TS.1", $data["EVN"]);
     
     $event_code = $this->_ref_exchange_ihe->code;
-    // Cas d'une suppression de mutation
-    if ($event_code == "A12") {
-      $affectation->load($movement->affectation_id);
-      if (!$affectation->_id) {
-        return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
-      }
 
-      if ($msgAffectation = $affectation->delete()) {
-        return $msgAffectation;
-      }
-      
-      return null;
-    }  
-    
-    // Si pas de lit on retourne une affectation vide
+    switch ($event_code) {
+      // Cas d'une suppression de mutation
+      case "A12" :
+        $affectation->load($movement->affectation_id);
+        if (!$affectation->_id) {
+          return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+        }
+
+        // Pas de synchronisation
+        $affectation->_no_synchro = true;
+        if ($msgAffectation = $affectation->delete()) {
+          return $msgAffectation;
+        }
+
+        return null;
+
+      // Annulation admission
+      case "A11" :
+        $affectation =  $newVenue->getCurrAffectation($datetime);
+
+        // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
+        if (!$movement->affectation_id && $affectation->_id) {
+          return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+        }
+
+        // Si on a une affectation associée, alors on charge celle-ci
+        if ($movement->affectation_id) {
+          $affectation = $movement->loadRefAffectation();
+        }
+
+        if ($msg = $affectation->delete()) {
+          return $msg;
+        }
+
+        return null;
+
+      // Cas mutation
+      case "A02" :
+        $affectation->entree = $datetime;
+        $affectation->loadMatchingObject();
+
+        // Si on ne retrouve pas une affectation
+        // Création de l'affectation
+        // et mettre à 'effectuee' la précédente si elle existe sinon création de celle-ci
+        if (!$affectation->_id) {
+          // Récupération du Lit et UFs
+          $this->getPL($PV1_3, $affectation);
+
+          $return_affectation = $newVenue->forceAffectation($affectation);
+          //$datetime, $affectation->lit_id, $affectation->service_id);
+          if (is_string($return_affectation)) {
+            return $return_affectation;
+          }
+
+          $affectation = $return_affectation;
+        }
+
+        break;
+
+      // Cas modification
+      case "Z99" :
+        $affectation =  $newVenue->getCurrAffectation($datetime);
+        // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
+        if (!$movement->affectation_id && $affectation->_id) {
+          return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+        }
+
+        // Si on a une affectation associée, alors on charge celle-ci
+        if ($movement->affectation_id) {
+          $affectation = $movement->loadRefAffectation();
+        }
+        // Sinon on récupère et on met à jour la première affectation
+        else {
+          $affectation->sejour_id = $newVenue->_id;
+          $affectation->entree    = $newVenue->entree;
+          $affectation->sortie    = $newVenue->sortie;
+        }
+
+        break;
+
+      // Tous les autres cas on récupère et on met à jour la première affectation
+      default :
+        $newVenue->loadRefsAffectations();
+        $affectation = $newVenue->_ref_first_affectation;
+        if (!$affectation->_id) {
+          $affectation->sejour_id = $newVenue->_id;
+          $affectation->entree    = $newVenue->entree;
+          $affectation->sortie    = $newVenue->sortie;
+        }
+
+        break;
+    }
+
+    // Si pas de lit on retourne une affectation vide/couloir
     if (!$PV1_3 || !$this->queryTextNode("PL.3", $PV1_3)) {
       // On essaye de récupérer le service dans ce cas depuis l'UF d'hébergement
       $uf           = new CUniteFonctionnelle();
       $uf->group_id = $newVenue->group_id;
-      $uf->code     = $this->queryTextNode("PL.1", $PV1_3); 
+      $uf->code     = $this->queryTextNode("PL.1", $PV1_3);
       if (!$uf->loadMatchingObject()) {
-        return $affectation;      
+        return $affectation;
       }
 
       $affectation_uf               = new CAffectationUniteFonctionnelle();
@@ -954,91 +1033,19 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $newVenue->service_id        = $affectation_uf->object_id;
         $newVenue->uf_hebergement_id = $affectation_uf->uf_id;
       }
-      
+
       $newVenue->uf_medicale_id    = $this->mappingUFMedicale($data);
       $newVenue->uf_soins_id       = $this->mappingUFSoins($data);
-      
+
       // On ne check pas la cohérence des dates des consults/intervs
       $newVenue->_skip_date_consistencies = true;
       if ($msgVenue = $newVenue->store()) {
         return $msgVenue;
       }
-      
-      return $affectation;     
-    }
-    
-    if ($event_code == "A11") {
-      $affectation =  $newVenue->getCurrAffectation($datetime);
-      
-      // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
-      if (!$movement->affectation_id && $affectation->_id) {
-        return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
-      }
-      
-      // Si on a une affectation associée, alors on charge celle-ci
-      if ($movement->affectation_id) {
-        $affectation = $movement->loadRefAffectation();
-      }
-      
-      if ($msg = $affectation->delete()) {
-        return $msg;
-      }
-      
-      return null;
+
+      return $affectation;
     }
 
-    // Cas mutation - A02
-    if ($event_code == "A02") {
-      $affectation->entree = $datetime;
-      $affectation->loadMatchingObject();
-
-      // Si on ne retrouve pas une affectation
-      // Création de l'affectation 
-      // et mettre à 'effectuee' la précédente si elle existe sinon création de celle-ci
-      if (!$affectation->_id) {
-        // Récupération du Lit et UFs
-        $this->getPL($PV1_3, $affectation);
-      
-        $return_affectation = $newVenue->forceAffectation($datetime, $affectation->lit_id);
-        if (is_string($return_affectation)) {
-          return $return_affectation;
-        }
-        
-        $affectation = $return_affectation;
-      }
-    }
-
-    // Cas modification - Z99
-    elseif ($event_code == "Z99") {
-      $affectation =  $newVenue->getCurrAffectation($datetime);
-      // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
-      if (!$movement->affectation_id && $affectation->_id) {
-        return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
-      }
-      
-      // Si on a une affectation associée, alors on charge celle-ci
-      if ($movement->affectation_id) {
-        $affectation = $movement->loadRefAffectation();
-      }
-      // Sinon on récupère et on met à jour la première affectation
-      else {
-        $affectation->sejour_id = $newVenue->_id;
-        $affectation->entree    = $newVenue->entree;
-        $affectation->sortie    = $newVenue->sortie;
-      }      
-    }
-    
-    // Tous les autres cas on récupère et on met à jour la première affectation
-    else {
-      $newVenue->loadRefsAffectations();  
-      $affectation = $newVenue->_ref_first_affectation;  
-      if (!$affectation->_id) {
-        $affectation->sejour_id = $newVenue->_id;
-        $affectation->entree    = $newVenue->entree;
-        $affectation->sortie    = $newVenue->sortie;
-      }
-    } 
-    
     // Récupération du Lit et UFs
     $this->getPL($PV1_3, $affectation);
     $affectation->uf_medicale_id = $this->mappingUFMedicale($data);
@@ -1063,8 +1070,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Dans le cas où l'on a déjà une grossesse pour la patiente
     if ($grossesse->_id) {
       // On recherche si la grossesse a déjà un séjour avec des naissances OU le nbre de jours entre le terme et l'entrée du
-      // séjour est inférieur à 294 jours (42 semaines)   
-      if (count($grossesse->loadRefsNaissances()) || (abs(mbDaysRelative($grossesse->terme_prevu, $newVenue->entree)) > 294 /* 42*7 */)) {
+      // séjour est inférieur à 294 jours (42 semaines) - 42*7
+      if (count($grossesse->loadRefsNaissances()) || (abs(mbDaysRelative($grossesse->terme_prevu, $newVenue->entree)) > 294)) {
         $grossesse                 = new CGrossesse();
         $grossesse->parturiente_id = $newVenue->patient_id;
       }
