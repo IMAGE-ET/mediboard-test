@@ -69,7 +69,7 @@ class CAffectation extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["echanges_hprim"]      = "CEchangeHprim object_id";
-    $backProps["echanges_ihe"]        = "CExchangeIHE object_id";
+    $backProps["echanges_ihe"]        = "CExchangeIHE object_id cascade";
     $backProps["repas"]               = "CRepas affectation_id";
     $backProps["affectations_enfant"] = "CAffectation parent_affectation_id";
     $backProps["movements"]           = "CMovement affectation_id";
@@ -79,15 +79,15 @@ class CAffectation extends CMbObject {
 
   function getProps() {
     $specs = parent::getProps();
-    $specs["service_id"]   = "ref notNull class|CService";
-    $specs["lit_id"]       = "ref class|CLit";
-    $specs["sejour_id"]    = "ref class|CSejour cascade";
+    $specs["service_id"]            = "ref notNull class|CService";
+    $specs["lit_id"]                = "ref class|CLit";
+    $specs["sejour_id"]             = "ref class|CSejour cascade";
     $specs["parent_affectation_id"] = "ref class|CAffectation";
-    $specs["function_id"]  = "ref class|CFunctions";
-    $specs["entree"]       = "dateTime notNull";
-    $specs["sortie"]       = "dateTime notNull";
-    $specs["effectue"]     = "bool";
-    $specs["rques"]        = "text";
+    $specs["function_id"]           = "ref class|CFunctions";
+    $specs["entree"]                = "dateTime notNull";
+    $specs["sortie"]                = "dateTime notNull";
+    $specs["effectue"]              = "bool";
+    $specs["rques"]                 = "text";
     
     $specs["uf_hebergement_id"] = "ref class|CUniteFonctionnelle seekable";
     $specs["uf_medicale_id"]    = "ref class|CUniteFonctionnelle seekable";
@@ -241,7 +241,7 @@ class CAffectation extends CMbObject {
     
     // Gestion des UFs
     $this->makeUF();
-    
+
     // Si c'est une création d'affectation, avec ni une précédente ni une suivante,
     // que le séjour est relié à une grossesse, et que le module maternité est actif,
     // alors il faut créer les affectations des bébés.
@@ -257,9 +257,9 @@ class CAffectation extends CMbObject {
     if ($msg = parent::store()) {
       return $msg;
     }
-    
+
     if ($create_affectations) {
-      
+
       $grossesse = $this->_ref_sejour->loadRefGrossesse();
       $naissances = $grossesse->loadRefsNaissances();
 
@@ -289,7 +289,7 @@ class CAffectation extends CMbObject {
     if ($old->_id) {
       $this->_ref_prev = $old->_ref_prev;
       $this->_ref_next = $old->_ref_next;
-    } 
+    }
     else {
       $this->loadRefsAffectations();
     }
@@ -300,7 +300,7 @@ class CAffectation extends CMbObject {
     
     $prev = $this->_ref_prev;
     $next = $this->_ref_next;
-    
+
     // Mise à jour vs l'entrée
     if (!$prev->_id) {
       if ($this->entree != $sejour->_entree) {
@@ -308,7 +308,7 @@ class CAffectation extends CMbObject {
         $sejour->$field = $this->entree;
         $changeSejour = 1;
       }
-    } 
+    }
     elseif ($this->entree != $prev->sortie) {
       $prev->sortie = $this->entree;
       $changePrev = 1;
@@ -334,7 +334,7 @@ class CAffectation extends CMbObject {
     if ($changeNext) {
       $next->store();
     }
-    
+
     if ($changeSejour) {
       $sejour->_no_synchro = 1;
       $sejour->updateFormFields();
