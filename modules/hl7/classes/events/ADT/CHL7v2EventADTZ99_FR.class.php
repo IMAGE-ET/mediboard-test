@@ -38,19 +38,13 @@ class CHL7v2EventADTZ99_FR  extends CHL7v2EventADTZ99 {
    */
   function buildI18nSegments($object) {
     if ($object instanceof CAffectation) {
-      $affectation = $object;
-
-      $sejour                       = $affectation->_ref_sejour;
-      $sejour->_ref_hl7_affectation = $affectation;
-
-      parent::build($affectation);
+      $sejour                       = $object->_ref_sejour;
+      $sejour->_ref_hl7_affectation = $object;
     }
     else {
       $sejour = $object;
-
-      parent::build($sejour);
     }
-    
+
     // Movement segment
     $this->addZBE($sejour);
     
