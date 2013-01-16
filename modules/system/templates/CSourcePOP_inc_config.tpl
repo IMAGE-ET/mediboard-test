@@ -39,7 +39,7 @@
           </tr>
           <tr>
             <th>{{mb_label object=$source field="host"}}</th>
-            <td>{{mb_field object=$source field="host"}}</td>
+            <td>{{mb_field object=$source field="host" form="editSourcePOP-`$source->name`"}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$source field="port"}}</th>

@@ -45,7 +45,7 @@ class CSourcePOP extends CExchangeSource {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["host"]          = "str";
+    $props["host"]          = "str autocomplete";
     $props["port"]          = "num default|25";
     $props["auth_ssl"]      = "enum list|None|SSL/TLS|STARTTLS";
     $props["password"]      = "password show|0";
@@ -58,7 +58,11 @@ class CSourcePOP extends CExchangeSource {
     return $props;
   }
 
-
+  /**
+   * get back props
+   *
+   * @return array
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["user_mail_account"]            = "CUserMail account_id";
