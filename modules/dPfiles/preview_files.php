@@ -96,7 +96,8 @@ $show_editor = true;
 if ($fileSel && $elementClass == "CFile" && !$acces_denied) {
   if (file_exists($fileSel->_file_path)) {
     $raw_content = file_get_contents($fileSel->_file_path);
-    
+
+
     switch ($fileSel->file_type) {
       case "text/osoft":
         if (class_exists("COsoftHistorique")) {
@@ -122,6 +123,12 @@ if ($fileSel && $elementClass == "CFile" && !$acces_denied) {
         
       case "text/plain": 
         $includeInfosFile = "<pre>".CMbString::htmlSpecialChars($raw_content)."</pre>";
+        break;
+
+      case "text/html":
+        $includeInfosFile = $raw_content;
+        $show_editor = false;
+        $display_as_is = true;
         break;
     }
   }
