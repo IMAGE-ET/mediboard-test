@@ -112,12 +112,20 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   }
 
   function store() {
-    // Verification du mot de passe
-    if ($this->_validator_password && $this->validator_id) {
-      $this->loadRefsFwd();
-      if (!CUser::checkPassword($this->_ref_validator->_user_username, $this->_validator_password)) {
+    if ($this->validator_id) {
+      // Verification du mot de passe
+      if ($this->_validator_password) {
+        $this->loadRefsFwd();
+        if (!CUser::checkPassword($this->_ref_validator->_user_username, $this->_validator_password)) {
+          $this->validator_id = "";
+          return 'Le mot de passe entré n\'est pas correct';
+        }
+      }
+
+      // Validator_id passé mais il ne faut pas l'enregistré
+      $old = $this->loadOldObject();
+      if (!$this->_validator_password && !$old->validator_id) {
         $this->validator_id = "";
-        return 'Le mot de passe entré n\'est pas correct';
       }
     }
 

@@ -69,7 +69,7 @@ confirmCheckList = function(form) {
 refreshCheckList{{$check_list->type}} = function(id){
   var form = getForm("edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}");
 
-  if ($V(form.validator_id) && !$("systemMsg").select(".warning, .error").length) {
+  if ($V(form.validator_id) && $V(form._validator_password) && !$("systemMsg").select(".warning, .error").length) {
     $("{{$check_list->type}}-title").down("img").src = "images/icons/tick.png";
     var url = new Url("dPsalleOp", "httpreq_vw_check_list");
     url.addParam("check_list_id", id);
@@ -87,7 +87,6 @@ submitCheckList = function(form, quicksave) {
     return confirmCheckList(form);
   }
 
-  $V(form.validator_id, "");
   $V(form._validator_password, "");
 
   return onSubmitFormAjax(form, {
