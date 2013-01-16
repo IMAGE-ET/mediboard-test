@@ -40,6 +40,7 @@ class CPack extends CMbObject {
   var $_modeles_ids  = null;
   
   // Referenced objects
+  var $_ref_owner    = null;
   var $_ref_user     = null;
   var $_ref_function = null;
   var $_ref_group    = null;
@@ -72,10 +73,20 @@ class CPack extends CMbObject {
     return $backProps;
   }
   
-  function loadRefsFwd($cached = false) {
-    $this->_ref_user = $this->loadFwdRef("user_id", $cached);
-    $this->_ref_function = $this->loadFwdRef("function_id", $cached);
-    $this->_ref_group = $this->loadFwdRef("group_id", $cached);
+  function loadRefOwner() {
+    $this->_ref_user     = $this->loadFwdRef("user_id"    );
+    $this->_ref_function = $this->loadFwdRef("function_id");
+    $this->_ref_group    = $this->loadFwdRef("group_id"   );
+    
+    if ($this->_ref_user->_id    ) $this->_ref_owner = $this->_ref_user    ;
+    if ($this->_ref_function->_id) $this->_ref_owner = $this->_ref_function;
+    if ($this->_ref_group->_id   ) $this->_ref_owner = $this->_ref_group   ;
+    
+    return $this->_ref_owner;
+  }
+  
+  function loadRefsFwd() {
+    $this->loadRefOwner();
   }
   
   function updateFormFields() {

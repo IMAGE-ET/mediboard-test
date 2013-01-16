@@ -5,10 +5,12 @@
   {{mb_return}}
 {{/if}}
 
-<div style="height: 150px; overflow-y: auto;">
+<table class="tbl">
+  <tr><th class="category" colspan="2">Choix disponibles</th></tr>
+</table>
 
+<div style="height: 150px; overflow-y: auto;">
   <table class="tbl">
-    <tr><th class="category" colspan="2">Choix disponibles</th></tr>
     {{foreach from=$liste->_valeurs item=_valeur name=choix}}
     <tr>
       <td class="text">{{$_valeur|nl2br}}</td>

@@ -562,8 +562,8 @@ class CCompteRendu extends CDocumentItem {
   /**
    * Charge tous les modèles pour une classe d'objets associés à un utilisateur
    * 
-   * @param integer $id           Identifiant
-   * @param string  $owner        Propriétaire du document / modèle
+   * @param integer $id           Identifiant du propriétaire
+   * @param string  $owner        Type de propriétaire du modèle: prat, func ou etab
    * @param string  $object_class string  Nom de la classe d'objet, optionnel. Doit être un CMbObject
    * @param string  $type         Type de composant, optionnel
    * @param boolean $fast_edit    Inclue les modèles en édition rapide
@@ -657,6 +657,10 @@ class CCompteRendu extends CDocumentItem {
         $where["function_id"] = "IS NULL";
         $where["group_id"]    = " = '$etab_id'";
         $modeles["etab"] = $modele->loadlist($where, $order);
+        break;
+        
+      default: 
+        trigger_error("Wrong type '$owner'", E_WARNING);
     }
     
     return $modeles;

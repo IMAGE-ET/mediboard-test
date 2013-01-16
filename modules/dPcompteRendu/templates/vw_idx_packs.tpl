@@ -1,60 +1,46 @@
 <!--  $Id$ -->
 
-<script type="text/javascript">
+{{mb_script module=compteRendu script=pack}}
 
-Main.add(function () {
-	reloadList('{{$pack_id}}');
-	updateAddEditPack.defer('{{$pack_id}}');
-});
-
-function updateAddEditPack(pack_id) {
-	var url = new Url("dPcompteRendu", "ajax_add_edit_pack");
-	url.addParam("pack_id", pack_id);
-  url.requestUpdate("add_edit_pack");
-  if (pack_id != '') {
-	  var lists = new Array("owner-user", "owner-func", "owner-etab");
-	  lists.each(function(elem) {
-	    if ($(elem) != null) {
-			  firstchild = $(elem).firstDescendant();
-			  firstchild.className = '';
-			  var siblings = firstchild.siblings();
-			  siblings.each(function(item) {
-			    item.className = '';
-			  });
-      }
-	  });
-	  if ($("p"+pack_id) != null) {
-		  var pack = $("p"+pack_id);
-		  pack.className = "selected";
-	  }
-	} 
-}
-
-function reloadList(pack_id, filter_class, user_id) {
-	var url = new Url("dPcompteRendu", "ajax_list_pack");
-	url.addParam("pack_id", pack_id);
-	if (user_id != undefined && user_id != '') {
-		url.addParam("filter_user_id", user_id);
-	}
-  if (filter_class != undefined) {
-	  url.addParam("filter_class", filter_class);
-  }
-	url.requestUpdate("list-pack");
-}
+<script>
+Main.add(Pack.refreshList);
 </script>
 
-<table class="main">
+<button class="new" onclick="Pack.edit('0');">
+  {{tr}}CPack-title-create{{/tr}}
+</button>
 
-<tr>
-  <td class="greedyPane">
-    <div id="list-pack">
-    </div>
-  </td>
+<form method="get" action="?" name="Filter" onsubmit="return Pack.filter();">
   
-  <td>
-   <div id="add_edit_pack">
-    
-   </div>
-  </td>
-</tr>
+<table class="form">
+  <tr>
+     <th class="category" colspan="10">Filtrer les packs</th>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label class=CPack field=user_id}}</th>
+    <td>
+      <select name="user_id" onchange="this.form.onsubmit();">
+        <option value="">&mdash; Choisir </option>
+        {{mb_include module=mediusers template=inc_options_mediuser list=$users selected=$user_id}}
+      </select>
+    </td>
+
+    <th>{{mb_label class=CPack field=object_class}}</th>
+    <td>
+      <select name="object_class" onchange="this.form.onsubmit();">
+        <option value="">&mdash; Tous</option>
+        {{foreach from=$classes key=_class item=_locale}}
+          <option value="{{$_class}}" {{if $_class == $object_class}} selected="selected" {{/if}}>
+            {{$_locale}}
+          </option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
 </table>
+
+</form>
+
+<div id="list-packs">
+</div>
