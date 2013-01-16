@@ -11,11 +11,11 @@
 {{mb_script module=messagerie script=UserEmail}}
 
 
-{{if count($mails)}}
+{{if count($mails) > 0}}
 <script type="text/javascript">
   Main.add(function () {
-    var tabs = Control.Tabs.create("tab-mail", true);
-    tabs.activeLink.onmousedown();
+    var tabsMail = Control.Tabs.create("tab-mail", true);
+    tabsMail.activeLink.onmousedown();
     //messagerie.getLastMessages({{$user->_id}}, null);
   });
 </script>
@@ -23,7 +23,7 @@
 
 <div>
 <button class="button change" onclick="messagerie.getLastMessages({{$user->_id}});">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
-<button class="button mail" onclick="messagerie.modalwriteMessage();">{{tr}}CUserMAil-button-writeMail{{/tr}}</button>
+<!--<button class="button mail" onclick="messagerie.modalwriteMessage();">{{tr}}CUserMAil-button-writeMail{{/tr}}</button>-->
 
   <select style="width: 50px;" name="action">
     <option va>{{tr}}CUserMail-option-More{{/tr}}</option>
@@ -34,7 +34,7 @@
 <table class="main" id="list_external_mail">
   <tr>
     <td style="width:200px;">
-      {{if count($mails)}}
+      {{if count($mails) > 0}}
         <ul id="tab-mail" class="control_tabs">
         {{foreach from=$mails key=k item=_mailbox}}
           <li>
