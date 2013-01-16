@@ -685,13 +685,27 @@ class CSejour extends CCodable implements IPatientRelated {
     }
 
     // Annulation de l'établissement de provenance si le mode d'entrée n'est pas transfert
-    if (null !== $this->mode_entree) {
+    if ($this->fieldModified("mode_entree")) {
       if ("7" != $this->mode_entree) {
         $this->etablissement_entree_id = "";
       }
 
       if ("6" != $this->mode_entree) {
         $this->service_entree_id = "";
+      }
+    }
+    
+    // Passage au mode transfert si on value un établissement de provenance
+    if($this->fieldModified("etablissement_entree_id")) {
+      if($this->etablissement_entree_id != null) {
+        $this->mode_entree = 7;
+      }
+    }
+    
+    // Passage au mode mutation si on value un service de provenance
+    if($this->fieldModified("service_entree_id")) {
+      if($this->service_entree_id != null) {
+        $this->mode_entree = 6;
       }
     }
 
