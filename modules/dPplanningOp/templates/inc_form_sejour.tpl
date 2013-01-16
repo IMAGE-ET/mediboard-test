@@ -28,7 +28,7 @@
   {{assign var=maternite_active value="0"}}
 {{/if}}
 
-<script type="text/javascript">  
+<script type="text/javascript">
 function modifLits(lit_id){
   var form = getForm('editSejour');
   
@@ -285,8 +285,7 @@ function updateTypeAndPeC(select) {
 function reloadAssurance() {
   {{if $conf.dPplanningOp.CSejour.assurances}}
     var oForm = getForm("editSejour");
-    var patient_id = $V(oForm.patient_id);
-    var $sejour    = $V(oForm.sejour_id);
+    var patient_id   = $V(oForm.patient_id);
   
     if (!patient_id) {
       return;
@@ -294,6 +293,7 @@ function reloadAssurance() {
   
     var url = new Url("dPplanningOp", "ajax_list_assurances");
     url.addParam("patient_id", patient_id);
+    url.requestUpdate("assurances_patient_easy");
     url.requestUpdate("assurances_patient");
   {{/if}}
 }
@@ -596,7 +596,7 @@ Main.add( function(){
       Choisir un patient
     </button>
     <button id="button-edit-patient" type="button" 
-            onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
+        onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value" 
             class="edit notext" {{if !$patient->_id}}style="display: none;"{{/if}}>
       {{tr}}Edit{{/tr}}
     </button>
@@ -1114,7 +1114,7 @@ Main.add( function(){
 
 {{if $conf.dPplanningOp.CSejour.assurances}}
   <tbody {{if !$conf.dPplanningOp.COperation.easy_assurances}}class="modeExpert"{{/if}} id="assurances_patient">
-    {{mb_include module=planningOp template="inc_vw_assurances" object=$sejour name="assurance_maladie"}}  
+    {{mb_include module=planningOp template="inc_vw_assurances"}}  
   </tbody>
 {{/if}}
 

@@ -320,7 +320,7 @@
   {{/if}}
 
   {{if $conf.dPplanningOp.CSejour.assurances && $conf.dPplanningOp.COperation.easy_assurances}}
-    <tbody id="assurances_patient">
+    <tbody id="assurances_patient_easy">
       {{mb_include module=planningOp template="inc_vw_assurances"}}
     </tbody>
   {{/if}}
