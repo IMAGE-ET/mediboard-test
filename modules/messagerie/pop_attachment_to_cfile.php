@@ -1,11 +1,13 @@
 <?php /** $Id$ **/
 
 /**
- * @package    Mediboard
+ * @package Mediboard
  * @subpackage messagerie
- * @version    $Revision$
- * @author     SARL OpenXtrem
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
+
 
 
 CCanDo::checkRead();

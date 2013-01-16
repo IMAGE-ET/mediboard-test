@@ -1,4 +1,4 @@
-<?php /* $Id: do_usermessage_aed.php 17062 2012-10-25 10:32:26Z rhum1 $ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -9,5 +9,3 @@
 
 $do = new CDoObjectAddEdit("CUserMail", "user_mail_id");
 $do->doIt();
-
-?>

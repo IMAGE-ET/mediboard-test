@@ -1,11 +1,13 @@
-<?php /* $Id: configure.php 15776 2012-06-05 07:54:52Z rhum1 $ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
- * @subpackage dPpatients
- * @version $Revision: 15776 $
- * @author Romain Ollivier
+ * @subpackage messagerie
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
+
 
 CCanDo::Admin();
 

@@ -1,3 +1,2 @@
 <?php
-$locales['module-messagerie-long'] = '';
-?>
+$locales['module-messagerie-long'] = 'Mailbox';

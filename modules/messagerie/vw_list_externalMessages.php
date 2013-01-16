@@ -13,13 +13,14 @@ CCanDo::checkRead();
 $user = CMediusers::get();
 //unseen
 
+//CSourcePOP account
 $account = new CSourcePOP();
 $account->object_class = $user->_class;
 $account->object_id = $user->_id;
 $accounts = $account->loadMatchingList();
 
+//mailbox
 $mailbox = array();
-
 foreach ($accounts as $_account) {
   $libelle = $_account->libelle ? $_account->libelle : $_account->_id;
   $mailbox[$_account->_id]     = $libelle;

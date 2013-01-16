@@ -147,7 +147,7 @@ class CPop{
    * @param string  $partId test
    * @param boolean $uid    test
    *
-   * @return STDout $object
+   * @return object $object
    */
   function openPart($msgId,$partId,$uid=true) {
     if ($uid) {
@@ -304,30 +304,32 @@ class CPop{
    * @return string
    */
   static function decodeMail($encoding, $text, $structure=null) {
+    $retour = null;
     switch ($encoding) {
       /* 0 : 7 bit / 1 : 8 bit / 2 ; binary / 5 : other  => default  */
       case(3):  //base64
-        return imap_base64($text);
+        $retour = imap_base64($text);
         break;
 
       case(4):
-        //Hack for bad defined encoding
-        if (!empty($structure->parameters)) {
-          for ($k = 0, $l = count($structure->parameters); $k < $l; $k++) {
-            $attribute = $structure->parameters[$k];
-            if ($attribute->attribute == 'CHARSET' && $attribute->value == 'utf-8') {
-              return utf8_decode(imap_qprint($text));
-            }
-          }
-        }
-
-        return imap_qprint($text);
+        $retour = imap_qprint($text);
         break;
 
       default:
-        return $text;
+        $retour = $text;
         break;
     }
+
+    //Hack for bad defined encoding
+    if (!empty($structure->parameters)) {
+      for ($k = 0, $l = count($structure->parameters); $k < $l; $k++) {
+        $attribute = $structure->parameters[$k];
+        if ($attribute->attribute == 'CHARSET' && strtoupper($attribute->value) == 'UTF-8') {
+          return utf8_decode($retour);
+        }
+      }
+    }
+    return $retour;
   }
 
   /**

@@ -71,12 +71,6 @@ messagerie = {
     });
   },
 
-  reloadMail: function(mail_id) {
-    var url = new Url("messagerie", "ajax_reload_mail");
-    url.addParam("mail_id", mail_id);
-    url.requestUpdate("systemMsg");
-  },
-
   /**
    * Toggle a list of checkbox
    *
@@ -106,8 +100,11 @@ messagerie = {
     url.addParam("object_id", attach.id);
     url.addParam("object_class", attach.object);
     url.addParam("attach_list", attach.files);
+    url.addParam("text_plain_id", attach.plain);
+    url.addParam("text_html_id", attach.html);
+    url.addParam("mail_id", mail_id);
     url.requestUpdate("systemMsg", function() {
-      messagerie.linkAttachment(mail_id);
+      this.refreshModal();
     });
   }
 };

@@ -118,9 +118,12 @@ class CSetupmessagerie extends CSetup {
 
     $this->makeRevision("0.21");
     $this->addPrefQuery("nbMailList", 20);
-    $this->mod_version = "0.22";
 
+    $this->makeRevision("0.22");
+    $query = "ALTER TABLE `user_mail`
+    ADD `text_file_id` INT (11) UNSIGNED AFTER `in_reply_to_id`;";
+    $this->addQuery($query);
 
+    $this->mod_version = "0.23";
   }
 }
-?>

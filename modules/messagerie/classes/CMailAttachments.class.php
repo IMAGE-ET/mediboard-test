@@ -178,6 +178,7 @@ class CMailAttachments extends CMbObject{
       $file = new CFile();
       $file->load($this->file_id);
       $file->updateFormFields();
+      $file->loadRefsFwd();
       return $this->_file = $file;
     }
     else {

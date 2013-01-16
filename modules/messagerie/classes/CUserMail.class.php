@@ -30,7 +30,9 @@ class CUserMail extends CMbObject{
   var $answered       = null;  //this message is flagged as answered
 
   //var $msg_references = null; //is a reference to this message id
-  var $in_reply_to_id    = null; //is a reply to this message id
+  var $in_reply_to_id      = null; //is a reply to this message id
+  var $text_file_id = null;
+  var $_ref_file_linked = null;
 
   //body
   var $text_plain_id     = null; //plain text (no html)
@@ -78,6 +80,7 @@ class CUserMail extends CMbObject{
     $props["answered"]      = "bool default|0";
     //$props["msg_references"]= "str";
     $props["in_reply_to_id"]   = "ref class|CUserMail";
+    $props["text_file_id"] = "ref class|CFile";
 
     $props["text_plain_id"]    = "ref class|CContentAny show|0";
     $props["text_html_id"]     = "ref class|CContentHTML show|0";
@@ -274,6 +277,13 @@ class CUserMail extends CMbObject{
     return $this->_attachments = $attachs;
   }
 
+  function loadFileLinked() {
+    $file = new CFile();
+    $file->load($this->text_file_id);
+    $file->loadRefsFwd();
+    return $this->_ref_file_linked = $file;
+  }
+
   
   function loadRefsFwd() {
     parent::loadRefsFwd();
@@ -281,6 +291,7 @@ class CUserMail extends CMbObject{
     $this->loadContentPlain();
     $this->loadAttachments();
     $this->loadAccount();
+    $this->loadFileLinked();
   }
 
 }

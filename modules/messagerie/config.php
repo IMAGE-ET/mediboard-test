@@ -1,11 +1,13 @@
 <?php /** $Id$ **/
 
 /**
- *  @package Mediboard
- *  @subpackage fse
- *  @version $Revision$
- *  @author SARL OpenXtrem
+ * @package Mediboard
+ * @subpackage messagerie
+ * @version $Revision$
+ * @author SARL OpenXtrem
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
+
 
 $dPconfig["messagerie"] = array (
   "enable_internal"  => "1",

@@ -8,7 +8,6 @@
  */
 
 // Open a contentHTML from an email_id
-
 CCanDo::checkRead();
 $mail_id = CValue::get("mail_id");
 
