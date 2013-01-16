@@ -183,18 +183,16 @@ Main.add(function () {
     bornes_composition_dossier:  {{$bornes_composition_dossier|@json}},
     nb_postes: {{$bornes_composition_dossier|@count}}
   });
-  {{else}}
-    // Si prescription non installé, chargement des taches en premier
-    updateTasks('{{$sejour->_id}}');
   {{/if}}
-  loadSuivi('{{$sejour->_id}}');
   
   // Deplacement du dossier de soin
   if($('plan_soin')){
     PlanSoins.moveDossierSoin($('tbody_date'));
   }
   
-  var tab_dossier_soin = new Control.Tabs('tab_dossier_soin');
+  var tab_dossier_soin = new Control.Tabs.create('tab_dossier_soin', true);
+  tab_dossier_soin.activeLink.up('li').onmousedown();  
+  
   if($('tab_categories')){
     tabs = Control.Tabs.create('tab_categories', true);
   }
