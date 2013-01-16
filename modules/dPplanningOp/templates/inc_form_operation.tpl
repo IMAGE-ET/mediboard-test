@@ -427,17 +427,17 @@ refreshFunction = function(chir_id) {
       <td colspan="3">{{mb_field object=$op field=duree_uscpo increment=true form=editOp size=2}} {{tr}}night{{/tr}}(s)</td>
     </tr>
   {{/if}}
+  {{if $conf.dPplanningOp.COperation.show_presence_op}}
+    <tr>
+      <th>{{mb_label object=$op field=presence_preop}}</th>
+      <td colspan="2">{{mb_field object=$op field=presence_preop form=editOp }}</td>
+    </tr>
   
-  <tr>
-    <th>{{mb_label object=$op field=presence_preop}}</th>
-    <td colspan="2">{{mb_field object=$op field=presence_preop form=editOp }}</td>
-  </tr>
-
-  <tr>
-    <th>{{mb_label object=$op field=presence_postop}}</th>
-    <td colspan="2">{{mb_field object=$op field=presence_postop form=editOp }}</td>
-  </tr>
-  
+    <tr>
+      <th>{{mb_label object=$op field=presence_postop}}</th>
+      <td colspan="2">{{mb_field object=$op field=presence_postop form=editOp }}</td>
+    </tr>
+  {{/if}}
   {{if $conf.dPbloc.CPlageOp.systeme_materiel == "expert"}}
     <tr>
       <td></td>
@@ -447,27 +447,27 @@ refreshFunction = function(chir_id) {
       <td></td>
     </tr>
   {{/if}}
-  <tr>
-    <td class="text">{{mb_label object=$op field="examen"}}</td>
-    <td class="text">{{mb_label object=$op field="materiel"}}</td>
-    <td class="text">{{mb_label object=$op field="rques"}}</td>
-  </tr>
-
-  <tr>
-    <td style="width: 33%;">
-      {{mb_field object=$op field="examen" form="editOp"
+  {{if $conf.dPplanningOp.COperation.show_remarques}}
+    <tr>
+      <td class="text">{{mb_label object=$op field="examen"}}</td>
+      <td class="text">{{mb_label object=$op field="materiel"}}</td>
+      <td class="text">{{mb_label object=$op field="rques"}}</td>
+    </tr>
+    <tr>
+      <td style="width: 33%;">
+        {{mb_field object=$op field="examen" form="editOp"
+          aidesaisie="validateOnBlur: 0"}}
+      </td>
+      <td style="width: 33%;">
+        {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOp"
         aidesaisie="validateOnBlur: 0"}}
-    </td>
-    <td style="width: 33%;">
-      {{mb_field object=$op field="materiel" onchange="Value.synchronize(this);" form="editOp"
-      aidesaisie="validateOnBlur: 0"}}
-    </td>
-    <td style="width: 33%;">
-      {{mb_field object=$op field="rques" onchange="Value.synchronize(this);" form="editOp"
-        aidesaisie="validateOnBlur: 0"}}
-    </td>
-  </tr>
-  
+      </td>
+      <td style="width: 33%;">
+        {{mb_field object=$op field="rques" onchange="Value.synchronize(this);" form="editOp"
+          aidesaisie="validateOnBlur: 0"}}
+      </td>
+    </tr>
+  {{/if}}
   {{if $op->_count_actes}}
   <tr>
     <td colspan="3">
@@ -485,31 +485,31 @@ refreshFunction = function(chir_id) {
       {{mb_field object=$op field="conventionne" typeEnum="checkbox"}}
     </td>
   </tr>
+  {{if $conf.dPplanningOp.COperation.show_montant_dp}}
+    <tr>
+      <td class="text">{{mb_label object=$op field="depassement"}}</td>
+      <td class="text">{{mb_label object=$op field="forfait"}}</td>
+      <td class="text">{{mb_label object=$op field="fournitures"}}</td>
+    </tr>
   
-  <tr>
-    <td class="text">{{mb_label object=$op field="depassement"}}</td>
-    <td class="text">{{mb_label object=$op field="forfait"}}</td>
-    <td class="text">{{mb_label object=$op field="fournitures"}}</td>
-  </tr>
-
-  <tr>
-    {{if $op->_ref_actes_ccam|@count}}
-    <td>{{mb_value object=$op field="depassement"}}</td>
-    <td>{{mb_value object=$op field="forfait"}}</td>
-    <td>{{mb_value object=$op field="fournitures"}}</td>
-    {{else}}
-    <td>{{mb_field object=$op field="depassement" size="4"}}</td>
-    <td>{{mb_field object=$op field="forfait" size="4"}}</td>
-    <td>{{mb_field object=$op field="fournitures" size="4"}}</td>
-    {{/if}}
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$op field="info"}}</th>
-    <td colspan="2">
-      {{mb_field object=$op field="info" typeEnum="checkbox"}}
-    </td>
-  </tr>
+    <tr>
+      {{if $op->_ref_actes_ccam|@count}}
+      <td>{{mb_value object=$op field="depassement"}}</td>
+      <td>{{mb_value object=$op field="forfait"}}</td>
+      <td>{{mb_value object=$op field="fournitures"}}</td>
+      {{else}}
+      <td>{{mb_field object=$op field="depassement" size="4"}}</td>
+      <td>{{mb_field object=$op field="forfait" size="4"}}</td>
+      <td>{{mb_field object=$op field="fournitures" size="4"}}</td>
+      {{/if}}
+    </tr>
+    <tr>
+      <th>{{mb_label object=$op field="info"}}</th>
+      <td colspan="2">
+        {{mb_field object=$op field="info" typeEnum="checkbox"}}
+      </td>
+    </tr>
+  {{/if}}
   
   {{if "reservation"|module_active}}
     <tr>

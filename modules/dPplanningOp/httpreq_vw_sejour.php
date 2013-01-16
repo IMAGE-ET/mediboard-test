@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPplanningOp
+ * @author     Romain Ollivier <dev@openxtrem.com>
+ * @version    $Revision$
+ */
 
 $mode_operation = CValue::get("mode_operation", 0);
 $sejour_id      = CValue::get("sejour_id"     , 0);
@@ -20,14 +21,15 @@ $prestations = CPrestation::loadCurrentList();
 
 $sejour = new CSejour;
 $praticien = new CMediusers;
-if($sejour_id) {
+if ($sejour_id) {
   $sejour->load($sejour_id);
   $sejour->loadRefsFwd();
   $praticien =& $sejour->_ref_praticien;
   $patient =& $sejour->_ref_patient;
   $patient->loadRefsSejours();
   $sejours =& $patient->_ref_sejours;
-} else {
+}
+else {
   $patient = new CPatient;
   $patient->load($patient_id);
   $patient->loadRefsSejours();
@@ -39,12 +41,13 @@ $sejour->loadNDA();
 
 $patient->loadRefsFwd();
 $patient->loadRefsCorrespondants();
+$patient->loadRefsCorrespondantsPatient();
 
 $correspondantsMedicaux = array();
 if ($patient->_ref_medecin_traitant->_id) {
   $correspondantsMedicaux["traitant"] = $patient->_ref_medecin_traitant;
 }
-foreach($patient->_ref_medecins_correspondants as $correspondant) {
+foreach ($patient->_ref_medecins_correspondants as $correspondant) {
   $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
 }
 
@@ -75,11 +78,10 @@ $blocages_lit = $affectation->loadList($where);
 
 $where["function_id"] = "IS NULL";
 
-foreach($blocages_lit as $key => $blocage){
+foreach ($blocages_lit as $key => $blocage) {
   $blocage->loadRefLit()->loadRefChambre()->loadRefService();
   $where["lit_id"] = "= '$blocage->lit_id'";
-  if(!$sejour->_id && $affectation->loadObject($where))
-  {
+  if (!$sejour->_id && $affectation->loadObject($where)) {
     $affectation->loadRefSejour();
     $affectation->_ref_sejour->loadRefPatient();
     $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";

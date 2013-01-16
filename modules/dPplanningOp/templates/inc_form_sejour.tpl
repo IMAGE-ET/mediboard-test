@@ -858,7 +858,7 @@ Main.add( function(){
 
 <tr>
   <th>Taux d'occupation</th>
-  <td colspan="3" id="occupation">
+  <td id="occupation">
   </td>
 </tr>
 

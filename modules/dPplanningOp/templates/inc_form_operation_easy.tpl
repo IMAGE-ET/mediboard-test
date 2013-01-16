@@ -280,7 +280,7 @@
   </tr>
   {{/if}}
   
-  {{if $conf.dPplanningOp.COperation.easy_materiel || $conf.dPplanningOp.COperation.easy_remarques}}
+  {{if ($conf.dPplanningOp.COperation.easy_materiel || $conf.dPplanningOp.COperation.easy_remarques) && $conf.dPplanningOp.COperation.show_remarques}}
   <tr>
     <td></td>
     {{if $conf.dPplanningOp.COperation.easy_materiel}}

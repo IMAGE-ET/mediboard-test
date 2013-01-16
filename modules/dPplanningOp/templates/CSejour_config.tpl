@@ -24,7 +24,7 @@
   {{assign var="class" value="CSejour"}}
   <table class="form">
     <tr>
-      <th class="title" colspan="2">{{tr}}{{$class}}{{/tr}}</th>
+      <th class="title" colspan="2">Général</th>
     </tr>
     
     {{mb_include module=system template=inc_config_enum var=patient_id values=$patient_ids}}
@@ -39,14 +39,10 @@
     {{mb_include module=system template=inc_config_bool var=blocage_occupation}}
     {{mb_include module=system template=inc_config_bool var=service_id_notNull}}
     {{mb_include module=system template=inc_config_bool var=consult_accomp}}
-    {{mb_include module=system template=inc_config_bool var=accident}}
-    {{mb_include module=system template=inc_config_bool var=assurances}}
     {{mb_include module=system template=inc_config_bool var=delete_only_admin}}
     {{mb_include module=system template=inc_config_str  var=max_cancel_time     size=2 suffix=h}}
     {{mb_include module=system template=inc_config_str  var=hours_sejour_proche size=2 suffix=h}}
     {{mb_include module=system template=inc_config_bool var=fix_doc_edit}}
-    {{mb_include module=system template=inc_config_bool var=show_type_pec}}
-    {{mb_include module=system template=inc_config_bool var=show_discipline_tarifaire }}
     {{mb_include module=system template=inc_config_bool var=create_anonymous_pat onchange="toggleSpecsPat(this.value)"}}
     <tbody id="specs_anonymous_pat" {{if !$conf.dPplanningOp.CSejour.create_anonymous_pat}}style="display: none;"{{/if}}>
       {{mb_include module=system template=inc_config_enum var=anonymous_sexe values=m|f}}
@@ -54,10 +50,18 @@
     </tbody>
     {{mb_include module=system template=inc_config_bool var=use_recuse}}
     {{mb_include module=system template=inc_config_bool var=use_charge_price_indicator}}
+    {{mb_include module=system template=inc_config_enum var=systeme_isolement values=standard|expert}}
+    
+    <tr>
+      <th class="title" colspan="2">Affichage des champs</th>
+    </tr>
+    {{mb_include module=system template=inc_config_bool var=accident}}
+    {{mb_include module=system template=inc_config_bool var=assurances}}
+    {{mb_include module=system template=inc_config_bool var=show_type_pec}}
+    {{mb_include module=system template=inc_config_bool var=show_discipline_tarifaire }}
     {{mb_include module=system template=inc_config_bool var=show_only_charge_price_indicator}}
     {{mb_include module=system template=inc_config_bool var=fiche_rques_sej}}
     {{mb_include module=system template=inc_config_bool var=fiche_conval}}
-    {{mb_include module=system template=inc_config_enum var=systeme_isolement values=standard|expert}}
     {{mb_include module=system template=inc_config_bool var=show_cmu_ald}}
     {{mb_include module=system template=inc_config_bool var=show_days_duree}}
     

@@ -1,18 +1,18 @@
-<?php /* $Id$ */
-
+<?php 
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPplanningOp
+ * @author     Romain Ollivier
+ * @version    $Revision$
+ */
 global $can, $m, $tab;
 
 CCanDo::checkRead();
 
 $hors_plage = new CIntervHorsPlage();
-if(!$hors_plage->canRead()) {
+if (!$hors_plage->canRead()) {
   $can->redirect();
 }
 
@@ -50,7 +50,7 @@ $chir = new CMediusers;
 if ($chir_id) {
   $testChir = new CMediusers();
   $testChir->load($chir_id);
-  if($testChir->isPraticien()) {
+  if ($testChir->isPraticien()) {
     $chir = $testChir;
   }
 }
@@ -67,17 +67,17 @@ if ($patient_id && !$operation_id && !$sejour_id) {
 // Vérification des droits sur les praticiens
 $listPraticiens = $chir->loadPraticiens(PERM_EDIT);
 $categorie_prat = array();
-foreach($listPraticiens as $keyPrat =>$prat){
+foreach ($listPraticiens as $keyPrat =>$prat) {
   $prat->loadRefsFwd();
   $categorie_prat[$keyPrat] = $prat->_ref_discipline->categorie;
 }
 
 // On récupère le séjour
 $sejour = new CSejour;
-if($sejour_id && !$operation_id) {
+if ($sejour_id && !$operation_id) {
   $sejour->load($sejour_id);
   $sejour->loadRefsFwd();
-  if(!$chir_id) {
+  if (!$chir_id) {
     $chir = $sejour->_ref_praticien;
   }
   // On ne change a priori pas le praticien du séjour
@@ -100,7 +100,7 @@ if ($op->_id) {
   }
 
   $op->loadRefs();
-  foreach($op->_ref_actes_ccam as $acte) {
+  foreach ($op->_ref_actes_ccam as $acte) {
     $acte->loadRefExecutant();
   }	
   
@@ -140,12 +140,13 @@ if (CModule::getActive("maternite")) {
 $patient->loadRefsSejours();
 $patient->loadRefsFwd();
 $patient->loadRefsCorrespondants();
+$patient->loadRefsCorrespondantsPatient();
 
 $correspondantsMedicaux = array();
 if ($patient->_ref_medecin_traitant->_id) {
   $correspondantsMedicaux["traitant"] = $patient->_ref_medecin_traitant;
 }
-foreach($patient->_ref_medecins_correspondants as $correspondant) {
+foreach ($patient->_ref_medecins_correspondants as $correspondant) {
   $correspondantsMedicaux["correspondants"][] = $correspondant->_ref_medecin;
 }
 
@@ -198,11 +199,10 @@ $blocages_lit = $affectatione->loadList($where);
 
 $where["function_id"] = "IS NULL";
 
-foreach($blocages_lit as $key => $blocage){
+foreach ($blocages_lit as $key => $blocage) {
   $blocage->loadRefLit()->loadRefChambre()->loadRefService();
   $where["lit_id"] = "= '$blocage->lit_id'";
-  if(!$sejour->_id && $affectatione->loadObject($where))
-  {
+  if (!$sejour->_id && $affectatione->loadObject($where)) {
     $affectatione->loadRefSejour();
     $affectatione->_ref_sejour->loadRefPatient();
     $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectatione->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectatione->_ref_sejour->_ref_patient->_view.")";
