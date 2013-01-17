@@ -5,7 +5,7 @@
  * @subpackage dPplanningOp
  * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 $dPconfig["dPplanningOp"]= array(
@@ -91,8 +91,6 @@ $dPconfig["dPplanningOp"]= array(
     "anonymous_sexe" => "m",
     "anonymous_naissance" => "1970-01-01",
     "use_recuse" => "0",
-    "use_charge_price_indicator" => "0",
-    "show_only_charge_price_indicator" => "0",
     "fiche_rques_sej"    => "0",
     "fiche_conval"       => "0",
     "systeme_isolement"  => "standard",
@@ -101,8 +99,11 @@ $dPconfig["dPplanningOp"]= array(
     "show_days_duree"    => "0",
     "show_isolement"     => "1",
     "show_chambre_part"  => "1",
-    "show_facturable"    => "1"
+    "show_facturable"    => "1",
+
+    "use_charge_price_indicator" => "0",
+    "show_only_charge_price_indicator" => "0",
+    "use_custom_mode_entree" => "0",
+    "use_custom_mode_sortie" => "0",
   ),
 );
-
-?>

@@ -5,7 +5,7 @@
  * @subpackage dPadmissions
  * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 CCanDo::checkRead();
@@ -27,7 +27,7 @@ $service_id = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
 
 $date_actuelle = mbDateTime("00:00:00");
-$date_demain   = mbDateTime("00:00:00","+ 1 day");
+$date_demain   = mbDateTime("00:00:00", "+ 1 day");
 
 $hier   = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
@@ -67,11 +67,13 @@ if (count($service_id)) {
 }
 
 // Filtre sur le type du séjour
-if($type == "ambucomp") {
+if ($type == "ambucomp") {
   $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
-} elseif($type) {
+}
+elseif ($type) {
   $where["sejour.type"] = " = '$type'";
-} else {
+}
+else {
   $where[] = "`sejour`.`type` != 'urg' AND `sejour`.`type` != 'seances'";
 }
 
@@ -92,19 +94,19 @@ if ($selSaisis != "0") {
   $where["sejour.entree_preparee"] = "= '0'";
 }
 
-if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id"){
-  $order_col = "patient_id";  
+if ($order_col != "patient_id" && $order_col != "entree_prevue" && $order_col != "praticien_id") {
+  $order_col = "patient_id";
 }
 
-if ($order_col == "patient_id"){
+if ($order_col == "patient_id") {
   $order = "patients.nom $order_way, patients.prenom $order_way, sejour.entree_prevue";
 }
 
-if ($order_col == "entree_prevue"){
+if ($order_col == "entree_prevue") {
   $order = "sejour.entree_prevue $order_way, patients.nom, patients.prenom";
 }
 
-if ($order_col == "praticien_id"){
+if ($order_col == "praticien_id") {
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
 
@@ -120,31 +122,31 @@ foreach ($sejours as $sejour_id => $_sejour) {
     unset($sejours[$sejour_id]);
     continue;
   }
-  
+
   // Chargement du patient
   $patient = $_sejour->loadRefPatient(true);
   $patient->loadIPP();
-  
+
   // Dossier médical
   $dossier_medical = $patient->loadRefDossierMedical(false);
-  
+
   if (CAppUI::conf("dPadmissions show_deficience")) {
     $deficiences = $dossier_medical->loadRefsDeficiences();
     $dossier_medical->_ref_antecedents_by_type["deficience"] = $deficiences;
   }
-  
+
   // Chargement du numéro de dossier
   $_sejour->loadNDA();
-  
+
   // Chargement des notes sur le séjour
   $_sejour->loadRefsNotes();
-  
+
   // Chargement des prestations
   $_sejour->countPrestationsSouhaitees();
-  
+
   // Chargement des modes d'entrée
   $_sejour->loadRefEtablissementProvenance();
-  
+
   // Chargement des interventions
   $whereOperations = array("annulee" => "= '0'");
   $_sejour->loadRefsOperations($whereOperations);
@@ -165,10 +167,19 @@ foreach ($sejours as $sejour_id => $_sejour) {
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
-if ($filterFunction && !array_key_exists($filterFunction, $functions)){
+if ($filterFunction && !array_key_exists($filterFunction, $functions)) {
   $_function = new CFunctions();
   $_function->load($filterFunction);
   $functions[$filterFunction] = $_function;
+}
+
+$list_mode_entree = array();
+if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_entree")) {
+  $mode_entree = new CModeEntreeSejour();
+  $where = array(
+    "actif" => "= '1'",
+  );
+  $list_mode_entree = $mode_entree->loadGroupList($where);
 }
 
 // Création du template
@@ -193,5 +204,6 @@ $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
 $smarty->assign("functions"     , $functions);
 $smarty->assign("filterFunction", $filterFunction);
 $smarty->assign("period"        , $period);
+$smarty->assign("list_mode_entree", $list_mode_entree);
 
 $smarty->display("inc_vw_admissions.tpl");

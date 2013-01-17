@@ -8,7 +8,6 @@
   <li><a href="#configure-mode_easy"  >Aff. DHE Simplifiée         </a></li>
   <li><a href="#configure-COperation" >{{tr}}COperation{{/tr}}     </a></li>
   <li><a href="#configure-CSejour"    >{{tr}}CSejour{{/tr}}        </a></li>
-  <li><a href="#configure-CChargePriceIndicator">{{tr}}CChargePriceIndicator{{/tr}}</a></li>
   <li><a href="#configure-blocage"    >Blocage                     </a></li>
   <li><a href="#configure-CIdSante400">{{tr}}CIdSante400-tag{{/tr}}</a></li>
   <li><a href="#configure-maintenance">{{tr}}Maintenance{{/tr}}    </a></li>
@@ -28,10 +27,6 @@
 
 <div id="configure-CSejour" style="display: none;">
   {{mb_include template=CSejour_config}}
-</div>
-
-<div id="configure-CChargePriceIndicator" style="display: none;">
-  {{mb_include template=CChargePriceIndicator_config}}
 </div>
 
 <div id="configure-blocage" style="display: none;">

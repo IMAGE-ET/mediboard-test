@@ -37,29 +37,42 @@
   <input type="hidden" name="dosql" value="do_sejour_aed" />
   <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
   <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
-  
+
   {{if !$_sejour->entree_reelle}}
     <input type="hidden" name="entree_reelle" value="now" />
     <input type="hidden" name="_modifier_entree" value="1" />
-    {{mb_field object=$_sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); submitAdmission(this.form);"}}
+
+    {{if $conf.dPplanningOp.CSejour.use_custom_mode_entree && $list_mode_entree|@count}}
+      {{mb_field object=$_sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); submitAdmission(this.form);" hidden=true}}
+      <select name="mode_entree_id" class="{{$_sejour->_props.mode_entree_id}}" onchange="updateModeEntree(this)">
+        {{foreach from=$list_mode_entree item=_mode}}
+          <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $_sejour->mode_entree_id == $_mode->_id}}selected{{/if}}>
+            {{$_mode}}
+          </option>
+        {{/foreach}}
+      </select>
+    {{else}}
+      {{mb_field object=$_sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); submitAdmission(this.form);"}}
+    {{/if}}
+
     <button class="tick" type="button" onclick="{{if (($date_actuelle > $_sejour->entree_prevue) || ($date_demain < $_sejour->entree_prevue))}}confirmation(this.form);{{else}}submitAdmission(this.form);{{/if}};">
       {{tr}}CSejour-admit{{/tr}}
     </button>
     <div id="listEtabExterne-editAdmFrm{{$_sejour->_id}}" {{if $_sejour->mode_entree != "7"}} style="display: none;" {{/if}}>
-      {{mb_field object=$_sejour field="etablissement_entree_id" form="editAdmFrm`$_sejour->_id`" 
+      {{mb_field object=$_sejour field="etablissement_entree_id" form="editAdmFrm`$_sejour->_id`"
         autocomplete="true,1,50,true,true" onchange="changeEtablissementId(this.form)"}}
     </div>
   {{else}}
     <input type="hidden" name="_modifier_entree" value="0" />
     <input type="hidden" name="mode_entree" value="{{$_sejour->mode_entree}}" />
     <input type="hidden" name="etablissement_entree_id" value="{{$_sejour->etablissement_entree_id}}" />
-    
+
     <input type="hidden" name="entree_reelle" value="" />
     <button class="cancel" type="button" onclick="submitAdmission(this.form);">
       {{tr}}Cancel{{/tr}}
     </button>
     <br />
-  
+
     {{if ($_sejour->entree_reelle < $date_min) || ($_sejour->entree_reelle > $date_max)}}
       {{$_sejour->entree_reelle|date_format:$conf.datetime}}
       <br>
@@ -67,7 +80,7 @@
     {{$_sejour->entree_reelle|date_format:$conf.time}}
     {{/if}}
     - {{tr}}CSejour.mode_entree.{{$_sejour->mode_entree}}{{/tr}}
-          
+
     {{if $_sejour->etablissement_entree_id}}
       - {{$_sejour->_ref_etablissement_provenance}}
     {{/if}}
@@ -84,7 +97,7 @@
       <br />
       {{tr}}CSejour.mode_entree.{{$_sejour->mode_entree}}{{/tr}}
     {{/if}}
-    
+
     {{if $_sejour->etablissement_entree_id}}
       <br />{{$_sejour->_ref_etablissement_provenance}}
     {{/if}}
@@ -99,11 +112,11 @@
       {{if "web100T"|module_active}}
         {{mb_include module=web100T template=inc_button_iframe}}
       {{/if}}
-      
+
       {{if $conf.dPadmissions.show_deficience}}
         {{mb_include module=patients template=inc_vw_antecedents type=deficience}}
       {{/if}}
-      
+
       {{foreach from=$_sejour->_ref_operations item=_op}}
       <a class="action" title="Imprimer la DHE de l'intervention" href="#printDHE" onclick="Admissions.printDHE('operation_id', {{$_op->_id}}); return false;">
         <img src="images/icons/print.png" />
@@ -113,15 +126,15 @@
         <img src="images/icons/print.png" />
       </a>
       {{/foreach}}
-        
+
       <a class="action" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
         <img src="images/icons/planning.png" />
       </a>
-      
+
       {{mb_include module=system template=inc_object_notes object=$_sejour}}
     </div>
   {{/if}}
-  
+
   {{if $patient->_ref_IPP}}
   <script type="text/javascript">
     PatHprimSelector.init{{$patient->_id}} = function(){
@@ -131,7 +144,7 @@
       this.sPatPrenom = "{{$patient->prenom}}";
       this.pop();
     };
-    
+
     SejourHprimSelector.init{{$_sejour->_id}} = function(){
       this.sForm      = "editNumdos{{$_sejour->_id}}";
       this.sId        = "id400";
@@ -155,7 +168,7 @@
     <input type="hidden" class="notNull" name="object_class" value="CPatient" />
     <input type="hidden" name="last_update" value="{{$patient->_ref_IPP->last_update}}" />
   </form>
-  
+
   {{if $_sejour->_ref_NDA}}
   <form name="editNumdos{{$_sejour->_id}}" action="?m={{$m}}" method="post" class="prepared" onsubmit="return ExtRefManager.submitNumdosForm({{$_sejour->_id}})">
     <input type="hidden" name="dosql" value="do_idsante400_aed" />
@@ -188,7 +201,7 @@
 
 <td>
   <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
-    {{$_sejour->entree_prevue|date_format:$conf.time}} 
+    {{$_sejour->entree_prevue|date_format:$conf.time}}
     <br />
     {{$_sejour->type|upper|truncate:1:"":true}}
     {{$_sejour->_ref_operations|@count}} Int.
@@ -199,7 +212,7 @@
   {{if !($_sejour->type == 'exte') && !($_sejour->type == 'consult') && $_sejour->annule != 1}}
     {{mb_include template=inc_form_prestations sejour=$_sejour edit=$canAdmissions->edit}}
     {{mb_include module=hospi template=inc_placement_sejour sejour=$_sejour}}
-  {{/if}}  
+  {{/if}}
 </td>
 
 <td>
@@ -209,7 +222,7 @@
       <input type="hidden" name="dosql" value="do_sejour_aed" />
       <input type="hidden" name="sejour_id" value="{{$_sejour->_id}}" />
       <input type="hidden" name="patient_id" value="{{$_sejour->patient_id}}" />
-      
+
       {{if !$_sejour->entree_preparee}}
         <input type="hidden" name="entree_preparee" value="1" />
         <button class="tick" type="button" onclick="submitAdmission(this.form, 1);">
@@ -221,7 +234,7 @@
           {{tr}}Cancel{{/tr}}
         </button>
       {{/if}}
-      
+
       {{if ($_sejour->entree_modifiee == 1) && ($conf.dPplanningOp.CSejour.entree_modifiee == 1)}}
         <img src="images/icons/warning.png" title="Le dossier a été modifié, il faut le préparer" />
       {{/if}}

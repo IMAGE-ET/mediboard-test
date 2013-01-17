@@ -16,6 +16,12 @@ Main.add(function() {
   Calendar.regField(getForm("changeDateAdmissions").date, null, {noView: true});
   Admissions.restoreSelection('listAdmissions');
 });
+
+updateModeEntree = function(select) {
+  var selected = select.options[select.selectedIndex];
+  var form = select.form;
+  $V(form.elements.mode_entree, selected.get("mode"));
+}
 </script>
 
 {{mb_include module=admissions template=inc_refresh_page_message}}
@@ -38,7 +44,7 @@ Main.add(function() {
       </form>
       <a href="?m=admissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">&gt;&gt;&gt;</a>
       <br />
-      
+
       <em style="float: left; font-weight: normal;">
       {{$sejours|@count}}
       {{if $selAdmis == "n"}}admissions non effectuées
@@ -46,7 +52,7 @@ Main.add(function() {
       {{else}}admissions ce jour
       {{/if}}
       </em>
-  
+
       <select style="float: right" name="filterFunction" style="width: 16em;" onchange="reloadAdmission(this.value);">
         <option value=""> &mdash; Toutes les fonctions</option>
         {{foreach from=$functions item=_function}}
@@ -55,7 +61,7 @@ Main.add(function() {
       </select>
     </th>
   </tr>
-  
+
   {{assign var=url value="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
   <tr>
     <th class="narrow">{{tr}}CSejour-admit{{/tr}}</th>
@@ -66,15 +72,15 @@ Main.add(function() {
     <th class="narrow">
       <input type="text" size="3" onkeyup="Admissions.filter(this, 'admissions')" id="filter-patient-name" />
     </th>
-  
+
     <th>
       {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url=$url}}
     </th>
-    
+
     <th>
       {{mb_colonne class="CSejour" field="entree_prevue" order_col=$order_col order_way=$order_way url=$url}}
     </th>
-    
+
     <th class="narrow">Chambre</th>
     <th class="narrow">
       {{if $canAdmissions->edit}}

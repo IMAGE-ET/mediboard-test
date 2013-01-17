@@ -3,10 +3,11 @@ editCharge = function(charge_id) {
   var url = new Url("planningOp", "edit_charge_price_indicator");
   url.addParam("charge_id", charge_id);
   url.requestModal(400, 400);
+  return false;
 }
 </script>
 
-<button class="new" onclick="editCharge(0)">{{tr}}CChargePriceIndicator-title-create{{/tr}}</button>
+<button class="new" type="button" onclick="editCharge(0)">{{tr}}CChargePriceIndicator-title-create{{/tr}}</button>
 
 <table class="main tbl">
   <tr>
