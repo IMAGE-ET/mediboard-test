@@ -82,6 +82,7 @@ if($userSel->_id){
     $nb_canceled += $op_canceled->countMatchingList();
     
     $_plage->loadRefsFwd();
+    $_plage->loadRefsNotes();
     
     $where = array();
     if($userSel->_id && !$userSel->isAnesth()) {
