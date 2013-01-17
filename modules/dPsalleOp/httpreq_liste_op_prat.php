@@ -47,10 +47,13 @@ asort($listPrats);
 $praticien = new CMediusers;
 if ($praticien->load($praticien_id)) {
   $praticien->loadRefsForDay($date); 
+  foreach($praticien->_ref_plages as $plage) {
+    $plage->loadRefsNotes();
+  }
 }
 
 if ($hide_finished == 1 && $praticien->_ref_plages) {
-  foreach($praticien->_ref_plages as &$plage) {
+  foreach($praticien->_ref_plages as $plage) {
     foreach($plage->_ref_operations as $key => $op){
       if ($op->sortie_salle) unset($plage->_ref_operations[$key]);
     }

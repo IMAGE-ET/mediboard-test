@@ -49,6 +49,7 @@
   {{foreach from=$listDay item=curr_plage}}
   <tr>
     <th colspan="3" class="section">
+      {{mb_include module=system template=inc_object_notes object=$curr_plage}}
       {{$curr_plage->_ref_salle->_view}} : 
       de {{$curr_plage->debut|date_format:$conf.time}} 
       à {{$curr_plage->fin|date_format:$conf.time}}

@@ -1230,7 +1230,7 @@ class CMediusers extends CMbObject {
     $where[] = "plagesop.chir_id = '$this->_id' OR plagesop.spec_id = '$this->function_id' OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs));
     $order = "debut";
     $this->_ref_plages = $plages->loadList($where, $order);
-    foreach ($this->_ref_plages as &$plage) {
+    foreach ($this->_ref_plages as $plage) {
       $plage->loadRefs(0);
       $plage->_unordered_operations = array();
       foreach ($plage->_ref_operations as $key_op => &$operation) {
