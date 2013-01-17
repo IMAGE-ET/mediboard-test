@@ -119,7 +119,8 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
           
           // Le patient retrouvé est-il différent que celui du message ?
           if (!$this->checkSimilarPatient($recoveredPatient, $newPatient)) {
-            $commentaire = "Le nom ($newPatient->nom / $recoveredPatient->nom) et/ou le prénom ($newPatient->prenom / $recoveredPatient->prenom) sont très différents."; 
+            $commentaire = "Le nom ($newPatient->nom / $recoveredPatient->nom) ".
+                           "et/ou le prénom ($newPatient->prenom / $recoveredPatient->prenom) sont très différents.";
             return $exchange_ihe->setAckAR($ack, "E123", $commentaire, $newPatient);
           }
           
@@ -192,19 +193,22 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       
       // Le patient retrouvé est-il différent que celui du message ?
       if (!$this->checkSimilarPatient($recoveredPatient, $newPatient)) {
-        $commentaire = "Le nom ($newPatient->nom / $recoveredPatient->nom) et/ou le prénom ($newPatient->prenom / $recoveredPatient->prenom) sont très différents."; 
+        $commentaire = "Le nom ($newPatient->nom / $recoveredPatient->nom) ".
+                       "et/ou le prénom ($newPatient->prenom / $recoveredPatient->prenom) sont très différents.";
         return $exchange_ihe->setAckAR($ack, "E124", $commentaire, $newPatient);
       }
                       
       // RI non fourni
       if (!$patientRI) {
         $code_IPP = "I123"; 
-      } else {
+      }
+      else {
         $tmpPatient = new CPatient();
         // RI connu
         if ($tmpPatient->load($patientRI)) {
           if ($tmpPatient->_id != $IPP->object_id) {
-            $comment = "L'identifiant source fait référence au patient : $IPP->object_id et l'identifiant cible au patient : $tmpPatient->_id.";
+            $comment = "L'identifiant source fait référence au patient : $IPP->object_id".
+                       "et l'identifiant cible au patient : $tmpPatient->_id.";
             return $exchange_ihe->setAckAR($ack, "E101", $comment, $newPatient);
           }
           $code_IPP = "I124"; 
@@ -407,6 +411,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
 
     // Rang naissance
     $this->getRangNaissance($node, $newPatient);
+
+    // Décès
+    $this->getDeces($node, $newPatient);
 
     // Mapping de l'INS-C
     if ($data && array_key_exists("INSC", $data["personIdentifiers"])) {
@@ -632,6 +639,20 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
   function getRangNaissance(DOMNode $node, CPatient $newPatient) {
     if ($rang_naissance = $this->queryTextNode("PID.25", $node)) {
       $newPatient->rang_naissance = $rang_naissance;
+    }
+  }
+
+  /**
+   * Get patient death datetime
+   *
+   * @param DOMNode  $node       Node
+   * @param CPatient $newPatient Person
+   *
+   * @return void
+   */
+  function getDeces(DOMNode $node, CPatient $newPatient) {
+    if ($deces = $this->queryTextNode("PID.29/TS.1", $node)) {
+      $newPatient->deces = mbDate($deces);
     }
   }
 
