@@ -8,7 +8,7 @@
 </tr>
   <tr>
     <th>{{mb_label object=$sejour field=assurance_maladie}}</th>
-    {{mb_include module=cabinet template="inc_vw_assurances_patient" object=$sejour name="assurance_maladie"}}
+    {{mb_include module=cabinet template="inc_vw_assurances_patient" object=$sejour name="assurance_maladie" colspan="3"}}
   </tr>
 <tr>
   <th>{{mb_label object=$sejour field="rques_assurance_maladie"}}</th>
@@ -18,7 +18,7 @@
 </tr>
   <tr>
     <th>{{mb_label object=$sejour field=assurance_accident}}</th>
-      {{mb_include module=cabinet template="inc_vw_assurances_patient" object=$sejour name="assurance_accident"}}
+      {{mb_include module=cabinet template="inc_vw_assurances_patient" object=$sejour name="assurance_accident" colspan="3"}}
   </tr>
 <tr>
   <th>{{mb_label object=$sejour field="rques_assurance_accident"}}</th>

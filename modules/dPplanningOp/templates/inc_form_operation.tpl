@@ -479,13 +479,13 @@ refreshFunction = function(chir_id) {
   </tr>
   {{/if}}
   
-  <tr>
-    <th>{{mb_label object=$op field="conventionne"}}</th>
-    <td colspan="2">
-      {{mb_field object=$op field="conventionne" typeEnum="checkbox"}}
-    </td>
-  </tr>
-  {{if $conf.dPplanningOp.COperation.show_montant_dp}}
+  {{if $conf.dPplanningOp.COperation.show_montant_dp}}  
+    <tr>
+      <th>{{mb_label object=$op field="conventionne"}}</th>
+      <td colspan="2">
+        {{mb_field object=$op field="conventionne" typeEnum="checkbox"}}
+      </td>
+    </tr>
     <tr>
       <td class="text">{{mb_label object=$op field="depassement"}}</td>
       <td class="text">{{mb_label object=$op field="forfait"}}</td>
@@ -509,15 +509,15 @@ refreshFunction = function(chir_id) {
         {{mb_field object=$op field="info" typeEnum="checkbox"}}
       </td>
     </tr>
-  {{/if}}
   
-  {{if "reservation"|module_active}}
-    <tr>
-      <th></th>
-      <td>
-        {{mb_include module="reservation" template="inc_button_examen" form="editOp"}}
-      </td>
-    </tr>
+    {{if "reservation"|module_active}}
+      <tr>
+        <th></th>
+        <td>
+          {{mb_include module="reservation" template="inc_button_examen" form="editOp"}}
+        </td>
+      </tr>
+    {{/if}}
   {{/if}}
 </table>
 

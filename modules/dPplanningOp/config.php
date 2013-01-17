@@ -99,6 +99,9 @@ $dPconfig["dPplanningOp"]= array(
     "easy_isolement"     => "0",
     "show_cmu_ald"       => "1",
     "show_days_duree"    => "0",
+    "show_isolement"     => "1",
+    "show_chambre_part"  => "1",
+    "show_facturable"    => "1"
   ),
 );
 
