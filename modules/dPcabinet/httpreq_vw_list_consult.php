@@ -95,6 +95,12 @@ foreach ($listPlage as &$plage) {
   }
 }
 
+// Récupération de la date du jour si $date
+$current_date = null;
+if ($date != mbDate()) {
+  $current_date = mbDate();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -111,6 +117,7 @@ $smarty->assign("canCabinet"  , CModule::getCanDo("dPcabinet"));
 $smarty->assign("current_m", $current_m);
 $smarty->assign("fixed_width", CValue::get("fixed_width", "0"));
 $smarty->assign("mode_urgence", false);
+$smarty->assign("current_date", $current_date);
 
 $smarty->display("inc_list_consult.tpl");
 

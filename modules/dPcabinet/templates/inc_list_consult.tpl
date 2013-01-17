@@ -30,7 +30,12 @@ Main.add( function () {
   <table class="form">
     <tr>
       <td colspan="6" style="text-align: left; width: 100%; font-weight: bold; height: 20px;">
-        <div style="float: right;">{{$hour|date_format:$conf.time}}</div>
+        <div style="float: right;">
+          {{if $current_date}}
+            {{$current_date|date_format:"%d/%m/%Y"}}
+          {{/if}}
+          {{$hour|date_format:$conf.time}}
+        </div>
         {{$date|date_format:$conf.longdate}}
         {{if $canCabinet->read}}
         <input type="hidden" name="date" class="date" value="{{$date}}" onchange="this.form.submit()" />
