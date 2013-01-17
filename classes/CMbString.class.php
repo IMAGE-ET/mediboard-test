@@ -495,10 +495,11 @@ abstract class CMbString {
    */
   static function htmlToText($html, $encoding = "ISO-8859-1") {
     $text = str_replace("<br />", "\n", $html);
-    $text = str_replace("&nbsp;", "", $text);
+    $text = str_replace("&nbsp;", " ", $text);
     $text = strip_tags($text);
     $text = html_entity_decode($text, ENT_QUOTES, $encoding);
-
+    $text = preg_replace('/[[:blank:]]{2,}/U', ' ', $text);
+    $text = preg_replace('/(\n[[:blank:]]*){2,}/U', "\n", $text);
     return $text;
   }
 }
