@@ -39,7 +39,7 @@ function tagCallback(){
       </form>
     </td>
   </tr>
-  
+
   {{foreach from=$fusionCim item=curr_code key=curr_key name="fusion"}}
   <tr>
     <td class="narrow">
@@ -47,8 +47,8 @@ function tagCallback(){
         <form name="delFavoris-{{$curr_key}}" action="?" method="post"
               onsubmit="return onSubmitFormAjax(this, function(){location.reload()})">
           {{mb_class class=CFavoriCIM10}}
-          <input type="hidden" name="del" value="{{$curr_code->_favoris_id}}" />
-          <input type="hidden" name="favoris_id" value="1" />
+          <input type="hidden" name="del" value="1" />
+          <input type="hidden" name="favoris_id" value="{{$curr_code->_favoris_id}}" />
           <button class="trash notext compact" type="submit">Retirer de mes favoris</button>
         </form>
       {{/if}}
