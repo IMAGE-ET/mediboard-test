@@ -13,7 +13,7 @@
             <description>Guarantor Number</description>
             <datatype>CX</datatype>
         </field>
-        <field minOccurs="1" maxOccurs="unbounded" length="250">
+        <field minOccurs="0" maxOccurs="unbounded" length="250">
             <name>GT1.3</name>
             <description>Guarantor Name</description>
             <datatype>XPN</datatype>

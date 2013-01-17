@@ -13,7 +13,7 @@
             <description>Allergen Type Code</description>
             <datatype>CE</datatype>
         </field>
-        <field minOccurs="1" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="0">
             <name>AL1.3</name>
             <description>Allergen Code/Mnemonic/Description</description>
             <datatype>CE</datatype>
