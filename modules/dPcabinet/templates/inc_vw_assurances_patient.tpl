@@ -1,4 +1,4 @@
-<td>
+<td colspan="{{if isset($colspan|smarty:nodefaults)}}{{$colspan}}{{/if}}">
   <select name="{{$name}}" style="width: 15em;" {{if $object->_class == "CFactureConsult"}}onchange="return onSubmitFormAjax(this.form);"{{/if}}>
     <option value="" {{if !$object->$name}}selected="selected" {{/if}}>&mdash; Choisir une assurance</option>
     {{foreach from=$patient->_ref_correspondants_patient item=_assurance}}
