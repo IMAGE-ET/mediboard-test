@@ -81,7 +81,7 @@ class CSalle extends CMbObject {
     );
     $this->_view = '';
     if ($bloc->countList($where) > 1) {
-      $this->_view = $bloc->nom.' &ndash; ';
+      $this->_view = $bloc->nom.' - ';
     }
     $this->_view .= $this->nom;
     $this->_shortview = $this->nom;
