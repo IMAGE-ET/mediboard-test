@@ -651,6 +651,7 @@ class CSejour extends CCodable implements IPatientRelated {
     }
     */
     if ($this->_protocole_prescription_chir_id) {
+      $prescription->_dhe_mode = true;
       $prescription->applyPackOrProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, mbDate(), null, $operation_id, null);
     }
   }
