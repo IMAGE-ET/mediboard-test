@@ -20,12 +20,13 @@ class CHL7v2SegmentPID_FR extends CHL7v2SegmentPID {
   /**
    * Fill other identifiers
    *
-   * @param array    &$identifiers Identifiers
-   * @param CPatient $patient      Person
+   * @param array         &$identifiers Identifiers
+   * @param CPatient      $patient      Person
+   * @param CInteropActor $actor        Interop actor
    *
    * @return null
    */
-  function fillOtherIdentifiers(&$identifiers, CPatient $patient) {
+  function fillOtherIdentifiers(&$identifiers, CPatient $patient, CInteropActor $actor = null) {
     if ($patient->INSC) {
       $identifiers[] = array(
         $patient->INSC,
@@ -38,14 +39,16 @@ class CHL7v2SegmentPID_FR extends CHL7v2SegmentPID {
         mbDate($patient->INSC_date)
       );
     }
-    
-    $identifiers[] = array(
-      $patient->_id,
-      null,
-      null,
-      // PID-3-4 Autorité d'affectation
-      $this->getAssigningAuthority("mediboard"),
-      "RI"
-    );
+
+    if ($actor->_configs["send_own_identifier"]) {
+      $identifiers[] = array(
+        $patient->_id,
+        null,
+        null,
+        // PID-3-4 Autorité d'affectation
+        $this->getAssigningAuthority("mediboard"),
+        "RI"
+      );
+    }
   }
 }

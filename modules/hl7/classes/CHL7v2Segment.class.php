@@ -325,12 +325,12 @@ class CHL7v2Segment extends CHL7v2Entity {
       );
     }
 
-    $this->fillOtherIdentifiers($identifiers, $patient);
+    $this->fillOtherIdentifiers($identifiers, $patient, $actor);
     
     return $identifiers;
   }
 
-  function fillOtherIdentifiers(&$identifiers, CPatient $patient) {
+  function fillOtherIdentifiers(&$identifiers, CPatient $patient, CInteropActor $actor = null) {
     
   }
   

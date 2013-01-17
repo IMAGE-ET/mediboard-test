@@ -378,20 +378,23 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
   /**
    * Fill other identifiers
    *
-   * @param array    &$identifiers Identifiers
-   * @param CPatient $patient      Person
+   * @param array         &$identifiers Identifiers
+   * @param CPatient      $patient      Person
+   * @param CInteropActor $actor        Interop actor
    *
    * @return null
    */
-  function fillOtherIdentifiers(&$identifiers, CPatient $patient) {
-    $identifiers[] = array(
-      $patient->_id,
-      null,
-      null,
-      // PID-3-4 Autorité d'affectation
-      $this->getAssigningAuthority("mediboard"),
-      "RI"
-    );
+  function fillOtherIdentifiers(&$identifiers, CPatient $patient, CInteropActor $actor = null) {
+    if ($actor->_configs["send_own_identifier"]) {
+      $identifiers[] = array(
+        $patient->_id,
+        null,
+        null,
+        // PID-3-4 Autorité d'affectation
+        $this->getAssigningAuthority("mediboard"),
+        "RI"
+      );
+    }
   }
 }
 ?>

@@ -268,7 +268,8 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     // N - Ce n'était pas la dernière venue pour ce dossier administratif
     if ($event->code == "A03" || $event->code == "Z99") {
       $data[] = ($sejour->type != "seances" && $sejour->sortie_reelle) ? "D" : "N";
-    } else {
+    }
+    else {
       $data[] = null;
     }
     

@@ -332,7 +332,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
             
             return $exchange_ihe->setAckAR($ack, "E230", $comment, $newVenue);
           }
-          $code_NDA = "I224"; 
+          $code_NDA = "I224";
         }
         // RI non connu
         else {
@@ -1429,6 +1429,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       case 'service':
         $newVenue->service_id = CIdSante400::getMatch("CService", $sender->_tag_service, $PV1_10)->object_id;
         break;
+
       // Discipline médico-tarifaire
       default:
         $newVenue->discipline_id = $PV1_10;
