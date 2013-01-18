@@ -6,14 +6,14 @@
 {{/if}}
 
 function reloadDiagnostic(sejour_id, modeDAS) {
-  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
+  var url = new Url('salleOp', 'httpreq_diagnostic_principal');
   url.addParam("sejour_id", sejour_id);
   url.addParam("modeDAS", modeDAS);
   url.requestUpdate("cim");
 }
 
 function printAllDocs() {
-  var url = new Url("dPcabinet", "print_select_docs");
+  var url = new Url('cabinet', 'print_select_docs');
   url.addElement(document.editFrmFinish.consultation_id);
   url.popup(700, 500, "printDocuments");
 }
@@ -39,6 +39,6 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td id="listConsult" style="width: 240px;"></td>
-    <td>{{mb_include template=inc_full_consult}}</td>
+    <td>{{mb_include module=cabinet template=inc_full_consult}}</td>
   </tr>
 </table>
