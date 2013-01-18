@@ -13,7 +13,7 @@
 <table class="tbl">
   <tr class="clear">
     <th colspan="{{if $_coordonnees}}13{{else}}12{{/if}}">
-      <h1>
+      <h1 class="no-break">
         <a href="#" onclick="window.print()">
           Planning du {{$filter->_date_min|date_format:$conf.date}}
           {{if $filter->_date_min != $filter->_date_max}}
@@ -73,7 +73,7 @@
     {{assign var="col1" value=$conf.dPbloc.CPlageOp.planning.col1}}
     {{assign var="col2" value=$conf.dPbloc.CPlageOp.planning.col2}}
     {{assign var="col3" value=$conf.dPbloc.CPlageOp.planning.col3}}
- 
+
     {{assign var=suffixe value="_title.tpl"}}
     {{include file=inc_planning/$col1$suffixe}}
     {{include file=inc_planning/$col2$suffixe}}

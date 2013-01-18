@@ -43,7 +43,7 @@ function showLegend() {
 <table class="main" id="suivi-salles">
   <tr class="only-printable">
     <th colspan="100">
-      <h1>{{$date_suivi|date_format:$conf.longdate}}</h1>
+      <h1 class="no-break">{{$date_suivi|date_format:$conf.longdate}}</h1>
     </th>
   </tr>
   <tr class="not-printable">
@@ -52,11 +52,11 @@ function showLegend() {
       <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
       <button type="button" onclick="printAnapath();" class="print" style="float: right;">{{tr}}COperation-anapath{{/tr}}</button>
       <button type="button" onclick="printBacterio();" class="print" style="float: right;">{{tr}}COperation-bacterio{{/tr}}</button>
-      
+
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
-        
+
         <select name="bloc_id" onchange="this.form.submit()">
         {{foreach from=$listBlocs item=curr_bloc}}
           <option value="{{$curr_bloc->_id}}" {{if $curr_bloc->_id == $bloc->_id}}selected="selected"{{/if}}>
