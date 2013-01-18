@@ -10,7 +10,7 @@
 
 {{mb_default var=lite_view value=false}}
 {{mb_default var=show_full_affectation value=false}}
-
+{{mb_default var=default_tab value=""}}
 {{assign var=patient value=$sejour->_ref_patient}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
 {{if ($service_id && $service_id != "NP") || $show_affectation || $function->_id || $praticien->_id}}
@@ -41,7 +41,7 @@
     {{assign var=statut value="sorti"}}
   {{/if}}
   
-  {{mb_include module=ssr template=inc_view_patient statut=$statut onclick="showDossierSoins('`$sejour->_id`','$date');"}}
+  {{mb_include module=ssr template=inc_view_patient statut=$statut onclick="showDossierSoins('`$sejour->_id`','$date', '$default_tab');"}}
 </td>
 <td>
   {{if "dPImeds"|module_active}}

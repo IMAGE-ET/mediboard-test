@@ -143,7 +143,7 @@ foreach($prescriptions as $_prescription){
  
   $sejour->loadRefPraticien();
   $sejour->checkDaysRelative(mbDate());
-  $sejour->loadSurrAffectations();
+  $sejour->loadSurrAffectations($date_min);
   $sejour->loadNDA();
     
   if ($_prescription->_id) {
@@ -166,6 +166,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("prescriptions", $prescriptions);
 $smarty->assign("board"        , $board);
 $smarty->assign("date", $date_min);
+$smarty->assign("default_tab", "prescription_sejour");
 $smarty->display('inc_vw_bilan_list_prescriptions.tpl');
 
 ?>

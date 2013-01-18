@@ -39,7 +39,7 @@
     {{assign var=patient value=$_prescription->_ref_patient}}
   {{if $board}}
   <tr>
-    {{mb_include module=soins template=inc_vw_sejour lite_view=true prescription=$_prescription service_id="" show_affectation=true}}
+    {{mb_include module=soins template=inc_vw_sejour lite_view=true prescription=$_prescription service_id="" show_affectation=true show_full_affectation=true}}
     </tr>
   {{else}}
   <tr>
