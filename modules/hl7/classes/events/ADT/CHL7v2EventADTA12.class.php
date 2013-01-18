@@ -67,14 +67,17 @@ class CHL7v2EventADTA12 extends CHL7v2EventADT implements CHL7EventADTA12 {
     // Build specific segments (i18n)
     $this->buildI18nSegments($sejour);
   }
-  
+
   /**
+   * Build i18n segements
+   *
+   * @param CSejour $sejour Admit
+   *
    * @see parent::buildI18nSegments()
+   *
+   * @return void
    */
-  function buildI18nSegments($affectation) {
-    $sejour                       = $affectation->_ref_sejour;
-    $sejour->_ref_hl7_affectation = $affectation;
-    
+  function buildI18nSegments($sejour) {
     // Movement segment only used within the context of the "Historic Movement Management"
     if ($this->_receiver->_configs["iti31_historic_movement"]) {
       $this->addZBE($sejour);

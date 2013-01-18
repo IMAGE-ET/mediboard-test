@@ -31,7 +31,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "assigning_authority_universal_id",
     "assigning_authority_universal_type_id",
     
-    // Encoding
+    // Format
     "encoding",
     "strict_segment_terminator",
     "segment_terminator",
@@ -57,24 +57,26 @@ class CHL7Config extends CExchangeDataFormatConfig {
   
   var $hl7_config_id = null;
 
-  // Object configs
+  // Actor Options
   var $iti30_option_merge       = null;
   var $iti30_option_link_unlink = null;
-  
   var $iti31_in_outpatient_emanagement           = null;
   var $iti31_pending_event_management            = null;
   var $iti31_advanced_encounter_management       = null;
   var $iti31_temporary_patient_transfer_tracking = null;
   var $iti31_historic_movement                   = null;
-  
+
+  // Application
   var $assigning_authority_namespace_id      = null;
   var $assigning_authority_universal_id      = null;
   var $assigning_authority_universal_type_id = null;
-  
-  var $encoding      = null;
+
+  // Format
+  var $encoding                  = null;
   var $strict_segment_terminator = null;
-  var $segment_terminator = null;
-  
+  var $segment_terminator        = null;
+
+  // Handle
   var $handle_mode             = null;
   var $handle_NDA              = null;
   var $handle_telephone_number = null;
@@ -84,11 +86,13 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $handle_PV1_14           = null;
   var $handle_PV1_36           = null;
   var $handle_NSS              = null;
-  
+
+  // Purge
   var $purge_idex_movements = null;
-  
-  var $repair_patient = null;
-  var $control_date   = null;
+
+  // Auto repair
+  var $repair_patient       = null;
+  var $control_date         = null;
   
   var $_categories = array(
     "format" => array(

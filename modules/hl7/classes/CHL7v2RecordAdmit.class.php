@@ -404,7 +404,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $affectation = $return_affectation;
     
     // Affectation de l'affectation au mouvement
-    if ($affectation && $affectation->_id) {
+    if ($movement && $affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
       $movement->store();
     }
@@ -821,7 +821,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $affectation = $return_affectation;
     
     // Attribution de l'affectation au mouvement
-    if ($affectation && $affectation->_id) {
+    if ($movement && $affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
       $movement->store();
     }
@@ -907,10 +907,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function mapAndStoreAffectation(CHL7Acknowledgment $ack, CSejour $newVenue, $data, CMovement $movement = null) {
-    if (!$movement) {
-      return;
-    }
-
     $PV1_3 = $this->queryNode("PV1.3", $data["PV1"]);
         
     $affectation = new CAffectation();
@@ -924,6 +920,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     switch ($event_code) {
       // Cas d'une suppression de mutation
       case "A12" :
+        if (!$movement) {
+          return;
+        }
+
         $affectation->load($movement->affectation_id);
         if (!$affectation->_id) {
           return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
@@ -939,6 +939,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
       // Annulation admission
       case "A11" :
+        if (!$movement) {
+          return;
+        }
+
         $affectation =  $newVenue->getCurrAffectation($datetime);
 
         // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
@@ -982,6 +986,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
       // Cas modification
       case "Z99" :
+        if (!$movement) {
+          return;
+        }
+
         $affectation =  $newVenue->getCurrAffectation($datetime);
         // Si on le mouvement n'a pas d'affectation associée, et que l'on a déjà une affectation dans MB
         if (!$movement->affectation_id && $affectation->_id) {
@@ -1214,28 +1222,39 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function getPL(DOMNode $node, CAffectation $affectation) {
     $sender = $this->_ref_sender;
-    
-    $code_uf     = $this->queryTextNode("PL.1", $node);    
-    $nom_lit     = $this->queryTextNode("PL.3", $node);
-    
-    $lit = new CLit();
-    
+
+    // Récupération de la chambre
+    $nom_chambre = $this->queryTextNode("PL.2", $node);
+    $chambre     = new CChambre();
+
     // Récupération du lit
+    $nom_lit = $this->queryTextNode("PL.3", $node);
+    $lit     = new CLit();
+
     switch ($sender->_configs["handle_PV1_3"]) {
       // idex du service
       case 'idex':
+        $chambre_id = CIdSante400::getMatch("CChambre", $sender->_tag_chambre, $nom_chambre)->object_id;
+        $chambre->load($chambre_id);
+
         $lit_id = CIdSante400::getMatch("CLit", $sender->_tag_lit, $nom_lit)->object_id;
         $lit->load($lit_id);
-        
+
         break;
       // Dans tous les cas le nom du lit est celui que l'on reçoit du flux
       default:
+        $chambre->nom = $nom_chambre;
+        $chambre->loadMatchingObjectEsc();
+
         $lit->nom = $nom_lit;
+        if ($chambre->_id) {
+          $lit->chambre_id = $chambre->_id;
+        }
         $lit->loadMatchingObjectEsc();
         
         break; 
     }
-        
+
     // Affectation du lit
     $affectation->lit_id = $lit->_id;
     
@@ -1244,6 +1263,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $affectation->service_id = $lit->loadRefService()->_id;
     }
 
+    $code_uf     = $this->queryTextNode("PL.1", $node);
     // Affectation de l'UF hébergement
     $uf = CUniteFonctionnelle::getUF($code_uf);
     $affectation->uf_hebergement_id = $uf->_id;
@@ -1432,8 +1452,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
       // Discipline médico-tarifaire
       default:
-        $newVenue->discipline_id = $PV1_10;
-        break; 
+        $discipline = new CDiscipline();
+        $discipline->load($PV1_10);
+
+        $newVenue->discipline_id = $discipline->_id;
+        break;
     }
   }
   
@@ -1589,6 +1612,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $newVenue->sortie_prevue = $sortie_prevue;
     }
     elseif (!$sortie_prevue && !$newVenue->sortie_prevue) {
+      mbLog($newVenue->type);
+
       $newVenue->sortie_prevue = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00", 
                     $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue);
     } 

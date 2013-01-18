@@ -334,7 +334,11 @@ class CHL7v2Segment extends CHL7v2Entity {
     
   }
   
-  function getXCN9(CMbObject $object, CIdSante400 $id400 = null, CInteropActor $actor = null) {
+  function getXCN9(CMbObject $object, CIdSante400 $id400 = null, CInteropReceiver $actor = null) {
+    if (!$actor->_configs["send_assigning_authority"]) {
+      return;
+    }
+
     // Autorité d'affectation de l'ADELI
     if ($object->adeli) {
       return $this->getAssigningAuthority("ADELI");

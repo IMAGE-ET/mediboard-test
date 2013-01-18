@@ -66,11 +66,12 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     // Query Parameter Definition
     $this->addQPD();
 
+    $i = 0;
     foreach ($object->objects as $_object) {
       if ($_object instanceof CPatient) {
-        $this->addPID($_object);
+        $this->addPID($_object, $i);
 
-
+        $i++;
       }
     }
   }
@@ -101,13 +102,13 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
   /**
    * Represents an HL7 QAK message segment (Query Acknowledgment)
    *
-   * @param array $results Results
+   * @param array $objects Objects
    *
    * @return void
    */
   function addQAK($objects = array()) {
     $QAK = CHL7v2Segment::create("QAK", $this->message);
-    $QAK->_objects = $objects;
+    $QAK->objects = $objects;
     $QAK->build($this);
   }
 
@@ -125,13 +126,14 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
    * Represents an HL7 PID message segment (Patient Identification)
    *
    * @param CPatient $patient Patient
+   * @param string   $set_id  Set ID
    *
    * @return void
    */
-  function addPID(CPatient $patient) {
+  function addPID(CPatient $patient, $set_id) {
     $PID = CHL7v2Segment::create("PID", $this->message);
     $PID->patient = $patient;
-    $PID->set_id  = 1;
+    $PID->set_id  = $set_id;
     $PID->build($this);
   }
   
