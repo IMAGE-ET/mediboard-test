@@ -17,11 +17,16 @@ CApp::rip(); // Pour eviter les mauvaises surprises, supprimer cette ligne pour 
 CCanDo::checkAdmin();
 
 $query = <<<SQL
-SELECT user_log_id, object_id FROM user_log WHERE
-  object_class = 'CSejour' AND
-  extra     LIKE '%"entree_reelle":""%' AND
-  extra     LIKE '%"etablissement_entree_id":%'AND
-  extra NOT LIKE '%"etablissement_entree_id":""%'
+SELECT user_log_id, object_id
+FROM user_log
+LEFT JOIN sejour ON sejour.sejour_id = user_log.object_id
+WHERE
+  sejour.mode_entree != '7' AND
+  user_log.object_class = 'CSejour' AND
+  user_log.extra     LIKE '%"entree_reelle":""%' AND
+  user_log.extra     LIKE '%"etablissement_entree_id":%'AND
+  user_log.extra NOT LIKE '%"etablissement_entree_id":""%'
+  LIMIT 50
 SQL;
 
 $ds = CSQLDataSource::get("std");
@@ -36,10 +41,13 @@ foreach ($logs as $_log) {
   /** @var CSejour $sejour */
   $sejour = $user_log->loadTargetObject();
   $sejour->etablissement_entree_id = $values["etablissement_entree_id"];
-  $sejour->mode_entree = "transfert";
+  $sejour->mode_entree = "7"; // transfert
 
   if ($msg = $sejour->store()) {
     CAppUI::setMsg($msg, UI_MSG_WARNING);
+  }
+  else {
+    CAppUI::setMsg("Etablissement d'entrée rétabli", UI_MSG_OK);
   }
 }
 
