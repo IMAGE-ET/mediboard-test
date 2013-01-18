@@ -18,8 +18,8 @@ updateActes = function() {
   url.requestUpdate("actes_non_cotes");
 }
 
-updateNbActes = function() {
-  return false;
+updateNbActes = function(nb) {
+  $('nb_actes').update('('+nb+')');
 }
 
 Main.add(function () {

@@ -278,8 +278,16 @@ class CCodable extends CMbObject {
     return null;
   }
   
-  function countActes() {
-    $this->_count_actes = $this->countBackRefs("actes_ngap") + $this->countBackRefs("actes_ccam") + $this->countBackRefs("actes_tarmed") + $this->countBackRefs("actes_caisse");
+  function countActes($user_id = null) {
+    $where = array();
+    if($user_id) {
+      $where["executant_id"] = "= '$user_id'";
+    }
+    $this->_count_actes = 0;
+    $this->_count_actes += $this->countBackRefs("actes_ngap", $where);
+    $this->_count_actes += $this->countBackRefs("actes_ccam", $where);
+    $this->_count_actes += $this->countBackRefs("actes_tarmed", $where);
+    $this->_count_actes += $this->countBackRefs("actes_caisse", $where);
   }
 
   function correctActes() {
