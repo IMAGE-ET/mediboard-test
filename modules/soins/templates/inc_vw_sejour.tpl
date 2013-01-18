@@ -43,13 +43,15 @@
   
   {{mb_include module=ssr template=inc_view_patient statut=$statut onclick="showDossierSoins('`$sejour->_id`','$date', '$default_tab');"}}
 </td>
+
+
+{{if "dPImeds"|module_active}}
 <td>
-  {{if "dPImeds"|module_active}}
     <span onclick="showDossierSoins('{{$sejour->_id}}','{{$date}}','Imeds');">
     {{mb_include module=Imeds template=inc_sejour_labo link="#"}}
     </span>
-  {{/if}}
 </td>
+{{/if}}
 
 {{if !$lite_view}}
 <td style="text-align: center;">

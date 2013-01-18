@@ -19,7 +19,9 @@
     <tr>
       <th rowspan="2" class="title narrow">{{mb_title class=CLit field=chambre_id}}</th>
       <th colspan="2" rowspan="2" class="title">{{mb_title class=CPatient field=nom}}<br />({{mb_title class=CPatient field=nom_jeune_fille}})</th>
-      <th rowspan="2" class="title">Labo</th>
+      {{if "dPImeds"|module_active}}
+        <th rowspan="2" class="title">Labo</th>
+      {{/if}}
       <th colspan="2" class="title">Alertes</th>
       <th rowspan="2" class="narrow title">{{mb_title class=CSejour field=entree}}</th>
       <th rowspan="2" class="title">{{mb_title class=CSejour field=libelle}}</th>
