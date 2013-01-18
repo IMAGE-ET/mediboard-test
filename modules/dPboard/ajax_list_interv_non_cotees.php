@@ -72,6 +72,7 @@ foreach ($interventions as $key => $_interv) {
   
   // Aucun acte prévu ou coté
   if(!count($codes_ccam) && !$_interv->_count_actes) {
+    $_interv->loadRefSejour();
     $_interv->loadRefPlageOp();
     $_interv->loadRefChir()->loadRefFunction();
     $_interv->loadRefAnesth()->loadRefFunction();
@@ -109,6 +110,7 @@ foreach ($interventions as $key => $_interv) {
     $where["executant_id"] = "= '$user->_id'";
   }
   $_interv->_actes_non_cotes = $nbCodes - $nb_actes_ccam;
+  $_interv->loadRefSejour();
   $_interv->loadRefPlageOp();
   $_interv->loadRefChir()->loadRefFunction();
   $_interv->loadRefAnesth()->loadRefFunction();

@@ -23,7 +23,7 @@
     <th>{{mb_title class=CSejour      field=patient_id}}</th>
     <th>{{mb_title class=CSejour      field=libelle}}</th>
     {{if $praticien->_is_anesth}}
-      <th>{{mb_title class=CSejour      field=praticien_id}}</th>
+      <th>{{mb_title class=CSejour    field=praticien_id}}</th>
     {{/if}}
   </tr>
   {{foreach from=$listSejours item=curr_sejour}}

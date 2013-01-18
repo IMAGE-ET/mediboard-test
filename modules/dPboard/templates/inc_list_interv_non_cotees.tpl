@@ -22,9 +22,13 @@
       {{/if}}
       <td class="narrow">
         {{assign var=patient value=$_interv->_ref_patient}}
-        <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}')">
-          {{$patient}}
-        </span>
+        {{assign var=sejour  value=$_interv->_ref_sejour}}
+        <a href="{{$patient->_dossier_cabinet_url}}">
+          <strong class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}}"
+            onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
+            {{$patient}}
+          </strong>
+        </a>
       </td>
       <td class="text">
         <a href="#1" onclick="Operation.dossierBloc('{{$_interv->_id}}', updateActes); return false;">
