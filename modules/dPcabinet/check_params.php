@@ -16,8 +16,19 @@ $date_max = mbDate("+6 weeks");
 
 $criteres = array();
 $details = array();
-$praticiens = $user->loadPraticiens(PERM_EDIT, $user->function_id);
+$praticiens = $user->isPraticien() ?
+  array($user) :
+  $user->loadPraticiens(PERM_EDIT, $user->function_id);
+
+if (CModule::getActive("ecap")) {
+  $group = CGroups::loadCurrent();
+  $cidc = $group->loadLastId400("ecap")->id400;
+  CAppUI::stepAjax("Problème d'accès au service web ecap", UI_MSG_WARNING);
+}
+  
 foreach ($praticiens as $_praticien) {
+  $_praticien->loadRefFunction()->loadRefGroup();
+  
   //----- Level 1
   // Plages de consultations
   $where = array();
@@ -30,13 +41,16 @@ foreach ($praticiens as $_praticien) {
   $idex = CIdSante400::getLatestFor($_praticien->_ref_user, "ldap");
   $criteres["level1"]["ldap"][$_praticien->_id] = $idex->_id ? true : false;
 
-  // Identifiants CPRT
-  $idex = CIdSante400::getLatestFor($_praticien, "CPRT");
-  $criteres["level1"]["cprt"][$_praticien->_id] = $idex->_id ? true : false;
-
-  // Paramétrage eCap (appel d'un web service)
-  $criteres["level1"]["ecap"][$_praticien->_id] = $criteres["level1"]["cprt"][$_praticien->_id];
-
+  // Critères eCap
+  if (CModule::getActive("ecap")) {
+    // Identifiants CPRT
+    $idex = CIdSante400::getLatestFor($_praticien, "eCap CIDC:$cidc");
+    $criteres["level1"]["cprt"][$_praticien->_id] = $idex->_id ? true : false;
+  
+    // Paramétrage eCap (appel d'un web service)
+    $criteres["level1"]["ecap"][$_praticien->_id] = null;
+  }
+  
   // Vue offline paramétrée et accessible
   $criteres["level1"]["offline"][$_praticien->_id] = false;
 
@@ -121,7 +135,7 @@ foreach ($praticiens as $_praticien) {
   
   $criteres["level2"]["patient_count"][$_praticien->_id] = $patient_count;
 }
-
+ 
 // Création du template
 $smarty = new CSmartyDP();
 

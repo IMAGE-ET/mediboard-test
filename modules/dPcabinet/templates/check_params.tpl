@@ -12,43 +12,56 @@ Main.add(function() {
 
 <h1>Contexte cabinet</h1>
 
+{{assign var=type value=$user->_user_type}}
+{{if $user->isPraticien() || $user->isSecretaire()}}
+<div class="small-success">
+  Vous êtes connecté en tant que 
+  <strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$user}}</strong>
+  utilisateur de type <strong>{{$utypes.$type}}</strong>
+</div>
+{{else}}
 <div class="small-warning">
   Vous êtes connecté en tant que 
   <strong>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$user}}</strong>
-  utilisateur de type 
-  <strong>
-  {{assign var=type value=$user->_user_type}}
-  {{$utypes.$type}}
-  </strong>
+  utilisateur de type <strong>{{$utypes.$type}}</strong>
   <!-- Traduire -->
   (ni praticien ni secrétaire)
 </div>
+{{/if}}
 
+{{assign var=function value=$user->_ref_function}}
+{{if $function->type == "cabinet"}}
+<div class="small-success">
+  Vous êtes associé à la fonction 
+  <strong>{{mb_include module=mediusers template=inc_vw_function function=$function}}</strong>
+  de type <strong>{{mb_value object=$function field=type}}</strong>
+</div>
+{{else}}
 <div class="small-warning">
   Vous êtes associé à la fonction 
-  {{assign var=function value=$user->_ref_function}}
   <strong>{{mb_include module=mediusers template=inc_vw_function function=$function}}</strong>
-  de type
-  <strong>
-  {{mb_value object=$function field=type}}
-  </strong>
+  de type <strong>{{mb_value object=$function field=type}}</strong>
   <!-- Traduire -->
-  (devrait être de type Médical)
+  (devrait être de type Cabinet)
 </div>
+{{/if}}
 
-<div class="small-success">
-  Vous avez accès à 
-  <strong>{{$praticiens|@count}}</strong>
+{{if !$user->isPraticien() }}
+<div class="small-info">
+  Vous avez accès à <strong>{{$praticiens|@count}}</strong>
   praticiens dans cette fonction
 </div>
+{{/if}}
 
 <h1>Utilisation fonctionnelle</h1>
 
+<div style="height: 480px; overflow: auto;">
+  
 <table class="tbl">
   <tr>
     <th>Critère</th>
     {{foreach from=$praticiens item=_praticien}}
-    <th style="width: 200px;">
+    <th class="text" style="width: 200px;">
       {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_praticien}}
     </th>
     {{/foreach}}
@@ -70,6 +83,11 @@ Main.add(function() {
       {{foreach from=$_values key=_prat_id item=_value}}
       {{assign var=value value=$_value|smarty:nodefaults}}
   
+      {{if $_value === null}}
+      <td style="width: 200px; text-align: center" class="error">
+        Vérification impossible
+      </td>
+      {{else}} 
       <td style="width: 200px; text-align: center" class="{{$_value|ternary:'ok':'warning'}}">
         {{if is_bool($_value|smarty:nodefaults)}}
           {{if @$details[$_level][$_critere][$_prat_id]}} 
@@ -84,6 +102,7 @@ Main.add(function() {
           {{$_value}}
         {{/if}}    
       </td>
+      {{/if}}
       {{/foreach}}
     </tr>
     {{/foreach}}
@@ -94,3 +113,4 @@ Main.add(function() {
   
 </table>
 
+</div>

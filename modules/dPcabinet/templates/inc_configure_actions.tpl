@@ -28,18 +28,6 @@
   <tr>
     <td class="button">
       <script type="text/javascript">
-        Consultations = {
-          macroStats: function(button) { 
-            var form = button.form;
-            var url = new Url('cabinet', 'macro_stats');
-            url.addElement(form.period);
-            url.addElement(form.date);
-            url.requestModal(1000, 600);
-          },
-          checkParams: function() {
-            new Url('cabinet', 'check_params').requestModal(800, 600);
-          }
-        };
         Main.add(function() {
           Calendar.regField(getForm("MacroStats").date);
         });
