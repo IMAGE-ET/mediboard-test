@@ -134,12 +134,38 @@ if(!$praticien_id && $user->isPraticien()){
 
 foreach($prescriptions as $_prescription){
   $_prescription->loadRefPatient();
+  
+  $patient = $_prescription->_ref_patient;  
+  $sejour = $_prescription->_ref_object;
+  
+  $patient->loadIPP();
+  $patient->loadRefPhotoIdentite();
+ 
+  $sejour->loadRefPraticien();
+  $sejour->checkDaysRelative(mbDate());
+  $sejour->loadSurrAffectations();
+  $sejour->loadNDA();
+    
+  if ($_prescription->_id) {
+    $_prescription->loadJourOp(mbDate());
+  }
+
+  $patient->loadRefDossierMedical();
+  $dossier_medical = $patient->_ref_dossier_medical;
+  
+  if($dossier_medical->_id){
+    $dossier_medical->loadRefsAllergies();
+    $dossier_medical->loadRefsAntecedents();
+    $dossier_medical->countAntecedents();
+    $dossier_medical->countAllergies();
+  }
 }
 
 // Smarty template
 $smarty = new CSmartyDP();
 $smarty->assign("prescriptions", $prescriptions);
 $smarty->assign("board"        , $board);
+$smarty->assign("date", $date_min);
 $smarty->display('inc_vw_bilan_list_prescriptions.tpl');
 
 ?>
