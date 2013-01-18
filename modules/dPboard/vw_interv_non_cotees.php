@@ -28,7 +28,7 @@ if (!$all_prats) {
 }
 
 $fin   = CValue::getOrSession("fin"  , mbDate());
-$debut = CValue::getOrSession("debut", mbDate("-1 week"));
+$debut = CValue::getOrSession("debut", mbDate("-1 week", $fin));
 
 $smarty = new CSmartyDP;
 

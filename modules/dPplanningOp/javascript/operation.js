@@ -14,10 +14,13 @@ Operation = {
     url.modal({width: 1000, height: 700});
   },
   
-  dossierBloc: function(operation_id) {
+  dossierBloc: function(operation_id, callback) {
     var url = new Url("salleOp", "ajax_vw_operation", "action");
     url.addParam("op", operation_id);
     url.modal({width: 1000, height: 700});
+    if(callback) {
+      url.modalObject.observe("afterClose", callback);
+    }
   },
   
   useModal: function() {

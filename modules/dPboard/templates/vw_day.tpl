@@ -45,7 +45,7 @@ initUpdateListConsults = function() {
   url.addParam("vue2"      , "{{$vue}}");
   url.addParam("selConsult", "");
   url.addParam("board"     , "1");
-  url.periodicalUpdate("consultations", { frequency: 90 } );
+  url.periodicalUpdate("consultations", { frequency: 120 } );
 }
 
 updateListOperations = function() {
@@ -63,7 +63,7 @@ initUpdateListOperations = function() {
   url.addParam("date"    , "{{$date}}");
   url.addParam("urgences", "0");
   url.addParam("board"   , "1");
-  url.periodicalUpdate("operations", { frequency: 90 } );
+  url.periodicalUpdate("operations", { frequency: 120 } );
 }
 
 updateListHospi = function() {
@@ -89,6 +89,7 @@ showDossierSoins = function(sejour_id, date, default_tab){
   }
   url.requestUpdate($('dossier_sejour'));
   modalWindow = modal($('dossier_sejour'));
+  modalWindow.observe("afterClose", updatePrescriptions);
 }
 
 Main.add(function () {

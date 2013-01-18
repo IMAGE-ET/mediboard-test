@@ -27,7 +27,7 @@
         </span>
       </td>
       <td class="text">
-        <a href="#1" onclick="Operation.dossierBloc('{{$_interv->_id}}'); return false;">
+        <a href="#1" onclick="Operation.dossierBloc('{{$_interv->_id}}', updateActes); return false;">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_interv->_guid}}')">
             {{$_interv}}
             {{if !$_interv->_count_actes && !$_interv->_ext_codes_ccam}}

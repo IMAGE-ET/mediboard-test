@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 
-updateListIntervsNonCotees = function() {
+updateActes = function() {
   var url = new Url("board", "ajax_list_interv_non_cotees");
   url.addParam("praticien_id", "{{$chirSel}}");
   url.addParam("all_prats"   , "{{$all_prats}}");
@@ -15,7 +15,7 @@ Main.add(function() {
   var form = getForm('changeDate');
   Calendar.regField(form.debut);
   Calendar.regField(form.fin);
-  updateListIntervsNonCotees();
+  updateActes();
 });
 
 </script>

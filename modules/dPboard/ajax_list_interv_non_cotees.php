@@ -18,7 +18,7 @@ $all_prats = CValue::get("all_prats", 0);
 $board     = CValue::get("board", 0);
 
 $fin   = CValue::getOrSession("fin", mbDate());
-$debut = CValue::getOrSession("debut", mbDate("-1 month"));
+$debut = CValue::getOrSession("debut", mbDate("-1 week", $fin));
 
 $mediuser = CMediusers::get();
 
