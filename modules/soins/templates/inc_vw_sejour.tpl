@@ -15,7 +15,7 @@
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
 {{if ($service_id && $service_id != "NP") || $show_affectation || $function->_id || $praticien->_id}}
   {{assign var=affectation value=$sejour->_ref_curr_affectation}}
-  <td {{if $sejour->isolement}} class="isolement" {{/if}}>
+  <td class="text {{if $sejour->isolement}}isolement{{/if}}">
     {{if $affectation->_id}}
       {{if $show_full_affectation}}
         {{$affectation->_ref_lit->_view}}

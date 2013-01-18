@@ -26,7 +26,7 @@
       <th rowspan="2" class="title">Prat.</th>
     </tr>
     <tr>
-      <th class="title">Allergies</th>
+      <th class="title">All.</th>
       <th class="title"><label title="Antécédents">Atcd</label></th>
     </tr>
   {{else}}
