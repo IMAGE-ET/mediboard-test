@@ -433,7 +433,7 @@ var Url = Class.create({
     
     var viewport = document.viewport.getDimensions();
     options.height = Math.min(viewport.height-50, options.height);
-    options.width = Math.min(viewport.width-50, options.width);
+    options.width  = Math.min(viewport.width -50, options.width );
         
     // Hack
     this.modalObject = Control.Modal.open(new Element("a", {href: options.baseUrl + this.make(questionMark)}), options);
