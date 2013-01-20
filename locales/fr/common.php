@@ -275,6 +275,7 @@ $locales['Stop'] = 'Stop';
 $locales['Submit'] = 'Envoyer';
 $locales['Suggestion'] = 'Suggestion';
 $locales['Summary'] = 'Résumé';
+$locales['Support'] = 'Support';
 $locales['Switch'] = 'Changer';
 $locales['Table'] = 'Table';
 $locales['To'] = 'a';
