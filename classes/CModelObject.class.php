@@ -379,6 +379,34 @@ class CModelObject {
   }
   
   /**
+   * Trigger a warning with appropriate locale and variatic i18n parameters
+   * string $suffix Locale suffix
+   * return void
+   */
+   static function warning($suffix/*, ... */) {
+     $args = func_get_args();
+     unset($args[0]);
+     $backtrace = debug_backtrace();
+     $class = $backtrace[1]["class"];
+     $message = CAppUI::tr("$class-warning-$suffix", $args);
+     trigger_error($message, E_USER_WARNING);
+   }
+
+  /**
+   * Trigger an error with appropriate locale and variatic i18n parameters
+   * string $suffix Locale suffix
+   * return void
+   */
+   static function error($suffix/*, ... */) {
+     $args = func_get_args();
+     unset($args[0]);
+     $backtrace = debug_backtrace();
+     $class = $backtrace[1]["class"];
+     $message = CAppUI::tr("$class-warning-$suffix", $args);
+     trigger_error($message, E_USER_ERROR);
+   }
+  
+  /**
    * Bind an object with an array
    * @param array $hash  associative array of values to match with
    * @param bool  $strip true to strip slashes
