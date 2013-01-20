@@ -46,13 +46,15 @@ Main.add(function () {
     </li>
   {{/if}}
   
-  {{if $can->admin}}
-  <li>
-    <a href="#browser-check" onmouseup="new Url('system', 'browser_check').requestUpdate('browser-check');">
-      {{tr}}Browser{{/tr}}
-    </a>
-  </li>
+  {{if "ecap"|module_active}}
+    <li>
+      {{mb_script module=astreintes script=plage}}
+      <a href="#support" onmouseup="">
+        {{tr}}Support{{/tr}}
+        </a>
+    </li>
   {{/if}}
+
 </ul>
 
 <hr class="control_tabs" />
@@ -75,8 +77,11 @@ Main.add(function () {
 <div id="edit-preferences" style="display: none;">
 </div>
 
-<div id="browser-check" style="display: none;">
+{{if "ecap"|module_active}}
+<div id="support" style="display: none;">
+  {{mb_include module=ecap template=support}}
 </div>
+{{/if}}
 
 {{if "astreintes"|module_active}}
   <div id="edit-astreintes" style="display: none;">
