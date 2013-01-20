@@ -110,14 +110,16 @@ class CCompteRendu extends CDocumentItem {
   );
   
   // Noms de modèles réservés
-  static $templateNames = array(
-    "CConsultAnesth" =>
-      array("[FICHE ANESTH]" => "body"),
-    "CPrescription"  =>
-      array("[ENTETE ORDONNANCE]"       => "header",
-            "[PIED DE PAGE ORDONNANCE]" => "footer",
-            "[ENTETE BON]"              => "header",
-            "[PIED DE PAGE BON]"        => "footer")
+  static $special_names = array(
+    "CConsultAnesth" => array(
+      "[FICHE ANESTH]" => "body"
+    ),
+    "CPrescription"  => array (
+      "[ENTETE ORDONNANCE]"       => "header",
+      "[PIED DE PAGE ORDONNANCE]" => "footer",
+      "[ENTETE BON]"              => "header",
+      "[PIED DE PAGE BON]"        => "footer"
+    ),
   );
   
   function getSpec() {
@@ -1327,34 +1329,39 @@ class CCompteRendu extends CDocumentItem {
     CApp::rip();
   }
   
-  static function getReservedModel($user, $object_class, $name) {
-    $compte_rendu = new CCompteRendu();
-    $compte_rendu->nom = $name;
-    $compte_rendu->object_class = $object_class;
-    $compte_rendu->type = CCompteRendu::$templateNames[$object_class][$name];
+  static function getSpecialModel($user, $object_class, $name) {
+    if (!isset(self::$special_names[$object_class][$name])) {
+      self::error("no_special", $object_class, $name); 
+      return null;
+    }
+    
+    $model = new CCompteRendu();
+    $model->nom = $name;
+    $model->object_class = $object_class;
+    $model->type = CCompteRendu::$special_names[$object_class][$name];
     
     // Utilisateur
-    $compte_rendu->user_id = $user->_id;
-    $compte_rendu->loadMatchingObject();
-    if ($compte_rendu->_id) {
-      return $compte_rendu;
+    $model->user_id = $user->_id;
+    $model->loadMatchingObject();
+    if ($model->_id) {
+      return $model;
     }
     
     
     // Fonction
-    $compte_rendu->user_id = null;
-    $compte_rendu->function_id = $user->function_id;
-    $compte_rendu->loadMatchingObject();
-    if ($compte_rendu->_id) {
-      return $compte_rendu;
+    $model->user_id = null;
+    $model->function_id = $user->function_id;
+    $model->loadMatchingObject();
+    if ($model->_id) {
+      return $model;
     }
     
     // Etablissement
     $user->loadRefFunction();
-    $compte_rendu->function_id = null;
-    $compte_rendu->group_id = $user->_ref_function->group_id;
-    $compte_rendu->loadMatchingObject();
+    $model->function_id = null;
+    $model->group_id = $user->_ref_function->group_id;
+    $model->loadMatchingObject();
     
-    return $compte_rendu;
+    return $model;
   }
 }

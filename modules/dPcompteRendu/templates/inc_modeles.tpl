@@ -18,7 +18,14 @@
         <img style="float: right;" src="images/icons/lightning.png"/>
       {{/if}}
       <a href="?m={{$m}}&amp;tab=addedit_modeles&amp;compte_rendu_id={{$_modele->_id}}">
+         {{assign var=object_class value=$_modele->object_class}}
+         {{assign var=name         value=$_modele->nom}}
+         {{if isset($special_names.$object_class.$name|smarty:nodefaults)}}
+         <strong>Special:</strong>
+         {{$_modele->nom|trim:"[]"}}
+         {{else}}
          {{mb_value object=$_modele field=nom}}
+         {{/if}}
       </a>
     </td>
   

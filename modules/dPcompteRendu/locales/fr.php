@@ -225,6 +225,7 @@ $locales['CCompteRendu-user_id-desc'] = 'Utilisateur auquel le modèle est associ
 $locales['CCompteRendu-valide'] = 'Valide';
 $locales['CCompteRendu-valide-court'] = 'Valide';
 $locales['CCompteRendu-valide-desc'] = 'Document validé';
+$locales['CCompteRendu-warning-no_special'] = 'Aucun modèle spécial pour la classe \'%s\' et le nom \'%s\'';
 $locales['CCompteRendu-words'] = 'mots';
 $locales['CCompteRendu._list_classes.'] = 'Indéterminé';
 $locales['CCompteRendu._list_classes.CBloodSalvage'] = 'Récupération sanguine';

@@ -73,13 +73,15 @@ $filtre->_specs['object_class']->_locales = CCompteRendu::getTemplatedClasses();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("user"      , $user);
-$smarty->assign("filtre"    , $filtre);
-$smarty->assign("praticiens", $praticiens);
-$smarty->assign("modeles"   , $modeles);
-$smarty->assign("owners"    , $owners);
-$smarty->assign("order_way" , $order_way);
-$smarty->assign("order_col" , $order_col);
+$smarty->assign("user"         , $user);
+$smarty->assign("filtre"       , $filtre);
+$smarty->assign("praticiens"   , $praticiens);
+$smarty->assign("modeles"      , $modeles);
+$smarty->assign("owners"       , $owners);
+$smarty->assign("order_way"    , $order_way);
+$smarty->assign("order_col"    , $order_col);
+$smarty->assign("special_names", CCompteRendu::$special_names);
+
 $smarty->display("vw_modeles.tpl");
 
 ?>

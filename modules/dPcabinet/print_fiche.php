@@ -83,7 +83,7 @@ if ($consultation_id) {
   $consult->loadRefConsultAnesth();
 
   // Si le modèle est redéfini, on l'utilise
-  $model = CCompteRendu::getReservedModel($consult->_ref_chir, "CConsultAnesth", "[FICHE ANESTH]");
+  $model = CCompteRendu::getSpecialModel($consult->_ref_chir, "CConsultAnesth", "[FICHE ANESTH]");
 
   if ($model->_id) {
     CCompteRendu::streamDocForObject($model, $consult->_ref_consult_anesth);

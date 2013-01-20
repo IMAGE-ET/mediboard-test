@@ -191,7 +191,7 @@ Main.add(Control.Tabs.create.curry('tabs-edit'));
       <th class="title">Description</th>
       <th class="title narrow"></th>
     </tr>
-    {{foreach from=$names_reserved item=_names_by_class key=_class}}
+    {{foreach from=$special_names item=_names_by_class key=_class}}
       <tr>
         <th class="category" colspan="3">{{tr}}{{$_class}}{{/tr}}</th>
       </tr>
