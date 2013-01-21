@@ -20,55 +20,55 @@ ExObjectForms.{{$ex_form_hash}} = {
   confirmSavePrint: function(form){
     var oldCallback = $V(form.callback);
     $V(form.callback, 'ExObjectForms.{{$ex_form_hash}}.printForm');
-    
-    (FormObserver.changes == 0 || confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?")) && 
+
+    (FormObserver.changes == 0 || confirm("Pour imprimer le formulaire, il est nécessaire de l'enregistrer, souhaitez-vous continuer ?")) &&
              form.onsubmit();
-    
+
     $V(form.callback, oldCallback);
-    
+
     return false;
   },
 
   closeOnSuccess: function(id, obj) {
     this.updateId(id, obj);
-    
+
     if (!(obj._ui_messages[3] || obj._ui_messages[4])) { // warning ou error
       var element_id = "{{$_element_id}}";
-      
+
       if (element_id && window.opener && !window.opener.closed && window.opener !== window && window.opener.ExObject) {
         if (element_id.charAt(0) == "@") {
           eval("window.opener."+element_id.substr(1)+"()"); // ARG
         }
         else {
           var target = window.opener.$(element_id);
-          
+
           if (target.get("ex_class_id")) {
             window.opener.ExObject.loadExObjects.defer(
-              target.get("reference_class"), 
-              target.get("reference_id"), 
-              element_id, 
-              target.get("detail"), 
+              target.get("reference_class"),
+              target.get("reference_id"),
+              element_id,
+              target.get("detail"),
               target.get("ex_class_id")
             );
           }
           else {
             window.opener.ExObject.register.defer(element_id, {
-              ex_class_id: "{{$ex_class_id}}", 
-              object_guid: "{{$object_guid}}", 
-              event_name: "{{$event_name}}", 
+              ex_class_id: "{{$ex_class_id}}",
+              object_guid: "{{$object_guid}}",
+              event_name: "{{$event_name}}",
               _element_id: element_id
             });
           }
         }
       }
-      
+
       window.close();
     }
   },
 
   printForm: function(id, obj) {
     this.updateId(id, obj);
-    
+
     FormObserver.changes = 0;
     var iFrame = $("printIframe");
     iFrame.src = "about:blank";
@@ -83,7 +83,7 @@ ExObjectForms.{{$ex_form_hash}} = {
 
 Main.add(function(){
   var form = getForm("editExObject_{{$ex_form_hash}}");
-  
+
   ExObject.current = {object_guid: "{{$object_guid}}", event_name: "{{$event_name}}"};
   ExObject.pixelPositionning = {{$ex_object->_ref_ex_class->pixel_positionning}} == 1;
   new ExObjectFormula({{$formula_token_values|@json}}, form);
@@ -96,33 +96,33 @@ Main.add(function(){
   {{mb_key object=$ex_object}}
   {{mb_field object=$ex_object field=_ex_class_id hidden=true}}
   {{mb_field object=$ex_object field=group_id hidden=true}}
-  
+
   {{mb_field object=$ex_object field=object_class hidden=true}}
   {{mb_field object=$ex_object field=object_id hidden=true}}
-  
+
   {{mb_field object=$ex_object field=reference_class hidden=true}}
   {{mb_field object=$ex_object field=reference_id hidden=true}}
-  
+
   {{mb_field object=$ex_object field=reference2_class hidden=true}}
   {{mb_field object=$ex_object field=reference2_id hidden=true}}
-  
+
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="callback" value="ExObjectForms.{{$ex_form_hash}}.closeOnSuccess" />
-  
+
   {{if !$print && !$preview_mode}}
     <iframe id="printIframe" width="0" height="0" style="display: none;"></iframe>
     <button type="button" class="print singleclick" onclick="ExObjectForms.{{$ex_form_hash}}.confirmSavePrint(this.form)" style="float: right;">
       {{tr}}Print{{/tr}}
     </button>
   {{/if}}
-  
+
   {{if !$noheader}}
   <h2 style="font-weight: bold;">
     {{if $ex_object->_ref_reference_object_2 && $ex_object->_ref_reference_object_2->_id}}
-      <span style="color: #006600;" 
+      <span style="color: #006600;"
            onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_reference_object_2->_guid}}');">
-        {{$ex_object->_ref_reference_object_2}} 
-      
+        {{$ex_object->_ref_reference_object_2}}
+
         {{if $ex_object->_ref_reference_object_2 instanceof CPatient}}
           {{mb_include module=patients template=inc_vw_ipp ipp=$ex_object->_ref_reference_object_2->_IPP}}
         {{/if}}
@@ -130,21 +130,21 @@ Main.add(function(){
     {{else}}
       {{if $ex_object->_rel_patient}}
         {{assign var=_patient value=$ex_object->_rel_patient}}
-        <span style="color: #006600;" 
+        <span style="color: #006600;"
              onmouseover="ObjectTooltip.createEx(this, '{{$_patient->_guid}}');">
           {{$_patient}}
           {{mb_include module=patients template=inc_vw_ipp ipp=$_patient->_IPP}}
         </span>
       {{/if}}
     {{/if}}
-    
+
     {{if $ex_object->_ref_reference_object_1 && $ex_object->_ref_reference_object_1->_id}}
       &ndash;
       <span onmouseover="ObjectTooltip.createEx(this, '{{$ex_object->_ref_reference_object_1->_guid}}');">
         {{$ex_object->_ref_reference_object_1}}
       </span>
     {{/if}}
-    
+
     &ndash;
     <span style="color: #0000AA;" {{if $ex_object->_id}} onmouseover="ObjectTooltip.createEx(this, 'CExObject_{{$ex_object->_ex_class_id}}-{{$ex_object->_id}}', 'objectViewHistory')" {{/if}}>
       {{if $ex_object->_id}}
@@ -154,12 +154,12 @@ Main.add(function(){
       {{/if}}
       {{$ex_object->_ref_last_log->_ref_user}}
     </span>
-    
+
     <hr style="border-color: #333; margin: 4px 0;" />
     {{*<span style="float: right;">{{$ex_object->_ref_group}}</span>*}}
-    
+
     {{$ex_object->_ref_ex_class->name}} - {{$object}}
-    
+
     {{if $parent_view}}
       <span style="float: right; color: #666;">
         Formulaire parent: {{$parent_view|smarty:nodefaults}}
@@ -167,18 +167,25 @@ Main.add(function(){
     {{/if}}
   </h2>
   {{/if}}
-  
+
   <script type="text/javascript">
     Main.add(function(){
-      Control.Tabs.create("ex_class-groups-tabs-{{$ex_form_hash}}");
+      Control.Tabs.create("ex_class-groups-tabs-{{$ex_form_hash}}", false, {
+        afterChange: function(container){
+          if (Object.isFunction(ExObject.groupTabsCallback[container.id])) {
+            ExObject.groupTabsCallback[container.id]();
+          }
+        }
+      });
+
       if (window.parent != window || window.opener != window) {
         document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
       }
     });
   </script>
-  
+
   {{$ui_msg|smarty:nodefaults}}
-  
+
   <ul id="ex_class-groups-tabs-{{$ex_form_hash}}" class="control_tabs" style="clear: left;">
     {{foreach from=$groups item=_group}}
       {{if $_group->_ref_fields|@count}}
@@ -187,7 +194,7 @@ Main.add(function(){
       </li>
       {{/if}}
     {{/foreach}}
-    
+
     {{foreach from=$ex_object->_native_views item=_object key=_name}}
       {{if $_object && $_object->_id || $preview_mode}}
         <li><a href="#tab-native_views-{{$_name}}" class="special">{{tr}}CExClass.native_views.{{$_name}}{{/tr}}</a></li>
@@ -231,11 +238,11 @@ Main.add(function(){
 {{else}}
 
 {{* ----   READONLY   ---- *}}
-  
+
 <script type="text/javascript">
 Main.add(function(){
   document.title = "{{$ex_object->_ref_ex_class->name}} - {{$object}}".htmlDecode();
-  
+
   {{if $autoprint}}
     if (document.execCommand) {
       window.focus();
@@ -244,7 +251,7 @@ Main.add(function(){
     else {
       window.print();
     }
-  {{/if}}    
+  {{/if}}
 });
 
 function switchMode(){
@@ -269,7 +276,7 @@ function switchMode(){
       <td colspan="4">
         <p style="font-weight: bold; font-size: 1.1em;">
           {{*<span style="float: right;">{{$ex_object->_ref_group}}</span>*}}
-    
+
           {{if $ex_object->_ref_reference_object_2 && $ex_object->_ref_reference_object_2->_id}}
             <span style="color: #006600;">
               {{$ex_object->_ref_reference_object_2}}
@@ -286,14 +293,14 @@ function switchMode(){
               </span>
             {{/if}}
           {{/if}}
-          
+
           {{if $ex_object->_ref_reference_object_1 && $ex_object->_ref_reference_object_1->_id}}
             &ndash;
             <span>
               {{$ex_object->_ref_reference_object_1}}
             </span>
           {{/if}}
-                
+
           &ndash;
           <span style="color: #0000AA;" {{if $ex_object->_id}} onmouseover="ObjectTooltip.createEx(this, 'CExObject_{{$ex_object->_ex_class_id}}-{{$ex_object->_id}}', 'objectViewHistory')" {{/if}}>
             {{if $ex_object->_id}}
@@ -303,7 +310,7 @@ function switchMode(){
             {{/if}}
             {{$ex_object->_ref_last_log->_ref_user}}
           </span>
-          
+
           <br />
           {{$ex_object->_ref_ex_class->name}} - {{$object}}
         </p>
@@ -312,13 +319,13 @@ function switchMode(){
     </tr>
   </thead>
   {{/if}}
-  
+
   {{if $only_filled}}
-  
+
     <tr>
       <td colspan="4">
         {{mb_include module=forms template=inc_vw_ex_object ex_object=$ex_object}}
-        
+
         {{foreach from=$ex_object->_native_views item=_object key=_name}}
           {{if $_object && $_object->_id}}
             <h4 style="margin: 0.5em; border-bottom: 1px solid #666;">{{tr}}CExClass.native_views.{{$_name}}{{/tr}}</h4>
@@ -327,17 +334,17 @@ function switchMode(){
         {{/foreach}}
       </td>
     </tr>
-    
+
   {{else}}
-    
+
     {{foreach from=$grid key=_group_id item=_grid}}
-    
+
     {{if $groups.$_group_id->_ref_fields|@count}}
     <tbody id="tab-{{$groups.$_group_id->_guid}}">
       <tr>
         <th class="title" colspan="4">{{$groups.$_group_id}}</th>
       </tr>
-      
+
     {{foreach from=$_grid key=_y item=_line}}
     <tr>
       {{foreach from=$_line key=_x item=_group name=_x}}
@@ -345,7 +352,7 @@ function switchMode(){
           {{if $_group.object instanceof CExClassField}}
             {{assign var=_field value=$_group.object}}
             {{assign var=_field_name value=$_field->name}}
-            
+
             {{if $_group.type == "label"}}
               {{if $_field->coord_field_x == $_field->coord_label_x+1}}
                 <th style="font-weight: bold; vertical-align: middle; white-space: normal;">
@@ -394,9 +401,9 @@ function switchMode(){
               </td>
             {{/if}}
           {{else}}
-            {{assign var=_message value=$_group.object}} 
+            {{assign var=_message value=$_group.object}}
               {{if $_group.type == "message_title"}}
-              
+
                 {{if $_message->coord_text_x == $_message->coord_title_x+1}}
                   <th style="font-weight: bold; vertical-align: middle; white-space: normal;">
                     {{$_message->title}}
@@ -418,11 +425,11 @@ function switchMode(){
       {{/foreach}}
     </tr>
     {{/foreach}}
-    
+
     {{* Out of grid *}}
     {{foreach from=$groups.$_group_id->_ref_fields item=_field}}
       {{assign var=_field_name value=$_field->name}}
-      
+
       {{if isset($out_of_grid.$_group_id.field.$_field_name|smarty:nodefaults)}}
         <tr>
           <th style="font-weight: bold; width: 50%; vertical-align: middle; white-space: normal;" colspan="2">
@@ -438,11 +445,11 @@ function switchMode(){
         </tr>
       {{/if}}
     {{/foreach}}
-    
+
     </tbody>
     {{/if}}
     {{/foreach}}
-  
+
     {{foreach from=$ex_object->_native_views item=_object key=_name}}
       {{if $_object && $_object->_id}}
       <tbody>
@@ -458,8 +465,8 @@ function switchMode(){
       {{/if}}
     {{/foreach}}
   {{/if}}
-    
+
 </table>
-  
+
 
 {{/if}}

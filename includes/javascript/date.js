@@ -267,7 +267,7 @@ var ProgressiveCalendar = Class.create({
     if (this.options.icon) {
       var cont = new Element('div', {className:"datePickerWrapper", style: 'position:relative;border:none;padding:0;margin:0;display:inline-block;'});
       this.elementView.wrap(cont);
-      var icon = new Element('img', {src: this.options.icon, className: 'inputExtension'});
+      var icon = new Element('input', {type: "image", tabIndex: -1, src: this.options.icon, className: 'inputExtension'});
 
       // No icon padding specified, default to 3px and calculate dynamically on image load
       var padding = 3;
