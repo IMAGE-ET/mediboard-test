@@ -1978,7 +1978,8 @@ class CSetupdPpatients extends CSetup {
     $this->makeRevision("1.68");
 
     $query = "ALTER TABLE `patients`
-                ADD `province` VARCHAR (25) AFTER adresse;";
+                ADD `province` VARCHAR (40) AFTER adresse;";
+    $this->addQuery($query);
 
     $this->mod_version = "1.69";
     
