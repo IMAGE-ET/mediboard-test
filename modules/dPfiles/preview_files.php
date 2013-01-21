@@ -83,6 +83,10 @@ if($objectClass && $objectId && $elementClass && $elementId){
         $catFileSel->load($fileSel->file_category_id);
       }
     }
+    else {
+      CAppUI::stepAjax(CAppUI::tr("CDocumentItem-_not_available"), UI_MSG_WARNING);
+      CApp::rip();
+    }
     
   }else {
     // Objet Inexistant
