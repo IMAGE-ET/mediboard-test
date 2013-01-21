@@ -25,7 +25,7 @@
 </form>
 
 {{if !$prat->_id}}
-<div class="big-info">
+<div class="small-warning">
   Les vues du tableau de bord sont spécifiques à chaque praticien.
   <br />Merci d'en <strong>sélectionner</strong> un dans la liste ci-dessus.
 </div>
