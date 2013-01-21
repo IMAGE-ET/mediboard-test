@@ -39,7 +39,9 @@ em {
       <tr>
         <th>Code</th>
         <th>Libellé</th>
-        <th></th>
+        {{if !$tag_id}}
+          <th></th>
+        {{/if}}
         <th></th>
       </tr>
       {{foreach from=$list item=curr_code name=fusion}}
@@ -52,16 +54,18 @@ em {
             <span>{{$curr_code->code}}</span>
           </td>
           <td class="text">{{$curr_code->libelle|emphasize:$_keywords_code}}</td>
-          <td>
-            {{if array_key_exists($curr_code->code, $list_stats)}}
-              {{assign var=_code value=$curr_code->code}}
-              {{$list_stats.$_code->occ}}
-            {{elseif array_key_exists($curr_code->code, $list_favoris)}}
-              Favoris
-            {{else}}
-              -
-            {{/if}}
-          </td>
+          {{if !$tag_id}}
+            <td>
+              {{if array_key_exists($curr_code->code, $list_stats)}}
+                {{assign var=_code value=$curr_code->code}}
+                {{$list_stats.$_code->occ}}
+              {{elseif array_key_exists($curr_code->code, $list_favoris)}}
+                Favoris
+              {{else}}
+                -
+              {{/if}}
+            </td>
+          {{/if}}
           <td class="narrow">
             <button type="button" class="tick compact" onclick="CIM10Selector.set('{{$curr_code->code}}'); Control.Modal.close();">Sélectionner</button>
           </td>
