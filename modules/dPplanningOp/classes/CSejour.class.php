@@ -203,6 +203,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_exams_igs               = null;
   var $_ref_charge_price_indicator  = null; // Type d'activité
   var $_ref_movements               = null;
+  var $_ref_mode_entree             = null;
+  var $_ref_mode_sortie             = null;
 
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -1304,6 +1306,20 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_charge_price_indicator = $this->loadFwdRef("charge_id", $cache);
   }
 
+  /**
+ * @return CModeEntreeSejour
+ */
+  function loadRefModeEntree($cache = true) {
+    return $this->_ref_mode_entree = $this->loadFwdRef("mode_entree_id", $cache);
+  }
+
+  /**
+   * @return CModeSortieSejour
+   */
+  function loadRefModeSortie($cache = true) {
+    return $this->_ref_mode_sortie = $this->loadFwdRef("mode_sortie_id", $cache);
+  }
+
   function countNotificationVisite($date = '') {
     if (!$date) {
       $date = mbDate();
@@ -2052,45 +2068,50 @@ class CSejour extends CCodable implements IPatientRelated {
     return $this->_ref_first_affectation;
   }
 
-  function forceAffectation($datetime, $lit_id) {
+  function forceAffectation(CAffectation $affectation) {
+    $datetime   = $affectation->entree;
+    $lit_id     = $affectation->lit_id;
+    $service_id = $affectation->service_id;
+
     $splitting            = new CAffectation();
     $where["sejour_id"] = "=  '$this->_id'";
     $where["entree"]    = "<= '$datetime'";
     $where["sortie"]    = ">= '$datetime'";
     $splitting->loadObject($where);
 
-    $affectation = new CAffectation();
+    $create = new CAffectation();
 
     // On retrouve une affectation a spliter
     if ($splitting->_id) {
       // Affecte la sortie de l'affectation a créer avec l'ancienne date de sortie
-      $affectation->sortie = $splitting->sortie;
+      $create->sortie = $splitting->sortie;
     }
     // On créé une première affectation
     else {
-      $affectation->sortie  = $this->sortie;
+      $create->sortie  = $this->sortie;
       $splitting->sejour_id = $this->_id;
       $splitting->entree    = $this->entree;
       $splitting->lit_id    = $lit_id;
     }
 
     // On passe à effectuer la split
-    $splitting->effectue = 1;
-    $splitting->sortie   = $datetime;
+    $splitting->effectue    = 1;
+    $splitting->sortie      = $datetime;
+    $splitting->_no_synchro = true;
     if ($msg = $splitting->store()) {
       return $msg;
     }
 
     // Créé la nouvelle affectation
-    $affectation->sejour_id = $this->_id;
-    $affectation->entree    = $datetime;
-    $affectation->lit_id    = $lit_id;
-
-    if ($msg = $affectation->store()) {
+    $create->sejour_id  = $this->_id;
+    $create->entree     = $datetime;
+    $create->lit_id     = $lit_id;
+    $create->service_id = $service_id;
+    if ($msg = $create->store()) {
       return $msg;
     }
 
-    return $affectation;
+    return $create;
   }
 
   function loadRefsOperations($where = array()) {

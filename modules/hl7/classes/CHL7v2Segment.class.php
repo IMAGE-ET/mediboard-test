@@ -664,11 +664,16 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getPV114 (CInteropReceiver $receiver, CSejour $sejour) {
+    // Mode d'entrée personnalisable
+    if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_entree")) {
+      return $sejour->loadRefModeEntree()->code;
+    }
+
     // Admit source
     switch ($receiver->_configs["build_PV1_14"]) {
       // Combinaison du ZFM
       // ZFM.1 + ZFM.3
-      case 'ZFM':
+      case 'ZFM' :
         // Si mutation des urgences
         if ($sejour->provenance == "8" || $sejour->provenance == "5") {
           return $sejour->mode_entree;
@@ -676,7 +681,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         
         // Sinon concaténation du code mode d'entrée et du code de provenance
         return $sejour->mode_entree.$sejour->provenance;
-        
+
       // Mode d'entrée
       default:
          // 1  - Envoyé par un médecin extérieur 
@@ -717,6 +722,11 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
   
   function getPV136 (CInteropReceiver $receiver, CSejour $sejour) {
+    // Mode de sortie personnalisable
+    if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
+      return $sejour->loadRefModeSortie()->code;
+    }
+
     // Discharge Disposition
     switch ($receiver->_configs["build_PV1_36"]) {
       // Combinaison du ZFM
