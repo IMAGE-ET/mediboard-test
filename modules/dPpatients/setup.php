@@ -1975,7 +1975,12 @@ class CSetupdPpatients extends CSetup {
                 ADD `email_apicrypt` VARCHAR (50),
                 ADD `last_ldap_checkout` DATE;";
 
-    $this->mod_version = "1.68";
+    $this->makeRevision("1.68");
+
+    $query = "ALTER TABLE `patients`
+                ADD `province` VARCHAR (25) AFTER adresse;";
+
+    $this->mod_version = "1.69";
     
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

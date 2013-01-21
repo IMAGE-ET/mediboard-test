@@ -87,6 +87,7 @@ class CPatient extends CMbObject {
   var $sexe             = null;
   var $civilite         = null;
   var $adresse          = null;
+  var $province         = null;
   var $ville            = null;
   var $cp               = null;
   var $tel              = null;
@@ -328,6 +329,7 @@ class CPatient extends CMbObject {
     $props["sexe"]              = "enum list|m|f";
     $props["civilite"]          = "enum list|m|mme|mlle|enf|dr|pr|me|vve";
     $props["adresse"]           = "text confidential";
+    $props["province"]          = "str";
     $props["ville"]             = "str confidential seekable|begin";
     $props["cp"]                = "str minLength|4 maxLength|5 confidential";
     $props["tel"]               = "phone confidential";
