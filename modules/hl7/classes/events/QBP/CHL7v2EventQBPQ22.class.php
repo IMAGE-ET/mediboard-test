@@ -16,15 +16,24 @@
  * Q22 - Find Candidates
  */
 class CHL7v2EventQBPQ22 extends CHL7v2EventQBP implements CHL7EventQBPQ22 {
-  var $code        = "Q22";
-  var $struct_code = "Q21";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
   /**
+   * @var string
+   */
+  var $code        = "Q22";
+
+  /**
+   * @var string
+   */
+  var $struct_code = "Q21";
+
+  /**
+   * Build Q22 event
+   *
+   * @param CPatient $patient Person
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($patient) {
     parent::build($patient);
@@ -34,6 +43,9 @@ class CHL7v2EventQBPQ22 extends CHL7v2EventQBP implements CHL7EventQBPQ22 {
 
     // RCP
     $this->addRCP($patient);
+
+    // DSC
+   // $this->addDSC($patient);
   }
 }
 

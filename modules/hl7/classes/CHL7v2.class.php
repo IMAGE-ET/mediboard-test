@@ -191,10 +191,22 @@ abstract class CHL7v2 {
   }
 
   /**
-   * Transforms absolute or relative time into a HL7 format
+   * Transforms absolute or relative date into a HL7 format
    *
    * @param string $relative A relative time
    * @param string $ref      An absolute time to transform
+   *
+   * @return string The transformed date
+   **/
+  static function getDate($relative = null, $ref = null) {
+    return mbTransformTime($relative, $ref, "%Y%m%d");
+  }
+
+  /**
+   * Transforms absolute or relative datetime into a HL7 format
+   *
+   * @param string $relative A relative datetime
+   * @param string $ref      An absolute datetime to transform
    *
    * @return string The transformed date
    **/

@@ -39,23 +39,18 @@ class CHL7v2SegmentRCP extends CHL7v2Segment {
 
     $patient = $this->patient;
 
-    $quantity_limited_request = isset($patient->_quantity_limited_request) ? $patient->_quantity_limited_request : null;
+    $quantity_limited_request = isset($patient->_quantity_limited_request) ? $patient->_quantity_limited_request : 100;
 
     // RCP-1: Query Priority (ID) (optional)
     $data[] = "I";
     
     // RCP-2: Quantity Limited Request (CQ) (optional)
-    if ($quantity_limited_request) {
-      $data[] =  array (
-        array (
-          $quantity_limited_request,
-          "RD"
-        )
-      );
-    }
-    else {
-      $data[] = null;
-    }
+    $data[] =  array (
+      array (
+        $quantity_limited_request,
+        "RD"
+      )
+    );
     
     // RCP-3: Response Modality (CE) (optional)
     $data[] = null;

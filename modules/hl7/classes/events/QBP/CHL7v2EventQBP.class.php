@@ -16,8 +16,16 @@
  * Patient Demographics Query
  */
 class CHL7v2EventQBP extends CHL7v2Event implements CHL7EventQBP {
+  /**
+   * @var string
+   */
   var $event_type = "QBP";
-  
+
+  /**
+   * Construct
+   *
+   * @return \CHL7v2EventQBP
+   */
   function __construct() {
     parent::__construct();
     
@@ -30,9 +38,15 @@ class CHL7v2EventQBP extends CHL7v2Event implements CHL7EventQBP {
 
     $this->transaction = CPDQ::getPDQTransaction($this->code);
   }
-  
+
   /**
+   * Build event
+   *
+   * @param CMbObject $object Object
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($object) {
     parent::build($object);
@@ -42,6 +56,8 @@ class CHL7v2EventQBP extends CHL7v2Event implements CHL7EventQBP {
 
   /**
    * MSH - Represents an HL7 MSH message segment (Message Header)
+   *
+   * @return void
    */
   function addMSH() {
     $MSH = CHL7v2Segment::create("MSH", $this->message);
@@ -50,6 +66,10 @@ class CHL7v2EventQBP extends CHL7v2Event implements CHL7EventQBP {
 
   /**
    * QPD - Represents an HL7 QPD message segment (Query Parameter Definition)
+   *
+   * @param CPatient $patient Patient
+   *
+   * @return void
    */
   function addQPD($patient) {
     $QPD = CHL7v2Segment::create("QPD", $this->message);
@@ -59,10 +79,28 @@ class CHL7v2EventQBP extends CHL7v2Event implements CHL7EventQBP {
 
   /**
    * RCP - Represents an HL7 RCP message segment (Response Control Parameter)
+   *
+   * @param CPatient $patient Patient
+   *
+   * @return void
    */
   function addRCP($patient) {
     $RCP = CHL7v2Segment::create("RCP", $this->message);
+    $RCP->patient = $patient;
     $RCP->build($this);
+  }
+
+  /**
+   * RCP - Represents an HL7 DSC message segment (Continuation Pointer)
+   *
+   * @param CPatient $patient Patient
+   *
+   * @return void
+   */
+  function addDSC($patient) {
+    $DSC = CHL7v2Segment::create("DSC", $this->message);
+    $DSC->patient = $patient;
+    $DSC->build($this);
   }
 }
 

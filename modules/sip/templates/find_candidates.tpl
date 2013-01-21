@@ -44,18 +44,32 @@
             <th><label for="nom_jeune_fille" title="Nom de naissance">Nom de naissance</label></th>
             <td><input tabindex="3" type="text" name="nom_jeune_fille" value="{{$nom_jeune_fille|stripslashes}}" /></td>
 
-            <td colspan="2" />
+            <th> <label for="Date_Day" title="Date de naissance du patient à rechercher"> Date de naissance </label> </th>
+            <td> {{mb_include module=patients template=inc_select_date date="--" tabindex=6}} </td>
           </tr>
 
           <tr>
-            <th colspan="2">
-              <label for="Date_Day" title="Date de naissance du patient à rechercher">
-                Date de naissance
-              </label>
-            </th>
-            <td colspan="2">
-            {{mb_include module=patients template=inc_select_date date="--" tabindex=7}}
+            <th><label for="sexe" title="Sexe">Sexe</label></th>
+            <td>
+              <select name="sexe">
+                <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+                <option value="m" {{if $sexe == "m"}}selected{{/if}}>
+                {{tr}}CPatient.sexe.m{{/tr}}
+                </option>
+                <option value="f" {{if $sexe == "f"}}selected{{/if}}>
+                {{tr}}CPatient.sexe.f{{/tr}}
+                </option>
+              </select>
             </td>
+
+            <td colspan="2"></td>
+          </tr>
+
+          <tr>
+            <th><label for="quantity_limited_request" title="Limite des résultats">Limite des résultats recherchés</label></th>
+            <td><input tabindex="8" type="text" name="quantity_limited_request" value="{{$quantity_limited_request}}" /></td>
+
+            <td colspan="2"></td>
           </tr>
 
           <tr>

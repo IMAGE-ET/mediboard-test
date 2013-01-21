@@ -51,10 +51,9 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     $data[] = "IHE PDQ Query";
     
     // QPD-2: Query Tag (ST)
-    $data[] = "PDQPDC.".CHL7v2::getDateTime();
+    $data[] = "PDQPDC.20130121155123";
     
     // QPD-3: User Parameters (in successive fields) (Varies)
-
     $QPD3 = array();
     // PID
     if ($patient) {
@@ -68,6 +67,32 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     CMbArray::removeValue("", $QPD3);
     $data[] = $QPD3;
 
+    // QPD-4 :
+    $data[] = null;
+
+    // QPD-5 :
+    $data[] = null;
+
+    // QPD-6 :
+    $data[] = null;
+
+    // QPD-7 :
+    $data[] = null;
+
+    // QPD-8 : What domains returned
+    /*$data[] = array(
+      array(
+        null,
+        null,
+        null,
+        array (
+          "NIST2010",
+          "2.16.840.1.113883.3.72.5.9.1",
+          "ISO",
+        )
+      )
+    );*/
+
     $this->fill($data);
   }
 
@@ -80,19 +105,30 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
    */
   function addQPD3PID(CPatient $patient) {
     return array(
-      // Patient Name
+      // PID-3 : Patient Identifier List
+      //$this->setDemographicsValues($patient, "PDQ", "3.1"),
+
+      // PID-5 : Patient Name
       $this->setDemographicsFields($patient, "nom", "5.1.1"),
       $this->setDemographicsFields($patient, "prenom", "5.2"),
 
-      // Maiden name
+      // PID-6 : Maiden name
       $this->setDemographicsFields($patient, "nom_jeune_fille", "6.1.1"),
 
-      // Date of birth
-      $this->setDemographicsFields($patient, "naissance", "7.1"),
+      // PID-7 : Date of birth
+      $this->setDemographicsFields($patient, "naissance", "7.1", null, true),
 
-      // Patient Adress
+      // PID-8: Administrative Sex
+      $this->setDemographicsFields($patient, "sexe", "8", "1"),
+
+      // PID-11 : Patient Adress
       $this->setDemographicsFields($patient, "ville", "11.3"),
-      $this->setDemographicsFields($patient, "cp", "11.5")
+      // $this->setDemographicsValues($patient, "", "11.4"),
+      $this->setDemographicsFields($patient, "cp", "11.5"),
+
+      // PID-13 : Phone Number
+   //   $this->setDemographicsValues($patient, "555", "13.6"),
+    //  $this->setDemographicsValues($patient, "1234567", "13.7"),
     );
   }
 
@@ -115,14 +151,14 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
    * Populating QPD-3 demographics fields
    *
    * @param CMbObject $object Object
-   * @param string    $spec   Field spec
-   * @param string    $field  The number of a field
+   * @param string    $mb_field   Field spec
+   * @param string    $hl7_field  The number of a field
    * @param null      $mapTo  Map to table HL7
    *
    * @return array
    */
-  function setDemographicsFields(CMbObject $object, $spec, $field, $mapTo = null) {
-    if (!$object->$spec) {
+  function setDemographicsFields(CMbObject $object, $mb_field, $hl7_field, $mapTo = null) {
+    if (!$object->$mb_field) {
       return;
     }
 
@@ -140,9 +176,42 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
       return;
     }
 
+    $value = $mapTo ? CHL7v2TableEntry::mapTo($mapTo, $object->$mb_field) : $object->$mb_field;
+
+    $spec = $object->_specs[$mb_field];
+    if ($spec instanceof CDateSpec || $spec instanceof CBirthDateSpec) {
+      $value = CHL7v2::getDate($value);
+    }
+
+    return array(
+      "@$seg.$hl7_field",
+      $value
+    );
+  }
+
+  /**
+   * Populating QPD-3 demographics value
+   *
+   * @param CMbObject $object Object
+   * @param string    $value  Value
+   * @param string    $field  The number of a field
+   *
+   * @return array
+   */
+  function setDemographicsValues(CMbObject $object, $value, $field) {
+    $seg = null;
+    switch ($object->_class) {
+      case "CPatient" :
+        $seg = "PID";
+        break;
+      case "CSejour" :
+        $seg = "PV1";
+        break;
+    }
+
     return array(
       "@$seg.$field",
-      $mapTo ? CHL7v2TableEntry::mapTo($mapTo, $object->$spec) : $object->$spec
+      $value
     );
   }
 }

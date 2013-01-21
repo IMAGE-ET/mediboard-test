@@ -14,14 +14,16 @@
 CCanDo::checkAdmin();
 
 // Récuperation des patients recherchés
-$patient_nom        = CValue::getOrSession("nom"            , "");
-$patient_prenom     = CValue::getOrSession("prenom"         , "");
-$patient_jeuneFille = CValue::getOrSession("nom_jeune_fille", "");
-$patient_ville      = CValue::getOrSession("ville"          , "");
-$patient_cp         = CValue::getOrSession("cp"             , "");
-$patient_day        = CValue::get("Date_Day"  , "");
-$patient_month      = CValue::get("Date_Month", "");
-$patient_year       = CValue::get("Date_Year" , "");
+$patient_nom              = CValue::getOrSession("nom"            , "");
+$patient_prenom           = CValue::getOrSession("prenom"         , "");
+$patient_jeuneFille       = CValue::getOrSession("nom_jeune_fille", "");
+$patient_ville            = CValue::getOrSession("ville"          , "");
+$patient_cp               = CValue::getOrSession("cp"             , "");
+$patient_sexe             = CValue::getOrSession("sexe"       , "");
+$patient_day              = CValue::get("Date_Day"  , "");
+$patient_month            = CValue::get("Date_Month", "");
+$patient_year             = CValue::get("Date_Year" , "");
+$quantity_limited_request = CValue::request("quantity_limited_request" , "");
 $patient_naissance = null;
 
 if(($patient_year) || ($patient_month) || ($patient_day)){
@@ -43,11 +45,13 @@ if ($patient_naissance == "on"){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("nom"                 , $patient_nom        );
-$smarty->assign("prenom"              , $patient_prenom     );
-$smarty->assign("nom_jeune_fille"     , $patient_jeuneFille );
-$smarty->assign("naissance"           , $naissance          );
-$smarty->assign("ville"               , $patient_ville      );
-$smarty->assign("cp"                  , $patient_cp         );
+$smarty->assign("nom"                     , $patient_nom        );
+$smarty->assign("prenom"                  , $patient_prenom     );
+$smarty->assign("nom_jeune_fille"         , $patient_jeuneFille );
+$smarty->assign("naissance"               , $naissance          );
+$smarty->assign("ville"                   , $patient_ville      );
+$smarty->assign("cp"                      , $patient_cp         );
+$smarty->assign("sexe"                    , $patient_sexe       );
+$smarty->assign("quantity_limited_request", $quantity_limited_request);
 
 $smarty->display("find_candidates.tpl");

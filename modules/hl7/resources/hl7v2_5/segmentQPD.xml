@@ -18,5 +18,30 @@
       <description>User Parameters (in Successive Fields)</description>
       <datatype>QIP</datatype>
     </field>
+    <field minOccurs="0" maxOccurs="0">
+      <name>QPD.4</name>
+      <description>?</description>
+      <datatype>ST</datatype>
+    </field>
+    <field minOccurs="0" maxOccurs="0">
+      <name>QPD.5</name>
+      <description>?</description>
+      <datatype>ST</datatype>
+    </field>
+    <field minOccurs="0" maxOccurs="0">
+      <name>QPD.6</name>
+      <description>?</description>
+      <datatype>ST</datatype>
+    </field>
+    <field minOccurs="0" maxOccurs="0">
+      <name>QPD.7</name>
+      <description>?</description>
+      <datatype>ST</datatype>
+    </field>
+    <field minOccurs="0" maxOccurs="0">
+      <name>QPD.8</name>
+      <description>What Domains Returned</description>
+      <datatype>CX</datatype>
+    </field>
   </elements>
 </segment>
