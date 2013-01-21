@@ -21,7 +21,7 @@
 {{assign var=actes_ids value=$subject->_associationCodesActes.$_key.ids}}
 {{unique_id var=uid_autocomplete_asso}}
 <fieldset>
-  <legend class="text" style="width: 90%; height: 20px">
+  <legend class="text" style="width: 95%; height: 20px; line-height: 100%;">
     {{assign var=can_delete value=1}}
     {{foreach from=$_code->activites item=_activite}}
       {{foreach from=$_activite->phases item=_phase}}
@@ -39,9 +39,8 @@
     <!-- Codes d'associations -->
     {{if count($_code->assos) > 0}}
       <div class="small" style="float:right;">
-        {{$_code->assos|@count}} codes associés
         <form name="addAssoCode{{$uid_autocomplete_asso}}" method="get">
-          <input type="text" size="12" name="keywords" value="&mdash; Code associé" onclick="$V(this, '');"/>
+          <input type="text" size="12" name="keywords" value="&mdash; {{$_code->assos|@count}} codes asso." onclick="$V(this, '');"/>
         </form>
       </div>
       <script>
@@ -63,10 +62,10 @@
     <!-- Forfait spécifique -->
     <a href="#" {{if $confCCAM.contraste}}style="color: #fff;"{{/if}} onclick="CodeCCAM.show('{{$_code->code}}', '{{$subject->_class}}')">
       {{$_code->code}}
-    </a> :
-    <label title="{{$_code->libelleLong}}">
-      <small>{{$_code->libelleLong|truncate:70:"...":true}}</small>
-    </label>
+    </a>
+    <span style="font-weight: normal;">
+      {{$_code->libelleLong}}
+    </span>
     {{if $_code->forfait}}
       <small style="color: #f00">({{tr}}CCodeCCAM.remboursement.{{$_code->forfait}}{{/tr}})</small>
     {{/if}}
@@ -104,7 +103,6 @@
             {{assign var=can_view_dh value=false}}
           {{/if}}
           
-        
           <!-- Couleur de l'acte -->
           {{if $acte->_id && ($acte->code_association == $acte->_guess_association || !$confCCAM.alerte_asso)}}
             {{assign var=bg_color value=9f9}}
@@ -150,7 +148,13 @@
                   {{/if}}
                 </div>
                 Activité {{$_activite->numero}} ({{$_activite->type}}) &mdash; 
-                Phase {{$_phase->phase}} 
+                Phase {{$_phase->phase}}
+                {{if $can_view_tarif && ($confCCAM.tarif || $subject->_class == "CConsultation")}}
+                <div style="font-weight: normal;">
+                {{$_phase->tarif|currency}}
+                </div>
+                {{/if}}
+
                 <!-- {{$_phase->libelle}} -->
               </td>
             </tr>
