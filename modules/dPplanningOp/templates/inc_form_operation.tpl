@@ -143,7 +143,7 @@ refreshFunction = function(chir_id) {
         class="notext {{if $op->chir_2_id || $op->chir_3_id || $op->chir_4_id}}up{{else}}down{{/if}}"></button>
     </td>
   </tr>
-  {{if $conf.dPplanningOp.COperation.show_secondary_function}}
+  {{if $conf.dPplanningOp.COperation.show_secondary_function && !$op->_id}}
     <tr>
       <th>
         {{mb_label class=CMediusers field=function_id}}
