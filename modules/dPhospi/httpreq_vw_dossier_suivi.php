@@ -92,6 +92,7 @@ foreach($sejour->_ref_suivi_medical as $_trans_const) {
     $list_trans_const[$sort_key] = $_trans_const;
   }
   elseif ($_trans_const instanceof CConsultation) {
+    $_trans_const->_ref_consult_anesth->loadRefOperation(); 
     if ($_trans_const->type == "entree") {
       $has_obs_entree = 1;
     }
