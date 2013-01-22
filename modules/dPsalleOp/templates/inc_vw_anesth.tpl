@@ -45,8 +45,8 @@ reloadPrescriptionAnesth = function(prescription_id){
           {{mb_label object=$selOp field="ASA" style="padding-left: 4em;"}}
           {{mb_field object=$selOp field="ASA" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
           <br />
-          {{mb_label object=$selOp->_ref_consult_anesth field="position" style="padding-left: 2.5em;"}}
-          {{mb_field object=$selOp->_ref_consult_anesth field="position" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
+          {{mb_label object=$selOp field="position" style="padding-left: 2.5em;"}}
+          {{mb_field object=$selOp field="position" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
         </form>
         {{/if}}
       </fieldset>
