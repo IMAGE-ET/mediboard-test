@@ -59,7 +59,7 @@ class COperation extends CCodable implements IPatientRelated {
   var $prothese             = null;
   var $ASA                  = null;
   var $position             = null;
-  
+
   var $depassement        = null;
   var $conventionne       = null;
   var $forfait            = null;
@@ -979,6 +979,8 @@ class COperation extends CCodable implements IPatientRelated {
    * @return CPlageOp
    */
   function loadRefPlageOp($cache = true) {
+    $this->loadRefAnesth($cache);
+
     $this->_ref_anesth_visite = $this->loadFwdRef("prat_visite_anesth_id", $cache);
 
     if (!$this->_ref_plageop) {
