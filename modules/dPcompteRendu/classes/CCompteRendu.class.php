@@ -1336,6 +1336,11 @@ class CCompteRendu extends CDocumentItem {
     }
     
     $model = new CCompteRendu();
+
+    if (!$user->_id) {
+      return $model;
+    }
+
     $model->nom = $name;
     $model->object_class = $object_class;
     $model->type = CCompteRendu::$special_names[$object_class][$name];
