@@ -369,9 +369,9 @@ var ExObject = {
 
   initPredicates: function(defaultProperties, fieldPredicates, form){
     // When the list is empty, the JSON value is an Array, which is wrong
-    if (defaultProperties.length === 0) {
+    /*if (defaultProperties.length === 0) {
       return;
-    }
+    }*/
 
     ExObject.defaultProperties = defaultProperties;
 
