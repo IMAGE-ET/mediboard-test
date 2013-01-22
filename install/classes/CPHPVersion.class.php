@@ -1,12 +1,12 @@
 <?php
 /**
  * $Id$
- *  
+ *
  * @package    Mediboard
  * @subpackage Intaller
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    SVN: $Id$ 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    SVN: $Id$
  * @link       http://www.mediboard.org
  */
 
@@ -27,20 +27,20 @@ class CPHPVersion extends CPrerequisite {
   function check($strict = true) {
     return phpversion() >= $this->name;
   }
-  
+
   function getAll() {
     $versions = array();
-    
+
     // Do not use $version which is a Mediboard global
     $php = new CPHPVersion;
-    $php->name = "5.2";
+    $php->name = "5.3";
     $php->mandatory = true;
     $php->description = "Version de PHP5 récente";
-    $php->reasons[] = "Intégration du support XML natif : utilisation pour l'intéropérabilité HPRIM XML'";
-    $php->reasons[] = "Intégration de PDO : accès universel et sécurisé aux base de données";
-    $php->reasons[] = "Conception objet plus évoluée";
+    $php->reasons[] = "Conception objet évoluée";
+    $php->reasons[] = "Optimisation mémoire";
+    $php->reasons[] = "Performances";
     $versions[] = $php;
-    
+
     return $versions;
   }
 }
