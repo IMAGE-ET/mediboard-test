@@ -16,14 +16,19 @@
  * K22 - Find Candidates response
  */
 class CHL7v2EventQBPK22 extends CHL7v2EventQBP implements CHL7EventQBPK22 {
-  var $code = "K22";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
   /**
+   * @var string
+   */
+  var $code = "K22";
+
+  /**
+   * Build K22 event
+   *
+   * @param CPatient $patient Person
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($patient) {
   }

@@ -45,7 +45,9 @@ class CHL7v2EventQBPQ22 extends CHL7v2EventQBP implements CHL7EventQBPQ22 {
     $this->addRCP($patient);
 
     // DSC
-   // $this->addDSC($patient);
+    if (isset($patient->_pointer)) {
+      $this->addDSC($patient);
+    }
   }
 }
 

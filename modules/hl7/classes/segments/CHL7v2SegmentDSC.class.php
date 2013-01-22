@@ -40,7 +40,7 @@ class CHL7v2SegmentDSC extends CHL7v2Segment {
     $patient = $this->patient;
 
     // DSC-1: Continuation Pointer (ST) (optional)
-    $data[] = "2bc015a3db1c43378215e5967f7e2f12";
+    $data[] = $patient->_pointer;
     
     // DSC-2: Continuation Style (ID) (optional)
     $data[] =  "I";

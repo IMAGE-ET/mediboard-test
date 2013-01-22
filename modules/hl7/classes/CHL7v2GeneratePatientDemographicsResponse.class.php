@@ -64,7 +64,13 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       $where[$field] = $ds->prepareLike($value);
     }
 
-    $patients = $patient->loadList($where, null, $quantity_limited_request);
+    if ($pointer = $patient->_pointer) {
+      $where["patient_id"] = " > $pointer";
+    }
+
+    $order = "patient_id ASC";
+
+    $patients = $patient->loadList($where, $order, $quantity_limited_request);
 
     return $exchange_ihe->setPDRAA($ack, "I001", null, $patients);
   }

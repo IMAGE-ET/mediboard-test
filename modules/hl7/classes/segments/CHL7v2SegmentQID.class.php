@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Represents an HL7 RCP message segment (Response Control Parameter) - HL7
+ * Represents an HL7 QID message segment (Query Identification) - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,15 +12,15 @@
  */
 
 /**
- * Class CHL7v2SegmentRCP
- * RCP - Represents an HL7 RCP message segment (Response Control Parameter)
+ * Class CHL7v2SegmentQID
+ * QID - Represents an HL7 QID message segment (Query Identification)
  */
 
-class CHL7v2SegmentRCP extends CHL7v2Segment {
+class CHL7v2SegmentQID extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name    = "RCP";
+  var $name    = "QID";
 
   /**
    * @var CPatient
@@ -28,7 +28,7 @@ class CHL7v2SegmentRCP extends CHL7v2Segment {
   var $patient = null;
 
   /**
-   * Build RCP segement
+   * Build QID segement
    *
    * @param CHL7v2Event $event Event
    *
@@ -37,35 +37,11 @@ class CHL7v2SegmentRCP extends CHL7v2Segment {
   function build(CHL7v2Event $event) {
     parent::build($event);
 
-    $patient = $this->patient;
-
-    $quantity_limited_request = isset($patient->_quantity_limited_request) ? $patient->_quantity_limited_request : 100;
-
-    // RCP-1: Query Priority (ID) (optional)
-    $data[] = "I";
+    // QID-1: Query Tag (ST) (optional)
+    $data[] = null;
     
-    // RCP-2: Quantity Limited Request (CQ) (optional)
-    $data[] =  array (
-      array (
-        $quantity_limited_request,
-        "RD"
-      )
-    );
-    
-    // RCP-3: Response Modality (CE) (optional)
-    $data[] = null;
-
-    // RCP-4: Execution and Delivery Time (TS) (optional)
-    $data[] = null;
-
-    // RCP-5: Modify Indicator (ID) (optional)
-    $data[] = null;
-
-    // RCP-6: Sort-by Field (SRT) (optional repeating)
-    $data[] = null;
-
-    // RCP-7: Segment group inclusion (ID) (optional repeating)
-    $data[] = null;
+    // QID-2: Message Query Name (CE) (optional)
+    $data[] =  null;
 
     $this->fill($data);
   }

@@ -51,7 +51,7 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     $data[] = "IHE PDQ Query";
     
     // QPD-2: Query Tag (ST)
-    $data[] = "PDQPDC.20130121155123";
+    $data[] = "PDQPDC.".CHL7v2::getDateTime();
     
     // QPD-3: User Parameters (in successive fields) (Varies)
     $QPD3 = array();
@@ -80,18 +80,7 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     $data[] = null;
 
     // QPD-8 : What domains returned
-    /*$data[] = array(
-      array(
-        null,
-        null,
-        null,
-        array (
-          "NIST2010",
-          "2.16.840.1.113883.3.72.5.9.1",
-          "ISO",
-        )
-      )
-    );*/
+    $data[] = null;
 
     $this->fill($data);
   }
@@ -106,7 +95,7 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
   function addQPD3PID(CPatient $patient) {
     return array(
       // PID-3 : Patient Identifier List
-      //$this->setDemographicsValues($patient, "PDQ", "3.1"),
+      //$this->setDemographicsValues($patient, "", "3.1"),
 
       // PID-5 : Patient Name
       $this->setDemographicsFields($patient, "nom", "5.1.1"),
@@ -127,8 +116,8 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
       $this->setDemographicsFields($patient, "cp", "11.5"),
 
       // PID-13 : Phone Number
-   //   $this->setDemographicsValues($patient, "555", "13.6"),
-    //  $this->setDemographicsValues($patient, "1234567", "13.7"),
+      // $this->setDemographicsValues($patient, "", "13.6"),
+    //  $this->setDemographicsValues($patient, "", "13.7"),
     );
   }
 
@@ -150,10 +139,10 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
   /**
    * Populating QPD-3 demographics fields
    *
-   * @param CMbObject $object Object
-   * @param string    $mb_field   Field spec
-   * @param string    $hl7_field  The number of a field
-   * @param null      $mapTo  Map to table HL7
+   * @param CMbObject $object    Object
+   * @param string    $mb_field  Field spec
+   * @param string    $hl7_field The number of a field
+   * @param null      $mapTo     Map to table HL7
    *
    * @return array
    */

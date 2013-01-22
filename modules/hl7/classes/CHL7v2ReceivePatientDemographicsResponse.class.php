@@ -37,6 +37,8 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
       $this->queryNodes("PID", $_query_response, $data, true);
     }
 
+    $this->queryNode("DSC", null, $data, true);
+
     return $data;
   }
 
@@ -69,9 +71,12 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
       $patients[$this->queryTextNode("PID.1", $_PID)] = $patient;
     }
 
+    if ($DSC = $data["DSC"]) {
+      $patients["pointer"] = $this->getContinuationPointer($DSC);
+    }
+
     return $patients;
   }
-
 
   /**
    * Get query response status
@@ -82,5 +87,16 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
    */
   function getQueryResponseStatus(DOMNode $node) {
     return $this->queryTextNode("QAK.2", $node);
+  }
+
+  /**
+   * Get continuation pointer
+   *
+   * @param DOMNode $node QAK element
+   *
+   * @return string
+   */
+  function getContinuationPointer(DOMNode $node) {
+    return $this->queryTextNode("DSC.1", $node);
   }
 }
