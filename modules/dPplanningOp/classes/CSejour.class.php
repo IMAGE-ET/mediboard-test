@@ -1477,6 +1477,7 @@ class CSejour extends CCodable implements IPatientRelated {
       $_consultation->canEdit();
       $_consult_anesth = $_consultation->loadRefConsultAnesth();
       if ($_consult_anesth->_id) {
+        $_consult_anesth->loadRefOperation();
         $_consult_anesth->loadRefsTechniques();
       }
       $_consultation->loadRefPlageConsult();
@@ -1488,6 +1489,7 @@ class CSejour extends CCodable implements IPatientRelated {
     foreach ($consultations_patient as $_consultation) {
       $_consult_anesth = $_consultation->loadRefConsultAnesth();
       if ($_consult_anesth->_id) {
+        $_consult_anesth->loadRefOperation();
         $_consult_anesth->loadRefsTechniques();
         $_consultation->loadRefPlageConsult();
         $_consultation->loadRefPraticien()->loadRefFunction();
