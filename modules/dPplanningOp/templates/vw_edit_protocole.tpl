@@ -286,6 +286,25 @@ Main.add(function () {
           </td>
         </tr> 
         
+        <!-- Choix du type d'anesthésie -->
+        {{if $conf.dPplanningOp.COperation.easy_type_anesth}}
+          <tr>
+            <th>{{mb_label object=$protocole field="type_anesth"}}</th>
+            <td colspan="2">
+              <select name="type_anesth" style="width: 15em;" onchange="submitAnesth(this.form);">
+                <option value="">&mdash; Anesthésie</option>
+                {{foreach from=$listAnesthType item=curr_anesth}}
+                  {{if $curr_anesth->actif || $protocole->type_anesth == $curr_anesth->type_anesth_id}}
+                    <option value="{{$curr_anesth->type_anesth_id}}" {{if $protocole->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}}>
+                      {{$curr_anesth->name}} {{if !$curr_anesth->actif && $protocole->type_anesth == $curr_anesth->type_anesth_id}}(Obsolète){{/if}}
+                    </option>
+                  {{/if}}
+                {{/foreach}}
+              </select>
+            </td>
+          </tr> 
+        {{/if}}
+        
         <tr>
           <th>{{mb_label object=$protocole field=temp_operation}}</th>
           <td colspan="2">{{mb_field object=$protocole field=temp_operation form=editProtocole class="notNull"}}</td>

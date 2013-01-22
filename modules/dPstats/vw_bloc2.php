@@ -1,13 +1,13 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPstats
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
-
 CCanDo::checkRead();
 
 //set_time_limit(180);
@@ -29,7 +29,7 @@ $bloc->load($bloc_id);
 
 $where = array();
 $where["stats"] = "= '1'";
-if($bloc->_id) {
+if ($bloc->_id) {
   $where["bloc_id"] = "= '$bloc->_id'";
 }
 $salle = new CSalle;
@@ -46,12 +46,12 @@ $plage = new CPlageOp;
 $listPlages = $plage->loadList($where, $order);
 
 // Récupération des interventions
-foreach($listPlages as $curr_plage) {
+foreach ($listPlages as $curr_plage) {
   $curr_plage->loadRefsFwd(1);
   $curr_plage->loadRefsBack(0, "entree_salle");
   
   $i = 1;
-  foreach($curr_plage->_ref_operations as $curr_op) {
+  foreach ($curr_plage->_ref_operations as $curr_op) {
     $curr_op->_rank_reel = $curr_op->entree_salle ? $i : "";
     $i++;
     $next = next($curr_plage->_ref_operations);
@@ -62,7 +62,7 @@ foreach($listPlages as $curr_plage) {
   }
 }
 
-if($mode == "csv") {
+if ($mode == "csv") {
     // A utiliser comme ça :
     // m=dPstats&dialog=1&a=vw_bloc2&mode=text&suppressHeaders=1
     $csvName = "stats_bloc_".$deblist."_".$finlist."_".$bloc_id.".csv";
@@ -74,8 +74,8 @@ if($mode == "csv") {
     $title .= '"Entrée reveil";"Sortie reveil"
 ';
     fwrite($csvFile, $title);
-    foreach($listPlages as $curr_plage) {
-      foreach($curr_plage->_ref_operations as $curr_op) {
+    foreach ($listPlages as $curr_plage) {
+      foreach ($curr_plage->_ref_operations as $curr_op) {
         $line  = '"'.$curr_plage->date.'";';
         $line .= '"'.$curr_plage->_ref_salle->_view.'";';
         $line .= '"'.$curr_op->_ref_salle->_view.'";';
@@ -91,7 +91,7 @@ if($mode == "csv") {
         $line .= '"'.$curr_op->_ref_sejour->DP.'";';
         $line .= '"'.$curr_op->codes_ccam.'";';
         $line .= '"'.$curr_op->_lu_type_anesth.'";';
-        $line .= '"'.$curr_op->_ref_consult_anesth->ASA.'";';
+        $line .= '"'.$curr_op->ASA.'";';
         $line .= '"'.$curr_op->_ref_first_log->date.'";';
         $line .= '"'.$curr_op->entree_salle.'";';
         $line .= '"'.$curr_op->induction_debut.'";';
@@ -123,7 +123,8 @@ if($mode == "csv") {
     header("Content-disposition: attachment; filename=\"".$csvName."\"");
     readfile($csvPath);
     return;
-} else {
+}
+else {
   // Création du template
   $smarty = new CSmartyDP();
 

@@ -1,10 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPcabinet
- * @version $Revision$
- * @author Romain Ollivier
+ * @author     Romain Ollivier <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CConsultAnesth extends CMbObject implements IPatientRelated {
@@ -31,7 +33,6 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   var $tabac          = null;
   var $oenolisme      = null;
 
-  var $ASA            = null;
   var $mallampati     = null;
   var $bouche         = null;
   var $distThyro      = null;
@@ -44,7 +45,6 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   var $examenAutre    = null;
   
   var $conclusion     = null;
-  var $position       = null;
   var $premedication  = null;
   var $prepa_preop    = null;
   var $date_analyse   = null;  
@@ -132,8 +132,6 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $props["traitements"]      = "text confidential";
     $props["tabac"]            = "text helped";
     $props["oenolisme"]        = "text helped";
-    
-    $props["ASA"]              = "enum list|1|2|3|4|5 default|1";
 
     // Données examens complementaires
     $props["rai"]              = "enum list|?|NEG|POS default|? show|0";
@@ -172,7 +170,6 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $props["examenAutre"]      = "text helped";
     
     $props["conclusion"]       = "text helped seekable";
-    $props["position"]         = "enum list|DD|DV|DL|GP|AS|TO|GYN";
 
     // Champs dérivés
     $props["_intub_difficile"] = "";
@@ -200,7 +197,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
    
   function updatePlainFields() {
-    if($this->_min_tsivy !== null && $this->_sec_tsivy !== null) {
+    if ($this->_min_tsivy !== null && $this->_sec_tsivy !== null) {
       $this->tsivy  = '00:'.($this->_min_tsivy ? sprintf("%02d", $this->_min_tsivy):'00').':';
       $this->tsivy .=       ($this->_sec_tsivy ? sprintf("%02d", $this->_sec_tsivy):'00');
     }
@@ -242,7 +239,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
       $this->_ref_operation->loadRefSejour();
       $this->_ref_operation->loadRefPlageOp();
       $this->_ref_sejour = $this->_ref_operation->_ref_sejour;
-    } 
+    }
     else {
       $this->loadRefSejour();
     }
@@ -260,7 +257,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   function loadRefsFiles(){
-    if(!$this->_ref_consultation){
+    if (!$this->_ref_consultation) {
       $this->loadRefConsultation();
     }
     $this->_ref_consultation->loadRefsFiles();
@@ -328,7 +325,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     }
     
     // Calcul des Pertes Sanguines Acceptables
-    if($this->ht && $this->ht_final && $const_med->_vst) {
+    if ($this->ht && $this->ht_final && $const_med->_vst) {
       $this->_psa = $const_med->_vst * ($this->ht - $this->ht_final) / 100;
     }
   }
@@ -362,30 +359,32 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
   }
 
   function getPerm($permType) {
-    if(!$this->_ref_consultation){
+    if (!$this->_ref_consultation) {
       $this->loadRefConsultation();
     }
     
-    switch($permType) {
+    switch ($permType) {
       case PERM_EDIT :
         return $this->_ref_consultation->getPerm($permType);
       default :
         // Droits sur l'opération
-        if($this->operation_id){
-          if(!$this->_ref_operation){
+        if ($this->operation_id) {
+          if (!$this->_ref_operation) {
             $this->loadRefOperation();
           }
           $canOper = $this->_ref_operation->getPerm($permType);
-        }else{
+        }
+        else {
           $canOper = false;
         }
         // Droits sur le séjour
-        if($this->sejour_id){
-          if(!$this->_ref_sejour){
+        if ($this->sejour_id) {
+          if (!$this->_ref_sejour) {
             $this->loadRefSejour();
           }
           $canSej = $this->_ref_sejour->getPerm($permType);
-        }else{
+        }
+        else {
           $canSej = false;
         }
         return $canOper || $canSej || $this->_ref_consultation->getPerm($permType);	
@@ -427,10 +426,10 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $template->addProperty("Anesthésie - TS Ivy"                 , "$this->_min_tsivy min $this->_sec_tsivy s");
     $template->addProperty("Anesthésie - ECBU"                   , $this->ecbu);
     
-    $template->addProperty("Anesthésie - ASA"                    , $this->ASA);
+    $template->addProperty("Anesthésie - ASA"                    , $this->_ref_operation->ASA);
     $template->addProperty("Anesthésie - Préparation pré-opératoire", $this->prepa_preop);
     $template->addProperty("Anesthésie - Prémédication", $this->premedication);
-    $template->addProperty("Anesthésie - Position"     , $this->getFormattedValue('position'));
+    $template->addProperty("Anesthésie - Position"     , $this->_ref_operation->getFormattedValue('position'));
 
     $list = CMbArray::pluck($this->loadRefsTechniques(), 'technique');
     $template->addListProperty("Anesthésie - Techniques complémentaires", $list);
@@ -462,7 +461,7 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     $this->loadRefConsultation();
     $consult =& $this->_ref_consultation;
     $consult->loadRefPlageConsult();
-    if ($consult->_ref_plageconsult->date < mbDate()){
+    if ($consult->_ref_plageconsult->date < mbDate()) {
       return "Imposible de supprimer une consultation passée";
     }
 

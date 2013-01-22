@@ -157,8 +157,8 @@ Main.add(function(){
                 </td>
 
                 <td class="{{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center;";>
-                  {{if $dossier_anesth->ASA}}
-                    <strong>{{$dossier_anesth->ASA[0]}}</strong>
+                  {{if $_operation->ASA}}
+                    <strong>{{$_operation->ASA[0]}}</strong>
                   {{else}}
                     -
                   {{/if}}

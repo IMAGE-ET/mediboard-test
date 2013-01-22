@@ -14,6 +14,7 @@
     {{mb_include module=system template=inc_config_bool var=easy_chambre_simple}}
     {{mb_include module=system template=inc_config_bool var=easy_ald_cmu}}
     {{mb_include module=system template=inc_config_bool var=easy_isolement}}
+    {{mb_include module=system template=inc_config_bool var=easy_atnc}}
       
     {{assign var=class value=COperation}}
     
@@ -23,6 +24,7 @@
     {{mb_include module=system template=inc_config_bool var=easy_regime}}
     {{mb_include module=system template=inc_config_bool var=easy_accident}}
     {{mb_include module=system template=inc_config_bool var=easy_assurances}}
+    {{mb_include module=system template=inc_config_bool var=easy_type_anesth}}
     
     <tr>
       <td class="button" colspan="2">

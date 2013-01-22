@@ -1720,7 +1720,15 @@ class CSetupdPcabinet extends CSetup {
               CHANGE `assurance_complementaire` `assurance_accident` INT (11) UNSIGNED;";
     $this->addQuery($query);
     
-    $this->mod_version = "1.85";
+    $this->makeRevision("1.85");
+
+    $this->addDependency("dPplanningOp", "1.70");
+    $query = "ALTER TABLE `consultation_anesth` 
+              DROP `position`,
+              DROP `ASA`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.86";
   }
 }
 ?>

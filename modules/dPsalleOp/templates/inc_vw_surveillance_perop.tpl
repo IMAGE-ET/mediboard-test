@@ -108,7 +108,7 @@ editEvenementPerop = function(guid, operation_id, datetime) {
     </td>
     <td>Gr. sang. / Rh: <strong>{{mb_value object=$consult_anesth field=groupe}} {{mb_value object=$consult_anesth field=rhesus}}</strong></td>
     <td>Mallampati: <strong>{{mb_value object=$consult_anesth field=mallampati}}</strong></td>
-    <td>ASA: <strong>{{mb_value object=$consult_anesth field=ASA}}</strong></td>
+    <td>ASA: <strong>{{{mb_value object=$interv field=ASA}}</strong> </td>
   </tr>
 </table>
 <hr />

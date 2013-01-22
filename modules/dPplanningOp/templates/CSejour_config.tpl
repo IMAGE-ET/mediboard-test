@@ -107,6 +107,7 @@
     {{mb_include module=system template=inc_config_bool var=show_isolement}}
     {{mb_include module=system template=inc_config_bool var=show_chambre_part}}
     {{mb_include module=system template=inc_config_bool var=show_facturable}}
+    {{mb_include module=system template=inc_config_bool var=show_atnc}}
 
     <tr>
       <th class="title" colspan="2">Heure par defaut du séjour</th>

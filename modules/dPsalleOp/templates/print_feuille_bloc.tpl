@@ -88,10 +88,10 @@ Main.add(function(){
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$consult_anesth field=ASA}}</th>
+          <th>{{mb_label object=$operation field=ASA}}</th>
           <td>
-            {{if $consult_anesth->ASA}}
-              {{mb_value object=$consult_anesth field=ASA}}
+            {{if $operation->ASA}}
+              {{mb_value object=$operation field=ASA}}
             {{else}}
               &mdash;
             {{/if}}
@@ -102,10 +102,10 @@ Main.add(function(){
           <td>{{mb_value object=$operation field=cote}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$consult_anesth field=position}}</th>
+          <th>{{mb_label object=$operation field=position}}</th>
           <td>
-            {{if $consult_anesth->position}}
-              {{mb_value object=$consult_anesth field=position}}
+            {{if $operation->position}}
+              {{mb_value object=$operation field=position}}
             {{else}}
               &mdash;
             {{/if}}

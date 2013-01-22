@@ -106,7 +106,7 @@ if ($filters['chir_id']) {
 }
 
 if ($filters['code_asa']) {
-  $where['consultation_anesth.ASA'] = " = '{$filters['code_asa']}'";
+  $where['operations.ASA'] = " = '{$filters['code_asa']}'";
 }
 
 if ($filters['cell_saver_id']) {
@@ -126,15 +126,15 @@ $data['age'] = array(
 $series = &$data['age']['series'];
 $age_areas = array(0, 20, 40, 50, 60, 70, 80);
 foreach($age_areas as $key => $age) {
-	$limits = array($age, CValue::read($age_areas, $key+1));
-	$label = $limits[1] ? ("$limits[0] - ".($limits[1]-1)) : ">= $limits[0]";
-	
+  $limits = array($age, CValue::read($age_areas, $key+1));
+  $label = $limits[1] ? ("$limits[0] - ".($limits[1]-1)) : ">= $limits[0]";
+  
   $date_min = mbDate("-{$limits[1]} YEARS");
   $date_max = mbDate("-{$limits[0]} YEARS");
   
-	// Age calculation
+  // Age calculation
   $where[] = "patients.naissance <= '$date_max' ".
-	           ($limits[1] != null ? " AND patients.naissance > '$date_min'" : "");
+             ($limits[1] != null ? " AND patients.naissance > '$date_min'" : "");
   
   $series[$key] = array('data' => array(), 'label' => "$label ans");
   fillData($where, $ljoin, $series[$key], $dates);
@@ -150,9 +150,9 @@ $data['6h'] = array(
 $series = &$data['6h']['series'];
 $areas = array("< 6", ">= 6", "IS NULL");
 foreach($areas as $key => $area) {
-	$where[] = "HOUR(TIMEDIFF(blood_salvage.transfusion_end, blood_salvage.recuperation_start)) $area";
-	$series[$key] = array('data' => array(), 'label' => (($area == 'IS NULL') ? CAppUI::tr("Unknown") : $area.'h'));
-	fillData($where, $ljoin, $series[$key], $dates);
+  $where[] = "HOUR(TIMEDIFF(blood_salvage.transfusion_end, blood_salvage.recuperation_start)) $area";
+  $series[$key] = array('data' => array(), 'label' => (($area == 'IS NULL') ? CAppUI::tr("Unknown") : $area.'h'));
+  fillData($where, $ljoin, $series[$key], $dates);
 }
 
 // H/F
@@ -174,19 +174,19 @@ foreach($areas as $key => $area) {
 // Codes CCAM
 if ($filters['codes_ccam']) {
   $list_codes_ccam = explode('|', $filters['codes_ccam']);
-	
+  
   $data['ccam'] = array(
     'options' => array(
       'title' => utf8_encode('Par code CCAM')
     ),
     'data' => array()
   );
-	$series = &$data['ccam']['series'];
-	foreach($list_codes_ccam as $key => $ccam) {
-	  $where[] = "operations.codes_ccam LIKE '%$ccam%'";
-	  $series[$key] = array('data' => array(), 'label' => $ccam);
-	  fillData($where, $ljoin, $series[$key], $dates);
-	}
+  $series = &$data['ccam']['series'];
+  foreach($list_codes_ccam as $key => $ccam) {
+    $where[] = "operations.codes_ccam LIKE '%$ccam%'";
+    $series[$key] = array('data' => array(), 'label' => $ccam);
+    fillData($where, $ljoin, $series[$key], $dates);
+  }
 }
 
 // Volume de lavage

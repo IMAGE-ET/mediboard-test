@@ -16,7 +16,7 @@ newExam = function(sAction, consultation_id) {
       {{mb_include module=system template=inc_object_idsante400 object=$consult}}
       {{mb_include module=system template=inc_object_history    object=$consult}}
       {{mb_include module=system template=inc_object_notes      object=$consult}}
-			
+      
       {{$consult}}
     </th>
   </tr>
@@ -83,7 +83,9 @@ newExam = function(sAction, consultation_id) {
   <tr>
     <td class="text" colspan="2">
       <strong>Position :</strong>
-      <i>{{tr}}CConsultAnesth.position.{{$object->position}}{{/tr}}</i>
+      {{if $object->operation_id}}
+        <i>{{tr}}CConsultAnesth.position.{{$object->_ref_operation->position}}{{/tr}}</i>
+      {{/if}}
     </td>
     <td class="text" colspan="2">
       <strong>Techniques Complémentaires :</strong>
@@ -132,7 +134,9 @@ newExam = function(sAction, consultation_id) {
     </td>
     <td class="text">
       <strong>ASA :</strong>
-      <i>{{tr}}CConsultAnesth.ASA.{{$object->ASA}}{{/tr}}</i>
+      {{if $object->operation_id}}
+        <i>{{tr}}COperation.ASA.{{$object->_ref_operation->ASA}}{{/tr}}</i>
+      {{/if}}
     </td>
     <td class="text">
       <strong>VST :</strong>
@@ -175,7 +179,7 @@ newExam = function(sAction, consultation_id) {
   
   {{if $object->mallampati || $object->bouche || $object->distThyro || $object->etatBucco || 
        $object->examenCardio || $object->examenPulmo || $object->examenDigest || $object->examenAutre ||
-			 $object->conclusion}}
+       $object->conclusion}}
   <tr>
     <th class="title" colspan="4">
       Conditions d'intubation
@@ -351,7 +355,7 @@ newExam = function(sAction, consultation_id) {
 </table>
 
 <table class="tbl">
-	{{mb_include module=cabinet template=inc_list_actes_ccam subject=$object->_ref_consultation vue=complete}}
+  {{mb_include module=cabinet template=inc_list_actes_ccam subject=$object->_ref_consultation vue=complete}}
 </table>
   
 <!-- Dossier Médical -->

@@ -42,8 +42,8 @@ reloadPrescriptionAnesth = function(prescription_id){
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
           {{mb_key object=$selOp->_ref_consult_anesth}}
-          {{mb_label object=$selOp->_ref_consult_anesth field="ASA" style="padding-left: 4em;"}}
-          {{mb_field object=$selOp->_ref_consult_anesth field="ASA" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
+          {{mb_label object=$selOp field="ASA" style="padding-left: 4em;"}}
+          {{mb_field object=$selOp field="ASA" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
           <br />
           {{mb_label object=$selOp->_ref_consult_anesth field="position" style="padding-left: 2.5em;"}}
           {{mb_field object=$selOp->_ref_consult_anesth field="position" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}

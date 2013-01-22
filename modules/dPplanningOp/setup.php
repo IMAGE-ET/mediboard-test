@@ -1583,7 +1583,23 @@ class CSetupdPplanningOp extends CSetup {
                 ADD INDEX (`mode_entree_id`),
                 ADD INDEX (`mode_sortie_id`);";
     $this->addQuery($query);
+    $this->makeRevision("1.69");
 
-    $this->mod_version = "1.69";
+    $query = "ALTER TABLE `protocole` 
+              ADD `type_anesth` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `operations` 
+              ADD `ASA` ENUM ('1','2','3','4','5') DEFAULT '1',
+              ADD `position` ENUM ('DD','DV','DL','GP','AS','TO','GYN');";
+    $this->addQuery($query);
+    
+    $query = "UPDATE `operations`, `consultation_anesth`
+      SET `operations`.`ASA` = `consultation_anesth`.`ASA`,
+      `operations`.`position` = `consultation_anesth`.`position`
+      WHERE `consultation_anesth`.`operation_id` = `operations`.`operation_id`;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.70";
   }
 }

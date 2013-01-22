@@ -90,12 +90,12 @@
                 <tr>
                   <th style="font-weight: normal;">Position</th>
                   <td style="font-weight: bold;">
-                    {{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}
+                    {{tr}}CConsultAnesth.position.{{$consult_anesth->_ref_operation->position}}{{/tr}}
                   </td>
                 </tr>
               </table>
-            {{elseif $consult_anesth->position}}
-            Position : <strong>{{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}</strong>
+            {{elseif $consult_anesth->_ref_operation->position}}
+            Position : <strong>{{tr}}CConsultAnesth.position.{{$consult_anesth->_ref_operation->position}}{{/tr}}</strong>
             {{/if}}
           </td>
           <td class="halfPane text">
@@ -180,7 +180,7 @@
               {{/if}}
               <tr>
                 <th style="font-weight: normal;">ASA</th>
-                <td style="font-weight: bold;">{{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}}</td>
+                <td style="font-weight: bold;">{{if $consult_anesth->operation_id}}{{tr}}COperation.ASA.{{$consult_anesth->_ref_operation->ASA}}{{/tr}}{{/if}}</td>
               </tr>
               <tr>
                 <th style="font-weight: normal;">VST</th>

@@ -148,7 +148,7 @@ Main.add(function () {
     <td class="text">{{$curr_op->_ref_sejour->DP}}</td>
     <td class="text">{{$curr_op->codes_ccam|replace:'|':' '}}</td>
     <td class="text">{{$curr_op->_lu_type_anesth}}</td>
-    <td class="text">{{$curr_op->_ref_consult_anesth->ASA}}</td>
+    <td class="text">{{$curr_op->ASA}}</td>
     <td class="text">
       {{if $curr_op->_ref_first_log}}
         {{$curr_op->_ref_first_log->date|date_format:$conf.datetime}}

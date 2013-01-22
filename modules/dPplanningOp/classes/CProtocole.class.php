@@ -1,12 +1,16 @@
-<?php /* $Id$ */
+<?php 
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPplanningOp
+ * @author     Romain Ollivier <dev@openxtrem.com>
+ * @version    $Revision$
+ */
 
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
+ * Classe des protocoles
+ */
 class CProtocole extends CMbObject {
   // DB Table key
   var $protocole_id = null;
@@ -50,6 +54,7 @@ class CProtocole extends CMbObject {
   var $presence_preop    = null;
   var $presence_postop   = null;
   var $exam_extempo      = null;
+  var $type_anesth       = null;
   
   // DB fields linked protocols
   var $protocole_prescription_chir_id      = null;
@@ -119,6 +124,7 @@ class CProtocole extends CMbObject {
     $props["presence_preop"]  = "time show|0";
     $props["presence_postop"] = "time show|0";
     $props["exam_extempo"]    = "bool";
+    $props["type_anesth"]     = "ref class|CTypeAnesth";
     
     $props["protocole_prescription_chir_id"]      = "ref class|CMbObject meta|protocole_prescription_chir_class";
     $props["protocole_prescription_chir_class"]   = "enum list|CPrescription|CPrescriptionProtocolePack";
@@ -142,7 +148,7 @@ class CProtocole extends CMbObject {
     $this->codes_ccam = strtoupper($this->codes_ccam);
     if ($this->codes_ccam) {
       $this->_codes_ccam = explode("|", $this->codes_ccam);
-    } 
+    }
     else {
       $this->_codes_ccam = array();
     }
@@ -152,21 +158,21 @@ class CProtocole extends CMbObject {
     
     if ($this->libelle_sejour) {
       $this->_view = $this->libelle_sejour;
-    } 
+    }
     elseif ($this->libelle) {
       $this->_view = $this->libelle;
-    } 
+    }
     else {
       $this->_view = $this->codes_ccam;
     }
   }
 
   function updatePlainFields() {
-    if($this->codes_ccam) {
+    if ($this->codes_ccam) {
       $this->codes_ccam = strtoupper($this->codes_ccam);
       $codes_ccam = explode("|", $this->codes_ccam);
       $XPosition = true;
-      while($XPosition !== false) {
+      while ($XPosition !== false) {
         $XPosition = array_search("-", $codes_ccam);
         if ($XPosition !== false) {
           array_splice($codes_ccam, $XPosition, 1);
@@ -233,20 +239,24 @@ class CProtocole extends CMbObject {
     $this->loadExtCodesCCAM();
     $this->loadExtCodeCIM();
     $this->_view = "";
-    if($this->libelle_sejour) {
+    if ($this->libelle_sejour) {
       $this->_view .= "$this->libelle_sejour";
-    } elseif($this->libelle) {
+    }
+    elseif ($this->libelle) {
       $this->_view .= "$this->libelle";
-    } else {
-      foreach($this->_ext_codes_ccam as $key => $ccam) {
+    }
+    else {
+      foreach ($this->_ext_codes_ccam as $key => $ccam) {
         $this->_view .= " - $ccam->code";
       }
     }
-    if($this->chir_id) {
+    if ($this->chir_id) {
       $this->_view .= " &mdash; Dr {$this->_ref_chir->_view}";
-    }else if($this->function_id) {
+    }
+    elseif ($this->function_id) {
       $this->_view .= " &mdash; Fonction {$this->_ref_function->_view}";
-    }else if($this->chir_id) {
+    }
+    elseif ($this->chir_id) {
       $this->_view .= " &mdash; Etablissement {$this->_ref_group->_view}";
     }
   }
@@ -268,20 +278,20 @@ class CProtocole extends CMbObject {
   }
   
   function getPerm($permType) {
-    if($this->chir_id) {
-      if(!$this->_ref_chir) {
+    if ($this->chir_id) {
+      if (!$this->_ref_chir) {
         $this->loadRefChir();
-      } 
+      }
       return $this->_ref_chir->getPerm($permType);
     }
-    if($this->function_id) {
-      if(!$this->_ref_function) {
+    if ($this->function_id) {
+      if (!$this->_ref_function) {
         $this->loadRefFunction();
       } 
       return $this->_ref_function->getPerm($permType);
     }
-    if($this->group_id) {
-      if(!$this->_ref_group) {
+    if ($this->group_id) {
+      if (!$this->_ref_group) {
         $this->loadRefGroup();
       } 
       return $this->_ref_group->getPerm($permType);

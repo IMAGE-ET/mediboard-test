@@ -57,7 +57,9 @@ class COperation extends CCodable implements IPatientRelated {
   var $labo_bacterio         = null;
   var $description_bacterio = null;
   var $prothese             = null;
-
+  var $ASA                  = null;
+  var $position             = null;
+  
   var $depassement        = null;
   var $conventionne       = null;
   var $forfait            = null;
@@ -312,6 +314,8 @@ class COperation extends CCodable implements IPatientRelated {
     $props["labo_bacterio"]        = "str autocomplete";
     $props["description_bacterio"] = "text helped";
     $props["prothese"]             = "enum list|1|0|? default|? show|0";
+    $props["position"]             = "enum list|DD|DV|DL|GP|AS|TO|GYN";
+    $props["ASA"]                  = "enum list|1|2|3|4|5 default|1";
     $props["horaire_voulu"]        = "time show|0";
     $props["presence_preop"]       = "time show|0";
     $props["presence_postop"]      = "time show|0";

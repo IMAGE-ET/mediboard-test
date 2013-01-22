@@ -991,12 +991,14 @@ Main.add( function(){
   </td>
 </tr>
 
-<tr {{if $mode_operation}} style="display: none;" {{/if}}>
-  <th>{{mb_label object=$sejour field="ATNC"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="ATNC"}}</td>
-</tr>
-
 </tbody>
+
+{{if $conf.dPplanningOp.CSejour.show_atnc}}
+  <tr {{if !$conf.dPplanningOp.CSejour.easy_atnc}} class="modeExpert" {{/if}}>
+    <th>{{mb_label object=$sejour field="ATNC"}}</th>
+    <td colspan="3">{{mb_field object=$sejour field="ATNC"}}</td>
+  </tr>
+{{/if}}
 
 {{if $conf.dPplanningOp.CSejour.show_isolement}}
   {{assign var=systeme_isolement value=$conf.dPplanningOp.CSejour.systeme_isolement}}

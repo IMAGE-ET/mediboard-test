@@ -39,6 +39,7 @@
     {{mb_include module=system template=inc_config_bool var=show_presence_op}}
     {{mb_include module=system template=inc_config_bool var=show_remarques}}
     {{mb_include module=system template=inc_config_bool var=show_montant_dp}}
+    {{mb_include module=system template=inc_config_bool var=show_asa_position}}
 
     <tr>
       <td class="button" colspan="2">

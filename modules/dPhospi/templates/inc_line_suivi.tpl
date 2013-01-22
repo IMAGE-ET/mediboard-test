@@ -148,11 +148,13 @@
   <td class="text">
     {{if $_suivi->_ref_consult_anesth->_id}}
       {{assign var=consult_anesth value=$_suivi->_ref_consult_anesth}}
-      {{if $consult_anesth->ASA}}
-        <u>ASA :</u> {{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}} <br />
-      {{/if}}
-      {{if $consult_anesth->position}}
-        <u>Position :</u> {{mb_value object=$consult_anesth field=position}} <br />
+      {{if $consult_anesth->operation_id}}
+        {{if $consult_anesth->_ref_operation->ASA}}
+          <u>ASA :</u> {{tr}}COperation.ASA.{{$consult_anesth->_ref_operation->ASA}}{{/tr}} <br />
+        {{/if}}
+        {{if $consult_anesth->_ref_operation->position}}
+          <u>Position :</u> {{mb_value object=$consult_anesth->_ref_operation field=position}} <br />
+        {{/if}}
       {{/if}}
       {{if $consult_anesth->prepa_preop}}
         <u>{{mb_label class=CConsultAnesth field=prepa_preop}} :</u> {{mb_value object=$consult_anesth field=prepa_preop}} <br />

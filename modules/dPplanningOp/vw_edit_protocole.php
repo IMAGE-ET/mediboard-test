@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPplanningOp
+ * @author     Romain Ollivier <dev@openxtrem.com>
+ * @version    $Revision$
+ */
 
 global $m, $tab;
 
@@ -28,7 +29,7 @@ $function = new CFunctions();
 $listFunctions  = $function->loadSpecialites(PERM_EDIT);
 
 $protocole = new CProtocole;
-if($protocole_id) {
+if ($protocole_id) {
   $protocole->load($protocole_id);
   // On vérifie que l'utilisateur a les droits sur le protocole
   if (!$protocole->getPerm(PERM_EDIT)) {
@@ -54,6 +55,10 @@ $where["cancelled"] = "= '0'";
 $order = "nom";
 $listServices = $service->loadListWithPerms(PERM_READ,$where, $order);
 
+// Liste des types d'anesthésie
+$listAnesthType = new CTypeAnesth;
+$orderanesth = "name";
+$listAnesthType = $listAnesthType->loadList(null,$orderanesth);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -67,6 +72,7 @@ $smarty->assign("ufs"         , CUniteFonctionnelle::getUFs());
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("listFunctions" , $listFunctions);
 $smarty->assign("listServices"  , $listServices);
+$smarty->assign("listAnesthType"  , $listAnesthType);
 
 $smarty->display("vw_edit_protocole.tpl");
 

@@ -111,19 +111,13 @@ checkUSCPO = function() {
                     {{/foreach}}
                   </select>
                   <br />
+                  {{mb_label object=$operation field="ASA" style="padding-left: 6em;"}}
+                  {{mb_field object=$operation field="ASA" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
+                  <br />
+                  {{mb_label object=$operation field="position" style="padding-left: 4.5em;"}}
+                  {{mb_field object=$operation field="position" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
                 </form>
               {{/if}}
-              <form name="editInfosASAFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-                <input type="hidden" name="m" value="dPcabinet" />
-                <input type="hidden" name="del" value="0" />
-                <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-                {{mb_key object=$consult_anesth}}
-                {{mb_label object=$consult_anesth field="ASA" style="padding-left: 6em;"}}
-                {{mb_field object=$consult_anesth field="ASA" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
-                <br />
-                {{mb_label object=$consult_anesth field="position" style="padding-left: 4.5em;"}}
-                {{mb_field object=$consult_anesth field="position" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
-              </form>
             </td>
           </tr>
         </table>

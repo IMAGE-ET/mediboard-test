@@ -287,7 +287,7 @@ refreshFunction = function(chir_id) {
     <td id="timeEst">
     </td>
   </tr>
-
+  
   <tr>
     {{if $modurgence}}
       <th>{{mb_label object=$op field="date"}}</th>
@@ -385,7 +385,16 @@ refreshFunction = function(chir_id) {
       </td>
     </tr>
   {{/if}}
-  
+  {{if $conf.dPplanningOp.COperation.show_asa_position}}
+    <tr>
+      <th>{{mb_label object=$op field="ASA"}}</th>
+      <td>{{mb_field object=$op field="ASA" emptyLabel="Choose" style="width: 15em;"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$op field="position"}}</th>
+      <td>{{mb_field object=$op field="position" emptyLabel="Choose" style="width: 15em;"}}</td>
+    </tr>
+  {{/if}}
   {{if $conf.dPplanningOp.COperation.use_poste}}
     <tr>
       <th>

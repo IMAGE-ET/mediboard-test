@@ -187,7 +187,7 @@
           </td>
         </tr>
         <tr>
-          <th class="category">Code ASA : {{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}}</th>
+          <th class="category">Code ASA : {{if $consult_anesth->operation_id}}{{tr}}COperation.ASA.{{$operation->ASA}}{{/tr}}{{/if}}</th>
         </tr>
       </table>
     </td>

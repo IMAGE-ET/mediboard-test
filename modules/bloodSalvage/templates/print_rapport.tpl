@@ -22,11 +22,11 @@
 
  <table class="print">
   <tr>
-	  <th class="title" colspan="4">
-	    <a href="#" onclick="window.print()">
+    <th class="title" colspan="4">
+      <a href="#" onclick="window.print()">
         {{tr}}CBloodSalvage.report-long{{/tr}}
-	    </a>
-	  </th>
+      </a>
+    </th>
   </tr>
   <tr>
     <td class="halfPane" {{if $no_alle}}colspan="2"{{/if}}>
@@ -75,7 +75,7 @@
               {{/if}}
               <tr>
                 <th>ASA</th>
-                <td> <b>{{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}}</b> </td>
+                <td> <b>{{tr}}COperation.ASA.{{$operation->ASA}}{{/tr}}</b> </td>
               </tr>
               <tr>
                 <th>VST</th>

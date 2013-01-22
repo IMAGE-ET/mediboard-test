@@ -1,10 +1,4 @@
 <?php
-$locales['CConsultAnesth.ASA.'] = ' ';
-$locales['CConsultAnesth.ASA.1'] = '1';
-$locales['CConsultAnesth.ASA.2'] = '2';
-$locales['CConsultAnesth.ASA.3'] = '3';
-$locales['CConsultAnesth.ASA.4'] = '4';
-$locales['CConsultAnesth.ASA.5'] = '5';
 $locales['CConsultAnesth.bouche.'] = ' ';
 $locales['CConsultAnesth.distThyro.'] = ' ';
 $locales['CConsultAnesth.ecbu.'] = '?';
@@ -18,7 +12,6 @@ $locales['CConsultAnesth.groupe.AB'] = 'AB';
 $locales['CConsultAnesth.groupe.B'] = 'B';
 $locales['CConsultAnesth.groupe.O'] = 'O';
 $locales['CConsultAnesth.mallampati.'] = ' ';
-$locales['CConsultAnesth.position.'] = ' ';
 $locales['CConsultAnesth.rai.'] = '?';
 $locales['CConsultAnesth.rai.?'] = '?';
 $locales['CConsultAnesth.rai.NEG'] = 'NEG';
