@@ -64,6 +64,7 @@
   line-height: 1.4;
   font-size: 0.9em;
   background: #eee;
+  color: #000;
 }
 
 .er7 .entity:hover:before {
@@ -78,6 +79,10 @@
 .er7 .entity.invalid {
   padding: 2px;
   border-bottom: 1px dotted red;
+}
+
+.er7 .entity.table-entry {
+  color: #939;
 }
 
 .er7 .group:hover {
@@ -120,7 +125,7 @@
 }
 
 .er7 .component:hover {
-  border-color: #009966; 
+  border-color: #009966;
   padding: 4px 0;
 }
 
@@ -131,7 +136,7 @@
 }
 
 .er7 .sub-component:hover {
-  border-color: #006699; 
+  border-color: #006699;
   padding: 2px 0;
 }
 

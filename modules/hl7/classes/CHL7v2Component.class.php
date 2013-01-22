@@ -1,11 +1,11 @@
 <?php
 /**
  * $Id$
- * 
+ *
  * @package    Mediboard
  * @subpackage hl7
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
@@ -17,67 +17,73 @@ class CHL7v2Component extends CHL7v2Entity {
    * @var CHL7v2Component
    */
   var $parent = null;
-  
+
   var $children = array();
-  
+
   /**
    * @var string
    */
   var $data = null;
-  
+
   /**
    * Separator used in $this->parse()
    * @var string
    */
   var $separator = null;
-  
+
   /**
    * Component's max length
    * @var integer
    */
   var $length = null;
-  
+
   /**
    * Data type
    * @var string
    */
   var $datatype = null;
-  
+
   /**
    * Description
    * @var string
    */
   var $description = null;
-  
+
+  /**
+   * Description
+   * @var string
+   */
+  var $value_description = null;
+
   /**
    * Table
    * @var integer
    */
   var $table = null;
-  
+
   /**
    * Position of self in its parent
    * @var integer
    */
   var $self_pos = null;
-  
+
   /**
    * @var CHL7v2DataType
    */
   var $props = null;
-  
+
   var $invalid = false;
-  
+
   function __construct(CHL7v2Entity $parent, CHL7v2SimpleXMLElement $specs, $self_pos, $separators) {
     parent::__construct();
-    
+
     $this->parent = $parent;
-    
+
     // Separators stack
     $this->separator = array_shift($separators);
     $this->separators = $separators;
-    
-    // Intrinsic properties 
+
+    // Intrinsic properties
     $this->length      = (int)$specs->attributes()->length;
     $this->table       = (int)$specs->attributes()->table;
     $this->datatype    = (string)$specs->datatype;
@@ -95,20 +101,20 @@ class CHL7v2Component extends CHL7v2Entity {
 
     return $this->props;
   }
-  
+
   /**
    * Insert the current component inside an XML node
-   * 
+   *
    * @param DOMNode $node          The node to insert the data into
    * @param boolean $hl7_datatypes Format the values to HL7 or to Mediboard
    * @param boolean $encoding      The encoding of the XML document
-   * 
+   *
    * @return void
    */
   function _toXML(DOMNode $node, $hl7_datatypes, $encoding) {
     $doc = $node->ownerDocument;
     $field = $this->getField();
-    
+
     if ($this->getProps() instanceof CHL7v2DataTypeComposite) {
       foreach ($this->children as $i => $_child) {
         $new_node = $doc->createElement("$this->datatype.".($i+1));
@@ -122,39 +128,39 @@ class CHL7v2Component extends CHL7v2Entity {
         $node->appendChild($new_node);
         $node = $new_node;
       }
-    
+
       if ($field->keep()) {
         $str = $this->data;
       }
       else {
         $str = $this->getMessage()->escape($this->data);
-        
+
         if (!$hl7_datatypes && $str !== "") {
           $str = $this->getProps()->toMB($str, $field);
         }
       }
-        
+
       /*$data_encoding = $this->getEncoding();
 
       if ($data_encoding && $data_encoding !== $encoding) {
         $str = mb_convert_encoding($str, $encoding, $data_encoding);
       }*/
-      
+
       $new_node = $doc->createTextNode($str);
       $node->appendChild($new_node);
     }
   }
-  
+
   /**
    * Parse a field item into components
-   * 
+   *
    * @param string $data The data to parse
-   * 
+   *
    * @return void
    */
   function parse($data) {
     $keep_original = $this->getField()->keep();
-    
+
     // Is composite
     if (isset($this->separator[0]) && $this->getProps() instanceof CHL7v2DataTypeComposite) {
       $parts = CHL7v2::split($this->separator[0], $data, $keep_original);
@@ -164,7 +170,7 @@ class CHL7v2Component extends CHL7v2Entity {
         if (array_key_exists($i, $parts)) {
           $_comp = new CHL7v2Component($this, $_component_spec, $i, $this->separators);
           $_comp->parse($parts[$i]);
-        
+
           $this->children[] = $_comp;
         }
         elseif ($_component_spec->isRequired()) {
@@ -172,22 +178,22 @@ class CHL7v2Component extends CHL7v2Entity {
         }
       }
     }
-    
+
     // Scalar type (NM, ST, ID, etc)
     else {
       $this->data = $data;
-    
+
       if (!$keep_original) {
         $this->data = $this->getMessage()->unescape($this->data);
       }
     }
   }
-  
+
   /**
    * Fill a field item with data
-   * 
+   *
    * @param array $data The data to add to the current component
-   * 
+   *
    * @return void
    */
   function fill($data) {
@@ -196,13 +202,13 @@ class CHL7v2Component extends CHL7v2Entity {
       if (!is_array($data)) {
         $data = array($data);
       }
-      
+
       $component_specs = $this->getSpecs()->getItems();
       foreach ($component_specs as $i => $_component_spec) {
         if (array_key_exists($i, $data)) {
           $_comp = new CHL7v2Component($this, $_component_spec, $i, $this->separators);
           $_comp->fill($data[$i]);
-        
+
           $this->children[] = $_comp;
         }
         elseif ($_component_spec->isRequired()) {
@@ -210,35 +216,35 @@ class CHL7v2Component extends CHL7v2Entity {
         }
       }
     }
-    
+
     // Scalar type (NM, ST, ID, etc)
     else {
       if (is_array($data)) {
         $this->error(CHL7v2Exception::INVALID_DATA_FORMAT, var_export($data, true), $this);
         return;
       }
-      
+
       $this->data = trim($this->getProps()->toHL7($data, $this->getField()));
     }
   }
-  
+
   /**
    * Get the data type object
-   * 
+   *
    * @return CHL7v2DataType
    */
   function getSpecs(){
     return $this->getMessage()->getSchema(self::PREFIX_COMPOSITE_NAME, $this->datatype, $this->getMessage()->extension);
   }
-  
+
   /**
    * Validate data in the field
-   * 
+   *
    * @return bool true if the component is valid
    */
   function validate(){
     $props = $this->getProps();
-    
+
     if ($props instanceof CHL7v2DataTypeComposite) {
       foreach ($this->children as $child) {
         if (!$child->validate()) {
@@ -253,33 +259,38 @@ class CHL7v2Component extends CHL7v2Entity {
         $this->error(CHL7v2Exception::DATA_TOO_LONG, var_export($this->data, true)." ($length / $this->length)", $this);
         $this->invalid = true;
       }
-      
+
       // table
       if ($this->table && $this->data !== "") {
-        $entries = CHL7v2::getTable($this->table, false);
-        
-        if (!empty($entries) && !array_key_exists($this->data, $entries)) {
-          $this->error(
-            CHL7v2Exception::UNKNOWN_TABLE_ENTRY, 
-            "'$this->data' (table $this->table)", 
-            $this, 
-            CHL7v2Error::E_WARNING
-          );
-          
-          $this->invalid = true;
+        $entries = CHL7v2::getTable($this->table, false, true);
+
+        if (!empty($entries)) {
+          if (!array_key_exists($this->data, $entries)) {
+            $this->error(
+              CHL7v2Exception::UNKNOWN_TABLE_ENTRY,
+              "'$this->data' (table $this->table)",
+              $this,
+              CHL7v2Error::E_WARNING
+            );
+
+            $this->invalid = true;
+          }
+          else {
+            $this->value_description = $entries[$this->data];
+          }
         }
       }
-      
+
       if (!$props->validate($this->data, $this->getField())) {
         $this->error(CHL7v2Exception::INVALID_DATA_FORMAT, $this->data, $this);
         $this->invalid = true;
         return false;
       }
     }
-    
+
     return true;
   }
-  
+
   /**
    * Get the current field
    *
@@ -288,7 +299,7 @@ class CHL7v2Component extends CHL7v2Entity {
   function getField(){
     return $this->parent->getField();
   }
-  
+
   /**
    * Get the current segment
    *
@@ -297,7 +308,7 @@ class CHL7v2Component extends CHL7v2Entity {
   function getSegment(){
     return $this->parent->getSegment();
   }
-  
+
   /**
    * Get the current message
    *
@@ -306,48 +317,48 @@ class CHL7v2Component extends CHL7v2Entity {
   function getMessage(){
     return $this->parent->getMessage();
   }
-  
+
   /**
    * Get the version number
-   * 
+   *
    * @return string the version number
    */
   function getVersion(){
     return $this->getMessage()->getVersion();
   }
-  
+
   function getPath($separator = ".", $with_name = false){
     $path = $this->parent->getPath($separator, $with_name);
     $label = $this->self_pos+1;
-    
+
     if ($with_name) {
       $label = "$this->datatype.$label";
     }
-    
+
     $path[] = $label;
     return $path;
   }
-  
+
   function getTypeTitle(){
     $str = $this->datatype;
-    
+
     if ($this->length) {
       $str .= "[$this->length]";
     }
-    
+
     return $str;
   }
-  
+
   function __toString(){
     $field = $this->getField();
-    
+
     if ($this->getProps() instanceof CHL7v2DataTypeComposite) {
       $sep = $this->separator[0];
-      
+
       if (CHL7v2Message::$decorateToString) {
         $sep = "<span class='{$this->separator[2]}'>$sep</span>";
       }
-      
+
       $str = implode($sep, $this->children);
     }
     else {
@@ -358,21 +369,24 @@ class CHL7v2Component extends CHL7v2Entity {
         $str = $this->getMessage()->escape($this->data);
       }
     }
-      
+
     if (CHL7v2Message::$decorateToString) {
       $title = $field->owner_segment->name.".".$this->getPathString(".")." - $this->datatype - $this->description";
-      
+
       if ($this->table != 0) {
-        $title .= " [$this->table]";
+        $value_description = $this->value_description ? $this->value_description : "?";
+        $title .= " [$this->table => $value_description]";
       }
-      
+
       $xpath = ($this->getSegment()->name)."/".$this->getPathString("/", ".", true);
-      
-      $str = "<span class='entity {$this->separator[1]} ".($this->invalid ? 'invalid' : '')."' 
-                    id='entity-er7-$this->id' data-title='$title' data-xpath='$xpath' 
-                    onclick='/*Event.stop(event);prompt(null,this.get(\"xpath\"))*/'>$str</span>";
+
+      $invalid = $this->invalid    ? 'invalid' : '';
+      $table   = $this->table != 0 ? 'table-entry' : '';
+
+      $str = "<span class='entity {$this->separator[1]} $invalid $table' id='entity-er7-$this->id'
+                    data-title='$title' data-xpath='$xpath'>$str</span>";
     }
-      
+
     return $str;
   }
 }
