@@ -565,7 +565,7 @@ if ($do && ($do_medicaments || $do_injections || $do_perfusions || $do_aerosols 
                         if($dateTimePrise < $dateTime_min || $dateTimePrise > $dateTime_max){
                           continue;
                         }
-                        if ($mode_urgences) {
+                        if (!$mode_urgences) {
                           $lit = getCurrentLit($sejour, $_date, $_hour,$service_id, $lits, $affectations);
                           if(!$lit) continue;
                         }
