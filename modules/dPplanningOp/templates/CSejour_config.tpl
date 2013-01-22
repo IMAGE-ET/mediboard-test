@@ -52,40 +52,44 @@
     {{mb_include module=system template=inc_config_enum var=systeme_isolement values=standard|expert}}
 
     <tr>
+      <th class="title" colspan="2">
+        Modes de traitement / entrée / sortie
+      </th>
+    </tr>
+    <tr>
       <td colspan="2">
-        <table class="main form" style="table-layout: fixed;">
-          <tr>
-            <th class="title" colspan="3">
-              Modes de traitement / entrée / sortie
-            </th>
-          </tr>
-          <tr>
-            <th class="category">{{tr}}CChargePriceIndicator{{/tr}}</th>
-            <th class="category">{{tr}}CModeEntreeSejour{{/tr}}</th>
-            <th class="category">{{tr}}CModeSortieSejour{{/tr}}</th>
-          </tr>
-          <tr>
-            <td style="vertical-align: top;">
-              <table class="main form">
-              {{mb_include module=system template=inc_config_bool class=CSejour var=use_charge_price_indicator colspan=3}}
-                {{mb_include module=system template=inc_config_bool class=CSejour var=show_only_charge_price_indicator colspan=3}}
-              </table>
-            {{mb_include template=CChargePriceIndicator_config}}
-            </td>
-            <td style="vertical-align: top;">
-              <table class="main form">
-              {{mb_include module=system template=inc_config_bool class=CSejour var=use_custom_mode_entree colspan=3}}
-              </table>
-            {{mb_include template=CModeEntreeSejour_config list_modes=$list_modes_entree}}
-            </td>
-            <td style="vertical-align: top;">
-              <table class="main form">
-              {{mb_include module=system template=inc_config_bool class=CSejour var=use_custom_mode_sortie colspan=3}}
-              </table>
-            {{mb_include template=CModeSortieSejour_config list_modes=$list_modes_sortie}}
-            </td>
-          </tr>
-        </table>
+        <script type="text/javascript">
+          Main.add(function(){
+            Control.Tabs.create("custom-cpi-mode-entre-sortie");
+          });
+        </script>
+        <ul class="control_tabs" id="custom-cpi-mode-entre-sortie">
+          <li><a href="#tab-CChargePriceIndicator">{{tr}}CChargePriceIndicator{{/tr}}</a></li>
+          <li><a href="#tab-CModeEntreeSejour">{{tr}}CModeEntreeSejour{{/tr}}</a></li>
+          <li><a href="#tab-CModeSortieSejour">{{tr}}CModeSortieSejour{{/tr}}</a></li>
+        </ul>
+
+        <div id="tab-CChargePriceIndicator" style="display: none;">
+          <table class="main form">
+            {{mb_include module=system template=inc_config_bool class=CSejour var=use_charge_price_indicator}}
+            {{mb_include module=system template=inc_config_bool class=CSejour var=show_only_charge_price_indicator}}
+          </table>
+          {{mb_include template=CChargePriceIndicator_config}}
+        </div>
+
+        <div id="tab-CModeEntreeSejour" style="display: none;">
+          <table class="main form">
+            {{mb_include module=system template=inc_config_bool class=CSejour var=use_custom_mode_entree}}
+          </table>
+          {{mb_include template=CModeEntreeSejour_config list_modes=$list_modes_entree}}
+        </div>
+
+        <div id="tab-CModeSortieSejour" style="display: none;">
+          <table class="main form">
+            {{mb_include module=system template=inc_config_bool class=CSejour var=use_custom_mode_sortie}}
+          </table>
+          {{mb_include template=CModeSortieSejour_config list_modes=$list_modes_sortie}}
+        </div>
       </td>
     </tr>
 
