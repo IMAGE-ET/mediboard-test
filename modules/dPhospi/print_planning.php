@@ -53,7 +53,7 @@ $sejourReq->addWhereClause("sejour.type", "!= 'urg'");
 if ($filter->_specialite or $filter->praticien_id) {
   $speChirs = new CMediusers();
   $speChirs = $speChirs->loadList(array ("function_id" => "= '$filter->_specialite'"));
-  
+
   if (count($filter->praticien_id)) {
     $sejourReq->addWhereClause("sejour.praticien_id", CSQLDataSource::prepareIn($filter->praticien_id));
   }
@@ -84,7 +84,7 @@ $sejourReq->addOrder("users.user_first_name");
 
 if ($filter->_admission  == "heure") {
   $sejourReq->addOrder("TIME(sejour.$filter->_horodatage)");
-} 
+}
 else {
   $sejourReq->addOrder("patients.nom");
   $sejourReq->addOrder("patients.prenom");
@@ -104,7 +104,8 @@ $where["cancelled"] = "= '0'";
 $order = "nom";
 $services = $service->loadListWithPerms(PERM_READ,$where, $order);
 
-foreach ($sejours as $key => $sejour) {
+// ATTENTION ne pas supprimer le "&" car pose des problemes
+foreach ($sejours as $key => &$sejour) {
   $sejour->loadRefsAffectations();
   $sejour->loadRefsOperations();
   $sejour->loadRefPatient();
@@ -118,7 +119,7 @@ foreach ($sejours as $key => $sejour) {
   }elseif(!$filter->_service && $affectation->_id && !in_array($affectation->_ref_lit->_ref_chambre->service_id, array_keys($services))){
     unset($sejours[$key]);
     continue;
-  } 
+  }
   $sejour->loadRefPraticien();
 
   foreach($sejour->_ref_operations as $operation) {
