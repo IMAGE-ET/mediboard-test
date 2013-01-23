@@ -303,23 +303,45 @@ modeExpertDisplay = function() {
     {{/if}}
     </td>
   </tr>
+
+  {{if $op->_id}}
+    <tr>
+      <td colspan="2">
+        <table class="main tbl">
+          <tr>
+            <th>{{tr}}Documents{{/tr}}</th>
+            {{if "forms"|module_active}}
+              <th style="width: 33%;">Formulaires</th>
+            {{/if}}
+          </tr>
+          <tr>
+            <td style="vertical-align: top;">
+              {{mb_include template=inc_documents_operation operation=$op}}
+              {{mb_include template=inc_files_operation operation=$op}}
+            </td>
+            {{if "forms"|module_active}}
+              <td style="vertical-align: top;">
+                {{*{{mb_include module=forms template=inc_widget_ex_class_register object=$op event_name=dhe}}*}}
+                {{unique_id var=unique_id_dhe_forms}}
+
+                <script type="text/javascript">
+                  Main.add(function(){
+                    ExObject.loadExObjects("{{$op->_class}}", "{{$op->_id}}", "{{$unique_id_dhe_forms}}", 0.5);
+                  });
+                </script>
+
+                <div id="{{$unique_id_dhe_forms}}"></div>
+              </td>
+            {{/if}}
+          </tr>
+        </table>
+      </td>
+    </tr>
+  {{/if}}
 </table>
 
-<!-- Documents -->
-{{if $op->_id}}
-  <hr />
-  {{mb_include template=inc_documents_operation operation=$op}}
-{{/if}}
-
-<!-- Files -->
-{{if $op->_id}}
-  <hr />
-  {{mb_include template=inc_files_operation operation=$op}}
-{{/if}}
-    
 <!-- Actes -->
 {{if $op->_ref_actes|@count}}
-<hr />
 <table class="tbl">
   {{mb_include module=cabinet template=inc_list_actes_ccam subject=$op vue=complete}}
 </table>
@@ -327,10 +349,11 @@ modeExpertDisplay = function() {
 
 <!-- la modale qui s'affiche dans le cas où la date de l'intervention est en dehors de celle du séjour -->
 <div id="date_alert" style="display:none">
-  <div style="text-align:center">  L'intervention est en dehors du séjour, voulez-vous passer au mode expert pour modifier les dates du séjour?
+  <div style="text-align:center">
+    L'intervention est en dehors du séjour, voulez-vous passer au mode expert pour modifier les dates du séjour?
   </div>
   <div style="text-align:center">
-    <button  class="tick" onclick="modalWindow.close();modeExpertDisplay();"> {{tr}}Yes{{/tr}}</button>
-    <button  class="cancel" onclick="modalWindow.close();"> {{tr}}No{{/tr}}</button>
+    <button class="tick" onclick="modalWindow.close();modeExpertDisplay();">{{tr}}Yes{{/tr}}</button>
+    <button class="cancel" onclick="modalWindow.close();">{{tr}}No{{/tr}}</button>
   </div>
 </div>
