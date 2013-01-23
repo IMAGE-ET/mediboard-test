@@ -117,7 +117,34 @@ class CMbPdf extends TCPDF {
     }
     return parent::Output($name, $dest);
   }
-  
+
+  protected function _putcatalog() {
+    $this->_out('/Type /Catalog');
+    $this->_out('/ViewerPreferences <</PrintScaling /None>>');
+    $this->_out('/Pages 1 0 R');
+    if($this->ZoomMode=='fullpage') {
+      $this->_out('/OpenAction [3 0 R /Fit]');
+    }
+    elseif($this->ZoomMode=='fullwidth') {
+      $this->_out('/OpenAction [3 0 R /FitH null]');
+    }
+    elseif($this->ZoomMode=='real') {
+      $this->_out('/OpenAction [3 0 R /XYZ null null 1]');
+    }
+    elseif(!is_string($this->ZoomMode)) {
+      $this->_out('/OpenAction [3 0 R /XYZ null null '.($this->ZoomMode/100).']');
+    }
+    if($this->LayoutMode=='single') {
+      $this->_out('/PageLayout /SinglePage');
+    }
+    elseif($this->LayoutMode=='continuous') {
+      $this->_out('/PageLayout /OneColumn');
+    }
+    elseif($this->LayoutMode=='two') {
+      $this->_out('/PageLayout /TwoColumnLeft');
+    }
+  }
+
 }
 
 
