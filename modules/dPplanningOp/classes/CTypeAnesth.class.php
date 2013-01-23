@@ -1,12 +1,13 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- *	@package Mediboard
- *	@subpackage dPPlanningOp
- *	@version $Revision$
- *  @author Sébastien Fillonneau
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPPlanningOp
+ * @author     Sébastien Fillonneau <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
-
 
 /**
  * The CTypeAnesth class
@@ -33,20 +34,21 @@ class CTypeAnesth extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["operations"] = "COperation type_anesth";
+    $backProps["protocole"]  = "CProtocole type_anesth";
     return $backProps;
   }
-	
-	function updateFormFields() {
-		parent::updateFormFields();
-		$this->_view = $this->name;
-	}
+  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->name;
+  }
   
   function countOperations() {
     $this->_count_operations = $this->countBackRefs("operations");
   }
   
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["name"]    = "str notNull";
     $specs["ext_doc"] = "enum list|1|2|3|4|5|6"; 
     $specs["actif"]   = "bool notNull default|1" ;
