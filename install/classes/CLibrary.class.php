@@ -244,13 +244,19 @@ $library->fileName = "kcfinder-2.51.tar.gz";
 $library->description = "Gestionnaire de fichier en ajax";
 $library->sourceDir = "kcfinder-2.51";
 $library->targetDir = "kcfinder";
-$library->versionFile = "config.php";
-$library->versionString = "config_all";
+$library->versionFile = "js/browser/settings.js";
+$library->versionString = "if ($('#view";
 
 $patch = new CLibraryPatch;
-$patch->dirName = "kcfinder";
-$patch->sourceName="config.php";
-$patch->targetDir="";
+$patch->dirName     = "kcfinder";
+$patch->sourceName  = "config.php";
+$patch->targetDir   = "";
+$library->patches[] = $patch;
+
+$patch = new CLibraryPatch;
+$patch->dirName     = "kcfinder/js/browser";
+$patch->sourceName  = "settings.js";
+$patch->targetDir   = "";
 $library->patches[] = $patch;
 
 CLibrary::$all[$library->name] = $library;
