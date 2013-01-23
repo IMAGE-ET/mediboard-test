@@ -119,7 +119,7 @@ foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
   if ($search_mode) {
     $where = array(
       "group_id" => "= '$group_id'",
-      "user_log.date" => "BETWEEN '$date_min' AND '$date_max'",
+      "DATE(user_log.date) BETWEEN '$date_min' AND '$date_max'",
       "user_log.type" => "= 'create'",
     );
 
