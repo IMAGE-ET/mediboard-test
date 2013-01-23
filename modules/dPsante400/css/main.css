@@ -1,0 +1,18 @@
+.idex-special {
+  font-size: 0.9em;
+  padding: 1px;
+  border-radius: 3px;
+  background: white;
+  line-height: 1;
+}
+
+.idex-special-IPP {
+  border: 1px solid #2D9A00;
+  color: #2D9A00;
+}
+
+.idex-special-NDA {
+  border: 1px solid #AA0000;
+  color: #AA0000;
+
+}

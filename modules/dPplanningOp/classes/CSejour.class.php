@@ -2846,4 +2846,18 @@ class CSejour extends CCodable implements IPatientRelated {
 
     return $this->_ref_assurance_maladie;
   }
+
+  /**
+   * Return idex type if it's special (e.g. NDA/...)
+   *
+   * @param CIdSante400 $idex Idex
+   *
+   * @return string|null
+   */
+  function getSpecialIdex(CIdSante400 $idex) {
+    // L'identifiant externe est le NDA
+    if ($idex->tag == self::getTagNDA()) {
+      return "NDA";
+    }
+  }
 }

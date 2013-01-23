@@ -1,11 +1,14 @@
-<?php /* $Id: $ */
+<?php /* $Id $ */
 
 /**
- * @package Mediboard
- * @subpackage sante400
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * List idexs
+ *
+ * @category dPsante400
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 $idSante400_id = CValue::get("idSante400_id");
@@ -16,7 +19,7 @@ $filter = new CIdSante400;
 $filter->object_id    = CValue::get("object_id"   );
 $filter->object_class = CValue::get("object_class");
 $filter->tag          = CValue::get("tag"         );
-$filter->id400        = CValue::get("id400");
+$filter->id400        = CValue::get("id400"       );
 $filter->nullifyEmptyFields();
 
 // Chargement de la cible si objet unique
@@ -28,22 +31,20 @@ if ($filter->object_id && $filter->object_class) {
 
 // Requête du filtre
 $order = "last_update DESC";
-$max = CValue::get("max", 30);
+$max   = CValue::get("max", 30);
 $limit = "0, $max";
 
-$list_idSante400 = $filter->loadMatchingList($order, $limit);
-$count_idSante400 = $filter->countMatchingList();
-
-foreach ($list_idSante400 as &$_idSante400) {
-  $_idSante400->loadRefs();
+$idexs = $filter->loadMatchingList($order, $limit);
+foreach ($idexs as $_idex) {
+  $_idex->loadRefs();
+  $_idex->getSpecialType();
 }
 
+// Création du template
 $smarty = new CSmartyDP;
-$smarty->assign("list_idSante400" , $list_idSante400);
-$smarty->assign("count_idSante400", $count_idSante400);
-$smarty->assign("filter"          , $filter);
-$smarty->assign("idSante400_id"   , $idSante400_id);
-$smarty->assign("dialog"          , $dialog);
-$smarty->assign("target"          , $target);
+$smarty->assign("idexs"        , $idexs);
+$smarty->assign("filter"       , $filter);
+$smarty->assign("idSante400_id", $idSante400_id);
+$smarty->assign("dialog"       , $dialog);
+$smarty->assign("target"       , $target);
 $smarty->display("inc_list_identifiants.tpl");
-?>

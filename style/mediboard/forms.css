@@ -722,6 +722,10 @@ button.calcul:before, a.button.calcul:before {
   content: url(images/buttons/calcul.png);
 }
 
+button.idex:before, a.button.idex:before {
+  content: url(images/icons/external.png);
+}
+
 button.selected {
   border: 2px solid #000;
 }

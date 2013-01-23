@@ -2,6 +2,8 @@
 $locales['CMbCodeSniffer-error-PEAR_needed'] = 'Cette fonctionnalité nécessite l\'extension PEAR::PHP_CodeSniffer dans sa version 1.3.0';
 $locales['CPermModule._owner.template'] = 'Profil';
 $locales['CPermModule._owner.user'] = 'Utilisateur';
+$locales['CUserLog-_view'] = 'Journal utilisateur';
+$locales['CUserLog-_view-desc'] = 'Journal utilisateur';
 $locales['dPdeveloppement-button-unlocalized_fix'] = 'Mais je suis courageux et je le corrige maintenant !';
 $locales['mod-dPdeveloppement-tab-benchmark'] = 'Analyse charge';
 $locales['mod-dPdeveloppement-tab-check_zombie_objects'] = 'Intégrité réf.';

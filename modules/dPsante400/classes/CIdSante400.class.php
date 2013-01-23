@@ -26,6 +26,7 @@
   // Filter fields
   var $_start_date   = null;
   var $_end_date     = null;
+  var $_type         = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -218,7 +219,16 @@
     $idex = new CIdSante400();
     $idex->loadLatestFor($mbObject, $tag);
     return $idex;
-  } 
+  }
+
+  /**
+    * Return type if it's special (e.g. IPP/NDA/...)
+    *
+    * @return string|null
+    */
+  function getSpecialType() {
+    return $this->_type = $this->loadTargetObject()->getSpecialIdex($this);
+  }
 }
 
 ?>

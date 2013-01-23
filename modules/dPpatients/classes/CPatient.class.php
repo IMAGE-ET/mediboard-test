@@ -492,7 +492,7 @@ class CPatient extends CMbObject {
     }
   }
 
-  function check(){
+  function check() {
     // Standard check
     if ($msg = parent::check()) {
       return $msg;
@@ -957,9 +957,15 @@ class CPatient extends CMbObject {
     $where[] = implode(" OR ", $whereOr);
     $where["prenom"]          = $ds->prepareLikeName($this->prenom);
 
-    if ($this->prenom_2) $where["prenom_2"] = $ds->prepareLikeName($this->prenom_2);
-    if ($this->prenom_3) $where["prenom_3"] = $ds->prepareLikeName($this->prenom_3);
-    if ($this->prenom_4) $where["prenom_4"] = $ds->prepareLikeName($this->prenom_4);
+    if ($this->prenom_2) {
+      $where["prenom_2"] = $ds->prepareLikeName($this->prenom_2);
+    }
+    if ($this->prenom_3) {
+      $where["prenom_3"] = $ds->prepareLikeName($this->prenom_3);
+    }
+    if ($this->prenom_4) {
+      $where["prenom_4"] = $ds->prepareLikeName($this->prenom_4);
+    }
 
     $where["naissance"] = $ds->prepare("= %", $this->naissance);
 
@@ -1298,7 +1304,8 @@ class CPatient extends CMbObject {
 
       // Grossesse
       if ($maternite_active && $consult->grossesse_id) {
-        $consult->_semaine_grossesse = ceil((mbDaysRelative($this->_ref_grossesses[$consult->grossesse_id]->_date_fecondation, $consult->_date))/7);
+        $result = ceil((mbDaysRelative($this->_ref_grossesses[$consult->grossesse_id]->_date_fecondation, $consult->_date))/7);
+        $consult->_semaine_grossesse = $result;
         $this->_ref_grossesses[$consult->grossesse_id]->_ref_consultations[$consult->_id] = $consult;
       }
     }
@@ -1599,8 +1606,8 @@ class CPatient extends CMbObject {
     $this->guessExoneration();
     $template->addProperty("Patient - Qualité bénéficiaire - Libellé", $this->libelle_exo);
     $template->addProperty("Patient - Numéro de sécurité sociale", $this->getFormattedValue("matricule"));
-    $template->addBarcode ("Patient - Code barre ID"     , "PID$this->_id"   );
-    $template->addBarcode ("Patient - Code barre IPP"    , "IPP$this->_IPP"  );
+    $template->addBarcode("Patient - Code barre ID"     , "PID$this->_id"   );
+    $template->addBarcode("Patient - Code barre IPP"    , "IPP$this->_IPP"  );
 
     if ($this->sexe === "m") {
       $template->addProperty("Patient - il/elle"         , "il"              );
@@ -1642,7 +1649,7 @@ class CPatient extends CMbObject {
         $_correspondant->relation = $relation;
       }
 
-      switch($_correspondant->relation) {
+      switch ($_correspondant->relation) {
         case "employeur" :
           $template->addProperty("Patient - employeur - nom"    , $_correspondant->nom);
           $template->addProperty("Patient - employeur - adresse", $_correspondant->adresse);
@@ -1708,7 +1715,7 @@ class CPatient extends CMbObject {
       }
       $smarty = new CSmartyDP("modules/dPpatients");
       $smarty->assign("sejours", $this->_ref_sejours);
-      $sejours = $smarty->fetch("print_closed_sejours.tpl",'','',0);
+      $sejours = $smarty->fetch("print_closed_sejours.tpl", '', '', 0);
       $sejours = preg_replace('`([\\n\\r])`', '', $sejours);
     }
     else {
@@ -2125,5 +2132,19 @@ class CPatient extends CMbObject {
 
   function getIncrementVars() {
     return array();
+  }
+
+  /**
+   * Return idex type if it's special (e.g. IPP/...)
+   *
+   * @param CIdSante400 $idex Idex
+   *
+   * @return string|null
+   */
+  function getSpecialIdex(CIdSante400 $idex) {
+    // L'identifiant externe est l'IPP
+    if ($idex->tag == self::getTagIPP()) {
+      return "IPP";
+    }
   }
 }

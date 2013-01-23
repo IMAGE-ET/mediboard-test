@@ -10,8 +10,9 @@
  */
 
 /**
- * @abstract Mediboard business object layer 
  * Handles: notes, documents, aides, views, model templates, echanges, idex, affectations personnels (!)
+ *
+ * @abstract Mediboard business object layer
  */
 class CMbObject extends CStoredObject {
   var $_aides         = array(); // Aides à la saisie
@@ -32,10 +33,12 @@ class CMbObject extends CStoredObject {
   
   var $_ref_affectations_personnel   = null;
   var $_count_affectations_personnel = null;
-  
+
   /**
    * Chargement des notes sur l'objet
-   * @param $perm One of PERM_READ | PERM_EDIT
+   *
+   * @param int $perm One of PERM_READ | PERM_EDIT
+   *
    * @return int Note count
    */
   function loadRefsNotes($perm = PERM_READ) {
@@ -47,14 +50,22 @@ class CMbObject extends CStoredObject {
       $this->_ref_notes = CNote::loadNotesForObject($this, $perm);
       
       // Find present levels
-      foreach($this->_ref_notes as $_note) {
+      foreach ($this->_ref_notes as $_note) {
         $notes_levels[$_note->degre] = true;
       }
       
       // Note highest level 
-      if (isset($notes_levels["low"   ])) $this->_degree_notes = "low";
-      if (isset($notes_levels["medium"])) $this->_degree_notes = "medium";
-      if (isset($notes_levels["high"  ])) $this->_degree_notes = "high";
+      if (isset($notes_levels["low"])) {
+        $this->_degree_notes = "low";
+      }
+
+      if (isset($notes_levels["medium"])) {
+        $this->_degree_notes = "medium";
+      }
+
+      if (isset($notes_levels["high"])) {
+        $this->_degree_notes = "high";
+      }
     }
 
     return count($this->_ref_notes);
@@ -74,7 +85,7 @@ class CMbObject extends CStoredObject {
     foreach ($this->_ref_files as $_file) {
       $this->_ref_files_by_name[$_file->file_name] = $_file;
       $_file->_is_editable = $is_editable;
-      if (!$_file->canRead()){
+      if (!$_file->canRead()) {
         unset($this->_ref_files[$_file->_id]);
       }
     }
@@ -95,20 +106,23 @@ class CMbObject extends CStoredObject {
 
   /**
    * Load documents for object
+   *
    * @return int document count
    */
   function loadRefsDocs() {
-    if (!$this->_id) return;
-    $document = new CCompteRendu();
+    if (!$this->_id) {
+      return;
+    }
 
+    $document = new CCompteRendu();
     if ($document->_ref_module) {
       $document->object_class = $this->_class;
       $document->object_id    = $this->_id;
       $this->_ref_documents = $document->loadMatchingList("nom");
       $is_editable = $this->docsEditable();
-      foreach($this->_ref_documents as $_doc) {
+      foreach ($this->_ref_documents as $_doc) {
         $_doc->_is_editable = $is_editable;
-        if (!$_doc->canRead()){
+        if (!$_doc->canRead()) {
            unset($this->_ref_documents[$_doc->_id]);
         }
       }
@@ -118,6 +132,7 @@ class CMbObject extends CStoredObject {
   
   /**
    * Load documents and files for object
+   *
    * @return int document + files count
    */
   function loadRefsDocItems() {
@@ -128,6 +143,7 @@ class CMbObject extends CStoredObject {
   
   /**
    * Count documents
+   *
    * @return int
    */
   function countDocs() {
@@ -136,6 +152,7 @@ class CMbObject extends CStoredObject {
   
   /**
    * Count files
+   *
    * @return int
    */
   function countFiles(){
@@ -144,7 +161,9 @@ class CMbObject extends CStoredObject {
   
   /**
    * Count doc items (that is documents and files), delegate when permission type defined
-   * @param $permType int Permission type, one of PERM_READ, PERM_EDIT
+   *
+   * @param int $permType Permission type, one of PERM_READ, PERM_EDIT
+   *
    * @return int
    */
   function countDocItems($permType = null) {
@@ -156,8 +175,11 @@ class CMbObject extends CStoredObject {
   
   /**
    * Count doc items according to given permission
+   *
+   * @param int $permType Permission type, one of PERM_READ, PERM_EDIT
+   *
    * @todo Merge with countDocItems(), unnecessary delegation
-   * @param $permType int Permission type, one of PERM_READ, PERM_EDIT
+   *
    * @return int
    */
   function countDocItemsWithPerm($permType = PERM_READ){
@@ -178,6 +200,7 @@ class CMbObject extends CStoredObject {
   
   /**
    * Count exchanges, make totals by format
+   *
    * @return int The absolute total
    */
   function countExchanges() {
@@ -202,7 +225,9 @@ class CMbObject extends CStoredObject {
   
   /**
    * Chargement du dernier identifiant id400
-   * @param $tag string Tag à utiliser comme filtre
+   *
+   * @param string $tag Tag à utiliser comme filtre
+   *
    * @return CIdSante400
    */
   function loadLastId400($tag = null) {
@@ -215,7 +240,9 @@ class CMbObject extends CStoredObject {
   } 
     
   /**
-   * Load object view information 
+   * Load object view information
+   *
+   * @return void
    */
   function loadView() {
     $this->loadRefsNotes();
@@ -225,13 +252,17 @@ class CMbObject extends CStoredObject {
   
   /**
    * Load object view information when used in an edit form (see system/ajax_edit_object.php)
+   *
+   * @return void
    */
   function loadEditView() {
     return $this->loadView();
   }
   
   /**
-   * Load complete object view information 
+   * Load complete object view information
+   *
+   * @return void
    */
   function loadComplete() {
     $this->loadRefsNotes();
@@ -241,19 +272,26 @@ class CMbObject extends CStoredObject {
   /**
    * Back references global loader
    * DEPRECATED: out of control resouce consumption
+   *
    * @return id Object id
    */
   function loadRefsBack() {
     parent::loadRefsBack();
     $this->loadExternal();
   }
-  
+
+  /**
+   * Load idexs
+   *
+   * @return void
+   */
   function loadExternal() {
     $this->_external = $this->countBackRefs("identifiants");
   }
 
   /**
    * Get backward reference specifications
+   *
    * @return array Array of form "collection-name" => "class join-field"
    */
   function getBackProps() {
@@ -271,17 +309,31 @@ class CMbObject extends CStoredObject {
       "tag_items"              => "CTagItem object_id",
       "echange_generique"      => "CExchangeAny object_id",
       "observation_result_sets"=> "CObservationResultSet context_id",
-      //"ex_objects"             => "CExObject object_id", // NE PAS DECOMMENTER CETTE LIGNE, backref impossible pour le moment (cf. Fabien)
+      // NE PAS DECOMMENTER CETTE LIGNE, backref impossible pour le moment (cf. Fabien)
+      //"ex_objects"             => "CExObject object_id",
     );
   }
   
   /**
    * Charge toutes les aides à la saisie de l'objet pour un utilisateur donné
    *
-   * @param ref|CUser $user_id  Utilisateur
-   * @param string    $keywords Permet de filtrer les aides commançant par le filtre, si non null
+   * @param int    $user_id        Utilisateur
+   * @param string $keywords       Permet de filtrer les aides commançant par le filtre, si non null
+   * @param string $depend_value_1 Valeur de la dépendance 1 lié à l'aide
+   * @param string $depend_value_2 Valeur de la dépendance 2 lié à l'aide
+   * @param string $object_field   Type d'objet concerné
+   * @param string $strict         True or False
+   *
+   * @return void
    */
-  function loadAides($user_id, $keywords = null, $depend_value_1 = null, $depend_value_2 = null, $object_field = null, $strict = "true") {
+  function loadAides(
+      $user_id,
+      $keywords = null,
+      $depend_value_1 = null,
+      $depend_value_2 = null,
+      $object_field = null,
+      $strict = "true"
+  ) {
     foreach ($this->_specs as $field => $spec) {
       if (isset($spec->helped)) {
         $this->_aides[$field] = array("no_enum" => null);
@@ -306,24 +358,24 @@ class CMbObject extends CStoredObject {
     $where["class"]   = $ds->prepare("= %", $this->_class);
 
     if ($strict == "true") {
-      if ($depend_value_1){
+      if ($depend_value_1) {
         $where["depend_value_1"] = " = '$depend_value_1'";
       }
       
-      if ($depend_value_2){
+      if ($depend_value_2) {
         $where["depend_value_2"] = " = '$depend_value_2'";
       }
     }
     else {
-      if ($depend_value_1){
+      if ($depend_value_1) {
         $where[] = "(depend_value_1 = '$depend_value_1' OR depend_value_1 IS NULL)";
       }
-      if ($depend_value_2){
+      if ($depend_value_2) {
         $where[] = "(depend_value_2 = '$depend_value_2' OR depend_value_2 IS NULL)";
       }
     }
     
-    if ($object_field){
+    if ($object_field) {
       $where["field"] = " = '$object_field'";
     }
     
@@ -332,10 +384,21 @@ class CMbObject extends CStoredObject {
     
     // Chargement des Aides de l'utilisateur
     $aide = new CAideSaisie();
-    $aides = $aide->seek($keywords, $where, null, null, null, $order); // TODO: si on veut ajouter un $limit, il faudrait l'ajouter en argument de la fonction loadAides
+    // TODO: si on veut ajouter un $limit, il faudrait l'ajouter en argument de la fonction loadAides
+    $aides = $aide->seek($keywords, $where, null, null, null, $order);
+
     $this->orderAides($aides, $depend_value_1, $depend_value_2);
   }
-  
+
+  /**
+   * Order aides
+   *
+   * @param array $aides          Aides
+   * @param null  $depend_value_1 Valeur de la dépendance 1 lié à l'aide
+   * @param null  $depend_value_2 Valeur de la dépendance 2 lié à l'aide
+   *
+   * @return void
+   */
   function orderAides($aides, $depend_value_1 = null, $depend_value_2 = null) {
     foreach ($aides as $aide) { 
       $owner = CAppUI::tr("CAideSaisie._owner.$aide->_owner");
@@ -345,9 +408,9 @@ class CMbObject extends CStoredObject {
       if ($depend_value_1) {
         $depend_field_2 = $aide->_depend_field_2;
         $depend_2 = CAppUI::tr("$this->_class.$aide->_depend_field_2.$aide->depend_value_2");
-        if ($aide->depend_value_2){
+        if ($aide->depend_value_2) {
           $this->_aides[$aide->field][$owner][$depend_2][$aide->text] = $aide->name;
-        } 
+        }
         else {
           $depend_name_2 = CAppUI::tr("$this->_class-$depend_field_2");
           $this->_aides[$aide->field][$owner]["$depend_name_2 non spécifié"][$aide->text] = $aide->name;
@@ -356,12 +419,12 @@ class CMbObject extends CStoredObject {
       }
       
       // ... et réciproquement 
-      if ($depend_value_2){
+      if ($depend_value_2) {
         $depend_field_1 = $aide->_depend_field_1;
         $depend_1 = CAppUI::tr("$this->_class.$aide->_depend_field_1.$aide->depend_value_1");
-        if ($aide->depend_value_1){    
+        if ($aide->depend_value_1) {
           $this->_aides[$aide->field][$owner][$depend_1][$aide->text] = $aide->name;
-        } 
+        }
         else {
           $depend_name_1 = CAppUI::tr("$this->_class-$depend_field_1");
           $this->_aides[$aide->field][$owner]["$depend_name_1 non spécifié"][$aide->text] = $aide->name;
@@ -380,6 +443,7 @@ class CMbObject extends CStoredObject {
   
   /**
    * Chargement des affectations de personnel par emplacements
+   *
    * @return array
    */
   function loadAffectationsPersonnel() {
@@ -409,6 +473,9 @@ class CMbObject extends CStoredObject {
 
   /**
    * Load the object's tag items
+   *
+   * @param bool $cache Use cache
+   *
    * @return array
    */
   function loadRefsTagItems($cache = true) {
@@ -421,6 +488,9 @@ class CMbObject extends CStoredObject {
 
   /**
    * Get the object's tags
+   *
+   * @param bool $cache Use cache
+   *
    * @return array
    */
   function getTags($cache = true) {
@@ -430,6 +500,7 @@ class CMbObject extends CStoredObject {
   
   /**
    * Get the related object by class for template filling
+   *
    * @return array Collection of class => id relations
    */
   function getTemplateClasses(){
@@ -439,7 +510,10 @@ class CMbObject extends CStoredObject {
   /**
    * This function register all templated properties for the object
    * Will load as necessary and fill in values
-   * @param $template CTemplateManager
+   *
+   * @param CTemplateManager &$template Template manager
+   *
+   * @return void
    */
   function fillTemplate(&$template) {
   }
@@ -448,20 +522,27 @@ class CMbObject extends CStoredObject {
    * This function register most important templated properties for the object
    * Won't register distant properties
    * Will load as necessary and fill in values
-   * @param $template CTemplateManager
-   **/
+   *
+   * @param CTemplateManager &$template Template manager
+   *
+   * @return void
+   */
   function fillLimitedTemplate(&$template) {
   }
   
   /**
    * This function registers fields for the label printing
-   * @param $fields Array of fields
+   *
+   * @param array &$fields Array of fields
+   *
+   * @return void
    */
   function completeLabelFields(&$fields) {
   }
   
   /**
-   * Load object config 
+   * Load object config
+   *
    * @return array contains config of class and/or object
    */
   function loadConfigValues() {
@@ -490,7 +571,9 @@ class CMbObject extends CStoredObject {
   }
   
   /**
-   * Get value of the object config 
+   * Get value of the object config
+   *
+   * @return void
    */
   function getConfigValues() {
     $configs = array();
@@ -498,7 +581,7 @@ class CMbObject extends CStoredObject {
     $fields = $this->getPlainFields();
     unset($fields[$this->_spec->key]);
     unset($fields["object_id"]);
-    foreach($fields as $_name => $_value) {
+    foreach ($fields as $_name => $_value) {
       $configs[$_name] = $_value;
     }
     
@@ -508,6 +591,8 @@ class CMbObject extends CStoredObject {
   
   /**
    * Backward references
+   *
+   * @return void
    */
   function loadRefObjectConfigs() {
     $object_class = $this->_class."Config";
@@ -517,8 +602,9 @@ class CMbObject extends CStoredObject {
   }
   
   /**
-   * Evaluate if an object is editable according to a date. 
-   * return bool 
+   * Evaluate if an object is editable according to a date.
+   *
+   * @return bool
    */
   function docsEditable() {
     // Un admin doit toujours pouvoir modifier un document
@@ -530,6 +616,7 @@ class CMbObject extends CStoredObject {
    * Returns the path to the class-specific template
    * 
    * @param string $type view|autocomplete|edit
+   *
    * @return string
    */
   function getTypedTemplate($type) {
@@ -547,9 +634,11 @@ class CMbObject extends CStoredObject {
     return "../../$template";
   }
   
-  /*
+  /**
    * Make and return usefull template paths for given object
+   *
    * @param string $name One of "view" and "complete"
+   *
    * @return string Path to wanted template, null if module undefined for object
    */
   function makeTemplatePath($name) {
@@ -559,12 +648,15 @@ class CMbObject extends CStoredObject {
     }
   }
   
-  /*
+  /**
    * Fills the object with random sample data, for testing purposes
+   *
    * @param array() $staticsProps Properties to assess
+   *
+   * @return void
    */
   function sample($staticsProps = array()) {
-    foreach($this->_specs as $key => $spec) {
+    foreach ($this->_specs as $key => $spec) {
       if (isset($staticsProps[$key])) {
         $this->$key = $staticsProps[$key];
       }
@@ -572,5 +664,15 @@ class CMbObject extends CStoredObject {
         $spec->sample($this, false);
       }
     }
+  }
+
+  /**
+   * Return idex type if it's special (e.g. IPP/NDA/...)
+   *
+   * @param CIdSante400 $idex Idex
+   *
+   * @return string|null
+   */
+  function getSpecialIdex(CIdSante400 $idex) {
   }
 }

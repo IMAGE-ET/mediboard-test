@@ -16,10 +16,10 @@
  * ITI30 Delegated Handler
  */
 class CITI30DelegatedHandler extends CITIDelegatedHandler {
-  static $handled        = array ("CPatient", "CCorrespondantPatient", "CIdSante400");
-  protected $profil      = "PAM";
-  protected $message     = "ADT";
-  protected $transaction = "ITI30";
+  static $handled     = array ("CPatient", "CCorrespondantPatient", "CIdSante400");
+  public $profil      = "PAM";
+  public $message     = "ADT";
+  public $transaction = "ITI30";
   
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
