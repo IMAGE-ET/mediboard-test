@@ -49,7 +49,7 @@
       
     </td>
     <td>
-      Partiellement effectué
+      Non conforme
     </td>
   </tr>
   <tr>
