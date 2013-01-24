@@ -11,44 +11,6 @@ body {
   padding-right: 6px;
 }
 
-/** WIP **/
-@media screen {
-  body {
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    margin: 10px auto!important;
-    padding: 2cm!important;
-    /*transform: scale(0.9);*/
-    transform-origin: center top 0;
-    width: 21cm;
-    position: relative;
-  }
-
-  body:before {
-    content: "";
-    display: block;
-    border: 1px dotted rgba(0,0,0,0.2);
-    position: absolute;
-    top: 2cm;
-    height: 25.7cm; /* height - margin-top - margin-bottom */
-    left: 0;
-    right: 0;
-    border-width: 1px 0 0 0; /*1px 0 1px;*/
-  }
-
-  body:after {
-    content: "";
-    display: block;
-    border: 1px dotted rgba(0,0,0,0.2);
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 2cm;
-    right: 2cm;
-    border-width: 0 1px 0;
-  }
-}
-
 textarea#htmlarea {
   width: 99%;
   height: 100%;
