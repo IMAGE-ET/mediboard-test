@@ -5,12 +5,12 @@
  * @subpackage dPetablissement
  * @version $Revision$
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 class CGroups extends CMbObject {
   // DB Table key
-  var $group_id       = null;  
+  var $group_id       = null;
 
   // DB Fields
   var $text                = null;
@@ -32,12 +32,12 @@ class CGroups extends CMbObject {
   var $pharmacie_id        = null;
   var $finess              = null;
   var $chambre_particuliere= null;
-  
+
   // Form fields
   var $_cp_court           = null;
   var $_is_ipp_supplier    = false;
   var $_is_nda_supplier    = false;
-  
+
   // Object References
   var $_ref_functions      = null;
   var $_ref_blocs          = null;
@@ -46,17 +46,17 @@ class CGroups extends CMbObject {
   var $_ref_services       = null;
   var $_ref_pharmacie      = null;
   var $_ref_service_urgences = null;
-  
-  
+
+
   static $_ref_current = null;
-  
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'groups_mediboard';
     $spec->key   = 'group_id';
     return $spec;
   }
-  
+
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["aides_saisie"]            = "CAideSaisie group_id";
@@ -104,7 +104,7 @@ class CGroups extends CMbObject {
     $backProps["echanges_ihe"]            = "CExchangeIHE group_id";
     $backProps["echanges_phast"]          = "CExchangePhast group_id";
     $backProps["extract_passages"]        = "CExtractPassages group_id";
-    $backProps["destinataires_phast"]     = "CPhastDestinataire group_id";  
+    $backProps["destinataires_phast"]     = "CPhastDestinataire group_id";
     $backProps["senders_ftp"]             = "CSenderFTP group_id";
     $backProps["senders_soap"]            = "CSenderSOAP group_id";
     $backProps["senders_mllp"]            = "CSenderMLLP group_id";
@@ -113,7 +113,6 @@ class CGroups extends CMbObject {
     $backProps["modeles_etiquette"]       = "CModeleEtiquette group_id";
     $backProps["unites_fonctionnelles"]   = "CUniteFonctionnelle group_id";
     $backProps["ex_classes"]              = "CExClass group_id";
-    $backProps["config_constantes_medicales"] = "CConfigConstantesMedicales group_id";
     $backProps["prestations_journalieres"] = "CPrestationJournaliere group_id";
     $backProps["prestations_ponctuelles"] = "CPrestationPonctuelle group_id";
     $backProps["supervision_graphs"]      = "CSupervisionGraph owner_id";
@@ -126,10 +125,10 @@ class CGroups extends CMbObject {
     $backProps["group_domains"]           = "CGroupDomain group_id";
     return $backProps;
   }
-  
+
   function getProps() {
     $props = parent::getProps();
-    
+
     $props["text"]                = "str notNull confidential seekable";
     $props["raison_sociale"]      = "str maxLength|50";
     $props["adresse"]             = "text confidential";
@@ -149,30 +148,29 @@ class CGroups extends CMbObject {
     $props["web"]                 = "str";
     $props["finess"]              = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
     $props["chambre_particuliere"]= "bool notNull default|0";
-    
+
     $props["_cp_court"]           = "numchar length|2";
-       
+
     return $props;
   }
-  
+
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = $this->text;
     $this->_shortview = CMbString::truncate($this->text);
     $this->_cp_court = substr($this->cp,0,2);
   }
-  
+
   function store(){
     $is_new = !$this->_id;
-    
+
     if ($msg = parent::store()) {
       return $msg;
     }
-    
+
     if ($is_new && CModule::getActive("dPprescription")) {
       CConfigService::emptySHM();
       CConfigMomentUnitaire::emptySHM();
-      CConfigConstantesMedicales::emptySHM();
     }
   }
 
@@ -182,7 +180,7 @@ class CGroups extends CMbObject {
   function loadFunctions($permType = PERM_READ) {
     return $this->_ref_functions = CMediusers::loadFonctions($permType, $this->_id);
   }
-  
+
   /**
    * Load blocs operatoires with given permission
    */
@@ -191,7 +189,7 @@ class CGroups extends CMbObject {
     $where = array('group_id' => "= '$this->_id'");
     $this->_ref_blocs = $bloc->loadListWithPerms($permType, $where, "nom");
     $use_poste = CAppUI::conf("dPplanningOp COperation use_poste");
-    
+
     if ($load_salles) {
       foreach ($this->_ref_blocs as &$bloc) {
         $bloc->loadRefsSalles();
@@ -199,12 +197,12 @@ class CGroups extends CMbObject {
     }
     return $this->_ref_blocs;
   }
-  
+
   function loadPostes($permType = PERM_READ, $load_bloc = true) {
     $poste = new CPosteSSPI();
     $where = array("group_id" => "= '$this->_id'");
     $this->_ref_postes = $poste->loadListWithPerms($permType, $where, "nom");
-    
+
     if ($load_bloc) {
       foreach ($this->_ref_postes as $_poste) {
         $_poste->loadRefBloc();
@@ -212,7 +210,7 @@ class CGroups extends CMbObject {
     }
     return $this->_ref_postes;
   }
-  
+
   function loadRefsBack() {
     $this->loadFunctions();
   }
@@ -228,7 +226,7 @@ class CGroups extends CMbObject {
   function loadRefServiceUrgences(){
     return $this->_ref_service_urgences = $this->loadFwdRef("service_urgences_id");
   }
-  
+
   /**
    * Load groups with given permission
    */
@@ -238,10 +236,10 @@ class CGroups extends CMbObject {
     self::filterByPerm($groups, $permType);
     return $groups;
   }
-  
+
   function fillLimitedTemplate(&$template) {
     $this->notify("BeforeFillLimitedTemplate", $template);
-    
+
     $template->addProperty("Etablissement - Nom"             , $this->text);
     $template->addProperty("Etablissement - Adresse"         , "$this->adresse \n $this->cp $this->ville");
     $template->addProperty("Etablissement - Ville"           , $this->ville);
@@ -256,14 +254,14 @@ class CGroups extends CMbObject {
     $template->addBarCode("Etablissement - Code Barre FINESS", $this->finess, array("barcode" => array(
       "title" => CAppUI::tr("{$this->_class}-finess")
     )));
-    
+
     $this->notify("AfterFillLimitedTemplate", $template);
   }
-  
+
   function fillTemplate(&$template) {
     $this->fillLimitedTemplate($template);
   }
-  
+
   /**
    * Load the current group
    * @return CGroups
@@ -276,11 +274,11 @@ class CGroups extends CMbObject {
     }
     return self::$_ref_current;
   }
-  
+
   function loadRefsDMICategories() {
     $this->_ref_dmi_categories = $this->loadBackRefs("dmi_categories", "nom");
   }
-  
+
   /**
    * Construit le tag de l'établissement en fonction des variables de configuration
    * @return string
@@ -293,53 +291,53 @@ class CGroups extends CMbObject {
 
     return str_replace('$g', $this->_id, $tag_group);
   }
-  
+
   /**
    * Charge l'idex de l'établissement
    */
   function loadIdex() {
     $tag_group = $this->getTagGroup();
-    
+
     if (!$this->_id || !$tag_group) {
       return;
     }
 
     // Récupération du premier idex créé
     $order = "id400 ASC";
-    
+
     // Recuperation de la valeur de l'id400
     $idex = new CIdSante400();
     $idex->setObject($this);
     $idex->tag = $tag_group;
     $idex->loadMatchingObject($order);
-    
+
     return $idex->id400;
   }
-  
+
   function isNumberSupplier($domain_type) {
     if (!$this->_id) {
-      return false;  
+      return false;
     }
-    
+
     $group_domain = new CGroupDomain();
     $group_domain->object_class = $domain_type;
     $group_domain->group_id     = $this->_id;
     $group_domain->master       = true;
     $group_domain->loadMatchingObject();
-    
+
     if (!$group_domain->_id) {
-      return false;  
+      return false;
     }
-    
+
     $domain = $group_domain->loadRefDomain();
-    
+
     return $domain->loadRefIncrementer()->_id ? 1 : 0;
   }
-  
+
   function isIPPSupplier() {
     return $this->_is_ipp_supplier = $this->isNumberSupplier("CPatient");
   }
-  
+
   function isNDASupplier() {
     return $this->_is_nda_supplier = $this->isNumberSupplier("CSejour");
   }
