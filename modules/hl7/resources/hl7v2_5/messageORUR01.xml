@@ -5,18 +5,18 @@
     <segments>
         <segment>MSH</segment>
         <segment minOccurs="0" maxOccurs="unbounded">SFT</segment>
-        <group maxOccurs="unbounded">
-            <group minOccurs="0">
+        <group maxOccurs="unbounded" name="PATIENT_RESULT">
+            <group minOccurs="0" name="PATIENT">
                 <segment>PID</segment>
                 <segment minOccurs="0">PD1</segment>
                 <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
                 <segment minOccurs="0" maxOccurs="unbounded">NK1</segment>
-                <group minOccurs="0">
+                <group minOccurs="0" name="VISIT">
                     <segment>PV1</segment>
                     <segment minOccurs="0">PV2</segment>
                 </group>
             </group>
-            <group maxOccurs="unbounded">
+            <group maxOccurs="unbounded" name="ORDER_OBSERVATION">
                 <segment minOccurs="0">ORC</segment>
                 <segment>OBR</segment>
                 <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
@@ -25,7 +25,7 @@
                     <segment minOccurs="0" maxOccurs="unbounded">TQ2</segment>
                 </group>
                 <segment minOccurs="0">CTD</segment>
-                <group maxOccurs="unbounded" minOccurs="0">
+                <group maxOccurs="unbounded" minOccurs="0" name="OBSERVATION">
                     <segment>OBX</segment>
                     <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
                 </group>

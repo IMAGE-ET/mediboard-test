@@ -8,7 +8,7 @@
             <description>Set ID</description>
             <datatype>SI</datatype>
         </field>
-        <field minOccurs="0" maxOccurs="0" length="2" table="0125">
+        <field minOccurs="0" maxOccurs="0" length="3" table="0125">
             <name>OBX.2</name>
             <description>Value Type</description>
             <datatype>ID</datatype>

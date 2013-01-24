@@ -344,7 +344,7 @@ class CSocketBasedServer {
       );
       
       $start = microtime(true);
-      
+
       // We must keep m=$module in the GET because of user permissions
       $url = "$this->call_url/index.php?login=$this->username:$this->password&m=$this->module";
       $ack = $this->requestHttpPost($url, $post);
@@ -634,22 +634,5 @@ EOT;
     CMbPath::forceDir($tmp_dir);
     
     return $tmp_dir;
-  }
-  
-  /**
-   * Return the list of sample messages defined in this class
-   * 
-   * @return array The list of available test messages
-   */
-  static function getList(){
-    $reflection = new ReflectionClass(get_class($this));
-    $list = $reflection->getMethods(ReflectionMethod::IS_FINAL);
-    
-    $types = array();
-    foreach ($list as $_method) {
-      $types[] = substr($_method->name, 6);
-    }
-    
-    return $types;
   }
 }

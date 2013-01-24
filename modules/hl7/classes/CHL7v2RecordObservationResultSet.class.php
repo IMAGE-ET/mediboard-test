@@ -78,11 +78,11 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     $exchange_ihe = $this->_ref_exchange_ihe;
     $exchange_ihe->_ref_sender->loadConfigValues();
     $sender       = $exchange_ihe->_ref_sender;
-    
+
     $patientPI = CValue::read($data['personIdentifiers'], "PI");
     $venueAN   = CValue::read($data['personIdentifiers'], "AN");
 
-    if (!$patientPI || !$venueAN) {
+    if (!$patientPI) {
       return $exchange_ihe->setAckAR($ack, "E007", null, $patient);
     }
    
@@ -91,19 +91,32 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     if (!$IPP->_id) {
       return $exchange_ihe->setAckAR($ack, "E105", null, $patient);
     }
-    $patient->load($IPP->object_id); 
+    $patient->load($IPP->object_id);
+
+    // Récupération de la date du relevé
+    $first_observation = $data["observations"][0];
+    $observation_dt = $this->getOBRObservationDateTime($first_observation["OBR"]);
     
     $sejour = new CSejour();
     $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
     // Séjour non retrouvé par son NDA
-    if (!$NDA->_id) {
-      return $exchange_ihe->setAckAR($ack, "E205", null, $sejour);
+    if ($NDA->_id) {
+      $sejour->load($NDA->object_id);
     }
-    $sejour->load($NDA->object_id); 
-    
+    else {
+      $where = array(
+        "patient_id" => "= '$patient->_id'",
+        "annule"     => "= '0'",
+      );
+      $sejours = CSejour::loadListForDateTime($observation_dt, $where, null, 1);
+      $sejour = reset($sejours);
+
+      if (!$sejour) {
+        return $exchange_ihe->setAckAR($ack, "E205", null, $sejour);
+      }
+    }
+
     // Récupération de l'opération courante à la date du relevé
-    $first_observation = $data["observations"][0];
-    $observation_dt = $this->getOBRObservationDateTime($first_observation["OBR"]);
     $operation = $sejour->getCurrOperation($observation_dt);
     if (!$operation->_id) {
       return $exchange_ihe->setAckAR($ack, "E301", null, $operation);

@@ -72,7 +72,7 @@ class COperatorIHE extends CEAIOperator {
         $exchange_ihe->populateExchange($data_format, $evt);
         $exchange_ihe->loadRefsInteropActor();
         $exchange_ihe->populateErrorExchange(null, $evt);
-        
+
         $ack->_ref_exchange_ihe = $exchange_ihe;
         $msgAck = $ack->generateAcknowledgment("AR", "E002", "207");
 

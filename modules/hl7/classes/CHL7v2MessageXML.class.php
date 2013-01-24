@@ -43,10 +43,9 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     if (!$event_name) {
       return new CHL7v2MessageXML($encoding);
     }
-    
     list($event_type, $event_code) = str_split($event_name, strlen("CHL7vXEventXXX"));
     $event_code = substr($event_code, 0, 3);
-    
+
     if ($event_type == "CHL7v2EventADT") {
       // Création d'un nouveau patient - Mise à jour d'information du patient
       if (CMbArray::in($event_code, CHL7v2RecordPerson::$event_codes)) {
@@ -70,7 +69,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     }    
     
     // Création des résultats d'observations  
-    if ($event_type == "CHL7v2EventDEC") {
+    if ($event_type == "CHL7v2EventORU") {
       return new CHL7v2RecordObservationResultSet($encoding);  
     }
     
