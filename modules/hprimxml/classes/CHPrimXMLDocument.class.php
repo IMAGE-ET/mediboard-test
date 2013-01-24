@@ -406,16 +406,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $montant = $this->addElement($acteNGAP, "montant");
     if ($mbActeNGAP->montant_depassement > 0) {
       $montantDepassement = $this->addElement($montant, "montantDepassement", sprintf("%.2f", $mbActeNGAP->montant_depassement));
-      if (CAppUI::conf("dPpmsi systeme_facturation") == "siemens") {
-        if (CAppUI::conf("dPsalleOp CActeCCAM envoi_motif_depassement")) {
-          $this->addAttribute($montantDepassement, "motif", "d");
-        }         
-      }
-      else {
-        if ($mbActeNGAP->motif_depassement) {
-          $this->addAttribute($montantDepassement, "motif", $mbActeNGAP->motif_depassement);
-        }
-      }
     }
     
     return $acteNGAP;
