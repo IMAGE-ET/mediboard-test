@@ -269,16 +269,12 @@ class CHL7v2Segment extends CHL7v2Entity {
     if (!$patient->_IPP) {
       $patient->loadIPP($group->_id);
     }
-    
-    switch ($actor->_configs["build_PID_34"]) {
-      case 'actor':
-        $assigning_authority = $this->getAssigningAuthority("actor", null, $actor);
-        break;
-      
-      default:
-        $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
-        break;
-    }  
+
+    $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
+
+    if (CValue::read($actor->_configs, "build_PID_34") === "actor") {
+      $assigning_authority = $this->getAssigningAuthority("actor", null, $actor);
+    }
     
     // Table - 0203
     // RI - Resource identifier
@@ -331,7 +327,6 @@ class CHL7v2Segment extends CHL7v2Entity {
   }
 
   function fillOtherIdentifiers(&$identifiers, CPatient $patient, CInteropActor $actor = null) {
-    
   }
   
   function getXCN9(CMbObject $object, CIdSante400 $id400 = null, CInteropReceiver $actor = null) {
@@ -646,16 +641,32 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
   }
   
-  function getPV110 (CInteropReceiver $receiver, CSejour $sejour) {
+  function getPV110 (CInteropReceiver $receiver, CSejour $sejour, CAffectation $affectation = null) {
     // Hospital Service
     switch ($receiver->_configs["build_PV1_10"]) {
       // idex du service
       case 'service':
-        if (!$sejour->service_id) {
-          return null;
+        if (!$affectation) {
+          // Chargement de l'affectation courante
+          $affectation = $sejour->getCurrAffectation();
+
+          // Si on n'a pas d'affectation on va essayer de chercher la première
+          if (!$affectation->_id) {
+            $sejour->loadSurrAffectations();
+            $affectation = $sejour->_ref_prev_affectation;
+          }
+        }
+
+        $service_id = $affectation->service_id;
+        if (!$service_id) {
+          if (!$sejour->service_id) {
+            return null;
+          }
+
+          $service_id = $sejour->service_id;
         }
         
-        return CIdSante400::getMatch("CService", $receiver->_tag_service, null, $sejour->service_id)->id400;
+        return CIdSante400::getMatch("CService", $receiver->_tag_service, null, $service_id)->id400;
         
       // Discipline médico-tarifaire
       default:
