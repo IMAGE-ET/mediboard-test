@@ -81,6 +81,11 @@ class CPAM extends CIHE {
     "Z99" => "CHL7EventADTZ99",
   );
 
+  /**
+   * Construct
+   *
+   * @return \CPAM
+   */
   function __construct() {
     $this->type = "PAM";
   }

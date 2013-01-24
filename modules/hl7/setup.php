@@ -964,8 +964,14 @@ class CSetuphl7 extends CSetup {
     $query = "ALTER TABLE `receiver_ihe_config`
                 ADD `send_assigning_authority` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
+
+    $this->makeRevision("0.52");
+    $query = "ALTER TABLE `hl7_config`
+                ADD `receiving_application` VARCHAR (255),
+                ADD `receiving_facility` VARCHAR (255);";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.52";
+    $this->mod_version = "0.53";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

@@ -16,34 +16,51 @@
  * PDevice Enterprise Communication
  */
 class CDEC extends CIHE {
+  /**
+   * @var array
+   */
   static $versions = array (
-    "2.1", "2.2", "2.3", "2.4", "2.5"  
+    "2.1", "2.2", "2.3", "2.4", "2.5", "2.6"
   );
-  
+
+  /**
+   * @var array
+   */
   static $transaction_pcdO1 = array(
     "R01"
   );
-  
+
+  /**
+   * @var array
+   */
   static $evenements = array(
     // PDC-01
     "R01" => "CHL7EventORUR01",
   );
-  
+
+  /**
+   * Construct
+   *
+   * @return \CDEC
+   */
   function __construct() {
     $this->type = "DEC";
   }
-  
+
   /**
    * Retrieve events list of data format
+   *
    * @return array Events list
    */
   function getEvenements() {
     return self::$evenements;
   }
-  
+
   /**
    * Retrieve transaction name
-   * @param $code Event code
+   *
+   * @param string $code Event code
+   *
    * @return string Transaction name
    */
   static function getTransaction($code) {
@@ -54,7 +71,9 @@ class CDEC extends CIHE {
 
   /**
    * Return data format object
-   * @param exchange Instance of exchange
+   *
+   * @param CExchangeDataFormat $exchange Instance of exchange
+   *
    * @return object An instance of data format
    */
   static function getEvent(CExchangeDataFormat $exchange) {

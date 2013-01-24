@@ -51,7 +51,7 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
 
     if ($error) {
       // ERR-1: Error Code and Location (ELD) (optional repeating)
-      if ($version < "2.5") {
+      if ($version < "2.6") {
         $data[] = $error->getCodeLocation();
         return $this->fill($data);
       }
@@ -89,7 +89,7 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
              "A002",
              CAppUI::tr("CHL7EventADT-AA-A002")
            )
-       );
+        );
       }
       
       // ERR-6: Application Error Parameter (ST) (optional repeating)
@@ -112,9 +112,10 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       
       // ERR-12: Help Desk Contact Point (XTN) (optional repeating) 
       $data[] = null;
-    } else {
+    }
+    else {
       // ERR-1: Error Code and Location (ELD) (optional repeating)
-      if ($version < "2.5") {
+      if ($version < "2.6") {
         $data[] = array(
           null,
           null,

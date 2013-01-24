@@ -161,22 +161,22 @@ class CReceiverIHEConfig extends CMbObjectConfig {
 
   function getProps() {
     $props = parent::getProps();
-    $props["object_id"]                = "ref class|CReceiverIHE";
+    $props["object_id"]              = "ref class|CReceiverIHE";
     
     // Format
-    $props["encoding"]                 = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
-    $props["ER7_segment_terminator"]   = "enum list|CR|LF|CRLF";
+    $props["encoding"]               = "enum list|UTF-8|ISO-8859-1 default|UTF-8";
+    $props["ER7_segment_terminator"] = "enum list|CR|LF|CRLF";
     
     // Version
-    $props["ITI30_HL7_version"]        = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
-    $props["ITI31_HL7_version"]        = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
-    $props["RAD48_HL7_version"]        = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
-    $props["ITI21_HL7_version"]        = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
-    $props["ITI22_HL7_version"]        = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
+    $props["ITI30_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
+    $props["ITI31_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5|FR_2.1|FR_2.2|FR_2.3 default|2.5";
+    $props["RAD48_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
+    $props["ITI21_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
+    $props["ITI22_HL7_version"] = "enum list|2.1|2.2|2.3|2.3.1|2.4|2.5 default|2.5";
     
     // Application
-    $props["receiving_application"]    = "str";
-    $props["receiving_facility"]       = "str";
+    $props["receiving_application"] = "str";
+    $props["receiving_facility"]    = "str";
     $props["assigning_authority_namespace_id"]      = "str";
     $props["assigning_authority_universal_id"]      = "str";
     $props["assigning_authority_universal_type_id"] = "str";
