@@ -56,6 +56,7 @@ class CProductDelivery extends CMbObject {
   var $_ref_delivery_traces = null;
   var $_ref_prises_dispensation = null;
   var $_ref_prises_dispensation_med = null;
+  var $_ref_preparateur     = null;
 
   var $_date_min            = null;
   var $_date_max            = null;
@@ -74,6 +75,7 @@ class CProductDelivery extends CMbObject {
   var $_pilulier            = null;
   var $_code_cis            = null;
   var $_code_ucd            = null;
+  var $_count_delivered     = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -152,7 +154,7 @@ class CProductDelivery extends CMbObject {
       }
     }
 
-    return $sum;
+    return $this->_count_delivered = $sum;
   }
 
   function isDelivered() {
@@ -182,6 +184,13 @@ class CProductDelivery extends CMbObject {
 
   function loadRefsPrisesDispensation(){
     return $this->_ref_prises_dispensation = $this->loadBackRefs("prises_dispensation", "datetime ASC");
+  }
+
+  /**
+   * @return CMediusers
+   */
+  function loadRefPreparateur() {
+    return $this->_ref_preparateur = $this->loadFirstLog()->loadRefUser()->loadRefMediuser();
   }
 
   function loadRefsPrisesDispensationMed($date_min, $date_max){

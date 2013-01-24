@@ -25,6 +25,11 @@ class CProductDeliveryTrace extends CMbObject {
    * @var CProductDelivery
    */
   var $_ref_delivery  = null;
+
+  /**
+   * @var CMediusers
+   */
+  var $_ref_preparateur = null;
   
   /**
    * @var CProductStockLocation
@@ -229,24 +234,24 @@ class CProductDeliveryTrace extends CMbObject {
    * @return CProductDelivery
    */
   function loadRefDelivery() {
-    return $this->_ref_delivery = $this->loadFwdRef("delivery_id", true); 
+    return $this->_ref_delivery = $this->loadFwdRef("delivery_id", true);
   }
   
   /**
    * @return CProductStockLocation
    */
   function loadRefTargetLocation() {
-    return $this->_ref_target_location = $this->loadFwdRef("target_location_id", true); 
+    return $this->_ref_target_location = $this->loadFwdRef("target_location_id", true);
   }
 
   function getPerm($permType) {
     return $this->getStock()->getPerm($permType);
   }
-  
+
   /**
    * @return CMediusers
    */
-  function loadRefPreparateur(){
-    return $this->loadLastLog()->loadRefUser(false)->loadRefMediuser();
+  function loadRefPreparateur() {
+    return $this->_ref_preparateur = $this->loadFirstLog()->loadRefUser()->loadRefMediuser();
   }
 }
