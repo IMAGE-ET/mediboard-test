@@ -11,6 +11,7 @@ $locales['CMailAttachment-msg-attachmentLinked-success'] = 'La pièce jointe a bi
 $locales['CMailAttachment-msg-attachmentsaved'] = 'Pièce jointe récupérée';
 $locales['CMailAttachment-msg-noAttachSelected'] = 'Aucune pièce jointe selectionnée';
 $locales['CMailAttachment-none'] = 'Aucune pièce jointe';
+$locales['CMailAttachment-unlinked'] = 'La pièce jointe a été détachée avec succès';
 $locales['CMailAttachments'] = 'Pièces Jointes';
 $locales['CMailAttachments-button-append'] = 'Lier des éléments';
 $locales['CMailAttachments-button-append_desc'] = 'Lier les pièces jointes';

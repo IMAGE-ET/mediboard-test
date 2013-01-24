@@ -28,61 +28,69 @@ if (!$object->_id) {
   CAppUI::setMsg("CUserMail-link-objectNull", UI_MSG_ERROR);
 }
 
-if ($attach_list != "") {
+if ($attach_list == "") {
+  CAppUI::setMsg("CMailAttachment-msg-no_object_to_attach", UI_MSG_ERROR);
+  echo CAppUI::getMsg();
+  return;
 
-  $attachments = explode("-", $attach_list);
-  foreach ($attachments as $_attachment) {
-    $attachment = new CMailAttachments();
-    $attachment->load($_attachment);
-    $attachment->loadRefsFwd();
+}
 
-    if ($attachment->_file->_id) {
-      //je lie
-      $attachment->_file->setObject($object);
-      if ($msg = $attachment->_file->store()) {
+$attachments = explode("-", $attach_list);
+foreach ($attachments as $_attachment) {
+  $attachment = new CMailAttachments();
+  $attachment->load($_attachment);
+  $attachment->loadRefsFwd();
+
+  //je lie
+  if ($attachment->_file->_id) {
+    $attachment->_file->setObject($object);
+    if ($msg = $attachment->_file->store()) {
+      CAppUI::setMsg($msg, UI_MSG_ERROR);
+    }
+    else {
+      $attachment->file_id = $attachment->_file->_id;
+      if ($msg = $attachment->store()) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
       }
       else {
-        $attachment->file_id = $attachment->_file->_id;
-        if (!$msg = $attachment->store()) {
-          CAppUI::setMsg("CMailAttachment-msg-attachmentLinked-success", UI_MSG_OK);
-        }
-      }
-    }
-    else {
-      //CFile does not exist
-      // pop
-      $account = new CSourcePOP();
-      $account->load($mail->account_id);
-
-      $pop = new CPop($account);
-      $pop->open();
-
-
-      $file = new CFile();
-      $file->setObject($object);
-      $file->private = 0;
-      $file->author_id  = CAppUI::$user->_id;
-
-      $pop = new CPop($account);
-      $pop->open();
-      $file_pop = $pop->decodeMail($attachment->encoding, $pop->openPart($mail->uid, $attachment->getpartDL()));
-      $pop->close();
-
-      $file->file_name  = $attachment->name;
-      $file->file_type  = $attachment->getType($attachment->type, $attachment->subtype);
-      $file->fillFields();
-      $file->putContent($file_pop);
-      if ($str = $file->store()) {
-        CAppUI::setMsg($str, UI_MSG_ERROR);
-      }
-      else {
-        $attachment->file_id = $file->_id;
-        $attachment->store();
+        CAppUI::setMsg("CMailAttachment-msg-attachmentLinked-success", UI_MSG_OK);
       }
     }
   }
+  //CFile does not exist
+  else {
+    // pop
+    $account = new CSourcePOP();
+    $account->load($mail->account_id);
+
+    $pop = new CPop($account);
+    $pop->open();
+
+
+    $file = new CFile();
+    $file->setObject($object);
+    $file->private = 0;
+    $file->author_id  = CAppUI::$user->_id;
+
+    $pop = new CPop($account);
+    $pop->open();
+    $file_pop = $pop->decodeMail($attachment->encoding, $pop->openPart($mail->uid, $attachment->getpartDL()));
+    $pop->close();
+
+    $file->file_name  = $attachment->name;
+    $file->file_type  = $attachment->getType($attachment->type, $attachment->subtype);
+    $file->fillFields();
+    $file->putContent($file_pop);
+    if ($str = $file->store()) {
+      CAppUI::setMsg($str, UI_MSG_ERROR);
+    }
+    else {
+      $attachment->file_id = $file->_id;
+      $attachment->store();
+    }
+  }
 }
+
 
 if ($text_html || $text_plain) {
   if ($text_html) {

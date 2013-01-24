@@ -35,6 +35,17 @@ messagerie = {
     url.requestUpdate(messagerie.tab);
   },
 
+  /**
+   * refresh the list of attachments to link
+   *
+   * @param mail_id
+   */
+  listAttachLink : function(mail_id) {
+    var url = new Url(messagerie.module, "ajax_list_attachments");
+    url.addParam("mail_id", mail_id);
+    url.requestUpdate("list_attachments");
+  },
+
   getLastMessages:function (user_id) {
     var url = new Url(messagerie.module, "ajax_get_last_email");
     url.addParam("user_id", user_id);
@@ -105,6 +116,14 @@ messagerie = {
     url.addParam("mail_id", mail_id);
     url.requestUpdate("systemMsg", function() {
       this.refreshModal();
+    });
+  },
+
+  cancelAttachment : function(attach_id, mail_id) {
+    var url = new Url("messagerie", "ajax_do_unlink_attachment");
+    url.addParam("attachment_id", attach_id);
+    url.requestUpdate("systemMsg", function() {
+      messagerie.listAttachLink(mail_id);
     });
   }
 };

@@ -27,7 +27,7 @@ class CSetupmessagerie extends CSetup {
               `starred` ENUM ('0','1') NOT NULL DEFAULT '0'
               ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
-    
+
     $query = "ALTER TABLE `mbmail` 
               ADD INDEX (`from`),
               ADD INDEX (`to`),
@@ -50,6 +50,7 @@ class CSetupmessagerie extends CSetup {
     $this->addPrefQuery("ViewMailAsHtml", 1);
 
     $this->makeRevision("0.13");
+    $this->addDependency("dPfiles", "0.1");
     $query = "CREATE TABLE `user_mail` (
               `user_mail_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `user_id` INT (11) UNSIGNED NOT NULL,

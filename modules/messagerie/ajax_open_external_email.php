@@ -52,4 +52,4 @@ $smarty = new CSmartyDP();
 $smarty->assign("mail", $mail);
 $smarty->assign("nbAttachPicked", $nbAttachPicked);
 $smarty->assign("nbAttachAll",  $nbAttach);
-$smarty->display("ajax_open_external_email.tpl");
+$smarty->display("vw_open_external_email.tpl");

@@ -24,14 +24,15 @@ class CMailAttachments extends CMbObject{
   var $bytes        = null;
   var $disposition  = null;
   var $part         = null;
-  var $file_id       = null; //Cfile id if linked
+  var $file_id      = null; //Cfile id if linked
 
   var $name         = null;
   var $extension    = null;
 
 
   var $_file        = null;
-  var $_content      = null; //temp for content of file
+  var $_content     = null; //temp for content of file
+  var $_ref_mail        = null; //for mail ref
 
 
   /**
@@ -61,7 +62,7 @@ class CMailAttachments extends CMbObject{
     $props["bytes"]         = "num";
     $props["disposition"]   = "str";
     $props["part"]          = "str notNull";
-    $props["file_id"]        = "ref class|CFile";
+    $props["file_id"]       = "ref class|CFile";
 
     $props["name"]          = "str notNull";
     $props["extension"]     = "str notNull";
@@ -127,14 +128,13 @@ class CMailAttachments extends CMbObject{
   function loadContentFromPop($content) {
     switch ($this->subtype) {
       case 'SVG+XML':
-        $this->_content = CPop::decodeMail($this->encoding, $content);
+        return $this->_content = CPop::decodeMail($this->encoding, $content);
         break;
 
       default:
-        $this->_content = base64_encode(CPop::decodeMail($this->encoding, $content));
+        return $this->_content = base64_encode(CPop::decodeMail($this->encoding, $content));
         break;
     }
-    return true;
   }
 
   /**
@@ -168,28 +168,33 @@ class CMailAttachments extends CMbObject{
     $this->loadFiles();
   }
 
+  function loadMail() {
+    return $this->_ref_mail = $this->loadRefsFwd("mail_id");
+  }
+
   /**
    * load files linked to the present attachment
    *
    * @return CFile
    */
   function loadFiles() {
+    //a file is already linked and we have the id
     if ($this->file_id) {
       $file = new CFile();
       $file->load($this->file_id);
+      $file->loadRefsFwd();         //TODO : fix this
       $file->updateFormFields();
-      $file->loadRefsFwd();
-      return $this->_file = $file;
     }
+    //so there is a file linked
     else {
       $file = new CFile();
-      $file->object_class = $this->_class;
-      $file->object_id = $this->_id;
+      $file->setObject($this);
       $file->loadMatchingObject();
+      //$file->loadUniqueBackRef("files");
       $file->updateFormFields();
-      return $this->_file = $file;
     }
 
+    return $this->_file = $file;
   }
 
   /**

@@ -15,22 +15,8 @@ $pat_id = CValue::get("pat_id");
 $pat = new CPatient();
 $pat->load($pat_id);
 
-if ($mail_id) {
-  $mail = new CUserMail();
-  $mail->load($mail_id);
-  $mail->loadRefsFwd();
-
-  //get the CFile attachments
-  foreach ($mail->_attachments as $_att) {
-    $_att->loadRefsFwd();
-  }
-
-  $mail->checkInlineAttachments();
-}
-
-
 //smarty
 $smarty = new CSmartyDP();
-$smarty->assign("mail", $mail);
+$smarty->assign("mail_id", $mail_id);
 $smarty->assign("pat", $pat);
-$smarty->display("ajax_link_attachments.tpl");
+$smarty->display("inc_vw_attach_piece.tpl");

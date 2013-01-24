@@ -25,7 +25,7 @@ $nb_mails = $mail->countMatchingList();
 $mails = $mail->loadMatchingList($order, $limit);
 
 foreach ($mails as $_mail) {
-  $_mail->loadComplete();
+  $_mail->loadReadableHeader();
   $_mail->loadRefsFwd();
 }
 
