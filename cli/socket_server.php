@@ -45,7 +45,7 @@ function restart(){
  * @return void
  */
 function on_shutdown() {
-  global $exit_status, $pid_file, $handler;
+  global $exit_status, $pid_file;
   
   switch ($exit_status) {
     case "error":
@@ -138,7 +138,7 @@ $options = array(
 );
 
 for ($i = 3; $i < $argc; $i++) {
-  switch($argv[$i]){
+  switch ($argv[$i]) {
     case "--debug":
       $options["debug"] = true;
       break;
@@ -169,7 +169,8 @@ try {
   if ($options["cert"]) {
     outln("SSL certificate: '{$options['cert']}'");
   }
-  
+
+  /** @var CSocketBasedServer $handler  */
   $handler = new $server_class(
     $options["url"], 
     $options["username"], 

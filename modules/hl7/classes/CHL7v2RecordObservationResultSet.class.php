@@ -96,23 +96,27 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     // Récupération de la date du relevé
     $first_observation = $data["observations"][0];
     $observation_dt = $this->getOBRObservationDateTime($first_observation["OBR"]);
-    
-    $sejour = new CSejour();
-    $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
+
+    $NDA = null;
+    if ($venueAN) {
+      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
+    }
+
     // Séjour non retrouvé par son NDA
-    if ($NDA->_id) {
-      $sejour->load($NDA->object_id);
+    if ($NDA && $NDA->_id) {
+      /** @var CSejour $sejour */
+      $sejour = $NDA->loadTargetObject();
     }
     else {
       $where = array(
         "patient_id" => "= '$patient->_id'",
         "annule"     => "= '0'",
       );
-      $sejours = CSejour::loadListForDateTime($observation_dt, $where, null, 1);
+      $sejours = CSejour::loadListForDate(mbDate($observation_dt), $where, null, 1);
       $sejour = reset($sejours);
 
       if (!$sejour) {
-        return $exchange_ihe->setAckAR($ack, "E205", null, $sejour);
+        return $exchange_ihe->setAckAR($ack, "E205", null);
       }
     }
 
@@ -121,6 +125,10 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
     if (!$operation->_id) {
       return $exchange_ihe->setAckAR($ack, "E301", null, $operation);
     }
+
+    $codes = array(
+      "I301",
+    );
     
     // Récupération des observations
     foreach ($data["observations"] as $_observation) {
@@ -142,23 +150,28 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
           $result_set->context_id    = $operation->_id;
           $result_set->datetime      = mbDateTime($dateTimeOBX);
           if ($msg = $result_set->store()) {
-            return $exchange_ihe->setAckAR($ack, "E302", $msg, $operation);
+            $codes[] = "E302";
+            continue;
           }
+        }
+
+        // Traiter le cas où ce sont des paramètres sans résultat utilisable
+        if ($this->getOBXResultStatus($_OBX) === "X") {
+          continue;
         }
         
         $result = new CObservationResult();
         $result->observation_result_set_id = $result_set->_id;
         $this->mappingObservationResult($_OBX, $result);
+
         /* @todo à voir si on envoi un message d'erreur ou si on continu ... */
         if ($msg = $result->store()) {
-          return $exchange_ihe->setAckAR($ack, "E303", $msg, $operation);
+          $codes[] = "E303";
         }
       }
     }
     
-    $codes = array ("I301");
-    
-    return $exchange_ihe->setAckAA($ack, $codes, null, $patient);
+    return $exchange_ihe->setAckAA($ack, $codes, $comment, $operation);
   }
   
   function getOBRObservationDateTime(DOMNode $node) {
@@ -167,6 +180,10 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
   
   function getOBXObservationDateTime(DOMNode $node) {
     return $this->queryTextNode("OBX.14/TS.1", $node);
+  }
+
+  function getOBXResultStatus(DOMNode $node) {
+    return $this->queryTextNode("OBX.11", $node);
   }
   
   function mappingObservationResult(DOMNode $node, CObservationResult $result) {

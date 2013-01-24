@@ -33,34 +33,69 @@ class CSupervisionGraphAxis extends CMbObject {
   var $_ref_graph;
   
   static $default_yaxis = array(
-    "position" => "left", 
-    "labelWidth" => 60, // FIXME
-    "ticks" => 6, 
+    "position"     => "left",
+    "labelWidth"   => 60, // FIXME
+    "ticks"        => 6,
     "reserveSpace" => true,
-    "label" => "",
-    "symbolChar" => "",
+    "label"        => "",
+    "symbolChar"   => "",
   );
-  
+
+  static $_symbol_chars = array(
+    "circle"   => "&#x25CB;",
+    "cross"    => "x",
+    "diamond"  => "&#x25CA;",
+    "square"   => "&#x25A1;",
+    "triangle" => "&#x25B3;",
+  );
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = "supervision_graph_axis";
+    $spec->key   = "supervision_graph_axis_id";
+    return $spec;
+  }
+
+  function getProps() {
+    $props = parent::getProps();
+    $props["supervision_graph_id"] = "ref notNull class|CSupervisionGraph cascade";
+    $props["title"]                = "str notNull";
+    $props["limit_low"]            = "float"; // null => auto
+    $props["limit_high"]           = "float"; // null => auto
+    $props["display"]              = "enum list|points|lines|bars|stack|bandwidth";
+    $props["show_points"]          = "bool notNull default|1";
+    $props["symbol"]               = "enum notNull list|circle|square|diamond|cross|triangle";
+    return $props;
+  }
+
+  /**
+   * Get an HTML representation of the symbol char
+   *
+   * @return string The HTML symbol char
+   */
   function getSymbolChar() {
     $this->completeField("symbol", "show_points", "display");
 
     if (!$this->show_points && $this->display != "points") {
       return null;
     }
-    
-    return CMbArray::get(array(
-      "circle"   => "&#x25CB;",
-      "cross"    => "x",
-      "diamond"  => "&#x25CA;",
-      "square"   => "&#x25A1;",
-      "triangle" => "&#x25B3;",
-    ), $this->symbol);
+
+    return CMbArray::get(self::$_symbol_chars, $this->symbol);
   }
-  
+
+  /**
+   * Get Flot-formatted axis data
+   *
+   * @param int $count_yaxes Number of axes to build
+   *
+   * @return array
+   */
   function getAxisForFlot($count_yaxes){
     $axis_data = array(
       "symbolChar" => $this->getSymbolChar(),
       "label"      => $this->title,
+      "min"        => null,
+      "max"        => null,
     ) + self::$default_yaxis;
 
     $height = $this->loadRefGraph()->height;
@@ -81,25 +116,6 @@ class CSupervisionGraphAxis extends CMbObject {
     return $axis_data;
   }
   
-  function getSpec() {
-    $spec = parent::getSpec();
-    $spec->table = "supervision_graph_axis";
-    $spec->key   = "supervision_graph_axis_id";
-    return $spec;
-  }
-  
-  function getProps() {
-    $props = parent::getProps();
-    $props["supervision_graph_id"] = "ref notNull class|CSupervisionGraph cascade";
-    $props["title"]                = "str notNull";
-    $props["limit_low"]            = "float"; // null => auto
-    $props["limit_high"]           = "float"; // null => auto
-    $props["display"]              = "enum list|points|lines|bars|stack|bandwidth";
-    $props["show_points"]          = "bool notNull default|1";
-    $props["symbol"]               = "enum notNull list|circle|square|diamond|cross|triangle";
-    return $props;
-  }
-  
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["series"] = "CSupervisionGraphSeries supervision_graph_axis_id";
@@ -107,7 +123,7 @@ class CSupervisionGraphAxis extends CMbObject {
   }
 
   /**
-   * @param bool $cache
+   * @param bool $cache Use cache
    *
    * @return CSupervisionGraph
    */
