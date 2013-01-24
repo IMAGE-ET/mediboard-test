@@ -69,7 +69,7 @@ switch ($period) {
     break;
     
   case "WEEK";
-    $format = "%W";
+    $format = "%V";
     $date_production = mbDateTime("+1 day last sunday", $date_production);
     break;
     

@@ -102,14 +102,9 @@ for ($i = 0 ; $i < $nb_ticks ; $i++) {
       mbTime($current) >= mbTime($temp_datetime) && mbTime($current) > mbTime($datetime)) {
       $current = $temp_datetime;
     }
-    $week_a = mbTransformTime($temp_datetime, null, "%W");
-    $week_b = mbTransformTime($datetime, null, "%W");
-    if ($week_a == "00") {
-      $week_a = "52";
-    }
-    if ($week_b == "00") {
-      $week_b = "52";
-    }
+    $week_a = mbTransformTime($temp_datetime, null, "%V");
+    $week_b = mbTransformTime($datetime, null, "%V");
+
     // les semaines
     $days[$datetime] = $week_b;
     

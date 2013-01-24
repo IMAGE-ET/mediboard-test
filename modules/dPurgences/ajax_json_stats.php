@@ -156,7 +156,7 @@ switch ($period) {
     break;
     
   case "WEEK";
-    $format = "%W";
+    $format = "%V";
     $entree = mbDate("+1 day last sunday", $entree);
     break;
     

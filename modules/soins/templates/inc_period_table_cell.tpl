@@ -54,7 +54,7 @@
   
   <th style="text-align: center; width: 3em; background-color: {{$background}};">
     <strong title="{{$_datetime|date_format:$conf.longdate}}">
-      {{$_datetime|date_format:"%W"}}
+      {{$_datetime|date_format:"%V"}}
     </strong>
   </th>
 

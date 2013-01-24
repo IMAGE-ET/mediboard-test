@@ -19,7 +19,7 @@
 		<td style="text-align: center; vertical-align: middle;">
       <big>
       	<strong>
-      		{{tr}}Week{{/tr}} {{$planning->date|date_format:'%U'}},
+      		{{tr}}Week{{/tr}} {{$planning->date|date_format:'%V'}},
 					{{assign var=month_min value=$planning->date_min|date_format:'%B'}}
           {{assign var=month_max value=$planning->date_max|date_format:'%B'}}
 					{{$month_min}}{{if $month_min != $month_max}}-{{$month_max}}{{/if}}

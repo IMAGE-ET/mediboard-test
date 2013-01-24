@@ -5,7 +5,7 @@
   </tr>
   <tr>
     {{if $period == "day"  }}{{assign var=format value="%d %a"}}{{/if}}
-    {{if $period == "week" }}{{assign var=format value="%W"   }}{{/if}}
+    {{if $period == "week" }}{{assign var=format value="%V"   }}{{/if}}
     {{if $period == "month"}}{{assign var=format value="%m"   }}{{/if}}
     {{if $period == "year" }}{{assign var=format value="%Y"   }}{{/if}}
     
