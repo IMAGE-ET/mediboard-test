@@ -34,23 +34,6 @@ $departements[] = "RE"; // Réunion
 $departements[] = "PM"; // Saitn Pierre et Miquelon
 $departements[] = "WF"; // Wallis et Futuna
 
-// Services
-$service = new CService;
-$services = $service->loadGroupList();
-foreach ($services as $_service) {
-	$_service->_conf_object = $_service->loadUniqueBackRef("config_constantes_medicales");
-}
-
-$group = CGroups::loadCurrent();
-$group->_conf_object = $group->loadUniqueBackRef("config_constantes_medicales");
-
-$base = new CConfigConstantesMedicales;
-$where = array(
-  "group_id" => "IS NULL",
-  "service_id" => "IS NULL",
-);
-$base->loadObject($where);
-
 // Nombre de patients
 $patient = new CPatient();
 $nb_patients = $patient->countList();
@@ -65,12 +48,7 @@ $smarty->assign("all_appareils"   , $all_appareils);
 
 $smarty->assign("pass"        , CValue::get("pass"));
 $smarty->assign("departements", $departements);
-$smarty->assign("base"        , $base);
-$smarty->assign("group"       , $group);
-$smarty->assign("services"    , $services);
 
 $smarty->assign("nb_patients", $nb_patients);
 
 $smarty->display("configure.tpl");
-
-?>

@@ -226,7 +226,7 @@ class CSetupdPpatients extends CSetup {
                 CHANGE `fax` `fax` bigint(10) unsigned zerofill NULL,
                 CHANGE `email` `email` varchar(255) NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `patients` 
+    $query = "ALTER TABLE `patients`
                 CHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                 CHANGE `nom` `nom` varchar(255) NOT NULL,
                 CHANGE `nom_jeune_fille` `nom_jeune_fille` varchar(255) NULL,
@@ -255,11 +255,11 @@ class CSetupdPpatients extends CSetup {
                 CHANGE `prevenir_prenom` `prevenir_prenom` varchar(255) NULL,
                 CHANGE `prevenir_ville` `prevenir_ville` varchar(255) NULL;";
     $this->addQuery($query);
-    $query = "ALTER TABLE `traitement` 
+    $query = "ALTER TABLE `traitement`
                 CHANGE `traitement_id` `traitement_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
                 CHANGE `patient_id` `patient_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `patients` 
+    $query = "ALTER TABLE `patients`
                 CHANGE `ATNC` `ATNC` enum('o','n','0','1') NOT NULL DEFAULT 'n',
                 CHANGE `incapable_majeur` `incapable_majeur` enum('o','n','0','1') NOT NULL DEFAULT 'n';";
     $this->addQuery($query);
@@ -271,14 +271,14 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
     $query = "UPDATE `patients` SET `incapable_majeur`='1' WHERE `incapable_majeur`='o';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `patients` 
+    $query = "ALTER TABLE `patients`
                 CHANGE `ATNC` `ATNC` enum('0','1') NOT NULL DEFAULT '0',
                 CHANGE `incapable_majeur` `incapable_majeur` enum('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
     $this->makeRevision("0.37");
     $this->setTimeLimit(1800);
-    $query = "ALTER TABLE `patients` 
+    $query = "ALTER TABLE `patients`
                 ADD `nom_soundex2`    VARCHAR(255) DEFAULT NULL AFTER `nom_jeune_fille`,
                 ADD `prenom_soundex2` VARCHAR(255) DEFAULT NULL AFTER `nom_soundex2`,
                 ADD `nomjf_soundex2`  VARCHAR(255) DEFAULT NULL AFTER `prenom_soundex2`;";
@@ -1964,25 +1964,86 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.66");
-    
+
     $query = "ALTER TABLE `patients`
               DROP `assure_avs`;";
     $this->addQuery($query);
 
-    $this->makeRevision("1.67");
+    $this->makeRevision("1.68");
 
     $query = "ALTER TABLE `medecin`
                 ADD `email_apicrypt` VARCHAR (50),
                 ADD `last_ldap_checkout` DATE;";
-
-    $this->makeRevision("1.68");
+    $this->addQuery($query);
 
     $query = "ALTER TABLE `patients`
                 ADD `province` VARCHAR (40) AFTER adresse;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.69";
-    
+    $this->makeRevision("1.69");
+
+    function setup_patients_constantes_configuration(CSetup $setup){
+      $ds = $setup->ds;
+      $fields = array(
+        'show_cat_tabs',
+        'show_enable_all_button',
+
+        'diuere_24_reset_hour',
+        'redon_cumul_reset_hour',
+        'sng_cumul_reset_hour',
+        'lame_cumul_reset_hour',
+        'drain_cumul_reset_hour',
+        'drain_thoracique_cumul_reset_hour',
+        'drain_pleural_cumul_reset_hour',
+        'drain_mediastinal_cumul_reset_hour',
+        'sonde_ureterale_cumul_reset_hour',
+        'sonde_nephro_cumul_reset_hour',
+        'sonde_vesicale_cumul_reset_hour',
+
+        'important_constantes',
+      );
+      $configs = $ds->loadList("SELECT * FROM `config_constantes_medicales`");
+      foreach ($configs as $_config) {
+        foreach ($fields as $_field) {
+          $object_class = null;
+          if ($object_id = $_config["service_id"]) {
+            $object_class = "CService";
+          }
+          elseif ($object_id = $_config["group_id"]) {
+            $object_class = "CGroups";
+          }
+
+          if (!$object_class) {
+            $object_class = "NULL";
+          }
+          else {
+            $object_class = "'$object_class'";
+          }
+
+          if (!$object_id) {
+            $object_id = "NULL";
+          }
+          else {
+            $object_id = "'$object_id'";
+          }
+
+          if ($_config[$_field] !== null) {
+            $query = "INSERT INTO `configuration` (`object_class`, `object_id`, `feature`, `value`) VALUES (
+              $object_class, $object_id, %1, %2
+            )";
+            $query = $ds->prepare($query, "dPpatients CConstantesMedicales $_field", $_config[$_field]);
+            $ds->exec($query);
+          }
+        }
+      }
+
+      return true;
+    }
+    $this->addFunction("setup_patients_constantes_configuration");
+    // TODO: "DROP TABLE config_constantes_medicales"
+
+    $this->mod_version = "1.70";
+
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
   }

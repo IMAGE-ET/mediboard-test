@@ -144,7 +144,7 @@ class CStoredObject extends CModelObject {
   /**
    * Build and load an object with a given GUID
    *
-   * @param string $guid
+   * @param string $guid   Object GUID
    * @param bool   $cached Use cache
    *
    * @return CMbObject Loaded object, null if inconsistent Guid 
@@ -980,6 +980,7 @@ class CStoredObject extends CModelObject {
     // Class level unique checking
     // @todo Move this checking up to CStoredObject (mind the _merging escape)
     foreach ($this->_spec->uniques as $unique => $names) {
+      /** @var self $other */
       $other = new $this->_class;
       
       foreach ($names as $name) {
@@ -1397,8 +1398,8 @@ class CStoredObject extends CModelObject {
   /**
    * Merge an array of objects
    *
-   * @param array $objects An array of CMbObject to merge
-   * @param bool  $fast    Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
+   * @param self[] $objects An array of CMbObject to merge
+   * @param bool   $fast    Tell wether to use SQL (fast) or PHP (slow but checked and logged) algorithm
    *
    * @return CMbObject
    */
@@ -1946,6 +1947,7 @@ class CStoredObject extends CModelObject {
 
     // Deleting backSpecs
     foreach ($this->_backSpecs as $backSpec) {
+      /** @var CStoredObject $backObject */
       $backObject = new $backSpec->class;
       $backField  = $backSpec->field;
       $fwdSpec    =& $backObject->_specs[$backField];

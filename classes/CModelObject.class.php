@@ -22,7 +22,7 @@ class CModelObject {
    * The object's class name
    * @var string
    */
-  var $_class         = null; 
+  var $_class         = null;
   
   /**
    * The object ID
@@ -53,10 +53,19 @@ class CModelObject {
    * @var CMbObjectSpec 
    */
   var $_spec          = null;    // Class specification
-  var $_props         = array(); // Properties specifications as string
+
+  /**
+   * @var CMbFieldSpec[]
+   */
   var $_specs         = array(); // Properties specifications as objects
-  var $_backProps     = array(); // Back reference specification as string
+  var $_props         = array(); // Properties specifications as string
+
+  /**
+   * @var CMbBackSpec[]
+   */
   var $_backSpecs     = array(); // Back reference specification as objects
+  var $_backProps     = array(); // Back reference specification as string
+
   var $_configs       = array(); // Object configs
 
   static $spec          = array();

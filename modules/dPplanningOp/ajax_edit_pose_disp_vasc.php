@@ -10,6 +10,8 @@
 
 CCanDo::checkEdit();
 
+// TODO check droit sur dPsalleOp plutot
+
 $pose_disp_vasc_id = CValue::get("pose_disp_vasc_id");
 $sejour_id         = CValue::get("sejour_id");
 $operation_id      = CValue::get("operation_id");

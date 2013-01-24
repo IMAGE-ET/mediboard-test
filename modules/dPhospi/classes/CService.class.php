@@ -8,19 +8,19 @@
 */
 
 /**
- * Classe CService. 
+ * Classe CService.
  * @abstract Gère les services d'hospitalisation
  * - contient de chambres
  */
 class CService extends CMbObject {
   // DB Table key
-  var $service_id = null;  
-  
+  var $service_id = null;
+
   // DB references
   var $group_id       = null;
   var $responsable_id = null;
   var $secteur_id     = null;
-  
+
   // DB Fields
   var $nom         = null;
   var $type_sejour = null;
@@ -31,12 +31,12 @@ class CService extends CMbObject {
   var $uhcd        = null;
   var $externe     = null;
   var $neonatalogie = null;
-  
+
   // Object references
   var $_ref_chambres = null;
   var $_ref_group    = null;
   var $_ref_validrepas = null;
-  
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'service';
@@ -56,14 +56,13 @@ class CService extends CMbObject {
     $backProps["services_entree"]        = "CSejour service_entree_id";
     $backProps["services_sortie"]        = "CSejour service_sortie_id";
     $backProps["affectations"]           = "CAffectation service_id";
-    
+
     // stocks
     $backProps["product_deliveries"]     = "CProductDelivery service_id";
     $backProps["product_stock_services"] = "CProductStockService object_id";
     $backProps["stock_locations"]        = "CProductStockLocation object_id";
-    $backProps["config_constantes_medicales"] = "CConfigConstantesMedicales service_id";
     $backProps["ufs"]                         = "CAffectationUniteFonctionnelle object_id";
-    
+
     return $backProps;
   }
 
@@ -72,7 +71,7 @@ class CService extends CMbObject {
     $props["group_id"]       = "ref notNull class|CGroups";
     $props["responsable_id"] = "ref class|CMediusers";
     $props["secteur_id"]     = "ref class|CSecteur";
-    
+
     $sejour = new CSejour;
     $props["type_sejour"] = CMbString::removeToken($sejour->_props["type"], " ", "notNull");
 
@@ -84,29 +83,28 @@ class CService extends CMbObject {
     $props["externe"]      = "bool default|0";
     $props["cancelled"  ]  = "bool default|0";
     $props["neonatalogie"] = "bool default|0";
-    
+
     return $props;
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
   }
-  
+
   function store(){
     $is_new = !$this->_id;
-    
+
     if ($msg = parent::store()) {
       return $msg;
     }
-    
+
     if ($is_new) {
       CConfigService::emptySHM();
       CConfigMomentUnitaire::emptySHM();
-      CConfigConstantesMedicales::emptySHM();
     }
   }
-  
+
   /**
    * Load list overlay for current group
    */
@@ -114,7 +112,7 @@ class CService extends CMbObject {
     // Filtre sur l'établissement
     $group = CGroups::loadCurrent();
     $where["group_id"] = "= '$group->_id'";
-    
+
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
 
@@ -123,11 +121,11 @@ class CService extends CMbObject {
     $where = array(
       "service_id" => "= '$this->_id'",
     );
-    
+
     if (!$annule) {
       $where["annule"] = "= '0'";
     }
-    
+
     return $this->_ref_chambres = $this->_back["chambres"] = $chambre->loadList($where, "nom");
   }
 
@@ -142,14 +140,14 @@ class CService extends CMbObject {
   function loadRefsFwd(){
     $this->loadRefGroup();
   }
-  
+
   function getPerm($permType) {
     if(!$this->_ref_group) {
       $this->loadRefsFwd();
     }
     return (CPermObject::getPermObject($this, $permType) && $this->_ref_group->getPerm($permType));
   }
-   
+
   function validationRepas($date, $listTypeRepas = null){
     $this->_ref_validrepas[$date] = array();
     $validation =& $this->_ref_validrepas[$date];
@@ -158,7 +156,7 @@ class CService extends CMbObject {
       $order = "debut, fin, nom";
       $listTypeRepas = $listTypeRepas->loadList(null,$order);
     }
-    
+
     $where               = array();
     $where["date"]       = $this->_spec->ds->prepare(" = %", $date);
     $where["service_id"] = $this->_spec->ds->prepare(" = %", $this->service_id);
@@ -169,7 +167,7 @@ class CService extends CMbObject {
       $validation[$keyType] = $validrepas;
     }
   }
-  
+
   /**
    * Charge les services d'urgence de l'établissement courant
    * @return array|CService
@@ -186,10 +184,10 @@ class CService extends CMbObject {
         $_chambre->loadRefsLits();
       }
     }
-    
+
     return $services;
   }
-  
+
   /**
    * Charge les services d'UHCD de l'établissement courant
    * @return array|CService
@@ -206,18 +204,18 @@ class CService extends CMbObject {
         $_chambre->loadRefsBack();
       }
     }
-    
+
     return $services;
   }
-  
+
   function loadListWithPerms($permType = PERM_READ, $where = array(), $order = "nom", $limit = null, $group = null, $leftjoin = null) {
     if ($where !== null && !isset($where["group_id"])) {
       $where["group_id"] = "='".CGroups::loadCurrent()->_id."'";
     }
-    
+
     return parent::loadListWithPerms($permType, $where, $order, $limit, $group, $leftjoin);
   }
-  
+
   /**
    * Construit le tag Service en fonction des variables de configuration
    * @param $group_id Permet de charger l'id externe d'un Service pour un établissement donné si non null
@@ -234,7 +232,7 @@ class CService extends CMbObject {
     if (!$group_id) {
       $group_id = $group->_id;
     }
-    
+
     return str_replace('$g', $group_id, $tag_service);
   }
 }

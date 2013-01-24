@@ -3,7 +3,7 @@ updateObjectTree = function(inherit) {
   if (!inherit) {
     return;
   }
-  
+
   var url = new Url("system", "ajax_configuration_object_tree");
   url.addParam("inherit", inherit);
   url.requestUpdate("object_guid-selector-container");
@@ -32,11 +32,11 @@ Main.add(function(){
             <option value="{{$_inherit}}">{{tr}}config-inherit-{{$_inherit}}{{/tr}}</option>
           {{/foreach}}
         {{else}}
-          <option value="{{$inherit}}">{{$inherit}}</option>
+          <option value="{{$inherit}}">{{tr}}config-inherit-{{$inherit}}{{/tr}}</option>
         {{/if}}
       </select>
     </td>
-    
+
     <th class="narrow">Contexte</th>
     <td class="narrow" id="object_guid-selector-container"></td>
     <td></td>

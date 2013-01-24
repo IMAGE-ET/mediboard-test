@@ -10,10 +10,22 @@
  * @link     http://www.mediboard.org
  */
 
+
+$profile = 0;
+
+if ($profile) {
+  xhprof_enable(XHPROF_FLAGS_NO_BUILTINS | XHPROF_FLAGS_CPU | XHPROF_FLAGS_MEMORY, array(
+    'ignored_functions' => array(
+      'call_user_func',
+      'call_user_func_array',
+    )
+  ));
+}
+
 CCanDo::checkRead();
 
 set_time_limit(240);
-set_min_memory_limit("712M");
+set_min_memory_limit("1024M");
 
 $actor_guid   = CValue::get("actor_guid");
 $to_treatment = CValue::get("to_treatment", 1);
@@ -142,6 +154,17 @@ foreach ($files as $_filepath) {
 fclose($file);
 
 unlink($filename_lock);
+
+if ($profile) {
+  $xhprof_data = xhprof_disable();
+  $xhprof_root = 'C:/xampp/htdocs/xhgui/';
+  require_once $xhprof_root.'xhprof_lib/config.php';
+  require_once $xhprof_root.'xhprof_lib/utils/xhprof_lib.php';
+  require_once $xhprof_root.'xhprof_lib/utils/xhprof_runs.php';
+
+  $xhprof_runs = new XHProfRuns_Default();
+  $run_id = $xhprof_runs->save_run($xhprof_data, "mediboard");
+}
 
 function dispatchError(CInteropSender $sender, $filename_excludes, $path_info) {
   CAppUI::stepAjax("CEAIDispatcher-no_message_supported_for_this_actor", UI_MSG_WARNING, $sender->_data_format->_family_message->code);
