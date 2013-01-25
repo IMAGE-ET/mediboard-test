@@ -117,16 +117,43 @@ class CIncrementer extends CMbObject {
     if (!$group_domain->_id) {
       return;
     }
+
+    $domain = $group_domain->loadRefDomain();
+
+    $conf = CAppUI::conf("dPsante400 CIncrementer");
+    $cluster_count    = abs(intval($conf["cluster_count"]));
+    $cluster_position = abs(intval($conf["cluster_position"]));
+
+    if ($cluster_count == 0) {
+      $cluster_count = 1;
+    }
+    if ($cluster_count == 1) {
+      $cluster_position = 0;
+    }
     
     $mutex = new CMbSemaphore("incrementer-$object->_class");
     $mutex->acquire();
     
-    $incrementer = $group_domain->loadRefDomain()->loadRefIncrementer();
+    $incrementer = $domain->loadRefIncrementer();
+
     // Chargement du dernier 'increment' s'il existe sinon on déclenche une erreur
     if (!$incrementer->_id) {
       $mutex->release();
       return;
     }
+
+    // Incrementation de l'idex
+    $value = $incrementer->value;
+
+    do {
+      $value++;
+    } while ($value % $cluster_count != $cluster_position);
+
+    $incrementer->value = $value;
+    $incrementer->last_update = mbDateTime();
+    $incrementer->store();
+
+    $mutex->release();
 
     $format_value = self::formatValue($object, $incrementer->pattern, $incrementer->value);
     
@@ -138,13 +165,6 @@ class CIncrementer extends CMbObject {
     $id400->id400        = $format_value;
     $id400->last_update  = mbDateTime();
     $id400->store();
-    
-    // Incrementation de l'idex
-    $incrementer->value++;
-    $incrementer->last_update = mbDateTime();
-    $incrementer->store();
-
-    $mutex->release();
 
     return $id400;
   }

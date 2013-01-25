@@ -19,4 +19,8 @@ $dPconfig["dPsante400"] = array (
   "CSejour"     => array(
     "sibling_hours" => 1,
   ),
+  "CIncrementer" => array(
+    "cluster_count"    => 1,
+    "cluster_position" => 0,
+  ),
 );
