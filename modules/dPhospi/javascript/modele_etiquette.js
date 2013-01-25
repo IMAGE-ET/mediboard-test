@@ -1,5 +1,6 @@
 ModeleEtiquette = {
   nb_printers: 0,
+  
   print: function(object_class, object_id, modele_etiquette_id) {
     if (ModeleEtiquette.nb_printers > 0) {
       var url = new Url('compteRendu', 'ajax_choose_printer');
@@ -23,10 +24,93 @@ ModeleEtiquette = {
       form.submit();
     }
   },
+  
   chooseModele: function(object_class, object_id) {
     var url = new Url('hospi', 'ajax_choose_modele_etiquette');
     url.addParam('object_class', object_class);
     url.addParam('object_id', object_id);
     url.requestModal(400);
+  },
+  
+  refreshList: function() {
+    var form = getForm('Filter');
+    var url = new Url('hospi', 'ajax_list_modele_etiquette');
+    url.addNotNullElement(form.filter_class);
+    url.requestUpdate("list_etiq");
+    return false;
+  },
+  
+  onSubmit: function(form) {
+    return onSubmitFormAjax(form, ModeleEtiquette.refreshList);
+  },
+  
+  onSubmitComplete: function (guid, properties) {
+    var id = guid.split('-')[1];
+    ModeleEtiquette.edit(id);
+  },
+
+  edit: function(modele_etiquette_id) {
+    Form.onSubmitComplete = modele_etiquette_id == '' ? 
+      ModeleEtiquette.onSubmitComplete : 
+      Prototype.emptyFunction;
+
+    $('modele_etiq-'+modele_etiquette_id).addUniqueClassName('selected');
+    var url = new Url('hospi', 'ajax_edit_modele_etiquette');
+    url.addParam('modele_etiquette_id', modele_etiquette_id);
+    url.requestModal(800);
+    url.modalObject.observe("afterClose", ModeleEtiquette.refreshList);
+  },
+  
+  confirmDeletion: function(form) {
+    var options = {
+      typeName: 'Le modèle ', 
+      objName: $V(form.nom)
+    };
+    
+    var ajax = Control.Modal.close;
+    
+    confirmDeletion(form, options, ajax);    
+  },
+  
+  preview: function() {
+    var form_edit     = getForm("edit_etiq"    );
+    var form_download = getForm("download_prev");
+    $V(form_download.largeur_page , $V(form_edit.largeur_page ));
+    $V(form_download.hauteur_page , $V(form_edit.hauteur_page ));
+    $V(form_download.nb_lignes    , $V(form_edit.nb_lignes    ));
+    $V(form_download.nb_colonnes  , $V(form_edit.nb_colonnes  ));
+    $V(form_download.marge_horiz  , $V(form_edit.marge_horiz  ));
+    $V(form_download.marge_vert   , $V(form_edit.marge_vert   ));
+    $V(form_download.hauteur_ligne, $V(form_edit.hauteur_ligne));
+    $V(form_download.nom          , $V(form_edit.nom          ));
+    $V(form_download.texte        , $V(form_edit.texte        ));
+    $V(form_download.texte_2      , $V(form_edit.texte_2      ));
+    $V(form_download.texte_3      , $V(form_edit.texte_3      ));
+    $V(form_download.texte_4      , $V(form_edit.texte_4      ));
+    $V(form_download.font         , $V(form_edit.font         ));
+    $V(form_download.show_border  , $V(form_edit.show_border  ));
+    $V(form_download.text_align   , $V(form_edit.text_align   ));
+    form_download.submit();
+  },
+  
+  insertField: function(elem) {
+    var texte_etiq = window.text_focused;
+    if (!texte_etiq) {
+      texte_etiq = $("edit_etiq_texte");
+    }
+    var caret = texte_etiq.caret();
+    var oForm = getForm("edit_etiq");
+    var bold = oForm.elements["_write_bold"][0].checked;
+    var content = elem.value;
+    if (bold) {
+      content = "*" + content + "*";
+    }
+    else {
+      content = "[" + content + "]";
+    }
+    texte_etiq.caret(caret.begin, caret.end, content + " ");
+    texte_etiq.caret(texte_etiq.value.length);
+    texte_etiq.fire('ui:change');
+    $V(getForm('edit_etiq').fields, '');
   }
 }

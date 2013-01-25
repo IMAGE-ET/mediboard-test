@@ -9,13 +9,15 @@
  */
 
 CCanDo::checkEdit();
-$modele_etiquette_id = CValue::getOrSession("modele_etiquette_id",'');
+
+$modele_etiquette_id = CValue::getOrSession("modele_etiquette_id");
 
 $modele_etiquette = new CModeleEtiquette;
 $group_id = CGroups::loadCurrent()->_id;
 
 if ($modele_etiquette_id) {
   $modele_etiquette->load($modele_etiquette_id);
+  $modele_etiquette->loadRefsNotes();
 }
 
 // Nouveau modèle d'étiquette dans le cas d'un changement d'établissement
