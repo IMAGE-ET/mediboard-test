@@ -224,6 +224,30 @@ var Url = Class.create({
   },
 
   /**
+   * Add element not null value to the parameters
+   * Won't work with radio button, use addRadio() instead
+   * 
+   * @param {HTMLInputElement,HTMLSelectElement,HTMLTextAreaElement} oElement The element to add to the data
+   * @param {String}      sParamName The parameter name
+   *
+   * @return {Url}
+   */
+  addNotNullElement: function(oElement, sParamName) {
+    if (!oElement) return this;
+  
+    if (!sParamName) {
+      sParamName = oElement.name;
+    }
+    
+    var value = oElement.value;
+    if (oElement.type == 'checkbox') {
+      value = $V(oElement) ? 1 : 0; 
+    }
+  
+    return this.addNotNullParam(sParamName, value);
+  },
+
+  /**
    * Add radio button value to the parameters
    *
    * @param {NodeList} oButtons   The buttons
