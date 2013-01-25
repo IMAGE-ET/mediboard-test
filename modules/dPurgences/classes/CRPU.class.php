@@ -321,6 +321,8 @@ class CRPU extends CMbObject {
       return;
     }
 
+    $this->completeField("sejour_id");
+
     $this->_bind_sejour = false;
 
     $this->loadRefsFwd();
@@ -379,7 +381,7 @@ class CRPU extends CMbObject {
         if ($sejour->_ref_rpu->_id) {
           return CAppUI::tr("CRPU-already-exists");
         }
-        
+
         $sejour->service_id              = $this->_service_id;
         $sejour->etablissement_entree_id = $this->_etablissement_entree_id;
         $sejour->service_entree_id       = $this->_service_entree_id;
