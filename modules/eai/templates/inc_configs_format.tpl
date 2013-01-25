@@ -22,13 +22,15 @@ importConfig = function(format_config_guid, actor_guid) {
 
 </script>
 
-<a class="button download" target="_blank" href="?m=eai&amp;a=export_config&amp;suppressHeaders=1&config_guid={{$format_config->_guid}}">
-  {{tr}}Export{{/tr}}
-</a>
+{{if $format_config->_id}}
+  <a class="button download" target="_blank" href="?m=eai&amp;a=export_config&amp;suppressHeaders=1&config_guid={{$format_config->_guid}}">
+    {{tr}}Export{{/tr}}
+  </a>
 
-<button class="upload" onclick="importConfig('{{$format_config->_guid}}', '{{$actor->_guid}}');">
-  {{tr}}Import{{/tr}}
-</button>
+  <button class="upload" onclick="importConfig('{{$format_config->_guid}}', '{{$actor->_guid}}');">
+    {{tr}}Import{{/tr}}
+  </button>
+{{/if}}
 
 <table class="form">
   {{foreach from=$categories key=cat_name item=_fields}}

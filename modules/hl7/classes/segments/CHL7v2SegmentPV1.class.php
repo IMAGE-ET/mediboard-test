@@ -134,7 +134,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
     $data[] = null;
     
     // PV1-10: Hospital Service (IS) (optional)
-    $data[] = $this->getPV110($receiver, $sejour);
+    $data[] = $this->getPV110($receiver, $sejour, $this->curr_affectation);
     
     // PV1-11: Temporary Location (PL) (optional)
     $data[] = null;

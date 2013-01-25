@@ -20,7 +20,7 @@ class CSWF extends CIHE {
    * @var array
    */
   static $versions = array (
-    "2.3", "2.4", "2.5"  
+    "2.3", "2.3.1", "2.4", "2.5"
   );
 
   /**
@@ -40,7 +40,12 @@ class CSWF extends CIHE {
     "S14" => "CHL7EventSIUS14",
     "S15" => "CHL7EventSIUS15",
   );
-  
+
+  /**
+   * Construct
+   *
+   * @return CSWF
+   */
   function __construct() {
     $this->type = "SWF";
   }

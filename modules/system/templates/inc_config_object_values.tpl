@@ -31,6 +31,7 @@ importConfig = function(object_config_guid) {
 
 </script>
 
+{{if $object->_id}}
 <a class="button download" target="_blank" href="?m=system&amp;a=export_config&amp;suppressHeaders=1&object_guid={{$object->_guid}}">
   {{tr}}Export{{/tr}}
 </a>
@@ -38,6 +39,7 @@ importConfig = function(object_config_guid) {
 <button class="upload" onclick="importConfig('{{$object->_guid}}');">
   {{tr}}Import{{/tr}}
 </button>
+{{/if}}
 
 <form name="editObjectConfig-{{$object->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitObjectConfigs(this, '{{$object->object_id}}', '{{$object->_guid}}') ">
   <input type="hidden" name="m" value="system" />

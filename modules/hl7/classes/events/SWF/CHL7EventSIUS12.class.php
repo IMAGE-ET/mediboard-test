@@ -15,6 +15,5 @@
  * Interface CHL7EventSIUS12 
  * S12 - Notification of new appointment booking 
  */
-interface CHL7EventSIUS12 extends CHL7EventSWF {}
-
-?>
+interface CHL7EventSIUS12 extends CHL7EventSIU {
+}

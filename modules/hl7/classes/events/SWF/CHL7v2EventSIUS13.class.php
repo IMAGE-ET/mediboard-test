@@ -15,15 +15,20 @@
  * Class CHL7v2EventSIUS12
  * S13 - Notification of appointment rescheduling
  */
-class CHL7v2EventSIUS13 extends CHL7v2EventSWF implements CHL7EventSIUS12 {
-  var $code = "S13";
-  
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+class CHL7v2EventSIUS13 extends CHL7v2EventSIU implements CHL7EventSIUS12 {
   /**
+   * @var string
+   */
+  var $code = "S13";
+
+  /**
+   * Build S13 event
+   *
+   * @param CConsultation $appointment Appointment
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($appointment) {
     parent::build($appointment);
@@ -51,5 +56,3 @@ class CHL7v2EventSIUS13 extends CHL7v2EventSWF implements CHL7EventSIUS12 {
     $this->addAIL($appointment);
   }
 }
-
-?>

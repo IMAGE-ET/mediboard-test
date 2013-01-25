@@ -24,7 +24,10 @@ class CHL7Event {
   var $code          = null;
   var $struct_code   = null;
   var $version       = null;
-  
+
+  /**
+   * @var CHL7v2Message
+   */
   var $message       = null;
   var $msg_hl7       = null;
 

@@ -74,7 +74,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     }
     
     // Création des consultations
-    if ($event_type == "CHL7v2EventSWF") {
+    if ($event_type == "CHL7v2EventSIU") {
       return new CHL7v2RecordAppointment($encoding);  
     }
 

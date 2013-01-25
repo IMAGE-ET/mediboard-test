@@ -12,26 +12,40 @@
  */
 
 /**
- * Classe CHL7v2EventSWF 
+ * Classe CHL7v2EventSIU
  * Scheduled Workflow
  */
-class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
+class CHL7v2EventSIU extends CHL7v2Event implements CHL7EventSIU {
+  /**
+   * @var string
+   */
   var $event_type = "SIU";
-  
+
+  /**
+   * Construct
+   *
+   * @return \CHL7v2EventSIU
+   */
   function __construct() {
     parent::__construct();
     
     $this->profil    = "SWF";
     $this->msg_codes = array ( 
       array(
-        $this->event_type, $this->code, "{$this->event_type}_{$this->struct_code}"
+        $this->event_type, $this->code, "{$this->event_type}_{$this->code}"
       )
     );
     $this->transaction = CIHE::getSWFTransaction($this->code);
   }
-  
+
   /**
+   * Build event
+   *
+   * @param CMbObject $object Object
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($object) {
     parent::build($object);
@@ -41,7 +55,9 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
   }
 
   /**
-   * MSH - Represents an HL7 MSH message segment (Message Header) 
+   * MSH - Represents an HL7 MSH message segment (Message Header)
+   *
+   * @return void
    */
   function addMSH() {
     $MSH = CHL7v2Segment::create("MSH", $this->message);
@@ -49,9 +65,13 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
   }
   
   /**
-   * SCH - Represents an HL7 SCH segment (Scheduling Activity Information) 
+   * SCH - Represents an HL7 SCH segment (Scheduling Activity Information)
+   *
+   * @param CConsultation $appointment Appointment
+   *
+   * @return void
    */
-  function addSCH(CMbObject $appointment) {
+  function addSCH(CConsultation $appointment) {
     $SCH = CHL7v2Segment::create("SCH", $this->message);
     $SCH->appointment = $appointment;
     $SCH->build($this);
@@ -59,7 +79,10 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
   
   /**
    * Represents an HL7 PID message segment (Patient Identification)
-   * @param CPatient Patient
+   *
+   * @param CPatient $patient Patient
+   *
+   * @return void
    */
   function addPID(CPatient $patient) {
     $PID = CHL7v2Segment::create("PID", $this->message);
@@ -70,7 +93,10 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
   
   /**
    * Represents an HL7 PD1 message segment (Patient Additional Demographic)
-   * @param CPatient Patient
+   *
+   * @param CPatient $patient Patient
+   *
+   * @return void
    */
   function addPD1(CPatient $patient) {
     $PD1 = CHL7v2Segment::create("PD1", $this->message);
@@ -80,44 +106,56 @@ class CHL7v2EventSWF extends CHL7v2Event implements CHL7EventSWF {
   
   /**
    * Represents an HL7 PV1 message segment (Patient Visit)
-   * @param CSejour Admit
+   *
+   * @return void
    */
-  function addPV1(CMbObject $appointment = null, $set_id = 1) {    
+  function addPV1() {
     $PV1 = CHL7v2Segment::create("PV1", $this->message);
-    $PV1->sejour = null;
-    $PV1->set_id = 1;
     $PV1->build($this);
   }
   
   /**
-   * RGS - Represents an HL7 SCH segment (Resource Group) 
+   * RGS - Represents an HL7 SCH segment (Resource Group)
+   *
+   * @param CConsultation $appointment Appointment
+   * @param int           $set_id      Set ID
+   *
+   * @return void
    */
-  function addRGS(CMbObject $appointment) {
+  function addRGS(CConsultation $appointment, $set_id = 1) {
     $RGS = CHL7v2Segment::create("RGS", $this->message);
-    $RGS->set_id = 1;
+    $RGS->set_id = $set_id;
     $RGS->appointment = $appointment;
     $RGS->build($this);
   }
   
   /**
-   * AIG - Represents an HL7 SCH segment (Appointment Information - General Resource) 
+   * AIG - Represents an HL7 SCH segment (Appointment Information - General Resource)
+   *
+   * @param CConsultation $appointment Appointment
+   * @param int           $set_id      Set ID
+   *
+   * @return void
    */
-  function addAIG(CMbObject $appointment) {
+  function addAIG(CConsultation $appointment, $set_id = 1) {
     $AIG = CHL7v2Segment::create("AIG", $this->message);
-    $AIG->set_id = 1;
+    $AIG->set_id = $set_id;
     $AIG->appointment = $appointment;
     $AIG->build($this);
   }
   
   /**
-   * AIL - Represents an HL7 AIL segment (Appointment Information - Location Resource) 
+   * AIL - Represents an HL7 AIL segment (Appointment Information - Location Resource)
+   *
+   * @param CConsultation $appointment Appointment
+   * @param int           $set_id      Set ID
+   *
+   * @return void
    */
-  function addAIL(CMbObject $appointment) {
+  function addAIL(CConsultation $appointment, $set_id = 1) {
     $AIL = CHL7v2Segment::create("AIL", $this->message);
     $AIL->set_id = 1;
     $AIL->appointment = $appointment;
     $AIL->build($this);
   }
 }
-
-?>

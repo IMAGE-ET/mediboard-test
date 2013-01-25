@@ -12,13 +12,25 @@
  */
 
 /**
- * Interface CHL7EventSWF 
+ * Interface CHL7EventSIU
  * Scheduled Workflow
  */
-interface CHL7EventSWF {
+interface CHL7EventSIU {
+  /**
+   * Construct
+   *
+   * @return \CHL7EventSIU
+   */
   function __construct();
-  
+
+  /**
+   * Build event
+   *
+   * @param CMbObject $object Object
+   *
+   * @see parent::build()
+   *
+   * @return void
+   */
   function build($object);
 }
-
-?>
