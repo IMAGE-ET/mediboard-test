@@ -272,7 +272,7 @@ var Patient = {
     </th>
   </tr>
   {{foreach from=$patients item=_patient}}
-    {{include file="inc_line_pat_selector.tpl"}}
+    {{mb_include template="inc_line_pat_selector"}}
   {{foreachelse}}
     <tr>
       <td class="button" colspan="5">
@@ -296,6 +296,6 @@ var Patient = {
   {{/if}}
 
   {{foreach from=$patientsSoundex item=_patient}}
-    {{include file="inc_line_pat_selector.tpl"}}
+    {{mb_include template="inc_line_pat_selector"}}
   {{/foreach}}
 </table>
