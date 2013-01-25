@@ -177,6 +177,11 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "cm",
       "min" => 20, "max" => 150
     ),
+    "hauteur_uterine" => array(
+      "type" => "physio",
+      "unit" => "cm",
+      "min" => 0, "max" => 35
+    ),
     "injection"         => array(
       "type" => "physio",
       "unit" => "",
@@ -227,6 +232,12 @@ class CConstantesMedicales extends CMbObject {
       "type" => "physio",
       "unit" => "",
       "min" => 0, "max" => 10
+    ),
+
+    "peak_flow" => array(
+      "type" => "physio",
+      "unit" => "L/min",
+      "min" => 60, "max" => 900
     ),
 
     /// DRAINS ///
@@ -547,6 +558,8 @@ class CConstantesMedicales extends CMbObject {
     $specs['perimetre_cuisse']       = 'float min|0';
     $specs['perimetre_cou']          = 'float min|0';
     $specs['perimetre_thoracique']   = 'float min|0';
+    $specs['hauteur_uterine']        = 'float min|0';
+    $specs['peak_flow']              = 'float min|0';
     $specs['_imc']                   = 'float pos';
     $specs['_vst']                   = 'float pos';
 

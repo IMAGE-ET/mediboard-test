@@ -2042,7 +2042,13 @@ class CSetupdPpatients extends CSetup {
     $this->addFunction("setup_patients_constantes_configuration");
     // TODO: "DROP TABLE config_constantes_medicales"
 
-    $this->mod_version = "1.70";
+    $this->makeRevision("1.70");
+    $query = "ALTER TABLE `constantes_medicales`
+                ADD `hauteur_uterine` FLOAT UNSIGNED AFTER `perimetre_thoracique`,
+                ADD `peak_flow` FLOAT UNSIGNED AFTER `vision_oeil_gauche`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.71";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
