@@ -145,7 +145,7 @@ if ($type == "presents") {
       }
       if ($show_hour_anesth) {
         $op->loadRefPlageOp();
-        $op->_ref_anesth->loadRefFunction();
+        //$op->_ref_anesth->loadRefFunction();
       }
     }
     
@@ -164,7 +164,7 @@ if ($type == "presents") {
       }
       if ($show_hour_anesth) {
         $op->loadRefPlageOp();
-        $op->_ref_anesth->loadRefFunction();
+        //$op->_ref_anesth->loadRefFunction();
       }
     }
   }
@@ -450,6 +450,15 @@ if ($type == "presents") {
   $mouvementsNP = $mouvementsNP_by_service;
 }
 
+$list_mode_sortie = array();
+if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
+  $mode_sortie = new CModeSortieSejour();
+  $where = array(
+    "actif" => "= '1'",
+  );
+  $list_mode_sortie = $mode_sortie->loadGroupList($where);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -461,6 +470,7 @@ $smarty->assign("order_way"     , $order_way);
 $smarty->assign("order_col"     , $order_col);
 $smarty->assign("date"          , $date);
 $smarty->assign("services"      , $services);
+$smarty->assign("list_mode_sortie", $list_mode_sortie);
 
 if ($type == "deplacements") {
   $smarty->assign("dep_entrants", $dep_entrants);

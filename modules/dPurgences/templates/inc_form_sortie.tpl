@@ -8,6 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+<script type="text/javascript">
+  updateModeSortie = function(select) {
+    var selected = select.options[select.selectedIndex];
+    var form = select.form;
+    $V(form.elements.mode_sortie, selected.get("mode"));
+  }
+</script>
+
 <form name="editSejour" action="?" method="post"  onsubmit="return submitSejour()">
 
 <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -39,7 +47,18 @@
   <tr>
     <th style="width: 120px;">{{mb_label object=$sejour field="mode_sortie"}}</th>
     <td>
-      {{mb_field object=$sejour field="mode_sortie" emptyLabel="Choose" onchange="Fields.init(this.value); this.form.onsubmit();"}}
+      {{if $conf.dPplanningOp.CSejour.use_custom_mode_sortie && $list_mode_sortie|@count}}
+        {{mb_field object=$sejour field=mode_sortie onchange="\$V(this.form._modifier_sortie, 0); Fields.init(this.value); this.form.onsubmit();" hidden=true}}
+        <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}}" onchange="updateModeSortie(this)">
+          {{foreach from=$list_mode_sortie item=_mode}}
+            <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
+              {{$_mode}}
+            </option>
+          {{/foreach}}
+        </select>
+      {{else}}
+        {{mb_field object=$sejour field="mode_sortie" emptyLabel="Choose" onchange="Fields.init(this.value); this.form.onsubmit();"}}
+      {{/if}}
       {{if !$rpu->mutation_sejour_id}}
         <input type="hidden" name="group_id" value="{{if $sejour->group_id}}{{$sejour->group_id}}{{else}}{{$g}}{{/if}}" />
       {{else}}

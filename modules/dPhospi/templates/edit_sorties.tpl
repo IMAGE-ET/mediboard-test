@@ -65,6 +65,12 @@ function selectServices() {
   url.addParam("ajax_request", 0);
   url.requestModal(null, null, {maxHeight: '600'});
 }
+
+updateModeSortie = function(select) {
+  var selected = select.options[select.selectedIndex];
+  var form = select.form;
+  $V(form.elements.mode_sortie, selected.get("mode"));
+}
 </script>
 
 <table class="main">

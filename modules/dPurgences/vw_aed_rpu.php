@@ -96,6 +96,15 @@ if (CModule::getActive("printing")) {
   $nb_printers   = $function->countBackRefs("printers");
 }
 
+$list_mode_entree = array();
+if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_entree")) {
+  $mode_entree = new CModeEntreeSejour();
+  $where = array(
+    "actif" => "= '1'",
+  );
+  $list_mode_entree = $mode_entree->loadGroupList($where);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("group"               , $group);
@@ -119,6 +128,6 @@ $smarty->assign("orumip_active"       , $orumip_active);
 $smarty->assign("nb_printers"         , $nb_printers);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"    , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
+$smarty->assign("list_mode_entree"    , $list_mode_entree);
 
 $smarty->display("vw_aed_rpu.tpl");
-?>

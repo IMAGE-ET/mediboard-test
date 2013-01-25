@@ -772,6 +772,18 @@ class CSejour extends CCodable implements IPatientRelated {
       }
     }
 
+    $this->completeField("mode_entree_id");
+    if ($this->mode_entree_id) {
+      $mode = $this->loadFwdRef("mode_entree_id");
+      $this->mode_entree = $mode->mode;
+    }
+
+    $this->completeField("mode_sortie_id");
+    if ($this->mode_sortie_id) {
+      $mode = $this->loadFwdRef("mode_sortie_id");
+      $this->mode_sortie = $mode->mode;
+    }
+
     // On fait le store du séjour
     if ($msg = parent::store()) {
       return $msg;

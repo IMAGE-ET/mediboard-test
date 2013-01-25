@@ -11,6 +11,12 @@
 {{mb_script module=planningOp script=prestations ajax=1}}
 
 <script type="text/javascript">
+  updateModeSortie = function(select) {
+    var selected = select.options[select.selectedIndex];
+    var form = select.form;
+    $V(form.elements.mode_sortie, selected.get("mode"));
+  }
+
   Main.add(function() {
     Admissions.restoreSelection('listSorties');
     Calendar.regField(getForm("changeDateSorties").date, null, {noView: true});
@@ -128,7 +134,18 @@
           <input type="hidden" name="entree_reelle" value="{{$_sejour->entree_reelle}}" />
           
           <div style="white-space: nowrap;">
-            {{mb_field object=$_sejour field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form);"}}
+            {{if $conf.dPplanningOp.CSejour.use_custom_mode_sortie && $list_mode_sortie|@count}}
+              {{mb_field object=$_sejour field=mode_sortie onchange="\$V(this.form._modifier_sortie, 0); submitSortie(this.form);" hidden=true}}
+              <select name="mode_sortie_id" class="{{$_sejour->_props.mode_sortie_id}}" onchange="updateModeSortie(this)">
+                {{foreach from=$list_mode_sortie item=_mode}}
+                  <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $_sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
+                    {{$_mode}}
+                  </option>
+                {{/foreach}}
+              </select>
+            {{else}}
+              {{mb_field object=$_sejour field="mode_sortie" onchange="this.form._modifier_sortie.value = '0'; submitSortie(this.form);"}}
+            {{/if}}
             <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$_sejour->sortie_prevue}}', '{{$_sejour->entree_reelle}}', this.form);">
               Effectuer la sortie
             </button>

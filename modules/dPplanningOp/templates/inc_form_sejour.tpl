@@ -316,6 +316,12 @@ function rechargement() {
   reloadAssurance();
 }
 
+updateModeSortie = function(select) {
+  var selected = select.options[select.selectedIndex];
+  var form = select.form;
+  $V(form.elements.mode_sortie, selected.get("mode"));
+}
+
 {{if $mode_operation}}
 // Declaration d'un objet Sejour
 var Sejour = {
@@ -900,7 +906,18 @@ Main.add( function(){
   <th>{{mb_label object=$sejour field=mode_sortie}}</th>
   <td>
     {{if $can->view}}
-      {{mb_field object=$sejour emptyLabel="Choose" field=mode_sortie onchange="changeModeSortie(this.value);" style="width: 15em;"}}
+      {{if $conf.dPplanningOp.CSejour.use_custom_mode_sortie && $list_mode_sortie|@count}}
+        {{mb_field object=$sejour field=mode_sortie onchange="\$V(this.form._modifier_sortie, 0); changeModeSortie(this.value)" hidden=true}}
+        <select name="mode_sortie_id" class="{{$sejour->_props.mode_sortie_id}}" onchange="updateModeSortie(this)">
+          {{foreach from=$list_mode_sortie item=_mode}}
+            <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_sortie_id == $_mode->_id}}selected{{/if}}>
+              {{$_mode}}
+            </option>
+          {{/foreach}}
+        </select>
+      {{else}}
+        {{mb_field object=$sejour emptyLabel="Choose" field=mode_sortie onchange="changeModeSortie(this.value);" style="width: 15em;"}}
+      {{/if}}
       <div id="listEtabExterne" {{if !$sejour->etablissement_sortie_id}}style="display:none"{{/if}}>
         {{mb_field object=$sejour field="etablissement_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;"}}
       </div>

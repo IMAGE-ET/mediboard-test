@@ -181,6 +181,15 @@ foreach ($blocages_lit as $blocage) {
   }
 }
 
+$list_mode_sortie = array();
+if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
+  $mode_sortie = new CModeSortieSejour();
+  $where = array(
+    "actif" => "= '1'",
+  );
+  $list_mode_sortie = $mode_sortie->loadGroupList($where);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -213,6 +222,8 @@ $smarty->assign("count_prestations", $count_prestations);
 $smarty->assign("hours", $hours);
 $smarty->assign("mins" , $mins);
 $smarty->assign("blocages_lit" , $blocages_lit);
+
+$smarty->assign("list_mode_sortie", $list_mode_sortie);
 
 $smarty->assign("dialog", $dialog);
 

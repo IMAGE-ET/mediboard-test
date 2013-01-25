@@ -50,11 +50,21 @@ foreach($blocages_lit as $blocage){
 	}
 }
 
+$list_mode_sortie = array();
+if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
+  $mode_sortie = new CModeSortieSejour();
+  $where = array(
+    "actif" => "= '1'",
+  );
+  $list_mode_sortie = $mode_sortie->loadGroupList($where);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("rpu", $rpu);
 $smarty->assign("sejour", $sejour);
 $smarty->assign("blocages_lit", $blocages_lit);
+$smarty->assign("list_mode_sortie", $list_mode_sortie);
 
 $smarty->display("inc_edit_sortie.tpl");
-?>

@@ -208,7 +208,13 @@
     url.requestUpdate($('dossier_sejour'));
     modalWindow = modal($('dossier_sejour'));
   }
-  
+
+  updateModeEntree = function(select) {
+    var selected = select.options[select.selectedIndex];
+    var form = select.form;
+    $V(form.elements.mode_entree, selected.get("mode"));
+  }
+
   Main.add(function () {
     {{if $rpu->_id && $can->edit}}
       if (window.DossierMedical){
@@ -307,7 +313,20 @@
       </td>
       
       <th>{{mb_label object=$rpu field="_mode_entree"}}</th>
-      <td>{{mb_field object=$rpu field="_mode_entree" style="width: 15em;" emptyLabel="Choose" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}</td>
+      <td>
+        {{if $conf.dPplanningOp.CSejour.use_custom_mode_entree && $list_mode_entree|@count}}
+          {{mb_field object=$sejour field=mode_entree onchange="\$V(this.form._modifier_entree, 0); ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)" hidden=true}}
+          <select name="mode_entree_id" class="{{$sejour->_props.mode_entree_id}}" onchange="updateModeEntree(this)">
+            {{foreach from=$list_mode_entree item=_mode}}
+              <option value="{{$_mode->_id}}" data-mode="{{$_mode->mode}}" {{if $sejour->mode_entree_id == $_mode->_id}}selected{{/if}}>
+                {{$_mode}}
+              </option>
+            {{/foreach}}
+          </select>
+        {{else}}
+          {{mb_field object=$rpu field="_mode_entree" style="width: 15em;" emptyLabel="Choose" onchange="ContraintesRPU.updateProvenance(this.value, true); changeModeEntree(this.value)"}}
+        {{/if}}
+      </td>
     </tr>
     
     <tr>

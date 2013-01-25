@@ -164,6 +164,15 @@ if ($filterFunction && !array_key_exists($filterFunction, $functions)){
   $functions[$filterFunction] = $_function;
 }
 
+$list_mode_sortie = array();
+if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
+  $mode_sortie = new CModeSortieSejour();
+  $where = array(
+    "actif" => "= '1'",
+  );
+  $list_mode_sortie = $mode_sortie->loadGroupList($where);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -186,4 +195,6 @@ $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
 $smarty->assign("functions"     , $functions);
 $smarty->assign("filterFunction", $filterFunction);
 $smarty->assign("period"        , $period);
+$smarty->assign("list_mode_sortie", $list_mode_sortie);
+
 $smarty->display("inc_vw_sorties.tpl");
