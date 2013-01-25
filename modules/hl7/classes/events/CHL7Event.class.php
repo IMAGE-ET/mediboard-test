@@ -16,21 +16,51 @@
  * Event HL7
  */
 class CHL7Event {
+  /**
+   * @var null
+   */
   var $event_type    = null;
+  /**
+   * @var null
+   */
   var $object        = null;
+  /**
+   * @var CUserLog
+   */
   var $last_log      = null;
+  /**
+   * @var string
+   */
   var $profil        = null;
+  /**
+   * @var string
+   */
   var $transaction   = null;
+  /**
+   * @var string
+   */
   var $code          = null;
+  /**
+   * @var string
+   */
   var $struct_code   = null;
+  /**
+   * @var string
+   */
   var $version       = null;
 
   /**
    * @var CHL7v2Message
    */
   var $message       = null;
+  /**
+   * @var string
+   */
   var $msg_hl7       = null;
 
+  /**
+   * @var array
+   */
   var $msg_codes     = array();
   
   /**
@@ -47,28 +77,62 @@ class CHL7Event {
    * @var CExchangeDataFormat
    */
   var $_data_format = null;
-  
+
+  /**
+   * @var CExchangeIHE
+   */
   var $_exchange_ihe = null;
+  /**
+   * @var string
+   */
   var $_is_i18n      = null;
-  
+
+  /**
+   * Construct
+   *
+   * @param string|null $i18n i18n
+   *
+   * @return CHL7Event
+   */
   function __construct($i18n = null) {
     $this->_is_i18n = $i18n;
   }
   
   /**
    * Build HL7 message
-   * @param $object Object to use
+   *
+   * @param CMbObject $object Object to use
+   *
+   * @return void
    */
-  function build($object) {}
+  function build($object) {
+  }
   
   /**
    * Build specifics HL7 message (i18n)
-   * @param $object Object to use
+   *
+   * @param CMbObject $object Object to use
+   *
+   * @return void
    */
-  function buildI18nSegments($object) {}
-  
-  function handle() {}
-  
+  function buildI18nSegments($object) {
+  }
+
+  /**
+   * Handle event
+   *
+   * @return void
+   */
+  function handle() {
+  }
+
+  /**
+   * Get event class
+   *
+   * @param CHL7Event $event Event HL7
+   *
+   * @return string
+   */
   static function getEventClass($event) {
     $classname = "CHL7Event".$event->event_type.$event->code;
     if ($event->message->i18n_code) {
@@ -77,7 +141,16 @@ class CHL7Event {
       
     return $classname;
   }
-  
+
+  /**
+   * Get event version
+   *
+   * @param string $version      Version
+   * @param string $message_name Message name
+   *
+   * @return mixed
+   * @throws CHL7v2Exception
+   */
   static function getEventVersion($version, $message_name) {
     $hl7_version = null;
     foreach (CHL7::$versions as $_version => $_sub_versions) {      
@@ -95,5 +168,3 @@ class CHL7Event {
     return new $event_class;
   }
 }
-
-?>

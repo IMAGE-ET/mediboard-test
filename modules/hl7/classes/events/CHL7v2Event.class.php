@@ -16,10 +16,13 @@
  * Event HL7
  */
 class CHL7v2Event extends CHL7Event {
-  function __construct($i18n = null) {
-    parent::__construct($i18n);
-  }
-  
+  /**
+   * Get segment terminator
+   *
+   * @param string $st The key of the value to get
+   *
+   * @return mixed
+   */
   private function getSegmentTerminator($st) {
     $terminators = array(
       "CR"   => "\r",
@@ -29,9 +32,15 @@ class CHL7v2Event extends CHL7Event {
     
     return CValue::read($terminators, $st, CHL7v2Message::DEFAULT_SEGMENT_TERMINATOR);
   }
-  
+
   /**
+   * Build event
+   *
+   * @param CMbObject $object Object
+   *
    * @see parent::build()
+   *
+   * @return void
    */
   function build($object) {
     // Traitement sur le mbObject
@@ -53,7 +62,14 @@ class CHL7v2Event extends CHL7Event {
    
     $this->message = $message;
   }
-  
+
+  /**
+   * Handle event
+   *
+   * @param string $msg_hl7 HL7 message
+   *
+   * @return DOMDocument|void
+   */
   function handle($msg_hl7) {
     $this->message = new CHL7v2Message();
 
@@ -71,7 +87,12 @@ class CHL7v2Event extends CHL7Event {
 
     return $this->message->toXML(get_class($this), false, CApp::$encoding);
   }
-  
+
+  /**
+   * Get the message as a string
+   *
+   * @return string
+   */
   function flatten() {
     $this->msg_hl7 = $this->message->flatten();
     $this->message->validate();
@@ -80,7 +101,12 @@ class CHL7v2Event extends CHL7Event {
     
     return $this->msg_hl7;
   }
-  
+
+  /**
+   * Generate exchange IHE
+   *
+   * @return CExchangeIHE
+   */
   function generateExchange() {
     $exchange_ihe                  = new CExchangeIHE();
     $exchange_ihe->date_production = mbDateTime();
@@ -98,7 +124,12 @@ class CHL7v2Event extends CHL7Event {
 
     return $this->_exchange_ihe = $exchange_ihe;
   }
-  
+
+  /**
+   * Update exchange IHE with
+   *
+   * @return CExchangeIHE
+   */
   function updateExchange() {
     $exchange_ihe                 = $this->_exchange_ihe;
     $exchange_ihe->_message       = $this->msg_hl7;
@@ -108,5 +139,3 @@ class CHL7v2Event extends CHL7Event {
     return $exchange_ihe;
   }
 }
-
-?>
