@@ -8,7 +8,7 @@
 
 Pack = {
   edit: function(pack_id) {
-  	Form.onSubmitComplete = pack_id == '0' ? Pack.onSubmitComplete : Prototype.emptyFunction;
+  	Form.onSubmitComplete = pack_id == '' ? Pack.onSubmitComplete : Prototype.emptyFunction;
   
   	var url = new Url('compteRendu', 'ajax_edit_pack');
     url.addParam('pack_id', pack_id);
