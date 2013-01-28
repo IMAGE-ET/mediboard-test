@@ -1454,17 +1454,17 @@ class CSetupdPpatients extends CSetup {
               VALUES (
               %1 , %2 , %3 , %4 , %5 , %6 , %7 , %8 , %9 , %10 , %11 , '0'
               );",
-                $conf["important_constantes"],
-                $conf["diuere_24_reset_hour"],
-                $conf["redon_cumul_reset_hour"],
-                $conf["sng_cumul_reset_hour"],
-                $conf["lame_cumul_reset_hour"],
-                $conf["drain_cumul_reset_hour"],
-                $conf["drain_thoracique_cumul_reset_hour"],
-                $conf["drain_pleural_cumul_reset_hour"],
-                $conf["drain_mediastinal_cumul_reset_hour"],
-                $conf["sonde_ureterale_cumul_reset_hour"],
-                $conf["sonde_vesicale_cumul_reset_hour"]
+                CValue::read($conf, "important_constantes"),
+                CValue::read($conf, "diuere_24_reset_hour"),
+                CValue::read($conf, "redon_cumul_reset_hour"),
+                CValue::read($conf, "sng_cumul_reset_hour"),
+                CValue::read($conf, "lame_cumul_reset_hour"),
+                CValue::read($conf, "drain_cumul_reset_hour"),
+                CValue::read($conf, "drain_thoracique_cumul_reset_hour"),
+                CValue::read($conf, "drain_pleural_cumul_reset_hour"),
+                CValue::read($conf, "drain_mediastinal_cumul_reset_hour"),
+                CValue::read($conf, "sonde_ureterale_cumul_reset_hour"),
+                CValue::read($conf, "sonde_vesicale_cumul_reset_hour")
               );
     $this->addQuery($query);
 
