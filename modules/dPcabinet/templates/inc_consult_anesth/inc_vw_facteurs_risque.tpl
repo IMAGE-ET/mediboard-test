@@ -92,7 +92,21 @@
         <input type="hidden" name="object_class" value="CSejour" />
         {{mb_field object=$dossier_medical_sejour field="risque_prophylaxie" onchange="onSubmitFormAjax(this.form);"}}
       </form>
-   </td>  
+    </td>  
    {{/if}}
+  </tr>
+  <tr>
+    <th>{{tr}}{{mb_label object=$dossier_medical_patient field="facteurs_risque"}}{{/tr}}</th>
+    <td style="text-align: center;">
+      <form name="editFacteursRisque" method="post" action="?">
+        <input type="hidden" name="m" value="dPpatients" />
+        <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="object_id" value="{{$patient->_id}}" />
+        <input type="hidden" name="object_class" value="CPatient" />
+        {{mb_field object=$dossier_medical_patient field="facteurs_risque" onchange="onSubmitFormAjax(this.form);"}}
+      </form>
+    </td>
+    <td></td>
   </tr>
 </table>

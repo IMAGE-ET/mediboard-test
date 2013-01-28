@@ -2047,8 +2047,14 @@ class CSetupdPpatients extends CSetup {
                 ADD `hauteur_uterine` FLOAT UNSIGNED AFTER `perimetre_thoracique`,
                 ADD `peak_flow` FLOAT UNSIGNED AFTER `vision_oeil_gauche`;";
     $this->addQuery($query);
+    
+    $this->makeRevision("1.71");
+    
+    $query = "ALTER TABLE `dossier_medical` 
+              ADD `facteurs_risque` TEXT;";
+    $this->addQuery($query);
 
-    $this->mod_version = "1.71";
+    $this->mod_version = "1.72";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

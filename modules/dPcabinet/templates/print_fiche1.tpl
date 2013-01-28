@@ -669,6 +669,13 @@
             {{mb_value object=$dossier_medical_sejour field="risque_prophylaxie"}}
          </td>  
         </tr>
+        <tr>
+          <th>{{tr}}{{mb_label object=$dossier_medical field="facteurs_risque"}}{{/tr}}</th>
+          <td style="text-align: center;">
+            {{mb_value object=$dossier_medical field="facteurs_risque"}}
+          </td>
+          <td></td>
+        </tr>
      </table>
    </td>
   </tr>
