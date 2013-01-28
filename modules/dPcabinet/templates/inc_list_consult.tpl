@@ -32,7 +32,7 @@ Main.add( function () {
       <td colspan="6" style="text-align: left; width: 100%; font-weight: bold; height: 20px;">
         <div style="float: right;">
           {{if $current_date}}
-            {{$current_date|date_format:"%d/%m/%Y"}}
+            {{$current_date|date_format:$conf.date}}
           {{/if}}
           {{$hour|date_format:$conf.time}}
         </div>
@@ -69,10 +69,12 @@ Main.add( function () {
   
   {{foreach from=$listPlage item=_plage}}
   <tr>
-    <th colspan="3">
+    <th colspan="3" class="section">
       {{if $current_m == "dPurgences"}}
         <span style="float: right;">
-          <button class="print notext" onclick="printPlage({{$_plage->_id}})">{{tr}}Print{{/tr}}</button>
+          <button class="print notext" onclick="printPlage({{$_plage->_id}})">
+            {{tr}}Print{{/tr}}
+          </button>
         </span>
       {{/if}}
       {{mb_include module=system template=inc_object_notes object=$_plage}}

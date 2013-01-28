@@ -266,16 +266,16 @@ var Patient = {
   
   <!-- Recherche exacte -->
   <tr>
-    <th colspan="5">
-      <em>{{tr}}dPpatients-CPatient-exact-results{{/tr}} 
-      {{if ($patients|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
+    <th colspan="5" class="section">
+      {{tr}}dPpatients-CPatient-exact-results{{/tr}} 
+      {{if ($patients|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}
     </th>
   </tr>
   {{foreach from=$patients item=_patient}}
     {{mb_include template="inc_line_pat_selector"}}
   {{foreachelse}}
     <tr>
-      <td class="button" colspan="5">
+      <td class="empty" colspan="5">
         {{if $name || $firstName}}
           {{tr}}dPpatients-CPatient-no-exact-results{{/tr}}
         {{else}}
@@ -288,9 +288,9 @@ var Patient = {
   <!-- Recherche phonétique -->
   {{if $patientsSoundex|@count}}
   <tr>
-    <th colspan="5">
-      <em>{{tr}}dPpatients-CPatient-close-results{{/tr}} 
-      {{if ($patientsSoundex|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}</em>
+    <th colspan="5" class="section">
+      {{tr}}dPpatients-CPatient-close-results{{/tr}} 
+      {{if ($patientsSoundex|@count >= 30)}}({{tr}}thirty-first-results{{/tr}}){{/if}}
     </th>
   </tr>
   {{/if}}
