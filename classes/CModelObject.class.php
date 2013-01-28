@@ -10,12 +10,19 @@
  */
 
 /**
- * @abstract Mediboard model definition 
- * - Metamodel: properties, class, validation 
+ * - Metamodel: properties, class, validation
  * - Observation: handlers
+ *
+ * @abstract Mediboard model definition
  */
 class CModelObject {
+  /**
+   * @var null
+   */
   static $handlers = null; // must be null at the beginning @see self::makeHandlers
+  /**
+   * @var array
+   */
   static $ignoredHandlers = array();
     
   /**
@@ -58,35 +65,68 @@ class CModelObject {
    * @var CMbFieldSpec[]
    */
   var $_specs         = array(); // Properties specifications as objects
+  /**
+   * @var array
+   */
   var $_props         = array(); // Properties specifications as string
 
   /**
    * @var CMbBackSpec[]
    */
   var $_backSpecs     = array(); // Back reference specification as objects
+  /**
+   * @var array
+   */
   var $_backProps     = array(); // Back reference specification as string
 
+  /**
+   * @var array
+   */
   var $_configs       = array(); // Object configs
 
+  /**
+   * @var array
+   */
   static $spec          = array();
+  /**
+   * @var array
+   */
   static $props         = array();
+  /**
+   * @var array
+   */
   static $specs         = array();
+  /**
+   * @var array
+   */
   static $backProps     = array();
+  /**
+   * @var array
+   */
   static $backSpecs     = array();
-  
+
+  /**
+   * @var array
+   */
   static $module_name   = array();
   
   /**
    * @var CModule
    */
   var $_ref_module     = null; // Parent module
-  
+
+  /**
+   * Construct
+   *
+   * @return CModelObject
+   */
   function __construct() {
     return $this->initialize();
   }
   
   /**
    * Pre-serialize magic method
+   *
    * @return array Property keys to be serialized
    */
   function __sleep() {
@@ -95,6 +135,7 @@ class CModelObject {
   
   /**
    * Post-unserialize magic method
+   *
    * @return void
    */
   function __wakeup() {
@@ -103,6 +144,7 @@ class CModelObject {
   
   /**
    * To string magic method
+   *
    * @return string
    */
   function __toString() {
@@ -111,6 +153,7 @@ class CModelObject {
   
   /**
    * Initialization factorisation for construction and unserialization
+   *
    * @return void
    */
   function initialize() {
@@ -168,7 +211,9 @@ class CModelObject {
   
   /**
    * Get the module name corresponding to given path
-   * @param string $path
+   *
+   * @param string $path Path name
+   *
    * @return string Module name
    */
   private static function getModuleName($path) {
@@ -181,6 +226,7 @@ class CModelObject {
   
   /**
    * Staticly build object handlers array
+   *
    * @return void
    */
   protected static final function makeHandlers() {
@@ -196,14 +242,21 @@ class CModelObject {
       }
     }
   }
-  
+
+  /**
+   * Get handlers
+   *
+   * @return array
+   */
   static function getHandlers(){
     return self::$handlers;
   }
   
   /**
    * Ignore a specific handler
+   *
    * @param string $handler The handler's class name
+   *
    * @return void
    */
   static final function ignoreHandler($handler) {
@@ -213,6 +266,7 @@ class CModelObject {
   
   /**
    * Initialize object specification
+   *
    * @return CMbObjectSpec the spec
    */
   function getSpec() {
@@ -221,6 +275,7 @@ class CModelObject {
   
   /**
    * Get properties specifications as strings
+   *
    * @return array
    */
   function getProps() {
@@ -233,6 +288,7 @@ class CModelObject {
   
   /**
    * Get backward reference specifications
+   *
    * @return array Array of form "collection-name" => "class join-field"
    */
   function getBackProps() {
@@ -243,6 +299,7 @@ class CModelObject {
   
   /**
    * Get the backrefs to export when using CMbObjecExport
+   *
    * @return array
    */
   function getExportedBackRefs(){
@@ -251,7 +308,9 @@ class CModelObject {
 
   /**
    * Convert string back specifications to objet specifications
+   *
    * @param string $backName The name of the back reference
+   *
    * @return CMbBackSpec The back reference specification, null if undefined
    */
   function makeBackSpec($backName) {
@@ -266,10 +325,11 @@ class CModelObject {
   
   /**
    * Makes all the back specs
+   *
    * @return void
    */
   function makeAllBackSpecs() {
-    foreach($this->_backProps as $backName => $backProp) {
+    foreach ($this->_backProps as $backName => $backProp) {
       $this->makeBackSpec($backName);
     }
   }
@@ -277,6 +337,7 @@ class CModelObject {
   /**
    * Converts properties string specifications to object specifications
    * Optimized version
+   *
    * @return CMbFieldSpec[]
    */
   function getSpecs() {
@@ -289,10 +350,11 @@ class CModelObject {
     
   /**
    * Decode all string fields (str, text, html)
+   *
    * @return void
    */
   function decodeUtfStrings() {
-    foreach($this->_specs as $name => $spec) {
+    foreach ($this->_specs as $name => $spec) {
       if (in_array(get_class($spec), array("CStrSpec", "CHtmlSpec", "CTextSpec"))) {
         if (null !== $this->$name) {
           $this->$name = utf8_decode($this->$name);
@@ -303,6 +365,7 @@ class CModelObject {
   
   /**
    * Set default values to properties
+   *
    * @return void
    */
   function valueDefaults() {
@@ -311,24 +374,33 @@ class CModelObject {
     $fields = $this->getPlainFields();
     unset($fields[$this->_spec->key]);
     unset($fields["object_id"]);
-    foreach($fields as $_name => $_value) {
+    foreach ($fields as $_name => $_value) {
       $this->$_name = $specs[$_name]->default;
     }
   }
   
   /**
    * Check a property against its specification
-   * @param $name string Name of the property
+   *
+   * @param string $name Name of the property
+   *
    * @return string Store-like error message
    */
   function checkProperty($name) {
     $spec = $this->_specs[$name];
     return $spec->checkPropertyValue($this);
   }
-  
+
+  /**
+   * Check confidential
+   *
+   * @param array $specs Specs
+   *
+   * @return void
+   */
   function checkConfidential($specs = null) {
     if (CAppUI::conf("hide_confidential")) {
-      if ($specs == null){
+      if ($specs == null) {
         $specs = $this->_specs;
       }
       foreach ($specs as $name => $_spec) {
@@ -342,7 +414,9 @@ class CModelObject {
   
   /**
    * Get object properties, i.e. having specs
-   * @param  bool  $nonEmpty   Filter non empty values
+   *
+   * @param bool $nonEmpty Filter non empty values
+   *
    * @return array Associative array
    */
   function getProperties($nonEmpty = false) {
@@ -360,8 +434,10 @@ class CModelObject {
   
   /**
    * Returns the field's formatted value
+   *
    * @param string $field   Field name
    * @param array  $options Format options
+   *
    * @return string The field's formatted value
    */
   function getFormattedValue($field, $options = array()) {
@@ -370,8 +446,10 @@ class CModelObject {
 
   /**
    * Returns the field's HTML label element
+   *
    * @param string $field   Field name
    * @param array  $options Format options
+   *
    * @return string The field's formatted value
    */
   function getLabelElement($field, $options = array()) {
@@ -380,7 +458,9 @@ class CModelObject {
   
   /**
    * Returns the field's main locale
-   * @param string $field   Field name
+   *
+   * @param string $field Field name
+   *
    * @return string The locale
    */
   function getLocale($field) {
@@ -389,36 +469,43 @@ class CModelObject {
   
   /**
    * Trigger a warning with appropriate locale and variatic i18n parameters
-   * string $suffix Locale suffix
-   * return void
+   *
+   * @param string $suffix Locale suffix
+   *
+   * @return void
    */
-   static function warning($suffix/*, ... */) {
-     $args = func_get_args();
-     unset($args[0]);
-     $backtrace = debug_backtrace();
-     $class = $backtrace[1]["class"];
-     $message = CAppUI::tr("$class-warning-$suffix", $args);
-     trigger_error($message, E_USER_WARNING);
-   }
+  static function warning($suffix/*, ... */) {
+    $args = func_get_args();
+    unset($args[0]);
+    $backtrace = debug_backtrace();
+    $class = $backtrace[1]["class"];
+    $message = CAppUI::tr("$class-warning-$suffix", $args);
+    trigger_error($message, E_USER_WARNING);
+  }
 
   /**
    * Trigger an error with appropriate locale and variatic i18n parameters
-   * string $suffix Locale suffix
-   * return void
+   *
+   * @param string $suffix Locale suffix
+   *
+   * @return void
    */
-   static function error($suffix/*, ... */) {
-     $args = func_get_args();
-     unset($args[0]);
-     $backtrace = debug_backtrace();
-     $class = $backtrace[1]["class"];
-     $message = CAppUI::tr("$class-warning-$suffix", $args);
-     trigger_error($message, E_USER_ERROR);
-   }
+  static function error($suffix/*, ... */) {
+    $args = func_get_args();
+    unset($args[0]);
+    $backtrace = debug_backtrace();
+    $class = $backtrace[1]["class"];
+    $message = CAppUI::tr("$class-warning-$suffix", $args);
+    trigger_error($message, E_USER_ERROR);
+  }
   
   /**
    * Bind an object with an array
+   *
    * @param array $hash  associative array of values to match with
    * @param bool  $strip true to strip slashes
+   *
+   * @return bool
    */
   function bind($hash, $strip = true) {
     bindHashToObject($strip ? stripslashes_deep($hash) : $hash, $this);
@@ -427,6 +514,7 @@ class CModelObject {
   
   /**
    * Update the form (derived) fields plain fields
+   *
    * @return void
    */
   function updateFormFields() {
@@ -437,13 +525,15 @@ class CModelObject {
   
   /**
    * Get DB fields and there values
+   *
    * @todo Rename to plainFields
+   *
    * @return array Associative array
    */
   function getPlainFields() {
     $result = array();
     $vars = get_object_vars($this);
-    foreach($vars as $name => $value) {
+    foreach ($vars as $name => $value) {
       if ($name[0] !== '_') {
         $result[$name] = $value;
       }
@@ -454,7 +544,10 @@ class CModelObject {
   
   /**
    * Update the plain fields from the form fields
+   *
    * @todo Rename to PlainFields()
+   *
+   * @return void
    */
   function updatePlainFields() {
     $specs = $this->_specs;
@@ -469,13 +562,18 @@ class CModelObject {
 
   /**
    * Merges the fields of an array of objects to $this
-   * @param $objects An array of CMbObject
+   *
+   * @param array $objects       An array of CMbObject
+   * @param bool  $getFirstValue Get first value ?
+   *
    * @return $this or an error
    */
   function mergePlainFields ($objects /*array(<CMbObject>)*/, $getFirstValue = false) {
     $fields = $this->getPlainFields();
     $diffs = $fields;
-    foreach ($diffs as &$diff) $diff = false;
+    foreach ($diffs as &$diff) {
+      $diff = false;
+    }
     
     foreach ($objects as &$object) {
       foreach ($fields as $name => $value) {
@@ -504,7 +602,10 @@ class CModelObject {
   
   /**
    * Nullify object fields that are empty strings
+   *
    * @todo Rename to plainFields
+   *
+   * @return void
    */
   function nullifyEmptyFields() {
     foreach ($this->getPlainFields() as $name => $value) {
@@ -516,12 +617,19 @@ class CModelObject {
     
   /**
    * Extends object properties with target object (of the same class) properties
+   *
+   * @param CMbObject $mbObject object to extend with
    * @param bool      $gently   Gently preserve existing non-empty values
-   * @param CMbObject $mbObject object to extend with 
+   *
+   * @return void
    */
   function extendsWith(CMbObject $mbObject, $gently = false) {
     if ($this->_class !== $mbObject->_class) {
-      trigger_error(printf("Target object has not the same class (%s) as this (%s)", $mbObject->_class, $this->_class), E_USER_WARNING);
+      trigger_error(
+        printf("Target object has not the same class (%s) as this (%s)", $mbObject->_class, $this->_class),
+        E_USER_WARNING
+      );
+
       return;
     }
     
@@ -533,17 +641,27 @@ class CModelObject {
       }
     }
   }
-  
+
+  /**
+   * Clone object
+   *
+   * @param CMbObject $mbObject
+   *
+   * @return void
+   */
   function cloneFrom(CMbObject $mbObject) {
     $this->extendsWith($mbObject);
     $this->_id = null;
   }
   
   /**
-   * Subject notification mechanism 
-   * @todo Implement to factorise 
-   *   on[Before|After][Store|Merge|Delete|FillLimitedTemplate]()
-   *   which have to get back de CPersistantObject layer
+   * Subject notification mechanism
+   *
+   * @param string $message on[Before|After][Store|Merge|Delete|FillLimitedTemplate] which have to get back de CPersistantObject layer
+   *
+   * @todo Implement to factorise
+   *
+   * @return void
    */
   function notify($message/*, ... */) {
     // Event Handlers
@@ -565,6 +683,7 @@ class CModelObject {
 
   /**
    * Get CSV values for object, i.e. db fields, references excepted
+   *
    * @return array Associative array of values
    */
   function getCSVFields() {
@@ -576,8 +695,6 @@ class CModelObject {
     }
     return $fields;
   }
-
-
 
   /**
    * Log shortcut to mbTrace
