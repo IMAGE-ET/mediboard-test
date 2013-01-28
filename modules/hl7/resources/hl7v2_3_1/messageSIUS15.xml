@@ -6,7 +6,7 @@
         <segment>MSH</segment>
         <segment>SCH</segment>
         <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
-        <group maxOccurs="unbounded" minOccurs="0">
+        <group maxOccurs="unbounded" minOccurs="0" name="PATIENT">
             <segment>PID</segment>
             <segment minOccurs="0">PD1</segment>
             <segment minOccurs="0">PV1</segment>
@@ -14,21 +14,21 @@
             <segment minOccurs="0" maxOccurs="unbounded">OBX</segment>
             <segment minOccurs="0" maxOccurs="unbounded">DG1</segment>
         </group>
-        <group maxOccurs="unbounded">
+        <group maxOccurs="unbounded" name="RESOURCES">
             <segment>RGS</segment>
-            <group maxOccurs="unbounded" minOccurs="0">
+            <group maxOccurs="unbounded" minOccurs="0" name="GENERAL_RESOURCE">
                 <segment>AIS</segment>
                 <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
             </group>
-            <group maxOccurs="unbounded" minOccurs="0">
+            <group maxOccurs="unbounded" minOccurs="0" name="GENERAL_RESOURCE">
                 <segment>AIG</segment>
                 <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
             </group>
-            <group maxOccurs="unbounded" minOccurs="0">
+            <group maxOccurs="unbounded" minOccurs="0" name="LOCATION_RESOURCE">
                 <segment>AIL</segment>
                 <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
             </group>
-            <group maxOccurs="unbounded" minOccurs="0">
+            <group maxOccurs="unbounded" minOccurs="0" name="PERSONNEL_RESOURCE">
                 <segment>AIP</segment>
                 <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
             </group>
