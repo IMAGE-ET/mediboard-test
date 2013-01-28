@@ -48,8 +48,8 @@ if ($receiver instanceof CDestinataireHprim) {
   }
   
   if ($exchange->type == "pmsi") {
-    $data_format = new CHPrimXMLEvenementsServeurActivitePmsi();
-    CAppUI::stepAjax("L'envoi de cet événement n'est actuellement pas pris en charge", UI_MSG_ERROR);
+    $data_format = CHPrimXMLEvenementsServeurActivitePmsi::getHPrimXMLEvenements($exchange->_message);
+    $evenement = $data_format->sous_type;
   }
 }
 
