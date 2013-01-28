@@ -17,11 +17,22 @@
  */
 
 class CEAIObjectHandler extends CMbObjectHandler {
-  static $handled               = array ();
-  var $_eai_initiateur_group_id = null;
-  
   /**
-   * @see parent::isHandled()
+   * @var array
+   */
+  static $handled               = array ();
+  /**
+   * @var null
+   */
+  var $_eai_initiateur_group_id = null;
+
+
+  /**
+   * If object is handled ?
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
    */
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
@@ -30,8 +41,8 @@ class CEAIObjectHandler extends CMbObjectHandler {
   /**
    * Trigger action on the right handler
    * 
-   * @param $action   string    Action name
-   * @param $mbObject CMbObject Object
+   * @param string    $action   Action name
+   * @param CMbObject $mbObject Object
    * 
    * @return void
    */
@@ -74,9 +85,13 @@ class CEAIObjectHandler extends CMbObjectHandler {
       }
     }
   }
-  
+
   /**
-   * @see parent::onBeforeStore()
+   * Trigger before event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
    */
   function onBeforeStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -87,9 +102,13 @@ class CEAIObjectHandler extends CMbObjectHandler {
       $this->_eai_initiateur_group_id = $mbObject->_eai_initiateur_group_id;
     }
   }
-  
+
   /**
-   * @see parent::onAfterStore()
+   * Trigger after event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
    */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -113,9 +132,13 @@ class CEAIObjectHandler extends CMbObjectHandler {
     
     return true;
   }
-  
+
   /**
-   * @see parent::onBeforeMerge()
+   * Trigger before event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
    */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -128,9 +151,13 @@ class CEAIObjectHandler extends CMbObjectHandler {
     
     return true;
   }
-  
+
   /**
-   * @see parent::onAfterMerge()
+   * Trigger after event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
    */
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -143,9 +170,13 @@ class CEAIObjectHandler extends CMbObjectHandler {
     
     return true;
   }
-  
+
   /**
-   * @see parent::onBeforeDelete()
+   * Trigger before event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
    */
   function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -154,9 +185,13 @@ class CEAIObjectHandler extends CMbObjectHandler {
     
     return true;
   }
-  
+
   /**
-   * @see parent::onAfterDelete()
+   * Trigger after event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
    */
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
@@ -166,4 +201,3 @@ class CEAIObjectHandler extends CMbObjectHandler {
     return true;
   }
 }
-?>

@@ -9,6 +9,14 @@
   * @link     http://www.mediboard.org
 *}}
 
+<script>
+  Main.add(function(){
+    var form = getForm("find");
+    form.elements.finder.disabled = '{{$pointer}}' ? "" : "disabled";
+    $V(form.pointer, '{{$pointer}}');
+  });
+</script>
+
 <table class="tbl">
   <tr>
     <th>{{tr}}CPatient{{/tr}}</th>
@@ -16,11 +24,12 @@
     <th>{{tr}}CPatient-adresse{{/tr}}</th>
     <th class="narrow"></th>
   </tr>
+
   <tr>
     <th class="section" colspan="4">{{$patients|@count}} résultats </th>
   </tr>
-  {{foreach from=$patients item=_patient}}
 
+  {{foreach from=$patients item=_patient}}
     <tr>
       <td>
         <div class="text noted">
@@ -40,7 +49,7 @@
         </a>
       </td>
     </tr>
-    {{foreachelse}}
+  {{foreachelse}}
     <tr>
       <td colspan="100" class="empty">{{tr}}dPpatients-CPatient-no-exact-results{{/tr}}</td>
     </tr>

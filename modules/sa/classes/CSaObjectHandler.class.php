@@ -9,20 +9,39 @@
  */
 
 class CSaObjectHandler extends CEAIObjectHandler {
+  /**
+   * @var array
+   */
   static $handled = array ("CSejour", "COperation", "CConsultation");
 
+
+  /**
+   * If object is handled ?
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
 
+  /**
+   * Trigger after event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!parent::onAfterStore($mbObject)) {
       return;
     }
-    
+
     switch ($mbObject->_class) {
       // CSejour 
-      // Envoi des actes / diags soit quand le séjour est facturé, soit quand le sejour a une sortie réelle, soit quand on a la clôture sur le sejour
+      // Envoi des actes / diags soit quand le séjour est facturé, soit quand le sejour a une sortie réelle
+      // soit quand on a la clôture sur le sejour
       case 'CSejour': 
         $sejour = $mbObject;
         
@@ -86,7 +105,7 @@ class CSaObjectHandler extends CEAIObjectHandler {
             break;
           
           case 'sortie_reelle':
-              break;
+            break;
             
           default:
             if ($operation->fieldModified('facture', 1)) {
@@ -122,4 +141,3 @@ class CSaObjectHandler extends CEAIObjectHandler {
     } 
   }
 }
-?>

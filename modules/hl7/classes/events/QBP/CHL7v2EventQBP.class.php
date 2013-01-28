@@ -103,5 +103,3 @@ class CHL7v2EventQBP extends CHL7v2Event implements CHL7EventQBP {
     $DSC->build($this);
   }
 }
-
-?>

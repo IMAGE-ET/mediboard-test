@@ -14,16 +14,17 @@
 CCanDo::checkAdmin();
 
 // Récuperation des patients recherchés
-$patient_nom              = CValue::request("nom"            , "");
-$patient_prenom           = CValue::request("prenom"         , "");
-$patient_jeuneFille       = CValue::request("nom_jeune_fille", "");
-$patient_sexe             = CValue::request("sexe"           , "");
-$patient_ville            = CValue::request("ville"          , "");
-$patient_cp               = CValue::request("cp"             , "");
-$patient_day              = CValue::request("Date_Day"  , "");
-$patient_month            = CValue::request("Date_Month", "");
-$patient_year             = CValue::request("Date_Year" , "");
-$quantity_limited_request = CValue::request("quantity_limited_request" , "");
+$patient_nom              = CValue::request("nom");
+$patient_prenom           = CValue::request("prenom");
+$patient_jeuneFille       = CValue::request("nom_jeune_fille");
+$patient_sexe             = CValue::request("sexe");
+$patient_ville            = CValue::request("ville");
+$patient_cp               = CValue::request("cp");
+$patient_day              = CValue::request("Date_Day");
+$patient_month            = CValue::request("Date_Month");
+$patient_year             = CValue::request("Date_Year");
+$quantity_limited_request = CValue::request("quantity_limited_request");
+$pointer                  = CValue::request("pointer");
 
 $patient_naissance = null;
 if (($patient_year) || ($patient_month) || ($patient_day)) {
@@ -56,13 +57,14 @@ $receiver_ihe->actif    = 1;
 $receiver_ihe->group_id = CGroups::loadCurrent()->_id;
 $receivers = $receiver_ihe->loadMatchingList();
 
-$iti_handler = new CITIDelegatedHandler();
-
 $profil      = "PDQ";
 $transaction = "ITI21";
 $message     = "QBP";
 $code        = "Q22";
 
+$ack_data    = null;
+
+$iti_handler = new CITIDelegatedHandler();
 foreach ($receivers as $_receiver) {
   if (!$iti_handler->isMessageSupported($transaction, $message, $code, $_receiver)) {
     continue;
@@ -70,16 +72,24 @@ foreach ($receivers as $_receiver) {
 
   $patient->_receiver                 = $_receiver;
   $patient->_quantity_limited_request = $quantity_limited_request;
+  $patient->_pointer                  = $pointer;
 
   // Envoi de l'évènement
   $ack_data = $iti_handler->sendITI($profil, $transaction, $message, $code, $patient);
 }
 
 $patients = array();
-$ack_data = null;
+$pointer  = null;
+
 if ($ack_data) {
   $ack_event = new CHL7v2EventQBPK22();
   $patients  = $ack_event->handle($ack_data)->handle();
+
+  if (array_key_exists("pointer", $patients)) {
+    $pointer = $patients["pointer"];
+  }
+
+  unset($patients["pointer"]);
 }
 
 // Création du template
@@ -87,6 +97,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("patient"                 , $patient);
 $smarty->assign("patients"                , $patients);
 $smarty->assign("quantity_limited_request", $quantity_limited_request);
+$smarty->assign("pointer"                 , $pointer);
 $smarty->display("inc_list_patients.tpl");
 
 CApp::rip();

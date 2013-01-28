@@ -60,6 +60,7 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
     $patients = array();
 
     $recordPerson = new CHL7v2RecordPerson();
+    $i = 1;
     foreach ($data["PID"] as $_PID) {
       $patient = new CPatient();
 
@@ -68,7 +69,9 @@ class CHL7v2ReceivePatientDemographicsResponse extends CHL7v2MessageXML {
       $patient->updateFormFields();
       $patient->loadRefsNotes();
 
-      $patients[$this->queryTextNode("PID.1", $_PID)] = $patient;
+      $patients[$i] = $patient;
+
+      $i++;
     }
 
     if ($DSC = $data["DSC"]) {

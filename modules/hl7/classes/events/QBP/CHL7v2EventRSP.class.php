@@ -16,6 +16,13 @@
  * Represents a RSP message structure (see chapter 2.14.1)
  */
 class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
+  /**
+   * Construct
+   *
+   * @param CHL7Event $trigger_event Trigger event
+   *
+   * @return CHL7v2EventRSP
+   */
   function __construct(CHL7Event $trigger_event) {
     $this->event_type  = "RSP";
     $this->version     = $trigger_event->message->version;
@@ -74,6 +81,21 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
         $i++;
       }
     }
+
+    $last = end($object->objects);
+    if ($last) {
+      //$last->_id
+    }
+  }
+
+  /**
+   * Get the message as a string
+   *
+   * @return string
+   */
+  function flatten() {
+    $this->msg_hl7 = $this->message->flatten();
+    $this->message->validate();
   }
 
   /**
@@ -136,11 +158,4 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     $PID->set_id  = $set_id;
     $PID->build($this);
   }
-  
-  function flatten() {
-    $this->msg_hl7 = $this->message->flatten();
-    $this->message->validate();
-  }
 }
-
-?>

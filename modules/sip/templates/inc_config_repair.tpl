@@ -42,13 +42,13 @@
 	    {{tr}}sip-repair-class{{/tr}} '{{tr}}CSejour{{/tr}}'
 	  </td>
 	  <td>
-	    <button type="button" class="new" onclick="Action.repair('start', 'sejour')">
+	    <button type="button" class="new" onclick="SIP.repair('start', 'sejour')">
 	      {{tr}}Start{{/tr}}      
 	    </button>
-	    <button type="button" class="change" onclick="Action.repair('retry', 'sejour')">
+	    <button type="button" class="change" onclick="SIP.repair('retry', 'sejour')">
 	      {{tr}}Retry{{/tr}}      
 	    </button>
-	    <button type="button" class="tick" onclick="Action.repair('continue', 'sejour')">
+	    <button type="button" class="tick" onclick="SIP.repair('continue', 'sejour')">
 	      {{tr}}Continue{{/tr}}      
 	    </button>
 	  </td>

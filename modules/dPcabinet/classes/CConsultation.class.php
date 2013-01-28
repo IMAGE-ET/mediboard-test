@@ -86,7 +86,13 @@ class CConsultation extends CCodable {
   var $_duree          = null;
     
   // Fwd References
+  /**
+   * @var CPatient
+   */
   var $_ref_patient      = null; // Declared in CCodable
+  /**
+   * @var CSejour
+   */
   var $_ref_sejour       = null; // Declared in CCodable
 
   /**
@@ -94,6 +100,11 @@ class CConsultation extends CCodable {
    */
   var $_ref_plageconsult = null;
   var $_ref_adresse_par_prat = null;
+
+  /**
+   * @var CMediusers
+   */
+  var $_ref_praticien = null;
 
   // FSE
   var $_bind_fse       = null;
@@ -124,6 +135,9 @@ class CConsultation extends CCodable {
   var $_ref_facture            = null;
   var $_ref_prescription       = null;
   var $_ref_categorie          = null;
+  /**
+   * @var CGroups
+   */
   var $_ref_group              = null;
   
   // Distant fields
@@ -1112,6 +1126,7 @@ TESTS A EFFECTUER
   function loadRefPraticien(){
     $this->loadRefPlageConsult();
     $this->_ref_executant = $this->_ref_plageconsult->_ref_chir;
+
     return $this->_ref_praticien = $this->_ref_chir;
   }
 

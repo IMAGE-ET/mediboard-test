@@ -81,15 +81,21 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     $data[] = null;
     
     // SCH-6: Event Reason (CE)
+    /* @todo Voir comment améliorer */
     $data[] = array(
       array(
-        null,
-        $appointment->motif
-      )
+        1,
+        "CConsultation"
+       )
     );
     
     // SCH-7: Appointment Reason (CE) (optional)
-    $data[] = null;
+    $data[] = array(
+      array(
+        $appointment->_id,
+        $appointment->motif
+      )
+    );
     
     // SCH-8: Appointment Type (CE) (optional)
     $data[] = null;

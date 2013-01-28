@@ -16,6 +16,13 @@
  * Represents a ACK message structure (see chapter 2.14.1)
  */
 class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
+  /**
+   * Construct
+   *
+   * @param CHL7Event $trigger_event Trigger event
+   *
+   * @return CHL7v2EventACK
+   */
   function __construct(CHL7Event $trigger_event) { 
     $this->event_type  = "ACK";
     $this->version     = $trigger_event->message->version;
@@ -30,7 +37,16 @@ class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
     $this->_receiver     = $trigger_event->_exchange_ihe->_ref_receiver;
     $this->_sender       = $trigger_event->_exchange_ihe->_ref_sender;
   }
-  
+
+  /**
+   * Build event
+   *
+   * @param CMbObject $object Object
+   *
+   * @see parent::build()
+   *
+   * @return void
+   */
   function build($object) {
     // Création du message HL7
     $this->message          = new CHL7v2Message();
@@ -57,8 +73,8 @@ class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
       $object->_mb_error_code = $object->mb_error_codes;
       $this->addERR($object);
     }  
-    
-    $trigger_event = $object->event; 
+
+    $trigger_event = $object->event;
     // Validation error
     if ($errors = $trigger_event->message->errors) {
       foreach ($errors as $_error) {
@@ -66,22 +82,31 @@ class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
       }
     }
   }
-  
-  /*
-   * MSH - Represents an HL7 MSH message segment (Message Header) 
+
+  /**
+   * MSH - Represents an HL7 MSH message segment (Message Header)
+   *
+   * @return void
    */
   function addMSH() {
     $MSH = CHL7v2Segment::create("MSH", $this->message);
     $MSH->build($this);
   }
   
-  /*
+  /**
    * SFT - Represents an HL7 SFT message segment (Software Segment)
+   *
+   * @return void
    */
-  function addSFT() {}
+  function addSFT() {
+  }
   
-  /*
+  /**
    * MSA - Represents an HL7 MSA message segment (Message Acknowledgment)
+   *
+   * @param CHL7Acknowledgment $acknowledgment Acknowledgment
+   *
+   * @return void
    */
   function addMSA(CHL7Acknowledgment $acknowledgment) {
     $MSA = CHL7v2Segment::create("MSA", $this->message);
@@ -89,20 +114,28 @@ class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
     $MSA->build($this);
   }
   
-  /*
+  /**
    * ERR - Represents an HL7 ERR message segment (Error)
+   *
+   * @param CHL7Acknowledgment $acknowledgment Acknowledgment
+   * @param CHL7v2Error|null   $error          Error HL7
+   *
+   * @return void
    */
-  function addERR(CHL7Acknowledgment $acknowledgment, $error = null) {
+  function addERR(CHL7Acknowledgment $acknowledgment, CHL7v2Error $error = null) {
     $ERR = CHL7v2Segment::create("ERR", $this->message);
     $ERR->acknowledgment = $acknowledgment;
     $ERR->error = $error;
     $ERR->build($this);
   }
-  
+
+  /**
+   * Get the message as a string
+   *
+   * @return string
+   */
   function flatten() {
     $this->msg_hl7 = $this->message->flatten();
     $this->message->validate();
   }
 }
-
-?>

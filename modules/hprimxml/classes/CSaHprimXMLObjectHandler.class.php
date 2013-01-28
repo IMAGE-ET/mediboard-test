@@ -1,33 +1,60 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision: 12577 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * SA H'XML object handler
+ *
+ * @category hprimxml
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * SA H'XML object handler
+ *
+ */
 class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
+  /**
+   * @var array
+   */
   static $handled = array ("CSejour", "COperation", "CConsultation");
 
+  /**
+   * If object is handled ?
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
 
+  /**
+   * Trigger after event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return;
     }
-        
+
     $receiver = $mbObject->_receiver;
     if (CGroups::loadCurrent()->_id != $receiver->group_id) {
       return;
     }
-    
+
     switch ($mbObject->_class) {
       // CSejour 
-      // Envoi des actes / diags soit quand le séjour est facturé, soit quand le sejour a une sortie réelle, soit quand on a la clôture sur le sejour
+      // Envoi des actes / diags soit quand le séjour est facturé, soit quand le sejour a une sortie réelle,
+      // soit quand on a la clôture sur le sejour
       case 'CSejour': 
         $sejour = $mbObject;
         $sejour->loadNDA($receiver->group_id);
@@ -93,4 +120,3 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     $this->sendEvenementPMSI("CHPrimXMLEvenementsServeurActes", $codable);   
   }
 }
-?>

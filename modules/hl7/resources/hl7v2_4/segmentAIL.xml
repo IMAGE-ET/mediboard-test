@@ -18,7 +18,7 @@
             <description>Location Resource ID</description>
             <datatype>PL</datatype>
         </field>
-        <field minOccurs="1" maxOccurs="0">
+        <field minOccurs="0" maxOccurs="0">
             <name>AIL.4</name>
             <description>Location Type</description>
             <datatype>CE</datatype>

@@ -60,7 +60,7 @@
   </table>
 </form>
 
-{{mb_script module="sip" script="action"}}
+{{mb_script module="sip" script="SIP"}}
 
 <table class="tbl">
   <tr>
@@ -72,13 +72,13 @@
       {{tr}}sip-export-class{{/tr}} '{{tr}}CPatient{{/tr}}'
     </td>
     <td class="narrow">
-      <button type="button" class="new" onclick="Action.doExport('start', 'patient')">
+      <button type="button" class="new" onclick="SIP.doExport('start', 'patient')">
         {{tr}}Start{{/tr}}      
       </button>
-      <button type="button" class="change" onclick="Action.doExport('retry', 'patient')">
+      <button type="button" class="change" onclick="SIP.doExport('retry', 'patient')">
         {{tr}}Retry{{/tr}}      
       </button>
-      <button type="button" class="tick" onclick="Action.doExport('continue', 'patient')">
+      <button type="button" class="tick" onclick="SIP.doExport('continue', 'patient')">
         {{tr}}Continue{{/tr}}      
       </button>
     </td>

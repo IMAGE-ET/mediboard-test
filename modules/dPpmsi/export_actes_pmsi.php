@@ -49,10 +49,18 @@ switch ($object_class) {
       $NDA = $mbSejour->_NDA;
       $mbSejour->_ref_patient->loadIPP();
       $IPP = $mbSejour->_ref_patient->_IPP;
-      if (isset($_POST["sc_patient_id"  ])) $mbSejour->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
-      if (isset($_POST["sc_venue_id"    ])) $mbSejour->_NDA               = $_POST["sc_venue_id"    ];
-      if (isset($_POST["cmca_uf_code"   ])) $object->code_uf              = $_POST["cmca_uf_code"   ];
-      if (isset($_POST["cmca_uf_libelle"])) $object->libelle_uf           = $_POST["cmca_uf_libelle"];
+      if (isset($_POST["sc_patient_id"  ])) {
+        $mbSejour->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
+      }
+      if (isset($_POST["sc_venue_id"    ])) {
+        $mbSejour->_NDA               = $_POST["sc_venue_id"    ];
+      }
+      if (isset($_POST["cmca_uf_code"   ])) {
+        $object->code_uf              = $_POST["cmca_uf_code"   ];
+      }
+      if (isset($_POST["cmca_uf_libelle"])) {
+        $object->libelle_uf           = $_POST["cmca_uf_libelle"];
+      }
     }
     break;
   case "CSejour" :
@@ -67,26 +75,31 @@ switch ($object_class) {
       $NDA = $object->_NDA;
       $object->_ref_patient->loadIPP();
       $IPP = $object->_ref_patient->_IPP;
-      if (isset($_POST["sc_patient_id"  ])) $object->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
-      if (isset($_POST["sc_venue_id"    ])) $object->_NDA               = $_POST["sc_venue_id"    ];
+      if (isset($_POST["sc_patient_id"  ])) {
+        $object->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
+      }
+      if (isset($_POST["sc_venue_id"    ])) {
+        $object->_NDA               = $_POST["sc_venue_id"    ];
+      }
     }
     break;
 }
 
 // Facturation de l'opération où du séjour
-
 $object->facture = 1;
-if($unlock_dossier) {
+if ($unlock_dossier) {
   $object->facture = 0;
 }
+
 $object->loadLastLog();
 $object->countExchanges();
 try {
   $object->store();
-} catch(CMbException $e) {
+}
+catch(CMbException $e) {
   // Cas d'erreur on repasse la facturation à l'état précédent
   $object->facture = 0;
-  if($unlock_dossier) {
+  if ($unlock_dossier) {
     $object->facture = 1;
   }
   $object->store();
@@ -94,7 +107,7 @@ try {
   $e->stepAjax();
 }
 
-if(!$unlock_dossier) {
+if (!$unlock_dossier) {
   // Flag les actes CCAM en envoyés
   foreach ($object->_ref_actes_ccam as $_acte_ccam) {
     $_acte_ccam->sent = 1;

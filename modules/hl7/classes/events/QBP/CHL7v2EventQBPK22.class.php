@@ -33,5 +33,3 @@ class CHL7v2EventQBPK22 extends CHL7v2EventQBP implements CHL7EventQBPK22 {
   function build($patient) {
   }
 }
-
-?>

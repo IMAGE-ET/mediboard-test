@@ -9,16 +9,14 @@
   * @link     http://www.mediboard.org
 *}}
 
-<script type="text/javascript">
-  findCandidates = function(form) {
-    return Url.update(form, "find_candidates");
-  }
-</script>
+{{mb_script module="sip" script="SIP" ajax=true}}
 
 <table class="main">
   <tr>
     <td class="halfPane">
-      <form name="find" action="?m=sip&a=ajax_find_candidates" method="post" onsubmit="return findCandidates(this)" class="prepared">
+      <form name="find" action="?m=sip&a=ajax_find_candidates" method="post" onsubmit="return SIP.findCandidates(this)" class="prepared">
+        <input type="hidden" name="pointer" value="{{$pointer}}" />
+
         <table class="form">
           <tr>
             <th class="category" colspan="4">Recherche d'un dossier patient sur le SIP</th>
@@ -75,6 +73,7 @@
           <tr>
             <td class="button" colspan="4">
               <button class="search singleclick"> {{tr}}Search{{/tr}} </button>
+              <button class="tick singleclick" name="finder" {{if !$pointer}}disabled{{/if}} onclick=""> {{tr}}Continue{{/tr}} </button>
             </td>
           </tr>
         </table>

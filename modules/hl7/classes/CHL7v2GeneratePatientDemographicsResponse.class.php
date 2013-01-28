@@ -64,8 +64,9 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
       $where[$field] = $ds->prepareLike($value);
     }
 
-    if ($pointer = $patient->_pointer) {
-      $where["patient_id"] = " > $pointer";
+    if (isset($patient->_pointer)) {
+      // is_numeric
+      $where["patient_id"] = $ds->prepareLike(" >%", $patient->_pointer);
     }
 
     $order = "patient_id ASC";
