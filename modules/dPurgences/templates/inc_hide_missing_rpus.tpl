@@ -11,7 +11,7 @@
 
 <div>
 	<label style="visibility: hidden;" class="veille" title="Cacher les admissions non-sorties des {{$conf.dPurgences.date_tolerance}} derniers jours">
-	  <input type="checkbox" onchange="Veille.toggle(this);" />
+	  <input type="checkbox" id="admission_ant" onchange="Veille.toggle(this.checked);" />
 	  {{tr}}Hide{{/tr}}
 	  <span>0</span> admission(s) antérieure(s) 
 	</label>
@@ -26,8 +26,8 @@ Veille = {
     label.down("span").update(count);
 	},
 	
-	toggle: function(checkbox) {
-  	$$('tr.veille').invoke('setVisible', !checkbox.checked);
+	toggle: function(checked) {
+  	$$('tr.veille').invoke('setVisible', !checked);
 	}
 }
 </script>

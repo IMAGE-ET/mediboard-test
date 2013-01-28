@@ -7,7 +7,10 @@ MainCourante = {
     
     var url = new Url("dPurgences", "httpreq_vw_main_courante");
     MainCourante.updater = url.periodicalUpdate('main_courante', { 
-      frequency: this.frequency
+      frequency: this.frequency,
+      onSuccess: function() {
+        Veille.toggle.defer($('admission_ant').checked);
+      }
     });
   },
   
