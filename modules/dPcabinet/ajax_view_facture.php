@@ -11,7 +11,7 @@
 
 CCanDo::checkEdit();
 
-$facture_id  = CValue::getOrSession("facture_id");
+$factureconsult_id  = CValue::getOrSession("factureconsult_id");
 $patient_id         = CValue::getOrSession("patient_id");
 $consult_id         = CValue::get("consult_id");
 $facture_id         = CValue::get("facture_id");
@@ -26,7 +26,7 @@ if ($consult_id) {
   $consult->load($consult_id);
   $consult->loadRefsReglements();
   
-  if ($facture->load($consult->facture_id)) {
+  if ($facture->load($consult->factureconsult_id)) {
     $facture->loadRefs();
     if (count($facture->_ref_consults) == 0) {
       $facture->tarif = null;
@@ -62,8 +62,8 @@ if ($consult_id) {
     }
   }
 }
-elseif ($facture_id) {
-  $facture->load($facture_id); 
+elseif ($factureconsult_id) {
+  $facture->load($factureconsult_id); 
   $facture->loadRefs();
   if ($facture->_ref_consults) {
     $last_consult = reset($facture->_ref_consults);

@@ -16,7 +16,7 @@ $date_max           = CValue::getOrSession("_date_max", mbDate());
 $etat               = CValue::getOrSession("etat", "ouvert");
 $etat_cloture       = CValue::getOrSession("etat_cloture", 1);
 $etat_ouvert        = CValue::getOrSession("etat_ouvert", 1);
-$facture_id  = CValue::getOrSession("facture_id");
+$factureconsult_id  = CValue::getOrSession("factureconsult_id");
 $patient_id         = CValue::getOrSession("patient_id");
 $no_finish_reglement= CValue::getOrSession("no_finish_reglement", 0);
 
@@ -51,10 +51,10 @@ elseif (!$etat_cloture && $etat_ouvert) {
 if ($chirSel) {
   $ljoin = array();
   
-  $ljoin["consultation"] = "factureconsult.facture_id = consultation.facture_id" ;
+  $ljoin["consultation"] = "factureconsult.factureconsult_id = consultation.factureconsult_id" ;
   $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id" ;
   
-  $where["consultation.facture_id"] =" IS NOT NULL ";
+  $where["consultation.factureconsult_id"] =" IS NOT NULL ";
   $where["factureconsult.praticien_id"] =" = '$chirSel' ";
 
   if ($patient_id) {
@@ -83,8 +83,8 @@ if ($no_finish_reglement) {
 
 $derconsult_id = null;
 $assurances_patient = array();
-if ($facture_id) {
-  $facture->load($facture_id);  
+if ($factureconsult_id) {
+  $facture->load($factureconsult_id);  
   $facture->loadRefs();
   if ($facture->_ref_consults) {
     $last_consult = end($facture->_ref_consults);

@@ -1727,26 +1727,8 @@ class CSetupdPcabinet extends CSetup {
               DROP `position`,
               DROP `ASA`;";
     $this->addQuery($query);
-    $this->makeRevision("1.86");
-
-    $query = "ALTER TABLE `factureconsult` 
-              ADD `envoi_xml` ENUM ('0','1') DEFAULT '1';";
-    $this->addQuery($query);
     
-    $query = "ALTER TABLE `consultation` 
-              CHANGE `factureconsult_id` `facture_id` INT (11) UNSIGNED;";
-    $this->addQuery($query);
-    
-    $query = "ALTER TABLE `factureconsult` 
-              CHANGE `factureconsult_id` `facture_id` INT (11) UNSIGNED NOT NULL auto_increment;";
-    $this->addQuery($query);
-    
-    $this->makeRevision("1.87");
-    
-    $query = "ALTER TABLE `reglement` 
-              CHANGE `object_class` `object_class` ENUM ('CConsultation','CFactureConsult','CFactureSejour') NOT NULL DEFAULT 'CConsultation';";
-    $this->addQuery($query);
-    $this->mod_version = "1.88";
+    $this->mod_version = "1.86";
   }
 }
 ?>

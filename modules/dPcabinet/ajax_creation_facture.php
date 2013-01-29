@@ -70,6 +70,7 @@ if ($facture->loadObject($where)) {
     $consult->store();
   }
 }
+
 // Sinon on la crée
 else {
   $facture->patient_id   = $patient_id;
@@ -78,7 +79,7 @@ else {
   $facture->du_tiers     = $du_tiers;
   $facture->type_facture = $type_facture;
   $facture->ouverture    = mbDate();
-  if (CAppUI::conf("ref_pays") == 1) {
+  if(CAppUI::conf("ref_pays") == 1){
     $facture->cloture    = mbDate();
   }
 }
@@ -93,7 +94,7 @@ if ($facture->du_patient) {
   
   // Ajout de l'id de la facture dans la consultation
   if ($facture->_id) {
-    $consultation->facture_id = $facture->_id;
+    $consultation->factureconsult_id = $facture->_id;
     $consultation->store();
   }
   $facture->_ref_consults = null;

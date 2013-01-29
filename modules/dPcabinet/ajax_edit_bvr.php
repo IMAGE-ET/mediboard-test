@@ -11,7 +11,7 @@
 
 CCanDo::checkEdit();
 
-$facture_id    = CValue::get("facture_id");
+$factureconsult_id    = CValue::get("factureconsult_id");
 $edition_bvr          = CValue::get("edition_bvr");
 $edition_justificatif = CValue::get("edition_justificatif");
 $prat_id              = CValue::get("prat_id");
@@ -22,15 +22,15 @@ $user = CMediusers::get();
 
 $factures = array();
 $facture = new CFactureConsult();
-//si on a une facture_id on la charge
-if ($facture_id) {
-  $factures[$facture_id] = $facture->load($facture_id);
+//si on a une factureconsult_id on la charge
+if ($factureconsult_id) {
+  $factures[$factureconsult_id] = $facture->load($factureconsult_id);
 }
 else {
   $where = array();
   $where["praticien_id"] = " = '$prat_id'";
   $where[]  = "cloture  <= '$date_max' AND cloture >= '$date_min'";
-  $factures = $facture->loadList($where, "facture_id DESC", null, "patient_id");
+  $factures = $facture->loadList($where, "factureconsult_id DESC", null, "patient_id");
   
   //Avant l'envoi par ftp des fichiers, création d'un fichier print.lock indiquant un envoi de fichiers en cours
 //  $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
@@ -434,7 +434,7 @@ if ($edition_bvr) {
       }
     }
     //enregistrement pour chaque facture l'ensemble des factures
-    if ($facture_id) {
+    if ($factureconsult_id) {
       $pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "I");
     }
 //    else {
@@ -449,7 +449,7 @@ if ($edition_bvr) {
 //      }
 //    }
   }
-  if (!$facture_id) {
+  if (!$factureconsult_id) {
     $pdf->Output('Factures.pdf', "I");
   }
 }
@@ -457,7 +457,7 @@ if ($edition_justificatif) {
   include "ajax_edit_justificatif.php" ;
 }
 
-//if (!$facture_id) {
+//if (!$factureconsult_id) {
   //Après l'envoi par ftp des fichiers, suppression du fichier print.lock
 //  $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
 //  $exchange_source->init();
