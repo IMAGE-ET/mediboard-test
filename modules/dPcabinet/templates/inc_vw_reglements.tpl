@@ -7,8 +7,8 @@
 <fieldset>
   <legend>Règlements ({{tr}}{{$object->_class}}{{/tr}})</legend>
   {{if $object->du_patient}}
-    {{mb_include template=inc_vw_du_patient_reglements}}
+    {{mb_include  module=cabinet template=inc_vw_du_patient_reglements}}
   {{else}}
-    {{mb_include template=inc_vw_du_tiers_reglements}}
+    {{mb_include  module=cabinet template=inc_vw_du_tiers_reglements}}
   {{/if}}
 </fieldset>

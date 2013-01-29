@@ -9,7 +9,7 @@
  * @version    $Revision: 17164 $
  */
 
-$factureconsult_id  = CValue::get("facture_id");
+$facture_id  = CValue::get("facture_id");
 $patient_id         = CValue::get("patient_id");
 
 //Patient sélectionné
@@ -18,7 +18,7 @@ $patient->load($patient_id);
 $patient->loadRefsCorrespondantsPatient();
 
 $facture = new CFactureConsult();
-$facture->load($factureconsult_id);  
+$facture->load($facture_id);  
 $facture->loadRefs();
 $facture->_ref_patient->loadRefsCorrespondantsPatient();
 

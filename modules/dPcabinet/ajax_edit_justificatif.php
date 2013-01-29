@@ -448,7 +448,7 @@ foreach ($factures as $facture) {
     $pdf->Cell($l, "", sprintf("%.2f",$total), null, null, "R");
   }
   
-  if ($factureconsult_id) {
+  if ($facture_id) {
     $pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "I");
   }
   
@@ -463,7 +463,7 @@ foreach ($factures as $facture) {
 //    }
 //  }
 }
-if (!$factureconsult_id) {
+if (!$facture_id) {
   $pdf->Output('Justificatifs.pdf', "I");
 }
 ?>

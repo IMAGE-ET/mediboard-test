@@ -55,7 +55,7 @@ $reglement = new CReglement();
 $reglements_consult = $reglement->loadList($where, $order, null, null, $ljoin);
 
 // Chargement des règlements via les factures
-$ljoin["consultation"] = "reglement.object_id = consultation.factureconsult_id";
+$ljoin["consultation"] = "reglement.object_id = consultation.facture_id";
 $where["object_class"] = " = 'CFactureConsult'";
 
 $reglement = new CReglement();
