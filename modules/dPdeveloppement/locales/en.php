@@ -14,7 +14,6 @@ $locales['mod-dPdeveloppement-tab-mnt_table_classes'] = 'DB tables';
 $locales['mod-dPdeveloppement-tab-mnt_traduction_classes'] = 'Localization';
 $locales['mod-dPdeveloppement-tab-mutex_tester'] = 'Mutex test';
 $locales['mod-dPdeveloppement-tab-sniff_code'] = 'Coding standards';
-$locales['mod-dPdeveloppement-tab-version_control'] = 'Version control';
 $locales['mod-dPdeveloppement-tab-view_logs'] = 'Error logs';
 $locales['mod-dPdeveloppement-tab-view_metrique'] = 'Metrics';
 $locales['module-dPdeveloppement-court'] = 'Dev tools';

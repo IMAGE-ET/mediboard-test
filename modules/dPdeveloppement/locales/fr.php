@@ -17,7 +17,6 @@ $locales['mod-dPdeveloppement-tab-mnt_traduction_classes'] = 'Traduction';
 $locales['mod-dPdeveloppement-tab-mutex_tester'] = 'Test Mutex';
 $locales['mod-dPdeveloppement-tab-sniff_code'] = 'Qualité du code';
 $locales['mod-dPdeveloppement-tab-sniff_file'] = 'Qualité du code d\'un fichier';
-$locales['mod-dPdeveloppement-tab-version_control'] = 'Versions';
 $locales['mod-dPdeveloppement-tab-view_logs'] = 'Journal sys.';
 $locales['mod-dPdeveloppement-tab-view_metrique'] = 'Métrique';
 $locales['mod-dPdeveloppement-tab-vw_create_module'] = 'Créateur module';
