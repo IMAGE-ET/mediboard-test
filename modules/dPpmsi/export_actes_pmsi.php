@@ -34,11 +34,12 @@ switch ($object_class) {
       }
 
       // Suppression des actes non codés
-      foreach ($codes as $_key => $_code) {
-        $key = array_search($_code, $actes);
-
-        if ($key === false) {
-          unset($codes[$_key]);
+      if (CAppUI::conf("dPsalleOp CActeCCAM del_actes_non_cotes")) {
+        foreach ($codes as $_key => $_code) {
+          $key = array_search($_code, $actes);
+          if ($key === false) {
+            unset($codes[$_key]);
+          }
         }
       }
       $object->_codes_ccam = $codes;

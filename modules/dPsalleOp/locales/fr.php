@@ -5,6 +5,7 @@ $locales['CActeCCAM-_already_coded'] = 'Cet acte a déjà été codé sur cette inter
 $locales['CActeCCAM-_montant_facture'] = 'Montant facturé';
 $locales['CActeCCAM-_montant_facture-court'] = 'Facture';
 $locales['CActeCCAM-_montant_facture-desc'] = 'Montant facturé (base secteur';
+$locales['CActeCCAM-_no_activite_1_cloture'] = 'Aucun acte chirurgical coté. Souhaitez-vous clôturer le codage ?';
 $locales['CActeCCAM-_no_activite_4_cloture'] = 'Aucun acte d\'anesthésie coté. Souhaitez-vous clôturer le codage ?';
 $locales['CActeCCAM-_rembex'] = 'Remboursement Exceptionnel';
 $locales['CActeCCAM-_rembex-court'] = 'RembEx.';

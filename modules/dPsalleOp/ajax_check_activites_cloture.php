@@ -23,17 +23,28 @@ $actes = explode("|", $object->codes_ccam);
 $object->loadRefsActes();
 
 $activites = CMbArray::pluck($object->_ref_actes, "code_activite");
+
+$activite_1 = array_search("1", $activites);
 $activite_4 = array_search("4", $activites);
 
+$completed_activite_1 = 1;
 $completed_activite_4 = 1;
 
 foreach ($actes as $_acte) {
   $acte = CCodeCCAM::get($_acte);
 
+  if (isset($acte->activites["1"]) && $activite_1 === false) {
+    $completed_activite_1 = 0;
+  }
   if (isset($acte->activites["4"]) && $activite_4 === false) {
     $completed_activite_4 = 0;
     break;
   }
 }
 
-echo json_encode($completed_activite_4);
+$response = array(
+  "activite_1" => $completed_activite_1,
+  "activite_4" => $completed_activite_4,
+);
+
+echo json_encode($response);

@@ -87,8 +87,11 @@ PMSI = {
     url.addParam("object_id", object_id);
     url.addParam("suppressHeaders", 1);
     url.addParam("dialog", 1);
-    url.requestJSON(function(completed_activite_4) {
-      if (completed_activite_4 == 0 && !confirm($T('CActeCCAM-_no_activite_4_cloture'))) {
+    url.requestJSON(function(completed_activite) {
+      if (completed_activite.activite_1 == 0 && !confirm($T('CActeCCAM-_no_activite_1_cloture'))) {
+        return;
+      }
+      if (completed_activite.activite_4 == 0 && !confirm($T('CActeCCAM-_no_activite_4_cloture'))) {
         return;
       }
       PMSI.exportActes(object_id, object_class, oOptions, module);
