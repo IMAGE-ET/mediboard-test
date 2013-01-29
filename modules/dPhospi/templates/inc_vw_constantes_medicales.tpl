@@ -255,7 +255,7 @@ toggleAllGraphs = function() {
   {{else}}
     {{foreach from=$data item=curr_data key=key}}
       checkbox = oForm["checkbox-constantes-medicales-{{$key}}"];
-      checkbox.checked = keys_selection.indexOf("{{$key}}") > -1 || (data.{{$key}}.series.last().data.length > 1);
+      checkbox.checked = keys_selection.indexOf("{{$key}}") > -1 || (data.{{$key}}.series.last().data.length > 0);
       toggleGraph("{{$key}}", checkbox.checked);
     {{/foreach}}
   {{/if}}
