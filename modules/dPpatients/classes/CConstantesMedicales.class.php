@@ -143,12 +143,12 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 10
     ),
     "glycemie"          => array(
-      "type" => "physio",
+      "type" => "biolo",
       "unit" => "g/l",
       "min" => 0, "max" => 4
     ),
     "hemoglobine_rapide" => array(
-      "type" => "physio",
+      "type" => "biolo",
       "unit" => "g/dl",
       "min" => 3, "max" => 25
     ),
@@ -459,7 +459,7 @@ class CConstantesMedicales extends CMbObject {
   static $list_constantes_type = array(
     "physio" => array(),
     "drain" => array(),
-    "biolo" => array()
+    "biolo" => array(),
   );
 
   function __construct() {
