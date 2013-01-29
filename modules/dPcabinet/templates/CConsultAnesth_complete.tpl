@@ -84,7 +84,7 @@ newExam = function(sAction, consultation_id) {
     <td class="text" colspan="2">
       <strong>Position :</strong>
       {{if $object->operation_id}}
-        <i>{{tr}}CConsultAnesth.position.{{$object->_ref_operation->position}}{{/tr}}</i>
+        <i>{{tr}}COperation.position.{{$object->_ref_operation->position}}{{/tr}}</i>
       {{/if}}
     </td>
     <td class="text" colspan="2">
