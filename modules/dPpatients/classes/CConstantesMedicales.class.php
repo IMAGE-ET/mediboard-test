@@ -147,6 +147,11 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "g/l",
       "min" => 0, "max" => 4
     ),
+    "hemoglobine_rapide" => array(
+      "type" => "physio",
+      "unit" => "g/dl",
+      "min" => 3, "max" => 25
+    ),
     "PVC"               => array(
       "type" => "physio",
       "unit" => "cm H2O",
@@ -187,6 +192,16 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "",
       "formfields" => array("_inj", "_inj_essai"),
       "min" => 0, "max" => 10
+    ),
+    "gaz" => array(
+      "type" => "physio",
+      "unit" => "",
+      "min" => 0, "max" => 1,
+    ),
+    "selles" => array(
+      "type" => "physio",
+      "unit" => "",
+      "min" => 0, "max" => 3,
     ),
 
     // Douleur
@@ -552,6 +567,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['score_sedation']         = 'float';
     $specs['frequence_respiratoire'] = 'float pos';
     $specs['glycemie']               = 'float pos max|10';
+    $specs['hemoglobine_rapide']     = 'float';
     $specs['PVC']                    = 'float min|0';
     $specs['perimetre_abdo']         = 'float min|0';
     $specs['perimetre_cranien']      = 'float min|0';
@@ -566,6 +582,9 @@ class CConstantesMedicales extends CMbObject {
     $specs['injection']              = 'str maxLength|10';
     $specs['_inj']                   = 'num pos';
     $specs['_inj_essai']             = 'num pos moreEquals|_inj';
+
+    $specs['gaz']                    = 'num min|0';
+    $specs['selles']                 = 'num min|0';
 
     // Douleur
     $specs['douleur_en']             = 'float min|0 max|10';
