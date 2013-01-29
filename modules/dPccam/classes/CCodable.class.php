@@ -400,21 +400,32 @@ class CCodable extends CMbObject {
     $totaux = array("base" => 0, "dh" => 0);
 
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
-      //Classement des actes par ordre chonologique et par code
-      $ljoin = array();
-      $ljoin["consultation"] = "acte_tarmed.object_id = consultation.consultation_id";
-      $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
-
       $where = array();
-      $where["acte_tarmed.object_class"] = " = '$this->_class'";
-      $where["acte_tarmed.object_id"] = " = '$this->_id'";
-
-      //Dans le cas ou la date est nulle on prend celle de la plage de consultation correspondante
-      $order = "IFNULL(acte_tarmed.date, plageconsult.date) ,code ASC";
-
+      $ljoin = array();
+      $order = null;
       $acte_tarmed = new CActeTarmed();
-      $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order, null, null, $ljoin );
-
+      //Dans le cas d'une consultation
+      if ($this->_class == "CConsultation") {
+        //Classement des actes par ordre chonologique et par code
+        $ljoin["consultation"] = "acte_tarmed.object_id = consultation.consultation_id";
+        $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
+        
+        $where["acte_tarmed.object_class"] = " = '$this->_class'";
+        $where["acte_tarmed.object_id"] = " = '$this->_id'";
+  
+        //Dans le cas ou la date est nulle on prend celle de la plage de consultation correspondante
+        $order = "IFNULL(acte_tarmed.date, plageconsult.date) ,code ASC";
+  
+        $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order, null, null, $ljoin );
+      }
+      //Dans les cas d'un séjour ou d'une intervention
+      else {
+        $where["object_class"] = " = '$this->_class'";
+        $where["object_id"]    = " = '$this->_id'";
+        $order = "code ASC";
+        $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order);
+      }
+      
       if (null === $this->_ref_actes_tarmed) {
         return;
       }
