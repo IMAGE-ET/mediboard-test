@@ -53,7 +53,8 @@ $count = $source->_limit = CAppUI::conf("eai max_files_to_process");
 $files = array();
 try {
   $files = $source->receive();
-} catch (CMbException $e) {
+}
+catch (CMbException $e) {
   $e->stepAjax();
 }
 
@@ -108,7 +109,8 @@ foreach ($files as $_filepath) {
     if (!$message) {
       continue;
     }
-  } catch (CMbException $e) {
+  }
+  catch (CMbException $e) {
     $e->stepAjax(UI_MSG_WARNING);
     continue;
   }   
@@ -119,10 +121,12 @@ foreach ($files as $_filepath) {
   if ($acq = CEAIDispatcher::dispatch($message, $sender, null, $to_treatment)) {
     try {
       CEAIDispatcher::createFileACK($acq, $sender);
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       if ($sender->_delete_file !== false) {
         $source->delFile($_filepath);
-      } 
+        $source->delFile("$_filepath_no_ext.$fileextension_write_end");
+      }
       else {
         dispatchError($sender, $filename_excludes, $path_info);
       } 
@@ -139,6 +143,7 @@ foreach ($files as $_filepath) {
   try {
     if ($sender->_delete_file !== false) {
       $source->delFile($_filepath);
+      $source->delFile("$_filepath_no_ext.$fileextension_write_end");
     }
     else {
       dispatchError($sender, $filename_excludes, $path_info);
@@ -173,5 +178,3 @@ function dispatchError(CInteropSender $sender, $filename_excludes, $path_info) {
   fputs($file, $path_info["dirname"]."/".$path_info["basename"]."\n");
   fclose($file);
 }
-
-?>
