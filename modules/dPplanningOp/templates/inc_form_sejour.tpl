@@ -983,14 +983,13 @@ Main.add( function(){
 </tr>
 {{/if}}
 
-{{if $conf.dPplanningOp.CSejour.show_facturable}}
-  <tr>
-    <th>{{mb_label object=$sejour field="facturable"}}</th>
-    <td colspan="3">
-    {{mb_field object=$sejour field="facturable"}}
-    </td>
-  </tr>
-{{/if}}
+
+<tr {{if $conf.dPplanningOp.CSejour.show_facturable}}style="display:none"{{/if}}>
+  <th>{{mb_label object=$sejour field="facturable"}}</th>
+  <td colspan="3">
+  {{mb_field object=$sejour field="facturable"}}
+  </td>
+</tr>
 
 {{if !$mode_operation}}
 <tr class="modeExpert">
@@ -1010,12 +1009,11 @@ Main.add( function(){
 
 </tbody>
 
-{{if $conf.dPplanningOp.CSejour.show_atnc}}
-  <tr {{if !$conf.dPplanningOp.CSejour.easy_atnc}} class="modeExpert" {{/if}}>
-    <th>{{mb_label object=$sejour field="ATNC"}}</th>
-    <td colspan="3">{{mb_field object=$sejour field="ATNC"}}</td>
-  </tr>
-{{/if}}
+<tr {{if !$conf.dPplanningOp.CSejour.easy_atnc}} class="modeExpert" {{/if}}
+{{if $conf.dPplanningOp.CSejour.show_atnc}}style="display:none;"{{/if}}>
+  <th>{{mb_label object=$sejour field="ATNC"}}</th>
+  <td colspan="3">{{mb_field object=$sejour field="ATNC"}}</td>
+</tr>
 
 {{if $conf.dPplanningOp.CSejour.show_isolement}}
   {{assign var=systeme_isolement value=$conf.dPplanningOp.CSejour.systeme_isolement}}

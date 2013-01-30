@@ -110,4 +110,10 @@ $dPconfig["dPplanningOp"]= array(
     "use_custom_mode_entree" => "0",
     "use_custom_mode_sortie" => "0",
   ),
+  "CFactureEtablissement" => array (
+    "show_type_facture"   =>  "1",
+    "show_statut_pro"     =>  "1",
+    "show_assur_accident" =>  "1",
+    "show_dialyse"        =>  "0"
+  ),
 );
