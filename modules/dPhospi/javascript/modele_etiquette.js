@@ -1,15 +1,15 @@
 ModeleEtiquette = {
   nb_printers: 0,
-  
+
   print: function(object_class, object_id, modele_etiquette_id) {
     if (ModeleEtiquette.nb_printers > 0) {
       var url = new Url('compteRendu', 'ajax_choose_printer');
-      
+
       if (modele_etiquette_id) {
         Control.Modal.close();
         url.addParam('modele_etiquette_id', modele_etiquette_id);
       }
-      
+
       url.addParam('mode_etiquette', 1);
       url.addParam('object_class', object_class);
       url.addParam('object_id', object_id);
@@ -24,14 +24,14 @@ ModeleEtiquette = {
       form.submit();
     }
   },
-  
+
   chooseModele: function(object_class, object_id) {
     var url = new Url('hospi', 'ajax_choose_modele_etiquette');
     url.addParam('object_class', object_class);
     url.addParam('object_id', object_id);
     url.requestModal(400);
   },
-  
+
   refreshList: function() {
     var form = getForm('Filter');
     var url = new Url('hospi', 'ajax_list_modele_etiquette');
@@ -39,11 +39,11 @@ ModeleEtiquette = {
     url.requestUpdate("list_etiq");
     return false;
   },
-  
+
   onSubmit: function(form) {
     return onSubmitFormAjax(form, ModeleEtiquette.refreshList);
   },
-  
+
   onSubmitComplete: function (guid, properties) {
     var id = guid.split('-')[1];
     ModeleEtiquette.edit(id);
@@ -54,24 +54,28 @@ ModeleEtiquette = {
       ModeleEtiquette.onSubmitComplete : 
       Prototype.emptyFunction;
 
-    $('modele_etiq-'+modele_etiquette_id).addUniqueClassName('selected');
+    var selected = $('modele_etiq-'+modele_etiquette_id);
+    if (selected) {
+      selected.addUniqueClassName('selected');
+    }
+
     var url = new Url('hospi', 'ajax_edit_modele_etiquette');
     url.addParam('modele_etiquette_id', modele_etiquette_id);
     url.requestModal(800);
     url.modalObject.observe("afterClose", ModeleEtiquette.refreshList);
   },
-  
+
   confirmDeletion: function(form) {
     var options = {
       typeName: 'Le modèle ', 
       objName: $V(form.nom)
     };
-    
+
     var ajax = Control.Modal.close;
-    
+
     confirmDeletion(form, options, ajax);    
   },
-  
+
   preview: function() {
     var form_edit     = getForm("edit_etiq"    );
     var form_download = getForm("download_prev");
@@ -92,7 +96,7 @@ ModeleEtiquette = {
     $V(form_download.text_align   , $V(form_edit.text_align   ));
     form_download.submit();
   },
-  
+
   insertField: function(elem) {
     var texte_etiq = window.text_focused;
     if (!texte_etiq) {
