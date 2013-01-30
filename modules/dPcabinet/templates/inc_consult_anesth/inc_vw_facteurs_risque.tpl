@@ -104,7 +104,8 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="object_id" value="{{$patient->_id}}" />
         <input type="hidden" name="object_class" value="CPatient" />
-        {{mb_field object=$dossier_medical_patient field="facteurs_risque" onchange="onSubmitFormAjax(this.form);"}}
+        {{mb_field object=$dossier_medical_patient field="facteurs_risque" onchange="onSubmitFormAjax(this.form);" 
+          form="editFacteursRisque" aidesaisie="validateOnBlur: 0"}}
       </form>
     </td>
     <td></td>
