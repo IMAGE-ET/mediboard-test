@@ -168,8 +168,8 @@ else {
   
   // Planning du mois
   $month_min = mbTransformTime(null, $date, "%Y-%m-01");
-  $month_max = mbTransformTime("+1 month", $date, "%Y-%m-01");
-  $month_max = mbTransformTime("-1 day", $month_max, "%Y-%m-%d");
+  $month_max = mbTransformTime(null, $date, "%Y-%m-31");
+
 
   $sql = "SELECT plagesop.*, plagesop.date AS opdate,
         SEC_TO_TIME(SUM(TIME_TO_SEC(operations.temp_operation))) AS duree,
