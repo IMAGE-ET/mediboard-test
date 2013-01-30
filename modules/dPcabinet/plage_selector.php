@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
 * @package Mediboard
@@ -20,7 +20,7 @@ $plageconsult_id = CValue::get("plageconsult_id");
 $mediuser = new CMediusers();
 if (CAppUI::pref("pratOnlyForConsult", 1)) {
   $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
-} 
+}
 else {
   $listPraticiens = $mediuser->loadProfessionnelDeSante(PERM_EDIT);
 }
@@ -46,7 +46,12 @@ if ($period == "weekly") {
 if ($period == "month" && phpversion() >= "5.3") {
   $ndate = mbDate("first day of next month"   , $date);
   $pdate = mbDate("last day of previous month", $date);
-} 
+}
+//5.1, 5.2 Case @TODO : toDelete if all MB instance are 5.3 compatible
+elseif ($period == 'month') {
+    $ndate = mbDate("+1 month"   , mbTransformTime(null, $date, "%Y-%m-01" ));
+    $pdate = mbDate("-1 month"   , mbTransformTime(null, $date, "%Y-%m-01" ));
+}
 else {
   $ndate = mbDate("+1 $unit", $date);
   $pdate = mbDate("-1 $unit", $date);
@@ -54,9 +59,7 @@ else {
 
 if ($period == "weekly") {
   CAppUI::requireModuleFile("dPcabinet", "inc_plage_selector_weekly");
-} 
+}
 else {
   CAppUI::requireModuleFile("dPcabinet", "inc_plage_selector_classic");
 }
-
-?>
