@@ -1,0 +1,14 @@
+table.tbl td.acte-CActeCCAM, table.tbl tr:hover td.acte-CActeCCAM{
+  background-color:#FF69B4;
+}
+table.tbl td.acte-CActeNGAP, table.tbl tr:hover td.acte-CActeNGAP{
+  background-color:#32CD32;
+}
+table.tbl td.acte-CActeTarmed, table.tbl tr:hover td.acte-CActeTarmed{
+  background-color:#BA55D3;
+  width:140px;
+}
+table.tbl td.acte-CActeCaisse, table.tbl tr:hover td.acte-CActeCaisse{
+  background-color:#DA70D6;
+  width:140px;
+}

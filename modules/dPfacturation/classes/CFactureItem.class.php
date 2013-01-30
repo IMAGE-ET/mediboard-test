@@ -1,60 +1,89 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPfacturation
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
-class CFactureItem extends CMbObject {
+/**
+ * Les items d'une facture
+ *
+ */
+class CFactureItem extends CMbMetaObject {
   // DB Table key
   var $factureitem_id = null;
   
   // DB Fields
-  var $facture_id = null;
-  var $libelle = null;
-  var $prix_ht = null;
-  var $taxe = null;
-  var $facture_catalogue_item_id = null;
-  var $reduction 		= null;
+  var $object_id = null;
+  var $object_class = null;
+  var $date       = null;
+  var $libelle    = null;
+  var $code       = null;
+  var $type       = null;
+  var $prix       = null;
+  var $reduction 	= null;
+  var $quantite 	= null;
+  var $coeff 	    = null;
   
   // References
   var $_ref_facture = null;
-  var $_ref_facture_catalogue_item = null;//
+  var $_ref_facture_catalogue_item = null;
    
   var $_ttc = null;
   
+  /**
+   * getSpec
+   * 
+   * @return $spec
+  **/
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'factureitem';
     $spec->key   = 'factureitem_id';
     return $spec;
   }
-
+  
+  /**
+   * getProps
+   * 
+   * @return $props
+  **/
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["facture_id"] = "ref notNull class|CFacture";
+    $specs = parent::getProps();
+    $specs["object_id"]  = "ref notNull class|CFacture meta|object_class";
+    $specs["date"]       = "date notNull";
     $specs["libelle"]    = "text notNull";
-    $specs["prix_ht"]    = "currency notNull";
+    $specs["code"]       = "text notNull";
+    $specs["type"]       = "enum notNull list|CActeNGAP|CFraisDivers|CActeCCAM|CActeTarmed|CActeCaisse default|CActeCCAM";
+    $specs["prix"]       = "currency notNull";
     $specs["reduction"]	 = "currency";
-    $specs["taxe"]       = "pct notNull";
-    $specs["_ttc"]		   = "currency";
-    $specs["facture_catalogue_item_id"]	= "ref class|CFacturecatalogueitem";
+    $specs["quantite"]   = "num notNull";
+    $specs["coeff"]      = "currency notNull";
     return $specs;
   }
-    
+  
+  /**
+   * getSpec
+   * 
+   * @return $spec
+  **/
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->libelle;
-    $prixReduit = $this->prix_ht - $this->reduction;
-    $this->_ttc += $prixReduit * ($this->taxe/100) + $prixReduit;
   }
   
+  /**
+   * loadRefsFwd
+   * 
+   * @return void
+  **/
   function loadRefsFwd(){ 
-  	$this->_ref_facture = new CFacture;
-  	$this->_ref_facture->load($this->facture_id);
+    $this->_ref_facture = new CFacture;
+    $this->_ref_facture->load($this->facture_id);
   }
 }
 ?>

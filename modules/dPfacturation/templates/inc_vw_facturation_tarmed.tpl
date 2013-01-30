@@ -1,0 +1,216 @@
+{{if !@$modules.tarmed->_can->read || !$conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+  {{mb_return}}
+{{/if}}
+{{mb_script module=patients   script=correspondant ajax="true"}}
+
+<script>
+  refreshAssurance = function() {
+    alert('hjk');
+      var url = new Url("cabinet", "ajax_list_assurances");
+      url.addParam("facture_id", '{{$facture->_id}}');
+      url.addParam("patient_id", '{{$facture->patient_id}}');
+      url.requestUpdate("refresh-assurance");
+  }
+</script>
+{{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures)}}
+  <tr>
+    <td colspan="8">
+      <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 0, 1);">Edition des BVR</button>
+      <button class="print" onclick="printFacture('{{$facture->_id}}', 1, 0);">Justificatif de remboursement</button>
+      {{if !$facture->_ref_patient->avs}}
+        <div class="small-warning" style="display:inline">N° AVS manquant pour le patient</div>
+      {{/if}}
+    </td>
+  </tr>
+{{/if}}
+<tr>
+  <td colspan="2"> {{tr}}CFactureEtablissement-type_facture{{/tr}}:
+    <form name="type_facture" method="post" action=""> 
+      {{mb_class object=$facture}}
+      {{mb_key   object=$facture}}
+      <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+      <input type="radio" name="type_facture" value="maladie" {{if $facture->type_facture == 'maladie'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" 
+      {{if $facture->cloture}}disabled="disabled"{{/if}}/>
+      <label for="maladie">{{tr}}CFactureEtablissement.type_facture.maladie{{/tr}}</label>
+      <input type="radio" name="type_facture" value="accident" {{if $facture->type_facture == 'accident'}}checked{{/if}}
+      {{if $facture->cloture}}disabled="disabled"{{/if}} onchange="Facture.modifCloture(this.form);" />
+      <label for="accident">{{tr}}CFactureEtablissement.type_facture.accident{{/tr}}</label>
+    </form>
+  </td>
+  <td colspan="6">
+    <form name="cession_facture" method="post" action=""> 
+      {{mb_class object=$facture}}
+      {{mb_key   object=$facture}}
+      <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+      <input type="hidden" name="cession_creance" value="{{if $facture->cession_creance == 1}}0{{else}}1{{/if}}" />
+      <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}}
+      {{if $facture->cloture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
+      {{mb_label object=$facture field=cession_creance}}
+    </form>
+    <form name="npq_facture" method="post" action=""> 
+      {{mb_class object=$facture}}
+      {{mb_key   object=$facture}}
+      <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+      <input type="hidden" name="npq" value="{{if $facture->npq == 1}}0{{else}}1{{/if}}" />
+      <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}}
+      {{if $facture->cloture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
+      {{mb_label object=$facture field=npq}}
+    </form>
+    <form name="statut_pro" method="post" action="" style="margin-left:30px;"> 
+      {{mb_class object=$facture}}
+      {{mb_key   object=$facture}}
+      {{mb_label object=$facture field=statut_pro}}
+      {{mb_field object=$facture field=statut_pro emptyLabel="Choisir un status" onchange="Facture.cut(this.form);"}} 
+    </form>
+    {{if $facture->_class == "CFactureEtablissement"}}
+      <form name="dialyse" method="post" action="" style="margin-left:30px;"> 
+        {{mb_class object=$facture}}
+        {{mb_key   object=$facture}}
+        {{mb_label object=$facture field=dialyse}}
+        {{mb_field object=$facture field=dialyse onchange="Facture.modifCloture(this.form);"}} 
+      </form>
+    {{/if}}
+  </td>
+</tr>
+<tr>
+  <td colspan="3" id="refresh-assurance">
+    {{mb_include module=cabinet template="inc_vw_assurances"}}
+  </td>
+  <td colspan="4"></td>
+</tr>
+
+{{if $facture->type_facture == "accident"}}
+  <tr>
+    <td colspan="2">
+      <form name="ref_accident" method="post" action="" onsubmit="return onSubmitFormAjax(this);" style="max-width:100px;">
+        {{mb_class object=$facture}}
+        {{mb_key   object=$facture}}
+        <b>{{mb_label object=$facture field="ref_accident"}}:</b>
+        {{if $facture->cloture}}
+          {{mb_value object=$facture field="ref_accident"}} 
+        {{else}}
+          {{mb_field object=$facture field="ref_accident" onchange="return onSubmitFormAjax(this.form);"}} 
+        </text
+        {{/if}}
+      </form>
+    </td>
+    <td colspan="9"></td>
+  </tr>
+{{/if}}
+
+<tr>
+  <th class="category">Date</th>
+  <th class="category">Code</th>
+  <th class="category">Libelle</th>
+  <th class="category">Coût</th>
+  <th class="category">Qte</th>
+  <th class="category">Coeff</th>        
+  <th class="category">Montant</th>
+</tr>
+
+{{if $facture->_ref_items|@count}}
+  {{foreach from=$facture->_ref_items item=item}}
+    <tr>
+      <td style="text-align:center;width:100px;">
+        {{mb_value object=$item field="date"}}
+      </td>
+      <td class="acte-{{$item->type}}" style="width:140px;">{{mb_value object=$item field="code"}}</td>
+      <td style="white-space: pre-line;" class="compact">{{mb_value object=$item field="libelle"}}</td>
+      <td style="text-align:right;">{{mb_value object=$item field="prix"}}</td>
+      <td style="text-align:right;">{{mb_value object=$item field="quantite"}}</td>
+      <td style="text-align:right;">{{mb_value object=$item field="coeff"}}
+      </td>
+      <td style="text-align:right;">{{$item->prix*$item->coeff|string_format:"%0.2f"|currency}}</td>
+    </tr>
+  {{/foreach}}
+{{else}}
+  {{if $facture->_class == "CFactureEtablissement"}}
+    {{assign var="objects" value=$facture->_ref_sejours}}
+  {{else}}
+    {{assign var="objects" value=$facture->_ref_consults}}
+  {{/if}}
+  
+  {{foreach from=$objects item=object}}
+    {{foreach from=$object->_ref_actes_tarmed item=_acte_tarmed}}
+      {{mb_include module=dPfacturation template="inc_line_tarmed"}}
+    {{/foreach}}
+    {{foreach from=$object->_ref_actes_caisse item=_acte_caisse}}
+      {{mb_include module=dPfacturation template="inc_line_caisse"}}
+    {{/foreach}}
+    
+    {{if $facture->_class == "CFactureEtablissement"}}
+      {{foreach from=$object->_ref_operations item=op}}
+        {{foreach from=$op->_ref_actes_tarmed item=_acte_tarmed}}
+          {{mb_include module=dPfacturation template="inc_line_tarmed"}}
+        {{/foreach}}
+        {{foreach from=$op->_ref_actes_caisse item=_acte_caisse}}
+          {{mb_include module=dPfacturation template="inc_line_caisse"}}
+        {{/foreach}}
+      {{/foreach}}
+    {{/if}}
+  {{/foreach}}
+{{/if}}
+<tbody class="hoverable">
+  {{assign var="nb_montants" value=$facture->_montant_factures|@count}}
+  {{foreach from=$facture->_montant_factures item=_montant key=key name=montants}}
+    <tr>
+      {{if $smarty.foreach.montants.first}}
+      <td colspan="4" rowspan="{{$nb_montants+2}}"></td>
+      {{/if}}
+      <td colspan="2">Montant{{if $nb_montants > 1}} n°{{$key+1}}{{/if}}</td>
+      <td style="text-align:right;">{{$_montant|string_format:"%0.2f"|currency}}</td>
+    </tr>
+  {{/foreach}}
+  
+  <tr>
+    {{if !$facture->_montant_factures|count}}
+      <td colspan="4" rowspan="2"></td>
+    {{/if}}
+    <td colspan="2"><b>{{mb_label object=$facture field="remise"}}</b></td>
+    <td style="text-align: right;"> 
+      <form name="modif_remise" method="post" onsubmit="Facture.modifCloture(this.form);">
+        {{mb_class object=$facture}}
+        {{mb_key   object=$facture}}
+        <input type="hidden" name="patient_id" value="{{$facture->patient_id}}" />
+        <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />                
+        
+        {{if $facture->cloture}}
+          {{mb_value object=$facture field="remise"}} 
+        {{else}}
+          <input name="remise" type="text" value="{{$facture->remise}}" onchange="Facture.modifCloture(this.form);" size="4" />
+        {{/if}}
+        
+        <br/>soit 
+        {{if $facture->_montant_sans_remise!=0 && $facture->remise}}
+          <strong>{{math equation="(y/x)*100" x=$facture->_montant_sans_remise y=$facture->remise format="%.2f"}} %</strong>
+        {{else}}
+          <strong>0 %</strong>
+        {{/if}}
+      </form>
+    </td>
+  </tr>
+  
+  <tr>
+    <td colspan="2"><b>Montant Total</b></td>
+    <td style="text-align:right;"><b>{{mb_value object=$facture field="_montant_avec_remise"}}</b></td>
+  </tr>
+</tbody>
+
+{{if !$facture->_reglements_total_patient}}
+  <tr>
+    <td colspan="7">
+      <form name="change_type_facture" method="post">
+        {{mb_class object=$facture}}
+        {{mb_key   object=$facture}}
+        <input type="hidden" name="facture_class" value="{{$facture->_class}}" />
+        <input type="hidden" name="cloture" value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
+        <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+        {{if !$facture->cloture}}
+          <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
+        {{elseif !isset($reglement|smarty:nodefaults) || ($facture->_ref_reglements|@count == 0)}}
+          <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button> Cloturée le {{$facture->cloture|date_format:"%d/%m/%Y"}}
+        {{/if}}
+      </form>
+    </td>
+  </tr>
+{{/if}}
