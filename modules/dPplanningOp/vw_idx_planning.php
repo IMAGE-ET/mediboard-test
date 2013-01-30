@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
 * @package Mediboard
@@ -12,8 +12,15 @@ $ds = CSQLDataSource::get("std");
 
 $date           = CValue::getOrSession("date", mbDate());
 $canceled       = CValue::getOrSession("canceled", 0);
-$lastmonth      = mbDate("-1 month", $date);
-$nextmonth      = mbDate("+1 month", $date);
+
+//5.1 / 5.2 hack @TODO : remove this if all phpversion are > 5.3
+if (phpversion() >= "5.3") {
+    $nextmonth = mbDate("first day of next month"   , $date);
+    $lastmonth = mbDate("first day of previous month", $date);
+} else {
+    $nextmonth = mbDate("+1 month"   , mbTransformTime(null, $date, "%Y-%m-01" ));
+    $lastmonth = mbDate("-1 month"   , mbTransformTime(null, $date, "%Y-%m-01" ));
+}
 $sans_anesth    = CValue::getOrSession("sans_anesth", 0);
 
 // Sélection du praticien
