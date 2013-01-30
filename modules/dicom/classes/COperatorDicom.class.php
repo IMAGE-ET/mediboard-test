@@ -320,8 +320,11 @@ class COperatorDicom extends CEAIOperator {
                       0x0010 => "$_patient->nom^$_patient->prenom",
                       0x0020 => "$_patient->_IPP",
                       0x0030 => str_replace("-", "", $_patient->naissance),
-                      0x0040 => $_patient->sexe
+                      0x0040 => strtoupper($_patient->sexe)
                     ),
+                    0x0020 => array(
+                      0x000D => $_sejour->_NDA
+                  ),
                     0x0040 => array(
                       0x0100 => array(
                         array(
@@ -331,6 +334,7 @@ class COperatorDicom extends CEAIOperator {
                           array("group_number" => 0x0040, "element_number" => 0x0007, "value" => $libelle),
                           array("group_number" => 0x0040, "element_number" => 0x0009, "value" => $_sejour->_NDA),
                         ),
+                      0x1001 => $_sejour->_NDA
                       ),
                     ),
                   ),
