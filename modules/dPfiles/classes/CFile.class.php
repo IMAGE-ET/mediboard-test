@@ -325,7 +325,7 @@ class CFile extends CDocumentItem {
   
   function loadNbPages(){
     if (strpos($this->file_type, "pdf") !== false && file_exists($this->_file_path)) {
-      // Fichier PDF Tentative de rï¿½cupï¿½ration
+      // Fichier PDF Tentative de récupération
       $string_recherche = "/Count";
       $dataFile = file_get_contents($this->_file_path);
       $nb_count = substr_count($dataFile, $string_recherche);
@@ -365,7 +365,7 @@ class CFile extends CDocumentItem {
         $this->_nb_pages = intval(trim($nombre_temp[0]));
       }
       
-      // Si les deux mï¿½thodes prï¿½cï¿½dentes ne donnent pas de rï¿½sultat
+      // Si les deux méthodes précédentes ne donnent pas de résultat
       if (is_null($this->_nb_pages)) {
         $this->_nb_pages = preg_match_all("/\/Page\W/", $dataFile, $matches);
       }
@@ -381,7 +381,7 @@ class CFile extends CDocumentItem {
       $object->loadRefsDocs();
     }
     
-    //Crï¿½ation du tableau des catï¿½gorie pour l'affichage
+    //Création du tableau des catégorie pour l'affichage
     $affichageFile = array(
       array(
         "name" => CAppUI::tr("CFilesCategory.none"),
@@ -414,7 +414,7 @@ class CFile extends CDocumentItem {
       }
     }
     
-    // Classement des Fichiers et des document par Ordre alphabï¿½tique
+    // Classement des Fichiers et des document par Ordre alphabétique
     foreach ($affichageFile as $keyFile => $currFile) {
       ksort($affichageFile[$keyFile]["items"]);
     }
@@ -458,12 +458,12 @@ class CFile extends CDocumentItem {
   function convertToPDF($file_path = null, $pdf_path = null) {
     global $rootName;
     
-    // Vï¿½rifier si openoffice est lancï¿½
+    // Vérifier si openoffice est lancé
     if (!CFile::openoffice_launched()) {
       return 0;
     }
     
-    // Vï¿½rifier sa charge en mï¿½moire
+    // Vérifier sa charge en mémoire
     CFile::openoffice_overload();
     
     if (!$file_path && !$pdf_path) {
@@ -486,8 +486,8 @@ class CFile extends CDocumentItem {
       $pdf_path  = $file->_file_path;
     }
     
-    // Requï¿½te post pour la conversion.
-    // Cela permet de mettre un time limit afin de garder le contrï¿½le de la conversion.
+    // Requête post pour la conversion.
+    // Cela permet de mettre un time limit afin de garder le contrôle de la conversion.
     
     ini_set("default_socket_timeout", 10);
     
@@ -499,10 +499,10 @@ class CFile extends CDocumentItem {
       "pdf_path"  => $pdf_path
     );
     
-    // Fermeture de la session afin d'ï¿½crire dans le fichier de session
+    // Fermeture de la session afin d'écrire dans le fichier de session
     session_write_close();
     
-    // Le header Connection: close permet de forcer a couper la connexion lorsque la requï¿½te est effectuï¿½e
+    // Le header Connection: close permet de forcer a couper la connexion lorsque la requête est effectuée
     $ctx = stream_context_create(array(
       'http' => array(
         'method'  => 'POST',
@@ -513,7 +513,7 @@ class CFile extends CDocumentItem {
       )
     ));
     
-    // La requï¿½te post rï¿½ouvre la session
+    // La requête post réouvre la session
     $res = file_get_contents($url, false, $ctx);
     
     if (isset($file) && $res == 1) {
@@ -523,8 +523,8 @@ class CFile extends CDocumentItem {
         return 0;
       }
     }
-    // Si la conversion a ï¿½chouï¿½,
-    // on relance le service s'il ne rï¿½pond plus.
+    // Si la conversion a échoué
+    // on relance le service s'il ne répond plus.
     if ( $res != 1) {
       CFile::openoffice_overload(1);
     }
