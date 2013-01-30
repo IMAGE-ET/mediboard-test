@@ -17,7 +17,8 @@ $canceled       = CValue::getOrSession("canceled", 0);
 if (phpversion() >= "5.3") {
     $nextmonth = mbDate("first day of next month"   , $date);
     $lastmonth = mbDate("first day of previous month", $date);
-} else {
+}
+else {
     $nextmonth = mbDate("+1 month"   , mbTransformTime(null, $date, "%Y-%m-01" ));
     $lastmonth = mbDate("-1 month"   , mbTransformTime(null, $date, "%Y-%m-01" ));
 }
@@ -147,7 +148,9 @@ if ($selPraticien->isAnesth()) {
   
   $smarty->display("vw_idx_visite_anesth.tpl");
   
-} else {
+}
+//non anesthesiste
+else {
   // Selection des plages du praticien et de celles de sa spécialité
   $selPratLogin   = null;
   $specialite     = null;
@@ -164,9 +167,10 @@ if ($selPraticien->isAnesth()) {
   }
   
   // Planning du mois
-  $month_min = mbTransformTime("+ 0 month", $date, "%Y-%m-00");
-  $month_max = mbTransformTime("+ 1 month", $date, "%Y-%m-00");
-  
+  $month_min = mbTransformTime(null, $date, "%Y-%m-01");
+  $month_max = mbTransformTime("+1 month", $date, "%Y-%m-01");
+  $month_max = mbTransformTime("-1 day", $month_max, "%Y-%m-%d");
+
   $sql = "SELECT plagesop.*, plagesop.date AS opdate,
         SEC_TO_TIME(SUM(TIME_TO_SEC(operations.temp_operation))) AS duree,
         COUNT(operations.operation_id) AS total,
@@ -198,15 +202,16 @@ if ($selPraticien->isAnesth()) {
       GROUP BY operations.date
       ORDER BY operations.date";
   $listUrgences = array();
-  if($selPratLogin) {
+  if ($selPratLogin) {
     $listUrgences = $ds->loadList($sql);
   }
   
   $listDays = array();
-  foreach($listPlages as $curr_ops) {
+  foreach ($listPlages as $curr_ops) {
     $listDays[$curr_ops["opdate"]][$curr_ops["plageop_id"]] = $curr_ops;
+
   }
-  foreach($listUrgences as $curr_ops) {
+  foreach ($listUrgences as $curr_ops) {
     $listDays[$curr_ops["opdate"]]["hors_plage"] = $curr_ops;
   }
   
@@ -222,7 +227,7 @@ if ($selPraticien->isAnesth()) {
   $smarty->assign("listPrat"    , $listPrat);
   $smarty->assign("selPrat"     , $selPrat);
   $smarty->assign("listDays"    , $listDays);
-  
+
   $smarty->display("vw_idx_planning.tpl");
 }
 
