@@ -1420,7 +1420,7 @@ class CSejour extends CCodable implements IPatientRelated {
       $where["sejour_id"] =  "= '$this->_id'";
       $order = "date DESC";
       $where["degre"] = " = 'high'";
-      $this->_ref_transmissions = array_merge($this->_ref_transmissions, $transmission->loadList($where, $order, $limit));
+      $this->_ref_transmissions = $this->_ref_transmissions + $transmission->loadList($where, $order, $limit);
     }
     if (!$cible_importante && !$important) {
       $this->_ref_transmissions = $this->loadBackRefs("transmissions");
