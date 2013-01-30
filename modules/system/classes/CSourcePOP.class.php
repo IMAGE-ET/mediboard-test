@@ -52,8 +52,8 @@ class CSourcePOP extends CExchangeSource {
     $props["timeout"]       = "num default|5 max|30";
     $props["type"]          = "enum list|pop3|imap";
     $props["libelle"]       = "str notNull";
-    $props["object_id"]    = "ref notNull class|CMbObject meta|object_class";
-    $props["object_class"] = "str notNull class show|0";
+    $props["object_id"]     = "ref notNull class|CMbObject meta|object_class";
+    $props["object_class"]  = "str notNull class show|0";
     $props["_server"]       = "str maxLength|255";
     return $props;
   }

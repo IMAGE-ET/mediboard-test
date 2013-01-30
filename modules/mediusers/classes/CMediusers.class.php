@@ -39,7 +39,7 @@ class CMediusers extends CMbObject {
   var $code_intervenant_cdarr      = null;
 
   var $secteur    = null;
-  // Champs utilisés pour l'affichage des ordonnances ALD
+  // Champs utilisï¿½s pour l'affichage des ordonnances ALD
   var $cab        = null;
   var $conv       = null;
   var $zisd       = null;
@@ -339,7 +339,7 @@ class CMediusers extends CMbObject {
     $backProps["poses_disp_vasc_encadrant"]       = "CPoseDispositifVasculaire encadrant_id";
     $backProps["praticien_facture"]               = "CFactureConsult praticien_id";
     $backProps["tokens"]                          = "CViewAccessToken user_id";
-    $backProps["sources_pop"]                     = "CSourcePOP object_id";
+    $backProps["astreintes"]                      = "CPlageAstreinte user_id";
     return $backProps;
   }
 
@@ -589,7 +589,7 @@ class CMediusers extends CMbObject {
 
     $pwd = $this->_user_password;
 
-    // S'il a été défini, on le contrôle (necessaire de le mettre ici a cause du md5)
+    // S'il a ï¿½tï¿½ dï¿½fini, on le contrï¿½le (necessaire de le mettre ici a cause du md5)
     if ($pwd) {
 
       // minLength
@@ -610,7 +610,7 @@ class CMediusers extends CMbObject {
       if ($target = $pwdSpecs->notNear) {
         if ($field = $this->$target) {
           if (levenshtein($pwd, $field) < 3) {
-            return "Le mot de passe ressemble trop à '$field'";
+            return "Le mot de passe ressemble trop ï¿½ '$field'";
           }
         }
       }
@@ -696,13 +696,13 @@ class CMediusers extends CMbObject {
     }
     /// </diff>
 
-    // Préparation du log, doit être fait AVANT $this->load()
+    // Prï¿½paration du log, doit ï¿½tre fait AVANT $this->load()
     $this->prepareLog();
 
     // Load the object to get all properties
-    //$this->load(); // peut poser probleme, à tester
+    //$this->load(); // peut poser probleme, ï¿½ tester
 
-    // Enregistrement du log une fois le store terminé
+    // Enregistrement du log une fois le store terminï¿½
     $this->doLog();
 
     // Trigger event
@@ -853,7 +853,7 @@ class CMediusers extends CMbObject {
    * @return CGroups[]
    */
   static function loadEtablissements($permType = PERM_READ) {
-    // Liste de Tous les établissements
+    // Liste de Tous les ï¿½tablissements
     $group = new CGroups;
     $order = "text";
     return $group->loadListWithPerms($permType, null, $order);
@@ -866,7 +866,7 @@ class CMediusers extends CMbObject {
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
     $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
-    // Filtre sur l'établissement
+    // Filtre sur l'ï¿½tablissement
     $group = CGroups::loadCurrent();
     $where["functions_mediboard.group_id"] = "= '$group->_id'";
 
@@ -925,7 +925,7 @@ class CMediusers extends CMbObject {
    * @return CMediusers[]
    */
   function loadMedecins($permType = PERM_READ, $function_id = null, $name = null, $actif = true) {
-    return $this->loadListFromType(array("Médecin"), $permType, $function_id, $name, $actif);
+    return $this->loadListFromType(array("Mï¿½decin"), $permType, $function_id, $name, $actif);
   }
 
   /**
@@ -949,7 +949,7 @@ class CMediusers extends CMbObject {
    * @return CMediusers[]
    */
   function loadAnesthesistes($permType = PERM_READ, $function_id = null, $name = null, $actif = true) {
-    return $this->loadListFromType(array("Anesthésiste"), $permType, $function_id, $name, $actif);
+    return $this->loadListFromType(array("Anesthï¿½siste"), $permType, $function_id, $name, $actif);
   }
 
   /**
@@ -962,7 +962,7 @@ class CMediusers extends CMbObject {
    * @return CMediusers[]
    */
   function loadPraticiens($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Dentiste"), $permType, $function_id, $name, $secondary, $actif);
+    return $this->loadListFromType(array("Chirurgien", "Anesthï¿½siste", "Mï¿½decin", "Dentiste"), $permType, $function_id, $name, $secondary, $actif);
   }
 
   /**
@@ -975,7 +975,7 @@ class CMediusers extends CMbObject {
    * @return CMediusers[]
    */
   function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary, $actif);
+    return $this->loadListFromType(array("Chirurgien", "Anesthï¿½siste", "Mï¿½decin", "Infirmiï¿½re", "Rï¿½ï¿½ducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary, $actif);
   }
 
   /**
@@ -988,7 +988,7 @@ class CMediusers extends CMbObject {
    * @return CMediusers[]
    */
   function loadNonProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary, $actif, true);
+    return $this->loadListFromType(array("Chirurgien", "Anesthï¿½siste", "Mï¿½decin", "Infirmiï¿½re", "Rï¿½ï¿½ducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary, $actif, true);
   }
 
   /**
@@ -996,7 +996,7 @@ class CMediusers extends CMbObject {
    */
   function loadPraticiensCompta(){
     $is_admin      = in_array(CUser::$types[$this->_user_type], array("Administrator"));
-    $is_secretaire = in_array(CUser::$types[$this->_user_type], array("Secrétaire"));
+    $is_secretaire = in_array(CUser::$types[$this->_user_type], array("Secrï¿½taire"));
     $is_directeur  = in_array(CUser::$types[$this->_user_type], array("Directeur"));
     $listPrat = array();
     $this->loadRefFunction();
@@ -1022,7 +1022,7 @@ class CMediusers extends CMbObject {
         else {
           $listPrat = $this->loadProfessionnelDeSante(PERM_EDIT, $this->function_id);
         }
-        // On ajoute les praticiens qui ont délégués leurs compta
+        // On ajoute les praticiens qui ont dï¿½lï¿½guï¿½s leurs compta
         $where = array();
         $where[] = "users_mediboard.compta_deleguee = '1' ||  users_mediboard.user_id ". CSQLDataSource::prepareIn(array_keys($listPrat));
         // Filters on users values
@@ -1032,7 +1032,7 @@ class CMediusers extends CMbObject {
         $order = "users.user_last_name, users.user_first_name";
 
         $mediuser = new CMediusers();
-        // les praticiens WithPerms sont déjà chargés
+        // les praticiens WithPerms sont dï¿½jï¿½ chargï¿½s
         // $mediusers = $mediuser->loadListWithPerms(PERM_EDIT, $where, $order, null, null, $ljoin);
         $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
 
@@ -1069,7 +1069,7 @@ class CMediusers extends CMbObject {
    * @return CMediusers[]
    */
   function loadKines($permType = PERM_READ, $function_id = null, $name = null) {
-    return $this->loadListFromType(array("Rééducateur"), $permType, $function_id, $name);
+    return $this->loadListFromType(array("Rï¿½ï¿½ducateur"), $permType, $function_id, $name);
   }
 
   function isFromType($user_types) {
@@ -1083,7 +1083,7 @@ class CMediusers extends CMbObject {
    * @return bool
    */
   function isPraticien() {
-    return $this->_is_praticien = $this->isFromType(array("Médecin", "Chirurgien", "Anesthésiste", "Dentiste"));
+    return $this->_is_praticien = $this->isFromType(array("Mï¿½decin", "Chirurgien", "Anesthï¿½siste", "Dentiste"));
   }
 
   /**
@@ -1092,7 +1092,7 @@ class CMediusers extends CMbObject {
    * @return bool
    */
   function isAnesth() {
-    return $this->_is_anesth = $this->isFromType(array("Anesthésiste"));
+    return $this->_is_anesth = $this->isFromType(array("Anesthï¿½siste"));
   }
 
   /**
@@ -1110,7 +1110,7 @@ class CMediusers extends CMbObject {
    * @return bool
    */
   function isInfirmiere() {
-    return $this->_is_infirmiere = $this->isFromType(array("Infirmière"));
+    return $this->_is_infirmiere = $this->isFromType(array("Infirmiï¿½re"));
   }
 
   /**
@@ -1126,7 +1126,7 @@ class CMediusers extends CMbObject {
    * @return bool
    */
   function isSecretaire () {
-    return $this->_is_secretaire = $this->isFromType(array("Secrétaire", "Administrator"));
+    return $this->_is_secretaire = $this->isFromType(array("Secrï¿½taire", "Administrator"));
   }
 
 
@@ -1136,14 +1136,14 @@ class CMediusers extends CMbObject {
    * @return bool
    */
   function isMedical() {
-    return $this->isFromType(array("Administrator", "Chirurgien", "Anesthésiste", "Infirmière", "Médecin", "Rééducateur", "Sage Femme", "Dentiste"));
+    return $this->isFromType(array("Administrator", "Chirurgien", "Anesthï¿½siste", "Infirmiï¿½re", "Mï¿½decin", "Rï¿½ï¿½ducateur", "Sage Femme", "Dentiste"));
   }
 
   /**
    * @return bool
    */
   function isExecutantPrescription() {
-    return $this->isFromType(array("Infirmière", "Aide soignant", "Rééducateur"));
+    return $this->isFromType(array("Infirmiï¿½re", "Aide soignant", "Rï¿½ï¿½ducateur"));
   }
 
   /**
@@ -1152,7 +1152,7 @@ class CMediusers extends CMbObject {
    * @return bool
    */
   function isKine() {
-    return $this->isFromType(array("Rééducateur"));
+    return $this->isFromType(array("Rï¿½ï¿½ducateur"));
   }
 
   /**
@@ -1186,9 +1186,9 @@ class CMediusers extends CMbObject {
     $this->loadRefsFwd();
     $this->_ref_function->fillTemplate($template);
     $template->addProperty("Praticien - Nom"            , $this->_user_last_name );
-    $template->addProperty("Praticien - Prénom"         , $this->_user_first_name);
+    $template->addProperty("Praticien - Prï¿½nom"         , $this->_user_first_name);
     $template->addProperty("Praticien - Initiales"      , $this->_shortview);
-    $template->addProperty("Praticien - Spécialité"     , $this->_ref_discipline->_view);
+    $template->addProperty("Praticien - Spï¿½cialitï¿½"     , $this->_ref_discipline->_view);
     $template->addProperty("Praticien - Titres"         , $this->titres);
     $template->addProperty("Praticien - ADELI"          , $this->adeli);
     $template->addBarcode("Praticien - Code barre ADELI", $this->adeli, array("barcode" => array(
@@ -1201,7 +1201,7 @@ class CMediusers extends CMbObject {
     $template->addProperty("Praticien - E-mail"         , $this->_user_email);
     $template->addProperty("Praticien - E-mail Apicrypt", $this->mail_apicrypt);
 
-    // Identité
+    // Identitï¿½
     $identite = $this->loadNamedFile("identite.jpg");
     $template->addImageProperty("Praticien - Photo d'identite", $identite->_id);
 
@@ -1211,8 +1211,8 @@ class CMediusers extends CMbObject {
   }
 
   /**
-   * Charge la liste de plages et interventions pour un jour donné
-   * Analogue à CSalle::loadRefsForDay
+   * Charge la liste de plages et interventions pour un jour donnï¿½
+   * Analogue ï¿½ CSalle::loadRefsForDay
    * @param $date date Date to look for
    */
   function loadRefsForDay($date) {
@@ -1243,7 +1243,7 @@ class CMediusers extends CMbObject {
           $operation->loadExtCodesCCAM();
           $operation->updateSalle();
 
-          // Extraire les interventions non placées
+          // Extraire les interventions non placï¿½es
           if ($operation->rank == 0) {
             $plage->_unordered_operations[$operation->_id] = $operation;
             unset($plage->_ref_operations[$operation->_id]);
@@ -1252,7 +1252,7 @@ class CMediusers extends CMbObject {
       }
     }
 
-    // Interventions déplacés
+    // Interventions dï¿½placï¿½s
     $deplacees = new COperation;
     $ljoin = array();
     $ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
@@ -1361,7 +1361,7 @@ class CMediusers extends CMbObject {
   /**
    * Construit le tag Mediusers en fonction des variables de configuration
    *
-   * @param int $group_id Permet de charger l'id externe d'un Mediuser pour un établissement donné si non null
+   * @param int $group_id Permet de charger l'id externe d'un Mediuser pour un ï¿½tablissement donnï¿½ si non null
    *
    * @return string
    */
@@ -1371,7 +1371,7 @@ class CMediusers extends CMbObject {
       return;
     }
 
-    // Permettre des id externes en fonction de l'établissement
+    // Permettre des id externes en fonction de l'ï¿½tablissement
     $group = CGroups::loadCurrent();
     if (!$group_id) {
       $group_id = $group->_id;

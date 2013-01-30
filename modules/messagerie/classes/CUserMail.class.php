@@ -79,8 +79,8 @@ class CUserMail extends CMbObject{
     $props["uid"]           = "num";
     $props["answered"]      = "bool default|0";
     //$props["msg_references"]= "str";
-    $props["in_reply_to_id"]   = "ref class|CUserMail";
-    $props["text_file_id"] = "ref class|CFile";
+    $props["in_reply_to_id"] = "ref class|CUserMail";
+    $props["text_file_id"]  = "ref class|CFile";
 
     $props["text_plain_id"]    = "ref class|CContentAny show|0";
     $props["text_html_id"]     = "ref class|CContentHTML show|0";
@@ -96,7 +96,8 @@ class CUserMail extends CMbObject{
    */
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["mail_attachments"]            = "CMailAttachments mail_id";
+    $backProps["mail_attachments"]          = "CMailAttachments mail_id";
+    $backProps["reply_of"]                  = "CUserMail in_reply_to_id";
     return $backProps;
   }
 

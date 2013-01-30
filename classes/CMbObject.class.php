@@ -15,7 +15,7 @@
  * @abstract Mediboard business object layer
  */
 class CMbObject extends CStoredObject {
-  var $_aides         = array(); // Aides à la saisie
+  var $_aides         = array(); // Aides ï¿½ la saisie
   var $_aides_new     = array(); // Nouveau tableau des aides (sans hierarchie)
   var $_nb_files_docs = null;
   var $_nb_files      = null;
@@ -226,7 +226,7 @@ class CMbObject extends CStoredObject {
   /**
    * Chargement du dernier identifiant id400
    *
-   * @param string $tag Tag à utiliser comme filtre
+   * @param string $tag Tag ï¿½ utiliser comme filtre
    *
    * @return CIdSante400
    */
@@ -309,19 +309,21 @@ class CMbObject extends CStoredObject {
       "tag_items"              => "CTagItem object_id",
       "echange_generique"      => "CExchangeAny object_id",
       "observation_result_sets"=> "CObservationResultSet context_id",
+      "sources_pop"            => "CSourcePOP object_id",
+
       // NE PAS DECOMMENTER CETTE LIGNE, backref impossible pour le moment (cf. Fabien)
       //"ex_objects"             => "CExObject object_id",
     );
   }
   
   /**
-   * Charge toutes les aides à la saisie de l'objet pour un utilisateur donné
+   * Charge toutes les aides ï¿½ la saisie de l'objet pour un utilisateur donnï¿½
    *
    * @param int    $user_id        Utilisateur
-   * @param string $keywords       Permet de filtrer les aides commançant par le filtre, si non null
-   * @param string $depend_value_1 Valeur de la dépendance 1 lié à l'aide
-   * @param string $depend_value_2 Valeur de la dépendance 2 lié à l'aide
-   * @param string $object_field   Type d'objet concerné
+   * @param string $keywords       Permet de filtrer les aides commanï¿½ant par le filtre, si non null
+   * @param string $depend_value_1 Valeur de la dï¿½pendance 1 liï¿½ ï¿½ l'aide
+   * @param string $depend_value_2 Valeur de la dï¿½pendance 2 liï¿½ ï¿½ l'aide
+   * @param string $object_field   Type d'objet concernï¿½
    * @param string $strict         True or False
    *
    * @return void
@@ -345,7 +347,7 @@ class CMbObject extends CStoredObject {
     $user->load($user_id);
     $user->loadRefFunction();
     
-    // Préparation du chargement des aides
+    // Prï¿½paration du chargement des aides
     $ds =& $this->_spec->ds;
     
     // Construction du Where
@@ -379,7 +381,7 @@ class CMbObject extends CStoredObject {
       $where["field"] = " = '$object_field'";
     }
     
-    // tri par user puis function puis group (ordre inversé pour avoir ce résultat)
+    // tri par user puis function puis group (ordre inversï¿½ pour avoir ce rï¿½sultat)
     $order = "group_id, function_id, user_id, depend_value_1, depend_value_2, name, text";
     
     // Chargement des Aides de l'utilisateur
@@ -394,8 +396,8 @@ class CMbObject extends CStoredObject {
    * Order aides
    *
    * @param array $aides          Aides
-   * @param null  $depend_value_1 Valeur de la dépendance 1 lié à l'aide
-   * @param null  $depend_value_2 Valeur de la dépendance 2 lié à l'aide
+   * @param null  $depend_value_1 Valeur de la dï¿½pendance 1 liï¿½ ï¿½ l'aide
+   * @param null  $depend_value_2 Valeur de la dï¿½pendance 2 liï¿½ ï¿½ l'aide
    *
    * @return void
    */
@@ -413,12 +415,12 @@ class CMbObject extends CStoredObject {
         }
         else {
           $depend_name_2 = CAppUI::tr("$this->_class-$depend_field_2");
-          $this->_aides[$aide->field][$owner]["$depend_name_2 non spécifié"][$aide->text] = $aide->name;
+          $this->_aides[$aide->field][$owner]["$depend_name_2 non spï¿½cifiï¿½"][$aide->text] = $aide->name;
         }
         continue;
       }
       
-      // ... et réciproquement 
+      // ... et rï¿½ciproquement 
       if ($depend_value_2) {
         $depend_field_1 = $aide->_depend_field_1;
         $depend_1 = CAppUI::tr("$this->_class.$aide->_depend_field_1.$aide->depend_value_1");
@@ -427,14 +429,14 @@ class CMbObject extends CStoredObject {
         }
         else {
           $depend_name_1 = CAppUI::tr("$this->_class-$depend_field_1");
-          $this->_aides[$aide->field][$owner]["$depend_name_1 non spécifié"][$aide->text] = $aide->name;
+          $this->_aides[$aide->field][$owner]["$depend_name_1 non spï¿½cifiï¿½"][$aide->text] = $aide->name;
         }
         continue;
       }
       
       $this->_aides_all_depends[$aide->field][$aide->depend_value_1][$aide->depend_value_2][$aide->_id] = $aide;
       
-      // Ajout de l'aide à la liste générale
+      // Ajout de l'aide ï¿½ la liste gï¿½nï¿½rale
       $this->_aides[$aide->field]["no_enum"][$owner][$aide->text] = $aide->name;
     }
     
