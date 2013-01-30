@@ -73,6 +73,7 @@ class CAffectation extends CMbObject {
     $backProps["repas"]               = "CRepas affectation_id";
     $backProps["affectations_enfant"] = "CAffectation parent_affectation_id";
     $backProps["movements"]           = "CMovement affectation_id";
+    $backProps["meal"]                = "CMeal affectation_id";
     
     return $backProps;
   }

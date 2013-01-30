@@ -340,6 +340,8 @@ class CMediusers extends CMbObject {
     $backProps["praticien_facture"]               = "CFactureConsult praticien_id";
     $backProps["tokens"]                          = "CViewAccessToken user_id";
     $backProps["astreintes"]                      = "CPlageAstreinte user_id";
+    $backProps["dicom_sender"]                    = "CDicomSender user_id";
+    $backProps["CPS_pyxvital"]                    = "CPvCPS id_mediuser";
     return $backProps;
   }
 

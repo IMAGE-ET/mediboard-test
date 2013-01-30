@@ -200,6 +200,7 @@ class CConsultation extends CCodable {
     $backProps["actes_dentaires"]   = "CActeDentaire consult_id";
     $backProps["echanges_hprimxml"] = "CEchangeHprim object_id";
     $backProps["exchanges_ihe"]     = "CExchangeIHE object_id";
+    $backProps["fse_pyxvital"]      = "CPvFSE consult_id";
     
     return $backProps;
   }

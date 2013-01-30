@@ -301,6 +301,7 @@ class CPatient extends CMbObject {
     $backProps["facture_patient"]       = "CFactureConsult patient_id";
     $backProps["patient_observation_result_sets"] = "CObservationResultSet patient_id"; // interfere avec CMbObject-back-observation_result_sets
     $backProps["patient_links"]         = "CPatient patient_link_id";
+    $backProps["CV_pyxvital"]           = "CPvCV id_patient";
     return $backProps;
   }
 
