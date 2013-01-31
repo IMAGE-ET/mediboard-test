@@ -1,63 +1,77 @@
-<?php /* $Id: $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage soins
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Vue offline des séjours
+ *
+ * @category soins
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
-
-CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 set_min_memory_limit("640M");
 set_time_limit(120);
 
 $service_id = CValue::get("service_id");
 $date       = CValue::get("date", mbDate());
-$mode       = CValue::get("mode", 0);
 
 $service = new CService();
 $service->load($service_id);
-loadServiceComplet($service, $date, $mode);
 
-$sejours = array();
+$datetime_min = "$date 00:00:00";
+$datetime_max = "$date 23:59:59";
+$datetime_avg = "$date ".mbTime();
+
+$sejour = new CSejour();
+$where  = array();
+$ljoin  = array();
+
+$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+$ljoin["lit"] = "affectation.lit_id = lit.lit_id";
+$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
+$ljoin["service"] = "chambre.service_id = service.service_id";
+
+$order_by = "chambre.nom";
+
+$where["sejour.entree"] = "<= '$datetime_max'";
+$where["sejour.sortie"] = " >= '$datetime_min'";
+$where["affectation.entree"] = "<= '$datetime_max'";
+$where["affectation.sortie"] = ">= '$datetime_min'";
+$where["service.service_id"] = " = '$service_id'";
+
+$sejours = $sejour->loadList($where, $order_by, null, null, $ljoin);
+
+CMbObject::massLoadFwdRef($sejours, "patient_id");
+CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $dossiers_complets = array();
 
-foreach($service->_ref_chambres as &$_chambre){
-  foreach($_chambre->_ref_lits as &$_lits){
-    foreach($_lits->_ref_affectations as &$_affectation){
-      $sejour = $_affectation->_ref_sejour;
-      $sejours[]= $sejour;
-      
-      // Détail du séjour
-      $sejour->checkDaysRelative($date);
-      $sejour->loadNDA();
-      $sejour->loadRefsNotes();
-      $sejour->loadRefCurrAffectation()->loadRefLit();
-      
-      // Patient
-      $patient = $sejour->loadRefPatient();
-      $patient->loadIPP();
-      
-      $params = array(
-        "sejour_id" => $sejour->_id,
-        "dialog" => 1,
-        "offline" => 1,
-        "in_modal" => 1
-      );
-      
-      $dossiers_complets[$sejour->_id] = CApp::fetch("soins", "print_dossier_soins", $params);
-    }
-  }
+foreach ($sejours as $sejour) {
+  $patient = $sejour->loadRefPatient();
+  $patient->loadIPP();
+  $sejour->loadRefPraticien();
+  $sejour->checkDaysRelative($date);
+  $sejour->loadNDA();
+  $sejour->loadRefsNotes();
+  $sejour->loadRefCurrAffectation($datetime_avg, $service_id)->loadRefLit();
+
+  $params = array(
+    "sejour_id" => $sejour->_id,
+    "dialog" => 1,
+    "offline" => 1,
+    "in_modal" => 1
+  );
+
+  $dossiers_complets[$sejour->_id] = CApp::fetch("soins", "print_dossier_soins", $params);
 }
 
-$smarty = new CSmartyDP;
-$smarty->assign("date", $date);
-$smarty->assign("hour", mbTime());
+$smarty = new CSmartyDP();
+
+$smarty->assign("date"   , $date);
+$smarty->assign("hour"   , mbTime());
 $smarty->assign("service", $service);
 $smarty->assign("sejours", $sejours);
 $smarty->assign("dossiers_complets", $dossiers_complets);
-$smarty->display("offline_sejours.tpl");
 
-?>
+$smarty->display("offline_sejours.tpl");
