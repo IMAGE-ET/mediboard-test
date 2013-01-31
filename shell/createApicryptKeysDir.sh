@@ -28,11 +28,6 @@ fi
 echo "Creating the folder /var/apicrypt/"
 mkdir -p /var/apicrypt/
 
-MOD_PATH=$(dirname $0)
-YEAR=`expr $(date +%Y) - 1900`
-echo "Copying the Master key in the folder"
-cp "$MOD_PATH/../modules/apicrypt/keys/Master.$YEAR" /var/apicrypt/
-
 echo "Changing the owner of the folder"
 chown -R $APACHE_USER:$APACHE_GROUP /var/apicrypt
 
