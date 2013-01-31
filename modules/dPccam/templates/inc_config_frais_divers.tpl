@@ -16,19 +16,21 @@
     {{assign var=var value=use_frais_divers}}
     {{foreach from=$childs_codable_class item=_child_codable_class}}
     {{assign var=type value=$_child_codable_class}}
-    <tr>
-      <th style="width: 50%">
-        <label for="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$type}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$type}}{{/tr}}
-        </label>     
-      </th>
-      <td>
-        <label for="{{$m}}[{{$class}}][{{$var}}][{{$type}}]_1">{{tr}}bool.1{{/tr}}</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" value="1" {{if $conf.$m.$class.$var.$type == "1"}}checked="checked"{{/if}}/>
-        <label for="{{$m}}[{{$class}}][{{$var}}][{{$type}}]_0">{{tr}}bool.0{{/tr}}</label>
-        <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" value="0" {{if $conf.$m.$class.$var.$type == "0" || $conf.$m.$class.$var.$type == ""}}checked="checked"{{/if}} />
-      </td>
-    </tr>
+    {{if $type != "CFacturable"}}
+      <tr>
+        <th style="width: 50%">
+          <label for="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$type}}{{/tr}}">
+            {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$type}}{{/tr}}
+          </label>     
+        </th>
+        <td>
+          <label for="{{$m}}[{{$class}}][{{$var}}][{{$type}}]_1">{{tr}}bool.1{{/tr}}</label>
+          <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" value="1" {{if $conf.$m.$class.$var.$type == "1"}}checked="checked"{{/if}}/>
+          <label for="{{$m}}[{{$class}}][{{$var}}][{{$type}}]_0">{{tr}}bool.0{{/tr}}</label>
+          <input type="radio" name="{{$m}}[{{$class}}][{{$var}}][{{$type}}]" value="0" {{if $conf.$m.$class.$var.$type == "0" || $conf.$m.$class.$var.$type == ""}}checked="checked"{{/if}} />
+        </td>
+      </tr>
+    {{/if}}
     {{/foreach}}
     
     <tr>
