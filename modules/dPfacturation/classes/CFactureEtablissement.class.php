@@ -81,11 +81,12 @@ class CFactureEtablissement extends CFacture {
    * @return void
   **/
   function store() {
-    //Si on cloture la facture création des lignes de la facture
-    if ($this->cloture && $this->fieldModified("cloture") && !$this->completeField("cloture")) {
-      $this->creationLignesFacture();
+    if (CAppUI::conf("facturation CFactureEtablissement create_items_bill")) {
+      //Si on cloture la facture création des lignes de la facture
+      if ($this->cloture && $this->fieldModified("cloture") && !$this->completeField("cloture")) {
+        $this->creationLignesFacture();
+      }
     }
-    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
@@ -102,46 +103,7 @@ class CFactureEtablissement extends CFacture {
     if ($msg = parent::delete()) {
       return $msg;
     }
-  } 
-
-  /**
-   * Fonction de création des lignes(items) de la facture lorsqu'elle est cloturée
-   * 
-   * @return void
-  **/
-  function creationLignesFacture(){
-    parent::loadRefsSejour();
-    $this->loadRefCoeffFacture();
-    foreach ($this->_ref_sejours as $sejour) {
-      foreach ($sejour->_ref_operations as $op) {
-        foreach ($op->_ref_actes_tarmed as $acte) {
-          $this->creationLigneTarmed($acte, $op->date);
-        }
-        foreach ($op->_ref_actes_caisse as $acte) {
-          $this->creationLigneCaisse($acte, $op->date);
-        }
-        foreach ($op->_ref_actes_ccam as $acte_ccam) {
-          $this->creationLigneCCAM($acte_ccam, $op->date);
-        }
-        foreach ($op->_ref_actes_ngap as $acte_ngap) {
-          $this->creationLigneNGAP($acte_ngap, $op->date);
-        }
-      }
-      foreach ($sejour->_ref_actes_tarmed as $acte) {
-        $this->creationLigneTarmed($acte, $sejour->entreee_prevue);
-      }
-      foreach ($sejour->_ref_actes_caisse as $acte) {
-        $this->creationLigneCaisse($acte, $sejour->entreee_prevue);
-      }
-      foreach ($sejour->_ref_actes_ccam as $acte_ccam) {
-        $this->creationLigneCCAM($acte, $sejour->entreee_prevue);
-      }
-      foreach ($sejour->_ref_actes_ngap as $acte_ngap) {
-        $this->creationLigneNGAP($acte, $sejour->entreee_prevue);
-      }
-    }
   }
-  
   
   /**
    * Chargement des différents séjours liées à la facture
@@ -151,56 +113,8 @@ class CFactureEtablissement extends CFacture {
    * @return void
   **/
   function loadRefSejour($cache = 1) {
-    parent::loadRefsSejour();
-
-    // Eclatement des factures
-    $this->_nb_factures = 1;
-    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
-      $this->eclatementTarmed();
-    }
-    $this->updateMontants();
-            
+    parent::loadRefsObjects();
     return $this->_ref_sejours;
-  }
-
-  /**
-   * Mise à jour des montant secteur 1, 2 et totaux, utilisés pour la compta
-   * 
-   * @return void
-  **/
-  function updateMontants() {
-    parent::updateMontants();
-    $this->du_patient = 0;
-    if (CModule::getActive("tarmed") &&CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
-      foreach ($this->_ref_sejours as $sejour) {
-        foreach ($sejour->_ref_operations as $op) {
-          foreach ($op->_ref_actes_tarmed as $acte) {
-            $this->_montant_secteur1 += $acte->montant_base;
-            $this->du_patient += $acte->montant_base;
-            $this->_montant_secteur2 += $acte->montant_depassement;
-            $this->_montant_total    += ($acte->montant_base + $acte->montant_depassement);
-          }
-          foreach ($op->_ref_actes_caisse as $acte) {
-            $this->_montant_secteur1 += $acte->montant_base;
-            $this->du_patient += $acte->montant_base;
-            $this->_montant_secteur2 += $acte->montant_depassement;
-            $this->_montant_total    += ($acte->montant_base + $acte->montant_depassement);
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Eclatement des montants de la facture utilisé uniquement en Suisse 
-   * 
-   * @return void
-  **/
-  function eclatementTarmed() {
-    parent::eclatementTarmed();
-    $this->_montant_factures   = array();
-    $this->_montant_factures[] = $this->du_patient + $this->du_tiers - $this->remise;
-    $this->loadNumerosBVR();
   }
   
   /**
@@ -240,36 +154,5 @@ class CFactureEtablissement extends CFacture {
     $facture->num_reference = $num_reference;
     $facture->loadMatchingObject();
     return $facture;
-  }
-  
-  /**
-   * Chargement des différents numéros de BVR de la facture 
-   * 
-   * @return void
-  **/
-  function loadNumerosBVR(){
-    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") && !count($this->_montant_factures_caisse)) {
-      $this->_total_tarmed = 0;
-      $this->_total_caisse = 0;
-      $this->_autre_tarmed = 0;
-      
-      foreach ($this->_ref_sejours as $sejour) {
-        foreach ($sejour->_ref_actes_tarmed as $acte_tarmed) {
-          $this->_total_tarmed += $acte_tarmed->montant_base + $acte_tarmed->montant_depassement;
-        }
-        foreach ($sejour->_ref_actes_caisse as $acte_caisse) {
-          $coeff = "coeff_".$this->type_facture;
-          $tarif_acte_caisse = ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
-          if ($acte_caisse->_ref_caisse_maladie->use_tarmed_bill) {
-            $this->_autre_tarmed += $tarif_acte_caisse;
-          }
-          else {
-            $this->_total_caisse +=  $tarif_acte_caisse;
-          }
-        }
-      }
-      parent::loadNumerosBVR();
-    }
-    return $this->_num_bvr;
   }
 }

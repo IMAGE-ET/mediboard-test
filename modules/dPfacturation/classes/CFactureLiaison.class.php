@@ -69,7 +69,10 @@ class CFactureLiaison extends CMbMetaObject {
    * @return void
   **/
   function loadRefFacture($cache = 1) {
-    return $this->_ref_facture =  $this->loadFwdRef("facture_id", $cache);
+    $facture = new $this->facture_class;
+    $facture->facture_id = $this->facture_id;
+    $facture->loadMatchingObject();
+    return $this->_ref_facture = $facture;
   }
      
   /**
@@ -82,4 +85,19 @@ class CFactureLiaison extends CMbMetaObject {
   function loadRefFacturable($cache = 1) {
     return $this->_ref_facturable =  $this->loadFwdRef("facturable_id", $cache);
   }
+  
+  /**
+   * Redéfinition du store
+   * 
+   * @return void
+  **/
+  function store() {
+    // Standard store
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    $facture = $this->loadRefFacture();
+    $facture->updateMontantsFacture();
+  } 
 }

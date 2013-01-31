@@ -1,0 +1,21 @@
+<?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPfacturation
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
+
+$dPconfig["facturation"] = array (
+  "CFactureEtablissement" => array(
+    "create_items_bill" => "0"
+  ),
+  "CFactureCabinet" => array(
+    "create_items_bill" => "0",
+    "use_create_bill"   => "0"
+  )
+);
+?>

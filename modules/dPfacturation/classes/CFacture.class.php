@@ -41,7 +41,8 @@ class CFacture extends CMbObject {
   var $envoi_xml              = null;
   
   // Form fields
-  var $_total    = null;
+  var $_consult_id  = null;
+  var $_total       = null;
   
   var $_nb_factures         = null;
   var $_coeff               = null;
@@ -68,15 +69,18 @@ class CFacture extends CMbObject {
   // Object References
   var $_ref_assurance_accident  = null;
   var $_ref_assurance_maladie   = null;
-  var $_ref_chir      = null;
-  var $_ref_consults  = null;
-  var $_ref_items  = null;
+  var $_ref_chir                = null;
+  var $_ref_consults            = null;
+  var $_ref_last_consult        = null;
+  var $_ref_first_consult       = null;
+  var $_ref_items               = null;
   var $_ref_patient             = null;
   var $_ref_praticien           = null;
   var $_ref_reglements          = null;
   var $_ref_reglements_patient  = null;
   var $_ref_reglements_tiers    = null;
-  var $_ref_sejours   = null;
+  var $_ref_sejours             = null;
+  
   
   /**
    * getBackProps
@@ -161,8 +165,10 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function store() {
-    if (!$this->cloture && $this->fieldModified("cloture")) {
-      $this->deleteItems();
+    if (CAppUI::conf("facturation $this->_class create_items_bill")) {
+      if (!$this->cloture && $this->fieldModified("cloture")) {
+        $this->deleteItems();
+      }
     }
     
     // Standard store
@@ -172,26 +178,28 @@ class CFacture extends CMbObject {
   }
   
   /**
-   * Redéfinition du store
+   * Redéfinition du delete
    * 
    * @return void
   **/
   function delete() {
-    $liaison = new CFactureLiaison();
-    $liaison->object_id    = $this->_id;
-    $liaison->object_class = $this->_class;
-    
-    if ($this->_class == "CFactureEtablissement") {
-      $liaison->object_class = "CSejour";
-    }
-    else {
-      $liaison->object_class = "CConsultation";
-    }
-    $liaisons = $liaison->loadMatchingList();
-    foreach ($liaisons as $lien) {
-      if ($msg = $lien->delete()) {
-        return $msg;
+    if (CAppUI::conf("facturation CFactureCabinet use_create_bill")) {
+      $where = array();
+      $where["facture_id"]    = " = '$this->_id'";
+      $where["facture_class"] = " = '$this->_class'";
+      $where[] = "object_class = 'Sejour' OR object_class = 'CConsultation'";
+      
+      $liaison = new CFactureLiaison();
+      $liaisons = $liaison->loadList($where);
+      foreach ($liaisons as $lien) {
+        if ($msg = $lien->delete()) {
+          return $msg;
+        }
       }
+    }
+    // Standard store
+    if ($msg = parent::delete()) {
+      return $msg;
     }
   }
   
@@ -215,9 +223,55 @@ class CFacture extends CMbObject {
     $this->_montant_secteur1 = 0.0;
     $this->_montant_secteur1 = 0.0;
     $this->_montant_total    = 0.0;
-    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
-      $this->_montant_secteur1 += $this->_montant_sans_remise;
-      $this->_montant_total    += $this->_montant_avec_remise;
+    $this->du_patient        = 0;
+    
+    if (count($this->_ref_sejours) == 0 && count($this->_ref_consults) == 0) {
+      $this->delete();
+    }
+    else {
+      if (count($this->_ref_sejours)) {
+        foreach ($this->_ref_sejours as $sejour) {
+          foreach ($sejour->_ref_operations as $op) {
+            foreach ($op->_ref_actes_tarmed as $acte) {
+              $this->_montant_secteur1 += $acte->montant_base;
+              $this->du_patient        += $acte->montant_base;
+              $this->_montant_secteur2 += $acte->montant_depassement;
+              $this->_montant_total    += ($acte->montant_base + $acte->montant_depassement);
+            }
+            foreach ($op->_ref_actes_caisse as $acte) {
+              $this->_montant_secteur1 += $acte->montant_base;
+              $this->du_patient        += $acte->montant_base;
+              $this->_montant_secteur2 += $acte->montant_depassement;
+              $this->_montant_total    += ($acte->montant_base + $acte->montant_depassement);
+            }
+          }
+        }
+      }
+      if (count($this->_ref_consults)) {
+        foreach ($this->_ref_consults as $_consult) {
+          $this->_montant_secteur1 += $_consult->secteur1;
+          $this->_montant_secteur2 += $_consult->secteur2;
+          $this->_montant_total    += $_consult->_somme;
+          $this->du_patient        += $_consult->du_patient;
+        }
+      }
+      $this->_montant_secteur1 *= $this->_coeff;
+      $this->_montant_secteur2 *= $this->_coeff;
+    }
+  }
+  
+  /**
+   * Mise à jour des montant secteur 1, 2 et totaux, utilisés pour la comtpa
+   * 
+   * @return void
+  **/
+  function updateMontantsFacture() {
+//    $this->loadRefsObjects();
+//    $this->updateMontants();
+    $this->du_patient = $this->_montant_secteur1;
+    $this->du_tiers   = $this->_montant_secteur2;
+    if ($this->_id) {
+      $this->store();
     }
   }
   
@@ -230,6 +284,9 @@ class CFacture extends CMbObject {
     if ($this->npq) {
       $this->remise = sprintf("%.2f",(10*(($this->du_patient+$this->du_tiers)*$this->_coeff))/100);
     }
+    $this->_montant_factures   = array();
+    $this->_montant_factures[] = $this->du_patient + $this->du_tiers;
+    $this->loadNumerosBVR();
   }
           
   /**
@@ -242,6 +299,7 @@ class CFacture extends CMbObject {
   function loadRefPatient($cache = 1) {
     if (!$this->_ref_patient) {
       $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
+      $this->_ref_patient->loadRefsCorrespondantsPatient();
     }
     return $this->_ref_patient;
   }
@@ -252,7 +310,10 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function loadRefPraticien(){
-    $this->_ref_praticien = $this->loadFwdRef("praticien_id", true);
+    if (!$this->_ref_praticien) {
+      $this->_ref_praticien = $this->loadFwdRef("praticien_id", true);
+    }
+    return $this->_ref_praticien;
   }
   
   /**
@@ -269,19 +330,18 @@ class CFacture extends CMbObject {
       foreach ($this->_montant_factures as $_montant) {
         $this->_montant_sans_remise += $_montant;
       }
-      $this->_montant_avec_remise = $this->_montant_sans_remise;
+      $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
     }
     
     if (!$this->_montant_sans_remise) {
       $this->_montant_sans_remise = $this->du_patient  + $this->du_tiers;
-      $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
     }
     
     $this->_du_restant_patient = $this->du_patient;
     $this->_du_restant_tiers   = $this->du_tiers  ;
     
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
-      $this->_du_restant_patient = $this->_montant_avec_remise  - $this->remise;
+      $this->_du_restant_patient = $this->_montant_avec_remise;
     }
     
     // Calcul des dus
@@ -360,6 +420,24 @@ class CFacture extends CMbObject {
   }
   
   /**
+   * Chargement des séjours et des consultations de la facture
+   * 
+   * @return void
+  **/
+  function loadRefsObjects(){
+    $this->loadRefsConsultation();
+    $this->loadRefsSejour();
+    $this->loadRefCoeffFacture();
+    
+    // Eclatement des factures
+    $this->_nb_factures = 1;
+    if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
+      $this->eclatementTarmed();
+    }
+    
+    $this->updateMontants();
+  }
+  /**
    * Chargement de toutes les consultations de la facture
    * 
    * @return object
@@ -369,22 +447,47 @@ class CFacture extends CMbObject {
       return $this->_ref_consults;
     }
     
-    $ljoin = array();
-    $ljoin["facture_liaison"] = "facture_liaison.object_id = consultation.consultation_id";
-    $where = array();
-    $where["facture_liaison.facture_id"]       = " = '$this->facture_id'";
-    $where["facture_liaison.object_class"]     = " = 'CFactureCabinet'";
-    $where["facture_liaison.object_class"] = " = 'CConsultation'";
-    
     $consult = new CConsultation();
-    $this->_ref_consults = $consult->loadList($where, null, null, null, $ljoin);
-    
-    // Chargement des actes de consultations
-    foreach ($this->_ref_consults as $_consult) {
-      $_consult->loadRefsActes();
-      $_consult->loadExtCodesCCAM();
+    if (CAppUI::conf("facturation CFactureCabinet use_create_bill")) {
+      $ljoin = array();
+      $ljoin["facture_liaison"] = "facture_liaison.object_id = consultation.consultation_id";
+      $where = array();
+      $where["facture_liaison.facture_id"]   = " = '$this->_id'";
+      $where["facture_liaison.object_class"] = " = '$this->_class'";
+      $where["facture_liaison.object_class"] = " = 'CConsultation'";
+      
+      $this->_ref_consults = $consult->loadList($where, null, null, null, $ljoin);
+    }
+    elseif ($this->_consult_id) {
+      $consult_new = new CConsultation();
+      $consult_new->consultation_id = $this->_consult_id;
+      $consult_new->loadMatchingObject();
+      if ($consult_new->facture_id) {
+        $consult->facture_id = $consult_new->facture_id;
+      }
+      else {
+        $consult->consultation_id = $this->_consult_id;
+      }
+      $this->_ref_consults = $consult->loadMatchingList();
+    }
+    elseif ($this->_id) {
+      $consult->facture_id = $this->_id;
+      $this->_ref_consults = $consult->loadMatchingList();
     }
     
+    if (count($this->_ref_consults) > 0) {
+      // Chargement des actes de consultations
+      foreach ($this->_ref_consults as $_consult) {
+        $_consult->loadRefsActes();
+        $_consult->loadExtCodesCCAM();
+      }
+      $this->_ref_last_consult = end($this->_ref_consults);
+      $this->_ref_first_consult = reset($this->_ref_consults);
+    }
+    else {
+      $this->_ref_last_consult = new CConsultation();
+      $this->_ref_first_consult  = new CConsultation();
+    }
     return $this->_ref_consults;
   }
   
@@ -401,8 +504,8 @@ class CFacture extends CMbObject {
     $ljoin = array();
     $ljoin["facture_liaison"] = "facture_liaison.object_id = sejour.sejour_id";
     $where = array();
-    $where["facture_liaison.facture_id"]       = " = '$this->facture_id'";
-    $where["facture_liaison.object_class"]    = " = 'CFactureEtablissement'";
+    $where["facture_liaison.facture_id"]   = " = '$this->_id'";
+    $where["facture_liaison.object_class"] = " = '$this->_class'";
     $where["facture_liaison.object_class"] = " = 'CSejour'";
     
     $sejour = new CSejour();
@@ -580,6 +683,45 @@ class CFacture extends CMbObject {
   **/
   function loadNumerosBVR(){
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") && !count($this->_montant_factures_caisse)) {
+      $this->_total_tarmed = 0;
+      $this->_total_caisse = 0;
+      $this->_autre_tarmed = 0;
+      if (count($this->_ref_consults)) {
+        foreach ($this->_ref_consults as $consult) {
+          $consult->loadRefsActes();
+          foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
+            $this->_total_tarmed += $acte_tarmed->montant_base + $acte_tarmed->montant_depassement;
+          }
+          foreach ($consult->_ref_actes_caisse as $acte_caisse) {
+            $this->completeField("type_facture");
+            $coeff = "coeff_".$this->type_facture;
+            $tarif_acte_caisse = ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
+            if ($acte_caisse->_ref_caisse_maladie->use_tarmed_bill) {
+               $this->_autre_tarmed += $tarif_acte_caisse;
+            }
+            else {
+               $this->_total_caisse +=  $tarif_acte_caisse;
+            }
+          }
+        }
+      }
+      if (count($this->_ref_sejours)) {
+        foreach ($this->_ref_sejours as $sejour) {
+          foreach ($sejour->_ref_actes_tarmed as $acte_tarmed) {
+            $this->_total_tarmed += $acte_tarmed->montant_base + $acte_tarmed->montant_depassement;
+          }
+          foreach ($sejour->_ref_actes_caisse as $acte_caisse) {
+            $coeff = "coeff_".$this->type_facture;
+            $tarif_acte_caisse = ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
+            if ($acte_caisse->_ref_caisse_maladie->use_tarmed_bill) {
+              $this->_autre_tarmed += $tarif_acte_caisse;
+            }
+            else {
+              $this->_total_caisse +=  $tarif_acte_caisse;
+            }
+          }
+        }
+      }
       $montant_prem = round($this->_total_tarmed * $this->_coeff + $this->_autre_tarmed, 1);
       $this->_total_caisse = round($this->_total_caisse, 1);
       
@@ -587,6 +729,7 @@ class CFacture extends CMbObject {
         $montant_prem = 0;
       }
       if ($this->_total_tarmed || $this->_autre_tarmed) {
+//         $this->_montant_factures_caisse[0] = sprintf("%.2f",$montant_prem);
          $this->_montant_factures_caisse[0] = sprintf("%.2f",$montant_prem - $this->remise);
       }
       if ($this->_total_caisse > 0) {
@@ -594,8 +737,8 @@ class CFacture extends CMbObject {
       }
       
       $this->_montant_sans_remise = round($montant_prem + $this->_total_caisse, 1);
-//      $this->_montant_avec_remise = round($this->_montant_sans_remise - $this->remise, 1);
-      $this->_montant_avec_remise = $this->_montant_total - $this->remise;
+      $this->_montant_avec_remise = round($this->_montant_sans_remise - $this->remise, 1);
+//      $this->_montant_avec_remise = $this->_montant_total - $this->remise;
       if (count($this->_montant_factures) == 1) {
         $this->_montant_factures = $this->_montant_factures_caisse;
       }
@@ -625,6 +768,60 @@ class CFacture extends CMbObject {
         $cle = $this->getNoControle($genre.$montant);
         $this->_num_bvr[$montant_facture] = $genre.$montant.$cle.">".$this->num_reference."+ ".$adherent2.">";
       } 
+    }
+    return $this->_num_bvr;
+  }
+
+  /**
+   * Fonction de création des lignes(items) de la facture lorsqu'elle est cloturée
+   * 
+   * @return void
+  **/
+  function creationLignesFacture(){
+    $this->loadRefCoeffFacture();
+    $this->loadRefsConsultation();
+    foreach ($this->_ref_consults as $consult) {
+      foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
+        $this->creationLigneTarmed($acte_tarmed, $consult->_date);
+      }
+      foreach ($consult->_ref_actes_caisse as $acte_caisse) {
+        $this->creationLigneCaisse($acte_caisse, $consult->_date);
+      }
+      foreach ($consult->_ref_actes_ccam as $acte_ccam) {
+        $this->creationLigneCCAM(_ref_actes_ccam, $consult->_date);
+      }
+      foreach ($consult->_ref_actes_ngap as $acte_ngap) {
+        $this->creationLigneNGAP($acte_ngap, $consult->_date);
+      }
+    }
+    $this->loadRefsSejour();
+    foreach ($this->_ref_sejours as $sejour) {
+      foreach ($sejour->_ref_operations as $op) {
+        foreach ($op->_ref_actes_tarmed as $acte) {
+          $this->creationLigneTarmed($acte, $op->date);
+        }
+        foreach ($op->_ref_actes_caisse as $acte) {
+          $this->creationLigneCaisse($acte, $op->date);
+        }
+        foreach ($op->_ref_actes_ccam as $acte_ccam) {
+          $this->creationLigneCCAM($acte_ccam, $op->date);
+        }
+        foreach ($op->_ref_actes_ngap as $acte_ngap) {
+          $this->creationLigneNGAP($acte_ngap, $op->date);
+        }
+      }
+      foreach ($sejour->_ref_actes_tarmed as $acte) {
+        $this->creationLigneTarmed($acte, $sejour->entreee_prevue);
+      }
+      foreach ($sejour->_ref_actes_caisse as $acte) {
+        $this->creationLigneCaisse($acte, $sejour->entreee_prevue);
+      }
+      foreach ($sejour->_ref_actes_ccam as $acte_ccam) {
+        $this->creationLigneCCAM($acte, $sejour->entreee_prevue);
+      }
+      foreach ($sejour->_ref_actes_ngap as $acte_ngap) {
+        $this->creationLigneNGAP($acte, $sejour->entreee_prevue);
+      }
     }
   }
 }
