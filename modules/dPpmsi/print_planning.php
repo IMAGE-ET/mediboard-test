@@ -26,6 +26,9 @@ $filter->_ccam_libelle = CValue::get("_ccam_libelle", 1);
 $filterSejour = new CSejour;
 $filterSejour->type = CValue::get("type");
 
+
+$group = CGroups::loadCurrent();
+
 //On sort les plages opératoires
 //  Chir - Salle - Horaires
 
@@ -40,12 +43,12 @@ $chir_id = CValue::get("chir");
 $user = CMediusers::get();
 
 // En fonction du praticien
-if($filter->_prat_id) {
+if ($filter->_prat_id) {
   $where["chir_id"] = $ds->prepare("= %", $filter->_prat_id);
 }
 
 // En fonction de la salle
-$listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
+$listBlocs = $group->loadBlocs(PERM_READ);
 
 $salle = new CSalle();
 $whereSalle = array('bloc_id' => CSQLDataSource::prepareIn(array_keys($listBlocs)));
@@ -130,6 +133,8 @@ foreach ($plagesop as $_plage) {
     }
 
     // Cas des urgences restantes
+    $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
+    $where["sejour.group_id"] = "= '$group->_id'";
     $where["plageop_id"]   = "IS NULL";
     $where["date"]         = $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
     $where["operation_id"] = $ds->prepareNotIn($listUrgencesTraitees);
