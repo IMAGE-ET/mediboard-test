@@ -111,6 +111,7 @@ $dPconfig["dPplanningOp"]= array(
     "use_custom_mode_sortie" => "0",
   ),
   "CFactureEtablissement" => array (
+    "use_facture_etab"    =>  "0",
     "show_type_facture"   =>  "1",
     "show_statut_pro"     =>  "1",
     "show_assur_accident" =>  "1",

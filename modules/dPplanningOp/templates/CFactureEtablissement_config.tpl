@@ -8,6 +8,7 @@
     </tr>
     
     {{assign var=class value=CFactureEtablissement}}
+    {{mb_include module=system template=inc_config_bool var=use_facture_etab}}
     {{mb_include module=system template=inc_config_bool var=show_type_facture}}
     {{mb_include module=system template=inc_config_bool var=show_statut_pro}}
     {{mb_include module=system template=inc_config_bool var=show_assur_accident}}
