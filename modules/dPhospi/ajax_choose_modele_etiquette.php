@@ -14,6 +14,7 @@ $object_id    = CValue::get("object_id");
 
 $modele_etiquette = new CModeleEtiquette();
 $modele_etiquette->object_class = $object_class;
+$modele_etiquette->group_id = CGroups::loadCurrent()->_id;
 
 $modeles_etiquettes = $modele_etiquette->loadMatchingList();
 

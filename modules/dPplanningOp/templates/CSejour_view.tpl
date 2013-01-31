@@ -100,7 +100,7 @@
       {{if @$modules.dPhospi->_can->read}}
         <br />
         <button type="button" class="print"
-          {{if $sejour->_count_modeles_etiq > 1}}
+          {{if $sejour->_count_modeles_etiq == 1}}
             onclick="ModeleEtiquette.print('{{$sejour->_class}}', '{{$sejour->_id}}');"
           {{else}}
             onclick="ModeleEtiquette.chooseModele('{{$sejour->_class}}', '{{$sejour->_id}}')"

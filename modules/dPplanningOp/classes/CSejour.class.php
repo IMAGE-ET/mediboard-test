@@ -1792,6 +1792,7 @@ class CSejour extends CCodable implements IPatientRelated {
     // - modale de choix si plusieurs
     $modele_etiquette = new CModeleEtiquette();
     $modele_etiquette->setObject($this);
+    $modele_etiquette->group_id = $this->group_id;
     $this->_count_modeles_etiq = $modele_etiquette->countMatchingList();
   }
 
