@@ -47,7 +47,14 @@ foreach ($log_pops as $_pop) {
         //text plain
         if ($mail_unseen->_text_plain) {
           $textP = new CContentAny();
-          $textP->content = $mail_unseen->_text_plain;
+          //apicrypt
+          if (CModule::getActive("apicrypt") && $mail_unseen->_is_apicrypt == "plain") {
+            $textP->content = "apicrypt\n".CApicrypt::uncryptBody($user->_id, $mail_unseen->_text_plain);
+          }
+          else {
+            $textP->content = $mail_unseen->_text_plain;
+          }
+
           if ($msg = $textP->store()) {
             CAppUI::setMsg($msg, UI_MSG_ERROR);
           }
@@ -59,7 +66,14 @@ foreach ($log_pops as $_pop) {
           $textH = new CContentHTML();
           $text = new CMbXMLDocument();
           $text = $text->sanitizeHTML($mail_unseen->_text_html); //cleanup
-          $textH->content = $text;
+          //apicrypt
+          if (CModule::getActive("apicrypt") && $mail_unseen->_is_apicrypt == "html") {
+            $textH->content = CApicrypt::uncryptBody($user->_id, $text);
+          }
+          else {
+            $textH->content = $text;
+          }
+
 
           if ($msg = $textH->store()) {
             CAppUI::setMsg($msg, UI_MSG_ERROR);

@@ -22,8 +22,9 @@ class CPop{
 
   var $content = array (
     "text" => array(
-      "plain" => null,
-      "html"  => null
+      "plain"       => null,
+      "html"        => null,
+      "is_apicrypt" => null
     ),
     "attachments" => array()
   );
@@ -188,6 +189,15 @@ class CPop{
 
           if ($structure->subtype == "HTML") {
             $this->content["text"]["html"] = self::decodeMail($structure->encoding, self::openPart($mail_id, $part_number), $structure);
+          }
+
+          //apycript
+          if (stripos($this->content["text"]["plain"], '$APICRYPT') !== false) {
+            $this->content["text"]["is_apicrypt"] = "plain";
+          }
+
+          if (stripos($this->content["text"]["html"], '$APICRYPT') !== false) {
+            $this->content["text"]["is_apicrypt"] = "html";
           }
 
           break;
