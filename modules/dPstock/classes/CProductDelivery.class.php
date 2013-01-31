@@ -77,6 +77,8 @@ class CProductDelivery extends CMbObject {
   var $_code_ucd            = null;
   var $_count_delivered     = null;
 
+  var $_auto_trace;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_delivery';
@@ -309,12 +311,15 @@ class CProductDelivery extends CMbObject {
       return;
     }
 
-    if ($this->manual) {
+    if ($this->manual || $this->_auto_trace) {
       $delivery_trace = new CProductDeliveryTrace;
       $delivery_trace->delivery_id = $this->_id;
       $delivery_trace->quantity = $this->quantity;
       $delivery_trace->date_delivery = $this->date_delivery ? $this->date_delivery : mbDateTime();
-      $delivery_trace->date_reception = $delivery_trace->date_delivery;
+
+      if ($this->manual) {
+        $delivery_trace->date_reception = $delivery_trace->date_delivery;
+      }
 
       $product = $this->loadRefStock()->loadRefProduct();
       $location = CProductStockLocation::getDefaultLocation($this->loadRefService(), $product);
@@ -332,9 +337,8 @@ class CProductDelivery extends CMbObject {
       }
     }
 
-    $this->loadRefStock();
-    $this->_ref_stock->loadRefsFwd();
-    if ($this->_auto_deliver || $this->_ref_stock->_ref_product->auto_dispensed) {
+    $this->loadRefStock()->loadRefsFwd();
+    if ($this->_auto_deliver || $this->_ref_stock->_ref_product->auto_dispensed || $this->_auto_trace) {
       $this->date_dispensation = mbDateTime();
       $this->order = 0;
       return parent::store();
