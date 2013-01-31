@@ -43,28 +43,31 @@ foreach ($favoris as $_favori) {
   $codes[$favoris_code] = $code;
 }
 
-// Chargement des favoris calculés
-$ds = CSQLDataSource::get("std");
-$sql = "SELECT DP, count(DP) as nb_code
-        FROM `sejour`
-        WHERE sejour.praticien_id = '$user->_id'
-        AND DP IS NOT NULL
-        AND DP != ''
-        GROUP BY DP
-        ORDER BY count(DP) DESC
-        LIMIT 10;";
-$cimStat = $ds->loadlist($sql);
- 
+// Chargement des favoris calculés, si pas de choix de tag
 $listCimStat = array();
-foreach ($cimStat as $value) {
-  $DP = $value["DP"];
 
-  $code = new CCodeCIM10($DP);
-  $code->loadLite();
-  $code->_favoris_id = "0";
-  $code->occ = $value["nb_code"];
+if (!$tag_id) {
+  $ds = CSQLDataSource::get("std");
+  $sql = "SELECT DP, count(DP) as nb_code
+          FROM `sejour`
+          WHERE sejour.praticien_id = '$user->_id'
+          AND DP IS NOT NULL
+          AND DP != ''
+          GROUP BY DP
+          ORDER BY count(DP) DESC
+          LIMIT 10;";
+  $cimStat = $ds->loadlist($sql);
 
-  $listCimStat[$DP] = $code;
+  foreach ($cimStat as $value) {
+    $DP = $value["DP"];
+
+    $code = new CCodeCIM10($DP);
+    $code->loadLite();
+    $code->_favoris_id = "0";
+    $code->occ = $value["nb_code"];
+
+    $listCimStat[$DP] = $code;
+  }
 }
 
 // Fusion des deux tableaux de favoris

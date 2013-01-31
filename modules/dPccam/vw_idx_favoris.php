@@ -17,21 +17,23 @@ $list = array();
 
 $user = CUser::get();
 
-$actes = new CActeCCAM();
-$codes = $actes->getFavoris($user->_id, $_filter_class);
-$i = 0;
+if (!$tag_id) {
+  $actes = new CActeCCAM();
+  $codes = $actes->getFavoris($user->_id, $_filter_class);
+  $i = 0;
 
-foreach ($codes as $value) {
-  $code = CCodeCCAM::get($value["code_acte"], CCodeCCAM::LITE);
-  $code->getChaps();
-  
-  $code->favoris_id = 0;
-  $code->occ = $value["nb_acte"];
-  $code->class = $value["object_class"];
+  foreach ($codes as $value) {
+    $code = CCodeCCAM::get($value["code_acte"], CCodeCCAM::LITE);
+    $code->getChaps();
 
-  $chapitre =& $code->chapitres[0];
-  $list[$chapitre["code"]]["nom"] = $chapitre["nom"];
-  $list[$chapitre["code"]]["codes"][$value["code_acte"]]= $code;
+    $code->favoris_id = 0;
+    $code->occ = $value["nb_acte"];
+    $code->class = $value["object_class"];
+
+    $chapitre =& $code->chapitres[0];
+    $list[$chapitre["code"]]["nom"] = $chapitre["nom"];
+    $list[$chapitre["code"]]["codes"][$value["code_acte"]]= $code;
+  }
 }
 
 $fusion = $list;

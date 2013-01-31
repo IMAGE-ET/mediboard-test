@@ -41,17 +41,20 @@ foreach ($profiles as $profile => $_user_id) {
   $_user->load($_user_id);
   $users[$profile] = $_user;
   $list = array();
-  
-  // Statistiques
-  $actes = new CActeCCAM;
-  $codes_stats = $actes->getFavoris($_user_id, $object_class);
 
-  foreach ($codes_stats as $key => $_code) {
-    $codes_stats[$_code["code_acte"]] = $_code;
-    unset($codes_stats[$key]);
+  if (!$tag_id) {
+    // Statistiques
+    $actes = new CActeCCAM;
+    $codes_stats = $actes->getFavoris($_user_id, $object_class);
+
+    foreach ($codes_stats as $key => $_code) {
+      $codes_stats[$_code["code_acte"]] = $_code;
+      unset($codes_stats[$key]);
+    }
   }
-  
+
   // Favoris
+
   $code = new CFavoriCCAM;
   $where = array();
   $where["ccamfavoris.favoris_user"] = " = '$_user_id'";
@@ -64,18 +67,24 @@ foreach ($profiles as $profile => $_user_id) {
   }
 
   $codes_favoris = $code->loadList($where, null, 100, null, $ljoin);
-  
+
   foreach ($codes_favoris as $key => $_code) {
     $codes_favoris[$_code->favoris_code] = $_code;
     unset($codes_favoris[$key]);
   }
-  
+
   // Seek sur les codes, avec ou non l'inclusion de tous les codes
   $code = new CCodeCCAM("");
   $where = null;
 
   if (!$_all_codes && (count($codes_stats) || count($codes_favoris))) {
-    $codes_keys = array_keys(array_merge($codes_stats, $codes_favoris));
+    // Si on a la recherche par tag, on n'utilise pas les stats (les tags sont mis sur les favoris)
+    if ($tag_id) {
+      $codes_keys = array_keys($codes_favoris);
+    }
+    else {
+      $codes_keys = array_keys(array_merge($codes_stats, $codes_favoris));
+    }
     $where = "CODE ".$ds->prepareIn($codes_keys);
   }
   
@@ -110,7 +119,7 @@ foreach ($profiles as $profile => $_user_id) {
     $sorter = CMbArray::pluck($list, "nb_acte");
     array_multisort($sorter, SORT_DESC, $list);
   }
-  
+
   $listByProfile[$profile]["favoris"] = $codes_favoris;
   $listByProfile[$profile]["stats"]   = $codes_stats;
   $listByProfile[$profile]["list"]    = $list;

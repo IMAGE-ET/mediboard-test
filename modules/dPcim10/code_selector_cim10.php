@@ -45,32 +45,33 @@ foreach ($profiles as $profile => $_user_id) {
   $_user->load($_user_id);
   $users[$profile] = $_user;
   $list = array();
-  
-  // Statistiques
-  $ds = CSQLDataSource::get("std");
-  $sql = "SELECT DP, count(DP) as nb_code
-          FROM `sejour`
-          WHERE sejour.praticien_id = '$_user_id'
-          AND DP IS NOT NULL
-          AND DP != ''
-          GROUP BY DP
-          ORDER BY count(DP) DESC
-          LIMIT 10;";
-  
-  $cimStat = $ds->loadlist($sql);
-
   $codes_stats = array();
-  foreach ($cimStat as $value) {
-    $DP = $value["DP"];
 
-    $code = new CCodeCIM10($DP);
-    $code->loadLite();
-    $code->_favoris_id = "0";
-    $code->occ = $value["nb_code"];
+  if (!$tag_id) {
+    // Statistiques (si pas de tag sélectionné)
+    $ds = CSQLDataSource::get("std");
+    $sql = "SELECT DP, count(DP) as nb_code
+            FROM `sejour`
+            WHERE sejour.praticien_id = '$_user_id'
+            AND DP IS NOT NULL
+            AND DP != ''
+            GROUP BY DP
+            ORDER BY count(DP) DESC
+            LIMIT 10;";
 
-    $codes_stats[$DP] = $code;
+    $cimStat = $ds->loadlist($sql);
+
+    foreach ($cimStat as $value) {
+      $DP = $value["DP"];
+
+      $code = new CCodeCIM10($DP);
+      $code->loadLite();
+      $code->_favoris_id = "0";
+      $code->occ = $value["nb_code"];
+
+      $codes_stats[$DP] = $code;
+    }
   }
-  
   // Favoris
   $code = new CFavoriCIM10;
   $where = array();
