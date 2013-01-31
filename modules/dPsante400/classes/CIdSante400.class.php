@@ -205,7 +205,9 @@
     $idex->tag          = $tag;
     $idex->id400        = $id400;
     $idex->object_id    = $object_id;
-    $idex->loadMatchingObject();
+
+    $order = "last_update DESC";
+    $idex->loadMatchingObject($order);
     
     return $idex;
   }
