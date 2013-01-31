@@ -1248,11 +1248,11 @@ class CConstantesMedicales extends CMbObject {
       $service_id = $_SESSION["ecap"]["service_id"];
     }
 
-    $guid = null;
-    if ($service_id) {
+    $guid = "global";
+    if ($service_id && is_numeric($service_id)) {
       $guid = "CService-$service_id";
     }
-    elseif ($group_id) {
+    elseif ($group_id && is_numeric($group_id)) {
       $guid = "CGroups-$group_id";
     }
 
