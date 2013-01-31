@@ -270,7 +270,7 @@ class CSejour extends CCodable implements IPatientRelated {
     $backProps["bilan_ssr"]             = "CBilanSSR sejour_id";
     $backProps["consultations_anesths"] = "CConsultAnesth sejour_id";
     $backProps["consultations"]         = "CConsultation sejour_id";
-    $backProps["factures"]              = "CFacture sejour_id";
+    //$backProps["factures"]              = "CFacture sejour_id";
     $backProps["fiche_autonomie"]       = "CFicheAutonomie sejour_id";
     $backProps["GHM"]                   = "CGHM sejour_id";
     $backProps["hprim21_sejours"]       = "CHprim21Sejour sejour_id";
