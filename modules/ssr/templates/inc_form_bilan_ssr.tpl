@@ -222,6 +222,8 @@ duplicateSSRLine = function(element_prescription_id, category_id){
                       <input type="hidden" name="prescription_id" value="{{$prescription_SSR->_id}}" onchange="this.form.onsubmit();"/>
                       <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
                       <input type="hidden" name="pratSel_id" value="" />
+                      <input type="hidden" name="_active" value="1" />
+                      
                      <input type="hidden" name="pack_protocole_id" value="" onchange="refreshFile(this.value)"/>
 				            </td>
 				          </tr>
