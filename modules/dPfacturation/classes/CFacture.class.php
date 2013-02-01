@@ -165,7 +165,7 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function store() {
-    if (CAppUI::conf("facturation $this->_class create_items_bill")) {
+    if (CAppUI::conf("dPfacturation $this->_class create_items_bill")) {
       if (!$this->cloture && $this->fieldModified("cloture")) {
         $this->deleteItems();
       }
@@ -183,7 +183,7 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function delete() {
-    if (CAppUI::conf("facturation CFactureCabinet use_create_bill")) {
+    if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
       $where = array();
       $where["facture_id"]    = " = '$this->_id'";
       $where["facture_class"] = " = '$this->_class'";
@@ -448,7 +448,7 @@ class CFacture extends CMbObject {
     }
     
     $consult = new CConsultation();
-    if (CAppUI::conf("facturation CFactureCabinet use_create_bill")) {
+    if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
       $ljoin = array();
       $ljoin["facture_liaison"] = "facture_liaison.object_id = consultation.consultation_id";
       $where = array();

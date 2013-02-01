@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-$dPconfig["facturation"] = array (
+$dPconfig["dPfacturation"] = array (
   "CFactureEtablissement" => array(
     "create_items_bill" => "0"
   ),

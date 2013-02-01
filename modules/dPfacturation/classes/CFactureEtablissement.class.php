@@ -81,7 +81,7 @@ class CFactureEtablissement extends CFacture {
    * @return void
   **/
   function store() {
-    if (CAppUI::conf("facturation CFactureEtablissement create_items_bill")) {
+    if (CAppUI::conf("dPfacturation CFactureEtablissement create_items_bill")) {
       //Si on cloture la facture création des lignes de la facture
       if ($this->cloture && $this->fieldModified("cloture") && !$this->completeField("cloture")) {
         $this->creationLignesFacture();
