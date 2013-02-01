@@ -1,17 +1,19 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- *  @package Mediboard
- *  @subpackage dPhospi
- *  @version $Revision$
- *  @author Thomas Despoix
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPplanningOp
+ * @author     Thomas Despoix <dev@openxtrem.com>
+ * @version    $Revision$
  */
 
 /**
  * Classe CSejour.
+ * 
  * @abstract Gère les séjours en établissement
  */
-class CSejour extends CCodable implements IPatientRelated {
+class CSejour extends CFacturable implements IPatientRelated {
   // DB Table key
   var $sejour_id = null;
 
@@ -100,13 +102,9 @@ class CSejour extends CCodable implements IPatientRelated {
   var $discipline_id       = null;
   var $ald                 = null;
   var $type_pec            = null;
-
-  var $assurance_maladie        = null;
-  var $rques_assurance_maladie  = null;
-  var $assurance_accident       = null;
-  var $rques_assurance_accident = null;
-  var $date_accident            = null;
-  var $nature_accident          = null;
+  
+  var $date_accident             = null;
+  var $nature_accident           = null;
 
   // Form Fields
   var $_entree             = null;
@@ -161,6 +159,15 @@ class CSejour extends CCodable implements IPatientRelated {
   // EAI Fields
   var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
 
+  //Fields for bill
+  var $_assurance_maladie        = null;
+  var $_rques_assurance_maladie  = null;
+  var $_assurance_accident       = null;
+  var $_rques_assurance_accident = null;
+  var $_type_sejour              = null;
+  var $_statut_pro               = null;
+  var $_dialyse                  = null;
+  
   // Object References
   var $_ref_patient                 = null; // Declared in CCodable
   var $_ref_praticien               = null;
@@ -205,6 +212,8 @@ class CSejour extends CCodable implements IPatientRelated {
   var $_ref_movements               = null;
   var $_ref_mode_entree             = null;
   var $_ref_mode_sortie             = null;
+  var $_ref_factures                = null;
+  var $_ref_last_facture            = null;
 
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -270,7 +279,6 @@ class CSejour extends CCodable implements IPatientRelated {
     $backProps["bilan_ssr"]             = "CBilanSSR sejour_id";
     $backProps["consultations_anesths"] = "CConsultAnesth sejour_id";
     $backProps["consultations"]         = "CConsultation sejour_id";
-    //$backProps["factures"]              = "CFacture sejour_id";
     $backProps["fiche_autonomie"]       = "CFicheAutonomie sejour_id";
     $backProps["GHM"]                   = "CGHM sejour_id";
     $backProps["hprim21_sejours"]       = "CHprim21Sejour sejour_id";
@@ -379,10 +387,6 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["rques_transport_sortie"]   = "text";
     $props["type_pec"]                 = "enum list|M|C|O";
 
-    $props["assurance_maladie"]        = "ref class|CCorrespondantPatient";
-    $props["rques_assurance_maladie"]  = "text helped";
-    $props["assurance_accident"]       = "ref class|CCorrespondantPatient";
-    $props["rques_assurance_accident"] = "text helped";
     $props["date_accident"]            = "date";
     $props["nature_accident"]          = "enum list|P|T|D|S|J|C|L|B|U";
 
@@ -390,6 +394,14 @@ class CSejour extends CCodable implements IPatientRelated {
     $props["cloture_activite_1"]    = "bool default|0";
     $props["cloture_activite_4"]    = "bool default|0";
 
+    $props["_rques_assurance_maladie"]  = "text helped";
+    $props["_rques_assurance_accident"] = "text helped";
+    $props["_assurance_maladie"]        = "ref class|CCorrespondantPatient";
+    $props["_assurance_accident"]       = "ref class|CCorrespondantPatient";
+    $props["_type_sejour"]              = "enum list|maladie|accident default|maladie";
+    $props["_dialyse"]                  = "bool default|0";
+    $props["_statut_pro"]               = "enum list|chomeur|etudiant|non_travailleur|independant|salarie|sans_emploi";
+    
     $props["_time_entree_prevue"] = "time";
     $props["_time_sortie_prevue"] = "time";
 
@@ -756,7 +768,7 @@ class CSejour extends CCodable implements IPatientRelated {
         }
       }
     }
-
+    
     // On fixe la récusation si pas définie pour un nouveau séjour
     if (!$this->_id && ($this->recuse === "" || $this->recuse === null)) {
       $this->recuse = CAppUI::conf("dPplanningOp CSejour use_recuse") ? -1 : 0;
@@ -771,7 +783,31 @@ class CSejour extends CCodable implements IPatientRelated {
         $this->isolement_fin = "";
       }
     }
-
+    
+    $facture = null;
+    if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
+      // Création de la facture de sejour 
+      $this->loadRefsFactureEtablissement();
+      $facture = $this->_ref_last_facture;
+      if (!$facture->_id) {
+        $facture->ouverture         = mbDate();
+      }
+      $facture->patient_id          = $this->patient_id;
+      $facture->praticien_id        = $this->praticien_id;
+      $facture->type_facture        = $this->_type_sejour;
+      $facture->dialyse             = $this->_dialyse;
+      $facture->statut_pro          = $this->_statut_pro;
+      $facture->assurance_maladie   = $this->_assurance_maladie;
+      $facture->assurance_accident  = $this->_assurance_accident;
+      $facture->rques_assurance_accident = $this->_rques_assurance_accident;
+      $facture->rques_assurance_maladie  = $this->_rques_assurance_maladie;
+      
+      //Store de la facture 
+      if ($msg = $facture->store()) {
+        return $msg;
+      }
+    }
+    
     $this->completeField("mode_entree_id");
     if ($this->mode_entree_id) {
       $mode = $this->loadFwdRef("mode_entree_id");
@@ -788,7 +824,21 @@ class CSejour extends CCodable implements IPatientRelated {
     if ($msg = parent::store()) {
       return $msg;
     }
-
+    
+    if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
+      if (count($this->_ref_factures) ==0) {
+        $liaison = new CFactureLiaison();
+        $liaison->object_id     = $this->_id;
+        $liaison->object_class  = $this->_class;
+        $liaison->facture_id    = $facture->_id;
+        $liaison->facture_class = "CFactureEtablissement";
+        //Store de la table de liaison entre facture et séjour
+        if ($msg = $liaison->store()) {
+          return $msg;
+        }
+      }
+    }
+    
     if ($patient_modified) {
       $consultations = $this->loadBackRefs("consultations");
       foreach ($consultations as $_consult) {
@@ -868,7 +918,28 @@ class CSejour extends CCodable implements IPatientRelated {
       }
     }
   }
-
+  
+  function loadRefsFactureEtablissement(){
+    if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
+      $ljoin = array();
+      $ljoin["facture_liaison"] = "facture_liaison.facture_id = facture_etablissement.facture_id";
+      $where = array();
+      $where["facture_liaison.facture_class"]    = " = 'CFactureEtablissement'";
+      $where["facture_liaison.object_class"] = " = 'CSejour'";
+      $where["facture_liaison.object_id"]    = " = '$this->_id'";
+      
+      $facture = new CFactureEtablissement();
+      $this->_ref_factures = $facture->loadList($where, "ouverture ASC", null, null, $ljoin);
+     if (count($this->_ref_factures) > 0) {
+        $this->_ref_last_facture = end($this->_ref_factures);
+      }
+      else {
+        $this->_ref_last_facture = new CFactureEtablissement();
+      }
+      return $this->_ref_factures;
+    }
+  }
+  
   function generateNDA() {
     $group = CGroups::loadCurrent();
     if (!$group->isNDASupplier()) {
@@ -1007,6 +1078,20 @@ class CSejour extends CCodable implements IPatientRelated {
 
       if (!$this->annule && $this->recuse == -1) {
         $this->_view = "[Att] " . $this->_view;
+      }
+    }
+    
+    if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
+      $this->loadRefsFactureEtablissement();
+      if ($this->_ref_last_facture) {
+        $facture = $this->_ref_last_facture;
+        $this->_type_sejour = $facture->type_facture;
+        $this->_statut_pro  = $facture->statut_pro;
+        $this->_dialyse     = $facture->dialyse;
+        $this->_assurance_maladie         = $facture->assurance_maladie;
+        $this->_assurance_accident        = $facture->assurance_accident;
+        $this->_rques_assurance_maladie   = $facture->rques_assurance_maladie;
+        $this->_rques_assurance_accident  = $facture->rques_assurance_accident;
       }
     }
   }
@@ -2846,18 +2931,6 @@ class CSejour extends CCodable implements IPatientRelated {
 
   function loadRefUFSoins($cache = true) {
     return $this->_ref_uf_soins = $this->loadFwdRef("uf_soins_id", $cache);
-  }
-
-  /**
-   * Chargement des assurances du séjour
-   *
-   * @return object
-  **/
-  function loadRefAssurance() {
-    $this->_ref_assurance_maladie = $this->loadFwdRef("assurance_maladie", true);
-    $this->_ref_assurance_accident = $this->loadFwdRef("assurance_accident", true);
-
-    return $this->_ref_assurance_maladie;
   }
 
   /**
