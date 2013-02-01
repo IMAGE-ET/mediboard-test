@@ -146,14 +146,14 @@ Main.add(function() {
       <td colspan="2">
         <fieldset>
           <legend>{{mb_label object=$modele_etiquette field=texte}}</legend>
-          {{mb_field object=$modele_etiquette field=texte rows=5}}
+          {{mb_field object=$modele_etiquette field=texte rows=4}}
         </fieldset>
       </td>
       <!-- Contenu seconde colonne optionnelle -->
       <td colspan="2">
         <fieldset>
           <legend>{{mb_label object=$modele_etiquette field=texte_2}}</legend>
-          {{mb_field object=$modele_etiquette field=texte_2 rows=5}}
+          {{mb_field object=$modele_etiquette field=texte_2 rows=4}}
         </fieldset>
       </td>
    </tr>
@@ -162,19 +162,21 @@ Main.add(function() {
       <td colspan="2">
         <fieldset>
           <legend>{{mb_label object=$modele_etiquette field=texte_3}}</legend>
-          {{mb_field object=$modele_etiquette field=texte_3 rows=5}}
+          {{mb_field object=$modele_etiquette field=texte_3 rows=4}}
         </fieldset>
       </td>
       <!-- Contenu quatrième colonne optionnelle -->
       <td colspan="2">
         <fieldset>
           <legend>{{mb_label object=$modele_etiquette field=texte_4}}</legend>
-          {{mb_field object=$modele_etiquette field=texte_4 rows=5}}
+          {{mb_field object=$modele_etiquette field=texte_4  rows=4}}
         </fieldset>
       </td>
   </tr>
+</table>
 
-  <!--  Liste des champs disponibles -->
+<!--  Liste des champs disponibles -->
+<table class="form">
   <tr>
     <th class="category" colspan="4">{{tr}}CModeleEtiquette.fields{{/tr}}</th>
   </tr>
@@ -185,9 +187,9 @@ Main.add(function() {
   {{foreach from=$fields key=_class item=_by_class}}
   <tr>
     <th>{{tr}}{{$_class}}{{/tr}}</th>
-    <td colspan="3" class="text">
+    <td class="text">
     {{foreach from=$_by_class item=_field}}
-      <button class="add" type="button" value='{{$_field}}' onclick='ModeleEtiquette.insertField(this);'>{{$_field}}</button>
+      <button class="add" type="button" value='{{$_field}}' onclick='ModeleEtiquette.insertField(this);'>{{$_field|lower}}</button>
     {{/foreach}}
     </td>
   
