@@ -1,20 +1,18 @@
-<script type="text/javascript">
+<script>
 window.text_focused = null;
 
 Main.add(function() {
-  var oForm = getForm("edit_etiq");
-  oForm.texte  .observe("focus", function(e) { window.text_focused = e.target; });
-  oForm.texte_2.observe("focus", function(e) { window.text_focused = e.target; });
-  oForm.texte_3.observe("focus", function(e) { window.text_focused = e.target; });
-  oForm.texte_4.observe("focus", function(e) { window.text_focused = e.target; });
+  var form = getForm('edit_etiq');
+  form.texte  .observe('focus', function(e) { window.text_focused = e.target; });
+  form.texte_2.observe('focus', function(e) { window.text_focused = e.target; });
+  form.texte_3.observe('focus', function(e) { window.text_focused = e.target; });
+  form.texte_4.observe('focus', function(e) { window.text_focused = e.target; });
 });
 </script>
 
 <form name="edit_etiq" onsubmit="return ModeleEtiquette.onSubmit(this);" method="post">
-  <input type="hidden" name="m" value="dPhospi" />
-  <input type="hidden" name="dosql" value="do_modele_etiquette_aed" />
-  <input type="hidden" name="del" value="0" />
-  {{mb_key object=$modele_etiquette}}
+  {{mb_class object=$modele_etiquette}}
+  {{mb_key   object=$modele_etiquette}}
   <input type="hidden" name="group_id" value="{{$modele_etiquette->group_id}}" />
   
   <table class="form">
@@ -121,12 +119,6 @@ Main.add(function() {
       <td>
         {{mb_field object=$modele_etiquette field=show_border}}
       </td>
-      <td colspan="2">
-        {{tr}}CModeleEtiquette._width_etiq{{/tr}}  : {{mb_value object=$modele_etiquette field=_width_etiq }} &mdash;
-        {{tr}}CModeleEtiquette._height_etiq{{/tr}} : {{mb_value object=$modele_etiquette field=_height_etiq}}
-      </td>
-    </tr>
-    <tr>
       <th>
         {{mb_label object=$modele_etiquette field=text_align}}
       </th>
