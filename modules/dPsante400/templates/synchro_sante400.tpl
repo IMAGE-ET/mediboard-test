@@ -121,11 +121,8 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
     {{elseif $status === "*"}}
     <div class="info">Skipped</div>
     {{else}}
-    <div class="info">
-      synch:&nbsp;{{$status}}
-      {{if $cache}}
-      <br />Cache:&nbsp;{{$cache}}
-      {{/if}}
+    <div class="success">
+      synch:&nbsp;{{$status}} {{if $cache}} <span title="Depuis le cache">({{$cache}})</span> {{/if}}
     </div>
     {{/if}}
   </td>
