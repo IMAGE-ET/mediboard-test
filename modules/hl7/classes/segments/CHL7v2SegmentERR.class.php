@@ -51,7 +51,7 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
 
     if ($error) {
       // ERR-1: Error Code and Location (ELD) (optional repeating)
-      if ($version < "2.6") {
+      if ($version < "2.5") {
         $data[] = $error->getCodeLocation();
         return $this->fill($data);
       }
@@ -115,7 +115,7 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
     }
     else {
       // ERR-1: Error Code and Location (ELD) (optional repeating)
-      if ($version < "2.6") {
+      if ($version < "2.5") {
         $data[] = array(
           null,
           null,
@@ -170,4 +170,3 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-?>
