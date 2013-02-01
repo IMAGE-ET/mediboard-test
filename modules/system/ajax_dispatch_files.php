@@ -125,7 +125,9 @@ foreach ($files as $_filepath) {
     catch (Exception $e) {
       if ($sender->_delete_file !== false) {
         $source->delFile($_filepath);
-        $source->delFile("$_filepath_no_ext.$fileextension_write_end");
+        if ($fileextension_write_end) {
+          $source->delFile("$_filepath_no_ext.$fileextension_write_end");
+        }
       }
       else {
         dispatchError($sender, $filename_excludes, $path_info);
@@ -143,7 +145,9 @@ foreach ($files as $_filepath) {
   try {
     if ($sender->_delete_file !== false) {
       $source->delFile($_filepath);
-      $source->delFile("$_filepath_no_ext.$fileextension_write_end");
+      if ($fileextension_write_end) {
+        $source->delFile("$_filepath_no_ext.$fileextension_write_end");
+      }
     }
     else {
       dispatchError($sender, $filename_excludes, $path_info);
