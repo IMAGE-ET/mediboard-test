@@ -190,11 +190,6 @@ if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
   $list_mode_sortie = $mode_sortie->loadGroupList($where);
 }
 
-if (!$sejour->_id) {
-  $sejour->ATNC = "0";
-}
-
-
 // Création du template
 $smarty = new CSmartyDP();
 
