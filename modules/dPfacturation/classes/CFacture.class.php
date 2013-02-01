@@ -335,6 +335,7 @@ class CFacture extends CMbObject {
     
     if (!$this->_montant_sans_remise) {
       $this->_montant_sans_remise = $this->du_patient  + $this->du_tiers;
+      $this->_montant_avec_remise = $this->_montant_sans_remise - $this->remise;
     }
     
     $this->_du_restant_patient = $this->du_patient;
@@ -473,6 +474,20 @@ class CFacture extends CMbObject {
     elseif ($this->_id) {
       $consult->facture_id = $this->_id;
       $this->_ref_consults = $consult->loadMatchingList();
+    }
+    
+    if (count($this->_ref_consults) > 0) {
+      foreach ($this->_ref_consults as $_consult) {
+        if ($_consult->valide == 0) {
+          $liaison = new CFactureLiaison();
+          $liaison->facture_class = $this->_class;
+          $liaison->facture_id    = $this->_id;
+          $liaison->object_class  = "CConsultation";
+          $liasion->object_id     = $_consult->_id;
+          $liaison->loadMatchingObject();
+          unset($this->_ref_consults["$_consult->_id"]);
+        }  
+      }
     }
     
     if (count($this->_ref_consults) > 0) {
