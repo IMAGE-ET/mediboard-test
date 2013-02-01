@@ -335,6 +335,10 @@
     <td colspan="3">{{mb_field object=$sejour field="nature_accident" emptyLabel="Choose" style="width: 15em;" onchange="checkAccidentEasy();"}}</td>
   </tr>
   {{/if}}
+  {{if $conf.dPplanningOp.CSejour.show_atnc && $conf.dPplanningOp.CSejour.easy_atnc}}
+    <th>{{mb_label object=$sejour field="ATNC"}}</th>
+    <td colspan="3">{{mb_field object=$sejour field="ATNC" typeEnum="select" emptyLabel="Non renseigné" onchange="checkATNCEasy()"}}</td>
+  {{/if}}
 
   {{if $conf.dPplanningOp.CSejour.assurances && $conf.dPplanningOp.COperation.easy_assurances}}
     <tbody id="assurances_patient_easy">

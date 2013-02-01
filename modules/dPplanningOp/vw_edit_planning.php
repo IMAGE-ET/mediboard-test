@@ -222,6 +222,10 @@ if ($chir->_id) {
   $_functions = $chir->loadBackRefs("secondary_functions");
 }
 
+if (!$sejour->_id) {
+  $sejour->ATNC = "0";
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 

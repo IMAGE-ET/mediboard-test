@@ -181,6 +181,24 @@ function checkAccidentEasy(){
   }
 }
 
+function checkATNC() {
+  var oForm = getForm("editSejour");
+  var oFormEasy = getForm("editOpEasy");
+  if (oFormEasy) {
+    var atnc    = $V(oForm.ATNC);
+    $V(oFormEasy.ATNC, atnc   , false);
+  }
+}
+
+function checkATNCEasy() {
+  var oForm = getForm("editSejour");
+  var oFormEasy = getForm("editOpEasy");
+  if (oFormEasy) {
+    var atnc    = $V(oFormEasy.ATNC);
+    $V(oForm.ATNC, atnc   , false);
+  }
+}
+
 function checkAssurances(){
   var oForm = getForm("editSejour");
   var oFormEasy = getForm("editOpEasy");
@@ -1010,9 +1028,9 @@ Main.add( function(){
 </tbody>
 
 <tr {{if !$conf.dPplanningOp.CSejour.easy_atnc}} class="modeExpert" {{/if}}
-{{if $conf.dPplanningOp.CSejour.show_atnc}}style="display:none;"{{/if}}>
+{{if !$conf.dPplanningOp.CSejour.show_atnc}}style="display:none;"{{/if}}>
   <th>{{mb_label object=$sejour field="ATNC"}}</th>
-  <td colspan="3">{{mb_field object=$sejour field="ATNC"}}</td>
+  <td colspan="3">{{mb_field object=$sejour field="ATNC" typeEnum="select" emptyLabel="Non renseigné" onchange="checkATNC()"}}</td>
 </tr>
 
 {{if $conf.dPplanningOp.CSejour.show_isolement}}
