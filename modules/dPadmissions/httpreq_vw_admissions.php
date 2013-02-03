@@ -19,7 +19,6 @@ $selSaisis      = CValue::getOrSession("selSaisis", "0");
 $order_col      = CValue::getOrSession("order_col", "patient_id");
 $order_way      = CValue::getOrSession("order_way", "ASC");
 $date           = CValue::getOrSession("date", mbDate());
-$next           = mbDate("+1 DAY", $date);
 $filterFunction = CValue::getOrSession("filterFunction");
 $period         = CValue::getOrSession("period");
 
@@ -112,6 +111,7 @@ if ($order_col == "praticien_id") {
 
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
+// Mass preloading
 CMbObject::massLoadFwdRef($sejours, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
@@ -159,11 +159,10 @@ foreach ($sejours as $sejour_id => $_sejour) {
   }
 
   // Chargement de l'affectation
-  $_sejour->loadRefsAffectations();
-  $affectation = $_sejour->_ref_first_affectation;
+  $affectation = $_sejour->loadRefFirstAffectation();
   if ($affectation->_id) {
     $affectation->loadRefLit(1)->loadCompleteView();
-  }
+  }    
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute

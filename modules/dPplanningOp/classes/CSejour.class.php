@@ -1928,6 +1928,10 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return string
    */
   static function getTagNDA($group_id = null, $type_tag = "tag_dossier") {
+    if (CFunctionCache::exist()) {
+      return CFunctionCache::get();
+    }
+     
     // Gestion du tag NDA par son domaine d'identification
     if (CAppUI::conf("eai use_domain")) {
       return CDomain::getTagMasterDomain("CSejour", $group_id);
@@ -1963,7 +1967,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $group_id = $idex->id400;
     }
 
-    return str_replace('$g', $group_id, $tag_NDA);
+    return CFunctionCache::set(str_replace('$g', $group_id, $tag_NDA));
   }
 
   /**
