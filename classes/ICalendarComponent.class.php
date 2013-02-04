@@ -1,5 +1,17 @@
 <?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage classes
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
+/**
+ * iCalendar component
+ */
 class ICalendarComponent {
   /**
    * @var array[]
@@ -51,7 +63,9 @@ class ICalendarComponent {
   }
 
   /**
-   * @param string $name
+   * Get a property by its name
+   *
+   * @param string $name Property name
    *
    * @return array
    */
@@ -63,6 +77,13 @@ class ICalendarComponent {
     return $this->properties[$name];
   }
 
+  /**
+   * Get a property scalar value by its name
+   *
+   * @param string $name Property name
+   *
+   * @return string The propery value
+   */
   public function getPropertyValue($name) {
     if (!isset($this->properties[$name])) {
       return null;
@@ -72,7 +93,9 @@ class ICalendarComponent {
   }
 
   /**
-   * @param string $type
+   * Get the components by their type
+   *
+   * @param string $type The components' type
    *
    * @return ICalendarComponent[]
    */
@@ -85,7 +108,9 @@ class ICalendarComponent {
   }
 
   /**
-   * @return string
+   * __toString magic method
+   *
+   * @return string The string value of the object
    */
   public function __toString(){
     $str = "<ul>";

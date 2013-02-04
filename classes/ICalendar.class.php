@@ -1,5 +1,17 @@
 <?php
+/**
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage classes
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
+/**
+ * iCalendar file parser
+ */
 class ICalendar extends ICalendarComponent {
   /**
    * @var ICalendarComponent
@@ -39,6 +51,9 @@ class ICalendar extends ICalendarComponent {
     $this->current_component = $this;
   }
 
+  /**
+   * Closes file pointer handle
+   */
   public function __destruct(){
     fclose($this->fp);
   }
