@@ -993,7 +993,7 @@ class COperation extends CCodable implements IPatientRelated {
       if ($this->anesth_id) {
         $this->loadRefAnesth();
       } else {
-        $this->_ref_anesth = $plageop->_ref_anesth;
+        $this->_ref_anesth = $plageOp->_ref_anesth;
       }
 
       $date = $plageOp->date;
