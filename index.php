@@ -260,8 +260,6 @@ else {
 
 CApp::notify("AfterMain");
 
-require "./includes/access_log.php";
-
 // Output HTML
 CHTMLResourceLoader::output();
 

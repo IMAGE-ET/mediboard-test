@@ -80,7 +80,10 @@ class CApp {
     /*if (empty($_COOKIE)) {
       CSessionHandler::end();
     }*/
-    
+
+    //access log
+    include "./includes/access_log.php";
+
     self::$inPeace = true;
     die;
   }
