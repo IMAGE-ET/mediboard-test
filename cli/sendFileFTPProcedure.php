@@ -9,6 +9,9 @@
  * @link     http://www.mediboard.org
  */
 
+// CLI or die
+PHP_SAPI === "cli" or die;
+
 require_once "utils.php";
 require_once dirname(__FILE__)."/classes/Procedure.class.php";
 

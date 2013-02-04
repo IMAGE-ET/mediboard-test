@@ -15,6 +15,9 @@
  *  - Install ANSICON to have colored shell (https://github.com/adoxa/ansicon/downloads) and run "ansicon -i"
  */
 
+// CLI or die
+PHP_SAPI === "cli" or die;
+
 require_once dirname(__FILE__)."/classes/Task.class.php";
 
 require_once "logPing.php";

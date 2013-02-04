@@ -9,6 +9,9 @@
  * @link     http://www.mediboard.org
  */
 
+// CLI or die
+PHP_SAPI === "cli" or die;
+
 global $file;
 echo exec("clear");
 menu();
