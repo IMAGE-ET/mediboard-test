@@ -328,12 +328,22 @@ if (!$suppressHeaders) {
   $tplHeader->display("header.tpl");
 }
 
+// Check whether we should trace SQL queries
+if (CValue::get("query_trace")) {
+  CSQLDataSource::$trace = true;
+}
+
 // tabBox et inclusion du fichier demandé
 if ($tab !== null) {
   $module->showTabs();
 }
 else {
   $module->showAction();
+}
+
+// Check whether we should trace SQL queries
+if (CValue::get("query_trace")) {
+  CSQLDataSource::$trace = false;
 }
 
 CApp::$chrono->stop();
