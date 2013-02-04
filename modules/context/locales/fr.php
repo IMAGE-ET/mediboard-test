@@ -9,6 +9,8 @@ $locales['context-nonexisting-patient-ipp'] = 'Aucun patient n\'a l\'IPP [%s], p
 $locales['context-view_not-registered'] = 'Erreur, cette vue n\'existe pas.';
 $locales['context-view_required'] = 'Erreur : Vue non définie. Une vue est requise dans les paramètres ($view)';
 $locales['mod-context-tab-call'] = 'requête contextuelle';
+$locales['mod-context-tab-vw_doc'] = 'Documentation';
 $locales['mod-context-tab-vw_tests'] = 'Requêtes de test';
 $locales['module-context-court'] = 'Afficage contextuel';
 $locales['module-context-long'] = 'Afficage contextuel';
+?>

@@ -41,9 +41,9 @@ if ($debug) {
 
 //view list
 $mods_available = array(
-  "patient"       => "m=patients&a=ajax_vw_patient_complete&patient_id=",
-  "soins"         => "m=soins&a=ajax_vw_dossier_soin&sejour_id=",
-  "labo"          => "m=Imeds&a=httpreq_vw_sejour_results&sejour_id="
+  "patient"       => array("patient", "ajax_vw_patient_complet"),
+  "soins"         => array("soins", "ajax_vw_dossier_soin"),
+  "labo"          => array("Imeds", "httpreq_vw_sejour_results")
 );
 
 
@@ -102,7 +102,7 @@ if ($view == "patient") {
   }
 
   if ($patient->_id) {
-    CAppUI::redirect($mods_available["patient"].$patient->_id);
+    CAppUI::redirect("?m=".$mods_available["patient"][0]."&a=".$mods_available["patient"][1]."&patient_id=".$patient->_id);
   }
   //non existing patient
   else {
@@ -131,6 +131,6 @@ if (($view == 'labo') ||($view == 'soins')) {
     CAppUI::stepAjax("context-non-existing-sejour-nda", UI_MSG_ERROR, $nda);
   }
 
-  CAppUI::redirect($mods_available[$view].$sejour->_id);
+  CAppUI::redirect(CAppUI::redirect("?m=".$mods_available[$view][0]."&a=".$mods_available[$view][1]."&sejour_id=".$sejour->_id));
 }
 
