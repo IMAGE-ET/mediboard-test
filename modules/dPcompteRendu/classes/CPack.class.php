@@ -243,7 +243,7 @@ class CPack extends CMbObject {
   }
   
   function loadHeaderFooter() {
-    if (!isset($pack->_back['modele_links'])) {
+    if (!isset($this->_back['modele_links'])) {
       $this->loadBackRefs("modele_links", "modele_to_pack_id");
     }
     
