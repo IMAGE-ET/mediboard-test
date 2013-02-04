@@ -85,7 +85,7 @@ $whereNP["sejour.annule"]              = "= '0'";
 if (count($services_ids)) {
   // Tenir compte des affectations sans lit_id (dans le couloir du service)
   unset($whereNP["affectation.affectation_id"]);
-  $whereNP[] = "(sejour.service_id " . CSQLDataSource::prepareIn($services_ids) . " AND affectation.affectation_id IS NULL) OR "
+  $whereNP[] = "((sejour.service_id " . CSQLDataSource::prepareIn($services_ids) . " OR sejour.service_id IS NULL) AND affectation.affectation_id IS NULL) OR "
               ."(affectation.lit_id IS NULL AND affectation.service_id " . CSQLDataSource::prepareIn($services_ids) . ")";
 }
 if ($praticien->_id) {

@@ -104,7 +104,7 @@ $whereNP["sejour.group_id"]            = "= '$group->_id'";
 $whereNP["sejour.annule"]              = "= '0'";
 $whereNP["sejour.type"]                = CSQLDataSource::prepareIn(array_keys($mouvements), $type_hospi);
 if (count($services_ids)) {
-  $whereNP[] = "(sejour.service_id " . CSQLDataSource::prepareIn($services_ids) . " AND affectation.affectation_id IS NULL) OR "
+  $whereNP[] = "((sejour.service_id " . CSQLDataSource::prepareIn($services_ids) . " OR sejour.service_id IS NULL) AND affectation.affectation_id IS NULL) OR "
     ."(affectation.lit_id IS NULL AND affectation.service_id " . CSQLDataSource::prepareIn($services_ids) . ")";
 }
 
