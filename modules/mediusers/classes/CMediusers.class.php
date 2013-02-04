@@ -774,7 +774,6 @@ class CMediusers extends CMbObject {
    * @return CMediusers[]
    */
   function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true, $reverse = false) {
-
     $where = array();
     $ljoin = array();
 
@@ -836,7 +835,6 @@ class CMediusers extends CMbObject {
 
     // Mass fonction standard preloading
     CMbObject::massLoadFwdRef($mediusers, "function_id");
-
 
     // Filter a posteriori to unable mass preloading of function
     self::filterByPerm($mediusers, $permType);

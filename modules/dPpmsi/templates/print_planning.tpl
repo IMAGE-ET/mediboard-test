@@ -122,22 +122,7 @@
           </td>
           <td class="text">
             {{foreach from=$_operation->_ref_actes_ccam item=_acte}}
-            <div>
-                {{$_acte->code_acte}} 
-                {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_acte->_ref_executant}}
-                
-                <div class="compact">
-                activité: {{$_acte->code_activite}}
-                &ndash; phase: {{$_acte->code_phase}}
-                &ndash; Asso:  {{$_acte->code_association|default:"aucun"}}
-                {{if $_acte->modificateurs}}
-                  &ndash; modifs: {{$_acte->modificateurs}}
-                {{/if}}
-                {{if $_acte->montant_depassement}}
-                  &ndash; DH: {{$_acte->montant_depassement|currency}} 
-                {{/if}}
-                </div>
-             </div>
+            {{mb_include module=salleOp template=inc_view_acte_compact acte=$_acte}}
             {{/foreach}}
           </td>
         </tr>

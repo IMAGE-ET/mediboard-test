@@ -2,7 +2,7 @@
 
 /**
  * dPboard
- *  
+ *   
  * @category dPboard
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
@@ -46,12 +46,15 @@ if ($all_prats) {
 }
 else {
   if ($user->isAnesth()) {
-    $where[] = "operations.anesth_id = '$user->_id' OR (operations.anesth_id IS NULL && plagesop.anesth_id = '$user->_id')";
+    $where[] = "operations.chir_id = '$user->_id' 
+      OR operations.anesth_id = '$user->_id' 
+      OR (operations.anesth_id IS NULL && plagesop.anesth_id = '$user->_id')";
   }
   else {
     $where["operations.chir_id"] = "= '$user->_id'";
   }
 }
+
 $interventions = $operation->loadList($where, null, null, null, $ljoin);
 
 foreach ($interventions as $key => $_interv) {
@@ -61,9 +64,10 @@ foreach ($interventions as $key => $_interv) {
   $codes_ccam = $_interv->_ext_codes_ccam;
   
   $where = array();
-  if($all_prats) {
+  if ($all_prats) {
     $_interv->countActes();
-  } else {
+  } 
+  else {
     $_interv->countActes($user->_id);
     $where["executant_id"] = "= '$user->_id'";
   }
@@ -83,18 +87,22 @@ foreach ($interventions as $key => $_interv) {
   // Actes prévus restant en suspend
   $activites = CMbArray::pluck($codes_ccam, "activites");
   $nbCodes = 0;
-  
   foreach ($activites as $_activite) {
-    if($all_prats) {
+    if ($all_prats) {
       $nbCodes += count($_activite);
       continue;
     }
-    foreach($_activite as $_type) {
-      if($user->_is_anesth && $_type->numero == 4) {
+    foreach ($_activite as $_type) {
+//      if ($user->_is_anesth && $_type->numero == 4) {
+      if ($_interv->chir_id != $user->_id && $_type->numero == 4) {
         $nbCodes++;
+        continue;
       }
-      elseif(!$user->_is_anesth && $_type->numero != 4) {
+      
+//      if (!$user->_is_anesth && $_type->numero != 4) {
+      if ($_interv->chir_id == $user->_id && $_type->numero != 4) {
         $nbCodes++;
+        continue;
       }
     }
   }
@@ -115,6 +123,12 @@ foreach ($interventions as $key => $_interv) {
   $_interv->loadRefChir()->loadRefFunction();
   $_interv->loadRefAnesth()->loadRefFunction();
   $_interv->loadRefPatient();
+
+  // Actes CCAM cotées
+  $_interv->loadExtCodesCCAM();
+  foreach ($_interv->loadRefsActesCCAM() as $_acte) {
+    $_acte->loadRefExecutant();
+  }
 }
 
 $interventions = CMbObject::naturalSort($interventions, array("_datetime"));

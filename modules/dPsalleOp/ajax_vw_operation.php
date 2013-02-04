@@ -19,6 +19,7 @@ if (!$selOp->_id) {
   CApp::rip();
 }
   
+
 $selOp->canDo();
 $selOp->loadRefs();
 
@@ -130,7 +131,9 @@ $listAnesthType = new CTypeAnesth();
 $orderanesth = "name";
 $listAnesthType = $listAnesthType->loadList(null,$orderanesth);
 
-//Tableau d'unités
+
+
+// Tableau d'unités
 $unites = array();
 $unites["hb"]         = array("nom"=>"Hb","unit"=>"g/dl");
 $unites["ht"]         = array("nom"=>"Ht","unit"=>"%");
