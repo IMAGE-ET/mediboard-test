@@ -36,23 +36,28 @@ $where["functions_mediboard.group_id"] = "= '$group->_id'";
 
 // FIXME: utiliser le seek
 if ($filter) {
-  
+
+  $filters = explode(" ", $filter);
+
   $re = "/(\d+)\s*(jour|mois|an)/i";
-  if(preg_match($re, $filter, $matches)){
-    $map = array("an" => "YEAR", "mois" => "MONTH", "jour" => "DAY");
-    
-    $nouvelle_date=mbDateTime("-".$matches[1]." ".$map[$matches[2]]);
-    
-    $where[] ="users.user_last_login <= '$nouvelle_date'";
+
+  foreach ($filters as $_filter) {
+    if(preg_match($re, $_filter, $matches)){
+      $map = array("an" => "YEAR", "mois" => "MONTH", "jour" => "DAY");
+
+      $nouvelle_date=mbDateTime("-".$matches[1]." ".$map[$matches[2]]);
+
+      $where[] ="users.user_last_login <= '$nouvelle_date'";
+    }
+    else {
+      $where[] ="functions_mediboard.text LIKE '%$_filter%' OR
+              users.user_last_name LIKE '$_filter%' OR
+              users.user_first_name LIKE '$_filter%' OR
+              users.user_username LIKE '$_filter%' ";
+    }
   }
-  else{
-    $where[] ="functions_mediboard.text LIKE '%$filter%' OR 
-              users.user_last_name LIKE '$filter%' OR 
-              users.user_first_name LIKE '$filter%' OR 
-              users.user_username LIKE '$filter%' ";
-  }
-  
 }
+
 if ($pro_sante) {
   $user_types = array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme");
   $utypes_flip = array_flip(CUser::$types);
