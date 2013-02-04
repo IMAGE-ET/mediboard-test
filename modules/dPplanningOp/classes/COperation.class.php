@@ -1276,7 +1276,7 @@ class COperation extends CCodable implements IPatientRelated {
       return $this->_dmi_alert = "none";
     }
 
-    $auto_validate = CAppUI::conf("dmi CMDI auto_validate");
+    $auto_validate = CAppUI::conf("dmi CDMI auto_validate");
     if ($auto_validate) {
       return $this->_dmi_alert = "ok";
     }
