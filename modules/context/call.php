@@ -153,7 +153,7 @@ if ($mods_available[$view][2] == "patient") {
 // labo
 if ($mods_available[$view][2] == "sejour") {
   if (!$sejour->_id) {
-    CAppUI::stepAjax("context-non-existing-sejour", UI_MSG_ERROR);
+    CAppUI::stepAjax("context-none-sejour", UI_MSG_ERROR);
   }
 
   $url = formRequest($mods_available[$view])."&sejour_id=".$sejour->_id;
