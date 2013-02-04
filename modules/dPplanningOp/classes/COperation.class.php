@@ -965,14 +965,19 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   function loadRefAnesth($cache = true) {
-    return $this->_ref_anesth = $this->loadFwdRef("anesth_id", $cache);
+    if($this->anesth_id) {
+      return $this->_ref_anesth = $this->loadFwdRef("anesth_id", $cache);
+    }
+    if($this->plageop_id) {
+      return $this->_ref_anesth = $this->_ref_plageop->loadFwdRef("anesth_id", $cache);
+    }
+    return $this->_ref_anesth = new CMediusers();
   }
 
   /**
    * @return CPlageOp
    */
   function loadRefPlageOp($cache = true) {
-    $this->loadRefAnesth($cache);
 
     $this->_ref_anesth_visite = $this->loadFwdRef("prat_visite_anesth_id", $cache);
 
@@ -985,8 +990,10 @@ class COperation extends CCodable implements IPatientRelated {
     if ($plageOp->_id) {
       $plageOp->loadRefsFwd($cache);
 
-      if (!$this->anesth_id) {
-        $this->_ref_anesth =& $plageOp->_ref_anesth;
+      if ($this->anesth_id) {
+        $this->loadRefAnesth();
+      } else {
+        $this->_ref_anesth = $plageop->_ref_anesth;
       }
 
       $date = $plageOp->date;
