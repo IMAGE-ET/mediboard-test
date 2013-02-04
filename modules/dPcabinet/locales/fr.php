@@ -1469,6 +1469,7 @@ $locales['mod-dPcabinet-tab-ajax_creation_facture'] = 'Création d\'une facture';
 $locales['mod-dPcabinet-tab-ajax_cut_facture'] = 'Scinder une facture';
 $locales['mod-dPcabinet-tab-ajax_edit_bvr'] = 'Edition de facture';
 $locales['mod-dPcabinet-tab-ajax_edit_justificatif'] = 'Edition de justificatifs de remboursement';
+$locales['mod-dPcabinet-tab-ajax_full_consult'] = 'Consultation';
 $locales['mod-dPcabinet-tab-ajax_link_sejour'] = 'Choix du séjour';
 $locales['mod-dPcabinet-tab-ajax_refresh_reglement'] = 'Rafraîchissement des règlements';
 $locales['mod-dPcabinet-tab-ajax_short_consult'] = 'Consultation immédiate';
