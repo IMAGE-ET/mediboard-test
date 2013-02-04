@@ -126,6 +126,21 @@ printDocument = function(iDocument_id) {
   return false;
 }
 
+linkSejour = function() {
+  var url = new Url("dPcabinet", "ajax_link_sejour");
+  url.addParam("consult_id", "{{$consult->_id}}");
+  url.requestModal(300, 300);
+}
+
+unlinkSejour = function() {
+  if (!confirm($T("CConsultation-_unlink_sejour"))) {
+    return;
+  }
+  var form = getForm("editFrm");
+  $V(form.sejour_id, "");
+  form.submit();
+}
+
 checkCorrespondantMedical = function(){
   var form = getForm("editFrm");
   var url = new Url("dPplanningOp", "ajax_check_correspondant_medical");
@@ -193,6 +208,7 @@ Main.add(function() {
 <input type="hidden" name="arrivee" value="" />
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
 <input type="hidden" name="_operation_id" value="" />
+{{mb_field object=$consult field=sejour_id hidden=1}}
 
 {{if !$dialog}}
   <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
@@ -377,6 +393,15 @@ Main.add(function() {
           <tr>
             <th>{{mb_label object=$consult field="plageconsult_id"}}</th>
             <td>
+              {{if $consult->_id}}
+                <span style="float: right">
+                  {{if !$consult->sejour_id && $consult->_count_matching_sejours}}
+                    <button type="button" class="add" onclick="linkSejour()">{{tr}}CConsultation-_link_sejour{{/tr}}</button>
+                  {{elseif $consult->sejour_id && $consult->_ref_sejour->type != "consult"}}
+                    <button type="button" class="remove" onclick="unlinkSejour()">{{$consult->_ref_sejour}}</button>
+                  {{/if}}
+                </span>
+              {{/if}}
               <input type="text" name="_date" style="width: 15em;" value="{{$consult->_date|date_format:"%A %d/%m/%Y"}}" onfocus="PlageConsultSelector.init()" readonly="readonly" onchange="if (this.value != '') $V(this.form._function_id, '')"/>
               <input type="hidden" name="_date_planning" value="{{$date_planning}}" />
               {{mb_field object=$consult field="plageconsult_id" hidden=1 ondblclick="PlageConsultSelector.init()"}}

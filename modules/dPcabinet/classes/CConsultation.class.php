@@ -170,7 +170,8 @@ class CConsultation extends CCodable {
   // Behaviour fields
   var $_operation_id = null;
   var $_dossier_anesth_completed_id = null;
-  
+  var $_count_matching_sejours = null;
+
   function getSpec() {
     $spec = parent::getSpec();
     

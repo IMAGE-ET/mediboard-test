@@ -35,6 +35,8 @@ $listAnesths = $user->loadAnesthesistes();
 
 $listPrats = array();
 
+$list_mode_sortie = array();
+
 $consult = new CConsultation();
 if ($current_m == "dPurgences") {
   if (!$selConsult) {
@@ -235,6 +237,14 @@ if ($consult->_ref_sejour && $sejour->_id) {
     if ($sejour->type == "comp" && $sejour->UHCD) {
       $services = CService::loadServicesUHCD();
     }
+
+    if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_sortie")) {
+      $mode_sortie = new CModeSortieSejour();
+      $where = array(
+        "actif" => "= '1'",
+      );
+      $list_mode_sortie = $mode_sortie->loadGroupList($where);
+    }
   }
 }
 
@@ -332,6 +342,7 @@ $smarty->assign("current_m"      , $current_m);
 $smarty->assign("list_etat_dents", $list_etat_dents);
 $smarty->assign("now"            , $now);
 $smarty->assign("listPrats"      , $listPrats);
+$smarty->assign("list_mode_sortie", $list_mode_sortie);
 
 if (CModule::getActive("dPprescription")) {
   $smarty->assign("line"           , new CPrescriptionLineMedicament());
@@ -340,6 +351,7 @@ if (CModule::getActive("dPprescription")) {
 $smarty->assign("soustotal_base" , $soustotal_base);
 $smarty->assign("soustotal_dh"   , $soustotal_dh);
 $smarty->assign("total"          , $total);
+
 if ($consult->_is_dentiste) {
   $devenirs_dentaires = $consult->_ref_patient->loadRefsDevenirDentaire();
   

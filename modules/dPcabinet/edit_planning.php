@@ -114,6 +114,12 @@ else {
     $medecin_adresse_par->load($consult->adresse_par_prat_id);
     $consult->_ref_adresse_par_prat = $medecin_adresse_par;
   }
+
+  $sejour = new CSejour();
+  $whereSejour = array();
+  $whereSejour["type"] = "!= 'consult'";
+  $whereSejour[] = "'$consult->_date' BETWEEN entree AND sortie";
+  $consult->_count_matching_sejours = $sejour->countList($whereSejour);
 }
 
 // Chargement des categories
@@ -156,7 +162,8 @@ if ($consult->_id) {
   if ($consult->valide) {
     $consult->_locks[] = "valide";
   }
-}
+}
+
 $_functions = array();
 
 if ($chir->_id) {
