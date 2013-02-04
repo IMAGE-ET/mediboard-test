@@ -974,7 +974,7 @@ div.about div.nav {
 }
 
 #performance strong {
-  min-width: 8em;
+  min-width: 12em;
   display: inline-block;
 }
 
@@ -1020,6 +1020,10 @@ div.about div.nav {
 
 #performance > li.performance-autoload:before {
   background-image: url(../../images/icons/autoload.png);
+}
+
+#performance > li.performance-function:before {
+  background-image: url(../../images/icons/functions.png);
 }
 
 #performance > li.performance-ccam:before {

@@ -75,6 +75,20 @@
     </ul>
   </li>
   
+  <li class="performance-function">
+    <span class="performance-count">{{$performance.functionCache.total}}</span>
+    <ul>
+      {{foreach from=$performance.functionCache.totals key=_function item=_hits}}
+      <li>
+        <strong>{{$_function}}</strong>
+        <span class="performance-count">{{$_hits}}</span>
+      </li>
+      {{foreachelse}}
+        <li class="empty">Aucune function cachée</li>
+      {{/foreach}}
+    </ul>
+  </li>
+  
   {{*
   <li class="performance-ccam">
     <span class="performance-count">{{$performance.ccam.cacheCount}}</span>
@@ -110,6 +124,7 @@
     <strong class="title">Adresse IP</strong>
     {{$performance.ip}}
   </li>
+  
   <li class="export" onclick="window.open('data:text/html;charset=utf-8,'+encodeURIComponent(this.up('ul').innerHTML))" title="{{tr}}Export{{/tr}}"></li>
   <li class="close" onclick="this.up('ul').remove()" title="{{tr}}Close{{/tr}}"></li>
 </ul>

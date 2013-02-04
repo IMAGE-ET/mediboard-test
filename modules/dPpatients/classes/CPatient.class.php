@@ -1418,6 +1418,11 @@ class CPatient extends CMbObject {
    * @return string
    */
   static function getTagIPP($group_id = null) {
+    $context = array(__METHOD__, func_get_args());
+    if (CFunctionCache::exist($context)) {
+      return CFunctionCache::get($context);
+    }
+     
     // Gestion du tag IPP par son domaine d'identification
     if (CAppUI::conf("eai use_domain")) {
       return CDomain::getTagMasterDomain("CPatient", $group_id);
@@ -1447,7 +1452,7 @@ class CPatient extends CMbObject {
       $group_id = $idex->id400;
     }
 
-    return str_replace('$g', $group_id, $tag_ipp);
+    return CFunctionCache::set($context, str_replace('$g', $group_id, $tag_ipp));
   }
 
   /**
