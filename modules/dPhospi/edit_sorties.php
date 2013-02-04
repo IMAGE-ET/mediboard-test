@@ -103,8 +103,10 @@ $whereNP                               = array();
 $whereNP["sejour.group_id"]            = "= '$group->_id'";
 $whereNP["sejour.annule"]              = "= '0'";
 $whereNP["sejour.type"]                = CSQLDataSource::prepareIn(array_keys($mouvements), $type_hospi);
-$whereNP[] = "(sejour.service_id " . CSQLDataSource::prepareIn($services_ids) . " AND affectation.affectation_id IS NULL) OR "
-  ."(affectation.lit_id IS NULL AND affectation.service_id " . CSQLDataSource::prepareIn($services_ids) . ")";
+if (count($services_ids)) {
+  $whereNP[] = "(sejour.service_id " . CSQLDataSource::prepareIn($services_ids) . " AND affectation.affectation_id IS NULL) OR "
+    ."(affectation.lit_id IS NULL AND affectation.service_id " . CSQLDataSource::prepareIn($services_ids) . ")";
+}
 
 if ($praticien_id) {
   $whereNP["sejour.praticien_id"] = "= '$praticien_id'";
@@ -133,35 +135,36 @@ $dep_entrants = $affectation->countList($whereEntrants, null, $ljoin);
 $dep_sortants = $affectation->countList($whereSortants, null, $ljoin);
 
 // Comptage des entrées/sorties
-foreach($mouvements as $type => &$_mouvement) {
-  if(($type_hospi && $type_hospi != $type) || ($type_hospi == "ambu")) {
+foreach ($mouvements as $type => &$_mouvement) {
+  if (($type_hospi && $type_hospi != $type) || ($type_hospi == "ambu")) {
     continue;
   }
   $where["sejour.type"] = $whereNP["sejour.type"] = " = '$type'";
-  foreach($_mouvement as $type_mouvement => &$_liste) {
-    if($type == "ambu" && $type_mouvement == "sorties") {
+  foreach ($_mouvement as $type_mouvement => &$_liste) {
+    if ($type == "ambu" && $type_mouvement == "sorties") {
       $_liste["place"]     = 0;
       $_liste["non_place"] = 0;
       continue;
     }
-    if($type_mouvement == "entrees") {
+    if ($type_mouvement == "entrees") {
       unset($where["affectation.sortie"]);
       $where["affectation.entree"] = "BETWEEN '$limit1' AND '$limit2'";
-      if(isset($where["sejour.sortie"])) {
+      if (isset($where["sejour.sortie"])) {
         unset($where["sejour.sortie"]);
       }
-      if(isset($whereNP["sejour.sortie"])) {
+      if (isset($whereNP["sejour.sortie"])) {
         unset($whereNP["sejour.sortie"]);
       }
       $where["sejour.entree"]      = "= affectation.entree";
       $whereNP["sejour.entree"]    = "BETWEEN '$limit1' AND '$limit2'";
-    } else {
+    }
+    else {
       unset($where["affectation.entree"]);
       $where["affectation.sortie"] = "BETWEEN '$limit1' AND '$limit2'";
-      if(isset($where["sejour.entree"])) {
+      if (isset($where["sejour.entree"])) {
         unset($where["sejour.entree"]);
       }
-      if(isset($whereNP["sejour.entree"])) {
+      if (isset($whereNP["sejour.entree"])) {
         unset($whereNP["sejour.entree"]);
       }
       $where["sejour.sortie"]      = "= affectation.sortie";
