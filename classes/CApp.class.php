@@ -45,6 +45,9 @@ class CApp {
     
     // Objects
     "objectCounts" => null,
+    
+    // Function cache
+    "functionCache" => null,
   );
 
   /**
@@ -439,9 +442,14 @@ class CApp {
     self::$performance["size"] = CHTMLResourceLoader::getOutputLength();
     self::$performance["ccam"] = array (
       "cacheCount" => class_exists("CCodeCCAM") ? CCodeCCAM::$cacheCount : 0,
-      "useCount"   => class_exists("CCodeCCAM") ? CCodeCCAM::$useCount : 0
+      "useCount"   => class_exists("CCodeCCAM") ? CCodeCCAM::$useCount   : 0
     );
-
+    
+    self::$performance["functionCache"] = array(
+      "totals" => CFunctionCache::$totals,
+      "total"  => CFunctionCache::$total,
+    );
+    
     // Data sources performance
     foreach (CSQLDataSource::$dataSources as $dsn => $ds) {
       if (!$ds) {
