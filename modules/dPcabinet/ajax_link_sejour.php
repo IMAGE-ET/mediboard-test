@@ -29,6 +29,12 @@ $where["sejour.group_id"] = "= '$group_id'";
 
 $sejours = $sejour->loadList($where);
 
+CMbObject::massLoadFwdRef($sejours, "praticien_id");
+
+foreach ($sejours as $_sejour) {
+  $_sejour->loadRefPraticien()->loadRefFunction();
+}
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("sejours", $sejours);

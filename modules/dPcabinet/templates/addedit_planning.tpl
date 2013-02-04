@@ -129,7 +129,7 @@ printDocument = function(iDocument_id) {
 linkSejour = function() {
   var url = new Url("dPcabinet", "ajax_link_sejour");
   url.addParam("consult_id", "{{$consult->_id}}");
-  url.requestModal(300, 300);
+  url.requestModal(350, 300);
 }
 
 unlinkSejour = function() {

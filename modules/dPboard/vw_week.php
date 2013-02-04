@@ -36,8 +36,28 @@ if ($mediuser->isPraticien()) {
 $chirSel = CValue::getOrSession("praticien_id", $chir ? $chir->user_id : null);
 
 $user = new CMediusers();
+
+$nbjours = 7;
+$listPlageConsult = new CPlageconsult();
+$listPlageOp = new CPlageOp();
+
+$where = array();
+$where["date"] = "= '$fin'";
+$where["chir_id"] = " = '$chirSel'";
+
+if (!$listPlageConsult->countList($where) && !$listPlageOp->countList($where)) {
+  $nbjours--;
+  // Aucune plage le dimanche, on peut donc tester le samedi.
+  $dateArr = mbDate("-1 day", $fin);
+  $where["date"] = "= '$dateArr'";
+  if (!$listPlageConsult->countList($where) && !$listPlageOp->countList($where)) {
+    $nbjours--;
+  }
+}
+
 //Instanciation du planning
-$planning = new CPlanningWeek($debut, $debut, $fin, 5, false, null, null, true);
+$planning = new CPlanningWeek($debut, $debut, $fin, $nbjours, false, null, null, true);
+
 if ($user->load($chirSel)) {
   $planning->title = $user->load($chirSel)->_view;
 }
@@ -98,11 +118,11 @@ for ($i = 0; $i < 7; $i++) {
   foreach ($plagesOp as $_op) {
     $_op->loadRefSalle();
     $_op->getNbOperations();
-    ajoutEvent($planning, $_op, $date,$_op->_ref_salle->nom,  "#BCE", "operation");
+    ajoutEvent($planning, $_op, $date, $_op->_ref_salle->nom, "#BCE", "operation");
   }
 }
 
-function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type){
+function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type) {
   $debute = "$date $_plage->debut";
   $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null);
     $event->resizable = true;
@@ -155,5 +175,3 @@ $smarty->assign("chirSel",  $chirSel);
 $smarty->assign("planning",  $planning);
 
 $smarty->display("vw_week.tpl");
-
-?>

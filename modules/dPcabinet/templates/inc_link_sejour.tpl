@@ -22,7 +22,8 @@
     <tr>
       <td class="narrow">
         <button type="button" class="big tick" onclick="mapSejour({{$_sejour->_id}})">
-          {{$_sejour}}
+          {{$_sejour}} <br />
+          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_sejour->_ref_praticien}}
         </button>
       </td>
     </tr>
