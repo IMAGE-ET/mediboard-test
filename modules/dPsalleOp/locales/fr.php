@@ -377,6 +377,7 @@ $locales['mod-dPsalleOp-tab-ajax_edit_evenement_perop'] = 'Evénement per-opérato
 $locales['mod-dPsalleOp-tab-ajax_edit_object_check_lists'] = 'Check list';
 $locales['mod-dPsalleOp-tab-ajax_info_anapath'] = 'Information sur les prélèvements anapath';
 $locales['mod-dPsalleOp-tab-ajax_info_bacterio'] = 'Information sur les prélèvements bactério';
+$locales['mod-dPsalleOp-tab-ajax_vw_operation'] = 'Dossier bloc';
 $locales['mod-dPsalleOp-tab-configure'] = 'Configuration';
 $locales['mod-dPsalleOp-tab-print_feuille_bloc'] = 'Impression feuille de bloc';
 $locales['mod-dPsalleOp-tab-print_intervention_anesth'] = 'Fiche d\'intervention d\'anesthésie';
