@@ -22,115 +22,153 @@ $prenom       = trim(CValue::get("firstname"));
 $date_naiss   = CValue::get("birthdate");
 $date_sejour  = CValue::get("date_sejour");
 $view         = CValue::get("view", "none");
-$debug        = CValue::get("debug", 0);    //to mbtrace get values
+$nbpatients   = 0;
 
-//trace
-if ($debug) {
-  mbTrace(
-    array(
-    "ipp"         => $ipp,
-    "nda"         => $nda,
-    "nom"         => $nom,
-    "prenom"      => $prenom,
-    "naissance"   => $date_naiss,
-    "date_sejour" => $date_sejour,
-    "view"        => $view
-  )
-  );
-}
 
 //view list
+// PATTERN : MODULE , AJAX, TYPE
 $mods_available = array(
-  "patient"       => array("patient", "ajax_vw_patient_complet"),
-  "soins"         => array("soins", "ajax_vw_dossier_soin"),
-  "labo"          => array("Imeds", "httpreq_vw_sejour_results")
+  "patient"       => array("patients", "ajax_vw_patient_complete", "patient"),  //dossier patient
+  "soins"         => array("soins", "vw_dossier_sejour", "sejour"),             //dossier de soin (complet)
+  "labo"          => array("Imeds", "httpreq_vw_sejour_results", "sejour")      //labo result
 );
 
 
 //-----------------------------------------------------------------
-// VIEW
+// VIEWS
 // view = none
 if ($view == "none") {
   CAppUI::stepAjax("context-view_required", UI_MSG_ERROR);
 }
 //view not registered
 if (!array_key_exists($view, $mods_available)) {
-  CAppUI::stepAjax("context-view_not-registered", UI_MSG_ERROR);
+  CAppUI::stepAjax("context-view_not-registered", UI_MSG_ERROR, $view);
+}
+
+//-----------------------------------------------------------------
+//PATIENT
+//find a patient
+$patient = new CPatient();
+//IPP Case
+if ($ipp) {
+  $patient->_IPP = $ipp;
+  $patient->loadFromIPP();
+  if ($patient->_id) {
+    $nbpatients = 1;
+  }
+}
+
+//global case
+if (!$nbpatients) {
+  $where = array();
+  if ($nom) {
+    $where[] = "`nom` LIKE '$nom%' OR `nom_jeune_fille` LIKE '$nom%'";
+  }
+  if ($prenom) {
+    $where["prenom"] = "LIKE '$prenom%'";
+  }
+  if ($date_naiss) {
+    $where["naissance"] = "LIKE '$date_naiss'";
+  }
+
+  $nbPat = $patient->countList($where);
+  switch ($nbPat) {
+    case 0:
+      CAppUI::stepAjax("context-none-patient", UI_MSG_ERROR);
+      break;
+
+    case 1:
+      $patient->loadObject($where);
+      break;
+
+    default:  //more than 1
+      CAppUI::stepAjax("context-multiple-patient", UI_MSG_ERROR, $nbPat);
+      break;
+  }
 }
 
 
-
 //-----------------------------------------------------------------
-//view patient
-if ($view == "patient") {
-  $nbpatients = 0;
-  $patient = new CPatient();
-  if ($ipp) {
-    $patient->_IPP = $ipp;
-    $patient->loadFromIPP();
-    if ($patient->_id) {
-      $nbpatients = 1;
-    }
+//Sejour
+$sejour = new CSejour();
+if ($mods_available[$view][2] == 'sejour') {
+
+  if ($nda) {
+    $sejour->loadFromNDA($nda);
   }
-  //search for a patient
-  else {
-    $where = array();
-    if ($nom) {
-      $where[] = "`nom` LIKE '$nom%' OR `nom_jeune_fille` LIKE '$nom%'";
-    }
-    if ($prenom) {
-      $where["prenom"] = "LIKE '$prenom%'";
-    }
-    if ($date_naiss) {
-      $where["naissance"] = "LIKE '$date_naiss'";
+  //patient, with a date = sejour
+  elseif ($patient->_id) {
+    if (!$date_sejour) {
+      CAppUI::stepAjax("context-sejour-patientOK-date-required", UI_MSG_ERROR, $view);
     }
 
-    $nbPat = $patient->countList($where);
-    switch ($nbPat) {
+    $date_sejour = mbDateTime($date_sejour);
+    $where = array();
+    $where[] = "'$date_sejour' BETWEEN entree AND sortie";
+    $where["patient_id"] = " = $patient->_id";
+    $sejours = $sejour->countList($where);
+    switch ($sejours) {
       case 0:
-        CAppUI::stepAjax("context-none-patient", UI_MSG_ERROR);
+        CAppUI::stepAjax("context-none-sejour", UI_MSG_ERROR);
         break;
 
       case 1:
-        $patient->loadObject($where);
+        $sejour->loadObject($where);
         break;
 
-      default:  //more than 1
-        CAppUI::stepAjax("context-multiple-patient", UI_MSG_ERROR, $nbPat);
+      default:
+        CAppUI::stepAjax("context-multiple-sejour", UI_MSG_ERROR, $sejours);
         break;
     }
   }
-
-  if ($patient->_id) {
-    CAppUI::redirect("?m=".$mods_available["patient"][0]."&a=".$mods_available["patient"][1]."&patient_id=".$patient->_id);
-  }
-  //non existing patient
+  //something is missing
   else {
+    CAppUI::stepAjax("context-nda-or-PatientPlusDate-required", UI_MSG_ERROR, $view);
+  }
+}
+
+
+//-----------------------------------------------------------------
+if ($mods_available[$view][2] == "patient") {
+  if (!$patient->_id) {
     if ($patient->_IPP) {
-      CAppUI::stepAjax("context-nonexisting-patient-ipp", UI_MSG_ERROR, $patient->_IPP);
+      CAppUI::stepAjax("context-nonexisting-patient-ipp%s", UI_MSG_ERROR, $patient->_IPP);
     }
     else {
       CAppUI::stepAjax("context-nonexisting-patient", UI_MSG_ERROR);
     }
   }
-} //end patient
+
+  $url = formRequest($mods_available[$view])."&patient_id=".$patient->_id;
+  CAppUI::redirect($url);
+}
 
 //-----------------------------------------------------------------
 // labo
-if (($view == 'labo') ||($view == 'soins')) {
-  //nda
-  $sejour = new CSejour();
-  if ($nda) {
-    $sejour->loadFromNDA($nda);
-  }
-  else {
-    CAppUI::stepAjax("context-nda-required", UI_MSG_ERROR, $view);
-  }
-
+if ($mods_available[$view][2] == "sejour") {
   if (!$sejour->_id) {
-    CAppUI::stepAjax("context-non-existing-sejour-nda", UI_MSG_ERROR, $nda);
+    CAppUI::stepAjax("context-non-existing-sejour", UI_MSG_ERROR);
   }
 
-  CAppUI::redirect(CAppUI::redirect("?m=".$mods_available[$view][0]."&a=".$mods_available[$view][1]."&sejour_id=".$sejour->_id));
+  $url = formRequest($mods_available[$view])."&sejour_id=".$sejour->_id;
+  CAppUI::redirect($url);
 }
 
+
+//TOOLS
+/**
+ * Create the redirect string from an array
+ *
+ * @param array $requete array of ["module", "action", ...]
+ *
+ * @return string
+ */
+function formRequest($requete) {
+  $redirect = "";
+  $redirect .= "m=".$requete[0];
+  $redirect .= "&a=".$requete[1];
+  if (CValue::get("dialog", 1)) {
+    $redirect .= "&dialog=1";
+  }
+  return $redirect;
+}
