@@ -629,6 +629,11 @@ Main.add( function(){
     {{if $sejour->_id}}
       <button type="button" onclick="openAntecedents()">ATCD</button>
     {{/if}}
+    <button type="button"
+        onclick="location.href='?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id=0&amp;pat_id='+this.form.patient_id.value"
+            class="add" {{if !$patient->_id}}style="display: none;"{{/if}}>
+      Rendez-vous
+    </button>
   </td>
 </tr>
 
