@@ -47,7 +47,7 @@ $patient_prenom_search = null;
 $patVitale = new CPatient();
 
 // Recherche par IPP
-if ($patient_ipp && CModule::getInstalled("dPsante400")){
+if ($patient_ipp && CModule::getInstalled("dPsante400")) {
   // Initialisation dans le cas d'une recherche par IPP
   $patients = array();
   $patientsSoundex = array();
@@ -83,6 +83,7 @@ else {
   $whereSoundex = array();
   $ljoin        = array();
   $soundexObj   = new soundex2();
+  $group_by     = null;
 
   // Limitation du nombre de caractères
   $patient_nom_search    = trim($patient_nom);
@@ -126,6 +127,8 @@ else {
 
     $where[] = "plageconsult.chir_id = '$prat_id' OR sejour.praticien_id = '$prat_id'";
     $whereSoundex[] = "plageconsult.chir_id = '$prat_id' OR sejour.praticien_id = '$prat_id'";
+
+    $group_by = "patient_id";
   }
 
   $patients        = array();
@@ -136,11 +139,11 @@ else {
 
   // Chargement des patients
   if ($where) {
-    $patients = $pat->loadList($where, $order, $showCount, null, $ljoin);
+    $patients = $pat->loadList($where, $order, $showCount, $group_by, $ljoin);
   }
 
   if ($whereSoundex) {
-    $patientsSoundex = $pat->loadList($whereSoundex, $order, $showCount, null, $ljoin);
+    $patientsSoundex = $pat->loadList($whereSoundex, $order, $showCount, $group_by, $ljoin);
     $patientsSoundex = array_diff_key($patientsSoundex, $patients);
   }
 
@@ -157,11 +160,11 @@ else {
   }
 }
 
-foreach($patients as $_patient) {
+foreach ($patients as $_patient) {
   $_patient->loadView();
 }
 
-foreach($patientsSoundex as $_patient) {
+foreach ($patientsSoundex as $_patient) {
   $_patient->loadView();
 }
 
@@ -184,7 +187,7 @@ $smarty->assign("ville"               , $patient_ville);
 $smarty->assign("cp"                  , $patient_cp);
 $smarty->assign("nom_search"          , $patient_nom_search);
 $smarty->assign("prenom_search"       , $patient_prenom_search);
-$smarty->assign("covercard"           , CValue::get("covercard",""));
+$smarty->assign("covercard"           , CValue::get("covercard", ""));
 $smarty->assign("sexe"                , $patient_sexe);
 $smarty->assign("prat_id"             , $prat_id);
 $smarty->assign("prats"               , $prats);
@@ -200,5 +203,3 @@ $smarty->assign("board"               , 0);
 $smarty->assign("patient_ipp"         , $patient_ipp);
 
 $smarty->display("vw_idx_patients.tpl");
-
-?>
