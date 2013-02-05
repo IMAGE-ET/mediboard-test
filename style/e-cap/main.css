@@ -370,7 +370,6 @@ table.tbl th.title a {
   color: #ddd;
 }
 
-
 .desktop tbody.hoverable:hover tr td,
 .desktop table.tbl tr:hover td,
 .desktop div.tree-header:hover,
@@ -383,6 +382,15 @@ table.tbl tr.selected td,
 table.form tr.selected td,
 table.tbl tbody.selected td {
   background-color: #dca;
+}
+
+/* Blend between .selected and :hover */
+.desktop tbody.hoverable:hover tr.selected td,
+.desktop tbody.hoverable.selected:hover tr td,
+.desktop table.tbl tr.selected:hover td,
+.desktop div.selected.tree-header:hover,
+table.tbl tr.selected td.hover {
+  background-color: #F4D7CC;
 }
 
 table.tbl td.button {

@@ -311,6 +311,10 @@ function prepareForm(oForm) {
     if (sTagName === "INPUT" && !oElement.getAttribute("type")) {
       oElement.type = "text";
     }
+
+    if (oElement.className == "") {
+      continue; // TODO : this speeds up everything
+    }
     
     // The "size" attribute is not taken into account with type=number
     if (sType === "number") {
@@ -379,10 +383,6 @@ function prepareForm(oForm) {
       bGiveFormFocus = false;
     }
     
-    if (oElement.className == "") {
-      continue; // TODO : this speeds up everything
-    }
-    
     var props = oElement.getProperties(),
         UIchange = false;
 
@@ -416,7 +416,7 @@ function prepareForm(oForm) {
     }
 
     // ui:change is a custom event fired on the native onchange throwed by $V, 
-    // because fire doesn't work with native events 
+    // because fire doesn't work with native events
     // Fire it only if necessary, because it slows down IE
     if (UIchange) {
       //(function(oElement){

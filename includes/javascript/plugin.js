@@ -24,7 +24,7 @@ App.detectPlugin = function(plugin) {
     },
     pdf : {
       activex : "AcroPDF.PDF",
-      plugin : /adobe\s?acrobat/gim
+      plugin : /adobe\s?acrobat|pdf/gim
     },
     qtime : {
       activex : "QuickTime.QuickTime",

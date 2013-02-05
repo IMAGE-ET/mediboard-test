@@ -10,7 +10,7 @@
 
 /**
  * Classe CSejour.
- * 
+ *
  * @abstract Gère les séjours en établissement
  */
 class CSejour extends CFacturable implements IPatientRelated {
@@ -559,9 +559,10 @@ class CSejour extends CFacturable implements IPatientRelated {
    * Cherche des séjours les dates d'entrée ou sortie sont proches,
    * pour le même patient dans le même établissement
    *
-   * @param $tolerance int Tolérance en heures
+   * @param int  $tolerance Tolérance en heures
+   * @param bool $use_type  Matche sur le type de séjour aussi
    *
-   * @return array|CSejour
+   * @return CSejour[]
    */
   function getSiblings($tolerance = 1, $use_type = false) {
     $sejour = new CSejour;
@@ -1202,9 +1203,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Count sejours including a specific date
    *
-   * @param $date     date  Date to check for inclusion
-   * @param $where    array Array of additional where clauses
-   * @param $leftjoin array Array of left join clauses
+   * @param string $date     Date to check for inclusion
+   * @param array  $where    Array of additional where clauses
+   * @param array  $leftjoin Array of left join clauses
    *
    * @return int Count null if module is not installed
    */
@@ -1218,9 +1219,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   /**
    * Count sejours including a specific date
    *
-   * @param $date     date  Date to check for inclusion
-   * @param $where    array Array of additional where clauses
-   * @param $leftjoin array Array of left join clauses
+   * @param string $datetime Date to check for inclusion
+   * @param array  $where    Array of additional where clauses
+   * @param array  $leftjoin Array of left join clauses
    *
    * @return int Count null if module is not installed
    */
@@ -1438,6 +1439,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $observation->countList($where);
   }
 
+  /**
+   * @param bool $cache Use cache
+   *
+   * @return CPatient
+   */
   function loadRefPatient($cache = true) {
     $this->_ref_patient = $this->loadFwdRef("patient_id", $cache);
     $this->getDroitsCMU();

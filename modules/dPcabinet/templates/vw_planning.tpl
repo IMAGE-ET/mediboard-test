@@ -4,10 +4,10 @@
 
 function showConsultations(oTd, plageconsult_id){
   oTd = $(oTd);
-  
+
   oTd.up("table").select(".event").invoke("removeClassName", "selected");
   oTd.up(".event").addClassName("selected");
-  
+
   var url = new Url("cabinet", "inc_consultation_plage");
   url.addParam("plageconsult_id", plageconsult_id);
   url.requestUpdate('consultations');
@@ -61,12 +61,12 @@ Main.add(function () {
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="{{$tab}}" />
         <input type="hidden" name="plageconsult_id" value="0" />
-        
+
         <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$prec}}')">&lt;&lt;&lt;</a>
-        
+
         Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
         <input type="hidden" name="debut" class="date" value="{{$debut}}" onchange="this.form.submit()" />
-        
+
         <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$suiv}}')">&gt;&gt;&gt;</a>
         <br />
         <a href="#1" onclick="$V($(this).getSurroundingForm().debut, '{{$today}}')">Aujourd'hui</a>
@@ -87,7 +87,7 @@ Main.add(function () {
           </option>
           {{/foreach}}
         </select>
-        
+
         Cacher les : 
           <label>
             <input type="checkbox" onchange="$V(this.form.hide_payees, this.checked ? 1 : 0); this.form.submit()" {{if $hide_payees}}checked="checked"{{/if}} name="_hide_payees"> payées
@@ -98,9 +98,9 @@ Main.add(function () {
             <input type="hidden" name="hide_annulees" value="{{$hide_annulees}}" />
           </label>
       </form>
-      
+
       <br />
-      
+
       {{if $chirSel && $chirSel != -1}}
         <button type="button" class="lookup" 
                 {{if !$count_si_desistement}}disabled="disabled"{{/if}}
@@ -108,33 +108,33 @@ Main.add(function () {
           {{tr}}CConsultation-si_desistement{{/tr}} ({{$count_si_desistement}})
         </button>
       {{/if}}
-      
+
       {{if $plageSel->_id}}
         <a class="button new" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->_id}}">Planifier une consultation dans cette plage</a>
       {{/if}}
-      
+
     </td>
   </tr>
   <tr>
     <td>
       <div id="planning-plages">
-      {{mb_include module=ssr template=inc_vw_week}}
+        {{mb_include module=ssr template=inc_vw_week}}
         <script type="text/javascript">
-	
+
         Main.add(function() {
           ViewPort.SetAvlHeight("planning-plages", 1);
-          var height = $('planning-plages').getDimensions().height - 50;
-          // Lancer le calcul du view planning avec la hauteur height
-          
-          window['planning-{{$planning->guid}}'].onMenuClick = function(event, plage, elem){
+
+          var planning = window['planning-{{$planning->guid}}'];
+
+          planning.onMenuClick = function(event, plage, elem){
             if (event == 'list') {
               showConsultations(elem,plage);
             }
-            
+
             if (event == 'edit') {
               PlageConsultation.edit(plage);
             }
-            
+
             if (event == 'clock') {
               var url = new Url('cabinet', 'edit_planning', 'tab');
               url.addParam('consultation_id', 0);
@@ -142,10 +142,16 @@ Main.add(function () {
               url.redirectOpener();
             }
           }
+
+          // Lancer le calcul du view planning avec la hauteur height
+          var height = $('planning-plages').getDimensions().height;
+          planning.setPlanningHeight(height);
+          planning.scroll();
         });
 
         </script>
       </div>
+    </td>
     <td id="consultations">{{mb_include module=cabinet template=inc_consultations}}</td>
   </tr>
 </table>

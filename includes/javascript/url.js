@@ -1201,8 +1201,8 @@ Url.parse = function(url) {
 /**
  * Make an Ajax request with data from a form, to update an element
  *
- * @param {HTMLFormElement} form    The form to take the data from
- * @param {HTMLElement}     element The element to update
+ * @param {HTMLFormElement}    form    The form to take the data from
+ * @param {HTMLElement,String} element The element to update
  *
  * @return {Boolean}
  */
