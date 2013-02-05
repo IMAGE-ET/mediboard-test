@@ -295,25 +295,28 @@ class CMbObject extends CStoredObject {
    * @return array Array of form "collection-name" => "class join-field"
    */
   function getBackProps() {
-    return parent::getBackProps() + array(
-      "alerts"                 => "CAlert object_id",
-      "identifiants"           => "CIdSante400 object_id",
-      "notes"                  => "CNote object_id",
-      "files"                  => "CFile object_id",
-      "documents"              => "CCompteRendu object_id",
-      "permissions"            => "CPermObject object_id",
-      "logs"                   => "CUserLog object_id",
-      "affectations_personnel" => "CAffectationPersonnel object_id",
-      "contextes_constante"    => "CConstantesMedicales context_id",
-      "modeles_etiquettes"     => "CModeleEtiquette object_id",
-      "tag_items"              => "CTagItem object_id",
-      "echange_generique"      => "CExchangeAny object_id",
-      "observation_result_sets"=> "CObservationResultSet context_id",
-      "sources_pop"            => "CSourcePOP object_id",
-      "dicom_exchange"         => "CExchangeDicom object_id",
+    $backProps = parent::getBackProps();
+
+    $backProps["alerts"]                 = "CAlert object_id";
+    $backProps["identifiants"]           = "CIdSante400 object_id";
+    $backProps["notes"]                  = "CNote object_id";
+    $backProps["files"]                  = "CFile object_id";
+    $backProps["documents"]              = "CCompteRendu object_id";
+    $backProps["permissions"]            = "CPermObject object_id";
+    $backProps["logs"]                   = "CUserLog object_id";
+    $backProps["affectations_personnel"] = "CAffectationPersonnel object_id";
+    $backProps["contextes_constante"]    = "CConstantesMedicales context_id";
+    $backProps["modeles_etiquettes"]     = "CModeleEtiquette object_id";
+    $backProps["tag_items"]              = "CTagItem object_id";
+    $backProps["echange_generique"]      = "CExchangeAny object_id";
+    $backProps["observation_result_sets"]= "CObservationResultSet context_id";
+    $backProps["configurations"]         = "CConfiguration object_id";
+    $backProps["sources_pop"]            = "CSourcePOP object_id";
+    $backProps["dicom_exchange"]         = "CExchangeDicom object_id";
       // NE PAS DECOMMENTER CETTE LIGNE, backref impossible pour le moment (cf. Fabien)
-      //"ex_objects"             => "CExObject object_id",
-    );
+    //$backProps["ex_objects"]             = "CExObject object_id";
+
+    return $backProps;
   }
   
   /**
