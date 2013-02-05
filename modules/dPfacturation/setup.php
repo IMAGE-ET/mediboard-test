@@ -159,7 +159,13 @@ class CSetupdPfacturation extends CSetup {
     $query = "DROP TABLE facturecatalogueitem;";
     $this->addQuery($query);
     
-    $this->mod_version = "0.18";
+    $this->makeRevision("0.18");
+    
+    $query = "ALTER TABLE `facture_etablissement` 
+              ADD `temporaire` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.19";
   }
 }
 ?>

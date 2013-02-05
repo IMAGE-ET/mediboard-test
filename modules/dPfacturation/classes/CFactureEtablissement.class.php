@@ -19,7 +19,8 @@ class CFactureEtablissement extends CFacture {
   var $facture_id = null;
   
   // DB Fields
-  var $dialyse          = null;
+  var $dialyse    = null;
+  var $temporaire = null;
       
   /**
    * getSpec
@@ -51,7 +52,8 @@ class CFactureEtablissement extends CFacture {
   **/
   function getProps() {
     $props = parent::getProps();
-    $props["dialyse"]   = "bool default|0";
+    $props["dialyse"]     = "bool default|0";
+    $props["temporaire"]  = "bool default|0";
     return $props;
   }
      

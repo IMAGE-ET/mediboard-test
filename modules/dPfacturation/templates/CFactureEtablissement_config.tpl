@@ -9,6 +9,7 @@
     
     {{assign var=class value=CFactureEtablissement}}
     {{mb_include module=system template=inc_config_bool var=create_items_bill}}
+    {{mb_include module=system template=inc_config_bool var=use_temporary_bill}}
     
     <tr>
       <td class="button" colspan="2">

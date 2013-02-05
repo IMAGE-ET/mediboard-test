@@ -19,6 +19,7 @@ $etat_ouvert        = CValue::getOrSession("etat_ouvert", 1);
 $facture_id         = CValue::getOrSession("facture_id");
 $patient_id         = CValue::getOrSession("patient_id");
 $no_finish_reglement= CValue::getOrSession("no_finish_reglement", 0);
+$type_date_search   = CValue::getOrSession("type_date_search", "cloture");
 
 // Praticien selectionné
 $chirSel = CValue::getOrSession("chirSel", "-1");
@@ -36,16 +37,16 @@ $factures= array();
 $facture = new CFactureEtablissement();
 
 $where = array();
-$where["ouverture"] = "BETWEEN '$date_min' AND '$date_max'";
+$where["temporaire"] = " = '0'";
 
 if ($etat_cloture && !$etat_ouvert) {
-  $where["cloture"] = "BETWEEN '$date_min' AND '$date_max'";
+  $where["$type_date_search"] = "BETWEEN '$date_min' AND '$date_max'";
 }
 elseif ($etat_cloture && $etat_ouvert) {
-   $where[] = "cloture BETWEEN '$date_min' AND '$date_max' OR cloture IS NULL";
+   $where[] = "$type_date_search BETWEEN '$date_min' AND '$date_max' OR $type_date_search IS NULL";
 }
 elseif (!$etat_cloture && $etat_ouvert) {
-  $where["cloture"] = "IS NULL";
+  $where["$type_date_search"] = "IS NULL";
 }
 
 if ($chirSel) {
@@ -60,8 +61,13 @@ else {
   $factures = $facture->loadList($where , "ouverture ASC", 50);
 }
 
-foreach ($factures as $_facture) {
+foreach ($factures as $key => $_facture) {
   $_facture->loadRefPatient();
+  $_facture->loadRefSejour();
+  if (count($_facture->_ref_sejours) == 0 ) {
+    unset($factures[$key]);
+    $_facture->loadRefs();
+  }
 }
 
 if ($no_finish_reglement) {
@@ -103,6 +109,7 @@ $smarty->assign("etat_ouvert"   , $etat_ouvert);
 $smarty->assign("etat_cloture"  , $etat_cloture);
 $smarty->assign("date"          , mbDate());
 $smarty->assign("filter"        , $filter);
-$smarty->assign("no_finish_reglement"      ,$no_finish_reglement);
+$smarty->assign("no_finish_reglement" ,$no_finish_reglement);
+$smarty->assign("type_date_search"    , $type_date_search);
 
 $smarty->display("vw_factures.tpl");

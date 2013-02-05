@@ -19,6 +19,7 @@ $etat_ouvert        = CValue::getOrSession("etat_ouvert", 1);
 $facture_id         = CValue::getOrSession("facture_id");
 $patient_id         = CValue::getOrSession("patient_id");
 $no_finish_reglement= CValue::getOrSession("no_finish_reglement", 0);
+$type_date_search   = CValue::getOrSession("type_date_search", "cloture");
 
 // Praticien selectionné
 $chirSel = CValue::getOrSession("chirSel", "-1");
@@ -36,32 +37,38 @@ $factures= array();
 $facture = new CFactureCabinet();
 
 $where = array();
-$where["ouverture"] = "BETWEEN '$date_min' AND '$date_max'";
 
 if ($etat_cloture && !$etat_ouvert) {
-  $where["cloture"] = "BETWEEN '$date_min' AND '$date_max'";
+  $where["$type_date_search"] = "BETWEEN '$date_min' AND '$date_max'";
 }
 elseif ($etat_cloture && $etat_ouvert) {
-   $where[] = "cloture BETWEEN '$date_min' AND '$date_max' OR cloture IS NULL";
+   $where[] = "$type_date_search BETWEEN '$date_min' AND '$date_max' OR $type_date_search IS NULL";
 }
 elseif (!$etat_cloture && $etat_ouvert) {
-  $where["cloture"] = "IS NULL";
+  $where["$type_date_search"] = "IS NULL";
 }
 
 if ($chirSel) {
-  $ljoin = array();
+  if (!CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
+    $ljoin = array();
+    $ljoin["consultation"] = "facture_cabinet.facture_id = consultation.facture_id" ;
+    $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id" ;
+    
+    $where["consultation.facture_id"] =" IS NOT NULL ";
+    $where["facture_cabinet.praticien_id"] =" = '$chirSel' ";
   
-  $ljoin["consultation"] = "facture_cabinet.facture_id = consultation.facture_id" ;
-  $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id" ;
-  
-  $where["consultation.facture_id"] =" IS NOT NULL ";
-  $where["facture_cabinet.praticien_id"] =" = '$chirSel' ";
-
-  if ($patient_id) {
-    $where["facture_cabinet.patient_id"] =" = '$patient_id' ";
+    if ($patient_id) {
+      $where["facture_cabinet.patient_id"] =" = '$patient_id' ";
+    }
+    $factures = $facture->loadList($where, "facture_cabinet.cloture DESC", 100, null, $ljoin);
   }
-  
-  $factures = $facture->loadList($where, "facture_cabinet.cloture DESC", 100, null, $ljoin);
+  else {
+    $where["praticien_id"] =" = '$chirSel' ";
+    if ($patient_id) {
+      $where["patient_id"] =" = '$patient_id' ";
+    }
+    $factures = $facture->loadList($where, "cloture DESC", 100);
+  }
 }
 else {
   $where["patient_id"] = "= '$patient_id'";  
@@ -117,6 +124,7 @@ $smarty->assign("etat_ouvert"   , $etat_ouvert);
 $smarty->assign("etat_cloture"  , $etat_cloture);
 $smarty->assign("date"          , mbDate());
 $smarty->assign("filter"        , $filter);
-$smarty->assign("no_finish_reglement"      ,$no_finish_reglement);
+$smarty->assign("no_finish_reglement" ,$no_finish_reglement);
+$smarty->assign("type_date_search"    ,$type_date_search);
 
 $smarty->display("vw_factures.tpl");

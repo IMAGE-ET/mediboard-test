@@ -1,4 +1,4 @@
-{{mb_script module=facturation     script=facture}}
+{{mb_script module=facturation    script=facture}}
 {{mb_script module="dPpatients"   script="pat_selector"}}
 
 <script>
@@ -7,7 +7,7 @@ refreshList = function(){
   if(!oForm._pat_name.value){
     oForm.patient_id.value = '';
   }
-  var url = new Url("dPfacturation" , "vw_factures_sejour", "tab");
+  var url = new Url("facturation" , "{{$tab}}", "tab");
   url.addParam("etat_cloture" , $V(oForm.etat_cloture) ? 1 : 0 );
   url.addParam("etat_ouvert"  , $V(oForm.etat_ouvert) ? 1 : 0 );
   url.addParam("patient_id"   , oForm.patient_id.value);
@@ -16,6 +16,7 @@ refreshList = function(){
   url.addParam("_date_min"    , oForm._date_min.value);
   url.addParam("_date_max"    , oForm._date_max.value);
   url.addParam("no_finish_reglement" , $V(oForm.no_finish_reglement) ? 1 : 0);
+  url.addParam("type_date_search" , $V(oForm.type_date_search));
   url.redirect();
 }
 
@@ -24,19 +25,20 @@ viewFacture = function(element, facture_id, facture_class){
     element.up("tr").addUniqueClassName("selected");
   }
    
-  var url = new Url("dPfacturation"     , "ajax_view_facture");
+  var url = new Url("facturation"     , "ajax_view_facture");
   url.addParam("facture_id", facture_id);
   url.addParam("object_class", facture_class);
   url.requestUpdate('load_facture');
 }
 
 printFacture = function(facture_id, edit_justificatif, edit_bvr) {
-//  var url = new Url('planningOp', 'ajax_edit_bvr');
-//  url.addParam('facture_id', facture_id);
-//  url.addParam('edition_justificatif', edit_justificatif);
-//  url.addParam('edition_bvr', edit_bvr);
-//  url.addParam('suppressHeaders', '1');
-//  url.popup(1000, 600);
+  var url = new Url('facturation', 'ajax_edit_bvr');
+  url.addParam('facture_class'        , '{{$facture->_class}}');
+  url.addParam('facture_id', facture_id);
+  url.addParam('edition_justificatif', edit_justificatif);
+  url.addParam('edition_bvr', edit_bvr);
+  url.addParam('suppressHeaders', '1');
+  url.popup(1000, 600);
 }
 Main.add(function () {
   Calendar.regField(getForm("choice-facture")._date_min, null);
@@ -100,6 +102,19 @@ Main.add(function () {
                 {{$curr_chir->_view}}
               </option>
             {{/foreach}}
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>Date de</th>
+        <td>
+          <select name="type_date_search" onchange="refreshList();">
+            <option value="cloture" {{if $type_date_search == "cloture"}} selected="selected" {{/if}}>
+              Cloture
+            </option>
+            <option value="ouverture" {{if $type_date_search == "ouverture"}} selected="selected" {{/if}}>
+              Ouverture
+            </option>
           </select>
         </td>
       </tr>

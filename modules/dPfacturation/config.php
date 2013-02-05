@@ -11,7 +11,8 @@
 
 $dPconfig["dPfacturation"] = array (
   "CFactureEtablissement" => array(
-    "create_items_bill" => "0"
+    "create_items_bill" => "0",
+    "use_temporary_bill" => "0"
   ),
   "CFactureCabinet" => array(
     "create_items_bill" => "0",
