@@ -1754,7 +1754,7 @@ td.tick {
   background: url(images/buttons/tick.png) no-repeat 6px;
 }
 
-#modal-yoplet td.warning {
+#modal-yoplet td.warning, td.cross {
   background: url(images/buttons/cancel.png) no-repeat 6px;
 }
 
