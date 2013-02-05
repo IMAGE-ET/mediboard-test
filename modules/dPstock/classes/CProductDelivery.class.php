@@ -78,7 +78,8 @@ class CProductDelivery extends CMbObject {
   var $_count_delivered     = null;
 
   var $_auto_trace;
-
+  var $_sejour_id;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'product_delivery';
@@ -316,7 +317,10 @@ class CProductDelivery extends CMbObject {
       $delivery_trace->delivery_id = $this->_id;
       $delivery_trace->quantity = $this->quantity;
       $delivery_trace->date_delivery = $this->date_delivery ? $this->date_delivery : mbDateTime();
-
+      $delivery_trace->_sejour_id = $this->_sejour_id;
+      $delivery_trace->_code_cis = $this->_code_cis;
+      $delivery_trace->_datetime_min = $this->datetime_min;
+      
       if ($this->manual) {
         $delivery_trace->date_reception = $delivery_trace->date_delivery;
       }

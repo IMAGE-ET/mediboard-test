@@ -43,6 +43,8 @@ class CProductDeliveryTrace extends CMbObject {
   var $_undeliver     = null;
   var $_receive       = null;
   var $_unreceive     = null;
+  var $_sejour_id     = null;
+  var $_datetime_min  = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -182,7 +184,35 @@ class CProductDeliveryTrace extends CMbObject {
         }
       }
     }
+    
+    // Calcul du stock du sejour
+    if ($this->_sejour_id) {
+      $stock_sejour = new CStockSejour();
+      $stock_sejour->sejour_id = $this->_sejour_id;
+      $stock_sejour->code_cis  = $this->_code_cis;
+      $stock_sejour->loadMatchingObject("datetime DESC");
+      
+      
+      // Mise à jour du stock
+      if ($stock_sejour->_id) {
+        $count_quantity = $stock_sejour->countQuantityForDates($this->_datetime_min);
+        $stock_sejour->quantite = $stock_sejour->quantite + $this->quantity - $count_quantity;
+        $stock_sejour->datetime = $this->_datetime_min;
 
+        if ($msg = $stock_sejour->store()) {
+          return $msg;
+        }
+      }
+        
+      // Création du stock séjour
+      if (!$stock_sejour->_id) {
+        $stock_sejour->datetime = $this->_datetime_min;
+        $stock_sejour->quantite = $this->quantity;
+        if ($msg = $stock_sejour->store()) {
+          return $msg;
+        }
+      }
+    }
     return parent::store();
   }
   
