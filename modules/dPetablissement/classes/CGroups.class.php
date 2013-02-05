@@ -123,6 +123,8 @@ class CGroups extends CMbObject {
     $backProps["charges"]                 = "CChargePriceIndicator group_id";
     $backProps["postes"]                  = "CPosteSSPI group_id";
     $backProps["group_domains"]           = "CGroupDomain group_id";
+    $backProps["modes_entree_sejour"]     = "CModeEntreeSejour group_id";
+    $backProps["modes_sortie_sejour"]     = "CModeSortieSejour group_id";
     $backProps["dicom_sender"]            = "CDicomSender group_id";
     $backProps["dicom_session"]           = "CDicomSession group_id";
     $backProps["dicom_exchange"]          = "CExchangeDicom group_id";
