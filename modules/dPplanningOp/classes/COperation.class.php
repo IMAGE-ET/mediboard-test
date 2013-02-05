@@ -1000,6 +1000,7 @@ class COperation extends CCodable implements IPatientRelated {
     }
     // Hors plage
     else {
+      $this->loadRefAnesth();
       $date = $this->date;
     }
 
