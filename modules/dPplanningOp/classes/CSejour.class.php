@@ -167,6 +167,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   var $_type_sejour              = null;
   var $_statut_pro               = null;
   var $_dialyse                  = null;
+  var $_cession_creance          = null;
   
   // Object References
   var $_ref_patient                 = null; // Declared in CCodable
@@ -400,6 +401,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["_assurance_accident"]       = "ref class|CCorrespondantPatient";
     $props["_type_sejour"]              = "enum list|maladie|accident default|maladie";
     $props["_dialyse"]                  = "bool default|0";
+    $props["_cession_creance"]          = "bool default|0";
     $props["_statut_pro"]               = "enum list|chomeur|etudiant|non_travailleur|independant|salarie|sans_emploi";
     
     $props["_time_entree_prevue"] = "time";
@@ -792,10 +794,14 @@ class CSejour extends CFacturable implements IPatientRelated {
       if (!$facture->_id) {
         $facture->ouverture         = mbDate();
       }
+      if (CAppUI::conf("dPfacturation CFactureEtablissement use_temporary_bill")) {
+        $facture->temporaire = 1;
+      }
       $facture->patient_id          = $this->patient_id;
       $facture->praticien_id        = $this->praticien_id;
       $facture->type_facture        = $this->_type_sejour;
       $facture->dialyse             = $this->_dialyse;
+      $facture->cession_creance     = $this->_cession_creance;
       $facture->statut_pro          = $this->_statut_pro;
       $facture->assurance_maladie   = $this->_assurance_maladie;
       $facture->assurance_accident  = $this->_assurance_accident;
@@ -1085,9 +1091,10 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->loadRefsFactureEtablissement();
       if ($this->_ref_last_facture) {
         $facture = $this->_ref_last_facture;
-        $this->_type_sejour = $facture->type_facture;
-        $this->_statut_pro  = $facture->statut_pro;
-        $this->_dialyse     = $facture->dialyse;
+        $this->_type_sejour     = $facture->type_facture;
+        $this->_statut_pro      = $facture->statut_pro;
+        $this->_dialyse         = $facture->dialyse;
+        $this->_cession_creance = $facture->cession_creance;
         $this->_assurance_maladie         = $facture->assurance_maladie;
         $this->_assurance_accident        = $facture->assurance_accident;
         $this->_rques_assurance_maladie   = $facture->rques_assurance_maladie;

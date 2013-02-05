@@ -18,13 +18,17 @@
     <td colspan="2"></td>
   {{/if}}
 </tr>
-
-{{if $conf.dPplanningOp.CFactureEtablissement.show_statut_pro}}
-  <tr>
+<tr>
+  {{if $conf.dPplanningOp.CFactureEtablissement.show_statut_pro}}
     <th>{{mb_label object=$sejour field=_statut_pro}}</th>
     <td>{{mb_field object=$sejour field=_statut_pro emptyLabel="Choisir un status"}}</td>
-  </tr>
-{{/if}}
+  {{/if}}
+  {{if $conf.dPplanningOp.CFactureEtablissement.show_cession}}
+    <th>{{mb_label object=$sejour field=_cession_creance}}</th>
+    <td>{{mb_field object=$sejour field=_cession_creance}}</td>
+  {{/if}}
+</tr>
+
 
 <tr>
   <th>{{mb_label object=$sejour field=_assurance_maladie}}</th>

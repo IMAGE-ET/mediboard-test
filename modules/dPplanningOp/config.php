@@ -115,6 +115,7 @@ $dPconfig["dPplanningOp"]= array(
     "show_type_facture"   =>  "1",
     "show_statut_pro"     =>  "1",
     "show_assur_accident" =>  "1",
-    "show_dialyse"        =>  "0"
+    "show_dialyse"        =>  "0",
+    "show_cession"        =>  "0"
   ),
 );
