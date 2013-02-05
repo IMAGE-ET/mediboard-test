@@ -380,6 +380,19 @@ class CConsultation extends CCodable {
     $this->loadOldObject();
     $this->loadRefsReglements();
 
+    $this->completeField("sejour_id", "plageconsult_id");
+
+    if ($this->sejour_id) {
+      $this->loadRefPlageConsult();
+      $sejour = $this->loadRefSejour();
+
+      if ($sejour->type != "consult" &&
+         ($this->_date < mbDate($sejour->entree) || mbDate($this->_date) > $sejour->sortie)) {
+        $msg .= "Consultation en dehors du séjour<br />";
+        return $msg . parent::check();
+      }
+    }
+
     // Dévalidation avec règlement déjà effectué
     if ($this->fieldModified("valide", "0")) {
       if ($this->countBackRefs("reglements")) {

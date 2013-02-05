@@ -117,8 +117,11 @@ else {
 
   $sejour = new CSejour();
   $whereSejour = array();
+  $group = CGroups::loadCurrent();
   $whereSejour["type"] = "!= 'consult'";
-  $whereSejour[] = "'$consult->_date' BETWEEN entree AND sortie";
+  $whereSejour[] = "'$consult->_date' BETWEEN DATE(entree) AND DATE(sortie)";
+  $whereSejour["patient_id"] = "= '$consult->patient_id'";
+  $whereSejour["group_id"] = "= '$group->_id'";
   $consult->_count_matching_sejours = $sejour->countList($whereSejour);
 }
 
