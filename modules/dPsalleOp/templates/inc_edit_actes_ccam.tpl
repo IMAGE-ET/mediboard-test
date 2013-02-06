@@ -183,7 +183,6 @@
               <tr class="{{$key}}">
                 <th>{{mb_label object=$acte field=executant_id}}</th>
                 <td colspan="10">
-                
                   {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
                   <select name="executant_id" class="{{$acte->_props.executant_id}}">
                     <option value="">&mdash; Choisir un professionnel de santé</option>

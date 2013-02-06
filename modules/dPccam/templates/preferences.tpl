@@ -10,3 +10,4 @@
 
 {{mb_include template=inc_pref spec=bool var=new_search_ccam}}
 {{mb_include template=inc_pref spec=bool var=multiple_select_ccam}}
+{{mb_include template=inc_pref spec=bool var=user_executant}}

@@ -111,4 +111,6 @@ $locales['pref-multiple_select_ccam'] = 'Sélection multiple de codes';
 $locales['pref-multiple_select_ccam-desc'] = 'Sélection multiple de codes';
 $locales['pref-new_search_ccam'] = 'Nouvelle recherche de code CCAM';
 $locales['pref-new_search_ccam-desc'] = 'Nouvelle ergonomie de recherche de code CCAM';
+$locales['pref-user_executant'] = 'Utilisateur exécutant';
+$locales['pref-user_executant-desc'] = 'L\'utilisateur connecté est toujours pré-sélectionné en tant qu\'exécutant';
 ?>

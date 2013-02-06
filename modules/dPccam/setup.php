@@ -83,7 +83,11 @@ class CSetupdPccam extends CSetup {
     
     $this->addPrefQuery("multiple_select_ccam", "0");
     
-    $this->mod_version = "0.17";
+    $this->makeRevision("0.17");
+    
+    $this->addPrefQuery("user_executant", "0");
+
+    $this->mod_version = "0.18";
 		
 		// Data source query
     $query = "SELECT *

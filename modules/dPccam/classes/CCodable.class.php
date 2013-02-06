@@ -238,29 +238,29 @@ class CCodable extends CMbObject {
     $this->updateFormFields();
     $this->loadRefsActesCCAM();
     if ($this->_ref_actes_ccam) {
-      foreach ($this->_ref_actes_ccam as &$acte_ccam) {
-        $acte_ccam->loadRefExecutant();
+      foreach ($this->_ref_actes_ccam as $_acte) {
+        $_acte->loadRefExecutant();
       }
     }
     $this->_associationCodesActes = array();
     $listCodes = $this->_ext_codes_ccam;
     $listActes = $this->_ref_actes_ccam;
-    foreach ($listCodes as $key_code => $curr_code) {
-      $ccam     = $curr_code->code;
-      $phase    = $curr_code->_phase;
-      $activite = $curr_code->_activite;
-      $this->_associationCodesActes[$key_code]["code"]    = $curr_code->code;
+    foreach ($listCodes as $key_code => $_code) {
+      $ccam     = $_code->code;
+      $phase    = $_code->_phase;
+      $activite = $_code->_activite;
+      $this->_associationCodesActes[$key_code]["code"]    = $_code->code;
       $this->_associationCodesActes[$key_code]["nbActes"] = 0;
       $this->_associationCodesActes[$key_code]["ids"]     = "";
-      foreach ($listActes as $key_acte => $curr_acte) {
-        $test = ($curr_acte->code_acte == $ccam);
-        $test = $test && ($phase === null || $curr_acte->code_phase == $phase);
-        $test = $test && ($activite === null || $curr_acte->code_activite == $activite);
-        $test = $test && !isset($this->_associationCodesActes[$key_code]["actes"][$curr_acte->code_phase][$curr_acte->code_activite]);
+      foreach ($listActes as $key_acte => $_acte) {
+        $test = ($_acte->code_acte == $ccam);
+        $test = $test && ($phase === null || $_acte->code_phase == $phase);
+        $test = $test && ($activite === null || $_acte->code_activite == $activite);
+        $test = $test && !isset($this->_associationCodesActes[$key_code]["actes"][$_acte->code_phase][$_acte->code_activite]);
         if ($test) {
-          $this->_associationCodesActes[$key_code]["actes"][$curr_acte->code_phase][$curr_acte->code_activite] = $curr_acte;
+          $this->_associationCodesActes[$key_code]["actes"][$_acte->code_phase][$_acte->code_activite] = $_acte;
           $this->_associationCodesActes[$key_code]["nbActes"]++;
-          $this->_associationCodesActes[$key_code]["ids"] .= "$curr_acte->_id|";
+          $this->_associationCodesActes[$key_code]["ids"] .= "$_acte->_id|";
           unset($listActes[$key_acte]);
         }
       }
@@ -663,19 +663,22 @@ class CCodable extends CMbObject {
             $possible_acte->montant_depassement = $this->_acte_depassement_anesth;
           }
 
-          $possible_acte->executant_id = $this->getExecutantId($possible_acte->code_activite);
+          $possible_acte->executant_id = CAppUI::pref("user_executant") ?
+            CMediusers::get()->_id :
+            $this->getExecutantId($possible_acte->code_activite);
+            
           $possible_acte->updateFormFields();
           $possible_acte->loadRefs();
           $possible_acte->getAnesthAssocie();
 
           // Affect a loaded acte if exists
-          foreach ($this->_ref_actes_ccam as $curr_acte) {
-            if ($curr_acte->code_acte     == $possible_acte->code_acte
-             && $curr_acte->code_activite == $possible_acte->code_activite
-             && $curr_acte->code_phase    == $possible_acte->code_phase) {
-              if (!isset($used_actes[$curr_acte->acte_id])) {
-                $possible_acte = $curr_acte;
-                $used_actes[$curr_acte->acte_id] = true;
+          foreach ($this->_ref_actes_ccam as $_acte) {
+            if ($_acte->code_acte     == $possible_acte->code_acte
+             && $_acte->code_activite == $possible_acte->code_activite
+             && $_acte->code_phase    == $possible_acte->code_phase) {
+              if (!isset($used_actes[$_acte->acte_id])) {
+                $possible_acte = $_acte;
+                $used_actes[$_acte->acte_id] = true;
                 break;
               }
             }
