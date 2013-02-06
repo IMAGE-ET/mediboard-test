@@ -299,6 +299,7 @@ class CPatient extends CMbObject {
     $backProps["correspondants_courrier"] = "CCorrespondantCourrier object_id";
     $backProps["grossesses"]            = "CGrossesse parturiente_id";
     $backProps["facture_patient"]       = "CFactureConsult patient_id";
+    $backProps["facture_patient_sejour"]  = "CFactureEtablissement patient_id";
     $backProps["patient_observation_result_sets"] = "CObservationResultSet patient_id"; // interfere avec CMbObject-back-observation_result_sets
     $backProps["patient_links"]         = "CPatient patient_link_id";
     $backProps["CV_pyxvital"]           = "CPvCV id_patient";
