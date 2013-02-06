@@ -316,6 +316,9 @@ class COperatorDicom extends CEAIOperator {
                 "message"                => array(
                   "type"  => "data",
                   "datas" => array(
+                    0x0008 => array (
+                      0x0050 => $_sejour->_NDA
+                    ),
                     0x0010 => array(
                       0x0010 => "$_patient->nom^$_patient->prenom",
                       0x0020 => "$_patient->_IPP",
@@ -324,6 +327,9 @@ class COperatorDicom extends CEAIOperator {
                     ),
                     0x0020 => array(
                       0x000D => $_sejour->_NDA
+                    ),
+                    0x0038 => array (
+                      0x0010 => $_sejour->_NDA
                     ),
                     0x0040 => array(
                       0x0100 => array(
