@@ -1203,7 +1203,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Demande de chambre particulière
     $this->getCourtesyCode($node, $newVenue);
-    
+
+    // Mode d'entrée personnalisable - Combinaison du ZFM
+    $this->getDischargeDisposition($node, $newVenue);
+
     // Etablissement de destination
     $this->getDischargedToLocation($node, $newVenue);
     
@@ -1535,7 +1538,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
       $newVenue->mode_sortie_id = $mode_sortie->_id;
     }
-    
+
+    $sender = $this->_ref_sender;
+
     // Admit source
     switch ($sender->_configs["handle_PV1_36"]) {
       // Combinaison du ZFM
@@ -1630,8 +1635,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $newVenue->sortie_prevue = $sortie_prevue;
     }
     elseif (!$sortie_prevue && !$newVenue->sortie_prevue) {
-      mbLog($newVenue->type);
-
       $newVenue->sortie_prevue = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00", 
                     $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue);
     } 
@@ -1677,7 +1680,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     foreach ($this->queryNodes("ZBE.1", $node) as $ZBE_1) {
       $EI_1 = $this->queryTextNode("EI.1", $ZBE_1);
       $EI_3 = $this->queryTextNode("EI.3", $ZBE_1);
-      
+
       // Notre propre identifiant de mouvement
       if ($EI_3 == CAppUI::conf("hl7 assigning_authority_universal_id")) {
         $own_movement = $EI_1;
