@@ -37,6 +37,8 @@ if (is_array($filter->_bloc_id)) {
 $filterSejour = new CSejour;
 $filterSejour->type = CValue::get("type");
 
+$group = CGroups::loadCurrent();
+
 // On sort les plages opératoires et les interventions hors plage
 //  date - salle - horaires
 
@@ -60,7 +62,7 @@ $praticien->load($filter->_prat_id);
 
 // dans le cas d'un anesthesiste, vider le prat_id si l'anesthesiste veut voir tous
 // les plannings sinon laisser son prat_id pour afficher son planning perso
-if($praticien->isFromType(array("Anesthésiste"))&& !$filter->_planning_perso) {
+if ($praticien->isFromType(array("Anesthésiste"))&& !$filter->_planning_perso) {
   $filter->_prat_id = null;
 }
 
@@ -70,34 +72,37 @@ $functions = array();
 $praticiens = array();
 // Aucun filtre de séléctionné : tous les éléments auxquels on a le droit
 if (!$filter->_specialite && !$filter->_prat_id) {
-  if(!$user->isFromType(array("Anesthésiste")) && !$praticien->isFromType(array("Anesthésiste"))) {
+  if (!$user->isFromType(array("Anesthésiste")) && !$praticien->isFromType(array("Anesthésiste"))) {
     $functions  = $function->loadListWithPerms(PERM_READ);
     $praticiens = $user->loadPraticiens();
-  } else {
+  }
+  else {
     $functions = $function->loadList();
     $praticiens = $praticien->loadList();
   }
 // Filtre sur la specialité : la spec et ses chirs primaires et secondaires
-} elseif ($filter->_specialite) {
+}
+elseif ($filter->_specialite) {
   $function->load($filter->_specialite);
   $function->loadBackRefs("users");
   $function->loadBackRefs("secondary_functions");
   $functions[$function->_id] = $function;
   $praticiens = $function->_back["users"];
-  foreach($function->_back["secondary_functions"] as $sec_func) {
-    if(!isset($praticiens[$sec_func->user_id])) {
+  foreach ($function->_back["secondary_functions"] as $sec_func) {
+    if (!isset($praticiens[$sec_func->user_id])) {
       $sec_func->loadRefUser();
       $praticiens[$sec_func->user_id] = $sec_func->_ref_user;
     }
   }
 // Filtre sur le chir : le chir et ses specs primaires et secondaires
-} elseif ($filter->_prat_id) {
+}
+elseif ($filter->_prat_id) {
   $praticien->loadRefFunction();
   $praticien->loadBackRefs("secondary_functions");
   $praticiens[$praticien->_id] = $praticien;
   $functions[$praticien->function_id] = $praticien->_ref_function;
-  foreach($praticien->_back["secondary_functions"] as $sec_func) {
-    if(!isset($functions[$sec_func->function_id])) {
+  foreach ($praticien->_back["secondary_functions"] as $sec_func) {
+    if (!isset($functions[$sec_func->function_id])) {
       $sec_func->loadRefFunction();
       $functions[$sec_func->function_id] = $sec_func->_ref_function;
     }
@@ -115,7 +120,7 @@ $whereSalle = array();
 $whereSalle["sallesbloc.bloc_id"] =
   CSQLDataSource::prepareIn(count($filter->_bloc_id) ?
     $filter->_bloc_id :
-    array_keys(CGroups::loadCurrent()->loadBlocs(PERM_READ)));
+    array_keys($group->loadBlocs(PERM_READ)));
 
 if ($filter->salle_id) {
   $whereSalle["sallesbloc.salle_id"] = "= $filter->salle_id";
@@ -125,7 +130,7 @@ if ($filter->salle_id || $filter->_bloc_id) {
   $whereOperations["operations.salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 }
 
-$whereOperations["sejour.group_id"] = "= '".CGroups::loadCurrent()->_id."'";
+$whereOperations["sejour.group_id"] = "= '".$group->_id."'";
 
 $wherePlagesop["plagesop.salle_id"] = CSQLDataSource::prepareIn(array_keys($listSalles));
 
@@ -143,8 +148,11 @@ if (!$_print_annulees) {
 }
 
 switch ($filter->_ranking) {
-  case "ok" : $where["operations.rank"] = "!= '0'"; break;
-  case "ko" : $where["operations.rank"] = "= '0'"; break;
+  case "ok" :
+    $where["operations.rank"] = "!= '0'";
+    break;
+  case "ko" :
+    $where["operations.rank"] = "= '0'";
 }
 
 if ($filter->_codes_ccam) {
@@ -155,7 +163,7 @@ if ($filter->exam_extempo) {
   $where["operations.exam_extempo"]           = "= '1'";
   $whereOperations["operations.exam_extempo"] = "= '1'";
 }
-if($filterSejour->type) {
+if ($filterSejour->type) {
   $where["sejour.type"]           = "= '$filterSejour->type'";
   $whereOperations["sejour.type"] = "= '$filterSejour->type'";
 }
@@ -164,6 +172,8 @@ $orderOperations = "date, salle_id, chir_id";
 
 $operations = $operation->loadList($whereOperations, $orderOperations, null, null, $ljoin);
 CMbObject::massLoadFwdRef($operations, "plageop_id");
+CMbObject::massLoadFwdRef($operations, "sejour_id");
+CMbObject::massLoadFwdRef($operations, "chir_id");
 
 $order = "operations.rank, operations.horaire_voulu, sejour.entree_prevue";
 
@@ -175,8 +185,12 @@ foreach ($plagesop as &$plage) {
 
   $where["operations.plageop_id"] = "= '$plage->_id'";
 
-  $listOp = new COperation;
+  $listOp = new COperation();
   $listOp = $listOp->loadList($where, $order, null, null, $ljoin);
+
+  $chirs   = CMbObject::massLoadFwdRef($listOp, "chir_id");
+  $sejours = CMbObject::massLoadFwdRef($listOp, "sejour_id");
+  CMbObject::massLoadFwdRef($sejours, "patient_id");
 
   foreach ($listOp as $operation) {
     $operation->loadRefPlageOp(1);
@@ -184,6 +198,8 @@ foreach ($plagesop as &$plage) {
     $operation->loadRefPraticien(1);
     $operation->loadExtCodesCCAM();
     $operation->updateHeureUS();
+    $operation->updateSalle();
+    $operation->loadAffectationsPersonnel();
     $sejour = $operation->loadRefSejour(1);
     $sejour->loadRefsFwd(1);
     if ($_print_numdoss) {
@@ -228,6 +244,7 @@ foreach ($operations as $operation) {
   $operation->loadRefPraticien(1);
   $operation->loadExtCodesCCAM();
   $operation->updateHeureUS();
+  $operation->loadAffectationsPersonnel();
   $sejour = $operation->loadRefSejour(1);
   $sejour->loadRefsFwd(1);
   if ($_print_numdoss) {
@@ -261,5 +278,3 @@ $smarty->assign("operations"        , $operations);
 $smarty->assign("numOp"             , $numOp);
 
 $smarty->display("view_planning.tpl");
-
-?>

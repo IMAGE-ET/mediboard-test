@@ -29,7 +29,7 @@
   
 {{if $list_type == "left"}}
   <tr>
-    <th class="title" colspan="3">
+    <th class="title" colspan="4">
       <form name="editOrderVoulu" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPbloc" />
         <input type="hidden" name="dosql" value="do_order_voulu_op" />
@@ -44,7 +44,7 @@
   </tr>
 {{else}}
   <tr>
-    <th class="title" colspan="3">Ordre des interventions</th>
+    <th class="title" colspan="4">Ordre des interventions</th>
   </tr>
 {{/if}}
 
@@ -113,32 +113,6 @@
     </td>
     
     <td class="text" style="vertical-align: top;">
-      <form name="editFrmAnesth{{$_op->operation_id}}" action="?m={{$m}}" method="post" style="float: right;">
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$_op->operation_id}}" />
-        <select name="type_anesth" onchange="submitOrder(this.form, '{{$list_type}}');" style="width: 11em; clear: both;">
-          <option value="">&mdash; Anesthésie</option>
-          {{foreach from=$anesth item=curr_anesth}}
-            {{if $curr_anesth->actif || $_op->type_anesth == $curr_anesth->type_anesth_id}}
-              <option value="{{$curr_anesth->type_anesth_id}}" {{if $_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}}>
-                {{$curr_anesth->name}}{{if !$curr_anesth->actif && $_op->type_anesth == $curr_anesth->type_anesth_id}}(Obsolète){{/if}}
-              </option>
-            {{/if}}
-          {{/foreach}}
-        </select>
-        <br />
-        <button type="button" style="clear: both; width:11em;" 
-                class="{{if $consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}"
-                onclick="printFicheAnesth('{{$consult_anesth->_ref_consultation->_id}}', '{{$_op->_id}}');">
-          Fiche d'anesthésie
-        </button>
-        {{if $conf.dPbloc.CPlageOp.systeme_materiel == "expert"}}
-          <br />
-          {{mb_include module=bloc template=inc_button_besoins_ressources type=operation_id object_id=$_op->_id usage=1}}
-        {{/if}}
-      </form>
-      
       <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_op->_id}}">
         <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}');">
           {{if $_op->libelle}}
@@ -164,7 +138,38 @@
       {{/if}}
       {{mb_include module=bloc template=inc_rques_intub operation=$_op}}
     </td>
-    
+    <td class="narrow" style="vertical-align: top;">
+      <form name="editFrmAnesth{{$_op->operation_id}}" action="?m={{$m}}" method="post" style="float: right;">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="dosql" value="do_planning_aed" />
+        <input type="hidden" name="operation_id" value="{{$_op->operation_id}}" />
+        <select name="type_anesth" onchange="submitOrder(this.form, '{{$list_type}}');" style="width: 11em; clear: both;">
+          <option value="">&mdash; Anesthésie</option>
+          {{foreach from=$anesth item=curr_anesth}}
+            {{if $curr_anesth->actif || $_op->type_anesth == $curr_anesth->type_anesth_id}}
+              <option value="{{$curr_anesth->type_anesth_id}}" {{if $_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}}>
+                {{$curr_anesth->name}}{{if !$curr_anesth->actif && $_op->type_anesth == $curr_anesth->type_anesth_id}}(Obsolète){{/if}}
+              </option>
+            {{/if}}
+          {{/foreach}}
+        </select>
+        <br />
+        <button type="button" style="clear: both; width:11em;"
+                class="{{if $consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}"
+                onclick="printFicheAnesth('{{$consult_anesth->_ref_consultation->_id}}', '{{$_op->_id}}');">
+          Fiche d'anesthésie
+        </button>
+        <br />
+        <button type="button" class="search" onclick="extraInterv('{{$_op->_id}}')"
+          {{if ($_op->salle_id && $_op->salle_id != $_op->_ref_plageop->salle_id) || $_op->_count_affectations_personnel}}
+          style="font-weight: bold"
+          {{/if}}>Extra</button>
+        {{if $conf.dPbloc.CPlageOp.systeme_materiel == "expert"}}
+          <br />
+          {{mb_include module=bloc template=inc_button_besoins_ressources type=operation_id object_id=$_op->_id usage=1}}
+        {{/if}}
+      </form>
+    </td>
     <td class="narrow" style="text-align: center;">
       <!-- Intervention à valider -->
       {{if $_op->annulee && !$conf.dPplanningOp.COperation.save_rank_annulee_validee}}

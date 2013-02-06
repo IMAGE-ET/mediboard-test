@@ -52,7 +52,21 @@
     
     return onSubmitFormAjax(oForm, callback);
   }
-  
+
+  var extraInterv = function(op_id) {
+    var url = new Url("dPbloc", "ajax_edit_extra_interv");
+    url.addParam("op_id", op_id);
+    url.requestModal(700, 400);
+    url.modalObject.observe("afterClose", reloadAllLists);
+  }
+
+  reloadPersonnel = function(operation_id){
+    var url = new Url("dPsalleOp", "httpreq_vw_personnel");
+    url.addParam("operation_id", operation_id);
+    url.addParam("in_salle", 0);
+    url.requestUpdate("listPersonnel");
+  }
+
   Main.add(function(){
     var oForm = getForm("editPlageTiming");
     var options = {

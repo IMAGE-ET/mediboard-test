@@ -14,3 +14,4 @@
 <th>Anesthésie</th>
 <th>Remarques</th>
 <th>Matériel</th>
+<th>Extra</th>

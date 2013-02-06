@@ -30,7 +30,7 @@ class CPersonnel extends CMbObject {
     $spec->key   = 'personnel_id';
     return $spec;
   }
-	
+
   function getProps() {
     $specs = parent::getProps();
     $specs["user_id"]     = "ref notNull class|CMediusers";
@@ -42,11 +42,11 @@ class CPersonnel extends CMbObject {
     return $specs;
   }
   
-	function getBackProps() {
-	  $backProps = parent::getBackProps();
-	  $backProps['affectations'] = 'CAffectationPersonnel personnel_id';
-	  return $backProps;
-	}
+  function getBackProps() {
+    $backProps = parent::getBackProps();
+    $backProps['affectations'] = 'CAffectationPersonnel personnel_id';
+    return $backProps;
+  }
 
   function loadRefsFwd() {
     parent::loadRefsFwd();
@@ -55,7 +55,8 @@ class CPersonnel extends CMbObject {
   
   function loadRefUser() {
     $this->_ref_user = $this->loadFwdRef("user_id");
-  	$this->_view = $this->getFormattedValue("emplacement") . ": " . $this->_ref_user->_view;
+    $this->_view = $this->getFormattedValue("emplacement") . ": " . $this->_ref_user->_view;
+    return $this->_ref_user;
   }
  
   function updateFormFields() {
@@ -67,11 +68,11 @@ class CPersonnel extends CMbObject {
    * Load list overlay for current group
    */
   function loadGroupList($where = array(), $order = null, $limit = null, $groupby = null, $ljoin = array()) {
-		$ljoin["users_mediboard"] = "users_mediboard.user_id = personnel.user_id";
-		$ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+    $ljoin["users_mediboard"] = "users_mediboard.user_id = personnel.user_id";
+    $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
     // Filtre sur l'établissement
-		$g = CGroups::loadCurrent();
-		$where["functions_mediboard.group_id"] = "= '$g->_id'";
+    $g = CGroups::loadCurrent();
+    $where["functions_mediboard.group_id"] = "= '$g->_id'";
     
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
@@ -104,10 +105,12 @@ class CPersonnel extends CMbObject {
     $group = $groupByUser ? "personnel.user_id" : null;
     
     $listPers = $personnel->loadGroupList($where, $order, null, $group, $ljoin);
-    foreach($listPers as $pers){
-      $pers->loadRefUser();
+    $users = CMbObject::massLoadFwdRef($listPers, "user_id");
+    CMbObject::massLoadFwdRef($users, "function_id");
+
+    foreach ($listPers as $pers) {
+      $pers->loadRefUser()->loadRefFunction();
     }
     return $listPers;
   }
 }
-?>

@@ -1612,7 +1612,18 @@ class CSetupdPplanningOp extends CSetup {
            DROP `rques_assurance_accident`,
            DROP `rques_assurance_maladie`;";
     $this->addQuery($query);
-    $this->mod_version = "1.71";
+
+    $this->makeRevision("1.71");
+    $query = "ALTER TABLE `sejour`
+      CHANGE `ATNC` `ATNC` ENUM ('0', '1')";
+    $this->addQuery($query);
+
+    $query = "UPDATE `sejour`
+      SET `ATNC` = NULL
+      WHERE `ATNC` = 0;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.72";
     
   }
 }

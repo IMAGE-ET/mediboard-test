@@ -7,10 +7,9 @@
 * @author Alexis Granger
 */
 
-global $can, $m;
-
-$date  = CValue::getOrSession("date", mbDate());
-$modif_operation = $can->edit || $date >= mbDate();
+$date     = CValue::getOrSession("date", mbDate());
+$in_salle = CValue::get("in_salle", 1);
+$modif_operation = CCAnDo::edit() || $date >= mbDate();
 
 // Chargement de l'operation selectionnee
 $operation_id = CValue::getOrSession("operation_id");
@@ -22,103 +21,82 @@ $selOp->loadRefPlageOp();
 $tabPersonnel = array();
 
 // Chargement de la liste du personnel  
-$listPersIADE = CPersonnel::loadListPers("iade");
-$listPersAideOp = CPersonnel::loadListPers("op");
+$listPersIADE     = CPersonnel::loadListPers("iade");
+$listPersAideOp   = CPersonnel::loadListPers("op");
 $listPersPanseuse = CPersonnel::loadListPers("op_panseuse");
 
 // Chargement des affectations de la plageOp
-$selOp->_ref_plageop->loadAffectationsPersonnel();
+$plageOp = $selOp->_ref_plageop;
+$plageOp->loadAffectationsPersonnel();
+$affectations_personnel = $plageOp->_ref_affectations_personnel;
 
-$affectations_plage_iade = $selOp->_ref_plageop->_ref_affectations_personnel["iade"];
-$affectations_plage_op = $selOp->_ref_plageop->_ref_affectations_personnel["op"];
-$affectations_plage_panseuse = $selOp->_ref_plageop->_ref_affectations_personnel["op_panseuse"];
-
-if(!$affectations_plage_iade){
-  $affectations_plage_iade = array();
-}
-if(!$affectations_plage_op){
-  $affectations_plage_op = array();
-}
-if(!$affectations_plage_panseuse){
-  $affectations_plage_panseuse = array();
-}
-$affectations_plage = array_merge($affectations_plage_iade, $affectations_plage_op, $affectations_plage_panseuse);
+$affectations_plage = array_merge(
+  $affectations_personnel["iade"],
+  $affectations_personnel["op"],
+  $affectations_personnel["op_panseuse"]
+);
 
 // Tableau de stockage des affectations
 $tabPersonnel["plage"] = array();
 $tabPersonnel["operation"] = array();
 
-if($affectations_plage){
-  foreach($affectations_plage as $key => $affectation_personnel){
-    $affectation = new CAffectationPersonnel();
-    $affectation->object_class = "COperation";
-    $affectation->object_id    = $selOp->_id;
-    $affectation->personnel_id = $affectation_personnel->_ref_personnel->_id;
-    $affectation->loadMatchingObject();
-    $affectation->loadRefPersonnel();
-    $affectation->_ref_personnel->loadRefUser();
-    $affectation->_ref_personnel->_ref_user->loadRefFunction();
-		$tabPersonnel["plage"][$affectation_personnel->_ref_personnel->_id] = $affectation;
-  }
-} 
-  
+$personnels = CMbObject::massLoadFwdRef($affectations_plage, "personnel_id");
+CMbObject::massLoadFwdRef($personnels, "user_id");
+CMbObject::massLoadFwdRef($affectations_plage, "object_id", "CPlageOp");
+foreach ($affectations_plage as $key => $affectation_personnel) {
+  $affectation_personnel->loadRefPersonnel()->loadRefUser()->loadRefFunction();
+  $affectation_personnel->loadRefObject();
+  $tabPersonnel["plage"][$affectation_personnel->_ref_personnel->_id] = $affectation_personnel;
+}
+
 // Chargement du de l'operation
 $selOp->loadAffectationsPersonnel();
+$affectations_personnel = $selOp->_ref_affectations_personnel;
 
-$affectations_operation_iade = $selOp->_ref_affectations_personnel["iade"];
-$affectations_operation_op = $selOp->_ref_affectations_personnel["op"];
-$affectations_operation_panseuse = $selOp->_ref_affectations_personnel["op_panseuse"];
+$affectations_operation = array_merge(
+  $affectations_personnel["iade"],
+  $affectations_personnel["op"],
+  $affectations_personnel["op_panseuse"]
+);
 
-if(!$affectations_operation_iade){
-  $affectations_operation_iade = array();
-}
-if(!$affectations_operation_op){
-  $affectations_operation_op = array();
-}
-if(!$affectations_operation_panseuse){
-  $affectations_operation_panseuse = array();
-}
-
-$affectations_operation = array_merge($affectations_operation_iade, $affectations_operation_op, $affectations_operation_panseuse);
-
-foreach($affectations_operation as $key => $affectation_personnel){
+foreach ($affectations_operation as $key => $affectation_personnel) {
   // Si le personnel n'est pas deja present dans le tableau d'affectation, on le rajoute
-  if((!array_key_exists($affectation_personnel->_ref_personnel->_id, $tabPersonnel["plage"])) 
-  && ($affectation_personnel->_ref_personnel->emplacement == "op" || $affectation_personnel->_ref_personnel->emplacement == "op_panseuse" || $affectation_personnel->_ref_personnel->emplacement == "iade")){
-    $affectation_personnel->_ref_personnel->loadRefUser();
-		$affectation_personnel->_ref_personnel->_ref_user->loadRefFunction();
+  if (
+      (!array_key_exists($affectation_personnel->_ref_personnel->_id, $tabPersonnel["plage"]))
+      && ($affectation_personnel->_ref_personnel->emplacement == "op" ||
+      $affectation_personnel->_ref_personnel->emplacement == "op_panseuse" ||
+      $affectation_personnel->_ref_personnel->emplacement == "iade")
+  ) {
     $tabPersonnel["operation"][$affectation_personnel->_ref_personnel->_id] = $affectation_personnel;  
   }
 }
 
 // Suppression de la liste des personnels deja presents
-foreach($listPersIADE as $key => $pers){
-	$pers->_ref_user->loadRefFunction();
-  if(array_key_exists($pers->_id, $tabPersonnel["plage"]) || array_key_exists($pers->_id, $tabPersonnel["operation"])){
+foreach ($listPersIADE as $key => $pers) {
+  if (array_key_exists($pers->_id, $tabPersonnel["plage"]) || array_key_exists($pers->_id, $tabPersonnel["operation"])) {
     unset($listPersIADE[$key]);
   }
 }
-foreach($listPersAideOp as $key => $pers){
-  $pers->_ref_user->loadRefFunction();
-  if(array_key_exists($pers->_id, $tabPersonnel["plage"]) || array_key_exists($pers->_id, $tabPersonnel["operation"])){
+foreach ($listPersAideOp as $key => $pers) {
+  if (array_key_exists($pers->_id, $tabPersonnel["plage"]) || array_key_exists($pers->_id, $tabPersonnel["operation"])) {
     unset($listPersAideOp[$key]);
   }
 }
-foreach($listPersPanseuse as $key => $pers){
-  $pers->_ref_user->loadRefFunction();
-  if(array_key_exists($pers->_id, $tabPersonnel["plage"]) || array_key_exists($pers->_id, $tabPersonnel["operation"])){
+foreach ($listPersPanseuse as $key => $pers) {
+  if (array_key_exists($pers->_id, $tabPersonnel["plage"]) || array_key_exists($pers->_id, $tabPersonnel["operation"])) {
     unset($listPersPanseuse[$key]);
   }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("selOp"           , $selOp           );
-$smarty->assign("tabPersonnel"    , $tabPersonnel    );
-$smarty->assign("listPersIADE"    , $listPersIADE  );
-$smarty->assign("listPersAideOp"  , $listPersAideOp  );
-$smarty->assign("listPersPanseuse", $listPersPanseuse);
-$smarty->assign("modif_operation" , $modif_operation );
-$smarty->display("inc_vw_personnel.tpl");
 
-?>
+$smarty->assign("selOp"           , $selOp);
+$smarty->assign("tabPersonnel"    , $tabPersonnel);
+$smarty->assign("listPersIADE"    , $listPersIADE);
+$smarty->assign("listPersAideOp"  , $listPersAideOp);
+$smarty->assign("listPersPanseuse", $listPersPanseuse);
+$smarty->assign("modif_operation" , $modif_operation);
+$smarty->assign("in_salle"        , $in_salle);
+
+$smarty->display("inc_vw_personnel.tpl");

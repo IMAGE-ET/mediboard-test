@@ -58,3 +58,21 @@
   {{/if}}
   {{$curr_op->materiel|nl2br}}
 </td>
+<td class="text" style="width: 10%">
+  {{if $curr_op->plageop_id && $curr_op->_ref_plageop->salle_id != $curr_op->salle_id}}
+    Déplacée en {{$curr_op->_ref_salle}} <br />
+  {{/if}}
+
+  {{foreach from=$curr_op->_ref_affectations_personnel key=type_personnel item=_affectations}}
+    {{if ($type_personnel == "op" || $type_personnel == "op_panseuse" || $type_personnel == "iade") && $_affectations|@count > 0}}
+      <strong>{{tr}}CPersonnel.emplacement.{{$type_personnel}}{{/tr}}</strong>
+      <ul>
+        {{foreach from=$_affectations item=_affectation}}
+          <li>
+            {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_affectation->_ref_personnel->_ref_user}}
+          </li>
+        {{/foreach}}
+      </ul>
+    {{/if}}
+  {{/foreach}}
+</td>
