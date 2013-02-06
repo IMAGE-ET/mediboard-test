@@ -2934,6 +2934,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     $where["item_souhait_id"] = "IS NOT NULL";
     return $this->countBackRefs("items_liaisons", $where);
   }
+  
+  static function massCountPrestationSouhaitees($sejours) {
+    $where["item_souhait_id"] = "IS NOT NULL";
+    CStoredObject::massCountBackRefs($sejours, "items_liaisons", $where);
+  }
 
   function loadRefsNaissances() {
     return $this->_ref_naissances = $this->loadBackRefs("naissances");

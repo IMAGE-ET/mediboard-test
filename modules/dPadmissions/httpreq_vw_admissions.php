@@ -117,7 +117,7 @@ $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 $functions  = CMbObject::massLoadFwdRef($praticiens, "function_id");
 
 // Chargement optimisée des prestations
-CMbObject::massCountBackRefs($sejours, "items_liaisons", array("item_souhait_id" => "IS NOT NULL"));
+CSejour::massCountPrestationSouhaitees($sejours);
 
 foreach ($sejours as $sejour_id => $_sejour) {
   $praticien = $_sejour->loadRefPraticien(1);
