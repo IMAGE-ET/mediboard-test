@@ -77,6 +77,7 @@ class CProductDelivery extends CMbObject {
   var $_code_ucd            = null;
   var $_code_cip            = null;
   var $_count_delivered     = null;
+  var $_preparateur_id      = null;
 
   var $_auto_trace;
   var $_sejour_id;
@@ -126,6 +127,7 @@ class CProductDelivery extends CMbObject {
     $specs['_datetime_min']     = 'dateTime notNull';
     $specs['_datetime_max']     = 'dateTime notNull moreEquals|_datetime_min';
 
+    $specs['_preparateur_id']   = 'ref class|CMediusers';
     return $specs;
   }
 
@@ -194,7 +196,9 @@ class CProductDelivery extends CMbObject {
    * @return CMediusers
    */
   function loadRefPreparateur() {
-    return $this->_ref_preparateur = $this->loadFirstLog()->loadRefUser()->loadRefMediuser();
+    $this->_preparateur_id = $this->loadFirstLog()->loadRefUser()->_id;
+
+    return $this->_ref_preparateur = $this->loadFwdRef("_preparateur_id");
   }
 
   function loadRefsPrisesDispensationMed($date_min, $date_max){

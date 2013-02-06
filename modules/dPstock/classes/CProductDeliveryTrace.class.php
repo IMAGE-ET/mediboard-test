@@ -64,7 +64,7 @@ class CProductDeliveryTrace extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs[$this->_spec->key] .= " show|1";
-    $specs['delivery_id']    = 'ref notNull class|CProductDelivery';
+    $specs['delivery_id']    = 'ref notNull class|CProductDelivery'; // TODO ajouter le cascade apres quelques verifications
     $specs['code']           = 'str maxLength|32';
     
     $type = (CProductStock::$allow_quantity_fractions ? "float" : "num");
