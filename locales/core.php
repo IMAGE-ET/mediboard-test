@@ -23,10 +23,20 @@ if (null == $locales = SHM::get($shared_name)) {
   }
 
   //overwrite locales by Database
-  $locale2 = new CTranslationOverwrite();
-  $locales2 = $locale2->loadList();
-  foreach ($locales2 as $_locales2) {
-    $locales[$_locales2->source] = $_locales2->translation;
+  $locale_db = new CTranslationOverwrite();
+  $ds = CSQLDataSource::get("std");
+
+  $where = array();
+  $where["language"] = "= '$locale'";
+
+  $query = new CRequest();
+  $query->addSelect("source, translation");
+  $query->addTable("translation");
+  $query->addWhere($where);
+  $locales2 = $ds->loadList($query->getRequest());
+
+  foreach ($locales2 as &$_locales2) {
+    $locales[$_locales2["source"]] = $_locales2["translation"];
   }
 
   SHM::put($shared_name, $locales);
