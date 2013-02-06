@@ -14,8 +14,7 @@
 /**
  * Description
  */
-class CTranslationOverwrite extends CMbObject
-{
+class CTranslationOverwrite extends CMbObject {
 
   /**
    * Table Key
@@ -26,6 +25,7 @@ class CTranslationOverwrite extends CMbObject
 
   var $source;
   var $translation;
+  var $language;
   var $_old_translation;
 
 
@@ -34,8 +34,7 @@ class CTranslationOverwrite extends CMbObject
    *
    * @return CMbFieldSpec
    */
-  function getSpec()
-  {
+  function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "translation";
     $spec->key = "translation_id";
@@ -48,8 +47,7 @@ class CTranslationOverwrite extends CMbObject
    *
    * @return array
    */
-  function getBackProps()
-  {
+  function getBackProps() {
     return $backProps = parent::getBackProps();
   }
 
@@ -69,7 +67,7 @@ class CTranslationOverwrite extends CMbObject
    */
   function check() {
     global $locales;
-    if (!$locales[$this->source]) {
+    if (!isset($locales[$this->source])) {
       return "CTranslationOverwrite-failed-locale-doesnot-exist";
     }
     return parent::check();
@@ -80,15 +78,12 @@ class CTranslationOverwrite extends CMbObject
    *
    * @return array
    */
-  function getProps()
-  {
+  function getProps() {
     $props = parent::getProps();
     $props["source"]        = "str notNull";
+    $props["language"]      = "enum notNull list|".implode('|', CAppUI::getAvailableLanguages())." default|fr";
     $props["translation"]   = "text notNull";
-
     return $props;
   }
-
-
 
 }

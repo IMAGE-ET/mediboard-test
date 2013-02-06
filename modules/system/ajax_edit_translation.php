@@ -13,13 +13,17 @@
  
  
 CCanDo::checkEdit();
-$traduction_id = CValue::getOrSession("trad_id");
+$translation_id = CValue::getOrSession("trad_id");
+$language = CValue::getOrSession("language", "fr");
+$languages = CAppUI::getAvailableLanguages();
 
 $translation = new CTranslationOverwrite();
-$translation->load($traduction_id);
+$translation->load($translation_id);
 
 
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("translation", $translation);
+$smarty->assign("language", $language);
+$smarty->assign("languages", $languages);
 $smarty->display("inc_edit_translation.tpl");

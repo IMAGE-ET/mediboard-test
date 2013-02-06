@@ -1228,12 +1228,15 @@ class CSetupsystem extends CSetup {
               `translation_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
               `source` VARCHAR (255) NOT NULL,
               `translation` TEXT NOT NULL
-) /*! ENGINE=MyISAM */;";
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.23";
+    $this->makeRevision("1.1.23");
+    $query = "ALTER TABLE `translation`
+              ADD `language` CHAR (2) NOT NULL DEFAULT 'fr';";
+    $this->addQuery($query);
 
-
+    $this->mod_version = "1.1.24";
 
 
     /*$query = "ALTER TABLE user_log

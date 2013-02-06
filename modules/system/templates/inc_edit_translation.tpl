@@ -36,7 +36,8 @@
     {{mb_key object=$translation}}
     {{mb_class object=$translation}}
 
-    <table class="tbl">
+    <table class="form">
+      <tbody>
       <tr>
         <th colspan="2" class="title">
       {{if $translation->_id}}
@@ -47,17 +48,21 @@
         </th>
       </tr>
       <tr>
-        <td>{{mb_label object=$translation field=source}}</td>
+        <th>{{mb_label object=$translation field=language}}</th>
+        <td>{{mb_field object=$translation field=language typeEnum=radio}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$translation field=source}}</th>
         <td>{{mb_field object=$translation field=source}}</td>
       </tr>
       <tr>
-        <td>{{tr}}CTranslationOverwrite.translation_mb{{/tr}}</td>
+        <th>{{tr}}CTranslationOverwrite.translation_mb{{/tr}}</th>
         <td>
           <textarea name="mbtrad" disabled="disabled">{{tr}}{{$translation->source}}{{/tr}}</textarea>
         </td>
       </tr>
       <tr>
-        <td>{{mb_label object=$translation field=translation}}</td>
+        <th>{{mb_label object=$translation field=translation}}</th>
         <td>{{mb_field object=$translation field=translation}}</td>
       </tr>
       <tr>
@@ -70,5 +75,6 @@
           {{/if}}
         </td>
       </tr>
+      </tbody>
     </table>
   </form>
