@@ -1620,7 +1620,7 @@ class CSetupdPplanningOp extends CSetup {
 
     $query = "UPDATE `sejour`
       SET `ATNC` = NULL
-      WHERE `ATNC` = 0;";
+      WHERE `ATNC` = '0'';";
     $this->addQuery($query);
 
     $this->mod_version = "1.72";
