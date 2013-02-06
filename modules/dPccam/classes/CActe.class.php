@@ -42,18 +42,31 @@ class CActe extends CMbMetaObject {
     $this->_montant_facture = $this->montant_base + $this->montant_depassement;
   }
   
+  /**
+   * @return CSejour
+   */
   function loadRefSejour() {
-    $this->loadTargetObject();
-    $this->_ref_object->loadRefSejour();
-    $this->_ref_sejour =& $this->_ref_object->_ref_sejour;
+    if (null == $object = $this->loadTargetObject()) {
+      return;
+    }
+
+    return $this->_ref_sejour = $object->loadRefSejour();
   }
   
+  /**
+   * @return CPatient
+   */
   function loadRefPatient() {
-    $this->loadTargetObject();
-    $this->_ref_object->loadRefPatient();
-    $this->_ref_patient =& $this->_ref_object->_ref_patient;
+    if (null == $object = $this->loadTargetObject()) {
+      return;
+    }
+
+    return $this->_ref_patient = $object->loadRefPatient();
   }
   
+  /**
+   * @return CMediusers
+   */
   function loadRefPraticien() {
     if (null == $object = $this->loadTargetObject()) {
       return;
