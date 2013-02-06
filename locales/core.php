@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ **/
 
 /**
  * @package Mediboard
@@ -21,8 +21,19 @@ if (null == $locales = SHM::get($shared_name)) {
   foreach ($locales as &$_locale) {
     $_locale = CMbString::unslash($_locale);
   }
+
+  //overwrite locales by Database
+  $locale2 = new CTranslationOverwrite();
+  $locales2 = $locale2->loadList();
+  foreach ($locales2 as $_locales2) {
+    $locales[$_locales2->source] = $_locales2->translation;
+  }
+
   SHM::put($shared_name, $locales);
 }
+
+
+
 
 // Encoding definition
 require "$root_dir/locales/$locale/meta.php";
