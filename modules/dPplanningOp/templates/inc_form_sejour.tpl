@@ -631,8 +631,8 @@ Main.add( function(){
     {{/if}}
     <button type="button"
         onclick="location.href='?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id=0&amp;pat_id='+this.form.patient_id.value"
-            class="add" {{if !$patient->_id}}style="display: none;"{{/if}}>
-      Rendez-vous
+            class="new" {{if !$patient->_id}}style="display: none;"{{/if}}>
+      RDV Consultation
     </button>
   </td>
 </tr>
