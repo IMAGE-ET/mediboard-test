@@ -55,36 +55,39 @@ class CActe extends CMbMetaObject {
   }
   
   function loadRefPraticien() {
-    $this->loadTargetObject();
-    $this->_ref_object->loadRefPraticien();
-    $this->_ref_praticien =& $this->_ref_object->_ref_praticien;
+    if (null == $object = $this->loadTargetObject()) {
+      return;
+    }
+    
+    return $this->_ref_praticien = $object->loadRefPraticien();
   }
   
   function loadRefExecutant() {
     $this->_ref_executant = $this->loadFwdRef("executant_id", true);
     $this->_ref_executant->loadRefFunction();
-    
     return $this->_ref_executant;
   }
   
-  function loadListExecutants($guess = true) {
-    
-    $list_executants = new CMediusers;
-    $this->_list_executants = $list_executants->loadProfessionnelDeSante(PERM_READ);
+  function loadListExecutants() {
+    $user = CMediusers::get(); 
+    $this->_list_executants = $user->loadProfessionnelDeSante(PERM_READ);
 
-    // We guess who is the executant
-    if ($guess && $this->executant_id == null && $this->_id == null) {
-      if ($this->_ref_object && $this->loadRefPraticien() && $this->_ref_praticien->_id) {
-        $this->executant_id = $this->_ref_praticien->_id;
-        return;
-      }
-      else {
-        $user = CMediusers::get();
-        if ($user->isPraticien() || $user->isInfirmiere()) {
-          $this->executant_id = $user->_id;
-          return;
-        }
-      }
+    // No executant guess for the existing acte
+    if ($this->executant_id || $this->_id) {
+      return;
+    }
+    
+    // User executant
+    if (CAppUI::pref("user_executant")) {
+      $this->executant_id = $user->_id;
+      return;
+    }
+
+    // Referring pratician executant
+    $praticien = $this->loadRefPraticien();
+    if ($praticien && $praticien->_id) {
+      $this->executant_id = $praticien->_id;
+      return;
     }
   }
   

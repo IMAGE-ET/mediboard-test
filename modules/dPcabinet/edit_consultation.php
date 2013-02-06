@@ -249,10 +249,7 @@ if ($consult->_ref_sejour && $sejour->_id) {
 }
 
 // Initialisation d'un acte NGAP
-$acte_ngap = new CActeNGAP();
-$acte_ngap->quantite    = 1;
-$acte_ngap->coefficient = 1;
-$acte_ngap->loadListExecutants();
+$acte_ngap = CActeNGAP::createEmptyFor($consult);
 
 // Tableau de contraintes pour les champs du RPU
 // Contraintes sur le mode d'entree / provenance

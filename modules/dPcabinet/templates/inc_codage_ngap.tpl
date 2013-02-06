@@ -56,8 +56,7 @@ ActesNGAP = {
   {{/if}}
 {{/if}}
 
-
-<form name="editNGAP" method="post" action=""> 
+ <form name="editNGAP" method="post" action=""> 
   <input type="hidden" name="acte_ngap_id" value="" />
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="dosql" value="do_acte_ngap_aed" />
@@ -97,10 +96,6 @@ ActesNGAP = {
     {{else}}
     
     <tr>
-      <th class="title" colspan="10">Codages des actes NGAP</th>
-    </tr>
-
-    <tr>
       <th class="category">{{mb_title object=$acte_ngap field=quantite}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=code}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=coefficient}}</th>
@@ -129,7 +124,7 @@ ActesNGAP = {
       {{if $can->edit}}
         <tr>
           <td>{{mb_field object=$acte_ngap field="quantite" onchange="refreshTarif()" onkeyup="refreshTarif()"}}</td>
-          <td>
+          <td> 
             {{mb_field object=$acte_ngap field="code" onchange="refreshTarif()"}}
             <div style="display: none; width: 300px;" class="autocomplete" id="code_auto_complete"></div>
           </td>
@@ -144,11 +139,7 @@ ActesNGAP = {
           <td>
             <select name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-              {{foreach from=$acte_ngap->_list_executants item=curr_executant}}
-              <option class="mediuser" style="border-color: #{{$curr_executant->_ref_function->color}};" value="{{$curr_executant->user_id}}" {{if $curr_executant->user_id == $object->_ref_executant->_id}} selected="selected" {{/if}}>
-                {{$curr_executant->_view}}
-              </option>
-              {{/foreach}}
+              {{mb_include module=mediusers template=inc_options_mediuser list=$acte_ngap->_list_executants selected=$acte_ngap->executant_id}}
             </select>
           </td>
           <td>

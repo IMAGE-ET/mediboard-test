@@ -32,10 +32,7 @@ $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens(PERM_DENY);
 
 //Initialisation d'un acte NGAP
-$acte_ngap = new CActeNGAP();
-$acte_ngap->quantite = 1;
-$acte_ngap->coefficient = 1;
-$acte_ngap->loadListExecutants();
+$acte_ngap = CActeNGAP::createEmptyFor($operation);
 
 $acte_tarmed = null;
 if (CModule::getActive("tarmed")) {

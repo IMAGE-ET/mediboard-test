@@ -149,10 +149,7 @@ $unites["tsivy"]      = array("nom"=>"TS Ivy","unit"=>"");
 $unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
 
 // Initialisation d'un acte NGAP
-$acte_ngap = new CActeNGAP();
-$acte_ngap->quantite = 1;
-$acte_ngap->coefficient = 1;
-$acte_ngap->loadListExecutants();
+$acte_ngap = CActeNGAP::createEmptyFor($selOp);
 
 // Si le module Tarmed est installé chargement d'un acte tarmed et caisse
 $acte_tarmed = null;

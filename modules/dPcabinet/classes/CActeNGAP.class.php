@@ -23,6 +23,15 @@ class CActeNGAP extends CActe {
   var $_libelle    = null;
   var $_execution = null;
   
+  static function createEmptyFor(CCodable $codable) {
+    $acte = new self;
+    $acte->setObject($codable);
+    $acte->quantite    = 1;
+    $acte->coefficient = 1;
+    $acte->loadListExecutants();
+    return $acte;
+  }
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table  = 'acte_ngap';

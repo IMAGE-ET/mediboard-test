@@ -37,10 +37,7 @@ $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens();
 
 //Initialisation d'un acte NGAP
-$acte_ngap = new CActeNGAP();
-$acte_ngap->quantite = 1;
-$acte_ngap->coefficient = 1;
-$acte_ngap->loadListExecutants();
+$acte_ngap = CActeNGAP::createEmptyFor($selOp);
 
 $acte_tarmed = null;
 if (CModule::getActive("tarmed")) {
