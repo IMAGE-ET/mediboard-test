@@ -1499,6 +1499,7 @@ class CStoredObject extends CModelObject {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }
+
     $backObject = new $backSpec->class;
     $backField = $backSpec->field;
     
@@ -1538,6 +1539,74 @@ class CStoredObject extends CModelObject {
     
     // Comptage des backrefs
     return $this->_count[$backName] = $this->_spec->ds->loadResult($query); 
+  }
+
+  /**
+   * Mass count mechanism for backward references of an object collection
+   *
+   * @param self[] $objects  Array of objects
+   * @param string $backName Name of backward reference
+   * @param array  $where    Additional where clauses
+   * @param array  $ljoin    Additionnal ljoin clauses
+   *
+   * @return total count among objects, null on error
+   */
+  static function massCountBackRefs($objects, $backName, $where = array(), $ljoin = array()) {
+    if (!count($objects)) {
+      return null;
+    }
+
+    $object = reset($objects);
+    if (!$backSpec = $object->makeBackSpec($backName)) {
+      return null;
+    }
+
+    $backObject = new $backSpec->class;
+    $backField = $backSpec->field;
+    
+    // Cas du module non installé
+    if (!$backObject->_ref_module) {
+      return null;
+    }
+
+    // @TODO Refactor using CRequest
+    $query = "SELECT $backField, COUNT({$backObject->_spec->key}) 
+      FROM `{$backObject->_spec->table}`";
+    
+    if ($ljoin && count($ljoin)) {
+      foreach ($ljoin as $table => $condition) {
+        $query .= "\nLEFT JOIN `$table` ON $condition ";
+      }
+    }
+    
+    $ds = $backObject->_spec->ds;
+    $query .= "WHERE `$backField` " . $ds->prepareIn(array_keys($objects));
+
+    // Additional where clauses
+    foreach ($where as $_field => $_clause) {
+      $query .= "\nAND `$_field` $_clause";
+    }
+    
+    // Meta objects case
+    $backSpec =& $backObject->_specs[$backField];
+    $backMeta = $backSpec->meta;
+    if ($backMeta) {
+      $query .= "\nAND `$backMeta` = '$this->_class'";
+    }
+    
+    // Group by object key
+    $query .= "\nGROUP BY $backField";
+    $counts = $ds->loadHashList($query);
+    
+    // Populate object counts
+    $total = 0;
+    foreach ($objects as $object_id => $_object) {
+      $count = isset($counts[$object_id]) ? $counts[$object_id] : 0;
+      $total += $_object->_count[$backName] = $count;
+    }
+    
+    // Total count
+    return $total; 
   }
 
   /**
