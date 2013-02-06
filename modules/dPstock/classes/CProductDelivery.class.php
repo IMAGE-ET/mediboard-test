@@ -75,6 +75,7 @@ class CProductDelivery extends CMbObject {
   var $_pilulier            = null;
   var $_code_cis            = null;
   var $_code_ucd            = null;
+  var $_code_cip            = null;
   var $_count_delivered     = null;
 
   var $_auto_trace;
@@ -319,6 +320,8 @@ class CProductDelivery extends CMbObject {
       $delivery_trace->date_delivery = $this->date_delivery ? $this->date_delivery : mbDateTime();
       $delivery_trace->_sejour_id = $this->_sejour_id;
       $delivery_trace->_code_cis = $this->_code_cis;
+      $delivery_trace->_code_cip = $this->_code_cip;
+      
       $delivery_trace->_datetime_min = $this->datetime_min;
       
       if ($this->manual) {

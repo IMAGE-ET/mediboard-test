@@ -45,6 +45,8 @@ class CProductDeliveryTrace extends CMbObject {
   var $_unreceive     = null;
   var $_sejour_id     = null;
   var $_datetime_min  = null;
+  var $_code_cis;
+  var $_code_cip;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -191,6 +193,16 @@ class CProductDeliveryTrace extends CMbObject {
       $stock_sejour->sejour_id = $this->_sejour_id;
       $stock_sejour->code_cis  = $this->_code_cis;
       $stock_sejour->loadMatchingObject("datetime DESC");
+      
+      
+      // Mise a jour de la quanitité du stock en quantité d'administration
+      $_produit = CBcbProduit::get($this->_code_cip);
+      $_produit->_unite_administration = $_produit->libelle_unite_presentation;
+      $_produit->_unite_dispensation = CValue::first($_produit->libelle_presentation, $_produit->libelle_unite_presentation);
+  
+      $ratio = ($_produit->_unite_dispensation == $_produit->libelle_unite_presentation) ? 1 : (1 / $_produit->nb_unite_presentation);
+      $this->quantity = $this->quantity / $ratio;
+      
       
       
       // Mise à jour du stock
