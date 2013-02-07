@@ -63,7 +63,7 @@ class CLPR {
     // Ajout préalable de l'imprimante via cups du serveur web
     $command = "lpr $u $printer '$file->_file_path'";
     
-    exec($command, $res, $success);
+    exec(escapeshellarg($command), $res, $success);
 
     // La commande lpr retourne 0 si la transmission s'est bien effectuée
     if ($success == 0) {

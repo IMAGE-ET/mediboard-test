@@ -63,7 +63,7 @@ class CSMB {
       $uri .= "-N";
     }
     
-    exec("smbclient $uri", $res);
+    exec(escapeshellarg("smbclient $uri"), $res);
     
     if (count($res)) {
       $mess = "";
