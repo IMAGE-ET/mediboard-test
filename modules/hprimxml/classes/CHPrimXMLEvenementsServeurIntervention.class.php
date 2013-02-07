@@ -1,13 +1,20 @@
-<?php /* $Id: CHPrimXMLEvenementsServeurActes.class.php 15933 2012-06-19 10:43:16Z lryo $ */
+ <?php
 
-/**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision: 15933 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- */
+ /**
+  * Évènements serveur intervention
+  *
+  * @category Hprimxml
+  * @package  Mediboard
+  * @author   SARL OpenXtrem <dev@openxtrem.com>
+  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+  * @version  SVN: $Id: CHPrimXMLEvenementsServeurActes.class.php 15933 2012-06-19 10:43:16Z lryo $
+  * @link     http://www.mediboard.org
+  */
 
+ /**
+  * Class CHPrimXMLEvenementsServeurIntervention
+  * Évènements serveur intervention
+  */
 class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurActivitePmsi {
   var $actions = array(
     'création'     => "création",
@@ -16,7 +23,12 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     'suppression'  => "suppression",
     'information'  => "information",
   );
-  
+
+  /**
+   * Construct
+   *
+   * @return CHPrimXMLEvenementsServeurIntervention
+   */
   function __construct() {
     $this->sous_type = "evenementServeurIntervention";
     $this->evenement = "evt_serveurintervention";
@@ -24,10 +36,22 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     parent::__construct("serveurActes", "msgEvenementsServeurActes");
   }
 
+  /**
+   * Generate header message
+   *
+   * @return void
+   */
   function generateEnteteMessage() {
     parent::generateEnteteMessage("evenementsServeurActes");
   }
-  
+
+  /**
+   * Generate content
+   *
+   * @param COperation $operation Operation
+   *
+   * @return void
+   */
   function generateFromOperation(COperation $operation) {
     $evenementsServeurActes = $this->documentElement;
 
@@ -64,7 +88,12 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     // Traitement final
     $this->purgeEmptyElements();
   }
-  
+
+  /**
+   * Get contents XML
+   *
+   * @return array
+   */
   function getContentsXML() {
     $data = array();
     $xpath = new CHPrimXPath($this);   
@@ -92,9 +121,9 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
    /**
    * Enregistrement des interventions
    * 
-   * @param CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq    DOM Acquittement 
-   * @param CMbObject                                 $mbObject   Object
-   * @param array                                     $data       Data that contain the nodes 
+   * @param CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq  DOM Acquittement
+   * @param CMbObject                                 $mbObject Object
+   * @param array                                     $data     Data that contain the nodes
    * 
    * @return string Acquittement 
    **/
@@ -117,7 +146,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     // IPP non connu => message d'erreur
     $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatient']);
     if (!$IPP->_id) {
-      return $exchange_hprim->setAckError($dom_acq, "E013", null, $mbObject);   
+      return $exchange_hprim->setAckError($dom_acq, "E013", null, $mbObject);
     }
     
     // Chargement du patient
@@ -161,7 +190,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
 
     // idex de l'intervention
     $idex = CIdSante400::getMatch("COperation", $sender->_tag_hprimxml, $data['idSourceIntervention']);
-    
+
     if ($idex->_id) {
       $operation_source = new COperation();
       $operation_source->load($idex->object_id);
@@ -210,7 +239,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     }
 
     // Mapping de l'intervention
-    $this->mappingIntervention(($data['intervention']), $operation);
+    $this->mappingIntervention($data, $operation);
 
     // Store de l'intervention
     // Notifier les autres destinataires autre que le sender
@@ -223,7 +252,7 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     $codes = array ($msgInterv ? "A201" : "I201");
     if ($msgInterv) {
       $warning .= $msgInterv." ";
-    } 
+    }
     else {
       $comment .= "Intervention : $operation->_id.";
       $comment .= $modified_fields ? " Les champs mis à jour sont les suivants : $modified_fields." : null;
@@ -232,4 +261,3 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     return $exchange_hprim->setAck($dom_acq, $codes, $warning, $comment, $operation);
   }
 }
-?>
