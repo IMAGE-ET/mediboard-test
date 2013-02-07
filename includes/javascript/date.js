@@ -231,20 +231,6 @@ DateFormat.prototype = {
   format: function(value) { return DateFormat.format(value, this.format); }
 };
 
-Object.extend(Date.prototype, {
-  format: function(format) {
-    return DateFormat.format(this, format);
-  },
-  getWeekNumber: function() {
-    var d = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-    d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
-    var ms = d.valueOf(); // GMT
-    d.setMonth(0);
-    d.setDate(4); // Thu in Week 1
-    return Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
-  }
-});
-
 var ProgressiveCalendar = Class.create({
   initialize: function(element, options) {
     this.element = $(element);
@@ -743,6 +729,17 @@ Object.extend(Date, {
 } );
 
 Class.extend(Date, {
+  format: function(format) {
+    return DateFormat.format(this, format);
+  },
+  getWeekNumber: function() {
+    var d = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
+    d.setDate(d.getDate() - (d.getDay() + 6) % 7 + 3); // Nearest Thu
+    var ms = d.valueOf(); // GMT
+    d.setMonth(0);
+    d.setDate(4); // Thu in Week 1
+    return Math.round((ms - d.valueOf()) / (7 * 864e5)) + 1;
+  },
   toDATE: function() {
     var y = this.getFullYear(),
         m = this.getMonth()+1, // Js months are 0-11!!
