@@ -138,6 +138,7 @@ unlinkSejour = function() {
   }
   var form = getForm("editFrm");
   $V(form.sejour_id, "");
+  $V(form._force_create_sejour, 1);
   form.submit();
 }
 
@@ -209,7 +210,7 @@ Main.add(function() {
 <input type="hidden" name="chrono" value="{{$consult|const:'PLANIFIE'}}" />
 <input type="hidden" name="_operation_id" value="" />
 {{mb_field object=$consult field=sejour_id hidden=1}}
-
+<input type="hidden" name="_force_create_sejour" value="0" />
 {{if !$dialog}}
   <a class="button new" href="?m={{$m}}&amp;tab={{$tab}}&amp;consultation_id=0">
     {{tr}}CConsultation-title-create{{/tr}}
