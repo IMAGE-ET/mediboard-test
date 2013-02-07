@@ -388,11 +388,11 @@ function switchMode(){
 
               {{if $_next && $_next->host_class == $_host_field->host_class && $_next->field == $_host_field->field}}
                 <th style="font-weight: bold; vertical-align: top; white-space: normal;">
-                  {{mb_title object=$_host_field->_ref_host_object field=$_host_field->field}}
+                  {{mb_label object=$_host_field->_ref_host_object field=$_host_field->field}}
                 </th>
               {{else}}
                 <td style="font-weight: bold; text-align: left; white-space: normal;">
-                  {{mb_title object=$_host_field->_ref_host_object field=$_host_field->field}}
+                  {{mb_label object=$_host_field->_ref_host_object field=$_host_field->field}}
                 </td>
               {{/if}}
             {{else}}
