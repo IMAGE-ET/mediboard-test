@@ -40,6 +40,7 @@ $where["$table.content"]  = " LIKE '%$error_code%'";
 
 $where["date_production"] = " BETWEEN '$date_min' AND '$date_max'";
 $where["group_id"]        = " = '$group_id'";
+$where["reprocess"]       = " < '5'";
 
 $forceindex[] = "date_production";
 
