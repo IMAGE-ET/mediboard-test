@@ -163,12 +163,15 @@
   </div>
 </td>
 <td class="text">
+  <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}');">
+    {{mb_value object=$sejour field=_motif_complet}}
+  </span>
   {{if $prescription->_id}}
     {{foreach from=$prescription->_jour_op item=_info_jour_op}}
+      <br />
       (<span onmouseover="ObjectTooltip.createEx(this, '{{$_info_jour_op.operation_guid}}');">J{{$_info_jour_op.jour_op}}</span>)
     {{/foreach}}
   {{/if}}
-  {{mb_value object=$sejour field=libelle}}
 </td>
 <td>
   {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$sejour->_ref_praticien initials=border}}
