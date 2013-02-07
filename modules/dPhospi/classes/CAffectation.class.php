@@ -68,7 +68,7 @@ class CAffectation extends CMbObject {
 
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["echanges_hprim"]      = "CEchangeHprim object_id";
+    $backProps["echanges_hprim"]      = "CEchangeHprim object_id cascade";
     $backProps["echanges_ihe"]        = "CExchangeIHE object_id cascade";
     $backProps["repas"]               = "CRepas affectation_id";
     $backProps["affectations_enfant"] = "CAffectation parent_affectation_id";
