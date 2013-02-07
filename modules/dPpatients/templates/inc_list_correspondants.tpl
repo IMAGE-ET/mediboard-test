@@ -74,10 +74,14 @@
             {{/if}}
             <td>{{mb_value object=$_correspondant field=email}}</td>
             <td>
-             Rqes:{{mb_value object=$_correspondant field=remarques}}<br/>
-             EAN : {{mb_value object=$_correspondant field=ean}}<br/>
-             Assure_id : {{mb_value object=$_correspondant field=assure_id}}<br/>
-              {{if $_correspondant->ean_id}}({{mb_value object=$_correspondant field=ean_id}}){{/if}}
+              {{if $conf.ref_pays == 1}}
+                {{mb_value object=$_correspondant field=remarques}}
+              {{else}}
+                 Rqes:{{mb_value object=$_correspondant field=remarques}}<br/>
+                 EAN : {{mb_value object=$_correspondant field=ean}}<br/>
+                 Assure_id : {{mb_value object=$_correspondant field=assure_id}}<br/>
+                  {{if $_correspondant->ean_id}}({{mb_value object=$_correspondant field=ean_id}}){{/if}}
+              {{/if}}
             </td>
             <td>{{mb_value object=$_correspondant field=date_debut}}</td>
             <td>{{mb_value object=$_correspondant field=date_fin}}</td>
