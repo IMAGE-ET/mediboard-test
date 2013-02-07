@@ -57,4 +57,4 @@ foreach ($patient->loadRefsConsultations(array("annule" => "= '0'")) as $_consul
 
 $smarty = new CSmartyDP();
 $smarty->assign("patient", $patient);
-$smarty->display("ajax_radio_last_refs.tpl");
+$smarty->display("inc_radio_last_refs.tpl");

@@ -9,7 +9,7 @@
   * @link     http://www.mediboard.org
 *}}
 
-<form name="select_attach">
+<form name="select_attach" method="get" action="?">
   <table class="tbl" id="list_attach">
     <tr>
       <th>Doc</th>

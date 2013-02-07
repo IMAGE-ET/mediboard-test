@@ -9,13 +9,23 @@
 *}}
 
 <script>
-  requestInfoPat = function() {
-    var oForm = getForm("editFrm");
-    if(!oForm.patient_id.value){
-    return false;
-    }
+  requestInfoPat = function(pat_id) {
     var url = new Url("messagerie", "ajax_radio_last_refs");
-    url.addElement(oForm.patient_id);
+
+    var oForm = getForm("editFrm");
+    if (pat_id) {
+      console.log(oForm.patient_id);
+      url.addParam("patient_id", pat_id);
+    }
+    else {
+      if(!oForm.patient_id.value){
+        return false;
+      }
+      url.addElement(oForm.patient_id);
+    }
+
+
+
     url.addElement(oForm.consultation_id);
     url.requestUpdate("recherche_patient");
     return true;
@@ -62,7 +72,9 @@
 
   Main.add(function () {
     messagerie.listAttachLink('{{$mail_id}}');
-
+    {{if $patient->_id}}
+      requestInfoPat('{{$patient->_id}}');
+    {{/if}}
   });
 </script>
 
@@ -90,8 +102,8 @@
       </td>
       <td style="width:50%;">
         <form class="watched prepared" method="post" action="?m=dPcabinet" name="editFrm" autocomplete="off" novalidate="on">
-        {{mb_field object=$pat field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat();"}}
-          <input type="text" name="_pat_name" style="width: 15em;" value="" readonly="readonly" onclick="PatSelector.init()" />
+        {{mb_field object=$patient field="patient_id" hidden=1 ondblclick="PatSelector.init()" onchange="requestInfoPat();"}}
+          <input type="text" name="_pat_name" style="width: 15em;" value="{{$patient}}" readonly="readonly" onclick="PatSelector.init()" />
           <button class="search notext" type="button" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
           <script type="text/javascript">
             PatSelector.init = function(){
@@ -106,7 +118,7 @@
           </script>
           <button id="button-edit-patient" type="button"
                   onclick="location.href='?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id='+this.form.patient_id.value"
-                  class="edit notext" {{if !$pat->_id}}style="display: none;"{{/if}}>
+                  class="edit notext" {{if !$patient->_id}}style="display: none;"{{/if}}>
           {{tr}}Edit{{/tr}}
           </button>
           <br />

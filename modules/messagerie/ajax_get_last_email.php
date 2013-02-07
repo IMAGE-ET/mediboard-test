@@ -49,7 +49,7 @@ foreach ($log_pops as $_pop) {
           $textP = new CContentAny();
           //apicrypt
           if (CModule::getActive("apicrypt") && $mail_unseen->_is_apicrypt == "plain") {
-            $textP->content = "apicrypt\n".CApicrypt::uncryptBody($user->_id, $mail_unseen->_text_plain);
+            $textP->content = "[apicrypt]\n".CApicrypt::uncryptBody($user->_id, $mail_unseen->_text_plain);
           }
           else {
             $textP->content = $mail_unseen->_text_plain;
