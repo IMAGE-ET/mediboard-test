@@ -118,9 +118,9 @@
                 <div style="float: right;">
                   {{if !$acte->_id && (!$conf.dPsalleOp.CActeCCAM.signature ||
                      ($conf.dPsalleOp.CActeCCAM.signature &&
-                       $subject instanceof COperation &&
+                     ($subject instanceof CConsultation ||
                      ( ($_activite->numero == 1 && !$subject->cloture_activite_1) ||
-                       ($_activite->numero == 4 && !$subject->cloture_activite_4) )))}}
+                       ($_activite->numero == 4 && !$subject->cloture_activite_4) ))))}}
                   <button class="add" type="button" onclick="Event.stop(event);
                     {{if $acte->_anesth_associe && $subject->_class == "COperation"}}
                     if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
