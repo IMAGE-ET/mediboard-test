@@ -220,12 +220,13 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
 
     // Mapping de la plage
     $this->mappingPlage($data['intervention'], $operation);
-    
-    // Recherche d'une intervention existante sinon création  
+    $plageop_id = $operation->plageop_id;
+
+    // Recherche d'une intervention existante sinon création
     if (!$operation->_id) {
       $operation->loadMatchingObject();
     }
-    
+
     // Si pas trouvé on recherche en hors plage
     if (!$operation->_id) {
       $operation->loadRefPlageOp();
@@ -233,8 +234,14 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
       $operation->temp_operation = null;
       $operation->time_operation = null;
       $operation->date           = $operation->_ref_plageop->_id ? $operation->_ref_plageop->date : $operation->date;
+      $operation->log();
       if ($operation->countMatchingList() == 1) {
         $operation->loadMatchingObject();
+      }
+
+      if (!$operation->_id && $plageop_id) {
+        $operation->plageop_id = $plageop_id;
+        $operation->date       = null;
       }
     }
 

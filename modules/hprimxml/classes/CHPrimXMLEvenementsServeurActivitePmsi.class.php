@@ -95,7 +95,16 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     return $sejour;    
   }
   
-  function mappingIntervention($node, COperation $operation) {
+  function mappingIntervention($data, COperation $operation) {
+    // Intervention annulée ?
+    if ($data['action'] == "suppression") {
+      $operation->annulee = 1;
+
+      return;
+    }
+
+    $node  = $data['intervention'];
+
     $xpath = new CHPrimXPath($node->ownerDocument);
     
     $debut = $this->getDebutInterv($node);
@@ -166,16 +175,13 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   }
   
   function mappingPlage($node, COperation $operation) {
-    $xpath = new CHPrimXPath($node->ownerDocument);
-    
     $debut = $this->getDebutInterv($node);
     $fin   = $this->getFinInterv($node);
     
     // Traitement de la date/heure début, et durée de l'opération
     $date_op  = mbDate($debut);
     $time_op  = mbTime($debut);
-    $temps_op = mbSubTime(mbTime($debut), mbTime($fin)); 
-    
+
     // Recherche d'une éventuelle PlageOp
     $plageOp           = new CPlageOp();  
     $plageOp->chir_id  = $operation->chir_id;
@@ -186,7 +192,6 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
       // Si notre intervention est dans la plage Mediboard
       if ($_plage->debut <= $time_op && (mbTime($fin) <= $_plage->fin)) {
         $plageOp = $_plage;
-        
         break;
       }
     }
