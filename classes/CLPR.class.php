@@ -44,26 +44,26 @@ class CLPR {
     
     $printer = "";
     if ($this->printer_name) {
-      $printer = "-P '$this->printer_name'";
+      $printer = "-P " . escapeshellarg($this->printer_name);
     }
 
     $u = "";
     
     if ($this->username) {
-      $u = "-U $this->username";
+      $u = "-U " . escapeshellarg($this->username);
     }
-    if ($this->port) {
+    /*if ($this->port) {
       $host .= ":$this->port";
-    }
+    }*/
     
     // La commande lpr interprête mal le hostname pour établir la requête
     // $host = "$this->hostname";
     // $command = "lpr -H $host $u $printer '$file->_file_path'";
     
     // Ajout préalable de l'imprimante via cups du serveur web
-    $command = "lpr $u $printer '$file->_file_path'";
+    $command = "lpr $u $printer " . escapeshellarg($file->_file_path);
     
-    exec(escapeshellarg($command), $res, $success);
+    exec($command, $res, $success);
 
     // La commande lpr retourne 0 si la transmission s'est bien effectuée
     if ($success == 0) {
@@ -74,4 +74,3 @@ class CLPR {
     }
   }
 }
-?>

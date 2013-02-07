@@ -23,12 +23,12 @@ class CSMB {
       throw new CMbException("CSourceFTP-no-source", $source->name);
     }
     
-    $this->hostname  = $source->host;
-    $this->username  = $source->user;
-    $this->password  = $source->password;
-    $this->port      = $source->port;
+    $this->hostname     = $source->host;
+    $this->username     = $source->user;
+    $this->password     = $source->password;
+    $this->port         = $source->port;
     $this->printer_name = $source->printer_name;
-    $this->workgroup = $source->workgroup;
+    $this->workgroup    = $source->workgroup;
   }
   
   function printFile($file) {
@@ -43,31 +43,31 @@ class CSMB {
     }
     
     // Construction de l'uri
-    $uri = "'//$this->hostname/$this->printer_name' "; 
+    $uri = escapeshellarg("//$this->hostname/$this->printer_name") . " ";
     
     if ($this->password) {
-      $uri .= $this->password;
+      $uri .= escapeshellarg($this->password);
     }
     
-    $uri .= " -c 'print $file->_file_path' ";
+    $uri .= " -c " . escapeshellarg('print ' . escapeshellarg($file->_file_path)) . " ";
     
     if ($this->username) {
-      $uri .= "-U $this->username ";
+      $uri .= "-U ". escapeshellarg($this->username) . " ";
     }
     
     if ($this->workgroup) {
-      $uri .= "-W '$this->workgroup' ";
+      $uri .= "-W " . escapeshellarg($this->workgroup) . " ";
     }
     
     if (!$this->password) {
       $uri .= "-N";
     }
     
-    exec(escapeshellarg("smbclient $uri"), $res);
+    exec("smbclient $uri", $res);
     
     if (count($res)) {
       $mess = "";
-      foreach($res as $_res) {
+      foreach ($res as $_res) {
         $mess .= $_res . "\n";
       }
       CAppUI::stepAjax("Impression échouée \n" . $mess, UI_MSG_ERROR);
