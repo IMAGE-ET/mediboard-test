@@ -1,11 +1,13 @@
-<?php /* $Id$ */
-
+<?php
 /**
-* @package Mediboard
-* @subpackage dPpmsi
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPpmsi
+ * @author     Romain Ollivier <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 CCanDo::checkEdit();
 
@@ -41,8 +43,7 @@ $acte_ngap = CActeNGAP::createEmptyFor($selOp);
 
 $acte_tarmed = null;
 if (CModule::getActive("tarmed")) {
-  $acte_tarmed = new CActeTarmed();
-  $acte_tarmed->createEmptyActeTarmed();
+  $acte_tarmed = CActeTarmed::createEmptyFor($selOp);
 }
 // Création du template
 $smarty = new CSmartyDP();

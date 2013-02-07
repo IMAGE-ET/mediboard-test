@@ -1,12 +1,13 @@
-<?php /* $Id: edit_consultation.php 17644 2013-01-03 15:24:52Z rhum1 $ */
-
+<?php 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision: 17644 $
-* @author Romain Ollivier
-*/
-
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     Romain Ollivier <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 global $m;
 
@@ -219,10 +220,8 @@ if ($consult->_id) {
 $acte_tarmed = null;
 $acte_caisse = null;
 if (CModule::getActive("tarmed")) {
-  $acte_tarmed = new CActeTarmed();
-  $acte_tarmed->createEmptyActeTarmed();
-  $acte_caisse = new CActeCaisse();
-  $acte_caisse->createEmptyActeCaisse();
+  $acte_tarmed = CActeTarmed::createEmptyFor($consult);
+  $acte_caisse = CActeCaisse::createEmptyFor($consult);
 }
 $total_tarmed = $consult->loadRefsActesTarmed();
 $total_caisse = $consult->loadRefsActesCaisse();

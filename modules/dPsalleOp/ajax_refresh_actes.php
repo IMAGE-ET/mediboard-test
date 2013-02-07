@@ -1,11 +1,13 @@
-<?php /* $Id: edit_actes.php 12659 2011-07-15 14:27:53Z lryo $ */
-
+<?php 
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision: 12659 $
-* @author Romain Ollivier
-*/
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPsalleOp
+ * @author     Romain Ollivier <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision: 12659 $
+ */
 
 $module       = CValue::getOrSession("module", "dPsalleOp");
 $operation_id = CValue::getOrSession("operation_id", 0);
@@ -36,13 +38,12 @@ $acte_ngap = CActeNGAP::createEmptyFor($operation);
 
 $acte_tarmed = null;
 if (CModule::getActive("tarmed")) {
-  $acte_tarmed = new CActeTarmed();
-  $acte_tarmed->createEmptyActeTarmed();
+  $acte_tarmed = CActeTarmed::createEmptyFor($operation);
 }
 // Création du template
 $smarty = new CSmartyDP("modules/dPsalleOp");
 $smarty->assign("acte_ngap"  , $acte_ngap      );
-$smarty->assign("acte_tarmed", $acte_tarmed      );
+$smarty->assign("acte_tarmed", $acte_tarmed    );
 $smarty->assign("subject"    , $operation      );
 $smarty->assign("listAnesths", $listAnesths    );
 $smarty->assign("listChirs"  , $listChirs      );

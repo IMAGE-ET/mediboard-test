@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPsalleOp
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
@@ -156,10 +157,8 @@ $acte_ngap = CActeNGAP::createEmptyFor($selOp);
 $acte_tarmed = null;
 $acte_caisse = null;
 if (CModule::getActive("tarmed")) {
-  $acte_tarmed = new CActeTarmed();
-  $acte_tarmed->createEmptyActeTarmed();
-  $acte_caisse = new CActeCaisse();
-  $acte_caisse->createEmptyActeCaisse();
+  $acte_tarmed = CActeTarmed::createEmptyFor($selOp);
+  $acte_caisse = CActeCaisse::createEmptyFor($selOp);
 }
 $total_tarmed = $selOp->loadRefsActesTarmed();
 $total_caisse = $selOp->loadRefsActesCaisse();
