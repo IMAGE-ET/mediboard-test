@@ -15,7 +15,8 @@
   <tr>
     <td class="halfPane">
       <form name="find" action="?m=sip&a=ajax_find_candidates" method="post" onsubmit="return SIP.findCandidates(this)" class="prepared">
-        <input type="hidden" name="pointer" value="{{$pointer}}" />
+        <input type="hidden" name="pointer"  value="{{$pointer}}" />
+        <input type="hidden" name="continue" value="" />
 
         <table class="form">
           <tr>
@@ -49,7 +50,7 @@
           <tr>
             <th><label for="sexe" title="Sexe">Sexe</label></th>
             <td>
-              <select name="sexe">
+              <select name="sexe" tabindex="7">
                 <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
                 <option value="m" {{if $sexe == "m"}}selected{{/if}}>
                 {{tr}}CPatient.sexe.m{{/tr}}
@@ -64,16 +65,27 @@
           </tr>
 
           <tr>
+            <th>Identifiant du patient</th>
+            <td colspan="4">
+              <input tabindex="8" type="text" name="id_number" value="" size="15" placeholder="ID"/> ^^^
+              <input tabindex="9" type="text" name="namespace_id" value="" size="30" placeholder="espace de noms du domaine"/> &
+              <input tabindex="10" type="text" name="universal_id" value="" size="30" placeholder="ID universel du domaine"/> &
+              <input tabindex="11" type="text" name="universal_id_type" value="" size="35" placeholder="Type de l'ID universel du domaine"/>
+              <input tabindex="12" type="text" name="identifier_type_code" value="" size="15" placeholder="Type de code"/>
+            </td>
+          </tr>
+
+          <tr>
             <th><label for="quantity_limited_request" title="Limite des résultats">Limite des résultats recherchés</label></th>
-            <td><input tabindex="8" type="text" name="quantity_limited_request" value="{{$quantity_limited_request}}" /></td>
+            <td><input tabindex="13" type="text" name="quantity_limited_request" value="{{$quantity_limited_request}}" /></td>
 
             <td colspan="2"></td>
           </tr>
 
           <tr>
             <td class="button" colspan="4">
-              <button class="search singleclick"> {{tr}}Search{{/tr}} </button>
-              <button class="tick singleclick" name="finder" {{if !$pointer}}disabled{{/if}} onclick=""> {{tr}}Continue{{/tr}} </button>
+              <button class="search singleclick"onclick="$V(this.form.continue, 0)"> {{tr}}Search{{/tr}} </button>
+              <button class="tick singleclick" name="finder" {{if !$pointer}}disabled{{/if}} onclick="$V(this.form.continue, 1)"> {{tr}}Continue{{/tr}} </button>
             </td>
           </tr>
         </table>

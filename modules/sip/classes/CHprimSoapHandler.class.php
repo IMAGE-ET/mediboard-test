@@ -12,6 +12,9 @@
  * The CHprimSoapHandler class
  */
 class CHprimSoapHandler extends CSoapHandler {
+  /**
+   * @var array
+   */
   static $paramSpecs = array(
     "evenementPatient" => array(
       "parameters" => array(
@@ -34,14 +37,21 @@ class CHprimSoapHandler extends CSoapHandler {
       "return" => array()
     )
   );
-  
+
+  /**
+   * Get param specs
+   *
+   * @return array
+   */
   static function getParamSpecs() {
     return array_merge(parent::getParamSpecs(), self::$paramSpecs);
   }
 
   /**
    * The message contains a collection of administrative notifications of events occurring to patients in a healthcare facility.
-   * @param CHPrimXMLEvenementsPatients messagePatient
+   *
+   * @param CHPrimXMLEvenementsPatients $messagePatient Message
+   *
    * @return CHPrimXMLAcquittementsPatients messageAcquittement 
    **/
   function evenementPatient($messagePatient) {
@@ -52,7 +62,9 @@ class CHprimSoapHandler extends CSoapHandler {
   
   /**
    * Codage CCAM vers les systèmes de facturation
-   * @param CHPrimXMLEvenementServeurActes messageServeurActes
+   *
+   * @param CHPrimXMLEvenementServeurActes $messageServeurActes Message H'XML serveur actes
+   *
    * @return CHPrimXMLAcquittementsServeurActes messageAcquittement 
    **/
   function evenementServeurActes($messageServeurActes) {
@@ -120,7 +132,8 @@ class CHprimSoapHandler extends CSoapHandler {
       $messageAcquittement = $domGetEvenement->serveurActes($domAcquittement, $echange_hprim, $data);
      
       return $messageAcquittement;
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       /*$domAcquittement = new CHPrimXMLAcquittementsServeurActes();
       $domAcquittement->identifiant = $data['identifiantMessage'];
       $domAcquittement->destinataire = $data['idClient'];
@@ -142,10 +155,12 @@ class CHprimSoapHandler extends CSoapHandler {
   
   /**
    * Diagnostics CIM vers les systèmes de facturation
-   * @param CHPrimXMLEvenementsPmsi messagePmsi
+   *
+   * @param CHPrimXMLEvenementsPmsi $messagePmsi Message H'XML PMSI
+   *
    * @return CHPrimXMLAcquittementsPmsi messageAcquittement 
    **/
-  function evenementPmsi($messagePmsi) {
+  function evenementPmsi(CHPrimXMLEvenementsPmsi $messagePmsi) {
     // Création de l'échange
     $echange_hprim = new CEchangeHprim();
     $messageAcquittement = null;
@@ -153,11 +168,7 @@ class CHprimSoapHandler extends CSoapHandler {
     
     // Gestion de l'acquittement
     $domAcquittement = new CHPrimXMLAcquittementsPmsi();
-    
-    
-    
+
     return $messageAcquittement;
   }
 }
-
-?>

@@ -53,9 +53,18 @@ class CSOAPClient {
    * @param string  $passphrase     Pass phrase for the certificate
    *
    * @throws CMbException
+   *
    * @return CMbSOAPClient | CNuSOAPClient
    */
-  public function make($rooturl, $login = null, $password = null, $type = null, $options = array(), $loggable = null, $stream_context = null, $local_cert = null, $passphrase = null) {
+  public function make(
+      $rooturl, $login = null,
+      $password = null, $type = null,
+      $options = array(),
+      $loggable = null,
+      $stream_context = null,
+      $local_cert = null,
+      $passphrase = null
+  ) {
     if (!url_exists($rooturl, $stream_context)) {
       throw new CMbException("CSourceSOAP-unreachable-source", $rooturl);
     }

@@ -25,6 +25,7 @@ $patient_month            = CValue::request("Date_Month");
 $patient_year             = CValue::request("Date_Year");
 $quantity_limited_request = CValue::request("quantity_limited_request");
 $pointer                  = CValue::request("pointer");
+$continue                 = CValue::request("continue");
 
 $patient_naissance = null;
 if (($patient_year) || ($patient_month) || ($patient_day)) {
@@ -63,6 +64,11 @@ $message     = "QBP";
 $code        = "Q22";
 
 $ack_data    = null;
+
+// Si on continue pas le pointer est réinitialisé
+if (!$continue) {
+  $pointer = null;
+}
 
 $iti_handler = new CITIDelegatedHandler();
 foreach ($receivers as $_receiver) {

@@ -2138,22 +2138,28 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   /* @todo A dédoublonner avec loadRefCurrAffectation  */
-  function getCurrAffectation($date = null) {
-    if (!$date) {
-      $date = mbDateTime();
+  function getCurrAffectation($dateTime = null) {
+    if (!$dateTime) {
+      $dateTime = mbDateTime();
     }
-    $curr_affectation = new CAffectation();
-    $order = "entree";
+
+    $ds = $this->_spec->ds;
+
     $where = array();
-    $where["sejour_id"] = $this->_spec->ds->prepare("= %", $this->sejour_id);
-    if (mbTime(null, $date) == "00:00:00") {
-      $where["entree"] = $this->_spec->ds->prepare("< %", mbDate(null, $date)." 23:59:59");
-      $where["sortie"] = $this->_spec->ds->prepare(">= %", mbDate(null, $date)." 00:00:01");
+    $where["sejour_id"] = $ds->prepare("= %", $this->sejour_id);
+
+    if (mbTime(null, $dateTime) == "00:00:00") {
+      $where["entree"] = $ds->prepare("<= %", mbDate(null, $dateTime)." 23:59:59");
+      $where["sortie"] = $ds->prepare(">= %", mbDate(null, $dateTime)." 00:00:01");
     }
     else {
-      $where["entree"] = $this->_spec->ds->prepare("< %", $date);
-      $where["sortie"] = $this->_spec->ds->prepare(">= %", $date);
+      $where["entree"] = $ds->prepare("<= %", $dateTime);
+      $where["sortie"] = $ds->prepare(">= %", $dateTime);
     }
+
+    $order = "entree";
+
+    $curr_affectation = new CAffectation();
     $curr_affectation->loadObject($where, $order);
 
     return $curr_affectation;
