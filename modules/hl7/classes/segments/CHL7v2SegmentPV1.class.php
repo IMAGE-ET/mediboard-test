@@ -105,7 +105,7 @@ class CHL7v2SegmentPV1 extends CHL7v2Segment {
       $data[] = array (
         $sejour->_id,
       );
-    } 
+    }
     else {
       $sejour->loadNPA($group->_id);
       $data[] = $sejour->_NPA ? array(

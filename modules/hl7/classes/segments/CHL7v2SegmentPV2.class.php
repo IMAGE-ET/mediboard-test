@@ -120,7 +120,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     $data[] = null;
     
     // PV2-12: Visit Description (ST) (optional)
-    $data[] = $sejour->libelle;
+    $data[] = $this->getPV212($receiver, $sejour);
     
     // PV2-13: Referral Source Code (XCN) (optional repeating)
     $data[] = null;
@@ -238,7 +238,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     $data[] = null;
     
     // PV2-45: Advance Directive Code (CE) (optional repeating)
-    $data[] = $this->getPV245($receiver, $this->sejour, $this->operation);
+    $data[] = $this->getPV245($receiver, $sejour, $this->operation);
     
     // PV2-46: Patient Status Effective Date (DT) (optional)
     $data[] = null;

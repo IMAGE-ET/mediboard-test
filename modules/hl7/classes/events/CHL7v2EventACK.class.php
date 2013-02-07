@@ -122,7 +122,7 @@ class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
    *
    * @return void
    */
-  function addERR(CHL7Acknowledgment $acknowledgment, CHL7v2Error $error = null) {
+  function addERR(CHL7Acknowledgment $acknowledgment, $error = null) {
     $ERR = CHL7v2Segment::create("ERR", $this->message);
     $ERR->acknowledgment = $acknowledgment;
     $ERR->error = $error;

@@ -47,6 +47,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle_PV1_10",
     "handle_PV1_14",
     "handle_PV1_36",
+    "handle_PV2_12",
     "handle_NSS",
     
     // Purge
@@ -89,6 +90,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $handle_PV1_10           = null;
   var $handle_PV1_14           = null;
   var $handle_PV1_36           = null;
+  var $handle_PV2_12           = null;
   var $handle_NSS              = null;
 
   // Purge
@@ -132,6 +134,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_PV1_10",
       "handle_PV1_14",
       "handle_PV1_36",
+      "handle_PV2_12",
       "handle_NSS",
     ),
     
@@ -192,6 +195,9 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["handle_PV1_10"] = "enum list|discipline|service default|discipline";
     $props["handle_PV1_14"] = "enum list|admit_source|ZFM default|admit_source";
     $props["handle_PV1_36"] = "enum list|discharge_disposition|ZFM default|discharge_disposition";
+
+    // => PV2
+    $props["handle_PV2_12"] = "enum list|libelle|none default|libelle";
     
     // Purge
     $props["purge_idex_movements"] = "bool default|0";

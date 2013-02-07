@@ -970,8 +970,13 @@ class CSetuphl7 extends CSetup {
                 ADD `receiving_application` VARCHAR (255),
                 ADD `receiving_facility` VARCHAR (255);";
     $this->addQuery($query);
+
+    $this->makeRevision("0.53");
+    $query = "ALTER TABLE `hl7_config`
+                ADD `handle_PV2_12` ENUM ('libelle','none') DEFAULT 'libelle';";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.53";
+    $this->mod_version = "0.54";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
