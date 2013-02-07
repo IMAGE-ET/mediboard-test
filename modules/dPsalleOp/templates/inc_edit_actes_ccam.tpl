@@ -283,7 +283,7 @@
                   </td>
                 </tr>
 
-                {{if $acte->facturable && $can_view_dh && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
+                {{if ($acte->facturable || !$acte->_id) && $can_view_dh && ($confCCAM.tarif || $subject->_class == "CConsultation" || ($subject->_class == "COperation" && $subject->_ref_salle->dh == 1))}}
                 <tr class="{{$view}}">
                   <th>{{mb_label object=$acte field=montant_depassement}}</th>
                   <td>
