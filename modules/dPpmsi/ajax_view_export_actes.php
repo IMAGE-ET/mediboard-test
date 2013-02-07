@@ -51,6 +51,8 @@ switch ($object_class) {
     break;
 }
 
+$object->countExchanges();
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
