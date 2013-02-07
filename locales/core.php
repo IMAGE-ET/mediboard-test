@@ -17,33 +17,33 @@ if (null == $locales = SHM::get($shared_name)) {
   foreach (CAppUI::getLocaleFilesPaths($locale) as $_path) {
     include_once $_path;
   }
+
   $locales = array_filter($locales, "stringNotEmpty");
   foreach ($locales as &$_locale) {
     $_locale = CMbString::unslash($_locale);
   }
 
-  //overwrite locales by Database
-  $locale_db = new CTranslationOverwrite();
-  $ds = CSQLDataSource::get("std");
+  // Load overwritten locales if the table exists
+  $overwrite = new CTranslationOverwrite();
+  if ($overwrite->isInstalled()) {
+    $ds = $overwrite->_spec->ds;
+    $where = array(
+      "language" => $ds->prepare("=%", $locale),
+    );
 
-  $where = array();
-  $where["language"] = "= '$locale'";
+    $query = new CRequest();
+    $query->addSelect("source, translation");
+    $query->addTable("translation");
+    $query->addWhere($where);
+    $overwrites = $ds->loadList($query->getRequest());
 
-  $query = new CRequest();
-  $query->addSelect("source, translation");
-  $query->addTable("translation");
-  $query->addWhere($where);
-  $locales2 = $ds->loadList($query->getRequest());
-
-  foreach ($locales2 as &$_locales2) {
-    $locales[$_locales2["source"]] = $_locales2["translation"];
+    foreach ($overwrites as $_overwrite) {
+      $locales[$_overwrite["source"]] = $_overwrite["translation"];
+    }
   }
 
   SHM::put($shared_name, $locales);
 }
-
-
-
 
 // Encoding definition
 require "$root_dir/locales/$locale/meta.php";
