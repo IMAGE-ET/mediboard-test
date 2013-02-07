@@ -34,7 +34,7 @@ function restart(){
   
   global $handler;
 
-  socket_close($handler->server->__socket);
+  socket_close($handler->getServer()->__socket);
   
   pcntl_exec($_SERVER["_"], $_SERVER["argv"]);
 }
@@ -45,9 +45,9 @@ function restart(){
  * @return void
  */
 function on_shutdown() {
-  global $exit_status, $pid_file, $handler;
+  global $exit_status, $pid_file;
   
-  switch($exit_status) {
+  switch ($exit_status) {
     case "error":
       outln("Server stopped unexpectedly, trying to restart.");
       restart();
@@ -135,7 +135,7 @@ $options = array(
 );
 
 for ($i = 3; $i < $argc; $i++) {
-  switch($argv[$i]){
+  switch ($argv[$i]) {
     case "--debug":
       $options["debug"] = true;
       break;

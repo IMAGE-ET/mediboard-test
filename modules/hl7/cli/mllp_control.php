@@ -40,7 +40,7 @@ if (PHP_OS == "Linux") {
   $msg_error = "\033[1;31m$msg_error\033[0m";
 }
 
-switch($command) {
+switch ($command) {
   case "stop":
   case "restart": 
     if (!$port) {
@@ -58,7 +58,7 @@ switch($command) {
     $n = 30;
     $secs = 60;
     for ($i = 0; $i < $n; $i++) {
-      echo CMLLPServer::send($host, $port, "\x0B".CMLLPServer::ORU()."\x1C\x0D");
+      echo CMLLPServer::send($host, $port, "\x0B".CMLLPServer::sampleMessage()."\x1C\x0D");
       usleep($secs * 1000000);
     }
     break;
