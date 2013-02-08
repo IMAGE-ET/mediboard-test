@@ -19,3 +19,5 @@ $locales['mod-context-tab-vw_doc'] = 'Documentation';
 $locales['mod-context-tab-vw_tests'] = 'Requêtes de test';
 $locales['module-context-court'] = 'Affichage contextuel';
 $locales['module-context-long'] = 'Affichage contextuel';
+
+?>
