@@ -396,7 +396,7 @@ Main.add(function() {
             <td>
               {{if $consult->_id}}
                 <span style="float: right">
-                  {{if !$consult->sejour_id && $consult->_count_matching_sejours}}
+                  {{if $consult->_count_matching_sejours}}
                     <button type="button" class="add" onclick="linkSejour()">{{tr}}CConsultation-_link_sejour{{/tr}}</button>
                   {{elseif $consult->sejour_id && $consult->_ref_sejour->type != "consult"}}
                     <button type="button" class="remove" onclick="unlinkSejour()">{{$consult->_ref_sejour}}</button>
@@ -464,20 +464,20 @@ Main.add(function() {
             </td>
           </tr>
           
-          {{if $maternite_active && @$modules.maternite->_can->read}}
-            <tr>
-              <th>{{tr}}CGrossesse{{/tr}}</th>
-              <td>
-                 {{mb_include module=maternite template=inc_input_grossesse object=$consult patient=$pat}}
-              </td>
-            </tr>
-          {{/if}}
-          
           <tr id="correspondant_medical" {{if !$consult->_check_adresse}}style="display: none;"{{/if}}>
             {{assign var="object" value=$consult}}
             {{mb_include module=planningOp template=inc_check_correspondant_medical}}
           </tr>
-          
+
+          {{if $maternite_active && @$modules.maternite->_can->read && (!$pat->_id || $pat->sexe != "m")}}
+            <tr>
+              <th>{{tr}}CGrossesse{{/tr}}</th>
+              <td>
+                {{mb_include module=maternite template=inc_input_grossesse object=$consult patient=$pat}}
+              </td>
+            </tr>
+          {{/if}}
+
           <tr>
             <td></td>
             <td colspan="3">
