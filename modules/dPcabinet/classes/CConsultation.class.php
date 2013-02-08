@@ -753,39 +753,39 @@ TESTS A EFFECTUER
         CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) || $this->_force_create_sejour) {
 
       $sejour = new CSejour();
-      
+
+      // Recherche séjour englobant
+      $facturable = $this->_facturable;
+      if ($facturable === null) {
+        $facturable = 1;
+      }
+      $this->loadRefPlageConsult();
+
+      $function = new CFunctions;
+
+      if ($this->_function_secondary_id) {
+        $function->load($this->_function_secondary_id);
+      }
+      else {
+        $user = new CMediusers;
+        $user->load($this->_ref_chir->_id);
+        $function->load($user->function_id);
+      }
+
+      $datetime = $this->_datetime;
+      $minutes_before_consult_sejour = CAppUI::conf("dPcabinet CConsultation minutes_before_consult_sejour");
+      $where = array();
+      $where['annule']     = " = '0'";
+      $where['type']       = " != 'seances'";
+      $where['patient_id'] = " = '$this->patient_id'";
+      if (!CAppUI::conf("dPcabinet CConsultation search_sejour_all_groups")) {
+        $where['group_id']   = " = '$function->group_id'";
+      }
+      $where['facturable']     = " = '$facturable'";
+      $datetime_before     = mbDateTime("+$minutes_before_consult_sejour minute", "$this->_date $this->heure");
+      $where[] = "`sejour`.`entree` <= '$datetime_before' AND `sejour`.`sortie` >= '$datetime'";
+
       if (!$this->_force_create_sejour) {
-        // Recherche séjour englobant
-        $facturable = $this->_facturable;
-        if ($facturable === null) {
-          $facturable = 1;
-        }
-        $this->loadRefPlageConsult();
-
-        $function = new CFunctions;
-
-        if ($this->_function_secondary_id) {
-          $function->load($this->_function_secondary_id);
-        }
-        else {
-          $user = new CMediusers;
-          $user->load($this->_ref_chir->_id);
-          $function->load($user->function_id);
-        }
-
-        $datetime = $this->_datetime;
-        $minutes_before_consult_sejour = CAppUI::conf("dPcabinet CConsultation minutes_before_consult_sejour");
-        $where = array();
-        $where['annule']     = " = '0'";
-        $where['type']       = " != 'seances'";
-        $where['patient_id'] = " = '$this->patient_id'";
-        if (!CAppUI::conf("dPcabinet CConsultation search_sejour_all_groups")) {
-          $where['group_id']   = " = '$function->group_id'";
-        }
-        $where['facturable']     = " = '$facturable'";
-        $datetime_before     = mbDateTime("+$minutes_before_consult_sejour minute", "$this->_date $this->heure");
-        $where[] = "`sejour`.`entree` <= '$datetime_before' AND `sejour`.`sortie` >= '$datetime'";
-
         $sejour->loadObject($where);
       }
 
