@@ -120,7 +120,7 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     $data[] = null;
     
     // PV2-12: Visit Description (ST) (optional)
-    $data[] = $this->getPV212($receiver, $sejour);
+    $data[] = $sejour->libelle;
     
     // PV2-13: Referral Source Code (XCN) (optional repeating)
     $data[] = null;

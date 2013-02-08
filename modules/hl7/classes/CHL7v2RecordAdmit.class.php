@@ -1660,8 +1660,19 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
   }
 
-  function getVisitDescription(DOMNode $node, CSejour $newVenue) {    
-    $newVenue->libelle = $this->queryTextNode("PV2.12", $node);
+  function getVisitDescription(DOMNode $node, CSejour $newVenue) {
+    $sender = $this->_ref_sender;
+
+    switch ($sender->_configs["handle_PV2_12"]) {
+      case "none" :
+        $newVenue->libelle = null;
+
+        break;
+      default :
+        $newVenue->libelle = $this->queryTextNode("PV2.12", $node);
+
+        break;
+    }
   }
   
   function getModeArrivalCode(DOMNode $node, CSejour $newVenue) {

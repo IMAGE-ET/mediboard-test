@@ -767,15 +767,6 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
   }
 
-  function getPV212(CInteropReceiver $receiver, CSejour $sejour) {
-    switch ($receiver->_configs["build_PV2_12"]) {
-      case "none" :
-        return null;
-      default :
-        $sejour->libelle;
-    }
-  }
-
   function getPV245(CInteropReceiver $receiver, CSejour $sejour, COperation $operation = null) {
     // Advance Directive Code
     switch ($receiver->_configs["build_PV2_45"]) {
