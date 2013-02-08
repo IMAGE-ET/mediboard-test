@@ -1,5 +1,5 @@
 <?php
-$locales['context-module%s-not-activated'] = 'Erreur, Le module %s doit être installé et actif. (module requis)';
+$locales['context-module%s-not-activated'] = 'Erreur, Le module %s doit être installé et actif.';
 $locales['context-multiple-patient'] = '%d patients vérifient vos critères. Affinez votre recherche (prenom, nom, date de naissance)';
 $locales['context-multiple-sejour'] = 'Plusieurs séjours ont été trouvés en suivant vos critères, essayer avec un NDA';
 $locales['context-nda-or-PatientPlusDate-required'] = 'Pour trouver un sejour, il faut soit un numéro NDA soit un patient ET une date de séjour';
@@ -19,4 +19,3 @@ $locales['mod-context-tab-vw_doc'] = 'Documentation';
 $locales['mod-context-tab-vw_tests'] = 'Requêtes de test';
 $locales['module-context-court'] = 'Affichage contextuel';
 $locales['module-context-long'] = 'Affichage contextuel';
-?>
