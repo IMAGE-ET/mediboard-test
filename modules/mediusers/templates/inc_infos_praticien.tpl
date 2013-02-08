@@ -8,33 +8,16 @@
 </tr>
 
 <tr>
-  <th>{{mb_label object=$object field="discipline_id"}}</th>
-  <td>
-    <select name="discipline_id" style="width: 150px;" class="{{$object->_props.discipline_id}}">
-      <option value="">&mdash; Choisir une spécialité</option>
-      {{foreach from=$disciplines item=curr_discipline}}
-      <option value="{{$curr_discipline->discipline_id}}" {{if $curr_discipline->discipline_id == $object->discipline_id}} selected="selected" {{/if}}>
-        {{$curr_discipline->_view}}
-      </option>
-      {{/foreach}}
-    </select>
-  </td>
+  <th>{{mb_label object=$object field=discipline_id}}</th>
+  <td>{{mb_field object=$object field=discipline_id options=$disciplines style="width: 250px;"}}</td> 
 </tr>
 
 
 <tr>  
-  <th>{{mb_label object=$object field="spec_cpam_id"}}</th>
-  <td>
-    <select name="spec_cpam_id" style="width: 150px;" class="{{$object->_props.spec_cpam_id}}">
-      <option value="">&mdash; Choisir une spécialité</option>
-      {{foreach from=$spec_cpam item=curr_spec}}
-      <option value="{{$curr_spec->spec_cpam_id}}" {{if $curr_spec->spec_cpam_id == $object->spec_cpam_id}} selected="selected" {{/if}}>
-        {{$curr_spec->_view}}
-      </option>
-      {{/foreach}}
-    </select>
-  </td>
+  <th>{{mb_label object=$object field=spec_cpam_id}}</th>
+  <td>{{mb_field object=$object field=spec_cpam_id options=$specialites style="width: 250px;"}}</td> 
 </tr>
+
 {{if $conf.ref_pays == 1}}
   <tr>
     <th>{{mb_label object=$object field="adeli"}}</th>

@@ -1188,7 +1188,9 @@ class CMediusers extends CMbObject {
     $template->addProperty("Praticien - Nom"            , $this->_user_last_name );
     $template->addProperty("Praticien - Prénom"         , $this->_user_first_name);
     $template->addProperty("Praticien - Initiales"      , $this->_shortview);
-    $template->addProperty("Praticien - Spécialité"     , $this->_ref_discipline->_view);
+    $template->addProperty("Praticien - Discipline"     , $this->_ref_discipline->_view);
+    $template->addProperty("Praticien - Spécialité"     , $this->_ref_spec_cpam->_view);
+    
     $template->addProperty("Praticien - Titres"         , $this->titres);
     $template->addProperty("Praticien - ADELI"          , $this->adeli);
     $template->addBarcode("Praticien - Code barre ADELI", $this->adeli, array("barcode" => array(

@@ -49,12 +49,12 @@ if (class_exists("CBanque")) {
 }
 
 // Récupération des disciplines
-$disciplines = new CDiscipline;
-$disciplines = $disciplines->loadList();
+$discipline = new CDiscipline;
+$disciplines = $discipline->loadList();
 
 // Récupération des spécialités CPAM
-$spec_cpam = new CSpecCPAM();
-$spec_cpam = $spec_cpam->loadList();
+$specialite = new CSpecCPAM();
+$specialites = $specialite->loadList();
   
 // Récupération des profils
 $profile = new CUser();
@@ -77,7 +77,7 @@ $smarty->assign("object"       , $object         );
 $smarty->assign("profiles"     , $profiles       );
 $smarty->assign("group"        , $group          );
 $smarty->assign("disciplines"  , $disciplines    );
-$smarty->assign("spec_cpam"    , $spec_cpam      );
+$smarty->assign("specialites"  , $specialites    );
 
 $smarty->display("inc_edit_mediuser.tpl");
 

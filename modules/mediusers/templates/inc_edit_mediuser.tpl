@@ -48,11 +48,6 @@ Main.add(function () {
     showPratInfo("{{$object->_user_type}}");
     loadProfil("{{$object->_user_type}}");
   {{/if}}
-  
-  var form = getForm("mediuser");
-  if ($(form.spec_cpam_id)) {
-    form.spec_cpam_id.makeAutocomplete({width: "200px"});
-  }
 });
 </script>
 

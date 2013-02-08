@@ -534,8 +534,13 @@ class CSetupmediusers extends CSetup {
 
      $query = "ALTER TABLE `medecin`
                 ADD `last_ldap_checkout` DATE;";
+                
+     $this->makeRevision("0.49");
 
-     $this->mod_version = "0.49";
+     $query = CSetupdPcompteRendu::renameTemplateFieldQuery("Praticien - Spécialité", "Praticien - Discipline");
+     $this->addQuery($query);
+        
+     $this->mod_version = "0.50";
   }
 }
 
