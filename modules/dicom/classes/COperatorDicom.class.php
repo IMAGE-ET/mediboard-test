@@ -298,7 +298,7 @@ class COperatorDicom extends CEAIOperator {
           
           $age = intval(substr(trim($_patient->_age), 0, 2));
           
-          $chir_name = "$_chir->_user_last_name^$_chir->_user_first_name";
+          $chir_name = "$_chir->_user_last_name $_chir->_user_first_name";
           
           /** Encodage des données **/
           if ($encoding == "ISO_IR 192") {
