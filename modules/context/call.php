@@ -20,7 +20,7 @@ $nda          = CValue::get("nda");
 $nom          = trim(CValue::get("name"));
 $prenom       = trim(CValue::get("firstname"));
 $date_naiss   = CValue::get("birthdate");
-$date_sejour  = CValue::get("date_sejour");
+$date_sejour  = CValue::get("admit_date");
 $view         = CValue::get("view", "none");
 $nbpatients   = 0;
 
