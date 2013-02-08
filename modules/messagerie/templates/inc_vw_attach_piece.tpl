@@ -9,12 +9,11 @@
 *}}
 
 <script>
-  requestInfoPat = function(pat_id) {
+  requestInfoPat = function(pat_id, dossier_id) {
     var url = new Url("messagerie", "ajax_radio_last_refs");
 
     var oForm = getForm("editFrm");
     if (pat_id) {
-      console.log(oForm.patient_id);
       url.addParam("patient_id", pat_id);
     }
     else {
@@ -24,7 +23,9 @@
       url.addElement(oForm.patient_id);
     }
 
-
+    if(dossier_id) {
+      url.addParam("dossier_id", dossier_id);
+    }
 
     url.addElement(oForm.consultation_id);
     url.requestUpdate("recherche_patient");
@@ -73,7 +74,7 @@
   Main.add(function () {
     messagerie.listAttachLink('{{$mail_id}}');
     {{if $patient->_id}}
-      requestInfoPat('{{$patient->_id}}');
+      requestInfoPat('{{$patient->_id}}','{{$dossier_id}}');
     {{/if}}
   });
 </script>

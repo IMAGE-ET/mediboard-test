@@ -10,6 +10,7 @@
 CCanDo::checkRead();
 
 $patient_id = CValue::getOrSession("patient_id");
+$dossier_id = CValue::getOrSession("dossier_id");
 
 $patient = new CPatient();
 $patient->load($patient_id);
@@ -57,4 +58,5 @@ foreach ($patient->loadRefsConsultations(array("annule" => "= '0'")) as $_consul
 
 $smarty = new CSmartyDP();
 $smarty->assign("patient", $patient);
+$smarty->assign("dossier_id", $dossier_id);
 $smarty->display("inc_radio_last_refs.tpl");

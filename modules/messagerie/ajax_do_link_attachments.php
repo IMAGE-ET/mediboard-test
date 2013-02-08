@@ -31,8 +31,6 @@ if (!$object->_id) {
 if ($attach_list == "") {
   CAppUI::setMsg("CMailAttachment-msg-no_object_to_attach", UI_MSG_ERROR);
   echo CAppUI::getMsg();
-  return;
-
 }
 
 $attachments = explode("-", $attach_list);

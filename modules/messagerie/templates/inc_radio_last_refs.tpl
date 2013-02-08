@@ -8,11 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<form>
+<form method="get" action="?" id="list_Relations">
   <ul style="text-align: left;">
     <li><strong>Sejours</strong></li>
   {{foreach from=$patient->_ref_sejours item=_sejour}}
-    <li><input type="radio" name="object" onclick="attach.setObject('{{$_sejour->_class}}','{{$_sejour->_id}}');checkrelation()" /> {{$_sejour}}  </li>
+    <li><input type="radio" name="object" onclick="attach.setObject('{{$_sejour->_class}}','{{$_sejour->_id}}');checkrelation()" {{if $_sejour->_id == $dossier_id}}checked="checked"{{/if}} /> {{$_sejour}}  </li>
     {{foreach from=$_sejour->_ref_operations item=_op}}
       <li style="margin-left:15px; padding-left: 15px; border-left: solid 1px grey;">
         <input type="radio" name="object" onclick="attach.object = '{{$_op->_class}}'; attach.id='{{$_op->_id}}';checkrelation()"/>
