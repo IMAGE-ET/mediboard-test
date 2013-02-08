@@ -133,7 +133,7 @@ moveListItem = function(e, way){
       <td class="text">{{mb_value object=$_item field=name}}</td>
       
       {{if $context instanceof CExClassField}}
-        {{mb_include module=forms template=inc_ex_field_triggers}}
+        {{mb_include module=forms template=inc_ex_field_triggers value=$_value}}
       {{/if}}
       
       {{if !$context instanceof CExConcept}}

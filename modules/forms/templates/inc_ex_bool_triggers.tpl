@@ -15,7 +15,7 @@
     <tr>
       <td>{{tr}}bool.{{$_value}}{{/tr}}</td>
       
-      {{mb_include module=forms template=inc_ex_field_triggers}}
+      {{mb_include module=forms template=inc_ex_field_triggers value=$_value}}
       
       <td style="text-align: center;">
         <label style="display: block;">

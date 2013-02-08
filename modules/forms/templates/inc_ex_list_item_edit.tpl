@@ -107,7 +107,7 @@ Main.add(function(){
         <td class="text">{{mb_value object=$_item field=name}}</td>
         
         {{if $context instanceof CExClassField}}
-          {{mb_include module=forms template=inc_ex_field_triggers}}
+          {{mb_include module=forms template=inc_ex_field_triggers value=$_item->_id}}
         {{/if}}
         
         <td></td>
