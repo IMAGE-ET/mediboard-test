@@ -1111,10 +1111,13 @@ class CStoredObject extends CModelObject {
       $old_values = array();
       foreach ($fields as $_field) {
         $_spec = $this->_specs[$_field];
-        if ($_spec instanceof CTextSpec ||
+        if (
+            $_spec instanceof CTextSpec ||
             $_spec instanceof CHtmlSpec ||
             $_spec instanceof CXmlSpec ||
-            $_spec instanceof CPhpSpec) {
+            $_spec instanceof CPhpSpec ||
+            $_spec->loggable == "0"
+        ) {
           continue;
         }
         $old_values[$_field] = utf8_encode($old->$_field);

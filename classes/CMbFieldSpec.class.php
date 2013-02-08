@@ -42,6 +42,7 @@ class CMbFieldSpec {
   var $reported       = null;
   var $pattern        = null;
   var $derived        = null;
+  var $loggable       = null;
 
   static $chars  = array();
   static $nums   = array();
@@ -139,6 +140,7 @@ class CMbFieldSpec {
       'seekable'      => 'bool',
       'reported'      => 'bool',
       'pattern'       => 'str',
+      'loggable'      => 'bool',
     );
   }
   

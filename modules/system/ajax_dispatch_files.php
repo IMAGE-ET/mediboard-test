@@ -41,12 +41,13 @@ $source = reset($sender->_ref_exchanges_sources);
 $path = $source->getFullPath($source->_path);
 $filename_excludes = "$path/mb_excludes.txt";
 
-$filename_lock = "$path/mb_lock.txt";
-if (file_exists($filename_lock)) {
-  return;
-}  
+// Initialisation d'un fichier de verrou de 60 secondes
+$lock = new CMbLock("$path/mb_lock.txt", 60);
 
-@touch($filename_lock);
+// On tente de verrouiller
+if (!$lock->acquire()) {
+  return;
+}
 
 $count = $source->_limit = CAppUI::conf("eai max_files_to_process");
 
@@ -156,13 +157,14 @@ foreach ($files as $_filepath) {
     $e->stepAjax(UI_MSG_WARNING);
     continue;
   }  
-  
+
   CAppUI::stepAjax("CEAIDispatcher-message_dispatch");
 }
 
 fclose($file);
 
-unlink($filename_lock);
+// Libère le verrou
+$lock->release();
 
 if ($profile) {
   $xhprof_data = xhprof_disable();
