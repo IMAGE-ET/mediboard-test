@@ -30,7 +30,7 @@ $nbpatients   = 0;
 $mods_available = array(
   "patient"       => array("dPpatients", "ajax_vw_patient_complete", "patient"),  //dossier patient
   "soins"         => array("soins", "vw_dossier_sejour", "sejour"),             //dossier de soin (complet)
-  "labo"          => array("Imeds", "httpreq_vw_sejour_results", "sejour")      //labo result
+  "labo"          => array("dPImeds", "httpreq_vw_sejour_results", "sejour")      //labo result
 );
 
 
@@ -45,13 +45,13 @@ if (!array_key_exists($view, $mods_available)) {
   CAppUI::stepAjax("context-view_not-registered", UI_MSG_ERROR, $view);
 }
 
-
-//-----------------------------------------------------------------
-//PATIENT
+//check for module (with hack)
 $this_module = $mods_available[$view][0];
-if (!CModule::getActive($this_module)) {
+if (!CModule::exists($this_module) && !CModule::exists("dP$this_module")) {
   CAppUI::stepAjax("context-module%s-not-activated", UI_MSG_ERROR, $this_module);
 }
+
+//PATIENT
 
 //find a patient
 $patient = new CPatient();
