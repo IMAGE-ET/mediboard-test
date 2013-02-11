@@ -40,13 +40,16 @@ $affectations_plage = array_merge(
 $tabPersonnel["plage"] = array();
 $tabPersonnel["operation"] = array();
 
-$personnels = CMbObject::massLoadFwdRef($affectations_plage, "personnel_id");
-CMbObject::massLoadFwdRef($personnels, "user_id");
-CMbObject::massLoadFwdRef($affectations_plage, "object_id", "CPlageOp");
 foreach ($affectations_plage as $key => $affectation_personnel) {
-  $affectation_personnel->loadRefPersonnel()->loadRefUser()->loadRefFunction();
-  $affectation_personnel->loadRefObject();
-  $tabPersonnel["plage"][$affectation_personnel->_ref_personnel->_id] = $affectation_personnel;
+  $affectation = new CAffectationPersonnel();
+  $affectation->object_class = "COperation";
+  $affectation->object_id    = $selOp->_id;
+  $affectation->personnel_id = $affectation_personnel->_ref_personnel->_id;
+  $affectation->loadMatchingObject();
+  $affectation->loadRefPersonnel();
+  $affectation->_ref_personnel->loadRefUser();
+  $affectation->_ref_personnel->_ref_user->loadRefFunction();
+  $tabPersonnel["plage"][$affectation_personnel->_ref_personnel->_id] = $affectation;
 }
 
 // Chargement du de l'operation
