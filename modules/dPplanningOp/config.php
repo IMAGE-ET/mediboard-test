@@ -42,7 +42,8 @@ $dPconfig["dPplanningOp"]= array(
     "show_presence_op"   => "1",
     "show_remarques"     => "1",
     "show_montant_dp"    => "1",
-    "show_asa_position"  => "1"
+    "show_asa_position"  => "1",
+    "show_print_dhe_info"  => "1"
    ),
   "CSejour" => array (
     "check_collisions"    => "date",

@@ -1,6 +1,8 @@
 {{if !$sejour->_id}}
   {{assign var="sejour" value=$operation->_ref_sejour}}
 {{/if}}
+
+{{assign var=show_print_dhe_info value=$conf.dPplanningOp.COperation.show_print_dhe_info}}
 <table class="print">
   <tr>
     <th class="title" colspan="2">
@@ -13,18 +15,19 @@
       <a href="#" onclick="window.print()">Fiche d'admission</a>
     </th>
   </tr>
-  <tr>
-    <td class="info" colspan="2">
-    (Prière de vous munir pour la consultation d'anesthésie de la photocopie
-     de vos cartes de sécurité sociale, de mutuelle, du résultat de votre
-     bilan sanguin et de la liste des médicaments que vous prenez)<br />
-     {{if $sejour->_ref_group->tel}}
-       Pour tout renseignement, téléphonez au 
-       {{mb_value object=$sejour->_ref_group field=tel}}
-     {{/if}}
-    </td>
-  </tr>
-  
+  {{if $show_print_dhe_info}}
+    <tr>
+      <td class="info" colspan="2">
+      (Prière de vous munir pour la consultation d'anesthésie de la photocopie
+       de vos cartes de sécurité sociale, de mutuelle, du résultat de votre
+       bilan sanguin et de la liste des médicaments que vous prenez)<br />
+       {{if $sejour->_ref_group->tel}}
+         Pour tout renseignement, téléphonez au
+         {{mb_value object=$sejour->_ref_group field=tel}}
+       {{/if}}
+      </td>
+    </tr>
+  {{/if}}
   <tr>
     <th>Date</th>
     <td>{{$today|date_format:"%A %d/%m/%Y"}}</td>
@@ -212,26 +215,26 @@
   {{/if}}
   
   {{if $conf.dPplanningOp.CSejour.assurances}}
-  {{if $sejour->assurance_maladie}}
-  <tr>
-    <th>{{mb_label object=$sejour field=assurance_maladie}}</th>
-    <td class="text">{{mb_value object=$sejour field=assurance_maladie}}</td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$sejour field=rques_assurance_maladie}}</th>
-    <td class="text">{{mb_value object=$sejour field=rques_assurance_maladie}}</td>
-  </tr>
-  {{/if}}
-  {{if $sejour->assurance_accident}}
-  <tr>
-    <th>{{mb_label object=$sejour field=assurance_accident}}</th>
-    <td class="text">{{mb_value object=$sejour field=assurance_accident}}</td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$sejour field=rques_assurance_accident}}</th>
-    <td class="text">{{mb_value object=$sejour field=rques_assurance_accident}}</td>
-  </tr>
-  {{/if}}
+    {{if $sejour->assurance_maladie}}
+    <tr>
+      <th>{{mb_label object=$sejour field=assurance_maladie}}</th>
+      <td class="text">{{mb_value object=$sejour field=assurance_maladie}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$sejour field=rques_assurance_maladie}}</th>
+      <td class="text">{{mb_value object=$sejour field=rques_assurance_maladie}}</td>
+    </tr>
+    {{/if}}
+    {{if $sejour->assurance_accident}}
+      <tr>
+        <th>{{mb_label object=$sejour field=assurance_accident}}</th>
+        <td class="text">{{mb_value object=$sejour field=assurance_accident}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$sejour field=rques_assurance_accident}}</th>
+        <td class="text">{{mb_value object=$sejour field=rques_assurance_accident}}</td>
+      </tr>
+    {{/if}}
   {{/if}}
   
   <tr>
@@ -250,48 +253,51 @@
   </tr>
   
   {{if $operation->_id}}
-  {{if $operation->forfait}}
-  <tr>
-    <th>{{mb_label object=$operation field=forfait}}</th>
-    <td>{{mb_value object=$operation field=forfait}}</td>
-  </tr>
-  {{/if}}  
-  {{if $operation->fournitures}}
+    {{if $operation->forfait}}
+      <tr>
+        <th>{{mb_label object=$operation field=forfait}}</th>
+        <td>{{mb_value object=$operation field=forfait}}</td>
+      </tr>
+    {{/if}}
+    {{if $operation->fournitures}}
+      <tr>
+      <th>{{mb_label object=$operation field=fournitures}}</th>
+      <td>{{mb_value object=$operation field=fournitures}}</td>
+      </tr>
+    {{/if}}
+
+    {{if $show_print_dhe_info}}
+      <tr>
+        <th class="category" colspan="2">Rendez vous d'anesthésie</th>
+      </tr>
+
+      <tr>
+        <td class="text" colspan="2">
+          Veuillez prendre rendez-vous avec le cabinet d'anesthésistes <strong>impérativement</strong>
+          avant votre intervention.
+         {{if $sejour->_ref_group->tel_anesth}}
+           Pour cela, téléphonez au {{mb_value object=$sejour->_ref_group field=tel_anesth}}
+         {{/if}}
+        </td>
+      <tr>
+    {{/if}}
+  {{/if}}
+  {{if $show_print_dhe_info}}
     <tr>
-    <th>{{mb_label object=$operation field=fournitures}}</th>
-    <td>{{mb_value object=$operation field=fournitures}}</td>
+      <td class="info" colspan="2">
+        <b>Pour votre hospitalisation, prière de vous munir de :</b>
+        <ul>
+          <li>Carte d'identité</li>
+          <li>
+            Carte vitale et attestation de sécurité sociale,
+            carte de mutuelle et prise en charge complète auprès de votre mutuelle
+            à transmettre au personnel des admissions lors de votre entrée.
+          </li>
+          <li>Tous examens en votre possession (analyse, radio, carte de groupe sanguin...).</li>
+          <li>Prévoir linge et nécessaire de toilette.</li>
+          <li>Vos médicaments éventuellement</li>
+        </ul>
+      </td>
     </tr>
   {{/if}}
-
-  <tr>
-    <th class="category" colspan="2">Rendez vous d'anesthésie</th>
-  </tr>
-    
-  <tr>
-    <td class="text" colspan="2">
-      Veuillez prendre rendez-vous avec le cabinet d'anesthésistes <strong>impérativement</strong>
-      avant votre intervention.
-     {{if $sejour->_ref_group->tel_anesth}}
-       Pour cela, téléphonez au {{mb_value object=$sejour->_ref_group field=tel_anesth}}
-     {{/if}}
-    </td>
-  <tr>
-  {{/if}}
-  
-  <tr>
-    <td class="info" colspan="2">
-      <b>Pour votre hospitalisation, prière de vous munir de :</b>
-      <ul>
-        <li>Carte d'identité</li>
-        <li>
-          Carte vitale et attestation de sécurité sociale,
-          carte de mutuelle et prise en charge complète auprès de votre mutuelle
-          à transmettre au personnel des admissions lors de votre entrée.
-        </li>
-        <li>Tous examens en votre possession (analyse, radio, carte de groupe sanguin...).</li>
-        <li>Prévoir linge et nécessaire de toilette.</li>
-        <li>Vos médicaments éventuellement</li>
-      </ul>
-    </td>
-  </tr>
 </table>
