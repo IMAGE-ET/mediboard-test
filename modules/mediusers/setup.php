@@ -538,7 +538,7 @@ class CSetupmediusers extends CSetup {
     $this->addQuery($query, true);
 
     $this->makeRevision("0.50");
-    $query = "ALTER TABLE `mediusers`
+    $query = "ALTER TABLE `users_mediboard`
               ADD `last_ldap_checkout` DATE;";
     $this->addQuery($query);
 
