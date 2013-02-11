@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPurgences
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 /**
@@ -38,6 +39,7 @@ class CRPU extends CMbObject {
   var $date_at         = null;
   var $circonstance    = null;
   var $regule_par      = null;
+  var $code_diag       = null;
 
   // Legacy Sherpa fields
   var $type_pathologie = null; // Should be $urtype
@@ -131,6 +133,7 @@ class CRPU extends CMbObject {
       "date_at"          => "date",
       "circonstance"     => "str",
       "regule_par"       => "enum list|centre_15|medecin",
+      "code_diag"        => "num",
 
       "_DP"              => "code cim10 show|1",
       "_provenance"      => "enum list|1|2|3|4|5|6|7|8",
@@ -424,7 +427,7 @@ class CRPU extends CMbObject {
     }
 
     // Standard Store
-    if ($msg = parent::store()){
+    if ($msg = parent::store()) {
       return $msg;
     }
 
@@ -498,7 +501,7 @@ class CRPU extends CMbObject {
     }
     $template->addProperty("RPU - Box"                          , $lit->_view);
 
-    if(CAppUI::conf("dPurgences old_rpu") == "1"){
+    if (CAppUI::conf("dPurgences old_rpu") == "1") {
       if (CModule::getActive("sherpa")) {
         $template->addProperty("RPU - Soins pour trauma"  , $this->getFormattedValue("urtrau"));
         $template->addProperty("RPU - Cause du transfert" , $this->getFormattedValue("urmuta"));

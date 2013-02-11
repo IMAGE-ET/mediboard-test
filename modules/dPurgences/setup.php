@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPurgences
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CSetupdPurgences extends CSetup {
@@ -39,7 +40,7 @@ class CSetupdPurgences extends CSetup {
     
     $this->makeRevision("0.1");
     $query = "ALTER TABLE `rpu` 
-			CHANGE `ccmu` `ccmu` ENUM( '1', 'P', '2', '3', '4', '5', 'D' )";
+      CHANGE `ccmu` `ccmu` ENUM( '1', 'P', '2', '3', '4', '5', 'D' )";
     $this->addQuery($query);
     
     $this->makeRevision("0.11");
@@ -71,34 +72,34 @@ class CSetupdPurgences extends CSetup {
 
     $this->makeRevision("0.16");
     $query = "ALTER TABLE `rpu`
-			CHANGE `mode_entree` `mode_entree` ENUM('6','7','8') NOT NULL, 
-			CHANGE `transport` `transport` ENUM('perso','perso_taxi','ambu','ambu_vsl','vsab','smur','heli','fo') NOT NULL;";
-	  $this->addQuery($query);
+      CHANGE `mode_entree` `mode_entree` ENUM('6','7','8') NOT NULL, 
+      CHANGE `transport` `transport` ENUM('perso','perso_taxi','ambu','ambu_vsl','vsab','smur','heli','fo') NOT NULL;";
+    $this->addQuery($query);
 
     $this->makeRevision("0.17");
     $query = "ALTER TABLE `rpu`
-			CHANGE `prise_en_charge` `pec_transport` ENUM('med','paramed','aucun')";
+      CHANGE `prise_en_charge` `pec_transport` ENUM('med','paramed','aucun')";
     $this->addQuery($query);
 
     $this->makeRevision("0.18");
     $query = "ALTER TABLE `rpu`
-			ADD `urprov` ENUM('AM','AT','DO','EC','MT','OT','RA','RC','SP','VP'), 
-			ADD `urmuta` ENUM('A','D','M','P','X'), 
-			ADD `urtrau` ENUM('I','S','T');";
+      ADD `urprov` ENUM('AM','AT','DO','EC','MT','OT','RA','RC','SP','VP'), 
+      ADD `urmuta` ENUM('A','D','M','P','X'), 
+      ADD `urtrau` ENUM('I','S','T');";
     $this->addQuery($query);
 
     $this->makeRevision("0.19");
     $query = "ALTER TABLE `rpu`
-			ADD `box_id` INT(11) UNSIGNED";
+      ADD `box_id` INT(11) UNSIGNED";
     $this->addQuery($query);
     
     $this->makeRevision("0.20");
     $query = "ALTER TABLE `rpu`
       ADD `sortie_autorisee` ENUM ('0','1') DEFAULT '0',
-		  ADD INDEX (`radio_debut`),
-		  ADD INDEX (`radio_fin`),
-		  ADD INDEX (`mutation_sejour_id`),
-		  ADD INDEX (`box_id`);";
+      ADD INDEX (`radio_debut`),
+      ADD INDEX (`radio_fin`),
+      ADD INDEX (`mutation_sejour_id`),
+      ADD INDEX (`box_id`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.21");
@@ -109,10 +110,10 @@ class CSetupdPurgences extends CSetup {
     
     $this->makeRevision("0.22");
     $query = "ALTER TABLE `rpu` 
-			ADD `bio_depart` DATETIME,
-			ADD `bio_retour` DATETIME,
-			ADD INDEX (`bio_depart`),
-			ADD INDEX (`bio_retour`);";
+      ADD `bio_depart` DATETIME,
+      ADD `bio_retour` DATETIME,
+      ADD INDEX (`bio_depart`),
+      ADD INDEX (`bio_retour`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.23");
@@ -145,15 +146,15 @@ class CSetupdPurgences extends CSetup {
       ADD INDEX (`rpu_id`),
       ADD INDEX (`extract_passages_id`);";
     $this->addQuery($query);
-		
-		$this->makeRevision("0.24");
+    
+    $this->makeRevision("0.24");
       
     $query = "ALTER TABLE `rpu` 
       ADD `specia_att` DATETIME,
       ADD `specia_arr` DATETIME;";
     $this->addQuery($query);
-		
-		$query = "ALTER TABLE `rpu` 
+    
+    $query = "ALTER TABLE `rpu` 
       ADD INDEX (`specia_att`),
       ADD INDEX (`specia_arr`);";
     $this->addQuery($query);
@@ -313,8 +314,8 @@ class CSetupdPurgences extends CSetup {
                  `box_urgences_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
                  `nom` VARCHAR(30) NOT NULL,
                  `description` VARCHAR(50),
-					       `type` ENUM('Suture','Degravillonage','Dechockage','Traumatologie','Radio','Retour_radio','Imagerie','Bio','Echo','Attente','Resultats','Sortie') NOT NULL DEFAULT 'Attente',
-					       `plan_x` INT(11) NULL,
+                 `type` ENUM('Suture','Degravillonage','Dechockage','Traumatologie','Radio','Retour_radio','Imagerie','Bio','Echo','Attente','Resultats','Sortie') NOT NULL DEFAULT 'Attente',
+                 `plan_x` INT(11) NULL,
                  `plan_y` INT(11) NULL,
                  `color` VARCHAR(6) DEFAULT 'ABE',
                  `hauteur` INT(11) NOT NULL DEFAULT '1',
@@ -324,8 +325,13 @@ class CSetupdPurgences extends CSetup {
     $this->makeRevision("0.38");
     
     $query = "DROP TABLE `box_urgences`;";
+    $this->addQuery($query);
+    $this->makeRevision("0.39");
+    
+    $query = "ALTER TABLE `rpu` 
+              ADD `code_diag` INT (11);";
     $this->addQuery($query); 
-    $this->mod_version = "0.39";
+    $this->mod_version = "0.40";
   }  
 }
 
