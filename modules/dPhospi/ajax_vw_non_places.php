@@ -150,7 +150,7 @@ if ($duree_uscpo) {
 
 if ($item_prestation_id && $prestation_id) {
   $ljoin["item_liaison"] = "sejour.sejour_id = item_liaison.sejour_id";
-  $where["item_liaison.item_souhaite_id"] = " = '$item_prestation_id'";
+  $where["item_liaison.item_souhait_id"] = " = '$item_prestation_id'";
 }
 
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
@@ -165,7 +165,7 @@ $sejours_non_affectes = array();
 $functions_filter = array();
 $operations = array();
 
-foreach($sejours as $_key => $_sejour) {
+foreach ($sejours as $_key => $_sejour) {
   $_sejour->loadRefPrestation();
   $_sejour->loadRefPraticien()->loadRefFunction();
   $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
@@ -179,7 +179,7 @@ foreach($sejours as $_key => $_sejour) {
     $_sejour->_width = $_sejour->_sortie_offset - $_sejour->_entree_offset;
     $patient = $_sejour->loadRefPatient();
     $patient->loadRefPhotoIdentite();
-    $patient->loadRefDossierMedical()->loadRefsAntecedents();
+    $patient->loadRefDossierMedical(false);
     $constantes = $patient->getFirstConstantes();
     $patient->_overweight = $constantes->poids > 120;
   }
@@ -211,24 +211,24 @@ foreach($sejours as $_key => $_sejour) {
   }
   
   if ($prestation_id) {
-    $item_liaison = new CItemLiaison;
+    $_sejour->loadRefFirstLiaisonForPrestation($prestation_id);
+
+    $item_liaison = new CItemLiaison();
     $where = array();
     $ljoin = array();
     
     $where["sejour_id"] = "= '$_sejour->_id'";
-    $ljoin["item_prestation"] = 
+    $ljoin["item_prestation"] =
       "item_prestation.item_prestation_id = item_liaison.item_realise_id OR
        item_prestation.item_prestation_id = item_liaison.item_souhait_id";
     
     $where["object_class"] = " = 'CPrestationJournaliere'";
     $where["object_id"] = " = '$prestation_id'";
-    $item_liaison->loadObject($where, null, null, $ljoin);
-    
-    if ($item_liaison->_id) {
-      $item_liaison->loadRefItem();
-      $item_liaison->loadRefItemRealise();
-      
-      $_sejour->_curr_liaison_prestation = $item_liaison;
+    $_sejour->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, null, $ljoin);
+
+    foreach ($_sejour->_liaisons_for_prestation as $_liaison) {
+      $_liaison->loadRefItem();
+      $_liaison->loadRefItemRealise();
     }
   }
   
@@ -239,6 +239,9 @@ foreach($sejours as $_key => $_sejour) {
     @$sejours_non_affectes[$_sejour->service_id][] = $_sejour;
   }
 }
+
+$dossiers = CMbArray::pluck($sejours, "_ref_patient", "_ref_dossier_medical");
+CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 
 $items_prestation = array();
 
@@ -288,8 +291,8 @@ foreach ($affectations as $_affectation) {
   $sejour->loadRefPraticien()->loadRefFunction();
   $patient = $sejour->loadRefPatient();
   $patient->loadRefPhotoIdentite();
-  $patient->loadRefDossierMedical()->loadRefsAntecedents();
-  
+  $patient->loadRefDossierMedical(false);
+
   $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->entree), $date_min, $period);
   $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->sortie), $date_min, $period);
   $_affectation->_width = $_affectation->_sortie_offset - $_affectation->_entree_offset;
@@ -300,7 +303,28 @@ foreach ($affectations as $_affectation) {
   else {
     $operations[$sejour->_id] = $_operations = $sejour->loadRefsOperations();
   }
-  
+
+  if ($prestation_id) {
+    $item_liaison = new CItemLiaison();
+    $where = array();
+    $ljoin = array();
+
+    $where["sejour_id"] = "= '$sejour->_id'";
+    $ljoin["item_prestation"] =
+      "item_prestation.item_prestation_id = item_liaison.item_realise_id OR
+       item_prestation.item_prestation_id = item_liaison.item_souhait_id";
+
+    $where["object_class"] = " = 'CPrestationJournaliere'";
+    $where["object_id"] = " = '$prestation_id'";
+    $sejour->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, null, $ljoin);
+
+    foreach ($sejour->_liaisons_for_prestation as $_liaison) {
+      $_liaison->loadRefItem();
+      $_liaison->loadRefItemRealise();
+    }
+  }
+
+
   foreach ($_operations as $key=>$_operation) {
     $_operation->loadRefPlageOp(1);
     
@@ -326,6 +350,9 @@ foreach ($affectations as $_affectation) {
   
   @$sejours_non_affectes[$_affectation->service_id][] = $lit;
 }
+
+$dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
+CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 
 ksort($sejours_non_affectes, SORT_STRING);
 

@@ -99,7 +99,7 @@
 {{/if}}
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
 
-<div style="height: 5em; width: 100%;">
+<div style="height: 5.4em; width: 100%;">
   <div id="time_line_temporelle" style="background: #fff;z-index: 200; position: absolute;">
     <strong>
       <a href="#1" onclick="$V(getForm('filterMouv').date, '{{$date_before}}');">
@@ -121,17 +121,14 @@
       {{/if}}
       <tr>
       {{if $granularite == "day"}}
-        <th colspan="{{$colspan}}">
+        <th class="title" colspan="{{$colspan}}">
           {{$date|date_format:$conf.longdate}}
         </th>
       {{else}}
-        <th></th>
-        {{if $prestation_id}}
-          <th></th>
-        {{/if}}
+        <th class="title" {{if $prestation_id}}colspan="2"{{/if}}></th>
         {{foreach from=$days item=_day key=_datetime}}
         
-          <th colspan="{{if $granularite == "week"}}4{{else}}7{{/if}}">
+          <th class="title" colspan="{{if $granularite == "week"}}4{{else}}7{{/if}}">
             {{if $granularite == "week"}}
               {{$_day|date_format:"%a"}} {{$_day|date_format:$conf.date}}
             {{else}}
@@ -155,12 +152,9 @@
       </th>
     </tr>
     <tr>
-      <th style="text-align: left;">
+      <th style="text-align: left;" {{if $prestation_id}}colspan="2"{{/if}}>
         <input type="text" style="width: 7em;" onkeyup="filter(this, 'tableau_vue_temporel')" class="search" />
       </th>
-      {{if $prestation_id}}
-        <th></th>
-      {{/if}}
       {{foreach from=$datetimes item=_date}}
         <th>
           {{if $granularite == "4weeks"}}
@@ -188,7 +182,7 @@
   {{/if}}
   {{foreach from=$services item=_service}}
     <tr>
-      <th class="title" colspan="{{$colspan}}">{{$_service}}</th>
+      <th class="section" colspan="{{$colspan}}">{{$_service}}</th>
     </tr>
     {{assign var=show_age_patient value=$conf.dPhospi.show_age_patient}}
     {{foreach from=$_service->_ref_chambres item=_chambre}}

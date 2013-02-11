@@ -233,7 +233,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   var $_ref_suivi_medical         = null;
   var $_diagnostics_associes      = null;
   var $_ref_prestations           = null;
-  var $_curr_liaison_prestation   = null;
+  var $_liaisons_for_prestation   = null;
+  var $_first_liaison_for_prestation = null;
 
   // Filter Fields
   var $_date_min        = null;
@@ -2934,6 +2935,20 @@ class CSejour extends CFacturable implements IPatientRelated {
       }
     }
     return $this->_ref_prestations;
+  }
+
+  function loadRefFirstLiaisonForPrestation($prestation_id) {
+    $this->_first_liaison_for_prestation = new CItemLiaison();
+    $where = array();
+    $ljoin = array();
+    $where["sejour_id"] = "= '$this->_id'";
+    $ljoin["item_prestation"] =
+      "item_prestation.item_prestation_id = item_liaison.item_realise_id OR
+       item_prestation.item_prestation_id = item_liaison.item_souhait_id";
+
+    $where["object_class"] = " = 'CPrestationJournaliere'";
+    $where["object_id"] = " = '$prestation_id'";
+    $this->_first_liaison_for_prestation->loadObject($where, null, null, $ljoin);
   }
 
   function countPrestationsSouhaitees() {

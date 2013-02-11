@@ -1583,7 +1583,7 @@ class CStoredObject extends CModelObject {
     }
     
     $ds = $backObject->_spec->ds;
-    $query .= "WHERE `$backField` " . $ds->prepareIn(array_keys($objects));
+    $query .= "WHERE `$backField` " . $ds->prepareIn(CMbArray::pluck($objects, "_id"));
 
     // Additional where clauses
     foreach ($where as $_field => $_clause) {
@@ -1603,8 +1603,8 @@ class CStoredObject extends CModelObject {
     
     // Populate object counts
     $total = 0;
-    foreach ($objects as $object_id => $_object) {
-      $count = isset($counts[$object_id]) ? $counts[$object_id] : 0;
+    foreach ($objects as $_object) {
+      $count = isset($counts[$_object->_id]) ? $counts[$_object->_id] : 0;
       $total += $_object->_count[$backName] = $count;
     }
     

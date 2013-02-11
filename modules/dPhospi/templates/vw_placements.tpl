@@ -167,9 +167,9 @@
       var after_mouv = null;
       
       // Pas d'affectation_id ou pas de lit_id_origine (affectation dans un couloir),
-      // on recharge la liste des affectations (placement d'un patient)
+      // on supprime l'affectation ciblée dans la liste des affectations (placement d'un patient)
       if (!affectation_id || !lit_id_origine) {
-        after_mouv = loadNonPlaces;
+        after_mouv = delLine(affectation_id ? affectation_id : sejour_id);
       }
       
       if (lit_id_origine) {
@@ -180,7 +180,14 @@
       }
     }});
   }
-  
+
+  delLine = function(object_id) {
+    var line = $("wrapper_line_"+object_id);
+    if (line) {
+      line.up("tr.line").remove();
+    }
+  }
+
   // Drop d'une affectation avec la touche ctrl
   selectAction = function(affectation_id, lit_id, sejour_id) {
     Placement.stop();

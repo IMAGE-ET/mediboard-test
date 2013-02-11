@@ -109,8 +109,7 @@ foreach ($sejours as $sejour_id => $_sejour) {
   $patient->loadIPP();
   
   
-  $dossier_medical = $patient->loadRefDossierMedical();
-  $dossier_medical->loadRefsAntecedents();
+  $dossier_medical = $patient->loadRefDossierMedical(false);
   
   // Chargement du numéro de dossier
   $_sejour->loadNDA();
@@ -135,6 +134,11 @@ foreach ($sejours as $sejour_id => $_sejour) {
     $affectation->loadRefLit(1);
     $affectation->_ref_lit->loadCompleteView();
   }
+}
+
+if (CAppUI::conf("dPadmissions show_deficience")) {
+  $dossiers = CMbArray::pluck($sejours, "_ref_patient", "_ref_dossier_medical");
+  CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute
@@ -165,5 +169,3 @@ $smarty->assign("functions"     , $functions);
 $smarty->assign("filterFunction", $filterFunction);
 
 $smarty->display("inc_vw_presents.tpl");
-
-?>

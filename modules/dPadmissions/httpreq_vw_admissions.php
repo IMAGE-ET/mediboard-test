@@ -133,11 +133,6 @@ foreach ($sejours as $sejour_id => $_sejour) {
   // Dossier médical
   $dossier_medical = $patient->loadRefDossierMedical(false);
 
-  if (CAppUI::conf("dPadmissions show_deficience")) {
-    $deficiences = $dossier_medical->loadRefsDeficiences();
-    $dossier_medical->_ref_antecedents_by_type["deficience"] = $deficiences;
-  }
-
   // Chargement du numéro de dossier
   $_sejour->loadNDA();
 
@@ -163,6 +158,10 @@ foreach ($sejours as $sejour_id => $_sejour) {
   if ($affectation->_id) {
     $affectation->loadRefLit(1)->loadCompleteView();
   }    
+}
+if (CAppUI::conf("dPadmissions show_deficience")) {
+  $dossiers = CMbArray::pluck($sejours, "_ref_patient", "_ref_dossier_medical");
+  CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 }
 
 // Si la fonction selectionnée n'est pas dans la liste des fonction, on la rajoute

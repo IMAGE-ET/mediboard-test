@@ -155,6 +155,8 @@ class CChambre extends CMbObject {
     }
     $this->_nb_affectations = count($listAff);
 
+    $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
+
     foreach ($listAff as $affectation1) {
       if(!$affectation1->sejour_id){
         continue;
@@ -162,11 +164,14 @@ class CChambre extends CMbObject {
       $sejour1     = $affectation1->_ref_sejour;
       $patient1    = $sejour1->_ref_patient;
       $chirurgien1 = $sejour1->_ref_praticien;
-      if ((count($this->_ref_lits) == 1) && $sejour1->chambre_seule == 0)
-        $this->_chambre_double++;
-      if ((count($this->_ref_lits) > 1) && $sejour1->chambre_seule == 1)
-        $this->_chambre_seule++;
-      
+
+      if ($systeme_presta == "standard") {
+        if ((count($this->_ref_lits) == 1) && $sejour1->chambre_seule == 0)
+          $this->_chambre_double++;
+        if ((count($this->_ref_lits) > 1) && $sejour1->chambre_seule == 1)
+          $this->_chambre_seule++;
+      }
+
       foreach ($listAff as $affectation2) {
         if(!$affectation2->sejour_id){
           continue;

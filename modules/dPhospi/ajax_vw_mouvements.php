@@ -197,7 +197,7 @@ foreach ($affectations as $_affectation) {
   $patient->loadRefPhotoIdentite();
   $constantes = $patient->getFirstConstantes();
   $patient->_overweight = $constantes->poids > 120;
-  $patient->loadRefDossierMedical()->loadRefsAntecedents();
+  $patient->loadRefDossierMedical(false);
   $lits[$_affectation->lit_id]->_ref_affectations[$_affectation->_id] = $_affectation;
   $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->entree), $date_min, $period);
   $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->sortie), $date_min, $period);
@@ -221,13 +221,11 @@ foreach ($affectations as $_affectation) {
       OR item_prestation.item_prestation_id = item_liaison.item_souhait_id";
     $where["object_class"] = " = 'CPrestationJournaliere'";
     $where["object_id"] = " = '$prestation_id'";
-    $item_liaison->loadObject($where, null, null, $ljoin);
-    
-    if ($item_liaison->_id) {
-      $item_liaison->loadRefItem();
-      $item_liaison->loadRefItemRealise();
-      
-      $sejour->_curr_liaison_prestation = $item_liaison;
+    $sejour->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, null, $ljoin);
+
+    foreach ($sejour->_liaisons_for_prestation as $_liaison) {
+      $_liaison->loadRefItem();
+      $_liaison->loadRefItemRealise();
     }
   }
   
@@ -251,6 +249,10 @@ foreach ($affectations as $_affectation) {
     }
   }
 }
+
+$dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
+mbLog($dossiers);
+CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 
 foreach ($lits as $_lit) {
   $intervals = array();
@@ -296,5 +298,3 @@ $smarty->assign("suivi_affectation", $suivi_affectation);
 $smarty->assign("td_width"    , 84.2 / $nb_ticks);
 
 $smarty->display("inc_vw_mouvements.tpl");
-
-?>

@@ -80,6 +80,7 @@ function &getCachedLit($lit_id) {
 function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type = "") {
   $service->loadRefsBack();
   $service->_nb_lits_dispo = 0;
+  $dossiers = array();
 
   foreach ($service->_ref_chambres as $chambre_id => &$chambre) {
     $chambre->loadRefsBack();
@@ -122,7 +123,7 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
           $sejour->loadNDA();
           $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
           $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
-          $sejour->_ref_patient->loadRefDossierMedical()->loadRefsAntecedents();
+          $sejour->_ref_patient->loadRefDossierMedical(false);
           
 		      // Chargement des droits CMU
           $sejour->getDroitsCMU();
@@ -131,12 +132,13 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
             $sejour->_ref_operations[$operation_id]->loadExtCodesCCAM();
           }
           $chambre->_nb_affectations++;
-                    
+          $dossiers[] = $sejour->_ref_patient->_ref_dossier_medical;
         } else {
           unset($lit->_ref_affectations[$affectation_id]);
         }
       }
     }
+    CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
     if(!$service->externe) {
       $chambre->checkChambre();
       $service->_nb_lits_dispo += ($chambre->annule == 0 ? $chambre->_nb_lits_dispo : 0);
@@ -177,7 +179,7 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
   	$sejour->loadRefsPrescriptions();
     $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
     $sejour->_ref_patient   =& getCachedPatient($sejour->patient_id);
-    $sejour->_ref_patient->loadRefDossierMedical()->loadRefsAntecedents();
+    $sejour->_ref_patient->loadRefDossierMedical(false);
     
     // Chargement des droits CMU
     $sejour->getDroitsCMU();
@@ -188,7 +190,8 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
       $operation->loadExtCodesCCAM();
     }
   }
-  
+  $dossiers = CMbArray::pluck($sejourNonAffectes, "_ref_patient", "_ref_dossier_medical");
+  CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
   return $sejourNonAffectes;
 }
 
@@ -238,7 +241,7 @@ function loadAffectationsCouloirs($where, $order = null, $praticien_id = null) {
     $sejour->loadNDA();
     $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
     $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
-    $sejour->_ref_patient->loadRefDossierMedical()->loadRefsAntecedents();
+    $sejour->_ref_patient->loadRefDossierMedical(false);
     
     // Chargement des droits CMU
     $sejour->getDroitsCMU();
@@ -248,7 +251,8 @@ function loadAffectationsCouloirs($where, $order = null, $praticien_id = null) {
     }
     $tab_affectations[$affectation->service_id][] = $affectation;
   }
-  
+  $dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
+  CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
+
   return $tab_affectations;
 }
-?>

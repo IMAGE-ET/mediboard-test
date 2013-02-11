@@ -37,6 +37,7 @@
 
 {{math equation=x+1 x=$nb_ticks assign=colspan}}
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
+{{assign var=systeme_presta value=$conf.dPhospi.systeme_prestations}}
 
 <div style="height: 2em; width: 100%">
   <div id="time_line_temporelle_non_affectes" style="background: #fff; position: absolute; z-index: 200;">
@@ -156,36 +157,37 @@
                       <br />
                       <div>
                         <span class="compact">
-                          {{$_object->_motif_complet}}
-                        </span>
-                        <span class="compact" style="float: right;">
-                          {{if $prestation_id && $_object->_curr_liaison_prestation}}
-                            {{assign var=liaison value=$_object->_curr_liaison_prestation}}
-                            {{assign var=item_presta value=$liaison->_ref_item}}
-                            {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
-                            <span
-                            {{if $item_presta->_id && $item_presta_realise->_id}}
-                              style="color:
-                              {{if $item_presta->rank == $item_presta_realise->rank}}
-                                #9F8
-                              {{elseif $item_presta->rank > $item_presta_realise->rank}}
-                                #FD9
-                              {{else}}
-                                #F89
-                              {{/if}}"
-                            {{/if}}>
-                              {{if $item_presta_realise->_id}}
-                                <em>({{$item_presta_realise->nom}})</em>
-                              {{else}}
-                                <em>({{$item_presta->nom}})</em>
-                              {{/if}}
-                            </span>
+                          {{if $systeme_presta == "expert"}}
+                            {{if $prestation_id && $_object->_liaisons_for_prestation|@count}}
+                              ({{foreach from=$_object->_liaisons_for_prestation item=liaison}}
+                                {{assign var=item_presta value=$liaison->_ref_item}}
+                                {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
+                                <strong title="{{tr}}CItemLiaison-item_souhait_id{{/tr}} {{$item_presta->nom}} {{if $item_presta_realise->_id}}versus {{tr}}CItemLiaison-item_realise_id{{/tr}} {{$item_presta_realise->nom}}{{/if}}"
+                                {{if $item_presta->_id && $item_presta_realise->_id}}
+                                  class="
+                                  {{if $item_presta->rank == $item_presta_realise->rank}}
+                                    item_egal
+                                  {{elseif $item_presta->rank > $item_presta_realise->rank}}
+                                    item_inferior
+                                  {{else}}
+                                    item_superior
+                                  {{/if}}"
+                                {{/if}}>
+                                  {{if $item_presta_realise->_id}}
+                                    {{$item_presta_realise->nom}}
+                                  {{else}}
+                                    {{$item_presta->nom}}
+                                  {{/if}}
+                                </strong>
+                              {{/foreach}})
+                            {{/if}}
                           {{else}}
                             <em style="color: #f00;" title="Chambre seule">
                               {{if $_object->chambre_seule}}CS{{else}}CD{{/if}}
                               {{if $_object->prestation_id}}- {{$_object->_ref_prestation->code}}{{/if}}
                             </em>
                           {{/if}}
+                          {{$_object->_motif_complet}}
                         </span>
                       </div>
                       {{foreach from=$_object->_ref_operations item=_operation}}
@@ -227,8 +229,9 @@
                             width:      width+'px'
                           });
                             
-                          {{if $prestation_id && $item_prestation_id}}
-                            {{assign var=item_prestation value=$items_prestation.$item_prestation_id}}
+                          {{if $prestation_id && $_object->_first_liaison_for_prestation->_id && $_object->_first_liaison_for_prestation->item_souhait_id}}
+                            {{assign var=first_item_prestation_id value=$_object->_first_liaison_for_prestation->item_souhait_id}}
+                            {{assign var=item_prestation value=$items_prestation.$first_item_prestation_id}}
                             $$(".first_cell").each(function(elt) {
                               var rank = {{$item_prestation->rank}};
                               var rank_elt = parseInt(elt.get('rank'));

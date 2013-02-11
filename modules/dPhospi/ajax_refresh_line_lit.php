@@ -120,7 +120,7 @@ foreach ($affectations as $_affectation) {
   $sejour->loadRefPraticien()->loadRefFunction();
   $patient = $sejour->loadRefPatient();
   $patient->loadRefPhotoIdentite();
-  $patient->loadRefDossierMedical()->loadRefsAntecedents();
+  $patient->loadRefDossierMedical(false)->loadRefsAntecedentsOfType("deficience");
   $constantes = $patient->getFirstConstantes();
   $patient->_overweight = $constantes->poids > 120;
   
@@ -168,13 +168,11 @@ foreach ($affectations as $_affectation) {
     
     $where["object_class"] = " = 'CPrestationJournaliere'";
     $where["object_id"] = " = '$prestation_id'";
-    $item_liaison->loadObject($where, null, null, $ljoin);
+    $sejour->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, null, $ljoin);
     
-    if ($item_liaison->_id) {
-      $item_liaison->loadRefItem();
-      $item_liaison->loadRefItemRealise();
-      
-      $sejour->_curr_liaison_prestation = $item_liaison;
+    foreach ($sejour->_liaisons_for_prestation as $_liaison) {
+      $_liaison->loadRefItem();
+      $_liaison->loadRefItemRealise();
     }
   }
 }

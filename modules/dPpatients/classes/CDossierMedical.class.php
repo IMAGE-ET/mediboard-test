@@ -50,6 +50,7 @@ class CDossierMedical extends CMbMetaObject {
   
   // Derived back references
   var $_count_antecedents = null;
+  var $_count_antecedents_by_type = null;
   var $_count_traitements = null;
   var $_count_cancelled_antecedents = null;
   var $_count_cancelled_traitements = null;
@@ -202,18 +203,17 @@ class CDossierMedical extends CMbMetaObject {
    * 
    * @return void
    */
-  function countAntecedents(){
+  function countAntecedents($type = ""){
     $antedecent = new CAntecedent();
     $where = array();
     $where["dossier_medical_id"] = " = '$this->_id'";
-
     $where["annule"] = " != '1'";
     $this->_count_antecedents = $antedecent->countList($where);
 
     $where["annule"] = " = '1'";
     $this->_count_cancelled_antecedents = $antedecent->countList($where);
   }
-  
+
   /**
    * Compte les antécédents annulés et non-annulés
    * 
@@ -251,14 +251,14 @@ class CDossierMedical extends CMbMetaObject {
   
   function loadRefsAntecedentsOfType($type) {
     if (!$this->_id) {
-      return array();
+      return $this->_ref_antecedents_by_type[$type] = array();
     }
     
     $antecedent = new CAntecedent();
     $antecedent->type = $type;
     $antecedent->annule = "0";
     $antecedent->dossier_medical_id = $this->_id;
-    return $antecedent->loadMatchingList();
+    return $this->_ref_antecedents_by_type[$type] = $antecedent->loadMatchingList();
   }
   
   function loadRefsAllergies(){
@@ -268,7 +268,25 @@ class CDossierMedical extends CMbMetaObject {
   function loadRefsDeficiences(){
     return $this->_ref_deficiences = $this->loadRefsAntecedentsOfType("deficience");
   }
-  
+
+  static function massCountAntecedentsByType($dossiers, $type = "") {
+    $where = array();
+    if ($type) {
+      $where["type"] = "= '$type'";
+    }
+
+    CMbObject::massCountBackRefs($dossiers, "antecedents", $where);
+
+    foreach ($dossiers as $_dossier) {
+      if ($type) {
+        $_dossier->_count_antecedents_by_type[$type] = $_dossier->_count["antecedents"];
+      }
+      else {
+        $_dossier->_count_antecedents = $_dossier->_count["antecedents"];
+      }
+    }
+  }
+
   function loadRefsTraitements($cancelled = false) {
     $order = "fin DESC, debut DESC";
     

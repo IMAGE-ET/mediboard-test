@@ -74,7 +74,7 @@
       <tr>
         <th class="narrow"></th>
         {{foreach from=$prestations_j item=_prestation}}
-          <th style="width: {{$width_prestation}}%">{{$_prestation->nom}}</th>
+          <th style="width: {{$width_prestation}}%" class="text">{{$_prestation->nom}}</th>
         {{/foreach}}
         {{if $context == "all"}}
           <th>

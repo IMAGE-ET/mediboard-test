@@ -7,6 +7,7 @@
 {{/if}}
 
 {{assign var=chambre value=$_lit->_ref_chambre}}
+{{assign var=systeme_presta value=$conf.dPhospi.systeme_prestations}}
 
 {{if $prestation_id}}
   <th class="text">{{$_lit->_selected_item->nom}}</th>
@@ -147,35 +148,38 @@
                       {{/if}}
                       {{if $mode_vue_reelle == "classique"}}
                         <div class="compact">
-                          <span onmouseover="ObjectTooltip.createEx(this, '{{$praticien->_guid}}')">({{$praticien->_shortview}})</span>
-                          {{$_sejour->_motif_complet}}
-                          {{if $prestation_id && $_sejour->_curr_liaison_prestation}}
-                            {{assign var=liaison value=$_sejour->_curr_liaison_prestation}}
-                            {{assign var=item_presta value=$liaison->_ref_item}}
-                            {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
-                            <span
-                            {{if $item_presta->_id && $item_presta_realise->_id}}
-                              style="color:
-                              {{if $item_presta->rank == $item_presta_realise->rank}}
-                                #9F8
-                              {{elseif $item_presta->rank > $item_presta_realise->rank}}
-                                #FD9
-                              {{else}}
-                                #F89
-                              {{/if}}"
-                            {{/if}}>
-                              {{if $item_presta_realise->_id}}
-                                <em>({{$item_presta_realise->nom}})</em>
-                              {{else}}
-                                <em>({{$item_presta->nom}})</em>
-                              {{/if}}
-                            </span>
+                          {{if $systeme_presta == "expert"}}
+                            {{if $prestation_id && $_sejour->_liaisons_for_prestation|@count}}
+                              {{foreach from=$_sejour->_liaisons_for_prestation item=liaison}}
+                                {{assign var=item_presta value=$liaison->_ref_item}}
+                                {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
+                                <strong title="{{tr}}CItemLiaison-item_souhait_id{{/tr}} {{$item_presta->nom}} {{if $item_presta_realise->_id}}versus {{tr}}CItemLiaison-item_realise_id{{/tr}} {{$item_presta_realise->nom}}{{/if}}"
+                                {{if $item_presta->_id && $item_presta_realise->_id}}
+                                  class="
+                                  {{if $item_presta->rank == $item_presta_realise->rank}}
+                                    item_egal
+                                  {{elseif $item_presta->rank > $item_presta_realise->rank}}
+                                    item_inferior
+                                  {{else}}
+                                    item_superior
+                                  {{/if}}"
+                                {{/if}}>
+                                  {{if $item_presta_realise->_id}}
+                                    {{$item_presta_realise->nom}}
+                                  {{else}}
+                                    {{$item_presta->nom}}
+                                  {{/if}}
+                                </strong>
+                              {{/foreach}}
+                            {{/if}}
                           {{else}}
                             <em style="color: #f00;" title="Chambre seule">
                               {{if $_sejour->chambre_seule}}CS{{else}}CD{{/if}}
                               {{if $_sejour->prestation_id}}- {{$_sejour->_ref_prestation->code}}{{/if}}
                             </em>
                           {{/if}}
+                          <span onmouseover="ObjectTooltip.createEx(this, '{{$praticien->_guid}}')">({{$praticien->_shortview}})</span>
+                          {{$_sejour->_motif_complet}}
                         </div>
                       {{/if}}
                     {{elseif !$_affectation->function_id}}

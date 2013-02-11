@@ -157,12 +157,19 @@ $where = array(
 );
 
 $listAff = $affectation->loadList($where);
+
+$sejours = CMbObject::massLoadFwdRef($listAff, "sejour_id");
+CMbObject::massLoadFwdRef($sejours, "patient_id");
+
 foreach ($listAff as &$_aff) {
   $_aff->loadView();
   $_aff->loadRefSejour();
   $_aff->_ref_sejour->checkDaysRelative($date);
-  $_aff->_ref_sejour->loadRefPatient()->loadRefDossierMedical()->loadRefsAntecedents();
+  $_aff->_ref_sejour->loadRefPatient()->loadRefDossierMedical(false);
 }
+
+$dossiers = CMbArray::pluck($listAff, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
+CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 
 $listNotAff = array(
   "Non placés" => array(),
