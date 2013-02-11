@@ -66,7 +66,7 @@ PlanSoins = {
     }       
   },
   
-  addAdministration: function(line_id, quantite, key_tab, object_class, dateTime, administrations, planification_id, multiple_adm) {
+  addAdministration: function(line_id, quantite, key_tab, object_class, dateTime, administrations, planification_id, multiple_adm, lock_hour) {
     /*
      Dans le cas des administrations multiples, si on clique sur la case principale, 
      on selectionne toutes les administrations et on lance la fenetre d'administrations multiples
@@ -103,6 +103,7 @@ PlanSoins = {
     url.addParam("mode_dossier", $V(document.mode_dossier_soin.mode_dossier));
     url.addParam("multiple_adm", multiple_adm);
     url.addParam("replanification", replanif);
+    url.addParam("lock_hour", lock_hour);
     url.popup(800,600,"Administration");
   },
   
