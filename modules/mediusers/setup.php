@@ -480,66 +480,68 @@ class CSetupmediusers extends CSetup {
               CHANGE `fax` `fax` VARCHAR (20)";
     $this->addQuery($query);
 
-     $this->makeRevision("0.40");
+    $this->makeRevision("0.40");
 
-     $query = "ALTER TABLE `users_mediboard`
-                 ADD `ean` VARCHAR (30),
-                 ADD `rcc` VARCHAR (30),
-                 ADD `adherent` VARCHAR (30);";
-     $this->addQuery($query);
+    $query = "ALTER TABLE `users_mediboard`
+               ADD `ean` VARCHAR (30),
+               ADD `rcc` VARCHAR (30),
+               ADD `adherent` VARCHAR (30);";
+    $this->addQuery($query);
 
-     $this->makeRevision("0.41");
+    $this->makeRevision("0.41");
 
-     $query = "ALTER TABLE `users_mediboard`
-                 ADD `mail_apicrypt` VARCHAR (50);";
-     $this->addQuery($query);
+    $query = "ALTER TABLE `users_mediboard`
+               ADD `mail_apicrypt` VARCHAR (50);";
+    $this->addQuery($query);
 
-     $this->makeRevision("0.42");
+    $this->makeRevision("0.42");
 
-     $query = "ALTER TABLE `users_mediboard`
-                 ADD `compta_deleguee` BOOL NOT NULL DEFAULT '0';";
-     $this->addQuery($query);
+    $query = "ALTER TABLE `users_mediboard`
+               ADD `compta_deleguee` BOOL NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
 
-     $this->makeRevision("0.43");
+    $this->makeRevision("0.43");
 
-     $query = "ALTER TABLE `users_mediboard`
-                 ADD `num_astreinte` VARCHAR (20)";
-     $this->addQuery($query);
+    $query = "ALTER TABLE `users_mediboard`
+               ADD `num_astreinte` VARCHAR (20)";
+    $this->addQuery($query);
 
-     $this->makeRevision("0.44");
+    $this->makeRevision("0.44");
 
-     $query = "ALTER TABLE `users_mediboard`
-                 DROP `num_astreinte`";
-     $this->addQuery($query);
-     
-     $this->makeRevision("0.45");
+    $query = "ALTER TABLE `users_mediboard`
+               DROP `num_astreinte`";
+    $this->addQuery($query);
 
-     $query = "ALTER TABLE `functions_mediboard`
-                 ADD `facturable` ENUM ('0','1') DEFAULT '1';";
-     $this->addQuery($query);
-     
-     $this->makeRevision("0.46");
-     
-     $query = "ALTER TABLE `users_mediboard`
-              ADD `initials` VARCHAR (255);";
-     $this->addQuery($query);
+    $this->makeRevision("0.45");
 
-     $this->makeRevision("0.47");
-     
-     $query = "ALTER TABLE `users_mediboard` 
-              ADD `debut_bvr` VARCHAR (10);";
-     $this->addQuery($query);
+    $query = "ALTER TABLE `functions_mediboard`
+               ADD `facturable` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
 
-     $this->makeRevision("0.48");
+    $this->makeRevision("0.46");
 
-     $query = "ALTER TABLE `medecin`
-                ADD `last_ldap_checkout` DATE;";
-                
-     $this->makeRevision("0.49");
+    $query = "ALTER TABLE `users_mediboard`
+            ADD `initials` VARCHAR (255);";
+    $this->addQuery($query);
 
-     $query = CSetupdPcompteRendu::renameTemplateFieldQuery("Praticien - Spécialité", "Praticien - Discipline");
-     $this->addQuery($query, true);
-        
-     $this->mod_version = "0.50";
+    $this->makeRevision("0.47");
+
+    $query = "ALTER TABLE `users_mediboard`
+            ADD `debut_bvr` VARCHAR (10);";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.48");
+
+    $this->makeRevision("0.49");
+
+    $query = CSetupdPcompteRendu::renameTemplateFieldQuery("Praticien - Spécialité", "Praticien - Discipline");
+    $this->addQuery($query, true);
+
+    $this->makeRevision("0.50");
+    $query = "ALTER TABLE `medecin`
+              ADD `last_ldap_checkout` DATE;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.51";
   }
 }
