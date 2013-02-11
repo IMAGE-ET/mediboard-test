@@ -160,10 +160,12 @@ else {
   }
 }
 
+CStoredObject::massCountBackRefs($patients, "notes");
 foreach ($patients as $_patient) {
   $_patient->loadView();
 }
 
+CStoredObject::massCountBackRefs($patientsSoundex, "notes");
 foreach ($patientsSoundex as $_patient) {
   $_patient->loadView();
 }

@@ -64,15 +64,6 @@ class CNote extends CMbMetaObject {
       $this->_ref_object->getPerm($perm) && $this->_ref_user->getPerm($perm);
   }
   
-  static function loadNotesForObject($object, $perm = PERM_READ) {
-    $where = array(
-      "object_class" => "= '$object->_class'",
-      "object_id"    => "= '$object->_id'",
-    );
-    $order = "degre DESC, date DESC";
-    $note = new CNote();
-    return $note->loadListWithPerms($perm, $where, $order);
-  }
 }
 
 ?>
