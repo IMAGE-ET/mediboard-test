@@ -41,6 +41,7 @@ foreach ($profiles as $profile => $_user_id) {
   $_user->load($_user_id);
   $users[$profile] = $_user;
   $list = array();
+  $codes_stats = array();
 
   if (!$tag_id) {
     // Statistiques
