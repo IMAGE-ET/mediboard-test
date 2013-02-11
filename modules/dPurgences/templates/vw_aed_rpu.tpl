@@ -32,6 +32,33 @@
   {{mb_script module=compteRendu script=modele_selector}}
   {{mb_script module=compteRendu script=document}}
 
+  {{if $conf.ref_pays == 2}}
+  <script>
+    Main.add(function () {
+        var tab_sejour = Control.Tabs.create('tab-rpu');
+    });
+    
+    </script>
+    <ul id="tab-rpu" class="control_tabs">
+      <li><a href="#admission">Echelle de tri</a></li>
+      <li><a href="#dossier_infirmier">Dossier infirmier</a></li>
+    </ul>
+    
+    <hr class="control_tabs" />
+    
+    <div id="admission" style="display:none;">
+      {{mb_include module=dPurgences template=vw_aed_rpu2}}
+    </div>
+    {{if $rpu->_id}}
+      <div id="dossier_infirmier" style="display:none;">
+    {{else}}
+      <div id="dossier_infirmier" style="display:none;">
+        <div class="big-info">Veuillez renseigner le dossier infirmier</div>
+      </div>
+    {{/if}}
+  {{/if}}
+  {{if $conf.ref_pays == 1 || $rpu->_id}}
+
   <script type="text/javascript">
   
   ContraintesRPU.contraintesProvenance = {{$contrainteProvenance|@json}};
@@ -71,15 +98,6 @@
   }
   
   var constantesMedicalesDrawn = false;
-  function refreshConstantesHack(sejour_id) {
-    (function(){
-      if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
-        refreshConstantesMedicales('CSejour-'+sejour_id);
-        constantesMedicalesDrawn = true;
-      }
-    }).delay(0.5);
-  }
-
   function refreshConstantesHack(sejour_id) {
     (function(){
       if (constantesMedicalesDrawn == false && $('constantes').visible() && sejour_id) {
@@ -643,9 +661,9 @@
       <hr class="control_tabs" />
       
       <div id="antecedents">
-        {{assign var="current_m" value="dPurgences"}}
+        {{assign var="current_m"  value="dPurgences"}}
         {{assign var="_is_anesth" value="0"}}
-        {{assign var=sejour_id value=""}}
+        {{assign var=sejour_id    value=""}}
         
         {{mb_include module=cabinet template=inc_ant_consult chir_id=$app->user_id}}
       </div>
@@ -698,6 +716,10 @@
     ContraintesRPU.updateProvenance("{{$sejour->mode_entree}}");
   </script>
   {{/if}}
+  
+  <div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto; display: none;"></div>
+  {{/if}}
+  {{if $conf.ref_pays == 2}}
+    </div>
+  {{/if}}
 {{/if}}
-
-<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto; display: none;"></div>  
