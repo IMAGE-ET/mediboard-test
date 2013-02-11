@@ -251,7 +251,6 @@ foreach ($affectations as $_affectation) {
 }
 
 $dossiers = CMbArray::pluck($affectations, "_ref_sejour", "_ref_patient", "_ref_dossier_medical");
-mbLog($dossiers);
 CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 
 foreach ($lits as $_lit) {
