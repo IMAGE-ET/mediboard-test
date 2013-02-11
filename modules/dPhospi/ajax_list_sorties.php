@@ -145,7 +145,7 @@ if ($type == "presents") {
       }
       if ($show_hour_anesth) {
         $op->loadRefPlageOp();
-        //$op->_ref_anesth->loadRefFunction();
+        $op->_ref_anesth->loadRefFunction();
       }
     }
     
@@ -164,7 +164,7 @@ if ($type == "presents") {
       }
       if ($show_hour_anesth) {
         $op->loadRefPlageOp();
-        //$op->_ref_anesth->loadRefFunction();
+        $op->_ref_anesth->loadRefFunction();
       }
     }
   }
