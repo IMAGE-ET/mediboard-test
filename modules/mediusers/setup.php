@@ -538,10 +538,8 @@ class CSetupmediusers extends CSetup {
      $this->makeRevision("0.49");
 
      $query = CSetupdPcompteRendu::renameTemplateFieldQuery("Praticien - Spécialité", "Praticien - Discipline");
-     $this->addQuery($query);
+     $this->addQuery($query, true);
         
      $this->mod_version = "0.50";
   }
 }
-
-?>
