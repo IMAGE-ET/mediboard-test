@@ -88,10 +88,12 @@ foreach ($patients as $patient_id => $patient) {
   if (count($patient->_ref_sejours) > 1) {
     $guess["mergeable"] = true;
   }
-  
+
+  $where = array();
+  $where["annulee"] = " = '0'";
   // Multiple Interventions
   foreach ($patient->_ref_sejours as $_sejour) {
-    $operations = $_sejour->loadRefsOperations();
+    $operations = $_sejour->loadRefsOperations($where);
     foreach ($operations as $_operation) {
       $_operation->loadView();
     }
