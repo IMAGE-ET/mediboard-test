@@ -65,6 +65,11 @@
         <input type="hidden" name="duree_uscpo" value="{{$duree_uscpo}}" onchange="this.form.onsubmit();"/>
         Durée uscpo
       </label>
+      <label>
+        <input type="checkbox" name="isolement_view" {{if $isolement}}checked="checked"{{/if}} onchange="$V(this.form.isolement, this.checked ? 1 : 0);"/>
+        <input type="hidden" name="isolement" value="{{$isolement}}" onchange="this.form.onsubmit();"/>
+        Isolement
+      </label>
       {{if $items_prestation|@count}}
         &mdash;
         Niveau de prestation :

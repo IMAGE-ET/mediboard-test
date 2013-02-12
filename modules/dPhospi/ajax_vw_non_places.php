@@ -16,6 +16,7 @@ $date            = CValue::getOrSession("date");
 $granularite     = CValue::getOrSession("granularite");
 $readonly        = CValue::getOrSession("readonly", 0);
 $duree_uscpo     = CValue::getOrSession("duree_uscpo", "0");
+$isolement     = CValue::getOrSession("isolement", "0");
 $prestation_id   = CValue::getOrSession("prestation_id", "");
 $item_prestation_id = CValue::getOrSession("item_prestation_id");
 
@@ -148,6 +149,10 @@ if ($duree_uscpo) {
   $where["duree_uscpo"] = "> 0";
 }
 
+if ($isolement) {
+  $where["isolement"] = "= '1'";
+}
+
 if ($item_prestation_id && $prestation_id) {
   $ljoin["item_liaison"] = "sejour.sejour_id = item_liaison.sejour_id";
   $where["item_liaison.item_souhait_id"] = " = '$item_prestation_id'";
@@ -232,11 +237,11 @@ foreach ($sejours as $_key => $_sejour) {
     }
   }
   
-  if (!$_sejour->service_id) {
-    @$sejours_non_affectes["np"][] = $_sejour;
+  if ($_sejour->service_id) {
+    @$sejours_non_affectes[$_sejour->service_id][] = $_sejour;
   }
   else {
-    @$sejours_non_affectes[$_sejour->service_id][] = $_sejour;
+    @$sejours_non_affectes["np"][] = $_sejour;
   }
 }
 
@@ -256,17 +261,22 @@ $where = array();
 $ljoin = array();
 $where["lit_id"] = "IS NULL";
 if (is_array($services_ids) && count($services_ids)) {
-  $where["service_id"] = CSQLDataSource::prepareIn($services_ids);
+  $where["affectation.service_id"] = CSQLDataSource::prepareIn($services_ids);
 }
-$where["entree"] = "<= '$date_max'";
-$where["sortie"] = ">= '$date_min'";
+$where["affectation.entree"] = "<= '$date_max'";
+$where["affectation.sortie"] = ">= '$date_min'";
 
 if ($duree_uscpo) {
   $ljoin["operations"] = "operations.sejour_id = affectation.sejour_id";
   $where["duree_uscpo"] = "> 0";
 }
 
-$affectation = new CAffectation;
+if ($isolement) {
+  $ljoin["sejour"] = "sejour.sejour_id = affectation.sejour_id";
+  $where["isolement"] = "= '1'";
+}
+
+$affectation = new CAffectation();
 
 $affectations = $affectation->loadList($where, "entree ASC", null, null, $ljoin);
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
@@ -375,6 +385,7 @@ $smarty->assign("days"    , $days);
 $smarty->assign("datetimes", $datetimes);
 $smarty->assign("readonly", $readonly);
 $smarty->assign("duree_uscpo", $duree_uscpo);
+$smarty->assign("isolement", $isolement);
 $smarty->assign("current", $current);
 $smarty->assign("items_prestation", $items_prestation);
 $smarty->assign("item_prestation_id", $item_prestation_id);
