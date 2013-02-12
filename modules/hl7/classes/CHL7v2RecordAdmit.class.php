@@ -1546,13 +1546,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // Combinaison du ZFM
       // ZFM.2 + ZFM.4
       case 'ZFM':
-        $newVenue->mode_sortie = $discharge_disposition[0];        
+        $newVenue->provenance = $discharge_disposition[0];
         if (strlen($discharge_disposition) == 2) {
           $newVenue->destination = $discharge_disposition[1];
         }
-        
+
         break;
-    } 
+    }
   }
   
   function getDischargedToLocation(DOMNode $node, CSejour $newVenue) {
