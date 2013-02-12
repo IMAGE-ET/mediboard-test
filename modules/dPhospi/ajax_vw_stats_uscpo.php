@@ -13,8 +13,18 @@
 
 CCanDo::checkRead();
 
-$date_min   = CValue::getOrSession("date_min", mbDate("-1 week"));
-$date_max   = CValue::getOrSession("date_max", mbDate());
+$default_week = CAppUI::conf("dPplanningOp COperation default_week_stat_uscpo");
+
+switch ($default_week) {
+  case "last":
+    $date_min   = CValue::getOrSession("date_min", mbDate("-1 week"));
+    $date_max   = CValue::getOrSession("date_max", mbDate());
+    break;
+  case "next":
+    $date_min   = CValue::getOrSession("date_min", mbDate());
+    $date_max   = CValue::getOrSession("date_max", mbDate("+1 week"));
+}
+
 $service_id = CValue::getOrSession("service_id", "");
  
 if ($date_min > $date_max) {

@@ -13,6 +13,7 @@
     {{mb_include module=system template=inc_config_bool var=verif_cote}}
     {{mb_include module=system template=inc_config_bool var=delete_only_admin}}
     {{mb_include module=system template=inc_config_enum var=show_duree_uscpo values="0|1|2"}}
+    {{mb_include module=system template=inc_config_enum var=default_week_stat_uscpo values="last|next"}}
     {{mb_include module=system template=inc_config_bool var=save_rank_annulee_validee}}
     {{mb_include module=system template=inc_config_bool var=cancel_only_for_resp_bloc}}
     {{mb_include module=system template=inc_config_enum var=duree_preop_adulte  values=$minutes skip_locales=true}}
