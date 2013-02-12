@@ -58,7 +58,8 @@
     </th>
     <th>
       <div class="small-info">
-        La position dans le cluster doit être définie dans le fichier <code>config_overload.php</code>.<br />
+        La position dans le cluster doit être définie dans le fichier <code>config_overload.php</code>
+        ('dPsante400 CIncrementer cluster_position').<br />
         Elle est définie à <strong>{{$conf.dPsante400.CIncrementer.cluster_position}}</strong> sur ce serveur.
       </div>
     </th>
