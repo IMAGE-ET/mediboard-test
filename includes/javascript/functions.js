@@ -8,6 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+/**
+ * Global page load event
+ */
 document.observe('dom:loaded', function(){
   try {
     // Fix for IE9 in IE8 mode
@@ -36,8 +39,19 @@ document.observe('dom:loaded', function(){
   }
 });
 
+/**
+ * Extact advanced browser info
+ *
+ * @type {Object}
+ */
 var UAInfo = {
   string: "",
+
+  /**
+   * Build the info string
+   *
+   * @return {String} The string with all the info
+   */
   buildString: function(){
     if (UAInfo.string) return UAInfo.string;
     
@@ -80,15 +94,31 @@ var UAInfo = {
     
     return UAInfo.string;
   },
+
+  /**
+   * Append a value to the string
+   *
+   * @param {String} label  The label to append
+   * @param {String} value  The value
+   * @param {String} indent Indentation size
+   */
   append: function(label, value, indent) {
     var string = ((indent > 0) ? (new Array(indent*8).join(" ")) : "");
     UAInfo.string += string + String.fromCharCode(8226)+" "+label+" : \t"+value+"\n";
   },
+
+  /**
+   * Display the information window
+   */
   show: function(){
     alert(UAInfo.buildString());
   }
 };
 
+/**
+ * Observe Alt+y to show general information about
+ * the browser, its plugins and information about the user
+ */
 document.observe("keydown", function(e){
   var key = Event.key(e);
   
@@ -98,17 +128,32 @@ document.observe("keydown", function(e){
   }
 });
 
+/**
+ * Alerts the user about pending POST requests
+ * when he tries to reload or quit the page
+ */
 window.onunload = function () {
-  if (Url.activeRequests.post > 0)
+  if (Url.activeRequests.post > 0) {
     alert($T("WaitingForAjaxRequestReturn"));
+  }
 };
 
+/**
+ * Handles the "loading" messages
+ *
+ * @type {Object}
+ */
 var WaitingMessage = {
+  /**
+   * Init function, which puts observers on observed forms to prevent
+   * the user from quiting the page if he didn't submit forms
+   */
   init: function() {
     window.onbeforeunload = function () {
       if(FormObserver.checkChanges()) {
         WaitingMessage.show();
-      } else {
+      }
+      else {
         if (FormObserver.onChanged) {
           FormObserver.onChanged();
         }
@@ -116,7 +161,10 @@ var WaitingMessage = {
       }
     };
   },
-  
+
+  /**
+   * Shows the waiting message between pages
+   */
   show: function() {
     var doc  = document.documentElement,
         mask = $('waitingMsgMask'),
@@ -144,7 +192,12 @@ var WaitingMessage = {
       position: "fixed"
     }).show();
   },
-  
+
+  /**
+   * Cover an element while it's refreshing via an Ajax request
+   *
+   * @param {HTMLElement} element The element to cover
+   */
   cover: function(element) {
     // don't cover hidden elements in IE
     if (Prototype.Browser.IE && document.documentMode < 9 && (element.style && element.style.display === "none")) {
@@ -230,9 +283,19 @@ function detectSkypeExtension(){
   return $$("#injection_graph_func, #_skypeplugin_dropdownmenu_css, #_injection_graph_nh_css, #_nameHighlight_injection").length > 0;
 }
 
+/**
+ * Handles different status changes of Ajax requests
+ *
+ * @type {Object}
+ */
 var AjaxResponse = {
+  /**
+   * Happens when the user was disconnected before the Ajax request
+   */
   onDisconnected: function() {
-    if (window.children['login'] && window.children['login'].closed) window.children['login'] = null;
+    if (window.children['login'] && window.children['login'].closed) {
+      window.children['login'] = null;
+    }
 
     if (!window.children['login']) {
       var url = new Url;
@@ -241,10 +304,18 @@ var AjaxResponse = {
       url.pop(650, 400, "login");
     }
   },
-  
+
+  /**
+   * Happens for each successful Ajax request
+   *
+   * @param {Object} getData     The GET data
+   * @param {Object} performance The performance data
+   */
   onLoaded: function(getData, performance) {
     try {
-      if (Prototype.Browser.IE) return;
+      if (Prototype.Browser.IE) {
+        return;
+      }
       
       // If Firebug or Chrome console
       if (!("_mediboard" in window.console)) {
@@ -891,6 +962,19 @@ window.getInnerDimensions = function() {
 /** DOM element creator for Prototype by Fabien Ménager
  *  Inspired from Michael Geary 
  *  http://mg.to/2006/02/27/easy-dom-creation-for-jquery-and-prototype
+ *
+ *  @property a
+ *  @property br
+ *  @property div
+ *  @property fieldset
+ *  @property form
+ *  @property h1
+ *  @property h2
+ *  @property h3
+ *  @property iframe
+ *  @property img
+ *  @property input
+ *  @property ul
  **/
 var DOM = {
   defineTag: function (tag) {

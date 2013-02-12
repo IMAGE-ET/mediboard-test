@@ -527,11 +527,27 @@ Element.addMethods({
         && ((scroll_left_a >= left_left && scroll_left_a <= left_right) ||
             (scroll_left_b >= left_left && scroll_left_b <= left_right));
   },
-  
+
+  /**
+   * Switch the display status of the element with a condition
+   *
+   * @param {HTMLElement} element   The element
+   * @param {Boolean}     condition The condition
+   *
+   * @return {Boolean}
+   */
   setVisible: function(element, condition) {
     return element[condition ? "show" : "hide"]();
   },
-  
+
+  /**
+   * Switch the visibility of the element with a condition
+   *
+   * @param {HTMLElement} element   The element
+   * @param {Boolean}     condition The condition
+   *
+   * @return {Boolean}
+   */
   setVisibility: function(element, condition) {
     return element.setStyle( {
       visibility: condition ? "visible" : "hidden"

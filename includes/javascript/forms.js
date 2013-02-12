@@ -311,10 +311,6 @@ function prepareForm(oForm) {
     if (sTagName === "INPUT" && !oElement.getAttribute("type")) {
       oElement.type = "text";
     }
-
-    if (oElement.className == "") {
-      continue; // TODO : this speeds up everything
-    }
     
     // The "size" attribute is not taken into account with type=number
     if (sType === "number") {
@@ -381,6 +377,10 @@ function prepareForm(oForm) {
       }
       else oElement.focus();
       bGiveFormFocus = false;
+    }
+
+    if (oElement.className == "") {
+      continue; // TODO : this speeds up everything
     }
     
     var props = oElement.getProperties(),
