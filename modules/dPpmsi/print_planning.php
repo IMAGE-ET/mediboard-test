@@ -11,7 +11,7 @@ CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
 $now       = mbDate();
-$filter = new COperation;
+$filter = new COperation();
 $filter->salle_id      = CValue::get("salle_id");
 $filter->_date_min     = CValue::get("_date_min", $now);
 $filter->_date_max     = CValue::get("_date_max", $now);
@@ -23,16 +23,16 @@ $filter->_specialite   = CValue::get("_specialite");
 $filter->_codes_ccam   = CValue::get("_codes_ccam");
 $filter->_ccam_libelle = CValue::get("_ccam_libelle", 1);
 
-$filterSejour = new CSejour;
+$filterSejour = new CSejour();
 $filterSejour->type = CValue::get("type");
-
+$filterSejour->ald = CValue::get("ald");
 
 $group = CGroups::loadCurrent();
 
 //On sort les plages opératoires
 //  Chir - Salle - Horaires
 
-$plagesop = new CPlageOp;
+$plagesop = new CPlageOp();
 
 $where = array();
 $where["date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
@@ -69,6 +69,30 @@ foreach ($plagesop as $_plage) {
   $ljoin = array();
   $tempOp = new COperation();
 
+  // Interventions avec ou sans actes
+  if ($filter->_cotation) {
+    $ljoin["acte_ccam"] = "operations.operation_id = acte_ccam.object_id AND acte_ccam.object_class = 'COperation'";
+    switch ($filter->_cotation) {
+      case "ok":
+        $where["acte_id"] = "IS NOT NULL";
+        break;
+      case "ko":
+        $where["acte_id"] = "IS NULL";
+    }
+  }
+
+  if ($filterSejour->type || $filterSejour->ald != "") {
+    $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
+
+    if ($filterSejour->type) {
+      $where["type"] = "= '$filterSejour->type'";
+    }
+
+    if ($filterSejour->ald != "") {
+      $where["ald"] = "= '$filterSejour->ald'";
+    }
+  }
+
   // Cas des plages normales
   if ($_plage->_id) {
 
@@ -86,18 +110,6 @@ foreach ($plagesop as $_plage) {
         break;
       case "ko" :
         $where["rank"] = "= '0'";
-    }
-
-    // Interventions avec ou sans actes
-    if ($filter->_cotation) {
-      $ljoin["acte_ccam"] = "operations.operation_id = acte_ccam.object_id AND acte_ccam.object_class = 'COperation'";
-      switch ($filter->_cotation) {
-        case "ok":
-          $where["acte_id"] = "IS NOT NULL";
-          break;
-        case "ko":
-          $where["acte_id"] = "IS NULL";
-      }
     }
 
     if ($filter->_codes_ccam) {
@@ -120,18 +132,6 @@ foreach ($plagesop as $_plage) {
     $_plage->_ref_operations = array_merge($listOperations, $listUrgences);
   }
   else {
-    // Interventions avec ou sans actes
-    if ($filter->_cotation) {
-      $ljoin["acte_ccam"] = "operations.operation_id = acte_ccam.object_id AND acte_ccam.object_class = 'COperation'";
-      switch ($filter->_cotation) {
-        case "ok":
-          $where["acte_id"] = "IS NOT NULL";
-          break;
-        case "ko":
-          $where["acte_id"] = "IS NULL";
-      }
-    }
-
     // Cas des urgences restantes
     $ljoin["sejour"] = "sejour.sejour_id = operations.sejour_id";
     $where["sejour.group_id"] = "= '$group->_id'";
@@ -148,11 +148,6 @@ foreach ($plagesop as $_plage) {
 
   foreach ($_plage->_ref_operations as $_operation) {
     $sejour = $_operation->loadRefSejour();
-    if ($filterSejour->type && $filterSejour->type != $sejour->type) {
-      unset($_plage->_ref_operations[$_operation->_id]);
-      continue;
-    }
-
     $_operation->loadRefPraticien()->loadRefFunction();
     $_operation->loadExtCodesCCAM();
     foreach ($_operation->loadRefsActesCCAM() as $_acte) {

@@ -13,7 +13,7 @@ $user = CUser::get();
 
 $now = mbDate();
 
-$filter = new COperation;
+$filter = new COperation();
 $filter->salle_id      = CValue::getOrSession("salle_id");
 $filter->_date_min     = CValue::get("_date_min", $now);
 $filter->_date_max     = CValue::get("_date_max", $now);
@@ -25,9 +25,9 @@ $filter->_specialite   = CValue::getOrSession("_specialite");
 $filter->_codes_ccam   = CValue::getOrSession("_codes_ccam");
 $filter->_ccam_libelle = CValue::getOrSession("_ccam_libelle");
 
-$filterSejour = new CSejour;
+$filterSejour = new CSejour();
 $filterSejour->type = CValue::getOrSession("type");
-
+$filterSejour->ald  = CValue::getOrSession("ald");
 $yesterday  = mbDate("-1 day", $now);
 
 $mediuser = new CMediusers();
@@ -52,5 +52,3 @@ $smarty->assign("listSpec"     , $listSpec);
 $smarty->assign("listBlocs"    , $listBlocs);
 
 $smarty->display("form_print_planning.tpl");
-
-?>

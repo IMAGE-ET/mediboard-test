@@ -4,40 +4,27 @@
 
 <script type="text/javascript">
 function checkPrint(form) {
-  if (!checkForm(form)) {
-    return false;
+  if (checkForm(form)) {
+    popPrint(form);
   }
-  
-  popPrint(form);
 }
 
   
 function popPrint(form) {
   var url = new Url('pmsi', 'print_planning');
-  url.addElement(form._date_min);
-  url.addElement(form._date_max);
-  url.addElement(form._codes_ccam);
-  url.addElement(form._prat_id);
-  url.addElement(form._specialite);
-  url.addElement(form.salle_id);
-  url.addElement(form.type);
-  url.addRadio(form._plage);
-  url.addRadio(form._ranking);
-  url.addRadio(form._cotation);
-  url.addRadio(form._ccam_libelle);
+  url.addFormData(form);
   url.popup(900, 550, 'Planning');
 }
 
 function changeDate(input, sMin, sMax){
   var form = input.form;
-  form._date_min.value = sMin;
-  form._date_max.value = sMax;
-  form._date_min_da.value = Date.fromDATE(sMin).toLocaleDate();
-  form._date_max_da.value = Date.fromDATE(sMax).toLocaleDate();  
+  $V(form._date_min, sMin);
+  $V(form._date_max, sMax);
+  $V(form._date_min_da, Date.fromDATE(sMin).toLocaleDate());
+  $V(form._date_max_da, Date.fromDATE(sMax).toLocaleDate());
 }
 
-function changeDateCal(input) {
-  var form = input.form;
+function changeDateCal(form) {
   form.select_days[0].checked = false;
   form.select_days[1].checked = false;
 }
@@ -67,7 +54,7 @@ function changeDateCal(input) {
         </tr>
         <tr>
            <th>{{mb_label object=$filter field="_date_max"}}</th>
-           <td>{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal(this)" register=true}} </td>
+           <td>{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal(form)" register=true}} </td>
         </tr>
       </table>
 
@@ -133,7 +120,11 @@ function changeDateCal(input) {
           <th>{{mb_label object=$filterSejour field="type"}}</th>
           <td>{{mb_field object=$filterSejour field="type" canNull=true emptyLabel="All"}}</td>
         </tr>
-        
+        <tr>
+          <th>{{mb_label object=$filterSejour field="ald"}}</th>
+          <td>{{mb_field object=$filterSejour field="ald" typeEnum=select emptyLabel="All"}}</td>
+        </tr>
+
         <tr>
           <th>{{mb_label object=$filter field="_codes_ccam"}}</th>
           <td><input type="text" name="_codes_ccam" size="10" value="" />
