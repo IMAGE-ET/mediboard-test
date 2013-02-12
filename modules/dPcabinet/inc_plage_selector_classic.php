@@ -1,11 +1,13 @@
-<?php /* $Id: plage_selector.php 13572 2011-10-24 07:04:18Z flaviencrochard $ */
-
+<?php 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision: 13572 $
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     Romain Ollivier <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 $ds = CSQLDataSource::get("std");
 
@@ -22,13 +24,15 @@ $where = array();
 
 // Praticiens sélectionnés
 $listPrat = new CMediusers;
-if(CAppUI::pref("pratOnlyForConsult", 1)) {
+if (CAppUI::pref("pratOnlyForConsult", 1)) {
   $listPrat = $listPrat->loadPraticiens(PERM_EDIT, $function_id, null, true);
-} else {
+}
+else {
   $listPrat = $listPrat->loadProfessionnelDeSante(PERM_EDIT, $function_id, null, true);
 }
 
-$where["chir_id"] = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
+$chir_sel = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
+$where[] = "chir_id $chir_sel OR remplacant_id $chir_sel OR pour_compte_id $chir_sel";
 
 // Filtres
 if ($hour) {

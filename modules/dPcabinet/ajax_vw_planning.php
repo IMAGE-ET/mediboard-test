@@ -15,9 +15,9 @@ $today = mbDate();
 // Liste des consultations a avancer si desistement
 $where = array(
   "plageconsult.date" => " > '$today'",
-  "plageconsult.chir_id" => "= '$chirSel'",
   "consultation.si_desistement" => "= '1'",
 );
+$where[] = "plageconsult.chir_id = '$chirSel' OR plageconsult.remplacant_id = '$chirSel' OR plageconsult.pour_compte_id = '$chirSel'";
 $ljoin = array(
   "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
 );
@@ -40,7 +40,7 @@ $listPlage = new CPlageconsult();
 
 $where = array();
 $where["date"] = "= '$dateArr'";
-$where["chir_id"] = " = '$chirSel'";
+$where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel' OR pour_compte_id = '$chirSel'";
 
 if (!$listPlage->countList($where)) {
   $nbDays--;
@@ -82,7 +82,7 @@ for ($i = 0; $i < $nbDays; $i++) {
   
   CMbObject::massLoadFwdRef($plages, "chir_id");
   
-  foreach($plages as $_plage){
+  foreach ($plages as $_plage) {
     $_plage->loadRefsFwd(1);
     $_plage->loadRefsConsultations(false);
     
@@ -92,31 +92,44 @@ for ($i = 0; $i < $nbDays; $i++) {
     
     $range->type = "plageconsult";
     $planning->addRange($range);
+    $color = "#cfc";
+    if ($_plage->remplacant_id && $_plage->remplacant_id != $chirSel) {
+      $color = "#FAA";
+    }
+    if ($_plage->remplacant_id && $_plage->remplacant_id == $chirSel) {
+      $color = "#FDA";
+    }
     
-    foreach($_plage->_ref_consultations as $_consult) {
+    foreach ($_plage->_ref_consultations as $_consult) {
       $debute = "$jour $_consult->heure";
-      if($_consult->patient_id) {
+      if ($_consult->patient_id) {
         $_consult->loadRefPatient();
-        $color = "#fee";
-        if ($_consult->premiere) {
-          $color = "#faa";
-        }
-        if ($_consult->derniere) {
-          $color = "#faf";
+        if ($color = "#cfc") {
+          $color = "#fee";
+          if ($_consult->premiere) {
+            $color = "#faa";
+          }
+          if ($_consult->derniere) {
+            $color = "#faf";
+          }
         }
         $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view . "\n" . $_consult->motif, $color, true, "droppable", $_consult->_guid);
-      } else {
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->motif ? $_consult->motif : "[PAUSE]", "#ffa", true, null, null);
+      }
+      else {
+        if ($color = "#cfc") {
+           $color = "#faa";
+        }
+        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->motif ? $_consult->motif : "[PAUSE]", $color, true, null, null);
       }
       $event->type        = "rdvfull";
       $event->plage["id"] = $_plage->_id;
       $event->plage["consult_id"] = $_consult->_id;
-      if($_plage->locked == 1) {
+      if ($_plage->locked == 1) {
         $event->disabled = true;
       }
       
       $_consult->loadRefCategorie();
-      if($_consult->categorie_id) {
+      if ($_consult->categorie_id) {
         $event->icon = "./modules/dPcabinet/images/categories/".$_consult->_ref_categorie->nom_icone;
         $event->icon_desc = CMbString::htmlEntities($_consult->_ref_categorie->nom_categorie);
       }
@@ -136,13 +149,13 @@ for ($i = 0; $i < $nbDays; $i++) {
       $planning->addEvent($event);
     }
     $utilisation = $_plage->getUtilisation();
-    foreach($utilisation as $_timing => $_nb) {
-      if(!$_nb) {
+    foreach ($utilisation as $_timing => $_nb) {
+      if (!$_nb) {
         $debute = "$jour $_timing";
-        $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", "#cfc", true, "droppable", null);
+        $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", $color, true, "droppable", null);
         $event->type        = "rdvfree";
         $event->plage["id"] = $_plage->_id;
-        if($_plage->locked == 1) {
+        if ($_plage->locked == 1) {
           $event->disabled = true;
         }
         $event->plage["color"] = $_plage->color;

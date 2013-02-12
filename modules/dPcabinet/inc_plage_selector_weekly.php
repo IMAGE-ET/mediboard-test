@@ -1,11 +1,13 @@
-<?php /* $Id: $ */
-
+<?php 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision: $
-* @author SARL Openxtrem
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL Openxtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
 
@@ -13,7 +15,7 @@ global $period, $periods, $listPraticiens, $chir_id, $function_id, $date, $ndate
 
 $plageconsult_id = 0;
 
-if(!$chir_id) {
+if (!$chir_id) {
   $chir_id = reset($listPraticiens);
 }
 
@@ -32,13 +34,14 @@ $bank_holidays = array_merge(mbBankHolidays($debut), mbBankHolidays($fin));
 $nbDays = 5;
 $plage  = new CPlageconsult();
 $where  = array();
-$where["chir_id"] = " = '$chir_id'";
+$where[] = "chir_id = '$chir_id' OR remplacant_id = '$chir_id' OR pour_compte_id = '$chir_id'";
 $where["date"] = "= '$fin'";
-if($plage->countList($where)) {
+if ($plage->countList($where)) {
   $nbDays = 7;
-} else {
+}
+else {
   $where["date"] = "= '".mbDate("-1 day", $fin)."'";
-  if($plage->countList($where)) {
+  if ($plage->countList($where)) {
     $nbDays = 6;
   }
 }
@@ -58,7 +61,7 @@ for ($i = 0; $i < $nbDays; $i++) {
   
   CMbObject::massLoadFwdRef($plages, "chir_id");
   
-  foreach($plages as $_plage){
+  foreach ($plages as $_plage) {
     $_plage->loadRefsFwd(1);
     $_plage->loadRefsConsultations(false);
     
@@ -66,24 +69,39 @@ for ($i = 0; $i < $nbDays; $i++) {
     $range->color = $_plage->color;
     $range->type = "plageconsult";
     $planning->addRange($range);
+  
+    $color = "#cfc";
+    if ($_plage->remplacant_id && $_plage->remplacant_id != $chir_id) {
+      $color = "#FAA";
+    }
+    if ($_plage->remplacant_id && $_plage->remplacant_id == $chir_id) {
+      $color = "#FDA";
+    }
     
-    foreach($_plage->_ref_consultations as $_consult) {
+    foreach ($_plage->_ref_consultations as $_consult) {
       $debute = "$jour $_consult->heure";
-      if($_consult->patient_id) {
+      if ($_consult->patient_id) {
         $_consult->loadRefPatient();
-        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, "#fee", true, null, null);
-      } else {
+        if ($color == "cfc") {
+          $color = "#fee";
+        }
+        $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, $_consult->_ref_patient->_view, $color, true, null, null);
+      }
+      else {
+        if ($color == "cfc") {
+          $color = "#ffa";
+        }
         $event = new CPlanningEvent($_consult->_guid, $debute, $_consult->duree * $_plage->_freq, "[PAUSE]", "#ffa", true, null, null);
       }
       $event->type        = "rdvfull";
       $event->plage["id"] = $_plage->_id;
       
-      if($_plage->locked == 1) {
+      if ($_plage->locked == 1) {
         $event->disabled = true;
       }
       
       $_consult->loadRefCategorie();
-      if($_consult->categorie_id) {
+      if ($_consult->categorie_id) {
         $event->icon = "./modules/dPcabinet/images/categories/".$_consult->_ref_categorie->nom_icone;
         $event->icon_desc = $_consult->_ref_categorie->nom_categorie;
       }
@@ -92,13 +110,13 @@ for ($i = 0; $i < $nbDays; $i++) {
       $planning->addEvent($event);
     }
     $utilisation = $_plage->getUtilisation();
-    foreach($utilisation as $_timing => $_nb) {
-      if(!$_nb) {
+    foreach ($utilisation as $_timing => $_nb) {
+      if (!$_nb) {
         $debute = "$jour $_timing";
-        $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", "#cfc", true, null, null);
+        $event = new CPlanningEvent($debute, $debute, $_plage->_freq, "", $color, true, null, null);
         $event->type        = "rdvfree";
         $event->plage["id"] = $_plage->_id;
-        if($_plage->locked == 1) {
+        if ($_plage->locked == 1) {
           $event->disabled = true;
         }
         $event->plage["color"] = $_plage->color;

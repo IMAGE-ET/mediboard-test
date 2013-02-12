@@ -25,9 +25,9 @@ $chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
 $now = mbDate();
 $where = array(
   "plageconsult.date" => " > '$now'",
-  "plageconsult.chir_id" => "= '$chirSel'",
   "consultation.si_desistement" => "= '1'",
 );
+$where[] = "plageconsult.chir_id = '$chirSel' OR plageconsult.remplacant_id = '$chirSel' OR plageconsult.pour_compte_id = '$chirSel'";
 $ljoin = array(
   "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
 );
@@ -53,10 +53,7 @@ $debut = mbDate("+1 day", $debut);
 $prev = mbDate("-1 week", $debut);
 $next = mbDate("+1 week", $debut);
 
-
-
 $smarty = new CSmartyDP();
-
 
 $smarty->assign("listChirs", $listChir);
 $smarty->assign("today"    , $today);
