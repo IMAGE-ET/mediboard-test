@@ -347,8 +347,9 @@ checkAnesth = function(oField){
         
         <tr>
           <td>
-            <form name="selService" action="?m={{$m}}" method="get">
+            <form name="selService" action="?" method="get">
               <input type="hidden" name="m" value="{{$m}}" />
+              <input type="hidden" name="tab" value="{{$tab}}" />
               <input type="hidden" name="sejour_id" value="" />
              
               <table class="main form">

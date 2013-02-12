@@ -136,7 +136,7 @@ Main.add(function () {
 	      {{/foreach}}
 	    </select>
 	    le
-	    {{mb_field object=$filter_line field="debut" register=true form=selService onchange="this.form.submit();"}}
+	    {{mb_field object=$filter_line field="debut" register=true form=selService onchange="this.form.submit();" class="notNull"}}
 	  </form>
 	</li>
 	<li style="float: right;">

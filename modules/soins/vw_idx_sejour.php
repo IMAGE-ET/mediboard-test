@@ -15,7 +15,7 @@ CCanDo::checkRead();
 $group = CGroups::loadCurrent();
 
 // Filtres
-$date           = CValue::getOrSession("date", mbDate());
+$date           = CValue::getOrSession("date");
 $datetime       = mbDateTime(); 
 $mode           = CValue::getOrSession("mode", 0);
 $service_id     = CValue::getOrSession("service_id");
@@ -23,19 +23,23 @@ $praticien_id   = CValue::getOrSession("praticien_id");
 $_active_tab    = CValue::get("_active_tab");
 $type_admission = CValue::getOrSession("type");
 
+if (!$date) {
+  $date = mbDate();
+}
+
 $tab_sejour = array();
 
 // Chargement de l'utilisateur courant
 $userCourant = CMediusers::get();
 
-if(CModule::getActive("dPprescription")){
+if (CModule::getActive("dPprescription")) {
   $prescription_sejour = new CPrescription();
 }
 
 $_is_praticien = $userCourant->isPraticien();
 
 // Preselection du praticien_id
-if($_is_praticien && !$service_id && !$praticien_id) {
+if ($_is_praticien && !$service_id && !$praticien_id) {
   $praticien_id = $userCourant->user_id;
 }
 
@@ -49,10 +53,11 @@ $services = $service->loadGroupList($where);
 $changeSejour = CValue::get("service_id") || CValue::get("praticien_id");
 $changeSejour = $changeSejour || (!$service_id && !$praticien_id);
 
-if($changeSejour) {
+if ($changeSejour) {
   $sejour_id = null;
   CValue::setSession("sejour_id");
-} else {
+}
+else {
   $sejour_id = CValue::getOrSession("sejour_id");
 }  
 
@@ -114,7 +119,7 @@ function cacheLit($affectation) {
 }
 
 // Chargement du praticien
-if ($praticien_id){
+if ($praticien_id) {
   $praticien = new CMediusers();
   $praticien->load($praticien_id);
 }
@@ -123,7 +128,7 @@ $anesth = new CMediusers();
 $anesthesistes = array_keys($anesth->loadAnesthesistes());
 
 // Si seulement le praticien est indiqué
-if($praticien_id && !$service_id){
+if($praticien_id && !$service_id) {
   $sejours = array();
   $sejour = new CSejour();
   $where = array();
@@ -150,7 +155,7 @@ if($praticien_id && !$service_id){
   }
     
   foreach($sejours as $_sejour){
-    if($_is_praticien && $_sejour->praticien_id == $userCourant->user_id){
+    if ($_is_praticien && $_sejour->praticien_id == $userCourant->user_id) {
       $tab_sejour[$_sejour->_id]= $_sejour;
     }
     $affectations = array();
@@ -161,14 +166,15 @@ if($praticien_id && !$service_id){
     $where["sortie"] = ">= '$date 00:00:00'";
     $affectations = $affectation->loadList($where);
 
-    if(count($affectations) >= 1){
+    if (count($affectations) >= 1) {
       foreach($affectations as $_affectation){
         $_affectation->loadRefsAffectations();
         cacheLit($_affectation);
       }
-    } else {
+    }
+    else {
       $_sejour->loadRefsPrescriptions();
-       $_sejour->loadRefPatient();
+      $_sejour->loadRefPatient();
       $_sejour->loadRefPraticien();
       $_sejour->_ref_praticien->loadRefFunction();
       $_sejour->loadNDA();
@@ -178,7 +184,7 @@ if($praticien_id && !$service_id){
 }
 
 foreach ($sejoursParService as $key => $_service) {
-  if($key != "NP"){ 
+  if ($key != "NP") {
     $sorter = CMbArray::pluck($_service->_ref_chambres, "nom");
     array_multisort($sorter, SORT_ASC, $_service->_ref_chambres);
   
@@ -188,7 +194,7 @@ foreach ($sejoursParService as $key => $_service) {
           $_affectation->loadRefsAffectations();
           $_affectation->loadRefSejour();
           $_sejour = $_affectation->_ref_sejour;
-          if($_is_praticien && $_sejour->praticien_id == $userCourant->user_id){
+          if ($_is_praticien && $_sejour->praticien_id == $userCourant->user_id) {
             $tab_sejour[$_sejour->_id]= $_sejour;
           }
           $_sejour->loadRefsPrescriptions();
@@ -197,8 +203,8 @@ foreach ($sejoursParService as $key => $_service) {
           $_sejour->_ref_praticien->loadRefFunction();
           $_sejour->loadNDA();
       
-          if($_sejour->_ref_prescriptions){
-            if(array_key_exists('sejour', $_sejour->_ref_prescriptions)){
+          if ($_sejour->_ref_prescriptions) {
+            if (array_key_exists('sejour', $_sejour->_ref_prescriptions)){
                $prescription_sejour = $_sejour->_ref_prescriptions["sejour"];
                $prescription_sejour->countNoValideLines();
             }
@@ -229,9 +235,9 @@ $etab = new CEtabExterne();
 $etab->load($sejour->etablissement_entree_id);
 $sejour->_ref_etablissement_provenance = $etab->_view;
 
-if($service_id){
+if ($service_id) {
   // Chargement des séjours à afficher
-  if($service_id == "NP") {
+  if ($service_id == "NP") {
 
     // Liste des patients à placer
     $order = "entree_prevue ASC";
@@ -275,10 +281,10 @@ if($service_id){
     );
       
     $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order, $praticien_id);
-    if($_is_praticien){
+    if ($_is_praticien) {
       foreach($groupSejourNonAffectes as $sejours_by_moment){
         foreach($sejours_by_moment as $_sejour){
-          if($_sejour->praticien_id == $userCourant->user_id){
+          if ($_sejour->praticien_id == $userCourant->user_id) {
             $tab_sejour[$_sejour->_id] = $_sejour;
           }
         }
@@ -289,18 +295,18 @@ if($service_id){
     loadServiceComplet($service, $date, $mode, $praticien_id, $type_admission);
   }
   
-  if($service->_id){
+  if ($service->_id) {
     foreach($service->_ref_chambres as $_chambre){
       foreach($_chambre->_ref_lits as $_lits){
         foreach($_lits->_ref_affectations as $_affectation){
-          if($_is_praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id){
+          if ($_is_praticien && $_affectation->_ref_sejour->praticien_id == $userCourant->user_id) {
             $tab_sejour[$_affectation->_ref_sejour->_id]= $_affectation->_ref_sejour;
           }
           $_affectation->_ref_sejour->loadRefsPrescriptions();
           $_affectation->_ref_sejour->_ref_praticien->loadRefFunction();
           $_affectation->loadRefsAffectations();
-          if($_affectation->_ref_sejour->_ref_prescriptions){
-            if(array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)){
+          if ($_affectation->_ref_sejour->_ref_prescriptions) {
+            if (array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)) {
               $prescription_sejour = $_affectation->_ref_sejour->_ref_prescriptions["sejour"];
               $prescription_sejour->countNoValideLines();
             }
@@ -318,11 +324,12 @@ $visites = array(
   "non_effectuee" => array()
 );
 
-if(count($tab_sejour)){
+if (count($tab_sejour)) {
   foreach($tab_sejour as $_sejour){
-    if($_sejour->countNotificationVisite($date)){
+    if ($_sejour->countNotificationVisite($date)) {
       $visites["effectuee"][] = $_sejour->_id;
-    } else {
+    }
+    else {
       $visites["non_effectuee"][] = $_sejour->_id; 
     }
   }
@@ -340,7 +347,7 @@ if ($type_admission) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("_active_tab", $_active_tab);
-$smarty->assign("_is_praticien"               , $_is_praticien);
+$smarty->assign("_is_praticien"           , $_is_praticien);
 $smarty->assign("anesthesistes"           , $anesthesistes);
 $smarty->assign("praticiens"              , $praticiens);
 $smarty->assign("praticien_id"            , $praticien_id);
@@ -354,7 +361,7 @@ $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
 $smarty->assign("demain"                  , mbDate("+ 1 day", $date));
 $smarty->assign("services"                , $services);
 $smarty->assign("sejoursParService"       , $sejoursParService);
-if(CModule::getActive("dPprescription")){
+if (CModule::getActive("dPprescription")) {
   $smarty->assign("prescription_sejour"     , $prescription_sejour);
 }
 $smarty->assign("service_id"              , $service_id);
@@ -362,7 +369,5 @@ $smarty->assign("groupSejourNonAffectes"  , $groupSejourNonAffectes);
 $smarty->assign("tab_sejour"              , $tab_sejour);
 $smarty->assign("visites"                 , $visites);
 $smarty->assign("current_date"            , mbDate());
+
 $smarty->display("vw_idx_sejour.tpl");
-
-
-?>
