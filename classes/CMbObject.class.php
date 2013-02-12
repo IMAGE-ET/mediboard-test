@@ -47,7 +47,9 @@ class CMbObject extends CStoredObject {
     $notes_levels = array();
     
     if ($this->_id) {
-      $this->_ref_notes = CNote::loadNotesForObject($this, $perm);
+      $this->_ref_notes = $this->loadBackRefs("notes");
+      self::filterByPerm($this->_ref_notes, $perm);
+      
       
       // Find present levels
       foreach ($this->_ref_notes as $_note) {

@@ -1594,7 +1594,7 @@ class CStoredObject extends CModelObject {
     $backSpec =& $backObject->_specs[$backField];
     $backMeta = $backSpec->meta;
     if ($backMeta) {
-      $query .= "\nAND `$backMeta` = '$this->_class'";
+      $query .= "\nAND `$backMeta` = '$object->_class'";
     }
     
     // Group by object key
@@ -1628,26 +1628,29 @@ class CStoredObject extends CModelObject {
       return null;
     }
     
-    // Empty object
-    if (!$this->_id) {
-      return array();
-    }
-
-    // Cas du module non installé
+    // Module unavailable
     $backObject = new $backSpec->class;
     if (!$backObject->_ref_module) {
       return null;
     }
 
+    // Empty object
+    if (!$this->_id) {
+      return $this->_back[$backName] = array();
+    }
+
+    // Precounting optimization: no need to query when we alreaydy know array is empty
+    if (isset($this->_count[$backName]) && $this->_count[$backName] === 0) {
+      return $this->_back[$backName] = array();
+    }
+    
+    // Back reference where clause
     $backField = $backSpec->field;
+    $where[$backField] = "= '$this->_id'";    
+    
+    // Meta object case
     $fwdSpec =& $backObject->_specs[$backField];
     $backMeta = $fwdSpec->meta;
-    
-    $where = array(
-      $backField => "= '$this->_id'"
-    );
-
-    // Cas des meta objects
     if ($backMeta) {
       $where[$backMeta] = "= '$this->_class'";
     }
