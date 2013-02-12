@@ -25,7 +25,7 @@ $total = count($listHprimMedecins);
 
 // Liaison à un médecin existant
 $nouv = 0;
-foreach($listHprimMedecins as $_medecin) {
+foreach ($listHprimMedecins as $_medecin) {
   $_medecin->loadRefEchangeHprim21();
   $echg_hprim = $_medecin->_ref_echange_hprim21;
   
@@ -48,21 +48,22 @@ foreach($listHprimMedecins as $_medecin) {
 
 CAppUI::stepAjax("Médecins utilisés : '$total'");
 CAppUI::stepAjax("Médecins rapprochés : '$nouv'");
-if ($total > 0)
-  CAppUI::stepAjax($nouv*100/($total).", %% de rapprochement de médecins");
+if ($total > 0) {
+  CAppUI::stepAjax($nouv * 100/ ($total).", %% de rapprochement de médecins");
+}
 
 // Gestion des patients
-$hprimPatient = new CHprim21Patient();
-$where = array();
+$hprimPatient                 = new CHprim21Patient();
+$where                        = array();
 $where["date_derniere_modif"] = ">= '$date_limite'";
-$where["patient_id"] = "IS NULL";
-$order = "date_derniere_modif DESC";
+$where["patient_id"]          = "IS NULL";
+$order                        = "date_derniere_modif DESC";
 $listHprimPatients = $hprimPatient->loadList($where, $order, $qte_limite);
 $total = count($listHprimPatients);
 
 // Liaison à un patient existant
 $nouv = $anc = 0;
-foreach($listHprimPatients as $_patient) {
+foreach ($listHprimPatients as $_patient) {
   $_patient->loadRefEchangeHprim21();
   $echg_hprim = $_patient->_ref_echange_hprim21;
   // Recherche si la liaison a déjà été faite
@@ -110,8 +111,10 @@ foreach($listHprimPatients as $_patient) {
 CAppUI::stepAjax("Patient utilisés : '$total'");
 CAppUI::stepAjax("Patient anciennement rapprochés : '$anc'");
 CAppUI::stepAjax("Nouveaux patients rapprochés : '$nouv'");
-if (($total-$anc) > 0)
-  CAppUI::stepAjax($nouv*100/($total-$anc)."%% de rapprochement de patients", UI_MSG_OK);
+
+if (($total - $anc) > 0) {
+  CAppUI::stepAjax($nouv * 100 / ($total - $anc)."%% de rapprochement de patients", UI_MSG_OK);
+}
 
 // Gestion des séjours
 $hprimSejour = new CHprim21Sejour();
@@ -124,13 +127,13 @@ $total = count($listHprimSejours);
 
 // Liaison à un sejour existant
 $nouv = $anc = $nopat = $moresej = $err = 0;
-foreach($listHprimSejours as $_sejour) {
+foreach ($listHprimSejours as $_sejour) {
   $_sejour->loadRefEchangeHprim21();
   $echg_hprim = $_sejour->_ref_echange_hprim21;
   // Vérification que le patient correspondant est bien lié
   $hprimPatient = new CHprim21Patient();
   $hprimPatient->load($_sejour->hprim21_patient_id);
-  if(!$hprimPatient->patient_id) {
+  if (!$hprimPatient->patient_id) {
     $nopat++;
     continue;
   }
@@ -140,7 +143,7 @@ foreach($listHprimSejours as $_sejour) {
   $nda->tag = $tag_sejour;
   $nda->id400 = "$_sejour->external_id";
   $nda->loadMatchingObject("last_update DESC");
-  if($nda->_id) {
+  if ($nda->_id) {
     $_sejour->sejour_id = $nda->object_id;
     $_sejour->store();
     
@@ -155,11 +158,14 @@ foreach($listHprimSejours as $_sejour) {
   // Sinon rattachement à un sejour existant
   $sejour = new CSejour();
   $where = array();
-  $where["patient_id"]    = "= '$hprimPatient->patient_id'";
-  $where["entree_prevue"] = "<= '".mbDate("+2 day", $_sejour->date_mouvement)."'";
-  $where["entree_prevue"] = ">= '".mbDate("-2 day", $_sejour->date_mouvement)."'";
-  $where["annule"]        = "= '0'";
+  $where["patient_id"] = "= '$hprimPatient->patient_id'";
+  $date_min            = mbDate("-2 day", $_sejour->date_mouvement);
+  $date_max            = mbDate("+2 day", $_sejour->date_mouvement);
+  $where["entree"]     = "BETWEEN '$date_min' AND '$date_max'";
+  $where["annule"]     = "= '0'";
+
   $listSej = $sejour->loadList($where);
+
   if (count($listSej) > 1) {
     $moresej++;
     continue;
@@ -190,7 +196,7 @@ CAppUI::stepAjax("Séjours sans patient rapprochés : '$nopat'");
 CAppUI::stepAjax("Séjours anciennement rapprochés : '$anc'");
 CAppUI::stepAjax("Séjours multiples trouvés : '$moresej'");
 CAppUI::stepAjax("Nouveaux séjours rapprochés : '$nouv'");
-if (($total-$nopat-$anc-$moresej) > 0)
-  CAppUI::stepAjax($nouv*100/($total-$nopat-$anc-$moresej)."%% de rapprochement de séjours");
 
-?>
+if (($total-$nopat-$anc-$moresej) > 0) {
+  CAppUI::stepAjax($nouv * 100 / ($total - $nopat - $anc - $moresej)." %% de rapprochement de séjours");
+}
