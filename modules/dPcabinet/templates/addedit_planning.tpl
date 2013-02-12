@@ -396,10 +396,10 @@ Main.add(function() {
             <td>
               {{if $consult->_id}}
                 <span style="float: right">
-                  {{if $consult->_count_matching_sejours}}
-                    <button type="button" class="add" onclick="linkSejour()">{{tr}}CConsultation-_link_sejour{{/tr}}</button>
-                  {{elseif $consult->sejour_id && $consult->_ref_sejour->type != "consult"}}
+                  {{if $consult->sejour_id && $consult->_ref_sejour->type != "consult"}}
                     <button type="button" class="remove" onclick="unlinkSejour()">{{$consult->_ref_sejour}}</button>
+                  {{elseif $consult->_count_matching_sejours}}
+                    <button type="button" class="add" onclick="linkSejour()">{{tr}}CConsultation-_link_sejour{{/tr}}</button>
                   {{/if}}
                 </span>
               {{/if}}
