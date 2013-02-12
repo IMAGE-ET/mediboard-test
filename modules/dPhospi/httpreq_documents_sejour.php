@@ -7,7 +7,8 @@
 * @author Thomas Despoix
 */
 
-$only_sejour = CValue::get("only_sejour", 0);
+$only_sejour  = CValue::get("only_sejour", 0);
+$with_patient = CValue::get("with_patient", 0);
 $operation_id = CValue::get("operation_id", 0);
 
 $sejour = new CSejour();
@@ -35,9 +36,9 @@ if (!$only_sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour", $sejour);
-$smarty->assign("only_sejour", $only_sejour);
+$smarty->assign("sejour"      , $sejour);
+$smarty->assign("only_sejour" , $only_sejour);
 $smarty->assign("operation_id", $operation_id);
+$smarty->assign("with_patient", $with_patient);
 
 $smarty->display("inc_documents_sejour.tpl");
-?>

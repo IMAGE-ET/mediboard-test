@@ -113,8 +113,10 @@
         {{mb_include module=web100T template=inc_button_iframe}}
       {{/if}}
 
+      <button type="button" class="print notext" onclick="Admissions.showDocs('{{$_sejour->_id}}')"></button>
+
       {{if $conf.dPadmissions.show_deficience}}
-        {{mb_include module=patients template=inc_vw_antecedents type=deficience}}
+        {{mb_include module=patients template=inc_vw_antecedents type=deficience callback=reloadAdmission}}
       {{/if}}
 
       {{foreach from=$_sejour->_ref_operations item=_op}}

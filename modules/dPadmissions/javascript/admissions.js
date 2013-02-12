@@ -96,5 +96,19 @@ Admissions = {
   
   showLegend: function() {
     var url = new Url("dPadmissions", "vw_legende").requestModal();
+  },
+
+  showDocs: function(sejour_id) {
+    Admissions.totalUpdater.stop();
+    Admissions.listUpdater.stop();
+    var url = new Url("dPhospi", "httpreq_documents_sejour");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("only_sejour", 1);
+    url.addParam("with_patient", 1);
+    url.requestModal(700, 400);
+    url.modalObject.observe("afterClose", function() {
+      Admissions.totalUpdater.resume();
+      Admissions.listUpdater.resume();
+    });
   }
 };

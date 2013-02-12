@@ -13,30 +13,30 @@
   </div>
   
   <div id="Files-{{$sejour->_guid}}" style="float: left; width: 50%;">
-  <script type="text/javascript">
-    File.register('{{$sejour->_id}}','{{$sejour->_class}}', "Files-{{$sejour->_guid}}");
-  </script>
-  </div>
-{{/if}}
-
-{{if !$only_sejour && !$operation_id && $sejour->_ref_consult_anesth->_id}}
-  {{assign var=consult_anesth value=$sejour->_ref_consult_anesth}}
-  {{assign var=consult value=$consult_anesth->_ref_consultation}}
-  <h2 style="clear: both;">{{tr}}CConsultAnesth{{/tr}} du {{$consult_anesth->_date_consult|date_format:$conf.date}}</h2>
-  <div id="Documents-{{$consult_anesth->_guid}}" style="float: left; width: 50%;">
     <script type="text/javascript">
-    Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class}}','{{$consult_anesth->chir_id}}', 'Documents-{{$consult_anesth->_guid}}', 'normal');
+      File.register('{{$sejour->_id}}','{{$sejour->_class}}', "Files-{{$sejour->_guid}}");
     </script>
-  </div>
-  
-  <div id="Files-{{$consult->_guid}}" style="float: left; width: 50%;">
-  <script type="text/javascript">
-    File.register('{{$consult->_id}}','{{$consult->_class}}', "Files-{{$consult->_guid}}");
-  </script>
   </div>
 {{/if}}
 
 {{if !$only_sejour}}
+  {{if !$operation_id && $sejour->_ref_consult_anesth->_id}}
+    {{assign var=consult_anesth value=$sejour->_ref_consult_anesth}}
+    {{assign var=consult value=$consult_anesth->_ref_consultation}}
+    <h2 style="clear: both;">{{tr}}CConsultAnesth{{/tr}} du {{$consult_anesth->_date_consult|date_format:$conf.date}}</h2>
+    <div id="Documents-{{$consult_anesth->_guid}}" style="float: left; width: 50%;">
+      <script type="text/javascript">
+      Document.register('{{$consult_anesth->_id}}','{{$consult_anesth->_class}}','{{$consult_anesth->chir_id}}', 'Documents-{{$consult_anesth->_guid}}', 'normal');
+      </script>
+    </div>
+
+    <div id="Files-{{$consult->_guid}}" style="float: left; width: 50%;">
+      <script type="text/javascript">
+        File.register('{{$consult->_id}}','{{$consult->_class}}', "Files-{{$consult->_guid}}");
+      </script>
+    </div>
+  {{/if}}
+
   {{foreach from=$sejour->_ref_operations item=operation}}
     <h2 style="clear: both;">{{tr}}COperation{{/tr}} du {{$operation->_datetime|date_format:$conf.date}}</h2>
     <div id="Documents-{{$operation->_guid}}" style="float: left; width: 50%;">
@@ -45,9 +45,9 @@
     	</script>
     </div>
     <div id="Files-{{$operation->_guid}}" style="float: left; width: 50%;">
-    <script type="text/javascript">
-      File.register('{{$operation->_id}}','{{$operation->_class}}', "Files-{{$operation->_guid}}");
-    </script>
+      <script type="text/javascript">
+        File.register('{{$operation->_id}}','{{$operation->_class}}', "Files-{{$operation->_guid}}");
+      </script>
     </div>
     
     {{if $operation->_ref_consult_anesth->_id && !$operation_id}}
@@ -60,10 +60,26 @@
         </script>
       </div>
       <div id="Files-{{$consult->_guid}}" style="float: left; width: 50%;">
-      <script type="text/javascript">
-        File.register('{{$consult->_id}}','{{$consult->_class}}', "Files-{{$consult->_guid}}");
-      </script>
+        <script type="text/javascript">
+          File.register('{{$consult->_id}}','{{$consult->_class}}', "Files-{{$consult->_guid}}");
+        </script>
       </div>
     {{/if}}
   {{/foreach}}
+{{/if}}
+
+{{if $with_patient}}
+  {{assign var=patient value=$sejour->_ref_patient}}
+  <h1 style="clear: both;">{{$patient}}</h1>
+  <div id="Documents-{{$patient->_guid}}" style="float: left; width: 50%;">
+    <script type="text/javascript">
+      Document.register('{{$patient->_id}}','{{$patient->_class}}', null, 'Documents-{{$patient->_guid}}', 'normal');
+    </script>
+  </div>
+
+  <div id="Files-{{$patient->_guid}}" style="float: left; width: 50%;">
+    <script type="text/javascript">
+      File.register('{{$patient->_id}}','{{$patient->_class}}', "Files-{{$patient->_guid}}");
+    </script>
+  </div>
 {{/if}}

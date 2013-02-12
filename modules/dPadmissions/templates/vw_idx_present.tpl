@@ -12,6 +12,9 @@
 {{mb_script module=hprim21 script=sejour_hprim_selector}}
 {{mb_script module=admissions script=admissions}}
 {{mb_script module=patients script=antecedent}}
+{{mb_script module=compteRendu script=document}}
+{{mb_script module=compteRendu script=modele_selector}}
+{{mb_script module=cabinet script=file}}
 {{if "web100T"|module_active}}
   {{mb_script module=web100T script=web100T}}
 {{/if}}

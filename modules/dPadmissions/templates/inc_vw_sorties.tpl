@@ -183,7 +183,9 @@
           {{if "web100T"|module_active}}
             {{mb_include module=web100T template=inc_button_iframe}}
           {{/if}}
-          
+
+          <button type="button" class="print notext" onclick="Admissions.showDocs('{{$_sejour->_id}}')"></button>
+
           {{foreach from=$_sejour->_ref_operations item=curr_op}}
           <a class="action" title="Imprimer la DHE de l'intervention" href="#1" onclick="Admissions.printDHE('operation_id', {{$curr_op->_id}}); return false;">
             <img src="images/icons/print.png" />
