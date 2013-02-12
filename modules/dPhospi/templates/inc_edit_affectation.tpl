@@ -1,4 +1,4 @@
-<form name="editAffect" method="post" action="?" 
+<form name="editAffect" method="post" action="?"
   onsubmit="return onSubmitFormAjax(this, {onComplete: function() {
     if($V(this._lock_all_lits)){
       refreshMouvements(Control.Modal.close, '{{$affectation->lit_id}}'); 
@@ -15,6 +15,13 @@
   {{mb_field object=$affectation field=lit_id hidden=true}}
   
   <table class="form">
+    <tr>
+      {{if $affectation->_id}}
+        <th class="title" colspan="4">
+          {{$affectation->_ref_sejour->_ref_patient}}
+        </th>
+      {{/if}}
+    </tr>
     {{if !$affectation->_id}}
       {{if $urgence}}
       <input type="hidden" name="function_id" value="{{$affectation->function_id}}"/>

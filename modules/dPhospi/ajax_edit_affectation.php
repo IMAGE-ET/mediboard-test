@@ -8,18 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+CCanDo::checkEdit();
+
 $affectation_id = CValue::get("affectation_id");
 $lit_id         = CValue::get("lit_id");
 $urgence         = CValue::get("urgence");
 
-$affectation = new CAffectation;
+$affectation = new CAffectation();
 $affectation->load($affectation_id);
-$lit = new CLit;
+$lit = new CLit();
 $lit->load($affectation->lit_id);
-  if($urgence){
-    $service_urgence = CGroups::loadCurrent()->service_urgences_id;
-    $affectation->function_id = $service_urgence; 
-  }
+if ($urgence) {
+  $service_urgence = CGroups::loadCurrent()->service_urgences_id;
+  $affectation->function_id = $service_urgence;
+}
 
 $sejour_maman = null;
 
@@ -34,7 +36,10 @@ if (CModule::getActive("maternite")) {
   }
 }
 
-if (!$affectation->_id) {
+if ($affectation->_id) {
+  $affectation->loadRefSejour()->loadRefPatient();
+}
+else {
   $affectation->lit_id = $lit_id;
   $lit->load($lit_id);
   $lit->loadRefChambre()->loadRefService();
@@ -50,4 +55,3 @@ $smarty->assign("sejour_maman", $sejour_maman);
 $smarty->assign("urgence"     , $urgence);
 
 $smarty->display("inc_edit_affectation.tpl");
-?>
