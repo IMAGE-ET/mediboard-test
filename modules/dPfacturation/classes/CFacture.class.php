@@ -81,6 +81,10 @@ class CFacture extends CMbObject {
   var $_ref_reglements_tiers    = null;
   var $_ref_sejours             = null;
   
+  var $_ref_actes_tarmed  = array();
+  var $_ref_actes_caisse  = array();
+  var $_ref_actes_ngap    = array();
+  var $_ref_actes_ccam    = array();
   
   /**
    * getBackProps
@@ -495,6 +499,7 @@ class CFacture extends CMbObject {
       foreach ($this->_ref_consults as $_consult) {
         $_consult->loadRefsActes();
         $_consult->loadExtCodesCCAM();
+        $this->rangeActes($_consult);
       }
       $this->_ref_last_consult = end($this->_ref_consults);
       $this->_ref_first_consult = reset($this->_ref_consults);
@@ -531,8 +536,10 @@ class CFacture extends CMbObject {
       $sejour->loadRefsBack();
       foreach ($sejour->_ref_operations as $op) {
         $op->loadRefsActes();
+        $this->rangeActes($op);
       }
       $sejour->loadRefsActes();
+      $this->rangeActes($sejour);
     }
     
     return $this->_ref_sejours;
@@ -621,6 +628,10 @@ class CFacture extends CMbObject {
     }
     $ligne->prix          = $acte_tarmed->montant_base;
     $ligne->quantite      = $acte_tarmed->quantite;
+    $ligne->pm            = $acte_tarmed->_ref_tarmed->tp_al;
+    $ligne->pt            = $acte_tarmed->_ref_tarmed->tp_tl;
+    $ligne->coeff_pm      = $acte_tarmed->_ref_tarmed->f_al;
+    $ligne->coeff_pt      = $acte_tarmed->_ref_tarmed->f_tl;
     $ligne->coeff         = $this->_coeff;
     if ($msg = $ligne->store()) {
       return $msg;
@@ -703,7 +714,6 @@ class CFacture extends CMbObject {
       $this->_autre_tarmed = 0;
       if (count($this->_ref_consults)) {
         foreach ($this->_ref_consults as $consult) {
-          $consult->loadRefsActes();
           foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
             $this->_total_tarmed += $acte_tarmed->montant_base + $acte_tarmed->montant_depassement;
           }
@@ -753,7 +763,6 @@ class CFacture extends CMbObject {
       
       $this->_montant_sans_remise = round($montant_prem + $this->_total_caisse, 1);
       $this->_montant_avec_remise = round($this->_montant_sans_remise - $this->remise, 1);
-//      $this->_montant_avec_remise = $this->_montant_total - $this->remise;
       if (count($this->_montant_factures) == 1) {
         $this->_montant_factures = $this->_montant_factures_caisse;
       }
@@ -790,53 +799,73 @@ class CFacture extends CMbObject {
   /**
    * Fonction de création des lignes(items) de la facture lorsqu'elle est cloturée
    * 
+   * @param string $object objet référence
+   * 
    * @return void
   **/
-  function creationLignesFacture(){
+  function rangeActes($object) {
+    $this->addActes($object->_ref_actes_tarmed  , "_ref_actes_tarmed");
+    $this->addActes($object->_ref_actes_caisse  , "_ref_actes_caisse");
+    $this->addActes($object->_ref_actes_ngap    , "_ref_actes_ngap");
+    $this->addActes($object->_ref_actes_ccam    , "_ref_actes_ccam");
+  }
+  
+  /**
+   * Fonction de création des lignes(items) de la facture lorsqu'elle est cloturée
+   * 
+   * @param string $actes les actes
+   * @param string $name  le nom de la reférence
+   * 
+   * @return void
+  **/
+  function addActes($actes, $name) {
+    $tab = $this->$name;
+    foreach ($actes as $key => $acte) {
+      $tab[$key] = $acte;
+    }
+    $this->$name = $tab;
+  }
+  
+  /**
+   * Fonction de création des lignes(items) de la facture lorsqu'elle est cloturée
+   * 
+   * @return void
+  **/
+  function creationLignesFacture() {
     $this->loadRefCoeffFacture();
     $this->loadRefsConsultation();
     foreach ($this->_ref_consults as $consult) {
-      foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
-        $this->creationLigneTarmed($acte_tarmed, $consult->_date);
-      }
-      foreach ($consult->_ref_actes_caisse as $acte_caisse) {
-        $this->creationLigneCaisse($acte_caisse, $consult->_date);
-      }
-      foreach ($consult->_ref_actes_ccam as $acte_ccam) {
-        $this->creationLigneCCAM(_ref_actes_ccam, $consult->_date);
-      }
-      foreach ($consult->_ref_actes_ngap as $acte_ngap) {
-        $this->creationLigneNGAP($acte_ngap, $consult->_date);
-      }
+      $this->creationLignesObject($consult, $consult->_date);
     }
     $this->loadRefsSejour();
     foreach ($this->_ref_sejours as $sejour) {
       foreach ($sejour->_ref_operations as $op) {
-        foreach ($op->_ref_actes_tarmed as $acte) {
-          $this->creationLigneTarmed($acte, $op->date);
-        }
-        foreach ($op->_ref_actes_caisse as $acte) {
-          $this->creationLigneCaisse($acte, $op->date);
-        }
-        foreach ($op->_ref_actes_ccam as $acte_ccam) {
-          $this->creationLigneCCAM($acte_ccam, $op->date);
-        }
-        foreach ($op->_ref_actes_ngap as $acte_ngap) {
-          $this->creationLigneNGAP($acte_ngap, $op->date);
-        }
+        $this->creationLignesObject($op, $op->date);
       }
-      foreach ($sejour->_ref_actes_tarmed as $acte) {
-        $this->creationLigneTarmed($acte, $sejour->entreee_prevue);
-      }
-      foreach ($sejour->_ref_actes_caisse as $acte) {
-        $this->creationLigneCaisse($acte, $sejour->entreee_prevue);
-      }
-      foreach ($sejour->_ref_actes_ccam as $acte_ccam) {
-        $this->creationLigneCCAM($acte, $sejour->entreee_prevue);
-      }
-      foreach ($sejour->_ref_actes_ngap as $acte_ngap) {
-        $this->creationLigneNGAP($acte, $sejour->entreee_prevue);
-      }
+      $this->creationLignesObject($sejour, $sejour->entreee_prevue);
+    }
+  }
+  
+  /**
+   * Fonction de création des lignes de la facture lorsqu'elle est cloturée à partir d'un objet
+   * 
+   * @param string $object objet référence
+   * @param string $date   date à défaut
+   * 
+   * @return void
+  **/
+  function creationLignesObject($object, $date){
+    foreach ($object->_ref_actes_tarmed as $acte) {
+      $this->creationLigneTarmed($acte, $sejour->entreee_prevue);
+    }
+    foreach ($object->_ref_actes_caisse as $acte) {
+      $this->creationLigneCaisse($acte, $sejour->entreee_prevue);
+    }
+    foreach ($object->_ref_actes_ccam as $acte_ccam) {
+      $this->creationLigneCCAM($acte, $sejour->entreee_prevue);
+    }
+    foreach ($object->_ref_actes_ngap as $acte_ngap) {
+      $this->creationLigneNGAP($acte, $sejour->entreee_prevue);
     }
   }
 }

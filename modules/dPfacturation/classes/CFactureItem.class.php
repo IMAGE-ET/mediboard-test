@@ -28,6 +28,10 @@ class CFactureItem extends CMbMetaObject {
   var $reduction 	= null;
   var $quantite 	= null;
   var $coeff 	    = null;
+  var $pm 	      = null;
+  var $pt 	      = null;
+  var $coeff_pm 	= null;
+  var $coeff_pt 	= null;
   
   // References
   var $_ref_facture = null;
@@ -54,15 +58,19 @@ class CFactureItem extends CMbMetaObject {
   **/
   function getProps() {
     $specs = parent::getProps();
-    $specs["object_id"]  = "ref notNull class|CFacture meta|object_class";
-    $specs["date"]       = "date notNull";
-    $specs["libelle"]    = "text notNull";
-    $specs["code"]       = "text notNull";
-    $specs["type"]       = "enum notNull list|CActeNGAP|CFraisDivers|CActeCCAM|CActeTarmed|CActeCaisse default|CActeCCAM";
-    $specs["prix"]       = "currency notNull";
-    $specs["reduction"]	 = "currency";
-    $specs["quantite"]   = "num notNull";
-    $specs["coeff"]      = "currency notNull";
+    $specs["object_id"] = "ref notNull class|CFacture meta|object_class";
+    $specs["date"]      = "date notNull";
+    $specs["libelle"]   = "text notNull";
+    $specs["code"]      = "text notNull";
+    $specs["type"]      = "enum notNull list|CActeNGAP|CFraisDivers|CActeCCAM|CActeTarmed|CActeCaisse default|CActeCCAM";
+    $specs["prix"]      = "currency notNull";
+    $specs["reduction"]	= "currency";
+    $specs["quantite"]  = "num notNull";
+    $specs["coeff"]     = "currency notNull";
+    $specs["pm"]        = "currency";
+    $specs["pt"]        = "currency";
+    $specs["coeff_pm"]  = "currency";
+    $specs["coeff_pt"]  = "currency";
     return $specs;
   }
   

@@ -187,9 +187,8 @@ foreach ($factures as $facture) {
     $debut_lignes = 140;
     $nb_pages = 1;
     $montant_intermediaire = 0;
-    foreach ($facture->_ref_consults as $consult) {
       if ($cle_facture == 0) {
-        foreach ($consult->_ref_actes_tarmed as $acte) {
+        foreach ($facture->_ref_actes_tarmed as $acte) {
           $ligne++;
           $x = 0;
           $pdf->setXY(37, $debut_lignes + $ligne*3);
@@ -231,7 +230,7 @@ foreach ($factures as $facture) {
           if ($acte->_ref_tarmed->tp_al == 0.00 && $acte->_ref_tarmed->tp_tl == 0.00) {
             if ($acte->code_ref && (preg_match("/Réduction/", $acte->libelle) || preg_match("Majoration", $acte->libelle)) ) {
               $acte_ref = null;
-              foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
+              foreach ($facture->_ref_actes_tarmed as $acte_tarmed) {
                 if ($acte_tarmed->code == $acte->code_ref) {
                   $acte_ref = $acte_tarmed;break;
                 }
@@ -249,7 +248,7 @@ foreach ($factures as $facture) {
               $valeur = "";
               $cote = "C";
               if ($key == "Date") {
-                $valeur = ($acte->date) ? $acte->date : $consult->_date;
+                $valeur = ($acte->date) ? $acte->date :$facture->_ref_first_consult->_date;
                 $valeur= mbTransformTime(null, $valeur, "%d.%m.%Y");
               }
               if ($key == "Tarif") {
@@ -270,7 +269,7 @@ foreach ($factures as $facture) {
               
               if ($acte->code_ref && (preg_match("/Réduction/", $acte->libelle) || preg_match("/Majoration/", $acte->libelle))) {
                 $acte_ref = null;
-                foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
+                foreach ($facture->_ref_actes_tarmed as $acte_tarmed) {
                   if ($acte_tarmed->code == $acte->code_ref) {
                     $acte_ref = $acte_tarmed;break;
                   }
@@ -322,7 +321,7 @@ foreach ($factures as $facture) {
           $montant_intermediaire += $this_pm;
         }
       } 
-      foreach ($consult->_ref_actes_caisse as $acte) {
+      foreach ($facture->_ref_actes_caisse as $acte) {
         if ($cle_facture == 1 || $acte->_ref_caisse_maladie->use_tarmed_bill) {
           $ligne++;
           $x = 0;
@@ -370,7 +369,7 @@ foreach ($factures as $facture) {
               $valeur = "";
               $cote = "C";
               if ($key == "Date") {
-                $valeur = ($acte->date) ? $acte->date : $consult->_date;
+                $valeur = ($acte->date) ? $acte->date : $facture->_ref_first_consult->_date;
                 $valeur= mbTransformTime(null, $valeur, "%d.%m.%Y");
               }
               if ($key == "Tarif") {
@@ -410,7 +409,6 @@ foreach ($factures as $facture) {
           $montant_intermediaire += sprintf("%.2f", $acte->montant_base * $coeff);
         }
       }
-    }
     
     $pt = sprintf("%.2f", $pt);
     $pm = sprintf("%.2f", $pm);

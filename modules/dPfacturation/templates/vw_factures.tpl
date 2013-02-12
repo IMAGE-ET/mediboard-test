@@ -41,8 +41,8 @@ printFacture = function(facture_id, edit_justificatif, edit_bvr) {
   url.popup(1000, 600);
 }
 Main.add(function () {
-  Calendar.regField(getForm("choice-facture")._date_min, null);
-  Calendar.regField(getForm("choice-facture")._date_max, null);
+  Calendar.regField(getForm("choice-facture")._date_min);
+  Calendar.regField(getForm("choice-facture")._date_max);
   
   {{if $facture->_id}}
     viewFacture(null, '{{$facture->_id}}', '{{$facture->_class}}');
