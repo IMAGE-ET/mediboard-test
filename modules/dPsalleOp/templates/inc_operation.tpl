@@ -17,7 +17,6 @@
 {{mb_script module="bloodSalvage" script="bloodSalvage" ajax=$ajax}}
 {{mb_script module="soins" script="plan_soins" ajax=$ajax}}
 {{mb_script module="dPplanningOp" script="cim10_selector" ajax=$ajax}}
-{{mb_include module=planningOp template=js_form_sejour only_ald=1}}
 {{mb_include module=salleOp template=js_codage_ccam}}
 
 <script type="text/javascript">

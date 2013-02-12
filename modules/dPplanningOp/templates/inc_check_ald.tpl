@@ -12,6 +12,45 @@
 
 <tr>
   <th>
+    <script type="text/javascript">
+      setAldCmu = function(oCurrForm) {
+        oSejourForm   = getForm("editSejour");
+        oEasyForm     = getForm("editOpEasy");
+        oPatForm      = getForm("patAldForm");
+        $V(oPatForm.patient_id  , $V(oSejourForm.patient_id));
+        $V(oSejourForm._ald_pat , $V(oCurrForm.__ald_pat)?1:0);
+        $V(oSejourForm.__ald_pat, $V(oCurrForm.__ald_pat)?1:0);
+        if(oEasyForm) {
+          $V(oEasyForm._ald_pat   , $V(oCurrForm.__ald_pat)?1:0);
+          $V(oEasyForm.__ald_pat  , $V(oCurrForm.__ald_pat)?1:0);
+        }
+        if($V(oCurrForm.__ald_pat)) {
+          oSejourForm.__ald.disabled = "";
+          if(oEasyForm) {
+            oEasyForm.__ald.disabled   = "";
+          }
+        } else {
+          $V(oSejourForm.__ald, 0);
+          $V(oSejourForm.ald, 0);
+          oSejourForm.__ald.disabled = "disabled";
+          if(oEasyForm) {
+            $V(oEasyForm.__ald, 0);
+            $V(oEasyForm.ald, 0);
+            oEasyForm.__ald.disabled = "disabled";
+          }
+        }
+        $V(oPatForm.ald, $V(oSejourForm._ald_pat));
+        $V(oSejourForm._cmu_pat , $V(oCurrForm.__cmu_pat)?1:0);
+        $V(oSejourForm.__cmu_pat, $V(oCurrForm.__cmu_pat)?1:0);
+        if(oEasyForm) {
+          $V(oEasyForm._cmu_pat   , $V(oCurrForm.__cmu_pat)?1:0);
+          $V(oEasyForm.__cmu_pat  , $V(oCurrForm.__cmu_pat)?1:0);
+        }
+        $V(oPatForm.cmu         , $V(oSejourForm._cmu_pat));
+        return onSubmitFormAjax(oPatForm);
+      }
+    </script>
+
     <label for="__cmu_pat" title="Patient bénéficiant du régime dde couverture maladie universelle">
       Patient sous CMU
     </label>

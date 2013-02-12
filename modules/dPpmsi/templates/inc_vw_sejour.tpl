@@ -72,6 +72,17 @@
       </button>
     </li>
     {{/if}}
+    <li style="float: right">
+      <form name="editSejour" method="post" onsubmit="return onSubmitFormAjax(this)">
+        <input type="hidden" name="m" value="planningOp">
+        <input type="hidden" name="dosql" value="do_sejour_aed">
+        <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}">
+        {{mb_key object=$sejour}}
+        <table class="main">
+          {{mb_include module=planningOp template=inc_check_ald patient=$sejour->_ref_patient onchange="this.form.onsubmit()"}}
+        </table>
+      </form>
+    </li>
   </ul>
   
   <hr class="control_tabs" />

@@ -169,6 +169,15 @@ Main.add(function () {
   <input type="hidden" name="typeVue"  value="0" />
 </form>
 
+<form name="patAldForm" method="post" onsubmit="return onSubmitFormAjax(this)">
+  <input type="hidden" name="m" value="dPpatients" />
+  <input type="hidden" name="dosql" value="do_patients_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="patient_id" value="">
+  <input type="hidden" name="ald" value="">
+  <input type="hidden" name="cmu" value="">
+</form>
+
 <table class="main">
   <tr>
     <td class="narrow">
