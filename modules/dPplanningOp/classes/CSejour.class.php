@@ -1917,7 +1917,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       return;
     }
 
-    if ($this->_entree ) {
+    if ($this->_entree) {
       $date_entree = mbDate($this->_entree);
       $where[] = "DATE(entree_prevue) = '$date_entree' OR DATE(entree_reelle) = '$date_entree'";
     }
@@ -1930,6 +1930,10 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     if ($notCancel) {
       $where["annule"] = " = '0'";
+    }
+
+    if ($this->type) {
+      $where["type"] = " = '$this->type'";
     }
 
     $this->loadObject($where);
