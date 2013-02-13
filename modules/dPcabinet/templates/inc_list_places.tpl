@@ -104,7 +104,8 @@ PlageConsult.addPlaceAfter = function(plage_id) {
       </div>
       <div style="float:right">
         {{if $_consultation->categorie_id}}
-          <img src="./modules/dPcabinet/images/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
+          {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$_consultation->_ref_categorie
+            alt=$_consultation->_ref_categorie->nom_categorie title=$_consultation->_ref_categorie->nom_categorie}}
         {{/if}}
       </div>
     </td>
@@ -165,7 +166,8 @@ PlageConsult.addPlaceAfter = function(plage_id) {
         {{assign var=categorie value=$_consultation->_ref_categorie}}
         {{if $categorie->_id}}
           <div class="compact">
-            <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
+            {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie alt=$categorie->nom_categorie
+              title=$categorie->nom_categorie}}
             {{$categorie->nom_categorie|spancate}}
           </div>
         {{/if}}
@@ -205,7 +207,8 @@ PlageConsult.addPlaceAfter = function(plage_id) {
       </div>
       <div style="float:right">
         {{if $_consultation->categorie_id}}
-          <img src="./modules/dPcabinet/images/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
+          {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$_consultation->_ref_categorie
+            alt=$_consultation->_ref_categorie->nom_categorie title=$_consultation->_ref_categorie->nom_categorie}}
         {{/if}}
       </div>
     </td>

@@ -34,7 +34,7 @@
       <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
       {{foreach from=$categories item="categorie"}}
         <option class="categorieConsult" {{if $categorie_id == $categorie->_id}} selected="selected"{{/if}}
-          style="background-image:url(./modules/dPcabinet/images/categories/{{$categorie->nom_icone}});
+          style="background-image:url(./modules/dPcabinet/images/categories/{{$categorie->nom_icone|basename}});
           background-repeat:no-repeat;" value="{{$categorie->_id}}">{{$categorie->_view}}
         </option>
       {{/foreach}}

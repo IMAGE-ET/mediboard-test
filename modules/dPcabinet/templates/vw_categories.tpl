@@ -33,7 +33,7 @@
     {{foreach from=$categories item=_categorie}}
     <tr {{if $_categorie->_id == $categorie->_id}}class="selected"{{/if}}>
       <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;categorie_id={{$_categorie->_id}}">{{$_categorie->nom_categorie}}</a></td>
-      <td><img src="./modules/dPcabinet/images/categories/{{$_categorie->nom_icone}}" /></td>
+      <td>{{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$_categorie}}</td>
       <td>x{{$_categorie->duree}}</td>
     </tr>
     {{foreachelse}}
@@ -42,7 +42,7 @@
     </tr>
     {{/foreach}}
     </table>
-  </td> 
+  </td>
   
   <td class="halfPane">
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -74,7 +74,7 @@
         <th>{{mb_label object=$categorie field="nom_icone"}}</th>
         <td>
         {{if $categorie->_id}}
-         <img id="iconeBackground" onclick="IconeSelector.init()" src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" />
+          {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie id="iconeBackground" onclick="IconeSelector.init()"}}
         {{else}}
           <img id="iconeBackground" src="images/icons/search.png" onclick="IconeSelector.init()" />
          {{/if}}

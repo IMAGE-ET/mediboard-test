@@ -91,7 +91,8 @@
           {{assign var=categorie value=$_consult->_ref_categorie}}
           {{if $categorie->_id}}
           <div>
-            <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
+            {{mb_include module=cabinet template=inc_icone_categorie_consult
+              categorie=$categorie alt=$categorie->nom_categorie title=$categorie->nom_categorie}}
             {{$categorie->nom_categorie}}
           </div>
           {{/if}}

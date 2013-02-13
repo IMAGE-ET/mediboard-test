@@ -124,10 +124,11 @@
   </td>
 
   {{if $categorie->nom_icone}}
-  <td {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} style="{{$style}}" class="narrow">
-    <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" title="{{$categorie->nom_categorie}}" />
-  </td>
+    <td {{if $destinations || $_consult->motif}}rowspan="2"{{/if}} style="{{$style}}" class="narrow">
+      {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie title=$categorie->nom_categorie}}
+    </td>
   {{/if}}
+
 </tr>
 
 {{if $destinations || $_consult->motif}}

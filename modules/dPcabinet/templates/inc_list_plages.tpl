@@ -31,7 +31,7 @@
           {{if $_plage->_consult_by_categorie|@count}}
             {{foreach from=$_plage->_consult_by_categorie item=curr_categorie}}
               {{$curr_categorie.nb}}
-              <img alt="{{$curr_categorie.nom_categorie}}" title="{{$curr_categorie.nom_categorie}}" src="modules/dPcabinet/images/categories/{{$curr_categorie.nom_icone}}"  style="vertical-align: middle;" />
+              <img alt="{{$curr_categorie.nom_categorie}}" title="{{$curr_categorie.nom_categorie}}" src="modules/dPcabinet/images/categories/{{$curr_categorie.nom_icone|basename}}"  style="vertical-align: middle;" />
             {{/foreach}}
           {{/if}}
         </td>

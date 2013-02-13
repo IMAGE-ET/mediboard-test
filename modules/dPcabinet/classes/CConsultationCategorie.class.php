@@ -47,7 +47,12 @@ class CConsultationCategorie extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom_categorie;
-  }  
+  }
+
+  function updatePlainFields() {
+    parent::updatePlainFields();
+    $this->nom_icone = basename($this->nom_icone);
+  }
 }
 
 ?>

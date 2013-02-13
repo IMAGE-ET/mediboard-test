@@ -8,7 +8,8 @@
     
     {{if $categorie->_id}}
     <td rowspan="2" style="{{$consult_background}}">
-      <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
+      {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie alt=$categorie->nom_categorie
+        title=$categorie->nom_categorie}}
     </td>
     {{/if}}
     
@@ -61,7 +62,8 @@
     <td {{if !$consult_anesth->operation_id}}rowspan="2"{{/if}} class="text" style="{{$consult_background}}">
       {{if $categorie->_id}}
         <div>
-          <img src="./modules/dPcabinet/images/categories/{{$categorie->nom_icone}}" alt="{{$categorie->nom_categorie}}" title="{{$categorie->nom_categorie}}" />
+          {{mb_include module=cabinet template=inc_icone_categorie_consult categorie=$categorie alt=$categorie->nom_categorie
+            title=$categorie->nom_categorie}}
           {{$categorie->nom_categorie}}
         </div>
       {{/if}}
