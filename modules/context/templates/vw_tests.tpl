@@ -32,7 +32,7 @@
         <input type="hidden" name="view" value="patient"/>
         <input type="text" placeholder="nom" name="name" value=""/><br/>
         <input type="text" placeholder="prenom" name="firstname" value=""/><br/>
-        <input type="text" placeholder="date_naiss" name="birthdate" value=""/><br/>
+        <input type="text" placeholder="date de naissance A-M-J" name="birthdate" value=""/><br/>
         <input type="submit" value="TESTER"/>
       </form>
     </td>
