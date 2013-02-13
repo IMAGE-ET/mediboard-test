@@ -58,8 +58,13 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return;
       }
 
-      // Si Client
+      // Si initiateur du message
       if ($sejour->_eai_initiateur_group_id) {
+        return;
+      }
+
+      // Si le group_id du séjour est différent de celui du destinataire
+      if ($sejour->group_id != $receiver->group_id) {
         return;
       }
 
@@ -197,7 +202,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($current_log && ($current_log->type == "create") && $first_affectation && ($first_affectation->_id == $affectation->_id)) {
         $affectation_id = $affectation->_id;
         $affectation    = null;
-      } 
+      }
       else {
         $movement->affectation_id = $affectation->_id;  
       }  
