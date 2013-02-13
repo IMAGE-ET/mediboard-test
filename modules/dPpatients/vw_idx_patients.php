@@ -36,6 +36,7 @@ $patient_month       = CValue::getOrSession("Date_Month");
 $patient_year        = CValue::getOrSession("Date_Year");
 $patient_naissance   = null;
 $patient_ipp         = CValue::get("patient_ipp");
+$patient_nda         = CValue::get("patient_nda");
 $useVitale           = CValue::get("useVitale",  CModule::getActive("fse") && CAppUI::pref('VitaleVision') ? 1 : 0);
 $prat_id             = CValue::get("prat_id");
 $patient_sexe        = CValue::get("sexe");
@@ -117,8 +118,13 @@ else {
     $where["sexe"] = $whereSoundex["sexe"] = "= '$patient_sexe'";
   }
 
-  if ($patient_ville) $where["ville"] = $whereSoundex["ville"] = "LIKE '$patient_ville%'";
-  if ($patient_cp)    $where["cp"]    = $whereSoundex["cp"]    = "LIKE '$patient_cp%'";
+  if ($patient_ville) {
+    $where["ville"] = $whereSoundex["ville"] = "LIKE '$patient_ville%'";
+  }
+
+  if ($patient_cp) {
+    $where["cp"]    = $whereSoundex["cp"]    = "LIKE '$patient_cp%'";
+  }
 
   if ($prat_id) {
     $ljoin["consultation"] = "`consultation`.`patient_id` = `patients`.`patient_id`";
@@ -129,6 +135,14 @@ else {
     $whereSoundex[] = "plageconsult.chir_id = '$prat_id' OR sejour.praticien_id = '$prat_id'";
 
     $group_by = "patient_id";
+  }
+
+  if ($patient_nda) {
+    $ljoin["sejour"]      = "`sejour`.`patient_id` = `patients`.`patient_id`";
+    $ljoin["id_sante400"] = "`id_sante400`.`object_id` = `sejour`.`sejour_id`";
+
+    $where[]                    = "`id_sante400`.`object_class` = 'CSejour'";
+    $where["id_sante400.id400"] = " = '$patient_nda'";
   }
 
   $patients        = array();
@@ -203,5 +217,6 @@ $smarty->assign("patientsSoundex"     , $patientsSoundex);
 $smarty->assign("patient"             , $patient);
 $smarty->assign("board"               , 0);
 $smarty->assign("patient_ipp"         , $patient_ipp);
+$smarty->assign("patient_nda"         , $patient_nda);
 
 $smarty->display("vw_idx_patients.tpl");

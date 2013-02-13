@@ -97,7 +97,7 @@ emptyForm = function() {
   });
   form.nom.focus();
 }
-{{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id || $sexe}}
+{{if $cp || $ville || ($conf.dPpatients.CPatient.tag_ipp && $patient_ipp) || $prat_id || $sexe || ($conf.dPplanningOp.CSejour.tag_dossier && $patient_nda) }}
   Main.add(toggleSearch);
 {{/if}}
 </script>
@@ -201,6 +201,18 @@ emptyForm = function() {
         {{mb_include module=mediusers template=inc_options_mediuser list=$prats selected=$prat_id}}
       </select>
     </td>
+  </tr>
+
+  <tr>
+    {{if $conf.dPplanningOp.CSejour.tag_dossier && $dPsanteInstalled}}
+    <th style="display: none;" class="field_advanced">NDA</th>
+    <td style="display: none;" class="field_advanced">
+      <input tabindex="8" type="text" name="patient_nda" value="{{$patient_nda}}" />
+    </td>
+    {{else}}
+    <td colspan="2" />
+    {{/if}}
+      <td colspan="2" />
   </tr>
 
   <tr>

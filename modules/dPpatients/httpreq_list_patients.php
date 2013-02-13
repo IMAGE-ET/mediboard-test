@@ -28,6 +28,7 @@ $patient_year        = CValue::getOrSession("Date_Year");
 $patient_sexe        = CValue::get("sexe");
 $patient_naissance   = null;
 $patient_ipp         = CValue::get("patient_ipp");
+$patient_nda         = CValue::get("patient_nda");;
 $useVitale           = CValue::get("useVitale",  CModule::getActive("fse") || CAppUI::pref('VitaleVision') ? 1 : 0);
 $prat_id             = CValue::get("prat_id");
 
@@ -39,14 +40,15 @@ if ($new = CValue::get("new")) {
   CValue::setSession("patient_id", null);
   CValue::setSession("selClass", null);
   CValue::setSession("selKey", null);
-} else {
+}
+else {
   $patient->load($patient_id);
 }
 
 // Champs vitale
 if ($useVitale && CModule::getActive("fse")) {
   $cv = CFseFactory::createCV();
-  if($cv) {
+  if ($cv) {
     $cv->getPropertiesFromVitale($patVitale);
     $patVitale->updateFormFields();
     $patient_nom    = $patVitale->nom;
@@ -58,7 +60,7 @@ if ($useVitale && CModule::getActive("fse")) {
 }
 
 // Recherhche par IPP
-if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
+if ($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
   // Initialisation dans le cas d'une recherche par IPP
   $patients = array();
   $patientsSoundex = array();
@@ -72,8 +74,7 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
     CValue::setSession("patient_id", $patient->_id);
     $patients[$patient->_id] = $patient; 
   }
-} 
-
+}
 // Recherche par trait standard
 else {
   $where        = array();
@@ -127,6 +128,14 @@ else {
     $where[] = "plageconsult.chir_id = '$prat_id' OR sejour.praticien_id = '$prat_id'";
     $whereSoundex[] = "plageconsult.chir_id = '$prat_id' OR sejour.praticien_id = '$prat_id'";
   }
+
+  if ($patient_nda) {
+    $ljoin["sejour"]      = "`sejour`.`patient_id` = `patients`.`patient_id`";
+    $ljoin["id_sante400"] = "`id_sante400`.`object_id` = `sejour`.`sejour_id`";
+
+    $where[]                    = "`id_sante400`.`object_class` = 'CSejour'";
+    $where["id_sante400.id400"] = " = '$patient_nda'";
+  }
   
   $patients        = array();
   $patientsSoundex = array();
@@ -135,7 +144,7 @@ else {
   if ($where) {
     $patients = $pat->loadList($where, "nom, prenom, naissance", "0, 100", null, $ljoin);
   }
-  if($whereSoundex && ($nbExact = (100 - count($patients)))) {
+  if ($whereSoundex && ($nbExact = (100 - count($patients)))) {
     $patientsSoundex = $pat->loadList($whereSoundex, "nom, prenom, naissance", "0, $nbExact", null, $ljoin);
     $patientsSoundex = array_diff_key($patientsSoundex, $patients);
   }
@@ -150,6 +159,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("dPsanteInstalled", CModule::getInstalled("dPsante400"));
 $smarty->assign("patient_ipp"    , $patient_ipp);
+$smarty->assign("patient_nda"    , $patient_nda);
 $smarty->assign("board"          , $board);
 
 $smarty->assign("nom"            , $patient_nom);
