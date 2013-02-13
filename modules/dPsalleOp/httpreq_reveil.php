@@ -67,21 +67,32 @@ switch($type){
     break;
 }
 
+$use_poste = CAppUI::conf("dPplanningOp COperation use_poste");
+
 // Chargement des interventions    
 $operation = new COperation();
 $listOperations = $operation->loadList($where, $order, null, null, $ljoin);
 
-$use_poste = CAppUI::conf("dPplanningOp COperation use_poste");
+$chirs = CMbObject::massLoadFwdRef($listOperations, "chir_id");
+CMbObject::massLoadFwdRef($chirs, "function_id");
+CMbObject::massLoadFwdRef($listOperations, "plageop_id");
+$sejours = CMbObject::massLoadFwdRef($listOperations, "sejour_id");
+CMbObject::massLoadFwdRef($sejours, "patient_id");
+if ($use_poste) {
+  CMbObject::massLoadFwdRef($listOperations, "poste_sspi_id");
+}
 
-foreach($listOperations as $key => &$op) {
+$nb_sorties_non_realisees = 0;
+
+foreach ($listOperations as $key => $op) {
   $sejour = $op->loadRefSejour(1);
   $sejour->loadNDA();
   
-  if ($sejour->type == "exte"){
+  if ($sejour->type == "exte") {
     unset($listOperations[$key]);
     continue;
   }
-    
+
   $op->loadRefChir(1);
   $op->_ref_chir->loadRefFunction();
   $op->loadRefPlageOp(1);
@@ -93,7 +104,7 @@ foreach($listOperations as $key => &$op) {
   }
   
   if (($type == "ops" || $type == "reveil") && CModule::getActive("bloodSalvage")) {
-    $op->blood_salvage= new CBloodSalvage;
+    $op->blood_salvage= new CBloodSalvage();
     $where = array();
     $where["operation_id"] = "= '$key'";
     $op->blood_salvage->loadObject($where);
@@ -101,13 +112,16 @@ foreach($listOperations as $key => &$op) {
     $op->blood_salvage->totaltime = "00:00:00";
     if ($op->blood_salvage->recuperation_start && $op->blood_salvage->transfusion_end) {
       $op->blood_salvage->totaltime = mbTimeRelative($op->blood_salvage->recuperation_start, $op->blood_salvage->transfusion_end);
-    } 
-    elseif ($op->blood_salvage->recuperation_start){
-      $op->blood_salvage->totaltime = mbTimeRelative($op->blood_salvage->recuperation_start,mbDate($op->blood_salvage->_datetime)." ".mbTime());
+    }
+    elseif ($op->blood_salvage->recuperation_start) {
+      $op->blood_salvage->totaltime = mbTimeRelative($op->blood_salvage->recuperation_start, mbDate($op->blood_salvage->_datetime)." ".mbTime());
     }
   }
   
-  if ($type == "reveil" || $type == "out"){
+  if ($type == "reveil" || $type == "out") {
+    if (!$sejour->sortie_reelle) {
+      $nb_sorties_non_realisees++;
+    }
     $sejour->loadRefsAffectations();
     if ($sejour->_ref_first_affectation->_id) {
       $sejour->_ref_first_affectation->loadRefLit();
@@ -125,6 +139,7 @@ if (Cmodule::getActive("dPpersonnel")) {
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("personnels"             , $personnels);
 $smarty->assign("listOperations"         , $listOperations);
 $smarty->assign("plages"                 , $plages);
@@ -133,6 +148,6 @@ $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("hour"                   , mbTime());
 $smarty->assign("modif_operation"        , $modif_operation);
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
-$smarty->display("inc_reveil_$type.tpl");
+$smarty->assign("nb_sorties_non_realisees", $nb_sorties_non_realisees);
 
-?>
+$smarty->display("inc_reveil_$type.tpl");

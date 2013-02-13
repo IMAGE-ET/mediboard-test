@@ -125,12 +125,11 @@ printDossier = function(sejour_id, operation_id) {
 
 {{else}}
 
-
   <div style="text-align: center">
-    {{mb_include template=inc_filter_reveil}}
+    {{mb_include module=dPsalleOp template=inc_filter_reveil}}
   </div>
     
-  {{include file=inc_edit_check_list.tpl personnel=$personnels}}
+  {{mb_include module=dPsalleOp template=inc_edit_check_list personnel=$personnels}}
 {{/if}}
 
 <div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto; display: none;"></div> 

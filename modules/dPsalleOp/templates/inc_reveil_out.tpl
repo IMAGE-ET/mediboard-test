@@ -1,6 +1,6 @@
 <script type="text/javascript">  
   Main.add(function () {
-    Control.Tabs.setTabCount("out", "{{$listOperations|@count}}");
+    Control.Tabs.setTabCount("out", "{{$nb_sorties_non_realisees}}",  "{{$listOperations|@count}}");
     
     {{if $isImedsInstalled}}
       ImedsResultsWatcher.loadResults();
