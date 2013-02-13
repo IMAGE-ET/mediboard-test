@@ -457,9 +457,9 @@ class CFacture extends CMbObject {
       $ljoin = array();
       $ljoin["facture_liaison"] = "facture_liaison.object_id = consultation.consultation_id";
       $where = array();
-      $where["facture_liaison.facture_id"]   = " = '$this->_id'";
-      $where["facture_liaison.object_class"] = " = '$this->_class'";
-      $where["facture_liaison.object_class"] = " = 'CConsultation'";
+      $where["facture_liaison.facture_id"]    = " = '$this->_id'";
+      $where["facture_liaison.facture_class"] = " = '$this->_class'";
+      $where["facture_liaison.object_class"]  = " = 'CConsultation'";
       
       $this->_ref_consults = $consult->loadList($where, null, null, null, $ljoin);
     }
@@ -524,9 +524,9 @@ class CFacture extends CMbObject {
     $ljoin = array();
     $ljoin["facture_liaison"] = "facture_liaison.object_id = sejour.sejour_id";
     $where = array();
-    $where["facture_liaison.facture_id"]   = " = '$this->_id'";
-    $where["facture_liaison.object_class"] = " = '$this->_class'";
-    $where["facture_liaison.object_class"] = " = 'CSejour'";
+    $where["facture_liaison.facture_id"]    = " = '$this->_id'";
+    $where["facture_liaison.facture_class"] = " = '$this->_class'";
+    $where["facture_liaison.object_class"]  = " = 'CSejour'";
     
     $sejour = new CSejour();
     $this->_ref_sejours = $sejour->loadList($where, "sejour_id", null, null, $ljoin);
@@ -555,7 +555,7 @@ class CFacture extends CMbObject {
     $item =  new CFactureItem();
     $item->object_id   = $this->_id;
     $item->object_class = $this->_class;
-    $this->_ref_items = $item->loadMatchingList();
+    $this->_ref_items = $item->loadMatchingList("code ASC");
   }
 
   /**
@@ -842,7 +842,7 @@ class CFacture extends CMbObject {
       foreach ($sejour->_ref_operations as $op) {
         $this->creationLignesObject($op, $op->date);
       }
-      $this->creationLignesObject($sejour, $sejour->entreee_prevue);
+      $this->creationLignesObject($sejour, $sejour->entree_prevue);
     }
   }
   
@@ -856,16 +856,16 @@ class CFacture extends CMbObject {
   **/
   function creationLignesObject($object, $date){
     foreach ($object->_ref_actes_tarmed as $acte) {
-      $this->creationLigneTarmed($acte, $sejour->entreee_prevue);
+      $this->creationLigneTarmed($acte, $date);
     }
     foreach ($object->_ref_actes_caisse as $acte) {
-      $this->creationLigneCaisse($acte, $sejour->entreee_prevue);
+      $this->creationLigneCaisse($acte, $date);
     }
     foreach ($object->_ref_actes_ccam as $acte_ccam) {
-      $this->creationLigneCCAM($acte, $sejour->entreee_prevue);
+      $this->creationLigneCCAM($acte, $date);
     }
     foreach ($object->_ref_actes_ngap as $acte_ngap) {
-      $this->creationLigneNGAP($acte, $sejour->entreee_prevue);
+      $this->creationLigneNGAP($acte, $date);
     }
   }
 }
