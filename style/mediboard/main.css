@@ -1951,3 +1951,7 @@ div.planning_ressource.besoin {
 span.hatching {
   background-image: url(images/icons/ray.gif);
 }
+
+a.inline-url {
+  display: inline !important;
+}

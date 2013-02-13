@@ -42,6 +42,7 @@ class CMbFieldSpecFact {
     "er7"          => "CER7Spec",
     "hpr"          => "CHPRSpec",
     "ipAddress"    => "CIpAddressSpec",
+    "url"          => "CURLSpec",
   );
    
   /**
