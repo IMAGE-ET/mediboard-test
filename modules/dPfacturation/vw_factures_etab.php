@@ -65,10 +65,10 @@ else {
 foreach ($factures as $key => $_facture) {
   $_facture->loadRefPatient();
   $_facture->loadRefSejour();
-  $nb_tarmed  = count($fact->_ref_actes_tarmed);
-  $nb_caisse  = count($fact->_ref_actes_caisse);
-  $nb_ngap    = count($fact->_ref_actes_ngap);
-  $nb_ccam    = count($fact->_ref_actes_ccam);
+  $nb_tarmed  = count($_facture->_ref_actes_tarmed);
+  $nb_caisse  = count($_facture->_ref_actes_caisse);
+  $nb_ngap    = count($_facture->_ref_actes_ngap);
+  $nb_ccam    = count($_facture->_ref_actes_ccam);
   if (count($_facture->_ref_sejours) == 0) {
     unset($factures[$key]);
     $_facture->loadRefs();
