@@ -71,5 +71,3 @@ class CHL7v2EventADTA24 extends CHL7v2EventADT implements CHL7EventADTA24 {
     $this->addPV1();
   }
 }
-
-?>

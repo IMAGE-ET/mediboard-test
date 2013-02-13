@@ -17,18 +17,50 @@
  * ITI31 Delegated Handler
  */
 class CITI31DelegatedHandler extends CITIDelegatedHandler {
+  /**
+   * @var array
+   */
   static $handled        = array ("CSejour", "CAffectation", "CNaissance");
+  /**
+   * @var string
+   */
   protected $profil      = "PAM";
+  /**
+   * @var string
+   */
   protected $message     = "ADT";
+  /**
+   * @var string
+   */
   protected $transaction = "ITI31";
 
+  /**
+   * @var array
+   */
   static $inpatient      = array("comp", "ssr", "psy", "seances", "consult", "ambu");
+  /**
+   * @var array
+   */
   static $outpatient     = array("urg", "exte");
-  
+
+  /**
+   * If object is handled ?
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
- 
+
+  /**
+   * Trigger after event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -182,7 +214,16 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       $this->sendITI($this->profil, $this->transaction, $this->message, $code, $sejour_enfant);
     }
   }
-  
+
+  /**
+   * Create movement
+   *
+   * @param string       $code        HL7 event code
+   * @param CSejour      $sejour      Admit
+   * @param CAffectation $affectation Affectation
+   *
+   * @return CMovement|mixed
+   */
   function createMovement($code, CSejour $sejour, CAffectation $affectation = null) {
     $insert = in_array($code, CHL7v2SegmentZBE::$actions["INSERT"]);
     $update = in_array($code, CHL7v2SegmentZBE::$actions["UPDATE"]);
@@ -265,6 +306,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     return $sejour->_ref_hl7_movement = $movement;
   }
 
+  /**
+   * Get start of movement
+   *
+   * @param string       $code        HL7 event code
+   * @param CSejour      $sejour      Admit
+   * @param CAffectation $affectation Affectation
+   *
+   * @return null|string
+   */
   function getStartOfMovement($code, CSejour $sejour, CAffectation $affectation = null) {
     switch ($code) {
       // Admission hospitalisé / externe
@@ -277,17 +327,17 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         return $affectation->entree;
       // Changement de statut externe ou urgence vers hospitalisé
       case 'A06':
-      // Changement de statut hospitalisé ou urgence vers externe
+        // Changement de statut hospitalisé ou urgence vers externe
       case 'A07':
-      // Absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
+        // Absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
       case 'A21':
-      // Retour d'absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
+        // Retour d'absence provisoire (permission) et mouvement de transfert vers un plateau technique pour acte (<48h)
       case 'A22': 
-      // Changement de médecin responsable
+        // Changement de médecin responsable
       case 'A54':
-      // Changement d'UF médicale
+        // Changement d'UF médicale
       case 'Z80':
-      // Changement d'UF de soins
+        // Changement d'UF de soins
       case 'Z84':
         // Date du transfert
         return mbDateTime();
@@ -306,6 +356,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
   }
 
+  /**
+   * Get bascule HL7 event code
+   *
+   * @param CSejour $from Admit from
+   * @param CSejour $to   Admit to
+   *
+   * @return string
+   */
   function getBasculeCode(CSejour $from, CSejour $to) {
     $matrix = array(    // comp/M   comp/C   comp/O   bebe/*   ambu/*   urg/*   seances/* exte/*
       "comp/M"    => array( null,   "A06",   "A06",   "A06",   "A06",   "A07",   "A06",   "A07"),
@@ -358,7 +416,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
     return $row[$col_num];
   }
-  
+
+  /**
+   * Get admit HL7 event code
+   *
+   * @param CSejour $sejour Admit
+   *
+   * @return null|string
+   */
   function getCodeSejour(CSejour $sejour) {
     $current_log = $sejour->loadLastLog();
     if (!in_array($current_log->type, array("create", "store"))) {
@@ -398,8 +463,10 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     // Cas d'un séjour en cours (entrée réelle)
     if ($sejour->_etat == "encours") {
       // Admission faite
-      if ($sejour->fieldModified("entree_reelle") && !$sejour->_old->entree_reelle
-          || $sejour->entree_reelle && !$sejour->_old->entree_reelle) {
+      $sejour_old = $sejour->_old;
+      if ($sejour->fieldModified("entree_reelle") && !$sejour_old->entree_reelle
+          || $sejour->entree_reelle && !$sejour_old->entree_reelle
+      ) {
         // Patient externe
         if (in_array($sejour->type, self::$outpatient)) {
           return "A04";
@@ -470,7 +537,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       return $this->getModificationAdmitCode($sejour->_receiver);
     }
   }
-  
+
+  /**
+   * Get affectation HL7 event code
+   *
+   * @param CAffectation $affectation       Affectation
+   * @param CAffectation $first_affectation First affectation
+   *
+   * @return null|string
+   */
   function getCodeAffectation(CAffectation $affectation, CAffectation $first_affectation = null) {
     $current_log = $affectation->_ref_current_log;
     if (!in_array($current_log->type, array("create", "store"))) {
@@ -521,7 +596,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         case 'A02':
           return "A02";
         default:
-         return $this->getModificationAdmitCode($receiver);
+          return $this->getModificationAdmitCode($receiver);
       }
     }
 
@@ -534,14 +609,21 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         case 'A02':
           return "A02";
         default:
-         return $this->getModificationAdmitCode($receiver);
+          return $this->getModificationAdmitCode($receiver);
       }
     }
  
     // Modifcation d'une affectation
     return $this->getModificationAdmitCode($affectation->_receiver);
   }
-  
+
+  /**
+   * Get affectation HL7 event code
+   *
+   * @param CReceiverIHE $receiver
+   *
+   * @return string
+   */
   function getModificationAdmitCode(CReceiverIHE $receiver) {
     switch ($receiver->_i18n_code) {
       // Cas de l'extension française : Z99
@@ -597,14 +679,13 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         if ($affectation->effectue) {
           $code = "A52";
         }
-        // Affectation non effectuée
         else {
+          // Affectation non effectuée
           $code = "A53";
         }
       }
-      
-      // Annulation d'une affectation
       else {
+        // Annulation d'une affectation
         $code = "A12";
       }
             
@@ -628,4 +709,3 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
   function onAfterDelete(CMbObject $mbObject) {
   }
 }
-?>

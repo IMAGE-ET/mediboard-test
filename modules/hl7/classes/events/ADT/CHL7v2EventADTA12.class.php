@@ -52,6 +52,7 @@ class CHL7v2EventADTA12 extends CHL7v2EventADT implements CHL7EventADTA12 {
     parent::build($affectation);
     
     $patient = $sejour->_ref_patient;
+
     // Patient Identification
     $this->addPID($patient, $sejour);
     
@@ -84,5 +85,3 @@ class CHL7v2EventADTA12 extends CHL7v2EventADT implements CHL7EventADTA12 {
     }
   }
 }
-
-?>

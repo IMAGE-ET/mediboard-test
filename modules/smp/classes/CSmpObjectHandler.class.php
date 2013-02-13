@@ -1,20 +1,44 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage smp
- * @version $Revision: 12577 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * SMP Object handler
+ *
+ * @category SMP
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
+
+/**
+ * Class CSmpObjectHandler
+ * SMP Object handler
  */
 
 class CSmpObjectHandler extends CEAIObjectHandler {
   static $handled = array ("CSejour", "CAffectation", "CNaissance");
 
+  /**
+   * If object is handled ?
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
 
+  /**
+   * Trigger after event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!parent::onAfterStore($mbObject)) {
       return;
@@ -26,14 +50,22 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     }
 
     // Si serveur et pas de NDA sur le séjour
-    if ((isset($mbObject->_no_num_dos) && ($mbObject->_no_num_dos == 1)) &&
-        CAppUI::conf('smp server')) {
+    if ((isset($mbObject->_no_num_dos) && ($mbObject->_no_num_dos == 1)) && CAppUI::conf('smp server')) {
       return;
     }
     
     $this->sendFormatAction("onAfterStore", $mbObject);
   }
 
+  /**
+   * Trigger before event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!parent::onBeforeMerge($mbObject)) {
       return;
@@ -108,7 +140,16 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     
     $this->sendFormatAction("onBeforeMerge", $mbObject);
   }
-  
+
+  /**
+   * Trigger after event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onAfterMerge(CMbObject $mbObject) {
     if (!parent::onAfterMerge($mbObject)) {
       return;
@@ -121,15 +162,29 @@ class CSmpObjectHandler extends CEAIObjectHandler {
 
     $this->sendFormatAction("onAfterMerge", $mbObject);
   }
-  
+
+  /**
+   * Trigger before event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onBeforeDelete(CMbObject $mbObject) {
     if (!parent::onBeforeDelete($mbObject)) {
       return;
     }
     
     $this->sendFormatAction("onBeforeDelete", $mbObject);
-  }  
-  
+  }
+
+  /**
+   * Trigger after event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterDelete(CMbObject $mbObject) {
     if (!parent::onAfterDelete($mbObject)) {
       return;
@@ -138,4 +193,3 @@ class CSmpObjectHandler extends CEAIObjectHandler {
     $this->sendFormatAction("onAfterDelete", $mbObject);
   }  
 }
-?>

@@ -14,18 +14,28 @@
 CCanDo::checkAdmin();
 
 // Récuperation des patients recherchés
-$patient_nom              = CValue::request("nom");
-$patient_prenom           = CValue::request("prenom");
-$patient_jeuneFille       = CValue::request("nom_jeune_fille");
-$patient_sexe             = CValue::request("sexe");
-$patient_ville            = CValue::request("ville");
-$patient_cp               = CValue::request("cp");
-$patient_day              = CValue::request("Date_Day");
-$patient_month            = CValue::request("Date_Month");
-$patient_year             = CValue::request("Date_Year");
-$quantity_limited_request = CValue::request("quantity_limited_request");
-$pointer                  = CValue::request("pointer");
-$continue                 = CValue::request("continue");
+$patient_nom                 = CValue::request("nom");
+$patient_prenom              = CValue::request("prenom");
+$patient_jeuneFille          = CValue::request("nom_jeune_fille");
+$patient_sexe                = CValue::request("sexe");
+$patient_ville               = CValue::request("ville");
+$patient_cp                  = CValue::request("cp");
+$patient_day                 = CValue::request("Date_Day");
+$patient_month               = CValue::request("Date_Month");
+$patient_year                = CValue::request("Date_Year");
+$quantity_limited_request    = CValue::request("quantity_limited_request");
+$pointer                     = CValue::request("pointer");
+
+$person_id_number            = CValue::request("person_id_number");
+$person_namespace_id         = CValue::request("person_namespace_id");
+$person_universal_id         = CValue::request("person_universal_id");
+$person_universal_id_type    = CValue::request("person_universal_id_type");
+$person_identifier_type_code = CValue::request("person_identifier_type_code");
+
+$continue                           = CValue::request("continue");
+$domains_returned_namespace_id      = CValue::request("domains_returned_namespace_id");
+$domains_returned_universal_id      = CValue::request("domains_returned_universal_id");
+$domains_returned_universal_id_type = CValue::request("domains_returned_universal_id_type");
 
 $patient_naissance = null;
 if (($patient_year) || ($patient_month) || ($patient_day)) {
@@ -76,7 +86,20 @@ foreach ($receivers as $_receiver) {
     continue;
   }
 
-  $patient->_receiver                 = $_receiver;
+  $patient->_receiver                = $_receiver;
+  $patient->_patient_identifier_list = array(
+    "person_id_number"            => $person_id_number,
+    "person_namespace_id"         => $person_namespace_id,
+    "person_universal_id"         => $person_universal_id,
+    "person_universal_id_type"    => $person_universal_id_type,
+    "person_identifier_type_code" => $person_identifier_type_code
+  );
+  $patient->_domains_returned  = array(
+    "domains_returned_namespace_id"      => $domains_returned_namespace_id,
+    "domains_returned_universal_id"      => $domains_returned_universal_id,
+    "domains_returned_universal_id_type" => $domains_returned_universal_id_type,
+  );
+
   $patient->_quantity_limited_request = $quantity_limited_request;
   $patient->_pointer                  = $pointer;
 

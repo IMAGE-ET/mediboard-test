@@ -80,7 +80,19 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     $data[] = null;
 
     // QPD-8 : What domains returned
-    $data[] = null;
+    if (isset($patient->_domains_returned)) {
+      $domains_returned = $patient->_domains_returned;
+      $data[] = array(
+        array (
+          CMbArray::get($domains_returned, "domains_returned_namespace_id"),
+          CMbArray::get($domains_returned, "domains_returned_universal_id"),
+          CMbArray::get($domains_returned, "domains_returned_universal_id_type")
+        )
+      );
+    }
+    else {
+      $data[] = null;
+    }
 
     $this->fill($data);
   }
@@ -93,31 +105,47 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
    * @return array
    */
   function addQPD3PID(CPatient $patient) {
-    return array(
-      // PID-3 : Patient Identifier List
-      //$this->setDemographicsValues($patient, "", "3.1"),
+    $qpd3pid = array();
 
-      // PID-5 : Patient Name
-      $this->setDemographicsFields($patient, "nom", "5.1.1"),
-      $this->setDemographicsFields($patient, "prenom", "5.2"),
+    // PID-3 : Patient Identifier List
+    if (isset($patient->_patient_identifier_list)) {
+      $patient_identifier_list = $patient->_patient_identifier_list;
 
-      // PID-6 : Maiden name
-      $this->setDemographicsFields($patient, "nom_jeune_fille", "6.1.1"),
+      $qpd3pid = array_merge(
+        $qpd3pid, array(
+          $this->setDemographicsValues($patient, CMbArray::get($patient_identifier_list, "person_id_number")           , "3.1"),
+          $this->setDemographicsValues($patient, CMbArray::get($patient_identifier_list, "person_namespace_id")        , "3.4.1"),
+          $this->setDemographicsValues($patient, CMbArray::get($patient_identifier_list, "person_universal_id")        , "3.4.2"),
+          $this->setDemographicsValues($patient, CMbArray::get($patient_identifier_list, "person_universal_id_type")   , "3.4.3"),
+          $this->setDemographicsValues($patient, CMbArray::get($patient_identifier_list, "person_identifier_type_code"), "3.5")
+        )
+      );
+    }
 
-      // PID-7 : Date of birth
-      $this->setDemographicsFields($patient, "naissance", "7.1", null, true),
+    return array_merge(
+      $qpd3pid, array(
+        // PID-5 : Patient Name
+        $this->setDemographicsFields($patient, "nom", "5.1.1"),
+        $this->setDemographicsFields($patient, "prenom", "5.2"),
 
-      // PID-8: Administrative Sex
-      $this->setDemographicsFields($patient, "sexe", "8", "1"),
+        // PID-6 : Maiden name
+        $this->setDemographicsFields($patient, "nom_jeune_fille", "6.1.1"),
 
-      // PID-11 : Patient Adress
-      $this->setDemographicsFields($patient, "ville", "11.3"),
-      // $this->setDemographicsValues($patient, "", "11.4"),
-      $this->setDemographicsFields($patient, "cp", "11.5"),
+        // PID-7 : Date of birth
+        $this->setDemographicsFields($patient, "naissance", "7.1", null, true),
 
-      // PID-13 : Phone Number
-      // $this->setDemographicsValues($patient, "", "13.6"),
-    //  $this->setDemographicsValues($patient, "", "13.7"),
+        // PID-8: Administrative Sex
+        $this->setDemographicsFields($patient, "sexe", "8", "1"),
+
+        // PID-11 : Patient Adress
+        $this->setDemographicsFields($patient, "ville", "11.3"),
+        // $this->setDemographicsValues($patient, "", "11.4"),
+        $this->setDemographicsFields($patient, "cp", "11.5"),
+
+        // PID-13 : Phone Number
+        // $this->setDemographicsValues($patient, "", "13.6"),
+        //  $this->setDemographicsValues($patient, "", "13.7"),
+      )
     );
   }
 
@@ -188,6 +216,10 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
    * @return array
    */
   function setDemographicsValues(CMbObject $object, $value, $field) {
+    if (!$value) {
+      return;
+    }
+
     $seg = null;
     switch ($object->_class) {
       case "CPatient" :
