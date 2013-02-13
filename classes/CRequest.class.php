@@ -370,12 +370,12 @@ class CRequest {
   /**
    * Returns the SQL string
    * 
-   * @param CMbObject $obj        Object on which table we prefix selects, ne prefix if null
-   * @param bool      $found_rows Return the found rows count
+   * @param CStoredObject $obj        Object on which table we prefix selects, ne prefix if null
+   * @param bool          $found_rows Return the found rows count
    * 
    * @return string
    */
-  function getRequest(CMbObject $obj = null, $found_rows = false) {
+  function getRequest(CStoredObject $obj = null, $found_rows = false) {
     $arraySelect = array();
     $arrayTable = array();
     
@@ -415,12 +415,12 @@ class CRequest {
   /**
    * Returns the SQL string that count the number of rows
    * 
-   * @param CMbObject $obj    Object on which table we prefix selects, one prefix if null
-   * @param array     $fields The fields to include in the SELECT clause
+   * @param CStoredObject $obj    Object on which table we prefix selects, one prefix if null
+   * @param array         $fields The fields to include in the SELECT clause
    * 
    * @return string A COUNT request
    */
-  function getCountRequest(CMbObject $obj = null, $fields = array()) {
+  function getCountRequest(CStoredObject $obj = null, $fields = array()) {
     // MbObject binding
     $sql = "SELECT COUNT(*) as total";
     
@@ -447,11 +447,11 @@ class CRequest {
   /**
    * Returns the SQL string that count the number of rows
    * 
-   * @param CMbObject $object Object concerned
+   * @param CStoredObject $object Object concerned
    * 
    * @return string
    */
-  function getIdsRequest(CMbObject $object) {
+  function getIdsRequest(CStoredObject $object) {
     $query = "SELECT `{$object->_spec->table}`.`{$object->_spec->key}`";
     return $query . $this->getRequestFrom($object->_spec->table);
   }
