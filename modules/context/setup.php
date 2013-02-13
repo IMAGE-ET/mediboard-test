@@ -8,7 +8,7 @@
  */
 
 /**
- * The setup for the dicom module
+ * The setup for the context module
  */
 class CSetupcontext extends CSetup {
 

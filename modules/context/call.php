@@ -66,31 +66,10 @@ if ($ipp) {
 
 //global case
 if (!$nbpatients) {
-  $where = array();
-  if ($nom) {
-    $where[] = "`nom` LIKE '$nom%' OR `nom_jeune_fille` LIKE '$nom%'";
-  }
-  if ($prenom) {
-    $where["prenom"] = "LIKE '$prenom%'";
-  }
-  if ($date_naiss) {
-    $where["naissance"] = "LIKE '$date_naiss'";
-  }
-
-  $nbPat = $patient->countList($where);
-  switch ($nbPat) {
-    case 0:
-      CAppUI::stepAjax("context-none-patient", UI_MSG_ERROR);
-      break;
-
-    case 1:
-      $patient->loadObject($where);
-      break;
-
-    default:  //more than 1
-      CAppUI::stepAjax("context-multiple-patient", UI_MSG_ERROR, $nbPat);
-      break;
-  }
+  $patient->nom = $nom;
+  $patient->prenom = $prenom;
+  $patient->naissance = $date_naiss;
+  $patient->loadMatchingPatient();
 }
 
 
