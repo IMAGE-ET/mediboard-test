@@ -96,6 +96,7 @@ class CPatient extends CMbObject {
   var $email            = null;
   var $vip              = null;
   var $tutelle          = null;
+  var $situation_famille= null;
 
   var $medecin_traitant_declare = null;
   var $medecin_traitant = null;
@@ -339,6 +340,7 @@ class CPatient extends CMbObject {
     $props["tel_autre"]         = "str maxLength|20";
     $props["email"]             = "str confidential";
     $props["vip"]               = "bool default|0";
+    $props["situation_famille"] = "enum list|S|M|G|P|D|W|A";
     $props["tutelle"]           = "enum list|aucune|tutelle|curatelle default|aucune";
     $props["incapable_majeur"]  = "bool";
     $props["ATNC"]              = "bool";

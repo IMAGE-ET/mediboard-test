@@ -230,6 +230,10 @@ Main.add(function() {
           </td>
         </tr>
         <tr>
+          <th>{{mb_label object=$patient field="situation_famille"}}</th>
+          <td>{{mb_field object=$patient field="situation_famille"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$patient field="rang_naissance"}}</th>
           <td>{{mb_field object=$patient field="rang_naissance"}}</td>
         </tr>
