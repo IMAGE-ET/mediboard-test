@@ -1,8 +1,5 @@
-{{if !$sejour->_id}}
-  {{assign var="sejour" value=$operation->_ref_sejour}}
-{{/if}}
-
 {{assign var=show_print_dhe_info value=$conf.dPplanningOp.COperation.show_print_dhe_info}}
+
 <table class="print">
   <tr>
     <th class="title" colspan="2">

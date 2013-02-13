@@ -158,9 +158,18 @@ class CHtmlToPDF {
     $str = CMbString::convertHTMLToXMLEntities($str);
     $str = CHtmlToPDF::cleanWord($str);
     
-    // Suppression des caractères ETX (3) (end of text) et BEL (7)
-    $str = str_replace(chr(3), "", $str);
-    $str = str_replace(chr(7), "", $str);
+    // Suppression des caractères de contrôle
+    $from = array(
+      chr(3), // ETX (end of text)
+      chr(7)  // BEL
+    );
+
+    $to = array(
+      "",
+      ""
+    );
+
+    $str = str_replace($from, $to, $str);
 
     $xml->loadXML(utf8_encode($str));
         
@@ -327,4 +336,3 @@ class CHtmlToPDF {
     return $doc->loadHTML($this->content) == 1;
   }
 }
-?>

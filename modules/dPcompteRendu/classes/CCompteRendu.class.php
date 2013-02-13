@@ -114,6 +114,9 @@ class CCompteRendu extends CDocumentItem {
     "CConsultAnesth" => array(
       "[FICHE ANESTH]" => "body"
     ),
+    "COperation" => array(
+      "[FICHE DHE]" => "body"
+    ),
     "CPrescription"  => array (
       "[ENTETE ORDONNANCE]"       => "header",
       "[PIED DE PAGE ORDONNANCE]" => "footer",
