@@ -53,8 +53,8 @@ $discipline = new CDiscipline;
 $disciplines = $discipline->loadList();
 
 // Récupération des spécialités CPAM
-$specialite = new CSpecCPAM();
-$specialites = $specialite->loadList();
+$spec_cpam = new CSpecCPAM();
+$spec_cpam = $spec_cpam->loadList();
   
 // Récupération des profils
 $profile = new CUser();
@@ -77,7 +77,7 @@ $smarty->assign("object"       , $object         );
 $smarty->assign("profiles"     , $profiles       );
 $smarty->assign("group"        , $group          );
 $smarty->assign("disciplines"  , $disciplines    );
-$smarty->assign("specialites"  , $specialites    );
+$smarty->assign("spec_cpam"    , $spec_cpam    );
 
 $smarty->display("inc_edit_mediuser.tpl");
 

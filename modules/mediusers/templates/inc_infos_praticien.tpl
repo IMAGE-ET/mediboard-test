@@ -15,7 +15,7 @@
 
 <tr>  
   <th>{{mb_label object=$object field=spec_cpam_id}}</th>
-  <td>{{mb_field object=$object field=spec_cpam_id options=$specialites style="width: 250px;"}}</td> 
+  <td>{{mb_field object=$object field=spec_cpam_id options=$spec_cpam style="width: 250px;"}}</td> 
 </tr>
 
 {{if $conf.ref_pays == 1}}
