@@ -1008,7 +1008,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
         "gauche"    => "G",
         "bilatéral" => "B",
         "total"     => "T",
-        "inconnu"   => "I"
+        "inconnu"   => "I",
+        "haut"      => "HT",
+        "bas"       => "BS"
       );
       
       $this->addCodeLibelle($elParent, "cote", $cote[$operation->cote], CMbString::capitalize($operation->cote));
@@ -1345,7 +1347,4 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addTexte($uniteFonctionnelleResponsable, "code", $id400Patient->id400 ? $id400Patient->id400 : $service->_id, 10);
     $this->addTexte($uniteFonctionnelleResponsable, "libelle", $service->_view, 35);
   }
-  
 }
-
-?>
