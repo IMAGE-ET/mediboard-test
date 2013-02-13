@@ -13,6 +13,7 @@ $_date_cut      = CValue::post("_date_cut");
 $lit_id         = CValue::post("lit_id");
 $_action_maman  = CValue::post("_action_maman", 0);
 $callback       = CValue::post("callback");
+$service_id     = CValue::post("service_id");
 
 $uf_hebergement_id   = CValue::post("uf_hebergement_id");
 $uf_medicale_id      = CValue::post("uf_medicale_id");
@@ -29,7 +30,12 @@ if ($_date_cut < $affectation->entree || $_date_cut > $affectation->sortie) {
 
 $affectation_cut = new CAffectation;
 $affectation_cut->entree    = $_date_cut;
-$affectation_cut->lit_id    = $affectation->lit_id;
+if ($service_id) {
+  $affectation_cut->service_id = $service_id;
+}
+else {
+  $affectation_cut->lit_id    = $affectation->lit_id;
+}
 $affectation_cut->sejour_id = $affectation->sejour_id;
 $affectation_cut->sortie    = $affectation->sortie;
 $affectation_cut->parent_affectation_id = $affectation->parent_affectation_id;
@@ -108,5 +114,3 @@ if ($callback) {
 
 echo CAppUI::getMsg();
 CApp::rip();
-
-?>

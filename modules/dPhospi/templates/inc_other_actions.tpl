@@ -48,6 +48,10 @@
     refreshMouvements(null, obj.lit_id);
   }
 
+  selectService = function() {
+    var url = new Url("dPhospi", "ajax_select_service");
+    url.requestModal(null, null, {maxHeight: '600'});
+  }
 </script>
 
 <table class="form">
@@ -67,6 +71,7 @@
         <input type="hidden" name="uf_medicale_id" value="" />
         <input type="hidden" name="uf_soins_id" value="" />
         <input type="hidden" name="callback" value="refreshNewLit" />
+        <input type="hidden" name="service_id" value="" />
         {{mb_key object=$affectation}}
         <input type="text" name="_date_cut_da" value="{{$smarty.now|date_format:$conf.datetime}}" readonly="readonly"/>
         <input type="hidden" name="_date_cut" class="dateTime" value="{{$smarty.now|@date_format:"%Y-%m-%d %H:%M:%S"}}"
@@ -80,12 +85,14 @@
         {{else}}
           this.form.onsubmit();
         {{/if}}" id="cut_affectation">Créer un mouvement</button>
-        
         {{if "maternite"|module_active && $sejour_maman}}
           <label>
             <input type="checkbox" name="_action_maman" checked="checked"/>
             {{if $affectation->parent_affectation_id}}Détacher de{{else}}Attacher à {{/if}} la maman ({{$sejour_maman->_ref_patient}})
           </label>
+        {{/if}}
+        {{if !$sejour_maman}}
+          <button type="button" class="door-out" onclick="selectService()">Placer dans le couloir</button>
         {{/if}}
       </form>
       <br />

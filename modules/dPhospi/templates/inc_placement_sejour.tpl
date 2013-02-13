@@ -14,7 +14,9 @@
 {{if ($which == "curr" )}}{{assign var=affectation value=$sejour->_ref_curr_affectation }}{{/if}}
 
 {{if isset($affectation|smarty:nodefaults) && $affectation->_id}}
-  <div>{{$affectation->_ref_lit}}</div>
+  <div>
+    <span onmouseover="ObjectTooltip.createEx(this, '{{$affectation->_guid}}')">{{$affectation->_ref_lit}}</span>
+  </div>
 {{else}}
   <div class="empty">Non placé</div>
 {{/if}}

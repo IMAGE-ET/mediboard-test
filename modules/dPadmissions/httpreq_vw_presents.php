@@ -33,7 +33,7 @@ $date_min = mbDateTime("00:00:00", $date);
 $date_max = mbDateTime("23:59:59", $date);
 
 // Entrées de la journée
-$sejour = new CSejour;
+$sejour = new CSejour();
 
 $group = CGroups::loadCurrent();
 
@@ -89,6 +89,8 @@ if ($order_col == "praticien_id"){
   $order = "users.user_last_name $order_way, users.user_first_name";
 }
 
+$show_curr_affectation = CAppUI::conf("dPadmissions show_curr_affectation");
+
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 CMbObject::massLoadFwdRef($sejours, "patient_id");
@@ -128,8 +130,14 @@ foreach ($sejours as $sejour_id => $_sejour) {
   }
 
   // Chargement de l'affectation
-  $_sejour->loadRefsAffectations();
-  $affectation = $_sejour->_ref_first_affectation;
+  if ($show_curr_affectation) {
+    $affectation = $_sejour->loadRefCurrAffectation();
+  }
+  else {
+    $_sejour->loadRefsAffectations();
+
+    $affectation = $_sejour->_ref_first_affectation;
+  }
   if ($affectation->_id) {
     $affectation->loadRefLit(1);
     $affectation->_ref_lit->loadCompleteView();
@@ -167,5 +175,6 @@ $smarty->assign("canPatients"   , CModule::getCanDo("dPpatients"));
 $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
 $smarty->assign("functions"     , $functions);
 $smarty->assign("filterFunction", $filterFunction);
+$smarty->assign("which"         , $show_curr_affectation ? "curr" : "first");
 
 $smarty->display("inc_vw_presents.tpl");

@@ -17,5 +17,6 @@ $dPconfig["dPadmissions"] = array(
   "show_deficience" => 0,
   "show_prestations_sorties" => 0,
   "use_recuse" => "0",
-  "hour_matin_soir" => "12:00:00"
+  "hour_matin_soir" => "12:00:00",
+  "show_curr_affectation" => "0"
 );
