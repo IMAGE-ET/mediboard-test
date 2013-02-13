@@ -64,7 +64,6 @@ $locales['CSourcePOP.role.prod'] = 'Production';
 $locales['CSourcePOP.role.qualif'] = 'Qualification';
 $locales['CSourcePOP.type.imap'] = 'IMAP';
 $locales['CSourcePOP.type.pop3'] = 'POP';
-$locales['CTEST-toto'] = 'Coucou, vous avez choisi %s sur le port %s';
 $locales['CUserMAil-button-getNewMails'] = 'Actualiser';
 $locales['CUserMAil-button-writeMail'] = 'Ecrire un nouveau message';
 $locales['CUserMail'] = 'Messagerie Externe';

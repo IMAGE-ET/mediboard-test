@@ -25,11 +25,11 @@ $mail = new CUserMail();
 $mail->load($mail_id);
 
 if (!$object->_id) {
-  CAppUI::setMsg("CUserMail-link-objectNull", UI_MSG_ERROR);
+  CAppUI::stepAjax("CUserMail-link-objectNull", UI_MSG_ERROR);
 }
 
-if ($attach_list == "") {
-  CAppUI::setMsg("CMailAttachment-msg-no_object_to_attach", UI_MSG_ERROR);
+if ($attach_list == "" && !$text_plain) {
+  CAppUI::stepAjax("CMailAttachment-msg-no_object_to_attach", UI_MSG_ERROR);
   echo CAppUI::getMsg();
 }
 
@@ -51,7 +51,7 @@ foreach ($attachments as $_attachment) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
       }
       else {
-        CAppUI::setMsg("CMailAttachment-msg-attachmentLinked-success", UI_MSG_OK);
+        CAppUI::stepAjax("CMailAttachment-msg-attachmentLinked-success", UI_MSG_OK);
       }
     }
   }
@@ -80,7 +80,7 @@ foreach ($attachments as $_attachment) {
     $file->fillFields();
     $file->putContent($file_pop);
     if ($str = $file->store()) {
-      CAppUI::setMsg($str, UI_MSG_ERROR);
+      CAppUI::stepAjax($str, UI_MSG_ERROR);
     }
     else {
       $attachment->file_id = $file->_id;
@@ -109,18 +109,16 @@ if ($text_html || $text_plain) {
   $file->fillFields();
   $file->putContent($text->content);
   if ($str = $file->store()) {
-    CAppUI::setMsg($str, UI_MSG_ERROR);
+    CAppUI::stepAjax($str, UI_MSG_ERROR);
   }
   else {
     $mail->text_file_id = $file->_id;
     $mail->store();
-    CAppUI::setMsg("CUserMail-content-attached", UI_MSG_OK);
+    CAppUI::stepAjax("CUserMail-content-attached", UI_MSG_OK);
   }
 }
 //if ($text_plain) {}
 
 if (!$text_html && !$text_plain && $attach_list == "" ) {
-  CAppUI::setMsg("CMailAttachment-msg-noAttachSelected", UI_MSG_ERROR);
+  CAppUI::stepAjax("CMailAttachment-msg-noAttachSelected", UI_MSG_ERROR);
 }
-
-echo CAppUI::getMsg();

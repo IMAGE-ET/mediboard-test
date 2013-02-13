@@ -128,7 +128,7 @@
 
         <div id="recherche_patient"></div>
         <div>
-          <button id="do_link_attachments" style="display: none;" onclick="messagerie.dolinkAttachment(attach, '{{$mail_id}}')">
+          <button id="do_link_attachments" {{if !$dossier_id}}style="display: none;"{{/if}} onclick="messagerie.dolinkAttachment(attach, '{{$mail_id}}')">
             <img src="style/mediboard/images/buttons/up.png" alt=""/>{{tr}}Lier{{/tr}}<img src="style/mediboard/images/buttons/up.png" alt=""/>
           </button>
         </div>
