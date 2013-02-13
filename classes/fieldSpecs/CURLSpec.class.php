@@ -27,7 +27,7 @@ class CURLSpec extends CMbFieldSpec {
   }
   
   function checkProperty($object){
-    if (!preg_match("|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i", $object->{$this->fieldName})) {
+    if (!preg_match("@^(?:http://)?([^/]+)@i", $object->{$this->fieldName})) {
       return "Le format de l'URL n'est pas valide";
     }
   }
