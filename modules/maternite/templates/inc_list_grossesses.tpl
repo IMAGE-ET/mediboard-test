@@ -1,6 +1,11 @@
 <script type="text/javascript">
   Main.add(function() {
     Grossesse.formFrom = getForm("bindFormGrossesse");
+    // Après création d'une grossesse, si l'objet concerné n'est relié à aucune grossesse,
+    // alors
+    {{if !$object->grossesse_id && $grossesses|@count == 1}}
+      Grossesse.formFrom.unique_grossesse_id.checked = true;
+    {{/if}}
   });
 </script>
 <form name="bindFormGrossesse" method="get">

@@ -56,7 +56,7 @@ class CGrossesse extends CMbObject{
     $specs["terme_prevu"]    = "date notNull";
     $specs["active"]         = "bool default|1";
     $specs["multiple"]       = "bool default|0";
-    $specs["allaitement_maternel"] = "bool default|1";
+    $specs["allaitement_maternel"] = "bool default|0";
     $specs["date_fin_allaitement"] = "date";
     $specs["date_dernieres_regles"] = "date";
     
