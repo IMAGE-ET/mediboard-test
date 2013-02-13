@@ -61,19 +61,27 @@ else {
   $factures = $facture->loadList($where , "ouverture ASC", 50);
 }
 
+//Affichage uniquement des factures qui contiennent des actes
 foreach ($factures as $key => $_facture) {
   $_facture->loadRefPatient();
   $_facture->loadRefSejour();
-  if (count($_facture->_ref_sejours) == 0 ) {
+  $nb_tarmed  = count($fact->_ref_actes_tarmed);
+  $nb_caisse  = count($fact->_ref_actes_caisse);
+  $nb_ngap    = count($fact->_ref_actes_ngap);
+  $nb_ccam    = count($fact->_ref_actes_ccam);
+  if (count($_facture->_ref_sejours) == 0) {
     unset($factures[$key]);
     $_facture->loadRefs();
+  }
+  elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0) {
+    unset($factures[$key]);
   }
 }
 
 if ($no_finish_reglement) {
   foreach ($factures as $key => $_facture) {
     $_facture->loadRefsReglements();
-    if ($_facture->_du_restant_patient != 0 ) {
+    if ($_facture->_du_restant_patient != 0) {
       unset($factures[$key]);
     }
   }
