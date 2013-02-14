@@ -23,7 +23,8 @@ foreach ($classes as $_class) {
   $object->makeAllBackSpecs();
   foreach ($object->_backSpecs as $backName => $backSpec) {
     if (!$backSpec->isInherited()) {
-      $present[$_class][$object->_backProps[$backName]] = $backName;
+      $parts = explode(" ", $object->_backProps[$backName]);
+      $present[$_class]["$parts[0] $parts[1]"] = $backName;
     }
   }
 }
@@ -112,5 +113,3 @@ $smarty->assign("reports", $reports);
 $smarty->assign("error_count", $error_count);
 
 $smarty->display("mnt_backref_classes.tpl");
-
-?>
