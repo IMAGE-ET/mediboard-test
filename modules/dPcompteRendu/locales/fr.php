@@ -258,6 +258,7 @@ $locales['CCompteRendu.auto_height'] = 'Générer hauteur auto';
 $locales['CCompteRendu.description_[ENTETE BON]'] = 'Entête de bon';
 $locales['CCompteRendu.description_[ENTETE ORDONNANCE]'] = 'Entête d\'ordonnance';
 $locales['CCompteRendu.description_[FICHE ANESTH]'] = 'Fiche d\'anesthésie';
+$locales['CCompteRendu.description_[FICHE DHE]'] = 'FICHE DHE';
 $locales['CCompteRendu.description_[PIED DE PAGE BON]'] = 'Pied de page de bon';
 $locales['CCompteRendu.description_[PIED DE PAGE ORDONNANCE]'] = 'Pied de page d\'ordonnance';
 $locales['CCompteRendu.document_fast_edit'] = 'Document en édition rapide';

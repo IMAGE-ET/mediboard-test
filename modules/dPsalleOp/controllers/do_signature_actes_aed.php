@@ -54,7 +54,7 @@ if (!CUser::checkPassword($praticien->_user_username, $password)){
 $acte_ccam = new CActeCCAM();
 $acte_ccam->object_id = $object_id;
 $acte_ccam->object_class = $object_class;
-$acte_ccam->executant_id = $user->_id;
+$acte_ccam->executant_id = $praticien->_id;
 $acte_ccam->signe = 0;
 $actes_ccam = $acte_ccam->loadMatchingList();
 
