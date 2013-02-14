@@ -32,8 +32,14 @@ class CService extends CMbObject {
   var $externe     = null;
   var $neonatalogie = null;
 
-  // Object references
+  /**
+   * @var CChambre[]
+   */
   var $_ref_chambres = null;
+
+  /**
+   * @var CGroups
+   */
   var $_ref_group    = null;
   var $_ref_validrepas = null;
 
@@ -46,6 +52,7 @@ class CService extends CMbObject {
 
   function getBackProps() {
     $backProps = parent::getBackProps();
+
     $backProps["chambres"]               = "CChambre service_id";
     $backProps["sejours"]                = "CSejour service_id";
     $backProps["protocoles"]             = "CProtocole service_id";
@@ -56,12 +63,11 @@ class CService extends CMbObject {
     $backProps["services_entree"]        = "CSejour service_entree_id";
     $backProps["services_sortie"]        = "CSejour service_sortie_id";
     $backProps["affectations"]           = "CAffectation service_id";
-
-    // stocks
     $backProps["product_deliveries"]     = "CProductDelivery service_id";
     $backProps["product_stock_services"] = "CProductStockService object_id";
     $backProps["stock_locations"]        = "CProductStockLocation object_id";
-    $backProps["ufs"]                         = "CAffectationUniteFonctionnelle object_id";
+    $backProps["ufs"]                    = "CAffectationUniteFonctionnelle object_id";
+    $backProps["refus_dispensation"]     = "CRefusDispensation service_id";
 
     return $backProps;
   }
@@ -107,6 +113,14 @@ class CService extends CMbObject {
 
   /**
    * Load list overlay for current group
+   *
+   * @param array  $where   Where clause
+   * @param string $order   Order clause
+   * @param null   $limit   Limit clause
+   * @param null   $groupby Group by clause
+   * @param array  $ljoin   Left join clause
+   *
+   * @return self[]
    */
   function loadGroupList($where = array(), $order = 'nom', $limit = null, $groupby = null, $ljoin = array()) {
     // Filtre sur l'établissement
@@ -116,6 +130,11 @@ class CService extends CMbObject {
     return $this->loadList($where, $order, $limit, $groupby, $ljoin);
   }
 
+  /**
+   * @param bool $annule Charge les chambres desactivées aussi
+   *
+   * @return CChambre[]
+   */
   function loadRefsChambres($annule = true) {
     $chambre = new CChambre();
     $where = array(
@@ -129,6 +148,9 @@ class CService extends CMbObject {
     return $this->_ref_chambres = $this->_back["chambres"] = $chambre->loadList($where, "nom");
   }
 
+  /**
+   * @return CGroups
+   */
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
@@ -142,7 +164,7 @@ class CService extends CMbObject {
   }
 
   function getPerm($permType) {
-    if(!$this->_ref_group) {
+    if (!$this->_ref_group) {
       $this->loadRefsFwd();
     }
     return (CPermObject::getPermObject($this, $permType) && $this->_ref_group->getPerm($permType));
@@ -151,17 +173,17 @@ class CService extends CMbObject {
   function validationRepas($date, $listTypeRepas = null){
     $this->_ref_validrepas[$date] = array();
     $validation =& $this->_ref_validrepas[$date];
-    if(!$listTypeRepas){
+    if (!$listTypeRepas) {
       $listTypeRepas = new CTypeRepas;
       $order = "debut, fin, nom";
-      $listTypeRepas = $listTypeRepas->loadList(null,$order);
+      $listTypeRepas = $listTypeRepas->loadList(null, $order);
     }
 
     $where               = array();
     $where["date"]       = $this->_spec->ds->prepare(" = %", $date);
     $where["service_id"] = $this->_spec->ds->prepare(" = %", $this->service_id);
-    foreach($listTypeRepas as $keyType=>$typeRepas){
-      $where["typerepas_id"] = $this->_spec->ds->prepare("= %",$keyType);
+    foreach ($listTypeRepas as $keyType=>$typeRepas) {
+      $where["typerepas_id"] = $this->_spec->ds->prepare("= %", $keyType);
       $validrepas = new CValidationRepas;
       $validrepas->loadObject($where);
       $validation[$keyType] = $validrepas;
@@ -170,7 +192,8 @@ class CService extends CMbObject {
 
   /**
    * Charge les services d'urgence de l'établissement courant
-   * @return array|CService
+   *
+   * @return CService[]
    */
   static function loadServicesUrgence() {
     $service = new CService();
@@ -190,7 +213,8 @@ class CService extends CMbObject {
 
   /**
    * Charge les services d'UHCD de l'établissement courant
-   * @return array|CService
+   *
+   * @return CService[]
    */
   static function loadServicesUHCD() {
     $service = new CService();
@@ -218,7 +242,9 @@ class CService extends CMbObject {
 
   /**
    * Construit le tag Service en fonction des variables de configuration
-   * @param $group_id Permet de charger l'id externe d'un Service pour un établissement donné si non null
+   *
+   * @param int $group_id Permet de charger l'id externe d'un Service pour un établissement donné si non null
+   *
    * @return string
    */
   static function getTagService($group_id = null) {
@@ -236,4 +262,3 @@ class CService extends CMbObject {
     return str_replace('$g', $group_id, $tag_service);
   }
 }
-?>

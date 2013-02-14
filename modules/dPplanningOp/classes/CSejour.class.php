@@ -309,6 +309,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     $backProps["ufs"]                   = "CAffectationUniteFonctionnelle object_id";
     $backProps["actes_cdarr"]           = "CActeCdARR sejour_id";
     $backProps["poses_disp_vasc"]       = "CPoseDispositifVasculaire sejour_id";
+    $backProps["deliveries"]            = "CProductDelivery sejour_id";
+    $backProps["stock_sejour"]          = "CStockSejour sejour_id";
+    $backProps["refus_dispensation"]    = "CRefusDispensation sejour_id";
     return $backProps;
   }
 

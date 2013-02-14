@@ -2308,6 +2308,15 @@ class CStoredObject extends CModelObject {
     
     return $this->loadList($where);
   }
+
+  /**
+   * Get the object's data source object
+   *
+   * @return CSQLDataSource The datasource object
+   */
+  function getDS(){
+    return $this->_spec->ds;
+  }
   
   protected static function _cmpFieldNatural($a, $b) {
     $sort_field = self::$sortField;
