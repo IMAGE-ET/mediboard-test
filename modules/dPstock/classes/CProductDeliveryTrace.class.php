@@ -64,7 +64,7 @@ class CProductDeliveryTrace extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs[$this->_spec->key] .= " show|1";
-    $specs['delivery_id']    = 'ref notNull class|CProductDelivery'; // TODO ajouter le cascade apres quelques verifications
+    $specs['delivery_id']    = 'ref notNull class|CProductDelivery cascade';
     $specs['code']           = 'str maxLength|32';
     
     $type = (CProductStock::$allow_quantity_fractions ? "float" : "num");
@@ -194,7 +194,6 @@ class CProductDeliveryTrace extends CMbObject {
       $stock_sejour->code_cis  = $this->_code_cis;
       $stock_sejour->loadMatchingObject("datetime DESC");
       
-      
       // Mise a jour de la quanitité du stock en quantité d'administration
       $_produit = CBcbProduit::get($this->_code_cip);
       $_produit->_unite_administration = $_produit->libelle_unite_presentation;
@@ -202,8 +201,6 @@ class CProductDeliveryTrace extends CMbObject {
   
       $ratio = ($_produit->_unite_dispensation == $_produit->libelle_unite_presentation) ? 1 : (1 / $_produit->nb_unite_presentation);
       $this->quantity = $this->quantity / $ratio;
-      
-      
       
       // Mise à jour du stock
       if ($stock_sejour->_id) {
@@ -225,6 +222,7 @@ class CProductDeliveryTrace extends CMbObject {
         }
       }
     }
+
     return parent::store();
   }
   
