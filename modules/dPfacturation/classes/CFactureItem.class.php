@@ -24,7 +24,8 @@ class CFactureItem extends CMbMetaObject {
   var $libelle    = null;
   var $code       = null;
   var $type       = null;
-  var $prix       = null;
+  var $montant_base        = null;
+  var $montant_depassement = null;
   var $reduction 	= null;
   var $quantite 	= null;
   var $coeff 	    = null;
@@ -32,6 +33,9 @@ class CFactureItem extends CMbMetaObject {
   var $pt 	      = null;
   var $coeff_pm 	= null;
   var $coeff_pt 	= null;
+  var $use_tarmed_bill 	= null;
+  var $code_ref 	= null;
+  var $code_caisse 	= null;
   
   // References
   var $_ref_facture = null;
@@ -63,7 +67,8 @@ class CFactureItem extends CMbMetaObject {
     $specs["libelle"]   = "text notNull";
     $specs["code"]      = "text notNull";
     $specs["type"]      = "enum notNull list|CActeNGAP|CFraisDivers|CActeCCAM|CActeTarmed|CActeCaisse default|CActeCCAM";
-    $specs["prix"]      = "currency notNull";
+    $specs["montant_base"]        = "currency notNull";
+    $specs["montant_depassement"] = "currency";
     $specs["reduction"]	= "currency";
     $specs["quantite"]  = "num notNull";
     $specs["coeff"]     = "currency notNull";
@@ -71,6 +76,9 @@ class CFactureItem extends CMbMetaObject {
     $specs["pt"]        = "currency";
     $specs["coeff_pm"]  = "currency";
     $specs["coeff_pt"]  = "currency";
+    $specs["use_tarmed_bill"] = "bool default|0";
+    $specs["code_ref"]    = "text";
+    $specs["code_caisse"] = "text";
     return $specs;
   }
   

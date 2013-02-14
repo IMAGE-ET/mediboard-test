@@ -152,18 +152,6 @@ class CFacture extends CMbObject {
   }
   
   /**
-   * loadRefsFwd
-   * 
-   * @return void
-  **/
-  function loadRefsFwd(){
-    $this->loadRefPatient();
-    $this->loadRefPraticien();
-    $this->loadRefAssurance();
-    $this->loadRefsItems();
-  } 
-  
-  /**
    * Redéfinition du store
    * 
    * @return void
@@ -384,6 +372,18 @@ class CFacture extends CMbObject {
   }
   
   /**
+   * loadRefsFwd
+   * 
+   * @return void
+  **/
+  function loadRefsFwd(){
+    $this->loadRefPatient();
+    $this->loadRefPraticien();
+    $this->loadRefAssurance();
+    $this->loadRefsItems();
+  } 
+  
+  /**
    * loadRefs
    * 
    * @return void
@@ -556,6 +556,27 @@ class CFacture extends CMbObject {
     $item->object_id   = $this->_id;
     $item->object_class = $this->_class;
     $this->_ref_items = $item->loadMatchingList("code ASC");
+    if (count($this->_ref_items)) {
+      $this->_ref_actes_tarmed  = array();
+      $this->_ref_actes_caisse  = array();
+      $this->_ref_actes_ngap    = array();
+      $this->_ref_actes_ccam    = array();
+    
+      foreach ($this->_ref_items as $key => $item) {
+        if ($item->type =="CActeTarmed") {
+          $this->_ref_actes_tarmed[$key] = $item;
+        }
+        elseif ($item->type =="CActeCaisse") {
+          $this->_ref_actes_caisse[$key] = $item;
+        }
+        elseif ($item->type =="CActeNGAP") {
+          $this->_ref_actes_ngap[$key] = $item;
+        }
+        elseif ($item->type =="CActeCCAM") {
+          $this->_ref_actes_ccam[$key] = $item;
+        }
+      }
+    }
   }
 
   /**
@@ -571,10 +592,11 @@ class CFacture extends CMbObject {
     $ligne->libelle       = $acte_ccam->_ref_code_ccam->libelleCourt;
     $ligne->code          = $acte_ccam->code;
     $ligne->type          = $acte_ccam->_class;
-    $ligne->object_id    = $this->_id;
-    $ligne->object_class = $this->_class;
+    $ligne->object_id     = $this->_id;
+    $ligne->object_class  = $this->_class;
     $ligne->date          = mbDate($acte_ccam->execution);
-    $ligne->prix          = $acte_ccam->montant_base;
+    $ligne->montant_base  = $acte_ccam->montant_base;
+    $ligne->montant_depassement = $acte_ccam->montant_depassement;
     $ligne->quantite      = 1;
     $ligne->coeff         = $this->_coeff;
     if ($msg = $ligne->store()) {
@@ -594,10 +616,11 @@ class CFacture extends CMbObject {
     $ligne->libelle       = $acte_ngap->_libelle;
     $ligne->code          = $acte_ngap->code;
     $ligne->type          = $acte_ngap->_class;
-    $ligne->object_id    = $this->_id;
-    $ligne->object_class = $this->_class;
+    $ligne->object_id     = $this->_id;
+    $ligne->object_class  = $this->_class;
     $ligne->date          = $date;
-    $ligne->prix          = $acte_ngap->montant_base;
+    $ligne->montant_base  = $acte_ngap->montant_base;
+    $ligne->montant_depassement = $acte_ccam->montant_depassement;
     $ligne->quantite      = $acte_ngap->quantite;
     $ligne->coeff         = $acte_ngap->coefficient;
     if ($msg = $ligne->store()) {
@@ -614,25 +637,44 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function creationLigneTarmed($acte_tarmed, $date){
+    if ($acte_tarmed->_ref_tarmed->tp_al == 0.00 && $acte_tarmed->_ref_tarmed->tp_tl == 0.00) {
+      if ($acte_tarmed->code_ref && (preg_match("Réduction", $acte_tarmed->libelle) || preg_match("Majoration", $acte_tarmed->libelle))) {
+        $acte_ref = null;
+        foreach ($facture->_ref_actes_tarmed as $acte_tarmed) {
+          if ($acte_tarmed->code == $acte_tarmed->code_ref) {
+            $acte_ref = $acte_tarmed;break;
+          }
+        }
+        $acte_ref->loadRefTarmed();
+        $acte_tarmed->_ref_tarmed->tp_al = $acte_ref->_ref_tarmed->tp_al;
+        $acte_tarmed->_ref_tarmed->tp_tl = $acte_ref->_ref_tarmed->tp_tl;
+      }
+      elseif ($acte_tarmed->montant_base) {
+        $acte_tarmed->_ref_tarmed->tp_al = $acte_tarmed->montant_base;
+      }
+    }
+      
     $ligne = new CFactureItem();
     $ligne->libelle       = $acte_tarmed->_ref_tarmed->libelle;
     $ligne->code          = $acte_tarmed->code;
     $ligne->type          = $acte_tarmed->_class;
     $ligne->object_id    = $this->_id;
     $ligne->object_class = $this->_class;
+    $ligne->code_ref = ($acte_tarmed->code_ref) ? $acte_tarmed->code_ref : $acte_tarmed->_ref_tarmed->procedure_associe[0][0];
     if ($acte_tarmed->date) {
       $ligne->date          = $acte_tarmed->date;
     }
     else {
       $ligne->date          = $date;
     }
-    $ligne->prix          = $acte_tarmed->montant_base;
+    $ligne->montant_base          = $acte_tarmed->montant_base;
     $ligne->quantite      = $acte_tarmed->quantite;
     $ligne->pm            = $acte_tarmed->_ref_tarmed->tp_al;
     $ligne->pt            = $acte_tarmed->_ref_tarmed->tp_tl;
     $ligne->coeff_pm      = $acte_tarmed->_ref_tarmed->f_al;
     $ligne->coeff_pt      = $acte_tarmed->_ref_tarmed->f_tl;
     $ligne->coeff         = $this->_coeff;
+    $ligne->code_caisse   = "001";
     if ($msg = $ligne->store()) {
       return $msg;
     }
@@ -648,20 +690,24 @@ class CFacture extends CMbObject {
   **/
   function creationLigneCaisse($acte_caisse, $date){
     $ligne = new CFactureItem();
-    $ligne->libelle       = $acte_caisse->_ref_prestation_caisse->libelle;
-    $ligne->code          = $acte_caisse->code;
-    $ligne->type          = $acte_caisse->_class;
-    $ligne->object_id    = $this->_id;
-    $ligne->object_class = $this->_class;
+    $ligne->libelle         = $acte_caisse->_ref_prestation_caisse->libelle;
+    $ligne->code            = $acte_caisse->code;
+    $ligne->type            = $acte_caisse->_class;
+    $ligne->object_id       = $this->_id;
+    $ligne->object_class    = $this->_class;
+    $ligne->use_tarmed_bill = $acte_caisse->_ref_caisse_maladie->use_tarmed_bill;
     if ($acte_caisse->date) {
-      $ligne->date          = $acte_caisse->date;
+      $ligne->date = $acte_caisse->date;
     }
     else {
-      $ligne->date          = $date;
+      $ligne->date = $date;
     }
-    $ligne->prix          = $acte_caisse->montant_base;
+    $ligne->montant_base  = $acte_caisse->montant_base;
     $ligne->quantite      = $acte_caisse->quantite;
     $ligne->coeff         = $this->_coeff;
+    $ligne->pm            = $acte_caisse->_ref_prestation_caisse->pt_medical;
+    $ligne->pt            = $acte_caisse->_ref_prestation_caisse->pt_technique;
+    $ligne->code_caisse   = $acte_caisse->_ref_caisse_maladie->code;
     if ($msg = $ligne->store()) {
       return $msg;
     }
@@ -707,46 +753,13 @@ class CFacture extends CMbObject {
    * 
    * @return void
   **/
-  function loadNumerosBVR(){
+  function loadNumerosBVR(){ 
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") && !count($this->_montant_factures_caisse)) {
       $this->_total_tarmed = 0;
       $this->_total_caisse = 0;
       $this->_autre_tarmed = 0;
-      if (count($this->_ref_consults)) {
-        foreach ($this->_ref_consults as $consult) {
-          foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
-            $this->_total_tarmed += $acte_tarmed->montant_base + $acte_tarmed->montant_depassement;
-          }
-          foreach ($consult->_ref_actes_caisse as $acte_caisse) {
-            $this->completeField("type_facture");
-            $coeff = "coeff_".$this->type_facture;
-            $tarif_acte_caisse = ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
-            if ($acte_caisse->_ref_caisse_maladie->use_tarmed_bill) {
-               $this->_autre_tarmed += $tarif_acte_caisse;
-            }
-            else {
-               $this->_total_caisse +=  $tarif_acte_caisse;
-            }
-          }
-        }
-      }
-      if (count($this->_ref_sejours)) {
-        foreach ($this->_ref_sejours as $sejour) {
-          foreach ($sejour->_ref_actes_tarmed as $acte_tarmed) {
-            $this->_total_tarmed += $acte_tarmed->montant_base + $acte_tarmed->montant_depassement;
-          }
-          foreach ($sejour->_ref_actes_caisse as $acte_caisse) {
-            $coeff = "coeff_".$this->type_facture;
-            $tarif_acte_caisse = ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
-            if ($acte_caisse->_ref_caisse_maladie->use_tarmed_bill) {
-              $this->_autre_tarmed += $tarif_acte_caisse;
-            }
-            else {
-              $this->_total_caisse +=  $tarif_acte_caisse;
-            }
-          }
-        }
-      }
+      $this->loadTotaux();
+      
       $montant_prem = round($this->_total_tarmed * $this->_coeff + $this->_autre_tarmed, 1);
       $this->_total_caisse = round($this->_total_caisse, 1);
       
@@ -754,7 +767,6 @@ class CFacture extends CMbObject {
         $montant_prem = 0;
       }
       if ($this->_total_tarmed || $this->_autre_tarmed) {
-//         $this->_montant_factures_caisse[0] = sprintf("%.2f",$montant_prem);
          $this->_montant_factures_caisse[0] = sprintf("%.2f",$montant_prem - $this->remise);
       }
       if ($this->_total_caisse > 0) {
@@ -796,6 +808,68 @@ class CFacture extends CMbObject {
     return $this->_num_bvr;
   }
 
+  /**
+   * Chargement des différents numéros de BVR de la facture 
+   * 
+   * @return void
+  **/
+  function loadTotaux() {
+    $this->loadRefsItems();
+    if ($this->cloture && $this->_ref_items) {
+      foreach ($this->_ref_actes_tarmed as $acte_tarmed) {
+        $this->_total_tarmed += $acte_tarmed->montant_base;
+      }
+      foreach ($this->_ref_actes_caisse as $acte_caisse) {
+        $this->completeField("type_facture");
+        $coeff = "coeff_".$this->type_facture;
+        $coeff = $acte_caisse->_class == "CActeCaisse" ? $acte_caisse->_ref_caisse_maladie->$coeff : $acte_caisse->coeff ;
+        $use   = $acte_caisse->_class == "CActeCaisse" ? $acte_caisse->_ref_caisse_maladie->use_tarmed_bill : $acte_caisse->use_tarmed_bill;
+        $tarif_acte_caisse = ($acte_caisse->montant_base + $acte_caisse->montant_depassement)* $coeff;
+        if ($use) {
+          $this->_autre_tarmed += $tarif_acte_caisse;
+        }
+        else {
+          $this->_total_caisse +=  $tarif_acte_caisse;
+        }
+      }
+    }
+    else {
+      if (count($this->_ref_consults)) {
+        foreach ($this->_ref_consults as $consult) {
+          $this->loadTotauxObject($consult);
+        }
+      }
+      if (count($this->_ref_sejours)) {
+        foreach ($this->_ref_sejours as $sejour) {
+          foreach ($sejour->_ref_operations as $op) {
+            $this->loadTotauxObject($op);
+          }
+          $this->loadTotauxObject($sejour);
+        }
+      }
+    }
+  }
+  
+  /**
+   * Chargement des différents numéros de BVR de la facture 
+   * 
+   * @return void
+  **/
+  function loadTotauxObject($object) {
+    foreach ($object->_ref_actes_tarmed as $acte_tarmed) {
+      $this->_total_tarmed += $acte_tarmed->montant_base + $acte_tarmed->montant_depassement;
+    }
+    foreach ($object->_ref_actes_caisse as $acte_caisse) {
+      $coeff = "coeff_".$this->type_facture;
+      $tarif_acte_caisse = ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
+      if ($acte_caisse->_ref_caisse_maladie->use_tarmed_bill) {
+        $this->_autre_tarmed += $tarif_acte_caisse;
+      }
+      else {
+        $this->_total_caisse +=  $tarif_acte_caisse;
+      }
+    }
+  }
   /**
    * Fonction de création des lignes(items) de la facture lorsqu'elle est cloturée
    * 

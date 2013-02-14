@@ -171,7 +171,16 @@ class CSetupdPfacturation extends CSetup {
               ADD `coeff_pm` DECIMAL (10,2),
               ADD `coeff_pt` DECIMAL (10,2);";
     $this->addQuery($query);
-    $this->mod_version = "0.20";
+    $this->makeRevision("0.20");
+    
+    $query = "ALTER TABLE `factureitem` 
+              ADD `use_tarmed_bill` ENUM ('0','1') DEFAULT '0',
+              CHANGE `prix` `montant_base` DECIMAL (10,2) NOT NULL DEFAULT '0',
+              ADD `montant_depassement` DECIMAL (10,2) DEFAULT '0' AFTER montant_base,
+              ADD `code_ref` TEXT,
+              ADD `code_caisse` TEXT;";
+    $this->addQuery($query);
+    $this->mod_version = "0.21";
   }
 }
 ?>

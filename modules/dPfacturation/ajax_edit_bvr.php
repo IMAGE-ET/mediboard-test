@@ -10,6 +10,7 @@
  */
 
 CCanDo::checkEdit();
+$user = CMediusers::get();
 
 $facture_class        = CValue::get("facture_class");
 $facture_id           = CValue::get("facture_id");
@@ -18,8 +19,6 @@ $edition_justificatif = CValue::get("edition_justificatif");
 $prat_id              = CValue::get("prat_id");
 $date_min             = CValue::get("_date_min", mbDate());
 $date_max             = CValue::get("_date_max", mbDate());
-
-$user = CMediusers::get();
 
 $factures = array();
 $facture = new $facture_class;
@@ -45,8 +44,9 @@ if ($edition_bvr) {
     $pm = 0;
     $pt = 0;
     $autre_tarmed = 0;
-    foreach ($facture->_ref_consults as $consult) {
-      foreach ($consult->_ref_actes_tarmed as $acte) {
+    
+    foreach ($facture->_ref_actes_tarmed as $acte) {
+      if ($acte->_class == "CActeTarmed") {
         if ($acte->_ref_tarmed->tp_al == 0.00 && $acte->_ref_tarmed->tp_tl == 0.00) {
           if ($acte->code_ref && (preg_match("Réduction", $acte->libelle) || preg_match("Majoration", $acte->libelle))) {
             $acte_ref = null;
@@ -72,10 +72,20 @@ if ($edition_bvr) {
           $pm += $acte->_ref_tarmed->tp_al * $acte->_ref_tarmed->f_al * $acte->quantite;
         }
       }
-      foreach ($consult->_ref_actes_caisse as $acte) {
+      else {
+        $pt += $acte->pt * $acte->coeff_pt * $acte->quantite;
+        $pm += $acte->pm * $acte->coeff_pm * $acte->quantite;
+      }
+    }
+    
+    foreach ($facture->_ref_actes_caisse as $acte) {
+      if ($acte->_class == "CActeCaisse") {
         if ($acte->_ref_caisse_maladie->use_tarmed_bill) {
           $autre_tarmed += $acte->montant_base;
         }
+      }
+      elseif ($acte->use_tarmed_bill) {
+        $autre_tarmed += $acte->prix;
       }
     }
     $pt = sprintf("%.2f", $pt * $facture->_coeff);

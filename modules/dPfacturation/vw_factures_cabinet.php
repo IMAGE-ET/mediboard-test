@@ -75,8 +75,21 @@ else {
   $factures = $facture->loadList($where , "ouverture ASC", 50);
 }
 
-foreach ($factures as $_facture) {
+foreach ($factures as $key => $_facture) {
   $_facture->loadRefPatient();
+  $_facture->loadRefsConsults();
+  $_facture->loadRefsItems();
+  $nb_tarmed  = count($_facture->_ref_actes_tarmed);
+  $nb_caisse  = count($_facture->_ref_actes_caisse);
+  $nb_ngap    = count($_facture->_ref_actes_ngap);
+  $nb_ccam    = count($_facture->_ref_actes_ccam);
+  if (count($_facture->_ref_consults) == 0) {
+    unset($factures[$key]);
+    $_facture->loadRefs();
+  }
+  elseif ($nb_tarmed == 0 && $nb_caisse == 0 && $nb_ngap == 0 && $nb_ccam == 0) {
+    unset($factures[$key]);
+  }
 }
 
 if ($no_finish_reglement) {
