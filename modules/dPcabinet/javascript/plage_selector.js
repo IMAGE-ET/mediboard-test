@@ -26,6 +26,11 @@ PlageConsultSelector = {
     var oForm = getForm(this.sForm);
     $V(oForm[this.sChir_id]        , chir_id, false);
     oForm[this.sChir_id].fire("ui:change");
+    if (chir_id) {
+      refreshListCategorie(chir_id);
+      refreshFunction(chir_id);
+      $V(oForm[this.sFunction_id], '');
+    }
     $V(oForm[this.sHeure]          , heure);
     $V(oForm[this.sDate]           , date);
     $V(oForm[this.sPlageconsult_id], plage_id, true);

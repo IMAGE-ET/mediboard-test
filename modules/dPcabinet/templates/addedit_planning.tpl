@@ -45,7 +45,15 @@ refreshFunction = function(chir_id) {
   {{if !$consult->_id && $conf.dPcabinet.CConsultation.create_consult_sejour}}
     var url = new Url("dPcabinet", "ajax_refresh_secondary_functions");
     url.addParam("chir_id", chir_id);
-    url.requestUpdate("secondary_functions");
+    url.requestUpdate("secondary_functions", function() {
+      if (chir_id) {
+        var form = getForm("editFrm");
+        var chir = form.chir_id;
+        var facturable = chir.options[chir.selectedIndex].get('facturable');
+        form.___facturable.checked = facturable ? 'checked' : '';
+        $V(form._facturable, facturable);
+      }
+    });
   {{/if}}
 }
 
@@ -300,9 +308,6 @@ Main.add(function() {
                   onChange="ClearRDV(); refreshListCategorie(this.value); refreshFunction(this.value);
                     if (this.value != '') { 
                       $V(this.form._function_id, '');
-                      var facturable = this.options[this.selectedIndex].get('facturable');
-                      this.form.___facturable.checked = facturable ? 'checked' : '';
-                      $V(this.form._facturable, facturable);
                     }">
                   <option value="">&mdash; Choisir un praticien</option>
                   {{foreach from=$listPraticiens item=curr_praticien}}
