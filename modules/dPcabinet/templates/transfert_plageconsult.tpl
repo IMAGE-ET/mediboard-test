@@ -20,28 +20,22 @@ var PlageConsult = {
 
   <tr>
     <th style="width: 50%">{{mb_label object=$filter field=chir_id}}</th>
-		<td style="width: 50%">
-	    <select name="chir_id" class="{{$filter->_props.chir_id}}">
-	      <option value="">&mdash; Choisir un praticien</option>
-	      {{foreach from=$praticiens item=_praticien}}
-	      <option class="mediuser" style="border-color: #{{$_praticien->_ref_function->color}};" value="{{$_praticien->_id}}" 
-	      	{{if $filter->chir_id == $_praticien->_id}} selected="selected" {{/if}}
-	      >
-	        {{$_praticien->_view}}
-	      </option>
-	     {{/foreach}}
-	    </select>
-		</td>
+    <td style="width: 50%">
+      <select name="chir_id" class="{{$filter->_props.chir_id}}">
+        <option value="">&mdash; Choisir un praticien</option>
+        {{mb_include module=mediusers template=inc_options_mediuser selected=$filter->chir_id list=$praticiens}}
+      </select>
+    </td>
   </tr>
 
   <tr>
     <th>{{mb_label object=$filter field=_date_min}}</th>
-		<td>{{mb_field object=$filter field=_date_min form=Find register=true}}</td>
+    <td>{{mb_field object=$filter field=_date_min form=Find register=true}}</td>
   </tr>
 
   <tr>
     <th>{{mb_label object=$filter field=_date_max}}</th>
-		<td>{{mb_field object=$filter field=_date_max form=Find register=true}}</td>
+    <td>{{mb_field object=$filter field=_date_max form=Find register=true}}</td>
   </tr>
   
   <tr>
@@ -66,21 +60,21 @@ var PlageConsult = {
 
 <table class="form">
   <tr>
-	  <th class="category" colspan="10">Transférer {{$plages|@count}} ces plages de consultations</th>
+    <th class="category" colspan="10">Transférer {{$plages|@count}} ces plages de consultations</th>
   </tr>
 
   <tr>
     <th style="width: 50%">{{mb_label object=$filter field=chir_id}}</th>
-		<td style="width: 50%">
-	    <select name="chir_id" class="{{$filter->_props.chir_id}}">
-	      <option value="">&mdash; Choisir un praticien</option>
-	      {{foreach from=$praticiens item=_praticien}}
-	      <option class="mediuser" style="border-color: #{{$_praticien->_ref_function->color}};" value="{{$_praticien->_id}}">
-	        {{$_praticien->_view}}
-	      </option>
-	     {{/foreach}}
-	    </select>
-		</td>
+    <td style="width: 50%">
+      <select name="chir_id" class="{{$filter->_props.chir_id}}">
+        <option value="">&mdash; Choisir un praticien</option>
+        {{foreach from=$praticiens item=_praticien}}
+        <option class="mediuser" style="border-color: #{{$_praticien->_ref_function->color}};" value="{{$_praticien->_id}}">
+          {{$_praticien->_view}}
+        </option>
+       {{/foreach}}
+      </select>
+    </td>
   </tr>
 
   <tr>
@@ -97,12 +91,12 @@ var PlageConsult = {
 <!-- Résultats -->
 <table class="tbl" style="text-align: center;	">
   {{if $filter->chir_id}}
-	<tr>
-	  <th class="category" colspan="100">
-	    {{$plages|@count}} plages de consultation trouvées
-	  </th>
-	</tr>
-	{{/if}}
+  <tr>
+    <th class="category" colspan="100">
+      {{$plages|@count}} plages de consultation trouvées
+    </th>
+  </tr>
+  {{/if}}
 
   <tr>
     <th colspan="3">{{mb_title object=$filter field=date}}</th>
@@ -111,16 +105,16 @@ var PlageConsult = {
     <th>{{mb_title object=$filter field=libelle}}</th>
   </tr>
 
-	<tbody>
-	  {{foreach from=$plages item=_plage}}
-	  <tr>
-	    <td>{{mb_ditto name=year value=$_plage->date|date_format:"%Y"}}</td>
-	    <td>{{mb_ditto name=month value=$_plage->date|date_format:"%B"}}</td>
-	    <td>{{include file=inc_plage_etat.tpl}}</td>
-	    <td>{{mb_value object=$_plage field=debut}}</td>
-	    <td>{{mb_value object=$_plage field=fin}}</td>
-	    <td>{{mb_value object=$_plage field=libelle}}</td>
-	  </tr>
-	  {{/foreach}}
-	</tbody>
+  <tbody>
+    {{foreach from=$plages item=_plage}}
+    <tr>
+      <td>{{mb_ditto name=year value=$_plage->date|date_format:"%Y"}}</td>
+      <td>{{mb_ditto name=month value=$_plage->date|date_format:"%B"}}</td>
+      <td>{{include file=inc_plage_etat.tpl}}</td>
+      <td>{{mb_value object=$_plage field=debut}}</td>
+      <td>{{mb_value object=$_plage field=fin}}</td>
+      <td>{{mb_value object=$_plage field=libelle}}</td>
+    </tr>
+    {{/foreach}}
+  </tbody>
 </table>

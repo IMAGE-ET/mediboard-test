@@ -17,12 +17,7 @@
         <input type="hidden" name="m" value="{{$m}}" />
         <select name="prat_id" onchange="this.form.submit()">
           <option value="">&mdash; Aucun praticien</option>
-          {{foreach from=$listPrat item=_prat}}
-          <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"
-          {{if $_prat->_id == $prat->_id}}selected="selected"{{/if}}>
-            {{$_prat}}
-          </option>
-          {{/foreach}}
+          {{mb_include module=mediusers template=inc_options_mediuser selected=$prat->_id list=$listPrat}}
         </select>
       </form>
     </td>
@@ -40,7 +35,7 @@
   {{/if}}
 
   <tr>
-  	<th colspan="10" class="title">{{tr}}CFunctions-back-tarifs{{/tr}}</th>
-	</tr>
+    <th colspan="10" class="title">{{tr}}CFunctions-back-tarifs{{/tr}}</th>
+  </tr>
   {{mb_include template=inc_list_tarifs_by_owner tarifs=$listeTarifsSpe}}
 </table>

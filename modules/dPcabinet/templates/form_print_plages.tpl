@@ -75,12 +75,12 @@ function changeDateCal(){
         <tr><th class="category" colspan="2">Choix des paramètres de tri</th></tr>
         <tr>
           <th><label for="chir" title="Praticien">Praticien</label></th>
-          <td><select name="chir">
+          <td>
+            <select name="chir">
             <option value="0">&mdash; Tous</option>
-            {{foreach from=$listChir item=curr_chir}}
-              <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}">{{$curr_chir->_view}}</option>
-            {{/foreach}}
-          </select></td>
+            {{mb_include module=mediusers template=inc_options_mediuser list=$listChir}}
+            </select>
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_telephone"}}</th>

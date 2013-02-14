@@ -155,9 +155,7 @@ viewTotaux = function() {
               {{if $listPrat|@count > 1}}
               <option value="">&mdash; Tous</option>
               {{/if}}
-              {{foreach from=$listPrat item=curr_prat}}
-              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
-              {{/foreach}}
+              {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat}}
             </select>
           </td>
         </tr>

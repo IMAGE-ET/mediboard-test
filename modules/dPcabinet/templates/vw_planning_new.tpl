@@ -155,11 +155,7 @@
         
         <select name="chirSel" style="width: 15em;" onchange="refreshPlanning()">
           <option value="-1" {{if $chirSel == -1}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
-          {{foreach from=$listChirs item=curr_chir}}
-          <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
-            {{$curr_chir->_view}}
-          </option>
-          {{/foreach}}
+          {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
         </select>
       </th>
       <th style="width: 50%">
