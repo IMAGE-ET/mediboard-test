@@ -222,16 +222,54 @@ foreach ($factures as $facture) {
           $pdf->setFont("verab", '', 7);
           $pdf->setXY(37, $debut_lignes + $ligne*3);
          
-          $libelle = "";
+          $acte_pm = $acte_coeffpm = $acte_pt = $acte_coeffpt = $code_ref = $libelle = "";
+          $coeff_fact = 1;
+          $code = "001";
           if ($acte->_class == "CActeTarmed") {
             $libelle = $acte->_ref_tarmed->libelle;
+            $code_ref = ($acte->code_ref) ? $acte->code_ref : $acte->_ref_tarmed->procedure_associe[0][0];
+            if ($acte->code_ref && (preg_match("/Réduction/", $acte->libelle) || preg_match("/Majoration/", $acte->libelle))) {
+              $acte_ref = null;
+              foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
+                if ($acte_tarmed->code == $acte->code_ref) {
+                  $acte_ref = $acte_tarmed;break;
+                }
+              }
+              $acte_ref->loadRefTarmed();
+              $acte_pm = $acte_ref->_ref_tarmed->tp_al;
+              $acte_pt = $acte_ref->_ref_tarmed->tp_tl;
+              $acte_coeffpm = $acte_ref->_ref_tarmed->f_al;
+              $acte_coeffpt = $acte_ref->_ref_tarmed->f_tl;
+            }
+            else {
+              $acte_pm = $acte->_ref_tarmed->tp_al;
+              $acte_pt = $acte->_ref_tarmed->tp_tl;
+              $acte_coeffpm = $acte->_ref_tarmed->f_al;
+              $acte_coeffpt = $acte->_ref_tarmed->f_tl;
+            }
+            $coeff_fact = $facture->_coeff;
           }
           elseif ($acte->_class == "CActeCaisse") {
             $libelle = $acte->_ref_prestation_caisse->libelle;
+            $nom_coeff = "coeff_".$facture->type_facture;
+            $coeff = $acte->_ref_caisse_maladie->$nom_coeff;
+            $acte_pm = sprintf("%.2f", $acte->_ref_prestation_caisse->pt_medical);
+            $acte_pt = sprintf("%.2f", $acte->_ref_prestation_caisse->pt_technique);
+            $coeff_fact = $coeff;
           }
           else {
             $libelle = $acte->libelle;
+            $acte_pm = $acte->pm;
+            $acte_pt = $acte->pt;
+            $acte_coeffpm = $acte->coeff_pm;
+            $acte_coeffpt = $acte->coeff_pt;
+            $coeff_fact = $acte->coeff;
           }
+          
+          if ($keytab == "caisse") {
+            $code = $acte->_class == "CActeCaisse" ? $acte->_ref_caisse_maladie->code : $code = $acte->code_caisse; ;
+          }
+          
           $pdf->Write("<b>",substr($libelle, 0, 90));
           $ligne++;
           //Si le libelle est trop long
@@ -240,112 +278,48 @@ foreach ($factures as $facture) {
             $pdf->Write("<b>",substr($libelle, 90));
             $ligne++;
           }
-         
+           
           $pdf->setX(10);
           $pdf->setFont("vera", '', 8);
-          foreach ($tailles_colonnes as $key => $largeur) {       
-              $pdf->setXY($pdf->getX()+$x, $debut_lignes + $ligne*3);
-              $valeur = "";
-              $cote = "C";
-              if ($key == "Date") {
+          foreach ($tailles_colonnes as $key => $largeur) {
+            $pdf->setXY($pdf->getX()+$x, $debut_lignes + $ligne*3);
+            $valeur = "";
+            $cote = "C";
+            switch ($key) {
+              case "Date" :
                 $valeur = $acte->date;
                 $valeur= mbTransformTime(null, $valeur, "%d.%m.%Y");
-              }
-              if ($key == "Tarif") {
-                $code = "001";
-                if ($keytab == "caisse" && $acte->_class == "CActeCaisse") {
-                  $code = $acte->_ref_caisse_maladie->code;
-                }
-                elseif ($keytab == "caisse") {
-                  $code = $acte->code_caisse;
-                }
-                $valeur = $code;
-              }
-              if ($key == "Code" && $acte->code!=10) {
+                break;
+              case "Tarif" :    $valeur = $code; break;
+              case "Code réf" : $valeur = $code_ref; break;
+              case $key == "Code" && $acte->code!=10 :
                 $valeur = $acte->code;
-              }
-              if ($key == "Code réf") {
-                $code_ref = "";
-                if ($acte->_class == "CActeTarmed") {
-                  $code_ref = ($acte->code_ref) ? $acte->code_ref : $acte->_ref_tarmed->procedure_associe[0][0];
-                }
-                $valeur = $code_ref;
-              }
-              if ($key == "Sé Cô") {
-                 $valeur = "1";
-              }
-              if ($key == "Quantité") {
-                $valeur = $acte->quantite;
-              }
-              $acte_pm = $acte_coeffpm = $acte_pt = $acte_coeffpt = "";
-              $coeff_fact = 1;
-              if ($acte->_class == "CActeTarmed") {
-                if ($acte->code_ref && (preg_match("/Réduction/", $acte->libelle) || preg_match("/Majoration/", $acte->libelle))) {
-                  $acte_ref = null;
-                  foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
-                    if ($acte_tarmed->code == $acte->code_ref) {
-                      $acte_ref = $acte_tarmed;break;
-                    }
-                  }
-                  $acte_ref->loadRefTarmed();
-                  $acte_pm = $acte_ref->_ref_tarmed->tp_al;
-                  $acte_pt = $acte_ref->_ref_tarmed->tp_tl;
-                  $acte_coeffpm = $acte_ref->_ref_tarmed->f_al;
-                  $acte_coeffpt = $acte_ref->_ref_tarmed->f_tl;
-                }
-                else {
-                   $acte_pm = $acte->_ref_tarmed->tp_al;
-                   $acte_pt = $acte->_ref_tarmed->tp_tl;
-                   $acte_coeffpm = $acte->_ref_tarmed->f_al;
-                   $acte_coeffpt = $acte->_ref_tarmed->f_tl;
-                }
-                $coeff_fact = $facture->_coeff;
-              }
-              elseif ($acte->_class == "CActeCaisse") {
-                $nom_coeff = "coeff_".$facture->type_facture;
-                $coeff = $acte->_ref_caisse_maladie->$nom_coeff;
-                $acte_pm = sprintf("%.2f", $acte->_ref_prestation_caisse->pt_medical);
-                $acte_pt = sprintf("%.2f", $acte->_ref_prestation_caisse->pt_technique);
-                $coeff_fact = $coeff;
-              }
-              else {
-                $acte_pm = $acte->pm;
-                $acte_pt = $acte->pt;
-                $acte_coeffpm = $acte->coeff_pm;
-                $acte_coeffpt = $acte->coeff_pt;
-                $coeff_fact = $acte->coeff;
-              }
-              
-              if ($key == "Pt PM/Prix") {
+                break;
+              case "Sé Cô" :    $valeur = "1"; break;
+              case "Quantité" : $valeur = $acte->quantite; break;
+              case "Pt PM/Prix" :
                 $valeur = $acte_pm;
                 $cote = "R";
-              }
-              if ($key == "fPM") {
-                $valeur = $acte_coeffpm;
-              }
-              if ($key == "VPtPM" || $key == "VPtPT") {
+                break;
+              case "fPM" : $valeur = $acte_coeffpm; break;
+              case $key == "VPtPM" || $key == "VPtPT" :
                 $valeur = $coeff_fact;
-              }
-              if ($key == "Pt PT") {
+                break;
+              case "Pt PT" :
                 $valeur = $acte_pt;
                 $cote = "R";
-              }
-              if ($key == "fPT") {
-                $valeur = $acte_pt;
-              }
-              if ($key == "E" || $key == "R") {
-                $valeur = "1";
-              }
-              if ($key == "P" || $key == "M") {
-                $valeur = "0";
-              }
-              if ($key == "Montant") {
+                break;
+              case "fPT" :   $valeur = $acte_pt; break;
+              case "Montant" :
                 $pdf->setX($pdf->getX()+3);
                 $valeur = sprintf("%.2f", $acte->montant_base * $coeff_fact);
                 $cote = "R";
-              }
-              $pdf->Cell($largeur, null ,  $valeur, null, null, $cote);
-              $x = $largeur;
+                break;
+              case $key == "E" || $key == "R" : $valeur = "1"; break;
+              case $key == "P" || $key == "M" : $valeur = "0"; break;
+            }
+            $pdf->Cell($largeur, null ,  $valeur, null, null, $cote);
+            $x = $largeur;
           }
           $this_pt = ($acte_pt * $acte_coeffpt * $acte->quantite * $coeff_fact);
           $this_pm = ($acte_pm * $acte_coeffpm * $acte->quantite * $coeff_fact);

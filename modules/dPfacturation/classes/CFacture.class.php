@@ -561,19 +561,21 @@ class CFacture extends CMbObject {
       $this->_ref_actes_caisse  = array();
       $this->_ref_actes_ngap    = array();
       $this->_ref_actes_ccam    = array();
-    
+      
       foreach ($this->_ref_items as $key => $item) {
-        if ($item->type =="CActeTarmed") {
-          $this->_ref_actes_tarmed[$key] = $item;
-        }
-        elseif ($item->type =="CActeCaisse") {
-          $this->_ref_actes_caisse[$key] = $item;
-        }
-        elseif ($item->type =="CActeNGAP") {
-          $this->_ref_actes_ngap[$key] = $item;
-        }
-        elseif ($item->type =="CActeCCAM") {
-          $this->_ref_actes_ccam[$key] = $item;
+        switch ($item->type) {
+          case "CActeTarmed" :
+            $this->_ref_actes_tarmed[$key] = $item;
+            break;
+          case "CActeCaisse" :
+            $this->_ref_actes_caisse[$key] = $item;
+            break;
+          case "CActeNGAP" :
+            $this->_ref_actes_ngap[$key] = $item;
+            break;
+          case "CActeCCAM" :
+            $this->_ref_actes_ccam[$key] = $item;
+            break;
         }
       }
     }
@@ -851,7 +853,9 @@ class CFacture extends CMbObject {
   }
   
   /**
-   * Chargement des différents numéros de BVR de la facture 
+   * Calcul des totaux à partir d'un objet
+   * 
+   * @param string $object objet référence
    * 
    * @return void
   **/
