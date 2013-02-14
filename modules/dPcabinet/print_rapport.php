@@ -16,7 +16,6 @@ CSQLDataSource::$trace = false;
 
 // Récupération des paramètres
 $filter = new CPlageconsult();
-
 $filter->_date_min = CValue::getOrSession("_date_min", mbDate());
 $filter->_date_max = CValue::getOrSession("_date_max", mbDate());
 $filter->_etat_reglement_patient = CValue::getOrSession("_etat_reglement_patient");
@@ -149,7 +148,6 @@ foreach ($listConsults as $_consult) {
   $factures[$facture->_guid] = $facture; 
 }
 
-
 // Reglements via les ***factures de consultation***
 $ljoin = array();
 $ljoin["consultation"] = "consultation.factureconsult_id = factureconsult.factureconsult_id";
@@ -214,23 +212,23 @@ foreach ($factures as $_facture) {
   
   // Classement par plage
   $plage = $_facture->_ref_last_consult->_ref_plageconsult;
-  if (!isset($listPlages[$plage->_id])) {
-    $listPlages[$plage->_id]["plage"] = $plage;
-    $listPlages[$plage->_id]["total"]["secteur1"] = 0;
-    $listPlages[$plage->_id]["total"]["secteur2"] = 0;
-    $listPlages[$plage->_id]["total"]["total"]    = 0;
-    $listPlages[$plage->_id]["total"]["patient"]  = 0;
-    $listPlages[$plage->_id]["total"]["tiers"]    = 0;
+  if (!isset($listPlages["$plage->date $plage->debut"])) {
+    $listPlages["$plage->date $plage->debut"]["plage"] = $plage;
+    $listPlages["$plage->date $plage->debut"]["total"]["secteur1"] = 0;
+    $listPlages["$plage->date $plage->debut"]["total"]["secteur2"] = 0;
+    $listPlages["$plage->date $plage->debut"]["total"]["total"]    = 0;
+    $listPlages["$plage->date $plage->debut"]["total"]["patient"]  = 0;
+    $listPlages["$plage->date $plage->debut"]["total"]["tiers"]    = 0;
   }
   
-  $listPlages[$plage->_id]["factures"][$_facture->_guid] = $_facture;
-  $listPlages[$plage->_id]["total"]["secteur1"] += $_facture->_montant_secteur1;
-  $listPlages[$plage->_id]["total"]["secteur2"] += $_facture->_montant_secteur2;
-  $listPlages[$plage->_id]["total"]["total"]    += $_facture->_montant_total;
-  $listPlages[$plage->_id]["total"]["patient"]  += $_facture->_reglements_total_patient;
-  $listPlages[$plage->_id]["total"]["tiers"]    += $_facture->_reglements_total_tiers;
+  $listPlages["$plage->date $plage->debut"]["factures"][$_facture->_guid] = $_facture;
+  $listPlages["$plage->date $plage->debut"]["total"]["secteur1"] += $_facture->_montant_secteur1;
+  $listPlages["$plage->date $plage->debut"]["total"]["secteur2"] += $_facture->_montant_secteur2;
+  $listPlages["$plage->date $plage->debut"]["total"]["total"]    += $_facture->_montant_total;
+  $listPlages["$plage->date $plage->debut"]["total"]["patient"]  += $_facture->_reglements_total_patient;
+  $listPlages["$plage->date $plage->debut"]["total"]["tiers"]    += $_facture->_reglements_total_tiers;
 }
-  
+
 // Chargement des banques
 $banque = new CBanque();
 $banques = $banque->loadList(null, "nom ASC");
