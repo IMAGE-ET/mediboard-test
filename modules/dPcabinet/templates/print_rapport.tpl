@@ -80,23 +80,20 @@
           <th style="width: 20%;">{{mb_label class=CConsultation field=tarif}}</th>
           
           {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
-          <th class="narrow">{{mb_title class=CConsultation field=secteur1}}</th>
-          <th class="narrow">{{mb_title class=CConsultation field=secteur2}}</th>
-          <th class="narrow">{{mb_title class=CConsultation field=_somme}}</th>
+            <th class="narrow">{{mb_title class=CConsultation field=secteur1}}</th>
+            <th class="narrow">{{mb_title class=CConsultation field=secteur2}}</th>
+            <th class="narrow">{{mb_title class=CConsultation field=_somme}}</th>
+            <th style="width: 20%;">{{mb_title class=CConsultation field=du_patient}}</th>
+            <th style="width: 20%;">{{mb_title class=CConsultation field=du_tiers}}</th>
           {{/if}}
           
           {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
-          <th class="narrow">Montant</th>
-          <th class="narrow">Remise</th>
+            <th class="narrow">Montant</th>
+            <th class="narrow">Remise</th>
+            <th class="narrow">{{mb_title class=CConsultation field=_somme}}</th>
+            <th style="width: 20%;">{{mb_title class=CConsultation field=du_patient}}</th>
           {{/if}}
           
-          <th style="width: 20%;">{{mb_title class=CConsultation field=du_patient}}</th>
-          
-          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
-          <th style="width: 20%;">{{mb_title class=CConsultation field=du_tiers}}</th>
-          {{/if}}
-          
-          <th></th>
           <th>{{mb_title class=CConsultation field=patient_date_reglement}}</th>
         </tr>
         
@@ -242,6 +239,7 @@
           {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
             <td><strong>{{$_plage.total.tiers|currency}}</strong></td>
           {{/if}}
+          <td></td>
         </tr>
       </table>
     </td>
