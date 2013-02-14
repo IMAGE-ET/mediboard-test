@@ -14,7 +14,7 @@
 Class.extend = function (oClass, oExtension) {
   Object.extend(oClass.prototype, oExtension);
 };
- 
+
 /**
  * Function class
  */
@@ -104,7 +104,7 @@ Class.extend(Autocompleter.Base, {
 
       this.stopIndicator();
       this.update.scrollTop = 0;
-      
+
       // was "this.index = 0;"
       this.index = this.options.dontSelectFirst ? -1 : 0;
 
@@ -164,12 +164,12 @@ Class.extend(Autocompleter.Base, {
   },
   onBlur: function(event) {
     if (this.updateHasFocus) return;
-    
+
     if (Prototype.Browser.IE && this.update.visible()) {  
       // fix for IE: don't blur when clicking the vertical scrollbar (if there is one)
       var verticalScrollbarWidth = this.update.offsetWidth - this.update.clientWidth -
         this.update.clientLeft - (parseInt(this.update.currentStyle['borderRightWidth']) || 0);
-        
+
       if (verticalScrollbarWidth) {
         var x = event.clientX, 
             y = event.clientY, 
@@ -178,7 +178,7 @@ Class.extend(Autocompleter.Base, {
             sbTop = this.update.offsetTop + this.update.clientTop,
             sbRight = sbLeft + verticalScrollbarWidth,
             sbBottom = sbTop + this.update.clientHeight;
-            
+
         while (parent) {
           var offs = parent.offsetLeft + parent.clientLeft, scrollOffs = offs - parent.scrollLeft;
           sbLeft = (sbLeft += scrollOffs) < offs ? offs : sbLeft;
@@ -188,14 +188,14 @@ Class.extend(Autocompleter.Base, {
           sbBottom = (sbBottom += scrollOffs) < offs ? offs : sbBottom;
           parent = parent.offsetParent;
         }
-        
+
         if (x >= sbLeft && x < sbRight && y >= sbTop && y < sbBottom) {
           this.element.setActive();
           return;
         }
       }
     }
-    
+
     setTimeout(this.hide.bind(this), 250);
     this.hasFocus = false;
     this.active = false;
@@ -205,7 +205,7 @@ Class.extend(Autocompleter.Base, {
     if (!this.options.caretBounds && (null != this.tokenBounds)) return this.tokenBounds;
     var value = this.element.value;
     if (value.strip().empty()) return [-1, 0];
-    
+
     // This has been added so that the token bounds are relative to the current cert position
     if (this.options.caretBounds) {
       var caret = this.element.getInputSelection(true).start;
@@ -213,7 +213,7 @@ Class.extend(Autocompleter.Base, {
       var end = value.substr(caret).indexOf("\n")+caret+1;
       return (this.tokenBounds = [start, end]);
     }
-    
+
     // This needs to be declared here as the arguments.callee is not the same
     var firstDiff = function(newS, oldS) {
       var boundary = Math.min(newS.length, oldS.length);
@@ -223,7 +223,7 @@ Class.extend(Autocompleter.Base, {
       return boundary;
     };
     /////////////
-    
+
     var diff = firstDiff(value, this.oldElementValue);
     var offset = (diff == this.oldElementValue.length ? 1 : 0);
     var prevTokenPos = -1, nextTokenPos = value.length;
@@ -380,7 +380,7 @@ Class.extend(Element.ClassNames, {
       this.set(sValue);
     }
   },
-  
+
   save: function (sCookieName, nDuration) {
     new CookieJar({expires: nDuration}).setValue(sCookieName, this.element.id, this.toString());
   },
@@ -388,14 +388,14 @@ Class.extend(Element.ClassNames, {
   toggle: function(sClassName) {
     this[this.include(sClassName) ? 'remove' : 'add'](sClassName);
   },
-  
+
   flip: function(sClassName1, sClassName2) {
     if (this.include(sClassName1)) {
       this.remove(sClassName1);
       this.add(sClassName2);
       return;
     }
-    
+
     if (this.include(sClassName2)) {
       this.remove(sClassName2);
       this.add(sClassName1);
@@ -416,7 +416,7 @@ NoClickDelay.prototype = {
       touchmove:  this.onTouchMove,
       touchend:   this.onTouchEnd
     }[e.type];
-    
+
     if (callback) {
       callback(e);
     }
@@ -468,7 +468,7 @@ Element.addMethods({
 
     pos.right  = pos[2] = pos.left + dim.width; // Element right position
     pos.bottom = pos[3] = pos.top + dim.height; // Element bottom position
-    
+
     // If the element exceeds the viewport on the right
     if (pos.right > (viewport.width - offset)) {
       element.style.left = parseInt(element.style.left) - (pos.right - viewport.width) - offset + 'px';
@@ -482,20 +482,20 @@ Element.addMethods({
     else if (pos.bottom > (viewport.height - offset)) {
       element.style.top = Math.max(0, parseInt(element.style.top) - (pos.bottom - viewport.height) - offset) + 'px';
     }
-    
+
     return element;
   },
-  
+
   centerHV : function(element, pos) {
     element.setStyle({
       left: 0
     });
-    
+
     var viewport = document.viewport.getDimensions(); // Viewport size
     var dim = element.getDimensions(); // Element dimensions
-    
+
     pos = parseInt(pos || 0)-(dim.height/2);
-    
+
     element.setStyle({
       top: Math.max(pos, 100) + "px",
       left: (viewport.width - dim.width) / 2 + "px",
@@ -503,25 +503,25 @@ Element.addMethods({
     });
     return element;
   },
-  
+
   isVisible: function(element, parent) {
     var element = $(element);
     var parent = parent ? $(parent) : element.getOffsetParent();
-    
+
     var offset_element = element.cumulativeOffset();
     var offset_parent = parent.cumulativeOffset();
     var scroll = element.cumulativeScrollOffset();
-    
+
     var top_top = offset_parent.top;
     var top_bottom = top_top + parent.getHeight();
     var left_left = offset_parent.left;
     var left_right = left_left + parent.getWidth();
-    
+
     var scroll_top_a = offset_element.top - scroll.top;
     var scroll_top_b = scroll_top_a + element.getHeight();
     var scroll_left_a = offset_element.left - scroll.left;
     var scroll_left_b = scroll_left_a + element.getWidth();
-    
+
     return ((scroll_top_a >= top_top && scroll_top_a <= top_bottom) ||
             (scroll_top_b >= top_top && scroll_top_b <= top_bottom))
         && ((scroll_left_a >= left_left && scroll_left_a <= left_right) ||
@@ -553,25 +553,13 @@ Element.addMethods({
       visibility: condition ? "visible" : "hidden"
     } );
   },
-  
+
   setClassName: function(element, className, condition) {
     if (condition ) element.addClassName(className);
     if (!condition) element.removeClassName(className);
     return element;
   },
-  
-  getInnerWidth: function(element){
-    var aBorderLeft = parseInt(element.getStyle("border-left-width")),
-        aBorderRight = parseInt(element.getStyle("border-right-width"));
-    return element.offsetWidth - aBorderLeft - aBorderRight;
-  },
-  
-  getInnerHeight: function(element){
-    var aBorderTop = parseInt(element.getStyle("border-top-width")),
-        aBorderBottom = parseInt(element.getStyle("border-bottom-width"));
-    return element.offsetHeight - aBorderTop - aBorderBottom;
-  },
-  
+
   /** Gets the elements properties (specs) thanks to its className */
   getProperties: function (element) {
     var props = {};
@@ -582,23 +570,23 @@ Element.addMethods({
     });
     return props;
   },
-  
+
   /** Add a class name to an element, and removing this class name to all of it's siblings */
   addUniqueClassName: function(element, className) {
     $(element).siblings().invoke('removeClassName', className);
     return element.addClassName(className);
   },
-  
+
   clone: function(element, deep) {
     return $($(element).cloneNode(deep)).writeAttribute("id", "");
   },
-  
+
   /** Get the surrounding form of the element  */
   getSurroundingForm: function(element) {
     if (element.form) return $(element.form);
     return $(element).up('form');
   },
-  
+
   enableInputs: function(element) {
     var inputs = element.select("input,select,textarea");
     inputs.invoke("enable");
@@ -616,48 +604,51 @@ Element.addMethods({
     // using || may not work
     return ("innerText" in element ? element.innerText : element.textContent)+"";
   },
+
+  /**
+   * @param {HTMLElement=} root The root element to init the touch events on
+   */
   prepareTouchEvents: function(root){
     if (!App.touchDevice) return;
-    
+
     /*root.select("label").each(function(label){
       label.observe("touchstart", Event.stop);
     });*/
-  
+
     /*
     root.select("*[onclick], .control_tabs a, .control_tabs_vertical a").each(function(element) {
       new NoClickDelay(element);
     });
     */
-    
-   
-   root.select("label").each(function(label){
-     if (label.hasAttribute("onclick")) {
-       return;
-     }
-     
-     label.setAttribute("onclick", "");
-   });
-    
+
+    root.select("label").each(function(label){
+      if (label.hasAttribute("onclick")) {
+        return;
+      }
+
+      label.setAttribute("onclick", "");
+    });
+
     if (App.mouseEventsPrepared) {
       return;
     }
-    
+
     var eventsHandled = $H({
       onmouseover: 300, 
       ondblclick:  500
     });
-    
+
     document.observe("touchstart", function(event){
       var element = Event.element(event);
-      
+
       eventsHandled.each(function(pair){
         var eventName = pair.key;
-        
+
         if (element[eventName]) {
           var timeout = pair.value;
           Event.stop(event);
           element["triggered"+eventName] = false;
-          
+
           element["timer"+eventName] = setTimeout(function(){
             element[eventName](event);
             element["triggered"+eventName] = true;
@@ -665,33 +656,33 @@ Element.addMethods({
         }
       });
     });
-    
+
     document.observe("touchmove", function(event){
       var element = Event.element(event);
-      
+
       eventsHandled.each(function(pair){
         var eventName = pair.key;
-        
+
         if (element["timer"+eventName]) {
           clearTimeout(element["timer"+eventName]);
         }
       });
     });
-    
+
     document.observe("touchend", function(event){
       var element = Event.element(event);
-      
+
       eventsHandled.each(function(pair){
         var eventName = pair.key;
-        
+
         if (element[eventName]) {
           Event.stop(event);
           clearTimeout(element["timer"+eventName]);
-          
+
           if (!element["triggered"+eventName]) {
             // event bubbling
             var bubble = (element.onclick || element.href) ? element : element.up("[onclick], :link");
-            
+
             // simulate event firing
             if (bubble.href && (!bubble.onclick || bubble.onclick() !== false)) {
               location.href = bubble.href;
@@ -701,7 +692,7 @@ Element.addMethods({
         }
       });
     });
-    
+
     App.mouseEventsPrepared = true;
   }
 });
@@ -725,14 +716,14 @@ Element.addMethods(['input', 'textarea'], {
   },
   switchMultiline: function (element, button) {
     var newElement;
-    
+
     if (/^textarea$/i.test(element.tagName)) {
       newElement = new Element("input", {type: "text", value: $V(element)});
       if (button) $(button).removeClassName("singleline").addClassName("multiline");
     }
     else {
       newElement = new Element("textarea", {style: "width: auto;"}).update($V(element));
-      
+
       if (element.maxLength) {
         newElement.observe("keypress", function(e){
           var txtarea = Event.element(e),
@@ -742,10 +733,10 @@ Element.addMethods(['input', 'textarea'], {
           }
         });
       }
-      
+
       if (button) $(button).removeClassName("multiline").addClassName("singleline");
     }
-    
+
     var exclude = ["type", "value"];
     var map = {
       readonly: "readOnly", 
@@ -753,12 +744,12 @@ Element.addMethods(['input', 'textarea'], {
       size: "cols", 
       cols: "size"
     };
-    
+
     $A(element.attributes).each(function(a){
       if (exclude.indexOf(a.name) != -1) return;
       newElement.setAttribute(map[a.name] || a.name, a.value);
     });
-    
+
     element.insert({after: newElement});
     element.remove();
     return newElement;
@@ -824,7 +815,7 @@ Object.extend(Event, {
   isCapsLock: function(e){
     var charCode = Event.key(e);
     var shiftOn = false;
-    
+
     if (e.shiftKey) {
       shiftOn = e.shiftKey;
     } else if (e.modifiers) {
@@ -835,7 +826,7 @@ Object.extend(Event, {
         (charCode >= 65 && charCode <= 90 && !shiftOn)) {
       return true;
     }
-    
+
     // Keys from the top of a French keyboard
     /*var keys = {
       "0": "à",
@@ -860,9 +851,9 @@ Object.extend(Event, {
       "§": "!",
       ">": "<"
     };
-    
+
     var c = String.fromCharCode(charCode);
-    
+
     if ( shiftOn && Object.values(keys).indexOf(c) != -1 ||
         !shiftOn && keys[c]) return true;*/
 
@@ -870,9 +861,9 @@ Object.extend(Event, {
   },
   wheel: function (event){
     var delta = 0;
-    
+
     if (!event) event = window.event;
-    
+
     if (event.wheelDelta) {
       delta = event.wheelDelta/120; 
       if (window.opera) delta = -delta;
@@ -880,7 +871,7 @@ Object.extend(Event, {
     else if (event.detail) { 
       delta = -event.detail/3; 
     }
-    
+
     return Math.round(delta); //Safari Round
   }
 });
@@ -902,7 +893,7 @@ Object.extend(String, {
   },
   dec2frac: function (dec, sep) {
     sep = sep || "/";
-    
+
     var df = 1,
         top = 1,
         bot = 1;
@@ -915,10 +906,10 @@ Object.extend(String, {
         bot++;
         top = parseInt(dec * bot);
       }
-      
+
       df = top / bot;
     }
-    
+
     return top + sep + bot;
   }
 });
@@ -945,43 +936,43 @@ Class.extend(String, {
   removeDiacritics: function(){
     var str = this;
     var from, to;
-    
+
     from = String.allographs.withDiacritics.split("");
     to   = String.allographs.withoutDiacritics.split("");
-    
+
     from.each(function(c, i){
       str = str.gsub(c, to[i]);
     });
-    
+
     from = String.allographs.withDiacritics.toUpperCase().split("");
     to   = String.allographs.withoutDiacritics.toUpperCase().split("");
-    
+
     from.each(function(c, i){
       str = str.gsub(c, to[i]);
     });
-    
+
     return str;
   },
   // @todo: should extend RegExp instead of String
   allowDiacriticsInRegexp: function() {
     var re = this.removeDiacritics();
-    
+
     var translation = {};
     $H(String.glyphs).each(function(g){
       translation[g.key] = "["+g.key+g.value+"]";
     });
-        
+
     $H(translation).each(function(t){
       re = re.replace(new RegExp(t.key, "gi"), t.value);
     });
-    
+
     return re;
   },
   like: function(term) {
     var specials = "/.*+?|()[]{}\\".split("");
-    
+
     term = term.replace(new RegExp('(\\' + specials.join('|\\') + ')', "g"), '\\$1');
-    
+
     return !!this.match(new RegExp(term.trim().allowDiacriticsInRegexp(), "i"));
   },
   htmlDecode: function() {
@@ -1020,7 +1011,7 @@ if (Prototype.Browser.IE) {
     delay: function(timeout){
       var __method = this, args = Array.prototype.slice.call(arguments, 1);
       timeout = timeout * 1000;
-      
+
       return window.setTimeout(function(){
         try {
           return __method.apply(__method, args);
@@ -1042,22 +1033,22 @@ Element.addMethods("img", {
   resample: function(element){
     if (!Prototype.Browser.Gecko || !element.getAttribute("width") && !element.getAttribute("height"))
       return element;
-    
+
     element.onload = function() {
       if (element.naturalWidth < 500 && element.naturalHeight < 200) return;
-      
+
       var canvas = document.createElement("canvas");
       canvas.height = canvas.width * (element.height / element.width);
       var ctx = canvas.getContext("2d");
-      
+
       ctx.scale(0.5, 0.5);
       ctx.drawImage(element, 0, 0);
       element.src = canvas.toDataURL();
       element.onload = null;
     };
-    
+
     if (element.complete) element.onload();
-    
+
     return element;
   }
 });
@@ -1074,7 +1065,7 @@ document.observeOnce = function(event_name, outer_callback){
 
 Function.getEvent = function(){
   var caller = arguments.callee.caller;
-  
+
   while(caller = caller.caller) {
     if(caller.arguments[0] instanceof Event) {
       return caller.arguments[0];
@@ -1086,10 +1077,10 @@ Element.findDuplicates = function(attr, tag) {
   var ids = $$((tag || "*")+"["+attr+"]").sort(function(e){return e[attr]});
   var results = [],
       len = ids.length - 1;
-      
+
   for (var i = 0; i < len; i++) {
     if (ids[i][attr] === "") continue;
-    
+
     if (ids[i + 1][attr] == ids[i][attr]) {
       if (results.indexOf(ids[i]) == -1) {
         results.push(ids[i]);
@@ -1097,7 +1088,7 @@ Element.findDuplicates = function(attr, tag) {
       results.push(ids[i + 1]);
     }
   }
-  
+
   return results;
 };
 
@@ -1106,33 +1097,33 @@ Element._idConflicts = [];
 
 Element.warnDuplicates = function(){
   if (Prototype.Browser.IE || Prototype.Browser.IPad || !(console.firebug || (Preferences.INFOSYSTEM == 1))) return; // if("0") => true
-  
+
   var elements;
-  
+
   /*elements = Element.findDuplicates("id");
   if (elements.length && !Element._duplicates.intersect(elements).length) {
     Element._duplicates = Element._duplicates.concat(elements);
     console.warn("Duplicates *[id]: ", elements);
   }*/
-  
+
   elements = Element.findDuplicates("name", "form");
   if (elements.length && !Element._duplicates.intersect(elements).length) {
     Element._duplicates = Element._duplicates.concat(elements);
     console.warn("Duplicates form[name]: ", elements);
   }
-  
+
   elements = $$("form form");
   if (elements.length && !Element._duplicates.intersect(elements).length) {
     Element._duplicates = Element._duplicates.concat(elements);
     console.error("Nested form: ", elements);
   }
-  
+
   elements = $$("form:not([method]), form[method='']");
   if (elements.length && !Element._duplicates.intersect(elements).length) {
     Element._duplicates = Element._duplicates.concat(elements);
     console.error("Method-less forms: ", elements);
   }
-  
+
   elements = $$("*[id]").pluck("id").intersect($H(window).keys().without("console", "main", "menubar", "performance")); // FIXME
   if (elements.length && !Element._idConflicts.intersect(elements).length) {
     Element._idConflicts = Element._idConflicts.concat(elements);
@@ -1145,12 +1136,12 @@ Event.initKeyboardEvents = function() {
     var key = Event.key(e);
     var element = Event.element(e);
     var tagName = element.tagName;
-    
+
     // Prevent backspace to go back in history
     if(key == Event.KEY_BACKSPACE && !/input|textarea/i.test(tagName)) {
       Event.stop(e);
     }
-    
+
     // Ctrl+Return in a textera to submit the form
     if(key == Event.KEY_RETURN && element.form && e.ctrlKey && tagName == "TEXTAREA") {
       element.form.onsubmit();

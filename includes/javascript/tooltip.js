@@ -12,15 +12,15 @@
  * ObjectTooltip Class
  *   Handle object tooltip creation, associated with a MbObject and a target HTML element
  */
-
 var ObjectTooltip = Class.create({
-  // Constructor
-  initialize: function(eTrigger, oOptions) {
-    eTrigger = $(eTrigger);
+  initialize: function(trigger, options) {
+    trigger = $(trigger);
     
-    if (!eTrigger) return;
+    if (!trigger) {
+      return;
+    }
     
-    this.sTrigger = eTrigger.identify();
+    this.sTrigger = trigger.identify();
     this.sTooltip = null;
     this.idTimeout = null;
     this.modalScrollTop = null;
@@ -36,9 +36,9 @@ var ObjectTooltip = Class.create({
       duration: appearenceTimeout[Preferences.tooltipAppearenceTimeout] || 0.6,
       durationHide: 0.2,
       params: {}
-    }, oOptions);
+    }, options);
         
-    eTrigger
+    trigger
         .observe("mouseout", this.cancelShow.bind(this))
         .observe("mouseleave", this.cancelShow.bind(this))
         .observe("mouseout", this.launchHide.bind(this))
@@ -204,9 +204,8 @@ var ObjectTooltip = Class.create({
 
 /**
  * ObjectTooltip utility fonctions
- *   Helpers for ObjectTooltip instanciations
+ * Helpers for ObjectTooltip instanciations
  */
-
 Object.extend(ObjectTooltip, {
   modes: {
     objectCompleteView: {
@@ -252,40 +251,68 @@ Object.extend(ObjectTooltip, {
       sClass: "tooltip"
     }
   },
-  
-  create: function(eTrigger, oOptions) {
-    if (!eTrigger) return;
-    
-    if (!eTrigger.oTooltip) {
-      eTrigger.oTooltip = new ObjectTooltip(eTrigger, oOptions);
-    }
 
-    eTrigger.oTooltip.launchShow();
-    return eTrigger.oTooltip;
+  init: function(){
+    // Init object tooltips on elements with the "data-object_guid" attribute
+    document.on("mouseover", "[data-object_guid]", function(event, element){
+      ObjectTooltip.createEx(element, element.get("object_guid"));
+    });
   },
 
-  createEx: function(eTrigger, guid, mode, params) {
+  /**
+   * Create a generic tooltip
+   *
+   * @param {HTMLElement} trigger
+   * @param {Object=}     options
+   *
+   * @return {ObjectTooltip,null}
+   */
+  create: function(trigger, options) {
+    if (!trigger) {
+      return null;
+    }
+    
+    if (!trigger.oTooltip) {
+      trigger.oTooltip = new ObjectTooltip(trigger, options);
+    }
+
+    trigger.oTooltip.launchShow();
+
+    return trigger.oTooltip;
+  },
+
+  /**
+   * Create a tooltip based on predefined ones
+   *
+   * @param {HTMLElement} trigger
+   * @param {String}      guid
+   * @param {String=}     mode
+   * @param {Object=}     params
+   *
+   * @return {ObjectTooltip,null}
+   */
+  createEx: function(trigger, guid, mode, params) {
     mode = mode || 'objectView';
     params = params || {};
     
     params.object_guid = guid;
     
-    var oOptions = {
+    var options = {
       mode: mode,
       params: params
     };
     
-    return this.create(eTrigger, oOptions);
+    return this.create(trigger, options);
   },
-  
-  createDOM: function(eTrigger, sTooltip, oOptions) {
-    oOptions = Object.extend( {
+
+  createDOM: function(trigger, tooltip, options) {
+    options = Object.extend( {
       params: {}
-    }, oOptions);
+    }, options);
     
-    oOptions.params.element = sTooltip;
-    oOptions.mode = "dom";
+    options.params.element = tooltip;
+    options.mode = "dom";
     
-    return this.create(eTrigger, oOptions);
+    return this.create(trigger, options);
   }
 });

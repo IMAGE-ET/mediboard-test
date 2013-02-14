@@ -30,6 +30,7 @@ document.observe('dom:loaded', function(){
     Note.refresh();
     Element.warnDuplicates();
     Event.initKeyboardEvents();
+    ObjectTooltip.init();
     $(document.documentElement).prepareTouchEvents();
     Main.init();
     new CookieJar().put("cookie-supported", 1);
