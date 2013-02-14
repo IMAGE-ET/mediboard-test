@@ -103,6 +103,7 @@ class CGroups extends CMbObject {
     $backProps["echanges_hprim21"]        = "CEchangeHprim21 group_id";
     $backProps["echanges_ihe"]            = "CExchangeIHE group_id";
     $backProps["echanges_phast"]          = "CExchangePhast group_id";
+    $backProps["echanges_dicom"]          = "CExchangeDicom group_id";
     $backProps["extract_passages"]        = "CExtractPassages group_id";
     $backProps["destinataires_phast"]     = "CPhastDestinataire group_id";
     $backProps["senders_ftp"]             = "CSenderFTP group_id";
@@ -127,7 +128,6 @@ class CGroups extends CMbObject {
     $backProps["modes_sortie_sejour"]     = "CModeSortieSejour group_id";
     $backProps["dicom_sender"]            = "CDicomSender group_id";
     $backProps["dicom_session"]           = "CDicomSession group_id";
-    $backProps["dicom_exchange"]          = "CExchangeDicom group_id";
     $backProps["pyxvital_receiver"]       = "CReceiverPyxVital group_id";
     $backProps["diet"]                    = "CDiet group_id";
     $backProps["diet_property"]           = "CDietProperty group_id";
