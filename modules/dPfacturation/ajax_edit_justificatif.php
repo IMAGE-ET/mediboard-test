@@ -290,33 +290,52 @@ foreach ($factures as $facture) {
                 $valeur = $acte->date;
                 $valeur= mbTransformTime(null, $valeur, "%d.%m.%Y");
                 break;
-              case "Tarif" :    $valeur = $code; break;
-              case "Code réf" : $valeur = $code_ref; break;
-              case $key == "Code" && $acte->code!=10 :
-                $valeur = $acte->code;
+              case "Tarif":
+                $valeur = $code;
                 break;
-              case "Sé Cô" :    $valeur = "1"; break;
-              case "Quantité" : $valeur = $acte->quantite; break;
-              case "Pt PM/Prix" :
+              case "Code réf":
+                $valeur = $code_ref;
+                break;
+              case "Sé Cô":
+                $valeur = "1";
+                break;
+              case "Quantité":
+                $valeur = $acte->quantite;
+                break;
+              case "Pt PM/Prix":
                 $valeur = $acte_pm;
                 $cote = "R";
                 break;
-              case "fPM" : $valeur = $acte_coeffpm; break;
-              case $key == "VPtPM" || $key == "VPtPT" :
+              case "fPM":
+                $valeur = $acte_coeffpm;
+                break;
+              case "VPtPM":
+              case "VPtPT":
                 $valeur = $coeff_fact;
                 break;
-              case "Pt PT" :
+              case "Pt PT":
                 $valeur = $acte_pt;
                 $cote = "R";
                 break;
-              case "fPT" :   $valeur = $acte_pt; break;
-              case "Montant" :
+              case "fPT":
+                $valeur = $acte_pt;
+                break;
+              case "Montant":
                 $pdf->setX($pdf->getX()+3);
                 $valeur = sprintf("%.2f", $acte->montant_base * $coeff_fact);
                 $cote = "R";
                 break;
-              case $key == "E" || $key == "R" : $valeur = "1"; break;
-              case $key == "P" || $key == "M" : $valeur = "0"; break;
+              case "E":
+              case "R": 
+                $valeur = "1"; 
+                break;
+              case "P":
+              case "M":
+                $valeur = "0";
+                break;
+            }
+            if ($key == "Code" && $acte->code!=10) {
+              $valeur = $acte->code;
             }
             $pdf->Cell($largeur, null ,  $valeur, null, null, $cote);
             $x = $largeur;
