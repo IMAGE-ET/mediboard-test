@@ -74,21 +74,11 @@ Main.add(function(){
                 {{if $chirs|@count}}
                 <optgroup label="Chirurgiens">
                 </optgroup>
-                {{foreach from=$chirs item=_chir}}
-                  <option class="mediuser" style="border-color: #{{$_chir->_ref_function->color}};" value="{{$_chir->user_id}}" 
-                  {{if $plagesel->chir_id == $_chir->user_id}}selected="selected"{{/if}}>
-                    {{$_chir->_view}}
-                  </option>
-                {{/foreach}}
+                {{mb_include module=mediusers template=inc_options_mediuser selected=$plagesel->chir_id list=$chirs}}
                 {{/if}}
                 {{if $anesths|@count}}
                 <optgroup label="Anesthésistes"></optgroup>
-                {{foreach from=$anesths item=_anesth}}
-                  <option class="mediuser" style="border-color: #{{$_anesth->_ref_function->color}};" value="{{$_anesth->user_id}}" 
-                  {{if $plagesel->chir_id == $_anesth->user_id}}selected="selected"{{/if}}>
-                    {{$_anesth->_view}}
-                  </option>
-                {{/foreach}}
+                {{mb_include module=mediusers template=inc_options_mediuser selected=$plagesel->chir_id list=$anesths}}
                 {{/if}}
               </select>
             </td>
@@ -147,11 +137,7 @@ Main.add(function(){
             <td>
               <select name="anesth_id" style="width: 15em;">
                 <option value="">&mdash; Choisir un anesthésiste</option>
-                {{foreach from=$anesths item=_anesth}}
-                <option class="mediuser" style="border-color: #{{$_anesth->_ref_function->color}};" value="{{$_anesth->user_id}}" {{if $plagesel->anesth_id == $_anesth->user_id}} selected="selected" {{/if}} >
-                  {{$_anesth->_view}}
-                </option>
-                {{/foreach}}
+                {{mb_include module=mediusers template=inc_options_mediuser selected=$plagesel->anesth_id list=$anesths}}
             </select>
             </td>
             <th>{{mb_label object=$plagesel field="debut"}}</th>
