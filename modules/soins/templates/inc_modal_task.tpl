@@ -46,7 +46,7 @@
           {{if $task->realise}}
             <button class="cancel" onclick="$V(this.form.realise, '0');">Annuler la réalisation</button>
           {{else}}
-            <button class="tick" onclick="$V(this.form.realise, '1');">Réaliser</button>
+            <button class="tick" onclick="$V(this.form.realise, '1');">Réalisée</button>
           {{/if}}
           {{if $task->_id}}
           <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,objName:'{{$task->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
