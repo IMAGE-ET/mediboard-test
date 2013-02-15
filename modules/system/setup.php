@@ -1236,7 +1236,16 @@ class CSetupsystem extends CSetup {
               ADD `language` CHAR (2) NOT NULL DEFAULT 'fr';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.24";
+    $this->makeRevision("1.1.24");
+    $query = "ALTER TABLE `source_pop`
+              ADD `last_update` DATETIME,
+              ADD `type_echange` VARCHAR (255);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `source_pop`
+              ADD INDEX (`last_update`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.25";
 
 
     /*$query = "ALTER TABLE user_log

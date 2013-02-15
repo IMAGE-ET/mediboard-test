@@ -24,6 +24,12 @@ class CExchangeSource extends CMbObject {
     "file_system" => "CSourceFileSystem",
     "http"        => "CSourceHTTP",
   );
+
+  //multi instance sources (more than one can run at the same time)
+  static $multi_instance = array(
+    "CSourcePOP",
+    "CSourceSMTP"
+  );
   
   // DB Fields
   var $name               = null;
@@ -48,7 +54,12 @@ class CExchangeSource extends CMbObject {
   var $_all_source        = array();
   var $_receive_filename  = null;
   var $_acquittement      = null;
-  
+
+  /**
+   * db properties
+   *
+   * @return array
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["name"]           = "str notNull";
@@ -67,10 +78,23 @@ class CExchangeSource extends CMbObject {
     return $specs;
   }
 
+  /**
+   * return the array of exchange classes
+   *
+   * @return array
+   */
   static function getExchangeClasses() {
     return self::$typeToClass;
   }
-  
+
+  /**
+   * return the exchange object
+   *
+   * @param string $name name of the exchange source
+   * @param null   $type always null
+   * @param strin  $type_echange
+   * @return array|null
+   */
   static function getObjects($name, $type = null, $type_echange = null) {
     if ($type) {
       return null;
@@ -90,8 +114,18 @@ class CExchangeSource extends CMbObject {
     }
     
     return $exchange_objects;
-  } 
-    
+  }
+
+  /**
+   * get the exchange source
+   *
+   * @param $name
+   * @param null $type
+   * @param bool $override
+   * @param null $type_echange
+   * @param bool $only_active
+   * @return CExchangeSource
+   */
   static function get($name, $type = null, $override = false, $type_echange = null, $only_active = true) {
     $exchange_classes = self::getExchangeClasses(); 
     foreach ($exchange_classes as $_class) {
@@ -139,7 +173,12 @@ class CExchangeSource extends CMbObject {
 
     return $source;
   }
-  
+
+  /**
+   * check before store
+   *
+   * @return string
+   */
   function check() {
     $source = self::get($this->name, null, true);
 
@@ -149,7 +188,12 @@ class CExchangeSource extends CMbObject {
     
     return parent::check();
   }
-  
+
+  /**
+   * store function
+   *
+   * @return null|string
+   */
   function store() {
     if ($this->password === "") {
       $this->password = null;

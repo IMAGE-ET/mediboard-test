@@ -8,47 +8,27 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<table class="form">  
+{{mb_script module="mediusers" script="exchange_source"}}
+
+<script>
+  Main.add(function() {
+    exchangeSources.refreshListPOP();
+  });
+</script>
+
+
+<table class="form">
   <tr>
     <th class="title" colspan="2">
       {{tr}}config-exchange-source{{/tr}}
     </th>
   </tr>
   <tr>
-    <th class="category">{{tr}}CExchangeSource.smtp-desc{{/tr}}</th>
-    <th class="category">{{tr}}CExchangeSource.pop-desc{{/tr}}</th>
+    <th class="category">{{tr}}CExchangeSource.smtp-desc{{/tr}} <!--<button class="notext add" onclick="exchangeSources.smtpModal('');">{{tr}}CSourcePOP.new{{/tr}}</button>--></th>
+    <th class="category">{{tr}}CExchangeSource.pop-desc{{/tr}} <button class="notext add" onclick="exchangeSources.popModal('');">{{tr}}CSourcePOP.new{{/tr}}</button></th>
   </tr>
   <tr>
     <td style="width:50%;"> {{mb_include module=system template=inc_config_exchange_source source=$smtp_source}} </td>
-    <td style="width:50%;">
-        <script type="text/javascript">
-          Main.add(function () {
-            Control.Tabs.create('tabs-sources-pop');
-          });
-        </script>
-        <table class="main">
-          <tr>
-            <td style="vertical-align: top;" class="narrow">
-              <ul id="tabs-sources-pop" class="control_tabs_vertical">
-              {{foreach from=$pop_source item=source_pop}}
-                <li>
-                  <a href="#source_pop_{{$source_pop->_guid}}">
-                    {{$source_pop->libelle}}
-                  </a>
-                </li>
-              {{/foreach}}
-              </ul>
-            </td>
-            <td style="vertical-align: top;">
-            {{foreach from=$pop_source item=_source_pop}}
-              <div id="source_pop_{{$_source_pop->_guid}}" style="display:none;">
-                {{mb_include module=system template=inc_config_exchange_source source=$_source_pop}}
-              </div>
-            {{/foreach}}
-            </td>
-          </tr>
-        </table>
-    </td>
+    <td style="width:50%;" id="list_sourcePOP"></td>
   </tr>
 </table>
-		

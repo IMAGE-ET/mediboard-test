@@ -20,13 +20,12 @@
   <th>{{mb_label object=$source field="active"}}</th>
   <td>{{mb_field object=$source field="active"}}</td>
 </tr>
-
+<tr>
+  <th>{{mb_label object=$source field="loggable"}}</th>
+  <td>{{mb_field object=$source field="loggable"}}</td>
+</tr>
 <tr>
   <th>{{mb_label object=$source field="host"}}</th>
   <td>{{mb_field object=$source field="host"}}</td>
 </tr>
 
-<tr>
-  <th>{{mb_label object=$source field="loggable"}}</th>
-  <td>{{mb_field object=$source field="loggable"}}</td>
-</tr>
