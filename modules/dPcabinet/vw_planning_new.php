@@ -27,7 +27,7 @@ $where = array(
   "plageconsult.date" => " > '$now'",
   "consultation.si_desistement" => "= '1'",
 );
-$where[] = "plageconsult.chir_id = '$chirSel' OR plageconsult.remplacant_id = '$chirSel' OR plageconsult.pour_compte_id = '$chirSel'";
+$where[] = "plageconsult.chir_id = '$chirSel' OR plageconsult.remplacant_id = '$chirSel'";
 $ljoin = array(
   "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
 );

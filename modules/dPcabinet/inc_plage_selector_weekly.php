@@ -34,7 +34,7 @@ $bank_holidays = array_merge(mbBankHolidays($debut), mbBankHolidays($fin));
 $nbDays = 5;
 $plage  = new CPlageconsult();
 $where  = array();
-$where[] = "chir_id = '$chir_id' OR remplacant_id = '$chir_id' OR pour_compte_id = '$chir_id'";
+$where[] = "chir_id = '$chir_id' OR remplacant_id = '$chir_id'";
 $where["date"] = "= '$fin'";
 if ($plage->countList($where)) {
   $nbDays = 7;

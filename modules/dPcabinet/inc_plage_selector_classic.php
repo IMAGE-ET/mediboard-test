@@ -32,7 +32,7 @@ else {
 }
 
 $chir_sel = CSQLDataSource::prepareIn(array_keys($listPrat), $chir_id);
-$where[] = "chir_id $chir_sel OR remplacant_id $chir_sel OR pour_compte_id $chir_sel";
+$where[] = "chir_id $chir_sel OR remplacant_id $chir_sel";
 
 // Filtres
 if ($hour) {

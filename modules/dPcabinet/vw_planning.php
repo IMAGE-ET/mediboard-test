@@ -82,7 +82,7 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
   $consultation->loadRefCategorie(1);
   $consultation->countDocItems();    
 }
-if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel && $plageSel->pour_compte_id != $chirSel) {
+if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel) {
   $plageconsult_id = null;
   $plageSel = new CPlageconsult();
 }

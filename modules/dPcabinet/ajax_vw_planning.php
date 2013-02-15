@@ -17,7 +17,7 @@ $where = array(
   "plageconsult.date" => " > '$today'",
   "consultation.si_desistement" => "= '1'",
 );
-$where[] = "plageconsult.chir_id = '$chirSel' OR plageconsult.remplacant_id = '$chirSel' OR plageconsult.pour_compte_id = '$chirSel'";
+$where[] = "plageconsult.chir_id = '$chirSel' OR plageconsult.remplacant_id = '$chirSel'";
 $ljoin = array(
   "plageconsult" => "plageconsult.plageconsult_id = consultation.plageconsult_id",
 );
@@ -40,7 +40,7 @@ $listPlage = new CPlageconsult();
 
 $where = array();
 $where["date"] = "= '$dateArr'";
-$where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel' OR pour_compte_id = '$chirSel'";
+$where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel'";
 
 if (!$listPlage->countList($where)) {
   $nbDays--;
