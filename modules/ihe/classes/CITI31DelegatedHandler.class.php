@@ -620,7 +620,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
   /**
    * Get affectation HL7 event code
    *
-   * @param CReceiverIHE $receiver
+   * @param CReceiverIHE $receiver Receiver IHE
    *
    * @return string
    */
@@ -639,18 +639,39 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     return $code;
   }
 
+  /**
+   * Trigger before event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
   }
-  
+
+  /**
+   * Trigger after event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
-  }  
-  
+  }
+
+  /**
+   * Trigger before event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -669,6 +690,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       $sejour = $affectation->loadRefSejour();
       if (!$sejour->_id || $sejour->_etat == "preadmission") {
+        return;
+      }
+
+      // Si le group_id du séjour est différent de celui du destinataire
+      if ($sejour->group_id != $receiver->group_id) {
         return;
       }
 
@@ -704,8 +730,15 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       // Envoi de l'événement
       $this->sendITI($this->profil, $this->transaction, $this->message, $code, $mbObject);
     }  
-  }  
-  
+  }
+
+  /**
+   * Trigger after event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterDelete(CMbObject $mbObject) {
   }
 }

@@ -62,7 +62,4 @@ class CITIDelegatedHandler {
 
     return $receiver->sendEvent($event, $mbObject);
   }
-  
 }
-
-?>
