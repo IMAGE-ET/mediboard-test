@@ -20,21 +20,6 @@ class CHL7v2SegmentQPD_RESP extends CHL7v2Segment {
   var $name   = "QPD_RESP";
 
   /**
-   * @var CPatient
-   */
-  var $patient = null;
-
-  /**
-   * @var CSejour
-   */
-  var $sejour = null;
-
-  /**
-   * @var CAffectation
-   */
-  var $affectation = null;
-
-  /**
    * Build QPD segement
    *
    * @param CHL7v2Event $event Event
@@ -43,9 +28,6 @@ class CHL7v2SegmentQPD_RESP extends CHL7v2Segment {
    */
   function build(CHL7v2Event $event) {
     parent::build($event);
-
-    $patient = $this->patient;
-    $sejour  = $this->sejour;
 
     $exchange_ihe = $event->_exchange_ihe;
     $message      = $exchange_ihe->_message;
