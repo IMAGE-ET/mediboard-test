@@ -51,7 +51,7 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     $data[] = "IHE PDQ Query";
     
     // QPD-2: Query Tag (ST)
-    $data[] = "PDQPDC.".CHL7v2::getDateTime();
+    $data[] = "PDQPDC_$event->code";
     
     // QPD-3: User Parameters (in successive fields) (Varies)
     $QPD3 = array();
@@ -82,13 +82,26 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     // QPD-8 : What domains returned
     if (isset($patient->_domains_returned)) {
       $domains_returned = $patient->_domains_returned;
-      $data[] = array(
-        array (
-          CMbArray::get($domains_returned, "domains_returned_namespace_id"),
-          CMbArray::get($domains_returned, "domains_returned_universal_id"),
-          CMbArray::get($domains_returned, "domains_returned_universal_id_type")
-        )
+      $QPD8 = array (
+        CMbArray::get($domains_returned, "domains_returned_namespace_id"),
+        CMbArray::get($domains_returned, "domains_returned_universal_id"),
+        CMbArray::get($domains_returned, "domains_returned_universal_id_type")
       );
+      CMbArray::removeValue(null, $QPD8);
+
+      if (empty($QPD8)) {
+        $data[] = null;
+      }
+      else {
+        $data[] = array(
+          array(
+            null,
+            null,
+            null,
+            $QPD8
+          )
+        );
+      }
     }
     else {
       $data[] = null;
@@ -236,5 +249,3 @@ class CHL7v2SegmentQPD extends CHL7v2Segment {
     );
   }
 }
-
-?>

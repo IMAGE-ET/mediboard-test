@@ -24,22 +24,24 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
    * @return CHL7v2EventRSP
    */
   function __construct(CHL7Event $trigger_event) {
+    $this->profil      = "PDQ";
+
     $this->event_type  = "RSP";
     $this->version     = $trigger_event->message->version;
 
     switch ($trigger_event->code) {
       case "Q22" :
-        $trigger_event_code = "K22";
-        $struct_code   = "K21";
+        $this->code        = "K22";
+        $this->struct_code = "K21";
         break;
       case "ZV1" :
-        $trigger_event_code = $struct_code   = "ZV2";
+        $this->code = $this->struct_code = "ZV2";
         break;
     }
 
     $this->msg_codes   = array (
       array(
-        $this->event_type, $trigger_event_code, "{$this->event_type}_{$struct_code}"
+        $this->event_type, $this->code, "{$this->event_type}_{$this->struct_code}"
       )
     );
 
@@ -135,12 +137,12 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
   }
 
   /**
-   * MSH - Represents an HL7 MSH message segment (Message Header)
+   * MSH - Represents an HL7 QPD message segment (Message Header)
    *
    * @return void
    */
   function addQPD() {
-    $QPD = CHL7v2Segment::create("QPD", $this->message);
+    $QPD = CHL7v2Segment::create("QPD_RESP", $this->message);
     $QPD->build($this);
   }
 

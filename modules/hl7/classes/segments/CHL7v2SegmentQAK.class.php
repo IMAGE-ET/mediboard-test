@@ -40,12 +40,12 @@ class CHL7v2SegmentQAK extends CHL7v2Segment {
     $objects = $this->objects;
 
     // QAK-1: Query Tag (ST) (optional)
-    $data[] = null;
+    $data[] = "PDQPDC_$event->code";
     
     // QAK-2: Query Response Status (ID) (optional)
     $data[] = (!$objects || count($objects) == 0) ? "NF" : "OK";
     
-    // QPD-3: User Parameters (in successive fields) (Varies) (optional)
+    // QAK-3: User Parameters (in successive fields) (Varies) (optional)
     $data[] = null;
 
     // QAK-4: Hit Count (NM) (optional)

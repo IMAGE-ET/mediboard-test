@@ -251,10 +251,10 @@ class CHL7v2Message extends CHMessage {
     } 
     // Recherche depuis le code du pays
     /* @todo Pas top */
-    elseif ($country_code == "FRA") {
+    /*elseif ($country_code == "FRA") {
       $this->i18n_code = "FR";
       $this->extension = $version = "FR_2.3";
-    }
+    }*/
 
     // Dans le cas où la version passée est incorrecte on met par défaut 2.5
     if (!in_array($version, self::$versions)) {
@@ -329,5 +329,20 @@ class CHL7v2Message extends CHMessage {
     );
 
     return "<pre class='er7'>".strtr($msg, $pat)."</pre>";
+  }
+
+  /**
+   * Get segment
+   *
+   * @param string $name Segment name
+   *
+   * @return CHL7v2Segment
+   */
+  function getSegmentByName($name) {
+    foreach ($this->children as $_segment) {
+      if ($_segment->name == $name) {
+        return $_segment;
+      }
+    }
   }
 }

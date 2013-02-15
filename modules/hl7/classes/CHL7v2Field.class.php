@@ -194,4 +194,19 @@ class CHL7v2Field extends CHL7v2Entity {
     
     return $str;
   }
+
+  /**
+   * Get segment struct
+   *
+   * @return array
+   */
+  function getStruct() {
+    $data = array();
+
+    foreach ($this->items as $_item) {
+      $data[] = $_item->getStruct();
+    }
+
+    return $data;
+  }
 }

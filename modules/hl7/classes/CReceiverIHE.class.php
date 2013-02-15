@@ -32,7 +32,12 @@ class CReceiverIHE extends CInteropReceiver {
    * @var null
    */
   var $_i18n_code       = null;
-  
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'receiver_ihe';
@@ -47,7 +52,12 @@ class CReceiverIHE extends CInteropReceiver {
     
     return $spec;
   }
-  
+
+  /**
+   * Get backward reference specifications
+   *
+   * @return array Array of form "collection-name" => "class join-field"
+   */
   function getBackProps() {
     $backProps                   = parent::getBackProps();
     $backProps['object_configs'] = "CReceiverIHEConfig object_id";
@@ -55,7 +65,12 @@ class CReceiverIHE extends CInteropReceiver {
     
     return $backProps;
   }
-  
+
+  /**
+   * Update the form (derived) fields plain fields
+   *
+   * @return void
+   */
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -167,7 +182,8 @@ class CReceiverIHE extends CInteropReceiver {
     $source->setData($msg, null, $exchange);
     try {
       $source->send();
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       throw new CMbException("CExchangeSource-no-response");
     }
     
@@ -178,7 +194,7 @@ class CReceiverIHE extends CInteropReceiver {
     if (!$ack_data) {
       $exchange->store();
       return;
-    }  
+    }
     
     $data_format = CIHE::getEvent($exchange);
 
@@ -193,4 +209,3 @@ class CReceiverIHE extends CInteropReceiver {
     return $ack_data;
   }
 }
-?>

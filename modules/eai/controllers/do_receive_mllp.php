@@ -17,10 +17,11 @@ $client_addr = CValue::post("client_addr");
 $message     = stripslashes(CValue::post("message"));
 
 $source_mllp          = new CSourceMLLP;
-
-$source_mllp->host    = $client_addr;
-$source_mllp->active = 1;
-$source_mllp->loadMatchingObject();
+$where = array();
+$where["host"]   = " = '$client_addr'";
+$where["active"] = " = '1'";
+$where["name"]   = "LIKE 'CSenderMLLP%'";
+$source_mllp->loadObject($where);
 
 if (!$source_mllp->_id) {
   /*

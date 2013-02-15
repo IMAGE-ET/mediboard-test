@@ -389,4 +389,13 @@ class CHL7v2Component extends CHL7v2Entity {
 
     return $str;
   }
+
+  /**
+   * Get segment struct
+   *
+   * @return array
+   */
+  function getStruct() {
+    return $this->data;
+  }
 }

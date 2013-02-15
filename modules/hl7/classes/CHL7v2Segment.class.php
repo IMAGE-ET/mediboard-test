@@ -377,7 +377,7 @@ class CHL7v2Segment extends CHL7v2Entity {
     if ($object instanceof CMediusers) {
       $object->completeField("adeli", "rpps");
       
-      $id400 = CIdSante400::getMatch("CMediusers", $actor->_tag_mediuser, null, $object->_id);  
+      $id400 = CIdSante400::getMatch("CMediusers", $actor->_tag_mediuser, null, $object->_id);
 
       $xcn1  = CValue::first($object->adeli, $object->rpps, $id400->id400, $object->_id);
       $xcn2  = $object->_user_last_name;
@@ -914,5 +914,20 @@ class CHL7v2Segment extends CHL7v2Entity {
     }
     
     return "Booked";
+  }
+
+  /**
+   * Get segment struct
+   *
+   * @return array
+   */
+  function getStruct() {
+    $data = array();
+
+    foreach ($this->fields as $_field) {
+      $data[] = $_field->getStruct();
+    }
+
+    return $data;
   }
 }
