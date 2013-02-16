@@ -9,13 +9,13 @@
  */
 
 /**
- * Activité CdARR
+ * Object CsARR
  */
-class CCdARRObject extends CStoredObject {
+class CCsARRObject extends CMbObject {
 	
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->dsn         = 'cdarr';
+    $spec->dsn         = 'csarr';
     $spec->incremented = 0;
     return $spec;
   }

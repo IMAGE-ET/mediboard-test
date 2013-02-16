@@ -63,19 +63,18 @@ class CActiviteCdARR extends CCdARRObject {
 	function loadRefsElements(){
 		$element_to_cdarr = new CElementPrescriptionToCdarr();
 		$element_to_cdarr->code = $this->code;
-		$this->_ref_elements = $element_to_cdarr->loadMatchingList();
+		return $this->_ref_elements = $element_to_cdarr->loadMatchingList();
 	}
 	
-	function loadRefsElementsByCat(){
-		$this->loadRefsElements();
-		foreach($this->_ref_elements as $_element){
+	function loadRefsElementsByCat() {
+		foreach ($this->loadRefsElements() as $_element){
       $_element->loadRefElementPrescription();
       $this->_ref_elements_by_cat[$_element->_ref_element_prescription->category_prescription_id][] = $_element;
     }
 	}
 	
 	static function getLibelle($type) {
-	  $found = new CActiviteCdARR();
+	  $found = new self();
 	  $found->type = $type;
 	  $found->loadMatchingObject();
 	  
@@ -89,14 +88,15 @@ class CActiviteCdARR extends CCdARRObject {
 	 **/
   static function get($code) {
   	if (!$code) {
-  	  return new CActiviteCdARR(); 
+  	  return new self(); 
   	}
   	
     if (!isset(self::$cached[$code])) {
-      $activite = new CActiviteCdARR();
+      $activite = new self();
       $activite->load($code);
       self::$cached[$code] = $activite;
     }
+    
     return self::$cached[$code];
   }
 }

@@ -10,30 +10,26 @@
 
 CCanDo::checkAdmin();
 
-set_time_limit(360);
-
-$sourcePath = "modules/ssr/base/nomenclatureCdARR.tar.gz";
+$sourcePath = "modules/ssr/base/nomenclature.CdARR.tar.gz";
 $targetDir = "tmp/cdarr";
 
 $targetTables    = "tmp/cdarr/tables.sql";
 
 // Extract the SQL dump
 if (null == $nbFiles = CMbPath::extract($sourcePath, $targetDir)) {
-  CAppUI::stepAjax("Erreur, impossible d'extraire l'archive", UI_MSG_ERROR);
+  CAppUI::stepAjax("extraction-error", UI_MSG_ERROR, $sourcePath);
 } 
 
-CAppUI::stepAjax("Extraction de $nbFiles fichier(s)", UI_MSG_OK);
+CAppUI::stepAjax("extraction-success", UI_MSG_OK, $sourcePath, $nbFiles);
 
 $ds = CSQLDataSource::get("cdarr");
 
 // Création des tables
-if (null == $lineCount = $ds->queryDump($targetTables, true)) {
+if (null == $count = $ds->queryDump($targetTables, true)) {
   $msg = $ds->error();
-  CAppUI::stepAjax("Import des tables - erreur de requête SQL: $msg", UI_MSG_ERROR);
+  CAppUI::stepAjax("ssr-import-tables-error", UI_MSG_ERROR, $msg);
 }
-CAppUI::stepAjax("Création de $lineCount tables", UI_MSG_OK);
-
-
+CAppUI::stepAjax("ssr-import-tables-success", UI_MSG_OK, $count);
 
 // Ajout des fichiers NX dans les tables
 $listTables = array(
@@ -61,8 +57,9 @@ function addFileIntoDB($file, $table) {
       $reussi++;
     }
   }
-  CAppUI::stepAjax("Import du fichier $file dans la table $table : $reussi lignes ajoutée(s), $echoue échouées(s)", UI_MSG_OK);
+
   fclose($handle);
+  CAppUI::stepAjax("ssr-import-cdarr-report", UI_MSG_OK, $file, $table, $reussi, $echoue);
 }
 
 foreach($listTables as $table => $file) {

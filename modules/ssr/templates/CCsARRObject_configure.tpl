@@ -9,10 +9,10 @@
 *}}
 
 
-{{mb_include module=system template=configure_dsn dsn=cdarr}}
+{{mb_include module=system template=configure_dsn dsn=csarr}}
 
 
-<h2>Import de la base de données CdARR</h2>
+<h2>Import de la base de données CsARR</h2>
 
 <table class="tbl">
   <tr>
@@ -22,9 +22,9 @@
   
   <tr>
     <td>
-    	<button class="tick" onclick="new Url('ssr', 'import_cdarr').requestUpdate('cdarr');" >
-    		Importer la base de données CdARR</button>
+    	<button class="tick" onclick="new Url('ssr', 'import_csarr').requestUpdate('csarr');" >
+    		Importer la base de données CsARR</button>
 			</td>
-    <td id="cdarr"></td>
+    <td id="csarr"></td>
   </tr>
 </table>
