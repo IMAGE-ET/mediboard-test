@@ -10,8 +10,6 @@
 
 CCanDo::checkRead();
 
-$ds = CSQLDataSource::get('std');
-
 // Nom de la classe à prendre en compte
 $class = CValue::getOrSession("class");
 
@@ -62,7 +60,11 @@ function array_duplicates($array, $field) {
 foreach ($selected_classes as $_class) {
   $object = new $_class;
   
-  if (!$object->_spec->table) continue;
+  if (!$object->_spec->table) {
+    continue;
+  }
+  
+  $ds = $object->_spec->ds;
   
   $list_classes[$_class] = array();
   $details = &$list_classes[$_class];
@@ -118,10 +120,12 @@ foreach ($selected_classes as $_class) {
       
       $db_spec['default'] = $default;
       
-      if ($is_key) {
+      // Some keys from external tables are str
+      if ($is_key && $spec instanceof CRefSpec) {
         $db_spec['unsigned'] = true;
       }
-      if ($k == $details['key']) {
+
+      if ($k == $details['key'] && $object->_spec->incremented) {  
         $db_spec['extra'] = 'auto_increment';
       }
     }
@@ -136,7 +140,7 @@ foreach ($selected_classes as $_class) {
   }
   
   // Extraction des champs de la BDD
-  if($object->_spec->table && $ds->loadTable($object->_spec->table)) {
+  if ($ds && $object->_spec->table && $ds->loadTable($object->_spec->table)) {
     $details['no_table'] = false;
 
     $sql = "SHOW COLUMNS FROM `{$object->_spec->table}`";
@@ -161,7 +165,7 @@ foreach ($selected_classes as $_class) {
       $field['index']    = null;
       $field['extra']    = $curr_field['Extra'];
     }
-    
+
     // Extraction des Index
     $sql = "SHOW INDEX FROM `{$object->_spec->table}`";
     
@@ -175,7 +179,9 @@ foreach ($selected_classes as $_class) {
       
       if($curr_index['Key_name'] == 'PRIMARY'){
         $details['db_key'] = $curr_index['Column_name'];
-        $details['fields'][$curr_index['Column_name']]['object']['db_spec']['extra'] = 'auto_increment';
+        if ($object->_spec->incremented) {
+          $details['fields'][$curr_index['Column_name']]['object']['db_spec']['extra'] = 'auto_increment';
+        }
       }
     }
   } else {

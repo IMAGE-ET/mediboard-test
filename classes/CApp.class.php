@@ -304,7 +304,7 @@ class CApp {
    * @return array Class names
    */
   static function getMbClasses($properties = array(), &$instances = null) {
-    $classes = self::getChildClasses("CMbObject", $properties);
+    $classes = self::getChildClasses("CStoredObject", $properties);
     
     foreach ($classes as $key => $class) {
       // In case we removed a class and it's still in the cache

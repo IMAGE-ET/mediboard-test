@@ -112,10 +112,12 @@ foreach ($classes as $class) {
   addLocale($classname, $classname, "$classname-title-modify");
   
   // Traductions pour la clé 
-  $prop = $object->_spec->key;
-  addLocale($classname, $prop, "$classname-$prop");
-  addLocale($classname, $prop, "$classname-$prop-desc");
-  addLocale($classname, $prop, "$classname-$prop-court");
+  if ($object->_spec->key) {
+    $prop = $object->_spec->key;
+    addLocale($classname, $prop, "$classname-$prop");
+    addLocale($classname, $prop, "$classname-$prop-desc");
+    addLocale($classname, $prop, "$classname-$prop-court");
+  }
   
   // Traductions de chaque propriété
   foreach ($object->_specs as $prop => $spec) { 
