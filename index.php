@@ -50,7 +50,7 @@ if (!is_file($dPconfig["root_dir"]."/includes/config.php")) {
 
 date_default_timezone_set($dPconfig["timezone"]);
 
-// Cord classes and functions
+// Core classes and functions
 require "./includes/mb_functions.php";
 require "./includes/errors.php";
 require "./classes/SHM.class.php";

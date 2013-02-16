@@ -391,9 +391,13 @@ class CApp {
     
     // Static initialisations
     self::$handlers = array();
-    foreach (CAppUI::conf("index_handlers") as $handler => $active) {
-      if ($active) {
-        self::$handlers[$handler] = new $handler;
+    foreach (CAppUI::conf("index_handlers") as $_class => $_active) {      
+      if ($_active) {
+        if (!class_exists($_class)) {
+          trigger_error("Application index handler missing class '$_class'", E_USER_ERROR);
+          continue;
+        }
+        self::$handlers[$_class] = new $_class;
       }
     }
   }
@@ -411,9 +415,9 @@ class CApp {
   static function notify($message) {
     // Event Handlers
     self::makeHandlers();
-    foreach (self::$handlers as $handler) {
+    foreach (self::$handlers as $_handler) {
       try {
-        call_user_func(array($handler, "on$message"));
+        call_user_func(array($_handler, "on$message"));
       } 
       catch (Exception $e) {
         CAppUI::setMsg($e, UI_MSG_ERROR);

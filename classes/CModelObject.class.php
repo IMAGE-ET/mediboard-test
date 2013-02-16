@@ -236,9 +236,14 @@ class CModelObject {
     
     // Static initialisations
     self::$handlers = array();
-    foreach (CAppUI::conf("object_handlers") as $handler => $active) {
-      if ($active && !isset(self::$ignoredHandlers[$handler])) {
-        self::$handlers[$handler] = new $handler;
+    foreach (CAppUI::conf("object_handlers") as $_class => $_active) {
+      if ($_active && !isset(self::$ignoredHandlers[$_class])) {
+        if (!class_exists($_class)) {
+          trigger_error("Model object handler missing class '$_class'", E_USER_ERROR);
+          continue;
+        }
+        
+        self::$handlers[$_class] = new $_class;
       }
     }
   }

@@ -24,9 +24,13 @@ class CSmartyDP extends CSmartyMB {
     
     // Static initialisations
     self::$placeholders = array();
-    foreach (CAppUI::conf("template_placeholders") as $placeholder => $active) {
-      if ($active) {
-        self::$placeholders[$placeholder] = new $placeholder;
+    foreach (CAppUI::conf("template_placeholders") as $_class => $_active) {
+      if ($_active) {
+        if (!class_exists($_class)) {
+          trigger_error("Template placeholder missing class '$_class'", E_USER_ERROR);
+          continue;
+        }
+        self::$placeholders[$_class] = new $_class;
       }
     }
   }
