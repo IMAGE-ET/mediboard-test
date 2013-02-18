@@ -16,7 +16,7 @@
  * PID - Represents an HL7 PID message segment (Patient Identification)
  */
 
-class CHL7v2SegmentPID extends CHL7v2Segment {
+class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
   /**
    * @var string
    */
@@ -47,8 +47,8 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     parent::build($event);
     
     $message  = $event->message;
-    $receiver = $event->_receiver;
-    $group    = $receiver->loadRefGroup();
+    $sender   = $event->_sender;
+    $group    = $sender->loadRefGroup();
 
     $patient  = $this->patient;
     
@@ -60,14 +60,14 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-3: Patient Identifier List (CX) (repeating)
-    $data[] = $this->getPersonIdentifiers($patient, $group, $receiver);
+    $data[] = $this->getPersonIdentifiers($patient, $group, $sender);
     
     // PID-4: Alternate Patient ID - PID (CX) (optional repeating)
     $data[] = null;
     
     // PID-5: Patient Name (XPN) (repeating)
     $data[] = $this->getXPN($patient);
-    
+
     // PID-6: Mother's Maiden Name (XPN) (optional repeating)
     $data[] = null;
     
@@ -99,7 +99,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
         CValue::read($linesAdress, 0),
         str_replace("\n", $message->componentSeparator, CValue::read($linesAdress, 1)),
         $patient->ville,
-        null,
+        $patient->province,
         $patient->cp,
         // Pays INSEE, récupération de l'alpha 3
         CPaysInsee::getAlpha3($patient->pays_insee),
@@ -174,25 +174,24 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     // TTY      - Teletypewriter
     $phones = array();
     if ($patient->tel) {
-      $phones[] = $this->getXTN($receiver, $patient->tel, "PRN", "PH");
-    }
-    if ($patient->tel2) {
-      // Pour le portable on met soit PRN ou ORN
-      $phones[] = $this->getXTN($receiver, $patient->tel2, $receiver->_configs["build_cellular_phone"], "CP");
-    }
-    if ($patient->tel_autre) {
-      $phones[] = $this->getXTN($receiver, $patient->tel_autre, "ORN", "PH");
-    }
-    if ($patient->email) {
       $phones[] = array(
         null,
         // Table - 0201
-        "NET",
+        "PRN",
         // Table - 0202
-        "Internet",
-        $patient->email,
+        "PH",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        $patient->tel,
       );
     }
+
     $data[] =  $phones;
     
     // PID-14: Phone Number - Business (XTN) (optional repeating)
@@ -208,35 +207,19 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-18: Patient Account Number (CX) (optional)
-    if ($this->sejour && ($receiver->_configs["build_NDA"] == "PID_18")) {
-      // Même traitement que pour l'IPP
-      switch ($receiver->_configs["build_PID_34"]) {
-        case 'actor':
-          $assigning_authority = $this->getAssigningAuthority("actor", null, $receiver);
-          break;
-        
-        default:
-          $assigning_authority = $this->getAssigningAuthority("FINESS", $group->finess);
-          break;
-      } 
-      
+    if ($this->sejour) {
       $sejour = $this->sejour;
       $sejour->loadNDA($group->_id);
-      $data[] = $sejour->_NDA ? array( 
-                  array(
-                    $sejour->_NDA,
-                    null,
-                    null,
-                    // PID-3-4 Autorité d'affectation
-                    $assigning_authority,
-                    "AN"
-                  )
-                ) : null;
+      $data[] = $sejour->_NDA ? array(
+        array(
+          $sejour->_NDA
+        )
+      ) : null;
     }
     else {
       $data[] = null;
     }
-    
+
     // PID-19: SSN Number - Patient (ST) (optional)
     $data[] = $patient->matricule;
 
@@ -244,49 +227,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-21: Mother's Identifier (CX) (optional repeating)
-    if ($this->sejour) {
-      $naissance = new CNaissance();
-      $naissance->sejour_enfant_id = $this->sejour->_id;
-      $naissance->loadMatchingObject();
-
-      if ($naissance->_id) {
-        $sejour_maman = $naissance->loadRefSejourMaman();
-        $sejour_maman->loadNDA($group->_id);
-        
-        $sejour_maman->loadRefPatient()->loadIPP($group->_id);
-        $mother = $sejour_maman->_ref_patient;
-        
-        $identifiers = array();
-        if ($mother->_IPP) {
-          $identifiers[] = array(
-            $mother->_IPP,
-            null,
-            null,
-            // PID-3-4 Autorité d'affectation
-            $this->getAssigningAuthority("FINESS", $group->finess),
-            "PI"
-          );
-        }
-        if ($sejour_maman->_NDA) {
-          $identifiers[] = array(
-            $sejour_maman->_NDA,
-            null,
-            null,
-            // PID-3-4 Autorité d'affectation
-            $this->getAssigningAuthority("FINESS", $group->finess),
-            "AN"
-          );
-        }
-
-        $data[] = $identifiers;
-      }
-      else {
-        $data[] = null;
-      }        
-    }
-    else {
-      $data[] = null;
-    }
+    $data[] = null;
 
     // PID-22: Ethnic Group (CE) (optional repeating)
     $data[] = null;
@@ -316,42 +257,13 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = ($patient->deces) ? "Y" : "N";
     
     // PID-31: Identity Unknown Indicator (ID) (optional)
-    switch ($receiver->_configs["build_PID_31"]) {
-      case 'avs':
-        $data[] = $patient->avs;
-        break;
-      
-      default:
-        $data[] = null;
-        break;
-    }
+    $data[] = null;
     
     // PID-32: Identity Reliability Code (IS) (optional repeating)
-    $data[] =  array (
-      // Table - 0445
-      // VIDE  - Identité non encore qualifiée
-      // PROV  - Provisoire
-      // VALI  - Validé
-      // DOUB  - Doublon ou esclave
-      // DESA  - Désactivé
-      // DPOT  - Doublon potentiel
-      // DOUA  - Doublon avéré
-      // COLP  - Collision potentielle
-      // COLV  - Collision validée
-      // FILI  - Filiation
-      // CACH  - Cachée
-      // ANOM  - Anonyme
-      // IDVER - Identité vérifiée par le patient
-      // RECD  - Reçue d'un autre domaine
-      // IDRA  - Identité rapprochée dans un autre domaine
-      // USUR  - Usurpation
-      // HOMD  - Homonyme detecté
-      // HOMA  - Homonyme avéré
-      is_numeric($patient->nom) ? "ANOM" : "VALI"
-    );
+    $data[] = null;
 
     // PID-33: Last Update Date/Time (TS) (optional)
-    $data[] =  $event->last_log->date;
+    $data[] =  null;
     
     // PID-34: Last Update Facility (HD) (optional)
     $data[] = null;
@@ -408,7 +320,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       null,
       null,
       // PID-3-4 Autorité d'affectation
-      $this->getAssigningAuthority("actor"),
+      $this->getAssigningAuthority("actor", null, $actor),
     );
   }
 }

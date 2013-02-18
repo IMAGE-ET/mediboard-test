@@ -29,13 +29,8 @@ class CHL7v2SegmentQPD_RESP extends CHL7v2Segment {
   function build(CHL7v2Event $event) {
     parent::build($event);
 
-    $exchange_ihe = $event->_exchange_ihe;
-    $message      = $exchange_ihe->_message;
-
-    $hl7_message = new CHL7v2Message();
-    $hl7_message->parse($message);
-
-    $QPD_request = $hl7_message->getSegmentByName("QPD");
+    $hl7_message_initiator = $event->message->_hl7_message_initiator;
+    $QPD_request           = $hl7_message_initiator->getSegmentByName("QPD");
 
     $this->fill($QPD_request->getStruct());
   }

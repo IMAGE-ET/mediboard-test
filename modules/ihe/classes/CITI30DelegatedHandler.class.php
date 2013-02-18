@@ -16,15 +16,41 @@
  * ITI30 Delegated Handler
  */
 class CITI30DelegatedHandler extends CITIDelegatedHandler {
+  /**
+   * @var array
+   */
   static $handled     = array ("CPatient", "CCorrespondantPatient", "CIdSante400");
+  /**
+   * @var string
+   */
   public $profil      = "PAM";
+  /**
+   * @var string
+   */
   public $message     = "ADT";
+  /**
+   * @var string
+   */
   public $transaction = "ITI30";
-  
+
+  /**
+   * If object is handled ?
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
- 
+
+  /**
+   * Trigger after event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -144,12 +170,26 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     $patient->_IPP = null;
   }
 
+  /**
+   * Trigger before event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
     }
   }
-  
+
+  /**
+   * Trigger after event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterMerge(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -180,8 +220,9 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
   
         // Cas 1 IPP : Pas de message de fusion mais d'une modification du patient
         if ($patient1_ipp xor $patient2_ipp) {
-          if ($patient2_ipp)
+          if ($patient2_ipp) {
             $patient->_IPP = $patient2_ipp;
+          }
           
           if (!$this->isMessageSupported($this->transaction, $this->message, "A31", $receiver)) {
             return;
@@ -204,8 +245,15 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
         }
       } 
     } 
-  }  
+  }
 
+  /**
+   * Trigger before event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onBeforeDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -213,7 +261,14 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     
     return true;
   }
-  
+
+  /**
+   * Trigger after event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterDelete(CMbObject $mbObject) {
     if (!$this->isHandled($mbObject)) {
       return false;
@@ -244,4 +299,3 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     $this->sendITI($this->profil, $this->transaction, $this->message, $code, $patient);
   }
 }
-?>

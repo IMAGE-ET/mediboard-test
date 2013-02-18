@@ -288,7 +288,7 @@ class CHL7v2Segment extends CHL7v2Entity {
           null,
           null,
           // PID-3-4 Autorité d'affectation
-          $assigning_authority,
+          (!$actor->_configs["send_assigning_authority"]) ? null : $assigning_authority,
           "PI"
         );
         
@@ -297,7 +297,7 @@ class CHL7v2Segment extends CHL7v2Entity {
           null,
           null,
           // PID-3-4 Autorité d'affectation
-          $this->getAssigningAuthority("mediboard"),
+          (!$actor->_configs["send_assigning_authority"]) ? null : $this->getAssigningAuthority("mediboard"),
           "RI"
         );  
       }
@@ -316,7 +316,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         null,
         null,
         // PID-3-4 Autorité d'affectation
-        $assigning_authority,
+        (!$actor->_configs["send_assigning_authority"]) ? null : $assigning_authority,
         "PI"
       );
     }
@@ -537,10 +537,10 @@ class CHL7v2Segment extends CHL7v2Entity {
       );
       // Cas nom de jeune fille
       if ($object->nom_jeune_fille) {
-        $patient_birthname = $patient_usualname;
+        $patient_birthname    = $patient_usualname;
         $patient_birthname[0] = $object->nom_jeune_fille;
         // Legal Name devient Display Name
-        $patient_usualname[6] = "D"; 
+        $patient_birthname[6] = "D";
       }
       $names[] = $patient_usualname;
       if ($object->nom_jeune_fille) {

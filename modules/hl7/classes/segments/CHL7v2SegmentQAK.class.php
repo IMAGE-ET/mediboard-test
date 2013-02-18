@@ -40,7 +40,10 @@ class CHL7v2SegmentQAK extends CHL7v2Segment {
     $objects = $this->objects;
 
     // QAK-1: Query Tag (ST) (optional)
-    $data[] = "PDQPDC_$event->code";
+    $hl7_message_initiator = $event->message->_hl7_message_initiator;
+    $QPD_request           = $hl7_message_initiator->getSegmentByName("QPD")->getStruct();
+
+    $data[] = isset($QPD_request[1][0]) ? $QPD_request[1][0] : "PDQPDC_$event->code";
     
     // QAK-2: Query Response Status (ID) (optional)
     $data[] = (!$objects || count($objects) == 0) ? "NF" : "OK";

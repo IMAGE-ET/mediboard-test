@@ -57,7 +57,8 @@ class CReceiverIHEConfig extends CMbObjectConfig {
   var $send_provisional_affectation       = null;
   var $send_transfer_patient              = null;
   var $send_own_identifier                = null;
-  
+  var $send_self_identifier               = null;
+
   // Build
   var $build_mode             = null;
   var $build_NDA              = null;
@@ -131,6 +132,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
       "send_provisional_affectation",
       "send_transfer_patient",
       "send_own_identifier",
+      "send_self_identifier",
     ),
     "PID" => array(
       "build_PID_31",
@@ -201,6 +203,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
     $props["send_provisional_affectation"]       = "bool default|0";
     $props["send_transfer_patient"]              = "enum list|A02|Z99 default|A02";
     $props["send_own_identifier"]                = "bool default|1";
+    $props["send_self_identifier"]               = "bool default|0";
     
     // Build
     $props["build_mode"]             = "enum list|normal|simple default|normal";

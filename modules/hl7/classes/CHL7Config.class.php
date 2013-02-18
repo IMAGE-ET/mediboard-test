@@ -49,6 +49,10 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle_PV1_36",
     "handle_PV2_12",
     "handle_NSS",
+
+    // Send
+    "send_assigning_authority",
+    "send_self_identifier",
     
     // Purge
     "purge_idex_movements",
@@ -92,6 +96,10 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $handle_PV1_36           = null;
   var $handle_PV2_12           = null;
   var $handle_NSS              = null;
+
+  // Send
+  var $send_assigning_authority = null;
+  var $send_self_identifier     = null;
 
   // Purge
   var $purge_idex_movements = null;
@@ -137,7 +145,12 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_PV2_12",
       "handle_NSS",
     ),
-    
+
+    "send" => array(
+      "send_assigning_authority",
+      "send_self_identifier",
+    ),
+
     "purge" => array(
       "purge_idex_movements"
     ),
@@ -148,14 +161,26 @@ class CHL7Config extends CExchangeDataFormatConfig {
     )
   );
 
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
+
     $spec->table = "hl7_config";
     $spec->key   = "hl7_config_id";
     $spec->uniques["uniques"] = array("sender_id", "sender_class");
+
     return $spec;
   }
 
+  /**
+   * Get properties specifications as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -198,6 +223,10 @@ class CHL7Config extends CExchangeDataFormatConfig {
 
     // => PV2
     $props["handle_PV2_12"] = "enum list|libelle|none default|libelle";
+
+    // Send
+    $props["send_assigning_authority"] = "bool default|1";
+    $props["send_self_identifier"]     = "bool default|0";
     
     // Purge
     $props["purge_idex_movements"] = "bool default|0";
@@ -208,7 +237,12 @@ class CHL7Config extends CExchangeDataFormatConfig {
     
     return $props;
   }
-  
+
+  /**
+   * Get config fields
+   *
+   * @return array
+   */
   function getConfigFields() {
     return $this->_config_fields = self::$config_fields;
   }

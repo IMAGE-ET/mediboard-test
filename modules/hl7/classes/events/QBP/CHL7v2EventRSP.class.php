@@ -62,7 +62,14 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     $this->message          = new CHL7v2Message();
     $this->message->version = $this->version;
     $this->message->name    = $this->msg_codes;
-    
+
+    $message      = $this->_exchange_ihe->_message;
+
+    $hl7_message_initiator = new CHL7v2Message();
+    $hl7_message_initiator->parse($message);
+
+    $this->message->_hl7_message_initiator = $hl7_message_initiator;
+
     // Message Header 
     $this->addMSH();
     
@@ -85,9 +92,9 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     }
 
     $last = end($object->objects);
-    if ($last) {
-      //$last->_id
-    }
+    /*if ($last) {
+      $last->_id
+    }*/
   }
 
   /**
@@ -155,8 +162,10 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
    * @return void
    */
   function addPID(CPatient $patient, $set_id) {
-    $PID = CHL7v2Segment::create("PID", $this->message);
+    $PID = CHL7v2Segment::create("PID_RESP", $this->message);
     $PID->patient = $patient;
+    $patient->getCurrSejour();
+    $PID->sejour = reset($patient->_ref_sejours);
     $PID->set_id  = $set_id;
     $PID->build($this);
   }

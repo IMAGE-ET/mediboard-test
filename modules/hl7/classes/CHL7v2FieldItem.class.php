@@ -30,7 +30,7 @@ class CHL7v2FieldItem extends CHL7v2Component {
     parent::__construct($field, $specs, $self_pos, $separators);
   }
   
-  function getField(){
+  function getField() {
     return $this->parent;
   }
   
@@ -44,10 +44,10 @@ class CHL7v2FieldItem extends CHL7v2Component {
     $node->appendChild($new_node);
   }
   
-  function getPath($separator = ".", $with_name = false){
+  function getPath($separator = ".", $with_name = false) {
     $path = $this->parent->getPath($separator, $with_name);
     
-    if(self::$_get_path_full) {
+    if (self::$_get_path_full) {
       $path[] = $this->self_pos+1;
     }
     else {

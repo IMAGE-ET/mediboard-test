@@ -321,7 +321,8 @@ class CPatient extends CMbObject {
     $props["nomjf_soundex2"]    = "str";
     $props["medecin_traitant_declare"] = "bool";
     $props["medecin_traitant"]  = "ref class|CMedecin";
-    $props["matricule"]         = CAppUI::conf("dPpatients CPatient check_code_insee") ? "code insee confidential mask|9S99S99S9xS999S999S99" : "str maxLength|8";
+    $conf = CAppUI::conf("dPpatients CPatient check_code_insee");
+    $props["matricule"]         = $conf ? "code insee confidential mask|9S99S99S9xS999S999S99" : "str maxLength|15";
     $props["INSC"]              = "str length|22";
     $props["code_regime"]       = "numchar length|2";
     $props["caisse_gest"]       = "numchar length|3";

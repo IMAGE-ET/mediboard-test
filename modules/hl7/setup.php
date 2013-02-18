@@ -975,8 +975,22 @@ class CSetuphl7 extends CSetup {
     $query = "ALTER TABLE `hl7_config`
                 ADD `handle_PV2_12` ENUM ('libelle','none') DEFAULT 'libelle';";
     $this->addQuery($query);
+
+    $this->makeRevision("0.54");
+    $query = "ALTER TABLE `hl7_config`
+                ADD `send_assigning_authority` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.55");
+    $query = "ALTER TABLE `hl7_config`
+                ADD `send_self_identifier` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `receiver_ihe_config`
+                ADD `send_self_identifier` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.54";
+    $this->mod_version = "0.56";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

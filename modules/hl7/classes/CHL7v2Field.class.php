@@ -122,7 +122,7 @@ class CHL7v2Field extends CHL7v2Entity {
     }
   }
   
-  function getSpecs(){
+  function getSpecs() {
     $specs = $this->getMessage()->getSchema(self::PREFIX_COMPOSITE_NAME, $this->datatype, $this->getMessage()->extension);
     
     // The timestamp case, where Time contains TimeStamp data
@@ -135,19 +135,19 @@ class CHL7v2Field extends CHL7v2Entity {
     return $specs;
   }
   
-  function getVersion(){
+  function getVersion() {
     return $this->owner_segment->getVersion();
   }
   
-  function getSegment(){
+  function getSegment() {
     return $this->owner_segment;
   }
   
-  function getMessage(){
+  function getMessage() {
     return $this->owner_segment->getMessage();
   }
   
-  function getPath($separator = ".", $with_name = false){
+  function getPath($separator = ".", $with_name = false) {
     if ($with_name) {
       return array($this->name);
     }
@@ -161,7 +161,7 @@ class CHL7v2Field extends CHL7v2Entity {
    * 
    * @return string The view of the form DATATYPE[LENGTH]
    */
-  function getTypeTitle(){
+  function getTypeTitle() {
     $str = $this->datatype;
     
     if ($this->length) {
@@ -171,7 +171,7 @@ class CHL7v2Field extends CHL7v2Entity {
     return $str;
   }
   
-  function __toString(){
+  function __toString() {
     $rs = $this->getMessage()->repetitionSeparator;
     
     if (CHL7v2Message::$decorateToString) {

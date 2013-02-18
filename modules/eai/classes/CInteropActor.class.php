@@ -17,37 +17,139 @@
  */
 class CInteropActor extends CMbObject {
   // DB Fields
+  /**
+   * @var null
+   */
   var $nom                       = null;
+
+  /**
+   * @var null
+   */
   var $libelle                   = null;
+
+  /**
+   * @var null
+   */
   var $group_id                  = null;
+
+  /**
+   * @var null
+   */
   var $actif                     = null;
   
   // Form fields
+  /**
+   * @var null
+   */
   var $_reachable                = null;
+
+  /**
+   * @var null
+   */
   var $_parent_class             = null;
+
+  /**
+   * @var bool
+   */
   var $_delete_file              = true;
-  
+
+  /**
+   * @var null
+   */
   var $_tag_patient              = null;
+
+  /**
+   * @var null
+   */
   var $_tag_sejour               = null;
+
+  /**
+   * @var null
+   */
   var $_tag_mediuser             = null;
+
+  /**
+   * @var null
+   */
   var $_tag_service              = null;
+
+  /**
+   * @var null
+   */
   var $_tag_chambre              = null;
+
+  /**
+   * @var null
+   */
   var $_tag_lit                  = null;
+
+  /**
+   * @var null
+   */
   var $_tag_movement             = null;
+
+  /**
+   * @var null
+   */
   var $_tag_visit_number         = null;
+
+  /**
+   * @var null
+   */
   var $_tag_hprimxml             = null;
+
+  /**
+   * @var null
+   */
   var $_tag_hl7                  = null;
+
+  /**
+   * @var null
+   */
   var $_tag_consultation         = null;
 
+  /**
+   * @var null
+   */
+  var $_self_tag_patient         = null;
+
+  /**
+   * @var null
+   */
+  var $_self_tag_sejour         = null;
+
+  /**
+   * @var array
+   */
   var $_tags                     = array(); // All tags
   
   // Forward references
+  /**
+   * @var CGroups
+   */
   var $_ref_group                = null;
+  /**
+   * @var null
+   */
   var $_ref_exchanges_sources    = null;
+  /**
+   * @var null
+   */
   var $_ref_last_message         = null;
+  /**
+   * @var null
+   */
   var $_ref_messages_supported   = null;
+  /**
+   * @var array
+   */
   var $_ref_msg_supported_family = array();
-  
+
+  /**
+   * Get properties specifications as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["nom"]        = "str notNull";
@@ -69,7 +171,9 @@ class CInteropActor extends CMbObject {
     $props["_tag_visit_number"] = "str";
     $props["_tag_hprimxml"]     = "str";
     $props["_tag_hl7"]          = "str";
-    
+    $props["_self_tag_patient"] = "str";
+    $props["_self_tag_sejour"]  = "str";
+
     if (CModule::getActive("phast")) {
       $props["_tag_phast"]        = "str";
     }
@@ -77,6 +181,11 @@ class CInteropActor extends CMbObject {
     return $props;
   }
 
+  /**
+   * Update the form (derived) fields plain fields
+   *
+   * @return void
+   */
   function updateFormFields() {
     parent::updateFormFields();
         
@@ -95,12 +204,20 @@ class CInteropActor extends CMbObject {
 
     $this->_tag_hprimxml      = CHprimXML::getDefaultTag($this->group_id);
     $this->_tag_hl7           = CHL7::getDefaultTag($this->group_id);
+
+    $this->_self_tag_patient  = $this->getTag($this->group_id, "CPatient");
+    $this->_self_tag_sejour   = $this->getTag($this->group_id, "Sejour");
     
     if (CModule::getActive("phast")) {
       $this->_tag_phast  = CPhast::getTagPhast($this->group_id);
     }
   }
-  
+
+  /**
+   * Get backward reference specifications
+   *
+   * @return array Array of form "collection-name" => "class join-field"
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     
@@ -110,7 +227,12 @@ class CInteropActor extends CMbObject {
     
     return $backProps;
   }
-    
+
+  /**
+   * Get actor tags
+   *
+   * @return array
+   */
   function getTags() {
     $tags = array();
     
@@ -123,20 +245,83 @@ class CInteropActor extends CMbObject {
     }
 
     return $this->_tags = $tags;
-  }  
-    
+  }
+
+  /**
+   * Get actor tag
+   *
+   * @param int    $group_id    Group
+   * @param string $domain_type Domain type
+   *
+   * @return string
+   */
+  function getTag($group_id, $domain_type) {
+    $context = array(__METHOD__, func_get_args());
+    if (CFunctionCache::exist($context)) {
+      return CFunctionCache::get($context);
+    }
+
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+
+    $ljoin["group_domain"] = "`group_domain`.`domain_id` = `domain`.`domain_id`";
+
+    $where = array();
+    $where["group_domain.object_class"] = " = '$domain_type'";
+    $where["group_domain.group_id"]     = " = '$group_id'";
+
+    $where["domain.actor_class"]        = " = '$this->_class'";
+    $where["domain.actor_id"]           = " = '$this->_id'";
+
+    $domain = new CDomain();
+    $domain->loadObject($where, null, null, $ljoin);
+
+    return CFunctionCache::set($context, $domain->tag);
+  }
+
+  /**
+   * Get idex
+   *
+   * @param CMbObject $object Object
+   *
+   * @return void
+   */
+  function getIdex(CMbObject $object) {
+    $idex = new CIdSante400();
+    $idex->object_class = $object->_class;
+    $idex->object_id    = $object->_id;
+    $idex->tag          = $this->getTag($this->group_id, $this->_class);
+    $idex->loadMatchingObject();
+
+    return $idex;
+  }
+
+  /**
+   * Load group forward reference
+   *
+   * @return CMbObject
+   */
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", 1);
   }
-  
-  function loadRefUser() {}
+
+  /**
+   * Load user forward reference
+   *
+   * @return CMbObject
+   */
+  function loadRefUser() {
+  }
   
   /**
    * Get exchanges sources
    * 
    * @return void
    */
-  function loadRefsExchangesSources() {}
+  function loadRefsExchangesSources() {
+  }
 
   /**
    * Sender is reachable ?
@@ -148,21 +333,46 @@ class CInteropActor extends CMbObject {
       $this->loadRefsExchangesSources();
     }
   }
-  
-  function lastMessage() {}
-  
+
+  /**
+   * Last message
+   *
+   * @return void
+   */
+  function lastMessage() {
+  }
+
+  /**
+   * Register actor ?
+   *
+   * @param string $name Actor name
+   *
+   * @return void
+   */
   function register($name) {
     $this->nom = $name;
     $this->loadMatchingObject();
     
     // Enregistrement automatique d'un destinataire ?
-    if (!$this->_id) {}
+    //if (!$this->_id) {}
   }
-  
+
+  /**
+   * Load messages supported back reference collection
+   *
+   * @return CStoredObject[]
+   */
   function loadRefsMessagesSupported() {
     return $this->_ref_messages_supported = $this->loadBackRefs("messages_supported");
   }
-  
+
+  /**
+   * Is that the message is supported by this actor
+   *
+   * @param string $message Message
+   *
+   * @return bool
+   */
   function isMessageSupported($message) {
     $msg_supported               = new CMessageSupported();
     $msg_supported->object_class = $this->_class;
@@ -172,7 +382,12 @@ class CInteropActor extends CMbObject {
 
     return $msg_supported->countMatchingList() > 0;
   }
-  
+
+  /**
+   * Get messages supported by family
+   *
+   * @return array
+   */
   function getMessagesSupportedByFamily() {    
     $family = array();
     
@@ -188,7 +403,7 @@ class CInteropActor extends CMbObject {
     
     $supported = $this->loadRefsMessagesSupported();
     
-    foreach($family as $_family => $_root_class) {
+    foreach ($family as $_family => $_root_class) {
       $root  = new $_root_class;   
 
       foreach ($root->getEvenements() as $_evt => $_evt_class) {
@@ -212,7 +427,12 @@ class CInteropActor extends CMbObject {
 
     return $this->_ref_msg_supported_family;
   }
-  
+
+  /**
+   * Get format object handlers
+   *
+   * @return array
+   */
   function getFormatObjectHandlers() {
     return array();
   }
@@ -232,5 +452,3 @@ class CInteropActor extends CMbObject {
     );
   }
 }
-
-?>
