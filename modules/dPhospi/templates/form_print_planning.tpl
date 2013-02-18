@@ -117,10 +117,10 @@ function toggleMultiple(select, multiple) {
         <tr>
           <th>{{mb_label object=$filter field="_service"}}</th>
           <td colspan="2">
-          	<select name="_service" style="width: 15em;">
+            <select name="_service" style="width: 15em;">
               <option value="0">&mdash; {{tr}}All{{/tr}}</option>
-            	{{foreach from=$listServ item=curr_serv}}
-            	  <option value="{{$curr_serv->service_id}}">{{$curr_serv->nom}}</option>
+              {{foreach from=$listServ item=curr_serv}}
+                <option value="{{$curr_serv->service_id}}">{{$curr_serv->nom}}</option>
               {{/foreach}}
             </select>
             <label style="vertical-align: top;">
@@ -146,9 +146,7 @@ function toggleMultiple(select, multiple) {
           <td colspan="2">
             <select name="praticien_id" style="width: 15em;">
               <option value="0">&mdash; {{tr}}All{{/tr}}</option>
-              {{foreach from=$listPrat item=curr_prat}}
-                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
-              {{/foreach}}
+              {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat}}
             </select>
             <label style="vertical-align: top;">
               <input type="checkbox" onclick="toggleMultiple(this.form.praticien_id, this.checked)"/>Multiple

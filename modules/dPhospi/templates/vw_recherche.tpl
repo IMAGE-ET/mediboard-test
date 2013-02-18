@@ -32,11 +32,7 @@ Main.add(function () {
   
   <select name="selPrat" onchange="this.form.submit()" style="float: right;">
     <option value="">&mdash; Tous les praticiens</option>
-    {{foreach from=$listPrat item=curr_prat}}
-      <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $selPrat == $curr_prat->user_id}}selected="selected"{{/if}}>
-        {{$curr_prat->_view}}
-      </option>
-    {{/foreach}}
+    {{mb_include module=mediusers template=inc_options_mediuser selected=$selPrat list=$listPrat}}
   </select>
   {{/if}}
   <select name="typeVue" onchange="this.form.submit()">

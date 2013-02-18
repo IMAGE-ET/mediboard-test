@@ -338,10 +338,12 @@ class CMediusers extends CMbObject {
     $backProps["poses_disp_vasc_operateur"]       = "CPoseDispositifVasculaire operateur_id";
     $backProps["poses_disp_vasc_encadrant"]       = "CPoseDispositifVasculaire encadrant_id";
     $backProps["praticien_facture"]               = "CFactureConsult praticien_id";
+    $backProps["praticien_facture_etab"]          = "CFactureEtablissement praticien_id";
     $backProps["tokens"]                          = "CViewAccessToken user_id";
     $backProps["astreintes"]                      = "CPlageAstreinte user_id";
     $backProps["dicom_sender"]                    = "CDicomSender user_id";
     $backProps["CPS_pyxvital"]                    = "CPvCPS id_mediuser";
+    $backProps["affectation"]                     = "CAffectation praticien_id";
     return $backProps;
   }
 

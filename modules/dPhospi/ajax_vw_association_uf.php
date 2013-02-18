@@ -16,9 +16,10 @@ $service = $chambre->loadRefService();
 
 $affectation = CMbObject::loadFromGuid($curr_affectation_guid);
 $affectation->loadRefUfs();
-$sejour = $affectation->loadRefSejour();
-$praticien = $sejour->loadRefPraticien();
-$function = $praticien->loadRefFunction();
+$sejour         = $affectation->loadRefSejour();
+$praticien      = $sejour->loadRefPraticien();
+$prat_placement = $affectation->loadRefPraticien();
+$function       = $praticien->loadRefFunction();
 
 $ufs_medicale    = array();
 $ufs_soins       = array();
@@ -84,11 +85,32 @@ foreach ($auf->loadListFor($function) as $_auf) {
 }
 
 // UFs de praticien
-$ufs_praticien = array();
+$ufs_praticien_sejour = array();
+$ufs_prat_placement = array();
 foreach ($auf->loadListFor($praticien) as $_auf) {
   $uf = $_auf->loadRefUniteFonctionnelle();
-  $ufs_praticien [$uf->_id] = $uf;
+  $ufs_praticien_sejour [$uf->_id] = $uf;
   $ufs_medicale  [$uf->_id] = $uf;
+}
+
+if ($prat_placement->_id) {
+  foreach ($auf->loadListFor($prat_placement) as $_auf) {
+    $uf = $_auf->loadRefUniteFonctionnelle();
+    $ufs_prat_placement [$uf->_id] = $uf;
+    $ufs_medicale  [$uf->_id] = $uf;
+  }
+}
+else {
+  $prat_placement = $praticien;
+}
+
+$user = new CMediusers();
+$praticiens = $user->loadPraticiens(PERM_EDIT, $function->_id);
+foreach ($praticiens as $prat) {
+  foreach ($auf->loadListFor($prat) as $_auf) {
+    $uf = $_auf->loadRefUniteFonctionnelle();
+    $ufs_medicale  [$uf->_id] = $uf;
+  }
 }
 
 $ufs_medicale    = array_reverse($ufs_medicale);
@@ -105,6 +127,8 @@ $smarty->assign("chambre"    , $chambre);
 $smarty->assign("lit"        , $lit);
 $smarty->assign("function"   , $function);
 $smarty->assign("praticien"  , $praticien);
+$smarty->assign("prat_placement" , $prat_placement);
+$smarty->assign("praticiens" , $praticiens);
 
 $smarty->assign("uf_sejour_hebergement", $uf_sejour_hebergement);
 $smarty->assign("uf_sejour_soins", $uf_sejour_soins);
@@ -113,7 +137,8 @@ $smarty->assign("ufs_service"    , $ufs_service);
 $smarty->assign("ufs_chambre"    , $ufs_chambre);
 $smarty->assign("ufs_lit"        , $ufs_lit);
 $smarty->assign("ufs_function"   , $ufs_function);
-$smarty->assign("ufs_praticien"  , $ufs_praticien);
+$smarty->assign("ufs_praticien_sejour"  , $ufs_praticien_sejour);
+$smarty->assign("ufs_prat_placement"    , $ufs_prat_placement);
 $smarty->assign("ufs_medicale"   , $ufs_medicale);
 $smarty->assign("ufs_soins"      , $ufs_soins);
 $smarty->assign("ufs_hebergement", $ufs_hebergement);

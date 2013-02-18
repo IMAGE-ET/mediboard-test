@@ -21,6 +21,7 @@ class CAffectation extends CMbObject {
   var $sejour_id  = null;
   var $parent_affectation_id = null;
   var $function_id = null;
+  var $praticien_id = null;
   
   // DB Fields
   var $entree   = null;
@@ -55,6 +56,7 @@ class CAffectation extends CMbObject {
   var $_ref_uf_medicale    = null; 
   var $_ref_uf_soins       = null; 
   var $_ref_parent_affectation = null;
+  var $_ref_praticien      = null;
   
   // EAI Fields
   var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
@@ -74,7 +76,6 @@ class CAffectation extends CMbObject {
     $backProps["affectations_enfant"] = "CAffectation parent_affectation_id";
     $backProps["movements"]           = "CMovement affectation_id";
     $backProps["meal"]                = "CMeal affectation_id";
-    
     return $backProps;
   }
 
@@ -85,6 +86,7 @@ class CAffectation extends CMbObject {
     $specs["sejour_id"]             = "ref class|CSejour cascade";
     $specs["parent_affectation_id"] = "ref class|CAffectation";
     $specs["function_id"]           = "ref class|CFunctions";
+    $specs["praticien_id"]          = "ref class|CMediusers";
     $specs["entree"]                = "dateTime notNull";
     $specs["sortie"]                = "dateTime notNull";
     $specs["effectue"]              = "bool";
@@ -137,7 +139,7 @@ class CAffectation extends CMbObject {
   }
 
   function check() {
-    if($msg = parent::check()) {
+    if ($msg = parent::check()) {
       return $msg;
     }
     
@@ -167,7 +169,7 @@ class CAffectation extends CMbObject {
     $affectations = $affectation->loadMatchingList();
     unset($affectations[$this->_id]);
     
-    foreach($affectations as $_aff) {
+    foreach ($affectations as $_aff) {
       if ($this->collide($_aff)) {
         return "Placement déjà effectué";
       }
@@ -411,7 +413,7 @@ class CAffectation extends CMbObject {
   function loadMenu($date, $listTypeRepas = null){
     $this->_list_repas[$date] = array();
     $repas =& $this->_list_repas[$date];
-    if(!$listTypeRepas){
+    if (!$listTypeRepas) {
       $listTypeRepas = new CTypeRepas;
       $order = "debut, fin, nom";
       $listTypeRepas = $listTypeRepas->loadList(null,$order);
@@ -420,7 +422,7 @@ class CAffectation extends CMbObject {
     $where                   = array();
     $where["date"]           = $this->_spec->ds->prepare(" = %", $date);
     $where["affectation_id"] = $this->_spec->ds->prepare(" = %", $this->affectation_id);
-    foreach($listTypeRepas as $keyType=>$typeRepas){
+    foreach ($listTypeRepas as $keyType=>$typeRepas) {
       $where["typerepas_id"] = $this->_spec->ds->prepare("= %",$keyType);
       $repasDuJour = new CRepas;
       $repasDuJour->loadObject($where);
@@ -430,6 +432,10 @@ class CAffectation extends CMbObject {
   
   function loadRefParentAffectation() {
     return $this->_ref_parent_affectation = $this->loadFwdRef("parent_affectation_id", true);
+  }
+  
+  function loadRefPraticien($cache = true) {
+    return $this->_ref_praticien = $this->loadFwdRef("praticien_id", $cache);
   }
     
   function makeUF() {
@@ -496,8 +502,14 @@ class CAffectation extends CMbObject {
       }
       
       if (!$affectation_uf->uf_id) {
-        $praticien = $this->loadRefSejour()->loadRefPraticien();
-
+        $praticien = new CMediusers();
+        if (!$this->praticien_id) {
+          $praticien = $this->loadRefSejour()->loadRefPraticien();
+        }
+        else {
+          $praticien = $this->loadRefPraticien();
+          $praticien->loadRefFunction();
+        }
         $where["object_id"]    = "= '$praticien->_id'";
         $where["object_class"] = "= 'CMediusers'";
         $affectation_uf->loadObject($where, null, null, $ljoin);

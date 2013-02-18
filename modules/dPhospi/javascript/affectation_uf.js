@@ -21,7 +21,15 @@ AffectationUf  = {
     Control.Modal.close();
     return onSubmitFormAjax(form);  
   },
-  
+  onSubmitRefresh: function(form, object_guid, lit_guid, see_validate) {
+    onSubmitFormAjax(form);
+    var url = new Url('hospi'  , 'ajax_vw_association_uf');
+    url.addParam('curr_affectation_guid'  , object_guid);
+    url.addParam('lit_guid'  , lit_guid);
+    url.addParam('see_validate'  , see_validate);
+    url.requestUpdate("affecter_uf");
+    return false;
+  },
   onDeletion: function(form) {
     return confirmDeletion(form,
       { typeName: 'l\'affectation d\'UF'},
