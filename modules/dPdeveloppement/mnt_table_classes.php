@@ -336,7 +336,7 @@ function get_query_for_class($class, $errors = array()) {
 
 // Enregistre les suggestion pour chaque classe
 foreach ($list_classes as $_class => &$class_details) {
-  $class_details['suggestion'] = get_query_for_class($class_details, $_class, $types);
+  $class_details['suggestion'] = get_query_for_class($class_details, $types);
 }
 
 // Création du template
