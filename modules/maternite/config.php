@@ -14,5 +14,8 @@
 $dPconfig["maternite"] = array(
   "days_terme" => "5",
   "duree_sejour" => "3",
+  "CGrossesse" =>array(
+    "date_regles_obligatoire" => "0"
+  )
 );
 ?>

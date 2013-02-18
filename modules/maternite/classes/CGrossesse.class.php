@@ -58,8 +58,12 @@ class CGrossesse extends CMbObject{
     $specs["multiple"]       = "bool default|0";
     $specs["allaitement_maternel"] = "bool default|0";
     $specs["date_fin_allaitement"] = "date";
-    $specs["date_dernieres_regles"] = "date";
-    
+    if (CAppUI::conf("maternite CGrossesse date_regles_obligatoire")) {
+      $specs["date_dernieres_regles"] = "date notNull";
+    }
+    else {
+      $specs["date_dernieres_regles"] = "date";
+    }
     return $specs;
   }
   
@@ -88,7 +92,7 @@ class CGrossesse extends CMbObject{
     $this->loadRefParturiente();
     $this->_view = "Terme du " . mbDateToLocale($this->terme_prevu);
     // Nombre de semaines (aménorrhée = 41, grossesse = 39)
-    $this->_date_fecondation = mbDate("-39 weeks", $this->terme_prevu);
+    $this->_date_fecondation = mbDate("-41 weeks", $this->terme_prevu);
     $this->_allaitement_en_cours = $this->allaitement_maternel && !$this->active && (!$this->date_fin_allaitement || $this->date_fin_allaitement > mbDate());
     $this->_semaine_grossesse = ceil(mbDaysRelative($this->_date_fecondation, mbDate()) / 7);
   }

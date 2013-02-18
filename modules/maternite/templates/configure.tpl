@@ -12,15 +12,15 @@
     <tr>
       <th colspan="2" class="category">{{tr}}CGrossesse{{/tr}}</th>
     </tr>
-    <tr>
-      {{mb_include module=system template=inc_config_str var=days_terme size=2 suffix="jours"}}
-    </tr>
-    <tr>
-      {{mb_include module=system template=inc_config_str var=duree_sejour size=2 suffix="jours"}}
-    </tr>
-    <tr>
-      {{mb_include module=system template=configure_handler class_handler=CAffectationHandler}}
-    </tr>
+
+    {{mb_include module=system template=inc_config_str var=days_terme size=2 suffix="jours"}}
+    {{mb_include module=system template=inc_config_str var=duree_sejour size=2 suffix="jours"}}
+
+    {{assign var=class value="CGrossesse"}}
+    {{mb_include module=system template=inc_config_bool var=date_regles_obligatoire size=2 suffix="jours"}}
+
+    {{mb_include module=system template=configure_handler class_handler=CAffectationHandler}}
+
     <tr>
       <td colspan="2" class="button">
         <button class="save">{{tr}}Save{{/tr}}</button>

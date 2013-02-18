@@ -68,7 +68,7 @@
         <button class="new notext" title="{{tr}}CSejour-title-create{{/tr}}"
           onclick="editSejour(0, '{{$_grossesse->_id}}', '{{$_grossesse->parturiente_id}}');"></button>
         {{foreach from=$_grossesse->_ref_sejours item=_sejour}}
-          <span {{if $_sejour->sortie_reelle}}class="hatching"{{/if}}>
+          <span class="{{if $_sejour->annule}}cancelled{{elseif $_sejour->sortie_reelle}}hatching{{/if}}">
             <button type="button" class="edit notext" onclick="editSejour({{$_sejour->_id}})"></button>
             <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
               {{$_sejour}}
