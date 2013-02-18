@@ -16,14 +16,16 @@ $user = CMediusers::get();
 $mail_id = CValue::get("mail_id");
 $attachment_id = CValue::get("attachment_id");
 
-//connection log
-$log_pop = new CSourcePOP();
-$log_pop->name = "user-pop-".$user->_id;
-$log_pop->loadMatchingObject();
-
 //load email
 $mail = new CUserMail();
 $mail->load($mail_id);
+
+//connection log
+$log_pop = new CSourcePOP();
+$log_pop->_id = $mail->account_id;
+$log_pop->loadMatchingObject();
+
+
 
 
 if ($attachment_id != 0) { //je récupère LA pièce jointe

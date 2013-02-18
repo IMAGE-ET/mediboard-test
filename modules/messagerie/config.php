@@ -10,6 +10,9 @@
 
 
 $dPconfig["messagerie"] = array (
-  "enable_internal"  => "1",
-  "enable_external" => "1"
+  "enable_internal"   => "1",
+  "enable_external"   => "1",
+  "CronJob_nbMail"    => "5",
+  "CronJob_schedule"  => "3",
+  "CronJob_olderThan" => "5"
 );

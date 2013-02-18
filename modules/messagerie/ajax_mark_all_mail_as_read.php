@@ -35,11 +35,8 @@ foreach ($mails as $_mail) {
 $pop->close();
 
 if ($count > 0) {
-  CAppUI::setMsg("CUserMail-markedAsRead", UI_MSG_OK, $count);
+  CAppUI::stepAjax("CUserMail-markedAsRead", UI_MSG_OK, $count);
 }
 else {
-  CAppUI::setMsg("CUserMail-markedAsRead-none", UI_MSG_OK);
+  CAppUI::stepAjax("CUserMail-markedAsRead-none", UI_MSG_OK);
 }
-
-//result
-echo CAppUI::getMsg();

@@ -1,50 +1,46 @@
-<?php /** $Id$ **/
+<?php
 
 /**
- * @package Mediboard
- * @subpackage messagerie
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Update the source pop account
+ *
+ * @category Messagerie
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
-
+ 
+ 
 CCanDo::checkRead();
-$user_id = CValue::get("user_id");
-
-$user = new CMediusers();
-$user->load($user_id);
+$nbAccount = CAppUI::conf("messagerie CronJob_nbMail");
+$older = CAppUI::conf("messagerie CronJob_olderThan");
 
 $size_required = CAppUI::pref("getAttachmentOnUpdate");
 if ($size_required == "") {
   $size_required = 0;
 }
 
-$log_pop = new CSourcePOP();
-$log_pop->active = 1;         //only activated ones
-$log_pop->object_class = $user->_class;
-$log_pop->object_id = $user->_id;
-$log_pops = $log_pop->loadMatchingList();
+$source = new CSourcePOP();
+$where = array();
+$where["active"] = "= '1'";
+$where["last_update"] = "< (NOW() - INTERVAL $older MINUTE)"; //doit avoir été updaté il y a plus de 5 minutes
+$order = "'last_update' ASC";
+$limit = "0, $nbAccount";
+$sources = $source->loadList($where, $order, $limit);
 
-
-foreach ($log_pops as $_pop) {
-  //pop init
-  $pop = new CPop($_pop);
+foreach ($sources as $_source) {
+  if (!$_source->user) {
+    return;
+  }
+  $pop = new CPop($_source);
   $pop->open();
   $unseen = $pop->search('UNSEEN');
 
   if (count($unseen)>0) {
-    //how many
-    if (count($unseen)>1) {
-      CAppUI::stepAjax("CPop-msg-newMsgs", UI_MSG_OK, count($unseen));
-    }
-    else {
-      CAppUI::stepAjax("CPop-msg-newMsg", UI_MSG_OK, count($unseen));
-    }
-
-    // traitement
     foreach ($unseen as $_mail) {
       $mail_unseen = new CUserMail();
-      $mail_unseen->account_id = $_pop->_id;
+      $mail_unseen->account_id = $_source->_id;
 
       if (!$mail_unseen->loadMatchingFromSource($pop->header($_mail))) {
         $mail_unseen->loadContentFromSource($pop->getFullBody($_mail, false, false, true));
@@ -55,15 +51,12 @@ foreach ($log_pops as $_pop) {
           $textP = new CContentAny();
           //apicrypt
           if (CModule::getActive("apicrypt") && $mail_unseen->_is_apicrypt == "plain") {
-            $textP->content = CApicrypt::uncryptBody($user->_id, $mail_unseen->_text_plain);
+            $textP->content = "[apicrypt]\n".CApicrypt::uncryptBody($user->_id, $mail_unseen->_text_plain);
           }
           else {
             $textP->content = $mail_unseen->_text_plain;
           }
-
-          if ($msg = $textP->store()) {
-            CAppUI::stepAjax($msg, UI_MSG_ERROR);
-          }
+          $textP->store();
           $mail_unseen->text_plain_id = $textP->_id;
         }
 
@@ -80,20 +73,14 @@ foreach ($log_pops as $_pop) {
             $textH->content = $text;
           }
 
-
-          if ($msg = $textH->store()) {
-            CAppUI::stepAjax($msg, UI_MSG_ERROR);
-          }
-          else {
+          if (!$msg = $textH->store()) {
             $mail_unseen->text_html_id = $textH->_id;
           }
         }
 
 
         //store the usermail
-        if ($msg = $mail_unseen->store()) {
-          CAppUI::stepAjax($msg, UI_MSG_ERROR);
-        }
+        $mail_unseen->store();
 
         //attachments list
         $attachs = $pop->getListAttachments($_mail);
@@ -102,9 +89,7 @@ foreach ($log_pops as $_pop) {
           $_attch->mail_id = $mail_unseen->_id;
           $_attch->loadMatchingObject();
           if (!$_attch->_id) {
-            if ($msg = $_attch->store()) {
-              CAppUI::stepAjax("CMailAttachments-error-unsave", UI_MSG_ERROR);
-            }
+            $_attch->store();
           }
           //si preference taille ok OU que la piece jointe est incluse au texte => CFile
           if (($_attch->bytes <= $size_required ) || $_attch->disposition == "INLINE") {
@@ -121,9 +106,7 @@ foreach ($log_pops as $_pop) {
               $file->file_type  = $_attch->getType($_attch->type, $_attch->subtype);
               $file->fillFields();
               $file->putContent($file_pop);
-              if ($str = $file->store()) {
-                CAppUI::stepAjax($str, UI_MSG_ERROR);
-              }
+              $file->store();
             }
           }
         }
@@ -131,20 +114,14 @@ foreach ($log_pops as $_pop) {
       else {
         //le mail est non lu sur MB mais lu sur IMAP => on le flag
         if ($mail_unseen->date_read) {
-          if ($pop->setflag($_mail, "\\Seen")) {
-            CAppUI::stepAjax("CPop-msg-unreadfromPopReadfromMb", UI_MSG_OK, count($unseen));
-          }
+          $pop->setflag($_mail, "\\Seen");
         }
       }
 
     } //foreach
   }
-  else {
-    CAppUI::stepAjax("CPop-msg-nonewMsg", UI_MSG_OK, $_pop->libelle);
-  }
 
-  $_pop->last_update = mbDateTime();
-  $_pop->store();
-
+  $_source->last_update = mbDateTime();
+  $_source->store();
   $pop->close();
 }

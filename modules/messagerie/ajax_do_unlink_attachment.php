@@ -27,12 +27,9 @@ $file->setObject($attachment);
 if (!$msg = $file->store()) {
   $attachment->file_id = "";
   if (!$msg2 = $attachment->store()) {
-    CAppUI::setMsg("CMailAttachment-unlinked", UI_MSG_OK);
+    CAppUI::stepAjax("CMailAttachment-unlinked", UI_MSG_OK);
   }
   else {
-    CAppUI::setMsg("CMailAttachment-unlinked-failed", UI_MSG_ERROR, $msg2);
+    CAppUI::stepAjax("CMailAttachment-unlinked-failed", UI_MSG_ERROR, $msg2);
   }
 }
-
-
-echo CAppUI::getMsg();

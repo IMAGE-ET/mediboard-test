@@ -103,7 +103,6 @@ messagerie = {
     var url = new Url("messagerie", "ajax_link_attachments");
     url.addParam("mail_id", mail_id);
     url.requestModal(800,600);
-
   },
 
   dolinkAttachment: function (attach, mail_id) {
@@ -115,7 +114,7 @@ messagerie = {
     url.addParam("text_html_id", attach.html);
     url.addParam("mail_id", mail_id);
     url.requestUpdate("systemMsg", function() {
-      this.refreshModal();
+      messagerie.listAttachLink(mail_id);
     });
   },
 

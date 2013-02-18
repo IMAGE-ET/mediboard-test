@@ -34,6 +34,9 @@
         #content-html iframe *{font-size: 11px;}
 
       </style>
+      {{if $mail->_is_hprim}}
+        <div class="small-info">{{tr}}CUserMail-is_apicrypt{{/tr}}</div>
+      {{/if}}
       {{if $mail->text_html_id && $app->user_prefs.ViewMailAsHtml}}
         <div style="text-align: left;" id="content-html">
           {{if $mail->_text_html->content == ''}}
@@ -104,7 +107,6 @@
           {{$_attachment->name}} ({{$_attachment->bytes}})
                 </a>
               </p>
-                <a href="#test" class="button lookup notext" onclick="messagerie.AttachFromPOP('{{$mail->_id}}','{{$_attachment->part}}')">{{tr}}Preview{{/tr}}</a>
               <a class="button download singleclick" href="#{{$_attachment->_id}}" onclick="messagerie.getAttachment('{{$mail->_id}}','{{$_attachment->_id}}')">{{tr}}CMailAttachment-button-getTheAttachment{{/tr}}</a>
             </li>
             <td></td>

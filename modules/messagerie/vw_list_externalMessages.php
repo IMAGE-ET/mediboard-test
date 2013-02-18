@@ -29,5 +29,5 @@ foreach ($accounts as $_account) {
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("user",  $user);
-$smarty->assign("mails", $mailbox);
+$smarty->assign("mails", $accounts);
 $smarty->display("vw_list_externalMessages.tpl");

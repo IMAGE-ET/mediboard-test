@@ -38,7 +38,7 @@ class CUserMail extends CMbObject{
   var $text_plain_id          = null; //plain text (no html)
   var $_text_plain            = null;
   var $_ref_account_pop       = null;
-  var $_is_apicrypt           = null;
+  var $_is_hprim              = null;
 
   var $text_html_id           = null; //html text
   var $_text_html             = null;
@@ -178,7 +178,7 @@ class CUserMail extends CMbObject{
    */
   function loadContentFromSource($contentsource) {
     $this->_text_plain   = $contentsource["text"]["plain"];
-    $this->_is_apicrypt  = $contentsource["text"]["is_apicrypt"];
+    $this->_is_hprim     = $contentsource["text"]["is_apicrypt"];
     $this->_text_html    = $contentsource["text"]["html"];
     $this->_attachments  = $contentsource["attachments"];
     return;
@@ -301,6 +301,25 @@ class CUserMail extends CMbObject{
     $file = $this->loadFwdRef("text_file_id");
     $file->loadRefsFwd(); //@TODO Fix this !
     return $this->_ref_file_linked = $file;
+  }
+
+  /**
+   * check if there is hprim headers
+   *
+   * @return int|null
+   */
+  function checkHprim() {
+    if ($this->_text_plain->content == "") {
+      return false;
+    }
+    $date_regex = "^([0-3][0-9])[/](0[1-9]|1[0-2])[/]([0-9]{4})$^";
+    $lines = preg_split("/(\r\n|\n)/", $this->_text_plain->content, 13);
+    if (count($lines) >= 13) {
+      if (preg_match($date_regex, $lines[6]) && preg_match($date_regex, $lines[9])) {
+        $this->_is_hprim = 1;
+      }
+    }
+    return $this->_is_hprim;
   }
 
   /**

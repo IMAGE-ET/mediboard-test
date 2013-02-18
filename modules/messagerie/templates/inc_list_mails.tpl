@@ -8,6 +8,12 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !$account_pop->active}}
+  <tr>
+    <td colspan="5"><div class="warning">{{tr}}CSourcePOP-msg-notActive{{/tr}}</div></td>
+  </tr>
+{{/if}}
+
 <tr>
   <th style="width: 10px;"><input type="checkbox" value="" onclick="messagerie.toggleSelect('list_external_mail', this.checked,'item_mail')"/>{{tr}}Actions{{/tr}}</th>
   <th style="width: 30px;">{{tr}}CUserMail-date_inbox{{/tr}}</th>

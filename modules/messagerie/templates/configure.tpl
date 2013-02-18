@@ -13,8 +13,17 @@
   <input type="hidden" name="m" value="system" />
 
   <table class="form">
+    <tr>
+      <th colspan="2" class="title">Activation des messageries</th>
+    </tr>
   {{mb_include module=system template=inc_config_bool var=enable_internal}}
   {{mb_include module=system template=inc_config_bool var=enable_external}}
+    <tr>
+      <th colspan="2" class="title">Mises à jour planifiées</th>
+    </tr>
+  {{mb_include module=system template=inc_config_str numeric=true var=CronJob_nbMail}}
+  {{mb_include module=system template=inc_config_str numeric=true var=CronJob_schedule}}
+  {{mb_include module=system template=inc_config_str numeric=true var=CronJob_olderThan}}
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

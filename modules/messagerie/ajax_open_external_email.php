@@ -19,6 +19,7 @@ $mail_id = CValue::get("mail_id");
 $mail = new CUserMail();
 $mail->load($mail_id);
 $mail->loadRefsFwd();
+$mail->checkHprim();//HprimMedecin
 
 //pop account
 $log_pop = new CSourcePOP();

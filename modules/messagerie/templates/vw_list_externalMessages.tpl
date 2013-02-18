@@ -22,9 +22,8 @@
 {{/if}}
 
 <div>
-<button class="button change" onclick="messagerie.getLastMessages({{$user->_id}});">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
-<!--<button class="button mail" onclick="messagerie.modalwriteMessage();">{{tr}}CUserMAil-button-writeMail{{/tr}}</button>-->
-
+  <button class="button change" onclick="messagerie.getLastMessages({{$user->_id}});">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
+  <!--<button class="button mail" onclick="messagerie.modalWriteNewMessage();">{{tr}}CUserMAil-button-writeMail{{/tr}}</button>-->
   <select style="width: 50px;" name="action">
     <option va>{{tr}}CUserMail-option-More{{/tr}}</option>
     <option value="AllMarkAsRead" onclick="messagerie.markallAsRead()">{{tr}}CUserMail-option-allmarkasread{{/tr}}</option>
@@ -39,7 +38,7 @@
         {{foreach from=$mails key=k item=_mailbox}}
           <li>
             <a href="#{{$k}}" style="white-space: nowrap;" onmousedown="messagerie.refreshList(messagerie.page,'{{$k}}')"
-              {{if count($_mailbox)==0}}class="empty"{{/if}}>{{$_mailbox}}
+              class=" {{if !$_mailbox->active}}empty{{/if}}">{{$_mailbox->libelle}}
             </a>
           </li>
         {{/foreach}}
@@ -55,9 +54,9 @@
   <tr>
     <td>
       {{foreach from=$mails key=k item=_list}}
-        <table id="{{$k}}" class="tbl" style="display: none;"></table>
+        <table id="{{$k}}" class="tbl" style="display: none;">
+        </table>
       {{/foreach}}
-
     </td>
   </tr>
 </table>
