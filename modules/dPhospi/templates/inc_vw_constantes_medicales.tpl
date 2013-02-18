@@ -19,14 +19,6 @@ if (xOffset > 0) {
   xRange.min += xOffset;
 }
 
-submitConstantesMedicales = function(oForm) {
-  return onSubmitFormAjax(oForm, {
-    onComplete: function () {
-      refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
-    }
-  });
-}
-
 editConstantes = function (const_id, context_guid, start){
   var url = new Url('dPhospi', 'httpreq_vw_form_constantes_medicales');
   url.addParam("const_id", const_id);
@@ -283,7 +275,7 @@ Main.add(function () {
 
 loadConstantesMedicales  = function(context_guid) {
   var url = new Url("dPhospi", "httpreq_vw_constantes_medicales"),
-      container = $("constantes-medicales") || $("constantes") || $("Constantes"); // case sensitive ?
+      container = $("constantes-medicales") || $("constantes") || $("Constantes")|| $("constantes-tri"); // case sensitive ?
 
   url.addParam("context_guid", '{{$context_guid}}');
   url.addParam("patient_id", '{{$patient->_id}}');

@@ -33,11 +33,16 @@
   {{mb_script module=compteRendu script=document}}
 
   {{if $conf.ref_pays == 2}}
-  <script>
+    <script>
     Main.add(function () {
-        var tab_sejour = Control.Tabs.create('tab-rpu');
+      var tab_rpu = Control.Tabs.create('tab-rpu');
+      var hash = Url.parse().fragment;
+      if (hash == "Imeds") {
+        {{if $rpu->_id}}
+          Control.Tabs.activateTab("dossier_infirmier");
+        {{/if}}
+      }
     });
-    
     </script>
     <ul id="tab-rpu" class="control_tabs">
       <li><a href="#admission">Echelle de tri</a></li>
@@ -322,11 +327,7 @@
       <td>
         <select name="_responsable_id" style="width: 15em;" class="{{$rpu->_props._responsable_id}}">
           <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-          {{foreach from=$listResponsables item=curr_user}}
-          <option value="{{$curr_user->_id}}" class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}}" {{if $curr_user->_id == $rpu->_responsable_id}}selected="selected"{{/if}}>
-            {{$curr_user->_view}}
-          </option>
-          {{/foreach}}
+          {{mb_include module=mediusers template=inc_options_mediuser selected=$rpu->_responsable_id list=$listResponsables}}
         </select>
       </td>
       

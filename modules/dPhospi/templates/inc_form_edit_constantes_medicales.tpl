@@ -1,6 +1,7 @@
 {{mb_default var=hide_save_button value=0}}
 {{mb_default var=callback_administration value=0}}
 {{mb_default var=display_graph value=1}}
+{{mb_default var=tri value=""}}
 
 {{assign var=show_cat_tabs value=false}}
 {{if "CConstantesMedicales::getConfig"|static_call:"show_cat_tabs"}}
@@ -13,6 +14,19 @@
 {{/if}}
 
 <script type="text/javascript">
+submitConstantesMedicales = function(oForm) {
+  return onSubmitFormAjax(oForm, {
+    onComplete: function () {
+      {{if $display_graph}}
+        refreshConstantesMedicales($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
+      {{/if}}
+      {{if $conf.ref_pays == 2}}
+        refreshConstantesMedicalesTri($V(oForm.context_class)+'-'+$V(oForm.context_id), 1);
+      {{/if}}
+    }
+  });
+}
+
 calculImcVst = function(form) {
   var imcInfo, imc, vst,
       poids  = parseFloat($V(form.poids)),
@@ -54,25 +68,25 @@ emptyAndSubmit = function(const_name) {
 }
 
 Main.add(function () {
-  var oForm = getForm('edit-constantes-medicales');
+  var oForm = getForm('edit-constantes-medicales{{$tri}}');
   calculImcVst(oForm);
   if (window.toggleAllGraphs) {
     toggleAllGraphs();
   }
   
   {{if $show_cat_tabs}}
-    Control.Tabs.create("constantes-by-type");
+    Control.Tabs.create("constantes-by-type{{$tri}}");
   {{/if}}
 });
 </script>
 
-{{if $constantes->_ref_context && $context_guid == $constantes->_ref_context->_guid && !$readonly}}
+{{if ($constantes->_ref_context && $context_guid == $constantes->_ref_context->_guid && !$readonly) || $real_context}}
   {{assign var=real_context value=1}}
 {{else}}
   {{assign var=real_context value=0}}
 {{/if}}
 
-<form name="edit-constantes-medicales" action="?" method="post" onsubmit="return {{if $real_context}}checkForm(this){{else}}false{{/if}}">
+<form name="edit-constantes-medicales{{$tri}}" action="?" method="post" onsubmit="return {{if $real_context}}checkForm(this){{else}}false{{/if}}">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_constantes_medicales_aed" />
@@ -96,10 +110,10 @@ Main.add(function () {
   <input type="hidden" name="_poids" value="{{$const->poids}}" />
   
   {{if $show_cat_tabs}}
-  <ul id="constantes-by-type" class="control_tabs small" style="min-width: 200px;">
+  <ul id="constantes-by-type{{$tri}}" class="control_tabs small" style="min-width: 200px;">
     {{foreach from=$all_constantes key=_type item=_list}}
       <li>
-        <a href="#type-{{$_type}}">{{tr}}CConstantesMedicales.type.{{$_type}}{{/tr}}</a>
+        <a href="#type{{$tri}}-{{$_type}}">{{tr}}CConstantesMedicales.type.{{$_type}}{{/tr}}</a>
       </li>
     {{/foreach}}
   </ul>
@@ -117,7 +131,7 @@ Main.add(function () {
     {{assign var=at_least_one_hidden value=false}}
     
     {{foreach from=$all_constantes key=_type item=_list}}
-      <tbody id="type-{{$_type}}" {{if $show_cat_tabs}} {{if $_type != "vital"}} style="display: none;" {{/if}} {{/if}}>
+      <tbody id="type{{$tri}}-{{$_type}}" {{if $show_cat_tabs}} {{if $_type != "vital"}} style="display: none;" {{/if}} {{/if}}>
       {{foreach from=$_list key=_constante item=_params}}
         <tr {{if !array_key_exists($_constante, $selection) && ($const->$_constante == "" || !$display_graph)}}
           style="display: none;" class="secondary"

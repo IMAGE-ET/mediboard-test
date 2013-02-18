@@ -12,15 +12,20 @@
   }
   
   function refreshConstantesMedicalesTri(context_guid){
-//    var oForm = getForm("editRPUtri");
-//    var iPatient_id = $V(oForm._patient_id);
-//    var url = new Url('dPhospi' , 'httpreq_vw_form_constantes_medicales');
-//    url.addParam("context_guid" , context_guid);
-//    url.addParam("patient_id"   , iPatient_id);
-//    url.addParam("readonly"     , '0');
-//    url.addParam("tri"          , "tri");
-//    url.addParam("real_context" , 1);
-//    url.requestUpdate('constantes-tri');
+    if (context_guid) {
+      var oForm = getForm("editRPUtri");
+      var iPatient_id = $V(oForm._patient_id);
+      var url = new Url('dPhospi' , 'httpreq_vw_form_constantes_medicales');
+      url.addParam("context_guid", context_guid);
+      url.addParam("patient_id"   , iPatient_id);
+      url.addParam("readonly"     , '0');
+      url.addParam("tri"          , "tri");
+      url.addParam("real_context" , 1);
+      url.requestUpdate('constantes-tri');
+      if (getForm("edit-constantes-medicales")) {
+        toggleAllGraphs();
+      }
+    }
   }
   
   function refreshAntecedentsPatient() {
@@ -96,11 +101,7 @@
             <td>
               <select name="_responsable_id" style="width: 15em;" class="{{$rpu->_props._responsable_id}}">
                 <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-                {{foreach from=$listResponsables item=curr_user}}
-                <option value="{{$curr_user->_id}}" class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}}" {{if $curr_user->_id == $rpu->_responsable_id}}selected="selected"{{/if}}>
-                  {{$curr_user->_view}}
-                </option>
-                {{/foreach}}
+                {{mb_include module=mediusers template=inc_options_mediuser selected=$rpu->_responsable_id list=$listResponsables}}
               </select>
             </td>
           </tr>
@@ -108,7 +109,6 @@
             <th>{{mb_label object=$rpu field="_entree"}}</th>
             <td>{{mb_field object=$rpu field="_entree" form="editRPUtri" register=true}}</td>
           </tr>
-          
           <tr>
             <th>
               <input type="hidden" name="_patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$rpu->_patient_id}}"  onchange="requestInfoPatTri();refreshAntecedentsPatient();refreshConstantesMedicalesTri();" />
@@ -120,7 +120,6 @@
                   onfocus="PatSelector.init()" 
                 {{/if}}
               readonly="readonly" />
-              
               {{if $conf.dPurgences.allow_change_patient || !$sejour->_id || $app->user_type == 1}} 
                 <button type="button" class="search notext" onclick="PatSelector.init()">{{tr}}Search{{/tr}}</button>
               {{/if}}
