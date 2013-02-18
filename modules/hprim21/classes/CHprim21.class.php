@@ -29,7 +29,13 @@ class CHprim21 {
   }
 
   static function formatHPRIMBiologie($string) {
-    if (strpos($string, "\x8E") !== false) {
+    // UTF-16 with BOM
+    if (substr($string, 0, 2) === "\xFF\xFE") {
+      $string = iconv("UTF-16", "iso-8859-1//TRANSLIT//IGNORE", $string);
+    }
+
+    // MacRoman
+    elseif (strpos($string, "\x8E") !== false) {
       $string = iconv("macintosh", "iso-8859-1//TRANSLIT//IGNORE", $string);
     }
 
@@ -76,11 +82,11 @@ class CHprim21 {
     );
 
     $classes = array(
-      "L" => "warning",
-      "H" => "warning",
+      "L"  => "warning",
+      "H"  => "warning",
       "LL" => "error",
       "HH" => "error",
-      "N" => "",
+      "N"  => "",
     );
 
     $results = array();
