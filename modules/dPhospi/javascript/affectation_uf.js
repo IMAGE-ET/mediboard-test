@@ -22,13 +22,13 @@ AffectationUf  = {
     return onSubmitFormAjax(form);  
   },
   onSubmitRefresh: function(form, object_guid, lit_guid, see_validate) {
-    onSubmitFormAjax(form);
-    var url = new Url('hospi'  , 'ajax_vw_association_uf');
-    url.addParam('curr_affectation_guid'  , object_guid);
-    url.addParam('lit_guid'  , lit_guid);
-    url.addParam('see_validate'  , see_validate);
-    url.requestUpdate("affecter_uf");
-    return false;
+    return onSubmitFormAjax(form, {onComplete : function() {
+      var url = new Url('hospi'  , 'ajax_vw_association_uf');
+      url.addParam('curr_affectation_guid'  , object_guid);
+      url.addParam('lit_guid'  , lit_guid);
+      url.addParam('see_validate'  , see_validate);
+      url.requestUpdate("affecter_uf");
+    }});
   },
   onDeletion: function(form) {
     return confirmDeletion(form,
