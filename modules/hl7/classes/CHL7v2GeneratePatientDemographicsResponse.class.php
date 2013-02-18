@@ -55,13 +55,34 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     $ds    = $patient->_spec->ds;
     $where = array();
-    foreach ($this->getQPD($data["QPD"]) as $field => $value) {
+    foreach ($this->getRequestPatient($data["QPD"]) as $field => $value) {
       if (!$value) {
         continue;
       }
 
       $value = preg_replace("/[^a-z]/i", "_", $value);
       $where[$field] = $ds->prepareLike($value);
+    }
+
+    $ljoin = null;
+    if ($identifier_list = $this->getRequestPatientIdentifierList($data["QPD"])) {
+      $ljoin[] = "id_sante400 AS id1 ON id1.object_id = patients.patient_id";
+      $where[]              = "`id1`.`object_class` = 'CPatient'";
+
+      if (isset($identifier_list["id_number"])) {
+        $id_number = $identifier_list["id_number"];
+        $where[] = "id1.id400 = '$id_number'";
+      }
+    }
+
+    if ($identifier_list = $this->getRequestSejourIdentifierList($data["QPD"])) {
+      $ljoin["sejour"]      = "`sejour`.`patient_id` = `patients`.`patient_id`";
+      $ljoin[] = "id_sante400 AS id2 ON `id2`.`object_id` = `sejour`.`sejour_id`";
+
+      if (isset($identifier_list["id_number"])) {
+        $id_number = $identifier_list["id_number"];
+        $where[] = "id2.id400 = '$id_number'";
+      }
     }
 
     if (isset($patient->_pointer)) {
@@ -71,27 +92,12 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     $order = "patient_id ASC";
 
-    $patients = $patient->loadList($where, $order, $quantity_limited_request);
+    $patients = array();
+    if (!empty($where)) {
+      $patients = $patient->loadList($where, $order, $quantity_limited_request, null, $ljoin);
+    }
 
     return $exchange_ihe->setPDRAA($ack, "I001", null, $patients);
-  }
-
-  /**
-   * Get QPD element
-   *
-   * @param DOMNode $node QPD element
-   *
-   * @return string
-   */
-  function getQPD(DOMNode $node) {
-    $datas = array();
-
-    // PID
-    $datas = array_merge($datas, $this->addQPD3PID($node));
-
-    // PV1
-
-    return $datas;
   }
 
   /**
@@ -101,22 +107,64 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    *
    * @return string
    */
-  function addQPD3PID(DOMNode $node) {
+  function getRequestPatient(DOMNode $node) {
     return array(
       // Patient Name
       "nom"             => $this->getDemographicsFields($node, "CPatient", "5.1.1"),
       "prenom"          => $this->getDemographicsFields($node, "CPatient", "5.2"),
 
-    // Maiden name
+      // Maiden name
       "nom_jeune_fille" => $this->getDemographicsFields($node, "CPatient", "6.1.1"),
 
-    // Date of birth"
-      "naissance"       => $this->getDemographicsFields($node, "CPatient", "7.1"),
+      // Date of birth"
+      "naissance"       => mbDate($this->getDemographicsFields($node, "CPatient", "7.1")),
 
-    // Patient Adress
+      // Patient Adress
       "ville"           => $this->getDemographicsFields($node, "CPatient", "11.3"),
-      "cp "             => $this->getDemographicsFields($node, "CPatient", "11.5")
+      "cp"              => $this->getDemographicsFields($node, "CPatient", "11.5")
     );
+  }
+
+  /**
+   * Get PID.3 QPD element
+   *
+   * @param DOMNode $node QPD element
+   *
+   * @return string
+   */
+  function getRequestPatientIdentifierList(DOMNode $node) {
+    return array(
+      "id_number"            => $this->getDemographicsFields($node, "CPatient", "3.1"),
+      /*"namespace_id"         => $this->getDemographicsFields($node, "CPatient", "3.1"),
+      "universal_id"         => $this->getDemographicsFields($node, "CPatient", "3.1"),
+      "universal_id_type"    => $this->getDemographicsFields($node, "CPatient", "3.1"),
+      "identifier_type_code" => $this->getDemographicsFields($node, "CPatient", "3.1"),*/
+    );
+  }
+
+  /**
+   * Get PID.3 QPD element
+   *
+   * @param DOMNode $node QPD element
+   *
+   * @return string
+   */
+  function getRequestSejourIdentifierList(DOMNode $node) {
+    return array(
+      "id_number" => $this->getDemographicsFields($node, "CPatient", "18.1")
+    );
+  }
+
+  /**
+   * Get PV1 QPD element
+   *
+   * @param DOMNode $node QPD element
+   *
+   * @return string
+   */
+  function getRequestSejour(DOMNode $node) {
+
+
   }
 
   /**

@@ -174,6 +174,14 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
     // TTY      - Teletypewriter
     $phones = array();
     if ($patient->tel) {
+      $area_city_code = null;
+      $local_number   = null;
+
+      if ($sender->_configs["send_area_local_number"]) {
+        $area_city_code = substr($patient->tel, 0, 3);
+        $local_number   = substr($patient->tel, 3);
+      }
+
       $phones[] = array(
         null,
         // Table - 0201
@@ -182,13 +190,13 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
         "PH",
         null,
         null,
+        $area_city_code,
+        $local_number,
         null,
         null,
         null,
         null,
-        null,
-        null,
-        $patient->tel,
+        ($sender->_configs["send_area_local_number"]) ? null : $patient->tel,
       );
     }
 

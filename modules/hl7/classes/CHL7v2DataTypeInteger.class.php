@@ -30,7 +30,7 @@ class CHL7v2DataTypeInteger extends CHL7v2DataType {
     $parsed = parent::toHL7($value, $field);
     
     // empty value
-    if ($parsed === "") {
+    if ($parsed === "" || $parsed === null) {
       return "";
     }
     

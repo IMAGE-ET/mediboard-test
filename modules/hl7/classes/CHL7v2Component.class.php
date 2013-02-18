@@ -396,6 +396,16 @@ class CHL7v2Component extends CHL7v2Entity {
    * @return array
    */
   function getStruct() {
-    return $this->data;
+    $data = array();
+
+    if (empty($this->children)) {
+      return $this->data;
+    }
+
+    foreach ($this->children as $_children) {
+      $data[] = $_children->getStruct();
+    }
+
+    return $data;
   }
 }

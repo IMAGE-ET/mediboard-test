@@ -53,6 +53,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     // Send
     "send_assigning_authority",
     "send_self_identifier",
+    "send_area_local_number",
     
     // Purge
     "purge_idex_movements",
@@ -100,6 +101,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   // Send
   var $send_assigning_authority = null;
   var $send_self_identifier     = null;
+  var $send_area_local_number   = null;
 
   // Purge
   var $purge_idex_movements = null;
@@ -149,6 +151,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "send" => array(
       "send_assigning_authority",
       "send_self_identifier",
+      "send_area_local_number",
     ),
 
     "purge" => array(
@@ -215,7 +218,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["handle_NSS"]    = "enum list|PID_3|PID_19 default|PID_3";
     $props["handle_PID_31"] = "enum list|avs|none default|none";
     
-    // => PV1
+     // =>PV1
     $props["handle_PV1_3"]  = "enum list|name|config_value|idex default|name";
     $props["handle_PV1_10"] = "enum list|discipline|service default|discipline";
     $props["handle_PV1_14"] = "enum list|admit_source|ZFM default|admit_source";
@@ -227,6 +230,8 @@ class CHL7Config extends CExchangeDataFormatConfig {
     // Send
     $props["send_assigning_authority"] = "bool default|1";
     $props["send_self_identifier"]     = "bool default|0";
+    // => XTN
+    $props["send_area_local_number"]   = "bool default|0";
     
     // Purge
     $props["purge_idex_movements"] = "bool default|0";

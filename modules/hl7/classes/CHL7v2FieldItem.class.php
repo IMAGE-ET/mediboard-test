@@ -56,23 +56,4 @@ class CHL7v2FieldItem extends CHL7v2Component {
    
     return $path;
   }
-
-  /**
-   * Get segment struct
-   *
-   * @return array
-   */
-  function getStruct() {
-    $data = array();
-
-    if (empty($this->children)) {
-      return $this->data;
-    }
-
-    foreach ($this->children as $_children) {
-      $data[] = $_children->getStruct();
-    }
-
-    return $data;
-  }
 }
