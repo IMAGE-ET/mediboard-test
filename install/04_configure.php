@@ -64,7 +64,7 @@ showHeader();
         <strong>Ce fichier NE DOIT PAS se situer dans un répertoire accessible depuis le Web !<br />
                 Veillez à le sauvegarder.</strong><br /><br />
         Un script de mise en place vous est fourni :<br />
-        <pre>php $répertoire mediboard$/cli/genMasterKey.php -d $répertoire clef$ -g $groupe apache$</pre>
+        <pre>php &lt;répertoire mediboard&gt;/cli/genMasterKey.php -d $répertoire clef$ -g $groupe apache$</pre>
       </div>
     </td>
   </tr>
