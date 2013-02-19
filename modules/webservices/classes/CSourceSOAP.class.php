@@ -21,6 +21,7 @@ class CSourceSOAP extends CExchangeSource {
   var $type_soap        = null;
   var $local_cert       = null;
   var $passphrase       = null;
+  var $iv_passphrase    = null;
   
   var $_headerbody      = array();
    
@@ -40,7 +41,8 @@ class CSourceSOAP extends CExchangeSource {
     $specs["stream_context"]   = "str";
     $specs["type_soap"]        = "enum list|CMbSOAPClient|CNuSOAPClient default|CMbSOAPClient notNull";
     $specs["local_cert"]       = "str";
-    $specs["passphrase"]       = "password revealable";
+    $specs["passphrase"]       = "password show|0 loggable|0";
+    $specs["iv_passphrase"]    = "str show|0 loggable|0";
     
     return $specs;
   }
@@ -48,6 +50,17 @@ class CSourceSOAP extends CExchangeSource {
   function __call($function, $arguments) { 
     $this->setData(reset($arguments));
     $this->send($function);
+  }
+
+  function updateEncryptedFields(){
+    if ($this->passphrase === "") {
+      $this->passphrase = null;
+    }
+    else {
+      if (!empty($this->passphrase)) {
+        $this->passphrase = $this->encryptString($this->passphrase, "iv_passphrase");
+      }
+    }
   }
   
   function setHeaders($namespace, $name, $data, $mustUnderstand = false, $actor = null) {
@@ -85,9 +98,13 @@ class CSourceSOAP extends CExchangeSource {
     );
     
     $soap_client = new CSOAPClient($this->type_soap);
+
+    $password   = $this->getPassword();
+    $passphrase = $this->getPassword($this->passphrase, "iv_passphrase");
+
     $soap_client->make(
-      $this->host, $this->user, $this->password, $this->type_echange, $options, null, 
-      $this->stream_context, $this->local_cert, $this->passphrase
+      $this->host, $this->user, $password, $this->type_echange, $options, null,
+      $this->stream_context, $this->local_cert, $passphrase
     );
     
     if ($soap_client->client->soap_client_error) {
@@ -133,7 +150,9 @@ class CSourceSOAP extends CExchangeSource {
     
     try {
       $soap_client = new CSOAPClient($this->type_soap);
-      $soap_client->make($this->host, $this->user, $this->password, $this->type_echange, $options);
+
+      $password   = $this->getPassword();
+      $soap_client->make($this->host, $this->user, $password, $this->type_echange, $options);
     } catch (Exception $e) {
       $this->_reachable = 1;
       $this->_message   = $e->getMessage();

@@ -33,6 +33,8 @@ require_once "rotateBinlogs.php";
 require_once "sendFileFTPProcedure.php";
 require_once "tuningPrimerProcedure.php";
 
+require_once "genMasterKey.php";
+
 // Création tache principale
 $main = new Task("main", "Main");
 
@@ -88,6 +90,10 @@ $mainMenu->appendTask($tuningprimer);
 // Rotate binlogs Mediboard
 $rotatebinlogs = new Task("rotateBinlogsProcedure", "Rotate binlogs");
 $mainMenu->appendTask($rotatebinlogs);
+
+// Generate Mediboard's Master Key
+$genmasterkey = new Task("genMasterKeyProcedure", "Generate Mediboard's Master Key");
+$mainMenu->appendTask($genmasterkey);
 
 // Fin création des taches du menu
 

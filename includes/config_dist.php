@@ -16,32 +16,36 @@
 global $dPconfig; 
 
 // No trailing slash, no backslashes for Win users (use slashes instead)
-$dPconfig["root_dir"]          = "/var/www/mediboard";
-$dPconfig["company_name"]      = "mediboard.org";
-$dPconfig["page_title"]        = "Mediboard SIH";
-$dPconfig["base_url"]          = "http://localhost/mediboard/";
+$dPconfig["root_dir"]             = "/var/www/mediboard";
+$dPconfig["company_name"]         = "mediboard.org";
+$dPconfig["page_title"]           = "Mediboard SIH";
+$dPconfig["base_url"]             = "http://localhost/mediboard/";
+$dPconfig["master_key_filepath"]  = "";
 
-$dPconfig["offline"]           = "0";
-$dPconfig["offline_non_admin"] = "0";
-$dPconfig["instance_role"]     = "qualif";
-$dPconfig["http_redirections"] = "0";
-$dPconfig["mb_id"]             = "";
-$dPconfig["system_date"]       = "";
-$dPconfig["minify_javascript"] = "1";
-$dPconfig["minify_css"]        = "1";
-$dPconfig["currency_symbol"]   = "&euro;";
-$dPconfig["ref_pays"]          = "1";
-$dPconfig["hide_confidential"] = "0";
-$dPconfig["locale_warn"]       = "0";
-$dPconfig["locale_alert"]      = "^";
-$dPconfig["debug"]             = "1";
-$dPconfig["readonly"]          = "0";
-$dPconfig["shared_memory"]     = "none";
-$dPconfig["session_handler"]   = "files";
-$dPconfig["log_js_errors"]     = "1";
-$dPconfig["weinre_debug_host"] = "";
-$dPconfig["issue_tracker_url"] = "http://www.mediboard.org/public/tracker4";
-$dPconfig["help_page_url"]     = "http://www.mediboard.org/public/mod-%m-tab-%a";
+$dPconfig["offline"]              = "0";
+$dPconfig["offline_non_admin"]    = "0";
+$dPconfig["instance_role"]        = "qualif";
+$dPconfig["http_redirections"]    = "0";
+$dPconfig["mb_id"]                = "";
+$dPconfig["system_date"]          = "";
+$dPconfig["minify_javascript"]    = "1";
+$dPconfig["minify_css"]           = "1";
+$dPconfig["currency_symbol"]      = "&euro;";
+$dPconfig["ref_pays"]             = "1";
+$dPconfig["hide_confidential"]    = "0";
+$dPconfig["locale_warn"]          = "0";
+$dPconfig["locale_alert"]         = "^";
+$dPconfig["debug"]                = "1";
+$dPconfig["readonly"]             = "0";
+$dPconfig["shared_memory"]        = "none";
+$dPconfig["session_handler"]      = "files";
+$dPconfig["log_js_errors"]        = "1";
+$dPconfig["weinre_debug_host"]    = "";
+$dPconfig["issue_tracker_url"]    = "http://www.mediboard.org/public/tracker4";
+$dPconfig["help_page_url"]        = "http://www.mediboard.org/public/mod-%m-tab-%a";
+
+$dPconfig["csrf_protection"]      = "0";
+$dPconfig["csrf_token_lifetime"]  = "3600";
 
 // Object merge
 $dPconfig["alternative_mode"]  = "1";

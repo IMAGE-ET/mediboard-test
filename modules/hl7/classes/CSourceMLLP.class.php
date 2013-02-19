@@ -26,6 +26,7 @@ class CSourceMLLP extends CExchangeSource {
   var $ssl_enabled        = null;
   var $ssl_certificate    = null;
   var $ssl_passphrase     = null;
+  var $iv_passphrase      = null;
   
   private $_socket_client = null;
   
@@ -41,13 +42,26 @@ class CSourceMLLP extends CExchangeSource {
     $specs["port"]            = "num default|7001";
     $specs["ssl_enabled"]     = "bool notNull default|0";
     $specs["ssl_certificate"] = "str";
-    $specs["ssl_passphrase"]  = "str";
+    $specs["ssl_passphrase"]  = "password show|0 loggable|0";
+    $specs["iv_passphrase"]   = "str show|0 loggable|0";
+
     return $specs;
   }
   
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->port;
+  }
+
+  function updateEncryptedFields(){
+    if ($this->ssl_passphrase === "") {
+      $this->ssl_passphrase = null;
+    }
+    else {
+      if (!empty($this->ssl_passphrase)) {
+        $this->ssl_passphrase = $this->encryptString($this->ssl_passphrase, "iv_passphrase");
+      }
+    }
   }
   
   /**
@@ -57,7 +71,7 @@ class CSourceMLLP extends CExchangeSource {
     if ($this->_socket_client) {
       return $this->_socket_client;
     }
-    
+
     $address = "$this->host:$this->port";
     $context = stream_context_create();
     
@@ -67,7 +81,8 @@ class CSourceMLLP extends CExchangeSource {
       stream_context_set_option($context, 'ssl', 'local_cert', $this->ssl_certificate); 
       
       if ($this->ssl_passphrase) {
-        stream_context_set_option($context, 'ssl', 'passphrase', $this->ssl_passphrase); 
+        $ssl_passphrase = $this->getPassword($this->ssl_passphrase, "iv_passphrase");
+        stream_context_set_option($context, 'ssl', 'passphrase', $ssl_passphrase);
       }
     }
     

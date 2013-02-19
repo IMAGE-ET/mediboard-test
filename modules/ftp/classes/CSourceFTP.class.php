@@ -56,13 +56,13 @@ class CSourceFTP extends CExchangeSource {
   function init() {
     $ftp = new CFTP();
     $ftp->init($this);
-    
+
     return $ftp;
   }
   
   function send($evenement_name = null, $destination_basename = null) {
     $ftp = $this->init($this);
-    
+
     $this->counter++;
 
     if (!$destination_basename) {
@@ -85,7 +85,7 @@ class CSourceFTP extends CExchangeSource {
   function getACQ() {}
   
   function receive() {
-    $ftp = $this->init($this);
+    $ftp = $this->init();
 
     try {
       $ftp->connect();
@@ -109,7 +109,7 @@ class CSourceFTP extends CExchangeSource {
   
   function getData($path) {
     $ftp = $this->init($this);
-    
+
     try {
       $ftp->connect();
       
@@ -131,7 +131,7 @@ class CSourceFTP extends CExchangeSource {
   
   function delFile($path) {
     $ftp = $this->init($this);
-    
+
     try {
       $ftp->connect();
       
@@ -146,7 +146,7 @@ class CSourceFTP extends CExchangeSource {
   function isReachableSource() {
     $ftp = new CFTP();
     $ftp->init($this);
-    
+
     try {
       $ftp->testSocket();
     } 
@@ -161,7 +161,7 @@ class CSourceFTP extends CExchangeSource {
   function isAuthentificate() {
     $ftp = new CFTP();
     $ftp->init($this);
-    
+
     try {
       $ftp->connect();
     } 

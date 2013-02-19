@@ -24,7 +24,7 @@ class CSourceSMTP extends CExchangeSource {
   var $debug    = null;
   
   var $_mail    = null;
-  
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'source_smtp';
@@ -38,9 +38,9 @@ class CSourceSMTP extends CExchangeSource {
     $props["email"]    = "email";
     $props["auth"]     = "bool default|1";
     $props["ssl"]      = "bool";
-    $props["password"] = "password show|0";
     $props["timeout"]  = "num default|5";
     $props["debug"]    = "bool default|0";
+
     return $props;
   }
   
@@ -53,7 +53,7 @@ class CSourceSMTP extends CExchangeSource {
     parent::updateFormFields();
     $this->_view = $this->email;
   }
-  
+
   /**
    * Mailer initialisation 
    * 
@@ -72,7 +72,7 @@ class CSourceSMTP extends CExchangeSource {
     $this->_mail->SMTPAuth   = $this->auth; 
     $this->_mail->Port       = $this->port;
     $this->_mail->Username   = $this->user;
-    $this->_mail->Password   = $this->password;
+    $this->_mail->Password   = $this->getPassword();
     $this->_mail->SMTPDebug  = $this->debug ? 2 : 0;
     $this->_mail->Timeout    = $this->timeout;
     

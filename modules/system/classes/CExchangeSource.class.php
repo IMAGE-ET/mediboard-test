@@ -37,6 +37,7 @@ class CExchangeSource extends CMbObject {
   var $host               = null;
   var $user               = null;
   var $password           = null;
+  var $iv                 = null;
   var $type_echange       = null;
   var $active             = null;
   var $loggable           = null;
@@ -66,7 +67,8 @@ class CExchangeSource extends CMbObject {
     $specs["role"]           = "enum list|prod|qualif default|qualif notNull";
     $specs["host"]           = "text notNull";
     $specs["user"]           = "str";
-    $specs["password"]       = "password revealable";
+    $specs["password"]       = "password show|0 loggable|0";
+    $specs["iv"]             = "str show|0 loggable|0";
     $specs["type_echange"]   = "str protected";
     $specs["active"]         = "bool default|1 notNull";
     $specs["loggable"]       = "bool default|1 notNull";
@@ -189,6 +191,11 @@ class CExchangeSource extends CMbObject {
     return parent::check();
   }
 
+  function updateEncryptedFields(){
+
+  }
+
+
   /**
    * store function
    *
@@ -198,10 +205,121 @@ class CExchangeSource extends CMbObject {
     if ($this->password === "") {
       $this->password = null;
     }
-    
+    else {
+      if (!empty($this->password)) {
+        $this->password = $this->encryptString();
+      }
+    }
+
+    $this->updateEncryptedFields();
+
     return parent::store();
   }
-  
+
+  function encryptString($pwd = null, $iv_field = "iv") {
+    if (is_null($pwd)) {
+      $pwd = $this->password;
+    }
+
+    try {
+      CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
+      CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
+
+      $master_key_filepath = CAppUI::conf("master_key_filepath");
+      $master_key_filepath = rtrim($master_key_filepath, "/");
+
+      if (CExchangeSource::checkMasterKeyFile($master_key_filepath)) {
+        $cipher = new Crypt_AES(CRYPT_AES_MODE_CTR);
+        // keys are null-padded to the closest valid size
+        // longer than the longest key and it's truncated
+        $cipher->setKeyLength(256);
+
+        $keyAB = file($master_key_filepath."/.mediboard.key");
+
+        if (count($keyAB) == 2) {
+          $cipher->setKey($keyAB[0].$keyAB[1]);
+
+          $iv = bin2hex(crypt_random_string(16));
+
+          $this->{$iv_field} = $iv;
+
+          $cipher->setIV($iv);
+
+          $encrypted = rtrim(base64_encode($cipher->encrypt($pwd)), "\0\3");
+
+          if ($encrypted) {
+            return $encrypted;
+          }
+        }
+      }
+      else {
+        // Key is not available
+        $this->{$iv_field} = "";
+      }
+    }
+    catch (Exception $e) {
+      return $pwd;
+    }
+
+    return $pwd;
+  }
+
+  function getPassword($pwd = null, $iv_field = "iv") {
+    if (is_null($pwd)) {
+      $pwd = $this->password;
+    }
+
+    try {
+      CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
+      CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
+
+      $master_key_filepath = CAppUI::conf("master_key_filepath");
+      $master_key_filepath = rtrim($master_key_filepath, "/");
+
+      if (CExchangeSource::checkMasterKeyFile($master_key_filepath)) {
+        $cipher = new Crypt_AES(CRYPT_AES_MODE_CTR);
+        $cipher->setKeyLength(256);
+
+        $keyAB = file($master_key_filepath."/.mediboard.key");
+
+        if (count($keyAB) == 2) {
+          $cipher->setKey($keyAB[0].$keyAB[1]);
+
+          $ivToUse = $this->{$iv_field};
+
+          if (!$ivToUse) {
+            $clear = $pwd;
+            $this->store();
+
+            return $clear;
+          }
+
+          $cipher->setIV($ivToUse);
+          $decrypted = rtrim(base64_decode($pwd), "\0\3");
+          $decrypted = $cipher->decrypt($decrypted);
+
+          if ($decrypted) {mbTrace($decrypted);
+            return $decrypted;
+          }
+        }
+      }
+    }
+    catch (Exception $e) {
+      return $pwd;
+    }
+
+    return $pwd;
+  }
+
+  static function checkMasterKeyFile($master_key_filepath) {
+    $master_key_filepath = rtrim($master_key_filepath, "/");
+    if (!is_readable($master_key_filepath."/.mediboard.key")) {
+      return false;
+    }
+
+    return true;
+  }
+
   function setData($data, $argsList = false, CExchangeDataFormat $exchange = null) {
     $this->_args_list = $argsList;
     $this->_data = $data;

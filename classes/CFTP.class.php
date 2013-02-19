@@ -119,7 +119,7 @@ class CFTP {
     }
 
     // Truncate
-    $max = 1024;    
+    $max = 1024;
     $result = CMbString::truncate($string, $max);
     
     // Indicate true size
@@ -138,7 +138,7 @@ class CFTP {
        
     $this->hostname      = $exchange_source->host;
     $this->username      = $exchange_source->user;
-    $this->userpass      = $exchange_source->password;
+    $this->userpass      = $exchange_source->getPassword();
     $this->port          = $exchange_source->port;
     $this->timeout       = $exchange_source->timeout;
     $this->passif_mode   = $exchange_source->pasv;

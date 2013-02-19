@@ -1244,8 +1244,29 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `source_pop`
               ADD INDEX (`last_update`);";
     $this->addQuery($query);
+    
+    $this->makeRevision("1.1.25");
+    $query = "ALTER TABLE `source_smtp`
+                CHANGE `password` `password` VARCHAR (255),
+                ADD `iv` VARCHAR (16) AFTER `password`;";
+    $this->addQuery($query);
 
-    $this->mod_version = "1.1.25";
+    $query = "ALTER TABLE `source_file_system`
+                CHANGE `password` `password` VARCHAR (255),
+                ADD `iv` VARCHAR (16) AFTER `password`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `source_http`
+                CHANGE `password` `password` VARCHAR (255),
+                ADD `iv` VARCHAR (16) AFTER `password`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `source_pop`
+                CHANGE `password` `password` VARCHAR (255),
+                ADD `iv` VARCHAR (16) AFTER `password`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.26";
 
 
     /*$query = "ALTER TABLE user_log

@@ -131,8 +131,13 @@ class CSetupftp extends CSetup {
     $query = "ALTER TABLE `sender_ftp` 
                 ADD `delete_file` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.12";    
+
+    $this->makeRevision("0.12");
+    $query = "ALTER TABLE `source_ftp`
+                CHANGE `password` `password` VARCHAR (255),
+                ADD `iv` VARCHAR (16) AFTER `password`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.13";
   }
 }
-?>

@@ -173,8 +173,15 @@ function __construct() {
     $query = "ALTER TABLE `sender_soap` 
                 ADD `delete_file` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.29";      
+
+    $this->makeRevision("0.29");
+    $query = "ALTER TABLE `source_soap`
+                CHANGE `password` `password` VARCHAR (255),
+                ADD `iv` VARCHAR (16) AFTER `password`,
+                ADD `iv_passphrase` VARCHAR (16) AFTER `passphrase`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.30";
   }
 }
 ?>

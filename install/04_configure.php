@@ -38,7 +38,7 @@ showHeader();
 <form name="configure" action="04_configure.php" method="post">
 
 <table class="form">
-  <col style="width: 50%" />
+  <col style="width: 25%" />
 
   <tr>
     <th class="category" colspan="3">Configuration générale</th>
@@ -52,6 +52,21 @@ showHeader();
   <tr>
     <th><label for="base_url" title="Url Racine pour le système">Url racine</label></th>
     <td colspan="2"><input type="text" size="40" name="base_url" value="<?php echo $dPconfig['base_url'] ?>" /></td>
+  </tr>
+
+  <tr>
+    <th><label for="master_key_filepath" title="Emplacement de la clef Mediboard">Répertoire clef</label></th>
+    <td><input type="text" size="40" name="master_key_filepath" value="<?php echo $dPconfig['master_key_filepath'] ?>" /></td>
+    <td class="text">
+      <div class="small-warning">
+        Ce répertoire doit être <strong>préalablement créé</strong>, apache ne disposant généralement pas des droits suffisants pour le faire.<br />
+        Veillez à ce que l'utilisateur apache ait les droits d'écriture dans ce dossier.<br /><br />
+        <strong>Ce fichier NE DOIT PAS se situer dans un répertoire accessible depuis le Web !<br />
+                Veillez à le sauvegarder.</strong><br /><br />
+        Un script de mise en place vous est fourni :<br />
+        <pre>php $répertoire mediboard$/cli/genMasterKey.php -d $répertoire clef$ -g $groupe apache$</pre>
+      </div>
+    </td>
   </tr>
 
   <tr>
@@ -99,7 +114,7 @@ showHeader();
         <option value="zebra"    <?php if ($dPconfig['session_handler'] == 'zebra'   ) { echo 'selected="selected"'; } ?> >Zebra (MySQL)</option>
       </select>
     </td>
-    <td>
+    <td class="text">
       <div class="small-warning">
         Le changement de ce paramètre <strong>mettra fin à toutes les session des utilisateurs actuellement connectés</strong>.<br />
         Si vous choisissez le mode Memcache, veuillez vous assurer que le serveur est correctement configuré.
