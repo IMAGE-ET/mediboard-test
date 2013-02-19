@@ -185,11 +185,7 @@ ActesNGAP = {
           {{if $can->edit}}
             <select onchange="ActesNGAP.changeExecutant('{{$_acte_ngap->_id}}', $V(this))" name="executant" style="width: 150px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-              {{foreach from=$acte_ngap->_list_executants item=_executant}}
-              <option class="mediuser" {{if ($_acte_ngap->executant_id == $_executant->user_id)}}selected="selected"{{/if}} style="border-color: #{{$_executant->_ref_function->color}};" value="{{$_executant->user_id}}">
-                {{$_executant}}
-              </option>
-              {{/foreach}}
+              {{mb_include module=mediusers template=inc_options_mediuser selected=$_acte_ngap->executant_id list=$acte_ngap->_list_executants}}
             </select>
           {{else}}
             <div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
