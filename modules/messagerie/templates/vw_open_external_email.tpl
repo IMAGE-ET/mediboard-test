@@ -26,7 +26,7 @@
 </table>
 <hr/>
       <style>
-        #content-html iframe, #content-plain {height:{{if !$mail->_attachments|count}}660{{else}}490{{/if}}px; overflow: auto;}
+        #content-html iframe, #content-plain {height:{{if !$mail->_attachments|count}}500{{else}}490{{/if}}px; overflow: auto;}
         #content-html td { padding:0; margin: 0; border:0; }
         div.gmail_quote,div.moz-forward-container { margin-left:10px; margin-top:20px; padding-left: 10px; border-left: grey 2px solid;  }
         #content-html iframe img {max-width: 90%;}
@@ -34,9 +34,7 @@
         #content-html iframe *{font-size: 11px;}
 
       </style>
-      {{if $mail->_is_hprim}}
-        <div class="small-info">{{tr}}CUserMail-is_apicrypt{{/tr}}</div>
-      {{/if}}
+
       {{if $mail->text_html_id && $app->user_prefs.ViewMailAsHtml}}
         <div style="text-align: left;" id="content-html">
           {{if $mail->_text_html->content == ''}}
@@ -52,6 +50,19 @@
       {{else}}
         <h1>{{tr}}CUserMail-msg-noContentText{{/tr}}</h1>
       {{/if}}
+
+    {{if $mail->_is_hprim}}
+    <div class="small-info">
+      {{tr var1="apicrypt"}}CUserMail-hashprim{{/tr}}
+      {{mb_include module="hprim21" template="inc_hprim_header"}}
+    </div>
+    {{/if}}
+
+    {{if $mail->_is_apicrypt}}
+    <div class="small-info">
+      {{tr var1="apicrypt"}}CUserMail-isApicrypt{{/tr}} <strong>apicrypt</strong>
+    </div>
+    {{/if}}
 {{if $mail->_attachments|count}}
 <table class="form">
   <tr><th class="title">{{tr}}Attachments{{/tr}} ({{$nbAttachPicked}}/{{$nbAttachAll}}) {{if $nbAttachPicked != $nbAttachAll}}<a href="#" tilte="{{tr}}CMailAttachment-button-getAllAttachments-desc{{/tr}}" onclick="messagerie.getAttachment('{{$mail->_id}}','0')" class="button download">{{tr}}CMailAttachment-button-getAllAttachments{{/tr}}</a>{{/if}}</th></tr>

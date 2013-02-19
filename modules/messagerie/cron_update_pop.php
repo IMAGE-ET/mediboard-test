@@ -24,7 +24,7 @@ if ($size_required == "") {
 $source = new CSourcePOP();
 $where = array();
 $where["active"] = "= '1'";
-$where["last_update"] = "< (NOW() - INTERVAL $older MINUTE)"; //doit avoir été updaté il y a plus de 5 minutes
+//$where["last_update"] = "< (NOW() - INTERVAL $older MINUTE)"; //doit avoir été updaté il y a plus de 5 minutes
 $order = "'last_update' ASC";
 $limit = "0, $nbAccount";
 $sources = $source->loadList($where, $order, $limit);
@@ -51,7 +51,7 @@ foreach ($sources as $_source) {
           $textP = new CContentAny();
           //apicrypt
           if (CModule::getActive("apicrypt") && $mail_unseen->_is_apicrypt == "plain") {
-            $textP->content = "[apicrypt]\n".CApicrypt::uncryptBody($user->_id, $mail_unseen->_text_plain);
+            $textP->content = CApicrypt::uncryptBody($_source->object_id, $mail_unseen->_text_plain);
           }
           else {
             $textP->content = $mail_unseen->_text_plain;

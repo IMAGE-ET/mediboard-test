@@ -38,6 +38,7 @@ class CUserMail extends CMbObject{
   var $text_plain_id          = null; //plain text (no html)
   var $_text_plain            = null;
   var $_ref_account_pop       = null;
+  var $_is_apicrypt           = null;
   var $_is_hprim              = null;
 
   var $text_html_id           = null; //html text
@@ -178,7 +179,7 @@ class CUserMail extends CMbObject{
    */
   function loadContentFromSource($contentsource) {
     $this->_text_plain   = $contentsource["text"]["plain"];
-    $this->_is_hprim     = $contentsource["text"]["is_apicrypt"];
+    $this->_is_apicrypt  = $contentsource["text"]["is_apicrypt"];
     $this->_text_html    = $contentsource["text"]["html"];
     $this->_attachments  = $contentsource["attachments"];
     return;

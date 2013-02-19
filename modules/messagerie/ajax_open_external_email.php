@@ -20,6 +20,7 @@ $mail = new CUserMail();
 $mail->load($mail_id);
 $mail->loadRefsFwd();
 $mail->checkHprim();//HprimMedecin
+//$mail->checkApicrypt();//HprimMedecin
 
 //pop account
 $log_pop = new CSourcePOP();
@@ -48,9 +49,19 @@ foreach ($mail->_attachments as $_att) {
 
 $mail->checkInlineAttachments();
 
+//hprim
+$headers = preg_split("/(\r\n|\n)/", $mail->_text_plain->content);
+$mail->_text_plain->content = implode("\n", array_splice($headers, 13));
+
+//apicrypt
+if (stripos($mail->_text_plain->content, "****FIN****") !== false) {
+  $mail->_is_apicrypt = 1;
+}
+
 //Smarty
 $smarty = new CSmartyDP();
 $smarty->assign("mail", $mail);
 $smarty->assign("nbAttachPicked", $nbAttachPicked);
 $smarty->assign("nbAttachAll",  $nbAttach);
+$smarty->assign("header", $headers);
 $smarty->display("vw_open_external_email.tpl");
