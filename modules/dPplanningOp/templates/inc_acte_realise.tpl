@@ -6,7 +6,7 @@
   *}}
 
 {{if $codable->_class == "COperation"}}
-	Intervention du {{mb_value object=$codable field=_datetime}}
+	Intervention du {{mb_value object=$codable field=_datetime_best}}
 	{{if $codable->libelle}}<br /> {{$codable->libelle}}{{/if}}
 {{/if}}
 

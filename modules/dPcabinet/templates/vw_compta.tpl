@@ -8,10 +8,8 @@ function checkRapport(){
   if(!(checkForm(oForm))){
     return false;
   }
-  var url = new Url();
-  url.setModuleAction("dPcabinet", oForm.a.value);
+  var url = new Url("cabinet", $V(oForm.a));
   url.addParam("compta", compta);
-  url.addElement(oForm.a);
   url.addElement(oForm._date_min);
   url.addElement(oForm._date_max);
   url.addElement(oForm.chir);
@@ -44,18 +42,12 @@ function viewActes(etab){
     return false;
   }
 
-  var url = new Url();
-  url.setModuleAction("dPplanningOp", "vw_actes_realises");
+  var url = new Url("planningOp", "vw_actes_realises");
   url.addElement(oForm._date_min);
   url.addElement(oForm._date_max);
   url.addElement(oForm.chir);
   url.addParam("etab", etab);
-  if (etab) {
-    url.addElement(oForm.tyepVueEtab);
-  }
-  else {
-    url.addElement(oForm.typeVue);
-  }
+  url.addParam("typeVue", etab ? $V(oForm.typeVueEtab) : $V(oForm.typeVue));
   url.popup(950, 550, "Rapport des actes réalisés");
   
   return false;
@@ -63,7 +55,7 @@ function viewActes(etab){
 
 printFacture = function(edit_justificatif, edit_bvr) {
   var oForm = document.printFrm;
-  var url = new Url('dPcabinet', 'ajax_edit_bvr');
+  var url = new Url('cabinet', 'ajax_edit_bvr');
   url.addParam('edition_justificatif', edit_justificatif);
   url.addParam('edition_bvr', edit_bvr);
   url.addParam('_date_min', oForm._date_min.value);
@@ -100,7 +92,7 @@ sendBill = function() {
 
 viewTotaux = function() {
   var oForm = getForm("printFrm");
-  var url = new Url("dPcabinet", "ajax_total_cotation");
+  var url = new Url("cabinet", "ajax_total_cotation");
   url.addParam("chir_id", $V(oForm.chir));
   url.addParam('date_min', $V(oForm._date_min));
   url.addParam('date_max', $V(oForm._date_max));

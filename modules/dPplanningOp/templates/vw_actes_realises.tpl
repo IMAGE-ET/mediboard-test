@@ -114,16 +114,16 @@ var viewCCAM = function(codeacte) {
           <td rowspan="{{$nbActes.$sejour_id}}">
             {{$montantSejour.$sejour_id|currency}}
           </td>
-          {{include file=inc_acte_realise.tpl codable=$sejour}}
+          {{mb_include module=dPplanningOp template=inc_acte_realise codable=$sejour}}
           {{if $sejour->_ref_operations}}
             {{foreach from=$sejour->_ref_operations item=operation}}
-	            {{include file=inc_acte_realise.tpl codable=$operation}}
+	            {{mb_include module=dPplanningOp template=inc_acte_realise codable=$operation}}
             {{/foreach}}
           {{/if}}
   
           {{if $sejour->_ref_consultations}}
             {{foreach from=$sejour->_ref_consultations item=consult}}
-              {{include file=inc_acte_realise.tpl codable=$consult}}
+              {{mb_include module=dPplanningOp template=inc_acte_realise codable=$consult}}
             {{/foreach}}
           {{/if}}
         </tr>

@@ -126,8 +126,6 @@ if ($selPraticien->isAnesth()) {
       foreach ($_intervs_by_service as $_interv) {
         $_interv->loadRefAffectation();
         $_interv->loadRefsFwd(1);
-        $_interv->loadRefsConsultAnesth();
-        $_interv->_ref_chir->loadRefFunction();
         $patient = $_interv->_ref_sejour->_ref_patient;
         $patient->loadRefConstantesMedicales();
       } 
@@ -230,5 +228,3 @@ else {
 
   $smarty->display("vw_idx_planning.tpl");
 }
-
-?>
