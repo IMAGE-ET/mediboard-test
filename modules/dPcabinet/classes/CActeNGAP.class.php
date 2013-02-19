@@ -18,7 +18,16 @@ class CActeNGAP extends CActe {
   var $demi        = null;
   var $complement  = null;
   var $lettre_cle  = null;
-  
+
+  /**
+   * C for Cabinet, D for Domicile
+   *
+   * @var string
+   */
+  var $lieu        = null;
+
+  var $exoneration = null;
+
   // Distant fields
   var $_libelle    = null;
   var $_execution = null;
@@ -46,12 +55,11 @@ class CActeNGAP extends CActe {
     $specs["coefficient"]         = "float notNull";
     $specs["demi"]                = "enum list|0|1 default|0";
     $specs["complement"]          = "enum list|N|F|U";
-    
-    $specs["lettre_cle"]          = "enum list|0|1 notNull default|0";
-   
+    $specs["lettre_cle"]          = "enum list|0|1 default|0";
+    $specs["lieu"]                = "enum list|C|D default|C";
+    $specs["exoneration"]         = "enum list|N|13|17 notNull default|N";
     $specs["_execution"]          = "dateTime";
-    
-    
+
     return $specs;
   }
  

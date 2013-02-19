@@ -1767,7 +1767,15 @@ class CSetupdPcabinet extends CSetup {
                 SET id_sante400.object_class = 'CFactureCabinet'
                 WHERE id_sante400.object_class = 'CFactureConsult';";
     $this->addQuery($query);
-    $this->mod_version = "1.89";
+
+    $this->makeRevision("1.89");
+
+    $query = "ALTER TABLE `acte_ngap`
+                ADD `lieu` ENUM('C', 'D') DEFAULT 'C' NOT NULL,
+                ADD `exoneration` ENUM('N', '13', '15', '17', '19') DEFAULT 'N' NOT NULL;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.90";
   }
 }
 ?>

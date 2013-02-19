@@ -112,6 +112,11 @@ ActesNGAP = {
         {{/if}}
       {{/if}}
       <th class="category">{{mb_title object=$acte_ngap field=complement}}</th>
+      <th class="category">{{mb_title object=$acte_ngap field=exoneration}}</th>
+
+      {{if $m=="dPcabinet"}}
+        <th class="category">{{mb_title object=$acte_ngap field=lieu}}</th>
+      {{/if}}
       <th class="category">{{mb_title object=$acte_ngap field=executant_id}}</th>
       {{if !$object->_coded}}
         {{if $can->edit}}
@@ -136,6 +141,11 @@ ActesNGAP = {
           </td>
           <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
           <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" onkeyup="refreshTarif()" emptyLabel="None"}}</td>
+          <td>{{mb_field object=$acte_ngap field="exoneration"}}</td>
+
+          {{if $m=="dPcabinet"}}
+            <td>{{mb_field object=$acte_ngap field="lieu"}}</td>
+          {{/if}}
           <td>
             <select name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
@@ -178,6 +188,11 @@ ActesNGAP = {
           Aucun
         {{/if}}
       </td>
+      <td>{{mb_value object=$_acte_ngap field="exoneration"}}</td>
+
+      {{if $m=="dPcabinet"}}
+        <td>{{mb_value object=$_acte_ngap field="lieu"}}</td>
+      {{/if}}
 
       {{assign var="executant" value=$_acte_ngap->_ref_executant}}
       <td>
