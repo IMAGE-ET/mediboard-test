@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-class CConsultation extends CCodable {
+class CConsultation extends CFacturable {
   const PLANIFIE       = 16;
   const PATIENT_ARRIVE = 32;
   const EN_COURS       = 48;
@@ -23,7 +23,7 @@ class CConsultation extends CCodable {
   var $patient_id      = null;
   var $sejour_id       = null;
   var $grossesse_id    = null;
-  var $factureconsult_id  = null;
+  var $facture_id  		 = null;
 
   // DB fields
   var $type            = null;
@@ -215,7 +215,7 @@ class CConsultation extends CCodable {
     $props["patient_id"]        = "ref class|CPatient purgeable seekable show|1";
     $props["categorie_id"]      = "ref class|CConsultationCategorie show|1";
     $props["grossesse_id"]      = "ref class|CGrossesse show|0 unlink";
-    $props["factureconsult_id"] = "ref class|CFactureConsult show|0 nullify";
+    $props["facture_id"] 				= "ref class|CFactureCabinet show|0 nullify";
     $props["_praticien_id"]     ="ref class|CMediusers show|1"; //is put here for view
     $props["_function_secondary_id"] = "ref class|CFunctions";
     $props["motif"]             = "text helped seekable";
@@ -399,7 +399,7 @@ class CConsultation extends CCodable {
       if ($this->countBackRefs("reglements")) {
         $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements de consultation ont déjà été effectués";
       }
-      // Bien tester sur _old car valide = 0 s'accompagne systématiquement d'un factureconsult_id = 0
+      // Bien tester sur _old car valide = 0 s'accompagne systématiquement d'un facture_id = 0
       if ($this->_old->loadRefFacture()->countBackRefs("reglements")) {
         $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements de factures ont déjà été effectués";
       }
@@ -739,7 +739,7 @@ TESTS A EFFECTUER
       $this->si_desistement = 0;
     }
 
-    /*if ($this->fieldAltered("factureconsult_id")) {
+    /*if ($this->fieldAltered("facture_id")) {
       $facture = $this->_old->loadRefFacture();
       if ($facture->countBackRefs("consultations") == 1) {
         if ($msg = $facture->delete()) {
@@ -1060,7 +1060,25 @@ TESTS A EFFECTUER
   }
 
   function loadRefFacture() {
-    return $this->_ref_facture = $this->loadFwdRef("factureconsult_id", true);
+    if ($this->_id && !CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
+      return $this->_ref_facture = $this->loadFwdRef("facture_id", true);
+    }
+    elseif (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
+      $where = array();
+      $where["object_id"]     = "= '$this->_id'"; 
+      $where["object_class"]  = "= '$this->_class'"; 
+      $where["facture_class"] = "= 'CFactureCabinet'"; 
+      $liaison = new CFactureLiaison();
+      if ($liaison->loadObject($where)) {
+        return $this->_ref_facture = $liaison->loadRefFacture();
+      }
+      elseif ($this->facture_id) {
+        return $this->_ref_facture = $this->loadFwdRef("facture_id", true);
+      }
+      else {
+        return $this->_ref_facture = new CFactureCabinet();
+      }
+    }
   }
   
   function loadRefGroup() {
@@ -1068,14 +1086,14 @@ TESTS A EFFECTUER
   }
 
   /**
-   * Permet de simplifier la transition vers les CFactureConsult
+   * Permet de simplifier la transition vers les CFactureCabinet
    * @see    self::loadRefFacture()
    * @todo   A supprimer le cas échéant
    * 
-   * @return CFactureConsult La pseudo facture
+   * @return CFactureCabinet La pseudo facture
    */
   function fakeRefFacture() {
-    $facture = new CFactureConsult();
+    $facture = new CFactureCabinet();
     $facture->_guid = "$facture->_class-$this->_guid";
     $facture->_view = sprintf("CO%08d", $this->_id);
     $facture->_ref_patient   = $this->loadRefPatient();
@@ -1093,12 +1111,12 @@ TESTS A EFFECTUER
   }
   
   /**
-   * Permet de simplifier la transition vers les CFactureConsult
+   * Permet de simplifier la transition vers les CFactureCabinet
    * @see    self::loadRefFacture()
    * @see    self::loadRefReglements()
    * @todo   A supprimer le cas échéant
    * 
-   * @return CFactureConsult La pseudo facture
+   * @return CFactureCabinet La pseudo facture
    */
   function fakeRefFactureReglements() {
     $facture = $this->fakeRefFacture();
@@ -1267,8 +1285,8 @@ TESTS A EFFECTUER
     $this->loadRefsExamNyha();
     $this->loadRefsExamPossum();
     $this->_count_fiches_examen = 0;
-    $this->_count_fiches_examen += $this->_ref_examaudio ->_id ? 1 : 0;
-    $this->_count_fiches_examen += $this->_ref_examnyha  ->_id ? 1 : 0;
+    $this->_count_fiches_examen += $this->_ref_examaudio->_id ? 1 : 0;
+    $this->_count_fiches_examen += $this->_ref_examnyha->_id ? 1 : 0;
     $this->_count_fiches_examen += $this->_ref_exampossum->_id ? 1 : 0;
   }
 
@@ -1288,7 +1306,7 @@ TESTS A EFFECTUER
   }
 
   function loadRefsReglements() {
-    $this->_ref_reglements = $this->factureconsult_id ?
+    $this->_ref_reglements = $this->facture_id ?
       $this->loadRefFacture()->loadRefsReglements() :
       $this->loadBackRefs('reglements', 'date');
       
@@ -1741,7 +1759,7 @@ TESTS A EFFECTUER
   }
   
   function createFactureConsult($type_facture = "maladie") {
-    $facture               = new CFactureConsult();
+    $facture               = new CFactureCabinet();
     $facture->patient_id   = $this->patient_id;
     $facture->praticien_id = $this->_praticien_id;
     $facture->du_patient   = $this->du_patient;
@@ -1763,7 +1781,7 @@ TESTS A EFFECTUER
     $facture->store();
     
     // Ajout de l'id de la facture dans la consultation
-    $this->factureconsult_id = $facture->_id;
+    $this->facture_id = $facture->_id;
     $this->store();
     
     return $facture;

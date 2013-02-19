@@ -1727,8 +1727,35 @@ class CSetupdPcabinet extends CSetup {
               DROP `position`,
               DROP `ASA`;";
     $this->addQuery($query);
+    $this->makeRevision("1.86");
+
+    $query = "ALTER TABLE `factureconsult` 
+              ADD `envoi_xml` ENUM ('0','1') DEFAULT '1',
+              CHANGE `factureconsult_id` `facture_id` INT (11) UNSIGNED NOT NULL auto_increment,
+              ADD `rques_assurance_maladie` TEXT,
+              ADD `rques_assurance_accident` TEXT;";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.86";
+    $query = "ALTER TABLE `consultation` 
+              CHANGE `factureconsult_id` `facture_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `reglement` 
+              CHANGE `object_class` `object_class` ENUM ('CConsultation','CFactureConsult','CFactureCabinet','CFactureEtablissement') NOT NULL DEFAULT 'CConsultation';";
+    $this->addQuery($query);
+    
+    $query = "RENAME TABLE `factureconsult` TO `facture_cabinet`;";
+    $this->addQuery($query);
+    
+    $query = "UPDATE reglement
+                SET reglement.object_class = 'CFactureCabinet'
+                WHERE reglement.object_class = 'CFactureConsult';";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `reglement` 
+              CHANGE `object_class` `object_class` ENUM ('CConsultation','CFactureCabinet','CFactureEtablissement') NOT NULL DEFAULT 'CConsultation';";
+    $this->addQuery($query);
+    $this->mod_version = "1.87";
   }
 }
 ?>

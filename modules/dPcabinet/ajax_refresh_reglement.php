@@ -11,10 +11,10 @@
 
 CCanDo::checkEdit();
 
-$factureconsult_id  = CValue::getOrSession("factureconsult_id");
+$facture_id  = CValue::getOrSession("facture_id");
 
-$facture = new CFactureConsult();
-$facture->load($factureconsult_id); 
+$facture = new CFactureCabinet();
+$facture->load($facture_id); 
 $facture->loadRefs();
 
 $reglement = new CReglement();

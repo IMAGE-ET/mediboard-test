@@ -23,17 +23,17 @@
   </tr>
 {{/if}}
 <tr>
-  <td colspan="2"> {{tr}}CFactureConsult-type_facture{{/tr}}:
+  <td colspan="2"> {{tr}}CFactureCabinet-type_facture{{/tr}}:
     <form name="type_facture" method="post" action=""> 
       {{mb_class object=$facture}}
       {{mb_key   object=$facture}}
       <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
       <input type="radio" name="type_facture" value="maladie" {{if $facture->type_facture == 'maladie'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" 
       {{if $facture->cloture}}disabled="disabled"{{/if}}/>
-      <label for="maladie">{{tr}}CFactureConsult.type_facture.maladie{{/tr}}</label>
+      <label for="maladie">{{tr}}CFactureCabinet.type_facture.maladie{{/tr}}</label>
       <input type="radio" name="type_facture" value="accident" {{if $facture->type_facture == 'accident'}}checked{{/if}}
       {{if $facture->cloture}}disabled="disabled"{{/if}} onchange="Facture.modifCloture(this.form);" />
-      <label for="accident">{{tr}}CFactureConsult.type_facture.accident{{/tr}}</label>
+      <label for="accident">{{tr}}CFactureCabinet.type_facture.accident{{/tr}}</label>
     </form>
   </td>
   <td colspan="6">

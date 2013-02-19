@@ -38,7 +38,7 @@
        onComplete : function() {
         var url = new Url('dPcabinet', 'ajax_view_facture');
         {{if isset($facture|smarty:nodefaults)}}
-          url.addParam('factureconsult_id', '{{$facture->_id}}');
+          url.addParam('facture_id', '{{$facture->_id}}');
         {{elseif isset($consult|smarty:nodefaults)}}
           url.addParam('consult_id',        '{{$consult->_id}}');
         {{/if}}
@@ -56,7 +56,7 @@
     return onSubmitFormAjax(oForm, function() {
       var url = new Url('dPcabinet', 'ajax_view_facture');
       {{if isset($facture|smarty:nodefaults)}}
-        url.addParam('factureconsult_id', '{{$facture->_id}}');
+        url.addParam('facture_id', '{{$facture->_id}}');
       {{elseif isset($consult|smarty:nodefaults)}}
         url.addParam('consult_id',        '{{$consult->_id}}');
       {{/if}}
@@ -68,8 +68,8 @@
   editAquittementDate = function(object_id, date){
     var oForm = getForm('edit-date-aquittement');
     {{if isset($facture|smarty:nodefaults)}}
-      $V(oForm.factureconsult_id , object_id);
-      $V(oForm.dosql      , 'do_factureconsult_aed');
+      $V(oForm.facture_id , object_id);
+      $V(oForm.dosql      , 'do_facturecabinet_aed');
     {{elseif isset($consult|smarty:nodefaults)}}
       $V(oForm.consultation_id, object_id);
       $V(oForm.dosql          , 'do_consultation_aed');
@@ -79,7 +79,7 @@
     return onSubmitFormAjax(oForm, function() {
       var url = new Url('dPcabinet', 'ajax_view_facture');
       {{if isset($facture|smarty:nodefaults)}}
-        url.addParam('factureconsult_id', '{{$facture->_id}}');
+        url.addParam('facture_id', '{{$facture->_id}}');
       {{elseif isset($consult|smarty:nodefaults)}}
         url.addParam('consult_id',        '{{$consult->_id}}');
       {{/if}}
@@ -91,7 +91,7 @@
   addReglement = function (oForm){
     return onSubmitFormAjax(oForm, function() {
       {{if isset($facture|smarty:nodefaults)}}
-        var name = "factureconsult_id";
+        var name = "facture_id";
       {{elseif isset($consult|smarty:nodefaults)}}
         var name = "consult_id";
       {{/if}}
@@ -130,7 +130,7 @@
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="" />
-  <input type="hidden" name="factureconsult_id" value="" />
+  <input type="hidden" name="facture_id" value="" />
   <input type="hidden" name="consultation_id" value="" />
   <input type="hidden" name="patient_id" value="{{$object->patient_id}}" />
   <input type="hidden" name="patient_date_reglement" value="" />

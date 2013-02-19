@@ -11,94 +11,51 @@
 
 CCanDo::checkEdit();
 
-$factureconsult_id  = CValue::getOrSession("factureconsult_id");
-$patient_id         = CValue::getOrSession("patient_id");
-$consult_id         = CValue::get("consult_id");
-$facture_id         = CValue::get("facture_id");
-
+$facture_id  = CValue::getOrSession("facture_id");
+$consult_id  = CValue::get("consult_id");
+    
 $derconsult_id = null;
-$facture = new CFactureConsult();
+$facture = new CFactureCabinet();
 $consult = null;
-$assurances_patient = array();
 
 if ($consult_id) {
   $consult = new CConsultation();
   $consult->load($consult_id);
   $consult->loadRefsReglements();
   
-  if ($facture->load($consult->factureconsult_id)) {
-    $facture->loadRefs();
-    if (count($facture->_ref_consults) == 0) {
-      $facture->tarif = null;
-      $facture->delete();
-      $facture = new CFactureConsult();
-    }
-    
-    // Recalcul de la facture ?    
-    else {
-      $total_patient  = 0;
-      $total_tiers    = 0;
-      
-      foreach ($facture->_ref_consults as $consultation) {
-        $total_patient  += $consultation->du_patient;
-        $total_tiers    += $consultation->du_tiers;
-      }
-      
-      if ($total_patient != $facture->du_patient || $total_tiers != $facture->du_tiers) {
-        $facture->du_patient = $total_patient;
-        $facture->du_tiers   = $total_tiers  ;
-        $facture->tarif = null;
-        $facture->store();
-      }
-    }
-  }
-  elseif ($facture_id) {
+  if (!$facture->load($consult->facture_id) && $facture_id) {
     $facture->load($facture_id);
-    $facture->loadRefs();
-    if (count($facture->_ref_consults) == 0) {
-      $facture->tarif = null;
-      $facture->delete();
-      $facture = new CFactureConsult();
-    }
   }
+  $facture->_consult_id = $consult_id;
 }
-elseif ($factureconsult_id) {
-  $facture->load($factureconsult_id); 
-  $facture->loadRefs();
-  if ($facture->_ref_consults) {
-    $last_consult = reset($facture->_ref_consults);
-    $derconsult_id = $last_consult->_id;
-  }
-  $facture->_ref_patient->loadRefsCorrespondantsPatient();
+elseif ($facture_id) {
+  $facture->load($facture_id);
 }
 
+$facture->loadRefs();
+$facture->loadRefsNotes();
+if ($facture->_ref_consults) {
+  $last_consult = $facture->_ref_last_consult;
+  $derconsult_id = $facture->_ref_last_consult->_id;
+}
+$facture->_ref_patient->loadRefsCorrespondantsPatient();
 $facture->loadRefsNotes();
 
 $reglement   = new CReglement();
-
 $banque      = new CBanque();
 $banques     = $banque->loadList(null, "nom");
-
-// Instanciation d'un acte tarmed pour l'ajout de ligne dans la facture
-$acte_tarmed = null;
-if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
-  $acte_tarmed = new CActeTarmed();
-  $acte_tarmed->date     = mbDate();
-  $acte_tarmed->quantite = 1;
-}
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("facture"       , $facture);
 $smarty->assign("reglement"     , $reglement);
-$smarty->assign("acte_tarmed"   , $acte_tarmed);
 $smarty->assign("derconsult_id" , $derconsult_id);
 $smarty->assign("banques"       , $banques);
 $smarty->assign("consult"       , $consult);
 
 if (!CValue::get("not_load_banque")) {
-  $smarty->assign("factures"    , array(new CFactureConsult()));
+  $smarty->assign("factures"    , array(new CFactureCabinet()));
 }
 
 $smarty->assign("etat_ouvert"   , CValue::getOrSession("etat_ouvert", 1));

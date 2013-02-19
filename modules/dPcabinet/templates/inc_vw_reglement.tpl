@@ -54,8 +54,8 @@ loadFacture = function() {
   Facture.load(document.tarifFrm, '{{$consult->patient_id}}', '{{$pour_compte_praticien_id}}', '{{$consult->_id}}', 1);
 }
 reloadFacture = function() {
-  {{if $consult->factureconsult_id}}
-    Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->factureconsult_id}}');
+  {{if $consult->facture_id}}
+    Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->facture_id}}');
   {{/if}}
 }
 
@@ -86,7 +86,7 @@ printActes = function(){
 checkActe = function(button) {
   button.form.du_tiers.value = 0; 
   button.form.du_patient.value = 0; 
-  button.form.factureconsult_id.value = ""; 
+  button.form.facture_id.value = ""; 
   cancelTarif(null, reloadFacture);
 }
 
@@ -329,7 +329,7 @@ Main.add( function(){
                 <input type="hidden" name="secteur2" value="{{$consult->secteur2}}" />
                 <input type="hidden" name="du_patient" value="{{$consult->du_patient}}" />
                 <input type="hidden" name="du_tiers" value="{{$consult->du_tiers}}" />
-                <input type="hidden" name="factureconsult_id" value="{{$consult->factureconsult_id}}" />
+                <input type="hidden" name="facture_id" value="{{$consult->facture_id}}" />
                 
                 {{if $app->user_prefs.autoCloseConsult}}
                 <input type="hidden" name="chrono" value="{{$consult->chrono}}" />
@@ -378,7 +378,7 @@ Main.add( function(){
   </tr>
   <tr>
     <td id="load_facture" colspan="2">
-      {{if $consult->factureconsult_id || $consult->_ref_reglements|@count}}
+      {{if $facture->_id || $consult->_ref_reglements|@count}}
         {{mb_include module=cabinet template="inc_vw_facturation"}}
       {{/if}}
     </td>

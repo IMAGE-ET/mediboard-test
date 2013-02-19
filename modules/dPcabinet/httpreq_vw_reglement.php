@@ -123,13 +123,10 @@ $reglement->consultation_id = $consult->_id;
 $reglement->montant = round($consult->_du_restant_patient, 2);
 
 // Codes et actes
-$consult->loadRefsActesNGAP();
-$consult->loadRefsActesTarmed();
-$consult->loadRefsActesCaisse();
+$consult->loadRefsActes();
 
-// Chargement de la facture
-$facture = new CFactureConsult();
-$facture_patient = new CFactureConsult();
+$facture_patient = new CFactureCabinet();
+$facture         = new CFactureCabinet();
 $where = array();
 $where["patient_id"] = "= '$consult->patient_id'";
 if ($consult->_ref_plageconsult->pour_compte_id) {
@@ -139,23 +136,41 @@ else {
   $where["praticien_id"] = "= '$prat_id'";
 }
 
-// On essaie de retrouver une ancienne facture ouverte
-$where["cloture"] = " IS NULL";
-if ($consult->patient_id && $facture->loadObject($where)) {
-  $facture_patient = $facture;
-  $facture_patient->loadRefs();
-  $facture->_ref_patient->loadRefsCorrespondantsPatient();
+if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
+  $liaison = new CFactureLiaison();
+  $liaison->object_id     = $consult->_id;
+  $liaison->object_class  = $consult->_class;
+  $liaison->facture_class = "CFactureCabinet";
+  if ($liaison->loadMatchingObject()) {
+    $facture_patient = $liaison->loadRefFacture();
+    $facture_patient->loadRefs();
+  }
 }
-// [TD] Sinon ???: je ne comprends pas
-else { 
-  $where["cloture"] = " IS NOT NULL"; 
-  if ($consult->patient_id && $factures = $facture->loadList($where)) {
+else {
+  if (CAppUI::conf("ref_pays") == 2) {
+    $where["cloture"] = " IS NULL";
+  }
+  // On essaie de retrouver une facture ouverte
+  if ($facture->loadObject($where)) {
+    $facture_patient = $facture;
+    $facture_patient->loadRefs();
+  }
+}
+
+if (!$facture_patient->facture_id) {
+  // Sinon chargement de la facture cloturée
+  if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
+    $where["cloture"] = " IS NOT NULL";
+  }
+  if ($factures = $facture->loadList($where)) {
     foreach ($factures as $_facture) {
-      $_facture->loadRefs();
+      $_facture->loadRefPatient();
+      $_facture->loadRefsConsultation();
       foreach ($_facture->_ref_consults as $consultation) {
         if ($consultation->_id == $consult->_id) {
-          $_facture->_ref_patient->loadRefsCorrespondantsPatient();
           $facture_patient = $_facture;
+          $facture_patient->loadRefs();
+          break;
         }
       }
     }  

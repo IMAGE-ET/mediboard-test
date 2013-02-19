@@ -13,12 +13,12 @@ CCanDo::checkEdit();
 
 $date_min           = CValue::getOrSession("_date_min", mbDate());
 $date_max           = CValue::getOrSession("_date_max", mbDate());
-$etat               = CValue::getOrSession("etat", "ouvert");
 $etat_cloture       = CValue::getOrSession("etat_cloture", 1);
 $etat_ouvert        = CValue::getOrSession("etat_ouvert", 1);
-$factureconsult_id  = CValue::getOrSession("factureconsult_id");
+$facture_id         = CValue::getOrSession("facture_id");
 $patient_id         = CValue::getOrSession("patient_id");
 $no_finish_reglement= CValue::getOrSession("no_finish_reglement", 0);
+$type_date_search   = CValue::getOrSession("type_date_search", "cloture");
 
 // Praticien selectionné
 $chirSel = CValue::getOrSession("chirSel", "-1");
@@ -33,35 +33,43 @@ $listChir =  $user->loadPraticiens(PERM_EDIT);
 
 //Tri des factures ayant un chir dans une de ses consultations
 $factures= array();
-$facture = new CFactureConsult();
+$facture = new CFactureCabinet();
 
 $where = array();
-$where["ouverture"] = "BETWEEN '$date_min' AND '$date_max'";
+//$where["ouverture"] = "BETWEEN '$date_min' AND '$date_max'";
 
 if ($etat_cloture && !$etat_ouvert) {
-  $where["cloture"] = "BETWEEN '$date_min' AND '$date_max'";
+  $where["$type_date_search"] = "BETWEEN '$date_min' AND '$date_max'";
 }
 elseif ($etat_cloture && $etat_ouvert) {
-   $where[] = "cloture BETWEEN '$date_min' AND '$date_max' OR cloture IS NULL";
+   $where[] = "$type_date_search BETWEEN '$date_min' AND '$date_max' OR $type_date_search IS NULL";
 }
 elseif (!$etat_cloture && $etat_ouvert) {
-  $where["cloture"] = "IS NULL";
+  $where["$type_date_search"] = "IS NULL";
 }
 
 if ($chirSel) {
-  $ljoin = array();
+  if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
+    $ljoin = array();
+    $ljoin["consultation"] = "facture_cabinet.facture_id = consultation.facture_id" ;
+    $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id" ;
+    
+    $where["consultation.facture_id"] =" IS NOT NULL ";
+    $where["facture_cabinet.praticien_id"] =" = '$chirSel' ";
   
-  $ljoin["consultation"] = "factureconsult.factureconsult_id = consultation.factureconsult_id" ;
-  $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id" ;
-  
-  $where["consultation.factureconsult_id"] =" IS NOT NULL ";
-  $where["factureconsult.praticien_id"] =" = '$chirSel' ";
-
-  if ($patient_id) {
-    $where["factureconsult.patient_id"] =" = '$patient_id' ";
+    if ($patient_id) {
+      $where["facture_cabinet.patient_id"] =" = '$patient_id' ";
+    }
+    
+    $factures = $facture->loadList($where, "facture_cabinet.cloture DESC", 100, null, $ljoin);
   }
-  
-  $factures = $facture->loadList($where, "factureconsult.cloture DESC", 100, null, $ljoin);
+  else {
+    $where["praticien_id"] =" = '$chirSel' ";
+    if ($patient_id) {
+      $where["patient_id"] =" = '$patient_id' ";
+    }
+    $factures = $facture->loadList($where, "cloture DESC", 100);
+  }
 }
 else {
   $where["patient_id"] = "= '$patient_id'";  
@@ -82,13 +90,12 @@ if ($no_finish_reglement) {
 }
 
 $derconsult_id = null;
-$assurances_patient = array();
-if ($factureconsult_id) {
-  $facture->load($factureconsult_id);  
+if ($facture_id && isset($factures[$facture_id])) {
+  $facture->load($facture_id);  
   $facture->loadRefs();
   if ($facture->_ref_consults) {
-    $last_consult = end($facture->_ref_consults);
-    $derconsult_id = $last_consult->_id;
+    $last_consult   = $facture->_ref_last_consult;
+    $derconsult_id  = $last_consult->_id;
   }
   $facture->_ref_patient->loadRefsCorrespondantsPatient();
 }
@@ -97,14 +104,6 @@ $reglement = new CReglement();
 
 $banque = new CBanque();
 $banques = $banque->loadList(null, "nom");
-
-$acte_tarmed = null;
-//Instanciation d'un acte tarmed pour l'ajout de ligne dans la facture
-if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
-  $acte_tarmed = new CActeTarmed();
-  $acte_tarmed->date = mbDate();
-  $acte_tarmed->quantite = 1;
-}
 
 $filter = new CConsultation();
 $filter->_date_min = $date_min;
@@ -115,7 +114,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("factures"      , $factures);
 $smarty->assign("reglement"     , $reglement);
-$smarty->assign("acte_tarmed"   , $acte_tarmed);
 $smarty->assign("derconsult_id" , $derconsult_id);
 $smarty->assign("listChirs"     , $listChir);
 $smarty->assign("chirSel"       , $chirSel);
@@ -126,6 +124,7 @@ $smarty->assign("etat_ouvert"   , $etat_ouvert);
 $smarty->assign("etat_cloture"  , $etat_cloture);
 $smarty->assign("date"          , mbDate());
 $smarty->assign("filter"        , $filter);
-$smarty->assign("no_finish_reglement"      ,$no_finish_reglement);
+$smarty->assign("no_finish_reglement" ,$no_finish_reglement);
+$smarty->assign("type_date_search"    ,$type_date_search);
 
 $smarty->display("vw_factures.tpl");

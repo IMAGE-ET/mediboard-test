@@ -75,7 +75,7 @@
     <td colspan="2">
       <table class="tbl">
         <tr>
-          <th colspan="2" class="narrow text">{{tr}}CFactureConsult{{/tr}}</th>
+          <th colspan="2" class="narrow text">{{tr}}CFactureCabinet{{/tr}}</th>
           <th style="width: 20%;">{{mb_label class=CConsultation field=patient_id}}</th>
           <th style="width: 20%;">{{mb_label class=CConsultation field=tarif}}</th>
           
@@ -208,8 +208,8 @@
               <input type="hidden" name="m" value="dPcabinet" />
               <input type="hidden" name="del" value="0" />
               {{if $_facture->_id}}
-                <input type="hidden" name="dosql" value="do_factureconsult_aed" />
-                <input type="hidden" name="factureconsult_id" value="{{$_facture->_id}}" />
+                <input type="hidden" name="dosql" value="do_facturecabinet_aed" />
+                <input type="hidden" name="facture_id" value="{{$_facture->_id}}" />
               {{else}}
                 <input type="hidden" name="dosql" value="do_consultation_aed" />
                 <input type="hidden" name="consultation_id" value="{{$_facture->_ref_last_consult->_id}}" />

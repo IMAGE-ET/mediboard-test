@@ -127,14 +127,14 @@
     <td colspan="2">
       <table class="tbl">
         <tr>
-          <th rowspan="2"  colspan="2" class="narrow text">{{tr}}CFactureConsult{{/tr}}</th>
+          <th rowspan="2"  colspan="2" class="narrow text">{{tr}}CFactureCabinet{{/tr}}</th>
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=_prat_id}}</th>
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=patient_id}}</th>
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=_date}}: {{mb_label class=CConsultation field=tarif}}</th>
           
           {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-            <th rowspan="2" class="narrow">{{mb_title class=CFactureConsult field=_montant_secteur1}}</th>
-            <th rowspan="2" class="narrow">{{mb_title class=CFactureConsult field=_montant_secteur2}}</th>
+            <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=_montant_secteur1}}</th>
+            <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=_montant_secteur2}}</th>
           {{/if}}
           
           {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
@@ -142,7 +142,7 @@
             <th rowspan="2" class="narrow">Remise</th>
           {{/if}}
           
-          <th rowspan="2" class="narrow">{{mb_title class=CFactureConsult field=_montant_total}}</th>
+          <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=_montant_total}}</th>
           <th rowspan="2" class="narrow">{{mb_label class=CReglement field=mode}}</th>
           <th colspan="2" class="narrow">{{mb_title class=CReglement field=emetteur}}</th>
         </tr>

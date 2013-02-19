@@ -9,7 +9,7 @@
  * @version    $Revision$
  */
 
-$do = new CDoObjectAddEdit("CFactureConsult", "factureconsult_id");
+$do = new CDoObjectAddEdit("CFactureCabinet", "facture_id");
 $do->doIt();
 
 ?>

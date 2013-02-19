@@ -40,7 +40,7 @@ class CReglement extends CMbMetaObject {
   
   function getProps() {
     $specs = parent::getProps();
-    $specs['object_class']    = 'enum notNull list|CConsultation|CFactureConsult show|0';
+    $specs['object_class']    = 'enum notNull list|CConsultation|CFactureCabinet|CFactureEtablissement show|0 default|CConsultation';
     $specs['banque_id']       = 'ref class|CBanque';
     $specs['date']            = 'dateTime notNull';
     $specs['montant']         = 'currency notNull';
@@ -97,7 +97,7 @@ class CReglement extends CMbMetaObject {
       return $this->_ref_facture = $target->fakeRefFacture();
     }
     
-    if ($target instanceof CFactureConsult) {
+    if ($target instanceof CFactureCabinet) {
       $target->loadRefsConsults();
       $target->loadRefPatient();
       $target->loadRefPraticien();
@@ -107,6 +107,7 @@ class CReglement extends CMbMetaObject {
   
   /**
    * Acquite la facture automatiquement
+   * 
    * @return Store-like message
    */
   function acquiteFacture() {
@@ -131,7 +132,7 @@ class CReglement extends CMbMetaObject {
     }
     
     // Cas de la facture
-    if ($this->_update_facture && $this->object_class == "CFactureConsult") {
+    if ($this->_update_facture && $this->object_class == "CFactureCabinet") {
       $facture = $this->_ref_object;
       $facture->loadRefsConsults();
       $facture->loadRefsReglements();
@@ -150,15 +151,24 @@ class CReglement extends CMbMetaObject {
     }
   }
   
+  /**
+   * Redéfinition du store
+   * 
+   * @return void
+  **/
   function store() {
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
-    
     return $this->acquiteFacture();
   }
   
+  /**
+   * Redéfinition du delete
+   * 
+   * @return void
+  **/
   function delete() {
     // Preload consultation
     $this->load();
@@ -168,7 +178,7 @@ class CReglement extends CMbMetaObject {
     if ($msg = parent::delete()) {
       return $msg;
     }
-
+    
     return $this->acquiteFacture();
   }
   

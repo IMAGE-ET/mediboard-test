@@ -63,8 +63,8 @@ $reglement = new CReglement();
 $reglements_consult = $reglement->loadList($where, "reglement.date, plageconsult.chir_id", null, null, $ljoin);
 
 // Chargement des règlements via les factures
-$ljoin["consultation"] = "reglement.object_id = consultation.factureconsult_id";
-$where["object_class"] = " = 'CFactureConsult'";
+$ljoin["consultation"] = "reglement.object_id = consultation.facture_id";
+$where["object_class"] = " = 'CFactureCabinet'";
 
 $reglement = new CReglement();
 $reglements_facture = $reglement->loadList($where, "reglement.date, plageconsult.chir_id", null, null, $ljoin);
@@ -127,7 +127,7 @@ foreach ($reglements as $_reglement) {
   }
   
   $facture = $_reglement->_ref_object;
-  if ($facture instanceof CFactureConsult) {
+  if ($facture instanceof CFactureCabinet) {
     $facture->loadRefsReglements();
     $recapReglement["total"]["avec_remise"] += $facture->_montant_avec_remise;
   }

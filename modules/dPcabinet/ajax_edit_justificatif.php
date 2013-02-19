@@ -9,6 +9,7 @@
  * @version    $Revision$
  */
 
+CCanDo::checkEdit();
 $colonnes = array(20, 28, 25, 75, 30);
 
 /**
@@ -243,7 +244,18 @@ foreach ($factures as $facture) {
               $acte->_ref_tarmed->tp_al = $acte->montant_base;
             }
           }
-          foreach ($tailles_colonnes as $key => $largeur) {      	
+          if ($acte->code_ref && (preg_match("/Réduction/", $acte->libelle) || preg_match("/Majoration/", $acte->libelle))) {
+            $acte_ref = null;
+            foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
+              if ($acte_tarmed->code == $acte->code_ref) {
+                $acte_ref = $acte_tarmed;break;
+              }
+            }
+            $acte_ref->loadRefTarmed();
+            $acte->_ref_tarmed->tp_al = $acte_ref->_ref_tarmed->tp_al;
+            $acte->_ref_tarmed->tp_tl = $acte_ref->_ref_tarmed->tp_tl;
+          }
+          foreach ($tailles_colonnes as $key => $largeur) {       
               $pdf->setXY($pdf->getX()+$x, $debut_lignes + $ligne*3);
               $valeur = "";
               $cote = "C";
@@ -265,18 +277,6 @@ foreach ($factures as $facture) {
               }
               if ($key == "Quantité") {
                 $valeur = $acte->quantite;
-              }
-              
-              if ($acte->code_ref && (preg_match("/Réduction/", $acte->libelle) || preg_match("/Majoration/", $acte->libelle))) {
-                $acte_ref = null;
-                foreach ($consult->_ref_actes_tarmed as $acte_tarmed) {
-                  if ($acte_tarmed->code == $acte->code_ref) {
-                    $acte_ref = $acte_tarmed;break;
-                  }
-                }
-                $acte_ref->loadRefTarmed();
-                $acte->_ref_tarmed->tp_al = $acte_ref->_ref_tarmed->tp_al;
-                $acte->_ref_tarmed->tp_tl = $acte_ref->_ref_tarmed->tp_tl;
               }
               if ($key == "Pt PM/Prix") {
                 $valeur = $acte->_ref_tarmed->tp_al;
@@ -352,7 +352,7 @@ foreach ($factures as $facture) {
           $pdf->Write("<b>",substr($acte->_ref_prestation_caisse->libelle, 0, 90));
           $ligne++;
           //Si le libelle est trop long
-          if (strlen($acte->_ref_prestation_caisse->libelle)>90) {      	
+          if (strlen($acte->_ref_prestation_caisse->libelle)>90) {        
             $pdf->setXY(37, $debut_lignes + $ligne*3);
             $pdf->Write("<b>",substr($acte->_ref_prestation_caisse->libelle, 90));
             $ligne++;
@@ -448,22 +448,11 @@ foreach ($factures as $facture) {
     $pdf->Cell($l, "", sprintf("%.2f",$total), null, null, "R");
   }
   
-  if ($factureconsult_id) {
+  if ($facture_id) {
     $pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "I");
   }
-  
-//  else {
-//    $exchange_source = CExchangeSource::get("tarmed_export_impression_justificatifs", "ftp", true);
-//    $exchange_source->init();
-//    try {
-//      $exchange_source->setData($pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "S"));
-//      $exchange_source->send("", $facture->cloture."_".$facture->_ref_patient->nom.'.pdf');
-//    } catch(CMbException $e) {
-//      $e->stepAjax();
-//    }
-//  }
 }
-if (!$factureconsult_id) {
+if (!$facture_id) {
   $pdf->Output('Justificatifs.pdf', "I");
 }
 ?>

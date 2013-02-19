@@ -1,11 +1,13 @@
-<?php /* $Id: edit_planning.php 16502 2012-09-03 14:31:26Z flaviencrochard $ */
-
+<?php 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision: 16502 $
-* @author Romain Ollivier
-*/
+ * $Id:$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     Romain Ollivier <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision:$
+ */
 
 CCanDO::checkEdit();
 
@@ -31,7 +33,7 @@ $banque = new CBanque();
 $banques = $banque->loadList(null, "nom");
 
 // Facture de contexte pour l'affichage
-if ($object instanceof CFactureConsult) {
+if ($object instanceof CFactureCabinet) {
   $facture = $object;
   if (CAppUI::conf("ref_pays") == 2) {
     $facture->loadRefsConsults();

@@ -16,30 +16,32 @@ refreshList = function(){
   url.addParam("_date_min"    , oForm._date_min.value);
   url.addParam("_date_max"    , oForm._date_max.value);
   url.addParam("no_finish_reglement" , $V(oForm.no_finish_reglement) ? 1 : 0);
+  url.addParam("type_date_search" , $V(oForm.type_date_search));
   url.redirect();
 }
 
-viewFacture = function(element, factureconsult_id){
+viewFacture = function(element, facture_id){
   if (element) {
     element.up("tr").addUniqueClassName("selected");
   }
    
-  var url = new Url("cabinet"     , "ajax_view_facture");
-  url.addParam("factureconsult_id", factureconsult_id);
+  var url = new Url("cabinet" , "ajax_view_facture");
+  url.addParam("facture_id"   , facture_id);
   url.requestUpdate('load_facture');
 }
 
-printFacture = function(factureconsult_id, edit_justificatif, edit_bvr) {
-  var url = new Url('dPcabinet', 'ajax_edit_bvr');
-  url.addParam('factureconsult_id', factureconsult_id);
-  url.addParam('edition_justificatif', edit_justificatif);
-  url.addParam('edition_bvr', edit_bvr);
-  url.addParam('suppressHeaders', '1');
+printFacture = function(facture_id, edit_justificatif, edit_bvr) {
+  var url = new Url('cabinet', 'ajax_edit_bvr');
+  url.addParam('facture_id'           , facture_id);
+  url.addParam('edition_justificatif' , edit_justificatif);
+  url.addParam('edition_bvr'          , edit_bvr);
+  url.addParam('facture_class'        , 'CFactureCabinet');
+  url.addParam('suppressHeaders'      , '1');
   url.popup(1000, 600);
 }
 Main.add(function () {
-  Calendar.regField(getForm("choice-facture")._date_min, null);
-  Calendar.regField(getForm("choice-facture")._date_max, null);
+  Calendar.regField(getForm("choice-facture")._date_min);
+  Calendar.regField(getForm("choice-facture")._date_max);
   
   {{if $facture->_id}}
     viewFacture(null, '{{$facture->_id}}');
@@ -94,11 +96,20 @@ Main.add(function () {
         <td>
           <select name="chirSel" style="width: 15em;" onchange="refreshList();">
             <option value="0" {{if !$chirSel}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
-            {{foreach from=$listChirs item=curr_chir}}
-              <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
-                {{$curr_chir->_view}}
-              </option>
-            {{/foreach}}
+            {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <th>Date de</th>
+        <td>
+          <select name="type_date_search" onchange="refreshList();">
+            <option value="cloture" {{if $type_date_search == "cloture"}} selected="selected" {{/if}}>
+              Cloture
+            </option>
+            <option value="ouverture" {{if $type_date_search == "ouverture"}} selected="selected" {{/if}}>
+              Ouverture
+            </option>
           </select>
         </td>
       </tr>
@@ -130,6 +141,10 @@ Main.add(function () {
                   {{$_facture->_ref_patient->_view|truncate:30:"...":true}}
                 </a>
               </td>
+            </tr>
+          {{foreachelse}}
+            <tr>
+              <td colspan="2" class="empty">{{tr}}CFactureCabinet.none{{/tr}}</td>
             </tr>
           {{/foreach}}
         </table>

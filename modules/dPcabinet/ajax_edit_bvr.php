@@ -11,7 +11,7 @@
 
 CCanDo::checkEdit();
 
-$factureconsult_id    = CValue::get("factureconsult_id");
+$facture_id    = CValue::get("facture_id");
 $edition_bvr          = CValue::get("edition_bvr");
 $edition_justificatif = CValue::get("edition_justificatif");
 $prat_id              = CValue::get("prat_id");
@@ -21,26 +21,16 @@ $date_max             = CValue::get("_date_max", mbDate());
 $user = CMediusers::get();
 
 $factures = array();
-$facture = new CFactureConsult();
-//si on a une factureconsult_id on la charge
-if ($factureconsult_id) {
-  $factures[$factureconsult_id] = $facture->load($factureconsult_id);
+$facture = new CFactureCabinet();
+//si on a une facture_id on la charge
+if ($facture_id) {
+  $factures[$facture_id] = $facture->load($facture_id);
 }
 else {
   $where = array();
   $where["praticien_id"] = " = '$prat_id'";
   $where[]  = "cloture  <= '$date_max' AND cloture >= '$date_min'";
-  $factures = $facture->loadList($where, "factureconsult_id DESC", null, "patient_id");
-  
-  //Avant l'envoi par ftp des fichiers, création d'un fichier print.lock indiquant un envoi de fichiers en cours
-//  $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
-//  $exchange_source->init();
-//  try {
-//    $exchange_source->setData("Ne pas imprimer maintenant. Merci d'avance!");
-//    $exchange_source->send("", "print.lock");
-//  } catch(CMbException $e) {
-//    $e->stepAjax();
-//  }
+  $factures = $facture->loadList($where, "facture_id DESC", null, "patient_id");
 }
 
 if ($edition_bvr) {
@@ -371,9 +361,6 @@ if ($edition_bvr) {
           }
           $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $function_prat->cp." ".$function_prat->ville);
 
-          // Deja sur la feuille
-          //$pdf->Text(16.75*$l_colonne + $decalage, $h_ligne*13.25+$haut_doc   , ".");
-
           //Numéro adhérent, CHF, Montant1 et Montant2
           $pdf->Text($l_colonne*11 + $decalage, $h_ligne*10.75+$haut_doc , $adherent);
 
@@ -384,7 +371,7 @@ if ($edition_bvr) {
           $pdf->Text($l_colonne*(17-strlen($montant_facture*100)) + $decalage, $h_ligne*13+$haut_doc , sprintf("%d", $montant_facture));
           
           $cents = floor(sprintf("%.2f", $montant_facture - sprintf("%d", $montant_facture))*100);
-          if ($cents<10) {			
+          if ($cents<10) {      
             $cents = "0".$cents;
           }
           $pdf->Text($l_colonne*19 + $decalage, $h_ligne*13+$haut_doc , $cents);
@@ -392,20 +379,10 @@ if ($edition_bvr) {
         
         $decalage = $left_offset; // 7.36 // 8;
 
-        // Deja sur la feuille
-        //$pdf->Text(28*$l_colonne, $h_ligne*18+$haut_doc , "609");
-        
         //écriture de la référence
         $num_reference = preg_replace("/^(\d{2})(\d{5})(\d{5})(\d{5})(\d{5})$/", '\\1 \\2 \\3 \\4 \\5 \\6', $facture->num_reference);
         $pdf->setFont($font, '', 11);
         $pdf->Text(50*$l_colonne, $h_ligne*8.75+$haut_doc , $num_reference);
-
-        /* // Deja imprimé sur la feuille
-        $pdf->setFont($font, '', 6);
-        $pdf->Text(13*$l_colonne, $h_ligne*21+$haut_doc , "Die Annahmestelle");
-        $pdf->Text(13*$l_colonne, $h_ligne*21.5+$haut_doc , "L'office de dépôt");
-        $pdf->Text(13*$l_colonne, $h_ligne*22+$haut_doc , "L'ufficio d'accettazione");
-        */
 
         $pdf->setFont($font, '', 8);
         $pdf->Text($l_colonne + $decalage, $h_ligne*15+$haut_doc , $facture->num_reference);
@@ -434,37 +411,15 @@ if ($edition_bvr) {
       }
     }
     //enregistrement pour chaque facture l'ensemble des factures
-    if ($factureconsult_id) {
+    if ($facture_id) {
       $pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "I");
     }
-//    else {
-//      $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
-//      $exchange_source->init();
-//  
-//      try {
-//        $exchange_source->setData($pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "S"));
-//        $exchange_source->send("", $facture->cloture."_".$facture->_ref_patient->nom.'.pdf');
-//      } catch(CMbException $e) {
-//        $e->stepAjax();
-//      }
-//    }
   }
-  if (!$factureconsult_id) {
+  if (!$facture_id) {
     $pdf->Output('Factures.pdf', "I");
   }
 }
 if ($edition_justificatif) {
   include "ajax_edit_justificatif.php" ;
 }
-
-//if (!$factureconsult_id) {
-  //Après l'envoi par ftp des fichiers, suppression du fichier print.lock
-//  $exchange_source = CExchangeSource::get("tarmed_export_impression_factures", "ftp", true);
-//  $exchange_source->init();
-//  try {
-//    $exchange_source->delFile("print.lock");
-//  } catch(CMbException $e) {
-//    $e->stepAjax();
-//  }
-//}
 ?>
