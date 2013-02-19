@@ -1761,7 +1761,13 @@ class CSetupdPcabinet extends CSetup {
                 SET user_log.object_class = 'CFactureCabinet'
                 WHERE user_log.object_class = 'CFactureConsult';";
     $this->addQuery($query);
-    $this->mod_version = "1.88";
+    $this->makeRevision("1.88");
+    
+    $query = "UPDATE id_sante400
+                SET id_sante400.object_class = 'CFactureCabinet'
+                WHERE id_sante400.object_class = 'CFactureConsult';";
+    $this->addQuery($query);
+    $this->mod_version = "1.89";
   }
 }
 ?>
