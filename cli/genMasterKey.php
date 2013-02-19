@@ -1,11 +1,11 @@
-<?php /** $Id:$ **/
+<?php /** $Id$ **/
 
 /**
  * @category Cli
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -133,7 +133,7 @@ global $argv;
 
 $dirKey    = "";
 $apacheGrp = "www-data";
-$help      = false;
+$help      = true;
 $command = array_shift($argv);
 
 foreach ($argv as $key => $arg) {
@@ -141,14 +141,12 @@ foreach ($argv as $key => $arg) {
     case "-d":
       $dirKey = $argv[$key+1];
       unset($argv[$key+1]);
+      $help = false;
       break;
     case "-g":
       $apacheGrp = $argv[$key+1];
       unset($argv[$key+1]);
-      break;
-    case "-h":
-      $help = true;
-      break;
+      $help = false;
   }
 }
 
