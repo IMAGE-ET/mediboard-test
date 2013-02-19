@@ -35,6 +35,14 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_bool var=readonly}}
     {{mb_include module=system template=inc_config_bool var=log_js_errors}}
     {{mb_include module=system template=inc_config_str var=weinre_debug_host}}
+
+    <tr>
+      <th colspan="2" class="title">
+        Sécurité
+      </th>
+    </tr>
+    {{mb_include module=system template=inc_config_bool var=csrf_protection}}
+    {{mb_include module=system template=inc_config_str var=csrf_token_lifetime numeric=true}}
     
     <tr>
       <th colspan="2" class="title">
@@ -101,7 +109,7 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_str var=intranet_url size=40}}
     {{mb_include module=system template=inc_config_str var=extranet_url size=40}}
     {{mb_include module=system template=inc_config_str var=limit_date}}
-    
+
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

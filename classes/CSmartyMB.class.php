@@ -20,6 +20,9 @@ CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.escape");
  */
 class CSmartyMB extends Smarty {
   static $extraPath = "";
+
+  protected static $csrf_values = array();
+  protected static $is_open = false;
   
   /**
    * Construction
@@ -97,6 +100,8 @@ class CSmartyMB extends Smarty {
     $this->register_modifier("module_installed"  , array($this,"module_installed"));
     $this->register_modifier("module_active"     , array($this,"module_active"));
     $this->register_modifier("JSAttribute"       , array($this,"JSAttribute"));
+
+    $this->register_function("mb_token"          , array($this,"mb_token"));
     
     $modules = CModule::getActive();
     foreach ($modules as $mod) {
@@ -171,6 +176,11 @@ class CSmartyMB extends Smarty {
     else {
       $class = $object->_class;
     }
+
+    // If protection enabled
+    if (CAppUI::conf("csrf_protection") && self::$is_open) {
+      self::$csrf_values["@class"] = $class;
+    }
     
     return "<input type=\"hidden\" name=\"@class\" value=\"$class\" />";
   }
@@ -201,7 +211,34 @@ class CSmartyMB extends Smarty {
     $spec = $object->_specs[$field];
     return $spec->getHtmlValue($object, $smarty, $params);
   }
-  
+
+  /**
+   * Put a random token into a form in order to prevent from CSRF attacks
+   *
+   * @param array $params Array of parameters
+   *
+   * @return string
+   */
+  function mb_token($params) {
+    if (CAppUI::conf("csrf_protection")) {
+      $lifetime = CMbArray::extract($params, "lifetime",  CAppUI::conf("csrf_token_lifetime"));
+      $lifetime = abs(round($lifetime));
+
+      $token = CCSRF::generateToken();
+      if ($token) {
+        // Store in session
+        if (isset($_SESSION)) {
+          // Key is token, value is expiration date
+          $_SESSION["tokens"][$token] = array("lifetime" => time() + $lifetime, "fields" => array());
+
+          return "<input type=\"hidden\" name=\"csrf\" value=\"".$token."\" />";
+        }
+      }
+    }
+  }
+
+
+
   /**
    * Get a concrete filename for automagically created content
    *
@@ -387,7 +424,7 @@ class CSmartyMB extends Smarty {
     if ($force_object && is_array($object) && empty($object)) {
       return "{}";
     }
-    
+
     return json_encode($object);
   }
   
@@ -474,7 +511,7 @@ class CSmartyMB extends Smarty {
     }
     
     // Formatage et symbole monétaire
-    $value = ($value !== null && $value !== "") ? 
+    $value = ($value !== null && $value !== "") ?
       number_format($value, $decimals, ",", " ")." ".CAppUI::conf("currency_symbol") : 
       "-";
       
@@ -649,6 +686,12 @@ class CSmartyMB extends Smarty {
     $params['field'] = $params["object"]->_spec->key;
     $params['prop'] = 'ref';
     $params['hidden'] = true;
+
+    // If protection enabled
+    if (CAppUI::conf("csrf_protection") && self::$is_open) {
+      $params['static'] = true;
+    }
+
     return $this->mb_field($params, $smarty);
   }
   

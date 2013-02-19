@@ -12,7 +12,7 @@
 class CSmartyDP extends CSmartyMB {
   
   public static $placeholders = null;
-  
+
   /**
    * Staticly build template placeholders array
    * @return void
@@ -68,37 +68,69 @@ class CSmartyDP extends CSmartyMB {
    * mb_form
    */
   function mb_form($params, $content, &$smarty, &$repeat){
-      $fields = array(
-        "m"     => CMbArray::extract($params, "m", null, true),
-        "dosql" => CMbArray::extract($params, "dosql"),
-        "tab"   => CMbArray::extract($params, "tab"),
-        "a"     => CMbArray::extract($params, "a"),
-      );
-      
-      $attributes = array(
-        "name"   => CMbArray::extract($params, "name", null, true),
-        "method" => CMbArray::extract($params, "method", "get"),
-        "action" => CMbArray::extract($params, "action", "?"),
-        "class"  => CMbArray::extract($params, "className", ""),
-      );
-      
-      $attributes += $params;
-      
-      $fields = array_filter($fields);
-      
-      $_content = "";
-      foreach($fields as $name => $value) {
-        $_content .= "\n".CHTMLResourceLoader::getTag("input", array(
-          "type"  => "hidden",
-          "name"  => $name,
-          "value" => $value,
-        ));
+    $fields = array(
+      "m"     => CMbArray::extract($params, "m", null, true),
+      "dosql" => CMbArray::extract($params, "dosql"),
+      "tab"   => CMbArray::extract($params, "tab"),
+      "a"     => CMbArray::extract($params, "a"),
+    );
+
+    $attributes = array(
+      "name"   => CMbArray::extract($params, "name", null, true),
+      "method" => CMbArray::extract($params, "method", "get"),
+      "action" => CMbArray::extract($params, "action", "?"),
+      "class"  => CMbArray::extract($params, "className", ""),
+    );
+
+    // If protection enabled
+    if (CAppUI::conf("csrf_protection")) {
+      // During opening tag, we generate the token
+      if ($repeat) {
+        // Form is open
+        self::$is_open     = true;
       }
-      
-      $_content .= $content;
-      
-      return CHTMLResourceLoader::getTag("form", $attributes, $_content);
+      // During closing tag, we store in SESSION and unset variable
+      else {
+        if (strtoupper($attributes["method"]) == "POST") {
+          $lifetime = CMbArray::extract($params, "lifetime",  CAppUI::conf("csrf_token_lifetime"));
+          $lifetime = abs(round($lifetime));
+
+          $token = CCSRF::generateToken();
+          if ($token) {
+            // Key is token, value is expiration date and fields to check
+            $_SESSION["tokens"][$token] = array(
+              "lifetime"  => time() + $lifetime,
+              "fields"    => self::$csrf_values
+            );
+            // In order to add the hidden input
+            $fields["csrf"] = $token;
+
+            self::$csrf_values = array();
+          }
+        }
+
+        // Form is closing
+        self::$is_open = false;
+      }
     }
+
+    $attributes += $params;
+
+    $fields = array_filter($fields);
+
+    $_content = "";
+    foreach ($fields as $name => $value) {
+      $_content .= "\n".CHTMLResourceLoader::getTag("input", array(
+        "type"  => "hidden",
+        "name"  => $name,
+        "value" => $value,
+      ));
+    }
+
+    $_content .= $content;
+
+    return CHTMLResourceLoader::getTag("form", $attributes, $_content);
+  }
 
    /*
    * Diplays veritcal text
@@ -173,7 +205,16 @@ class CSmartyDP extends CSmartyMB {
       $spec->notNull = 1;
       $spec->prop = "canNull notNull $spec->prop";
     }
-  
+
+    // If protection enabled
+    if (CAppUI::conf("csrf_protection") && self::$is_open) {
+      $static = CMbArray::extract($params, "static" , false);
+
+      if ($static) {
+        self::$csrf_values[$field] = $object->$field;
+      }
+    }
+
     return $spec->getFormElement($object, $params);
   }
   

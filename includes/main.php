@@ -215,6 +215,9 @@ if ($indexGroup->load($g) && !$indexGroup->canRead()) {
   CValue::setSessionAbs("g", $g);
 }
 
+// Check CSRF protection
+CCSRF::checkProtection();
+
 // do some db work if dosql is set
 if ($dosql) {
   // dP remover super hack
