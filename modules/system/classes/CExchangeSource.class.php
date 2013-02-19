@@ -222,13 +222,12 @@ class CExchangeSource extends CMbObject {
     }
 
     try {
-      CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
-      CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
-
       $master_key_filepath = CAppUI::conf("master_key_filepath");
       $master_key_filepath = rtrim($master_key_filepath, "/");
 
       if (CExchangeSource::checkMasterKeyFile($master_key_filepath)) {
+        CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
+        CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
         $cipher = new Crypt_AES(CRYPT_AES_MODE_CTR);
         // keys are null-padded to the closest valid size
         // longer than the longest key and it's truncated
@@ -270,13 +269,13 @@ class CExchangeSource extends CMbObject {
     }
 
     try {
-      CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
-      CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
-
       $master_key_filepath = CAppUI::conf("master_key_filepath");
       $master_key_filepath = rtrim($master_key_filepath, "/");
 
       if (CExchangeSource::checkMasterKeyFile($master_key_filepath)) {
+        CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/AES");
+        CAppUI::requireLibraryFile("phpseclib/phpseclib/Crypt/Random");
+
         $cipher = new Crypt_AES(CRYPT_AES_MODE_CTR);
         $cipher->setKeyLength(256);
 
