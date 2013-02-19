@@ -520,28 +520,27 @@ class CFacture extends CMbObject {
     if (count($this->_ref_sejours)) {
       return $this->_ref_sejours;
     }
-    
-    $ljoin = array();
-    $ljoin["facture_liaison"] = "facture_liaison.object_id = sejour.sejour_id";
-    $where = array();
-    $where["facture_liaison.facture_id"]    = " = '$this->_id'";
-    $where["facture_liaison.facture_class"] = " = '$this->_class'";
-    $where["facture_liaison.object_class"]  = " = 'CSejour'";
-    
-    $sejour = new CSejour();
-    $this->_ref_sejours = $sejour->loadList($where, "sejour_id", null, null, $ljoin);
-    
-    // Chargement des actes de séjour
-    foreach ($this->_ref_sejours as $sejour) {
-      $sejour->loadRefsBack();
-      foreach ($sejour->_ref_operations as $op) {
-        $op->loadRefsActes();
-        $this->rangeActes($op);
+    if (CModule::getActive("dPfacturation")) {
+      $ljoin = array();
+      $ljoin["facture_liaison"] = "facture_liaison.object_id = sejour.sejour_id";
+      $where = array();
+      $where["facture_liaison.facture_id"]    = " = '$this->_id'";
+      $where["facture_liaison.facture_class"] = " = '$this->_class'";
+      $where["facture_liaison.object_class"]  = " = 'CSejour'";
+      
+      $sejour = new CSejour();
+      $this->_ref_sejours = $sejour->loadList($where, "sejour_id", null, null, $ljoin);
+      // Chargement des actes de séjour
+      foreach ($this->_ref_sejours as $sejour) {
+        $sejour->loadRefsBack();
+        foreach ($sejour->_ref_operations as $op) {
+          $op->loadRefsActes();
+          $this->rangeActes($op);
+        }
+        $sejour->loadRefsActes();
+        $this->rangeActes($sejour);
       }
-      $sejour->loadRefsActes();
-      $this->rangeActes($sejour);
     }
-    
     return $this->_ref_sejours;
   }
   
