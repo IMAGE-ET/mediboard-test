@@ -34,6 +34,12 @@
             <legend>{{tr}}CConsultation-date_at{{/tr}}</legend>
             <table style="width: 100%;">
               <tr>
+                <th>{{mb_label object=$consult field=num_at}}</th>
+                <td>{{mb_field object=$consult field=num_at style="width:50px;"}}
+                {{mb_field object=$consult field=cle_at onchange="this.form.onsubmit();" style="width:8px;"}}
+                {{mb_label object=$consult field=cle_at}}</td>
+              </tr>
+              <tr>
                 <th style="width: 30%">{{mb_label object=$consult field=date_at}}</th>
                 <td>{{mb_field object=$consult field=date_at form=editConsultation register=true onchange="updateDates(this); this.form.onsubmit();"}}</td>    
               </tr>

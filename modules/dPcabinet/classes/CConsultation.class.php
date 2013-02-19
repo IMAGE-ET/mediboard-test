@@ -65,6 +65,8 @@ class CConsultation extends CFacturable {
   var $date_at          = null;
   var $fin_at           = null;
   var $pec_at           = null;
+  var $num_at           = null;
+  var $cle_at           = null;
   var $reprise_at       = null;
   var $at_sans_arret    = null;
   var $arret_maladie    = null;
@@ -252,6 +254,9 @@ class CConsultation extends CFacturable {
 
     $props["date_at"]  = "date";
     $props["fin_at"]   = "dateTime";
+    $props["num_at"]   = "num length|8";
+    $props["cle_at"]   = "num length|1";
+
     $props["pec_at"]   = "enum list|soins|arret";
     $props["reprise_at"] = "dateTime";
     $props["at_sans_arret"] = "bool default|0";

@@ -108,11 +108,17 @@ Main.add( function(){
 
 <table class="form">
   <tr>
-    <!--  Accident du travail -->
-    <td colspan="2" id="at_area">
-      {{mb_include module=cabinet template="inc_accident_travail"}}
+    <td colspan="2">
+      {{mb_include module="cabinet" template="inc_type_assurance_reglement/inc_type_assurance"}}
     </td>
   </tr>
+
+  <tr>
+    <!--  type assurance -->
+    <td colspan="2" id="area_type_assurance">
+    </td>
+  </tr>
+
   
   <tr>
     {{if $gestionFSE}}

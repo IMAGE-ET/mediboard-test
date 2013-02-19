@@ -1775,7 +1775,13 @@ class CSetupdPcabinet extends CSetup {
                 ADD `exoneration` ENUM('N', '13', '15', '17', '19') DEFAULT 'N' NOT NULL;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.90";
+    $this->makeRevision("1.90");
+    $query = "ALTER TABLE `consultation`
+                ADD `num_at` INT (11) AFTER `date_at`,
+                ADD `cle_at` INT (11) AFTER `num_at`";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.91";
   }
 }
 ?>
