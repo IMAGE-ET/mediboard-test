@@ -14,7 +14,19 @@
  * Acknowledgment HL7
  */
 interface CHL7Acknowledgment {
+  /**
+   * Construct
+   *
+   * @param CHL7Event $event Event HL7
+   *
+   * @return CHL7Acknowledgment
+   */
   function __construct(CHL7Event $event = null);
 
+  /**
+   * Get acknowledgment status
+   *
+   * @return string
+   */
   function getStatutAcknowledgment();
 }

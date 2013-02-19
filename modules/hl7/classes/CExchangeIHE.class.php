@@ -44,6 +44,11 @@ class CExchangeIHE extends CExchangeTabular {
    */
   var $_message_object = null;
 
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
@@ -52,7 +57,12 @@ class CExchangeIHE extends CExchangeTabular {
     
     return $spec;
   }
-  
+
+  /**
+   * Get properties specifications as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -100,7 +110,8 @@ class CExchangeIHE extends CExchangeTabular {
       $strict = $this->getConfigs($sender->_guid)->strict_segment_terminator;
       
       return CHL7v2Message::isWellFormed($data, $strict);
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       return false;
     }
   }
@@ -222,15 +233,17 @@ class CExchangeIHE extends CExchangeTabular {
    * @return CHL7v2Message|void
    */
   function getACK() {
-    if ($this->_acquittement !== null) {
-      $hl7_ack = new CHL7v2Message();
-      $hl7_ack->parse($this->_acquittement);
-      
-      $this->_doc_errors_ack   = !$hl7_ack->isOK(CHL7v2Error::E_ERROR);
-      $this->_doc_warnings_ack = !$hl7_ack->isOK(CHL7v2Error::E_WARNING);
-
-      return $hl7_ack;
+    if ($this->_acquittement === null) {
+      return;
     }
+
+    $hl7_ack = new CHL7v2Message();
+    $hl7_ack->parse($this->_acquittement);
+
+    $this->_doc_errors_ack   = !$hl7_ack->isOK(CHL7v2Error::E_ERROR);
+    $this->_doc_warnings_ack = !$hl7_ack->isOK(CHL7v2Error::E_WARNING);
+
+    return $hl7_ack;
   }
 
   /**
@@ -348,15 +361,29 @@ class CExchangeIHE extends CExchangeTabular {
   /**
    * Generate 'Patient Demographics Response' acknowledgment
    *
-   * @param CHL7Acknowledgment $ack            Acknowledgment
-   * @param array              $mb_error_codes Mediboard errors codes
-   * @param string             $comments       Comments
-   * @param array              $objects        Objects
+   * @param CHL7v2PatientDemographicsAndVisitResponse $ack        Acknowledgment
+   * @param array                                     $objects    Objects
+   * @param string                                    $QPD8_error QPD-8 that contained the unrecognized domain
    *
    * @return string
    */
-  function setPDRAA(CHL7Acknowledgment $ack, $mb_error_codes, $comments = null, $objects = array()) {
-    $ack->generateAcknowledgment("AA", $mb_error_codes, "0", "I", $comments, $objects);
+  function setPDRAA(CHL7v2PatientDemographicsAndVisitResponse $ack, $objects = array(), $QPD8_error = null) {
+    $ack->generateAcknowledgment("AA", "0", "I", $objects);
+
+    return $this->populateExchangeACK($ack);
+  }
+
+  /**
+   * Generate 'Patient Demographics Response' acknowledgment
+   *
+   * @param CHL7v2PatientDemographicsAndVisitResponse $ack        Acknowledgment
+   * @param array                                     $objects    Objects
+   * @param string                                    $QPD8_error QPD-8 that contained the unrecognized domain
+   *
+   * @return string
+   */
+  function setPDRAE(CHL7v2PatientDemographicsAndVisitResponse $ack, $objects = null, $QPD8_error = null) {
+    $ack->generateAcknowledgment("AE", "204", "E", null, $QPD8_error);
 
     return $this->populateExchangeACK($ack);
   }
@@ -408,4 +435,3 @@ class CExchangeIHE extends CExchangeTabular {
     $this->getObservations();
   }
 }
-?>

@@ -32,6 +32,7 @@ class CHL7v2Error {
     CHL7v2Exception::UNEXPECTED_DATA_TYPE       => 207,
     CHL7v2Exception::DATA_TOO_LONG              => 102,
     CHL7v2Exception::UNKNOWN_TABLE_ENTRY        => 103,
+    CHL7v2Exception::UNKNOWN_KEY_IDENTIFIER     => 204,
   );
   
   /**
@@ -58,11 +59,27 @@ class CHL7v2Error {
    * @var string
    */
   public $level = self::E_WARNING;
-  
-  function getLocation(){
+
+  /**
+   * @var array
+   */
+  public $location;
+
+  /**
+   * Error location
+   *
+   * @return array|null
+   */
+  function getLocation() {
+    if ($this->location) {
+      return $this->location;
+    }
+
     $entity = $this->entity;
     
-    if (!$entity) return null;
+    if (!$entity) {
+      return null;
+    }
     
     $path = array();
     
@@ -78,11 +95,21 @@ class CHL7v2Error {
     
     return $path;
   }
-  
+
+  /**
+   * Get HL7 error code
+   *
+   * @return mixed
+   */
   function getHL7Code() {
     return CValue::read(self::$errorMap, $this->code, 207);
   }
-  
+
+  /**
+   * Get code location
+   *
+   * @return array
+   */
   function getCodeLocation() {
     return array (
       $this->getLocation(),
@@ -90,5 +117,3 @@ class CHL7v2Error {
     );
   }
 }
-
-?>

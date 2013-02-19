@@ -14,10 +14,22 @@
  * Acknowledgment v2 HL7
  */
 class CHL7v2Acknowledgment implements CHL7Acknowledgment {
+  /**
+   * @var CHL7Event|null
+   */
   var $event              = null;
+  /**
+   * @var CHL7v2EventACK
+   */
   var $event_ack          = null;
-  
+
+  /**
+   * @var CHL7v2Message
+   */
   var $message            = null;
+  /**
+   * @var CHL7v2MessageXML
+   */
   var $dom_message        = null;
   
   var $message_control_id = null;
@@ -26,15 +38,35 @@ class CHL7v2Acknowledgment implements CHL7Acknowledgment {
   var $hl7_error_code     = null;
   var $severity           = null;
   var $comments           = null;
+  /**
+   * @var CMbObject
+   */
   var $object             = null;
-  
+
+  /**
+   * @var CExchangeIHE
+   */
   var $_ref_exchange_ihe  = null;
   var $_mb_error_code     = null;
-    
+
+  /**
+   * Construct
+   *
+   * @param CHL7Event $event Event HL7
+   *
+   * @return CHL7v2Acknowledgment
+   */
   function __construct(CHL7Event $event = null) {
     $this->event = $event;
   }
 
+  /**
+   * Handle acknowledgment
+   *
+   * @param string $ack_hl7 HL7 acknowledgment
+   *
+   * @return DOMDocument
+   */
   function handle($ack_hl7) {
     $this->message = new CHL7v2Message();
     $this->message->parse($ack_hl7);
@@ -42,8 +74,22 @@ class CHL7v2Acknowledgment implements CHL7Acknowledgment {
     
     return $this->dom_message;
   }
-  
-  function generateAcknowledgment($ack_code, $mb_error_codes, $hl7_error_code = null, $severity = "E", $comments = null, $object = null) {
+
+  /**
+   * Generate acknowledgment
+   *
+   * @param string $ack_code       Acknowledgment code
+   * @param string $mb_error_codes Mediboard error code
+   * @param null   $hl7_error_code HL7 error code
+   * @param string $severity       Severity
+   * @param null   $comments       Comments
+   * @param null   $object         Object
+   *
+   * @return null|string
+   */
+  function generateAcknowledgment(
+      $ack_code, $mb_error_codes, $hl7_error_code = null, $severity = "E", $comments = null, $object = null
+  ) {
     $this->ack_code       = $ack_code;
     $this->mb_error_codes = $mb_error_codes;
     $this->hl7_error_code = $hl7_error_code;
@@ -61,7 +107,12 @@ class CHL7v2Acknowledgment implements CHL7Acknowledgment {
     
     return $this->event_ack->msg_hl7;
   }
-  
+
+  /**
+   * Get acknowledgment status
+   *
+   * @return string
+   */
   function getStatutAcknowledgment() {
     $xpath = new CHL7v2MessageXPath($this->dom_message);
 

@@ -76,6 +76,29 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     // Message Acknowledgment
     $this->addMSA($object);
 
+    // Error
+    $trigger_event = $object->event;
+    // Validation error
+    if ($errors = $trigger_event->message->errors) {
+      foreach ($errors as $_error) {
+        $this->addERR($object, $_error);
+      }
+    }
+
+    // Error unrecognized domain
+    if ($object->QPD8_error) {
+      $error           = new CHL7v2Error();
+      $error->code     = CHL7v2Exception::UNKNOWN_KEY_IDENTIFIER;
+      $error->location = array(
+        "QPD",
+        1,
+        8,
+        1
+      );
+
+      $this->addERR($object, $error);
+    }
+
     // Query Acknowledgment
     $this->addQAK($object->objects);
 
@@ -83,6 +106,11 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     $this->addQPD();
 
     $i = 0;
+    if (!$object->objects) {
+      return;
+    }
+
+    // Results
     foreach ($object->objects as $_object) {
       if ($_object instanceof CPatient) {
         $this->addPID($_object, $i);
@@ -128,6 +156,21 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
     $MSA = CHL7v2Segment::create("MSA", $this->message);
     $MSA->acknowledgment = $acknowledgment;
     $MSA->build($this);
+  }
+
+  /**
+   * ERR - Represents an HL7 ERR message segment (Error)
+   *
+   * @param CHL7Acknowledgment $acknowledgment Acknowledgment
+   * @param CHL7v2Error|null   $error          Error HL7
+   *
+   * @return void
+   */
+  function addERR(CHL7Acknowledgment $acknowledgment, $error = null) {
+    $ERR = CHL7v2Segment::create("ERR", $this->message);
+    $ERR->acknowledgment = $acknowledgment;
+    $ERR->error = $error;
+    $ERR->build($this);
   }
 
   /**

@@ -25,7 +25,7 @@ class CHL7v2SegmentQAK extends CHL7v2Segment {
   /**
    * @var array
    */
-  var $objects = array();
+  var $objects = null;
 
   /**
    * Build QPD segement
@@ -44,10 +44,18 @@ class CHL7v2SegmentQAK extends CHL7v2Segment {
     $QPD_request           = $hl7_message_initiator->getSegmentByName("QPD")->getStruct();
 
     $data[] = isset($QPD_request[1][0]) ? $QPD_request[1][0] : "PDQPDC_$event->code";
-    
+
     // QAK-2: Query Response Status (ID) (optional)
-    $data[] = (!$objects || count($objects) == 0) ? "NF" : "OK";
-    
+    if (!$objects) {
+      $data[] = "AE";
+    }
+    elseif (count($objects) == 0) {
+      $data[] = "NF";
+    }
+    else {
+      $data[] = "OK";
+    }
+
     // QAK-3: User Parameters (in successive fields) (Varies) (optional)
     $data[] = null;
 

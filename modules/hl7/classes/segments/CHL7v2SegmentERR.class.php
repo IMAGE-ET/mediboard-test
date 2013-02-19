@@ -85,10 +85,10 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       else {
         $data[] = "W";
         $data[] = array(
-           array (
+           /*array (
              "A002",
              CAppUI::tr("CHL7EventADT-AA-A002")
-           )
+           )*/
         );
       }
       

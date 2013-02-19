@@ -14,23 +14,43 @@
  * Patient Demographics and Visit Response, message XML HL7
  */
 class CHL7v2PatientDemographicsAndVisitResponse implements CHL7Acknowledgment {
+  /**
+   * @var CHL7Event|null
+   */
   var $event              = null;
-  var $event_ack          = null;
-  
+  /**
+   * @var CHL7v2EventACK
+   */
+
+  /**
+   * @var CHL7v2Message
+   */
   var $message            = null;
+  /**
+   * @var CHL7v2MessageXML
+   */
   var $dom_message        = null;
   
   var $message_control_id = null;
   var $ack_code           = null;
-  var $mb_error_codes     = null;
   var $hl7_error_code     = null;
   var $severity           = null;
   var $comments           = null;
   var $objects            = null;
-  
+  var $QPD8_error         = null;
+
+  /**
+   * @var CExchangeIHE
+   */
   var $_ref_exchange_ihe  = null;
-  var $_mb_error_code     = null;
-    
+
+  /**
+   * Construct
+   *
+   * @param CHL7Event $event Event HL7
+   *
+   * @return CHL7v2PatientDemographicsAndVisitResponse
+   */
   function __construct(CHL7Event $event = null) {
     $this->event = $event;
   }
@@ -53,15 +73,20 @@ class CHL7v2PatientDemographicsAndVisitResponse implements CHL7Acknowledgment {
   /**
    * Generate acknowledgment
    *
-   * @return null
+   * @param string     $ack_code       Acknowledgment code
+   * @param null       $hl7_error_code HL7 error code
+   * @param string     $severity       Severity
+   * @param array|null $objects        Objects
+   * @param array|null $QPD8_error     QPD-8 that contained the unrecognized domain
+   *
+   * @return null|string
    */
-  function generateAcknowledgment($ack_code, $mb_error_codes, $hl7_error_code = null, $severity = "E", $comments = null, $objects = null) {
+  function generateAcknowledgment($ack_code, $hl7_error_code = null, $severity = "E", $objects = null, $QPD8_error = null) {
     $this->ack_code       = $ack_code;
-    $this->mb_error_codes = $mb_error_codes;
     $this->hl7_error_code = $hl7_error_code;
     $this->severity       = $severity;
-    $this->comments       = CMbString::convertHTMLToXMLEntities($comments);
     $this->objects        = $objects;
+    $this->QPD8_error     = $QPD8_error;
 
     $this->event->_exchange_ihe = $this->_ref_exchange_ihe;
 
