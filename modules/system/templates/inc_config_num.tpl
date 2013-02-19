@@ -1,0 +1,20 @@
+{{assign var=field_name value=$m}}
+{{mb_default var=size value=4}}
+
+{{if @$class}}
+  {{assign var=field_name value="$field_name[$class]"}}
+
+  {{if @$var}}
+    {{assign var=field_name value="$field_name[$var]"}}
+  {{/if}}
+{{/if}}
+
+{{if @$form}}
+<script>
+Main.add(function(){
+  getForm("{{$form}}")["{{$field_name}}"].addSpinner();
+});
+</script>
+{{/if}}
+
+{{mb_include module=system template=inc_config_str size=$size}}
