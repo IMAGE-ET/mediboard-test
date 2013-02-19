@@ -298,7 +298,7 @@ class CExchangeSource extends CMbObject {
           $decrypted = rtrim(base64_decode($pwd), "\0\3");
           $decrypted = $cipher->decrypt($decrypted);
 
-          if ($decrypted) {mbTrace($decrypted);
+          if ($decrypted) {
             return $decrypted;
           }
         }
