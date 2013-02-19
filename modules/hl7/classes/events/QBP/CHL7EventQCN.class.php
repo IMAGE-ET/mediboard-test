@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Patient Demographics Query HL7
+ * Patient Demographics Query Cancel Query HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,19 +12,19 @@
  */
 
 /**
- * Interface CHL7EventQBP
- * Patient Demographics Query
+ * Interface CHL7EventQCN
+ * Patient Demographics Query Cancel Query
  */
-interface CHL7EventQBP {
+interface CHL7EventQCN {
   /**
    * Construct
    *
-   * @return CHL7EventQBP
+   * @return CHL7EventQCN
    */
   function __construct();
 
   /**
-   * Build QBP message
+   * Build QCN message
    *
    * @param CMbObject $object object
    *

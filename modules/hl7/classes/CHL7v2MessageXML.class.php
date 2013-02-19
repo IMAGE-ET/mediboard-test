@@ -90,6 +90,14 @@ class CHL7v2MessageXML extends CMbXMLDocument {
         return new CHL7v2GeneratePatientDemographicsResponse($encoding);
       }
     }
+
+    // Récupération des résultats du QCN
+    if ($event_type == "CHL7v2EventQCN") {
+      // Suppression d'une requête
+      if (CMbArray::in($event_code, CHL7v2CancelPatientDemographicsQuery::$event_codes)) {
+        return new CHL7v2CancelPatientDemographicsQuery($encoding);
+      }
+    }
     
     return new CHL7v2MessageXML($encoding);
 }

@@ -27,7 +27,7 @@ class CPDQ extends CIHE {
    * @var array
    */
   static $transaction_iti21 = array(
-    "Q22"
+    "Q22", "J01"
   );
 
   /**
@@ -43,11 +43,17 @@ class CPDQ extends CIHE {
   static $evenements = array(
     // ITI-21
     "Q22" => "CHL7EventQBPQ22",
+    "J01" => "CHL7EventQCNJ01",
 
     // ITI-22
     "ZV1" => "CHL7EventQBPZV1",
   );
 
+  /**
+   * Construct
+   *
+   * @return CPDQ
+   */
   function __construct() {
     $this->type = "PDQ";
   }
@@ -91,7 +97,13 @@ class CPDQ extends CIHE {
 
     foreach (CHL7::$versions as $_version => $_sub_versions) {
       if (in_array($version, $_sub_versions)) {
-        $classname = "CHL7{$_version}EventQBP$code";
+        if ($code == "Q22" || $code == "ZV1") {
+          $classname = "CHL7{$_version}EventQBP$code";
+        }
+        if ($code == "J01") {
+          $classname = "CHL7{$_version}EventQCN$code";
+        }
+
         return new $classname;
       }
     }

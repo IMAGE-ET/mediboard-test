@@ -336,7 +336,7 @@ class CExchangeIHE extends CExchangeTabular {
    *
    * @return string
    */
-  function setAckAA(CHL7Acknowledgment $ack, $mb_error_codes, $comments = null, CMbObject $mbObject = null) {
+  function setAckAA(CHL7Acknowledgment $ack, $mb_error_codes = null, $comments = null, CMbObject $mbObject = null) {
     $ack->generateAcknowledgment("AA", $mb_error_codes, "0", "I", $comments, $mbObject);
         
     return $this->populateExchangeACK($ack, $mbObject);

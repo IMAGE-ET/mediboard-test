@@ -16,9 +16,19 @@
  * Represents a RSP message structure
  */
 interface CHL7EventRSP {
+  /**
+   * Construct
+   *
+   * @return CHL7EventRSP
+   */
   function __construct(CHL7Event $trigger_event);
-  
+
+  /**
+   * Build QBP message
+   *
+   * @param CMbObject $object object
+   *
+   * @return mixed
+   */
   function build($object);
 }
-
-?>

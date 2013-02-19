@@ -416,6 +416,7 @@ $locales['CHL7EventQBPK22'] = 'ITI21 - RSP^K22';
 $locales['CHL7EventQBPQ22'] = 'ITI21 - QBP^Q22';
 $locales['CHL7EventQBPZV1'] = 'ITI22 - QBP^ZV1';
 $locales['CHL7EventQBPZV2'] = 'ITI22 - RSP^ZV2';
+$locales['CHL7EventQCNJ01'] = 'ITI21 - QCN^J01';
 $locales['CHL7EventSIUS12'] = 'RAD48 - SIU^S12';
 $locales['CHL7EventSIUS13'] = 'RAD48 - SIU^S13';
 $locales['CHL7EventSIUS14'] = 'RAD48 - SIU^S14';

@@ -683,7 +683,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     // Traitement Affectation
     if ($mbObject instanceof CAffectation) {
       $affectation = $mbObject;
-      $current_log = $affectation->_ref_current_log;
+
       if ($affectation->_no_synchro) {
         return;
       }

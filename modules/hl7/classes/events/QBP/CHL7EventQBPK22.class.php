@@ -15,6 +15,5 @@
  * Interface CHL7EventQBPK22
  * K22 - Find Candidates response
  */
-interface CHL7EventQBPK22 extends CHL7EventQBP {}
-
-?>
+interface CHL7EventQBPK22 extends CHL7EventQBP {
+}
