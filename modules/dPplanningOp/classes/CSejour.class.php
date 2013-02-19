@@ -215,6 +215,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   var $_ref_mode_sortie             = null;
   var $_ref_factures                = null;
   var $_ref_last_facture            = null;
+  var $_ref_prestation              = null;
 
   // External objects
   var $_ext_diagnostic_principal = null;

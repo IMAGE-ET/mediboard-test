@@ -1,7 +1,7 @@
 {{if $can->admin}}
   <button class="hslip"
           onclick="window.open('?m=dPcompteRendu&amp;a=aides_export_csv&amp;suppressHeaders=1&amp;owner={{$owner}}&amp;object_class={{$filter_class}}&amp;id={{"-"|implode:$aides_ids}}')">
-    {{tr}}Export-csv{{/tr}}
+    {{tr}}Export-CSV{{/tr}}
   </button>
   
   <button onclick="return popupImport('{{$owner->_guid}}');" class="hslip">{{tr}}Import-CSV{{/tr}}</button>

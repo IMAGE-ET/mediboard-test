@@ -20,7 +20,7 @@
       <button type="button" class="print notext" onclick="Admissions.showDocs('{{$_sejour->_id}}')"></button>
 
       {{if $conf.dPadmissions.show_deficience}}
-        {{mb_include module=patients template=inc_vw_antecedents type=deficience callback=reloadPresent}}
+        {{mb_include module=patients template=inc_vw_antecedents type=deficience callback=reloadPresent force_show=true}}
       {{/if}}
       
       {{foreach from=$_sejour->_ref_operations item=_op}}
