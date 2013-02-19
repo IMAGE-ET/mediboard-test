@@ -68,11 +68,7 @@ var PlageConsult = {
     <td style="width: 50%">
       <select name="chir_id" class="{{$filter->_props.chir_id}}">
         <option value="">&mdash; Choisir un praticien</option>
-        {{foreach from=$praticiens item=_praticien}}
-        <option class="mediuser" style="border-color: #{{$_praticien->_ref_function->color}};" value="{{$_praticien->_id}}">
-          {{$_praticien->_view}}
-        </option>
-       {{/foreach}}
+        {{mb_include module=mediusers template=inc_options_mediuser list=$praticiens}}
       </select>
     </td>
   </tr>
