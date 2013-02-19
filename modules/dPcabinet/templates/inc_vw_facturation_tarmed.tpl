@@ -15,8 +15,6 @@
   <tr>
     <td colspan="8">
       <button class="printPDF" onclick="printFacture('{{$facture->_id}}', 0, 1);">Edition des BVR</button>
-      <button class="cut" onclick="Facture.cutFacture('{{$facture->_id}}');"
-        {{if $facture->_nb_factures != 1 || $facture->cloture}}disabled="disabled"{{/if}}> Eclatement</button>
       <button class="print" onclick="printFacture('{{$facture->_id}}', 1, 0);">Justificatif de remboursement</button>
       {{if !$facture->_ref_patient->avs}}
         <div class="small-warning" style="display:inline">N° AVS manquant pour le patient</div>
@@ -220,28 +218,17 @@
 {{if !$facture->_reglements_total_patient}}
   <tr>
     <td colspan="7">
-      {{if $facture->_nb_factures == 1}}
-        <form name="change_type_facture" method="post">
-          {{mb_class object=$facture}}
-          {{mb_key   object=$facture}}
-          <input type="hidden" name="cloture" value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
-          <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-          {{if !$facture->cloture}}
-            <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
-          {{elseif !isset($reglement|smarty:nodefaults) || ($facture->_ref_reglements|@count == 0)}}
-            <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button> Cloturée le {{$facture->cloture|date_format:"%d/%m/%Y"}}
-          {{/if}}
-        </form>
-      {{else}}
-        <form name="fusionner_eclatements" method="post">
-          <input type="hidden" name="dosql" value="do_fusion_facture_aed" />
-          <input type="hidden" name="m" value="dPcabinet" />
-          <input type="hidden" name="del" value="0" />
-          {{mb_key   object=$facture}}
-          <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-          <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" > Fusionner les éclats de facture </button>
-        </form>
-      {{/if}}
+      <form name="change_type_facture" method="post">
+        {{mb_class object=$facture}}
+        {{mb_key   object=$facture}}
+        <input type="hidden" name="cloture" value="{{if !$facture->cloture}}{{$date}}{{/if}}" />
+        <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+        {{if !$facture->cloture}}
+          <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Cloturer la facture</button>
+        {{elseif !isset($reglement|smarty:nodefaults) || ($facture->_ref_reglements|@count == 0)}}
+          <button class="submit" type="button" onclick="Facture.modifCloture(this.form);" >Réouvrir la facture</button> Cloturée le {{$facture->cloture|date_format:"%d/%m/%Y"}}
+        {{/if}}
+      </form>
     </td>
   </tr>
 {{/if}}
