@@ -20,7 +20,7 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
  * 
  * @param string $subDir    modules|style
  * @param string $apacheGrp Name of the primary group for apache user
- * 
+ *
  * @return void
  */
 function setup($subDir, $apacheGrp) {
@@ -249,7 +249,7 @@ function setupCall( $command, $argv ) {
   if (count($argv) == 2) {
     $subDir     = $argv[0];
     $apacheGrp  = $argv[1];
-    
+
     setup($subDir, $apacheGrp);
     return 0;
   }
