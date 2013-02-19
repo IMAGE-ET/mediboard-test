@@ -146,34 +146,34 @@ if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
     $facture_patient->loadRefs();
   }
 }
-else {
-  if (CAppUI::conf("ref_pays") == 2) {
-    $where["cloture"] = " IS NULL";
-  }
-  // On essaie de retrouver une facture ouverte
-  if ($facture->loadObject($where)) {
+elseif (CAppUI::conf("ref_pays") == 1 && $consult->facture_id) {
+  if ($facture->load($consult->facture_id)) {
     $facture_patient = $facture;
     $facture_patient->loadRefs();
   }
 }
-
-if (!$facture_patient->facture_id) {
-  // Sinon chargement de la facture cloturée
-  if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
-    $where["cloture"] = " IS NOT NULL";
+elseif (CAppUI::conf("ref_pays") == 2) {
+  $where["cloture"] = " IS NULL";
+  //On essaie de retrouver une facture ouverte
+  if ($facture->loadObject($where)) {
+    $facture_patient = $facture;
+    $facture_patient->loadRefs();
   }
-  if ($factures = $facture->loadList($where)) {
-    foreach ($factures as $_facture) {
-      $_facture->loadRefPatient();
-      $_facture->loadRefsConsultation();
-      foreach ($_facture->_ref_consults as $consultation) {
-        if ($consultation->_id == $consult->_id) {
-          $facture_patient = $_facture;
-          $facture_patient->loadRefs();
-          break;
+  else {
+    $where["cloture"] = " IS NOT NULL";
+    if ($factures = $facture->loadList($where)) {
+      foreach ($factures as $_facture) {
+        $_facture->loadRefPatient();
+        $_facture->loadRefsConsultation();
+        foreach ($_facture->_ref_consults as $consultation) {
+          if ($consultation->_id == $consult->_id) {
+            $facture_patient = $_facture;
+            $facture_patient->loadRefs();
+            break;
+          }
         }
-      }
-    }  
+      }  
+    }
   }
 }
 
