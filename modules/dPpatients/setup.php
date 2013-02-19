@@ -2065,7 +2065,13 @@ class CSetupdPpatients extends CSetup {
                 ADD `situation_famille` ENUM ('S','M','G','P','D','W','A')";
     $this->addQuery($query);
 
-    $this->mod_version = "1.74";
+    $this->makeRevision("1.74");
+    $query = "ALTER TABLE `patients`
+                ADD `is_smg` ENUM ('0','1') DEFAULT '0' AFTER `cmu`";
+    $this->addQuery($query);
+
+
+    $this->mod_version = "1.75";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

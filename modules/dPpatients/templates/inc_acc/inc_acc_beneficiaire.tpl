@@ -108,6 +108,10 @@ Main.add(checkFinAmo);
     <td>{{mb_field object=$patient field="ATNC"}}</td>
   </tr>
   <tr>
+    <th>{{mb_label object=$patient field="is_smg"}}</th>
+    <td>{{mb_field object=$patient field="is_smg"}}</td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$patient field="fin_validite_vitale"}}</th>
     <td>{{mb_field object=$patient field="fin_validite_vitale" form="editFrm" register=true}}</td>
   </tr>

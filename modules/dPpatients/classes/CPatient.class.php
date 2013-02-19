@@ -97,6 +97,7 @@ class CPatient extends CMbObject {
   var $vip              = null;
   var $tutelle          = null;
   var $situation_famille= null;
+  var $is_smg           = null; //titulaire de soins médicaux gratuits
 
   var $medecin_traitant_declare = null;
   var $medecin_traitant = null;
@@ -334,6 +335,7 @@ class CPatient extends CMbObject {
     $props["civilite"]          = "enum list|m|mme|mlle|enf|dr|pr|me|vve";
     $props["adresse"]           = "text confidential";
     $props["province"]          = "str";
+    $props["is_smg"]            = "bool default|0";
     $props["ville"]             = "str confidential seekable|begin";
     $props["cp"]                = "str minLength|4 maxLength|5 confidential";
     $props["tel"]               = "phone confidential";
