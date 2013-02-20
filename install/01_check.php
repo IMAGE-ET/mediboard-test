@@ -215,9 +215,9 @@ showHeader();
 <h3>Droits d'accès distants</h3>
 
 <p>
-  Certaines ressources ne devraient pas être accessibles autrement que depuis le serveur local.
-  <br />
-  En revanche, il convient de s'assurer que certaines autres le soient bel et bien. 
+  Certaines ressources ne devraient pas être accessibles autrement que depuis le serveur local.<br />
+  Pour ce faire, il faut autoriser les fichiers <code>.htaccess</code> de Mediboard à redéfinir certaines règles, en
+  spécifiant <code>AllowOverride All</code> dans les fichiers de configuration Apache pour le répértoire web.
 </p>
   
 <table class="tbl" >
@@ -239,18 +239,12 @@ $restriction = new CUrlRestriction;
 foreach ($restriction->getAll() as $_restriction) { ?>
   <tr>
     <td><strong><?php echo $_restriction->url; ?></strong></td>
-    <td>
-      <?php if ($_restriction->allowed) { ?>
-        Autorisé
-      <?php } else { ?>
-        Interdit
-      <?php } ?>
-    </td>
+    <td>Interdit (HTTP 403)</td>
     <td>
       <?php if ($_restriction->check()) { ?>
         <div class="info">OK</div>
       <?php } else { ?>
-        <div class="error">Erreur</div>
+        <div class="warning">Erreur</div>
       <?php } ?>
     </td>
   </tr>

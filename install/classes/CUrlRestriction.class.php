@@ -16,7 +16,6 @@
 class CUrlRestriction extends CCheckable {
   var $url = "";
   var $description = "";
-  var $allowed = false;
 
   /**
    * Get the last HTTP code from a requested URL (follow redirection)
@@ -44,16 +43,13 @@ class CUrlRestriction extends CCheckable {
   }
   
   function check($strict = true){
-    $code = substr($this->getHTTPResponseCode($this->url), 0, 1);
-    
-    if ( $this->allowed && $code == 2 ||
-        !$this->allowed && $code == 4) {
-      return true;
-    }
-    
-    return false;
+    $code = substr($this->getHTTPResponseCode($this->url), 0, 3);
+    return $code == 403;
   }
-  
+
+  /**
+   * @return self[]
+   */
   function getAll(){
     $http = "http://";
     if (array_key_exists("HTTPS", $_SERVER)) {
@@ -63,12 +59,6 @@ class CUrlRestriction extends CCheckable {
     $url = $http.dirname(dirname($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']));
     
     $restrictions = array();
-    
-    $restriction = new self;
-    $restriction->url = "$url/tmp/locales-fr.js";
-    $restriction->description = "Fichier de traductions";
-    $restriction->allowed = true;
-    $restrictions[] = $restriction;
     
     $restriction = new self;
     $restriction->url = "$url/files";
