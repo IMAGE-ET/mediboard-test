@@ -138,7 +138,8 @@ if($praticien_id && !$service_id) {
     $ljoin = array();
     $ljoin["operations"] = "operations.sejour_id = sejour.sejour_id";
     $ljoin["plagesop"]   = "operations.plageop_id = plagesop.plageop_id";
-    $where[] = "operations.anesth_id = '$praticien_id' OR (operations.anesth_id IS NULL AND plagesop.anesth_id = '$praticien_id')";
+    $where[] = "operations.anesth_id = '$praticien_id' OR (operations.anesth_id IS NULL AND plagesop.anesth_id = '$praticien_id')
+                OR praticien_id = '$praticien_id'";
   } else {
     $where["praticien_id"] = " = '$praticien_id'";
   }
