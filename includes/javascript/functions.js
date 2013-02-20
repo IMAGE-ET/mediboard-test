@@ -1492,7 +1492,7 @@ Element.addMethods({
     }
     
     bodyContent += "<"+"style type='text/css'>";
-    $$("body style").each(function(elt) {
+    $$("style").each(function(elt) {
       bodyContent += elt.innerHTML;
     });
     bodyContent += "<"+"/style>";
