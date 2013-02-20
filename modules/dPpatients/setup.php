@@ -2070,8 +2070,12 @@ class CSetupdPpatients extends CSetup {
                 ADD `is_smg` ENUM ('0','1') DEFAULT '0' AFTER `cmu`";
     $this->addQuery($query);
 
+    $this->makeRevision("1.75");
+    $query = "ALTER TABLE `constantes_medicales`
+                ADD `cetonemie` FLOAT UNSIGNED AFTER `glycemie`";
+    $this->addQuery($query);
 
-    $this->mod_version = "1.75";
+    $this->mod_version = "1.76";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

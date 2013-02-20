@@ -189,6 +189,9 @@ $locales['CConstantesMedicales-bricker-desc'] = 'Bricker';
 $locales['CConstantesMedicales-catheter_suspubien'] = 'Cathéter sus-pubien';
 $locales['CConstantesMedicales-catheter_suspubien-court'] = 'Cath. sus-pub.';
 $locales['CConstantesMedicales-catheter_suspubien-desc'] = 'Cathéter sus-pubien';
+$locales['CConstantesMedicales-cetonemie'] = 'Cétonémie';
+$locales['CConstantesMedicales-cetonemie-court'] = 'Cétonémie';
+$locales['CConstantesMedicales-cetonemie-desc'] = 'Cétonémie capilaire';
 $locales['CConstantesMedicales-comment'] = 'Commentaire sur le relevé';
 $locales['CConstantesMedicales-comment-court'] = 'Commentaire';
 $locales['CConstantesMedicales-comment-desc'] = 'Commentaire sur le relevé';
@@ -1737,4 +1740,3 @@ $locales['pref-VitaleVisionDir'] = 'Répertoire VitaleVision';
 $locales['pref-VitaleVisionDir-desc'] = 'Répertoire du fichier généré par Vitale Vision';
 $locales['pref-vCardExport'] = 'Afficher les boutons d\'export vCard';
 $locales['pref-vCardExport-desc'] = 'Afficher les boutons d\'export vCard';
-?>

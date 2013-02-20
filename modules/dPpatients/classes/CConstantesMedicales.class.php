@@ -147,6 +147,11 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "g/l",
       "min" => 0, "max" => 4
     ),
+    "cetonemie"         => array(
+      "type" => "biolo",
+      "unit" => "g/l",
+      "min" => 0, "max" => 4
+    ),
     "hemoglobine_rapide" => array(
       "type" => "biolo",
       "unit" => "g/dl",
@@ -567,6 +572,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['score_sedation']         = 'float';
     $specs['frequence_respiratoire'] = 'float pos';
     $specs['glycemie']               = 'float pos max|10';
+    $specs['cetonemie']              = 'float pos max|10';
     $specs['hemoglobine_rapide']     = 'float';
     $specs['PVC']                    = 'float min|0';
     $specs['perimetre_abdo']         = 'float min|0';
