@@ -518,15 +518,14 @@ refreshFunction = function(chir_id) {
         {{mb_field object=$op field="info" typeEnum="checkbox"}}
       </td>
     </tr>
-  
-    {{if "reservation"|module_active}}
-      <tr>
-        <th></th>
-        <td>
-          {{mb_include module="reservation" template="inc_button_examen" form="editOp"}}
-        </td>
-      </tr>
-    {{/if}}
+  {{/if}}
+  {{if "reservation"|module_active}}
+    <tr>
+      <th></th>
+      <td>
+        {{mb_include module="reservation" template="inc_button_examen" form="editOp"}}
+      </td>
+    </tr>
   {{/if}}
 </table>
 

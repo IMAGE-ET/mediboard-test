@@ -1307,8 +1307,10 @@ class CPatient extends CMbObject {
       $this->_ref_praticiens[$praticien->_id] = $praticien;
       $praticien->loadRefFunction()->loadRefGroup();
 
-      $consult->loadRefConsultAnesth()->countDocItems();
-
+      foreach ($consult->_refs_dossiers_anesth as $_dossier_anesth) {
+        $_dossier_anesth->countDocItems();
+      }
+      
       // Grossesse
       if ($maternite_active && $consult->grossesse_id) {
         $result = ceil((mbDaysRelative($this->_ref_grossesses[$consult->grossesse_id]->_date_fecondation, $consult->_date))/7);
