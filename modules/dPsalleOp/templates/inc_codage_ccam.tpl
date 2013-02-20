@@ -49,7 +49,7 @@
     {{if $can->admin || $m == "dPpmsi" || (!$subject->_coded && $subject->_canRead)}}
     <tr>
       <td class="text">
-        {{mb_include template="../../dPsalleOp/templates/inc_manage_codes"}}
+        {{mb_include module=salleOp template=inc_manage_codes}}
       </td>
     </tr>
     {{/if}}

@@ -34,31 +34,31 @@ Main.add(function () {
     <td id="listConsult" style="width: 240px;"></td>
     <td>
       {{if $consult->_id}}
-      {{assign var="patient" value=$consult->_ref_patient}}
-      
-      <div id="finishBanner">
-        {{include file="../../dPcabinet/templates/inc_finish_banner.tpl"}}
-      </div>
-    
-      <div id="Infos">
-        {{include file="../../dPcabinet/templates/inc_patient_infos_accord_consult.tpl"}}
-      </div>
-    
-      <div id="mainConsult">
-        {{include file="../../dPcabinet/templates/inc_main_consultform.tpl"}}
-      </div>
-    
-      <div id="fdrConsult">
-        {{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}
-      </div>
-      
-      <!-- Reglement -->
-      {{mb_script module="dPcabinet" script="reglement"}}
-      <script type="text/javascript">
-        Reglement.consultation_id = '{{$consult->_id}}';
-        Reglement.user_id = '{{$userSel->_id}}';
-        Reglement.register('{{$consult->_id}}');
-      </script>
+        {{assign var="patient" value=$consult->_ref_patient}}
+
+        <div id="finishBanner">
+          {{mb_include module=cabinet template=inc_finish_banner}}
+        </div>
+
+        <div id="Infos">
+          {{mb_include module=cabinet template=inc_patient_infos_accord_consult}}
+        </div>
+
+        <div id="mainConsult">
+          {{mb_include module=cabinet template=inc_main_consultform}}
+        </div>
+
+        <div id="fdrConsult">
+          {{mb_include module=cabinet template=inc_fdr_consult}}
+        </div>
+
+        <!-- Reglement -->
+        {{mb_script module="dPcabinet" script="reglement"}}
+        <script type="text/javascript">
+          Reglement.consultation_id = '{{$consult->_id}}';
+          Reglement.user_id = '{{$userSel->_id}}';
+          Reglement.register('{{$consult->_id}}');
+        </script>
       
       {{/if}}
     </td>

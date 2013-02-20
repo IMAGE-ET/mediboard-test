@@ -3,7 +3,7 @@
   <form name="newExamen" action="?m=dPcabinet" method="get">
     <select name="type_examen" onchange="ExamDialog.init(this.value)">
       <option value="">&mdash; Choisir un type d'examen</option>
-      {{if $_is_anesth}}
+      {{if $consult->_is_anesth}}
         <option value="exam_possum">Score Possum</option>
         <option value="exam_nyha">Classification NYHA</option>
       {{else}}
@@ -11,11 +11,16 @@
       {{/if}}
     </select>
     <input type="hidden" name="consultation_id" value="{{$consult->_id}}" />
-    
+    {{if $consult->_is_anesth}}
+      <input type="hidden" name="dossier_anesth_id" value="{{$dossier_anesth_id}}" />
+    {{/if}}
     <script type="text/javascript">
        ExamDialog.init = function(type_exam){
          this.sForm      = "newExamen";
          this.sConsultId = "consultation_id";
+         {{if $consult->_is_anesth}}
+           this.sDossierAnesthId = "dossier_anesth_id";
+         {{/if}}
          this.pop(type_exam);
        }
     </script>

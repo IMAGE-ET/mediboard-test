@@ -108,7 +108,7 @@ if ($consult->_id) {
   $date = $consult->_ref_plageconsult->date;
 }
 else {
-  $consultAnesth->consultation_anesth_id = 0;
+  $consultAnesth->_id = 0;
 }
 
 if ($consult->_id) {
@@ -227,8 +227,8 @@ $total_tarmed = $consult->loadRefsActesTarmed();
 $total_caisse = $consult->loadRefsActesCaisse();
 $soustotal_base = array("tarmed" => $total_tarmed["base"], "caisse" => $total_caisse["base"]);
 $soustotal_dh   = array("tarmed" => $total_tarmed["dh"], "caisse" => $total_caisse["dh"]);
-$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"],2);
-$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"],2);
+$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"], 2);
+$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"], 2);
 
 if (CModule::getActive("maternite")) {
   $consult->loadRefGrossesse();
@@ -327,4 +327,3 @@ else {
   
   $smarty->display("../../dPcabinet/templates/inc_full_consult.tpl");
 }
-?>

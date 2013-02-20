@@ -1,5 +1,5 @@
 {{if "dPmedicament"|module_active}}
-{{mb_script module="dPmedicament" script="medicament_selector"}}
+{{mb_script module="medicament" script="medicament_selector"}}
 {{/if}}
 <script type="text/javascript">
 
@@ -39,10 +39,10 @@ Main.add(function () {
         <tr>
           <td style="width: 50%;">
 			      <!-- Fiches d'examens -->
-			      {{mb_script module="dPcabinet" script="exam_dialog"}}
+			      {{mb_script module="cabinet" script="exam_dialog"}}
 			      <script type="text/javascript">
 			        {{if !$readonly}}
-			          ExamDialog.register('{{$consult->_id}}','{{$consult->_class}}');
+			          ExamDialog.register('{{$consult->_id}}');
 			        {{/if}}
 			      
 			        onExamComplete = function(){
@@ -72,7 +72,7 @@ Main.add(function () {
       
       {{if $consult->_id}}
       <form name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: onExamComplete})">
-      <input type="hidden" name="m" value="dPcabinet" />
+      <input type="hidden" name="m" value="cabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
       {{mb_key object=$consult}}

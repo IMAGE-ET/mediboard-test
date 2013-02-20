@@ -1,8 +1,7 @@
 {{assign var="chir_id" value=$consult->_ref_plageconsult->_ref_chir->_id}}
 {{assign var="object" value=$consult}}
-{{assign var="module" value="dPcabinet"}}
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
-
+{{assign var="module" value="cabinet"}}
 {{mb_include module=salleOp template=js_codage_ccam}}
 
 {{if "dPmedicament"|module_active}}
@@ -14,6 +13,8 @@
   {{mb_script module="dPprescription" script="element_selector"}}
   {{mb_script module="dPprescription" script="prescription"}}
 {{/if}}
+
+{{mb_script module="dPcabinet" script="reglement"}}
 
 <script type="text/javascript">
 
@@ -37,6 +38,7 @@ function refreshConstantesMedicales (force) {
 refreshFacteursRisque = function(){
   var url = new Url("dPcabinet", "httpreq_vw_facteurs_risque");
 	url.addParam("consultation_id", "{{$consult->_id}}");
+  url.addParam("dossier_anesth_id", "{{$consult->_ref_consult_anesth->_id}}");
 	url.requestUpdate("facteursRisque");
 }
 
@@ -70,11 +72,12 @@ Main.add(function () {
   <li><a href="#fdrConsult">Documents</a></li>
   <li><a href="#reglement">Réglements</a></li>
 </ul>
+
 <hr class="control_tabs" />
 
-
 <!-- Tabs -->
-<div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl" sejour_id=$consult->_ref_consult_anesth->_ref_sejour->_id}}</div>
+<div id="AntTrait" style="display: none;">
+  {{mb_include module=cabinet template=inc_ant_consult sejour_id=$consult->_ref_consult_anesth->_ref_sejour->_id}}</div>
 
 <div id="Constantes" style="display: none;">
   <!-- We put a fake form for the ExamCompFrm form, before we insert the real one -->
@@ -84,11 +87,18 @@ Main.add(function () {
   </form>
 </div>
 
-<div id="Exams" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_clinique.tpl"}}</div>
-<div id="Intub" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/intubation.tpl"}}</div>
-
-<div id="ExamsComp" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_complementaire.tpl"}}</div>
-<div id="InfoAnesth" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_infos_anesth.tpl"}}</div>
+<div id="Exams" style="display: none;">
+  {{mb_include module=cabinet template=inc_consult_anesth/acc_examens_clinique}}
+</div>
+<div id="Intub" style="display: none;">
+  {{mb_include module=cabinet template=inc_consult_anesth/intubation}}
+</div>
+<div id="ExamsComp" style="display: none;">
+  {{mb_include module=cabinet template=inc_consult_anesth/acc_examens_complementaire}}
+</div>
+<div id="InfoAnesth" style="display: none;">
+  {mb_{include module=cabinet template=inc_consult_anesth/acc_infos_anesth}}
+</div>
 
 {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
 <div id="prescription_sejour" style="display: none"></div>
@@ -116,7 +126,6 @@ Main.add(function () {
   <hr class="control_tabs"/>
   
   <div id="ccam" style="display: none;">
-    {{assign var="module" value="dPcabinet"}}
     {{assign var="subject" value=$consult}}
     {{mb_include module=salleOp template=inc_codage_ccam}}
   </div>
@@ -131,7 +140,7 @@ Main.add(function () {
   {{if $consult->sejour_id}}
     <div id="cim" style="display: none;">
       {{assign var="sejour" value=$consult->_ref_sejour}}
-      {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl" modeDAS="1"}}
+      {{mb_include module=salleOp template=inc_diagnostic_principal modeDAS="1"}}
     </div>
   {{/if}}
   
@@ -150,10 +159,11 @@ Main.add(function () {
 </div>
 {{/if}}
 	
-<div id="fdrConsult" style="display: none;">{{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}</div>
+<div id="fdrConsult" style="display: none;">
+  {{mb_include module=cabinet template=inc_fdr_consult}}
+</div>
 
 <!-- Reglement -->
-{{mb_script module="dPcabinet" script="reglement"}}
 <script type="text/javascript">
   Reglement.consultation_id = '{{$consult->_id}}';
   Reglement.user_id = '{{$userSel->_id}}';

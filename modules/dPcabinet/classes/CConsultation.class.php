@@ -1258,8 +1258,11 @@ TESTS A EFFECTUER
     return $nbDocs;
   }
 
-  function loadRefConsultAnesth() {
+  function loadRefConsultAnesth($dossier_anesth_id = null) {
     $this->loadRefsDossiersAnesth();
+    if ($dossier_anesth_id !== null) {
+      return $this->_ref_consult_anesth = $this->_refs_dossiers_anesth[$dossier_anesth_id];
+    }
     return $this->_ref_consult_anesth = @$this->loadUniqueBackRef("consult_anesth");
   }
   

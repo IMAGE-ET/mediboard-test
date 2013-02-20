@@ -7,7 +7,7 @@
             <!-- Fiches d'examens -->
             {{mb_script module="dPcabinet" script="exam_dialog"}}
             <script type="text/javascript">
-              ExamDialog.register('{{$consult->_id}}','{{$consult->_class}}');
+              ExamDialog.register('{{$consult->_id}}','{{$consult_anesth->_id}}');
             </script>
           </td>
           
