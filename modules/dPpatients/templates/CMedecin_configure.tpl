@@ -77,6 +77,45 @@ var Process = {
   }
 }
 
+function importSF(form) {
+  var url = new Url("patients", "import_sages_femmes");
+  url.addParam("pass", Process.pass);
+  url.addElement(form.departement);
+  url.requestUpdate("resultSF", {onComplete:
+    function() {
+      if (form.auto.checked) {
+        var select = form.departement;
+        if ((select.length -1) != select.selectedIndex) {
+          select.selectedIndex += 1;
+          importSF(form);
+        }
+      }
+    },
+    insertion: function(element, content){
+      element.innerHTML += content;
+    }
+  } );
+}
+
+function importKine(form) {
+  var url = new Url("patients", "import_kines");
+  url.addParam("pass", Process.pass);
+  url.addElement(form.departement);
+  url.requestUpdate("resultKine", {onComplete:
+               function() {
+                 if (form.auto.checked) {
+                   var select = form.departement;
+                   if ((select.length -1) != select.selectedIndex) {
+                     select.selectedIndex += 1;
+                     importKine(form);
+                   }
+                 }
+               },
+    insertion: function(element, content){
+      element.innerHTML += content;
+    }
+  } );
+}
 </script>
 
 {{assign var=class value=CMedecin}}
@@ -98,7 +137,7 @@ var Process = {
 
 </form>
 
-<h2>Import de la base données de médecins</h2>
+<h2>Import de la base de données de médecins</h2>
 
 <table class="tbl">
   <tr>
@@ -167,4 +206,68 @@ var Process = {
     <td id="total-updates" />
     <td id="total-errors" />
   </tr>
+</table>
+
+<h2>
+  Import de la base de données des sages-femmes
+</h2>
+
+<table class="tbl">
+  <tr>
+    <th colspan="3" style="width: 50%">{{tr}}Action{{/tr}}</th>
+    <th colspan="2" style="width: 50%">{{tr}}Status{{/tr}}</th>
+  </tr>
+  <tr>
+    <td colspan="3" style="vertical-align: top">
+      <form name="importSFForm" action="#" method="get" onsubmit="return false">
+        <input type="checkbox" name="auto" />
+        <label for="auto">Automatique</label>
+        &mdash;
+        Département :
+        <select name="departement">
+          {{foreach from=$departements item=_departement}}
+            {{if is_numeric($_departement)}}
+              <option value="{{$_departement}}">{{$_departement}}</option>
+            {{/if}}
+          {{/foreach}}
+        </select>
+        <button type="button" class="tick" onclick="importSF(this.form)">Traiter</button>
+        <button type="button" class="cancel" onclick="$('resultSF').update()">Vider</button>
+      </form>
+    </td>
+    <td id="resultSF"></td>
+  </tr>
+</table>
+
+<h2>
+  Import de la base de données des kinésithérapeutes
+</h2>
+
+<table class="tbl">
+  <tr>
+    <th colspan="3" style="width: 50%">{{tr}}Action{{/tr}}</th>
+    <th colspan="2" style="width: 50%">{{tr}}Status{{/tr}}</th>
+  </tr>
+  <tr>
+    <td colspan="3" style="vertical-align: top">
+      <form name="importKineForm" action="#" method="get" onsubmit="return false">
+        <input type="checkbox" name="auto" />
+        <label for="auto">Automatique</label>
+        &mdash;
+        Département :
+        <select name="departement">
+          {{foreach from=$departements item=_departement}}
+            {{if is_numeric($_departement)}}
+              <option value="{{$_departement}}">{{$_departement}}</option>
+            {{/if}}
+          {{/foreach}}
+        </select>
+        <button type="button" class="tick" onclick="importKine(this.form)">Traiter</button>
+        <button type="button" class="cancel" onclick="$('resultKine').update()">Vider</button>
+      </form>
+    </td>
+    <td id="resultKine"></td>
+  </tr>
+</table>
+
 </table>
