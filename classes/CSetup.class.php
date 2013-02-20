@@ -480,6 +480,7 @@ class CSetup {
    * @return void
    */
   function getFieldRenameQueries($object_class, $from, $to) {
+    // CUserLog
     $query =
       "UPDATE `user_log` 
        SET   
@@ -489,7 +490,6 @@ class CSetup {
          `object_class` = '$object_class' AND 
          `fields` = '$from' AND 
          `type` IN('store', 'merge')";
-    
     $this->addQuery($query);
     
     $query =
@@ -503,7 +503,45 @@ class CSetup {
          `object_class` = '$object_class' AND 
          `fields` LIKE '%$from%' AND 
          `type` IN('store', 'merge')";
-    
+    $this->addQuery($query);
+
+    // CExClassHostField
+    $query =
+      "UPDATE `ex_class_host_field`
+       SET
+         `field` = '$to'
+       WHERE
+         `host_class` = '$object_class' AND
+         `field` = '$from'";
+    $this->addQuery($query);
+
+    // CExClassConstraint
+    $query =
+      "UPDATE `ex_class_constraint`
+       SET
+         `field` = REPLACE(`field`, '.$object_class-$from', '.$object_class-$to')
+       WHERE
+         `field` LIKE '%.$object_class-$from%'";
+    $this->addQuery($query);
+
+    $query =
+      "UPDATE `ex_class_constraint`
+       LEFT JOIN `ex_class_event` ON `ex_class_event`.`ex_class_event_id` = `ex_class_constraint`.`ex_class_event_id`
+       SET
+         `field` = '$to'
+       WHERE
+         `field` = '$from' AND
+         `ex_class_event`.`host_class` = '$object_class'";
+    $this->addQuery($query);
+
+    $query =
+      "UPDATE `ex_class_constraint`
+       LEFT JOIN `ex_class_event` ON `ex_class_event`.`ex_class_event_id` = `ex_class_constraint`.`ex_class_event_id`
+       SET
+         `field` = REPLACE(`field`, '$from.', '$to.')
+       WHERE
+         `field` LIKE '$from.%' AND
+         `ex_class_event`.`host_class` = '$object_class'";
     $this->addQuery($query);
   }
 }
