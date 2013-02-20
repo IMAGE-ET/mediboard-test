@@ -14,7 +14,6 @@
  
 CCanDo::checkRead();
 
-$type = CValue::get("type", "assurance_classique");
 $consult_id = CValue::get("consult_id");
 
 $consult = new CConsultation();
@@ -22,6 +21,24 @@ $consult->_id = $consult_id;
 $consult->load();
 $consult->loadRefPatient();
 
+$type = "";
+switch($consult->type_assurance) {
+  case "classique" :
+    $type = "assurance_classique";
+    break;
+
+  case "at" :
+    $type = "accident_travail";
+    break;
+
+  case "smg" :
+    $type = "soins_medicaux_gratuits";
+    break;
+
+  case "maternite" :
+    $type = "maternite";
+    break;
+}
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("consult", $consult);

@@ -1781,7 +1781,12 @@ class CSetupdPcabinet extends CSetup {
                 ADD `cle_at` INT (11) AFTER `num_at`";
     $this->addQuery($query);
 
-    $this->mod_version = "1.91";
+    $this->makeRevision("1.91");
+    $query = "ALTER TABLE `consultation`
+                ADD `type_assurance` ENUM('classique','at','maternite','smg');";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.92";
   }
 }
 ?>

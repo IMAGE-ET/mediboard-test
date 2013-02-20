@@ -62,6 +62,7 @@ class CConsultation extends CFacturable {
 
   var $du_patient       = null; // somme que le patient doit régler
   var $du_tiers         = null;
+  var $type_assurance   = null;
   var $date_at          = null;
   var $fin_at           = null;
   var $pec_at           = null;
@@ -252,6 +253,7 @@ class CConsultation extends CFacturable {
     $props["du_patient"]                = "currency show|0";
     $props["du_tiers"  ]                = "currency show|0";
 
+    $props["type_assurance"] = "enum list|classique|at|maternite|smg";
     $props["date_at"]  = "date";
     $props["fin_at"]   = "dateTime";
     $props["num_at"]   = "num length|8";
