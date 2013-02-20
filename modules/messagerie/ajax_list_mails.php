@@ -31,6 +31,7 @@ $mails = $mail->loadMatchingList($order, $limit);
 foreach ($mails as $_mail) {
   $_mail->loadReadableHeader();
   $_mail->loadRefsFwd();
+  $_mail->checkApicrypt();
 }
 
 

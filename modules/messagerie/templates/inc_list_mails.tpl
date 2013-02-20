@@ -41,12 +41,15 @@
         <label title="{{$_mail->from}}">{{$_mail->_from}}</label>
       </td>
       <td>
-        {{if count($_mail->_attachments)}}
-          <img title="{{$_mail->_attachments|@count}}" src="modules/messagerie/images/attachments.png" alt="attachments"/>
-        {{/if}}
         <a href="#{{$_mail->_id}}"  onclick="messagerie.modalExternalOpen('{{$_mail->_id}}','{{$account}}');" style="display: inline; vertical-align: middle;">
           {{if $_mail->subject}}{{mb_include template=inc_vw_type_message subject=$_mail->subject}}{{$_mail->subject|truncate:100:"(...)"}}{{else}}{{tr}}CUserMail-no_subject{{/tr}}{{/if}}
         </a>
+        {{if count($_mail->_attachments)}}
+          <img title="{{$_mail->_attachments|@count}}" src="modules/messagerie/images/attachments.png" alt="attachments"/>
+        {{/if}}
+        {{if $_mail->_is_apicrypt}}
+          <img title="apicrypt" src="modules/messagerie/images/cle.png" alt="attachments" style="height:15px;"/>
+        {{/if}}
       </td>
       <td{{if $_mail->_text_plain->content == ""}} class="empty">({{tr}}CUserMail-content-empty{{/tr}}){{else}}>{{$_mail->_text_plain->content|truncate}}{{/if}}</td>
     </tr>

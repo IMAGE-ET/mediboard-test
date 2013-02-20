@@ -51,18 +51,18 @@
         <h1>{{tr}}CUserMail-msg-noContentText{{/tr}}</h1>
       {{/if}}
 
-    {{if $mail->_is_hprim}}
-    <div class="small-info">
-      {{tr var1="apicrypt"}}CUserMail-hashprim{{/tr}}
-      {{mb_include module="hprim21" template="inc_hprim_header"}}
-    </div>
-    {{/if}}
 
     {{if $mail->_is_apicrypt}}
-    <div class="small-info">
-      {{tr var1="apicrypt"}}CUserMail-isApicrypt{{/tr}} <strong>apicrypt</strong>
-    </div>
+      <div class="small-warning">
+        <img src="modules/{{$m}}/images/cle.png" alt=""/> {{tr var1="apicrypt"}}CUserMail-isApicrypt{{/tr}} <strong>apicrypt</strong>
+      </div>
     {{/if}}
+    {{if $mail->_is_hprim}}
+      {{tr var1="apicrypt"}}CUserMail-hashprim{{/tr}}
+      {{mb_include module="hprim21" template="inc_hprim_header"}}
+    {{/if}}
+
+
 {{if $mail->_attachments|count}}
 <table class="form">
   <tr><th class="title">{{tr}}Attachments{{/tr}} ({{$nbAttachPicked}}/{{$nbAttachAll}}) {{if $nbAttachPicked != $nbAttachAll}}<a href="#" tilte="{{tr}}CMailAttachment-button-getAllAttachments-desc{{/tr}}" onclick="messagerie.getAttachment('{{$mail->_id}}','0')" class="button download">{{tr}}CMailAttachment-button-getAllAttachments{{/tr}}</a>{{/if}}</th></tr>

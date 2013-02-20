@@ -28,9 +28,8 @@ if (!$object->_id) {
   CAppUI::stepAjax("CUserMail-link-objectNull", UI_MSG_ERROR);
 }
 
-if ($attach_list == "" && !$text_plain) {
+if ($attach_list == "" && !$text_plain && !$text_html) {
   CAppUI::stepAjax("CMailAttachment-msg-no_object_to_attach", UI_MSG_ERROR);
-  echo CAppUI::getMsg();
 }
 
 $attachments = explode("-", $attach_list);

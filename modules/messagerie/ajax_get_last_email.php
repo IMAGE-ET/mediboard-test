@@ -9,6 +9,8 @@
  */
 
 CCanDo::checkRead();
+CPop::checkImapLib();
+
 $user_id = CValue::get("user_id");
 
 $user = new CMediusers();
@@ -29,7 +31,12 @@ $log_pops = $log_pop->loadMatchingList();
 foreach ($log_pops as $_pop) {
   //pop init
   $pop = new CPop($_pop);
-  $pop->open();
+  if (!$pop->open()) {
+    //disable the account because of a problem
+    $_pop->active = 0;
+    $_pop->store();
+    CAppUI::stepAjax("CPop-error-imap_open-disable", UI_MSG_ERROR);
+  }
   $unseen = $pop->search('UNSEEN');
 
   if (count($unseen)>0) {

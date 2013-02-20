@@ -31,13 +31,11 @@ class CPop{
 
 
   /**
-   * CPop constructor
+   * constructor
    *
-   * @param CExchangeSource $source IMAP source
-   *
-   * @return string $_server
+   * @param object $source sourcePOP
    */
-  function CPop($source) {
+  function __construct($source) {
     //stock the source
     $this->source = $source;
 
@@ -58,21 +56,20 @@ class CPop{
   /**
    * Open the remote mailbox
    *
-   * @return ressource
+   * @return ressource|bool
    */
   function open() {
 
     if (!isset($this->_server)) {
       CAppUI::stepAjax("CPop-error-notInitiated", UI_MSG_ERROR);
     }
-
     $this->source->password = $this->source->getPassword();
     $this->_mailbox = @imap_open($this->_server, $this->source->user, $this->source->password, 0, 0);
     if ($this->_mailbox === false ) {
-      CAppUI::stepAjax("CPop-error-imap_open", UI_MSG_ERROR);
+      return false;
     }
     //get the basics
-    $this->_mailbox_info = imap_check($this->_mailbox);
+    $this->_mailbox_info = @imap_check($this->_mailbox);
     return $this->_mailbox;
 
   }
@@ -83,7 +80,7 @@ class CPop{
    * @return object
    */
   function check() {
-      $this->_mailbox_info = imap_check($this->_mailbox);
+      $this->_mailbox_info = @imap_check($this->_mailbox);
     return $this->_mailbox_info;
   }
 
@@ -340,6 +337,21 @@ class CPop{
       }
     }
     return $retour;
+  }
+
+
+  /**
+   * check if imap_lib exist
+   *
+   * @return null
+   */
+  static function checkImapLib() {
+    if (!function_exists("imap_open")) {
+      CMbObject::error("no-imap-lib");
+      CAppUI::stepAjax("no-imap-lib", UI_MSG_ERROR);
+      return false;
+    }
+    return true;
   }
 
   /**

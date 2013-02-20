@@ -324,6 +324,23 @@ class CUserMail extends CMbObject{
   }
 
   /**
+   * Check if the content plain is from apicrypt
+   *
+   * @return bool|null
+   */
+  function checkApicrypt() {
+
+    if ($this->_text_plain->content == "") {
+      return false;
+    }
+
+    if (stripos($this->_text_plain->content, "****FIN****") !== false) {
+      $this->_is_apicrypt = true;
+    }
+    return $this->_is_apicrypt;
+  }
+
+  /**
    * Load complete email
    *
    * @return int|void

@@ -13,6 +13,8 @@
  
  
 CCanDo::checkRead();
+CPop::checkImapLib();
+
 $nbAccount = CAppUI::conf("messagerie CronJob_nbMail");
 $older = CAppUI::conf("messagerie CronJob_olderThan");
 
@@ -34,7 +36,12 @@ foreach ($sources as $_source) {
     return;
   }
   $pop = new CPop($_source);
-  $pop->open();
+  if (!$pop->open()) {
+    //disable the account because of a problem
+    $_source->active = 0;
+    $_source->store();
+    CMbObject::error("CPop-error-imap_open");
+  }
   $unseen = $pop->search('UNSEEN');
 
   if (count($unseen)>0) {

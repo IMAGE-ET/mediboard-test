@@ -8,6 +8,8 @@
  */
 
 CCanDo::checkRead();
+CPop::checkImapLib();
+
 $account = CValue::get("account");
 $user = CMediusers::get();
 
