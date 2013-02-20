@@ -44,6 +44,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "handle_telephone_number",
     "handle_PID_31",
     "handle_PV1_3",
+    "handle_PV1_7",
     "handle_PV1_10",
     "handle_PV1_14",
     "handle_PV1_36",
@@ -92,6 +93,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $handle_telephone_number = null;
   var $handle_PID_31           = null;
   var $handle_PV1_3            = null;
+  var $handle_PV1_7            = null;
   var $handle_PV1_10           = null;
   var $handle_PV1_14           = null;
   var $handle_PV1_36           = null;
@@ -141,6 +143,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
       "handle_telephone_number",
       "handle_PID_31",
       "handle_PV1_3",
+      "handle_PV1_7",
       "handle_PV1_10",
       "handle_PV1_14",
       "handle_PV1_36",
@@ -220,6 +223,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     
      // =>PV1
     $props["handle_PV1_3"]  = "enum list|name|config_value|idex default|name";
+    $props["handle_PV1_7"]  = "bool default|1";
     $props["handle_PV1_10"] = "enum list|discipline|service default|discipline";
     $props["handle_PV1_14"] = "enum list|admit_source|ZFM default|admit_source";
     $props["handle_PV1_36"] = "enum list|discharge_disposition|ZFM default|discharge_disposition";

@@ -1001,8 +1001,13 @@ class CSetuphl7 extends CSetup {
                 ADD `iv` VARCHAR (16) AFTER `password`,
                 ADD `iv_passphrase` VARCHAR (16) AFTER `ssl_passphrase`;";
     $this->addQuery($query);
+
+    $this->makeRevision("0.58");
+    $query = "ALTER TABLE `hl7_config`
+                ADD `handle_PV1_7` ENUM ('0','1') DEFAULT '1';";
+    $this->addQuery($query);
     
-    $this->mod_version = "0.58";
+    $this->mod_version = "0.59";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

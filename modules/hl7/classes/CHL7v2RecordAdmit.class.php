@@ -1297,6 +1297,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function getAttendingDoctor(DOMNode $node, CSejour $newVenue) {
     $PV17 = $this->query("PV1.7", $node);
+
+    // On ne récupère pas le praticien dans le cas où l'on a un séjour d'urgences et que la config est à non
+    if ($newVenue->type == "urg" && !$this->_ref_sender->_configs["handle_PV1_7"]) {
+      return;
+    }
     
     $mediuser = new CMediusers();
     foreach ($PV17 as $_PV17) {
