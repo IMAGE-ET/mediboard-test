@@ -52,25 +52,25 @@ Main.add(function () {
 });
 
 function refreshTabsReveil() {
+  refreshTabReveil("preop");
+  refreshTabReveil("encours");
+  refreshTabReveil("ops");
+  refreshTabReveil("reveil");
+  refreshTabReveil("out");
+}
+
+function refreshTabReveil(type) {
   var url = new Url("dPsalleOp", "httpreq_reveil");
-  
   url.addParam("bloc_id", "{{$bloc->_id}}");
   url.addParam("date", "{{$date}}");
-  
-  url.addParam("type", "preop");
-  url.requestUpdate("preop");
-  
-  url.addParam("type", "encours");
-  url.requestUpdate("encours");
-  
-  url.addParam("type", "ops");
-  url.requestUpdate("ops");
-  
-  url.addParam("type", "reveil");
-  url.requestUpdate("reveil");
-  
-  url.addParam("type", "out");
-  url.requestUpdate("out");
+  url.addParam("type", type);
+  if (type == "out") {
+    url.addParam("present_only", $V($('present_only')));
+    if ($("present_only_reel")) {
+      url.addParam("present_only_reel", $V($('present_only_reel')));
+    }
+  }
+  url.requestUpdate(type);
 }
 
 codageCCAM = function(operation_id){
@@ -104,11 +104,21 @@ printDossier = function(sejour_id, operation_id) {
 
      
   <ul id="reveil_tabs" class="control_tabs">
-    <li><a class="empty" href="#preop"  >{{tr}}SSPI.Preop{{/tr}}   <small>(&ndash;)</small></a></li>
-    <li><a class="empty" href="#encours">{{tr}}SSPI.Encours{{/tr}} <small>(&ndash;)</small></a></li>
-    <li><a class="empty" href="#ops"    >{{tr}}SSPI.Attente{{/tr}} <small>(&ndash;)</small></a></li>
-    <li><a class="empty" href="#reveil" >{{tr}}SSPI.Reveil{{/tr}}  <small>(&ndash;)</small></a></li>
-    <li><a class="empty" href="#out"    >{{tr}}SSPI.Sortie{{/tr}}  <small>(&ndash;)</small></a></li>
+    <li onmousedown="refreshTabReveil('preop')">
+      <a class="empty" href="#preop">{{tr}}SSPI.Preop{{/tr}} <small>(&ndash;)</small></a>
+    </li>
+    <li onmousedown="refreshTabReveil('encours')">
+      <a class="empty" href="#encours">{{tr}}SSPI.Encours{{/tr}} <small>(&ndash;)</small></a>
+    </li>
+    <li onmousedown="refreshTabReveil('ops')">
+      <a class="empty" href="#ops"    >{{tr}}SSPI.Attente{{/tr}} <small>(&ndash;)</small></a>
+    </li>
+    <li onmousedown="refreshTabReveil('reveil')">
+      <a class="empty" href="#reveil" >{{tr}}SSPI.Reveil{{/tr}}  <small>(&ndash;)</small></a>
+    </li>
+    <li onmousedown="refreshTabReveil('out')">
+      <a class="empty" href="#out"    >{{tr}}SSPI.Sortie{{/tr}}  <small>(&ndash;)</small></a>
+    </li>
     
     <li style="float:right; font-weight: bold;">
       {{mb_include template=inc_filter_reveil}}

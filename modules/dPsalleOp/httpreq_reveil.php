@@ -13,7 +13,8 @@ CCanDo::checkRead();
 $date    = CValue::getOrSession("date", mbDate());
 $bloc_id = CValue::getOrSession("bloc_id");
 $type    = CValue::get("type"); // Type d'affichage => encours, ops, reveil, out
-
+$present_only = CValue::getOrSession("present_only", 0);
+$present_only_reel = CValue::getOrSession("present_only_reel", 0);
 $modif_operation = CCanDo::edit() || $date >= mbDate();
 
 // Selection des plages opératoires de la journée
@@ -40,7 +41,7 @@ else {
 }
 $where[] = "plageop_id ".CSQLDataSource::prepareIn(array_keys($plages))." OR (plageop_id IS NULL AND date = '$date')";
 
-switch($type){
+switch ($type) {
   case 'preop':
     $where["entree_salle"] = "IS NULL";
     $order = "time_operation";
@@ -83,6 +84,9 @@ if ($use_poste) {
 }
 
 $nb_sorties_non_realisees = 0;
+$now = mbTime();
+
+$use_sortie_reveil_reel = CAppUI::conf("dPsalleOp COperation use_sortie_reveil_reel");
 
 foreach ($listOperations as $key => $op) {
   $sejour = $op->loadRefSejour(1);
@@ -91,6 +95,17 @@ foreach ($listOperations as $key => $op) {
   if ($sejour->type == "exte") {
     unset($listOperations[$key]);
     continue;
+  }
+
+  if ($type == "out") {
+    if ($present_only && $op->sortie_reveil_possible < $now) {
+      unset($listOperations[$key]);
+      continue;
+    }
+    elseif ($present_only_reel && $op->sortie_reveil_reel && $op->sortie_reveil_reel < $now) {
+      unset($listOperations[$key]);
+      continue;
+    }
   }
 
   $op->loadRefChir(1);
@@ -104,7 +119,7 @@ foreach ($listOperations as $key => $op) {
   }
   
   if (($type == "ops" || $type == "reveil") && CModule::getActive("bloodSalvage")) {
-    $op->blood_salvage= new CBloodSalvage();
+    $op->blood_salvage = new CBloodSalvage();
     $where = array();
     $where["operation_id"] = "= '$key'";
     $op->blood_salvage->loadObject($where);
@@ -114,14 +129,22 @@ foreach ($listOperations as $key => $op) {
       $op->blood_salvage->totaltime = mbTimeRelative($op->blood_salvage->recuperation_start, $op->blood_salvage->transfusion_end);
     }
     elseif ($op->blood_salvage->recuperation_start) {
-      $op->blood_salvage->totaltime = mbTimeRelative($op->blood_salvage->recuperation_start, mbDate($op->blood_salvage->_datetime)." ".mbTime());
+      $from = $op->blood_salvage->recuperation_start;
+      $to   = mbDate($op->blood_salvage->_datetime)." ".mbTime();
+      $op->blood_salvage->totaltime = mbTimeRelative($from, $to);
     }
   }
   
   if ($type == "reveil" || $type == "out") {
-    if (!$sejour->sortie_reelle) {
+    if ($use_sortie_reveil_reel) {
+      if ($op->sortie_reveil_reel > $now) {
+        $nb_sorties_non_realisees++;
+      }
+    }
+    elseif ($op->sortie_reveil_possible > $now) {
       $nb_sorties_non_realisees++;
     }
+
     $sejour->loadRefsAffectations();
     if ($sejour->_ref_first_affectation->_id) {
       $sejour->_ref_first_affectation->loadRefLit();
@@ -149,5 +172,7 @@ $smarty->assign("hour"                   , mbTime());
 $smarty->assign("modif_operation"        , $modif_operation);
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("nb_sorties_non_realisees", $nb_sorties_non_realisees);
+$smarty->assign("present_only"           , $present_only);
+$smarty->assign("present_only_reel"      , $present_only_reel);
 
 $smarty->display("inc_reveil_$type.tpl");
