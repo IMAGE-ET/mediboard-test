@@ -61,20 +61,26 @@ class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
     
     // Message Acknowledgment
     $this->addMSA($object);
-    
+
     // Error
     if (is_array($object->mb_error_codes)) {
-      foreach ($object->mb_error_codes as $_mb_error_code) {
-        $object->_mb_error_code = $_mb_error_code;
+      if ($this->version < "2.5") {
+        $object->_mb_error_code = reset($object->mb_error_codes);
         $this->addERR($object);
+      }
+      else {
+        foreach ($object->mb_error_codes as $_mb_error_code) {
+          $object->_mb_error_code = $_mb_error_code;
+          $this->addERR($object);
+        }
       }
     }
     else {
-      if ($object->_mb_error_code) {
+      if ($object->mb_error_codes) {
         $object->_mb_error_code = $object->mb_error_codes;
         $this->addERR($object);
       }
-    }  
+    }
 
     $trigger_event = $object->event;
     // Validation error

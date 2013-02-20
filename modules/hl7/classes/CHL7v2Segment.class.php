@@ -51,11 +51,22 @@ class CHL7v2Segment extends CHL7v2Entity {
     if ($this->name === $message->getHeaderSegmentName()) {
       array_unshift($fields, $message->fieldSeparator);
     }
+
+    // Don't count empty fields on the right
+    $count_fields = count($fields);
+    for ($i = $count_fields-1; $i >= 0; $i--) {
+      if ($fields[$i] === "") {
+        $count_fields--;
+      }
+      else {
+        break;
+      }
+    }
     
     $_segment_specs = $specs->getItems();
     
     // Check the number of fields
-    if (count($fields) > count($_segment_specs)) {
+    if ($count_fields > count($_segment_specs)) {
       $this->error(CHL7v2Exception::TOO_MANY_FIELDS, $data, $this, CHL7v2Error::E_WARNING);
     }
    

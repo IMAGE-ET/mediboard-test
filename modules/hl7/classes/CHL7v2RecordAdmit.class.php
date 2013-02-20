@@ -86,9 +86,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $this->_ref_sender = $sender;
 
     // Acquittement d'erreur : identifiants RI et NA, VN non fournis
-    /*if (!$data['admitIdentifiers'] && !$this->getVenueAN($sender, $data)) {
+    if (!$data['admitIdentifiers'] && !$this->getVenueAN($sender, $data)) {
       return $exchange_ihe->setAckAR($ack, "E200", null, $newPatient);
-    }*/
+    }
 
     // Traitement du patient
     $hl7v2_record_person = new CHL7v2RecordPerson();
@@ -1023,7 +1023,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
 
     // Si pas de lit on retourne une affectation vide/couloir
-    if (!$PV1_3 || !$this->queryTextNode("PL.3", $PV1_3)) {
+    if (!$PV1_3) {
+      return $affectation;
+    }
+
+    if (!$this->queryTextNode("PL.3", $PV1_3)) {
       // On essaye de récupérer le service dans ce cas depuis l'UF d'hébergement
       $uf           = new CUniteFonctionnelle();
       $uf->group_id = $newVenue->group_id;

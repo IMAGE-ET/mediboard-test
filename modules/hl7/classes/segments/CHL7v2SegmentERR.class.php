@@ -117,15 +117,17 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       // ERR-1: Error Code and Location (ELD) (optional repeating)
       if ($version < "2.5") {
         $data[] = array(
-          null,
-          null,
-          null,
           array(
-            $acknowledgment->hl7_error_code,
             null,
             null,
-            $acknowledgment->_mb_error_code,
-            CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
+            null,
+            array(
+              $acknowledgment->hl7_error_code,
+              null,
+              null,
+              $acknowledgment->_mb_error_code,
+              CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
+            )
           )
         );
         return $this->fill($data);

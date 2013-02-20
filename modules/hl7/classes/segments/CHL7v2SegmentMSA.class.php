@@ -69,4 +69,3 @@ class CHL7v2SegmentMSA extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-?>
