@@ -10,7 +10,7 @@
  * @link       http://www.mediboard.org
  */
 
-require_once "includes/header.php" ;
+require_once "includes/checkauth.php";
 
 showHeader();
 ?>
