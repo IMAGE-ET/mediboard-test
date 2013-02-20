@@ -1,20 +1,47 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage sip
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * SIP Event Handler
+ *
+ * @category SIP
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
+
+/**
+ * Class CSipObjectHandler
+ * SIP Event Handler
  */
 
 class CSipObjectHandler extends CEAIObjectHandler {
+  /**
+   * @var array
+   */
   static $handled = array ("CPatient", "CCorrespondantPatient", "CIdSante400");
-  
+
+  /**
+   * If object is handled ?
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return bool
+   */
   static function isHandled(CMbObject $mbObject) {
     return in_array($mbObject->_class, self::$handled);
   }
-  
+
+  /**
+   * Trigger after event store
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onAfterStore(CMbObject $mbObject) {
     if (!parent::onAfterStore($mbObject)) {
       return;
@@ -26,14 +53,22 @@ class CSipObjectHandler extends CEAIObjectHandler {
     }
 
     // Si serveur et pas d'IPP sur le patient
-    if ((isset($mbObject->_no_ipp) && ($mbObject->_no_ipp == 1)) &&
-        CAppUI::conf('sip server')) {
+    if ((isset($mbObject->_no_ipp) && ($mbObject->_no_ipp == 1)) && CAppUI::conf('sip server')) {
       return;
     }
     
     $this->sendFormatAction("onAfterStore", $mbObject);
   }
 
+  /**
+   * Trigger before event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function onBeforeMerge(CMbObject $mbObject) {
     if (!parent::onBeforeMerge($mbObject)) {
       return;
@@ -106,7 +141,14 @@ class CSipObjectHandler extends CEAIObjectHandler {
 
     $this->sendFormatAction("onBeforeMerge", $mbObject);
   }
-  
+
+  /**
+   * Trigger after event merge
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterMerge(CMbObject $mbObject) {
     if (!parent::onAfterMerge($mbObject)) {
       return;
@@ -114,7 +156,14 @@ class CSipObjectHandler extends CEAIObjectHandler {
     
     $this->sendFormatAction("onAfterMerge", $mbObject);
   }
-  
+
+  /**
+   * Trigger after event delete
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function onAfterDelete(CMbObject $mbObject) {
     if (!parent::onAfterDelete($mbObject)) {
       return;
@@ -123,4 +172,3 @@ class CSipObjectHandler extends CEAIObjectHandler {
     $this->sendFormatAction("onAfterDelete", $mbObject);
   }
 }
-?>

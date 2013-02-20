@@ -51,6 +51,7 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
       return;
     }
 
+    $send_diags = false;
     switch ($mbObject->_class) {
       // CSejour 
       // Envoi des actes / diags soit quand le séjour est facturé, soit quand le sejour a une sortie réelle,
@@ -72,7 +73,9 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           $evt = (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ? 
                      "CHPrimXMLEvenementsServeurEtatsPatient" : "CHPrimXMLEvenementsPmsi";
                      
-          $this->sendEvenementPMSI($evt, $sejour);         
+          $this->sendEvenementPMSI($evt, $sejour);
+
+          $send_diags = true;
         }
       
         break;
@@ -105,6 +108,15 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     if (CAppUI::conf("sa send_only_with_ipp_nda")) {
       if (!$patient->_IPP || !$sejour->_NDA) {
         throw new CMbException("CSaObjectHandler-send_only_with_ipp_nda", UI_MSG_ERROR);
+      }
+    }
+
+    if (CAppUI::conf("sa send_diags_with_actes") && !$send_diags) {
+      if ($sejour->DP || $sejour->DR || (count($sejour->loadRefDossierMedical()->_codes_cim) > 0)) {
+        $evt = (CAppUI::conf("hprimxml send_diagnostic") == "evt_serveuretatspatient") ?
+          "CHPrimXMLEvenementsServeurEtatsPatient" : "CHPrimXMLEvenementsPmsi";
+
+        $this->sendEvenementPMSI($evt, $sejour);
       }
     }
 

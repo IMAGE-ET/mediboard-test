@@ -37,6 +37,8 @@
     {{mb_include module=system template=inc_config_bool var=send_only_with_ipp_nda}}
     {{assign var=list_types_sejour value='|'|implode:$sejour_types}}
     {{mb_include module=system template=inc_config_enum var=send_only_with_type values=|$list_types_sejour}}
+
+    {{mb_include module=system template=inc_config_bool var=send_diags_with_actes}}
     
     <tr>
       <td class="button" colspan="10">

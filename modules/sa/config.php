@@ -13,6 +13,7 @@ $dPconfig["sa"] = array (
   "send_only_with_type"    => "",
   "send_actes_consult"     => "0",
   "send_actes_interv"      => "0",
+  "send_diags_with_actes"  => "0"
 );
 
 ?>
