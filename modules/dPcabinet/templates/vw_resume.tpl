@@ -185,24 +185,27 @@ function newExam(sAction, consultation_id) {
               </td>
               
               <td  class="compta" style="text-align: center">
-              {{if $_consult->tarif}}
-                {{if $_consult->du_patient}}
-                <div style="display: inline; {{if !$_consult->patient_date_reglement}} color: #f00;{{/if}}">
-                  {{mb_value object=$_consult field=_reglements_total_patient}}
-                </div>
-                /
+                {{assign var=chir_id value=$_consult->_ref_plageconsult->chir_id}}
+                {{if isset($listPrat.$chir_id|smarty:nodefaults)}}
+                  {{if $_consult->tarif}}
+                    {{if $_consult->du_patient}}
+                    <div style="display: inline; {{if !$_consult->patient_date_reglement}} color: #f00;{{/if}}">
+                      {{mb_value object=$_consult field=_reglements_total_patient}}
+                    </div>
+                    /
+                    {{/if}}
+              
+                    {{mb_value object=$_consult field=du_patient}}
+                    -
+                    {{if $_consult->du_tiers}}
+                    <div style="display: inline; {{if !$_consult->tiers_date_reglement}} color: #f00;{{/if}}">
+                      {{mb_value object=$_consult field=_reglements_total_tiers}}
+                    </div>
+                    /
+                    {{/if}}
+                    {{mb_value object=$_consult field=du_tiers}}
+                  {{/if}}
                 {{/if}}
-          
-                {{mb_value object=$_consult field=du_patient}}
-                -
-                {{if $_consult->du_tiers}}
-                <div style="display: inline; {{if !$_consult->tiers_date_reglement}} color: #f00;{{/if}}">
-                  {{mb_value object=$_consult field=_reglements_total_tiers}}
-                </div>
-                /
-                {{/if}}
-                {{mb_value object=$_consult field=du_tiers}}
-              {{/if}}
               </td>
             </tr>
           {{/if}}

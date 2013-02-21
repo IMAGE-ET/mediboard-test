@@ -1,14 +1,15 @@
-<?php /* $Id$ */
-
+<?php 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage dPcabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
+ */
 
 CCanDo::checkRead();
-
 $patient_id = CValue::get("patient_id");
 
 $patient = new CPatient;
@@ -74,9 +75,15 @@ foreach ($patient->_ref_sejours as $sejour) {
   }
 }
 
+// L'utilisateur est-il praticien ?
+$user = CMediusers::get();
+$user->loadRefFunction();
+$listPrat = $user->loadPraticiensCompta();
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("patient", $patient);
+$smarty->assign("patient" , $patient);
+$smarty->assign("listPrat", $listPrat);
 
 $smarty->display("vw_resume.tpl");
