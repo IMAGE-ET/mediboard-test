@@ -63,8 +63,8 @@ class CPop{
     if (!isset($this->_server)) {
       CAppUI::stepAjax("CPop-error-notInitiated", UI_MSG_ERROR);
     }
-    $this->source->password = $this->source->getPassword();
-    $this->_mailbox = @imap_open($this->_server, $this->source->user, $this->source->password, 0, 0);
+    $password = $this->source->getPassword();
+    $this->_mailbox = @imap_open($this->_server, $this->source->user, $password, 0, 0);
     if ($this->_mailbox === false ) {
       return false;
     }

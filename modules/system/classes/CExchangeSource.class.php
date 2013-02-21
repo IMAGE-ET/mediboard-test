@@ -206,7 +206,7 @@ class CExchangeSource extends CMbObject {
       $this->password = null;
     }
     else {
-      if (!empty($this->password)) {
+      if ($this->fieldModified("password")) {
         $this->password = $this->encryptString();
       }
     }
