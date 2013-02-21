@@ -10,6 +10,29 @@
  */
 
 CCanDo::checkEdit();
+
+/**
+ * Fontion pour éviter la duplication de code qui traite une adresse dans le cas d'un retour à la ligne
+ * 
+ * @param object $adresse l'adresse a traiter
+ * 
+ * @return array
+ */
+function traitements($adresse) {
+  $tab = array("group1" => "", "group2" => "");
+  
+  if (stristr($adresse, "\r\n")) {
+    $tab["group1"] = stristr($adresse, "\r\n", true);
+    $tab["group2"] = stristr($adresse, "\r\n");
+    $tab["group2"] = str_replace("\r\n",'',$tab["group2"]);
+  }
+  else {
+    $tab["group1"] = substr($adresse, 0, 30);
+    $tab["group2"] = substr($adresse, 30);
+  }
+  return $tab;
+}
+
 $user = CMediusers::get();
 
 $facture_class        = CValue::get("facture_class");
@@ -99,12 +122,13 @@ if ($edition_bvr) {
     // Praticien selectionné
     $praticien = $facture->_ref_praticien;
     $function_prat = $praticien->loadRefFunction();
+    $group = $function_prat->loadRefGroup();
     $adherent = $praticien->adherent;
     
     $acompte = 0;
     $nb_factures = count($facture->_montant_factures_caisse);
     $num_fact = 0;
-    
+    $patient_facture = $facture->_ref_patient;
     foreach ($facture->_montant_factures_caisse as $cle_facture => $montant_facture) {
       if ($acompte < $facture->_montant_avec_remise) {
         //Création de la page de la facture
@@ -131,83 +155,64 @@ if ($edition_bvr) {
         $pdf->setFont($font, '', 8);
         
         // C + D : Auteur de la facture
-        if (stristr($function_prat->adresse, "\r\n")) {
-          $adresse_part1 = stristr($function_prat->adresse, "\r\n", true);
-          $adresse_part2 = stristr($function_prat->adresse, "\r\n");
-          $adresse_part2 = str_replace("\r\n",'',$adresse_part2);
-        }
-        else {
-          $adresse_part1 = substr($function_prat->adresse, 0, 30);
-          $adresse_part2 = substr($function_prat->adresse, 30);
-        }
+        $func_adrr = traitements($function_prat->adresse);
+        $adresse_prat1 = $func_adrr["group1"];
+        $adresse_prat2 = $func_adrr["group2"];
+        
+        $group_adrr = traitements($group->adresse);
+        $adresse_group1 = $group_adrr["group1"];
+        $adresse_group2 = $group_adrr["group2"];
+        
         if (strlen($function_prat->cp)>4) {
           $function_prat->cp =  substr($function_prat->cp, 1);
         }
-        if (strlen($facture->_ref_patient->cp)>4) {
-          $facture->_ref_patient->cp =  substr($facture->_ref_patient->cp, 1);
+        if (strlen($patient_facture->cp)>4) {
+          $patient_facture->cp =  substr($patient_facture->cp, 1);
         }
         $auteur = array(
           "50" => "Auteur facture",
-          $user->_view,
-          "$function_prat->_view",
-          $adresse_part1,
-          $adresse_part2,
-          $function_prat->cp." ".$function_prat->ville,
+          $group->raison_sociale,
+          $adresse_group1,
+          $adresse_group2,
+          $group->cp." ".$group->ville,
           "80" => "Four. de prestations",
           "Dr. ".$praticien->_view,
           "$function_prat->_view",
-          $adresse_part1,
-          $adresse_part2,
+          $adresse_prat1,
+          $adresse_prat2,
           $function_prat->cp." ".$function_prat->ville,
         );
         $tab[$colonne1] = $auteur;
 
         // E
-        $adresse1 = $adresse2 = "";
-        if (stristr($facture->_ref_patient->adresse, "\r\n")) {
-          $adresse1 = stristr($facture->_ref_patient->adresse, "\r\n", true);
-          $adresse2 = stristr($facture->_ref_patient->adresse, "\r\n");
-          $adresse2 = str_replace("\r\n", '', $adresse2);
+        $assur = array();
+        $assurance_patient = null;
+        if ($facture->assurance_maladie && !$facture->send_assur_base && $facture->type_facture == "maladie") {
+          $assurance_patient = $facture->_ref_assurance_maladie;
+        }
+        elseif ($facture->assurance_accident && !$facture->send_assur_compl && $facture->type_facture == "accident") {
+          $assurance_patient = $facture->_ref_assurance_accident;
         }
         else {
-          $adresse1 = substr($facture->_ref_patient->adresse, 0, 30);
-          $adresse2 = substr($facture->_ref_patient->adresse, 30);
+          $assurance_patient = $patient_facture;
         }
-        $destinataire = array(
-          "nom"=> $facture->_ref_patient->_view,
-          "adresse1"=> $adresse1,
-          "adresse2"=> $adresse2,
-          "cp"=> $facture->_ref_patient->cp." ".$facture->_ref_patient->ville,
-        );
-         
-//        if ($facture->cession_creance || $facture->type_facture == "accident") {
-          $correspondant = new CCorrespondantPatient();
-          
-          if ($facture->assurance_maladie && $cle_facture == 0 && !$facture->send_assur_base) {
-            $correspondant->load($facture->assurance_maladie);
-          }
-          elseif ($facture->assurance_accident && $cle_facture == 1 && !$facture->send_assur_compl) {
-            $correspondant->load($facture->assurance_accident);
-          }
-          
-          if ($correspondant->_id) {
-            if (strlen($correspondant->cp)>4) {
-              $correspondant->cp = substr($correspondant->cp, 1);
-            }
-            $destinataire["nom"] = $correspondant->nom." ".$correspondant->prenom;
-            if (stristr($correspondant->adresse, "\r\n")) {
-              $destinataire["adresse1"] = stristr($correspondant->adresse, "\r\n", true);
-              $destinataire["adresse2"] = stristr($correspondant->adresse, "\r\n");
-              $destinataire["adresse2"] = str_replace("\r\n",'',$destinataire["adresse2"]);
-            }
-            else {
-              $destinataire["adresse1"] = $correspondant->adresse;
-              $destinataire["adresse2"] = "";
-            }
-            $destinataire["cp"] =  $correspondant->cp." ".$correspondant->ville;
-          }
-//        }
         
+        $assur["nom"]     = "$assurance_patient->_view";
+        $assur["adresse"] = "$assurance_patient->adresse";
+        $assur["cp"]      = "$assurance_patient->cp $assurance_patient->ville";
+        
+        $assur_adrr = traitements($assur["adresse"]);
+        $adresse1 = $assur_adrr["group1"];
+        $adresse2 = $assur_adrr["group2"];
+        
+        $destinataire = array(
+          "nom"       => $assur["nom"],
+          "adresse1"  => $assur_adrr["group1"],
+          "adresse2"  => $assur_adrr["group2"],
+          "cp"        => $assur["cp"],
+        );
+        
+        $patient_adrr = traitements($patient_facture->adresse);
         // E + F : Destinataire de la facture
         $patient = array(
           "50" => "Destinataire",
@@ -216,11 +221,11 @@ if ($edition_bvr) {
           $destinataire["adresse2"],
           $destinataire["cp"],
           "80" => "Patient",
-          "n° AVS: ".$facture->_ref_patient->avs, 
-          $facture->_ref_patient->_view,
-          $adresse1,
-          $adresse2,
-          $facture->_ref_patient->cp." ".$facture->_ref_patient->ville
+          "n° AVS: ".$patient_facture->avs, 
+          $patient_facture->_view,
+          $patient_adrr["group1"],
+          $patient_adrr["group2"],
+          $patient_facture->cp." ".$patient_facture->ville
         );
         
         $tab[$colonne2] = $patient;
@@ -365,9 +370,9 @@ if ($edition_bvr) {
           $pdf->Text($l_colonne + $decalage, $h_ligne*3+$haut_doc , $praticien->_view);
           $pdf->Text($l_colonne + $decalage, $h_ligne*4+$haut_doc , $function_prat->_view);
           $j = 1;
-          $pdf->Text($l_colonne + $decalage, $h_ligne*5+$haut_doc , $adresse_part1);
-          if ($adresse_part2) {
-            $pdf->Text($l_colonne + $decalage, $h_ligne*6+$haut_doc , $adresse_part2);
+          $pdf->Text($l_colonne + $decalage, $h_ligne*5+$haut_doc , $adresse_prat1);
+          if ($adresse_prat2) {
+            $pdf->Text($l_colonne + $decalage, $h_ligne*6+$haut_doc , $adresse_prat2);
             $j = 2;
           }
           $pdf->Text($l_colonne + $decalage, $h_ligne*(5+$j)+$haut_doc , $function_prat->cp." ".$function_prat->ville);
@@ -420,7 +425,7 @@ if ($edition_bvr) {
     }
     //enregistrement pour chaque facture l'ensemble des factures
     if ($facture_id) {
-      $pdf->Output($facture->cloture."_".$facture->_ref_patient->nom.'.pdf', "I");
+      $pdf->Output($facture->cloture."_".$patient_facture->nom.'.pdf', "I");
     }
   }
   if (!$facture_id) {

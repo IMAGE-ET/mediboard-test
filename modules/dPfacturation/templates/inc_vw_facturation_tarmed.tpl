@@ -5,11 +5,11 @@
 
 <script>
   refreshAssurance = function() {
-    alert('hjk');
-      var url = new Url("cabinet", "ajax_list_assurances");
-      url.addParam("facture_id", '{{$facture->_id}}');
-      url.addParam("patient_id", '{{$facture->patient_id}}');
-      url.requestUpdate("refresh-assurance");
+    var url = new Url("facturation", "ajax_list_assurances");
+    url.addParam("facture_id"   , '{{$facture->_id}}');
+    url.addParam("facture_class", '{{$facture->_class}}');
+    url.addParam("patient_id"   , '{{$facture->patient_id}}');
+    url.requestUpdate("refresh-assurance");
   }
 </script>
 {{if $facture->cloture && isset($factures|smarty:nodefaults) && count($factures)}}
@@ -74,7 +74,7 @@
 </tr>
 <tr>
   <td colspan="3" id="refresh-assurance">
-    {{mb_include module=cabinet template="inc_vw_assurances"}}
+    {{mb_include module=facturation template="inc_vw_assurances"}}
   </td>
   <td colspan="4"></td>
 </tr>
@@ -123,30 +123,11 @@
     </tr>
   {{/foreach}}
 {{else}}
-  {{if $facture->_class == "CFactureEtablissement"}}
-    {{assign var="objects" value=$facture->_ref_sejours}}
-  {{else}}
-    {{assign var="objects" value=$facture->_ref_consults}}
-  {{/if}}
-  
-  {{foreach from=$objects item=object}}
-    {{foreach from=$object->_ref_actes_tarmed item=_acte_tarmed}}
-      {{mb_include module=dPfacturation template="inc_line_tarmed"}}
-    {{/foreach}}
-    {{foreach from=$object->_ref_actes_caisse item=_acte_caisse}}
-      {{mb_include module=dPfacturation template="inc_line_caisse"}}
-    {{/foreach}}
-    
-    {{if $facture->_class == "CFactureEtablissement"}}
-      {{foreach from=$object->_ref_operations item=op}}
-        {{foreach from=$op->_ref_actes_tarmed item=_acte_tarmed}}
-          {{mb_include module=dPfacturation template="inc_line_tarmed"}}
-        {{/foreach}}
-        {{foreach from=$op->_ref_actes_caisse item=_acte_caisse}}
-          {{mb_include module=dPfacturation template="inc_line_caisse"}}
-        {{/foreach}}
-      {{/foreach}}
-    {{/if}}
+  {{foreach from=$facture->_ref_actes_tarmed item=_acte_tarmed}}
+    {{mb_include module=dPfacturation template="inc_line_tarmed"}}
+  {{/foreach}}
+  {{foreach from=$facture->_ref_actes_caisse item=_acte_caisse}}
+    {{mb_include module=dPfacturation template="inc_line_caisse"}}
   {{/foreach}}
 {{/if}}
 <tbody class="hoverable">

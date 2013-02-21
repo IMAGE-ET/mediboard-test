@@ -10,7 +10,6 @@
  */
 
 CCanDo::checkEdit();
-
 $date_min           = CValue::getOrSession("_date_min", mbDate());
 $date_max           = CValue::getOrSession("_date_max", mbDate());
 $etat               = CValue::getOrSession("etat", "ouvert");
@@ -37,7 +36,6 @@ $factures= array();
 $facture = new CFactureCabinet();
 
 $where = array();
-
 if ($etat_cloture && !$etat_ouvert) {
   $where["$type_date_search"] = "BETWEEN '$date_min' AND '$date_max'";
 }
@@ -103,7 +101,7 @@ if ($no_finish_reglement) {
 
 $derconsult_id = null;
 $assurances_patient = array();
-if ($facture_id) {
+if ($facture_id && isset($factures[$facture_id])) {
   $facture->load($facture_id);  
   $facture->loadRefs();
   if ($facture->_ref_consults) {
@@ -114,7 +112,6 @@ if ($facture_id) {
 }
 
 $reglement = new CReglement();
-
 $banque = new CBanque();
 $banques = $banque->loadList(null, "nom");
 

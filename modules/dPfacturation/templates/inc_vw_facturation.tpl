@@ -1,6 +1,6 @@
 <!-- Facture -->
-{{if $facture && $facture->_id}}
 <fieldset>
+  {{if $facture && $facture->_id}}
   <legend>{{tr}}{{$facture->_class}}{{/tr}}: {{$facture}}</legend>
   <table class="main tbl">
 
@@ -17,10 +17,12 @@
     
     {{mb_include module=dPfacturation template=inc_vw_facturation_tarmed}}
     {{mb_include module=dPfacturation template=inc_vw_facturation_t2a   }}
-
-  </table> 
+  </table>
+  
+  {{else}}
+    <legend class="empty">{{tr}}CFactureCabinet.none{{/tr}}</legend>
+  {{/if}}
 </fieldset>
-{{/if}}
 
 <!-- Reglement -->
 {{if $facture->_id && $facture->cloture}}

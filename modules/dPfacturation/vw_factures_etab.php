@@ -10,7 +10,6 @@
  */
 
 CCanDo::checkEdit();
-
 $date_min           = CValue::getOrSession("_date_min", mbDate());
 $date_max           = CValue::getOrSession("_date_max", mbDate());
 $etat               = CValue::getOrSession("etat", "ouvert");
@@ -89,7 +88,7 @@ if ($no_finish_reglement) {
 }
 
 $assurances_patient = array();
-if ($facture_id) {
+if ($facture_id && isset($factures[$facture_id])) {
   $facture->load($facture_id);  
   $facture->loadRefs();
   $facture->_ref_patient->loadRefsCorrespondantsPatient();

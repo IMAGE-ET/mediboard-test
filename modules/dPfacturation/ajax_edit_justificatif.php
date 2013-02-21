@@ -17,16 +17,16 @@ $colonnes = array(20, 28, 25, 75, 30);
  * 
  * @param object $pdf         le pdf
  * @param object $facture     la facture courante
- * @param object $user        l'utilisateur
- * @param object $praticien   le praticien de la facture
- * @param object $group       l'établissement
  * @param object $colonnes    les colonnes
  * @param object $cle_facture clé de la facture
  * 
  * @return void
  */
-function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes, $cle_facture){
-  ajoutEntete2($pdf, 1, $facture, $user, $praticien, $group, $colonnes);
+function ajoutEntete1($pdf, $facture, $colonnes, $cle_facture){
+  ajoutEntete2($pdf, 1, $facture, $colonnes);
+  $praticien = $facture->_ref_praticien;
+  $function  = $praticien->_ref_function;
+  $group     = $function->_ref_group;
   $pdf->SetFillColor(255, 255, 255);
   $pdf->SetDrawColor(0);
   $pdf->Rect(10, 38, 180, 100,'DF');
@@ -39,46 +39,60 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes, $cle
     $_ref_assurance = $employeur->num_assure;
     $nom_entreprise = $employeur->nom;
   }
-  $typeRbt = "TG";
-  if (($facture->assurance_maladie && $cle_facture == 0 && !$facture->send_assur_base) 
-      || ($facture->assurance_accident && $cle_facture == 1 && !$facture->send_assur_compl)) {
-    $typeRbt = "TP";
-  }
-  $loi = "LAMal";
+  
+  $loi = $facture->type_facture == "accident" ? "LAA" : "LAMal";
+  $typeRbt = $facture->type_facture == "accident" ? "TP" : "TG";
   if ($facture->cession_creance) {
-    //La LAI : Loi sur l'Assurance Invalidité
-    $loi = "LAI";
+    $typeRbt .= " avec cession";
   }
-  elseif ($facture->type_facture == "accident") {
-    //La LAA : Loi sur L'Assurance Accident
-    $loi = "LAA";
+  
+  $patient = $facture->_ref_patient;
+  $assur = array();
+  $assurance_patient = null;
+  if ($facture->assurance_maladie && !$facture->send_assur_base && $facture->type_facture == "maladie") {
+    $assurance_patient = $facture->_ref_assurance_maladie;
   }
+  elseif ($facture->assurance_accident && !$facture->send_assur_compl && $facture->type_facture == "accident") {
+    $assurance_patient = $facture->_ref_assurance_accident;
+  }
+  else {
+    $assurance_patient = $patient;
+  }
+  
+  $assur["civilite"]  = isset($assurance_patient->civilite) ? ucfirst($patient->civilite) : "";
+  $assur["nom"]     = "$assurance_patient->nom $assurance_patient->prenom";
+  $assur["adresse"] = "$assurance_patient->adresse";
+  $assur["cp"]      = "$assurance_patient->cp $assurance_patient->ville";
+  
+  $naissance =  mbTransformTime(null, $patient->naissance, "%d.%m.%Y");
+  $colonnes = array(20, 28, 25, 25, 25, 50);
   $lignes = array(
-    array("Patient"   , "Nom", $facture->_ref_patient->nom),
-    array(""          , "Prénom", $facture->_ref_patient->prenom),
-    array(""          , "Rue", $facture->_ref_patient->adresse),
-    array(""          , "NPA",  $facture->_ref_patient->cp),
-    array(""          , "Localité", $facture->_ref_patient->ville),
-    array(""          , "Date de naissance", mbTransformTime(null, $facture->_ref_patient->naissance, "%d.%m.%Y")),
-    array(""          , "Sexe", $facture->_ref_patient->sexe),
-    array(""          , "Date cas", mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
-    array(""          , "N° cas", "$facture->ref_accident"),
-    array(""          , "N° AVS", $facture->_ref_patient->avs),
-    array(""          , "N° assuré", "$_ref_assurance"),
-    array(""          , "Nom entreprise", "$nom_entreprise"),
-    array(""          , "Canton", "GE"),
-    array(""          , "Copie", "Non"),
-    array(""          , "Type de remb.", $typeRbt),
-    array(""          , "Loi", "$loi"),
-    array(""          , "N° contrat", ""),
-    array(""          , "Motif traitement", "$facture->type_facture"),
-    array(""          , "Traitement", mbTransformTime(null, $facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
-    array(""          , "Rôle/ Localité", "-"),
-    array("Mandataire", "N° EAN/N° RCC", $praticien->ean." - ".$praticien->rcc." "),
-    array("Diagnostic", "Contrat", "ICD--"),
-    array("Liste EAN" , "", "1/".$praticien->ean." 2/".$user->ean),
+    array("Patient"   , "Nom"             , $patient->nom     ,null, "Assurance", $assur["nom"]),
+    array(""          , "Prénom"          , $patient->prenom),
+    array(""          , "Rue"             , $patient->adresse),
+    array(""          , "NPA"             , $patient->cp      , null, $assur["civilite"]),
+    array(""          , "Localité"        , $patient->ville   , null, $assur["nom"]),
+    array(""          , "Date de naissance",$naissance        , null, $assur["adresse"]),
+    array(""          , "Sexe"            , strtoupper($patient->sexe) , null, $assur["cp"]),
+    array(""          , "Date cas"        , mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
+    array(""          , "N° cas"          , "$facture->ref_accident"),
+    array(""          , "N° AVS"          , $patient->avs),
+    array(""          , "N° assuré"       , "$_ref_assurance"),
+    array(""          , "Nom entreprise"  , "$nom_entreprise"),
+    array(""          , "Canton"          , "GE"),
+    array(""          , "Copie"           , "Non"),
+    array(""          , "Type de remb."   , $typeRbt),
+    array(""          , "Loi"             , "$loi"),
+    array(""          , "N° contrat"      , ""),
+    array(""          , "Motif traitement", ucfirst($facture->type_facture)),
+    array(""          , "Traitement"      , mbTransformTime(null, $facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
+    array(""          , "Rôle/ Localité"  , "-"),
+    array("Mandataire", "N° EAN/N° RCC"   , $praticien->ean." - ".$praticien->rcc." "),
+    array("Diagnostic", "Contrat"         , "ICD--"),
+    array("Liste EAN" , "", "1/".$praticien->ean." 2/".$group->ean),
     array("Commentaire")
   );
+  
   $font = "vera";
   $pdf->setFont($font, '', 8);
   foreach ($lignes as $ligne) {
@@ -96,17 +110,17 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes, $cle
 /**
  * Création du second type d'en-tête possible d'un justificatif, celui-ci étant plus léger 
  * 
- * @param object $pdf       le pdf
- * @param object $nb        le numéro de la page
- * @param object $facture   la facture courante
- * @param object $user      l'utilisateur
- * @param object $praticien le praticien de la facture
- * @param object $group     l'établissement
- * @param object $colonnes  les colonnes
+ * @param object $pdf      le pdf
+ * @param object $nb       le numéro de la page
+ * @param object $facture  la facture courante
+ * @param object $colonnes les colonnes
  * 
  * @return void
  */
-function ajoutEntete2($pdf, $nb, $facture, $user, $praticien, $group, $colonnes){
+function ajoutEntete2($pdf, $nb, $facture, $colonnes){
+  $praticien = $facture->_ref_praticien;
+  $function  = $praticien->_ref_function;
+  $group     = $function->_ref_group;
   $font = "verab";
   $pdf->setFont($font, '', 12);
   $pdf->WriteHTML("<h4>Justificatif de remboursement</h4>");
@@ -116,11 +130,11 @@ function ajoutEntete2($pdf, $nb, $facture, $user, $praticien, $group, $colonnes)
   $pdf->SetDrawColor(0);
   $pdf->Rect(10, 18, 180,20,'DF');
   $lignes = array(
-    array("Document", "Identification", $facture->_id." ".mbTransformTime(null, null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
-    array("Auteur", "N° EAN(B)", "$user->ean", "$user->_view", " Tél: $group->tel"),
-    array("Facture", "N° RCC(B)", "$user->rcc", substr($group->adresse, 0, 29)." ". $group->cp." ".$group->ville, "Fax: $group->fax"),
-    array("Four.de", "N° EAN(P)", "$praticien->ean", "DR.".$praticien->_view, " Tél: $group->tel"),
-    array("prestations", "N° RCC(B)", "$praticien->rcc", substr($group->adresse, 0, 29)." ". $group->cp." ".$group->ville, "Fax: $group->fax")
+    array("Document"    , "Identification"  , $facture->_id." ".mbTransformTime(null, null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
+    array("Auteur"      , "N° EAN(B)"       , "$group->ean", "$group->_view", " Tél: $group->tel"),
+    array("Facture"     , "N° RCC(B)"       , "$group->rcc", substr($group->adresse, 0, 29)." ". $group->cp." ".$group->ville, "Fax: $group->fax"),
+    array("Four.de"     , "N° EAN(P)"       , "$praticien->ean", "DR.".$praticien->_view, " Tél: $function->tel"),
+    array("prestations" , "N° RCC(B)"       , "$praticien->rcc", substr($function->adresse, 0, 29)." ". $function->cp." ".$function->ville, "Fax: $function->fax")
   );
   $font = "vera";
   $pdf->setFont($font, '', 8);
@@ -142,6 +156,7 @@ foreach ($factures as $facture) {
   $facture->loadRefs();
   $praticien = $facture->_ref_praticien;
   $function_prat = $praticien->loadRefFunction();
+  $function_prat->loadRefGroup();
   $function_prat->adresse = str_replace("\r\n",' ', $function_prat->adresse);
   $facture->_ref_patient->adresse = str_replace("\r\n",' ', $facture->_ref_patient->adresse);
   
@@ -156,7 +171,7 @@ foreach ($factures as $facture) {
     $pdf->AddPage();
     $pm = $pt = 0;
     
-    ajoutEntete1($pdf, $facture, $user, $praticien, $function_prat, $colonnes, $cle_facture);
+    ajoutEntete1($pdf, $facture, $colonnes, $cle_facture);
     $pdf->setFont("vera", '', 8);
     $tailles_colonnes = array(
               "Date" => 9,
@@ -208,7 +223,7 @@ foreach ($factures as $facture) {
             $pdf->setFont("vera", '', 8);
             $pdf->AddPage();
             $nb_pages++;
-            ajoutEntete2($pdf, $nb_pages, $facture, $user, $praticien, $function_prat, $colonnes);
+            ajoutEntete2($pdf, $nb_pages, $facture, $colonnes);
             $pdf->setXY(10,$pdf->getY()+4);
             $pdf->Cell($colonnes[0]+$colonnes[1], "", "Patient");
             $pdf->Cell($colonnes[2], "", $facture->_ref_patient->nom." ".$facture->_ref_patient->prenom." ".$facture->_ref_patient->naissance);

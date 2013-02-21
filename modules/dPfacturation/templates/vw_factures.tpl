@@ -97,11 +97,7 @@ Main.add(function () {
         <td>
           <select name="chirSel" style="width: 15em;" onchange="refreshList();">
             <option value="0" {{if !$chirSel}} selected="selected" {{/if}}>&mdash; Choisir un professionnel</option>
-            {{foreach from=$listChirs item=curr_chir}}
-              <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}" {{if $chirSel == $curr_chir->user_id}} selected="selected" {{/if}}>
-                {{$curr_chir->_view}}
-              </option>
-            {{/foreach}}
+            {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
           </select>
         </td>
       </tr>
@@ -146,6 +142,10 @@ Main.add(function () {
                   {{$_facture->_ref_patient->_view|truncate:30:"...":true}}
                 </a>
               </td>
+            </tr>
+          {{foreachelse}}
+            <tr>
+              <td colspan="2" class="empty">{{tr}}{{$facture->_class}}.none{{/tr}}</td>
             </tr>
           {{/foreach}}
         </table>
