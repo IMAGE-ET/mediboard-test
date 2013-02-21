@@ -27,6 +27,7 @@ CKEDITOR.plugins.addExternal("usermessage"      , "../../modules/dPcompteRendu/f
 {{/if}}
 CKEDITOR.plugins.addExternal("mbbreakage"  , "../../modules/dPcompteRendu/fcke_plugins/mbbreakage/plugin.js");
 CKEDITOR.plugins.addExternal("mbcap"       , "../../modules/dPcompteRendu/fcke_plugins/mbcap/plugin.js");
+CKEDITOR.plugins.addExternal("mbspace"     , "../../modules/dPcompteRendu/fcke_plugins/mbspace/plugin.js");
 
 // CK editor general configuration
 CKEDITOR.editorConfig = function(config) {
@@ -106,7 +107,7 @@ CKEDITOR.editorConfig = function(config) {
       var textForPrint = 'Print';
     {{/if}}
     
-    config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,';
+    config.extraPlugins =  'mbfields,mbfreetext,mbhelpers,mblists,{{if $mode_play && !$templateManager->isModele}}mbplay,{{/if}},mbprint,mbprintPDF,mbspace,';
     config.extraPlugins += 'mbheader,mbfooter,mbpagebreak,mblineheight{{if "printing"|module_active && !$templateManager->isModele}},mbprinting{{/if}}{{if $can->admin}},mbthumbs{{/if}},mbcap,mbbreakage';
     {{if !$templateManager->isModele}}
       config.extraPlugins += ',usermessage{{if $use_apicrypt}},apicrypt{{/if}}';
@@ -114,7 +115,7 @@ CKEDITOR.editorConfig = function(config) {
     config.toolbar_Full = [
       ['Save','Preview'], [{{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}'mbprintPDF',{{/if}} textForPrint, 'mbprinting', 'SelectAll', 'Cut', 'Copy', 'PasteText', 'PasteFromWord', 'Find', 'Undo', 'Redo'],
       [{{if !$templateManager->isModele}}'mbheader', 'mbfooter',{{/if}} 'mbpagebreak'],
-      ['Table','HorizontalRule','Image','SpecialChar', 'Checkbox'],
+      ['Table','HorizontalRule','Image','SpecialChar', 'mbspace', 'Checkbox'],
       ['Maximize', 'Source'], '/',
       ['Font', 'FontSize'],
       ['RemoveFormat', 'Bold', 'Italic', 'Underline', 'Strike', 'mbbreakage', 'mbcap'],

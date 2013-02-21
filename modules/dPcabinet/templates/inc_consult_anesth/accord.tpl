@@ -97,7 +97,7 @@ Main.add(function () {
   {{mb_include module=cabinet template=inc_consult_anesth/acc_examens_complementaire}}
 </div>
 <div id="InfoAnesth" style="display: none;">
-  {mb_{include module=cabinet template=inc_consult_anesth/acc_infos_anesth}}
+  {{mb_include module=cabinet template=inc_consult_anesth/acc_infos_anesth}}
 </div>
 
 {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
