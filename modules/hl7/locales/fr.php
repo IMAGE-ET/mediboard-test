@@ -1,4 +1,6 @@
 <?php
+$locales['CExchangeIHE-msg-purge_count'] = '\'%s\' échanges HL7 à purger';
+$locales['CExchangeIHE-msg-purged_count'] = '\'%s\' échanges purgés - \'%s\'';
 $locales['CExchangeIHE'] = 'Échange IHE';
 $locales['CExchangeIHE-_acquittement'] = 'Acquittement';
 $locales['CExchangeIHE-_acquittement-court'] = 'ACK';
