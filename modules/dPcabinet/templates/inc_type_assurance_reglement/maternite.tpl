@@ -9,16 +9,15 @@
   * @link     http://www.mediboard.org
 *}}
 
-
-<form>
-
-  <fieldset>
-    <legend>{{tr}}type_assurance.maternite{{/tr}}</legend>
+<fieldset>
+  <legend>{{tr}}type_assurance.maternite{{/tr}}</legend>
+  {{mb_form name="editCslt_maternite" method="post" onsubmit="return onSubmitFormAjax(this)" m="cabinet" dosql="do_consultation_aed"}}
+    {{mb_key object=$consult}}
     <table>
       <tr>
-        <td>{{mb_label object=$consult field=grossesse_id}}</td>
-        <td>{{mb_field object=$consult field=grossesse_id}}</td>
+        <td><label title="Date d'accouchement effective ou à défaut date présumée de début de grossesse" class="" for="editCslt_maternite_date_at" id="labelFor_editConsultation_date_at">Date accouchement prévue</label></td>
+        <td>{{mb_field object=$consult field=date_at form=editCslt_maternite register=true onchange="this.form.onsubmit();"}}</td>
       </tr>
     </table>
-  </fieldset>
-</form>
+  {{/mb_form}}
+</fieldset>

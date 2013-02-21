@@ -1610,5 +1610,5 @@ $locales['type_assurance'] = 'Type d\'assurances';
 $locales['type_assurance.assurance_maladie'] = 'Assurance Maladie';
 $locales['type_assurance.assurance_maladie-desc'] = 'Assurance Maladie classique';
 $locales['type_assurance.soins_medicaux_gratuits'] = 'Soins médicaux gratuits';
-$locales['type_assurance.soins_medicaux_gratuits-desc'] = 'titulaire d\'une pension d\'invalidité attribuée au titre du Code des pensions militaires d\'invalidité et des victimes de la guerre (CPMIVG) résidant en métropole ou à l?étranger, hors Maghreb.';
+$locales['type_assurance.soins_medicaux_gratuits-desc'] = 'Titulaire d\'une pension d\'invalidité attribuée au titre du Code des pensions militaires d\'invalidité et des victimes de la guerre (CPMIVG) résidant en métropole ou à l\'étranger, hors Maghreb.';
 ?>
