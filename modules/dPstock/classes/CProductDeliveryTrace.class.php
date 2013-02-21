@@ -203,14 +203,15 @@ class CProductDeliveryTrace extends CMbObject {
       // Mise à jour du stock
       if ($stock_sejour->_id) {
         $count_quantity = $stock_sejour->countQuantityForDates($this->_datetime_min);
-        $stock_sejour->quantite = $stock_sejour->quantite + $quantity - $count_quantity;
+        $quantite = $stock_sejour->quantite + $quantity - $count_quantity;
       }
 
       // Création du stock séjour
       else {
-        $stock_sejour->quantite = $this->quantity;
+        $quantite = $this->quantity;
       }
 
+      $stock_sejour->quantite = round($quantite, 4);
       $stock_sejour->datetime = $this->_datetime_min;
 
       if ($msg = $stock_sejour->store()) {
@@ -281,6 +282,8 @@ class CProductDeliveryTrace extends CMbObject {
             // Mise à jour du stock
             $stock_sejour->datetime = $this->_ref_delivery->datetime_min;
             $stock_sejour->quantite -= ($this->quantity / $ratio);
+
+            $stock_sejour->quantite = round($stock_sejour->quantite, 4);
 
             if ($msg = $stock_sejour->store()) {
               return $msg;

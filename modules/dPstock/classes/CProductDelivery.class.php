@@ -75,6 +75,7 @@ class CProductDelivery extends CMbObject {
   var $_auto_deliver        = null;
   var $_make_delivery_trace = null;
   var $_initial_quantity    = null;
+  var $_quantity_recond     = null;
 
   /**
    * @var CProduct[]
@@ -121,6 +122,7 @@ class CProductDelivery extends CMbObject {
     $specs['quantity']          = "$type notNull";
     $specs['endowment_quantity']= "$type";
     $specs['_initial_quantity'] = "$type";
+    $specs['_quantity_recond']  = "float";
 
     $specs['endowment_item_id'] = "ref class|CProductEndowmentItem";
     $specs['order']             = 'bool default|0';
