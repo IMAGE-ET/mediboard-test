@@ -66,7 +66,7 @@ CAppUI::stepAjax("CExchangeIHE-msg-purged_count", UI_MSG_OK, $count, mbDateTime(
  * @return int
  */
 function deleteContentAndUpdateExchange(CContentTabular $content_tabular, $type_content_id, $date_max, $max) {
-  $ds = $content_tabular->getDS();
+  $ds = $content_tabular->_spec->ds;
 
   // Récupère les content Tabulé
   $query = "SELECT cx.content_id
