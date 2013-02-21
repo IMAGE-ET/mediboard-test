@@ -13,12 +13,11 @@
     <th class="text narrow" title="{{$_date}}">{{$_date|date_format:$format}}</th>
     {{/foreach}}
   </tr>
- 
-  {{foreach from=$groups item=_group}}
+
   <tr>
-    <th class="category" colspan="31">{{$_group}}</th>
+    <th class="category" colspan="31">{{$group}}</th>
   </tr>
-  {{foreach from=$_group->_ref_functions item=_function}}
+  {{foreach from=$functions item=_function}}
   <tr>
     <th class="section" colspan="31" style="text-align: left;">
       {{mb_include module=mediusers template=inc_vw_function function=$_function}}
@@ -40,7 +39,6 @@
     </td>
     {{/foreach}}
   </tr>
-  {{/foreach}}
   {{/foreach}}
   {{foreachelse}}
   <tr><td class="empty" colspan=31">{{tr}}CConsultation.none{{/tr}}</td></tr>

@@ -41,7 +41,12 @@
           <option value="month">{{tr}}Month{{/tr}}</option>
           <option value="year" >{{tr}}Year {{/tr}}</option>
         </select>
-        <button class="modify" type="button" onclick="Consultations.macroStats(this);">
+        <select name="type_stats">
+          <option value="RDV">RDV</option>
+          <option value="consult">{{tr}}CConsultation{{/tr}}</option>
+          <option value="FSE" style="display: none;">{{tr}}CFSE{{/tr}}</option>
+        </select>
+        <button class="modify" type="button" onclick="Consultation.macroStats(this);">
           {{tr}}mod-cabinet-tab-macro_stats{{/tr}}
         </button> 
       </form>
@@ -50,7 +55,7 @@
 
   <tr>
     <td class="button">
-      <button class="search" type="button" onclick="Consultations.checkParams();">
+      <button class="search" type="button" onclick="Consultation.checkParams();">
         {{tr}}mod-cabinet-tab-check_params{{/tr}}
       </button> 
     </td>

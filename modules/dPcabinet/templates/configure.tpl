@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module="cabinet" script="consultation"}}
+
 <script type="text/javascript">
 Main.add(function () {
   Control.Tabs.create('tabs-configure', true);

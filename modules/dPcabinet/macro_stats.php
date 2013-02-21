@@ -1,19 +1,25 @@
-<?php /* $Id: print_select_docs.php 14587 2012-02-08 08:33:51Z alexis_granger $ */
+<?php
 
- /**
-  * @package Mediboard
-  * @subpackage dPcabinet
-  * @version $Revision: 14587 $
-  * @author Sébastien Fillonneau
-  */
+/**
+ * $Id: $
+ *
+ * @package    Mediboard
+ * @subpackage cabinet
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision: $
+ */
 
 CCanDo::checkAdmin();
 
-$consult = new CConsultation;
+$consult = new CConsultation();
+$group = CGroups::loadCurrent();
 $ds = $consult->_spec->ds;
 
-$date = CValue::get("date");
-$period = CValue::get("period", "month");
+$type_stats = CValue::get("type_stats", "RDV");
+$date       = CValue::get("date");
+$period     = CValue::get("period", "month");
+
 switch ($period) {
   case "day": 
     $php_period = "days";
@@ -43,12 +49,30 @@ foreach (range(0, 29) as $n) {
 
 $dates = array_reverse($dates);
 
+$query_complement = "1";
+if($type_stats == "consult") {
+  $query_complement = "consultation.examen IS NOT NULL
+                     OR consultation.traitement IS NOT NULL
+                     OR consultation.histoire_maladie IS NOT NULL
+                     OR consultation.conclusion IS NOT NULL
+                     OR consultation.conclusion IS NOT NULL
+                     OR consultation.chrono > 32
+                     OR consultation.facture_id IS NOT NULL";
+}
+if($type_stats == "fse") {
+  $query_complement = "1";
+}
+
 $query = "SELECT COUNT(*) total, chir_id, $sql_cast AS refdate
   FROM `consultation`
   LEFT JOIN plageconsult AS plage ON plage.plageconsult_id = consultation.plageconsult_id
+  LEFT JOIN users_mediboard AS user ON user.user_id = plage.chir_id
+  LEFT JOIN functions_mediboard AS function ON function.function_id = user.function_id
   WHERE $sql_cast >= '$min'
-  AND annule != '1'
-  AND patient_id IS NOT NULL
+  AND function.group_id = '$group->_id'
+  AND consultation.annule != '1'
+  AND consultation.patient_id IS NOT NULL
+  AND $query_complement
   GROUP BY chir_id, refdate
   ORDER BY refdate DESC
 ";
@@ -61,26 +85,23 @@ foreach ($result = $ds->loadList($query) as $_row) {
 $user = CMediusers::get();
 $users     = $user->loadAll(array_keys($totals));
 $functions = CStoredObject::massLoadFwdRef($users, "function_id");
-$groups    = CStoredObject::massLoadFwdRef($functions, "group_id");
 
 foreach ($users as $_user) {
   $_user->loadRefFunction();
   
   $function = $functions[$_user->function_id];
   $function->_ref_users[$_user->_id] = $_user;
-  
-  $group = $groups[$function->group_id];
-  $group->_ref_functions[$function->_id] = $function;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("period", $period);
-$smarty->assign("dates" , $dates );
-$smarty->assign("users" , $users );
-$smarty->assign("groups", $groups);
-$smarty->assign("totals", $totals);
+$smarty->assign("period"   , $period);
+$smarty->assign("dates"    , $dates );
+$smarty->assign("users"    , $users );
+$smarty->assign("functions", $functions);
+$smarty->assign("group"    , $group);
+$smarty->assign("totals"   , $totals);
 
 $smarty->display("macro_stats.tpl");
 ?>
