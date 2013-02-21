@@ -73,6 +73,7 @@ class CMediusers extends CMbObject {
   var $_is_anesth                  = null;
   var $_is_infirmiere              = null;
   var $_is_aide_soignant           = null;
+  var $_is_pharmacien              = null;
   var $_user_password_weak         = null;
   var $_user_password_strong       = null;
   var $_basic_info                 = null;
@@ -1095,6 +1096,15 @@ class CMediusers extends CMbObject {
    */
   function isAnesth() {
     return $this->_is_anesth = $this->isFromType(array("Anesthésiste"));
+  }
+
+  /**
+   * Check whether user is an pharmacist
+   *
+   * @return bool
+   */
+  function isPharmacien() {
+    return $this->_is_pharmacien = $this->isFromType(array("Pharmacien"));
   }
 
   /**

@@ -91,7 +91,8 @@ class CUser extends CMbObject {
     16 => "Sage Femme",
     17 => "Pharmacien",
     18 => "Aide soignant",
-    19 => "Dentiste"
+    19 => "Dentiste",
+    20 => "Préparateur"
   );
 
   static $ps_types = array(3, 4, 13, 16, 17, 19);
