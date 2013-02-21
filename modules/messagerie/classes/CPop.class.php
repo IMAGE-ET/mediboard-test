@@ -40,7 +40,7 @@ class CPop{
     $this->source = $source;
 
     if (!function_exists("imap_open")) {
-      CAppUI::stepAjax("CPop-error-no_imap_lib", UI_MSG_ERROR);
+      CModelObject::error("FE-IMAP-support-not-available");
     }
 
     //initialise open TIMEOUT

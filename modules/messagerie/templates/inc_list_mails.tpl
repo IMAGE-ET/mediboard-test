@@ -34,7 +34,8 @@
           <input type="hidden" name="user_mail_id" value="{{$_mail->_id}}"/>
           <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$_mail->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: messagerie.refreshList.curry(messagerie.page,'{{$account}}')})">Supprimer le message</button>
         </form>
-        (<button class="tag notext" title="button.tag notext">tag</button>)
+        <!--(<button class="tag notext" title="button.tag notext">tag</button>)-->
+        <button onclick="messagerie.toggleFavorite('{{$_mail->_id}}');" class="nowrap"><img src="modules/{{$m}}/images/favorites-{{$_mail->favorite}}.png" alt="" style="height:15px;"/></button>
       </td>
       <td>{{mb_value object=$_mail field=date_inbox format=relative}}</td>
       <td>

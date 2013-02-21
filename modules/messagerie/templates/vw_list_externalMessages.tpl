@@ -15,6 +15,7 @@
 <script type="text/javascript">
   Main.add(function () {
     var tabsMail = Control.Tabs.create("tab-mail", true);
+    console.log(tabsMail.activeLink);
     tabsMail.activeLink.onmousedown();
     //messagerie.getLastMessages({{$user->_id}}, null);
   });
@@ -23,6 +24,7 @@
 
 <div>
   <button class="button change" onclick="messagerie.getLastMessages({{$user->_id}});">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
+  <button onclick="messagerie.refreshList(messagerie.page,messagerie.tab,'1')"><img src="modules/{{$m}}/images/favorites-1.png"  alt="" style="height: 15px;"/></button>
   <!--<button class="button mail" onclick="messagerie.modalWriteNewMessage();">{{tr}}CUserMAil-button-writeMail{{/tr}}</button>-->
   <select style="width: 50px;" name="action">
     <option va>{{tr}}CUserMail-option-More{{/tr}}</option>
@@ -37,7 +39,7 @@
         <ul id="tab-mail" class="control_tabs">
         {{foreach from=$mails key=k item=_mailbox}}
           <li>
-            <a href="#{{$k}}" style="white-space: nowrap;" onmousedown="messagerie.refreshList(messagerie.page,'{{$k}}')"
+            <a href="#{{$k}}" style="white-space: nowrap;" onmousedown="messagerie.refreshList(messagerie.page,'{{$k}}','0')"
               class=" {{if !$_mailbox->active}}empty{{/if}}">{{$_mailbox->libelle}}
             </a>
           </li>

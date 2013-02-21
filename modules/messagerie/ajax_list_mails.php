@@ -10,6 +10,7 @@
 CCanDo::checkRead();
 
 $account = CValue::get("account");
+$favorite = CValue::get("favorite", 0);
 $page = CValue::get("page", 0);
 $limit_list = CAppUI::pref("nbMailList", 20);
 
@@ -17,6 +18,9 @@ $user = CMediusers::get();
 
 $mail = new CUserMail();
 $mail->account_id = $account;
+if ($favorite) {
+  $mail->favorite = $favorite;
+}
 $order = "date_inbox DESC";
 
 $account_pop = new CSourcePOP();

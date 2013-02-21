@@ -22,7 +22,7 @@ messagerie = {
     messagerie.url = url;
   },
 
-  refreshList:function (page,account) {
+  refreshList:function (page,account,favorite) {
     if( page != messagerie.page) {
       messagerie.page = page;
     }
@@ -30,9 +30,18 @@ messagerie = {
       messagerie.tab = account;
     }
     var url = new Url(messagerie.module, "ajax_list_mails");
+    url.addParam("favorite", favorite);
     url.addParam("account", messagerie.tab);
     url.addParam("page", messagerie.page);
     url.requestUpdate(messagerie.tab);
+  },
+
+  toggleFavorite : function(mail_id) {
+    var url = new Url(messagerie.module, "ajax_toggle_favorite");
+    url.addParam("mail_id", mail_id);
+    url.requestUpdate("systemMsg", function() {
+      messagerie.refreshList(0, messagerie.tab, 0);
+    });
   },
 
   /**
@@ -50,7 +59,7 @@ messagerie = {
     var url = new Url(messagerie.module, "ajax_get_last_email");
     url.addParam("user_id", user_id);
     url.requestUpdate("systemMsg", function () {
-      messagerie.refreshList(0, messagerie.tab);
+      messagerie.refreshList(0, messagerie.tab, 0);
     });
   },
 
@@ -78,7 +87,7 @@ messagerie = {
     var url = new Url("messagerie", "ajax_mark_all_mail_as_read");
     url.addParam("account", messagerie.tab);
     url.requestUpdate("systemMsg", function () {
-      messagerie.refreshList(0, messagerie.tab);
+      messagerie.refreshList(0, messagerie.tab, 0);
     });
   },
 

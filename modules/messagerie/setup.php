@@ -125,6 +125,11 @@ class CSetupmessagerie extends CSetup {
     ADD `text_file_id` INT (11) UNSIGNED AFTER `in_reply_to_id`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.23";
+    $this->makeRevision("0.23");
+    $query = "ALTER TABLE `user_mail`
+              ADD `favorite` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.24";
   }
 }
