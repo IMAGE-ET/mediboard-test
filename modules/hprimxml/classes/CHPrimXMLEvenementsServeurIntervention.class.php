@@ -137,12 +137,12 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
     
     $warning = null;
     $comment = null;
-    
+
     // Acquittement d'erreur : identifiants source du patient / séjour non fournis
     if (!$data['idSourcePatient'] || !$data['idSourceVenue']) {
       return $exchange_hprim->setAckError($dom_acq, "E206", null, $mbObject);
     }
-    
+
     // IPP non connu => message d'erreur
     $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $data['idSourcePatient']);
     if (!$IPP->_id) {
@@ -200,6 +200,22 @@ class CHPrimXMLEvenementsServeurIntervention extends CHPrimXMLEvenementsServeurA
       } 
 
       $operation = $operation_source;     
+    }
+
+    // ID Mediboard de l'intervention
+    if ($data['idCibleIntervention']) {
+      $operation_source = new COperation();
+      $operation_source->load($data['idCibleIntervention']);
+
+      if ($operation_source->sejour_id != $sejour->_id) {
+        return $exchange_hprim->setAckError($dom_acq, "E204", null, $mbObject);
+      }
+
+      if ($idex->_id && $operation->_id != $operation_source->_id) {
+        return $exchange_hprim->setAckError($dom_acq, "E205", null, $mbObject);
+      }
+
+      $operation = $operation_source;
     }
     
     // Recherche de la salle
