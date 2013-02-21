@@ -827,17 +827,18 @@ class CPatient extends CMbObject {
   }
 
   // Backward references
-  function loadRefsSejours($where = null) {
+  function loadRefsSejours($where = array()) {
     if (!$this->_id) {
       return $this->_ref_sejours = array();
     }
 
-    $sejour = new CSejour;
-    if ($where === null) {
-      $where = array();
-    }
-
+    $sejour = new CSejour();
+    $group_id = CGroups::loadCurrent()->_id;
+    
     $where["patient_id"] = "= '$this->_id'";
+    if(CAppUI::conf("dPpatients CPatient multi_group") == "hidden") {
+      $where["sejour.group_id"] = "= '$group_id'";
+    }
     $order = "entree DESC";
 
     return $this->_ref_sejours = $sejour->loadList($where, $order);
@@ -1070,6 +1071,7 @@ class CPatient extends CMbObject {
 
   function loadRefsConsultations($where = null) {
     $consultation = new CConsultation();
+    $group_id = CGroups::loadCurrent()->_id;
     $curr_user = CAppUI::$user;
     if ($this->_id) {
       if ($where === null) {
@@ -1080,6 +1082,9 @@ class CPatient extends CMbObject {
                     (functions_mediboard.consults_partagees = '0' && functions_mediboard.function_id = '$curr_user->function_id')";
       }
       $where["patient_id"] = "= '$this->_id'";
+      if(CAppUI::conf("dPpatients CPatient multi_group") == "hidden") {
+        $where["functions_mediboard.group_id"] = "= '$group_id'";
+      }
       $order = "plageconsult.date DESC";
       $leftjoin = array();
       $leftjoin["plageconsult"]        = "consultation.plageconsult_id = plageconsult.plageconsult_id";

@@ -280,7 +280,7 @@ onMergeComplete = function() {
   {{elseif $conf.dPpatients.CPatient.multi_group == "limited" && !$_consult->annule}}
   <tr>
     <td colspan="2">
-      Le {{$_consult->_datetime|date_format:$conf.datetime}}
+      <span class="iconed-text">Le {{$_consult->_datetime|date_format:$conf.datetime}}</span>
     </td>
     <td style="background-color:#afa" colspan="2">
       {{$_consult->_ref_chir->_ref_function->_ref_group->text|upper}}

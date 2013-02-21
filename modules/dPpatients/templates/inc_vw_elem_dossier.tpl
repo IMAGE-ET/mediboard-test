@@ -123,7 +123,7 @@
 {{elseif $conf.dPpatients.CPatient.multi_group == "limited" && !$object->annule}}
 <tr>
   <td>
-    Le {{$object->_datetime|date_format:$conf.datetime}}
+    <span class="iconed-text">Le {{$object->_datetime|date_format:$conf.datetime}}</span>
   </td>
   <td style="background-color:#afa">
     {{$object->_ref_chir->_ref_function->_ref_group->text|upper}}
