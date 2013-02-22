@@ -13,7 +13,7 @@ class CPlageconsult extends CPlageHoraire {
   static $hours_start = null;
   static $hours_stop = null;
   static $minutes_interval = null;
-  
+
   // DB Table key
   var $plageconsult_id = null;
 
@@ -21,7 +21,7 @@ class CPlageconsult extends CPlageHoraire {
   var $chir_id = null;
   var $remplacant_id = null;
   var $pour_compte_id = null;
-  
+
   // DB fields
   var $freq    = null;
   var $libelle = null;
@@ -30,7 +30,7 @@ class CPlageconsult extends CPlageHoraire {
   var $desistee = null;
   var $color = null;
   var $pct_retrocession = null;
-  
+
   // Form fields
   var $_freq                 = null;
   var $_affected             = null;
@@ -39,23 +39,23 @@ class CPlageconsult extends CPlageHoraire {
   var $_nb_patients          = null;
   var $_consult_by_categorie = null;
   var $_type_repeat          = null;
-  
+
   // Field pour le calcul de collision (fin à 00:00:00)
   var $_fin = null;
-  
+
   // Filter fields
   var $_date_min = null;
   var $_date_max = null;
   var $_function_id = null;
   var $_other_function_id = null;
   var $_user_id  = null;
-  
+
   // Object References
   var $_ref_chir          = null;
   var $_ref_consultations = null;
   var $_ref_remplacant    = null;
   var $_ref_pour_compte    = null;
-  
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table          = "plageconsult";
@@ -63,7 +63,7 @@ class CPlageconsult extends CPlageHoraire {
     $spec->collision_keys = array("chir_id");
     return $spec;
   }
-  
+
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["consultations"] = "CConsultation plageconsult_id";
@@ -72,7 +72,7 @@ class CPlageconsult extends CPlageHoraire {
 
   function getProps() {
     $props = parent::getProps();
-    
+
     $props["chir_id"]          = "ref notNull class|CMediusers seekable";
     $props["remplacant_id"]    = "ref class|CMediusers seekable";
     $props["pour_compte_id"]   = "ref class|CMediusers seekable";
@@ -86,14 +86,14 @@ class CPlageconsult extends CPlageHoraire {
     $props["desistee"]         = "bool default|0 show|0";
     $props["color"]            = "str length|6 default|DDDDDD";
     $props["pct_retrocession"] = "pct default|70 show|0";
-    
+
     // Form fields
     $props["_freq"]        = "";
     $props["_affected"]    = "";
     $props["_total"]       = "";
     $props["_fill_rate"]   = "";
     $props["_type_repeat"] = "enum list|simple|double|triple|quadruple|sameweek";
-    
+
     // Filter fields
     $props["_date_min"]          = "date";
     $props["_date_max"]          = "date moreThan|_date_min";
@@ -103,7 +103,7 @@ class CPlageconsult extends CPlageHoraire {
 
     return $props;
   }
-  
+
   /**
    * Load consultations
    *
@@ -114,7 +114,7 @@ class CPlageconsult extends CPlageHoraire {
    */
   function loadRefsConsultations($withCanceled = true, $withClosed = true) {
     $where["plageconsult_id"] = "= '$this->_id'";
-    
+
     if (!$withCanceled) {
       $where["annule"] = "= '0'";
     }
@@ -122,7 +122,7 @@ class CPlageconsult extends CPlageHoraire {
     if (!$withClosed) {
       $where["chrono"] = "!=  '" . CConsultation::TERMINE . "'";   
     }
-    
+
     $order = "heure";
     $consult = new CConsultation();
     return $this->_ref_consultations = $consult->loadList($where, $order);
@@ -138,12 +138,12 @@ class CPlageconsult extends CPlageHoraire {
     $where["patient_id"] = " IS NOT NULL";
     return $this->_nb_patients = $consultation->countList($where);
   }
-  
+
   function loadRefsBack($withCanceled = true) {
     $this->loadRefsConsultations($withCanceled);
     $this->loadFillRate();
   }
-  
+
   function loadFillRate() {
     if (!$this->_id) {
       return;
@@ -154,14 +154,14 @@ class CPlageconsult extends CPlageHoraire {
               WHERE `consultation`.`plageconsult_id` = $this->_id
                 AND `consultation`.`patient_id` IS NOT NULL
                 AND `consultation`.`annule` = '0'";
-      
+
     $this->_affected = intval($this->_spec->ds->loadResult($query));
 
     if ($this->_total) {
       $this->_fill_rate = round($this->_affected/$this->_total*100);
     }
   }
-  
+
   function getUtilisation() {
     $this->loadRefsConsultations(false);
 
@@ -183,7 +183,7 @@ class CPlageconsult extends CPlageHoraire {
     }
     return $utilisation;
   }
-  
+
   function loadCategorieFill() {
     if (!$this->_id) {
       return;
@@ -200,23 +200,23 @@ class CPlageconsult extends CPlageHoraire {
               ORDER BY `consultation`.`categorie_id`";
     $this->_consult_by_categorie = $this->_spec->ds->loadList($query);
   }
-  
+
   function loadRefs($withCanceled = true, $cache = 0) {
     $this->loadRefsFwd($cache);
     $this->loadRefsBack($withCanceled);
   }
-  
+
   function loadRefsFwd($cache = 0) {
     $this->_ref_chir        = $this->loadFwdRef("chir_id"       , $cache);
     $this->_ref_remplacant  = $this->loadFwdRef("remplacant_id" , $cache);
     $this->_ref_pour_compte = $this->loadFwdRef("pour_compte_id", $cache);
   }
-  
+
   function getPerm($permType) {
     if (!$this->_ref_chir) {
       $this->loadRefsFwd(1);
     }
-    
+
     return $this->_ref_chir->getPerm($permType) 
       && $this->_ref_module->getPerm($permType);
   }
@@ -233,27 +233,32 @@ class CPlageconsult extends CPlageHoraire {
 
     return $msg . parent::check();
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->_total = mbTimeCountIntervals($this->debut, $this->fin, $this->freq);
-    $this->_freq  = substr($this->freq, 3, 2);
-    if($this->freq == "1:00:00") {
+
+    if ($this->freq == "1:00:00" || $this->freq == "01:00:00") {
       $this->_freq = "60";
     }
+    else {
+      $this->_freq = substr($this->freq, 3, 2);
+    }
   }
-  
+
   function updatePlainFields() {
-  	parent::updatePlainFields();
-		
+    parent::updatePlainFields();
+
     if ($this->_freq !== null) {
-      $this->freq  = "00:". $this->_freq. ":00";
-      if($this->_freq == "60") {
-        $this->freq  = "01:00:00";
+      if ($this->_freq == "60") {
+        $this->freq = "01:00:00";
+      }
+      else {
+        $this->freq = sprintf("00:%02d:00", $this->_freq);
       }
     }
   }
-  
+
   function becomeNext() {
     $week_jumped = 0;
 
@@ -274,13 +279,13 @@ class CPlageconsult extends CPlageHoraire {
       case "sameweek":
         $week_number = CMbDate::weekNumberInMonth($this->date);
         $next_month  = CMbDate::monthNumber(mbDate("+1 MONTH", $this->date));
-        $i=0;
+        $i = 0;
         do {
           $this->date = mbDate("+1 WEEK", $this->date);
           $week_jumped++;
           $i++;
         } while (
-          $i<10 && 
+          $i < 10 &&
           (CMbDate::monthNumber($this->date)       <  $next_month) ||
           (CMbDate::weekNumberInMonth($this->date) != $week_number)
         );
@@ -288,7 +293,7 @@ class CPlageconsult extends CPlageHoraire {
       default:
         return ++$week_jumped;
     }
-    
+
     // Stockage des champs modifiés
     $debut   = $this->debut;
     $fin     = $this->fin;
@@ -315,8 +320,8 @@ class CPlageconsult extends CPlageHoraire {
     $this->libelle = $libelle;
     $this->locked  = $locked;
     $this->color   = $color;
-    $this->desistee       = $desistee;
-    $this->remplacant_id  = $remplacant_id;
+    $this->desistee        = $desistee;
+    $this->remplacant_id   = $remplacant_id;
     $this->pour_compte_id  = $pour_compte_id;
     $this->updateFormFields();
     return $week_jumped;
