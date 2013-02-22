@@ -443,6 +443,7 @@ $locales['style.phenx'] = 'Phenix (blanc, gris, module tabulé)';
 $locales['style.silver'] = 'Silver (gris, vert)';
 $locales['thirty-first-results'] = '30 premiers résultats';
 $locales['total'] = 'Total';
+$locales['tree'] = 'Arbre';
 $locales['week'] = 'semaine';
 $locales['weeks'] = 'semaines';
 $locales['year'] = 'année';

@@ -9,7 +9,7 @@
   <h1>{{$message->description}} ({{$message->version}}) <span class="type">{{$message->name}}</span> [{{$message->getEncoding()}}]</h1>
   
   <ul class="control_tabs" id="message-tab-{{$key}}">
-    <li><a href="#message-{{$key}}-tree">Arbre</a></li>
+    <li><a href="#message-{{$key}}-tree">{{tr}}tree{{/tr}}</a></li>
     <li><a href="#message-{{$key}}-er7-input">ER7 Input</a></li>
     <li><a href="#message-{{$key}}-er7-output">ER7 Output</a></li>
     <li><a href="#message-{{$key}}-xml">XML</a></li>

@@ -1,0 +1,19 @@
+/**
+* Couleur pour la structure du document
+*/
+/*Noeud racine*/
+.rootname {
+  color: green;
+}
+/*Noeud fil*/
+.child {
+  color: #276cd8;
+}
+/*Attribut du noeud*/
+.attribute {
+  color: maroon;
+}
+/*Données du noeud*/
+.data {
+  color: #e17c41;
+}
