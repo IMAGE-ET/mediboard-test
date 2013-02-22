@@ -10,7 +10,7 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="10">
+    <th class="title" colspan="6">
       <strong>
       {{if $plageSel->_id}}
         <button class="print" onclick="printPlage({{$plageSel->_id}})" style="float:right">{{tr}}Print{{/tr}}</button>
@@ -56,7 +56,7 @@
     {{else}} 
       {{assign var="style" value=""}}
     {{/if}}
-    
+
     <td {{$style|smarty:nodefaults}}>
       <div style="float: left">
       {{if $patient->_id}}
@@ -78,7 +78,7 @@
         [PAUSE]
       {{else}}
       <a style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
-        <img src="images/icons/edit.png" alt="modifier" />
+        <img src="images/icons/edit.png" />
       </a>
       <a href="{{$href_consult}}">
         {{mb_value object=$patient}}
@@ -86,55 +86,70 @@
       {{/if}}
     </td>
     <td class="text" {{$style|smarty:nodefaults}}>
+      {{assign var=categorie value=$_consult->_ref_categorie}}
+
       {{if $patient->_id}}
-        <a href="{{$href_consult}}"  title="Voir la consultation">
-          {{assign var=categorie value=$_consult->_ref_categorie}}
+        <a href="{{$href_consult}}" title="Voir la consultation">
           {{if $categorie->_id}}
           <div>
-            {{mb_include module=cabinet template=inc_icone_categorie_consult
-              categorie=$categorie alt=$categorie->nom_categorie title=$categorie->nom_categorie}}
+            {{mb_include
+              module=cabinet
+              template=inc_icone_categorie_consult
+              categorie=$categorie
+              alt=$categorie->nom_categorie
+              title=$categorie->nom_categorie
+            }}
             {{$categorie->nom_categorie}}
           </div>
           {{/if}}
           {{$_consult->motif|truncate:35:"...":false|nl2br}}
         </a>
       {{else}}
+        {{if $categorie->_id}}
+          {{mb_include
+            module=cabinet
+            template=inc_icone_categorie_consult
+            categorie=$categorie
+            alt=$categorie->nom_categorie
+            title=$categorie->nom_categorie
+          }}
+        {{/if}}
         {{$_consult->motif|truncate:35:"...":false|nl2br}}
       {{/if}}
     </td>
     <td class="text" {{$style|smarty:nodefaults}}>
       {{if $patient->_id}}
-        <a href="{{$href_consult}}"  title="Voir la consultation">{{$_consult->rques|truncate:35:"...":false|nl2br}}</a>
+        <a href="{{$href_consult}}" title="Voir la consultation">{{$_consult->rques|truncate:35:"...":false|nl2br}}</a>
       {{else}}
         {{$_consult->rques|truncate:35:"...":false|nl2br}}
       {{/if}}
     </td>
     <td {{$style|smarty:nodefaults}}>
       <form name="etatFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post">
-      <input type="hidden" name="m" value="dPcabinet" />
-      <input type="hidden" name="dosql" value="do_consultation_aed" />
-      {{mb_key object=$_consult}}
-      <input type="hidden" name="chrono" value="{{$_consult|const:'PATIENT_ARRIVE'}}" />
-      <input type="hidden" name="arrivee" value="" />
+        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="dosql" value="do_consultation_aed" />
+        {{mb_key object=$_consult}}
+        <input type="hidden" name="chrono" value="{{$_consult|const:'PATIENT_ARRIVE'}}" />
+        <input type="hidden" name="arrivee" value="" />
       </form>
-      
+
       <form name="cancelFrm{{$_consult->_id}}" action="?m=dPcabinet" method="post">
-      <input type="hidden" name="m" value="dPcabinet" />
-      <input type="hidden" name="dosql" value="do_consultation_aed" />
-      {{mb_key object=$_consult}}
-      <input type="hidden" name="chrono" value="{{$_consult|const:'TERMINE'}}" />
-      <input type="hidden" name="annule" value="1" />
+        <input type="hidden" name="m" value="dPcabinet" />
+        <input type="hidden" name="dosql" value="do_consultation_aed" />
+        {{mb_key object=$_consult}}
+        <input type="hidden" name="chrono" value="{{$_consult|const:'TERMINE'}}" />
+        <input type="hidden" name="annule" value="1" />
       </form>
-      
+
       <a class="action" href="{{$href_planning}}">
-        <img src="images/icons/planning.png" title="Modifier le rendez-vous" alt="modifier" />
+        <img src="images/icons/planning.png" title="Modifier le rendez-vous" />
       </a>
       {{if $_consult->chrono == $_consult|const:'PLANIFIE' && $patient->_id}}
       <a class="action" href="#" onclick="putArrivee(document.etatFrm{{$_consult->_id}})">
-        <img src="images/icons/check.png" title="Notifier l'arrivée du patient" alt="arrivee" />
+        <img src="images/icons/check.png" title="Notifier l'arrivée du patient" />
       </a>
       <a class="action" href="#" onclick="if(confirm('Voulez-vous vraiment annuler cette consultation ?')) {document.cancelFrm{{$_consult->_id}}.submit()}">
-        <img src="images/icons/cancel.png" title="Annuler ce rendez-vous" alt="annuler" />
+        <img src="images/icons/cancel.png" title="Annuler ce rendez-vous" />
       </a>
       {{/if}}
     </td>
