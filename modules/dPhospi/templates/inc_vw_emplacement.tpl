@@ -44,12 +44,12 @@
   
     <tr>
       <th>{{mb_label object=$emplacement field=hauteur}}</th>
-      <td>{{mb_field object=$emplacement field=hauteur increment=true form="Edit-CEmplacement" min=1 max=20}}</td>
+      <td>{{mb_field object=$emplacement field=hauteur increment=true form="Edit-CEmplacement"}}</td>
     </tr>
   
     <tr>
       <th>{{mb_label object=$emplacement field=largeur}}</th>
-      <td>{{mb_field object=$emplacement field=largeur increment=true form="Edit-CEmplacement" min=1 max=20}}</td>
+      <td>{{mb_field object=$emplacement field=largeur increment=true form="Edit-CEmplacement"}}</td>
     </tr>
     
     <tr>
