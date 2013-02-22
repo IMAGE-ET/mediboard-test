@@ -582,11 +582,7 @@ Main.add( function(){
     {{else}} 
     <select name="praticien_id" onchange="modifPrat()" class="{{$sejour->_props.praticien_id}}" style="width: 15em">
       <option value="">&mdash; Choisir un praticien</option>
-      {{foreach from=$listPraticiens item=curr_praticien}}
-      <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $praticien->_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
-        {{$curr_praticien}}
-      </option>
-      {{/foreach}}
+      {{mb_include module=mediusers template=inc_options_mediuser selected=$praticien->_id list=$listPraticiens}}
     </select>
     {{/if}}
   </td>
@@ -1007,7 +1003,7 @@ Main.add( function(){
 {{/if}}
 
 
-<tr {{if $conf.dPplanningOp.CSejour.show_facturable}}style="display:none"{{/if}}>
+<tr {{if !$conf.dPplanningOp.CSejour.show_facturable}}style="display:none"{{/if}}>
   <th>{{mb_label object=$sejour field="facturable"}}</th>
   <td colspan="3">
   {{mb_field object=$sejour field="facturable"}}
