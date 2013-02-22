@@ -483,12 +483,6 @@ class CFacture extends CMbObject {
     if (count($this->_ref_consults) > 0) {
       foreach ($this->_ref_consults as $_consult) {
         if ($_consult->valide == 0) {
-          $liaison = new CFactureLiaison();
-          $liaison->facture_class = $this->_class;
-          $liaison->facture_id    = $this->_id;
-          $liaison->object_class  = "CConsultation";
-          $liasion->object_id     = $_consult->_id;
-          $liaison->loadMatchingObject();
           unset($this->_ref_consults["$_consult->_id"]);
         }  
       }
