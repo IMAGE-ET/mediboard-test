@@ -54,6 +54,13 @@
       {{mb_label object=$object field=cote}} {{mb_value object=$object field=cote}}
     </td>
   </tr>
+  {{if $object->type_anesth}}
+  <tr>
+    <td colspan="3">
+      {{mb_value object=$object field=type_anesth}}
+    </td>
+  </tr>
+  {{/if}}
   <tr>
     <td colspan="3">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$sejour->_guid}}')">
