@@ -26,6 +26,7 @@ editConstantes = function (const_id, context_guid, start){
   url.addParam("readonly", '{{$readonly}}');
   url.addParam("start", start || 0);
   url.addParam("selection[]", keys_selection);
+  url.addParam("patient_id", '{{$patient->_id}}');
   url.requestUpdate('constantes-medicales-form');
 }
 

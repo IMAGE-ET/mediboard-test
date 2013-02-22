@@ -27,10 +27,11 @@ else {
   $selection = array_intersect_key(CConstantesMedicales::$list_constantes, $selection_flip);
 }
 
+foreach (CConstantesMedicales::$list_constantes as $key => $cst) {
+  $dates["$key"] = mbTransformTime(null, null, '%d/%m/%y');
+}
+
 if ($tri) {
-  foreach (CConstantesMedicales::$list_constantes as $key => $cst) {
-    $dates["$key"] = mbTransformTime(null, null, '%d/%m/%y');
-  }
   $patient = new CPatient();
   $patient->load($patient->_id);
   $const = $patient->loadRefConstantesMedicales();
@@ -51,7 +52,7 @@ if ($context_guid) {
 
 $patient_id = $constantes->patient_id ? $constantes->patient_id : $patient_id;
 $latest_constantes = CConstantesMedicales::getLatestFor($patient_id);
-                 
+
 // Création du template
 $smarty = new CSmartyDP("modules/dPhospi");
 
@@ -60,12 +61,13 @@ $smarty->assign('latest_constantes', $latest_constantes);
 $smarty->assign('context_guid'  , $context_guid);
 $smarty->assign('readonly'      , $readonly);
 $smarty->assign('selection'     , $selection);
+$smarty->assign('dates'         , $dates);
 if ($tri) {
-  $smarty->assign('dates'         , $dates);
   $smarty->assign('real_context'	, CValue::get('real_context'));
   $smarty->assign('display_graph'	, CValue::get('display_graph', 0));
   $smarty->assign('tri'         	, $tri);
 }
+
 $smarty->display('inc_form_edit_constantes_medicales.tpl');
 
 ?>
