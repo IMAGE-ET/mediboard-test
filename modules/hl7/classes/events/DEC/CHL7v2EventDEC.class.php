@@ -17,7 +17,12 @@
  */
 class CHL7v2EventDEC extends CHL7v2Event implements CHL7EventDEC {
   var $event_type = "ORU";
-  
+
+  /**
+   * Construct
+   *
+   * @return CHL7v2EventDEC
+   */
   function __construct() {
     parent::__construct();
     
@@ -27,18 +32,7 @@ class CHL7v2EventDEC extends CHL7v2Event implements CHL7EventDEC {
         $this->event_type, $this->code
       )
     );
+
     $this->transaction = CIHE::getDECTransaction($this->code);
   }
-  
-  /**
-   * @see parent::build()
-   */
-  function build($object) {
-    parent::build($object);
-        
-    /* @todo Pas de création de message pour le moment */
-  }
-
 }
-
-?>

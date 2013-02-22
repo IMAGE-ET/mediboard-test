@@ -1,7 +1,7 @@
 <?php
 
 /**
- * R01 - Observation results reports for the patient - HL7
+ * O01 - Order Message - HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,8 +12,8 @@
  */
 
 /**
- * Interface CHL7EventORUR01 
- * R01 - Observation results reports for the patient
+ * Interface CHL7EventORMO01
+ * O01 - Order Message
  */
-interface CHL7EventORUR01 extends CHL7EventDEC {
+interface CHL7EventORMO01 extends CHL7EventORM {
 }

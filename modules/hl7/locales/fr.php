@@ -1,6 +1,4 @@
 <?php
-$locales['CExchangeIHE-msg-purge_count'] = '\'%s\' échanges HL7 à purger';
-$locales['CExchangeIHE-msg-purged_count'] = '\'%s\' échanges purgés - \'%s\'';
 $locales['CExchangeIHE'] = 'Échange IHE';
 $locales['CExchangeIHE-_acquittement'] = 'Acquittement';
 $locales['CExchangeIHE-_acquittement-court'] = 'ACK';
@@ -86,6 +84,8 @@ $locales['CExchangeIHE-message_valide-desc'] = 'Schéma message de l\'événement p
 $locales['CExchangeIHE-msg-create'] = 'Échange IHE créé';
 $locales['CExchangeIHE-msg-delete'] = 'Échange IHE supprimé';
 $locales['CExchangeIHE-msg-modify'] = 'Échange IHE modifié';
+$locales['CExchangeIHE-msg-purge_count'] = '\'%s\' échanges HL7 à purger';
+$locales['CExchangeIHE-msg-purged_count'] = '\'%s\' échanges purgés - \'%s\'';
 $locales['CExchangeIHE-nom_fichier'] = 'Nom fichier';
 $locales['CExchangeIHE-nom_fichier-court'] = 'Nom fichier';
 $locales['CExchangeIHE-nom_fichier-desc'] = 'Nom du fichier';
@@ -414,6 +414,7 @@ $locales['CHL7EventADTZ84_FR'] = 'ITI31 - ADT^Z84';
 $locales['CHL7EventADTZ85_FR'] = 'ITI31 - ADT^Z85';
 $locales['CHL7EventADTZ99'] = 'ITI31 - ADT^Z99';
 $locales['CHL7EventADTZ99_FR'] = 'ITI31 - ADT^Z99';
+$locales['CHL7EventORMO01'] = 'RAD3 - ORM^O01';
 $locales['CHL7EventORUR01'] = 'PCD01 - ORU^R01';
 $locales['CHL7EventQBP-AA-I001'] = 'Requête effectuée avec succès';
 $locales['CHL7EventQBPK22'] = 'ITI21 - RSP^K22';

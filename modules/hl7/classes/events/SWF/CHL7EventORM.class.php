@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Device Enterprise Communication HL7
+ * Order Message HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,23 +12,25 @@
  */
 
 /**
- * Interface CHL7EventDEC 
- * Device Enterprise Communication
+ * Interface CHL7EventORM
+ * Order Message
  */
-interface CHL7EventDEC {
+interface CHL7EventORM {
   /**
    * Construct
    *
-   * @return CHL7EventDEC
+   * @return \CHL7EventORM
    */
   function __construct();
 
   /**
-   * Build DEC message
+   * Build event
    *
-   * @param CMbObject $object object
+   * @param CMbObject $object Object
    *
-   * @return mixed
+   * @see parent::build()
+   *
+   * @return void
    */
   function build($object);
 }
