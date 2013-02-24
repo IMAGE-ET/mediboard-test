@@ -1,16 +1,19 @@
 <?php
 /**
  * $Id$
- *
+ *  
  * @package    Mediboard
  * @subpackage Intaller
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    SVN: $Id$
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    SVN: $Id$ 
  * @link       http://www.mediboard.org
  */
 
 class CLibrary {
+  /**
+   * @var self[]
+   */
   static $all = array();
 
   var $name = "";
@@ -23,10 +26,16 @@ class CLibrary {
   var $targetDir = null;
   var $versionFile = "";
   var $versionString = "";
-  var $patches = array();
-  var $lib_ = null;
 
-  function clearLibraries($libSel) {
+  /**
+   * @var CLibraryPatch[]
+   */
+  var $patches = array();
+
+  /**
+   * @param string $libSel Library to clear
+   */
+  function clearLibraries($libSel = null) {
     global $mbpath;
     $libsDir = $mbpath."lib";
 
@@ -63,26 +72,26 @@ class CLibrary {
     global $mbpath;
     return is_dir($mbpath."lib/$this->targetDir");
   }
-
+    
   function countLibraries() {
     global $mbpath;
     return count(glob($mbpath."lib/*"));
   }
-
+  
   function install() {
     global $mbpath;
     $pkgsDir = $mbpath."libpkg";
     $libsDir = $mbpath."lib";
     $filePath = "$pkgsDir/$this->fileName";
-
+    
     // For libraries archive not contained in directory
     if ($this->extraDir) {
       $libsDir .= "/$this->extraDir";
     }
-
+    
     return CMbPath::extract($filePath, $libsDir);
   }
-
+  
   function apply() {
     global $mbpath;
     $libsDir = $mbpath."lib";
@@ -91,14 +100,14 @@ class CLibrary {
     assert(is_dir($sourceDir));
     return rename($sourceDir, $targetDir);
   }
-
+  
   function checkAll($strict = true) {
     foreach (CLibrary::$all as $library) {
       if (!$library->getUpdateState()) {
         return false;
       }
     }
-
+    
     return true;
   }
 }

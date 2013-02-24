@@ -177,7 +177,7 @@ abstract class CJSLoader extends CHTMLResourceLoader {
         $delim = "/([\.-])/";
         $arr = new stdClass;
         foreach ($keys as $_pos => $_key) {
-          $parts = preg_split($delim, $_key, null, PREG_SPLIT_DELIM_CAPTURE);
+          $parts = preg_split($delim, $_key, -1, PREG_SPLIT_DELIM_CAPTURE);
 
           $_arr = $arr;
           $last_key = count($parts)-1;

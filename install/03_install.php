@@ -37,9 +37,9 @@ showHeader();
   informations.
 </p>
 
-<form action="03_install.php" name="InstallLibs" method="post" style="display: block; text-align: center; margin: 1em;">  
+<form action="03_install.php" name="InstallAllLibs" method="post" style="display: block; text-align: center; margin: 1em;">
   <input type="hidden" name="do" />
-  <?php foreach(CLibrary::$all as $library) { ?>
+  <?php foreach (CLibrary::$all as $library) { ?>
   <input type="hidden" name="install[<?php echo $library->name; ?>]" value="true" />
   <?php } ?>
   <button type="submit" class="edit">Installer tout</button>
@@ -57,7 +57,7 @@ showHeader();
     <th>Installation</th>
   </tr>
   
-  <?php foreach(CLibrary::$all as $library) { 
+  <?php foreach (CLibrary::$all as $library) {
     if (isset($install[$library->name])) {
       $library->clearLibraries($library->name); ?>
   <tbody class="hoverable">
@@ -74,7 +74,7 @@ showHeader();
               <?php if ($nbFiles = $library->install()) { ?>
               <div class="info">Ok, <?php echo $nbFiles ?> fichiers extraits</div>
               <?php } else { ?>
-              <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Erreur, <?php echo $library->nbFiles; ?> fichiers trouvés</div>
+              <div class="error">Erreur, <?php echo $library->nbFiles; ?> fichiers trouvés</div>
               <?php } ?>
             </td>
           </tr>
@@ -86,20 +86,20 @@ showHeader();
               <?php if ($library->apply()) { ?>
               <div class='info'>Ok</div>
               <?php } else { ?>
-              <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Erreur</div>
+              <div class="error">Erreur</div>
               <?php } ?>
             </td>
           </tr>
           <?php } ?>
               
-          <?php foreach($library->patches as $patch) { ?>
+          <?php foreach ($library->patches as $patch) { ?>
           <tr>
             <td style="text-align: right;">Patch <strong>'<?php echo $patch->sourceName; ?>'</strong> dans <strong>'<?php echo $patch->targetDir; ?>'</strong> :</td>
             <td>
               <?php if ($patch->apply()) { ?>
               <div class="info">Patch appliqué</div>
               <?php } else { ?>
-              <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Erreur</div>
+              <div class="error">Erreur</div>
               <?php } ?>
             </td>
           </tr>

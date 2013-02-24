@@ -22,7 +22,7 @@ class CLibraryPatch {
     $libsDir = $mbpath."lib";
     $patchDir = "$pkgsDir/patches";
     $sourcePath = "$patchDir/$this->dirName/";
-    if($this->subDirName) {
+    if ($this->subDirName) {
       $sourcePath .= "$this->subDirName/";
     }
     $sourcePath .= "$this->sourceName";

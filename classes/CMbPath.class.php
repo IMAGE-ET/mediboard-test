@@ -39,6 +39,8 @@ abstract class CMbPath {
   }
 
   /**
+   * Checks if a directory is empty
+   *
    * @param string $dir Directory path
    *
    * @return bool true if directory is empty
@@ -49,8 +51,8 @@ abstract class CMbPath {
       return false;
     }
     
-    $file = readdir($dh); // for ./
-    $file = readdir($dh); // for ../
+    readdir($dh); // for ./
+    readdir($dh); // for ../
     $file = readdir($dh); // for real first child
 
     closedir($dh);
@@ -96,13 +98,16 @@ abstract class CMbPath {
    *
    * @param string $path Path from which we want the extension
    *
-   * @return string The extension
+   * @return string|null The extension
    */
   static function getExtension($path) {
     $info = pathinfo($path);
+
     if (array_key_exists('extension', $info)) {
       return $info['extension'];
     }
+
+    return null;
   }
 
   /**
@@ -110,7 +115,7 @@ abstract class CMbPath {
    *
    * @param string $file The file from which we want to guess the mime type
    *
-   * @return string
+   * @return string The mime type
    */
   static function guessMimeType($file) {
     $ext = strtolower(self::getExtension($file));
@@ -219,10 +224,14 @@ abstract class CMbPath {
         return "application/vnd.sante400";
     }
   }
-  
+
   /**
    * Extracts an archive into a destination directory
-   * @return the number of extracted files or false if failed
+   *
+   * @param string $archivePath    Path to the archive file
+   * @param string $destinationDir Destination forlder
+   *
+   * @return integer The number of extracted files or false if failed
    */
   static function extract($archivePath, $destinationDir) {
     if (!is_file($archivePath)) {
@@ -236,28 +245,29 @@ abstract class CMbPath {
     }
     
     $nbFiles = 0;
+    $extract = false;
     switch (self::getExtension($archivePath)) {
       case "gz"  :
       case "tgz" : 
-      $archive = new Archive_Tar($archivePath);
-      $nbFiles = count($archive->listContent());
-      $extract = $archive->extract($destinationDir);
-      break;
+        $archive = new Archive_Tar($archivePath);
+        $nbFiles = count($archive->listContent());
+        $extract = $archive->extract($destinationDir);
+        break;
       
       case "zip" : 
-      if (class_exists("ZipArchive", false)) {
-        $archive = new ZipArchive();
-        $archive->open($archivePath);
-        $nbFiles = $archive->numFiles;
-        $extract = $archive->extractTo($destinationDir);
-      }
-      else {
-        require_once ("Archive/Zip.php");
-        $archive = new Archive_Zip($archivePath);
-        $nbFiles = count($archive->listContent());
-        $extract = $archive->extract(array("add_path" => $destinationDir));
-      }
-      break;
+        if (class_exists("ZipArchive", false)) {
+          $archive = new ZipArchive();
+          $archive->open($archivePath);
+          $nbFiles = $archive->numFiles;
+          $extract = $archive->extractTo($destinationDir);
+        }
+        else {
+          require_once "Archive/Zip.php";
+          $archive = new Archive_Zip($archivePath);
+          $nbFiles = count($archive->listContent());
+          $extract = $archive->extract(array("add_path" => $destinationDir));
+        }
+        break;
     }
     
     if (!$extract) {
@@ -266,12 +276,19 @@ abstract class CMbPath {
     
     return $nbFiles;
   }
-  
+
   /**
    * Clears out any file or sub-directory from target path
-   * @return boolean jobdone-value */
+   *
+   * @param string $dir Remove any file / folder from the directory
+   *
+   * @return boolean true on success, false otherwise
+   */
   static function emptyDir($dir) {
-    if (!($dir = dir($dir))) {
+    /** @var Directory $dir */
+    $dir = dir($dir);
+
+    if (!$dir) {
       return false;
     }
     
@@ -285,18 +302,22 @@ abstract class CMbPath {
     $dir->close();
     return true;
   }
-  
+
   /**
    * Recursively removes target path
-   * @return boolean jobdone-value */
+   *
+   * @param string $path Removes a directory
+   *
+   * @return boolean true on success, false otherwise
+   */
   static function remove($path) {
     if (!$path) {
       trigger_error("Path undefined", E_USER_WARNING);
     }
     
-    if (is_dir ($path)) {
+    if (is_dir($path)) {
       if (self::emptyDir($path)) {
-        return rmdir ($path);
+        return rmdir($path);
       }
       return false;
     }
@@ -307,21 +328,26 @@ abstract class CMbPath {
   
   /**
    * Reduces a path, removing "folder/.." occurences
-   * @param $path The path to reduces
-   * @return The reduced path
+   *
+   * @param string $path The path to reduce
+   *
+   * @return string The reduced path
    * @todo Use realpath instead
    */ 
   static function reduce($path) {
-    while(preg_match('/([A-z0-9-_])+\/\.\.\//', $path)) {
+    while (preg_match('/([A-z0-9-_])+\/\.\.\//', $path)) {
       $path = preg_replace('/([A-z0-9-_])+\/\.\.\//', '', $path);
     }
+
     return $path;
   }
   
   /**
    * Count the files under $path
-   * @param string The path to read
-   * @return string A number of the files
+   *
+   * @param string $path The path to read
+   *
+   * @return string The number of files
    */
   static function countFiles($path) {
     return count(glob("$path/*")) - count(glob("$path/*", GLOB_ONLYDIR));
@@ -329,8 +355,10 @@ abstract class CMbPath {
 
   /**
    * Coompare file names, with directory first
-   * @param $a
-   * @param $b
+   *
+   * @param string $a File A
+   * @param string $b File B
+   *
    * @return int Comparison result as an integer, 0 being tie
    */
   static function cmpFiles($a, $b) {
@@ -341,15 +369,17 @@ abstract class CMbPath {
   
   /**
    * Get the path tree under a given directory
-   * @param string $dir
+   *
+   * @param string $dir        Directory to get the tree of
    * @param array  $ignored    Ignored patterns
    * @param array  $extensions Restricted extensions, if not null
-   * @return array recursive   Recursive array of basenames
+   *
+   * @return array|null Recursive array of basenames
    */
   static function getPathTreeUnder($dir, $ignored = array(), $extensions = null) {
     // Restricted extensions
     if (!is_dir($dir) && is_array($extensions) && !in_array(self::getExtension($dir), $extensions)) {
-      return;
+      return null;
     }
     
     // Ignored patterns
@@ -362,7 +392,7 @@ abstract class CMbPath {
       $_ignored = strtr($_ignored, $replacements);
       
       if (preg_match("|{$_ignored}|i", $dir) === 1) {
-        return;
+        return null;
       }
     }
             
@@ -389,7 +419,9 @@ abstract class CMbPath {
   
   /**
    * Add a directory to include path
+   *
    * @param string $dir Directory to add
+   *
    * @return string The former include path
    */
   static function addInclude($dir) {
@@ -401,11 +433,23 @@ abstract class CMbPath {
     $paths[] = $dir;
     return set_include_path(implode(PATH_SEPARATOR, array_unique($paths)));
   }
-  
+
+  /**
+   * Get a list of the files inside a direcory (not the subdirectories)
+   *
+   * @param string $path The directory
+   *
+   * @return string[] The list of files
+   */
   static function getFiles($path) {
     return array_diff(glob("$path/*"), glob("$path/*", GLOB_ONLYDIR));
   }
-  
+
+  /**
+   * Get a file pointer to a temporary file in binary write mode (rb+)
+   *
+   * @return resource The resource to the temporary file
+   */
   static function getTempFile() {
     // PHP 5.1+
     $f = @fopen("php://temp", "rb+");
@@ -417,5 +461,3 @@ abstract class CMbPath {
     return $f;
   }
 }
-
-?>

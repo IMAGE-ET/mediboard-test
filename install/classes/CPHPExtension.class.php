@@ -30,7 +30,10 @@ class CPHPExtension  extends CPrerequisite {
     
     return !$this->mandatory || extension_loaded(strtolower($this->name));
   }
-  
+
+  /**
+   * @return self[]
+   */
   function getAll(){
     $extensions = array();
     

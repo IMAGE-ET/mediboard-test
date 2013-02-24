@@ -21,8 +21,15 @@ require_once "DB.php";
  */
 class CMbDb {
   var $dsn = array();
-  
+
+  /**
+   * @var DB_common
+   */
   var $_db;
+
+  /**
+   * @var string[]
+   */
   var $_errors = array();
 
   /**
@@ -32,7 +39,6 @@ class CMbDb {
    * @param string      $user Username
    * @param string      $pass Password
    * @param bool|string $base Database name
-   * @param string      $port Used port
    *
    * @return CMbDb
    */
@@ -56,7 +62,7 @@ class CMbDb {
    * 
    * @return void
    */
-  function logError($error, $prefix = "") {
+  function logError(PEAR_Error $error, $prefix = "") {
     $prefix .= sprintf("\nErreur # %s\nMessage: %s, \nInfo: %s", $error->code, $error->message, $error->userinfo);
     $this->_errors[] = $prefix;
   }
@@ -77,7 +83,7 @@ class CMbDb {
    */
   function connect() {
     $this->_db =& DB::connect($this->dsn);
-    if (PEAR::isError($this->_db)) {
+    if ($this->_db instanceof PEAR_Error) {
       $this->logError($this->_db, "Problème de connexion");
       return false;
     } 
@@ -91,11 +97,11 @@ class CMbDb {
    * @param string $query SQL query
    * @param array  $data  Preparation data
    * 
-   * @return result The actual result if successfull, false otherwise
+   * @return mixed The actual result if successfull, false otherwise
    */
   function query($query, $data = array()) {
     $res =& $this->_db->query($query, $data);
-    if (PEAR::isError($res)) {
+    if ($res instanceof PEAR_Error) {
       $this->logError($res, "Erreur d'exécution de requête");
       return false;
     }
@@ -109,11 +115,11 @@ class CMbDb {
    * @param string $query SQL query
    * @param array  $data  Preparation data
    * 
-   * @return result The actual result if successful, false otherwise
+   * @return mixed The actual result if successful, false otherwise
    */
   function getOne($query, $data = array()) {
     $res =& $this->_db->getOne($query, $data);
-    if (PEAR::isError($res)) {
+    if ($res instanceof PEAR_Error) {
       $this->logError($res, "Erreur d'exécution de requête");
       return false;
     }
@@ -127,11 +133,11 @@ class CMbDb {
    * @param string $query SQL query
    * @param array  $data  Preparation data
    * 
-   * @return result The actual result if successful, false otherwise
+   * @return mixed The actual result if successful, false otherwise
    */
   function getAssoc($query, $data = array()) {
     $res =& $this->_db->getAssoc($query, true, $data, DB_FETCHMODE_ASSOC);
-    if (PEAR::isError($res)) {
+    if ($res instanceof PEAR_Error) {
       $this->logError($res, "Erreur d'exécution de requête");
       return false;
     }

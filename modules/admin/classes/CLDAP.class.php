@@ -8,11 +8,17 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
+/**
+ * LDAP authentication class
+ */
 class CLDAP {
   /**
-   * @param CUser  $user
-   * @param string $ldap_guid
-   * @return CUser
+   * Log a user in
+   *
+   * @param CUser  $user      The user logging in
+   * @param string $ldap_guid The user's LDAP GUID
+   *
+   * @return CUser The user
    */
   static function login(CUser $user, $ldap_guid) {
     if (!$ldap_guid) {
@@ -25,15 +31,16 @@ class CLDAP {
       $source_ldap = self::bind($user, $ldaprdn, $ldappass);
     }
 
-    // Logging succesfull
+    // Login succesful
     if ($user->_bound) {
       $user = self::searchAndMap($user, $source_ldap, $source_ldap->_ldapconn);
     }
 
     return $user;
   }
-  
+
   /**
+   * @throws CMbException
    * @return CSourceLDAP
    */
   static function connect() {
@@ -44,7 +51,7 @@ class CLDAP {
       throw new CMbException("CSourceLDAP_undefined");
     }
     
-    foreach($sources_ldap as $_source) {
+    foreach ($sources_ldap as $_source) {
       try {
         $ldapconn = $_source->ldap_connect();
         $_source->_ldapconn = $ldapconn;
@@ -57,8 +64,15 @@ class CLDAP {
     
     return false;
   }
-  
+
   /**
+   * Binds a user to the LDAP server
+   *
+   * @param CUser $user     The user to bind to the LDAP server
+   * @param null  $ldaprdn  Relative Distinguished Name
+   * @param null  $ldappass LDAP password
+   *
+   * @throws CMbException
    * @return CSourceLDAP
    */
   static function bind(CUser $user = null, $ldaprdn = null, $ldappass = null) {
@@ -86,13 +100,15 @@ class CLDAP {
     
     return $source_ldap;
   }
-  
+
   /**
-   * @param CUser  $user
-   * @param string $old_pass
-   * @param string $new_pass
-   * @param string $encryption [optional]
-   * @param boolean $encoded_password [optional] If the password is already encoded
+   * Changes a user's password inside the LDAP
+   *
+   * @param CUser  $user       The user
+   * @param string $old_pass   The user's old password
+   * @param string $new_pass   The user's new password
+   * @param string $encryption Encryption type: Unicode or MD5 or SHA
+   *
    * @return boolean Success
    */
   static function changePassword(CUser $user, $old_pass, $new_pass, $encryption = "Unicode") {
@@ -118,20 +134,19 @@ class CLDAP {
     
     $entry = array();
     
-    switch($encryption) {
+    switch ($encryption) {
       case "Unicode":
-        $entry["unicodePwd"][0] = self::encodeUnicodePassword($new_pass);  
-        
+        $entry["unicodePwd"][0] = self::encodeUnicodePassword($new_pass);
         break;
+
       case "MD5":
         $new_pass = md5($new_pass);
         $entry["userPassword"] = "\{$encryption\}".base64_encode(pack("H*", $new_pass));
-        
         break;
+
       case "SHA":
         $new_pass = sha1($new_pass);
         $entry["userPassword"] = "\{$encryption\}".base64_encode(pack("H*", $new_pass));
-        
         break;
     }
     
@@ -143,7 +158,7 @@ class CLDAP {
     $password = "\"$password\"";
     $encoded = "";
     
-    for ($i = 0; $i < strlen($password); $i++){ 
+    for ($i = 0; $i < strlen($password); $i++) {
       $encoded .= "{$password[$i]}\000"; 
     }
     
@@ -151,13 +166,15 @@ class CLDAP {
   }
   
   /**
-   * 
+   * Search and map a user inside the LDAP
+   *
    * @param CUser       $user
    * @param CSourceLDAP $source_ldap
    * @param resource    $ldapconn
    * @param string      $person [optional]
    * @param string      $filter [optional]
    * @param boolean     $force_create [optional]
+   *
    * @return CUser
    */
   static function searchAndMap(CUser $user, CSourceLDAP $source_ldap, $ldapconn, $person = null, $filter = null, $force_create = false) {
@@ -262,11 +279,11 @@ class CLDAP {
    * @param string  $name
    * @param boolean $single [optional]
    * @param boolean $utf8_decode [optional]
+   *
    * @return string
    */
   static function getValue($values = array(), $name, $single = true, $utf8_decode = true) {
     if (array_key_exists($name, $values)) {
-      
       return $single ? 
               ($utf8_decode ? utf8_decode($values[$name][0]) : $values[$name][0]) : 
               ($utf8_decode ? utf8_decode($values[$name]) : $values[$name]);
@@ -276,6 +293,7 @@ class CLDAP {
   /**
    * @param CUser $user
    * @param array $values
+   *
    * @return CUser
    */
   static function mapTo(CUser $user, $values) {
@@ -302,7 +320,7 @@ class CLDAP {
     $user->loadRefMediuser();
     if ($user->_id) {
       $mediuser = $user->_ref_mediuser;
-      $mediuser->actif        =  $actif;
+      $mediuser->actif        = $actif;
       $mediuser->deb_activite = $whencreated;
       $mediuser->fin_activite = $accountexpires;
       $mediuser->_ldap_store = true;
@@ -317,6 +335,7 @@ class CLDAP {
   
   /**
    * @param array $values
+   *
    * @return string
    */
   static function getObjectGUID($values) {
@@ -349,6 +368,7 @@ class CLDAP {
   
   /**
    * @param string $ldap_guid
+   *
    * @return CUser
    */
   static function getFromLDAPGuid($ldap_guid) {

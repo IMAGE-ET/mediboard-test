@@ -15,7 +15,7 @@ require_once "includes/checkauth.php";
 showHeader();
 ?>
 
-<div style="font-size: 14px">
+<div style="font-size: 14px;">
   
   <?php phpinfo(); ?>
   

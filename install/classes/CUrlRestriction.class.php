@@ -55,9 +55,16 @@ class CUrlRestriction extends CCheckable {
     if (array_key_exists("HTTPS", $_SERVER)) {
       $http = "https://";
     }
-    
-    $url = $http.dirname(dirname($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI']));
-    
+
+    $address = $_SERVER['SERVER_ADDR'];
+
+    // IPv6 address
+    if (strpos($address, ":") !== false) {
+      $address = "[$address]";
+    }
+
+    $url = $http.dirname(dirname($address.$_SERVER['REQUEST_URI']));
+
     $restrictions = array();
     
     $restriction = new self;

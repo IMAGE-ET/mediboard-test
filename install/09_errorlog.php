@@ -15,7 +15,10 @@ require_once "includes/checkauth.php";
 
 showHeader();
 
+// Disable output buffer to be able to see big error logs
+ob_end_clean();
+
 // Escape if the file doesn't exist
 @readfile("../tmp/mb-log.html");
 
-showFooter(); ?>
+showFooter();

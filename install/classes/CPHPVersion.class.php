@@ -28,6 +28,10 @@ class CPHPVersion extends CPrerequisite {
     return phpversion() >= $this->name;
   }
 
+  /**
+   * @return self[]
+   */
+
   function getAll() {
     $versions = array();
 

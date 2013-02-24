@@ -17,9 +17,17 @@ abstract class CHTMLResourceLoader {
   
   private static $_stylesheet_path = null;
   
-  private static $_aio = null;
-  private static $_fp_in = null;
-  private static $_fp_out = null;
+  private static $_aio = false;
+
+  /**
+   * @var resource
+   */
+  private static $_fp_in;
+
+  /**
+   * @var resource
+   */
+  private static $_fp_out;
   
   /** 
    * IE Conditional comments
@@ -198,6 +206,8 @@ abstract class CHTMLResourceLoader {
     if (file_exists($filename)) {
       return file_get_contents($filename);
     }
+
+    return null;
   }
   
   /**

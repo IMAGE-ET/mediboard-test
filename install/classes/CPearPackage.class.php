@@ -32,7 +32,10 @@ class CPearPackage extends CPrerequisite {
 
     return @include_once "$this->name.php";
   }
-  
+
+  /**
+   * @return self[]
+   */
   function getAll(){
     $packages = array();
     

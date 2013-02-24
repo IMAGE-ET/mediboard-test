@@ -13,13 +13,14 @@
  * Favicon loader utility class
  */
 abstract class CFaviconLoader extends CHTMLResourceLoader {
-  
+
   /**
    * Links a shortcut icon (aka "favicon")
    * Only to be called while in the HTML header
-   * 
+   *
    * @param string $file The path to the favicon file
-   * 
+   * @param string $type The favicon mime type
+   *
    * @return string An HTML tag to load the favicon
    */
   static function loadFile($file, $type = "image/ico") {

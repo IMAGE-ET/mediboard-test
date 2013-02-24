@@ -51,9 +51,10 @@ if (@$_POST["do"]) {
     $dbConfig["dbhost"], 
     $dbConfig["dbuser"], 
     $dbConfig["dbpass"], 
-    $dbConfig["dbname"]);
+    $dbConfig["dbname"]
+  );
   if ($dbConnection->connect()) {
-    echo $dbConnection->queryDump("includes/mediboard.sql");
+    $dbConnection->queryDump("includes/mediboard.sql");
   }
 ?>
 

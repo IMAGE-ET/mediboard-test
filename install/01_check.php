@@ -127,7 +127,7 @@ showHeader();
     </td>
     <td class="text">
       <ul>
-        <?php foreach($prereq->reasons as $reason) { ?>
+        <?php foreach ($prereq->reasons as $reason) { ?>
         <li><?php echo $reason; ?></li>
         <?php } ?>
       </ul>
@@ -172,7 +172,7 @@ showHeader();
 <?php 
   $package = new CPearPackage;
   
-  foreach($package->getAll() as $prereq) { ?>
+  foreach ($package->getAll() as $prereq) { ?>
   <tr>
     <td><strong><?php echo $prereq->name; ?></strong></td>
     <td class="text"><?php echo nl2br($prereq->description); ?></td>
@@ -185,7 +185,7 @@ showHeader();
     </td>
     <td class="text">
       <ul>
-        <?php foreach($prereq->reasons as $reason) { ?>
+        <?php foreach ($prereq->reasons as $reason) { ?>
         <li><?php echo $reason; ?></li>
         <?php } ?>
       </ul>

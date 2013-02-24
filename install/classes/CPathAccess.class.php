@@ -31,7 +31,10 @@ class CPathAccess extends CCheckable {
     global $mbpath;
     return is_writable($mbpath.$this->path);
   }
-  
+
+  /**
+   * @return self[]
+   */
   function getAll() {
     $pathAccesses = array();
     

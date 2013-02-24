@@ -27,6 +27,11 @@ abstract class CPrerequisite extends CCheckable {
    * @return bool
    */
   abstract function check($strict = true);
-  
+
+  /**
+   * Return all instances of self
+   *
+   * @return self[]
+   */
   abstract function getAll();
 }

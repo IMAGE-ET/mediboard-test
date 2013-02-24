@@ -12,7 +12,7 @@
 
 require_once "header.php";
 
-if (!@include_once $mbpath."includes/config.php") { 
+if (!@include_once $mbpath."includes/config.php") {
   showHeader();
 ?>
   

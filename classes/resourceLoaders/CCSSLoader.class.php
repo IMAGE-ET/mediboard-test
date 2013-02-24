@@ -87,6 +87,7 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
     
     $hash = self::getHash(implode("", $files)."-level-$compress");
     $cachefile = "tmp/$hash-$theme.css";
+    $last_update = null;
     
     // If it exists, we check if it is up to date
     if (file_exists($cachefile)) {

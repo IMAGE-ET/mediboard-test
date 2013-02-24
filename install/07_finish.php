@@ -102,7 +102,7 @@ if (@$_POST["changePassword"] && $_POST["password1"] === $_POST["password2"]) {
 <tr>
   <td>Modification du mot de passe 'admin'</td>
   <td>
-    <?php if (!Pear::isError($res)) { ?>
+    <?php if (!$res instanceof PEAR_Error) { ?>
     <div class="info">Mot de passe modifié</div>
     <?php } else { ?>
     <div class="error">

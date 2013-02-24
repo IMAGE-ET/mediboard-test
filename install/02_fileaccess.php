@@ -55,7 +55,7 @@ showHeader();
   
 <?php 
 $pathAccess = new CPathAccess();
-foreach($pathAccess->getAll() as $pathAccess) { ?>
+foreach ($pathAccess->getAll() as $pathAccess) { ?>
 <tr>
   <td><strong><?php echo $pathAccess->path; ?></strong></td>
   <td class="text"><?php echo nl2br($pathAccess->description); ?></td>

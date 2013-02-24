@@ -24,7 +24,7 @@ body.loaded {
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-die;
+/*
 
 if (isset($_POST["action"])) {
   $action = $_POST["action"];
@@ -44,7 +44,7 @@ if (isset($_POST["action"])) {
       }
     }
   }
-}
+}*/
 
 ?>
 

@@ -45,7 +45,7 @@ showHeader();
 <form name="createBases" action="05_initialize.php" method="post">
 
 <table class="form">
-  <col style="width: 25%" />
+  <col style="width: 25%;" />
 
   <tr>
     <th class="title" colspan="2">Avec des droits d'aministrateurs</th>
@@ -80,7 +80,7 @@ if (@$_POST["adminhost"]) {
     $_POST["adminpass"]);
     
   if ($dbConnection->connect()) {
-    foreach($queries as $query) {
+    foreach ($queries as $query) {
       $dbConnection->query($query);
     }
   }
@@ -117,7 +117,7 @@ if (@$_POST["adminhost"]) {
 <input type="hidden" name="generate" value="true"/>
   
 <table class="form">
-  <col style="width: 50%" />
+  <col style="width: 50%;" />
 
   <tr>
     <th class="title" colspan="2">Sans droits d'aministrateurs</th>
@@ -154,12 +154,13 @@ if (@$_POST["adminhost"]) {
     <th>Test de connectivité</th>
   </tr>
   <?php 
-  foreach($dbConfigs as $dbConfigName => $dbConfig) { 
+  foreach ($dbConfigs as $dbConfigName => $dbConfig) {
     $dbConnection = new CMbDb(
       $dbConfig["dbhost"], 
       $dbConfig["dbuser"], 
       $dbConfig["dbpass"], 
-      $dbConfig["dbname"]);
+      $dbConfig["dbname"]
+    );
     $dbConnection->connect();
   ?>
   <tr>
