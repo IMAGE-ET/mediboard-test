@@ -8,15 +8,16 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$affectation_id = CValue::get("affectation_id");
-$_link_affectation = CValue::get("_link_affectation", 0);
-$services_ids_suggest   = CValue::get("services_ids_suggest");
+$affectation_id       = CValue::get("affectation_id");
+$_link_affectation    = CValue::get("_link_affectation", 0);
+$services_ids_suggest = CValue::get("services_ids_suggest");
+$datetime             = CValue::get("datetime");
 
-$entree = null;
+$entree = $datetime;
 $sortie = null;
 $lit_id = null;
 
-$affectation = new CAffectation;
+$affectation = new CAffectation();
 $affectation->load($affectation_id)->loadRefLit()->loadRefChambre();
 
 if (!$services_ids_suggest) {
@@ -26,7 +27,6 @@ else {
   $services_ids_suggest = explode(",", $services_ids_suggest);
 }
 
-$entree = $affectation->entree;
 $sortie = $affectation->sortie;
 
 $where = array();
@@ -35,13 +35,15 @@ $where["chambre.service_id"] = CSQLDataSource::prepareIn($services_ids_suggest);
 $ljoin = array();
 $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
 
-$lit = new CLit;
+$lit = new CLit();
 $lits = $lit->loadList($where, null, null, null, $ljoin);
 
 //unset($lits[$affectation->lit_id]);
 
 $max_entree = 0;
 $max_sortie = 0;
+
+$ds = $lit->getDS();
 
 foreach ($lits as $key => $_lit) {
   
@@ -50,7 +52,7 @@ foreach ($lits as $key => $_lit) {
   
   if ($_lit->_id == $affectation->lit_id) {
     
-    $_lit->_ref_last_dispo = new CAffectation;
+    $_lit->_ref_last_dispo = new CAffectation();
     $_lit->_ref_last_dispo->sortie = $entree;
     $_lit->_dispo_depuis = 0;
   }
@@ -60,17 +62,18 @@ foreach ($lits as $key => $_lit) {
     $where["entree"] = "<= '$sortie'";
     $where["sortie"] = ">= '$entree'";
     
-    $affectation_collide = new CAffectation;
+    $affectation_collide = new CAffectation();
     $affectation_collide->loadObject($where);
     
     if ($affectation_collide->_id) {
+
       unset($lits[$key]);
       continue;
     }
     $where = array(
       "lit_id" => "= '$_lit->_id'",
       "sortie" => "<= '$entree'");
-    $_lit->_ref_last_dispo = new CAffectation;
+    $_lit->_ref_last_dispo = new CAffectation();
     $_lit->_ref_last_dispo->loadObject($where, "sortie DESC");
     
     $_lit->_dispo_depuis = strtotime($entree) - strtotime($_lit->_ref_last_dispo->sortie);
@@ -83,11 +86,22 @@ foreach ($lits as $key => $_lit) {
       $max_entree = $_lit->_dispo_depuis;
     }
   }
-  
+
+  // Sexe de l'autre patient présent dans la chambre
+  $sql = "SELECT sexe
+          FROM affectation
+          LEFT JOIN lit ON lit.lit_id = affectation.lit_id
+          LEFT JOIN sejour ON sejour.sejour_id = affectation.sejour_id
+          LEFT JOIN patients ON patients.patient_id = sejour.patient_id
+          WHERE lit.chambre_id = '$_lit->chambre_id'
+          AND lit.lit_id != '$_lit->_id'
+          AND '$datetime' BETWEEN affectation.entree AND affectation.sortie";
+  $_lit->_sexe_other_patient = $ds->loadResult($sql);
+
   $where = array(
       "lit_id" => "= '$_lit->_id'",
       "entree" => " >= '$sortie'");
-  $_lit->_ref_next_dispo = new CAffectation;
+  $_lit->_ref_next_dispo = new CAffectation();
   $_lit->_ref_next_dispo->loadObject($where, "entree ASC");
   
   $_lit->_dispo_depuis_friendly = CMbDate::relative($_lit->_ref_last_dispo->sortie, $entree);
@@ -114,7 +128,7 @@ foreach ($lits as $key => $_lit) {
 $sorter = CMbArray::pluck($lits, "_dispo_depuis");
 array_multisort($sorter, SORT_ASC, $lits);
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("lits", $lits);
 $smarty->assign("affectation_id", $affectation_id);
@@ -124,4 +138,3 @@ $smarty->assign("_link_affectation", $_link_affectation);
 $smarty->assign("services_ids_suggest", $services_ids_suggest);
 
 $smarty->display("inc_suggest_lit.tpl");
-?>

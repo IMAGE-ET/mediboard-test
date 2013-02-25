@@ -2,7 +2,7 @@
 
 <table class="tbl" id="lits_dispos">
   <tr>
-    <th class="title" colspan="5">
+    <th class="title" colspan="6">
       <form name="searchLit" method="get" onsubmit="return onSubmitFormAjax(this, null, this.up('div'))">
         <input type="hidden" name="m" value="dPhospi" />
         <input type="hidden" name="a" value="ajax_suggest_lit" />
@@ -21,6 +21,9 @@
     <th>{{tr}}CLit{{/tr}}</th>
     <th class="narrow">
       <input type="text" size="3" onkeyup="Admissions.filter(this, 'lits_dispos')" id="filter-patient-name" />
+    </th>
+    <th class="narrow">
+      <label title="Sexe de l'autre patient dans la chambre">Sexe</label>
     </th>
     <th>Occupé après</th>
   </tr>
@@ -61,6 +64,11 @@
         </td>
         <td colspan="2">
           <span class="CPatient-view">{{$_lit}}</span>
+        </td>
+        <td>
+          {{if $_lit->_sexe_other_patient}}
+            {{tr}}CPatient.sexe.{{$_lit->_sexe_other_patient}}{{/tr}}
+          {{/if}}
         </td>
         <td style="width: 30%;">
           {{if isset($_lit->_occupe_dans_friendly.count|smarty:nodefaults)}}

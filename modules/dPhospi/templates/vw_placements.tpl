@@ -125,10 +125,10 @@
     url.requestUpdate("list_affectations", {onComplete: after_refresh});
   }
  
-  changeLit = function(affectation_id, link_affectation) {
+  changeLit = function(affectation_id, link_affectation, datetime) {
     var url = new Url('dPhospi', 'ajax_suggest_lit');
     url.addParam('affectation_id', affectation_id);
-    
+    url.addParam("datetime", datetime);
     if (link_affectation) {
       url.addParam("_link_affectation", link_affectation);
     }

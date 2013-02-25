@@ -28,10 +28,10 @@
     Calendar.regField(getForm('cutAffectation')._date_cut, dates, {timePicker: true});
   } );
   
-  liaisonMaman = function(status, parent_affectation_id) {
+  liaisonMaman = function(status, parent_affectation_id, datetime) {
     var oForm = getForm('cutAffectation');
     if (status && parent_affectation_id) {
-      changeLit('{{$affectation->_id}}', 1);
+      changeLit('{{$affectation->_id}}', 1, datetime);
       return;
     }
     oForm.onsubmit();
@@ -81,7 +81,7 @@
         {{if "maternite"|module_active && $sejour_maman}}
           liaisonMaman(this.form._action_maman.checked, '{{$affectation->parent_affectation_id}}')
         {{elseif !$lit_id}}
-          changeLit('{{$affectation->_id}}', 1);
+          changeLit('{{$affectation->_id}}', 1, $V(this.form._date_cut));
         {{else}}
           this.form.onsubmit();
         {{/if}}" id="cut_affectation">Créer un mouvement</button>
