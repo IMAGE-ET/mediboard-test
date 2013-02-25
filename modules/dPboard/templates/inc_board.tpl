@@ -15,12 +15,7 @@
   <label for="praticien_id" title="Praticien pour lequel on affiche les statistiques">Praticien</label>
   <select name="praticien_id" onchange="form.submit()">
   <option value="">&mdash; Choix d'un praticien</option>
-  {{foreach from=$praticiens item=_praticien}}
-    <option value="{{$_praticien->_id}}" class="mediuser" style="border-color: #{{$_praticien->_ref_function->color}};" 
-    	{{if $prat->_id == $_praticien->_id}}selected="selected"{{/if}}>
-      {{$_praticien->_view}}
-    </option>
-  {{/foreach}}
+  {{mb_include module=mediusers template=inc_options_mediuser selected=$prat->_id list=$praticiens}}
   </select>
 </form>
 
