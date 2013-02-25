@@ -135,7 +135,7 @@ toggleCustomValue = function(button, b) {
                     {{assign var=_list value="|"|explode:$_prop.list}}
                     <select class="{{$_prop.string}}" name="c[{{$_feature}}]" {{if $is_inherited}} disabled {{/if}}>
                       {{foreach from=$_list item=_item}}
-                        <option value="{{$_item}}" {{if $_item == $value}} selected {{/if}} {{if $is_inherited}} disabled {{/if}}>{{$_item}}</option>
+                        <option value="{{$_item}}" {{if $_item == $value}} selected {{/if}}>{{$_item}}</option>
                       {{/foreach}}
                     </select>
 
