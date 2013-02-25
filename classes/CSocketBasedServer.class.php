@@ -427,8 +427,8 @@ class CSocketBasedServer {
         "port"   => $port,
       );
     }
-    
-    echo sprintf(" > New connection [%d] arrived from %s:%d\n", $id, $addr, $port);
+
+    echo sprintf(" > %s: New connection [%d] arrived from %s:%d\n", date("H:i:s"), $id, $addr, $port);
     return true;
   }
   
