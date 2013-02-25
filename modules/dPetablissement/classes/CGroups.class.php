@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPetablissement
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 class CGroups extends CMbObject {
@@ -32,6 +33,8 @@ class CGroups extends CMbObject {
   var $pharmacie_id        = null;
   var $finess              = null;
   var $chambre_particuliere= null;
+  var $ean                 = null;
+  var $rcc                 = null;
 
   // Form fields
   var $_cp_court           = null;
@@ -159,6 +162,8 @@ class CGroups extends CMbObject {
     $props["web"]                 = "str";
     $props["finess"]              = "numchar length|9 confidential mask|9xS9S99999S9 control|luhn";
     $props["chambre_particuliere"]= "bool notNull default|0";
+    $props["ean"]                 = "str";
+    $props["rcc"]                 = "str";
 
     $props["_cp_court"]           = "numchar length|2";
 

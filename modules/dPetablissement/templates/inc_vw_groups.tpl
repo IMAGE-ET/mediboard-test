@@ -105,7 +105,18 @@ Main.add(function () {
     <th>{{mb_label object=$group field="chambre_particuliere"}}</th>
     <td>{{mb_field object=$group field="chambre_particuliere"}}</td>
   </tr>
-
+  
+  {{if $conf.ref_pays == 2}}
+    <tr>
+      <th>{{mb_label object=$group field="ean"}}</th>
+      <td>{{mb_field object=$group field="ean"}}</td>
+    </tr>
+    <tr>
+      <th>{{mb_label object=$group field="rcc"}}</th>
+      <td>{{mb_field object=$group field="rcc"}}</td>
+    </tr>
+  {{/if}}
+  
   <tr>
     <td class="button" colspan="2">
     {{if $group->_id}}

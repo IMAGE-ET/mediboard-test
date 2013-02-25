@@ -103,8 +103,13 @@ class CSetupdPetablissement extends CSetup {
     $query = "ALTER TABLE `groups_mediboard` 
                 ADD `mail_apicrypt` VARCHAR (50);";
     $this->addQuery($query);
-   
-    $this->mod_version = "0.30";
+    $this->makeRevision("0.30");
+    
+    $query = "ALTER TABLE `groups_mediboard`
+               ADD `ean` VARCHAR (30),
+               ADD `rcc` VARCHAR (30);";
+    $this->addQuery($query);
+    $this->mod_version = "0.31";
   } 
 }
 
