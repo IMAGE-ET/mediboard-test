@@ -1,12 +1,18 @@
 <tr>
   <td style="text-align:center;width:100px;">
+    {{if $facture->_ref_last_sejour->_id}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$facture->_ref_last_sejour->_guid}}')">
+    {{else}}
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$facture->_ref_last_consult->_guid}}')">
+    {{/if}}
     {{if $_acte_tarmed->date}}
       {{mb_value object=$_acte_tarmed field="date"}}
-    {{elseif $object->_date}}
-      {{$object->_date|date_format:"%d/%m/%Y"}}
+    {{elseif $facture->_ref_last_consult->_date}}
+      {{$facture->_ref_last_consult->_date|date_format:"%d/%m/%Y"}}
     {{else}}
-      {{$object->date|date_format:"%d/%m/%Y"}}
+      {{$facture->_ref_last_sejour->date|date_format:"%d/%m/%Y"}}
     {{/if}}
+    </span>
   </td>
   {{if $_acte_tarmed->code}} 
   <td class="acte-{{$_acte_tarmed->_class}}">

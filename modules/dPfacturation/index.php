@@ -11,6 +11,7 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_factures_consult", TAB_READ);
-$module->registerTab("vw_factures_sejour" , TAB_READ);
+$module->registerTab("vw_factures_cabinet", TAB_READ);
+$module->registerTab("vw_factures_etab"   , TAB_READ);
+$module->registerTab("vw_compta"          , TAB_READ);
 ?>

@@ -80,6 +80,8 @@ class CFacture extends CMbObject {
   var $_ref_reglements_patient  = null;
   var $_ref_reglements_tiers    = null;
   var $_ref_sejours             = null;
+  var $_ref_first_sejour        = null;
+  var $_ref_last_sejour         = null;
   
   var $_ref_actes_tarmed  = array();
   var $_ref_actes_caisse  = array();
@@ -534,6 +536,14 @@ class CFacture extends CMbObject {
         $sejour->loadRefsActes();
         $this->rangeActes($sejour);
       }
+    }
+    if (count($this->_ref_sejours) > 0) {
+      $this->_ref_last_sejour  = end($this->_ref_sejours);
+      $this->_ref_first_sejour = reset($this->_ref_sejours);
+    }
+    else {
+      $this->_ref_last_sejour = new CSejour();
+      $this->_ref_first_sejour  = new CSejour();
     }
     return $this->_ref_sejours;
   }
