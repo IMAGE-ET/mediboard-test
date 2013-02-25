@@ -91,8 +91,8 @@ class CSetupdPccam extends CSetup {
 		
 		// Data source query
     $query = "SELECT *
-      FROM `actes`
-      WHERE CODE = 'DBLF009'";
+              FROM `notes`
+              WHERE `CODEACTE` LIKE 'EBQF004'";
     //$query = "SHOW TABLES LIKE 'forfaits'";
     $this->addDatasource("ccamV2", $query);
 		
