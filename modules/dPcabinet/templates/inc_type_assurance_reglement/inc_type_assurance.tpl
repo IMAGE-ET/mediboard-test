@@ -32,7 +32,7 @@ changeType = function() {
       <label><input type="radio" name="type_assurance" id="type_classique" value="classique" onclick="this.form.onsubmit();" {{if $consult->type_assurance == "classique"}} checked=true{{/if}}/>Classique</label>
       <label><input type="radio" name="type_assurance" id="type_at" value="at" onclick="this.form.onsubmit();" {{if $consult->type_assurance == "at"}} checked=true{{/if}}/>Accident du travail</label>
 
-      {{if "maternite"|module_active && $consult->_ref_patient->grossesse_id}}
+      {{if "maternite"|module_active && $consult->grossesse_id}}
         <label><input type="radio" name="type_assurance" id="type_maternite" value="maternite" onclick="this.form.onsubmit();" {{if $consult->type_assurance == "maternite"}} checked=true{{/if}}/>Maternité</label>
       {{/if}}
     {{/if}}
