@@ -336,7 +336,7 @@
 <br />
 <table class="tbl">
   <tr>
-    <th colspan="7" class="title">Transmissions {{if !$mode_urgences}}-
+    <th colspan="9" class="title">Transmissions {{if !$mode_urgences}}-
         {{$service->_view}} - du {{$dateTime_min|date_format:$conf.datetime}} au {{$dateTime_max|date_format:$conf.datetime}}
       {{/if}}
     </th>
@@ -354,7 +354,7 @@
           {{assign var=patient value=$sejour->_ref_patient}}
           {{assign var=operation value=$sejour->_ref_last_operation}}
           <tr>
-            <th colspan="7" class="text">
+            <th colspan="9" class="text">
               {{if !$mode_urgences}}
                 <span style="float: left; text-align: left;">
                   {{foreach from=$sejour->_ref_affectations item=_affectation}}
@@ -396,7 +396,7 @@
             </th>
           </tr>
           <tr>
-            <th class="element text" colspan="7" style="text-align: left">
+            <th class="element text" colspan="9" style="text-align: left">
               <strong>{{$operation->libelle}}</strong> 
               {{if !$operation->libelle}}
                 {{foreach from=$operation->_ext_codes_ccam item=curr_ext_code}}
@@ -411,7 +411,7 @@
           {{if $_trans_and_obs instanceof CTransmissionMedicale && $_trans_and_obs->degre == 'high'}}
             style="font-weight: bold;"
           {{/if}}>
-          {{include file=../../dPhospi/templates/inc_line_suivi.tpl _suivi=$_trans_and_obs show_patient=false readonly=true nodebug=true}}
+          {{mb_include module=hospi template=inc_line_suivi _suivi=$_trans_and_obs show_patient=false readonly=true nodebug=true}}
         </tr>
       {{/foreach}}
     {{/foreach}}

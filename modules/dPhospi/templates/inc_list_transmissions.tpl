@@ -4,7 +4,7 @@
   {{if $offline}}
     <thead>
       <tr>
-        <th class="title" colspan="7">
+        <th class="title" colspan="9">
           {{$sejour->_view}}
           {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
         </th>
@@ -12,7 +12,7 @@
     </thead>
   {{/if}}
   <tr>
-    <th colspan="7" class="title">
+    <th colspan="9" class="title">
 			{{if !$readonly}}
 				<div style="float: right">
           <input name="_show_obs_view" id="_show_obs_view" type="checkbox" {{if $_show_obs}}checked="checked"{{/if}}
@@ -52,14 +52,19 @@
     </th>
   </tr>
   <tr>
-    <th>{{tr}}Type{{/tr}}</th>
-    <th>{{tr}}User{{/tr}}</th>
-    <th>{{tr}}Date{{/tr}}</th>
-    <th>{{tr}}Hour{{/tr}}</th>
-    <th>{{mb_title class=CTransmissionMedicale field=object_class}}</th>
-		<th>{{mb_title class=CTransmissionMedicale field=text}}</th>
-    <th />
-  </tr>  
+    <th rowspan="2">{{tr}}Type{{/tr}}</th>
+    <th rowspan="2" style="width: 10%">{{tr}}User{{/tr}}</th>
+    <th rowspan="2">{{tr}}Date{{/tr}}</th>
+    <th rowspan="2">{{tr}}Hour{{/tr}}</th>
+    <th rowspan="2">{{mb_title class=CTransmissionMedicale field=object_class}}</th>
+		<th colspan="3" style="width: 50%">{{mb_title class=CTransmissionMedicale field=text}}</th>
+    <th rowspan="2" class="narrow"></th>
+  </tr>
+  <tr>
+    <th class="section" style="width: 17%">{{tr}}CTransmissionMedicale.type.data{{/tr}}</th>
+    <th class="section" style="width: 17%">{{tr}}CTransmissionMedicale.type.action{{/tr}}</th>
+    <th class="section" style="width: 17%">{{tr}}CTransmissionMedicale.type.result{{/tr}}</th>
+  </tr>
   <tbody {{if !$readonly}} id="transmissions" {{/if}}>
   {{foreach from=$list_transmissions item=_suivi}}
 	<tr class="{{if is_array($_suivi)}}

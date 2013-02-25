@@ -30,12 +30,12 @@
      </span>
    {{/if}}
   </td>  
-  <td class="text">
+  <td colspan="3" class="text">
     <div>
       <strong>{{mb_value object=$_suivi field=text}}</strong>
     </div>
   </td>
-  <td>
+  <td class="text">
     {{if !$readonly && $_suivi->_canEdit}}
       <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_observation_aed" />
@@ -59,7 +59,7 @@
      {{mb_ditto name=date value=$_suivi->datetime|date_format:$conf.date}}
   </td>
   <td>{{$_suivi->datetime|date_format:$conf.time}}</td>
-  <td colspan="2" class="text">
+  <td colspan="4" class="text">
     {{foreach from=$params key=_key item=_field name="const"}}
       {{if $_suivi->$_key != null && $_key|substr:0:1 != "_"}}
         {{mb_title object=$_suivi field=$_key}} :
@@ -91,7 +91,7 @@
     {{mb_ditto name=date value=$_suivi->debut|date_format:$conf.date}}
   </td>
   <td>{{mb_value object=$_suivi field="time_debut"}}</td>
-  <td colspan="2" {{if $_suivi->_count.transmissions}} class="arretee" {{/if}}>
+  <td colspan="4" {{if $_suivi->_count.transmissions}} class="arretee" {{/if}}>
     {{if !$readonly}}
       <button type="button" class="tick" onclick="addTransmissionAdm('{{$_suivi->_id}}','{{$_suivi->_class}}');" style="float: right;">Réaliser ({{$_suivi->_count.transmissions}})</button>
     {{/if}}
@@ -101,7 +101,7 @@
     {{/if}}
     {{mb_value object=$_suivi field="commentaire"}}
   </td>
-  <td class="narrow button {{if $_suivi->_count.transmissions}} arretee {{/if}}" style="white-space: nowrap;">
+  <td class="text {{if $_suivi->_count.transmissions}}arretee{{/if}}">
     {{if !$readonly && $_suivi->_canEdit && !$_suivi->_count.transmissions}}
       <form name="Del-{{$_suivi->_guid}}" action="?" method="post">
         <input type="hidden" name="m" value="dPprescription" />
@@ -116,7 +116,7 @@
         <button type="button" class="trash notext" onclick="submitSuivi(this.form, 1);"></button>
       </form>
       <button type="button" class="edit notext"
-        onclick="addPrescription('{{$_suivi->_ref_prescription->object_id}}', '{{$app->user_id}}', '{{$_suivi->_id}}', '{{$_suivi->_class}}');">{{tr}}Edit{{/tr}}</button>
+        onclick="addPrescription('{{$_suivi->_ref_prescription->object_id}}', '{{$app->user_id}}', '{{$_suivi->_id}}', '{{$_suivi->_class}}');"></button>
     {{/if}}
   </td>
   {{/if}}
@@ -145,7 +145,7 @@
   </td>
   <td>{{$_suivi->_datetime|date_format:$conf.time}}</td>
   <td></td>
-  <td class="text">
+  <td class="text" colspan="3">
     {{if $_suivi->_refs_dossiers_anesth|@count}}
       {{foreach from=$_suivi->_refs_dossiers_anesth item=_dossier_anesth}}
         <strong>
@@ -196,7 +196,7 @@
       {{/if}}
     {{/if}}
   </td>
-  <td class="narrow button" style="white-space: nowrap;">
+  <td>
     {{if !$readonly}}
       <button type="button" class="{{if $_suivi->_canEdit}}edit{{else}}search{{/if}} notext" onclick="modalConsult('{{$_suivi->_id}}')"></button>
     {{/if}}
@@ -260,11 +260,11 @@
   {{/if}} 
 
   </td>
-  <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}} libelle_trans">
+  <td class="text {{if $_suivi->type}}trans-{{$_suivi->type}}{{/if}} libelle_trans" colspan="3">
     {{mb_value object=$_suivi field=text}}
   </td>
   
-  <td class="narrow button" style="white-space: nowrap;">
+  <td class="text">
     {{if !$readonly && $_suivi->_canEdit}}
       <form name="Del-{{$_suivi->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
         <input type="hidden" name="dosql" value="do_transmission_aed" />
@@ -274,7 +274,7 @@
         <input type="hidden" name="sejour_id" value="{{$_suivi->sejour_id}}" />
         <button type="button" class="trash notext" onclick="submitSuivi(this.form, 1)">{{tr}}Delete{{/tr}}</button>
       </form>
-      <button type="button" class="edit notext" onclick="addTransmission(null, null, '{{$_suivi->_id}}', null, null, null, 1)"></button>
+      <button type="button" class="edit notext" onclick="addTransmission(null, null, '{{$_suivi->_id}}', null, null, null, 1)" ></button>
     {{/if}}
   </td>
   
@@ -337,22 +337,33 @@
       <a href="#1" onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$_suivi[0]->user_id}}', null, null, null, '{{$_suivi[0]->libelle_ATC|smarty:nodefaults|JSAttribute}}'); }">{{$_suivi[0]->libelle_ATC}}</a>
     {{/if}}
   </td>
+  {{if $_suivi|@count}}
+    {{if $_suivi[0]->type != "data"}}
+      <td></td>
+      {{if $_suivi[0]->type == "result"}}
+        <td></td>
+      {{/if}}
+    {{/if}}
+  {{/if}}
+  {{foreach from=$_suivi item=_trans name=foreach_trans}}
+    {{if $smarty.foreach.foreach_trans.index == 1 && $_suivi[0]->type == "data" && $_trans->type == "result"}}
+      <td></td>
+    {{/if}}
+    <td>
+      {{mb_value object=$_trans field=text}}
+    </td>
+  {{/foreach}}
+  {{if $_suivi|@count == 1}}
+    {{if $_suivi[0]->type != "result"}}
+      <td></td>
+      {{if $_suivi[0]->type != "action"}}
+        <td></td>
+      {{/if}}
+    {{/if}}
+  {{elseif $_suivi|@count == 2 && $_suivi[1]->type == "action"}}
+    <td></td>
+  {{/if}}
   <td class="text">
-    {{foreach from=$_suivi item=_trans}}
-      <strong>
-        {{if $_trans->type == "data"}}
-          D: 
-        {{elseif $_trans->type == "action"}}
-          A: 
-        {{else}}
-          R: 
-        {{/if}}
-      </strong>
-      {{$_trans->text|nl2br|smarty:nodefaults}} <br />
-    {{/foreach}}
-  </td>
-  
-  <td class="narrow button" style="white-space: nowrap;">
     {{if !$readonly && $_suivi[0]->_canEdit}}
       
       <form name="Del-{{$_suivi[0]->_guid}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
@@ -378,7 +389,7 @@
          onclick="confirmDeletion(this.form,
           {typeName:'la/les transmission(s)',
             ajax: true,
-            callback: function() { submitSuivi(getForm('Del-{{$_suivi[0]->_guid}}'), 1); } })">{{tr}}Delete{{/tr}}</button>
+            callback: function() { submitSuivi(getForm('Del-{{$_suivi[0]->_guid}}'), 1); } })"></button>
       </form>
       {{if $_suivi|@count == 1}}
         <button type="button" class="edit notext" onclick="addTransmission('{{$_suivi[0]->sejour_id}}', null, '{{$_suivi[0]->_id}}', null, null, null, 1)"></button>
