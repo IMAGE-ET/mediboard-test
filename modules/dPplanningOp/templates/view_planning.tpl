@@ -212,24 +212,25 @@
   {{/if}}
   
   {{if $conf.dPplanningOp.CSejour.assurances}}
-    {{if $sejour->assurance_maladie}}
+    {{assign var="facture" value=$sejour->_ref_last_facture}}
+    {{if $facture->assurance_maladie}}
     <tr>
-      <th>{{mb_label object=$sejour field=assurance_maladie}}</th>
-      <td class="text">{{mb_value object=$sejour field=assurance_maladie}}</td>
+      <th>{{mb_label object=$facture field=assurance_maladie}}</th>
+      <td class="text">{{mb_value object=$facture field=assurance_maladie}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$sejour field=rques_assurance_maladie}}</th>
-      <td class="text">{{mb_value object=$sejour field=rques_assurance_maladie}}</td>
+      <th>{{mb_label object=$facture field=rques_assurance_maladie}}</th>
+      <td class="text">{{mb_value object=$facture field=rques_assurance_maladie}}</td>
     </tr>
     {{/if}}
-    {{if $sejour->assurance_accident}}
+    {{if $facture->assurance_accident}}
       <tr>
-        <th>{{mb_label object=$sejour field=assurance_accident}}</th>
-        <td class="text">{{mb_value object=$sejour field=assurance_accident}}</td>
+        <th>{{mb_label object=$facture field=assurance_accident}}</th>
+        <td class="text">{{mb_value object=$facture field=assurance_accident}}</td>
       </tr>
       <tr>
-        <th>{{mb_label object=$sejour field=rques_assurance_accident}}</th>
-        <td class="text">{{mb_value object=$sejour field=rques_assurance_accident}}</td>
+        <th>{{mb_label object=$facture field=rques_assurance_accident}}</th>
+        <td class="text">{{mb_value object=$facture field=rques_assurance_accident}}</td>
       </tr>
     {{/if}}
   {{/if}}
