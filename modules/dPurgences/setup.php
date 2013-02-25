@@ -331,7 +331,29 @@ class CSetupdPurgences extends CSetup {
     $query = "ALTER TABLE `rpu` 
               ADD `code_diag` INT (11);";
     $this->addQuery($query); 
-    $this->mod_version = "0.40";
+    $this->makeRevision("0.40");
+    
+    $query = "CREATE TABLE `motif_urgence` (
+              `motif_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `chapitre_id` INT (11) UNSIGNED,
+              `nom` VARCHAR (255),
+              `code_diag` INT (11),
+              `degre_min` INT (11),
+              `degre_max` INT (11)
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `motif_urgence` 
+              ADD INDEX (`chapitre_id`);";
+    $this->addQuery($query);
+    
+    $query = "CREATE TABLE `motif_chapitre` (
+              `chapitre_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `nom` VARCHAR (255)
+              ) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.41";
   }  
 }
 
