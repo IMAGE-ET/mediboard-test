@@ -37,7 +37,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
    * @param string $event_name Event name
    * @param string $encoding   Encoding
    *
-   * @return CHL7v2ChangePatientIdentifierList|CHL7v2GeneratePatientDemographicsResponse|CHL7v2MergePersons|CHL7v2MessageXML|CHL7v2ReceivePatientDemographicsResponse|CHL7v2RecordAdmit|CHL7v2RecordAppointment|CHL7v2RecordObservationResultSet|CHL7v2RecordPerson
+   * @return CHL7v2MessageXML
    */
   static function getEventType($event_name = null, $encoding = "utf-8") {
     if (!$event_name) {
@@ -96,6 +96,13 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       // Suppression d'une requête
       if (CMbArray::in($event_code, CHL7v2CancelPatientDemographicsQuery::$event_codes)) {
         return new CHL7v2CancelPatientDemographicsQuery($encoding);
+      }
+    }
+
+    if ($event_type == "CHL7v2EventORM") {
+      // Analyse d'une réponse reçu après une requête
+      if (CMbArray::in($event_code, CHL7v2ReceiveOrderMessage::$event_codes)) {
+        return new CHL7v2ReceiveOrderMessage($encoding);
       }
     }
     
@@ -188,7 +195,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     }
     
     return $nodeList;
-}
+  }
 
   /**
    * @param         $nodeName
@@ -200,7 +207,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $xpath = new CHL7v2MessageXPath($contextNode ? $contextNode->ownerDocument : $this);   
     
     return $xpath->queryTextNode($nodeName, $contextNode);
-}
+  }
 
   /**
    * @param $name
@@ -214,7 +221,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $function = "get$name";
     
     $this->$function($data[$name], $object);
-}
+  }
 
   /**
    * @return array
@@ -243,7 +250,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
         $data["PI"] = $this->queryTextNode("CX.1", $node);
       }
     }
-}
+  }
 
   /**
    * @param DOMNode $node
@@ -258,7 +265,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
         $data["AN"] = $this->queryTextNode("CX.1", $node);
       }
     }
-}
+  }
 
   /**
    * @param DOMNode $node
@@ -271,7 +278,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
         return $this->queryTextNode("CX.1", $_PID21);
       }
     }
-}
+  }
 
   /**
    * @param DOMNode $node
@@ -284,7 +291,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
         return $this->queryTextNode("CX.1", $_PID21);
       }
     }
-}
+  }
 
   /**
    * @param DOMNode        $node
@@ -295,7 +302,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     if (($this->queryTextNode("CX.5", $node) == "VN")) {
       $data["VN"] = $this->queryTextNode("CX.1", $node);
     }
-}
+  }
 
   /**
    * @param DOMNode        $node
@@ -321,7 +328,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     if (($this->queryTextNode("CX.5", $node) == "RI")) {
       $data["RI_Others"] = $this->queryTextNode("CX.1", $node);
     }
-}
+  }
 
   /**
    * @param DOMNode $node
@@ -332,7 +339,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
         ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))) {
       $data["NPA"] = $this->queryTextNode("CX.1", $node);
     }
-}
+  }
 
   /**
    * @param                $nodeName
@@ -367,7 +374,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     }    
  
     return $data;
-}
+  }
 
   /**
    * @param DOMNode        $contextNode
@@ -403,7 +410,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     }
         
     return $data;
-}
+  }
 
   /**
    * @return array
@@ -426,7 +433,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $this->queryNode("PD1", null, $data, true);
     
     return $data;
-}
+  }
 
   /**
    * @param $value
@@ -434,7 +441,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
    */
   function getBoolean($value) {
     return ($value == "Y") ? 1 : 0;
-}
+  }
 
   /**
    * @param $string
@@ -442,7 +449,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
    */
   function getPhone($string) {
     return preg_replace("/[^0-9]/", "", $string);
-}
+  }
 
   /**
    * @param DOMNode   $node
