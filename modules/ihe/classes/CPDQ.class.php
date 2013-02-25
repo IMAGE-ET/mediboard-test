@@ -56,6 +56,11 @@ class CPDQ extends CIHE {
    */
   function __construct() {
     $this->type = "PDQ";
+
+    $this->_categories = array(
+      "ITI-21" => self::$transaction_iti21,
+      "ITI-22" => self::$transaction_iti22,
+    );
   }
 
   /**

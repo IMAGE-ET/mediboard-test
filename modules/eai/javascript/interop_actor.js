@@ -54,7 +54,7 @@ InteropActor = {
     var url = new Url("eai", "ajax_vw_messages_supported");
     url.addParam("actor_guid", actor_guid);
     url.addParam("exchange_class", exchange_class);
-    url.requestModal(800, 350);
+    url.requestModal(800, 530);
     InteropActor.modal = url.modalObject;
     InteropActor.modal.observe("afterClose", function(){ 
       InteropActor.refreshFormatsAvailable(actor_guid); 

@@ -91,6 +91,7 @@ $locales['CEAI-tools-exchanges-reprocessing-button'] = 'Retraiter';
 $locales['CEAI-tools-smp'] = 'Outils SMP';
 $locales['CEAI-tools-smp-resend_exchange'] = 'Réémission des échanges';
 $locales['CEAI-tools-smp-resend_exchange-button'] = 'Réémettre';
+$locales['CEAI-trigger-events'] = 'Trigger Events';
 $locales['CEAIDispatcher-_family_message_no_supported_for_this_actor'] = 'Le message \'%s\' est compris mais n\'est pas supporté par cet utilisateur Mediboard. Veuillez contacter votre administrateur.';
 $locales['CEAIDispatcher-message_dispatch'] = 'Message retraité';
 $locales['CEAIDispatcher-no_actor'] = 'Aucun utilisateur Mediboard associé à ce message. Veuillez contacter votre administrateur.';

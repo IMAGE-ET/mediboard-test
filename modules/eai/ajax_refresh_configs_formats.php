@@ -32,5 +32,3 @@ $smarty->assign("actor_guid"      , $actor_guid);
 $smarty->assign("formats_xml"     , $formats_xml);
 $smarty->assign("formats_tabular" , $formats_tabular);
 $smarty->display("inc_configs_formats.tpl");
-
-?>

@@ -13,7 +13,7 @@
 
 /**
  * Class CDEC 
- * PDevice Enterprise Communication
+ * Device Enterprise Communication
  */
 class CDEC extends CIHE {
   /**
@@ -45,6 +45,10 @@ class CDEC extends CIHE {
    */
   function __construct() {
     $this->type = "DEC";
+
+    $this->_categories = array(
+      "PDC-01" => self::$transaction_pcdO1
+    );
   }
 
   /**
@@ -88,5 +92,3 @@ class CDEC extends CIHE {
     }
   }
 }
-
-?>

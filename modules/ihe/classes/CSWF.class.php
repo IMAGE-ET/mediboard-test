@@ -26,6 +26,13 @@ class CSWF extends CIHE {
   /**
    * @var array
    */
+  static $transaction_rad3 = array(
+    "O01"
+  );
+
+  /**
+   * @var array
+   */
   static $transaction_rad48 = array(
     "S12", "S13", "S14", "S15" 
   );
@@ -39,6 +46,9 @@ class CSWF extends CIHE {
     "S13" => "CHL7EventSIUS13",
     "S14" => "CHL7EventSIUS14",
     "S15" => "CHL7EventSIUS15",
+
+    // ORM
+    "O01" => "CHL7EventORMO01"
   );
 
   /**
@@ -48,6 +58,11 @@ class CSWF extends CIHE {
    */
   function __construct() {
     $this->type = "SWF";
+
+    $this->_categories = array(
+      "RAD-3"  => self::$transaction_rad3,
+      "RAD-48" => self::$transaction_rad48,
+    );
   }
   
   /**
@@ -67,6 +82,10 @@ class CSWF extends CIHE {
    * @return string Transaction name
    */
   static function getTransaction($code) {
+    if (in_array($code, self::$transaction_rad3)) {
+      return "RAD3";
+    }
+
     if (in_array($code, self::$transaction_rad48)) {
       return "RAD48";
     }
@@ -85,11 +104,18 @@ class CSWF extends CIHE {
     
     foreach (CHL7::$versions as $_version => $_sub_versions) {      
       if (in_array($version, $_sub_versions)) {
-        $classname = "CHL7{$_version}EventSIU$code";
+        // Transaction RAD-48
+        if (in_array($code, self::$transaction_rad48)) {
+          $classname = "CHL7{$_version}EventSIU$code";
+        }
+
+        // Transaction RAD-3
+        if (in_array($code, self::$transaction_rad3)) {
+          $classname = "CHL7{$_version}EventORM$code";
+        }
+
         return new $classname;
       }
     }
   }
 }
-
-?>

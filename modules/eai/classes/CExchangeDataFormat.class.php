@@ -74,7 +74,12 @@ class CExchangeDataFormat extends CMbMetaObject {
    * @var CInteropReceiver
    */
   var $_ref_receiver   = null;
-  
+
+  /**
+   * Get properties specifications as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     
@@ -106,18 +111,56 @@ class CExchangeDataFormat extends CMbMetaObject {
     
     return $props;
   }
-  
-  function loadRefGroups() {
-    $this->_ref_group = new CGroups;
-    $this->_ref_group->load($this->group_id);
+
+  /**
+   * Update the form (derived) fields plain fields
+   *
+   * @return void
+   */
+  function updateFormFields() {
+    parent::updateFormFields();
+
+    // Chargement des tags
+    $this->_tag_patient  = CPatient::getTagIPP($this->group_id);
+    $this->_tag_sejour   = CSejour::getTagNDA($this->group_id);
+    $this->_tag_mediuser = CMediusers::getTagMediusers($this->group_id);
+    $this->_tag_service  = CService::getTagService($this->group_id);
+
+    // Chargement des contents
+    if ($this->_load_content) {
+      $this->loadContent();
+    }
+
+    $this->_self_sender   = $this->sender_id   === null;
+    $this->_self_receiver = $this->receiver_id === null;
+
+    if ($this->date_echange > mbDateTime("+ ".CAppUI::conf("eai exchange_format_delayed")." minutes", $this->date_production)) {
+      $this->_delayed = mbMinutesRelative($this->date_production, $this->date_echange);
+    }
   }
-  
+
+  /**
+   * Load Groups
+   *
+   * @return CGroups
+   */
+  function loadRefGroups() {
+    $this->_ref_group = $this->loadFwdRef("group_id");
+  }
+
+  /**
+   * Load interop actors
+   *
+   * @return void
+   */
   function loadRefsInteropActor() {
     $this->loadRefReceiver();
     $this->loadRefSender();
   }
   
   /**
+   * Load interop sender
+   *
    * @return CInteropSender
    */
   function loadRefSender(){
@@ -125,51 +168,110 @@ class CExchangeDataFormat extends CMbMetaObject {
   }
   
   /**
+   * Load interop receiver
+   *
    * @return CInteropReceiver
    */
   function loadRefReceiver(){
     return $this->_ref_receiver = $this->loadFwdRef("receiver_id");
   }
-  
-  function getObservations() {}
-  
-  function getErrors() {}
-  
-  function loadContent() {}
-  
-  function getEncoding() {}
 
-  function updateFormFields() {
-    parent::updateFormFields();
-    
-    // Chargement des tags
-    $this->_tag_patient  = CPatient::getTagIPP($this->group_id);   
-    $this->_tag_sejour   = CSejour::getTagNDA($this->group_id);
-    $this->_tag_mediuser = CMediusers::getTagMediusers($this->group_id);
-    $this->_tag_service  = CService::getTagService($this->group_id); 
-    
-    // Chargement des contents 
-    if ($this->_load_content) {
-      $this->loadContent();
-    }   
-     
-    $this->_self_sender   = $this->sender_id   === null;
-    $this->_self_receiver = $this->receiver_id === null;
-    
-    if ($this->date_echange > mbDateTime("+ ".CAppUI::conf("eai exchange_format_delayed")." minutes", $this->date_production)) {
-      $this->_delayed = mbMinutesRelative($this->date_production, $this->date_echange);
-    }
+  /**
+   * Load content
+   *
+   * @return void
+   */
+  function loadContent() {
+  }
+
+  /**
+   * Get observations
+   *
+   * @return array
+   */
+  function getObservations() {
+  }
+
+  /**
+   * Get errors
+   *
+   * @return array
+   */
+  function getErrors() {
+  }
+
+  /**
+   * Get encoding
+   *
+   * @return string
+   */
+  function getEncoding() {
+  }
+
+  /**
+   * Is well formed ?
+   *
+   * @param string $data Data
+   *
+   * @return bool
+   */
+  function isWellFormed($data) {
+  }
+
+  /**
+   * Understand ?
+   *
+   * @param string        $data  Data
+   * @param CInteropActor $actor Actor
+   *
+   * @return bool
+   */
+  function understand($data, CInteropActor $actor = null) {
+  }
+
+  /**
+   * Handle exchange
+   *
+   * @return void
+   */
+  function handle() {
+  }
+
+  /**
+   * Get configs
+   *
+   * @param string $actor_guid Actor
+   *
+   * @return array
+   */
+  function getConfigs($actor_guid) {
+  }
+
+  /**
+   * Get family
+   *
+   * @return array
+   */
+  function getFamily() {
+    return array();
   }
   
   /**
    * Get child exchanges
+   *
+   * @param string $class Classname
    * 
    * @return array CExchangeDataFormat collection 
    */
   static function getAll($class = "CExchangeDataFormat") {    
     return CApp::getChildClasses($class, array(), true);
   }
- 
+
+  /**
+   * Count exchanges
+   *
+   * @return int|void
+   */
   function countExchanges() {
     // Total des échanges
     $this->_count_exchanges = $this->countList();
@@ -184,13 +286,17 @@ class CExchangeDataFormat extends CMbMetaObject {
     $where['acquittement_valide'] = " = '0'";
     $this->_count_ack_invalide = $this->countList($where);
   }
-  
-  function isWellFormed($data) {}
-  
-  function understand($data, CInteropActor $actor = null) {}
-  
-  function handle() {}
-  
+
+  /**
+   * Get messages supported
+   *
+   * @param string $actor_guid Actor guid
+   * @param bool   $all        All messages
+   * @param null   $evenement  Event name
+   * @param null   $show_actif Show only active
+   *
+   * @return array
+   */
   function getMessagesSupported($actor_guid, $all = true, $evenement = null, $show_actif = null) {
     list($object_class, $object_id) = explode("-", $actor_guid);
     $family = array();
@@ -213,7 +319,7 @@ class CExchangeDataFormat extends CMbMetaObject {
         if (!$message_supported->_id && !$all) {
           continue;
         } 
-        
+
         $this->_messages_supported_class[] = $message_supported->message;
         
         $family[$_root_class][] = $message_supported;
@@ -222,20 +328,28 @@ class CExchangeDataFormat extends CMbMetaObject {
 
     return $family;
   }
-  
-  function getConfigs($actor_guid) {}
-  
-  function getFamily() {
-    return array(); 
-  }
-    
+
+  /**
+   * Set object_id & object_class
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function setObjectIdClass(CMbObject $mbObject) {
     if ($mbObject) {
       $this->object_id    = $mbObject->_id;
       $this->object_class = $mbObject->_class;
     }
   }
-  
+
+  /**
+   * Set permanent identifier
+   *
+   * @param CMbObject $mbObject Object
+   *
+   * @return void
+   */
   function setIdPermanent(CMbObject $mbObject) {
     if ($mbObject instanceof CPatient) {
       if (!$mbObject->_IPP) {
@@ -251,7 +365,14 @@ class CExchangeDataFormat extends CMbMetaObject {
       $this->id_permanent = $mbObject->_NDA;
     }
   }
-  
+
+  /**
+   * Reprocessing exchange
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function reprocessing() {
     if ($this->reprocess >= CAppUI::conf("eai max_reprocess_retries")) {
       throw new CMbException("CExchangeDataFormat-too_many_retries", $this->reprocess);
@@ -320,5 +441,3 @@ class CExchangeDataFormat extends CMbMetaObject {
     }
   }
 }
-
-?>

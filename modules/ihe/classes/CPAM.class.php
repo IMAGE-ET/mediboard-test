@@ -88,6 +88,11 @@ class CPAM extends CIHE {
    */
   function __construct() {
     $this->type = "PAM";
+
+    $this->_categories = array(
+      "ITI-30" => self::$transaction_iti30,
+      "ITI-31" => self::$transaction_iti31,
+    );
   }
   
   /**
@@ -135,5 +140,3 @@ class CPAM extends CIHE {
     }
   }
 }
-
-?>

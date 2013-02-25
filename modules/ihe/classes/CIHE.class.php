@@ -16,13 +16,26 @@
  * IHE classes
  */
 class CIHE {
+  /**
+   * @var array
+   */
   static $object_handlers = array(
     "CSipObjectHandler"     => "CITI30DelegatedHandler",
     "CSmpObjectHandler"     => "CITI31DelegatedHandler",
     "CSaEventObjectHandler" => "CRAD48DelegatedHandler"
   );
-  static $versions = array();
+  /**
+   * @var array
+   */
+  static $versions   = array();
+  /**
+   * @var array
+   */
   static $evenements = array();
+  /**
+   * @var array
+   */
+  var $_categories   = array();
 
   /**
    * Retrieve handlers list
@@ -51,12 +64,14 @@ class CIHE {
    */
   static function getTransaction($code) {
   }
-  
+
   /**
    * Return data format object
-   * 
+   *
    * @param CExchangeDataFormat $exchange Instance of exchange
-   * 
+   *
+   * @throws CMbException
+   *
    * @return object An instance of data format
    */
   static function getEvent(CExchangeDataFormat $exchange) {
@@ -132,4 +147,3 @@ class CIHE {
     return CPDQ::getTransaction($code);
   }
 }
-?>

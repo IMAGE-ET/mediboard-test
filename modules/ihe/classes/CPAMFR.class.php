@@ -44,7 +44,7 @@ class CPAMFR extends CPAM {
     "A37" => "CHL7EventADTA37_FR",
     "A40" => "CHL7EventADTA40_FR",
     "A47" => "CHL7EventADTA47_FR",
-    
+
     // ITI-31
     "A01" => "CHL7EventADTA01_FR",
     "A02" => "CHL7EventADTA02_FR",
@@ -71,9 +71,19 @@ class CPAMFR extends CPAM {
     "Z85" => "CHL7EventADTZ85_FR",
     "Z99" => "CHL7EventADTZ99_FR",
   );
-  
+
+  /**
+   * Construct
+   *
+   * @return CPAMFR
+   */
   function __construct() {
     $this->type = "PAM_FR";
+
+    $this->_categories = array(
+      "ITI-30" => self::$transaction_iti30,
+      "ITI-31" => self::$transaction_iti31,
+    );
   }
 
   /**
@@ -121,5 +131,3 @@ class CPAMFR extends CPAM {
     }
   }
 }
-
-?>
