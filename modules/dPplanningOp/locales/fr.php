@@ -592,6 +592,7 @@ $locales['COperation.more'] = 'Des interventions';
 $locales['COperation.none'] = 'Pas d\'intervention';
 $locales['COperation.none_non_cotee'] = 'Aucune intervention non cotée';
 $locales['COperation.one'] = 'Une interventon';
+$locales['COperation.position.'] = 'Non spécifiée';
 $locales['COperation.position.AS'] = 'Assise';
 $locales['COperation.position.DD'] = 'DD';
 $locales['COperation.position.DL'] = 'DL';

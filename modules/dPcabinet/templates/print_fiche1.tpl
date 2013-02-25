@@ -14,14 +14,15 @@
   {{assign var=tbl_class value="main form"}}
 {{/if}}
 
-{{assign var="patient" value=$consult->_ref_patient}}
-{{assign var="consult_anesth" value=$consult->_ref_consult_anesth}}
-{{assign var="sejour" value=$consult_anesth->_ref_operation->_ref_sejour}}
-{{assign var="operation" value=$consult_anesth->_ref_operation}}
+{{assign var="consult"   value=$dossier_anesth->_ref_consultation}}
+{{assign var="patient"   value=$consult->_ref_patient}}
+{{assign var="operation" value=$dossier_anesth->_ref_operation}}
+{{assign var="sejour"    value=$operation->_ref_sejour}}
 
-{{assign var=const_med value=$patient->_ref_constantes_medicales}}
+{{assign var=const_med       value=$patient->_ref_constantes_medicales}}
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
-{{assign var=ant value=$dossier_medical->_ref_antecedents_by_type}}
+{{assign var=ant             value=$dossier_medical->_ref_antecedents_by_type}}
+
 <table class="{{$tbl_class}}">
   <tr>
     <td colspan="2">
@@ -73,14 +74,14 @@
                 <em>[{{$operation->libelle}}]</em>
               {{/if}}
             {{else}}
-              {{if $consult_anesth->chir_id}}
-                Dr {{$consult_anesth->_ref_chir->_view}} -
+              {{if $dossier_anesth->chir_id}}
+                Dr {{$dossier_anesth->_ref_chir}} -
               {{/if}}
-              {{if $consult_anesth->date_interv}}
-                le {{$consult_anesth->date_interv|date_format:"%d/%m/%Y"}}
+              {{if $dossier_anesth->date_interv}}
+                le {{$dossier_anesth->date_interv|date_format:"%d/%m/%Y"}}
               {{/if}}
-              {{if $consult_anesth->libelle_interv}}
-                <em>[{{$consult_anesth->libelle_interv}}]</em>
+              {{if $dossier_anesth->libelle_interv}}
+                <em>[{{$dossier_anesth->libelle_interv}}]</em>
               {{/if}}
             {{/if}}
           </td>
@@ -187,7 +188,7 @@
           </td>
         </tr>
         <tr>
-          <th class="category">Code ASA : {{if $consult_anesth->operation_id}}{{tr}}COperation.ASA.{{$operation->ASA}}{{/tr}}{{/if}}</th>
+          <th class="category">Code ASA : {{if $operation->_id}}{{tr}}COperation.ASA.{{$operation->ASA}}{{/tr}}{{/if}}</th>
         </tr>
       </table>
     </td>
@@ -213,24 +214,24 @@
         <tr>
           <td>
             <strong>Mallampati :</strong>
-            {{tr}}CConsultAnesth.mallampati.{{$consult_anesth->mallampati}}{{/tr}}
+            {{tr}}CConsultAnesth.mallampati.{{$dossier_anesth->mallampati}}{{/tr}}
             <br />
             <strong>Ouverture de la bouche :</strong>
-            {{tr}}CConsultAnesth.bouche.{{$consult_anesth->bouche}}{{/tr}}
+            {{tr}}CConsultAnesth.bouche.{{$dossier_anesth->bouche}}{{/tr}}
             <br />
             <strong>Distance thyro-mentonière :</strong>
-            {{tr}}CConsultAnesth.distThyro.{{$consult_anesth->distThyro}}{{/tr}}
+            {{tr}}CConsultAnesth.distThyro.{{$dossier_anesth->distThyro}}{{/tr}}
             <br />
             <strong>Etat bucco-dentaire :</strong>
-            {{$consult_anesth->etatBucco|nl2br}}
+            {{$dossier_anesth->etatBucco|nl2br}}
             <br />
             {{if $etatDents}}
               {{$etatDents|nl2br}}
             {{/if}}
             <strong>Conclusion :</strong>
-            {{$consult_anesth->conclusion|nl2br}}
+            {{$dossier_anesth->conclusion|nl2br}}
             <br />
-            {{if $consult_anesth->_intub_difficile}}
+            {{if $dossier_anesth->_intub_difficile}}
             <span style="font-weight: bold; text-align:center; color:#F00;">
               Intubation difficile prévisible
             </span>
@@ -246,10 +247,10 @@
         </tr>
         <tr>
           <td>
-            {{$consult_anesth->premedication|nl2br}}
+            {{$dossier_anesth->premedication|nl2br}}
           </td>
         </tr>
-        {{assign var=prescription value =$consult_anesth->_ref_sejour->_ref_prescription_sejour}}
+        {{assign var=prescription value =$sejour->_ref_prescription_sejour}}
         <tr>
           <td>
             <ul>
@@ -272,7 +273,7 @@
         <tr>
           <td>
             <ul>
-              {{foreach from=$consult_anesth->_ref_techniques item=curr_tech}}
+              {{foreach from=$dossier_anesth->_ref_techniques item=curr_tech}}
               <li>
                 {{$curr_tech->technique}}<br />
               </li>
@@ -338,67 +339,67 @@
             <table>
               <tr>
                 <td style="width: 50%">
-                  {{if $consult->_ref_consult_anesth->date_analyse}}
-                    {{mb_label object=$consult->_ref_consult_anesth field=date_analyse}} {{mb_value object=$consult->_ref_consult_anesth field=date_analyse}}
+                  {{if $dossier_anesth->date_analyse}}
+                    {{mb_label object=$dossier_anesth field=date_analyse}} {{mb_value object=$dossier_anesth field=date_analyse}}
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->groupe!="?" || $consult->_ref_consult_anesth->rhesus!="?"}}
-                    Groupe sanguin&nbsp;:&nbsp;{{tr}}CConsultAnesth.groupe.{{$consult->_ref_consult_anesth->groupe}}{{/tr}}&nbsp;{{tr}}CConsultAnesth.rhesus.{{$consult->_ref_consult_anesth->rhesus}}{{/tr}}
+                  {{if $dossier_anesth->groupe!="?" || $dossier_anesth->rhesus!="?"}}
+                    Groupe sanguin&nbsp;:&nbsp;{{tr}}CConsultAnesth.groupe.{{$dossier_anesth->groupe}}{{/tr}}&nbsp;{{tr}}CConsultAnesth.rhesus.{{$dossier_anesth->rhesus}}{{/tr}}
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->rai && $consult->_ref_consult_anesth->rai!="?"}}
-                    RAI&nbsp;:&nbsp;{{tr}}CConsultAnesth.rai.{{$consult->_ref_consult_anesth->rai}}{{/tr}}
+                  {{if $dossier_anesth->rai && $dossier_anesth->rai!="?"}}
+                    RAI&nbsp;:&nbsp;{{tr}}CConsultAnesth.rai.{{$dossier_anesth->rai}}{{/tr}}
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->hb}}
-                    Hb&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->hb}}&nbsp;g/dl
+                  {{if $dossier_anesth->hb}}
+                    Hb&nbsp;:&nbsp;{{$dossier_anesth->hb}}&nbsp;g/dl
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->ht}}
-                    Ht&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->ht}}&nbsp;%
+                  {{if $dossier_anesth->ht}}
+                    Ht&nbsp;:&nbsp;{{$dossier_anesth->ht}}&nbsp;%
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->ht_final}}
-                    Ht&nbsp;final&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->ht_final}}&nbsp;%
+                  {{if $dossier_anesth->ht_final}}
+                    Ht&nbsp;final&nbsp;:&nbsp;{{$dossier_anesth->ht_final}}&nbsp;%
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->_psa}}
-                    PSA&nbsp;final&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->_psa}}&nbsp;ml/mg<br />
+                  {{if $dossier_anesth->_psa}}
+                    PSA&nbsp;final&nbsp;:&nbsp;{{$dossier_anesth->_psa}}&nbsp;ml/mg<br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->plaquettes}}
-                    Plaquettes&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->plaquettes}}&nbsp;(x1000)&nbsp;/mm3
+                  {{if $dossier_anesth->plaquettes}}
+                    Plaquettes&nbsp;:&nbsp;{{$dossier_anesth->plaquettes}}&nbsp;(x1000)&nbsp;/mm3
                   {{/if}}
                 </td>
                 <td style="width: 50%">
-                  {{if $consult->_ref_consult_anesth->creatinine}}
-                    Créatinine&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->creatinine}}&nbsp;mg/l
+                  {{if $dossier_anesth->creatinine}}
+                    Créatinine&nbsp;:&nbsp;{{$dossier_anesth->creatinine}}&nbsp;mg/l
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->_clairance}}
-                    Créatinine&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->_clairance}}&nbsp;ml/min
+                  {{if $dossier_anesth->_clairance}}
+                    Créatinine&nbsp;:&nbsp;{{$dossier_anesth->_clairance}}&nbsp;ml/min
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->na}}
-                    Na+&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->na}}&nbsp;mmol/l
+                  {{if $dossier_anesth->na}}
+                    Na+&nbsp;:&nbsp;{{$dossier_anesth->na}}&nbsp;mmol/l
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->k}}
-                    K+&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->k}}&nbsp;mmol/l<br />
+                  {{if $dossier_anesth->k}}
+                    K+&nbsp;:&nbsp;{{$dossier_anesth->k}}&nbsp;mmol/l<br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->tp}}
-                    TP&nbsp;final&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->tp}}&nbsp;%
+                  {{if $dossier_anesth->tp}}
+                    TP&nbsp;final&nbsp;:&nbsp;{{$dossier_anesth->tp}}&nbsp;%
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->tca}}
-                    TCA&nbsp:&nbsp;{{$consult->_ref_consult_anesth->tca_temoin}}&nbsp;s&nbsp;/&nbsp;{{$consult->_ref_consult_anesth->tca}}&nbsp;s
+                  {{if $dossier_anesth->tca}}
+                    TCA&nbsp:&nbsp;{{$dossier_anesth->tca_temoin}}&nbsp;s&nbsp;/&nbsp;{{$dossier_anesth->tca}}&nbsp;s
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->tsivy && $consult->_ref_consult_anesth->tsivy != "00:00:00"}}
-                    TS Ivy&nbsp;:&nbsp;{{$consult->_ref_consult_anesth->tsivy|date_format:"%M min %S s"}}
+                  {{if $dossier_anesth->tsivy && $dossier_anesth->tsivy != "00:00:00"}}
+                    TS Ivy&nbsp;:&nbsp;{{$dossier_anesth->tsivy|date_format:"%M min %S s"}}
                     <br />
                   {{/if}}
-                  {{if $consult->_ref_consult_anesth->ecbu && $consult->_ref_consult_anesth->ecbu!="?"}}
-                    ECBU&nbsp;:&nbsp;{{tr}}CConsultAnesth.ecbu.{{$consult->_ref_consult_anesth->ecbu}}{{/tr}}
+                  {{if $dossier_anesth->ecbu && $dossier_anesth->ecbu!="?"}}
+                    ECBU&nbsp;:&nbsp;{{tr}}CConsultAnesth.ecbu.{{$dossier_anesth->ecbu}}{{/tr}}
                     <br />
                   {{/if}}
                 </td>
@@ -434,7 +435,7 @@
             ?
             {{/if}}
             <br />
-            {{$consult_anesth->examenCardio}}
+            {{$dossier_anesth->examenCardio}}
             {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('cardio', $dossier_medical->_ref_antecedents_by_type)}}
             <ul>
             {{foreach from=$dossier_medical->_ref_antecedents_by_type.cardio item=currAnt}}
@@ -455,7 +456,7 @@
         </tr>
         <tr>
           <td>
-            {{$consult_anesth->examenPulmo}}
+            {{$dossier_anesth->examenPulmo}}
             {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('pulmo', $dossier_medical->_ref_antecedents_by_type)}}
             <ul>
             {{foreach from=$dossier_medical->_ref_antecedents_by_type.pulmo item=currAnt}}
@@ -476,7 +477,7 @@
         </tr>
         <tr>
           <td>
-            {{$consult_anesth->examenDigest}}
+            {{$dossier_anesth->examenDigest}}
             {{if $dossier_medical->_ref_antecedents_by_type && array_key_exists('digestif', $dossier_medical->_ref_antecedents_by_type)}}
             <ul>
             {{foreach from=$dossier_medical->_ref_antecedents_by_type.digestif item=currAnt}}
@@ -492,13 +493,13 @@
           </td>
         </tr>
         
-        {{if $consult_anesth->examenAutre}}
+        {{if $dossier_anesth->examenAutre}}
         <tr>
           <th class="category">Examen Autre</th>
         </tr>
         <tr>
           <td>
-            {{$consult_anesth->examenAutre}}
+            {{$dossier_anesth->examenAutre}}
           </td>
         </tr>
         {{/if}}

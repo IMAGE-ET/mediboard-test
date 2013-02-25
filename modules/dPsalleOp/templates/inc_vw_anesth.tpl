@@ -1,12 +1,10 @@
 <script type="text/javascript">
-
 reloadPrescriptionAnesth = function(prescription_id){
   reloadPrescription(prescription_id);
   reloadAnesth('{{$selOp->_id}}');
 }
-
-
 </script>
+
 <table class="form">
   <tr>
     <td class="halfPane">
@@ -83,8 +81,8 @@ reloadPrescriptionAnesth = function(prescription_id){
             </td>
           </tr>
           <tr>
-            {{include file=inc_field_timing.tpl object=$selOp form="anesthTiming" field=induction_debut submit=submitAnesth}}
-            {{include file=inc_field_timing.tpl object=$selOp form="anesthTiming" field=induction_fin submit=submitAnesth}}
+            {{mb_include module=salleOp template=inc_field_timing object=$selOp form="anesthTiming" field=induction_debut submit=submitAnesth}}
+            {{mb_include module=salleOp template=inc_field_timing object=$selOp form="anesthTiming" field=induction_fin submit=submitAnesth}}
           </tr>
         </table>
         </form>

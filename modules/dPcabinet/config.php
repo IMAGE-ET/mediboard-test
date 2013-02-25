@@ -59,5 +59,3 @@ $dPconfig["dPcabinet"] = array(
     "show_compta_tiers" => 1
   )
 );
-
-?>

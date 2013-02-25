@@ -155,8 +155,8 @@
         </select>
         <br />
         <button type="button" style="clear: both; width:11em;"
-                class="{{if $consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}"
-                onclick="printFicheAnesth('{{$consult_anesth->_ref_consultation->_id}}', '{{$_op->_id}}');">
+                class="{{if $consult_anesth->_id}}print{{else}}warning{{/if}}"
+                onclick="printFicheAnesth('{{$consult_anesth->_id}}', '{{$_op->_id}}');">
           Fiche d'anesthésie
         </button>
         <br />

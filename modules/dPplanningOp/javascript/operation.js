@@ -2,23 +2,23 @@
 
 Operation = {
   edit: function(operation_id, plage_id) {
-    new Url("dPplanningOp", plage_id ? "vw_edit_planning" : "vw_edit_urgence", "tab").
+    new Url("planningOp", plage_id ? "vw_edit_planning" : "vw_edit_urgence", "tab").
       addParam("operation_id", operation_id).
       redirectOpener();
   },
   
   editModal: function(operation_id, plage_id) {
-    var url = new Url("dPplanningOp", plage_id ? "vw_edit_planning" : "vw_edit_urgence", "action");
+    var url = new Url("planningOp", plage_id ? "vw_edit_planning" : "vw_edit_urgence", "action");
     url.addParam("operation_id", operation_id);
     url.addParam("dialog", 1);
     url.modal({width: 1000, height: 700});
   },
   
   dossierBloc: function(operation_id, callback) {
-    var url = new Url("salleOp", "ajax_vw_operation", "action");
+    var url = new Url("salleOp", "ajax_vw_operation");
     url.addParam("op", operation_id);
     url.modal({width: 1000, height: 700});
-    if(callback) {
+    if (callback) {
       url.modalObject.observe("afterClose", callback);
     }
   },
@@ -28,7 +28,7 @@ Operation = {
   },
 	
   print: function(operation_id) {
-    new Url("dPplanningOp", "view_planning").
+    new Url("planningOp", "view_planning").
       addParam("operation_id", operation_id).
       popup(700, 550, "Admission");
   }

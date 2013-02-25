@@ -1590,10 +1590,10 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     foreach ($consultations as $_consultation) {
       $_consultation->canEdit();
-      $_consult_anesth = $_consultation->loadRefConsultAnesth();
-      if ($_consult_anesth->_id) {
-        $_consult_anesth->loadRefOperation();
-        $_consult_anesth->loadRefsTechniques();
+      $_consultation->loadRefConsultAnesth();
+      foreach ($_consultation->_refs_dossiers_anesth as $_dossier_anesth) {
+        $_dossier_anesth->loadRefOperation();
+        $_dossier_anesth->loadRefsTechniques();
       }
       $_consultation->loadRefPlageConsult();
       $_consultation->loadRefPraticien()->loadRefFunction();
@@ -1603,13 +1603,13 @@ class CSejour extends CFacturable implements IPatientRelated {
     // Ajout des consultations d'anesthésie hors séjour
     foreach ($consultations_patient as $_consultation) {
       $_consult_anesth = $_consultation->loadRefConsultAnesth();
-      if ($_consult_anesth->_id) {
-        $_consult_anesth->loadRefOperation();
-        $_consult_anesth->loadRefsTechniques();
-        $_consultation->loadRefPlageConsult();
-        $_consultation->loadRefPraticien()->loadRefFunction();
-        $this->_ref_suivi_medical[$_consultation->_datetime] = $_consultation;
+      foreach ($_consultation->_refs_dossiers_anesth as $_dossier_anesth) {
+        $_dossier_anesth->loadRefOperation();
+        $_dossier_anesth->loadRefsTechniques();
       }
+      $_consultation->loadRefPlageConsult();
+      $_consultation->loadRefPraticien()->loadRefFunction();
+      $this->_ref_suivi_medical[$_consultation->_datetime] = $_consultation;
     }
 
     if (CModule::getActive("dPprescription") && $this->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins")) {

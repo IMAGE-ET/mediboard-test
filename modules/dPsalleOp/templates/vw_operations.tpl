@@ -34,9 +34,9 @@ Main.add(function () {
            $date < $smarty.now|date_format:'%Y-%m-%d' || 
            $daily_check_list->_id && $daily_check_list->validator_id || 
            $currUser->_is_praticien}}
-        {{include file=inc_operation.tpl}}
+        {{mb_include module=salleOp template=inc_operation}}
       {{else}}
-        {{include file=inc_edit_check_list.tpl 
+        {{mb_include module=salleOp template=inc_edit_check_list
                   check_list=$daily_check_list 
                   check_item_categories=$daily_check_item_categories
                   personnel=$listValidateurs}}

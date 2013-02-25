@@ -126,7 +126,7 @@
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_guid}}')">
       {{if $_suivi->type == "entree"}}
         {{tr}}CConsultation.type.entree{{/tr}}
-      {{elseif $_suivi->_ref_consult_anesth->_id}}
+      {{elseif $_suivi->_refs_dossiers_anesth|@count >= 1}}
         {{tr}}CConsultAnesth{{/tr}}
       {{else}}
         {{tr}}CConsultation{{/tr}}
@@ -146,27 +146,37 @@
   <td>{{$_suivi->_datetime|date_format:$conf.time}}</td>
   <td></td>
   <td class="text">
-    {{if $_suivi->_ref_consult_anesth->_id}}
-      {{assign var=consult_anesth value=$_suivi->_ref_consult_anesth}}
-      {{if $consult_anesth->operation_id}}
-        {{if $consult_anesth->_ref_operation->ASA}}
-          <u>ASA :</u> {{tr}}COperation.ASA.{{$consult_anesth->_ref_operation->ASA}}{{/tr}} <br />
+    {{if $_suivi->_refs_dossiers_anesth|@count}}
+      {{foreach from=$_suivi->_refs_dossiers_anesth item=_dossier_anesth}}
+        <strong>
+          Dossier d'anesthésie
+          {{if $_dossier_anesth->operation_id}}
+            pour l'intervention du {{mb_value object=$_dossier_anesth->_ref_operation field=_datetime_best}}
+          {{else}}
+            {{$_dossier_anesth->_id}}
+          {{/if}}
+        </strong>
+        <br />
+        {{if $_dossier_anesth->operation_id}}
+          {{if $_dossier_anesth->_ref_operation->ASA}}
+            <u>ASA :</u> {{tr}}COperation.ASA.{{$_dossier_anesth->_ref_operation->ASA}}{{/tr}} <br />
+          {{/if}}
+          {{if $_dossier_anesth->_ref_operation->position}}
+            <u>Position :</u> {{mb_value object=$_dossier_anesth->_ref_operation field=position}} <br />
+          {{/if}}
         {{/if}}
-        {{if $consult_anesth->_ref_operation->position}}
-          <u>Position :</u> {{mb_value object=$consult_anesth->_ref_operation field=position}} <br />
+        {{if $_dossier_anesth->prepa_preop}}
+          <u>{{mb_label class=CConsultAnesth field=prepa_preop}} :</u> {{mb_value object=$_dossier_anesth field=prepa_preop}} <br />
         {{/if}}
-      {{/if}}
-      {{if $consult_anesth->prepa_preop}}
-        <u>{{mb_label class=CConsultAnesth field=prepa_preop}} :</u> {{mb_value object=$consult_anesth field=prepa_preop}} <br />
-      {{/if}}
+        {{if $_dossier_anesth->_ref_techniques|@count}}
+          <u>Techniques :</u>
+          {{foreach from=$_dossier_anesth->_ref_techniques item=_technique name=foreach_techniques}}
+            {{mb_value object=$_technique field=technique}} {{if !$smarty.foreach.foreach_techniques.last}}-{{/if}}
+          {{/foreach}}
+        {{/if}}
+      {{/foreach}}
       {{if $_suivi->rques}}
         <u>Remarques :</u> {{mb_value object=$_suivi field=rques}} <br />
-      {{/if}}
-      {{if $consult_anesth->_ref_techniques|@count}}
-        <u>Techniques :</u>
-        {{foreach from=$consult_anesth->_ref_techniques item=_technique name=foreach_techniques}}
-          {{mb_value object=$_technique field=technique}} {{if !$smarty.foreach.foreach_techniques.last}}-{{/if}}
-        {{/foreach}}
       {{/if}}
     {{else}}
       {{if $_suivi->rques}}

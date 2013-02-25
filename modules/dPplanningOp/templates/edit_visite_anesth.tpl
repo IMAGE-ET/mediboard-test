@@ -1,21 +1,21 @@
 {{if "dPmedicament"|module_active}}
-  {{mb_script module="dPmedicament" script="medicament_selector"}}
-  {{mb_script module="dPmedicament" script="equivalent_selector"}}
+  {{mb_script module="medicament" script="medicament_selector"}}
+  {{mb_script module="medicament" script="equivalent_selector"}}
 {{/if}}
 
 {{if "dPprescription"|module_active}}
-  {{mb_script module="dPprescription" script="element_selector"}}
-  {{mb_script module="dPprescription" script="prescription"}}
+  {{mb_script module="prescription" script="element_selector"}}
+  {{mb_script module="prescription" script="prescription"}}
 {{/if}}
 
-{{mb_script module="dPplanningOp" script="cim10_selector"}}
-{{mb_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_script module="planningOp" script="cim10_selector"}}
+{{mb_script module="compteRendu" script="modele_selector"}}
 
 <script type="text/javascript">
 
-printFicheAnesth = function(consult_id) {
-  var url = new Url("dPcabinet", "print_fiche"); 
-  url.addParam("consultation_id", consult_id);
+printFicheAnesth = function(dossier_anesth_id) {
+  var url = new Url("cabinet", "print_fiche");
+  url.addParam("dossier_anesth_id", dossier_anesth_id);
   url.popup(700, 500, "printFiche");
 }
 
@@ -52,7 +52,7 @@ refreshConstantesHack = function(sejour_id) {
 
 refreshConstantesMedicales = function(context_guid) {
   if(context_guid) {
-    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
+    var url = new Url("hospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
     url.requestUpdate("constantes-medicales");
   }
@@ -64,7 +64,7 @@ Main.add(function () {
   }
   
   if($('antecedents')){
-    var url = new Url("dPcabinet", "httpreq_vw_antecedents");
+    var url = new Url("cabinet", "httpreq_vw_antecedents");
     url.addParam("sejour_id","{{$operation->sejour_id}}");
     url.requestUpdate("antecedents");
   }
@@ -81,7 +81,7 @@ Main.add(function () {
   {{/if}}
 
   if($('Imeds_tab')){
-    var url = new Url("dPImeds", "httpreq_vw_sejour_results");
+    var url = new Url("Imeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", {{$operation->_ref_sejour->_id}});
     url.requestUpdate('Imeds_tab');
   }

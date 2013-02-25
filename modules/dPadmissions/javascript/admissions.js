@@ -72,6 +72,7 @@ Admissions = {
     }
     
     url.addParam("sejours_ids", sejours_ids.join(","));
+    url.addParam("pdf", 0);
     url.popup(700, 500);
   }
   ,

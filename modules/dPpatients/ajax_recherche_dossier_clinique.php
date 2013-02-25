@@ -190,7 +190,7 @@ switch ($section) {
       $where[] = "plageconsult.date >= '".mbDate($sejour_data['entree'])."'";
     }
     
-    $where["sejour.chir_id"] = "= '$user_id'";
+    $where["sejour.praticien_id"] = "= '$user_id'";
     
     // CSejour ----------------------------
     if (!empty($sejour_data["_rques_sejour"])) {
@@ -453,7 +453,7 @@ if ($one_field) {
       $request_b->addOrder("patients.nom ASC, plageconsult.date ASC");
     }
     elseif ($sejour_filled) {
-      $request_b->addSelect("sejour.sejour_id, patients_patient_id" . $other_fields);
+      $request_b->addSelect("sejour.sejour_id, patients.patient_id" . $other_fields);
       $request_b->addTable("sejour");
       $request_b->addOrder("patients.nom ASC, sejour.entree_prevue ASC");
     }

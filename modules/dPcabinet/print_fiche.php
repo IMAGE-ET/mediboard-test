@@ -17,19 +17,19 @@ $date  = CValue::getOrSession("date", mbDate());
 $print = CValue::getOrSession("print", false);
 $today = mbDate();
 
-$consultation_id       = CValue::get("consultation_id");
+$dossier_anesth_id     = CValue::get("dossier_anesth_id");
 $operation_id          = CValue::get("operation_id");
 $create_dossier_anesth = CValue::get("create_dossier_anesth", 0);
 $multi                 = CValue::get("multi");
 $offline               = CValue::get("offline");
 $display               = CValue::get("display");
-
+$pdf                   = CValue::get("pdf", 1);
 $lines = array();
 
 // Consultation courante
-$consult = new CConsultation();
+$dossier_anesth = new CConsultAnesth();
 
-if (!$consultation_id) {
+if (!$dossier_anesth_id) {
   $selOp = new COperation();
   $selOp->load($operation_id);
   $selOp->loadRefsFwd();
@@ -37,23 +37,22 @@ if (!$consultation_id) {
   $selOp->_ref_sejour->loadRefsConsultAnesth();
   $selOp->_ref_sejour->_ref_consult_anesth->loadRefsFwd();
 
-  $patient = new CPatient();
   $patient = $selOp->_ref_sejour->_ref_patient;
   $patient->loadRefsConsultations();
 
   // Chargement des praticiens
   $listAnesths = array();
   if (!$offline) {
-    $listAnesths = new CMediusers;
+    $listAnesths = new CMediusers();
     $listAnesths = $listAnesths->loadAnesthesistes(PERM_READ);
   }
 
   foreach ($patient->_ref_consultations as $consultation) {
     $consultation->loadRefConsultAnesth();
-    $consult_anesth =& $consultation->_ref_consult_anesth;
-    if ($consult_anesth->_id) {
+
+    foreach ($consultation->_refs_dossiers_anesth as $_dossier_anesth) {
       $consultation->loadRefPlageConsult();
-      $consult_anesth->loadRefOperation();
+      $_dossier_anesth->loadRefOperation();
     }
   }
 
@@ -77,110 +76,107 @@ if (!$consultation_id) {
   return;
 }
 
-if ($consultation_id) {
-  $consult->load($consultation_id);
-  $consult->loadRefsDocs();
-  $consult->loadRefConsultAnesth();
+$dossier_anesth->load($dossier_anesth_id);
+$consult = $dossier_anesth->loadRefConsultation();
+$consult->loadRefPlageConsult();
 
+if ($pdf) {
   // Si le modèle est redéfini, on l'utilise
   $model = CCompteRendu::getSpecialModel($consult->_ref_chir, "CConsultAnesth", "[FICHE ANESTH]");
 
   if ($model->_id) {
-    CCompteRendu::streamDocForObject($model, $consult->_ref_consult_anesth);
+    CCompteRendu::streamDocForObject($model, $dossier_anesth);
+  }
+}
+
+$consult->loadRefsFwd();
+$consult->loadExamsComp();
+$consult->loadRefsExamNyha();
+$consult->loadRefsExamPossum();
+
+$dossier_anesth->loadRefs();
+$dossier_anesth->_ref_sejour->loadRefDossierMedical();
+
+// Lignes de prescription en prémédication
+if (CModule::getActive("dPprescription")) {
+  $prescription = $dossier_anesth->_ref_sejour->loadRefPrescriptionSejour();
+  $prescription->loadRefsLinesElement();
+  $prescription->loadRefsLinesMed();
+  $prescription->loadRefsPrescriptionLineMixes();
+
+  foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
+    if (!$_line_elt->premedication) {
+      continue;
+    }
+    $_line_elt->loadRefsPrises();
+    $lines[] = $_line_elt;
   }
 
-  $consult->loadRefsFwd();
-  $consult->loadExamsComp();
-  $consult->loadRefsExamNyha();
-  $consult->loadRefsExamPossum();
-  $consult->loadRefSejour();
+  foreach ($prescription->_ref_prescription_lines as $_line_med) {
+    if (!$_line_med->premedication) {
+      continue;
+    }
+    $_line_med->loadRefsPrises();
+    $lines[] = $_line_med;
+  }
 
-  if ($consult->_ref_consult_anesth->_id) {
-    $consult_anesth = $consult->_ref_consult_anesth;
-    $consult_anesth->loadRefs();
-    $consult_anesth->_ref_sejour->loadRefDossierMedical();
+  foreach ($prescription->_ref_prescription_line_mixes as $_line_mix) {
+    if (!$_line_mix->premedication) {
+      continue;
+    }
+    $_line_mix->loadRefPraticien();
+    $_line_mix->loadRefsLines();
+    $lines[] = $_line_mix;
+  }
+}
 
-    // Lignes de prescription en prémédication
-    if (CModule::getActive("dPprescription")) {
-      $prescription = $consult_anesth->_ref_sejour->loadRefPrescriptionSejour();
-      $prescription->loadRefsLinesElement();
-      $prescription->loadRefsLinesMed();
-      $prescription->loadRefsPrescriptionLineMixes();
 
-      foreach ($prescription->_ref_prescription_lines_element as $_line_elt) {
-        if (!$_line_elt->premedication) {
-          continue;
-        }
-        $_line_elt->loadRefsPrises();
-        $lines[] = $_line_elt;
+$praticien =& $consult->_ref_chir;
+$patient   =& $consult->_ref_patient;
+$patient->loadRefDossierMedical();
+$dossier_medical =& $patient->_ref_dossier_medical;
+
+// Chargement des elements du dossier medical
+$dossier_medical->loadRefsAntecedents();
+$dossier_medical->countAllergies();
+$dossier_medical->loadRefsTraitements();
+$dossier_medical->loadRefsEtatsDents();
+$dossier_medical->loadRefPrescription();
+if ($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_id) {
+  foreach ($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line) {
+    if ($_line->fin && $_line->fin <= mbDate()) {
+      unset($dossier_medical->_ref_prescription->_ref_prescription_lines[$_line->_id]);
+    }
+    $_line->loadRefsPrises();
+  }
+}
+$etats = array();
+if (is_array($dossier_medical->_ref_etats_dents)) {
+  foreach ($dossier_medical->_ref_etats_dents as $etat) {
+    if ($etat->etat != null) {
+      switch ($etat->dent) {
+        case 10:
+        case 30:
+          $position = "Central haut";
+          break;
+        case 50:
+        case 70:
+          $position = "Central bas";
+          break;
+        default:
+          $position = $etat->dent;
       }
-
-      foreach ($prescription->_ref_prescription_lines as $_line_med) {
-        if (!$_line_med->premedication) {
-          continue;
-        }
-        $_line_med->loadRefsPrises();
-        $lines[] = $_line_med;
+      if (!isset ($etats[$etat->etat])) {
+        $etats[$etat->etat] = array();
       }
-
-      foreach ($prescription->_ref_prescription_line_mixes as $_line_mix) {
-        if (!$_line_mix->premedication) {
-          continue;
-        }
-        $_line_mix->loadRefPraticien();
-        $_line_mix->loadRefsLines();
-        $lines[] = $_line_mix;
-      }
+      $etats[$etat->etat][] = $position;
     }
   }
-
-  $praticien =& $consult->_ref_chir;
-  $patient   =& $consult->_ref_patient;
-  $patient->loadRefDossierMedical();
-  $dossier_medical =& $patient->_ref_dossier_medical;
-
-  // Chargement des elements du dossier medical
-  $dossier_medical->loadRefsAntecedents();
-  $dossier_medical->countAllergies();
-  $dossier_medical->loadRefsTraitements();
-  $dossier_medical->loadRefsEtatsDents();
-  $dossier_medical->loadRefPrescription();
-  if ($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_id) {
-    foreach ($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line) {
-      if ($_line->fin && $_line->fin <= mbDate()) {
-        unset($dossier_medical->_ref_prescription->_ref_prescription_lines[$_line->_id]);
-      }
-      $_line->loadRefsPrises();
-    }
-  }
-  $etats = array();
-  if (is_array($dossier_medical->_ref_etats_dents)) {
-    foreach ($dossier_medical->_ref_etats_dents as $etat) {
-      if ($etat->etat != null) {
-        switch ($etat->dent) {
-          case 10:
-          case 30:
-            $position = "Central haut";
-            break;
-          case 50:
-          case 70:
-            $position = "Central bas";
-            break;
-          default:
-            $position = $etat->dent;
-        }
-        if (!isset ($etats[$etat->etat])) {
-          $etats[$etat->etat] = array();
-        }
-        $etats[$etat->etat][] = $position;
-      }
-    }
-  }
-  $sEtatsDents = "";
-  foreach ($etats as $key => $list) {
-    sort($list);
-    $sEtatsDents .= "- " . ucfirst($key) . " : " . implode(", ", $list) . "\n";
-  }
+}
+$sEtatsDents = "";
+foreach ($etats as $key => $list) {
+  sort($list);
+  $sEtatsDents .= "- " . ucfirst($key) . " : " . implode(", ", $list) . "\n";
 }
 
 // Affichage des données
@@ -189,33 +185,34 @@ $listChamps = array(
   2 => array("creatinine", "_clairance", "fibrinogene", "na", "k"),
   3 => array("tp", "tca", "tsivy", "ecbu")
 );
-$cAnesth    =& $consult->_ref_consult_anesth;
+
 foreach ($listChamps as $keyCol => $aColonne) {
   foreach ($aColonne as $keyChamp => $champ) {
     $verifchamp = true;
     if ($champ == "tca") {
-      $champ2 = $cAnesth->tca_temoin;
+      $champ2 = $dossier_anesth->tca_temoin;
     }
     else {
       $champ2 = false;
-      if (($champ == "ecbu" && $cAnesth->ecbu == "?") || ($champ == "tsivy" && $cAnesth->tsivy == "00:00:00")) {
+      if (($champ == "ecbu" && $dossier_anesth->ecbu == "?") || ($champ == "tsivy" && $dossier_anesth->tsivy == "00:00:00")) {
         $verifchamp = false;
       }
     }
-    $champ_exist = $champ2 || ($verifchamp && $cAnesth->$champ);
+    $champ_exist = $champ2 || ($verifchamp && $dossier_anesth->$champ);
     if (!$champ_exist) {
       unset($listChamps[$keyCol][$keyChamp]);
     }
   }
 }
 
-//Tableau d'unités
+// Tableau d'unités
 $unites                 = array();
 $unites["hb"]           = array("nom" => "Hb", "unit" => "g/dl");
 $unites["ht"]           = array("nom" => "Ht", "unit" => "%");
 $unites["ht_final"]     = array("nom" => "Ht final", "unit" => "%");
 $unites["plaquettes"]   = array("nom" => "Plaquettes", "unit" => "(x1000) /mm3");
 $unites["creatinine"]   = array("nom" => "Créatinine", "unit" => "mg/l");
+$unites["_clairance"]   = array("nom" => "Clairance de Créatinine", "unit" => "ml/min");
 $unites["_clairance"]   = array("nom" => "Clairance de Créatinine", "unit" => "ml/min");
 $unites["fibrinogene"]  = array("nom" => "Fibrinogène", "unit" => "g/l");
 $unites["na"]           = array("nom" => "Na+", "unit" => "mmol/l");
@@ -233,13 +230,12 @@ $smarty->assign("display"   , $display);
 $smarty->assign("offline"   , $offline);
 $smarty->assign("unites"    , $unites);
 $smarty->assign("listChamps", $listChamps);
-$smarty->assign("consult"   , $consult);
+$smarty->assign("dossier_anesth", $dossier_anesth);
 $smarty->assign("etatDents" , $sEtatsDents);
 $smarty->assign("print"     , $print);
-$smarty->assign("praticien" , new CUser);
+$smarty->assign("praticien" , new CUser());
 $smarty->assign("lines"     , $lines);
 $smarty->assign("multi"     , $multi);
-$smarty->assign("dossier_medical_sejour", $consult->_ref_consult_anesth->_ref_sejour->_ref_dossier_medical);
-$template = CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie");
+$smarty->assign("dossier_medical_sejour", $dossier_anesth->_ref_sejour->_ref_dossier_medical);
 
-$smarty->display($template.".tpl");
+$smarty->display(CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie").".tpl");

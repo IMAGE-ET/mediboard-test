@@ -13,36 +13,36 @@
   </tr>
   
   {{foreach from=$consult->_ref_logs item=curr_object}}
-  <tr>
-    <td>{{$curr_object->_ref_user->_view}}</td>
-    <td>{{$curr_object->date|date_format:$conf.datetime}}</td>
-    <td>{{tr}}CUserLog.type.{{$curr_object->type}}{{/tr}}</td>
-    <td>
-      {{foreach from=$curr_object->_fields|smarty:nodefaults item=curr_field}}
-      {{$curr_field}}<br />
-      {{/foreach}}
-    </td>
-  </tr>
+    <tr>
+      <td>{{$curr_object->_ref_user->_view}}</td>
+      <td>{{$curr_object->date|date_format:$conf.datetime}}</td>
+      <td>{{tr}}CUserLog.type.{{$curr_object->type}}{{/tr}}</td>
+      <td>
+        {{foreach from=$curr_object->_fields|smarty:nodefaults item=curr_field}}
+        {{$curr_field}}<br />
+        {{/foreach}}
+      </td>
+    </tr>
   {{/foreach}}
 
-  {{if $consult->_ref_consult_anesth->consultation_anesth_id}}
-  <tr>
-    <th colspan="4" class="title">
-      Consultation Anesthesique
-    </th>
-  </tr>  
-  
-  {{foreach from=$consult->_ref_consult_anesth->_ref_logs item=curr_object}}
-  <tr>
-    <td>{{$curr_object->_ref_user->_view}}</td>
-    <td>{{$curr_object->date|date_format:$conf.datetime}}</td>
-    <td>{{tr}}CUserLog.type.{{$curr_object->type}}{{/tr}}</td>
-    <td>
-      {{foreach from=$curr_object->_fields|smarty:nodefaults item=curr_field}}
-      {{$curr_field}}<br />
-      {{/foreach}}
-    </td>
-  </tr>
+  {{foreach from=$consult->_refs_dossiers_anesth item=_dossier_anesth}}
+    <tr>
+      <th colspan="4" class="title">
+        Consultation Anesthesique
+      </th>
+    </tr>
+
+    {{foreach from=$_dossier_anesth->_ref_logs item=curr_object}}
+      <tr>
+        <td>{{$curr_object->_ref_user->_view}}</td>
+        <td>{{$curr_object->date|date_format:$conf.datetime}}</td>
+        <td>{{tr}}CUserLog.type.{{$curr_object->type}}{{/tr}}</td>
+        <td>
+          {{foreach from=$curr_object->_fields|smarty:nodefaults item=curr_field}}
+            {{$curr_field}}<br />
+          {{/foreach}}
+        </td>
+      </tr>
+    {{/foreach}}
   {{/foreach}}
-  {{/if}}
 </table>

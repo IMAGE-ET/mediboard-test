@@ -76,7 +76,7 @@
     </tr>
     {{foreachelse}}
     <tr>
-      <td class="empty">{{tr}}COperation.none_non_cotee{{/tr}}</td>
+      <td colspan="5" class="empty">{{tr}}COperation.none_non_cotee{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

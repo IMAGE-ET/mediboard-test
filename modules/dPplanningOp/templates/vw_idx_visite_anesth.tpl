@@ -1,15 +1,13 @@
 <script type="text/javascript">
-function printFicheAnesth(consult_id) {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "print_fiche"); 
-  url.addParam("consultation_id", consult_id);
+function printFicheAnesth(dossier_anesth_id) {
+  var url = new Url("cabinet", "print_fiche");
+  url.addParam("dossier_anesth_id", dossier_anesth_id);
   url.popup(700, 500, "printFiche");
   return;
 }
 
 function editVisite(operation_id) {
-  var url = new Url;
-  url.setModuleAction("dPplanningOp", "edit_visite_anesth"); 
+  var url = new Url("planningOp", "edit_visite_anesth");
   url.addParam("operation_id", operation_id);
   url.popup(800, 500, "editVisite");
   return;
@@ -17,7 +15,7 @@ function editVisite(operation_id) {
 
 Main.add(function(){
   Calendar.regField(getForm("selectPraticien").date, null, {noView: true});
- if ($('type_sejour')){
+  if ($('type_sejour')) {
     Control.Tabs.create('type_sejour', true);
   }
 });
@@ -175,7 +173,7 @@ Main.add(function(){
                 <td {{if $_operation->annulee}}class="cancelled"{{/if}}">
                   <button type="button" class="edit notext" onclick="editVisite({{$_operation->_id}});">{{tr}}Edit{{/tr}}</button>
                   {{if $_operation->_ref_consult_anesth->_id}}
-                    <button type="button" class="print notext" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}');">{{tr}}Print{{/tr}}</button>
+                    <button type="button" class="print notext" onclick="printFicheAnesth('{{$_operation->_ref_consult_anesth->_id}}');">{{tr}}Print{{/tr}}</button>
                   {{/if}}
                 </td>
               </tr>

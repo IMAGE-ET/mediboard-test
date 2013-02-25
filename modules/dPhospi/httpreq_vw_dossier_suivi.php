@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-$user = CAppUI::$user;
+$user = CMediusers::get();
 
 if(!$user->isPraticien()) {
   CCanDo::checkRead();
@@ -37,31 +37,31 @@ $has_obs_entree = 0;
 $cibles = array();
 $users = array();
 
-foreach($sejour->_ref_suivi_medical as $_suivi) {
+foreach ($sejour->_ref_suivi_medical as $_suivi) {
   if (is_array($_suivi)) { 
     $_suivi = $_suivi[0];
   }
   // Elements et commentaires
-  if($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment){
+  if ($_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment) {
     $_suivi->loadRefPraticien();
     $users[$_suivi->praticien_id] = $_suivi->_ref_praticien;
-    if($user_id && $_suivi->praticien_id != $user_id){
+    if ($user_id && $_suivi->praticien_id != $user_id) {
       unset($sejour->_ref_suivi_medical["$_suivi->debut $_suivi->time_debut $_suivi->_guid"]);
     }
-  }  
+  }
   // Transmissions et Observations
   elseif (!$_suivi instanceof CConsultation) {
     $users[$_suivi->user_id] = $_suivi->_ref_user;
     $type = ($_suivi instanceof CObservationMedicale) ? "obs" : "trans";
-    if($user_id && $_suivi->user_id != $user_id){
+    if ($user_id && $_suivi->user_id != $user_id){
       unset($sejour->_ref_suivi_medical[$_suivi->date.$_suivi->_id.$type]);
     }
     
     $_suivi->loadRefUser();
-    if($_suivi instanceof CTransmissionMedicale) {
+    if ($_suivi instanceof CTransmissionMedicale) {
       $trans = $_suivi;
       $trans->calculCibles($cibles);
-      if ($cible && $_suivi->_cible != $cible){
+      if ($cible && $_suivi->_cible != $cible) {
         unset($sejour->_ref_suivi_medical[$_suivi->date.$_suivi->_id.$type]);
       }
     }
@@ -71,13 +71,13 @@ foreach($sejour->_ref_suivi_medical as $_suivi) {
 
 //TODO: Revoir l'ajout des constantes dans le suivi de soins 
 //Ajout des constantes
-if (!$cible && CAppUI::conf("soins constantes_show") && $_show_const){
+if (!$cible && CAppUI::conf("soins constantes_show") && $_show_const) {
   $sejour->loadRefConstantes($user_id);
 }
 
 //mettre les transmissions dans un tableau dont l'index est le datetime
 $list_trans_const = array();
-foreach($sejour->_ref_suivi_medical as $_trans_const) {
+foreach ($sejour->_ref_suivi_medical as $_trans_const) {
   if (is_array($_trans_const)) {
     $_trans_const = $_trans_const[0];
   }
@@ -92,7 +92,9 @@ foreach($sejour->_ref_suivi_medical as $_trans_const) {
     $list_trans_const[$sort_key] = $_trans_const;
   }
   elseif ($_trans_const instanceof CConsultation) {
-    $_trans_const->_ref_consult_anesth->loadRefOperation(); 
+    foreach ($_trans_const->_refs_dossiers_anesth as $key => $_dossier_anesth) {
+      $_dossier_anesth->loadRefOperation();
+    }
     if ($_trans_const->type == "entree") {
       $has_obs_entree = 1;
     }
@@ -143,7 +145,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("params"      , CConstantesMedicales::$list_constantes);
 $smarty->assign("page_step"   , 20);
-$smarty->assign("readOnly"    , CValue::get("readOnly",false));
+$smarty->assign("readOnly"    , CValue::get("readOnly", false));
 $smarty->assign("count_trans" , $count_trans);
 $smarty->assign("user"        , $user);
 $smarty->assign("isPraticien" , $is_praticien);
@@ -158,6 +160,5 @@ $smarty->assign("has_obs_entree", $has_obs_entree);
 $smarty->assign("_show_obs"   , $_show_obs);
 $smarty->assign("_show_trans" , $_show_trans);
 $smarty->assign("_show_const" , $_show_const);
-$smarty->display("inc_vw_dossier_suivi.tpl");
 
-?>
+$smarty->display("inc_vw_dossier_suivi.tpl");

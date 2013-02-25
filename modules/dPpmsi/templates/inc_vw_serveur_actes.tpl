@@ -34,7 +34,8 @@ Main.add(function () {
   </tr>
   <tr>
     <td class="button" colspan="4">
-      <button {{if $curr_op->_ref_consult_anesth->_ref_consultation->_id}}class="print"{{else}}class="warning"{{/if}} style="width:11em;" type="button" onclick="printFicheAnesth('{{$curr_op->_ref_consult_anesth->_ref_consultation->_id}}', '{{$curr_op->_id}}');">
+      <button class="{{if $curr_op->_ref_consult_anesth->_id}}print{{else}}warning{{/if}}"
+        style="width:11em;" type="button" onclick="printFicheAnesth('{{$curr_op->_ref_consult_anesth->_id}}', '{{$curr_op->_id}}');">
         Fiche d'anesthésie
       </button>
       <button class="print" onclick="printFicheBloc({{$curr_op->operation_id}})">

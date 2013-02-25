@@ -1,29 +1,32 @@
 <script type="text/javascript">
 
 Main.add(function () {
-  var opsUpdater = new Url("dPsalleOp", "httpreq_liste_plages");
+  var opsUpdater = new Url("salleOp", "httpreq_liste_plages");
   opsUpdater.addParam("date", "{{$date}}");
   opsUpdater.periodicalUpdate('listplages', { frequency: 90 });
 });
 
 function printFiche() {
-  var url = new Url("dPcabinet", "print_fiche"); 
+  var url = new Url("cabinet", "print_fiche");
   url.addElement(document.editFrmFinish.consultation_id);
   url.popup(700, 500, "printFiche");
 }
 
 function printAllDocs() {
-  var url = new Url("dPcabinet", "print_docs"); 
+  var url = new Url("cabinet", "print_docs");
   url.addElement(document.editFrmFinish.consultation_id);
   url.popup(700, 600, "printDocuments");
 }
 </script>
 
+{{assign var=consult_anesth value=$operation->_ref_consult_anesth}}
+{{assign var=consult value=$consult_anesth->_ref_consultation}}
+
 <table class="main">
   <tr>
     <td style="width: 200px;" id="listplages"></td>
     <td class="greedyPane">
-      {{if $op && !$consult->consultation_id}}
+      {{if $op && !$consult_anesth->_id}}
         <table class="form">
           <tr>
             <th class="category">Consultation</th>
@@ -52,14 +55,14 @@ function printAllDocs() {
               Consultation d'anesthésie de <strong>{{$consult->_ref_patient->_view}}</strong>
               le {{$consult->_date|date_format:$conf.longdate}}
               par <strong>{{$consult->_ref_chir->_view}}</strong><br />
-              Type de Séjour : {{tr}}CSejour.type.{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}
+              Type de Séjour : {{tr}}CSejour.type.{{$operation->_ref_sejour->type}}{{/tr}}
               <br />
               <strong>Intervention :</strong>
-              le <strong>{{$consult_anesth->_ref_operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
-              par le <strong>Dr {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong> (coté {{tr}}COperation.cote.{{$consult_anesth->_ref_operation->cote}}{{/tr}})<br />
+              le <strong>{{$operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
+              par le <strong>Dr {{$operation->_ref_chir->_view}}</strong> (coté {{tr}}COperation.cote.{{$operation->cote}}{{/tr}})<br />
             </td>
             <td class="button">
-              <a class="button search" href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$consult->consultation_id}}">
+              <a class="button search" href="?m=cabinet&tab=edit_consultation&selConsult={{$consult->_id}}">
                 Voir la consultation
               </a><br />
               <button class="print" type="button" onclick="printFiche()">
@@ -77,10 +80,10 @@ function printAllDocs() {
           </tr>
         </table>
         <div id="InfoAnesth">
-          {{include file="../../dPcabinet/templates/inc_consult_anesth/acc_infos_anesth.tpl"}}
+          {{mb_include module=cabinet template=inc_consult_anesth/acc_infos_anesth}}
         </div>
         <div id="fdrConsult">
-          {{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}
+          {{mb_include module=cabinet template=inc_fdr_consult}}
         </div>
       {{/if}}
     </td>

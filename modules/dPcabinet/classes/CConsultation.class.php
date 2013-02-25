@@ -1031,6 +1031,10 @@ TESTS A EFFECTUER
     foreach ($this->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
     }
+    $this->loadRefConsultAnesth();
+    foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
+      $_dossier_anesth->loadRefOperation();
+    }
   }
 
   /**
@@ -1214,18 +1218,12 @@ TESTS A EFFECTUER
   function loadRefsDocs() {
     parent::loadRefsDocs();
 
-    // On ajoute les documents de la consultation d'anesthésie
+    // On ajoute les documents des dossiers d'anesthésie
     $this->loadRefConsultAnesth();
-    $consult_anesth =& $this->_ref_consult_anesth;
-    if (is_array($consult_anesth)) {
-      foreach ($consult_anesth as $_consult_anesth) {
-        $_consult_anesth->loadRefsDocs();
-        $this->_ref_documents = CMbArray::mergeKeys($this->_ref_documents, $_consult_anesth->_ref_documents);
-      }
-    }
-    else if ($consult_anesth->_id) {
-      $consult_anesth->loadRefsDocs();
-      $this->_ref_documents = CMbArray::mergeKeys($this->_ref_documents, $consult_anesth->_ref_documents);
+
+    foreach ($this->_refs_dossiers_anesth as $_dossier_anesth) {
+      $_dossier_anesth->loadRefsDocs();
+      $this->_ref_documents = CMbArray::mergeKeys($this->_ref_documents, $_dossier_anesth->_ref_documents);
     }
 
     return count($this->_ref_documents);
@@ -1269,7 +1267,7 @@ TESTS A EFFECTUER
   }
   
   function loadRefsDossiersAnesth() {
-    $this->_refs_dossiers_anesth = $this->loadBackRefs("consult_anesth");
+    return $this->_refs_dossiers_anesth = $this->loadBackRefs("consult_anesth");
   }
   
   function loadRefsExamAudio(){

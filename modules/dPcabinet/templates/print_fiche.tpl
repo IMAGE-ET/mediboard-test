@@ -16,10 +16,11 @@
   {{assign var=tbl_class value="main form"}}
 {{/if}}
 
-{{assign var="patient" value=$consult->_ref_patient}}
-{{assign var="consult_anesth" value=$consult->_ref_consult_anesth}}  
-{{assign var="operation" value=$consult_anesth->_ref_operation}}
-  
+{{assign var="consult"   value=$dossier_anesth->_ref_consultation}}
+{{assign var="patient"   value=$consult->_ref_patient}}
+{{assign var="operation" value=$dossier_anesth->_ref_operation}}
+{{assign var="sejour"    value=$operation->_ref_sejour}}
+
 {{mb_include module=cabinet template=inc_header_fiche_anesth}}
 
 <table class="{{$tbl_class}}" style="page-break-after: always;">
@@ -31,34 +32,34 @@
         </tr>
         <tr>
           <td colspan="2">
-            {{if $consult_anesth->operation_id}}
-              {{if $consult_anesth->_ref_operation->_ref_sejour}}
-              Admission en {{tr}}CSejour.type.{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}
-              le <strong>{{$consult_anesth->_ref_operation->_ref_sejour->_entree|date_format:"%A %d/%m/%Y à %Hh%M"}}</strong>
-              pour <strong>{{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} nuit(s)</strong>
+            {{if $operation->_id}}
+              {{if $sejour}}
+              Admission en {{tr}}CSejour.type.{{$sejour->type}}{{/tr}}
+              le <strong>{{$sejour->_entree|date_format:"%A %d/%m/%Y à %Hh%M"}}</strong>
+              pour <strong>{{$sejour->_duree_prevue}} nuit(s)</strong>
               <br />
               {{/if}}
             {{else}}
-              Intervention le <strong>{{$consult_anesth->date_interv|date_format:"%A %d/%m/%Y"}}</strong>
-              par le <strong>Dr {{$consult_anesth->_ref_chir->_view}}</strong>
+              Intervention le <strong>{{$dossier_anesth->date_interv|date_format:"%A %d/%m/%Y"}}</strong>
+              par le <strong>Dr {{$dossier_anesth->_ref_chir->_view}}</strong>
               <br />
-              {{$consult_anesth->libelle_interv}}
+              {{$dossier_anesth->libelle_interv}}
             {{/if}}
           </td>
         </tr>
-        {{if $consult_anesth->operation_id}}
+        {{if $operation->_id}}
         <tr>
           <td colspan="2" class="text">
-            Intervention le <strong>{{$consult_anesth->_ref_operation->_ref_plageop->date|date_format:"%A %d/%m/%Y"}}</strong>
-            {{if $consult_anesth->_ref_operation->libelle}}
-              - {{$consult_anesth->_ref_operation->libelle}}
+            Intervention le <strong>{{$operation->_ref_plageop->date|date_format:"%A %d/%m/%Y"}}</strong>
+            {{if $operation->libelle}}
+              - {{$operation->libelle}}
             {{/if}}
             <ul>
-              {{if $consult_anesth->_ref_operation->libelle}}
-                <li><em>[{{$consult_anesth->_ref_operation->libelle}}]</em></li>
+              {{if $operation->libelle}}
+                <li><em>[{{$operation->libelle}}]</em></li>
               {{/if}}
-              {{foreach from=$consult_anesth->_ref_operation->_ext_codes_ccam item=curr_code}}
-              <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}}) (coté {{tr}}COperation.cote.{{$consult_anesth->_ref_operation->cote}}{{/tr}})</li>
+              {{foreach from=$operation->_ext_codes_ccam item=curr_code}}
+              <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}}) (coté {{tr}}COperation.cote.{{$operation->cote}}{{/tr}})</li>
               {{/foreach}}
             </ul>
           </td>
@@ -66,42 +67,41 @@
         {{/if}}
         <tr>
           <td class="halfPane text">
-            {{if $consult_anesth->operation_id}}
+            {{if $operation->_id}}
               <table>
                 {{if $conf.dPplanningOp.COperation.show_duree_uscpo != "0"}}
                 <tr>
                   <th style="font-weight: normal;">USCPO</th>
                   <td style="font-weight: bold;">
-                    {{if !$consult_anesth->_ref_operation->passage_uscpo}}
+                    {{if !$operation->passage_uscpo}}
                       Non
                     {{else}}
-                      {{$consult_anesth->_ref_operation->duree_uscpo}} nuit(s)
+                      {{$operation->duree_uscpo}} nuit(s)
                     {{/if}}
-                    
                   </td>
                 </tr>
                 {{/if}}
                 <tr>
                   <th style="font-weight: normal;">Anesthésie prévue</th>
                   <td style="font-weight: bold;">
-                    {{$consult_anesth->_ref_operation->_lu_type_anesth}}
+                    {{$operation->_lu_type_anesth}}
                   </td>
                 </tr>
                 <tr>
                   <th style="font-weight: normal;">Position</th>
                   <td style="font-weight: bold;">
-                    {{tr}}CConsultAnesth.position.{{$consult_anesth->_ref_operation->position}}{{/tr}}
+                    {{tr}}COperation.position.{{$operation->position}}{{/tr}}
                   </td>
                 </tr>
               </table>
-            {{elseif $consult_anesth->_ref_operation->position}}
-            Position : <strong>{{tr}}CConsultAnesth.position.{{$consult_anesth->_ref_operation->position}}{{/tr}}</strong>
+            {{elseif $operation->position}}
+            Position : <strong>{{tr}}COperation.position.{{$operation->position}}{{/tr}}</strong>
             {{/if}}
           </td>
           <td class="halfPane text">
             <strong>Techniques Complémentaires</strong>
             <ul>
-              {{foreach from=$consult_anesth->_ref_techniques item=curr_tech}}
+              {{foreach from=$dossier_anesth->_ref_techniques item=curr_tech}}
               <li>
                 {{$curr_tech->technique}}
               </li>
@@ -111,11 +111,11 @@
             </ul>
           </td>
         </tr>
-        {{if $consult_anesth->_ref_operation->rques}}
+        {{if $operation->rques}}
         <tr>
           <td colspan="2" style="font-weight: bold;">
             <div class="small-warning">
-              {{mb_value object=$consult_anesth->_ref_operation field=rques}}
+              {{mb_value object=$operation field=rques}}
             </div>
           </td>
         </tr>
@@ -166,21 +166,21 @@
         <tr>
           <td colspan="2">
             <table>
-              {{if $consult->_ref_consult_anesth->groupe!="?" || $consult->_ref_consult_anesth->rhesus!="?"}}
+              {{if $dossier_anesth->groupe!="?" || $dossier_anesth->rhesus!="?"}}
               <tr>
                 <th style="font-weight: normal;">Groupe sanguin</th>
-                <td style="font-weight: bold; white-space: nowrap; font-size:130%;">&nbsp;{{tr}}CConsultAnesth.groupe.{{$consult->_ref_consult_anesth->groupe}}{{/tr}} &nbsp;{{tr}}CConsultAnesth.rhesus.{{$consult->_ref_consult_anesth->rhesus}}{{/tr}}</td>
+                <td style="font-weight: bold; white-space: nowrap; font-size:130%;">&nbsp;{{tr}}CConsultAnesth.groupe.{{$dossier_anesth->groupe}}{{/tr}} &nbsp;{{tr}}CConsultAnesth.rhesus.{{$dossier_anesth->rhesus}}{{/tr}}</td>
               </tr>
               {{/if}}
-              {{if $consult->_ref_consult_anesth->rai && $consult->_ref_consult_anesth->rai!="?"}}
+              {{if $dossier_anesth->rai && $dossier_anesth->rai!="?"}}
               <tr>
                 <th style="font-weight: normal;">RAI</th>
-                <td style="font-weight: bold; white-space: nowrap; font-size:130%;">&nbsp;{{tr}}CConsultAnesth.rai.{{$consult->_ref_consult_anesth->rai}}{{/tr}}</td>
+                <td style="font-weight: bold; white-space: nowrap; font-size:130%;">&nbsp;{{tr}}CConsultAnesth.rai.{{$dossier_anesth->rai}}{{/tr}}</td>
               </tr>
               {{/if}}
               <tr>
                 <th style="font-weight: normal;">ASA</th>
-                <td style="font-weight: bold;">{{if $consult_anesth->operation_id}}{{tr}}COperation.ASA.{{$consult_anesth->_ref_operation->ASA}}{{/tr}}{{/if}}</td>
+                <td style="font-weight: bold;">{{if $operation->_id}}{{tr}}COperation.ASA.{{$operation->ASA}}{{/tr}}{{/if}}</td>
               </tr>
               <tr>
                 <th style="font-weight: normal;">VST</th>
@@ -188,11 +188,11 @@
                   {{if $const_med->_vst}}{{$const_med->_vst}} ml{{/if}}
                 </td>
               </tr>
-              {{if $consult->_ref_consult_anesth->_psa}}
+              {{if $dossier_anesth->_psa}}
               <tr>
                 <th style="font-weight: normal;">PSA</th>
                 <td style="font-weight: bold; white-space: nowrap;">
-                  {{$consult->_ref_consult_anesth->_psa}} ml/GR
+                  {{$dossier_anesth->_psa}} ml/GR
                 </td>
                 <td colspan="2"></td>
               </tr>
@@ -365,19 +365,19 @@
         
         <tr>
           <th style="font-weight: normal;">Examen cardiovasculaire</th>
-          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->examenCardio}}</td>
+          <td style="font-weight: bold;" class="text">{{$dossier_anesth->examenCardio}}</td>
         </tr>
         <tr>
           <th style="font-weight: normal;">Examen pulmonaire</th>
-          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->examenPulmo}}</td>
+          <td style="font-weight: bold;" class="text">{{$dossier_anesth->examenPulmo}}</td>
         </tr>
         <tr>
           <th style="font-weight: normal;">Examen digestif</th>
-          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->examenDigest}}</td>
+          <td style="font-weight: bold;" class="text">{{$dossier_anesth->examenDigest}}</td>
         </tr>
         <tr>
           <th style="font-weight: normal;">Examen autre</th>
-          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->examenAutre}}</td>
+          <td style="font-weight: bold;" class="text">{{$dossier_anesth->examenAutre}}</td>
         </tr>
         
         {{if $consult->examen}}
@@ -409,29 +409,29 @@
         <tr>
           <th style="font-weight: normal;">Mallampati</th>
           <td style="font-weight: bold;">
-           {{mb_value object=$consult->_ref_consult_anesth field="mallampati"}}
+           {{mb_value object=$dossier_anesth field="mallampati"}}
           </td>
         </tr>  
         {{/if}}
         <tr>
-          {{if $consult->_ref_consult_anesth->mallampati && $conf.dPcabinet.CConsultAnesth.show_mallampati}}
+          {{if $dossier_anesth->mallampati && $conf.dPcabinet.CConsultAnesth.show_mallampati}}
           <td rowspan="4" class="button" style="white-space: nowrap;">
-            <img src="images/pictures/{{$consult->_ref_consult_anesth->mallampati}}.png" alt="{{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}" />
-            <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
+            <img src="images/pictures/{{$dossier_anesth->mallampati}}.png" alt="{{tr}}CConsultAnesth.mallampati.{{$dossier_anesth->mallampati}}{{/tr}}" />
+            <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$dossier_anesth->mallampati}}{{/tr}}
           </td>
           {{/if}}
           <th style="font-weight: normal;">Ouverture de la bouche</th>
           <td style="font-weight: bold;">
-            {{tr}}CConsultAnesth.bouche.{{$consult->_ref_consult_anesth->bouche}}{{/tr}}
+            {{tr}}CConsultAnesth.bouche.{{$dossier_anesth->bouche}}{{/tr}}
           </td>
         </tr>
         <tr>
           <th style="font-weight: normal;">Distance thyro-mentonnière</th>
-          <td style="font-weight: bold;">{{tr}}CConsultAnesth.distThyro.{{$consult->_ref_consult_anesth->distThyro}}{{/tr}}</td>
+          <td style="font-weight: bold;">{{tr}}CConsultAnesth.distThyro.{{$dossier_anesth->distThyro}}{{/tr}}</td>
         </tr>
         <tr>
           <th style="font-weight: normal;">Etat bucco-dentaire</th>
-          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->etatBucco}}
+          <td style="font-weight: bold;" class="text">{{$dossier_anesth->etatBucco}}
           <br />
             {{if $etatDents}}
               {{$etatDents|nl2br}}
@@ -440,10 +440,10 @@
         </tr>
         <tr>
           <th style="font-weight: normal;">Conclusion</th>
-          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->conclusion}}</td>
+          <td style="font-weight: bold;" class="text">{{$dossier_anesth->conclusion}}</td>
         </tr>
         <tr>
-        {{if $consult->_ref_consult_anesth->_intub_difficile}}
+        {{if $dossier_anesth->_intub_difficile}}
           <td colspan="3" style="font-weight: bold; text-align:center; color:#F00;">
             {{tr}}CConsultAnesth-_intub_difficile{{/tr}}
           </td>
@@ -472,15 +472,15 @@
                 <th style="font-weight: normal;">{{$donnees.nom}}</th>
                 <td style="font-weight: bold; white-space: nowrap;">
                   {{if $champ=="tca"}}
-                    {{$consult->_ref_consult_anesth->tca_temoin}} s / {{$consult->_ref_consult_anesth->tca}}
+                    {{$dossier_anesth->tca_temoin}} s / {{$dossier_anesth->tca}}
                   {{elseif $champ=="tsivy"}}
-                    {{$consult->_ref_consult_anesth->tsivy|date_format:"%Mm%Ss"}}
+                    {{$dossier_anesth->tsivy|date_format:"%Mm%Ss"}}
                   {{elseif $champ=="ecbu"}}
-                    {{tr}}CConsultAnesth.ecbu.{{$consult->_ref_consult_anesth->ecbu}}{{/tr}}
+                    {{tr}}CConsultAnesth.ecbu.{{$dossier_anesth->ecbu}}{{/tr}}
                   {{elseif $champ == "date_analyse"}}
-                    {{mb_value object=$consult->_ref_consult_anesth field=date_analyse}}
+                    {{mb_value object=$dossier_anesth field=date_analyse}}
                   {{else}}
-                    {{$consult->_ref_consult_anesth->$champ}}
+                    {{mb_value object=$dossier_anesth field=$champ}}
                   {{/if}}
                   {{$donnees.unit}}
                 </td>
@@ -493,23 +493,23 @@
       </table>
     </td>
   </tr>
-  {{if $consult->_ref_consult_anesth->result_ecg || $consult->_ref_consult_anesth->result_rp}}
+  {{if $dossier_anesth->result_ecg || $dossier_anesth->result_rp}}
   <tr>
     <td>
       <table width="100%">
         <tr>
           <td width="50%">
-            {{if $consult->_ref_consult_anesth->result_ecg}}
-            <strong>{{mb_label object=$consult->_ref_consult_anesth field="result_ecg"}}</strong>
+            {{if $dossier_anesth->result_ecg}}
+            <strong>{{mb_label object=$dossier_anesth field="result_ecg"}}</strong>
             <br />
-            {{mb_value object=$consult->_ref_consult_anesth field="result_ecg"}}
+            {{mb_value object=$dossier_anesth field="result_ecg"}}
             {{/if}}
           </td>
           <td>
-            {{if $consult->_ref_consult_anesth->result_rp}}
-            <strong>{{mb_label object=$consult->_ref_consult_anesth field="result_rp"}}</strong>
+            {{if $dossier_anesth->result_rp}}
+            <strong>{{mb_label object=$dossier_anesth field="result_rp"}}</strong>
             <br />
-            {{mb_value object=$consult->_ref_consult_anesth field="result_rp"}}
+            {{mb_value object=$dossier_anesth field="result_rp"}}
             {{/if}}
           </td>
         </tr>
@@ -591,14 +591,14 @@
           </th>
         </tr>
         
-        {{if $consult->_ref_consult_anesth->premedication}}
+        {{if $dossier_anesth->premedication}}
           <tr>
             <td>
-              {{$consult->_ref_consult_anesth->premedication|nl2br}}
+              {{$dossier_anesth->premedication|nl2br}}
             </td>
           </tr>
         {{/if}}
-        {{assign var=prescription value =$consult_anesth->_ref_sejour->_ref_prescription_sejour}}
+        {{assign var=prescription value=$sejour->_ref_prescription_sejour}}
         <tr>
           <td>
             <ul>
@@ -618,7 +618,7 @@
         </tr>
       </table>
       
-      {{if $consult->_ref_consult_anesth->prepa_preop}}
+      {{if $dossier_anesth->prepa_preop}}
       <table width="100%">
         <tr>
           <th class="category">
@@ -627,7 +627,7 @@
         </tr>
         <tr>
           <td>
-            {{$consult->_ref_consult_anesth->prepa_preop|nl2br}}
+            {{$dossier_anesth->prepa_preop|nl2br}}
           </td>
         </tr>
       </table>

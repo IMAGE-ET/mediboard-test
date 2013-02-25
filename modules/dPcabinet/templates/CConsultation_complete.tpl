@@ -8,9 +8,9 @@ newExam = function(sAction, consultation_id) {
     url.popup(900, 600, "Examen");  
   }
 }
-printFiche = function() {
+printFiche = function(dossier_anesth_id) {
   var url = new Url("dPcabinet", "print_fiche"); 
-  url.addParam("consultation_id", '{{$object->_id}}');
+  url.addParam("dossier_anesth_id", dossier_anesth_id);
   url.addParam("print", true);
   url.popup(700, 500, "printFiche");
 }
@@ -22,11 +22,15 @@ printFiche = function() {
       {{mb_include module=system template=inc_object_idsante400 object=$object}}
       {{mb_include module=system template=inc_object_history    object=$object}}
       {{mb_include module=system template=inc_object_notes      object=$object}}
-      
-      <button class="print" type="button" style="float: right;" onclick="printFiche();">
-        Imprimer la fiche
-      </button>
-      
+
+      {{foreach from=$object->_refs_dossiers_anesth item=_dossier_anesth}}
+        <button class="print" type="button" style="float: right;" onclick="printFiche('{{$_dossier_anesth->_id}}');">
+          Imprimer la fiche
+          {{if $_dossier_anesth->_ref_operation->_id}}
+            pour l'intervention du {{mb_value object=$_dossier_anesth->_ref_operation field=_datetime_best}}
+          {{/if}}
+        </button>
+      {{/foreach}}
       {{$object->_view}}
     </th>
   </tr>

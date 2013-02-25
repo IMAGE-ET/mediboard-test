@@ -18,7 +18,7 @@ reloadDocumentsAnesth = function () {
 }
 
 refreshAnesthPerops = function(operation_id){
-  var url = new Url("dPsalleOp", "httpreq_vw_anesth_perop");
+  var url = new Url("salleOp", "httpreq_vw_anesth_perop");
   url.addParam("operation_id", operation_id);
   url.requestUpdate("list_perops_"+operation_id);
 }
@@ -27,7 +27,7 @@ refreshFicheAnesth = function() {
   var url = new Url("cabinet", "print_fiche");
 
   {{if $consult_anesth->_id}}
-    url.addParam("consultation_id", "{{$consult_anesth->consultation_id}}");
+    url.addParam("dossier_anesth_id", "{{$consult_anesth->_id}}");
   {{else}}
     url.addParam("operation_id", "{{$selOp->_id}}");
   {{/if}}
@@ -38,13 +38,13 @@ refreshFicheAnesth = function() {
 }
 
 printIntervAnesth = function(){
-  var url = new Url("dPsalleOp", "print_intervention_anesth");
+  var url = new Url("salleOp", "print_intervention_anesth");
   url.addParam("operation_id", "{{$selOp->_id}}");
   url.popup(800, 600, "Intervention anesthésiste");
 }
 
 refreshVisite = function(operation_id) {
-  var url = new Url("dPsalleOp", "ajax_refresh_visite_pre_anesth");
+  var url = new Url("salleOp", "ajax_refresh_visite_pre_anesth");
   url.addParam("operation_id", operation_id);
   url.addParam("callback", "refreshVisite");
   url.requestUpdate("visite_pre_anesth");
@@ -53,13 +53,6 @@ refreshVisite = function(operation_id) {
 refreshFormsPerop = function(){
   ExObject.loadExObjects("{{$selOp->_class}}", "{{$selOp->_id}}", "forms_perop", 0);
 }
-
-{{if $dialog}}
-reloadAnesth = function() {
-  window.opener.location.reload(true);
-  window.location.reload(true);
-}
-{{/if}}
 
 Main.add(function(){
   if ($('anesth_tab_group')){
@@ -99,7 +92,7 @@ Main.add(function(){
 <hr class="control_tabs" />
 
 <div id="anesth">
-  {{include file="inc_vw_anesth.tpl"}}
+  {{mb_include module=salleOp template=inc_vw_anesth}}
 </div>
 
 <div id="fiche_anesth"></div>
@@ -110,7 +103,7 @@ Main.add(function(){
     <tr>
       <td class="halfPane">
         <fieldset>
-          {{mb_script module="dPcabinet" script="file"}}
+          {{mb_script module="cabinet" script="file"}}
           <legend>{{tr}}CFile{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>
           <div id="files-anesth">
             <script type="text/javascript">
@@ -120,8 +113,8 @@ Main.add(function(){
         </fieldset>
       </td>
       <td class="halfPane">
-        {{mb_script module="dPcompteRendu" script="document"}}
-        {{mb_script module="dPcompteRendu" script="modele_selector"}}
+        {{mb_script module="compteRendu" script="document"}}
+        {{mb_script module="compteRendu" script="modele_selector"}}
         <fieldset>
           <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}CConsultAnesth{{/tr}}</legend>
           <div id="documents-anesth">

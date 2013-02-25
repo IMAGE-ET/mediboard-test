@@ -5,8 +5,8 @@
 {{assign var="do_subject_aed" value="do_planning_aed"}}
 
 {{if "dPmedicament"|module_active}}
-  {{mb_script module="dPmedicament" script="medicament_selector" ajax=$ajax}}
-  {{mb_script module="dPmedicament" script="equivalent_selector" ajax=$ajax}}
+  {{mb_script module="medicament" script="medicament_selector" ajax=$ajax}}
+  {{mb_script module="medicament" script="equivalent_selector" ajax=$ajax}}
 {{/if}}
 
 {{if "dPprescription"|module_active}}
@@ -14,16 +14,16 @@
   {{mb_script module="dPprescription" script="prescription" ajax=$ajax}}
 {{/if}}
 
-{{mb_script module="bloodSalvage" script="bloodSalvage" ajax=$ajax}}
-{{mb_script module="soins" script="plan_soins" ajax=$ajax}}
-{{mb_script module="dPplanningOp" script="cim10_selector" ajax=$ajax}}
+{{mb_script module=bloodSalvage script=bloodSalvage ajax=$ajax}}
+{{mb_script module=soins script=plan_soins ajax=$ajax}}
+{{mb_script module=planningOp script=cim10_selector ajax=$ajax}}
 {{mb_include module=salleOp template=js_codage_ccam}}
 
 <script type="text/javascript">
 
-printFicheAnesth = function(consult_id) {
-  var url = new Url("dPcabinet", "print_fiche"); 
-  url.addParam("consultation_id", consult_id);
+printFicheAnesth = function(dossier_anesth_id) {
+  var url = new Url("cabinet", "print_fiche");
+  url.addParam("dossier_anesth_id", dossier_anesth_id);
   url.popup(700, 500, "printFiche");
 }
 
@@ -37,9 +37,13 @@ submitTiming = function(oForm) {
 
 reloadTiming = function(operation_id){
   {{if $object->_id}}
-  var url = new Url("dPsalleOp", "httpreq_vw_timing");
-  url.addParam("operation_id", operation_id);
-  url.requestUpdate("timing", { onComplete: function() { ActesCCAM.refreshList({{$object->_id}},{{$object->_praticien_id}});} } );
+    var url = new Url("salleOp", "httpreq_vw_timing");
+    url.addParam("operation_id", operation_id);
+    url.requestUpdate("timing", { onComplete:
+      function() {
+        ActesCCAM.refreshList({{$object->_id}},{{$object->_praticien_id}});
+      }
+    });
   {{/if}}
 }
 
@@ -62,27 +66,28 @@ signVisiteAnesth = function(anesth_id) {
 }
 
 reloadAnesth = function(operation_id){
-  var url = new Url("dPsalleOp", "httpreq_vw_anesth");
+  console.log($("anesth"));
+  var url = new Url("salleOp", "httpreq_vw_anesth");
   url.addParam("operation_id", operation_id);
-  url.requestUpdate("anesth", { 
+  url.requestUpdate("anesth", {
     onComplete: function() { 
       if(reloadDocumentsAnesth) {
         reloadDocumentsAnesth();
       }
-      ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}"); 
+      ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}");
     }
   } );  
 }
 
 reloadDiagnostic = function(sejour_id, modeDAS) {
-  var url = new Url("dPsalleOp", "httpreq_diagnostic_principal");
+  var url = new Url("salleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
   url.addParam("modeDAS", modeDAS);
   url.requestUpdate("cim");
 }
 
 reloadPersonnel = function(operation_id){
-  var url = new Url("dPsalleOp", "httpreq_vw_personnel");
+  var url = new Url("salleOp", "httpreq_vw_personnel");
   url.addParam("operation_id", operation_id);
   url.requestUpdate("listPersonnel");
 }
@@ -97,12 +102,10 @@ Main.add(function () {
   if ($('main_tab_group')){
     Control.Tabs.create('main_tab_group', true);
     var tabName = Control.Tabs.loadTab('main_tab_group');
-    {{if "maternite"|module_active}}
-      if (tabName && tabName == "grossesse") {
-        refreshGrossesse('{{$selOp->_id}}');
-      }
-    {{/if}}      
-  }  
+    if (tabName && tabName == "grossesse") {
+      refreshGrossesse('{{$selOp->_id}}');
+    }
+  }
   
   // Sauvegarde de l'operation_id selectionné (utile pour l'ajout de DMI dans la prescription)
   window.DMI_operation_id = "{{$selOp->_id}}";
@@ -124,7 +127,7 @@ Main.add(function () {
   }
   
   if($('antecedents')){
-    var url = new Url("dPcabinet", "httpreq_vw_antecedents");
+    var url = new Url("cabinet", "httpreq_vw_antecedents");
     url.addParam("sejour_id","{{$selOp->sejour_id}}");
     url.requestUpdate("antecedents");
   }
@@ -141,7 +144,7 @@ Main.add(function () {
   }
   
   if($('Imeds_tab')){
-    var url = new Url("dPImeds", "httpreq_vw_sejour_results");
+    var url = new Url("Imeds", "httpreq_vw_sejour_results");
     url.addParam("sejour_id", {{$sejour->_id}});
     url.requestUpdate('Imeds_tab');
   }
@@ -165,7 +168,7 @@ refreshConstantesHack = function(sejour_id) {
 
 refreshConstantesMedicales = function(context_guid) {
   if(context_guid) {
-    var url = new Url("dPhospi", "httpreq_vw_constantes_medicales");
+    var url = new Url("hospi", "httpreq_vw_constantes_medicales");
     url.addParam("context_guid", context_guid);
     url.requestUpdate("constantes-medicales");
   }
@@ -173,7 +176,7 @@ refreshConstantesMedicales = function(context_guid) {
 
 loadSuivi = function(sejour_id, user_id, cible, show_obs, show_trans, show_const) {
   if(sejour_id) {
-    var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
+    var urlSuivi = new Url("hospi", "httpreq_vw_dossier_suivi");
     urlSuivi.addParam("sejour_id", sejour_id);
     urlSuivi.addParam("user_id", user_id);
     urlSuivi.addParam("cible", cible);
@@ -209,14 +212,14 @@ reloadPrescription = function(prescription_id){
 
 reloadSurveillancePerop = function() {
   if($('surveillance_perop')){
-    var url = new Url("dPsalleOp", "ajax_vw_surveillance_perop");
+    var url = new Url("salleOp", "ajax_vw_surveillance_perop");
     url.addParam("operation_id","{{$selOp->_id}}");
     url.requestUpdate("surveillance_perop");
   }
 }
 
 loadPosesDispVasc = function() {
-  var url = new Url("dPplanningOp", "ajax_list_pose_disp_vasc");
+  var url = new Url("planningOp", "ajax_list_pose_disp_vasc");
   url.addParam("operation_id", "{{$selOp->_id}}");
   url.addParam("sejour_id",    "{{$selOp->sejour_id}}");
   url.addParam("operateur_ids", "{{$operateurs_disp_vasc}}")
@@ -258,10 +261,10 @@ infoBacterio = function(field) {
       <button class="hslip notext" id="listplages-trigger" type="button" style="float:left">
         {{tr}}Programme{{/tr}}
       </button>
-      <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
-        {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
+      <a style="float: left" href="?m=patients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+        {{mb_include module=patients template=inc_vw_photo_identite patient=$patient size=42}}
       </a>
-      <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+      <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&tab=vw_edit_patients&patient_id={{$patient->_id}}">
         <img src="images/icons/edit.png" />
        </a>
       
@@ -456,7 +459,7 @@ infoBacterio = function(field) {
 <!-- codage des acte ccam et ngap -->
 <div id="codage_tab" style="display:none">
   <form name="infoFactu" action="?m={{$m}}" method="post">
-    <input type="hidden" name="m" value="dPplanningOp" />
+    <input type="hidden" name="m" value="planningOp" />
     <input type="hidden" name="dosql" value="do_planning_aed" />
     <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
     <input type="hidden" name="del" value="0" />
@@ -488,24 +491,23 @@ infoBacterio = function(field) {
   </form>
   
   <div id="codage_actes">
-    {{mb_include template="inc_codage_actes" subject=$selOp}}
+    {{mb_include module=salleOp template=inc_codage_actes subject=$selOp}}
   </div> 
 </div>
 
 <!-- codage diagnostics CIM -->
 <div id="diag_tab" style="display:none">
   <div id="cim">
-    {{include file="inc_diagnostic_principal.tpl" modeDAS=true}}
+    {{mb_include module=salleOp template=inc_diagnostic_principal modeDAS=true}}
   </div>
 </div>
 {{/if}}
 
-
-{{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)}}
 <!-- Anesthesie -->
-<div id="anesth_tab" style="display:none">
-  {{mb_include module=salleOp template=inc_vw_info_anesth}}
-</div>
+{{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && $currUser->_is_anesth)}}
+  <div id="anesth_tab" style="display:none">
+    {{mb_include module=salleOp template=inc_vw_info_anesth}}
+  </div>
 {{/if}}
 
 {{if !$currUser->_is_praticien || ($currUser->_is_praticien && $can->edit) || ($currUser->_is_praticien && !$currUser->_is_anesth)}}
@@ -519,8 +521,8 @@ infoBacterio = function(field) {
     <tr>
       <td>
         <div id="documents">
-          {{mb_script module="dPcompteRendu" script="document"}}
-          {{mb_script module="dPcompteRendu" script="modele_selector"}}
+          {{mb_script module="compteRendu" script="document"}}
+          {{mb_script module="compteRendu" script="modele_selector"}}
           {{mb_include module=planningOp template=inc_documents_operation operation=$selOp}}
         </div>
       </td>
@@ -532,7 +534,7 @@ infoBacterio = function(field) {
       <th class="title">Facteurs de risque</th>
     </tr>
   </table>
-  {{include file=../../dPcabinet/templates/inc_consult_anesth/inc_vw_facteurs_risque.tpl sejour=$selOp->_ref_sejour patient=$selOp->_ref_sejour->_ref_patient}}
+  {{mb_include module=cabinet template=inc_consult_anesth/inc_vw_facteurs_risque sejour=$selOp->_ref_sejour patient=$selOp->_ref_sejour->_ref_patient}}
 </div>
 {{/if}}
 

@@ -10,9 +10,9 @@
 
 <script type="text/javascript">
 
-  var printFicheAnesth = function(consultation_id, operation_id) {
+  var printFicheAnesth = function(dossier_anesth_id, operation_id) {
     var url = new Url("dPcabinet", "print_fiche"); 
-    url.addParam("consultation_id", consultation_id);
+    url.addParam("dossier_anesth_id", dossier_anesth_id);
     url.addParam("operation_id", operation_id);
     url.popup(700, 500, "printFicheAnesth");
   }

@@ -36,49 +36,11 @@
         </div>
       </td>
     </tr>
-    
-    <tr>
-      {{assign var="var" value="feuille_anesthesie"}}
-      
-      <th>
-        <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-        </label>  
-      </th>
-      <td>
-        <select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
-          <option value="print_fiche"  {{if "print_fiche" == $conf.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-print_fiche{{/tr}}</option>
-          <option value="print_fiche1" {{if "print_fiche1" == $conf.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-print_fiche1{{/tr}}</option>
-        </select>
-      </td>
-    </tr>
-    {{assign var="var" value="format_auto_motif"}}
-    <tr>
-      <th>
-        <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-        </label>  
-      </th>
-      <td>
-        <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" />
-      </td>
-    </tr>
-    
-    {{assign var="var" value="format_auto_rques"}}
-    <tr>
-      <th>
-        <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
-          {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-        </label>  
-      </th>
-      <td>
-        <input type="text" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$conf.$m.$class.$var}}" />
-      </td>
-    </tr>
-    
+
+    {{mb_include module=system template=inc_config_enum var=feuille_anesthesie values=print_fiche|print_fiche1}}
+    {{mb_include module=system template=inc_config_str  var=format_auto_motif}}
+    {{mb_include module=system template=inc_config_str  var=format_auto_rques}}
     {{mb_include module=system template=inc_config_bool var=show_mallampati}}
-    
-    
     {{mb_include module=system template=inc_config_bool var=view_premedication}}
     {{mb_include module=system template=inc_config_bool var=show_facteurs_risque}}
     {{mb_include module=system template=inc_config_bool var=multiple_dossiers_anesth}}

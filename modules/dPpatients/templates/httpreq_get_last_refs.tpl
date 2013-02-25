@@ -21,7 +21,8 @@
           {{foreach from=$_sejour->_ref_operations item=_op}}
             <li style="list-style-type: none;" class="iconed-text interv">
               {{if $is_anesth}}
-              <input type="radio" name="_operation_id" value="{{$_op->operation_id}}" {{if $_op->operation_id == $consultation->_ref_consult_anesth->operation_id}}checked="checked"{{/if}} />
+                {{assign var=operations_ids value="CMbArray::pluck"|static_call:$consultation->_refs_dossiers_anesth:"operation_id"}}
+                <input type="radio" name="_operation_id" value="{{$_op->operation_id}}" {{if in_array($_op->operation_id, $operations_ids)}}checked="checked"{{/if}}/>
               {{/if}}
               <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}')">
                 Intervention le {{mb_value object=$_op field=_datetime}}

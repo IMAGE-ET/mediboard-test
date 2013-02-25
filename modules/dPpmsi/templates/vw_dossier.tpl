@@ -96,42 +96,41 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
 }
 
 printFicheBloc = function(oper_id) {
-  var url = new Url("dPsalleOp", "print_feuille_bloc");
+  var url = new Url("salleOp", "print_feuille_bloc");
   url.addParam("operation_id", oper_id);
   url.popup(700, 600, 'FeuilleBloc');
 }
 
-printFicheAnesth = function(consultation_id, operation_id) {
-    var url = new Url;
-    url.setModuleAction("dPcabinet", "print_fiche"); 
-    url.addParam("consultation_id", consultation_id);
-    url.addParam("operation_id", operation_id);
-    url.popup(700, 500, "printFicheAnesth");
+printFicheAnesth = function(dossier_anesth_id, operation_id) {
+  var url = new Url("cabinet", "print_fiche");
+  url.addParam("dossier_anesth_id", dossier_anesth_id);
+  url.addParam("operation_id", operation_id);
+  url.popup(700, 500, "printFicheAnesth");
 }
 
 function reloadDiagnostic(sejour_id, modeDAS) {
-  var urlDiag = new Url("dPpmsi", "httpreq_diagnostic");
+  var urlDiag = new Url("pmsi", "httpreq_diagnostic");
   urlDiag.addParam("sejour_id", sejour_id);
   urlDiag.addParam("modeDAS", modeDAS);
   urlDiag.requestUpdate("cim-"+sejour_id);
 	
-  var urlListDiag = new Url("dPpmsi", "httpreq_list_diags");
+  var urlListDiag = new Url("pmsi", "httpreq_list_diags");
   urlListDiag.addParam("sejour_id", sejour_id);
   urlListDiag.requestUpdate("cim-list-"+sejour_id);
 	
-  var urlGHM = new Url("dPpmsi", "httpreq_vw_GHM");
+  var urlGHM = new Url("pmsi", "httpreq_vw_GHM");
   urlGHM.addParam("sejour_id", sejour_id);
   urlGHM.requestUpdate("GHM-"+sejour_id);
 }
 
 function reloadListActes(operation_id) {
-  var urlActes = new Url("dPpmsi", "httpreq_list_actes");
+  var urlActes = new Url("pmsi", "httpreq_list_actes");
   urlActes.addParam("operation_id", operation_id);
   urlActes.requestUpdate("modifActes-"+operation_id);
 }
 
 function loadSejour(sejour_id) {
-	var url = new Url("dPpmsi", "ajax_vw_sejour");
+	var url = new Url("pmsi", "ajax_vw_sejour");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate("sejour");
 }

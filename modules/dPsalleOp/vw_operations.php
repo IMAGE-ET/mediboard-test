@@ -63,19 +63,9 @@ if ($op) {
   $sejour->_ref_consult_anesth->loadRefsFwd();
   $sejour->loadRefCurrAffectation();
 
-  // Chargement des consultation d'anesthésie pour les associations a posteriori
   $patient =& $sejour->_ref_patient;
-  $patient->loadRefsConsultations();
   $patient->loadRefPhotoIdentite();
   $patient->loadRefDossierMedical();
-  foreach ($patient->_ref_consultations as $consultation) {
-    $consultation->loadRefConsultAnesth();
-    $consult_anesth =& $consultation->_ref_consult_anesth;
-    if ($consult_anesth->_id) {
-      $consultation->loadRefPlageConsult();
-      $consult_anesth->loadRefOperation();
-    }
-  }
 
   $selOp->getAssociationCodesActes();
   $selOp->loadExtCodesCCAM();
@@ -268,5 +258,3 @@ if (CModule::getActive("maternite") && $selOp->_id) {
 }
 
 $smarty->display("vw_operations.tpl");
-
-?>

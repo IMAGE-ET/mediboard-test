@@ -50,7 +50,6 @@ foreach ($sejour->_ref_operations as $_interv) {
   $_interv->loadRefChir();
   $_interv->_ref_chir->loadRefFunction();
   $_interv->loadRefsConsultAnesth();
-  $consult = $_interv->_ref_consult_anesth->loadRefConsultation();
   $check_lists = $_interv->loadBackRefs("check_lists", "date");
 
   foreach ($check_lists as $_check_list) {
@@ -61,12 +60,12 @@ foreach ($sejour->_ref_operations as $_interv) {
     }
   }
 
-
   $params = array(
-    "consultation_id" => $consult->_id,
-    "operation_id" => $_interv->_id,
-    "offline" => 1,
-    "print" => 1
+    "dossier_anesth_id" => $_interv->_ref_consult_anesth->_id,
+    "operation_id"      => $_interv->_id,
+    "offline"           => 1,
+    "print"             => 1,
+    "pdf"               => 0
   );
 
   $fiches_anesthesies[$_interv->_id] = CApp::fetch("dPcabinet", "print_fiche", $params);
@@ -74,11 +73,11 @@ foreach ($sejour->_ref_operations as $_interv) {
 
 if ($offline && CModule::getActive("forms")) {
   $params = array(
-    "detail" => 3,
-    "reference_id" => $sejour->_id,
+    "detail"          => 3,
+    "reference_id"    => $sejour->_id,
     "reference_class" => $sejour->_class,
-    "target_element" => "ex-objects-$sejour->_id",
-    "print" => 1,
+    "target_element"  => "ex-objects-$sejour->_id",
+    "print"           => 1,
   );
 
   $formulaires = CApp::fetch("forms", "ajax_list_ex_object", $params);

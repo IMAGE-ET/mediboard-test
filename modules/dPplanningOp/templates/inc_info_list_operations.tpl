@@ -41,7 +41,7 @@
         modal(fiche);
       }
     {{else}}
-      printFicheAnesth('{{$_operation->_ref_consult_anesth->_ref_consultation->_id}}', '{{$_operation->_id}}');
+      printFicheAnesth('{{$_operation->_ref_consult_anesth->_id}}', '{{$_operation->_id}}');
     {{/if}}">
       Fiche d'anesthésie
     </button>

@@ -56,28 +56,29 @@ else {
 }
 
 $interventions = $operation->loadList($where, null, null, null, $ljoin);
+CMbObject::massLoadFwdRef($interventions, "plageop_id");
+$sejours = CMbObject::massLoadFwdRef($interventions, "sejour_id");
+CMbObject::massLoadFwdRef($sejours, "patient_id");
+$chirs = CMbObject::massLoadFwdRef($interventions, "chir_id");
+CMbObject::massLoadFwdRef($chirs, "function_id");
+
+$where = array();
+if (!$all_prats) {
+  $where["executant_id"] = "= '$user->_id'";
+}
+CMbObject::massCountBackRefs($interventions, "actes_ccam", $where);
 
 foreach ($interventions as $key => $_interv) {
   $_plage = $_interv->loadRefPlageOp();
   
   $_interv->loadExtCodesCCAM(true);
   $codes_ccam = $_interv->_ext_codes_ccam;
-  
-  $where = array();
-  if ($all_prats) {
-    $_interv->countActes();
-  } 
-  else {
-    $_interv->countActes($user->_id);
-    $where["executant_id"] = "= '$user->_id'";
-  }
-  
-  $nb_actes_ccam = $_interv->countBackRefs("actes_ccam", $where);
-  
+
+  $nb_actes_ccam = $_interv->_count["actes_ccam"];
+
   // Aucun acte prévu ou coté
-  if(!count($codes_ccam) && !$_interv->_count_actes) {
+  if (!count($codes_ccam) && !$_interv->_count_actes) {
     $_interv->loadRefSejour();
-    $_interv->loadRefPlageOp();
     $_interv->loadRefChir()->loadRefFunction();
     $_interv->loadRefAnesth()->loadRefFunction();
     $_interv->loadRefPatient();
@@ -86,6 +87,7 @@ foreach ($interventions as $key => $_interv) {
   
   // Actes prévus restant en suspend
   $activites = CMbArray::pluck($codes_ccam, "activites");
+
   $nbCodes = 0;
   foreach ($activites as $_activite) {
     if ($all_prats) {
@@ -106,26 +108,20 @@ foreach ($interventions as $key => $_interv) {
       }
     }
   }
-    
+
   // Si tout est coté, on n'affiche pas l'opération
   if ($nb_actes_ccam == $nbCodes) {
     unset($interventions[$key]);
     continue;
   }
-  
-  $where = array();
-  if(!$all_prats) {
-    $where["executant_id"] = "= '$user->_id'";
-  }
+
   $_interv->_actes_non_cotes = $nbCodes - $nb_actes_ccam;
   $_interv->loadRefSejour();
-  $_interv->loadRefPlageOp();
   $_interv->loadRefChir()->loadRefFunction();
   $_interv->loadRefAnesth()->loadRefFunction();
   $_interv->loadRefPatient();
 
   // Actes CCAM cotées
-  $_interv->loadExtCodesCCAM();
   foreach ($_interv->loadRefsActesCCAM() as $_acte) {
     $_acte->loadRefExecutant();
   }
@@ -133,13 +129,12 @@ foreach ($interventions as $key => $_interv) {
 
 $interventions = CMbObject::naturalSort($interventions, array("_datetime"));
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("interventions", $interventions);
 $smarty->assign("debut"        , $debut);
 $smarty->assign("fin"          , $fin);
 $smarty->assign("all_prats"    , $all_prats);
 $smarty->assign("board"        , $board);
-$smarty->display("../../dPboard/templates/inc_list_interv_non_cotees.tpl");
 
-?>
+$smarty->display("../../dPboard/templates/inc_list_interv_non_cotees.tpl");
