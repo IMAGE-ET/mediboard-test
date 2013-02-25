@@ -62,6 +62,7 @@ $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
 $listAff = null;
 $libre = null;
+$autre_sexe_chambre = array();
 
 $ds    = CSQLDataSource::get("std");
 
@@ -79,6 +80,7 @@ if ($typeVue == 0) {
           AND chambre.annule = '0'
           AND affectation.effectue = '0'
           GROUP BY lit.lit_id";
+
   $occupes = $ds->loadlist($sql);
   $arrayIn = array();
   foreach($occupes as $key => $occupe) {
@@ -88,7 +90,7 @@ if ($typeVue == 0) {
   $libre = array();
 
   if (is_array($services_ids) && count($services_ids)) {
-    $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, chambre.caracteristiques as caracteristiques, service.nom AS service, MIN(affectation.entree) AS limite
+    $sql = "SELECT lit.chambre_id, lit.lit_id, lit.nom AS lit, chambre.nom AS chambre, chambre.caracteristiques as caracteristiques, service.nom AS service, MIN(affectation.entree) AS limite
             FROM lit
             LEFT JOIN affectation ON affectation.lit_id = lit.lit_id
             AND (affectation.entree > '$date_recherche' OR affectation.entree IS NULL)
@@ -100,7 +102,24 @@ if ($typeVue == 0) {
             AND service.service_id ".CSQLDataSource::prepareIn($services_ids)."
             GROUP BY lit.lit_id
             ORDER BY service.nom, chambre.nom, lit.nom, limite DESC";
-    $libre = $ds->loadlist($sql);
+    $libre = $ds->loadList($sql);
+
+    $sql = "SELECT lit.chambre_id, patients.sexe, lit.nom AS lit, chambre.nom AS chambre, service.nom AS service
+            FROM affectation
+            LEFT JOIN lit ON lit.lit_id = affectation.lit_id
+            LEFT JOIN chambre ON chambre.chambre_id = lit.chambre_id
+            LEFT JOIN service ON chambre.service_id = chambre.service_id
+            LEFT JOIN sejour ON sejour.sejour_id = affectation.sejour_id
+            LEFT JOIN patients ON patients.patient_id = sejour.patient_id
+            WHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie
+            AND affectation.lit_id IS NOT NULL
+            AND lit.chambre_id ".CSQLDataSource::prepareIn(CMbArray::pluck($libre, "chambre_id")).
+           "AND lit.lit_id ".CSQLDataSource::prepareNotIn(CMbArray::pluck($libre, "lit_id")).
+           "GROUP BY lit.lit_id";
+    $autre_sexe_chambre = $ds->loadList($sql);
+    foreach ($autre_sexe_chambre as $key=>$_autre) {
+      $autre_sexe_chambre[$_autre["chambre_id"]] = $_autre;
+    }
   }
 }
 
@@ -175,6 +194,7 @@ $smarty->assign("typeVue"       , $typeVue);
 $smarty->assign("selPrat"       , $selPrat);
 $smarty->assign("listPrat"      , $listPrat);
 $smarty->assign("listAff"       , $listAff);
+$smarty->assign("autre_sexe_chambre", $autre_sexe_chambre);
 $smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
 
 $smarty->display("vw_recherche.tpl");

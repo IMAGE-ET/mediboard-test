@@ -49,7 +49,7 @@ Main.add(function () {
 <table class="tbl main">
   {{if $typeVue == 0}}
   <tr>
-    <th class="title" colspan="4">
+    <th class="title" colspan="5">
       <button type="button" class="print not-printable notext" style="float: left;" onclick="this.up('table').print()"></button>
       {{$date_recherche|date_format:$conf.datetime}} : {{$libre|@count}} lit(s) disponible(s)
     </th>
@@ -57,23 +57,35 @@ Main.add(function () {
   <tr>
     <th>Service</th>
     <th>Chambre</th>
+    <th class="narrow">
+      <label title="Sexe de l'autre patient dans la chambre">
+        Sexe
+      </label>
+    </th>
     <th>Lit</th>
     <th>Fin de disponibilité</th>
   </tr>
   {{foreach from=$libre item=curr_lit}}
-  <tr>
-    <td class="text">{{$curr_lit.service}}</td>
-    <td class="text">
-      {{$curr_lit.chambre}}
-      {{if $curr_lit.caracteristiques != ""}}
-        <div class="compact">
-          {{$curr_lit.caracteristiques}}
-        </div>
-      {{/if}}
-    </td>
-    <td class="text">{{$curr_lit.lit}}</td>
-    <td class="text">{{$curr_lit.limite|date_format:"%A %d %B %Y à %Hh%M"}}
-  </tr>
+    {{assign var=chambre_id value=$curr_lit.chambre_id}}
+    <tr>
+      <td class="text">{{$curr_lit.service}}</td>
+      <td class="text">
+        {{$curr_lit.chambre}}
+        {{if $curr_lit.caracteristiques != ""}}
+          <div class="compact">
+            {{$curr_lit.caracteristiques}}
+          </div>
+        {{/if}}
+      </td>
+      <td>
+        {{if isset($autre_sexe_chambre.$chambre_id|smarty:nodefaults)}}
+          {{assign var=chambre_autre_sexe value=$autre_sexe_chambre.$chambre_id}}
+          {{tr}}CPatient.sexe.{{$chambre_autre_sexe.sexe}}{{/tr}}
+        {{/if}}
+      </td>
+      <td class="text">{{$curr_lit.lit}}</td>
+      <td class="text">{{$curr_lit.limite|date_format:"%A %d %B %Y à %Hh%M"}}
+    </tr>
   {{foreachelse}}
     <tr>
       <td class="empty" colspan="4">{{tr}}CLit.none{{/tr}}</td>
