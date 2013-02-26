@@ -214,10 +214,13 @@
 
   /**
    * Static alternative to loadLatestFor()
+   *
+   * @param CMbObject $mbObject Object
+   * @param string    $tag      Tag
    * 
    * @return CIdSante400 
    */
-  static function getLatestFor($mbObject, $tag = null) {
+  static function getLatestFor(CMbObject $mbObject, $tag = null) {
     $idex = new CIdSante400();
     $idex->loadLatestFor($mbObject, $tag);
     return $idex;
@@ -232,5 +235,3 @@
     return $this->_type = $this->loadTargetObject()->getSpecialIdex($this);
   }
 }
-
-?>

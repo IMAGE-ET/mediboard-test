@@ -1491,14 +1491,8 @@ class CPatient extends CMbObject {
       return;
     }
 
-    // Récupération du premier IPP créé, utile pour la gestion des doublons
-    $order = "id400 ASC";
-
     // Recuperation de la valeur de l'id400
-    $idex = new CIdSante400();
-    $idex->setObject($this);
-    $idex->tag = $tag_ipp;
-    $idex->loadMatchingObject($order);
+    $idex = CIdSante400::getLatestFor($this, $tag_ipp);
 
     // Stockage de la valeur de l'id400
     $this->_ref_IPP = $idex;
@@ -1515,12 +1509,9 @@ class CPatient extends CMbObject {
       return;
     }
 
+
     // Recuperation de la valeur de l'id400
-    $idex = new CIdSante400();
-    $idex->object_class= 'CPatient';
-    $idex->tag = $tag_ipp;
-    $idex->id400 = $this->_IPP;
-    $idex->loadMatchingObject();
+    $idex = CIdSante400::getMatch('CPatient', $tag_ipp, $this->_IPP);
 
     $this->load($idex->object_id);
   }

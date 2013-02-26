@@ -2022,7 +2022,10 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Charge le NDA du séjour pour l'établissement courant
+   *
    * @param $group_id Permet de charger le NDA pour un établissement donné si non null
+   *
+   * @return void
    */
   function loadNDA($group_id = null) {
     // Objet inexistant
@@ -2036,13 +2039,13 @@ class CSejour extends CFacturable implements IPatientRelated {
       return;
     }
 
+
     // Recuperation de la valeur de l'id400
-    $id400 = new CIdSante400();
-    $id400->loadLatestFor($this, $tag_NDA);
+    $idex = CIdSante400::getLatestFor($this, $tag_NDA);
 
     // Stockage de la valeur de l'id400
-    $this->_ref_NDA  = $id400;
-    $this->_NDA_view = $this->_NDA = $id400->id400;
+    $this->_ref_NDA  = $idex;
+    $this->_NDA_view = $this->_NDA = $idex->id400;
 
     // Cas de l'utilisation du rang
     $this->loadNRA($group_id);
@@ -2050,7 +2053,10 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * Charge le Numéro de pré-admission du séjour pour l'établissement courant
+   *
    * @param $group_id Permet de charger le NPA pour un établissement donné si non null
+   *
+   * @return void
    */
   function loadNPA($group_id = null) {
     // Objet inexistant
@@ -2065,17 +2071,19 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     // Recuperation de la valeur de l'id400
-    $id400 = new CIdSante400();
-    $id400->loadLatestFor($this, $tag_NPA);
+    $idex = CIdSante400::getLatestFor($this, $tag_NPA);
 
     // Stockage de la valeur de l'id400
-    $this->_ref_NPA = $id400;
-    $this->_NPA     = $id400->id400;
+    $this->_ref_NPA = $idex;
+    $this->_NPA     = $idex->id400;
   }
 
   /**
    * Charge le Numéro de rang du séjour pour l'établissement courant
+   *
    * @param $group_id Permet de charger le NRA pour un établissement donné si non null
+   *
+   * @return void
    */
   function loadNRA($group_id = null) {
     // Utilise t-on le rang pour le dossier
@@ -2094,12 +2102,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     // Recuperation de la valeur de l'id400
-    $id400 = new CIdSante400();
-    $id400->loadLatestFor($this, $tag_NRA);
+    $idex = CIdSante400::getLatestFor($this, $tag_NRA);
 
     // Stockage de la valeur de l'id400
-    $this->_ref_NRA = $id400;
-    $NRA            = $id400->_id ? $id400->id400 : "-";
+    $this->_ref_NRA = $idex;
+    $NRA            = $idex->_id ? $idex->id400 : "-";
 
     // Récupération de l'IPP du patient
     $this->loadRefPatient();
