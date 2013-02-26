@@ -39,6 +39,11 @@
 {{math equation=x-1 x=$nb_ticks assign=nb_ticks_r}}
 {{assign var=systeme_presta value=$conf.dPhospi.systeme_prestations}}
 
+{{assign var=onmouseevent value=onmouseout}}
+{{if $smarty.session.browser.name == "msie"}}
+  {{assign var=onmouseevent value=onmouseleave}}
+{{/if}}
+
 <div style="height: 2em; width: 100%">
   <div id="time_line_temporelle_non_affectes" style="background: #fff; position: absolute; z-index: 200;">
     <div style="display: inline-block;">
@@ -130,13 +135,17 @@
                     style="border: 1px solid #{{$praticien->_ref_function->color}}; width: {{$width}}%; left: {{$offset}}%; margin-left: 15.1%;"
                     id="sejour_temporel_{{$_object->_id}}"
                     data-patient_id="{{$patient->_id}}"
-                    data-sejour_id="{{$_object->_id}}">
+                    data-sejour_id="{{$_object->_id}}"
+                    onmouseover="this.select('.toolbar_affectation')[0].setStyle({visibility: 'visible'});"
+                   {{$onmouseevent}}="this.select('.toolbar_affectation')[0].setStyle({visibility: 'hidden'});">
                     <span style="float: left; padding-left: 1px; padding-right: 1px;">
                       {{mb_include module=patients template=inc_vw_photo_identite mode=read patient=$patient size=22}}
                     </span>
                     <div class="wrapper_op">
                       {{if !$readonly}}
-                        <span style="float: right;">
+                        <span style="float: right; float: right; margin-top: 3px; margin-right: 3px;" class="toolbar_affectation">
+                          <button type="button" class="door-out notext opacity-40" onclick="changeAffService('{{$_object->_id}}', '{{$_object->_class}}')"
+                                  onmouseover="this.toggleClassName('opacity-40')" onmouseout="this.toggleClassName('opacity-40')"></button>
                           <input type="radio" name="sejour_move" id="sejour_move_{{$_object->_id}}" onclick="chooseSejour('{{$_object->_id}}');"/>
                         </span>
                       {{/if}}

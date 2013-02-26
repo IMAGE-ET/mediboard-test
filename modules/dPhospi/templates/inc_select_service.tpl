@@ -18,6 +18,17 @@
     form.onsubmit();
     loadNonPlaces();
   }
+  changeService = function(service_id) {
+    var form = getForm("changeService");
+    $V(form.service_id, service_id);
+    onSubmitFormAjax(form, function(){
+      loadNonPlaces();
+    });
+  }
+
+  launchAction = function(service_id) {
+    {{$action}}(service_id);
+  }
 </script>
 
 <div style="overflow-x: auto;">
@@ -64,7 +75,7 @@
       </tr>
       <tr>
         <td class="button" colspan="{{$colspan}}">
-          <button type="button" class="tick" onclick="mapService($V(this.form.service_id)); Control.Modal.close();">{{tr}}Validate{{/tr}}</button>
+          <button type="button" class="tick" onclick="launchAction($V(this.form.service_id)); Control.Modal.close();">{{tr}}Validate{{/tr}}</button>
         </td>
       </tr>
     </table>

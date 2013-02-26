@@ -13,6 +13,8 @@
 
 CCAnDo::checkRead();
 
+$action = CValue::get("action", "mapService");
+
 $group_id = CGroups::loadCurrent()->_id;
 
 $service = new CService();
@@ -40,5 +42,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("all_services"    , $all_services);
 $smarty->assign("services_allowed", $services_allowed);
 $smarty->assign("secteurs"        , $secteurs);
+$smarty->assign("action"          , $action);
 
 $smarty->display("inc_select_service.tpl");

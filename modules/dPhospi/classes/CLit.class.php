@@ -30,7 +30,8 @@ class CLit extends CMbObject {
   var $_overbooking = null;
   var $_selected_item   = null;
   var $_lines       = array();
-  
+  var $_sexe_other_patient = null;
+
   // Object references
   
   /**
@@ -193,5 +194,3 @@ class CLit extends CMbObject {
 }
 
 CLit::$_prefixe = CAppUI::conf("dPhospi CLit prefixe");
-
-?>

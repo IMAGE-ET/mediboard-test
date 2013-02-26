@@ -341,7 +341,25 @@
     }
     else return onSubmitFormAjax(getForm('filterMouv'), {onComplete: after_refresh}, 'view_affectations');
   }
-  
+
+  changeAffService = function(object_id, object_class) {
+    var form = getForm("changeService");
+    switch (object_class) {
+      case "CSejour":
+        $V(form.m ,"planningOp");
+        $V(form.dosql ,"do_sejour_aed");
+        $V(form.sejour_id ,object_id);
+        break;
+      case "CAffectation":
+        $V(form.m ,"hospi");
+        $V(form.affectation_id, object_id);
+        $V(form.dosql ,"do_affectation_aed");
+    }
+    var url = new Url("hospi", "ajax_select_service");
+    url.addParam("action", "changeService");
+    url.requestModal(null, null, {maxHeight: '600'});
+  }
+
   Main.add(function(){
     Placement.tabs = Control.Tabs.create('placements_tabs', true);
     if (Placement.tabs.activeLink.key == "temporel") {
@@ -359,6 +377,15 @@
   <input type="hidden" name="dosql" value="do_preference_aed" />
   <input type="hidden" name="user_id" value="{{$app->user_id}}" />
   <input type="hidden" name="pref[prestation_id_hospi]" value="" />
+</form>
+
+<!-- Formulaire de changement de service d'une affectation dans un couloir (pas de lit_id) -->
+<form name="changeService" method="post">
+  <input type="hidden" name="m" />
+  <input type="hidden" name="dosql" />
+  <input type="hidden" name="affectation_id" />
+  <input type="hidden" name="sejour_id" />
+  <input type="hidden" name="service_id" />
 </form>
 
 <!-- Légendes -->
