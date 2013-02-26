@@ -1,15 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPurgences
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
 CCanDo::checkRead();
-
 $group = CGroups::loadCurrent();
 $user = CAppUI::$user;
 $listResponsables = CAppUI::conf("dPurgences only_prat_responsable") ?
@@ -46,20 +46,20 @@ if ($rpu->_id || $rpu->sejour_id) {
   
   // Chargement de l'IPP ($_IPP)
   $patient->loadIPP();
-	
+  
   // Chargement du numero de dossier ($_NDA)
   $sejour->loadNDA();
   $sejour->loadRefPraticien(1);
   $sejour->loadRefsNotes();
-	$praticien = $sejour->_ref_praticien;
+  $praticien = $sejour->_ref_praticien;
   $listResponsables[$praticien->_id] = $praticien;
-} 
+}
 else {
   $rpu->_responsable_id = $user->_id;
   $rpu->_entree         = mbDateTime();
   $sejour               = new CSejour;
   $patient              = new CPatient;
-	$praticien            = new CMediusers;
+  $praticien            = new CMediusers;
 }
 
 // Gestion des traitements, antecedents, diagnostics
@@ -105,10 +105,29 @@ if (CAppUI::conf("dPplanningOp CSejour use_custom_mode_entree")) {
   $list_mode_entree = $mode_entree->loadGroupList($where);
 }
 
+if (CAppUI::conf("ref_pays") == 2) {
+  $rpu->loadRefMotif();
+  $chapitre = new CChapitreMotif();
+  $chapitres = $chapitre->loadList();
+  $motif    = new CMotif();
+  if ($rpu->code_diag) {
+    $motif->chapitre_id = $rpu->_ref_motif->chapitre_id;
+  }
+  $motifs = $motif->loadMatchingList();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
+
+if (CAppUI::conf("ref_pays") == 2) {
+  $smarty->assign("chapitre_id"         , 0);
+  $smarty->assign("chapitres"           , $chapitres);
+  $smarty->assign("motif_id"            , 0);
+  $smarty->assign("motifs"              , $motifs);
+}
+
 $smarty->assign("group"               , $group);
-if (CModule::getActive("dPprescription")){
+if (CModule::getActive("dPprescription")) {
   $smarty->assign("line"              , new CPrescriptionLineMedicament());
 }
 

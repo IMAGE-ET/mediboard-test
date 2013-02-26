@@ -80,9 +80,10 @@ class CRPU extends CMbObject {
 
 
   // Object References
-  var $_ref_sejour = null;
+  var $_ref_sejour  = null;
   var $_ref_consult = null;
   var $_ref_sejour_mutation = null;
+  var $_ref_motif   = null;
 
   // Behaviour fields
   var $_bind_sejour = null;
@@ -425,7 +426,14 @@ class CRPU extends CMbObject {
         return $msg;
       }
     }
-
+    
+    if ($this->code_diag) {
+      $this->loadRefMotif();
+      $this->diag_infirmier = $this->_ref_motif->_ref_chapitre->nom;
+      $this->diag_infirmier .= "\n".$this->code_diag.": ".$this->_ref_motif->nom;
+      $this->diag_infirmier .= "\n Degrés d'urgence entre ".$this->_ref_motif->degre_min." et ".$this->_ref_motif->degre_max;
+    }
+    
     // Standard Store
     if ($msg = parent::store()) {
       return $msg;
@@ -524,6 +532,21 @@ class CRPU extends CMbObject {
 
   function docsEditable() {
     return true;
+  }
+  
+  /**
+   * Chargement du motif de l'urgence
+   * 
+   * @return object
+  **/
+  function loadRefMotif() {
+    $motif = new CMotif();
+    if ($this->code_diag) {
+      $motif->code_diag = $this->code_diag;
+      $motif->loadMatchingObject();
+      $motif->loadRefChapitre();
+    }
+    return $this->_ref_motif = $motif;
   }
 }
 ?>

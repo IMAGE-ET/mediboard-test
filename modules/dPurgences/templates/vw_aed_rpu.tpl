@@ -411,6 +411,17 @@
       {{if $can->edit}}
         <th>{{mb_label object=$rpu field="ccmu"}}</th>
         <td>{{mb_field object=$rpu field="ccmu" emptyLabel="Choose" style="width: 15em;"}}</td>
+        <script>
+          Main.add(function () {
+            {{if $conf.ref_pays == 2}}
+              var form = getForm("editRPU");
+              var ccmu = form.ccmu;
+              ccmu.options[2].hide();
+              ccmu.options[6].hide();
+              ccmu.options[7].hide();
+            {{/if}}
+          });
+        </script>
       {{else}}
         <th></th>
         <td></td>
