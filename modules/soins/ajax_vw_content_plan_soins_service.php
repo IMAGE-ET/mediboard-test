@@ -96,12 +96,7 @@ foreach($lines as $_line_element){
   }
                 
   // Chargement des planificatoins systemes  
-  $planif = new CPlanificationSysteme();
-  $planif->object_id = $_line_element->_id;
-  $planif->object_class = $_line_element->_class;
-  if(!$planif->countMatchingList()){
-    $_line_element->calculPlanifSysteme();
-  }
+  $_line_element->calculPlanifSysteme();
   
   // Chargement des administrations et des transmissions
   $_line_element->calculPrises($prescription, $_dates, $name_chap, $name_cat, 1, $planif_manuelle);
