@@ -13,7 +13,7 @@
 {{/if}}
 
 {{if !$dialog}}
-  <a class="button lookup" href="?m=system&a=view_user_logs&dialog=1">Vue graphique</a>
+  <a class="button lookup" href="?m=system&tab=view_user_logs">Vue graphique</a>
 {{/if}}
 
 <table class="tbl">
