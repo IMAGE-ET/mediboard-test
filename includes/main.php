@@ -194,8 +194,27 @@ $m_post = CAppUI::checkFileName(CValue::post("m"     , $m));
 $class  = CAppUI::checkFileName(CValue::post("@class", ""));
 
 $tab = $a == "index" ? 
-  CValue::getOrSession("tab", $tab) : 
+  CValue::getOrSession("tab", $tab) :
   CValue::get("tab");
+
+// If we want to force user to periodically change password
+if (CAppUI::conf("admin CUser force_changing_password")) {
+  $user = CAppUI::$user;
+
+  // If account is not a service account
+  if ($user->_id && !$user->service_account) {
+    // Need to change
+    if (mbDateTime("-".CAppUI::conf("admin CUser password_life_duration")) > $user->_ref_user->user_password_last_change) {
+      // To prevent from infinite redirection
+      if (
+          !($m      == "admin" && $tab   == "chpwd") &&
+          !($m_post == "admin" && $dosql == "do_chpwd_aed")
+      ) {
+        CAppUI::redirect("m=admin&tab=chpwd&forceChange=1&lifeDuration=1");
+      }
+    }
+  }
+}
 
 // Check whether the password is strong enough
 if (

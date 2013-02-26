@@ -20,6 +20,8 @@
     {{mb_include module=system template=inc_config_bool var=strong_password}}
     {{mb_include module=system template=inc_config_str var=max_login_attempts}}
     {{mb_include module=system template=inc_config_bool var=allow_change_password}}
+    {{mb_include module=system template=inc_config_bool var=force_changing_password}}
+    {{mb_include module=system template=inc_config_enum var=password_life_duration values="15 day|1 month|2 month|3 month|6 month|1 year"}}
     <tr>
       <td class="button" colspan="100">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

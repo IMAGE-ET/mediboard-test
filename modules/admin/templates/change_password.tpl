@@ -12,6 +12,14 @@
   goHome = function(){
     location.replace("?");
   }
+
+  checkPasswd = function(form) {
+    if (($V(form.old_pwd) != $V(form.new_pwd1)) || (!$V(form.new_pwd2))) {
+      return onSubmitFormAjax(form);
+    }
+    alert("Le nouveau mot de passe doit être différent du précédent.");
+    return false;
+  }
 </script>
 
 {{if $user->_ldap_linked && !$conf.admin.LDAP.allow_change_password}}
@@ -19,7 +27,7 @@
 {{elseif !$user->canChangePassword()}}
   <div class="small-warning">{{tr}}CUser-password_change_forbidden{{/tr}}</div>
 {{else}}
-  <form name="chpwdFrm" action="?m=admin&amp;{{if $forceChange}}tab{{else}}a{{/if}}=chpwd" method="post" onsubmit="return onSubmitFormAjax(this)">
+  <form name="chpwdFrm" method="post" onsubmit="return checkPasswd(this)">
     <input type="hidden" name="m" value="admin" />
     <input type="hidden" name="dosql" value="do_chpwd_aed" />
     <input type="hidden" name="del" value="0" />
@@ -34,9 +42,13 @@
         La sécurité des informations de vos patients en dépend.<br />
         Pour plus de précisions, veuillez vous référer aux 
         <a href="http://mediboard.org/public/Recommandations+de+la+CNIL" target="_blank"> recommandations de la CNIL</a>.
+        {{if $lifeDuration}}
+          <br /><br />
+          <strong>Votre mot de passe n'a pas été changé depuis au moins {{tr}}config-admin-CUser-password_life_duration-{{$lifetime}}{{/tr}}.</strong>
+        {{/if}}
       </div>
     {{/if}}
-  
+
     <table class="form">
       <tr>
         <th style="width: 50%;">

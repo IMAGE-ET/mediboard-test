@@ -131,8 +131,14 @@ class CSetupadmin extends CSetup {
     $query = "ALTER TABLE `user_preferences`
       CHANGE `value` `value` TEXT;";
     $this->addQuery($query);
+
+    $this->makeRevision("1.0.29");
+    $date = mbDateTime();
+    $query = "ALTER TABLE `users`
+      ADD `user_password_last_change` DATETIME NOT NULL DEFAULT '$date' AFTER `user_password`;";
+    $this->addQuery($query);
     
-    $this->mod_version = "1.0.29";
+    $this->mod_version = "1.0.30";
   }
 }
 ?>

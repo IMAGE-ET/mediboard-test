@@ -13,29 +13,30 @@
  */
 class CUser extends CMbObject {
   // DB key
-  var $user_id             = null;
+  var $user_id                   = null;
 
   // DB fields
-  var $user_username       = null;
-  var $user_password       = null;
-  var $user_salt           = null;
-  var $user_type           = null;
-  var $user_first_name     = null;
-  var $user_last_name      = null;
-  var $user_email          = null;
-  var $user_phone          = null;
-  var $user_mobile         = null;
-  var $user_astreinte      = null;
-  var $user_address1       = null;
-  var $user_city           = null;
-  var $user_zip            = null;
-  var $user_country        = null;
-  var $user_birthday       = null;
-  var $user_last_login     = null;
-  var $user_login_errors   = null;
-  var $template            = null;
-  var $profile_id          = null;
-  var $dont_log_connection = null;
+  var $user_username             = null;
+  var $user_password             = null;
+  var $user_salt                 = null;
+  var $user_type                 = null;
+  var $user_first_name           = null;
+  var $user_last_name            = null;
+  var $user_email                = null;
+  var $user_phone                = null;
+  var $user_mobile               = null;
+  var $user_astreinte            = null;
+  var $user_address1             = null;
+  var $user_city                 = null;
+  var $user_zip                  = null;
+  var $user_country              = null;
+  var $user_birthday             = null;
+  var $user_last_login           = null;
+  var $user_login_errors         = null;
+  var $template                  = null;
+  var $profile_id                = null;
+  var $dont_log_connection       = null;
+  var $user_password_last_change = null;
 
   // Derived fields
   var $_user_password        = null;
@@ -51,6 +52,8 @@ class CUser extends CMbObject {
 
   var $_is_logging           = null;
   var $_user_salt            = null;
+
+  var $_is_changing          = null;
 
   // Behaviour fields
   var $_purge_connections = null;
@@ -122,26 +125,27 @@ class CUser extends CMbObject {
     $props = parent::getProps();
 
     // Plain fields
-    $props["user_username"]       = "str notNull maxLength|20";
-    $props["user_password"]       = "str maxLength|64 show|0";
-    $props["user_salt"]           = "str maxLength|64 show|0";
-    $props["user_type"]           = "num notNull min|0 max|20 default|0";
-    $props["user_first_name"]     = "str maxLength|50 seekable|begin";
-    $props["user_last_name"]      = "str notNull maxLength|50 confidential seekable|begin";
-    $props["user_email"]          = "str maxLength|255";
-    $props["user_phone"]          = "phone";
-    $props["user_mobile"]         = "phone";
-    $props["user_astreinte"]      = "phone";
-    $props["user_address1"]       = "str";
-    $props["user_city"]           = "str maxLength|30";
-    $props["user_zip"]            = "str maxLength|11";
-    $props["user_country"]        = "str maxLength|30";
-    $props["user_birthday"]       = "dateTime";
-    $props["user_last_login"]     = "dateTime";
-    $props["user_login_errors"]   = "num notNull min|0 max|100 default|0";
-    $props["template"]            = "bool notNull default|0";
-    $props["profile_id"]          = "ref class|CUser";
-    $props["dont_log_connection"] = "bool default|0";
+    $props["user_username"]             = "str notNull maxLength|20";
+    $props["user_password"]             = "str maxLength|64 show|0";
+    $props["user_salt"]                 = "str maxLength|64 show|0";
+    $props["user_type"]                 = "num notNull min|0 max|20 default|0";
+    $props["user_first_name"]           = "str maxLength|50 seekable|begin";
+    $props["user_last_name"]            = "str notNull maxLength|50 confidential seekable|begin";
+    $props["user_email"]                = "str maxLength|255";
+    $props["user_phone"]                = "phone";
+    $props["user_mobile"]               = "phone";
+    $props["user_astreinte"]            = "phone";
+    $props["user_address1"]             = "str";
+    $props["user_city"]                 = "str maxLength|30";
+    $props["user_zip"]                  = "str maxLength|11";
+    $props["user_country"]              = "str maxLength|30";
+    $props["user_birthday"]             = "dateTime";
+    $props["user_last_login"]           = "dateTime";
+    $props["user_login_errors"]         = "num notNull min|0 max|100 default|0";
+    $props["template"]                  = "bool notNull default|0";
+    $props["profile_id"]                = "ref class|CUser";
+    $props["dont_log_connection"]       = "bool default|0";
+    $props["user_password_last_change"] = "dateTime notNull";
 
     // The different levels of security are stored to be usable in JS
     $props["_user_password_weak"]   = "password minLength|4";
@@ -157,6 +161,7 @@ class CUser extends CMbObject {
     $props["_user_type_view"]    = "str";
     $props["_count_connections"] = "num";
     $props["_is_logging"]        = "bool";
+    $props["_is_changing"]       = "bool";
     $props["_user_salt"]         = "str";
 
     return $props;
@@ -260,7 +265,7 @@ class CUser extends CMbObject {
     }
 
     // If user is logging, get the salt value in table
-    if (!$this->_is_logging) {
+    if (!$this->_is_logging || $this->_is_changing) {
       $this->generateUserSalt();
       return;
     }
@@ -304,7 +309,6 @@ class CUser extends CMbObject {
     if ($this->_user_salt) {
       $this->user_salt = $this->_user_salt;
     }
-
     else {
       // Mcrypt has a better CSPRNG method
       if (function_exists('mcrypt_create_iv')) {
@@ -318,6 +322,9 @@ class CUser extends CMbObject {
         $this->user_salt = hash("SHA256", mt_rand());
       }
     }
+
+    // DB field to update
+    $this->user_password_last_change = mbDateTime();
 
     // Compute the hash
     $this->user_password = hash("SHA256", $this->user_salt.$this->_user_password);

@@ -40,6 +40,7 @@ if ($new_pwd1 != $new_pwd2) {
 
 // Enregistrement
 $user->_user_password = $new_pwd1;
+$user->_is_changing   = true;
 if ($msg = $user->store()) {
   CAppUI::stepAjax($msg, UI_MSG_ERROR);
 }

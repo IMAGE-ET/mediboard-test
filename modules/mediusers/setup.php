@@ -542,6 +542,11 @@ class CSetupmediusers extends CSetup {
               ADD `last_ldap_checkout` DATE;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.51";
+    $this->makeRevision("0.51");
+    $query = "ALTER TABLE `users_mediboard`
+              ADD `service_account` ENUM ('0','1') NOT NULL DEFAULT '0' AFTER `actif`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.52";
   }
 }
