@@ -15,7 +15,12 @@
  */
 class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
   static $event_codes = "A46 A47";
-  
+
+  /**
+   * Get contents
+   *
+   * @return array
+   */
   function getContentNodes() {
     $data = parent::getContentNodes();
 
@@ -23,8 +28,17 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
        
     return $data;
   }
-  
-  function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+
+  /**
+   * Handle change patient identifier list message
+   *
+   * @param CHL7Acknowledgment $ack     Acknowledgment
+   * @param CPatient           $patient Person
+   * @param array              $data    Data
+   *
+   * @return string|void
+   */
+  function handle(CHL7Acknowledgment $ack, CPatient $patient, $data) {
     $event_temp = $ack->event;
 
     $exchange_ihe = $this->_ref_exchange_ihe;
@@ -35,31 +49,49 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
 
     // Acquittement d'erreur : identifiants RI et PI non fournis
     if (!$data['personIdentifiers']) {
-      return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
+      return $exchange_ihe->setAckAR($ack, "E100", null, $patient);
     }
  
     $function_handle = "handle$exchange_ihe->code";
     
     if (!method_exists($this, $function_handle)) {
-      return $exchange_ihe->setAckAR($ack, "E006", null, $newPatient);
+      return $exchange_ihe->setAckAR($ack, "E006", null, $patient);
     }
     
-    return $this->$function_handle($ack, $newPatient, $data); 
-  } 
-  
-  function handleA46(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+    return $this->$function_handle($ack, $patient, $data);
+  }
+
+  /**
+   * Handle event A46
+   *
+   * @param CHL7Acknowledgment $ack     Acknowledgment
+   * @param CPatient           $patient Person
+   * @param array              $data    Data
+   *
+   * @return string
+   */
+  function handleA46(CHL7Acknowledgment $ack, CPatient $patient, $data) {
     $handle_mode = CHL7v2Message::$handle_mode;
     
     CHL7v2Message::$handle_mode = "simple";
     
-    $msg = $this->handleA47($ack, $newPatient, $data);
+    $msg = $this->handleA47($ack, $patient, $data);
     
     CHL7v2Message::$handle_mode = $handle_mode;
     
     return $msg;
   }
-  
-  function handleA47(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+
+  /**
+   * Handle event A47
+   *
+   * @param CHL7Acknowledgment $ack     Acknowledgment
+   * @param CPatient           $patient Person
+   * @param array              $data    Data
+   *
+   * @return string
+   */
+  function handleA47(CHL7Acknowledgment $ack, CPatient $patient, $data) {
     // Traitement du message des erreurs
     $comment = $warning = "";
     
@@ -92,28 +124,28 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
     
     // PI non connu (non fourni ou non retrouvé)
     if (!$incorrect_identifier || !$IPP_incorrect->_id) {
-      return $exchange_ihe->setAckAR($ack, "E141", null, $newPatient);
+      return $exchange_ihe->setAckAR($ack, "E141", null, $patient);
     }
-    
-    $newPatient->load($IPP_incorrect->object_id);
+
+    $patient->load($IPP_incorrect->object_id);
 
     // Passage en trash de l'IPP du patient a éliminer
-    if ($msg = $newPatient->trashIPP($IPP_incorrect)) {
-      return $exchange_ihe->setAckAR($ack, "E140", $msg, $newPatient);
+    if ($msg = $patient->trashIPP($IPP_incorrect)) {
+      return $exchange_ihe->setAckAR($ack, "E140", $msg, $patient);
     }  
     
     // Sauvegarde du nouvel IPP
     $IPP = new CIdSante400();
-    $IPP->object_id    = $newPatient->_id;
+    $IPP->object_id    = $patient->_id;
     $IPP->object_class = "CPatient";
     $IPP->id400        = $data['personIdentifiers']["PI"];
     $IPP->tag          = $sender->_tag_patient;
     $IPP->last_update  = mbDateTime();
     
     if ($msg = $IPP->store()) {
-      return $exchange_ihe->setAckAR($ack, "E140", $msg, $newPatient);
+      return $exchange_ihe->setAckAR($ack, "E140", $msg, $patient);
     }  
     
-    return $exchange_ihe->setAckAA($ack, "I140", null, $newPatient);
+    return $exchange_ihe->setAckAA($ack, "I140", null, $patient);
   }
 }

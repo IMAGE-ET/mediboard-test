@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Represents a RSP message structure HL7
+ * Represents a ORR message structure HL7
  *  
  * @category HL7
  * @package  Mediboard
@@ -12,21 +12,21 @@
  */
 
 /**
- * Interface CHL7EventRSP
- * Represents a RSP message structure
+ * Interface CHL7EventORR
+ * Represents a ORR message structure
  */
-interface CHL7EventRSP {
+interface CHL7EventORR {
   /**
    * Construct
    *
    * @param CHL7Event $trigger_event Trigger event
    *
-   * @return CHL7EventRSP
+   * @return CHL7EventORR
    */
   function __construct(CHL7Event $trigger_event);
 
   /**
-   * Build QBP message
+   * Build ORR message
    *
    * @param CMbObject $object object
    *

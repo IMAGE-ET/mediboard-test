@@ -32,5 +32,3 @@ if (!$exchange->_id) {
 }
 
 CAppUI::stepAjax("CExchangeDataFormat-reprocessed");
-
-?>

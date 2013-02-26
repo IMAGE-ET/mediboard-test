@@ -44,21 +44,68 @@ class CHL7v2ReceiveOrderMessage extends CHL7v2MessageXML {
   /**
    * Handle receive order message
    *
-   * @param CHL7Acknowledgment $ack        Acknowledgment
-   * @param CPatient           $newPatient Person
-   * @param array              $data       Data
+   * @param CHL7v2ReceiveOrderMessageResponse $ack     Acknowledgment
+   * @param CPatient                          $patient Person
+   * @param array                             $data    Data
    *
    * @return string|void
    */
-  function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
+  function handle(CHL7v2ReceiveOrderMessageResponse $ack, CPatient $patient, $data) {
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $exchange_ihe->_ref_sender;
     $sender->loadConfigValues();
 
     $this->_ref_sender = $sender;
 
+    $patientPI = CValue::read($data['personIdentifiers'], "PI");
 
+    if (!$patientPI) {
+      return $exchange_ihe->setORRError($ack, "E007");
+    }
 
-    return $exchange_ihe->setAckAA($ack, null);
+    $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
+    // Patient non retrouvé par son IPP
+    if (!$IPP->_id) {
+      return $exchange_ihe->setORRError($ack, "E105");
+    }
+    $patient->load($IPP->object_id);
+
+    $venueAN   = CValue::read($data['personIdentifiers'], "AN");
+
+    $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
+    // Séjour non retrouvé par son NDA
+    if (!$NDA->_id) {
+      return $exchange_ihe->setORRError($ack, "E205");
+    }
+    $sejour = new CSejour();
+    $sejour->load($NDA->object_id);
+
+    // Common order - ORC
+    $event_request = $this->getEventRequest($data["ORC"]);
+    switch ($event_request) {
+      // new order
+      case "NW" :
+
+        break;
+      // cancel order request
+      case "CA" :
+
+        break;
+      default :
+        return $exchange_ihe->setORRError($ack, "E205");
+    }
+
+    return $exchange_ihe->setORRSuccess($ack);
+  }
+
+  /**
+   * Get event request (Order Control)
+   *
+   * @param DOMNode $node ORC node
+   *
+   * @return string
+   */
+  function getEventRequest(DOMNode $node) {
+    return $this->queryTextNode("ORC.1", $node);
   }
 }

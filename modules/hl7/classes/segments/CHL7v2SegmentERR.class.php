@@ -78,7 +78,7 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
         $data[] = array(
           array (
             "E002",
-            CAppUI::tr("CHL7EventADT-AR-E002")
+            CAppUI::tr("CHL7Event-AR-E002")
           )
         );
       }
@@ -87,7 +87,7 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
         $data[] = array(
            /*array (
              "A002",
-             CAppUI::tr("CHL7EventADT-AA-A002")
+             CAppUI::tr("CHL7Event-AA-A002")
            )*/
         );
       }
@@ -126,7 +126,7 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
               null,
               null,
               $acknowledgment->_mb_error_code,
-              CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
+              CAppUI::tr("CHL7Event-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
             )
           )
         );
@@ -150,7 +150,7 @@ class CHL7v2SegmentERR extends CHL7v2Segment {
       $data[] = array(
           array (
             $acknowledgment->_mb_error_code,
-            CAppUI::tr("CHL7EventADT-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
+            CAppUI::tr("CHL7Event-$acknowledgment->ack_code-$acknowledgment->_mb_error_code")
           )
       );
       // ERR-6

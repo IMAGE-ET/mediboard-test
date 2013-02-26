@@ -7,14 +7,14 @@
         <segment>MSA</segment>
         <segment minOccurs="0">ERR</segment>
         <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
-        <group minOccurs="0">
-            <group minOccurs="0">
+        <group minOccurs="0" name="RESPONSE">
+            <group minOccurs="0" name="PATIENT">
                 <segment>PID</segment>
                 <segment minOccurs="0" maxOccurs="unbounded">NTE</segment>
             </group>
-            <group maxOccurs="unbounded">
+            <group maxOccurs="unbounded" name="ORDER">
                 <segment>ORC</segment>
-                <group maxOccurs="unbounded" minOccurs="0">
+                <group maxOccurs="unbounded" minOccurs="0" name="ORDER_DETAIL_SEGMENTS">
                     <segment minOccurs="0">OBR</segment>
                     <segment minOccurs="0">RQD</segment>
                     <segment minOccurs="0">RQ1</segment>

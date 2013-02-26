@@ -517,6 +517,11 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       return new CHL7v2PatientDemographicsAndVisitResponse($event);
     }
 
+    // Pour l'acquittement du ORM on retourne un message ORR
+    if ($this instanceof CHL7v2ReceiveOrderMessage) {
+      return new CHL7v2ReceiveOrderMessageResponse($event);
+    }
+
     // Génère un acquittement classique
     return new CHL7v2Acknowledgment($event);
   }

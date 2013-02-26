@@ -407,6 +407,10 @@ class CExchangeDataFormat extends CMbMetaObject {
         throw new CMbException("CMbObject-msg-delete-failed", $msg);
       }
     }
+
+    if (!$ack_data) {
+      return;
+    }
     
     if ($this instanceof CEchangeHprim) {
       $dom_evt = $sender->_data_format->_family_message->getHPrimXMLEvenements($this->_message);
@@ -414,7 +418,7 @@ class CExchangeDataFormat extends CMbMetaObject {
       $ack->loadXML($ack_data);
       $ack_valid = $ack->schemaValidate();
       if ($ack_valid) {
-        $exchange->statut_acquittement = $ack->getStatutAcquittement();
+        $this->statut_acquittement = $ack->getStatutAcquittement();
       }
     }
     
@@ -426,9 +430,17 @@ class CExchangeDataFormat extends CMbMetaObject {
     }
     
     if ($this instanceof CExchangeIHE) {
-      $ack = new CHL7v2Acknowledgment($sender->_data_format->_family_message);
+      $evt               = $sender->_data_format->_family_message;
+      $evt->_data_format = $sender->_data_format;
+
+      // Récupération des informations du message - CHL7v2MessageXML
+      $dom_evt = $evt->handle($this->_message);
+      $dom_evt->_is_i18n = $evt->_is_i18n;
+
+      $ack = $dom_evt->getEventACK($evt);
       $ack->handle($ack_data);
-      $this->statut_acquittement = $ack->getStatutAcknowledgment(); 
+
+      $this->statut_acquittement = $ack->getStatutAcknowledgment();
       $ack_valid = $ack->message->isOK(CHL7v2Error::E_ERROR);
     }
     
@@ -436,6 +448,7 @@ class CExchangeDataFormat extends CMbMetaObject {
     $this->acquittement_valide = $ack_valid ? 1 : 0;
     $this->_acquittement       = $ack_data;
     $this->reprocess++;
+
     if ($msg = $this->store()) {
       throw new CMbException("CMbObject-msg-store-failed", $msg);
     }

@@ -64,7 +64,9 @@ class CHL7v2SegmentMSA extends CHL7v2Segment {
     $data[] = null;
     
     // MSA-6: Error Condition (CE) (optional)
-    $data[] = null;
+    $data[] = array(
+      $acknowledgment->hl7_error_code
+    );
     
     $this->fill($data);
   }

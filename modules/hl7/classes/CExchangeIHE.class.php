@@ -389,6 +389,38 @@ class CExchangeIHE extends CExchangeTabular {
   }
 
   /**
+   * Generate ORR 'Success' acknowledgment
+   *
+   * @param CHL7Acknowledgment $ack            Acknowledgment
+   * @param array              $mb_error_codes Mediboard errors codes
+   * @param null               $comments       Comments
+   * @param CMbObject          $mbObject       Object
+   *
+   * @return string
+   */
+  function setORRSuccess(CHL7Acknowledgment $ack, $mb_error_codes = null, $comments = null, CMbObject $mbObject = null) {
+    $ack->generateAcknowledgment("AA", $mb_error_codes, "0", "I", $comments, $mbObject);
+
+    return $this->populateExchangeACK($ack, $mbObject);
+  }
+
+  /**
+   * Generate ORR 'Error' acknowledgment
+   *
+   * @param CHL7Acknowledgment $ack            Acknowledgment
+   * @param array              $mb_error_codes Mediboard errors codes
+   * @param string             $comments       Comments
+   * @param CMbObject          $mbObject       Object
+   *
+   * @return string
+   */
+  function setORRError(CHL7Acknowledgment $ack, $mb_error_codes, $comments = null, CMbObject $mbObject = null) {
+    $ack->generateAcknowledgment("AR", $mb_error_codes, "204", "E", $comments, $mbObject);
+
+    return $this->populateExchangeACK($ack);
+  }
+
+  /**
    * Get exchange observation
    *
    * @param bool $display_errors Display errors ?

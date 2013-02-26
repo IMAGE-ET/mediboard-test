@@ -1111,13 +1111,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Récupération du séjour de la maman
     if (!$mother_AN = $this->getANMotherIdentifier($data["PID"])) {
-      return CAppUI::tr("CHL7EventADT-AA-E227");
+      return CAppUI::tr("CHL7Event-AA-E227");
     }
     
     $sender = $this->_ref_sender;
     $idex_mother = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $mother_AN);
     if (!$idex_mother->_id) {
-      return CAppUI::tr("CHL7EventADT-AA-E228");
+      return CAppUI::tr("CHL7Event-AA-E228");
     }
     
     $sejour_mother = new CSejour();
@@ -1125,11 +1125,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     // Récupération de l'IPP de la maman
     if (!$mother_PI = $this->getPIMotherIdentifier($data["PID"])) {
-      return CAppUI::tr("CHL7EventADT-AA-E229");
+      return CAppUI::tr("CHL7Event-AA-E229");
     }
     
     if (CIdSante400::getMatch("CPatient", $sender->_tag_patient, $mother_PI)->object_id != $sejour_mother->patient_id) {
-      return CAppUI::tr("CHL7EventADT-AA-E230");
+      return CAppUI::tr("CHL7Event-AA-E230");
     }
     
     $naissance                   = new CNaissance();
