@@ -1,16 +1,4 @@
 <script type="text/javascript">
-showExClassFormSelect = function(select){
-  var selected = select.options[select.selectedIndex];
-  var reference_class = selected.get("reference_class");
-  var reference_id    = selected.get("reference_id");
-  var host_class      = selected.get("host_class");
-  var event_name      = selected.get("event_name");
-  
-  showExClassForm(selected.value, reference_class+"-"+reference_id, host_class+"-"+event_name, null, event_name, '@ExObject.refreshSelf.{{$self_guid}}');
-  
-  select.selectedIndex = 0;
-};
-
 loadExObjectsList = function(element, reference_class, reference_id, ex_class_id){
   element = $(element);
   
@@ -55,7 +43,7 @@ filterExClasses = function(input){
 
 <table class="main tbl treegrid">
   <tr>
-    <td colspan="2">
+    <td colspan="3">
       <label style="float: right;">
         Recherche
         <input type="text"{{* type="search" *}} onkeyup="filterExClasses(this)" />
@@ -63,7 +51,7 @@ filterExClasses = function(input){
       </label>
       
       {{if $ex_classes_creation|@count}}
-      <select onchange="showExClassFormSelect(this)" style="width: 20em;">
+      <select onchange="ExObject.showExClassFormSelect(this)" style="width: 20em;">
         <option value=""> &ndash; Remplir nouveau formulaire </option>
         {{foreach from=$ex_classes_creation item=_ex_class_events key=_ex_class_id}}
           {{if $_ex_class_events|@count > 1}}
@@ -107,18 +95,29 @@ filterExClasses = function(input){
             {{$ex_classes.$_ex_class_id->name}}
           </a>
         </td>
+
+        <td class="narrow">
+          {{if isset($ex_classes_creation.$_ex_class_id|smarty:nodefaults)}}
+            {{assign var=_ex_class_event value=$ex_classes_creation.$_ex_class_id|@reset}}
+            <button class="add notext compact"
+                    onclick="showExClassForm('{{$_ex_class_id}}', '{{$reference_class}}-{{$reference_id}}', '{{$_ex_class_event->host_class}}-{{$_ex_class_event->event_name}}', null, '{{$_ex_class_event->event_name}}', '@ExObject.refreshSelf.{{$self_guid}}');">
+              {{tr}}New{{/tr}}
+            </button>
+          {{/if}}
+        </td>
+
         <td class="narrow" style="text-align: right;">
           {{$_ex_objects_count}}
         </td>
       </tr>
       <tr style="display: none;" class="list-container">
-        <td colspan="2"></td>
+        <td colspan="3"></td>
       </tr>
     </tbody>
     {{/if}}
   {{foreachelse}}
     <tr>
-      <td colspan="2" class="empty">Aucun formulaire saisi</td>
+      <td colspan="3" class="empty">Aucun formulaire saisi</td>
     </tr>
   {{/foreach}}
 </table>
