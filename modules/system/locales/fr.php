@@ -399,6 +399,8 @@ $locales['CExClassField-prop-desc'] = 'Propriétés';
 $locales['CExClassField-report_class'] = 'Report de données';
 $locales['CExClassField-report_class-court'] = 'Report de données';
 $locales['CExClassField-report_class-desc'] = 'Report de données';
+$locales['CExClassField-result_in_title'] = 'Afficher le résultat';
+$locales['CExClassField-result_in_title-desc'] = 'Afficher le résultat, il ne peut y en avoir qu\'un par formulaire';
 $locales['CExClassField-show_label'] = 'Afficher le libellé';
 $locales['CExClassField-show_label-court'] = 'Aff. libellé';
 $locales['CExClassField-show_label-desc'] = 'Afficher le libellé';
@@ -2074,4 +2076,3 @@ $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';
 $locales['utilities-source-file_system-sendFile'] = 'Dépôt d\'un fichier';
 $locales['utilities-source-http'] = 'Utilitaires de la source HTTP';
-?>

@@ -12,8 +12,10 @@ class CPlageHoraire extends CMbObject {
   var $date    = null;
   var $debut   = null;
   var $fin     = null;
-  
-  // Object references
+
+  /**
+   * @var self[]
+   */
   var $_colliding_plages = null;
   
   function getProps() {

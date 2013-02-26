@@ -73,6 +73,7 @@ $all_ex_objects = array();
 $ex_objects = array();
 $ex_classes = array();
 $ex_objects_counts = array();
+$ex_objects_results = array();
 $ex_classes_creation = array();
 
 $limit = null;
@@ -109,12 +110,10 @@ if ($concept_search) {
   $search = CExConcept::parseSearch($concept_search);
 }
 
-$ex_class_event = new CExClassEvent;
+$ex_class_event = new CExClassEvent();
 
 foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
-  $_ex_object = new CExObject;
-  $_ex_object->_ex_class_id = $_ex_class_id;
-  $_ex_object->setExClass();
+  $_ex_object = new CExObject($_ex_class_id);
 
   if ($search_mode) {
     $where = array(
@@ -141,6 +140,7 @@ foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     $ljoin = array();
   }
 
+  /** @var CExObject[] $_ex_objects */
   $_ex_objects = array();
 
   if ($detail >= 1) {
@@ -155,6 +155,12 @@ foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
     $ex_objects_counts[$_ex_class_id] = $_ex_objects_count;
   }
 
+  // Loas latest formula result for this ExClass
+  $ex_objects_results[$_ex_class_id] = null;
+  if ($_ex_class->_formula_field) {
+    $ex_objects_results[$_ex_class_id] = $_ex_class->getFormulaResult($_ex_class->_formula_field, $where);
+  }
+
   if ($detail <= 0.5 && !$_ex_class->conditional) {
     $where = array(
       "ex_class.ex_class_id"      => "= '$_ex_class_id'",
@@ -165,6 +171,7 @@ foreach (CExClass::$_list_cache as $_ex_class_id => $_ex_class) {
       "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id",
     );
 
+    /** @var CExClassEvent[] $_ex_class_events */
     $_ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
 
     // TODO canCreateNew
@@ -269,6 +276,7 @@ $smarty->assign("reference",       $reference);
 $smarty->assign("all_ex_objects",  $all_ex_objects);
 $smarty->assign("ex_objects",      $ex_objects);
 $smarty->assign("ex_objects_counts", $ex_objects_counts);
+$smarty->assign("ex_objects_results", $ex_objects_results);
 $smarty->assign("limit",           $limit);
 $smarty->assign("step",            $step);
 $smarty->assign("total",           $total);

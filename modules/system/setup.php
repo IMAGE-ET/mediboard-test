@@ -1266,7 +1266,12 @@ class CSetupsystem extends CSetup {
                 ADD `iv` VARCHAR (16) AFTER `password`;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.26";
+    $this->makeRevision("1.1.26");
+    $query = "ALTER TABLE `ex_class_field`
+                ADD `result_in_title` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.27";
 
 
     /*$query = "ALTER TABLE user_log

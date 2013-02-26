@@ -48,6 +48,7 @@ class CExObject extends CMbMetaObject {
   var $_fields_display = array();
   var $_fields_display_struct = array();
   var $_fields_default_properties = array();
+  var $_formula_result = null;
 
   static $_load_lite      = false;
   static $_multiple_load  = false;
@@ -642,7 +643,7 @@ class CExObject extends CMbMetaObject {
     return $ret;
   }
   /// End low level methods /////////
-  
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->key = "ex_object_id";

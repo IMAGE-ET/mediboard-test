@@ -26,6 +26,7 @@ class CExClassField extends CExListItemsOwner {
 
   var $formula      = null;
   var $_formula     = null;
+  var $result_in_title = null;
 
   var $coord_field_x = null;
   var $coord_field_y = null;
@@ -96,7 +97,13 @@ class CExClassField extends CExListItemsOwner {
 
   static $_load_lite = false;
 
-  static $_indexed_types = array("ref", "date", "dateTime", "time");
+  static $_indexed_types = array(
+    "ref",
+    "date",
+    "dateTime",
+    "time",
+  );
+
   static $_data_type_groups = array(
     array("ipAddress"),
     array("bool"),
@@ -132,10 +139,21 @@ class CExClassField extends CExListItemsOwner {
 
   static $_formula_token_re = "/\[([^\]]+)\]/";
 
-  static $_formula_valid_types = array("float", "num", "numchar", "pct", "currency");
-  static $_concat_valid_types  = array("float", "num", "numchar", "pct", "currency", "str", "text", "code", "email", "date", "dateTime", "time");
+  static $_formula_valid_types = array(
+    "float", "num", "numchar", "pct", "currency"/*, "date", "dateTime", "time"*/
+  );
 
-  static $_formula_constants = array("DateCourante", "HeureCourante", "DateHeureCourante");
+  static $_concat_valid_types  = array(
+    "float", "num", "numchar", "pct", "currency", /*"date", "dateTime", "time",*/
+    "str", "text", "code", "email"
+  );
+
+  static $_formula_constants = array(
+    "DateCourante",
+    "HeureCourante",
+    "DateHeureCourante"
+  );
+
   static $_formula_intervals = array(
     "Min" => "Minutes",
     "H"   => "Heures",
@@ -177,7 +195,7 @@ class CExClassField extends CExListItemsOwner {
   }
 
   static function getTypes(){
-    return array_intersect_key(CMbFieldSpecFact::$classes, array_flip(array(
+    $types = array(
       "enum",
       "set",
       "str",
@@ -193,7 +211,9 @@ class CExClassField extends CExListItemsOwner {
       "birthDate",
       "currency",
       "email",
-    )));
+    );
+
+    return array_intersect_key(CMbFieldSpecFact::$classes, array_flip($types));
   }
 
   /**
@@ -237,6 +257,7 @@ class CExClassField extends CExListItemsOwner {
 
     $props["formula"]     = "text"; // canonical tokens
     $props["_formula"]    = "text"; // localized tokens
+    $props["result_in_title"] = "bool notNull default|0";
 
     $props["coord_field_x"] = "num min|0 max|100";
     $props["coord_field_y"] = "num min|0 max|100";
@@ -294,7 +315,7 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
-   * @param bool $cache
+   * @param bool $cache Cache results
    *
    * @return array
    */
@@ -306,15 +327,6 @@ class CExClassField extends CExListItemsOwner {
     return $this->_default_properties = CExClassFieldProperty::getDefaultPropertiesFor($this);
   }
 
-  /**
-   * @param string $keywords
-   * @param null   $where
-   * @param null   $limit
-   * @param null   $ljoin
-   * @param null   $order
-   *
-   * @return self[]
-   */
   function getAutocompleteList($keywords, $where = null, $limit = null, $ljoin = null, $order = null) {
     $list = $this->loadList($where, null, null, null, $ljoin);
 
@@ -324,7 +336,7 @@ class CExClassField extends CExListItemsOwner {
     $re = str_replace("/", "\\/", $re);
     $re = "/($re)/i";
 
-    foreach($list as $_ex_field) {
+    foreach ($list as $_ex_field) {
       if ($keywords == "%" || $keywords == "" || preg_match($re, $_ex_field->_view)) {
         $_ex_field->updateTranslation();
         $_group = $_ex_field->loadRefExGroup();
@@ -338,10 +350,12 @@ class CExClassField extends CExListItemsOwner {
   }
 
   /**
-   * @param bool $name_as_key
-   * @param bool $all_groups
+   * Get all the fields' names
    *
-   * @return string[]
+   * @param bool $name_as_key Put the names in the keys
+   * @param bool $all_groups  Load all groups
+   *
+   * @return string[] List of field names
    */
   function getFieldNames($name_as_key = true, $all_groups = true){
     $ds = $this->_spec->ds;
@@ -360,9 +374,10 @@ class CExClassField extends CExListItemsOwner {
     $where = array();
     if ($all_groups) {
       $ex_group = $this->loadRefExGroup();
-      $ids = $ex_group->loadIds(array(
+      $where_ids = array(
         "ex_class_id" => $ds->prepare("= %", $ex_group->ex_class_id),
-      ));
+      );
+      $ids = $ex_group->loadIds($where_ids);
       $where["ex_group_id"] = $ds->prepareIn($ids);
     }
     else {
@@ -387,10 +402,14 @@ class CExClassField extends CExListItemsOwner {
 
     if ($this->concept_id) {
       $concept = $this->loadRefConcept();
-      if (!$concept->ex_list_id) return $ret;
+      if (!$concept->ex_list_id) {
+        return $ret;
+      }
 
       $list = $concept->loadRefExList();
-      if (!$list->coded) return $ret;
+      if (!$list->coded) {
+        return $ret;
+      }
 
       $items = $list->loadRefItems(true);
       $ret = array_combine(CMbArray::pluck($items, "ex_list_item_id"), CMbArray::pluck($items, "code"));
@@ -399,13 +418,19 @@ class CExClassField extends CExListItemsOwner {
     return $ret;
   }
 
+  function validateFormula($formula) {
+
+  }
+
   /**
    * @param bool $update
    *
    * @return string
    */
   function formulaToDB($update = true) {
-    if ($this->_formula === null) return;
+    if ($this->_formula === null) {
+      return;
+    }
 
     if ($this->_formula === "") {
       $this->formula = "";
@@ -415,21 +440,23 @@ class CExClassField extends CExListItemsOwner {
     $field_names = $this->getFieldNames(false);
     $formula = $this->_formula;
 
-    if (!preg_match_all(self::$_formula_token_re, $formula, $matches)) {
+    if (/*!in_array($formula, self::$_formula_constants) && */!preg_match_all(self::$_formula_token_re, $formula, $matches)) {
       return "Formule invalide";
     }
 
     $msg = array();
 
-    foreach($matches[1] as $_match) {
-      $_trimmed = trim($_match);
-      if (!array_key_exists($_trimmed, $field_names)) {
-        $msg[] = "\"$_match\"";
+    //if (isset($matches)) {
+      foreach ($matches[1] as $_match) {
+        $_trimmed = trim($_match);
+        if (!array_key_exists($_trimmed, $field_names)) {
+          $msg[] = "\"$_match\"";
+        }
+        else {
+          $formula = str_replace("[$_match]", "[".$field_names[$_trimmed]."]", $formula);
+        }
       }
-      else {
-        $formula = str_replace("[$_match]", "[".$field_names[$_trimmed]."]", $formula);
-      }
-    }
+    //}
 
     if (empty($msg)) {
       if ($update) {
@@ -444,22 +471,26 @@ class CExClassField extends CExListItemsOwner {
   function formulaFromDB(){
     //$this->completeField("formula"); memory limit :(
 
-    if (!$this->formula) return;
+    if (!$this->formula) {
+      return;
+    }
 
     $field_names = $this->getFieldNames(true);
 
     $formula = $this->formula;
 
-    if (!preg_match_all(self::$_formula_token_re, $formula, $matches)) {
+    if (/*!in_array($formula, self::$_formula_constants) && */!preg_match_all(self::$_formula_token_re, $formula, $matches)) {
       return "Formule invalide";
     }
 
-    foreach($matches[1] as $_match) {
-      $_trimmed = trim($_match);
-      if (array_key_exists($_trimmed, $field_names)) {
-        $formula = str_replace($_match, $field_names[$_trimmed], $formula);
+    //if (isset($matches)) {
+      foreach ($matches[1] as $_match) {
+        $_trimmed = trim($_match);
+        if (array_key_exists($_trimmed, $field_names)) {
+          $formula = str_replace($_match, $field_names[$_trimmed], $formula);
+        }
       }
-    }
+    //}
 
     $this->_formula = $formula;
   }
@@ -590,7 +621,7 @@ class CExClassField extends CExListItemsOwner {
     global $locales;
     $locales["{$key}."] = CAppUI::tr("Undefined");
 
-    foreach($items as $_id => $_item) {
+    foreach ($items as $_id => $_item) {
       $locales["$key.$_id"] = $_item;
     }
 
@@ -707,8 +738,7 @@ class CExClassField extends CExListItemsOwner {
         "name" => "= '$uniqid'",
       );
       $sibling->loadObject($where);
-    }
-    while($sibling->_id);
+    } while ($sibling->_id);
 
     return $uniqid;
   }
@@ -727,7 +757,9 @@ class CExClassField extends CExListItemsOwner {
       $this->name = self::getUniqueName();
     }
 
-    if ($msg = $this->check()) return $msg;
+    if ($msg = $this->check()) {
+      return $msg;
+    }
 
     /*if (!preg_match('/^[a-z0-9_]+$/i', $this->name)) {
       return "Nom de champ invalide ($this->name)";
@@ -749,13 +781,9 @@ class CExClassField extends CExListItemsOwner {
       // ajout de l'index
       if (in_array($spec_type, self::$_indexed_types)) {
         $query = "ALTER TABLE `$table_name` ADD INDEX (`$this->name`)";
-
-        if (!$ds->query($query)) {
-          //return "L'index sur le champ '$this->name' n'a pas pu être ajouté (".$ds->error().")";
-        }
+        $ds->query($query);
       }
     }
-
     else if ($this->fieldModified("name") || $this->fieldModified("prop")) {
       $table_name = $this->getTableName();
       $sql_spec = $this->getSQLSpec();
@@ -780,7 +808,7 @@ class CExClassField extends CExListItemsOwner {
       $triggered_object = json_decode($triggered_data, true);
 
       if (is_array($triggered_object)) {
-        foreach($triggered_object as $_value => $_class_trigger_id) {
+        foreach ($triggered_object as $_value => $_class_trigger_id) {
           $trigger = new CExClassFieldTrigger();
           $trigger->ex_class_field_id = $this->_id;
           $trigger->trigger_value = $_value;

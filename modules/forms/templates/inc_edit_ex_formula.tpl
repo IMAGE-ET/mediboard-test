@@ -38,6 +38,11 @@ ExFormula.tokens = {{$field_names|@json}};
               <option value="{{$_const}}( ¤ )">{{$_view}}</option>
             {{/foreach}}
           </select>
+
+          <label>
+            {{mb_field object=$ex_field field=result_in_title typeEnum=checkbox}}
+            {{tr}}CExClassField-result_in_title{{/tr}}
+          </label>
         {{/if}}
         
         {{* <button class="sum" type="button" onclick="ExFormula.sumAllFields()">Somme de tous les champs</button> *}}

@@ -188,14 +188,14 @@ var ExObject = {
     url.requestUpdate(target, {onComplete: options.onComplete});
   },
 
-  showExClassFormSelect: function(select){
+  showExClassFormSelect: function(select, guid){
     var selected = select.options[select.selectedIndex];
     var reference_class = selected.get("reference_class");
     var reference_id    = selected.get("reference_id");
     var host_class      = selected.get("host_class");
     var event_name      = selected.get("event_name");
 
-    showExClassForm(selected.value, reference_class+"-"+reference_id, host_class+"-"+event_name, null, event_name, '@ExObject.refreshSelf.{{$self_guid}}');
+    showExClassForm(selected.value, reference_class+"-"+reference_id, host_class+"-"+event_name, null, event_name, '@ExObject.refreshSelf.'+guid);
 
     select.selectedIndex = 0;
   },

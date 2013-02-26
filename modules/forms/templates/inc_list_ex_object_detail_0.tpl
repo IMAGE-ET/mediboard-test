@@ -2,7 +2,7 @@
   <tr>
     <td class="narrow" style="min-width: 20em; vertical-align: top;">
       {{if $ex_classes_creation|@count}}
-        <select onchange="ExObject.showExClassFormSelect(this)" style="width: 22em;">
+        <select onchange="ExObject.showExClassFormSelect(this, '{{$self_guid}}')" style="width: 22em;">
           <option value=""> &ndash; Remplir nouveau formulaire </option>
           {{foreach from=$ex_classes_creation item=_ex_class_events key=_ex_class_id}}
             {{if $_ex_class_events|@count > 1}}
@@ -39,6 +39,10 @@
           {{if $_ex_objects_count}}
           <tr>
             <td class="text">
+              {{if $ex_objects_results.$_ex_class_id !== null}}
+                <strong style="float: right;">= {{$ex_objects_results.$_ex_class_id}}</strong>
+              {{/if}}
+
               <a href="#1" onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list', 2, '{{$_ex_class_id}}'); return false;">
                 {{$ex_classes.$_ex_class_id->name}}
               </a>
@@ -53,7 +57,7 @@
               {{/if}}
             </td>
             <td class="narrow" style="text-align: right;">
-              {{$_ex_objects_count}}
+              <span class="compact">{{$_ex_objects_count}}</span>
               <button class="right notext compact"
                       onclick="$(this).up('tr').addUniqueClassName('selected'); ExObject.loadExObjects('{{$reference_class}}', '{{$reference_id}}', 'ex_class-list', 2, '{{$_ex_class_id}}')">
               </button>

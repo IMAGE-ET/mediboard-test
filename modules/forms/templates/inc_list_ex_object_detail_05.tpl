@@ -51,7 +51,7 @@ filterExClasses = function(input){
       </label>
       
       {{if $ex_classes_creation|@count}}
-      <select onchange="ExObject.showExClassFormSelect(this)" style="width: 20em;">
+      <select onchange="ExObject.showExClassFormSelect(this, '{{$self_guid}}')" style="width: 20em;">
         <option value=""> &ndash; Remplir nouveau formulaire </option>
         {{foreach from=$ex_classes_creation item=_ex_class_events key=_ex_class_id}}
           {{if $_ex_class_events|@count > 1}}
@@ -91,6 +91,10 @@ filterExClasses = function(input){
     <tbody data-name="{{$ex_classes.$_ex_class_id->name}}">
       <tr>
         <td class="text">
+          {{if $ex_objects_results.$_ex_class_id !== null}}
+            <strong style="float: right;">= {{$ex_objects_results.$_ex_class_id}}</strong>
+          {{/if}}
+
           <a href="#1" class="tree-folding" onclick="loadExObjectsList(this, '{{$reference_class}}', '{{$reference_id}}', '{{$_ex_class_id}}'); return false;">
             {{$ex_classes.$_ex_class_id->name}}
           </a>

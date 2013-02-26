@@ -76,7 +76,8 @@ $exclude = array(
   "confidential", "mask", "format", "reported",
   "perm", "seekable", "pattern", "autocomplete",
   "cascade", "delimiter", "canonical", "protected",
-  "class", "alphaAndNum", "byteUnit", "length" //  a cause de form.length qui pose probleme
+  "class", "alphaAndNum", "byteUnit", "length", //  a cause de form.length qui pose probleme
+  "loggable",
 );
 
 $boolean = array(

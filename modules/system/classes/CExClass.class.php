@@ -41,9 +41,13 @@ class CExClass extends CMbObject {
   var $_fields_by_name = null;
   var $_dont_create_default_group = null;
   var $_duplicate = null;
+  var $_formula_field = null;
   
   private $_latest_ex_object_cache = array();
-  
+
+  /**
+   * @var self[]
+   */
   static $_list_cache = array();
   
   static $_native_views = array(
@@ -297,8 +301,43 @@ class CExClass extends CMbObject {
   
   function updateFormFields(){
     parent::updateFormFields();
-    
+    $this->getFormulaField();
+
     $this->_view = $this->name;
+  }
+
+  function getFormulaField(){
+    if ($this->_formula_field) {
+      return $this->_formula_field;
+    }
+
+    $ds = $this->getDS();
+
+    $request = new CRequest();
+    $request->addSelect("ex_class_field.name");
+    $request->addTable("ex_class_field");
+    $where = array(
+      "ex_class_field_group.ex_class_id" => $ds->prepare("=%", $this->_id),
+      "ex_class_field.result_in_title"   => "= '1'",
+    );
+    $request->addWhere($where);
+    $ljoin = array(
+      "ex_class_field_group" => "ex_class_field_group.ex_class_field_group_id = ex_class_field.ex_group_id",
+    );
+    $request->addLJoin($ljoin);
+
+    return $this->_formula_field = $ds->loadResult($request->getRequest());
+  }
+
+  function getFormulaResult($field_name, $where) {
+    $ds = $this->getDS();
+
+    $request = new CRequest();
+    $request->addSelect($field_name);
+    $request->addTable($this->getTableName());
+    $request->addWhere($where);
+
+    return $ds->loadResult($request->getRequest());
   }
 
   /**
