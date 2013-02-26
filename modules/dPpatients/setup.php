@@ -2075,7 +2075,12 @@ class CSetupdPpatients extends CSetup {
                 ADD `cetonemie` FLOAT UNSIGNED AFTER `glycemie`";
     $this->addQuery($query);
 
-    $this->mod_version = "1.76";
+    $this->makeRevision("1.76");
+    $query = "ALTER TABLE `constantes_medicales`
+      ADD `redon_5` FLOAT UNSIGNED AFTER `redon_4`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.77";
 
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);

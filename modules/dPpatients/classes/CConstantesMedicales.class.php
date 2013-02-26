@@ -291,6 +291,12 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 100,
       "cumul_reset_config" => "redon_cumul_reset_hour",
     ),
+    "redon_5"           => array(
+      "type" => "drain",
+      "unit" => "ml",
+      "min" => 0, "max" => 100,
+      "cumul_reset_config" => "redon_cumul_reset_hour",
+    ),
     "lame_1"           => array(
       "type" => "drain",
       "unit" => "ml",
@@ -608,6 +614,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['redon_2']                = 'float min|0';
     $specs['redon_3']                = 'float min|0';
     $specs['redon_4']                = 'float min|0';
+    $specs['redon_5']                = 'float min|0';
     $specs['diurese']                = 'float min|0'; // Miction naturelle
     $specs['_diurese']               = 'float min|0'; // Vraie diurèse (calculée)
     $specs['sng']                    = 'float min|0';
