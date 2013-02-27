@@ -17,6 +17,8 @@
     </tr>
 
     {{mb_include module=system template=inc_config_str var=tag_mediuser}}
+
+    {{mb_include module=system template=inc_config_str var=tag_mediuser_software}}
       
     <tr>
       <td class="button" colspan="10">

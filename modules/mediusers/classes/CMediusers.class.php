@@ -1377,6 +1377,41 @@ class CMediusers extends CMbObject {
   }
 
   /**
+   * Return idex type if it's special (e.g. software/...)
+   *
+   * @param CIdSante400 $idex Idex
+   *
+   * @return string|null
+   */
+  function getSpecialIdex(CIdSante400 $idex) {
+    //identifier les comptes de type logiciel
+    if ($idex->tag == self::getTagSoftware()) {
+      return "software";
+    }
+  }
+
+  /**
+   * return the tag used for identifying "software user"
+   *
+   * @param null $group_id
+   * @return mixed
+   */
+  function getTagSoftware($group_id = null) {
+    // Pas de tag Mediusers
+    if (null == $tag_mediusers_software = CAppUI::conf("mediusers tag_mediuser_software")) {
+      return;
+    }
+
+    // Permettre des id externes en fonction de l'établissement
+    $group = CGroups::loadCurrent();
+    if (!$group_id) {
+      $group_id = $group->_id;
+    }
+
+    return str_replace('$g', $group_id, $tag_mediusers_software);
+  }
+
+  /**
    * Construit le tag Mediusers en fonction des variables de configuration
    *
    * @param int $group_id Permet de charger l'id externe d'un Mediuser pour un établissement donné si non null
