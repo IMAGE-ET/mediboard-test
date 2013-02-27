@@ -139,20 +139,23 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   /**
    * Add element
    *
-   * @param string $elParent
-   * @param string $elName
-   * @param string $elValue
-   * @param string $elNS
+   * @param string $elParent Parent element
+   * @param string $elName   Name
+   * @param string $elValue  Value
+   * @param string $elNS     Namespace
    *
    * @return mixed
    */
   function addElement($elParent, $elName, $elValue = null, $elNS = "urn:hl7-org:v2xml") {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
-}
+  }
 
   /**
-   * @param         $nodeName
-   * @param DOMNode $contextNode
+   * Query
+   *
+   * @param string  $nodeName    The XPath to the node
+   * @param DOMNode $contextNode The context node from which the XPath starts
+   *
    * @return DOMNodeList
    */
   function query($nodeName, DOMNode $contextNode = null) {
@@ -182,10 +185,13 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param         $nodeName
-   * @param DOMNode $contextNode
-   * @param null    $data
-   * @param bool    $root
+   * Get the nodeList corresponding to an XPath
+   *
+   * @param string       $nodeName    The XPath to the node
+   * @param DOMNode|null $contextNode The context node from which the XPath starts
+   * @param array|null   &$data       Nodes data
+   * @param boolean      $root        Is root node ?
+   *
    * @return DOMNodeList
    */
   function queryNodes($nodeName, DOMNode $contextNode = null, &$data = null, $root = false) {
@@ -198,9 +204,12 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param         $nodeName
-   * @param DOMNode $contextNode
-   * @param bool    $root
+   * Get the text of a node corresponding to an XPath
+   *
+   * @param string       $nodeName    The XPath to the node
+   * @param DOMNode|null $contextNode The context node from which the XPath starts
+   * @param boolean      $root        Is root node ?
+   *
    * @return string
    */
   function queryTextNode($nodeName, DOMNode $contextNode, $root = false) {
@@ -210,10 +219,15 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param $name
-   * @param $data
-   * @param $object
-   */function getSegment($name, $data, $object) {
+   * Get segment
+   *
+   * @param string    $name   Segment name
+   * @param array     $data   Data
+   * @param CMbObject $object Object
+   *
+   * @return void
+   */
+  function getSegment($name, $data, $object) {
     if (!array_key_exists($name, $data) || $data[$name] === null) {
       return;
     }
@@ -224,6 +238,8 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
+   * Get fields in MSH segment
+   *
    * @return array
    */
   function getMSHEvenementXML() {
@@ -231,15 +247,22 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     
     $MSH = $this->queryNode("MSH", null, $foo, true);
     
-    $data['dateHeureProduction'] = mbDateTime($this->queryTextNode("MSH.7/TS.1", $MSH));
-    $data['identifiantMessage']  = $this->queryTextNode("MSH.10", $MSH);
+    $data['dateHeureProduction']   = mbDateTime($this->queryTextNode("MSH.7/TS.1", $MSH));
+    $data['identifiantMessage']    = $this->queryTextNode("MSH.10", $MSH);
+
+    $data['receiving_application'] = $this->queryTextNode("MSH.3/HD.1", $MSH);
+    $data['receiving_facility']    = $this->queryTextNode("MSH.4/HD.1", $MSH);
     
     return $data;
-}
+  }
 
   /**
-   * @param DOMNode $node
-   * @param         $data
+   * Get PI identifier
+   *
+   * @param DOMNode $node  Node
+   * @param array   &$data Data
+   *
+   * @return void
    */
   function getPIIdentifier(DOMNode $node, &$data) {
     if (CHL7v2Message::$handle_mode == "simple") {
@@ -253,8 +276,12 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param DOMNode $node
-   * @param         $data
+   * Get AN identifier
+   *
+   * @param DOMNode $node  Node
+   * @param array   &$data Data
+   *
+   * @return void
    */
   function getANIdentifier(DOMNode $node, &$data) {
     if (CHL7v2Message::$handle_mode == "simple") {
@@ -268,7 +295,10 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param DOMNode $node
+   * Get AN mother identifier
+   *
+   * @param DOMNode $node Node
+   *
    * @return string
    */
   function getANMotherIdentifier(DOMNode $node) {
@@ -281,7 +311,10 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param DOMNode $node
+   * Get PI mother identifier
+   *
+   * @param DOMNode $node Node
+   *
    * @return string
    */
   function getPIMotherIdentifier(DOMNode $node) {
@@ -294,32 +327,41 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param DOMNode        $node
-   * @param                $data
-   * @param CInteropSender $sender
+   * Get VN identifier
+   *
+   * @param DOMNode $node  Node
+   * @param array   &$data Data
+   *
+   * @return void
    */
-  function getVNIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
+  function getVNIdentifiers(DOMNode $node, &$data) {
     if (($this->queryTextNode("CX.5", $node) == "VN")) {
       $data["VN"] = $this->queryTextNode("CX.1", $node);
     }
   }
 
   /**
-   * @param DOMNode        $node
-   * @param                $data
-   * @param CInteropSender $sender
+   * Get RI identifiers
+   *
+   * @param DOMNode        $node   Node
+   * @param array          &$data  Data
+   * @param CInteropSender $sender Sender
+   *
+   * @return void
    */
   function getRIIdentifiers(DOMNode $node, &$data, CInteropSender $sender) {
     // Notre propre RI
-    if (($this->queryTextNode("CX.5", $node) == "RI") && 
-        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))) {
+    if (($this->queryTextNode("CX.5", $node) == "RI") &&
+        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))
+    ) {
       $data["RI"] = $this->queryTextNode("CX.1", $node);
       return;
     }
 
     // RI de l'expéditeur
     if (($this->queryTextNode("CX.5", $node) == "RI") && 
-        ($this->queryTextNode("CX.4/HD.2", $node) == $sender->_configs["assigning_authority_universal_id"])) {
+        ($this->queryTextNode("CX.4/HD.2", $node) == $sender->_configs["assigning_authority_universal_id"])
+    ) {
       $data["RI_Sender"] = $this->queryTextNode("CX.1", $node);
       return;
     }
@@ -331,21 +373,29 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param DOMNode $node
-   * @param         $data
+   * Get NPA identifiers
+   *
+   * @param DOMNode $node  Node
+   * @param array   &$data Data
+   *
+   * @return void
    */
   function getNPAIdentifiers(DOMNode $node, &$data) {
     if (($this->queryTextNode("CX.5", $node) == "RI") && 
-        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))) {
+        ($this->queryTextNode("CX.4/HD.2", $node) == CAppUI::conf("hl7 assigning_authority_universal_id"))
+    ) {
       $data["NPA"] = $this->queryTextNode("CX.1", $node);
     }
   }
 
   /**
-   * @param                $nodeName
-   * @param DOMNode        $contextNode
-   * @param CInteropSender $sender
-   * @return array
+   * Get person identifiers
+   *
+   * @param string         $nodeName    Node name
+   * @param DOMNode        $contextNode Node
+   * @param CInteropSender $sender      Sender
+   *
+   * @return void
    */
   function getPersonIdentifiers($nodeName, DOMNode $contextNode, CInteropSender $sender) {
     $data = array();
@@ -377,9 +427,12 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param DOMNode        $contextNode
-   * @param CInteropSender $sender
-   * @return array
+   * Get admit identifiers
+   *
+   * @param DOMNode        $contextNode Node
+   * @param CInteropSender $sender      Sender
+   *
+   * @return void
    */
   function getAdmitIdentifiers(DOMNode $contextNode, CInteropSender $sender) {
     $data = array();
@@ -398,7 +451,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
           $this->getRIIdentifiers($_node, $data, $sender);
 
           // VN - Visit Number
-          $this->getVNIdentifiers($_node, $data, $sender);
+          $this->getVNIdentifiers($_node, $data);
     
           break;
       }
@@ -413,6 +466,8 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
+   * Get content nodes
+   *
    * @return array
    */
   function getContentNodes() {
@@ -436,7 +491,10 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param $value
+   * Get boolean
+   *
+   * @param bool $value Value
+   *
    * @return int
    */
   function getBoolean($value) {
@@ -444,7 +502,10 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param $string
+   * Get phone
+   *
+   * @param string $string Value
+   *
    * @return mixed
    */
   function getPhone($string) {
@@ -452,25 +513,29 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   }
 
   /**
-   * @param DOMNode   $node
-   * @param CMbObject $mbObject
-   * @param           $data
+   * Get segement OBX
+   *
+   * @param DOMNode   $node   Node
+   * @param CMbObject $object Object
+   * @param array     $data   Data
+   *
+   * @return void
    */
-  function getOBX(DOMNode $node, CMbObject $mbObject, $data) {
+  function getOBX(DOMNode $node, CMbObject $object, $data) {
     $type  = $this->queryTextNode("OBX.3/CE.2", $node);
     $value = floatval($this->queryTextNode("OBX.5", $node));
     
     $constante_medicale = new CConstantesMedicales();
     
-    if ($mbObject instanceof CSejour) {
+    if ($object instanceof CSejour) {
       $constante_medicale->context_class = "CSejour";
-      $constante_medicale->context_id    = $mbObject->_id;
-      $constante_medicale->patient_id    = $mbObject->patient_id;
+      $constante_medicale->context_id    = $object->_id;
+      $constante_medicale->patient_id    = $object->patient_id;
     }
-    else if ($mbObject instanceof CPatient) {
+    else if ($object instanceof CPatient) {
       $constante_medicale->context_class = "CPatient";
-      $constante_medicale->context_id    = $mbObject->_id;
-      $constante_medicale->patient_id    = $mbObject->_id;
+      $constante_medicale->context_id    = $object->_id;
+      $constante_medicale->patient_id    = $object->_id;
     }
     
     $constante_medicale->datetime = $this->queryTextNode("EVN.2/TS.1", $data["EVN"]);
@@ -524,5 +589,22 @@ class CHL7v2MessageXML extends CMbXMLDocument {
 
     // Génère un acquittement classique
     return new CHL7v2Acknowledgment($event);
+  }
+
+  /**
+   * Verifies that the message is for this actor
+   *
+   * @param array         $data  Data
+   * @param CInteropActor $actor Actor
+   *
+   * @return bool
+   */
+  function checkApplicationAndFacility($data, CInteropActor $actor) {
+    if (!$actor->_configs["check_receiving_application_facility"]) {
+      return true;
+    }
+
+    return ($data['receiving_application'] == $actor->_configs["receiving_application"]) &&
+           ($data['receiving_facility'] == $actor->_configs['receiving_facility']);
   }
 }

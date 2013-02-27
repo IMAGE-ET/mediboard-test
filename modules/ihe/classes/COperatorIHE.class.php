@@ -28,7 +28,7 @@ class COperatorIHE extends CEAIOperator {
     $evt               = $data_format->_family_message;
     $evt->_data_format = $data_format;
 
-    // Récupération des informations du message - CHL7v2MessageXML
+    // Récupération des informations du message
     $dom_evt = $evt->handle($msg);
     $dom_evt->_is_i18n = $evt->_is_i18n;
     
@@ -102,17 +102,22 @@ class COperatorIHE extends CEAIOperator {
       // Chargement des configs de l'expéditeur
       $sender = $exchange_ihe->_ref_sender;
       $sender->getConfigs($data_format);
+
+      if (!$dom_evt->checkApplicationAndFacility($data, $sender)) {
+        return;
+      }
       
       CHL7v2Message::setHandleMode($sender->_configs["handle_mode"]); 
 
       $dom_evt->_ref_exchange_ihe = $exchange_ihe;
       $ack->_ref_exchange_ihe     = $exchange_ihe;
 
-      // Message PAM / DEC / PDQ
+      // Message PAM / DEC / PDQ / SWF
       $msgAck = self::handleEvent($exchange_ihe, $dom_evt, $ack, $data);
       
       CHL7v2Message::resetBuildMode(); 			
-    } catch(Exception $e) {
+    }
+    catch(Exception $e) {
       $exchange_ihe->populateExchange($data_format, $evt);
       $exchange_ihe->loadRefsInteropActor();
       $exchange_ihe->populateErrorExchange(null, $evt);
@@ -129,10 +134,10 @@ class COperatorIHE extends CEAIOperator {
     }
 
     return $msgAck;
-}
+  }
 
   /**
-   * Handle event PAM / DEC / PDQ message
+   * Handle event PAM / DEC / PDQ / SWF message
    *
    * @param CExchangeIHE       $exchange_ihe Exchange IHE
    * @param CHL7v2MessageXML   $dom_evt      DOM Event
@@ -150,5 +155,3 @@ class COperatorIHE extends CEAIOperator {
     return $dom_evt->handle($ack, $newPatient, $data);
   }
 }
-
-?>

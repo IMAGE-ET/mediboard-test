@@ -14,6 +14,9 @@
  * Config HL7
  */
 class CHL7Config extends CExchangeDataFormatConfig {
+  /**
+   * @var array Config fields
+   */
   static $config_fields = array(
     // Options
     // => ITI-30
@@ -27,6 +30,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "iti31_historic_movement",
     
     // Assigning authority
+    "check_receiving_application_facility",
     "receiving_application",
     "receiving_facility",
     "assigning_authority_namespace_id",
@@ -76,8 +80,9 @@ class CHL7Config extends CExchangeDataFormatConfig {
   var $iti31_historic_movement                   = null;
 
   // Application
-  var $receiving_application    = null;
-  var $receiving_facility       = null;
+  var $check_receiving_application_facility  = null;
+  var $receiving_application                 = null;
+  var $receiving_facility                    = null;
   var $assigning_authority_namespace_id      = null;
   var $assigning_authority_universal_id      = null;
   var $assigning_authority_universal_type_id = null;
@@ -111,7 +116,10 @@ class CHL7Config extends CExchangeDataFormatConfig {
   // Auto repair
   var $repair_patient       = null;
   var $control_date         = null;
-  
+
+  /**
+   * @var array Categories
+   */
   var $_categories = array(
     "format" => array(
       "encoding", 
@@ -120,6 +128,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     ),
     
     "application" => array(
+      "check_receiving_application_facility",
       "receiving_application",
       "receiving_facility",
       "assigning_authority_namespace_id",
@@ -201,6 +210,7 @@ class CHL7Config extends CExchangeDataFormatConfig {
     $props["iti31_temporary_patient_transfer_tracking"] = "bool default|0";
     $props["iti31_historic_movement"]                   = "bool default|1";
 
+    $props["check_receiving_application_facility"]  = "bool default|0";
     $props["receiving_application"]                 = "str";
     $props["receiving_facility"]                    = "str";
     $props["assigning_authority_namespace_id"]      = "str";

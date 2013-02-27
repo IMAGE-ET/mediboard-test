@@ -1006,8 +1006,13 @@ class CSetuphl7 extends CSetup {
     $query = "ALTER TABLE `hl7_config`
                 ADD `handle_PV1_7` ENUM ('0','1') DEFAULT '1';";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.59";
+
+    $this->makeRevision("0.59");
+    $query = "ALTER TABLE `hl7_config`
+                ADD `check_receiving_application_facility` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.60";
     
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);
