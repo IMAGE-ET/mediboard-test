@@ -547,6 +547,11 @@ class CSetupmediusers extends CSetup {
               ADD `service_account` ENUM ('0','1') NOT NULL DEFAULT '0' AFTER `actif`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.52";
+    $this->makeRevision("0.52");
+    $query = "ALTER TABLE `users_mediboard`
+              DROP `service_account`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.53";
   }
 }

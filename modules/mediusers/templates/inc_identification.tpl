@@ -47,11 +47,6 @@
 </tr>
 
 <tr>
-  <th>{{mb_label object=$object field="service_account"}}</th>
-  <td>{{mb_field object=$object field="service_account"}}</td>
-</tr>
-
-<tr>
   <th>{{mb_label object=$object field="deb_activite"}}</th>
   <td>{{mb_field object=$object field="deb_activite" form="mediuser" register=true}}</td>
 </tr>

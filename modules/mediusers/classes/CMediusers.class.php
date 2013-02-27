@@ -31,8 +31,6 @@ class CMediusers extends CMbObject {
   var $compta_deleguee             = null;
   var $last_ldap_checkout          = null;
 
-  var $service_account             = null;
-
   // DB References
   var $function_id                 = null;
   var $discipline_id               = null;
@@ -213,8 +211,6 @@ class CMediusers extends CMbObject {
     $props["mail_apicrypt"]          = "email";
     $props["compta_deleguee"]        = "bool default|0";
     $props["last_ldap_checkout"]     = "date";
-
-    $props["service_account"]        = "bool default|0";
 
     $props["_group_id"]              = "ref notNull class|CGroups";
 
@@ -1396,7 +1392,7 @@ class CMediusers extends CMbObject {
    * @param null $group_id
    * @return mixed
    */
-  function getTagSoftware($group_id = null) {
+  static function getTagSoftware($group_id = null) {
     // Pas de tag Mediusers
     if (null == $tag_mediusers_software = CAppUI::conf("mediusers tag_mediuser_software")) {
       return;

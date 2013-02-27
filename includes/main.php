@@ -201,8 +201,8 @@ $tab = $a == "index" ?
 if (CAppUI::conf("admin CUser force_changing_password")) {
   $user = CAppUI::$user;
 
-  // If account is not a service account
-  if ($user->_id && !$user->service_account) {
+  // If account has a software tag
+  if ($user->_id && CIdSante400::getMatch($user->_class, CMediusers::getTagSoftware(), null, $user->_id)->_id) {
     // Need to change
     if (mbDateTime("-".CAppUI::conf("admin CUser password_life_duration")) > $user->_ref_user->user_password_last_change) {
       // To prevent from infinite redirection
