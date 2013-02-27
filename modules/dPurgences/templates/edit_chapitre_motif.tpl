@@ -1,5 +1,5 @@
 {{mb_script module=urgences script=motif}}
-{{assign var=objetc value=""}}
+{{assign var=object value=""}}
 
 {{if $chapitre_id || $chapitre_id == '0'}}
   {{assign var=object value=$chapitre}}

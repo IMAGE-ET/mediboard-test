@@ -214,9 +214,12 @@
           {{mb_include module=cabinet template=inc_ant_consult_trait addform="tri"}}
         </table>
       </div>
-      <div id="constantes-tri" style="width:50%;float:left;"></div>
+      <fieldset style="width:48%;float:left;">
+        <legend>Constantes</legend>
+        <div id="constantes-tri"></div>
+      </fieldset>
       
-      <div style="float:left;width:50%;" id="form-edit-complement">
+      <div style="float:left;width:48%;" id="form-edit-complement">
         {{mb_include module=urgences template=inc_form_complement}}
       </div>
     </td>
