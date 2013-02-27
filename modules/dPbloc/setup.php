@@ -379,8 +379,13 @@ class CSetupdPbloc extends CSetup {
     $query = "ALTER TABLE `poste_sspi`
       ADD `bloc_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.37";
+
+    $this->makeRevision("0.37");
+    $query = 'ALTER TABLE `plagesop`
+      ADD `secondary_function_id` INT (11) UNSIGNED AFTER `chir_id`,
+      ADD INDEX (`secondary_function_id`);';
+    $this->addQuery($query);
+
+    $this->mod_version = "0.38";
   }
 }
-?>

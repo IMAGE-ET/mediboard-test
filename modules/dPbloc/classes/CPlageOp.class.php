@@ -27,6 +27,7 @@ class CPlageOp extends CMbObject {
   var $spec_id      = null;
   var $salle_id     = null;
   var $spec_repl_id = null;
+  var $secondary_function_id = null;
 
   // DB fields
   var $date             = null;
@@ -82,6 +83,7 @@ class CPlageOp extends CMbObject {
     $specs["spec_id"]          = "ref class|CFunctions";
     $specs["salle_id"]         = "ref notNull class|CSalle";
     $specs["spec_repl_id"]     = "ref class|CFunctions";
+    $specs["secondary_function_id"] = "ref class|CFunctions";
     $specs["date"]             = "date notNull";
     $specs["debut"]            = "time notNull";
     $specs["fin"]              = "time notNull moreThan|debut";
@@ -405,7 +407,7 @@ class CPlageOp extends CMbObject {
    * return the number of weeks jumped
    * @return int
    */
-  function becomeNext($init_salle_id = null, $init_chir_id = null, $init_spec_id = null) {
+  function becomeNext($init_salle_id = null, $init_chir_id = null, $init_spec_id = null, $init_secondary_function_id = null) {
     $week_jumped = 0;
     if(!$this->_type_repeat) {
       $this->_type_repeat = "simple";
@@ -444,6 +446,7 @@ class CPlageOp extends CMbObject {
     $salle_id         = $this->salle_id;
     $chir_id          = $this->chir_id;
     $spec_id          = $this->spec_id;
+    $secondary_function_id = $this->secondary_function_id === null ? "" : $this->secondary_function_id;
     $debut            = $this->debut;
     $fin              = $this->fin;
     $temps_inter_op   = $this->temps_inter_op;
@@ -453,17 +456,22 @@ class CPlageOp extends CMbObject {
     $spec_repl_id     = $this->spec_repl_id;
     $type_repeat      = $this->_type_repeat;
     $unique_chir      = $this->unique_chir;
-    
+
     // Recherche de la plage suivante
     $where             = array();
     $where["date"]     = "= '$this->date'";
     $where[]           = "`debut` = '$this->debut' OR `fin` = '$this->fin'";
     $where["salle_id"] = $init_salle_id ? "= '$init_salle_id'" : "= '$this->salle_id'";
-    if($this->chir_id || $init_chir_id) {
-      $where["chir_id"] = $init_chir_id ? "= '$init_chir_id'" : "= '$this->chir_id'";
-    } else {
-      $where["spec_id"] = $init_spec_id ? "= '$init_spec_id'" : "= '$this->spec_id'";
+    if ($chir_id || $init_chir_id) {
+      $where["chir_id"] = $init_chir_id ? "= '$init_chir_id'" : "= '$chir_id'";
     }
+    else {
+      $where["spec_id"] = $init_spec_id ? "= '$init_spec_id'" : "= '$spec_id'";
+    }
+    if ($secondary_function_id || $init_secondary_function_id) {
+      $where["secondary_function_id"] = $init_secondary_function_id ? "= '$init_secondary_function_id'" : "= '$secondary_function_id'";
+    }
+
     $plages           = $this->loadList($where);
     if(count($plages) > 0) {
       $this->load(reset($plages)->plageop_id);
@@ -473,10 +481,11 @@ class CPlageOp extends CMbObject {
     }
     if(!$this->chir_id) $this->chir_id = "";
     if(!$this->spec_id) $this->spec_id = "";
-    
+
     // Remise en place des champs modifiés
     $this->salle_id         = $salle_id;
     $this->chir_id          = $chir_id;
+    $this->secondary_function_id = $secondary_function_id;
     $this->spec_id          = $spec_id;
     $this->debut            = $debut;
     $this->fin              = $fin;

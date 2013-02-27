@@ -25,6 +25,14 @@ toggleDel = function(input) {
   input.up('span').toggleClassName('opacity-40');
 }
 
+refreshFunction = function(chir_id) {
+  var url = new Url("dPcabinet", "ajax_refresh_secondary_functions");
+  url.addParam("chir_id"   , chir_id);
+  url.addParam("field_name", "secondary_function_id");
+  url.addParam("empty_function_principale", 1);
+  url.requestUpdate("secondary_functions");
+}
+
 Main.add(function(){
   var oForm = getForm('editFrm');
   Calendar.regField(oForm.date);
@@ -69,7 +77,7 @@ Main.add(function(){
           <tr>
             <th>{{mb_label object=$plagesel field="chir_id"}}</th>
             <td>
-              <select name="chir_id" class="{{$plagesel->_props.chir_id}}" style="width: 15em;">
+              <select name="chir_id" class="{{$plagesel->_props.chir_id}}" style="width: 15em;" onchange="refreshFunction(this.value)">
                 <option value="">&mdash; Choisir un chirurgien</option>
                 {{if $chirs|@count}}
                 <optgroup label="Chirurgiens">
@@ -109,6 +117,17 @@ Main.add(function(){
                 {{/if}}
               </select>
             </td>
+          </tr>
+          <tr>
+            <th>
+              {{mb_label class=CMediusers field=function_id}}
+            </th>
+            <td id="secondary_functions">
+              {{assign var=chir value=$plagesel->_ref_chir}}
+              {{assign var=selected value=$plagesel->secondary_function_id}}
+              {{mb_include module=cabinet template=inc_refresh_secondary_functions field_name=secondary_function_id empty_function_principale=1 type_onchange=""}}
+            </td>
+            <td colspan="2" style="min-width: 50%"></td>
           </tr>
           <tr>
             <th>{{mb_label object=$plagesel field="spec_id"}}</th>

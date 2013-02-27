@@ -61,6 +61,8 @@ if ($del) {
     $salle_id = $oldObj->salle_id;
     $chir_id  = $oldObj->chir_id;
     $spec_id  = $oldObj->spec_id;
+    $secondary_function_id = $oldObj->secondary_function_id;
+
     while ($repeat > 0) {
       if ($obj->_id) {
         if ($msg = $obj->store()) {
@@ -72,7 +74,7 @@ if ($del) {
         }
         managePersonnel($obj);  
       }
-      $repeat -= $obj->becomeNext($salle_id, $chir_id, $spec_id);
+      $repeat -= $obj->becomeNext($salle_id, $chir_id, $spec_id, $secondary_function_id);
     }
   }
   // Création des plages
@@ -160,5 +162,3 @@ if ($otherm = CValue::post("otherm", 0)) {
 }
 
 CAppUI::redirect("m=$m");
-
-?>
