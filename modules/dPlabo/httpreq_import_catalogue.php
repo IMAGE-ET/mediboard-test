@@ -17,7 +17,7 @@ $can->needsAdmin();
 function importCatalogue($cat, $parent_id = null) { 
   global $remote_name;
  
-  set_time_limit(180);
+  CApp::setTimeLimit(180);
   
   // On rend toutes les analyses du catalogue obsoletes
   $idAnalyse = new CIdSante400();

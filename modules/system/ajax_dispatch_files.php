@@ -24,8 +24,8 @@ if ($profile) {
 
 CCanDo::checkRead();
 
-set_time_limit(240);
-set_min_memory_limit("1024M");
+CApp::setTimeLimit(240);
+CApp::setMemoryLimit("1024M");
 
 $actor_guid   = CValue::get("actor_guid");
 $to_treatment = CValue::get("to_treatment", 1);

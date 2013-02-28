@@ -12,8 +12,8 @@
 
 CCanDo::checkRead();
 
-set_time_limit(240);
-set_min_memory_limit("512M");
+CApp::setTimeLimit(240);
+CApp::setMemoryLimit("512M");
 
 $actor_guid   = CValue::get("actor_guid");
 $to_treatment = CValue::get("to_treatment", 1);

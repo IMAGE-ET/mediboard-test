@@ -14,7 +14,7 @@ $where = array(
 //  "compte_rendu_id" => "= '47325'"
 );
   
-set_time_limit(300);
+CApp::setTimeLimit(300);
 
 $loops = CValue::get("loops", 100);
 $trunk = CValue::get("trunk", 100);

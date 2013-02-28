@@ -12,8 +12,8 @@ CCanDo::checkEdit();
 
 $ratio = (float)(CValue::get("ratio", 2));
 
-set_min_memory_limit('512M');
-set_time_limit(120);
+CApp::setMemoryLimit('512M');
+CApp::setTimeLimit(120);
 
 $sql = new CRequest();
 $sql->addTable("product_order_item");

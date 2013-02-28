@@ -11,7 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
-set_min_memory_limit("512M");
+CApp::setMemoryLimit("512M");
 
 function getCurrentLit($sejour, $date, $hour, $service_id, &$lits) {
   $affectations = $sejour->_ref_affectations;

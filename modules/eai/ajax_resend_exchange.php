@@ -70,7 +70,7 @@ else {
   // Time limit
   $seconds = max($max / 20, 120);
   CAppUI::stepAjax("Limite de temps du script positionné à '$seconds' secondes", UI_MSG_OK);
-  set_time_limit($seconds);
+  CApp::setTimeLimit($seconds);
   
   // Export réel
   $sejours  = $sejour->loadList($where, $sejour->_spec->key, "0, $max");

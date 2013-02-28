@@ -935,7 +935,7 @@ class CSetupdPcabinet extends CSetup {
     
     
     $this->makeRevision("0.94");
-    set_time_limit(180);
+    CApp::setTimeLimit(180);
     
     // Ajout de du_tiers
     $query = "ALTER TABLE `consultation`

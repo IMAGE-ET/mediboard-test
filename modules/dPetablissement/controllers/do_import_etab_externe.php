@@ -24,7 +24,7 @@ function getNum($value) {
   return preg_replace("/[^0-9]/", "", $value);
 }
  
-set_time_limit(3600);
+CApp::setTimeLimit(3600);
 session_write_close();
 
 if (empty($_FILES["import"]["tmp_name"])) {

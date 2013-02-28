@@ -10,8 +10,8 @@
  * @link     http://www.mediboard.org
  */
 
-set_time_limit(240);
-set_min_memory_limit("712M");
+CApp::setTimeLimit(240);
+CApp::setMemoryLimit("712M");
 
 CCanDo::checkRead();
 

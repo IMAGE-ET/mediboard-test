@@ -7,7 +7,7 @@
  * @author Alexis Granger
  */
 
-set_time_limit(180);
+CApp::setTimeLimit(180);
 
 $_date_min = CValue::getOrSession("_date_min");
 $_date_max = CValue::getOrSession("_date_max");

@@ -14,7 +14,7 @@ if (!class_exists("CMbCodeSniffer")) {
   return;
 }
 
-set_time_limit(600);
+CApp::setTimeLimit(600);
 
 $sniffer = new CMbCodeSniffer;
 $files = $sniffer->getFilesTree();

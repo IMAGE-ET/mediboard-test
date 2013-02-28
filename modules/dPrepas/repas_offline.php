@@ -11,7 +11,7 @@ CCanDo::checkRead();
 
 global $uistyle, $messages, $version;
 
-set_time_limit(90);
+CApp::setTimeLimit(90);
 
 $indexFile  = CValue::post("indexFile"  , 0);
 $style      = CValue::post("style"      , 0);

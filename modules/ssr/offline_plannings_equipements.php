@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-set_min_memory_limit("256M");
+CApp::setMemoryLimit("256M");
 
 $plateau_tech = new CPlateauTechnique();
 $plateau_tech->group_id = CGroups::loadCurrent()->_id;

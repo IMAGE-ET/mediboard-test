@@ -10,7 +10,7 @@
  */
 CCanDo::checkRead();
 
-//set_time_limit(180);
+//CApp::setTimeLimit(180);
 //ini_set("memory_limit", "512M");
 
 $mode = CValue::get("mode", "html");

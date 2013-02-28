@@ -11,8 +11,8 @@
  * @link     http://www.mediboard.org
  */
 
-set_min_memory_limit("640M");
-set_time_limit(120);
+CApp::setMemoryLimit("640M");
+CApp::setTimeLimit(120);
 
 $service_id = CValue::get("service_id");
 $date       = CValue::get("date", mbDate());

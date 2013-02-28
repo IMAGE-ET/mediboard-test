@@ -9,7 +9,7 @@
 
 CCanDo::checkEdit();
 
-set_time_limit(300);
+CApp::setTimeLimit(300);
 
 $show = CValue::get("show", 50);
 

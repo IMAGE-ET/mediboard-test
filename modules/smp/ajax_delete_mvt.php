@@ -65,7 +65,7 @@ CAppUI::stepAjax("Export de $max sur $count objets de type 'CSejour' à partir de
 // Time limit
 $seconds = max($max / 20, 120);
 CAppUI::stepAjax("Limite de temps du script positionné à '$seconds' secondes", UI_MSG_OK);
-set_time_limit($seconds);
+CApp::setTimeLimit($seconds);
 
 // Export réel
 $errors = 0;

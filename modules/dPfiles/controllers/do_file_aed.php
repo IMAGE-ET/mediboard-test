@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-set_time_limit(600);
+CApp::setTimeLimit(600);
 ignore_user_abort(1);
 CValue::setSession(CValue::postOrSession("private"));
 ini_set("upload_max_filesize", CAppUI::conf("dPfiles upload_max_filesize"));

@@ -393,7 +393,7 @@ class CSetupdPpatients extends CSetup {
     // Creation de la table dossier medical
     $this->makeRevision("0.50");
 
-    set_time_limit(60);
+    CApp::setTimeLimit(60);
 
     $this->addDependency("dPcabinet", "0.78");
 

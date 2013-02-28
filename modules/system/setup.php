@@ -535,7 +535,7 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.65");
     function setup_system_addExReferenceFields(){
-      set_time_limit(1800);
+      CApp::setTimeLimit(1800);
       ignore_user_abort(1);
       
       $ds = CSQLDataSource::get("std");
@@ -563,7 +563,7 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.67");
     function setup_system_addExReferenceFields2(){
-      set_time_limit(1800);
+      CApp::setTimeLimit(1800);
       ignore_user_abort(1);
       
       $ds = CSQLDataSource::get("std");
@@ -752,7 +752,7 @@ class CSetupsystem extends CSetup {
               ADD INDEX (`field`)";
     $this->addQuery($query);
     function setup_system_addExReferenceFieldsIndex(){
-      set_time_limit(1800);
+      CApp::setTimeLimit(1800);
       ignore_user_abort(1);
       
       $ds = CSQLDataSource::get("std");
@@ -807,7 +807,7 @@ class CSetupsystem extends CSetup {
     
     $this->makeRevision("1.0.96");
     function setup_system_addExObjectGroupId(){
-      set_time_limit(1800);
+      CApp::setTimeLimit(1800);
       ignore_user_abort(1);
       
       $ds = CSQLDataSource::get("std");

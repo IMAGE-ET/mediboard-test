@@ -11,7 +11,7 @@
 
 CCanDo::checkAdmin();
 ini_set("memory_limit", "2048M");
-set_time_limit(1800);
+CApp::setTimeLimit(1800);
 
 $nomenclature = CValue::get("nomenclature", "ccam");
 

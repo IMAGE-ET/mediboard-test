@@ -12,7 +12,7 @@ global $can;
 
 $can->needsAdmin();
 
-set_time_limit(360);
+CApp::setTimeLimit(360);
 
 $sourcePath = "modules/dPcim10/base/cim10.tar.gz";
 $targetDir = "tmp/cim10";

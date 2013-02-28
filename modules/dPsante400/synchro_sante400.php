@@ -16,7 +16,7 @@ if (CMbRange::in($time, "05:40", "07:00")) {
   return;
 }
 
-set_time_limit(90);
+CApp::setTimeLimit(90);
 
 CRecordSante400::$verbose = CValue::get("verbose");
 

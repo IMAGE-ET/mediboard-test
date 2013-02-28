@@ -10,7 +10,7 @@
 
 CCanDo::checkAdmin();
 
-set_time_limit(1200);
+CApp::setTimeLimit(1200);
 
 function append_user_logs(&$all_logs, $logs) {
   foreach($logs as $_log) {

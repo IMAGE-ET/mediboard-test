@@ -10,8 +10,8 @@
  * @link     http://www.mediboard.org
  */
 
-set_time_limit(240);
-set_min_memory_limit("1024M");
+CApp::setTimeLimit(240);
+CApp::setMemoryLimit("1024M");
 
 /*$profile = 0;
 

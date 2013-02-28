@@ -13,7 +13,7 @@
 
 CCanDo::checkAdmin();
 
-set_min_memory_limit("712M");
+CApp::setMemoryLimit("712M");
 
 $domains_id = CValue::get("domains_id");
 if (!is_array($domains_id)) {

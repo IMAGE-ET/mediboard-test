@@ -14,7 +14,7 @@ $base_object_id = CValue::post("_base_object_id");
 $del            = CValue::post("del");
 $fast           = CValue::post("fast");
 
-set_min_memory_limit("512M");
+CApp::setMemoryLimit("512M");
 
 // If the class is valid
 if (class_exists($objects_class)) {

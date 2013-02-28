@@ -10,7 +10,7 @@
 
 CCanDo::checkAdmin();
 
-set_time_limit(360);
+CApp::setTimeLimit(360);
 ini_set("memory_limit", "128M");
 
 $sourcePath = "modules/dPccam/base/ngap.tar.gz";

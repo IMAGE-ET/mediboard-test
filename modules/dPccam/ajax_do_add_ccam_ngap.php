@@ -9,7 +9,7 @@
 
 CCanDo::checkAdmin();
 
-set_time_limit(360);
+CApp::setTimeLimit(360);
 
 $sourcePath = "modules/dPccam/base/ccam_ngap.tar.gz";
 $targetDir = "tmp/ccam_ngap";

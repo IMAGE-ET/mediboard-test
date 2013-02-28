@@ -16,7 +16,7 @@ require dirname(__FILE__)."/mllp_utils.php";
 
 // Ignores user logout
 ignore_user_abort(true);
-set_time_limit(0);
+CApp::setTimeLimit(0);
 
 global $exit_status, $pid_file, $handler;
 $exit_status = "error";

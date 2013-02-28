@@ -9,7 +9,7 @@
 
 global $m;
 
-set_time_limit(150);
+CApp::setTimeLimit(150);
 
 if (!class_exists("DOMDocument")) {
   trigger_error("sorry, DOMDocument is needed");

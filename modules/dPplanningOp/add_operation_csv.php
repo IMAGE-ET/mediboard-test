@@ -10,7 +10,7 @@
 
 CCanDo::checkAdmin();
 
-set_time_limit(240);
+CApp::setTimeLimit(240);
 
 $file    = isset($_FILES['import']) ? $_FILES['import'] : null;
 

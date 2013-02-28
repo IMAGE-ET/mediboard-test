@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-set_time_limit(240);
+CApp::setTimeLimit(240);
 
 $date_limite = mbDate("- 1 month");
 $qte_limite  = 1000;

@@ -11,7 +11,7 @@
 global $can;
 $can->needsAdmin();
 
-set_time_limit(360);
+CApp::setTimeLimit(360);
 
 $do_delete = CValue::get('do_delete');
 
