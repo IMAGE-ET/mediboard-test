@@ -118,10 +118,12 @@ class CCompteRendu extends CDocumentItem {
       "[FICHE DHE]" => "body"
     ),
     "CPrescription"  => array (
-      "[ENTETE ORDONNANCE]"       => "header",
-      "[PIED DE PAGE ORDONNANCE]" => "footer",
-      "[ENTETE BON]"              => "header",
-      "[PIED DE PAGE BON]"        => "footer"
+      "[ENTETE ORDONNANCE]"           => "header",
+      "[PIED DE PAGE ORDONNANCE]"     => "footer",
+      "[ENTETE ORDONNANCE ALD]"       => "header",
+      "[PIED DE PAGE ORDONNANCE ALD]" => "footer",
+      "[ENTETE BON]"                  => "header",
+      "[PIED DE PAGE BON]"            => "footer"
     ),
   );
   
@@ -260,7 +262,7 @@ class CCompteRendu extends CDocumentItem {
     }
     
     $docs = parent::loadList($where, $order, $limit, $group, $leftjoin);
-    $current_user = CAppUI::$user;
+    $current_user = CMediusers::get();
     $current_user->loadRefFunction();
 
     foreach ($docs as $_doc) {
@@ -823,7 +825,7 @@ class CCompteRendu extends CDocumentItem {
     }
     
     if (!$this->_id) {
-      $this->author_id = CAppUI::$user->_id;
+      $this->author_id = CMediusers::get()->_id;
     }
     
     return parent::store();
@@ -1064,7 +1066,7 @@ class CCompteRendu extends CDocumentItem {
       $file->private = 0;
       $file->file_name  = $this->nom . ".pdf";
       $file->file_type  = "application/pdf";
-      $file->author_id   = CAppUI::$user->_id;
+      $file->author_id   = CMediusers::get()->_id;
       $file->fillFields();
       $file->updateFormFields();
       $file->forceDir();
