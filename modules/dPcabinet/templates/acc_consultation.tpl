@@ -99,7 +99,7 @@ Main.add(function () {
   
   <li><a href="#AntTrait">Antécédents</a></li>
  
-  {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
+  {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
   <li {{if !$mutation_id}}onmousedown="Prescription.reloadPrescSejour('', '{{$consult->sejour_id}}','', '', null, null, null,'', null, false);"{{/if}}>
     <a href="#prescription_sejour">
       Prescription
@@ -144,7 +144,7 @@ Main.add(function () {
 
 
 
-  {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
+  {{if "dPprescription"|module_active && $consult->sejour_id && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
     
   <div id="prescription_sejour" style="display: none;">
     {{if $mutation_id}}

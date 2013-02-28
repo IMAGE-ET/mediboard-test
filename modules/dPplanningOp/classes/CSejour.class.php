@@ -1612,7 +1612,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->_ref_suivi_medical[$_consultation->_datetime] = $_consultation;
     }
 
-    if (CModule::getActive("dPprescription") && $this->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins")) {
+    if (CModule::getActive("dPprescription") && $this->type == "urg" && CAppUI::conf("dPprescription CPrescription prescription_suivi_soins", CGroups::loadCurrent())) {
       $this->loadRefPrescriptionSejour();
       $prescription = $this->_ref_prescription_sejour;
 

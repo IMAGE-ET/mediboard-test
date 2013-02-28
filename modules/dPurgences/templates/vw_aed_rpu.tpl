@@ -651,7 +651,7 @@
       <ul id="tab-dossier" class="control_tabs">
         <li><a href="#antecedents">Antécédents &amp; Traitements</a></li>
         
-        {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
+        {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
           <li {{if $rpu->sejour_id}} onmouseup="Prescription.reloadPrescSejour('', '{{$rpu->sejour_id}}','', '', null, null, null,'');" {{/if}}><a href="#prescription_sejour">Prescription</a></li>
           <li {{if $rpu->sejour_id}} onmouseup="PlanSoins.loadTraitement('{{$rpu->sejour_id}}',null,'','administration');"{{/if}}><a href="#dossier_traitement">Suivi de soins</a></li>
         {{else}}
@@ -698,7 +698,7 @@
       <div id="actes" style="display: none;"> </div>    
       {{/if}}
       
-      {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !$conf.dPprescription.CPrescription.prescription_suivi_soins}}
+      {{if $isPrescriptionInstalled && $modules.dPprescription->_can->read && !"dPprescription CPrescription prescription_suivi_soins"|conf:"CGroups-$g"}}
       <div id="prescription_sejour" style="display: none;">
         <div class="small-info">
           Aucune prescription
