@@ -39,7 +39,6 @@ class CObservationResultSet extends CMbObject {
     $spec = parent::getSpec();
     $spec->table = "observation_result_set";
     $spec->key   = "observation_result_set_id";
-    $spec->measureable = true;
     return $spec;
   }
   

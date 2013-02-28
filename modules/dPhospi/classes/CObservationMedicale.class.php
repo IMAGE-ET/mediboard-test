@@ -34,6 +34,7 @@ class CObservationMedicale extends CMbMetaObject {
     $spec = parent::getSpec();
     $spec->table = 'observation_medicale';
     $spec->key   = 'observation_medicale_id';
+    $spec->measureable = true;
     return $spec;
   }
 

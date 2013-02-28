@@ -38,6 +38,7 @@ class CTransmissionMedicale extends CMbMetaObject {
     $spec = parent::getSpec();
     $spec->table = 'transmission_medicale';
     $spec->key   = 'transmission_medicale_id';
+    $spec->measureable = true;
     return $spec;
   }
 
