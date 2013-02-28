@@ -241,25 +241,27 @@ abstract class CMbString {
   /**
    * Equivalent to htmlspecialchars
    *
-   * @param string $string Input string
-   * @param int    $flags  Flags
+   * @param string $string        Input string
+   * @param int    $flags         Flags
+   * @param bool   $double_encode Enable double encode
    *
    * @return string
    */
-  static function htmlSpecialChars($string, $flags = ENT_COMPAT) {
-    return htmlspecialchars($string, $flags, CApp::$encoding);
+  static function htmlSpecialChars($string, $flags = ENT_COMPAT, $double_encode = true) {
+    return htmlspecialchars($string, $flags, CApp::$encoding, $double_encode);
   }
 
   /**
    * Equivalent to htmlentities
    *
-   * @param string $string Input string
-   * @param int    $flags  Flags
+   * @param string $string        Input string
+   * @param int    $flags         Flags
+   * @param bool   $double_encode Enable double encode
    *
    * @return string
    */
-  static function htmlEntities($string, $flags = ENT_COMPAT) {
-    return htmlentities($string, $flags, CApp::$encoding);
+  static function htmlEntities($string, $flags = ENT_COMPAT, $double_encode = true) {
+    return htmlentities($string, $flags, CApp::$encoding, $double_encode);
   }
 
   /**
