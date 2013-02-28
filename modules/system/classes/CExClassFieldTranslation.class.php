@@ -1,27 +1,28 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClassFieldTranslation extends CMbObject {
-  var $ex_class_field_translation_id = null;
+  public $ex_class_field_translation_id;
   
-  var $ex_class_field_id = null;
-  var $lang = null;
+  public $ex_class_field_id;
+  public $lang;
   
-  var $std   = null;
-  var $desc  = null;
-  var $court = null;
+  public $std;
+  public $desc;
+  public $court;
 
   /**
    * @var CExClassField
    */
-  var $_ref_ex_class_field = null;
+  public $_ref_ex_class_field;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -49,6 +50,7 @@ class CExClassFieldTranslation extends CMbObject {
   
   /**
    * @param integer $field_id
+   *
    * @return CExClassFieldTranslation
    */
   static function tr($field_id) {
@@ -94,6 +96,7 @@ class CExClassFieldTranslation extends CMbObject {
   
   /**
    * @param bool $cache [optional]
+   *
    * @return CExClassField
    */
   function loadRefExClassField($cache = true){

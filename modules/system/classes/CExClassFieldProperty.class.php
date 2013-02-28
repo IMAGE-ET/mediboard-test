@@ -1,30 +1,31 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClassFieldProperty extends CMbMetaObject {
-  var $ex_class_field_property_id = null;
+  public $ex_class_field_property_id;
 
-  var $type              = null;
-  var $value             = null;
-  var $_value            = null;
-  var $predicate_id      = null;
+  public $type;
+  public $value;
+  public $_value;
+  public $predicate_id;
   
   /**
    * @var CExClassField|CExClassMessage|CExClassFieldSubgroup
    */
-  var $_ref_object = null;
+  public $_ref_object;
   
   /**
    * @var CExClassFieldPredicate
    */
-  var $_ref_predicate = null;
+  public $_ref_predicate;
   
   static $_style_types = array(
     "background-color" => "color",
@@ -89,7 +90,9 @@ class CExClassFieldProperty extends CMbMetaObject {
   }
 
   /**
-   * @param CExClassField|CExClassMessage|CExClassFieldSubgroup $object
+   * Get default styles
+   *
+   * @param CExClassField|CExClassMessage|CExClassFieldSubgroup $object Object to get the default styles of
    *
    * @return array
    */

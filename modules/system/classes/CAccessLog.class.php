@@ -1,42 +1,43 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CAccessLog extends CMbObject {
-  var $accesslog_id = null;
+  public $accesslog_id;
   
   // DB Fields
-  var $module      = null;
-  var $action      = null;
-  var $period      = null;
-  var $hits        = null;
-  var $duration    = null;
-  var $processus   = null;
-  var $processor   = null;
-  var $request     = null;
-  var $peak_memory = null;
-  var $size        = null;
-  var $errors      = null;
-  var $warnings    = null;
-  var $notices     = null;
+  public $module;
+  public $action;
+  public $period;
+  public $hits;
+  public $duration;
+  public $processus;
+  public $processor;
+  public $request;
+  public $peak_memory;
+  public $size;
+  public $errors;
+  public $warnings;
+  public $notices;
   
   // Form fields
-  var $_average_hits        = 0;
-  var $_average_duration    = 0;
-  var $_average_processus   = 0;
-  var $_average_processor   = 0;
-  var $_average_request     = 0;
-  var $_average_peak_memory = 0;
-  var $_average_size        = 0;
-  var $_average_errors      = 0;
-  var $_average_warnings    = 0;
-  var $_average_notices     = 0;
+  public $_average_hits        = 0;
+  public $_average_duration    = 0;
+  public $_average_processus   = 0;
+  public $_average_processor   = 0;
+  public $_average_request     = 0;
+  public $_average_peak_memory = 0;
+  public $_average_size        = 0;
+  public $_average_errors      = 0;
+  public $_average_warnings    = 0;
+  public $_average_notices     = 0;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -69,6 +70,7 @@ class CAccessLog extends CMbObject {
   
   /**
    * Fast store using ON DUPLICATE KEY UPDATE MySQL feature
+   *
    * @return string Store-like message
    */
   function fastStore() {
@@ -138,10 +140,15 @@ class CAccessLog extends CMbObject {
     }
     
     switch ($groupmod) {
-      case 2 :  $query .= "GROUP BY grouping "; break;
-      case 1 :  $query .= "GROUP BY module ORDER BY module "; break;
-      case 0 :  $query .= "GROUP BY module, action ORDER BY module, action "; break;
-
+      case 2 :
+        $query .= "GROUP BY grouping ";
+        break;
+      case 1 :
+        $query .= "GROUP BY module ORDER BY module ";
+        break;
+      case 0 :
+        $query .= "GROUP BY module, action ORDER BY module, action ";
+        break;
     }
     
     if ($DBorNotDB) {
@@ -160,9 +167,15 @@ class CAccessLog extends CMbObject {
       }
       
       switch ($groupmod) {
-        case 2 :  $query .= "GROUP BY grouping "; break;
-        case 1 :  $query .= "GROUP BY module ORDER BY module "; break;
-        case 0 :  $query .= "GROUP BY module, action ORDER BY module, action "; break;
+        case 2:
+          $query .= "GROUP BY grouping ";
+          break;
+        case 1:
+          $query .= "GROUP BY module ORDER BY module ";
+          break;
+        case 0:
+          $query .= "GROUP BY module, action ORDER BY module, action ";
+          break;
       }
       
       $log = new self;
@@ -199,8 +212,13 @@ class CAccessLog extends CMbObject {
       USE INDEX (period)
       WHERE `period` BETWEEN '$start' AND '$end'";
       
-    if ($module_name) $query .= "\nAND `module` = '$module_name'";
-    if ($action_name) $query .= "\nAND `action` = '$action_name'";
+    if ($module_name) {
+      $query .= "\nAND `module` = '$module_name'";
+    }
+
+    if ($action_name) {
+      $query .= "\nAND `action` = '$action_name'";
+    }
     
     $query .= "\nGROUP BY `gperiod` ORDER BY `period`";
     
@@ -218,8 +236,13 @@ class CAccessLog extends CMbObject {
       WHERE `access_log`.`period` BETWEEN '$start' AND '$end'
         AND `access_log`.`accesslog_id` = `datasource_log`.`accesslog_id`";
         
-      if ($module_name) $query .= "\nAND `access_log`.`module` = '$module_name'";
-      if ($action_name) $query .= "\nAND `access_log`.`action` = '$action_name'";
+      if ($module_name) {
+        $query .= "\nAND `access_log`.`module` = '$module_name'";
+      }
+
+      if ($action_name) {
+        $query .= "\nAND `access_log`.`action` = '$action_name'";
+      }
       
       $query .= "\nGROUP BY `gperiod`, `datasource_log`.`datasource` ORDER BY `period`";
       
@@ -231,4 +254,3 @@ class CAccessLog extends CMbObject {
     return $log->loadQueryList($query);
   }
 }
-?>

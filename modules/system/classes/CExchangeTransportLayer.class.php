@@ -1,34 +1,33 @@
 <?php
-
 /**
  * Exchange Transport Layer
- *  
- * @category system
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExchangeTransportLayer extends CMbObject {
   // DB Fields
-  var $emetteur           = null;
-  var $destinataire       = null;
-  var $date_echange       = null;
-  var $function_name      = null;
-  var $input              = null;
-  var $output             = null;
-  var $purge              = null;
-  var $response_time      = null;
+  public $emetteur;
+  public $destinataire;
+  public $date_echange;
+  public $function_name;
+  public $input;
+  public $output;
+  public $purge;
+  public $response_time;
     
   // Form fields
-  var $_self_sender   = null;
-  var $_self_receiver = null;
+  public $_self_sender;
+  public $_self_receiver;
   
   // Filter fields
-  var $_date_min          = null;
-  var $_date_max          = null;
+  public $_date_min;
+  public $_date_max;
   
   function getProps() {
     $props = parent::getProps();
@@ -59,6 +58,3 @@ class CExchangeTransportLayer extends CMbObject {
     $this->response_time = $this->response_time * 1000;
   }  
 }
-
-
-?>

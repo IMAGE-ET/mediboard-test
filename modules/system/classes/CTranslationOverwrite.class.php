@@ -1,33 +1,22 @@
 <?php
-
 /**
  * Overwrite a locale for an instance
+ * $Id$
  *
- * @category System
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:\$
- * @link     http://www.mediboard.org
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-/**
- * Description
- */
 class CTranslationOverwrite extends CMbObject {
-
-  /**
-   * Table Key
-   *
-   * @var integer
-   */
   public $translation_id;
 
-  var $source;
-  var $translation;
-  var $language;
-  var $_old_translation;
-
+  public $source;
+  public $translation;
+  public $language;
+  public $_old_translation;
 
   /**
    * Initialize the class specifications
@@ -80,10 +69,9 @@ class CTranslationOverwrite extends CMbObject {
    */
   function getProps() {
     $props = parent::getProps();
-    $props["source"]        = "str notNull";
-    $props["language"]      = "enum notNull list|".implode('|', CAppUI::getAvailableLanguages())." default|fr";
-    $props["translation"]   = "text notNull";
+    $props["source"]      = "str notNull";
+    $props["language"]    = "enum notNull list|".implode('|', CAppUI::getAvailableLanguages())." default|fr";
+    $props["translation"] = "text notNull";
     return $props;
   }
-
 }

@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,28 +14,28 @@
  */
 class CUserLog extends CMbMetaObject {
   // DB Table key
-  var $user_log_id = null;
+  public $user_log_id;
 
   // DB Fields
-  var $user_id      = null;
-  var $date         = null;
-  var $type         = null;
-  var $fields       = null;
-  var $ip_address   = null;
-  var $extra        = null;
+  public $user_id;
+  public $date;
+  public $type;
+  public $fields;
+  public $ip_address;
+  public $extra;
   
   // Filter Fields
-  var $_date_min    = null;
-  var $_date_max    = null;
+  public $_date_min;
+  public $_date_max;
   
   // Object References
-  var $_fields = null;
-  var $_old_values = null;
-  var $_ref_user = null;
-  var $_canUndo = null;
-  var $_undo = null;
+  public $_fields;
+  public $_old_values;
+  public $_ref_user;
+  public $_canUndo;
+  public $_undo;
   
-  var $_merged_ids = null; // Tableau d'identifiants des objets fusionnés
+  public $_merged_ids; // Tableau d'identifiants des objets fusionnés
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -46,19 +47,19 @@ class CUserLog extends CMbMetaObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["object_id"]    = "ref notNull class|CMbObject meta|object_class unlink";
-    $specs["object_class"] = "str notNull show|0"; // Ne pas mettre "class" !! (pour les CExObject)
-    $specs["user_id"]      = "ref notNull class|CUser";
-    $specs["date"]         = "dateTime notNull";
-    $specs["type"]         = "enum notNull list|create|store|merge|delete";
-    $specs["fields"]       = "text show|0";
-    $specs["ip_address"]   = "ipAddress";
-    $specs["extra"]        = "text show|0";
+    $props = parent::getProps();
+    $props["object_id"]    = "ref notNull class|CMbObject meta|object_class unlink";
+    $props["object_class"] = "str notNull show|0"; // Ne pas mettre "class" !! (pour les CExObject)
+    $props["user_id"]      = "ref notNull class|CUser";
+    $props["date"]         = "dateTime notNull";
+    $props["type"]         = "enum notNull list|create|store|merge|delete";
+    $props["fields"]       = "text show|0";
+    $props["ip_address"]   = "ipAddress";
+    $props["extra"]        = "text show|0";
 
-    $specs["_date_min"]    = "dateTime";
-    $specs["_date_max"]    = "dateTime moreEquals|_date_min";
-    return $specs;
+    $props["_date_min"]    = "dateTime";
+    $props["_date_max"]    = "dateTime moreEquals|_date_min";
+    return $props;
   }
   
   function updateFormFields() {
@@ -88,6 +89,7 @@ class CUserLog extends CMbMetaObject {
   
   /**
    * @param bool $cache [optional]
+   *
    * @return CUser
    */
   function loadRefUser($cache = true) {
@@ -117,7 +119,7 @@ class CUserLog extends CMbMetaObject {
       );
       $logs = $this->loadList($where);
       
-      foreach($logs as $_log){
+      foreach ($logs as $_log) {
         $this->_merged_ids[] = $_log->object_id;
       }
     }
@@ -210,7 +212,7 @@ class CUserLog extends CMbMetaObject {
     $this->getOldValues();
     
     // Revalue fields
-    foreach($this->_old_values as $_field => $_value) {
+    foreach ($this->_old_values as $_field => $_value) {
       $object->$_field = $_value;
     }
     $object->updateFormFields();

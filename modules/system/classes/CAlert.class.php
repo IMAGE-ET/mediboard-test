@@ -1,11 +1,12 @@
-<?php /* $Id: $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,13 +14,13 @@
  */
 class CAlert extends CMbMetaObject {
   // DB Table key
-  var $alert_id = null;
+  public $alert_id;
   
   // DB Fields
-  var $tag      = null;
-  var $level    = null;
-  var $comments = null;
-  var $handled  = null;
+  public $tag;
+  public $level;
+  public $comments;
+  public $handled;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -29,14 +30,12 @@ class CAlert extends CMbMetaObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["tag"]      = "str notNull";
-    $specs["level"]    = "enum list|low|medium|high default|medium notNull";
-    $specs["comments"] = "text";
-    $specs["handled"]  = "bool notNull default|0";
-    $specs["object_id"] .= " cascade";
-    return $specs;
+    $props = parent::getProps();
+    $props["tag"]      = "str notNull";
+    $props["level"]    = "enum list|low|medium|high default|medium notNull";
+    $props["comments"] = "text";
+    $props["handled"]  = "bool notNull default|0";
+    $props["object_id"] .= " cascade";
+    return $props;
   }
 }
-
-?>

@@ -1,34 +1,34 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
- * 
- * Classe CNote. 
+ * Classe CNote.
+ *
  * @abstract Permet de créer des notes sur n'importe quel objet
  */
-
 class CNote extends CMbMetaObject {
   // DB Table key
-  var $note_id = null;	
-  
+  public $note_id;
+
   // DB Fields
-  var $user_id      = null;
-  var $public       = null;
-  var $degre        = null;
-  var $date         = null;
-  var $libelle      = null;
-  var $text         = null;
-  
+  public $user_id;
+  public $public;
+  public $degre;
+  public $date;
+  public $libelle;
+  public $text;
+
   // References
-  var $_ref_user   = null;
-  
+  public $_ref_user;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'note';
@@ -37,33 +37,31 @@ class CNote extends CMbMetaObject {
   }
 
   function getProps() {
-  	$specs = parent::getProps();
-    $specs["user_id"]      = "ref class|CMediusers";
-    $specs["public"]       = "bool notNull";
-    $specs["degre"]        = "enum notNull list|low|medium|high default|low";
-    $specs["date"]         = "dateTime notNull";
-    $specs["libelle"]      = "str notNull";
-    $specs["text"]         = "text";
-    $specs["object_id"]   .= " cascade";
-    return $specs;
+    $props = parent::getProps();
+    $props["user_id"]    = "ref class|CMediusers";
+    $props["public"]     = "bool notNull";
+    $props["degre"]      = "enum notNull list|low|medium|high default|low";
+    $props["date"]       = "dateTime notNull";
+    $props["libelle"]    = "str notNull";
+    $props["text"]       = "text";
+    $props["object_id"] .= " cascade";
+    return $props;
   }
-  
+
   function loadRefsFwd() {
-  	parent::loadRefsFwd();
+    parent::loadRefsFwd();
     $this->_ref_user = new CMediusers;
     $this->_ref_user->load($this->user_id);
     $this->_view = "Note écrite par ".$this->_ref_user->_view;
   }
-  
+
   function getPerm($perm) {
-    if(!isset($this->_ref_object->_id)) {
+    if (!isset($this->_ref_object->_id)) {
       $this->loadRefsFwd();
     }
     return $this->public ?
       $this->_ref_object->getPerm($perm) :
       $this->_ref_object->getPerm($perm) && $this->_ref_user->getPerm($perm);
   }
-  
-}
 
-?>
+}

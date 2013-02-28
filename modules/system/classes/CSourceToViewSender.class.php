@@ -1,33 +1,34 @@
-<?php /* $Id: message.class.php 8208 2010-03-04 19:14:03Z lryo $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 8208 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CSourceToViewSender extends CMbObject {
   // DB Table key
-  var $source_to_view_sender_id = null; 
-  
+  public $source_to_view_sender_id;
+
   // DB fields
-  var $source_id = null;
-  var $sender_id = null;
-  var $last_datetime = null;
-  var $last_duration = null;
-  var $last_size     = null;
-  var $last_status   = null;
-  var $last_count    = null;
-    
+  public $source_id;
+  public $sender_id;
+  public $last_datetime;
+  public $last_duration;
+  public $last_size;
+  public $last_status;
+  public $last_count;
+
   // Form fields
-  var $_last_age = null;
-  
+  public $_last_age;
+
   // Object references
-  var $_ref_source = null;
-  var $_ref_sender = null;
-    
+  public $_ref_source;
+  public $_ref_sender;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "source_to_view_sender";
@@ -38,27 +39,25 @@ class CSourceToViewSender extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["sender_id"] = "ref class|CViewSender notNull autocomplete|name";
-    $props["source_id"] = "ref class|CViewSenderSource notNull autocomplete|name";
+    $props["sender_id"]     = "ref class|CViewSender notNull autocomplete|name";
+    $props["source_id"]     = "ref class|CViewSenderSource notNull autocomplete|name";
     $props["last_datetime"] = "dateTime";
     $props["last_duration"] = "float";
-    $props["last_size"    ] = "num min|0";
-    $props["last_status"  ] = "enum list|triggered|uploaded|checked";
-    $props["last_count"   ] = "num min|0";
+    $props["last_size"]     = "num min|0";
+    $props["last_status"]   = "enum list|triggered|uploaded|checked";
+    $props["last_count"]    = "num min|0";
 
-    $props["_last_age"   ] = "num";
+    $props["_last_age"]     = "num";
     return $props;
   }
-  
+
   function loadRefSender() {
-    $sender = $this->loadFwdRef("sender_id", 1);
+    $sender = $this->loadFwdRef("sender_id", true);
     $this->_last_age = mbMinutesRelative($this->last_datetime, mbDateTime());
-  	return $this->_ref_sender = $sender;
+    return $this->_ref_sender = $sender;
   }
-  
+
   function loadRefSource() {
-    return $this->_ref_source = $this->loadFwdRef("source_id", 1);
+    return $this->_ref_source = $this->loadFwdRef("source_id", true);
   }
 }
-
-?>

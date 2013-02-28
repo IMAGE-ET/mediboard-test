@@ -3,7 +3,7 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage system
+ * @subpackage System
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
@@ -12,10 +12,10 @@
 class CConfiguration extends CMbMetaObject {
   const INHERIT = "@@INHERIT@@";
 
-  var $configuration_id = null;
+  public $configuration_id;
 
-  var $feature          = null;
-  var $value            = null;
+  public $feature;
+  public $value;
 
   // The BIG config model
   private static $model_raw = array();
@@ -329,9 +329,9 @@ class CConfiguration extends CMbMetaObject {
   }
 
   /**
-   * @param $path
-   * @param $value
-   * @param $tree
+   * @param string $path  Config path
+   * @param string $value Config value
+   * @param array  $tree  Subtree
    */
   static protected function _unflattenFeatureList($path, $value, &$tree) {
     $level = array_shift($path);
@@ -460,10 +460,10 @@ class CConfiguration extends CMbMetaObject {
   /**
    * Recursive method to build the object tree
    *
-   * @param      $subtree
-   * @param      $classes
-   * @param null $parent_fwd
-   * @param null $parent_id
+   * @param array  $subtree
+   * @param array  $classes
+   * @param string $parent_fwd
+   * @param int    $parent_id
    */
   static protected function _getObjectTree(&$subtree, $classes, $parent_fwd = null, $parent_id = null) {
     if (empty($classes)) {
@@ -483,9 +483,7 @@ class CConfiguration extends CMbMetaObject {
       $where[$parent_fwd] = "= '$parent_id'";
     }
 
-    /**
-     * @var CMbObject
-     */
+    /** @var CMbObject $_obj */
     $_obj = new $class;
 
     // Attention il faut generer les configurations de TOUS les objets, donc ne pas utiliser loadListWitfPerms

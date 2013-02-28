@@ -1,32 +1,34 @@
-<?php /** $Id$ **/
-
+<?php
 /**
- * @package Mediboard
- * @subpackage messagerie
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
+
 class CSourcePOP extends CExchangeSource {
 
   /* KEY */
-  var $source_pop_id = null;
+  public $source_pop_id;
 
   // DB Fields
-  var $host           = null;
-  var $port           = null;
-  var $auth_ssl       = null;
-  var $timeout        = null; //seconds
-  var $type           = null;
-  var $libelle        = null;
+  public $host;
+  public $port;
+  public $auth_ssl;
+  public $timeout; //seconds
+  public $type;
+  public $libelle;
 
-  var $last_update    = null;
-  var $object_class   = null;
-  var $object_id      = null;
+  public $last_update;
+  public $object_class;
+  public $object_id;
 
-  var $_mailbox       = null; //ressource id
-  var $_server        = null; //string of server for imap
-  var $_mailbox_info  = null;
+  public $_mailbox; //ressource id
+  public $_server; //string of server for imap
+  public $_mailbox_info;
 
   /**
    * table spec

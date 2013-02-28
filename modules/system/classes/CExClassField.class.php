@@ -1,99 +1,100 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClassField extends CExListItemsOwner {
-  var $ex_class_field_id = null;
+  public $ex_class_field_id;
 
-  var $ex_group_id  = null;
-  var $subgroup_id  = null;
-  var $name         = null; // != object_class, object_id, ex_ClassName_event_id,
-  var $prop         = null;
-  //var $report_level = null;
-  var $report_class = null;
-  var $concept_id   = null;
-  var $predicate_id = null;
-  var $prefix       = null;
-  var $suffix       = null;
-  var $show_label   = null;
-  var $tab_index    = null;
+  public $ex_group_id;
+  public $subgroup_id;
+  public $name; // != object_class, object_id, ex_ClassName_event_id,
+  public $prop;
+  //public $report_level;
+  public $report_class;
+  public $concept_id;
+  public $predicate_id;
+  public $prefix;
+  public $suffix;
+  public $show_label;
+  public $tab_index;
 
-  var $formula      = null;
-  var $_formula     = null;
-  var $result_in_title = null;
+  public $formula;
+  public $_formula;
+  public $result_in_title;
 
-  var $coord_field_x = null;
-  var $coord_field_y = null;
-  //var $coord_field_colspan = null; 
-  //var $coord_field_rowspan = null; 
+  public $coord_field_x;
+  public $coord_field_y;
+  //public $coord_field_colspan;
+  //public $coord_field_rowspan;
 
-  var $coord_label_x = null;
-  var $coord_label_y = null;
+  public $coord_label_x;
+  public $coord_label_y;
 
   // Pixel positionned
-  var $coord_left    = null;
-  var $coord_top     = null;
-  var $coord_width   = null;
-  var $coord_height  = null;
+  public $coord_left;
+  public $coord_top;
+  public $coord_width;
+  public $coord_height;
 
-  var $_locale = null;
-  var $_locale_desc = null;
-  var $_locale_court = null;
+  public $_locale;
+  public $_locale_desc;
+  public $_locale_court;
 
-  var $_triggered_data = null;
+  public $_triggered_data;
 
   /**
    * @var CExClassFieldGroup
    */
-  var $_ref_ex_group = null;
+  public $_ref_ex_group;
 
   /**
    * @var CExClass
    */
-  var $_ref_ex_class = null;
+  public $_ref_ex_class;
 
   /**
    * @var CExClassFieldTranslation[]
    */
-  var $_ref_translation = null;
+  public $_ref_translation;
 
   /**
    * @var CExClassFieldPredicate[]
    */
-  var $_ref_predicates = null;
+  public $_ref_predicates;
 
   /**
    * @var CExClassFieldProperty[]
    */
-  var $_ref_properties = null;
+  public $_ref_properties;
 
   /**
    * @var CExClassFieldPredicate
    */
-  var $_ref_predicate = null;
+  public $_ref_predicate;
 
   /**
    * @var CExConcept
    */
-  var $_ref_concept = null;
+  public $_ref_concept;
 
   /**
    * @var CMbFieldSpec
    */
-  var $_spec_object = null;
+  public $_spec_object;
 
-  var $_ex_class_id = null;
-  var $_default_properties = null;
-  var $_no_size = false;
-  var $_make_unique_name = true;
+  public $_ex_class_id;
+  public $_default_properties;
+  public $_no_size = false;
+  public $_make_unique_name = true;
 
-  var $_dont_drop_column = null;
+  public $_dont_drop_column;
 
   static $_load_lite = false;
 

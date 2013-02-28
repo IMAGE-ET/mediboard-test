@@ -1,22 +1,23 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CTagItem extends CMbMetaObject {
-  var $tag_item_id = null;
+  public $tag_item_id;
   
-  var $tag_id = null;
+  public $tag_id;
   
   /**
    * @var CTag
    */
-  var $_ref_tag = null;
+  public $_ref_tag;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -48,7 +49,7 @@ class CTagItem extends CMbMetaObject {
   }
   
   function check(){
-    if ($msg = parent::check()){
+    if ($msg = parent::check()) {
       return $msg;
     }
     

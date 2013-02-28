@@ -1,11 +1,12 @@
-<?php /* $Id: message.class.php 8208 2010-03-04 19:14:03Z lryo $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 8208 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -14,22 +15,22 @@
  */
 class CViewSenderSource extends CMbObject {
   // DB Table key
-  var $source_id = null; 
+  public $source_id;
   
   // DB fields
-  var $name      = null;
-  var $libelle   = null;
-  var $group_id  = null;
-  var $actif     = null;
-  var $archive   = null;
+  public $name;
+  public $libelle;
+  public $group_id;
+  public $actif;
+  public $archive;
   
   // Form fields
-  var $_type_echange   = null;
-  var $_ref_source_ftp = null;
-  var $_reachable      = null;
+  public $_type_echange;
+  public $_ref_source_ftp;
+  public $_reachable;
   
   // Distant refs
-  var $_ref_senders = null;
+  public $_ref_senders;
       
   function getSpec() {
     $spec = parent::getSpec();
@@ -52,9 +53,9 @@ class CViewSenderSource extends CMbObject {
   }
   
   function getBackProps() {
-    return parent::getBackProps() + array(
-      "senders_link" => "CSourceToViewSender source_id",
-    );
+    $backProps = parent::getBackProps();
+    $backProps["senders_link"] = "CSourceToViewSender source_id";
+    return $backProps;
   }
   
   function updateFormFields() {
@@ -77,5 +78,3 @@ class CViewSenderSource extends CMbObject {
     return $this->_ref_senders = CMbObject::massLoadFwdRef($senders_link, "sender_id");
   }
 }
-
-?>

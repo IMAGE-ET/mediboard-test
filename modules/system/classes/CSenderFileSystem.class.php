@@ -1,14 +1,13 @@
 <?php
-
 /**
  * Interop Sender File System
- *  
- * @category system
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -17,7 +16,7 @@
  */
 class CSenderFileSystem extends CInteropSender {
   // DB Table key
-  var $sender_file_system_id = null;
+  public $sender_file_system_id;
     
   function getSpec() {
     $spec = parent::getSpec();
@@ -49,5 +48,3 @@ class CSenderFileSystem extends CInteropSender {
     $this->loadRefsExchangesSources();
   }
 }
-
-?>

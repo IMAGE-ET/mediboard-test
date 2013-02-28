@@ -1,11 +1,12 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 6069 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 CAppUI::requireLibraryFile("phpmailer/class.phpmailer");
@@ -13,17 +14,17 @@ CAppUI::requireLibraryFile("phpmailer/class.smtp");
 
 class CSourceSMTP extends CExchangeSource {
   // DB Table key
-  var $source_smtp_id = null;
+  public $source_smtp_id;
   
   // DB Fields
-  var $port     = null;
-  var $email    = null;
-  var $auth     = null;
-  var $ssl      = null;
-  var $timeout  = null;
-  var $debug    = null;
+  public $port;
+  public $email;
+  public $auth;
+  public $ssl;
+  public $timeout;
+  public $debug;
   
-  var $_mail    = null;
+  public $_mail;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -82,9 +83,10 @@ class CSourceSMTP extends CExchangeSource {
   /**
    * Set a supposably unique to-address
    * 
-   * @param $adress E-mail address
-   * @param $name   Display name
-   * @return bool   Job done
+   * @param string $address E-mail address
+   * @param string $name    Display name
+   *
+   * @return bool Job done
    */
   function setRecipient($address, $name = '') {
     return $this->_mail->AddAddress($address, $name);
@@ -93,9 +95,10 @@ class CSourceSMTP extends CExchangeSource {
   /**
    * Add a to-address
    * 
-   * @param $adress E-mail address
-   * @param $name   Display name
-   * @return bool   Job done
+   * @param string $address E-mail address
+   * @param string $name    Display name
+   *
+   * @return bool  Job done
    */
   function addTo($address, $name = '') {
     return $this->_mail->AddAddress($address, $name);
@@ -103,10 +106,12 @@ class CSourceSMTP extends CExchangeSource {
   
   /**
    * Add a cc-address
-   * 
-   * @param $adress E-mail address
-   * @param $name   Display name
-   * @return bool   Job done
+   *
+   * @param string $address E-mail address
+   * @param string $name    Display name
+   *
+   * @return bool
+   * Job done
    */
   function addCc($address, $name = '') {
     return $this->_mail->AddCC($address, $name);
@@ -114,11 +119,11 @@ class CSourceSMTP extends CExchangeSource {
 
   /**
    * Add a bcc-address
-   * 
-   * @param string $adress E-mail address
-   * @param string $name   Display name
    *
-   * @return boolean   Job done
+   * @param string $address E-mail address
+   * @param string $name    Display name
+   *
+   * @return boolean Job done
    */
   function addBcc($address, $name = '') {
     return $this->_mail->AddBCC($address, $name);
@@ -126,10 +131,11 @@ class CSourceSMTP extends CExchangeSource {
   
   /**
    * Add a replyto-address
-   * 
-   * @param $adress E-mail address
-   * @param $name   Display name
-   * @return bool   Job done
+   *
+   * @param string $address E-mail address
+   * @param string $name    Display name
+   *
+   * @return bool Job done
    */
   function addRe($address, $name = '') {
     return $this->_mail->AddReplyTo($address, $name);
@@ -156,8 +162,7 @@ class CSourceSMTP extends CExchangeSource {
     try {
       $this->_mail->send();
     } catch(phpmailerException $e) {
-     throw $e;
+      throw $e;
     }
   }
 }
-?>

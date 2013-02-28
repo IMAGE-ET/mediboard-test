@@ -1,11 +1,12 @@
-<?php /* $Id: message.class.php 8208 2010-03-04 19:14:03Z lryo $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 8208 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -17,32 +18,32 @@
  */
 class CViewSender extends CMbObject {
   // DB Table key
-  var $sender_id = null; 
+  public $sender_id;
   
   // DB fields
-  var $name          = null;
-  var $description   = null;
-  var $params        = null;
-  var $period        = null;
-  var $offset        = null;
-  var $active        = null;
-  var $max_archives  = null;
-  var $last_duration = null;
-  var $last_size     = null;
+  public $name;
+  public $description;
+  public $params;
+  public $period;
+  public $offset;
+  public $active;
+  public $max_archives;
+  public $last_duration;
+  public $last_size;
   
   // Form fields
-  var $_params = null;
-  var $_when   = null;
-  var $_active = null;
-  var $_url    = null;
-  var $_file   = null;
-  var $_file_compressed = null;
+  public $_params;
+  public $_when;
+  public $_active;
+  public $_url;
+  public $_file;
+  public $_file_compressed;
   
   // Distant properties
-  var $_hour_plan = null;
+  public $_hour_plan;
   
   // Object references
-  var $_ref_senders_source;
+  public $_ref_senders_source;
     
   function getSpec() {
     $spec = parent::getSpec();
@@ -71,16 +72,16 @@ class CViewSender extends CMbObject {
   }
 
   function getBackProps() {
-    return parent::getBackProps() + array(
-      "sources_link" => "CSourceToViewSender sender_id",
-    );
+    $backProps = parent::getBackProps();
+    $backProps["sources_link"] = "CSourceToViewSender sender_id";
+    return $backProps;
   }
   
   function updateFormFields() {
     parent::updateFormFields();
 
-    $this->_view         = $this->name;
-    $this->_when         = "$this->period mn + $this->offset";
+    $this->_view = $this->name;
+    $this->_when = "$this->period mn + $this->offset";
 
     // Parse parameters
     $params = strtr($this->params, array("\r\n" => "&", "\n" => "&", " " => "")); 
@@ -92,7 +93,7 @@ class CViewSender extends CMbObject {
     $offset = intval($this->offset);
     $minute = intval($minute);
     
-    return $this->_active =  $minute % $period == $offset;
+    return $this->_active = $minute % $period == $offset;
   }
   
   function makeHourPlan($minute = null) {
@@ -113,7 +114,8 @@ class CViewSender extends CMbObject {
   }
 
   function loadRefSendersSource() {
-    $senders_source = $this->loadBackRefs("sources_link"); 
+    $senders_source = $this->loadBackRefs("sources_link");
+
     foreach ($senders_source as $_sender_source) {
       $_sender_source->loadRefSource()->loadRefSourceFTP();
     }

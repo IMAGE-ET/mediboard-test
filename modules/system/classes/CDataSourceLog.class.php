@@ -1,27 +1,25 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 16292 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CDataSourceLog extends CMbObject {
   // DB Table Key
-  var $datasourcelog_id = null;
+  public $datasourcelog_id;
   
   // DB Fields
-  var $datasource       = null;
-  var $requests         = null;
-  var $duration         = null;
+  public $datasource;
+  public $requests;
+  public $duration;
   
   // Object Reference
-  var $accesslog_id     = null;
-  
-  // Form fields
-  
+  public $accesslog_id;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -46,13 +44,18 @@ class CDataSourceLog extends CMbObject {
    * @return string Store-like message
    */
   function fastStore() {
+    $columns = array();
+    $inserts = array();
+    $updates = array();
+
     $fields = $this->getPlainFields();
     unset($fields[$this->_spec->key]);
     foreach ($fields as $_name => $_value) {
       $columns[] = "$_name";
       $inserts[] = "'$_value'";
+
       if (!in_array($_name, array("datasource", "accesslog_id"))) {
-          $updates[] = "$_name = $_name + '$_value'";
+        $updates[] = "$_name = $_name + '$_value'";
       }
     }
     
@@ -68,10 +71,6 @@ class CDataSourceLog extends CMbObject {
     if (!$ds->exec($query)) {
       return $ds->error();
     }
-  }
-  
-  function updateFormFields() {
-    parent::updateFormFields();
   }
   
   /*
@@ -148,4 +147,3 @@ class CDataSourceLog extends CMbObject {
   }
   */
 }
-?>

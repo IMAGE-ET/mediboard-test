@@ -1,57 +1,58 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClassFieldSubgroup extends CMbObject {
-  var $ex_class_field_subgroup_id = null;
+  public $ex_class_field_subgroup_id;
   
-  var $parent_class = null;
-  var $parent_id    = null;
-  var $title        = null;
-  var $predicate_id = null;
+  public $parent_class;
+  public $parent_id;
+  public $title;
+  public $predicate_id;
   
-  var $coord_left   = null;
-  var $coord_top    = null;
-  var $coord_width  = null;
-  var $coord_height = null;
+  public $coord_left;
+  public $coord_top;
+  public $coord_width;
+  public $coord_height;
 
   /**
    * @var CExClassFieldSubgroup|CExClassFieldGroup
    */
-  var $_ref_parent;
+  public $_ref_parent;
 
   /**
    * @var CExClassFieldPredicate
    */
-  var $_ref_predicate;
+  public $_ref_predicate;
 
   /**
    * @var CExClassFieldSubgroup[]
    */
-  var $_ref_children_groups;
+  public $_ref_children_groups;
 
   /**
    * @var CExClassField[]
    */
-  var $_ref_children_fields;
+  public $_ref_children_fields;
 
   /**
    * @var CExClassMessage[]
    */
-  var $_ref_children_messages;
+  public $_ref_children_messages;
 
   /**
    * @var CExClassFieldProperty[]
    */
-  var $_ref_properties;
+  public $_ref_properties;
 
-  var $_default_properties = null;
+  public $_default_properties;
 
   function getSpec() {
     $spec = parent::getSpec();

@@ -1,54 +1,55 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExObject extends CMbMetaObject {
-  var $ex_object_id       = null;
+  public $ex_object_id;
   
-  var $group_id           = null;
+  public $group_id;
   
-  var $reference_class    = null;
-  var $reference_id       = null;
+  public $reference_class;
+  public $reference_id;
   
-  var $reference2_class   = null;
-  var $reference2_id      = null;
+  public $reference2_class;
+  public $reference2_id;
   
-  var $_ex_class_id       = null;
-  var $_own_ex_class_id   = null;
-  var $_specs_already_set = false;
-  var $_native_views      = null;
+  public $_ex_class_id;
+  public $_own_ex_class_id;
+  public $_specs_already_set = false;
+  public $_native_views;
   
   /**
    * @var CExClass
    */
-  var $_ref_ex_class = null;
+  public $_ref_ex_class;
   
   /**
    * @var CMbObject
    */
-  var $_ref_reference_object_1 = null;
+  public $_ref_reference_object_1;
   
   /**
    * @var CMbObject
    */
-  var $_ref_reference_object_2 = null;
+  public $_ref_reference_object_2;
   
   /**
    * @var CGroups
    */
-  var $_ref_group = null;
+  public $_ref_group;
   
-  var $_reported_fields = array();
-  var $_fields_display = array();
-  var $_fields_display_struct = array();
-  var $_fields_default_properties = array();
-  var $_formula_result = null;
+  public $_reported_fields = array();
+  public $_fields_display = array();
+  public $_fields_display_struct = array();
+  public $_fields_default_properties = array();
+  public $_formula_result;
 
   static $_load_lite      = false;
   static $_multiple_load  = false;
@@ -261,6 +262,8 @@ class CExObject extends CMbMetaObject {
    * Permet de supprimer les valeurs non presentes dans les 
    * specs du champ dans ce formulaire, mais qui le sont peut
    * etre dans le meme champ dans un autre formulaire (cas d'un concept)
+   *
+   * @return string
   **/
   static function typeSetSpecIntersect($field, $value) {
     $field_spec = $field->getSpecObject();
@@ -347,7 +350,6 @@ class CExObject extends CMbMetaObject {
         
         $_latest = null;
         $_latest_value = null;
-        $_found_a_concept = false;
         
         // on regarde tous les champs du concept
         foreach ($_concept_fields as $_concept_field) {
@@ -363,10 +365,6 @@ class CExObject extends CMbMetaObject {
           }
           elseif ($this->_ref_reference_object_2->_class == $_report_class) {
             $_concept_latest = $_ex_class->getLatestExObject($this->_ref_reference_object_2);
-          }
-          
-          if ($_concept_latest && $_concept_latest->_id) {
-            $_found_a_concept = true;
           }
           
           // si pas d'objet precedemment enregistré
@@ -396,11 +394,6 @@ class CExObject extends CMbMetaObject {
           $this->_reported_fields[$field_name] = $_latest;
           $this->$field_name = self::typeSetSpecIntersect($_field, $_latest_value);
         }
-
-        /*if ($this->_ref_object->_id && !$_found_a_concept) {
-          $_field_view = CAppUI::tr("$this->_class-$_field->name");
-          CAppUI::setMsg("Report de données impossible pour le champ '$_field_view'", UI_MSG_WARNING);
-        }*/
       }
 
       // Ceux de la meme exclass
@@ -416,7 +409,8 @@ class CExObject extends CMbMetaObject {
         if ($escape) {
           continue;
         }
-        
+
+        /** @var CMbObject $_base */
         $_base = null;
         foreach ($latest_ex_objects as $_latest_ex_object) {
           if ($_latest_ex_object->_ref_reference_object_1->_class == $_report_class) {
@@ -516,7 +510,9 @@ class CExObject extends CMbMetaObject {
 
         $_styles = $_predicate->loadRefProperties();
         foreach ($_styles as $_style) {
+          /** @var CExClassField|CExClassMessage|CExClassFieldSubgroup $_ref_object */
           $_ref_object = $_style->loadTargetObject();
+
           $default[$_ref_object->_guid] = $_ref_object->getDefaultProperties();
 
           switch ($_style->object_class) {
@@ -533,7 +529,7 @@ class CExObject extends CMbMetaObject {
                 "type" => "field",
                 "name" => $_field_name,
               );
-            break;
+              break;
 
             case "CExClassMessage":
               $_struct["style"]["messages"][] = array(
@@ -547,7 +543,7 @@ class CExObject extends CMbMetaObject {
                 "type" => "message",
                 "guid" => $_ref_object->_guid,
               );
-            break;
+              break;
 
             case "CExClassFieldSubgroup":
               $_struct["style"]["subgroups"][] = array(
@@ -561,7 +557,7 @@ class CExObject extends CMbMetaObject {
                 "type" => "subgroup",
                 "guid" => $_ref_object->_guid,
               );
-            break;
+              break;
           }
         }
 

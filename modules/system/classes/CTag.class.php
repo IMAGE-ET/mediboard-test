@@ -1,25 +1,26 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CTag extends CMbObject {
-  var $tag_id       = null;
+  public $tag_id;
   
-  var $parent_id    = null;
-  var $object_class = null;
-  var $name         = null;
-  var $color        = null;
+  public $parent_id;
+  public $object_class;
+  public $name;
+  public $color;
   
-  var $_ref_parent  = null;
-  var $_ref_items   = null;
+  public $_ref_parent;
+  public $_ref_items;
   
-  var $_deepness    = null;
+  public $_deepness;
 
   function getSpec() {
     $spec = parent::getSpec();

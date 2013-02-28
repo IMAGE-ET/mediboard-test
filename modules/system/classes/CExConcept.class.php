@@ -1,34 +1,35 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExConcept extends CExListItemsOwner {
-  var $ex_concept_id = null;
+  public $ex_concept_id;
   
-  var $ex_list_id = null;
-  var $name = null; // != object_class, object_id, ex_ClassName_event_id,
-  var $prop = null;
+  public $ex_list_id;
+  public $name; // != object_class, object_id, ex_ClassName_event_id,
+  public $prop;
 
   /**
    * @var CExList
    */
-  var $_ref_ex_list = null;
+  public $_ref_ex_list;
 
   /**
    * @var CExClassField[]
    */
-  var $_ref_class_fields = null;
+  public $_ref_class_fields;
 
   /**
    * @var CMbFieldSpec
    */
-  var $_concept_spec = null;
+  public $_concept_spec;
   
   static $_options_order = array(
     "list",
@@ -66,12 +67,12 @@ class CExConcept extends CExListItemsOwner {
     $args = json_decode($concept_search);
 
     $search = array();
-    foreach($args as $_key => $_val) {
+    foreach ($args as $_key => $_val) {
       $matches = array();
       
       if (preg_match('/^cv(\d+)_(\d+)_([a-z]+)$/', $_key, $matches)) {
         list(, $concept_id, $i, $k) = $matches;
-        if (!isset($search[$concept_id])){
+        if (!isset($search[$concept_id])) {
           $search[$concept_id] = array();
         }
         
@@ -236,13 +237,13 @@ class CExConcept extends CExListItemsOwner {
   function store(){
     $prop_changed = $this->fieldModified("prop");
     
-    if ($msg = parent::store()){
+    if ($msg = parent::store()) {
       return $msg;
     }
     
     if ($prop_changed) {
       $fields = $this->loadRefClassFields();
-      foreach($fields as $_field) {
+      foreach ($fields as $_field) {
         $new_prop = $this->updateFieldProp($_field->prop);
         $modif = ($_field->prop != $new_prop);
         
@@ -280,7 +281,7 @@ class CExConcept extends CExListItemsOwner {
     $options = $spec->getOptions();
     
     $invalid = array("moreThan", "moreEquals", "sameAs", "notContaining", "notNear", "dependsOn", "helped", "aidesaisie");
-    foreach($invalid as $_invalid) {
+    foreach ($invalid as $_invalid) {
       unset($options[$_invalid]);
     }
     

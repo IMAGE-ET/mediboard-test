@@ -3,18 +3,18 @@
  * $Id$
  *
  * @package    Mediboard
- * @subpackage system
+ * @subpackage System
  * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
 
 class CExchangeHTTP extends CExchangeTransportLayer {
   // DB Table key
-  var $echange_http_id = null;
+  public $echange_http_id;
   
   // DB Fields
-  var $http_fault      = null;
+  public $http_fault;
   
   function getSpec() {
     $spec = parent::getSpec();

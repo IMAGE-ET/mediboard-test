@@ -1,22 +1,23 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClassFieldEnumTranslation extends CMbObject {
-  var $ex_class_field_enum_translation_id = null;
-  
-  var $ex_class_field_id = null;
-  var $lang  = null;
-  var $key   = null;
-  var $value = null;
-  
-  var $_ref_ex_class_field = null;
+  public $ex_class_field_enum_translation_id;
+
+  public $ex_class_field_id;
+  public $lang;
+  public $key;
+  public $value;
+
+  public $_ref_ex_class_field;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -34,27 +35,27 @@ class CExClassFieldEnumTranslation extends CMbObject {
     $props["value"] = "str";
     return $props;
   }
-  
+
   function getKey(CExClassField $base = null){
     $field = $base ? $base : $this->loadRefExClassField();
     $class = $base ? $base->loadRefExClass() : $field->loadRefExClass();
-		$key = "CExObject";
-		
-		if ($class->_id) {
-			$key .= "_{$class->_id}";
-		}
-		
+    $key = "CExObject";
+
+    if ($class->_id) {
+      $key .= "_{$class->_id}";
+    }
+
     return "$key.{$field->name}.{$this->key}";
   }
-  
+
   function updateLocales(CExClassField $base = null){
     $key = $this->getKey($base);
-		
+
     global $locales;
     $locales[$key] = $this->value;
     $this->_view = $this->value;
   }
-  
+
   function fillIfEmpty() {
     if (!$this->_id) {
       $this->value = $this->key;
@@ -62,7 +63,7 @@ class CExClassFieldEnumTranslation extends CMbObject {
       $this->value = "";
     }
   }
-  
+
   function loadRefExClassField($cache = true){
     return $this->_ref_ex_class_field = $this->loadFwdRef("ex_class_field_id", $cache);
   }

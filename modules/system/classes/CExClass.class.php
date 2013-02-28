@@ -1,47 +1,48 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClass extends CMbObject {
-  var $ex_class_id = null;
+  public $ex_class_id;
   
-  //var $host_class = null;
-  //var $event      = null;
-  var $name       = null;
-  //var $disabled   = null;
-  var $conditional= null;
-  //var $required   = null;
-  //var $unicity    = null;
-  var $group_id   = null;
-  var $native_views = null;
+  //public $host_class;
+  //public $event;
+  public $name;
+  //public $disabled;
+  public $conditional;
+  //public $required;
+  //public $unicity;
+  public $group_id;
+  public $native_views;
   
-  var $pixel_positionning = null;
+  public $pixel_positionning;
 
   /**
    * @var CExClassField[]
    */
-  var $_ref_fields;
+  public $_ref_fields;
 
   /**
    * @var CExClassEvent[]
    */
-  var $_ref_events;
+  public $_ref_events;
 
   /**
    * @var CExClassFieldGroup[]
    */
-  var $_ref_groups;
+  public $_ref_groups;
   
-  var $_fields_by_name = null;
-  var $_dont_create_default_group = null;
-  var $_duplicate = null;
-  var $_formula_field = null;
+  public $_fields_by_name;
+  public $_dont_create_default_group;
+  public $_duplicate;
+  public $_formula_field;
   
   private $_latest_ex_object_cache = array();
 
@@ -55,57 +56,56 @@ class CExClass extends CMbObject {
     "constantes" => "CSejour",
     "corresp"    => "CPatient",
   );
-  
+
+  /** @var CExClassFieldGroup[] */
+  public $_groups;
+
+  /** @var CExObject */
+  public $_ex_object;
+
+  /** @var array */
+  public $_grid;
+
+  /** @var array */
+  public $_out_of_grid;
+
   static function compareValues($a, $operator, $b) {
     // =|!=|>|>=|<|<=|startsWith|endsWith|contains default|=
     switch ($operator) {
       default:
-      case "=": 
-        if ($a == $b) return true;
-        break;
+      case "=":
+        return $a == $b;
         
       case "!=": 
-        if ($a != $b) return true;
-        break;
+        return $a != $b;
         
       case ">": 
-        if ($a > $b) return true;
-        break;
+        return $a > $b;
         
       case ">=": 
-        if ($a >= $b) return true;
-        break;
+        return $a >= $b;
         
       case "<": 
-        if ($a < $b) return true;
-        break;
+        return $a < $b;
         
       case "<=": 
-        if ($a <= $b) return true;
-        break;
+        return $a <= $b;
         
       case "startsWith": 
-        if (strpos($a, $b) === 0) return true;
-        break;
+        return strpos($a, $b) === 0;
         
       case "endsWith": 
-        if (substr($a, -strlen($b)) == $b) return true;
-        break;
+        return substr($a, -strlen($b)) == $b;
         
       case "contains": 
-        if (strpos($a, $b) !== false) return true;
-        break;
+        return strpos($a, $b) !== false;
         
       case "hasValue": 
-        if ($a != "") return true;
-        break;
+        return $a != "";
 
       case "hasNoValue":
-        if ($a == "") return true;
-        break;
+        return $a == "";
     }
-    
-    return false;
   }
 
   function getSpec() {
@@ -403,6 +403,8 @@ class CExClass extends CMbObject {
   function loadExObjects(CMbObject $object, &$ex_object = null) {
     $ex_object = new CExObject($this->_id);
     $ex_object->setObject($object);
+
+    /** @var CExObject[] $list */
     $list = $ex_object->loadMatchingList();
     
     foreach ($list as $_object) {
@@ -776,7 +778,8 @@ class CExClass extends CMbObject {
 
   private function duplicateObject(CMbObject $object, $fwd_field, $fwd_value, &$new = null, $exclude_fields = array()) {
     $class = $object->_class;
-    
+
+    /** @var CExObject $new */
     $new = new $class;
     $new->cloneFrom($object);
 

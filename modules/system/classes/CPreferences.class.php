@@ -1,27 +1,28 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CPreferences extends CMbObject {
   static $modules = array();
-	
-	static function loadModules() {
-		foreach (glob("./modules/*/preferences.php") as $file) {
-		  require_once($file);
-		}
-	}
 
-	var $pref_id = null;
-	
-	var $user_id = null;
-	var $key     = null;
-	var $value   = null;
+  public $pref_id;
+
+  public $user_id;
+  public $key;
+  public $value;
+
+  static function loadModules() {
+    foreach (glob("./modules/*/preferences.php") as $file) {
+      include_once $file;
+    }
+  }
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -38,29 +39,35 @@ class CPreferences extends CMbObject {
     $props["value"]   = "str";
     return $props;
   }
-  
+
   static function get($user_id = null) {
     $where["user_id"] = "IS NULL";
-		if ($user_id) {
+    if ($user_id) {
       $where["user_id"] = "= '$user_id'";
       $where["value"  ] = "IS NOT NULL";
-		}
+    }
 
-  	$preferences = array();
+    $preferences = array();
     $pref = new self;
-  	foreach ($pref->loadList($where) as $_pref) {
-  		$preferences[$_pref->key] = $_pref->value;
-  	}
 
-  	return $preferences;
+    /** @var self[] $list */
+    $list = $pref->loadList($where);
+
+    foreach ($list as $_pref) {
+      $preferences[$_pref->key] = $_pref->value;
+    }
+
+    return $preferences;
   } 
-  
+
   function loadRefsFwd(){
-  	$this->loadRefUser();
+    $this->loadRefUser();
   }
-  
+
+  /**
+   * @return CUser
+   */
   function loadRefUser(){
-  	return $this->loadFwdRef("user_id", true);
+    return $this->loadFwdRef("user_id", true);
   }
 }
-?>

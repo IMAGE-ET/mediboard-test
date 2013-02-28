@@ -1,24 +1,25 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExListItem extends CMbObject {
-  var $ex_list_item_id = null;
+  public $ex_list_item_id;
   
-  var $list_id         = null;
-  var $concept_id      = null;
-  var $field_id        = null;
+  public $list_id;
+  public $concept_id;
+  public $field_id;
   
-  var $code            = null;
-  var $name            = null;
+  public $code;
+  public $name;
   
-  var $_ref_list       = null;
+  public $_ref_list;
 
   function getSpec() {
     $spec = parent::getSpec();

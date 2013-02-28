@@ -1,30 +1,31 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClassFieldPredicate extends CMbObject {
-  var $ex_class_field_predicate_id = null;
+  public $ex_class_field_predicate_id;
   
-  var $ex_class_field_id   = null;
-  var $operator            = null;
-  var $value               = null;
-  var $_value              = null;
+  public $ex_class_field_id;
+  public $operator;
+  public $value;
+  public $_value;
 
   /**
    * @var CExClassField
    */
-  var $_ref_ex_class_field = null;
+  public $_ref_ex_class_field;
 
   /**
    * @var CExClassFieldProperty
    */
-  var $_ref_properties = null;
+  public $_ref_properties;
 
   static $_load_lite = false;
 

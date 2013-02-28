@@ -1,56 +1,57 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClassFieldGroup extends CMbObject {
-  var $ex_class_field_group_id = null;
+  public $ex_class_field_group_id;
   
-  var $ex_class_id = null;
-  var $name = null; // != object_class, object_id, ex_ClassName_event_id,
-  var $rank = null;
+  public $ex_class_id;
+  public $name; // != object_class, object_id, ex_ClassName_event_id,
+  public $rank;
 
   /**
    * @var CExClass
    */
-  var $_ref_ex_class    = null;
+  public $_ref_ex_class;
 
   /**
    * @var CExClassField[]
    */
-  var $_ref_fields      = null;
+  public $_ref_fields;
 
   /**
    * @var CExClassMessage[]
    */
-  var $_ref_messages    = null;
+  public $_ref_messages;
 
   /**
    * @var CExClassHostField[]
    */
-  var $_ref_host_fields = null;
+  public $_ref_host_fields;
 
   /**
    * @var CExClassFieldSubgroup[]
    */
-  var $_ref_subgroups   = null;
+  public $_ref_subgroups;
 
   /**
    * @var CExClassField[]
    */
-  var $_ref_root_fields = null;
+  public $_ref_root_fields;
 
   /**
    * @var CExClassMessage[]
    */
-  var $_ref_root_messages = null;
+  public $_ref_root_messages;
   
-  var $_move = null;
+  public $_move;
 
   /**
    * @var CExClassField[]
@@ -176,12 +177,12 @@ class CExClassFieldGroup extends CMbObject {
         list($groups_ids[$self_index+$sign], $groups_ids[$self_index]) = array($groups_ids[$self_index], $groups_ids[$self_index+$sign]); 
       
         $new_groups = array();
-        foreach($groups_ids as $id) {
+        foreach ($groups_ids as $id) {
           $new_groups[$id] = $groups[$id];
         }
         
         $i = 1;
-        foreach($new_groups as $_group) {
+        foreach ($new_groups as $_group) {
           if ($_group->_id == $this->_id) {
             $this->rank = $i;
           }

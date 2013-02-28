@@ -1,40 +1,41 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClassMessage extends CMbObject {
-  var $ex_class_message_id = null;
+  public $ex_class_message_id;
   
-  var $ex_group_id   = null;
-  var $subgroup_id   = null;
-  var $type          = null;
-  var $predicate_id  = null;
+  public $ex_group_id;
+  public $subgroup_id;
+  public $type;
+  public $predicate_id;
   
-  var $title         = null;
-  var $text          = null;
+  public $title;
+  public $text;
   
-  var $coord_title_x = null;
-  var $coord_title_y = null;
-  var $coord_text_x  = null;
-  var $coord_text_y  = null;
+  public $coord_title_x;
+  public $coord_title_y;
+  public $coord_text_x;
+  public $coord_text_y;
   
-  var $coord_left    = null;
-  var $coord_top     = null;
-  var $coord_width   = null;
-  var $coord_height  = null;
+  public $coord_left;
+  public $coord_top;
+  public $coord_width;
+  public $coord_height;
   
-  var $_ref_ex_group = null;
-  var $_ref_predicate = null;
-  var $_ref_properties = null;
+  public $_ref_ex_group;
+  public $_ref_predicate;
+  public $_ref_properties;
 
-  var $_default_properties = null;
-  var $_no_size = false;
+  public $_default_properties;
+  public $_no_size = false;
 
   function getSpec() {
     $spec = parent::getSpec();

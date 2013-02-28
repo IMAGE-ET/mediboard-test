@@ -1,34 +1,28 @@
 <?php
-
 /**
  * Source HTTP
- *  
- * @category system
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CSourceHTTP extends CExchangeSource {
   // DB Table key
-  var $source_http_id = null;
+  public $source_http_id;
   
-  var $_filename = null;
-  var $_fieldname = null;
-  var $_mimetype = null;
+  public $_filename;
+  public $_fieldname;
+  public $_mimetype;
   
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'source_http';
     $spec->key   = 'source_http_id';
     return $spec;
-  }
-
-  function getProps() {
-    $specs = parent::getProps();    
-    return $specs;
   }
   
   function send($evenement_name = null, $tab_data = null) {
@@ -71,4 +65,3 @@ class CSourceHTTP extends CExchangeSource {
   function getResponseTime() {
   }
 }
-?>

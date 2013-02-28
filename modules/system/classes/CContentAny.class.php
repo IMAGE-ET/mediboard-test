@@ -1,23 +1,21 @@
 <?php
-
 /**
- * Content Any
- *  
- * @category System
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CContentAny extends CMbObject {
   // DB Table key
-  var $content_id = null;
+  public $content_id;
   
   // DB Fields
-  var $content   = null;
-  var $import_id = null;
+  public $content;
+  public $import_id;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -27,19 +25,17 @@ class CContentAny extends CMbObject {
   }
   
   function getProps() { 
-    $specs = parent::getProps();
-    $specs["content"]   = "text show|0";
-    $specs["import_id"] = "num";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["content"]   = "text show|0";
+    $props["import_id"] = "num";
+    return $props;
   }
   
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["messages_generique"]      = "CExchangeAny message_content_id";
     $backProps["acquittements_generique"] = "CExchangeAny acquittement_content_id";
-    $backProps["usermail_plain"] = "CUserMail text_plain_id";
-
+    $backProps["usermail_plain"]          = "CUserMail text_plain_id";
     return $backProps;
   }
 }

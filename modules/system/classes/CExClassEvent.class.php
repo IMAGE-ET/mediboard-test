@@ -1,52 +1,53 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClassEvent extends CMbObject {
-  var $ex_class_event_id = null;
+  public $ex_class_event_id;
   
-  var $ex_class_id = null;
+  public $ex_class_id;
   
-  var $host_class  = null;
-  var $event_name  = null;
-  var $disabled    = null;
-  var $unicity     = null;
+  public $host_class;
+  public $event_name;
+  public $disabled;
+  public $unicity;
 
   /**
    * @var CExClass
    */
-  var $_ref_ex_class    = null;
+  public $_ref_ex_class;
 
   /**
    * @var CExClassConstraint[]
    */
-  var $_ref_constraints = null;
+  public $_ref_constraints;
 
   /**
    * @var CExClassFieldTrigger[]
    */
-  var $_ref_triggers    = null;
+  public $_ref_triggers;
 
   /**
    * @var CMbFieldSpec[]
    */
-  var $_host_class_fields = null;
+  public $_host_class_fields;
 
   /**
    * @var array
    */
-  var $_host_class_options;
+  public $_host_class_options;
 
   /**
    * @var array
    */
-  var $_available_native_views;
+  public $_available_native_views;
   
   static $_extendable_classes = array(
     "CPrescriptionLineElement",
@@ -194,7 +195,7 @@ class CExClassEvent extends CMbObject {
     $existing = $this->loadRefExClass()->loadExObjects($host, $ex_object);
     $disabled = $this->disabled || !$this->checkConstraints($host);
     
-    switch($this->unicity) {
+    switch ($this->unicity) {
       case "no":
         if (!$disabled) {
           array_unshift($existing, $ex_object);
@@ -211,8 +212,8 @@ class CExClassEvent extends CMbObject {
           return array($ex_object);
         }
         /*
-      case "reference2": $level++;
-      case "reference1": 
+        case "reference2": $level++;
+        case "reference1":
         $reference_object = $this->resolveReferenceObject($host, $level);
         return array($this->getLatestExObject($reference_object, $level));*/
     }
@@ -616,9 +617,13 @@ class CExClassEvent extends CMbObject {
       "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id"
     );
     
-    switch($type) {
-      case "disabled":    $where["ex_class_event.disabled"] = 1; break;
-      case "conditional": $where["ex_class.conditional"] = 1; break;
+    switch ($type) {
+      case "disabled":
+        $where["ex_class_event.disabled"] = 1;
+        break;
+      case "conditional":
+        $where["ex_class.conditional"] = 1;
+        break;
     }
     
     $ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);

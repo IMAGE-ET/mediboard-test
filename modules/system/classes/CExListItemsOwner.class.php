@@ -1,18 +1,19 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExListItemsOwner extends CMbObject {
   /**
    * @var CExListItem[]
    */
-  var $_ref_items = null;
+  public $_ref_items;
 
   /**
    * @var bool
@@ -94,8 +95,11 @@ class CExListItemsOwner extends CMbObject {
     $items = $this->getItemNames();
     $empty = empty($spec->_locales);
     
-    foreach($items as $_id => $_item) {
-      if (!$empty && !isset($spec->_locales[$_id])) continue;
+    foreach ($items as $_id => $_item) {
+      if (!$empty && !isset($spec->_locales[$_id])) {
+        continue;
+      }
+
       $spec->_locales[$_id] = $_item;
     }
     

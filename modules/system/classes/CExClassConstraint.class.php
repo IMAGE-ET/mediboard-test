@@ -1,36 +1,37 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClassConstraint extends CMbObject {
-  var $ex_class_constraint_id = null;
+  public $ex_class_constraint_id;
 
-  //var $ex_class_id   = null;
-  var $ex_class_event_id = null;
-  var $field         = null;
-  var $operator      = null;
-  var $value         = null;
+  //public $ex_class_id;
+  public $ex_class_event_id;
+  public $field;
+  public $operator;
+  public $value;
 
   /**
    * @var CExClass
    */
-  var $_ref_ex_class_event = null;
+  public $_ref_ex_class_event;
 
   /**
    * @var CMbObject
    */
-  var $_ref_target_object = null;
+  public $_ref_target_object;
 
   /**
    * @var CMbFieldSpec
    */
-  var $_ref_target_spec = null;
+  public $_ref_target_spec;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -76,6 +77,8 @@ class CExClassConstraint extends CMbObject {
    * @return CMbFieldSpec
    */
   function resolveSpec(CModelObject $ref_object){
+    /** @var CModelObject $ref_object */
+    /** @var string $field */
     list($ref_object, $field) = $this->getFieldAndObject($ref_object);
 
     $parts = explode("-", $field);
@@ -191,6 +194,8 @@ class CExClassConstraint extends CMbObject {
 
     $host_class = $this->_ref_ex_class_event->host_class;
 
+    /** @var CMbObject $object */
+    /** @var string $field */
     list($object, $field) = $this->getFieldAndObject(new $host_class);
     $host_class = $object->_class;
 
@@ -239,7 +244,9 @@ class CExClassConstraint extends CMbObject {
 
     $object_field = $this->resolveObjectField($object);
 
-    if (!$object_field) return false;
+    if (!$object_field) {
+      return false;
+    }
 
     $object->loadView();
 

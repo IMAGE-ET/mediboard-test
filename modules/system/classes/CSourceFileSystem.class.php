@@ -1,27 +1,28 @@
-<?php /* $Id:$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 6069 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CSourceFileSystem extends CExchangeSource {
   // DB Table key
-  var $source_file_system_id   = null;
+  public $source_file_system_id;
   
-  var $fileextension           = null;
-  var $fileextension_write_end = null;
-  var $fileprefix              = null;
-  var $sort_files_by           = null;
+  public $fileextension;
+  public $fileextension_write_end;
+  public $fileprefix;
+  public $sort_files_by;
   
   // Form fields
-  var $_path             = null;
-  var $_file_path        = null;
-  var $_files            = array();
-  var $_dir_handles      = array();
+  public $_path;
+  public $_file_path;
+  public $_files            = array();
+  public $_dir_handles      = array();
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -31,14 +32,15 @@ class CSourceFileSystem extends CExchangeSource {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["fileextension"]           = "str";
-    $specs["fileextension_write_end"] = "str";
-    $specs["fileprefix"]              = "str";
-    $specs["sort_files_by"]           = "enum list|date|name|size default|name";
+    $props = parent::getProps();
+    $props["fileextension"]           = "str";
+    $props["fileextension_write_end"] = "str";
+    $props["fileprefix"]              = "str";
+    $props["sort_files_by"]           = "enum list|date|name|size default|name";
     
-    return $specs;
+    return $props;
   }
+
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -83,7 +85,7 @@ class CSourceFileSystem extends CExchangeSource {
       $this->_dir_handles[$path] = $handle;
     }
     
-    while(true) {
+    while (true) {
       $file = readdir($handle);
       
       if ($file === false) {
@@ -138,11 +140,17 @@ class CSourceFileSystem extends CExchangeSource {
     
     closedir($handle);
 
-    switch($this->sort_files_by) {
+    switch ($this->sort_files_by) {
       default:
-      case "name": sort($files); break;
-      case "date": usort($files, array($this, "sortByDate")); break;
-      case "size": usort($files, array($this, "sortBySize")); break;
+      case "name":
+        sort($files);
+        break;
+      case "date":
+        usort($files, array($this, "sortByDate"));
+        break;
+      case "size":
+        usort($files, array($this, "sortBySize"));
+        break;
     }
 
     if (isset($this->_limit)) {
@@ -223,7 +231,8 @@ class CSourceFileSystem extends CExchangeSource {
   function isReachableSource() {
     if (is_dir($this->host)) {
       return true;
-    } else {
+    }
+    else {
       $this->_reachable = 0;
       $this->_message   = CAppUI::tr("CSourceFileSystem-path-not-found", $this->host);
       return false;
@@ -233,7 +242,8 @@ class CSourceFileSystem extends CExchangeSource {
   function isAuthentificate() {
     if (is_writable($this->host)) {
       return true;
-    } else {
+    }
+    else {
       $this->_reachable = 1;
       $this->_message   = CAppUI::tr("CSourceFileSystem-path-not-writable", $this->host);
       return false;

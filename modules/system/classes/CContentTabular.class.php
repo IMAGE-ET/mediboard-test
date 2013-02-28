@@ -1,24 +1,22 @@
 <?php
-
 /**
- * Content Tabular
- *  
- * @category System
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CContentTabular extends CMbObject {
   // DB Table key
-  var $content_id = null;
+  public $content_id;
   
   // DB Fields
-  var $content   = null;
-  var $import_id = null;
-  var $separator = null;
+  public $content;
+  public $import_id;
+  public $separator;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -29,12 +27,12 @@ class CContentTabular extends CMbObject {
   }
   
   function getProps() { 
-    $specs = parent::getProps();
-    $specs["content"]   = "text show|0";
-    $specs["import_id"] = "num";
-    $specs["separator"] = "str length|1";
+    $props = parent::getProps();
+    $props["content"]   = "text show|0";
+    $props["import_id"] = "num";
+    $props["separator"] = "str length|1";
     
-    return $specs;
+    return $props;
   }
   
   function getBackProps() {

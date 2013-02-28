@@ -1,20 +1,21 @@
-<?php /* $Id: compteRendu.class.php 9309 2010-06-28 16:17:19Z flaviencrochard $ */
-  
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision: 8779 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CContentXML extends CMbObject {
   // DB Table key
-  var $content_id = null;
+  public $content_id;
   
   // DB Fields
-  var $content   = null;
-  var $import_id = null;
+  public $content;
+  public $import_id;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -25,11 +26,10 @@ class CContentXML extends CMbObject {
   }
   
   function getProps() { 
-    $specs = parent::getProps();
-    $specs["content"]   = "xml show|0";
-    $specs["import_id"] = "num";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["content"]   = "xml show|0";
+    $props["import_id"] = "num";
+    return $props;
   }
   
   function getBackProps() {

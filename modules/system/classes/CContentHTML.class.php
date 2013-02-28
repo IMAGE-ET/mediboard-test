@@ -1,49 +1,50 @@
-<?php /* $Id: compteRendu.class.php 9309 2010-06-28 16:17:19Z flaviencrochard $ */
-  
+<?php
 /**
-* @package Mediboard
-* @subpackage dPcompteRendu
-* @version $Revision: 9309 $
-* @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 class CContentHTML extends CMbObject {
   // DB Table key
-  var $content_id = null;
-  
+  public $content_id;
+
   // DB Fields
-  var $content = null;
+  public $content;
 
   // Form fields
-  var $_list_classes = null;
-  
-  
+  public $_list_classes;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'content_html';
     $spec->key   = 'content_id';
     return $spec;
   }
-  
+
   function getProps() { 
-    $specs = parent::getProps();
-    $specs["_list_classes"]    = "enum list|CBloodSalvage|CConsultAnesth|CConsultation|CDossierMedical|CFunctions|CGroups|CMediusers|COperation|CPatient|CPrescription|CSejour";
-    $specs["content"] = "html helped|_list_classes";
-    return $specs;
+    $props = parent::getProps();
+    $props["_list_classes"] = "enum list|CBloodSalvage|CConsultAnesth|CConsultation|CDossierMedical|CFunctions|CGroups|CMediusers|COperation|CPatient|CPrescription|CSejour";
+    $props["content"] = "html helped|_list_classes";
+    return $props;
   }
-  
+
   function check() {
-  	if($this->fieldModified("content", "")) {
-  		return "CContentHTML-failed-emptytext";
-  	}
-  	return parent::check();
+    if ($this->fieldModified("content", "")) {
+      return "CContentHTML-failed-emptytext";
+    }
+
+    return parent::check();
   }
-  
+
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["compte_rendus"] = "CCompteRendu content_id";
     $backProps["usermail_html"]     = "CUserMail text_html_id";
     return $backProps;
   }
-  
 }

@@ -1,19 +1,20 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExList extends CExListItemsOwner {
-  var $ex_list_id = null;
+  public $ex_list_id;
   
-  var $name       = null;
-  var $coded      = null;
-  var $multiple   = null;
+  public $name;
+  public $coded;
+  public $multiple;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -45,7 +46,7 @@ class CExList extends CExListItemsOwner {
   
   function updateFormFields(){
     parent::updateFormFields();
-		$this->_view  = $this->coded ? "# " : "";
+    $this->_view  = $this->coded ? "# " : "";
     $this->_view .= $this->name;
   }
 }

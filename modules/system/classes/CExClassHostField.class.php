@@ -1,34 +1,35 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CExClassHostField extends CMbObject {
-  var $ex_class_host_field_id = null;
+  public $ex_class_host_field_id;
   
-  var $ex_group_id = null;
+  public $ex_group_id;
   
-  //var $host_type = null;
-  var $host_class = null;
-  var $field = null;
+  //public $host_type;
+  public $host_class;
+  public $field;
   
-  var $coord_label_x = null;
-  var $coord_label_y = null;
-  var $coord_value_x = null;
-  var $coord_value_y = null;
+  public $coord_label_x;
+  public $coord_label_y;
+  public $coord_value_x;
+  public $coord_value_y;
   
-  var $coord_left    = null;
-  var $coord_top     = null;
-  var $coord_width   = null;
-  var $coord_height  = null;
+  public $coord_left;
+  public $coord_top;
+  public $coord_width;
+  public $coord_height;
   
-  var $_ref_ex_group = null;
-  var $_ref_host_object = null;
+  public $_ref_ex_group;
+  public $_ref_host_object;
 
   function getSpec() {
     $spec = parent::getSpec();

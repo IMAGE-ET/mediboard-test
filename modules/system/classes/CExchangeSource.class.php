@@ -1,14 +1,13 @@
 <?php
-
 /**
- * Exchange Source
- *  
- * @category system
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * Exchange source
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -32,29 +31,29 @@ class CExchangeSource extends CMbObject {
   );
   
   // DB Fields
-  var $name               = null;
-  var $role               = null;
-  var $host               = null;
-  var $user               = null;
-  var $password           = null;
-  var $iv                 = null;
-  var $type_echange       = null;
-  var $active             = null;
-  var $loggable           = null;
+  public $name;
+  public $role;
+  public $host;
+  public $user;
+  public $password;
+  public $iv;
+  public $type_echange;
+  public $active;
+  public $loggable;
   
   // Behaviour Fields
-  var $_client            = null;
-  var $_data              = null;
-  var $_args_list         = false;
-  var $_allowed_instances = null;
-  var $_wanted_type       = null;
-  var $_incompatible      = false;
-  var $_reachable         = null;
-  var $_message           = null;
-  var $_response_time     = null;
-  var $_all_source        = array();
-  var $_receive_filename  = null;
-  var $_acquittement      = null;
+  public $_client;
+  public $_data;
+  public $_args_list = false;
+  public $_allowed_instances;
+  public $_wanted_type;
+  public $_incompatible = false;
+  public $_reachable;
+  public $_message;
+  public $_response_time;
+  public $_all_source = array();
+  public $_receive_filename;
+  public $_acquittement;
 
   /**
    * db properties
@@ -62,22 +61,22 @@ class CExchangeSource extends CMbObject {
    * @return array
    */
   function getProps() {
-    $specs = parent::getProps();
-    $specs["name"]           = "str notNull";
-    $specs["role"]           = "enum list|prod|qualif default|qualif notNull";
-    $specs["host"]           = "text notNull";
-    $specs["user"]           = "str";
-    $specs["password"]       = "password show|0 loggable|0";
-    $specs["iv"]             = "str show|0 loggable|0";
-    $specs["type_echange"]   = "str protected";
-    $specs["active"]         = "bool default|1 notNull";
-    $specs["loggable"]       = "bool default|1 notNull";
+    $props = parent::getProps();
+    $props["name"]           = "str notNull";
+    $props["role"]           = "enum list|prod|qualif default|qualif notNull";
+    $props["host"]           = "text notNull";
+    $props["user"]           = "str";
+    $props["password"]       = "password show|0 loggable|0";
+    $props["iv"]             = "str show|0 loggable|0";
+    $props["type_echange"]   = "str protected";
+    $props["active"]         = "bool default|1 notNull";
+    $props["loggable"]       = "bool default|1 notNull";
     
-    $specs["_incompatible"]  = "bool";
-    $specs["_reachable"]     = "enum list|0|1|2 default|0";
-    $specs["_response_time"] = "float";
+    $props["_incompatible"]  = "bool";
+    $props["_reachable"]     = "enum list|0|1|2 default|0";
+    $props["_response_time"] = "float";
     
-    return $specs;
+    return $props;
   }
 
   /**
@@ -92,9 +91,10 @@ class CExchangeSource extends CMbObject {
   /**
    * return the exchange object
    *
-   * @param string $name name of the exchange source
-   * @param null   $type always null
-   * @param strin  $type_echange
+   * @param string $name         Name of the exchange source
+   * @param null   $type         Always null
+   * @param string $type_echange Exchange type
+   *
    * @return array|null
    */
   static function getObjects($name, $type = null, $type_echange = null) {
@@ -104,6 +104,7 @@ class CExchangeSource extends CMbObject {
     
     $exchange_objects = array();
     foreach (self::getExchangeClasses() as $_class) {
+      /** @var CExchangeSource $object */
       $object = new $_class;
       if (!$object->_ref_module) {
         continue;
@@ -119,19 +120,21 @@ class CExchangeSource extends CMbObject {
   }
 
   /**
-   * get the exchange source
+   * Get the exchange source
    *
-   * @param $name
-   * @param null $type
-   * @param bool $override
-   * @param null $type_echange
-   * @param bool $only_active
+   * @param string $name
+   * @param null   $type
+   * @param bool   $override
+   * @param null   $type_echange
+   * @param bool   $only_active
+   *
    * @return CExchangeSource
    */
   static function get($name, $type = null, $override = false, $type_echange = null, $only_active = true) {
     $exchange_classes = self::getExchangeClasses(); 
     foreach ($exchange_classes as $_class) {
-      $exchange_source         = new $_class;
+      /** @var CExchangeSource $exchange_source */
+      $exchange_source = new $_class;
       if (isset(self::$typeToClass[$type])) {
         $classname = self::$typeToClass[$type];
         if ($classname != $exchange_source->_class) {
@@ -192,9 +195,8 @@ class CExchangeSource extends CMbObject {
   }
 
   function updateEncryptedFields(){
-
+    // Inherited method
   }
-
 
   /**
    * store function
@@ -375,4 +377,3 @@ if (CModule::getActive("hl7")) {
 if (CModule::getActive("dicom")) {
   CExchangeSource::$typeToClass = CExchangeSource::$typeToClass + array("dicom" => "CSourceDicom");
 }
-?>

@@ -1,48 +1,50 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage system
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage System
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
- * Classe CMessage. 
+ * Classe CMessage.
+ *
  * @abstract Gère les messages de l'administrateur
  */
 class CMessage extends CMbObject {
   // DB Table key
-  var $message_id = null; 
+  public $message_id;
   
   // DB fields
-  var $module_id = null;
-  var $group_id  = null;
+  public $module_id;
+  public $group_id;
   
-  var $deb     = null;
-  var $fin     = null;
-  var $titre   = null;
-  var $corps   = null;
-  var $urgence = null;
+  public $deb;
+  public $fin;
+  public $titre;
+  public $corps;
+  public $urgence;
   
   // Form fields
-  var $_status = null;
+  public $_status;
   
   // Behaviour fields
-  var $_email_send    = null;
-  var $_email_from    = null;
-  var $_email_to      = null;
-  var $_email_details = null;
+  public $_email_send;
+  public $_email_from;
+  public $_email_to;
+  public $_email_details;
   
-  var $_update_moment    = null;
-  var $_update_initiator = null;
-  var $_update_benefits  = null;
+  public $_update_moment;
+  public $_update_initiator;
+  public $_update_benefits;
   
   
   // Object references
-  var $_ref_module;
-  var $_ref_group;
+  public $_ref_module;
+  public $_ref_group;
   
   static $status = array (
     "all"     => "Tous les messages",
@@ -80,12 +82,13 @@ class CMessage extends CMbObject {
 
   /**
    * Loads messages from a publication date perspective
-   * 
-   * @param string status   Wanted status, null for all
-   * @param string mod_name Module name restriction, null for all
+   *
+   * @param string $status   Wanted status, null for all
+   * @param string $mod_name Module name restriction, null for all
+   * @param int    $group_id Group ID
+   *
    * @return array          Published messages
-   * 
-   */ 
+   */
   function loadPublications($status = null, $mod_name = null, $group_id = null) {
     $now = mbDateTime();
     $where = array();
@@ -198,5 +201,3 @@ class CMessage extends CMbObject {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 }
-
-?>
