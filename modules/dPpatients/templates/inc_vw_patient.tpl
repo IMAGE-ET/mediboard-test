@@ -86,12 +86,7 @@ Document.refreshList = function() {
   
         <select name="prat_id" class="notNull ref">
           <option value="">&mdash; Choisir un praticien</option>
-          {{foreach from=$listPrat item=curr_prat}}
-            <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" 
-              {{if $curr_prat->user_id == $app->user_id}} selected="selected" {{/if}}>
-              {{$curr_prat->_view}}
-            </option>
-          {{/foreach}}
+          {{mb_include module=mediusers template=inc_options_mediuser selected=$app->user_id list=$listPrat}}
         </select>
   
         <button class="new" type="submit">Consulter</button>
