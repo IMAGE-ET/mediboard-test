@@ -24,7 +24,12 @@
     <li><a href="#message-cda-xml">XML</a></li>
     <li>
       <a href="#message-cda-errors" {{if $treecda->validate !=1}}class="wrong"{{else}} class="special" {{/if}}>
-        {{tr}}validation{{/tr}}
+        {{tr}}validation{{/tr}} XSD
+      </a>
+    </li>
+    <li>
+      <a href="#message-cda-errors-schematron" {{if $treecda->validateSchematron !=1}}class="wrong"{{else}} class="special" {{/if}}>
+        {{tr}}validation{{/tr}} schematron
       </a>
     </li>
   </ul>
@@ -42,5 +47,9 @@
 
   <div id="message-cda-errors" style="display: none;">
     {{mb_include template="inc_highlightcda_validate"}}
+  </div>
+
+  <div id="message-cda-errors-schematron" style="display: none;">
+    {{mb_include template="inc_highlightcda_validate_schematron"}}
   </div>
 </div>

@@ -1703,9 +1703,9 @@
                   <xs:documentation>
                      A code specifying whether the set component is included
                      (union) or excluded (set-difference) from the set, or
-                     other set operations with the current set component and
-                     the set as constructed from the representation stream
-                     up to the current point.
+                    other set operations with the current set component and
+                    the set as constructed from the representation stream
+                    up to the current point.
                   </xs:documentation>
                </xs:annotation>
             </xs:attribute>

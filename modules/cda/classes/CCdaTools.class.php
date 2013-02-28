@@ -17,6 +17,7 @@ class CCdaTools {
 
   var $contain   = null;
   var $validate  = null;
+  var $validateSchematron = null;
 
   var $xml       = null;
   /**
@@ -38,7 +39,7 @@ class CCdaTools {
   /**
    * Permet de récupérer les attributs d'un noeud xml sous forme de tableau
    *
-   * @param $node
+   * @param DOMNode $node Node
    *
    * @return array[nom_attribut]
    */
@@ -54,7 +55,7 @@ class CCdaTools {
    * Permet de faire un parcours en profondeur du document
    * et renvoi le document sous forme d'un tableau
    *
-   * @param $node
+   * @param DOMNode $node Node
    *
    * @return array
    */
@@ -96,7 +97,7 @@ class CCdaTools {
   /**
    * Permet remplir la variable $_contain avec la structure du document
    *
-   * @param $message
+   * @param String $message message
    *
    * @return nothing
    */
@@ -117,11 +118,91 @@ class CCdaTools {
   /**
    * Affiche le message au format xml
    *
-   * @param $message
+   * @param String $message message
    *
    * @return nothing
    */
   function showxml($message) {
     $this->xml = CMbString::highlightCode("xml", $message);
+  }
+
+  function schematronValidate ($message) {
+    $xsltsche = new XSLTProcessor();
+
+    $domSche = new DOMDocument();
+    $domSche->loadXML($message);
+
+    $domXSLSche = new DOMDocument();
+    $domXSLSche->load("modules/cda/resources/schematron/CI-SIS_StructurationCommuneCDAr2.xsl");
+
+    $xsltsche->importStylesheet($domXSLSche);
+    $XSLValid = $xsltsche->transformToXml($domSche);
+/*
+    $xslt = new XSLTProcessor();
+    $xslt->importStylesheet($XSLValid);
+    $domcda = new CMbXMLDocument("UTF-8");
+    $domcda->loadXMLSafe($message);
+    $this->validateSchematron = $xslt->transformToXml($domcda);*/
+  }
+
+  function parseElement($node) {
+    $tabElement = array();
+    foreach ($node as $_element) {
+      $tabElement[] = $this->parseattribute($_element);
+    }
+    return $tabElement;
+  }
+
+  function createClass() {
+    $dom = new CMbXMLDocument("UTF-8");
+    $dom->load("modules/cda/resources/voc.xsd");
+
+    $xpath = new CMbXPath($dom);
+    $xpath->registerNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+
+    $nodeList = $xpath->query("//xs:complexType|xs:simpleType");
+    $node = $nodeList->item(1);
+    $listvoc = array();
+    $node->attributes->getNamedItem("name")->nodeValue;
+
+    foreach ($nodeList as $_node) {
+      $name = $_node->attributes->getNamedItem("name")->nodeValue;
+      $documentation = $xpath->queryUniqueNode("//xs:*[@name='".$name."']//xs:documentation");
+      if ($documentation) {
+        $documentation = $documentation->nodeValue;
+      }
+      $union = $xpath->queryUniqueNode("//xs:*[@name='".$name."']//xs:union");
+      if ($union) {
+        $union = $union->attributes->getNamedItem("memberTypes")->nodeValue;
+      }
+
+      $restriction = $xpath->queryUniqueNode("//xs:*[@name='".$name."']//xs:restriction");
+      if ($restriction) {
+        $restriction = $restriction->attributes->getNamedItem("base")->nodeValue;
+      }
+
+      $enumeration = $xpath->query("//xs:*[@name='".$name."']//xs:enumeration");
+      $listEnumeration = array();
+
+      foreach ($enumeration as $_enumeration) {
+        $listEnumeration[] = $_enumeration->attributes->getNamedItem("value")->nodeValue;
+      }
+      $listvoc[] = array( "name" => $name,
+                          "documentation" => $documentation,
+                          "union" => $union,
+                          "restriction" => $restriction,
+                          "enumeration" => $listEnumeration);
+    }
+      //mbTrace($listvoc);
+  }
+
+  function showNodeXSD($name) {
+    $dom = new CMbXMLDocument();
+    $dom->load("modules/cda/resources/datatypes-base.xsd");
+
+    $xpath = new CMbXPath($dom);
+    $xpath->registerNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+    $node = $xpath->queryUniqueNode("//xs:*[@name='".$name."']");
+    return $dom->saveXML($node);
   }
 }
