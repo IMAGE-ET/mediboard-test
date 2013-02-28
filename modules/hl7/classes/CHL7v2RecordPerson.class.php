@@ -721,8 +721,9 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     $adresse = $this->queryTextNode("XAD.1/SAD.1", $NK1_4);
     $cp      = $this->queryTextNode("XAD.5", $NK1_4);
     $ville   = $this->queryTextNode("XAD.3", $NK1_4); 
-    
-    $tel     = $this->queryTextNode("NK1.5/XTN.1", $node); 
+
+    $NK1_5 = $this->queryNodes("NK1.5", $node)->item(0);
+    $tel   = $this->queryTextNode("XTN.1", $NK1_5);
     
     $relation = $this->queryTextNode("NK1.7/CE.1", $node);
     $relation_autre = null;
