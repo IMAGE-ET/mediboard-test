@@ -33,13 +33,14 @@
           form.facturable[facturable == '1' ? 0 : 1].checked = "checked";
       }
     }
-
-    Main.add(function() {
-      var select = $("select_secondary_func");
-      if (select) {
-        select.onchange();
-      }
-    });
+    {{if $change_active}}
+      Main.add(function() {
+        var select = $("select_secondary_func");
+        if (select) {
+          select.onchange();
+        }
+      });
+    {{/if}}
   </script>
 {{/if}}
 
@@ -52,10 +53,10 @@
         {{else}}
           value="{{$chir->function_id}}"
         {{/if}}
-         data-facturable="{{$chir->_ref_function->facturable}}">{{$chir->_ref_function}}</option>
+         data-facturable="{{$chir->_ref_function->facturable}}">{{$chir->_ref_function}} ({{$chir->_ref_function->_ref_group}})</option>
     {{foreach from=$_functions item=_function}}
       <option value="{{$_function->function_id}}" data-facturable="{{$_function->_ref_function->facturable}}"
-        {{if $_function->function_id == $selected}}selected{{/if}}>{{$_function}}</option>
+        {{if $_function->function_id == $selected}}selected{{/if}}>{{$_function}} ({{$_function->_ref_function->_ref_group}})</option>
     {{/foreach}}
   </select>
 {{else}}

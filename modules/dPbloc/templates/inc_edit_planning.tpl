@@ -30,6 +30,7 @@ refreshFunction = function(chir_id) {
   url.addParam("chir_id"   , chir_id);
   url.addParam("field_name", "secondary_function_id");
   url.addParam("empty_function_principale", 1);
+  url.addParam("change_active", 0);
   url.requestUpdate("secondary_functions");
 }
 
@@ -125,7 +126,7 @@ Main.add(function(){
             <td id="secondary_functions">
               {{assign var=chir value=$plagesel->_ref_chir}}
               {{assign var=selected value=$plagesel->secondary_function_id}}
-              {{mb_include module=cabinet template=inc_refresh_secondary_functions field_name=secondary_function_id empty_function_principale=1 type_onchange=""}}
+              {{mb_include module=cabinet template=inc_refresh_secondary_functions field_name=secondary_function_id empty_function_principale=1 type_onchange="" change_active=0}}
             </td>
             <td colspan="2" style="min-width: 50%"></td>
           </tr>

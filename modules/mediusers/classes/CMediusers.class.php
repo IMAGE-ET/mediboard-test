@@ -776,19 +776,9 @@ class CMediusers extends CMbObject {
    *
    * @return CMediusers[]
    */
-  function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true, $reverse = false) {
+  function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null, $actif = true, $secondary = false, $reverse = false) {
     $where = array();
     $ljoin = array();
-
-    if ($function_id) {
-      if ($secondary) {
-        $ljoin["secondary_function"] = "`users_mediboard`.`user_id` = `secondary_function`.`user_id`";
-        $where[] = "`users_mediboard`.`function_id` = '$function_id' OR `secondary_function`.`function_id` = '$function_id'";
-      }
-      else {
-        $where["users_mediboard.function_id"] = "= '$function_id'";
-      }
-    }
 
     if ($actif) {
       $where["users_mediboard.actif"] = "= '1'";
@@ -802,10 +792,20 @@ class CMediusers extends CMbObject {
     }
 
     $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+    $ljoin["secondary_function"] = "secondary_function.user_id = users_mediboard.user_id";
 
-    // Filter on current group
+    if ($function_id) {
+      if ($secondary) {
+        $where[] = "'$function_id' IN (users_mediboard.function_id, secondary_function.function_id)";
+      }
+      else {
+        $where["users_mediboard.function_id"] = "= '$function_id'";
+      }
+    }
+
+    // Filter on current group or users in secondaries functions
     $group = CGroups::loadCurrent();
-    $where["functions_mediboard.group_id"] = "= '$group->_id'";
+    $where[] = "functions_mediboard.group_id = '$group->_id' OR secondary_function.user_id = users.user_id";
 
     // Filter on user type
     if (is_array($user_types)) {
