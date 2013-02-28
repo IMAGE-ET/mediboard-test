@@ -23,7 +23,7 @@ tabSejour = {{$tabSejour|@json}};
 
 printFiche = function() {
   var url = new Url("dPcabinet", "print_fiche"); 
-  url.addElement(document.editFrmFinish.consultation_id);
+  url.addParam("dossier_anesth_id", document.editFrmFinish._consult_anesth_id.value);
   url.addParam("print", true);
   url.popup(700, 500, "printFiche");
 };

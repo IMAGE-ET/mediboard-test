@@ -9,15 +9,18 @@
  */
  
 PlanSoins = {
-  formClick: null,
+  formClick:           null,
   composition_dossier: null,
-  timeOutBefore: null,
-  timeOutAfter: null,
-  date: null,
-  manual_planif: null,
+  timeOutBefore:       null,
+  timeOutAfter:        null,
+  date:                null,
+  manual_planif:       null,
   bornes_composition_dossier: null,
-  nb_postes : null,
-  
+  nb_postes:           null,
+  anciennete:          null,
+  time_anciennete:     [],
+  timer_anciennete:    [],
+
   init: function(options){
     Object.extend(PlanSoins, options);
     PlanSoins.formClick = getForm("click");
@@ -654,5 +657,39 @@ PlanSoins = {
     var url = new Url("soins", "ajax_vw_perop_administrations");
     url.addParam("prescription_id", prescription_id);
     url.requestUpdate("perop_adm");
+  },
+
+  startAnciennete : function(chapitre) {
+    if (!PlanSoins.anciennete) {
+      return;
+    }
+    PlanSoins.time_anciennete[chapitre] = new Date();
+    $(chapitre+"_time").addClassName("opacity-60").setStyle({color: ""});
+    PlanSoins.updateAnciennete(chapitre);
+    PlanSoins.timer_anciennete[chapitre] = setInterval(PlanSoins.updateAnciennete.curry(chapitre), 60000);
+  },
+
+  updateAnciennete: function(chapitre) {
+    var span = $(chapitre+"_time");
+    if (!span) {
+      clearTimeout(PlanSoins.timer_anciennete[chapitre]);
+      PlanSoins.time_anciennete[chapitre] = null;
+      return;
+    }
+    var diff = parseInt((new Date() - PlanSoins.time_anciennete[chapitre]) / 60000);
+    span.update(diff+" min");
+
+    if (diff > PlanSoins.anciennete) {
+      span.removeClassName("opacity-60");
+      span.setStyle({color: "#ffd700"});
+    }
+  },
+
+  toggleAnciennete: function(chapitre) {
+    if (!PlanSoins.anciennete) {
+      return;
+    }
+    $$(".anciennete").invoke("hide");
+    $(chapitre+"_time").show();
   }
 };

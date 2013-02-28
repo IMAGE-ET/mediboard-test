@@ -31,10 +31,11 @@ addManualPlanification = function(date, time, key_tab, object_id, object_class, 
   
   submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
     PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, 'planification', object_id, object_class, key_tab);
-  } } ); 
+  } } );
 }
 
 refreshDossierSoin = function(mode_dossier, chapitre, force_refresh){
+  PlanSoins.toggleAnciennete(chapitre);
   if(!window[chapitre+'SoinLoaded'] || force_refresh) {
     PlanSoins.loadTraitement('{{$sejour->_id}}','{{$date}}',document.click.nb_decalage.value, mode_dossier, null, null, null, chapitre);
     window[chapitre+'SoinLoaded'] = true;
@@ -112,7 +113,7 @@ refreshTabState = function(){
   {{/if}}
   if(tabs){
     if(tabs.activeLink){
-      tabs.activeLink.up().onmousedown();
+      tabs.activeLink.up().onmouseup();
     } else {
       if($('tab_categories') && $('tab_categories').down()){
         $('tab_categories').down().onmousedown();
@@ -173,6 +174,7 @@ function updateNbTrans(sejour_id) {
 {{/if}}
 
 Main.add(function () {
+  PlanSoins.anciennete = {{$conf.dPprescription.CPrescription.alerte_refresh_plan}}
   {{if !"dPprescription"|module_active || $multiple_prescription|@count <= 1}}
   
   {{if "dPprescription"|module_active}}
@@ -320,7 +322,7 @@ Main.add(function () {
              {{/if}}
            </span>
            <a style="float: left" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}"'>
-            {{include file="../../dPpatients/templates/inc_vw_photo_identite.tpl" patient=$patient size=42}}
+            {{mb_include module=patients template=inc_vw_photo_identite patient=$patient size=42}}
            </a>
            
            <h2 style="color: #fff; font-weight: bold;">
