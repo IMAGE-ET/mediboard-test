@@ -553,12 +553,13 @@ Main.add( function(){
 </tr>
 {{/if}}
 
+{{if $sejour->_id || $can->admin}}
 <tr>
   <th>
     {{mb_label object=$sejour field="group_id"}}
   </th>
   <td colspan="3">
-    {{if !$sejour->_id || $can->admin}}
+    {{if $can->admin}}
     <select class="{{$sejour->_props.group_id}}" style="width: 15em" name="group_id" onchange="removePlageOp(true); updateListCPI(this.form);">
     {{foreach from=$etablissements item=curr_etab}}
       <option value="{{$curr_etab->group_id}}" {{if ($sejour->sejour_id && $sejour->group_id==$curr_etab->group_id) || (!$sejour->sejour_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->_view}}</option>
@@ -570,6 +571,13 @@ Main.add( function(){
     {{/if}}
   </td>
 </tr>
+{{else}}
+<tr style="display: none;">
+  <td colspan="4">
+    {{mb_field object=$sejour field=group_id value=$g hidden=hidden}}
+  </td>
+</tr>
+{{/if}}
 
 <tr>
   <th>
