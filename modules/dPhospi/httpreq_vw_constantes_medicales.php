@@ -11,11 +11,13 @@ global $m;
 
 $user = CMediusers::get();
 
-if(!$user->isMedical() &&
-   !CModule::getCanDo('soins')->read && 
-   !CModule::getCanDo('dPurgences')->read && 
-   !CModule::getCanDo('dPcabinet')->edit){
-     CModule::getCanDo($m)->redirect();
+if (
+    !$user->isMedical() &&
+    !CModule::getCanDo('soins')->read &&
+    !CModule::getCanDo('dPurgences')->read &&
+    !CModule::getCanDo('dPcabinet')->edit
+) {
+  CModule::getCanDo($m)->redirect();
 }
 
 $context_guid          = CValue::get('context_guid');
@@ -54,10 +56,13 @@ else {
 
 $constants_to_draw = ($print == 1 ? $selection : CConstantesMedicales::$list_constantes);
 
-if ($selected_context_guid !== 'all')
+/** @var CMbObject|CPatient|CSejour $context */
+if ($selected_context_guid !== 'all') {
   $context = CMbObject::loadFromGuid($selected_context_guid);
-else
+}
+else {
   $context = CMbObject::loadFromGuid($context_guid);
+}
   
 $context->loadRefs();
 
@@ -103,10 +108,16 @@ $query = $query->getRequest();
 $list = $constantes->_spec->ds->loadList($query);
 $list_contexts = array();
 
-foreach($list as $_context) {
+foreach ($list as $_context) {
+  /** @var CMbObject $c */
   $c = new $_context["context_class"];
   $c = $c->getCached($_context["context_id"]);
-  if ($c instanceof CConsultation && $c->sejour_id) continue; // Cas d'un RPU
+
+  // Cas d'un RPU
+  if ($c instanceof CConsultation && $c->sejour_id) {
+    continue;
+  }
+
   $c->loadRefsFwd();
   $list_contexts[$c->_guid] = $c;
 }
@@ -125,7 +136,8 @@ if ($current_context instanceof CConsultation && $current_context->sejour_id) {
   $context = $current_context;
   $context_guid = $current_context->_guid;
 }
-if (!isset($list_contexts[$current_context->_guid])){
+if (!isset($list_contexts[$current_context->_guid])) {
+  $current_context->loadRefsFwd();
   $list_contexts[$current_context->_guid] = $current_context;
 }
 
@@ -144,8 +156,10 @@ if ($context && $selected_context_guid !== 'all') {
 }
 
 $whereOr = array();
-foreach($constants_to_draw as $name => $params) {
-  if ($name[0] === "_") continue;
+foreach ($constants_to_draw as $name => $params) {
+  if ($name[0] === "_") {
+    continue;
+  }
   $whereOr[] = "$name IS NOT NULL ";
 }
 $where[] = implode(" OR ", $whereOr);
@@ -188,8 +202,11 @@ function getMax($n, $array) {
   }
   
   $max = $n;
-  foreach ($array as $a) 
-    if (isset($a[1])) $max = max($n, $a[1], $max);
+  foreach ($array as $a) {
+    if (isset($a[1])) {
+      $max = max($n, $a[1], $max);
+    }
+  }
     
   if ($orig_n != $n) {
     $max += floatval(substr($orig_n, 1));
@@ -206,8 +223,11 @@ function getMin($n, $array) {
   }
   
   $min = $n;
-  foreach ($array as $a)
-    if (isset($a[1])) $min = min($n, $a[1], $min);
+  foreach ($array as $a) {
+    if (isset($a[1])) {
+      $min = min($n, $a[1], $min);
+    }
+  }
     
   if ($orig_n != $n) {
     $min += floatval(substr($orig_n, 1));
@@ -224,7 +244,9 @@ $data      = array();
 $graphs    = array();
 
 foreach ($constants_to_draw as $name => $params) {
-  if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) continue;
+  if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) {
+    continue;
+  }
   
   $data[$name] = $standard_struct;
   
@@ -232,7 +254,7 @@ foreach ($constants_to_draw as $name => $params) {
     $serie = &$data[$name]["series"];
     
     $serie = array();
-    foreach($params["formfields"] as $_field) {
+    foreach ($params["formfields"] as $_field) {
       $serie[] = array(
         "data" => array(),
         "label" => CAppUI::tr("CConstantesMedicales-$_field-court"),
@@ -254,7 +276,9 @@ if ($list_constantes) {
     $cst->loadLogs();
     
     foreach ($constants_to_draw as $name => $params) {
-      if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) continue;
+      if ($name[0] === "_" && empty($params["plot"]) && empty($params["formula"])) {
+        continue;
+      }
       
       $candles = isset($params["candles"]);
       
@@ -285,7 +309,7 @@ if ($list_constantes) {
         }
         
         $i = count($d["series"][0]["data"]);
-        foreach($fields as $n => $_field) {
+        foreach ($fields as $n => $_field) {
           $ya = $yb = $yc = $yd = null;
           
           $ya = getValue($cst->$_field);
@@ -309,7 +333,7 @@ if ($list_constantes) {
             if (isset($params["formula"])) {
               $formula = $params["formula"];
               
-              foreach($formula as $_field => $_sign) {
+              foreach ($formula as $_field => $_sign) {
                 $_value = $cst->$_field;
                 
                 if ($_value !== null && $_value !== "") {
@@ -339,7 +363,7 @@ if ($list_constantes) {
         $first = true;
         
         $i = count($d["series"][0]["data"]);
-        foreach($fields as $n => $_field) {
+        foreach ($fields as $n => $_field) {
           $ya = $yb = $yc = $yd = null;
           
           // first series : all values
@@ -381,12 +405,12 @@ if ($list_constantes) {
 // Pour les tensions artérielles, changer les unités suivant la config
 $unite_ta = CAppUI::conf("dPpatients CConstantesMedicales unite_ta");
 
-foreach($cumuls_day as $name => $days) {
+foreach ($cumuls_day as $name => $days) {
   $_data = &$data[$name];
   $_params = CConstantesMedicales::$list_constantes[$name];
   
   $offset = 0;
-  foreach($days as $day => $values) {
+  foreach ($days as $day => $values) {
     $_color = CConstantesMedicales::getColor($values["value"], $_params, "#4DA74D");
     
     $_data["series"][] = array(
@@ -424,7 +448,7 @@ foreach($cumuls_day as $name => $days) {
   array_push($_data["series"], $first);
 }
 
-foreach($data as $name => &$_data) {
+foreach ($data as $name => &$_data) {
   $params = CConstantesMedicales::$list_constantes[$name];
   
   // And the options
@@ -446,7 +470,7 @@ foreach($data as $name => &$_data) {
   $all_y_values = CMbArray::pluck($_data["series"], "data");
   $y_values = array();
   
-  foreach($all_y_values as $_values) {
+  foreach ($all_y_values as $_values) {
     $y_values = array_merge($y_values, $_values);
   }
   
@@ -498,5 +522,3 @@ $smarty->assign('paginate',      $paginate);
 $smarty->assign('constantes_medicales_grid', $constantes_medicales_grid);
 $smarty->assign('simple_view',   $simple_view);
 $smarty->display('inc_vw_constantes_medicales.tpl');
-
-?>
