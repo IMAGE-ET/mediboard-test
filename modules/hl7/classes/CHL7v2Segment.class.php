@@ -551,7 +551,7 @@ class CHL7v2Segment extends CHL7v2Entity {
         $patient_birthname    = $patient_usualname;
         $patient_birthname[0] = $object->nom_jeune_fille;
         // Legal Name devient Display Name
-        $patient_birthname[6] = "D";
+        $patient_usualname[6] = "D";
       }
       $names[] = $patient_usualname;
       if ($object->nom_jeune_fille) {
