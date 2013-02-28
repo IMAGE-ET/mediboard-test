@@ -80,7 +80,7 @@ Main.add(function () {
 });
 </script>
 
-{{if ($constantes->_ref_context && $context_guid == $constantes->_ref_context->_guid && !$readonly) || $real_context}}
+{{if ($constantes->_ref_context && $context_guid == $constantes->_ref_context->_guid && !$readonly) || isset($real_context|smarty:nodefaults)}}
   {{assign var=real_context value=1}}
 {{else}}
   {{assign var=real_context value=0}}
