@@ -107,6 +107,18 @@
           </td>
         </tr>
         <tr>
+          <td>
+            <div class="wrapper_line">
+              <div class="affect_legend clit" style="width: 30px">
+                <div class="affect_legend prolongation opacity-60" style="width: 33px"><span style="font-size: xx-small;"></span></div>
+              </div>
+            </div>
+          </td>
+          <td class="text">
+            Prolongation anormale (entrée réelle, pas de sortie réelle et sortie non confirmée)
+          </td>
+        </tr>
+        <tr>
           <th class="item_egal">
             Lit
           </th>

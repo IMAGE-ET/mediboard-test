@@ -99,20 +99,21 @@
   filter = function(input, table) {
     var alerte = $("alerte_"+table);
     table = $(table);
-    table.select("tr").invoke("show");
-    
+
     var term = $V(input);
     
     if (!term) {
+      table.select("tr.line").invoke("show");
       alerte.hide();
       return;
     }
-    
+
+    table.select("tr.line").invoke("hide");
     alerte.show();
     
     table.select(".CPatient-view").each(function(e) {
-      if (!e.innerHTML.like(term)) {
-        e.up("tr.line").hide();
+      if (e.innerHTML.like(term)) {
+        e.up("tr.line").show();
       }
     });
   }

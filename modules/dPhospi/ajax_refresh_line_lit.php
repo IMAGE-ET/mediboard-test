@@ -24,6 +24,7 @@ $period = "";
 $datetimes = array();
 $change_month = array();
 $granularites = array("day", "week", "4weeks");
+$group_id = CGroups::loadCurrent()->_id;
 
 switch ($granularite) {
   case "day":
@@ -103,6 +104,33 @@ $where["sortie"] = ">= '$date_min'";
 $affectation = new CAffectation;
 $affectations = $affectation->loadList($where, "parent_affectation_id ASC");
 
+// Ajout des prolongations anormales
+// (séjours avec entrée réelle et sortie non confirmée et sortie < maintenant
+$nb_days_prolongation = CAppUI::conf("dPhospi nb_days_prolongation");
+$sejour = new CSejour();
+$max = mbDateTime();
+$min = mbDate("-$nb_days_prolongation days", $max) . " 00:00:00";
+$where = array(
+  "entree_reelle"   => "IS NOT NULL",
+  "sortie_reelle"   => "IS NULL",
+  "sortie_prevue"   => "BETWEEN '$min' AND '$max'",
+  "sejour.confirme" => "= '0'",
+  "group_id"        => "= '$group_id'"
+);
+
+$sejours_prolonges = $sejour->loadList($where);
+
+$affectations_prolong = array();
+foreach ($sejours_prolonges as $_sejour) {
+  $aff = $_sejour->getCurrAffectation($_sejour->sortie);
+  if (!$aff->_id || $aff->lit_id != $lit_id) {
+    continue;
+  }
+
+  $aff->_is_prolong = true;
+  $affectations[$aff->_id] = $aff;
+}
+
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
@@ -115,6 +143,11 @@ foreach ($affectations as $_affectation) {
   if (!$suivi_affectation && $_affectation->parent_affectation_id) {
     $suivi_affectation = true;
   }
+  $_affectation->_entree = $_affectation->entree;
+  $_affectation->_sortie = $_affectation->sortie;
+  if ($_affectation->_is_prolong) {
+    $_affectation->_sortie = mbDateTime();
+  }
   $_affectation->loadRefsAffectations();
   $sejour = $_affectation->loadRefSejour();
   $sejour->loadRefPraticien()->loadRefFunction();
@@ -125,8 +158,8 @@ foreach ($affectations as $_affectation) {
   $patient->_overweight = $constantes->poids > 120;
   
   $lit->_ref_affectations[$_affectation->_id] = $_affectation;
-  $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->entree), $date_min, $period);
-  $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->sortie), $date_min, $period);
+  $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->_entree), $date_min, $period);
+  $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->_sortie), $date_min, $period);
   $_affectation->_width = $_affectation->_sortie_offset - $_affectation->_entree_offset;
   
   if (isset($operations[$sejour->_id])) {
@@ -142,9 +175,9 @@ foreach ($affectations as $_affectation) {
     $hour_operation = mbTransformTime(null, $_operation->temp_operation, "%H");
     $min_operation = mbTransformTime(null, $_operation->temp_operation, "%M");
     
-    $_operation->_debut_offset[$_affectation->_id] = CMbDate::position($_operation->_datetime, max($date_min, $_affectation->entree), $period);
+    $_operation->_debut_offset[$_affectation->_id] = CMbDate::position($_operation->_datetime, max($date_min, $_affectation->_entree), $period);
     
-    $_operation->_fin_offset[$_affectation->_id] = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_affectation->entree), $period);
+    $_operation->_fin_offset[$_affectation->_id] = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_affectation->_entree), $period);
     $_operation->_width[$_affectation->_id] = $_operation->_fin_offset[$_affectation->_id] - $_operation->_debut_offset[$_affectation->_id];
     
     if (($_operation->_datetime > $date_max)) {
@@ -152,7 +185,13 @@ foreach ($affectations as $_affectation) {
     }
     else {
       $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
-      $_operation->_width_uscpo[$_affectation->_id] = CMbDate::position(mbDateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period) - $_operation->_fin_offset[$_affectation->_id];
+      $_operation->_width_uscpo[$_affectation->_id] = CMbDate::position(mbDateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->_entree), $period) - $_operation->_fin_offset[$_affectation->_id];
+    }
+
+    if ($_affectation->_is_prolong) {
+      $_affectation->_start_prolongation = CMbDate::position(max($date_min, $_affectation->_entree), $date_min, $period);
+      $_affectation->_end_prolongation   = CMbDate::position(min($date_max, $_affectation->_sortie), $date_min, $period);
+      $_affectation->_width_prolongation = $_affectation->_end_prolongation - $_affectation->_start_prolongation;
     }
   }
   
@@ -181,8 +220,8 @@ $intervals = array();
 if (count($lit->_ref_affectations)) {
   foreach ($lit->_ref_affectations as $_affectation) {
     $intervals[$_affectation->_id] = array(
-      "lower" => $_affectation->entree,
-      "upper" => $_affectation->sortie,
+      "lower" => $_affectation->_entree,
+      "upper" => $_affectation->_sortie,
     );
   }
   $lit->_lines = CMbRange::rearrange($intervals);
@@ -250,5 +289,3 @@ $smarty->assign("suivi_affectation", $suivi_affectation);
 $smarty->assign("td_width"  , 84.2 / $nb_ticks);
 
 $smarty->display("inc_line_lit.tpl");
-
-?>

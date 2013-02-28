@@ -38,7 +38,13 @@ class CAffectation extends CMbObject {
   var $_sortie_relative = null;
   var $_mode_sortie     = null;
   var $_duree           = null;
-  
+  var $_is_prolong      = null;
+  var $_entree          = null;
+  var $_sortie          = null;
+  var $_start_prolongation = null;
+  var $_stop_prolongation = null;
+  var $_width_prolongation = null;
+
   // Order fields
   var $_patient   = null;
   var $_praticien = null;

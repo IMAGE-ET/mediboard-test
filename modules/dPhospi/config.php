@@ -29,6 +29,7 @@ $dPconfig["dPhospi"] = array (
   "show_retour_mvt" => "0",
   "show_collation_mvt" => "0",
   "show_sortie_mvt" => "0",
+  "nb_days_prolongation" => "30",
   "CLit" => array(
     "prefixe"         => "",
     "show_in_tableau" => 0,

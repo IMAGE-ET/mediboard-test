@@ -108,10 +108,7 @@ div.operation_in_mouv {
 }
 
 div.operation_in_mouv.compacte {
-  position: absolute;
   height: 11px;
-  top: 1px;
-  background: #6AE;
 }
 
 div.soins_uscpo {
@@ -121,15 +118,23 @@ div.soins_uscpo {
   background: #fd7;
 }
 
-div.soins_uscpo_compact {
-  position: absolute;
+div.soins_uscpo.compacte {
   height: 11px;
-  top: 1px;
-  background: #fd7;
 }
 
 div.sejour_sortie_confirmee {
   background-image: url(../../../images/icons/ray.gif) !important;
+}
+
+div.prolongation {
+  position: absolute;
+  height: 25px;
+  top: 1px;
+  background: #ffA000;
+}
+
+div.prolongation.compacte {
+  height: 11px;
 }
 
 table.layout_affectation,

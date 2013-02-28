@@ -5,7 +5,7 @@
  * @subpackage dPhospi
  * @version $Revision: $
  * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
 $services_ids   = CValue::getOrSession("services_ids", null);
@@ -72,10 +72,10 @@ $temp_datetime = mbDateTime(null, $date_min);
 
 for ($i = 0 ; $i < $nb_ticks ; $i++) {
   $offset = $i * $nb_unite;
-  
+
   $datetime = mbDateTime("+ $offset $unite", $date_min);
   $datetimes[] = $datetime;
-  
+
   if ($granularite == "4weeks") {
     if (mbDate($current) == mbDate($temp_datetime) &&
       mbTime($current) >= mbTime($temp_datetime) && mbTime($current) > mbTime($datetime)) {
@@ -83,32 +83,32 @@ for ($i = 0 ; $i < $nb_ticks ; $i++) {
     }
     $week_a = mbTransformTime($temp_datetime, null, "%V");
     $week_b = mbTransformTime($datetime, null, "%V");
-    
+
     // les semaines
     $days[$datetime] = $week_b;
-    
+
     // On stocke le changement de mois s'il advient
-   if (mbTransformTime($datetime, null, "%m") != mbTransformTime($temp_datetime, null, "%m")) {
-     
-     // Entre deux semaines
-     if ($i%7 == 0) {
-       $change_month[$week_a] = array("right"=>$temp_datetime);
-       $change_month[$week_b] = array("left"=>$datetime);
-     }
-     // Dans la même semaine
-     else {
-       $change_month[$week_b] = array("left" => $temp_datetime, "right" => $datetime);
-     }
-   }
+    if (mbTransformTime($datetime, null, "%m") != mbTransformTime($temp_datetime, null, "%m")) {
+
+      // Entre deux semaines
+      if ($i%7 == 0) {
+        $change_month[$week_a] = array("right"=>$temp_datetime);
+        $change_month[$week_b] = array("left"=>$datetime);
+      }
+      // Dans la même semaine
+      else {
+        $change_month[$week_b] = array("left" => $temp_datetime, "right" => $datetime);
+      }
+    }
   }
   else {
     if ($granularite == "week" && mbDate($current) == mbDate($temp_datetime) &&
-        mbTime($datetime) >= mbTime($temp_datetime) && mbTime($current) <= mbTime($datetime)) {
+      mbTime($datetime) >= mbTime($temp_datetime) && mbTime($current) <= mbTime($datetime)) {
       $current = $temp_datetime;
     }
     if ($granularite)
-    // le datetime, pour avoir soit le jour soit l'heure
-    $days[] = mbDate($datetime);
+      // le datetime, pour avoir soit le jour soit l'heure
+      $days[] = mbDate($datetime);
   }
   $temp_datetime = $datetime;
 }
@@ -129,8 +129,7 @@ $where["lit.annule"] = "= '0'";
 $ljoin = array();
 $ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
 $ljoin["service"] = "chambre.service_id = service.service_id";
-$lit = new CLit;
-
+$lit = new CLit();
 $lits     = $lit->loadList($where, null, null, null, $ljoin);
 $chambres = CMbObject::massLoadFwdRef($lits, "chambre_id");
 $services = CMbObject::massLoadFwdRef($chambres, "service_id");
@@ -144,7 +143,7 @@ foreach ($lits as $_lit) {
   $liaisons_items = $_lit->loadBackRefs("liaisons_items");
   $items_prestations = CMbObject::massLoadFwdRef($liaisons_items, "item_prestation_id");
   $prestations_ids = CMbArray::pluck($items_prestations, "object_id");
-  
+
   if (in_array($prestation_id, $prestations_ids)) {
     $inverse = array_flip($prestations_ids);
     $item_prestation = $items_prestations[$inverse[$prestation_id]];
@@ -152,11 +151,11 @@ foreach ($lits as $_lit) {
       $_lit->_selected_item = $item_prestation;
     }
     else {
-      $_lit->_selected_item = new CItemPrestation;
+      $_lit->_selected_item = new CItemPrestation();
     }
   }
   else {
-    $_lit->_selected_item = new CItemPrestation;
+    $_lit->_selected_item = new CItemPrestation();
   }
 }
 
@@ -178,6 +177,32 @@ if ($nb_affectations > CAppUI::conf("dPhospi max_affectations_view")) {
 
 $affectations = $affectation->loadList($where, "parent_affectation_id ASC");
 
+// Ajout des prolongations anormales
+// (séjours avec entrée réelle et sortie non confirmée et sortie < maintenant
+$nb_days_prolongation = CAppUI::conf("dPhospi nb_days_prolongation");
+$sejour = new CSejour();
+$max = mbDateTime();
+$min = mbDate("-$nb_days_prolongation days", $max) . " 00:00:00";
+$where = array(
+  "entree_reelle"   => "IS NOT NULL",
+  "sortie_reelle"   => "IS NULL",
+  "sortie_prevue"   => "BETWEEN '$min' AND '$max'",
+  "sejour.confirme" => "= '0'",
+  "group_id"        => "= '$group_id'"
+);
+
+$sejours_prolonges = $sejour->loadList($where);
+
+$affectations_prolong = array();
+foreach ($sejours_prolonges as $_sejour) {
+  $aff = $_sejour->getCurrAffectation($_sejour->sortie);
+  if (!$aff->_id || !array_key_exists($aff->lit_id, $lits)) {
+    continue;
+  }
+  $aff->_is_prolong = true;
+  $affectations[$aff->_id] = $aff;
+}
+
 $sejours  = CMbObject::massLoadFwdRef($affectations, "sejour_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
@@ -190,6 +215,8 @@ foreach ($affectations as $_affectation) {
   if (!$suivi_affectation && $_affectation->parent_affectation_id) {
     $suivi_affectation = true;
   }
+  $_affectation->_entree = $_affectation->entree;
+  $_affectation->_sortie = $_affectation->sortie;
   $_affectation->loadRefsAffectations();
   $sejour = $_affectation->loadRefSejour();
   $sejour->loadRefPraticien()->loadRefFunction();
@@ -198,25 +225,33 @@ foreach ($affectations as $_affectation) {
   $constantes = $patient->getFirstConstantes();
   $patient->_overweight = $constantes->poids > 120;
   $patient->loadRefDossierMedical(false);
+  if ($_affectation->_is_prolong) {
+    $_affectation->_sortie = mbDateTime();
+  }
   $lits[$_affectation->lit_id]->_ref_affectations[$_affectation->_id] = $_affectation;
-  $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->entree), $date_min, $period);
-  $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->sortie), $date_min, $period);
+  $_affectation->_entree_offset = CMbDate::position(max($date_min, $_affectation->_entree), $date_min, $period);
+  $_affectation->_sortie_offset = CMbDate::position(min($date_max, $_affectation->_sortie), $date_min, $period);
   $_affectation->_width = $_affectation->_sortie_offset - $_affectation->_entree_offset;
-  
+
+  if ($_affectation->_is_prolong) {
+    $_affectation->_start_prolongation = CMbDate::position(max($date_min, $_affectation->_entree), $date_min, $period);
+    $_affectation->_end_prolongation   = CMbDate::position(min($date_max, $_affectation->_sortie), $date_min, $period);
+    $_affectation->_width_prolongation = $_affectation->_end_prolongation - $_affectation->_start_prolongation;
+  }
   if (isset($operations[$sejour->_id])) {
     $_operations = $operations[$sejour->_id];
   }
   else {
     $operations[$sejour->_id] = $_operations = $sejour->loadRefsOperations();
   }
-  
+
   if ($prestation_id) {
     $item_liaison = new CItemLiaison;
     $where = array();
     $ljoin = array();
-    
+
     $where["sejour_id"] = "= '$sejour->_id'";
-    $ljoin["item_prestation"] = 
+    $ljoin["item_prestation"] =
       "  item_prestation.item_prestation_id = item_liaison.item_realise_id
       OR item_prestation.item_prestation_id = item_liaison.item_souhait_id";
     $where["object_class"] = " = 'CPrestationJournaliere'";
@@ -228,24 +263,24 @@ foreach ($affectations as $_affectation) {
       $_liaison->loadRefItemRealise();
     }
   }
-  
+
   foreach ($_operations as $key=>$_operation) {
     $_operation->loadRefPlageOp(1);
-    
+
     $hour_operation = mbTransformTime(null, $_operation->temp_operation, "%H");
     $min_operation = mbTransformTime(null, $_operation->temp_operation, "%M");
-    
-    $_operation->_debut_offset[$_affectation->_id] = CMbDate::position($_operation->_datetime, max($date_min, $_affectation->entree), $period);
-    
-    $_operation->_fin_offset[$_affectation->_id] = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_affectation->entree), $period);
+
+    $_operation->_debut_offset[$_affectation->_id] = CMbDate::position($_operation->_datetime, max($date_min, $_affectation->_entree), $period);
+
+    $_operation->_fin_offset[$_affectation->_id] = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_affectation->_entree), $period);
     $_operation->_width[$_affectation->_id] = $_operation->_fin_offset[$_affectation->_id] - $_operation->_debut_offset[$_affectation->_id];
-    
+
     if (($_operation->_datetime > $date_max)) {
       $_operation->_width_uscpo[$_affectation->_id] = 0;
     }
     else {
       $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
-      $_operation->_width_uscpo[$_affectation->_id] = CMbDate::position(mbDateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period) - $_operation->_fin_offset[$_affectation->_id];
+      $_operation->_width_uscpo[$_affectation->_id] = CMbDate::position(mbDateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->_entree), $period) - $_operation->_fin_offset[$_affectation->_id];
     }
   }
 }
@@ -258,8 +293,8 @@ foreach ($lits as $_lit) {
   if (isset($_lit->_ref_affectations) && count($_lit->_ref_affectations)) {
     foreach ($_lit->_ref_affectations as $_affectation) {
       $intervals[$_affectation->_id] = array(
-        "lower" => $_affectation->entree,
-        "upper" => $_affectation->sortie,
+        "lower" => $_affectation->_entree,
+        "upper" => $_affectation->_sortie,
       );
     }
     $_lit->_lines = CMbRange::rearrange($intervals);
