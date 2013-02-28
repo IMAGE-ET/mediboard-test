@@ -22,7 +22,7 @@ messagerie = {
     messagerie.url = url;
   },
 
-  refreshList:function (page,account,favorite) {
+  refreshList:function (page,account,favorite, archive) {
     if( page != messagerie.page) {
       messagerie.page = page;
     }
@@ -33,11 +33,20 @@ messagerie = {
     url.addParam("favorite", favorite);
     url.addParam("account", messagerie.tab);
     url.addParam("page", messagerie.page);
+    url.addParam("archived", archive);
     url.requestUpdate(messagerie.tab);
   },
 
   toggleFavorite : function(mail_id) {
     var url = new Url(messagerie.module, "ajax_toggle_favorite");
+    url.addParam("mail_id", mail_id);
+    url.requestUpdate("systemMsg", function() {
+      messagerie.refreshList(0, messagerie.tab, 0);
+    });
+  },
+
+  toggleArchived : function(mail_id) {
+    var url = new Url(messagerie.module, "ajax_toggle_archived");
     url.addParam("mail_id", mail_id);
     url.requestUpdate("systemMsg", function() {
       messagerie.refreshList(0, messagerie.tab, 0);

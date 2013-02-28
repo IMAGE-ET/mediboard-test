@@ -24,7 +24,8 @@
 
 <div>
   <button class="button change" onclick="messagerie.getLastMessages({{$user->_id}});">{{tr}}CUserMAil-button-getNewMails{{/tr}}</button>
-  <button onclick="messagerie.refreshList(messagerie.page,messagerie.tab,'1')"><img src="modules/{{$m}}/images/favorites-1.png"  alt="" style="height: 15px;"/></button>
+  <button onclick="messagerie.refreshList(messagerie.page,messagerie.tab,'1')" class="notext"><img src="modules/{{$m}}/images/favorites-1.png"  alt="" style="height: 15px;"/>{{tr}}CUserMail-view-onlyFavorite{{/tr}}</button>
+  <button onclick="messagerie.refreshList(messagerie.page,messagerie.tab,'0','1')" class="notext"><img src="style/mediboard/images/buttons/history.gif"  alt="" style="height: 15px;"/>{{tr}}CUserMail-view-onlyArchived{{/tr}}</button>
   <!--<button class="button mail" onclick="messagerie.modalWriteNewMessage();">{{tr}}CUserMAil-button-writeMail{{/tr}}</button>-->
   <select style="width: 50px;" name="action">
     <option va>{{tr}}CUserMail-option-More{{/tr}}</option>

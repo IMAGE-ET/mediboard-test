@@ -10,12 +10,16 @@
 
 {{if !$account_pop->active}}
   <tr>
-    <td colspan="5"><div class="warning">{{tr}}CSourcePOP-msg-notActive{{/tr}}</div></td>
+    <td colspan="5"><div class="small-warning">{{tr}}CSourcePOP-msg-notActive{{/tr}}</div></td>
   </tr>
 {{/if}}
 
 <tr>
-  <th style="width: 10px;"><input type="checkbox" value="" onclick="messagerie.toggleSelect('list_external_mail', this.checked,'item_mail')"/>{{tr}}Actions{{/tr}}</th>
+  <th style="width: 10px;">
+    {{if $favorite}}<img src="modules/{{$m}}/images/favorites-1.png" alt="" style="height:15px;" title="{{tr}}CUserMail-view-onlyFavorite{{/tr}}"/>{{/if}}
+    {{if $archived}}<img src="style/mediboard/images/buttons/history.gif" alt="" title="{{tr}}CUserMail-view-onlyArchived{{/tr}}"/>{{/if}}
+    <input type="checkbox" value="" onclick="messagerie.toggleSelect('list_external_mail', this.checked,'item_mail')"/>{{tr}}Actions{{/tr}}
+  </th>
   <th style="width: 30px;">{{tr}}CUserMail-date_inbox{{/tr}}</th>
   <th>{{tr}}CUserMail-from{{/tr}}</th>
   <th>{{tr}}CUserMail-subject{{/tr}}</th>
@@ -35,6 +39,7 @@
           <button type="button" class="trash notext" onclick="return confirmDeletion(this.form,{typeName:'messagerie',objName:'{{$_mail->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: messagerie.refreshList.curry(messagerie.page,'{{$account}}')})">Supprimer le message</button>
         </form>
         <!--(<button class="tag notext" title="button.tag notext">tag</button>)-->
+        <button onclick="messagerie.toggleArchived('{{$_mail->_id}}');" class="nowrap notext"><img src="style/mediboard/images/buttons/history.gif" alt="" style="height:15px;"/>Archiver</button>
         <button onclick="messagerie.toggleFavorite('{{$_mail->_id}}');" class="nowrap"><img src="modules/{{$m}}/images/favorites-{{$_mail->favorite}}.png" alt="" style="height:15px;"/></button>
       </td>
       <td>{{mb_value object=$_mail field=date_inbox format=relative}}</td>

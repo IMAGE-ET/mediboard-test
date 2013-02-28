@@ -41,6 +41,7 @@ foreach ($sources as $_source) {
     $_source->active = 0;
     $_source->store();
     CMbObject::error("CPop-error-imap_open");
+    continue;
   }
   $unseen = $pop->search('UNSEEN');
 

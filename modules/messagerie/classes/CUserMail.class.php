@@ -29,6 +29,7 @@ class CUserMail extends CMbObject{
   var $uid                    = null;
   var $answered               = null;  //this message is flagged as answered
   var $favorite               = null;  // favorite, important email
+  var $archived               = null;  // is the mail archived, (hidden)
 
   //var $msg_references = null; //is a reference to this message id
   var $in_reply_to_id         = null; //is a reply to this message id
@@ -82,6 +83,7 @@ class CUserMail extends CMbObject{
     $props["uid"]           = "num";
     $props["answered"]      = "bool default|0";
     $props["favorite"]      = "bool default|0";
+    $props["archived"]      = "bool default|0";
     //$props["msg_references"]= "str";
     $props["in_reply_to_id"] = "ref class|CUserMail";
     $props["text_file_id"]  = "ref class|CFile";

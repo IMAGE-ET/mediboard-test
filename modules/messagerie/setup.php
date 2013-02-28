@@ -130,6 +130,11 @@ class CSetupmessagerie extends CSetup {
               ADD `favorite` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    $query = "ALTER TABLE `user_mail`
+              ADD `archived` ENUM ('0','1') DEFAULT '0' AFTER `favorite`;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.25";
   }
 }
