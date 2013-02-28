@@ -697,20 +697,14 @@ function mbLoadScriptsStorage(){
 /**
  * Set memory limit alternative with a minimal value approach
  * Shoud *always* be used
- * 
+ *
  * @param string $limit Memory limit with ini_set() syntax
- * 
+ *
  * @return string The old value on success, false on failure
- * @todo Should me moved to CApp::memoryLimit()
+ * @TODO : DELETE if not called anymore (check for all modules)
  */
 function set_min_memory_limit($limit) {
-  $actual = CMbString::fromDecaBinary(ini_get('memory_limit'));
-  $new    = CMbString::fromDecaBinary($limit);
-  if ($new > $actual) {
-    return ini_set('memory_limit', $limit);
-  }
-  
-  return ini_get('memory_limit');
+  return CApp::setMemoryLimit($limit);
 }
 
 /**

@@ -67,8 +67,7 @@ class CApp {
       if (!headers_sent()) {
         header("HTTP/1.1 500 Application died unexpectedly");
       }
-      
-      trigger_error("Application died unexpectedly", E_USER_ERROR);      
+      CModelObject::error("Application-died-unexpectedly");
     }
   }
   
@@ -109,10 +108,10 @@ class CApp {
    *
    * @param integer $seconds The time limit in seconds
    *
-   * @return void
+   * @return string
    */
   static function setTimeLimit($seconds) {
-    set_time_limit($seconds);
+    return self::setMaxPhpConfig("max_execution_time", $seconds);
   }
 
   /**
@@ -120,12 +119,35 @@ class CApp {
    *
    * @param integer $megabytes The memory limit in megabytes
    *
-   * @return string Previous memory limit
+   * @return string
    */
   static function setMemoryLimit($megabytes) {
-    return ini_set("memory_limit", "{$megabytes}M");
+    return self::setMaxPhpConfig("memory_limit", $megabytes);
   }
-  
+
+
+  /**
+   * set a php configuration limit with a minimal value
+   * if the value is < actual, the old value is used
+   *
+   * @param string     $config the php parameter
+   * @param string|int $limit  the limit required
+   *
+   * @return string
+   */
+  static function setMaxPhpConfig($config, $limit) {
+    $actual = CMbString::fromDecaBinary(ini_get($config));
+    $new    = CMbString::fromDecaBinary($limit);
+
+    //new value is superior => change the config
+    if ($new > $actual) {
+      return ini_set($config, $limit);
+    }
+
+    return ini_get($config);
+  }
+
+
   /**
    * Redirect to empty the POST data, 
    * so that it is not posted back when refreshing the page.
@@ -394,7 +416,7 @@ class CApp {
     foreach (CAppUI::conf("index_handlers") as $_class => $_active) {      
       if ($_active) {
         if (!class_exists($_class)) {
-          trigger_error("Application index handler missing class '$_class'", E_USER_ERROR);
+          CModelObject::error("application-index-handler-missing-class%s", $_class);
           continue;
         }
         self::$handlers[$_class] = new $_class;
