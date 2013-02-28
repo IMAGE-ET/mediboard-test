@@ -20,12 +20,12 @@ class CHL7v2SegmentACC extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name   = "ACC";
+  public $name   = "ACC";
   
   /**
    * @var CSejour
    */
-  var $sejour = null;
+  public $sejour;
 
   /**
    * Build ACC segement
@@ -35,11 +35,6 @@ class CHL7v2SegmentACC extends CHL7v2Segment {
    * @return null
    */
   function build(CHL7v2Event $event) {
-    $data = array();
-    
-    $sejour = new CSejour();
-    $sejour = $this->sejour;
-    
     parent::build($event);
 
     // ACC-1: Accident Date/Time (TS) <b>optional </b>
@@ -78,5 +73,3 @@ class CHL7v2SegmentACC extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

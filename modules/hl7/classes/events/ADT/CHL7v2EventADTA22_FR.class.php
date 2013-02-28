@@ -45,5 +45,3 @@ class CHL7v2EventADTA22_FR extends CHL7v2EventADTA22 {
     $this->addZFM($sejour);
   }
 }
-
-?>

@@ -13,35 +13,35 @@
 
 class CGrossesse extends CMbObject{
   // DB Table key
-  var $grossesse_id   = null;
+  public $grossesse_id;
   
   // DB References
-  var $parturiente_id = null;
+  public $parturiente_id;
   
   // DB Fields
-  var $terme_prevu    = null;
-  var $active         = null;
-  var $multiple       = null;
-  var $allaitement_maternel = null;
-  var $date_fin_allaitement = null;
-  var $date_dernieres_regles = null;
+  public $terme_prevu;
+  public $active;
+  public $multiple;
+  public $allaitement_maternel;
+  public $date_fin_allaitement;
+  public $date_dernieres_regles;
   
   // DB References
-  var $_ref_parturiente = null;
+  public $_ref_parturiente;
   
   // Distant fields
-  var $_ref_naissances  = null;
-  var $_ref_sejours     = array();
-  var $_ref_consultations = array();
-  var $_ref_last_consult_anesth = null;
+  public $_ref_naissances;
+  public $_ref_sejours     = array();
+  public $_ref_consultations = array();
+  public $_ref_last_consult_anesth;
   
   // Form fields
-  var $_praticiens      = null;
-  var $_date_fecondation = null;
-  var $_semaine_grossesse = null;
-  var $_terme_vs_operation = null;
-  var $_operation_id    = null;
-  var $_allaitement_en_cours = null;
+  public $_praticiens;
+  public $_date_fecondation;
+  public $_semaine_grossesse;
+  public $_terme_vs_operation;
+  public $_operation_id;
+  public $_allaitement_en_cours;
   
   function getSpec() {
     $spec = parent::getSpec();

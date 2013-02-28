@@ -16,7 +16,7 @@
  * R01 - Observation results reports for the patient
  */
 class CHL7v2EventORUR01 extends CHL7v2EventDEC implements CHL7EventORUR01 {
-  var $code = "R01";
+  public $code = "R01";
 
   /**
    * Construct

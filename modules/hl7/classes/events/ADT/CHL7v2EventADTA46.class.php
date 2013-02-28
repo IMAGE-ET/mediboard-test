@@ -19,11 +19,11 @@ class CHL7v2EventADTA46 extends CHL7v2EventADT implements CHL7EventADTA30 {
   /**
    * @var string
    */
-  var $code        = "A46";
+  public $code        = "A46";
   /**
    * @var string
    */
-  var $struct_code = "A30";
+  public $struct_code = "A30";
 
   /**
    * Build A46 event
@@ -46,7 +46,4 @@ class CHL7v2EventADTA46 extends CHL7v2EventADT implements CHL7EventADTA30 {
     // Merge Patient Information
     $this->addMRG($patient->_patient_elimine);
   }
-  
 }
-
-?>

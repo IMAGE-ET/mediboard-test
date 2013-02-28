@@ -19,7 +19,7 @@ class CHL7v2EventSIUS12 extends CHL7v2EventSIU implements CHL7EventSIUS12 {
   /**
    * @var string
    */
-  var $code = "S12";
+  public $code = "S12";
 
   /**
    * Build S12 event
@@ -56,5 +56,3 @@ class CHL7v2EventSIUS12 extends CHL7v2EventSIU implements CHL7EventSIUS12 {
     $this->addAIL($appointment);
   }
 }
-
-?>

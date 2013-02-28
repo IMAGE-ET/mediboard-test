@@ -286,22 +286,16 @@ class CInteropActor extends CMbObject {
    *
    * @param CMbObject $object Object
    *
-   * @return void
+   * @return CIdSante400
    */
   function getIdex(CMbObject $object) {
-    $idex = new CIdSante400();
-    $idex->object_class = $object->_class;
-    $idex->object_id    = $object->_id;
-    $idex->tag          = $this->getTag($this->group_id, $this->_class);
-    $idex->loadMatchingObject();
-
-    return $idex;
+    return CIdSante400::getLatestFor($object, $this->getTag($this->group_id, $this->_class));
   }
 
   /**
    * Load group forward reference
    *
-   * @return CMbObject
+   * @return CGroups
    */
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", 1);
@@ -310,7 +304,7 @@ class CInteropActor extends CMbObject {
   /**
    * Load user forward reference
    *
-   * @return CMbObject
+   * @return void
    */
   function loadRefUser() {
   }

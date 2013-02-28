@@ -20,12 +20,12 @@ class CHL7v2SegmentZFP extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name   = "ZFP";
+  public $name   = "ZFP";
   
   /**
    * @var CPatient
    */
-  var $patient = null;
+  public $patient;
 
   /**
    * Build ZFP segement
@@ -48,5 +48,3 @@ class CHL7v2SegmentZFP extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

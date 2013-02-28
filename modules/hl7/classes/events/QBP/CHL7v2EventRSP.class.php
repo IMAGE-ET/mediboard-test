@@ -119,7 +119,7 @@ class CHL7v2EventRSP extends CHL7v2Event implements CHL7EventRSP {
       }
     }
 
-    $last = end($object->objects);
+    //$last = end($object->objects);
     /*if ($last) {
       $last->_id
     }*/

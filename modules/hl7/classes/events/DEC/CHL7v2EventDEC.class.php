@@ -16,7 +16,7 @@
  * Device Enterprise Communication
  */
 class CHL7v2EventDEC extends CHL7v2Event implements CHL7EventDEC {
-  var $event_type = "ORU";
+  public $event_type = "ORU";
 
   /**
    * Construct

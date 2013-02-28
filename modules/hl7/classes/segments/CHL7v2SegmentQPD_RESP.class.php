@@ -17,7 +17,7 @@
  */
 
 class CHL7v2SegmentQPD_RESP extends CHL7v2Segment {
-  var $name   = "QPD_RESP";
+  public $name   = "QPD_RESP";
 
   /**
    * Build QPD segement

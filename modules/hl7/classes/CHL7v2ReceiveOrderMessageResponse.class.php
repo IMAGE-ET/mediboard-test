@@ -17,7 +17,7 @@ class CHL7v2ReceiveOrderMessageResponse implements CHL7Acknowledgment {
   /**
    * @var CHL7Event|null
    */
-  var $event              = null;
+  public $event;
   /**
    * @var CHL7v2EventACK
    */
@@ -25,23 +25,23 @@ class CHL7v2ReceiveOrderMessageResponse implements CHL7Acknowledgment {
   /**
    * @var CHL7v2Message
    */
-  var $message            = null;
+  public $message;
   /**
    * @var CHL7v2MessageXML
    */
-  var $dom_message        = null;
+  public $dom_message;
 
-  var $message_control_id = null;
-  var $ack_code           = null;
-  var $mb_error_codes     = null;
-  var $hl7_error_code     = null;
-  var $severity           = null;
-  var $comments           = null;
+  public $message_control_id;
+  public $ack_code;
+  public $mb_error_codes;
+  public $hl7_error_code;
+  public $severity;
+  public $comments;
 
   /**
    * @var CExchangeIHE
    */
-  var $_ref_exchange_ihe  = null;
+  public $_ref_exchange_ihe;
 
   /**
    * Construct

@@ -15,18 +15,18 @@
  */
 class CHL7v2TableEntry extends CHL7v2TableObject { 
   // DB Table key
-  var $table_entry_id  = null;
+  public $table_entry_id;
   
-  var $number          = null;
+  public $number;
   
-  var $code_hl7_from   = null;
-  var $code_hl7_to     = null;
+  public $code_hl7_from;
+  public $code_hl7_to;
   
-  var $code_mb_from    = null;
-  var $code_mb_to      = null;
+  public $code_mb_from;
+  public $code_mb_to;
   
-  var $description     = null;
-  var $user            = null;
+  public $description;
+  public $user;
       
   function getSpec() {
     $spec = parent::getSpec();

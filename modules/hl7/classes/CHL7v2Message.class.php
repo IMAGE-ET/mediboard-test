@@ -24,9 +24,9 @@ class CHL7v2Message extends CHMessage {
 
   protected $keep_original = array("MSH.1", "MSH.2", "NTE.3", "OBX.5");
 
-  var $extension    = null;
-  var $i18n_code    = null;
-  var $version      = "2.5";
+  public $extension;
+  public $i18n_code;
+  public $version      = "2.5";
   
   function __construct($version = null) {
     if (preg_match("/([A-Z]{2})_(.*)/", $version, $matches)) {

@@ -19,11 +19,11 @@ class CHL7v2EventADTA44 extends CHL7v2EventADT implements CHL7EventADTA43 {
   /**
    * @var string
    */
-  var $code        = "A44";
+  public $code        = "A44";
   /**
    * @var string
    */
-  var $struct_code = "A43";
+  public $struct_code = "A43";
 
   /**
    * Get event planned datetime
@@ -47,20 +47,17 @@ class CHL7v2EventADTA44 extends CHL7v2EventADT implements CHL7EventADTA43 {
    */
   function build($sejour) {
     parent::build($sejour);
-    
+
     $patient = $sejour->_ref_patient;
     // Patient Identification
     $this->addPID($patient, $sejour);
-    
+
     // Patient Additional Demographic
     $this->addPD1($patient);
-    
+
     $old_patient = new CPatient();
     $old_patient->load($sejour->_old->patient_id);
     // Merge Patient Information
     $this->addMRG($old_patient);
   }
-  
 }
-
-?>

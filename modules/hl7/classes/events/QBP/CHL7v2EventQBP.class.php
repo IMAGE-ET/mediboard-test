@@ -19,7 +19,7 @@ class CHL7v2EventQBP extends CHL7v2Event implements CHL7EventQBP {
   /**
    * @var string
    */
-  var $event_type = "QBP";
+  public $event_type = "QBP";
 
   /**
    * Construct

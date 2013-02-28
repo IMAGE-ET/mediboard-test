@@ -19,73 +19,73 @@ class CHL7Event {
   /**
    * @var null
    */
-  var $event_type    = null;
+  public $event_type;
   /**
    * @var null
    */
-  var $object        = null;
+  public $object;
   /**
    * @var CUserLog
    */
-  var $last_log      = null;
+  public $last_log;
   /**
    * @var string
    */
-  var $profil        = null;
+  public $profil;
   /**
    * @var string
    */
-  var $transaction   = null;
+  public $transaction;
   /**
    * @var string
    */
-  var $code          = null;
+  public $code;
   /**
    * @var string
    */
-  var $struct_code   = null;
+  public $struct_code;
   /**
    * @var string
    */
-  var $version       = null;
+  public $version;
 
   /**
    * @var CHL7v2Message
    */
-  var $message       = null;
+  public $message;
   /**
    * @var string
    */
-  var $msg_hl7       = null;
+  public $msg_hl7;
 
   /**
    * @var array
    */
-  var $msg_codes     = array();
+  public $msg_codes     = array();
   
   /**
    * @var CReceiverIHE
    */
-  var $_receiver     = null;
+  public $_receiver;
   
   /**
    * @var CInteropSender
    */
-  var $_sender       = null;
+  public $_sender;
 
   /**
    * @var CExchangeDataFormat
    */
-  var $_data_format = null;
+  public $_data_format;
 
   /**
    * @var CExchangeIHE
    */
-  var $_exchange_ihe = null;
+  public $_exchange_ihe;
   /**
    * @var string
    */
-  var $_is_i18n      = null;
+  public $_is_i18n;
 
   /**
    * Construct

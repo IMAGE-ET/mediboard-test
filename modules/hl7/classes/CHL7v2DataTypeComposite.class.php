@@ -10,8 +10,8 @@
  */
 
 class CHL7v2DataTypeComposite extends CHL7v2DataType {
-  var $components = array();
-  var $description = null;
+  public $components = array();
+  public $description;
   
   /*protected */function __construct($message, $datatype, $version, $extension) {
     parent::__construct($message, $datatype, $version, $extension);

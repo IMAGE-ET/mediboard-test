@@ -20,21 +20,21 @@ class CHL7v2SegmentGT1 extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name   = "GT1";
+  public $name   = "GT1";
   /**
    * @var null
    */
-  var $set_id = null;
+  public $set_id;
   
   /**
    * @var CPatient
    */
-  var $patient = null;
+  public $patient;
   
   /**
    * @var CSejour
    */
-  var $sejour = null;
+  public $sejour;
 
   /**
    * Build GT1 segement
@@ -45,9 +45,7 @@ class CHL7v2SegmentGT1 extends CHL7v2Segment {
    */
   function build(CHL7v2Event $event) {
     $data = array();
-    
-    $patient = $this->patient;
-    
+
     parent::build($event);
 
     $data[] = null;
@@ -226,5 +224,3 @@ class CHL7v2SegmentGT1 extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

@@ -20,12 +20,12 @@ class CHL7v2SegmentZFM extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name   = "ZFM";
+  public $name   = "ZFM";
   
   /**
    * @var CSejour
    */
-  var $sejour = null;
+  public $sejour;
 
   /**
    * Build ZFM segement
@@ -55,5 +55,3 @@ class CHL7v2SegmentZFM extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

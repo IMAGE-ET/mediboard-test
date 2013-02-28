@@ -19,11 +19,11 @@ class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA39 {
   /**
    * @var string
    */
-  var $code        = "A40";
+  public $code        = "A40";
   /**
    * @var string
    */
-  var $struct_code = "A39";
+  public $struct_code = "A39";
 
   /**
    * Build A40 event
@@ -42,11 +42,8 @@ class CHL7v2EventADTA40 extends CHL7v2EventADT implements CHL7EventADTA39 {
     
     // Patient Additional Demographic
     $this->addPD1($patient);
-    
+
     // Merge Patient Information
     $this->addMRG($patient->_patient_elimine);
   }
 }
-
-
-?>

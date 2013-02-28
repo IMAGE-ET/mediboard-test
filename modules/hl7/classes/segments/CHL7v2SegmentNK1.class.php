@@ -20,16 +20,16 @@ class CHL7v2SegmentNK1 extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name          = "NK1";
+  public $name          = "NK1";
   /**
    * @var null
    */
-  var $set_id        = null;
+  public $set_id;
   
   /**
    * @var CCorrespondantPatient
    */
-  var $correspondant = null;
+  public $correspondant;
 
   /**
    * Build NK1 segement
@@ -258,5 +258,4 @@ class CHL7v2SegmentNK1 extends CHL7v2Segment {
     
     $this->fill($data);
   }
-}  
-?>
+}

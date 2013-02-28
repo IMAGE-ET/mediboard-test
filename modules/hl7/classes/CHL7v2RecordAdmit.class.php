@@ -16,7 +16,7 @@
 class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   static $event_codes = "A01 A02 A03 A04 A05 A06 A07 A08 A11 A12 A13 A14 A16 A25 A38 A44 A54 A55 Z80 Z81 Z84 Z85 Z99";
   
-  var $_object_found_by_vn = null;
+  public $_object_found_by_vn;
 
   /**
    * Get data nodes
@@ -155,16 +155,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   
   function handleA05(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création possible
-    
-    // Traitement du message des erreurs
-    $comment = $warning = "";
-    $_modif_sejour = false; 
+    $_modif_sejour = false;
     
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $this->_ref_sender;
     
     $venueRI       = CValue::read($data['admitIdentifiers'], "RI");
-    $venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
+    //$venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
     $venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
     $venueVN       = CValue::read($data['admitIdentifiers'], "VN");
     $venueAN       = $this->getVenueAN($sender, $data);
@@ -221,8 +218,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       if (!$found && $venueRI) {
         // Recherche du séjour par son RI
         if ($newVenue->load($venueRI)) {
-          $recoveredSejour = clone $newVenue;
-          
           // Mapping du séjour
           $this->mappingVenue($data, $newVenue);
           
@@ -313,9 +308,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // NDA connu
     else {
       $newVenue->load($NDA->object_id);
-      
-      $recoveredVenue = clone $newVenue;
-          
+
       // Mapping de la venue
       $this->mappingVenue($data, $newVenue);
       
@@ -669,8 +662,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         
         return true;
     }
-    
-    return false;
   }
   
   function createObjectByVisitNumber(CSejour $newVenue, $data) {
@@ -760,13 +751,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   } 
   
   function admitFound(CSejour $newVenue, $data) {
-    $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $this->_ref_sender;
     
     $venueRI       = CValue::read($data['admitIdentifiers'], "RI");
-    $venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
+    //$venueRISender = CValue::read($data['admitIdentifiers'], "RI_Sender");
     $venueVN       = CValue::read($data['admitIdentifiers'], "VN");
-    $venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
+    //$venueNPA      = CValue::read($data['admitIdentifiers'], "NPA");
     $venueAN       = $this->getVenueAN($sender, $data);
     
     $NDA = new CIdSante400();

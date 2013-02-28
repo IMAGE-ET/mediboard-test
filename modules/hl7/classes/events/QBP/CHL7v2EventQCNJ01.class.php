@@ -19,12 +19,12 @@ class CHL7v2EventQCNJ01 extends CHL7v2EventQCN implements CHL7EventQCNJ01 {
   /**
    * @var string
    */
-  var $code        = "J01";
+  public $code        = "J01";
 
   /**
    * @var string
    */
-  var $struct_code = "J01";
+  public $struct_code = "J01";
 
   /**
    * Build J01 event

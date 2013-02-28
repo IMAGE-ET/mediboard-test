@@ -1,13 +1,14 @@
 <?php
+
 /**
- * Exchange source
- * $Id$
- *
- * @package    Mediboard
- * @subpackage System
- * @author     SARL OpenXtrem <dev@openxtrem.com>
- * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version    $Revision$
+ * Exchange Source
+ *  
+ * @category system
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version  SVN: $Id:$ 
+ * @link     http://www.mediboard.org
  */
 
 /**
@@ -195,8 +196,8 @@ class CExchangeSource extends CMbObject {
   }
 
   function updateEncryptedFields(){
-    // Inherited method
   }
+
 
   /**
    * store function
@@ -326,9 +327,11 @@ class CExchangeSource extends CMbObject {
     $this->_data = $data;
   }
   
-  function getData($path) {}
+  function getData($path) {
+  }
 
-  function delFile($path) {}
+  function delFile($path) {
+  }
   
   function send($evenement_name = null) {}
   
@@ -336,9 +339,11 @@ class CExchangeSource extends CMbObject {
     return $this->_acquittement;
   }
   
-  function receiveOne() {}
+  function receiveOne() {
+  }
   
-  function receive() {}
+  function receive() {
+  }
   
   /**
    * Source is reachable ?
@@ -363,11 +368,14 @@ class CExchangeSource extends CMbObject {
     $this->_message   = CAppUI::tr("$this->_class-reachable-source", $this->host);
   }
   
-  function isReachableSource() {}
+  function isReachableSource() {
+  }
   
-  function isAuthentificate() {}
+  function isAuthentificate() {
+  }
   
-  function getResponseTime() {}
+  function getResponseTime() {
+  }
 }
 
 if (CModule::getActive("hl7")) {

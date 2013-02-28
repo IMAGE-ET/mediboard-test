@@ -19,11 +19,11 @@ class CHL7v2EventADTA55 extends CHL7v2EventADT implements CHL7EventADTA52 {
   /**
    * @var string
    */
-  var $code        = "A55";
+  public $code        = "A55";
   /**
    * @var string
    */
-  var $struct_code = "A52";
+  public $struct_code = "A52";
 
   /**
    * Get event planned datetime
@@ -82,5 +82,3 @@ class CHL7v2EventADTA55 extends CHL7v2EventADT implements CHL7EventADTA52 {
     }
   }
 }
-
-?>

@@ -27,5 +27,3 @@ class CHL7v2EventADTA47_FR extends CHL7v2EventADTA47 {
     parent::__construct($i18n);
   }
 }
-
-?>

@@ -54,5 +54,3 @@ class CHL7v2EventADTA14_FR extends CHL7v2EventADTA14 {
     $this->addZFD($sejour);
   }
 }
-
-?>

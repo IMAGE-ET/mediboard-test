@@ -33,7 +33,7 @@ class CHL7v2Exception extends Exception {
   const UNKNOWN_MSG_CODE           = 22;
   const UNKNOWN_KEY_IDENTIFIER     = 23;
   
-  var $extraData = null;
+  public $extraData;
   
   // argument 2 must be named "code" ...
   public function __construct($id, $code = 0) {

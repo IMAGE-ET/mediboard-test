@@ -17,22 +17,22 @@
  */
 
 class CHL7v2SegmentQPD extends CHL7v2Segment {
-  var $name   = "QPD";
+  public $name   = "QPD";
 
   /**
    * @var CPatient
    */
-  var $patient = null;
+  public $patient;
 
   /**
    * @var CSejour
    */
-  var $sejour = null;
+  public $sejour;
 
   /**
    * @var CAffectation
    */
-  var $affectation = null;
+  public $affectation;
 
   /**
    * Build QPD segement

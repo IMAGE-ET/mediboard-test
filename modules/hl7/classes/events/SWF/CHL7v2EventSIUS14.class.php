@@ -19,7 +19,7 @@ class CHL7v2EventSIUS14 extends CHL7v2EventSIU implements CHL7EventSIUS12 {
   /**
    * @var string
    */
-  var $code = "S14";
+  public $code = "S14";
 
   /**
    * Build S14 event

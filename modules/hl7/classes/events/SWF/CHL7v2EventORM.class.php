@@ -19,7 +19,7 @@ class CHL7v2EventORM extends CHL7v2Event implements CHL7EventORM {
   /**
    * @var string
    */
-  var $event_type = "ORM";
+  public $event_type = "ORM";
 
   /**
    * Construct

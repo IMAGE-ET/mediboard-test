@@ -30,19 +30,19 @@ class CExchangeIHE extends CExchangeTabular {
   
   // DB Table key
   /**
-   * @var null
+   * @var int
    */
-  var $exchange_ihe_id = null;
+  public $exchange_ihe_id;
 
   /**
-   * @var null
+   * @var string
    */
-  var $code            = null;
+  public $code;
   
   /**
    * @var CHL7v2Message
    */
-  var $_message_object = null;
+  public $_message_object;
 
   /**
    * Initialize object specification
@@ -285,7 +285,7 @@ class CExchangeIHE extends CExchangeTabular {
    */
   function populateErrorExchange(CHL7Acknowledgment $ack = null, CHL7Event $event = null) {
     if ($ack) {
-      $msgAck = $ack->event_ack->msg_hl7;
+      $ack->event_ack->msg_hl7;
       $this->_acquittement       = $ack->event_ack->msg_hl7;;
       /* @todo Comment gérer ces informations ? */
       $this->statut_acquittement = $ack->ack_code;

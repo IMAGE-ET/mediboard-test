@@ -20,17 +20,17 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name   = "PV2";
+  public $name   = "PV2";
   
   /**
    * @var CSejour
    */
-  var $sejour = null;
+  public $sejour;
   
   /**
    * @var COperation
    */
-  var $operation = null;
+  public $operation;
 
   /**
    * Build PV2 segement
@@ -255,5 +255,3 @@ class CHL7v2SegmentPV2 extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

@@ -13,10 +13,6 @@
  * The CMbXPath class
  */
 class CMbXPath extends DOMXPath {
-  function __construct(DOMDocument $doc) {
-    parent::__construct($doc);
-  }
-
   /**
    * Get the node corresponding to an XPath
    *
@@ -49,7 +45,16 @@ class CMbXPath extends DOMXPath {
     return $nodeList->item(0);
   }
 
-  function queryNumcharNode($query, DOMNode $contextNode = null, $length) {
+  /**
+   * Get the numchar text of a node corresponding to an XPath
+   *
+   * @param string   $query       The XPath to the node
+   * @param int|null $length      If length is given and is positive, the string returned will contain at most length characters
+   * @param DOMNode  $contextNode The context node from which the XPath starts
+   *
+   * @return string
+   */
+  function queryNumcharNode($query, $length, DOMNode $contextNode = null) {
     if (null == $text = $this->queryTextNode($query, $contextNode, " /-.")) {
       return;
     }
@@ -107,6 +112,17 @@ class CMbXPath extends DOMXPath {
     return $text;
   }
 
+  /**
+   * Get the value of attribute
+   *
+   * @param string  $query       The XPath to the node
+   * @param DOMNode $contextNode The context node from which the XPath starts
+   * @param string  $attName     Attribute name
+   * @param string  $purgeChars  The input string
+   * @param bool    $optional    Don't throw an exception if node not found
+   *
+   * @return string
+   */
   function queryAttributNode($query, DOMNode $contextNode = null, $attName, $purgeChars = "", $optional = true) {
     $text = "";
 
@@ -120,6 +136,14 @@ class CMbXPath extends DOMXPath {
     return $text;
   }
 
+  /**
+   * Get multiple text nodes
+   *
+   * @param string  $query       The XPath to the node
+   * @param DOMNode $contextNode The context node from which the XPath starts
+   *
+   * @return array
+   */
   function getMultipleTextNodes($query, DOMNode $contextNode = null) {
     $query = $this->convertEncoding($query);
     $nodeList = $contextNode ? parent::query($query, $contextNode) : parent::query($query);
@@ -131,6 +155,15 @@ class CMbXPath extends DOMXPath {
     return $array;
   }
 
+  /**
+   * Get the value of attribute
+   *
+   * @param DOMNode $node       Node
+   * @param string  $attName    Attribute name
+   * @param string  $purgeChars The input string
+   *
+   * @return string
+   */
   function getValueAttributNode(DOMNode $node, $attName, $purgeChars = "") {
     $text = "";
 
@@ -144,6 +177,13 @@ class CMbXPath extends DOMXPath {
     return $text;
   }
 
+  /**
+   * Convert value with ISO-8859-1 characters encoded with UTF-8
+   *
+   * @param string $value Value
+   *
+   * @return string
+   */
   function convertEncoding($value) {
     return utf8_decode($value);
   }

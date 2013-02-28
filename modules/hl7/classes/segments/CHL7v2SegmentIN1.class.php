@@ -20,12 +20,12 @@ class CHL7v2SegmentIN1 extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name    = "IN1";
+  public $name    = "IN1";
   
   /**
    * @var CPatient
    */
-  var $patient = null;
+  public $patient;
 
   /**
    * Build IN1 segement
@@ -36,8 +36,6 @@ class CHL7v2SegmentIN1 extends CHL7v2Segment {
    */
   function build(CHL7v2Event $event) {
     parent::build($event);
-    
-    $patient  = $this->patient;
     
     $data = array();
     
@@ -202,7 +200,4 @@ class CHL7v2SegmentIN1 extends CHL7v2Segment {
     
     $this->fill($data);
   }
-  
 }
-
-?>

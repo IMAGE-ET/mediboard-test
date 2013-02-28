@@ -80,5 +80,3 @@ class CHL7v2SegmentZBE_FR extends CHL7v2SegmentZBE {
     }
   }
 }
-
-?>

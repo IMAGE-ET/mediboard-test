@@ -132,7 +132,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
    *
    * @param DOMNode $node QPD element
    *
-   * @return string
+   * @return array
    */
   function getRequestPatient(DOMNode $node) {
     $PID = array();

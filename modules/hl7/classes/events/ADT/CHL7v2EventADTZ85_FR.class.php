@@ -19,11 +19,11 @@ class CHL7v2EventADTZ85_FR extends CHL7v2EventADT implements CHL7EventADTA01 {
   /**
    * @var string
    */
-  var $code        = "Z85";
+  public $code        = "Z85";
   /**
    * @var string
    */
-  var $struct_code = "A01";
+  public $struct_code = "A01";
 
   /**
    * Construct
@@ -57,11 +57,13 @@ class CHL7v2EventADTZ85_FR extends CHL7v2EventADT implements CHL7EventADTA01 {
    * @return void
    */
   function build($affectation) {
+    /** @var CSejour $sejour */
     $sejour                       = $affectation->_ref_sejour;
     $sejour->_ref_hl7_affectation = $affectation;
     
     parent::build($affectation);
-    
+
+    /** @var CPatient $patient */
     $patient = $sejour->_ref_patient;
     // Patient Identification
     $this->addPID($patient, $sejour);
@@ -100,5 +102,3 @@ class CHL7v2EventADTZ85_FR extends CHL7v2EventADT implements CHL7EventADTA01 {
     $this->addGT1($patient);
   }
 }
-
-?>

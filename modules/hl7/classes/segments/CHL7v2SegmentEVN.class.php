@@ -20,15 +20,15 @@ class CHL7v2SegmentEVN extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name             = "EVN";
+  public $name             = "EVN";
   /**
    * @var null
    */
-  var $planned_datetime = null;
+  public $planned_datetime;
   /**
    * @var null
    */
-  var $occured_datetime = null;
+  public $occured_datetime;
 
   /**
    * Build EVN segement
@@ -76,4 +76,3 @@ class CHL7v2SegmentEVN extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-?>

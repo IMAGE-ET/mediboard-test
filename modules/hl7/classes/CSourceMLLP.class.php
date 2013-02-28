@@ -20,13 +20,13 @@ class CSourceMLLP extends CExchangeSource {
    */
   const LEADING  = "\x1C\x0D"; // File separator (FS, decimal 28), \r Carriage return (CR, decimal 13)
   
-  var $source_mllp_id     = null;
-  var $port               = null;
+  public $source_mllp_id;
+  public $port;
   
-  var $ssl_enabled        = null;
-  var $ssl_certificate    = null;
-  var $ssl_passphrase     = null;
-  var $iv_passphrase      = null;
+  public $ssl_enabled;
+  public $ssl_certificate;
+  public $ssl_passphrase;
+  public $iv_passphrase;
   
   private $_socket_client = null;
   

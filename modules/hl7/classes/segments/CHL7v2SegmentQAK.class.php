@@ -20,12 +20,12 @@ class CHL7v2SegmentQAK extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name   = "QAK";
+  public $name   = "QAK";
 
   /**
    * @var array
    */
-  var $objects = null;
+  public $objects;
 
   /**
    * Build QPD segement

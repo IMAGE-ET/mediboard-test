@@ -20,12 +20,12 @@ class CHL7v2SegmentMRG extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name             = "MRG";
+  public $name             = "MRG";
   
   /**
    * @var CPatient
    */
-  var $patient_eliminee = null;
+  public $patient_eliminee;
 
   /**
    * Build MRG segement
@@ -66,7 +66,4 @@ class CHL7v2SegmentMRG extends CHL7v2Segment {
     
     $this->fill($data);
   }
-  
 }
-
-?>

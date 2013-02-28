@@ -21,17 +21,17 @@ class CReceiverIHE extends CInteropReceiver {
   /**
    * @var null
    */
-  var $receiver_ihe_id  = null;
+  public $receiver_ihe_id;
 
   /**
    * @var null
    */
-  var $_extension       = null;
+  public $_extension;
 
   /**
    * @var null
    */
-  var $_i18n_code       = null;
+  public $_i18n_code;
 
   /**
    * Initialize object specification

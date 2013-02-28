@@ -37,27 +37,27 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name   = "ZBE";
+  public $name   = "ZBE";
   
   /**
    * @var CSejour
    */
-  var $sejour = null;
+  public $sejour;
   
   /**
    * @var CMovement
    */
-  var $movement = null;
+  public $movement;
   
   /**
    * @var CAffectation
    */
-  var $curr_affectation = null;
+  public $curr_affectation;
   
   /**
    * @var CAffectation
    */
-  var $other_affectation = null;
+  public $other_affectation;
 
   /**
    * Build ZBE segement
@@ -147,7 +147,7 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
           $uf_medicale->code
         )
       );
-    } 
+    }
     else {
       $data[] = null;
     }
@@ -159,11 +159,14 @@ class CHL7v2SegmentZBE extends CHL7v2Segment {
   }
 
   /**
-   * @param             $data
-   * @param             $ufs
-   * @param CHL7v2Event $event
+   * Fill other segments
+   *
+   * @param array       &$data Data
+   * @param array       $ufs   UFs
+   * @param CHL7v2Event $event Event
+   *
+   * @return void
    */
-  function fillOtherSegments(&$data, $ufs, CHL7v2Event $event) {}
+  function fillOtherSegments(&$data, $ufs, CHL7v2Event $event) {
+  }
 }
-
-?>

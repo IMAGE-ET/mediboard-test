@@ -94,15 +94,14 @@ class CHL7v2MergePersons extends CHL7v2MessageXML {
       }
       
       if (!$mbPatient->_id || !$mbPatientElimine->_id) {
-        $comment = !$mbPatient->_id ? "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientElimine->_id est inconnu dans Mediboard.";
+        $comment = !$mbPatient->_id ?
+          "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientElimine->_id est inconnu dans Mediboard.";
         return $exchange_ihe->setAckAR($ack, "E120", $comment, $newPatient);
       }
   
       // Passage en trash de l'IPP du patient a éliminer
       $newPatient->trashIPP($id400PatientElimine);
-      
-      $messages = array();
-            
+
       $patientsElimine_array = array($mbPatientElimine);
       $first_patient_id = $mbPatient->_id;
   

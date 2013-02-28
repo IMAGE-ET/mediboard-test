@@ -20,16 +20,16 @@ class CHL7v2SegmentAIG extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name = "AIG";
+  public $name = "AIG";
   /**
    * @var null
    */
-  var $set_id = null;
+  public $set_id;
   
   /**
    * @var CConsultation
    */
-  var $appointment = null;
+  public $appointment;
 
   /**
    * Build AIG segement

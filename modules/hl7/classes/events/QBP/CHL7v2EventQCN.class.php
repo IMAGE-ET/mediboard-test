@@ -19,7 +19,7 @@ class CHL7v2EventQCN extends CHL7v2Event implements CHL7EventQCN {
   /**
    * @var string
    */
-  var $event_type = "QCN";
+  public $event_type = "QCN";
 
   /**
    * Construct

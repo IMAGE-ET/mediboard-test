@@ -20,12 +20,12 @@ class CHL7v2SegmentRCP extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name    = "RCP";
+  public $name    = "RCP";
 
   /**
    * @var CPatient
    */
-  var $patient = null;
+  public $patient;
 
   /**
    * Build RCP segement
@@ -75,5 +75,3 @@ class CHL7v2SegmentRCP extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

@@ -15,247 +15,247 @@
  */
 class CSejour extends CFacturable implements IPatientRelated {
   // DB Table key
-  var $sejour_id = null;
+  public $sejour_id;
 
   // Clôture des actes
-  var $cloture_activite_1    = null;
-  var $cloture_activite_4    = null;
+  public $cloture_activite_1;
+  public $cloture_activite_4;
 
   // DB Réference
-  var $patient_id          = null;
-  var $praticien_id        = null;
-  var $group_id            = null;
-  var $grossesse_id        = null;
+  public $patient_id;
+  public $praticien_id;
+  public $group_id;
+  public $grossesse_id;
 
-  var $uf_hebergement_id   = null; // UF de responsabilité d'hébergement
-  var $uf_medicale_id      = null; // UF de responsabilité médicale
-  var $uf_soins_id         = null; // UF de responsabilité de soins
+  public $uf_hebergement_id; // UF de responsabilité d'hébergement
+  public $uf_medicale_id; // UF de responsabilité médicale
+  public $uf_soins_id; // UF de responsabilité de soins
 
-  var $etablissement_entree_id = null;
-  var $etablissement_sortie_id = null;
-  var $service_entree_id       = null; // Service d' entrée de mutation
-  var $service_sortie_id       = null; // Service de sortie de mutation
+  public $etablissement_entree_id;
+  public $etablissement_sortie_id;
+  public $service_entree_id; // Service d' entrée de mutation
+  public $service_sortie_id; // Service de sortie de mutation
 
   // DB Fields
-  var $type                = null;
-  var $charge_id           = null;
-  var $modalite            = null;
-  var $annule              = null;
-  var $recuse              = null;
-  var $chambre_seule       = null;
-  var $reanimation         = null;
-  var $UHCD                = null;
-  var $service_id          = null;
+  public $type;
+  public $charge_id;
+  public $modalite;
+  public $annule;
+  public $recuse;
+  public $chambre_seule;
+  public $reanimation;
+  public $UHCD;
+  public $service_id;
 
-  var $entree_prevue       = null;
-  var $sortie_prevue       = null;
-  var $entree_reelle       = null;
-  var $sortie_reelle       = null;
-  var $entree              = null;
-  var $sortie              = null;
+  public $entree_prevue;
+  public $sortie_prevue;
+  public $entree_reelle;
+  public $sortie_reelle;
+  public $entree;
+  public $sortie;
 
-  var $entree_preparee     = null;
-  var $sortie_preparee     = null;
-  var $entree_modifiee     = null;
-  var $sortie_modifiee     = null;
+  public $entree_preparee;
+  public $sortie_preparee;
+  public $entree_modifiee;
+  public $sortie_modifiee;
 
-  var $DP                  = null;
-  var $DR                  = null;
-  var $pathologie          = null;
-  var $septique            = null;
-  var $convalescence       = null;
+  public $DP;
+  public $DR;
+  public $pathologie;
+  public $septique;
+  public $convalescence;
 
-  var $provenance          = null;
-  var $destination         = null;
-  var $transport           = null; /* @todo Passer en $transport_entree */
-  var $transport_sortie    = null;
-  var $rques_transport_sortie = null;
+  public $provenance;
+  public $destination;
+  public $transport; /* @todo Passer en $transport_entree */
+  public $transport_sortie;
+  public $rques_transport_sortie;
 
-  var $rques               = null;
-  var $ATNC                = null;
-  var $consult_accomp      = null;
-  var $hormone_croissance  = null;
-  var $lit_accompagnant    = null;
-  var $isolement           = null;
-  var $isolement_date      = null;
-  var $isolement_fin       = null;
-  var $raison_medicale     = null;
-  var $television          = null;
-  var $repas_diabete       = null;
-  var $repas_sans_sel      = null;
-  var $repas_sans_residu   = null;
-  var $repas_sans_porc     = null;
+  public $rques;
+  public $ATNC;
+  public $consult_accomp;
+  public $hormone_croissance;
+  public $lit_accompagnant;
+  public $isolement;
+  public $isolement_date;
+  public $isolement_fin;
+  public $raison_medicale;
+  public $television;
+  public $repas_diabete;
+  public $repas_sans_sel;
+  public $repas_sans_residu;
+  public $repas_sans_porc;
 
-  var $mode_entree         = null;
-  var $mode_entree_id      = null;
-  var $mode_sortie         = null;
-  var $mode_sortie_id      = null;
+  public $mode_entree;
+  public $mode_entree_id;
+  public $mode_sortie;
+  public $mode_sortie_id;
 
-  var $confirme            = null;
-  var $prestation_id       = null;
-  var $facturable          = null;
-  var $adresse_par_prat_id = null;
-  var $libelle             = null;
-  var $forfait_se          = null;
-  var $forfait_sd          = null;
-  var $commentaires_sortie = null;
-  var $discipline_id       = null;
-  var $ald                 = null;
-  var $type_pec            = null;
+  public $confirme;
+  public $prestation_id;
+  public $facturable;
+  public $adresse_par_prat_id;
+  public $libelle;
+  public $forfait_se;
+  public $forfait_sd;
+  public $commentaires_sortie;
+  public $discipline_id;
+  public $ald;
+  public $type_pec;
   
-  var $date_accident             = null;
-  var $nature_accident           = null;
+  public $date_accident;
+  public $nature_accident;
 
   // Form Fields
-  var $_entree             = null;
-  var $_sortie             = null;
-  var $_duree_prevue       = null;
-  var $_duree_reelle       = null;
-  var $_duree              = null;
-  var $_date_entree_prevue = null;
-  var $_date_sortie_prevue = null;
-  var $_time_entree_prevue = null;
-  var $_time_sortie_prevue = null;
-  var $_hour_entree_prevue = null;
-  var $_hour_sortie_prevue = null;
-  var $_min_entree_prevue  = null;
-  var $_min_sortie_prevue  = null;
-  var $_guess_NDA          = null;
-  var $_at_midnight        = null;
-  var $_couvert_cmu        = null;
-  var $_couvert_ald        = null;
-  var $_curr_op_id         = null;
-  var $_curr_op_date       = null;
-  var $_protocole_prescription_anesth_id = null;
-  var $_protocole_prescription_chir_id   = null;
-  var $_adresse_par        = null;
-  var $_adresse_par_prat   = null;
-  var $_etat               = null;
-  var $_entree_relative    = null;
-  var $_sortie_relative    = null;
-  var $_not_collides       = array ("urg", "consult", "seances", "exte"); // Séjour dont on ne test pas la collision
-  var $_is_proche          = null;
-  var $_motif_complet      = null;
-  var $_grossesse          = null;
-  var $_nb_printers        = null;
-  var $_sejours_enfants_ids = array();
-  var $_date_deces         = null;
-  var $_envoi_mail         = null;
-  var $_naissance          = null;
-  var $_isolement_date     = null;
-  var $_collisions         = null;
-  var $_count_modeles_etiq = null;
-  var $_count_tasks        = null;
-  var $_count_pending_tasks = null;
+  public $_entree;
+  public $_sortie;
+  public $_duree_prevue;
+  public $_duree_reelle;
+  public $_duree;
+  public $_date_entree_prevue;
+  public $_date_sortie_prevue;
+  public $_time_entree_prevue;
+  public $_time_sortie_prevue;
+  public $_hour_entree_prevue;
+  public $_hour_sortie_prevue;
+  public $_min_entree_prevue;
+  public $_min_sortie_prevue;
+  public $_guess_NDA;
+  public $_at_midnight;
+  public $_couvert_cmu;
+  public $_couvert_ald;
+  public $_curr_op_id;
+  public $_curr_op_date;
+  public $_protocole_prescription_anesth_id;
+  public $_protocole_prescription_chir_id;
+  public $_adresse_par;
+  public $_adresse_par_prat;
+  public $_etat;
+  public $_entree_relative;
+  public $_sortie_relative;
+  public $_not_collides       = array ("urg", "consult", "seances", "exte"); // Séjour dont on ne test pas la collision
+  public $_is_proche;
+  public $_motif_complet;
+  public $_grossesse;
+  public $_nb_printers;
+  public $_sejours_enfants_ids = array();
+  public $_date_deces;
+  public $_envoi_mail;
+  public $_naissance;
+  public $_isolement_date;
+  public $_count_modeles_etiq;
+  public $_count_tasks;
+  public $_count_pending_tasks;
+  public $_collisions = array();
 
   // Behaviour fields
-  var $_check_bounds  = true;
-  var $_en_mutation   = null;
-  var $_unique_lit_id = null;
-  var $_no_synchro    = null;
-  var $_generate_NDA  = true;
-  var $_skip_date_consistencies = false; // On ne check pas la cohérence des dates des consults/intervs
+  public $_check_bounds  = true;
+  public $_en_mutation;
+  public $_unique_lit_id;
+  public $_no_synchro;
+  public $_generate_NDA            = true;
+  public $_skip_date_consistencies = false; // On ne check pas la cohérence des dates des consults/intervs
 
   // EAI Fields
-  var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
+  public $_eai_initiateur_group_id; // group initiateur du message EAI
 
   //Fields for bill
-  var $_assurance_maladie        = null;
-  var $_rques_assurance_maladie  = null;
-  var $_assurance_accident       = null;
-  var $_rques_assurance_accident = null;
-  var $_type_sejour              = null;
-  var $_statut_pro               = null;
-  var $_dialyse                  = null;
-  var $_cession_creance          = null;
+  public $_assurance_maladie;
+  public $_rques_assurance_maladie;
+  public $_assurance_accident;
+  public $_rques_assurance_accident;
+  public $_type_sejour;
+  public $_statut_pro;
+  public $_dialyse;
+  public $_cession_creance;
   
   // Object References
-  var $_ref_patient                 = null; // Declared in CCodable
-  var $_ref_praticien               = null;
-  var $_ref_operations              = null;
-  var $_ref_last_operation          = null;
-  var $_ref_affectations            = null;
-  var $_ref_first_affectation       = null;
-  var $_ref_last_affectation        = null;
-  var $_ref_GHM                     = array();
-  var $_ref_group                   = null;
-  var $_ref_etablissement_transfert  = null;
-  var $_ref_etablissement_provenance = null;
-  var $_ref_service_mutation        = null;
-  var $_ref_dossier_medical         = null;
-  var $_ref_rpu                     = null;
-  var $_ref_bilan_ssr               = null;
-  var $_ref_fiche_autonomie         = null;
-  var $_ref_consult_anesth          = null;
-  var $_ref_consultations           = null;
-  var $_ref_consult_atu             = null;
-  var $_ref_prescriptions           = null;
-  var $_ref_last_prescription       = null;
-  var $_ref_NDA                     = null;
-  var $_ref_NPA                     = null;
-  var $_ref_NRA                     = null;
-  var $_ref_prescripteurs           = null;
-  var $_ref_adresse_par_prat        = null;
-  var $_ref_prescription_sejour     = null;
-  var $_ref_replacements            = null;
-  var $_ref_replacement             = null;
-  var $_ref_tasks                   = null;
-  var $_ref_tasks_not_created       = null;
-  var $_ref_transmissions           = null;
-  var $_ref_observations            = null;
-  var $_ref_hl7_movement            = null;
-  var $_ref_hl7_affectation         = null;
-  var $_ref_grossesse               = null;
-  var $_ref_curr_operation          = null;
-  var $_ref_curr_operations         = null;
-  var $_ref_exams_igs               = null;
-  var $_ref_charge_price_indicator  = null; // Type d'activité
-  var $_ref_movements               = null;
-  var $_ref_mode_entree             = null;
-  var $_ref_mode_sortie             = null;
-  var $_ref_factures                = null;
-  var $_ref_last_facture            = null;
-  var $_ref_prestation              = null;
+  public $_ref_patient; // Declared in CCodable
+  public $_ref_praticien;
+  public $_ref_operations;
+  public $_ref_last_operation;
+  public $_ref_affectations;
+  public $_ref_first_affectation;
+  public $_ref_last_affectation;
+  public $_ref_GHM = array();
+  public $_ref_group;
+  public $_ref_etablissement_transfert;
+  public $_ref_etablissement_provenance;
+  public $_ref_service_mutation;
+  public $_ref_dossier_medical;
+  public $_ref_rpu;
+  public $_ref_bilan_ssr;
+  public $_ref_fiche_autonomie;
+  public $_ref_consult_anesth;
+  public $_ref_consultations;
+  public $_ref_consult_atu;
+  public $_ref_prescriptions;
+  public $_ref_last_prescription;
+  public $_ref_NDA;
+  public $_ref_NPA;
+  public $_ref_NRA;
+  public $_ref_prescripteurs;
+  public $_ref_adresse_par_prat;
+  public $_ref_prescription_sejour;
+  public $_ref_replacements;
+  public $_ref_replacement;
+  public $_ref_tasks;
+  public $_ref_tasks_not_created;
+  public $_ref_transmissions;
+  public $_ref_observations;
+  public $_ref_hl7_movement;
+  public $_ref_hl7_affectation;
+  public $_ref_grossesse;
+  public $_ref_curr_operation;
+  public $_ref_curr_operations;
+  public $_ref_exams_igs;
+  public $_ref_charge_price_indicator; // Type d'activité
+  public $_ref_movements;
+  public $_ref_mode_entree;
+  public $_ref_mode_sortie;
+  public $_ref_factures;
+  public $_ref_last_facture;
+  public $_ref_prestation;
 
   // External objects
-  var $_ext_diagnostic_principal = null;
-  var $_ext_diagnostic_relie     = null;
-  var $_ref_echange_hprim        = null;
+  public $_ext_diagnostic_principal;
+  public $_ext_diagnostic_relie;
+  public $_ref_echange_hprim;
 
   // Distant fields
-  var $_dates_operations          = null;
-  var $_dates_consultations       = null;
-  var $_codes_ccam_operations     = null;
-  var $_NDA                       = null; // Numéro Dossier Administratif
-  var $_NDA_view                  = null; // Vue du NDA
-  var $_NPA                       = null; // Numéro Pré-Admission
-  var $_list_constantes_medicales = null;
-  var $_cancel_alerts             = null;
-  var $_ref_suivi_medical         = null;
-  var $_diagnostics_associes      = null;
-  var $_ref_prestations           = null;
-  var $_liaisons_for_prestation   = null;
-  var $_first_liaison_for_prestation = null;
+  public $_dates_operations;
+  public $_dates_consultations;
+  public $_codes_ccam_operations;
+  public $_NDA; // Numéro Dossier Administratif
+  public $_NDA_view; // Vue du NDA
+  public $_NPA; // Numéro Pré-Admission
+  public $_list_constantes_medicales;
+  public $_cancel_alerts;
+  public $_ref_suivi_medical;
+  public $_diagnostics_associes;
+  public $_ref_prestations;
+  public $_liaisons_for_prestation;
+  public $_first_liaison_for_prestation;
 
   // Filter Fields
-  var $_date_min        = null;
-  var $_date_max        = null;
-  var $_date_entree     = null;
-  var $_date_sortie     = null;
-  var $_horodatage      = null;
-  var $_admission       = null;
-  var $_service         = null;
-  var $_type_admission  = null;
-  var $_specialite      = null;
-  var $_date_min_stat   = null;
-  var $_date_max_stat   = null;
-  var $_filter_type     = null;
-  var $_ccam_libelle    = null;
-  var $_coordonnees     = null;
+  public $_date_min;
+  public $_date_max;
+  public $_date_entree;
+  public $_date_sortie;
+  public $_horodatage;
+  public $_admission;
+  public $_service;
+  public $_type_admission;
+  public $_specialite;
+  public $_date_min_stat;
+  public $_date_max_stat;
+  public $_filter_type;
+  public $_ccam_libelle;
+  public $_coordonnees;
 
   // Object tool field
-  var $_modifier_sortie = null;
-  var $_modifier_entree = null;
+  public $_modifier_sortie;
+  public $_modifier_entree;
 
   function CSejour() {
     parent::__construct();

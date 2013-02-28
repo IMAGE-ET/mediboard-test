@@ -20,12 +20,12 @@ class CHL7v2SegmentMSA extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name           = "MSA";
+  public $name           = "MSA";
   
   /**
    * @var CHL7v2Acknowledgment
    */
-  var $acknowledgment = null;
+  public $acknowledgment;
 
   /**
    * Build MSA segement

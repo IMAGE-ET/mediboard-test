@@ -20,20 +20,20 @@ class CHL7v2SegmentROL extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name = "ROL";
+  public $name = "ROL";
   /**
    * @var string
    */
-  var $action  = "UC";
+  public $action  = "UC";
   /**
    * @var null
    */
-  var $role_id = null;
+  public $role_id;
   
   /**
    * @var CMedecin
    */
-  var $medecin = null;
+  public $medecin;
 
   /**
    * Build ROL segement
@@ -112,5 +112,3 @@ class CHL7v2SegmentROL extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

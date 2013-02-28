@@ -20,12 +20,12 @@ class CHL7v2SegmentPD1 extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name    = "PD1";
+  public $name    = "PD1";
   
   /**
    * @var CPatient
    */
-  var $patient = null;
+  public $patient;
 
   /**
    * Build PD1 segement
@@ -118,5 +118,3 @@ class CHL7v2SegmentPD1 extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

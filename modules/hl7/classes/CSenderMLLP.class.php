@@ -15,9 +15,9 @@
  */
 class CSenderMLLP extends CInteropSender {
   // DB Table key
-  var $sender_mllp_id  = null;
+  public $sender_mllp_id;
   
-  var $_duplicate = null;
+  public $_duplicate;
   
   function getSpec() {
     $spec = parent::getSpec();

@@ -22,13 +22,13 @@
 abstract class CHL7v2Entity extends CHL7v2 {
   protected static $_id = 0;
   protected $id      = null;
-  var $spec_filename = null;
+  public $spec_filename;
   
   /**
    * @var CHL7v2SimpleXMLElement
    */
-  var $specs         = null;
-  var $data          = null;
+  public $specs;
+  public $data;
   
   /**
    * Initializes an internal entity counter

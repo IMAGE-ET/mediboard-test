@@ -19,11 +19,11 @@ class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTA01 {
   /**
    * @var string
    */
-  var $code        = "Z99";
+  public $code        = "Z99";
   /**
    * @var string
    */
-  var $struct_code = "A01";
+  public $struct_code = "A01";
 
   /**
    * Get event planned datetime
@@ -103,5 +103,3 @@ class CHL7v2EventADTZ99 extends CHL7v2EventADT implements CHL7EventADTA01 {
     }
   }
 }
-
-?>

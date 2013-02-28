@@ -19,11 +19,11 @@ class CHL7v2EventADTA37 extends CHL7v2EventADT implements CHL7EventADTA37 {
   /**
    * @var string
    */
-  var $code        = "A37";
+  public $code        = "A37";
   /**
    * @var string
    */
-  var $struct_code = "A37";
+  public $struct_code = "A37";
 
   /**
    * Get event planned datetime
@@ -71,5 +71,3 @@ class CHL7v2EventADTA37 extends CHL7v2EventADT implements CHL7EventADTA37 {
     $this->addPV1();
   }
 }
-
-?>

@@ -20,12 +20,12 @@ class CHL7v2SegmentDSC extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name    = "DSC";
+  public $name    = "DSC";
 
   /**
    * @var CPatient
    */
-  var $patient = null;
+  public $patient;
 
   /**
    * Build DSC segement
@@ -48,5 +48,3 @@ class CHL7v2SegmentDSC extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

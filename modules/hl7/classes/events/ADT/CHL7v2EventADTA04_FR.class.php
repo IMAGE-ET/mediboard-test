@@ -53,7 +53,4 @@ class CHL7v2EventADTA04_FR extends CHL7v2EventADTA04 {
     // Complément démographique
     $this->addZFD($sejour);
   }
-  
 }
-
-?>

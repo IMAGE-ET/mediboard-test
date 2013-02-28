@@ -19,11 +19,11 @@ class CHL7v2EventADTA02 extends CHL7v2EventADT implements CHL7EventADTA02 {
   /**
    * @var string
    */
-  var $code        = "A02";
+  public $code        = "A02";
   /**
    * @var string
    */
-  var $struct_code = "A02";
+  public $struct_code = "A02";
 
   /**
    * Get event planned datetime
@@ -46,11 +46,13 @@ class CHL7v2EventADTA02 extends CHL7v2EventADT implements CHL7EventADTA02 {
    * @return void
    */
   function build($affectation) {
+    /** @var CSejour $sejour */
     $sejour                       = $affectation->_ref_sejour;
     $sejour->_ref_hl7_affectation = $affectation;
     
     parent::build($affectation);
-    
+
+    /** @var CPatient $patient */
     $patient = $sejour->_ref_patient;
     // Patient Identification
     $this->addPID($patient, $sejour);
@@ -90,5 +92,3 @@ class CHL7v2EventADTA02 extends CHL7v2EventADT implements CHL7EventADTA02 {
     }
   }
 }
-
-?>

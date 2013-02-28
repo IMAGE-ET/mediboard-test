@@ -15,74 +15,74 @@
  * IHE receiver config
  */
 class CReceiverIHEConfig extends CMbObjectConfig {
-  var $receiver_ihe_config_id   = null;
+  public $receiver_ihe_config_id;
   
-  var $object_id                = null; // CReceiverIHE
+  public $object_id; // CReceiverIHE
   
   // Format
-  var $encoding                 = null;
-  var $ER7_segment_terminator   = null;
+  public $encoding;
+  public $ER7_segment_terminator;
   
   // Version
-  var $ITI30_HL7_version        = null; 
-  var $ITI31_HL7_version        = null; 
-  var $RAD48_HL7_version        = null;
-  var $ITI21_HL7_version        = null;
-  var $ITI22_HL7_version        = null;
+  public $ITI30_HL7_version;
+  public $ITI31_HL7_version;
+  public $RAD48_HL7_version;
+  public $ITI21_HL7_version;
+  public $ITI22_HL7_version;
 
   // Application
-  var $receiving_application    = null;
-  var $receiving_facility       = null;
-  var $assigning_authority_namespace_id      = null;
-  var $assigning_authority_universal_id      = null;
-  var $assigning_authority_universal_type_id = null;
+  public $receiving_application;
+  public $receiving_facility;
+  public $assigning_authority_namespace_id;
+  public $assigning_authority_universal_id;
+  public $assigning_authority_universal_type_id;
   
   // Actor Options
-  var $iti30_option_merge       = null;
-  var $iti30_option_link_unlink = null;
-  var $iti31_in_outpatient_emanagement           = null;
-  var $iti31_pending_event_management            = null;
-  var $iti31_advanced_encounter_management       = null;
-  var $iti31_temporary_patient_transfer_tracking = null;
-  var $iti31_historic_movement                   = null;
+  public $iti30_option_merge;
+  public $iti30_option_link_unlink;
+  public $iti31_in_outpatient_emanagement;
+  public $iti31_pending_event_management;
+  public $iti31_advanced_encounter_management;
+  public $iti31_temporary_patient_transfer_tracking;
+  public $iti31_historic_movement;
   
   // Send
-  var $send_assigning_authority           = null;
-  var $send_all_patients                  = null;
-  var $send_default_affectation           = null;
-  var $send_change_medical_responsibility = null;
-  var $send_change_nursing_ward           = null;
-  var $send_change_attending_doctor       = null;
-  var $send_first_affectation             = null;
-  var $send_provisional_affectation       = null;
-  var $send_transfer_patient              = null;
-  var $send_own_identifier                = null;
-  var $send_self_identifier               = null;
+  public $send_assigning_authority;
+  public $send_all_patients;
+  public $send_default_affectation;
+  public $send_change_medical_responsibility;
+  public $send_change_nursing_ward;
+  public $send_change_attending_doctor;
+  public $send_first_affectation;
+  public $send_provisional_affectation;
+  public $send_transfer_patient;
+  public $send_own_identifier;
+  public $send_self_identifier;
 
   // Build
-  var $build_mode             = null;
-  var $build_NDA              = null;
-  var $build_telephone_number = null;
-  var $build_cellular_phone   = null;
+  public $build_mode;
+  public $build_NDA;
+  public $build_telephone_number;
+  public $build_cellular_phone;
   
   // PID
-  var $build_PID_31  = null;
-  var $build_PID_34  = null;
+  public $build_PID_31;
+  public $build_PID_34;
   
   // PV1
-  var $build_PV1_3_2 = null;
-  var $build_PV1_3_3 = null;
-  var $build_PV1_3_5 = null;
-  var $build_PV1_7   = null;
-  var $build_PV1_10  = null;
-  var $build_PV1_14  = null;
-  var $build_PV1_26  = null;
-  var $build_PV1_36  = null;
+  public $build_PV1_3_2;
+  public $build_PV1_3_3;
+  public $build_PV1_3_5;
+  public $build_PV1_7;
+  public $build_PV1_10;
+  public $build_PV1_14;
+  public $build_PV1_26;
+  public $build_PV1_36;
   
   // PV2
-  var $build_PV2_45 = null;
+  public $build_PV2_45;
   
-  var $_categories = array(
+  public $_categories = array(
     "format" => array(
       "encoding", 
       "ER7_segment_terminator",

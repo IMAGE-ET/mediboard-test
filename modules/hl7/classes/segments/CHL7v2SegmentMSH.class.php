@@ -20,7 +20,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name = "MSH";
+  public $name = "MSH";
 
   /**
    * Build MSH segement
@@ -37,8 +37,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $actor    = (isset($event->_sender->_id)) ? $event->_sender : $event->_receiver;
     $actor->loadRefGroup();
     $actor->loadConfigValues();
-    $group    = $actor->_ref_group;
-    
+
     $data = array();
     
     // MSH-1: Field Separator (ST)
@@ -147,5 +146,3 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     return parent::fill($fields);
   }
 }
-
-?>

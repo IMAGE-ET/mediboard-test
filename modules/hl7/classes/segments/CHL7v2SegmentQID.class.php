@@ -20,12 +20,12 @@ class CHL7v2SegmentQID extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name    = "QID";
+  public $name    = "QID";
 
   /**
    * @var CPatient
    */
-  var $patient = null;
+  public $patient;
 
   /**
    * Build QID segement
@@ -46,5 +46,3 @@ class CHL7v2SegmentQID extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

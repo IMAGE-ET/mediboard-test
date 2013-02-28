@@ -39,8 +39,6 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
    * @return string|void
    */
   function handle(CHL7Acknowledgment $ack, CPatient $patient, $data) {
-    $event_temp = $ack->event;
-
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $exchange_ihe->_ref_sender;
     $sender->loadConfigValues();
@@ -92,9 +90,6 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
    * @return string
    */
   function handleA47(CHL7Acknowledgment $ack, CPatient $patient, $data) {
-    // Traitement du message des erreurs
-    $comment = $warning = "";
-    
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $exchange_ihe->_ref_sender;
     $sender->loadConfigValues();

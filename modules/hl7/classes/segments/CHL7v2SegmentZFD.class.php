@@ -20,12 +20,12 @@ class CHL7v2SegmentZFD extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name   = "ZFD";
+  public $name   = "ZFD";
   
   /**
    * @var CPatient
    */
-  var $patient = null;
+  public $patient;
 
   /**
    * Build ZFD segement
@@ -50,7 +50,8 @@ class CHL7v2SegmentZFD extends CHL7v2Segment {
         // ZFD-1.1 : Année
         $date[0]
       );
-    } else {
+    }
+    else {
       $data[] = null;
     }
     
@@ -60,5 +61,3 @@ class CHL7v2SegmentZFD extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

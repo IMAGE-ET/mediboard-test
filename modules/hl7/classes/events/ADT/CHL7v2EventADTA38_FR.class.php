@@ -41,5 +41,3 @@ class CHL7v2EventADTA38_FR extends CHL7v2EventADTA38 {
     $this->addZBE($sejour);
   }
 }
-
-?>

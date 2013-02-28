@@ -16,63 +16,63 @@ class CHL7v2Component extends CHL7v2Entity {
   /**
    * @var CHL7v2Component
    */
-  var $parent = null;
+  public $parent;
 
-  var $children = array();
+  public $children = array();
 
   /**
    * @var string
    */
-  var $data = null;
+  public $data;
 
   /**
    * Separator used in $this->parse()
    * @var string
    */
-  var $separator = null;
+  public $separator;
 
   /**
    * Component's max length
    * @var integer
    */
-  var $length = null;
+  public $length;
 
   /**
    * Data type
    * @var string
    */
-  var $datatype = null;
+  public $datatype;
 
   /**
    * Description
    * @var string
    */
-  var $description = null;
+  public $description;
 
   /**
    * Description
    * @var string
    */
-  var $value_description = null;
+  public $value_description;
 
   /**
    * Table
    * @var integer
    */
-  var $table = null;
+  public $table;
 
   /**
    * Position of self in its parent
    * @var integer
    */
-  var $self_pos = null;
+  public $self_pos;
 
   /**
    * @var CHL7v2DataType
    */
-  var $props = null;
+  public $props;
 
-  var $invalid = false;
+  public $invalid = false;
 
   function __construct(CHL7v2Entity $parent, CHL7v2SimpleXMLElement $specs, $self_pos, $separators) {
     parent::__construct();

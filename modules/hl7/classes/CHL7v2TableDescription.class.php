@@ -15,15 +15,15 @@
  */
 class CHL7v2TableDescription extends CHL7v2TableObject { 
   // DB Table key
-  var $table_description_id = null;
+  public $table_description_id;
   
   // DB Fields
-  var $number               = null;
-  var $description          = null;
-  var $user                 = null;  
+  public $number;
+  public $description;
+  public $user;
   
   // Form fields
-  var $_count_entries       = null;
+  public $_count_entries;
   
   function getSpec() {
     $spec = parent::getSpec();

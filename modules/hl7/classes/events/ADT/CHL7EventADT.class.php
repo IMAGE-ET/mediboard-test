@@ -45,5 +45,3 @@ interface CHL7EventADT {
    */
   function buildI18nSegments($object);
 }
-
-?>

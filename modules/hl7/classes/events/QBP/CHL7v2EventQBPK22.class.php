@@ -19,7 +19,7 @@ class CHL7v2EventQBPK22 extends CHL7v2EventQBP implements CHL7EventQBPK22 {
   /**
    * @var string
    */
-  var $code = "K22";
+  public $code = "K22";
 
   /**
    * Build K22 event

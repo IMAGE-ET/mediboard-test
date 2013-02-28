@@ -20,21 +20,21 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name    = "PID";
+  public $name    = "PID";
   /**
    * @var null
    */
-  var $set_id  = null;
+  public $set_id;
   
   /**
    * @var CPatient
    */
-  var $patient = null;
+  public $patient;
   
   /**
    * @var CSejour
    */
-  var $sejour  = null;
+  public $sejour;
 
   /**
    * Build PID segement
@@ -72,7 +72,12 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     $data[] = null;
     
     // PID-7: Date/Time of Birth (TS) (optional)
-    $data[] = isLunarDate($patient->naissance) ? null : $patient->naissance;
+    if ($patient->naissance) {
+      $data[] = isLunarDate($patient->naissance) ? null : $patient->naissance;
+    }
+    else {
+      $data[] = null;
+    }
     
     // PID-8: Administrative Sex (IS) (optional)
     // Table - 0001

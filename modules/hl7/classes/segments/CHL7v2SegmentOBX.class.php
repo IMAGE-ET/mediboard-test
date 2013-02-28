@@ -20,7 +20,7 @@ class CHL7v2SegmentOBX extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name   = "OBX";
+  public $name   = "OBX";
 
   /**
    * Build OBX segement
@@ -92,5 +92,3 @@ class CHL7v2SegmentOBX extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

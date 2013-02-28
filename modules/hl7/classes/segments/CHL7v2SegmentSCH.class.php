@@ -20,12 +20,12 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
   /**
    * @var string
    */
-  var $name = "SCH";
+  public $name = "SCH";
   
   /**
    * @var CConsultation
    */
-  var $appointment = null;
+  public $appointment;
 
   /**
    * Build SCH segement
@@ -38,8 +38,7 @@ class CHL7v2SegmentSCH extends CHL7v2Segment {
     parent::build($event);
     
     $receiver = $event->_receiver;
-    $group    = $receiver->_ref_group;
-    
+
     $appointment = $this->appointment;
         
     $data = array();

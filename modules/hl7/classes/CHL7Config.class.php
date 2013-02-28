@@ -68,59 +68,59 @@ class CHL7Config extends CExchangeDataFormatConfig {
     "control_date"
   );
   
-  var $hl7_config_id = null;
+  public $hl7_config_id;
 
   // Actor Options
-  var $iti30_option_merge       = null;
-  var $iti30_option_link_unlink = null;
-  var $iti31_in_outpatient_emanagement           = null;
-  var $iti31_pending_event_management            = null;
-  var $iti31_advanced_encounter_management       = null;
-  var $iti31_temporary_patient_transfer_tracking = null;
-  var $iti31_historic_movement                   = null;
+  public $iti30_option_merge;
+  public $iti30_option_link_unlink;
+  public $iti31_in_outpatient_emanagement;
+  public $iti31_pending_event_management;
+  public $iti31_advanced_encounter_management;
+  public $iti31_temporary_patient_transfer_tracking;
+  public $iti31_historic_movement;
 
   // Application
-  var $check_receiving_application_facility  = null;
-  var $receiving_application                 = null;
-  var $receiving_facility                    = null;
-  var $assigning_authority_namespace_id      = null;
-  var $assigning_authority_universal_id      = null;
-  var $assigning_authority_universal_type_id = null;
+  public $check_receiving_application_facility;
+  public $receiving_application;
+  public $receiving_facility;
+  public $assigning_authority_namespace_id;
+  public $assigning_authority_universal_id;
+  public $assigning_authority_universal_type_id;
 
   // Format
-  var $encoding                  = null;
-  var $strict_segment_terminator = null;
-  var $segment_terminator        = null;
+  public $encoding;
+  public $strict_segment_terminator;
+  public $segment_terminator;
 
   // Handle
-  var $handle_mode             = null;
-  var $handle_NDA              = null;
-  var $handle_telephone_number = null;
-  var $handle_PID_31           = null;
-  var $handle_PV1_3            = null;
-  var $handle_PV1_7            = null;
-  var $handle_PV1_10           = null;
-  var $handle_PV1_14           = null;
-  var $handle_PV1_36           = null;
-  var $handle_PV2_12           = null;
-  var $handle_NSS              = null;
+  public $handle_mode;
+  public $handle_NDA;
+  public $handle_telephone_number;
+  public $handle_PID_31;
+  public $handle_PV1_3;
+  public $handle_PV1_7;
+  public $handle_PV1_10;
+  public $handle_PV1_14;
+  public $handle_PV1_36;
+  public $handle_PV2_12;
+  public $handle_NSS;
 
   // Send
-  var $send_assigning_authority = null;
-  var $send_self_identifier     = null;
-  var $send_area_local_number   = null;
+  public $send_assigning_authority;
+  public $send_self_identifier;
+  public $send_area_local_number;
 
   // Purge
-  var $purge_idex_movements = null;
+  public $purge_idex_movements;
 
   // Auto repair
-  var $repair_patient       = null;
-  var $control_date         = null;
+  public $repair_patient;
+  public $control_date;
 
   /**
    * @var array Categories
    */
-  var $_categories = array(
+  public $_categories = array(
     "format" => array(
       "encoding", 
       "strict_segment_terminator",

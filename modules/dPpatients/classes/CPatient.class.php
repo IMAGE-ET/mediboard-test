@@ -70,210 +70,213 @@ class CPatient extends CMbObject {
   );
 
   // DB Table key
-  var $patient_id = null;
+  public $patient_id;
 
   // DB Fields
-  var $nom              = null;
-  var $nom_jeune_fille  = null;
-  var $prenom           = null;
-  var $prenom_2         = null;
-  var $prenom_3         = null;
-  var $prenom_4         = null;
-  var $nom_soundex2     = null;
-  var $nomjf_soundex2   = null;
-  var $prenom_soundex2  = null;
-  var $naissance        = null;
-  var $deces            = null;
-  var $sexe             = null;
-  var $civilite         = null;
-  var $adresse          = null;
-  var $province         = null;
-  var $ville            = null;
-  var $cp               = null;
-  var $tel              = null;
-  var $tel2             = null;
-  var $tel_autre        = null;
-  var $email            = null;
-  var $vip              = null;
-  var $tutelle          = null;
-  var $situation_famille= null;
-  var $is_smg           = null; //titulaire de soins médicaux gratuits
+  public $nom;
+  public $nom_jeune_fille;
+  public $prenom;
+  public $prenom_2;
+  public $prenom_3;
+  public $prenom_4;
+  public $nom_soundex2;
+  public $nomjf_soundex2;
+  public $prenom_soundex2;
+  public $naissance;
+  public $deces;
+  public $sexe;
+  public $civilite;
+  public $adresse;
+  public $province;
+  public $ville;
+  public $cp;
+  public $tel;
+  public $tel2;
+  public $tel_autre;
+  public $email;
+  public $vip;
+  public $tutelle;
+  public $situation_famille;
+  public $is_smg; //titulaire de soins médicaux gratuits
 
-  var $medecin_traitant_declare = null;
-  var $medecin_traitant = null;
-  var $incapable_majeur = null;
-  var $ATNC             = null;
-  var $matricule        = null;
-  var $INSC             = null;
-  var $avs              = null;
+  public $medecin_traitant_declare;
+  public $medecin_traitant;
+  public $incapable_majeur;
+  public $ATNC;
+  public $matricule;
+  public $INSC;
+  public $avs;
 
-  var $code_regime      = null;
-  var $caisse_gest      = null;
-  var $centre_gest      = null;
-  var $code_gestion     = null;
-  var $centre_carte     = null;
-  var $regime_sante     = null;
-  var $rques            = null;
-  var $cmu              = null;
-  var $ald              = null;
-  var $code_exo         = null;
-  var $libelle_exo    = null;
-  var $notes_amo        = null;
-  var $notes_amc        = null;
-  var $deb_amo          = null;
-  var $fin_amo          = null;
-  var $code_sit         = null;
-  var $regime_am        = null;
-  var $mutuelle_types_contrat = null;
+  public $code_regime;
+  public $caisse_gest;
+  public $centre_gest;
+  public $code_gestion;
+  public $centre_carte;
+  public $regime_sante;
+  public $rques;
+  public $cmu;
+  public $ald;
+  public $code_exo;
+  public $libelle_exo;
+  public $notes_amo;
+  public $notes_amc;
+  public $deb_amo;
+  public $fin_amo;
+  public $code_sit;
+  public $regime_am;
+  public $mutuelle_types_contrat;
 
-  var $rang_beneficiaire= null;
-  var $qual_beneficiaire= null; // LogicMax, VitaleVision
-  var $rang_naissance   = null;
-  var $fin_validite_vitale = null;
+  public $rang_beneficiaire;
+  public $qual_beneficiaire; // LogicMax, VitaleVision
+  public $rang_naissance;
+  public $fin_validite_vitale;
 
-  var $pays                 = null;
-  var $pays_insee           = null;
-  var $lieu_naissance       = null;
-  var $cp_naissance         = null;
-  var $pays_naissance_insee = null;
-  var $profession           = null;
-  var $csp                  = null; // Catégorie socioprofessionnelle
-  var $patient_link_id      = null; // Patient link
+  public $pays;
+  public $pays_insee;
+  public $lieu_naissance;
+  public $cp_naissance;
+  public $pays_naissance_insee;
+  public $profession;
+  public $csp; // Catégorie socioprofessionnelle
+  public $patient_link_id; // Patient link
 
   // Assuré
-  var $assure_nom                   = null;
-  var $assure_nom_jeune_fille       = null;
-  var $assure_prenom                = null;
-  var $assure_prenom_2              = null;
-  var $assure_prenom_3              = null;
-  var $assure_prenom_4              = null;
-  var $assure_naissance             = null;
-  var $assure_sexe                  = null;
-  var $assure_civilite              = null;
-  var $assure_adresse               = null;
-  var $assure_ville                 = null;
-  var $assure_cp                    = null;
-  var $assure_tel                   = null;
-  var $assure_tel2                  = null;
-  var $assure_pays                  = null;
-  var $assure_pays_insee            = null;
-  var $assure_cp_naissance          = null;
-  var $assure_lieu_naissance        = null;
-  var $assure_pays_naissance_insee  = null;
-  var $assure_profession            = null;
-  var $assure_rques                 = null;
-  var $assure_matricule             = null;
+  public $assure_nom;
+  public $assure_nom_jeune_fille;
+  public $assure_prenom;
+  public $assure_prenom_2;
+  public $assure_prenom_3;
+  public $assure_prenom_4;
+  public $assure_naissance;
+  public $assure_sexe;
+  public $assure_civilite;
+  public $assure_adresse;
+  public $assure_ville;
+  public $assure_cp;
+  public $assure_tel;
+  public $assure_tel2;
+  public $assure_pays;
+  public $assure_pays_insee;
+  public $assure_cp_naissance;
+  public $assure_lieu_naissance;
+  public $assure_pays_naissance_insee;
+  public $assure_profession;
+  public $assure_rques;
+  public $assure_matricule;
 
   // Other fields
-  var $INSC_date                    = null;
-  var $date_lecture_vitale          = null;
-  var $_pays_naissance_insee        = null;
-  var $_assure_pays_naissance_insee = null;
+  public $INSC_date;
+  public $date_lecture_vitale;
+  public $_pays_naissance_insee;
+  public $_assure_pays_naissance_insee;
 
   // Behaviour fields
-  var $_anonyme                     = null;
-  var $_generate_IPP                = true;
+  public $_anonyme;
+  public $_generate_IPP = true;
 
   // Form fields
-  var $_vip           = null;
-  var $_annees        = null;
-  var $_age           = null;
-  var $_age_assure    = null;
-  var $_civilite      = null;
-  var $_civilite_long = null;
-  var $_assure_civilite = null;
-  var $_assure_civilite_long = null;
-  var $_longview      = null;
-  var $_art115        = null;
-  var $_type_exoneration = null;
-  var $_exoneration = null;
-  var $_can_see_photo = null;
-  var $_csp_view      = null;
-  var $_nb_enfants    = null;
-  var $_overweight    = null;
-  var $_age_min       = null;
-  var $_age_max       = null;
+  public $_vip;
+  public $_annees;
+  public $_age;
+  public $_age_assure;
+  public $_civilite;
+  public $_civilite_long;
+  public $_assure_civilite;
+  public $_assure_civilite_long;
+  public $_longview;
+  public $_art115;
+  public $_type_exoneration;
+  public $_exoneration;
+  public $_can_see_photo;
+  public $_csp_view;
+  public $_nb_enfants;
+  public $_overweight;
+  public $_age_min;
+  public $_age_max;
 
   // Vitale behaviour
-  var $_bind_vitale   = null;
-  var $_update_vitale = null;
-  var $_id_vitale     = null;
+  public $_bind_vitale;
+  public $_update_vitale;
+  public $_id_vitale;
 
   //ean (for switzerland)
-  var $_assuranceCC_ean   = null;
-  var $_assureCC_id       = null;
-  var $_assuranceCC_id    = null;
+  public $_assuranceCC_ean;
+  public $_assureCC_id;
+  public $_assuranceCC_id;
 
   // Navigation Fields
-  var $_dossier_cabinet_url = null;
+  public $_dossier_cabinet_url;
 
   // EAI Fields
-  var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
+  public $_eai_initiateur_group_id; // group initiateur du message EAI
 
   // HPRIM Fields
-  var $_prenoms          = null; // multiple
-  var $_nom_naissance    = null; // +/- = nom_jeune_fille
-  var $_adresse_ligne2   = null;
-  var $_adresse_ligne3   = null;
-  var $_pays             = null;
-  var $_IPP              = null;
-  var $_fusion           = null; // fusion
-  var $_patient_elimine  = null; // fusion
+  public $_prenoms; // multiple
+  public $_nom_naissance; // +/- = nom_jeune_fille
+  public $_adresse_ligne2;
+  public $_adresse_ligne3;
+  public $_pays;
+  public $_IPP;
+  public $_fusion; // fusion
+  /**
+   * @var CPatient
+   */
+  public $_patient_elimine; // fusion
 
-  var $_nb_docs                     = null;
+  public $_nb_docs;
 
   /**
    * @var CSejour[]
    */
-  var $_ref_sejours                 = null;
+  public $_ref_sejours;
 
   /**
    * @var CConsultation[]
    */
-  var $_ref_consultations           = null;
-  var $_ref_prescriptions           = null;
-  var $_ref_grossesses              = null;
-  var $_ref_last_grossesse          = null;
-  var $_ref_first_constantes        = null;
-  var $_ref_patient_links           = null;
+  public $_ref_consultations;
+  public $_ref_prescriptions;
+  public $_ref_grossesses;
+  public $_ref_last_grossesse;
+  public $_ref_first_constantes;
+  public $_ref_patient_links;
 
   /**
    * @var CAffectation
    */
-  var $_ref_curr_affectation        = null;
+  public $_ref_curr_affectation;
 
   /**
    * @var CAffectation
    */
-  var $_ref_next_affectation        = null;
+  public $_ref_next_affectation;
 
   /**
    * @var CMedecin
    */
-  var $_ref_medecin_traitant        = null;
+  public $_ref_medecin_traitant;
 
   /**
    * @var CCorrespondant[]
    */
-  var $_ref_medecins_correspondants = null;
+  public $_ref_medecins_correspondants;
 
   /**
    * @var CCorrespondantPatient[]
    */
-  var $_ref_correspondants_patient  = null;
-  var $_ref_cp_by_relation          = null;
+  public $_ref_correspondants_patient;
+  public $_ref_cp_by_relation;
 
   /**
    * @var CDossierMedical
    */
-  var $_ref_dossier_medical         = null;
-  var $_refs_devenirs_dentaires     = null;
-  var $_ref_IPP                     = null;
-  var $_ref_vitale_idsante400       = null;
-  var $_ref_constantes_medicales    = null;
+  public $_ref_dossier_medical;
+  public $_refs_devenirs_dentaires;
+  public $_ref_IPP;
+  public $_ref_vitale_idsante400;
+  public $_ref_constantes_medicales;
 
   // Distant fields
-  var $_ref_praticiens = null; // Praticiens ayant participé à la pec du patient
+  public $_ref_praticiens; // Praticiens ayant participé à la pec du patient
 
   function getSpec() {
     $spec = parent::getSpec();

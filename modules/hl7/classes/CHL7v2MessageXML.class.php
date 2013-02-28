@@ -17,19 +17,19 @@ class CHL7v2MessageXML extends CMbXMLDocument {
   /**
    * @var CExchangeIHE
    */
-  var $_ref_exchange_ihe = null;
+  public $_ref_exchange_ihe;
   /**
    * @var CInteropSender
    */
-  var $_ref_sender       = null;
+  public $_ref_sender;
   /**
    * @var CInteropReceiver
    */
-  var $_ref_receiver     = null;
+  public $_ref_receiver;
   /**
    * @var string
    */
-  var $_is_i18n          = null;
+  public $_is_i18n;
 
   /**
    * Get event
@@ -432,7 +432,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
    * @param DOMNode        $contextNode Node
    * @param CInteropSender $sender      Sender
    *
-   * @return void
+   * @return array
    */
   function getAdmitIdentifiers(DOMNode $contextNode, CInteropSender $sender) {
     $data = array();

@@ -17,5 +17,3 @@
  */
 interface CHL7EventADTA05 extends CHL7EventADT {
 }
-
-?>

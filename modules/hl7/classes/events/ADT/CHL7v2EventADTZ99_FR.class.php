@@ -38,6 +38,7 @@ class CHL7v2EventADTZ99_FR  extends CHL7v2EventADTZ99 {
    */
   function buildI18nSegments($object) {
     if ($object instanceof CAffectation) {
+      /** @var CSejour $sejour */
       $sejour                       = $object->_ref_sejour;
       $sejour->_ref_hl7_affectation = $object;
     }
@@ -66,5 +67,3 @@ class CHL7v2EventADTZ99_FR  extends CHL7v2EventADTZ99 {
     $this->addZFD($sejour);
   }
 }
-
-?>

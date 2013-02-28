@@ -41,7 +41,7 @@ class CHL7v2EventACK extends CHL7v2Event implements CHL7EventACK {
   /**
    * Build event
    *
-   * @param CMbObject $object Object
+   * @param CHL7Acknowledgment $object Object
    *
    * @see parent::build()
    *

@@ -17,18 +17,18 @@
  */
 
 class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
-  var $name   = "PV1";
-  var $set_id = null;
+  public $name   = "PV1";
+  public $set_id;
   
   /**
    * @var CSejour
    */
-  var $sejour = null;
+  public $sejour;
   
   /**
    * @var CAffectation
    */
-  var $curr_affectation = null;
+  public $curr_affectation;
 
   /**
    * Build PV1 (FR) segment
@@ -40,7 +40,6 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
   function build(CHL7v2Event $event) {
     parent::build($event);
     
-    $message  = $event->message;
     $receiver = $event->_receiver;
     $group    = $receiver->_ref_group;
     
@@ -288,5 +287,3 @@ class CHL7v2SegmentPV1_FR extends CHL7v2Segment {
     $this->fill($data);
   }
 }
-
-?>

@@ -17,5 +17,3 @@
  */
 interface CHL7EventADTZ99 extends CHL7EventADT {
 }
-
-?>

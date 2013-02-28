@@ -19,7 +19,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
   /**
    * @var string
    */
-  var $event_type = "ADT";
+  public $event_type = "ADT";
 
   /**
    * Construct
@@ -196,7 +196,7 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     $segment_name = $this->_is_i18n ? "PV1_FR" : "PV1";
     $PV1          = CHL7v2Segment::create($segment_name, $this->message);
     $PV1->sejour  = $sejour;
-    $PV1->set_id  = 1;
+    $PV1->set_id  = $set_id;
     if ($sejour) {
       $PV1->curr_affectation = $sejour->_ref_hl7_affectation;
     }
@@ -317,5 +317,3 @@ class CHL7v2EventADT extends CHL7v2Event implements CHL7EventADT {
     
   }
 }
-
-?>

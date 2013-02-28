@@ -13,24 +13,24 @@ class CHL7v2Field extends CHL7v2Entity {
   /**
    * @var CHL7v2Segment
    */
-  var $owner_segment = null;
+  public $owner_segment;
   
-  var $name          = null;
-  var $datatype      = null;
-  var $length        = null;
-  var $table         = null;
-  var $description   = null;
-  var $required      = null;
-  var $forbidden     = null;
-  var $unbounded     = null;
-  var $items         = array();
+  public $name;
+  public $datatype;
+  public $length;
+  public $table;
+  public $description;
+  public $required;
+  public $forbidden;
+  public $unbounded;
+  public $items         = array();
 
   /**
    * @var CHL7v2SimpleXMLElement
    */
-  var $meta_spec     = null;
+  public $meta_spec;
   
-  private $_ts_fixed = false;
+  // private $_ts_fixed = false;
   
   function __construct(CHL7v2Segment $segment, $spec) {
     parent::__construct($segment);

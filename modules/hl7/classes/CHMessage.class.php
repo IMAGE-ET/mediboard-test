@@ -24,26 +24,26 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
 
   static $decorateToString   = false;
    
-  var $segmentTerminator     = self::DEFAULT_SEGMENT_TERMINATOR;
-  var $escapeCharacter       = self::DEFAULT_ESCAPE_CHARACTER;
-  var $fieldSeparator        = self::DEFAULT_FIELD_SEPARATOR;
-  var $componentSeparator    = self::DEFAULT_COMPONENT_SEPARATOR;
-  var $repetitionSeparator   = self::DEFAULT_REPETITION_SEPARATOR;
-  var $subcomponentSeparator = self::DEFAULT_SUBCOMPONENT_SEPARATOR;
-  var $nullValue             = self::DEFAULT_NULL_VALUE;
+  public $segmentTerminator     = self::DEFAULT_SEGMENT_TERMINATOR;
+  public $escapeCharacter       = self::DEFAULT_ESCAPE_CHARACTER;
+  public $fieldSeparator        = self::DEFAULT_FIELD_SEPARATOR;
+  public $componentSeparator    = self::DEFAULT_COMPONENT_SEPARATOR;
+  public $repetitionSeparator   = self::DEFAULT_REPETITION_SEPARATOR;
+  public $subcomponentSeparator = self::DEFAULT_SUBCOMPONENT_SEPARATOR;
+  public $nullValue             = self::DEFAULT_NULL_VALUE;
   
-  var $strict_segment_terminator = false;
+  public $strict_segment_terminator = false;
   
-  var $escape_sequences   = null;
-  var $unescape_sequences = null;
+  public $escape_sequences;
+  public $unescape_sequences;
 
-  var $version      = null;
-  var $event_name   = null;
-  var $name         = null;
-  var $description  = null;
-  var $lines        = array();
-  var $current_line = 0;
-  var $errors       = array();
+  public $version;
+  public $event_name;
+  public $name;
+  public $description;
+  public $lines        = array();
+  public $current_line = 0;
+  public $errors       = array();
   
   function __construct($version = null) {
     $this->version = $version;
@@ -174,7 +174,7 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
      */
     $current_group = $this;
     
-    $lines_count = count($this->lines);
+    //$lines_count = count($this->lines);
     
     $n = 100000; // pour eviter les boucles infinies !
 
@@ -184,7 +184,7 @@ abstract class CHMessage extends CHL7v2SegmentGroup {
         break;
       }
         
-      switch($current_node->getName()) {
+      switch ($current_node->getName()) {
         // SEGMENT //
         case "segment":
           CHL7v2::d($current_node->getSegmentHeader()." ".$current_node->state(), "red");

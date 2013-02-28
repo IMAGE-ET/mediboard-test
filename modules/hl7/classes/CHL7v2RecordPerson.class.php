@@ -46,8 +46,6 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
    * @return null|string
    */
   function handle(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
-    $event_temp = $ack->event;
-
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $exchange_ihe->_ref_sender;
     $sender->loadConfigValues();
@@ -89,19 +87,17 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
    */
   function handleAll(CHL7Acknowledgment $ack, CPatient $newPatient, $data) {
     // Traitement du message des erreurs
-    $comment = $warning = $code_IPP = "";
     $_modif_patient = false;
 
     $exchange_ihe = $this->_ref_exchange_ihe;
     $sender       = $this->_ref_sender;
 
     $patientRI       = CValue::read($data['personIdentifiers'], "RI");
-    $patientRISender = CValue::read($data['personIdentifiers'], "RI_Sender");
+    //$patientRISender = CValue::read($data['personIdentifiers'], "RI_Sender");
     $patientPI       = CValue::read($data['personIdentifiers'], "PI");
       
     $IPP = new CIdSante400();
     
-    $sender_purge_idex_movements = $sender->_configs["purge_idex_movements"]; 
     if ($patientPI) {
       $IPP = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
     }
@@ -317,7 +313,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
    * @param array    $data       Datas
    * @param CPatient $newPatient Person
    *
-   * @return void
+   * @return string
    */
   function secondaryMappingPatient($data, CPatient $newPatient) {
     $sender = $this->_ref_sender;
@@ -526,7 +522,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
       $this->getAdress($addresses["H"], $newPatient);
     }
     else {
-      foreach ($addresses as $adress_type => $_address) {
+      foreach ($addresses as $_address) {
         $this->getAdress($_address, $newPatient);
       }
     }

@@ -19,7 +19,7 @@ class CHL7v2EventSIU extends CHL7v2Event implements CHL7EventSIU {
   /**
    * @var string
    */
-  var $event_type = "SIU";
+  public $event_type = "SIU";
 
   /**
    * Construct
@@ -154,7 +154,7 @@ class CHL7v2EventSIU extends CHL7v2Event implements CHL7EventSIU {
    */
   function addAIL(CConsultation $appointment, $set_id = 1) {
     $AIL = CHL7v2Segment::create("AIL", $this->message);
-    $AIL->set_id = 1;
+    $AIL->set_id = $set_id;
     $AIL->appointment = $appointment;
     $AIL->build($this);
   }

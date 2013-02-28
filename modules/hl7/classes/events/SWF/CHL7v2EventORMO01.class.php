@@ -19,7 +19,7 @@ class CHL7v2EventORMO01 extends CHL7v2EventORM implements CHL7EventORMO01 {
   /**
    * @var string
    */
-  var $code = "O01";
+  public $code = "O01";
 
   /**
    * Build O01 event

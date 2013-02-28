@@ -49,15 +49,5 @@ class CHL7v2RecordAppointment extends CHL7v2MessageXML {
    * @return null|string
    */
   function handle(CHL7Acknowledgment $ack, CPatient $patient, $data) {
-    // Traitement du message des erreurs
-    $comment = "";
-    
-    $exchange_ihe = $this->_ref_exchange_ihe;
-    $exchange_ihe->_ref_sender->loadConfigValues();
-    $sender       = $exchange_ihe->_ref_sender;
-    
-    mbTrace($data);
   }
 }
-
-?>
