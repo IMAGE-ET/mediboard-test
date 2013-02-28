@@ -37,9 +37,9 @@
   {{/if}}
 </script>
 
-<table style="text-align: left; width: 100%">
+<table class="main" style="text-align: left; width: 100%">
   <tr>
-    <th class="title" colspan="2" style="background-color: #6688CC">
+    <th class="title" colspan="2">
     {{mb_include module=system template=inc_object_notes object=$patient}}
       <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
         <span style="float: left;">
