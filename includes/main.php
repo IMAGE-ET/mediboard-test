@@ -197,6 +197,24 @@ $tab = $a == "index" ?
   CValue::getOrSession("tab", $tab) :
   CValue::get("tab");
 
+// Check whether the password is strong enough
+if (
+    CAppUI::$instance->weak_password && 
+    !CAppUI::$instance->user_remote && 
+    !($m      == "admin" && $tab == "chpwd") &&
+    !($m_post == "admin" && $dosql == "do_chpwd_aed")
+) {
+  CAppUI::redirect("m=admin&tab=chpwd&forceChange=1");
+}
+
+// set the group in use, put the user group if not allowed
+$g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
+$indexGroup = new CGroups;
+if ($indexGroup->load($g) && !$indexGroup->canRead()) {
+  $g = CAppUI::$instance->user_group;
+  CValue::setSessionAbs("g", $g);
+}
+
 // If we want to force user to periodically change password
 if (CAppUI::conf("admin CUser force_changing_password")) {
   $user = CAppUI::$user;
@@ -214,24 +232,6 @@ if (CAppUI::conf("admin CUser force_changing_password")) {
       }
     }
   }
-}
-
-// Check whether the password is strong enough
-if (
-    CAppUI::$instance->weak_password && 
-    !CAppUI::$instance->user_remote && 
-    !($m      == "admin" && $tab == "chpwd") &&
-    !($m_post == "admin" && $dosql == "do_chpwd_aed")
-) {
-  CAppUI::redirect("m=admin&tab=chpwd&forceChange=1");
-}
-
-// set the group in use, put the user group if not allowed
-$g = CValue::getOrSessionAbs("g", CAppUI::$instance->user_group);
-$indexGroup = new CGroups;
-if ($indexGroup->load($g) && !$indexGroup->canRead()) {
-  $g = CAppUI::$instance->user_group;
-  CValue::setSessionAbs("g", $g);
 }
 
 // Check CSRF protection
