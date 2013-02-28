@@ -32,13 +32,13 @@ class CDataSourceLog extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["datasource"]   = "str notNull";
-    $specs["requests"]     = "num";
-    $specs["duration"]     = "float";
+    $props = parent::getProps();
+    $props["datasource"]   = "str notNull";
+    $props["requests"]     = "num";
+    $props["duration"]     = "float";
     $props['accesslog_id'] = "ref notNull class|CAccessLog";
 
-    return $specs;
+    return $props;
   }
   
   /**
