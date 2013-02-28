@@ -16,11 +16,11 @@
 class CFactureEtablissement extends CFacture {
   
   // DB Table key
-  var $facture_id = null;
+  public $facture_id;
   
   // DB Fields
-  var $dialyse    = null;
-  var $temporaire = null;
+  public $dialyse;
+  public $temporaire;
       
   /**
    * getSpec
@@ -83,11 +83,9 @@ class CFactureEtablissement extends CFacture {
    * @return void
   **/
   function store() {
-    if (CAppUI::conf("dPfacturation CFactureEtablissement create_items_bill")) {
-      //Si on cloture la facture création des lignes de la facture
-      if ($this->cloture && $this->fieldModified("cloture") && !$this->completeField("cloture")) {
-        $this->creationLignesFacture();
-      }
+    //Si on cloture la facture création des lignes de la facture
+    if ($this->cloture && $this->fieldModified("cloture") && !$this->completeField("cloture")) {
+      $this->creationLignesFacture();
     }
     // Standard store
     if ($msg = parent::store()) {

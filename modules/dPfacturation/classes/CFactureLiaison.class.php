@@ -15,17 +15,17 @@
 class CFactureLiaison extends CMbMetaObject {
 
   // DB Table key
-  var $facture_liaison_id = null;
+  public $facture_liaison_id;
   
   // DB Fields
-  var $facture_id       = null;
-  var $facture_class    = null;
-  var $object_id    = null;
-  var $object_class = null;
+  public $facture_id;
+  public $facture_class;
+  public $object_id;
+  public $object_class;
   
   // Object References
-  var $_ref_facture     = null;
-  var $_ref_facturable  = null;
+  public $_ref_facture;
+  public $_ref_facturable;
   /**
    * getSpec
    * 
@@ -78,12 +78,10 @@ class CFactureLiaison extends CMbMetaObject {
   /**
    * Chargement de l'objet facturable
    * 
-   * @param bool $cache cache
-   * 
    * @return void
   **/
-  function loadRefFacturable($cache = 1) {
-    return $this->_ref_facturable =  $this->loadFwdRef("facturable_id", $cache);
+  function loadRefFacturable() {
+    return $this->_ref_facturable =  $this->loadTargetObject();
   }
   
   /**

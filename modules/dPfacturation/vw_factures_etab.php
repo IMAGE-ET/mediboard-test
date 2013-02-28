@@ -99,7 +99,7 @@ $reglement = new CReglement();
 $banque = new CBanque();
 $banques = $banque->loadList(null, "nom");
 
-$filter = new CSejour();
+$filter = new CConsultation();
 $filter->_date_min = $date_min;
 $filter->_date_max = $date_max;
 

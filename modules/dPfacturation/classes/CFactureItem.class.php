@@ -15,33 +15,32 @@
  */
 class CFactureItem extends CMbMetaObject {
   // DB Table key
-  var $factureitem_id = null;
+  public $factureitem_id;
   
   // DB Fields
-  var $object_id = null;
-  var $object_class = null;
-  var $date       = null;
-  var $libelle    = null;
-  var $code       = null;
-  var $type       = null;
-  var $montant_base        = null;
-  var $montant_depassement = null;
-  var $reduction 	= null;
-  var $quantite 	= null;
-  var $coeff 	    = null;
-  var $pm 	      = null;
-  var $pt 	      = null;
-  var $coeff_pm 	= null;
-  var $coeff_pt 	= null;
-  var $use_tarmed_bill 	= null;
-  var $code_ref 	= null;
-  var $code_caisse 	= null;
+  public $object_id;
+  public $object_class;
+  public $date;
+  public $libelle;
+  public $code;
+  public $type;
+  public $montant_base;
+  public $montant_depassement;
+  public $reduction;
+  public $quantite;
+  public $coeff;
+  public $pm;
+  public $pt;
+  public $coeff_pm;
+  public $coeff_pt;
+  public $use_tarmed_bill;
+  public $code_ref;
+  public $code_caisse;
   
   // References
-  var $_ref_facture = null;
-  var $_ref_facture_catalogue_item = null;
+  public $_ref_facture;
    
-  var $_ttc = null;
+  public $_ttc;
   
   /**
    * getSpec
@@ -93,13 +92,12 @@ class CFactureItem extends CMbMetaObject {
   }
   
   /**
-   * loadRefsFwd
+   * Chargement de la facture
    * 
    * @return void
   **/
-  function loadRefsFwd(){ 
-    $this->_ref_facture = new CFacture;
-    $this->_ref_facture->load($this->facture_id);
+  function loadRefFacture(){
+    return $this->loadTargetObject();
   }
 }
 ?>

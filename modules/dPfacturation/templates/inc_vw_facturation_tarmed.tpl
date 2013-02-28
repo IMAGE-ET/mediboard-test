@@ -112,7 +112,13 @@
   {{foreach from=$facture->_ref_items item=item}}
     <tr>
       <td style="text-align:center;width:100px;">
+        {{if $facture->_ref_last_sejour->_id}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$facture->_ref_last_sejour->_guid}}')">
+        {{else}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$facture->_ref_last_consult->_guid}}')">
+        {{/if}}
         {{mb_value object=$item field="date"}}
+        </span>
       </td>
       <td class="acte-{{$item->type}}" style="width:140px;">{{mb_value object=$item field="code"}}</td>
       <td style="white-space: pre-line;" class="compact">{{mb_value object=$item field="libelle"}}</td>
