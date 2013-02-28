@@ -803,8 +803,15 @@ var Dom = {
   }
 };
 
-/** Levenstein function **/
-function levenshtein( str1, str2 ) {
+/**
+ * Levenstein function
+ *
+ * @param {String} str1 String 1
+ * @param {String} str2 String 2
+ *
+ * @return {Number} The Levenstein distance between str1 and str2
+ */
+function levenshtein(str1, str2) {
   // http://kevin.vanzonneveld.net
   // +   original by: Carlos R. L. Rodrigues
   // *     example 1: levenshtein('Kevin van Zonneveld', 'Kevin van Sommeveld');
@@ -846,34 +853,61 @@ function luhn (code) {
 
 /* Control tabs creation. It saves selected tab into a cookie name TabState */
 Object.extend (Control.Tabs, {
-  storeTab: function (tabName, tab) {
-    new CookieJar().setValue("TabState", tabName, tab);
+  /**
+   * Store the state of a Control Tab in a cookie
+   *
+   * @param {String} id  Id of the Control Tab UL
+   * @param {String} tab Active tab
+   */
+  storeTab: function (id, tab) {
+    new CookieJar().setValue("TabState", id, tab);
   },
-  loadTab: function (tabName) {
-    return new CookieJar().getValue("TabState", tabName);
-  },
-  create: function (name, storeInCookie, options) {
-    if ($(name)) {
-      var tab = new Control.Tabs(name, options);
-      
-      if (storeInCookie) {
-        var oldAfterChange = tab.options.afterChange;
-        
-        tab.options.afterChange = function (tab, tabName) {
-          if (oldAfterChange && Object.isFunction(oldAfterChange)) {
-            oldAfterChange(tab, tabName);
-          }
-          
-          Control.Tabs.storeTab(name, tab.id);
-        };
 
-        var tabName = Control.Tabs.loadTab(name);
-        if (tabName) {
-          tab.setActiveTab(tabName);
-        }
-      }
-      return tab;
+  /**
+   * Get the state of a Control Tab from the cookie
+   *
+   * @param {String} id  Id of the Control Tab UL
+   *
+   * @return {String} The active tab
+   */
+  loadTab: function (id) {
+    return new CookieJar().getValue("TabState", id);
+  },
+
+  /**
+   * Create a Control Tab
+   *
+   * @param {String}  id            ID of the UL
+   * @param {Boolean} storeInCookie Store the state in a cookie
+   * @param {Object=} options       Options
+   *
+   * @return {Control.Tabs,Boolean}
+   */
+  create: function (id, storeInCookie, options) {
+    if (!$(id)) {
+      return false;
     }
+
+    var tab = new Control.Tabs(id, options);
+
+    if (storeInCookie) {
+      var oldAfterChange = tab.options.afterChange;
+
+      tab.options.afterChange = function (tab, tabName) {
+        if (oldAfterChange && Object.isFunction(oldAfterChange)) {
+          oldAfterChange(tab, tabName);
+        }
+
+        Control.Tabs.storeTab(id, tab.id);
+      };
+
+      var tabName = Control.Tabs.loadTab(id);
+      if (tabName) {
+        tab.setActiveTab(tabName);
+      }
+    }
+
+    return tab;
   },
   
   activateTab: function(tabName) {

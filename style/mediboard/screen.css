@@ -7,7 +7,10 @@
   
   .desktop label[title]:hover,
   *[onmouseover],
-  *[data-object_guid] {
+  span[data-object_guid],
+  div[data-object_guid],
+  label[data-object_guid],
+  strong[data-object_guid] {
     border-bottom: 1px dotted #bbb;
     margin-bottom: -1px;
     cursor: help;

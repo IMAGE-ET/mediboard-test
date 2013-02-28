@@ -10,7 +10,7 @@
 
 $dPconfig["admin"] = array (
   "CUser" => array(
-    "strong_password"         => "0",
+    "strong_password"         => "1",
     "max_login_attempts"      => "5",
     "allow_change_password"   => "1",
     "force_changing_password" => "0",
