@@ -108,6 +108,11 @@
     <severity>0</severity>
   </rule>
 
+  <!-- Remove buggy "Useless method overriding detected", see http://pear.php.net/bugs/bug.php?id=19481 -->
+  <rule ref="Generic.CodeAnalysis.UselessOverridingMethod.Found">
+    <severity>0</severity>
+  </rule>
+
   <!-- PEAR Sniffs -->
   <rule ref="PEAR">
     <exclude name="PEAR.ControlStructures.ControlSignature" />
