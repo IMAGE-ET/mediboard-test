@@ -3,7 +3,7 @@
      <a href="#1" onclick="showDossierSoins('{{$_prescription->_ref_object->_id}}','{{$date}}')" style="display: inline;">
      {{assign var=sejour value=$_prescription->_ref_object}}
      <span class="{{if !$sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $sejour->septique}}septique{{/if}}"
-           onmouseover="ObjectTooltip.createEx(this, '{{$_prescription->_ref_patient->_guid}}');">           
+           onmouseover="ObjectTooltip.createEx(this, '{{$_prescription->_ref_object->_guid}}');">           
         {{$_prescription->_ref_patient->_view}}
      </span>
    </a>
