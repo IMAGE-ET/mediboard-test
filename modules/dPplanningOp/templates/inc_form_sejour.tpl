@@ -633,11 +633,13 @@ Main.add( function(){
     {{if $sejour->_id}}
       <button type="button" onclick="openAntecedents()">ATCD</button>
     {{/if}}
-    <button type="button"
-        onclick="location.href='?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id=0&amp;pat_id='+this.form.patient_id.value"
-            class="new" {{if !$patient->_id}}style="display: none;"{{/if}}>
-      RDV Consultation
-    </button>
+    {{if @$modules.dPcabinet->_can->read}}
+      <button type="button"
+          onclick="location.href='?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id=0&amp;pat_id='+this.form.patient_id.value"
+              class="new" {{if !$patient->_id}}style="display: none;"{{/if}}>
+        RDV Consultation
+      </button>
+    {{/if}}
   </td>
 </tr>
 
