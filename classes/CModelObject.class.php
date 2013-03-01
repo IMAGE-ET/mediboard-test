@@ -148,8 +148,8 @@ class CModelObject {
    * @return string
    */
   function __toString() {
-    return $this->_view;
-  }  
+    return strip_tags($this->_view);
+  }
   
   /**
    * Initialization factorisation for construction and unserialization
