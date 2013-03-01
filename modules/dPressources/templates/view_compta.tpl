@@ -95,11 +95,7 @@ Main.add(function () {
           <td>{{mb_label object=$filter field="prat_id"}}</td>
           <td>
             <select name="prat_id">
-              {{foreach from=$listPrats item=curr_prat}}
-              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">
-                {{$curr_prat->_view}}
-              </option>
-              {{/foreach}}
+              {{mb_include module=mediusers template=inc_options_mediuser list=$listPrats}}
             </select>
           </td>
         </tr>
