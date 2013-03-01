@@ -1493,7 +1493,28 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function getFinancialClass(DOMNode $node, CSejour $newVenue) {
-    /* @todo Voir comment gérer */
+    $sender = $this->_ref_sender;
+    if ($sender->_configs["handle_PV1_20"] == "none") {
+      return;
+    }
+
+    if (!$newVenue->_id) {
+      return;
+    }
+
+    $PV1_20 = $this->queryTextNode("PV1.20", $node);
+
+    // Chargement d'une prestation journalière
+    $prestation           = new CPrestation();
+    $prestation->group_id = $sender->group_id;
+    $prestation->code     = $PV1_20;
+    $prestation->loadMatchingObject();
+
+    if (!$prestation->_id) {
+      return;
+    }
+
+    $newVenue->prestation_id = $prestation->_id;
   }
   
   function getChargePriceIndicator(DOMNode $node, CSejour $newVenue) {
@@ -1553,7 +1574,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         break;
     }
   }
-  
+
   function getDischargedToLocation(DOMNode $node, CSejour $newVenue) {
     if (!$finess = $this->queryTextNode("PV1.37/DLD.1", $node)) {
       return;
