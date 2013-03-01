@@ -20,7 +20,7 @@
       <input type="hidden" name="@class" value="CPlageOp" />
       <input type="hidden" name="verrouillage" value="oui" />
       <input type="hidden" name="plageop_ids" value="{{$plages_ids|@array_keys|@join:"-"}}" />
-      {{if $can->edit}}
+      {{if $bloc->_canEdit}}
         <button type="button" class="new notext" onclick="EditPlanning.edit('','{{$curr_day}}');">{{tr}}Edit{{/tr}}</button>
         <button type="submit" class="lock notext">{{tr}}Lock{{/tr}}</button>
       {{/if}}

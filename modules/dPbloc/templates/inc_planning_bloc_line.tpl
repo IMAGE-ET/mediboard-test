@@ -30,7 +30,7 @@
         <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;height: 3px;border-right: 2px solid #000;">
         </div>
       </div>
-      {{if $can->edit}}
+      {{if $bloc->_canEdit}}
       <strong title="{{$plage->_fill_rate}} % du temps occupé">
       <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}" title="Agencer les interventions">
         {{$plage->_view}}
