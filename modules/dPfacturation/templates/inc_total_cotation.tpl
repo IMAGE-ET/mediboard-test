@@ -5,27 +5,22 @@
 <table class="tbl">
   <tr>
     <th rowspan="2" colspan="2" style="width: 18%;">Praticien</th>
-    <th colspan="2">
-      Consultation
-    </th>
-    <th colspan="2">
-      Séjour
-    </th>
-    <th colspan="2">
-      Intervention
-    </th>
+    {{foreach from=$object_classes item=classe}}
+      <th colspan="2">
+        {{tr}}{{$classe}}{{/tr}}
+      </th>
+    {{/foreach}}
     <th colspan="2" rowspan="2">
       Totaux
     </th>
   </tr>
   <tr>
-    {{foreach from=1|range:3 item=i}}
+    {{foreach from=$object_classes item=classe}}
+      {{foreach from=$tab_actes item=acte key=nom}}
       <th>
-        CCAM
+        {{$nom|capitalize}}
       </th>
-      <th>
-        NGAP
-      </th>
+      {{/foreach}}
     {{/foreach}}
   </tr>
   {{foreach from=$cotation item=_cotation key=_chir_id}}
@@ -34,14 +29,18 @@
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$prats.$_chir_id}}
       </td>
       <td class="narrow">
-        Sec 1<br />
-        Sec 2
+        {{if $conf.ref_pays == 1}}
+          Sec 1<br />
+          Sec 2
+        {{/if}}
       </td>
       {{foreach from=$_cotation item=_total_by_class}}
         {{foreach from=$_total_by_class item=_total}}
           <td style="text-align: right;">
             <div>{{$_total.sect1|currency}}</div>
-            <div>{{$_total.sect2|currency}}</div>
+            {{if $conf.ref_pays == 1}}
+              <div>{{$_total.sect2|currency}}</div>
+            {{/if}}
           </td>
         {{/foreach}}
       {{/foreach}}
@@ -79,7 +78,11 @@
     {{foreach from=$total_by_class item=_total_by_code}}
       <td colspan="2" style="text-align: right;">
         {{if $total}}
-          {{math equation=x+y x=$_total_by_code.ccam y=$_total_by_code.ngap assign=sub_total}}
+          {{if $conf.ref_pays == 1}}
+            {{math equation=x+y x=$_total_by_code.ccam y=$_total_by_code.ngap assign=sub_total}}
+          {{else}}
+            {{math equation=x+y x=$_total_by_code.tarmed y=$_total_by_code.caisse assign=sub_total}}
+          {{/if}}
           {{math equation=(x/y)*100 x=$sub_total y=$total assign=percent_total}}
           <strong>
             {{$sub_total|currency}}
