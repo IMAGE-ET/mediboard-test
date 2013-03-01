@@ -458,11 +458,13 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
 
   function canDeleteEx() {
     // Date dépassée
-    $this->loadRefConsultation();
-    $consult =& $this->_ref_consultation;
+    $this->completeField("consultation_id");
+
+    $consult = $this->loadRefConsultation();
     $consult->loadRefPlageConsult();
-    if ($consult->_ref_plageconsult->date < mbDate()) {
-      return "Imposible de supprimer une consultation passée";
+
+    if ($consult->_ref_plageconsult->date < CMbDT::date()) {
+      return "Impossible de supprimer une consultation passée";
     }
 
     return parent::canDeleteEx();

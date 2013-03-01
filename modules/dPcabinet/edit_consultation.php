@@ -334,6 +334,7 @@ $smarty->assign("traitement"     , $traitement);
 $smarty->assign("techniquesComp" , $techniquesComp);
 $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);
+$smarty->assign("consult_anesth" , $consultAnesth);
 $smarty->assign("_is_dentiste"   , $consult->_is_dentiste);
 $smarty->assign("current_m"      , $current_m);
 $smarty->assign("list_etat_dents", $list_etat_dents);
@@ -361,7 +362,7 @@ if ($consult->_is_dentiste) {
   $smarty->assign("devenirs_dentaires", $devenirs_dentaires);
 }
 
-if ($consult->_is_anesth) {
+if ($consult->_refs_dossiers_anesth|@count) {
   $nextSejourAndOperation = $consult->_ref_patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
   
   $secs = range(0, 60-1, 1);
@@ -370,7 +371,6 @@ if ($consult->_is_anesth) {
   $smarty->assign("nextSejourAndOperation", $nextSejourAndOperation);
   $smarty->assign("secs"                  , $secs);
   $smarty->assign("mins"                  , $mins);
-  $smarty->assign("consult_anesth"        , $consultAnesth);
   $smarty->display("../../dPcabinet/templates/edit_consultation_anesth.tpl");  
 }
 else {
@@ -404,4 +404,3 @@ else {
     $smarty->display("../../dPcabinet/templates/edit_consultation_classique.tpl");
   }
 }
-?>

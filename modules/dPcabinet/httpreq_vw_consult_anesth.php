@@ -47,6 +47,7 @@ if ($selConsult) {
   
   if ($dossier_anesth_id) {
     $consultAnesth = $consult->_refs_dossiers_anesth[$dossier_anesth_id];
+    $consult->_ref_consult_anesth = $consultAnesth;
   }
   
   if ($consultAnesth->_id) {
@@ -89,5 +90,3 @@ $smarty->assign("nextSejourAndOperation", $nextSejourAndOperation);
 $smarty->assign("listChirs"             , $listChirs);
 
 $smarty->display("inc_consult_anesth/interventions.tpl");
-
-?>

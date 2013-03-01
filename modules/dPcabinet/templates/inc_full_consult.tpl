@@ -45,6 +45,7 @@ reloadConsultAnesth = function() {
   // Reload Intervention
   var consultUrl = new Url("dPcabinet", "httpreq_vw_consult_anesth");
   consultUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
+  consultUrl.addParam("dossier_anesth_id", document.editFrmFinish._consult_anesth_id.value);
   consultUrl.requestUpdate('consultAnesth');
   
   // Reload Infos Anesth
@@ -111,16 +112,16 @@ printAllDocs = function() {
 {{if $consult->_id}}
   {{assign var="patient" value=$consult->_ref_patient}}
   {{if $consult_anesth}}
-    {{include file="../../dPcabinet/templates/inc_consult_anesth/patient_infos.tpl"}}
+    {{mb_include module=cabinet template=inc_consult_anesth/patient_infos}}
   {{/if}}
   <div id="finishBanner">
-    {{include file="../../dPcabinet/templates/inc_finish_banner.tpl"}}
+    {{mb_include module=cabinet template=inc_finish_banner}}
   </div>
   {{if $consult_anesth}}
-    {{include file="../../dPcabinet/templates/inc_consult_anesth/accord.tpl"}}
+    {{mb_include module=cabinet template=inc_consult_anesth/accord}}
   {{else}}
-    {{include file="../../dPcabinet/templates/inc_patient_infos_accord_consult.tpl"}}
-    {{include file="../../dPcabinet/templates/acc_consultation.tpl"}}
+    {{mb_include module=cabinet template=inc_patient_infos_accord_consult}}
+    {{mb_include module=cabinet template=acc_consultation}}
   {{/if}}
 {{/if}}
 

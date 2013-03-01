@@ -7,7 +7,7 @@
 {{mb_script module=compteRendu script=modele_selector ajax=true}}
 
 {{if $consult->_id}}
-  {{mb_ternary var=object_consult test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
+  {{mb_ternary var=object_consult test=$consult->_refs_dossiers_anesth|@count value=$consult->_ref_consult_anesth other=$consult}}
   {{mb_include module="dPfiles" template="yoplet_uploader" object=$object_consult}}
 {{/if}}
 

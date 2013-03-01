@@ -34,6 +34,8 @@ $prescription =& $sejour->_ref_prescription_sejour;
 $is_praticien   = $user->isPraticien();
 $has_obs_entree = 0;
 
+$cible = stripslashes($cible);
+
 $cibles = array();
 $users = array();
 
