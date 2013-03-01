@@ -9,8 +9,8 @@
  */
 
 class CHPrimXMLAcquittementsPatients extends CHPrimXMLAcquittements {
-  var $_identifiant_acquitte = null;
-  var $_sous_type_evt        = null;
+  public $_identifiant_acquitte;
+  public $_sous_type_evt;
   
   var $_codes_erreurs        = array(
     "ok"  => "OK",

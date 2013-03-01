@@ -37,30 +37,30 @@ class CHprimXMLConfig extends CExchangeDataFormatConfig {
     "repair_patient"
   );
   
-  var $hprimxml_config_id  = null;
+  public $hprimxml_config_id;
 
   // Digit
-  var $type_sej_hospi      = null;
-  var $type_sej_ambu       = null;
-  var $type_sej_urg        = null;
-  var $type_sej_exte       = null;
-  var $type_sej_scanner    = null;
-  var $type_sej_chimio     = null;
-  var $type_sej_dialyse    = null;
-  var $type_sej_pa         = null;
+  public $type_sej_hospi;
+  public $type_sej_ambu;
+  public $type_sej_urg;
+  public $type_sej_exte;
+  public $type_sej_scanner;
+  public $type_sej_chimio;
+  public $type_sej_dialyse;
+  public $type_sej_pa;
  
   // Handle
-  var $use_sortie_matching = null;
-  var $fully_qualified     = null;
+  public $use_sortie_matching;
+  public $fully_qualified;
   
   // Format
-  var $encoding            = null;
+  public $encoding;
   
   // Purge
-  var $purge_idex_movements = null;
+  public $purge_idex_movements;
   
   // Repair
-  var $repair_patient       = null;
+  public $repair_patient;
  
   var $_categories = array(
     // Format

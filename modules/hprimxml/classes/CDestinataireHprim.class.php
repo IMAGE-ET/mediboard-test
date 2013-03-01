@@ -10,16 +10,16 @@
 
 class CDestinataireHprim extends CInteropReceiver {
   // DB Table key
-  var $dest_hprim_id  = null;
+  public $dest_hprim_id;
   
   // DB Fields
-  var $register    = null;
-  var $code_appli  = null;
-  var $code_acteur = null;
-  var $code_syst   = null;
+  public $register;
+  public $code_appli;
+  public $code_acteur;
+  public $code_syst;
   
   // Form fields
-  var $_tag_hprimxml = null;
+  public $_tag_hprimxml;
     
   function getSpec() {
     $spec = parent::getSpec();

@@ -1,11 +1,19 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Serveur actes
+ *
+ * @category Hprimxml
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
+
+/**
+ * Class CHPrimXMLEvenementsServeurActes
+ * Serveur actes
  */
 
 class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivitePmsi {
@@ -16,7 +24,12 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     'suppression'  => "suppression",
     'information'  => "information",
   );
-  
+
+  /**
+   * Construct
+   *
+   * @return CHPrimXMLEvenementsServeurActes
+   */
   function __construct() {
     $this->sous_type = "evenementServeurActe";
     $this->evenement = "evt_serveuractes";
@@ -24,10 +37,22 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     parent::__construct("serveurActes", "msgEvenementsServeurActes");
   }
 
+  /**
+   * Generate header message
+   *
+   * @return void
+   */
   function generateEnteteMessage() {
     parent::generateEnteteMessage("evenementsServeurActes");
   }
-  
+
+  /**
+   * Generate content message
+   *
+   * @param CCodable $codable Codable
+   *
+   * @return void
+   */
   function generateFromOperation(CCodable $codable) {
     $evenementsServeurActes = $this->documentElement;
 
@@ -109,7 +134,12 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     // Traitement final
     $this->purgeEmptyElements();
   }
-  
+
+  /**
+   * Get content XML
+   *
+   * @return array
+   */
   function getContentsXML() {
     $data = array();
     $xpath = new CHPrimXPath($this);   
@@ -138,9 +168,9 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
   /**
    * Enregistrement des actes CCAM
    * 
-   * @param CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq    DOM Acquittement 
-   * @param CMbObject                                 $mbObject   Object
-   * @param array                                     $data       Data that contain the nodes 
+   * @param CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq  DOM Acquittement
+   * @param CMbObject                                 $mbObject Object
+   * @param array                                     $data     Data that contain the nodes
    * 
    * @return string Acquittement 
    **/
@@ -177,7 +207,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $IPP->tag = $dest_hprim->_tag_patient;
       $IPP->id400 = $data['idSourcePatient'];
 
-      if(!$IPP->loadMatchingObject()) {
+      if (!$IPP->loadMatchingObject()) {
         $messageAcquittement = $domAcquittement->generateAcquittements("err", "E013", null, null, $actesCCAM, $elPatient);
         $doc_valid = $domAcquittement->schemaValidate();
         
@@ -195,7 +225,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $num_dos->tag = $dest_hprim->_tag_sejour;
       $num_dos->id400 = $data['idSourceVenue'];
       
-      if(!$num_dos->loadMatchingObject()) {mbTrace($num_dos, "num", true);
+      if (!$num_dos->loadMatchingObject()) {
         $messageAcquittement = $domAcquittement->generateAcquittements("err", "E014", null, null, $actesCCAM, $elPatient);
         $doc_valid = $domAcquittement->schemaValidate();
         
@@ -248,8 +278,8 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       foreach () {
       
       }*/
-      $messageAcquittement = $domAcquittement->generateAcquittements("ok", "I201", null, null, $actesCCAM, $elPatient); 
-   }
+      $messageAcquittement = $domAcquittement->generateAcquittements("ok", "I201", null, null, $actesCCAM, $elPatient);
+    }
     
     $echange_hprim->_acquittement = $messageAcquittement;
     $echange_hprim->date_echange = mbDateTime();
@@ -259,4 +289,3 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     return $messageAcquittement;
   }
 }
-?>

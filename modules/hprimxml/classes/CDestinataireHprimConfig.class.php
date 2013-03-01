@@ -9,21 +9,21 @@
  */
 
 class CDestinataireHprimConfig extends CMbObjectConfig {
-  var $dest_hprim_config_id = null;
+  public $dest_hprim_config_id;
   
-  var $object_id            = null; // CDestinataireHprim
+  public $object_id; // CDestinataireHprim
   
   // Format
-  var $encoding             = null;
-  var $uppercase_fields     = null;
+  public $encoding;
+  public $uppercase_fields;
   
   // Send
-  var $send_sortie_prevue   = null; 
-  var $send_all_patients    = null;
-  var $send_default_serv_with_type_sej = null;
+  public $send_sortie_prevue;
+  public $send_all_patients;
+  public $send_default_serv_with_type_sej;
   
   // Application
-  var $receive_ack          = null;
+  public $receive_ack;
   
   var $_categories = array(
     // Format

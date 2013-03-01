@@ -9,21 +9,21 @@
  */
 
 class CHPrimXMLDocument extends CMbXMLDocument {  
-  var $evenement              = null;
-  var $finalpath              = null;
-  var $documentfinalprefix    = null;
-  var $documentfinalfilename  = null;
+  public $evenement;
+  public $finalpath;
+  public $documentfinalprefix;
+  public $documentfinalfilename;
   var $sentFiles              = array();
   
-  var $group_id  = null;
+  public $group_id;
   
-  var $type      = null;
-  var $sous_type = null;
+  public $type;
+  public $sous_type;
   
   // Behaviour fields
-  var $_ref_sender      = null;
-  var $_ref_receiver  = null;
-  var $_ref_echange_hprim = null;
+  public $_ref_sender;
+  public $_ref_receiver;
+  public $_ref_echange_hprim;
   
   function __construct($dirschemaname, $schemafilename = null) {
     parent::__construct();

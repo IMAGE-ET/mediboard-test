@@ -1,25 +1,50 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * PMSI
+ *
+ * @category Hprimxml
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
+
+/**
+ * Class CHPrimXMLEvenementsPmsi
+ * PMSI
  */
 
 class CHPrimXMLEvenementsPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
+  /**
+   * Construct
+   *
+   * @return CHPrimXMLEvenementsPmsi
+   */
   function __construct() {
     $this->sous_type = "evenementPMSI";
     $this->evenement = "evt_pmsi";
-		
+
     parent::__construct("evenementPmsi", "msgEvenementsPmsi");
   }
-  
+
+  /**
+   * Generate header message
+   *
+   * @return void
+   */
   function generateEnteteMessage() {
     parent::generateEnteteMessage("evenementsPMSI");
   }
-  
+
+  /**
+   * Generate content message
+   *
+   * @param CSejour $mbSejour Admit
+   *
+   * @return void
+   */
   function generateFromOperation(CSejour $mbSejour) {
     $evenementsPMSI = $this->documentElement;
 
@@ -38,7 +63,8 @@ class CHPrimXMLEvenementsPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
       // Ajout du contenu rhss
       $rhss = $this->addElement($evenementPMSI, "rhss");
       $this->addSsr($rhss, $mbSejour);
-    } else {
+    }
+    else {
       // Ajout de la saisie délocalisée
       $saisie = $this->addElement($evenementPMSI, "saisieDelocalisee");
       $this->addSaisieDelocalisee($saisie, $mbSejour);
@@ -47,7 +73,12 @@ class CHPrimXMLEvenementsPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
     // Traitement final
     $this->purgeEmptyElements();
   }
-  
+
+  /**
+   * Get content XML
+   *
+   * @return array
+   */
   function getContentsXML() {
     $data = array();
     $xpath = new CHPrimXPath($this);   
@@ -65,4 +96,3 @@ class CHPrimXMLEvenementsPmsi extends CHPrimXMLEvenementsServeurActivitePmsi {
     return $data; 
   }
 }
-?>

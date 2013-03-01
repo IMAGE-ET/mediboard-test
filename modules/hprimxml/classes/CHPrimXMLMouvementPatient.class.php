@@ -1,11 +1,19 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision:$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Mouvement patient
+ *
+ * @category Hprimxml
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
+ */
+
+/**
+ * Class CHPrimXMLMouvementPatient
+ * Mouvement patient
  */
 
 class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients { 
@@ -14,14 +22,27 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
     'remplacement' => "remplacement",
     'modification' => "modification",
   );
-  
+
+  /**
+   * Construct
+   *
+   * @return CHPrimXMLMouvementPatient
+   */
   function __construct() {    
     $this->sous_type = "mouvementPatient";
             
     parent::__construct();
   }
-  
-  function generateFromOperation(CAffectation $newMouvement, $referent) {  
+
+  /**
+   * Generate content message
+   *
+   * @param CAffectation $mouvement Movement
+   * @param bool         $referent  Is referring ?
+   *
+   * @return void
+   */
+  function generateFromOperation(CAffectation $mouvement, $referent) {
     $evenementsPatients = $this->documentElement;
     $evenementPatient   = $this->addElement($evenementsPatients, "evenementPatient");
     
@@ -31,25 +52,30 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       "store"  => "modification",
       "delete" => "suppression"
     );
-    $action = $newMouvement->_ref_last_log->type ? $newMouvement->_ref_last_log->type : "create";
+    $action = $mouvement->_ref_last_log->type ? $mouvement->_ref_last_log->type : "create";
     $this->addAttribute($mouvementPatient, "action", $actionConversion[$action]);
     
     $patient = $this->addElement($mouvementPatient, "patient");
     // Ajout du patient   
-    $this->addPatient($patient, $newMouvement->_ref_sejour->_ref_patient, $referent);
+    $this->addPatient($patient, $mouvement->_ref_sejour->_ref_patient, $referent);
     
     $venue = $this->addElement($mouvementPatient, "venue"); 
     // Ajout de la venue   
-    $this->addVenue($venue, $newMouvement->_ref_sejour, $referent);
+    $this->addVenue($venue, $mouvement->_ref_sejour, $referent);
     
     // Ajout du mouvement (1 seul dans notre cas pas l'historique)
     $mouvements = $this->addElement($mouvementPatient, "mouvements"); 
-    $this->addMouvement($mouvements, $newMouvement, $referent);
+    $this->addMouvement($mouvements, $mouvement, $referent);
 
     // Traitement final
     $this->purgeEmptyElements();
   }
-  
+
+  /**
+   * Get content XML
+   *
+   * @return array
+   */
   function getContentsXML() {
     $xpath = new CHPrimXPath($this);
 
@@ -78,13 +104,14 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
   
   /**
    * Fusion and recording a stay with an num_dos in the system
-   * @param CHPrimXMLAcquittementsPatients $dom_acq
-   * @param CEchangeHprim $echg_hprim.
-   * @param CPatient $newPatient
-   * @param array $data
+   *
+   * @param CHPrimXMLAcquittementsPatients $dom_acq    Acquittement
+   * @param CPatient                       $newPatient Patient
+   * @param array                          $data       Data
+   *
    * @return string acquittement 
    **/
-  function mouvementPatient($dom_acq, $newPatient, $data) {
+  function mouvementPatient(CHPrimXMLAcquittementsPatients $dom_acq, CPatient $newPatient, $data) {
     $echg_hprim = $this->_ref_echange_hprim;
     
     // Traitement de la venue
@@ -118,7 +145,8 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       
       if ($msgVenue) {
         $avertissement = $msgVenue." ";
-      } else {
+      }
+      else {
         $newVenue->loadLogs();
         $modified_fields = "";
         if (is_array($newVenue->_ref_last_log->_fields)) {
@@ -130,8 +158,7 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
         $commentaire = "Séjour modifiée : $newVenue->_id. Les champs mis à jour sont les suivants : $modified_fields.";
       }
     }
-		
-		return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);
+
+    return $echg_hprim->setAck($dom_acq, $codes, $avertissement, $commentaire, $newVenue);
   } 
 }
-?>

@@ -1,25 +1,49 @@
-<?php /* $Id: evenementspmsi.class.php 9209 2010-06-15 13:10:19Z lryo $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision: 9209 $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Frais divers
+ *
+ * @category Hprimxml
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * Class CHPrimXMLEvenementsFraisDivers
+ * Frais divers
+ */
 class CHPrimXMLEvenementsFraisDivers extends CHPrimXMLEvenementsServeurActivitePmsi {
+  /**
+   * Construct
+   *
+   * @return CHPrimXMLEvenementsFraisDivers
+   */
   function __construct() {
     $this->sous_type = "evenementFraisDivers";
     $this->evenement = "evt_frais_divers";
     
     parent::__construct("evenementFraisDivers", "msgEvenementsFraisDivers");
   }
-  
+
+  /**
+   * Generate header message
+   *
+   * @return void
+   */
   function generateEnteteMessage() {
     parent::generateEnteteMessage("evenementsFraisDivers");
   }
-  
+
+  /**
+   * Generate content message
+   *
+   * @param CSejour $mbSejour Admit
+   *
+   * @return void
+   */
   function generateFromOperation(CSejour $mbSejour) {
     $evenementsFraisDivers = $this->documentElement;
 
@@ -58,7 +82,12 @@ class CHPrimXMLEvenementsFraisDivers extends CHPrimXMLEvenementsServeurActiviteP
     // Traitement final
     $this->purgeEmptyElements();
   }
-  
+
+  /**
+   * Get content XML
+   *
+   * @return array
+   */
   function getContentsXML() {
     $data = array();
     $xpath = new CHPrimXPath($this);   
@@ -76,4 +105,3 @@ class CHPrimXMLEvenementsFraisDivers extends CHPrimXMLEvenementsServeurActiviteP
     return $data; 
   }
 }
-?>

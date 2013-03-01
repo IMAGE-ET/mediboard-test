@@ -15,7 +15,7 @@ class CEchangeHprim extends CEchangeXML {
   );
   
   // DB Table key
-  var $echange_hprim_id     = null;
+  public $echange_hprim_id;
 
   function getSpec() {
     $spec = parent::getSpec();

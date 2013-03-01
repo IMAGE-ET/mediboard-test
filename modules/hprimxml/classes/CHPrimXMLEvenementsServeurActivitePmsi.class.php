@@ -296,5 +296,3 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
   function handle(CHPrimXMLAcquittementsServeurActivitePmsi $dom_acq, CMbObject $mbObject, $data) {
   }
 }
-
-?>
