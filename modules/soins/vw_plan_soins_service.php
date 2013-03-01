@@ -77,6 +77,7 @@ $ljoin["sejour"] = "sejour.sejour_id = prescription.object_id AND prescription.o
 
 $where = array();
 $where["sejour.sejour_id"] = CSQLDataSource::prepareIn($sejours_id);
+$where["prescription_line_element.active"] = " = '1'";
 
 $elements = $element->loadList($where, null, null, null, $ljoin);
 

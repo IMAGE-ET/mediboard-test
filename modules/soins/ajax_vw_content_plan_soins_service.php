@@ -65,6 +65,7 @@ $where["element_prescription_id"] =  CSQLDataSource::prepareIn($categories_id);
 $where[] = "'$date' <= sejour.sortie && '$date_max' >= sejour.entree";
 $where["service.service_id"] = " = '$service_id'";
 $where["inscription"] = " = '0'";
+$where["active"] = " = '1'";
 
 if ($premedication){
   $where["premedication"] = " = '1'";
