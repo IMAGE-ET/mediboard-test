@@ -10,14 +10,24 @@
  * @link     http://www.mediboard.org */
 
 
-/**
- * Test avec un nullFlavor bon
- */
+$result = array();
 $CCDAANY = new CCDAANY();
-$CCDAANY->test();
+$result[] = $CCDAANY->test();
 
 $CCDAANYNonNull = new CCDAANYNonNull();
-$CCDAANYNonNull->test();
+$result[] = $CCDAANYNonNull->test();
+
+$CCDA_cs = new CCDA_cs();
+$result[] = $CCDA_cs->test();
+
+$test = new CCDAAddressPartType();
+$result[] = $test->test();
+
+$smarty = new CSmartyDP();
+
+$smarty->assign("result", $result);
+
+$smarty->display("vw_testdatatype.tpl");
 
 /*$CCDATools = new CCdaTools();
 $CCDATools->createClass();*/

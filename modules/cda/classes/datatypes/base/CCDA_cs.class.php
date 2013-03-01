@@ -3,7 +3,7 @@
 /**
  * $Id$
  *  
- * @category ${Module}
+ * @category CDA
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -16,9 +16,9 @@
  * for coded attributes that have a single HL7-defined
  * value set.
  */
-class CCDA_cs {
+class CCDA_cs extends CCDA_Datatype_Voc {
 
-  public $value;
+  public $data;
   /**
 	 * Get the properties of our class as strings
 	 *
@@ -26,7 +26,47 @@ class CCDA_cs {
 	 */
   function getProps() {
     $props = array();
-    $props["value"] = "str pattern:[^\\s]+";
+    $props["data"] = "str data pattern|[^\\s]+";
     return $props;
+  }
+
+  /**
+   * fonction permettant de tester la validité de la classe
+   *
+   * @return nothing
+   */
+  function test() {
+    if(get_class($this) !== "CCDA_cs") {
+      return parent::test();
+    }
+
+    $name = $this->getName();
+    $tabTest[$name] = array();
+    /**
+     * Test avec un valeur null
+     */
+
+    $tabTest[$name][] = $this->sample("Test avec une valeur null", "Document invalide");
+
+    /*-------------------------------------------------------------------------------------*/
+    /**
+     * Test avec un valeur erronée
+     */
+
+    $this->setData(" ");
+    $tabTest[$name][] = $this->sample("Test avec une valeur erronée", "Document invalide");
+
+    /*-------------------------------------------------------------------------------------*/
+    /**
+     * Test avec un valeur bonne
+     */
+
+
+    $this->setData("test");
+    $tabTest[$name][] = $this->sample("Test avec une valeur bonne", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    return $tabTest;
   }
 }

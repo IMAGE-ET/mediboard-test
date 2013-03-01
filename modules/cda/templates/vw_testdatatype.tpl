@@ -11,24 +11,31 @@
 
 <table class="tbl">
   <tr>
-    <th colspan="2" class="title">
-      {{$nameClass}}
+    <th>
+      Description
+    </th>
+    <th>
+      Résultat attendu
+    </th>
+    <th>
+      Résultat
     </th>
   </tr>
-  <tr>
-    <td colspan="2">{{$description}}</td>
-  </tr>
-  <tr>
-    <th>Résultat</th>
-    <th>Résultat attendu</th>
-  </tr>
-  <tr>
-   <td {{if $result == $resultAttendu}}class="ok"{{else}} class="error"{{/if}}>
-     {{$result}}
-    </td>
-    <td>
-      {{$resultAttendu}}
-    </td>
-  </tr>
+  {{foreach from=$result item=_class}}
+    {{foreach from=$_class key=name item=_test}}
+      <tr>
+        <th colspan="3" class="title">
+          {{$name}}
+        </th>
+      </tr>
+      {{foreach from=$_test item=_ligne}}
+        <tr>
+          <td>{{$_ligne.description}}</td>
+          <td>{{$_ligne.resultatAttendu}}</td>
+          <td {{if $_ligne.resultatAttendu == $_ligne.resultat}}class="ok"{{else}}class="error"{{/if}}>{{$_ligne.resultat}}</td>
+        </tr>
+      {{/foreach}}
+    {{/foreach}}
+  {{/foreach}}
 </table>
 <br/>

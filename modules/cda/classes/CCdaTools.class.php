@@ -153,6 +153,11 @@ class CCdaTools {
     return $tabElement;
   }
 
+  /**
+   * Fonction de création des classes voc
+   *
+   * @return string
+   */
   function createClass() {
     $dom = new CMbXMLDocument("UTF-8");
     $dom->load("modules/cda/resources/voc.xsd");
@@ -185,7 +190,7 @@ class CCdaTools {
       $listEnumeration = array();
 
       foreach ($enumeration as $_enumeration) {
-        $listEnumeration[] = $_enumeration->attributes->getNamedItem("value")->nodeValue;
+        array_push($listEnumeration, $_enumeration->attributes->getNamedItem("value")->nodeValue);
       }
       $listvoc[] = array( "name" => $name,
                           "documentation" => $documentation,
@@ -193,7 +198,29 @@ class CCdaTools {
                           "restriction" => $restriction,
                           "enumeration" => $listEnumeration);
     }
-      //mbTrace($listvoc);
+
+    $cheminBase = "modules/cda/classes/datatypes/voc/";
+
+    foreach ($listvoc as $voc) {
+      $nameFichier = "CCDA".$voc["name"].".class.php";
+      $smarty = new CSmartyDP();
+      $smarty->assign("documentation", $voc["documentation"]);
+      $smarty->assign("name", $voc["name"]);
+      $smarty->assign("enumeration", $this->formatArray($voc["enumeration"]));
+      $union = $this->formatArray(array());
+      if (CMbArray::get($voc, "union")) {
+        $union = $this->formatArray(explode(" ", $voc["union"]));
+      }
+      $smarty->assign("union", $union);
+      $smarty->assign("extend", $voc["restriction"]);
+      $data = $smarty->fetch("defaultClassVoc.tpl");
+
+      file_put_contents($cheminBase.$nameFichier, $data);
+    }
+  }
+
+  function formatArray($array) {
+    return preg_replace('/\)$/', "  )", preg_replace("/\d+ => /", "  ", var_export($array, true)));
   }
 
   function showNodeXSD($name) {

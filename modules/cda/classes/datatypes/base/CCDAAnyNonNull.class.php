@@ -28,23 +28,25 @@ class CCDAANYNonNull extends CCDAANY {
   }
 
   function test() {
+    $name = $this->getName();
+    $tabTest[$name] = array();
     /**
      * Test avec un nullFlavor null
      */
-    $this->sample("Test avec un nullFlavor null", "Document valide");
+    $tabTest[$name][] = $this->sample("Test avec un nullFlavor null", "Document valide");
 
     /**
      * Test avec un nullFlavor bon
      */
     $this->setNullFlavor("NP");
-    $this->sample("Test avec un nullFlavor bon", "Document invalide");
+    $tabTest[$name][] = $this->sample("Test avec un nullFlavor bon", "Document invalide");
 
     /**
      * Test avec un nullFlavor incorrect
      */
     $this->setNullFlavor("TESTTEST");
-    $this->sample("Test avec un nullFlavor incorrect", "Document invalide");
+    $tabTest[$name][] = $this->sample("Test avec un nullFlavor incorrect", "Document invalide");
 
-    $this->changeclass();
+    return $tabTest;
   }
 }
