@@ -1785,8 +1785,38 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `consultation`
                 ADD `type_assurance` ENUM('classique','at','maternite','smg');";
     $this->addQuery($query);
-
-    $this->mod_version = "1.92";
+    $this->makeRevision("1.92");
+    
+    $query = "ALTER TABLE `facture_cabinet` 
+              ADD `consultation_id` INT (11);";
+    $this->addQuery($query);
+    
+    $query = "INSERT INTO `facture_cabinet` (`patient_id` ,`praticien_id`,`ouverture`,`cloture`,`du_patient`,`du_tiers`,`patient_date_reglement`,`tiers_date_reglement`, `consultation_id`)
+        SELECT c.patient_id, p.chir_id, p.date, p.date, c.du_patient, c.du_tiers, c.patient_date_reglement, c.tiers_date_reglement, c.consultation_id
+        FROM consultation c, plageconsult p
+        WHERE c.facture_id IS NULL
+        AND c.plageconsult_id = p.plageconsult_id
+        AND c.valide = '1'
+        GROUP BY c.consultation_id;";
+    $this->addQuery($query);
+    
+    $query = "UPDATE consultation c, facture_cabinet f
+          SET c.facture_id = f.facture_id
+          WHERE c.consultation_id = f.consultation_id;";
+    $this->addQuery($query);
+    
+    $query = "UPDATE reglement r, consultation c, facture_cabinet f
+          SET r.object_id = f.facture_id,
+              r.object_class = 'CFactureCabinet'
+          WHERE r.object_id = c.consultation_id
+          AND r.object_class = 'CConsultation'
+          AND f.consultation_id = c.consultation_id;";
+    $this->addQuery($query);
+    
+    $query = "ALTER TABLE `facture_cabinet` 
+              DROP `consultation_id`;";
+    $this->addQuery($query);
+    $this->mod_version = "1.93";
   }
 }
 ?>
