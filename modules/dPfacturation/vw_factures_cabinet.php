@@ -40,33 +40,18 @@ if ($etat_cloture && !$etat_ouvert) {
   $where["$type_date_search"] = "BETWEEN '$date_min' AND '$date_max'";
 }
 elseif ($etat_cloture && $etat_ouvert) {
-   $where[] = "$type_date_search BETWEEN '$date_min' AND '$date_max' OR $type_date_search IS NULL";
+   $where[] = "($type_date_search BETWEEN '$date_min' AND '$date_max') OR $type_date_search IS NULL";
 }
 elseif (!$etat_cloture && $etat_ouvert) {
   $where["$type_date_search"] = "IS NULL";
 }
 
 if ($chirSel) {
-  if (!CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
-    $ljoin = array();
-    $ljoin["consultation"] = "facture_cabinet.facture_id = consultation.facture_id" ;
-    $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id" ;
-    
-    $where["consultation.facture_id"] =" IS NOT NULL ";
-    $where["facture_cabinet.praticien_id"] =" = '$chirSel' ";
-  
-    if ($patient_id) {
-      $where["facture_cabinet.patient_id"] =" = '$patient_id' ";
-    }
-    $factures = $facture->loadList($where, "facture_cabinet.cloture DESC", 100, null, $ljoin);
+  $where["praticien_id"] =" = '$chirSel'";
+  if ($patient_id) {
+    $where["patient_id"] =" = '$patient_id' ";
   }
-  else {
-    $where["praticien_id"] =" = '$chirSel' ";
-    if ($patient_id) {
-      $where["patient_id"] =" = '$patient_id' ";
-    }
-    $factures = $facture->loadList($where, "cloture DESC", 100);
-  }
+  $factures = $facture->loadList($where, "cloture DESC", 100);
 }
 else {
   $where["patient_id"] = "= '$patient_id'";  
@@ -75,7 +60,7 @@ else {
 
 foreach ($factures as $key => $_facture) {
   $_facture->loadRefPatient();
-  $_facture->loadRefsConsults();
+  $_facture->loadRefsConsultation();
   $_facture->loadRefsItems();
   $nb_tarmed  = count($_facture->_ref_actes_tarmed);
   $nb_caisse  = count($_facture->_ref_actes_caisse);

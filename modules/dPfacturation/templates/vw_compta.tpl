@@ -53,14 +53,14 @@ function viewActes(){
   return false;
 }
 
-printFacture = function(edit_justificatif, edit_bvr) {
+printFacture = function(edit_justificatif, edit_bvr, facture_class) {
   var oForm = document.printFrm;
   if(!oForm.chir.value) {
     alert('Vous devez choisir un praticien');
     return false;
   }
   var url = new Url('facturation', 'ajax_edit_bvr');
-  url.addParam('facture_class'   , "CFactureCabinet");
+  url.addParam('facture_class'   , facture_class);
   url.addParam('edition_justificatif', edit_justificatif);
   url.addParam('edition_bvr'     , edit_bvr);
   url.addParam('_date_min'       , oForm._date_min.value);
@@ -238,8 +238,8 @@ viewTotaux = function() {
           </tr>
           <tr>
             <td class="button" colspan="2">
-              <button type="button" class="pdf" onclick="printFacture(0, 1);">Impression des BVR</button>
-              <button type="button" class="pdf" onclick="printFacture(1, 0);">Justificatifs de remboursement</button>
+              <button type="button" class="pdf" onclick="printFacture(0, 1, 'CFactureCabinet');">Impression des BVR</button>
+              <button type="button" class="pdf" onclick="printFacture(1, 0, 'CFactureCabinet');">Justificatifs de remboursement</button>
             </td>
             <td colspan="2" rowspan="2" class="text">
               <div class="small-info" id="response_send_bill">
@@ -282,6 +282,24 @@ viewTotaux = function() {
             <button type="button" class="search" onclick="viewActes();">Validation paiements</button>
           </td>
         </tr>
+        {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+          <tr>
+            <td class="button" colspan="4">
+              <hr />
+            </td>
+          </tr>
+          <tr>
+            <td class="button" colspan="2">
+              <button type="button" class="pdf" onclick="printFacture(0, 1, 'CFactureEtablissement');">Impression des BVR</button>
+              <button type="button" class="pdf" onclick="printFacture(1, 0, 'CFactureEtablissement');">Justificatifs de remboursement</button>
+            </td>
+            <td colspan="2" class="text">
+              <div class="small-info" id="response_send_bill">
+                Envoi des factures à la Caisse des Médecins et stockage au format pdf.
+              </div>
+            </td>
+          </tr>
+        {{/if}}
         <tr>
           <th class="category" colspan="4">
             Totaux
