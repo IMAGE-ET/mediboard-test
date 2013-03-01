@@ -10,8 +10,7 @@
  */
 
 CCanDo::checkEdit();
-
-$facture_id  = CValue::getOrSession("facture_id");
+$facture_id  = CValue::get("facture_id");
 
 $facture = new CFactureCabinet();
 $facture->load($facture_id); 

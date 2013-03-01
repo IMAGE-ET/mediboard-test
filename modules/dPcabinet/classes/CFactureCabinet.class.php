@@ -15,7 +15,7 @@
  */
 class CFactureCabinet extends CFacture {
   // DB Table key
-  var $facture_id = null;
+  public $facture_id;
   
   /**
    * getSpec
@@ -36,8 +36,8 @@ class CFactureCabinet extends CFacture {
   **/
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps["consultations"]           = "CConsultation facture_id";
-    $backProps["reglements"] = "CReglement object_id";
+    $backProps["consultations"] = "CConsultation facture_id";
+    $backProps["reglements"]    = "CReglement object_id";
     return $backProps;
   }
    
@@ -89,12 +89,12 @@ class CFactureCabinet extends CFacture {
    * @return void
   **/
   function store() {
-    if (CAppUI::conf("dPfacturation CFactureCabinet create_items_bill")) {
-      //Si on cloture la facture (pour plus tard ;))
-      if ($this->cloture && $this->fieldModified("cloture")) {
-        $this->creationLignesFacture();
-      }
-    }
+		if (CModule::getActive("dPfacturation")) {
+    	//Si on cloture la facture on créé les lignes de facture
+    	if ($this->cloture && $this->fieldModified("cloture")) {
+      	$this->creationLignesFacture();
+    	}
+  	}
     // A vérifier pour le == 0 s'il faut faire un traitement
     if ($this->facture !== '0') {
       foreach ($this->loadBackRefs("consultations") as $_consultation) {
@@ -205,7 +205,7 @@ class CFactureCabinet extends CFacture {
     //Si la facture existe déjà
     if ($this->loadObject($where)) {
       $this->loadRefsConsults();
-      if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
+      if (CModule::getActive("dPfacturation")) {
         $ligne = new CFactureLiaison();
         $ligne->facture_id    = $this->_id;
         $ligne->facture_class = $this->_class;
@@ -227,15 +227,14 @@ class CFactureCabinet extends CFacture {
       $this->patient_id   = $patient_id;
       $this->praticien_id = $chirsel_id;
       $this->type_facture = $type_facture;
-      
       $this->du_patient   = $du_patient;
       $this->du_tiers     = $du_tiers;
-      
       if (CAppUI::conf("ref_pays") == 1) {
         $this->cloture    = mbDate();
       }
       $this->store();
-      if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
+      
+      if (CModule::getActive("dPfacturation")) {
         $ligne = new CFactureLiaison();
         $ligne->facture_id    = $this->_id;
         $ligne->facture_class = $this->_class;
@@ -243,13 +242,13 @@ class CFactureCabinet extends CFacture {
         $ligne->object_class  = 'CConsultation';
         $ligne->store();
       }
-    }
-    if ($this->_id && !CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
-       $consult = new CConsultation();
-       $consult->_id = $consult_id;
-       $consult->loadMatchingObject();
-       $consult->facture_id = $this->_id;
-       $consult->store();
+      else {
+         $consult = new CConsultation();
+         $consult->_id = $consult_id;
+         $consult->loadMatchingObject();
+         $consult->facture_id = $this->_id;
+         $consult->store();
+      }
     }
   }
 }

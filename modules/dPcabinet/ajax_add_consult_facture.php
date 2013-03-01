@@ -9,6 +9,7 @@
  * @version    $Revision$
  */
 
+CCanDo::checkEdit();
 $patient_id     = CValue::getOrSession("patient_id");
 $du_patient     = CValue::get("du_patient");
 $consult_id     = CValue::get("consult_id");

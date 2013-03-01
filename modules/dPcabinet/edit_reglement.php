@@ -10,7 +10,6 @@
  */
 
 CCanDO::checkEdit();
-
 // Chargement du reglement
 $reglement = new CReglement();
 $reglement->load(CValue::get("reglement_id"));
@@ -39,9 +38,6 @@ if ($object instanceof CFactureCabinet) {
     $facture->loadRefsConsults();
     $facture->loadNumerosBVR();
   }
-}
-if ($object instanceof CConsultation) {
-  $facture = $object->fakeRefFacture();
 }
 
 // Création du template

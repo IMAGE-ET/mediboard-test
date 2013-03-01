@@ -10,7 +10,6 @@
  */
 
 CCanDo::checkEdit();
-
 $date_min           = CValue::getOrSession("_date_min", mbDate());
 $date_max           = CValue::getOrSession("_date_max", mbDate());
 $etat_cloture       = CValue::getOrSession("etat_cloture", 1);
@@ -49,27 +48,11 @@ elseif (!$etat_cloture && $etat_ouvert) {
 }
 
 if ($chirSel) {
-  if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
-    $ljoin = array();
-    $ljoin["consultation"] = "facture_cabinet.facture_id = consultation.facture_id" ;
-    $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id" ;
-    
-    $where["consultation.facture_id"] =" IS NOT NULL ";
-    $where["facture_cabinet.praticien_id"] =" = '$chirSel' ";
-  
-    if ($patient_id) {
-      $where["facture_cabinet.patient_id"] =" = '$patient_id' ";
-    }
-    
-    $factures = $facture->loadList($where, "facture_cabinet.cloture DESC", 100, null, $ljoin);
+  $where["praticien_id"] =" = '$chirSel' ";
+  if ($patient_id) {
+    $where["patient_id"] =" = '$patient_id' ";
   }
-  else {
-    $where["praticien_id"] =" = '$chirSel' ";
-    if ($patient_id) {
-      $where["patient_id"] =" = '$patient_id' ";
-    }
-    $factures = $facture->loadList($where, "cloture DESC", 100);
-  }
+  $factures = $facture->loadList($where, "cloture DESC", 100);
 }
 else {
   $where["patient_id"] = "= '$patient_id'";  
