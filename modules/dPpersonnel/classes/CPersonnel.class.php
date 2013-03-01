@@ -30,11 +30,11 @@ class CPersonnel extends CMbObject {
     $spec->key   = 'personnel_id';
     return $spec;
   }
-
+  
   function getProps() {
     $specs = parent::getProps();
     $specs["user_id"]     = "ref notNull class|CMediusers";
-    $specs["emplacement"] = "enum notNull list|op|op_panseuse|reveil|service|iade default|op";
+    $specs["emplacement"] = "enum notNull list|op|op_panseuse|reveil|service|iade|brancardier default|op";
     $specs["actif"]       = "bool notNull default|1";
     
     $specs["_user_last_name" ] = "str";
@@ -44,7 +44,9 @@ class CPersonnel extends CMbObject {
   
   function getBackProps() {
     $backProps = parent::getBackProps();
-    $backProps['affectations'] = 'CAffectationPersonnel personnel_id';
+    $backProps['affectations']    = 'CAffectationPersonnel personnel_id';
+    $backProps['brancard_depart'] = 'CBrancardage pec_dep_user_id';
+    $backProps['brancard_retour'] = 'CBrancardage pec_ret_user_id';
     return $backProps;
   }
 
