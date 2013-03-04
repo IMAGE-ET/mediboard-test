@@ -324,7 +324,7 @@ class CUser extends CMbObject {
     }
 
     // DB field to update
-    $this->user_password_last_change = mbDateTime();
+    $this->user_password_last_change = CMbDT::dateTime();
 
     // Compute the hash
     $this->user_password = hash("SHA256", $this->user_salt.$this->_user_password);
@@ -383,6 +383,10 @@ class CUser extends CMbObject {
 
   function store() {
     $this->updateSpecs();
+
+    if (!$this->_id) {
+      $this->user_password_last_change = CMbDT::dateTime();
+    }
 
     if ($msg = $this->purgeConnections()) {
       return $msg;
