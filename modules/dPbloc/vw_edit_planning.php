@@ -38,6 +38,7 @@ foreach($listBlocs as &$curr_bloc) {
 
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
+$bloc->canDo();
 $bloc->loadRefsSalles();
 $nbAlertesInterv = count($bloc->loadRefsAlertesIntervs());
 
