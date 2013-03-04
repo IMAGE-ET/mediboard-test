@@ -135,8 +135,8 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
             break;
           }
           
-          // Dans tous les autres cas il s'agit d'une modification          
-          $code = "A31";
+          // Dans tous les autres cas il s'agit d'une modification
+          $code = ($receiver->_configs["send_update_patient_information"] == "A08") ? "A08" : "A31";
           break;
         default:
           $code = null;
@@ -223,12 +223,13 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
           if ($patient2_ipp) {
             $patient->_IPP = $patient2_ipp;
           }
-          
-          if (!$this->isMessageSupported($this->transaction, $this->message, "A31", $receiver)) {
+
+          $code = ($receiver->_configs["send_update_patient_information"] == "A08") ? "A08" : "A31";
+          if (!$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
             return;
           }
             
-          $this->sendITI($this->profil, $this->transaction, $this->message, "A31", $patient);
+          $this->sendITI($this->profil, $this->transaction, $this->message, $code, $patient);
           continue;
         }
         
@@ -285,7 +286,7 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
     $patient = $mbObject->loadRefPatient();
     $patient->_receiver = $receiver;
     
-    $code = "A31";
+    $code = ($receiver->_configs["send_update_patient_information"] == "A08") ? "A08" : "A31";
         
     if ($patient->_eai_initiateur_group_id || !$this->isMessageSupported($this->transaction, $this->message, $code, $receiver)) {
       return;

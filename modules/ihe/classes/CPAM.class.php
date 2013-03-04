@@ -27,18 +27,15 @@ class CPAM extends CIHE {
    * @var array
    */
   static $transaction_iti30 = array(
-    "A24", "A37", "A28", "A29", "A31", "A40", "A46",
-    "A47"
+    "A08", "A24", "A37", "A28", "A29", "A31", "A40", "A46", "A47"
   );
 
   /**
    * @var array
    */
   static $transaction_iti31 = array(
-    "A01", "A02", "A03", "A04", "A05", "A06", "A07",
-    "A08", "A11", "A12", "A13", "A14", "A16", "A21",
-    "A22", "A25", "A38", "A44", "A52", "A53", "A54", 
-    "A55", "Z99"
+    "A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A11", "A12", "A13", "A14", "A16", "A21", "A22", "A25", "A38", "A44",
+    "A52", "A53", "A54", "A55", "Z99"
   );
 
   /**
@@ -46,6 +43,7 @@ class CPAM extends CIHE {
    */
   static $evenements = array(
     // ITI-30
+    "A08" => "CHL7EventADTA08",
     "A24" => "CHL7EventADTA24",
     "A28" => "CHL7EventADTA28",
     "A29" => "CHL7EventADTA29",

@@ -1017,7 +1017,12 @@ class CSetuphl7 extends CSetup {
                 ADD `handle_PV1_20` ENUM ('old_presta','none') DEFAULT 'none';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.61";
+    $this->makeRevision("0.61");
+    $query = "ALTER TABLE `receiver_ihe_config`
+                ADD `send_update_patient_information` ENUM ('A08','A31') DEFAULT 'A31';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.62";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

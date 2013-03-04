@@ -58,6 +58,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
   public $send_transfer_patient;
   public $send_own_identifier;
   public $send_self_identifier;
+  public $send_update_patient_information;
 
   // Build
   public $build_mode;
@@ -133,6 +134,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
       "send_transfer_patient",
       "send_own_identifier",
       "send_self_identifier",
+      "send_update_patient_information",
     ),
     "PID" => array(
       "build_PID_31",
@@ -152,15 +154,27 @@ class CReceiverIHEConfig extends CMbObjectConfig {
       "build_PV2_45",
     )
   );
-  
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
+
     $spec->table = "receiver_ihe_config";
     $spec->key   = "receiver_ihe_config_id";
     $spec->uniques["uniques"] = array("object_id");
+
     return $spec;
   }
 
+  /**
+   * Get properties specifications as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["object_id"]              = "ref class|CReceiverIHE";
@@ -204,6 +218,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
     $props["send_transfer_patient"]              = "enum list|A02|Z99 default|A02";
     $props["send_own_identifier"]                = "bool default|1";
     $props["send_self_identifier"]               = "bool default|0";
+    $props["send_update_patient_information"]    = "enum list|A08|A31 default|A31";
     
     // Build
     $props["build_mode"]             = "enum list|normal|simple default|normal";

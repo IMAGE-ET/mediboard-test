@@ -46,6 +46,30 @@ class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
    * @return void
    */
   function build($object) {
+    // Dans le cas où le A08 est dédié à la mise à jour des données du patient
+    if ($object instanceof CPatient) {
+      $patient = $object;
+
+      parent::build($patient);
+
+      // Patient Identification
+      $this->addPID($patient);
+
+      // Patient Additional Demographic
+      $this->addPD1($patient);
+
+      // Doctors
+      $this->addROLs($patient);
+
+      // Next of Kin / Associated Parties
+      $this->addNK1s($patient);
+
+      // Patient Visit
+      $this->addPV1();
+
+      return;
+    }
+
     if ($object instanceof CAffectation) {
       $affectation= $object;
 
@@ -53,16 +77,18 @@ class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
       $sejour                       = $affectation->_ref_sejour;
       $sejour->_ref_hl7_affectation = $affectation;
 
+      /** @var CPatient $patient */
+      $patient = $sejour->_ref_patient;
+
       parent::build($affectation);
     }
     else {
-      $sejour = $object;
+      $sejour  = $object;
+      $patient = $sejour->_ref_patient;
 
       parent::build($sejour);
     }
 
-    /** @var CPatient $patient */
-    $patient = $sejour->_ref_patient;
     // Patient Identification
     $this->addPID($patient, $sejour);
     
@@ -78,5 +104,4 @@ class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
     // Patient Visit - Additionale Info
     $this->addPV2($sejour);
   }
-  
 }
