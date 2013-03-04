@@ -203,9 +203,12 @@ class CMbObject extends CStoredObject {
   /**
    * Count exchanges, make totals by format
    *
+   * @param string $type    Exchange type
+   * @param string $subtype Exchange subtype
+   *
    * @return int The absolute total
    */
-  function countExchanges() {
+  function countExchanges($type = null, $subtype = null) {
     foreach (CExchangeDataFormat::getAll() as $_data_format) {
       $data_format = new $_data_format;
       if (!$data_format->hasTable()) {
@@ -213,6 +216,9 @@ class CMbObject extends CStoredObject {
       }
       $data_format->object_id    = $this->_id;
       $data_format->object_class = $this->_class;
+
+      $data_format->type      = $type;
+      $data_format->sous_type = $subtype;
 
       $this->_nb_exchanges_by_format[$_data_format] = $data_format->countMatchingList();
     }
