@@ -7,15 +7,17 @@
     <input type="hidden" name="{{$field}}" value="{{$value}}"/>
     {{assign var=found_checked value=0}}
     {{foreach from=$ufs item=_uf}}
-      <label>
-        <input type="radio" name="{{$field}}_radio_view" value="{{$_uf->_id}}"
-          {{if $value == $_uf->_id}}
-            checked="checked"
-            {{assign var=found_checked value=1}}
-          {{/if}}
-          onclick="$V(this.form.{{$field}}, this.value); $V(this.form.{{$field}}_view, '')"> 
-        {{$_uf}}
-      </label>
+      <span onmouseover="ObjectTooltip.createEx(this, '{{$_uf->_guid}}')">
+        <label>
+          <input type="radio" name="{{$field}}_radio_view" value="{{$_uf->_id}}"
+            {{if $value == $_uf->_id}}
+              checked="checked"
+              {{assign var=found_checked value=1}}
+            {{/if}}
+            onclick="$V(this.form.{{$field}}, this.value); $V(this.form.{{$field}}_view, '')">
+          {{$_uf}}
+        </label>
+      </span>
     {{/foreach}}
   
     <div>
