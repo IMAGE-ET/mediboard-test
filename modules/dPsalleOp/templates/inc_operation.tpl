@@ -276,7 +276,12 @@ infoBacterio = function(field) {
       <br />
       
       {{if $selOp->libelle}}{{$selOp->libelle}} &mdash;{{/if}}
-      {{mb_label object=$selOp field=cote}} : {{mb_value object=$selOp field=cote}}
+      {{mb_label object=$selOp field=cote}} :
+      {{if !($conf.dPplanningOp.COperation.verif_cote && !$selOp->cote_bloc) || ($selOp->cote != "droit" && $selOp->cote != "gauche")}}
+        {{mb_value object=$selOp field=cote}}
+      {{else}}
+        Non validé en salle
+      {{/if}}
       &mdash; {{mb_label object=$selOp field=temp_operation}} : {{mb_value object=$selOp field=temp_operation}}
       <br />
       
