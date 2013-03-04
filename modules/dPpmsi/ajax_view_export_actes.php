@@ -51,7 +51,7 @@ switch ($object_class) {
     break;
 }
 
-$object->countExchanges();
+$object->countExchanges("pmsi", "evenementServeurActe");
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -93,7 +93,7 @@ if ($unlock_dossier) {
 }
 
 $object->loadLastLog();
-$object->countExchanges();
+$object->countExchanges("pmsi", "evenementServeurActe");
 try {
   $object->store();
 }
