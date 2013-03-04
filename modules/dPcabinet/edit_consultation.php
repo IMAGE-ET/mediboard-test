@@ -11,7 +11,7 @@
 
 global $m;
 
-CCanDo::edit();
+CCanDo::checkEdit();
 
 $user = CMediusers::get();
 
