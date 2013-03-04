@@ -51,7 +51,7 @@ function showLegend() {
       <button type="button" onclick="showLegend()" class="search" style="float: left;">Légende</button>
       <button type="button" onclick="$('suivi-salles').print();" class="print" style="float: right;">{{tr}}Print{{/tr}}</button>
       <button type="button" onclick="printAnapath();" class="print" style="float: right;">{{tr}}COperation-anapath{{/tr}}</button>
-      <button type="button" onclick="printBacterio();" class="print" style="float: right;">{{tr}}COperation-bacterio{{/tr}}</button>
+      <button type="button" onclick="printBacterio();" class="print" style="float: right;">{{tr}}COperation-labo{{/tr}}</button>
 
       <form action="?" name="changeDate" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
