@@ -11,6 +11,8 @@
 
 global $m;
 
+CCanDo::edit();
+
 $user = CMediusers::get();
 
 $date  = CValue::getOrSession("date", mbDate());
