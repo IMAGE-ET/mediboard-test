@@ -4,6 +4,10 @@ function checkRapport(){
   // Mode comptabilite
   var compta = 0;
   
+  if(!oForm.chir.value && oForm.a.value == "print_actes") {
+    alert('Vous devez choisir un praticien');
+    return false;
+  }
   if(!(checkForm(oForm))){
     return false;
   }
@@ -279,7 +283,8 @@ viewTotaux = function() {
         </tr>
         <tr>
           <td class="button" colspan="2">
-            <button type="button" class="search" onclick="viewActes();">Validation paiements</button>
+            {{* <button type="button" class="search" onclick="viewActes();">Validation paiements</button> *}}
+            <button class="print" type="submit" onclick="document.printFrm.a.value='print_actes';">Validation paiements</button>
           </td>
         </tr>
         {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
