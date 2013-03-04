@@ -38,7 +38,12 @@ changeRemote = function(input) {
     '{{$object->_props._user_password_weak}}';
     
   {{if !$object->user_id}}oPassword.addClassName('notNull');{{/if}}
-    
+
+  // Force to re-enter password
+  if (canRemote) {
+    oPassword.addClassName('notNull');
+  }
+
   // we check the field
   checkFormElement(oPassword);
 };

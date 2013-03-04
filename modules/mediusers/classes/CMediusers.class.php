@@ -660,6 +660,12 @@ class CMediusers extends CMbObject {
 
     $spec = $this->_spec;
 
+    if ($this->fieldModified("remote", 0)) {
+      if (!$this->_user_password) {
+        return "Veuillez saisir à nouveau votre mot de passe";
+      }
+    }
+
     /// <diff>
     // Store corresponding core user first
     $user = $this->createUser();
