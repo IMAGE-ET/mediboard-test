@@ -33,8 +33,8 @@ foreach ($log_pops as $_pop) {
   $pop = new CPop($_pop);
   if (!$pop->open()) {
     //disable the account because of a problem
-    $_pop->active = 0;
-    $_pop->store();
+    //$_pop->active = 0;
+    //$_pop->store();
     CAppUI::stepAjax("CPop-error-imap_open-disable", UI_MSG_ERROR);
   }
   $unseen = $pop->search('UNSEEN');

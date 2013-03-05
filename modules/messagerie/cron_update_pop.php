@@ -38,8 +38,8 @@ foreach ($sources as $_source) {
   $pop = new CPop($_source);
   if (!$pop->open()) {
     //disable the account because of a problem
-    $_source->active = 0;
-    $_source->store();
+    //$_source->active = 0;
+    //$_source->store();
     CMbObject::error("CPop-error-imap_open");
     continue;
   }
