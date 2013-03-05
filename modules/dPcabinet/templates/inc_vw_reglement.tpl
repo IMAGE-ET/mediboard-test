@@ -61,9 +61,14 @@ reloadFacture = function() {
 
 modifTotal = function(){
   var form = document.tarifFrm;
+  if (!form.secteur1.value) {
+    form.secteur1.value = 0;
+  }
   var secteur1 = form.secteur1.value;
+  if (!form.secteur2.value) {
+    form.secteur2.value = 0;
+  }
   var secteur2 = form.secteur2.value;
-
   $V(form._somme, Math.round(100*(parseFloat(secteur1) + parseFloat(secteur2))) / 100);
   $V(form.du_patient, Math.round(100* parseFloat(form._somme.value)) / 100); 
 }
