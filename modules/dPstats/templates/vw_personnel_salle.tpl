@@ -23,21 +23,16 @@ Main.add(function () {
 <table class="main form">
   <tr>
     <th colspan="6" class="category">
-    	Bilan pour le personnel :
-			{{tr}}CPersonnel.emplacement.op{{/tr}}
-			</th>
+      Bilan pour le personnel :
+      {{tr}}CPersonnel.emplacement.op{{/tr}}
+      </th>
   </tr>
   <tr>
     <th>Praticien</th>
     <td>
       <select name="prat_personnel">
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
-        {{foreach from=$listPrats item=curr_prat}}
-        <option value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_personnel}}selected="selected"{{/if}}
-				        class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};">
-          {{$curr_prat->_view}}
-        </option>
-        {{/foreach}}
+        {{mb_include module=mediusers template=inc_options_mediuser selected=$prat_personnel list=$listPrats}}
       </select>
     </td>
     <th><label for="deb_personnel" title="Date de début">Début</label></th>
@@ -54,67 +49,67 @@ Main.add(function () {
 
 </form>
 {{if $prat_personnel}}
-	<table class="main tbl">
-	  <tr>
-	    <th rowspan="2">Date</th>
-	    <th rowspan="2">Salle</th>
-	    <th rowspan="2">Nb interv.</th>
-	    <th colspan="3">Durées</th>
-	    <th colspan="2">Aides op.</th>
-	    <th colspan="2">Panseuses</th>
-			<th colspan="2">IADE</th>
-	  </tr>
-	  <tr>
+  <table class="main tbl">
+    <tr>
+      <th rowspan="2">Date</th>
+      <th rowspan="2">Salle</th>
+      <th rowspan="2">Nb interv.</th>
+      <th colspan="3">Durées</th>
+      <th colspan="2">Aides op.</th>
+      <th colspan="2">Panseuses</th>
+      <th colspan="2">IADE</th>
+    </tr>
+    <tr>
       <th>prévue</th>
       <th>première à la dernière</th>
       <th>totale interv. (interv. pris en compte)</th>
-	    <th>nb prévu</th>
-      <th>durée notée</th>
       <th>nb prévu</th>
       <th>durée notée</th>
       <th>nb prévu</th>
       <th>durée notée</th>
-	  </tr>
-	  {{foreach from=$listPlages item=curr_plage}}
-	  <tr>
-	    <td>{{$curr_plage->date|date_format:"%d/%m/%Y"}}</td>
-	    <td>{{$curr_plage->_ref_salle->_view}}</td>
-	    <td>{{$curr_plage->_ref_operations|@count}}</td>
-	    <td>{{$curr_plage->_duree_prevue|date_format:$conf.time}}</td>
-	    <td>{{$curr_plage->_duree_first_to_last|date_format:$conf.time}}</td>
-	    <td>
-	      {{$curr_plage->_duree_total_op|date_format:$conf.time}}
-	      ({{$curr_plage->_op_for_duree_totale}}/{{$curr_plage->_ref_operations|@count}})
-	    </td>
-	    <td>{{$curr_plage->_ref_affectations_personnel.op|@count}}</td>
-	    <td>{{$curr_plage->_duree_total_personnel.op.days_duree}}j {{$curr_plage->_duree_total_personnel.op.duree|date_format:$conf.time}}</td>
-	    <td>{{$curr_plage->_ref_affectations_personnel.op_panseuse|@count}}</td>
-	    <td>{{$curr_plage->_duree_total_personnel.op_panseuse.days_duree}}j {{$curr_plage->_duree_total_personnel.op_panseuse.duree|date_format:$conf.time}}</td>
-			<td>{{$curr_plage->_ref_affectations_personnel.iade|@count}}</td>
-			<td>{{$curr_plage->_duree_total_personnel.iade.days_duree}}j {{$curr_plage->_duree_total_personnel.iade.duree|date_format:$conf.time}}</td>
-	  </tr>
-	  {{/foreach}}
-	  <tr>
-	    <td colspan="3"></td>
-	    <td>
-	      <strong>
-	        {{$total.days_duree_prevue}}j
-	        {{$total.duree_prevue|date_format:$conf.time}}
-	      </strong>
-	    </td>
-	    <td>
-	      <strong>
-	        {{$total.days_duree_first_to_last}}j
-	        {{$total.duree_first_to_last|date_format:$conf.time}}
-	      </strong>
-	    </td>
-	    <td>
-	      <strong>
-	        {{$total.days_duree_reelle}}j
-	        {{$total.duree_reelle|date_format:$conf.time}}
-	      </strong>
-	    </td>
-	    <td></td>
+      <th>nb prévu</th>
+      <th>durée notée</th>
+    </tr>
+    {{foreach from=$listPlages item=curr_plage}}
+    <tr>
+      <td>{{$curr_plage->date|date_format:"%d/%m/%Y"}}</td>
+      <td>{{$curr_plage->_ref_salle->_view}}</td>
+      <td>{{$curr_plage->_ref_operations|@count}}</td>
+      <td>{{$curr_plage->_duree_prevue|date_format:$conf.time}}</td>
+      <td>{{$curr_plage->_duree_first_to_last|date_format:$conf.time}}</td>
+      <td>
+        {{$curr_plage->_duree_total_op|date_format:$conf.time}}
+        ({{$curr_plage->_op_for_duree_totale}}/{{$curr_plage->_ref_operations|@count}})
+      </td>
+      <td>{{$curr_plage->_ref_affectations_personnel.op|@count}}</td>
+      <td>{{$curr_plage->_duree_total_personnel.op.days_duree}}j {{$curr_plage->_duree_total_personnel.op.duree|date_format:$conf.time}}</td>
+      <td>{{$curr_plage->_ref_affectations_personnel.op_panseuse|@count}}</td>
+      <td>{{$curr_plage->_duree_total_personnel.op_panseuse.days_duree}}j {{$curr_plage->_duree_total_personnel.op_panseuse.duree|date_format:$conf.time}}</td>
+      <td>{{$curr_plage->_ref_affectations_personnel.iade|@count}}</td>
+      <td>{{$curr_plage->_duree_total_personnel.iade.days_duree}}j {{$curr_plage->_duree_total_personnel.iade.duree|date_format:$conf.time}}</td>
+    </tr>
+    {{/foreach}}
+    <tr>
+      <td colspan="3"></td>
+      <td>
+        <strong>
+          {{$total.days_duree_prevue}}j
+          {{$total.duree_prevue|date_format:$conf.time}}
+        </strong>
+      </td>
+      <td>
+        <strong>
+          {{$total.days_duree_first_to_last}}j
+          {{$total.duree_first_to_last|date_format:$conf.time}}
+        </strong>
+      </td>
+      <td>
+        <strong>
+          {{$total.days_duree_reelle}}j
+          {{$total.duree_reelle|date_format:$conf.time}}
+        </strong>
+      </td>
+      <td></td>
       <td>
         <strong>
           {{$total.personnel.op.days_duree}}j
@@ -135,6 +130,6 @@ Main.add(function () {
           {{$total.personnel.iade.duree|date_format:$conf.time}}
         </strong>
       </td>
-	  </tr>
-	</table>
+    </tr>
+  </table>
 {{/if}}
