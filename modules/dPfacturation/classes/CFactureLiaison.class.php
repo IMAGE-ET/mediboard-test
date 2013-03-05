@@ -96,6 +96,5 @@ class CFactureLiaison extends CMbMetaObject {
     }
     
     $facture = $this->loadRefFacture();
-    $facture->updateMontantsFacture();
   } 
 }
