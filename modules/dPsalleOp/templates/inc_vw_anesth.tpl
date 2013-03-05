@@ -35,7 +35,8 @@ reloadPrescriptionAnesth = function(prescription_id){
         </form>
         <br />
         <form name="editInfosASAFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-          {{mb_key object=$selOp}}
+          {{mb_key   object=$selOp}}
+          {{mb_class object=$selOp}}
           {{mb_label object=$selOp field="ASA" style="padding-left: 4em;"}}
           {{mb_field object=$selOp field="ASA" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
           <br />
@@ -48,9 +49,8 @@ reloadPrescriptionAnesth = function(prescription_id){
       <fieldset>
         <legend>Infos induction</legend>
         <form name="anesthTiming" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPplanningOp" />
-        <input type="hidden" name="dosql" value="do_planning_aed" />
-        <input type="hidden" name="operation_id" value="{{$selOp->operation_id}}" />
+        {{mb_key   object=$selOp}}
+        {{mb_class object=$selOp}}
         <input type="hidden" name="del" value="0" />
         <table class="layout">
           <tr>
