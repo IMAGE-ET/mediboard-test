@@ -215,7 +215,7 @@ class CFacture extends CMbObject {
   **/
   function updateMontants() {
     $this->_montant_secteur1 = 0.0;
-    $this->_montant_secteur1 = 0.0;
+    $this->_montant_secteur2 = 0.0;
     $this->_montant_total    = 0.0;
     $this->du_patient        = 0;
     
@@ -319,6 +319,7 @@ class CFacture extends CMbObject {
   **/
   function loadRefsReglements($cache = 1) {
     $this->_montant_sans_remise = 0;
+    $this->_montant_avec_remise = 0;
     
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
       foreach ($this->_montant_factures as $_montant) {
