@@ -47,7 +47,7 @@ function changePratPec(prat_id) {
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 {{mb_key   object=$consult}}
 {{mb_field object=$consult field="chrono" hidden=1}}
-{{if $consult_anesth}}
+{{if $consult_anesth && $consult_anesth->_id}}
   <input type="hidden" name="_consult_anesth_id" value="{{$consult_anesth->_id}}" />
 {{/if}}
 
@@ -56,7 +56,7 @@ function changePratPec(prat_id) {
     <th colspan="4" class="title text">
       {{assign var=patient value=$consult->_ref_patient}}
       {{assign var=sejour value=$consult->_ref_sejour}}
-      {{if $consult_anesth}}
+      {{if $consult_anesth && $consult_anesth->_id}}
       <button class="print" type="button" style="float: left;" onclick="printFiche()">
         Imprimer la fiche
       </button>

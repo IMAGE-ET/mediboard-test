@@ -23,12 +23,17 @@
 <form name="filterDate" method="get" action="?">
   <input type="hidden" name="m" value="maternite" />
   <input type="hidden" name="tab" value="vw_grossesses" />
+  <input type="hidden" name="show_cancelled" value="{{$show_cancelled}}" />
   <strong>
     <a href="#1" onclick="var form = getForm('filterDate'); $V(form.date, this.get('date')); form.submit();" data-date="{{$date_min}}">&lt;&lt;&lt;</a>
     {{$date|date_format:$conf.longdate}}
     <input type="hidden" name="date" value="{{$date}}" class="notNull" onchange="this.form.submit()"/>
     <a href="#1" onclick="var form = getForm('filterDate'); $V(form.date, this.get('date')); form.submit();" data-date="{{$date_max}}"">&gt;&gt;&gt;</a>
   </strong>
+  <label>
+    <input type="checkbox" {{if $show_cancelled}}checked{{/if}}
+           onclick="$V(this.form.show_cancelled, this.checked ? 1 : 0); this.form.submit()"/> Afficher les séjours annulés
+  </label>
 </form>
 
 <table class="tbl" id="admissions">
@@ -68,12 +73,14 @@
         <button class="new notext" title="{{tr}}CSejour-title-create{{/tr}}"
           onclick="editSejour(0, '{{$_grossesse->_id}}', '{{$_grossesse->parturiente_id}}');"></button>
         {{foreach from=$_grossesse->_ref_sejours item=_sejour}}
-          <span class="{{if $_sejour->annule}}cancelled{{elseif $_sejour->sortie_reelle}}hatching{{/if}}">
-            <button type="button" class="edit notext" onclick="editSejour({{$_sejour->_id}})"></button>
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
-              {{$_sejour}}
+          {{if $show_cancelled || !$_sejour->annule}}
+            <span class="{{if $_sejour->annule}}cancelled{{elseif $_sejour->sortie_reelle}}hatching{{/if}}">
+              <button type="button" class="edit notext" onclick="editSejour({{$_sejour->_id}})"></button>
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}')">
+                {{$_sejour}}
+              </span>
             </span>
-          </span>
+          {{/if}}
         {{/foreach}}
         {{assign var=consult value=$_grossesse->_ref_last_consult_anesth}}
         {{if $consult->_id}}
