@@ -89,12 +89,12 @@ class CFactureCabinet extends CFacture {
    * @return void
   **/
   function store() {
-		if (CModule::getActive("dPfacturation")) {
-    	//Si on cloture la facture on créé les lignes de facture
-    	if ($this->cloture && $this->fieldModified("cloture")) {
-      	$this->creationLignesFacture();
-    	}
-  	}
+    if (CModule::getActive("dPfacturation")) {
+      //Si on cloture la facture on créé les lignes de facture
+      if ($this->cloture && $this->fieldModified("cloture")) {
+        $this->creationLignesFacture();
+      }
+    }
     // A vérifier pour le == 0 s'il faut faire un traitement
     if ($this->facture !== '0') {
       foreach ($this->loadBackRefs("consultations") as $_consultation) {
@@ -126,7 +126,7 @@ class CFactureCabinet extends CFacture {
       return $msg;
     }
     
-  } 
+  }
 
   /**
    * Chargement des différentes consultations liées à la facture
@@ -155,7 +155,6 @@ class CFactureCabinet extends CFacture {
     $this->loadRefsFwd();
     $this->loadRefsBack();
     $this->updateMontants();
-    $this->updateMontantsFacture();
     $this->loadNumerosBVR();
   }
   
@@ -190,12 +189,10 @@ class CFactureCabinet extends CFacture {
    * @param string $chirsel_id   le praticien
    * @param string $consult_id   l'id de la consultation
    * @param string $type_facture le type de la facture
-   * @param string $du_patient   le dut patient
-   * @param string $du_tiers     le dut patient tiers
    * 
    * @return void
   **/
-  function ajoutConsult($patient_id, $chirsel_id, $consult_id, $type_facture, $du_patient, $du_tiers) {
+  function ajoutConsult($patient_id, $chirsel_id, $consult_id, $type_facture) {
     $this->_consult_id = $consult_id;
     // Si la facture existe déjà on la met à jour
     $where["patient_id"]    = "= '$patient_id'";
@@ -223,12 +220,14 @@ class CFactureCabinet extends CFacture {
     }
     else {
       // Sinon on la crée
+      $consult = new CConsultation();
+      $consult->load($consult_id);
       $this->ouverture    = mbDate();
       $this->patient_id   = $patient_id;
       $this->praticien_id = $chirsel_id;
       $this->type_facture = $type_facture;
-      $this->du_patient   = $du_patient;
-      $this->du_tiers     = $du_tiers;
+      $this->du_patient   = $consult->du_patient;
+      $this->du_tiers     = $consult->du_tiers;
       if (CAppUI::conf("ref_pays") == 1) {
         $this->cloture    = mbDate();
       }
@@ -243,9 +242,6 @@ class CFactureCabinet extends CFacture {
         $ligne->store();
       }
       else {
-         $consult = new CConsultation();
-         $consult->_id = $consult_id;
-         $consult->loadMatchingObject();
          $consult->facture_id = $this->_id;
          $consult->store();
       }

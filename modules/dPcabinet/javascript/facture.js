@@ -4,8 +4,6 @@ window.Facture = {
     var url = new Url('dPcabinet' , 'ajax_add_consult_facture');
     url.addParam('patient_id'     , patient_id);
     url.addParam('executant_id'   , praticien_id);
-    url.addParam('du_patient'     , oForm.du_patient.value);
-    url.addParam('du_tiers'       , oForm.du_tiers.value);
     url.addParam('consult_id'     , consult_id);
     url.addParam('type_facture'   , oForm.type_facture.value);
     url.addParam('not_load_banque', not_load_banque);

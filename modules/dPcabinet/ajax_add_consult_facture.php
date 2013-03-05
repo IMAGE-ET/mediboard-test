@@ -11,15 +11,13 @@
 
 CCanDo::checkEdit();
 $patient_id     = CValue::getOrSession("patient_id");
-$du_patient     = CValue::get("du_patient");
 $consult_id     = CValue::get("consult_id");
-$du_tiers       = CValue::get("du_tiers", "0");
 $type_facture   = CValue::get("type_facture", "maladie");
 $chirsel_id     = CValue::get("executant_id");
 $date           = CValue::get("date", mbDate());
 
 $facture = new CFactureCabinet();
-$facture->ajoutConsult($patient_id, $chirsel_id, $consult_id, $type_facture, $du_patient, $du_tiers);
+$facture->ajoutConsult($patient_id, $chirsel_id, $consult_id, $type_facture);
 $facture->loadRefs();
 
 // Chargement des banques
