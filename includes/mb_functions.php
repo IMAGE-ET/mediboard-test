@@ -353,30 +353,6 @@ function mbDateFromLocale($date) {
 }
 
 /**
- * Convert a datetime from LDAP to ISO format
- *
- * @param string $dateLargeInt nano seconds (yes, nano seconds) since jan 1st 1601
- *
- * @deprecated Use CMbDT instead
- * @return string DateTime in ISO format
- */
-function mbDateTimeFromLDAP($dateLargeInt) {
-  return CMbDT::dateTimeFromLDAP($dateLargeInt);
-}
-
-/**
- * Convert a datetime from ActiveDirecetory to ISO format
- *
- * @param string $dateAD Datetime from AD since jan 1st 1601
- *
- * @deprecated Use CMbDT instead
- * @return string DateTime in ISO format
- */
-function mbDateTimeFromAD($dateAD) {
-  return CMbDT::dateTimeFromAD($dateAD);
-}
-
-/**
  * URL to the mediboard.org documentation page
  *
  * @param string $module Module name

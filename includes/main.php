@@ -222,7 +222,7 @@ if (CAppUI::conf("admin CUser force_changing_password")) {
   // If account has a software tag
   if ($user->_id && CIdSante400::getMatch($user->_class, CMediusers::getTagSoftware(), null, $user->_id)->_id) {
     // Need to change
-    if (mbDateTime("-".CAppUI::conf("admin CUser password_life_duration")) > $user->_ref_user->user_password_last_change) {
+    if (CMbDT::dateTime("-".CAppUI::conf("admin CUser password_life_duration")) > $user->_ref_user->user_password_last_change) {
       // To prevent from infinite redirection
       if (
           !($m      == "admin" && $tab   == "chpwd") &&

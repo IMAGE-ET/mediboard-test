@@ -264,7 +264,7 @@ class CLDAP {
     
     if (!$id400->_id) {
       $id400->object_id   = $user->_id;
-      $id400->last_update = mbDateTime();
+      $id400->last_update = CMbDT::dateTime();
       $msg = $id400->store();
       if ($msg) {
         throw new CMbException($msg);
@@ -304,13 +304,13 @@ class CLDAP {
     $user->user_email      = self::getValue($values, "mail");
     $whencreated = null;
     if ($when_created = self::getValue($values, "whencreated")) {
-      $whencreated      = mbDate(mbDateTimeFromAD($when_created));
+      $whencreated      = CMbDT::date(CMbDT::dateTimeFromAD($when_created));
     }
     $accountexpires = null;
     if ($account_expires = self::getValue($values, "accountexpires")) {
       // 1000000000000000000 = 16-11-4769 01:56:35
       if ($account_expires < 1000000000000000000) {
-        $accountexpires = mbDate(mbDateTimeFromLDAP($account_expires));
+        $accountexpires = CMbDT::date(CMbDT::dateTimeFromLDAP($account_expires));
       }
     }
     // 66048,Account: Enabled - DONT_EXPIRE_PASSWORD
