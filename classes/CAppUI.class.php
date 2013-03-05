@@ -37,29 +37,29 @@ class CAppUI {
    */
   static $user = null;
 
-  var $user_id = 0;
+  public $user_id = 0;
 
-  var $_is_intranet = null;
+  public $_is_intranet;
 
   // DEPRECATED Use CAppUI::$user instead
 
   // @todo Remove all calls to these variables
-  var $user_first_name = null;
-  var $user_last_name = null;
-  var $user_email = null;
-  var $user_type = null;
-  var $user_group = null;
-  var $user_last_login = null;
-  var $user_remote = null;
+  public $user_first_name;
+  public $user_last_name;
+  public $user_email;
+  public $user_type;
+  public $user_group;
+  public $user_last_login;
+  public $user_remote;
 
   // @todo Remove many calls in templates
   // @todo Handle the CMediusers::get() and CUser::get() cases
-  var $_ref_user = null;
+  public $_ref_user;
 
   // END DEPRECATED
 
   // Weak password
-  var $weak_password = null;
+  public $weak_password;
 
   // Language alert mask
   static $locale_mask = "";
@@ -73,19 +73,19 @@ class CAppUI {
   static $token_expiration = null;
 
   // Global collections
-  var $messages = array();
-  var $user_prefs = array();
-  var $update_hash = null;
+  public $messages = array();
+  public $user_prefs = array();
+  public $update_hash;
 
   /**
    * @var string Default page for a redirect call
    */
-  var $defaultRedirect = "";
+  public $defaultRedirect = "";
 
   /**
    * @var string Session name
    */
-  var $session_name = "";
+  public $session_name = "";
 
   /**
    * Initializes the CAppUI singleton
@@ -639,7 +639,7 @@ class CAppUI {
     if ($ds->loadField("users", "user_last_login")) {
       // Nullify password or you hash it once more
       $user->user_last_name = null;
-      $user->user_last_login = mbDateTime();
+      $user->user_last_login = CMbDT::dateTime();
       $user->store();
     }
 
@@ -714,7 +714,7 @@ class CAppUI {
         return false;
       }
 
-      $today = mbDate();
+      $today = CMbDT::date();
       $deb = $mediuser->deb_activite;
       $fin = $mediuser->fin_activite;
 
@@ -1042,7 +1042,7 @@ class CAppUI {
       return false;
     }
 
-    return mbDateTime() >= CAppUI::$token_expiration;
+    return CMbDT::dateTime() >= CAppUI::$token_expiration;
   }
 }
 

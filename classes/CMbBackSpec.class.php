@@ -29,7 +29,7 @@ class CMbBackSpec {
     if (!class_exists($class)) {
       // Modules might not be installed, can't trigger error for now
       // @todo: add an 'external' keyword to the backref 
-//      trigger_error("Back spec '$owner'.'$name' refers to unexisting class '$class'", E_USER_ERROR);
+      // trigger_error("Back spec '$owner'.'$name' refers to unexisting class '$class'", E_USER_ERROR);
       return;
     }
     
@@ -74,5 +74,3 @@ class CMbBackSpec {
     return false;
   }
 }
-
-?>

@@ -10,10 +10,10 @@
  */
 
 class CFloatSpec extends CMbFieldSpec {
-  var $min    = null;
-  var $max    = null;
-  var $pos    = null;
-  var $decimals = null;
+  public $min;
+  public $max;
+  public $pos;
+  public $decimals;
   
   static function equals($value1, $value2, $spec) {
     if ($spec instanceof CCurrencySpec) {

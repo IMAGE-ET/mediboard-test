@@ -24,7 +24,7 @@ class CTimeSpec extends CMbFieldSpec {
   
     if (!preg_match("/^\d{1,2}:\d{1,2}(:\d{1,2})?$/", $propValue)) { 
       if ($propValue === 'current' || $propValue ===  'now') {
-        $propValue = mbTime();
+        $propValue = CMbDT::time();
         return null;
       }
       
@@ -33,7 +33,7 @@ class CTimeSpec extends CMbFieldSpec {
   }
   
   function getValue($object, $smarty = null, $params = array()) {
-    include_once $smarty->_get_plugin_filepath('modifier','date_format');
+    include_once $smarty->_get_plugin_filepath('modifier', 'date_format');
     
     $propValue = $object->{$this->fieldName};
     $format = CValue::first(@$params["format"], CAppUI::conf("time"));

@@ -15,24 +15,24 @@
  * @abstract Mediboard business object layer
  */
 class CMbObject extends CStoredObject {
-  var $_aides         = array(); // Aides à la saisie
-  var $_aides_new     = array(); // Nouveau tableau des aides (sans hierarchie)
-  var $_nb_files_docs = null;
-  var $_nb_files      = null;
-  var $_nb_docs       = null;
-  var $_nb_exchanges           = null;
-  var $_nb_exchanges_by_format = array();
+  public $_aides         = array(); // Aides à la saisie
+  public $_aides_new     = array(); // Nouveau tableau des aides (sans hierarchie)
+  public $_nb_files_docs;
+  public $_nb_files;
+  public $_nb_docs;
+  public $_nb_exchanges;
+  public $_nb_exchanges_by_format = array();
     
-  var $_ref_last_id400     = null;
-  var $_ref_notes          = null; // Notes
-  var $_ref_documents      = array(); // Documents
-  var $_ref_files          = array(); // Fichiers
-  var $_ref_named_files    = array(); // Fichiers par nom
-  var $_ref_tag_items      = array(); // Object tag items
-  var $_ref_object_configs = null;   // Object configs
+  public $_ref_last_id400;
+  public $_ref_notes; // Notes
+  public $_ref_documents      = array(); // Documents
+  public $_ref_files          = array(); // Fichiers
+  public $_ref_named_files    = array(); // Fichiers par nom
+  public $_ref_tag_items      = array(); // Object tag items
+  public $_ref_object_configs;   // Object configs
   
-  var $_ref_affectations_personnel   = null;
-  var $_count_affectations_personnel = null;
+  public $_ref_affectations_personnel;
+  public $_count_affectations_personnel;
 
   /**
    * Chargement des notes sur l'objet

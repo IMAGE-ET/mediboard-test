@@ -10,13 +10,13 @@
  */
 
 class CStrSpec extends CMbFieldSpec {
-  var $length    = null;
-  var $minLength = null;
-  var $maxLength = null;
-  var $protected = null;
-  var $class     = null;
-  var $delimiter = null;
-  var $canonical = null;
+  public $length;
+  public $minLength;
+  public $maxLength;
+  public $protected;
+  public $class;
+  public $delimiter;
+  public $canonical;
   
   function getSpecType() {
     return "str";

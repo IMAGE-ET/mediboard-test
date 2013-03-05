@@ -10,22 +10,21 @@
  */
 
 class CCodeSpec extends CMbFieldSpec {
-  
-  var $ccam  = null;
-  var $cim10 = null;
-  var $adeli = null;
-  var $insee = null;
-  var $rib   = null;
-  var $siret = null;
-  var $order_number = null;
-  
+  public $ccam;
+  public $cim10;
+  public $adeli;
+  public $insee;
+  public $rib;
+  public $siret;
+  public $order_number;
+
   function getSpecType() {
     return "code";
   }
-  
+
   function getDBSpec(){
     $type_sql = null;
-    
+
     if ($this->ccam) {
       $type_sql = "VARCHAR(7)";
     }
@@ -47,7 +46,7 @@ class CCodeSpec extends CMbFieldSpec {
 
     return $type_sql;
   }
-  
+
   function getOptions(){
     return array(
       'ccam'         => 'bool',
@@ -59,10 +58,10 @@ class CCodeSpec extends CMbFieldSpec {
       'order_number' => 'bool',
     ) + parent::getOptions();
   }
-  
+
   function checkProperty($object){
     $propValue = $object->{$this->fieldName};
-       
+
     // ccam
     if ($this->ccam) {
       //^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$
@@ -71,19 +70,19 @@ class CCodeSpec extends CMbFieldSpec {
         return "Code CCAM incorrect";
       }
     }
-    
+
     // cim10
     elseif ($this->cim10) {
       if (!preg_match("/^[a-z][0-9x]{2,4}$/i", $propValue)) {
-//        $codeCim = new CCodeCIM10($propValue);
-//        if ($codeCim->loadLite()) {
-//          return "Code CIM inconnu";
-//        }
-        
+        // $codeCim = new CCodeCIM10($propValue);
+        // if ($codeCim->loadLite()) {
+        //   return "Code CIM inconnu";
+        // }
+
         return "Code CIM incorrect, doit contenir une lettre, puis de 2 à 4 chiffres ou la lettre X";
       }
     }
-    
+
     // adeli
     elseif ($this->adeli) {
       if (!preg_match("/^([0-9]){9}$/i", $propValue)) {
@@ -115,34 +114,34 @@ class CCodeSpec extends CMbFieldSpec {
         return "Rib incorrect";
       }
     }
-     
+
     // INSEE
-    elseif($this->insee){
-      
+    elseif ($this->insee) {
+
       if (preg_match("/^([0-9]{7,8}[A-Z])$/i", $propValue)) {
         return;
       }
-      
+
       $matches = null;
       if (!preg_match("/^([12478][0-9]{2}[0-9]{2}[0-9][0-9ab][0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches)) {
         return "Matricule incorrect";
       }
- 
+
       $code = preg_replace(array('/2A/i', '/2B/i'), array(19, 18), $matches[1]);
       $cle  = $matches[2];
-      
+
       if (97 - bcmod($code, 97) != $cle) {
         return "Matricule incorrect, la clé n'est pas valide";
       }
     }
-    
+
     // siret
     elseif ($this->siret) {
       if (!luhn($propValue)) {
         return "Code SIRET incorrect, doit contenir exactement 14 chiffres";
       }
     }
-    
+
     // order_number
     elseif ($this->order_number) {
       if (!preg_match('#\%id#', $propValue)) {
@@ -157,36 +156,36 @@ class CCodeSpec extends CMbFieldSpec {
   function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementText($object, $params, $value, $className);
   }
-  
+
   function sample(&$object, $consistent = true) {
     parent::sample($object, $consistent);
     $propValue = &$object->{$this->fieldName};
-    
+
     // ccam
     if ($this->ccam) {
       $propValue = "BFGA004";
     }
-    
+
     // cim10
     elseif ($this->cim10) {
       $propValue = "H251";
     }
-    
+
     // adeli
     elseif ($this->adeli) {
       $propValue = "123456789";
     }
-    
+
     // rib
     elseif ($this->rib) {
       $propValue = "11111111111111111111111";
     }
-    
+
     // siret
     elseif ($this->siret) {
       $propValue = "73282932000074";
     }
-    
+
     // insee
     elseif ($this->insee) {
       $propValue = "100000000000047";

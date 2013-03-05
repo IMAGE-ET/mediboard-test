@@ -26,55 +26,55 @@ class CStoredObject extends CModelObject {
   /**
    * @var CCanDo
    */
-  var $_can           = null;
+  public $_can;
   
-  var $_canRead       = null; // read permission for the object
-  var $_canEdit       = null; // write permission for the object
-  var $_external      = null; // true if object is has remote ids
-  var $_locked        = null; // true if object is locked
-  var $_totalSeek     = null;
+  public $_canRead; // read permission for the object
+  public $_canEdit; // write permission for the object
+  public $_external; // true if object is has remote ids
+  public $_locked; // true if object is locked
+  public $_totalSeek;
   
   /**
    * References
    */
-  var $_back           = array(); // Back references collections
-  var $_count          = array(); // Back references counts
-  var $_fwd            = array(); // Forward references
-  var $_history        = null; // Array representation of the object's evolution
+  public $_back           = array(); // Back references collections
+  public $_count          = array(); // Back references counts
+  public $_fwd            = array(); // Forward references
+  public $_history; // Array representation of the object's evolution
 
   /**
    * History of the object
    * @var CUserLog
    */
-  var $_ref_logs       = null;
+  public $_ref_logs;
 
   /**
    * @var CUserLog
    */
-  var $_ref_first_log  = null;
+  public $_ref_first_log;
 
   /**
    * @var CUserLog
    */
-  var $_ref_last_log   = null;
+  public $_ref_last_log;
 
   /**
    * Log related to the current store or delete
    * @var CUserLog
    */
-  var $_ref_current_log = null;
+  public $_ref_current_log;
   
   /**
    * The object in database
    * @var CMbObject
    */
-  var $_old            = null;
+  public $_old;
   
   // Behaviour fields
-  var $_merging           = null;
-  var $_purge             = null;
-  var $_forwardRefMerging = null;
-  var $_mergeDeletion     = null;
+  public $_merging;
+  public $_purge;
+  public $_forwardRefMerging;
+  public $_mergeDeletion;
   
   /**
    * Check whether object is persistant (ie has a specified table)
@@ -1133,7 +1133,7 @@ class CStoredObject extends CModelObject {
     $log->object_class = $this->_class;
     $log->type = $type;
     $log->_fields = $fields;
-    $log->date = mbDateTime();
+    $log->date = CMbDT::dateTime();
 
     // Champs potentiellement absents
     if (CModule::getInstalled("system")->mod_version > "1.0.19") {
@@ -1294,7 +1294,7 @@ class CStoredObject extends CModelObject {
    * @return int
    */
   function hasRecentLog($nb_hours = 1) {
-    $recent = mbDateTime("- $nb_hours HOURS");
+    $recent = CMbDT::dateTime("- $nb_hours HOURS");
     $where["object_id"   ] = "= '$this->_id'";
     $where["object_class"] = "= '$this->_class'";
     $where["date"] = "> '$recent'";
@@ -1436,7 +1436,7 @@ class CStoredObject extends CModelObject {
         $idex->tag = "merged";
         $idex->setObject($this);
         $idex->id400 = $object->_id;
-        $idex->last_update = mbDateTime();
+        $idex->last_update = CMbDT::dateTime();
         $idex->store();
       }
     }

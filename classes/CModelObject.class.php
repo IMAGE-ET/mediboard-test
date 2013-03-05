@@ -29,60 +29,60 @@ class CModelObject {
    * The object's class name
    * @var string
    */
-  var $_class         = null;
+  public $_class;
   
   /**
    * The object ID
    * @var integer
    */
-  var $_id            = null;
+  public $_id;
   
   /**
    * The object GUID ("_class-_id")
    * @var string
    */
-  var $_guid          = null;
+  public $_guid;
   
   /**
    * The universal object view
    * @var string
    */
-  var $_view          = '';
+  public $_view          = '';
   
   /**
    * The universal object shortview
    * @var string
    */
-  var $_shortview     = '';
+  public $_shortview     = '';
   
   /**
    * The class specification
    * @var CMbObjectSpec 
    */
-  var $_spec          = null;    // Class specification
+  public $_spec;    // Class specification
 
   /**
    * @var CMbFieldSpec[]
    */
-  var $_specs         = array(); // Properties specifications as objects
+  public $_specs         = array(); // Properties specifications as objects
   /**
    * @var array
    */
-  var $_props         = array(); // Properties specifications as string
+  public $_props         = array(); // Properties specifications as string
 
   /**
    * @var CMbBackSpec[]
    */
-  var $_backSpecs     = array(); // Back reference specification as objects
+  public $_backSpecs     = array(); // Back reference specification as objects
   /**
    * @var array
    */
-  var $_backProps     = array(); // Back reference specification as string
+  public $_backProps     = array(); // Back reference specification as string
 
   /**
    * @var array
    */
-  var $_configs       = array(); // Object configs
+  public $_configs       = array(); // Object configs
 
   /**
    * @var array
@@ -113,7 +113,7 @@ class CModelObject {
   /**
    * @var CModule
    */
-  var $_ref_module     = null; // Parent module
+  public $_ref_module; // Parent module
 
   /**
    * Construct

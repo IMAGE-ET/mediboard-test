@@ -10,12 +10,12 @@
  */
 
 class CRefSpec extends CMbFieldSpec {
-  var $class     = null;
-  var $cascade   = null;
-  var $unlink    = null;
-  var $nullify   = null;
-  var $meta      = null;
-  var $purgeable = null;
+  public $class;
+  public $cascade;
+  public $unlink;
+  public $nullify;
+  public $meta;
+  public $purgeable;
   
   function getSpecType() {
     return "ref";

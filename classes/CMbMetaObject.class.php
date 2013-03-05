@@ -10,13 +10,13 @@
  */
 
 class CMbMetaObject extends CMbObject {
-  var $object_id    = null;
-  var $object_class = null;
+  public $object_id;
+  public $object_class;
 
   /**
    * @var CMbObject
    */
-  var $_ref_object  = null;
+  public $_ref_object;
   
   function getProps() {
     $specs = parent::getProps();
@@ -58,7 +58,6 @@ class CMbMetaObject extends CMbObject {
         $this->_ref_object = $ex_object;
       }
     }
-
     else {
       $this->_ref_object = $this->loadFwdRef("object_id", $cache);
     }

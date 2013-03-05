@@ -9,14 +9,14 @@
 
 class CPlageHoraire extends CMbObject {
   // DB fields
-  var $date    = null;
-  var $debut   = null;
-  var $fin     = null;
+  public $date;
+  public $debut;
+  public $fin;
 
   /**
    * @var self[]
    */
-  var $_colliding_plages = null;
+  public $_colliding_plages;
   
   function getProps() {
     $props = parent::getProps();
@@ -89,9 +89,9 @@ class CPlageHoraire extends CMbObject {
     parent::updateFormFields();
     $this->_view = sprintf(
       "Plage du %s de %s à %s",
-      mbTransformTime($this->date , null, CAppUI::conf("date")),
-      mbTransformTime($this->debut, null, CAppUI::conf("time")),
-      mbTransformTime($this->fin  , null, CAppUI::conf("time"))
+      CMbDT::transform($this->date , null, CAppUI::conf("date")),
+      CMbDT::transform($this->debut, null, CAppUI::conf("time")),
+      CMbDT::transform($this->fin  , null, CAppUI::conf("time"))
     );
   }
   

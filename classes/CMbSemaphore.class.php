@@ -13,13 +13,13 @@
  * Semaphore implementation to deal with concurrency
  */
 class CMbSemaphore {
-  
-  var $key     = null;
-  var $process = null;
-  var $path    = null;
+  public $key;
+  public $process;
+  public $path;
   
   /**
    * CMbSemaphore Constructor
+   *
    * @param string $key semaphore identifier
    */
   function __construct($key) {
@@ -28,14 +28,16 @@ class CMbSemaphore {
     $this->process = getmypid();
     $this->key = $key;
   }
-  
+
   /**
    * Acquire the semaphore by putting a lock on it
-   * @param float $timeout the max time in seconds to acquire the semaphore (max 10s)
-   * @param float $step the step between each acquire attempt in seconds (max 10s)
-   * @return float waiting time in seconds
+   *
+   * @param float $timeout The max time in seconds to acquire the semaphore (max 10s)
+   * @param float $step    The step between each acquire attempt in seconds (max 10s)
+   *
+   * @return float Waiting time in seconds
    */
-  function acquire($timeout = 10, $step = 0.1) {
+  function acquire($timeout = 10.0, $step = 0.1) {
     $i       = 0;
     $timeout = intval(min($timeout, 10) * 1000000);
     $step    = intval(min($step   , 10) * 1000000);
@@ -51,11 +53,10 @@ class CMbSemaphore {
   
   /**
    * Release the lock on the semaphore
+   *
    * @return boolean the job is done
    */
   function release() {
     return flock($this->key, LOCK_UN);
   }
 }
-
-?>

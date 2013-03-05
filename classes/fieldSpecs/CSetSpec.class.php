@@ -11,7 +11,7 @@
 
 class CSetSpec extends CEnumSpec {
   
-  var $_list_default = null;
+  public $_list_default;
   
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);

@@ -19,14 +19,14 @@ class CCSVFile {
   const PROFILE_OPENOFFICE = "openoffice";
   const PROFILE_EXCEL      = "excel";
   
-  var $handle       = null;
-  var $delimiter    = ',';
-  var $enclosure    = '"';
+  public $handle;
+  public $delimiter = ',';
+  public $enclosure = '"';
 
   /**
    * @var array
    */
-  var $column_names = null;
+  public $column_names;
   
   static $profiles = array(
     self::PROFILE_OPENOFFICE => array(

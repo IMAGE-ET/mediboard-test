@@ -12,16 +12,16 @@
 class CMbObjectImport {
   static $all = array();
   
-  var $class;
-  var $instance;
+  public $class;
+  public $instance;
   
-  var $values;
-  var $ids;
+  public $values;
+  public $ids;
   
-  var $refs;
-  var $collections;
+  public $refs;
+  public $collections;
   
-  var $similar;
+  public $similar;
   
   function __construct($class, $values, $ids) {
     $this->class  = $class;
@@ -70,10 +70,10 @@ class CMbObjectImport {
 }
 
 class CMbXMLObjectExport extends CMbXMLDocument {
-  var $object_class = null;
-  var $object_id = null;
+  public $object_class;
+  public $object_id;
   
-  var $objects_values = array();
+  public $objects_values = array();
   
   function load($file){
     parent::load($file);

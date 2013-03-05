@@ -13,10 +13,10 @@
  * Class CSMB
  */
 class CSMB {
-  var $hostname  = null;
-  var $username  = null;
-  var $port      = null;
-  var $workgroup = null;
+  public $hostname;
+  public $username;
+  public $port;
+  public $workgroup;
   
   function init($source) {   
     if (!$source) {

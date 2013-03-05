@@ -16,7 +16,7 @@ class CPDODataSource extends CSQLDataSource {
   /**
    * @var PDO
    */
-  var $link;
+  public $link;
     
   function connect($host, $name, $user, $pass) {
     if (!class_exists("PDO")) {
@@ -147,5 +147,3 @@ class CPDODataSource extends CSQLDataSource {
     return $queries;
   }
 }
-
-?>

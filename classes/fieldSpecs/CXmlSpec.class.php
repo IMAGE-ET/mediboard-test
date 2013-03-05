@@ -27,7 +27,7 @@ class CXmlSpec extends CMbFieldSpec {
   }
   
   function sample(&$object, $consistent = true){
-    $object->{$this->fieldName} = <<<EOD
+    $object->{$this->fieldName} = <<<XML
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <note>
   <to>Tove</to>
@@ -35,6 +35,6 @@ class CXmlSpec extends CMbFieldSpec {
   <heading>Reminder</heading>
   <body>Don't forget me this weekend!</body>
 </note>
-EOD;
+XML;
   }
 }

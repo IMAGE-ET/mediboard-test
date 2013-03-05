@@ -11,14 +11,14 @@
 
 class CMbObjectTest {
   
-  var $log = "";
+  public $log = "";
   
   function sample(&$object, $staticsProps = array()){
-    foreach($object->_specs as $key => $spec){
-      if (isset($staticsProps[$key])){
+    foreach ($object->_specs as $key => $spec) {
+      if (isset($staticsProps[$key])) {
         $object->$key = $staticsProps[$key];
       }
-      elseif($key[0] != "_"){
+      elseif ($key[0] != "_") {
         $spec->sample($object, false);
       }
     }

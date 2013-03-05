@@ -14,8 +14,8 @@
  * @abstract Template placeholder class for module extensibility of main style templates
  */
 abstract class CMbTemplatePlaceholder {
-  var $module = null;
-  var $minitoolbar = null;
+  public $module;
+  public $minitoolbar;
   
   function __construct($module) {
     $this->module = $module;

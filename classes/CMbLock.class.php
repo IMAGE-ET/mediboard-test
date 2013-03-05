@@ -1,21 +1,20 @@
 <?php 
 /**
- * $Id:$
+ * $Id$
  * 
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    SVN: $Id:$
+ * @version    SVN: $Id$
  */
 
 /**
  * Manage locking files to deal with concurrency
  */
 class CMbLock {
-
-  var $lock_file     = null;
-  var $lock_lifetime = null;
+  public $lock_file;
+  public $lock_lifetime;
 
   /**
    * @param $lock_file
@@ -59,5 +58,3 @@ class CMbLock {
     return unlink($this->lock_file);
   }
 }
-
-?>

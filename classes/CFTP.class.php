@@ -10,18 +10,18 @@
  */
  
 class CFTP {
-  var $hostname      = null;
-  var $username      = null;
-  var $userpass      = null;
-  var $connexion     = null;
-  var $port          = null;
-  var $timeout       = null;
-  var $passif_mode   = false;
-  var $mode          = null;
-  var $fileprefix    = null;
-  var $fileextension = null;
-  var $filenbroll    = null;
-  var $loggable     = null;
+  public $hostname;
+  public $username;
+  public $userpass;
+  public $connexion;
+  public $port;
+  public $timeout;
+  public $passif_mode = false;
+  public $mode;
+  public $fileprefix;
+  public $fileextension;
+  public $filenbroll;
+  public $loggable;
   
   private static $aliases = array(
     'sslconnect' => 'ssl_connect',
@@ -68,7 +68,7 @@ class CFTP {
     }
     
     $echange_ftp = new CExchangeFTP();
-    $echange_ftp->date_echange = mbDateTime();
+    $echange_ftp->date_echange = CMbDT::dateTime();
     $echange_ftp->emetteur     = CAppUI::conf("mb_id");
     $echange_ftp->destinataire = $this->hostname;
     

@@ -10,9 +10,9 @@
  */
 
 class CMbvCardExport {
-  var $version = "2.1";
-  var $elements = array();
-  var $name = 'no_name';
+  public $version = "2.1";
+  public $elements = array();
+  public $name = 'no_name';
   
   function addTitle($title){
     $this->addElement("TITLE", $title);
@@ -91,4 +91,3 @@ class CMbvCardExport {
     echo $content;
   }
 }
-?>

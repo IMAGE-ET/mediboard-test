@@ -15,27 +15,27 @@ class CMbObjectExport {
   /**
    * @var CMbObject
    */
-  var $dom = null;
+  public $dom;
   
   /**
    * @var CMbObject
    */
-  var $object = null;
+  public $object;
   
   /**
    * @var array
    */
-  var $backrefs_tree = null;
+  public $backrefs_tree;
   
   /**
    * @var integer
    */
-  var $depth = self::DEFAULT_DEPTH;
+  public $depth = self::DEFAULT_DEPTH;
   
   /**
    * @var bool
    */
-  var $empty_values = true;
+  public $empty_values = true;
   
   static function str_trim($s) {
     return trim(trim($s), "\xA0\xFF");
@@ -57,7 +57,7 @@ class CMbObjectExport {
     $this->doc = new CMbXMLDocument();
     $this->doc->formatOutput = true;
     $root = $this->doc->createElement($this->object->_guid);
-    $root->setAttribute("date", mbDateTime());
+    $root->setAttribute("date", CMbDT::dateTime());
     $this->doc->appendChild($root);
     
     $this->_toDOM($this->object, $this->depth);
@@ -72,7 +72,9 @@ class CMbObjectExport {
     $object_node = $doc->getElementById($object->_guid);
     
     // Objet deja exporté
-    if ($object_node) return;
+    if ($object_node) {
+      return;
+    }
     
     $object_node = $doc->createElement($object->_class);
     $object_node->setAttribute('id', $object->_guid);
@@ -81,7 +83,7 @@ class CMbObjectExport {
     
     $db_fields = $object->getPlainFields();
     
-    foreach($db_fields as $key => $value) {
+    foreach ($db_fields as $key => $value) {
       // Forward Refs Fields
       if ($object->_specs[$key] instanceof CRefSpec) {
         $object->loadFwdRef($key);
@@ -116,13 +118,15 @@ class CMbObjectExport {
     // Collections
     if (!isset($this->backrefs_tree[$object->_class])) return;
     
-    foreach($object->_backProps as $backName => $backProp) {
-      if (!in_array($backName, $this->backrefs_tree[$object->_class])) continue;
+    foreach ($object->_backProps as $backName => $backProp) {
+      if (!in_array($backName, $this->backrefs_tree[$object->_class])) {
+        continue;
+      }
       
       $object->makeBackSpec($backName);
       $objects = $object->loadBackRefs($backName);
       
-      foreach($objects as $_object) {
+      foreach ($objects as $_object) {
         $this->_toDOM($_object, $depth-1);
       }
     }
@@ -138,7 +142,7 @@ class CMbObjectExport {
   
   function stream($mimetype){
     $xml = $this->toDOM()->saveXML();
-    $date = mbDateTime();
+    $date = CMbDT::dateTime();
     
     header("Content-Type: $mimetype");
     header("Content-Disposition: attachment;filename=\"{$this->object->_guid} - $date.xml\"");

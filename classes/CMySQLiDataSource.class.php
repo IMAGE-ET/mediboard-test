@@ -13,7 +13,7 @@ class CMySQLiDataSource extends CMySQLDataSource {
   /**
    * @var MySQLi
    */
-  var $link;
+  public $link;
   
   const ASSOC = 1; // MYSQLI_ASSOC;
   const NUM   = 2; // MYSQLI_NUM;
@@ -21,14 +21,14 @@ class CMySQLiDataSource extends CMySQLDataSource {
     
   function connect($host, $name, $user, $pass) {
     if (!class_exists("MySQLi")) {
-      trigger_error( "FATAL ERROR: MySQLi support not available.  Please check your configuration.", E_USER_ERROR );
+      trigger_error("FATAL ERROR: MySQLi support not available.  Please check your configuration.", E_USER_ERROR);
       return;
     }
     
     $this->link = new MySQLi($host, $user, $pass, $name);
     
     if ($error = $this->link->connect_error) { 
-      trigger_error( "FATAL ERROR: Connection to MySQL server failed ($error)", E_USER_ERROR );
+      trigger_error("FATAL ERROR: Connection to MySQL server failed ($error)", E_USER_ERROR);
       return;
     }
      /*
@@ -83,11 +83,13 @@ class CMySQLiDataSource extends CMySQLDataSource {
   }
 
   function fetchObject($result, $class_name = null, $params = array()) {
-    if (empty($class_name))
+    if (empty($class_name)) {
       return $result->fetch_object();
+    }
       
-    if (empty($params))
+    if (empty($params)) {
       return $result->fetch_object($class_name);
+    }
     
     return $result->fetch_object($class_name, $params);
   }
@@ -153,5 +155,3 @@ class CMySQLiDataSource extends CMySQLDataSource {
     return $this->link->server_info;
   }
 }
-
-?>

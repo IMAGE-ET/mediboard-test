@@ -12,19 +12,19 @@
 class CMySQLDataSource extends CSQLDataSource {
     
   function connect($host, $name, $user, $pass) {
-    if (!function_exists( "mysql_connect" )) {
-      trigger_error( "FATAL ERROR: MySQL support not available.  Please check your configuration.", E_USER_ERROR );
+    if (!function_exists("mysql_connect")) {
+      trigger_error("FATAL ERROR: MySQL support not available.  Please check your configuration.", E_USER_ERROR);
       return;
     }
       
     if (null == $this->link = mysql_connect($host, $user, $pass, true)) { 
-      trigger_error( "FATAL ERROR: Connection to MySQL server failed", E_USER_ERROR );
+      trigger_error("FATAL ERROR: Connection to MySQL server failed", E_USER_ERROR);
       return;
     }
      
     if ($name) {
       if (!mysql_select_db($name, $this->link)) {
-        trigger_error( "FATAL ERROR: Database not found ($name)", E_USER_ERROR );
+        trigger_error("FATAL ERROR: Database not found ($name)", E_USER_ERROR);
         return;
       }
     }
@@ -93,11 +93,13 @@ class CMySQLDataSource extends CSQLDataSource {
   }
 
   function fetchObject($result, $class = null, $params = array()) {
-    if (empty($class))
+    if (empty($class)) {
       return mysql_fetch_object($result);
+    }
       
-    if (empty($params))
+    if (empty($params)) {
       return mysql_fetch_object($result, $class);
+    }
     
     return mysql_fetch_object($result, $class, $params);
   }
@@ -148,5 +150,3 @@ class CMySQLDataSource extends CSQLDataSource {
     return $this->loadResult("SELECT FOUND_ROWS()");
   }
 }
-
-?>

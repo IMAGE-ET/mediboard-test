@@ -14,10 +14,10 @@ if (!class_exists("DOMDocument")) {
 }
 
 class CMbXMLDocument extends DOMDocument {
-  var $schemapath       = null;
-  var $schemafilename   = null;
-  var $documentfilename = null;
-  var $now              = null;
+  public $schemapath;
+  public $schemafilename;
+  public $documentfilename;
+  public $now;
   
   function __construct($encoding = "iso-8859-1") {
     parent::__construct("1.0", $encoding);
@@ -168,11 +168,11 @@ class CMbXMLDocument extends DOMDocument {
   }
   
   function addDateTimeElement($elParent, $elName, $dateValue = null) {
-    $this->addElement($elParent, $elName, mbTransformTime(null, $dateValue, "%Y-%m-%dT%H:%M:%S"));
+    $this->addElement($elParent, $elName, CMbDT::transform(null, $dateValue, "%Y-%m-%dT%H:%M:%S"));
   }
   
   function addDateTimeAttribute($elParent, $atName, $dateValue = null) {
-    $this->addAttribute($elParent, $atName, mbTransformTime(null, $dateValue, "%Y-%m-%dT%H:%M:%S"));
+    $this->addAttribute($elParent, $atName, CMbDT::transform(null, $dateValue, "%Y-%m-%dT%H:%M:%S"));
   }
   
   function addAttribute($elParent, $atName, $atValue) {
@@ -237,7 +237,7 @@ class CMbXMLDocument extends DOMDocument {
     $file->file_name          = "$object->_guid.xml";
     $file->file_type          = "text/xml";
     $file->file_size          = filesize($this->documentfilename);
-    $file->file_date          = mbDateTime();
+    $file->file_date          = CMbDT::dateTime();
     $file->file_real_filename = uniqid(rand());
     $file->author_id          = $user->_id;
     $file->private            = 0;

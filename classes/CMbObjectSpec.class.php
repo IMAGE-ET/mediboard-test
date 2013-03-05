@@ -22,13 +22,13 @@ class CMbObjectSpec {
   public $xor                 = array();
   public $events              = array();
   
-  /**
-   * @var CSQLDataSource
-   */
+  /** @var CSQLDataSource */
   public $ds = null;
   
   /**
    * Initialize derivate fields
+   *
+   * @return void
    */
   public function init() {
     $this->ds = CSQLDataSource::get($this->dsn, $this->dsn != "std");
@@ -36,11 +36,12 @@ class CMbObjectSpec {
   
   /**
    * toString method to be used in the HTML for the form className
+   *
    * @return string The spec as string
    */
   function __toString(){
     $specs = array();
-    foreach($this->xor as $xor) {
+    foreach ($this->xor as $xor) {
       $specs[] = "xor|".implode("|", $xor);
     }
     return implode(" ", $specs);

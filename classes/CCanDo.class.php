@@ -15,11 +15,11 @@
  * Allow to check permissions on a module with redirect helpers
  */ 
 class CCanDo {
-  var $read       = null;
-  var $edit       = null;
-  var $view       = null;
-  var $admin      = null;
-  var $setValues  = null;
+  public $read;
+  public $edit;
+  public $view;
+  public $admin;
+  public $setValues;
   
   /**
    * Redirection facility
@@ -38,7 +38,7 @@ class CCanDo {
     if ($this->setValues) {
       if (is_scalar($this->setValues)) {
         CValue::setSession($this->setValues);
-      } 
+      }
       else {
         foreach ($this->setValues as $key => $value) {
           CValue::setSession($key, $value);
@@ -90,7 +90,7 @@ class CCanDo {
   
   function needsObject(CMbObject $object, $setValues = null){
     $this->setValues = $setValues;
-    if (!$object->_id){
+    if (!$object->_id) {
       $params = "&object_guid=$object->_class-?";
       $this->redirect("object_not_found", $params);
     }
@@ -103,6 +103,7 @@ class CCanDo {
 
   /** 
    * Check if the connected user has READ rights on the current page
+   *
    * @return void
    */
   static function checkRead() {
@@ -112,6 +113,7 @@ class CCanDo {
 
   /** 
    * Return the global READ permission
+   *
    * @return bool
    */
   static function read() {
@@ -121,6 +123,7 @@ class CCanDo {
   
   /** 
    * Check if the connected user has EDIT rights on the current page
+   *
    * @return void
    */
   static function checkEdit() {
@@ -130,6 +133,7 @@ class CCanDo {
 
   /** 
    * Return the global EDIT permission
+   *
    * @return bool
    */
   static function edit() {
@@ -139,6 +143,7 @@ class CCanDo {
   
   /** 
    * Check if the connected user has ADMIN rights on the current page
+   *
    * @return void
    */
   static function checkAdmin() {
@@ -148,6 +153,7 @@ class CCanDo {
 
   /** 
    * Return the global ADMIN permission
+   *
    * @return bool
    */
   static function admin() {
@@ -158,6 +164,7 @@ class CCanDo {
   /**
    * Dummy check method with no control
    * Enables differenciation between no-check and undefined-check views
+   *
    * @return void
    */
   static function check() {

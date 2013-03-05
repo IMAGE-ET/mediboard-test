@@ -10,26 +10,26 @@
  */
 
 class CDoObjectAddEdit {
-  var $className           = null;
-  var $objectKey           = null;
-  var $objectKeys          = null;
-  var $createMsg           = null;
-  var $modifyMsg           = null;
-  var $deleteMsg           = null;
-  var $request             = null;
-  var $redirect            = null;
-  var $redirectStore       = null;
-  var $redirectError       = null;
-  var $redirectDelete      = null;
-  var $ajax                = null;
-  var $callBack            = null;
-  var $suppressHeaders     = null;
-  var $_logIt              = null;
+  public $className;
+  public $objectKey;
+  public $objectKeys;
+  public $createMsg;
+  public $modifyMsg;
+  public $deleteMsg;
+  public $request;
+  public $redirect;
+  public $redirectStore;
+  public $redirectError;
+  public $redirectDelete;
+  public $ajax;
+  public $callBack;
+  public $suppressHeaders;
+  public $_logIt;
 
-  var $_obj  = null;
-  var $_old  = null;
+  public $_obj;
+  public $_old;
 
-  function CDoObjectAddEdit($className, $objectKey = null) {
+  function __construct($className, $objectKey = null) {
     if (CAppUI::conf("readonly")) {
       CAppUI::stepAjax("Mode-readonly-title", UI_MSG_ERROR);
       return;
@@ -162,7 +162,7 @@ class CDoObjectAddEdit {
     $fields["_guid"] = $this->_obj->_guid;
     $fields["_class"] = $this->_obj->_class;
 
-    foreach($messages as &$_level) {
+    foreach ($messages as &$_level) {
       $_keys   = array_map("utf8_encode", array_keys($_level));
       $_values = array_map("utf8_encode", array_values($_level));
       $_level = array_combine($_keys, $_values);
@@ -180,7 +180,7 @@ class CDoObjectAddEdit {
       CAppUI::callbackAjax("Form.onSubmitComplete", $guid, $fields);
     }
 
-    if(!CAppUI::$mobile){
+    if (!CAppUI::$mobile) {
       CApp::rip();
     }
 

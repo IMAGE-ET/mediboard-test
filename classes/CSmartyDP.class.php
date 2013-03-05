@@ -10,7 +10,7 @@
  */
 
 class CSmartyDP extends CSmartyMB {
-  
+
   public static $placeholders = null;
 
   /**
@@ -21,7 +21,7 @@ class CSmartyDP extends CSmartyMB {
     if (is_array(self::$placeholders)) {
       return;
     }
-    
+
     // Static initialisations
     self::$placeholders = array();
     foreach (CAppUI::conf("template_placeholders") as $_class => $_active) {
@@ -34,7 +34,7 @@ class CSmartyDP extends CSmartyMB {
       }
     }
   }
-  
+
   /**
    * Constructor
    */
@@ -43,12 +43,12 @@ class CSmartyDP extends CSmartyMB {
 
     $this->makePlaceholders();
     $this->assign("placeholders", self::$placeholders);
-    
+
     $this->register_compiler_function("mb_return", array($this,"mb_return"));
-    
+
     $this->register_block("mb_form" , array($this,"mb_form")); 
     $this->register_block("vertical", array($this,"vertical"));
-    
+
     $this->register_function("mb_field"          , array($this,"mb_field"));
     $this->register_function("mb_key"            , array($this,"mb_key"));
     $this->register_function("mb_label"          , array($this,"mb_label"));
@@ -56,14 +56,14 @@ class CSmartyDP extends CSmartyMB {
     $this->register_function("mb_ternary"        , array($this,"mb_ternary"));
     $this->register_function("mb_colonne"        , array($this,"mb_colonne"));
   }
-  
+
   /**
    * mb_return
    */
   function mb_return($tag_arg, &$smarty) {
     return "\nreturn;";
   }
-  
+
   /**
    * mb_form
    */
@@ -135,27 +135,25 @@ class CSmartyDP extends CSmartyMB {
    /*
    * Diplays veritcal text
    */
-    function vertical($params, $content, &$smarty, &$repeat) {
-      if (isset($content)) {
-        $content = trim($content);
-        $content = preg_replace("/\s+/", " ", $content);
-        $orig = $content;
-        $content = strip_tags($content);
-        $content = preg_replace("/\s+/", chr(0xA0), $content); // == nbsp
-        
-        $letters = str_split($content);
-        
-        $html = "";
-        foreach($letters as $_letter) {
-          $html .= "<i>$_letter</i>";
-        }
-        
-        return "<span class=\"vertical\"><span class=\"nowm\">$html</span><span class=\"orig\">$orig</span></span>";
-      }
-    }
+  function vertical($params, $content, &$smarty, &$repeat) {
+    if (isset($content)) {
+      $content = trim($content);
+      $content = preg_replace("/\s+/", " ", $content);
+      $orig = $content;
+      $content = strip_tags($content);
+      $content = preg_replace("/\s+/", chr(0xA0), $content); // == nbsp
 
-   
-  
+      $letters = str_split($content);
+
+      $html = "";
+      foreach ($letters as $_letter) {
+        $html .= "<i>$_letter</i>";
+      }
+
+      return "<span class=\"vertical\"><span class=\"nowm\">$html</span><span class=\"orig\">$orig</span></span>";
+    }
+  }
+
    /**
    * @param array params tableau des parametres
    * - object          : Objet
@@ -173,34 +171,34 @@ class CSmartyDP extends CSmartyMB {
     if (CAppUI::conf("readonly")) {
       //$params["readonly"] = 1;
     }
-    
-    require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');
-  
+
+    require_once $smarty->_get_plugin_filepath('shared', 'escape_special_chars');
+
     if (null == $object = CMbArray::extract($params, "object")) {
       $class = CMbArray::extract($params, "class" , null, true);
       $object = new $class;
     }
-    
+
     $field   = CMbArray::extract($params, "field" , null, true);
     $prop    = CMbArray::extract($params, "prop");
     $canNull = CMbArray::extract($params, "canNull");
-    
+
     if (null !== $value = CMbArray::extract($params, "value")) {
       $object->$field = $value;
     }
-      
+
     // Get spec, may create it
     $spec = $prop !== null ? 
       CMbFieldSpecFact::getSpec($object, $field, $prop) : 
       $object->_specs[$field];
-    
+
     if ($canNull === "true" || $canNull === true) {
       $spec->notNull = 0;
-      $tabSpec = explode(" ",$spec->prop);
+      $tabSpec = explode(" ", $spec->prop);
       CMbArray::removeValue("notNull", $tabSpec);
       $spec->prop = implode(" ", $tabSpec);
     }
-    
+
     if ($canNull === "false" || $canNull === false) {
       $spec->notNull = 1;
       $spec->prop = "canNull notNull $spec->prop";
@@ -217,7 +215,7 @@ class CSmartyDP extends CSmartyMB {
 
     return $spec->getFormElement($object, $params);
   }
-  
+
   /**
    * Fonction d'écriture  des labels
    * @param array params tableau des parametres
@@ -231,17 +229,17 @@ class CSmartyDP extends CSmartyMB {
       $class = CMbArray::extract($params, "class" , null, true);
       $object = new $class;
     }
-    
+
     $field = CMbArray::extract($params, "field" , null, true);
-    
+
     if (!array_key_exists($field, $object->_specs)) {
        $object->_specs[$field] = CMbFieldSpecFact::getSpec($object, $field, "");
        trigger_error("Spec missing for class '$object->_class' field '$field'", E_USER_WARNING);
     }
-  
+
     return $object->_specs[$field]->getLabelElement($object, $params);
   }
-  
+
   /**
    * Fonction d'écriture  des labels de titre
    * @param array params tableau des parametres
@@ -253,12 +251,12 @@ class CSmartyDP extends CSmartyMB {
       $class = CMbArray::extract($params, "class" , null, true);
       $object = new $class;
     }
-    
+
     $field = CMbArray::extract($params, "field" , null, true);
-  
+
     return $object->_specs[$field]->getTitleElement($object, $params);
   }
-  
+
   /**
    * Fonction d'écriture  des labels
    * @param array params 
@@ -271,9 +269,9 @@ class CSmartyDP extends CSmartyMB {
     $test  = CMbArray::extract($params, "test"  , null, true);
     $value = CMbArray::extract($params, "value" , null, true);
     $other = CMbArray::extract($params, "other" , null, true);
-    
+
     $result =  $test ? $value : $other;
-    
+
     if ($var = CMbArray::extract($params, "var", null)) {
       $smarty->assign($var, $result);
     }
@@ -281,7 +279,7 @@ class CSmartyDP extends CSmartyMB {
       return $result;
     }
   }
-  
+
   function mb_colonne($params, &$smarty) {
     $class         = CMbArray::extract($params, "class"        , null, true);
     $field         = CMbArray::extract($params, "field"        , null, true);
@@ -290,31 +288,31 @@ class CSmartyDP extends CSmartyMB {
     $order_suffixe = CMbArray::extract($params, "order_suffixe", ""  , false);
     $url           = CMbArray::extract($params, "url"          , null, false);
     $function      = CMbArray::extract($params, "function"     , null, false);
-    
+
     $sHtml  = "<label for=\"$field\" title=\"".CAppUI::tr("$class-$field-desc")."\">";
     $sHtml .= CAppUI::tr("$class-$field-court");
     $sHtml .= "</label>";
-      
+
     $css_class = ($order_col == $field) ? "sorted" : "sortable";
     $order_way_inv = ($order_way == "ASC") ? "DESC" : "ASC";
-    
-    if ($url){
-      if ($css_class == "sorted"){
+
+    if ($url) {
+      if ($css_class == "sorted") {
         return "<a class='$css_class $order_way' href='$url&amp;order_col$order_suffixe=$order_col&amp;order_way$order_suffixe=$order_way_inv'>$sHtml</a>";
       }
-      if ($css_class == "sortable"){
+      if ($css_class == "sortable") {
         return "<a class='$css_class' href='$url&amp;order_col$order_suffixe=$field&amp;order_way$order_suffixe=ASC'>$sHtml</a>";
       }
     }
-    
-    if ($function){
-      if ($css_class == "sorted"){
+
+    if ($function) {
+      if ($css_class == "sorted") {
         return "<a class='$css_class $order_way' onclick=$function('$order_col','$order_way_inv');>$sHtml</a>";
       }
-      if ($css_class == "sortable"){
+      if ($css_class == "sortable") {
         return "<a class='$css_class' onclick=$function('$field','ASC');>$sHtml</a>";
       }    
     }
   }
-    
+
 }

@@ -10,8 +10,8 @@
  */
 
 class CNumcharSpec extends CNumSpec {
-  var $control = null;
-  var $protected = null;
+  public $control;
+  public $protected;
   
   function getSpecType() {
     return "numchar";

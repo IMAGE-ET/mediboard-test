@@ -9,21 +9,21 @@
  * @version    $Revision$
  */
 
-define ("K_TCPDF_EXTERNAL_CONFIG", "config_externe");
+define("K_TCPDF_EXTERNAL_CONFIG", "config_externe");
 
-define ("K_PATH_MAIN", CAppUI::conf('root_dir')."/lib/tcpdf/");
-define ("K_PATH_URL", "");
+define("K_PATH_MAIN", CAppUI::conf('root_dir')."/lib/tcpdf/");
+define("K_PATH_URL", "");
 
-define ("FPDF_FONTPATH", K_PATH_MAIN."fonts/");
-define ("K_PATH_CACHE", K_PATH_MAIN."cache/");
-define ("K_PATH_URL_CACHE", K_PATH_URL."cache/");
-define ("K_PATH_IMAGES", K_PATH_MAIN."../../images/pictures/");
-define ("K_BLANK_IMAGE", K_PATH_IMAGES."_blank.png");
+define("FPDF_FONTPATH", K_PATH_MAIN."fonts/");
+define("K_PATH_CACHE", K_PATH_MAIN."cache/");
+define("K_PATH_URL_CACHE", K_PATH_URL."cache/");
+define("K_PATH_IMAGES", K_PATH_MAIN."../../images/pictures/");
+define("K_BLANK_IMAGE", K_PATH_IMAGES."_blank.png");
 
-define ("HEAD_MAGNIFICATION", 1.1);
-define ("K_CELL_HEIGHT_RATIO", 1.25);
-define ("K_TITLE_MAGNIFICATION", 1.3);
-define ("K_SMALL_RATIO", 2/3);
+define("HEAD_MAGNIFICATION", 1.1);
+define("K_CELL_HEIGHT_RATIO", 1.25);
+define("K_TITLE_MAGNIFICATION", 1.3);
+define("K_SMALL_RATIO", 2/3);
 
 CAppUI::requireLibraryFile("tcpdf/config/lang/eng");
 CAppUI::requireLibraryFile("tcpdf/tcpdf");
@@ -147,5 +147,3 @@ class CMbPdf extends TCPDF {
 
 }
 
-
-?>

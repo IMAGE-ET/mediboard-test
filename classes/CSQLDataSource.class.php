@@ -947,7 +947,7 @@ abstract class CSQLDataSource {
     
     while ($date_temp <= $date_max) {
       $dates[] = "('$date_temp')";
-      $date_temp = mbDate("+1 day", $date_temp);
+      $date_temp = CMbDT::date("+1 day", $date_temp);
     }
     
     $ds = CSQLDataSource::get("std");

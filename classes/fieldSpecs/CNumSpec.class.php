@@ -10,13 +10,13 @@
  */
 
 class CNumSpec extends CMbFieldSpec {
-  var $min       = null;
-  var $max       = null;
-  var $pos       = null;
-  var $length    = null;
-  var $minLength = null;
-  var $maxLength = null;
-  var $byteUnit  = null;
+  public $min;
+  public $max;
+  public $pos;
+  public $length;
+  public $minLength;
+  public $maxLength;
+  public $byteUnit;
   
   function getSpecType() {
     return "num";

@@ -52,36 +52,36 @@ class CModule extends CMbObject {
   static $active    = array();
   static $visible   = array();
   static $absent    = array();
- 
-  // primary key
-  var $mod_id;
+
+  // Primary key
+  public $mod_id;
   
   // DB Fields
-  var $mod_name      = null;
-  var $mod_type      = null; // Core or User
-  var $mod_version   = null; // Current Installed version MM.mmm
-  var $mod_active    = null; // active module
-  var $mod_ui_active = null; // visible module
-  var $mod_ui_order  = null; // UI Position
+  public $mod_name;
+  public $mod_type; // Core or User
+  public $mod_version; // Current Installed version MM.mmm
+  public $mod_active; // active module
+  public $mod_ui_active; // visible module
+  public $mod_ui_order; // UI Position
 
   // Form Fields
-  var $_latest        = null;
-  var $_too_new       = null;
-  var $_upgradable    = null;
-  var $_configable    = null;
-  var $_files_missing = null;
-  var $_dependencies  = null;
-  var $_dependencies_not_verified = null;
+  public $_latest;
+  public $_too_new;
+  public $_upgradable;
+  public $_configable;
+  public $_files_missing;
+  public $_dependencies;
+  public $_dependencies_not_verified;
   
   // Other fields
-  var $_dsns = null;
+  public $_dsns;
   
   // Other collections
-  var $_tabs      = array(); // List of tabs with permission
-  var $_can       = null;    // Rights
-  var $_canView   = null;
+  public $_tabs      = array(); // List of tabs with permission
+  public $_can;    // Rights
+  public $_canView;
 
-  function CModule() {
+  function __construct() {
     parent::__construct();
    
     // Hack to simulate the activeness of the class which has no real module 
@@ -151,6 +151,8 @@ class CModule extends CMbObject {
    * Load and compare a module to a given setup
    *
    * @param CSetup $setup The CSetup object to compare to
+   * 
+   * @return void
    */
   function compareToSetup(CSetup $setup) {
     $this->mod_name = $setup->mod_name;
@@ -191,11 +193,21 @@ class CModule extends CMbObject {
   function getView($permType) {
     return CPermModule::getViewModule($this->mod_id, $permType);
   }
-  
+
+  /**
+   * Checks the View permission on the module
+   *
+   * @return bool
+   */
   function canView() {
     return $this->_canView = $this->getView(PERM_READ);
   }
-  
+
+  /**
+   * Checks the Admin permission on the module
+   *
+   * @return bool
+   */
   function canAdmin() {
     return $this->_canEdit = $this->getView(PERM_EDIT);
   }
@@ -243,7 +255,15 @@ class CModule extends CMbObject {
       }
     }
   }
-  
+
+  /**
+   * Registers a new tab in the list
+   *
+   * @param string $file     The file to add as a tab
+   * @param int    $permType The permission level required
+   *
+   * @return void
+   */
   function registerTab($file, $permType) {
     switch ($permType) {
       case TAB_READ:
@@ -263,7 +283,14 @@ class CModule extends CMbObject {
         break;
     }
   }
-  
+
+  /**
+   * Returns the $tab if it is valid, the first one from $this->_tabs if not
+   *
+   * @param string $tab The tab to validate
+   *
+   * @return mixed
+   */
   function getValidTab($tab){
     if (!$this->mod_active) {
       return;
@@ -277,7 +304,12 @@ class CModule extends CMbObject {
 
     return $tab;
   }
-  
+
+  /**
+   * Adds the "Configure" tab
+   *
+   * @return void
+   */
   function addConfigureTab() {
     // Add configure tab if exist
     $configPath = "./modules/$this->mod_name/configure.php";
@@ -285,7 +317,12 @@ class CModule extends CMbObject {
       $this->registerTab("configure", TAB_ADMIN);
     }
   }
-  
+
+  /**
+   * Shows the list of available tabs
+   *
+   * @return void
+   */
   function showTabs() {
     if (!$this->checkActive()) {
       return;
@@ -317,13 +354,18 @@ class CModule extends CMbObject {
     $smartyStyle->assign("fintab" , false);
     $smartyStyle->display("tabbox.tpl");
 
-    require_once $tabPath;
+    include_once $tabPath;
   
     $smartyStyle->assign("fintab", true);
     $smartyStyle->display("tabbox.tpl");
     
   }
-  
+
+  /**
+   * Shows the "action" page
+   *
+   * @return void
+   */
   function showAction() {
     if (!$this->checkActive()) {
       return;
@@ -335,9 +377,17 @@ class CModule extends CMbObject {
     $actionPath = "./modules/$this->mod_name/";
     $actionPath .= $u ? "$u/" : "";
     $actionPath .= "$a.php";
-    require_once $actionPath;
+
+    if (is_file($actionPath)) {
+      include_once $actionPath;
+    }
   }
-  
+
+  /**
+   * Checks if the module is active
+   *
+   * @return bool
+   */
   function checkActive() {
     if (!$this->mod_active) {
       $smarty = new CSmartyDP("modules/system");
@@ -417,19 +467,19 @@ class CModule extends CMbObject {
   }
   
   function reorder() {
-    $sql = "SELECT * FROM modules ORDER BY mod_ui_order";
-    $result = $this->_spec->ds->exec($sql);
+    $query = "SELECT * FROM modules ORDER BY mod_ui_order";
+    $result = $this->_spec->ds->exec($query);
     $i = 1;
     while ($row = $this->_spec->ds->fetchArray($result)) {
-      $sql = "UPDATE modules SET mod_ui_order = '$i' WHERE mod_id = '".$row["mod_id"]."'";
-      $this->_spec->ds->exec($sql);
+      $query = "UPDATE modules SET mod_ui_order = '$i' WHERE mod_id = '".$row["mod_id"]."'";
+      $this->_spec->ds->exec($query);
       $i++;
     }
   }
 
   function install() {
-    $sql = "SELECT mod_name FROM modules WHERE mod_name = '$this->mod_name'";
-    if ($this->_spec->ds->loadHash($sql)) {
+    $query = "SELECT mod_name FROM modules WHERE mod_name = '$this->mod_name'";
+    if ($this->_spec->ds->loadHash($query)) {
       // the module is already installed
       // TODO: check for older version - upgrade
       return false;
@@ -441,14 +491,14 @@ class CModule extends CMbObject {
   }
 
   function remove() {
-    $sql = "DELETE FROM modules WHERE mod_id = $this->mod_id";
-    if (!$this->_spec->ds->exec($sql)) {
+    $query = "DELETE FROM modules WHERE mod_id = $this->mod_id";
+    if (!$this->_spec->ds->exec($query)) {
       return $this->_spec->ds->error();
     }
     else {
       $this->reorder();
-      $sql = "DELETE FROM perm_module WHERE mod_id = $this->mod_id";
-      $this->_spec->ds->exec($sql);
+      $query = "DELETE FROM perm_module WHERE mod_id = $this->mod_id";
+      $this->_spec->ds->exec($query);
       return null;
     }
   }
@@ -457,16 +507,16 @@ class CModule extends CMbObject {
     $temp = $this->mod_ui_order;
     if ($dirn == "moveup") {
       $temp--;
-      $sql = "UPDATE modules SET mod_ui_order = (mod_ui_order+1) WHERE mod_ui_order = $temp";
-      $this->_spec->ds->exec($sql);
+      $query = "UPDATE modules SET mod_ui_order = (mod_ui_order+1) WHERE mod_ui_order = $temp";
+      $this->_spec->ds->exec($query);
     }
     else if ($dirn == "movedn") {
       $temp++;
-      $sql = "UPDATE modules SET mod_ui_order = (mod_ui_order-1) WHERE mod_ui_order = $temp";
-      $this->_spec->ds->exec($sql);
+      $query = "UPDATE modules SET mod_ui_order = (mod_ui_order-1) WHERE mod_ui_order = $temp";
+      $this->_spec->ds->exec($query);
     }
-    $sql = "UPDATE modules SET mod_ui_order = $temp WHERE mod_id = $this->mod_id";
-    $this->_spec->ds->exec($sql);
+    $query = "UPDATE modules SET mod_ui_order = $temp WHERE mod_id = $this->mod_id";
+    $this->_spec->ds->exec($query);
 
     $this->mod_id = $temp;
     

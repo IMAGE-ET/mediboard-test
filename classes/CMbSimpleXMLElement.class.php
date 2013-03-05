@@ -21,7 +21,7 @@ class CMbSimpleXMLElement extends SimpleXMLElement {
   function getXpath($prefix = "") {
     $tokens = array();
     
-    foreach($this->getValidPatterns() as $patt) {
+    foreach ($this->getValidPatterns() as $patt) {
       $tokens[] = "$prefix$patt";
     }
     

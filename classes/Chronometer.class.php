@@ -13,15 +13,15 @@
  * Time tracking utility class
  */
 class Chronometer {
-  var $total = 0;
-  var $step  = 0;
-  var $maxStep = 0;
-  var $avgStep = 0;
-  var $nbSteps = 0;
-  var $main = false;
-  var $latestStep = 0;
-  
-  var $report = array();
+  public $total = 0;
+  public $step  = 0;
+  public $maxStep = 0;
+  public $avgStep = 0;
+  public $nbSteps = 0;
+  public $main = false;
+  public $latestStep = 0;
+
+  public $report = array();
   
   /**
    * Starts the chronometer

@@ -15,10 +15,10 @@
  */
 
 class CLPR {
-  var $hostname     = null;
-  var $username     = null;
-  var $port         = null;
-  var $printer_name = null;
+  public $hostname;
+  public $username;
+  public $port;
+  public $printer_name;
   
   function init($source) {   
     if (!$source) {

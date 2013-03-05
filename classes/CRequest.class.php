@@ -13,16 +13,16 @@
  * SQL query builder
  */
 class CRequest {
-  var $select = array();
-  var $table  = array();
-  var $ljoin  = array();
-  var $rjoin  = array();
-  var $where  = array();
-  var $group  = array();
-  var $having = array();
-  var $order  = array();
-  var $forceindex = array();
-  var $limit  = "";
+  public $select = array();
+  public $table  = array();
+  public $ljoin  = array();
+  public $rjoin  = array();
+  public $where  = array();
+  public $group  = array();
+  public $having = array();
+  public $order  = array();
+  public $forceindex = array();
+  public $limit  = "";
   
   /**
    * SELECT [...]

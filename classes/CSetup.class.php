@@ -15,25 +15,25 @@
  */ 
 class CSetup {
   // Public vars
-  var $mod_name = null;
-  var $mod_version = null;
-  var $mod_type = "user";
+  public $mod_name;
+  public $mod_version;
+  public $mod_type = "user";
   
   /**
    * @var CSQLDataSource
    */
-  var $ds = null;
+  public $ds;
 
   // Protected vars
-  var $revisions    = array();
-  var $queries      = array();
-  var $preferences  = array();
-  var $functions    = array();
-  var $dependencies = array();
-  var $timeLimit    = array();
-  var $tables       = array();
-  var $datasources  = array();
-  var $config_moves = array();
+  public $revisions    = array();
+  public $queries      = array();
+  public $preferences  = array();
+  public $functions    = array();
+  public $dependencies = array();
+  public $timeLimit    = array();
+  public $tables       = array();
+  public $datasources  = array();
+  public $config_moves = array();
   
   static private $_old_pref_system = null;
   

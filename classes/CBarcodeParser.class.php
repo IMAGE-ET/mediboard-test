@@ -209,7 +209,7 @@ class CBarcodeParser {
    * 
    * @param string $string String
    * 
-   * @return char
+   * @return string A single char
    * @todo Rename to checksum39 ?
    */
   static function checksum($string) {
@@ -241,7 +241,7 @@ class CBarcodeParser {
    * @param string $date Raw date
    * @param bool   $alt  Alternate semantic in some cases
    * 
-   * @return date ISO date equivalent
+   * @return string ISO date equivalent
    */
   static function parsePeremptionDate($date, $alt = false) {
     // dates du type 18304 >> octobre 2018 (304 = jour dans l'année)
@@ -253,36 +253,36 @@ class CBarcodeParser {
     
     // DD/MM/YYYY
     if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $date)) {
-      return mbDateFromLocale($date);
+      return CMbDT::dateFromLocale($date);
     }
     
     // YYYYMM
     if (preg_match('/^(20\d{2})(\d{2})$/', $date, $parts)) {
-      $date = mbDate("+1 MONTH", $parts[1]."-".$parts[2]."-01");
-      return mbDate("-1 DAY", $date);
+      $date = CMbDT::date("+1 MONTH", $parts[1]."-".$parts[2]."-01");
+      return CMbDT::date("-1 DAY", $date);
     }
     
     // YYMMDD
     if (preg_match('/^(\d{2})(\d{2})(\d{2})$/', $date, $parts)) {
       if ($alt) {
-        $date = mbDate("+1 MONTH", "20".$parts[3]."-".$parts[1]."-01");
+        $date = CMbDT::date("+1 MONTH", "20".$parts[3]."-".$parts[1]."-01");
       }
       else {
-        $date = mbDate("+1 MONTH", "20".$parts[1]."-".$parts[2]."-01");
+        $date = CMbDT::date("+1 MONTH", "20".$parts[1]."-".$parts[2]."-01");
       }
-      return mbDate("-1 DAY", $date);
+      return CMbDT::date("-1 DAY", $date);
     }
     
     // YYNNN
     if (preg_match('/^(\d{2})(\d{3})$/', $date, $parts)) {
-      $date = mbDate("+{$parts[2]} DAYS", "20{$parts[1]}-01-01");
-      return mbDate("-1 DAY", $date);
+      $date = CMbDT::date("+{$parts[2]} DAYS", "20{$parts[1]}-01-01");
+      return CMbDT::date("-1 DAY", $date);
     }
     
     // MMYY
     if (preg_match('/^(\d{2})(\d{2})$/', $date, $parts)) {
-      $date = mbDate("+1 MONTH", "20".$parts[2]."-".$parts[1]."-01");
-      return mbDate("-1 DAY", $date);
+      $date = CMbDT::date("+1 MONTH", "20".$parts[2]."-".$parts[1]."-01");
+      return CMbDT::date("-1 DAY", $date);
     }
     
     return null;
@@ -357,22 +357,21 @@ class CBarcodeParser {
     $pattern = '/^(\d{13})$/ims';
     if (empty($comp) && preg_match($pattern, $barcode, $parts)) {
       $type = "ean13";
-      $patt = $pattern;
       $comp["scc"] = "0{$parts[1]}";
     }
     
     // 2016-08
     if (empty($comp) && preg_match('/^(20\d{2})-(\d{2})$/ms', $barcode, $parts)) {
       $type = "date";
-      $date = mbDate("+1 MONTH", $parts[1]."-".$parts[2]."-01");
-      $comp["per"] = mbDate("-1 DAY", $date);
+      $date = CMbDT::date("+1 MONTH", $parts[1]."-".$parts[2]."-01");
+      $comp["per"] = CMbDT::date("-1 DAY", $date);
     }
     
     // 130828
     /*if (empty($comp) && preg_match('/^(\d{2})(\d{2})(\d{2})$/ms', $barcode, $parts)){
       $type = "date";
-      $comp = mbDate("+1 MONTH", "20".$parts[1]."-".$parts[2]."-01");
-      $comp = mbDate("-1 DAY", $comp);
+      $comp = CMbDT::date("+1 MONTH", "20".$parts[1]."-".$parts[2]."-01");
+      $comp = CMbDT::date("-1 DAY", $comp);
     }*/
     
     if (empty($comp) && $barcode[0] === "+") {

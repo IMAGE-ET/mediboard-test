@@ -10,8 +10,8 @@
  */
 
 class CPasswordSpec extends CMbFieldSpec {
-  var $minLength = null;
-  var $revealable = null;
+  public $minLength;
+  public $revealable;
   
   function getSpecType() {
     return "password";

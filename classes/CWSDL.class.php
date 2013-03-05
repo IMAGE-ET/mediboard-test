@@ -16,11 +16,23 @@
  * Web Services Description Language
  */
 class CWSDL extends CMbXMLDocument {
-  var $xsd = array("string"=>"string", "bool"=>"boolean", "boolean"=>"boolean",
-                   "int"=>"integer", "integer"=>"integer", "double"=>"double", "float"=>"float", "number"=>"float",
-                   "resource"=>"anyType", "mixed"=>"anyType", "unknown_type"=>"anyType", "anyType"=>"anyType", "xml"=>"anyType");
-  
-  var $_soap_handler = null;
+  public $xsd = array(
+    "string"       => "string",
+    "bool"         => "boolean",
+    "boolean"      => "boolean",
+    "int"          => "integer",
+    "integer"      => "integer",
+    "double"       => "double",
+    "float"        => "float",
+    "number"       => "float",
+    "resource"     => "anyType",
+    "mixed"        => "anyType",
+    "unknown_type" => "anyType",
+    "anyType"      => "anyType",
+    "xml"          => "anyType",
+  );
+
+  public $_soap_handler;
              
   function __construct() {
     parent::__construct();
@@ -70,5 +82,3 @@ class CWSDL extends CMbXMLDocument {
     parent::saveXML();
   }
 }
-
-?>

@@ -14,35 +14,35 @@
  * as defined in Model objects
  */
 class CMbFieldSpec {
-  var $object         = null;
-  var $spec           = null;
-  var $className      = null; // @todo: rename to $owner
-  var $fieldName      = null; // @todo: rename to $field
-  var $prop           = null;
+  public $object;
+  public $spec;
+  public $className; // @todo: rename to $owner
+  public $fieldName; // @todo: rename to $field
+  public $prop;
   
   // Options
-  var $default        = null;
-  var $notNull        = null;
-  var $confidential   = null;
-  var $moreThan       = null;
-  var $moreEquals     = null;
-  var $sameAs         = null;
-  var $notContaining  = null;
-  var $notNear        = null;
-  var $alphaAndNum    = null;
-  var $mask           = null;
-  var $format         = null;
-  var $autocomplete   = null;
-  var $aidesaisie     = null;
-  var $perm           = null; // Used by autocomplete
-  var $dependsOn      = null;
-  var $helped         = null;
-  var $seekable       = null;
-  var $show           = null;
-  var $reported       = null;
-  var $pattern        = null;
-  var $derived        = null;
-  var $loggable       = null;
+  public $default;
+  public $notNull;
+  public $confidential;
+  public $moreThan;
+  public $moreEquals;
+  public $sameAs;
+  public $notContaining;
+  public $notNear;
+  public $alphaAndNum;
+  public $mask;
+  public $format;
+  public $autocomplete;
+  public $aidesaisie;
+  public $perm; // Used by autocomplete
+  public $dependsOn;
+  public $helped;
+  public $seekable;
+  public $show;
+  public $reported;
+  public $pattern;
+  public $derived;
+  public $loggable;
 
   static $chars  = array();
   static $nums   = array();
@@ -946,8 +946,8 @@ class CMbFieldSpec {
     $date = "";
     if ($value && $value != '0000-00-00' && $value != '00:00:00' && $value != '0000-00-00 00:00:00') {
       $date =  ($this instanceof CDateSpec && $this->progressive) ? 
-        $this->getValue($object, null, $params) : 
-        mbTransformTime(null, $value, $format);
+        $this->getValue($object, null, $params) :
+        CMbDT::transform(null, $value, $format);
     }
     
     $form     = CMbArray::extract($params, "form");
@@ -1139,5 +1139,3 @@ CMbFieldSpec::$months = range(1, 12);
 CMbFieldSpec::$days   = range(1, 29);
 CMbFieldSpec::$hours  = range(9, 19);
 CMbFieldSpec::$mins   = range(0, 60, 10);
-
-?>

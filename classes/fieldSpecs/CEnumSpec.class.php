@@ -10,14 +10,13 @@
  */
 
 class CEnumSpec extends CMbFieldSpec {
+  public $list;
+  public $typeEnum;
+  public $vertical;
+  public $columns;
 
-  var $list = null;
-  var $typeEnum = null;
-  var $vertical = null;
-  var $columns = null;
-
-  var $_list = null;
-  var $_locales = null;
+  public $_list;
+  public $_locales;
 
   function __construct($className, $field, $prop = null, $aProperties = array()) {
     parent::__construct($className, $field, $prop, $aProperties);

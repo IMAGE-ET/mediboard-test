@@ -13,14 +13,14 @@ class COracleDataSource extends CSQLDataSource {
   private $_queries = array();
     
   function connect($host, $name, $user, $pass) {
-    if (!function_exists( "oci_connect" )) {
-      trigger_error( "FATAL ERROR: Oracle support not available.  Please check your configuration.", E_USER_ERROR );
+    if (!function_exists("oci_connect")) {
+      trigger_error("FATAL ERROR: Oracle support not available.  Please check your configuration.", E_USER_ERROR);
       return;
     }
     
     if (false === $this->link = oci_connect($user, $pass, "$host/$name")) {
       $error = $this->error();
-      trigger_error( "FATAL ERROR: Connection to Oracle database '$host/$name' failed.\n".$error['message'], E_USER_ERROR );
+      trigger_error("FATAL ERROR: Connection to Oracle database '$host/$name' failed.\n".$error['message'], E_USER_ERROR);
       return;
     }
     
@@ -65,7 +65,9 @@ class COracleDataSource extends CSQLDataSource {
 
   function errno() {
     $error = $this->error();
-    if ($error === false) return null;
+    if ($error === false) {
+      return null;
+    }
     return $error["code"];
   }
 
@@ -113,7 +115,7 @@ class COracleDataSource extends CSQLDataSource {
       return $hash;
     }
     
-    foreach($hash as &$value) {
+    foreach ($hash as &$value) {
       if (is_object($value) && is_a($value, "OCI-Lob")) {
         if ($size = $value->size()) {
           $value = $value->read($size);
@@ -183,10 +185,10 @@ class COracleDataSource extends CSQLDataSource {
     $cur = $this->exec($query);
     $cur or CApp::rip();
     
-    $ret = oci_fetch_all($cur, $rows, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_NUM);
+    oci_fetch_all($cur, $rows, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_NUM);
     
     $hashlist = array();
-    foreach($rows as $hash) {
+    foreach ($rows as $hash) {
       $hashlist[$hash[0]] = $hash[1];
     }
     
@@ -198,10 +200,10 @@ class COracleDataSource extends CSQLDataSource {
     $cur = $this->exec($query);
     $cur or CApp::rip();
     
-    $ret = oci_fetch_all($cur, $rows, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+    oci_fetch_all($cur, $rows, 0, -1, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
     
     $hashlist = array();
-    foreach($rows as $hash) {
+    foreach ($rows as $hash) {
       $key = reset($hash);
       $hashlist[$key] = $hash;
     }
@@ -216,7 +218,7 @@ class COracleDataSource extends CSQLDataSource {
       return false;
     }
     
-    $ret = oci_fetch_all($result, $list, 0, $maxrows, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
+    oci_fetch_all($result, $list, 0, $maxrows, OCI_FETCHSTATEMENT_BY_ROW + OCI_ASSOC);
     
     $this->freeResult($result);
     return $list;
@@ -261,5 +263,3 @@ class COracleDataSource extends CSQLDataSource {
     return $queries;
   }
 }
-
-?>
