@@ -33,20 +33,15 @@ reloadPrescriptionAnesth = function(prescription_id){
             -
           {{/if}}
         </form>
-        {{if $selOp->_ref_consult_anesth->_id}}
         <br />
         <form name="editInfosASAFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this);">
-          <input type="hidden" name="m" value="dPcabinet" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-          {{mb_key object=$selOp->_ref_consult_anesth}}
+          {{mb_key object=$selOp}}
           {{mb_label object=$selOp field="ASA" style="padding-left: 4em;"}}
           {{mb_field object=$selOp field="ASA" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
           <br />
           {{mb_label object=$selOp field="position" style="padding-left: 2.5em;"}}
           {{mb_field object=$selOp field="position" emptyLabel="Choose" style="width: 12em;" onchange="this.form.onsubmit()"}}
         </form>
-        {{/if}}
       </fieldset>
     </td>
     <td class="halfPane">
