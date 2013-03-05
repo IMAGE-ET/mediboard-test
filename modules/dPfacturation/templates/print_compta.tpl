@@ -51,7 +51,7 @@
             <th rowspan="2" class="narrow">Remise</th>
           {{/if}}
           
-          <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=_montant_total}}</th>
+          <th rowspan="2" class="narrow">Total</th>
           <th rowspan="2" class="narrow">{{mb_label class=CReglement field=mode}}</th>
           <th colspan="2" class="narrow">{{mb_title class=CReglement field=emetteur}}</th>
         </tr>
@@ -100,7 +100,7 @@
           {{if $type_aff}}
             <td {{if $facture->_secteur1 < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_secteur1}}</td>
             <td {{if $facture->_secteur2 < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_secteur2}}</td>
-            <td {{if $facture->_montant_total    < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_montant_total   }}</td>
+            <td {{if $facture->_montant_avec_remise < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_montant_avec_remise}}</td>
           {{else}}
             <td style="text-align: right;">{{mb_value object=$facture field=_montant_sans_remise}}</td>
             <td style="text-align: right;">{{mb_value object=$facture field=remise}}</td>

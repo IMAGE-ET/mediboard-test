@@ -50,7 +50,7 @@ $where["facture_cabinet.praticien_id"] = CSQLDataSource::prepareIn(array_keys($l
 $where["reglement.object_class"] = " = 'CFactureCabinet'";
 
 $reglement = new CReglement();
-$reglements = $reglement->loadList($where, "reglement.date", null, null, $ljoin);
+$reglements = $reglement->loadList($where, " facture_cabinet.facture_id, reglement.date", null, null, $ljoin);
 
 $reglement = new CReglement();
 // Calcul du récapitulatif
@@ -97,6 +97,7 @@ foreach ($reglements as $_reglement) {
     }
     $recapReglement["total"]["secteur1"] += $facture->_montant_avec_remise;
   }
+  $recapReglement["total"]["nb_consultations"] += count($facture->_ref_consults);
   
   if ($_reglement->emetteur == "patient") {
     $recapReglement["total"]["du_patient"] += $_reglement->montant;

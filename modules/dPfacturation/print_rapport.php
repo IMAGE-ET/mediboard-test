@@ -10,8 +10,6 @@
  */
 
 CCanDo::checkEdit();
-CSQLDataSource::$trace = false;
-
 // Récupération des paramètres
 $filter = new CPlageconsult();
 $filter->_date_min = CValue::getOrSession("_date_min", mbDate());
@@ -30,7 +28,23 @@ elseif ($filter->_type_affichage == "totaux") {
 }
 
 $where = array();
-$where["ouverture"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
+$ljoin = array();
+
+// Plage ciblée
+if ($plage_id = CValue::get("plage_id")) {
+  // Contraintes sur les plages de consultation
+  $ljoin["facture_liaison"] = "facture_liaison.facture_id = facture_cabinet.facture_id";
+  $ljoin["consultation"] = "facture_liaison.object_id = consultation.consultation_id";
+  $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
+  
+  $where["facture_liaison.facture_class"] = " = 'CFactureCabinet'";
+  $where["facture_liaison.object_class"] = " = 'CConsultation'";
+  $where["plageconsult.plageconsult_id"] = " = '$plage_id'";
+}
+// Tri sur les dates
+else {
+  $where["ouverture"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
+}
 
 // Consultations gratuites
 if (!CValue::getOrSession("cs")) {
@@ -94,11 +108,21 @@ $where["patient_id"] = "IS NOT NULL";
 $order = "ouverture, praticien_id";
 
 $facture = new CFactureCabinet();
-$listFactures = $facture->loadList($where, $order);
+$listFactures = $facture->loadList($where, $order, null, null, $ljoin);
 
 $listPlages = array();
+CMbObject::massLoadFwdRef($listFactures, "praticien_id");
+CMbObject::massLoadFwdRef($listFactures, "patient_id");
+CMbObject::massCountBackRefs($listFactures, "consultations");
+CMbObject::massCountBackRefs($listFactures, "reglements");
+CMbObject::massCountBackRefs($listFactures, "notes");
 foreach ($listFactures as $_facture) {
-  $_facture->loadRefs();
+  $_facture->loadRefPatient();
+  $_facture->loadRefPraticien();
+  $_facture->loadRefsConsultation();
+  $_facture->loadRefCoeffFacture();
+  $_facture->updateMontants();
+  $_facture->loadRefsReglements();
   $_facture->loadRefsNotes();
   
   // Ajout de reglements
@@ -161,12 +185,12 @@ foreach ($listFactures as $_facture) {
     }
     
     $listPlages["$debut_plage"]["factures"][$_facture->_guid] = $_facture;
+    $listPlages["$debut_plage"]["total"]["secteur1"] += $_facture->_secteur1;
+
     if (CAppUI::conf("dPccam CCodeCCAM use_cotation_ccam")) {
-      $listPlages["$debut_plage"]["total"]["secteur1"] += $_facture->_secteur1;
       $listPlages["$debut_plage"]["total"]["secteur2"] += $_facture->_secteur2;
     }
     else {
-      $listPlages["$debut_plage"]["total"]["secteur1"] += $_facture->_montant_sans_remise;
       $listPlages["$debut_plage"]["total"]["secteur2"] += $_facture->remise;
     }
     $listPlages["$debut_plage"]["total"]["total"]    += $_facture->_montant_avec_remise;

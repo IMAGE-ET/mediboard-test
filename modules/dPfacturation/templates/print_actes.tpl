@@ -104,16 +104,14 @@
               {{if $consult->motif}}: {{$consult->motif}}{{/if}}
             {{/foreach}}
           </td>
-
+          
+          <td>{{mb_value object=$_facture field=_secteur1 empty=1}}</td>
           {{if $type_aff}}
-            <td>{{mb_value object=$_facture field=_secteur1 empty=1}}</td>
             <td>{{mb_value object=$_facture field=_secteur2 empty=1}}</td>
-            <td>{{mb_value object=$_facture field=_montant_total    empty=1}}</td>
           {{else}}
-            <td>{{mb_value object=$_facture field=_montant_sans_remise empty=1}}</td>
             <td>{{mb_value object=$_facture field=remise empty=1}}</td>
-            <td>{{mb_value object=$_facture field=_montant_avec_remise empty=1}}</td>
           {{/if}}
+          <td>{{mb_value object=$_facture field=_montant_avec_remise empty=1}}</td>
 
           <td>
             <table class="layout">
