@@ -10,14 +10,16 @@
  * @link     http://www.mediboard.org */
  
 /**
- * Coded data, consists of a coded value (CV)
- * and, optionally, coded value(s) from other coding systems
- * that identify the same concept. Used when alternative
- * codes may exist.
+ * The quantity data type is an abstract generalization
+ * for all data types (1) whose value set has an order
+ * relation (less-or-equal) and (2) where difference is
+ * defined in all of the data type's totally ordered value
+ * subsets.  The quantity type abstraction is needed in
+ * defining certain other types, such as the interval and
+ * the probability distribution.
  */
-class CCDACE extends CCDACD {
+class CCDAQTY extends CCDAANY {
 
-  
   /**
 	 * Get the properties of our class as strings
 	 *
@@ -25,7 +27,7 @@ class CCDACE extends CCDACD {
 	 */
   function getProps() {
     $props = parent::getProps();
-    //$props["qualifier"] = "CCDACR xml|element prohibited";
+    
     return $props;
   }
 }

@@ -10,38 +10,38 @@
  * @link     http://www.mediboard.org */
  
 /**
- * The Boolean type stands for the values of two-valued logic.
- * A Boolean value can be either true or
- * false, or, as any other value may be NULL.
+ * A globally unique string representing an ISO Object Identifier
+ * (OID) in a form that consists only of non-negative numbers with
+ * no leading zeros and dots (e.g., "2.16.840.1.113883.3.1").
+ * According to ISO, OIDs are paths in a tree structure, with the
+ * left-most number representing the root and the right-most number
+ * representing a leaf.
  */
-class CCDA_bl extends CCDAANY {
-
+class CCDA_oid extends CCDA_Datatype {
 
   public $data;
+
+  public function setData($data) {
+    $this->data = $data;
+  }
+
+  public function getData() {
+    return $this->data;
+  }
+
+  public function getValue() {
+    return $this->data;
+  }
+
   /**
 	 * Get the properties of our class as strings
 	 *
 	 * @return array
 	 */
   function getProps() {
-    parent::getProps();
-    $props["data"] = "booleen xml|data pattern|true|false";
+    $props = parent::getProps();
+    $props["data"] = "str xml|data pattern|[0-2](\\.(0|[1-9][0-9]*))*";
     return $props;
-  }
-
-  /**
-   * Modifie la variable data
-   *
-   * @param String $data Data
-   *
-   * @return void
-   */
-  function setData($data) {
-    $this->data = $data;
-  }
-
-  function getData() {
-    return $this->data;
   }
 
   /**
@@ -59,7 +59,7 @@ class CCDA_bl extends CCDAANY {
     /**
      * Test avec une valeur bonne
      */
-    $this->setData("true");
+    $this->setData("2.16.840.1.113883.3.1");
     $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
     /*-------------------------------------------------------------------------------------*/
     /**

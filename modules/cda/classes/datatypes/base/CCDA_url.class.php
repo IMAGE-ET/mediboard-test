@@ -10,23 +10,47 @@
  * @link     http://www.mediboard.org */
  
 /**
- * Coded data in its simplest form, consists of a code.
- * The code system and code system version is fixed by
- * the context in which the CS value occurs. CS is used
- * for coded attributes that have a single HL7-defined
- * value set.
+ * A telecommunications address  specified according to
+ * Internet standard RFC 1738
+ * [http://www.ietf.org/rfc/rfc1738.txt]. The
+ * URL specifies the protocol and the contact point defined
+ * by that protocol for the resource.  Notable uses of the
+ * telecommunication address data type are for telephone and
+ * telefax numbers, e-mail addresses, Hypertext references,
+ * FTP references, etc.
  */
-class CCDA_cs extends CCDA_Datatype_Voc {
+class CCDA_url extends CCDA_Datatype {
 
   public $data;
+
+  /**
+   * Setter data
+   *
+   * @param \String $data String
+   *
+   * @return void
+   */
+  public function setData($data) {
+    $this->data = $data;
+  }
+
+  /**
+   * Getter data
+   *
+   * @return URI
+   */
+  public function getData() {
+    return $this->data;
+  }
+
   /**
 	 * Get the properties of our class as strings
 	 *
 	 * @return array
 	 */
   function getProps() {
-    $props = array();
-    $props["data"] = "str xml|data pattern|[^\\s]+";
+    $props = parent::getProps();
+    $props["data"] = "uri xml|data";
     return $props;
   }
 
@@ -36,28 +60,25 @@ class CCDA_cs extends CCDA_Datatype_Voc {
    * @return nothing
    */
   function test() {
-    if(get_class($this) !== "CCDA_cs") {
-      return parent::test();
-    }
 
     $tabTest = array();
     /**
-     * Test avec un valeur null
+     * Test avec une valeur null
      */
 
-    $tabTest[] = $this->sample("Test avec une valeur null", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec un valeur erronée
+     * Test avec une valeur erronée
      */
 
-    $this->setData(" ");
+    $this->setData(":::$:!:");
     $tabTest[] = $this->sample("Test avec une valeur erronée", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec un valeur bonne
+     * Test avec une valeur bonne
      */
 
 

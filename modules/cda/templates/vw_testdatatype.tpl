@@ -11,31 +11,34 @@
 
 <table class="tbl">
   <tr>
+    <th class="title" colspan="3">Synthèse</th>
+  </tr>
+  <tr>
     <th>
-      Description
+      Total des tests
     </th>
     <th>
-      Résultat attendu
+      Nombre de succès
     </th>
     <th>
-      Résultat
+      Classe en erreur
     </th>
   </tr>
-  {{foreach from=$result item=_class}}
-    {{foreach from=$_class key=name item=_test}}
-      <tr>
-        <th colspan="3" class="title">
-          {{$name}}
-        </th>
-      </tr>
-      {{foreach from=$_test item=_ligne}}
-        <tr>
-          <td>{{$_ligne.description}}</td>
-          <td>{{$_ligne.resultatAttendu}}</td>
-          <td {{if $_ligne.resultatAttendu == $_ligne.resultat}}class="ok"{{else}}class="error"{{/if}}>{{$_ligne.resultat}}</td>
-        </tr>
+  <tr>
+    <td>
+      {{$resultsynth.total}}
+    </td>
+    <td>
+      {{$resultsynth.succes}}
+    </td>
+    <td>
+      {{foreach from=$resultsynth.erreur item=_classerror}}
+        <a href="#{{$_classerror}}">{{$_classerror}}</a>
       {{/foreach}}
-    {{/foreach}}
-  {{/foreach}}
+    </td>
+  </tr>
 </table>
 <br/>
+<br/>
+
+{{mb_include template="inc_testdatatype"}}

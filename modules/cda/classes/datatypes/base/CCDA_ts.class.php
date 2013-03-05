@@ -10,23 +10,42 @@
  * @link     http://www.mediboard.org */
  
 /**
- * Coded data in its simplest form, consists of a code.
- * The code system and code system version is fixed by
- * the context in which the CS value occurs. CS is used
- * for coded attributes that have a single HL7-defined
- * value set.
+ * A quantity specifying a point on the axis of natural time.
+ * A point in time is most often represented as a calendar
+ * expression.
  */
-class CCDA_cs extends CCDA_Datatype_Voc {
+class CCDA_ts extends CCDA_Datatype {
 
   public $data;
+
+  /**
+   * setter data
+   *
+   * @param $data
+   *
+   * @return void
+   */
+  public function setData($data) {
+    $this->data = $data;
+  }
+
+  /**
+   * Getter Data
+   *
+   * @return mixed
+   */
+  public function getData() {
+    return $this->data;
+  }
+  
   /**
 	 * Get the properties of our class as strings
 	 *
 	 * @return array
 	 */
   function getProps() {
-    $props = array();
-    $props["data"] = "str xml|data pattern|[^\\s]+";
+    $props = parent::getProps();
+    $props["data"] = "str xml|data pattern|[0-9]{1,8}|([0-9]{9,14}|[0-9]{14,14}\\.[0-9]+)([+\\-][0-9]{1,4})?";
     return $props;
   }
 
@@ -36,32 +55,29 @@ class CCDA_cs extends CCDA_Datatype_Voc {
    * @return nothing
    */
   function test() {
-    if(get_class($this) !== "CCDA_cs") {
-      return parent::test();
-    }
 
     $tabTest = array();
+
     /**
-     * Test avec un valeur null
+     * Test avec une valeur null
      */
 
     $tabTest[] = $this->sample("Test avec une valeur null", "Document invalide");
-
     /*-------------------------------------------------------------------------------------*/
+
     /**
-     * Test avec un valeur erronée
+     * Test avec un use erronée
      */
 
-    $this->setData(" ");
+    $this->setData("TESTEST");
     $tabTest[] = $this->sample("Test avec une valeur erronée", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec un valeur bonne
+     * Test avec une valeur bonne
      */
 
-
-    $this->setData("test");
+    $this->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
     $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

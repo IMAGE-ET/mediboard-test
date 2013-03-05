@@ -3,7 +3,7 @@
 /**
  * $Id$
  *  
- * @category ${Module}
+ * @category CDA
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -23,29 +23,33 @@ class CCDAANYNonNull extends CCDAANY {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["nullFlavor"] = "CCDANullFlavor attribute prohibited";
+    $props["nullFlavor"] = "CCDANullFlavor xml|attribute prohibited";
     return $props;
   }
 
   function test() {
-    $name = $this->getName();
-    $tabTest[$name] = array();
+
+    $tabTest = array();
     /**
      * Test avec un nullFlavor null
      */
-    $tabTest[$name][] = $this->sample("Test avec un nullFlavor null", "Document valide");
+    $tabTest[] = $this->sample("Test avec un nullFlavor null", "Document valide");
 
     /**
      * Test avec un nullFlavor bon
      */
-    $this->setNullFlavor("NP");
-    $tabTest[$name][] = $this->sample("Test avec un nullFlavor bon", "Document invalide");
+    $nullFlavor = new CCDANullFlavor();
+    $nullFlavor->setData("NP");
+    $this->setNullFlavor($nullFlavor);
+    $tabTest[] = $this->sample("Test avec un nullFlavor bon", "Document invalide");
 
     /**
      * Test avec un nullFlavor incorrect
      */
-    $this->setNullFlavor("TESTTEST");
-    $tabTest[$name][] = $this->sample("Test avec un nullFlavor incorrect", "Document invalide");
+
+    $nullFlavor->setData("TESTEST");
+    $this->setNullFlavor($nullFlavor);
+    $tabTest[] = $this->sample("Test avec un nullFlavor incorrect", "Document invalide");
 
     return $tabTest;
   }

@@ -10,38 +10,37 @@
  * @link     http://www.mediboard.org */
  
 /**
- * The Boolean type stands for the values of two-valued logic.
- * A Boolean value can be either true or
- * false, or, as any other value may be NULL.
+ * HL7 reserved identifiers are strings consisting only of
+ * (US-ASCII) letters, digits and hyphens, where the first
+ * character must be a letter. HL7 may assign these reserved
+ * identifiers as mnemonic identifiers for major concepts of
+ * interest to HL7.
  */
-class CCDA_bl extends CCDAANY {
-
+class CCDA_ruid extends CCDA_Datatype {
 
   public $data;
+
+  public function setData($data) {
+    $this->data = $data;
+  }
+
+  public function getData() {
+    return $this->data;
+  }
+
+  public function getValue() {
+    return $this->data;
+  }
+
   /**
 	 * Get the properties of our class as strings
 	 *
 	 * @return array
 	 */
   function getProps() {
-    parent::getProps();
-    $props["data"] = "booleen xml|data pattern|true|false";
+    $props = parent::getProps();
+    $props["data"] = "str xml|data pattern|[A-Za-z][A-Za-z0-9\\-]*";
     return $props;
-  }
-
-  /**
-   * Modifie la variable data
-   *
-   * @param String $data Data
-   *
-   * @return void
-   */
-  function setData($data) {
-    $this->data = $data;
-  }
-
-  function getData() {
-    return $this->data;
   }
 
   /**
@@ -59,13 +58,13 @@ class CCDA_bl extends CCDAANY {
     /**
      * Test avec une valeur bonne
      */
-    $this->setData("true");
+    $this->setData("HL7");
     $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
     /*-------------------------------------------------------------------------------------*/
     /**
      * Test avec une valeur incorrecte
      */
-    $this->setData("TESTTEST");
+    $this->setData("4TESTTEST");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
     /*-------------------------------------------------------------------------------------*/
 

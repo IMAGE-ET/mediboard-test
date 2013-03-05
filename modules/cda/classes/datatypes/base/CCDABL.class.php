@@ -3,7 +3,7 @@
 /**
  * $Id$
  *  
- * @category ${Module}
+ * @category CDA
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -25,7 +25,69 @@ class CCDABL extends CCDAANY {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["value"] = "CCDA_bl notNullFlavor";
+    $props["value"] = "CCDA_bl xml|attribute notNullFlavor";
     return $props;
+  }
+
+  function setValue($value) {
+    $this->value = $value;
+  }
+
+  function test() {
+    $tabTest = array();
+    /**
+     * Test avec une valeur null
+     */
+
+    $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * Test avec une valeur null et avec un nullFlavor
+     */
+    $nullFlavor = new CCDANullFlavor();
+    $nullFlavor->setData("NP");
+    $this->setNullFlavor($nullFlavor);
+
+    $tabTest[] = $this->sample("Test avec une valeur null et avec un nullFlavor", "Document valide");
+    $this->setNullFlavor(null);
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * Test avec une valeur erroné
+     */
+    $bl = new CCDA_bl();
+    $bl->setData("TESTTEST");
+    $this->setValue($bl);
+
+    $tabTest[] = $this->sample("Test avec une valeur erronée", "Document invalide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * Test avec une valeur bonne
+     */
+
+    $bl->setData("true");
+    $this->setValue($bl);
+
+    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * Test avec une valeur bonne et avec un nullflavor
+     */
+
+    $bl->setData("true");
+    $this->setValue($bl);
+    $this->setNullFlavor($nullFlavor);
+    $tabTest[] = $this->sample("Test avec une valeur bonne et un nullflavor", "Document invalide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    return $tabTest;
   }
 }

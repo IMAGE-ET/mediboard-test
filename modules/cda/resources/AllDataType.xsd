@@ -43,10 +43,6 @@
   <!--
         Instantiated templates
       -->
-  <xs:element name="ANY" type="ANY"></xs:element>
-  <xs:element name="ANYNonNull" type="ANYNonNull"></xs:element>
-  <xs:element name="cs" type="cs"></xs:element>
-  <xs:element name="AddressPartType" type="AddressPartType"></xs:element>
   <xs:complexType name="ANY">
     <xs:annotation>
       <xs:documentation>

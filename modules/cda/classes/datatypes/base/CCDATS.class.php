@@ -10,13 +10,33 @@
  * @link     http://www.mediboard.org */
  
 /**
- * The BooleanNonNull type is used where a Boolean cannot
- * have a null value. A Boolean value can be either
- * true or false.
+ * A quantity specifying a point on the axis of natural time.
+ * A point in time is most often represented as a calendar
+ * expression.
  */
-class CCDABN extends CCDAANYNonNull {
+class CCDATS extends CCDAQTY{
 
   public $value;
+
+  /**
+   * Setter value
+   *
+   * @param \CCDA_ts $value CCDA_ts
+   *
+   * @return void
+   */
+  public function setValue($value) {
+    $this->value = $value;
+  }
+
+  /**
+   * Getter value
+   *
+   * @return mixed
+   */
+  public function getValue() {
+    return $this->value;
+  }
 
   /**
 	 * Get the properties of our class as strings
@@ -25,31 +45,29 @@ class CCDABN extends CCDAANYNonNull {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["value"] = "CCDA_bn xml|attribute";
+    $props["value"] = "CCDA_ts xml|attribute";
     return $props;
-  }
-
-  function setValue($value) {
-    $this->value = $value;
   }
 
   function test() {
     $tabTest = array();
+
     /**
      * Test avec une valeur null
      */
-    $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
+
+    $tabTest[] = $this->sample("Test avec les valeurs null", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec une valeur erroné
+     * Test avec une valeur incorrecte
      */
-    $bn = new CCDA_bn();
-    $bn->setData("TESTTEST");
-    $this->setValue($bn);
 
-    $tabTest[] = $this->sample("Test avec une valeur erronée", "Document invalide");
+    $ts = new CCDA_ts();
+    $ts->setData("TESTTEST");
+    $this->setValue($ts);
+    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -57,9 +75,8 @@ class CCDABN extends CCDAANYNonNull {
      * Test avec une valeur bonne
      */
 
-    $bn->setData("true");
-    $this->setValue($bn);
-
+    $ts->setData("24141331462095.812975314545697850652375076363185459409261232419230495159675586");
+    $this->setValue($ts);
     $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

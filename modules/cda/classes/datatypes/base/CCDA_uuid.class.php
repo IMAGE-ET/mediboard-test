@@ -10,38 +10,41 @@
  * @link     http://www.mediboard.org */
  
 /**
- * The Boolean type stands for the values of two-valued logic.
- * A Boolean value can be either true or
- * false, or, as any other value may be NULL.
+ * A DCE Universal Unique Identifier is a globally unique
+ * string consisting of 5 groups of upper- or lower-case
+ * hexadecimal digits having 8, 4, 4, 4, and 12 places
+ * respectively. UUIDs are assigned using Ethernet MAC
+ * addresses, the point in time of creation and some random
+ * components. This mix is believed to generate sufficiently
+ * unique identifiers without any organizational policy for
+ * identifier assignment (in fact this piggy-backs on the
+ * organization of MAC address assignment.)
  */
-class CCDA_bl extends CCDAANY {
-
+class CCDA_uuid extends CCDA_Datatype {
 
   public $data;
+
+  public function setData($data) {
+    $this->data = $data;
+  }
+
+  public function getData() {
+    return $this->data;
+  }
+
+  public function getValue() {
+    return $this->data;
+  }
+
   /**
 	 * Get the properties of our class as strings
 	 *
 	 * @return array
 	 */
   function getProps() {
-    parent::getProps();
-    $props["data"] = "booleen xml|data pattern|true|false";
+    $props = parent::getProps();
+    $props["data"] = "str xml|data pattern|[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}";
     return $props;
-  }
-
-  /**
-   * Modifie la variable data
-   *
-   * @param String $data Data
-   *
-   * @return void
-   */
-  function setData($data) {
-    $this->data = $data;
-  }
-
-  function getData() {
-    return $this->data;
   }
 
   /**
@@ -59,7 +62,7 @@ class CCDA_bl extends CCDAANY {
     /**
      * Test avec une valeur bonne
      */
-    $this->setData("true");
+    $this->setData("azer1254-azer-azer-azer-Azert1257825");
     $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
     /*-------------------------------------------------------------------------------------*/
     /**

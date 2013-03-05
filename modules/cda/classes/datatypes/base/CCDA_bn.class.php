@@ -3,14 +3,14 @@
 /**
  * $Id$
  *  
- * @category ${Module}
+ * @category CDA
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
  
 /**
- * Description
+ * CCDA_bn class
  */
 class CCDA_bn extends CCDA_bl {
 
@@ -20,8 +20,36 @@ class CCDA_bn extends CCDA_bl {
 	 * @return array
 	 */
   function getProps() {
-    $props = parent::getProps();
-    $props["value"] = "booleen notnull";
+    parent::getProps();
+    $props["data"] = "booleen xml|data notnull";
     return $props;
+  }
+
+  /**
+   * Fonction permettant de tester la classe
+   *
+   * @return void
+   */
+  function test() {
+    $tabTest = array();
+    /**
+     * Test avec une valeur null
+     */
+    $tabTest[] = $this->sample("Test avec une valeur null", "Document invalide");
+    /*-------------------------------------------------------------------------------------*/
+    /**
+     * Test avec une valeur bonne
+     */
+    $this->setData("true");
+    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    /*-------------------------------------------------------------------------------------*/
+    /**
+     * Test avec une valeur incorrecte
+     */
+    $this->setData("TESTTEST");
+    $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
+    /*-------------------------------------------------------------------------------------*/
+
+    return $tabTest;
   }
 }

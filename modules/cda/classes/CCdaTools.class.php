@@ -232,4 +232,58 @@ class CCdaTools {
     $node = $xpath->queryUniqueNode("//xs:*[@name='".$name."']");
     return $dom->saveXML($node);
   }
+
+  function createTestSchemaClasses() {
+    $nameFile = "modules/cda/resources/TestClasses.xsd";
+    $dom = new DOMDocument();
+    $dom->load($nameFile);
+
+    $file = glob("modules/cda/classes/datatypes/{voc,base}/*.class.php", GLOB_BRACE);
+
+    foreach ($file as $_file) {
+      $element = $dom->createElement("xs:element");
+      $_file = explode(".", $_file)[0];
+      $_file = substr($_file, strrpos($_file, "/")+1);
+      $instanceClass = new $_file;
+      $_file = $instanceClass->getName();
+      $element->setAttribute("name", $_file);
+      $element->setAttribute("type", $_file);
+      $dom->documentElement->appendChild($element);
+      $dom->documentElement->appendChild($dom->createTextNode("\n"));
+    }
+    file_put_contents($nameFile, $dom->saveXML());
+  }
+
+  function syntheseTest($result) {
+    $resultSynth = array("total" => 0,
+                         "succes" => 0,
+                         "erreur" => array());
+    foreach ($result as $keyClass => $valueClass) {
+      foreach ($valueClass as $_test) {
+        if ($_test["resultat"] === $_test["resultatAttendu"]) {
+          $resultSynth["succes"]++;
+        }
+        else {
+          array_push($resultSynth["erreur"], $keyClass);
+        }
+        $resultSynth["total"]++;
+      }
+    }
+    $resultSynth["erreur"] = array_unique($resultSynth["erreur"]);
+    return $resultSynth;
+  }
+
+  function createTest() {
+    $file = glob("modules/cda/classes/datatypes/{voc,base}/*.class.php", GLOB_BRACE);
+
+    $result = array();
+    foreach ($file as $_file) {
+      $_file = explode(".", $_file)[0];
+      $_file = substr($_file, strrpos($_file, "/")+1);
+      $class = new $_file;
+      $result[$class->getName()] = $class->test();
+    }
+    return $result;
+
+  }
 }

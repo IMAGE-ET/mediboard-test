@@ -10,13 +10,38 @@
  * @link     http://www.mediboard.org */
  
 /**
- * The BooleanNonNull type is used where a Boolean cannot
- * have a null value. A Boolean value can be either
- * true or false.
+ * A telecommunications address  specified according to
+ * Internet standard RFC 1738
+ * [http://www.ietf.org/rfc/rfc1738.txt]. The
+ * URL specifies the protocol and the contact point defined
+ * by that protocol for the resource.  Notable uses of the
+ * telecommunication address data type are for telephone and
+ * telefax numbers, e-mail addresses, Hypertext references,
+ * FTP references, etc.
  */
-class CCDABN extends CCDAANYNonNull {
+class CCDAURL extends CCDAANY {
 
   public $value;
+
+  /**
+   * Setter value
+   *
+   * @param \String $value String
+   *
+   * @return void
+   */
+  public function setValue($value) {
+    $this->value = $value;
+  }
+
+  /**
+   * Getter value
+   *
+   * @return CCDA_url
+   */
+  public function getValue() {
+    return $this->value;
+  }
 
   /**
 	 * Get the properties of our class as strings
@@ -25,41 +50,41 @@ class CCDABN extends CCDAANYNonNull {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["value"] = "CCDA_bn xml|attribute";
+    $props["value"] = "url xml|attribute";
     return $props;
   }
 
-  function setValue($value) {
-    $this->value = $value;
-  }
-
+  /**
+   * fonction permettant de tester la validité de la classe
+   *
+   * @return nothing
+   */
   function test() {
+
     $tabTest = array();
     /**
      * Test avec une valeur null
      */
+
     $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
-
     /**
-     * Test avec une valeur erroné
+     * Test avec une valeur erronée
      */
-    $bn = new CCDA_bn();
-    $bn->setData("TESTTEST");
-    $this->setValue($bn);
 
+    $url = new CCDA_url();
+    $url->setData(":::$:!:");
+    $this->setValue($url);
     $tabTest[] = $this->sample("Test avec une valeur erronée", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
-
     /**
      * Test avec une valeur bonne
      */
 
-    $bn->setData("true");
-    $this->setValue($bn);
-
+    $url->setData("test");
+    $this->setValue($url);
     $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

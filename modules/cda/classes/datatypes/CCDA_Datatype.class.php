@@ -3,7 +3,7 @@
 /**
  * $Id$
  *  
- * @category ${Module}
+ * @category CDA
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -18,7 +18,13 @@ class CCDA_Datatype {
   function validate() {
 
     $domDataType = $this->toXML();
-    return $domDataType->schemaValidate("modules/cda/resources/AllDataType.xsd");
+    return @$domDataType->schemaValidate("modules/cda/resources/TestClasses.xsd");
+  }
+
+  function getProps() {
+    $props = array();
+
+    return $props;
   }
 
   function getName() {
@@ -58,22 +64,44 @@ class CCDA_Datatype {
 
     $spec = $this->getSpecs();
 
-
     foreach ($spec as $key => $value) {
-      if (CMbArray::get($value, "attribute")) {
-        if (empty($this->$key)) {
-          continue;
-        }
-        $dom->getElementsByTagName($name)->item(0)->appendChild($dom->createAttribute($key));
-        $dom->getElementsByTagName($name)->item(0)->attributes->getNamedItem($key)->nodeValue = $this->$key;
-      }
-      else {
-        if (CMbArray::get($value, "data")) {
-          $dom->getElementsByTagName($name)->item(0)->nodeValue = $this->data;
-        }
+      switch ($value["xml"]) {
+        case "attribute":
+          $classInstance = $this->$key;
+          if (empty($classInstance)) {
+            continue;
+          }
+          $dom->getElementsByTagName($name)->item(0)->appendChild($dom->createAttribute($key));
+          $dom->getElementsByTagName($name)->item(0)->attributes->getNamedItem($key)->nodeValue = $classInstance->getData();
+
+          break;
+        case "data":
+          $dom->getElementsByTagName($name)->item(0)->nodeValue = $this->getData();
+          break;
+        case "element":
+          $classInstance = $this->$key;
+          if (empty($classInstance)) {
+            continue;
+          }
+          $xmlClass = $classInstance->toXML();
+
+          $element = $dom->createElement($key);
+          foreach ($xmlClass->firstChild->childNodes as $_child) {
+            $element->appendChild($dom->importNode($_child, true));
+          }
+          foreach ($xmlClass->firstChild->attributes as $_attrib) {
+            $element->setAttributeNode($dom->importNode($_attrib, true));
+          }
+
+          $dom->getElementsByTagName($name)->item(0)->appendChild($element);
+          break;
       }
     }
-    //mbTrace($dom->saveXML());
+
+    /*if (get_class($this) === "CCDATEL") {
+      mbTrace($dom->saveXML());
+    }*/
+
     return $dom;
   }
 
@@ -82,7 +110,8 @@ class CCDA_Datatype {
     $arrayReturn = array("description" => $description,
                          "resultatAttendu" => $resultAttendu,
                          "resultat" => "");
-    $result = @$this->validate();
+    $result = $this->validate();
+
     if ($result) {
       $arrayReturn["resultat"] = "Document valide";
     }
