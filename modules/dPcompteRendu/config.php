@@ -21,6 +21,9 @@ $dPconfig["dPcompteRendu"] = array (
     "check_to_empty_field" => "1",
     "default_font" => "Georgia",
     "default_size" => "small",
-    "dompdf_host" => "0"
+    "dompdf_host" => "0",
+    "days_to_lock" => array(
+      "base" => "30",
+    )
   ),
 );

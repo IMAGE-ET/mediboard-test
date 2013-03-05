@@ -33,7 +33,7 @@
   {{/if}}
   
   <td class="narrow button">
-    <button class="{{if $_operation->_ref_consult_anesth->_ref_consultation->_id}}print{{else}}warning{{/if}}" type="button"
+    <button class="{{if $_operation->_ref_consult_anesth->_id}}print{{else}}warning{{/if}}" type="button"
     onclick="
     {{if $offline}}
       var fiche = $('fiche_anesth_{{$_operation->_id}}');

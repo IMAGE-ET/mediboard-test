@@ -19,7 +19,7 @@ $target_class    = CValue::get("target_class");
 $force_fast_edit = CValue::get("force_fast_edit", 0);
 
 // Faire ici le test des différentes variables dont on a besoin
-$compte_rendu = new CCompteRendu;
+$compte_rendu = new CCompteRendu();
 
 // Modification d'un document
 if ($compte_rendu_id) {
@@ -58,7 +58,7 @@ else {
   }
   
   // On fournit la cible
-  if ($target_id && $target_class){
+  if ($target_id && $target_class) {
     $compte_rendu->object_id = $target_id;
     $compte_rendu->object_class = $target_class;
   }
@@ -102,49 +102,50 @@ $compte_rendu->loadRefsFwd();
 $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;  
 
+$curr_user = CMediusers::get();
+
 // Calcul du user concerné
-$user = new CMediusers();
-$user->load(CAppUI::$user->_id);
+$user = $curr_user;
 
 // Chargement dans l'ordre suivant pour les listes de choix si null :
 // - user courant
 // - anesthésiste
 // - praticien de la consultation
-
 if (!$user->isPraticien()) {
+  $user = new CMediusers();
+  $user_id = null;
   if ($object instanceof CConsultAnesth) {
     $operation = $object->loadRefOperation();
     $anesth = $operation->_ref_anesth;
-    $user->_id = null;
+    $user_id = null;
     if ($operation->_id && $anesth->_id) {
-      $user->_id = $anesth->_id;
+      $user_id = $anesth->_id;
     }
     
-    if ($user->_id == null)
-      $user->_id = $object->_ref_consultation->_praticien_id;
+    if ($user_id == null)
+      $user_id = $object->_ref_consultation->_praticien_id;
   }
   if ($object instanceof CCodable) {
-    $user->_id = $object->_praticien_id;
+    $user_id = $object->_praticien_id;
   }
+
+  $user->load($user_id);
 }
 
-$user->load($user->_id);
 $user->loadRefFunction();
 
 // Chargement des catégories
 $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
 
 // Décompte des imprimantes disponibles pour l'impression serveur
-$user_printers = CMediusers::get();
-$function      = $user_printers->loadRefFunction();
-$nb_printers   = $function->countBackRefs("printers");
+$nb_printers   = $curr_user->loadRefFunction()->countBackRefs("printers");
 
 // Gestion du template
 $templateManager = new CTemplateManager($_GET);
 $templateManager->isModele = false;
 $object->fillTemplate($templateManager);
 $templateManager->document = $compte_rendu->_source;
-$templateManager->loadHelpers($user->_id, $compte_rendu->object_class, CAppUI::$user->function_id);
+$templateManager->loadHelpers($user->_id, $compte_rendu->object_class, $curr_user->function_id);
 $templateManager->loadLists($user->_id);
 $templateManager->applyTemplate($compte_rendu);
 
@@ -168,6 +169,32 @@ if ($isCourrier) {
   $destinataires = CDestinataire::$destByClass;
 }
 
+$can_lock = false;
+$is_locked = false;
+
+if ($curr_user->isAdmin()) {
+  $can_lock = true;
+}
+else {
+  // Droit de lock du fichier
+  $can_lock = !$compte_rendu->_id || ($curr_user->_id == $compte_rendu->author_id);
+
+  // Vérification de la date de dernière modification (lock si trop ancien et pas admin)
+  if ($compte_rendu->_id) {
+    $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
+    $days = isset($days[$compte_rendu->object_class]) ?
+      $days[$compte_rendu->object_class] : $days["base"];
+
+    $last_log = $compte_rendu->_ref_content->loadLastLogForField("content");
+    if (mbDaysRelative($last_log->date, mbDateTime()) > $days) {
+      $is_locked = true;
+    }
+  }
+  if ($is_locked || (!$can_lock && $compte_rendu->valide)) {
+    $templateManager->printMode = true;
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -183,6 +210,7 @@ $smarty->assign('object_class'  , CValue::get("object_class", $compte_rendu->obj
 $smarty->assign("nb_printers"   , $nb_printers);
 $smarty->assign("pack_id"       , $pack_id);
 $smarty->assign("destinataires" , $destinataires);
+$smarty->assign("can_lock"      , $can_lock);
 
 preg_match_all("/(:?\[\[Texte libre - ([^\]]*)\]\])/i",$compte_rendu->_source, $matches);
 
@@ -197,7 +225,7 @@ if (isset($compte_rendu->_ref_file->_id)) {
 
 $smarty->assign("textes_libres", $templateManager->textes_libres);
 
-$exchange_source = CExchangeSource::get("mediuser-".CAppUI::$user->_id);
+$exchange_source = CExchangeSource::get("mediuser-".$curr_user->_id);
 $smarty->assign("exchange_source", $exchange_source, "smtp");
 
 // Ajout d'entête / pied de page à la volée
@@ -206,10 +234,10 @@ $footers = array();
 
 if (CAppUI::conf("dPcompteRendu CCompteRendu header_footer_fly") && $modele_id) {
   if (!$compte_rendu->header_id) {
-    $headers = CCompteRendu::loadAllModelesFor(CAppUI::$user->_id, "prat", $compte_rendu->object_class, "header");
+    $headers = CCompteRendu::loadAllModelesFor($curr_user->_id, "prat", $compte_rendu->object_class, "header");
   }
   if (!$compte_rendu->footer_id) {
-    $footers = CCompteRendu::loadAllModelesFor(CAppUI::$user->_id, "prat", $compte_rendu->object_class, "footer");
+    $footers = CCompteRendu::loadAllModelesFor($curr_user->_id, "prat", $compte_rendu->object_class, "footer");
   }
 }
 
@@ -263,4 +291,3 @@ else {
   $smarty->assign("prevnext", $prevnext);
   $smarty->display("edit_compte_rendu.tpl");
 }
-?>

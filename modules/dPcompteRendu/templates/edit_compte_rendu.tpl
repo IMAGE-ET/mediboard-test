@@ -268,6 +268,14 @@ function saveAndMerge() {
   form.onsubmit();
 }
 
+function toggleLock(button) {
+  var form = button.form;
+  $V(form.valide, $V(form.valide) == 1 ? 0 : 1);
+  var classes = Element.classNames(button);
+  classes.flip('lock', 'unlock');
+  form.onsubmit();
+}
+
 Main.add(function(){
   if (window.pdf_thumbnails && window.Preferences.pdf_and_thumbs == 1) {
     PageFormat.init(getForm("editFrm"));
@@ -434,6 +442,7 @@ Main.add(function(){
   {{mb_field object=$compte_rendu field="modele_id" hidden=1}}
   {{mb_field object=$compte_rendu field="font" hidden=1}}
   {{mb_field object=$compte_rendu field="size" hidden=1}}
+  {{mb_field object=$compte_rendu field="valide" hidden=1}}
   
   <table class="form">
     <tr>
@@ -473,7 +482,7 @@ Main.add(function(){
       </label>
       {{if $pdf_thumbnails && $app->user_prefs.pdf_and_thumbs}}
         &mdash;
-        <button class="pagelayout" type="button" title="Mise en page"
+        <button type="button" class="pagelayout" title="Mise en page"
                 onclick="save_page_layout(); modal($('page_layout'), {
                 closeOnClick: $('page_layout').down('button.tick')
                 });">
@@ -484,12 +493,16 @@ Main.add(function(){
           <button class="hslip" type="button" title="Afficher / Masquer les vignettes"
                   onclick = "Thumb.choixAffiche(1);">Vignettes</button>
         {{/if}}
-
         <div id="page_layout" style="display: none;">
-          {{include file="inc_page_layout.tpl" droit=1}}
+          {{mb_include module=compteRendu template=inc_page_layout droit=1}}
           <button class="tick" type="button">{{tr}}Validate{{/tr}}</button>
           <button class="cancel" type="button" onclick="cancel_page_layout();">{{tr}}Cancel{{/tr}}</button>
         </div>
+      {{/if}}
+      {{if $can_lock}}
+        &mdash;
+        <button type="button" class="{{if $compte_rendu->valide}}unlock{{else}}lock{{/if}} notext"
+                onclick="toggleLock(this)" title="Verrouiller / Déverouiller le document"></button>
       {{/if}}
     </th>
   </tr>
