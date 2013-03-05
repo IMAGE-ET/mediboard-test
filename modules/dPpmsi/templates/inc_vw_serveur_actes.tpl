@@ -74,6 +74,14 @@ Main.add(function () {
     <th>{{mb_label object=$curr_op field=prothese}}</th>
     <td colspan="3">{{mb_value object=$curr_op field=prothese}}</td>
   </tr>
+  <tr>
+    <th>{{mb_label object=$curr_op field=ASA}}</th>
+    <td colspan="3">{{mb_value object=$curr_op field=ASA}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$curr_op field=type_anesth}}</th>
+    <td colspan="3">{{mb_value object=$curr_op field=type_anesth}}</td>
+  </tr>  
   {{if $curr_op->_ref_consult_anesth->consultation_anesth_id}}
   <tr>
     <td class="button" colspan="4">Consultation de pré-anesthésie le {{$curr_op->_ref_consult_anesth->_ref_plageconsult->date|date_format:"%A %d %b %Y"}}
