@@ -272,13 +272,12 @@ Main.add(function(){
     <tr>
       <td></td>
       <td colspan="3">
+        <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
+
         {{if $ex_field->_id}}
-          <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
           <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le champ ',objName:'{{$ex_field->_view|smarty:nodefaults|JSAttribute}}'}, {onComplete: ExClass.edit.curry('{{$ex_class->_id}}')})">
             {{tr}}Delete{{/tr}}
           </button>
-        {{else}}
-          <button type="submit" class="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>

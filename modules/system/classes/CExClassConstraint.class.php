@@ -18,19 +18,13 @@ class CExClassConstraint extends CMbObject {
   public $operator;
   public $value;
 
-  /**
-   * @var CExClass
-   */
+  /** @var CExClass */
   public $_ref_ex_class_event;
 
-  /**
-   * @var CMbObject
-   */
+  /** @var CMbObject */
   public $_ref_target_object;
 
-  /**
-   * @var CMbFieldSpec
-   */
+  /** @var CMbFieldSpec */
   public $_ref_target_spec;
 
   function getSpec() {

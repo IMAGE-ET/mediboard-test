@@ -25,24 +25,16 @@ class CExObject extends CMbMetaObject {
   public $_specs_already_set = false;
   public $_native_views;
   
-  /**
-   * @var CExClass
-   */
+  /** @var CExClass */
   public $_ref_ex_class;
   
-  /**
-   * @var CMbObject
-   */
+  /** @var CMbObject */
   public $_ref_reference_object_1;
   
-  /**
-   * @var CMbObject
-   */
+  /** @var CMbObject */
   public $_ref_reference_object_2;
   
-  /**
-   * @var CGroups
-   */
+  /** @var CGroups */
   public $_ref_group;
   
   public $_reported_fields = array();

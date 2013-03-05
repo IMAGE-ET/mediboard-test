@@ -94,14 +94,12 @@ Main.add(function(){
     <tr>
       <th></th>
       <td>
+        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+
         {{if $object->_id}}
-          <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-          
           <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax: true, typeName:'', objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}'})">
             {{tr}}Delete{{/tr}}
           </button>
-        {{else}}
-          <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
       <th>

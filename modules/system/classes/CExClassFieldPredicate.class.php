@@ -17,14 +17,10 @@ class CExClassFieldPredicate extends CMbObject {
   public $value;
   public $_value;
 
-  /**
-   * @var CExClassField
-   */
+  /** @var CExClassField */
   public $_ref_ex_class_field;
 
-  /**
-   * @var CExClassFieldProperty
-   */
+  /** @var CExClassFieldProperty */
   public $_ref_properties;
 
   static $_load_lite = false;

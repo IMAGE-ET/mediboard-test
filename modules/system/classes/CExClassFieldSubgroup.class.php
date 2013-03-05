@@ -22,34 +22,22 @@ class CExClassFieldSubgroup extends CMbObject {
   public $coord_width;
   public $coord_height;
 
-  /**
-   * @var CExClassFieldSubgroup|CExClassFieldGroup
-   */
+  /** @var CExClassFieldSubgroup|CExClassFieldGroup */
   public $_ref_parent;
 
-  /**
-   * @var CExClassFieldPredicate
-   */
+  /** @var CExClassFieldPredicate */
   public $_ref_predicate;
 
-  /**
-   * @var CExClassFieldSubgroup[]
-   */
+  /** @var CExClassFieldSubgroup[] */
   public $_ref_children_groups;
 
-  /**
-   * @var CExClassField[]
-   */
+  /** @var CExClassField[] */
   public $_ref_children_fields;
 
-  /**
-   * @var CExClassMessage[]
-   */
+  /** @var CExClassMessage[] */
   public $_ref_children_messages;
 
-  /**
-   * @var CExClassFieldProperty[]
-   */
+  /** @var CExClassFieldProperty[] */
   public $_ref_properties;
 
   public $_default_properties;

@@ -91,13 +91,12 @@ Main.add(function(){
     <tr>
       <th></th>
       <td colspan="3">
+        <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
+
         {{if $ex_subgroup->_id}}
-          <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
           <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le sous groupe ',objName:'{{$ex_subgroup->_view|smarty:nodefaults|JSAttribute}}'})">
             {{tr}}Delete{{/tr}}
           </button>
-        {{else}}
-          <button type="submit" class="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>

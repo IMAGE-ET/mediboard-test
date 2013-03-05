@@ -38,7 +38,7 @@ if ($ex_class_event->_id) {
 
   $unicity_spec->_locales["host"] = "Unique pour <strong>".CAppUI::tr($ex_class_event->host_class)."</strong>";
 
-  if ($ex_class_event->host_class != "CMbObject") {
+  if ($ex_class_event->host_class != "CMbObject" && $ex_class_event->host_class) {
     $host_object = new $ex_class_event->host_class;
 
     $reference1_class = $ex_class_event->_host_class_options["reference1"][0];

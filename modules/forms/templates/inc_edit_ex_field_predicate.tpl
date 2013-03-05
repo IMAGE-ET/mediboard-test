@@ -144,13 +144,12 @@ Main.add(function(){
     <tr>
       <td></td>
       <td>
+        <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
+
         {{if $ex_field_predicate->_id}}
-          <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
           <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'le prédicat ',objName:'{{$ex_field_predicate->_view|smarty:nodefaults|JSAttribute}}'})">
             {{tr}}Delete{{/tr}}
           </button>
-        {{else}}
-          <button type="submit" class="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>

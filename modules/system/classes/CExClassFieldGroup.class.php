@@ -16,46 +16,30 @@ class CExClassFieldGroup extends CMbObject {
   public $name; // != object_class, object_id, ex_ClassName_event_id,
   public $rank;
 
-  /**
-   * @var CExClass
-   */
+  /** @var CExClass */
   public $_ref_ex_class;
 
-  /**
-   * @var CExClassField[]
-   */
+  /** @var CExClassField[] */
   public $_ref_fields;
 
-  /**
-   * @var CExClassMessage[]
-   */
+  /** @var CExClassMessage[] */
   public $_ref_messages;
 
-  /**
-   * @var CExClassHostField[]
-   */
+  /** @var CExClassHostField[] */
   public $_ref_host_fields;
 
-  /**
-   * @var CExClassFieldSubgroup[]
-   */
+  /** @var CExClassFieldSubgroup[] */
   public $_ref_subgroups;
 
-  /**
-   * @var CExClassField[]
-   */
+  /** @var CExClassField[] */
   public $_ref_root_fields;
 
-  /**
-   * @var CExClassMessage[]
-   */
+  /** @var CExClassMessage[] */
   public $_ref_root_messages;
   
   public $_move;
 
-  /**
-   * @var CExClassField[]
-   */
+  /** @var CExClassField[] */
   static $_fields_cache = array();
 
   function getSpec() {

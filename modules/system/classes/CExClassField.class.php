@@ -49,44 +49,28 @@ class CExClassField extends CExListItemsOwner {
 
   public $_triggered_data;
 
-  /**
-   * @var CExClassFieldGroup
-   */
+  /** @var CExClassFieldGroup */
   public $_ref_ex_group;
 
-  /**
-   * @var CExClass
-   */
+  /** @var CExClass */
   public $_ref_ex_class;
 
-  /**
-   * @var CExClassFieldTranslation[]
-   */
+  /** @var CExClassFieldTranslation[] */
   public $_ref_translation;
 
-  /**
-   * @var CExClassFieldPredicate[]
-   */
+  /** @var CExClassFieldPredicate[] */
   public $_ref_predicates;
 
-  /**
-   * @var CExClassFieldProperty[]
-   */
+  /** @var CExClassFieldProperty[] */
   public $_ref_properties;
 
-  /**
-   * @var CExClassFieldPredicate
-   */
+  /** @var CExClassFieldPredicate */
   public $_ref_predicate;
 
-  /**
-   * @var CExConcept
-   */
+  /** @var CExConcept */
   public $_ref_concept;
 
-  /**
-   * @var CMbFieldSpec
-   */
+  /** @var CMbFieldSpec */
   public $_spec_object;
 
   public $_ex_class_id;

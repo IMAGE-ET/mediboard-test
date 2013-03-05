@@ -19,34 +19,22 @@ class CExClassEvent extends CMbObject {
   public $disabled;
   public $unicity;
 
-  /**
-   * @var CExClass
-   */
+  /** @var CExClass */
   public $_ref_ex_class;
 
-  /**
-   * @var CExClassConstraint[]
-   */
+  /** @var CExClassConstraint[] */
   public $_ref_constraints;
 
-  /**
-   * @var CExClassFieldTrigger[]
-   */
+  /** @var CExClassFieldTrigger[] */
   public $_ref_triggers;
 
-  /**
-   * @var CMbFieldSpec[]
-   */
+  /** @var CMbFieldSpec[] */
   public $_host_class_fields;
 
-  /**
-   * @var array
-   */
+  /** @var array */
   public $_host_class_options;
 
-  /**
-   * @var array
-   */
+  /** @var array */
   public $_available_native_views;
   
   static $_extendable_classes = array(
@@ -324,99 +312,108 @@ class CExClassEvent extends CMbObject {
     }
   }
 
+  static function getAvailableFieldsOfObject(CMbObject $object, $class_fields = null) {
+    if ($class_fields === null) {
+      $class_fields = $object->_specs;
+    }
+
+    foreach ($class_fields as $_field => $_spec) {
+      if ($_field == $object->_spec->key) {
+        unset($class_fields[$_field]);
+        continue;
+      }
+
+      /*if ($_spec instanceof CRefSpec && $_spec->meta) {
+        unset($class_fields[$_spec->meta]);
+        continue;
+      }*/
+
+      // LEVEL 1
+      if (($_field[0] === "_" && ($_spec->show === null || $_spec->show == 0)) || // form field
+        !($_spec->show === null || $_spec->show == 1) || // not shown
+        $_spec instanceof CRefSpec && $_spec->meta && !$class_fields[$_spec->meta] instanceof CEnumSpec // not a finite meta class field
+      ) {
+        unset($class_fields[$_field]);
+        continue;
+      }
+
+      // LEVEL 2
+      if ($_spec instanceof CRefSpec) {
+        // LEVEL 2 + Class list
+        if ($_spec->meta && $class_fields[$_spec->meta] instanceof CEnumSpec) {
+          unset($class_fields[$_field]);
+
+          // boucle sur les classes du enum
+          $classes = $class_fields[$_spec->meta]->_list;
+
+          foreach ($classes as $_class) {
+            $_key = "$_field.$_class";
+
+            $_target = new $_class;
+
+            $class_fields[$_key] = new CRefSpec($object->_class, $_field, "ref class|$_class");
+            $class_fields[$_key]->_subspecs = array();
+
+            foreach ($_target->_specs as $_subfield => $_subspec) {
+              if (!$_subfield || $_subfield === $_target->_spec->key) {
+                continue;
+              }
+
+              if ($_subfield[0] === "_" || // form field
+                !($_subspec->show === null || $_subspec->show == 1) || // not shown
+                $_subspec instanceof CRefSpec && $_subspec->meta && !$_target->_specs[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
+              ) {
+                continue;
+              }
+
+              $class_fields[$_key]->_subspecs[$_subfield] = $_subspec;
+            }
+          }
+        }
+
+        // LEVEL 2 + Single class
+        else {
+          $_key = $_field;
+          $class_fields[$_key]->_subspecs = array();
+
+          $_class = $_spec->class;
+          if (!$_class) {
+            continue;
+          }
+
+          $_target = new $_class;
+
+          foreach ($_target->_specs as $_subfield => $_subspec) {
+            if (!$_subfield || $_subfield === $_target->_spec->key) {
+              continue;
+            }
+
+            if ($_subfield[0] === "_" || // form field
+              !($_subspec->show === null || $_subspec->show == 1) || // not shown
+              $_subspec instanceof CRefSpec && $_subspec->meta && isset($object->_specs[$_subspec->meta]) && !$object->_specs[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
+            ) {
+              continue;
+            }
+
+            $class_fields[$_key]->_subspecs[$_subfield] = $_subspec;
+          }
+        }
+      }
+    }
+
+    return $class_fields;
+  }
+
   /**
    * @return CMbFieldSpec[]
    */
   function getAvailableFields(){
     $object = new $this->host_class;
+
+    $class_fields = self::getHostObjectSpecs($object);
+    $class_fields = self::getAvailableFieldsOfObject($object, $class_fields);
     
-    $this->_host_class_fields = self::getHostObjectSpecs($object);
-    
-    foreach ($this->_host_class_fields as $_field => $_spec) {
-      if ($_field == $object->_spec->key) {
-        unset($this->_host_class_fields[$_field]);
-        continue;
-      }
-      
-      /*if ($_spec instanceof CRefSpec && $_spec->meta) {
-        unset($this->_host_class_fields[$_spec->meta]);
-        continue;
-      }*/
-      
-      // LEVEL 1
-      if (($_field[0] === "_" && ($_spec->show === null || $_spec->show == 0)) || // form field
-          !($_spec->show === null || $_spec->show == 1) || // not shown
-          $_spec instanceof CRefSpec && $_spec->meta && !$this->_host_class_fields[$_spec->meta] instanceof CEnumSpec // not a finite meta class field
-          ) {
-        unset($this->_host_class_fields[$_field]);
-        continue;
-      }
-      
-      // LEVEL 2
-      if ($_spec instanceof CRefSpec) {        
-        // LEVEL 2 + Class list
-        if ($_spec->meta && $this->_host_class_fields[$_spec->meta] instanceof CEnumSpec) {
-          unset($this->_host_class_fields[$_field]);
-          
-          // boucle sur les classes du enum
-          $classes = $this->_host_class_fields[$_spec->meta]->_list;
-          
-          foreach ($classes as $_class) {
-            $_key = "$_field.$_class";
-            
-            $_target = new $_class;
-            
-            $this->_host_class_fields[$_key] = new CRefSpec($this->host_class, $_field, "ref class|$_class");
-            $this->_host_class_fields[$_key]->_subspecs = array();
-            
-            foreach ($_target->_specs as $_subfield => $_subspec) {
-              if (!$_subfield || $_subfield === $_target->_spec->key) {
-                continue;
-              }
-              
-              if ($_subfield[0] === "_" || // form field
-                  !($_subspec->show === null || $_subspec->show == 1) || // not shown
-                  $_subspec instanceof CRefSpec && $_subspec->meta && !$_target->_specs[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
-                  ) {
-                continue;
-              }
-              
-              $this->_host_class_fields[$_key]->_subspecs[$_subfield] = $_subspec;
-            }
-          }
-        }
-        
-        // LEVEL 2 + Single class
-        else {
-          $_key = $_field;
-          $this->_host_class_fields[$_key]->_subspecs = array();
-          
-          $_class = $_spec->class;
-          if (!$_class) {
-            continue;
-          }
-          
-          $_target = new $_class;
-          
-          foreach ($_target->_specs as $_subfield => $_subspec) {
-            if (!$_subfield || $_subfield === $_target->_spec->key) {
-              continue;
-            }
-            
-            if ($_subfield[0] === "_" || // form field
-                !($_subspec->show === null || $_subspec->show == 1) || // not shown
-                $_subspec instanceof CRefSpec && $_subspec->meta && isset($object->_specs[$_subspec->meta]) && !$object->_specs[$_subspec->meta] instanceof CEnumSpec // not a finite meta class field
-                ) {
-              continue;
-            }
-            
-            $this->_host_class_fields[$_key]->_subspecs[$_subfield] = $_subspec;
-          }
-        }
-      }
-    }
-    
-    return $this->_host_class_fields;
+    return $this->_host_class_fields = $class_fields;
   }
 
   /**

@@ -10,14 +10,10 @@
  */
 
 class CExListItemsOwner extends CMbObject {
-  /**
-   * @var CExListItem[]
-   */
+  /** @var CExListItem[] */
   public $_ref_items;
 
-  /**
-   * @var bool
-   */
+  /** @var bool */
   static $_order_list_items = true;
 
   /**

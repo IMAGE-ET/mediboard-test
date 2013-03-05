@@ -16,14 +16,10 @@ class CExClassFieldTrigger extends CMbObject {
   public $ex_class_triggered_id;
   public $trigger_value;
 
-  /**
-   * @var CExClassField
-   */
+  /** @var CExClassField */
   public $_ref_ex_class_field;
 
-  /**
-   * @var CExClassField
-   */
+  /** @var CExClassField */
   public $_ref_ex_class_triggered;
 
   function getSpec() {

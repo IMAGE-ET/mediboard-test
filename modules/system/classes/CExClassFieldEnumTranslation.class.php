@@ -17,6 +17,7 @@ class CExClassFieldEnumTranslation extends CMbObject {
   public $key;
   public $value;
 
+  /** @var CExClassField */
   public $_ref_ex_class_field;
 
   function getSpec() {

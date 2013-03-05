@@ -55,14 +55,15 @@
     <tr>
       <th></th>
       <td colspan="1">
+        <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
+
         {{if $ex_class_event->_id}}
-          <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
           <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'l\'évènement ',objName:'{{$ex_class_event->_view|smarty:nodefaults|JSAttribute}}'}, ExClass.edit.curry({{$ex_class_event->ex_class_id}}))">
             {{tr}}Delete{{/tr}}
           </button>
-          <button type="button" class="search" onclick="ExObject.preview({{$ex_class_event->ex_class_id}}, '{{$ex_class_event->host_class}}-0')">{{tr}}Preview{{/tr}}</button>
-        {{else}}
-          <button type="submit" class="submit">{{tr}}Create{{/tr}}</button>
+          <button type="button" class="search" onclick="ExObject.preview({{$ex_class_event->ex_class_id}}, '{{$ex_class_event->host_class}}-0')">
+            {{tr}}Preview{{/tr}}
+          </button>
         {{/if}}
       </td>
     </tr>

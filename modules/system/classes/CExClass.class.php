@@ -24,19 +24,13 @@ class CExClass extends CMbObject {
   
   public $pixel_positionning;
 
-  /**
-   * @var CExClassField[]
-   */
+  /** @var CExClassField[] */
   public $_ref_fields;
 
-  /**
-   * @var CExClassEvent[]
-   */
+  /** @var CExClassEvent[] */
   public $_ref_events;
 
-  /**
-   * @var CExClassFieldGroup[]
-   */
+  /** @var CExClassFieldGroup[] */
   public $_ref_groups;
   
   public $_fields_by_name;
@@ -46,9 +40,7 @@ class CExClass extends CMbObject {
   
   private $_latest_ex_object_cache = array();
 
-  /**
-   * @var self[]
-   */
+  /** @var self[] */
   static $_list_cache = array();
   
   static $_native_views = array(
@@ -69,6 +61,15 @@ class CExClass extends CMbObject {
   /** @var array */
   public $_out_of_grid;
 
+  /**
+   * Compare values with each other with a comparison operator
+   *
+   * @param string|float $a        Operand A
+   * @param strin        $operator Operator
+   * @param string|float $b        Operand B
+   *
+   * @return bool
+   */
   static function compareValues($a, $operator, $b) {
     // =|!=|>|>=|<|<=|startsWith|endsWith|contains default|=
     switch ($operator) {
@@ -294,7 +295,12 @@ class CExClass extends CMbObject {
 
     return $this->_latest_ex_object_cache[$object->_class][$object->_id] = $ex_object;
   }
-  
+
+  /**
+   * Get the CExObject class name
+   *
+   * @return string
+   */
   function getExClassName(){
     return "CExObject_{$this->_id}";
   }

@@ -17,14 +17,10 @@ class CExClassFieldProperty extends CMbMetaObject {
   public $_value;
   public $predicate_id;
   
-  /**
-   * @var CExClassField|CExClassMessage|CExClassFieldSubgroup
-   */
+  /** @var CExClassField|CExClassMessage|CExClassFieldSubgroup */
   public $_ref_object;
   
-  /**
-   * @var CExClassFieldPredicate
-   */
+  /** @var CExClassFieldPredicate */
   public $_ref_predicate;
   
   static $_style_types = array(
