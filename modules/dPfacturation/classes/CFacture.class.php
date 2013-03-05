@@ -260,13 +260,15 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function updateMontantsFacture() {
-//    $this->loadRefsObjects();
-//    $this->updateMontants();
+  /*    
+    $this->loadRefsObjects();
+    $this->updateMontants();
     $this->du_patient = $this->_montant_secteur1;
     $this->du_tiers   = $this->_montant_secteur2;
     if ($this->_id) {
       $this->store();
     }
+  */
   }
   
   /**
