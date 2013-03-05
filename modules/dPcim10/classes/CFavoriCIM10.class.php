@@ -9,9 +9,9 @@
  */
 
 class CFavoriCIM10 extends CMbObject {
-  var $favoris_id   = null;
-  var $favoris_code = null;
-  var $favoris_user = null;
+  public $favoris_id;
+  public $favoris_code;
+  public $favoris_user;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -21,10 +21,10 @@ class CFavoriCIM10 extends CMbObject {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["favoris_user"] = "ref notNull class|CUser";
-    $specs["favoris_code"] = "str notNull maxLength|16 seekable";
-    return $specs;
+    $props = parent::getProps();
+    $props["favoris_user"] = "ref notNull class|CUser";
+    $props["favoris_code"] = "str notNull maxLength|16 seekable";
+    return $props;
   }
 
   static function getTree($user_id) {

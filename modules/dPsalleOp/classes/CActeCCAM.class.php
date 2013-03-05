@@ -22,42 +22,42 @@ class CActeCCAM extends CActe {
   );
   
   // DB Table key
-  var $acte_id = null;
+  public $acte_id;
 
   // DB Fields
-  var $code_acte           = null;
-  var $code_activite       = null;
-  var $code_phase          = null;
-  var $execution           = null;
-  var $modificateurs       = null;
-  var $motif_depassement   = null;
-  var $commentaire         = null;
-  var $code_association    = null;
-  var $rembourse           = null;
-  var $charges_sup         = null;
-  var $regle               = null;
-  var $regle_dh            = null;
-  var $signe               = null;
-  var $sent                = null;
+  public $code_acte;
+  public $code_activite;
+  public $code_phase;
+  public $execution;
+  public $modificateurs;
+  public $motif_depassement;
+  public $commentaire;
+  public $code_association;
+  public $rembourse;
+  public $charges_sup;
+  public $regle;
+  public $regle_dh;
+  public $signe;
+  public $sent;
 
   // Form fields
-  var $_modificateurs     = array();
-  var $_rembex            = null;
-  var $_anesth            = null;
-  var $_anesth_associe    = null;
-  var $_linked_actes      = null;
-  var $_guess_association = null;
-  var $_guess_regle_asso  = null;
+  public $_modificateurs = array();
+  public $_rembex;
+  public $_anesth;
+  public $_anesth_associe;
+  public $_linked_actes;
+  public $_guess_association;
+  public $_guess_regle_asso;
 
   // Behaviour fields
-  var $_adapt_object = false;
-  var $_calcul_montant_base = false;
+  public $_adapt_object = false;
+  public $_calcul_montant_base = false;
   
   // Object references
-  var $_ref_code_ccam = null;
+  public $_ref_code_ccam;
   
-  var $_activite = null;
-  var $_phase = null;
+  public $_activite;
+  public $_phase;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -90,6 +90,7 @@ class CActeCCAM extends CActe {
   
   /**
    * Check the number of codes compared to the number of actes
+   *
    * @return string check-like message
    */
   function checkEnoughCodes() {

@@ -9,67 +9,64 @@
  */
 
 class CCodable extends CMbObject {
-
-  // DB Fields
-  var $codes_ccam          = null;
-  var $facture             = null; // Séjour facturé ou non
+  public $codes_ccam;
+  public $facture; // Séjour facturé ou non
 
   // Form fields
-  var $_acte_execution          = null;
-  var $_acte_depassement        = null;
-  var $_acte_depassement_anesth = null;
-  var $_ref_anesth              = null;
-  var $_anesth                  = null;
-  var $_associationCodesActes   = null;
-  var $_count_actes             = null;
-  var $_actes_non_cotes         = null;
+  public $_acte_execution;
+  public $_acte_depassement;
+  public $_acte_depassement_anesth;
+  public $_ref_anesth;
+  public $_anesth;
+  public $_associationCodesActes;
+  public $_count_actes;
+  public $_actes_non_cotes;
 
   // Abstract fields
-  var $_praticien_id       = null;
-  var $_coded              = 0;    // Initialisation à 0 => codable qui peut etre codé !
+  public $_praticien_id;
+  public $_coded = 0;    // Initialisation à 0 => codable qui peut etre codé !
 
   // Actes CCAM
-  var $_text_codes_ccam    = null;
-  var $_codes_ccam         = null;
-  var $_tokens_ccam        = null;
-  var $_ref_actes_ccam     = null;
+  public $_text_codes_ccam;
+  public $_codes_ccam;
+  public $_tokens_ccam;
+  public $_ref_actes_ccam;
 
-  /**
-   * @var CCodeCCAM[]
-   */
-  var $_ext_codes_ccam     = null;
+  /** @var CCodeCCAM[] */
+  public $_ext_codes_ccam;
 
   // Actes NGAP
-  var $_store_ngap     = null;
-  var $_ref_actes_ngap = null;
-  var $_codes_ngap     = null;
-  var $_tokens_ngap    = null;
+  public $_store_ngap;
+  public $_ref_actes_ngap;
+  public $_codes_ngap;
+  public $_tokens_ngap;
 
   // Actes Tarmed
-  var $_codes_tarmed      = null;
-  var $_ref_actes_tarmed  = null;
-  var $_tokens_tarmed     = null;
+  public $_codes_tarmed;
+  public $_ref_actes_tarmed;
+  public $_tokens_tarmed;
 
   // Actes Caisse
-  var $_codes_caisse      = null;
-  var $_ref_actes_caisse  = null;
-  var $_tokens_caisse     = null;
+  public $_codes_caisse;
+  public $_ref_actes_caisse;
+  public $_tokens_caisse;
 
   // Back references
-  var $_ref_actes = null;
-  var $_ref_prescriptions = null;
+  public $_ref_actes;
+  public $_ref_prescriptions;
 
   // Distant references
-  var $_ref_sejour = null;
-  var $_ref_patient = null;
-  var $_ref_praticien = null;
-  var $_ref_executant = null;
+  public $_ref_sejour;
+  public $_ref_patient;
+  public $_ref_praticien;
+  public $_ref_executant;
 
   // Behaviour fields
-  var $_delete_actes   = null;
+  public $_delete_actes;
 
   /**
    * Détruit les actes CCAM et NGAP
+   *
    * @return string Store-like message
    */
   function deleteActes() {
@@ -409,13 +406,13 @@ class CCodable extends CMbObject {
         //Classement des actes par ordre chonologique et par code
         $ljoin["consultation"] = "acte_tarmed.object_id = consultation.consultation_id";
         $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
-        
+
         $where["acte_tarmed.object_class"] = " = '$this->_class'";
         $where["acte_tarmed.object_id"] = " = '$this->_id'";
-  
+
         //Dans le cas ou la date est nulle on prend celle de la plage de consultation correspondante
         $order = "IFNULL(acte_tarmed.date, plageconsult.date) ,code ASC";
-  
+
         $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order, null, null, $ljoin );
       }
       //Dans les cas d'un séjour ou d'une intervention
@@ -425,7 +422,7 @@ class CCodable extends CMbObject {
         $order = "code ASC";
         $this->_ref_actes_tarmed = $acte_tarmed->loadList($where, $order);
       }
-      
+
       if (null === $this->_ref_actes_tarmed) {
         return;
       }
@@ -666,7 +663,7 @@ class CCodable extends CMbObject {
           $possible_acte->executant_id = CAppUI::pref("user_executant") ?
             CMediusers::get()->_id :
             $this->getExecutantId($possible_acte->code_activite);
-            
+
           $possible_acte->updateFormFields();
           $possible_acte->loadRefs();
           $possible_acte->getAnesthAssocie();
@@ -691,7 +688,7 @@ class CCodable extends CMbObject {
           $phase->_connected_acte = $possible_acte;
           if (!$possible_acte->_id) {
             foreach ($phase->_modificateurs as &$modificateur) {
-              $modificateur->_checked = $this->checkModificateur($modificateur->code, mbTime($phase->_connected_acte->execution));
+              $modificateur->_checked = $this->checkModificateur($modificateur->code, CMbDT::time($phase->_connected_acte->execution));
             }
           }
           else {

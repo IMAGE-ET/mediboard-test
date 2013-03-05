@@ -12,47 +12,45 @@
  */
 
 class CBlocage extends CMbObject {
-  // DB Table Key
-  var $blocage_id = null;
-  
+  public $blocage_id;
+
   // DB References
-  var $salle_id   = null;
-  
+  public $salle_id;
+
   // DB Fields
-  var $libelle    = null;
-  var $deb        = null;
-  var $fin        = null;
-  
-  // References
-  var $_ref_salle = null;
-  
+  public $libelle;
+  public $deb;
+  public $fin;
+
+  /** @var CSalle */
+  public $_ref_salle;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'blocage';
     $spec->key   = 'blocage_id';
     return $spec;
   }
-  
+
   function getProps() {
-    $specs = parent::getProps();
-    
-    $specs["salle_id"] = "ref class|CSalle notNull";
-    $specs["libelle"]  = "str seekable";
-    $specs["deb"]      = "date notNull";
-    $specs["fin"]      = "date notNull moreEquals|deb";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["salle_id"] = "ref class|CSalle notNull";
+    $props["libelle"]  = "str seekable";
+    $props["deb"]      = "date notNull";
+    $props["fin"]      = "date notNull moreEquals|deb";
+    return $props;
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
-    
+
     $this->_view = "Blocage du " . $this->getFormattedValue("deb") . " au " . $this->getFormattedValue("fin");
   }
-  
+
+  /**
+   * @return CSalle
+   */
   function loadRefSalle() {
     return $this->_ref_salle = $this->loadFwdRef("salle_id", true);
   }
 }
-
-?>

@@ -60,11 +60,17 @@ class CPermModule extends CMbObject {
     $specs["_owner"]        = "enum list|user|template";
     return $specs;
   }
-  
+
+  /**
+   * @return CModule
+   */
   function loadRefDBModule() {
     return $this->_ref_db_module = $this->loadFwdRef("mod_id", true);
   }
 
+  /**
+   * @return CUser
+   */
   function loadRefDBUser() {
     return $this->_ref_db_user = $this->loadFwdRef("user_id", true);
   }
@@ -86,7 +92,9 @@ class CPermModule extends CMbObject {
   /**
    * Build the class object permission tree for given user
    * Cache the result as static member
-   * @param user_id ref|CUser The concerned user, connected user if null
+   *
+   * @param int $user_id The concerned user, connected user if null
+   *
    * @return void
    */
   static function buildUser($user_id = null) {
@@ -111,7 +119,7 @@ class CPermModule extends CMbObject {
     $perms["user"] = $perm->loadMatchingList();
     
     // Build final tree
-    foreach ($perms as $owner => $_perms) {
+    foreach ($perms as $_perms) {
       foreach ($_perms as $_perm) {
         self::$users_perms[$user->_id][$_perm->mod_id ? $_perm->mod_id : "all"] = array(
           "permission" => $_perm->permission,
@@ -127,27 +135,22 @@ class CPermModule extends CMbObject {
     // Déclaration du user
     $user = CUser::get($user_id);
 
-    //Declaration des tableaux de droits 
-    $permsProfil = array();
-    $permsSelf = array();
-    $permsFinal = array();
-    
     // Declaration des tableaux de droits
+    $permsFinal = array();
     $tabModProfil = array();
     $tabModSelf = array();
-    $tabModFinal = array();
     
-    //Chargement des droits
+    // Chargement des droits
     $permsProfil = CPermModule::loadExactPerms($user->profile_id);
     $permsSelf = CPermModule::loadExactPerms($user->user_id);
     
     // Creation du tableau de droit de permsSelf
-    foreach ($permsSelf as $key => $value){
+    foreach ($permsSelf as $value) {
       $tabModSelf["mod_$value->mod_id"] = $value;
     }
     
     // Creation du tableau de droit de permsProfil
-    foreach ($permsProfil as $key => $value){
+    foreach ($permsProfil as $value) {
       $tabModProfil["mod_$value->mod_id"] = $value;
     }
     
@@ -155,7 +158,7 @@ class CPermModule extends CMbObject {
     $tabModFinal = array_merge($tabModProfil, $tabModSelf);
     
     // Creation du tableau de fusion des droits
-    foreach ($tabModFinal as $mod => $value){
+    foreach ($tabModFinal as $value) {
       $permsFinal[$value->perm_module_id] = $value;
     }
 
@@ -174,8 +177,7 @@ class CPermModule extends CMbObject {
         }
       }
       return $currPermsModules;
-    } 
-    
+    }
     else {
       $userPermsModules = array();
       foreach ($listPermsModules as $perm_mod) {
@@ -251,19 +253,25 @@ class CPermModule extends CMbObject {
 
   /**
    *  Return the first visible module
+   *
+   * @return bool|string The module name or false
    */
   static function getFirstVisibleModule() {
     $listModules = CModule::getVisible();
+
     foreach ($listModules as $module) {
       if (CPermModule::getViewModule($module->mod_id, PERM_READ)) {
         return $module->mod_name;
       }
     }
+
     return false;
   }
   
   /**
    *  Return all the visible modules
+   *
+   * @return CModule[]
    */
   static function getVisibleModules() {
     $listReadable = array();
@@ -276,7 +284,6 @@ class CPermModule extends CMbObject {
     return $listReadable;
   }
 }
-
 
 if (is_null(CPermModule::$users_perms)) {
   CPermModule::loadUserPerms();

@@ -12,18 +12,17 @@
  */
 
 class CTypeRessource extends CMbObject{
-  // DB Table Key
-  var $type_ressource_id = null;
+  public $type_ressource_id;
   
   // DB References
-  var $group_id    = null;
+  public $group_id;
   
   // DB Fields
-  var $libelle     = null;
-  var $description = null;
+  public $libelle;
+  public $description;
   
-  // References
-  var $_ref_ressources = null;
+  /** @var CRessourceMaterielle */
+  public $_ref_ressources;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -33,13 +32,11 @@ class CTypeRessource extends CMbObject{
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    
-    $specs["group_id"]    = "ref notNull class|CGroups";
-    $specs["libelle"]     = "str notNull seekable";
-    $specs["description"] = "text helped";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["group_id"]    = "ref notNull class|CGroups";
+    $props["libelle"]     = "str notNull seekable";
+    $props["description"] = "text helped";
+    return $props;
   }
   
   function getBackProps() {
@@ -55,7 +52,10 @@ class CTypeRessource extends CMbObject{
     
     $this->_view = $this->libelle;
   }
-  
+
+  /**
+   * @return CRessourceMaterielle[]
+   */
   function loadRefsRessources() {
     return $this->_ref_ressources = $this->loadBackRefs("ressources_materielles");
   }

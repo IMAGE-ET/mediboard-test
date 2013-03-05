@@ -9,14 +9,14 @@
  */
 
 class CFraisDiversType extends CMbObject {
-  var $frais_divers_type_id = null;
-  
+  public $frais_divers_type_id;
+
   // DB fields
-  var $code        = null;
-  var $libelle     = null;
-  var $tarif       = null;
-  var $facturable  = null;
-  
+  public $code;
+  public $libelle;
+  public $tarif;
+  public $facturable;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "frais_divers_type";
@@ -24,21 +24,21 @@ class CFraisDiversType extends CMbObject {
     $spec->uniques["code"] = array("code");
     return $spec;
   }
-  
+
   function getProps() {
-    $specs = parent::getProps();
-    $specs["code"]        = "str notNull maxLength|16";
-    $specs["libelle"]     = "str notNull";
-    $specs["tarif"]       = "currency notNull";
-    $specs["facturable"]  = "bool notNull default|0";
-    return $specs;
+    $props = parent::getProps();
+    $props["code"]        = "str notNull maxLength|16";
+    $props["libelle"]     = "str notNull";
+    $props["tarif"]       = "currency notNull";
+    $props["facturable"]  = "bool notNull default|0";
+    return $props;
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->libelle ($this->code)";
   }
-  
+
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["frais_divers"] = "CFraisDivers type_id";

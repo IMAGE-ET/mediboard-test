@@ -11,68 +11,80 @@
  * @link     http://www.mediboard.org
  */
 
-class CBesoinRessource extends CMbObject{
-  // DB Table Key
-  var $besoin_ressource_id = null;
-  
+class CBesoinRessource extends CMbObject {
+  public $besoin_ressource_id;
+
   // DB References
-  var $type_ressource_id   = null;
-  var $protocole_id        = null;
-  var $operation_id        = null;
-  var $commentaire         = null;
-  
-  // Ref Fields
-  var $_ref_type_ressource = null;
-  var $_ref_operation      = null;
-  var $_ref_protocole      = null;
-  var $_ref_usage          = null;
-  
+  public $type_ressource_id;
+  public $protocole_id;
+  public $operation_id;
+  public $commentaire;
+
+  /** @var CTypeRessource */
+  public $_ref_type_ressource;
+
+  /** @var COperation */
+  public $_ref_operation;
+
+  /** @var CProtocole */
+  public $_ref_protocole;
+
+  /** @var CUsageRessource */
+  public $_ref_usage;
+
   // Form Fields
-  var $_color              = null;
-  var $_width              = null;
-  var $_debut_offset       = null;
-  var $_fin_offset         = null;
-  
+  public $_color;
+  public $_width;
+  public $_debut_offset;
+  public $_fin_offset;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'besoin_ressource';
     $spec->key   = 'besoin_ressource_id';
-    
     $spec->xor["owner"] = array("operation_id", "protocole_id");
-    
     return $spec;
   }
-  
+
   function getProps() {
-    $specs = parent::getProps();
-    
-    $specs["type_ressource_id"] = "ref class|CTypeRessource notNull";
-    $specs["operation_id"]      = "ref class|COperation";
-    $specs["protocole_id"]      = "ref class|CProtocole";
-    $specs["commentaire"]       = "text helped";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["type_ressource_id"] = "ref class|CTypeRessource notNull";
+    $props["operation_id"]      = "ref class|COperation";
+    $props["protocole_id"]      = "ref class|CProtocole";
+    $props["commentaire"]       = "text helped";
+    return $props;
   }
-  
+
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["usages"] = "CUsageRessource besoin_ressource_id";
-    
     return $backProps;
   }
-  
+
+  /**
+   * @return CTypeRessource
+   */
   function loadRefTypeRessource() {
     return $this->_ref_type_ressource = $this->loadFwdRef("type_ressource_id", true);
   }
-  
+
+  /**
+   * @return COperation
+   */
   function loadRefOperation() {
     return $this->_ref_operation = $this->loadFwdRef("operation_id", true);
   }
-  
+
+  /**
+   * @return CProtocole
+   */
   function loadRefProtocole() {
     return $this->_ref_protocole = $this->loadFwdRef("protocole_id", true);
   }
-  
+
+  /**
+   * @return CUsageRessource
+   */
   function loadRefUsage() {
     return $this->_ref_usage = $this->loadUniqueBackRef("usages", true);
   }

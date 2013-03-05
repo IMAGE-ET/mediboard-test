@@ -9,40 +9,30 @@
  */
 
 class CSalle extends CMbObject {
-  // DB Table key
-  var $salle_id = null;
+  public $salle_id;
   
   // DB references
-  var $bloc_id = null;
+  public $bloc_id;
   
   // DB Fields
-  var $nom         = null;
-  var $stats       = null;
-  var $dh          = null;
+  public $nom;
+  public $stats;
+  public $dh;
 
-  /**
-   * @var CBlocOperatoire
-   */
-  var $_ref_bloc = null;
-  
-  // Object references per day
-  /**
-   * @var CPlageOp[]
-   */
-  var $_ref_plages = null;
+  /** @var CBlocOperatoire */
+  public $_ref_bloc;
 
-  /**
-   * @var COperation
-   */
-  var $_ref_urgences = null;
+  /** @var CPlageOp[] */
+  public $_ref_plages;
 
-  /**
-   * @var COperation
-   */
-  var $_ref_deplacees = null;
+  /** @var COperation[] */
+  public $_ref_urgences;
+
+  /** @var COperation[] */
+  public $_ref_deplacees;
   
   // Form fields
-  var $_blocage = array();
+  public $_blocage = array();
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -63,12 +53,12 @@ class CSalle extends CMbObject {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["bloc_id"] = "ref notNull class|CBlocOperatoire";
-    $specs["nom"]     = "str notNull seekable";
-    $specs["stats"]   = "bool notNull";
-    $specs["dh"]      = "bool notNull default|0";
-    return $specs;
+    $props = parent::getProps();
+    $props["bloc_id"] = "ref notNull class|CBlocOperatoire";
+    $props["nom"]     = "str notNull seekable";
+    $props["stats"]   = "bool notNull";
+    $props["dh"]      = "bool notNull default|0";
+    return $props;
   }
   
   function updateFormFields() {
@@ -79,7 +69,7 @@ class CSalle extends CMbObject {
     $where = array(
       'group_id' => "= '$bloc->group_id'"
     );
-    $this->_view = '';
+    $this->_view = "";
     if ($bloc->countList($where) > 1) {
       $this->_view = $bloc->nom.' - ';
     }
@@ -118,7 +108,10 @@ class CSalle extends CMbObject {
   /**
    * Charge la liste de plages et opérations pour un jour donné
    * Analogue à CMediusers::loadRefsForDay
-   * @param $date date Date to look for
+   *
+   * @param string $date Date to look for
+   *
+   * @return void
    */
   function loadRefsForDay($date) {
     // Plages d'opérations
@@ -184,7 +177,10 @@ class CSalle extends CMbObject {
       $urgence->loadRefPlageOp(1);
     }
   }
-  
+
+  /**
+   * @return CAlert[]
+   */
   function loadRefsAlertesIntervs() {
     $alerte = new CAlert();
     $ljoin = array();
@@ -198,12 +194,17 @@ class CSalle extends CMbObject {
     $order = "operations.date, operations.chir_id";
     return $this->_alertes_intervs = $alerte->loadList($where, $order, null, null, $ljoin);
   }
-  
+
+  /**
+   * @param string $date
+   *
+   * @return CBlocage[]
+   */
   function loadRefsBlocages($date = "now") {
-    $blocage = new CBlocage;
+    $blocage = new CBlocage();
     
     if ($date == "now") {
-      $date = mbDate();
+      $date = CMbDT::date();
     }
     
     $where = array();

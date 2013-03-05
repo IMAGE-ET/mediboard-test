@@ -10,34 +10,30 @@
  */
 
 class CPosteSSPI extends CMbObject {
-  // DB Table Key
-  var $poste_sspi_id = null;
+  public $poste_sspi_id;
   
   // DB References
-  var $group_id      = null;
-  var $bloc_id       = null;
+  public $group_id;
+  public $bloc_id;
   
   // DB Fields
-  var $nom           = null;
+  public $nom;
   
-  // References
-  var $_ref_bloc    = null;
+  /** @var CBlocOperatoire */
+  public $_ref_bloc;
   
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'poste_sspi';
     $spec->key   = 'poste_sspi_id';
-    
     return $spec;
   }
   
   function getProps() {
     $props = parent::getProps();
-    
     $props["bloc_id"]  = "ref class|CBlocOperatoire";
     $props["group_id"] = "ref class|CGroups notNull";
     $props["nom"]      = "str notNull seekable";
-    
     return $props;
   }
   
@@ -52,7 +48,10 @@ class CPosteSSPI extends CMbObject {
     
     $this->_view = $this->nom;
   }
-  
+
+  /**
+   * @return CBlocOperatoire
+   */
   function loadRefBloc() {
     return $this->_ref_bloc = $this->loadFwdRef("bloc_id");
   }

@@ -13,37 +13,35 @@ class CCodeCIM10 {
   const LANG_EN = "EN_OMS";
   const LANG_DE = "GE_DIMDI";
 
-  var $_spec = null;
+  /** @var CMbObjectSpec */
+  public $_spec;
   
   // Lite props
-  var $code    = null;
-  var $sid     = null;
-  var $level   = null;
-  var $libelle = null;
-  var $exist   = null;
+  public $code;
+  public $sid;
+  public $level;
+  public $libelle;
+  public $exist;
   
   // Others props
-  var $descr     = null;
-  var $glossaire = null;
-  var $include   = null;
-  var $indir     = null;
-  var $notes     = null;
+  public $descr;
+  public $glossaire;
+  public $include;
+  public $indir;
+  public $notes;
   
   // Références
-  var $_exclude   = null;
-  var $_levelsSup = null;
-  var $_levelsInf = null;
+  public $_exclude;
+  public $_levelsSup;
+  public $_levelsInf;
 
   // Langue
-  var $_lang = null;
+  public $_lang;
   
   // Other
-  var $_isInfo = null;
-  
-  /**
-   * Construction
-   */
-  function CCodeCIM10($code = "(A00-B99)", $loadlite = 0) {
+  public $_isInfo;
+
+  function __construct($code = "(A00-B99)", $loadlite = 0) {
     // Static initialisation
     static $spec = null;
     if (!$spec) {
@@ -109,7 +107,7 @@ class CCodeCIM10 {
   
   // Chargement des données
   function load($lang = self::LANG_FR) {
-    if (!$this->loadLite($lang)){
+    if (!$this->loadLite($lang)) {
       return false;
     }
     $ds =& $this->_spec->ds;
@@ -131,7 +129,6 @@ class CCodeCIM10 {
         }
       }
     }
-    
     
     // glossaire
     $this->glossaire = array();
@@ -288,7 +285,7 @@ class CCodeCIM10 {
     }
     
     ksort($this->_levelsInf);
-}
+  }
   
   // Sommaire
   function getSommaire($lang = self::LANG_FR, $level = 0) {
@@ -298,6 +295,8 @@ class CCodeCIM10 {
     $query = "SELECT * FROM chapter ORDER BY chap";
     $result = $ds->exec($query);
     $i = 0;
+    $chapter = array();
+
     while ($row = $ds->fetchArray($result)) {
       $chapter[$i]["rom"] = $row["rom"];
       $query = "SELECT * FROM master WHERE SID = '".$row["SID"]."'";
@@ -369,7 +368,7 @@ class CCodeCIM10 {
       $hasWhere = true;
     }
     
-    if(!$hasWhere) {
+    if (!$hasWhere) {
       $query .= " AND 0";
     }
     if ($max_length) {
@@ -381,7 +380,7 @@ class CCodeCIM10 {
     $result = $ds->exec($query);
     $master = array();
     $i = 0;
-    while($row = $ds->fetchArray($result)) {
+    while ($row = $ds->fetchArray($result)) {
       $master[$i]["text"] = $row[$this->_lang];
       $master[$i]["code"] = $row["abbrev"];
       $i++;
@@ -396,7 +395,7 @@ class CCodeCIM10 {
     $codeCim->loadRefs();
     $master = array();
     $i = 0;
-    foreach($codeCim->_levelsInf as $curr_code) {
+    foreach ($codeCim->_levelsInf as $curr_code) {
       $master[$i]["text"] = $curr_code->libelle;
       $master[$i]["code"] = $curr_code->code;
       $i++;
@@ -405,11 +404,9 @@ class CCodeCIM10 {
   }
   
   static function addPoint($code) {
-    if(!strpos($code, ".") && strlen($code) >= 4) {
+    if (!strpos($code, ".") && strlen($code) >= 4) {
       $code = substr($code, 0, 3).".".substr($code, 3);
     }
     return $code;
   }
 }
-
-?>

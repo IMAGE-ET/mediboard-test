@@ -11,52 +11,52 @@
  * @link     http://www.mediboard.org
  */
 
-class CIndispoRessource extends CMbObject{
-  // DB Table Key
-  var $indispo_ressource_id = null;
-  
+class CIndispoRessource extends CMbObject {
+  public $indispo_ressource_id;
+
   // DB References
-  var $ressource_materielle_id    = null;
-  
+  public $ressource_materielle_id;
+
   // DB Fields
-  var $deb                        = null;
-  var $fin                        = null;
-  var $commentaire                = null;
-  
-  // Ref Fields
-  var $_ref_ressource_materielle  = null;
-  
+  public $deb;
+  public $fin;
+  public $commentaire;
+
+  /** @var CRessourceMaterielle */
+  public $_ref_ressource_materielle;
+
   // Form Fields
-  var $_debut_offset              = null;
-  var $_fin_offset                = null;
-  var $_width                     = null;
-  
+  public $_debut_offset;
+  public $_fin_offset;
+  public $_width;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'indispo_ressource';
     $spec->key   = 'indispo_ressource_id';
     return $spec;
   }
-  
+
   function getProps() {
-    $specs = parent::getProps();
-    
-    $specs["ressource_materielle_id"]    = "ref notNull class|CRessourceMaterielle autocomplete|libelle";
-    $specs["deb"]                        = "dateTime notNull";
-    $specs["fin"]                        = "dateTime notNull";
-    $specs["commentaire"]                = "text helped";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["ressource_materielle_id"] = "ref notNull class|CRessourceMaterielle autocomplete|libelle";
+    $props["deb"]                     = "dateTime notNull";
+    $props["fin"]                     = "dateTime notNull";
+    $props["commentaire"]             = "text helped";
+    return $props;
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = "Indisponibilité du " . mbDateToLocale($this->deb);
+    $this->_view = "Indisponibilité du " . CMbDT::dateToLocale($this->deb);
     if ($this->deb != $this->fin) {
-      $this->_view .= " au " . mbDateToLocale($this->fin);
+      $this->_view .= " au " . CMbDT::dateToLocale($this->fin);
     }
   }
-  
+
+  /**
+   * @return CRessourceMaterielle
+   */
   function loadRefRessource() {
     return $this->_ref_ressource_materielle = $this->loadFwdRef("ressource_materielle_id", true);
   }

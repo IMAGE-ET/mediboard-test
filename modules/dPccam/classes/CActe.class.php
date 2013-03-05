@@ -9,33 +9,31 @@
  */
 
 class CActe extends CMbMetaObject {
-  
-  // DB fields
-  var $montant_depassement = null;
-  var $montant_base        = null;
+  public $montant_depassement;
+  public $montant_base;
   
   // DB References
-  var $executant_id        = null;
-  var $facturable          = null;
+  public $executant_id;
+  public $facturable;
 
   // Form fields
-  var $_preserve_montant   = null; 
-  var $_montant_facture    = null;
+  public $_preserve_montant;
+  public $_montant_facture;
   
   // Derived fields
-  var $_full_code = null;
+  public $_full_code;
   
   // Behaviour fields
-  var $_check_coded  = true;
-  var $_permissive   = null;
+  public $_check_coded = true;
+  public $_permissive;
   
   // Distant object
-  var $_ref_sejour = null;
-  var $_ref_patient = null;
-  var $_ref_praticien = null; // Probable user
-  var $_ref_executant = null; // Actual user
+  public $_ref_sejour;
+  public $_ref_patient;
+  public $_ref_praticien; // Probable user
+  public $_ref_executant; // Actual user
   
-  var $_list_executants = null;
+  public $_list_executants;
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -164,7 +162,8 @@ class CActe extends CMbMetaObject {
     if ($this->_preserve_montant || $this->_forwardRefMerging) {
       return;
     }
-    
+
+    /** @var CCodable $object */
     $object = new $this->object_class;
     $object->load($this->object_id);
     
@@ -190,5 +189,3 @@ class CActe extends CMbMetaObject {
     }
   }
 }
-
-?>

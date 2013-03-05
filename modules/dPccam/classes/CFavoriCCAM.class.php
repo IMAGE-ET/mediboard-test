@@ -9,16 +9,16 @@
  */
 
 class CFavoriCCAM extends CMbObject {
-  var $favoris_id   = null;
+  public $favoris_id;
 
   // DB Fields
-  var $object_class = null;
-  var $favoris_user = null;
-  var $favoris_code = null;
-  
+  public $object_class;
+  public $favoris_user;
+  public $favoris_code;
+
   // Form fields
-  var $_filter_class = null;
-  var $_ref_code = null;
+  public $_filter_class;
+  public $_ref_code;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -28,19 +28,19 @@ class CFavoriCCAM extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs["favoris_user"] = "ref notNull class|CUser";
-    $specs["favoris_code"] = "str notNull length|7 seekable";
-    $specs["object_class"] = "str notNull";
-    $specs["_filter_class"] = "enum list|CConsultation|COperation|CSejour";
-    return $specs;
+    $props = parent::getProps();
+    $props["favoris_user"] = "ref notNull class|CUser";
+    $props["favoris_code"] = "str notNull length|7 seekable";
+    $props["object_class"] = "str notNull";
+    $props["_filter_class"] = "enum list|CConsultation|COperation|CSejour";
+    return $props;
   }
-  
+
   function loadRefsFwd() {
     $this->_ref_code = CCodeCCAM::get($this->favoris_code, CCodeCCAM::LITE);
     $this->_ref_code->getChaps();
   }
-  
+
   static function getOrdered($user_id = 0, $class = null, $ref_favori = false, $tag_id = null) {
     $listOrdered = array();
     if ($user_id) {
@@ -57,11 +57,11 @@ class CFavoriCCAM extends CMbObject {
 
       $fav = new CFavoriCCAM();
       $favoris = $fav->loadList($where, "favoris_code", null, null, $ljoin);
-   
+
       foreach ($favoris as $_favori) {
         $code = CCodeCCAM::get($_favori->favoris_code, CCodeCCAM::LITE);
         $code->getChaps();
-        
+
         $code->class = $_favori->object_class;
         $code->favoris_id = $_favori->favoris_id;
         $code->occ = 0;
@@ -70,7 +70,7 @@ class CFavoriCCAM extends CMbObject {
           $_favori->loadRefsTagItems();
           $code->_ref_favori = $_favori;
         }
-      
+
         $chapitre =& $code->chapitres[0];
         $listOrdered[$chapitre["code"]]["nom"] = $chapitre["nom"];
         $listOrdered[$chapitre["code"]]["codes"][$_favori->favoris_code] = $code;
