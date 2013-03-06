@@ -270,6 +270,9 @@ class CDossierMedical extends CMbMetaObject {
   }
 
   static function massCountAntecedentsByType($dossiers, $type = "") {
+    if ($type && !preg_match("/$type/", CAppUI::conf("patients CAntecedent types"))) {
+      return;
+    }
     $where = array();
     if ($type) {
       $where["type"] = "= '$type'";

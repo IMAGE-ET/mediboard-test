@@ -7,6 +7,10 @@
 {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
 {{assign var=antecedents value=$dossier_medical->_count_antecedents_by_type}}
 
+{{if $type && !preg_match("/$type/", $conf.dPpatients.CAntecedent.types)}}
+  {{mb_return}}
+{{/if}}
+
 {{if !$show_all}}
   {{if ($antecedents.$type > 0 || $force_show)}}
     <a src="images/icons/{{$type}}.png"
