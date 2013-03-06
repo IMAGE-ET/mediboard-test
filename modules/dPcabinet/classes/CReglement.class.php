@@ -1,36 +1,46 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPcabinet
- * @version $Revision$
- * @author Fabien Ménager
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @version    $Revision$
  */
 
+/**
+ * Les règlements
+ */
 class CReglement extends CMbMetaObject {
   // DB Table key
-  var $reglement_id    = null;
+  public $reglement_id;
 
   // DB References
-  var $banque_id       = null;
+  public $banque_id;
 
   // DB fields
-  var $date            = null;
-  var $montant         = null;
-  var $emetteur        = null;
-  var $mode            = null;
-  var $object_class    = null;
-  var $object_id       = null;
-  var $reference       = null;
-  var $num_bvr         = null;
+  public $date;
+  public $montant;
+  public $emetteur;
+  public $mode;
+  public $object_class;
+  public $object_id;
+  public $reference;
+  public $num_bvr;
   
   // Fwd References
-  var $_ref_consultation = null;
-  var $_ref_banque       = null;
-  var $_ref_facture      = null;
+  public $_ref_consultation;
+  public $_ref_banque;
+  public $_ref_facture;
   
   var $_update_facture = true;
   
+  /**
+   * getSpec
+   * 
+   * @return $spec
+  **/
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'reglement';
@@ -38,9 +48,14 @@ class CReglement extends CMbMetaObject {
     return $spec;
   }
   
+  /**
+   * getProps
+   * 
+   * @return $props
+  **/
   function getProps() {
     $specs = parent::getProps();
-    $specs['object_class']    = 'enum notNull list|CConsultation|CFactureCabinet|CFactureEtablissement show|0 default|CConsultation';
+    $specs['object_class']    = 'enum notNull list|CFactureCabinet|CFactureEtablissement show|0 default|CFactureCabinet';
     $specs['banque_id']       = 'ref class|CBanque';
     $specs['date']            = 'dateTime notNull';
     $specs['montant']         = 'currency notNull';
@@ -51,16 +66,31 @@ class CReglement extends CMbMetaObject {
     return $specs;
   }
   
+  /**
+   * Accesseur sur la banque
+   * 
+   * @return array La banque
+   */
   function loadRefBanque() {
     $this->_ref_banque = $this->loadFwdRef("banque_id", true);
   }
   
+  /**
+   * loadRefsFwd
+   * 
+   * @return void
+  **/
   function loadRefsFwd() {
     $this->loadTargetObject();
     $this->loadRefBanque();
   }
   
-  function check () {
+  /**
+   * Vérification des champs
+   * 
+   * @return void
+  **/
+  function check() {
     if ($msg = parent::check()) {
       return $msg;
     }
@@ -74,35 +104,20 @@ class CReglement extends CMbMetaObject {
     if (!$this->mode) {
       return 'Le mode de paiment ne doit pas être nul';
     }
-    
     $this->loadRefsFwd();
-    
-    if ($this->object_class == "CConsultation" && !$this->_ref_object->valide) {
-      return "Impossible d'enregistrer un règlement car le tarif de la consultation n'est pas validé";
-    }
   }
   
   /**
-   * Accesseur sur la 
-   * Fait abstraction de l'ambivalence des consultations et des factures de consultation
-   * Charge les actes des consultations en question
+   * Accesseur sur la facture
    * 
-   * @return array Consultations concernées
+   * @return array La facture
    */
   function loadRefFacture() {
     $target = $this->loadTargetObject();
-    
-    if ($target instanceof CConsultation) {
-      $target->loadRefsActes();
-      return $this->_ref_facture = $target->fakeRefFacture();
-    }
-    
-    if ($target instanceof CFactureCabinet) {
-      $target->loadRefsConsults();
-      $target->loadRefPatient();
-      $target->loadRefPraticien();
-      return $this->_ref_facture = $target;
-    }
+    $target->loadRefsObjects();
+    $target->loadRefPatient();
+    $target->loadRefPraticien();
+    return $this->_ref_facture = $target;
   }
   
   /**
@@ -112,43 +127,21 @@ class CReglement extends CMbMetaObject {
    */
   function acquiteFacture() {
     $this->loadRefsFwd();
+    $facture = $this->_ref_object;
+    $facture->loadRefsObjects();
+    $facture->loadRefsReglements();
     
-    // Cas de la consultation
-    if ($this->object_class == "CConsultation") {
-      $consult = $this->_ref_object;
-      $consult->loadRefsReglements();
-      
-      // Acquitement patient
-      if ($this->emetteur == "patient" && $consult->du_patient) {
-        $consult->patient_date_reglement = $consult->_du_restant_patient <= 0 ? mbDate() : "";
-      }
-        
-      // Acquitement tiers
-      if ($this->emetteur == "tiers" && $consult->du_tiers) {
-        $consult->tiers_date_reglement = $consult->_du_restant_tiers <= 0 ? mbDate() : "";
-      }
-      
-      return $consult->store();
+    // Acquitement patient
+    if ($this->emetteur == "patient" && $facture->du_patient) {
+      $facture->patient_date_reglement = $facture->_du_restant_patient <= 0 ? mbDate() : "";
     }
     
-    // Cas de la facture
-    if ($this->_update_facture && $this->object_class == "CFactureCabinet") {
-      $facture = $this->_ref_object;
-      $facture->loadRefsConsults();
-      $facture->loadRefsReglements();
-      
-      // Acquitement patient
-      if ($this->emetteur == "patient" && $facture->du_patient) {
-        $facture->patient_date_reglement = $facture->_du_restant_patient <= 0 ? mbDate() : "";
-      }
-        
-      // Acquitement tiers
-      if ($this->emetteur == "tiers" && $facture->du_tiers) {
-        $facture->tiers_date_reglement = $facture->_du_restant_tiers <= 0 ? mbDate() : "";
-      }
-      
-      return $facture->store();
+    // Acquitement tiers
+    if ($this->emetteur == "tiers" && $facture->du_tiers) {
+      $facture->tiers_date_reglement = $facture->_du_restant_tiers <= 0 ? mbDate() : "";
     }
+    
+    return $facture->store();
   }
   
   /**
@@ -178,7 +171,6 @@ class CReglement extends CMbMetaObject {
     if ($msg = parent::delete()) {
       return $msg;
     }
-    
     return $this->acquiteFacture();
   }
   

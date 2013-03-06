@@ -3,6 +3,11 @@
 {{mb_script module=cabinet script=reglement}}
 {{mb_script module=cabinet script=rapport}}
 
+{{assign var=type_aff value=1}}
+{{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
+  {{assign var=type_aff value=0}}
+{{/if}}
+
 {{if !$ajax}} 
 
 <div style="float: right;"> 
@@ -79,15 +84,13 @@
           <th style="width: 20%;">{{mb_label class=CConsultation field=patient_id}}</th>
           <th style="width: 20%;">{{mb_label class=CConsultation field=tarif}}</th>
           
-          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+          {{if $type_aff}}
             <th class="narrow">{{mb_title class=CConsultation field=secteur1}}</th>
             <th class="narrow">{{mb_title class=CConsultation field=secteur2}}</th>
             <th class="narrow">{{mb_title class=CConsultation field=_somme}}</th>
             <th style="width: 20%;">{{mb_title class=CConsultation field=du_patient}}</th>
             <th style="width: 20%;">{{mb_title class=CConsultation field=du_tiers}}</th>
-          {{/if}}
-          
-          {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
+          {{else}}
             <th class="narrow">Montant</th>
             <th class="narrow">Remise</th>
             <th class="narrow">{{mb_title class=CConsultation field=_somme}}</th>
@@ -99,19 +102,13 @@
         
         {{foreach from=$_plage.factures item=_facture}}
         <tr>
-          {{if $_facture->_id}}
           <td>
             <strong onmouseover="ObjectTooltip.createEx(this, '{{$_facture->_guid}}')">
               {{$_facture}}
             </strong>
           </td>
           <td>{{mb_include module=system template=inc_object_notes object=$_facture}}</td>
-          {{else}}
-          <td colspan="2">
-            <strong>{{$_facture}}</strong>
-          </td>
-          {{/if}}
-        
+          
           <td class="text">
             <a name="{{$_facture->_guid}}">
               {{assign var=patient value=$_facture->_ref_patient}}
@@ -131,19 +128,16 @@
             <div class="empty">{{tr}}CConsultation.none{{/tr}}</div>
             {{/foreach}}
           </td>
-
-          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
-          <td>{{mb_value object=$_facture field=_montant_secteur1 empty=1}}</td>
-          <td>{{mb_value object=$_facture field=_montant_secteur2 empty=1}}</td>
-          <td>{{mb_value object=$_facture field=_montant_total    empty=1}}</td>
-          {{/if}}
           
-          {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed}}
-          <td>{{mb_value object=$_facture field=_montant_sans_remise empty=1}}</td>
-          <td>{{mb_value object=$_facture field=remise empty=1}}</td>
-          <td>{{mb_value object=$_facture field=_montant_avec_remise empty=1}}</td>
+          {{if $type_aff}}
+            <td>{{mb_value object=$_facture field=_secteur1 empty=1}}</td>
+            <td>{{mb_value object=$_facture field=_secteur2 empty=1}}</td>
+          {{else}}
+            <td>{{mb_value object=$_facture field=_montant_sans_remise empty=1}}</td>
+            <td>{{mb_value object=$_facture field=remise empty=1}}</td>
           {{/if}}
-
+          <td>{{mb_value object=$_facture field=_montant_avec_remise empty=1}}</td>
+          
           <td>
             <table class="layout">
               {{foreach from=$_facture->_ref_reglements_patient item=_reglement}}
@@ -173,7 +167,7 @@
             </table>
           </td>
           
-          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
+          {{if $type_aff}}
           <td>
             <table class="layout">
               {{foreach from=$_facture->_ref_reglements_tiers item=_reglement}}
@@ -236,7 +230,7 @@
           <td><strong>{{$_plage.total.secteur2|currency}}</strong></td>
           <td><strong>{{$_plage.total.total|currency}}</strong></td>
           <td><strong>{{$_plage.total.patient|currency}}</strong></td>
-          {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam}}
+          {{if $type_aff}}
             <td><strong>{{$_plage.total.tiers|currency}}</strong></td>
           {{/if}}
           <td></td>
@@ -250,7 +244,6 @@
   {{/if}}
   {{/foreach}}
   {{/if}}
-  
   
 {{if !$ajax}} 
 </table>

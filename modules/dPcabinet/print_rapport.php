@@ -10,9 +10,8 @@
  */
 // !! Attention, régression importante si ajout de type de paiement
 
+CCanDo::checkEdit();
 $today = mbDate();
-
-CSQLDataSource::$trace = false;
 
 // Récupération des paramètres
 $filter = new CPlageconsult();
@@ -20,13 +19,13 @@ $filter->_date_min = CValue::getOrSession("_date_min", mbDate());
 $filter->_date_max = CValue::getOrSession("_date_max", mbDate());
 $filter->_etat_reglement_patient = CValue::getOrSession("_etat_reglement_patient");
 $filter->_etat_reglement_tiers   = CValue::getOrSession("_etat_reglement_tiers");
+$filter->_mode_reglement         = CValue::getOrSession("mode");
 
-$filter->_mode_reglement = CValue::getOrSession("mode");
 if ($filter->_mode_reglement == null) {
   $filter->_mode_reglement = 0;
 }
-$filter->_type_affichage = CValue::getOrSession("_type_affichage" , 1);
 
+$filter->_type_affichage = CValue::getOrSession("_type_affichage" , 1);
 // Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
 if ($filter->_type_affichage == "complete") {
   $filter->_type_affichage = 1;
@@ -71,7 +70,6 @@ $listPrat = ($prat->_id) ?
 $where[] = "plageconsult.chir_id ".CSQLDataSource::prepareIn(array_keys($listPrat))
     ." OR plageconsult.pour_compte_id ".CSQLDataSource::prepareIn(array_keys($listPrat));
 
-$where["consultation.facture_id"] = "IS NULL";
 $order = "plageconsult.date, plageconsult.debut, plageconsult.chir_id";
 
 // Initialisation du tableau de reglements
@@ -117,37 +115,6 @@ if ($filter->_etat_reglement_tiers == "non_reglee") {
   $where["consultation.tiers_date_reglement"] = "IS NULL";
   $where["consultation.du_tiers"] = "> 0";
 }
-
-// Reglements via les ***consultations***
-$listConsults = $consultation->loadList($where, $order, null, null, $ljoin);
-CMbObject::massLoadFwdRef($listConsults, "patient_id");
-
-// Les plages sont déjà chargés dans CConsultation::updateFormFields, 
-// ainsi que le praticien par la même occasion...
-//$plages = CMbObject::massLoadFwdRef($listConsults, "plageconsult_id");
-
-$listPlages = array();
-$factures = array();
-foreach ($listConsults as $_consult) {
-  $_consult->loadRefPatient(1);
-  $_consult->loadRefPlageConsult(1);
-  $facture = $_consult->fakeRefFactureReglements();
-  
-  // Ajout de reglements
-  $facture->_new_reglement_patient = new CReglement();
-  $facture->_new_reglement_patient->setObject($_consult);
-  $facture->_new_reglement_patient->emetteur = "patient";
-  $facture->_new_reglement_patient->montant = $facture->_du_restant_patient;
-  $facture->_new_reglement_tiers = new CReglement();
-  $facture->_new_reglement_tiers->setObject($_consult);
-  $facture->_new_reglement_tiers->emetteur = "tiers";
-  $facture->_new_reglement_tiers->mode = "virement";
-  $facture->_new_reglement_tiers->montant = $facture->_du_restant_tiers;
-  
-  // Utiliser le GUID car le ID n'est pas valué en l'espèce
-  $factures[$facture->_guid] = $facture; 
-}
-
 
 // Reglements via les ***factures de consultation***
 $ljoin = array();
@@ -198,8 +165,8 @@ foreach ($factures as $_facture) {
   
   $recapReglement["total"]["nb_reglement_patient"] += count($_facture->_ref_reglements_patient);
   $recapReglement["total"]["nb_reglement_tiers"]   += count($_facture->_ref_reglements_tiers  );
-  $recapReglement["total"]["secteur1"]             += $_facture->_montant_secteur1;
-  $recapReglement["total"]["secteur2"]             += $_facture->_montant_secteur2;
+  $recapReglement["total"]["secteur1"]             += $_facture->_secteur1;
+  $recapReglement["total"]["secteur2"]             += $_facture->_secteur2;
   
   foreach ($_facture->_ref_reglements_patient as $_reglement) {
     $recapReglement[$_reglement->mode]["du_patient"]          += $_reglement->montant;
@@ -223,9 +190,9 @@ foreach ($factures as $_facture) {
   }
   
   $listPlages["$plage->date $plage->debut"]["factures"][$_facture->_guid] = $_facture;
-  $listPlages["$plage->date $plage->debut"]["total"]["secteur1"] += $_facture->_montant_secteur1;
-  $listPlages["$plage->date $plage->debut"]["total"]["secteur2"] += $_facture->_montant_secteur2;
-  $listPlages["$plage->date $plage->debut"]["total"]["total"]    += $_facture->_montant_total;
+  $listPlages["$plage->date $plage->debut"]["total"]["secteur1"] += $_facture->_secteur1;
+  $listPlages["$plage->date $plage->debut"]["total"]["secteur2"] += $_facture->_secteur2;
+  $listPlages["$plage->date $plage->debut"]["total"]["total"]    += $_facture->_montant_avec_remise;
   $listPlages["$plage->date $plage->debut"]["total"]["patient"]  += $_facture->_reglements_total_patient;
   $listPlages["$plage->date $plage->debut"]["total"]["tiers"]    += $_facture->_reglements_total_tiers;
 }

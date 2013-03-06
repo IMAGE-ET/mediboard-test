@@ -31,13 +31,10 @@ else {
 $banque = new CBanque();
 $banques = $banque->loadList(null, "nom");
 
-// Facture de contexte pour l'affichage
-if ($object instanceof CFactureCabinet) {
-  $facture = $object;
-  if (CAppUI::conf("ref_pays") == 2) {
-    $facture->loadRefsConsults();
-    $facture->loadNumerosBVR();
-  }
+$facture = $object;
+if (CAppUI::conf("ref_pays") == 2) {
+  $facture->loadRefsObjects();
+  $facture->loadNumerosBVR();
 }
 
 // Création du template

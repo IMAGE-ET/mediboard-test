@@ -16,77 +16,75 @@
 class CFacture extends CMbObject {
   
   // DB Fields
-  var $patient_id   = null; 
-  var $praticien_id = null; 
-  var $remise       = null; 
-  var $ouverture    = null; 
-  var $cloture      = null;
-  var $du_patient   = null;
-  var $du_tiers     = null;
-  var $type_facture           = null;
-  var $patient_date_reglement = null;
-  var $tiers_date_reglement   = null;
-  var $npq                    = null;
-  var $cession_creance        = null;
-  var $assurance_maladie      = null;
-  var $assurance_accident     = null;
-  var $rques_assurance_maladie  = null;
-  var $rques_assurance_accident = null;
-  var $send_assur_base        = null;
-  var $send_assur_compl       = null;
-  var $facture                = null;
-  var $ref_accident           = null;
-  var $statut_pro             = null;
-  var $num_reference          = null;
-  var $envoi_xml              = null;
+  public $patient_id; 
+  public $praticien_id;
+  public $remise;
+  public $ouverture;
+  public $cloture;
+  public $du_patient;
+  public $du_tiers;
+  public $type_facture;
+  public $patient_date_reglement;
+  public $tiers_date_reglement;
+  public $npq;
+  public $cession_creance;
+  public $assurance_maladie;
+  public $assurance_accident;
+  public $rques_assurance_maladie;
+  public $rques_assurance_accident;
+  public $send_assur_base;
+  public $send_assur_compl;
+  public $facture;
+  public $ref_accident;
+  public $statut_pro;
+  public $num_reference;
+  public $envoi_xml;
   
   // Form fields
-  var $_consult_id  = null;
-  var $_total       = null;
+  public $_consult_id;
+  public $_total;
   
-  var $_nb_factures         = null;
-  var $_coeff               = null;
-  var $_montant_sans_remise = null;
-  var $_montant_avec_remise = null;
-  var $_montant_secteur1    = null;
-  var $_montant_secteur2    = null;
-  var $_montant_total       = null;
+  public $_coeff;
+  public $_montant_sans_remise;
+  public $_montant_avec_remise;
+  public $_secteur1 = 0.0;
+  public $_secteur2 = 0.0;
+  //Champ à supprimer
+  public $_montant_total;
   
-  var $_total_tarmed        = null;
-  var $_total_caisse        = null;
-  var $_autre_tarmed        = null;
+  public $_total_tarmed;
+  public $_total_caisse;
+  public $_autre_tarmed;
   
-  var $_du_restant_patient        = null;
-  var $_du_restant_tiers          = null;
-  var $_reglements_total_patient  = null;
-  var $_reglements_total_tiers    = null;
-  var $_montant_factures          = array();
-  var $_num_bvr                   = array();
-  var $_montant_factures_caisse   = array();
-  //champ de test rapide
-  var $_ajoute   = null;
+  public $_du_restant_patient;
+  public $_du_restant_tiers;
+  public $_reglements_total_patient;
+  public $_reglements_total_tiers;
+  public $_montant_factures        = array();
+  public $_num_bvr                 = array();
+  public $_montant_factures_caisse = array();
       
   // Object References
-  var $_ref_assurance_accident  = null;
-  var $_ref_assurance_maladie   = null;
-  var $_ref_chir                = null;
-  var $_ref_consults            = null;
-  var $_ref_last_consult        = null;
-  var $_ref_first_consult       = null;
-  var $_ref_items               = null;
-  var $_ref_patient             = null;
-  var $_ref_praticien           = null;
-  var $_ref_reglements          = null;
-  var $_ref_reglements_patient  = null;
-  var $_ref_reglements_tiers    = null;
-  var $_ref_sejours             = null;
-  var $_ref_first_sejour        = null;
-  var $_ref_last_sejour         = null;
+  public $_ref_assurance_accident;
+  public $_ref_assurance_maladie;
+  public $_ref_chir;
+  public $_ref_consults;
+  public $_ref_last_consult;
+  public $_ref_first_consult;
+  public $_ref_items;
+  public $_ref_patient;
+  public $_ref_praticien;
+  public $_ref_reglements;
+  public $_ref_reglements_patient;
+  public $_ref_reglements_tiers;
+  public $_ref_sejours;
+  public $_ref_first_sejour;
+  public $_ref_last_sejour;
   
-  var $_ref_actes_tarmed  = array();
-  var $_ref_actes_caisse  = array();
-  var $_ref_actes_ngap    = array();
-  var $_ref_actes_ccam    = array();
+  public $_ref_actes_tarmed = array();
+  public $_ref_actes_caisse = array();
+  public $_ref_actes_ngap   = array();
+  public $_ref_actes_ccam   = array();
   
   /**
    * getBackProps
@@ -137,8 +135,8 @@ class CFacture extends CMbObject {
     $props["_reglements_total_tiers"]   = "currency";
     $props["_montant_sans_remise"]      = "currency";
     $props["_montant_avec_remise"]      = "currency";
-    $props["_montant_secteur1"]         = "currency";
-    $props["_montant_secteur2"]         = "currency";
+    $props["_secteur1"]         				= "currency";
+    $props["_secteur2"]         				= "currency";
     $props["_montant_total"]            = "currency";
     $specs["_total"]                    = "currency";
     return $props;
@@ -159,12 +157,11 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function store() {
-    if (CAppUI::conf("dPfacturation $this->_class create_items_bill")) {
+    if (CModule::getActive("dPfacturation")) {
       if (!$this->cloture && $this->fieldModified("cloture")) {
         $this->deleteItems();
       }
     }
-    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
@@ -177,7 +174,7 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function delete() {
-    if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
+    if (CModule::getActive("dPfacturation")) {
       $where = array();
       $where["facture_id"]    = " = '$this->_id'";
       $where["facture_class"] = " = '$this->_class'";
@@ -208,67 +205,55 @@ class CFacture extends CMbObject {
       $item->delete();
     }
   }
-  /**
-   * Mise à jour des montant secteur 1, 2 et totaux, utilisés pour la comtpa
-   * 
-   * @return void
-  **/
-  function updateMontants() {
-    $this->_montant_secteur1 = 0.0;
-    $this->_montant_secteur2 = 0.0;
-    $this->_montant_total    = 0.0;
-    $this->du_patient        = 0;
-    
-    if (count($this->_ref_sejours) == 0 && count($this->_ref_consults) == 0) {
-      $this->delete();
-    }
-    else {
-      if (count($this->_ref_sejours)) {
-        foreach ($this->_ref_sejours as $sejour) {
-          foreach ($sejour->_ref_operations as $op) {
-            foreach ($op->_ref_actes_tarmed as $acte) {
-              $this->_montant_secteur1 += $acte->montant_base;
-              $this->du_patient        += $acte->montant_base;
-              $this->_montant_secteur2 += $acte->montant_depassement;
-              $this->_montant_total    += ($acte->montant_base + $acte->montant_depassement);
-            }
-            foreach ($op->_ref_actes_caisse as $acte) {
-              $this->_montant_secteur1 += $acte->montant_base;
-              $this->du_patient        += $acte->montant_base;
-              $this->_montant_secteur2 += $acte->montant_depassement;
-              $this->_montant_total    += ($acte->montant_base + $acte->montant_depassement);
-            }
-          }
-        }
-      }
-      if (count($this->_ref_consults)) {
-        foreach ($this->_ref_consults as $_consult) {
-          $this->_montant_secteur1 += $_consult->secteur1;
-          $this->_montant_secteur2 += $_consult->secteur2;
-          $this->_montant_total    += $_consult->_somme;
-          $this->du_patient        += $_consult->du_patient;
-        }
-      }
-      $this->_montant_secteur1 *= $this->_coeff;
-      $this->_montant_secteur2 *= $this->_coeff;
-    }
-  }
   
   /**
    * Mise à jour des montant secteur 1, 2 et totaux, utilisés pour la comtpa
    * 
    * @return void
   **/
-  function updateMontantsFacture() {
-  /*    
-    $this->loadRefsObjects();
-    $this->updateMontants();
-    $this->du_patient = $this->_montant_secteur1;
-    $this->du_tiers   = $this->_montant_secteur2;
-    if ($this->_id) {
-      $this->store();
+  function updateMontants() {
+    $this->du_patient = 0;
+    $this->du_tiers   = 0;
+    
+    if (count($this->_ref_sejours) != 0 || count($this->_ref_consults) != 0) {
+      if (!count($this->_ref_items)){
+        if (count($this->_ref_sejours)) {
+          foreach ($this->_ref_sejours as $sejour) {
+            foreach ($sejour->_ref_operations as $op) {
+              foreach ($op->_ref_actes as $acte) {
+                $this->_secteur1      += $acte->montant_base;
+                $this->_secteur2      += $acte->montant_depassement;
+              }
+              foreach ($sejour->_ref_actes as $acte) {
+                $this->_secteur1      += $acte->montant_base;
+                $this->_secteur2      += $acte->montant_depassement;
+              }
+            }
+            $this->du_patient += $this->_secteur1;
+            $this->du_tiers   += $this->_secteur2;
+          }
+        }
+        if (count($this->_ref_consults)) {
+          foreach ($this->_ref_consults as $_consult) {
+            $this->_secteur1 += $_consult->secteur1;
+            $this->_secteur2 += $_consult->secteur2;
+            $this->du_patient += $_consult->du_patient;
+            $this->du_tiers   += $_consult->du_tiers;
+          }
+        }
+        $this->_secteur1 *= $this->_coeff;
+        $this->_secteur2 *= $this->_coeff;
+      }
+      else {
+        foreach ($this->_ref_items as $item) {
+          $this->_secteur1      += $item->montant_base * $item->quantite * $item->coeff;
+          $this->_secteur2      += $item->montant_depassement * $item->quantite * $item->coeff;
+          
+        }
+        $this->du_patient += $this->_secteur1;
+        $this->du_tiers   += $this->_secteur2;
+      }
     }
-  */
   }
   
   /**
@@ -324,6 +309,7 @@ class CFacture extends CMbObject {
     $this->_montant_avec_remise = 0;
     
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed")) {
+      $this->loadNumerosBVR();
       foreach ($this->_montant_factures as $_montant) {
         $this->_montant_sans_remise += $_montant;
       }
@@ -440,7 +426,6 @@ class CFacture extends CMbObject {
     $this->loadRefCoeffFacture();
     
     // Eclatement des factures
-    $this->_nb_factures = 1;
     if (CModule::getActive("tarmed") && CAppUI::conf("tarmed CCodeTarmed use_cotation_tarmed") ) {
       $this->eclatementTarmed();
     }
@@ -458,15 +443,21 @@ class CFacture extends CMbObject {
     }
     
     $consult = new CConsultation();
-    if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
-      $ljoin = array();
-      $ljoin["facture_liaison"] = "facture_liaison.object_id = consultation.consultation_id";
-      $where = array();
-      $where["facture_liaison.facture_id"]    = " = '$this->_id'";
-      $where["facture_liaison.facture_class"] = " = '$this->_class'";
-      $where["facture_liaison.object_class"]  = " = 'CConsultation'";
-      
-      $this->_ref_consults = $consult->loadList($where, null, null, null, $ljoin);
+    if ($this->_id) {
+      if (CModule::getActive("dPfacturation")) {
+        $ljoin = array();
+        $ljoin["facture_liaison"] = "facture_liaison.object_id = consultation.consultation_id";
+        $where = array();
+        $where["facture_liaison.facture_id"]    = " = '$this->_id'";
+        $where["facture_liaison.facture_class"] = " = '$this->_class'";
+        $where["facture_liaison.object_class"]  = " = 'CConsultation'";
+        $this->_ref_consults = $consult->loadList($where, null, null, null, $ljoin);
+      }
+      if (!count($this->_ref_consults)) {
+        $consult_new = new CConsultation();
+        $consult_new->facture_id = $this->_id;
+        $this->_ref_consults = $consult_new->loadMatchingList();
+      }
     }
     elseif ($this->_consult_id) {
       $consult_new = new CConsultation();
@@ -480,19 +471,14 @@ class CFacture extends CMbObject {
       }
       $this->_ref_consults = $consult->loadMatchingList();
     }
-    elseif ($this->_id) {
-      $consult->facture_id = $this->_id;
-      $this->_ref_consults = $consult->loadMatchingList();
-    }
     
     if (count($this->_ref_consults) > 0) {
       foreach ($this->_ref_consults as $_consult) {
         if ($_consult->valide == 0) {
           unset($this->_ref_consults["$_consult->_id"]);
-        }  
+        }
       }
     }
-    
     if (count($this->_ref_consults) > 0) {
       // Chargement des actes de consultations
       foreach ($this->_ref_consults as $_consult) {
@@ -563,11 +549,10 @@ class CFacture extends CMbObject {
     $item->object_class = $this->_class;
     $this->_ref_items = $item->loadMatchingList("code ASC");
     if (count($this->_ref_items)) {
-      $this->_ref_actes_tarmed  = array();
-      $this->_ref_actes_caisse  = array();
-      $this->_ref_actes_ngap    = array();
-      $this->_ref_actes_ccam    = array();
-      
+      $this->_ref_actes_tarmed = array();
+      $this->_ref_actes_caisse = array();
+      $this->_ref_actes_ngap = array();
+      $this->_ref_actes_ccam = array();
       foreach ($this->_ref_items as $key => $item) {
         switch ($item->type) {
           case "CActeTarmed" :
@@ -597,8 +582,9 @@ class CFacture extends CMbObject {
   **/
   function creationLigneCCAM($acte_ccam, $date){
     $ligne = new CFactureItem();
+    $acte_ccam->loadRefCodeCCAM();
     $ligne->libelle       = $acte_ccam->_ref_code_ccam->libelleCourt;
-    $ligne->code          = $acte_ccam->code;
+    $ligne->code          = $acte_ccam->code_acte;
     $ligne->type          = $acte_ccam->_class;
     $ligne->object_id     = $this->_id;
     $ligne->object_class  = $this->_class;
@@ -628,7 +614,7 @@ class CFacture extends CMbObject {
     $ligne->object_class  = $this->_class;
     $ligne->date          = $date;
     $ligne->montant_base  = $acte_ngap->montant_base;
-    $ligne->montant_depassement = $acte_ccam->montant_depassement;
+    $ligne->montant_depassement = $acte_ngap->montant_depassement;
     $ligne->quantite      = $acte_ngap->quantite;
     $ligne->coeff         = $acte_ngap->coefficient;
     if ($msg = $ligne->store()) {
@@ -811,7 +797,7 @@ class CFacture extends CMbObject {
         $montant = sprintf('%010d', $montant_facture*100);
         $cle = $this->getNoControle($genre.$montant);
         $this->_num_bvr[$montant_facture] = $genre.$montant.$cle.">".$this->num_reference."+ ".$adherent2.">";
-      } 
+      }
     }
     return $this->_num_bvr;
   }
@@ -832,7 +818,7 @@ class CFacture extends CMbObject {
         $coeff = "coeff_".$this->type_facture;
         $coeff = $acte_caisse->_class == "CActeCaisse" ? $acte_caisse->_ref_caisse_maladie->$coeff : $acte_caisse->coeff ;
         $use   = $acte_caisse->_class == "CActeCaisse" ? $acte_caisse->_ref_caisse_maladie->use_tarmed_bill : $acte_caisse->use_tarmed_bill;
-        $tarif_acte_caisse = ($acte_caisse->montant_base + $acte_caisse->montant_depassement)* $coeff;
+        $tarif_acte_caisse = ($acte_caisse->_montant_facture)* $coeff;
         if ($use) {
           $this->_autre_tarmed += $tarif_acte_caisse;
         }
@@ -867,11 +853,11 @@ class CFacture extends CMbObject {
   **/
   function loadTotauxObject($object) {
     foreach ($object->_ref_actes_tarmed as $acte_tarmed) {
-      $this->_total_tarmed += $acte_tarmed->montant_base + $acte_tarmed->montant_depassement;
+      $this->_total_tarmed += $acte_tarmed->_montant_facture;
     }
     foreach ($object->_ref_actes_caisse as $acte_caisse) {
       $coeff = "coeff_".$this->type_facture;
-      $tarif_acte_caisse = ($acte_caisse->montant_base + $acte_caisse->montant_depassement)*$acte_caisse->_ref_caisse_maladie->$coeff;
+      $tarif_acte_caisse = ($acte_caisse->_montant_facture)*$acte_caisse->_ref_caisse_maladie->$coeff;
       if ($acte_caisse->_ref_caisse_maladie->use_tarmed_bill) {
         $this->_autre_tarmed += $tarif_acte_caisse;
       }
@@ -888,26 +874,25 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function rangeActes($object) {
-    $this->addActes($object->_ref_actes_tarmed  , "_ref_actes_tarmed");
-    $this->addActes($object->_ref_actes_caisse  , "_ref_actes_caisse");
-    $this->addActes($object->_ref_actes_ngap    , "_ref_actes_ngap");
-    $this->addActes($object->_ref_actes_ccam    , "_ref_actes_ccam");
-  }
-  
-  /**
-   * Fonction de création des lignes(items) de la facture lorsqu'elle est cloturée
-   * 
-   * @param string $actes les actes
-   * @param string $name  le nom de la reférence
-   * 
-   * @return void
-  **/
-  function addActes($actes, $name) {
-    $tab = $this->$name;
-    foreach ($actes as $key => $acte) {
-      $tab[$key] = $acte;
+    if (count($object->_ref_actes)) {
+      foreach ($object->_ref_actes as $acte) {
+        switch ($acte->_class) {
+          case "CActeTarmed" :
+            $this->_ref_actes_tarmed[$acte->_id] = $acte;
+            break;
+          case "CActeCaisse" :
+            $this->_ref_actes_caisse[$acte->_id] = $acte;
+            break;
+          case "CActeNGAP" :
+            $this->_ref_actes_ngap[$acte->_id] = $acte;
+            break;
+          case "CActeCCAM" :
+            $acte->loadRefCodeCCAM();
+            $this->_ref_actes_ccam[$acte->_id] = $acte;
+            break;
+        }
+      }
     }
-    $this->$name = $tab;
   }
   
   /**
@@ -939,17 +924,21 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function creationLignesObject($object, $date){
-    foreach ($object->_ref_actes_tarmed as $acte) {
-      $this->creationLigneTarmed($acte, $date);
-    }
-    foreach ($object->_ref_actes_caisse as $acte) {
-      $this->creationLigneCaisse($acte, $date);
-    }
-    foreach ($object->_ref_actes_ccam as $acte_ccam) {
-      $this->creationLigneCCAM($acte, $date);
-    }
-    foreach ($object->_ref_actes_ngap as $acte_ngap) {
-      $this->creationLigneNGAP($acte, $date);
+    foreach ($object->_ref_actes as $acte) {
+      switch ($acte->_class) {
+        case "CActeTarmed" :
+          $this->creationLigneTarmed($acte, $date);
+          break;
+        case "CActeCaisse" :
+          $this->creationLigneCaisse($acte, $date);
+          break;
+        case "CActeNGAP" :
+          $this->creationLigneNGAP($acte, $date);
+          break;
+        case "CActeCCAM" :
+          $this->creationLigneCCAM($acte, $date);
+          break;
+      }
     }
   }
 }

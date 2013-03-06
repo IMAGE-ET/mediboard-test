@@ -9,6 +9,9 @@
  * @version    $Revision$
  */
 
+/**
+ * Consultation
+ */
 class CConsultation extends CFacturable {
   const PLANIFIE       = 16;
   const PATIENT_ARRIVE = 32;
@@ -16,165 +19,165 @@ class CConsultation extends CFacturable {
   const TERMINE        = 64;
 
   // DB Table key
-  var $consultation_id = null;
+  public $consultation_id;
 
   // DB References
-  var $plageconsult_id = null;
-  var $patient_id      = null;
-  var $sejour_id       = null;
-  var $grossesse_id    = null;
-  var $facture_id  		 = null;
+  public $plageconsult_id;
+  public $patient_id;
+  public $sejour_id;
+  public $grossesse_id;
+  public $facture_id;
 
   // DB fields
-  var $type            = null;
-  var $heure           = null;
-  var $duree           = null;
-  var $secteur1        = null;
-  var $secteur2        = null;
-  var $chrono          = null;
-  var $annule          = null;
+  public $type;
+  public $heure;
+  public $duree;
+  public $secteur1;
+  public $secteur2;
+  public $chrono;
+  public $annule;
 
-  var $patient_date_reglement = null;
-  var $tiers_date_reglement   = null;
+  public $patient_date_reglement;
+  public $tiers_date_reglement;
 
-  var $motif            = null;
-  var $rques            = null;
-  var $examen           = null;
-  var $histoire_maladie = null;
-  var $brancardage      = null;
-  var $conclusion       = null;
+  public $motif;
+  public $rques;
+  public $examen;
+  public $histoire_maladie;
+  public $brancardage;
+  public $conclusion;
 
-  var $traitement          = null;
-  var $premiere            = null;
-  var $derniere            = null;
-  var $adresse             = null; // Le patient a-t'il été adressé ?
-  var $adresse_par_prat_id = null;
-  var $tarif               = null;
+  public $traitement;
+  public $premiere;
+  public $derniere;
+  public $adresse; // Le patient a-t'il été adressé ?
+  public $adresse_par_prat_id;
+  public $tarif;
 
-  var $arrivee         = null;
-  var $categorie_id    = null;
-  var $valide          = null; // Cotation validée
-  var $si_desistement  = null;
+  public $arrivee;
+  public $categorie_id;
+  public $valide; // Cotation validée
+  public $si_desistement;
 
-  var $total_assure    = null;
-  var $total_amc       = null;
-  var $total_amo       = null;
+  public $total_assure;
+  public $total_amc;
+  public $total_amo;
 
-  var $du_patient       = null; // somme que le patient doit régler
-  var $du_tiers         = null;
-  var $type_assurance   = null;
-  var $date_at          = null;
-  var $fin_at           = null;
-  var $pec_at           = null;
-  var $num_at           = null;
-  var $cle_at           = null;
-  var $reprise_at       = null;
-  var $at_sans_arret    = null;
-  var $arret_maladie    = null;
-  var $concerne_ALD     = null;
+  public $du_patient; // somme que le patient doit régler
+  public $du_tiers;
+  public $type_assurance;
+  public $date_at;
+  public $fin_at;
+  public $pec_at;
+  public $num_at;
+  public $cle_at;
+  public $reprise_at;
+  public $at_sans_arret;
+  public $arret_maladie;
+  public $concerne_ALD;
 
   // Form fields
-  var $_etat           = null;
-  var $_hour           = null;
-  var $_min            = null;
-  var $_check_adresse  = null;
-  var $_somme          = null;
-  var $_types_examen   = null;
-  var $_precode_acte   = null;
-  var $_exam_fields    = null;
-  var $_acte_dentaire_id = null;
-  var $_function_secondary_id = null;
-  var $_semaine_grossesse = null;
-  var $_type           = null;  // Type de la consultation
-  var $_duree          = null;
-  var $_force_create_sejour = null;
+  public $_etat;
+  public $_hour;
+  public $_min;
+  public $_check_adresse;
+  public $_somme;
+  public $_types_examen;
+  public $_precode_acte;
+  public $_exam_fields;
+  public $_acte_dentaire_id;
+  public $_function_secondary_id;
+  public $_semaine_grossesse;
+  public $_type;  // Type de la consultation
+  public $_duree;
+  public $_force_create_sejour;
 
   // Fwd References
   /**
    * @var CPatient
    */
-  var $_ref_patient      = null; // Declared in CCodable
+  public $_ref_patient; // Declared in CCodable
   /**
    * @var CSejour
    */
-  var $_ref_sejour       = null; // Declared in CCodable
+  public $_ref_sejour; // Declared in CCodable
 
   /**
    * @var CPlageconsult
    */
-  var $_ref_plageconsult = null;
-  var $_ref_adresse_par_prat = null;
+  public $_ref_plageconsult;
+  public $_ref_adresse_par_prat;
 
   /**
    * @var CMediusers
    */
-  var $_ref_praticien = null;
+  public $_ref_praticien;
 
   // FSE
-  var $_bind_fse       = null;
-  var $_ids_fse        = null;
-  var $_ext_fses       = null;
-  var $_current_fse    = null;
-  var $_fse_intermax   = null;
+  public $_bind_fse;
+  public $_ids_fse;
+  public $_ext_fses;
+  public $_current_fse;
+  public $_fse_intermax;
 
   // Tarif
-  var $_bind_tarif     = null;
-  var $_tarif_id       = null;
+  public $_bind_tarif;
+  public $_tarif_id;
 
   // Back References
   /**
    * @var CConsultAnesth
    */
-  var $_ref_consult_anesth     = null;
-  var $_refs_dossiers_anesth   = null;
-  var $_ref_examaudio          = null;
-  var $_ref_examcomp           = null;
-  var $_ref_examnyha           = null;
-  var $_ref_exampossum         = null;
-  var $_count_fiches_examen    = null;
-  var $_ref_reglements         = null;
-  var $_ref_reglements_patient = null;
-  var $_ref_reglements_tiers   = null;
-  var $_ref_grossesse          = null;
-  var $_ref_facture            = null;
-  var $_ref_prescription       = null;
-  var $_ref_categorie          = null;
+  public $_ref_consult_anesth;
+  public $_refs_dossiers_anesth;
+  public $_ref_examaudio;
+  public $_ref_examcomp;
+  public $_ref_examnyha;
+  public $_ref_exampossum;
+  public $_count_fiches_examen;
+  public $_ref_reglements;
+  public $_ref_reglements_patient;
+  public $_ref_reglements_tiers;
+  public $_ref_grossesse;
+  public $_ref_facture;
+  public $_ref_prescription;
+  public $_ref_categorie;
   /**
    * @var CGroups
    */
-  var $_ref_group              = null;
+  public $_ref_group;
   
   // Distant fields
-  var $_ref_chir                 = null;
-  var $_date                     = null;
-  var $_datetime                 = null;
-  var $_date_fin                 = null;
-  var $_is_anesth                = null;
-  var $_du_restant_patient       = null;
-  var $_du_restant_tiers         = null;
-  var $_reglements_total_patient = null;
-  var $_reglements_total_tiers   = null;
-  var $_forfait_se               = null;
-  var $_forfait_sd               = null;
-  var $_facturable               = null;
+  public $_ref_chir;
+  public $_date;
+  public $_datetime;
+  public $_date_fin;
+  public $_is_anesth;
+  public $_du_restant_patient;
+  public $_du_restant_tiers;
+  public $_reglements_total_patient;
+  public $_reglements_total_tiers;
+  public $_forfait_se;
+  public $_forfait_sd;
+  public $_facturable;
 
   // Filter Fields
-  var $_date_min               = null;
-  var $_date_max               = null;
-  var $_prat_id                = null;
-  var $_etat_reglement_patient = null;
-  var $_etat_reglement_tiers   = null;
-  var $_type_affichage         = null;
-  var $_telephone              = null;
-  var $_coordonnees            = null;
-  var $_plages_vides           = null;
-  var $_empty_places           = null;
-  var $_non_pourvues           = null;
+  public $_date_min;
+  public $_date_max;
+  public $_prat_id;
+  public $_etat_reglement_patient;
+  public $_etat_reglement_tiers;
+  public $_type_affichage;
+  public $_telephone;
+  public $_coordonnees;
+  public $_plages_vides;
+  public $_empty_places;
+  public $_non_pourvues;
 
   // Behaviour fields
-  var $_operation_id = null;
-  var $_dossier_anesth_completed_id = null;
-  var $_count_matching_sejours = null;
+  public $_operation_id;
+  public $_dossier_anesth_completed_id;
+  public $_count_matching_sejours;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -201,7 +204,6 @@ class CConsultation extends CFacturable {
     $backProps["examnyha"]          = "CExamNyha consultation_id";
     $backProps["exampossum"]        = "CExamPossum consultation_id";
     $backProps["prescriptions"]     = "CPrescription object_id";
-    $backProps["reglements"]        = "CReglement object_id";
     $backProps["actes_dentaires"]   = "CActeDentaire consult_id";
     $backProps["echanges_hprimxml"] = "CEchangeHprim object_id";
     $backProps["exchanges_ihe"]     = "CExchangeIHE object_id";
@@ -403,9 +405,6 @@ class CConsultation extends CFacturable {
 
     // Dévalidation avec règlement déjà effectué
     if ($this->fieldModified("valide", "0")) {
-      if ($this->countBackRefs("reglements")) {
-        $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements de consultation ont déjà été effectués";
-      }
       // Bien tester sur _old car valide = 0 s'accompagne systématiquement d'un facture_id = 0
       if ($this->_old->loadRefFacture()->countBackRefs("reglements")) {
         $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements de factures ont déjà été effectués";
@@ -746,15 +745,6 @@ TESTS A EFFECTUER
       $this->si_desistement = 0;
     }
 
-    /*if ($this->fieldAltered("facture_id")) {
-      $facture = $this->_old->loadRefFacture();
-      if ($facture->countBackRefs("consultations") == 1) {
-        if ($msg = $facture->delete()) {
-          return $msg;
-        }
-      }
-    }*/
-    
     // Consultation dans un séjour
     if ((!$this->_id && !$this->sejour_id &&
         CAppUI::conf("dPcabinet CConsultation attach_consult_sejour") && $this->patient_id) || $this->_force_create_sejour) {
@@ -1071,19 +1061,21 @@ TESTS A EFFECTUER
   }
 
   function loadRefFacture() {
-    if ($this->_id && !CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
-      return $this->_ref_facture = $this->loadFwdRef("facture_id", true);
+    if ($this->_ref_facture) {
+      return $this->_ref_facture;
     }
-    elseif (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
+    if (CModule::getActive("facturation")) {
       $where = array();
-      $where["object_id"]     = "= '$this->_id'"; 
-      $where["object_class"]  = "= '$this->_class'"; 
-      $where["facture_class"] = "= 'CFactureCabinet'"; 
+      $where["object_id"]     = "= '$this->_id'";
+      $where["object_class"]  = "= '$this->_class'";
+      $where["facture_class"] = "= 'CFactureCabinet'";
       $liaison = new CFactureLiaison();
       if ($liaison->loadObject($where)) {
         return $this->_ref_facture = $liaison->loadRefFacture();
       }
-      elseif ($this->facture_id) {
+    }
+    if (!$this->_ref_facture) {
+      if ($this->facture_id) {
         return $this->_ref_facture = $this->loadFwdRef("facture_id", true);
       }
       else {
@@ -1094,51 +1086,6 @@ TESTS A EFFECTUER
   
   function loadRefGroup() {
     return $this->_ref_group = $this->loadRefPraticien()->loadRefFunction()->loadRefGroup();
-  }
-
-  /**
-   * Permet de simplifier la transition vers les CFactureCabinet
-   * @see    self::loadRefFacture()
-   * @todo   A supprimer le cas échéant
-   * 
-   * @return CFactureCabinet La pseudo facture
-   */
-  function fakeRefFacture() {
-    $facture = new CFactureCabinet();
-    $facture->_guid = "$facture->_class-$this->_guid";
-    $facture->_view = sprintf("CO%08d", $this->_id);
-    $facture->_ref_patient   = $this->loadRefPatient();
-    $facture->_ref_praticien = $this->loadRefPraticien();
-    $facture->_ref_consults  = array($this->_id => $this);
-    $facture->_ref_last_consult = $this;
-    
-    $facture->du_patient = $this->du_patient;
-    $facture->du_tiers   = $this->du_tiers  ;
-    $facture->patient_date_reglement = $this->patient_date_reglement;
-    $facture->tiers_date_reglement   = $this->tiers_date_reglement;
-    $facture->updateMontants();
-    
-    return $this->_ref_facture = $facture;
-  }
-  
-  /**
-   * Permet de simplifier la transition vers les CFactureCabinet
-   * @see    self::loadRefFacture()
-   * @see    self::loadRefReglements()
-   * @todo   A supprimer le cas échéant
-   * 
-   * @return CFactureCabinet La pseudo facture
-   */
-  function fakeRefFactureReglements() {
-    $facture = $this->fakeRefFacture();
-    $facture->_ref_reglements = $this->loadRefsReglements();
-    $facture->_ref_reglements_patient = $this->_ref_reglements_patient;
-    $facture->_ref_reglements_tiers   = $this->_ref_reglements_tiers  ;
-    $facture->_du_restant_patient = $this->_du_restant_patient;
-    $facture->_du_restant_tiers   = $this->_du_restant_tiers  ;
-    $facture->_reglements_total_patient = $this->_reglements_total_patient;
-    $facture->_reglements_total_tiers   = $this->_reglements_total_tiers  ;
-    return $facture;
   }
   
   function getActeExecution() {
@@ -1314,23 +1261,24 @@ TESTS A EFFECTUER
   }
 
   function loadRefsReglements() {
-    $this->_ref_reglements = $this->facture_id ?
-      $this->loadRefFacture()->loadRefsReglements() :
-      $this->loadBackRefs('reglements', 'date');
-      
     // Classement reglements patient et tiers 
     $this->_ref_reglements_patient = array();
     $this->_ref_reglements_tiers   = array();
-    foreach ($this->_ref_reglements as $_reglement) {
-      $_reglement->loadRefBanque(1);
-      if ($_reglement->emetteur == "patient") {
-        $this->_ref_reglements_patient[$_reglement->_id] = $_reglement;
-      }
-      if ($_reglement->emetteur == "tiers") {
-        $this->_ref_reglements_tiers[$_reglement->_id] = $_reglement;
+    
+    $this->loadRefFacture();
+    if ($this->_ref_facture) {
+      $this->_ref_reglements = $this->_ref_facture->loadRefsReglements();
+      foreach ($this->_ref_reglements as $_reglement) {
+        $_reglement->loadRefBanque(1);
+        if ($_reglement->emetteur == "patient") {
+          $this->_ref_reglements_patient[$_reglement->_id] = $_reglement;
+        }
+        if ($_reglement->emetteur == "tiers") {
+          $this->_ref_reglements_tiers[$_reglement->_id] = $_reglement;
+        }
       }
     }
-
+    
     // Calcul de la somme du restante du patient
     $this->_du_restant_patient = $this->du_patient;
     $this->_reglements_total_patient = 0;

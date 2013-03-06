@@ -1816,7 +1816,13 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `facture_cabinet` 
               DROP `consultation_id`;";
     $this->addQuery($query);
-    $this->mod_version = "1.93";
+    $this->makeRevision("1.93");
+    
+    $query = "ALTER TABLE `reglement` 
+              CHANGE `object_class` `object_class` ENUM ('CFactureCabinet','CFactureEtablissement') NOT NULL DEFAULT 'CFactureCabinet';";
+    $this->addQuery($query);
+    
+    $this->mod_version = "1.94";
   }
 }
 ?>
