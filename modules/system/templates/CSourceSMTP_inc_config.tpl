@@ -51,7 +51,11 @@ guessDataFormEmail = function(element){
           </tr>
           <tr>
             <th>{{mb_label object=$source field="password"}}</th>
-            <td>{{mb_field object=$source field="password"}}</td>
+            {{assign var=placeholder value="Pas de mot de passe"}}
+            {{if $source->password}}
+              {{assign var=placeholder value="Mot de passe enregistré"}}
+            {{/if}}
+            <td>{{mb_field object=$source field="password" placeholder=$placeholder}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$source field="port"}}</th>

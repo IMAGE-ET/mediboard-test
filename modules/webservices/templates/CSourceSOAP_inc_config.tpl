@@ -35,7 +35,11 @@
           </tr>
           <tr>
             <th>{{mb_label object=$source field="password"}}</th>
-            <td>{{mb_field object=$source field="password"}}</td>
+            {{assign var=placeholder value="Pas de mot de passe"}}
+            {{if $source->password}}
+              {{assign var=placeholder value="Mot de passe enregistré"}}
+            {{/if}}
+            <td>{{mb_field object=$source field="password" placeholder=$placeholder}}</td>
           </tr>
           <tr>
             <th>{{mb_label object=$source field="type_echange"}}</th>
@@ -67,7 +71,11 @@
           </tr>
           <tr>
             <th>{{mb_label object=$source field="passphrase"}}</th>
-            <td>{{mb_field object=$source field="passphrase"}}</td>
+            {{assign var=placeholder value="Pas de phrase de passe"}}
+            {{if $source->passphrase}}
+              {{assign var=placeholder value="Phrase de passe enregistrée"}}
+            {{/if}}
+            <td>{{mb_field object=$source field="passphrase" placeholder=$placeholder}}</td>
           </tr>
           <tr>
             <td class="button" colspan="2">

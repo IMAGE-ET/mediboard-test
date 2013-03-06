@@ -40,7 +40,11 @@
           </tr>
           <tr>
             <th>{{mb_label object=$source field="ssl_passphrase"}}</th>
-            <td>{{mb_field object=$source field="ssl_passphrase"}}</td>
+            {{assign var=placeholder value="Pas de phrase de passe"}}
+            {{if $source->ssl_passphrase}}
+              {{assign var=placeholder value="Phrase de passe enregistrée"}}
+            {{/if}}
+            <td>{{mb_field object=$source field="ssl_passphrase" placeholder=$placeholder}}</td>
           </tr>
           <tr>
             <td class="button" colspan="2">

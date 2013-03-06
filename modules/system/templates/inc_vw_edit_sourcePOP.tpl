@@ -48,7 +48,11 @@
     </tr>
     <tr>
       <th>{{mb_label object=$source field="password"}}</th>
-      <td>{{mb_field object=$source field="password"}}</td>
+      {{assign var=placeholder value="Pas de mot de passe"}}
+      {{if $source->password}}
+        {{assign var=placeholder value="Mot de passe enregistré"}}
+      {{/if}}
+      <td>{{mb_field object=$source field="password" placeholder=$placeholder}}</td>
     </tr>
     <tr {{if !$app->_ref_user->isAdmin()}}style="display:none;"{{/if}}>
       <th>{{mb_label object=$source field="timeout"}}</th>
