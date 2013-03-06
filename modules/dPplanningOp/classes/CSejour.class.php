@@ -2978,12 +2978,12 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $where["object_class"] = " = 'CPrestationJournaliere'";
     $where["object_id"] = " = '$prestation_id'";
-    $sejour->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, null, $ljoin);
+    $this->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, null, $ljoin);
 
-    CMbObject::massLoadFwdRef($sejour->_liaisons_for_prestation, "item_souhait_id");
-    CMbObject::massLoadFwdRef($sejour->_liaisons_for_prestation, "item_realise_id");
+    CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_souhait_id");
+    CMbObject::massLoadFwdRef($this->_liaisons_for_prestation, "item_realise_id");
 
-    foreach ($sejour->_liaisons_for_prestation as $_liaison) {
+    foreach ($this->_liaisons_for_prestation as $_liaison) {
       $_liaison->loadRefItem();
       $_liaison->loadRefItemRealise();
     }

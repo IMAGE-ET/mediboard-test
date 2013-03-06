@@ -29,6 +29,18 @@
         </select>
       </td>
     </tr>
+    {{if $prestations_journalieres|@count}}
+      <tr>
+        <td>
+          <select name="prestation_id" style="width: 16em;" onchange="this.form.onsubmit()">
+            <option value="">&mdash; {{tr}}All{{/tr}}</option>
+            {{foreach from=$prestations_journalieres item=_prestation}}
+              <option value="{{$_prestation->_id}}" {{if $_prestation->_id == $prestation_id}}selected{{/if}}>{{$_prestation}}</option>
+            {{/foreach}}
+          </select>
+        </td>
+      </tr>
+    {{/if}}
   </table>
 </form>
 

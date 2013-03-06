@@ -7,8 +7,6 @@
 * @author Thomas Despoix
 */
 
-global $can;
-
 CCanDo::checkRead();
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
@@ -26,6 +24,7 @@ $services_ids    = CValue::getOrSession("services_ids");
 $triAdm          = CValue::getOrSession("triAdm", "praticien");
 $_type_admission = CValue::getOrSession("_type_admission", "ambucomp");
 $filterFunction  = CValue::getOrSession("filterFunction");
+$prestation_id   = CValue::getOrSession("prestation_id", CAppUI::pref("prestation_id_hospi"));
 
 if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);
@@ -49,15 +48,15 @@ $where["group_id"]  = "= '$g'";
 $where["cancelled"] = "= '0'";
 $services = new CService();
 $order = "externe, nom";
-$services = $services->loadListWithPerms(PERM_READ,$where, $order);
+$services = $services->loadListWithPerms(PERM_READ, $where, $order);
 
 // Chargement des services
 foreach ($services as &$service) {
-  if (!in_array($service->_id, $services_ids)){
+  if (!in_array($service->_id, $services_ids)) {
     continue;
   }
-  
-  loadServiceComplet($service, $date, $mode);
+
+  loadServiceComplet($service, $date, $mode, null, null, $prestation_id);
   CApp::$chrono->stop("Load Service Complet : '$service->_view'");
   CApp::$chrono->start();
   $totalLits += $service->_nb_lits_dispo;
@@ -71,14 +70,16 @@ $where = array();
 $where["annule"]          = "= '0'";
 $where["sejour.entree"]   = "BETWEEN '$today' AND '$endWeek'";
 $where["sejour.group_id"] = "= '$g'";
-if($_type_admission == "ambucomp") {
+if ($_type_admission == "ambucomp") {
   $where[] = "`sejour`.`type` = 'ambu' OR `sejour`.`type` = 'comp'";
-} elseif($_type_admission) {
+}
+elseif ($_type_admission) {
   $where["sejour.type"] = " = '$_type_admission'";
-} else {
+}
+else {
   $where["sejour.type"] = "!= 'urg'";
 }
-if($_type_admission != "seances") {
+if ($_type_admission != "seances") {
   $where[] = "affectation.affectation_id IS NULL";
 }
 
@@ -86,7 +87,7 @@ $where[] = "sejour.service_id IN (".join($services_ids, ',').") OR sejour.servic
 $leftjoin["affectation"]  = "sejour.sejour_id = affectation.sejour_id";
 
 // Filtre sur les fonctions
-if($filterFunction){
+if ($filterFunction) {
   $leftjoin["users_mediboard"] = "sejour.praticien_id = users_mediboard.user_id";
   $where["users_mediboard.function_id"] = " = '$filterFunction'";
 }
@@ -99,7 +100,7 @@ CApp::$chrono->start();
 // Liste des patients à placer
 $groupSejourNonAffectes = array();
 
-if ($can->edit) {
+if (CCanDo::edit()) {
   $where = array();
   $where["sejour.annule"] = "= '0'";
   $where[] = "sejour.service_id IN (".join($services_ids, ',').") OR sejour.service_id IS NULL";
@@ -130,19 +131,19 @@ if ($can->edit) {
   // Admissions de la veille
   $dayBefore = mbDate("-1 days", $date);
   $where["sejour.entree"] = "BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
-  $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order);
+  $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order, null, $prestation_id);
   CApp::$chrono->stop("Non affectés: veille");
   CApp::$chrono->start();
   
   // Admissions du matin
-  $where["sejour.entree"] = "BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'";
-  $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order);
+  $where["sejour.entree"] = "BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second", $heureLimit)."'";
+  $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order, null, $prestation_id);
   CApp::$chrono->stop("Non affectés: matin");
   CApp::$chrono->start();
   
   // Admissions du soir
   $where["sejour.entree"] = "BETWEEN '$date $heureLimit' AND '$date 23:59:59'";
-  $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order);
+  $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order, null, $prestation_id);
   CApp::$chrono->stop("Non affectés: soir");
   CApp::$chrono->start();
   
@@ -151,7 +152,7 @@ if ($can->edit) {
   $where["sejour.entree"] = "<= '$twoDaysBefore 23:59:59'";
   $where["sejour.sortie"] = ">= '$date 00:00:00'";
 
-  $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order);
+  $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order, null, $prestation_id);
   CApp::$chrono->stop("Non affectés: avant");
   CApp::$chrono->start();
   
@@ -161,15 +162,15 @@ if ($can->edit) {
   $where["sejour.annule"] = " = '0'";
   $where[] = "(affectation.entree BETWEEN '$date 00:00:00' AND '$date 23:59:59')
             OR (affectation.sortie BETWEEN '$date 00:00:00' AND '$date 23:59:59')";
-  $groupSejourNonAffectes["couloir"] = loadAffectationsCouloirs($where, $order);
+  $groupSejourNonAffectes["couloir"] = loadAffectationsCouloirs($where, $order, null, $prestation_id);
 }
 
 $functions_filter = array();
-foreach($groupSejourNonAffectes as $_keyGroup => $_group) {
+foreach ($groupSejourNonAffectes as $_keyGroup => $_group) {
   if ($_keyGroup == "couloir") {
     continue;
   }
-  foreach($_group as $_key => $_sejour) {
+  foreach ($_group as $_key => $_sejour) {
     $functions_filter[$_sejour->_ref_praticien->function_id] = $_sejour->_ref_praticien->_ref_function;
     if ($filterFunction && $filterFunction != $_sejour->_ref_praticien->function_id) {
       unset($groupSejourNonAffectes[$_keyGroup][$_key]);
@@ -178,11 +179,11 @@ foreach($groupSejourNonAffectes as $_keyGroup => $_group) {
 }
 
 $affectation = new CAffectation();
-$affectation->entree = mbAddDateTime("08:00:00",$date);
-$affectation->sortie = mbAddDateTime("23:00:00",$date);
+$affectation->entree = mbAddDateTime("08:00:00", $date);
+$affectation->sortie = mbAddDateTime("23:00:00", $date);
 
 // Chargement des prestations
-$prestations = CPrestation::loadCurrentList();
+$prestations_journalieres = CPrestationJournaliere::loadCurrentList();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -190,7 +191,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("services_ids"          , $services_ids);
 $smarty->assign("services"              , $services);
 $smarty->assign("affectation"           , $affectation);
-$smarty->assign("prestations"           , $prestations);
 $smarty->assign("pathos"                , $pathos);
 $smarty->assign("date"                  , $date);
 $smarty->assign("demain"                , mbDate("+ 1 day", $date));
@@ -203,6 +203,8 @@ $smarty->assign("totalLits"             , $totalLits);
 $smarty->assign("alerte"                , $alerte);
 $smarty->assign("groupSejourNonAffectes", $groupSejourNonAffectes);
 $smarty->assign("functions_filter"      , $functions_filter);
+$smarty->assign("prestations_journalieres", $prestations_journalieres);
+$smarty->assign("prestation_id"         , $prestation_id);
 
 $smarty->display("vw_affectations.tpl");
 

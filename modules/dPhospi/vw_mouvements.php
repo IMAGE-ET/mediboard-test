@@ -22,11 +22,9 @@ $prestation_id = CValue::getOrSession("prestation_id", CAppUI::pref("prestation_
 // Si c'est la préférence utilisateur, il faut la mettre en session 
 CValue::setSession("prestation_id", $prestation_id);
 
-$prestation_journaliere = new CPrestationJournaliere;
+$prestations_journalieres = CPrestationJournaliere::loadCurrentList();
 
-$prestations_journalieres = $prestation_journaliere->loadList();
-
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("date"        , $date);
 $smarty->assign("granularites", $granularites);
@@ -37,4 +35,3 @@ $smarty->assign("prestation_id", $prestation_id);
 $smarty->assign("readonly"    , $readonly);
 
 $smarty->display("vw_mouvements.tpl");
-?>

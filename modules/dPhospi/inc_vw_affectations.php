@@ -77,10 +77,12 @@ function &getCachedLit($lit_id) {
 /**
  * Charge complètement un service pour l'affichage des affectations
  */
-function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type = "") {
+function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type = "", $prestation_id = "") {
+
   $service->loadRefsBack();
   $service->_nb_lits_dispo = 0;
   $dossiers = array();
+  $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
 
   foreach ($service->_ref_chambres as $chambre_id => &$chambre) {
     $chambre->loadRefsBack();
@@ -91,14 +93,14 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
       foreach ($lit->_ref_affectations as $affectation_id => &$affectation) {
         if (!$affectation->effectue || $mode) {
           $affectation->loadRefSejour();
-          if ($praticien_id){
-          	if($affectation->_ref_sejour->praticien_id != $praticien_id){
-          		unset($lit->_ref_affectations[$affectation_id]);
-          		continue;
-          	}
+          if ($praticien_id) {
+            if ($affectation->_ref_sejour->praticien_id != $praticien_id) {
+              unset($lit->_ref_affectations[$affectation_id]);
+              continue;
+            }
           }
-         if ($type){
-            if($affectation->_ref_sejour->type != $type){
+          if ($type) {
+            if ($affectation->_ref_sejour->type != $type) {
               unset($lit->_ref_affectations[$affectation_id]);
               continue;
             }
@@ -125,21 +127,29 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
           $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
           $sejour->_ref_patient->loadRefDossierMedical(false);
           
-		      // Chargement des droits CMU
+          // Chargement des droits CMU
           $sejour->getDroitsCMU();
 
-          foreach($sejour->_ref_operations as $operation_id => $curr_operation) {
+          foreach ($sejour->_ref_operations as $operation_id => $curr_operation) {
             $sejour->_ref_operations[$operation_id]->loadExtCodesCCAM();
           }
           $chambre->_nb_affectations++;
           $dossiers[] = $sejour->_ref_patient->_ref_dossier_medical;
-        } else {
+
+          if ($systeme_presta == "expert" && $prestation_id) {
+
+            $sejour->loadLiaisonsForPrestation($prestation_id);
+          }
+        }
+        else {
           unset($lit->_ref_affectations[$affectation_id]);
         }
       }
     }
+
     CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
-    if(!$service->externe) {
+
+    if (!$service->externe) {
       $chambre->checkChambre();
       $service->_nb_lits_dispo += ($chambre->annule == 0 ? $chambre->_nb_lits_dispo : 0);
     }
@@ -149,16 +159,17 @@ function loadServiceComplet(&$service, $date, $mode, $praticien_id = "", $type =
 /**
  *  Chargement des admissions à affecter
  */
-function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
+function loadSejourNonAffectes($where, $order = null, $praticien_id = null, $prestation_id = null) {
   $group_id = CGroups::loadCurrent()->_id;
-  
+  $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
+
   $leftjoin = array(
     "affectation"     => "sejour.sejour_id = affectation.sejour_id",
     "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
     "patients"        => "sejour.patient_id = patients.patient_id"
   );
 
-  if ($praticien_id){
+  if ($praticien_id) {
     $where["sejour.praticien_id"] = " = '$praticien_id'";
   }
 
@@ -166,27 +177,31 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
   
   $where[] = "(sejour.type != 'seances' && affectation.affectation_id IS NULL) || sejour.type = 'seances'";
   
-  if ($order == null){
+  if ($order == null) {
     $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
   }
 
-  $sejourNonAffectes = new CSejour;
+  $sejourNonAffectes = new CSejour();
   $sejourNonAffectes = $sejourNonAffectes->loadList($where, $order, null, null, $leftjoin);
 
   foreach ($sejourNonAffectes as &$sejour) {
-  	$sejour->loadRefPrestation();
-  	$sejour->loadNDA();
-  	$sejour->loadRefsPrescriptions();
+    $sejour->loadRefPrestation();
+    $sejour->loadNDA();
+    $sejour->loadRefsPrescriptions();
     $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
     $sejour->_ref_patient   =& getCachedPatient($sejour->patient_id);
     $sejour->_ref_patient->loadRefDossierMedical(false);
-    
+
+    if ($systeme_presta == "expert" && $prestation_id) {
+      $sejour->loadLiaisonsForPrestation($prestation_id);
+    }
+
     // Chargement des droits CMU
     $sejour->getDroitsCMU();
     
     // Chargement des opérations
     $sejour->loadRefsOperations();
-    foreach($sejour->_ref_operations as &$operation) {
+    foreach ($sejour->_ref_operations as &$operation) {
       $operation->loadExtCodesCCAM();
     }
   }
@@ -198,9 +213,10 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
 /**
  * Chargement des affectations dans les couloirs
  */
-function loadAffectationsCouloirs($where, $order = null, $praticien_id = null) {
+function loadAffectationsCouloirs($where, $order = null, $praticien_id = null, $prestation_id = null) {
   $group_id = CGroups::loadCurrent()->_id;
-  
+  $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
+
   $ljoin = array(
     "sejour"          => "affectation.sejour_id = sejour.sejour_id",
     "patients"        => "sejour.patient_id = patients.patient_id",
@@ -211,7 +227,7 @@ function loadAffectationsCouloirs($where, $order = null, $praticien_id = null) {
     $where["sejour.praticien_id"] = " = '$praticien_id'";
   }
   
-  if ($order == null){
+  if ($order == null) {
     $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
   }
   
@@ -242,11 +258,14 @@ function loadAffectationsCouloirs($where, $order = null, $praticien_id = null) {
     $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
     $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
     $sejour->_ref_patient->loadRefDossierMedical(false);
-    
+
+    if ($systeme_presta == "expert" && $prestation_id) {
+      $sejour->loadLiaisonsForPrestation($prestation_id);
+    }
     // Chargement des droits CMU
     $sejour->getDroitsCMU();
 
-    foreach($sejour->_ref_operations as $operation_id => $curr_operation) {
+    foreach ($sejour->_ref_operations as $operation_id => $curr_operation) {
       $sejour->_ref_operations[$operation_id]->loadExtCodesCCAM();
     }
     $tab_affectations[$affectation->service_id][] = $affectation;

@@ -173,27 +173,7 @@
                         <span class="compact">
                           {{if $systeme_presta == "expert"}}
                             {{if $prestation_id && $_object->_liaisons_for_prestation|@count}}
-                              ({{foreach from=$_object->_liaisons_for_prestation item=liaison}}
-                                {{assign var=item_presta value=$liaison->_ref_item}}
-                                {{assign var=item_presta_realise value=$liaison->_ref_item_realise}}
-                                <strong title="{{tr}}CItemLiaison-item_souhait_id{{/tr}} {{$item_presta->nom}} {{if $item_presta_realise->_id}}versus {{tr}}CItemLiaison-item_realise_id{{/tr}} {{$item_presta_realise->nom}}{{/if}}"
-                                {{if $item_presta->_id && $item_presta_realise->_id}}
-                                  class="
-                                  {{if $item_presta->rank == $item_presta_realise->rank}}
-                                    item_egal
-                                  {{elseif $item_presta->rank > $item_presta_realise->rank}}
-                                    item_inferior
-                                  {{else}}
-                                    item_superior
-                                  {{/if}}"
-                                {{/if}}>
-                                  {{if $item_presta_realise->_id}}
-                                    {{$item_presta_realise->nom}}
-                                  {{else}}
-                                    {{$item_presta->nom}}
-                                  {{/if}}
-                                </strong>
-                              {{/foreach}})
+                              {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$_object->_liaisons_for_prestation}}
                             {{/if}}
                           {{else}}
                             <em style="color: #f00;" title="Chambre seule">
