@@ -35,6 +35,7 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_bool var=readonly}}
     {{mb_include module=system template=inc_config_bool var=log_js_errors}}
     {{mb_include module=system template=inc_config_str var=weinre_debug_host}}
+    {{mb_include module=system template=inc_config_str var=base_backup_lockfile_path}}
 
     <tr>
       <th colspan="2" class="title">

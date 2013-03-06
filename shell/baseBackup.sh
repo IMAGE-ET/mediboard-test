@@ -21,13 +21,15 @@ then
   echo "   [-t <time>] is time in days before removal of files, default 7"
   echo "   [-b ] to create mysql binary log index"
   echo "   [-l <login>] user:pass login to send a mail when diskfull is detected"
+  echo "   [-f <lock_file>] lock file path"
   exit 1
 fi
 
 login=''
 time=7
 binary_log=0
-args=`getopt t:l:b $*`
+lock=''
+args=`getopt t:l:f:b $*`
 
 if [ $? != 0 ] ; then
   echo "Invalid argument. Check your command line"; exit 0;
@@ -39,6 +41,7 @@ for i; do
   case "$i" in
     -t) time=$2; shift 2;;
     -l) login=$2; shift 2;;
+    -f) lock=$2; shift 2;;
     -b) binary_log=1; shift;;
     --) shift ; break ;;
   esac
@@ -56,6 +59,12 @@ info_script "Backuping '$database' database"
 
 # Make shell path
 SHELL_PATH=`pwd`/$BASH_PATH
+
+# Create lock file
+if [ -n "$lock" ]
+then
+  touch $lock
+fi
 
 # Make backup path
 BACKUP_PATH=$5
@@ -118,7 +127,12 @@ case $1 in
     ;;
   *)
     result=$database/
-    echo "Choose hotcopy or dump method" 
+    echo "Choose hotcopy or dump method"
+
+    if [ -n "$lock" ]
+    then
+      rm $lock
+    fi
     exit 1
     ;;
 esac
@@ -146,3 +160,8 @@ check_errs $? "Failed to create symlink" "Symlink created!"
 # Remove temporary files
 rm -Rf $result
 check_errs $? "Failed to clean MySQL files" "MySQL files cleansing done!"
+
+if [ -n "$lock" ]
+then
+  rm $lock
+fi

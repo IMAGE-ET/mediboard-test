@@ -17,6 +17,10 @@ switch ($reason) {
     $msg = "La base de données n'est pas accessible.";
     break;
 
+  case "backup":
+    $msg = "La base de données est en cours de sauvegarde.";
+    break;
+
   default :
     if (!($dPconfig["offline"] || $dPconfig["offline_non_admin"])) {
       header("Location: index.php");

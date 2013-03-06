@@ -33,7 +33,7 @@ require_once dirname(__FILE__)."/classes/Procedure.class.php";
  * @return void
  */
 function baseBackup($method, $username, $password, $hostname, $port, $database, $backupPath, $time, $binary,
-    $loginUsername, $loginPassword
+    $loginUsername, $loginPassword, $lockFilePath = null
 ) {
   $currentDir = dirname(__FILE__);
   announce_script("Database daily backup");
@@ -65,7 +65,16 @@ function baseBackup($method, $username, $password, $hostname, $port, $database, 
   // Make complete path //
   // Make shell path
   $SHELL_PATH = $currentDir;
-  
+
+  // Create the lock file
+  if ($lockFilePath) {
+    if (
+        !check_errs(touch($lockFilePath), false, "Unable to create lock file", "Lock file created")
+    ) {
+      return;
+    }
+  }
+
   // Make backup path
   force_dir($backupPath);
   
@@ -148,6 +157,9 @@ function baseBackup($method, $username, $password, $hostname, $port, $database, 
         check_errs($link, false, "Could not connect : ".mysql_error(), "Connected!");
     
         if ( !($link) ) {
+          if ($lockFilePath) {
+            unlink($lockFilePath);
+          }
           return 0;
         }
       
@@ -205,7 +217,10 @@ function baseBackup($method, $username, $password, $hostname, $port, $database, 
     
     default:
       echo "Choose hotcopy or dump method\n";
-      
+      if ($lockFilePath) {
+        unlink($lockFilePath);
+      }
+
       return 0;
   }
   
@@ -255,7 +270,10 @@ function baseBackup($method, $username, $password, $hostname, $port, $database, 
     }
   }
   
-  check_errs($a, false, "Failed to clean MySQL files", "MySQL files cleaning done!");	
+  check_errs($a, false, "Failed to clean MySQL files", "MySQL files cleaning done!");
+  if ($lockFilePath) {
+    unlink($lockFilePath);
+  }
 }
 
 /**
@@ -442,11 +460,14 @@ function baseBackupProcedure(Menu $backMenu) {
     $usernameMail = "";
     $passwordMail = "";
   }
+
+  $qt_lock = $procedure->createQuestion("Lock file path (ie /tmp/lock.txt) (leave blank for no lock file): ", null);
+  $lock    = $procedure->askQuestion($qt_lock);
   
   echo "\n";
   baseBackup(
     $method, $username, $password, $hostname, $port, $DBBackup,
-    $backupPath, $time, $binLog, $usernameMail, $passwordMail
+    $backupPath, $time, $binLog, $usernameMail, $passwordMail, $lock
   );
 }
 
@@ -459,7 +480,7 @@ function baseBackupProcedure(Menu $backMenu) {
  * @return bool
  */
 function baseBackupCall( $command, $argv ) {
-  if (count($argv) == 11) {
+  if (count($argv) == 12) {
     $method         = $argv[0];
     $username       = $argv[1];
     $password       = $argv[2];
@@ -471,10 +492,11 @@ function baseBackupCall( $command, $argv ) {
     $binary         = $argv[8];
     $loginUsername  = $argv[9];
     $loginPassword  = $argv[10];
+    $lockFilePath   = $argv[11];
     
     baseBackup(
       $method, $username, $password, $hostname, $port, $database,
-      $backupPath, $time, $binary, $loginUsername, $loginPassword
+      $backupPath, $time, $binary, $loginUsername, $loginPassword, $lockFilePath
     );
     
     return 0;
@@ -492,7 +514,8 @@ Options :
 [<time>]              : time in days before removal of files, default 7
 [<binary_log_index>]  : to create mysql binary log index, default no
 [<login_username>]    : username login to send a mail when diskfull is detected
-[<login_password>]    : password login to send a mail when diskfull is detected\n\n";
+[<login_password>]    : password login to send a mail when diskfull is detected\n\n
+[<lockfile_path>]     : lock file path\n\n";
     
     return 1;
   }

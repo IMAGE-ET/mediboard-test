@@ -1836,6 +1836,8 @@ $locales['UnlocDiv-RRRS'] = 'Really really really sure ?';
 $locales['config-admin-dsn'] = 'Création de la source de données';
 $locales['config-alternative_mode'] = 'Mode de fusion alternatif';
 $locales['config-alternative_mode-desc'] = 'Mode de fusion d\'objets alternatif';
+$locales['config-base_backup_lockfile_path'] = 'Fichier-verrou pour la sauvegarde de la base';
+$locales['config-base_backup_lockfile_path-desc'] = 'Chemin du fichier à utiliser pour bloquer les accès à la base pendant sa sauvegarde';
 $locales['config-base_url'] = 'URL de base de l\'application';
 $locales['config-base_url-desc'] = 'URL de base de l\'application pour servir de référentiel absolu';
 $locales['config-browser_enable_ie9'] = 'Mode de document Internet Explorer';
@@ -2076,3 +2078,4 @@ $locales['utilities-source-file_system-connexion'] = 'Test d\'accessibilité';
 $locales['utilities-source-file_system-getFiles'] = 'Liste des fichiers';
 $locales['utilities-source-file_system-sendFile'] = 'Dépôt d\'un fichier';
 $locales['utilities-source-http'] = 'Utilitaires de la source HTTP';
+?>

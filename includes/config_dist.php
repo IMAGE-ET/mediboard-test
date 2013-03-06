@@ -41,6 +41,9 @@ $dPconfig["shared_memory"]        = "none";
 $dPconfig["session_handler"]      = "files";
 $dPconfig["log_js_errors"]        = "1";
 $dPconfig["weinre_debug_host"]    = "";
+
+$dPconfig["base_backup_lockfile_path"] = "";
+
 $dPconfig["issue_tracker_url"]    = "http://www.mediboard.org/public/tracker4";
 $dPconfig["help_page_url"]        = "http://www.mediboard.org/public/mod-%m-tab-%a";
 

@@ -33,6 +33,14 @@ foreach ($dPconfig["php"] as $key => $value) {
   }
 }
 
+// If baseBackup is running
+if (!empty($dPconfig["base_backup_lockfile_path"])) {
+  if (file_exists(realpath($dPconfig["base_backup_lockfile_path"]))) {
+    header("Location: offline.php?reason=backup");
+    die("La base de données n'est pas connectée");
+  }
+}
+
 if ($dPconfig["offline"]) {
   header("Location: offline.php");
   die("Le système est actuellement en cours de maintenance");
