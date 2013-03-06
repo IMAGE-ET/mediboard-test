@@ -42,7 +42,9 @@ $dPconfig["session_handler"]      = "files";
 $dPconfig["log_js_errors"]        = "1";
 $dPconfig["weinre_debug_host"]    = "";
 
-$dPconfig["base_backup_lockfile_path"] = "";
+$dPconfig["base_backup_lockfile_path"]  = "";
+$dPconfig["offline_time_start"]         = "";
+$dPconfig["offline_time_end"]           = "";
 
 $dPconfig["issue_tracker_url"]    = "http://www.mediboard.org/public/tracker4";
 $dPconfig["help_page_url"]        = "http://www.mediboard.org/public/mod-%m-tab-%a";

@@ -19,6 +19,16 @@ Main.add(function(){
   input.className = "date";
   input.type = "hidden";
   Calendar.regField(input);
+
+  input = getForm("editConfig-system")["offline_time_start"];
+  input.className = "time";
+  input.type = "hidden";
+  Calendar.regField(input);
+
+  input = getForm("editConfig-system")["offline_time_end"];
+  input.className = "time";
+  input.type = "hidden";
+  Calendar.regField(input);
 });
 </script>
 
@@ -36,6 +46,8 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_bool var=log_js_errors}}
     {{mb_include module=system template=inc_config_str var=weinre_debug_host}}
     {{mb_include module=system template=inc_config_str var=base_backup_lockfile_path}}
+    {{mb_include module=system template=inc_config_str var=offline_time_start}}
+    {{mb_include module=system template=inc_config_str var=offline_time_end}}
 
     <tr>
       <th colspan="2" class="title">

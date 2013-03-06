@@ -33,11 +33,32 @@ foreach ($dPconfig["php"] as $key => $value) {
   }
 }
 
+// If offline period
+if ($dPconfig["offline_time_start"] && $dPconfig["offline_time_end"]) {
+  $time               = time();
+  $offline_time_start = strtotime($dPconfig["offline_time_start"]);
+  $offline_time_end   = strtotime($dPconfig["offline_time_end"]);
+
+  if ( ($time >= $offline_time_start) && ($time <= $offline_time_end) ) {
+    header("Location: offline.php");
+    die("Le système est actuellement en cours de maintenance");
+  }
+}
+
 // If baseBackup is running
 if (!empty($dPconfig["base_backup_lockfile_path"])) {
-  if (file_exists(realpath($dPconfig["base_backup_lockfile_path"]))) {
-    header("Location: offline.php?reason=backup");
-    die("La base de données n'est pas connectée");
+  $backup_lockfile = realpath($dPconfig["base_backup_lockfile_path"]);
+  if (file_exists($backup_lockfile)) {
+    // File exists, we have to check lifetime
+    $lock_mtime = filemtime($backup_lockfile);
+
+    // Lock file is not dead
+    if ( (microtime(true) - $lock_mtime) <= 1800 ) {
+      header("Location: offline.php?reason=backup");
+      die("Le système est actuellement en cours de maintenance");
+    }
+
+    unlink($backup_lockfile);
   }
 }
 
