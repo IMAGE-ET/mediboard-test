@@ -60,8 +60,8 @@ else {
 
 foreach ($factures as $key => $_facture) {
   $_facture->loadRefPatient();
-  $_facture->loadRefsConsultation();
   $_facture->loadRefsItems();
+  $_facture->loadRefsConsultation();
   $nb_tarmed  = count($_facture->_ref_actes_tarmed);
   $nb_caisse  = count($_facture->_ref_actes_caisse);
   $nb_ngap    = count($_facture->_ref_actes_ngap);

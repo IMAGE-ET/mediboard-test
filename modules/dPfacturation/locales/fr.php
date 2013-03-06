@@ -253,6 +253,7 @@ $locales['mod-dPfacturation-tab-ajax_refresh_reglement'] = 'Rafraîchissement des
 $locales['mod-dPfacturation-tab-ajax_total_cotation'] = 'Totaux des cotations';
 $locales['mod-dPfacturation-tab-ajax_view_facture'] = 'Vue d\'une facture';
 $locales['mod-dPfacturation-tab-configure'] = 'Configurer';
+$locales['mod-dPfacturation-tab-print_actes'] = 'Impression des actes';
 $locales['mod-dPfacturation-tab-print_bordereau'] = 'Impression bordereau';
 $locales['mod-dPfacturation-tab-print_compta'] = 'Impression de la comptabilité';
 $locales['mod-dPfacturation-tab-print_noemie'] = 'Impression de noémie';

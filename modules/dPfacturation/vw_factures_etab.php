@@ -63,8 +63,8 @@ else {
 //Affichage uniquement des factures qui contiennent des actes
 foreach ($factures as $key => $_facture) {
   $_facture->loadRefPatient();
-  $_facture->loadRefSejour();
   $_facture->loadRefsItems();
+  $_facture->loadRefSejour();
   $nb_tarmed  = count($_facture->_ref_actes_tarmed);
   $nb_caisse  = count($_facture->_ref_actes_caisse);
   $nb_ngap    = count($_facture->_ref_actes_ngap);
