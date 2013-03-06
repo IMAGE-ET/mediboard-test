@@ -242,7 +242,7 @@ class CCdaTools {
 
     foreach ($file as $_file) {
       $element = $dom->createElement("xs:element");
-      $_file = explode(".", $_file)[0];
+      $_file = CMbArray::get(explode(".", $_file), 0);
       $_file = substr($_file, strrpos($_file, "/")+1);
       $instanceClass = new $_file;
       $_file = $instanceClass->getName();
@@ -278,7 +278,7 @@ class CCdaTools {
 
     $result = array();
     foreach ($file as $_file) {
-      $_file = explode(".", $_file)[0];
+      $_file = CMbArray::get(explode(".", $_file), 0);
       $_file = substr($_file, strrpos($_file, "/")+1);
       $class = new $_file;
       $result[$class->getName()] = $class->test();
