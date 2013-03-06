@@ -77,7 +77,7 @@
             {{if !$subject->facture || $m == "dPpmsi" || $can->admin}}
             <script>
               Main.add(function () {
-                PMSI.loadExportActes('{{$subject->_id}}', '{{$subject->_class}}', 1);
+                PMSI.loadExportActes('{{$subject->_id}}', '{{$subject->_class}}', 1, 'dPsalleOp');
               });
             </script>
             {{/if}}

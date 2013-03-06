@@ -12,10 +12,11 @@
 PMSI = {
   confirmCloture: 0,
   
-  loadExportActes: function(object_id, object_class, confirmCloture) {
+  loadExportActes: function(object_id, object_class, confirmCloture, module) {
     var url = new Url("dPpmsi", "ajax_view_export_actes");
-    url.addParam("object_id", object_id);
+    url.addParam("object_id"   , object_id);
     url.addParam("object_class", object_class);
+    url.addParam("module"      , module);
     if(confirmCloture == 1) {
       PMSI.confirmCloture = 1;
       url.addParam("confirmCloture", confirmCloture);
@@ -40,7 +41,8 @@ PMSI = {
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
     url.addParam("sent_files", oDefaultOptions.onlySentFiles ? 1 : 0);
-  
+    url.addParam("module"      , module);
+
     var oRequestOptions = {
       waitingText: oDefaultOptions.onlySentFiles ? 
         "Chargement des fichers envoyés" : 

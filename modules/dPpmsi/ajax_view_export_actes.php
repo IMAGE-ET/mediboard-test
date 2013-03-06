@@ -8,6 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
+global $m;
+
+$module = CValue::get("module");
+if (!$module) {
+  $module = $m;
+}
+
 if (null == $object_class = CValue::get("object_class")) {
   CAppUI::stepMessage(UI_MSG_WARNING, "$tab-msg-mode-missing");
   return;
@@ -58,5 +65,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
 $smarty->assign("IPP"   , $IPP);
 $smarty->assign("NDA"   , $NDA);
+$smarty->assign("module", $module);
 $smarty->assign("confirmCloture", $confirmCloture);
 $smarty->display("../../dPpmsi/templates/inc_export_actes_pmsi.tpl");
