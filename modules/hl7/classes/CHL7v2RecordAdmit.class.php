@@ -1352,16 +1352,37 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($object instanceof CMedecin && $object->loadMatchingObjectEsc()) {
       return $object->_id;
     }
-      
+
+    $sender  = $this->_ref_sender;
+    $ljoin[] = "functions_mediboard ON functions_mediboard.function_id = users_mediboard.function_id";
+
+    $where   = array();
+    $where["functions_mediboard.group_id"] = " = '$sender->group_id'";
+
+    $ds      = $object->getDS();
+
     if ($object instanceof CMediusers) {
-      if (($object->rpps || $object->adeli) && $object->loadMatchingObjectEsc()) {
-        return $object->_id;
+      if (($object->rpps || $object->adeli)) {
+        if ($object->rpps) {
+          $where[] = $ds->prepare("rpps = %", $object->rpps);
+        }
+        if ($object->adeli) {
+          $where[] = $ds->prepare("adeli = %", $object->adeli);
+        }
+
+        $object->loadObject($where, null, null, $ljoin);
+
+        if ($object->_id) {
+          return $object->_id;
+        }
       }
-      
+
       $user = new CUser;
-      $user->user_first_name = $first_name;
-      $user->user_last_name  = $last_name;
-      if ($user->loadMatchingObjectEsc()) {
+
+      $where[] = $ds->prepare("user_first_name = %", $first_name);
+      $where[] = $ds->prepare("user_last_name = %", $last_name);
+
+      if ($user->loadObject($where, null, null, $ljoin)) {
         return $user->_id;
       }
       
@@ -1398,7 +1419,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $user = reset($users);
       $user->loadRefMediuser();
       $mediuser = $user->_ref_mediuser;
-    } else {
+    }
+    else {
       // Dernière recherche si le login est déjà existant
       $user = new CUser();
       $user->user_username = $mediuser->_user_username;
