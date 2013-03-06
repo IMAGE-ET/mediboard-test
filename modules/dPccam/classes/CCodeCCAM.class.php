@@ -9,29 +9,34 @@
  */
 
 class CCodeCCAM {
-  var $code          = null; // Code de l'acte 
-  var $chapitres     = null; // Chapitres de la CCAM concernes
-  var $libelleCourt  = null; // Libelles
-  var $libelleLong   = null;
-  var $place         = null; // Place dans la CCAM
-  var $remarques     = null; // Remarques sur le code
-  var $activites     = array(); // Activites correspondantes
-  var $phases        = array(); // Nombre de phases par activités
-  var $incomps       = array(); // Incompatibilite
-  var $assos         = array(); // Associabilite
-  var $procedure     = null; // Procedure
-  var $remboursement = null; // Remboursement
-  var $forfait       = null; // Forfait spécifique (SEH1, SEH2, SEH3, SEH4)
-  var $couleur       = null; // Couleur du code par rapport à son chapitre
-  
+  public $code;          // Code de l'acte
+  public $chapitres;     // Chapitres de la CCAM concernes
+  public $libelleCourt;  // Libelles
+  public $libelleLong;
+  public $place;         // Place dans la CCAM
+  public $remarques;     // Remarques sur le code
+  public $activites = array(); // Activites correspondantes
+  public $phases    = array(); // Nombre de phases par activités
+  public $incomps   = array(); // Incompatibilite
+  public $assos     = array(); // Associabilite
+  public $procedure;     // Procedure
+  public $remboursement; // Remboursement
+  public $forfait;       // Forfait spécifique (SEH1, SEH2, SEH3, SEH4)
+  public $couleur;       // Couleur du code par rapport à son chapitre
+
   // Variable calculées
-  var $_code7    = null; // Possibilité d'ajouter le modificateur 7 (0 : non, 1 : oui)
-  var $_default  = null;
-  
+  public $_code7; // Possibilité d'ajouter le modificateur 7 (0 : non, 1 : oui)
+  public $_default;
+
   // Activités et phases recuperées depuis le code CCAM
-  var $_activite = null;
-  var $_phase    = null;
-  
+  public $_activite;
+  public $_phase;
+
+  /**
+   * @var CMbObjectSpec
+   */
+  public $_spec;
+
   var $_couleursChap = array(
     1  => "669966",
     2  => "6666cc",
@@ -53,12 +58,12 @@ class CCodeCCAM {
     18 => "ffffee",
     19 => "cccccc",
   );
-  
+
   // niveaux de chargement
   const LITE   = 1;
   const MEDIUM = 2;
   const FULL   = 3;
-  
+
   // table de chargement
   static $loadLevel = array();
   static $loadedCodes = array();
@@ -68,22 +73,22 @@ class CCodeCCAM {
     CCodeCCAM::MEDIUM => 0,
     CCodeCCAM::FULL   => 0,
   );
-  
+
   static $spec = null;
-  
+
   /**
    * Constructeur à partir du code CCAM
    */
-  function CCodeCCAM($code = null) {
+  function __construct($code = null) {
     // Static initialisation
     if (!self::$spec) {
       self::$spec = new CMbObjectSpec();
       self::$spec->dsn = "ccamV2";
       self::$spec->init();
     }
-    
+
     $this->_spec = self::$spec;
-    
+
     if (strlen($code) > 7) {
       if (!preg_match("/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i", $code)) {
          return "Le code $code n'est pas formaté correctement";
@@ -101,23 +106,29 @@ class CCodeCCAM {
       $this->code = strtoupper($code);
     }
   }
-  
+
+  /*function __sleep(){
+    $fields = get_object_vars($this);
+    unset($fields["_spec"]);
+    return array_keys($fields);
+  }*/
+
   // Chargement optimisé des codes
   static function get($code, $niv = self::MEDIUM) {
     self::$useCount[$niv]++;
-    
+
     if (!CAppUI::conf("ccam CCodeCCAM use_cache")) {
       $codeCCAM = new CCodeCCAM($code);
       $codeCCAM->load($niv);
       return $codeCCAM;
     }
-    
+
     // Si le code n'a encore jamais été chargé, on instancie et on met son niveau de chargement à zéro
     if (!isset(self::$loadedCodes[$code])) {
       self::$loadedCodes[$code] = new CCodeCCAM($code);
       self::$loadLevel[$code] = null;
     } 
-    
+
     $code_ccam =& self::$loadedCodes[$code];
 
     // Si le niveau demandé est inférieur au niveau courant, on retourne le code 
@@ -132,7 +143,7 @@ class CCodeCCAM {
 
     return $code_ccam->copy();
   }
-  
+
   /**
    * Should use clone with appropriate behaviour
    * But a bit complicated to implement
@@ -142,12 +153,12 @@ class CCodeCCAM {
     $obj->_spec = self::$spec;
     return $obj;
   }
-  
+
   function load($niv) {
     if (!$this->getLibelles()) {
       return;
     }
-    
+
     if ($niv == self::LITE) {
       $this->getActivite7();
     }
@@ -169,7 +180,7 @@ class CCodeCCAM {
       $this->getProcedure();
     }
   }
-  
+
   function getLibelles() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
@@ -190,7 +201,7 @@ class CCodeCCAM {
       return true;
     }
   }
-  
+
   function getActivite7() {
     $ds =& $this->_spec->ds;
     // recherche de la dernière date d'effet
@@ -214,7 +225,7 @@ class CCodeCCAM {
       $this->_code7 = 1;
     }
   }
-  
+
   function getTarification() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM infotarif WHERE CODEACTE = % ORDER BY DATEEFFET DESC", $this->code);
@@ -222,7 +233,7 @@ class CCodeCCAM {
     $row = $ds->fetchArray($result);
     $this->remboursement = $row["REMBOURSEMENT"];
   }
-  
+
   function getForfaitSpec() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM forfaits WHERE CODE = %", $this->code);
@@ -230,7 +241,7 @@ class CCodeCCAM {
     $row = $ds->fetchArray($result);
     $this->forfait = $row["forfait"];
   } 
-  
+
   function getChaps() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
@@ -245,17 +256,17 @@ class CCodeCCAM {
     $this->chapitres[3]["db"] = $row["ARBORESCENCE4"];
     $pere = "000001";
     $track = "";
-    
+
     // On rentre les infos sur les chapitres
     foreach ($this->chapitres as $key => $value) {
       $rang = $this->chapitres[$key]["db"];
       $query = $ds->prepare("SELECT * FROM arborescence WHERE CODEPERE = %1 AND rang = %2", $pere, $rang);
       $result = $ds->exec($query);
       $row = $ds->fetchArray($result);
-      
+
       $query = $ds->prepare("SELECT * FROM notesarborescence WHERE CODEMENU = %", $row["CODEMENU"]);
       $result2 = $ds->exec($query);
-      
+
       $track .= substr($row["RANG"], -2) . ".";
       $this->chapitres[$key]["rang"] = $track;
       $this->chapitres[$key]["code"] = $row["CODEMENU"];
@@ -268,7 +279,7 @@ class CCodeCCAM {
     }
     $this->place = $this->chapitres[3]["rang"];
   }
-  
+
   function getRemarques() {
     $ds =& $this->_spec->ds;
     $this->remarques = array();
@@ -278,7 +289,7 @@ class CCodeCCAM {
       $this->remarques[] = str_replace("¶", "\n", $row["TEXTE"]);
     }
   }
-  
+
   function getActivites() {
     $ds =& $this->_spec->ds;
     // Extraction des activités
@@ -330,10 +341,10 @@ class CCodeCCAM {
     else {
       $this->_default = 0;
     }
-    
+
     return $this->activites;
   }
-  
+
   function getModificateursFromActivite(&$activite) {
     $ds =& $this->_spec->ds;
     // recherche de la dernière date d'effet
@@ -355,7 +366,7 @@ class CCodeCCAM {
               GROUP BY MODIFICATEUR";
     $query = $ds->prepare($query, $this->code, $activite->numero);
     $result = $ds->exec($query);
-    
+
     while ($row = $ds->fetchArray($result)) {
       $query = "SELECT CODE AS code, LIBELLE AS libelle
                 FROM modificateur
@@ -365,7 +376,7 @@ class CCodeCCAM {
       $modificateurs[] = $ds->fetchObject($ds->exec($query));
     }
   }
-  
+
   function getPhasesFromActivite(&$activite) {
     $ds =& $this->_spec->ds;
     // Extraction des phases
@@ -379,18 +390,18 @@ class CCodeCCAM {
               ORDER BY PHASE, DATE1 DESC";
     $query = $ds->prepare($query, $this->code, $activite->numero);
     $result = $ds->exec($query);
-          
+
     while ($obj = $ds->fetchObject($result)) {
       $phases[$obj->phase] = $obj;
       $phase =& $phases[$obj->phase];
       $phase->tarif = floatval($obj->tarif)/100;
       $phase->libelle = "Phase Principale";
       $phase->charges = floatval($obj->charges)/100;
-      
+
       // Copie des modificateurs pour chaque phase. Utile pour dPsalleOp
       $phase->_modificateurs = $activite->modificateurs;
     }
-    
+
     // Libellés des phases
     foreach ($this->remarques as $remarque) {
       if (preg_match("/Phase (\d) : (.*)/i", $remarque, $match)) {
@@ -400,7 +411,7 @@ class CCodeCCAM {
       }
     }
   }
-  
+
   function getActesAsso($code = null, $limit = null) {
     $ds =& $this->_spec->ds;
     $queryEffet = $ds->prepare("SELECT MAX(DATEEFFET) as LASTDATE FROM associabilite WHERE CODEACTE = % GROUP BY CODEACTE", $this->code);
@@ -419,7 +430,7 @@ class CCodeCCAM {
         WHERE CODEACTE = '$this->code'
         AND DATEEFFET = '$lastDate'
         AND (CODE LIKE '$code%'
-          OR (".implode(" OR ",$codeLike)."))
+          OR (".implode(" OR ", $codeLike)."))
         GROUP BY ACTEASSO";
     }
     else {
@@ -439,7 +450,7 @@ class CCodeCCAM {
       $i++;
     }
   }
-  
+
   function getActesIncomp() {
     $ds =& $this->_spec->ds;
     $queryEffet = $ds->prepare("SELECT MAX(DATEEFFET) as LASTDATE FROM incompatibilite WHERE CODEACTE = % GROUP BY CODEACTE", $this->code);
@@ -458,7 +469,7 @@ class CCodeCCAM {
       $i++;
     }
   }
-  
+
   function getProcedure() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM procedures WHERE CODEACTE = % GROUP BY CODEACTE ORDER BY DATEEFFET DESC", $this->code);
@@ -476,7 +487,7 @@ class CCodeCCAM {
       $this->procedure["texte"] = "";
     }
   }
-  
+
   function getForfait($modificateur) {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM modificateurforfait WHERE CODE = % AND DATEFIN = '00000000'", $modificateur);
@@ -487,7 +498,7 @@ class CCodeCCAM {
     $valeur["coefficient"] = $row["COEFFICIENT"] / 10;
     return $valeur;
   }
-  
+
   function getCoeffAsso($code) {
     if ($code == "X") {
       return 0;
@@ -504,11 +515,11 @@ class CCodeCCAM {
     $valeur = $row["COEFFICIENT"] / 10;
     return $valeur;
   }
-  
+
 // Recherche de codes
   function findCodes($code='', $keys='', $max_length = null, $where = null) {
     $ds =& $this->_spec->ds;
-  
+
     $query = "SELECT CODE, LIBELLELONG
               FROM actes
               WHERE DATEFIN = '00000000' ";
@@ -517,7 +528,7 @@ class CCodeCCAM {
     $codes    = explode(" ", $code);
     CMbArray::removeValue("", $keywords);
     CMbArray::removeValue("", $codes);
-    
+
     if ($keys != "") {
       $listLike = array();
       $codeLike = array();
@@ -538,7 +549,9 @@ class CCodeCCAM {
         $query .= " AND (";
       }
       $query .= implode(" AND ", $listLike);
-      if ($code != "") $query .= ") ) ";
+      if ($code != "") {
+        $query .= ") ) ";
+      }
 
     }
     // Ou que le code
@@ -549,17 +562,17 @@ class CCodeCCAM {
       }
       $query .= "AND ". implode(" OR ", $codeLike);
     }
-    
+
     if ($max_length) {
       $query .= " AND LENGTH(CODE) < $max_length ";
     }
-    
+
     if ($where) {
       $query .= "AND " . $where;
     }
-    
+
     $query .= " ORDER BY CODE LIMIT 0 , 100";
-    
+
     $result = $ds->exec($query);
     $master = array();
     $i = 0;
@@ -568,15 +581,15 @@ class CCodeCCAM {
       $master[$i]["CODE"] = $row["CODE"];
       $i++;
     }
-  
+
     return($master);
   }
-  
+
   function getActeRadio() {
     $ds =& $this->_spec->ds;
     $query = "SELECT code
       FROM ccam_radio
-      WHERE code_saisi LIKE '%".$this->code."%'";
+      WHERE code_saisi LIKE '%$this->code%'";
     return $ds->loadResult($query);
   }
 }

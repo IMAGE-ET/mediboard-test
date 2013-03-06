@@ -20,7 +20,7 @@ class CPDODataSource extends CSQLDataSource {
     
   function connect($host, $name, $user, $pass) {
     if (!class_exists("PDO")) {
-      trigger_error( "FATAL ERROR: PDO support not available. Please check your configuration.", E_USER_ERROR );
+      trigger_error("FATAL ERROR: PDO support not available. Please check your configuration.", E_USER_ERROR);
       return;
     }
     
@@ -31,7 +31,8 @@ class CPDODataSource extends CSQLDataSource {
   }
 
   function error() {
-    return $this->link->errorInfo();
+    $errorInfo = $this->link->errorInfo();
+    return $errorInfo[2];
   }
 
   function errno() {
@@ -44,7 +45,11 @@ class CPDODataSource extends CSQLDataSource {
 
   function query($query) {
     $stmt = $this->link->query($query);
-    $this->affected_rows = $stmt->rowCount();
+
+    if ($stmt !== false) {
+      $this->affected_rows = $stmt->rowCount();
+    }
+
     return $stmt;
   }
 
@@ -78,21 +83,24 @@ class CPDODataSource extends CSQLDataSource {
   }
 
   function fetchObject($result, $class_name = null, $params = array()) {
-    if (empty($class_name))
+    if (empty($class_name)) {
       return $result->fetchObject();
+    }
       
-    if (empty($params))
+    if (empty($params)) {
       return $result->fetchObject($class_name);
+    }
     
     return $result->fetchObject($class_name, $params);
   }
 
   function escape($value) {
-    //return substr($this->link->quote($value), 1, -1); // remove the quotes around
+    return substr($this->link->quote($value), 1, -1); // remove the quotes around
+    /*
     return strtr($value, array(
       "'" => "''",
       '"' => '\"',
-    ));
+    ));*/
   }
   
   function prepareLike($value) {

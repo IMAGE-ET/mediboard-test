@@ -18,8 +18,8 @@ $hide_finished   = CValue::getOrSession("hide_finished", 0);
 $salle_id        = CValue::getOrSession("salle");
 $bloc_id         = CValue::getOrSession("bloc_id");
 $op              = CValue::getOrSession("op");
-$date            = CValue::getOrSession("date", mbDate());
-$modif_operation = CCanDo::edit() || $date >= mbDate();
+$date            = CValue::getOrSession("date", CMbDT::date());
+$modif_operation = CCanDo::edit() || $date >= CMbDT::date();
 
 // Récupération de l'utilisateur courant
 $currUser = new CMediusers();
@@ -75,20 +75,21 @@ if ($op) {
 
   // Affichage des données
   $listChamps = array(
-                  1=>array("hb","ht","ht_final","plaquettes"),
-                  2=>array("creatinine","_clairance","na","k"),
-                  3=>array("tp","tca","tsivy","ecbu")
-                  );
+    1 => array("hb", "ht", "ht_final", "plaquettes"),
+    2 => array("creatinine", "_clairance", "na", "k"),
+    3 => array("tp", "tca", "tsivy", "ecbu")
+  );
+
   $cAnesth =& $selOp->_ref_consult_anesth;
-  foreach ($listChamps as $keyCol=>$aColonne) {
-    foreach ($aColonne as $keyChamp=>$champ) {
+  foreach ($listChamps as $keyCol => $aColonne) {
+    foreach ($aColonne as $keyChamp => $champ) {
       $verifchamp = true;
-      if ($champ=="tca") {
+      if ($champ == "tca") {
         $champ2 = $cAnesth->tca_temoin;
       }
       else {
         $champ2 = false;
-        if (($champ=="ecbu" && $cAnesth->ecbu=="?") || ($champ=="tsivy" && $cAnesth->tsivy=="00:00:00")) {
+        if (($champ == "ecbu" && $cAnesth->ecbu == "?") || ($champ == "tsivy" && $cAnesth->tsivy == "00:00:00")) {
           $verifchamp = false;
         }
       }
@@ -113,7 +114,7 @@ if ($op) {
   
   $anesth_id = ($selOp->anesth_id) ? $selOp->anesth_id : $selOp->_ref_plageop->anesth_id;
   if ($anesth_id && CModule::getActive('dPprescription')) {
-    $protocoles = CPrescription::getAllProtocolesFor($anesth_id, null, null, 'CSejour','sejour');
+    $protocoles = CPrescription::getAllProtocolesFor($anesth_id, null, null, 'CSejour', 'sejour');
   }
 
   if (!$selOp->prat_visite_anesth_id && $selOp->_ref_anesth->_id) {
@@ -123,7 +124,7 @@ if ($op) {
 
 $listAnesthType = new CTypeAnesth;
 $orderanesth = "name";
-$listAnesthType = $listAnesthType->loadList(null,$orderanesth);
+$listAnesthType = $listAnesthType->loadList(null, $orderanesth);
 
 //Tableau d'unités
 $unites = array();
@@ -154,24 +155,27 @@ $total_tarmed = $selOp->loadRefsActesTarmed();
 $total_caisse = $selOp->loadRefsActesCaisse();
 $soustotal_base = array("tarmed" => $total_tarmed["base"], "caisse" => $total_caisse["base"]);
 $soustotal_dh   = array("tarmed" => $total_tarmed["dh"], "caisse" => $total_caisse["dh"]);
-$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"],2);
-$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"],2);
+$total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"], 2);
+$total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"], 2);
 
 // Vérification de la check list journalière
 $daily_check_list = CDailyCheckList::getList($salle, $date);
 $daily_check_list->loadItemTypes();
 $daily_check_list->loadBackRefs('items');
 
-$cat = new CDailyCheckItemCategory;
-$cat->target_class = "CSalle";
-$daily_check_item_categories = $cat->loadMatchingList();
+$cat = new CDailyCheckItemCategory();
+$where = array(
+  "target_class" => " = 'CSalle'",
+  "target_id IS NULL OR target_id = '$salle->_id'",
+);
+$daily_check_item_categories = $cat->loadList($where);
 
-// Chargement des 3 check lists de l'OMS
+// Chargement des check lists de l'OMS
 $operation_check_lists = array();
 $operation_check_item_categories = array();
 
-$operation_check_list = new CDailyCheckList;
-$cat = new CDailyCheckItemCategory;
+$operation_check_list = new CDailyCheckList();
+$cat = new CDailyCheckItemCategory();
 $cat->target_class = "COperation";
 
 // Pre-anesth, pre-op, post-op

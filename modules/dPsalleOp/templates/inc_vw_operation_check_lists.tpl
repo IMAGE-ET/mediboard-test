@@ -47,15 +47,16 @@ Main.add(function(){
       </button>
       
       <select onchange="showCheckListType($(this).up('table'), $V(this))" style="max-width: 18em;">
-        <option value="normal" {{if $active_list_type == "normal"}} selected="selected" {{/if}}>Au bloc opératoire (v. 2011-01)</option>
-        <option value="endoscopie" {{if $active_list_type == "endoscopie"}} selected="selected" {{/if}}>En endoscopie digestive (v. 2010-01)</option>
-        <option value="endoscopie-bronchique" {{if $active_list_type == "endoscopie-bronchique"}} selected="selected" {{/if}}>En endoscopie bronchique (v. 2011-01)</option>
-        <option value="radio" {{if $active_list_type == "radio"}} selected="selected" {{/if}}>En radiologie interv. (v. 2011-01)</option>
+        {{foreach from="CDailyCheckList"|static:_HAS_lists key=_type item=_label}}
+          <option value="{{$_type}}" {{if $active_list_type == $_type}} selected {{/if}}>{{$_label}}</option>
+        {{/foreach}}
       </select>
       
       <img height="20" src="images/pictures/logo-has-small.png" />
       
-      <button class="print" onclick="(new Url('dPsalleOp', 'print_check_list_operation')).addParam('operation_id', {{$selOp->_id}}).popup(800, 600, 'check_list')">{{tr}}Print{{/tr}}</button>
+      <button class="print" onclick="(new Url('dPsalleOp', 'print_check_list_operation')).addParam('operation_id', '{{$selOp->_id}}').popup(800, 600, 'check_list')">
+        {{tr}}Print{{/tr}}
+      </button>
       
       {{mb_include module=forms template=inc_widget_ex_class_register object=$selOp event_name=checklist cssStyle="display: inline-block; font-size: 0.8em;"}}
     </th>

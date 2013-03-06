@@ -7,7 +7,7 @@
       {{if array_key_exists($curr_cat, $check_item_categories)}}
       {{if $curr_type->category_id != $category_id}}
         <tr>
-          <th colspan="3" class="text category" style="text-align: left;">
+          <th colspan="2" class="text category" style="text-align: left;">
             <strong>{{$check_item_categories.$curr_cat->title}}</strong>
             {{if $check_item_categories.$curr_cat->desc}}
               &ndash; {{$check_item_categories.$curr_cat->desc}}
@@ -17,8 +17,10 @@
       {{/if}}
       <tr>
         <td style="padding-left: 1em;" class="text">
-          {{mb_value object=$curr_type field=title}}<br />
-          <small style="text-indent: 1em; color: #666;">{{mb_value object=$curr_type field=desc}}</small>
+          {{mb_value object=$curr_type field=title}}
+          {{if $curr_type->desc}}
+            <div class="compact" style="margin-top: 0.5em;">{{mb_value object=$curr_type field=desc}}</div>
+          {{/if}}
         </td>
         <td class="text">
           {{$curr_type->_answer}}
@@ -28,13 +30,13 @@
       {{assign var=category_id value=$curr_type->category_id}}
     {{foreachelse}}
       <tr>
-        <td colspan="3" class="empty">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
+        <td colspan="2" class="empty">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
       </tr>
     {{/foreach}}
 
     {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio" || $check_list->type == "disp_vasc_apres"}}
     <tr>
-      <td colspan="10">
+      <td colspan="2">
         <strong>Commentaires:</strong><br />
         {{mb_value object=$check_list field=comments}}
       </td>
@@ -42,7 +44,7 @@
     {{/if}}
 
     <tr>
-      <td colspan="10">
+      <td colspan="2">
         <strong>Validé par {{mb_value object=$check_list field=validator_id}}</strong>
       </td>
     </tr>
@@ -82,6 +84,14 @@ refreshCheckList{{$check_list->type}} = function(id){
   }
 }
 
+saveCheckListIdCallback{{$check_list->type}} = function(id) {
+  var form = getForm("edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}");
+
+  if (!$V(form.daily_check_list_id)) {
+    $V(form.daily_check_list_id, id);
+  }
+}
+
 submitCheckList = function(form, quicksave) {
   if (!quicksave) {
     return confirmCheckList(form);
@@ -111,6 +121,8 @@ Main.add(function(){
 
   {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
     <input type="hidden" name="callback" value="refreshCheckList{{$check_list->type}}" />
+  {{else}}
+    <input type="hidden" name="callback" value="saveCheckListIdCallback{{$check_list->type}}" />
   {{/if}}
 
   {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
@@ -128,7 +140,7 @@ Main.add(function(){
       {{if array_key_exists($curr_cat, $check_item_categories)}}
       {{if $curr_type->category_id != $category_id}}
         <tr>
-          <th colspan="3" class="text category" style="text-align: left;">
+          <th colspan="2" class="text category" style="text-align: left;">
             <strong>{{$check_item_categories.$curr_cat->title}}</strong>
             {{if $check_item_categories.$curr_cat->desc}}
               &ndash; {{$check_item_categories.$curr_cat->desc}}
@@ -143,8 +155,7 @@ Main.add(function(){
           </ul>
 
           {{if $curr_type->desc}}
-            <br />
-            <small style="text-indent: 1em; color: #666;">{{mb_value object=$curr_type field=desc}}</small>
+            <div class="compact" style="margin-top: 0.5em;">{{mb_value object=$curr_type field=desc}}</div>
           {{/if}}
         </td>
         <td style="text-align: left;">
@@ -176,28 +187,22 @@ Main.add(function(){
       {{assign var=category_id value=$curr_type->category_id}}
     {{foreachelse}}
       <tr>
-        <td colspan="3" class="empty">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
+        <td colspan="2" class="empty">{{tr}}CDailyCheckItemType.none{{/tr}}</td>
       </tr>
     {{/foreach}}
 
     {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes) || $check_list->type == "postop" || $check_list->type == "postendoscopie" || $check_list->type == "postendoscopie_bronchique" || $check_list->type == "postop_radio" || $check_list->type == "disp_vasc_apres"}}
     <tr>
-      <td colspan="10" class="text">
+      <td colspan="2" class="text">
         <hr />
         {{mb_label object=$check_list field=comments}}<br />
         {{mb_field object=$check_list field=comments onchange="submitCheckList(this.form,true)"}}
-        {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
-          <div class="small-info">
-            Pour consulter les informations sur la version 2011 des check-lists,
-            <a href="http://www.has-sante.fr/portail/jcms/c_1019445/la-version-2011-de-la-check-list-securite-du-patient-au-bloc-operatoire" target="_blank" style="display: inline;">rendez-vous sur le site de la HAS en cliquant ici</a>.
-          </div>
-        {{/if}}
       </td>
     </tr>
     {{/if}}
 
     <tr>
-      <td colspan="10" class="button">
+      <td colspan="2" class="button">
         <label for="validator_id" style="display: none;">{{tr}}CDailyCheckList-validator_id{{/tr}}</label>
         <select name="validator_id" class="notNull ref" style="width: 10em;">
           <option value="" disabled="disabled" selected="selected">&mdash; Validateur</option>

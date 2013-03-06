@@ -10,20 +10,21 @@
 
 CCanDo::checkRead();
 
-$date_min = CValue::getOrSession('_date_min');
-$date_max = CValue::getOrSession('_date_max');
-$object_guid = CValue::getOrSession('object_guid');
+$date_min      = CValue::getOrSession('_date_min');
+$date_max      = CValue::getOrSession('_date_max');
+$object_guid   = CValue::getOrSession('object_guid');
 $check_list_id = CValue::getOrSession('check_list_id');
 
 $check_list = new CDailyCheckList;
 $check_list->load($check_list_id);
+
 $items = $check_list->loadBackRefs('items');
 if ($check_list->_ref_object) {
   $check_list->_ref_object->loadRefsFwd();
 }
 
 if ($items) {
-  foreach($items as $id => $item) {
+  foreach ($items as $id => $item) {
     $item->loadRefsFwd();
   }
 }
@@ -35,8 +36,9 @@ $where = array(
 );
 if ($object_class) {
   $where['object_class'] = "= '$object_class'";
-  if ($object_id)
+  if ($object_id) {
     $where['object_id'] = "= '$object_id'";
+  }
 }
 if ($date_min) {
   $where[] = "date >= '$date_min'";
@@ -44,29 +46,18 @@ if ($date_min) {
 if ($date_max) {
   $where[] = "date <= '$date_max'";
 }
-$list_check_lists = $check_list->loadList($where, 'date DESC, object_class, object_id, type' , 30);
+$list_check_lists = $check_list->loadList($where, 'date DESC, object_class, object_id, type' , 50);
 
-$check_list_filter = new CDailyCheckList;
+$check_list_filter = new CDailyCheckList();
 $check_list_filter->object_class = $object_class;
 $check_list_filter->object_id = $object_id;
 $check_list_filter->_date_min = $date_min;
 $check_list_filter->_date_max = $date_max;
 $check_list_filter->loadRefsFwd();
 
-$list_rooms = array(
-  "CSalle" => array(),
-  "CBlocOperatoire" => array()
-);
+$list_rooms = CDailyCheckList::getRooms();
 
-foreach($list_rooms as $class => &$list) {
-  $room = new $class;
-  $list = $room->loadList();
-  $empty = new $class;
-  $empty->updateFormFields();
-  array_unshift($list, $empty);
-}
-
-$empty = new COperation;
+$empty = new COperation();
 $empty->updateFormFields();
 $list_rooms["COperation"] = array($empty);
 
@@ -78,5 +69,3 @@ $smarty->assign("check_list", $check_list);
 $smarty->assign("object_guid", $object_guid);
 $smarty->assign("check_list_filter", $check_list_filter);
 $smarty->display("vw_daily_check_traceability.tpl");
-
-?>

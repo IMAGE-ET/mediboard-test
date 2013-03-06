@@ -8,6 +8,117 @@
  */
 
 class CSetupdPsalleOp extends CSetup {
+  /**
+   * Add a new HAS check list
+   *
+   * @param array  $check_list   The check list description
+   * @param string $object_class The associated object class
+   *
+   * @return void
+   */
+  private function addNewCheckList($check_list, $object_class = 'COperation') {
+    foreach ($check_list as $title => $cat) {
+      // Ajout de la catégorie
+      $query = "INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES
+                               (%1, %2, '$object_class', %3)";
+      $query = $this->ds->prepare($query, $title, $cat[1], $cat[0]);
+      $this->addQuery($query);
+
+      // Ajout des élements
+      foreach ($cat[2] as $i => $type) {
+        $query = "INSERT INTO `daily_check_item_type` (`title`, `active`, `attribute`, `category_id`, `index`, `default_value`) VALUES
+                    (%1, '1', %2, (
+                      SELECT `daily_check_item_category_id`
+                      FROM `daily_check_item_category`
+                      WHERE `title` = %3 AND `target_class` = '$object_class' AND `type` = %4
+                    ), %5, %6)";
+        $query = $this->ds->prepare($query, $type[0], $type[1], $title, $cat[0], $i+1, $type[2]);
+        $this->addQuery($query);
+      }
+    }
+  }
+
+  /**
+   * Changes check list categories
+   *
+   * @param array $category_changes Categories changes
+   *
+   * @return void
+   */
+  private function changeCheckListCategories($category_changes) {
+    // reverse because of the title changes
+    $category_changes = array_reverse($category_changes);
+
+    // Category changes
+    foreach ($category_changes as $_change) {
+      $cat_class = $_change[0];
+      $cat_type  = $_change[1];
+      $cat_title = $_change[2];
+      $cat_new_title = addslashes($_change[3]);
+      $cat_new_desc  = addslashes(CValue::read($_change, 4, null));
+
+      $query = "UPDATE `daily_check_item_category` SET
+        `daily_check_item_category`.`title` = '$cat_new_title' ";
+
+      if (isset($cat_new_desc)) {
+        $query .= ", `daily_check_item_category`.`desc` = '$cat_new_desc' ";
+      }
+
+      $query .= "WHERE
+        `daily_check_item_category`.`target_class` = '$cat_class' AND
+        `daily_check_item_category`.`type` = '$cat_type' AND
+        `daily_check_item_category`.`title` = '$cat_title'";
+      $this->addQuery($query);
+    }
+  }
+
+  private function addCheckListCategories($category_additions) {
+    foreach ($category_additions as $_change) {
+      $query = "INSERT INTO `daily_check_item_category` (`target_class`, `type`, `title`, `desc`) VALUES (%1, %2, %3, %4)";
+      $query = $this->ds->prepare($query, $_change[0], $_change[1], $_change[2], '');
+      $this->addQuery($query);
+    }
+  }
+
+  private function changeCheckListTypes($changes) {
+    foreach ($changes as $_change) {
+      $cat_class = $_change[0];
+      $cat_type  = $_change[1];
+      $cat_title = $_change[2];
+
+      $data  = $_change[3];
+      $index = $data["index"];
+
+      $query = "UPDATE `daily_check_item_type`
+                  LEFT JOIN `daily_check_item_category` ON `daily_check_item_category`.`daily_check_item_category_id` = `daily_check_item_type`.`category_id`
+                  SET ";
+
+      if (isset($data["title"])) {
+        $query .= " `daily_check_item_type`.`title` = '".addslashes($data["title"])."' ";
+      }
+
+      if (isset($data["attribute"])) {
+        if (isset($data["title"])) {
+          $query .= ",";
+        }
+        $query .= " `daily_check_item_type`.`attribute` = '".$data["attribute"]."' ";
+      }
+
+      if (isset($data["default"])) {
+        if (isset($data["title"]) || isset($data["attribute"])) {
+          $query .= ",";
+        }
+        $query .= " `daily_check_item_type`.`default_value` = '".$data["default"]."' ";
+      }
+
+      $query .= "WHERE
+        `daily_check_item_category`.`target_class` = '$cat_class' AND
+        `daily_check_item_category`.`type` = '$cat_type' AND
+        `daily_check_item_category`.`title` = '$cat_title' AND
+        `daily_check_item_type`.`index` = '$index'";
+      $this->addQuery($query);
+    }
+  }
   
   function __construct() {
     parent::__construct();
@@ -17,168 +128,168 @@ class CSetupdPsalleOp extends CSetup {
     $this->makeRevision("all");
     
     $this->makeRevision("0.1");
-    $query = "CREATE TABLE `acte_ccam` (" .
-            "\n`acte_id` INT NOT NULL ," .
-            "\n`code_activite` VARCHAR( 2 ) NOT NULL ," .
-            "\n`code_phase` VARCHAR( 1 ) NOT NULL ," .
-            "\n`execution` DATETIME NOT NULL ," .
-            "\n`modificateurs` VARCHAR( 4 ) ," .
-            "\n`montant_depassement` FLOAT," .
-            "\n`commentaire` TEXT," .
-            "\n`operation_id` INT NOT NULL ," .
-            "\n`executant_id` INT NOT NULL ," .
-            "\nPRIMARY KEY ( `acte_id` )) /*! ENGINE=MyISAM */";
+    $query = "CREATE TABLE `acte_ccam` (
+                `acte_id` INT NOT NULL ,
+                `code_activite` VARCHAR( 2 ) NOT NULL ,
+                `code_phase` VARCHAR( 1 ) NOT NULL ,
+                `execution` DATETIME NOT NULL ,
+                `modificateurs` VARCHAR( 4 ) ,
+                `montant_depassement` FLOAT,
+                `commentaire` TEXT,
+                `operation_id` INT NOT NULL ,
+                `executant_id` INT NOT NULL ,
+              PRIMARY KEY ( `acte_id` )) /*! ENGINE=MyISAM */";
     $this->addQuery($query);
     
     $this->makeRevision("0.11");
-    $query = "ALTER TABLE `acte_ccam` ADD `code_acte` CHAR( 7 ) NOT NULL AFTER `acte_id`";
+    $query = "ALTER TABLE `acte_ccam`
+                ADD `code_acte` CHAR( 7 ) NOT NULL AFTER `acte_id`";
     $this->addQuery($query);
-    $query = "ALTER TABLE `acte_ccam` " .
-            "ADD UNIQUE (" .
-              "`code_acte` ," .
-              "`code_activite` ," .
-              "`code_phase` ," .
-              "`operation_id`)";
+    $query = "ALTER TABLE `acte_ccam`
+                ADD UNIQUE (`code_acte`, `code_activite`, `code_phase`, `operation_id`)";
     $this->addQuery($query);
     
     $this->makeRevision("0.12");
-    $query =  "ALTER TABLE `acte_ccam` CHANGE `acte_id` `acte_id` INT( 11 ) NOT NULL AUTO_INCREMENT";
+    $query = "ALTER TABLE `acte_ccam`
+                CHANGE `acte_id` `acte_id` INT( 11 ) NOT NULL AUTO_INCREMENT";
     $this->addQuery($query);
     
     $this->makeRevision("0.13");
-    $query =  "ALTER TABLE `acte_ccam` DROP INDEX `code_acte`";
+    $query = "ALTER TABLE `acte_ccam`
+                DROP INDEX `code_acte`";
     $this->addQuery($query);
     
     $this->makeRevision("0.14");
-    $query = "ALTER TABLE `acte_ccam` " .
-               "\nCHANGE `acte_id` `acte_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `operation_id` `operation_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `executant_id` `executant_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `code_activite` `code_activite` tinyint(2) unsigned zerofill NOT NULL," .
-               "\nCHANGE `code_phase` `code_phase` tinyint(1) unsigned zerofill NOT NULL;";
+    $query = "ALTER TABLE `acte_ccam`
+                CHANGE `acte_id` `acte_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `operation_id` `operation_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `executant_id` `executant_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `code_activite` `code_activite` tinyint(2) unsigned zerofill NOT NULL,
+                CHANGE `code_phase` `code_phase` tinyint(1) unsigned zerofill NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.15");
-    $query = "ALTER TABLE `acte_ccam` CHANGE `code_acte` `code_acte` varchar(7) NOT NULL;";
+    $query = "ALTER TABLE `acte_ccam`
+                CHANGE `code_acte` `code_acte` varchar(7) NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.16");
-    $query = "ALTER TABLE `acte_ccam`" .
-        "\nCHANGE `code_activite` `code_activite` TINYINT(4) NOT NULL," .
-        "\nCHANGE `code_phase` `code_phase` TINYINT(4) NOT NULL;";
+    $query = "ALTER TABLE `acte_ccam`
+                CHANGE `code_activite` `code_activite` TINYINT(4) NOT NULL,
+                CHANGE `code_phase` `code_phase` TINYINT(4) NOT NULL;";
     $this->addQuery($query);
 
     $this->makeRevision("0.17");
-    $query = "ALTER TABLE `acte_ccam`" .
-        "\nCHANGE `operation_id` `subject_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-        "\nADD `subject_class` VARCHAR(25) NOT NULL;";
+    $query = "ALTER TABLE `acte_ccam`
+                CHANGE `operation_id` `subject_id` int(11) unsigned NOT NULL DEFAULT '0',
+                ADD `subject_class` VARCHAR(25) NOT NULL;";
     $this->addQuery($query);
     $query = "UPDATE `acte_ccam` SET `subject_class` = 'COperation';";
     $this->addQuery($query); 
     
     $this->makeRevision("0.18");
-    $query = "ALTER TABLE `acte_ccam`" .
-        "\nCHANGE `subject_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-        "\nCHANGE `subject_class` `object_class` VARCHAR(25) NOT NULL;";
+    $query = "ALTER TABLE `acte_ccam`
+                CHANGE `subject_id` `object_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `subject_class` `object_class` VARCHAR(25) NOT NULL;";
     $this->addQuery($query); 
     
     $this->makeRevision("0.19");
     $query = "ALTER TABLE `acte_ccam`
-            ADD `code_association` TINYINT(4)";
+                ADD `code_association` TINYINT(4)";
     $this->addQuery($query);
     
     $this->makerevision("0.20");
     $query = "ALTER TABLE `acte_ccam`
-            ADD `regle` ENUM('0','1');";
+                ADD `regle` ENUM('0','1');";
     $this->addQuery($query);
     
     $this->makerevision("0.21");
     $query = "ALTER TABLE `acte_ccam`
-              ADD INDEX ( `code_acte` ),
-              ADD INDEX ( `code_activite` ),
-              ADD INDEX ( `code_phase` ),
-              ADD INDEX ( `object_id` ),
-              ADD INDEX ( `executant_id` ),
-              ADD INDEX ( `object_class` )";
+                ADD INDEX ( `code_acte` ),
+                ADD INDEX ( `code_activite` ),
+                ADD INDEX ( `code_phase` ),
+                ADD INDEX ( `object_id` ),
+                ADD INDEX ( `executant_id` ),
+                ADD INDEX ( `object_class` )";
     $this->addQuery($query);
     
     $this->makeRevision("0.22");
     $query = "ALTER TABLE `acte_ccam`
-            ADD `montant_base` FLOAT;";
+                ADD `montant_base` FLOAT;";
     $this->addQuery($query);
     
     $this->makeRevision("0.23");
     $query = "ALTER TABLE `acte_ccam`
-            ADD `signe` ENUM('0','1') DEFAULT '0';";
+                ADD `signe` ENUM('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
     $this->makeRevision("0.24");
     $query = "ALTER TABLE `acte_ccam`
-            ADD `rembourse` ENUM('0','1'), 
-            CHANGE `object_class` `object_class` ENUM('COperation','CSejour','CConsultation') NOT NULL;";
+                ADD `rembourse` ENUM('0','1'),
+                CHANGE `object_class` `object_class` ENUM('COperation','CSejour','CConsultation') NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.25");
     $query = "CREATE TABLE `daily_check_item` (
-              `daily_check_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `list_id` INT (11) UNSIGNED NOT NULL,
-              `item_type_id` INT (11) UNSIGNED NOT NULL,
-              `checked` ENUM ('0','1') NOT NULL
-            ) /*! ENGINE=MyISAM */;";
+                `daily_check_item_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `list_id` INT (11) UNSIGNED NOT NULL,
+                `item_type_id` INT (11) UNSIGNED NOT NULL,
+                `checked` ENUM ('0','1') NOT NULL
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `daily_check_item` 
-              ADD INDEX (`list_id`),
-              ADD INDEX (`item_type_id`);";
+                ADD INDEX (`list_id`),
+                ADD INDEX (`item_type_id`);";
     $this->addQuery($query);
     
     $query = "CREATE TABLE `daily_check_item_type` (
-              `daily_check_item_type_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `title` VARCHAR (255) NOT NULL,
-              `desc` TEXT,
-              `active` ENUM ('0','1') NOT NULL,
-              `group_id` INT (11) UNSIGNED NOT NULL
-            ) /*! ENGINE=MyISAM */;";
+                `daily_check_item_type_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `title` VARCHAR (255) NOT NULL,
+                `desc` TEXT,
+                `active` ENUM ('0','1') NOT NULL,
+                `group_id` INT (11) UNSIGNED NOT NULL
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `daily_check_item_type` ADD INDEX (`group_id`)";
     $this->addQuery($query);
 
     $query = "CREATE TABLE `daily_check_list` (
-              `daily_check_list_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `date` DATE NOT NULL,
-              `room_id` INT (11) UNSIGNED NOT NULL,
-              `validator_id` INT (11) UNSIGNED
-            ) /*! ENGINE=MyISAM */;";
+                `daily_check_list_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `date` DATE NOT NULL,
+                `room_id` INT (11) UNSIGNED NOT NULL,
+                `validator_id` INT (11) UNSIGNED
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `daily_check_list` 
-              ADD INDEX (`date`),
-              ADD INDEX (`room_id`),
-              ADD INDEX (`validator_id`);";
+                ADD INDEX (`date`),
+                ADD INDEX (`room_id`),
+                ADD INDEX (`validator_id`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.26");
     $query = "ALTER TABLE `daily_check_item_type` 
-      ADD `category_id` INT (11) UNSIGNED NOT NULL, 
-      ADD INDEX (`category_id`);";
+                ADD `category_id` INT (11) UNSIGNED NOT NULL,
+                ADD INDEX (`category_id`);";
     $this->addQuery($query);
     $query = "CREATE TABLE `daily_check_item_category` (
-              `daily_check_item_category_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `title` VARCHAR (255) NOT NULL,
-              `desc` TEXT
-            ) /*! ENGINE=MyISAM */;";
+                `daily_check_item_category_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `title` VARCHAR (255) NOT NULL,
+                `desc` TEXT
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $this->makeRevision("0.27");
     $query = "ALTER TABLE `acte_ccam` 
-      ADD `charges_sup` ENUM ('0','1')";
+                ADD `charges_sup` ENUM ('0','1')";
     $this->addQuery($query);
     
     $this->makeRevision("0.28");
     $query = "ALTER TABLE `daily_check_list` 
-              CHANGE `room_id` `object_id` INT (11) UNSIGNED NOT NULL,
-              ADD `object_class` VARCHAR(80) NOT NULL DEFAULT 'CSalle'";
+                CHANGE `room_id` `object_id` INT (11) UNSIGNED NOT NULL,
+                ADD `object_class` VARCHAR(80) NOT NULL DEFAULT 'CSalle'";
     $this->addQuery($query);
     $query = "ALTER TABLE `daily_check_item_category` 
-              ADD `target_class` VARCHAR(80) NOT NULL DEFAULT 'CSalle'";
+                ADD `target_class` VARCHAR(80) NOT NULL DEFAULT 'CSalle'";
     $this->addQuery($query);
     
     $this->makeRevision("0.29");
@@ -187,30 +298,28 @@ class CSetupdPsalleOp extends CSetup {
     
     $this->makerevision("0.30");
     $query = "ALTER TABLE `acte_ccam`
-            ADD `regle_dh` ENUM('0','1') DEFAULT '0' AFTER `regle`;";
+                ADD `regle_dh` ENUM('0','1') DEFAULT '0' AFTER `regle`;";
     $this->addQuery($query);
     
     $this->makeRevision("0.31");
     $query = "ALTER TABLE `daily_check_item_category` 
-              ADD `type` ENUM ('preanesth','preop','postop');";
+                ADD `type` ENUM ('preanesth','preop','postop');";
     $this->addQuery($query);
    
     $query = "ALTER TABLE `daily_check_item` 
-              CHANGE `checked` `checked` ENUM ('0','1');";
+                CHANGE `checked` `checked` ENUM ('0','1');";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `daily_check_item_type` 
-              ADD `attribute` ENUM ('normal','notrecommended','notapplicable'),
-              CHANGE `group_id` `group_id` INT(11) UNSIGNED NULL";
+                ADD `attribute` ENUM ('normal','notrecommended','notapplicable'),
+                CHANGE `group_id` `group_id` INT(11) UNSIGNED NULL";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `daily_check_list` 
-              ADD `type` ENUM ('preanesth','preop','postop'),
-              CHANGE `object_class` `object_class` ENUM ('CSalle','CBlocOperatoire','COperation') NOT NULL";
+                ADD `type` ENUM ('preanesth','preop','postop'),
+                CHANGE `object_class` `object_class` ENUM ('CSalle','CBlocOperatoire','COperation') NOT NULL";
     $this->addQuery($query);
-    
-    
-    
+
     // Liste des points de check liste spécifiés par la HAS
     $categories = array(
       '01' => array('preanesth', 'Identité du patient', 
@@ -226,7 +335,7 @@ class CSetupdPsalleOp extends CSetup {
         ),
       ),
       
-      '03' => array('preanesth', null, 
+      '03' => array('preanesth', null,
         array(
           array('Le mode d\'installation est connu de l\'équipe en salle, cohérent avec le site/intervention et non dangereuse pour le patient', 'notapplicable'),
         ),
@@ -264,7 +373,7 @@ class CSetupdPsalleOp extends CSetup {
         ),
       ),
       
-      '08' => array('preop', null, 
+      '08' => array('preop', null,
         array(
           array('Antibioprophylaxie effectuée', 'notrecommended'),
         ),
@@ -279,43 +388,50 @@ class CSetupdPsalleOp extends CSetup {
         ),
       ),
       
-      '10' => array('postop', null, 
+      '10' => array('postop', null,
         array(
           array('Les prescriptions pour les suites opératoires immédiates sont faites de manière conjointe', 'notrecommended'),
         ),
       ),
     );
     
-    foreach($categories as $title => $cat) {
-      $query = $this->ds->prepare("INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES 
-                               (%1, %2, 'COperation', %3)", $title, $cat[1], $cat[0]);
+    foreach ($categories as $title => $cat) {
+      $query = "INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES
+                               (%1, %2, 'COperation', %3)";
+      $query = $this->ds->prepare($query, $title, $cat[1], $cat[0]);
       $this->addQuery($query);
       
-      foreach($cat[2] as $type) {
-        $query = $this->ds->prepare("INSERT INTO `daily_check_item_type` (`title`, `active`, `attribute`, `category_id`) VALUES
-                    (%1, '1', %2, (SELECT `daily_check_item_category_id` FROM `daily_check_item_category` WHERE `title` = %3 AND `target_class` = 'COperation'))", 
-                     $type[0], $type[1], $title);
+      foreach ($cat[2] as $type) {
+        $query = "INSERT INTO `daily_check_item_type` (`title`, `active`, `attribute`, `category_id`) VALUES (
+                    %1, '1', %2, (
+                      SELECT `daily_check_item_category_id`
+                      FROM `daily_check_item_category`
+                      WHERE `title` = %3
+                      AND `target_class` = 'COperation'
+                    )
+                  )";
+        $query = $this->ds->prepare($query, $type[0], $type[1], $title);
         $this->addQuery($query);
       }
     }
     
     $this->makeRevision("0.32");
     $query = "ALTER TABLE `acte_ccam` 
-              ADD INDEX (`execution`);";
+                ADD INDEX (`execution`);";
     $this->addQuery($query);
 
     $this->makeRevision("0.33");
     $query = "CREATE TABLE `anesth_perop` (
-              `anesth_perop_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
-              `operation_id` INT (11) UNSIGNED NOT NULL,
-              `libelle` VARCHAR (255) NOT NULL,
-              `datetime` DATETIME NOT NULL
-             ) /*! ENGINE=MyISAM */;";
+                `anesth_perop_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `operation_id` INT (11) UNSIGNED NOT NULL,
+                `libelle` VARCHAR (255) NOT NULL,
+                `datetime` DATETIME NOT NULL
+              ) /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     
     $query = "ALTER TABLE `anesth_perop` 
-              ADD INDEX (`operation_id`),
-              ADD INDEX (`datetime`);";
+                ADD INDEX (`operation_id`),
+                ADD INDEX (`datetime`);";
     $this->addQuery($query);
     
     $this->makeRevision("0.34");
@@ -365,16 +481,17 @@ class CSetupdPsalleOp extends CSetup {
       array('10', 0, "postop", "normal"),
     );
     
-    foreach($changes as $_change) {
-      $libelle = $categories[$_change[0]][2][$_change[1]][0];
+    foreach ($changes as $_change) {
+      $libelle = addslashes($categories[$_change[0]][2][$_change[1]][0]);
       $query = "UPDATE `daily_check_item_type` 
-      LEFT JOIN `daily_check_item_category` ON `daily_check_item_category`.`daily_check_item_category_id` = `daily_check_item_type`.`category_id`
+      LEFT JOIN `daily_check_item_category`
+        ON `daily_check_item_category`.`daily_check_item_category_id` = `daily_check_item_type`.`category_id`
       SET `daily_check_item_type`.`attribute` = '{$_change[3]}'
       WHERE 
         `daily_check_item_category`.`target_class` = 'COperation' AND 
         `daily_check_item_category`.`type` = '{$_change[2]}' AND
         `daily_check_item_category`.`title` = '{$_change[0]}' AND 
-        `daily_check_item_type`.`title` = '".addslashes($libelle)."'"; 
+        `daily_check_item_type`.`title` = '$libelle'";
       $this->addQuery($query);
     }
     
@@ -394,7 +511,7 @@ class CSetupdPsalleOp extends CSetup {
         ),
       ),
       
-      '02' => array('preendoscopie', null, 
+      '02' => array('preendoscopie', null,
         array(
           array('Le type de l\'endoscopie est confirmé par le patient et dans tous les cas par le dossier', 'normal'),
         ),
@@ -415,66 +532,73 @@ class CSetupdPsalleOp extends CSetup {
         ),
       ),
       
-      '05' => array('preendoscopie', null, 
+      '05' => array('preendoscopie', null,
         array(
           array('Patient à jeun', 'normal'),
         ),
       ),
       
-      '06' => array('preendoscopie', null, 
+      '06' => array('preendoscopie', null,
         array(
           array('La préparation adéquate (coloscopie, gastrostomie) a été mise en oeuvre', 'notapplicable'),
         ),
       ),
       
-      '07' => array('preendoscopie', null, 
+      '07' => array('preendoscopie', null,
         array(
           array('Vérification croisée de situations spécifiques entre les membres de l\'équipe médico-soignante '.
                 'concernant notamment la gestion des antiagrégants plaquettaires et/ou des anticoagulants', 'notapplicable'),
         ),
       ),
       
-      '08' => array('preendoscopie', null, 
+      '08' => array('preendoscopie', null,
         array(
           array('Antibioprophylaxie effectuée', 'notapplicable'),
         ),
       ),
       
-      '09' => array('postendoscopie', null, 
+      '09' => array('postendoscopie', null,
         array(
           array('Confirmation orale par le personnel auprès de l\'équipe de l\'étiquetage des prélèvements, pièces opératoires, etc.', 'notapplicable'),
         ),
       ),
       
-      '10' => array('postendoscopie', null, 
+      '10' => array('postendoscopie', null,
         array(
           array('Les prescriptions pour les suites immédiates de l\'endoscopie sont faites de manière conjointe', 'normal'),
         ),
       ),
     );
     
-    foreach($category_changes as $title => $cat) {
-      $query = $this->ds->prepare("INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES 
-                               (%1, %2, 'COperation', %3)", $title, $cat[1], $cat[0]);
+    foreach ($category_changes as $title => $cat) {
+      $query = "INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES (%1, %2, 'COperation', %3)";
+      $query = $this->ds->prepare($query, $title, $cat[1], $cat[0]);
       $this->addQuery($query);
       
-      foreach($cat[2] as $type) {
-        $query = $this->ds->prepare("INSERT INTO `daily_check_item_type` (`title`, `active`, `attribute`, `category_id`) VALUES
-                    (%1, '1', %2, (SELECT `daily_check_item_category_id` FROM `daily_check_item_category` WHERE `title` = %3 AND `target_class` = 'COperation' AND `type` = %4))", 
-                     $type[0], $type[1], $title, $cat[0]);
+      foreach ($cat[2] as $type) {
+        $query = "INSERT INTO `daily_check_item_type` (`title`, `active`, `attribute`, `category_id`) VALUES (
+                    %1, '1', %2, (
+                      SELECT `daily_check_item_category_id`
+                      FROM `daily_check_item_category`
+                      WHERE `title` = %3
+                      AND `target_class` = 'COperation'
+                      AND `type` = %4
+                    )
+                  )";
+        $query = $this->ds->prepare($query, $type[0], $type[1], $title, $cat[0]);
         $this->addQuery($query);
       }
     }
     
     $this->makeRevision("0.35");
     $query = "ALTER TABLE `acte_ccam` 
-              ADD `sent` ENUM ('0','1') DEFAULT '0';";
+                ADD `sent` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
     $this->makeRevision("0.36");
     $query = "ALTER TABLE `daily_check_item_type` 
-              ADD `default_value` ENUM ('yes','no','nr','na') NOT NULL DEFAULT 'yes',
-              ADD `index` TINYINT (2) UNSIGNED NOT NULL";
+                ADD `default_value` ENUM ('yes','no','nr','na') NOT NULL DEFAULT 'yes',
+                ADD `index` TINYINT (2) UNSIGNED NOT NULL";
     $this->addQuery($query);
     
     // creation des index (pas au sens index SQL, mais pour ordonner les types dans chanque catégorie)
@@ -484,7 +608,7 @@ class CSetupdPsalleOp extends CSetup {
       $sub_query = "SELECT `daily_check_item_category`.`daily_check_item_category_id` FROM `daily_check_item_category`";
       $categories = $ds->loadList($sub_query);
       
-      foreach($categories as $_category) {
+      foreach ($categories as $_category) {
         $id = reset($_category);
         $sub_query = "SELECT `daily_check_item_type`.`daily_check_item_type_id`
           FROM `daily_check_item_type`
@@ -492,7 +616,7 @@ class CSetupdPsalleOp extends CSetup {
           
         $types = $ds->loadList($sub_query);
         
-        foreach($types as $_index => $_type) {
+        foreach ($types as $_index => $_type) {
           $type_id = reset($_type);
           $_index++;
           
@@ -522,42 +646,13 @@ class CSetupdPsalleOp extends CSetup {
       array('COperation', 'postop', '09', '10'),
       array('COperation', 'postop', '10', '11'),
     );
+    $this->changeCheckListCategories($category_changes);
     
-    // reverse because of the title changes
-    $category_changes = array_reverse($category_changes);
-    
-    // Category changes
-    foreach($category_changes as $_change) {
-      $cat_class = $_change[0];
-      $cat_type  = $_change[1];
-      $cat_title = $_change[2];
-      $cat_new_title = $_change[3];
-      $cat_new_desc  = CValue::read($_change, 4, null);
-      
-      $query = "UPDATE `daily_check_item_category` SET 
-      `daily_check_item_category`.`title` = '".addslashes($cat_new_title)."' ";
-      
-      if (isset($cat_new_desc)) {
-        $query .= ", `daily_check_item_category`.`desc` = '".addslashes($cat_new_desc)."' ";
-      }
-      
-      $query .= "WHERE 
-        `daily_check_item_category`.`target_class` = '$cat_class' AND 
-        `daily_check_item_category`.`type` = '$cat_type' AND
-        `daily_check_item_category`.`title` = '$cat_title'"; 
-      $this->addQuery($query);
-    }
-    
-    // Category addittions
+    // Category additions
     $category_additions = array(
       array('COperation', 'preanesth', '04'),
     );
-    
-    foreach($category_additions as $_change) {
-      $query = $this->ds->prepare("INSERT INTO `daily_check_item_category` (`target_class`, `type`, `title`, `desc`) 
-        VALUES (%1, %2, %3, %4)", $_change[0], $_change[1], $_change[2], ''); 
-      $this->addQuery($query);
-    }
+    $this->addCheckListCategories($category_additions);
     
     // Type changes
     $type_changes = array(
@@ -625,40 +720,7 @@ class CSetupdPsalleOp extends CSetup {
         "title"     => "Les prescriptions pour les suites opératoires immédiates sont faites de manière conjointe entre les équipes chirurgicale et anesthésiste",
       )),
     );
-    
-    foreach($type_changes as $_change) {
-      $cat_class = $_change[0];
-      $cat_type  = $_change[1];
-      $cat_title = $_change[2];
-      
-      $data  = $_change[3];
-      $index = $data["index"];
-      
-      $query = "UPDATE `daily_check_item_type` 
-      LEFT JOIN `daily_check_item_category` ON `daily_check_item_category`.`daily_check_item_category_id` = `daily_check_item_type`.`category_id`
-      SET ";
-      
-      if (isset($data["title"])) {
-        $query .= " `daily_check_item_type`.`title` = '".addslashes($data["title"])."' ";
-      }
-      
-      if (isset($data["attribute"])) {
-        if (isset($data["title"])) $query .= ",";
-        $query .= " `daily_check_item_type`.`attribute` = '".$data["attribute"]."' ";
-      }
-      
-      if (isset($data["default"])) {
-        if (isset($data["title"]) || isset($data["attribute"])) $query .= ",";
-        $query .= " `daily_check_item_type`.`default_value` = '".$data["default"]."' ";
-      }
-      
-      $query .= "WHERE 
-        `daily_check_item_category`.`target_class` = '$cat_class' AND 
-        `daily_check_item_category`.`type` = '$cat_type' AND
-        `daily_check_item_category`.`title` = '$cat_title' AND 
-        `daily_check_item_type`.`index` = '$index'";
-      $this->addQuery($query);
-    }
+    $this->changeCheckListTypes($type_changes);
     
     // type additions
     $type_additions = array(
@@ -677,12 +739,11 @@ class CSetupdPsalleOp extends CSetup {
       )),
     );
     
-    foreach($type_additions as $_type) {
+    foreach ($type_additions as $_type) {
       $cat_class = $_type[0];
       $cat_type  = $_type[1];
       $cat_title = $_type[2];
       $data      = $_type[3];
-      $index     = $data["index"];
       
       $query = $this->ds->prepare("INSERT INTO `daily_check_item_type` (`title`, `attribute`, `default_value`, `index`, `active`, `category_id`)
       VALUES (%1, %2, %3, %4, '1', (
@@ -720,7 +781,7 @@ class CSetupdPsalleOp extends CSetup {
         ),
       ),
       
-      '03' => array('preendoscopie_bronchique', null, 
+      '03' => array('preendoscopie_bronchique', null,
         array(
           array('Patient à jeun', 'normal', 'yes'),
         ),
@@ -733,20 +794,20 @@ class CSetupdPsalleOp extends CSetup {
         ),
       ),
       
-      '05' => array('preendoscopie_bronchique', null, 
+      '05' => array('preendoscopie_bronchique', null,
         array(
           array('Vérification croisée de situations spécifiques entre les membres de l\'équipe médico-soignante '.
                 'concernant notamment la gestion des antiagrégants plaquettaires et/ou des anticoagulants', 'notapplicable', 'yes'),
         ),
       ),
       
-      '06' => array('postendoscopie_bronchique', null, 
+      '06' => array('postendoscopie_bronchique', null,
         array(
           array('Confirmation orale par le personnel auprès de l\'équipe de l\'étiquetage des prélèvements, pièces opératoires, etc.', 'notapplicable', 'yes'),
         ),
       ),
       
-      '07' => array('postendoscopie_bronchique', null, 
+      '07' => array('postendoscopie_bronchique', null,
         array(
           array('Les prescriptions pour les suites immédiates de l\'endoscopie sont faites de manière conjointe', 'normal', 'yes'),
         ),
@@ -757,19 +818,20 @@ class CSetupdPsalleOp extends CSetup {
     
     $this->makeRevision("0.38");
     $query = "ALTER TABLE `anesth_perop` 
-              CHANGE `libelle` `libelle` TEXT NOT NULL;";
+                CHANGE `libelle` `libelle` TEXT NOT NULL;";
     $this->addQuery($query);
     $query = "ALTER TABLE `anesth_perop` 
-              ADD `incident` ENUM ('0','1') DEFAULT '0';";
+                ADD `incident` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($query);
     
     $this->makeRevision("0.39");
     $query = "ALTER TABLE `acte_ccam` 
-              ADD `motif_depassement` ENUM ('d','e','f','n') AFTER `montant_depassement`;";
+                ADD `motif_depassement` ENUM ('d','e','f','n') AFTER `montant_depassement`;";
     $this->addQuery($query);
     
     $this->makeRevision("0.40");
-    // Liste des points de check liste sécurité du patient en radiologie interventionnelle spécifiés par la HAS, version 2011-01 (au 16/12/2011)
+    // Liste des points de check liste sécurité du patient en radiologie
+    // interventionnelle spécifiés par la HAS, version 2011-01 (au 16/12/2011)
     $query = "ALTER TABLE `daily_check_list` 
                 CHANGE `type` `type` ENUM ('preanesth','preop','postop','preendoscopie','postendoscopie','preendoscopie_bronchique','postendoscopie_bronchique','preanesth_radio','preop_radio','postop_radio')";
     $this->addQuery($query);
@@ -779,7 +841,7 @@ class CSetupdPsalleOp extends CSetup {
     $this->addQuery($query);
     
     $check_list = array(
-      '00' => array('preanesth_radio', null, 
+      '00' => array('preanesth_radio', null,
         array(
           array('Informations au patient', 'normal', 'yes'),
           array('Traçabilité du consentement éclairé', 'normal', 'yes'),
@@ -787,7 +849,7 @@ class CSetupdPsalleOp extends CSetup {
         ),
       ),
       
-      '01' => array('preanesth_radio', null, 
+      '01' => array('preanesth_radio', null,
         array(
           array('L\'identité du patient est correcte', 'normal', 'yes'),
         ),
@@ -800,13 +862,13 @@ class CSetupdPsalleOp extends CSetup {
         ),
       ),
       
-      '03' => array('preanesth_radio', null, 
+      '03' => array('preanesth_radio', null,
         array(
           array('Le mode d\'installation est connu de l\'équipe en salle, cohérent avec le site/intervention et non dangereux pour le patient', 'normal', 'yes'),
         ),
       ),
       
-      '04' => array('preanesth_radio', null, 
+      '04' => array('preanesth_radio', null,
         array(
           array('La préparation cutanée de l\'opéré est documentée dans la fiche de liaison service', 'notapplicable', 'yes'),
         ),
@@ -873,7 +935,7 @@ class CSetupdPsalleOp extends CSetup {
         ),
       ),
       
-      '11' => array('postop_radio', null, 
+      '11' => array('postop_radio', null,
         array(
           array('Les prescriptions pour les suites opératoires immédiates sont faites de manière conjointe entre les équipes de radiologie et d\'anesthésie', 'normal', 'yes'),
         ),
@@ -897,12 +959,12 @@ class CSetupdPsalleOp extends CSetup {
     
     $check_list = array(
       // AVANT
-      '01' => array('disp_vasc_avant', null, 
+      '01' => array('disp_vasc_avant', null,
         array(
           array('Identité du patient vérifiée', 'normal', 'yes'),
         ),
       ),
-      '02' => array('disp_vasc_avant', null, 
+      '02' => array('disp_vasc_avant', null,
         array(
           array('Patient / famille informé', 'normal', 'yes'),
         ),
@@ -912,22 +974,22 @@ class CSetupdPsalleOp extends CSetup {
           array('Risque hémorragique, allergie, contre-indications anatomique ou pathologique', 'normal', 'yes'),
         ),
       ),
-      '04' => array('disp_vasc_avant', null, 
+      '04' => array('disp_vasc_avant', null,
         array(
           array('Choix argumenté du site d\'insertion', 'normal', 'yes'),
         ),
       ),
-      '05' => array('disp_vasc_avant', null, 
+      '05' => array('disp_vasc_avant', null,
         array(
           array('Choix concerté du matériel', 'normal', 'yes'),
         ),
       ),
-      '06' => array('disp_vasc_avant', null, 
+      '06' => array('disp_vasc_avant', null,
         array(
           array('Préparation cutanée appropriée', 'normal', 'yes'),
         ),
       ),
-      '07' => array('disp_vasc_avant', null, 
+      '07' => array('disp_vasc_avant', null,
         array(
           array('Monitorage approprié', 'normal', 'yes'),
         ),
@@ -937,7 +999,7 @@ class CSetupdPsalleOp extends CSetup {
           array('Date de péremption, intégrité de l\'emballage', 'normal', 'yes'),
         ),
       ),
-      '09' => array('disp_vasc_avant', null, 
+      '09' => array('disp_vasc_avant', null,
         array(
           array('Échographie', 'normal', 'yes'),
         ),
@@ -958,17 +1020,17 @@ class CSetupdPsalleOp extends CSetup {
           array('FONCTIONNELLE: Système perméable', 'normal', 'yes'),
         ),
       ),
-      '12' => array('disp_vasc_pendant', null, 
+      '12' => array('disp_vasc_pendant', null,
         array(
           array('Vérification de la fixation du dispositif', 'normal', 'yes'),
         ),
       ),
-      '13' => array('disp_vasc_pendant', null, 
+      '13' => array('disp_vasc_pendant', null,
         array(
           array('Pose d\'un pansement occlusif', 'normal', 'yes'),
         ),
       ),
-      '14' => array('disp_vasc_pendant', "Si utilisation différée, fermeture du dispositif", 
+      '14' => array('disp_vasc_pendant', "Si utilisation différée, fermeture du dispositif",
         array(
           array('En accord avec la procédure locale', 'normal', 'yes'),
         ),
@@ -986,12 +1048,12 @@ class CSetupdPsalleOp extends CSetup {
           array('Matériel, technique, nombre de ponctions, incident', 'normal', 'yes'),
         ),
       ),
-      '17' => array('disp_vasc_apres', null, 
+      '17' => array('disp_vasc_apres', null,
         array(
           array('Prescriptions pour le suivi après pose', 'normal', 'yes'),
         ),
       ),
-      '18' => array('disp_vasc_apres', null, 
+      '18' => array('disp_vasc_apres', null,
         array(
           array('Documents remis au patient', 'normal', 'yes'),
         ),
@@ -1006,24 +1068,42 @@ class CSetupdPsalleOp extends CSetup {
                 ADD `facturable` ENUM ('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.43";
-  }
-  
-  function addNewCheckList($check_list, $object_class = 'COperation') {
-    foreach($check_list as $title => $cat) {
-      // Ajout de la catégorie
-      $query = $this->ds->prepare("INSERT INTO `daily_check_item_category` (`title`, `desc`, `target_class`, `type`) VALUES 
-                               (%1, %2, '$object_class', %3)", $title, $cat[1], $cat[0]);
-      $this->addQuery($query);
-      
-      // Ajout des élements
-      foreach($cat[2] as $i => $type) {
-        $query = $this->ds->prepare("INSERT INTO `daily_check_item_type` (`title`, `active`, `attribute`, `category_id`, `index`, `default_value`) VALUES
-                    (%1, '1', %2, (SELECT `daily_check_item_category_id` FROM `daily_check_item_category` WHERE `title` = %3 AND `target_class` = '$object_class' AND `type` = %4), %5, %6)", 
-                     $type[0], $type[1], $title, $cat[0], $i+1, $type[2]);
-        $this->addQuery($query);
-      }
-    }
+    $this->makeRevision("0.43");
+    $query = "ALTER TABLE `daily_check_item_category`
+                CHANGE `target_class` `target_class` ENUM ('CSalle','CBlocOperatoire','COperation','CPoseDispositifVasculaire') NOT NULL DEFAULT 'CSalle',
+                ADD `target_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `daily_check_item_category`
+                ADD INDEX (`target_id`);";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.44");
+    // Check list sécurité du patient en endoscopie digestive, version 2013
+    $query = "UPDATE `daily_check_item_category` SET
+                `title` = '11'
+                WHERE `title` = '10'
+                  AND `target_class` = 'COperation'
+                  AND `type` = 'postendoscopie'";
+    $this->addQuery($query);
+    $query = "UPDATE `daily_check_item_category` SET
+                `title` = '10'
+                WHERE `title` = '09'
+                  AND `target_class` = 'COperation'
+                  AND `type` = 'postendoscopie'";
+    $this->addQuery($query);
+
+    // Nouveau point 09
+    $check_list = array(
+      '09' => array('preendoscopie', 'Patient suspect ou atteint d\'EST',
+        array(
+          array('(en cas de réponse positive, l\'endoscopie doit être considérée comme un acte à risque de transmission d\'ATNC et '.
+                'il convient de se référer aux procédures en cours dans l\'établissement en lien avec l\'Instruction n°DGS/R13/2011'.
+                '/449)', 'normal', 'yes'),
+        ),
+      ),
+    );
+    $this->addNewCheckList($check_list);
+
+    $this->mod_version = "0.45";
   }
 }
-?>

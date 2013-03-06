@@ -9,16 +9,18 @@
  */
 
 class CDailyCheckItem extends CMbObject {
-  var $daily_check_item_id  = null;
+  public $daily_check_item_id;
 
   // DB Fields
-  var $list_id      = null;
-  var $item_type_id = null;
-  var $checked = null;
+  public $list_id;
+  public $item_type_id;
+  public $checked;
   
-  // Refs
-  var $_ref_list = null;
-  var $_ref_item_type = null;
+  /** @var CDailyCheckList */
+  public $_ref_list;
+
+  /** @var CDailyCheckItemType */
+  public $_ref_item_type;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -28,34 +30,39 @@ class CDailyCheckItem extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs['list_id']      = 'ref notNull class|CDailyCheckList';
-    $specs['item_type_id'] = 'ref notNull class|CDailyCheckItemType';
-    $specs['checked']      = 'enum notNull list|yes|no|nr|na';
-    return $specs;
+    $props = parent::getProps();
+    $props['list_id']      = 'ref notNull class|CDailyCheckList';
+    $props['item_type_id'] = 'ref notNull class|CDailyCheckItemType';
+    $props['checked']      = 'enum notNull list|yes|no|nr|na';
+    return $props;
   }
   
   function getAnswer(){
-    /* $this->loadRefsFwd();
-    
-    switch ($this->_ref_item_type->attribute) {
-      default:
-      case "normal":         $value = ($this->checked === null ? 'Unknown' : ($this->checked != 0 ? 'Yes' : 'No')); break;
-      case "notrecommended": $value = ($this->checked === null ? 'N/R' :     ($this->checked != 0 ? 'Yes' : 'No')); break;
-      case "notapplicable":  $value = ($this->checked === null ? 'Unknown' : ($this->checked != 0 ? 'Yes' : 'N/A')); break;
-    }*/
-    
     return $this->getFormattedValue("checked");
   }
 
   function updateFormFields() {
     parent::updateFormFields();
+
     $this->_view = "$this->_ref_item_type (".$this->getAnswer().")";
   }
   
   function loadRefsFwd() {
-    $this->_ref_list = $this->loadFwdRef("list_id", true);
-    $this->_ref_item_type = $this->loadFwdRef("item_type_id", true);
+    $this->loadRefList();
+    $this->loadRefItemType();
+  }
+
+  /**
+   * @return CDailyCheckList
+   */
+  function loadRefList(){
+    return $this->_ref_list = $this->loadFwdRef("list_id", true);
+  }
+
+  /**
+   * @return CDailyCheckItemType
+   */
+  function loadRefItemType(){
+    return $this->_ref_item_type = $this->loadFwdRef("item_type_id", true);
   }
 }
-?>

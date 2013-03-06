@@ -8,46 +8,50 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $can, $g;
-$can->needsAdmin();
+CCanDo::checkAdmin();
 
 $item_type_id = CValue::getOrSession('item_type_id');
 
-$item_type = new CDailyCheckItemType;
+$group_id = CGroups::loadCurrent()->_id;
+
+$item_type = new CDailyCheckItemType();
 if (!$item_type->load($item_type_id)) {
   $item_type->index = 1;
 }
-
-$item_category = new CDailyCheckItemCategory;
-$item_categories_list = array();
-
-$target_class_list = $item_category->_specs["target_class"]->_list;
-
-foreach(CDailyCheckList::$_HAS_classes as $_class) {
-  CMbArray::removeValue($_class, $target_class_list);
+else {
+  $item_type->loadRefsNotes();
 }
 
-foreach($target_class_list as $_target) {
-  $item_category->target_class = $_target;
-  $list_cat = $item_category->loadMatchingList('target_class, title');
-  
-  foreach ($list_cat as $cat) {
-    $cat->loadBackRefs('item_types', 'title');
-    foreach($cat->_back['item_types'] as $id => $type) {
-      if ($type->group_id != $g) {
-        unset($cat->_back['item_types'][$id]);
+$item_category = new CDailyCheckItemCategory();
+
+foreach (CDailyCheckList::$_HAS_classes as $_class) {
+  unset($item_category->_specs["target_class"]->_locales[$_class]);
+}
+
+list($targets, $item_categories_by_class) = CDailyCheckItemCategory::getCategoriesTree();
+
+$target_class_list = array_keys($item_category->_specs["target_class"]->_locales);
+
+foreach ($item_categories_by_class as $_class => $item_categories_by_target) {
+  foreach ($item_categories_by_target as $_id => $_categories) {
+    /** @var CDailyCheckItemCategory $_cat */
+    foreach ($_categories as $_cat) {
+      $_cat->loadBackRefs('item_types', array("`index`", "`title`"));
+
+      /** @var CDailyCheckItemType $_type */
+      foreach ($_cat->_back['item_types'] as $_id_type => $_type) {
+        if ($_type->group_id != $group_id) {
+          unset($_cat->_back['item_types'][$_id_type]);
+        }
       }
     }
   }
-  $item_categories_list[$_target] = $list_cat;
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("item_type", $item_type);
 $smarty->assign("item_category", $item_category);
-$smarty->assign("item_categories_list", $item_categories_list);
-$smarty->assign("target_class_list", $target_class_list);
+$smarty->assign("item_categories_by_class", $item_categories_by_class);
+$smarty->assign("targets", $targets);
 $smarty->display("vw_daily_check_item_type.tpl");
-
-?>
