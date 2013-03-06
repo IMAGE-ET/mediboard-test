@@ -217,24 +217,7 @@ foreach ($sejours as $_key => $_sejour) {
   
   if ($prestation_id) {
     $_sejour->loadRefFirstLiaisonForPrestation($prestation_id);
-
-    $item_liaison = new CItemLiaison();
-    $where = array();
-    $ljoin = array();
-    
-    $where["sejour_id"] = "= '$_sejour->_id'";
-    $ljoin["item_prestation"] =
-      "item_prestation.item_prestation_id = item_liaison.item_realise_id OR
-       item_prestation.item_prestation_id = item_liaison.item_souhait_id";
-    
-    $where["object_class"] = " = 'CPrestationJournaliere'";
-    $where["object_id"] = " = '$prestation_id'";
-    $_sejour->_liaisons_for_prestation = $item_liaison->loadList($where, "date ASC", null, null, $ljoin);
-
-    foreach ($_sejour->_liaisons_for_prestation as $_liaison) {
-      $_liaison->loadRefItem();
-      $_liaison->loadRefItemRealise();
-    }
+    $_sejour->loadLiaisonsForPrestation($prestation_id);
   }
   
   if ($_sejour->service_id) {

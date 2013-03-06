@@ -734,7 +734,7 @@ class CStoredObject extends CModelObject {
     $request->addOrder($order);
     $request->setLimit($limit);
     $request->addForceIndex($index);
-    
+
     $query_list = $this->loadQueryList($request->getRequest($this, $found_rows));
     if ($found_rows) {
       $this->_found_rows = $this->_spec->ds->foundRows();
@@ -1572,6 +1572,17 @@ class CStoredObject extends CModelObject {
       return null;
     }
 
+    // With old versions of mysql, remove '' fields
+    $ids = CMbArray::pluck($objects, "_id");
+    CMbArray::removeValue("", $ids);
+
+    if (!count($ids)) {
+      foreach ($objects as $_object) {
+        $_object->_count[$backName] = 0;
+      }
+      return 0;
+    }
+
     // @TODO Refactor using CRequest
     $query = "SELECT $backField, COUNT({$backObject->_spec->key}) 
       FROM `{$backObject->_spec->table}`";
@@ -1583,7 +1594,7 @@ class CStoredObject extends CModelObject {
     }
     
     $ds = $backObject->_spec->ds;
-    $query .= "WHERE `$backField` " . $ds->prepareIn(CMbArray::pluck($objects, "_id"));
+    $query .= "WHERE `$backField` " . $ds->prepareIn($ids);
 
     // Additional where clauses
     foreach ($where as $_field => $_clause) {
@@ -1600,7 +1611,7 @@ class CStoredObject extends CModelObject {
     // Group by object key
     $query .= "\nGROUP BY $backField";
     $counts = $ds->loadHashList($query);
-    
+
     // Populate object counts
     $total = 0;
     foreach ($objects as $_object) {
