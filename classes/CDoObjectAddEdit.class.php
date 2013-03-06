@@ -29,7 +29,7 @@ class CDoObjectAddEdit {
   public $_obj;
   public $_old;
 
-  function __construct($className, $objectKey = null) {
+  function CDoObjectAddEdit($className, $objectKey = null) {
     if (CAppUI::conf("readonly")) {
       CAppUI::stepAjax("Mode-readonly-title", UI_MSG_ERROR);
       return;
