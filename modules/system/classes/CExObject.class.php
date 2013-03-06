@@ -114,8 +114,12 @@ class CExObject extends CMbMetaObject {
   }
   
   static function clearLocales() {
-    SHM::rem("exclass-locales-fr");
-    SHM::rem("exclass-locales-en");
+    $languages = CAppUI::getAvailableLanguages();
+
+    foreach ($languages as $_lang) {
+      SHM::rem("exclass-locales-$_lang");
+    }
+
     self::$_locales_ready = false;
   }
   
@@ -125,82 +129,77 @@ class CExObject extends CMbMetaObject {
     }
     
     $lang = CAppUI::pref("LOCALE");
-    $_locales = SHM::get("exclass-locales-$lang");
-    
-    if (!$_locales) {
-      $_locales = array();
-      
+
+    $_locales = array();
+
+    $request = new CRequest();
+    $request->addTable("ex_class_field_translation");
+    $request->addWhere(array(
+      "lang" => "= '$lang'",
+    ));
+    $request->addLJoin(array(
+      "ex_class_field"       => "ex_class_field.ex_class_field_id = ex_class_field_translation.ex_class_field_id",
+      "ex_concept"           => "ex_concept.ex_concept_id = ex_class_field.concept_id",
+      "ex_class_field_group" => "ex_class_field_group.ex_class_field_group_id = ex_class_field.ex_group_id",
+    ));
+    $request->addSelect(array(
+      "ex_class_field_translation.std",
+      "IF(ex_class_field_translation.desc, ex_class_field_translation.desc, ex_class_field_translation.std) AS `desc`",
+      "IF(ex_class_field_translation.court, ex_class_field_translation.court, ex_class_field_translation.std) AS `court`",
+      "ex_class_field.ex_class_field_id AS field_id",
+      "ex_class_field.name",
+      "ex_class_field.prop",
+      "ex_class_field.concept_id",
+      "ex_class_field_group.ex_class_id",
+      "ex_concept.ex_list_id",
+    ));
+
+    $ds = CSQLDataSource::get("std");
+    $list = $ds->loadList($request->getRequest());
+
+    foreach ($list as $_item) {
+      $key = "CExObject_{$_item['ex_class_id']}-{$_item['name']}";
+      $_locales[$key]         = $_item["std"];
+      $_locales["$key-desc"]  = $_item["desc"];
+      $_locales["$key-court"] = $_item["court"];
+
+      $prop = $_item["prop"];
+      if (strpos($prop, "enum") === false && strpos($prop, "set") === false) {
+        continue;
+      }
+
+      $key = "CExObject_{$_item['ex_class_id']}.{$_item['name']}";
+      $_locales["$key."] = CAppUI::tr("Undefined");
+
       $request = new CRequest();
-      $request->addTable("ex_class_field_translation");
-      $request->addWhere(array(
-        "lang" => "= '$lang'",
-      ));
-      $request->addLJoin(array(
-        "ex_class_field"       => "ex_class_field.ex_class_field_id = ex_class_field_translation.ex_class_field_id",
-        "ex_concept"           => "ex_concept.ex_concept_id = ex_class_field.concept_id",
-        "ex_class_field_group" => "ex_class_field_group.ex_class_field_group_id = ex_class_field.ex_group_id",
-      ));
+      $request->addTable("ex_list_item");
       $request->addSelect(array(
-        "ex_class_field_translation.std", 
-        "IF(ex_class_field_translation.desc, ex_class_field_translation.desc, ex_class_field_translation.std) AS `desc`", 
-        "IF(ex_class_field_translation.court, ex_class_field_translation.court, ex_class_field_translation.std) AS `court`",
-        "ex_class_field.ex_class_field_id AS field_id",
-        "ex_class_field.name",
-        "ex_class_field.prop",
-        "ex_class_field.concept_id",
-        "ex_class_field_group.ex_class_id",
-        "ex_concept.ex_list_id",
+        "ex_list_item_id",
+        "name",
       ));
-      
-      $ds = CSQLDataSource::get("std");
-      $list = $ds->loadList($request->getRequest());
-      
-      foreach ($list as $_item) {
-        $key = "CExObject_{$_item['ex_class_id']}-{$_item['name']}";
-        $_locales[$key]         = $_item["std"];
-        $_locales["$key-desc"]  = $_item["desc"];
-        $_locales["$key-court"] = $_item["court"];
-        
-        $prop = $_item["prop"];
-        if (strpos($prop, "enum") === false && strpos($prop, "set") === false) {
-          continue;
-        }
-        
-        $key = "CExObject_{$_item['ex_class_id']}.{$_item['name']}";
-        $_locales["$key."] = CAppUI::tr("Undefined");
-        
-        $request = new CRequest();
-        $request->addTable("ex_list_item");
-        $request->addSelect(array(
-          "ex_list_item_id",
-          "name",
-        ));
-          
-        if ($concept_id = $_item["concept_id"]) {
-          if ($list_id = $_item["ex_list_id"]) {
-            $request->addWhere(array(
-              "list_id" => "= '$list_id'"
-            ));
-          }
-          else {
-            $request->addWhere(array(
-              "concept_id" => "= '$concept_id'"
-            ));
-          }
+
+      if ($concept_id = $_item["concept_id"]) {
+        if ($list_id = $_item["ex_list_id"]) {
+          $request->addWhere(array(
+            "list_id" => "= '$list_id'"
+          ));
         }
         else {
           $request->addWhere(array(
-            "field_id" => "= '{$_item['field_id']}'"
+            "concept_id" => "= '$concept_id'"
           ));
         }
-          
-        $enum_list = $ds->loadHashList($request->getRequest());
-        foreach ($enum_list as $_value => $_locale) {
-          $_locales["$key.$_value"] = $_locale;
-        }
+      }
+      else {
+        $request->addWhere(array(
+          "field_id" => "= '{$_item['field_id']}'"
+        ));
       }
 
-      SHM::put("exclass-locales-$lang", $_locales);
+      $enum_list = $ds->loadHashList($request->getRequest());
+      foreach ($enum_list as $_value => $_locale) {
+        $_locales["$key.$_value"] = $_locale;
+      }
     }
     
     global $locales;
