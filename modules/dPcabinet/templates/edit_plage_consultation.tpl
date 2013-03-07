@@ -129,7 +129,7 @@
     <th/>
     <td>
       {{if $plageSel->_affected}} 
-         Déjà <strong>{{$plageSel->_affected}} consultations</strong> panifiées
+         Déjà <strong>{{$plageSel->_affected}} consultations</strong> planifiées
          de <strong>{{$_firstconsult_time}}</strong> à <strong>{{$_lastconsult_time}}</strong>
       {{/if}}
       <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />
