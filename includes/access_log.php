@@ -31,7 +31,7 @@ if (!$action) {
 $log = new CAccessLog();
 $log->module   = $m;
 $log->action   = $action;
-$log->period   = mbTransformTime(null, null, "%Y-%m-%d %H:00:00");;
+$log->period   = CMbDT::transform(null, null, "%Y-%m-%d %H:00:00");;
 
 // Probe aquisition
 $rusage = getrusage();

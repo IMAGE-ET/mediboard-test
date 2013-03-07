@@ -31,8 +31,8 @@ class COperatorDicom extends CEAIOperator {
     }
     else {
       $dicom_exchange = $data_format;
-      $dicom_exchange->date_production = mbDatetime();
-      $dicom_exchange->date_echange = mbDatetime();
+      $dicom_exchange->date_production = CMbDT::dateTime();
+      $dicom_exchange->date_echange = CMbDT::dateTime();
     }
     $last_pdvs = $dicom_exchange->_requests[count($dicom_exchange->_requests) - 1]->getPDVs();
 
