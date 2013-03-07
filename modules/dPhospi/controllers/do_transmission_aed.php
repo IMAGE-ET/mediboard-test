@@ -8,7 +8,7 @@
  */
 /*
 if(isset($_POST["date"]) && $_POST["date"] == "now") {
-  $_POST["date"] = mbDateTime();
+  $_POST["date"] = CMbDT::dateTime();
 }
 */
 $do = new CDoObjectAddEdit("CTransmissionMedicale", "transmission_medicale_id");

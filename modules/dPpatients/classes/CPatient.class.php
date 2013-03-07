@@ -748,11 +748,11 @@ class CPatient extends CMbObject {
    * Calcul l'âge du patient en jours
    */
   function evalAgeJours($date = null){
-    $date = $date ? $date : mbDate();
+    $date = $date ? $date : CMbDT::date();
     if (!$this->naissance || $this->naissance === "0000-00-00") {
       return 0;
     }
-    return mbDaysRelative($this->naissance, $date);
+    return CMbDT::daysRelative($this->naissance, $date);
   }
 
   function updatePlainFields() {
@@ -821,7 +821,7 @@ class CPatient extends CMbObject {
     // Détermine la civilité de l'assure automatiquement (utile en cas d'import)
     $this->completeField("assure_civilite");
     if ($this->assure_civilite === "guess" || !$this->assure_civilite) {
-      $this->assure_naissance = mbDateFromLocale($this->assure_naissance);
+      $this->assure_naissance = CMbDT::dateFromLocale($this->assure_naissance);
       $this->evalAgeAssure();
       $sexe = $this->assure_sexe ? $this->assure_sexe : $this->sexe;
       $this->assure_civilite = ($this->_age_assure < CAppUI::conf("dPpatients CPatient adult_age")) ?
@@ -849,7 +849,7 @@ class CPatient extends CMbObject {
 
   function getCurrSejour($dateTime = null) {
     if (!$dateTime) {
-      $dateTime = mbDateTime();
+      $dateTime = CMbDT::dateTime();
     }
 
     $where[] = "'$dateTime' BETWEEN entree AND sortie";
@@ -875,7 +875,7 @@ class CPatient extends CMbObject {
     $sejour = new CSejour;
     $op     = new COperation;
     if (!$date) {
-      $date = mbDate();
+      $date = CMbDT::date();
     }
     if (!$this->_ref_sejours) {
       $this->loadRefsSejours();
@@ -929,8 +929,8 @@ class CPatient extends CMbObject {
       foreach ($this->_ref_sejours as $_sejour) {
         if (!$_sejour->annule && $_sejour->group_id == $group_id && !in_array($_sejour->type, array("urg", "seances", "consult"))) {
           $sejours_collision[$_sejour->_id] = array (
-            "entree" => mbDate($_sejour->_entree),
-            "sortie" => mbDate($_sejour->_sortie)
+            "entree" => CMbDT::date($_sejour->_entree),
+            "sortie" => CMbDT::date($_sejour->_sortie)
           );
         }
       }
@@ -1047,8 +1047,8 @@ class CPatient extends CMbObject {
     $join = null;
     if ($date) {
       $join["sejour"] = "sejour.patient_id = patients.patient_id";
-      $min = mbDateTime("-1 DAY", $date);
-      $max = mbDateTime("+1 DAY", $date);
+      $min = CMbDT::dateTime("-1 DAY", $date);
+      $max = CMbDT::dateTime("+1 DAY", $date);
       $whereDate[] = "sejour.entree_reelle BETWEEN '$min' AND '$max'";
       $whereDate[] = "sejour.entree_prevue BETWEEN '$min' AND '$max'";
       $where[] = implode(" OR ", $whereDate);
@@ -1126,7 +1126,7 @@ class CPatient extends CMbObject {
     }
 
     if (!$date) {
-      $date = mbDateTime();
+      $date = CMbDT::dateTime();
     }
 
     $sejours = $this->loadRefsSejours();
@@ -1321,7 +1321,7 @@ class CPatient extends CMbObject {
       
       // Grossesse
       if ($maternite_active && $consult->grossesse_id) {
-        $result = ceil((mbDaysRelative($this->_ref_grossesses[$consult->grossesse_id]->_date_fecondation, $consult->_date))/7);
+        $result = ceil((CMbDT::daysRelative($this->_ref_grossesses[$consult->grossesse_id]->_date_fecondation, $consult->_date))/7);
         $consult->_semaine_grossesse = $result;
         $this->_ref_grossesses[$consult->grossesse_id]->_ref_consultations[$consult->_id] = $consult;
       }
@@ -1528,7 +1528,7 @@ class CPatient extends CMbObject {
    */
   function trashIPP(CIdSante400 $IPP) {
     $IPP->tag         = CAppUI::conf("dPpatients CPatient tag_ipp_trash").$IPP->tag;
-    $IPP->last_update = mbDateTime();
+    $IPP->last_update = CMbDT::dateTime();
 
     return $IPP->store();
   }
@@ -1977,7 +1977,7 @@ class CPatient extends CMbObject {
     $fields = array_merge(
       $fields,
       array(
-        "DATE NAISS"     => mbDateToLocale($this->naissance), "IPP"    => $this->_IPP,
+        "DATE NAISS"     => CMbDT::dateToLocale($this->naissance), "IPP"    => $this->_IPP,
         "LIEU NAISSANCE" => $this->lieu_naissance,
         "NOM"            => $this->nom,       "NOM JF" => $this->nom_jeune_fille,
         "NUM SECU"       => $this->matricule, "PRENOM" => $this->prenom,
@@ -2051,7 +2051,7 @@ class CPatient extends CMbObject {
     // check birthdate
     $birthdate = $naissance;
     if ($birthdate === null) {
-      $birthdate = mbTransformTime($this->naissance, null, "%d/%m/%Y");
+      $birthdate = CMbDT::transform($this->naissance, null, "%d/%m/%Y");
     }
 
     if (!$birthdate) {
@@ -2130,7 +2130,7 @@ class CPatient extends CMbObject {
     }
     else {
       $this->INSC = $sha_dec . $cle;
-      $this->INSC_date = mbDateTime();
+      $this->INSC_date = CMbDT::dateTime();
     }
   }
 

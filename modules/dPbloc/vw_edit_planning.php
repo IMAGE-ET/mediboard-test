@@ -8,20 +8,20 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-$date               = CValue::getOrSession("date", mbDate());
+$date               = CValue::getOrSession("date", CMbDT::date());
 $type_view_planning = CValue::getOrSession("type_view_planning", "day");
 
 if($type_view_planning == "day") {
   $debut = $fin = $date;
 } else {
-  $debut = mbDate("last sunday", $date);
-  $fin   = mbDate("next sunday", $date);
-  $debut = mbDate("+1 day", $debut);
+  $debut = CMbDT::date("last sunday", $date);
+  $fin   = CMbDT::date("next sunday", $date);
+  $debut = CMbDT::date("+1 day", $debut);
 }
 
 // Liste des jours
 $listDays = array();
-for($i = $debut; $i <= $fin; $i = mbDate("+1 day", $i)) {
+for($i = $debut; $i <= $fin; $i = CMbDT::date("+1 day", $i)) {
   $listDays[$i] = $i;  
 }
 
@@ -120,10 +120,10 @@ foreach($listDays as $keyDate => $valDate){
   
   // Remplissage du tableau de visualisation
   foreach($listPlages[$keyDate] as $plage){
-    $plage->debut = mbTimeGetNearestMinsWithInterval($plage->debut, CPlageOp::$minutes_interval);
-    $plage->fin   = mbTimeGetNearestMinsWithInterval($plage->fin  , CPlageOp::$minutes_interval);
-    $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
-    for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+".CPlageOp::$minutes_interval." minutes", $time) ){
+    $plage->debut = CMbDT::timeGetNearestMinsWithInterval($plage->debut, CPlageOp::$minutes_interval);
+    $plage->fin   = CMbDT::timeGetNearestMinsWithInterval($plage->fin  , CPlageOp::$minutes_interval);
+    $plage->_nbQuartHeure = CMbDT::timeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
+    for($time = $plage->debut; $time < $plage->fin; $time = CMbDT::time("+".CPlageOp::$minutes_interval." minutes", $time) ){
       $affichages["$keyDate-s$plage->salle_id-$time"] = "full";
     } 
     $affichages["$keyDate-s$plage->salle_id-$plage->debut"] = $plage->_id;

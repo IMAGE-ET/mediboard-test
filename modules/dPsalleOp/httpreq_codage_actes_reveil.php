@@ -9,7 +9,7 @@
 
 $operation_id = CValue::getOrSession("operation_id");
 
-$date  = CValue::getOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", CMbDT::date());
 
 $operation = new COperation();
 $operation->load($operation_id);

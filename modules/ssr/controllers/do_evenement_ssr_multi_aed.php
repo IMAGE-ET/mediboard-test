@@ -69,8 +69,8 @@ if($seance_collective_id){
 else {
 	if(count($_days)){
     $sejour->loadRefBilanSSR();
-    $entree = mbDate($sejour->entree);
-    $sortie = mbDate($sejour->sortie);
+    $entree = CMbDT::date($sejour->entree);
+    $sortie = CMbDT::date($sejour->sortie);
 
 		$bilan =& $sejour->_ref_bilan_ssr;
 		$bilan->loadRefKineReferent();
@@ -80,11 +80,11 @@ else {
 		global $m;
 		$m = $m_post;
 		
-    $date = CValue::getOrSession("date", mbDate());
+    $date = CValue::getOrSession("date", CMbDT::date());
 
-		$monday = mbDate("last monday", mbDate("+1 day", $date));
+		$monday = CMbDT::date("last monday", CMbDT::date("+1 day", $date));
 		foreach($_days as $_number){
-			$_day = mbDate("+$_number DAYS", $monday);
+			$_day = CMbDT::date("+$_number DAYS", $monday);
 	    if (!CMbRange::in($_day, $entree, $sortie)) {
 	      CAppUI::setMsg("CEvenementSSR-msg-failed-bounds", UI_MSG_WARNING);
 	      continue; 

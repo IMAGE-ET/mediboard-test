@@ -18,7 +18,7 @@ CCanDo::checkAdmin();
  
 $criteres         = CValue::get("selected_criteres", array());
 $exchanges        = CValue::get("selected_exchanges", array());
-$date_production  = CValue::getOrSession("date_production", mbDate());
+$date_production  = CValue::getOrSession("date_production", CMbDT::date());
 $period           = CValue::getOrSession('period', "DAY");
 $count            = CValue::getOrSession('count', 30);
 $group_id         = CValue::getOrSession("group_id", CGroups::loadCurrent()->_id);
@@ -70,12 +70,12 @@ switch ($period) {
     
   case "WEEK";
     $format = "%V";
-    $date_production = mbDateTime("+1 day last sunday", $date_production);
+    $date_production = CMbDT::dateTime("+1 day last sunday", $date_production);
     break;
     
   case "MONTH";
     $format = "%m/%Y";
-    $date_production = mbDateTime("first day", $date_production);
+    $date_production = CMbDT::dateTime("first day", $date_production);
     break;
 } 
 
@@ -85,11 +85,11 @@ $date = $date_production;
 $n = min($count, 120);
 while ($n--) {
   $dates[] = $date;
-  $date = mbDateTime("+1 $period", $date);
+  $date = CMbDT::dateTime("+1 $period", $date);
 }
 
 foreach ($dates as $i => $_date) {
-  $options["xaxis"]["ticks"][$i] = array($i, mbTransformTime(null, $_date, $format));
+  $options["xaxis"]["ticks"][$i] = array($i, CMbDT::transform(null, $_date, $format));
 }
 
 $where = array();
@@ -123,7 +123,7 @@ foreach ($exchanges as $_sub_class => $_child_classes) {
     $exchange = new $_child_class;
     $series[$i] = array("data" => array(), "label" => utf8_encode(CAppUI::tr($_child_class)));
     foreach ($dates as $j => $_date) {
-      $_date_next = mbDateTime("+1 $period", $_date);
+      $_date_next = CMbDT::dateTime("+1 $period", $_date);
       $where["date_production"] = " BETWEEN '$_date' AND '$_date_next'";
       
       $count = $exchange->countList($where, null, null);

@@ -13,8 +13,8 @@ $user = CMediusers::get();
 
 $praticien_id      = CValue::getOrSession("prat_bilan_id"      , $user->_id);
 $signee            = CValue::getOrSession("signee"             , 0);         // par default les non signees
-$date_min          = CValue::getOrSession("_date_entree_prevue", mbDate());  // par default, date du jour
-$date_max          = CValue::getOrSession("_date_sortie_prevue", mbDate());
+$date_min          = CValue::getOrSession("_date_entree_prevue", CMbDT::date());  // par default, date du jour
+$date_max          = CValue::getOrSession("_date_sortie_prevue", CMbDT::date());
 $type_prescription = CValue::getOrSession("type_prescription"  , "sejour");  // sejour - externe - sortie_manquante
 
 // Chargement de la liste des praticiens

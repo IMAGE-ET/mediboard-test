@@ -12,7 +12,7 @@
 $chambre_id = CValue::get("chambre_id");
 $patient_id = CValue::get("patient_id");
 $vue_hospi  = CValue::get("vue_hospi", false);
-$date       = CValue::getOrSession("date", mbDate());
+$date       = CValue::getOrSession("date", CMbDT::date());
 
 $chambre = new CChambre();
 $chambre->load($chambre_id);
@@ -39,8 +39,8 @@ foreach ($chambre->_ref_lits as $lit) {
 }
 //Si on se trouve dans le module hospi
 if ($vue_hospi) {		
-  $date_min = mbDateTime($date);
-  $date_max = mbDateTime("+1 day", $date_min);
+  $date_min = CMbDT::dateTime($date);
+  $date_max = CMbDT::dateTime("+1 day", $date_min);
 
   $affectation = new CAffectation();
   $where["entree"] = "<= '$date_max'";
@@ -55,8 +55,8 @@ if ($vue_hospi) {
 //Si on vient du module urgences
 else {
   $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
-  $date_before    = mbDate("-$date_tolerance DAY", $date);
-  $date_after     = mbDate("+1 DAY", $date);
+  $date_before    = CMbDT::date("-$date_tolerance DAY", $date);
+  $date_after     = CMbDT::date("+1 DAY", $date);
 
   $ljoin = array();
   $ljoin["sejour"] = "rpu.sejour_id = sejour.sejour_id";

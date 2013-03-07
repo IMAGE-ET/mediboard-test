@@ -10,7 +10,7 @@
 
 $categories_id = CValue::getOrSession("categories_id");
 $date          = CValue::getOrSession("date");
-$date_max      = mbDate("+ 1 DAY", $date);
+$date_max      = CMbDT::date("+ 1 DAY", $date);
 $service_id    = CValue::getOrSession("service_id", "none");
 $nb_decalage   = CValue::get("nb_decalage");
 $mode_dossier  = CValue::get("mode_dossier", "administration");
@@ -105,7 +105,7 @@ foreach($lines as $_line_element){
 
   foreach($_dates as $_date){
     // Pre-remplissage des prises prevues dans le dossier de soin
-    if(($_date >= $_line_element->debut && $_date <= mbDate($_line_element->_fin_reelle))){
+    if(($_date >= $_line_element->debut && $_date <= CMbDT::date($_line_element->_fin_reelle))){
       // Si aucune prise  
       if ((count($_line_element->_ref_prises) < 1) && (!isset($prescription->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"]))){
         $prescription->_ref_lines_elt_for_plan[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
@@ -147,7 +147,7 @@ $smarty->assign("operations", array());
 $smarty->assign("nb_decalage", $nb_decalage);
 $smarty->assign("mode_dossier", $mode_dossier);
 $smarty->assign("nb_lines_element", $nb_lines_element);
-$smarty->assign("now", mbDateTime());
+$smarty->assign("now", CMbDT::dateTime());
 $smarty->assign("date", $date);
 $smarty->assign("move_dossier_soin", false);
 $smarty->assign("configs", $configs);

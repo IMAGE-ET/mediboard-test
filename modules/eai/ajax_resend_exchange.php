@@ -56,8 +56,8 @@ else {
   $where[$sejour->_spec->key] = "> '$idMin'";
   $where['annule']            = " = '0'";
   
-  $date_min = CValue::getOrSession('date_min', mbDateTime("-7 day"));
-  $date_max = CValue::getOrSession('date_max', mbDateTime("+1 day"));
+  $date_min = CValue::getOrSession('date_min', CMbDT::dateTime("-7 day"));
+  $date_max = CValue::getOrSession('date_max', CMbDT::dateTime("+1 day"));
   
   // Bornes
   $where['entree'] = " BETWEEN '$date_min' AND '$date_max'";

@@ -56,7 +56,7 @@ if (!$prenom) {
 
 $sejour_enfant = new CSejour;
 $sejour_enfant->patient_id = $patient->_id;
-$sejour_enfant->entree_prevue = mbDateTime();
+$sejour_enfant->entree_prevue = CMbDT::dateTime();
 $sejour_enfant->sortie_prevue = $sejour->sortie;
 $sejour_enfant->praticien_id = $praticien_id ? $praticien_id : $sejour->praticien_id;
 $sejour_enfant->group_id = $sejour->group_id;

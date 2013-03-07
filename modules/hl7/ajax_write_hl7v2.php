@@ -29,7 +29,7 @@ $data = array(
   "Mediboard_finess", // MSH-4: Sending Facility (HD) (optional)
   "no_receiver", // MSH-5: Receiving Application (HD) (optional)
   null, // MSH-6: Receiving Facility (HD) (optional)
-  mbDateTime(), // MSH-7: Date/Time Of Message (TS)
+  CMbDT::dateTime(), // MSH-7: Date/Time Of Message (TS)
   null, // MSH-8: Security (ST) (optional)
   null, // MSH-9: Message Type (MSG)
   "Msg ctrl id", // MSH-10: Message Control ID (ST) 

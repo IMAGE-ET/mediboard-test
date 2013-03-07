@@ -133,12 +133,12 @@ class CReglement extends CMbMetaObject {
     
     // Acquitement patient
     if ($this->emetteur == "patient" && $facture->du_patient) {
-      $facture->patient_date_reglement = $facture->_du_restant_patient <= 0 ? mbDate() : "";
+      $facture->patient_date_reglement = $facture->_du_restant_patient <= 0 ? CMbDT::date() : "";
     }
     
     // Acquitement tiers
     if ($this->emetteur == "tiers" && $facture->du_tiers) {
-      $facture->tiers_date_reglement = $facture->_du_restant_tiers <= 0 ? mbDate() : "";
+      $facture->tiers_date_reglement = $facture->_du_restant_tiers <= 0 ? CMbDT::date() : "";
     }
     
     return $facture->store();

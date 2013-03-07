@@ -187,7 +187,7 @@ class CReceiverIHE extends CInteropReceiver {
       throw new CMbException("CExchangeSource-no-response");
     }
     
-    $exchange->date_echange = mbDateTime();
+    $exchange->date_echange = CMbDT::dateTime();
 
     $ack_data = $source->getACQ();
 
@@ -200,7 +200,7 @@ class CReceiverIHE extends CInteropReceiver {
 
     $ack = new CHL7v2Acknowledgment($data_format);
     $ack->handle($ack_data);
-    $exchange->date_echange        = mbDateTime();   
+    $exchange->date_echange        = CMbDT::dateTime();
     $exchange->statut_acquittement = $ack->getStatutAcknowledgment();
     $exchange->acquittement_valide = $ack->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
     $exchange->_acquittement       = $ack_data;

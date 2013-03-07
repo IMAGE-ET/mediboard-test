@@ -13,7 +13,7 @@ CCanDo::checkRead();
 global $m;
 CAppUI::requireModuleFile($m, "inc_vw_affectations");
 
-$date       = CValue::getOrSession("date", mbDate());
+$date       = CValue::getOrSession("date", CMbDT::date());
 $mode       = CValue::getOrSession("mode", 0);
 $service_id = CValue::get("service_id");
 
@@ -26,7 +26,7 @@ loadServiceComplet($service, $date, $mode);
 $smarty = new CSmartyDP();
 
 $smarty->assign("date"        , $date );
-$smarty->assign("demain"      , mbDate("+ 1 day", $date));
+$smarty->assign("demain"      , CMbDT::date("+ 1 day", $date));
 $smarty->assign("curr_service", $service);
 
 $smarty->display("inc_affectations_services.tpl");

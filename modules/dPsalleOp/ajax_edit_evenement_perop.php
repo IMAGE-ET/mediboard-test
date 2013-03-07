@@ -15,7 +15,7 @@ $interv = new COperation;
 $interv->load($operation_id);
 
 if (!$datetime) {
-  $datetime = $interv->loadRefPlageOp()->date." ".mbTime();
+  $datetime = $interv->loadRefPlageOp()->date." ".CMbDT::time();
 }
 
 list($evenement_class, $evenement_id) = explode("-", $evenement_guid);

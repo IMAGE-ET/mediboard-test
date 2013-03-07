@@ -152,7 +152,7 @@ class CHL7v2GeneratePatientDemographicsResponse extends CHL7v2MessageXML {
 
     // Date of birth"
     if ($PID_7_1 = $this->getDemographicsFields($node, "CPatient", "7.1")) {
-      $PID = array_merge($PID, array("naissance" => mbDate($PID_7_1)));
+      $PID = array_merge($PID, array("naissance" => CMbDT::date($PID_7_1)));
     }
 
     // Patient Adress

@@ -14,7 +14,7 @@ $patient_id     = CValue::getOrSession("patient_id");
 $consult_id     = CValue::get("consult_id");
 $type_facture   = CValue::get("type_facture", "maladie");
 $chirsel_id     = CValue::get("executant_id");
-$date           = CValue::get("date", mbDate());
+$date           = CValue::get("date", CMbDT::date());
 
 $facture = new CFactureCabinet();
 $facture->ajoutConsult($patient_id, $chirsel_id, $consult_id, $type_facture);

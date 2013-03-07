@@ -44,8 +44,8 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
   
   $datax = array();
   $i = 0;
-  for ($d = $startx; $d <= $endx; $d = mbDateTime($step, $d)) {
-    $datax[] = array($i, mbTransformTime(null, $d, $period_format));
+  for ($d = $startx; $d <= $endx; $d = CMbDT::dateTime($step, $d)) {
+    $datax[] = array($i, CMbDT::transform(null, $d, $period_format));
     $i++;
   }
   
@@ -79,7 +79,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
       $size[$x[0]] = array($x[0], 0);
       
       foreach ($logs as $log) {
-        if ($x[1] == mbTransformTime(null, $log->period, $period_format)) {
+        if ($x[1] == CMbDT::transform(null, $log->period, $period_format)) {
           $duration[$x[0]]    = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'duration'});
           $processus[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'processus'});
           $processor[$x[0]]   = array($x[0], $log->{($left[1] == 'mean' ? '_average_' : '').'processor'});
@@ -106,7 +106,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     if ($module_name) $title .= CAppUI::tr("module-$module_name-court");
     if ($action_name) $title .= " - $action_name";
     
-    $subtitle = mbTransformTime(null, $endx, CAppUI::conf("longdate"));
+    $subtitle = CMbDT::transform(null, $endx, CAppUI::conf("longdate"));
     
     $options = array(
       'title' => utf8_encode($title),
@@ -249,7 +249,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
       }
       
       foreach ($logs as $log) {
-        if ($x[1] == mbTransformTime(null, $log['period'], $period_format)) {
+        if ($x[1] == CMbDT::transform(null, $log['period'], $period_format)) {
           $duration[$log['datasource']][$x[0]] = array($x[0], $log['duration']);
           $requests[$log['datasource']][$x[0]] = array($x[0], $log['requests']);
         }
@@ -266,7 +266,7 @@ function graphAccessLog($module_name, $action_name, $startx, $endx, $interval = 
     if ($module_name) $title .= CAppUI::tr("module-$module_name-court");
     if ($action_name) $title .= " - $action_name";
     
-    $subtitle = mbTransformTime(null, $endx, CAppUI::conf("longdate"));
+    $subtitle = CMbDT::transform(null, $endx, CAppUI::conf("longdate"));
     
     $options = array(
       'title' => utf8_encode($title),

@@ -15,15 +15,15 @@ CCanDo::checkRead();
 global $g;
 
 // Récupération des paramètres
-$date  = CValue::getOrSession("date", mbDateTime());
+$date  = CValue::getOrSession("date", CMbDT::dateTime());
 $services_ids    = CValue::getOrSession("services_ids");
 
 if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);
 }
 
-$date_min = mbDateTime($date);
-$date_max = mbDateTime("+1 day", $date_min);
+$date_min = CMbDT::dateTime($date);
+$date_max = CMbDT::dateTime("+1 day", $date_min);
 $listNotAff = array(
   "Non placés" => array(),
   "Couloir" => array()

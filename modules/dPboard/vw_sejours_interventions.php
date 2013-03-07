@@ -16,15 +16,15 @@ global $prat;
 $filterSejour    = new CSejour();
 $filterOperation = new COperation();
 
-$filterSejour->_date_min_stat = CValue::getOrSession("_date_min_stat", mbDate("-1 YEAR"));
-$rectif = mbTransformTime("+0 DAY", $filterSejour->_date_min_stat, "%d") - 1;
-$filterSejour->_date_min_stat = mbDate("-$rectif DAYS", $filterSejour->_date_min_stat);
+$filterSejour->_date_min_stat = CValue::getOrSession("_date_min_stat", CMbDT::date("-1 YEAR"));
+$rectif = CMbDT::transform("+0 DAY", $filterSejour->_date_min_stat, "%d") - 1;
+$filterSejour->_date_min_stat = CMbDT::date("-$rectif DAYS", $filterSejour->_date_min_stat);
 
-$filterSejour->_date_max_stat =  CValue::getOrSession("_date_max_stat",  mbDate());
-$rectif = mbTransformTime("+0 DAY", $filterSejour->_date_max_stat, "%d") - 1;
-$filterSejour->_date_max_stat = mbDate("-$rectif DAYS", $filterSejour->_date_max_stat);
-$filterSejour->_date_max_stat = mbDate("+1 MONTH", $filterSejour->_date_max_stat);
-$filterSejour->_date_max_stat = mbDate("-1 DAY", $filterSejour->_date_max_stat);
+$filterSejour->_date_max_stat =  CValue::getOrSession("_date_max_stat",  CMbDT::date());
+$rectif = CMbDT::transform("+0 DAY", $filterSejour->_date_max_stat, "%d") - 1;
+$filterSejour->_date_max_stat = CMbDT::date("-$rectif DAYS", $filterSejour->_date_max_stat);
+$filterSejour->_date_max_stat = CMbDT::date("+1 MONTH", $filterSejour->_date_max_stat);
+$filterSejour->_date_max_stat = CMbDT::date("-1 DAY", $filterSejour->_date_max_stat);
 
 
 $filterSejour->praticien_id = $prat->_id;

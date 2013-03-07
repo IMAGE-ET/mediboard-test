@@ -18,7 +18,7 @@ $g = CGroups::loadCurrent()->_id;
 // A passer en variable de configuration
 
 $heureLimit = CAppUI::conf("dPhospi hour_limit");
-$date            = CValue::getOrSession("date", mbDate()); 
+$date            = CValue::getOrSession("date", CMbDT::date());
 $mode            = CValue::getOrSession("mode", 0); 
 $services_ids    = CValue::getOrSession("services_ids");
 $triAdm          = CValue::getOrSession("triAdm", "praticien");
@@ -63,8 +63,8 @@ foreach ($services as &$service) {
 }
 
 // Nombre de patients à placer pour la semaine qui vient (alerte)
-$today   = mbDate()." 01:00:00";
-$endWeek = mbDateTime("+7 days", $today);
+$today   = CMbDT::date()." 01:00:00";
+$endWeek = CMbDT::dateTime("+7 days", $today);
 
 $where = array();
 $where["annule"]          = "= '0'";
@@ -129,14 +129,14 @@ if (CCanDo::edit()) {
   }
   
   // Admissions de la veille
-  $dayBefore = mbDate("-1 days", $date);
+  $dayBefore = CMbDT::date("-1 days", $date);
   $where["sejour.entree"] = "BETWEEN '$dayBefore 00:00:00' AND '$date 01:59:59'";
   $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order, null, $prestation_id);
   CApp::$chrono->stop("Non affectés: veille");
   CApp::$chrono->start();
   
   // Admissions du matin
-  $where["sejour.entree"] = "BETWEEN '$date 02:00:00' AND '$date ".mbTime("-1 second", $heureLimit)."'";
+  $where["sejour.entree"] = "BETWEEN '$date 02:00:00' AND '$date ".CMbDT::time("-1 second", $heureLimit)."'";
   $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order, null, $prestation_id);
   CApp::$chrono->stop("Non affectés: matin");
   CApp::$chrono->start();
@@ -148,7 +148,7 @@ if (CCanDo::edit()) {
   CApp::$chrono->start();
   
   // Admissions antérieures
-  $twoDaysBefore = mbDate("-2 days", $date);
+  $twoDaysBefore = CMbDT::date("-2 days", $date);
   $where["sejour.entree"] = "<= '$twoDaysBefore 23:59:59'";
   $where["sejour.sortie"] = ">= '$date 00:00:00'";
 
@@ -179,8 +179,8 @@ foreach ($groupSejourNonAffectes as $_keyGroup => $_group) {
 }
 
 $affectation = new CAffectation();
-$affectation->entree = mbAddDateTime("08:00:00", $date);
-$affectation->sortie = mbAddDateTime("23:00:00", $date);
+$affectation->entree = CMbDT::addDateTime("08:00:00", $date);
+$affectation->sortie = CMbDT::addDateTime("23:00:00", $date);
 
 // Chargement des prestations
 $prestations_journalieres = CPrestationJournaliere::loadCurrentList();
@@ -193,7 +193,7 @@ $smarty->assign("services"              , $services);
 $smarty->assign("affectation"           , $affectation);
 $smarty->assign("pathos"                , $pathos);
 $smarty->assign("date"                  , $date);
-$smarty->assign("demain"                , mbDate("+ 1 day", $date));
+$smarty->assign("demain"                , CMbDT::date("+ 1 day", $date));
 $smarty->assign("heureLimit"            , $heureLimit);
 $smarty->assign("mode"                  , $mode);
 $smarty->assign("emptySejour"           , $emptySejour);

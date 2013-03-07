@@ -87,7 +87,7 @@ if ($mods_available[$view][2] == 'sejour') {
       CAppUI::stepAjax("context-sejour-patientOK-date-required", UI_MSG_ERROR, $view);
     }
 
-    $date_sejour = mbDateTime($date_sejour);
+    $date_sejour = CMbDT::dateTime($date_sejour);
     $where = array();
     $where[] = "'$date_sejour' BETWEEN entree AND sortie";
     $where["patient_id"] = " = $patient->_id";

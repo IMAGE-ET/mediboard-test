@@ -13,8 +13,8 @@
 
 CCanDo::checkRead();
 
-$date_min    = CValue::getOrSession("date_min", mbDate("-1 month"));
-$date_max    = CValue::getOrSession("date_max", mbDate());
+$date_min    = CValue::getOrSession("date_min", CMbDT::date("-1 month"));
+$date_max    = CValue::getOrSession("date_max", CMbDT::date());
 $service_id  = CValue::getOrSession("service_id");
 $display_stat = CValue::getOrSession("display_stat", array("ouvert" => 1, "prevu" => 1, "reel" => 1, "entree" => 1));
 
@@ -46,8 +46,8 @@ $date_temp = $date_min;
 $series    = array();
 
 while ($date_temp <= $date_max) {
-  $dates[] = array(count($dates), mbDateToLocale($date_temp));
-  $date_temp = mbDate("+1 day", $date_temp);
+  $dates[] = array(count($dates), CMbDT::dateToLocale($date_temp));
+  $date_temp = CMbDT::date("+1 day", $date_temp);
 }
 
 // Table temporaraire de dates pour les jointures
@@ -81,7 +81,7 @@ $serie = array(
 $lits_ouverts_par_date = array();
 
 foreach ($dates as $key=>$_date) {
-  $date = mbDateFromLocale($_date[1]);
+  $date = CMbDT::dateFromLocale($_date[1]);
   $query = "SELECT count(DISTINCT l.lit_id) as lits_ouverts
     FROM lit l
     JOIN affectation a ON a.lit_id = l.lit_id AND
@@ -116,7 +116,7 @@ if (isset($display_stat["prevu"])) {
   );
   
   foreach ($dates as $key=>$_date) {
-    $date = mbDateFromLocale($_date[1]);
+    $date = CMbDT::dateFromLocale($_date[1]);
     $query = "SELECT count(sejour_id) as nb_prevu
     FROM sejour
     WHERE entree <= '$date 00:00:00' AND sortie >= '$date 00:00:00'
@@ -142,7 +142,7 @@ if (isset($display_stat["reel"])) {
   );
   
   foreach ($dates as $key=>$_date) {
-    $date = mbDateFromLocale($_date[1]);
+    $date = CMbDT::dateFromLocale($_date[1]);
     $query = "SELECT count(affectation_id) as nb_reel
     FROM affectation d
     WHERE entree <= '$date 00:00:00' AND sortie >= '$date 00:00:00'

@@ -23,11 +23,11 @@ $prat = new CMediusers;
 $prat->load($chir_id);
 
 //Planning au format  CPlanningWeek
-$today         = mbDate();
+$today         = CMbDT::date();
 $debut         = $date;
-$debut         = mbDate("-1 week", $debut);
-$debut         = mbDate("next monday", $debut);
-$fin           = mbDate("next sunday", $debut);
+$debut         = CMbDT::date("-1 week", $debut);
+$debut         = CMbDT::date("next monday", $debut);
+$fin           = CMbDT::date("next sunday", $debut);
 $bank_holidays = array_merge(mbBankHolidays($debut), mbBankHolidays($fin));
 
 // Nombre de jours
@@ -40,7 +40,7 @@ if ($plage->countList($where)) {
   $nbDays = 7;
 }
 else {
-  $where["date"] = "= '".mbDate("-1 day", $fin)."'";
+  $where["date"] = "= '".CMbDT::date("-1 day", $fin)."'";
   if ($plage->countList($where)) {
     $nbDays = 6;
   }
@@ -55,7 +55,7 @@ $planning->hour_max = "20";
 $planning->pauses   = array("07", "12", "19");
 
 for ($i = 0; $i < $nbDays; $i++) {
-  $jour = mbDate("+$i day", $debut);
+  $jour = CMbDT::date("+$i day", $debut);
   $where["date"] = "= '$jour'";
   $plages = $plage->loadList($where);
   
@@ -65,7 +65,7 @@ for ($i = 0; $i < $nbDays; $i++) {
     $_plage->loadRefsFwd(1);
     $_plage->loadRefsConsultations(false);
     
-    $range = new CPlanningRange($_plage->_guid, $jour." ".$_plage->debut, mbMinutesRelative($_plage->debut, $_plage->fin));
+    $range = new CPlanningRange($_plage->_guid, $jour." ".$_plage->debut, CMbDT::minutesRelative($_plage->debut, $_plage->fin));
     $range->color = $_plage->color;
     $range->type = "plageconsult";
     $planning->addRange($range);

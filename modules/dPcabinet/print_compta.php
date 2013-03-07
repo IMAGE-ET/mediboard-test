@@ -11,13 +11,13 @@
 
 // !! Attention, régression importante si ajout de type de paiement
 
-$today = mbDate();
+$today = CMbDT::date();
 
 // Récupération des paramètres
 $filter = new CPlageconsult();
 
-$filter->_date_min = CValue::getOrSession("_date_min", mbDate());
-$filter->_date_max = CValue::getOrSession("_date_max", mbDate());
+$filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
+$filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
 $filter->_mode_reglement = CValue::getOrSession("mode", 0);
 $filter->_type_affichage  = CValue::getOrSession("_type_affichage" , 1);
 
@@ -133,7 +133,7 @@ foreach ($reglements as $_reglement) {
   }
   
   // Totaux par date
-  $date = mbDate($_reglement->date);
+  $date = CMbDT::date($_reglement->date);
   if (!isset($listReglements[$date])) {
     $listReglements[$date]["total"]["patient"] = 0;
     $listReglements[$date]["total"]["tiers"] = 0;

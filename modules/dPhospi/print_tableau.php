@@ -13,7 +13,7 @@ CCanDo::checkRead();
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 $g        = CGroups::loadCurrent()->_id;
-$date     = CValue::get("date"    , mbDate());
+$date     = CValue::get("date"    , CMbDT::date());
 $mode     = CValue::get("mode"    , 0);
 $services_ids = CValue::getOrSession("services_ids", "");
 $g        = CGroups::loadCurrent()->_id;
@@ -62,7 +62,7 @@ foreach ($services as $_service) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("date"    , $date);
-$smarty->assign("demain"  , mbDate("+ 1 day", $date));
+$smarty->assign("demain"  , CMbDT::date("+ 1 day", $date));
 $smarty->assign("services", $services);
 
 $smarty->display("print_tableau.tpl");

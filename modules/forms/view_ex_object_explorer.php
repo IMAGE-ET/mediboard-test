@@ -11,8 +11,8 @@
 
 CCanDo::checkEdit();
 
-$date_min = CValue::getOrSession("date_min", mbDate("-1 MONTH"));
-$date_max = CValue::getOrSession("date_max", mbDate());
+$date_min = CValue::getOrSession("date_min", CMbDT::date("-1 MONTH"));
+$date_max = CValue::getOrSession("date_max", CMbDT::date());
 
 $group = new CGroups;
 $groups = $group->loadListWithPerms(PERM_READ);

@@ -9,8 +9,8 @@
  */
 
 function graphPatRepartJour($debut = null, $fin = null, $prat_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = '') {
-  if (!$debut) $debut = mbDate("-1 YEAR");
-  if (!$fin) $fin = mbDate();
+  if (!$debut) $debut = CMbDT::date("-1 YEAR");
+  if (!$fin) $fin = CMbDT::date();
   
   $prat = new CMediusers();
   $prat->load($prat_id);

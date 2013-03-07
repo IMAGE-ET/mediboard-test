@@ -13,9 +13,9 @@ if (!CModule::getCanDo('dPcabinet')->edit && !CModule::getCanDo('soins')->read) 
 
 //CCanDo::checkEdit();
 
-$date  = CValue::getOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", CMbDT::date());
 $print = CValue::getOrSession("print", false);
-$today = mbDate();
+$today = CMbDT::date();
 
 $dossier_anesth_id     = CValue::get("dossier_anesth_id");
 $operation_id          = CValue::get("operation_id");
@@ -144,7 +144,7 @@ $dossier_medical->loadRefsEtatsDents();
 $dossier_medical->loadRefPrescription();
 if ($dossier_medical->_ref_prescription && $dossier_medical->_ref_prescription->_id) {
   foreach ($dossier_medical->_ref_prescription->_ref_prescription_lines as $_line) {
-    if ($_line->fin && $_line->fin <= mbDate()) {
+    if ($_line->fin && $_line->fin <= CMbDT::date()) {
       unset($dossier_medical->_ref_prescription->_ref_prescription_lines[$_line->_id]);
     }
     $_line->loadRefsPrises();

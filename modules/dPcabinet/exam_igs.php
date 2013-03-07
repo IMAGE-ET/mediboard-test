@@ -9,7 +9,7 @@
 
 $sejour_id = CValue::get("sejour_id"); 
 $exam_igs_id = CValue::get("exam_igs_id");
-$date = CValue::get("date", mbDateTime());
+$date = CValue::get("date", CMbDT::dateTime());
 
 // Chargement du séjour
 $sejour = new CSejour();

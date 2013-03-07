@@ -28,7 +28,7 @@ $docGed->_lastentry->loadFile();
 
 if($docGed->etat==CDocGed::TERMINE){
   $docGed->_lastentry = new CDocGedSuivi;
-  $docGed->_lastentry->date = mbDateTime();
+  $docGed->_lastentry->date = CMbDT::dateTime();
 }
 
 //Procédure Terminé et/ou Refusé

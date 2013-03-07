@@ -10,12 +10,12 @@
 
 function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_id = 0, $discipline_id = null, $codeCCAM = '') {
   $ds = CSQLDataSource::get("std");
-  if (!$debut) $debut = mbDate("-1 YEAR");
-  if (!$fin) $fin = mbDate();
+  if (!$debut) $debut = CMbDT::date("-1 YEAR");
+  if (!$fin) $fin = CMbDT::date();
 
   $totalWorkDays = 0;
-  for ($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-    $totalWorkDays += mbWorkDaysInMonth(mbTransformTime("+0 DAY", $i, "%Y-%m-01"));
+  for ($i = $debut; $i <= $fin; $i = CMbDT::date("+1 MONTH", $i)) {
+    $totalWorkDays += mbWorkDaysInMonth(CMbDT::transform("+0 DAY", $i, "%Y-%m-01"));
   }
   
   $prat = new CMediusers;
@@ -26,7 +26,7 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
 
   $ticks = array();
   for ($i = "7"; $i <= "21"; $i = $i + 1) {
-    $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", "$i:00:00", "%Hh%M"));
+    $ticks[] = array(count($ticks), CMbDT::transform("+0 DAY", "$i:00:00", "%Hh%M"));
   }
 
   $bloc = new CBlocOperatoire();

@@ -15,7 +15,7 @@ CCanDo::checkRead();
  */
 $salle        		= CValue::getOrSession("salle");
 $op           		= CValue::getOrSession("op");
-$date         		= CValue::getOrSession("date", mbDate());
+$date         		= CValue::getOrSession("date", CMbDT::date());
 
 $blood_salvage = new CBloodSalvage();
 

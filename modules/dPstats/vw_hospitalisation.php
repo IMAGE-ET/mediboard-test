@@ -16,15 +16,15 @@ CAppUI::requireModuleFile('dPstats', 'graph_joursparservice');
 
 $filter = new CSejour();
 
-$filter->_date_min_stat = CValue::getOrSession("_date_min_stat", mbDate("-1 YEAR"));
-$rectif = mbTransformTime("+0 DAY", $filter->_date_min_stat, "%d")-1;
-$filter->_date_min_stat = mbDate("-$rectif DAYS", $filter->_date_min_stat);
+$filter->_date_min_stat = CValue::getOrSession("_date_min_stat", CMbDT::date("-1 YEAR"));
+$rectif = CMbDT::transform("+0 DAY", $filter->_date_min_stat, "%d")-1;
+$filter->_date_min_stat = CMbDT::date("-$rectif DAYS", $filter->_date_min_stat);
 
-$filter->_date_max_stat = CValue::getOrSession("_date_max_stat",  mbDate());
-$rectif = mbTransformTime("+0 DAY", $filter->_date_max_stat, "%d")-1;
-$filter->_date_max_stat = mbDate("-$rectif DAYS", $filter->_date_max_stat);
-$filter->_date_max_stat = mbDate("+ 1 MONTH", $filter->_date_max_stat);
-$filter->_date_max_stat = mbDate("-1 DAY", $filter->_date_max_stat);
+$filter->_date_max_stat = CValue::getOrSession("_date_max_stat",  CMbDT::date());
+$rectif = CMbDT::transform("+0 DAY", $filter->_date_max_stat, "%d")-1;
+$filter->_date_max_stat = CMbDT::date("-$rectif DAYS", $filter->_date_max_stat);
+$filter->_date_max_stat = CMbDT::date("+ 1 MONTH", $filter->_date_max_stat);
+$filter->_date_max_stat = CMbDT::date("-1 DAY", $filter->_date_max_stat);
 
 $filter->_service     = CValue::getOrSession("service_id", 0);
 $filter->type         = CValue::getOrSession("type", 1);

@@ -9,11 +9,11 @@
  * @version    $Revision$
  */
 
-$date = mbDate();
+$date = CMbDT::date();
 
 // Dates selectionnees
-$date_min = CValue::getOrSession("_date_min", mbDate());
-$date_max = CValue::getOrSession("_date_max", mbDate());
+$date_min = CValue::getOrSession("_date_min", CMbDT::date());
+$date_max = CValue::getOrSession("_date_max", CMbDT::date());
 
 // Id du praticien selectionné
 $prat = CValue::get("chir");

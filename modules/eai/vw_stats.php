@@ -13,7 +13,7 @@
 CCanDo::checkAdmin();
 
 $count             = CValue::getOrSession("count", 30);
-$date_production   = CValue::getOrSession("date_production", mbDate());
+$date_production   = CValue::getOrSession("date_production", CMbDT::date());
 $group_id          = CValue::getOrSession("group_id", CGroups::loadCurrent()->_id);
 
 $filter = new CExchangeDataFormat();

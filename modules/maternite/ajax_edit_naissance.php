@@ -21,7 +21,7 @@ $callback       = CValue::get("callback");
 $constantes = new CConstantesMedicales;
 
 $patient    = new CPatient;
-$patient->naissance = mbDate();
+$patient->naissance = CMbDT::date();
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);
@@ -43,8 +43,8 @@ if ($naissance_id) {
   // Heure courante sur la naissance et date courante sur le patient
   // pour transformer le dossier provisoire en naissance
   if (!$naissance->heure) {
-    $naissance->heure = mbTime();
-    $patient->naissance = mbDate();
+    $naissance->heure = CMbDT::time();
+    $patient->naissance = CMbDT::date();
   }
   
 }
@@ -52,7 +52,7 @@ else {
   if (!$provisoire) {
     $grossesse = $sejour->loadRefGrossesse();
     $naissance->rang = $grossesse->countBackRefs("naissances") + 1;
-    $naissance->heure = mbTime();
+    $naissance->heure = CMbDT::time();
   }
   
   $naissance->sejour_maman_id = $sejour_id;

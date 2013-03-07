@@ -19,7 +19,7 @@ $blocage = new CBlocage;
 $blocage->load($blocage_id);
 
 if (!$blocage->_id) {
-  $blocage->deb = $blocage->fin = mbDate();
+  $blocage->deb = $blocage->fin = CMbDT::date();
 }
 
 $bloc = new CBlocOperatoire();

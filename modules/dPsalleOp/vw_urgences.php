@@ -10,7 +10,7 @@
 CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
-$date  = CValue::getOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", CMbDT::date());
 
 // Toutes les salles des blocs
 $listBlocs = CGroups::loadCurrent()->loadBlocs(PERM_READ);
@@ -40,7 +40,7 @@ foreach ($urgences as &$urgence) {
   
   if ($reservation_installed) {
     $first_log = $urgence->loadFirstLog();
-    if (abs(mbHoursRelative($urgence->_datetime_best, $first_log->date)) <= $diff_hour_urgence) {
+    if (abs(CMbDT::hoursRelative($urgence->_datetime_best, $first_log->date)) <= $diff_hour_urgence) {
       $urgence->_is_urgence = true;
     }
   }

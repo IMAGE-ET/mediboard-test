@@ -51,7 +51,7 @@ foreach($list as $filepath) {
     $echg_hprim21->group_id        = CGroups::loadCurrent()->_id;
     $echg_hprim21->sender_class    = $sender_ftp->_class;
     $echg_hprim21->sender_id       = $sender_ftp->_id;
-    $echg_hprim21->date_production = mbDateTime();
+    $echg_hprim21->date_production = CMbDT::dateTime();
     $echg_hprim21->store();
     
     $hprimReader = new CHPrim21Reader();

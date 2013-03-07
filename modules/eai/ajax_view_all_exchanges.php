@@ -12,8 +12,8 @@
 
 CCanDo::checkRead();
 
-$_date_min    = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
-$_date_max    = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
+$_date_min    = CValue::getOrSession('_date_min', CMbDT::dateTime("-7 day"));
+$_date_max    = CValue::getOrSession('_date_max', CMbDT::dateTime("+1 day"));
 $group_id     = CValue::getOrSession('group_id' , CGroups::loadCurrent()->_id);
 $id_permanent = CValue::getOrSession("id_permanent");
 $object_id    = CValue::getOrSession("object_id");

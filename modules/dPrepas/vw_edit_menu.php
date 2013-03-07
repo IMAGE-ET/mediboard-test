@@ -93,7 +93,7 @@ if($typeVue == 2){
   
   $smarty->assign("typePlats"    , $typePlats);
   $smarty->assign("listRepeat"   , $listRepeat);
-  $smarty->assign("date_debut"   , mbDate());
+  $smarty->assign("date_debut"   , CMbDT::date());
   $smarty->assign("listTypeRepas", $listTypeRepas);
   $smarty->assign("listMenus"    , $listMenus);
   $smarty->assign("menu"         , $menu); 

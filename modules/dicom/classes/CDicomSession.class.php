@@ -376,7 +376,7 @@ class CDicomSession extends CMbObject {
     }
     $this->group_id = CGroups::loadCurrent()->_id;
     $this->state = self::STA1;
-    $this->begin_date = mbDateTime();
+    $this->begin_date = CMbDT::dateTime();
     $this->messages = "";
   }
   
@@ -800,7 +800,7 @@ class CDicomSession extends CMbObject {
   protected function doAE1($datas) {
     // Open a TCP Connection with the server
     
-    $this->begin_date = mbDateTime();
+    $this->begin_date = CMbDT::dateTime();
   }
   
   /**
@@ -860,7 +860,7 @@ class CDicomSession extends CMbObject {
     
     $this->state = self::STA1;
     
-    $this->end_date = mbDateTime();  
+    $this->end_date = CMbDT::dateTime();
     $this->status = "Rejected";
   }
   
@@ -879,7 +879,7 @@ class CDicomSession extends CMbObject {
     // start ARTIM timer
     $this->state = self::STA2;
     
-    $this->begin_date = mbDateTime();
+    $this->begin_date = CMbDT::dateTime();
   }
   
   /**
@@ -1065,7 +1065,7 @@ class CDicomSession extends CMbObject {
     
     $this->status = "Completed";
     
-    $this->end_date = mbDateTime();
+    $this->end_date = CMbDT::dateTime();
   }
   
   /**
@@ -1088,7 +1088,7 @@ class CDicomSession extends CMbObject {
     /** @todo start ARTIM timer **/
     
     $this->status = "Completed";
-    $this->end_date = mbDateTime();
+    $this->end_date = CMbDT::dateTime();
     
     return $pdu->getPacket();
   }
@@ -1258,7 +1258,7 @@ class CDicomSession extends CMbObject {
     /** close connection **/
     $this->state = self::STA1;
     $this->status ="Aborted";
-    $this->end_date = mbDateTime();
+    $this->end_date = CMbDT::dateTime();
   }
   
   /**

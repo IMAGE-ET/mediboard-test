@@ -13,7 +13,7 @@
 
 CCanDo::checkEdit();
 
-$date_replanif = CValue::getOrSession("date_replanif", mbDate());
+$date_replanif = CValue::getOrSession("date_replanif", CMbDT::date());
 
 $smarty = new CSmartyDP;
 

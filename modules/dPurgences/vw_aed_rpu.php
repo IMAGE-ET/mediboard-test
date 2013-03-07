@@ -56,7 +56,7 @@ if ($rpu->_id || $rpu->sejour_id) {
 }
 else {
   $rpu->_responsable_id = $user->_id;
-  $rpu->_entree         = mbDateTime();
+  $rpu->_entree         = CMbDT::dateTime();
   $sejour               = new CSejour;
   $patient              = new CPatient;
   $praticien            = new CMediusers;
@@ -134,7 +134,7 @@ if (CModule::getActive("dPprescription")) {
 $smarty->assign("services"            , $services);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
 $smarty->assign("userSel"             , $user);
-$smarty->assign("today"               , mbDate());
+$smarty->assign("today"               , CMbDT::date());
 $smarty->assign("traitement"          , $traitement);
 $smarty->assign("antecedent"          , $antecedent);
 $smarty->assign("rpu"                 , $rpu);

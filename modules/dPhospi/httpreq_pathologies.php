@@ -8,7 +8,7 @@
 */
 
 $affichage_patho = CValue::getOrSession("affichage_patho");
-$date = CValue::getOrSession("date", mbDate()); 
+$date = CValue::getOrSession("date", CMbDT::date());
 $pathos = new CDiscipline();
 
 // Recuperation de l'id du sejour

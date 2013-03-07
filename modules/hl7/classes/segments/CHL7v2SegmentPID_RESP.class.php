@@ -72,7 +72,7 @@ class CHL7v2SegmentPID_RESP extends CHL7v2Segment {
     $data[] = null;
     
     // PID-7: Date/Time of Birth (TS) (optional)
-    $data[] = isLunarDate($patient->naissance) ? null : $patient->naissance;
+    $data[] = CMbDT::isLunarDate($patient->naissance) ? null : $patient->naissance;
     
     // PID-8: Administrative Sex (IS) (optional)
     // Table - 0001

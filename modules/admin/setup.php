@@ -133,7 +133,7 @@ class CSetupadmin extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.0.29");
-    $date = mbDateTime();
+    $date = CMbDT::dateTime();
     $query = "ALTER TABLE `users`
       ADD `user_password_last_change` DATETIME NOT NULL DEFAULT '$date' AFTER `user_password`;";
     $this->addQuery($query);

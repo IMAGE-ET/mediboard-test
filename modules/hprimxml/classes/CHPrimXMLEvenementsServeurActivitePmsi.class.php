@@ -111,26 +111,26 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $fin   = $this->getFinInterv($node);
     
     // Traitement de la date/heure début, et durée de l'opération
-    $operation->temp_operation = mbSubTime(mbTime($debut), mbTime($fin)); 
+    $operation->temp_operation = CMbDT::subTime(CMbDT::time($debut), CMbDT::time($fin));
     $operation->_hour_op       = null;
     $operation->_min_op        = null;
 
     // Si une intervention du passée    
-    if (mbDate($debut) < mbDate()) {
+    if (CMbDT::date($debut) < CMbDT::date()) {
       // On affecte le début de l'opération
       if (!$operation->debut_op) {
-        $operation->debut_op = mbTime($debut);
+        $operation->debut_op = CMbDT::time($debut);
       } 
       // On affecte la fin de l'opération
       if (!$operation->fin_op) {
-        $operation->fin_op = mbTime($fin);
+        $operation->fin_op = CMbDT::time($fin);
       }
     }
     // Si dans le futur
     else {
       $operation->_hour_urgence  = null;
       $operation->_min_urgence   = null;
-      $operation->time_operation = mbTime($debut);
+      $operation->time_operation = CMbDT::time($debut);
     }
     
     $operation->libelle = CMbString::capitalize($xpath->queryTextNode("hprim:libelle", $node));
@@ -179,8 +179,8 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $fin   = $this->getFinInterv($node);
     
     // Traitement de la date/heure début, et durée de l'opération
-    $date_op  = mbDate($debut);
-    $time_op  = mbTime($debut);
+    $date_op  = CMbDT::date($debut);
+    $time_op  = CMbDT::time($debut);
 
     // Recherche d'une éventuelle PlageOp
     $plageOp           = new CPlageOp();  
@@ -190,7 +190,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $plageOps          = $plageOp->loadMatchingList();
     foreach ($plageOps as $_plage) {
       // Si notre intervention est dans la plage Mediboard
-      if ($_plage->debut <= $time_op && (mbTime($fin) <= $_plage->fin)) {
+      if ($_plage->debut <= $time_op && (CMbDT::time($fin) <= $_plage->fin)) {
         $plageOp = $_plage;
         break;
       }
@@ -282,7 +282,7 @@ class CHPrimXMLEvenementsServeurActivitePmsi extends CHPrimXMLEvenements {
     $acteCCAM->code_acte     = $xpath->queryTextNode("hprim:codeActe", $node);
     $acteCCAM->code_activite = $xpath->queryTextNode("hprim:codeActivite", $node);
     $acteCCAM->code_phase    = $xpath->queryTextNode("hprim:codePhase", $node);
-    $acteCCAM->execution     = $xpath->queryTextNode("hprim:execute/hprim:date", $node)." ".mbTransformTime($xpath->queryTextNode("hprim:execute/hprim:heure", $node), null , "%H:%M:%S");
+    $acteCCAM->execution     = $xpath->queryTextNode("hprim:execute/hprim:date", $node)." ".CMbDT::transform($xpath->queryTextNode("hprim:execute/hprim:heure", $node), null , "%H:%M:%S");
         
     return array (
       "idSourceIntervention" => $data['idSourceIntervention'],

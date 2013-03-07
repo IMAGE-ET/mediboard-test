@@ -17,7 +17,7 @@ foreach($sejours as $_sejour_id){
   $observation->sejour_id = $_sejour_id;
   $observation->user_id = $user->_id;
   $observation->degre = "info";
-  $observation->date = mbDateTime();
+  $observation->date = CMbDT::dateTime();
   $observation->text = "Visite effectuée";
   $msg = $observation->store();
 	CAppUI::displayMsg($msg, "CObservationMedicale-msg-create");

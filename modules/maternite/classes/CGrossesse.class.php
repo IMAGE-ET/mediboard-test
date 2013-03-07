@@ -90,11 +90,11 @@ class CGrossesse extends CMbObject{
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefParturiente();
-    $this->_view = "Terme du " . mbDateToLocale($this->terme_prevu);
+    $this->_view = "Terme du " . CMbDT::dateToLocale($this->terme_prevu);
     // Nombre de semaines (aménorrhée = 41, grossesse = 39)
-    $this->_date_fecondation = mbDate("-41 weeks", $this->terme_prevu);
-    $this->_allaitement_en_cours = $this->allaitement_maternel && !$this->active && (!$this->date_fin_allaitement || $this->date_fin_allaitement > mbDate());
-    $this->_semaine_grossesse = ceil(mbDaysRelative($this->_date_fecondation, mbDate()) / 7);
+    $this->_date_fecondation = CMbDT::date("-41 weeks", $this->terme_prevu);
+    $this->_allaitement_en_cours = $this->allaitement_maternel && !$this->active && (!$this->date_fin_allaitement || $this->date_fin_allaitement > CMbDT::date());
+    $this->_semaine_grossesse = ceil(CMbDT::daysRelative($this->_date_fecondation, CMbDT::date()) / 7);
   }
   
   function loadRefsSejours() {

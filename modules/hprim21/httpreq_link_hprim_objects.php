@@ -12,7 +12,7 @@ CCanDo::checkRead();
 
 CApp::setTimeLimit(240);
 
-$date_limite = mbDate("- 1 month");
+$date_limite = CMbDT::date("- 1 month");
 $qte_limite  = 1000;
 
 $tag_ipp    = CPatient::getTagIPP();
@@ -95,7 +95,7 @@ foreach ($listHprimPatients as $_patient) {
   $return = $patient->loadMatchingPatient();
   if ($return == 1) {
     $IPP->object_id   = $patient->_id;
-    $IPP->last_update = mbDateTime();
+    $IPP->last_update = CMbDT::dateTime();
     $IPP->store();
       
     $_patient->patient_id = $patient->_id;
@@ -161,8 +161,8 @@ foreach ($listHprimSejours as $_sejour) {
   $sejour = new CSejour();
   $where = array();
   $where["patient_id"] = "= '$hprimPatient->patient_id'";
-  $date_min            = mbDate("-2 day", $_sejour->date_mouvement);
-  $date_max            = mbDate("+2 day", $_sejour->date_mouvement);
+  $date_min            = CMbDT::date("-2 day", $_sejour->date_mouvement);
+  $date_max            = CMbDT::date("+2 day", $_sejour->date_mouvement);
   $where["entree"]     = "BETWEEN '$date_min' AND '$date_max'";
   $where["annule"]     = "= '0'";
 
@@ -178,7 +178,7 @@ foreach ($listHprimSejours as $_sejour) {
   $sejour = reset($listSej);
   if ($sejour->_id) {
     $nda->object_id   = $sejour->_id;
-    $nda->last_update = mbDateTime();
+    $nda->last_update = CMbDT::dateTime();
     $nda->store();   
      
     $_sejour->sejour_id = $sejour->_id;

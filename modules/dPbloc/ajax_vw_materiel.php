@@ -27,8 +27,8 @@ $where[] = "plagesop.salle_id " . CSQLDataSource::prepareIn(array_keys($salles))
            "OR operations.salle_id " . CSQLDataSource::prepareIn(array_keys($salles));
 
 $where["materiel"] = "!= ''";
-$where[] = "(operations.plageop_id IS NOT NULL AND plagesop.date >= '".mbDate("-7 day")."')".
-          " OR (operations.plageop_id IS NULL AND operations.date >= '".mbDate("-7 day")."')";
+$where[] = "(operations.plageop_id IS NOT NULL AND plagesop.date >= '".CMbDT::date("-7 day")."')".
+          " OR (operations.plageop_id IS NULL AND operations.date >= '".CMbDT::date("-7 day")."')";
 
 
 $order = "plagesop.date, rank";

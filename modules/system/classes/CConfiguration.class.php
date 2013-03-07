@@ -181,7 +181,7 @@ class CConfiguration extends CMbMetaObject {
         SHM::put(
           "config-model",
           array(
-            "date"    => mbDateTime(),
+            "date"    => CMbDT::dateTime(),
             "hash"    => md5(serialize(self::$model_raw)),
             "content" => self::$model,
           )
@@ -234,7 +234,7 @@ class CConfiguration extends CMbMetaObject {
     SHM::put(
       "config-values",
       array(
-        "date"    => mbDateTime(),
+        "date"    => CMbDT::dateTime(),
         "content" => self::$values,
       )
     );

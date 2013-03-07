@@ -95,20 +95,20 @@ class CMenu extends CMbObject {
   }
   
   function is_actif($date){
-    $date_debut = mbDate("last sunday", $this->debut);
-    $date_debut = mbDate("+1 day"     , $date_debut);
-    $numDayMenu  = mbDaysRelative($date_debut, $this->debut);
+    $date_debut = CMbDT::date("last sunday", $this->debut);
+    $date_debut = CMbDT::date("+1 day"     , $date_debut);
+    $numDayMenu  = CMbDT::daysRelative($date_debut, $this->debut);
     
     $nb_weeks = (($this->nb_repet * $this->repetition) - 1);
-    $date_fin = mbDate("+$nb_weeks week" , $date_debut);
-    $date_fin = mbDate("next monday"     , $date_fin);
-    $date_fin = mbDate("-1 day"          , $date_fin);
+    $date_fin = CMbDT::date("+$nb_weeks week" , $date_debut);
+    $date_fin = CMbDT::date("next monday"     , $date_fin);
+    $date_fin = CMbDT::date("-1 day"          , $date_fin);
     
     if($date < $this->debut || $date > $date_fin){  
       return false;
     }
     
-    $nbDays  = mbDaysRelative($date_debut, $date);
+    $nbDays  = CMbDT::daysRelative($date_debut, $date);
     $nbWeeks = floor($nbDays / 7);
     $numDay = $nbDays - ($nbWeeks * 7);
     if (!$nbWeeks || !fmod($nbWeeks, $this->repetition)) {

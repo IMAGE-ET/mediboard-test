@@ -12,7 +12,7 @@ CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 // Récupération des paramètres
 $chirSel   = CValue::getOrSession("chirSel");
-$date      = CValue::getOrSession("date", mbDate());
+$date      = CValue::getOrSession("date", CMbDT::date());
 
 // Création du template
 $smarty = new CSmartyDP();

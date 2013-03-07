@@ -13,11 +13,11 @@ $date = CValue::getOrSession("date");
 $med = new CMediusers();
 $listPrat = $med->loadPraticiens(PERM_READ);
 
-$dateEntree = mbDateTime("23:59:00", $date);
-$dateSortie = mbDateTime("00:01:00", $date);
+$dateEntree = CMbDT::dateTime("23:59:00", $date);
+$dateSortie = CMbDT::dateTime("00:01:00", $date);
 
-$hierEntree = mbDate("- 1 day", $dateEntree);
-$hierEntree = mbDateTime("23:59:00", $hierEntree);
+$hierEntree = CMbDT::date("- 1 day", $dateEntree);
+$hierEntree = CMbDT::dateTime("23:59:00", $hierEntree);
 
 // Chargement des services
 $service = new CService();
@@ -109,8 +109,8 @@ foreach($list_affectations as $key=>$_affectation){
   }
 }
 
-$date_debut = mbDateTime("00:01:00",$date);
-$date_fin = mbDateTime("23:59:00",$date);
+$date_debut = CMbDT::dateTime("00:01:00",$date);
+$date_fin = CMbDT::dateTime("23:59:00",$date);
 
 // present du jour
 $sejourJour = new CSejour();

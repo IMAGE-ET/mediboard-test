@@ -12,7 +12,7 @@ CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
 $op    = CValue::getOrSession("op");
-$date  = CValue::getOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", CMbDT::date());
 
 $consultAnesth  = new CConsultAnesth();
 $consult        = new CConsultation();

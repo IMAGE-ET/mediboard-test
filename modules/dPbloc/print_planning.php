@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$now = mbDate();
+$now = CMbDT::date();
 
 $filter = new COperation;
 $filter->_date_min     = CValue::get("_date_min", $now);
@@ -26,16 +26,16 @@ $filter->_ccam_libelle = CValue::getOrSession("_ccam_libelle", CAppUI::conf("dPb
 $filterSejour = new CSejour;
 $filterSejour->type = CValue::getOrSession("type");
 
-$tomorrow  = mbDate("+1 day", $now);
+$tomorrow  = CMbDT::date("+1 day", $now);
 
-$week_deb  = mbDate("last sunday", $now);
-$week_fin  = mbDate("next sunday", $week_deb);
-$week_deb  = mbDate("+1 day"     , $week_deb);
+$week_deb  = CMbDT::date("last sunday", $now);
+$week_fin  = CMbDT::date("next sunday", $week_deb);
+$week_deb  = CMbDT::date("+1 day"     , $week_deb);
 
-$rectif     = mbTransformTime("+0 DAY", $now, "%d")-1;
-$month_deb  = mbDate("-$rectif DAYS", $now);
-$month_fin  = mbDate("+1 month", $month_deb);
-$month_fin  = mbDate("-1 day", $month_fin);
+$rectif     = CMbDT::transform("+0 DAY", $now, "%d")-1;
+$month_deb  = CMbDT::date("-$rectif DAYS", $now);
+$month_fin  = CMbDT::date("+1 month", $month_deb);
+$month_fin  = CMbDT::date("-1 day", $month_fin);
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);

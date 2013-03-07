@@ -10,8 +10,8 @@
  */
 
 CCanDo::checkEdit();
-$date_min           = CValue::getOrSession("_date_min", mbDate());
-$date_max           = CValue::getOrSession("_date_max", mbDate());
+$date_min           = CValue::getOrSession("_date_min", CMbDT::date());
+$date_max           = CValue::getOrSession("_date_max", CMbDT::date());
 $etat_cloture       = CValue::getOrSession("etat_cloture", 1);
 $etat_ouvert        = CValue::getOrSession("etat_ouvert", 1);
 $facture_id         = CValue::getOrSession("facture_id");
@@ -105,7 +105,7 @@ $smarty->assign("banques"       , $banques);
 $smarty->assign("facture"       , $facture);
 $smarty->assign("etat_ouvert"   , $etat_ouvert);
 $smarty->assign("etat_cloture"  , $etat_cloture);
-$smarty->assign("date"          , mbDate());
+$smarty->assign("date"          , CMbDT::date());
 $smarty->assign("filter"        , $filter);
 $smarty->assign("no_finish_reglement" ,$no_finish_reglement);
 $smarty->assign("type_date_search"    ,$type_date_search);

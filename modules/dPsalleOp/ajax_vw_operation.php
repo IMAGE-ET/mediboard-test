@@ -24,8 +24,8 @@ if (!$selOp->_id) {
 $selOp->canDo();
 $selOp->loadRefs();
 
-$date = mbDate($selOp->_datetime);
-$modif_operation = $selOp->canEdit() || $date >= mbDate();
+$date = CMbDT::date($selOp->_datetime);
+$modif_operation = $selOp->canEdit() || $date >= CMbDT::date();
 
 // Récupération de l'utilisateur courant
 $currUser = new CMediusers();

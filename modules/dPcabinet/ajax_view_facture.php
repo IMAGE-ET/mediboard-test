@@ -60,7 +60,7 @@ if (!CValue::get("not_load_banque")) {
 
 $smarty->assign("etat_ouvert"   , CValue::getOrSession("etat_ouvert", 1));
 $smarty->assign("etat_cloture"  , CValue::getOrSession("etat_cloture", 1));
-$smarty->assign("date"          , mbDate());
+$smarty->assign("date"          , CMbDT::date());
 $smarty->assign("chirSel"       , CValue::getOrSession("chirSel", "-1"));
 
 $smarty->display("inc_vw_facturation.tpl");

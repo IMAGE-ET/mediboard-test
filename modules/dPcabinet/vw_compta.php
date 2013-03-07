@@ -12,21 +12,21 @@
 CCanDo::checkEdit();
 
 // Gestion des bouton radio des dates
-$now             = mbDate();
-$yesterday       = mbDate("-1 DAY"         , $now);
-$week_deb        = mbDate("last sunday"    , $now);
-$week_fin        = mbDate("next sunday"    , $week_deb);
-$week_deb        = mbDate("+1 day"         , $week_deb);
-$rectif          = mbTransformTime("+0 DAY", $now, "%d")-1;
-$month_deb       = mbDate("-$rectif DAYS"  , $now);
-$month_fin       = mbDate("+1 month"       , $month_deb);
-$three_month_deb = mbDate("-3 month"       , $month_fin);
-$month_fin       = mbDate("-1 day"         , $month_fin);
+$now             = CMbDT::date();
+$yesterday       = CMbDT::date("-1 DAY"         , $now);
+$week_deb        = CMbDT::date("last sunday"    , $now);
+$week_fin        = CMbDT::date("next sunday"    , $week_deb);
+$week_deb        = CMbDT::date("+1 day"         , $week_deb);
+$rectif          = CMbDT::transform("+0 DAY", $now, "%d")-1;
+$month_deb       = CMbDT::date("-$rectif DAYS"  , $now);
+$month_fin       = CMbDT::date("+1 month"       , $month_deb);
+$three_month_deb = CMbDT::date("-3 month"       , $month_fin);
+$month_fin       = CMbDT::date("-1 day"         , $month_fin);
 
 $filter = new CConsultation;
 
-$filter->_date_min = mbDate();
-$filter->_date_max = mbDate("+ 0 day");
+$filter->_date_min = CMbDT::date();
+$filter->_date_max = CMbDT::date("+ 0 day");
 
 $filter->_etat_paiement = CValue::getOrSession("_etat_paiement", 0);
 $filter->_type_affichage = CValue::getOrSession("_type_affichage", 0);

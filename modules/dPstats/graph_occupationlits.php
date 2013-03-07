@@ -11,8 +11,8 @@
 CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
 CAppUI::requireLibraryFile("jpgraph/src/jpgraph_bar");
 
-$debut      = CValue::get("debut"     , mbDate("-1 YEAR"));
-$fin        = CValue::get("fin"       , mbDate());
+$debut      = CValue::get("debut"     , CMbDT::date("-1 YEAR"));
+$fin        = CValue::get("fin"       , CMbDT::date());
 $prat_id    = CValue::get("prat_id"   , 0);
 $service_id = CValue::get("service_id", 0);
 
@@ -25,9 +25,9 @@ $service = new CService();
 $service->load($service_id);
 
 $datax = array("ticks" => array(), "date" => array());
-for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-  $datax["ticks"][] = mbTransformTime("+0 DAY", $i, "%m/%Y");
-  $datax["date"][]  = mbTransformTime("+0 DAY", $i, "%Y-%m");
+for($i = $debut; $i <= $fin; $i = CMbDT::date("+1 MONTH", $i)) {
+  $datax["ticks"][] = CMbDT::transform("+0 DAY", $i, "%m/%Y");
+  $datax["date"][]  = CMbDT::transform("+0 DAY", $i, "%Y-%m");
 }
 
 $where = array();
@@ -51,8 +51,8 @@ foreach($services as $service) {
   foreach($datax["date"] as $x) {
     $debMonth = $x."-01";
     $endMonth = $debMonth;
-    $endMonth = mbDate("+ 1 MONTH", $endMonth);
-    $endMonth = mbDate("-1 DAY", $endMonth);
+    $endMonth = CMbDT::date("+ 1 MONTH", $endMonth);
+    $endMonth = CMbDT::date("-1 DAY", $endMonth);
     $f = true;
     $sql = "SELECT affectation.entree, affectation.sortie" .
         "\nFROM affectation, operations, service, chambre, lit" .

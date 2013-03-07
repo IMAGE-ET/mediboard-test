@@ -73,10 +73,10 @@ class CRPUXMLDocument extends CMbXMLDocument {
   function addRPU($elParent, CRPU $mbObject) { 
     $this->addElement($elParent, "CP", $mbObject->_cp);
     $this->addElement($elParent, "COMMUNE", $mbObject->_ville);
-    $this->addElement($elParent, "NAISSANCE", mbTransformTime($mbObject->_naissance, null, "%d/%m/%Y"));
+    $this->addElement($elParent, "NAISSANCE", CMbDT::transform($mbObject->_naissance, null, "%d/%m/%Y"));
     $this->addElement($elParent, "SEXE", strtoupper($mbObject->_sexe));
     
-    $this->addElement($elParent, "ENTREE", mbTransformTime($mbObject->_entree, null, "%d/%m/%Y %H:%M"));
+    $this->addElement($elParent, "ENTREE", CMbDT::transform($mbObject->_entree, null, "%d/%m/%Y %H:%M"));
     $this->addElement($elParent, "MODE_ENTREE", $mbObject->_ref_sejour->mode_entree);
     $this->addElement($elParent, "PROVENANCE", $mbObject->_ref_sejour->provenance);
     if ($mbObject->_ref_sejour->transport == "perso_taxi") {
@@ -121,7 +121,7 @@ class CRPUXMLDocument extends CMbXMLDocument {
       }
     }
     
-    $this->addElement($elParent, "SORTIE", mbTransformTime($mbObject->_sortie, null, "%d/%m/%Y %H:%M"));
+    $this->addElement($elParent, "SORTIE", CMbDT::transform($mbObject->_sortie, null, "%d/%m/%Y %H:%M"));
     $this->addElement($elParent, "MODE_SORTIE", $mbObject->_mode_sortie);
     $this->addElement($elParent, "DESTINATION", $mbObject->_ref_sejour->destination);
     $this->addElement($elParent, "ORIENT", strtoupper($mbObject->orientation));

@@ -17,13 +17,13 @@ $sejour = new CSejour;
 $sejour->load(CValue::get("sejour_id"));
 $sejour->loadRefPatient();
 
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 
-$monday = mbDate("last monday", mbDate("+1 day", $date));
-$sunday = mbDate("next sunday", $date);
+$monday = CMbDT::date("last monday", CMbDT::date("+1 day", $date));
+$sunday = CMbDT::date("next sunday", $date);
 
 for ($i = 0; $i < 7; $i++) {
-  $week_days[$i] = mbTransformTime("+$i day", $monday, "%a");
+  $week_days[$i] = CMbDT::transform("+$i day", $monday, "%a");
 }
 
 // Prescription

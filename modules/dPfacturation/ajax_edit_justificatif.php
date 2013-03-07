@@ -64,7 +64,7 @@ function ajoutEntete1($pdf, $facture, $colonnes, $cle_facture){
   $assur["adresse"] = "$assurance_patient->adresse";
   $assur["cp"]      = "$assurance_patient->cp $assurance_patient->ville";
   
-  $naissance =  mbTransformTime(null, $patient->naissance, "%d.%m.%Y");
+  $naissance =  CMbDT::transform(null, $patient->naissance, "%d.%m.%Y");
   $colonnes = array(20, 28, 25, 25, 25, 50);
   $lignes = array(
     array("Patient"   , "Nom"             , $patient->nom     ,null, "Assurance", $assur["nom"]),
@@ -74,7 +74,7 @@ function ajoutEntete1($pdf, $facture, $colonnes, $cle_facture){
     array(""          , "Localité"        , $patient->ville   , null, $assur["nom"]),
     array(""          , "Date de naissance",$naissance        , null, $assur["adresse"]),
     array(""          , "Sexe"            , strtoupper($patient->sexe) , null, $assur["cp"]),
-    array(""          , "Date cas"        , mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
+    array(""          , "Date cas"        , CMbDT::transform(null, $facture->cloture, "%d.%m.%Y")),
     array(""          , "N° cas"          , "$facture->ref_accident"),
     array(""          , "N° AVS"          , $patient->avs),
     array(""          , "N° assuré"       , "$_ref_assurance"),
@@ -85,7 +85,7 @@ function ajoutEntete1($pdf, $facture, $colonnes, $cle_facture){
     array(""          , "Loi"             , "$loi"),
     array(""          , "N° contrat"      , ""),
     array(""          , "Motif traitement", ucfirst($facture->type_facture)),
-    array(""          , "Traitement"      , mbTransformTime(null, $facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
+    array(""          , "Traitement"      , CMbDT::transform(null, $facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".CMbDT::transform(null, $facture->cloture, "%d.%m.%Y")),
     array(""          , "Rôle/ Localité"  , "-"),
     array("Mandataire", "N° EAN/N° RCC"   , $praticien->ean." - ".$praticien->rcc." "),
     array("Diagnostic", "Contrat"         , "ICD--"),
@@ -130,7 +130,7 @@ function ajoutEntete2($pdf, $nb, $facture, $colonnes){
   $pdf->SetDrawColor(0);
   $pdf->Rect(10, 18, 180,20,'DF');
   $lignes = array(
-    array("Document"    , "Identification"  , $facture->_id." ".mbTransformTime(null, null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
+    array("Document"    , "Identification"  , $facture->_id." ".CMbDT::transform(null, null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
     array("Auteur"      , "N° EAN(B)"       , "$group->ean", "$group->_view", " Tél: $group->tel"),
     array("Facture"     , "N° RCC(B)"       , "$group->rcc", substr($group->adresse, 0, 29)." ". $group->cp." ".$group->ville, "Fax: $group->fax"),
     array("Four.de"     , "N° EAN(P)"       , "$praticien->ean", "DR.".$praticien->_view, " Tél: $function->tel"),
@@ -303,7 +303,7 @@ foreach ($factures as $facture) {
             switch ($key) {
               case "Date" :
                 $valeur = $acte->date;
-                $valeur= mbTransformTime(null, $valeur, "%d.%m.%Y");
+                $valeur= CMbDT::transform(null, $valeur, "%d.%m.%Y");
                 break;
               case "Tarif":
                 $valeur = $code;

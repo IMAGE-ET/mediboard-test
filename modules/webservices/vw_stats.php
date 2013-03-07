@@ -10,8 +10,8 @@
 
 CCanDo::checkRead();
 
-$date_min = CValue::getOrSession("date_min", mbDate("-7 DAYS"));
-$date_max = CValue::getOrSession("date_max", mbDate());
+$date_min = CValue::getOrSession("date_min", CMbDT::date("-7 DAYS"));
+$date_max = CValue::getOrSession("date_max", CMbDT::date());
 
 $service     = CValue::getOrSession("service");
 $web_service = CValue::getOrSession("web_service");
@@ -22,10 +22,10 @@ $ds = CSQLDataSource::get("std");
 $services = $ds->loadColumn("SELECT type FROM echange_soap GROUP BY type");
 
 if (!$date_min) {
-  $date_min = mbDate("-7 DAYS");
+  $date_min = CMbDT::date("-7 DAYS");
 }
 if (!$date_max) {
-  $date_max = mbDate();
+  $date_max = CMbDT::date();
 }
 
 $query = null;
@@ -34,7 +34,7 @@ $series  = $ticks = array();
 $options = array();
 
 if ($service) {
-  for ($day = $date_min; $day <= $date_max; $day = mbDate("+1 day", $day)) {
+  for ($day = $date_min; $day <= $date_max; $day = CMbDT::date("+1 day", $day)) {
     $ticks[] = array(count($ticks), "$day");
     
     $query = "SELECT COUNT(DISTINCT `echange_soap_id`) as `nb_echanges`, SUM(`response_time`) as `resp`

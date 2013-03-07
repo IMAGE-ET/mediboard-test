@@ -13,8 +13,8 @@ $ds = CSQLDataSource::get("std");
 
 //Recuperation des identifiants pour les filtres
 $filter = new CPlageressource;
-$filter->_date_min = CValue::getOrSession("_date_min",mbDate());
-$filter->_date_max = CValue::getOrSession("_date_max",mbDate());
+$filter->_date_min = CValue::getOrSession("_date_min",CMbDT::date());
+$filter->_date_max = CValue::getOrSession("_date_max",CMbDT::date());
 $filter->prat_id = CValue::getOrSession("prat_id");
 $filter->paye = CValue::getOrSession("paye");
 // Chargement de la liste des praticiens pour l'historique
@@ -22,7 +22,7 @@ $filter->paye = CValue::getOrSession("paye");
 $listPrats = new CMediusers;
 
 $where = array();
-$where[] = "plageressource.date < '".mbDate()."'";
+$where[] = "plageressource.date < '".CMbDT::date()."'";
 $where[] = "plageressource.prat_id IS NOT NULL";
 $where[] = "plageressource.prat_id <> 0";
 $ljoin = array();
@@ -39,7 +39,7 @@ foreach ($listPrats as &$prat) {
 // Chargement de la liste des impayés
 $sql = "SELECT prat_id" .
     "\nFROM plageressource" .
-    "\nWHERE date < '".mbDate()."'" .
+    "\nWHERE date < '".CMbDT::date()."'" .
     "\nAND prat_id IS NOT NULL" .
     "\nAND prat_id <> 0" .
     "\nGROUP BY prat_id" .
@@ -55,7 +55,7 @@ $sql = "SELECT prat_id," .
     "\nCOUNT(plageressource_id) AS total," .
     "\nSUM(tarif) AS somme" .
     "\nFROM plageressource" .
-    "\nWHERE date < '".mbDate()."'" .
+    "\nWHERE date < '".CMbDT::date()."'" .
     "\nAND prat_id IS NOT NULL" .
     "\nAND prat_id <> 0" .
     "\nAND paye = '0'" .
@@ -64,7 +64,7 @@ $sql = "SELECT prat_id," .
 $list = $ds->loadlist($sql);
 
 $where = array();
-$where["date"] = "< '".mbDate()."'";
+$where["date"] = "< '".CMbDT::date()."'";
 $where["paye"] = "= '0'";
 $order = "date";
 foreach($list as $key => $value) {
@@ -85,7 +85,7 @@ $smarty->assign("listPrats", $listPrats);
 $smarty->assign("filter"   , $filter   );
 $smarty->assign("list"     , $list     );
 $smarty->assign("total"    , $total    );
-$smarty->assign("today"    , mbDate()  );
+$smarty->assign("today"    , CMbDT::date()  );
 
 $smarty->display("view_compta.tpl");
 

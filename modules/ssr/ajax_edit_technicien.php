@@ -15,7 +15,7 @@ $plateau = new CPlateauTechnique;
 $plateau->load(CValue::get("plateau_id"));
 
 // Détails des techniciens
-$date = mbDate();
+$date = CMbDT::date();
 foreach ($plateau->loadRefsTechniciens(false) as $_technicien) {
 	$_technicien->countSejoursDate($date);
 };

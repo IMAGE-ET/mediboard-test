@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -256,7 +256,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
       $sejour->loadRefsOperations();  
       $operation = null;
       foreach ($sejour->_ref_operations as $_operation) {
-        if (mbDate($_operation->_datetime)) {
+        if (CMbDT::date($_operation->_datetime)) {
           $operation = $_operation;
         }
       }
@@ -282,7 +282,7 @@ class CHPrimXMLEvenementsServeurActes extends CHPrimXMLEvenementsServeurActivite
     }
     
     $echange_hprim->_acquittement = $messageAcquittement;
-    $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->date_echange = CMbDT::dateTime();
     $echange_hprim->setObjectIdClass("CSejour", $data['idCibleVenue']);
     $echange_hprim->store();
 

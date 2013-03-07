@@ -11,14 +11,14 @@
 CCanDo::checkRead();
 
 $type_modif = CValue::getOrSession("type_modif", "annule");
-$date_max   = CValue::getOrSession("_date_max", mbDate());
+$date_max   = CValue::getOrSession("_date_max", CMbDT::date());
 if(phpversion() >= "5.3") {
-  $date_max   = mbDate("last day of +0 months", $date_max); 
-  $date_min   = mbDate("first day of -0 months", $date_max);
+  $date_max   = CMbDT::date("last day of +0 months", $date_max);
+  $date_min   = CMbDT::date("first day of -0 months", $date_max);
 } else {
-  $date_max = mbTransformTime("+ 1 month", $date_max, "%Y-%m-01");
-  $date_min = mbDate("- 1 month", $date_max);
-  $date_max = mbDate("- 1 day", $date_max);
+  $date_max = CMbDT::transform("+ 1 month", $date_max, "%Y-%m-01");
+  $date_min = CMbDT::date("- 1 month", $date_max);
+  $date_max = CMbDT::date("- 1 day", $date_max);
 }
 $prat_id    = CValue::get("prat_id");
 $salle_id   = CValue::get("salle_id");
@@ -111,8 +111,8 @@ $queryHorsPlage .= "\nORDER BY orderitem, bloc_operatoire.nom, sallesbloc.nom";
 $resultInPlage   = $prat->_spec->ds->loadlist($queryInPlage);
 $resultHorsPlage = $prat->_spec->ds->loadlist($queryHorsPlage);
 
-for($rangeDate = $date_min; $rangeDate <= $date_max; $rangeDate = mbDate("+1 month", $rangeDate)) {
-  $month = mbTransformTime(null, $rangeDate, "%Y - %m");
+for($rangeDate = $date_min; $rangeDate <= $date_max; $rangeDate = CMbDT::date("+1 month", $rangeDate)) {
+  $month = CMbDT::transform(null, $rangeDate, "%Y - %m");
   $list[$month]['total'] = 0;
   $list[$month]['inPlage'] = array();
   $list[$month]['horsPlage'] = array();

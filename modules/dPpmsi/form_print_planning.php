@@ -11,7 +11,7 @@ CCanDO::checkRead();
 
 $user = CUser::get();
 
-$now = mbDate();
+$now = CMbDT::date();
 
 $filter = new COperation();
 $filter->salle_id      = CValue::getOrSession("salle_id");
@@ -28,7 +28,7 @@ $filter->_ccam_libelle = CValue::getOrSession("_ccam_libelle");
 $filterSejour = new CSejour();
 $filterSejour->type = CValue::getOrSession("type");
 $filterSejour->ald  = CValue::getOrSession("ald");
-$yesterday  = mbDate("-1 day", $now);
+$yesterday  = CMbDT::date("-1 day", $now);
 
 $mediuser = new CMediusers();
 $listPrat = $mediuser->loadPraticiens(PERM_READ);

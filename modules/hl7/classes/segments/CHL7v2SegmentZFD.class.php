@@ -40,7 +40,7 @@ class CHL7v2SegmentZFD extends CHL7v2Segment {
     $patient = $this->patient;
     
      // ZFD-1: Date lunaire
-    if (isLunarDate($patient->naissance)) {
+    if (CMbDT::isLunarDate($patient->naissance)) {
       $date = explode("-", $patient->naissance);
       $data[] = array(
         // ZFD-1.1 : Jour

@@ -120,7 +120,7 @@ class CEAIMbObject {
    */ 
   function storeIdex(CIdSante400 $idex, CMbObject $object, CInteropSender $sender) {
     $idex->object_id   = $object->_id; 
-    $idex->last_update = mbDateTime();
+    $idex->last_update = CMbDT::dateTime();
 
     return $idex->store();
   }

@@ -34,7 +34,7 @@ class CEAISejour extends CEAIMbObject {
     $id400Sejour->id400        = $idSourceSejour;
     $id400Sejour->object_id    = $newSejour->_id;
     $id400Sejour->_id          = null;
-    $id400Sejour->last_update  = mbDateTime();
+    $id400Sejour->last_update  = CMbDT::dateTime();
 
     return $id400Sejour->store();
   }
@@ -103,7 +103,7 @@ class CEAISejour extends CEAIMbObject {
       $NDA->tag          = $sender->_tag_sejour;
       $NDA->object_class = "CSejour";
       $NDA->object_id    = $sejour->_id;
-      $NDA->last_update  = mbDateTime();
+      $NDA->last_update  = CMbDT::dateTime();
       
       return $NDA->store();  
     }
@@ -119,7 +119,7 @@ class CEAISejour extends CEAIMbObject {
         $NDA->object_id   = $sejour->_id;
       }
         
-      $NDA->last_update = mbDateTime();
+      $NDA->last_update = CMbDT::dateTime();
       
       return $NDA->store();  
     }
@@ -144,7 +144,7 @@ class CEAISejour extends CEAIMbObject {
         }
         
         $NDA->object_id   = $sejour->_id;
-        $NDA->last_update = mbDateTime();
+        $NDA->last_update = CMbDT::dateTime();
       
         return $NDA->store();  
       }

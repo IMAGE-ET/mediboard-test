@@ -26,17 +26,17 @@ $series = array(
 $ticks = array();
 $max = 1;
 
-$now = mbDate();
-$date = mbDate("-6 MONTHS");
+$now = CMbDT::date();
+$date = CMbDT::date("-6 MONTHS");
 $i = 0;
 
 while($date < $now) {
-  //$to = mbDate("+1 MONTH", $date);
-  //$ticks[] = "Du ".mbDateToLocale($date)." au ".mbDateToLocale($to);
+  //$to = CMbDT::date("+1 MONTH", $date);
+  //$ticks[] = "Du ".CMbDT::dateToLocale($date)." au ".CMbDT::dateToLocale($to);
   
-  $date = mbTransformTime(null, $date, "%Y-%m-01");
-  $to = mbDate("+1 MONTH", $date);
-  $ticks[] = array(count($ticks)*2-0.4, utf8_encode(mbTransformTime(null, $date, "%b")));
+  $date = CMbDT::transform(null, $date, "%Y-%m-01");
+  $to = CMbDT::date("+1 MONTH", $date);
+  $ticks[] = array(count($ticks)*2-0.4, utf8_encode(CMbDT::transform(null, $date, "%b")));
   
   // Input //////////////////
   $where = array(

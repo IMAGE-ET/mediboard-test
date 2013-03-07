@@ -90,7 +90,7 @@ foreach ($listCategories as $key=>$value){
 }
 
 if (!$fiche->date_incident) {
-	$fiche->date_incident = mbDateTime();
+	$fiche->date_incident = CMbDT::dateTime();
 }
 $fiche->updateFormFields();
   

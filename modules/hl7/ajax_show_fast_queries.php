@@ -52,15 +52,15 @@ $queries = array(
   "CPatient" => array(
     "nom"       => $names["nom"] . " (".$names["nom_jeune_fille"].")",
     "prenom"    => $prenom,
-    "naissance" => mbDateToLocale($xml->queryTextNode("PID.7", $PID)),
+    "naissance" => CMbDT::dateToLocale($xml->queryTextNode("PID.7", $PID)),
     "_IPP"      => $IPP,
   ),
   "CSejour" => array(
     "type"          => $xml->queryTextNode("PV1.2", $PV1),
-    "entree_prevue" => mbDateToLocale($xml->queryTextNode("PV2.8/TS.1", $PV2)),
-    "entree_reelle" => mbDateToLocale($xml->queryTextNode("PV1.44/TS.1", $PV1)),
-    "sortie_prevue" => mbDateToLocale($xml->queryTextNode("PV2.9/TS.1", $PV2)),
-    "sortie_reelle" => mbDateToLocale($xml->queryTextNode("PV1.45/TS.1", $PV1)),
+    "entree_prevue" => CMbDT::dateToLocale($xml->queryTextNode("PV2.8/TS.1", $PV2)),
+    "entree_reelle" => CMbDT::dateToLocale($xml->queryTextNode("PV1.44/TS.1", $PV1)),
+    "sortie_prevue" => CMbDT::dateToLocale($xml->queryTextNode("PV2.9/TS.1", $PV2)),
+    "sortie_reelle" => CMbDT::dateToLocale($xml->queryTextNode("PV1.45/TS.1", $PV1)),
     "_NDA"          => $NDA,
   )
 );

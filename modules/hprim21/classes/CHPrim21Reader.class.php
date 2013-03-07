@@ -40,14 +40,14 @@ class CHPrim21Reader {
   var $_echange_hprim21 = null;
   
   function bindEchange($fileName = null) {
-    $this->_echange_hprim21->date_production   = mbDateTime($this->date);
+    $this->_echange_hprim21->date_production   = CMbDT::dateTime($this->date);
     $this->_echange_hprim21->version           = $this->version;
     $this->_echange_hprim21->nom_fichier       = $this->nom_fichier;
     // Read => Mediboard
     $this->_echange_hprim21->receiver_id       = null;
     $this->_echange_hprim21->sous_type         = $this->sous_type;
     $this->_echange_hprim21->type              = $this->type;
-    $this->_echange_hprim21->date_echange      = mbDateTime();
+    $this->_echange_hprim21->date_echange      = CMbDT::dateTime();
     if ($fileName)
       $this->_echange_hprim21->_message        = file_get_contents($fileName);
 

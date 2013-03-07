@@ -16,7 +16,7 @@ $intervals = array("05","10","15","20","30");
 $smarty = new CSmartyDP();
 
 $smarty->assign("hours"     , $hours);
-$smarty->assign("date"      , mbDate());
+$smarty->assign("date"      , CMbDT::date());
 $smarty->assign("intervals" , $intervals);
 
 $smarty->assign("anesths" , CMediusers::get()->loadAnesthesistes());

@@ -30,8 +30,8 @@ else {
   $sejour->load($sejour_id);
   if ($new_sejour) {
     $sejour->_id = null;
-    $entree_prevue = mbDate($date_move) . " " . $hour_intervention;
-    $sortie_prevue = mbAddDateTime($duree, $entree_prevue);
+    $entree_prevue = CMbDT::date($date_move) . " " . $hour_intervention;
+    $sortie_prevue = CMbDT::addDateTime($duree, $entree_prevue);
   }
 }
 
@@ -45,19 +45,19 @@ if ($entree_prevue && $sortie_prevue) {
 }
 
 if (isset($operation)) {
-  $nb_days = mbDaysRelative("$operation->date $operation->time_operation", $date_move);
+  $nb_days = CMbDT::daysRelative("$operation->date $operation->time_operation", $date_move);
 }
 else {
-  $nb_days = mbDaysRelative($sejour->entree_prevue, $entree_prevue);
+  $nb_days = CMbDT::daysRelative($sejour->entree_prevue, $entree_prevue);
 }
 
 if ($nb_days > 0 ) {
-  $sejour->entree_prevue = mbDateTime("+$nb_days day", $sejour->entree_prevue);
-  $sejour->sortie_prevue = mbDateTime("+$nb_days day", $sejour->sortie_prevue);
+  $sejour->entree_prevue = CMbDT::dateTime("+$nb_days day", $sejour->entree_prevue);
+  $sejour->sortie_prevue = CMbDT::dateTime("+$nb_days day", $sejour->sortie_prevue);
 } 
 else {
-  $sejour->entree_prevue = mbDateTime("$nb_days day", $sejour->entree_prevue);
-  $sejour->sortie_prevue = mbDateTime("$nb_days day", $sejour->sortie_prevue);
+  $sejour->entree_prevue = CMbDT::dateTime("$nb_days day", $sejour->entree_prevue);
+  $sejour->sortie_prevue = CMbDT::dateTime("$nb_days day", $sejour->sortie_prevue);
 }
 
 $smarty = new CSmartyDP;

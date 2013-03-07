@@ -16,8 +16,8 @@ $sejour = new CSejour();
 $suppr    = 0;
 $error    = 0;
 $qte      = CValue::get("qte", 1);
-$date_min = CValue::get("date_min", mbDate());
-$date_min = $date_min ? $date_min : mbDate();
+$date_min = CValue::get("date_min", CMbDT::date());
+$date_min = $date_min ? $date_min : CMbDT::date();
 $where = array("entree" => ">= '$date_min 00:00:00'");
 $listSejours = $sejour->loadList($where, null, $qte);
 

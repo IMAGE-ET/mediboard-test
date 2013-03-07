@@ -65,15 +65,15 @@ foreach($elts_id as $_elt_id){
   		}
 	
 	    if($_nb_decalage_min_debut){
-	      $evenement->debut = mbDateTime("$_nb_decalage_min_debut minutes", $evenement->debut);
+	      $evenement->debut = CMbDT::dateTime("$_nb_decalage_min_debut minutes", $evenement->debut);
 	    }
 			
 	    if($_nb_decalage_heure_debut){
-	      $evenement->debut = mbDateTime("$_nb_decalage_heure_debut hours", $evenement->debut);
+	      $evenement->debut = CMbDT::dateTime("$_nb_decalage_heure_debut hours", $evenement->debut);
 	    }
 			
 	    if($_nb_decalage_jour_debut){
-	      $evenement->debut = mbDateTime("$_nb_decalage_jour_debut days", $evenement->debut);
+	      $evenement->debut = CMbDT::dateTime("$_nb_decalage_jour_debut days", $evenement->debut);
 	    }
 			
 	    if($_nb_decalage_duree){

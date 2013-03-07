@@ -11,7 +11,7 @@
 CCanDo::read();
 
 $service_id = CValue::get("service_id");
-$date = CValue::get("date", mbDate());
+$date = CValue::get("date", CMbDT::date());
 
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
@@ -101,7 +101,7 @@ $smarty->assign("_sejours", $_sejours);
 $smarty->assign("service_id", $service_id);
 $smarty->assign("service", $service);
 $smarty->assign("date", $date);
-$smarty->assign("dateTime", mbDateTime());
+$smarty->assign("dateTime", CMbDT::dateTime());
 $smarty->assign("outputs", $outputs);
 $smarty->assign("fiches_anesth", $fiches_anesth);
 

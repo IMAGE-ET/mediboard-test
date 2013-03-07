@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -90,7 +90,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
    * Mapping patient
    *
    * @param DOMNode  $node      Node
-   * @param CPatient $mbPatient Person
+   * @param CPatient $mbPatient Patient
    *
    * @return CPatient
    */
@@ -109,8 +109,10 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
   }
 
   /**
-   * @param          $node
-   * @param CPatient $mbPatient
+   * Get
+   *
+   * @param DOMNode  $node      Node
+   * @param CPatient $mbPatient Person
    *
    * @return CMbObject|CMediusers|CPatient
    */
@@ -128,7 +130,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $mbPatient->sexe = $sexeConversion[$sexe];
     
     // Récupération du typePersonne
-    $mbPatient = self::getPersonne($personnePhysique,$mbPatient);
+    $mbPatient = self::getPersonne($personnePhysique, $mbPatient);
     
     $elementDateNaissance = $xpath->queryUniqueNode("hprim:dateNaissance", $personnePhysique);
     $mbPatient->naissance = $xpath->queryTextNode("hprim:date", $elementDateNaissance);
@@ -140,7 +142,15 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     return $mbPatient;
   }
-  
+
+  /**
+   * Return person
+   *
+   * @param DOMNode   $node       Node
+   * @param CMbObject $mbPersonne Person
+   *
+   * @return CMbObject|CMediusers|CPatient
+   */
   static function getPersonne(DOMNode $node, CMbObject $mbPersonne) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
@@ -200,7 +210,15 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     return $mbPersonne;
   }
-  
+
+  /**
+   * Récupérer l'activité socio-professionnelle
+   *
+   * @param DOMNode  $node      Node
+   * @param CPatient $mbPatient Patient
+   *
+   * @return CPatient
+   */
   static function getActiviteSocioProfessionnelle(DOMNode $node, CPatient $mbPatient) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
@@ -210,10 +228,15 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     return $mbPatient;
   }
-  
+
   /**
-   * @todo: Gérer le store des correspondants patients après le mapping
-  **/
+   * Récupérer les personnes à prévenir
+   *
+   * @param DOMNode  $node      Node
+   * @param CPatient $mbPatient Patient
+   *
+   * @return CPatient
+   */
   static function getPersonnesPrevenir(DOMNode $node, CPatient $mbPatient) {
     $xpath = new CHPrimXPath($node->ownerDocument);
     
@@ -240,38 +263,58 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     
     return $mbPatient;
   }
-  
+
+  /**
+   * Vérifier si les patients sont similaires
+   *
+   * @param CPatient $mbPatient  Patient
+   * @param DOMNode  $xmlPatient Patient provenant des données XML
+   *
+   * @return bool
+   */
   function checkSimilarPatient(CPatient $mbPatient, $xmlPatient) {
     $xpath = new CHPrimXPath($this);
         
     // Création de l'element personnePhysique
     $personnePhysique = $xpath->queryUniqueNode("hprim:personnePhysique", $xmlPatient);
-    $nom = $xpath->queryTextNode("hprim:nomUsuel", $personnePhysique);
+
+    $nom     = $xpath->queryTextNode("hprim:nomUsuel", $personnePhysique);
     $prenoms = $xpath->getMultipleTextNodes("hprim:prenoms/*", $personnePhysique);
-    $prenom = $prenoms[0];
+    $prenom  = $prenoms[0];
     
     return $mbPatient->checkSimilar($nom, $prenom);
   }
-  
-  function checkSimilarSejour(CPatient $mbPatient, CSejour $mbVenue, $xmlVenue) {
-    $xpath = new CHPrimXPath($this);
-    
-    return $mbVenue->checkSimilar();
-  }
-  
+
+  /**
+   * Get source ID
+   *
+   * @param string $query_evt  Event
+   * @param string $query_type Type
+   *
+   * @return string
+   */
   function getIdSourceObject($query_evt, $query_type) { 
     $xpath = new CHPrimXPath($this);
     
     $query = "/hprim:evenementsPatients/hprim:evenementPatient";
 
     $evenementPatient = $xpath->queryUniqueNode($query);
-    $typeEvenement = $xpath->queryUniqueNode($query_evt, $evenementPatient);
+    $typeEvenement    = $xpath->queryUniqueNode($query_evt, $evenementPatient);
     
     $object = $xpath->queryUniqueNode($query_type, $typeEvenement);
 
     return $this->getIdSource($object);
   }
-  
+
+  /**
+   * Mapping admit
+   *
+   * @param DOMNode $node    Node
+   * @param CSejour $mbVenue Admit
+   * @param bool    $cancel  Cancel
+   *
+   * @return CSejour
+   */
   function mappingVenue(DOMNode $node, CSejour $mbVenue, $cancel = false) {
     // Si annulation
     if ($cancel) {
@@ -379,7 +422,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $entree = $xpath->queryUniqueNode("hprim:entree", $node);
   
     $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $entree);
-    $heure = mbTransformTime($xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $entree), null , "%H:%M:%S");
+    $heure = CMbDT::transform($xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $entree), null , "%H:%M:%S");
     $modeEntree = $xpath->queryAttributNode("hprim:modeEntree", $entree, "valeur");
     
     $dateHeure = "$date $heure";
@@ -472,7 +515,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
       $mediuser->_id = $this->createPraticien($mediuser);
       
       $id400->object_id = $mediuser->_id;
-      $id400->last_update = mbDateTime();
+      $id400->last_update = CMbDT::dateTime();
       $id400->store(); 
     }
     
@@ -528,12 +571,12 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
     $sortie = $xpath->queryUniqueNode("hprim:sortie", $node);
   
     $date = $xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:date", $sortie);
-    $heure = mbTransformTime($xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $sortie), null , "%H:%M:%S");
+    $heure = CMbDT::transform($xpath->queryTextNode("hprim:dateHeureOptionnelle/hprim:heure", $sortie), null , "%H:%M:%S");
     if ($date) {
       $dateHeure = "$date $heure";
     }
     elseif (!$date && !$mbVenue->sortie_prevue) {
-      $dateHeure = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type).":00:00", 
+      $dateHeure = CMbDT::addDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$mbVenue->type).":00:00",
                     $mbVenue->entree_reelle ? $mbVenue->entree_reelle : $mbVenue->entree_prevue);
     } 
     else {
@@ -695,7 +738,7 @@ class CHPrimXMLEvenementsPatients extends CHPrimXMLEvenements {
         $num_pa->id400 = $venue->_NDA;
         if ($num_pa->loadMatchingObject()) {
           $num_pa->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_pa').$sender->_tag_sejour;
-          $num_pa->last_update = mbDateTime();
+          $num_pa->last_update = CMbDT::dateTime();
           $num_pa->store();
         }
         return false;

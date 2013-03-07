@@ -155,7 +155,7 @@ class CUserMail extends CMbObject{
 
     $this->from         = self::flatMimeDecode($source->from);
     $this->to           = self::flatMimeDecode($source->to);
-    $this->date_inbox   = mbDateTime($source->date);
+    $this->date_inbox   = CMbDT::dateTime($source->date);
     $this->uid          = $source->uid;
 
     $this->loadMatchingObject();

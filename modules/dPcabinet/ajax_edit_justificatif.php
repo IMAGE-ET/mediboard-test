@@ -59,9 +59,9 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes, $cle
     array(""          , "Rue", $facture->_ref_patient->adresse),
     array(""          , "NPA",  $facture->_ref_patient->cp),
     array(""          , "Localité", $facture->_ref_patient->ville),
-    array(""          , "Date de naissance", mbTransformTime(null, $facture->_ref_patient->naissance, "%d.%m.%Y")),
+    array(""          , "Date de naissance", CMbDT::transform(null, $facture->_ref_patient->naissance, "%d.%m.%Y")),
     array(""          , "Sexe", $facture->_ref_patient->sexe),
-    array(""          , "Date cas", mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
+    array(""          , "Date cas", CMbDT::transform(null, $facture->cloture, "%d.%m.%Y")),
     array(""          , "N° cas", "$facture->ref_accident"),
     array(""          , "N° AVS", $facture->_ref_patient->avs),
     array(""          , "N° assuré", "$_ref_assurance"),
@@ -72,7 +72,7 @@ function ajoutEntete1($pdf, $facture, $user, $praticien, $group, $colonnes, $cle
     array(""          , "Loi", "$loi"),
     array(""          , "N° contrat", ""),
     array(""          , "Motif traitement", "$facture->type_facture"),
-    array(""          , "Traitement", mbTransformTime(null, $facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".mbTransformTime(null, $facture->cloture, "%d.%m.%Y")),
+    array(""          , "Traitement", CMbDT::transform(null, $facture->_ref_first_consult->_date, "%d.%m.%Y")." - ".CMbDT::transform(null, $facture->cloture, "%d.%m.%Y")),
     array(""          , "Rôle/ Localité", "-"),
     array("Mandataire", "N° EAN/N° RCC", $praticien->ean." - ".$praticien->rcc." "),
     array("Diagnostic", "Contrat", "ICD--"),
@@ -116,7 +116,7 @@ function ajoutEntete2($pdf, $nb, $facture, $user, $praticien, $group, $colonnes)
   $pdf->SetDrawColor(0);
   $pdf->Rect(10, 18, 180,20,'DF');
   $lignes = array(
-    array("Document", "Identification", $facture->_id." ".mbTransformTime(null, null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
+    array("Document", "Identification", $facture->_id." ".CMbDT::transform(null, null, "%d.%m.%Y %H:%M:%S"), "", "Page $nb"),
     array("Auteur", "N° EAN(B)", "$user->ean", "$user->_view", " Tél: $group->tel"),
     array("Facture", "N° RCC(B)", "$user->rcc", substr($group->adresse, 0, 29)." ". $group->cp." ".$group->ville, "Fax: $group->fax"),
     array("Four.de", "N° EAN(P)", "$praticien->ean", "DR.".$praticien->_view, " Tél: $group->tel"),
@@ -261,7 +261,7 @@ foreach ($factures as $facture) {
               $cote = "C";
               if ($key == "Date") {
                 $valeur = ($acte->date) ? $acte->date : $consult->_date;
-                $valeur= mbTransformTime(null, $valeur, "%d.%m.%Y");
+                $valeur= CMbDT::transform(null, $valeur, "%d.%m.%Y");
               }
               if ($key == "Tarif") {
                 $valeur = "001";
@@ -370,7 +370,7 @@ foreach ($factures as $facture) {
               $cote = "C";
               if ($key == "Date") {
                 $valeur = ($acte->date) ? $acte->date : $consult->_date;
-                $valeur= mbTransformTime(null, $valeur, "%d.%m.%Y");
+                $valeur= CMbDT::transform(null, $valeur, "%d.%m.%Y");
               }
               if ($key == "Tarif") {
                 $valeur = $acte->_ref_caisse_maladie->code;

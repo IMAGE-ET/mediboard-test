@@ -15,14 +15,14 @@ if(!$user->isPraticien() && CCanDo::checkAdmin()){
 }
  
 // Gestion des bouton radio des dates
-$now       = mbDate();
-$week_deb  = mbDate("last sunday", $now);
-$week_fin  = mbDate("next sunday", $week_deb);
-$week_deb  = mbDate("+1 day"     , $week_deb);
-$rectif     = mbTransformTime("+0 DAY", $now, "%d")-1;
-$month_deb  = mbDate("-$rectif DAYS", $now);
-$month_fin  = mbDate("+1 month", $month_deb);
-$month_fin  = mbDate("-1 day", $month_fin);
+$now       = CMbDT::date();
+$week_deb  = CMbDT::date("last sunday", $now);
+$week_fin  = CMbDT::date("next sunday", $week_deb);
+$week_deb  = CMbDT::date("+1 day"     , $week_deb);
+$rectif     = CMbDT::transform("+0 DAY", $now, "%d")-1;
+$month_deb  = CMbDT::date("-$rectif DAYS", $now);
+$month_fin  = CMbDT::date("+1 month", $month_deb);
+$month_fin  = CMbDT::date("-1 day", $month_fin);
 
 // Chargement du filter permettant de faire la recherche
 $filter = new COperation();

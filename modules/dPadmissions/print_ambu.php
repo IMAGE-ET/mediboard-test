@@ -11,7 +11,7 @@
 CCanDo::checkRead();
 
 // Récupération des dates
-$date       = CValue::getOrSession("date", mbDate());
+$date       = CValue::getOrSession("date", CMbDT::date());
 $service_id = CValue::getOrSession("service_id");
 
 // Initialisation
@@ -53,7 +53,7 @@ foreach($sejours as $key => $_sejour){
   $_sejour->loadRefPraticien();
   $_sejour->loadRefsAffectations("sortie ASC");
   $_sejour->loadRefsOperations();
-  $_sejour->_duree = mbSubTime(mbTime($_sejour->entree_reelle), mbTime($_sejour->sortie_reelle));
+  $_sejour->_duree = CMbDT::subTime(CMbDT::time($_sejour->entree_reelle), CMbDT::time($_sejour->sortie_reelle));
   
   $affectation =& $_sejour->_ref_last_affectation;
   if($affectation->affectation_id){

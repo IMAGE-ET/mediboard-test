@@ -13,7 +13,7 @@ CCanDo::checkEdit();
 CPrescriptionLine::$contexte_recent_modif = 'ssr';
 
 $mode = CValue::get("mode", "count");
-$date    = CValue::getOrSession("date", mbDate());
+$date    = CValue::getOrSession("date", CMbDT::date());
 $kine_id = CValue::getOrSession("kine_id");
 $hide_noevents = CValue::getOrSession("hide_noevents");
 

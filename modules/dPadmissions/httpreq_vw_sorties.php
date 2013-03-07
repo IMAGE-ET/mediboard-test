@@ -16,22 +16,22 @@ $prat_id        = CValue::getOrSession("prat_id");
 $selSortis      = CValue::getOrSession("selSortis", "0");
 $order_col      = CValue::getOrSession("order_col", "patient_id");
 $order_way      = CValue::getOrSession("order_way", "ASC");
-$date           = CValue::getOrSession("date", mbDate());
-$next           = mbDate("+1 DAY", $date);
+$date           = CValue::getOrSession("date", CMbDT::date());
+$next           = CMbDT::date("+1 DAY", $date);
 $filterFunction = CValue::getOrSession("filterFunction");
 $period         = CValue::getOrSession("period");
 
 $service_id = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
 
-$date_actuelle = mbDateTime("00:00:00");
-$date_demain   = mbDateTime("00:00:00","+ 1 day");
+$date_actuelle = CMbDT::dateTime("00:00:00");
+$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
 
-$hier   = mbDate("- 1 day", $date);
-$demain = mbDate("+ 1 day", $date);
+$hier   = CMbDT::date("- 1 day", $date);
+$demain = CMbDT::date("+ 1 day", $date);
 
-$date_min = mbDateTime("00:00:00", $date);
-$date_max = mbDateTime("23:59:59", $date);
+$date_min = CMbDT::dateTime("00:00:00", $date);
+$date_max = CMbDT::dateTime("23:59:59", $date);
 //$date_min = "2012-09-23 00:00:00";
 //$date_max = "2012-09-25 23:59:59";
 
@@ -39,11 +39,11 @@ if ($period) {
   $hour = CAppUI::conf("dPadmissions hour_matin_soir");
   // Matin
   if ($period == "matin") {
-    $date_max = mbDateTime($hour, $date);
+    $date_max = CMbDT::dateTime($hour, $date);
   }
   // Soir
   else {
-    $date_min = mbDateTime($hour, $date);
+    $date_min = CMbDT::dateTime($hour, $date);
   }
 }
 

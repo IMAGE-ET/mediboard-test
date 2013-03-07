@@ -13,8 +13,8 @@ CCanDo::checkRead();
 $blood_salvage      = new CBloodSalvage();
 
 $operation_id       = CValue::getOrSession("operation_id");
-$date               = CValue::getOrSession("date", mbDate());
-$hour               = mbTime();
+$date               = CValue::getOrSession("date", CMbDT::date());
+$hour               = CMbDT::time();
 $totaltime          = "00:00:00";
 
 // Selection des plages opératoires de la journée

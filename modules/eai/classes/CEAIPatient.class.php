@@ -34,7 +34,7 @@ class CEAIPatient extends CEAIMbObject {
     $id400Patient->id400        = $idSourcePatient;
     $id400Patient->object_id    = $newPatient->_id;
     $id400Patient->_id          = null;
-    $id400Patient->last_update  = mbDateTime();
+    $id400Patient->last_update  = CMbDT::dateTime();
 
     return $id400Patient->store();
   }
@@ -89,7 +89,7 @@ class CEAIPatient extends CEAIMbObject {
       $IPP->tag          = $sender->_tag_patient;
       $IPP->object_class = "CPatient";
       $IPP->object_id    = $patient->_id;
-      $IPP->last_update  = mbDateTime();
+      $IPP->last_update  = CMbDT::dateTime();
       
       return $IPP->store();  
     }
@@ -105,7 +105,7 @@ class CEAIPatient extends CEAIMbObject {
         $IPP->object_id   = $patient->_id;
       }
         
-      $IPP->last_update = mbDateTime();
+      $IPP->last_update = CMbDT::dateTime();
       
       return $IPP->store();  
     }
@@ -138,7 +138,7 @@ class CEAIPatient extends CEAIMbObject {
         }
         
         $IPP->object_id   = $patient->_id;
-        $IPP->last_update = mbDateTime();
+        $IPP->last_update = CMbDT::dateTime();
       
         return $IPP->store();  
       }

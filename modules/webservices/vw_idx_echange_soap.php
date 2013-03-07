@@ -12,9 +12,9 @@ CCanDo::checkRead();
 
 $echange_soap_id = CValue::get("echange_soap_id");
 $page            = CValue::get('page', 0);
-$now             = mbDate();
-$_date_min       = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
-$_date_max       = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
+$now             = CMbDT::date();
+$_date_min       = CValue::getOrSession('_date_min', CMbDT::dateTime("-7 day"));
+$_date_max       = CValue::getOrSession('_date_max', CMbDT::dateTime("+1 day"));
 $service         = CValue::getOrSession("service");
 $web_service     = CValue::getOrSession("web_service"); 
 $fonction        = CValue::getOrSession("fonction"); 

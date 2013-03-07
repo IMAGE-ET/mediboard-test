@@ -14,10 +14,10 @@
 CCanDo::checkEdit();
 
 $blocage_id = CValue::getOrSession("blocage_id");
-$date_replanif = CValue::getOrSession("date_replanif", mbDate());
+$date_replanif = CValue::getOrSession("date_replanif", CMbDT::date());
 
-$date_min = mbTransformTime(null, $date_replanif, "%Y-%m-01");
-$date_max = mbDate("-1 day", mbDate("+1 month", $date_min));
+$date_min = CMbDT::transform(null, $date_replanif, "%Y-%m-01");
+$date_max = CMbDT::date("-1 day", CMbDT::date("+1 month", $date_min));
 
 $bloc = new CBlocOperatoire();
 $where = array("group_id" => "= '".CGroups::loadCurrent()->_id."'");
@@ -46,8 +46,8 @@ $smarty->assign("salles"    , $salles);
 $smarty->assign("blocages"  , $blocages);
 $smarty->assign("blocage_id", $blocage_id);
 $smarty->assign("date_replanif", $date_replanif);
-$smarty->assign("date_before", mbDate("-1 month", $date_replanif));
-$smarty->assign("date_after" , mbDate("+1 month", $date_replanif));
+$smarty->assign("date_before", CMbDT::date("-1 month", $date_replanif));
+$smarty->assign("date_after" , CMbDT::date("+1 month", $date_replanif));
 
 $smarty->display("inc_list_blocages.tpl");
 

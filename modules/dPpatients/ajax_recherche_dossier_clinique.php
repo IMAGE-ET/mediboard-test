@@ -156,12 +156,12 @@ switch ($section) {
       $where["sejour.rques"] = $ds->prepareLike("%{$sejour_data['_rques_sejour']}%");
     }
     if (!empty($sejour_data["entree"])) {
-      $from = mbDate($sejour_data['entree']);
-      $where["plageconsult.date"] = ">= '" .mbDate($sejour_data['entree'])."'";
+      $from = CMbDT::date($sejour_data['entree']);
+      $where["plageconsult.date"] = ">= '" .CMbDT::date($sejour_data['entree'])."'";
     }
     if (!empty($sejour_data["sortie"])) {
-      $to = mbDate($sejour_data['sortie']);
-      $where["plageconsult.date"] = "< '" .mbDate($sejour_data['sortie'])."'";
+      $to = CMbDT::date($sejour_data['sortie']);
+      $where["plageconsult.date"] = "< '" .CMbDT::date($sejour_data['sortie'])."'";
     }
     $data_patient = $data["CPatient"];
     if (!empty($data_patient["_age_min"])) {
@@ -187,7 +187,7 @@ switch ($section) {
       $where[] = "sejour.entree >=  '{$sejour_data['entree']}'";
       $where[] = "operations.date  >= '{$sejour_data['entree']}' OR 
                   plagesop.date >= '{$sejour_data['entree']}'";
-      $where[] = "plageconsult.date >= '".mbDate($sejour_data['entree'])."'";
+      $where[] = "plageconsult.date >= '".CMbDT::date($sejour_data['entree'])."'";
     }
     
     $where["sejour.praticien_id"] = "= '$user_id'";
@@ -197,11 +197,11 @@ switch ($section) {
       $where["sejour.rques"] = $ds->prepareLike("%{$sejour_data['_rques_sejour']}%");
     }
     if (!empty($sejour_data["entree"])) {
-      $from = mbDate($sejour_data['entree']);
-      $where["plageconsult.date"] = ">= '".mbDate($sejour_data['entree'])."'";
+      $from = CMbDT::date($sejour_data['entree']);
+      $where["plageconsult.date"] = ">= '".CMbDT::date($sejour_data['entree'])."'";
     }
     if (!empty($sejour_data["sortie"])) {
-      $to = mbDate($sejour_data['sortie']);
+      $to = CMbDT::date($sejour_data['sortie']);
       $where["sejour.entree"] = "<  '{$sejour_data['sortie']}'";
     }
     $ljoin["dossier_medical"] = "dossier_medical.object_id = sejour.sejour_id";
@@ -251,12 +251,12 @@ switch ($section) {
     
     $sejour_data = $data["CSejour"];
     if (!empty($sejour_data["entree"])) {
-      $from = mbDate($sejour_data['entree']);
+      $from = CMbDT::date($sejour_data['entree']);
       $where[] = "operations.date  >= '{$sejour_data['entree']}' OR 
                   plagesop.date >= '{$sejour_data['entree']}'";
     }
     if (!empty($sejour_data["sortie"])) {
-      $to = mbDate($sejour_data['sortie']);
+      $to = CMbDT::date($sejour_data['sortie']);
       $where[] = "operations.date  < '{$sejour_data['sortie']}' OR 
                   plagesop.date < '{$sejour_data['sortie']}'";
     }
@@ -275,10 +275,10 @@ $data_patient = $data["CPatient"];
 
 if (!$one_field_presc && !$sejour_filled && !$consult_filled && !$interv_filled) {
   if (!empty($data_patient["_age_min"])) {
-    $where[] = "DATEDIFF('".mbDateTime() . "', patients.naissance)/365 > {$data_patient['_age_min']}";
+    $where[] = "DATEDIFF('".CMbDT::dateTime() . "', patients.naissance)/365 > {$data_patient['_age_min']}";
   }
   if (!empty($data_patient["_age_max"])) {
-    $where[] = "DATEDIFF('".mbDateTime() . "', patients.naissance)/365 <= {$data_patient['_age_max']}";
+    $where[] = "DATEDIFF('".CMbDT::dateTime() . "', patients.naissance)/365 <= {$data_patient['_age_max']}";
   }
 }
 
@@ -514,20 +514,20 @@ if ($one_field) {
       $sejour = new CSejour();
       $sejour->load($_result["sejour_id"]);
       $pat->_distant_object = $sejour;
-      $pat->_age_epoque = intval(mbDaysRelative($pat->naissance, $sejour->entree)/365);
+      $pat->_age_epoque = intval(CMbDT::daysRelative($pat->naissance, $sejour->entree)/365);
     }
     else if ($consult_filled) {
       $consult = new CConsultation();
       $consult->load($_result["consultation_id"]);
       $pat->_distant_object = $consult;
-      $pat->_age_epoque = intval(mbDaysRelative($pat->naissance, $consult->_ref_plageconsult->date)/365);
+      $pat->_age_epoque = intval(CMbDT::daysRelative($pat->naissance, $consult->_ref_plageconsult->date)/365);
     }
     else if ($interv_filled) {
       $interv = new COperation();
       $interv->load($_result["operation_id"]);
       $interv->loadRefPlageOp();
       $pat->_distant_object = $interv;
-      $pat->_age_epoque = intval(mbDaysRelative($pat->naissance, $interv->_datetime_best)/365);
+      $pat->_age_epoque = intval(CMbDT::daysRelative($pat->naissance, $interv->_datetime_best)/365);
     }
     $list_patient[] = $pat;
   }
@@ -584,13 +584,13 @@ if ($export) {
       $object = $_patient->_distant_object;
       switch (get_class($object)) {
         case "CConsultation":
-          $object_view = "Consultation du " . mbDateToLocale($object->_ref_plageconsult->date) .
-            " à ".mbTransformTime(null, $object->heure, "%Hh:%M");
+          $object_view = "Consultation du " . CMbDT::dateToLocale($object->_ref_plageconsult->date) .
+            " à ".CMbDT::transform(null, $object->heure, "%Hh:%M");
           break;
         case "CSejour":
-          $object_view = "Séjour du " . mbDateToLocale(mbDate($object->entree)) . "au " . mbDateToLocale(mbDate($object->sortie));
+          $object_view = "Séjour du " . CMbDT::dateToLocale(CMbDT::date($object->entree)) . "au " . CMbDT::dateToLocale(CMbDT::date($object->sortie));
         case "COperation":
-          $object_view = "Intervention du " . mbDateToLocale(mbDate($object->_datetime_best));
+          $object_view = "Intervention du " . CMbDT::dateToLocale(CMbDT::date($object->_datetime_best));
       }
     }
     

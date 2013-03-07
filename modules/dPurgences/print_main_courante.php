@@ -17,10 +17,10 @@ $where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 
 // Par date
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
-$date_before = mbDate("-$date_tolerance DAY", $date);
-$date_after  = mbDate("+1 DAY", $date);
+$date_before = CMbDT::date("-$date_tolerance DAY", $date);
+$date_after  = CMbDT::date("+1 DAY", $date);
 $where[] = "sejour.entree BETWEEN '$date' AND '$date_after'
   OR (sejour.sortie_reelle IS NULL AND sejour.entree BETWEEN '$date_before' AND '$date_after')";
 
@@ -57,10 +57,10 @@ foreach ($sejours as &$_sejour) {
   $_sejour->_ref_patient->loadIPP();
   $_sejour->loadRefRPU();
   $_sejour->_ref_rpu->loadRefSejourMutation();
-  $_sejour->_veille = mbDate($_sejour->entree) != $date;
+  $_sejour->_veille = CMbDT::date($_sejour->entree) != $date;
   
   // Statistiques de sortie
-  if (mbDate($_sejour->sortie) == $date) {
+  if (CMbDT::date($_sejour->sortie) == $date) {
     $stats["sortie"]["total"]++;
 
     // Statistiques de mutations de sejours
@@ -93,7 +93,7 @@ foreach ($sejours as &$_sejour) {
   }
 
   // Statistiques d'entrée
-  if (mbDate($_sejour->entree) == $date) {
+  if (CMbDT::date($_sejour->entree) == $date) {
     $stats["entree"]["total"]++;
 
     // Statistiques  d'âge de patient
@@ -126,7 +126,7 @@ $smarty->assign("date"         , $date);
 $smarty->assign("stats"        , $stats);
 $smarty->assign("sejours"      , $sejours);
 $smarty->assign("offline"      , $offline);
-$smarty->assign("dateTime"     , mbDateTime());
+$smarty->assign("dateTime"     , CMbDT::dateTime());
 $smarty->assign("offlines"     , $offlines);
 
 $smarty->display("print_main_courante.tpl");

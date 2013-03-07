@@ -13,9 +13,9 @@ CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 $blood_salvage_id = CValue::getOrSession("blood_salvage_id");
 $blood_salvage = new CBloodSalvage();
 
-$date  = CValue::getOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", CMbDT::date());
 
-$modif_operation = CCanDo::edit() || $date >= mbDate();
+$modif_operation = CCanDo::edit() || $date >= CMbDT::date();
 
 $list_nurse_sspi= CPersonnel::loadListPers("reveil");
 

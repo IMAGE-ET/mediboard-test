@@ -13,7 +13,7 @@ CCanDo::checkAdmin();
 CMbObject::$useObjectCache = false;
 
 $axe    = CValue::getOrSession('axe');
-$entree = CValue::getOrSession('entree', mbDate());
+$entree = CValue::getOrSession('entree', CMbDT::date());
 $period = CValue::getOrSession('period', "MONTH");
 $count  = CValue::getOrSession('count', 30);
 $hide_cancelled = CValue::getOrSession("hide_cancelled", 1);
@@ -41,7 +41,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
       $series[$key] = array('data' => array(), "label" => utf8_encode($value[0]));
       
       foreach ($dates as $i => $_date) {
-        $_date_next = mbDate("+1 $period", $_date);
+        $_date_next = CMbDT::date("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
@@ -67,7 +67,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
     );
     
     foreach ($dates as $i => $_date) {
-      $_date_next = mbDate("+1 $period", $_date);
+      $_date_next = CMbDT::date("+1 $period", $_date);
       $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
       $_sejours = $sejour->loadList($where, null, null, null, $ljoin);
       // FIXME
@@ -108,7 +108,7 @@ function computeAttente($areas, &$series, $where, $ljoin, $dates, $period, $sejo
         $end   = $_end_object->$_end_field;
         
         if ($start && $end)
-          $times[] = mbMinutesRelative($start, $end);
+          $times[] = CMbDT::minutesRelative($start, $end);
       }
       $count = array_sum($times);
       $mean = count($times) ? $count / count($times) : 0;
@@ -157,12 +157,12 @@ switch ($period) {
     
   case "WEEK";
     $format = "%V";
-    $entree = mbDate("+1 day last sunday", $entree);
+    $entree = CMbDT::date("+1 day last sunday", $entree);
     break;
     
   case "MONTH";
     $format = "%m/%Y";
-    $entree = mbDate("first day", $entree);
+    $entree = CMbDT::date("first day", $entree);
     break;
 }
 
@@ -172,7 +172,7 @@ $date = $entree;
 $n = min($count, 120);
 while ($n--) {
   $dates[] = $date;
-  $date = mbDate("-1 $period", $date);
+  $date = CMbDT::date("-1 $period", $date);
 }
 
 $dates = array_reverse($dates);
@@ -235,7 +235,7 @@ switch ($axe) {
       $series[$key] = array('data' => array(), 'label' => "$label ans");
       
       foreach ($dates as $i => $_date) {
-        $_date_next = mbDate("+1 $period", $_date);
+        $_date_next = CMbDT::date("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
@@ -263,7 +263,7 @@ switch ($axe) {
       $series[$key] = array('data' => array(), 'label' => $label);
       
       foreach ($dates as $i => $_date) {
-        $_date_next = mbDate("+1 $period", $_date);
+        $_date_next = CMbDT::date("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
@@ -290,7 +290,7 @@ switch ($axe) {
       $series[$key] = array('data' => array(), 'label' => $label);
       
       foreach ($dates as $i => $_date) {
-        $_date_next = mbDate("+1 $period", $_date);
+        $_date_next = CMbDT::date("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
@@ -320,7 +320,7 @@ switch ($axe) {
       $series[$key] = array('data' => array(), 'label' => $label);
       
       foreach ($dates as $i => $_date) {
-        $_date_next = mbDate("+1 $period", $_date);
+        $_date_next = CMbDT::date("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
@@ -345,7 +345,7 @@ switch ($axe) {
       $series[$key] = array('data' => array());
       
       foreach ($dates as $i => $_date) {
-        $_date_next = mbDate("+1 $period", $_date);
+        $_date_next = CMbDT::date("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $sejour->countList($where, null, $ljoin);
         $total += $count;
@@ -395,7 +395,7 @@ switch ($axe) {
       
       $sub_total = 0;
       foreach ($dates as $i => $_date) {
-        $_date_next = mbDate("+1 $period", $_date);
+        $_date_next = CMbDT::date("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $where['sejour.etablissement_sortie_id'] = ($_id === "none" ? "IS NULL" : "= '$_id'");
         $count = $sejour->countList($where, null, $ljoin);
@@ -443,7 +443,7 @@ switch ($axe) {
       
       $sub_total = 0;
       foreach ($dates as $i => $_date) {
-        $_date_next = mbDate("+1 $period", $_date);
+        $_date_next = CMbDT::date("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $where['sejour.service_sortie_id'] = ($_id === "none" ? "IS NULL" : "= '$_id'");
         $count = $sejour->countList($where, null, $ljoin);
@@ -666,7 +666,7 @@ switch ($axe) {
     
     // On compte le nombre total de rpu par date
     foreach($dates as $i => $_date) {
-      $_date_next = mbDate("+1 $period", $_date);
+      $_date_next = CMbDT::date("+1 $period", $_date);
       $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
       $totaux[$i] = $rpu->countList($where, null, $ljoin);
     }
@@ -688,7 +688,7 @@ switch ($axe) {
           $total += $totaux[$i];
           continue;
         }
-        $_date_next = mbDate("+1 $period", $_date);
+        $_date_next = CMbDT::date("+1 $period", $_date);
         $where['sejour.entree'] = "BETWEEN '$_date' AND '$_date_next'";
         $count = $rpu->countList($where, null, $ljoin);
         $totaux[$i] -= $count;
@@ -705,7 +705,7 @@ switch ($axe) {
 // Ticks
 $ticks = array();
 foreach ($dates as $i => $_date) {
-  $ticks[$i] = array($i, mbTransformTime(null, $_date, $format));
+  $ticks[$i] = array($i, CMbDT::transform(null, $_date, $format));
 }
 
 $group_view = utf8_encode($group->_view);

@@ -15,7 +15,7 @@ CCanDo::checkRead();
 
 $mode = CValue::get("mode", "html");
 
-$deblist = CValue::getOrSession("deblistbloc", mbDate("-1 DAY"));
+$deblist = CValue::getOrSession("deblistbloc", CMbDT::date("-1 DAY"));
 $finlist = $deblist;
 $finlist = max(CValue::get("finlistbloc", $deblist), $deblist);
 $bloc_id = CValue::getOrSession("bloc_id");

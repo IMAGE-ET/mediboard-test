@@ -14,8 +14,8 @@ CCanDo::checkRead();
 $group = CGroups::loadCurrent();
 
 $filter = new CSejour();
-$filter->_date_min      = CValue::get("_date_min", mbDate() ." 06:00:00");
-$filter->_date_max      = CValue::get("_date_max", mbDate() ." 21:00:00");
+$filter->_date_min      = CValue::get("_date_min", CMbDT::date() ." 06:00:00");
+$filter->_date_max      = CValue::get("_date_max", CMbDT::date() ." 21:00:00");
 $filter->_horodatage    = CValue::get("_horodatage", "entree_prevue");
 $filter->_service       = CValue::get("_service", 0);
 $filter->_filter_type   = CValue::get("_filter_type", 0);
@@ -126,7 +126,7 @@ foreach ($sejours as $key => &$sejour) {
     $operation->loadRefsFwd();
   }
 
-  $curr_date = mbDate(null, $sejour->{$filter->_horodatage});
+  $curr_date = CMbDT::date(null, $sejour->{$filter->_horodatage});
   $curr_prat = $sejour->praticien_id;
   $listDays[$curr_date][$curr_prat]["praticien"] =& $sejour->_ref_praticien;
   $listDays[$curr_date][$curr_prat]["sejours"][] =& $sejour;

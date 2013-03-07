@@ -588,7 +588,7 @@ class CFacture extends CMbObject {
     $ligne->type          = $acte_ccam->_class;
     $ligne->object_id     = $this->_id;
     $ligne->object_class  = $this->_class;
-    $ligne->date          = mbDate($acte_ccam->execution);
+    $ligne->date          = CMbDT::date($acte_ccam->execution);
     $ligne->montant_base  = $acte_ccam->montant_base;
     $ligne->montant_depassement = $acte_ccam->montant_depassement;
     $ligne->quantite      = 1;

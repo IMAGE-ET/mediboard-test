@@ -12,7 +12,7 @@ CCanDo::checkRead();
 
 $rhs_date_monday = CValue::get('rhs_date_monday');
 
-$date = mbDate();
+$date = CMbDT::date();
 $rhs = new CRHS();
 $join['sejour'] = "sejour.sejour_id = rhs.sejour_id";
 $join['patients'] = "patients.patient_id = sejour.patient_id";

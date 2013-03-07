@@ -204,7 +204,7 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
                 continue;
               }
               $_id_400->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$tap_NDA;
-              $_id_400->last_update = mbDateTime();
+              $_id_400->last_update = CMbDT::dateTime();
               $_id_400->store();
             }
           }

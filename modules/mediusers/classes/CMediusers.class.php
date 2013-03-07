@@ -1335,8 +1335,8 @@ class CMediusers extends CMbObject {
   }
 
   function getNbJoursPlanningSSR($date){
-    $sunday = mbDate("next sunday", mbDate("- 1 DAY", $date));
-    $saturday = mbDate("-1 DAY", $sunday);
+    $sunday = CMbDT::date("next sunday", CMbDT::date("- 1 DAY", $date));
+    $saturday = CMbDT::date("-1 DAY", $sunday);
 
     $_evt = new CEvenementSSR();
     $where = array();

@@ -33,7 +33,7 @@ class CHL7v2EventADTA44 extends CHL7v2EventADT implements CHL7EventADTA43 {
    * @return DateTime Event occured
    */
   function getEVNPlannedDateTime($sejour) {
-    return mbDateTime();
+    return CMbDT::dateTime();
   }
 
   /**

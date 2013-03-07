@@ -13,7 +13,7 @@ $group = CGroups::loadCurrent();
 $ds = CSQLDataSource::get("std");
 $service_id = CValue::getOrSession("service_id" , null);
 $type       = CValue::getOrSession("type"       , null);
-$date       = CValue::getOrSession("date"       , mbDate());
+$date       = CValue::getOrSession("date"       , CMbDT::date());
 
 $listRepas   = new CRepas;
 $where = array();

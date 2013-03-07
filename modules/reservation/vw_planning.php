@@ -18,7 +18,7 @@ if (!isset($current_m)){
 }
 
 
-$date_planning = CValue::getOrSession("date_planning", mbDate());
+$date_planning = CValue::getOrSession("date_planning", CMbDT::date());
 $praticien_id  = CValue::getOrSession("praticien_id", "");
 $bloc_id       = CValue::getOrSession("bloc_id", "");
 $show_cancelled = CValue::getOrSession("show_cancelled", 0);

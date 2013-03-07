@@ -14,14 +14,14 @@ $listPrat = new CMediusers;
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
 // Période
-$today = mbDate();
+$today = CMbDT::date();
 $debut = CValue::getOrSession("debut", $today);
-$debut = mbDate("last sunday", $debut);
-$fin   = mbDate("next sunday", $debut);
-$debut = mbDate("+1 day", $debut);
+$debut = CMbDT::date("last sunday", $debut);
+$fin   = CMbDT::date("next sunday", $debut);
+$debut = CMbDT::date("+1 day", $debut);
 
-$prec = mbDate("-1 week", $debut);
-$suiv = mbDate("+1 week", $debut);
+$prec = CMbDT::date("-1 week", $debut);
+$suiv = CMbDT::date("+1 week", $debut);
 
 // Plage selectionnée
 $plage_id = CValue::getOrSession("plage_id", null);
@@ -33,7 +33,7 @@ $plage->loadRefsNotes();
 // Sélection des plages
 $plages = array();
 for ($i = 0; $i < 7; $i++) {
-  $date = mbDate("+$i day", $debut);
+  $date = CMbDT::date("+$i day", $debut);
   $where["date"] = "= '$date'";
   $plagesPerDay = $plage->loadList($where);
   foreach ($plagesPerDay as $_plage) {

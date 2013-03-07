@@ -19,7 +19,7 @@ if(CValue::post("mode_sortie") == "mutation" && CValue::post("type") == "urg" &&
 	
   //Création de l'affectation du patient 
   $affectation = new CAffectation();
-  $affectation->entree = mbDateTime();
+  $affectation->entree = CMbDT::dateTime();
   $affectation->lit_id = $lit_id;
   $affectation->sejour_id = $sejour_id;
   $affectation->sortie = $sejour->sortie_prevue;

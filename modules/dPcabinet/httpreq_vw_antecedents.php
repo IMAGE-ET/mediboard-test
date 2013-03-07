@@ -31,7 +31,7 @@ $smarty->assign("antecedent", new CAntecedent());
 $smarty->assign("traitement", new CTraitement());
 $smarty->assign("_is_anesth", "1");
 $smarty->assign("userSel", $userSel);
-$smarty->assign("today", mbDate());
+$smarty->assign("today", CMbDT::date());
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("sejour", $sejour);
 $smarty->assign("show_header", $show_header);

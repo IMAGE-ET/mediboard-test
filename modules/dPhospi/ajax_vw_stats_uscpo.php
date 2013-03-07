@@ -17,12 +17,12 @@ $default_week = CAppUI::conf("dPplanningOp COperation default_week_stat_uscpo");
 
 switch ($default_week) {
   case "last":
-    $date_min   = CValue::getOrSession("date_min", mbDate("-1 week"));
-    $date_max   = CValue::getOrSession("date_max", mbDate());
+    $date_min   = CValue::getOrSession("date_min", CMbDT::date("-1 week"));
+    $date_max   = CValue::getOrSession("date_max", CMbDT::date());
     break;
   case "next":
-    $date_min   = CValue::getOrSession("date_min", mbDate());
-    $date_max   = CValue::getOrSession("date_max", mbDate("+1 week"));
+    $date_min   = CValue::getOrSession("date_min", CMbDT::date());
+    $date_max   = CValue::getOrSession("date_max", CMbDT::date("+1 week"));
 }
 
 $service_id = CValue::getOrSession("service_id", "");
@@ -53,10 +53,10 @@ $serie = array(
   'label' => utf8_encode("Nombre de nuits prévues")
 );
 
-$today = mbDate();
+$today = CMbDT::date();
 
 while ($day <= $date_max) {
-  $display = mbDateToLocale($day);
+  $display = CMbDT::dateToLocale($day);
   
   // On préfixe d'une étoile si c'est le jour courant
   if ($day == $today) {
@@ -66,7 +66,7 @@ while ($day <= $date_max) {
   $dates[] = array(count($dates), $display);
   $where[2] = "plagesop.date <= '$day' AND DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) > '$day'";
   $count = count($operation->loadIds($where, null, null, null, $ljoin));
-  $day = mbDate("+1 day", $day);
+  $day = CMbDT::date("+1 day", $day);
   $serie['data'][] = array(count($serie['data'])-0.2, $count);
 }
 
@@ -83,7 +83,7 @@ $ljoin["affectation"] = "affectation.sejour_id = operations.sejour_id";
 while ($day <= $date_max) {
   $where[2] = "plagesop.date <= '$day' AND DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) > '$day'";
   $where[3] = "DATE_ADD(plagesop.date, INTERVAL duree_uscpo DAY) <= affectation.sortie";
-  $day = mbDate("+1 day", $day);
+  $day = CMbDT::date("+1 day", $day);
   $count = count($operation->loadIds($where, null, null, null, $ljoin));
   $serie['data'][] = array(count($serie['data'])+0.2, intval($count)); 
 }
@@ -113,7 +113,7 @@ $day = $date_min;
 
 while ($day <= $date_max) {
   $dates[] = $day;
-  $day = mbDate("+1 day", $day);
+  $day = CMbDT::date("+1 day", $day);
 }
 
 $smarty = new CSmartyDP;

@@ -27,13 +27,13 @@ function buildPartialTables($tableName, $tableFields, $queryFields, $querySelect
   $intervalle = CValue::get("intervalle");
   
   switch ($intervalle) {
-    case "month" : $deb = mbDate("-1 month");
-    case "6month": $deb = mbDate("-6 month");
-    case "year"  : $deb = mbDate("-1  year");
-    default      : $deb = mbDate("-10 year");
+    case "month" : $deb = CMbDT::date("-1 month");
+    case "6month": $deb = CMbDT::date("-6 month");
+    case "year"  : $deb = CMbDT::date("-1  year");
+    default      : $deb = CMbDT::date("-10 year");
   }
   
-  $fin = mbDate();
+  $fin = CMbDT::date();
 
   // Suppression si existe
   $drop = "DROP TABLE IF EXISTS `$tableName`";

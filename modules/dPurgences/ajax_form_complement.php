@@ -42,7 +42,7 @@ if ($rpu->_id || $rpu->sejour_id) {
   $sejour->loadRefsNotes();
 }
 else {
-  $rpu->_entree         = mbDateTime();
+  $rpu->_entree         = CMbDT::dateTime();
   $sejour               = new CSejour;
 }
 

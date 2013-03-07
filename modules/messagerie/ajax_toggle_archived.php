@@ -26,7 +26,7 @@ if (!$mail->_id) {
 $arch = $mail->archived = ($mail->archived) ? 0 : 1;
 
 if (!$mail->date_read) {
-  $mail->date_read = mbDateTime();
+  $mail->date_read = CMbDT::dateTime();
 }
 if ($msg = $mail->store()) {
   CAppUI::stepAjax($msg, UI_MSG_ERROR);

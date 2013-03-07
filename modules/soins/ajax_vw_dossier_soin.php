@@ -22,7 +22,7 @@ $without_check_date = CValue::get("without_check_date", "0");
 $hide_close  = CValue::get("hide_close", 0);
 
 if (!$date) {
-  $date = mbDate();
+  $date = CMbDT::date();
 }
 
 CPrescription::$mode_plan_soins = true;
@@ -108,11 +108,11 @@ if (CModule::getActive("dPprescription")) {
   
   if(!$without_check_date && !($object_id && $object_class) && !$chapitre){
     // Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille (cas de la nuit)
-    $datetime_limit = mbDateTime($configs["Poste 1"].":00:00");  
-    if(mbDateTime() < $datetime_limit){
-      $date = mbDate("- 1 DAY");
+    $datetime_limit = CMbDT::dateTime($configs["Poste 1"].":00:00");
+    if(CMbDT::dateTime() < $datetime_limit){
+      $date = CMbDT::date("- 1 DAY");
     } else {
-      $date = mbDate();
+      $date = CMbDT::date();
     }
   }
   
@@ -291,7 +291,7 @@ if (CModule::getActive("dPprescription")) {
               $date_operation = $_operation->date;
             }
             $hour_op = $_operation->debut_op ? $_operation->debut_op : $_operation->time_operation; 
-            $hour_operation = mbTransformTime(null, $hour_op, '%H');
+            $hour_operation = CMbDT::transform(null, $hour_op, '%H');
             $hour_operation .= ":00:00";
             $operations["$date_operation $hour_operation"] = $hour_op;
             $operations["$date_operation $hour_operation object"] = $_operation;
@@ -308,7 +308,7 @@ if (CModule::getActive("dPprescription")) {
 $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
 
 $prolongation_time = CAppUI::conf("dPprescription CPrescription prolongation_time");
-$sortie_sejour = ($sejour->sortie_reelle || !$prolongation_time) ? $sejour->sortie : mbDateTime("+ $prolongation_time HOURS", $sejour->sortie);
+$sortie_sejour = ($sejour->sortie_reelle || !$prolongation_time) ? $sejour->sortie : CMbDT::dateTime("+ $prolongation_time HOURS", $sejour->sortie);
 
 $count_perop_adm = 0;
 if (CAppUI::conf("dPprescription CPrescription show_perop_suivi_soins") && $prescription->_id && !$chapitre){
@@ -365,15 +365,15 @@ if (CModule::getActive("dPprescription")){
 
 $smarty->assign("sejour"              , $sejour);
 $smarty->assign("date"                , $date);
-$smarty->assign("now"                 , mbDateTime());
-$smarty->assign("real_date"           , mbDate());
-$smarty->assign("real_time"           , mbTime());
+$smarty->assign("now"                 , CMbDT::dateTime());
+$smarty->assign("real_date"           , CMbDT::date());
+$smarty->assign("real_time"           , CMbDT::time());
 $smarty->assign("operations"          , $operations);
 $smarty->assign("mode_dossier"        , $mode_dossier);
 
-$smarty->assign("prev_date"           , mbDate("- 1 DAY", $date));
-$smarty->assign("next_date"           , mbDate("+ 1 DAY", $date));
-$smarty->assign("today"               , mbDate());
+$smarty->assign("prev_date"           , CMbDT::date("- 1 DAY", $date));
+$smarty->assign("next_date"           , CMbDT::date("+ 1 DAY", $date));
+$smarty->assign("today"               , CMbDT::date());
 $smarty->assign("move_dossier_soin"   , false);
 $smarty->assign("params"              , CConstantesMedicales::$list_constantes);
 $smarty->assign("hide_close"          , $hide_close);

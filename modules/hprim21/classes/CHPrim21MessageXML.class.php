@@ -99,7 +99,7 @@ class CHPrim21MessageXML extends CMbXMLDocument {
     
     $H = $this->queryNode("H", null, $foo, true);
     
-    $data['dateHeureProduction'] = mbDateTime($this->queryTextNode("H.13/TS.1", $H));
+    $data['dateHeureProduction'] = CMbDT::dateTime($this->queryTextNode("H.13/TS.1", $H));
     $data['filename']            = $this->queryTextNode("H.2", $H);
     
     return $data;

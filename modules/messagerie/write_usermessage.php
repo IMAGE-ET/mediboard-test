@@ -18,7 +18,7 @@ $usermessage->loadRefsFwd();
 
 // Vérifiction de la première lecture par le destinataire
 if ($usermessage->to == $user->_id && $usermessage->date_sent && ! $usermessage->date_read) {
-  $usermessage->date_read = mbDateTime();
+  $usermessage->date_read = CMbDT::dateTime();
   $usermessage->store();
 }
 

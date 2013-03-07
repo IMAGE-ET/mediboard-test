@@ -102,7 +102,7 @@ class CMovement extends CMbObject {
   function store() {
     // Création idex sur le mouvement (movement_type + original_trigger_code + object_guid + tag (mvt_id))
     
-    $this->last_update = mbDateTime();
+    $this->last_update = CMbDT::dateTime();
     
     return parent::store();
   }

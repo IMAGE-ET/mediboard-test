@@ -23,11 +23,11 @@ if ($mediuser->isPraticien()) {
 $chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
 
 // Période
-$today = mbDate();
+$today = CMbDT::date();
 $debut = CValue::getOrSession("debut", $today);
-$debut = mbDate("last sunday", $debut);
-$fin   = mbDate("next sunday", $debut);
-$debut = mbDate("+1 day", $debut);
+$debut = CMbDT::date("last sunday", $debut);
+$fin   = CMbDT::date("next sunday", $debut);
+$debut = CMbDT::date("+1 day", $debut);
 
 $is_in_period = ($today >= $debut) && ($today <= $fin);
 
@@ -35,7 +35,7 @@ $is_in_period = ($today >= $debut) && ($today <= $fin);
 $plageconsult_id = CValue::getOrSession("plageconsult_id", null);
 $plageSel = new CPlageconsult();
 if(($plageconsult_id === null) && $chirSel && $is_in_period) {
-  $nowTime = mbTime();
+  $nowTime = CMbDT::time();
   $where = array(
     "chir_id" => "= '$chirSel'",
     "date"    => "= '$today'",
@@ -95,7 +95,7 @@ if(CAppUI::pref("pratOnlyForConsult", 1)) {
 
 $listDaysSelect = array();
 for($i = 0; $i < 7; $i++) {
-  $dateArr = mbDate("+$i day", $debut);
+  $dateArr = CMbDT::date("+$i day", $debut);
   $listDaysSelect[$dateArr] = $dateArr;    
 }
 
@@ -110,8 +110,8 @@ $max = CPlageconsult::$hours_stop.":".end(CPlageconsult::$minutes).":00";
 // de configuration hours_start et hours_stop
 $hours = CPlageconsult::$hours;
 
-$min_hour = sprintf("%01d", mbTransformTime($min, null, "%H"));
-$max_hour = sprintf("%01d", mbTransformTime($max, null, "%H"));
+$min_hour = sprintf("%01d", CMbDT::transform($min, null, "%H"));
+$max_hour = sprintf("%01d", CMbDT::transform($max, null, "%H"));
 
 if (!isset($hours[$min_hour])) {
   for($i = $min_hour; $i < CPlageconsult::$hours_start; $i++) {

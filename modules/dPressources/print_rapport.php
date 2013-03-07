@@ -11,8 +11,8 @@ CCanDo::checkRead();
 
 //Recuperation des identifiants pour les filtres
 $filter = new CPlageressource;
-$filter->_date_min = CValue::getOrSession("_date_min",mbDate());
-$filter->_date_max = CValue::getOrSession("_date_max",mbDate());
+$filter->_date_min = CValue::getOrSession("_date_min",CMbDT::date());
+$filter->_date_max = CValue::getOrSession("_date_max",CMbDT::date());
 $filter->prat_id = CValue::getOrSession("prat_id");
 $filter->paye = CValue::getOrSession("type");
 
@@ -21,8 +21,8 @@ if(!$prat_id) {
   echo "Vous devez choisir un praticien valide";
   CApp::rip();
 }
-if($filter->_date_max > mbDate())
- $filter->_date_max = mbDate();
+if($filter->_date_max > CMbDT::date())
+ $filter->_date_max = CMbDT::date();
 $filter->paye = CValue::get("type", 0);
 $total = 0;
 

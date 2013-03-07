@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$date     = CValue::getOrSession("date"    , mbDate());
+$date     = CValue::getOrSession("date"    , CMbDT::date());
 $groupres = CValue::getOrSession("groupres", 1);
 $element  = CValue::getOrSession("element" , "duration");
 $interval = CValue::getOrSession("interval", "day");
@@ -18,19 +18,19 @@ $numelem  = CValue::getOrSession("numelem" , 6);
 
 CAppUI::requireModuleFile('dPstats', 'graph_ressourceslog');
 
-$next     = mbDate("+1 DAY", $date);
+$next     = CMbDT::date("+1 DAY", $date);
 switch($interval) {
   case "day":
-    $from = mbDate("-1 DAY", $next);
+    $from = CMbDT::date("-1 DAY", $next);
     break;
   case "month":
-    $from = mbDate("-1 MONTH", $next);
+    $from = CMbDT::date("-1 MONTH", $next);
     break;
   case "hyear":
-    $from = mbDate("-6 MONTH", $next);
+    $from = CMbDT::date("-6 MONTH", $next);
     break;
   default:
-    $from = mbDate("-1 DAY", $next);
+    $from = CMbDT::date("-1 DAY", $next);
 }
 
 

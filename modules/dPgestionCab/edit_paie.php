@@ -35,8 +35,8 @@ $paramsPaie->loadFromUser($employe->employecab_id);
 $fichePaie = new CFichePaie();
 $fichePaie->load($fiche_paie_id);
 if (!$fichePaie->fiche_paie_id) {
-  $fichePaie->debut = mbDate();
-  $fichePaie->fin = mbDate();
+  $fichePaie->debut = CMbDT::date();
+  $fichePaie->fin = CMbDT::date();
   $fichePaie->params_paie_id = $paramsPaie->_id;
 }
 

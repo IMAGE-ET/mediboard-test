@@ -97,8 +97,8 @@ class CMedinetSender extends CDocumentSender {
       
       $doc_type = 29;
       
-      $act_dateActe = mbDate($object->entree_reelle);
-      $act_dateValidationActe = mbDate($object->entree_reelle);
+      $act_dateActe = CMbDT::date($object->entree_reelle);
+      $act_dateValidationActe = CMbDT::date($object->entree_reelle);
         
       $etab_id = $object->_ref_group->_id;
       $etab_nom = $object->_ref_group->text;
@@ -112,8 +112,8 @@ class CMedinetSender extends CDocumentSender {
       
       $doc_type = 8;
       
-      $act_dateActe = mbDate($object->_datetime);
-      $act_dateValidationActe = mbDate($object->_datetime);
+      $act_dateActe = CMbDT::date($object->_datetime);
+      $act_dateValidationActe = CMbDT::date($object->_datetime);
         
       $etab_id = $object->_ref_sejour->_ref_group->_id;
       $etab_nom = $object->_ref_sejour->_ref_group->text;
@@ -122,8 +122,8 @@ class CMedinetSender extends CDocumentSender {
     if ($object instanceof CConsultation) {
     	$object->loadRefConsultAnesth();
     	
-    	$act_dateActe = mbDate($object->_ref_plageconsult->date);
-      $act_dateValidationActe = mbDate($object->_ref_plageconsult->date);
+    	$act_dateActe = CMbDT::date($object->_ref_plageconsult->date);
+      $act_dateValidationActe = CMbDT::date($object->_ref_plageconsult->date);
       
     	if ($object->_ref_consult_anesth instanceof CConsultAnesth) {
     		$object->_ref_consult_anesth->loadRefSejour();
@@ -200,7 +200,7 @@ class CMedinetSender extends CDocumentSender {
       $log->object_class = $docItem->_class;
       $log->loadMatchingObject();
       
-      $act_dateCreationActe = mbDate($log->date); 
+      $act_dateCreationActe = CMbDT::date($log->date);
       $fichier = base64_encode($docItem->getBinaryContent());
     }
     if ($docItem instanceof CFile) {
@@ -209,7 +209,7 @@ class CMedinetSender extends CDocumentSender {
       $doc_nomReel = $docItem->file_real_filename;
       $doc_typeMime = $docItem->file_type;
       
-      $act_dateCreationActe = mbDate($docItem->file_date);
+      $act_dateCreationActe = CMbDT::date($docItem->file_date);
       $fichier = base64_encode($docItem->getBinaryContent());
     }
     $doc_commentaire = "";
@@ -296,7 +296,7 @@ class CMedinetSender extends CDocumentSender {
       
     $id400->object_id = $docItem->_id;
     $id400->_id = null;
-    $id400->last_update = mbDateTime(); 
+    $id400->last_update = CMbDT::dateTime();
     
     $id400->store();
 
@@ -334,7 +334,7 @@ class CMedinetSender extends CDocumentSender {
       
     $id400->object_id = $docItem->_id;
     $id400->_id = null;
-    $id400->last_update = mbDateTime();
+    $id400->last_update = CMbDT::dateTime();
     
     $id400->store();
     

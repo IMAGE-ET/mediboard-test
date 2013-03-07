@@ -243,7 +243,7 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
   }
   
   function getDatePayment(DOMNode $node) {
-    return mbDate($this->queryTextNode("REG.5/TS.1", $node));
+    return CMbDT::date($this->queryTextNode("REG.5/TS.1", $node));
   }
   
   function mapAndStorePayment(DOMNode $node, CFactureCabinet $facture, CIdSante400 $idex) {
@@ -282,7 +282,7 @@ class CHprim21RecordPayment extends CHPrim21MessageXML {
     if (!$idex->object_id) {
       $idex->object_id = $reglement->_id;
     }
-    $idex->last_update = mbDateTime();
+    $idex->last_update = CMbDT::dateTime();
     if ($msg = $idex->store()) {
       return $msg;
     }

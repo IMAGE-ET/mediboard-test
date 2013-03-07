@@ -9,9 +9,9 @@
 
 CCanDo::checkRead();
 
-$date = CValue::getOrSession("date", mbDate());
-$date_now = mbDate();
-$modif_operation = CCanDo::edit() || $date >= mbDate();
+$date = CValue::getOrSession("date", CMbDT::date());
+$date_now = CMbDT::date();
+$modif_operation = CCanDo::edit() || $date >= CMbDT::date();
 
 // Selection des plages opératoires de la journée
 $plages = new CPlageOp;

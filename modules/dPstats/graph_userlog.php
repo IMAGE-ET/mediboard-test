@@ -32,11 +32,11 @@ function graphUserLog($startx, $endx, $interval, $user_id) {
       break;
   }
   
-  $endx   = ($interval == "day") ? mbDate($endx) : mbDateTime($endx);
+  $endx   = ($interval == "day") ? CMbDT::date($endx) : CMbDT::dateTime($endx);
   $datax  = array();
   $i = 0;
-  for ($d = $startx; $d <= $endx; $d = mbDateTime($step, $d)) {
-    $period = mbTransformTime(null, $d, $period_format);
+  for ($d = $startx; $d <= $endx; $d = CMbDT::dateTime($step, $d)) {
+    $period = CMbDT::transform(null, $d, $period_format);
     $datax[$period] = array($i, $period);
     $i++;
   }
@@ -152,8 +152,8 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
   
   $datax = array();
   $i = 0;
-  for($d = $startx; $d <= $endx; $d = mbDateTime($step, $d)) {
-    $datax[] = array($i, mbTransformTime(null, $d, $period_format));
+  for($d = $startx; $d <= $endx; $d = CMbDT::dateTime($step, $d)) {
+    $datax[] = array($i, CMbDT::transform(null, $d, $period_format));
     $i++;
   }
   
@@ -232,7 +232,7 @@ function graphUserLogV2($module_name, $action_name, $startx, $endx, $interval = 
     
   }
   
-  $subtitle = mbTransformTime(null, $endx, CAppUI::conf("longdate"));
+  $subtitle = CMbDT::transform(null, $endx, CAppUI::conf("longdate"));
   
   $options = array(
     'title' => utf8_encode($title),

@@ -74,7 +74,7 @@ class CHPRSegmentH extends CHL7v2Segment {
     );
     
     // H-14 : Date/Time of Message
-    $data[] = mbDateTime();
+    $data[] = CMbDT::dateTime();
 
     $this->fill($data);
   }

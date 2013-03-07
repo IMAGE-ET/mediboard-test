@@ -9,8 +9,8 @@
  */
 
 function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codes_ccam = "", $type_hospi = "", $hors_plage) {
-  if (!$debut) $debut = mbDate("-1 YEAR");
-  if (!$fin) $fin = mbDate();
+  if (!$debut) $debut = CMbDT::date("-1 YEAR");
+  if (!$fin) $fin = CMbDT::date();
   
   $prat = new CMediusers;
   $prat->load($prat_id);
@@ -30,8 +30,8 @@ function graphActivite($debut = null, $fin = null, $prat_id = 0, $salle_id = 0, 
     'markers' => array('show' => true),
     'bars'    => array('show' => false),
   );
-  for ($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-    $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
+  for ($i = $debut; $i <= $fin; $i = CMbDT::date("+1 MONTH", $i)) {
+    $ticks[] = array(count($ticks), CMbDT::transform("+0 DAY", $i, "%m/%Y"));
     $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
   

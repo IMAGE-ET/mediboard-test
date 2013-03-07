@@ -11,8 +11,8 @@
 CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
 CAppUI::requireLibraryFile("jpgraph/src/jpgraph_bar");
 
-$debut      = CValue::get("debut"     , mbDate("-1 YEAR"));
-$fin        = CValue::get("fin"       , mbDate());
+$debut      = CValue::get("debut"     , CMbDT::date("-1 YEAR"));
+$fin        = CValue::get("fin"       , CMbDT::date());
 $prat_id    = CValue::get("prat_id"   , 0);
 $service_id = CValue::get("service_id", 0);
 
@@ -22,8 +22,8 @@ $pratSel->load($prat_id);
 $service = new CSalle;
 $service->load($service_id);
 
-for ($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-  $datax[] = mbTransformTime("+0 DAY", $i, "%m/%Y");
+for ($i = $debut; $i <= $fin; $i = CMbDT::date("+1 MONTH", $i)) {
+  $datax[] = CMbDT::transform("+0 DAY", $i, "%m/%Y");
 }
 
 $sql = "SELECT * FROM service WHERE";

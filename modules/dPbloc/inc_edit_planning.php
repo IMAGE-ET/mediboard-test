@@ -8,7 +8,7 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
-$date       = CValue::getOrSession("date", mbDate());
+$date       = CValue::getOrSession("date", CMbDT::date());
 $plageop_id = CValue::getOrSession("plageop_id");
 
 $listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");

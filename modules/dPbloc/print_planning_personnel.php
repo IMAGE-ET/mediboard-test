@@ -30,7 +30,7 @@ $date_temp = $date_min;
 while ($date_temp < $date_max) {
   $dates[] = $date_temp;
   //$personnel[$date_temp] = array();
-  $date_temp = mbDate("+ 1 day", $date_temp);
+  $date_temp = CMbDT::date("+ 1 day", $date_temp);
 }
 
 $hours = array();
@@ -39,7 +39,7 @@ $hour_max = CAppUI::conf("dPbloc CPlageOp hours_stop");
 
 while ($hour_temp < $hour_max) {
   $hours[] = $hour_temp;
-  $hour_temp = mbTime("+1 hour", $hour_temp);
+  $hour_temp = CMbDT::time("+1 hour", $hour_temp);
 }
 
 $plage = new CPlageOp;

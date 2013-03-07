@@ -73,7 +73,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     
     // PID-7: Date/Time of Birth (TS) (optional)
     if ($patient->naissance) {
-      $data[] = isLunarDate($patient->naissance) ? null : $patient->naissance;
+      $data[] = CMbDT::isLunarDate($patient->naissance) ? null : $patient->naissance;
     }
     else {
       $data[] = null;

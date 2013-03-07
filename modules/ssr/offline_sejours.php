@@ -12,7 +12,7 @@ CCanDo::checkRead();
 
 CApp::setMemoryLimit("256M");
 
-$date = CValue::get("date", mbDate());
+$date = CValue::get("date", CMbDT::date());
 
 // Chargement des sejours SSR pour la date courante
 $group_id = CGroups::loadCurrent()->_id;

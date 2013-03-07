@@ -19,9 +19,9 @@ $conge = new CPlageConge();
 $conge->load($conge_id);
 
 // Week dates
-$date = CValue::getOrSession("date", mbDate());
-$monday = mbDate("last monday", mbDate("+1 DAY", $date));
-$sunday = mbDate("next sunday", mbDate("-1 DAY", $date));
+$date = CValue::getOrSession("date", CMbDT::date());
+$monday = CMbDT::date("last monday", CMbDT::date("+1 DAY", $date));
+$sunday = CMbDT::date("next sunday", CMbDT::date("-1 DAY", $date));
 
 // Pseudo plage for user activity
 if (preg_match("/[deb|fin][\W][\d]+/", $conge_id)) {
@@ -93,7 +93,7 @@ if ($type == 'kine') {
   $transfer_counts = array();
     
   $date_min = $conge->date_debut;
-  $date_max = mbDate("+1 DAY", $conge->date_fin);
+  $date_max = CMbDT::date("+1 DAY", $conge->date_fin);
   foreach ($sejours as $_sejour) {
   	$bilan = $_sejour->loadRefBilanSSR();
     $tech = $bilan->loadRefTechnicien();
@@ -114,12 +114,12 @@ if ($type == "reeducateur") {
   $where["therapeute_id"] = " = '$conge->user_id'";
   $transfer_count = 0;
   foreach (range(0,6) as $weekday) {
-    $day = mbDate("+$weekday DAYS", $monday);
+    $day = CMbDT::date("+$weekday DAYS", $monday);
     if (!CMbRange::in($day, $date_min, $date_max)) {
       $transfer_counts[$day] = 0;
       continue;
     }
-    $after = mbDate("+1 DAY", $day);
+    $after = CMbDT::date("+1 DAY", $day);
     $where["debut"] = "BETWEEN '$day' AND '$after'";
     $count = $evenement->countList($where);
     $transfer_counts[$day] = $count;

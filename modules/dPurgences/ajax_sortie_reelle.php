@@ -13,7 +13,7 @@ CCanDo::checkRead();
 $sejour_id  = CValue::get("sejour_id");
 $consult_id = CValue::get("consult_id");
 
-$now = mbDateTime();
+$now = CMbDT::dateTime();
 
 $sejour = new CSejour();
 $sejour->load($sejour_id);

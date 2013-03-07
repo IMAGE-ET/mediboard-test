@@ -41,26 +41,26 @@ if ($hour) {
 }
 
 if ($hide_finished) {
-  $where[] = $ds->prepare("`date` >= %", mbDate());
+  $where[] = $ds->prepare("`date` >= %", CMbDT::date());
 }
 
-$minDate = $maxDate = $refDate = mbDate(null, $date);
+$minDate = $maxDate = $refDate = CMbDT::date(null, $date);
 // Filtre de la période
 switch ($period) {
   case "day":
-    $minDate = $maxDate = $refDate = mbDate(null, $date);
+    $minDate = $maxDate = $refDate = CMbDT::date(null, $date);
     break;
 
   case "week":
-    $minDate = mbDate("last sunday", $date);
-    $maxDate = mbDate("next saturday", $date);
-    $refDate = mbDate("+1 day", $minDate);
+    $minDate = CMbDT::date("last sunday", $date);
+    $maxDate = CMbDT::date("next saturday", $date);
+    $refDate = CMbDT::date("+1 day", $minDate);
     break;
 
   case "month":
-    $minDate = mbTransformTime(null, $date, "%Y-%m-01");
-    $maxDate = mbTransformTime("+1 month", $minDate, "%Y-%m-01");
-    $maxDate = mbDate("-1 day", $maxDate);
+    $minDate = CMbDT::transform(null, $date, "%Y-%m-01");
+    $maxDate = CMbDT::transform("+1 month", $minDate, "%Y-%m-01");
+    $maxDate = CMbDT::date("-1 day", $maxDate);
     $refDate = $minDate;
     break;
 

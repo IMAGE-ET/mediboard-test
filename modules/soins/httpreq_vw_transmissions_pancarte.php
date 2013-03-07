@@ -17,14 +17,14 @@ $load_transmissions = CValue::get("transmissions");
 $load_observations = CValue::get("observations");
 $refresh = CValue::get("refresh");
 
-if($date == mbDate()){
-  $date_max = mbDateTime();
+if($date == CMbDT::date()){
+  $date_max = CMbDT::dateTime();
 } else {
-  $date_max = mbDate("+ 1 DAY", $date)." 00:00:00";   
+  $date_max = CMbDT::date("+ 1 DAY", $date)." 00:00:00";
 }
 
 $nb_hours = CAppUI::conf("soins transmissions_hours");
-$date_min = mbDateTime(" - $nb_hours HOURS", $date_max);
+$date_min = CMbDT::dateTime(" - $nb_hours HOURS", $date_max);
 
 $order_col = CValue::get("order_col", "date");
 $order_way = CValue::get("order_way", "DESC");

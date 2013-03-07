@@ -293,8 +293,8 @@ class CExchangeIHE extends CExchangeTabular {
     }
     else {
       $this->message_valide      = $event->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
-      $this->date_production     = mbDateTime();
-      $this->date_echange        = mbDateTime();
+      $this->date_production     = CMbDT::dateTime();
+      $this->date_echange        = CMbDT::dateTime();
     }
 
     $this->store();
@@ -320,7 +320,7 @@ class CExchangeIHE extends CExchangeTabular {
     }
 
     $this->_acquittement = $msgAck;
-    $this->date_echange = mbDateTime();
+    $this->date_echange = CMbDT::dateTime();
     $this->store();
     
     return $msgAck;

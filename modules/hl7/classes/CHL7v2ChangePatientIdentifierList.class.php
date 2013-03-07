@@ -135,7 +135,7 @@ class CHL7v2ChangePatientIdentifierList extends CHL7v2MessageXML {
     $IPP->object_class = "CPatient";
     $IPP->id400        = $data['personIdentifiers']["PI"];
     $IPP->tag          = $sender->_tag_patient;
-    $IPP->last_update  = mbDateTime();
+    $IPP->last_update  = CMbDT::dateTime();
     
     if ($msg = $IPP->store()) {
       return $exchange_ihe->setAckAR($ack, "E140", $msg, $patient);

@@ -63,7 +63,7 @@ $mediuser = CMediusers::get();
 // Vérification des droits sur les praticiens
 $listPraticiens = $mediuser->loadPraticiens(PERM_EDIT);
 
-$sortie_sejour = mbDateTime();
+$sortie_sejour = CMbDT::dateTime();
 if ($sejour->sortie_reelle) {
   $sortie_sejour = $sejour->sortie_reelle;
 }
@@ -84,7 +84,7 @@ foreach ($blocages_lit as $key => $blocage) {
   if (!$sejour->_id && $affectation->loadObject($where)) {
     $affectation->loadRefSejour();
     $affectation->_ref_sejour->loadRefPatient();
-    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
   }
 }
 
