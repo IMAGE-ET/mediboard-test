@@ -106,7 +106,7 @@ function graphPatJourSalle($debut = null, $fin = null, $prat_id = 0, $salle_id =
             }
           }
         }
-        //$nbjours = mbWorkDaysInMonth($r["orderitem"]);
+        //$nbjours = CMbDT::workDaysInMonth($r["orderitem"]);
         //$serie['data'][] = array($i, $r["total"]/($nbjours*count($salles)));
         $serie['data'][] = array($i, $res);
         //$serie['data'][] = array($i, $r["total"]/($r["nb_days"]*count($salles)));

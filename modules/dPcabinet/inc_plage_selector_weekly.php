@@ -28,7 +28,7 @@ $debut         = $date;
 $debut         = CMbDT::date("-1 week", $debut);
 $debut         = CMbDT::date("next monday", $debut);
 $fin           = CMbDT::date("next sunday", $debut);
-$bank_holidays = array_merge(mbBankHolidays($debut), mbBankHolidays($fin));
+$bank_holidays = array_merge(CMbDT::bankHolidays($debut), CMbDT::bankHolidays($fin));
 
 // Nombre de jours
 $nbDays = 5;

@@ -16,7 +16,7 @@ $view = CValue::getOrSession("view", "all");
 
 $ds = CSQLDataSource::get("std");
 $group = CGroups::loadCurrent();
-$bank_holidays = mbBankHolidays($date);
+$bank_holidays = CMbDT::bankHolidays($date);
 $next          = CMbDT::date("+1 DAY", $date);
 $month_min     = CMbDT::transform("+ 0 month", $date, "%Y-%m-01");
 $month_max     = CMbDT::transform("+ 1 month", $month_min, "%Y-%m-01");

@@ -48,7 +48,7 @@ for ($i = 1; $i <= $nb_months; $i++) {
   $listPlages[CMbDT::transform(null, $minDate, "%B %Y")] = $plage->loadList($where, $order);
 }
 
-$bank_holidays = array_merge(mbBankHolidays($date), mbBankHolidays($maxDate));
+$bank_holidays = array_merge(CMbDT::bankHolidays($date), CMbDT::bankHolidays($maxDate));
 
 // Chargement des places disponibles pour chaque plage
 foreach ($listPlages as &$curr_month) {

@@ -35,7 +35,7 @@ else {
 $type          = CValue::getOrSession("type");
 $type_externe  = CValue::getOrSession("type_externe", "depart");
 
-$bank_holidays = mbBankHolidays($date);
+$bank_holidays = CMbDT::bankHolidays($date);
 
 $hier   = CMbDT::date("- 1 day", $date);
 $demain = CMbDT::date("+ 1 day", $date);

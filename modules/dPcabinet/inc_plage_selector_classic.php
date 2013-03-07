@@ -69,7 +69,7 @@ switch ($period) {
     break;
 }
 
-$bank_holidays = array_merge(mbBankHolidays($minDate), mbBankHolidays($maxDate));
+$bank_holidays = array_merge(CMbDT::bankHolidays($minDate), CMbDT::bankHolidays($maxDate));
 
 $where["date"] = $ds->prepare("BETWEEN %1 AND %2", $minDate, $maxDate);
 $where[] = "libelle != 'automatique' OR libelle IS NULL";

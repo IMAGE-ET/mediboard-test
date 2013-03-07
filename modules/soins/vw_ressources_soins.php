@@ -127,7 +127,7 @@ foreach ($planifications as &$_planifs){
   }
 }
 
-$bank_holidays = mbBankHolidays();
+$bank_holidays = CMbDT::bankHolidays();
 
 // Création du template
 $smarty = new CSmartyDP();

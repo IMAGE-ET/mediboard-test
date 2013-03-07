@@ -17,8 +17,8 @@ $filter->date_debut = CValue::get("date_debut",CMbDT::date());
 
 // Tableau des jours fériés sur 2 ans, car
 // en mode semaine : 31 décembre - 1 janvier
-$bank_holidays = array_merge(mbBankHolidays($filter->date_debut),
-                   mbBankHolidays(CMbDT::transform("+1 YEAR", $filter->date_debut, "%Y-%m-%d")));
+$bank_holidays = array_merge(CMbDT::bankHolidays($filter->date_debut),
+  CMbDT::bankHolidays(CMbDT::transform("+1 YEAR", $filter->date_debut, "%Y-%m-%d")));
 
 $mediuser  = new CMediusers();
 switch ($filter->user_id) {

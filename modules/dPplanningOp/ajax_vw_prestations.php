@@ -177,6 +177,6 @@ $smarty->assign("empty_liaison", $empty_liaison);
 $smarty->assign("liaisons_p"   , $liaisons_p);
 $smarty->assign("liaisons_j"   , $liaisons_j);
 $smarty->assign("context"      , $context);
-$smarty->assign("bank_holidays", mbBankHolidays(CMbDT::date()));
+$smarty->assign("bank_holidays", CMbDT::bankHolidays(CMbDT::date()));
 $smarty->display("inc_vw_prestations.tpl");
 ?>

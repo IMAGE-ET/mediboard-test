@@ -15,7 +15,7 @@ function graphPatParHeureReveil($debut = null, $fin = null, $prat_id = 0, $bloc_
 
   $totalWorkDays = 0;
   for ($i = $debut; $i <= $fin; $i = CMbDT::date("+1 MONTH", $i)) {
-    $totalWorkDays += mbWorkDaysInMonth(CMbDT::transform("+0 DAY", $i, "%Y-%m-01"));
+    $totalWorkDays += CMbDT::workDaysInMonth(CMbDT::transform("+0 DAY", $i, "%Y-%m-01"));
   }
   
   $prat = new CMediusers;

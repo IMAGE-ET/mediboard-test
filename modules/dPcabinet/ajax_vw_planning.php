@@ -52,7 +52,7 @@ if (!$listPlage->countList($where)) {
   }
 }
 
-$bank_holidays = array_merge(mbBankHolidays($debut), mbBankHolidays($fin));
+$bank_holidays = array_merge(CMbDT::bankHolidays($debut), CMbDT::bankHolidays($fin));
 
 // Planning Week
 $planning = new CPlanningWeek($debut, $debut, $fin, $nbDays, false, "auto");

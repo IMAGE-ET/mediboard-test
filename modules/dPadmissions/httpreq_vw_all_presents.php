@@ -33,7 +33,7 @@ else {
 $type          = CValue::getOrSession("type");
 $service_id    = CValue::getOrSession("service_id");
 $prat_id       = CValue::getOrSession("prat_id");
-$bank_holidays = mbBankHolidays($date);
+$bank_holidays = CMbDT::bankHolidays($date);
 $service_id    = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
 

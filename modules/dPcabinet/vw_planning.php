@@ -31,7 +31,7 @@ $debut         = CValue::getOrSession("debut", $today);
 $debut         = CMbDT::date("last sunday", $debut);
 $fin           = CMbDT::date("next sunday", $debut);
 $debut         = CMbDT::date("+1 day", $debut);
-$bank_holidays = array_merge(mbBankHolidays($debut), mbBankHolidays($fin));
+$bank_holidays = array_merge(CMbDT::bankHolidays($debut), CMbDT::bankHolidays($fin));
 
 $is_in_period = ($today >= $debut) && ($today <= $fin);
 
