@@ -8,7 +8,11 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module="dPcabinet" script="edit_consultation"}}
+
 <script type="text/javascript">
+Consultation.useModal();
+
 function viewItem(guid, id, date, oTd) {
   oTd = $(oTd);
   
