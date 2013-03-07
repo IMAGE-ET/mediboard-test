@@ -124,9 +124,9 @@
     <td>{{mb_field object=$plageSel field="_type_repeat" style="width: 15em;" typeEnum="select" disabled="disabled"}}</td>
   </tr>
   <tr>
-    <th/>
-    <td/>
-    <th/>
+    <th></th>
+    <td></td>
+    <th></th>
     <td>
       {{if $plageSel->_affected}} 
          Déjà <strong>{{$plageSel->_affected}} consultations</strong> planifiées
