@@ -10,12 +10,11 @@
  */
 
 class CProductDiscrepancy extends CMbMetaObject { // Ecart d'inventaire
-  // DB Fields
-  var $discrepancy_id = null;
+  public $discrepancy_id;
   
-  var $quantity       = null;
-  var $date           = null;
-  var $description    = null;
+  public $quantity;
+  public $date;
+  public $description;
   
   function getSpec() {
     $spec = parent::getSpec();

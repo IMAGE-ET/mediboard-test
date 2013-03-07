@@ -10,15 +10,17 @@
  */
 
 class CProductEndowment extends CMbObject {
-  var $endowment_id = null;
+  public $endowment_id;
   
-  var $name         = null;
-  var $service_id   = null;
-  var $_duplicate_to_service_id = null;
+  public $name;
+  public $service_id;
+  public $_duplicate_to_service_id;
 
-  // Object References
-  var $_ref_service = null;
-  var $_ref_endowment_items = null;
+  /** @var CService */
+  public $_ref_service;
+
+  /** @var CProductEndowmentItem[] */
+  public $_ref_endowment_items;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -68,6 +70,9 @@ class CProductEndowment extends CMbObject {
     $this->loadRefsEndowmentItems();
   }
 
+  /**
+   * @return CProductEndowmentItem[]
+   */
   function loadRefsEndowmentItems() {
     $ljoin = array(
       "product"                => "product.product_id = product_endowment_item.product_id",
@@ -97,12 +102,12 @@ class CProductEndowment extends CMbObject {
       
       $items = $this->loadRefsEndowmentItems();
       
-      foreach($items as $_item) {
+      foreach ($items as $_item) {
         if ($_item->cancelled) {
           continue;
         }
         
-        $_dup_item = new CProductEndowmentItem;
+        $_dup_item = new CProductEndowmentItem();
         $_dup_item->product_id = $_item->product_id;
         $_dup_item->quantity   = $_item->quantity;
         $_dup_item->endowment_id = $dup->_id;

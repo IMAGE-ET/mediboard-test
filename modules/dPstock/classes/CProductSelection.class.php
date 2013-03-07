@@ -10,15 +10,13 @@
  */
 
 class CProductSelection extends CMbObject {
-  // DB Table key
-  var $selection_id = null;
+  public $selection_id;
 
   // DB Fields
-  var $name         = null;
+  public $name;
 
-  // Object References
-  //    Multiple
-  var $_ref_items   = null;
+  /** @var CProductSelectionItem[] */
+  public $_ref_items;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -48,7 +46,10 @@ class CProductSelection extends CMbObject {
   function loadRefsBack() {
     $this->loadRefsItems();
   }
-  
+
+  /**
+   * @return CProductSelectionItem[]
+   */
   function loadRefsItems() {
     $ljoin = array(
       "product" => "product.product_id = product_selection_item.product_id"

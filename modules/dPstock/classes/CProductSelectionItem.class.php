@@ -11,15 +11,17 @@
 
 class CProductSelectionItem extends CMbObject {
   // DB Table key
-  var $selection_item_id = null;
+  public $selection_item_id;
 
   // DB Fields
-  var $product_id        = null;
-  var $selection_id      = null;
+  public $product_id;
+  public $selection_id;
 
-  // Object References
-  var $_ref_product      = null;
-  var $_ref_selection    = null;
+  /** @var CProduct */
+  public $_ref_product;
+
+  /** @var CProductSelection */
+  public $_ref_selection;
   
   function getSpec() {
     $spec = parent::getSpec();

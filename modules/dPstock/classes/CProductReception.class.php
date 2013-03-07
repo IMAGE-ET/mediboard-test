@@ -11,26 +11,29 @@
 
 class CProductReception extends CMbObject {
   // DB Table key
-  var $reception_id     = null;
+  public $reception_id;
 
   // DB Fields
-  var $date             = null;
-  var $societe_id       = null;
-  var $group_id         = null;
-  var $reference        = null;
-  var $bill_number      = null;
-  var $bill_date        = null;
-  var $locked           = null;
+  public $date;
+  public $societe_id;
+  public $group_id;
+  public $reference;
+  public $bill_number;
+  public $bill_date;
+  public $locked;
 
-  // Object References
-  //    Multiple
-  var $_ref_reception_items = null;
-  var $_count_reception_items = null;
-  var $_total = null;
+  /** @var CProductOrderItemReception[] */
+  public $_ref_reception_items;
+
+  /** @var int */
+  public $_count_reception_items;
+  public $_total;
   
-  //    Single
-  var $_ref_societe = null;
-  var $_ref_group   = null;
+  /** @var CSociete */
+  public $_ref_societe;
+
+  /** @var CGroups */
+  public $_ref_group;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -47,16 +50,16 @@ class CProductReception extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs['date']       = 'dateTime seekable';
-    $specs['societe_id'] = 'ref class|CSociete seekable';
-    $specs['group_id']   = 'ref notNull class|CGroups show|0';
-    $specs['reference']  = 'str notNull seekable';
-    $specs['locked']     = 'bool notNull default|0';
-    $specs['bill_number']= 'str maxLength|64 protected seekable';
-    $specs['bill_date']  = 'date';
-    $specs['_total']     = 'currency';
-    return $specs;
+    $props = parent::getProps();
+    $props['date']       = 'dateTime seekable';
+    $props['societe_id'] = 'ref class|CSociete seekable';
+    $props['group_id']   = 'ref notNull class|CGroups show|0';
+    $props['reference']  = 'str notNull seekable';
+    $props['locked']     = 'bool notNull default|0';
+    $props['bill_number']= 'str maxLength|64 protected seekable';
+    $props['bill_date']  = 'date';
+    $props['_total']     = 'currency';
+    return $props;
   }
   
   private function getUniqueNumber() {
@@ -67,7 +70,7 @@ class CProductReception extends CMbObject {
     }
     
     $format = str_replace('%id', str_pad($this->_id?$this->_id:0, 4, '0', STR_PAD_LEFT), $format);
-    return mbTransformTime(null, null, $format);
+    return CMbDT::transform(null, null, $format);
   }
   
   function findFromOrder($order_id, $locked = false) {
@@ -78,14 +81,18 @@ class CProductReception extends CMbObject {
     $order->load($order_id);
     $order->loadBackRefs("order_items");
     
-    foreach($order->_back["order_items"] as $order_item) {
+    foreach ($order->_back["order_items"] as $order_item) {
       $r = $order_item->loadBackRefs("receptions");
       
-      foreach($r as $_r) {
-        if (!$_r->reception_id) continue;
+      foreach ($r as $_r) {
+        if (!$_r->reception_id) {
+          continue;
+        }
         
         $_r->loadRefReception();
-        if ($locked || $_r->_ref_reception->locked) continue;
+        if ($locked || $_r->_ref_reception->locked) {
+          continue;
+        }
         
         if (!isset($receptions_prob[$_r->reception_id])) {
           $receptions_prob[$_r->reception_id] = 0;
@@ -96,7 +103,9 @@ class CProductReception extends CMbObject {
       }
     }
     
-    if (!count($receptions_prob)) return $receptions;
+    if (!count($receptions_prob)) {
+      return $receptions;
+    }
     
     $reception_id = array_search(max($receptions_prob), $receptions_prob);
     if ($reception_id) {
@@ -123,7 +132,9 @@ class CProductReception extends CMbObject {
   function store () {
     if (!$this->_id && empty($this->reference)) {
       $this->reference = uniqid(rand());
-      if ($msg = parent::store()) return $msg;
+      if ($msg = parent::store()) {
+        return $msg;
+      }
       $this->reference = $this->getUniqueNumber();
     }
     
@@ -137,7 +148,7 @@ class CProductReception extends CMbObject {
   function updateTotal(){
     $this->loadRefsBack();
     $total = 0;
-    foreach($this->_ref_reception_items as $_item) {
+    foreach ($this->_ref_reception_items as $_item) {
       $total += $_item->computePrice();
     }
     $this->_total = $total;
@@ -158,7 +169,7 @@ class CProductReception extends CMbObject {
   }
 
   function getPerm($permType) {
-    if(!$this->_ref_reception_items) {
+    if (!$this->_ref_reception_items) {
       $this->loadRefsBack();
     }
 

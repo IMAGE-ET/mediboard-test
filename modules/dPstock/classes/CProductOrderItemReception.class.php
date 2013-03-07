@@ -11,36 +11,36 @@
 
 class CProductOrderItemReception extends CMbObject {
   // DB Table key
-  var $order_item_reception_id = null;
+  public $order_item_reception_id;
 
   // DB Fields
-  var $order_item_id      = null;
-  var $reception_id       = null;
-  var $quantity           = null;
-  var $code               = null;
-  var $serial             = null;
-  var $lapsing_date       = null;
-  var $date               = null;
-  var $barcode_printed    = null;
-  var $cancelled          = null;
+  public $order_item_id;
+  public $reception_id;
+  public $quantity;
+  public $code;
+  public $serial;
+  public $lapsing_date;
+  public $date;
+  public $barcode_printed;
+  public $cancelled;
 
   // Object References
   //    Single
   /**
    * @var CProductOrderItem
    */
-  var $_ref_order_item    = null;
+  public $_ref_order_item;
   /**
    * @var CProductReception
    */
-  var $_ref_reception     = null;
+  public $_ref_reception;
   
-  var $_cancel            = null;
-  var $_price             = null;
+  public $_cancel;
+  public $_price;
   
   // #TEMP#
-  var $units_fixed   = null;
-  var $orig_quantity = null;
+  public $units_fixed;
+  public $orig_quantity;
   
   static $_load_lite = false;
 
@@ -90,11 +90,17 @@ class CProductOrderItemReception extends CMbObject {
     $this->loadRefOrderItem();
     return $this->_price = $this->quantity * $this->_ref_order_item->unit_price;
   }
-  
+
+  /**
+   * @return CProductOrderItem
+   */
   function loadRefOrderItem() {
     return $this->_ref_order_item = $this->loadFwdRef("order_item_id", true);
   }
-  
+
+  /**
+   * @return CProductReception
+   */
   function loadRefReception() {
     return $this->_ref_reception = $this->loadFwdRef("reception_id", true);
   }
@@ -180,7 +186,7 @@ class CProductOrderItemReception extends CMbObject {
     if ($is_new && !$this->reception_id) {
       $order = $this->_ref_order_item->_ref_order;
       $reception = new CProductReception;
-      $reception->date = mbDateTime();
+      $reception->date = CMbDT::dateTime();
       $reception->societe_id = $order->societe_id;
       $reception->group_id = CProductStockGroup::getHostGroup();
       
@@ -246,4 +252,3 @@ class CProductOrderItemReception extends CMbObject {
     }
   }
 }
-?>

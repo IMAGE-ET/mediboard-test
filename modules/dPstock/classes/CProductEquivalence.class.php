@@ -10,15 +10,13 @@
  */
 
 class CProductEquivalence extends CMbObject {
-  // DB Table key
-  var $equivalence_id = null;
+  public $equivalence_id;
 
   // DB Fields
-  var $name           = null;
+  public $name;
 
-  // Object References
-  //    Multiple
-  var $_ref_products  = null;
+  /** @var CProduct[] */
+  public $_ref_products;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -44,7 +42,10 @@ class CProductEquivalence extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->name;
   }
-  
+
+  /**
+   * @return CProduct[]
+   */
   function loadRefsProducts(){
     return $this->_ref_products = $this->loadBackRefs('products', 'name');
   }

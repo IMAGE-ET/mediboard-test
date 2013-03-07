@@ -11,45 +11,45 @@
 
 class CProductOrderItem extends CMbObject {
   // DB Table key
-  var $order_item_id      = null;
+  public $order_item_id;
 
   // DB Fields
-  var $reference_id       = null;
-  var $order_id           = null;
-  var $quantity           = null;
-  var $unit_price         = null; // In the case the reference price changes
-  var $tva                = null; // In the case the reference tva changes
-  var $lot_id             = null;
-  var $renewal            = null;
-  var $septic             = null;
+  public $reference_id;
+  public $order_id;
+  public $quantity;
+  public $unit_price; // In the case the reference price changes
+  public $tva; // In the case the reference tva changes
+  public $lot_id;
+  public $renewal;
+  public $septic;
 
   // Object References
   //    Single
   /**
    * @var CProductOrder
    */
-  var $_ref_order         = null;
+  public $_ref_order;
   /**
    * @var CProductReference
    */
-  var $_ref_reference     = null;
-  var $_ref_lot           = null;
-  var $_ref_stock_group   = null;
+  public $_ref_reference;
+  public $_ref_lot;
+  public $_ref_stock_group;
   
   //    Multiple
-  var $_ref_receptions    = null;
+  public $_ref_receptions;
 
   // Form fields
-  var $_price        = null;
-  var $_date_received     = null;
-  var $_quantity_received = null;
-  var $_id_septic         = null;
-  var $_update_reference  = null;
+  public $_price;
+  public $_date_received;
+  public $_quantity_received;
+  public $_id_septic;
+  public $_update_reference;
   
   // #TEMP#
-  var $units_fixed        = null;
-  var $orig_quantity      = null;
-  var $orig_unit_price    = null;
+  public $units_fixed;
+  public $orig_quantity;
+  public $orig_unit_price;
   
   static $_load_lite = false;
 
@@ -86,7 +86,7 @@ class CProductOrderItem extends CMbObject {
       $reception = new CProductOrderItemReception();
       $reception->order_item_id = $this->_id;
       $reception->quantity = $quantity;
-      $reception->date = mbDateTime();
+      $reception->date = CMbDT::dateTime();
       $reception->code = $code;
       return $reception->store();
     }
@@ -105,7 +105,10 @@ class CProductOrderItem extends CMbObject {
     $this->updateReceived();
     return $this->_quantity_received >= $this->quantity;
   }
-  
+
+  /**
+   * @return CProductStockGroup
+   */
   function getStock() {
     if ($this->_ref_stock_group) {
       return $this->_ref_stock_group;
@@ -145,20 +148,34 @@ class CProductOrderItem extends CMbObject {
     $this->_view = $this->_ref_reference->_view;
     $this->_price = $this->unit_price * $this->quantity;
   }
-  
+
+  /**
+   * @return CProductReference
+   */
   function loadReference() {
     return $this->_ref_reference = $this->loadFwdRef("reference_id", true);
   }
-  
+
+  /**
+   * @return CProductOrderItemReception
+   */
   function loadRefLot() {
     return $this->_ref_lot = $this->loadFwdRef("lot_id", false);
   }
-  
+
+  /**
+   * @param bool $cache
+   *
+   * @return CProductOrder
+   */
   function loadOrder($cache = true) {
     $this->completeField("order_id");
     return $this->_ref_order = $this->loadFwdRef("order_id", $cache);
-  }  
-  
+  }
+
+  /**
+   * @return CProductOrderItemReception[]
+   */
   function loadRefsReceptions() {
     return $this->_ref_receptions = $this->loadBackRefs('receptions', 'date DESC');
   }
@@ -255,4 +272,3 @@ class CProductOrderItem extends CMbObject {
     }
   }
 }
-?>

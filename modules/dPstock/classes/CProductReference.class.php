@@ -10,39 +10,34 @@
  */
 
 class CProductReference extends CMbObject {
-  // DB Table key
-  var $reference_id  = null;
+  public $reference_id;
 
   // DB Fields
-  var $product_id    = null;
-  var $societe_id    = null;
-  var $quantity      = null;
-  var $price         = null;
-  var $tva           = null;
-  var $code          = null;
-  var $supplier_code = null;
-  var $mdq           = null; // minimum delivery quantity
-  var $cancelled     = null;
+  public $product_id;
+  public $societe_id;
+  public $quantity;
+  public $price;
+  public $tva;
+  public $code;
+  public $supplier_code;
+  public $mdq; // minimum delivery quantity
+  public $cancelled;
 
-  // Object References
-  /**
-   * @var CProduct
-   */
-  var $_ref_product  = null;
-  /**
-   * @var CSociete
-   */
-  var $_ref_societe  = null;
+  /** @var CProduct */
+  public $_ref_product;
+
+  /** @var CSociete */
+  public $_ref_societe;
   
   static $_load_lite = false;
 
   // Form fields
-  var $_cond_price   = null;
+  public $_cond_price;
   
   // #TEMP#
-  var $units_fixed = null;
-  var $orig_quantity = null;
-  var $orig_price    = null;
+  public $units_fixed;
+  public $orig_quantity;
+  public $orig_price;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -117,14 +112,14 @@ class CProductReference extends CMbObject {
       "bills" => array(),
     );
     
-    foreach($items as $_item) {
+    foreach ($items as $_item) {
       if ($_item->order_id) {
         $_item->loadOrder();
         $lists["orders"][$_item->order_id] = $_item->_ref_order;
       }
       
       $_item->loadBackRefs("receptions");
-      foreach($_item->_back["receptions"] as $_reception) {
+      foreach ($_item->_back["receptions"] as $_reception) {
         if ($_reception->reception_id) {
           $_reception->loadRefReception();
           $lists["receptions"][$_reception->reception_id] = $_reception->_ref_reception;
@@ -139,4 +134,3 @@ class CProductReference extends CMbObject {
     return $this->loadRefProduct()->getPerm($permType);
   }
 }
-?>

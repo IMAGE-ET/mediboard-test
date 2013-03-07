@@ -10,86 +10,82 @@
  */
 
 class CProductDelivery extends CMbObject {
-  // DB Table key
-  var $delivery_id        = null;
+  public $delivery_id;
 
   // Source
-  var $stock_id           = null;
-  var $stock_class        = null;
+  public $stock_id;
+  public $stock_class;
 
   // Target
-  var $service_id         = null;
-  var $patient_id         = null;
-  var $sejour_id          = null;
+  public $service_id;
+  public $patient_id;
+  public $sejour_id;
 
-  var $date_dispensation  = null;
-  var $date_delivery      = null;
-  var $datetime_min       = null;
-  var $datetime_max       = null;
+  public $date_dispensation;
+  public $date_delivery;
+  public $datetime_min;
+  public $datetime_max;
 
-  var $quantity           = null;
-  var $endowment_quantity = null;
-  var $endowment_item_id  = null;
-  var $order              = null;
-  var $manual             = null;
-  var $comments           = null;
-  var $comments_deliver   = null;
-  var $type               = null;
+  public $quantity;
+  public $endowment_quantity;
+  public $endowment_item_id;
+  public $order;
+  public $manual;
+  public $comments;
+  public $comments_deliver;
+  public $type;
 
-  // Object References
-  /**
-   * @var CProductStockGroup
-   */
-  var $_ref_stock           = null;
-  var $_ref_stock_service   = null;
-  var $_ref_endowment_item  = null;
+  /** @var CProductStockGroup */
+  public $_ref_stock;
 
-  /**
-   * @var CService
-   */
-  var $_ref_service         = null;
+  /** @var CProductStockService */
+  public $_ref_stock_service;
 
-  /**
-   * @var CPatient
-   */
-  var $_ref_patient         = null;
+  /** @var CProductEndowmentItem */
+  public $_ref_endowment_item;
 
-  /**
-   * @var CSejour
-   */
-  var $_ref_sejour          = null;
+  /** @var CService */
+  public $_ref_service;
 
-  var $_ref_location_source = null;
-  var $_ref_location_target = null;
+  /** @var CPatient */
+  public $_ref_patient;
 
-  var $_ref_delivery_traces = null;
-  var $_ref_prises_dispensation = null;
-  var $_ref_prises_dispensation_med = null;
-  var $_ref_preparateur     = null;
+  /** @var CSejour */
+  public $_ref_sejour;
 
-  var $_date_min            = null;
-  var $_date_max            = null;
-  var $_datetime_min        = null;
-  var $_datetime_max        = null;
-  var $_delivered           = null;
-  var $_auto_deliver        = null;
-  var $_make_delivery_trace = null;
-  var $_initial_quantity    = null;
-  var $_quantity_recond     = null;
+  /** @var CProductStockLocation */
+  public $_ref_location_source;
 
-  /**
-   * @var CProduct[]
-   */
-  var $_products            = null;
-  var $_prises              = null;
-  var $_pilulier            = null;
-  var $_code_cis            = null;
-  var $_code_ucd            = null;
-  var $_code_cip            = null;
-  var $_count_delivered     = null;
-  var $_preparateur_id      = null;
+  /** @var CProductStockLocation */
+  public $_ref_location_target;
 
-  var $_auto_trace;
+  /** @var CProductDeliveryTrace[] */
+  public $_ref_delivery_traces;
+  public $_ref_prises_dispensation;
+  public $_ref_prises_dispensation_med;
+  public $_ref_preparateur;
+
+  public $_date_min;
+  public $_date_max;
+  public $_datetime_min;
+  public $_datetime_max;
+  public $_delivered;
+  public $_auto_deliver;
+  public $_make_delivery_trace;
+  public $_initial_quantity;
+  public $_quantity_recond;
+
+  /** @var CProduct[] */
+  public $_products;
+  public $_prises;
+  public $_pilulier;
+  public $_code_cis;
+  public $_code_ucd;
+  public $_code_cip;
+  public $_count_delivered;
+  public $_preparateur_id;
+
+  public $_auto_trace;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -100,45 +96,45 @@ class CProductDelivery extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
+    $props = parent::getProps();
 
     // Source
     // can be null when the stock doesn't exist in the group
-    $specs['stock_id']          = 'ref class|CProductStock meta|stock_class';
-    $specs['stock_class']       = 'str notNull class show|0';
+    $props['stock_id']          = 'ref class|CProductStock meta|stock_class';
+    $props['stock_class']       = 'str notNull class show|0';
 
     // Target
-    $specs['service_id']        = 'ref class|CService'; // >/dev/null
-    $specs['patient_id']        = 'ref class|CPatient';
-    $specs['sejour_id']         = 'ref class|CSejour';
+    $props['service_id']        = 'ref class|CService'; // >/dev/null
+    $props['patient_id']        = 'ref class|CPatient';
+    $props['sejour_id']         = 'ref class|CSejour';
 
-    $specs['date_dispensation'] = 'dateTime notNull';
-    $specs['date_delivery']     = 'dateTime';
+    $props['date_dispensation'] = 'dateTime notNull';
+    $props['date_delivery']     = 'dateTime';
 
-    $specs['datetime_min']      = 'dateTime notNull';
-    $specs['datetime_max']      = 'dateTime notNull moreEquals|datetime_min';
+    $props['datetime_min']      = 'dateTime notNull';
+    $props['datetime_max']      = 'dateTime notNull moreEquals|datetime_min';
 
     $type = (CProductStock::$allow_quantity_fractions ? "float" : "num");
-    $specs['quantity']          = "$type notNull";
-    $specs['endowment_quantity']= "$type";
-    $specs['_initial_quantity'] = "$type";
-    $specs['_quantity_recond']  = "float";
+    $props['quantity']          = "$type notNull";
+    $props['endowment_quantity']= "$type";
+    $props['_initial_quantity'] = "$type";
+    $props['_quantity_recond']  = "float";
 
-    $specs['endowment_item_id'] = "ref class|CProductEndowmentItem";
-    $specs['order']             = 'bool default|0';
-    $specs['manual']            = 'bool default|0';
-    $specs['comments']          = 'text';
-    $specs['comments_deliver']  = 'text';
-    $specs['type']              = 'enum list|other|expired|breakage|loss|gift|discrepancy|notused|toomany';
+    $props['endowment_item_id'] = "ref class|CProductEndowmentItem";
+    $props['order']             = 'bool default|0';
+    $props['manual']            = 'bool default|0';
+    $props['comments']          = 'text';
+    $props['comments_deliver']  = 'text';
+    $props['type']              = 'enum list|other|expired|breakage|loss|gift|discrepancy|notused|toomany';
 
-    $specs['_date_min']         = 'date notNull';
-    $specs['_date_max']         = 'date notNull moreEquals|_date_min';
+    $props['_date_min']         = 'date notNull';
+    $props['_date_max']         = 'date notNull moreEquals|_date_min';
 
-    $specs['_datetime_min']     = 'dateTime notNull';
-    $specs['_datetime_max']     = 'dateTime notNull moreEquals|_datetime_min';
+    $props['_datetime_min']     = 'dateTime notNull';
+    $props['_datetime_max']     = 'dateTime notNull moreEquals|_datetime_min';
 
-    $specs['_preparateur_id']   = 'ref class|CMediusers';
-    return $specs;
+    $props['_preparateur_id']   = 'ref class|CMediusers';
+    return $props;
   }
 
   function updateFormFields() {
@@ -371,7 +367,7 @@ class CProductDelivery extends CMbObject {
       $delivery_trace = new CProductDeliveryTrace;
       $delivery_trace->delivery_id = $this->_id;
       $delivery_trace->quantity = $this->quantity;
-      $delivery_trace->date_delivery = $this->date_delivery ? $this->date_delivery : mbDateTime();
+      $delivery_trace->date_delivery = $this->date_delivery ? $this->date_delivery : CMbDT::dateTime();
       $delivery_trace->_code_cis = $this->_code_cis;
       $delivery_trace->_code_cip = $this->_code_cip;
 
@@ -399,7 +395,7 @@ class CProductDelivery extends CMbObject {
 
     $this->loadRefStock()->loadRefsFwd();
     if ($this->_auto_deliver || $this->_ref_stock->_ref_product->auto_dispensed || $this->_auto_trace) {
-      $this->date_dispensation = mbDateTime();
+      $this->date_dispensation = CMbDT::dateTime();
       $this->order = 0;
       return parent::store();
     }

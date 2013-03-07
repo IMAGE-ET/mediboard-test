@@ -10,17 +10,15 @@
  */
 
 class CProductCategory extends CMbObject {
-  // DB Table key
-  var $category_id   = null;
+  public $category_id;
   
   // DB fields
-  var $name          = null;
+  public $name;
   
-  var $_count_products = null;
+  public $_count_products;
 
-  // Object References
-  //    Multiple
-  var $_ref_products = null;
+  /** @var CProduct[] */
+  public $_ref_products;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -61,4 +59,3 @@ class CProductCategory extends CMbObject {
     $this->_count_products = $this->countBackRefs("products");
   }
 }
-?>

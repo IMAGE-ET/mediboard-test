@@ -10,25 +10,20 @@
  */
 
 class CProductStockGroup extends CProductStock {
-  // DB Fields
-  var $group_id                 = null;
+  public $group_id;
 
-  // Object References
-  //    Single
-  /**
-   * @var CGroups
-   */
-  var $_ref_group               = null;
+  /** @var CGroups */
+  public $_ref_group;
 
-  //    Multiple
-  var $_ref_deliveries          = null;
+  /** @var CProductDelivery[] */
+  public $_ref_deliveries;
+
+  public $_zone_future   = 0;
+  public $_ordered_count = 0;
+  public $_ordered_last;
+  public $_orders = array();
   
-  var $_zone_future             = 0;
-  var $_ordered_count           = 0;
-  var $_ordered_last            = null;
-  var $_orders                  = array();
-  
-  private static $_host_group   = null;
+  private static $_host_group = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -105,6 +100,7 @@ class CProductStockGroup extends CProductStock {
   
   /**
    * @param string $code
+   *
    * @return CProductStockGroup
    */
   static function getFromCode($code) {
@@ -157,7 +153,10 @@ class CProductStockGroup extends CProductStock {
     $this->loadRefGroup();
     $this->setHost($this->_ref_group);
   }
-  
+
+  /**
+   * @return CGroups
+   */
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
@@ -165,18 +164,24 @@ class CProductStockGroup extends CProductStock {
   function loadRefsBack(){
     $this->loadRefsDeliveries();
   }
-  
+
+  /**
+   * @return CProductDelivery[]
+   */
   function loadRefsDeliveries(){
     return $this->_ref_deliveries = $this->loadBackRefs('deliveries');
   }
-  
+
+  /**
+   * @return CProductStockLocation[]
+   */
   function loadRelatedLocations(){
     $where = array(
       "object_class" => "= 'CGroups'",
       "object_id" => "= '$this->group_id'",
     );
     
-    $location = new CProductStockLocation;
+    $location = new CProductStockLocation();
     return $this->_ref_related_locations = $location->loadList($where, "name");
   }
   
@@ -188,7 +193,10 @@ class CProductStockGroup extends CProductStock {
       $this->group_id = CProductStockGroup::getHostGroup();
     }
   }
-  
+
+  /**
+   * @return CGroups
+   */
   function loadRefHost(){
     return $this->loadRefGroup();
   }

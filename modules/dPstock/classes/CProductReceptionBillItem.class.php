@@ -11,21 +11,22 @@
 
 class CProductReceptionBillItem extends CMbObject {
   // DB Table key
-  var $reception_bill_item_id = null;
+  public $reception_bill_item_id;
 
   // DB Fields
-  var $bill_id            = null;
-  var $reception_item_id  = null;
-  var $quantity           = null;
-  var $unit_price         = null; // In the case the reference price changes
+  public $bill_id;
+  public $reception_item_id;
+  public $quantity;
+  public $unit_price; // In the case the reference price changes
 
-  // Object References
-  //    Single
-  var $_ref_reception_item= null;
-  var $_ref_bill          = null;
+  /** @var CProductOrderItemReception */
+  public $_ref_reception_item;
+
+  /** @var CProductReceptionBill */
+  public $_ref_bill;
 
   // Form fields
-  var $_price             = null;
+  public $_price;
 
   function getSpec() {
     $spec = parent::getSpec();

@@ -10,66 +10,60 @@
  */
 
 class CProductStock extends CMbObject {
-  // DB Table key
-  var $stock_id                 = null;
+  public $stock_id;
 
   // DB Fields
-  var $product_id               = null;
-  var $quantity                 = null;
-  var $order_threshold_critical = null;
-  var $order_threshold_min      = null;
-  var $order_threshold_optimum  = null;
-  var $order_threshold_max      = null;
-  var $location_id              = null;
+  public $product_id;
+  public $quantity;
+  public $order_threshold_critical;
+  public $order_threshold_min;
+  public $order_threshold_optimum;
+  public $order_threshold_max;
+  public $location_id;
 
   // Stock percentages
-  var $_quantity                = null;
-  var $_critical                = null;
-  var $_min                     = null;
-  var $_optimum                 = null;
-  var $_max                     = null;
+  public $_quantity;
+  public $_critical;
+  public $_min;
+  public $_optimum;
+  public $_max;
   // In which part of the graph the quantity is
-  var $_zone                    = 0;
+  public $_zone = 0;
 
-  var $_package_quantity        = null; // The number of packages
-  var $_package_mod             = null; // The modulus of the quantity
+  public $_package_quantity; // The number of packages
+  public $_package_mod; // The modulus of the quantity
 
-  // Object References
-  //    Single
-  /**
-   * @var CProduct
-   */
-  var $_ref_product             = null;
-  /**
-   * @var CProductStockLocation
-   */
-  var $_ref_location            = null;
+  /** @var CProduct */
+  public $_ref_product;
 
-  var $_ref_related_locations   = null;
+  /** @var CProductStockLocation */
+  public $_ref_location;
+
+  public $_ref_related_locations;
 
   static $allow_quantity_fractions = false;
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs['product_id']               = 'ref notNull class|CProduct seekable autocomplete|name show|0 dependsOn|cancelled';
+    $props = parent::getProps();
+    $props['product_id']               = 'ref notNull class|CProduct seekable autocomplete|name show|0 dependsOn|cancelled';
 
     $type = (CProductStock::$allow_quantity_fractions ? "float" : "num");
-    $specs['quantity']                 = "$type notNull";
+    $props['quantity']                 = "$type notNull";
 
-    $specs['order_threshold_critical'] = 'num min|0';
-    $specs['order_threshold_min']      = 'num min|0 notNull moreEquals|order_threshold_critical';
-    $specs['order_threshold_optimum']  = 'num min|0 moreEquals|order_threshold_min';
-    $specs['order_threshold_max']      = 'num min|0 moreEquals|order_threshold_optimum';
-    $specs['location_id']              = 'ref notNull class|CProductStockLocation autocomplete|name|true';
-    $specs['_quantity']                = 'pct';
-    $specs['_critical']                = 'pct';
-    $specs['_min']                     = 'pct';
-    $specs['_optimum']                 = 'pct';
-    $specs['_max']                     = 'pct';
-    $specs['_zone']                    = 'num';
-    $specs['_package_quantity']        = 'str';
-    $specs['_package_mod']             = 'str';
-    return $specs;
+    $props['order_threshold_critical'] = 'num min|0';
+    $props['order_threshold_min']      = 'num min|0 notNull moreEquals|order_threshold_critical';
+    $props['order_threshold_optimum']  = 'num min|0 moreEquals|order_threshold_min';
+    $props['order_threshold_max']      = 'num min|0 moreEquals|order_threshold_optimum';
+    $props['location_id']              = 'ref notNull class|CProductStockLocation autocomplete|name|true';
+    $props['_quantity']                = 'pct';
+    $props['_critical']                = 'pct';
+    $props['_min']                     = 'pct';
+    $props['_optimum']                 = 'pct';
+    $props['_max']                     = 'pct';
+    $props['_zone']                    = 'num';
+    $props['_package_quantity']        = 'str';
+    $props['_package_mod']             = 'str';
+    return $props;
   }
 
   function getBackProps() {
@@ -157,6 +151,7 @@ class CProductStock extends CMbObject {
 
   /**
    * @param boolean $cache [optional]
+   *
    * @return CProductStockLocation
    */
   function loadRefLocation(){
@@ -165,6 +160,7 @@ class CProductStock extends CMbObject {
 
   /**
    * @param boolean $cache [optional]
+   *
    * @return CProduct
    */
   function loadRefProduct($cache = true){
@@ -183,6 +179,7 @@ class CProductStock extends CMbObject {
 
   /**
    * Returns the host object
+   *
    * @return CGroups|CService|CBlocOperatoire
    */
   function loadRefHost() {
@@ -191,6 +188,7 @@ class CProductStock extends CMbObject {
 
   /**
    * Sets the host object
+   *
    * @return void
    */
   function setHost(CMbObject $host) {

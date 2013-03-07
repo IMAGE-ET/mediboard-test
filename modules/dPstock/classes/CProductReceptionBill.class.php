@@ -11,24 +11,24 @@
 
 class CProductReceptionBill extends CMbObject {
   // DB Table key
-  var $bill_id         = null;
+  public $bill_id;
 
   // DB Fields
-  var $date            = null;
-  var $societe_id      = null;
-  var $group_id        = null;
-  var $reference       = null;
-  
-  var $_total          = null;
+  public $date;
+  public $societe_id;
+  public $group_id;
+  public $reference;
+
+  public $_total;
 
   // Object References
   //    Multiple
-  var $_ref_bill_items = null;
-  
+  public $_ref_bill_items;
+
   //    Single
-  var $_ref_reception_item = null;
-  var $_ref_group   = null;
-  
+  public $_ref_reception_item;
+  public $_ref_group;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "product_bill";
@@ -52,16 +52,16 @@ class CProductReceptionBill extends CMbObject {
     $specs['_total']      = 'currency';
     return $specs;
   }
-  
+
   private function getUniqueNumber() {
     $format = CAppUI::conf('dPstock CProductOrder order_number_format');
-    
+
     if (strpos($format, '%id') === false) {
       $format .= '%id';
     }
-    
+
     $format = str_replace('%id', str_pad($this->_id?$this->_id:0, 4, '0', STR_PAD_LEFT), $format);
-    return mbTransformTime(null, null, $format);
+    return CMbDT::transform(null, null, $format);
   }
 
   function updateFormFields() {
@@ -69,14 +69,16 @@ class CProductReceptionBill extends CMbObject {
     $this->loadRefSociete();
     $this->_view = $this->reference . ($this->societe_id ? " - $this->_ref_societe" : "");
   }
-  
+
   function store () {
     if (!$this->_id && empty($this->reference)) {
       $this->reference = uniqid(rand());
-      if ($msg = parent::store()) return $msg;
+      if ($msg = parent::store()) {
+        return $msg;
+      }
       $this->reference = $this->getUniqueNumber();
     }
-    
+
     return parent::store();
   }
 
@@ -87,24 +89,24 @@ class CProductReceptionBill extends CMbObject {
   function updateTotal(){
     $this->loadRefsBack();
     $total = 0;
-    foreach($this->_ref_bill_items as $_item) {
+    foreach ($this->_ref_bill_items as $_item) {
       $_item->loadRefOrderItem();
       $total += $_item->_ref_order_item->_price;
     }
     $this->_total = $total;
   }
-  
+
   function loadRefSociete(){
     $this->_ref_societe = $this->loadFwdRef("societe_id", true);
   }
-  
+
   function loadRefsFwd(){
     $this->loadRefSociete();
     $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 
   function getPerm($permType) {
-    if(!$this->_ref_bill_items) {
+    if (!$this->_ref_bill_items) {
       $this->loadRefsBack();
     }
 

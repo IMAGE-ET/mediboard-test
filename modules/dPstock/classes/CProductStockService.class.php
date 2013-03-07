@@ -11,13 +11,13 @@
 
 class CProductStockService extends CProductStock /* extends CMbMetaObject */ {
   // DB Fields
-  var $object_class = null;
-  var $object_id    = null;
-  var $common       = null;
+  public $object_class;
+  public $object_id;
+  public $common;
 
   // Object References
   //    Single
-  var $_ref_object = null;
+  public $_ref_object;
   
   function getSpec() {
     $spec = parent::getSpec();

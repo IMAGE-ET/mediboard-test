@@ -10,42 +10,35 @@
  */
 
 class CProductDeliveryTrace extends CMbObject {
-  // DB Table key
-  var $delivery_trace_id  = null;
+  public $delivery_trace_id;
 
   // DB Fields
-  var $delivery_id    = null;
-  var $date_delivery  = null;
-  var $date_reception = null;
-  var $code           = null;
-  var $quantity       = null;
-  var $target_location_id = null;
+  public $delivery_id;
+  public $date_delivery;
+  public $date_reception;
+  public $code;
+  public $quantity;
+  public $target_location_id;
 
-  /**
-   * @var CProductDelivery
-   */
-  var $_ref_delivery  = null;
+  /** @var CProductDelivery */
+  public $_ref_delivery;
 
-  /**
-   * @var CMediusers
-   */
-  var $_ref_preparateur = null;
+  /** @var CMediusers */
+  public $_ref_preparateur;
 
-  /**
-   * @var CProductStockLocation
-   */
-  var $_ref_target_location = null;
+  /** @var CProductStockLocation */
+  public $_ref_target_location;
 
-  var $_date_min      = null;
-  var $_date_max      = null;
+  public $_date_min;
+  public $_date_max;
 
-  var $_deliver       = null;
-  var $_undeliver     = null;
-  var $_receive       = null;
-  var $_unreceive     = null;
-  var $_datetime_min  = null;
-  var $_code_cis;
-  var $_code_cip;
+  public $_deliver;
+  public $_undeliver;
+  public $_receive;
+  public $_unreceive;
+  public $_datetime_min;
+  public $_code_cis;
+  public $_code_cip;
 
   function getSpec() {
     $spec = parent::getSpec();

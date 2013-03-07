@@ -10,16 +10,18 @@
  */
 
 class CProductEndowmentItem extends CMbObject {
-  var $endowment_item_id = null;
+  public $endowment_item_id;
   
-  var $quantity          = null;
-  var $endowment_id      = null;
-  var $product_id        = null;
-  var $cancelled         = null;
+  public $quantity;
+  public $endowment_id;
+  public $product_id;
+  public $cancelled;
 
-  // Object References
-  var $_ref_endowment    = null;
-  var $_ref_product      = null;
+  /** @var CProductEndowment */
+  public $_ref_endowment;
+
+  /** @var CProduct */
+  public $_ref_product;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -64,4 +66,3 @@ class CProductEndowmentItem extends CMbObject {
       $this->_ref_product->getPerm($permType);
   }
 }
-?>

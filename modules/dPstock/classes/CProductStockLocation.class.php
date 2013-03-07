@@ -11,24 +11,24 @@
 
 class CProductStockLocation extends CMbMetaObject {
   // DB Table key
-  var $stock_location_id = null;
+  public $stock_location_id;
 
   // DB Fields
-  var $name              = null;
-  var $desc              = null;
-  var $position          = null;
-  var $group_id          = null;
+  public $name;
+  public $desc;
+  public $position;
+  public $group_id;
 
   // Object References
-  var $_ref_group_stocks = null;
+  public $_ref_group_stocks;
   
   /**
    * @var CGroups
    */
-  var $_ref_group        = null;
+  public $_ref_group;
   
-  var $_before           = null;
-  var $_type             = null;
+  public $_before;
+  public $_type;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -185,7 +185,8 @@ class CProductStockLocation extends CMbMetaObject {
    */
   static function getDefaultLocation(CMbObject $host, CProduct $product = null) {
     $stock_class = self::getStockClass($host->_class);
-    
+
+    /** @var CProductStock $stock */
     $stock = new $stock_class;
     $stock->setHost($host);
     $stock->product_id = $product->_id;
@@ -199,7 +200,7 @@ class CProductStockLocation extends CMbMetaObject {
       );
       
       // pas loadMatchingObject a cause du "position" pré-rempli :(
-      $location = new CProductStockLocation;
+      $location = new CProductStockLocation();
       if (!$location->loadObject($where, "position")) {
         $location->name = "Lieu par défaut";
         $location->group_id = ($host instanceof CGroups ? $host->_id : $host->group_id);
@@ -213,7 +214,12 @@ class CProductStockLocation extends CMbMetaObject {
       return $stock->loadRefLocation();
     }
   }
-  
+
+  /**
+   * @param $product_id
+   *
+   * @return CProductStock
+   */
   function loadRefStock($product_id) {
     $class = $this->getStockType();
     

@@ -10,65 +10,65 @@
  */
 
 class CProduct extends CMbObject {
-  // DB Table key
-  var $product_id        = null;
+  public $product_id;
 
   // DB Fields
-  var $name              = null;
-  var $description       = null;
+  public $name;
+  public $description;
   
   // codage
-  var $code              = null;
-  var $code_canonical    = null;
-  var $scc_code          = null; // in the barcodes (http://www.morovia.com/education/symbology/scc-14.asp)
+  public $code;
+  public $code_canonical;
+  public $scc_code; // in the barcodes (http://www.morovia.com/education/symbology/scc-14.asp)
   
-  var $category_id       = null;
-  var $societe_id        = null;
-  var $quantity          = null;
-  var $item_title        = null;
-  var $unit_quantity     = null;
-  var $unit_title        = null;
-  var $packaging         = null;
-  var $renewable         = null;
-  var $cancelled         = null;
-  var $equivalence_id    = null;
-  var $auto_dispensed    = null;
+  public $category_id;
+  public $societe_id;
+  public $quantity;
+  public $item_title;
+  public $unit_quantity;
+  public $unit_title;
+  public $packaging;
+  public $renewable;
+  public $cancelled;
+  public $equivalence_id;
+  public $auto_dispensed;
   
   // classif
-  var $classe_comptable  = null;
-  var $cladimed          = null;
+  public $classe_comptable;
+  public $cladimed;
 
-  // Object References
-  //    Single
-  /**
-   * @var CProductCategory
-   */
-  var $_ref_category     = null;
-  /**
-   * @var CSociete
-   */
-  var $_ref_societe      = null;
+  /** @var CProductCategory */
+  public $_ref_category;
 
-  //    Multiple
-  var $_ref_stocks_group   = null;
-  var $_ref_stocks_service = null;
-  var $_ref_references     = null;
-  var $_ref_lots           = null;
+  /** @var CSociete */
+  public $_ref_societe;
+
+  /** @var CProductStockGroup[] */
+  public $_ref_stocks_group;
+
+  /** @var CProductStockService[] */
+  public $_ref_stocks_service;
+
+  /** @var CProductReference[] */
+  public $_ref_references;
+
+  /** @var CProductOrderItemReception[] */
+  public $_ref_lots;
   
   // Undividable quantity
-  var $_unit_quantity      = null;
-  var $_unit_title         = null;
-  var $_quantity           = null; // The quantity view
-  var $_consumption        = null;
-  var $_supply             = null;
-  var $_unique_usage       = null;
+  public $_unit_quantity;
+  public $_unit_title;
+  public $_quantity; // The quantity view
+  public $_consumption;
+  public $_supply;
+  public $_unique_usage;
   
-  var $_in_order           = null;
-  var $_classe_atc         = null;
-  var $_create_stock_quantity = null;
+  public $_in_order;
+  public $_classe_atc;
+  public $_create_stock_quantity;
   
-  // This group's stock id
-  var $_ref_stock_group    = null;
+  /** @var CProductStockGroup This group's stock id */
+  public $_ref_stock_group;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -96,40 +96,40 @@ class CProduct extends CMbObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs['name']          = 'str notNull seekable show|0';
-    $specs['description']   = 'text seekable';
+    $props = parent::getProps();
+    $props['name']          = 'str notNull seekable show|0';
+    $props['description']   = 'text seekable';
     
     // codage
-    $specs['code']          = 'str maxLength|32 seekable protected';
-    $specs['code_canonical']= 'str maxLength|32 seekable show|0';
-    $specs['scc_code']      = 'numchar length|10 seekable|equal protected'; // Manufacturer Code + Item Number
+    $props['code']          = 'str maxLength|32 seekable protected';
+    $props['code_canonical']= 'str maxLength|32 seekable show|0';
+    $props['scc_code']      = 'numchar length|10 seekable|equal protected'; // Manufacturer Code + Item Number
     
-    $specs['category_id']   = 'ref notNull class|CProductCategory autocomplete|name';
-    $specs['societe_id']    = 'ref class|CSociete seekable autocomplete|name';
-    $specs['quantity']      = 'num notNull min|0 show|0';
-    $specs['item_title']    = 'str autocomplete show|0';
-    $specs['unit_quantity'] = 'float min|0 show|0';
-    $specs['unit_title']    = 'str autocomplete show|0';
-    $specs['packaging']     = 'str autocomplete';
-    $specs['renewable']     = 'enum list|0|1|2';
-    $specs['cancelled']     = 'bool default|0 show|0';
-    $specs['equivalence_id'] = 'ref class|CProductEquivalence';
-    $specs['auto_dispensed'] = 'bool default|0';
+    $props['category_id']   = 'ref notNull class|CProductCategory autocomplete|name';
+    $props['societe_id']    = 'ref class|CSociete seekable autocomplete|name';
+    $props['quantity']      = 'num notNull min|0 show|0';
+    $props['item_title']    = 'str autocomplete show|0';
+    $props['unit_quantity'] = 'float min|0 show|0';
+    $props['unit_title']    = 'str autocomplete show|0';
+    $props['packaging']     = 'str autocomplete';
+    $props['renewable']     = 'enum list|0|1|2';
+    $props['cancelled']     = 'bool default|0 show|0';
+    $props['equivalence_id'] = 'ref class|CProductEquivalence';
+    $props['auto_dispensed'] = 'bool default|0';
     
     // classif
-    $specs['cladimed'] = 'str maxLength|7 autocomplete';
-    $specs['classe_comptable'] = 'str maxLength|9 autocomplete';
+    $props['cladimed'] = 'str maxLength|7 autocomplete';
+    $props['classe_comptable'] = 'str maxLength|9 autocomplete';
     
-    $specs['_unit_title']   = 'str';
-    $specs['_unique_usage'] = 'bool';
-    $specs['_unit_quantity']= 'float min|0';
-    $specs['_quantity']     = 'str show|1';
-    $specs['_consumption']  = 'num show|1';
-    $specs['_create_stock_quantity'] = 'num min|0';
+    $props['_unit_title']   = 'str';
+    $props['_unique_usage'] = 'bool';
+    $props['_unit_quantity']= 'float min|0';
+    $props['_quantity']     = 'str show|1';
+    $props['_consumption']  = 'num show|1';
+    $props['_create_stock_quantity'] = 'num min|0';
     
-    $specs['_classe_atc']  = 'str';
-    return $specs;
+    $props['_classe_atc']  = 'str';
+    return $props;
   }
 
   function updateFormFields() {
@@ -160,7 +160,12 @@ class CProduct extends CMbObject {
     
     $this->_unique_usage = ($this->unit_quantity < 2 && !$this->renewable);
   }
-  
+
+  /**
+   * @param bool $cache
+   *
+   * @return CProductReference[]
+   */
   function loadRefsReferences($cache = false) {
     if ($cache && !empty($this->_ref_references)) {
       return $this->_ref_references;
@@ -251,11 +256,11 @@ class CProduct extends CMbObject {
     $where = array(
       "product_delivery.stock_class" => "= 'CProductStockGroup'",
       "product_delivery.stock_id" => "= '{$this->_ref_stock_group->_id}'",
-      "product_delivery_trace.date_delivery > '".mbDate($since)."'",
+      "product_delivery_trace.date_delivery > '".CMbDT::date($since)."'",
     );
     
     if ($date_max) {
-      $where[] = "product_delivery_trace.date_delivery <= '".mbDate($date_max)."'";
+      $where[] = "product_delivery_trace.date_delivery <= '".CMbDT::date($date_max)."'";
     }
     
     if ($service_id) {
@@ -294,11 +299,11 @@ class CProduct extends CMbObject {
       "product_stock_group.product_id" => $ds->prepareIn(CMbArray::pluck($products, "_id")),
       "product_stock_group.group_id" => "= '".CProductStockGroup::getHostGroup()."'",
       "product_delivery.stock_class" => "= 'CProductStockGroup'",
-      "product_delivery_trace.date_delivery > '".mbDate($since)."'",
+      "product_delivery_trace.date_delivery > '".CMbDT::date($since)."'",
     );
     
     if ($date_max) {
-      $where[] = "product_delivery_trace.date_delivery <= '".mbDate($date_max)."'";
+      $where[] = "product_delivery_trace.date_delivery <= '".CMbDT::date($date_max)."'";
     }
     
     if (!empty($services)) {
@@ -343,11 +348,11 @@ class CProduct extends CMbObject {
   function getSupply($since = "-1 MONTH", $date_max = null){
     $where = array(
       "product.product_id" => "= '{$this->_id}'",
-      "product_order_item_reception.date > '".mbDate($since)."'",
+      "product_order_item_reception.date > '".CMbDT::date($since)."'",
     );
     
     if ($date_max) {
-      $where[] = "product_order_item_reception.date <= '".mbDate($date_max)."'";
+      $where[] = "product_order_item_reception.date <= '".CMbDT::date($date_max)."'";
     }
     
     $ljoin = array(
@@ -370,11 +375,11 @@ class CProduct extends CMbObject {
     
     $where = array(
       "product.product_id" => $ds->prepareIn(CMbArray::pluck($products, "_id")),
-      "product_order_item_reception.date > '".mbDate($since)."'",
+      "product_order_item_reception.date > '".CMbDT::date($since)."'",
     );
     
     if ($date_max) {
-      $where[] = "product_order_item_reception.date <= '".mbDate($date_max)."'";
+      $where[] = "product_order_item_reception.date <= '".CMbDT::date($date_max)."'";
     }
     
     $ljoin = array(
@@ -410,11 +415,11 @@ class CProduct extends CMbObject {
     
     $where = array(
       "product.product_id" => "= '{$this->_id}'",
-      "product_order_item_reception.date > '".mbDate($since)."'",
+      "product_order_item_reception.date > '".CMbDT::date($since)."'",
     );
     
     if ($date_max) {
-      $where[] = "product_order_item_reception.date <= '".mbDate($date_max)."'";
+      $where[] = "product_order_item_reception.date <= '".CMbDT::date($date_max)."'";
     }
     
     $ljoin = array(
@@ -503,8 +508,10 @@ class CProduct extends CMbObject {
       "product_order.received"     => "= '0'", // ordered
       "product_order_item.renewal" => "= '1'", // renewal line
     );
-    
-    $item = new CProductOrderItem;
+
+    /** @var CProductOrderItem[] $list */
+
+    $item = new CProductOrderItem();
     if ($count) {
       $list = $item->countList($where, null, $leftjoin);
     }
@@ -538,8 +545,8 @@ class CProduct extends CMbObject {
     
     // Y init
     for ($i = 0; $i < 12; $i++) {
-      $from = mbDate("+$i $unit", $start);
-      $to   = mbDate("+1 $unit", $from);
+      $from = CMbDT::date("+$i $unit", $start);
+      $to   = CMbDT::date("+1 $unit", $from);
       
       $d[$from] = array();
     }
@@ -548,8 +555,8 @@ class CProduct extends CMbObject {
     );
     
     for ($i = 0; $i < $n; $i++) {
-      $from = mbDate("+$i $unit", $start);
-      $to = mbDate("+1 $unit", $from);
+      $from = CMbDT::date("+$i $unit", $start);
+      $to = CMbDT::date("+1 $unit", $from);
       
       // X init
       foreach ($services as $_key => $_service) {
@@ -678,7 +685,7 @@ class CProduct extends CMbObject {
       "in"  => array(),
       "out" => array(),
     );
-    $start = mbDate(null, "$year-01-01");
+    $start = CMbDT::date(null, "$year-01-01");
     self::fillFlow($year_flows, $products, 12, $start, "MONTH", $services);
     
     $flows["year"] = array(
@@ -694,8 +701,8 @@ class CProduct extends CMbObject {
         "in"  => array(),
         "out" => array(),
       );
-      $start = mbDate(null, "$year-$month-01");
-      self::fillFlow($month_flows, $products, mbTransformTime("+1 MONTH -1 DAY", $start, "%d"), $start, "DAY", $services);
+      $start = CMbDT::date(null, "$year-$month-01");
+      self::fillFlow($month_flows, $products, CMbDT::transform("+1 MONTH -1 DAY", $start, "%d"), $start, "DAY", $services);
       
       $flows["month"] = array(
         $month_flows, 
@@ -712,10 +719,10 @@ class CProduct extends CMbObject {
       "diff" => array(),
     );
     
-    $start = mbDate(null, "$year-01-01");
+    $start = CMbDT::date(null, "$year-01-01");
     for ($i = 0; $i < 12; $i++) {
-      $from = mbDate("+$i MONTH", $start);
-      $to = mbDate("+1 MONTH", $from);
+      $from = CMbDT::date("+$i MONTH", $start);
+      $to = CMbDT::date("+1 MONTH", $from);
       
       $balance["in"][$from] = array(0, 0);
       $balance["out"][$from] = array(0, 0);
@@ -723,12 +730,8 @@ class CProduct extends CMbObject {
       $supply_multiple = self::getSupplyMultiple($products, $from, $to);
       $consum_multiple = self::getConsumptionMultipleProducts($products, $from, $to, null, false);
 
+      /** @var CProduct $_product */
       foreach ($products as $_product) {
-        /** 
-        @var CProduct
-        */
-        $_product = $_product; // for autocompletion
-        
         $supply = CValue::read($supply_multiple, $_product->_id, 0);
         //$supply = $_product->getSupply($from, $to);
         

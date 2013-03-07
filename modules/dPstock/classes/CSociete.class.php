@@ -11,35 +11,35 @@
 
 class CSociete extends CMbObject {
   // DB Table key
-  var $societe_id     = null;
+  public $societe_id;
 
   // DB Fields
-  var $name            = null;
-  var $code            = null;
-  var $distributor_code= null;
-  var $customer_code   = null;
-  var $manufacturer_code= null; // in the barcodes (http://www.morovia.com/education/symbology/scc-14.asp)
-  var $address         = null;
-  var $postal_code     = null;
-  var $city            = null;
-  var $phone           = null;
-  var $fax             = null;
-  var $siret           = null;
-  var $email           = null;
-  var $contact_name    = null;
-  var $carriage_paid   = null;
-  var $delivery_time   = null;
-  var $departments     = null;
+  public $name;
+  public $code;
+  public $distributor_code;
+  public $customer_code;
+  public $manufacturer_code; // in the barcodes (http://www.morovia.com/education/symbology/scc-14.asp)
+  public $address;
+  public $postal_code;
+  public $city;
+  public $phone;
+  public $fax;
+  public $siret;
+  public $email;
+  public $contact_name;
+  public $carriage_paid;
+  public $delivery_time;
+  public $departments;
   
-  var $_departments    = null;
-  var $_is_supplier    = null;
-  var $_is_manufacturer= null;
+  public $_departments;
+  public $_is_supplier;
+  public $_is_manufacturer;
 
   // Object References
   //     Multiple
-  var $_ref_product_references = null;
-  var $_ref_product_orders = null;
-  var $_ref_products   = null;
+  public $_ref_product_references;
+  public $_ref_product_orders;
+  public $_ref_products;
 
   function getSpec() {
     $spec = parent::getSpec();

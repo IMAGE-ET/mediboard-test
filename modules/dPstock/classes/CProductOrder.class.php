@@ -10,57 +10,55 @@
  */
 
 class CProductOrder extends CMbMetaObject {
-  // DB Table key
-  var $order_id         = null;
+  public $order_id;
 
   // DB Fields
-  var $date_ordered     = null;
-  var $comments         = null;
-  var $societe_id       = null;
-  var $group_id         = null;
-  var $locked           = null;
-  var $order_number     = null;
-  var $bill_number      = null;
-  var $cancelled        = null;
-  var $deleted          = null;
-  var $received         = null;
+  public $date_ordered;
+  public $comments;
+  public $societe_id;
+  public $group_id;
+  public $locked;
+  public $order_number;
+  public $bill_number;
+  public $cancelled;
+  public $deleted;
+  public $received;
 
-  // Object References
-  //    Multiple
-  var $_ref_order_items = null;
-  var $_ref_receptions  = null;
+  /** @var CProductOrderItem[] */
+  public $_ref_order_items;
 
-  //    Single
-  /**
-   * @var CSociete
-   */
-  var $_ref_societe     = null;
-  /**
-   * @var CGroups
-   */
-  var $_ref_group       = null;
-  var $_ref_address     = null;
+  /** @var CProductReception[] */
+  public $_ref_receptions;
+
+  /** @var CSociete */
+  public $_ref_societe;
+
+  /** @var CGroups*/
+  public $_ref_group;
+
+  /** @var CMbObject */
+  public $_ref_address;
 
   // Form fields
-  var $_total           = null;
-  var $_total_tva       = null;
-  var $_status          = null;
-  var $_count_received  = null;
-  var $_count_renewed   = null;
-  var $_date_received   = null;
-  var $_received        = null;
-  var $_partial         = null;
-  var $_customer_code   = null;
-  var $_context_bl      = null;
-  var $_septic          = null;
-  var $_has_lot_numbers = false;
+  public $_total;
+  public $_total_tva;
+  public $_status;
+  public $_count_received;
+  public $_count_renewed;
+  public $_date_received;
+  public $_received;
+  public $_partial;
+  public $_customer_code;
+  public $_context_bl;
+  public $_septic;
+  public $_has_lot_numbers = false;
   
   // actions
-  var $_order           = null;
-  var $_receive         = null;
-  var $_autofill        = null;
-  var $_redo            = null;
-  var $_reset           = null;
+  public $_order;
+  public $_receive;
+  public $_autofill;
+  public $_redo;
+  public $_reset;
   
   static $_return_form_label = "Bon de retour";
   
@@ -78,38 +76,40 @@ class CProductOrder extends CMbMetaObject {
   }
 
   function getProps() {
-    $specs = parent::getProps();
-    $specs['date_ordered']    = 'dateTime seekable';
-    $specs['order_number']    = 'str maxLength|64 seekable protected';
-    $specs['bill_number']     = 'str maxLength|64 protected';
-    $specs['societe_id']      = 'ref notNull class|CSociete seekable autocomplete|name';
-    $specs['group_id']        = 'ref notNull class|CGroups show|0';
-    $specs['comments']        = 'text';
-    $specs['locked']          = 'bool show|0';
-    $specs['cancelled']       = 'bool show|0';
-    $specs['deleted']         = 'bool show|0';
-    $specs['received']        = 'bool';
-    $specs['object_id']       = 'ref class|CMbObject meta|object_class';
-    $specs['object_class']    = 'enum list|COperation show|0'; // only COperation for now
+    $props = parent::getProps();
+    $props['date_ordered']    = 'dateTime seekable';
+    $props['order_number']    = 'str maxLength|64 seekable protected';
+    $props['bill_number']     = 'str maxLength|64 protected';
+    $props['societe_id']      = 'ref notNull class|CSociete seekable autocomplete|name';
+    $props['group_id']        = 'ref notNull class|CGroups show|0';
+    $props['comments']        = 'text';
+    $props['locked']          = 'bool show|0';
+    $props['cancelled']       = 'bool show|0';
+    $props['deleted']         = 'bool show|0';
+    $props['received']        = 'bool';
+    $props['object_id']       = 'ref class|CMbObject meta|object_class';
+    $props['object_class']    = 'enum list|COperation show|0'; // only COperation for now
     
-    $specs['_total']          = 'currency show|1';
-    $specs['_total_tva']      = 'currency show|1';
-    $specs['_status']         = 'enum list|opened|locked|ordered|received|cancelled show|1';
-    $specs['_count_received'] = 'num pos';
-    $specs['_date_received']  = 'dateTime';
-    $specs['_received']       = 'bool';
-    $specs['_partial']        = 'bool';
-    $specs['_customer_code']  = 'str show|1';
+    $props['_total']          = 'currency show|1';
+    $props['_total_tva']      = 'currency show|1';
+    $props['_status']         = 'enum list|opened|locked|ordered|received|cancelled show|1';
+    $props['_count_received'] = 'num pos';
+    $props['_date_received']  = 'dateTime';
+    $props['_received']       = 'bool';
+    $props['_partial']        = 'bool';
+    $props['_customer_code']  = 'str show|1';
     
-    $specs['_order']          = 'bool';
-    $specs['_receive']        = 'bool';
-    $specs['_autofill']       = 'bool';
-    $specs['_redo']           = 'bool';
-    $specs['_reset']          = 'bool';
-    return $specs;
+    $props['_order']          = 'bool';
+    $props['_receive']        = 'bool';
+    $props['_autofill']       = 'bool';
+    $props['_redo']           = 'bool';
+    $props['_reset']          = 'bool';
+    return $props;
   }
 
-  /** Counts this received product's items */
+  /**
+   * Counts this received product's items
+   */
   function countReceivedItems() {
     $this->loadRefsOrderItems();
     $count = 0;
@@ -137,15 +137,18 @@ class CProductOrder extends CMbMetaObject {
   function containsRenewalLines() {
     $this->loadRefsOrderItems();
     
-    foreach($this->_ref_order_items as $_item) {
+    foreach ($this->_ref_order_items as $_item) {
       if ($_item->renewal) {
         return true;
       }
     }
+
     return false;
   }
 
-  /** Marks every order's items as received */
+  /**
+   * Marks every order's items as received
+   */
   function receive() {
     $this->loadRefsOrderItems();
 
@@ -155,7 +158,7 @@ class CProductOrder extends CMbMetaObject {
         $reception = new CProductOrderItemReception();
         $reception->quantity = $item->quantity - $item->_quantity_received;
         $reception->order_item_id = $item->_id;
-        $reception->date = mbDateTime();
+        $reception->date = CMbDT::dateTime();
         if ($msg = $reception->store()) {
           return $msg;
         }
@@ -163,7 +166,9 @@ class CProductOrder extends CMbMetaObject {
     }
   }
   
-  /** Fills the order in function of the stocks and future stocks */
+  /**
+   * Fills the order in function of the stocks and future stocks
+   */
   function autofill() {
     $this->updateFormFields();
     $this->completeField('societe_id');
@@ -176,7 +181,7 @@ class CProductOrder extends CMbMetaObject {
     if (!$this->date_ordered && !$this->_received && !$this->cancelled && !$this->deleted) {
       
       // we empty the order
-      foreach($this->_ref_order_items as $item) {
+      foreach ($this->_ref_order_items as $item) {
         $item->delete();
       }
     }
@@ -217,7 +222,9 @@ class CProductOrder extends CMbMetaObject {
     }
   }
   
-  /** Fills a new order with the same articles */
+  /**
+   * Fills a new order with the same articles
+   */
   function redo() {
     $this->load();
     $order = new CProductOrder();
@@ -255,16 +262,20 @@ class CProductOrder extends CMbMetaObject {
       }
     }
   }
-  
+
   /**
-   * @param string $type The type of orders we are looking for [waiting|locked|pending|received|cancelled]
-   * @param string $keywords [optional]
-   * @param integer $limit = 30 [optional]
+   * Search a product
+   *
+   * @param string  $type     The type of orders we are looking for [waiting|locked|pending|received|cancelled]
+   * @param string  $keywords [optional]
+   * @param integer $limit    = 30 [optional]
+   * @param array   $where    Where additionnal
+   *
    * @return array The list of orders
    */
   function search($type, $keywords = "", $limit = 30, $where = array()) {
     global $g;
-    
+
     $leftjoin = array();
     $leftjoin['product_order_item'] = 'product_order.order_id = product_order_item.order_id';
     $leftjoin['product_order_item_reception'] = 'product_order_item.order_item_id = product_order_item_reception.order_item_id';
@@ -275,15 +286,16 @@ class CProductOrder extends CMbMetaObject {
     if ($keywords) {
       $societe = new CSociete();
       $where_or = array();
-      
+
       // we seek among the societes
+      $where_societe_or = array();
       foreach ($societe->getSeekables() as $field => $spec) {
         $where_societe_or[] = "societe.$field LIKE '%$keywords%'";
       }
       $where_societe[] = implode(' OR ', $where_societe_or);
       
       // we seek among the orders
-      foreach($this->getSeekables() as $field => $spec) {
+      foreach ($this->getSeekables() as $field => $spec) {
         $where_or[] = "product_order.$field LIKE '%$keywords%'";
       }
       $where_or[] = 'product_order.societe_id ' . CSQLDataSource::prepareIn(array_keys($societe->loadList($where_societe)));
@@ -301,7 +313,8 @@ class CProductOrder extends CMbMetaObject {
     $where['product_order.comments']     = $this->_spec->ds->prepare("!= % OR product_order.comments IS NULL", CProductOrder::$_return_form_label);
     
     switch ($type) {
-      case 'waiting': break;
+      case 'waiting':
+        break;
       case 'locked':
         $where['product_order.locked']       = " = 1";
         break;
@@ -369,7 +382,7 @@ class CProductOrder extends CMbMetaObject {
       $orders_list = $list;
     }*/
     
-    foreach($orders_list as $_order) {
+    foreach ($orders_list as $_order) {
       $_order->loadRefsFwd();
     }
     
@@ -385,7 +398,7 @@ class CProductOrder extends CMbMetaObject {
     }
     
     $format = str_replace('%id', str_pad($this->_id ? $this->_id : 0, 4, '0', STR_PAD_LEFT), $format);
-    $number = mbTransformTime(null, null, $format);
+    $number = CMbDT::transform(null, null, $format);
     
     if ($contextual) {
       $this->completeField("object_class");
@@ -397,8 +410,9 @@ class CProductOrder extends CMbMetaObject {
   }
   
   function getReceptions(){
-    if (!$this->_id) 
+    if (!$this->_id) {
       return $this->_ref_receptions = array();
+    }
       
     $rec = new CProductReception;
     return $this->_ref_receptions = $rec->findFromOrder($this->_id);
@@ -423,10 +437,18 @@ class CProductOrder extends CMbMetaObject {
     
     // Status
     $this->_status = "opened";
-    if ($this->locked)       $this->_status = "locked";
-    if ($this->date_ordered) $this->_status = "ordered";
-    if ($this->received)     $this->_status = "received";
-    if ($this->cancelled)    $this->_status = "cancelled";
+    if ($this->locked) {
+      $this->_status = "locked";
+    }
+    if ($this->date_ordered) {
+      $this->_status = "ordered";
+    }
+    if ($this->received) {
+      $this->_status = "received";
+    }
+    if ($this->cancelled) {
+      $this->_status = "cancelled";
+    }
     
     // View
     $this->_view  = "$this->order_number - ";
@@ -490,8 +512,10 @@ class CProductOrder extends CMbMetaObject {
       "product_reference" => "product_reference.reference_id = product_order_item.reference_id",
       "product"           => "product.product_id = product_reference.product_id",
     );
-    
-    return $this->_ref_order_items = $this->loadBackRefs('order_items', "renewal, product.classe_comptable, product.code", null, null, $ljoin);
+
+    $order = "renewal, product.classe_comptable, product.code";
+
+    return $this->_ref_order_items = $this->loadBackRefs('order_items', $order, null, null, $ljoin);
   }
   
   function loadRefAddress(){
@@ -515,7 +539,7 @@ class CProductOrder extends CMbMetaObject {
     
     if ($this->_order && !$this->date_ordered) {
       if (count($this->_ref_order_items) != 0) {
-        $this->date_ordered = mbDateTime();
+        $this->date_ordered = CMbDT::dateTime();
       }
       $this->_order = null;
     }
@@ -561,7 +585,9 @@ class CProductOrder extends CMbMetaObject {
     
     if (!$this->_id && empty($this->order_number)) {
       $this->order_number = uniqid(rand());
-      if ($msg = parent::store()) return $msg;
+      if ($msg = parent::store()) {
+        return $msg;
+      }
       $this->order_number = $this->getUniqueNumber();
     }
     
@@ -583,7 +609,7 @@ class CProductOrder extends CMbMetaObject {
     
     if (($items_count == 0) || !$this->date_ordered) {
       return parent::delete();
-    } 
+    }
     else if ($this->date_ordered && !$this->_received) {
       
       // TODO: here : cancel order !!
@@ -596,7 +622,7 @@ class CProductOrder extends CMbMetaObject {
   function loadView(){
     parent::loadView();
     
-    foreach($this->_ref_order_items as $_item) {
+    foreach ($this->_ref_order_items as $_item) {
       if ($_item->lot_id) {
         $_item->loadRefLot();
         $this->_has_lot_numbers = true;
@@ -605,11 +631,13 @@ class CProductOrder extends CMbMetaObject {
   }
   
   function getLabel(){
-    if ($this->object_id)
+    if ($this->object_id) {
       return "Bon de commande / Facturation";
+    }
     
-    if (strpos($this->comments, self::$_return_form_label) === 0)
+    if (strpos($this->comments, self::$_return_form_label) === 0) {
       return "Bon de retour";
+    }
     
     return "Bon de commande";
   }
@@ -625,4 +653,3 @@ class CProductOrder extends CMbMetaObject {
     return true;
   }
 }
-?>
