@@ -1,4 +1,4 @@
-<?php /* $Id$ */
+<?php /** $Id$ */
 
 /**
  * @package Mediboard
@@ -25,33 +25,32 @@ $total["reveil_somme"]    = 0;
 $listTemps = new CTempsOp;
 
 $where = array();
-$where["nb_intervention"] = ">= $nb_sejour_mini";
+$where["nb_intervention"] = ">= '$nb_sejour_mini'";
 $where["chir_id"]         = CSQLDataSource::prepareIn(array_keys($listPrats), $prat_id);
 
-if($codeCCAM) {
+if ($codeCCAM) {
   $codeCCAM = trim($codeCCAM);
-  $listCodeCCAM=explode(" ",$codeCCAM);
+  $listCodeCCAM=explode(" ", $codeCCAM);
   $listCodeCCAM=array_filter($listCodeCCAM);
-  foreach($listCodeCCAM as $keyccam => $code){
+
+  foreach ($listCodeCCAM as $keyccam => $code) {
     $where[] = "ccam LIKE '%$code%'";
   }
 }
 
-$ljoin = array();
+$ljoin          = array();
 $ljoin["users"] = "users.user_id = temps_op.chir_id";
+$order          = "users.user_last_name ASC, users.user_first_name ASC, ccam";
 
-$order = "users.user_last_name ASC, users.user_first_name ASC, ccam";
+$listTemps      = $listTemps->loadList($where, $order, null, null, $ljoin);
 
-$listTemps = $listTemps->loadList($where, $order, null, null, $ljoin);
-
-
-if($codeCCAM) {
+if ($codeCCAM) {
   // Groupement des données par chirurgien
   $old_chir = 0;
   $TempsOperatoire = array();
   
-  foreach($listTemps as $keyTemps => $temps) {    
-    if($old_chir != $temps->chir_id) {
+  foreach ($listTemps as $keyTemps => $temps) {
+    if ($old_chir != $temps->chir_id) {
       // Si on change de chirurgien, alors on initialise la variable
       $old_temps_id = $temps->temps_op_id;
       $TempsOperatoire[$temps->chir_id]                  = new CTempsOp();
@@ -63,6 +62,7 @@ if($codeCCAM) {
       $TempsOperatoire[$temps->chir_id]->duree_ecart     = "-";
       $TempsOperatoire[$temps->chir_id]->occup_ecart     = "-";
     }
+
     $TempsOperatoire[$temps->chir_id]->ccam            = str_replace("|", ", ", $codeCCAM);
     $TempsOperatoire[$temps->chir_id]->nb_intervention += $temps->nb_intervention;
     $TempsOperatoire[$temps->chir_id]->estimation      += $temps->nb_intervention * strtotime($temps->estimation);
@@ -72,17 +72,19 @@ if($codeCCAM) {
 
     $old_chir = $temps->chir_id;    
   }
+
   $listTemps = $TempsOperatoire;
 }
 
 
-foreach($listTemps as $keyTemps => $temps) {
-  if($codeCCAM) {
-    $temps->estimation  = strftime("%H:%M:%S",$temps->estimation / $temps->nb_intervention);
-    $temps->occup_moy   = strftime("%H:%M:%S",$temps->occup_moy  / $temps->nb_intervention);
-    $temps->duree_moy   = strftime("%H:%M:%S",$temps->duree_moy  / $temps->nb_intervention);
-    $temps->reveil_moy  = strftime("%H:%M:%S",$temps->reveil_moy / $temps->nb_intervention); 
+foreach ($listTemps as $keyTemps => $temps) {
+  if ($codeCCAM) {
+    $temps->estimation  = strftime("%H:%M:%S", $temps->estimation / $temps->nb_intervention);
+    $temps->occup_moy   = strftime("%H:%M:%S", $temps->occup_moy  / $temps->nb_intervention);
+    $temps->duree_moy   = strftime("%H:%M:%S", $temps->duree_moy  / $temps->nb_intervention);
+    $temps->reveil_moy  = strftime("%H:%M:%S", $temps->reveil_moy / $temps->nb_intervention);
   }
+
   $listTemps[$keyTemps]->loadRefsFwd();
   $total["nbInterventions"] += $temps->nb_intervention;
   $total["estim_somme"]     += $temps->nb_intervention * strtotime($temps->estimation);
@@ -90,7 +92,8 @@ foreach($listTemps as $keyTemps => $temps) {
   $total["duree_somme"]     += $temps->nb_intervention * strtotime($temps->duree_moy);
   $total["reveil_somme"]    += $temps->nb_intervention * strtotime($temps->reveil_moy);
 }
-if($total["nbInterventions"] != 0){
+
+if ($total["nbInterventions"] != 0) {
   $total["estim_moy"]  = $total["estim_somme"]  / $total["nbInterventions"];
   $total["occup_moy"]  = $total["occup_somme"]  / $total["nbInterventions"];
   $total["duree_moy"]  = $total["duree_somme"]  / $total["nbInterventions"];
