@@ -150,7 +150,7 @@ foreach ($log_pops as $_pop) {
     CAppUI::stepAjax("CPop-msg-nonewMsg", UI_MSG_OK, $_pop->libelle);
   }
 
-  $_pop->last_update = mbDateTime();
+  $_pop->last_update = CMbDT::dateTime();
   $_pop->store();
 
   $pop->close();

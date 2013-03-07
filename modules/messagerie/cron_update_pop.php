@@ -129,7 +129,7 @@ foreach ($sources as $_source) {
     } //foreach
   }
 
-  $_source->last_update = mbDateTime();
+  $_source->last_update = CMbDT::dateTime();
   $_source->store();
   $pop->close();
 }

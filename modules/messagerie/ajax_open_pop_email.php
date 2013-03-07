@@ -37,7 +37,7 @@ $mail->loadMatchingObject();
 if ($mail->_id && !$mail->text_plain_id) {
   $mail->loadMatchingFromSource($head);
   $mail->loadContentFromSource($pop->getFullBody($mail_id, false, false, true));
-  $mail->date_read = mbDateTime();
+  $mail->date_read = CMbDT::dateTime();
   $mail->user_id = $user->_id;
   //text plain
   if ($mail->_text_plain) {

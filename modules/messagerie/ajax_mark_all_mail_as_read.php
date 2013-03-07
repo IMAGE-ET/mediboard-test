@@ -28,7 +28,7 @@ $pop->open();
 $count = 0;
 foreach ($mails as $_mail) {
   if ($pop->setflag($_mail->uid, "\\Seen")) {
-    $_mail->date_read = mbDateTime();
+    $_mail->date_read = CMbDT::dateTime();
     if (!$msg = $_mail->store() ) {
       $count++;
     }

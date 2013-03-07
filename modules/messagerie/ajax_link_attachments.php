@@ -38,7 +38,7 @@ if (stripos($mail->_text_plain->content, "[apicrypt]") !== false) {
 
   //search
   if (!$patient->_id && $lines[2] != '' && $lines[3] != "") {
-    $lines[7] = mbDateFromLocale($lines[7]);
+    $lines[7] = CMbDT::dateFromLocale($lines[7]);
     $where = array();
     $where[] = "`nom` LIKE '$lines[2]%' OR `nom_jeune_fille` LIKE '$lines[2]%'";
     $where["prenom"] = "LIKE '$lines[3]%' ";
@@ -53,7 +53,7 @@ if (stripos($mail->_text_plain->content, "[apicrypt]") !== false) {
 
   // patient + date
   if ($patient->_id && !$dossier->_id && $lines[10]) {
-    $lines[10] = mbDateTime(mbDateFromLocale($lines[10]));
+    $lines[10] = CMbDT::dateTime(CMbDT::dateFromLocale($lines[10]));
     $where = array();
     $where[] = " '$lines[10]' BETWEEN entree AND sortie ";
     $where["patient_id"] = " = $patient->_id";
