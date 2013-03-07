@@ -16,9 +16,9 @@ CCanDo::checkRead();
 
 $echange_ftp_id = CValue::get("echange_ftp_id");
 $page           = CValue::get('page', 0);
-$now            = mbDate();
-$_date_min      = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
-$_date_max      = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
+$now            = CMbDT::date();
+$_date_min      = CValue::getOrSession('_date_min', CMbDT::dateTime("-7 day"));
+$_date_max      = CValue::getOrSession('_date_max', CMbDT::dateTime("+1 day"));
 $function       = CValue::getOrSession("function"); 
 
 CValue::setSession("_date_min"  , $_date_min);

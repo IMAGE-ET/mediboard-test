@@ -121,7 +121,7 @@ class CSmpObjectHandler extends CEAIObjectHandler {
             }
             
             $_id_400->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$tag_NDA;
-            $_id_400->last_update = mbDateTime();
+            $_id_400->last_update = CMbDT::dateTime();
             $_id_400->store();
           }
         }

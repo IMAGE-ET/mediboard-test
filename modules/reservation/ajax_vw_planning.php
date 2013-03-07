@@ -105,19 +105,19 @@ $plages = $plageop->loadList($where);
 
 // Création du planning
 $planning = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
-$planning->title =  "Planning du ".mbDateToLocale($date_planning);
+$planning->title =  "Planning du ".CMbDT::dateToLocale($date_planning);
 
 if ($bloc_id) {
   $planning->title .= " - $bloc->nom";
 }
 
 $planning->guid = "planning_interv";
-$planning->hour_min  = mbTime(CAppUI::conf("reservation debut_planning").":00");
+$planning->hour_min  = CMbDT::time(CAppUI::conf("reservation debut_planning").":00");
 $planning->dragndrop = $planning->resizable = CCanDo::edit();
 $planning->hour_divider = 60 / intval(CAppUI::conf("dPplanningOp COperation min_intervalle"));
 $planning->show_half = true;
 $i = 0;
-$today = mbDate();
+$today = CMbDT::date();
 
 foreach ($salles as $_salle) {
   if ($bloc_id) {
@@ -127,7 +127,7 @@ foreach ($salles as $_salle) {
     $planning->addDayLabel($i, $_salle->_view);
   }
   if ($today == $date_planning) {
-    $planning->addEvent(new CPlanningEvent(null, "$i ".mbTime(), null, null, "red", null, "now"));
+    $planning->addEvent(new CPlanningEvent(null, "$i ".CMbDT::time(), null, null, "red", null, "now"));
   }
   $i++;
 }
@@ -203,25 +203,25 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     if ($_operation->horaire_voulu) {
       $debut = "$i {$_operation->horaire_voulu}";
       $debut_op = $_operation->horaire_voulu;
-      $fin_op = mbAddTime($_operation->temp_operation, $_operation->horaire_voulu);
-      $duree = mbMinutesRelative($_operation->horaire_voulu, $fin_op);
+      $fin_op = CMbDT::addTime($_operation->temp_operation, $_operation->horaire_voulu);
+      $duree = CMbDT::minutesRelative($_operation->horaire_voulu, $fin_op);
     }
     else {
       $debut = "$i {$_operation->time_operation}";
       $debut_op = $_operation->time_operation;
-      $fin_op = mbAddTime($_operation->temp_operation, $_operation->time_operation);
-      $duree = mbMinutesRelative($_operation->time_operation, $fin_op);
+      $fin_op = CMbDT::addTime($_operation->temp_operation, $_operation->time_operation);
+      $duree = CMbDT::minutesRelative($_operation->time_operation, $fin_op);
     }
     
     $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue' ".
       "data-sortie_prevue='$sejour->sortie_prevue' data-sejour_id='$sejour->_id' data-duree='$_operation->temp_operation'></span>";
     
-    if (abs(mbHoursRelative("$_operation->date $debut_op", $first_log->date)) <= $diff_hour_urgence) {
+    if (abs(CMbDT::hoursRelative("$_operation->date $debut_op", $first_log->date)) <= $diff_hour_urgence) {
       $libelle .= "<span style='float: right' title='Intervention en urgence'><img src='images/icons/attente_fourth_part.png' /></span>";
     }
     
     $libelle .= "<span onmouseover='ObjectTooltip.createEx(this, \"".CMbString::htmlEntities($patient->_guid)."\")'>".CMbString::htmlEntities($patient->nom. " " .$patient->prenom)."</span>, ".$patient->getFormattedValue("naissance").
-    "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".mbTransformTime($debut_op, null, "%H:%M")." - ".mbTransformTime($fin_op, null, "%H:%M")."</span>".
+    "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".CMbDT::transform($debut_op, null, "%H:%M")." - ".CMbDT::transform($fin_op, null, "%H:%M")."</span>".
     "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>".
     "\n<span style='font-size: 11px; font-weight: bold;'>".CMbString::htmlEntities($_operation->libelle)."</span>".
     "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>".CMbString::htmlEntities($chir->_view)."</span>";
@@ -297,18 +297,18 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     $planning->addEvent($event);
     
     if ($_operation->presence_preop) {
-      $hour_debut_preop = mbSubTime($_operation->presence_preop, $_operation->time_operation);
+      $hour_debut_preop = CMbDT::subTime($_operation->presence_preop, $_operation->time_operation);
       $debut_preop = "$i $hour_debut_preop";
-      $duree = mbMinutesRelative($hour_debut_preop, $_operation->time_operation);
+      $duree = CMbDT::minutesRelative($hour_debut_preop, $_operation->time_operation);
       $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_preop, $duree, "", "#ddd", true);
       
       $planning->addEvent($event);
     }
     
     if ($_operation->presence_postop) {
-      $hour_fin_postop = mbAddTime($_operation->presence_postop, $fin_op);
+      $hour_fin_postop = CMbDT::addTime($_operation->presence_postop, $fin_op);
       $debut_postop = "$i $fin_op";
-      $duree = mbMinutesRelative($fin_op, $hour_fin_postop);
+      $duree = CMbDT::minutesRelative($fin_op, $hour_fin_postop);
       $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_postop, $duree, "", "#ddd", true);
       
       $planning->addEvent($event);
@@ -321,9 +321,9 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
   $i = array_search($salle_id, $salles_ids);
   
   foreach ($_commentaires as $_commentaire) {
-    $debut = "$i ".mbTime($_commentaire->debut);
+    $debut = "$i ".CMbDT::time($_commentaire->debut);
     
-    $duree = mbMinutesRelative(mbTime($_commentaire->debut), mbTime($_commentaire->fin));
+    $duree = CMbDT::minutesRelative(CMbDT::time($_commentaire->debut), CMbDT::time($_commentaire->fin));
     
     $libelle = "<span style='display: none;' data-entree_prevue='$_commentaire->debut' data-sortie_prevue='$_commentaire->fin'></span>".
     "<span style='font-size: 11px; font-weight: bold;'>".CMbString::htmlEntities($_commentaire->libelle)."</span>".
@@ -348,9 +348,9 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
   $i = array_search($salle_id, $salles_ids);
   
   foreach ($_plages as $_plage) {
-    $debut = "$i ".mbTime($_plage->debut);
+    $debut = "$i ".CMbDT::time($_plage->debut);
     
-    $duree = mbMinutesRelative(mbTime($_plage->debut), mbTime($_plage->fin));
+    $duree = CMbDT::minutesRelative(CMbDT::time($_plage->debut), CMbDT::time($_plage->fin));
     
     $libelle = $_plage->chir_id ? $_plage->_ref_chir->_view : $_plage->_ref_spec->_view;
     

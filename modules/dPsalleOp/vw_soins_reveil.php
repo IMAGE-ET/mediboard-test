@@ -27,7 +27,7 @@ $smarty->assign("operation", $operation);
 $smarty->assign("sejour", $sejour);
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"       , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
-$smarty->assign("date", mbDate());
+$smarty->assign("date", CMbDT::date());
 $smarty->display("vw_soins_reveil.tpl");
 
 ?>

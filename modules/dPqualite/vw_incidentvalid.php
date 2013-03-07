@@ -95,7 +95,7 @@ $smarty->assign("selected_user_id", $selected_user_id);
 $smarty->assign("selected_service_valid_user_id", $selected_service_valid_user_id);
 $smarty->assign("evenements", $evenements);
 
-$smarty->assign("today"            , mbDate());
+$smarty->assign("today"            , CMbDT::date());
 $smarty->assign("listUsersEdit"    , $listUsersEdit);
 $smarty->assign("listUsersTermine" , $listUsersTermine);
 $smarty->assign("selectedUser"     , $selectedUser);

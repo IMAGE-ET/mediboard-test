@@ -71,46 +71,46 @@ switch ($granularite) {
     $unite = "hour";
     $nb_unite = 1;
     $nb_ticks = 24;
-    $date_min = mbDateTime($date);
+    $date_min = CMbDT::dateTime($date);
     break;
   case "week":
     $period = "6hours";
     $unite = "hour";
     $nb_unite = 6;
     $nb_ticks = 28;
-    $date_min = mbDateTime("-2 days", $date);
+    $date_min = CMbDT::dateTime("-2 days", $date);
     break;
   case "4weeks":
     $period = "1day";
     $unite = "day";
     $nb_unite = 1;
     $nb_ticks = 28;
-    $date_min = mbDateTime("-1 week", CMbDate::dirac("week", $date));
+    $date_min = CMbDT::dateTime("-1 week", CMbDate::dirac("week", $date));
 }
 
 $offset = $nb_ticks * $nb_unite;
-$date_max = mbDateTime("+ $offset $unite", $date_min);
-$current = CMbDate::dirac("hour", mbDateTime());
-$temp_datetime = mbDateTime(null, $date_min);
+$date_max = CMbDT::dateTime("+ $offset $unite", $date_min);
+$current = CMbDate::dirac("hour", CMbDT::dateTime());
+$temp_datetime = CMbDT::dateTime(null, $date_min);
 
 for ($i = 0 ; $i < $nb_ticks ; $i++) {
   $offset = $i * $nb_unite;
   
-  $datetime = mbDateTime("+ $offset $unite", $date_min);
+  $datetime = CMbDT::dateTime("+ $offset $unite", $date_min);
   $datetimes[] = $datetime;
   if ($granularite == "4weeks") {
-    if (mbDate($current) == mbDate($temp_datetime) &&
-      mbTime($current) >= mbTime($temp_datetime) && mbTime($current) > mbTime($datetime)) {
+    if (CMbDT::date($current) == CMbDT::date($temp_datetime) &&
+      CMbDT::time($current) >= CMbDT::time($temp_datetime) && CMbDT::time($current) > CMbDT::time($datetime)) {
       $current = $temp_datetime;
     }
-    $week_a = mbTransformTime($temp_datetime, null, "%V");
-    $week_b = mbTransformTime($datetime, null, "%V");
+    $week_a = CMbDT::transform($temp_datetime, null, "%V");
+    $week_b = CMbDT::transform($datetime, null, "%V");
 
     // les semaines
     $days[$datetime] = $week_b;
     
     // On stocke le changement de mois s'il advient
-   if (mbTransformTime($datetime, null, "%m") != mbTransformTime($temp_datetime, null, "%m")) {
+   if (CMbDT::transform($datetime, null, "%m") != CMbDT::transform($temp_datetime, null, "%m")) {
      
      // Entre deux semaines
      if ($i%7 == 0) {
@@ -124,12 +124,12 @@ for ($i = 0 ; $i < $nb_ticks ; $i++) {
    }
   }
   else {
-    if ($granularite == "week" && mbDate($current) == mbDate($temp_datetime) &&
-        mbTime($datetime) >= mbTime($temp_datetime) && mbTime($current) <= mbTime($datetime)) {
+    if ($granularite == "week" && CMbDT::date($current) == CMbDT::date($temp_datetime) &&
+        CMbDT::time($datetime) >= CMbDT::time($temp_datetime) && CMbDT::time($current) <= CMbDT::time($datetime)) {
       $current = $temp_datetime;
     }
     // le datetime, pour avoir soit le jour soit l'heure
-    $days[] = mbDate($datetime);
+    $days[] = CMbDT::date($datetime);
   }
   $temp_datetime = $datetime;
 }
@@ -199,11 +199,11 @@ foreach ($sejours as $_key => $_sejour) {
   foreach ($_operations as $key=>$_operation) {
     $_operation->loadRefPlageOp(1);
     
-    $hour_operation = mbTransformTime(null, $_operation->temp_operation, "%H");
-    $min_operation = mbTransformTime(null, $_operation->temp_operation, "%M");
+    $hour_operation = CMbDT::transform(null, $_operation->temp_operation, "%H");
+    $min_operation = CMbDT::transform(null, $_operation->temp_operation, "%M");
     
     $_operation->_debut_offset = CMbDate::position($_operation->_datetime, max($date_min, $_sejour->entree), $period);
-    $_operation->_fin_offset = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_sejour->entree), $period);
+    $_operation->_fin_offset = CMbDate::position(CMbDT::dateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_sejour->entree), $period);
     $_operation->_width = $_operation->_fin_offset - $_operation->_debut_offset;
     
     if (($_operation->_datetime > $date_max)) {
@@ -211,7 +211,7 @@ foreach ($sejours as $_key => $_sejour) {
     }
     else {
       $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
-      $_operation->_width_uscpo = CMbDate::position(mbDateTime("+$fin_uscpo hours +$min_operation minutes", $_operation->_datetime), max($date_min, $_sejour->entree), $period) - $_operation->_fin_offset;
+      $_operation->_width_uscpo = CMbDate::position(CMbDT::dateTime("+$fin_uscpo hours +$min_operation minutes", $_operation->_datetime), max($date_min, $_sejour->entree), $period) - $_operation->_fin_offset;
     }
   }
   
@@ -321,12 +321,12 @@ foreach ($affectations as $_affectation) {
   foreach ($_operations as $key=>$_operation) {
     $_operation->loadRefPlageOp(1);
     
-    $hour_operation = mbTransformTime(null, $_operation->temp_operation, "%H");
-    $min_operation = mbTransformTime(null, $_operation->temp_operation, "%M");
+    $hour_operation = CMbDT::transform(null, $_operation->temp_operation, "%H");
+    $min_operation = CMbDT::transform(null, $_operation->temp_operation, "%M");
     
     $_operation->_debut_offset[$_affectation->_id] = CMbDate::position($_operation->_datetime, max($date_min, $_affectation->entree), $period);
     
-    $_operation->_fin_offset[$_affectation->_id] = CMbDate::position(mbDateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_affectation->entree), $period);
+    $_operation->_fin_offset[$_affectation->_id] = CMbDate::position(CMbDT::dateTime("+$hour_operation hours +$min_operation minutes",$_operation->_datetime), max($date_min, $_affectation->entree), $period);
     $_operation->_width[$_affectation->_id] = $_operation->_fin_offset[$_affectation->_id] - $_operation->_debut_offset[$_affectation->_id];
     
     if (($_operation->_datetime > $date_max)) {
@@ -334,7 +334,7 @@ foreach ($affectations as $_affectation) {
     }
     else {
       $fin_uscpo = $hour_operation + 24 * $_operation->duree_uscpo;
-      $_operation->_width_uscpo[$_affectation->_id] = CMbDate::position(mbDateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period) - $_operation->_fin_offset[$_affectation->_id];
+      $_operation->_width_uscpo[$_affectation->_id] = CMbDate::position(CMbDT::dateTime("+$fin_uscpo hours + $min_operation minutes", $_operation->_datetime), max($date_min, $_affectation->entree), $period) - $_operation->_fin_offset[$_affectation->_id];
     }
   }
   

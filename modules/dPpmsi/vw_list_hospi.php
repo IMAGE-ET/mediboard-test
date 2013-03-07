@@ -10,8 +10,8 @@
 CCanDo::checkRead();
 $group = CGroups::loadCurrent();
 
-$date = CValue::getOrSession("date", mbDate());
-$next = mbDate("+1 day", $date);
+$date = CValue::getOrSession("date", CMbDT::date());
+$next = CMbDT::date("+1 day", $date);
 
 $sejour = new CSejour;
 $where = array();

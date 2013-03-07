@@ -65,7 +65,7 @@ function patientGetSiblings($patientMatch) {
       if ($value->nom_jeune_fille)
         $textSiblings .= "($value->nom_jeune_fille)";
       
-      $textSiblings .= " né(e) le ". mbDateToLocale($value->naissance) .
+      $textSiblings .= " né(e) le ". CMbDT::dateToLocale($value->naissance) .
       "\n\t\thabitant ". strtr($value->adresse, "\n", "-") .
       "- $value->cp $value->ville";
     }

@@ -9,7 +9,7 @@
 
 CCanDo::checkRead();
 
-$today = mbDateTime();
+$today = CMbDT::dateTime();
 $sejour_id 		= CValue::getOrSession("sejour_id",0);
 $operation_id = CValue::getOrSession("operation_id",0);
 

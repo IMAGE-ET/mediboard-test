@@ -29,7 +29,7 @@ $hide_annulees = CValue::getOrSession("hide_annulees", 1);
 $plageconsult_id = CValue::getOrSession("plageconsult_id", null);
 $plageSel = new CPlageconsult();
 if (($plageconsult_id === null) && $chirSel && $is_in_period) {
-  $nowTime = mbTime();
+  $nowTime = CMbDT::time();
   $where = array(
     "chir_id = '$chirSel' OR remplacant_id = '$chirSel' OR pour_compte_id = '$chirSel'",
     "date"    => "= '$today'",

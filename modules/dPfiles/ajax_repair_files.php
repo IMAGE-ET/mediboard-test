@@ -17,7 +17,7 @@ $file = new CFile;
 
 if ($date_debut && $date_fin) {
   $where = array();
-  $where["file_date"] =  "BETWEEN '".mbDateTime($date_debut)."' AND '".mbDateTime($date_fin)."'";
+  $where["file_date"] =  "BETWEEN '".CMbDT::dateTime($date_debut)."' AND '".CMbDT::dateTime($date_fin)."'";
   
   $files = $file->loadList($where, null, "$step_from, 100");
   $count = 0;

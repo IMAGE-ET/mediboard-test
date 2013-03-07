@@ -202,7 +202,7 @@ class CSourceFileSystem extends CExchangeSource {
   function setData($data, $argsList = false, CExchangeDataFormat $exchange = null) {
     parent::setData($data, $argsList);
     
-    $file_path = str_replace(array(" ", ":", "-"), array("_", "", ""), mbDateTime());
+    $file_path = str_replace(array(" ", ":", "-"), array("_", "", ""), CMbDT::dateTime());
     
     // Ajout du prefix si existant
     $file_path = $this->fileprefix.$file_path;

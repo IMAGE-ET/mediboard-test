@@ -22,7 +22,7 @@ if ($plageconsult_id) {
   $plage->loadRefsNotes();
   $date  = $plage->date;
 } else {
-  $date  = CValue::get("date", mbDate());
+  $date  = CValue::get("date", CMbDT::date());
 }
 
 function utilisation_rdv($plages, $list, $plage) {
@@ -31,20 +31,20 @@ function utilisation_rdv($plages, $list, $plage) {
   // Granularité de 5 minutes.
   // 288 créneaux de 5 minutes dans 24 heures
   for ($i=0 ; $i < 288 ; $i++) {
-    $time = mbTime(($i*5)." minutes", $plage->debut);
+    $time = CMbDT::time(($i*5)." minutes", $plage->debut);
     $utilisation[$time] = 0;
     if ($time == $plage->fin) break;
   }
   
   foreach($plages as $_plage) {
     $rdvs = $_plage->loadRefsConsultations(false);
-    $freq = mbTransformTime($_plage->freq, null, "%M");
+    $freq = CMbDT::transform($_plage->freq, null, "%M");
     
     foreach ($rdvs as $_rdv) {
       $nb_cases = ($_rdv->duree * $freq) / 5 ;
       for ($i=0 ; $i < $nb_cases ; $i++) {
         
-        $time = mbTime(($i*5)." minutes", $_rdv->heure);
+        $time = CMbDT::time(($i*5)." minutes", $_rdv->heure);
         if (!isset($utilisation[$time])) {
           continue;
         }
@@ -87,7 +87,7 @@ if ($plageconsult_id) {
   
   for ($i = 0; $i < $plage->_total; $i++) {
     $minutes = $plage->_freq * $i;
-    $listPlace[$i]["time"]          = mbTime("+ $minutes minutes", $plage->debut);
+    $listPlace[$i]["time"]          = CMbDT::time("+ $minutes minutes", $plage->debut);
     $listPlace[$i]["consultations"] = array();
   }
   
@@ -97,7 +97,7 @@ if ($plageconsult_id) {
     // Chargement de la categorie
     $consultation->loadRefCategorie();
     
-    $keyPlace = mbTimeCountIntervals($plage->debut, $consultation->heure, $plage->freq);
+    $keyPlace = CMbDT::timeCountIntervals($plage->debut, $consultation->heure, $plage->freq);
   
     if($keyPlace < 0) {
       $listBefore[$keyPlace] =& $consultation;

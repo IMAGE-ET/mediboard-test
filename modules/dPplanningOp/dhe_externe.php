@@ -218,16 +218,16 @@ if ($praticien_id && (!$patient_ok || $sejour_id)) {
     $intervention->chir_id = $praticien_id;
     // Est-ce que la date permet de planifier
     $bloc = $intervention->updateSalle()->loadRefBloc();
-    if(mbDaysRelative(mbDate(), mbDate($intervention->_datetime)) > $bloc->days_locked) {
+    if(CMbDT::daysRelative(CMbDT::date(), CMbDT::date($intervention->_datetime)) > $bloc->days_locked) {
       $plage_op = new CPlageOp();
-      $plage_op->date = mbDate($intervention->_datetime);
+      $plage_op->date = CMbDT::date($intervention->_datetime);
       $plage_op->chir_id = $praticien_id;
       $listPlages = $plage_op->loadMatchingList();
       if(count($listPlages)) {
         $intervention->plageop_id = reset($listPlages)->_id;
       }
     }
-    if(!$intervention->plageop_id && mbDaysRelative(mbDate(), mbDate($intervention->_datetime)) > 2) {
+    if(!$intervention->plageop_id && CMbDT::daysRelative(CMbDT::date(), CMbDT::date($intervention->_datetime)) > 2) {
       $msg_error = "aucune vacation de disponible à cette date";
     } else {
       $intervention->libelle = $sejour->libelle;

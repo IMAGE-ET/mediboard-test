@@ -49,7 +49,7 @@ class CHL7v2SegmentEVN extends CHL7v2Segment {
     $data[] = ($version < "2.5") ? $event->code : null;
     
     // EVN-2: Recorded Date/Time (TS)
-    $data[] = mbDateTime();
+    $data[] = CMbDT::dateTime();
     
     // EVN-3: Date/Time Planned Event (TS)(optional)
     $data[] = $this->planned_datetime;

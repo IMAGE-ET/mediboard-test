@@ -30,7 +30,7 @@
   {{assign var=background value=#ddd}}
   {{if $day_number == '0' || $day_number == '6'}}
     {{assign var=background value=#aaa}}
-  {{elseif in_array(mbDate($_datetime), $bank_holidays)}}
+  {{elseif in_array(CMbDT::date($_datetime), $bank_holidays)}}
     {{assign var=background value=#fc0}}
   {{/if}}
   
@@ -48,7 +48,7 @@
   {{assign var=background value=#ddd}}
   {{if $_datetime|week_number_month == 1}}
     {{assign var=background value=#aaa}}
-  {{elseif in_array(mbDate($_datetime), $bank_holidays)}}
+  {{elseif in_array(CMbDT::date($_datetime), $bank_holidays)}}
     {{assign var=background value=#fc0}}
   {{/if}}
   

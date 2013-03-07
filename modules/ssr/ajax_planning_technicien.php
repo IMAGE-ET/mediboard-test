@@ -10,7 +10,7 @@
 
 CCando::checkRead();
 
-$date         = CValue::getOrSession("date", mbDate());
+$date         = CValue::getOrSession("date", CMbDT::date());
 $kine_id      = CValue::getOrSession("kine_id");
 $surveillance = CValue::getOrSession("surveillance");
 $sejour_id    = CValue::get("sejour_id");
@@ -84,7 +84,7 @@ foreach($evenements as $_evenement){
   }
   
 	$_sejour = $_evenement->_ref_sejour;
-	if (!CMbRange::in($_evenement->debut, mbDate($_sejour->entree), mbDate("+1 DAY", $_sejour->sortie))) {
+	if (!CMbRange::in($_evenement->debut, CMbDT::date($_sejour->entree), CMbDT::date("+1 DAY", $_sejour->sortie))) {
 		$class = "disabled";
 	}
 	
@@ -150,13 +150,13 @@ foreach ($kine->loadBackRefs("plages_conge") as $_plage) {
 
 // Activité du compte
 if ($kine->deb_activite) {
-	$deb = mbDate("-1 DAY", $kine->deb_activite);
-	$planning->addUnavailability(mbDate("-1 WEEK", $deb), $deb);
+	$deb = CMbDT::date("-1 DAY", $kine->deb_activite);
+	$planning->addUnavailability(CMbDT::date("-1 WEEK", $deb), $deb);
 }
 
 if ($kine->fin_activite) {
-  $fin = mbDate("+1 DAY", $kine->fin_activite);
-  $planning->addUnavailability($fin, mbDate("+1 WEEK", $fin));
+  $fin = CMbDT::date("+1 DAY", $kine->fin_activite);
+  $planning->addUnavailability($fin, CMbDT::date("+1 WEEK", $fin));
 }
 
 
@@ -166,7 +166,7 @@ $planning->showNow();
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("planning", $planning);
-$smarty->assign("date"    , mbDateTime());
+$smarty->assign("date"    , CMbDT::dateTime());
 
 $smarty->display("inc_vw_week.tpl");
 

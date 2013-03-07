@@ -187,7 +187,7 @@ if ($prescription->_id){
   }
 }
 
-$now = 100 * (CMbDate::toUTCTimestamp(mbDateTime()) - $time_min) / ($time_max - $time_min);
+$now = 100 * (CMbDate::toUTCTimestamp(CMbDT::dateTime()) - $time_min) / ($time_max - $time_min);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -202,6 +202,6 @@ $smarty->assign("consult_anesth", $consult_anesth);
 $smarty->assign("now", $now);
 $smarty->assign("time_debut_op_iso", $time_debut_op_iso);
 $smarty->assign("time_fin_op_iso",   $time_fin_op_iso);
-$smarty->assign("nb_minutes", mbMinutesRelative($time_debut_op_iso, $time_fin_op_iso));
+$smarty->assign("nb_minutes", CMbDT::minutesRelative($time_debut_op_iso, $time_fin_op_iso));
 
 $smarty->display("inc_vw_surveillance_perop.tpl");

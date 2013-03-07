@@ -38,8 +38,8 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     // Parsing
     $NDA        = trim($line[0]);
     $ADELI      = trim($line[1]);
-    $date_debut = mbDateTime(trim($line[2]));
-    $date_fin   = mbDateTime(trim($line[3]));
+    $date_debut = CMbDT::dateTime(trim($line[2]));
+    $date_fin   = CMbDT::dateTime(trim($line[3]));
     $libelle    = CMbString::capitalize(addslashes(trim($line[4])));
     $nom_salle  = addslashes(trim($line[5]));
     $cote       = isset($line[6]) ? addslashes(trim($line[6])) : null;;
@@ -79,9 +79,9 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $mediuser->loadObject($where, null, null, $ljoin);
     
     // Traitement de la date/heure début, et durée de l'opération
-    $date_op  = mbDate($date_debut);
-    $time_op  = mbTime($date_debut);
-    $temps_op = mbSubTime(mbTime($date_debut), mbTime($date_fin)); 
+    $date_op  = CMbDT::date($date_debut);
+    $time_op  = CMbDT::time($date_debut);
+    $temps_op = CMbDT::subTime(CMbDT::time($date_debut), CMbDT::time($date_fin));
     
     // Recherche de la salle
     $salle      = new CSalle();

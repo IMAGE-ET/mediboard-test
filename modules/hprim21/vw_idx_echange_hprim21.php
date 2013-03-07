@@ -14,8 +14,8 @@ $echange_hprim21_id = CValue::get("echange_hprim21_id");
 $t                  = CValue::getOrSession('types', array());
 $type_message       = CValue::getOrSession("type_message");
 $page               = CValue::get('page', 0);
-$_date_min          = CValue::getOrSession('_date_min', mbDateTime("-7 day"));
-$_date_max          = CValue::getOrSession('_date_max', mbDateTime("+1 day"));
+$_date_min          = CValue::getOrSession('_date_min', CMbDT::dateTime("-7 day"));
+$_date_max          = CValue::getOrSession('_date_max', CMbDT::dateTime("+1 day"));
 
 // Types filtres qu'on peut prendre en compte
 $filtre_types = array('no_date_echange', 'message_invalide');

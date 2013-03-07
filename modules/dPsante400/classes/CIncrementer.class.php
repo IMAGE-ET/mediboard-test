@@ -150,7 +150,7 @@ class CIncrementer extends CMbObject {
     } while ($value % $cluster_count != $cluster_position);
 
     $incrementer->value = $value;
-    $incrementer->last_update = mbDateTime();
+    $incrementer->last_update = CMbDT::dateTime();
     $incrementer->store();
 
     $mutex->release();
@@ -163,7 +163,7 @@ class CIncrementer extends CMbObject {
     $id400->object_class = $object->_class;
     $id400->tag          = $tag;
     $id400->id400        = $format_value;
-    $id400->last_update  = mbDateTime();
+    $id400->last_update  = CMbDT::dateTime();
     $id400->store();
 
     return $id400;
@@ -172,8 +172,8 @@ class CIncrementer extends CMbObject {
   static function getVars(CMbObject $object) {
     $vars = $object->getIncrementVars();
     $default_vars = array(
-      "YYYY" => mbTransformTime(null, null, "%Y"),
-      "YY"   => mbTransformTime(null, null, "%y"),
+      "YYYY" => CMbDT::transform(null, null, "%Y"),
+      "YY"   => CMbDT::transform(null, null, "%y"),
     );
     $vars = array_merge($vars, $default_vars);
     

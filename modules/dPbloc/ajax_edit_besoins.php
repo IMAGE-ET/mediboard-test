@@ -24,7 +24,7 @@ $operation = new COperation;
 $operation->load($object_id);
 $operation->loadRefPlageOp();
 $deb_op = $operation->_datetime;
-$fin_op  = mbAddDateTime($operation->temp_operation, $deb_op);
+$fin_op  = CMbDT::addDateTime($operation->temp_operation, $deb_op);
 
 foreach ($besoins as $_besoin) {
   $type_ressource = $_besoin->loadRefTypeRessource();

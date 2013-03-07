@@ -37,12 +37,12 @@ function loadSejourNonAffectes($where) {
   return $sejourNonAffectes;
 }
 
-$today = mbDate()." 01:00:00";
-$to = mbDateTime("-1 second", $today);
+$today = CMbDT::date()." 01:00:00";
+$to = CMbDT::dateTime("-1 second", $today);
 $list = array();
 for($i = 1; $i <= 7; $i++) {
-  $from = mbDateTime("+1 second", $to);
-  $to = mbDateTime("+1 day", $to);
+  $from = CMbDT::dateTime("+1 second", $to);
+  $to = CMbDT::dateTime("+1 day", $to);
   $where = array();
   $where["annule"] = "= '0'";
   switch ($type_admission) {

@@ -181,7 +181,7 @@ class CFile extends CDocumentItem {
   function fillFields(){
     if (!$this->_id) {
       if (!$this->file_date) {
-        $this->file_date = mbDateTime();
+        $this->file_date = CMbDT::dateTime();
       }
       if (!$this->file_real_filename) {
         $this->file_real_filename = uniqid(rand());

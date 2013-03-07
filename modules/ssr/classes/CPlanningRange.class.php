@@ -41,16 +41,16 @@ class CPlanningRange  {
     
     if (preg_match("/[0-9]+ /", $this->start)) {
       $parts = split(" ", $this->start);
-      $this->end = "{$parts[0]} ".mbTime("+{$this->length} MINUTES", $parts[1]);
+      $this->end = "{$parts[0]} ".CMbDT::time("+{$this->length} MINUTES", $parts[1]);
       $this->day = $parts[0];
-      $this->hour = mbTransformTime(null, $parts[1], "%H");
-      $this->minutes = mbTransformTime(null, $parts[1], "%M");
+      $this->hour = CMbDT::transform(null, $parts[1], "%H");
+      $this->minutes = CMbDT::transform(null, $parts[1], "%M");
     }
     else {
-      $this->day = mbDate($date);
-      $this->end = mbDateTime("+{$this->length} MINUTES", $date);
-      $this->hour = mbTransformTime(null, $date, "%H");
-      $this->minutes = mbTransformTime(null, $date, "%M");
+      $this->day = CMbDT::date($date);
+      $this->end = CMbDT::dateTime("+{$this->length} MINUTES", $date);
+      $this->hour = CMbDT::transform(null, $date, "%H");
+      $this->minutes = CMbDT::transform(null, $date, "%M");
     }
   }
   

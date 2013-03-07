@@ -35,9 +35,9 @@ $horaire_voulu = $plageop->debut;
 
 if ($_last_op) {
   $horaire_voulu = $_last_op->_horaire_voulu;
-  $horaire_voulu = mbAddTime($_last_op->temp_operation, $horaire_voulu);
-  $horaire_voulu = mbAddTime($plageop->temps_inter_op, $horaire_voulu);
-  $horaire_voulu = mbAddTime($_last_op->pause, $horaire_voulu);
+  $horaire_voulu = CMbDT::addTime($_last_op->temp_operation, $horaire_voulu);
+  $horaire_voulu = CMbDT::addTime($plageop->temps_inter_op, $horaire_voulu);
+  $horaire_voulu = CMbDT::addTime($_last_op->pause, $horaire_voulu);
 }
 
 $new_op = new COperation;

@@ -24,7 +24,7 @@ $req->addGroup("date_monday");
 $ds = $rhs->_spec->ds;
 $rhs_counts = $ds->loadList($req->getRequest());
 foreach($rhs_counts as &$_rhs_count) {
-	$_rhs_count["sundate"] = mbDate("+6 DAYS", $_rhs_count["mondate"]);
+	$_rhs_count["sundate"] = CMbDT::date("+6 DAYS", $_rhs_count["mondate"]);
 }
 
 // Création du template

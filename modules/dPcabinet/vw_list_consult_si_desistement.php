@@ -15,7 +15,7 @@ $user = new CMediusers;
 $user->load($chir_id);
 
 // Liste des consultations a avancer si desistement
-$now = mbDate();
+$now = CMbDT::date();
 $where = array(
   "plageconsult.date" => " > '$now'",
   "plageconsult.chir_id" => "= '$chir_id'",

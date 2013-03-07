@@ -138,12 +138,12 @@ class CPlageConge extends CMbObject {
     // Dates for deb case
     if ($activite == "deb") {
       $plage->date_debut = $limit;
-      $plage->date_fin = mbDate("-1 DAY", $user->deb_activite);
+      $plage->date_fin = CMbDT::date("-1 DAY", $user->deb_activite);
     }
     
     // Dates for fin case
     if ($activite == "fin") {
-	    $plage->date_debut = mbDate("+1 DAY", $user->fin_activite);
+	    $plage->date_debut = CMbDT::date("+1 DAY", $user->fin_activite);
 	    $plage->date_fin   = $limit;
     }
     

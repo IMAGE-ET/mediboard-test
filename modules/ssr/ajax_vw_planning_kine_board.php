@@ -13,8 +13,8 @@ CCanDo::checkRead();
 $kine_id = CValue::getOrSession("kine_id");
 $date = CValue::getOrSession("date");
 
-$monday = mbDate("last monday", mbDate("+1 day -1 week", $date));
-$sunday = mbDate("next sunday", mbDate("-1 DAY -1 week", $date));
+$monday = CMbDT::date("last monday", CMbDT::date("+1 day -1 week", $date));
+$sunday = CMbDT::date("next sunday", CMbDT::date("-1 DAY -1 week", $date));
 
 // Chargement des evenements de la semaine precedente qui n'ont pas encore ete validés
 $evenement = new CEvenementSSR();

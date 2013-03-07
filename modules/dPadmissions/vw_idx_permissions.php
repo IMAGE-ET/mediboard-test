@@ -12,15 +12,15 @@ CCanDo::checkRead();
 
 // Filtres d'affichage
 
-$date         = CValue::getOrSession("date", mbDate());
+$date         = CValue::getOrSession("date", CMbDT::date());
 $type         = CValue::getOrSession("type");
 $type_externe = CValue::getOrSession("type_externe");
 $service_id   = CValue::getOrSession("service_id");
 
-$date_actuelle = mbDateTime("00:00:00");
-$date_demain   = mbDateTime("00:00:00","+ 1 day");
-$hier          = mbDate("- 1 day", $date);
-$demain        = mbDate("+ 1 day", $date);
+$date_actuelle = CMbDT::dateTime("00:00:00");
+$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
+$hier          = CMbDT::date("- 1 day", $date);
+$demain        = CMbDT::date("+ 1 day", $date);
 
 // Récupération de la liste des services
 $where = array();

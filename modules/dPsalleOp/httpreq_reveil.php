@@ -10,12 +10,12 @@
 
 CCanDo::checkRead();
 
-$date    = CValue::getOrSession("date", mbDate());
+$date    = CValue::getOrSession("date", CMbDT::date());
 $bloc_id = CValue::getOrSession("bloc_id");
 $type    = CValue::get("type"); // Type d'affichage => encours, ops, reveil, out
 $present_only = CValue::getOrSession("present_only", 0);
 $present_only_reel = CValue::getOrSession("present_only_reel", 0);
-$modif_operation = CCanDo::edit() || $date >= mbDate();
+$modif_operation = CCanDo::edit() || $date >= CMbDT::date();
 
 // Selection des plages opératoires de la journée
 $plage = new CPlageOp();
@@ -84,7 +84,7 @@ if ($use_poste) {
 }
 
 $nb_sorties_non_realisees = 0;
-$now = mbTime();
+$now = CMbDT::time();
 
 $use_sortie_reveil_reel = CAppUI::conf("dPsalleOp COperation use_sortie_reveil_reel");
 
@@ -126,12 +126,12 @@ foreach ($listOperations as $key => $op) {
     $op->blood_salvage->loadRefPlageOp();
     $op->blood_salvage->totaltime = "00:00:00";
     if ($op->blood_salvage->recuperation_start && $op->blood_salvage->transfusion_end) {
-      $op->blood_salvage->totaltime = mbTimeRelative($op->blood_salvage->recuperation_start, $op->blood_salvage->transfusion_end);
+      $op->blood_salvage->totaltime = CMbDT::timeRelative($op->blood_salvage->recuperation_start, $op->blood_salvage->transfusion_end);
     }
     elseif ($op->blood_salvage->recuperation_start) {
       $from = $op->blood_salvage->recuperation_start;
-      $to   = mbDate($op->blood_salvage->_datetime)." ".mbTime();
-      $op->blood_salvage->totaltime = mbTimeRelative($from, $to);
+      $to   = CMbDT::date($op->blood_salvage->_datetime)." ".CMbDT::time();
+      $op->blood_salvage->totaltime = CMbDT::timeRelative($from, $to);
     }
   }
   
@@ -168,7 +168,7 @@ $smarty->assign("listOperations"         , $listOperations);
 $smarty->assign("plages"                 , $plages);
 $smarty->assign("date"                   , $date);
 $smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
-$smarty->assign("hour"                   , mbTime());
+$smarty->assign("hour"                   , CMbDT::time());
 $smarty->assign("modif_operation"        , $modif_operation);
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("nb_sorties_non_realisees", $nb_sorties_non_realisees);

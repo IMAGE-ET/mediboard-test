@@ -11,10 +11,10 @@
 CCanDo::checkRead();
 
 // Récupération des paramètres
-$date           = CValue::getOrSession("date", mbDate());
+$date           = CValue::getOrSession("date", CMbDT::date());
 $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
-$date_before    = mbDate("-$date_tolerance DAY", $date);
-$date_after     = mbDate("+1 DAY", $date);
+$date_before    = CMbDT::date("-$date_tolerance DAY", $date);
+$date_after     = CMbDT::date("+1 DAY", $date);
 
 //recherche des chambres d'urgences placées
 $chambre = new CChambre();
@@ -166,8 +166,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("listSejours"    , $listSejours);
 $smarty->assign("grilles"        , $grille);
 $smarty->assign("date"           , $date);
-$smarty->assign("suiv"           , mbDate("+1 day", $date));
-$smarty->assign("prec"           , mbDate("-1 day", $date));
+$smarty->assign("suiv"           , CMbDT::date("+1 day", $date));
+$smarty->assign("prec"           , CMbDT::date("-1 day", $date));
 
 $smarty->display("vw_placement_patients.tpl");
 ?>

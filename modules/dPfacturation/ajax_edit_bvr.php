@@ -40,8 +40,8 @@ $facture_id           = CValue::get("facture_id");
 $edition_bvr          = CValue::get("edition_bvr");
 $edition_justificatif = CValue::get("edition_justificatif");
 $prat_id              = CValue::get("prat_id");
-$date_min             = CValue::get("_date_min", mbDate());
-$date_max             = CValue::get("_date_max", mbDate());
+$date_min             = CValue::get("_date_min", CMbDT::date());
+$date_max             = CValue::get("_date_max", CMbDT::date());
 
 $factures = array();
 $facture = new $facture_class;
@@ -271,16 +271,16 @@ if ($edition_bvr) {
         $pdf->Cell(25, "", "Données de la facture", null, null, "L");
         $pdf->setXY($colonne1, $pdf->GetY()+5);
         $pdf->Cell(22, "", "Date facture:", null, null, "R");
-        $pdf->Cell(25, "", mbTransformTime(null, $facture->cloture, "%d %B %Y"), null, null, "L");
+        $pdf->Cell(25, "", CMbDT::transform(null, $facture->cloture, "%d %B %Y"), null, null, "L");
         $pdf->setXY($colonne1, $pdf->GetY()+3);
         $pdf->Cell(22, "", "N° facture:", null, null, "R");
         $pdf->Cell(25, "", $facture->_id, null, null, "L");
         $pdf->setXY($colonne1, $pdf->GetY()+3);
         $pdf->Cell(22, "", "Traitement du:", null, null, "R");
-        $pdf->Cell(25, "", mbTransformTime(null, $facture->_ref_first_consult->_date, "%d %B %Y"), null, null, "L");
+        $pdf->Cell(25, "", CMbDT::transform(null, $facture->_ref_first_consult->_date, "%d %B %Y"), null, null, "L");
         $pdf->setXY($colonne1, $pdf->GetY()+3);
         $pdf->Cell(22, "", "au:", null, null, "R");
-        $pdf->Cell(25, "", mbTransformTime(null, $facture->cloture, "%d %B %Y"), null, null, "L");
+        $pdf->Cell(25, "", CMbDT::transform(null, $facture->cloture, "%d %B %Y"), null, null, "L");
   
         $montant_facture = sprintf('%0.2f', $montant_facture);
         if ($montant_facture < 0) {

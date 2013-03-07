@@ -11,8 +11,8 @@ CCanDo::checkEdit();
 
 $user = CMediusers::get();
 
-$date_min = mbDate();
-$date_max = mbDate("+6 weeks");
+$date_min = CMbDT::date();
+$date_max = CMbDT::date("+6 weeks");
 
 $criteres = array();
 $details = array();
@@ -127,7 +127,7 @@ foreach ($praticiens as $_praticien) {
   // Days Patients
   $patient_count = 0;
   $plage = new CPlageconsult();
-  $plage->date = mbDate();
+  $plage->date = CMbDT::date();
   $plage->chir_id = $_praticien->_id;
   foreach ($plage->loadMatchingList() as $_plage) {
     $patient_count += $_plage->countPatients();

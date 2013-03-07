@@ -37,7 +37,7 @@ while(--$n > 0 && ($datetime < $datetime_end)) {
   
   $times[$datetime] = $observation_result_set;
 
-  $datetime = mbDateTime("+$period SECONDS", $datetime);
+  $datetime = CMbDT::dateTime("+$period SECONDS", $datetime);
 }
 
 foreach($graphs as $_graph) {

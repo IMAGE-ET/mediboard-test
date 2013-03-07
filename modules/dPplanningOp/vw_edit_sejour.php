@@ -91,9 +91,9 @@ if (CModule::getActive("maternite")) {
   
   if (!$sejour->_id && $grossesse_id) {
     $sejour->type_pec = 'O';
-    $sejour->_date_entree_prevue = mbDate();
+    $sejour->_date_entree_prevue = CMbDT::date();
     $duree_sejour = CAppUI::conf("maternite duree_sejour");
-    $sejour->_date_sortie_prevue = mbDate("+ $duree_sejour days");
+    $sejour->_date_sortie_prevue = CMbDT::date("+ $duree_sejour days");
     $sejour->_duree_prevue = $duree_sejour;
     $sejour->type = $duree_sejour > 0 ? "comp" : "ambu";
   }
@@ -158,7 +158,7 @@ $count_prestations = CPrestationJournaliere::countCurrentList();
 // Chargement des prestations système standard
 $prestations = CPrestation::loadCurrentList();
 
-$sortie_sejour = mbDateTime();
+$sortie_sejour = CMbDT::dateTime();
 if ($sejour->sortie_reelle) {
   $sortie_sejour = $sejour->sortie_reelle;
 }
@@ -177,7 +177,7 @@ foreach ($blocages_lit as $blocage) {
   $where["lit_id"] = "= '$blocage->lit_id'";
   if (!$sejour->_id && $affectation->loadObject($where)) {
     $affectation->loadRefSejour()->loadRefPatient();
-    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
   }
 }
 

@@ -133,9 +133,9 @@ class CObservationResultSet extends CMbObject {
     list($results, /*$times*/) = CObservationResultSet::getResultsFor($interv);
 
     $time_min = $interv->entree_salle;
-    $time_max = mbTime("+".mbMinutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
+    $time_max = CMbDT::time("+".CMbDT::minutesRelative("00:00:00", $interv->temp_operation)." MINUTES", $interv->entree_salle);
 
-    $date = mbDate($interv->_datetime);
+    $date = CMbDT::date($interv->_datetime);
 
     $time_debut_op_iso = "$date $time_min";
     $time_fin_op_iso   = "$date $time_max";

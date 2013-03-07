@@ -66,7 +66,7 @@ class CHPrimXMLEvenementsServeurEtatsPatient extends CHPrimXMLEvenementsServeurA
     $this->addVenue($venue, $sejour, false, true);
     
     $dateObservation = $this->addElement($evenementsServeurEtatsPatient, "dateObservation");
-    $this->addDateHeure($dateObservation, mbDateTime());
+    $this->addDateHeure($dateObservation, CMbDT::dateTime());
     
     // Ajout des diagnostics
     $Diagnostics = $this->addElement($evenementsServeurEtatsPatient, "Diagnostics");

@@ -10,13 +10,13 @@
 
 CCanDo::checkRead();
 
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 $therapeute_id = CValue::get("therapeute_id");
 $equipement_id = CValue::get("equipement_id");
 $prescription_line_element_id = CValue::get("prescription_line_element_id");
 
-$monday = mbDate("last monday", mbDate("+1 day", $date));
-$sunday = mbDate("next sunday", mbDate("-1 DAY", $date));
+$monday = CMbDT::date("last monday", CMbDT::date("+1 day", $date));
+$sunday = CMbDT::date("next sunday", CMbDT::date("-1 DAY", $date));
 
 // Chargement de la ligne
 $line_element = new CPrescriptionLineElement();

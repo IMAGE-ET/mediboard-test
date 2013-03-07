@@ -11,9 +11,9 @@
 CCanDo::checkRead();
 
 //Initialisations des variables
-$date         = CValue::getOrSession("date", mbDate());
-$today        = mbDate();
-$hour         = mbTime(null);
+$date         = CValue::getOrSession("date", CMbDT::date());
+$today        = CMbDT::date();
+$hour         = CMbDT::time(null);
 $board        = CValue::get("board", 1);
 $boardItem    = CValue::get("boardItem", 1);
 $consult      = new CConsultation;

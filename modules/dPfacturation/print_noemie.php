@@ -12,8 +12,8 @@
 CCanDo::checkRead();
 // Récupération des paramètres
 $filter = new CPlageconsult();
-$filter->_date_min = CValue::getOrSession("_date_min", mbDate());
-$filter->_date_max = CValue::getOrSession("_date_max", mbDate());
+$filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
+$filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
 
 $where = array();
 $ljoin["plageconsult"]                      = "consultation.plageconsult_id = plageconsult.plageconsult_id";

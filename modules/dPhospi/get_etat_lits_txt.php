@@ -16,7 +16,7 @@
 */
 
 // Date actuelle
-$date = mbDateTime();
+$date = CMbDT::dateTime();
 
 // Affectation a la date $date
 $affectation = new CAffectation();
@@ -52,11 +52,11 @@ foreach($affectations as $key=>$_affectation){
    $list_affectations[$key]["chambre"]      = $_affectation->_ref_lit->_ref_chambre->_id;
    $list_affectations[$key]["lit"]          = $_affectation->_ref_lit->_id;
    $list_affectations[$key]["sexe"]         = $_affectation->_ref_sejour->_ref_patient->sexe;
-   $list_affectations[$key]["naissance"]    = mbTransformTime(null, $_affectation->_ref_sejour->_ref_patient->naissance, "%Y%m%d");
-   $list_affectations[$key]["date_entree"]  = mbTransformTime(null, mbDate($_affectation->_ref_sejour->entree), "%Y%m%d"); 
-   $list_affectations[$key]["heure_entree"] = mbTransformTime(null, mbTime($_affectation->_ref_sejour->entree), "%H%M");
-   $list_affectations[$key]["date_sortie"]  = mbTransformTime(null, mbDate($_affectation->_ref_sejour->sortie), "%Y%m%d");
-   $list_affectations[$key]["heure_sortie"] = mbTransformTime(null, mbTime($_affectation->_ref_sejour->sortie), "%H%M");
+   $list_affectations[$key]["naissance"]    = CMbDT::transform(null, $_affectation->_ref_sejour->_ref_patient->naissance, "%Y%m%d");
+   $list_affectations[$key]["date_entree"]  = CMbDT::transform(null, CMbDT::date($_affectation->_ref_sejour->entree), "%Y%m%d");
+   $list_affectations[$key]["heure_entree"] = CMbDT::transform(null, CMbDT::time($_affectation->_ref_sejour->entree), "%H%M");
+   $list_affectations[$key]["date_sortie"]  = CMbDT::transform(null, CMbDT::date($_affectation->_ref_sejour->sortie), "%Y%m%d");
+   $list_affectations[$key]["heure_sortie"] = CMbDT::transform(null, CMbDT::time($_affectation->_ref_sejour->sortie), "%H%M");
    $list_affectations[$key]["type"]         = $_affectation->_ref_sejour->type;
 }
 

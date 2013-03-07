@@ -269,8 +269,8 @@ $cumuls_day = array();
 if ($list_constantes) {
   foreach ($list_constantes as $cst) {
     $comment = utf8_encode($cst->comment);
-    $dates[] = mbTransformTime($cst->datetime, null, '%d/%m/%y');
-    $hours[] = mbTransformTime($cst->datetime, null, '%Hh%M');
+    $dates[] = CMbDT::transform($cst->datetime, null, '%d/%m/%y');
+    $hours[] = CMbDT::transform($cst->datetime, null, '%Hh%M');
     $comments[] = $comment;
     $const_ids[] = $cst->_id;
     $cst->loadLogs();
@@ -324,7 +324,7 @@ if ($list_constantes) {
           
           if (isset($params["cumul_reset_config"])) {
             $reset_hour = CConstantesMedicales::getResetHour($name);
-            $day_24h = mbTransformTime("-$reset_hour hours", $cst->datetime, '%d/%m/%y');
+            $day_24h = CMbDT::transform("-$reset_hour hours", $cst->datetime, '%d/%m/%y');
     
             if (!isset($cumuls_day[$name][$day_24h])) {
               $cumuls_day[$name][$day_24h] = array("n" => 0, "value" => null);

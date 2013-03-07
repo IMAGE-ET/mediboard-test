@@ -10,8 +10,8 @@
 CCanDo::checkRead();
 
 $operation_id = CValue::getOrSession("operation_id");
-$date         = CValue::getOrSession("date", mbDate());
-$modif_operation = CCanDo::edit() || $date >= mbDate();
+$date         = CValue::getOrSession("date", CMbDT::date());
+$modif_operation = CCanDo::edit() || $date >= CMbDT::date();
 
 $operation = new COperation();
 $protocoles = array();

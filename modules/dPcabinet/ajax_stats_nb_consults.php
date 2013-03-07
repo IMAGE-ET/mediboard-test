@@ -23,8 +23,8 @@ $function = $mediuser->_ref_function;
 $filter = new CPlageconsult();
 $filter->_function_id       = CValue::get("_function_id", $function->type == "cabinet" ? $function->_id : null );
 $filter->_other_function_id = CValue::get("_other_function_id");
-$filter->_date_min          = CValue::get("_date_min", mbDate("last month"));
-$filter->_date_max          = CValue::get("_date_max", mbDate());
+$filter->_date_min          = CValue::get("_date_min", CMbDT::date("last month"));
+$filter->_date_max          = CValue::get("_date_max", CMbDT::date());
 $filter->_user_id           = CValue::get("_user_id", null);
 $ds = $filter->_spec->ds;
 

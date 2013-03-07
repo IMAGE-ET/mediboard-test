@@ -64,7 +64,7 @@ foreach($references as $_reference) {
   $_product = $_reference->loadRefProduct();
   
   //mbTrace($_product->_view, " ######################## ");
-  $old_date = mbDateTime();
+  $old_date = CMbDT::dateTime();
   
   $quantity_product   = $_product->quantity;
   $quantity_reference = $_reference->orig_quantity;

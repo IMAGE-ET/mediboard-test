@@ -247,7 +247,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     
     $MSH = $this->queryNode("MSH", null, $foo, true);
     
-    $data['dateHeureProduction']   = mbDateTime($this->queryTextNode("MSH.7/TS.1", $MSH));
+    $data['dateHeureProduction']   = CMbDT::dateTime($this->queryTextNode("MSH.7/TS.1", $MSH));
     $data['identifiantMessage']    = $this->queryTextNode("MSH.10", $MSH);
 
     $data['receiving_application'] = $this->queryTextNode("MSH.3/HD.1", $MSH);

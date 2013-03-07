@@ -53,7 +53,7 @@ class CSourceToViewSender extends CMbObject {
 
   function loadRefSender() {
     $sender = $this->loadFwdRef("sender_id", true);
-    $this->_last_age = mbMinutesRelative($this->last_datetime, mbDateTime());
+    $this->_last_age = CMbDT::minutesRelative($this->last_datetime, CMbDT::dateTime());
     return $this->_ref_sender = $sender;
   }
 

@@ -10,8 +10,8 @@
 
 CCanDo::checkEdit();
 
-$debutact      = CValue::getOrSession("debutact", mbDate());
-$finact        = CValue::getOrSession("finact", mbDate());
+$debutact      = CValue::getOrSession("debutact", CMbDT::date());
+$finact        = CValue::getOrSession("finact", CMbDT::date());
 
 // Création du template
 $smarty = new CSmartyDP();

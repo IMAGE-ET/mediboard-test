@@ -24,7 +24,7 @@ $filter->tag          = CValue::get("tag"         );
 $filter->id400        = CValue::get("id400");
 $filter->nullifyEmptyFields();
 
-$filter->last_update = CValue::first($idSante400->last_update, mbDateTime());
+$filter->last_update = CValue::first($idSante400->last_update, CMbDT::dateTime());
 
 // Rester sur le même filtre en mode dialogue
 $dialog = CValue::get("dialog");

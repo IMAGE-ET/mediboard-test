@@ -19,8 +19,8 @@ $operation_id = CValue::getOrSession("operation_id");
 $chir_id      = CValue::getOrSession("chir_id");
 $sejour_id    = CValue::get("sejour_id");
 $patient_id   = CValue::get("pat_id");
-$today        = mbDate();
-$tomorow      = mbDate("+1 DAY");
+$today        = CMbDT::date();
+$tomorow      = CMbDT::date("+1 DAY");
 
 // L'utilisateur est-il un praticien
 $user = CAppUI::$user;
@@ -181,7 +181,7 @@ $services = $service->loadGroupList($where);
 // Compter les prestations journalières
 $count_prestations = CPrestationJournaliere::countCurrentList();
 
-$sortie_sejour = mbDateTime();
+$sortie_sejour = CMbDT::dateTime();
 if ($sejour->sortie_reelle) {
   $sortie_sejour = $sejour->sortie_reelle;
 }
@@ -202,7 +202,7 @@ foreach ($blocages_lit as $key => $blocage) {
   if (!$sejour->_id && $affectation->loadObject($where)) {
     $affectation->loadRefSejour();
     $affectation->_ref_sejour->loadRefPatient();
-    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
   }
 }
 

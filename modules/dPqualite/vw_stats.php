@@ -35,8 +35,8 @@ foreach($fiche->_specs as $field => $spec) {
 
 for ($i = $months_count - 1; $i >= 0; --$i) {
 	$mr = $months_relative+$i;
-	$sample_end = mbTransformTime("-$mr MONTHS", mbDate(), "%Y-%m-31 23:59:59");
-	$sample_start = mbTransformTime("-$mr MONTHS", mbDate(), "%Y-%m-01 00:00:00");
+	$sample_end = CMbDT::transform("-$mr MONTHS", CMbDT::date(), "%Y-%m-31 23:59:59");
+	$sample_start = CMbDT::transform("-$mr MONTHS", CMbDT::date(), "%Y-%m-01 00:00:00");
 	$dates[$sample_start] = array(
 	  'start' => $sample_start,
 	  'end' => $sample_end,
@@ -179,7 +179,7 @@ foreach ($comparison as $comp) {
 					$series_data['total'][$i][1] += $count;
 					
 					$data[] = array($i, $count);
-					$ticks[$i] = array($i, mbTransformTime(null, $month, "%m/%y"));
+					$ticks[$i] = array($i, CMbDT::transform(null, $month, "%m/%y"));
 					++$i;
 				}
 			}

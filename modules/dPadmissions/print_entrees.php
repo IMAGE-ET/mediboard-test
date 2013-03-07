@@ -10,11 +10,11 @@
 
 CCanDo::checkRead();
 
-$date       = CValue::get("date", mbDate());
+$date       = CValue::get("date", CMbDT::date());
 $type       = CValue::get("type");
 $service_id = CValue::get("service_id");
 
-$date_next = mbDate("+ 1 DAY", $date);
+$date_next = CMbDT::date("+ 1 DAY", $date);
 $service = new CService();
 $service->load($service_id);
 $group = CGroups::loadCurrent();

@@ -13,7 +13,7 @@ $period          = CValue::get("period", CAppUI::pref("DefaultPeriod"));
 $periods         = array("day", "week", "month","weekly");
 $chir_id         = CValue::get("chir_id");
 $function_id     = $chir_id ? null : CValue::get("function_id");
-$date            = CValue::get("date", mbDate());
+$date            = CValue::get("date", CMbDT::date());
 $plageconsult_id = CValue::get("plageconsult_id");
 
 // Vérification des droits sur les praticiens
@@ -44,17 +44,17 @@ if ($period == "weekly") {
  * */
 
 if ($period == "month" && phpversion() >= "5.3") {
-  $ndate = mbDate("first day of next month"   , $date);
-  $pdate = mbDate("last day of previous month", $date);
+  $ndate = CMbDT::date("first day of next month"   , $date);
+  $pdate = CMbDT::date("last day of previous month", $date);
 }
 //5.1, 5.2 Case @TODO : toDelete if all MB instance are 5.3 compatible
 elseif ($period == 'month') {
-    $ndate = mbDate("+1 month"   , mbTransformTime(null, $date, "%Y-%m-01" ));
-    $pdate = mbDate("-1 month"   , mbTransformTime(null, $date, "%Y-%m-01" ));
+    $ndate = CMbDT::date("+1 month"   , CMbDT::transform(null, $date, "%Y-%m-01" ));
+    $pdate = CMbDT::date("-1 month"   , CMbDT::transform(null, $date, "%Y-%m-01" ));
 }
 else {
-  $ndate = mbDate("+1 $unit", $date);
-  $pdate = mbDate("-1 $unit", $date);
+  $ndate = CMbDT::date("+1 $unit", $date);
+  $pdate = CMbDT::date("-1 $unit", $date);
 }
 
 if ($period == "weekly") {

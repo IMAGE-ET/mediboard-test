@@ -29,25 +29,25 @@ $type_ressource->load($type_ressource_id);
 $ressources = $type_ressource->loadRefsRessources();
 
 if (!$date) {
-  $date = mbDate($debut_op);
+  $date = CMbDT::date($debut_op);
 }
 
 $date_min = $date." 00:00:00";
-$date_max = mbDate("+1 day", $date)." 00:00:00";
+$date_max = CMbDT::date("+1 day", $date)." 00:00:00";
 
-$date_before = mbDate("-1 day", $date);
-$date_after = mbDate("+1 day", $date);
+$date_before = CMbDT::date("-1 day", $date);
+$date_after = CMbDT::date("+1 day", $date);
 
 $date_temp = $date_min;
 $hours = array();
 
 while ($date_temp < $date_max) {
   $hours[] = $date_temp;
-  $date_temp = mbDateTime("+1 hour", $date_temp);
+  $date_temp = CMbDT::dateTime("+1 hour", $date_temp);
 }
 
 $operation->_debut_offset = CMbDate::position($debut_op, $date_min, "1hour");
-$operation->_fin_offset   = CMbDate::position(min($date_max, mbAddDateTime($operation->temp_operation, $debut_op)), $date_min, "1hour");
+$operation->_fin_offset   = CMbDate::position(min($date_max, CMbDT::addDateTime($operation->temp_operation, $debut_op)), $date_min, "1hour");
 $operation->_width        = $operation->_fin_offset - $operation->_debut_offset;
 
 
@@ -71,7 +71,7 @@ foreach ($usages as $_usage) {
   $_operation = $_usage->loadRefBesoin()->loadRefOperation();
   $_operation->loadRefPlageOp();
   $_debut_op = $_operation->_datetime;
-  $_fin_op = mbAddDateTime($_operation->temp_operation, $_debut_op);
+  $_fin_op = CMbDT::addDateTime($_operation->temp_operation, $_debut_op);
   
   $_usage->_debut_offset = CMbDate::position(max($date_min, $_debut_op), $date_min, "1hour");
   
@@ -108,7 +108,7 @@ foreach ($besoins as $key => $_besoin) {
   $_operation = $_besoin->loadRefOperation();
   $_operation->loadRefPlageOp();
   $_debut_op = $_operation->_datetime;
-  $_fin_op = mbAddDateTime($_operation->temp_operation, $_debut_op);
+  $_fin_op = CMbDT::addDateTime($_operation->temp_operation, $_debut_op);
   $_besoin->_debut_offset = CMbDate::position($_debut_op, $date_min, "1hour");
   $_besoin->_fin_offset   = CMbDate::position(min($date_max, $_fin_op), $date_min, "1hour");
   $_besoin->_width        = $_besoin->_fin_offset - $_besoin->_debut_offset;

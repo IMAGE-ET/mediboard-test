@@ -10,17 +10,17 @@
 CCanDo::checkEdit();
 $ds = CSQLDataSource::get("std");
 
-$date           = CValue::getOrSession("date", mbDate());
+$date           = CValue::getOrSession("date", CMbDT::date());
 $canceled       = CValue::getOrSession("canceled", 0);
 
 //5.1 / 5.2 hack @TODO : remove this if all phpversion are > 5.3
 if (phpversion() >= "5.3") {
-    $nextmonth = mbDate("first day of next month"   , $date);
-    $lastmonth = mbDate("first day of previous month", $date);
+    $nextmonth = CMbDT::date("first day of next month"   , $date);
+    $lastmonth = CMbDT::date("first day of previous month", $date);
 }
 else {
-    $nextmonth = mbDate("+1 month"   , mbTransformTime(null, $date, "%Y-%m-01" ));
-    $lastmonth = mbDate("-1 month"   , mbTransformTime(null, $date, "%Y-%m-01" ));
+    $nextmonth = CMbDT::date("+1 month"   , CMbDT::transform(null, $date, "%Y-%m-01" ));
+    $lastmonth = CMbDT::date("-1 month"   , CMbDT::transform(null, $date, "%Y-%m-01" ));
 }
 $sans_anesth    = CValue::getOrSession("sans_anesth", 0);
 
@@ -165,8 +165,8 @@ else {
   }
   
   // Planning du mois
-  $month_min = mbTransformTime(null, $date, "%Y-%m-01");
-  $month_max = mbTransformTime(null, $date, "%Y-%m-31");
+  $month_min = CMbDT::transform(null, $date, "%Y-%m-01");
+  $month_max = CMbDT::transform(null, $date, "%Y-%m-31");
 
 
   $sql = "SELECT plagesop.*, plagesop.date AS opdate,

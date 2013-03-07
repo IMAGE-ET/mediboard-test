@@ -10,8 +10,8 @@
  */
 
 CCanDo::checkEdit();
-$date_min = CValue::getOrSession("_date_min", mbDate());
-$date_max = CValue::getOrSession("_date_max", mbDate());
+$date_min = CValue::getOrSession("_date_min", CMbDT::date());
+$date_max = CValue::getOrSession("_date_max", CMbDT::date());
 $prat = CValue::get("chir");
 
 // Chargement du praticien
@@ -62,7 +62,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("praticien"      , $praticien     );
 $smarty->assign("reglements"     , $reglements    );
-$smarty->assign("date"           , mbDate()       );
+$smarty->assign("date"           , CMbDT::date()       );
 $smarty->assign("compte_banque"  , $compte_banque );
 $smarty->assign("compte_guichet" , $compte_guichet);
 $smarty->assign("compte_numero"  , $compte_numero );

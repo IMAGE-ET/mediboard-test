@@ -20,7 +20,7 @@ $max      = CValue::get("max"   , 1000);
 
 // Use months syntax
 if ($months) {
-  $date_max = mbDate("- $months MONTHS");
+  $date_max = CMbDT::date("- $months MONTHS");
 }
 
 // Check params
@@ -51,7 +51,7 @@ if ($count) {
   echo "<script type='text/javascript'>Echange.purge();</script>";
 }
 
-CAppUI::stepAjax("CEchangeHprim-msg-purged_count", UI_MSG_OK, $count, mbDateTime());
+CAppUI::stepAjax("CEchangeHprim-msg-purged_count", UI_MSG_OK, $count, CMbDT::dateTime());
 
 /**
  * Delete content and update exchange

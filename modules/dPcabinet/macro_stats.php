@@ -26,17 +26,17 @@ switch ($period) {
     $sql_cast = "date";
     break;
   case "week":
-    $date = mbDate("next monday", $date);
+    $date = CMbDT::date("next monday", $date);
     $php_period = "weeks";
     $sql_cast = "DATE_ADD( date, INTERVAL (2 - DAYOFWEEK(date)) DAY)";
     break;
   case "month":
-    $date = mbDate("first day of +0 month", $date);
+    $date = CMbDT::date("first day of +0 month", $date);
     $php_period = "months";
     $sql_cast = "DATE_ADD( date, INTERVAL (1 - DAYOFMONTH(date)) DAY)";
     break;
   case "year":
-    $date = mbTransformTime(null, $date, "%Y-01-01");
+    $date = CMbDT::transform(null, $date, "%Y-01-01");
     $php_period = "years";
     $sql_cast = "DATE_ADD( date, INTERVAL (1 - DAYOFYEAR(date)) DAY)";
     break;
@@ -44,7 +44,7 @@ switch ($period) {
 
 $dates = array();
 foreach (range(0, 29) as $n) {
-  $dates[] = $min = mbDate("- $n $php_period", $date);
+  $dates[] = $min = CMbDT::date("- $n $php_period", $date);
 }
 
 $dates = array_reverse($dates);

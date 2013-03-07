@@ -10,7 +10,7 @@
 
 CCando::checkRead();
 
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 $sejour_id = CValue::get("sejour_id");
 
 $sejour = new CSejour();

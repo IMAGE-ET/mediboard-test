@@ -18,7 +18,7 @@ $prescription = new CPrescriptionLabo;
 $prescription->load($prescription_labo_id = CValue::get("prescription_labo_id"));
 if (!$prescription->_id) {
   $prescription->patient_id = CValue::get("patient_id");
-  $prescription->date = mbDateTime();
+  $prescription->date = CMbDT::dateTime();
   $prescription->praticien_id = $user->_id;
 }
 

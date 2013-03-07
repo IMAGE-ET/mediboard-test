@@ -50,7 +50,7 @@ foreach ($order->_ref_order_items as $_item) {
 }
 
 if (!$reception->bill_date) {
-  $reception->bill_date = mbDate();
+  $reception->bill_date = CMbDT::date();
 }
 
 $order->loadView();

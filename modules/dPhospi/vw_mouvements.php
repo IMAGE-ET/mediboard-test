@@ -12,7 +12,7 @@ ini_set("memory_limit", "256M");
 
 $services_ids = CValue::getOrSession("services_ids");
 $granularite  = CValue::getOrSession("granularite", "day");
-$date         = CValue::getOrSession("date", mbDate());
+$date         = CValue::getOrSession("date", CMbDT::date());
 $granularites = array("day", "week", "4weeks");
 $triAdm       = CValue::getOrSession("triAdm", "praticien");
 $mode_vue_tempo = CValue::getOrSession("mode_vue_tempo", "classique");

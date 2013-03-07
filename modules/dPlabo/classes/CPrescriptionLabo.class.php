@@ -74,7 +74,7 @@ class CPrescriptionLabo extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_shortview = $this->date;
-    $this->_view      = "Prescription du ".mbTransformTime(null, $this->date, "%d/%m/%Y %Hh%M");
+    $this->_view      = "Prescription du ".CMbDT::transform(null, $this->date, "%d/%m/%Y %Hh%M");
   }
   
   function loadIdPresc(){
@@ -124,7 +124,7 @@ class CPrescriptionLabo extends CMbObject {
       $idExterne->object_class = "CPrescriptionLabo";
       $idExterne->object_id = $this->_id;
       $idExterne->id400 = $exchange_source->getACQ()->NDOSLABResult;
-      $idExterne->last_update = mbDateTime();
+      $idExterne->last_update = CMbDT::dateTime();
       $idExterne->store();
     }
     return $idExterne;

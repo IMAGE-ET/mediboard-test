@@ -14,7 +14,7 @@ $mediuser->load(CAppUI::$instance->user_id);
 
 //Initialisations des variables
 $cabinet_id   = CValue::getOrSession("cabinet_id", $mediuser->function_id);
-$date         = CValue::getOrSession("date", mbDate());
+$date         = CValue::getOrSession("date", CMbDT::date());
 
 $canceled       = CValue::getOrSession("canceled" , false);
 $finished       = CValue::getOrSession("finished" , true);
@@ -28,7 +28,7 @@ $apres_midi     = CValue::getOrSession("apres_midi", true);
 $mode_urgence = CValue::get("mode_urgence", false);
 $offline      = CValue::get("offline"     , false);
 
-$hour         = mbTime(null);
+$hour         = CMbDT::time(null);
 $board        = CValue::get("board", 1);
 $boardItem    = CValue::get("boardItem", 1);
 $consult      = new CConsultation();
@@ -126,7 +126,7 @@ foreach ($listPlages as $key_prat => $infos_by_prat) {
             unset($plage->_ref_consultations[$key_consult]);
           }
         }
-        elseif(!$immediate && ($_consult->heure == mbTime(null, $_consult->arrivee)) && ($_consult->motif == "Consultation immédiate")) {
+        elseif(!$immediate && ($_consult->heure == CMbDT::time(null, $_consult->arrivee)) && ($_consult->motif == "Consultation immédiate")) {
           unset($plage->_ref_consultations[$key_consult]);
         }
       }

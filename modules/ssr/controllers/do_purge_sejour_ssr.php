@@ -16,8 +16,8 @@ if (!$sejour->_id) {
 }
 
 $evenement = new CEvenementSSR();
-$date_min = mbDate($sejour->entree);
-$date_max = mbDate("+1 DAY", $sejour->sortie);
+$date_min = CMbDT::date($sejour->entree);
+$date_max = CMbDT::date("+1 DAY", $sejour->sortie);
 
 $where["sejour_id"] = "= '$sejour->_id'";
 $where["debut"] = "NOT BETWEEN '$date_min' AND '$date_max'";

@@ -23,7 +23,7 @@ if ($type && $entree) {
 	  "group_id" => "= '$group->_id'"
 	);
 	$min = $entree;
-  $max = mbDate("+1 DAY", $min);
+  $max = CMbDT::date("+1 DAY", $min);
 	if ($type == "ambu") {
 	  $where[] = "entree BETWEEN '$min' AND '$max'";
 	} elseif($type == "comp") {

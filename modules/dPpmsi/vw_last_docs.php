@@ -12,8 +12,8 @@
 $cat_docs        = CValue::getOrSession("cat_docs");
 $specialite_docs = CValue::getOrSession("specialite_docs");
 $prat_docs       = CValue::getOrSession("prat_docs");
-$date_docs_max   = CValue::getOrSession("date_docs_max", mbDate());
-$date_docs_min   = CValue::getOrSession("date_docs_min", mbDate("-1 week"));
+$date_docs_max   = CValue::getOrSession("date_docs_max", CMbDT::date());
+$date_docs_min   = CValue::getOrSession("date_docs_min", CMbDT::date("-1 week"));
 $entree_min      = CValue::getOrSession("entree_min");
 $entree_max      = CValue::getOrSession("entree_max");
 $sortie_min      = CValue::getOrSession("sortie_min");

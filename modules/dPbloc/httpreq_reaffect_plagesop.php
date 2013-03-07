@@ -21,8 +21,8 @@ $plageop = new CPlageOp();
 $where = array();
 $where["plagesop.spec_repl_id"] = "IS NOT NULL";
 $where["plagesop.delay_repl"]   = "IS NOT NULL";
-$where[] = "`plagesop`.`date` < DATE_ADD('".mbDate()."', INTERVAL `plagesop`.`delay_repl` DAY)";
-$where[] = "`plagesop`.`date` >= '".mbDate()."'";
+$where[] = "`plagesop`.`date` < DATE_ADD('".CMbDT::date()."', INTERVAL `plagesop`.`delay_repl` DAY)";
+$where[] = "`plagesop`.`date` >= '".CMbDT::date()."'";
 $where["operations.operation_id"] = "IS NULL";
 $order = "`plagesop`.`date`, `plagesop`.`debut`";
 $limit = null;
@@ -31,9 +31,9 @@ $ljoin = array();
 $ljoin["operations"] = "operations.plageop_id = plagesop.plageop_id AND operations.annulee = '0'";
 $listPlages = $plageop->loadList($where, $order, $limit, $group, $ljoin);
 if($mode_real) {
-  CAppUI::getMsg("Lancement à : ".mbDateTime()." en mode réel");
+  CAppUI::getMsg("Lancement à : ".CMbDT::dateTime()." en mode réel");
 } else {
-  CAppUI::setMsg("Lancement à : ".mbDateTime()." en mode test");
+  CAppUI::setMsg("Lancement à : ".CMbDT::dateTime()." en mode test");
 }
 foreach($listPlages as $curr_plage) {
   if($mode_real) {

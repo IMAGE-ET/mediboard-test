@@ -303,8 +303,8 @@ if ($consult->_is_anesth) {
 }
 else {
   $where = array();
-  $where["entree"] = "<= '".mbDateTime()."'";
-  $where["sortie"] = ">= '".mbDateTime()."'";
+  $where["entree"] = "<= '".CMbDT::dateTime()."'";
+  $where["sortie"] = ">= '".CMbDT::dateTime()."'";
   $where["function_id"] = "IS NOT NULL";
   
   $affectation = new CAffectation();
@@ -319,7 +319,7 @@ else {
     if ($affectation->loadObject($where)) {
       $affectation->loadRefSejour();
       $affectation->_ref_sejour->loadRefPatient();
-      $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+      $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
     }
   }
   $smarty->assign("blocages_lit"  , $blocages_lit);

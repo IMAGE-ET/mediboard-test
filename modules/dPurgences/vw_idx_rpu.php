@@ -23,8 +23,8 @@ $selAffichage = CValue::postOrSession("selAffichage", CAppUI::conf("dPurgences d
 $uhcd_affichage = CValue::postOrSession("uhcd_affichage", CAppUI::conf("dPurgences default_view"));
 
 // Selection de la date
-$date = CValue::getOrSession("date", mbDate());
-$today = mbDate();
+$date = CValue::getOrSession("date", CMbDT::date());
+$today = CMbDT::date();
 
 // Création du template
 $smarty = new CSmartyDP();

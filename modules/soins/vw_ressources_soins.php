@@ -13,14 +13,14 @@ $service_id  = CValue::getOrSession("service_id");
 $nb_unites   = CValue::getOrSession("nb_unites", 1);
 $show_cost   = CValue::getOrSession("show_cost", 1);
 
-$datetime   = CValue::getOrSession("datetime", mbDateTime());
+$datetime   = CValue::getOrSession("datetime", CMbDT::dateTime());
 $period     = CValue::getOrSession("period", "day");
 $nb_periods = CValue::getOrSession("nb_periods", "14");
 
 $datetime = CMbDate::dirac($period, $datetime);
 $datetimes = array();
 for ($i = 0; $i < $nb_periods; $i++) {
-  $_datetime = mbDateTime("+$i $period", $datetime);
+  $_datetime = CMbDT::dateTime("+$i $period", $datetime);
   $datetimes[$_datetime] = $_datetime;
 }
 
@@ -40,8 +40,8 @@ $ljoin["service"] = "chambre.service_id = service.service_id";
   
 $where = array();
 
-$datetime_min = mbDateTime($datetime);
-$datetime_max = mbDateTime("+$nb_periods $period", $datetime);
+$datetime_min = CMbDT::dateTime($datetime);
+$datetime_max = CMbDT::dateTime("+$nb_periods $period", $datetime);
 
 $where["sortie"] = ">= '$datetime_min'";
 $where["entree"] = "<= '$datetime_max'";

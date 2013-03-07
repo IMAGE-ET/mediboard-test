@@ -22,7 +22,7 @@ if ($note_id) {
 else {
   $note->setObject(CMbObject::loadFromGuid($object_guid));
   $note->user_id = $user->_id;
-  $note->date = mbDateTime();
+  $note->date = CMbDT::dateTime();
 }
 
 $note->loadRefsFwd();

@@ -12,8 +12,8 @@
 CCanDo::checkEdit();
 // Récupération des paramètres
 $filter = new CPlageconsult();
-$filter->_date_min = CValue::getOrSession("_date_min", mbDate());
-$filter->_date_max = CValue::getOrSession("_date_max", mbDate());
+$filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
+$filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
 $filter->_etat_reglement_patient = CValue::getOrSession("_etat_reglement_patient");
 $filter->_etat_reglement_tiers   = CValue::getOrSession("_etat_reglement_tiers");
 $filter->_mode_reglement = CValue::getOrSession("mode", 0);
@@ -206,7 +206,7 @@ $banques = $banque->loadList(null, "nom ASC");
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("today"         , mbDate());
+$smarty->assign("today"         , CMbDT::date());
 $smarty->assign("filter"        , $filter);
 $smarty->assign("listPrat"      , $listPrat);
 $smarty->assign("listPlages"    , $listPlages);

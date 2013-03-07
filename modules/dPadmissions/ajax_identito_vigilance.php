@@ -17,9 +17,9 @@ $see_cancelled = CValue::getOrSession("see_cancelled", "1");
 $module        = CValue::get("module", "dPadmissions");
 
 // Selection de la date
-$date = CValue::get("date", mbDate());
-$date_min = $see_yesterday ? mbDate("-1 day", $date) : $date;
-$date_max = mbDate("+1 day", $date);
+$date = CValue::get("date", CMbDT::date());
+$date_min = $see_yesterday ? CMbDT::date("-1 day", $date) : $date;
+$date_max = CMbDT::date("+1 day", $date);
 
 // Chargement des séjours concernés
 $sejour = new CSejour;

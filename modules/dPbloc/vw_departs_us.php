@@ -11,7 +11,7 @@
  * @link     http://www.mediboard.org
  */
 
-$date_depart = CValue::getOrSession("date_depart", mbDate());
+$date_depart = CValue::getOrSession("date_depart", CMbDT::date());
 $bloc_id     = CValue::getOrSession("bloc_id");
 $order_way   = CValue::getOrSession("order_way", "_heure_us");
 $order_col   = CValue::getOrSession("order_col", "ASC");

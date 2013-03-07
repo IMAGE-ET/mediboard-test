@@ -91,8 +91,8 @@ if ($sejour->_id) {
 else {
   $sejour->group_id = $group_id;
   $sejour->praticien_id = $user->_id;
-  $sejour->entree_prevue = mbDate()." 08:00:00";
-  $sejour->sortie_prevue = mbDate()." 18:00:00";
+  $sejour->entree_prevue = CMbDT::date()." 08:00:00";
+  $sejour->sortie_prevue = CMbDT::date()." 18:00:00";
   $sejour->recuse = CAppUI::conf("ssr recusation use_recuse") ? -1 : 0;
 }
 
@@ -127,7 +127,7 @@ if (!$can_edit_prescription) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
-$smarty->assign("today"                   , mbDate());
+$smarty->assign("today"                   , CMbDT::date());
 $smarty->assign("sejour"                  , $sejour);
 $smarty->assign("fiche_autonomie"         , $fiche_autonomie);
 $smarty->assign("bilan"                   , $bilan);

@@ -34,7 +34,7 @@ $date .= ":00";
 foreach($patient->_ref_sejours as $_sejour) {
   // Séjours proches
   if ($_sejour->sortie) {
-    if (mbDateTime("+". CAppUI::conf("dPplanningOp CSejour hours_sejour_proche") ."HOUR", $_sejour->sortie) > $date && $date > $_sejour->sortie) {
+    if (CMbDT::dateTime("+". CAppUI::conf("dPplanningOp CSejour hours_sejour_proche") ."HOUR", $_sejour->sortie) > $date && $date > $_sejour->sortie) {
       $_sejour->_is_proche = 1;
     }
   }

@@ -372,7 +372,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           $last_id400 = $_movement->_ref_last_id400;
           if ($last_id400->_id) {
             $last_id400->tag = "trash_".$last_id400->tag;
-            $last_id400->last_update = mbDateTime();
+            $last_id400->last_update = CMbDT::dateTime();
             $last_id400->store();
           }
           
@@ -745,7 +745,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     // Création de l'idex
-    $idexVN->last_update = mbDateTime();
+    $idexVN->last_update = CMbDT::dateTime();
 
     return $idexVN->store();
   } 
@@ -1073,14 +1073,14 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if ($grossesse->_id) {
       // On recherche si la grossesse a déjà un séjour avec des naissances OU le nbre de jours entre le terme et l'entrée du
       // séjour est inférieur à 294 jours (42 semaines) - 42*7
-      if (count($grossesse->loadRefsNaissances()) || (abs(mbDaysRelative($grossesse->terme_prevu, $newVenue->entree)) > 294)) {
+      if (count($grossesse->loadRefsNaissances()) || (abs(CMbDT::daysRelative($grossesse->terme_prevu, $newVenue->entree)) > 294)) {
         $grossesse                 = new CGrossesse();
         $grossesse->parturiente_id = $newVenue->patient_id;
       }
     }
     
     if (!$grossesse->_id) {
-      $grossesse->terme_prevu = mbDate($newVenue->sortie);
+      $grossesse->terme_prevu = CMbDT::date($newVenue->sortie);
       if ($msg = $grossesse->store()) {
         return $msg;
       }
@@ -1132,7 +1132,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         
     // On récupère l'entrée réelle ssi msg A01 pour indiquer l'heure de la naissance 
     if ($this->_ref_exchange_ihe->code == "A01") {
-      $naissance->heure = mbTime($this->queryTextNode("PV1.44", $data["PV1"]));
+      $naissance->heure = CMbDT::time($this->queryTextNode("PV1.44", $data["PV1"]));
     }
     
     // Notifier les autres destinataires autre que le sender
@@ -1648,7 +1648,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $id400NRA->tag          = $newVenue->getTagNRA($newVenue->group_id);
     $id400NRA->id400        = $this->queryTextNode("PV1.50/CX.1", $node);
     $id400NRA->loadMatchingObject();
-    $id400NRA->last_update  = mbDateTime();
+    $id400NRA->last_update  = CMbDT::dateTime();
 
     $id400NRA->store();
   }
@@ -1677,7 +1677,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $newVenue->sortie_prevue = $sortie_prevue;
     }
     elseif (!$sortie_prevue && !$newVenue->sortie_prevue) {
-      $newVenue->sortie_prevue = mbAddDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00", 
+      $newVenue->sortie_prevue = CMbDT::addDateTime(CAppUI::conf("dPplanningOp CSejour sortie_prevue ".$newVenue->type).":00:00",
                     $newVenue->entree_reelle ? $newVenue->entree_reelle : $newVenue->entree_prevue);
     } 
     else {
@@ -1811,13 +1811,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
     
     $movement->start_of_movement = $start_movement_dt;
-    $movement->last_update = mbDateTime();
+    $movement->last_update = CMbDT::dateTime();
     if ($msg = $movement->store()) {
       return $msg;
     }
     
     if ($id400_create) {
-      $id400Movement->last_update = mbDateTime();
+      $id400Movement->last_update = CMbDT::dateTime();
       $id400Movement->object_id   = $movement->_id;
       if ($msg = $id400Movement->store()) {
         return $msg;

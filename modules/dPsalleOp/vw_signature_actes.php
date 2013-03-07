@@ -11,7 +11,7 @@
 global $a;
 
 $praticien_id = CValue::getOrSession("praticien_id");
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 $dialog = CValue::get("dialog");
 $tabOperations = array();
 $tabOp = array();

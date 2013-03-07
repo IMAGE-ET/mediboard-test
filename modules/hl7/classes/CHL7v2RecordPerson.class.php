@@ -386,7 +386,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     }
     
     // Date de naissance
-    $newPatient->naissance = mbDate($this->queryTextNode("PID.7/TS.1", $node));
+    $newPatient->naissance = CMbDT::date($this->queryTextNode("PID.7/TS.1", $node));
     
     // Cas d'un patient anonyme
     if ($newPatient->naissance && !$newPatient->prenom) {
@@ -648,7 +648,7 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
    */
   function getDeces(DOMNode $node, CPatient $newPatient) {
     if ($deces = $this->queryTextNode("PID.29/TS.1", $node)) {
-      $newPatient->deces = mbDate($deces);
+      $newPatient->deces = CMbDT::date($deces);
     }
   }
 

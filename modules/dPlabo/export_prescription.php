@@ -35,12 +35,12 @@ $doc->setDocument("tmp/Prescription-".$mbPrescription->_id.".xml");
 
 $prescription    = $doc->addElement($doc, "prescription");
 $doc->addAttribute($prescription, "id"  , $mbPrescription->_id);
-$doc->addAttribute($prescription, "date", mbDate());
+$doc->addAttribute($prescription, "date", CMbDT::date());
 $nomPraticien    = $doc->addElement($prescription, "nomPraticien"   , $mbPrescription->_ref_praticien->_user_last_name);
 $prenomPraticien = $doc->addElement($prescription, "prenomPraticien", $mbPrescription->_ref_praticien->_user_first_name);
 $nomPatient      = $doc->addElement($prescription, "nomPatient"     , $mbPrescription->_ref_patient->nom);
 $prenomPatient   = $doc->addElement($prescription, "prenomPatient"  , $mbPrescription->_ref_patient->prenom);
-$date            = $doc->addElement($prescription, "date"           , mbDate($mbPrescription->date));
+$date            = $doc->addElement($prescription, "date"           , CMbDT::date($mbPrescription->date));
 $analyses       = $doc->addElement($prescription, "analyses");
 foreach($mbPrescription->_ref_examens as $curr_analyse) {
   $analyse = $doc->addElement($analyses, "analyse");

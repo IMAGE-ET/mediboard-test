@@ -88,16 +88,16 @@ class CAffectationPersonnel extends CMbMetaObject {
     parent::updateFormFields();
     $this->loadRefs();  
     if ($this->object_class == "CPlageOp"){
-      $this->_debut = mbAddDateTime($this->_ref_object->debut, $this->_ref_object->date);
-    	$this->_fin = mbAddDateTime($this->_ref_object->fin, $this->_ref_object->date);
+      $this->_debut = CMbDT::addDateTime($this->_ref_object->debut, $this->_ref_object->date);
+    	$this->_fin = CMbDT::addDateTime($this->_ref_object->fin, $this->_ref_object->date);
     }
     
     if ($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ){
       if($this->debut){
-        $this->_debut = mbTime($this->debut);
+        $this->_debut = CMbDT::time($this->debut);
       }
       if($this->fin){
-        $this->_fin   = mbTime($this->fin);
+        $this->_fin   = CMbDT::time($this->fin);
       }
     }
   }
@@ -108,21 +108,21 @@ class CAffectationPersonnel extends CMbMetaObject {
       $this->_ref_object->loadRefPlageOp();
       
       if($this->_debut =="current") {
-      	$this->_debut = mbTime();
+      	$this->_debut = CMbDT::time();
       }
       
       if($this->_fin =="current") {
-      	$this->_fin = mbTime();
+      	$this->_fin = CMbDT::time();
       }
 
       if($this->_debut !== null && $this->_debut != ""){
-        $this->_debut = mbTime($this->_debut);
-        $this->debut = mbAddDateTime($this->_debut, mbDate($this->_ref_object->_datetime));  
+        $this->_debut = CMbDT::time($this->_debut);
+        $this->debut = CMbDT::addDateTime($this->_debut, CMbDT::date($this->_ref_object->_datetime));
       }
       
       if($this->_fin !== null && $this->_fin != ""){
-        $this->_fin = mbTime($this->_fin);
-        $this->fin = mbAddDateTime($this->_fin, mbDate($this->_ref_object->_datetime));  
+        $this->_fin = CMbDT::time($this->_fin);
+        $this->fin = CMbDT::addDateTime($this->_fin, CMbDT::date($this->_ref_object->_datetime));
       }
       
       // Suppression de la valeur

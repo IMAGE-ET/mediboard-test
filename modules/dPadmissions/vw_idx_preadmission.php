@@ -14,13 +14,13 @@ CCanDo::checkRead();
 
 $order_way_pre = CValue::getOrSession("order_way_pre", "ASC");
 $order_col_pre = CValue::getOrSession("order_col_pre", "heure");
-$date          = CValue::getOrSession("date", mbDate());
+$date          = CValue::getOrSession("date", CMbDT::date());
 
-$date_actuelle = mbDateTime("00:00:00");
-$date_demain   = mbDateTime("00:00:00","+ 1 day");
+$date_actuelle = CMbDT::dateTime("00:00:00");
+$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
 
-$hier   = mbDate("- 1 day", $date);
-$demain = mbDate("+ 1 day", $date);
+$hier   = CMbDT::date("- 1 day", $date);
+$demain = CMbDT::date("+ 1 day", $date);
 
 // Création du template
 $smarty = new CSmartyDP();

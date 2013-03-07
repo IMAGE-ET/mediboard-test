@@ -22,9 +22,9 @@ global $m;
 $m = $m_post;
 
 // Week dates
-$date = CValue::getOrSession("date", mbDate());
-$monday = mbDate("last monday", mbDate("+1 DAY", $date));
-$sunday = mbDate("next sunday", mbDate("-1 DAY", $date));
+$date = CValue::getOrSession("date", CMbDT::date());
+$monday = CMbDT::date("last monday", CMbDT::date("+1 DAY", $date));
+$sunday = CMbDT::date("next sunday", CMbDT::date("-1 DAY", $date));
 
 // Pseudo plage for user activity
 if (preg_match("/[deb|fin][\W][\d]+/", $conge_id)) {
@@ -37,7 +37,7 @@ if (preg_match("/[deb|fin][\W][\d]+/", $conge_id)) {
 $evenement = new CEvenementSSR();
 $where = array();
 $date_min = max($monday, $conge->date_debut);
-$date_max = mbDate("+1 DAY", min($sunday, $conge->date_fin));
+$date_max = CMbDT::date("+1 DAY", min($sunday, $conge->date_fin));
 $where["therapeute_id"] = " = '$conge->user_id'";
 $where["sejour_id"] = " = '$sejour_id'";
 $where["debut"] = " BETWEEN '$date_min' AND '$date_max'";

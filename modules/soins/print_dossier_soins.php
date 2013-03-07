@@ -116,7 +116,7 @@ if (CModule::getActive("dPprescription")) {
         foreach ($_perf_line->_ref_administrations as $_administration_perf) {
           $_administration_perf->loadRefAdministrateur();
           if (!$_administration_perf->planification) {
-            $dossier[mbDate($_administration_perf->dateTime)]["prescription_line_mix"][$_perf_line->_id][$_administration_perf->quantite][$_administration_perf->_id] = $_administration_perf;
+            $dossier[CMbDT::date($_administration_perf->dateTime)]["prescription_line_mix"][$_perf_line->_id][$_administration_perf->quantite][$_administration_perf->_id] = $_administration_perf;
           }
         }
       }
@@ -137,7 +137,7 @@ if (CModule::getActive("dPprescription")) {
         foreach ($_line_med->_ref_administrations as $_administration_med) {
           $_administration_med->loadRefAdministrateur();
           if (!$_administration_med->planification) {
-            $dossier[mbDate($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
+            $dossier[CMbDT::date($_administration_med->dateTime)]["medicament"][$_line_med->_id][$_administration_med->quantite][$_administration_med->_id] = $_administration_med;
           }
         }
       }
@@ -157,7 +157,7 @@ if (CModule::getActive("dPprescription")) {
           foreach ($_line_elt->_ref_administrations as $_administration_elt) {
             $_administration_elt->loadRefAdministrateur();
             if (!$_administration_elt->planification) {
-              $dossier[mbDate($_administration_elt->dateTime)][$chap][$_line_elt->_id][$_administration_elt->quantite][$_administration_elt->_id] = $_administration_elt;
+              $dossier[CMbDT::date($_administration_elt->dateTime)][$chap][$_line_elt->_id][$_administration_elt->quantite][$_administration_elt->_id] = $_administration_elt;
             }
           }
         }

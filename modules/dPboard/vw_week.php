@@ -12,18 +12,18 @@
 
 CAppUI::requireModuleFile("dPboard", "inc_board");
 
-$date = CValue::getOrSession("date", mbDate());
-$prec = mbDate("-1 week", $date);
-$suiv = mbDate("+1 week", $date);
-$today = mbDate();
+$date = CValue::getOrSession("date", CMbDT::date());
+$prec = CMbDT::date("-1 week", $date);
+$suiv = CMbDT::date("+1 week", $date);
+$today = CMbDT::date();
 
 global $smarty;
 
 //Planning au format  CPlanningWeek
 $debut = CValue::getOrSession("date", $date);
-$debut = mbDate("-1 week", $debut);
-$debut = mbDate("next monday", $debut);
-$fin   = mbDate("next sunday", $debut);
+$debut = CMbDT::date("-1 week", $debut);
+$debut = CMbDT::date("next monday", $debut);
+$fin   = CMbDT::date("next sunday", $debut);
 
 // L'utilisateur est-il praticien ?
 $chir = null;
@@ -48,7 +48,7 @@ $where["chir_id"] = " = '$chirSel'";
 if (!$listPlageConsult->countList($where) && !$listPlageOp->countList($where)) {
   $nbjours--;
   // Aucune plage le dimanche, on peut donc tester le samedi.
-  $dateArr = mbDate("-1 day", $fin);
+  $dateArr = CMbDT::date("-1 day", $fin);
   $where["date"] = "= '$dateArr'";
   if (!$listPlageConsult->countList($where) && !$listPlageOp->countList($where)) {
     $nbjours--;
@@ -83,7 +83,7 @@ $where            = array();
 $where["chir_id"] = "= '$chirSel'";
 
 for ($i = 0; $i < 7; $i++) {
-  $date             = mbDate("+$i day", $debut);
+  $date             = CMbDT::date("+$i day", $debut);
   $where["date"]    = "= '$date'";
   $plagesConsult = $plageConsult->loadList($where);
   
@@ -99,7 +99,7 @@ $where[] = "chir_id = '$chirSel' OR anesth_id = '$chirSel'";
 $operation = new COperation();
 
 for ($i = 0; $i < 7; $i++) {
-  $date             = mbDate("+$i day", $debut);
+  $date             = CMbDT::date("+$i day", $debut);
   $where["date"]    = "= '$date'";
   $plagesOp = $plageOp->loadList($where);
   
@@ -124,7 +124,7 @@ for ($i = 0; $i < 7; $i++) {
 
 function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type) {
   $debute = "$date $_plage->debut";
-  $event = new CPlanningEvent($_plage->_guid, $debute, mbMinutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null);
+  $event = new CPlanningEvent($_plage->_guid, $debute, CMbDT::minutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null);
     $event->resizable = true;
   
     //Menu des évènements

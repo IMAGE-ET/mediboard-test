@@ -9,9 +9,9 @@
  */
 
 $service_id  = CValue::getOrSession("service_id");
-$date        = CValue::getOrSession("date", mbDate());
+$date        = CValue::getOrSession("date", CMbDT::date());
 $nb_decalage = CValue::get("nb_decalage");
-$date_max    = mbDate("+ 1 DAY", $date);
+$date_max    = CMbDT::date("+ 1 DAY", $date);
 
 // Chargement du service
 $service = new CService();

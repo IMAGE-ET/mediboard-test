@@ -18,10 +18,10 @@ $order_way = CValue::getOrSession("order_way", "DESC");
 $order_col = CValue::getOrSession("order_col", CAppUI::pref("defaultRPUSort"));
 
 // Selection de la date
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
-$date_before = mbDate("-$date_tolerance DAY", $date);
-$date_after  = mbDate("+1 DAY", $date);
+$date_before = CMbDT::date("-$date_tolerance DAY", $date);
+$date_after  = CMbDT::date("+1 DAY", $date);
 
 // L'utilisateur doit-il voir les informations médicales
 $user = CMediusers::get();
@@ -101,7 +101,7 @@ foreach ($listSejours as &$sejour) {
   $sejour->_ref_patient->loadIPP();
 
   // Séjours antérieurs  
-	$sejour->_veille = mbDate($sejour->entree) != $date;
+	$sejour->_veille = CMbDT::date($sejour->entree) != $date;
 	
 	// Ajout des documents de la consultation dans le compteur
 	$consult_atu = $sejour->_ref_consult_atu;
@@ -162,7 +162,7 @@ $smarty->assign("selAffichage", $selAffichage);
 $smarty->assign("medicalView" , $medicalView);
 $smarty->assign("date"        , $date);
 $smarty->assign("date_before" , $date_before);
-$smarty->assign("today"       , mbDate());
+$smarty->assign("today"       , CMbDT::date());
 $smarty->assign("isImedsInstalled", (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("admin_urgences", $admin_urgences);
 $smarty->assign("type"        , "MainCourante");

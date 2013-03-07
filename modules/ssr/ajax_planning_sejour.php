@@ -22,7 +22,7 @@ $print = CValue::get("print");
 $large = CValue::get("large");
 
 // Initialisation du planning
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 $nb_days_planning = $sejour->getNbJourPlanning($date);
 
 $planning = new CPlanningWeek($date, $sejour->entree, $sejour->sortie, $nb_days_planning, $selectable, $height, $large, !$print);
@@ -113,7 +113,7 @@ $planning->showNow();
 // Alertes séjour
 $total_evenement = array();
 foreach($evenements as $_evenement){
-	$_date = mbDate($_evenement->debut);
+	$_date = CMbDT::date($_evenement->debut);
 	if (!isset($total_evenement[$_date])) {
     $total_evenement[$_date]["duree"] = 0;
     $total_evenement[$_date]["nb"] = 0;
@@ -143,7 +143,7 @@ foreach ($sejour->loadRefReplacements() as $_replacement) {
 	  $_replacement->loadRefConge();
 	  $conge =& $_replacement->_ref_conge;
 	  
-	  for ($day = $conge->date_debut; $day <= $conge->date_fin; $day = mbDate("+1 DAY", $day)) {
+	  for ($day = $conge->date_debut; $day <= $conge->date_fin; $day = CMbDT::date("+1 DAY", $day)) {
 	    $planning->addDayLabel($day, $_replacement->_ref_replacer->_view);
 	  } 
 	}

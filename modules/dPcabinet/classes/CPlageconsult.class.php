@@ -165,7 +165,7 @@ class CPlageconsult extends CPlageHoraire {
   function getUtilisation() {
     $this->loadRefsConsultations(false);
 
-    for ($i = $this->debut; $i < $this->fin; $i = mbAddTime("+".$this->freq, $i)) {
+    for ($i = $this->debut; $i < $this->fin; $i = CMbDT::addTime("+".$this->freq, $i)) {
       $utilisation[$i] = 0;
     }
 
@@ -178,7 +178,7 @@ class CPlageconsult extends CPlageHoraire {
         if (isset($utilisation[$emplacement])) {
           $utilisation[$emplacement]++;
         }
-        $emplacement = mbAddTime("+".$this->freq, $emplacement);
+        $emplacement = CMbDT::addTime("+".$this->freq, $emplacement);
       }
     }
     return $utilisation;
@@ -236,7 +236,7 @@ class CPlageconsult extends CPlageHoraire {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_total = mbTimeCountIntervals($this->debut, $this->fin, $this->freq);
+    $this->_total = CMbDT::timeCountIntervals($this->debut, $this->fin, $this->freq);
 
     if ($this->freq == "1:00:00" || $this->freq == "01:00:00") {
       $this->_freq = "60";
@@ -264,24 +264,24 @@ class CPlageconsult extends CPlageHoraire {
 
     switch ($this->_type_repeat) {
       case "quadruple": 
-        $this->date = mbDate("+1 WEEK", $this->date); // 4
+        $this->date = CMbDT::date("+1 WEEK", $this->date); // 4
         $week_jumped++;
       case "triple": 
-        $this->date = mbDate("+1 WEEK", $this->date); // 3
+        $this->date = CMbDT::date("+1 WEEK", $this->date); // 3
         $week_jumped++;
       case "double": 
-        $this->date = mbDate("+1 WEEK", $this->date); // 2
+        $this->date = CMbDT::date("+1 WEEK", $this->date); // 2
         $week_jumped++;
       case "simple": 
-        $this->date = mbDate("+1 WEEK", $this->date); // 1
+        $this->date = CMbDT::date("+1 WEEK", $this->date); // 1
         $week_jumped++;
         break;
       case "sameweek":
         $week_number = CMbDate::weekNumberInMonth($this->date);
-        $next_month  = CMbDate::monthNumber(mbDate("+1 MONTH", $this->date));
+        $next_month  = CMbDate::monthNumber(CMbDT::date("+1 MONTH", $this->date));
         $i = 0;
         do {
-          $this->date = mbDate("+1 WEEK", $this->date);
+          $this->date = CMbDT::date("+1 WEEK", $this->date);
           $week_jumped++;
           $i++;
         } while (

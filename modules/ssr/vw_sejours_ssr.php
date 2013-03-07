@@ -12,7 +12,7 @@ CCanDo::checkRead();
 
 // Plateaux disponibles
 $show_cancelled_services = CValue::getOrSession("show_cancelled_services", CAppUI::conf("ssr recusation view_services_inactifs"));
-$date                    = CValue::getOrSession("date", mbDate());
+$date                    = CValue::getOrSession("date", CMbDT::date());
 $order_way               = CValue::getOrSession("order_way", "ASC");
 $order_col               = CValue::getOrSession("order_col", "patient_id");
 $show                    = CValue::getOrSession("show", "all");

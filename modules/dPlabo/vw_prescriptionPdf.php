@@ -56,14 +56,14 @@ $patient =& $prescription->_ref_patient;
 
 // Affichage du praticien et du patient à l'aide d'un tableau
 $pdf->createTab($pdf->viewPraticien($praticien->_view,$praticien->_ref_function->_view, $praticien->_ref_function->_ref_group->_view),
-                $pdf->viewPatient($patient->_view, mbTransformTime($patient->naissance,null,'%d-%m-%y'), $patient->adresse, $patient->cp, $patient->ville, $patient->tel));
+                $pdf->viewPatient($patient->_view, CMbDT::transform($patient->naissance,null,'%d-%m-%y'), $patient->adresse, $patient->cp, $patient->ville, $patient->tel));
 
 $urgent = "";
 if($prescription->urgence){
 	$urgent = "(URGENT)";
 }
 $pdf->setY(65);
-$pdf->writeHTML(utf8_encode("<b>Prélèvement du ".(mbTransformTime($prescription->date,null,'%d-%m-%y à %H:%M'))." ".$urgent."</b>"));
+$pdf->writeHTML(utf8_encode("<b>Prélèvement du ".(CMbDT::transform($prescription->date,null,'%d-%m-%y à %H:%M'))." ".$urgent."</b>"));
 
 $pdf->setY(80);
 // Affichage des analyses
@@ -107,7 +107,7 @@ $num = $numPrat.$id400Presc;
 
 // Initialisation du code barre, => utilisation par default du codage C128B
 // L'affichage du code barre est realisee dans la fonction redefinie Footer dans la classe CPrescriptionPdf
-$pdf->SetBarcode($num, $prescription->_ref_praticien->_user_last_name, substr($prescription->_ref_patient->_view, 0, 20), $prescription->_ref_patient->sexe,mbTransformTime($prescription->_ref_patient->naissance,null,"%d-%m-%y"), mbTransformTime($prescription->date,null,"%d-%m-%y %H:%M"));
+$pdf->SetBarcode($num, $prescription->_ref_praticien->_user_last_name, substr($prescription->_ref_patient->_view, 0, 20), $prescription->_ref_patient->sexe,CMbDT::transform($prescription->_ref_patient->naissance,null,"%d-%m-%y"), CMbDT::transform($prescription->date,null,"%d-%m-%y %H:%M"));
 
 
 

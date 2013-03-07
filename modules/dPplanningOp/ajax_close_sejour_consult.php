@@ -10,8 +10,8 @@
 
 CCanDo::checkEdit();
 
-$now       = mbDateTime();
-$yesterday = mbDateTime("-1 DAY");
+$now       = CMbDT::dateTime();
+$yesterday = CMbDT::dateTime("-1 DAY");
 
 $sejour = new CSejour();
 $where['type']   = "= 'consult'";

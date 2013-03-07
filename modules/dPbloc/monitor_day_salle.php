@@ -19,12 +19,12 @@ foreach($listBlocs as $_bloc) {
 $salle = new CSalle();
 $salle->load(CValue::get("salle_id"), reset($listSalles)->_id);
 
-$date = CValue::get("date", mbDate());
+$date = CValue::get("date", CMbDT::date());
 
 // Liste des jours
 $listDays = array();
 for($i = 0; $i < 19*7; $i += 7) {
-  $dateArr = mbDate("+$i day", $date);
+  $dateArr = CMbDT::date("+$i day", $date);
   $listDays[$dateArr] = $dateArr;  
 }
 
@@ -89,10 +89,10 @@ foreach($listDays as $keyDate => $valDate){
   
   // Remplissage du tableau de visualisation
   foreach($listPlages[$keyDate] as $plage){
-    $plage->debut = mbTimeGetNearestMinsWithInterval($plage->debut, CPlageOp::$minutes_interval);
-    $plage->fin   = mbTimeGetNearestMinsWithInterval($plage->fin  , CPlageOp::$minutes_interval);
-    $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
-    for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+".CPlageOp::$minutes_interval." minutes", $time) ){
+    $plage->debut = CMbDT::timeGetNearestMinsWithInterval($plage->debut, CPlageOp::$minutes_interval);
+    $plage->fin   = CMbDT::timeGetNearestMinsWithInterval($plage->fin  , CPlageOp::$minutes_interval);
+    $plage->_nbQuartHeure = CMbDT::timeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
+    for($time = $plage->debut; $time < $plage->fin; $time = CMbDT::time("+".CPlageOp::$minutes_interval." minutes", $time) ){
       $affichages["$keyDate-$time"] = "full";
     } 
     $affichages["$keyDate-$plage->debut"] = $plage->_id;

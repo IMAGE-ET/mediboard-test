@@ -15,14 +15,14 @@ CApp::setMemoryLimit("640M");
 CApp::setTimeLimit(120);
 
 $service_id = CValue::get("service_id");
-$date       = CValue::get("date", mbDate());
+$date       = CValue::get("date", CMbDT::date());
 
 $service = new CService();
 $service->load($service_id);
 
 $datetime_min = "$date 00:00:00";
 $datetime_max = "$date 23:59:59";
-$datetime_avg = "$date ".mbTime();
+$datetime_avg = "$date ".CMbDT::time();
 
 $sejour = new CSejour();
 $where  = array();
@@ -69,7 +69,7 @@ foreach ($sejours as $sejour) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("date"   , $date);
-$smarty->assign("hour"   , mbTime());
+$smarty->assign("hour"   , CMbDT::time());
 $smarty->assign("service", $service);
 $smarty->assign("sejours", $sejours);
 $smarty->assign("dossiers_complets", $dossiers_complets);

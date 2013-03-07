@@ -442,9 +442,9 @@ class COperation extends CCodable implements IPatientRelated {
     $this->loadRefPlageOp();
 
     if ($this->plageop_id !== null && !$sejour->entree_reelle) {
-      $date = mbDate($this->_datetime);
-      $entree = mbDate($sejour->entree_prevue);
-      $sortie = mbDate($sejour->sortie_prevue);
+      $date = CMbDT::date($this->_datetime);
+      $entree = CMbDT::date($sejour->entree_prevue);
+      $sortie = CMbDT::date($sejour->sortie_prevue);
       if (!CMbRange::in($date, $entree, $sortie)) {
          $msg .= "Intervention du $date en dehors du séjour du $entree au $sortie";
       }
@@ -492,19 +492,19 @@ class COperation extends CCodable implements IPatientRelated {
     $this->_lu_type_anesth = $this->_ref_type_anesth->name;
 
     if ($this->debut_op && $this->fin_op && $this->fin_op > $this->debut_op) {
-      $this->_duree_interv = mbSubTime($this->debut_op,$this->fin_op);
+      $this->_duree_interv = CMbDT::subTime($this->debut_op,$this->fin_op);
     }
     if ($this->pose_garrot && $this->retrait_garrot && $this->retrait_garrot > $this->pose_garrot) {
-      $this->_duree_garrot = mbSubTime($this->pose_garrot,$this->retrait_garrot);
+      $this->_duree_garrot = CMbDT::subTime($this->pose_garrot,$this->retrait_garrot);
     }
     if ($this->induction_debut && $this->induction_fin && $this->induction_fin > $this->induction_debut) {
-      $this->_duree_induction = mbSubTime($this->induction_debut,$this->induction_fin);
+      $this->_duree_induction = CMbDT::subTime($this->induction_debut,$this->induction_fin);
     }
     if ($this->entree_salle && $this->sortie_salle && $this->sortie_salle>$this->entree_salle) {
-      $this->_presence_salle = mbSubTime($this->entree_salle,$this->sortie_salle);
+      $this->_presence_salle = CMbDT::subTime($this->entree_salle,$this->sortie_salle);
     }
     if ($this->entree_reveil && $this->sortie_reveil_possible && $this->sortie_reveil_possible > $this->entree_reveil) {
-      $this->_duree_sspi = mbSubTime($this->entree_reveil,$this->sortie_reveil_possible);
+      $this->_duree_sspi = CMbDT::subTime($this->entree_reveil,$this->sortie_reveil_possible);
     }
 
     if ($this->plageop_id) {
@@ -610,12 +610,12 @@ class COperation extends CCodable implements IPatientRelated {
 
       // Alerte sur l'annulation d'une intervention
       if ($this->fieldModified("annulee", "1")) {
-        $comments .= "L'intervention a été annulée pour le ".mbTransformTime(null, $this->_datetime, CAppUI::conf("datetime")).".";
+        $comments .= "L'intervention a été annulée pour le ".CMbDT::transform(null, $this->_datetime, CAppUI::conf("datetime")).".";
       }
 
       // Alerte sur le déplacement d'une intervention
-      elseif (mbDate(null, $this->_datetime) != mbDate(null, $this->_old->_datetime)) {
-        $comments .= "L'intervention a été déplacée du ".mbTransformTime(null, $this->_old->_datetime, CAppUI::conf("date"))." au ".mbTransformTime(null, $this->_datetime, CAppUI::conf("date")).".";
+      elseif (CMbDT::date(null, $this->_datetime) != CMbDT::date(null, $this->_old->_datetime)) {
+        $comments .= "L'intervention a été déplacée du ".CMbDT::transform(null, $this->_old->_datetime, CAppUI::conf("date"))." au ".CMbDT::transform(null, $this->_datetime, CAppUI::conf("date")).".";
       }
 
       // Alerte sur la commande de matériel
@@ -1007,7 +1007,7 @@ class COperation extends CCodable implements IPatientRelated {
     $this->updateSalle();
 
     //Calcul du nombre de jour entre la date actuelle et le jour de l'operation
-    $this->_compteur_jour = mbDaysRelative($date, mbDate());
+    $this->_compteur_jour = CMbDT::daysRelative($date, CMbDT::date());
 
     // Horaire global
     if ($this->time_operation && $this->time_operation != "00:00:00") {
@@ -1034,10 +1034,10 @@ class COperation extends CCodable implements IPatientRelated {
       $this->_acte_execution = $this->_datetime_reel_fin;
     }
     elseif ($this->debut_op) {
-      $this->_acte_execution = mbAddDateTime($this->temp_operation, $this->_datetime_reel);
+      $this->_acte_execution = CMbDT::addDateTime($this->temp_operation, $this->_datetime_reel);
     }
     elseif ($this->time_operation != "00:00:00") {
-      $this->_acte_execution = mbAddDateTime($this->temp_operation, $this->_datetime);
+      $this->_acte_execution = CMbDT::addDateTime($this->temp_operation, $this->_datetime);
     }
     else {
       $this->_acte_execution = $this->_datetime;
@@ -1049,7 +1049,7 @@ class COperation extends CCodable implements IPatientRelated {
       $this->_view .= "(hors plage) ";
     }
 
-    $this->_view .= "du " . mbTransformTime(null, $this->_datetime, CAppUI::conf("date"));
+    $this->_view .= "du " . CMbDT::transform(null, $this->_datetime, CAppUI::conf("date"));
     return $this->_ref_plageop;
   }
 
@@ -1143,7 +1143,7 @@ class COperation extends CCodable implements IPatientRelated {
   function isCoded() {
     $this->loadRefPlageOp();
     $this->_coded = (CAppUI::conf("dPsalleOp COperation modif_actes") == "never") ||
-                    (CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday" && $this->date > mbDate()) ||
+                    (CAppUI::conf("dPsalleOp COperation modif_actes") == "oneday" && $this->date > CMbDT::date()) ||
                     (CAppUI::conf("dPsalleOp COperation modif_actes") == "button" && $this->_ref_plageop->actes_locked) ||
                     (CAppUI::conf("dPsalleOp COperation modif_actes") == "facturation" && $this->facture);
     return $this->_coded;
@@ -1304,7 +1304,7 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   function updateHeureUS() {
-    $this->_heure_us = $this->duree_preop ? mbSubTime($this->duree_preop, $this->time_operation) : $this->time_operation;
+    $this->_heure_us = $this->duree_preop ? CMbDT::subTime($this->duree_preop, $this->time_operation) : $this->time_operation;
   }
 
   function getAffectation() {
@@ -1336,9 +1336,9 @@ class COperation extends CCodable implements IPatientRelated {
       $moment = $sejour->sortie;
     }
 
-    if (mbTime(null, $moment) == "00:00:00") {
-      $where["entree"] = $this->_spec->ds->prepare("<= %", mbDate(null, $moment)." 23:59:59");
-      $where["sortie"] = $this->_spec->ds->prepare(">= %", mbDate(null, $moment)." 00:00:01");
+    if (CMbDT::time(null, $moment) == "00:00:00") {
+      $where["entree"] = $this->_spec->ds->prepare("<= %", CMbDT::date(null, $moment)." 23:59:59");
+      $where["sortie"] = $this->_spec->ds->prepare(">= %", CMbDT::date(null, $moment)." 00:00:01");
     }
     else {
       $where["entree"] = $this->_spec->ds->prepare("<= %", $moment);

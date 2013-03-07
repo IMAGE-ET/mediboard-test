@@ -59,7 +59,7 @@ class CHL7v2SegmentMSH extends CHL7v2Segment {
     $data[] = isset($actor->_configs["receiving_facility"]) ? $actor->_configs["receiving_facility"] : $actor->nom; 
     
     // MSH-7: Date/Time Of Message (TS)
-    $data[] = mbDateTime(); 
+    $data[] = CMbDT::dateTime();
     
     // MSH-8: Security (ST) (optional)
     $data[] = null;

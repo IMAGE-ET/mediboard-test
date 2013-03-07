@@ -486,6 +486,6 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     }
     $this->_ref_consultation->loadRefPlageConsult();
 
-    return (mbDateTime("+ 24 HOUR", "{$this->_ref_consultation->_date} {$this->_ref_consultation->heure}") > mbDateTime());
+    return (CMbDT::dateTime("+ 24 HOUR", "{$this->_ref_consultation->_date} {$this->_ref_consultation->heure}") > CMbDT::dateTime());
   }
 }

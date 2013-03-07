@@ -19,7 +19,7 @@ if($forum_message->_id) {
     $forum_message->loadRefs();
 } else { // sinon on en crée un nouveau
     $forum_message->user_id = $user->_id;
-    $forum_message->date = mbDateTime();
+    $forum_message->date = CMbDT::dateTime();
 }
 
 

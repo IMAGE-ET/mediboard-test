@@ -10,7 +10,7 @@
 
 CCanDo::checkEdit();
 
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 $praticien_id = CValue::getOrSession("praticien_id", CAppUI::$instance->user_id);
 
 // Chargement de la liste des praticiens

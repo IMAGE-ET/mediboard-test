@@ -77,25 +77,25 @@ class CPlageressource extends CPlageHoraire {
   function updateFormFields() {
     parent::updateFormFields();
     
-    $this->_hour_deb = mbTransformTime($this->debut, null, "%H");
-    $this->_hour_fin = mbTransformTime($this->fin  , null, "%H");
+    $this->_hour_deb = CMbDT::transform($this->debut, null, "%H");
+    $this->_hour_fin = CMbDT::transform($this->fin  , null, "%H");
 		
 		// State rules
     if ($this->paye == 1) {
       $this->_state = self::PAYED;
     } 
-    elseif($this->date < mbDate()) {
+    elseif($this->date < CMbDT::date()) {
       $this->_state = self::OUT;
     } 
     elseif($this->prat_id) {
-      if (mbDate("+ 15 DAYS") > $this->date) {
+      if (CMbDT::date("+ 15 DAYS") > $this->date) {
         $this->_state = self::BLOCKED;
       } 
       else {
         $this->_state = self::BUSY;
       }
     } 
-    elseif (mbDate("+ 1 MONTH") < $this->date) {
+    elseif (CMbDT::date("+ 1 MONTH") < $this->date) {
       $this->_state = self::FREEB;
     } 
     else {
@@ -115,7 +115,7 @@ class CPlageressource extends CPlageHoraire {
     $_hour_fin = $this->_hour_fin;
     $_min_fin  = $this->_min_fin;
 
-    $this->date = mbDate("+7 DAYS", $this->date);
+    $this->date = CMbDT::date("+7 DAYS", $this->date);
     $where["date"] = "= '$this->date'";
     $where[] = "`debut` = '$this->debut' OR `fin` = '$this->fin'";
     if (!$this->loadObject($where)) {

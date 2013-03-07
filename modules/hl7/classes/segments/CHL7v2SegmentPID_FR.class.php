@@ -36,7 +36,7 @@ class CHL7v2SegmentPID_FR extends CHL7v2SegmentPID {
         $this->getAssigningAuthority("INS-C"),
         "INS-C",
         null,
-        mbDate($patient->INSC_date)
+        CMbDT::date($patient->INSC_date)
       );
     }
 

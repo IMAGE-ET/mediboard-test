@@ -10,7 +10,7 @@
 
 CCando::checkEdit();
 
-$date    = CValue::get("date", mbDate());
+$date    = CValue::get("date", CMbDT::date());
 $kine_id = CValue::getOrSession("kine_id", CAppUI::$instance->user_id);
 
 // Chargement de la liste des utilisateurs

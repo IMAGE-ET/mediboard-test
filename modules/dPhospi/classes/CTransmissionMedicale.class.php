@@ -79,8 +79,8 @@ class CTransmissionMedicale extends CMbMetaObject {
   
 	function canEdit(){
 		$nb_hours = CAppUI::conf("soins max_time_modif_suivi_soins");
-    $datetime_max = mbDateTime("+ $nb_hours HOURS", $this->date);
-		return $this->_canEdit = (mbDateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->user_id);
+    $datetime_max = CMbDT::dateTime("+ $nb_hours HOURS", $this->date);
+		return $this->_canEdit = (CMbDT::dateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->user_id);
 	}
 	
   function calculCibles(&$cibles = array()){

@@ -61,8 +61,8 @@ try {
    $url,
    $praticien->_user_last_name,
    $praticien->_user_first_name,
-   mbDateToLocale(mbDate($operation->_datetime_best)),
-   mbTransformTime($operation->_datetime_best, null, CAppUI::conf("time"))
+   CMbDT::dateToLocale(CMbDT::date($operation->_datetime_best)),
+   CMbDT::transform($operation->_datetime_best, null, CAppUI::conf("time"))
   );
   
   $subject = str_replace($from, $to, $subject);
@@ -73,7 +73,7 @@ try {
   $exchange_source->setBody($content);
   
   $exchange_source->send();
-  $operation->envoi_mail = mbDateTime();
+  $operation->envoi_mail = CMbDT::dateTime();
   
   if ($msg = $operation->store()) {
     CAppUI::displayAjaxMsg($msg, UI_MSG_ERROR);

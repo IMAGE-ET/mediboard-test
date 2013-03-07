@@ -75,7 +75,7 @@ try {
   throw new CMbException("CExchangeSource-no-response");
 }
 
-$exchange->date_echange = mbDateTime();
+$exchange->date_echange = CMbDT::dateTime();
 
 if (!$ack_data = $source->getACQ()) {
   $exchange->store();

@@ -38,11 +38,11 @@ $configs = CConfigService::getAllFor($service_id);
 
 // Si la date actuelle est inférieure a l'heure affichée sur le plan de soins, on affiche le plan de soins de la veille (cas de la nuit)
 if(!$date){
-  //$datetime_limit = mbDateTime($configs["Poste 1"].":00:00");
-  //if(mbDateTime() < $datetime_limit){
-  //  $date = mbDate("- 1 DAY");
+  //$datetime_limit = CMbDT::dateTime($configs["Poste 1"].":00:00");
+  //if(CMbDT::dateTime() < $datetime_limit){
+  //  $date = CMbDT::date("- 1 DAY");
   //} else {
-    $date = mbDate();
+    $date = CMbDT::date();
   //}
 }
 
@@ -92,7 +92,7 @@ if($prescription_id){
 }
 
 // Recuperation de l'heure courante
-$time = mbTransformTime(null,null,"%H");
+$time = CMbDT::transform(null,null,"%H");
 
 $tabHours = CAdministration::getTimingPlanSoins($date, $configs, array("00"), "0", "0");
 $composition_dossier = array();
@@ -120,7 +120,7 @@ foreach($tabHours as $_key_date => $_period_date){
   }
 }
 
-$date_max = mbDateTime("+ 1 HOUR", $date_max);
+$date_max = CMbDT::dateTime("+ 1 HOUR", $date_max);
 
 foreach($prescriptions as $_prescription){
   $_prescription->calculAllPlanifSysteme();
@@ -149,7 +149,7 @@ foreach($prescriptions as $_prescription){
   foreach($planifs_systeme as $_planif){
     // Chargement et stockage de la ligne
     $_planif->loadTargetObject();
-    $_date = mbDate($_planif->dateTime);
+    $_date = CMbDT::date($_planif->dateTime);
     
     if($_planif->_ref_object instanceof CPrescriptionLineMedicament || $_planif->_ref_object instanceof CPrescriptionLineElement){
       // Chargement de la prise
@@ -164,7 +164,7 @@ foreach($prescriptions as $_prescription){
       
       $qte_adm = $_planif->_ref_prise->_quantite_administrable ? $_planif->_ref_prise->_quantite_administrable : 1; 
       
-      $time = mbTransformTime($_planif->dateTime,null,"%H").":00:00";
+      $time = CMbDT::transform($_planif->dateTime,null,"%H").":00:00";
       
       if(!isset($pancarte[$_prescription->_id]["$_date $time"][$type][$_planif->object_id]["prevue"])){
         $pancarte[$_prescription->_id]["$_date $time"][$type][$_planif->object_id]["prevue"] = 0;
@@ -215,7 +215,7 @@ foreach($prescriptions as $_prescription){
         $where["object_class"] = " = 'CPrescriptionLineMixItem'";
         $where["object_id"] = " = '$_planif->object_id'";
         
-        $_line_mix_datetime = mbTransformTime(null, $_planif->dateTime, "%Y-%m-%d %H:00:00");
+        $_line_mix_datetime = CMbDT::transform(null, $_planif->dateTime, "%Y-%m-%d %H:00:00");
         
         $where[] = "original_dateTime = '$_line_mix_datetime'";
         $where["planification"] = " = '1'";
@@ -238,8 +238,8 @@ foreach($prescriptions as $_prescription){
       $_planif->_ref_object->updateQuantiteAdministration();
       $list_lines[$type_line][$_planif->_ref_object->_ref_prescription_line_mix->_id] = $_planif->_ref_object->_ref_prescription_line_mix;
       $list_lines["perf_line"][$_planif->_ref_object->_id] = $_planif->_ref_object; 
-      $time = mbTransformTime($_planif->dateTime,null,"%H").":00:00";
-      $_date = mbDate($_planif->dateTime);
+      $time = CMbDT::transform($_planif->dateTime,null,"%H").":00:00";
+      $_date = CMbDT::date($_planif->dateTime);
       if(!isset($pancarte[$_prescription->_id]["$_date $time"][$type_line][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"])){
         $pancarte[$_prescription->_id]["$_date $time"][$type_line][$_planif->_ref_object->prescription_line_mix_id][$_planif->object_id]["prevue"] = 0;
       }
@@ -309,8 +309,8 @@ foreach($prescriptions as $_prescription){
   $administrations = array_merge($administrations, $administration->loadList($where, null, null, null, $ljoin));
   */
   foreach($administrations as $_administration){
-    $time = mbTransformTime($_administration->dateTime,null,"%H").":00:00";
-    $_date = mbDate($_administration->dateTime);
+    $time = CMbDT::transform($_administration->dateTime,null,"%H").":00:00";
+    $_date = CMbDT::date($_administration->dateTime);
       
     $type_adm = $_administration->planification ? "prevue" : "adm";
       
@@ -339,8 +339,8 @@ foreach($prescriptions as $_prescription){
       // Suppression d'une planification systeme replanifiée
       if($type_adm == "prevue"){
         if($_administration->original_dateTime){
-          $original_time = mbTransformTime($_administration->original_dateTime,null,"%H").":00:00";
-          $original_date = mbDate($_administration->original_dateTime);
+          $original_time = CMbDT::transform($_administration->original_dateTime,null,"%H").":00:00";
+          $original_date = CMbDT::date($_administration->original_dateTime);
           
           if(isset( $pancarte[$_prescription->_id]["$original_date $original_time"][$type][$_administration->object_id][$type_adm])){
             $pancarte[$_prescription->_id]["$original_date $original_time"][$type][$_administration->object_id][$type_adm] -= $_administration->quantite;
@@ -361,8 +361,8 @@ foreach($prescriptions as $_prescription){
       }
       
       $prescription_line_mix_item = $_administration->_ref_object;
-      $time = mbTransformTime($_administration->dateTime,null,"%H").":00:00";
-      $_date = mbDate($_administration->dateTime);      
+      $time = CMbDT::transform($_administration->dateTime,null,"%H").":00:00";
+      $_date = CMbDT::date($_administration->dateTime);
       
       $list_lines[$type_line][$_administration->_ref_object->_ref_prescription_line_mix->_id] = $_administration->_ref_object->_ref_prescription_line_mix;
       $list_lines["perf_line"][$_administration->_ref_object->_id] = $_administration->_ref_object; 

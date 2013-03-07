@@ -105,10 +105,10 @@ foreach ($sejour->_ref_suivi_medical as $_trans_const) {
   elseif ($_trans_const instanceof CTransmissionMedicale) {
     $sort_key = "$_trans_const->date $_trans_const->_class $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
     
-    $date_before = mbDateTime("-1 SECOND", $_trans_const->date);
+    $date_before = CMbDT::dateTime("-1 SECOND", $_trans_const->date);
     $sort_key_before = "$date_before $_trans_const->_class $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
     
-    $date_after  = mbDateTime("+1 SECOND", $_trans_const->date);
+    $date_after  = CMbDT::dateTime("+1 SECOND", $_trans_const->date);
     $sort_key_after = "$date_after $_trans_const->_class $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
     
     // Aggrégation à -1 sec

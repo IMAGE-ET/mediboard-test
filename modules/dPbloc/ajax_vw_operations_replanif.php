@@ -50,8 +50,8 @@ $smarty = new CSmartyDP;
 $smarty->assign("plages_by_salle", $plages_by_salle);
 $smarty->assign("salles", $salles);
 $smarty->assign("date_replanif", $date_replanif);
-$smarty->assign("date_replanif_before", mbDate("-1 day", $date_replanif));
-$smarty->assign("date_replanif_after" , mbDate("+1 day", $date_replanif));
+$smarty->assign("date_replanif_before", CMbDT::date("-1 day", $date_replanif));
+$smarty->assign("date_replanif_after" , CMbDT::date("+1 day", $date_replanif));
 
 $smarty->display("inc_vw_operations_replanif.tpl");
 

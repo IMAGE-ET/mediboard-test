@@ -29,7 +29,7 @@ $docs  = array();
 $where = array();
 $ljoin = array();
 $cr    = new CCompteRendu;
-$long_period = mbDaysRelative($date_docs_min, $date_docs_max) > 10;
+$long_period = CMbDT::daysRelative($date_docs_min, $date_docs_max) > 10;
 
 $total_docs = 0;
 

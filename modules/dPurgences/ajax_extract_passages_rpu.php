@@ -16,12 +16,12 @@ $debut_selection = CValue::get("debut_selection");
 $fin_selection   = CValue::get("fin_selection");
 
 if (!$debut_selection || !$fin_selection) {
-  $fin_selection   = mbDate()." 00:00:00";
-  $debut_selection = mbDate("-7 DAY", $fin_selection)." 00:00:00";
+  $fin_selection   = CMbDT::date()." 00:00:00";
+  $debut_selection = CMbDT::date("-7 DAY", $fin_selection)." 00:00:00";
 }
 
 $extractPassages = new CExtractPassages();
-$extractPassages->date_extract    = mbDateTime();
+$extractPassages->date_extract    = CMbDT::dateTime();
 $extractPassages->type            = "rpu";
 $extractPassages->debut_selection = $debut_selection;
 $extractPassages->fin_selection   = $fin_selection;
@@ -63,7 +63,7 @@ if (!$rpuSender) {
 }
 $extractPassages = $rpuSender->extractRPU($extractPassages, $rpus);
 
-CAppUI::stepAjax("Extraction de ".count($rpus)." RPUs du ".mbDateToLocale($debut_selection)." au ".mbDateToLocale($fin_selection)." terminée.", UI_MSG_OK);
+CAppUI::stepAjax("Extraction de ".count($rpus)." RPUs du ".CMbDT::dateToLocale($debut_selection)." au ".CMbDT::dateToLocale($fin_selection)." terminée.", UI_MSG_OK);
 if (!$extractPassages->message_valide)
   CAppUI::stepAjax("Le document produit n'est pas valide.", UI_MSG_WARNING);
 else 

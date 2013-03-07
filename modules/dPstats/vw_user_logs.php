@@ -10,28 +10,28 @@
 
 CCanDo::checkRead();
 
-$date    = CValue::getOrSession("date", mbDate());
+$date    = CValue::getOrSession("date", CMbDT::date());
 $user_id = CValue::getOrSession("user_id");
 
 CAppUI::requireModuleFile("dPstats", "graph_userlog");
 
-$to = mbDate("+1 DAY", $date);
+$to = CMbDT::date("+1 DAY", $date);
 switch ($interval = CValue::getOrSession("interval", "day")) {
   default:
   case "day":
-    $from = mbDate("-1 DAY", $to);
+    $from = CMbDT::date("-1 DAY", $to);
     break;
   case "month":
-    $from = mbDate("-1 MONTH", $to);
+    $from = CMbDT::date("-1 MONTH", $to);
     break;
   case "hyear":
-    $from = mbDate("-6 MONTH", $to);
+    $from = CMbDT::date("-6 MONTH", $to);
     break;
   case "twoyears":
-    $from = mbDate("-2 YEARS", $to);
+    $from = CMbDT::date("-2 YEARS", $to);
     break;
   case "twentyyears":
-    $from = mbDate("-20 YEARS", $to);
+    $from = CMbDT::date("-20 YEARS", $to);
     break;
 }
 

@@ -141,7 +141,7 @@ class CAffectation extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_duree = mbDaysRelative($this->entree, $this->sortie);
+    $this->_duree = CMbDT::daysRelative($this->entree, $this->sortie);
   }
 
   function check() {
@@ -279,7 +279,7 @@ class CAffectation extends CMbObject {
         $_affectation->lit_id = $this->lit_id;
         $_affectation->sejour_id = $_sejour->_id;
         $_affectation->parent_affectation_id = $this->_id;
-        $_affectation->entree = mbDateTime();
+        $_affectation->entree = CMbDT::dateTime();
         $_affectation->sortie = $this->sortie;
         if ($msg = $_affectation->store()) {
           return $msg;
@@ -407,8 +407,8 @@ class CAffectation extends CMbObject {
 
   function checkDaysRelative($date) {
     if ($this->entree and $this->sortie) {
-      $this->_entree_relative = mbDaysRelative("$date 10:00:00", $this->entree);
-      $this->_sortie_relative = mbDaysRelative("$date 10:00:00", $this->sortie);
+      $this->_entree_relative = CMbDT::daysRelative("$date 10:00:00", $this->entree);
+      $this->_sortie_relative = CMbDT::daysRelative("$date 10:00:00", $this->sortie);
     }
   }
 

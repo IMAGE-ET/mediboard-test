@@ -9,7 +9,7 @@
 
 CCanDo::checkEdit();
 
-$date           = CValue::getOrSession("date"           , mbDate());
+$date           = CValue::getOrSession("date"           , CMbDT::date());
 $typerepas_id   = CValue::getOrSession("typerepas_id"   , null);
 $affectation_id = CValue::getOrSession("affectation_id" , null);
 

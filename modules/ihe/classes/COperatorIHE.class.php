@@ -86,7 +86,7 @@ class COperatorIHE extends CEAIOperator {
       
       // Gestion des notifications ? 
       if (!$exchange_ihe->_id) {
-        $exchange_ihe->date_production      = mbDateTime();
+        $exchange_ihe->date_production      = CMbDT::dateTime();
         $exchange_ihe->identifiant_emetteur = $data['identifiantMessage'];
       }
       

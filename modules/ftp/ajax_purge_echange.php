@@ -20,7 +20,7 @@ $max      = CValue::get("max", 1000);
 $delete   = CValue::get("delete");
 
 if ($months) {
-  $date_max = mbDate("- $months MONTHS");
+  $date_max = CMbDT::date("- $months MONTHS");
 }
 
 if (!$date_max) {
@@ -33,7 +33,7 @@ $ds = $exchange->_spec->ds;
 
 // comptage des echanges à supprimer
 $count_delete = 0;
-$date_max_delete = mbDate("-6 MONTHS", $date_max);
+$date_max_delete = CMbDT::date("-6 MONTHS", $date_max);
 
 if ($delete) {
   $where = array();

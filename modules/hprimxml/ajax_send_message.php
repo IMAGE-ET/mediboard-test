@@ -26,14 +26,14 @@ if (!$echange_hprim_id) {
   $where['acquittement_valide']     = "IS NULL"; 
   $where['acquittement_content_id'] = "IS NULL"; 
   $where['date_echange']            = "IS NULL"; 
-  $where['date_production']         = "BETWEEN '".mbDateTime("-3 DAYS")."' AND '".mbDateTime("+1 DAYS")."'"; 
+  $where['date_production']         = "BETWEEN '".CMbDT::dateTime("-3 DAYS")."' AND '".CMbDT::dateTime("+1 DAYS")."'";
   
   $notifications = $echange_hprim->loadList($where, null, $limit);
 
   // Effectue le traitement d'enregistrement des notifications sur lequel le cron vient de passer
   // ce qui permet la gestion des doublons
   foreach ($notifications as $notification) {
-    $notification->date_echange = mbDateTime();
+    $notification->date_echange = CMbDT::dateTime();
     $notification->store();
   }
   
@@ -63,7 +63,7 @@ if (!$echange_hprim_id) {
         }
         $notification->acquittement_valide = $doc_valid ? 1 : 0;
         
-        $notification->date_echange = mbDateTime();
+        $notification->date_echange = CMbDT::dateTime();
         $notification->_acquittement = $acquittement;
         $notification->store();
       } 
@@ -98,7 +98,7 @@ if (!$echange_hprim_id) {
     }
     $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
       
-    $echange_hprim->date_echange = mbDateTime();
+    $echange_hprim->date_echange = CMbDT::dateTime();
     $echange_hprim->_acquittement = $acquittement;
   
     $echange_hprim->store();

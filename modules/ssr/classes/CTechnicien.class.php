@@ -63,7 +63,7 @@ class CTechnicien extends CMbObject {
 	function store() {
 		// Transfert de séjours vers un autre technicien
 		if ($this->_transfer_id) {
-			foreach ($this->loadRefsSejours(mbDate()) as $_sejour) {
+			foreach ($this->loadRefsSejours(CMbDT::date()) as $_sejour) {
 				$bilan = $_sejour->loadRefBilanSSR();
 				$bilan->technicien_id = $this->_transfer_id;
 				if ($msg = $bilan->store()) {

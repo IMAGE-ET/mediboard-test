@@ -50,7 +50,7 @@ if(CModule::getActive("dPprescription")){
 }
 $smarty->assign("userSel"        , $user);
 $smarty->assign("sejour_id"      , $sejour_id);
-$smarty->assign("today"          , mbDate());
+$smarty->assign("today"          , CMbDT::date());
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 
 if ($consult_anesth->_id) {

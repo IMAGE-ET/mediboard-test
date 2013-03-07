@@ -105,7 +105,7 @@ else {
 	
   // Chargement des consultations du jour
   function loadConsultationsDuJour(&$patients) {
-    $today = mbDate();
+    $today = CMbDT::date();
     $where = array();
     $where["plageconsult.date"] = "= '$today'";
     foreach ($patients as &$patient) {
@@ -119,7 +119,7 @@ else {
   
   // Chargement des admissions du jour
   function loadAdmissionsDuJour(&$patients) {
-    $today = mbDate();
+    $today = CMbDT::date();
     $where = array();
     $where["entree"] = "LIKE '$today __:__:__'";
     foreach ($patients as &$patient) {

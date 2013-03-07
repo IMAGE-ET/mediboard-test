@@ -12,10 +12,10 @@
 CCanDo::checkEdit();
 
 $indispo_ressource_id = CValue::getOrSession("indispo_ressource_id");
-$date_indispo         = CValue::getOrSession("date_indispo", mbDate());
+$date_indispo         = CValue::getOrSession("date_indispo", CMbDT::date());
 
-$date_min = mbTransformTime(null, $date_indispo, "%Y-%m-01");
-$date_max = mbDate("-1 day", mbDate("+1 month", $date_min));
+$date_min = CMbDT::transform(null, $date_indispo, "%Y-%m-01");
+$date_max = CMbDT::date("-1 day", CMbDT::date("+1 month", $date_min));
 
 $group_id = CGroups::loadCurrent()->_id;
 
@@ -46,8 +46,8 @@ $smarty->assign("ressources", $ressources);
 $smarty->assign("indispos"  , $indispos);
 $smarty->assign("types_ressources", $types_ressources);
 $smarty->assign("date_indispo", $date_indispo);
-$smarty->assign("prev_month", mbDate("-1 month", $date_indispo));
-$smarty->assign("next_month", mbDate("+1 month", $date_indispo));
+$smarty->assign("prev_month", CMbDT::date("-1 month", $date_indispo));
+$smarty->assign("next_month", CMbDT::date("+1 month", $date_indispo));
 $smarty->assign("indispo_ressource_id", $indispo_ressource_id);
 
 $smarty->display("inc_list_indispos.tpl");

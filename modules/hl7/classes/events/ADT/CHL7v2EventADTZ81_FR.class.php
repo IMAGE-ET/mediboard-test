@@ -44,7 +44,7 @@ class CHL7v2EventADTZ81_FR extends CHL7v2EventADT implements CHL7EventADTA01 {
    * @return DateTime Event occured
    */
   function getEVNOccuredDateTime($affectation) {
-    return mbDateTime();
+    return CMbDT::dateTime();
   }
 
   /**

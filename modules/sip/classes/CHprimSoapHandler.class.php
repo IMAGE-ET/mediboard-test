@@ -93,7 +93,7 @@ class CHprimSoapHandler extends CSoapHandler {
       if ($doc_errors !== true) {
         $messageAcquittement = $domAcquittement->generateAcquittementsServeurActivitePmsi("erreur", "E002", $doc_errors);
         $doc_valid = $domAcquittement->schemaValidate();
-        $echange_hprim->date_production = mbDateTime();
+        $echange_hprim->date_production = CMbDT::dateTime();
         $echange_hprim->emetteur = $data['idClient'] ? $dest_hprim->_id : 0;
         $echange_hprim->destinataire = CAppUI::conf('mb_id');
         $echange_hprim->group_id = CGroups::loadCurrent()->_id;
@@ -124,7 +124,7 @@ class CHprimSoapHandler extends CSoapHandler {
         $echange_hprim->_message        = $messageServeurActes;
         $echange_hprim->message_valide = 1;
       }
-      $echange_hprim->date_production = mbDateTime();
+      $echange_hprim->date_production = CMbDT::dateTime();
       $echange_hprim->store();
   
       $data = array_merge($data, $domGetEvenement->getContentsXML());
@@ -146,7 +146,7 @@ class CHprimSoapHandler extends CSoapHandler {
       $echange_hprim->_acquittement = $messageAcquittement;
       $echange_hprim->statut_acquittement = "erreur";
       $echange_hprim->acquittement_valide = $doc_valid ? 1 : 0;
-      $echange_hprim->date_echange = mbDateTime();
+      $echange_hprim->date_echange = CMbDT::dateTime();
       $echange_hprim->store();*/
       
       return $messageAcquittement;

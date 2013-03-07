@@ -39,7 +39,7 @@ class CEAIDispatcher {
    * 
    * @return string Dispatch response
    */  
-  static function dispatch($data, CInteropSender $actor = null, $exchange_id = null, $to_treatment = true) { 
+  static function dispatch($data, CInteropSender $actor = null, $exchange_id = null, $to_treatment = true) {
     $contexts = null;
     // Dicom a besoin des contextes de présentation afin de pouvoir déchiffrer le message
     if (is_array($data)) {
@@ -152,7 +152,7 @@ class CEAIDispatcher {
     
     // Création d'un échange Any
     $exchange_any                  = new CExchangeAny();
-    $exchange_any->date_production = mbDateTime();
+    $exchange_any->date_production = CMbDT::dateTime();
     $exchange_any->sender_id       = $actor->_id;
     $exchange_any->sender_class    = $actor->_class;
     $exchange_any->group_id        = $actor->group_id ? $actor->group_id : CGroups::loadCurrent()->_id;

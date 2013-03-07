@@ -14,7 +14,7 @@ CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 
 $service_id = CValue::getOrSession("service_id" , null);
-$date       = CValue::getOrSession("date"       , mbDate());
+$date       = CValue::getOrSession("date"       , CMbDT::date());
 
 $service = null;
 

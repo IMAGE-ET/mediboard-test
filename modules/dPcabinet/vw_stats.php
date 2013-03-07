@@ -15,8 +15,8 @@ $mediuser->load(CAppUI::$instance->user_id);
 
 // Filter
 $filter = new CPlageconsult();
-$filter->_date_min          = mbDate("last month");
-$filter->_date_max          = mbDate();
+$filter->_date_min          = CMbDT::date("last month");
+$filter->_date_max          = CMbDT::date();
 
 $functions = CMediusers::loadFonctions(PERM_EDIT, null, "cabinet");
 $users = $mediuser->loadPraticiens();

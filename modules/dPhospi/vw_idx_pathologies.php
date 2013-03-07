@@ -11,7 +11,7 @@ CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 $affichage_patho = CValue::postOrSession("affichage_patho","non_complet"); 
 
-$date = CValue::getOrSession("date", mbDate()); 
+$date = CValue::getOrSession("date", CMbDT::date());
 $pathos = new CDiscipline();
 $heureLimit = "16:00:00";
 
@@ -20,7 +20,7 @@ $groupSejourNonAffectes = array();
 
 if (CCanDo::edit()) {
   // Admissions de la veille
-  $dayBefore = mbDate("-1 days", $date);
+  $dayBefore = CMbDT::date("-1 days", $date);
   $where = array(
     "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 00:00:00'",
     "type" => "!= 'exte'",
@@ -31,7 +31,7 @@ if (CCanDo::edit()) {
   
   // Admissions du matin
   $where = array(
-    "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'",
+    "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".CMbDT::time("-1 second",$heureLimit)."'",
     "type" => "!= 'exte'",
     "annule" => "= '0'"
   );
@@ -48,7 +48,7 @@ if (CCanDo::edit()) {
   $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where);
   
   // Admissions antérieures
-  $twoDaysBefore = mbDate("-2 days", $date);
+  $twoDaysBefore = CMbDT::date("-2 days", $date);
   $where = array(
     "annule" => "= '0'",
     "'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue"
@@ -63,8 +63,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("affichage_patho"       , $affichage_patho);
 $smarty->assign("pathos"                , $pathos);
 $smarty->assign("date"                  , $date);
-$smarty->assign("yesterday"             , mbDate("-1 day", $date));
-$smarty->assign("tomorow"               , mbDate("+1 day", $date));
+$smarty->assign("yesterday"             , CMbDT::date("-1 day", $date));
+$smarty->assign("tomorow"               , CMbDT::date("+1 day", $date));
 $smarty->assign("heureLimit"            , $heureLimit);
 $smarty->assign("groupSejourNonAffectes", $groupSejourNonAffectes);
 $smarty->display("vw_idx_pathologies.tpl");

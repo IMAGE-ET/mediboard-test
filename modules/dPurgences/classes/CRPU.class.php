@@ -200,7 +200,7 @@ class CRPU extends CMbObject {
     $this->_ville      = $patient->ville;
     $this->_naissance  = $patient->naissance;
     $this->_sexe       = $patient->sexe;
-    $this->_view       = "RPU du " . mbDateToLocale(mbDate($this->_entree)). " pour $patient->_view";
+    $this->_view       = "RPU du " . CMbDT::dateToLocale(CMbDT::date($this->_entree)). " pour $patient->_view";
 
     // Calcul des valeurs de _mode_sortie
     if ($sejour->mode_sortie == "mutation") {
@@ -255,11 +255,11 @@ class CRPU extends CMbObject {
     $this->_ref_sejour->loadRefsFwd();
 
     // Calcul des temps d'attente et présence
-    $entree = mbTime($this->_ref_sejour->_entree);
-    $this->_presence =  mbSubTime($entree, mbTime());
+    $entree = CMbDT::time($this->_ref_sejour->_entree);
+    $this->_presence =  CMbDT::subTime($entree, CMbDT::time());
 
     if ($this->_ref_sejour->sortie_reelle) {
-      $this->_presence  = mbSubTime($entree, mbTime($this->_ref_sejour->sortie_reelle));
+      $this->_presence  = CMbDT::subTime($entree, CMbDT::time($this->_ref_sejour->sortie_reelle));
     }
 
     return $this->_ref_sejour;
@@ -278,8 +278,8 @@ class CRPU extends CMbObject {
     // Calcul du l'attente
     $this->_attente  = $this->_presence;
     if ($this->_ref_consult->_id) {
-      $entree = mbTime($this->_ref_sejour->_entree);
-      $this->_attente  = mbSubTime(mbTransformTime($entree, null,"%H:%M:00"), mbTransformTime(mbTime($this->_ref_consult->heure), null, "%H:%M:00"));
+      $entree = CMbDT::time($this->_ref_sejour->_entree);
+      $this->_attente  = CMbDT::subTime(CMbDT::transform($entree, null,"%H:%M:00"), CMbDT::transform(CMbDT::time($this->_ref_consult->heure), null, "%H:%M:00"));
     }
 
     $this->_can_leave_level = $sejour->sortie_reelle ? "" : "ok";
@@ -294,13 +294,13 @@ class CRPU extends CMbObject {
         $this->_can_leave_level = "warning";
       }
       else {
-        if (mbTime($sejour->sortie_prevue) > mbTime()) {
+        if (CMbDT::time($sejour->sortie_prevue) > CMbDT::time()) {
           $this->_can_leave_since = true;
-          $this->_can_leave = mbTimeRelative(mbTime(), mbTime($sejour->sortie_prevue));
+          $this->_can_leave = CMbDT::timeRelative(CMbDT::time(), CMbDT::time($sejour->sortie_prevue));
         }
         else {
           $this->_can_leave_about = true;
-          $this->_can_leave = mbTimeRelative(mbTime($sejour->sortie_prevue), mbTime());
+          $this->_can_leave = CMbDT::timeRelative(CMbDT::time($sejour->sortie_prevue), CMbDT::time());
         }
 
         if (CAppUI::conf("dPurgences rpu_warning_time") < $this->_can_leave) {
@@ -338,7 +338,7 @@ class CRPU extends CMbObject {
     $sejour->recuse        = "-1";
     $sejour->entree_prevue = $this->_entree;
     $sejour->entree_reelle = $this->_entree;
-    $sejour->sortie_prevue = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? mbDateTime("+1 DAY", $this->_entree) : mbDate(null, $this->_entree)." 23:59:59";
+    $sejour->sortie_prevue = (CAppUI::conf("dPurgences sortie_prevue") == "h24") ? CMbDT::dateTime("+1 DAY", $this->_entree) : CMbDT::date(null, $this->_entree)." 23:59:59";
     $sejour->annule        = $this->_annule;
     $sejour->service_id    = $this->_service_id;
     $sejour->etablissement_entree_id = $this->_etablissement_entree_id;
@@ -369,8 +369,8 @@ class CRPU extends CMbObject {
       $sejour->group_id      = CGroups::loadCurrent()->_id;
 
       $sortie_prevue         = CAppUI::conf("dPurgences sortie_prevue") == "h24" ?
-        mbDateTime("+1 DAY", $this->_entree) :
-        mbDate(null, $this->_entree)." 23:59:59";
+        CMbDT::dateTime("+1 DAY", $this->_entree) :
+        CMbDT::date(null, $this->_entree)." 23:59:59";
       $sejour->sortie_prevue = $this->_sortie ? $this->_sortie : $sortie_prevue;
 
       // En cas de ressemblance à quelques heures près (cas des urgences), on a affaire au même séjour

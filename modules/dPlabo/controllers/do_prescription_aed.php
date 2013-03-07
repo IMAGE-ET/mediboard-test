@@ -40,7 +40,7 @@ if($verouillee){
     $idPresc->id400 = str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT);
 
     $idPresc->_id = null;
-    $idPresc->last_update = mbDateTime();
+    $idPresc->last_update = CMbDT::dateTime();
     $idPresc->object_id = $prescription->_id;
     $idPresc->store();
   }

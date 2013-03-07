@@ -17,8 +17,8 @@ $dialog = CValue::get("dialog");
 $filter = new CIdSante400;
 $filter->object_id    = CValue::getOrSession("object_id");
 $filter->object_class = CValue::getOrSession("object_class", "CPatient");
-$filter->_start_date  = CValue::getOrSession("_start_date", mbDateTime());
-$filter->_end_date    = CValue::getOrSession("_end_date", mbDateTime());
+$filter->_start_date  = CValue::getOrSession("_start_date", CMbDT::dateTime());
+$filter->_end_date    = CValue::getOrSession("_end_date", CMbDT::dateTime());
 $limit_duplicates     = CValue::getOrSession("limit_duplicates", 30);
 $do_delete            = CValue::get("do_delete", false);
 

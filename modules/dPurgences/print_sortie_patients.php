@@ -23,8 +23,8 @@ $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
 // Selection de la date
 $date = CValue::get("date");
 $date_tolerance = CAppUI::conf("dPurgences date_tolerance");
-$date_before = mbDate("-$date_tolerance DAY", $date);
-$date_after  = mbDate("+1 DAY", $date);
+$date_before = CMbDT::date("-$date_tolerance DAY", $date);
+$date_after  = CMbDT::date("+1 DAY", $date);
 $where = array();
 $group = CGroups::loadCurrent();
 $where["group_id"] = " = '$group->_id'";
@@ -52,7 +52,7 @@ foreach ($listSejours as &$_sejour) {
   $_sejour->loadRefRPU();
   $_sejour->loadNDA();
   $_sejour->loadRefsConsultations();
-  $_sejour->_veille = mbDate($_sejour->entree) != $date;
+  $_sejour->_veille = CMbDT::date($_sejour->entree) != $date;
   
   // Détail du RPU
   $rpu =& $_sejour->_ref_rpu;

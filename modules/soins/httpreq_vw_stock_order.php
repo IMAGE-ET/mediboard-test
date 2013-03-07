@@ -33,10 +33,10 @@ $date_min = CValue::get('_date_min');
 $date_max = CValue::get('_date_max');
 
 if (!$date_min) {
-  $date_min = CValue::session('_date_delivrance_min', mbDate("-1 DAY"));
+  $date_min = CValue::session('_date_delivrance_min', CMbDT::date("-1 DAY"));
 }
 if (!$date_max) {
-  $date_max = CValue::session('_date_delivrance_max', mbDate());
+  $date_max = CValue::session('_date_delivrance_max', CMbDT::date());
 }
 
 CValue::setSession('_date_delivrance_min', $date_min);

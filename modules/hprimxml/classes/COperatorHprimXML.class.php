@@ -72,7 +72,7 @@ class COperatorHprimXML extends CEAIOperator {
         $echg_hprim->message_valide       = 1;
       }
       
-      $echg_hprim->date_production = mbDateTime();
+      $echg_hprim->date_production = CMbDT::dateTime();
       $echg_hprim->store();
       
       if (!$data_format->_to_treatment) {

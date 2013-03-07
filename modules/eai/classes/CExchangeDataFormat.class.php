@@ -134,8 +134,8 @@ class CExchangeDataFormat extends CMbMetaObject {
     $this->_self_sender   = $this->sender_id   === null;
     $this->_self_receiver = $this->receiver_id === null;
 
-    if ($this->date_echange > mbDateTime("+ ".CAppUI::conf("eai exchange_format_delayed")." minutes", $this->date_production)) {
-      $this->_delayed = mbMinutesRelative($this->date_production, $this->date_echange);
+    if ($this->date_echange > CMbDT::dateTime("+ ".CAppUI::conf("eai exchange_format_delayed")." minutes", $this->date_production)) {
+      $this->_delayed = CMbDT::minutesRelative($this->date_production, $this->date_echange);
     }
   }
 
@@ -444,7 +444,7 @@ class CExchangeDataFormat extends CMbMetaObject {
       $ack_valid = $ack->message->isOK(CHL7v2Error::E_ERROR);
     }
     
-    $this->date_echange        = mbDateTime();
+    $this->date_echange        = CMbDT::dateTime();
     $this->acquittement_valide = $ack_valid ? 1 : 0;
     $this->_acquittement       = $ack_data;
     $this->reprocess++;

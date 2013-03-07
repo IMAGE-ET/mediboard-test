@@ -58,7 +58,7 @@ class CTemplateManager {
       $this->addProperty("Courrier - copie à - complet (multiligne)", "[Courrier - copie à - complet (multiligne)]");
     }
 
-    $now = mbDateTime();
+    $now = CMbDT::dateTime();
     $this->addDateProperty("Général - date du jour", $now);
     $this->addLongDateProperty("Général - date du jour (longue)", $now);
     $this->addTimeProperty("Général - heure courante", $now);
@@ -245,7 +245,7 @@ class CTemplateManager {
    * @return void
    */
   function addDateProperty($field, $value = null) {
-    $value = $value ? mbTransformTime(null, $value, CAppUI::conf("date")) : "";
+    $value = $value ? CMbDT::transform(null, $value, CAppUI::conf("date")) : "";
     $this->addProperty($field, $value);
   }
 
@@ -258,7 +258,7 @@ class CTemplateManager {
    * @return void
    */
   function addLongDateProperty($field, $value) {
-    $value = $value ? ucfirst(mbTransformTime(null, $value, CAppUI::conf("longdate"))) : "";
+    $value = $value ? ucfirst(CMbDT::transform(null, $value, CAppUI::conf("longdate"))) : "";
     $this->addProperty($field, $value);
   }
 
@@ -271,7 +271,7 @@ class CTemplateManager {
    * @return void
    */
   function addTimeProperty($field, $value = null) {
-    $value = $value ? mbTransformTime(null, $value, CAppUI::conf("time")) : "";
+    $value = $value ? CMbDT::transform(null, $value, CAppUI::conf("time")) : "";
     $this->addProperty($field, $value);
   }
 
@@ -284,7 +284,7 @@ class CTemplateManager {
    * @return void
    */
   function addDateTimeProperty($field, $value = null) {
-    $value = $value ? mbTransformTime(null, $value, CAppUI::conf("datetime")) : "";
+    $value = $value ? CMbDT::transform(null, $value, CAppUI::conf("datetime")) : "";
     $this->addProperty($field, $value);
   }
 

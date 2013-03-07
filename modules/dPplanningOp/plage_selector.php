@@ -11,7 +11,7 @@ CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
 $chir         = CValue::get("chir"         , 0);
-$date         = CValue::getOrSession("date_plagesel", mbDate());
+$date         = CValue::getOrSession("date_plagesel", CMbDT::date());
 $group_id     = CValue::get("group_id"     , CGroups::loadCurrent()->_id);
 $operation_id = CValue::get("operation_id" , null);
 $curr_op_hour = CValue::get("curr_op_hour" , "25");
@@ -21,11 +21,11 @@ $resp_bloc = CModule::getInstalled("dPbloc")->canEdit();
 
 // Liste des mois selectionnables
 
-$date = mbTransformTime(null, $date, "%Y-%m-01");
+$date = CMbDT::transform(null, $date, "%Y-%m-01");
 $listMonthes = array();
 for($i = -6; $i <= 12; $i++) {
-  $curr_key   = mbTransformTime("$i month", $date, "%Y-%m-%d");
-  $curr_month = mbTransformTime("$i month", $date, "%B %Y");
+  $curr_key   = CMbDT::transform("$i month", $date, "%Y-%m-%d");
+  $curr_month = CMbDT::transform("$i month", $date, "%B %Y");
   $listMonthes[$i]["date"] = $curr_key;
   $listMonthes[$i]["month"] = $curr_month;
 }
@@ -44,18 +44,18 @@ $bloc = new CBlocOperatoire();
 $blocs = $bloc->loadGroupList(null, "nom");
 foreach($blocs as $_bloc) {
   $_bloc->loadRefsSalles();
-  $_bloc->_date_min = mbDate("+ " . $_bloc->days_locked . " DAYS");
+  $_bloc->_date_min = CMbDT::date("+ " . $_bloc->days_locked . " DAYS");
 }
 
 // Chargement des plages pour le chir ou sa spécialité par bloc
 $where = array();
 $selectPlages  = "(plagesop.chir_id = %1 OR plagesop.spec_id = %2 OR plagesop.spec_id ".CSQLDataSource::prepareIn($secondary_functions).")";
 $where[]       = $ds->prepare($selectPlages ,$mediChir->user_id,$mediChir->function_id);
-$month_min = mbTransformTime("+ 0 month", $date, "%Y-%m-00");
-$month_max = mbTransformTime("+ 1 month", $date, "%Y-%m-00");
+$month_min = CMbDT::transform("+ 0 month", $date, "%Y-%m-00");
+$month_max = CMbDT::transform("+ 1 month", $date, "%Y-%m-00");
 $where["date"] = "BETWEEN '$month_min' AND '$month_max'";
 if(!$resp_bloc) {
-  $where[] = "date >= '".mbDate()."'";
+  $where[] = "date >= '".CMbDT::date()."'";
 }
 $order = "date, debut";
 $plage = new CPlageOp;

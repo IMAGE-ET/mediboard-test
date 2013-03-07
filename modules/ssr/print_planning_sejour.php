@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 $sejour_id = CValue::getOrSession("sejour_id");
 
 $sejour = new CSejour();
@@ -24,8 +24,8 @@ $technicien =& $bilan_ssr->_ref_technicien;
 $technicien->loadRefKine();
 
 // Chargement des evenement SSR 
-$monday = mbDate("last monday", mbDate("+1 day", $date));
-$sunday = mbDate("next sunday", mbDate("-1 DAY", $date));
+$monday = CMbDT::date("last monday", CMbDT::date("+1 day", $date));
+$sunday = CMbDT::date("next sunday", CMbDT::date("-1 DAY", $date));
 
 $evenement_ssr = new CEvenementSSR();
 $where = array();

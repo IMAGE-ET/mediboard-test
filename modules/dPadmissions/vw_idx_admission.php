@@ -16,16 +16,16 @@ $selAdmis   = CValue::getOrSession("selAdmis", "0");
 $selSaisis  = CValue::getOrSession("selSaisis", "0");
 $order_way  = CValue::getOrSession("order_way", "ASC");
 $order_col  = CValue::getOrSession("order_col", "patient_id");
-$date       = CValue::getOrSession("date", mbDate());
+$date       = CValue::getOrSession("date", CMbDT::date());
 $type       = CValue::getOrSession("type");
 $service_id = CValue::getOrSession("service_id");
 $prat_id    = CValue::getOrSession("prat_id");
 $period     = CValue::getOrSession("period");
 
-$date_actuelle = mbDateTime("00:00:00");
-$date_demain = mbDateTime("00:00:00","+ 1 day");
-$hier = mbDate("- 1 day", $date);
-$demain = mbDate("+ 1 day", $date);
+$date_actuelle = CMbDT::dateTime("00:00:00");
+$date_demain = CMbDT::dateTime("00:00:00","+ 1 day");
+$hier = CMbDT::date("- 1 day", $date);
+$demain = CMbDT::date("+ 1 day", $date);
 
 // Récupération de la liste des services
 $where = array();

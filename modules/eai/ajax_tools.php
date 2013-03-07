@@ -18,8 +18,8 @@ $error_code     = CValue::get("error_code");
 $exchange_class = CValue::get("exchange_class"); 
 $group_id       = CValue::get("group_id", CGroups::loadCurrent()->_id);
 $tool           = CValue::get("tool"); 
-$date_min       = CValue::getOrSession('date_min', mbDateTime("-7 day"));
-$date_max       = CValue::getOrSession('date_max', mbDateTime("+1 day"));
+$date_min       = CValue::getOrSession('date_min', CMbDT::dateTime("-7 day"));
+$date_max       = CValue::getOrSession('date_max', CMbDT::dateTime("+1 day"));
 
 $exchange = new $exchange_class;
 $exchange->group_id = $group_id;

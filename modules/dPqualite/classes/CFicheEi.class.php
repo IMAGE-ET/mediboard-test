@@ -173,7 +173,7 @@ class CFicheEi extends CMbObject {
     
     $this->loadCriticite();
     
-    $this->_view = sprintf("%03d - %s", $this->fiche_ei_id, mbDateToLocale(substr($this->date_fiche, 0, 10)));
+    $this->_view = sprintf("%03d - %s", $this->fiche_ei_id, CMbDT::dateToLocale(substr($this->date_fiche, 0, 10)));
   }
   
   function store(){

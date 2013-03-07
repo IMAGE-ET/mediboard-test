@@ -10,10 +10,10 @@
 
 CCanDo::checkEdit();
 
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 
-$date_min = mbDate("last monday", mbDate("+1 day", $date));
-$date_max = mbDate("+7 DAY", $date_min);
+$date_min = CMbDT::date("last monday", CMbDT::date("+1 day", $date));
+$date_max = CMbDT::date("+7 DAY", $date_min);
 
 // Comptage des événements hors-séjours
 $group = "sejour.sejour_id";

@@ -7,9 +7,9 @@
 * @author Alexis Granger
 */
 
-$date     = CValue::getOrSession("date", mbDate());
+$date     = CValue::getOrSession("date", CMbDT::date());
 $in_salle = CValue::get("in_salle", 1);
-$modif_operation = CCAnDo::edit() || $date >= mbDate();
+$modif_operation = CCAnDo::edit() || $date >= CMbDT::date();
 
 // Chargement de l'operation selectionnee
 $operation_id = CValue::getOrSession("operation_id");

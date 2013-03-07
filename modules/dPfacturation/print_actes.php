@@ -13,8 +13,8 @@ CCanDo::checkEdit();
 // Récupération des paramètres
 $date   = CValue::get("date");
 $filter = new CPlageconsult();
-$filter->_date_min = CValue::getOrSession("_date_min", mbDate());
-$filter->_date_max = CValue::getOrSession("_date_max", mbDate());
+$filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
+$filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
 $filter->_type_affichage = CValue::getOrSession("_type_affichage" , 1);
 
 // Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
@@ -140,7 +140,7 @@ foreach ($listFactures as $_facture) {
   // Classement par plage
   $plage = $_facture->_ref_last_sejour;
   if ($plage->_id) {
-    $debut_plage = mbDate($plage->sortie);
+    $debut_plage = CMbDT::date($plage->sortie);
     if (!isset($listPlages["$debut_plage"])) {
       $listPlages["$debut_plage"]["plage"] = $plage;
       $listPlages["$debut_plage"]["total"]["secteur1"] = 0;
@@ -172,7 +172,7 @@ $banques = $banque->loadList(null, "nom ASC");
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("today"         , mbDate());
+$smarty->assign("today"         , CMbDT::date());
 $smarty->assign("filter"        , $filter);
 $smarty->assign("listPrat"      , $listPrat);
 $smarty->assign("listPlages"    , $listPlages);

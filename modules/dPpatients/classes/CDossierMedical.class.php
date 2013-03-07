@@ -421,7 +421,7 @@ class CDossierMedical extends CMbMetaObject {
       if ($prescription && $prescription->_id) {
         $prescription->loadRefsLinesMed();
         foreach ($prescription->_ref_prescription_lines as $_line) {
-          if ($_line->fin && $_line->fin <= mbDate()) {
+          if ($_line->fin && $_line->fin <= CMbDT::date()) {
             continue;
           }
           $view = $_line->_ucd_view;

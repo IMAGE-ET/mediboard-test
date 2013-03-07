@@ -10,8 +10,8 @@
 // Récupération des paramètres
 $filter = new CPlageconsult();
 
-$filter->_date_min = CValue::getOrSession("_date_min", mbDate());
-$filter->_date_max = CValue::getOrSession("_date_max", mbDate());
+$filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
+$filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
 $filter->_type_affichage  = CValue::getOrSession("_type_affichage" , 1);
 
 // Tri sur les praticiens
@@ -55,7 +55,7 @@ foreach($listConsults as $consult){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("today"              , mbDate());
+$smarty->assign("today"              , CMbDT::date());
 $smarty->assign("filter"             , $filter);
 $smarty->assign("listPrat"           , $listPrat);
 $smarty->assign("listConsults"       , $listConsults);

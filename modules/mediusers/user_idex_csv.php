@@ -93,7 +93,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     }
     
     $idex->id400       = $results[$i]["idex"];
-    $idex->last_update = mbDateTime();
+    $idex->last_update = CMbDT::dateTime();
     if ($msg = $idex->store()) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
       $results[$i]["error"] = $msg;

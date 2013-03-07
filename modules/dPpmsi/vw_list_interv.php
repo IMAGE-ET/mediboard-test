@@ -9,7 +9,7 @@
 
 CCanDo::checkRead();
 
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 
 // Selection des salles
 $listSalles = new CSalle;

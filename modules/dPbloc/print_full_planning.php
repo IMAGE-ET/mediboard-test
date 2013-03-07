@@ -11,7 +11,7 @@
 
 CCanDo::checkRead();
 
-$date_min = CValue::get("_date_min", mbDate());
+$date_min = CValue::get("_date_min", CMbDT::date());
 $date_max = CValue::get("_date_max");
 
 $bloc_id  = CValue::get("_bloc_id", null);
@@ -27,13 +27,13 @@ if ($bloc_id) {
   $blocs = array_intersect_key($blocs, array_flip($bloc_id));
 }
 
-$date_min = mbDate("LAST SUNDAY +1 DAY", $date_min);
+$date_min = CMbDT::date("LAST SUNDAY +1 DAY", $date_min);
 
 if (!$date_max) {
-  $date_max = mbDate("+1 WEEK -1 DAY", $date_min);
+  $date_max = CMbDT::date("+1 WEEK -1 DAY", $date_min);
 }
 else {
-  $date_max = mbDate("NEXT MONDAY -1 DAY", $date_max);
+  $date_max = CMbDT::date("NEXT MONDAY -1 DAY", $date_max);
 }
 
 
@@ -46,12 +46,12 @@ $plage = new CPlageOp();
 
 $hour_midi = CAppUI::conf("dPbloc CPlageOp hour_midi_fullprint");
 
-for ($date_temp = $date_min ; $date_temp <= $date_max ; $date_temp = mbDate("+1 WEEK", $date_temp)) {
+for ($date_temp = $date_min ; $date_temp <= $date_max ; $date_temp = CMbDT::date("+1 WEEK", $date_temp)) {
   $ljoin = array();
   $where = array();
   
   $_date_min = $date_temp;
-  $_date_max = mbDate("+1 WEEK -1 DAY", $date_temp);
+  $_date_max = CMbDT::date("+1 WEEK -1 DAY", $date_temp);
   
   $dates_planning[$date_temp] = $date_temp;
   
@@ -61,7 +61,7 @@ for ($date_temp = $date_min ; $date_temp <= $date_max ; $date_temp = mbDate("+1 
   );
   $dates[$date_temp] = array();
   
-  for ($date = $_date_min; $date <= $_date_max; $date = mbDate("+1 DAY", $date)) {
+  for ($date = $_date_min; $date <= $_date_max; $date = CMbDT::date("+1 DAY", $date)) {
     $dates[$date_temp][$date] = $date;
   }
   
@@ -78,7 +78,7 @@ for ($date_temp = $date_min ; $date_temp <= $date_max ; $date_temp = mbDate("+1 
   }
   
   // Puis le samedi
-  $where["date"] = "= '".mbDate("-1 day", $date_max)."'";
+  $where["date"] = "= '".CMbDT::date("-1 day", $date_max)."'";
   if ($plage->countList($where, null, $ljoin) == 0) {
     array_pop($dates[$date_temp]);
   }

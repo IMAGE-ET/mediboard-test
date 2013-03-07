@@ -47,12 +47,14 @@ class CConstantesMedicales extends CMbObject {
     "poids"             => array(
       "type" => "physio",
       "unit" => "kg",
+      "unit_iso" => "kg",
       "callback" => "calculImcVst",
       "min" => "@-2", "max" => "@+2",
     ),
     "taille"            => array(
       "type" => "physio",
       "unit" => "cm",
+      "unit_iso" => "cm",
       "callback" => "calculImcVst",
       "min" => "@-5", "max" => "@+5",
     ),
@@ -66,6 +68,7 @@ class CConstantesMedicales extends CMbObject {
     "ta"                => array(
       "type" => "physio",
       "unit" => "cmHg",
+      "unit_iso" => "cm",
       "formfields" => array("_ta_systole", "_ta_diastole"),
       "min" => 2, "max" => 16,
       "standard" => 8,
@@ -908,7 +911,7 @@ class CConstantesMedicales extends CMbObject {
     }
 
     $constante->patient_id = $patient_id;
-    $constante->datetime = mbDateTime();
+    $constante->datetime = CMbDT::dateTime();
     $constante->loadRefPatient();
 
     $where = array(
@@ -942,7 +945,7 @@ class CConstantesMedicales extends CMbObject {
     if ($datetime) {
       foreach ($list_constantes as $_name => $_params) {
         if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
-          $day_defore = mbDateTime("-24 hours", $datetime);
+          $day_defore = CMbDT::dateTime("-24 hours", $datetime);
 
           // cumul simple sur le meme champ
           if (isset($_params["cumul_for"])) {
@@ -1058,7 +1061,7 @@ class CConstantesMedicales extends CMbObject {
           // cumul
           if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
             $reset_hour = self::getResetHour($_name);
-            $day_24h = mbTransformTime("-$reset_hour hours", $_constante_medicale->datetime, '%y-%m-%d');
+            $day_24h = CMbDT::transform("-$reset_hour hours", $_constante_medicale->datetime, '%y-%m-%d');
 
             if (!isset($cumuls_day[$_name][$day_24h])) {
               $cumuls_day[$_name][$day_24h] = array(
@@ -1067,7 +1070,7 @@ class CConstantesMedicales extends CMbObject {
                 "value" => null,
                 "span"  => 0,
                 "pair"  => (@count($cumuls_day[$_name]) % 2 ? "odd" : "even"),
-                "day"   => mbTransformTime($day_24h, null, "%a"),
+                "day"   => CMbDT::transform($day_24h, null, "%a"),
               );
             }
 

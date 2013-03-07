@@ -12,7 +12,7 @@ CCanDo::checkRead();
 
 $salle_id     = CValue::getOrSession("salle");
 $bloc_id      = CValue::getOrSession("bloc_id");
-$date         = CValue::getOrSession("date", mbDate());
+$date         = CValue::getOrSession("date", CMbDT::date());
 $operation_id = CValue::getOrSession("operation_id");
 $hide_finished = CValue::getOrSession("hide_finished", 0);
 

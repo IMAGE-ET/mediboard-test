@@ -81,7 +81,7 @@ if (!$affectation_id && isset($sejour)) {
     if (!$item_liaison->_id) {
       $item_liaison = new CItemLiaison;
       $item_liaison->sejour_id = $sejour->_id;
-      $item_liaison->date = mbDate($sejour->entree);
+      $item_liaison->date = CMbDT::date($sejour->entree);
       $item_liaison->quantite = 0;
     }
     

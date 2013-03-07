@@ -9,7 +9,7 @@
  */
 
 function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $discipline_id = 0, $codes_ccam = '', $hors_plage) {
-  if (!$date) $date = mbTransformTime("+0 DAY", mbDate(), "%m/%Y");
+  if (!$date) $date = CMbDT::transform("+0 DAY", CMbDT::date(), "%m/%Y");
 
   $prat = new CMediusers;
   $prat->load($prat_id);
@@ -22,8 +22,8 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
   
   // Gestion de la date
   $debut = substr($date,3,7)."-".substr($date,0,2)."-01";
-  $fin = mbDate("+1 MONTH", $debut);
-  $fin = mbDate("-1 DAY", $fin);
+  $fin = CMbDT::date("+1 MONTH", $debut);
+  $fin = CMbDT::date("-1 DAY", $fin);
   $step = "+1 DAY";
   
   // Tableaux des jours
@@ -35,9 +35,9 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
     'markers' => array('show' => true),
     'bars' => array('show' => false)
   );
-  for ($i = $debut; $i <= $fin; $i = mbDate($step, $i)) {
-    $ticks[] = array(count($ticks), mbTransformTime(null, $i, "%a %d"));
-    $ticks2[] = array(count($ticks), mbTransformTime(null, $i, "%d"));
+  for ($i = $debut; $i <= $fin; $i = CMbDT::date($step, $i)) {
+    $ticks[] = array(count($ticks), CMbDT::transform(null, $i, "%a %d"));
+    $ticks2[] = array(count($ticks), CMbDT::transform(null, $i, "%d"));
     $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
 
@@ -136,11 +136,11 @@ function graphActiviteZoom($date, $prat_id = 0, $salle_id = 0, $bloc_id = 0, $di
   
   // Set up the title for the graph
   if ($prat_id && $prat->isFromType(array("Anesthésiste"))) {
-    $title = "Nombre d'anesthésie par salle - ".mbTransformTime(null, $debut, "%m/%Y");
+    $title = "Nombre d'anesthésie par salle - ".CMbDT::transform(null, $debut, "%m/%Y");
     $subtitle = "$total anesthésies";
   }
   else {
-    $title = "Nombre d'interventions par salle - ".mbTransformTime(null, $debut, "%m/%Y");
+    $title = "Nombre d'interventions par salle - ".CMbDT::transform(null, $debut, "%m/%Y");
     $subtitle = "$total interventions";
   }
 

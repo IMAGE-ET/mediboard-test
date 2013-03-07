@@ -31,11 +31,11 @@ $export       = CValue::get("export");
 $weeks_before = CValue::get("weeks_before");
 $weeks_after  = CValue::get("weeks_after");
 
-$date         = CValue::get("date", mbDate());
-$debut        = mbDate("-$weeks_before week", $date);
-$debut        = mbDate("last sunday", $debut);
-$fin          = mbDate("+$weeks_after week", $date);
-$fin          = mbDate("next sunday", $fin);
+$date         = CValue::get("date", CMbDT::date());
+$debut        = CMbDT::date("-$weeks_before week", $date);
+$debut        = CMbDT::date("last sunday", $debut);
+$fin          = CMbDT::date("+$weeks_after week", $date);
+$fin          = CMbDT::date("next sunday", $fin);
 
 // Liste des Salles
 $listSalles = new CSalle();
@@ -49,10 +49,10 @@ $plagesConsult  = array();
 $plagesOp       = array();
 $plagesPerDayOp = array();
 
-for ($i = 0; mbDate("+$i day", $debut)!=$fin ; $i++) {
+for ($i = 0; CMbDT::date("+$i day", $debut)!=$fin ; $i++) {
   $where = array();
   $where["chir_id"] = "= '$prat_id'";
-  $date             = mbDate("+$i day", $debut);
+  $date             = CMbDT::date("+$i day", $debut);
   $where["date"]    = "= '$date'";
   
   $plagesPerDayConsult = $plageConsult->loadList($where);
@@ -144,7 +144,7 @@ if (in_array("interv", $export)) {
           foreach ($rdv->_ref_operations as $op) {
             $op->loadComplete();
             $duration = ical_time($op->temp_operation);
-            $when     = ical_time(mbTime($op->_datetime));
+            $when     = ical_time(CMbDT::time($op->_datetime));
             $patient = $op->_ref_patient->_view;
             $description.= "\n$when: $patient (duree: $duration)";
           }

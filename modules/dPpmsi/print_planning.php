@@ -10,7 +10,7 @@
 CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
-$now       = mbDate();
+$now       = CMbDT::date();
 $filter = new COperation();
 $filter->salle_id      = CValue::get("salle_id");
 $filter->_date_min     = CValue::get("_date_min", $now);

@@ -185,7 +185,7 @@ $smarty->assign("facture"  , $facture_patient);
 $smarty->assign("consult"  , $consult);
 $smarty->assign("reglement", $reglement);
 $smarty->assign("tarifs"   , $tarifs);
-$smarty->assign("date"     , mbDate());
+$smarty->assign("date"     , CMbDT::date());
 
 $smarty->display("inc_vw_reglement.tpl");
 

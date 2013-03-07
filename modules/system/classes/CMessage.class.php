@@ -90,7 +90,7 @@ class CMessage extends CMbObject {
    * @return array          Published messages
    */
   function loadPublications($status = null, $mod_name = null, $group_id = null) {
-    $now = mbDateTime();
+    $now = CMbDT::dateTime();
     $where = array();
     
     switch ($status) {

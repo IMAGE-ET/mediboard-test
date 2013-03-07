@@ -13,9 +13,9 @@ CCanDo::checkEdit();
 $type = CValue::getOrSession("type");
 
 // Week dates
-$date = CValue::getOrSession("date", mbDate());
-$monday = mbDate("last monday", mbDate("+1 DAY", $date));
-$sunday = mbDate("next sunday", mbDate("-1 DAY", $date));
+$date = CValue::getOrSession("date", CMbDT::date());
+$monday = CMbDT::date("last monday", CMbDT::date("+1 DAY", $date));
+$sunday = CMbDT::date("next sunday", CMbDT::date("-1 DAY", $date));
 
 // Chargement des conges
 $plage_conge = new CPlageConge();
@@ -51,7 +51,7 @@ foreach ($plages_conge as $_plage_conge){
   $_sejours = array();
 
   $date_min = max($monday, $_plage_conge->date_debut);
-  $date_max = mbDate("+1 DAY", min($sunday, $_plage_conge->date_fin));
+  $date_max = CMbDT::date("+1 DAY", min($sunday, $_plage_conge->date_fin));
   
   // Cas des remplacements kinés
   if ($type == "kine" && !$_plage_conge->_activite) {

@@ -12,7 +12,7 @@ global $can, $m, $g;
 $can->needsAdmin();
 
 // Last update
-$today = mbDateTime();
+$today = CMbDT::dateTime();
 
 // Chargement des praticiens de l'établissement
 $praticien = new CMediusers();

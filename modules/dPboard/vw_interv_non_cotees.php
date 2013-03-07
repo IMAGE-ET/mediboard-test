@@ -27,8 +27,8 @@ if (!$all_prats) {
   CAppUI::requireModuleFile("dPboard", "inc_board");
 }
 
-$fin   = CValue::getOrSession("fin"  , mbDate());
-$debut = CValue::getOrSession("debut", mbDate("-1 week", $fin));
+$fin   = CValue::getOrSession("fin"  , CMbDT::date());
+$debut = CValue::getOrSession("debut", CMbDT::date("-1 week", $fin));
 
 $smarty = new CSmartyDP;
 

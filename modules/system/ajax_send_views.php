@@ -11,8 +11,8 @@
 CCanDo::checkRead();
 
 // Minute courante
-$time = mbTime();
-$minute = intval(mbTransformTime($time, null, "%M"));
+$time = CMbDT::time();
+$minute = intval(CMbDT::transform($time, null, "%M"));
 
 // Opératue de l'envoi
 $user = new CUser;

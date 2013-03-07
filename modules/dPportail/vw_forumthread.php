@@ -19,7 +19,7 @@ if($forum_thread->_id) {
     $forum_thread->loadRefs();
 } else {
     $forum_thread->user_id = $user->_id;
-    $forum_thread->date = mbDateTime();
+    $forum_thread->date = CMbDT::dateTime();
 }
 
 

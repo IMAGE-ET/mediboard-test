@@ -17,8 +17,8 @@ $object->load($object_id);
 $object->loadRefsActesNGAP();
 $object->loadRefPraticien();
 
-$date            = CValue::getOrSession("date", mbDate());
-$date_now        = mbDate();
+$date            = CValue::getOrSession("date", CMbDT::date());
+$date_now        = CMbDT::date();
 
 // Initialisation d'un acte NGAP
 $acte_ngap = CActeNGAP::createEmptyFor($object);

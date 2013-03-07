@@ -15,8 +15,8 @@ CCanDO::checkEdit();
 $current_m = CValue::get("current_m", $m);
 
 $ds = CSQLDataSource::get("std");
-$date      = CValue::getOrSession("date", mbDate());
-$hour      = mbTime();
+$date      = CValue::getOrSession("date", CMbDT::date());
+$hour      = CMbDT::time();
 $board     = CValue::get("board", 0);
 $boardItem = CValue::get("boardItem", 0);
 $plageconsult_id = CValue::get("plageconsult_id");
@@ -97,8 +97,8 @@ foreach ($listPlage as &$plage) {
 
 // Récupération de la date du jour si $date
 $current_date = null;
-if ($date != mbDate()) {
-  $current_date = mbDate();
+if ($date != CMbDT::date()) {
+  $current_date = CMbDT::date();
 }
 
 // Création du template

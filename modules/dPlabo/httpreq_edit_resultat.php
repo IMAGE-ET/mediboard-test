@@ -17,7 +17,7 @@ $prescriptionItem = new CPrescriptionLaboExamen;
 $prescriptionItem->load(CValue::getOrSession("prescription_labo_examen_id"));
 
 if ($prescriptionItem->_id) {
-  $prescriptionItem->date = mbDate();
+  $prescriptionItem->date = CMbDT::date();
 }
 
 $siblingItems = array();

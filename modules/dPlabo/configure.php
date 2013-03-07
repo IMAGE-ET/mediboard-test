@@ -12,7 +12,7 @@ $can->needsAdmin();
 
 $pratId    = CValue::getOrSession("object_id");
 $pratId400 = CValue::getOrSession("id400");
-$date      = mbDateTime();
+$date      = CMbDT::dateTime();
 
 //Création d'un nouvel id400 pour le laboratoire
 $newId400 = new CIdSante400();

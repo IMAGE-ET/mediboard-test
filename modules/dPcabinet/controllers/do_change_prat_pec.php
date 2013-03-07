@@ -14,10 +14,10 @@ $consult->load(CValue::post("consultation_id"));
 $consult->loadRefPlageConsult();
 $_datetime = $consult->_datetime;
 
-$day_now  = mbTransformTime(null, $_datetime, "%Y-%m-%d");
-$time_now = mbTransformTime(null, $_datetime, "%H:%M:00");
-$hour_now = mbTransformTime(null, $_datetime, "%H:00:00");
-$hour_next = mbTime("+1 HOUR", $hour_now);
+$day_now  = CMbDT::transform(null, $_datetime, "%Y-%m-%d");
+$time_now = CMbDT::transform(null, $_datetime, "%H:%M:00");
+$hour_now = CMbDT::transform(null, $_datetime, "%H:00:00");
+$hour_next = CMbDT::time("+1 HOUR", $hour_now);
 $plage = new CPlageconsult();
 $plageBefore = new CPlageconsult();
 $plageAfter = new CPlageconsult();

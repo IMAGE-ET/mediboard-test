@@ -41,15 +41,15 @@ $prescription_sejour->loadRefsLinesElement();
 $lines_element = $prescription_sejour->_ref_prescription_lines_element;
 
 // Chargement evenements de la derniere semaine complete
-$original_last_friday = mbDate("last friday", mbDate("+ 1 DAY", $original_sejour->sortie));
-$monday = mbDate("last monday", $original_last_friday);
-$next_monday = mbDate("next monday", $monday);
+$original_last_friday = CMbDT::date("last friday", CMbDT::date("+ 1 DAY", $original_sejour->sortie));
+$monday = CMbDT::date("last monday", $original_last_friday);
+$next_monday = CMbDT::date("next monday", $monday);
 
 // 1er vendredi du nouveau sejour
-$next_friday = mbDate("next friday", mbDate("- 1 DAY", $sejour->entree));
+$next_friday = CMbDT::date("next friday", CMbDT::date("- 1 DAY", $sejour->entree));
 
 // Calcul du nombre de decalage entre les 2 sejours
-$nb_decalage = mbDaysRelative($original_last_friday, $next_friday);
+$nb_decalage = CMbDT::daysRelative($original_last_friday, $next_friday);
 
 $evenement_ssr = new CEvenementSSR();
 $where = array();
@@ -115,7 +115,7 @@ foreach($evenements as $_evenement){
   $_evenement->realise = "0";
   $_evenement->annule = "0";
 	$_evenement->prescription_line_element_id = $original_to_new_line[$_evenement->prescription_line_element_id];
-  $_evenement->debut = mbDateTime("+ $nb_decalage DAYS", $_evenement->debut);
+  $_evenement->debut = CMbDT::dateTime("+ $nb_decalage DAYS", $_evenement->debut);
 	$msg = $_evenement->store();
 	CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
 

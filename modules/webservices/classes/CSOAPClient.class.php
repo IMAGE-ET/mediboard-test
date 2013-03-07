@@ -142,7 +142,7 @@ class CSOAPClient {
     
     $echange_soap = new CEchangeSOAP();
     
-    $echange_soap->date_echange = mbDateTime();
+    $echange_soap->date_echange = CMbDT::dateTime();
     $echange_soap->emetteur     = CAppUI::conf("mb_id");
     $echange_soap->destinataire = $client->wsdl_url;
     $echange_soap->type         = $client->type_echange_soap;
@@ -173,7 +173,7 @@ class CSOAPClient {
         $client->getTrace($echange_soap);
       }
       
-      $echange_soap->date_echange = mbDateTime();
+      $echange_soap->date_echange = CMbDT::dateTime();
       $echange_soap->output       = $fault->faultstring;
       $echange_soap->soapfault    = 1;
       $echange_soap->store();
@@ -185,7 +185,7 @@ class CSOAPClient {
     
     $chrono->stop();
     CApp::$chrono->start();
-    $echange_soap->date_echange = mbDateTime();
+    $echange_soap->date_echange = CMbDT::dateTime();
     // trace
     if (CAppUI::conf("webservices trace")) {
       $client->getTrace($echange_soap);

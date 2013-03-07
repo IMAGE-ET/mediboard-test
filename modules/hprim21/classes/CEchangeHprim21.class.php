@@ -152,8 +152,8 @@ class CEchangeHprim21 extends CExchangeTabular {
     } 
     else {
       $this->message_valide      = $event->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
-      $this->date_production     = mbDateTime();
-      $this->date_echange        = mbDateTime();
+      $this->date_production     = CMbDT::dateTime();
+      $this->date_echange        = CMbDT::dateTime();
     }*/
 
     $this->store();
@@ -166,7 +166,7 @@ class CEchangeHprim21 extends CExchangeTabular {
     $this->acquittement_valide = $ack->event_err->message->isOK(CHL7v2Error::E_ERROR) ? 1 : 0;
 
     $this->_acquittement = $msgAck;
-    $this->date_echange  = mbDateTime();
+    $this->date_echange  = CMbDT::dateTime();
     $this->store();
     
     return $msgAck;

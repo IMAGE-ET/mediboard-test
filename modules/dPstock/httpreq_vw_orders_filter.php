@@ -12,8 +12,8 @@ CCanDo::checkRead();
 
 $invoiced = CValue::get('invoiced');
 
-$date_min = mbTransformTime("-1 MONTH", null, "%Y-%m-01");
-$date_max = mbDate("+1 MONTH -1 DAY", $date_min);
+$date_min = CMbDT::transform("-1 MONTH", null, "%Y-%m-01");
+$date_max = CMbDT::date("+1 MONTH -1 DAY", $date_min);
 
 // Smarty template
 $smarty = new CSmartyDP();

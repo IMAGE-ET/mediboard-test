@@ -44,7 +44,7 @@ $tag_search =  ($tag == $d1->tag) ? $d2->tag : $d1->tag;
 // 1. On change les tags de tous les objets liés à ce domaine
 $query = "UPDATE `id_sante400` 
             SET `tag` = REPLACE(`tag`, '$tag_search', '$tag'),
-                `last_update` = '". mbDateTime() . "'
+                `last_update` = '". CMbDT::dateTime() . "'
             WHERE `tag` LIKE '%$tag_search%'
             $and;";
 $ds->query($query);

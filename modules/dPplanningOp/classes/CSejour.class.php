@@ -170,6 +170,9 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_cession_creance;
   
   // Object References
+  /**
+   * @var CPatient Patient
+   */
   public $_ref_patient; // Declared in CCodable
   public $_ref_praticien;
   public $_ref_operations;
@@ -472,8 +475,8 @@ class CSejour extends CFacturable implements IPatientRelated {
       $sortie = $this->sortie_prevue;
 
       if ($entree !== null && $sortie !== null  && !$this->_skip_date_consistencies) {
-        $entree = mbDate($entree);
-        $sortie = mbDate($sortie);
+        $entree = CMbDT::date($entree);
+        $sortie = CMbDT::date($sortie);
         $this->makeDatesOperations();
         if (!$this->entree_reelle) {
           foreach ($this->_dates_operations as $operation_id => $date_operation) {
@@ -501,7 +504,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->completeField("entree_reelle", "annule");
       if ($this->fieldModified("annule", "1")) {
         $max_cancel_time = CAppUI::conf("dPplanningOp CSejour max_cancel_time");
-        if ((mbDateTime("+ $max_cancel_time HOUR", $this->entree_reelle) < mbDateTime())) {
+        if ((CMbDT::dateTime("+ $max_cancel_time HOUR", $this->entree_reelle) < CMbDT::dateTime())) {
            return "Impossible d'annuler un dossier ayant une entree réelle depuis plus de $max_cancel_time heures.<br />";
         }
       }
@@ -593,8 +596,8 @@ class CSejour extends CFacturable implements IPatientRelated {
         continue;
       }
 
-      $entree_relative = abs(mbHoursRelative($entree, $_sibling->entree));
-      $sortie_relative = abs(mbHoursRelative($sortie, $_sibling->sortie));
+      $entree_relative = abs(CMbDT::hoursRelative($entree, $_sibling->entree));
+      $sortie_relative = abs(CMbDT::hoursRelative($sortie, $_sibling->sortie));
       if ($entree_relative > $tolerance && $sortie_relative > $tolerance) {
         unset($siblings[$_sibling->_id]);
       }
@@ -637,10 +640,10 @@ class CSejour extends CFacturable implements IPatientRelated {
       case "no":
         return;
       case "date":
-        $lower1 = mbDate($this->entree);
-        $upper1 = mbDate($this->sortie);
-        $lower2 = mbDate($sejour->entree);
-        $upper2 = mbDate($sejour->sortie);
+        $lower1 = CMbDT::date($this->entree);
+        $upper1 = CMbDT::date($this->sortie);
+        $lower2 = CMbDT::date($sejour->entree);
+        $upper2 = CMbDT::date($sejour->sortie);
         break;
       case "datetime":
         $lower1 = $this->entree;
@@ -669,12 +672,12 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     /*
     if ($this->_protocole_prescription_anesth_id) {
-      $prescription->applyPackOrProtocole($this->_protocole_prescription_anesth_id, $this->praticien_id, mbDate(), null, $operation_id);
+      $prescription->applyPackOrProtocole($this->_protocole_prescription_anesth_id, $this->praticien_id, CMbDT::date(), null, $operation_id);
     }
     */
     if ($this->_protocole_prescription_chir_id) {
       $prescription->_dhe_mode = true;
-      $prescription->applyPackOrProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, mbDate(), null, $operation_id, null);
+      $prescription->applyPackOrProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, CMbDT::date(), null, $operation_id, null);
     }
   }
 
@@ -798,7 +801,7 @@ class CSejour extends CFacturable implements IPatientRelated {
       $this->loadRefsFactureEtablissement();
       $facture = $this->_ref_last_facture;
       if (!$facture->_id) {
-        $facture->ouverture         = mbDate();
+        $facture->ouverture         = CMbDT::date();
       }
       if (CAppUI::conf("dPfacturation CFactureEtablissement use_temporary_bill")) {
         $facture->temporaire = 1;
@@ -1016,26 +1019,26 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     // Durées
-    $this->_duree_prevue       = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
-    $this->_duree_reelle       = mbDaysRelative($this->entree_reelle, $this->sortie_reelle);
-    $this->_duree              = mbDaysRelative($this->_entree, $this->_sortie);
+    $this->_duree_prevue       = CMbDT::daysRelative($this->entree_prevue, $this->sortie_prevue);
+    $this->_duree_reelle       = CMbDT::daysRelative($this->entree_reelle, $this->sortie_reelle);
+    $this->_duree              = CMbDT::daysRelative($this->_entree, $this->_sortie);
 
     // Dates
-    $this->_date_entree_prevue = mbDate(null, $this->entree_prevue);
-    $this->_date_sortie_prevue = mbDate(null, $this->sortie_prevue);
+    $this->_date_entree_prevue = CMbDT::date(null, $this->entree_prevue);
+    $this->_date_sortie_prevue = CMbDT::date(null, $this->sortie_prevue);
 
     // Horaires
     // @todo: A supprimer
-    $this->_time_entree_prevue = mbTransformTime(null, $this->entree_prevue, "%H:%M:00");
-    $this->_time_sortie_prevue = mbTransformTime(null, $this->sortie_prevue, "%H:%M:00");
-    $this->_hour_entree_prevue = mbTransformTime(null, $this->entree_prevue, "%H");
-    $this->_hour_sortie_prevue = mbTransformTime(null, $this->sortie_prevue, "%H");
-    $this->_min_entree_prevue  = mbTransformTime(null, $this->entree_prevue, "%M");
-    $this->_min_sortie_prevue  = mbTransformTime(null, $this->sortie_prevue, "%M");
+    $this->_time_entree_prevue = CMbDT::transform(null, $this->entree_prevue, "%H:%M:00");
+    $this->_time_sortie_prevue = CMbDT::transform(null, $this->sortie_prevue, "%H:%M:00");
+    $this->_hour_entree_prevue = CMbDT::transform(null, $this->entree_prevue, "%H");
+    $this->_hour_sortie_prevue = CMbDT::transform(null, $this->sortie_prevue, "%H");
+    $this->_min_entree_prevue  = CMbDT::transform(null, $this->entree_prevue, "%M");
+    $this->_min_sortie_prevue  = CMbDT::transform(null, $this->sortie_prevue, "%M");
 
     switch (CAppUI::conf("dPpmsi systeme_facturation")) {
       case "siemens" :
-        $this->_guess_NDA = mbTransformTime(null, $this->entree_prevue, "%y");
+        $this->_guess_NDA = CMbDT::transform(null, $this->entree_prevue, "%y");
         $this->_guess_NDA .=
           $this->type == "exte" ? "5" :
           $this->type == "ambu" ? "4" : "0";
@@ -1047,14 +1050,14 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->_at_midnight = ($this->_date_entree_prevue != $this->_date_sortie_prevue);
 
     if ($this->entree_prevue && $this->sortie_prevue) {
-      $this->_view      = "Séjour du " . mbTransformTime(null, $this->_entree, CAppUI::conf("date"));
-      $this->_shortview = "Du "        . mbTransformTime(null, $this->_entree, CAppUI::conf("date"));
-      if (mbTransformTime(null, $this->_entree, CAppUI::conf("date")) != mbTransformTime(null, $this->_sortie, CAppUI::conf("date"))) {
-        $this->_view      .= " au " . mbTransformTime(null, $this->_sortie, CAppUI::conf("date"));
-        $this->_shortview .= " au " . mbTransformTime(null, $this->_sortie, CAppUI::conf("date"));
+      $this->_view      = "Séjour du " . CMbDT::transform(null, $this->_entree, CAppUI::conf("date"));
+      $this->_shortview = "Du "        . CMbDT::transform(null, $this->_entree, CAppUI::conf("date"));
+      if (CMbDT::transform(null, $this->_entree, CAppUI::conf("date")) != CMbDT::transform(null, $this->_sortie, CAppUI::conf("date"))) {
+        $this->_view      .= " au " . CMbDT::transform(null, $this->_sortie, CAppUI::conf("date"));
+        $this->_shortview .= " au " . CMbDT::transform(null, $this->_sortie, CAppUI::conf("date"));
       }
     }
-    $this->_acte_execution = mbDateTime($this->entree_prevue);
+    $this->_acte_execution = CMbDT::dateTime($this->entree_prevue);
 
     $this->_praticien_id = $this->praticien_id;
 
@@ -1111,8 +1114,8 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   function checkDaysRelative($date) {
     if ($this->_entree && $this->_sortie) {
-      $this->_entree_relative = mbDaysRelative($date, mbDate($this->_entree));
-      $this->_sortie_relative = mbDaysRelative($date, mbDate($this->_sortie));
+      $this->_entree_relative = CMbDT::daysRelative($date, CMbDT::date($this->_entree));
+      $this->_sortie_relative = CMbDT::daysRelative($date, CMbDT::date($this->_sortie));
     }
   }
 
@@ -1148,7 +1151,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Signaler l'action de validation de la sortie
     if ($this->_modifier_sortie === '1') {
-      $this->sortie_reelle = mbDateTime();
+      $this->sortie_reelle = CMbDT::dateTime();
     }
 
     if ($this->_modifier_sortie === '0') {
@@ -1157,7 +1160,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Signaler l'action de validation de l'entrée
     if ($this->_modifier_entree === '1') {
-      $this->entree_reelle = mbDateTime();
+      $this->entree_reelle = CMbDT::dateTime();
     }
 
     if ($this->_modifier_entree === '0') {
@@ -1177,22 +1180,22 @@ class CSejour extends CFacturable implements IPatientRelated {
     // Nouveau séjour relié à une grossesse
     // Si l'entrée prévue est à l'heure courante, alors on value également l'entrée réelle
     if (CModule::getActive("maternite") && !$this->_id && $this->grossesse_id) {
-      $current_hour = mbTransformTime(mbTime(), null, "%H");
+      $current_hour = CMbDT::transform(CMbDT::time(), null, "%H");
       $hour_sejour = $this->_hour_entree_prevue;
 
-      if (mbDate() == $this->_date_entree_prevue && $current_hour == $hour_sejour) {
-        $this->entree_reelle = mbDateTime();
+      if (CMbDT::date() == $this->_date_entree_prevue && $current_hour == $hour_sejour) {
+        $this->entree_reelle = CMbDT::dateTime();
       }
     }
 
     //@TODO : mieux gérer les current et now dans l'updatePlainFields et le store
-    $entree_reelle = ($this->entree_reelle === 'current'|| $this->entree_reelle ===  'now') ? mbDateTime() : $this->entree_reelle;
+    $entree_reelle = ($this->entree_reelle === 'current'|| $this->entree_reelle ===  'now') ? CMbDT::dateTime() : $this->entree_reelle;
     if ($entree_reelle && ($this->sortie_prevue < $entree_reelle)) {
-      $this->sortie_prevue = $this->type == "comp" ? mbDateTime("+1 DAY", $entree_reelle) : $entree_reelle;
+      $this->sortie_prevue = $this->type == "comp" ? CMbDT::dateTime("+1 DAY", $entree_reelle) : $entree_reelle;
     }
 
     // Synchro durée d'hospi / type d'hospi
-    $this->_at_midnight = (mbDate(null, $this->entree_prevue) != mbDate(null, $this->sortie_prevue));
+    $this->_at_midnight = (CMbDT::date(null, $this->entree_prevue) != CMbDT::date(null, $this->sortie_prevue));
     if ($this->_at_midnight && $this->type == "ambu") {
       $this->type = "comp";
     }
@@ -1321,7 +1324,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   /* @todo A dédoublonner avec getCurrAffectation  */
   function loadRefCurrAffectation($date = "", $service_id = "") {
     if (!$date) {
-      $date = mbDateTime();
+      $date = CMbDT::dateTime();
     }
 
     $affectation = new CAffectation();
@@ -1349,7 +1352,7 @@ class CSejour extends CFacturable implements IPatientRelated {
    */
   function loadSurrAffectations($date = "") {
     if (!$date) {
-      $date = mbDateTime();
+      $date = CMbDT::dateTime();
     }
 
     // Current affectation
@@ -1432,7 +1435,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   function countNotificationVisite($date = '') {
     if (!$date) {
-      $date = mbDate();
+      $date = CMbDT::date();
     }
     $this->completeField("praticien_id");
     $observation = new CObservationMedicale();
@@ -1659,7 +1662,8 @@ class CSejour extends CFacturable implements IPatientRelated {
     if (!$this->_ref_suivi_medical) {
       $this->_ref_suivi_medical = array();
     }
-    $this->_ref_suivi_medical = array_merge($constantes,$this->_ref_suivi_medical);
+
+    $this->_ref_suivi_medical = array_merge($constantes, $this->_ref_suivi_medical);
   }
 
   /**
@@ -1808,7 +1812,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   function loadListConstantesMedicales($where = array()) {
     if ($this->_list_constantes_medicales) {
-      return;
+      return $this->_list_constantes_medicales;
     }
 
     $constantes = new CConstantesMedicales();
@@ -1816,7 +1820,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $where['context_id']    = " = '$this->_id'";
     $where['patient_id']    = " = '$this->patient_id'";
 
-    $this->_list_constantes_medicales = $constantes->loadList($where, 'datetime ASC');
+    return $this->_list_constantes_medicales = $constantes->loadList($where, 'datetime ASC');
   }
 
   function loadRefsFwd($cache = true) {
@@ -1922,12 +1926,12 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     if ($this->_entree) {
-      $date_entree = mbDate($this->_entree);
+      $date_entree = CMbDT::date($this->_entree);
       $where[] = "DATE(entree_prevue) = '$date_entree' OR DATE(entree_reelle) = '$date_entree'";
     }
     if ($useSortie) {
       if ($this->_sortie) {
-        $date_sortie = mbDate($this->_sortie);
+        $date_sortie = CMbDT::date($this->_sortie);
         $where[] = "DATE(sortie_prevue) = '$date_sortie' OR DATE(sortie_reelle) = '$date_sortie'";
       }
     }
@@ -2156,7 +2160,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   /* @todo A dédoublonner avec loadRefCurrAffectation  */
   function getCurrAffectation($dateTime = null) {
     if (!$dateTime) {
-      $dateTime = mbDateTime();
+      $dateTime = CMbDT::dateTime();
     }
 
     $ds = $this->_spec->ds;
@@ -2164,9 +2168,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     $where = array();
     $where["sejour_id"] = $ds->prepare("= %", $this->sejour_id);
 
-    if (mbTime(null, $dateTime) == "00:00:00") {
-      $where["entree"] = $ds->prepare("<= %", mbDate(null, $dateTime)." 23:59:59");
-      $where["sortie"] = $ds->prepare(">= %", mbDate(null, $dateTime)." 00:00:01");
+    if (CMbDT::time(null, $dateTime) == "00:00:00") {
+      $where["entree"] = $ds->prepare("<= %", CMbDT::date(null, $dateTime)." 23:59:59");
+      $where["sortie"] = $ds->prepare(">= %", CMbDT::date(null, $dateTime)." 00:00:01");
     }
     else {
       $where["entree"] = $ds->prepare("<= %", $dateTime);
@@ -2302,7 +2306,7 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   function getCurrOperation($date, $show_trace = true, $only_one = true) {
-    $date = mbDate($date);
+    $date = CMbDT::date($date);
 
     $where["operations.sejour_id"] = "= '$this->_id'";
     $where[]            = "plagesop.date = '$date' OR operations.date = '$date'";
@@ -2435,7 +2439,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $transmissions = array();
     if (isset($this->_back["transmissions"])) {
       foreach ($this->_back["transmissions"] as $_trans) {
-        $datetime = mbTransformTime(null, $_trans->date, CAppUI::conf('datetime'));
+        $datetime = CMbDT::transform(null, $_trans->date, CAppUI::conf('datetime'));
         $transmissions["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
       }
     }
@@ -2447,7 +2451,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $transmissions_hautes = array();
     foreach ($this->_ref_transmissions as $_trans) {
       $_trans->loadRefUser();
-      $datetime = mbTransformTime(null, $_trans->date, CAppUI::conf('datetime'));
+      $datetime = CMbDT::transform(null, $_trans->date, CAppUI::conf('datetime'));
       $transmissions_hautes["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
 
     }
@@ -2458,7 +2462,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     foreach ($this->_ref_transmissions as $_trans) {
       $_trans->loadRefUser();
-      $datetime = mbTransformTime(null, $_trans->date, CAppUI::conf('datetime'));
+      $datetime = CMbDT::transform(null, $_trans->date, CAppUI::conf('datetime'));
       $transmissions_macro["$_trans->date $_trans->_guid"] = "$_trans->text, le $datetime, {$_trans->_ref_user->_view}";
 
     }
@@ -2470,7 +2474,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $observations = array();
     if (isset($this->_back["observations"])) {
       foreach ($this->_back["observations"] as $_obs) {
-        $datetime = mbTransformTime(null, $_obs->date, CAppUI::conf('datetime'));
+        $datetime = CMbDT::transform(null, $_obs->date, CAppUI::conf('datetime'));
         $observations["$_obs->date $_obs->_guid"] = "$_obs->text, le $datetime, {$_obs->_ref_user->_view}";
       }
     }
@@ -2486,14 +2490,14 @@ class CSejour extends CFacturable implements IPatientRelated {
 
       if (isset($prescription->_ref_prescription_lines_all_comments)) {
         foreach ($prescription->_ref_prescription_lines_all_comments as $_comment) {
-          $datetime = mbTransformTime(null, "$_comment->debut $_comment->time_debut", CAppUI::conf('datetime'));
+          $datetime = CMbDT::transform(null, "$_comment->debut $_comment->time_debut", CAppUI::conf('datetime'));
           $lines["$_comment->debut $_comment->time_debut $_comment->_guid"] = "$_comment->_view, $datetime, {$_comment->_ref_praticien->_view}";
         }
       }
 
       if (isset($prescription->_ref_prescription_lines_element)) {
         foreach ($prescription->_ref_prescription_lines_element as $_line_element) {
-          $datetime = mbTransformTime(null, "$_line_element->debut $_line_element->time_debut", CAppUI::conf('datetime'));
+          $datetime = CMbDT::transform(null, "$_line_element->debut $_line_element->time_debut", CAppUI::conf('datetime'));
           $view = "$_line_element->_view";
           if ($_line_element->commentaire) {
             $view .= " ($_line_element->commentaire)";
@@ -2612,7 +2616,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $operation->loadRefPlageOp();
       }
 
-      $this->_dates_operations[$operation->_id] = mbDate($operation->_datetime);
+      $this->_dates_operations[$operation->_id] = CMbDT::date($operation->_datetime);
     }
   }
 
@@ -2637,7 +2641,7 @@ class CSejour extends CFacturable implements IPatientRelated {
         $consultation->loadRefPlageConsult();
       }
 
-      $this->_dates_consultations[$consultation->_id] = mbDate($consultation->_datetime);
+      $this->_dates_consultations[$consultation->_id] = CMbDT::date($consultation->_datetime);
     }
   }
 
@@ -2670,7 +2674,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
         if ($_operation->annulee == 0) {
           $operation_view = " le "
-            . mbDateToLocale(mbDate($_operation->_datetime))
+            . CMbDT::dateToLocale(CMbDT::date($_operation->_datetime))
             . " par le Dr "
             . $_operation->_ref_chir->_view;
           $_operation->countActes();
@@ -2692,7 +2696,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $sejours = self::loadListForDateTime($this->entree_reelle, $where);
     foreach ($sejours as $_sejour) {
-      $_sejour->sortie_reelle = mbDateTime();
+      $_sejour->sortie_reelle = CMbDT::dateTime();
       $_sejour->store();
     }
   }
@@ -2731,8 +2735,8 @@ class CSejour extends CFacturable implements IPatientRelated {
   }
 
   function getNbJourPlanning($date){
-    $sunday = mbDate("next sunday", mbDate("- 1 DAY", $date));
-    $saturday = mbDate("-1 DAY", $sunday);
+    $sunday = CMbDT::date("next sunday", CMbDT::date("- 1 DAY", $date));
+    $saturday = CMbDT::date("-1 DAY", $sunday);
 
     $_evt = new CEvenementSSR();
     $ljoin = array();
@@ -2764,10 +2768,10 @@ class CSejour extends CFacturable implements IPatientRelated {
     $affectation = $this->getCurrAffectation();
     $affectation->loadView();
     $fields = array_merge($fields,
-                array("DATE ENT" => mbDateToLocale(mbDate($this->entree)),
-                      "HEURE ENT" => mbTime($this->entree),
-                      "DATE SORTIE" => mbDateToLocale(mbDate($this->sortie)),
-                      "HEURE SORTIE" => mbTime($this->sortie),
+                array("DATE ENT" => CMbDT::dateToLocale(CMbDT::date($this->entree)),
+                      "HEURE ENT" => CMbDT::time($this->entree),
+                      "DATE SORTIE" => CMbDT::dateToLocale(CMbDT::date($this->sortie)),
+                      "HEURE SORTIE" => CMbDT::time($this->sortie),
                       "PRAT RESPONSABLE" => $this->_ref_praticien->_view,
                       "NDOS"     => $this->_NDA,
                       "CODE BARRE NDOS" => "@BARCODE_".$this->_NDA."@",
@@ -2822,7 +2826,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   function getUFs($date = null, $affectation_id = null) {
     if (!$date) {
-      $date = mbDateTime();
+      $date = CMbDT::dateTime();
     }
 
     if ($affectation_id) {

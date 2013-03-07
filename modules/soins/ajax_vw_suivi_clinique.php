@@ -98,10 +98,10 @@ if(CModule::getActive("dPprescription")){
 }
 
 if (CModule::getActive("dPprescription")){
-  $date = mbDateTime();
+  $date = CMbDT::dateTime();
   $days_config = CAppUI::conf("dPprescription CPrescription nb_days_prescription_current");
-  $date_before = mbDateTime("-$days_config DAY", $date);
-  $date_after  = mbDateTime("+$days_config DAY", $date);
+  $date_before = CMbDT::dateTime("-$days_config DAY", $date);
+  $date_after  = CMbDT::dateTime("+$days_config DAY", $date);
 }
 
 $smarty = new CSmartyDP;

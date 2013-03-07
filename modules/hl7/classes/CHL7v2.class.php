@@ -209,7 +209,7 @@ abstract class CHL7v2 {
    * @return string The transformed date
    **/
   static function getDate($relative = null, $ref = null) {
-    return mbTransformTime($relative, $ref, "%Y%m%d");
+    return CMbDT::transform($relative, $ref, "%Y%m%d");
   }
 
   /**
@@ -221,6 +221,6 @@ abstract class CHL7v2 {
    * @return string The transformed date
    **/
   static function getDateTime($relative = null, $ref = null) {
-    return mbTransformTime($relative, $ref, "%Y%m%d%H%M%S");
+    return CMbDT::transform($relative, $ref, "%Y%m%d%H%M%S");
   }
 }

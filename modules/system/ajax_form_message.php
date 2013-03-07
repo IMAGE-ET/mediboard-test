@@ -18,17 +18,17 @@ $update_benefits  = CValue::get("_update_benefits");
 
 // Récupération du message à ajouter/éditer
 $message = new CMessage;
-$message->deb = mbDateTime();
+$message->deb = CMbDT::dateTime();
 $message->load($message_id);
 $message->loadRefsNotes();
 
 // Création du possible
 if ($update_moment) {
-  $message->deb = mbDateTime("-8 hours", $update_moment);
-  $message->fin = mbDateTime("+5 minutes", $update_moment);
+  $message->deb = CMbDT::dateTime("-8 hours", $update_moment);
+  $message->fin = CMbDT::dateTime("+5 minutes", $update_moment);
   $message->titre = CAppUI::tr("CMessage-create_update-titre");
   $message->corps = CAppUI::tr("CMessage-create_update-corps", 
-    mbTransformTime(null, $update_moment, CAppUI::conf("datetime")));
+    CMbDT::transform(null, $update_moment, CAppUI::conf("datetime")));
   
   $details = CAppUI::tr("CMessage-create_update-details", 
     stripslashes($update_initiator), 

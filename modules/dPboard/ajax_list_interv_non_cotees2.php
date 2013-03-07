@@ -24,8 +24,8 @@ $chirSel   = CValue::getOrSession("praticien_id", $chir ? $chir->user_id : null)
 $all_prats = CValue::get("all_prats", 0);
 $board     = CValue::get("board", 0);
 
-$fin   = CValue::getOrSession("fin", mbDate());
-$debut = CValue::getOrSession("debut", mbDate("-1 month"));
+$fin   = CValue::getOrSession("fin", CMbDT::date());
+$debut = CValue::getOrSession("debut", CMbDT::date("-1 month"));
 
 $user = new CMediusers();
 $user->load($chirSel);

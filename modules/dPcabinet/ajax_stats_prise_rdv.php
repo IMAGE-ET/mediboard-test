@@ -22,8 +22,8 @@ $function = $mediuser->_ref_function;
 // Filter
 $filter = new CPlageconsult();
 $filter->_user_id           = CValue::get("_user_id", null);
-$filter->_date_min          = CValue::get("_date_min", mbDate("last month"));
-$filter->_date_max          = CValue::get("_date_max", mbDate());
+$filter->_date_min          = CValue::get("_date_min", CMbDT::date("last month"));
+$filter->_date_max          = CValue::get("_date_max", CMbDT::date());
 
 $ds = $filter->_spec->ds;
 

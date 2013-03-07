@@ -305,7 +305,7 @@ class CConsultation extends CFacturable {
   function getEtat() {
     $etat = array();
     $etat[self::PLANIFIE]       = "Plan.";
-    $etat[self::PATIENT_ARRIVE] = mbTransformTime(null, $this->arrivee, "%Hh%M");
+    $etat[self::PATIENT_ARRIVE] = CMbDT::transform(null, $this->arrivee, "%Hh%M");
     $etat[self::EN_COURS]       = "En cours";
     $etat[self::TERMINE]        = "Term.";
     if ($this->chrono)
@@ -352,10 +352,10 @@ class CConsultation extends CFacturable {
     $this->loadRefPlageConsult(true);
     $plageconsult = $this->_ref_plageconsult;
 
-    $time = mbTime("+".mbMinutesRelative("00:00:00", $plageconsult->freq)*$this->duree." MINUTES", $this->heure);
+    $time = CMbDT::time("+".CMbDT::minutesRelative("00:00:00", $plageconsult->freq)*$this->duree." MINUTES", $this->heure);
     $this->_date_fin = "$plageconsult->date $time";
     
-    $this->_duree = mbMinutesRelative("00:00:00", $plageconsult->freq) * $this->duree;
+    $this->_duree = CMbDT::minutesRelative("00:00:00", $plageconsult->freq) * $this->duree;
     
     $this->_exam_fields = $this->getExamFields();
   }
@@ -397,7 +397,7 @@ class CConsultation extends CFacturable {
       $sejour = $this->loadRefSejour();
 
       if ($sejour->type != "consult" &&
-         ($this->_date < mbDate($sejour->entree) || mbDate($this->_date) > $sejour->sortie)) {
+         ($this->_date < CMbDT::date($sejour->entree) || CMbDT::date($this->_date) > $sejour->sortie)) {
         $msg .= "Consultation en dehors du séjour<br />";
         return $msg . parent::check();
       }
@@ -779,7 +779,7 @@ TESTS A EFFECTUER
         $where['group_id']   = " = '$function->group_id'";
       }
       $where['facturable']     = " = '$facturable'";
-      $datetime_before     = mbDateTime("+$minutes_before_consult_sejour minute", "$this->_date $this->heure");
+      $datetime_before     = CMbDT::dateTime("+$minutes_before_consult_sejour minute", "$this->_date $this->heure");
       $where[] = "`sejour`.`entree` <= '$datetime_before' AND `sejour`.`sortie` >= '$datetime'";
 
       if (!$this->_force_create_sejour) {
@@ -828,19 +828,19 @@ TESTS A EFFECTUER
         $this->_ref_sejour->_hour_sortie_prevue = null;
         $this->_ref_sejour->_min_sortie_prevue  = null;
 
-        $date_consult = mbDate($this->_datetime);
+        $date_consult = CMbDT::date($this->_datetime);
 
         // On déplace l'entrée et la sortie du séjour
         $entree = $this->_datetime;
         $sortie = $date_consult . " 23:59:59";
 
         // Si on a une entrée réelle et que la date de la consultation est avant l'entrée réelle, on sort du store
-        if ($this->_ref_sejour->entree_reelle && $date_consult < mbDate($this->_ref_sejour->entree_reelle)) {
+        if ($this->_ref_sejour->entree_reelle && $date_consult < CMbDT::date($this->_ref_sejour->entree_reelle)) {
           return CAppUI::tr("CConsultation-denyDayChange");
         }
 
         // Si on a une sortie réelle et que la date de la consultation est après la sortie réelle, on sort du store
-        if ($this->_ref_sejour->sortie_reelle && $date_consult > mbDate($this->_ref_sejour->sortie_reelle)) {
+        if ($this->_ref_sejour->sortie_reelle && $date_consult > CMbDT::date($this->_ref_sejour->sortie_reelle)) {
           return CAppUI::tr("CConsultation-denyDayChange-exit");
         }
 
@@ -863,7 +863,7 @@ TESTS A EFFECTUER
             }
 
             if ($_consultation->_datetime > $sortie) {
-              $sortie = mbDate($_consultation->_datetime) . " 23:59:59";
+              $sortie = CMbDT::date($_consultation->_datetime) . " 23:59:59";
             }
           }
         }
@@ -882,7 +882,7 @@ TESTS A EFFECTUER
         // Pas le permettre si admission est déjà faite
         $max_hours = CAppUI::conf("dPcabinet CConsultation hours_after_changing_prat");
         if ($this->_ref_sejour->entree_reelle &&
-            (mbDateTime("+ $max_hours HOUR", $this->_ref_sejour->entree_reelle) < mbDateTime())) {
+            (CMbDT::dateTime("+ $max_hours HOUR", $this->_ref_sejour->entree_reelle) < CMbDT::dateTime())) {
           return CAppUI::tr("CConsultation-denyPratChange", $max_hours);
         }
 
@@ -943,7 +943,7 @@ TESTS A EFFECTUER
     // Update de reprise at
     // Par défaut, j+1 par rapport à fin at
     if ($this->fieldModified("fin_at") && $this->fin_at) {
-      $this->reprise_at = mbDateTime("+1 DAY", $this->fin_at);
+      $this->reprise_at = CMbDT::dateTime("+1 DAY", $this->fin_at);
     }
 
     // Standard store
@@ -1110,7 +1110,7 @@ TESTS A EFFECTUER
       $this->_ref_plageconsult->_ref_chir;
 
     $this->_date     = $this->_ref_plageconsult->date;
-    $this->_datetime = mbAddDateTime($this->heure,$this->_date);
+    $this->_datetime = CMbDT::addDateTime($this->heure,$this->_date);
     $this->_acte_execution = $this->_datetime;
     $this->_is_anesth    = $this->_ref_chir->isAnesth();
     $this->_is_dentiste  = $this->_ref_chir->isDentiste();
@@ -1158,7 +1158,7 @@ TESTS A EFFECTUER
     $this->_ref_patient->loadRefConstantesMedicales();
     $this->loadRefPlageConsult($cache);
     $this->_view = "Consult. de ".$this->_ref_patient->_view." - ".$this->_ref_plageconsult->_ref_chir->_view;
-    $this->_view .= " (".mbTransformTime(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
+    $this->_view .= " (".CMbDT::transform(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
     $this->loadExtCodesCCAM();
   }
 
@@ -1437,9 +1437,9 @@ TESTS A EFFECTUER
     $list = CMbArray::pluck($this->_ref_files, "file_name");
     $template->addListProperty("Consultation - Liste des fichiers", $list);
 
-    $template->addProperty("Consultation - Fin arrêt de travail", mbDateToLocale(mbDate($this->fin_at)));
+    $template->addProperty("Consultation - Fin arrêt de travail", CMbDT::dateToLocale(CMbDT::date($this->fin_at)));
     $template->addProperty("Consultation - Prise en charge arrêt de travail", $this->getFormattedValue("pec_at"));
-    $template->addProperty("Consultation - Reprise de travail", mbDateToLocale(mbDate($this->reprise_at)));
+    $template->addProperty("Consultation - Reprise de travail", CMbDT::dateToLocale(CMbDT::date($this->reprise_at)));
     $template->addProperty("Consultation - Accident de travail sans arrêt de travail", $this->getFormattedValue("at_sans_arret"));
     $template->addProperty("Consultation - Arrêt maladie", $this->getFormattedValue("arret_maladie"));
     
@@ -1458,7 +1458,7 @@ TESTS A EFFECTUER
     if (!$this->_mergeDeletion) {
       // Date dépassée
       $this->loadRefPlageConsult();
-      if ($this->_date < mbDate() && !$this->_ref_module->_can->admin) {
+      if ($this->_date < CMbDT::date() && !$this->_ref_module->_can->admin) {
         return "Impossible de supprimer une consultation passée";
       }
     }
@@ -1484,7 +1484,7 @@ TESTS A EFFECTUER
     // On déplace les dates du séjour
     if (($count_consultations == 1) && ($this->_ref_sejour->type === "consult")) {
       $this->_ref_sejour->entree_prevue = $dateTimePlage;
-      $this->_ref_sejour->sortie_prevue = mbDate($dateTimePlage)." 23:59:59";
+      $this->_ref_sejour->sortie_prevue = CMbDT::date($dateTimePlage)." 23:59:59";
       $this->_ref_sejour->_hour_entree_prevue = null;
       $this->_ref_sejour->_hour_sortie_prevue = null;
       if ($msg = $this->_ref_sejour->store()) {
@@ -1500,7 +1500,7 @@ TESTS A EFFECTUER
     $sejour->group_id = CGroups::loadCurrent()->_id;
     $sejour->type = "consult";
     $sejour->entree_prevue = $dateTimePlage;
-    $sejour->sortie_prevue = mbDate($dateTimePlage)." 23:59:59";
+    $sejour->sortie_prevue = CMbDT::date($dateTimePlage)." 23:59:59";
     if ($msg = $sejour->store()) {
       return $msg;
     }
@@ -1521,7 +1521,7 @@ TESTS A EFFECTUER
     }
     $this->loadRefPlageConsult();
 
-    return (mbDateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > mbDateTime());
+    return (CMbDT::dateTime("+ 24 HOUR", "{$this->_date} {$this->heure}") > CMbDT::dateTime());
   }
 
   function completeLabelFields(&$fields) {
@@ -1553,10 +1553,10 @@ TESTS A EFFECTUER
   }
 
   function createByDatetime($datetime, $praticien_id, $patient_id) {
-    $day_now   = mbTransformTime(null, $datetime, "%Y-%m-%d");
-    $time_now  = mbTransformTime(null, $datetime, "%H:%M:00");
-    $hour_now  = mbTransformTime(null, $datetime, "%H:00:00");
-    $hour_next = mbTime("+1 HOUR", $hour_now);
+    $day_now   = CMbDT::transform(null, $datetime, "%Y-%m-%d");
+    $time_now  = CMbDT::transform(null, $datetime, "%H:%M:00");
+    $hour_now  = CMbDT::transform(null, $datetime, "%H:00:00");
+    $hour_next = CMbDT::time("+1 HOUR", $hour_now);
 
     $plage       = new CPlageconsult();
     $plageBefore = new CPlageconsult();
@@ -1669,10 +1669,10 @@ TESTS A EFFECTUER
             '%P' => $chir->_user_first_name,
             '%S' => $chir->_shortview,
             '%L' => $operation->libelle,
-            '%i' => mbTransformTime(null, $operation->_datetime_best , CAppUI::conf('time')),
-            '%I' => mbTransformTime(null, $operation->_datetime_best , CAppUI::conf('date')),
-            '%E' => mbTransformTime(null, $sejour->entree_prevue, CAppUI::conf('date')),
-            '%e' => mbTransformTime(null, $sejour->entree_prevue, CAppUI::conf('time')),
+            '%i' => CMbDT::transform(null, $operation->_datetime_best , CAppUI::conf('time')),
+            '%I' => CMbDT::transform(null, $operation->_datetime_best , CAppUI::conf('date')),
+            '%E' => CMbDT::transform(null, $sejour->entree_prevue, CAppUI::conf('date')),
+            '%e' => CMbDT::transform(null, $sejour->entree_prevue, CAppUI::conf('time')),
             '%T' => strtoupper(substr($sejour->type, 0, 1)),
           );
 
@@ -1721,17 +1721,17 @@ TESTS A EFFECTUER
     $facture->du_patient   = $this->du_patient;
     $facture->du_tiers     = $this->du_tiers;
     $facture->type_facture = $type_facture;
-    $facture->ouverture    = mbDate();
-    $facture->cloture      = mbDate();
+    $facture->ouverture    = CMbDT::date();
+    $facture->cloture      = CMbDT::date();
     
     $facture->patient_date_reglement = $this->patient_date_reglement;
     if (!$this->du_patient) {
-      $facture->patient_date_reglement = mbDate();
+      $facture->patient_date_reglement = CMbDT::date();
     }
     
     $facture->patient_date_reglement = $this->tiers_date_reglement;
     if (!$this->du_tiers) {
-      $facture->tiers_date_reglement = mbDate();
+      $facture->tiers_date_reglement = CMbDT::date();
     }
     
     $facture->store();

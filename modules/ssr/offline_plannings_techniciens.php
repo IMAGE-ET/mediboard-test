@@ -16,7 +16,7 @@ CApp::setMemoryLimit("256M");
 $mediuser = new CMediusers();
 $kines = $mediuser->loadKines();
 
-$date = CValue::get("date", mbDate());
+$date = CValue::get("date", CMbDT::date());
 
 // Parcours des kines et chargement du planning
 foreach($kines as $_kine){
@@ -37,8 +37,8 @@ foreach($kines as $_kine){
 	$plannings[$_kine->_id]["surveillance"] = CApp::fetch("ssr", "ajax_planning_technicien", $args_planning); 	
 }
 
-$monday = mbDate("last monday", mbDate("+1 day", $date));
-$sunday = mbDate("next sunday", mbDate("-1 DAY", $date));
+$monday = CMbDT::date("last monday", CMbDT::date("+1 day", $date));
+$sunday = CMbDT::date("next sunday", CMbDT::date("-1 DAY", $date));
 		
 // Création du template
 $smarty = new CSmartyDP();

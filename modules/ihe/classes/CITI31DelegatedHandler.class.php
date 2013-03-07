@@ -340,7 +340,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         // Changement d'UF de soins
       case 'Z84':
         // Date du transfert
-        return mbDateTime();
+        return CMbDT::dateTime();
       // Sortie définitive
       case 'A03':
         // Date de la sortie

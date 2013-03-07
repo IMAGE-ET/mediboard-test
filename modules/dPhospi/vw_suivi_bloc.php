@@ -14,7 +14,7 @@ $group = CGroups::loadCurrent();
 $ds = CSQLDataSource::get("std");
 $service_id = CValue::getOrSession("service_id", 0);
 $bloc_id    = CValue::getOrSession("bloc_id"   , 0);
-$date_suivi = CValue::getOrSession("date_suivi", mbDate());
+$date_suivi = CValue::getOrSession("date_suivi", CMbDT::date());
 $listOps = array();
 
 // Liste des services

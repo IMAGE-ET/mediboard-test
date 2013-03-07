@@ -11,23 +11,23 @@
  * @link     http://www.mediboard.org
  */
 
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 $view = CValue::getOrSession("view", "all");
 
 $ds = CSQLDataSource::get("std");
 $group = CGroups::loadCurrent();
 $bank_holidays = mbBankHolidays($date);
-$next          = mbDate("+1 DAY", $date);
-$month_min     = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
-$month_max     = mbTransformTime("+ 1 month", $month_min, "%Y-%m-01");
-$prev_month    = mbDate("-1 month", $date);
-$next_month    = mbDate("+1 month", $date);
-$date_before   = mbDate("-1 day", $date);
-$date_after    = mbDate("+1 day", $date);
+$next          = CMbDT::date("+1 DAY", $date);
+$month_min     = CMbDT::transform("+ 0 month", $date, "%Y-%m-01");
+$month_max     = CMbDT::transform("+ 1 month", $month_min, "%Y-%m-01");
+$prev_month    = CMbDT::date("-1 month", $date);
+$next_month    = CMbDT::date("+1 month", $date);
+$date_before   = CMbDT::date("-1 day", $date);
+$date_after    = CMbDT::date("+1 day", $date);
 
 // Initialisation du tableau de jours
 $days = array();
-for ($day = $month_min; $day < $month_max; $day = mbDate("+1 DAY", $day)) {
+for ($day = $month_min; $day < $month_max; $day = CMbDT::date("+1 DAY", $day)) {
   $days[$day] = array(
     "num1" => "0",
     "num2" => "0",

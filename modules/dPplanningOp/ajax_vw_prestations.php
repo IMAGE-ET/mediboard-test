@@ -27,13 +27,13 @@ $sejour->load($sejour_id);
 $duree = strtotime($sejour->sortie) - strtotime($sejour->entree);
 $affectations = $sejour->loadRefsAffectations();
 
-$date_temp = mbDate($sejour->entree);
+$date_temp = CMbDT::date($sejour->entree);
 
-while ($date_temp <= mbDate($sejour->sortie)) {
+while ($date_temp <= CMbDT::date($sejour->sortie)) {
   if (!isset($dates[$date_temp])) {
     $dates[$date_temp] = 0;
   }
-  $date_temp = mbDate("+1 day", $date_temp);
+  $date_temp = CMbDT::date("+1 day", $date_temp);
 }
 
 if (count($affectations)) {
@@ -41,12 +41,12 @@ if (count($affectations)) {
   CMbObject::massLoadFwdRef($lits, "chambre_id");
   foreach ($affectations as $_affectation) {
     $_affectation->loadRefLit()->loadCompleteView();
-    $_affectation->_rowspan = mbDaysRelative($_affectation->entree, $_affectation->sortie)+1;
-    $date_temp = mbDate($_affectation->entree);
+    $_affectation->_rowspan = CMbDT::daysRelative($_affectation->entree, $_affectation->sortie)+1;
+    $date_temp = CMbDT::date($_affectation->entree);
   
-    while ($date_temp <= mbDate($_affectation->sortie)) {
+    while ($date_temp <= CMbDT::date($_affectation->sortie)) {
       $dates[$date_temp] = $_affectation->_id;
-      $date_temp = mbDate("+1 day", $date_temp);
+      $date_temp = CMbDT::date("+1 day", $date_temp);
     }
   }
 }
@@ -78,10 +78,10 @@ foreach ($items_liaisons as $_item_liaison) {
   }
 }
 
-$date_temp = mbDate($sejour->entree);
+$date_temp = CMbDT::date($sejour->entree);
 
-while (!isset($liaisons_j[$date_temp]) && $date_temp < mbDate($sejour->sortie)) {
-  $date_temp = mbDate("+1 day", $date_temp);
+while (!isset($liaisons_j[$date_temp]) && $date_temp < CMbDT::date($sejour->sortie)) {
+  $date_temp = CMbDT::date("+1 day", $date_temp);
 }
 
 $liaisons_j_date =& $liaisons_j[$date_temp];
@@ -167,7 +167,7 @@ $empty_liaison->loadRefItem();
 $empty_liaison->loadRefItemRealise();
 $smarty = new CSmartyDP;
 
-$smarty->assign("today"        , mbDate());
+$smarty->assign("today"        , CMbDT::date());
 $smarty->assign("dates"        , $dates);
 $smarty->assign("sejour"       , $sejour);
 $smarty->assign("affectations" , $affectations);
@@ -177,6 +177,6 @@ $smarty->assign("empty_liaison", $empty_liaison);
 $smarty->assign("liaisons_p"   , $liaisons_p);
 $smarty->assign("liaisons_j"   , $liaisons_j);
 $smarty->assign("context"      , $context);
-$smarty->assign("bank_holidays", mbBankHolidays(mbDate()));
+$smarty->assign("bank_holidays", mbBankHolidays(CMbDT::date()));
 $smarty->display("inc_vw_prestations.tpl");
 ?>

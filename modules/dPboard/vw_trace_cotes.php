@@ -10,7 +10,7 @@
 
 global $prat;
 
-$date_interv = CValue::getOrSession("date_interv", mbDate());
+$date_interv = CValue::getOrSession("date_interv", CMbDT::date());
 
 // Chargement des plages du mois
 $plage = new CPlageOp();
@@ -36,8 +36,8 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("date_interv", $date_interv);
 $smarty->assign("listIntervs", $listIntervs);
-$smarty->assign("prec", mbDate("-1 DAYS", $date_interv));
-$smarty->assign("suiv", mbDate("+1 DAYS", $date_interv));
+$smarty->assign("prec", CMbDT::date("-1 DAYS", $date_interv));
+$smarty->assign("suiv", CMbDT::date("+1 DAYS", $date_interv));
 
 $smarty->display("vw_trace_cotes.tpl");
 

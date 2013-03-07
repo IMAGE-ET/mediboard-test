@@ -22,7 +22,7 @@ if ($mediuser->isPraticien()) {
 $chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
 
 // Liste des consultations a avancer si desistement
-$now = mbDate();
+$now = CMbDT::date();
 $where = array(
   "plageconsult.date" => " > '$now'",
   "consultation.si_desistement" => "= '1'",
@@ -42,16 +42,16 @@ $listChir = CAppUI::pref("pratOnlyForConsult", 1) ?
   $user->loadProfessionnelDeSante(PERM_EDIT);
 
 // Période
-$today = mbDate();
+$today = CMbDT::date();
 
 $debut = CValue::getOrSession("debut", $today);
 
-$debut = mbDate("last sunday", $debut);
-$fin   = mbDate("next sunday", $debut);
-$debut = mbDate("+1 day", $debut);
+$debut = CMbDT::date("last sunday", $debut);
+$fin   = CMbDT::date("next sunday", $debut);
+$debut = CMbDT::date("+1 day", $debut);
 
-$prev = mbDate("-1 week", $debut);
-$next = mbDate("+1 week", $debut);
+$prev = CMbDT::date("-1 week", $debut);
+$next = CMbDT::date("+1 week", $debut);
 
 $smarty = new CSmartyDP();
 

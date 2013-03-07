@@ -42,7 +42,7 @@ $smarty->assign("element", $element);
 $smarty->assign("lines", $lines);
 $smarty->assign("last_line", $last_line);
 $smarty->assign("nodebug", true);
-$smarty->assign("current_date", mbDate());
+$smarty->assign("current_date", CMbDT::date());
 $smarty->display("inc_vw_modal.tpl");
 
 ?>

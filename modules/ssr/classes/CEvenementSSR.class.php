@@ -90,8 +90,8 @@ class CEvenementSSR extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_traite = $this->realise || $this->annule;
-    $this->_heure_deb = mbTime($this->debut);
-    $this->_heure_fin = mbTime("+ $this->duree MINUTES", $this->debut);
+    $this->_heure_deb = CMbDT::time($this->debut);
+    $this->_heure_fin = CMbDT::time("+ $this->duree MINUTES", $this->debut);
   }
   
   function check(){
@@ -116,9 +116,9 @@ class CEvenementSSR extends CMbObject {
     
     // Vérifier seulement les jours car les sorties peuvent être imprécises pour les hospit de jours
     if ($sejour->_id && $this->debut) {
-      $date_debut = mbDate($this->debut);
-      $date_entree = mbDate(mbDate($sejour->entree));
-      $date_sortie = mbDate(mbDate($sejour->sortie));
+      $date_debut = CMbDT::date($this->debut);
+      $date_entree = CMbDT::date(CMbDT::date($sejour->entree));
+      $date_sortie = CMbDT::date(CMbDT::date($sejour->sortie));
       if (!CMbRange::in($date_debut, $date_entree, $date_sortie)) {
         return "Evenement SSR en dehors des dates du séjour";
       }
@@ -205,7 +205,7 @@ class CEvenementSSR extends CMbObject {
       $this->debut = $this->_ref_seance_collective->debut;
       $this->duree = $this->_ref_seance_collective->duree;
     }
-    $this->_view = "$patient->_view - ". mbDateToLocale(mbDate($this->debut));
+    $this->_view = "$patient->_view - ". CMbDT::dateToLocale(CMbDT::date($this->debut));
     $this->loadRefsActesCdARR();
     
     if(!$this->sejour_id){
@@ -265,15 +265,15 @@ class CEvenementSSR extends CMbObject {
   function getRHS() {
     $rhs = new CRHS();
     $rhs->sejour_id = $this->sejour_id;
-    $rhs->date_monday = mbDate("last monday", mbDate("+1 day", mbDate($this->debut)));
+    $rhs->date_monday = CMbDT::date("last monday", CMbDT::date("+1 day", CMbDT::date($this->debut)));
     $rhs->loadMatchingObject();
     
     return $rhs;
   }
   
   static function getNbJoursPlanning($user_id, $date){
-    $sunday = mbDate("next sunday", mbDate("- 1 DAY", $date));
-    $saturday = mbDate("-1 DAY", $sunday);
+    $sunday = CMbDT::date("next sunday", CMbDT::date("- 1 DAY", $date));
+    $saturday = CMbDT::date("-1 DAY", $sunday);
     
     $_evt = new CEvenementSSR();
     $where = array();
@@ -338,7 +338,7 @@ class CEvenementSSR extends CMbObject {
    * @return array[CMediusers]
    */
   static function getActiveTherapeutes($min, $max) {
-    $max = mbDate("+1 DAY", $max);
+    $max = CMbDT::date("+1 DAY", $max);
     $query = "SELECT DISTINCT therapeute_id FROM `evenement_ssr` 
       WHERE debut BETWEEN '$min' AND '$max'";
     $that = new self;

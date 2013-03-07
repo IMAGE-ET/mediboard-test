@@ -222,14 +222,14 @@ class CFactureCabinet extends CFacture {
       // Sinon on la crée
       $consult = new CConsultation();
       $consult->load($consult_id);
-      $this->ouverture    = mbDate();
+      $this->ouverture    = CMbDT::date();
       $this->patient_id   = $patient_id;
       $this->praticien_id = $chirsel_id;
       $this->type_facture = $type_facture;
       $this->du_patient   = $consult->du_patient;
       $this->du_tiers     = $consult->du_tiers;
       if (CAppUI::conf("ref_pays") == 1) {
-        $this->cloture    = mbDate();
+        $this->cloture    = CMbDT::date();
       }
       $this->store();
       

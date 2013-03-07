@@ -182,7 +182,7 @@ class CCodable extends CMbObject {
   }
 
   function getActeExecution() {
-    $this->_acte_execution = mbDateTime();
+    $this->_acte_execution = CMbDT::dateTime();
   }
 
   function isCoded() {
@@ -594,7 +594,7 @@ class CCodable extends CMbObject {
     $patient   = $this->_ref_patient;
     $discipline = $this->_ref_praticien->_ref_discipline;
     // Il faut une date complête pour la comparaison
-    $date_ref = mbDate();
+    $date_ref = CMbDT::date();
     $date = "$date_ref $heure";
 
     switch ($code) {
@@ -614,7 +614,7 @@ class CCodable extends CMbObject {
           ($date >= "$date_ref 00:00:01" && $date < "$date_ref 06:00:00");
         break;
       case "U":
-        $date_tomorrow = mbDate("+1 day", $date_ref)." 08:00:00";
+        $date_tomorrow = CMbDT::date("+1 day", $date_ref)." 08:00:00";
         return !in_array($discipline->text, array("MEDECINE GENERALE", "PEDIATRIE")) &&
           ($date > "$date_ref 20:00:00" && $date < $date_tomorrow);
     }

@@ -11,16 +11,16 @@
 global $m, $debutact, $finact, $prat_id;
 
 function graphConsultations($debut = null, $fin = null, $prat_id = 0) {
-  if (!$debut) $debut = mbDate("-1 YEAR");
-  if (!$fin) $fin = mbDate();
+  if (!$debut) $debut = CMbDT::date("-1 YEAR");
+  if (!$fin) $fin = CMbDT::date();
   
-  $rectif        = mbTransformTime("+0 DAY", $debut, "%d")-1;
-  $debutact      = mbDate("-$rectif DAYS", $debut);
+  $rectif        = CMbDT::transform("+0 DAY", $debut, "%d")-1;
+  $debutact      = CMbDT::date("-$rectif DAYS", $debut);
   
-  $rectif        = mbTransformTime("+0 DAY", $fin, "%d")-1;
-  $finact        = mbDate("-$rectif DAYS", $fin);
-  $finact        = mbDate("+ 1 MONTH", $finact);
-  $finact        = mbDate("-1 DAY", $finact);
+  $rectif        = CMbDT::transform("+0 DAY", $fin, "%d")-1;
+  $finact        = CMbDT::date("-$rectif DAYS", $fin);
+  $finact        = CMbDT::date("+ 1 MONTH", $finact);
+  $finact        = CMbDT::date("-1 DAY", $finact);
   
   $pratSel = new CMediusers;
   $pratSel->load($prat_id);
@@ -32,8 +32,8 @@ function graphConsultations($debut = null, $fin = null, $prat_id = 0) {
     'markers' => array('show' => true),
     'bars' => array('show' => false)
   );
-  for ($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-    $ticks[] = array(count($ticks), mbTransformTime("+0 DAY", $i, "%m/%Y"));
+  for ($i = $debut; $i <= $fin; $i = CMbDT::date("+1 MONTH", $i)) {
+    $ticks[] = array(count($ticks), CMbDT::transform("+0 DAY", $i, "%m/%Y"));
     $serie_total['data'][] = array(count($serie_total['data']), 0);
   }
   

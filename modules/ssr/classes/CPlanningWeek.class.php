@@ -80,22 +80,22 @@ class CPlanningWeek {
       $last_day = $days[$this->nb_days - 1];
       
       
-      $monday = mbDate("last monday", mbDate("+1 day", $this->date));
-      $sunday = mbDate("next $last_day", mbDate("-1 DAY", $this->date));
+      $monday = CMbDT::date("last monday", CMbDT::date("+1 day", $this->date));
+      $sunday = CMbDT::date("next $last_day", CMbDT::date("-1 DAY", $this->date));
       
-      if (mbDaysRelative($monday, $sunday) > 7) {
-        $sunday = mbDate("-7 DAYS", $sunday);
+      if (CMbDT::daysRelative($monday, $sunday) > 7) {
+        $sunday = CMbDT::date("-7 DAYS", $sunday);
       }
       
-      $this->date_min_active = $date_min ? max($monday, mbDate($date_min)) : $monday;
-      $this->date_max_active = $date_max ? min($sunday, mbDate($date_max)) : $sunday;
+      $this->date_min_active = $date_min ? max($monday, CMbDT::date($date_min)) : $monday;
+      $this->date_max_active = $date_max ? min($sunday, CMbDT::date($date_max)) : $sunday;
       
       $this->date_min = $monday;
       $this->date_max = $sunday;
       
       // Days period
       for ($i = 0; $i < $this->nb_days; $i++) {
-        $_day = mbDate("+$i day", $monday);
+        $_day = CMbDT::date("+$i day", $monday);
         $this->days[$_day] = array();
         $this->load_data[$_day] = array();
       }
@@ -172,7 +172,7 @@ class CPlanningWeek {
   }
   
   function showNow($color = "red") {
-    $this->addEvent(new CPlanningEvent(null, mbDateTime(), null, null, $color, null, "now"));
+    $this->addEvent(new CPlanningEvent(null, CMbDT::dateTime(), null, null, $color, null, "now"));
   }
   
   /**
@@ -181,9 +181,9 @@ class CPlanningWeek {
    * @return 
    */
   function addUnavailability($min, $max = null) {
-    $min = mbDate($min);
+    $min = CMbDT::date($min);
     
-    $max = $max ? mbDate($max) : $min;
+    $max = $max ? CMbDT::date($max) : $min;
     
     if ($min > $max) {
       list($min, $max) = array($max, $min);
@@ -191,7 +191,7 @@ class CPlanningWeek {
     
     while ($min <= $max) {
       $this->unavailabilities[$min] = true;
-      $min = mbDate("+1 DAY", $min);
+      $min = CMbDT::date("+1 DAY", $min);
     }
   }
   
@@ -211,7 +211,7 @@ class CPlanningWeek {
    * @param object $color [optional] The label's color
    */
   function addDayLabel($day, $text, $detail = null, $color = null, $onclick = null) {
-    $this->day_labels[$this->no_dates ? $day : mbDate($day)][] = array(
+    $this->day_labels[$this->no_dates ? $day : CMbDT::date($day)][] = array(
       "text"   => $text, 
       "detail" => $detail, 
       "color"  => $color,
@@ -233,7 +233,7 @@ class CPlanningWeek {
         $day = $event->day;
       }
       else {
-        $day = mbDate($event->day);
+        $day = CMbDT::date($event->day);
       }
     }
     else {
@@ -241,7 +241,7 @@ class CPlanningWeek {
         $day = $start;
       }
       else {
-        $day = mbDate($start);
+        $day = CMbDT::date($start);
       }
       $event = new CPlanningEvent(null, $start, $length);
     }
@@ -251,17 +251,17 @@ class CPlanningWeek {
     
     $div_size = 60 / $this->hour_divider;
     
-    $min = round(mbMinutesRelative($day, $start) / $div_size) - 1;
-    $max = round(mbMinutesRelative($day, $end)   / $div_size) + 1;
+    $min = round(CMbDT::minutesRelative($day, $start) / $div_size) - 1;
+    $max = round(CMbDT::minutesRelative($day, $end)   / $div_size) + 1;
 
     for($i = $min; $i <= $max; $i++) {
-      $div_min = mbDateTime("+".($i*$div_size)." MINUTES", $day);
-      $div_max = mbDateTime("+".(($i+1)*$div_size)." MINUTES", $day);
+      $div_min = CMbDT::dateTime("+".($i*$div_size)." MINUTES", $day);
+      $div_max = CMbDT::dateTime("+".(($i+1)*$div_size)." MINUTES", $day);
       
       // FIXME: ameliorer ce calcul
       if ($div_min >= $start && $div_min < $end) {
-        $hour = mbTransformTime(null, $div_min, "%H");
-        $min = mbTransformTime(null, $div_min, "%M");
+        $hour = CMbDT::transform(null, $div_min, "%H");
+        $min = CMbDT::transform(null, $div_min, "%M");
         
         if (!isset($this->load_data[$day][$hour][$min])) {
           $this->load_data[$day][$hour][$min] = 0;

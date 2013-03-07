@@ -143,7 +143,7 @@ class CFichePaie extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_locked = ($this->final_file !== null);
-    $this->_view = "Fiche de paie du ".mbTransformTime(null, $this->debut, CAppUI::conf("date"))." au ".mbTransformTime(null, $this->fin, CAppUI::conf("date"));
+    $this->_view = "Fiche de paie du ".CMbDT::transform(null, $this->debut, CAppUI::conf("date"))." au ".CMbDT::transform(null, $this->fin, CAppUI::conf("date"));
     if($this->fiche_paie_id) {
       // On charge cette référence dès le load
       $this->_ref_params_paie = new CParamsPaie();

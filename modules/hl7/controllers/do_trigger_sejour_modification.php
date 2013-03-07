@@ -30,8 +30,8 @@ switch($action) {
     $sejour->group_id      = 1;
     $sejour->praticien_id  = 73;
     $sejour->patient_id    = rand(1, 5000);
-    $sejour->entree_prevue = mbDateTime();
-    $sejour->sortie_prevue = mbDateTime("+1 day");
+    $sejour->entree_prevue = CMbDT::dateTime();
+    $sejour->sortie_prevue = CMbDT::dateTime("+1 day");
     //$patient->updateFormFields();
   break;
 }

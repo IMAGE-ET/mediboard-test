@@ -36,8 +36,8 @@ $parturiente = $sejour->loadRefPatient();
 $grossesse   = $sejour->loadRefGrossesse();
 $curr_affect = $sejour->loadRefCurrAffectation();
 
-$datetime = mbDateTime();
-$date     = mbDate($datetime);
+$datetime = CMbDT::dateTime();
+$date     = CMbDT::date($datetime);
 
 function storeObject($object) {
   $title = $object->_id ? "-msg-modify" : "-msg-create";
@@ -148,7 +148,7 @@ else {
   if ($validation_naissance) {
     
     // On passe la date de naissance du bébé au jour courant
-    $patient->naissance = mbDate();
+    $patient->naissance = CMbDT::date();
     storeObject($patient);
     
     // L'entrée réelle du séjour à maintenant
@@ -182,7 +182,7 @@ else {
     // Depuis un dossier provisoire, les constantes médicales ne sont pas créées.
     if (!$constantes->_id) {
       $constantes->patient_id = $patient->_id;
-      $constantes->datetime = mbDateTime();
+      $constantes->datetime = CMbDT::dateTime();
     }
     
     storeObject($constantes);

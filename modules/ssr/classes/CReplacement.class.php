@@ -89,7 +89,7 @@ class CReplacement extends CMbObject {
     $kine_id = $sejour->_ref_bilan_ssr->_ref_technicien->kine_id;
     
     $date_debut = $conge->date_debut;
-    $date_fin = mbDate("+1 DAY", $conge->date_fin);
+    $date_fin = CMbDT::date("+1 DAY", $conge->date_fin);
     $evenement_ssr = new CEvenementSSR();
     $where = array();
     $where["therapeute_id"] = " = '$kine_id'";
@@ -116,7 +116,7 @@ class CReplacement extends CMbObject {
     $sejour->_ref_bilan_ssr->loadRefTechnicien();
     
     $date_debut = $conge->date_debut;
-    $date_fin = mbDate("+1 DAY", $conge->date_fin);
+    $date_fin = CMbDT::date("+1 DAY", $conge->date_fin);
     $evenement_ssr = new CEvenementSSR();
     $where = array();
     $where["therapeute_id"] = " = '$this->replacer_id'";
@@ -151,7 +151,7 @@ class CReplacement extends CMbObject {
     $sejour = $this->loadRefSejour();
     
     list($this->_min_deb, $this->_max_fin) = CMbRange::intersection(
-      mbDate($sejour->entree), mbDate($sejour->sortie),
+      CMbDT::date($sejour->entree), CMbDT::date($sejour->sortie),
       $conge->date_debut, $conge->date_fin
     );
   }
@@ -167,7 +167,7 @@ class CReplacement extends CMbObject {
     $fragments = array();
     $croppers = array();
     foreach($this->_ref_replacer_conges as $_conge) {
-      $croppers[] = array(mbDate("-1 DAY", $_conge->date_debut), mbDate("+1 DAY", $_conge->date_fin));
+      $croppers[] = array(CMbDT::date("-1 DAY", $_conge->date_debut), CMbDT::date("+1 DAY", $_conge->date_fin));
     }
     
     if (count($this->_ref_replacer_conges) > 0) {

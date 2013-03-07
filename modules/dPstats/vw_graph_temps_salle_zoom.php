@@ -10,7 +10,7 @@
 
 CCanDo::checkEdit();
 
-$date          = CValue::getOrSession("date", mbTransformTime("+0 DAY", mbDate(), "%m/%Y"));
+$date          = CValue::getOrSession("date", CMbDT::transform("+0 DAY", CMbDT::date(), "%m/%Y"));
 $prat_id       = CValue::getOrSession("prat_id", 0);
 $salle_id      = CValue::getOrSession("salle_id", 0);
 $bloc_id       = CValue::getOrSession("bloc_id");
@@ -19,8 +19,8 @@ $codes_ccam    = strtoupper(CValue::getOrSession("codes_ccam", ""));
 $hors_plage    = CValue::getOrSession("hors_plage", 1);
 $type_hospi    = CValue::getOrSession("type_hospi", '');
 $debut = substr($date,3,7)."-".substr($date,0,2)."-01";
-$fin = mbDate("+1 MONTH", $debut);
-$fin = mbDate("-1 DAY", $fin);
+$fin = CMbDT::date("+1 MONTH", $debut);
+$fin = CMbDT::date("-1 DAY", $fin);
 
 // map Graph occupation salle
 CAppUI::requireModuleFile("dPstats", "graph_temps_salle");

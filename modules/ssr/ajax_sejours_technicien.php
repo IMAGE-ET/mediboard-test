@@ -14,7 +14,7 @@ CCanDo::checkRead();
 $show_cancelled_services = CValue::getOrSession("show_cancelled_services");
 $technicien_id = CValue::get("technicien_id");
 $service_id = CValue::getOrSession("service_id");
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 
 $technicien = new CTechnicien();
 $technicien->load($technicien_id);

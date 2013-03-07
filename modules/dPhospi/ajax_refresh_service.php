@@ -13,7 +13,7 @@ CCanDo::checkRead();
 global $g;
 
 // Récupération des paramètres
-$date  = CValue::getOrSession("date", mbDateTime());
+$date  = CValue::getOrSession("date", CMbDT::dateTime());
 $service_id    = CValue::get("service_id");
 $chambre_id    = CValue::get("chambre_id");
 
@@ -114,8 +114,8 @@ for ($i=0;$i<10;$i++) {
   }
 }
 
-$date_min = mbDateTime($date);
-$date_max = mbDateTime("+1 day", $date_min);
+$date_min = CMbDT::dateTime($date);
+$date_max = CMbDT::dateTime("+1 day", $date_min);
 
 $listAff = array();
 

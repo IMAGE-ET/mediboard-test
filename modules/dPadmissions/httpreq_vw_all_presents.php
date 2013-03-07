@@ -11,22 +11,22 @@
 CCanDo::checkRead();
 
 // Initialisation de variables
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 
 if (phpversion() >= "5.3") {
-  $month_min     = mbDate("first day of +0 month", $date);
-  $lastmonth     = mbDate("last day of -1 month" , $date);
-  $nextmonth     = mbDate("first day of +1 month", $date);
+  $month_min     = CMbDT::date("first day of +0 month", $date);
+  $lastmonth     = CMbDT::date("last day of -1 month" , $date);
+  $nextmonth     = CMbDT::date("first day of +1 month", $date);
 }
 else {
-  $month_min     = mbTransformTime("+ 0 month", $date, "%Y-%m-01");
-  $lastmonth     = mbDate("-1 month", $date);
-  $nextmonth     = mbDate("+1 month", $date);
-  if (mbTransformTime(null, $date, "%m-%d") == "08-31") {
-    $nextmonth = mbTransformTime("+0 month", $nextmonth, "%Y-09-%d");
+  $month_min     = CMbDT::transform("+ 0 month", $date, "%Y-%m-01");
+  $lastmonth     = CMbDT::date("-1 month", $date);
+  $nextmonth     = CMbDT::date("+1 month", $date);
+  if (CMbDT::transform(null, $date, "%m-%d") == "08-31") {
+    $nextmonth = CMbDT::transform("+0 month", $nextmonth, "%Y-09-%d");
   }
   else {
-    $nextmonth     = mbTransformTime("+0 month", $nextmonth, "%Y-%m-01");
+    $nextmonth     = CMbDT::transform("+0 month", $nextmonth, "%Y-%m-01");
   }
 }
 
@@ -37,12 +37,12 @@ $bank_holidays = mbBankHolidays($date);
 $service_id    = explode(",", $service_id);
 CMbArray::removeValue("", $service_id);
 
-$hier   = mbDate("- 1 day", $date);
-$demain = mbDate("+ 1 day", $date);
+$hier   = CMbDT::date("- 1 day", $date);
+$demain = CMbDT::date("+ 1 day", $date);
 
 // Initialisation du tableau de jours
 $days = array();
-for ($day = $month_min; $day < $nextmonth; $day = mbDate("+1 DAY", $day)) {
+for ($day = $month_min; $day < $nextmonth; $day = CMbDT::date("+1 DAY", $day)) {
   $days[$day] = "0";
 }
 
@@ -82,8 +82,8 @@ $where["sejour.group_id"] = "= '$group->_id'";
 
 // Liste des admissions par jour
 foreach($days as $_date => $num) {
-  $date_min = mbDateTime("00:00:00", $_date);
-  $date_max = mbDateTime("23:59:00", $_date);
+  $date_min = CMbDT::dateTime("00:00:00", $_date);
+  $date_max = CMbDT::dateTime("23:59:00", $_date);
   $where["sejour.entree"] = "<= '$date_max'";
   $where["sejour.sortie"] = ">= '$date_min'";
   $days[$_date] = $sejour->countList($where, null, $ljoin);

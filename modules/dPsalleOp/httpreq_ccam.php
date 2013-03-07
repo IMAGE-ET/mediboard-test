@@ -6,7 +6,7 @@ $module          = CValue::getOrSession("module");
 $do_subject_aed  = CValue::getOrSession("do_subject_aed");
 $chir_id         = CValue::getOrSession("chir_id");
 
-$date  = CValue::getOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", CMbDT::date());
 
 
 // Chargement de la liste des praticiens

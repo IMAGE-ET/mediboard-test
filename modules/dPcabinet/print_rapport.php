@@ -11,12 +11,12 @@
 // !! Attention, régression importante si ajout de type de paiement
 
 CCanDo::checkEdit();
-$today = mbDate();
+$today = CMbDT::date();
 
 // Récupération des paramètres
 $filter = new CPlageconsult();
-$filter->_date_min = CValue::getOrSession("_date_min", mbDate());
-$filter->_date_max = CValue::getOrSession("_date_max", mbDate());
+$filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date());
+$filter->_date_max = CValue::getOrSession("_date_max", CMbDT::date());
 $filter->_etat_reglement_patient = CValue::getOrSession("_etat_reglement_patient");
 $filter->_etat_reglement_tiers   = CValue::getOrSession("_etat_reglement_tiers");
 $filter->_mode_reglement         = CValue::getOrSession("mode");

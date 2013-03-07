@@ -99,7 +99,7 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
   
   function doStore() {
     global $doc_ged_id,$file_id,$_validation;
-    $this->_obj->date       = mbDateTime();
+    $this->_obj->date       = CMbDT::dateTime();
     $this->_obj->remarques  = CAppUI::tr("Modele");
     $this->_obj->doc_ged_id = $doc_ged_id;
     if($file_id !== null){

@@ -12,20 +12,20 @@ CCanDo::checkRead();
 $ds = CSQLDataSource::get("std");
 
 // Période
-$today = mbDate();
+$today = CMbDT::date();
 $debut = CValue::getOrSession("debut", $today);
-$debut = mbDate("last sunday", $debut);
-$fin   = mbDate("next sunday", $debut);
-$debut = mbDate("+1 day", $debut);
+$debut = CMbDT::date("last sunday", $debut);
+$fin   = CMbDT::date("next sunday", $debut);
+$debut = CMbDT::date("+1 day", $debut);
 
-$prec = mbDate("-1 week", $debut);
-$suiv = mbDate("+1 week", $debut);
+$prec = CMbDT::date("-1 week", $debut);
+$suiv = CMbDT::date("+1 week", $debut);
 
 // Sélection des plages
 $plages = array();
 $curr_plage = new CPlageressource();
 for ($i = 0; $i < 7; $i++) {
-  $date = mbDate("+$i day", $debut);
+  $date = CMbDT::date("+$i day", $debut);
   $where["date"] = "= '$date'";
   $plagesPerDay = $curr_plage->loadList($where);
   foreach($plagesPerDay as $key => $value) {
@@ -50,7 +50,7 @@ if($isprat) {
       "\nSUM(tarif) AS somme" .
       "\nFROM plageressource" .
       "\nWHERE prat_id = '$prat->user_id'" .
-      "\nAND date < '".mbDate()."'" .
+      "\nAND date < '".CMbDT::date()."'" .
       "\nAND paye = '0'";
   $result = $ds->loadlist($sql);
   $compte["impayes"]["total"] = $result[0]["total"];
@@ -58,7 +58,7 @@ if($isprat) {
   $compte["impayes"]["plages"] = new CPlageressource;
   $where = array();
   $where["prat_id"] = "= '$prat->user_id'";
-  $where["date"] = "< '".mbDate()."'";
+  $where["date"] = "< '".CMbDT::date()."'";
   $where["paye"] = "= '0'";
   $compte["impayes"]["plages"] = $compte["impayes"]["plages"]->loadList($where, $order);
   // Plages bloquées
@@ -66,28 +66,28 @@ if($isprat) {
       "\nSUM(tarif) AS somme" .
       "\nFROM plageressource" .
       "\nWHERE prat_id = '$prat->user_id'" .
-      "\nAND date BETWEEN '".mbDate()."' AND '".mbDate("+15 DAYS")."'";
+      "\nAND date BETWEEN '".CMbDT::date()."' AND '".CMbDT::date("+15 DAYS")."'";
   $result = $ds->loadlist($sql);
   $compte["inf15"]["total"] = $result[0]["total"];
   $compte["inf15"]["somme"] = $result[0]["somme"];
   $compte["inf15"]["plages"] = new CPlageressource;
   $where = array();
   $where["prat_id"] = "= '$prat->user_id'";
-  $where["date"] = "BETWEEN '".mbDate()."' AND '".mbDate("+15 DAYS")."'";
+  $where["date"] = "BETWEEN '".CMbDT::date()."' AND '".CMbDT::date("+15 DAYS")."'";
   $compte["inf15"]["plages"] = $compte["inf15"]["plages"]->loadList($where, $order);
   // Plages réservées
   $sql = "SELECT COUNT(plageressource_id) AS total," .
       "\nSUM(tarif) AS somme" .
       "\nFROM plageressource" .
       "\nWHERE prat_id = '$prat->user_id'" .
-      "\nAND date > '".mbDate("+15 DAYS")."'";
+      "\nAND date > '".CMbDT::date("+15 DAYS")."'";
   $result = $ds->loadlist($sql);
   $compte["sup15"]["total"] = $result[0]["total"];
   $compte["sup15"]["somme"] = $result[0]["somme"];
   $compte["sup15"]["plages"] = new CPlageressource;
   $where = array();
   $where["prat_id"] = "= '$prat->user_id'";
-  $where["date"] = "> '".mbDate("+15 DAYS")."'";
+  $where["date"] = "> '".CMbDT::date("+15 DAYS")."'";
   $compte["sup15"]["plages"] = $compte["sup15"]["plages"]->loadList($where, $order);
 }
 

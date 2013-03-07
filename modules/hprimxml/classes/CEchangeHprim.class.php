@@ -135,7 +135,7 @@ class CEchangeHprim extends CEchangeXML {
   }
   
   function populateEchange(CExchangeDataFormat $data_format, CHPrimXMLEvenements $dom_evt) {
-    $this->date_production = mbDateTime();
+    $this->date_production = CMbDT::dateTime();
     $this->group_id        = $data_format->group_id;
     $this->sender_id       = $data_format->sender_id;
     $this->sender_class    = $data_format->sender_class;
@@ -149,7 +149,7 @@ class CEchangeHprim extends CEchangeXML {
     $this->statut_acquittement = $type_error;
     $this->message_valide      = 0;
     $this->acquittement_valide = $doc_valid ? 1 : 0;
-    $this->date_echange        = mbDateTime();
+    $this->date_echange        = CMbDT::dateTime();
     $this->store();
   }
   
@@ -167,7 +167,7 @@ class CEchangeHprim extends CEchangeXML {
       $this->setObjectIdClass($mbObject);
     }
     $this->_acquittement = $msgAcq;
-    $this->date_echange = mbDateTime();
+    $this->date_echange = CMbDT::dateTime();
     $this->store();
     
     return $msgAcq;
@@ -186,7 +186,7 @@ class CEchangeHprim extends CEchangeXML {
       $this->setObjectIdClass($mbObject);
     }
     $this->_acquittement = $msgAcq;
-    $this->date_echange = mbDateTime();
+    $this->date_echange = CMbDT::dateTime();
     $this->store();
     
     return $msgAcq;

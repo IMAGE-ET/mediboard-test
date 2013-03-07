@@ -9,11 +9,11 @@
 
 CCanDo::checkRead();
 
-$date    = CValue::getOrSession("date", mbDate());
+$date    = CValue::getOrSession("date", CMbDT::date());
 $bloc_id = CValue::getOrSession("bloc_id");
 
-$modif_operation = CCanDo::edit() || $date >= mbDate();
-$hour = mbTime();
+$modif_operation = CCanDo::edit() || $date >= CMbDT::date();
+$hour = CMbDT::time();
 $blocs_list = CGroups::loadCurrent()->loadBlocs();
 
 $bloc = new CBlocOperatoire();

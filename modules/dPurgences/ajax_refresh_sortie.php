@@ -67,7 +67,7 @@ $smarty->assign("listPrats", $listPrats);
 $smarty->assign("sejour" , $sejour);
 $smarty->assign("access_pmsi", $access_pmsi);
 $smarty->assign("is_praticien", $is_praticien);
-$smarty->assign("date" , CValue::getOrSession("date", mbDate()));
+$smarty->assign("date" , CValue::getOrSession("date", CMbDT::date()));
 
 $smarty->display("inc_sortie_rpu.tpl");
 ?>

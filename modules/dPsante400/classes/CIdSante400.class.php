@@ -49,7 +49,7 @@
   
   function updatePlainFields() {
     if($this->last_update === "") {
-      $this->last_update = mbDateTime();
+      $this->last_update = CMbDT::dateTime();
     }
     return parent::updatePlainFields();
   }
@@ -130,7 +130,7 @@
     $this->loadRefsFwd();
 
     // Check against cache duration
-    if (mbDateTime("+ $delay HOURS", $this->last_update) < mbDateTime()) {
+    if (CMbDT::dateTime("+ $delay HOURS", $this->last_update) < CMbDT::dateTime()) {
       $this->_ref_object = new $this->object_class;
     }
 
@@ -188,7 +188,7 @@
     }
     
     $this->object_id = $mbObject->_id;
-    $this->last_update = mbDateTime();
+    $this->last_update = CMbDT::dateTime();
 
     // Create/update the idSante400    
     if ($msg = $this->store()) {

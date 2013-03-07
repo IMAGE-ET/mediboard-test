@@ -10,12 +10,12 @@
 
 CCanDo::checkAdmin();
 
-$date          = CValue::get("date_min", mbDate());
+$date          = CValue::get("date_min", CMbDT::date());
 $see_yesterday = CValue::getOrSession("see_yesterday", "1");
 
 $date_min = $date;
-$date_min = $see_yesterday ? mbDate("-1 day", $date) : $date;
-$date_max = mbDate("+1 day", $date);
+$date_min = $see_yesterday ? CMbDT::date("-1 day", $date) : $date;
+$date_max = CMbDT::date("+1 day", $date);
 
 // Chargement des séjours concernés
 $sejour = new CSejour;

@@ -8,7 +8,7 @@
 */
 
 CCanDo::checkRead();
-$now = mbDate();
+$now = CMbDT::date();
 
 $filter = new CConsultation;
 $filter->plageconsult_id = CValue::get("plage_id", null);
@@ -62,7 +62,7 @@ foreach ($listPlage as $plage_id => &$plage) {
   
   for ($i = 0; $i < $plage->_total; $i++) {
     $minutes = $plage->_freq * $i;
-    $plage->listPlace[$i]["time"] = mbTime("+ $minutes minutes", $plage->debut);
+    $plage->listPlace[$i]["time"] = CMbDT::time("+ $minutes minutes", $plage->debut);
     $plage->listPlace[$i]["consultations"] = array();
   }
   
@@ -74,7 +74,7 @@ foreach ($listPlage as $plage_id => &$plage) {
     $patient = $consultation->loadRefPatient(1);
     
     if ($consultation->sejour_id) {
-      $patient->_ref_curr_affectation = $consultation->loadRefSejour()->loadRefCurrAffectation(mbDate($consultation->_datetime));
+      $patient->_ref_curr_affectation = $consultation->loadRefSejour()->loadRefCurrAffectation(CMbDT::date($consultation->_datetime));
       $patient->_ref_curr_affectation->loadView();
       if ($patient->_ref_curr_affectation->_id) {
         $show_lit = true;
@@ -93,7 +93,7 @@ foreach ($listPlage as $plage_id => &$plage) {
       $consult_anesth->_date_op =& $consult_anesth->_ref_operation->_ref_plageop->date;
     } 
     
-    $keyPlace = mbTimeCountIntervals($plage->debut, $consultation->heure, $plage->freq);
+    $keyPlace = CMbDT::timeCountIntervals($plage->debut, $consultation->heure, $plage->freq);
     
     for ($i = 0;  $i < $consultation->duree; $i++) {
       @$plage->listPlace[($keyPlace + $i)]["consultations"][] =& $consultation;

@@ -28,18 +28,18 @@ $recuse         = CValue::getOrSession("recuse", "-1");
 $envoi_mail     = CValue::getOrSession("envoi_mail", "0");
 $order_col      = CValue::getOrSession("order_col", "patient_id");
 $order_way      = CValue::getOrSession("order_way", "ASC");
-$date           = CValue::getOrSession("date", mbDate());
-$next           = mbDate("+1 DAY", $date);
+$date           = CValue::getOrSession("date", CMbDT::date());
+$next           = CMbDT::date("+1 DAY", $date);
 $filterFunction = CValue::getOrSession("filterFunction");
 
-$date_actuelle = mbDateTime("00:00:00");
-$date_demain   = mbDateTime("00:00:00","+ 1 day");
+$date_actuelle = CMbDT::dateTime("00:00:00");
+$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
 
-$hier   = mbDate("- 1 day", $date);
-$demain = mbDate("+ 1 day", $date);
+$hier   = CMbDT::date("- 1 day", $date);
+$demain = CMbDT::date("+ 1 day", $date);
 
-$date_min = mbDateTime("00:00:00", $date);
-$date_max = mbDateTime("23:59:00", $date);
+$date_min = CMbDT::dateTime("00:00:00", $date);
+$date_max = CMbDT::dateTime("23:59:00", $date);
 
 // Chargement des prestations
 $prestations = CPrestation::loadCurrentList();

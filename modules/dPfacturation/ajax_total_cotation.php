@@ -10,8 +10,8 @@
  */
 
 CCanDo::checkRead();
-$debut   = CValue::getOrSession("date_min", mbDate());
-$fin     = CValue::getOrSession("date_max", mbDate());
+$debut   = CValue::getOrSession("date_min", CMbDT::date());
+$fin     = CValue::getOrSession("date_max", CMbDT::date());
 $chir_id = CValue::getOrSession("chir_id");
 
 $prats = array();

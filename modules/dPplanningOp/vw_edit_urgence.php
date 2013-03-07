@@ -116,7 +116,7 @@ else {
     $op->_min_urgence  = intval(substr($min_urgence, 0, 2));
   }
   
-  $op->date = $op->_datetime = $date_urgence ? $date_urgence : mbDate();
+  $op->date = $op->_datetime = $date_urgence ? $date_urgence : CMbDT::date();
   $op->salle_id = $salle_id;
 }
 // Liste des types d'anesthésie
@@ -184,7 +184,7 @@ $where["cancelled"] = "= '0'";
 $service = new CService();
 $services = $service->loadGroupList($where);
 
-$sortie_sejour = mbDateTime();
+$sortie_sejour = CMbDT::dateTime();
 if ($sejour->sortie_reelle) {
   $sortie_sejour = $sejour->sortie_reelle;
 }
@@ -205,7 +205,7 @@ foreach ($blocages_lit as $key => $blocage) {
   if (!$sejour->_id && $affectatione->loadObject($where)) {
     $affectatione->loadRefSejour();
     $affectatione->_ref_sejour->loadRefPatient();
-    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectatione->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectatione->_ref_sejour->_ref_patient->_view.")";
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectatione->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectatione->_ref_sejour->_ref_patient->_view.")";
   }
 }
 
@@ -240,8 +240,8 @@ $smarty->assign("ufs"       , CUniteFonctionnelle::getUFs());
 $smarty->assign("_functions", $_functions);
 
 $smarty->assign("modurgence", 1);
-$smarty->assign("date_min", mbDate());
-$smarty->assign("date_max", mbDate("+".CAppUI::conf("dPplanningOp COperation nb_jours_urgence")." days", mbDate()));
+$smarty->assign("date_min", CMbDT::date());
+$smarty->assign("date_max", CMbDT::date("+".CAppUI::conf("dPplanningOp COperation nb_jours_urgence")." days", CMbDT::date()));
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);

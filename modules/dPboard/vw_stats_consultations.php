@@ -14,15 +14,15 @@ CAppUI::requireModuleFile('dPstats', 'graph_consultations');
 
 $filterConsultation = new CConsultation();
 
-$filterConsultation->_date_min = CValue::getOrSession("_date_min", mbDate("-1 YEAR"));
-$rectif = mbTransformTime("+0 DAY", $filterConsultation->_date_min, "%d") - 1;
-$filterConsultation->_date_min = mbDate("-$rectif DAYS", $filterConsultation->_date_min);
+$filterConsultation->_date_min = CValue::getOrSession("_date_min", CMbDT::date("-1 YEAR"));
+$rectif = CMbDT::transform("+0 DAY", $filterConsultation->_date_min, "%d") - 1;
+$filterConsultation->_date_min = CMbDT::date("-$rectif DAYS", $filterConsultation->_date_min);
 
-$filterConsultation->_date_max =  CValue::getOrSession("_date_max",  mbDate());
-$rectif = mbTransformTime("+0 DAY", $filterConsultation->_date_max, "%d") - 1;
-$filterConsultation->_date_max = mbDate("-$rectif DAYS", $filterConsultation->_date_max);
-$filterConsultation->_date_max = mbDate("+ 1 MONTH", $filterConsultation->_date_max);
-$filterConsultation->_date_max = mbDate("-1 DAY", $filterConsultation->_date_max);
+$filterConsultation->_date_max =  CValue::getOrSession("_date_max",  CMbDT::date());
+$rectif = CMbDT::transform("+0 DAY", $filterConsultation->_date_max, "%d") - 1;
+$filterConsultation->_date_max = CMbDT::date("-$rectif DAYS", $filterConsultation->_date_max);
+$filterConsultation->_date_max = CMbDT::date("+ 1 MONTH", $filterConsultation->_date_max);
+$filterConsultation->_date_max = CMbDT::date("-1 DAY", $filterConsultation->_date_max);
 
 $filterConsultation->praticien_id = $prat->_id;
 

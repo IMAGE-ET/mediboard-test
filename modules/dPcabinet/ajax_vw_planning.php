@@ -10,7 +10,7 @@
  */
 
 $chirSel = CValue::getOrSession("chirSel");
-$today = mbDate();
+$today = CMbDT::date();
 
 // Liste des consultations a avancer si desistement
 $where = array(
@@ -27,14 +27,14 @@ $count_si_desistement = $consultation_desist->countList($where, null, $ljoin);
 
 // Période
 $debut = CValue::getOrSession("debut");
-$debut = mbDate("last sunday", $debut);
-$fin   = mbDate("next sunday", $debut);
-$debut = mbDate("+1 day", $debut);
+$debut = CMbDT::date("last sunday", $debut);
+$fin   = CMbDT::date("next sunday", $debut);
+$debut = CMbDT::date("+1 day", $debut);
 
-$prev = mbDate("-1 week", $debut);
-$next = mbDate("+1 week", $debut);
+$prev = CMbDT::date("-1 week", $debut);
+$next = CMbDT::date("+1 week", $debut);
 
-$dateArr = mbDate("+6 day", $debut);
+$dateArr = CMbDT::date("+6 day", $debut);
 $nbDays = 7;
 $listPlage = new CPlageconsult();
 
@@ -45,7 +45,7 @@ $where[] = "chir_id = '$chirSel' OR remplacant_id = '$chirSel'";
 if (!$listPlage->countList($where)) {
   $nbDays--;
   // Aucune plage le dimanche, on peut donc tester le samedi.
-  $dateArr = mbDate("+5 day", $debut);
+  $dateArr = CMbDT::date("+5 day", $debut);
   $where["date"] = "= '$dateArr'"; 
   if (!$listPlage->countList($where)) {
     $nbDays--;
@@ -76,7 +76,7 @@ $planning->hour_divider = 60 / CAppUI::conf("dPcabinet CPlageconsult minutes_int
 $plage = new CPlageconsult();
 
 for ($i = 0; $i < $nbDays; $i++) {
-  $jour = mbDate("+$i day", $debut);
+  $jour = CMbDT::date("+$i day", $debut);
   $where["date"] = "= '$jour'";
   $plages = $plage->loadList($where);
   
@@ -88,7 +88,7 @@ for ($i = 0; $i < $nbDays; $i++) {
     
     // Affichage de la plage sur le planning
     
-    $range = new CPlanningRange($_plage->_guid, $jour." ".$_plage->debut, mbMinutesRelative($_plage->debut, $_plage->fin), $_plage->libelle, $_plage->color);
+    $range = new CPlanningRange($_plage->_guid, $jour." ".$_plage->debut, CMbDT::minutesRelative($_plage->debut, $_plage->fin), $_plage->libelle, $_plage->color);
     
     $range->type = "plageconsult";
     $planning->addRange($range);
@@ -136,7 +136,7 @@ for ($i = 0; $i < $nbDays; $i++) {
       
       if ($_consult->patient_id) {
         $event->draggable /*= $event->resizable */ = $can_edit;
-        $event->hour_divider = 60 / mbTransformTime($_plage->freq, null, "%M");
+        $event->hour_divider = 60 / CMbDT::transform($_plage->freq, null, "%M");
         
         if ($can_edit) {
           $event->addMenuItem("copy", "Copier cette consultation");

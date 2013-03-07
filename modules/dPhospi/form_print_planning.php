@@ -12,7 +12,7 @@ CCanDo::checkRead();
 $group = CGroups::loadCurrent();
 
 $filter = new CSejour();
-$today      = mbDate();
+$today      = CMbDT::date();
 $filter->_date_min     = CValue::getOrSession("_date_min","$today 06:00:00");
 $filter->_date_max     = CValue::getOrSession("_date_max","$today 21:00:00");
 $filter->_horodatage   = CValue::getOrSession("_horodatage", "entree_prevue");
@@ -38,8 +38,8 @@ $where["cancelled"]  = "= '0'";
 $service = new CService();
 $services = $service->loadGroupList($where);
 
-$yesterday  = mbDate("-1 day", $today);
-$tomorrow   = mbDate("+1 day", $today);
+$yesterday  = CMbDT::date("-1 day", $today);
+$tomorrow   = CMbDT::date("+1 day", $today);
 
 $yesterday_deb  = "$yesterday 06:00:00";
 $yesterday_fin  = "$yesterday 21:00:00";

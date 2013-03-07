@@ -11,9 +11,9 @@
 $user = CUser::get();
 
 $ds = CSQLDataSource::get("std");
-$datetime = mbDateTime();
+$datetime = CMbDT::dateTime();
 $date_max = $datetime;
-$date_min = mbDateTime("-1 DAY", $date_max);
+$date_min = CMbDT::dateTime("-1 DAY", $date_max);
 
 $praticien_id = CValue::get("praticien_id", $user->_id);
 

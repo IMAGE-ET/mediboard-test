@@ -46,7 +46,7 @@ if ($operation_id = CValue::get("operation_id")) {
 
 
 
-$today = mbDate();
+$today = CMbDT::date();
 
 $group = CGroups::loadCurrent();
 $group->loadConfigValues();

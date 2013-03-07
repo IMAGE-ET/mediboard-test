@@ -33,7 +33,7 @@ class CHL7v2EventADTA08 extends CHL7v2EventADT implements CHL7EventADTA01 {
    * @return DateTime Event occured
    */
   function getEVNOccuredDateTime($object) {
-    return ($object instanceof CAffectation) ? $object->entree : mbDateTime();
+    return ($object instanceof CAffectation) ? $object->entree : CMbDT::dateTime();
   }
 
   /**

@@ -112,7 +112,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
         "patient_id" => "= '$patient->_id'",
         "annule"     => "= '0'",
       );
-      $sejours = CSejour::loadListForDate(mbDate($observation_dt), $where, null, 1);
+      $sejours = CSejour::loadListForDate(CMbDT::date($observation_dt), $where, null, 1);
       $sejour = reset($sejours);
 
       if (!$sejour) {
@@ -136,7 +136,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
       $result_set->patient_id    = $patient->_id;
       $result_set->context_class = "COperation";
       $result_set->context_id    = $operation->_id;
-      $result_set->datetime      = mbDateTime($this->getOBRObservationDateTime($_observation["OBR"]));
+      $result_set->datetime      = CMbDT::dateTime($this->getOBRObservationDateTime($_observation["OBR"]));
       if ($msg = $result_set->store()) {
         return $exchange_ihe->setAckAR($ack, "E302", $msg, $operation);
       }
@@ -148,7 +148,7 @@ class CHL7v2RecordObservationResultSet extends CHL7v2MessageXML {
           $result_set->patient_id    = $patient->_id;
           $result_set->context_class = "COperation";
           $result_set->context_id    = $operation->_id;
-          $result_set->datetime      = mbDateTime($dateTimeOBX);
+          $result_set->datetime      = CMbDT::dateTime($dateTimeOBX);
           if ($msg = $result_set->store()) {
             $codes[] = "E302";
             continue;

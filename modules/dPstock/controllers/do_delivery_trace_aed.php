@@ -33,7 +33,7 @@ if (isset ($_POST['_return']) && isset ($_POST['_code'])) {
   	}
     
   	$delivery->quantity += $_POST['quantity'];
-  	$delivery->date_dispensation = mbDateTime();
+  	$delivery->date_dispensation = CMbDT::dateTime();
     
   	if ($msg = $delivery->store()) {
   	  CAppUI::setMsg($msg, UI_MSG_ERROR);

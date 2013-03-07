@@ -120,7 +120,7 @@ class CHPrimXMLAcquittementsServeurActivitePmsi extends CHPrimXMLAcquittements {
   }
 
   function generateAcquittements($statut, $codes, $commentaires = null, $mbObject = null, $data = array()) {
-    $this->date_production = mbDateTime();
+    $this->date_production = CMbDT::dateTime();
 
     $this->generateEnteteMessageAcquittement($statut);
     $this->addReponses($statut, $codes, $commentaires, $mbObject, $data);

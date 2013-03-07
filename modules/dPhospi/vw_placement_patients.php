@@ -12,7 +12,7 @@
 CCanDo::checkRead();
 
 // Récupération des paramètres
-$date           = CValue::getOrSession("date", mbDateTime());
+$date           = CValue::getOrSession("date", CMbDT::dateTime());
 $services_ids   = CValue::getOrSession("services_ids");
 
 $group_id           = CGroups::loadCurrent()->_id;
@@ -143,8 +143,8 @@ foreach ($services as $serv) {
   $grilles[$serv->_id] = $grille;
 }
 
-$date_min = mbDateTime($date);
-$date_max = mbDateTime("+1 day", $date_min);
+$date_min = CMbDT::dateTime($date);
+$date_max = CMbDT::dateTime("+1 day", $date_min);
 
 $listAff = array();
 

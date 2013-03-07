@@ -59,7 +59,7 @@ else {
     
     if ($tag->_id) {
       $tag->tag = "trash_$tag->tag";
-      $tag->last_update = mbDateTime();
+      $tag->last_update = CMbDT::dateTime();
       $tag->store();
     }
     else {

@@ -9,7 +9,7 @@
 
 CCanDo::checkRead();
 
-$date       = CValue::getOrSession("date", mbDate());
+$date       = CValue::getOrSession("date", CMbDT::date());
 $type_hospi = CValue::getOrSession("type_hospi", null);
 $vue        = CValue::getOrSession("vue", 0);
 $group_id   = CValue::get("g");
@@ -69,7 +69,7 @@ $praticien    = new CMediusers();
 $praticiens   = $praticien->loadPraticiens(PERM_READ);
 $praticien_id = CValue::getOrSession("praticien_id", null);
 
-$date  = CValue::getOrSession("date" , mbDate());
+$date  = CValue::getOrSession("date" , CMbDT::date());
 
 $limit1  = $date." 00:00:00";
 $limit2  = $date." 23:59:59";

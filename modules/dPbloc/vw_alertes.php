@@ -9,13 +9,13 @@
  */
 
 $type    = CValue::get("type", "week");
-$date    = CValue::get("date", mbDate());
+$date    = CValue::get("date", CMbDT::date());
 $bloc_id = CValue::get("bloc_id");
 
 if ($type == "week") {
-  $date = mbDate("last sunday", $date);
-  $fin  = mbDate("next sunday", $date);
-  $date = mbDate("+1 day", $date);
+  $date = CMbDT::date("last sunday", $date);
+  $fin  = CMbDT::date("next sunday", $date);
+  $date = CMbDT::date("+1 day", $date);
 } else {
   $fin = $date;
 }

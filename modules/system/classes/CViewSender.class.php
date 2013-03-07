@@ -169,7 +169,7 @@ class CViewSender extends CMbObject {
   function sendFile() {
     // On transmet aux sources le fichier
     foreach ($this->loadRefSendersSource() as $_sender_source) {
-      $_sender_source->last_datetime = mbDateTime();
+      $_sender_source->last_datetime = CMbDT::dateTime();
       $_sender_source->last_status   = "triggered";
       $_sender_source->last_duration = null;
       $_sender_source->last_size     = null;
@@ -254,7 +254,7 @@ class CViewSender extends CMbObject {
     try {
       // Répertoire d'archivage
       $directory = $ftp->fileprefix.$basename;
-      $datetime = mbTransformTime(null, null, "%Y-%m-%d_%H-%M-%S");   
+      $datetime = CMbDT::transform(null, null, "%Y-%m-%d_%H-%M-%S");
       $ftp->createDirectory($directory);
       
       // Transmission de la copie

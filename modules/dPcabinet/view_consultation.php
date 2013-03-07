@@ -21,7 +21,7 @@ $prat->loadRefs();
 $patient = $consultation->_ref_patient;
 $patient->loadRefs();
 
-$today = mbDate();
+$today = CMbDT::date();
 
 // Création du template
 $smarty = new CSmartyDP();

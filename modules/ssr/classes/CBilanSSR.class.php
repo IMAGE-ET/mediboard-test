@@ -144,13 +144,13 @@ class CBilanSSR extends CMbObject {
     $sejour = $this->loadFwdRef("sejour_id", true);
     
     // Premier et dernier jour ouvré (exclusion des week-end)
-    $premier_jour = mbDate($sejour->entree);
-    $dernier_jour = mbDate($sejour->sortie);
+    $premier_jour = CMbDT::date($sejour->entree);
+    $dernier_jour = CMbDT::date($sejour->sortie);
     if (!$this->hospit_de_jour) {
-      $numero_premier_decalage = mbTransformTime(null, $premier_jour, "%w");
-      $numero_dernier_decalage = mbTransformTime(null, $dernier_jour, "%w");
-      $premier_jour = mbDate(in_array($numero_premier_decalage, array(5, 6)) ? "next monday" : "+1 day", $premier_jour);
-      $dernier_jour = mbDate(in_array($numero_dernier_decalage, array(1, 7)) ? "last friday" : "-1 day", $dernier_jour);
+      $numero_premier_decalage = CMbDT::transform(null, $premier_jour, "%w");
+      $numero_dernier_decalage = CMbDT::transform(null, $dernier_jour, "%w");
+      $premier_jour = CMbDT::date(in_array($numero_premier_decalage, array(5, 6)) ? "next monday" : "+1 day", $premier_jour);
+      $dernier_jour = CMbDT::date(in_array($numero_dernier_decalage, array(1, 7)) ? "last friday" : "-1 day", $dernier_jour);
     }
     $this->_premier_jour = $premier_jour;
     $this->_dernier_jour = $dernier_jour;
@@ -194,7 +194,7 @@ class CBilanSSR extends CMbObject {
       if ($_replacement->_id) {
         $_replacement->loadRefConge();
         $conge = $_replacement->_ref_conge;
-        if (CMbRange::in(CValue::first($date, mbDate()), $conge->date_debut, $conge->date_fin)) {
+        if (CMbRange::in(CValue::first($date, CMbDT::date()), $conge->date_debut, $conge->date_fin)) {
           $_replacement->loadRefReplacer();
           $replacer =& $_replacement->_ref_replacer;
           $replacer->loadRefFunction();
@@ -222,8 +222,8 @@ class CBilanSSR extends CMbObject {
     // Requête
     $sejour_ssr = $this->loadRefSejour();
     $tolerance = CAppUI::conf("ssr CBilanSSR tolerance_sejour_demandeur");
-    $date_min = mbDate("- $tolerance DAYS", $sejour_ssr->entree);
-    $date_max = mbDate("+ $tolerance DAYS", $sejour_ssr->entree);
+    $date_min = CMbDT::date("- $tolerance DAYS", $sejour_ssr->entree);
+    $date_max = CMbDT::date("+ $tolerance DAYS", $sejour_ssr->entree);
     $where["sortie"]     = "BETWEEN '$date_min' AND '$date_max'";
     $where["patient_id"] = "= '$sejour_ssr->patient_id'";
     $where["annule"]     = " = '0'";
@@ -298,7 +298,7 @@ class CBilanSSR extends CMbObject {
     
     $date_min = max($date_min, $plage->date_debut);
     $date_max = min($date_max, $plage->date_fin);
-    $date_max = mbDate("+1 DAY", $date_max);
+    $date_max = CMbDT::date("+1 DAY", $date_max);
     
     $sejour = new CSejour();
     $ljoin["bilan_ssr" ] = "bilan_ssr.sejour_id     = sejour.sejour_id";

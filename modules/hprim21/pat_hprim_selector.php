@@ -18,9 +18,9 @@ $findyear  = null;
 $findmonth = null;
 $findday   = null;
 if($patient->naissance) {
-  $findyear  = mbTransformTime(null, $patient->naissance, "%Y");
-  //$findmonth = mbTransformTime(null, $patient->naissance, "%m");
-  //$findday   = mbTransformTime(null, $patient->naissance, "%d");
+  $findyear  = CMbDT::transform(null, $patient->naissance, "%Y");
+  //$findmonth = CMbDT::transform(null, $patient->naissance, "%m");
+  //$findday   = CMbDT::transform(null, $patient->naissance, "%d");
 }
 
 $name          = CValue::get("name"      , $patient->nom);

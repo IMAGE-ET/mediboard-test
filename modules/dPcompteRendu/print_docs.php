@@ -19,7 +19,7 @@ foreach ($nbDoc as $compte_rendu_id => $nb_print){
   if ($nb_print > 0) {
     $compte_rendu = new CCompteRendu();
     $compte_rendu->load($compte_rendu_id);
-    $compte_rendu->date_print = mbDateTime();
+    $compte_rendu->date_print = CMbDT::dateTime();
     $compte_rendu->store();
     $compte_rendu->makePDFpreview(1);
     

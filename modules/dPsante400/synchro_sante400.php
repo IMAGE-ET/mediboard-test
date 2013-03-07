@@ -11,7 +11,7 @@
 CCanDo::checkEdit();
 
 // @todo Make it a conf
-$time = mbTime();
+$time = CMbDT::time();
 if (CMbRange::in($time, "05:40", "07:00")) {
   return;
 }

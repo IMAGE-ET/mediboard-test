@@ -15,11 +15,11 @@ CCanDo::checkEdit();
 
 $user = CMediusers::get();
 
-$date  = CValue::getOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", CMbDT::date());
 $vue   = CValue::getOrSession("vue2", CAppUI::pref("AFFCONSULT", 0));
-$today = mbDate();
-$hour  = mbTime(null);
-$now   = mbDateTime();
+$today = CMbDT::date();
+$hour  = CMbDT::time(null);
+$now   = CMbDT::dateTime();
 
 CMbObject::$useObjectCache = false;
 
@@ -378,8 +378,8 @@ if ($consult->_refs_dossiers_anesth|@count) {
 else {
   if (CAppUI::pref("MODCONSULT")) {
     $where = array();
-    $where["entree"] = "<= '".mbDateTime()."'";
-    $where["sortie"] = ">= '".mbDateTime()."'";
+    $where["entree"] = "<= '".CMbDT::dateTime()."'";
+    $where["sortie"] = ">= '".CMbDT::dateTime()."'";
     $where["function_id"] = "IS NOT NULL";
     
     $affectation = new CAffectation();
@@ -394,7 +394,7 @@ else {
       if ($affectation->loadObject($where)) {
         $affectation->loadRefSejour();
         $affectation->_ref_sejour->loadRefPatient();
-        $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+        $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
       }
     }
     $smarty->assign("blocages_lit" , $blocages_lit);

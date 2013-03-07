@@ -45,7 +45,7 @@ if ($filter) {
     if(preg_match($re, $_filter, $matches)){
       $map = array("an" => "YEAR", "mois" => "MONTH", "jour" => "DAY");
 
-      $nouvelle_date=mbDateTime("-".$matches[1]." ".$map[$matches[2]]);
+      $nouvelle_date=CMbDT::dateTime("-".$matches[1]." ".$map[$matches[2]]);
 
       $where[] ="users.user_last_login <= '$nouvelle_date'";
     }

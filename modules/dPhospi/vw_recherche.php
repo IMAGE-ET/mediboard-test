@@ -17,7 +17,7 @@ $selPrat = CValue::getOrSession("selPrat");
 $services_ids = CValue::getOrSession("services_ids");
 $group_id     = CValue::get("g");
 
-$date_recherche = CValue::getOrSession("date_recherche", mbDateTime());
+$date_recherche = CValue::getOrSession("date_recherche", CMbDT::dateTime());
 
 if (is_array($services_ids)) {
   CMbArray::removeValue("", $services_ids);

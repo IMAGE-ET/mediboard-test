@@ -12,7 +12,7 @@ $group = CGroups::loadCurrent();
 
 $type       = CValue::getOrSession("type"       , null);
 $service_id = CValue::getOrSession("service_id" , null);
-$date       = CValue::getOrSession("date"       , mbDate());
+$date       = CValue::getOrSession("date"       , CMbDT::date());
 
 $service = null;
 

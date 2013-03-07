@@ -111,7 +111,7 @@ class CUserLog extends CMbMetaObject {
   
   function loadMergedIds(){
     if ($this->type === "merge") {
-      $date_max = mbDateTime("+3 seconds", $this->date);
+      $date_max = CMbDT::dateTime("+3 seconds", $this->date);
       $where = array(
         "user_id" => "= '$this->user_id'",
         "type" => " = 'delete'",

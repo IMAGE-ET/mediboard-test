@@ -11,7 +11,7 @@
 CCanDo::checkAdmin();
 
 $axe    = CValue::getOrSession('axe');
-$entree = CValue::getOrSession('entree', mbDate());
+$entree = CValue::getOrSession('entree', CMbDT::date());
 $count  = CValue::getOrSession('count', 30);
 $hide_cancelled = CValue::getOrSession("hide_cancelled", 1);
 

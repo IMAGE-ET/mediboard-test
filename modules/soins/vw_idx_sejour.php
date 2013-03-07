@@ -16,7 +16,7 @@ $group = CGroups::loadCurrent();
 
 // Filtres
 $date           = CValue::getOrSession("date");
-$datetime       = mbDateTime(); 
+$datetime       = CMbDT::dateTime();
 $mode           = CValue::getOrSession("mode", 0);
 $service_id     = CValue::getOrSession("service_id");
 $praticien_id   = CValue::getOrSession("praticien_id");
@@ -24,7 +24,7 @@ $_active_tab    = CValue::get("_active_tab");
 $type_admission = CValue::getOrSession("type");
 
 if (!$date) {
-  $date = mbDate();
+  $date = CMbDT::date();
 }
 
 $tab_sejour = array();
@@ -244,7 +244,7 @@ if ($service_id) {
     $order = "entree_prevue ASC";
       
     // Admissions de la veille
-    $dayBefore = mbDate("-1 days", $date);
+    $dayBefore = CMbDT::date("-1 days", $date);
     $where = array(
       "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 00:00:00'",
       "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
@@ -255,7 +255,7 @@ if ($service_id) {
       
     // Admissions du matin
     $where = array(
-      "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'",
+      "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".CMbDT::time("-1 second",$heureLimit)."'",
       "type" => $type_admission ? " = '$type_admission'" : "!= 'exte'",
       "annule" => "= '0'"
     );
@@ -272,7 +272,7 @@ if ($service_id) {
     $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order, $praticien_id);
       
     // Admissions antérieures
-    $twoDaysBefore = mbDate("-2 days", $date);
+    $twoDaysBefore = CMbDT::date("-2 days", $date);
     $where = array(
       "entree_prevue" => "<= '$twoDaysBefore 23:59:59'",
       "sortie_prevue" => ">= '$date 00:00:00'",
@@ -359,7 +359,7 @@ $smarty->assign("date"                    , $date);
 $smarty->assign("isPrescriptionInstalled" , CModule::getActive("dPprescription"));
 $smarty->assign("isImedsInstalled"        , (CModule::getActive("dPImeds") && CImeds::getTagCIDC(CGroups::loadCurrent())));
 $smarty->assign("can_view_dossier_medical", $can_view_dossier_medical);
-$smarty->assign("demain"                  , mbDate("+ 1 day", $date));
+$smarty->assign("demain"                  , CMbDT::date("+ 1 day", $date));
 $smarty->assign("services"                , $services);
 $smarty->assign("sejoursParService"       , $sejoursParService);
 if (CModule::getActive("dPprescription")) {
@@ -369,6 +369,6 @@ $smarty->assign("service_id"              , $service_id);
 $smarty->assign("groupSejourNonAffectes"  , $groupSejourNonAffectes);
 $smarty->assign("tab_sejour"              , $tab_sejour);
 $smarty->assign("visites"                 , $visites);
-$smarty->assign("current_date"            , mbDate());
+$smarty->assign("current_date"            , CMbDT::date());
 
 $smarty->display("vw_idx_sejour.tpl");

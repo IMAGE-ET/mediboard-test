@@ -12,7 +12,7 @@ CCanDo::checkRead();
 
 // Etablissement courant
 $group = CGroups::loadCurrent();
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 $readonly = CValue::get("readonly", false);
 
 // Plateaux disponibles

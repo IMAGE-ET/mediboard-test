@@ -20,10 +20,10 @@ if (CValue::post("propagate")) {
   global $m;
   $m = $m_post;
 	
-  $date = CValue::getOrSession("date", mbDate());
-  $monday = mbDate("last monday", mbDate("+1 day", $date));
+  $date = CValue::getOrSession("date", CMbDT::date());
+  $monday = CMbDT::date("last monday", CMbDT::date("+1 day", $date));
 	foreach(CValue::post("_days") as $_number) {
-    $days[] = mbDate("+$_number DAYS", $monday);
+    $days[] = CMbDT::date("+$_number DAYS", $monday);
 	}
 }
 
@@ -39,7 +39,7 @@ foreach($days as $day) {
 	  $evenement->_id = "";
     $evenement->realise = 0;
     $evenement->annule = 0;
-	  $evenement->debut = $day ? "$day ".mbTime($evenement->debut) :  mbDateTime($period, $evenement->debut);
+	  $evenement->debut = $day ? "$day ".CMbDT::time($evenement->debut) :  CMbDT::dateTime($period, $evenement->debut);
 	
 	  // Cas des séances collectives
 	  if ($evenement->seance_collective_id){
@@ -65,7 +65,7 @@ foreach($days as $day) {
 	  $bilan->loadRefKineReferent();
 	  
 	  $referant =& $bilan->_ref_kine_referent;
-	  $_day = mbDate($evenement->debut);
+	  $_day = CMbDT::date($evenement->debut);
 	  $therapeute_id = $evenement->therapeute_id;
 	  
 	  // Transfert kiné référent => kiné remplaçant si disponible

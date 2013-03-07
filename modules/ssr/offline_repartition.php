@@ -15,7 +15,7 @@ CApp::setMemoryLimit("256M");
 
 // Chargement de l'etablissement courant
 $group = CGroups::loadCurrent();
-$date = mbDate();
+$date = CMbDT::date();
 
 // Chargement des plateaux disponibles
 $all_sejours = array();

@@ -19,7 +19,7 @@ foreach($plateaux as $_plateau_tech){
   $_plateau_tech->loadRefsEquipements();
 }
 
-$date = mbDate();
+$date = CMbDT::date();
 
 foreach($plateaux as $_plateau){
 	$_plateau->loadRefsEquipements();
@@ -36,8 +36,8 @@ foreach($plateaux as $_plateau){
 	  $plannings[$_equipement->_id] = CApp::fetch("ssr", "ajax_planning_equipement", $args_planning);
 	}
 }
-$monday = mbDate("last monday", mbDate("+1 day", $date));
-$sunday = mbDate("next sunday", mbDate("-1 DAY", $date));
+$monday = CMbDT::date("last monday", CMbDT::date("+1 day", $date));
+$sunday = CMbDT::date("next sunday", CMbDT::date("-1 DAY", $date));
     
 // Création du template
 $smarty = new CSmartyDP();

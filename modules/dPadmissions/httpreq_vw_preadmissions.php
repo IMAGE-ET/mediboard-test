@@ -14,17 +14,17 @@ CCanDo::checkRead();
 
 $order_col_pre = CValue::getOrSession("order_col_pre", "heure");
 $order_way_pre = CValue::getOrSession("order_way_pre", "ASC");
-$date          = CValue::getOrSession("date", mbDate());
-$next          = mbDate("+1 DAY", $date);
+$date          = CValue::getOrSession("date", CMbDT::date());
+$next          = CMbDT::date("+1 DAY", $date);
 
-$date_actuelle = mbDateTime("00:00:00");
-$date_demain   = mbDateTime("00:00:00","+ 1 day");
+$date_actuelle = CMbDT::dateTime("00:00:00");
+$date_demain   = CMbDT::dateTime("00:00:00","+ 1 day");
 
-$hier   = mbDate("- 1 day", $date);
-$demain = mbDate("+ 1 day", $date);
+$hier   = CMbDT::date("- 1 day", $date);
+$demain = CMbDT::date("+ 1 day", $date);
 
-$date_min = mbDateTime("00:00:00", $date);
-$date_max = mbDateTime("23:59:59", $date);
+$date_min = CMbDT::dateTime("00:00:00", $date);
+$date_max = CMbDT::dateTime("23:59:59", $date);
 
 // Récupération de la liste des anesthésistes
 $mediuser = new CMediusers;

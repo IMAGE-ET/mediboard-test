@@ -81,7 +81,7 @@ class CSetupdPrepas extends CSetup {
       $query = "SELECT * FROM menu";
       $menus = $ds->loadList($query);
       foreach($menus as $menu){
-        $nbDays  = mbDaysRelative($menu["debut"], $menu["fin"]);
+        $nbDays  = CMbDT::daysRelative($menu["debut"], $menu["fin"]);
         $nbWeeks = floor($nbDays / 7);
         if(!$nbWeeks){
           $menu["nb_repet"] = 1;

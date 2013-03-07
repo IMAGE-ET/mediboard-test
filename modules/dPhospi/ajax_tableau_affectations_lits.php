@@ -22,7 +22,7 @@ $g = CGroups::loadCurrent()->_id;
 // A passer en variable de configuration
 $heureLimit = "16:00:00";
 
-$date            = CValue::getOrSession("date", mbDate()); 
+$date            = CValue::getOrSession("date", CMbDT::date());
 $mode            = CValue::getOrSession("mode", 0); 
 $services_ids    = CValue::getOrSession("services_ids");
 $triAdm          = CValue::getOrSession("triAdm", "praticien");
@@ -87,8 +87,8 @@ foreach ($services as &$service) {
 }
 
 // Nombre de patients à placer pour la semaine qui vient (alerte)
-$today   = mbDate()." 01:00:00";
-$endWeek = mbDateTime("+7 days", $today);
+$today   = CMbDT::date()." 01:00:00";
+$endWeek = CMbDT::dateTime("+7 days", $today);
 
 $where = array();
 $where["annule"]          = "= '0'";
@@ -121,8 +121,8 @@ CApp::$chrono->stop("Patient à placer dans la semaine");
 CApp::$chrono->start();
 
 $affectation = new CAffectation();
-$affectation->entree = mbAddDateTime("08:00:00",$date);
-$affectation->sortie = mbAddDateTime("23:00:00",$date);
+$affectation->entree = CMbDT::addDateTime("08:00:00",$date);
+$affectation->sortie = CMbDT::addDateTime("23:00:00",$date);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -130,7 +130,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("services_ids"          , $services_ids);
 $smarty->assign("affectation"           , $affectation);
 $smarty->assign("date"                  , $date);
-$smarty->assign("demain"                , mbDate("+ 1 day", $date));
+$smarty->assign("demain"                , CMbDT::date("+ 1 day", $date));
 $smarty->assign("heureLimit"            , $heureLimit);
 $smarty->assign("mode"                  , $mode);
 $smarty->assign("emptySejour"           , $emptySejour);

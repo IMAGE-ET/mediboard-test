@@ -20,15 +20,15 @@ $type_view_bloc = CValue::getOrSession("type_view_bloc", "nbInterv");
 
 $hors_plage = CValue::getOrSession("hors_plage", 1);
 
-$debutact      = $filter->_date_min = CValue::getOrSession("_date_min", mbDate("-1 YEAR"));
-$rectif        = mbTransformTime("+0 DAY", $filter->_date_min, "%d")-1;
-$debutact      = $filter->_date_min = mbDate("-$rectif DAYS", $filter->_date_min);
+$debutact      = $filter->_date_min = CValue::getOrSession("_date_min", CMbDT::date("-1 YEAR"));
+$rectif        = CMbDT::transform("+0 DAY", $filter->_date_min, "%d")-1;
+$debutact      = $filter->_date_min = CMbDT::date("-$rectif DAYS", $filter->_date_min);
 
-$finact        = $filter->_date_max = CValue::getOrSession("_date_max",  mbDate());
-$rectif        = mbTransformTime("+0 DAY", $filter->_date_max, "%d")-1;
-$finact        = $filter->_date_max = mbDate("-$rectif DAYS", $filter->_date_max);
-$finact        = $filter->_date_max = mbDate("+ 1 MONTH", $filter->_date_max);
-$finact        = $filter->_date_max = mbDate("-1 DAY", $filter->_date_max);
+$finact        = $filter->_date_max = CValue::getOrSession("_date_max",  CMbDT::date());
+$rectif        = CMbDT::transform("+0 DAY", $filter->_date_max, "%d")-1;
+$finact        = $filter->_date_max = CMbDT::date("-$rectif DAYS", $filter->_date_max);
+$finact        = $filter->_date_max = CMbDT::date("+ 1 MONTH", $filter->_date_max);
+$finact        = $filter->_date_max = CMbDT::date("-1 DAY", $filter->_date_max);
 
 $prat_id       = $filter->_prat_id = CValue::getOrSession("prat_id", 0);
 $salle_id      = $filter->salle_id = CValue::getOrSession("salle_id", 0);

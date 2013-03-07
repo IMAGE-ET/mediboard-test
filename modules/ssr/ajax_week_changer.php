@@ -10,11 +10,11 @@
 
 CCanDo::checkRead();
 
-$date = CValue::getOrSession("date", mbDate());
+$date = CValue::getOrSession("date", CMbDT::date());
 
 $planning = new CPlanningWeek($date);
-$next_week = mbDate("+1 week", $date);
-$prev_week = mbDate("-1 week", $date);
+$next_week = CMbDT::date("+1 week", $date);
+$prev_week = CMbDT::date("-1 week", $date);
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -49,7 +49,7 @@ $where["externe"] = "= '0'";
 $where["group_id"] = "= '$group->_id'";
 
 // Récupération de la journée à afficher
-$date  = CValue::getOrSession("date" , mbDate());
+$date  = CValue::getOrSession("date" , CMbDT::date());
 $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
 

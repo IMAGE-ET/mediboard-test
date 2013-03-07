@@ -36,13 +36,13 @@ $sql .="\nFROM operations" .
 
 switch($intervalle) {
   case "month":
-    $sql .= "\nAND sejour.entree_reelle BETWEEN '".mbDate("-1 month")."' AND '".mbDate()."'";
+    $sql .= "\nAND sejour.entree_reelle BETWEEN '".CMbDT::date("-1 month")."' AND '".CMbDT::date()."'";
     break;
   case "6month":
-    $sql .= "\nAND sejour.entree_reelle BETWEEN '".mbDate("-6 month")."' AND '".mbDate()."'";
+    $sql .= "\nAND sejour.entree_reelle BETWEEN '".CMbDT::date("-6 month")."' AND '".CMbDT::date()."'";
     break;
   case "year":
-    $sql .= "\nAND sejour.entree_reelle BETWEEN '".mbDate("-1 year")."' AND '".mbDate()."'";
+    $sql .= "\nAND sejour.entree_reelle BETWEEN '".CMbDT::date("-1 year")."' AND '".CMbDT::date()."'";
     break;
 }
        

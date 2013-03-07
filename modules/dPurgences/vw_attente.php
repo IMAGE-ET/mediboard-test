@@ -11,8 +11,8 @@
 CCanDo::checkRead();
 
 // Selection de la date
-$date = CValue::getOrSession("date", mbDate());
-$today = mbDate();
+$date = CValue::getOrSession("date", CMbDT::date());
+$today = CMbDT::date();
 
 // Chargement des urgences prises en charge
 $sejour = new CSejour;

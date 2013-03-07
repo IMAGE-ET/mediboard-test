@@ -124,7 +124,7 @@ CMbObject::massLoadFwdRef($sejours, "patient_id");
 // Tri par sortie et chargement des patients
 foreach ($sejours as $key => $sejour) {
   $sejour->loadRefPatient();
-  $tabSejours[mbDate($sejour->sortie)][$sejour->_id] = $sejour;
+  $tabSejours[CMbDT::date($sejour->sortie)][$sejour->_id] = $sejour;
   
   // Calcul du nombre d'actes par sejour
   if ($sejour->_ref_actes_ccam) {

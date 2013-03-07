@@ -86,7 +86,7 @@ class CDestinataireHprim extends CInteropReceiver {
       throw new CMbException("CExchangeSource-no-response");
     }
     
-    $exchange->date_echange = mbDateTime();
+    $exchange->date_echange = CMbDT::dateTime();
     
     $acq = $source->getACQ();
     if (!$acq) {
@@ -125,7 +125,7 @@ class CDestinataireHprim extends CInteropReceiver {
       throw new CMbException("CExchangeSource-no-response");
     }
     
-    $exchange->date_echange = mbDateTime();
+    $exchange->date_echange = CMbDT::dateTime();
 
     $acq = $source->getACQ();
     if (!$acq) {

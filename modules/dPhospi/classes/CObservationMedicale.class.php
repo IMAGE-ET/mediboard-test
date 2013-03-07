@@ -52,8 +52,8 @@ class CObservationMedicale extends CMbMetaObject {
 
   function canEdit(){
     $nb_hours = CAppUI::conf("soins max_time_modif_suivi_soins");
-    $datetime_max = mbDateTime("+ $nb_hours HOURS", $this->date);
-    return $this->_canEdit = (mbDateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->user_id);  
+    $datetime_max = CMbDT::dateTime("+ $nb_hours HOURS", $this->date);
+    return $this->_canEdit = (CMbDT::dateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->user_id);
   }
 	
   function loadRefSejour(){
@@ -83,7 +83,7 @@ class CObservationMedicale extends CMbMetaObject {
   }
   
   function countNotifSiblings() {
-    $date = mbDate($this->date);
+    $date = CMbDT::date($this->date);
     $observation = new CObservationMedicale();
     $where = array();
     $where["sejour_id"]  = " = '$this->sejour_id'";

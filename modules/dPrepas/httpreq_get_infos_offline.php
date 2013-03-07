@@ -12,7 +12,7 @@ CCanDo::checkRead();
 CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 $service_id = CValue::get("service_id" , null);
-$date       = CValue::get("date"       , mbDate());
+$date       = CValue::get("date"       , CMbDT::date());
 
 $service = null;
 
@@ -78,10 +78,10 @@ if(!$service_id || !array_key_exists($service_id,$services)){
           }
           
           foreach($listTypeRepas as $keyType => $valType){
-            $heure_entree = mbTransformTime(null,$affectation->entree,"%H:%M");
-            $heure_sortie = mbTransformTime(null,$affectation->sortie,"%H:%M");
-            $date_entree  = mbTransformTime(null,$affectation->entree,"%Y-%m-%d");
-            $date_sortie  = mbTransformTime(null,$affectation->sortie,"%Y-%m-%d");
+            $heure_entree = CMbDT::transform(null,$affectation->entree,"%H:%M");
+            $heure_sortie = CMbDT::transform(null,$affectation->sortie,"%H:%M");
+            $date_entree  = CMbDT::transform(null,$affectation->entree,"%Y-%m-%d");
+            $date_sortie  = CMbDT::transform(null,$affectation->sortie,"%Y-%m-%d");
             
             if(($date == $date_entree && $heure_entree > $valType->fin) ||
                 ($date == $date_sortie && $valType->debut > $heure_sortie)){

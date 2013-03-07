@@ -11,7 +11,7 @@ CCanDo::checkRead();
 
 $userSel   = CMediusers::get(CValue::getOrSession("pratSel"));
 
-$date      = CValue::getOrSession("date", mbDate());
+$date      = CValue::getOrSession("date", CMbDT::date());
 $canceled  = CValue::getOrSession("canceled", 0);
 $board     = CValue::get("board", 0);
 $boardItem = CValue::get("boardItem", 0);

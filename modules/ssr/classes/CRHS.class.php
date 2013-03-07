@@ -102,7 +102,7 @@ class CRHS extends CMbObject {
 	}
   
 	function check() {
-		if ($this->date_monday && mbTransformTime(null, $this->date_monday, "%w") != "1") {
+		if ($this->date_monday && CMbDT::transform(null, $this->date_monday, "%w") != "1") {
 			return CAppUI::tr("CRHS-failed-monday", $this->date_monday);
 		}
     return parent::check();
@@ -110,14 +110,14 @@ class CRHS extends CMbObject {
 	
 	function updateFormFields() {
 		parent::updateFormFields();
-		$this->_week_number = mbTransformTime(null, $this->date_monday, "%U");
+		$this->_week_number = CMbDT::transform(null, $this->date_monday, "%U");
       
-    $this->_date_tuesday   = mbDate("+1 DAY", $this->date_monday);
-    $this->_date_wednesday = mbDate("+2 DAY", $this->date_monday);
-    $this->_date_thursday  = mbDate("+3 DAY", $this->date_monday);
-    $this->_date_friday    = mbDate("+4 DAY", $this->date_monday);
-    $this->_date_saturday  = mbDate("+5 DAY", $this->date_monday);
-    $this->_date_sunday    = mbDate("+6 DAY", $this->date_monday);
+    $this->_date_tuesday   = CMbDT::date("+1 DAY", $this->date_monday);
+    $this->_date_wednesday = CMbDT::date("+2 DAY", $this->date_monday);
+    $this->_date_thursday  = CMbDT::date("+3 DAY", $this->date_monday);
+    $this->_date_friday    = CMbDT::date("+4 DAY", $this->date_monday);
+    $this->_date_saturday  = CMbDT::date("+5 DAY", $this->date_monday);
+    $this->_date_sunday    = CMbDT::date("+6 DAY", $this->date_monday);
     
 		$this->_view = CAppUI::tr("Week") . " $this->_week_number";
 	}
@@ -127,36 +127,36 @@ class CRHS extends CMbObject {
   	$sejour->loadRefPatient();
     
   	$this->_in_bounds = 
-		  $this->date_monday <= mbDate(null, $sejour->_sortie) && 
-      $this->_date_sunday >= mbDate(null, $sejour->_entree);
+		  $this->date_monday <= CMbDT::date(null, $sejour->_sortie) &&
+      $this->_date_sunday >= CMbDT::date(null, $sejour->_entree);
       
     $this->_in_bounds_mon = 
-		  $this->date_monday <= mbDate($sejour->_sortie) && 
-      $this->date_monday >= mbDate($sejour->_entree);
+		  $this->date_monday <= CMbDT::date($sejour->_sortie) &&
+      $this->date_monday >= CMbDT::date($sejour->_entree);
     
     $this->_in_bounds_tue = 
-		  $this->_date_tuesday <= mbDate($sejour->_sortie) && 
-      $this->_date_tuesday >= mbDate($sejour->_entree);
+		  $this->_date_tuesday <= CMbDT::date($sejour->_sortie) &&
+      $this->_date_tuesday >= CMbDT::date($sejour->_entree);
     
     $this->_in_bounds_wed = 
-		  $this->_date_wednesday <= mbDate($sejour->_sortie) && 
-      $this->_date_wednesday >= mbDate($sejour->_entree);
+		  $this->_date_wednesday <= CMbDT::date($sejour->_sortie) &&
+      $this->_date_wednesday >= CMbDT::date($sejour->_entree);
     
     $this->_in_bounds_thu = 
-		  $this->_date_thursday <= mbDate($sejour->_sortie) && 
-      $this->_date_thursday >= mbDate($sejour->_entree);
+		  $this->_date_thursday <= CMbDT::date($sejour->_sortie) &&
+      $this->_date_thursday >= CMbDT::date($sejour->_entree);
     
     $this->_in_bounds_fri = 
-		  $this->_date_friday <= mbDate($sejour->_sortie) && 
-      $this->_date_friday >= mbDate($sejour->_entree);
+		  $this->_date_friday <= CMbDT::date($sejour->_sortie) &&
+      $this->_date_friday >= CMbDT::date($sejour->_entree);
     
     $this->_in_bounds_sat = 
-		  $this->_date_saturday <= mbDate($sejour->_sortie) && 
-      $this->_date_saturday >= mbDate($sejour->_entree);
+		  $this->_date_saturday <= CMbDT::date($sejour->_sortie) &&
+      $this->_date_saturday >= CMbDT::date($sejour->_entree);
     
     $this->_in_bounds_sun = 
-		  $this->_date_sunday <= mbDate($sejour->_sortie) && 
-      $this->_date_sunday >= mbDate($sejour->_entree);
+		  $this->_date_sunday <= CMbDT::date($sejour->_sortie) &&
+      $this->_date_sunday >= CMbDT::date($sejour->_entree);
 			
 		return $this->_ref_sejour;
   }
@@ -177,9 +177,9 @@ class CRHS extends CMbObject {
     }
     
 		for (
-		  $date_monday = mbDate("last sunday + 1 day", $sejour->_entree);
+		  $date_monday = CMbDT::date("last sunday + 1 day", $sejour->_entree);
 			$date_monday <= $sejour->_sortie;
-			$date_monday = mbDate("+1 week", $date_monday)
+			$date_monday = CMbDT::date("+1 week", $date_monday)
 		) {
 			if (!isset($rhss[$date_monday])) {
 				$rhs = new CRHS;
@@ -228,7 +228,7 @@ class CRHS extends CMbObject {
     );
     
     foreach($chrono as $ref => &$dep) {
-      $date = mbDate("$ref WEEKS", $this->date_monday);
+      $date = CMbDT::date("$ref WEEKS", $this->date_monday);
       
       if (array_key_exists($date, $all_rhs)) {
       	$_rhs = $all_rhs[$date];

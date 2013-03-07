@@ -152,7 +152,7 @@ if (!$consult->_id && $consult_urgence_id){
 
 // Locks sur le rendez-vous
 $consult->_locks = null;
-$today = mbDate();
+$today = CMbDT::date();
 if ($consult->_id) {
   if ($consult->_datetime < $today) {
     $consult->_locks[] = "datetime";

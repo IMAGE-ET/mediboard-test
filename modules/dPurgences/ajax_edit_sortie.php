@@ -25,7 +25,7 @@ $sejour->loadRefsConsultations();
 
 // Horaire par défaut
 if (!$sejour->sortie_reelle) {
-	$sejour->sortie_reelle = mbDateTime();
+	$sejour->sortie_reelle = CMbDT::dateTime();
 }
 
 $where = array();
@@ -46,7 +46,7 @@ foreach($blocages_lit as $blocage){
 	{
 		$affectation->loadRefSejour();
 		$affectation->_ref_sejour->loadRefPatient();
-    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".mbTransformTime($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
+    $blocage->_ref_lit->_view .= " indisponible jusqu'à ".CMbDT::transform($affectation->sortie, null, "%Hh%Mmin %d-%m-%Y")." (".$affectation->_ref_sejour->_ref_patient->_view.")";
 	}
 }
 

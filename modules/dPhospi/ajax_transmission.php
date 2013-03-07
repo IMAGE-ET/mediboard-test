@@ -103,8 +103,8 @@ $smarty->assign("update_plan_soin", $update_plan_soin);
 $smarty->assign("data_id"  , $data_id);
 $smarty->assign("action_id", $action_id);
 $smarty->assign("result_id", $result_id);
-$smarty->assign("date", mbDate());
-$smarty->assign("hour", mbTransformTime(null, mbTime(), "%H"));
+$smarty->assign("date", CMbDT::date());
+$smarty->assign("hour", CMbDT::transform(null, CMbDT::time(), "%H"));
 
 $smarty->display("inc_transmission.tpl");
 ?>

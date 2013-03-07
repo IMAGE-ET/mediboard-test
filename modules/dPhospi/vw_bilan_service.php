@@ -38,14 +38,14 @@ $show_inactive = CValue::get("show_inactive", "0");
 $_present_only = CValue::get("_present_only", 1);
 $mode_urgences = CValue::get("mode_urgences", 0);
 $offline       = CValue::get("offline", 0);
-$date          = CValue::getOrSession("date", mbDate());
+$date          = CValue::getOrSession("date", CMbDT::date());
 $do            = CValue::get("do");
 
 if ($offline) {
   $by_patient = true;
   $do = 1;
-  $dateTime_min = mbDateTime(" - 12 HOURS");
-  $dateTime_max = mbDateTime(" + 24 HOURS");
+  $dateTime_min = CMbDT::dateTime(" - 12 HOURS");
+  $dateTime_max = CMbDT::dateTime(" + 24 HOURS");
 }
 else {
   $dateTime_min = CValue::getOrSession("_dateTime_min", "$date 00:00:00");
@@ -54,8 +54,8 @@ else {
 
 $categories = CCategoryPrescription::loadCategoriesByChap(null, "current");
 
-$date_min = mbDate($dateTime_min);
-$date_max = mbDate($dateTime_max);
+$date_min = CMbDT::date($dateTime_min);
+$date_max = CMbDT::date($dateTime_max);
 
 if ($token_cat == "all") {
   $token_cat = "trans|med|inj|perf|aerosol";
@@ -83,14 +83,14 @@ $do_stupefiants = (in_array("stup"   , $cats));
 $do_trans       = (in_array("trans"  , $cats));
 
 // Filtres sur l'heure des prises
-$time_min = mbTime($dateTime_min, "00:00:00");
-$time_max = mbTime($dateTime_max, "23:59:59");
+$time_min = CMbDT::time($dateTime_min, "00:00:00");
+$time_max = CMbDT::time($dateTime_max, "23:59:59");
 
 // Stockage des jours concernés par le chargement
 $dates = array();
-$nb_days = mbDaysRelative($date_min, $date_max);
+$nb_days = CMbDT::daysRelative($date_min, $date_max);
 for ($i = 0 ; $i <= $nb_days ; $i++) {
-  $dates[] = mbDate("+ $i DAYS", $date_min);
+  $dates[] = CMbDT::date("+ $i DAYS", $date_min);
 }
 
 $sejours       = array();

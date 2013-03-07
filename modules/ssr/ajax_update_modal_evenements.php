@@ -48,7 +48,7 @@ foreach($events as $_event){
   $sejours[$_event->sejour_id] = $_event->_ref_sejour;
   $_event->loadRefPrescriptionLineElement();
   $element_prescription_id = $_event->_ref_prescription_line_element->element_prescription_id;
-  $date_debut = mbDate($_event->debut);
+  $date_debut = CMbDT::date($_event->debut);
   $evenements[$_event->sejour_id][$element_prescription_id.$date_debut][$_event->_id] = $_event;
 }
 

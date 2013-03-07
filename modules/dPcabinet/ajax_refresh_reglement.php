@@ -29,7 +29,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("facture"       , $facture);
 $smarty->assign("banques"       , $banques);
 $smarty->assign("reglement"     , $reglement);
-$smarty->assign("date"          , mbDate());
+$smarty->assign("date"          , CMbDT::date());
 
 $smarty->display("inc_vw_reglements.tpl");
 ?>

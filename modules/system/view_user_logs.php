@@ -9,7 +9,7 @@
  */
 
 CCanDo::checkRead();
-$date     = CValue::getOrSession("date"    , mbDate());
+$date     = CValue::getOrSession("date"    , CMbDT::date());
 $groupmod = CValue::getOrSession("groupmod", 2);
 
 // Hour range for daily stats
@@ -29,26 +29,26 @@ CAppUI::requireModuleFile('dPstats', 'graph_userlog');
 
 $listModules = CModule::getInstalled();
 
-$to    = mbDate("+1 DAY", $date);
+$to    = CMbDT::date("+1 DAY", $date);
 switch ($interval = CValue::getOrSession("interval", "day")) {
   default:
   case "day":
-    $from = mbDate("-1 DAY", $to);
+    $from = CMbDT::date("-1 DAY", $to);
     // Hours limitation
-    $from = mbDateTime("+$hour_min HOUR", $from);
-    $to   = mbDateTime("-1 DAY +$hour_max HOUR", $to  );
+    $from = CMbDT::dateTime("+$hour_min HOUR", $from);
+    $to   = CMbDT::dateTime("-1 DAY +$hour_max HOUR", $to  );
     break;
   case "month":
-    $from = mbDate("-1 MONTH", $to);
+    $from = CMbDT::date("-1 MONTH", $to);
     break;
   case "hyear":
-    $from = mbDate("-6 MONTH", $to);
+    $from = CMbDT::date("-6 MONTH", $to);
     break;
   case "twoyears":
-    $from = mbDate("-2 YEARS", $to);
+    $from = CMbDT::date("-2 YEARS", $to);
     break;
   case "twentyyears":
-    $from = mbDate("-20 YEARS", $to);
+    $from = CMbDT::date("-20 YEARS", $to);
     break;
 }
 

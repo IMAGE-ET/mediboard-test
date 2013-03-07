@@ -16,8 +16,8 @@ $debut_selection = CValue::get("debut_selection");
 $fin_selection   = CValue::get("fin_selection");
 
 if (!$debut_selection || !$fin_selection) {
-  $fin_selection   = mbDate()." 00:00:00";
-  $debut_selection = mbDate("-7 DAY", $fin_selection)." 00:00:00";
+  $fin_selection   = CMbDT::date()." 00:00:00";
+  $debut_selection = CMbDT::date("-7 DAY", $fin_selection)." 00:00:00";
 }
 
 // Chargement des rpu de la main courante
@@ -42,7 +42,7 @@ foreach ($sejours as &$_sejour) {
   $_sejour->loadRefRPU();
   $_sejour->_ref_rpu->loadRefSejourMutation();
   
-  $entree_patient = mbDate($_sejour->entree);
+  $entree_patient = CMbDT::date($_sejour->entree);
   
   if (!array_key_exists($entree_patient, $stats)) {
     $stats[$entree_patient] = array (
@@ -84,7 +84,7 @@ foreach ($sejours as &$_sejour) {
 }
 
 $extractPassages = new CExtractPassages();
-$extractPassages->date_extract    = mbDateTime();
+$extractPassages->date_extract    = CMbDT::dateTime();
 $extractPassages->type            = "urg";
 $extractPassages->debut_selection = $debut_selection;
 $extractPassages->fin_selection   = $fin_selection;
@@ -100,7 +100,7 @@ if (!$rpuSender) {
 }
 $extractPassages = $rpuSender->extractURG($extractPassages, $stats);
 
-CAppUI::stepAjax("Extraction de $count_sejour séjours du ".mbDateToLocale($debut_selection)." au ".mbDateToLocale($fin_selection)." terminée.", UI_MSG_OK);
+CAppUI::stepAjax("Extraction de $count_sejour séjours du ".CMbDT::dateToLocale($debut_selection)." au ".CMbDT::dateToLocale($fin_selection)." terminée.", UI_MSG_OK);
 if (!$extractPassages->message_valide)
   CAppUI::stepAjax("Le document produit n'est pas valide.", UI_MSG_WARNING);
 else 
