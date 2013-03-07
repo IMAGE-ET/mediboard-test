@@ -98,11 +98,17 @@ checkActe = function(button) {
 Main.add( function(){
   prepareForm(document.accidentTravail);
   
+  {{if $consult->type_assurance}}
+    var url = new Url("cabinet", "ajax_type_assurance");
+    url.addParam("consult_id", '{{$consult->_id}}');
+    url.requestUpdate("area_type_assurance");
+  {{/if}}
+  
   {{if $consult->_ref_patient->ald}}
-  if($('accidentTravail_concerne_ALD_1')){
-    $('accidentTravail_concerne_ALD_1').checked = "checked";
-    onSubmitFormAjax(document.accidentTravail);
-  }
+    if($('accidentTravail_concerne_ALD_1')){
+      $('accidentTravail_concerne_ALD_1').checked = "checked";
+      onSubmitFormAjax(document.accidentTravail);
+    }
   {{/if}}	
 });
 </script>
@@ -123,7 +129,6 @@ Main.add( function(){
     <td colspan="2" id="area_type_assurance">
     </td>
   </tr>
-
   
   <tr>
     {{if $gestionFSE}}

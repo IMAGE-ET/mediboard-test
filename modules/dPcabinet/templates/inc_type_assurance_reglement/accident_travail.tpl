@@ -7,9 +7,9 @@
   });
 
   refreshAt = function() {
-    new Url("dPcabinet", "ajax_refresh_accident_travail")
-    .addParam("consult_id", "{{$consult->_id}}")
-    .requestUpdate("at_area");
+    var url = new Url("cabinet", "ajax_type_assurance");
+    url.addParam("consult_id", '{{$consult->_id}}');
+    url.requestUpdate("area_type_assurance");
   }
 
   updateDates = function(elt) {
@@ -22,7 +22,7 @@
   }
 </script>
     
-<form name="editConsultation" method="post" action="?" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshAt})">
+<form name="editConsultation" method="post" action="?" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="dosql" value="do_consultation_aed" />
   <input type="hidden" name="ajax" value="1" />
@@ -41,7 +41,7 @@
               </tr>
               <tr>
                 <th style="width: 30%">{{mb_label object=$consult field=date_at}}</th>
-                <td>{{mb_field object=$consult field=date_at form=editConsultation register=true onchange="updateDates(this); this.form.onsubmit();"}}</td>    
+                <td>{{mb_field object=$consult field=date_at form=editConsultation register=true onchange="updateDates(this); onSubmitFormAjax(this.form, {onComplete: refreshAt});"}}</td>    
               </tr>
               <tr>
                 <th>{{mb_label object=$consult field=fin_at}}</th>
@@ -57,9 +57,9 @@
                 <th>{{mb_label object=$consult field=pec_at}}</th>
                 <td>
                   {{if $consult->date_at}}
-                    {{mb_field object=$consult field=pec_at onchange="this.form.onsubmit()" emptyLabel="Choose" typeEnum="radio"}}
+                    {{mb_field object=$consult field=pec_at onchange="this.form.onsubmit()" typeEnum="radio"}}
                   {{else}}
-                    {{mb_field object=$consult field=pec_at emptyLabel="Choose" readonly=readonly typeEnum="radio"}}
+                    {{mb_field object=$consult field=pec_at readonly=readonly typeEnum="radio"}}
                   {{/if}}
                 </td>
               </tr>
