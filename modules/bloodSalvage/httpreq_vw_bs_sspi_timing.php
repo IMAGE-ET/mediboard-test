@@ -11,9 +11,9 @@
 CCanDo::checkRead();
 
 $blood_salvage_id = CValue::getOrSession("blood_salvage_id");
-$date  = CValue::getOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", CMbDT::date());
 $timing  = CValue::getOrSession("timing");
-$modif_operation    = CCanDo::edit() || $date >= mbDate();
+$modif_operation    = CCanDo::edit() || $date >= CMbDT::date();
 
 
 $blood_salvage = new CBloodSalvage();
@@ -27,7 +27,7 @@ if($blood_salvage_id){
   $timing["_transfusion_end"]          = array();
   foreach($timing as $key => $value) {
     for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $blood_salvage->$key !== null; $i++) {
-      $timing[$key][] = mbTime("$i minutes", $blood_salvage->$key);
+      $timing[$key][] = CMbDT::time("$i minutes", $blood_salvage->$key);
     }
   }
 }

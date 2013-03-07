@@ -19,12 +19,12 @@ if ($blood_salvage_id) {
 	$blood_salvage->loadRefPlageOp();
 	
 	if ($blood_salvage->recuperation_start && $blood_salvage->transfusion_end) {
-		$totaltime = mbTimeRelative($blood_salvage->recuperation_start, $blood_salvage->transfusion_end);
+		$totaltime = CMbDT::timeRelative($blood_salvage->recuperation_start, $blood_salvage->transfusion_end);
 	} 
 	elseif ($blood_salvage->recuperation_start){
-		$totaltime = mbTimeRelative($blood_salvage->recuperation_start,mbDate($blood_salvage->_datetime)." ".mbTime());
+		$totaltime = CMbDT::timeRelative($blood_salvage->recuperation_start,CMbDT::date($blood_salvage->_datetime)." ".CMbDT::time());
 	}	
-	$timeleft = mbTimeRelative($totaltime,"06:00:00");
+	$timeleft = CMbDT::timeRelative($totaltime,"06:00:00");
 	if ($totaltime > "06:00:00") {
     $timeleft = "00:00:00";
 	}

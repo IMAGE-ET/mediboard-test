@@ -65,7 +65,7 @@ class CViewAccessToken extends CMbObject {
   function store() {
     $this->completeField("datetime_start");
     if (!$this->datetime_start) {
-      $this->datetime_start = mbDateTime();
+      $this->datetime_start = CMbDT::dateTime();
     }
     
     if (!$this->_id) {
@@ -107,7 +107,7 @@ class CViewAccessToken extends CMbObject {
    * @return datetime The datetime of expiration
    */
   function getTokenExpiration() {
-    return mbDateTime("+ $this->ttl_hours HOURS", $this->datetime_start);
+    return CMbDT::dateTime("+ $this->ttl_hours HOURS", $this->datetime_start);
   }
 
   /**
@@ -120,7 +120,7 @@ class CViewAccessToken extends CMbObject {
       return false;
     }
     
-    $now = mbDateTime();
+    $now = CMbDT::dateTime();
     return $now >= $this->datetime_start && $now <= $this->getTokenExpiration();
   }
 
@@ -150,7 +150,7 @@ class CViewAccessToken extends CMbObject {
     $this->completeField("first_use");
     
     if ($this->_id && !$this->first_use) {
-      $this->first_use = mbDateTime();
+      $this->first_use = CMbDT::dateTime();
     }
     
     $this->store();

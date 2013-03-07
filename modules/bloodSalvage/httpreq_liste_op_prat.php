@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$date  = CValue::getOrSession("date", mbDate());
+$date  = CValue::getOrSession("date", CMbDT::date());
 $operation_id = CValue::getOrSession("operation_id");
 
 // Liste des blocs

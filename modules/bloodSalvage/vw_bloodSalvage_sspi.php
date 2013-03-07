@@ -12,7 +12,7 @@ CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 
 $selOp = new COperation;
 $blood_salvage      = new CBloodSalvage();
-$date               = CValue::getOrSession("date", mbDate());
+$date               = CValue::getOrSession("date", CMbDT::date());
 $op                 = CValue::getOrSession("op");
 
 

@@ -12,9 +12,9 @@ CCanDo::checkRead();
 
 $salle            = CValue::getOrSession("salle");
 $op               = CValue::getOrSession("op");
-$date             = CValue::getOrSession("date", mbDate());
+$date             = CValue::getOrSession("date", CMbDT::date());
 
-$modif_operation  = CCanDo::edit() || $date >= mbDate();
+$modif_operation  = CCanDo::edit() || $date >= CMbDT::date();
 $timing = array();
 
 $inLivretTherapeutique = CAppUI::conf("bloodSalvage inLivretTherapeutique");
@@ -54,7 +54,7 @@ if ($op) {
   $timing["_recuperation_start"] = array();
   foreach($timing as $key => $value) {
     for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $blood_salvage->$key !== null; $i++) {
-      $timing[$key][] = mbTime("$i minutes", $blood_salvage->$key);
+      $timing[$key][] = CMbDT::time("$i minutes", $blood_salvage->$key);
     }
   }
 }

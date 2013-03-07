@@ -74,11 +74,11 @@ function computeMeanValue(&$where, &$ljoin, &$serie, $dates, $prop) {
 
 // Dates
 $dates = array();
-$first_day = mbTransformTime(null, null, "%Y-%m-01");
+$first_day = CMbDT::transform(null, null, "%Y-%m-01");
 for ($i = $months_count - 1; $i >= 0; --$i) {
   $mr = $months_relative+$i;
-  $sample_end = mbTransformTime("-$mr MONTHS", $first_day, "%Y-%m-31 23:59:59");
-  $sample_start = mbTransformTime("-$mr MONTHS", $first_day, "%Y-%m-01 00:00:00");
+  $sample_end = CMbDT::transform("-$mr MONTHS", $first_day, "%Y-%m-31 23:59:59");
+  $sample_start = CMbDT::transform("-$mr MONTHS", $first_day, "%Y-%m-01 00:00:00");
 
   $dates[$sample_start] = array(
     'start' => $sample_start,
@@ -129,8 +129,8 @@ foreach($age_areas as $key => $age) {
   $limits = array($age, CValue::read($age_areas, $key+1));
   $label = $limits[1] ? ("$limits[0] - ".($limits[1]-1)) : ">= $limits[0]";
   
-  $date_min = mbDate("-{$limits[1]} YEARS");
-  $date_max = mbDate("-{$limits[0]} YEARS");
+  $date_min = CMbDT::date("-{$limits[1]} YEARS");
+  $date_max = CMbDT::date("-{$limits[0]} YEARS");
   
   // Age calculation
   $where[] = "patients.naissance <= '$date_max' ".
@@ -270,7 +270,7 @@ if ($mode === "comparison") {
 $i = 0;
 $ticks = array();
 foreach ($dates as $month => $date) {
-  $ticks[$i] = array($i, mbTransformTime(null, $month, '%m/%y'));
+  $ticks[$i] = array($i, CMbDT::transform(null, $month, '%m/%y'));
   $i++;
 }
 

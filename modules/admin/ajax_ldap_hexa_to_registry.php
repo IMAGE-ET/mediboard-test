@@ -27,7 +27,7 @@ foreach($list as $_id_ext) {
   $count++;
   
   $_id_ext->id400 = CLDAP::convertHexaToRegistry($_id_ext->id400);
-  $_id_ext->last_update = mbDateTime();
+  $_id_ext->last_update = CMbDT::dateTime();
   
   if ($msg = $_id_ext->store()) {
     CAppUI::setMsg($msg, UI_MSG_WARNING);

@@ -141,16 +141,16 @@ class CBloodSalvage extends CMbObject {
   
   function updateFormFields() {    
     if($this->recuperation_start){
-      $this->_recuperation_start = mbTime($this->recuperation_start);
+      $this->_recuperation_start = CMbDT::time($this->recuperation_start);
     }
     if($this->recuperation_end){
-      $this->_recuperation_end = mbTime($this->recuperation_end);
+      $this->_recuperation_end = CMbDT::time($this->recuperation_end);
     }
     if($this->transfusion_start){
-      $this->_transfusion_start = mbTime($this->transfusion_start);
+      $this->_transfusion_start = CMbDT::time($this->transfusion_start);
     }
     if($this->transfusion_end){
-      $this->_transfusion_end = mbTime($this->transfusion_end);
+      $this->_transfusion_end = CMbDT::time($this->transfusion_end);
     }
   }
   
@@ -159,42 +159,42 @@ class CBloodSalvage extends CMbObject {
     $this->loadRefPlageOp();
     
     if($this->_recuperation_start =="current") {
-      $this->_recuperation_start = mbTime();
+      $this->_recuperation_start = CMbDT::time();
     }
     if($this->_recuperation_end =="current") {
-      $this->_recuperation_end = mbTime();
+      $this->_recuperation_end = CMbDT::time();
     }
     if($this->_transfusion_start =="current") {
-      $this->_transfusion_start = mbTime();
+      $this->_transfusion_start = CMbDT::time();
     }
     if($this->_transfusion_end =="current") {
-      $this->_transfusion_end = mbTime();
+      $this->_transfusion_end = CMbDT::time();
     }
     
     if($this->_recuperation_start !== null && $this->_recuperation_start !="") {
-      $this->_recuperation_start = mbTime($this->_recuperation_start);
-      $this->recuperation_start = mbAddDateTime($this->_recuperation_start, mbDate($this->_datetime));
+      $this->_recuperation_start = CMbDT::time($this->_recuperation_start);
+      $this->recuperation_start = CMbDT::addDateTime($this->_recuperation_start, CMbDT::date($this->_datetime));
     }
     if($this->_recuperation_start === ""){
         $this->recuperation_start= "";
     }
     if($this->_recuperation_end !== null && $this->_recuperation_end !="") {
-      $this->_recuperation_end = mbTime($this->_recuperation_end);
-      $this->recuperation_end = mbAddDateTime($this->_recuperation_end, mbDate($this->_datetime));
+      $this->_recuperation_end = CMbDT::time($this->_recuperation_end);
+      $this->recuperation_end = CMbDT::addDateTime($this->_recuperation_end, CMbDT::date($this->_datetime));
     }
     if($this->_recuperation_end === ""){
         $this->recuperation_end= "";
     }
     if($this->_transfusion_start !== null && $this->_transfusion_start !="") {
-      $this->_transfusion_start = mbTime($this->_transfusion_start);
-      $this->transfusion_start = mbAddDateTime($this->_transfusion_start, mbDate($this->_datetime));
+      $this->_transfusion_start = CMbDT::time($this->_transfusion_start);
+      $this->transfusion_start = CMbDT::addDateTime($this->_transfusion_start, CMbDT::date($this->_datetime));
     }
     if($this->_transfusion_start === ""){
         $this->transfusion_start= "";
     }
     if($this->_transfusion_end !== null && $this->_transfusion_end !="") {
-      $this->_transfusion_end = mbTime($this->_transfusion_end);
-      $this->transfusion_end = mbAddDateTime($this->_transfusion_end, mbDate($this->_datetime));
+      $this->_transfusion_end = CMbDT::time($this->_transfusion_end);
+      $this->transfusion_end = CMbDT::addDateTime($this->_transfusion_end, CMbDT::date($this->_datetime));
     }
     if($this->_transfusion_end === ""){
         $this->transfusion_end= "";

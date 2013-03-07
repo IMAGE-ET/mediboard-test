@@ -14,7 +14,7 @@ $year = date("Y");
 
 $filter->user_id    = CValue::get("user_id", CAppUI::$user->_id);
 $filter->_id = CValue::get("plage_id","");
-$filter->date_debut = CValue::get("date_debut", mbDate());
+$filter->date_debut = CValue::get("date_debut", CMbDT::date());
 $filter->date_fin   = CValue::get("date_fin"  , "$year-12-31");
 
 // load available users

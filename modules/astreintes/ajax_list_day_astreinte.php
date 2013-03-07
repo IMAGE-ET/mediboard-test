@@ -12,7 +12,7 @@ CCanDo::checkRead();
 
 
 // @TODO : faire un detection de plage et non un chargement d'une journée
-$date = CValue::get("date", mbDate());
+$date = CValue::get("date", CMbDT::date());
 
 
 

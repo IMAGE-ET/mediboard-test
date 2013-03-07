@@ -31,7 +31,7 @@ function loadAffected(&$blood_salvage_id, &$list_nurse_sspi, &$tabAffected, &$ti
 	foreach($tabAffected as $id => $affectation){
 	  foreach($timingAffect[$affectation->_id] as $key => $value){
 	    for($i = -10; $i < 10 && $affectation->$key !== null; $i++) {
-	      $timingAffect[$affectation->_id][$key][] = mbTime("$i minutes", $affectation->$key);
+	      $timingAffect[$affectation->_id][$key][] = CMbDT::time("$i minutes", $affectation->$key);
 	    }  
 	  }   
 	}
