@@ -112,8 +112,7 @@ foreach ($profiles as $profile => $_user_id) {
   foreach ($codes as $value) {
     $val_code = $value["code"];
 
-    $code_cim10 = new CCodeCIM10;
-    $code_cim10->CCodeCIM10($val_code, 1);
+    $code_cim10 = new CCodeCIM10($val_code, 1);
     $list[$val_code] = $code_cim10;
     $nb_code = 0;
 
