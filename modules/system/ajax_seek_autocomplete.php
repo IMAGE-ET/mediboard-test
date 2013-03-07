@@ -19,10 +19,11 @@ $where        = CValue::get('where', array());
 $whereComplex = CValue::get('whereComplex', array());
 $ljoin        = CValue::get("ljoin", array());
 
+/** @var CMbObject $object */
 $object = new $object_class;
 $ds = $object->_spec->ds;
 
-foreach($where as $key => $value) {
+foreach ($where as $key => $value) {
   $where[$key] = $ds->prepare("= %", $value);
   $object->$key = $value;
 }
