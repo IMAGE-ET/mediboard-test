@@ -1,14 +1,12 @@
 <?php
-
 /**
- * Source LDAP Admin
- *  
- * @category Admin
- * @package  Mediboard
- * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version  SVN: $Id:$ 
- * @link     http://www.mediboard.org
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage admin
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -16,27 +14,25 @@
  * Source LDAP
  */
 
-class CSourceLDAP extends CMbObject{
-  // DB Table key
-  var $source_ldap_id            = null;
+class CSourceLDAP extends CMbObject {
+  public $source_ldap_id;
   
   // DB Fields
-  var $name                      = null;
-  var $host                      = null;
-  var $port                      = null;
-  var $rootdn                    = null;
-  var $bind_rdn_suffix           = null;
-  var $ldap_opt_protocol_version = null;
-  var $ldap_opt_referrals        = null;
-  var $priority                  = null;
-  var $secured                   = null;
-  
-  var $_options                  = array();
-  var $_ldapconn                 = null;
+  public $name;
+  public $host;
+  public $port;
+  public $rootdn;
+  public $bind_rdn_suffix;
+  public $ldap_opt_protocol_version;
+  public $ldap_opt_referrals;
+  public $priority;
+  public $secured;
+
+  public $_options = array();
+  public $_ldapconn;
   
   function getSpec() {
     $spec = parent::getSpec();
-    
     $spec->table = 'source_ldap';
     $spec->key   = 'source_ldap_id';
     return $spec;
@@ -69,19 +65,18 @@ class CSourceLDAP extends CMbObject{
    * @return resource link_identifier 
    */
   function ldap_connect() {
-    if (!function_exists("ldap_connect")){
+    if (!function_exists("ldap_connect")) {
       throw new CMbException("CSourceLDAP_ldap-functions-not-available");
     }
     
-    if (!$fp = @fsockopen($this->host, $this->port, $errno, $errstr, 2)){
+    if (!$fp = @fsockopen($this->host, $this->port, $errno, $errstr, 2)) {
       throw new CMbException("CSourceLDAP_unreachable", $this->host);
-      return false;
     }
     
     fclose($fp);
     
     $host = ($this->secured ? "ldaps://" : "") . $this->host;
-    $ldapconn = @ldap_connect($this->host, $this->port);
+    $ldapconn = @ldap_connect($host, $this->port);
     if (!$ldapconn) {
       throw new CMbException("CSourceLDAP_no-connexion", $this->host);
     }
@@ -92,13 +87,17 @@ class CSourceLDAP extends CMbObject{
 
     return $ldapconn;
   }
-  
+
   /**
-   * @param resource $ldapconn [optional]
-   * @param string   $ldaprdn [optional]
-   * @param string   $ldappass [optional]
+   * Bind to the LDAP
+   *
+   * @param resource $ldapconn               [optional]
+   * @param string   $ldaprdn                [optional]
+   * @param string   $ldappass               [optional]
    * @param boolean  $showInvalidCredentials [optional]
-   * @return 
+   *
+   * @throws CMbException
+   * @return bool
    */
   function ldap_bind($ldapconn = null, $ldaprdn = null, $ldappass = null, $showInvalidCredentials = false) {
     if (!$ldapconn) {
@@ -115,7 +114,6 @@ class CSourceLDAP extends CMbObject{
     if (!$showInvalidCredentials && ($error == 49)) {
       $error = $this->get_error_message($ldapconn);
       throw new CMbException("CSourceLDAP-invalid_credentials", $error);
-      return false;
     }
     
     if (!$ldapbind) {
@@ -136,7 +134,8 @@ class CSourceLDAP extends CMbObject{
    * @param resource $ldapconn [optional]
    * @param string   $filter [optional]
    * @param array    $entry [optional]
-   * @return 
+   *
+   * @return bool
    */
   function ldap_mod_replace($ldapconn = null, $dn = null, $entry) {
     if (!$ldapconn) {

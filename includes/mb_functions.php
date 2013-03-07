@@ -460,7 +460,7 @@ function bindHashToObject($hash, &$object) {
   $vars = get_object_vars($object);
   foreach ($hash as $k => $v) {
     if (array_key_exists($k, $vars)) {
-      $object->$k = $hash[$k];
+      $object->$k = $v;
     }
   }
 }

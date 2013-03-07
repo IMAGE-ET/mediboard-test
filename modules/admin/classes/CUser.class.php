@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage admin
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -13,64 +14,64 @@
  */
 class CUser extends CMbObject {
   // DB key
-  var $user_id                   = null;
+  public $user_id;
 
   // DB fields
-  var $user_username             = null;
-  var $user_password             = null;
-  var $user_salt                 = null;
-  var $user_type                 = null;
-  var $user_first_name           = null;
-  var $user_last_name            = null;
-  var $user_email                = null;
-  var $user_phone                = null;
-  var $user_mobile               = null;
-  var $user_astreinte            = null;
-  var $user_address1             = null;
-  var $user_city                 = null;
-  var $user_zip                  = null;
-  var $user_country              = null;
-  var $user_birthday             = null;
-  var $user_last_login           = null;
-  var $user_login_errors         = null;
-  var $template                  = null;
-  var $profile_id                = null;
-  var $dont_log_connection       = null;
-  var $user_password_last_change = null;
+  public $user_username;
+  public $user_password;
+  public $user_salt;
+  public $user_type;
+  public $user_first_name;
+  public $user_last_name;
+  public $user_email;
+  public $user_phone;
+  public $user_mobile;
+  public $user_astreinte;
+  public $user_address1;
+  public $user_city;
+  public $user_zip;
+  public $user_country;
+  public $user_birthday;
+  public $user_last_login;
+  public $user_login_errors;
+  public $template;
+  public $profile_id;
+  public $dont_log_connection;
+  public $user_password_last_change;
 
   // Derived fields
-  var $_user_password        = null;
-  var $_user_password_weak   = null;
-  var $_user_password_strong = null;
-  var $_login_locked         = null;
-  var $_ldap_linked          = null;
-  var $_user_actif           = null;
-  var $_user_cps             = null;
-  var $_user_deb_activite    = null;
-  var $_user_fin_activite    = null;
-  var $_count_connections    = null;
+  public $_user_password;
+  public $_user_password_weak;
+  public $_user_password_strong;
+  public $_login_locked;
+  public $_ldap_linked;
+  public $_user_actif;
+  public $_user_cps;
+  public $_user_deb_activite;
+  public $_user_fin_activite;
+  public $_count_connections;
 
-  var $_is_logging           = null;
-  var $_user_salt            = null;
+  public $_is_logging;
+  public $_user_salt;
 
-  var $_is_changing          = null;
+  public $_is_changing;
 
   // Behaviour fields
-  var $_purge_connections = null;
+  public $_purge_connections;
 
   // Form fields
-  var $_user_type_view    = null;
+  public $_user_type_view;
 
   // Object references
-  var $_ref_preferences = null;
+  public $_ref_preferences;
 
   /**
    * @var CMediusers
    */
-  var $_ref_mediuser    = null;
+  public $_ref_mediuser;
 
   // Object collections
-  var $_ref_profiled_users = null;
+  public $_ref_profiled_users;
 
   static $types = array(
     // DEFAULT USER (nothing special)

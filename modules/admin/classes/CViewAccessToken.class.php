@@ -1,28 +1,29 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage admin
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * Temporary view access token
  */
 class CViewAccessToken extends CMbObject {
-  var $view_access_token_id = null;
+  public $view_access_token_id;
 
-  var $user_id        = null;
-  var $datetime_start = null;
-  var $ttl_hours      = null;
-  var $first_use      = null;
-  var $params         = null;
-  var $hash           = null;
+  public $user_id;
+  public $datetime_start;
+  public $ttl_hours;
+  public $first_use;
+  public $params;
+  public $hash;
   
-  var $_ref_user      = null;
-  var $_url           = null;
+  public $_ref_user;
+  public $_url;
   
   function getSpec() {
     $spec = parent::getSpec();

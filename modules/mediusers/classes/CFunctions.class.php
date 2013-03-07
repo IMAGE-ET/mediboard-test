@@ -1,57 +1,61 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage mediusers
- *  @version $Revision$
- *  @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage mediusers
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
  * The CFunction Class
  */
 class CFunctions extends CMbObject {
   // DB Table key
-  var $function_id = null;
+  public $function_id;
 
   // DB References
-  var $group_id = null;
+  public $group_id;
 
   // DB Fields
-  var $type      = null;
-  var $text      = null;
-  var $soustitre = null;
-  var $color     = null;
-  var $adresse   = null;
-  var $cp        = null;
-  var $ville     = null;
-  var $tel       = null;
-  var $fax       = null;
-  var $actif     = null;
-  var $compta_partagee    = null;
-  var $admission_auto     = null;
-  var $consults_partagees = null;
-  var $quotas             = null;
-  var $facturable         = null;
-  
-  // Object References
-  var $_ref_group = null;
-  var $_ref_users = null;
-  
+  public $type;
+  public $text;
+  public $soustitre;
+  public $color;
+  public $adresse;
+  public $cp;
+  public $ville;
+  public $tel;
+  public $fax;
+  public $actif;
+  public $compta_partagee;
+  public $admission_auto;
+  public $consults_partagees;
+  public $quotas;
+  public $facturable;
+
+  /** @var CGroups */
+  public $_ref_group;
+
+  /** @var CMediusers[] */
+  public $_ref_users;
+
   // Form fields
-  var $_ref_protocoles   = array();
-  var $_count_protocoles = null;
-  
+  public $_ref_protocoles = array();
+  public $_count_protocoles;
+
   // Filter fields
-  var $_skipped = null;
-  
+  public $_skipped;
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'functions_mediboard';
     $spec->key   = 'function_id';
     return $spec;
   }
-  
+
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["users"]                          = "CMediusers function_id";
@@ -82,13 +86,13 @@ class CFunctions extends CMbObject {
     $backProps["destination_brancardage"]        = "CDestinationBrancardage object_id";
     $backProps["affectations"]                   = "CAffectation function_id";
     $backProps["caisses_maladies"]               = "CCaisseMaladie function_id";
-    
+
     return $backProps;
   }
-  
+
   function getProps() {
     $props = parent::getProps();
-    
+
     $props["group_id"]           = "ref notNull class|CGroups";
     $props["type"]               = "enum notNull list|administratif|cabinet";
     $props["text"]               = "str notNull confidential seekable";
@@ -105,36 +109,46 @@ class CFunctions extends CMbObject {
     $props["actif"]              = "bool default|1";
     $props["quotas"]             = "num pos";
     $props["facturable"]         = "bool default|1";
-    
+
     return $props;
   }
-    
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->text;
     $this->_shortview = CMbString::truncate($this->text);
-   }
-   
-   function loadView() {
-     parent::loadView();
-     $this->loadRefsFwd();
-   }
-  
+  }
+
+  function loadView() {
+    parent::loadView();
+    $this->loadRefsFwd();
+  }
+
   // Forward references
   function loadRefsFwd() {
     $this->loadRefGroup();
   }
-  
+
+  /**
+   * @return CGroups
+   */
   function loadRefGroup() {
     return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
-  
+
   // Backward references
   function loadRefsBack() {
     $this->loadRefsUsers();
   }
-  
+
+  /**
+   * @param string $type
+   *
+   * @return CMediusers[]
+   */
   function loadRefsUsers($type = null) {
+    $user = new CMediusers();
+
     if (!$type) {
       $where = array(
         "function_id" => "= '$this->function_id'",
@@ -144,41 +158,48 @@ class CFunctions extends CMbObject {
         "users" => "`users`.`user_id` = `users_mediboard`.`user_id`"
       );
       $order = "`users`.`user_last_name`, `users`.`user_first_name`";
-      $this->_ref_users = new CMediusers;
-      return $this->_ref_users = $this->_ref_users->loadList($where, $order, null, null, $ljoin);
-    } 
-    else {
-      $this->_ref_users = new CMediusers;
-      return $this->_ref_users = $this->_ref_users->loadListFromType($type, PERM_READ, $this->function_id);
+      return $this->_ref_users = $user->loadList($where, $order, null, null, $ljoin);
     }
+
+    return $this->_ref_users = $user->loadListFromType($type, PERM_READ, $this->function_id);
   }
 
+  /**
+   * @param string $type
+   *
+   * @return CProtocole[]
+   */
   function loadProtocoles($type = null) {
     $where = array(
       "function_id" => "= '$this->_id'"
     );
-    
+
     if ($type) {
       $where["type"] = "= '$type'";
     }
-    
+
     $protocole = new CProtocole();
-    $this->_ref_protocoles = $protocole->loadList($where, "libelle_sejour, libelle, codes_ccam");
+    return $this->_ref_protocoles = $protocole->loadList($where, "libelle_sejour, libelle, codes_ccam");
   }
-  
+
+  /**
+   * @param string $type
+   *
+   * @return int
+   */
   function countProtocoles($type = null) {
     $where = array(
       "function_id" => "= '$this->_id'"
     );
-    
+
     if ($type) {
       $where["type"] = "= '$type'";
     }
-    
+
     $protocole = new CProtocole();
-    $this->_count_protocoles = $protocole->countList($where);
+    return $this->_count_protocoles = $protocole->countList($where);
   }
-  
+
   // @todo : ameliorer le choix des spécialités
   // (loadfunction($groupe, $permtype) par exemple)
   function loadSpecialites($perm_type = null, $include_empty = 0) {
@@ -188,7 +209,7 @@ class CFunctions extends CMbObject {
       "functions_mediboard.group_id" => "= '$group_id'"
     );
     $ljoin = array();
-    if(!$include_empty) {
+    if (!$include_empty) {
       // Fonctions secondaires actives
       $sec_function = new CSecondaryFunction();
       $where_secondary = array();
@@ -200,13 +221,14 @@ class CFunctions extends CMbObject {
       $group = "secondary_function.function_id";
       $sec_functions = $sec_function->loadListWithPerms($perm_type, $where_secondary, null, null, $group, $ljoin);
       $in_functions = CSQLDataSource::prepareIn(CMbArray::pluck($sec_functions, "function_id"));
-      
+
       $ljoin["users_mediboard"] = "users_mediboard.actif = '1' AND users_mediboard.function_id = functions_mediboard.function_id";
       $where[] = "users_mediboard.user_id IS NOT NULL OR functions_mediboard.function_id $in_functions";
     }
+
     return $this->loadListWithPerms($perm_type, $where, "text", null, null, $ljoin);
   }
-  
+
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_group->fillTemplate($template);
@@ -218,4 +240,3 @@ class CFunctions extends CMbObject {
     $template->addProperty("Cabinet - fax"         , $this->getFormattedValue("fax"));
   }
 }
-?>

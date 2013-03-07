@@ -107,7 +107,7 @@ class CMbDT {
    *
    * @return string The DATETIME, null if failed
    **/
-  function dateTimeFromXMLDuration($duration) {
+  static function dateTimeFromXMLDuration($duration) {
     $regexp = "/P((\d+)Y)?((\d+)M)?((\d+)D)?T((\d+)H)?((\d+)M)?((\d+)S)?/";
     if (!preg_match($regexp, $duration, $matches)) {
       return null;
@@ -272,7 +272,7 @@ class CMbDT {
    *
    * @return string Nearest time
    **/
-  function timeGetNearestMinsWithInterval($reference, $mins_interval) {
+  static function timeGetNearestMinsWithInterval($reference, $mins_interval) {
     $min_reference = self::transform(null, $reference, "%M");
     $div = intval($min_reference / $mins_interval);
     $borne_inf = $mins_interval * $div;

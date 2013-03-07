@@ -1,14 +1,15 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage admin
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
-if(!defined("PERM_DENY")) {
+if (!defined("PERM_DENY")) {
   define("PERM_DENY" , 0);
   define("PERM_READ" , 1);
   define("PERM_EDIT" , 2);
@@ -26,24 +27,24 @@ class CPermObject extends CMbObject {
   
   // Stored permissions
   static $users_perms = null;    // OLD query system
-//  static $users_perms = array(); // NEW query system
+  // static $users_perms = array(); // NEW query system
   static $users_cache = array();
   
   // DB Table key
-  var $perm_object_id = null;
+  public $perm_object_id;
   
   // DB Fields
-  var $user_id      = null;
-  var $object_id    = null;
-  var $object_class = null;
-  var $permission   = null;
+  public $user_id;
+  public $object_id;
+  public $object_class;
+  public $permission;
   
   // Distant fields
-  var $_owner = null;
+  public $_owner;
   
   // References
-  var $_ref_db_user   = null;
-  var $_ref_db_object = null;
+  public $_ref_db_user;
+  public $_ref_db_object;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -88,7 +89,9 @@ class CPermObject extends CMbObject {
   /**
    * Build the class object permission tree for given user
    * Cache the result as static member
-   * @param user_id ref|CUser The concerned user, connected user if null
+   *
+   * @param int $user_id The concerned user, connected user if null
+   *
    * @return void
    */
   static function buildUser($user_id = null) {
@@ -113,7 +116,7 @@ class CPermObject extends CMbObject {
     $perms["user"] = $perm->loadMatchingList();
     
     // Build final tree
-    foreach ($perms as $owner => $_perms) {
+    foreach ($perms as $_perms) {
       foreach ($_perms as $_perm) {
         self::$users_perms[$user->_id][$_perm->object_class][$_perm->object_id ? $_perm->object_id : "all"] = $_perm->permission;
       }
@@ -138,13 +141,13 @@ class CPermObject extends CMbObject {
     $permsObjectSelf = CPermObject::loadExactPermsObject($user->user_id);
     
     // Creation du tableau de droits du user
-    foreach ($permsObjectSelf as $key => $value){
+    foreach ($permsObjectSelf as $value) {
       $tabObjectSelf["obj_$value->object_id$value->object_class"] = $value;
     }
     
     // Creation du tableau de droits du profil
     $permsObjectProfil = CPermObject::loadExactPermsObject($user->profile_id);
-    foreach ($permsObjectProfil as $key => $value){
+    foreach ($permsObjectProfil as $value) {
       $tabObjectProfil["obj_$value->object_id$value->object_class"] = $value;
     }
     
@@ -152,7 +155,7 @@ class CPermObject extends CMbObject {
     $tabObjectFinal = array_merge($tabObjectProfil, $tabObjectSelf);
     
     // Creation du tableau de fusion des droits
-    foreach ($tabObjectFinal as $object => $value){
+    foreach ($tabObjectFinal as $value) {
       $permsObjectFinal[$value->perm_object_id] = $value;
     }
 
@@ -172,8 +175,6 @@ class CPermObject extends CMbObject {
   }
   
   static function getPermObject(CMbObject $object, $permType, $defaultObject = null, $user_id = null) {
-//    mbTrace($object->_guid, "Querying Object Perm");
-
     $user = CUser::get($user_id);
     
     // Shorteners
@@ -208,7 +209,6 @@ class CPermObject extends CMbObject {
 
     global $userPermsObjects;
 
-    $result       = PERM_DENY;
     $object_class = $object->_class;
     $object_id    = $object->_id;
     
@@ -231,13 +231,13 @@ class CPermObject extends CMbObject {
     
     if (!$this->perm_object_id) {
       $where = array();
-      $where["user_id"]      = $ds->prepare("= %",$this->user_id);
-      $where["object_class"] = $ds->prepare("= %",$this->object_class);
+      $where["user_id"]      = $ds->prepare("= %", $this->user_id);
+      $where["object_class"] = $ds->prepare("= %", $this->object_class);
       if ($this->object_id) {
-        $where["object_id"]    = $ds->prepare("= %",$this->object_id);
+        $where["object_id"] = $ds->prepare("= %", $this->object_id);
       }
       else {
-        $where["object_id"]    = "IS NULL";
+        $where["object_id"] = "IS NULL";
       }
       
       $query = new CRequest();

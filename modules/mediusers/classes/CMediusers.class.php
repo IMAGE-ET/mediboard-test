@@ -1,144 +1,139 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage mediusers
- *  @version $Revision$
- *  @author Romain Ollivier
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage mediusers
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
  * The CMediusers class
  */
 class CMediusers extends CMbObject {
-  // DB Table key
-  var $user_id = null;
+  public $user_id;
 
   // DB Fields
-  var $remote                      = null;
-  var $adeli                       = null;
-  var $rpps                        = null;
-  var $cps                         = null;
-  var $titres                      = null;
-  var $initials                    = null;
-  var $commentaires                = null;
-  var $actif                       = null;
-  var $deb_activite                = null;
-  var $fin_activite                = null;
-  var $compte                      = null;
-  var $banque_id                   = null;
-  var $mail_apicrypt               = null;
-  var $compta_deleguee             = null;
-  var $last_ldap_checkout          = null;
+  public $remote;
+  public $adeli;
+  public $rpps;
+  public $cps;
+  public $titres;
+  public $initials;
+  public $commentaires;
+  public $actif;
+  public $deb_activite;
+  public $fin_activite;
+  public $compte;
+  public $banque_id;
+  public $mail_apicrypt;
+  public $compta_deleguee;
+  public $last_ldap_checkout;
 
   // DB References
-  var $function_id                 = null;
-  var $discipline_id               = null;
-  var $spec_cpam_id                = null;
+  public $function_id;
+  public $discipline_id;
+  public $spec_cpam_id;
 
-  var $code_intervenant_cdarr      = null;
+  public $code_intervenant_cdarr;
 
-  var $secteur    = null;
+  public $secteur;
   // Champs utilisés pour l'affichage des ordonnances ALD
-  var $cab        = null;
-  var $conv       = null;
-  var $zisd       = null;
-  var $ik         = null;
-  var $ean        = null;
-  var $rcc        = null;
-  var $adherent   = null;
-  var $debut_bvr  = null;
+  public $cab;
+  public $conv;
+  public $zisd;
+  public $ik;
+  public $ean;
+  public $rcc;
+  public $adherent;
+  public $debut_bvr;
 
   // CUser reported fields fields
-  var $_user_type                  = null;
-  var $_user_username              = null;
-  var $_user_password              = null;
-  var $_user_password2             = null;
-  var $_user_first_name            = null;
-  var $_user_last_name             = null;
-  var $_user_email                 = null;
-  var $_user_phone                 = null;
-  var $_user_astreinte             = null;
-  var $_user_adresse               = null;
-  var $_user_cp                    = null;
-  var $_user_ville                 = null;
-  var $_user_last_login            = null;
-  var $_user_template              = null;
+  public $_user_type;
+  public $_user_username;
+  public $_user_password;
+  public $_user_password2;
+  public $_user_first_name;
+  public $_user_last_name;
+  public $_user_email;
+  public $_user_phone;
+  public $_user_astreinte;
+  public $_user_adresse;
+  public $_user_cp;
+  public $_user_ville;
+  public $_user_last_login;
+  public $_user_template;
 
   // Other fields
-  var $_profile_id                 = null;
-  var $_is_praticien               = null;
-  var $_is_dentiste                = null;
-  var $_is_secretaire              = null;
-  var $_is_anesth                  = null;
-  var $_is_infirmiere              = null;
-  var $_is_aide_soignant           = null;
-  var $_is_pharmacien              = null;
-  var $_user_password_weak         = null;
-  var $_user_password_strong       = null;
-  var $_basic_info                 = null;
-  var $_is_urgentiste              = null;
-  var $_force_merge                = false;
-  var $_user_id                    = null;
-  var $_keep_user                  = null;
-  var $_user_type_view             = null;
+  public $_profile_id;
+  public $_is_praticien;
+  public $_is_dentiste;
+  public $_is_secretaire;
+  public $_is_anesth;
+  public $_is_infirmiere;
+  public $_is_aide_soignant;
+  public $_is_pharmacien;
+  public $_user_password_weak;
+  public $_user_password_strong;
+  public $_basic_info;
+  public $_is_urgentiste;
+  public $_force_merge = false;
+  public $_user_id;
+  public $_keep_user;
+  public $_user_type_view;
 
   // Distant fields
-  var $_group_id                   = null;
+  public $_group_id;
 
   // Behaviour fields
-  static $user_autoload            = true;
-  var $_bind_cps                   = null;
-  var $_id_cps                     = null;
+  static $user_autoload = true;
+  public $_bind_cps;
+  public $_id_cps;
 
-  /**
-   * @var null CBanque
-   */
-  var $_ref_banque                 = null;
+  /** @var CBanque */
+  public $_ref_banque;
 
-  /**
-   * @var CFunction
-   */
-  var $_ref_function               = null;
+  /** @var CFunctions */
+  public $_ref_function;
 
-  /**
-   * @var CSpecCPAM
-   */
-  var $_ref_spec_cpam              = null;
+  /** @var CSpecCPAM */
+  public $_ref_spec_cpam;
 
-  /**
-   * @var CDiscipline
-   */
-  var $_ref_discipline             = null;
+  /** @var CDiscipline */
+  public $_ref_discipline;
 
-  /**
-   * @var CUser
-   */
-  var $_ref_profile                = null;
+  /** @var CUser */
+  public $_ref_profile;
 
-  /**
-   * @var CUser
-   */
-  var $_ref_user                   = null;
+  /** @var CUser*/
+  public $_ref_user;
 
-  /**
-   * @var CIntervenantCdARR
-   */
-  var $_ref_intervenant_cdarr      = null;
+  /** @var CIntervenantCdARR */
+  public $_ref_intervenant_cdarr;
 
-  /**
-   * @var CProtocole[]
-   */
-  var $_ref_protocoles             = array();
-  var $_count_protocoles           = null;
-  var $_ref_current_functions      = null;
+  /** @var CProtocole[] */
+  public $_ref_protocoles = array();
+  public $_count_protocoles;
 
-  // Object references per day
-  var $_ref_plages                 = null;
-  var $_ref_plages_conge           = null;
-  var $_ref_urgences               = null;
-  var $_ref_deplacees              = null;
-  var $_refs_source_pop            = null;
+  /** @var CFunctions[] */
+  public $_ref_current_functions;
+
+  /** @var CPlageOp[] */
+  public $_ref_plages;
+
+  /** @var CPlageConge[] */
+  public $_ref_plages_conge;
+
+  /** @var COperation[] */
+  public $_ref_urgences;
+
+  /** @var COperation[] */
+  public $_ref_deplacees;
+
+  /** @var CSourcePOP[] */
+  public $_refs_source_pop;
 
   /**
    * Lazy access to a given user, defaultly connected user
@@ -893,7 +888,8 @@ class CMediusers extends CMbObject {
    */
   static function loadFonctions($permType = PERM_READ, $group_id = null, $type = null) {
     $group = CGroups::loadCurrent();
-    $function = new CFunctions;
+
+    $function = new CFunctions();
     $function->actif = 1;
     $function->group_id = CValue::first($group_id, $group->_id);
 
@@ -902,6 +898,8 @@ class CMediusers extends CMbObject {
     }
 
     $order = "text";
+
+    /** @var CFunctions[] $functions */
     $functions = $function->loadMatchingList($order);
     CMbObject::filterByPerm($functions, $permType);
 
@@ -1046,7 +1044,7 @@ class CMediusers extends CMbObject {
         $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
 
         // Associate already loaded function
-        foreach ($mediusers as $key => $_mediuser) {
+        foreach ($mediusers as $_mediuser) {
           $_mediuser->loadRefFunction();
         }
         $listPrat = $mediusers;
@@ -1238,13 +1236,13 @@ class CMediusers extends CMbObject {
   function loadRefsForDay($date) {
     $this->loadBackRefs("secondary_functions");
     $secondary_specs = array();
-    foreach ($this->_back["secondary_functions"] as  $curr_sec_spec) {
+    foreach ($this->_back["secondary_functions"] as $curr_sec_spec) {
       $curr_sec_spec->loadRefsFwd();
       $curr_function = $curr_sec_spec->_ref_function;
       $secondary_specs[$curr_function->_id] = $curr_function;
     }
     // Plages d'intervention
-    $plages = new CPlageOp;
+    $plages = new CPlageOp();
     $where = array();
     $where["date"] = "= '$date'";
     $where[] = "plagesop.chir_id = '$this->_id' OR plagesop.spec_id = '$this->function_id' OR plagesop.spec_id ".CSQLDataSource::prepareIn(array_keys($secondary_specs));
@@ -1297,7 +1295,7 @@ class CMediusers extends CMbObject {
     $where["date"]       = "= '$date'";
     $where["chir_id"]    = "= '$this->_id'";
     $where["annulee"]    = "= '0'";
-    $order = "chir_id";
+
     $this->_ref_urgences = $urgences->loadList($where);
     foreach ($this->_ref_urgences as &$urgence) {
       $urgence->loadRefChir();

@@ -1,65 +1,66 @@
-<?php /* $Id$ */
-
+<?php
 /**
- *  @package Mediboard
- *  @subpackage mediusers
- *  @version $Revision$
- *  @author Romain Ollivier
-*/
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage mediusers
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
+ */
 
 /**
  * The CDiscipline Class
  */
 class CDiscipline extends CMbObject {
-  
-  // DB Table key
-  var $discipline_id = null;
+  public $discipline_id;
 
   // DB Fields
-  var $text      = null;
-  var $categorie = null;
+  public $text;
+  public $categorie;
 
-  // Object References
-  var $_ref_users = null;
-  
+  /** @var CMediusers[] */
+  public $_ref_users;
+
   // Form Fields
-  var $_compat    = null;
-  
-  function CDiscipline() {
+  public $_compat;
+
+  function __construct() {
     parent::__construct();
-    
+
     static $dispo = null;
-    if(!$dispo) {
+
+    if (!$dispo) {
       $dispo = array ();
     }
     $this->_dispo =& $dispo;
-    
+
     static $compat = null;
-    if(!$compat) {
+    if (!$compat) {
       $this->addCompat($compat, "ORT", "ORT", false, false);
-  
+
       $this->addCompat($compat, "ORL", "ORL", false, false);
-  
+
       $this->addCompat($compat, "OPH", "ORT", null, false);
       $this->addCompat($compat, "OPH", "OPH");
-  
+
       $this->addCompat($compat, "DER", "ORT", false, false);
       $this->addCompat($compat, "DER", "OPH", false);
       $this->addCompat($compat, "DER", "DER", true, true);
-  
+
       $this->addCompat($compat, "STO", "DER", null, false);
       $this->addCompat($compat, "STO", "STO");
-  
+
       $this->addCompat($compat, "GAS", "DER", false, false);
       $this->addCompat($compat, "GAS", "GAS");
-  
+
       $this->addCompat($compat, "ARE", "ORT", null, false);
       $this->addCompat($compat, "ARE", "ORL", null, false);
       $this->addCompat($compat, "ARE", "ORT", null, false);
       $this->addCompat($compat, "ARE", "OPH");
       $this->addCompat($compat, "ARE", "DER", null, false);
       $this->addCompat($compat, "ARE", "ARE");
-  
+
       $this->addCompat($compat, "RAD", "ORT", null, false);
       $this->addCompat($compat, "RAD", "ORL", null, false);
       $this->addCompat($compat, "RAD", "ORT", null, false);
@@ -67,7 +68,7 @@ class CDiscipline extends CMbObject {
       $this->addCompat($compat, "RAD", "DER", null, false);
       $this->addCompat($compat, "RAD", "ARE");
       $this->addCompat($compat, "RAD", "RAD");
-  
+
       $this->addCompat($compat, "GYN", "ORT", null, false);
       $this->addCompat($compat, "GYN", "ORL", null, false);
       $this->addCompat($compat, "GYN", "ORT", null, false);
@@ -79,55 +80,60 @@ class CDiscipline extends CMbObject {
     }
     $this->_compat =& $compat;
   }
-  
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'discipline';
     $spec->key   = 'discipline_id';
     return $spec;
   }
-  
+
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["users"] = "CMediusers discipline_id";
     return $backProps;
   }
-  
+
   function getProps() {
-  	$specs = parent::getProps();
+    $specs = parent::getProps();
     $specs["text"]      = "str notNull seekable";
     $specs["categorie"] = "enum list|ORT|ORL|OPH|DER|STO|GAS|ARE|RAD|GYN|EST";
     return $specs;
   }
-    
+
   function loadUsedDisciplines($where = array(), $order = null) {
-    $ljoin["users_mediboard"] = "`users_mediboard`.`discipline_id` = `discipline`.`discipline_id`";
+    $ljoin["users_mediboard"] = "users_mediboard.discipline_id = discipline.discipline_id";
     $where["users_mediboard.discipline_id"] = "IS NOT NULL";
-    if(!$order) {
-      $order = "`discipline`.`text`";
+
+    if (!$order) {
+      $order = "discipline.text";
     }
+
     return $this->loadList($where, $order, null, null, $ljoin);
   }
-  
+
   function updateFormFields () {
     parent::updateFormFields();
     $this->_view = strtolower($this->text);
     $this->_shortview = CMbString::truncate($this->_view);
   }
-    
-  // Backward references
+
   function loadRefsBack() {
-    $where = array("discipline_id" => "= '$this->discipline_id'");
+    $where = array(
+      "discipline_id" => "= '$this->discipline_id'",
+    );
     $this->_ref_users = new CMediusers;
     $this->_ref_users = $this->_ref_users->loadList($where);
   }
-  
+
   function loadGroupRefsBack() {
-    $where = array("discipline_id" => "= '$this->discipline_id'");
+    $where = array(
+      "discipline_id" => "= '$this->discipline_id'",
+    );
     $this->_ref_users = new CMediusers;
     $this->_ref_users = $this->_ref_users->loadGroupList($where);
   }
-  
+
   function addCompat(&$compat, $patho1, $patho2, $septique1 = null, $septique2 = null) {
     assert(in_array($patho1, $this->_specs["categorie"]->_list));
     assert(in_array($patho2, $this->_specs["categorie"]->_list));
@@ -143,20 +149,19 @@ class CDiscipline extends CMbObject {
       $this->addCompat($compat, $patho1, $patho2, $septique1, false);
       $this->addCompat($compat, $patho1, $patho2, $septique1, true );
     }
-    
+
     if ($septique1 === null or $septique2 === null) {
       return;
     }
 
     @$compat[$patho1][$septique1][$patho2][$septique2] = true;
   }
-  
+
   function isCompat($patho1, $patho2, $septique1, $septique2) {
-    
-    if(!$patho1 || !$patho2) {
+    if (!$patho1 || !$patho2) {
       return true;
     }
-    
+
     assert($septique1 !== null);
     assert($septique2 !== null);
 
@@ -166,5 +171,3 @@ class CDiscipline extends CMbObject {
       @$this->_compat[$patho2][$septique2][$patho1][$septique1];
   }  
 }
-
-?>

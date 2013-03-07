@@ -1,11 +1,12 @@
-<?php /* $Id$ */
-
+<?php
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage admin
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 /**
@@ -28,20 +29,20 @@ class CPermModule extends CMbObject {
   );
   
   // DB Table key
-  var $perm_module_id = null;
+  public $perm_module_id;
 
   // DB Fields
-  var $user_id    = null;
-  var $mod_id     = null;
-  var $permission = null;
-  var $view       = null;
+  public $user_id;
+  public $mod_id;
+  public $permission;
+  public $view;
   
   // Distant fields
-  var $_owner = null;
+  public $_owner;
   
   // References
-  var $_ref_db_user   = null;
-  var $_ref_db_module = null;
+  public $_ref_db_user;
+  public $_ref_db_module;
   
   function getSpec() {
     $spec = parent::getSpec();
