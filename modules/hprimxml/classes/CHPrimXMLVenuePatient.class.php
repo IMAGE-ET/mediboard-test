@@ -76,8 +76,8 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     }
 
     // Ajout du volet médical
-    $voletMedical = $this->addElement($venuePatient, "voletMedical");
-    $this->addVoletMedical($voletMedical, $mbVenue);
+    //$voletMedical = $this->addElement($venuePatient, "voletMedical");
+    //$this->addVoletMedical($voletMedical, $mbVenue);
 
     // Traitement final
     $this->purgeEmptyElements();
