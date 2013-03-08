@@ -5,6 +5,7 @@ $locales['Document valide'] = 'Document valide';
 $locales['mod-cda-tab-vw_datatype'] = 'Type de données';
 $locales['mod-cda-tab-vw_highlightCDA'] = 'HighlightCDA';
 $locales['mod-cda-tab-vw_testdatatype'] = 'Test des types de données';
+$locales['mod-cda-tab-vw_toolsdatatype'] = 'Outil de création';
 $locales['module-cda-court'] = 'CDA';
 $locales['module-cda-long'] = 'Clinical Document Architecture';
 $locales['validation'] = 'Validation';
