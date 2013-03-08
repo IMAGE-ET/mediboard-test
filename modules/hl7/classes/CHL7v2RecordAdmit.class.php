@@ -1520,10 +1520,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
 
-    if (!$newVenue->_id) {
-      return;
-    }
-
     $PV1_20 = $this->queryTextNode("PV1.20", $node);
 
     // Chargement d'une prestation journalière
