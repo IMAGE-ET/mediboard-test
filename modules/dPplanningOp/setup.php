@@ -518,26 +518,11 @@ class CSetupdPplanningOp extends CSetup {
       ADD `induction` TIME AFTER `sortie_reveil`";
     $this->addQuery($query);
 
-    $this->makeRevision("0.55");
-    $query = "CREATE TABLE `naissance` (
-      `naissance_id` INT UNSIGNED NOT NULL auto_increment,
-      `operation_id` INT UNSIGNED NOT NULL ,
-      `nom_enfant` VARCHAR( 50 ) ,
-      `prenom_enfant` VARCHAR( 50 ) ,
-      `date_prevue` DATE,
-      `date_reelle` DATETIME,
-      `debut_grossesse` DATE,
-      PRIMARY KEY ( `naissance_id` ) ,
-      INDEX ( `operation_id` ))";
-    $this->addQuery($query);
+    $this->makeEmptyRevision("0.55");
 
-    $this->makeRevision("0.56");
-    $query = "ALTER TABLE `naissance`
-      CHANGE `naissance_id` `naissance_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-      CHANGE `operation_id` `operation_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
-      CHANGE `nom_enfant` `nom_enfant` VARCHAR(255) NOT NULL,
-      CHANGE `prenom_enfant` `prenom_enfant` VARCHAR(255) NULL;";
-    $this->addQuery($query);
+
+    $this->makeEmptyRevision("0.56");
+
     $query = "ALTER TABLE `operations`
       CHANGE `operation_id` `operation_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
       CHANGE `sejour_id` `sejour_id` int(11) UNSIGNED NOT NULL DEFAULT '0',
@@ -546,6 +531,7 @@ class CSetupdPplanningOp extends CSetup {
       CHANGE `plageop_id` `plageop_id` int(11) UNSIGNED NULL,
       CHANGE `code_uf` `code_uf` VARCHAR(3) NULL,
       CHANGE `libelle_uf` `libelle_uf` VARCHAR(35) NULL,
+      CHANGE `salle_id` `salle_id` int(11) UNSIGNED NULL,
       CHANGE `salle_id` `salle_id` int(11) UNSIGNED NULL,
       CHANGE `codes_ccam` `codes_ccam` VARCHAR(255) NULL,
       CHANGE `libelle` `libelle` VARCHAR(255) NULL,
@@ -951,11 +937,8 @@ class CSetupdPplanningOp extends CSetup {
       CHANGE `type` `type` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult') NOT NULL;";
     $this->addQuery($query);
 
-    $this->makeRevision("1.01");
-    $query = "ALTER TABLE `naissance`
-      ADD INDEX (`date_prevue`),
-      ADD INDEX (`date_reelle`),
-      ADD INDEX (`debut_grossesse`);";
+    $this->makeEmptyRevision("1.01");
+
     $this->addQuery($query);
     $query = "ALTER TABLE `operations`
       ADD INDEX (`type_anesth`);";

@@ -36,12 +36,12 @@ class CCDAANYNonNull extends CCDAANY {
     $tabTest[] = $this->sample("Test avec un nullFlavor null", "Document valide");
 
     /**
-     * Test avec un nullFlavor bon
+     * Test avec un nullFlavor correct
      */
     $nullFlavor = new CCDANullFlavor();
     $nullFlavor->setData("NP");
     $this->setNullFlavor($nullFlavor);
-    $tabTest[] = $this->sample("Test avec un nullFlavor bon", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un nullFlavor correct", "Document invalide");
 
     /**
      * Test avec un nullFlavor incorrect

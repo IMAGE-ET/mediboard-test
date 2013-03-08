@@ -52,7 +52,7 @@ class CCDA_ts extends CCDA_Datatype {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return nothing
+   * @return void
    */
   function test() {
 
@@ -74,11 +74,11 @@ class CCDA_ts extends CCDA_Datatype {
 
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
 
     $this->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

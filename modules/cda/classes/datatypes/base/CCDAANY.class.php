@@ -58,12 +58,12 @@ class CCDAANY extends CCDA_Datatype{
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec un nullFlavor bon
+     * Test avec un nullFlavor correct
      */
     $nullFlavor->setData("NP");
     $this->setNullFlavor($nullFlavor);
 
-    $tabTest[] = $this->sample("Test avec un nullFlavor bon", "Document valide");
+    $tabTest[] = $this->sample("Test avec un nullFlavor correct", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

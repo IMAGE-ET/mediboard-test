@@ -14,10 +14,12 @@
  */
 class CCDA_Datatype {
 
-
   function validate() {
 
     $domDataType = $this->toXML();
+    /*if (get_class($this) === "CCDAINT") {
+      mbTrace($domDataType->saveXML());
+    }*/
     return @$domDataType->schemaValidate("modules/cda/resources/TestClasses.xsd");
   }
 
@@ -27,7 +29,7 @@ class CCDA_Datatype {
     return $props;
   }
 
-  function getName() {
+  function getNameClass() {
     $name = get_class($this);
     $name = substr($name, 4);
 
@@ -57,9 +59,13 @@ class CCDA_Datatype {
     return $specs;
   }
 
-  function toXML() {
+  function toXML($nameParent = null) {
     $dom = new DOMDocument();
-    $name = $this->getName();
+    $name = $this->getNameClass();
+    if(!empty($nameParent)) {
+      $name = $nameParent;
+    }
+
     $dom->appendChild($dom->createElement($name));
 
     $spec = $this->getSpecs();
@@ -71,8 +77,9 @@ class CCDA_Datatype {
           if (empty($classInstance)) {
             continue;
           }
-          $dom->getElementsByTagName($name)->item(0)->appendChild($dom->createAttribute($key));
-          $dom->getElementsByTagName($name)->item(0)->attributes->getNamedItem($key)->nodeValue = $classInstance->getData();
+          $baseXML = $dom->getElementsByTagName($name)->item(0);
+          $baseXML->appendChild($dom->createAttribute($key));
+          $baseXML->attributes->getNamedItem($key)->nodeValue = $classInstance->getData();
 
           break;
         case "data":
@@ -83,24 +90,20 @@ class CCDA_Datatype {
           if (empty($classInstance)) {
             continue;
           }
-          $xmlClass = $classInstance->toXML();
-
-          $element = $dom->createElement($key);
-          foreach ($xmlClass->firstChild->childNodes as $_child) {
-            $element->appendChild($dom->importNode($_child, true));
+          $baseXML = $dom->getElementsByTagName($name)->item(0);
+          if (is_array($classInstance)) {
+            foreach ($classInstance as $_class) {
+              $xmlClass = $_class->toXML($key);
+              $baseXML->appendChild($dom->importNode($xmlClass->documentElement));
+            }
           }
-          foreach ($xmlClass->firstChild->attributes as $_attrib) {
-            $element->setAttributeNode($dom->importNode($_attrib, true));
+          else {
+            $xmlClass = $classInstance->toXML($key);
+            $baseXML->appendChild($dom->importNode($xmlClass->documentElement));
           }
-
-          $dom->getElementsByTagName($name)->item(0)->appendChild($element);
           break;
       }
     }
-
-    /*if (get_class($this) === "CCDATEL") {
-      mbTrace($dom->saveXML());
-    }*/
 
     return $dom;
   }

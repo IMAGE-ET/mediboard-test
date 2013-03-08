@@ -67,17 +67,17 @@ class CCDATS extends CCDAQTY{
     $ts = new CCDA_ts();
     $ts->setData("TESTTEST");
     $this->setValue($ts);
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
 
     $ts->setData("24141331462095.812975314545697850652375076363185459409261232419230495159675586");
     $this->setValue($ts);
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

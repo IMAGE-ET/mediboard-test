@@ -33,7 +33,7 @@ class CCDA_cs extends CCDA_Datatype_Voc {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return nothing
+   * @return void
    */
   function test() {
     if(get_class($this) !== "CCDA_cs") {
@@ -57,12 +57,11 @@ class CCDA_cs extends CCDA_Datatype_Voc {
 
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec un valeur bonne
+     * Test avec un valeur correcte
      */
 
-
     $this->setData("test");
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

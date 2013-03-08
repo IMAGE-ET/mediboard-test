@@ -38,10 +38,10 @@ class CCDA_bn extends CCDA_bl {
     $tabTest[] = $this->sample("Test avec une valeur null", "Document invalide");
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
     $this->setData("true");
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
     /*-------------------------------------------------------------------------------------*/
     /**
      * Test avec une valeur incorrecte

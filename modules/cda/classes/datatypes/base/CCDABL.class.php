@@ -67,24 +67,24 @@ class CCDABL extends CCDAANY {
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
 
     $bl->setData("true");
     $this->setValue($bl);
 
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec une valeur bonne et avec un nullflavor
+     * Test avec une valeur correcte et avec un nullflavor
      */
 
     $bl->setData("true");
     $this->setValue($bl);
     $this->setNullFlavor($nullFlavor);
-    $tabTest[] = $this->sample("Test avec une valeur bonne et un nullflavor", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte et un nullflavor", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 

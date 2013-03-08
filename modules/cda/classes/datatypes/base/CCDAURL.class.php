@@ -57,7 +57,7 @@ class CCDAURL extends CCDAANY {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return nothing
+   * @return void
    */
   function test() {
 
@@ -80,12 +80,12 @@ class CCDAURL extends CCDAANY {
 
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
 
     $url->setData("test");
     $this->setValue($url);
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

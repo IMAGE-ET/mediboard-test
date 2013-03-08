@@ -57,10 +57,10 @@ class CCDA_oid extends CCDA_Datatype {
     $tabTest[] = $this->sample("Test avec une valeur null", "Document invalide");
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
     $this->setData("2.16.840.1.113883.3.1");
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
     /*-------------------------------------------------------------------------------------*/
     /**
      * Test avec une valeur incorrecte

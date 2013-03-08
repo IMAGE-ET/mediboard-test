@@ -24,7 +24,7 @@ class CCDAset_TelecommunicationAddressUse extends CCDA_Datatype {
    * @return void
    */
   function addData($listData) {
-    array_push($this->listData, $listData);
+    $this->listData[] = $listData;
   }
 
   /**
@@ -41,7 +41,7 @@ class CCDAset_TelecommunicationAddressUse extends CCDA_Datatype {
    *
    * @return string
    */
-  function getName() {
+  function getNameClass() {
     $name = get_class($this);
     $name = substr($name, 4);
 
@@ -76,7 +76,7 @@ class CCDAset_TelecommunicationAddressUse extends CCDA_Datatype {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return nothing
+   * @return void
    */
   function test() {
     $tabTest = array();
@@ -100,7 +100,6 @@ class CCDAset_TelecommunicationAddressUse extends CCDA_Datatype {
     /**
      * Test avec un TelecommunicationAddressUse correcte
      */
-    $tel = new CCDATelecommunicationAddressUse();
     $tel->setData("AS");
     $this->razlistData();
     $this->addData($tel);
@@ -110,8 +109,7 @@ class CCDAset_TelecommunicationAddressUse extends CCDA_Datatype {
     /**
      * Test avec deux TelecommunicationAddressUse correcte
      */
-    $tel = new CCDATelecommunicationAddressUse();
-    $tel->setData("AS");
+
     $tel2 = new CCDATelecommunicationAddressUse();
     $tel2->setData("BAD");
     $this->addData($tel2);

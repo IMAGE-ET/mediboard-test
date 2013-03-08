@@ -57,7 +57,7 @@ class CCDA_url extends CCDA_Datatype {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return nothing
+   * @return void
    */
   function test() {
 
@@ -78,12 +78,12 @@ class CCDA_url extends CCDA_Datatype {
 
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
 
 
     $this->setData("test");
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

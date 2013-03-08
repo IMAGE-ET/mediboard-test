@@ -24,12 +24,12 @@ class CCDA_Datatype_Voc extends CCDA_Datatype {
     $this->_all_enumeration = $this->getEnumeration(true);
   }
 
-  function getName() {
+  function getNameClass() {
     $name = get_class($this);
     $name = substr($name, 4);
 
     if (get_class($this) === "CCDA_cs") {
-      $name = explode("_", $name)[1];
+      $name = CMbArray::get(explode("_", $name), 1);
     }
 
     return $name;
@@ -70,7 +70,7 @@ class CCDA_Datatype_Voc extends CCDA_Datatype {
   /**
    * Fonction qui teste si la classe est valide
    *
-   * @return nothing|void
+   * @return void|void
    */
   function test() {
 

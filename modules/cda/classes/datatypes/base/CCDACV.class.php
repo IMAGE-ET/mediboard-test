@@ -25,4 +25,41 @@ class CCDACV extends CCDACE {
     $props["translation"] = "CCDACD xml|element prohibited";
     return $props;
   }
+
+  /**
+   * Fonction permettant de tester la classe
+   *
+   * @return array
+   */
+  function test() {
+    $tabTest = parent::test();
+
+    if(get_class($this) === "CCDAPQR") {
+      return $tabTest;
+    }
+    /**
+     * Test avec un translation correct sans valeur
+     */
+    $translation = new CCDACD();
+    $this->setTranslation($translation);
+
+    $tabTest[] = $this->sample("Test avec translation correct sans valeur", "Document invalide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * Test avec un translation correct avec valeur
+     */
+    $translation = new CCDACD();
+    $codeSystemNameTest = new CCDA_st();
+    $codeSystemNameTest->setData("test");
+    $translation->setCodeSystemName($codeSystemNameTest);
+    $this->setTranslation($translation);
+
+    $tabTest[] = $this->sample("Test avec translation correct avec valeur", "Document invalide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    return $tabTest;
+  }
 }

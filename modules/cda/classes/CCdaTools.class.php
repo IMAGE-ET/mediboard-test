@@ -99,7 +99,7 @@ class CCdaTools {
    *
    * @param String $message message
    *
-   * @return nothing
+   * @return void
    */
   function parse ($message) {
     $this->domschema = new CMbXMLDocument("UTF-8");
@@ -120,7 +120,7 @@ class CCdaTools {
    *
    * @param String $message message
    *
-   * @return nothing
+   * @return void
    */
   function showxml($message) {
     $this->xml = CMbString::highlightCode("xml", $message);
@@ -236,7 +236,17 @@ class CCdaTools {
   function createTestSchemaClasses() {
     $nameFile = "modules/cda/resources/TestClasses.xsd";
     $dom = new DOMDocument();
+    $dom->preserveWhiteSpace = false;
     $dom->load($nameFile);
+
+    $xpath = new DOMXPath($dom);
+    $nodeList = $xpath->query("//xs:element");
+
+    foreach ($nodeList as $_node) {
+      $dom->documentElement->removeChild($_node);
+    }
+
+    file_put_contents($nameFile, $dom->saveXML());
 
     $file = glob("modules/cda/classes/datatypes/{voc,base}/*.class.php", GLOB_BRACE);
 
@@ -245,7 +255,7 @@ class CCdaTools {
       $_file = CMbArray::get(explode(".", $_file), 0);
       $_file = substr($_file, strrpos($_file, "/")+1);
       $instanceClass = new $_file;
-      $_file = $instanceClass->getName();
+      $_file = $instanceClass->getNameClass();
       $element->setAttribute("name", $_file);
       $element->setAttribute("type", $_file);
       $dom->documentElement->appendChild($element);
@@ -281,9 +291,67 @@ class CCdaTools {
       $_file = CMbArray::get(explode(".", $_file), 0);
       $_file = substr($_file, strrpos($_file, "/")+1);
       $class = new $_file;
-      $result[$class->getName()] = $class->test();
+      $result[$class->getNameClass()] = $class->test();
     }
     return $result;
 
+  }
+
+  function returnType($schema) {
+    $dom = new CMbXMLDocument();
+    $dom->load($schema);
+
+    $xpath = new CMbXPath($dom);
+    $xpath->registerNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+    $nodelist = $xpath->query("//xs:simpleType[@name]|xs:complexType[@name]");
+    $listName =  array();
+    foreach ($nodelist as $_node) {
+      array_push($listName, $_node->attributes->getNamedItem("name")->nodeValue);
+    }
+
+    return $listName;
+  }
+
+  function missclass() {
+    $listAllType = array();
+    $listAllType = $this->returnType("modules/cda/resources/datatypes-base.xsd");
+    $listAllType = array_merge($listAllType, $this->returnType("modules/cda/resources/voc.xsd"));
+    $file = glob("modules/cda/classes/datatypes/{voc,base}/*.class.php", GLOB_BRACE);
+
+    $result = array();
+    foreach ($file as $_file) {
+      $_file = CMbArray::get(explode(".", $_file), 0);
+      $_file = substr($_file, strrpos($_file, "/")+1);
+      $class = new $_file;
+      array_push($result, $class->getNameClass());
+    }
+    return array_diff($listAllType, $result);
+  }
+
+  function clearXSD() {
+    $pathSource = "modules/cda/resources/datatypes-base_original.xsd";
+    $pathDest = "modules/cda/resources/datatypes-base.xsd";
+    $copyFile = false;
+    $copyFile = copy($pathSource, $pathDest);
+
+    if (!$copyFile) {
+      return false;
+    }
+
+    $dom = new DOMDocument();
+    $dom->load($pathDest);
+
+    $xpath = new DOMXPath($dom);
+    $nodeList = $xpath->query("//xs:complexType[@abstract]|xs:simpleType[@abstract]");
+
+    foreach ($nodeList as $_node) {
+      $_node->removeAttribute("abstract");
+    }
+
+    $nodeList = $xpath->query("//xs:element[@maxOccurs=\"0\"]");
+    foreach ($nodeList as $_node) {
+      $_node->parentNode->removeChild($_node);
+    }
+    file_put_contents($pathDest, $dom->saveXML());
   }
 }

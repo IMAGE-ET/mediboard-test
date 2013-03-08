@@ -54,9 +54,13 @@ class CCDABIN extends CCDAANY {
      * Test avec une valeur null
      */
 
-    $tabTest[] = $this->sample("Test avec une representation null", "Document valide");
+    $tabTest[] = $this->sample("Test avec les valeurs null", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
+
+    if (get_class($this) !== "CCDABIN" || get_class($this) !== "CCDAED") {
+      return $tabTest;
+    }
 
     /**
      * Test avec une valeur erroné
@@ -71,13 +75,13 @@ class CCDABIN extends CCDAANY {
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
 
     $binaryDataEncoding->setData("B64");
     $this->setRepresentation($binaryDataEncoding);
 
-    $tabTest[] = $this->sample("Test avec une representation bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une representation correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

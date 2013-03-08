@@ -54,13 +54,13 @@ class CCDABN extends CCDAANYNonNull {
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
 
     $bn->setData("true");
     $this->setValue($bn);
 
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

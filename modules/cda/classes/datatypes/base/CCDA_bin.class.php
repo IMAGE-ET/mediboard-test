@@ -56,10 +56,10 @@ class CCDA_bin extends CCDA_Datatype {
     $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
     $this->setData("JVBERi0xLjUNCiW1tbW1DQoxIDAgb2Jq");
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
     /*-------------------------------------------------------------------------------------*/
     /**
      * Test avec une valeur incorrecte

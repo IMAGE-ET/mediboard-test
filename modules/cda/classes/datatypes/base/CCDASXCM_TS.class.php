@@ -48,7 +48,7 @@ class CCDASXCM_TS extends CCDATS {
    *
    * @return string
    */
-  function getName() {
+  function getNameClass() {
     $name = get_class($this);
     $name = substr($name, 4);
 
@@ -81,17 +81,17 @@ class CCDASXCM_TS extends CCDATS {
     $op = new CCDASetOperator();
     $op->setData("TESTTEST");
     $this->setOperator($op);
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
 
     $op->setData("H");
     $this->setOperator($op);
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

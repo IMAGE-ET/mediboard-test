@@ -97,7 +97,7 @@ class CCDATEL extends CCDAURL {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return nothing
+   * @return void
    */
   function test() {
 
@@ -117,13 +117,13 @@ class CCDATEL extends CCDAURL {
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec un useablePeriod bon
+     * Test avec un useablePeriod correct
      */
 
     $op->setData("H");
     $useable->setOperator($op);
     $this->setUseablePeriod($useable);
-    $tabTest[] = $this->sample("Test avec un useablePeriod bon", "Document valide");
+    $tabTest[] = $this->sample("Test avec un useablePeriod correct", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -141,7 +141,7 @@ class CCDATEL extends CCDAURL {
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec un use bon
+     * Test avec un use correct
      */
 
     $tel->setData("AS");

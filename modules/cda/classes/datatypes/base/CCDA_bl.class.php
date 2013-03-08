@@ -14,7 +14,7 @@
  * A Boolean value can be either true or
  * false, or, as any other value may be NULL.
  */
-class CCDA_bl extends CCDAANY {
+class CCDA_bl extends CCDA_Datatype {
 
 
   public $data;
@@ -57,10 +57,10 @@ class CCDA_bl extends CCDAANY {
     $tabTest[] = $this->sample("Test avec une valeur null", "Document invalide");
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
     $this->setData("true");
-    $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
     /*-------------------------------------------------------------------------------------*/
     /**
      * Test avec une valeur incorrecte

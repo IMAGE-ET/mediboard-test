@@ -21,6 +21,20 @@
 class CCDAQTY extends CCDAANY {
 
   /**
+   * The magnitude of the measurement value in terms of
+   * the unit specified in the code.
+   */
+  public $value;
+
+  public function setValue($value) {
+    $this->value = $value;
+  }
+
+  public function getValue() {
+    return $this->value;
+  }
+
+  /**
 	 * Get the properties of our class as strings
 	 *
 	 * @return array
