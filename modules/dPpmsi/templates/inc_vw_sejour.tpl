@@ -21,9 +21,19 @@
       url.addParam("sejour_id" , '{{$sejour->_id}}');
       url.requestUpdate("Docs");
     }
+
+    loadDMIs = function(sejour_id) {
+      var url = new Url("dmi", "ajax_list_dmis");
+      url.addParam("sejour_id" , sejour_id);
+      url.requestUpdate("tab-dmi");
+    }
+
     Main.add(function() {
-      Control.Tabs.create('tabs-pmsi', true)
+      Control.Tabs.create('tabs-pmsi', true);
       loadDocuments();
+      {{if "dmi"|module_active}}
+        loadDMIs('{{$sejour->_id}}');
+      {{/if}}
     });
   </script>
   
@@ -60,6 +70,9 @@
     <li><a href="#tab-PMSI">{{tr}}PMSI{{/tr}}</a></li>
     <li><a href="#ServeurActes" {{if !$sejour->_ref_operations}}class="empty"{{/if}}>Actes</a></li>
     <li onmousedown="loadDocuments()"><a href="#Docs">Documents</a></li>
+    {{if "dmi"|module_active}}
+      <li><a href="#tab-dmi">{{tr}}CDMI{{/tr}}</a></li>
+    {{/if}}
     <li style="float: right">
       <button type="button" class="print" onclick="printDossierComplet('{{$sejour->_id}}');">
         Dossier complet
@@ -85,8 +98,6 @@
     </li>
   </ul>
   
-  <hr class="control_tabs" />
-  
   <div id="tab-PMSI" style="display: none;">
     {{mb_include template=inc_vw_pmsi}}
   </div>
@@ -97,6 +108,9 @@
   
   <div id="Docs" style="display: none;"></div>
 
+  {{if "dmi"|module_active}}
+    <div id="tab-dmi" style="display: none;"></div>
+  {{/if}}
 {{else}}
   <div class="small-info">Veuillez sélectionner un séjour dans la liste des séjours sur la gauche.</div>
 {{/if}}
