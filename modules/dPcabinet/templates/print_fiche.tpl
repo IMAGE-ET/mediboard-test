@@ -574,10 +574,13 @@
         <tr>
           <td>
             <ul>
-            {{foreach from=$consult->_ref_documents item=currDoc}}
+            {{foreach from=$dossier_anesth->_ref_documents item=currDoc}}
               <li>{{$currDoc->nom}}<br />
             {{foreachelse}}
-            Aucun Document
+            Aucun Document de consultation d'anesthésie
+            {{/foreach}}
+            {{foreach from=$consult->_ref_documents item=currDoc}}
+              <li>{{$currDoc->nom}}<br />
             {{/foreach}}
             </ul>
           </td>

@@ -77,6 +77,7 @@ if (!$dossier_anesth_id) {
 }
 
 $dossier_anesth->load($dossier_anesth_id);
+$dossier_anesth->loadRefsDocs();
 $consult = $dossier_anesth->loadRefConsultation();
 $consult->loadRefPlageConsult();
 
