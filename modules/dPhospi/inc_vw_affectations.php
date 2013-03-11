@@ -175,16 +175,16 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null, $pre
 
   $where["sejour.group_id"] = "= '$group_id'";
   
-  $where[] = "(sejour.type != 'seances' && affectation.affectation_id IS NULL) || sejour.type = 'seances'";
+  $where[] = "(sejour.type != 'seances' && affectation.affectation_id IS NULL) OR sejour.type = 'seances'";
   
   if ($order == null) {
     $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
   }
 
   $sejourNonAffectes = new CSejour();
-  $sejourNonAffectes = $sejourNonAffectes->loadList($where, $order, null, null, $leftjoin);
+  $sejourNonAffectes = $sejourNonAffectes->loadList($where, $order, 100, null, $leftjoin);
 
-  foreach ($sejourNonAffectes as &$sejour) {
+  foreach ($sejourNonAffectes as $sejour) {
     $sejour->loadRefPrestation();
     $sejour->loadNDA();
     $sejour->loadRefsPrescriptions();
@@ -193,20 +193,23 @@ function loadSejourNonAffectes($where, $order = null, $praticien_id = null, $pre
     $sejour->_ref_patient->loadRefDossierMedical(false);
 
     if ($systeme_presta == "expert" && $prestation_id) {
-      $sejour->loadLiaisonsForPrestation($prestation_id);
+     $sejour->loadLiaisonsForPrestation($prestation_id);
     }
 
     // Chargement des droits CMU
     $sejour->getDroitsCMU();
-    
+
     // Chargement des opérations
     $sejour->loadRefsOperations();
-    foreach ($sejour->_ref_operations as &$operation) {
-      $operation->loadExtCodesCCAM();
+    foreach ($sejour->_ref_operations as $_operation) {
+      $_operation->loadExtCodesCCAM();
     }
   }
+
   $dossiers = CMbArray::pluck($sejourNonAffectes, "_ref_patient", "_ref_dossier_medical");
+
   CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
+
   return $sejourNonAffectes;
 }
 

@@ -18,7 +18,7 @@ $listPats = array();
 // Récupération des admissions à affecter
 function loadSejourNonAffectes($where) {
   global $listChirs, $listPats, $listFunctions;
-  
+
   $group = CGroups::loadCurrent();
   
   $leftjoin = array(
