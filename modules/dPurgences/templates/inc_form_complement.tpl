@@ -107,7 +107,7 @@
       </tr>
       <tr>
         <td class="button" colspan="2">
-          <button class="submit" onclick="this.form.submit();">Enregistrer</button>
+          <button class="submit" onclick="this.form.submit();">{{tr}}Validate{{/tr}}</button>
         </td>
       </tr>
     </table>
