@@ -94,6 +94,12 @@
     </tr>
 
     <tr>
+      <th class="title" colspan="2">{{tr}}CRegleSectorisation{{/tr}}</th>
+    </tr>
+
+    {{mb_include module=system template=inc_config_bool class=CRegleSectorisation var=use_sectorisation }}
+
+    <tr>
       <th class="title" colspan="2">Affichage des champs</th>
     </tr>
     {{mb_include module=system template=inc_config_bool var=accident}}

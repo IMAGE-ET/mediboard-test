@@ -120,4 +120,7 @@ $dPconfig["dPplanningOp"]= array(
     "show_dialyse"        =>  "0",
     "show_cession"        =>  "0"
   ),
+  "CRegleSectorisation" => array (
+    "use_sectorisation"   =>  "0",
+  ),
 );

@@ -1606,7 +1606,30 @@ class CSetupdPplanningOp extends CSetup {
       WHERE `ATNC` = '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.72";
-    
+    $this->makeRevision("1.72");
+    $query = "CREATE TABLE `regle_sectorisation` (
+              `regle_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `service_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+              `function_id` INT (11) UNSIGNED,
+              `praticien_id` INT (11) UNSIGNED,
+              `duree_min` INT (11),
+              `duree_max` INT (11),
+              `date_min` DATETIME,
+              `date_max` DATETIME,
+              `typeAdminission` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult'),
+              `typePEC` ENUM ('M','C','O'),
+              `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0';
+) /*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `regle_sectorisation`
+              ADD INDEX (`service_id`),
+              ADD INDEX (`function_id`),
+              ADD INDEX (`praticien_id`),
+              ADD INDEX (`date_min`),
+              ADD INDEX (`date_max`),
+              ADD INDEX (`group_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.73";
   }
 }

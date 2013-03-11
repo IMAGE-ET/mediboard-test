@@ -688,6 +688,12 @@ class CSejour extends CFacturable implements IPatientRelated {
   function store() {
     $this->completeField("entree_reelle", "entree", "patient_id", "type_pec");
 
+    // Sectorisation Rules
+    if (!$this->service_id && CAppUI::conf("dPplanningOp CRegleSectorisation use_sectorisation")) {
+      //$this->getServiceFromSectorisationRules();
+    }
+
+
     // Vérification de la validité des codes CIM
     if ($this->DP != null) {
       $dp = new CCodeCIM10($this->DP, 1);
