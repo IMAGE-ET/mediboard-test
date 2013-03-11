@@ -77,9 +77,13 @@
       {{assign var=category_id value=$_item->file_category_id}}
     	{{$categories.$category_id}}
     </td>
-    <td onmouseover="ObjectTooltip.createEx(this,'{{$_item->_ref_object->_guid}}')">
-    	{{$_item->_ref_object}}
-    </td>
+    {{if $_item->_ref_object}}
+      <td onmouseover="ObjectTooltip.createEx(this,'{{$_item->_ref_object->_guid}}')">
+        {{$_item->_ref_object}}
+      </td>
+    {{else}}
+      <td class="empty">Cible non chargée</td>
+    {{/if}}
     <td onmouseover="ObjectTooltip.createEx(this,'{{$_item->_guid}}')">
     	{{mb_value object=$_item field=_extensioned}}
     </td>
