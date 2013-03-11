@@ -26,7 +26,7 @@
     <th>Description</th>
   </tr>
   <tr>
-    <td style="background-color:#0F0"></td>
+    <td style="background-color:{{if $conf.ref_pays == 1}}#0F0{{else}}#F00{{/if}}"></td>
     <td class="text">{{tr}}CRPU.ccmu.1.desc{{/tr}}</td>
   </tr>
   {{if $conf.ref_pays == 1}}
@@ -36,15 +36,15 @@
   </tr>
   {{/if}}
   <tr>
-    <td style="background-color:#9F0"></td>
+    <td style="background-color:{{if $conf.ref_pays == 1}}#9F0{{else}}#F60{{/if}}"></td>
     <td class="text">{{tr}}CRPU.ccmu.2.desc{{/tr}}</td>
   </tr>
   <tr>
-    <td style="background-color:#FF0"></td>
+    <td style="background-color:{{if $conf.ref_pays == 1}}#FF0{{else}}#FF0{{/if}}"></td>
     <td class="text">{{tr}}CRPU.ccmu.3.desc{{/tr}}</td>
   </tr>  
   <tr>
-    <td style="background-color:#FFCD00"></td>
+    <td style="background-color:{{if $conf.ref_pays == 1}}#FFCD00{{else}}#9F0{{/if}}"></td>
     <td class="text">{{tr}}CRPU.ccmu.4.desc{{/tr}}</td>
   </tr>
   {{if $conf.ref_pays == 1}}

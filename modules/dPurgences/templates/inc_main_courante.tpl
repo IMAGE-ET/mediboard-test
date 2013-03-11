@@ -27,7 +27,7 @@
       {{/if}}
     {{/if}}
     
-	  {{if $isImedsInstalled}}
+    {{if $isImedsInstalled}}
       ImedsResultsWatcher.loadResults();
     {{/if}}
   });
@@ -71,35 +71,35 @@
 <table class="tbl">
   <tr>
     <th style="width: 8em;">
-		  {{mb_colonne class=CRPU field="ccmu"        order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
-		</th>
+      {{mb_colonne class=CRPU field="ccmu"        order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
+    </th>
     <th style="width: 16em;">
-    	{{mb_colonne class=CRPU field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
-		</th>
-		
-		<th class="narrow">
-  		{{if $type == "MainCourante"}}
+      {{mb_colonne class=CRPU field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
+    </th>
+    
+    <th class="narrow">
+      {{if $type == "MainCourante"}}
         <input type="text" size="6" onkeyup="MainCourante.filter(this, 'filter-indicator')" id="filter-patient-name-{{$type}}" />
       {{else if $type == "UHCD"}}
         <input type="text" size="6" onkeyup="UHCD.filter(this, 'filter-indicator')" id="filter-patient-name-{{$type}}" />
       {{/if}}
-		</th>
-		
+    </th>
+    
     <th style="width: 10em;">
-		  {{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
-		</th>
+      {{mb_colonne class=CRPU field="_entree"     order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}
+    </th>
     {{if $conf.dPurgences.responsable_rpu_view}}
     <th class="narrow">{{mb_title class=CRPU field="_responsable_id"}}</th>
     {{/if}}
     <th style="width: 10em;">{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
     {{if $medicalView}}
-			<th style="width: 16em;">
-			{{if $conf.dPurgences.diag_prat_view}}
-	      {{tr}}CRPU-diag_infirmier-court{{/tr}} / {{tr}}Medical{{/tr}}
-			{{else}}
-			  {{tr}}CRPU-diag_infirmier-court{{/tr}}
-			{{/if}}
-		  </th>
+      <th style="width: 16em;">
+      {{if $conf.dPurgences.diag_prat_view}}
+        {{tr}}CRPU-diag_infirmier-court{{/tr}} / {{tr}}Medical{{/tr}}
+      {{else}}
+        {{tr}}CRPU-diag_infirmier-court{{/tr}}
+      {{/if}}
+      </th>
     {{/if}}
     <th style="width: 0em;">{{tr}}CRPU.pec{{/tr}}</th>
   </tr>
@@ -118,22 +118,22 @@
     {{assign var=rpu_link value="?m=dPurgences&tab=vw_aed_rpu&$rpu_link_param"}}
     
     <tr class="
-  	 {{if !$_sejour->sortie_reelle && $_sejour->_veille}}veille{{/if}}
+     {{if !$_sejour->sortie_reelle && $_sejour->_veille}}veille{{/if}}
      {{if !$rpu_id}}missing{{/if}}
     ">
-    	{{if $_sejour->annule}}
+      {{if $_sejour->annule}}
       <td class="cancelled">
         {{tr}}Cancelled{{/tr}}
       </td>
-  	  {{else}}
+      {{else}}
   
-      <td class="ccmu-{{$rpu->ccmu}} text" 
+      <td class="ccmu-{{if $conf.ref_pays == 2}}2{{/if}}{{$rpu->ccmu}} text" 
         {{if $_sejour->sortie_reelle || ($rpu->mutation_sejour_id && $conf.dPurgences.create_sejour_hospit)}}
           style="border-right: 5px solid black"
         {{/if}}>
         <a href="{{$rpu_link}}">
           {{if $rpu->ccmu}}
-  				  {{mb_value object=$rpu field=ccmu}}
+            {{mb_value object=$rpu field=ccmu}}
           {{/if}}
         </a>
         {{if $rpu->box_id}}
@@ -145,41 +145,41 @@
       </td>
       {{/if}}
   
-    	{{if $_sejour->annule}}
-    	<td colspan="2" class="text cancelled">
-  	  {{else}}
+      {{if $_sejour->annule}}
+      <td colspan="2" class="text cancelled">
+      {{else}}
       <td colspan="2" class="text" style="background-color: {{$background}};">
       {{/if}}
         <button type="button" class="search notext" title="Synthèse" onclick="showSynthese('{{$_sejour->_id}}');" style="float: right">Synthèse</button>
         {{mb_include template=inc_rpu_patient}}
       </td>
   
-    	{{if $_sejour->annule}}
+      {{if $_sejour->annule}}
       <td class="cancelled" colspan="{{if $conf.dPurgences.responsable_rpu_view}}4{{else}}3{{/if}}">
         {{tr}}Cancelled{{/tr}}
       </td>
-  		<td class="cancelled">
-  		  {{if $rpu->_ref_consult->_id}}
+      <td class="cancelled">
+        {{if $rpu->_ref_consult->_id}}
           {{mb_include template="inc_pec_praticien"}}
-  			{{/if}}
+        {{/if}}
       </td>
   
-  	  {{else}}
+      {{else}}
   
       <td class="text" style="background-color: {{$background}}; text-align: center;">
-  			{{mb_include module=system template=inc_object_notes object=$_sejour mode=view float=right}}
+        {{mb_include module=system template=inc_object_notes object=$_sejour mode=view float=right}}
         
-  			{{if $isImedsInstalled}}
-  			  {{mb_include module=Imeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
+        {{if $isImedsInstalled}}
+          {{mb_include module=Imeds template=inc_sejour_labo sejour=$_sejour link="$rpu_link#Imeds"}}
         {{/if}}
   
         <a href="{{$rpu_link}}">
-        	<span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$_sejour->_guid}}');">
             {{mb_value object=$_sejour field=_entree date=$date}}
            {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$_sejour}}
           </span>
         </a>
-  								
+                  
         {{if $show_statut == 1}}
           <div style="clear: both; font-weight: bold; padding-top: 3px;">
             {{if $type == "MainCourante"}}
@@ -263,16 +263,16 @@
                   {{if $prescription->_count_recent_modif_presc}}
                     <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
                   {{else}}
-    	              <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
-    	            {{/if}}
+                    <img src="images/icons/ampoule_grey.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
+                  {{/if}}
                 </a>
-  	    	    {{else}}
+              {{else}}
                 <img src="images/icons/placeholder.png"/>
-  			      {{/if}}
-  			      
-  			      {{if $_sejour->UHCD}}
-  			        <img src="images/icons/uhcd.png"/>
-  			      {{/if}}
+              {{/if}}
+              
+              {{if $_sejour->UHCD}}
+                <img src="images/icons/uhcd.png"/>
+              {{/if}}
             </form>
           </div>
         {{/if}}
@@ -288,50 +288,50 @@
   
       {{if $rpu->_id}}
         {{if $rpu->mutation_sejour_id}}
-  			  {{mb_include template=inc_dossier_mutation colspan=1}}
+          {{mb_include template=inc_dossier_mutation colspan=1}}
         {{else}} 
-    		  <td style="background-color: {{$background}}; text-align: center">
-    		    {{if $consult && $consult->_id}}
-      		    {{if !$_sejour->sortie_reelle && $show_statut}}
+          <td style="background-color: {{$background}}; text-align: center">
+            {{if $consult && $consult->_id}}
+              {{if !$_sejour->sortie_reelle && $show_statut}}
                 {{mb_include template=inc_icone_attente}}
               {{/if}}
-    			    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
-    			      Consult. {{$consult->heure|date_format:$conf.time}}
-    			      {{if $date != $consult->_ref_plageconsult->date}}
-    			      <br/>le {{$consult->_ref_plageconsult->date|date_format:$conf.date}}
-    			      {{/if}}
-    			    </a>
-    			    {{if !$_sejour->sortie_reelle}}
-    			      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
-    			    {{elseif $_sejour->sortie_reelle}}
+              <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
+                Consult. {{$consult->heure|date_format:$conf.time}}
+                {{if $date != $consult->_ref_plageconsult->date}}
+                <br/>le {{$consult->_ref_plageconsult->date|date_format:$conf.date}}
+                {{/if}}
+              </a>
+              {{if !$_sejour->sortie_reelle}}
+                ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
+              {{elseif $_sejour->sortie_reelle}}
                 {{if $_sejour->mode_sortie != "normal"}}
                   ({{mb_value object=$_sejour field=mode_sortie}}
                 {{else}}
                   (sortie
                 {{/if}}
                 à {{$_sejour->sortie_reelle|date_format:$conf.time}})
-    			    {{/if}}
-    		    {{else}}
-    		      {{mb_include template="inc_attente" sejour=$_sejour}}
-    	      {{/if}}
-    	    </td>
+              {{/if}}
+            {{else}}
+              {{mb_include template="inc_attente" sejour=$_sejour}}
+            {{/if}}
+          </td>
         {{/if}} 
       
-  	    {{if $medicalView}}
-    	    <td class="text" style="background-color: {{$background}};">
+        {{if $medicalView}}
+          <td class="text" style="background-color: {{$background}};">
             {{if $admin_urgences}}
               <button class="edit notext" style="float: right;" title="{{tr}}CRPU-modif_diag_infirmier{{/tr}}" onclick="fillDiag('{{$rpu->_id}}')"></button>
             {{/if}}
-  				  {{if $rpu->date_at}} 
-  					<img src="images/icons/accident_travail.png" />
-  				  {{/if}}
-    				{{if $rpu->motif && $conf.dPurgences.diag_prat_view}}
-    				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
-    				  	<strong>{{mb_title class=$rpu field=motif}}</strong> : {{$rpu->motif|nl2br}}
-    				  </span>
-    	      {{else}}
-    	       {{if $rpu->diag_infirmier}}
-    				  <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+            {{if $rpu->date_at}} 
+            <img src="images/icons/accident_travail.png" />
+            {{/if}}
+            {{if $rpu->motif && $conf.dPurgences.diag_prat_view}}
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
+                <strong>{{mb_title class=$rpu field=motif}}</strong> : {{$rpu->motif|nl2br}}
+              </span>
+            {{else}}
+             {{if $rpu->diag_infirmier}}
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$rpu->_guid}}');">
                 {{$rpu->diag_infirmier|nl2br}}
               </span>
               {{else}}
@@ -341,25 +341,25 @@
                   </span> 
                 {{/if}} 
               {{/if}}
-    	      {{/if}}
-    	    </td>
-  	    {{/if}}
-  	
-  	    <td class="button {{if $_sejour->type != "urg"}}arretee{{/if}}" style="background-color: {{$background}};">
-  			  {{mb_include template="inc_pec_praticien"}}
-  	    </td>
+            {{/if}}
+          </td>
+        {{/if}}
+    
+        <td class="button {{if $_sejour->type != "urg"}}arretee{{/if}}" style="background-color: {{$background}};">
+          {{mb_include template="inc_pec_praticien"}}
+        </td>
   
-  		{{else}}
-  			<!-- Pas de RPU pour ce séjour d'urgence -->
-  			<td colspan="{{$medicalView|ternary:3:2}}">
-  			  <div class="small-warning">
-  			  	{{tr}}CRPU.no_assoc{{/tr}}
-  			  	<br />
-  			  	{{tr}}CRPU.no_assoc_clic{{/tr}}
-  			  	<a class="button action new" href="{{$rpu_link}}">{{tr}}CRPU-title-create{{/tr}}</a>
-  			  </div>
-  			</td>
-  		{{/if}}
+      {{else}}
+        <!-- Pas de RPU pour ce séjour d'urgence -->
+        <td colspan="{{$medicalView|ternary:3:2}}">
+          <div class="small-warning">
+            {{tr}}CRPU.no_assoc{{/tr}}
+            <br />
+            {{tr}}CRPU.no_assoc_clic{{/tr}}
+            <a class="button action new" href="{{$rpu_link}}">{{tr}}CRPU-title-create{{/tr}}</a>
+          </div>
+        </td>
+      {{/if}}
       {{/if}}
     </tr>
   {{foreachelse}}
