@@ -183,7 +183,14 @@ $affectation->entree = CMbDT::addDateTime("08:00:00", $date);
 $affectation->sortie = CMbDT::addDateTime("23:00:00", $date);
 
 // Chargement des prestations
-$prestations_journalieres = CPrestationJournaliere::loadCurrentList();
+$systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
+
+if ($systeme_presta == "standard") {
+  $prestations = CPrestation::loadCurrentList();
+}
+else {
+  $prestations_journalieres = CPrestationJournaliere::loadCurrentList();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -203,8 +210,14 @@ $smarty->assign("totalLits"             , $totalLits);
 $smarty->assign("alerte"                , $alerte);
 $smarty->assign("groupSejourNonAffectes", $groupSejourNonAffectes);
 $smarty->assign("functions_filter"      , $functions_filter);
-$smarty->assign("prestations_journalieres", $prestations_journalieres);
 $smarty->assign("prestation_id"         , $prestation_id);
+$smarty->assign("systeme_presta"        , $systeme_presta);
+if ($systeme_presta == "standard") {
+  $smarty->assign("prestations"           , $prestations);
+}
+else {
+  $smarty->assign("prestations_journalieres", $prestations_journalieres);
+}
 
 $smarty->display("vw_affectations.tpl");
 

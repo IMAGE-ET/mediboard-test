@@ -29,7 +29,7 @@
         </select>
       </td>
     </tr>
-    {{if $prestations_journalieres|@count}}
+    {{if $systeme_presta == "expert" && $prestations_journalieres|@count}}
       <tr>
         <td>
           <select name="prestation_id" style="width: 16em;" onchange="this.form.onsubmit()">

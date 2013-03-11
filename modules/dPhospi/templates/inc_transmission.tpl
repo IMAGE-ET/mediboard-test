@@ -85,7 +85,7 @@ updateCible = function(elt) {
 
 submitTrans = function(form) {
   {{if $cible_mandatory_trans}}
-    if (!$V(form.cible)) {
+    if (!$V(form.libelle_ATC) && !$V(form.object_class) && !$V(form.object_id)) {
       alert("{{tr}}CTransmissionMedicale.cible_mandatory_trans{{/tr}}");
       return; 
     }
@@ -144,6 +144,7 @@ toggleDateMax = function() {
   <input type="hidden" name="action_id" value="{{$action_id}}" />
   <input type="hidden" name="result_id" value="{{$result_id}}" />
   <input type="hidden" name="callback" value="" />
+  <input type="hidden"  name="_locked" />
   <table style="width: 100%;">
     <tr>
       <td>
@@ -280,6 +281,9 @@ toggleDateMax = function() {
         {{tr}}Add{{/tr}}
       {{/if}}
     </button>
+    {{if !$transmission->_id && !$data_id && !$action_id && !$result_id}}
+      <button type="button" class="add" onclick="$V(this.form._locked, 1); submitTrans(this.form);">Ajouter et fermer la cible</button>
+    {{/if}}
   {{/if}}
   <div style="margin-top: 20px;" id="list_transmissions"></div>
 </form>

@@ -64,7 +64,7 @@ function viewTransmissions(service_id, user_id, degre, observations, transmissio
   if(user_id || degre || refresh){
     url.requestUpdate("_transmissions");
   } else {
-    url.requestUpdate("viewTransmissions");
+    url.requestUpdate("viewTrans");
   }
 }       
 
@@ -124,7 +124,7 @@ Main.add(function () {
 			
 <ul id="tab-pancarte" class="control_tabs">
   <li><a href="#viewPancarte">Pancarte {{$service->_view}}</a></li>
-  <li><a href="#viewTransmissions">Transmissions</a></li>
+  <li><a href="#viewTrans">Transmissions</a></li>
 	<li style="margin-top: 2px; padding-left: 2em; vertical-align: top;">
 	  <form name="selService" action="?" method="get">
 	    <input type="hidden" name="m" value="{{$m}}" />
@@ -203,7 +203,7 @@ Main.add(function () {
 		{{/foreach}}
 	</table>
 	</div>
-	<div id="viewTransmissions" style="display: none;">
+	<div id="viewTrans" style="display: none;">
 	</div>
 </div>
 

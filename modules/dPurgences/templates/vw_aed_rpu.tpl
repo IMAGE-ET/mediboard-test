@@ -91,7 +91,7 @@
   
   function submitSuivi(oForm) {
     sejour_id = oForm.sejour_id.value;
-    submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
+    submitFormAjax(oForm, 'systemMsg', { onComplete: function() { Control.Modal.close(); loadSuivi(sejour_id); } });
   }
   
   function refreshConstantesMedicales(context_guid) {

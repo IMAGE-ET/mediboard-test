@@ -106,7 +106,9 @@
       var url = new Url("hospi", "httpreq_vw_dossier_suivi");
       url.addParam("sejour_id", sejour_id);
       url.addParam("user_id", user_id);
-      url.addParam("cible", cible);
+      if (cible) {
+        url.addParam("cible", cible);
+      }
       if (!Object.isUndefined(show_obs)) {
         url.addParam("_show_obs", show_obs);
       }

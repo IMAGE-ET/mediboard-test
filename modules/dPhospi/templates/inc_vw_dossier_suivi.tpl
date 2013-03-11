@@ -213,6 +213,21 @@ createConsultEntree = function() {
   onSubmitFormAjax(getForm('addConsultation'));
 }
 
+toggleLockCible = function(transmission_id, lock) {
+  var form = getForm("lockTransmission");
+  $V(form.transmission_medicale_id, transmission_id);
+  $V(form.locked, lock);
+  onSubmitFormAjax(form, {onComplete: function() {
+    loadSuivi('{{$sejour->_id}}');
+  }});
+}
+
+showLockedTrans = function(transmission_id) {
+  var url = new Url("hospi", "ajax_list_locked_trans");
+  url.addParam("transmission_id", transmission_id);
+  url.requestModal(850, 550, {maxHeight: '550'});
+}
+
 {{if $count_trans > 0}}
   Main.add(showListTransmissions.curry(0, {{$count_trans}}));
 {{/if}}
@@ -221,8 +236,16 @@ App.readonly = false;
 
 </script>
 
+<form name="lockTransmission" method="post" action="?">
+  <input type="hidden" name="m" value="hospi"/>
+  <input type="hidden" name="dosql" value="do_transmission_aed"/>
+  <input type="hidden" name="transmission_medicale_id" />
+  <input type="hidden" name="locked" value="1" />
+
+</form>
+
 <form name="addTransmissionFrm" method="post" action="?">
-  <input type="hidden" name="m" value="dPhospi" />
+  <input type="hidden" name="m" value="hospi" />
   <input type="hidden" name="dosql" value="do_transmission_aed" />
   <input type="hidden" name="object_id" />
   <input type="hidden" name="object_class" />
@@ -233,7 +256,7 @@ App.readonly = false;
 </form>
 
 <form name="addConsultation" method="post" action="?">
-  <input type="hidden" name="m" value="dPcabinet" />
+  <input type="hidden" name="m" value="cabinet" />
   <input type="hidden" name="dosql" value="do_consult_now" />
   <input type="hidden" name="prat_id" value="{{$user->_id}}" />
   <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />

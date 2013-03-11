@@ -47,5 +47,5 @@ tri_transmissions = function(order_col, order_way){
   </tr>
 </table>
 <div id="_transmissions">
-  {{include file="../../dPprescription/templates/inc_vw_transmissions.tpl"}}
+  {{mb_include module=prescription template=inc_vw_transmissions}}
 </div>

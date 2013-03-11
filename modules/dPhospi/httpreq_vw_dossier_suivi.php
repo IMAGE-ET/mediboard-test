@@ -15,13 +15,17 @@ if(!$user->isPraticien()) {
 
 $sejour_id   = CValue::get("sejour_id", 0);
 $user_id     = CValue::get("user_id");
-$cible       = CValue::get("cible");
+$cible       = CValue::getOrSession("cible", "");
 $_show_obs   = CValue::getOrSession("_show_obs", 1);
 $_show_trans = CValue::getOrSession("_show_trans", 1);
 $_show_const = CValue::getOrSession("_show_const", 0);
 
+if ($cible != "") {
+  $_show_obs = $_show_const = 0;
+}
+
 // Chargement du sejour
-$sejour = new CSejour;
+$sejour = new CSejour();
 $sejour->load($sejour_id);
 $sejour->loadSuiviMedical();
 $sejour->loadRefPraticien();
@@ -36,10 +40,14 @@ $has_obs_entree = 0;
 
 $cible = stripslashes($cible);
 
-$cibles = array();
+$cibles = array(
+  "opened" => array(),
+  "closed" => array()
+);
 $users = array();
+$last_trans_cible = array();
 
-foreach ($sejour->_ref_suivi_medical as $_suivi) {
+foreach ($sejour->_ref_suivi_medical as $_key => $_suivi) {
   if (is_array($_suivi)) { 
     $_suivi = $_suivi[0];
   }
@@ -55,7 +63,7 @@ foreach ($sejour->_ref_suivi_medical as $_suivi) {
   elseif (!$_suivi instanceof CConsultation) {
     $users[$_suivi->user_id] = $_suivi->_ref_user;
     $type = ($_suivi instanceof CObservationMedicale) ? "obs" : "trans";
-    if ($user_id && $_suivi->user_id != $user_id){
+    if ($user_id && $_suivi->user_id != $user_id) {
       unset($sejour->_ref_suivi_medical[$_suivi->date.$_suivi->_id.$type]);
     }
     
@@ -66,9 +74,23 @@ foreach ($sejour->_ref_suivi_medical as $_suivi) {
       if ($cible && $_suivi->_cible != $cible) {
         unset($sejour->_ref_suivi_medical[$_suivi->date.$_suivi->_id.$type]);
       }
+
+      if ($_suivi->libelle_ATC) {
+        if (!isset($last_trans_cible[$_suivi->libelle_ATC])) {
+          $last_trans_cible[$_suivi->libelle_ATC] = $_suivi;
+        }
+      }
+      else if (!isset($last_trans_cible["$_suivi->object_class $_suivi->object_id"])) {
+        $last_trans_cible["$_suivi->object_class $_suivi->object_id"] = $_suivi;
+      }
     }
     $_suivi->canEdit();
   }
+}
+
+foreach ($last_trans_cible as &$_last) {
+  $_last->_log_lock = $_last->loadLastLogForField("locked");
+  $_last->_log_lock->loadRefUser()->loadRefMediuser()->loadRefFunction();
 }
 
 //TODO: Revoir l'ajout des constantes dans le suivi de soins 
@@ -79,7 +101,8 @@ if (!$cible && CAppUI::conf("soins constantes_show") && $_show_const) {
 
 //mettre les transmissions dans un tableau dont l'index est le datetime
 $list_trans_const = array();
-foreach ($sejour->_ref_suivi_medical as $_trans_const) {
+
+foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
   if (is_array($_trans_const)) {
     $_trans_const = $_trans_const[0];
   }
@@ -103,11 +126,18 @@ foreach ($sejour->_ref_suivi_medical as $_trans_const) {
     $list_trans_const[$_trans_const->_datetime] = $_trans_const;
   }
   elseif ($_trans_const instanceof CTransmissionMedicale) {
+    if (($_trans_const->libelle_ATC &&
+         $last_trans_cible[$_trans_const->libelle_ATC] != $_trans_const && $last_trans_cible[$_trans_const->libelle_ATC]->locked) ||
+        ($_trans_const->object_id && $last_trans_cible["$_trans_const->object_class $_trans_const->object_id"]->locked &&
+         $last_trans_cible["$_trans_const->object_class $_trans_const->object_id"] != $_trans_const)) {
+      unset($sejour->_ref_suivi_medical[$_key]);
+      continue;
+    }
     $sort_key = "$_trans_const->date $_trans_const->_class $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
     
     $date_before = CMbDT::dateTime("-1 SECOND", $_trans_const->date);
     $sort_key_before = "$date_before $_trans_const->_class $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
-    
+
     $date_after  = CMbDT::dateTime("+1 SECOND", $_trans_const->date);
     $sort_key_after = "$date_after $_trans_const->_class $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
     
@@ -137,6 +167,10 @@ foreach ($sejour->_ref_suivi_medical as $_trans_const) {
   }
 }
 
+/*foreach ($last_trans_cible as $_trans) {
+  $_trans->
+}*/
+
 krsort($list_trans_const);
 
 $count_trans = count($list_trans_const);
@@ -159,6 +193,7 @@ $smarty->assign("cible"       , $cible);
 $smarty->assign("users"       , $users);
 $smarty->assign("user_id"     , $user_id);
 $smarty->assign("has_obs_entree", $has_obs_entree);
+$smarty->assign("last_trans_cible", $last_trans_cible);
 $smarty->assign("_show_obs"   , $_show_obs);
 $smarty->assign("_show_trans" , $_show_trans);
 $smarty->assign("_show_const" , $_show_const);

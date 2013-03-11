@@ -195,7 +195,9 @@ function loadSuivi(sejour_id, user_id, cible, show_obs, show_trans, show_const) 
   var urlSuivi = new Url("dPhospi", "httpreq_vw_dossier_suivi");
   urlSuivi.addParam("sejour_id", sejour_id);
   urlSuivi.addParam("user_id", user_id);
-  urlSuivi.addParam("cible", cible);
+  if (!Object.isUndefined(cible)) {
+    urlSuivi.addParam("cible", cible);
+  }
   if (!Object.isUndefined(show_obs)) {
     urlSuivi.addParam("_show_obs", show_obs);
   }

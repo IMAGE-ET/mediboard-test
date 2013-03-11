@@ -29,13 +29,18 @@
             <label for="_show_const_view" title="{{tr}}CConstantesMedicales{{/tr}}">{{tr}}CConstantesMedicales._show_const{{/tr}}</label>
           {{/if}}
           
-			    <select style="width:150px" name="selCible" onchange="loadSuivi('{{$sejour->_id}}','',this.value)" >
+			    <select style="width: 150px" name="selCible" onchange="loadSuivi('{{$sejour->_id}}','',this.value)" >
 			      <option value="">&mdash; Toutes les cibles</option>
-			      {{foreach from=$cibles item=cibles_by_type}}
-			        {{foreach from=$cibles_by_type item=_cible}}
-			          <option {{if $_cible == $cible}} selected="selected" {{/if}} value="{{$_cible}}">{{$_cible|capitalize}}</option>
-			        {{/foreach}}
-			      {{/foreach}}
+			      {{foreach from=$cibles item=cibles_by_state key=state}}
+              {{if $cibles_by_state|@count}}
+                <optgroup label="{{tr}}CTransmission.state.{{$state}}{{/tr}}"></optgroup>
+                {{foreach from=$cibles_by_state item=cibles_by_type}}
+                  {{foreach from=$cibles_by_type item=_cible}}
+                    <option {{if $_cible == $cible}} selected="selected" {{/if}} value="{{$_cible}}">{{$_cible|capitalize}}</option>
+                  {{/foreach}}
+                {{/foreach}}
+              {{/if}}
+            {{/foreach}}
 			    </select>
 			    
 			    {{if @$users}}
@@ -58,7 +63,7 @@
     <th rowspan="2">{{tr}}Hour{{/tr}}</th>
     <th rowspan="2">{{mb_title class=CTransmissionMedicale field=object_class}}</th>
 		<th colspan="3" style="width: 50%">{{mb_title class=CTransmissionMedicale field=text}}</th>
-    <th rowspan="2" class="narrow"></th>
+    <th rowspan="2"></th>
   </tr>
   <tr>
     <th class="section" style="width: 17%">{{tr}}CTransmissionMedicale.type.data{{/tr}}</th>
@@ -98,7 +103,7 @@
   {{foreachelse}}
   </tbody>
     <tr>
-      <td colspan="7" class="empty">{{tr}}CTransmissionMedicale.none{{/tr}}</td>
+      <td colspan="9" class="empty">{{tr}}CTransmissionMedicale.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>
