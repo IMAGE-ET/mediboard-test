@@ -47,17 +47,17 @@
             {{mb_field object=$rpu field="ccmu" emptyLabel="Choose" style="width: 15em;"}}
             <script>
               Main.add(function () {
+                var form = getForm("editBox");
+                var ccmu = form.ccmu;
+                ccmu.options[2].disabled=true;
+                ccmu.options[6].disabled=true;
+                ccmu.options[7].disabled=true;
+                ccmu.options[2].hide();
+                ccmu.options[6].hide();
+                ccmu.options[7].hide();
                 {{if $rpu->code_diag}}
                   var min = '{{$rpu->_ref_motif->degre_min}}';
                   var max = '{{$rpu->_ref_motif->degre_max}}';
-                  var form = getForm("editBox");
-                  var ccmu = form.ccmu;
-                  ccmu.options[2].disabled=true;
-                  ccmu.options[6].disabled=true;
-                  ccmu.options[7].disabled=true;
-                  ccmu.options[2].hide();
-                  ccmu.options[6].hide();
-                  ccmu.options[7].hide();
                   for (var i=0; i<ccmu.options.length; i++){
                     if (i == 2) { i++; min++; max++;}
                     if (i<min || i>max) {
