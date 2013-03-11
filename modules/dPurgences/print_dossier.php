@@ -80,7 +80,7 @@ if (CModule::getActive("dPprescription")){
   $prescription->loadMatchingObject();
 
   // Chargement des lignes
-  $prescription->loadRefsLinesMedComments("1", "", "", "0", "1");
+  $prescription->loadRefsLinesMedComments("0", "0", "1", "", "", "0", "1");
   $prescription->loadRefsLinesElementsComments();
   $prescription->loadRefsPrescriptionLineMixes();
 

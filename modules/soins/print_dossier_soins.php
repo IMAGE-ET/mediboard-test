@@ -101,7 +101,7 @@ if (CModule::getActive("dPprescription")) {
   $prescription = $sejour->loadRefPrescriptionSejour();
 
   // Chargement des lignes
-  $prescription->loadRefsLinesMedComments("1", "", "", "0", "1");
+  $prescription->loadRefsLinesMedComments("1", "1", "1", "", "", "0", "1");
   $prescription->loadRefsLinesElementsComments();
   $prescription->loadRefsPrescriptionLineMixes();
 
