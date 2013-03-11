@@ -1,4 +1,4 @@
-<?php /* $Id $ */
+<?php /** $Id $ **/
 
 /**
  * @package Mediboard
@@ -11,7 +11,7 @@
 CCanDo::checkAdmin();
 
 $sejour = new CSejour();
-$sejour_types = $sejour->_specs["type"]->_list;
+$sejour_types = CSejour::$types;
 
 // Création du template
 $smarty = new CSmartyDP();
