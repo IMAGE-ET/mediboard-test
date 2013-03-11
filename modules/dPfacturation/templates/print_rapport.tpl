@@ -156,7 +156,7 @@
               </tr>
               {{/foreach}}
               
-              {{if abs($_facture->_du_restant_patient) > 0.001}}
+              {{if abs($_facture->_du_restant_patient) > 0.01}}
               <tr>
                 <td colspan="4" class="button">
                   {{assign var=new_reglement value=$_facture->_new_reglement_patient}}
@@ -186,7 +186,7 @@
               </tr>
               {{/foreach}}
 
-              {{if abs($_facture->_du_restant_tiers) > 0.001}}
+              {{if abs($_facture->_du_restant_tiers) > 0.01}}
               <tr>
                 <td colspan="4" class="button">
                   {{assign var=new_reglement value=$_facture->_new_reglement_tiers}}
