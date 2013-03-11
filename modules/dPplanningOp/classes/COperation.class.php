@@ -1250,6 +1250,14 @@ class COperation extends CCodable implements IPatientRelated {
     $template->addProperty("Opération - convalescence"        , $this->_ref_sejour->convalescence);
     $template->addProperty("Opération - remarques"            , $this->rques);
 
+    $consult_anesth = $this->_ref_consult_anesth;
+    $consult = $consult_anesth->loadRefConsultation();
+    $consult->loadRefPlageConsult();
+    $template->addDateProperty("Opération - Consultation anesthésie - Date", $consult->_id ? $consult->_datetime : "");
+    $template->addLongDateProperty("Opération - Consultation anesthésie - Date (longue)", $consult->_id ? $consult->_datetime : "");
+    $template->addLongDateProperty("Opération - Consultation anesthésie - Date (longue, minuscule)", $consult->_id ? $consult->_datetime : "", true);
+    $template->addTimeProperty("Opération - Consultation anesthésie - Heure", $consult->_id ? $consult->_datetime : "");
+
     $template->addBarcode("Opération - Code Barre ID"         , $this->_id);
 
     $list = CMbArray::pluck($this->_ref_files, "file_name");

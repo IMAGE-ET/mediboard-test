@@ -61,6 +61,7 @@ class CTemplateManager {
     $now = CMbDT::dateTime();
     $this->addDateProperty("Général - date du jour", $now);
     $this->addLongDateProperty("Général - date du jour (longue)", $now);
+    $this->addLongDateProperty("Général - date du jour (longue, minuscule)", $now, true);
     $this->addTimeProperty("Général - heure courante", $now);
 
     // Connected user
@@ -252,14 +253,15 @@ class CTemplateManager {
   /**
    * Ajoute un champ de type date longue
    *
-   * @param string $field Nom du champ
-   * @param string $value Valeur du champ
+   * @param string  $field     Nom du champ
+   * @param string  $value     Valeur du champ
+   * @param boolean $lowercase Champ avec des minuscules
    *
    * @return void
    */
-  function addLongDateProperty($field, $value) {
+  function addLongDateProperty($field, $value, $lowercase = false) {
     $value = $value ? ucfirst(CMbDT::transform(null, $value, CAppUI::conf("longdate"))) : "";
-    $this->addProperty($field, $value);
+    $this->addProperty($field, $lowercase ? strtolower($value) : $value);
   }
 
   /**

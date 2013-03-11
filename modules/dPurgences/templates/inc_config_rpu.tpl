@@ -32,6 +32,7 @@
     {{mb_include module=system template=inc_config_bool var=create_sejour_hospit}}
     {{mb_include module=system template=inc_config_bool var=valid_cotation_sortie_reelle}}
     {{mb_include module=system template=inc_config_bool var=use_blocage_lit}}
+    {{mb_include module=system template=inc_config_bool var=motif_rpu_view}}
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
