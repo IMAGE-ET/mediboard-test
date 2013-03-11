@@ -94,18 +94,20 @@
         {{$recapReglement.total.du_patient+$recapReglement.total.du_tiers|currency}}
       </td>
     </tr>
-    <tr>
-      <th>Total non réglé patient</th>
-      <td colspan="4">{{$recapReglement.total.reste_patient|currency}}</td>
-      <th colspan="4">Total non réglé</th>
-    </tr>
-    <tr>
-      <th>Total non réglé tiers</th>
-      <td colspan="4">{{$recapReglement.total.reste_tiers|currency}}</td>
-      <td colspan="4" class="button">
-        {{$recapReglement.total.reste_patient+$recapReglement.total.reste_tiers|currency}}
-      </td>
-    </tr>
+    {{if $a == "print_rapport"}}
+      <tr>
+        <th>Total non réglé patient</th>
+        <td colspan="4">{{$recapReglement.total.reste_patient|currency}}</td>
+        <th colspan="4">Total non réglé</th>
+      </tr>
+      <tr>
+        <th>Total non réglé tiers</th>
+        <td colspan="4">{{$recapReglement.total.reste_tiers|currency}}</td>
+        <td colspan="4" class="button">
+          {{$recapReglement.total.reste_patient+$recapReglement.total.reste_tiers|currency}}
+        </td>
+      </tr>
+    {{/if}}
   {{else}}
     <tr>
       <th>{{mb_label class=CConsultation field=_somme}}</th>

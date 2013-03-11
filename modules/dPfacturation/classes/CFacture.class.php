@@ -216,7 +216,7 @@ class CFacture extends CMbObject {
     $this->du_tiers   = 0;
     
     if (count($this->_ref_sejours) != 0 || count($this->_ref_consults) != 0) {
-      if (!count($this->_ref_items)){
+      if (!count($this->_ref_items)) {
         if (count($this->_ref_sejours)) {
           foreach ($this->_ref_sejours as $sejour) {
             foreach ($sejour->_ref_operations as $op) {
@@ -431,6 +431,9 @@ class CFacture extends CMbObject {
     }
     
     $this->updateMontants();
+    if (!count($this->_ref_consults) && !count($this->_ref_sejours)) {
+      $this->delete();
+    }
   }
   /**
    * Chargement de toutes les consultations de la facture

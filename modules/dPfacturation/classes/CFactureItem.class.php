@@ -39,6 +39,7 @@ class CFactureItem extends CMbMetaObject {
   
   // References
   public $_ref_facture;
+  public $_montant_facture;
    
   public $_ttc;
   
@@ -88,6 +89,7 @@ class CFactureItem extends CMbMetaObject {
   **/
   function updateFormFields() {
     parent::updateFormFields();
+    $this->_montant_facture = $this->montant_base + $this->montant_depassement;
     $this->_view = $this->libelle;
   }
   
