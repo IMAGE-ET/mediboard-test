@@ -272,10 +272,25 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $codeLibelle = $this->addElement($elParent, $nodeName);
     $code = str_replace(" ", "", $code);
     $this->addTexte($codeLibelle, "code", $code, 10);
+
     if ($libelle) {
       $this->addTexte($codeLibelle, "libelle", $libelle, 35);
     }
+
     return $codeLibelle;
+  }
+
+  function addCodeLibelleCommentaire($elParent, $nodeName, $code, $libelle, $dictionnaire = null, $commentaire = null) {
+    $identification = $this->addElement($elParent, $nodeName);
+
+    $this->addTexte($identification, "code", str_replace(" ", "", $code), 10);
+    $this->addTexte($identification, "libelle", $libelle, 35);
+    $this->addTexte($identification, "dictionnaire", $dictionnaire, 12);
+    $this->addCommentaire($identification, $commentaire);
+  }
+
+  function addCommentaire($elParent, $commentaire) {
+    $this->addTexte($elParent, "commentaire", $commentaire, 4000);
   }
   
   function addAgent($elParent, $categorie, $code, $libelle) {
@@ -942,6 +957,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
 
   function addVoletMedical($elParent, CSejour $sejour) {
+    $sejour->loadRefDossierMedical();
+
     // constantes
     $this->addConstantes($elParent, $sejour);
 
@@ -959,9 +976,11 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
 
   function addConstantes($elParent, CSejour $sejour) {
-    $constantes = $sejour->loadListConstantesMedicales();
-    foreach ($constantes as $_constante) {
-      $this->addListConstante($elParent, $_constante);
+    $constantes_medicales = $sejour->loadListConstantesMedicales();
+
+    $constantes = $this->addElement($elParent, "constantes");
+    foreach ($constantes_medicales as $_constante) {
+      $this->addListConstante($constantes, $_constante);
     }
   }
 
@@ -985,7 +1004,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $list_constantes = CConstantesMedicales::$list_constantes;
 
     $constante = $this->addElement($elParent, "constante");
-    $this->addAttribute($constante, "nature", "");
+    $this->addAttribute($constante, "nature", CMbArray::get(CHPrimXMLDocument::$list_constantes, $type));
 
     $valeur = $this->addElement($constante, "valeur", $constante_medicale->$type);
     $this->addAttribute($valeur, "unite", CMbArray::get($list_constantes[$type], "unit"));
@@ -995,19 +1014,127 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
 
   function addAntecedents($elParent, CSejour $sejour) {
+    $antecedents = $this->addElement($elParent, "antecedents");
 
+    $all_antecedents = $sejour->loadRefDossierMedical()->loadRefsAntecedents();
+
+    foreach ($all_antecedents as $_antecedent) {
+      // On exclut les antécédents familliaux et les allergies
+      if ($_antecedent->type == "fam" || $_antecedent->type == "alle") {
+        continue;
+      }
+
+      $this->addAntecedent($antecedents, $_antecedent);
+    }
+  }
+
+  function addAntecedent($elParent, CAntecedent $antecedent) {
+    $elAntecedent = $this->addElement($elParent, "antecedent");
+
+    $rques = CMbString::htmlspecialchars($_antecedent->rques);
+    $rques = CMbString::convertHTMLToXMLEntities($rques);
+
+    if (preg_match_all("/[A-Z]\d{2}\.?\d{0,2}/i", $rques, $matches, PREG_SET_ORDER)) {
+      foreach ($matches as $_matches) {
+        foreach ($_matches as $_match) {
+          $this->addCodeLibelleCommentaire($elAntecedent, "identification", $_match, $rques, "CIM10");
+        }
+      }
+    }
+    else {
+      $this->addCodeLibelle($elAntecedent, "identification", $antecedent->_id, $rques);
+    }
+
+    if ($antecedent->date) {
+      $date_explode = explode("-", $antecedent->date);
+      if ($date_explode[1] == "00") {
+        $date_explode[1] = "01";
+      }
+      if ($date_explode[2] == "00") {
+        $date_explode[2] = "01";
+      }
+
+      $date = $date_explode[0]."-".$date_explode[1]."-".$date_explode[2];
+
+      $this->addElement($elAntecedent, "dateDebutEstimee", $date);
+    }
   }
 
   function addAllergies($elParent, CSejour $sejour) {
+    $allergies = $this->addElement($elParent, "allergies");
 
+    $all_antecedents = $sejour->_ref_dossier_medical->_all_antecedents;
+
+    foreach ($all_antecedents as $_antecedent) {
+      if ($_antecedent->type != "alle") {
+        continue;
+      }
+
+      $rques = CMbString::htmlspecialchars($_antecedent->rques);
+      $rques = CMbString::convertHTMLToXMLEntities($rques);
+
+      $allergie = $this->addElement($allergies, "allergie");
+      if (preg_match_all("/[A-Z]\d{2}\.?\d{0,2}/i", $rques, $matches, PREG_SET_ORDER)) {
+        foreach ($matches as $_matches) {
+          foreach ($_matches as $_match) {
+            $this->addCodeLibelleCommentaire($allergie, "allergene", $_match, $rques, "CIM10");
+          }
+        }
+      }
+      else {
+        $this->addCodeLibelle($allergie, "allergene", $_antecedent->_id, $rques);
+      }
+
+      if ($_antecedent->date) {
+        $date_explode = explode("-", $_antecedent->date);
+        if ($date_explode[1] == "00") {
+          $date_explode[1] = "01";
+        }
+        if ($date_explode[2] == "00") {
+          $date_explode[2] = "01";
+        }
+
+        $date = $date_explode[0]."-".$date_explode[1]."-".$date_explode[2];
+
+        $this->addElement($allergie, "dateDebutEstimee", $date);
+      }
+    }
   }
 
   function addTraitements($elParent, CSejour $sejour) {
+    $elTraitements = $this->addElement($elParent, "traitements");
 
+    $traitements = $sejour->_ref_dossier_medical->loadRefsTraitements();
+
+    foreach ($traitements as $_traitement) {
+      $this->addTraitement($elTraitements, $_traitement);
+    }
+  }
+
+  function addTraitement($elParent, CTraitement $traitement) {
+    $rques = CMbString::htmlspecialchars($traitement->traitement);
+    $rques = CMbString::convertHTMLToXMLEntities($rques);
+
+    $elTraitement = $this->addCodeLibelle($elParent, "traitement", $traitement->_id, $rques);
+
+    $this->addElement($elTraitement, "dateDebutEstimee", $traitement->debut);
+    $this->addElement($elTraitement, "dateFinEstimee", $traitement->fin);
   }
 
   function addAntecedentsFamiliaux($elParent, CSejour $sejour) {
+    $antecedentsFamiliaux = $this->addElement($elParent, "antecedentsFamiliaux");
 
+    $all_antecedents = $sejour->_ref_dossier_medical->_all_antecedents;
+
+    foreach ($all_antecedents as $_antecedent) {
+      if ($_antecedent->type != "fam") {
+        continue;
+      }
+
+      $antecedentFamilial = $this->addElement($antecedentsFamiliaux, "antecedentFamilial");
+      $this->addElement($antecedentFamilial, "parent", "pr");
+      $this->addAntecedent($antecedentFamilial, $_antecedent);
+    }
   }
   
   function addIntervention($elParent, COperation $operation, $referent = null, $light = false) {
