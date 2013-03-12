@@ -1354,7 +1354,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     }
 
     $sender  = $this->_ref_sender;
-    $ljoin[] = "functions_mediboard ON functions_mediboard.function_id = users_mediboard.function_id";
+    $ljoin = array();
+    $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
 
     $where   = array();
     $where["functions_mediboard.group_id"] = " = '$sender->group_id'";
@@ -1379,8 +1380,12 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
       $user = new CUser;
 
-      $where[] = $ds->prepare("user_first_name = %", $first_name);
-      $where[] = $ds->prepare("user_last_name = %", $last_name);
+      $ljoin = array();
+      $ljoin["users_mediboard"]     = "users.user_id = users_mediboard.user_id";
+      $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+
+      $where[] = $ds->prepare("users.user_first_name = %", $first_name);
+      $where[] = $ds->prepare("users.user_last_name = %" , $last_name);
 
       if ($user->loadObject($where, null, null, $ljoin)) {
         return $user->_id;
