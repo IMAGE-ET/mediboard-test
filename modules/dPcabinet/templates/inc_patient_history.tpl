@@ -104,9 +104,6 @@
 
 </table>
 
-{{assign var=multiple_dossiers_anesth value=$conf.dPcabinet.CConsultAnesth.multiple_dossiers_anesth}}
-{{if $multiple_dossiers_anesth}}
-  <div id="dossiers_anesth_area">
-    {{mb_include module=cabinet template=inc_multi_consult_anesth}}
-  </div>
-{{/if}}
+<div id="dossiers_anesth_area">
+  {{mb_include module=cabinet template=inc_multi_consult_anesth}}
+</div>

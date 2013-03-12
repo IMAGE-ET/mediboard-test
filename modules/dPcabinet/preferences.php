@@ -30,6 +30,6 @@ CPreferences::$modules["dPcabinet"] = array (
   "viewFunctionPrats",
   "empty_form_atcd",
   "new_semainier",
-  "order_mode_grille"
+  "order_mode_grille",
+  "create_dossier_anesth",
 );
-?>

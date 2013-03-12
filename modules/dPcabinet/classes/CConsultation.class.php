@@ -950,8 +950,10 @@ TESTS A EFFECTUER
     if ($msg = parent::store()) {
       return $msg;
     }
-    
-    $this->createConsultAnesth();
+
+    if (CAppUI::pref("create_dossier_anesth")) {
+      $this->createConsultAnesth();
+    }
 
     // Forfait SE et facturable. A laisser apres le store()
     if ($this->sejour_id && CAppUI::conf("dPcabinet CConsultation attach_consult_sejour")) {

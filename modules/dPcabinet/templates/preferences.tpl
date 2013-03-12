@@ -32,3 +32,4 @@
 {{mb_include template=inc_pref spec=bool var=empty_form_atcd}}
 {{mb_include template=inc_pref spec=bool var=new_semainier}}
 {{mb_include template=inc_pref spec=str var=order_mode_grille readonly=true}}
+{{mb_include template=inc_pref spec=bool var=create_dossier_anesth}}

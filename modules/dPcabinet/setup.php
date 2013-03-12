@@ -1828,6 +1828,9 @@ class CSetupdPcabinet extends CSetup {
               ADD `ald` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.95";
+    $this->makeRevision("1.95");
+    $this->addPrefQuery("create_dossier_anesth", "1");
+
+    $this->mod_version = "1.96";
   }
 }
