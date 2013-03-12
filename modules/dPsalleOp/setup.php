@@ -1107,7 +1107,7 @@ class CSetupdPsalleOp extends CSetup {
     $this->makeRevision("0.45");
 
     $query = "ALTER TABLE `acte_ccam`
-                ADD `ald` ENUM ('0','1') NOT NULL DEFAULT '0'
+                ADD `ald` ENUM ('0','1') NOT NULL DEFAULT '0',
                 ADD `lieu` ENUM('C', 'D') DEFAULT 'C' NOT NULL,
                 ADD `exoneration` ENUM('N', '13', '15', '17', '19') DEFAULT 'N' NOT NULL;";
     $this->addQuery($query);
