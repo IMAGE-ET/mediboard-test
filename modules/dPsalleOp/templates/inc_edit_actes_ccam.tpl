@@ -293,7 +293,22 @@
                 </tr>
                 {{/if}}
               {{/if}}
-      
+
+              <!-- Codes d'exonération -->
+              <tr class="{{$view}}">
+                <th>{{mb_label object=$acte field=exoneration}}</th>
+                <td>{{mb_field object=$acte field=exoneration}}</td>
+              </tr>
+
+
+              <!-- ALD -->
+              {{if $subject->_ref_patient->ald == 1}}
+                <tr class="{{$view}}">
+                  <th>{{mb_label object=$acte field=ald}}</th>
+                  <td>{{mb_field object=$acte field=ald}}</td>
+                </tr>
+              {{/if}}
+
               <!-- Commentaire -->
               {{if $confCCAM.commentaire}}
               <tr class="{{$view}} commentaire" {{if !$acte->commentaire}}style="display: none;"{{/if}}>
