@@ -91,8 +91,15 @@ class CSetupmaternite extends CSetup {
     $query = "ALTER TABLE `grossesse` 
       ADD `date_fin_allaitement` DATE;";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.09";
+
+    $this->makeRevision("0.09");
+    $query = "ALTER TABLE `naissance`
+      ADD `num_naissance` INT (11) UNSIGNED,
+      ADD `lieu_accouchement` ENUM ('sur_site','exte') DEFAULT 'sur_site',
+      ADD `fausse_couche` ENUM ('inf_15','sup_15'),
+      ADD `rques` TEXT;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.10";
   }
 }
-?>

@@ -16,6 +16,8 @@ $dPconfig["maternite"] = array(
   "duree_sejour" => "3",
   "CGrossesse" =>array(
     "date_regles_obligatoire" => "0"
+  ),
+  "CNaissance" => array(
+    "num_naissance" => "1",
   )
 );
-?>

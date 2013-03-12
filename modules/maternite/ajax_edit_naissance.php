@@ -18,12 +18,12 @@ $provisoire     = CValue::get("provisoire", 0);
 $sejour_id      = CValue::get("sejour_id");
 $callback       = CValue::get("callback");
 
-$constantes = new CConstantesMedicales;
+$constantes = new CConstantesMedicales();
 
-$patient    = new CPatient;
+$patient    = new CPatient();
 $patient->naissance = CMbDT::date();
 
-$sejour = new CSejour;
+$sejour = new CSejour();
 $sejour->load($sejour_id);
 $parturiente = $sejour->loadRefPatient();
 
@@ -57,7 +57,10 @@ else {
   
   $naissance->sejour_maman_id = $sejour_id;
   $naissance->operation_id = $operation_id;
-  
+
+  $num_naissance = CAppUI::conf("maternite CNaissance num_naissance");
+  $naissance->num_naissance = $num_naissance + $naissance->countList();
+
   if (!$anonmymous) {
     $patient->nom = $parturiente->nom;
   }
@@ -65,7 +68,7 @@ else {
 
 $sejour->loadRefPraticien();
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("naissance"  , $naissance);
 $smarty->assign("patient"    , $patient);
@@ -79,4 +82,3 @@ $smarty->assign("operation_id", $operation_id);
 $smarty->assign("list_constantes", CConstantesMedicales::$list_constantes);
 
 $smarty->display("inc_edit_naissance.tpl");
-?>

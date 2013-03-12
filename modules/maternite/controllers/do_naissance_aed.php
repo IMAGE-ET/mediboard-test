@@ -13,5 +13,3 @@
 
 $do = new CDoObjectAddEdit("CNaissance");
 $do->doIt();
-
-?>

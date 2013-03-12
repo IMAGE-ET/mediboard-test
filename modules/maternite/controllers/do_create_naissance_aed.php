@@ -11,25 +11,29 @@
  * @link     http://www.mediboard.org
  */
 
-$naissance_id = CValue::post("naissance_id");
-$operation_id = CValue::post("operation_id");
-$patient_id   = CValue::post("patient_id");
-$praticien_id = CValue::post("praticien_id");
-$hors_etab    = CValue::post("hors_etab");
-$sexe         = CValue::post("sexe");
-$heure        = CValue::post("heure");
-$rang         = CValue::post("rang");
-$date_naissance = CValue::post("naissance");
-$nom          = CValue::post("nom");
-$prenom       = CValue::post("prenom");
-$poids        = CValue::post("poids");
-$taille       = CValue::post("taille");
-$constantes_id = CValue::post("constantes_medicales_id");
-$sejour_maman_id = CValue::post("sejour_maman_id");
+$naissance_id      = CValue::post("naissance_id");
+$operation_id      = CValue::post("operation_id");
+$patient_id        = CValue::post("patient_id");
+$praticien_id      = CValue::post("praticien_id");
+$hors_etab         = CValue::post("hors_etab");
+$sexe              = CValue::post("sexe");
+$heure             = CValue::post("heure");
+$rang              = CValue::post("rang");
+$date_naissance    = CValue::post("naissance");
+$nom               = CValue::post("nom");
+$prenom            = CValue::post("prenom");
+$poids             = CValue::post("poids");
+$taille            = CValue::post("taille");
+$num_naissance     = CValue::post("num_naissance");
+$lieu_accouchement = CValue::post("lieu_accouchement");
+$fausse_couche     = CValue::post("fausse_couche");
+$rques             = CValue::post("rques");
+$constantes_id     = CValue::post("constantes_medicales_id");
+$sejour_maman_id   = CValue::post("sejour_maman_id");
 $perimetre_cranien = CValue::post("perimetre_cranien");
-$callback     = CValue::post("callback");
+$callback          = CValue::post("callback");
 
-$sejour = new CSejour;
+$sejour = new CSejour();
 $sejour->load($sejour_maman_id);
 
 $parturiente = $sejour->loadRefPatient();
@@ -59,7 +63,7 @@ function storeObject($object) {
 
 if (!$naissance_id) {
   // Etape 1 (patient)
-  $patient = new CPatient;
+  $patient = new CPatient();
   
   $patient->nom = $nom;
   $patient->prenom = $prenom;
@@ -69,7 +73,7 @@ if (!$naissance_id) {
   
   // Etape 2 (constantes)
   if ($poids || $taille || $perimetre_cranien) {
-    $constantes = new CConstantesMedicales;
+    $constantes = new CConstantesMedicales();
     $constantes->patient_id = $patient->_id;
     $constantes->datetime = "now";
     $constantes->poids = $poids;
@@ -79,7 +83,7 @@ if (!$naissance_id) {
   }
   
   // Etape 3 (séjour)
-  $sejour_enfant = new CSejour;
+  $sejour_enfant = new CSejour();
   $sejour_enfant->entree_reelle = $datetime;
   $sejour_enfant->sortie_prevue = $curr_affect->sortie ? $curr_affect->sortie : $sejour->sortie;
   $sejour_enfant->patient_id = $patient->_id;
@@ -91,7 +95,7 @@ if (!$naissance_id) {
   // Etape 4 (affectation)
   // Checker si l'affectation de la maman existe
   if ($heure && $curr_affect->_id) {
-    $affectation = new CAffectation;
+    $affectation = new CAffectation();
     $affectation->entree = $sejour_enfant->entree_reelle;
     $affectation->sortie = $sejour_enfant->sortie_prevue;
     $affectation->lit_id = $curr_affect->lit_id;
@@ -101,24 +105,32 @@ if (!$naissance_id) {
   }
   
   // Etape 5 (naissance)
-  $naissance = new CNaissance;
-  $naissance->sejour_maman_id  = $sejour_maman_id;
-  $naissance->sejour_enfant_id = $sejour_enfant->_id;
-  $naissance->operation_id = $operation_id;
-  $naissance->grossesse_id = $grossesse->_id;
-  $naissance->rang         = $rang;
-  $naissance->heure        = $heure;
-  $naissance->hors_etab    = $hors_etab;
+  $naissance = new CNaissance();
+  $naissance->sejour_maman_id   = $sejour_maman_id;
+  $naissance->sejour_enfant_id  = $sejour_enfant->_id;
+  $naissance->operation_id      = $operation_id;
+  $naissance->grossesse_id      = $grossesse->_id;
+  $naissance->rang              = $rang;
+  $naissance->heure             = $heure;
+  $naissance->hors_etab         = $hors_etab;
+  $naissance->num_naissance     = $num_naissance;
+  $naissance->lieu_accouchement = $lieu_accouchement;
+  $naissance->fausse_couche     = $fausse_couche;
+  $naissance->rques             = $rques;
   storeObject($naissance);
 }
 // Modification d'une naissance
 else {
   $validation_naissance = false;
-  $naissance = new CNaissance;
+  $naissance = new CNaissance();
   $naissance->load($naissance_id);
-  $naissance->rang = $rang;
-  $naissance->hors_etab = $hors_etab;
-  
+  $naissance->rang              = $rang;
+  $naissance->hors_etab         = $hors_etab;
+  $naissance->num_naissance     = $num_naissance;
+  $naissance->lieu_accouchement = $lieu_accouchement;
+  $naissance->fausse_couche     = $fausse_couche;
+  $naissance->rques             = $rques;
+
   if (!$naissance->heure && $heure) {
     $validation_naissance = true;
     $naissance->operation_id = $operation_id;
@@ -129,7 +141,7 @@ else {
   
   $sejour = $naissance->loadRefSejourEnfant();
   
-  $patient = new CPatient;
+  $patient = new CPatient();
   $patient->load($sejour->patient_id);
   $patient->nom = $nom;
   $patient->prenom = $prenom;
@@ -138,7 +150,7 @@ else {
   $patient->naissance = $date_naissance;
   storeObject($patient);
   
-  $sejour_enfant = new CSejour;
+  $sejour_enfant = new CSejour();
   $sejour_enfant->load($naissance->sejour_enfant_id);
   $sejour_enfant->praticien_id = $praticien_id;
   $sejour_enfant->_naissance = true;
@@ -161,7 +173,7 @@ else {
       $affectation = $sejour_enfant->loadRefCurrAffectation();
       
       if (!$affectation->_id) {
-        $affectation = new CAffectation;
+        $affectation = new CAffectation();
         $affectation->entree = $sejour_enfant->entree_reelle;
         $affectation->sortie = $sejour_enfant->sortie_prevue;
         $affectation->lit_id = $curr_affect->lit_id;
@@ -173,7 +185,7 @@ else {
   }
   
   if ($poids || $taille || $perimetre_cranien) {
-    $constantes = new CConstantesMedicales;
+    $constantes = new CConstantesMedicales();
     $constantes->load($constantes_id);
     $constantes->poids = $poids;
     $constantes->taille = $taille;
@@ -195,5 +207,3 @@ if ($callback) {
 }
 
 CApp::rip();
-
-?>

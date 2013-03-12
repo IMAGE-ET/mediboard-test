@@ -19,6 +19,12 @@
     {{assign var=class value="CGrossesse"}}
     {{mb_include module=system template=inc_config_bool var=date_regles_obligatoire size=2 suffix="jours"}}
 
+    {{assign var=class value="CNaissance"}}
+    <tr>
+      <th colspan="2" class="category">{{tr}}CNaissance{{/tr}}</th>
+    </tr>
+    {{mb_include module=system template=inc_config_str var=num_naissance}}
+
     {{mb_include module=system template=configure_handler class_handler=CAffectationHandler}}
 
     <tr>

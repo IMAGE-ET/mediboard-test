@@ -55,7 +55,7 @@
   
   <table class="form">
     <tr>
-      <th class="category" colspan="2">
+      <th class="category" colspan="4">
         Informations sur la naissance
       </th>
     </tr>
@@ -66,6 +66,12 @@
       <td>
         {{mb_field object=$patient field="sexe" emptyLabel="CPatient.sexe."}}
       </td>
+      <th>
+        {{mb_label object=$naissance field="num_naissance"}}
+      </th>
+      <td>
+        {{mb_field object=$naissance field="num_naissance" size="2" increment="true" form="newNaissance" step="1"}}
+      </td>
     </tr>
     <tr>
       <th>
@@ -74,6 +80,12 @@
       <td>
         {{mb_field object=$patient field="naissance" form="newNaissance" register="true"}}
       </td>
+      <th>
+        {{mb_label object=$naissance field="lieu_accouchement"}}
+      </th>
+      <td>
+        {{mb_field object=$naissance field="lieu_accouchement"}}
+      </td>
     </tr>
     <tr>
       <th>
@@ -81,6 +93,12 @@
       </th>
       <td>
         {{mb_field object=$patient field="nom"}}
+      </td>
+      <th>
+        {{mb_label object=$naissance field="fausse_couche"}}
+      </th>
+      <td>
+        {{mb_field object=$naissance field="fausse_couche" emptyLabel="Choose"}}
       </td>
     </tr>
     
@@ -92,6 +110,7 @@
         <td>
           {{mb_field object=$patient field="prenom"}}
         </td>
+        <td colspan="2"></td>
       </tr>
       <tr>
         <th>
@@ -100,6 +119,7 @@
         <td>
           {{mb_field object=$naissance field="hors_etab"}}
         </td>
+        <td colspan="2"></td>
       </tr>
       <tr>
         <th>
@@ -108,6 +128,7 @@
         <td>
           {{mb_field object=$naissance field="heure" form="newNaissance" register="true"}}
         </td>
+        <td colspan="2"></td>
       </tr>
     {{/if}}
     <tr>
@@ -116,6 +137,15 @@
       </th>
       <td>
         {{mb_field object=$naissance field="rang" size="2" increment="true" form="newNaissance" step="1"}}
+      </td>
+      <td colspan="2"></td>
+    </tr>
+    <tr>
+      <th>
+        {{mb_label object=$naissance field="rques"}}
+      </th>
+      <td colspan="3">
+        {{mb_field object=$naissance field="rques" form="newNaissance"}}
       </td>
     </tr>
     <tr>
@@ -129,10 +159,11 @@
           {{tr}}CNaissance-only_pediatres{{/tr}}
         </label>
       </td>
+      <td colspan="2"></td>
     </tr>
     {{if !$provisoire}}
       <tr>
-        <th class="category" colspan="2">{{tr}}CConstantesMedicales{{/tr}}</th>
+        <th class="category" colspan="4">{{tr}}CConstantesMedicales{{/tr}}</th>
       </tr>
       <tr>
         <th>
@@ -141,6 +172,7 @@
         <td>
           {{mb_field object=$constantes field=poids size="3"}} {{$list_constantes.poids.unit}}
         </td>
+        <td colspan="2"></td>
       </tr>
       <tr>
         <th>
@@ -149,6 +181,7 @@
         <td>
           {{mb_field object=$constantes field=taille size="3"}} {{$list_constantes.taille.unit}}
         </td>
+        <td colspan="2"></td>
       </tr>
       <tr>
         <th>
@@ -157,10 +190,11 @@
         <td>
           {{mb_field object=$constantes field=perimetre_cranien size="3"}} {{$list_constantes.perimetre_cranien.unit}}
         </td>
+        <td colspan="2"></td>
       </tr>
     {{/if}}
     <tr>
-      <td class="button" colspan="2">
+      <td class="button" colspan="4">
         {{if $naissance->_id}}
           <button type="submit" class="submit">{{tr}}Modify{{/tr}}</button>
         {{else}}

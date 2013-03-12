@@ -261,7 +261,7 @@ class CTemplateManager {
    */
   function addLongDateProperty($field, $value, $lowercase = false) {
     $value = $value ? ucfirst(CMbDT::transform(null, $value, CAppUI::conf("longdate"))) : "";
-    $this->addProperty($field, $lowercase ? strtolower($value) : $value);
+    $this->addProperty($field, $lowercase ? CMbString::lower($value) : $value);
   }
 
   /**
