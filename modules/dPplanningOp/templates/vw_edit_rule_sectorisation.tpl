@@ -15,23 +15,30 @@
 <form name="editRegleSectorisation" method="post">
   {{mb_key object=$rule}}
     <input type="hidden" name="dosql" value="do_sejour_sectorisation_aed" />
-  <table class="form">
+    <input type="hidden" name="m" value="{{$m}}" />
+    <input type="hidden" name="tab" value="vw_sectorisations" />
+  <table class="form tbl">
+    {{if $clone == true && !$rule->_id}}
     <tr>
-      <th class="title" colspan="2">{{tr}}Service{{/tr}}</th>
+      <th colspan="2"><div class="small-warning">{{tr}}CRegleSectorisation-msg-duplicate-rule{{/tr}}</div></th>
+    </tr>
+    {{/if}}
+    <tr>
+      <th class="title" colspan="2">{{tr}}CRegleSectorisation-service_id{{/tr}}</th>
     </tr>
     <tr>
       <th>{{mb_label object=$rule field=service_id}}</th>
       <td>
         <select name="service_id">
           {{foreach from=$services item=_service}}
-            <option value="{{$_service->_id}}">{{$_service}}</option>
+            <option value="{{$_service->_id}}" {{if $_service->_id == $rule->service_id}}selected="selected" {{/if}}>{{$_service}}</option>
           {{/foreach}}
         </select>
 
       </td>
     </tr>
     <tr>
-      <th class="title" colspan="2">{{tr}}Criteras{{/tr}}</th>
+      <th class="title" colspan="2">{{tr}}CRegleSectorisation-criteras{{/tr}}</th>
     </tr>
 
     <tr>
@@ -47,7 +54,16 @@
 
     <tr>
       <th>{{mb_label object=$rule field=function_id}}</th>
-      <td>{{mb_field object=$rule field=function_id}}</td>
+      <td>
+        <select name="function_id">
+        <option value="">{{tr}}CRegleSectorisation-whatever{{/tr}}</option>
+        {{foreach from=$functions item=_function}}
+          <option value="{{$_function->_id}}" {{if $_function->_id == $rule->function_id}}selected="selected" {{/if}}>
+            {{$_function->_view}}
+          </option>
+        {{/foreach}}
+        </select>
+      </td>
     </tr>
 
     <tr>
@@ -64,12 +80,12 @@
 
     <tr>
       <th>{{mb_label object=$rule field=duree_min}}</th>
-      <td>{{mb_field object=$rule field=duree_min }}</td>
+      <td>{{mb_field object=$rule field=duree_min }} {{tr}}days{{/tr}}</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$rule field=duree_max}}</th>
-      <td>{{mb_field object=$rule field=duree_max}}</td>
+      <td>{{mb_field object=$rule field=duree_max}} {{tr}}days{{/tr}}</td>
     </tr>
 
     <tr>
@@ -96,7 +112,7 @@
       <td colspan="2" class="button">
         <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
       {{if $rule->_id}}
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la règle',objName:'{{$rule->_view|smarty:nodefaults|JSAttribute}}', ajax :true})">{{tr}}Delete{{/tr}}</button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{objName:'{{$rule->_view|smarty:nodefaults|JSAttribute}}'})">{{tr}}Delete{{/tr}}</button>
       {{/if}}
       </td>
     </tr>

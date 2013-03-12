@@ -14,14 +14,19 @@
  
 CCanDo::checkAdmin();
 
-$rule_id = CValue::get("rule_id");
+$rule_id  = CValue::get("rule_id");
+$clone    = CValue::get("clone", 0);
 
 $rule_sectorisation = new CRegleSectorisation();
 $rule_sectorisation->load($rule_id);
 
+if ($clone) {
+  $rule_sectorisation->_id = null;
+}
+
 //mediusers
 $user = CMediusers::get();
-$users = $user->loadListFromType(null, PERM_EDIT);
+$users = $user->loadPraticiens(PERM_EDIT);
 
 //functions
 $function = new CFunctions();
@@ -38,6 +43,7 @@ $groups = $group->loadList();
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("rule", $rule_sectorisation);
+$smarty->assign("clone", $clone);
 $smarty->assign("user", $user);
 $smarty->assign("users", $users);
 $smarty->assign("functions", $functions);

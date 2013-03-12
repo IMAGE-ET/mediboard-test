@@ -40,6 +40,7 @@ class CRegleSectorisation extends CMbObject
   public $_ref_function;
   public $_ref_praticien;
   public $_ref_group;
+  public $_inactive;
 
 
   /**
@@ -73,11 +74,31 @@ class CRegleSectorisation extends CMbObject
     $props["duree_min"]         = "num";
     $props["duree_max"]         = "num moreEquals|duree_min";
     $props["date_min"]          = "dateTime";
-    $props["date_max"]          = "dateTime moreEquals|date_start";
+    $props["date_max"]          = "dateTime moreEquals|date_min";
     $props["type_admission"]    = "enum list|".implode("|", $types_admission);
     $props["type_pec"]          = "enum list|".implode("|", $types_pec);
     $props["group_id"]          = "ref class|CGroups notNull";
     return $props;
+  }
+
+  /**
+   * check if $this is an older rule
+   *
+   * @return bool
+   */
+  function checkOlder() {
+    $now = CMbDT::dateTime();
+
+    if ($this->date_min && $now < $this->date_min) {
+      return $this->_inactive = true;
+    }
+
+    if ($this->date_max && $now > $this->date_max) {
+      return $this->_inactive = true;
+    }
+
+    return $this->_inactive = false;
+
   }
 
   /**
@@ -104,7 +125,7 @@ class CRegleSectorisation extends CMbObject
    * @return CMbObject
    */
   function loadRefFunction() {
-    return $this->_ref_praticien = $this->loadFwdRef("function_id", true);
+    return $this->_ref_function = $this->loadFwdRef("function_id", true);
   }
 
   /**

@@ -13,27 +13,37 @@
  
  CCanDo::checkAdmin();
 
-global $g;
 $regleSector = new CRegleSectorisation();
-$regleSector->group_id = $g;
+$regleSector->group_id = CGroups::loadCurrent()->_id;
 
-$regles = $regleSector->loadMatchingList();
+$showinactive = CValue::getOrSession("inactive", 0);
+
+$where = array();
+if (!$showinactive) {
+  $where["date_max"] = " > '".CMbDT::dateTime()."' OR date_max IS NULL";
+  $where["date_min"] = " < '".CMbDT::dateTime()."' OR date_min IS NULL";
+}
+
+$order = "praticien_id, function_id";
+$regles = $regleSector->loadList($where, $order);
+
+//mass load
+CStoredObject::massLoadFwdRef($regles, "praticien_id");
+CStoredObject::massLoadFwdRef($regles, "service_id");
+CStoredObject::massLoadFwdRef($regles, "function_id");
 
 /**
  * @var CRegleSectorisation $_regle
  */
-CStoredObject::massLoadFwdRef($regles, "praticien_id");
-CStoredObject::massLoadFwdRef($regles, "service_id");
-CStoredObject::massLoadFwdRef($regles, "service_id");
-
 foreach ($regles as $_regle) {
-  $_regle->loadRefGroup();
-  $_regle->loadRefPraticien();
+  $_regle->loadRefPraticien()->loadRefFunction();
   $_regle->loadRefService();
-  $_regle->_ref_praticien->loadRefFunction();
+  $_regle->loadRefFunction();
+  $_regle->checkOlder();
 }
 
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("regles", $regles);
+$smarty->assign("show_inactive", $showinactive);
 $smarty->display("vw_sectorisations.tpl");

@@ -685,12 +685,70 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
   }
 
+  /**
+   * check for a sectorisation rules to find a service_id
+   *
+   * @return bool
+   */
+  function getServiceFromSectorisationRules() {
+    $this->completeField("type", "praticien_id", "entree", "sortie", "group_id", "type_pec");
+    $praticien = $this->loadRefPraticien();
+
+    $where = array();
+    $where["type_admission"] = " = '$this->type' OR `type_admission` IS NULL";
+    $where["praticien_id"] = " = '$this->praticien_id' OR `praticien_id` IS NULL";
+    $where["function_id"] = " = '$praticien->function_id' OR `function_id` IS NULL";
+    $where["date_min"] = " <= '$this->entree' OR `date_min` IS NULL";
+    $where["date_max"] = " >= '$this->entree' OR `date_max` IS NULL";
+    $where["group_id"] = " = '$this->group_id'";
+
+    if ($this->type_pec) {
+      $where["type_pec"] = " = '$this->type_pec' OR `type_pec` IS NULL";
+    }
+
+    $duree = CMbDT::daysRelative($this->entree, $this->sortie);
+    $where["duree_min"] = " <= '$duree' OR `duree_min` IS NULL";
+    $where["duree_max"] = " >= '$duree' OR `duree_max` IS NULL";
+
+    $regle = new CRegleSectorisation();
+    $regles = $regle->loadList($where);
+    $count  = count($regles);
+
+    //too much results
+    if ($count > 1) {
+      CAppUI::setMsg("CRegleSectorisation-number%d-rules-unable-to-resolve", UI_MSG_WARNING, $count);
+      return false;
+    }
+    //no result, no work
+    if ($count == 0) {
+      CAppUI::setMsg("CRegleSectorisation-no-rules-found", UI_MSG_WARNING);
+      return false;
+    }
+
+    // one rule, lets do the work
+    if ($count == 1) {
+      $regle = reset($regles);
+      $regle->loadRefService();
+      $this->service_id = $regle->service_id;
+      CAppUI::setMsg("CRegleSectorisation-unique-rule%s", UI_MSG_OK, $regle->_ref_service->nom);
+      return true;
+    }
+
+
+
+  }
+
+  /**
+   * Object store in DB
+   *
+   * @return null|string|void
+   */
   function store() {
     $this->completeField("entree_reelle", "entree", "patient_id", "type_pec");
 
     // Sectorisation Rules
     if (!$this->service_id && CAppUI::conf("dPplanningOp CRegleSectorisation use_sectorisation")) {
-      //$this->getServiceFromSectorisationRules();
+      $this->getServiceFromSectorisationRules();
     }
 
 
