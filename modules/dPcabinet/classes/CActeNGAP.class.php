@@ -9,28 +9,22 @@
 
 class CActeNGAP extends CActe {
   // DB Table key
-  var $acte_ngap_id = null;
+  public $acte_ngap_id; 
   
   // DB fields
-  var $quantite    = null;
-  var $code        = null;
-  var $coefficient = null;
-  var $demi        = null;
-  var $complement  = null;
-  var $lettre_cle  = null;
-
-  /**
-   * C for Cabinet, D for Domicile
-   *
-   * @var string
-   */
-  var $lieu        = null;
-
-  var $exoneration = null;
+  public $quantite; 
+  public $code; 
+  public $coefficient; 
+  public $demi; 
+  public $complement; 
+  public $lettre_cle; 
+  public $lieu; 
+  public $exoneration; 
+  public $ald; 
 
   // Distant fields
-  var $_libelle    = null;
-  var $_execution = null;
+  public $_libelle; 
+  public $_execution; 
   
   static function createEmptyFor(CCodable $codable) {
     $acte = new self;
@@ -49,18 +43,19 @@ class CActeNGAP extends CActe {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["code"]                = "str notNull maxLength|3";
-    $specs["quantite"]            = "num notNull maxLength|2";
-    $specs["coefficient"]         = "float notNull";
-    $specs["demi"]                = "enum list|0|1 default|0";
-    $specs["complement"]          = "enum list|N|F|U";
-    $specs["lettre_cle"]          = "enum list|0|1 default|0";
-    $specs["lieu"]                = "enum list|C|D default|C";
-    $specs["exoneration"]         = "enum list|N|13|17 notNull default|N";
-    $specs["_execution"]          = "dateTime";
+    $props = parent::getProps();
+    $props["code"]                = "str notNull maxLength|3";
+    $props["quantite"]            = "num notNull maxLength|2";
+    $props["coefficient"]         = "float notNull";
+    $props["demi"]                = "enum list|0|1 default|0";
+    $props["complement"]          = "enum list|N|F|U";
+    $props["lettre_cle"]          = "enum list|0|1 default|0";
+    $props["lieu"]                = "enum list|C|D default|C";
+    $props["exoneration"]         = "enum list|N|13|17 default|N";
+    $props["ald"]                 = "enum list|0|1 default|0";
+    $props["_execution"]          = "dateTime";
 
-    return $specs;
+    return $props;
   }
  
   function updateFormFields() {
@@ -212,5 +207,3 @@ class CActeNGAP extends CActe {
 		return $this->_libelle;
   }
 } 
-
-?>

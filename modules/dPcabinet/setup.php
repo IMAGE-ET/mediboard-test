@@ -1821,8 +1821,13 @@ class CSetupdPcabinet extends CSetup {
     $query = "ALTER TABLE `reglement` 
               CHANGE `object_class` `object_class` ENUM ('CFactureCabinet','CFactureEtablissement') NOT NULL DEFAULT 'CFactureCabinet';";
     $this->addQuery($query);
-    
-    $this->mod_version = "1.94";
+
+    $this->makeRevision("1.94");
+
+    $query = "ALTER TABLE `acte_ngap`
+              ADD `ald` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.95";
   }
 }
-?>

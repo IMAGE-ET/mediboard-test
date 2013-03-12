@@ -129,7 +129,7 @@ Main.add( function(){
     <td colspan="2" id="area_type_assurance">
     </td>
   </tr>
-  
+
   <tr>
     {{if $gestionFSE}}
       {{if $modFSE->canRead()}}

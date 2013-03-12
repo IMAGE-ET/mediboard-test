@@ -50,6 +50,7 @@ ActesNGAP = {
 </script>
 
 {{assign var=can_view_tarif value=true}}
+
 {{if $conf.dPsalleOp.CActeCCAM.restrict_display_tarif}}
   {{if !$app->_ref_user->isPraticien() && !$app->_ref_user->isSecretaire()}}
     {{assign var=can_view_tarif value=false}}
@@ -117,6 +118,11 @@ ActesNGAP = {
       {{if $m=="dPcabinet"}}
         <th class="category">{{mb_title object=$acte_ngap field=lieu}}</th>
       {{/if}}
+
+      {{if $object->_ref_patient->ald == 1}}
+        <th class="category">{{mb_title object=$acte_ngap field=ald}}</th>
+      {{/if}}
+
       <th class="category">{{mb_title object=$acte_ngap field=executant_id}}</th>
       {{if !$object->_coded}}
         {{if $can->edit}}
@@ -146,6 +152,11 @@ ActesNGAP = {
           {{if $m=="dPcabinet"}}
             <td>{{mb_field object=$acte_ngap field="lieu"}}</td>
           {{/if}}
+
+          {{if $object->_ref_patient->ald == 1}}
+            <td>{{mb_field object=$acte_ngap field="ald"}}</td>
+          {{/if}}
+
           <td>
             <select name="executant_id" style="width: 120px;" class="{{$acte_ngap->_props.executant_id}}">
               <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
@@ -192,6 +203,10 @@ ActesNGAP = {
 
       {{if $m=="dPcabinet"}}
         <td>{{mb_value object=$_acte_ngap field="lieu"}}</td>
+      {{/if}}
+
+      {{if $object->_ref_patient->ald == 1}}
+        <td>{{mb_value object=$_acte_ngap field="ald"}}</td>
       {{/if}}
 
       {{assign var="executant" value=$_acte_ngap->_ref_executant}}
