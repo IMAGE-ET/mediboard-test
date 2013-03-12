@@ -86,6 +86,7 @@ class CFunctions extends CMbObject {
     $backProps["destination_brancardage"]        = "CDestinationBrancardage object_id";
     $backProps["affectations"]                   = "CAffectation function_id";
     $backProps["caisses_maladies"]               = "CCaisseMaladie function_id";
+    $backProps["regle_sectorisation_function"]   = "CRegleSectorisation function_id";
 
     return $backProps;
   }

@@ -340,6 +340,7 @@ class CMediusers extends CMbObject {
     $backProps["dicom_sender"]                    = "CDicomSender user_id";
     $backProps["CPS_pyxvital"]                    = "CPvCPS id_mediuser";
     $backProps["affectation"]                     = "CAffectation praticien_id";
+    $backProps["regles_sectorisation_mediuser"]   = "CRegleSectorisation praticien_id";
     return $backProps;
   }
 

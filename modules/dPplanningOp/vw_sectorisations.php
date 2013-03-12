@@ -36,5 +36,4 @@ foreach ($regles as $_regle) {
 //smarty
 $smarty = new CSmartyDP();
 $smarty->assign("regles", $regles);
-$smarty->assign("active", CAppUI::conf("dPplanningOp CRegleSectorisation use_sectorisation"));
 $smarty->display("vw_sectorisations.tpl");

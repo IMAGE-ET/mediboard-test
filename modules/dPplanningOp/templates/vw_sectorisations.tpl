@@ -19,14 +19,14 @@
 </script>
 
 
-{{if !$active}}
+{{if !$conf.dPplanningOp.CRegleSectorisation.use_sectorisation}}
 <div class="small-warning">
   Les règles de sectorisation ne sont pas actives, pour les activer, Cliquez sur l'onglet Configurer/ Séjour
 </div>
 {{/if}}
 
 
-<button class="new" onclick="editSRF('')">{{tr}}Add{{/tr}}</button>
+<button class="new" onclick="editSRF(0)">{{tr}}Add{{/tr}}</button>
 <table class="tbl">
   <tr>
     <th>Actions</th>

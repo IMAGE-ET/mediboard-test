@@ -1,4 +1,4 @@
-<?php
+<?php /** $Id: **/
 
 /**
  * look for a context to find a service
@@ -68,7 +68,7 @@ class CRegleSectorisation extends CMbObject
     $props = parent::getProps();
     $props["service_id"]        = "ref class|CService seekable notNull";
 
-    $props["function_id"]       = "ref class|CFunction";
+    $props["function_id"]       = "ref class|CFunctions";
     $props["praticien_id"]      = "ref class|CMediusers";
     $props["duree_min"]         = "num";
     $props["duree_max"]         = "num moreEquals|duree_min";
@@ -77,23 +77,42 @@ class CRegleSectorisation extends CMbObject
     $props["type_admission"]    = "enum list|".implode("|", $types_admission);
     $props["type_pec"]          = "enum list|".implode("|", $types_pec);
     $props["group_id"]          = "ref class|CGroups notNull";
-
     return $props;
   }
 
+  /**
+   * Load the praticien by his _id
+   *
+   * @return CMbObject
+   */
   function loadRefPraticien() {
-    $this->_ref_praticien = $this->loadFwdRef("praticien_id", true);
+    return $this->_ref_praticien = $this->loadFwdRef("praticien_id", true);
   }
 
+  /**
+   * load service by id
+   *
+   * @return CMbObject
+   */
   function loadRefService() {
-    $this->_ref_service = $this->loadFwdRef("service_id", true);
+    return $this->_ref_service = $this->loadFwdRef("service_id", true);
   }
 
+  /**
+   * load function by id
+   *
+   * @return CMbObject
+   */
   function loadRefFunction() {
-    $this->_ref_praticien = $this->loadFwdRef("function_id", true);
+    return $this->_ref_praticien = $this->loadFwdRef("function_id", true);
   }
 
+  /**
+   * load group
+   *
+   * @return CMbObject
+   */
   function loadRefGroup() {
-    $this->_ref_group = $this->loadFwdRef("group_id", true);
+    return $this->_ref_group = $this->loadFwdRef("group_id", true);
   }
 }

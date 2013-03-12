@@ -68,6 +68,7 @@ class CService extends CMbObject {
     $backProps["stock_locations"]        = "CProductStockLocation object_id";
     $backProps["ufs"]                    = "CAffectationUniteFonctionnelle object_id";
     $backProps["refus_dispensation"]     = "CRefusDispensation service_id";
+    $backProps["regle_sectorisation_service"] = "CRegleSectorisation service_id";
 
     return $backProps;
   }
