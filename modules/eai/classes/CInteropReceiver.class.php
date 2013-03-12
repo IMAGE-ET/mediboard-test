@@ -19,28 +19,48 @@ class CInteropReceiver extends CInteropActor {
   // Form fields
   var $_type_echange = null;
   var $_exchanges_sources_save = 0;
-  
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
 
     $spec->messages = array();
     return $spec;
   }
-  
+
+  /**
+   * Get properties specifications as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     
     $props["_exchanges_sources_save"] = "num";
     return $props;
   }
-  
+
+  /**
+   * Get backward reference specifications
+   *
+   * @return array Array of form "collection-name" => "class join-field"
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["echanges_any"] = "CExchangeAny receiver_id";
     
     return $backProps;
   }
-  
+
+  /**
+   * Update the form (derived) fields plain fields
+   *
+   * @return void
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -81,8 +101,13 @@ class CInteropReceiver extends CInteropActor {
     }
     
     return $objects;
-  } 
-  
+  }
+
+  /**
+   * Load exchanges sources
+   *
+   * @return void
+   */
   function loadRefsExchangesSources() {
     if (!$this->_ref_msg_supported_family) {
       $this->getMessagesSupportedByFamily();
@@ -92,5 +117,7 @@ class CInteropReceiver extends CInteropActor {
     foreach ($this->_ref_msg_supported_family as $_evenement) {
       $this->_ref_exchanges_sources[$_evenement] = CExchangeSource::get("$this->_guid-$_evenement", null, true, $this->_type_echange);
     }
+
+    return $this->_ref_exchanges_sources;
   }
 }
