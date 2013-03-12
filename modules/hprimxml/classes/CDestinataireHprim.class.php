@@ -1,13 +1,20 @@
-<?php /* $Id $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage hprimxml
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * Destinataire H'XML
+ *
+ * @category Hprimxml
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * Class CDestinataireHprim
+ * Destinataire H'XML
+ */
 class CDestinataireHprim extends CInteropReceiver {
   // DB Table key
   public $dest_hprim_id;
@@ -20,7 +27,12 @@ class CDestinataireHprim extends CInteropReceiver {
   
   // Form fields
   public $_tag_hprimxml;
-    
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'destinataire_hprim';
@@ -42,7 +54,12 @@ class CDestinataireHprim extends CInteropReceiver {
     );
     return $spec;
   }
-  
+
+  /**
+   * Get properties specifications as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["register"]    = "bool notNull default|1";
@@ -52,7 +69,12 @@ class CDestinataireHprim extends CInteropReceiver {
 
     return $props;
   }
-  
+
+  /**
+   * Get backward reference specifications
+   *
+   * @return array Array of form "collection-name" => "class join-field"
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps['object_configs'] = "CDestinataireHprimConfig object_id";
@@ -60,13 +82,30 @@ class CDestinataireHprim extends CInteropReceiver {
     
     return $backProps;
   }
-  
+
+  /**
+   * Update the form (derived) fields plain fields
+   *
+   * @return void
+   */
   function updateFormFields() {
     parent::updateFormFields();
 
     $this->code_syst = $this->code_syst ? $this->code_syst : $this->nom;
   }
-  
+
+  /**
+   * Send event patient
+   *
+   * @param CHPrimXMLEvenementsPatients $dom_evt    Event
+   * @param CMbObject                   $mbObject   Object
+   * @param bool                        $referent   Referent
+   * @param bool                        $initiateur Initiateur
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function sendEvenementPatient(CHPrimXMLEvenementsPatients $dom_evt, CMbObject $mbObject, $referent = null, $initiateur = null) {
     if (!$msg = $dom_evt->generateTypeEvenement($mbObject, $referent, $initiateur)) {
       return;
@@ -105,7 +144,17 @@ class CDestinataireHprim extends CInteropReceiver {
 
     $exchange->store();
   }
-  
+
+  /**
+   * Send event PMSI
+   *
+   * @param CHPrimXMLEvenementsServeurActivitePmsi $dom_evt  Event
+   * @param CMbObject                              $mbObject Object
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
   function sendEvenementPMSI(CHPrimXMLEvenementsServeurActivitePmsi $dom_evt, CMbObject $mbObject) {
     if (!$msg = $dom_evt->generateTypeEvenement($mbObject)) {
       return;
@@ -144,7 +193,12 @@ class CDestinataireHprim extends CInteropReceiver {
     
     $exchange->store();
   }
-  
+
+  /**
+   * Load last message
+   *
+   * @return void
+   */
   function lastMessage() {
     $echg_hprim = new CEchangeHprim();
     $echg_hprim->_load_content = false;
@@ -154,7 +208,14 @@ class CDestinataireHprim extends CInteropReceiver {
     $echg_hprim->loadObject($where, "$key DESC");
     $this->_ref_last_message = $echg_hprim;
   }
-  
+
+  /**
+   * Get object handlers
+   *
+   * @param CEAIObjectHandler $objectHandler Object handler
+   *
+   * @return mixed
+   */
   function getFormatObjectHandler(CEAIObjectHandler $objectHandler) {
     $hprim_object_handlers = CHprimXML::getObjectHandlers();
     $object_handler_class  = get_class($objectHandler);
@@ -163,5 +224,3 @@ class CDestinataireHprim extends CInteropReceiver {
     }
   }
 }
-
-?>

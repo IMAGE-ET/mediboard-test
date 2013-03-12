@@ -424,9 +424,13 @@ class CSetuphprimxml extends CSetup {
     $query = "ALTER TABLE `echange_hprim` 
                 ADD `reprocess` TINYINT (4) UNSIGNED DEFAULT '0';";
     $this->addQuery($query);
+
+    $this->makeRevision("0.46");
+
+    $query = "ALTER TABLE `destinataire_hprim_config`
+                ADD `send_volet_medical` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
         
-    $this->mod_version = "0.46";
+    $this->mod_version = "0.47";
   }
 }
-
-?>

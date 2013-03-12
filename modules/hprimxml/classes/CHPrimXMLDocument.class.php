@@ -29,8 +29,20 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   public $sous_type;
   
   // Behaviour fields
+
+  /**
+   * @var CInteropSender
+   */
   public $_ref_sender;
+
+  /**
+   * @var CInteropReceiver
+   */
   public $_ref_receiver;
+
+  /**
+   * @var CEchangeHprim
+   */
   public $_ref_echange_hprim;
 
   /**
@@ -281,12 +293,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   }
 
   function addCodeLibelleCommentaire($elParent, $nodeName, $code, $libelle, $dictionnaire = null, $commentaire = null) {
-    $identification = $this->addElement($elParent, $nodeName);
+    $codeLibelleCommentaire = $this->addElement($elParent, $nodeName);
 
-    $this->addTexte($identification, "code", str_replace(" ", "", $code), 10);
-    $this->addTexte($identification, "libelle", $libelle, 35);
-    $this->addTexte($identification, "dictionnaire", $dictionnaire, 12);
-    $this->addCommentaire($identification, $commentaire);
+    $this->addTexte($codeLibelleCommentaire, "code", str_replace(" ", "", $code), 10);
+    $this->addTexte($codeLibelleCommentaire, "libelle", $libelle, 35);
+    $this->addTexte($codeLibelleCommentaire, "dictionnaire", $dictionnaire, 12);
+    $this->addCommentaire($codeLibelleCommentaire, $commentaire);
+
+    return $codeLibelleCommentaire;
   }
 
   function addCommentaire($elParent, $commentaire) {
@@ -1031,7 +1045,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function addAntecedent($elParent, CAntecedent $antecedent) {
     $elAntecedent = $this->addElement($elParent, "antecedent");
 
-    $rques = CMbString::htmlspecialchars($_antecedent->rques);
+    $rques = CMbString::htmlspecialchars($antecedent->rques);
     $rques = CMbString::convertHTMLToXMLEntities($rques);
 
     if (preg_match_all("/[A-Z]\d{2}\.?\d{0,2}/i", $rques, $matches, PREG_SET_ORDER)) {
@@ -1104,10 +1118,24 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function addTraitements($elParent, CSejour $sejour) {
     $elTraitements = $this->addElement($elParent, "traitements");
 
-    $traitements = $sejour->_ref_dossier_medical->loadRefsTraitements();
+    // Traitements du patient
+    $patient = $sejour->_ref_patient;
+    $traitements = $patient->loadRefDossierMedical()->loadRefsTraitements();
 
     foreach ($traitements as $_traitement) {
       $this->addTraitement($elTraitements, $_traitement);
+    }
+
+    $prescription = $patient->_ref_dossier_medical->loadRefPrescription();
+    if ($prescription && is_array($prescription->_ref_prescription_lines)) {
+      foreach($prescription->_ref_prescription_lines as $_line) {
+        $_line->loadRefsPrises();
+
+        $elTraitement = $this->addCodeLibelleCommentaire($elTraitements, "traitement", $_line->code_cip, $_line->_ucd_view, "CIP", $_line->commentaire);
+
+        $this->addElement($elTraitement, "dateDebutEstimee", $_line->debut);
+        $this->addElement($elTraitement, "dateFinEstimee", $_line->fin);
+      }
     }
   }
 

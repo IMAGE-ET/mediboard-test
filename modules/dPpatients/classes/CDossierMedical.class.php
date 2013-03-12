@@ -301,6 +301,8 @@ class CDossierMedical extends CMbMetaObject {
         unset($this->_ref_traitements[$_traitement->_id]);
       }
     }
+
+    return $this->_ref_traitements;
   }
   
   /**

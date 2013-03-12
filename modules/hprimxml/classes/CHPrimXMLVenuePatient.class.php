@@ -65,19 +65,25 @@ class CHPrimXMLVenuePatient extends CHPrimXMLEvenementsPatients {
     $venue = $this->addElement($venuePatient, "venue"); 
     // Ajout de la venue   
     $this->addVenue($venue, $mbVenue, $referent);
+
+    $echg_hprim = $this->_ref_echange_hprim;
+    $receiver   = $echg_hprim->_ref_receiver;
         
     // Cas d'une annulation dans Mediboard on passe en trash le num dossier
     if (CAppUI::conf("hprimxml trash_numdos_sejour_cancel") && $mbVenue->annule && $mbVenue->_NDA) {
-      $NDA = CIdSante400::getMatch("CSejour", $this->_ref_echange_hprim->_ref_receiver->_tag_sejour, $mbVenue->_NDA);
+      $NDA = CIdSante400::getMatch("CSejour", $receiver->_tag_sejour, $mbVenue->_NDA);
       if ($NDA->_id) {
-        $NDA->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$this->_ref_echange_hprim->_ref_receiver->_tag_sejour;
+        $NDA->tag = CAppUI::conf('dPplanningOp CSejour tag_dossier_trash').$receiver->_tag_sejour;
         $NDA->store();
       }
     }
 
+    $receiver->loadConfigValues();
     // Ajout du volet médical
-    //$voletMedical = $this->addElement($venuePatient, "voletMedical");
-    //$this->addVoletMedical($voletMedical, $mbVenue);
+    if ($receiver->_configs["send_volet_medical"]) {
+      $voletMedical = $this->addElement($venuePatient, "voletMedical");
+      $this->addVoletMedical($voletMedical, $mbVenue);
+    }
 
     // Traitement final
     $this->purgeEmptyElements();

@@ -21,6 +21,7 @@ class CDestinataireHprimConfig extends CMbObjectConfig {
   public $send_sortie_prevue;
   public $send_all_patients;
   public $send_default_serv_with_type_sej;
+  public $send_volet_medical;
   
   // Application
   public $receive_ack;
@@ -42,9 +43,15 @@ class CDestinataireHprimConfig extends CMbObjectConfig {
       "send_sortie_prevue", 
       "send_all_patients",
       "send_default_serv_with_type_sej",
+      "send_volet_medical"
     )
-  );  
-  
+  );
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = "destinataire_hprim_config";
@@ -53,6 +60,11 @@ class CDestinataireHprimConfig extends CMbObjectConfig {
     return $spec;
   }
 
+  /**
+   * Get properties specifications as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["object_id"] = "ref class|CDestinataireHprim";
@@ -65,6 +77,7 @@ class CDestinataireHprimConfig extends CMbObjectConfig {
     $props["send_sortie_prevue"]              = "bool default|1"; 
     $props["send_all_patients"]               = "bool default|0";
     $props["send_default_serv_with_type_sej"] = "bool default|0";
+    $props["send_volet_medical"]              = "bool default|0";
     
     // Application
     $props["receive_ack"]          = "bool default|1";
@@ -72,4 +85,3 @@ class CDestinataireHprimConfig extends CMbObjectConfig {
     return $props;
   }
 }
-?>
