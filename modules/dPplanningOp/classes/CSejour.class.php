@@ -1616,6 +1616,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     // Ajout des consultations d'anesthésie hors séjour
     foreach ($consultations_patient as $_consultation) {
       $_consult_anesth = $_consultation->loadRefConsultAnesth();
+      if (!count($_consultation->_refs_dossiers_anesth)) {
+        continue;
+      }
       foreach ($_consultation->_refs_dossiers_anesth as $_dossier_anesth) {
         $_dossier_anesth->loadRefOperation();
         $_dossier_anesth->loadRefsTechniques();

@@ -274,7 +274,7 @@ modeExpertDisplay = function() {
             <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
           {{/if}}
           {{assign var=current_user value="CMediusers::get"|static_call:null}}
-          {{assign var=types_forbidden value=","|explode:"Médecin,Secrétaire"}}
+          {{assign var=types_forbidden value=","|explode:"Médecin"}}
           {{if "reservation"|module_active && !$current_user->isFromType($types_forbidden)}}
             {{if $op->_ref_sejour->recuse == "-1"}}
               <button class="tick" onclick="$V(getForm('editSejour').recuse, 0); submitForms();">{{tr}}Validate{{/tr}}</button>
