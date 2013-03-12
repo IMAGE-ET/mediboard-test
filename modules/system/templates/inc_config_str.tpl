@@ -49,7 +49,7 @@
       <textarea class="{{if @$cssClass}}{{$cssClass}}{{else}}str{{/if}} {{$uid}}" name="{{$field}}">{{$value|smarty:nodefaults}}</textarea>
     {{else}}
       <input class="{{if @$cssClass}}{{$cssClass}}{{else}}str{{/if}} {{$uid}}" {{if @$password}} type="password" {{/if}} name="{{$field}}" 
-             value="{{$value}}" {{if @$size}}size="{{$size}}"{{/if}}
+             value="{{$value|smarty:nodefaults}}" {{if @$size}}size="{{$size}}"{{/if}}
              {{if @$maxlength}}maxlength="{{$maxlength}}"{{/if}}/> 
       {{if @$suffix}}{{$suffix}}{{/if}}
     {{/if}} 
