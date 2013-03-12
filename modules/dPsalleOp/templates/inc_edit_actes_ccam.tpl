@@ -151,7 +151,7 @@
                 Phase {{$_phase->phase}}
                 {{if $can_view_tarif && ($confCCAM.tarif || $subject->_class == "CConsultation")}}
                 <div style="font-weight: normal;">
-                {{$_phase->tarif|currency}}
+                  <span title="Tarif de l'acte avant association">{{$acte->_tarif_sans_asso|currency}}</span>
                 </div>
                 {{/if}}
 

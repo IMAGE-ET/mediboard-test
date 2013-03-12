@@ -463,11 +463,13 @@ class CActeCCAM extends CActe {
     $numActes = count($this->_linked_actes) + 1;
     
     // Calcul de la position tarifaire de l'acte
-    $tarif = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase]->tarif;
+//    $tarif = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase]->tarif;
+    $tarif = $this->getTarifSansAssociationNiCharge();
     $orderedActes = array();
     $orderedActes[$this->_id] = $tarif;
-    foreach ($this->_linked_actes as &$acte) {
-      $tarif = $acte->_ref_code_ccam->activites[$acte->code_activite]->phases[$acte->code_phase]->tarif;
+    foreach ($this->_linked_actes as $_acte) {
+//      $tarif = $acte->_ref_code_ccam->activites[$acte->code_activite]->phases[$acte->code_phase]->tarif;
+      $tarif = $acte->getTarifSansAssociationNiCharge();
       $orderedActes[$acte->_id] = $tarif;
     }
     ksort($orderedActes);
@@ -829,22 +831,30 @@ class CActeCCAM extends CActe {
     return $this->_guess_association;
   }
   
-  
-  function getTarif() {
-    $this->loadRefCodeCCAM();
-    $phase = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase];
-    $this->_tarif = $phase->tarif;
-    $coeffAsso    = $this->_ref_code_ccam->getCoeffAsso($this->code_association);
+  function getTarifSansAssociationNiCharge() {
+    // Tarif de base
+    $code = $this->loadRefCodeCCAM();
+    $phase = $code->activites[$this->code_activite]->phases[$this->code_phase];
+    $this->_tarif_sans_asso = $phase->tarif;
     
+    // Application des modificateurs
     $forfait     = 0;
     $coefficient = 100;
-    
     foreach ($this->_modificateurs as $modif) {
-      $result = $this->_ref_code_ccam->getForfait($modif);
+      $result = $code->getForfait($modif);
       $forfait     += $result["forfait"];
       $coefficient += $result["coefficient"] - 100;
     }
-    $this->_tarif = ($this->_tarif * ($coefficient / 100) + $forfait) * ($coeffAsso / 100);
+    
+    return $this->_tarif_sans_asso = ($this->_tarif_sans_asso * ($coefficient / 100) + $forfait);    
+  }
+  
+  function getTarif() {
+    $this->_tarif = $this->getTarifSansAssociationNiCharge();
+    
+    // Coefficient d'association
+    $code = $this->loadRefCodeCCAM();
+    $this->_tarif *= ($code->getCoeffAsso($this->code_association) / 100);
     
     // Charges supplémentaires
     if ($this->charges_sup) {

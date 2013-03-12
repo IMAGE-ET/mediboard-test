@@ -597,7 +597,6 @@ div.triggerShow {
 .triggerShow:hover td, .triggerHide:hover td,
 .triggerShow:hover th, .triggerHide:hover th {
   cursor: pointer;
-  text-decoration: underline;
 }
 
 tr.show {
