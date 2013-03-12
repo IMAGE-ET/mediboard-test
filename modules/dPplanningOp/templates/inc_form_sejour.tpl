@@ -7,7 +7,7 @@
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
- 
+
 {{mb_script module=patients   script=pat_selector}}
 {{mb_script module=patients   script=medecin}}
 {{mb_script module=planningOp script=cim10_selector}}
@@ -31,18 +31,18 @@
 <script type="text/javascript">
 function modifLits(lit_id){
   var form = getForm('editSejour');
-  
+
   var service = $('CLit-'+lit_id).className;
   service = service.split("-");
   form.service_sortie_id.value = service[1];
-  
+
   form.service_sortie_id_autocomplete_view.value = service[2];
 }
 
 function checkHeureSortie(){
   var oForm = getForm("editSejour");
   var heure_entree = parseInt(oForm._hour_entree_prevue.value, 10);
-  
+
   if (oForm._hour_sortie_prevue.value < heure_entree + 1) {
     heure_entree++;
     oForm._hour_sortie_prevue.value = heure_entree;
@@ -77,12 +77,12 @@ function changeModeSortie(mode_sortie){
 
 function checkModeSortie(){
   var oForm = getForm("editSejour");
-  
+
   if(oForm.sortie_reelle && oForm.sortie_reelle.value && !oForm.mode_sortie.value) {
     alert("Date de sortie réelle et mode de sortie incompatibles");
     return false;
   }
-  
+
   return true;
 }
 
@@ -108,10 +108,10 @@ function checkChambreSejour(){
   var oForm = getForm("editSejour");
   var oFormEasy = getForm("editOpEasy");
   var valeur_chambre = $V(oForm.chambre_seule);
-  
+
   if (oFormEasy)
     $V(oFormEasy.chambre_seule, valeur_chambre, false);
-  
+
   if(valeur_chambre == "0")
     $V(oForm.prestation_id, "", false);
 }
@@ -120,11 +120,11 @@ function checkChambreSejour(){
 function checkChambreSejourEasy(){
   var oForm = getForm("editSejour");
   var oFormEasy = getForm("editOpEasy");
-  
+
   if (oFormEasy){
     var valeur_chambre = $V(oFormEasy.chambre_seule);
     $V(oForm.chambre_seule, valeur_chambre);
-    
+
     if(valeur_chambre == "0"){
       $V(oForm.prestation_id, "", false);
     }
@@ -135,7 +135,7 @@ function checkConsultAccompSejour(){
   var oForm = getForm("editSejour");
   var oFormEasy = getForm("editOpEasy");
   var valeur_consult = $V(oForm.consult_accomp);
-  
+
   if (oFormEasy)
     $V(oFormEasy.consult_accomp, valeur_consult, false);
 }
@@ -144,7 +144,7 @@ function checkConsultAccompSejour(){
 function checkConsultAccompSejourEasy(){
   var oForm = getForm("editSejour");
   var oFormEasy = getForm("editOpEasy");
-  
+
   if (oFormEasy){
     var valeur_consult = $V(oFormEasy.consult_accomp);
     $V(oForm.consult_accomp, valeur_consult);
@@ -154,11 +154,11 @@ function checkConsultAccompSejourEasy(){
 function checkAccident(){
   var oForm = getForm("editSejour");
   var oFormEasy = getForm("editOpEasy");
-  
+
   var date_accident    = $V(oForm.date_accident);
   var date_accident_da = $V(oForm.date_accident_da);
   var nature_accident  = $V(oForm.nature_accident);
-  
+
   if (oFormEasy) {
     $V(oFormEasy.date_accident   , date_accident   , false);
     $V(oFormEasy.date_accident_da, date_accident_da, false);
@@ -170,7 +170,7 @@ function checkAccident(){
 function checkAccidentEasy(){
   var oForm = getForm("editSejour");
   var oFormEasy = getForm("editOpEasy");
-  
+
   if (oFormEasy) {
     var date_accident    = $V(oFormEasy.date_accident);
     var date_accident_da = $V(oFormEasy.date_accident_da);
@@ -202,12 +202,12 @@ function checkATNCEasy() {
 function checkAssurances(){
   var oForm = getForm("editSejour");
   var oFormEasy = getForm("editOpEasy");
-  
+
   var assurance_maladie        = $V(oForm.assurance_maladie);
   var rques_assurance_maladie  = $V(oForm.rques_assurance_maladie);
   var assurance_accident       = $V(oForm.assurance_accident);
   var rques_assurance_accident = $V(oForm.rques_assurance_accident);
-  
+
   if (oFormEasy) {
     $V(oFormEasy.assurance_maladie       , assurance_maladie       , false);
     $V(oFormEasy.rques_assurance_maladie , rques_assurance_maladie , false);
@@ -220,7 +220,7 @@ function checkAssurances(){
 function checkAssurancesEasy(){
   var oForm = getForm("editSejour");
   var oFormEasy = getForm("editOpEasy");
-  
+
   if (oFormEasy) {
     var assurance_maladie        = $V(oFormEasy.assurance_maladie);
     var rques_assurance_maladie  = $V(oFormEasy.rques_assurance_maladie);
@@ -271,14 +271,14 @@ CIM10Selector.init = function(){
 
 function updateListCPI(form){
   var field = form.charge_id;
-  
+
   var url = new Url("dPplanningOp", "ajax_vw_list_cpi");
   url.addParam("group_id", $V(form.group_id));
-  
+
   {{if !$conf.dPplanningOp.CSejour.show_only_charge_price_indicator}}
     url.addParam("type", $V(form.type));
   {{/if}}
-  
+
   url.requestUpdate(field, function(){
     if (field.type == "hidden") {
       $V(field, ""); // To check the field
@@ -292,9 +292,9 @@ function updateTypeAndPeC(select) {
   var type     = selected.get("type");
   var type_pec = selected.get("type_pec");
   var form = select.form;
-  
+
   $V(form.type, type);
-  
+
   if (type_pec) {
     $V(form.type_pec, type_pec);
   }
@@ -304,11 +304,11 @@ function reloadAssurance() {
   {{if $conf.dPplanningOp.CSejour.assurances}}
     var oForm = getForm("editSejour");
     var patient_id   = $V(oForm.patient_id);
-  
+
     if (!patient_id) {
       return;
     }
-  
+
     var url = new Url("dPplanningOp", "ajax_list_assurances");
     url.addParam("patient_id", patient_id);
     url.requestUpdate("assurances_patient_easy");
@@ -319,7 +319,7 @@ function reloadAssurance() {
 function toggleIsolement(elt) {
   {{if $conf.dPplanningOp.CSejour.show_isolement}}
     var isolement_area = $$(".isolement_area");
-    
+
     if ($V(elt) == 1) {
       isolement_area.invoke("show");
     }
@@ -350,7 +350,7 @@ var Sejour = {
     if (!date_plage || this.preselected){
       return;
     }
-    
+
     var sejours_collision = this.sejours_collision;
     var oForm = getForm("editSejour");
     var sejour_courant_id = $V(oForm.sejour_id);
@@ -367,7 +367,7 @@ var Sejour = {
                     Date.fromDATE(date_plage).toLocaleDate(), 
                     Date.fromDATE(entree).toLocaleDate(),
                     Date.fromDATE(sortie).toLocaleDate());
-                    
+
           if (confirm(msg)){
             this.preselected = true;
             $V(oForm.sejour_id, sejour_id);
@@ -388,7 +388,7 @@ Main.add( function(){
 
 Main.add( function(){
   var form = getForm("editSejour");
-  
+
   dates = {
     current: {
       start: "{{$sejour->_date_entree_prevue}}",
@@ -403,41 +403,41 @@ Main.add( function(){
     minHours: {{$conf.dPplanningOp.CSejour.heure_deb}},
     maxHours: {{$conf.dPplanningOp.CSejour.heure_fin}}
   };
-  
+
   // Object.value takes the internal functions too :(
   var dates_operations = {{$sejour->_dates_operations|@json}};
   $H(dates_operations).each(function(p){
     if (!Object.isFunction(p.value))
       dates.spots.push(p.value);
   });
-  
+
   Calendar.regField(form.entree_reelle, dates);
   Calendar.regField(form.sortie_reelle, dates);
-  
+
 // Constraints make intervention moving fastidious
 //  dates.limit = {
 //    start: null,
 //    stop: dates.spots.first()
 //  };
-  
+
   Calendar.regField(form._date_entree_prevue, dates);
-  
+
 // Constraints make intervention moving fastidious
 //  dates.limit = {
 //    start: dates.spots.last(),
 //    stop: null 
 //  };
-  
+
   Calendar.regField(form._date_sortie_prevue, dates);
-  
+
   {{if !$mode_operation && $can->view}}
     Calendar.regProgressiveField(form._date_deces);
   {{/if}}
-  
+
   removePlageOp(false);
   OccupationServices.initOccupation();
   OccupationServices.configBlocage = ({{$conf.dPplanningOp.CSejour.blocage_occupation|@json}} == "1") && !{{$modules.dPcabinet->_can->edit|@json}};
-  
+
   {{if $conf.dPplanningOp.CSejour.use_charge_price_indicator}}
     updateListCPI(form);
   {{/if}}
@@ -451,9 +451,9 @@ Main.add( function(){
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="dosql" value="do_patients_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="patient_id" value="">
-  <input type="hidden" name="ald" value="">
-  <input type="hidden" name="cmu" value="">
+  <input type="hidden" name="patient_id" value="" />
+  <input type="hidden" name="ald" value="" />
+  <input type="hidden" name="cmu" value="" />
 </form>
 
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkSejour()">
@@ -515,11 +515,11 @@ Main.add( function(){
 
     <a class="action" style="float: right"  title="Modifier uniquement le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
       <img src="images/icons/edit.png" alt="modifier" />
-     </a>
+    </a>
     {{/if}}
     {{tr}}CSejour-msg-informations{{/tr}} 
     {{if $mode_operation && $sejour->_NDA}}
-    {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
+      {{mb_include module=planningOp template=inc_vw_numdos nda_obj=$sejour}}
     {{/if}}
   </th>
 </tr>
@@ -604,7 +604,7 @@ Main.add( function(){
       }
     </script>
     {{mb_include module=patients template=inc_button_pat_anonyme form=editSejour other_form=editOpEasy patient_id=$patient->_id}}
-    
+
     <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" 
       onchange="rechargement(); $('button-edit-patient').setVisible(this.value);" />
     {{mb_label object=$sejour field="patient_id"}}
@@ -665,7 +665,7 @@ Main.add( function(){
       });
     });
     </script>
-    
+
     <input type="text" name="keywords_code" class="autocomplete str code cim10" value="{{$sejour->DP}}" onchange="Value.synchronize(this, 'editSejour');" style="width: 12em" />
     <button type="button" class="cancel notext" onclick="$V(this.form.DP, '');"></button>
     <button type="button" class="search notext" onclick="CIM10Selector.init()">{{tr}}button-CCodeCIM10-choix{{/tr}}</button>
@@ -683,7 +683,7 @@ Main.add( function(){
       <th>{{mb_label object=$sejour field="date_accident"}}</th>
       <td colspan="3">{{mb_field object=$sejour form="editSejour" field="date_accident" register=true onchange="checkAccident();"}}</td>
     </tr>
-    
+
     <tr>
       <th>{{mb_label object=$sejour field="nature_accident"}}</th>
       <td colspan="3">{{mb_field object=$sejour field="nature_accident" emptyLabel="Choose" style="width: 15em;" onchange="checkAccident();"}}</td>
@@ -719,7 +719,7 @@ Main.add( function(){
     <script type="text/javascript">
       Main.add(function(){
         var form = getForm("editSejour");
-        
+
         var url = new Url("system", "ajax_seek_autocomplete");
         url.addParam("object_class", "CLit");
         url.addParam("field", "lit_id");
@@ -844,14 +844,14 @@ Main.add( function(){
         onchange="changeTypeHospi(); OccupationServices.updateOccupation(); checkDureeHospi('syncDuree'); updateListCPI(this.form);"}}
     </td>
   {{/if}}
-  
+
   <td colspan="2" rowspan="{{if $conf.dPplanningOp.CSejour.use_charge_price_indicator && !$conf.dPplanningOp.CSejour.show_only_charge_price_indicator}}3{{else}}2{{/if}}">
     <table>
       <tr class="reanimation">
         <th>{{mb_label object=$sejour field="reanimation"}}</th>
         <td colspan="3"> {{mb_field object=$sejour field="reanimation"}} </td>
       </tr>
-      
+
       <tr class="UHCD">
         <th>{{mb_label object=$sejour field="UHCD"}}</th>
         <td colspan="3">
@@ -864,11 +864,11 @@ Main.add( function(){
                 $V(oForm.reanimation, '0');
                 $V(oForm.UHCD       , '0');
               }
-              
+
               $(oForm).select(".reanimation").invoke(sValue == "comp" ? "show" : "hide");
               $(oForm).select(".UHCD").invoke(sValue == "comp" ? "show" : "hide");
             }
-      
+
           Main.add(changeTypeHospi);
           </script>
         </td>
@@ -888,15 +888,14 @@ Main.add( function(){
   <tr>
     <th>{{mb_label object=$sejour field="type_pec"}}</th>
     <td>
-      {{mb_field object=$sejour field="type_pec" emptyLabel="Choose" typeEnum="radio"}}
+      {{mb_field object=$sejour field="type_pec" typeEnum="radio"}}
     </td>
   </tr>
 {{/if}}
 
 <tr>
   <th>Taux d'occupation</th>
-  <td id="occupation">
-  </td>
+  <td id="occupation"></td>
 </tr>
 
 {{if $conf.dPplanningOp.CSejour.consult_accomp}}
@@ -954,7 +953,7 @@ Main.add( function(){
         {{mb_field object=$sejour field="service_sortie_id" form="editSejour" autocomplete="true,1,50,true,true" style="width: 12em;"}}
         <input type="hidden" name="cancelled" value="0" />
       </div>
-      
+
       <div id="lit_sortie_transfert" {{if $sejour->mode_sortie != "mutation"}} style="display:none;" {{/if}} >
         <select name="lit_id" style="width: 15em;" onchange="modifLits(this.value);this.form.sortie_reelle.value = '';">
           <option value="0">&mdash; Choisir Lit </option>
@@ -1055,7 +1054,7 @@ Main.add( function(){
         {{mb_field object=$sejour field="isolement" onchange=toggleIsolement(this)}}
     {{/if}}
   </tr>
-  
+
   {{if $systeme_isolement == "expert"}}
     <tr class="isolement_area {{if !$conf.dPplanningOp.CSejour.easy_isolement}}modeExpert{{/if}}" {{if !$sejour->isolement}}style="display: none"{{/if}}>
       <th>
@@ -1098,7 +1097,7 @@ Main.add( function(){
       {{mb_include module=planningOp template=regimes_alimentaires prefix=expert}}
     </td>
   </tr>
-  
+
   <tr>
     <th>{{mb_label object=$sejour field=prestation_id}}</th>
     <td colspan="3">
@@ -1109,12 +1108,12 @@ Main.add( function(){
         {{/foreach}}
       </select>
     </td>
-  
+
     {{if $mode_operation}}
     <td colspan="2"></td>
     {{/if}}
   </tr>
-    
+
   {{if !$mode_operation}}
   <tr class="modeExpert">
     <th>{{mb_label object=$sejour field="lit_accompagnant"}}</th>
@@ -1199,7 +1198,7 @@ Main.add( function(){
       });
     });
     </script>
-    
+
     <input type="text" name="libelle_protocole" class="autocomplete str" value=""/>
     <div style="display:none; width: 150px;" class="autocomplete" id="protocole_auto_complete"></div>
     <input type="hidden" name="_protocole_prescription_chir_id" />
@@ -1225,7 +1224,7 @@ Main.add( function(){
         {{tr}}Delete{{/tr}}
       </button>
     {{/if}}
-    
+
     <button class="print" type="button" onclick="printFormSejour();">{{tr}}Print{{/tr}}</button>
   {{else}}
     <div class="big-info">
