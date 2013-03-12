@@ -17,14 +17,14 @@ class CBlocOperatoire extends CMbObject {
   // DB Fields
   public $nom;
   public $days_locked;
+  public $tel;
+  public $fax;
 
   /** @var CSalle[] */
   public $_ref_salles;
 
   /** @var CGroups */
   public $_ref_group;
-
-  public $_ref_poste;
 
   // Form field
   public $_date_min;
@@ -48,10 +48,12 @@ class CBlocOperatoire extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["group_id"]  = "ref notNull class|CGroups";
-    $props["nom"]       = "str notNull seekable";
+    $props["group_id"]    = "ref notNull class|CGroups";
+    $props["nom"]         = "str notNull seekable";
     $props["days_locked"] = "num min|0 default|0";
-    $props["_date_min"] = "date";
+    $props["tel"]         = "phone";
+    $props["fax"]         = "phone";
+    $props["_date_min"]   = "date";
     return $props;
   }
 

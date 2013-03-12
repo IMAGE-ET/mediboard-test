@@ -610,14 +610,14 @@ class CSetupdPstock extends CSetup {
         "product_order.cancelled" => " = 0",
         "product_order.deleted"   => " = 0",
       );
-      
+
+      /** @var CProductOrder[] $orders */
       $orders = $order->loadList($where);
       
       foreach ($orders as $_order) {
         if ($_order->countReceivedItems() >= $_order->countBackRefs("order_items")) {
           $_order->received = 1;
           $_order->store();
-          mbTrace($_order->_id, "Order is received", true);
         }
       }
       
@@ -925,30 +925,59 @@ class CSetupdPstock extends CSetup {
     
     $this->makeRevision("1.53");
     $query = "ALTER TABLE `societe` 
-              CHANGE `fax` `fax` VARCHAR (20);";
+                CHANGE `fax` `fax` VARCHAR (20);";
     $this->addQuery($query);
     
     $this->makeRevision("1.54");
     $query = "ALTER TABLE `product_delivery` 
-              ADD `endowment_quantity` FLOAT,
-              ADD `endowment_item_id` INT (11) UNSIGNED,
-              ADD `comments_deliver` TEXT AFTER `comments`";
+                ADD `endowment_quantity` FLOAT,
+                ADD `endowment_item_id` INT (11) UNSIGNED,
+                ADD `comments_deliver` TEXT AFTER `comments`";
     $this->addQuery($query);
     $query = "ALTER TABLE `product_delivery` 
-              ADD INDEX (`endowment_item_id`)";
+                ADD INDEX (`endowment_item_id`)";
     $this->addQuery($query);
     $query = "ALTER TABLE `product_endowment_item` 
-              ADD `cancelled` ENUM ('0','1') NOT NULL DEFAULT '0';";
+                ADD `cancelled` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
     $this->makeRevision("1.55");
     $query = "ALTER TABLE `product_delivery`
-              ADD `sejour_id` INT (11) UNSIGNED AFTER `patient_id`;";
+                ADD `sejour_id` INT (11) UNSIGNED AFTER `patient_id`;";
     $this->addQuery($query);
     $query = "ALTER TABLE `product_delivery`
-              ADD INDEX (`sejour_id`);";
+                ADD INDEX (`sejour_id`);";
+    $this->addQuery($query);
+
+    // Add address_id to CProductOrder
+    $this->makeRevision("1.56");
+    $query = "ALTER TABLE `product_order`
+                ADD `address_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+                ADD `address_class` VARCHAR(80) NOT NULL;";
+    $this->addQuery($query);
+
+    // Adresse = pharmacie
+    $query = "UPDATE `product_order`
+                SET `address_id` = (
+                  SELECT `pharmacie_id`
+                  FROM `groups_mediboard`
+                  WHERE `group_id` = `product_order`.`group_id`
+                  LIMIT 1
+                )";
+    $this->addQuery($query);
+    $query = "UPDATE `product_order`
+                SET `address_class` = 'CFunctions'
+                WHERE `address_id` != 0";
+    $this->addQuery($query);
+
+    // Adresse = Etablissement
+    $query = "UPDATE `product_order`
+                SET
+                  `address_id` = `product_order`.`group_id`,
+                  `address_class` = 'CGroups'
+                WHERE `address_id` = 0";
     $this->addQuery($query);
     
-    $this->mod_version = "1.56";
+    $this->mod_version = "1.57";
   }
 }

@@ -85,23 +85,45 @@ html {
     <th>Expéditeur</th>
     <td>
       {{assign var=address value=$order->_ref_address}}
-      
-      <strong>
+
+      {{* Pharmacie *}}
       {{if $address instanceof CFunctions}}
-        {{$order->_ref_group}}<br />
+
+        <strong>
+          {{$address->_ref_group}}<br />
+          {{$address}}
+        </strong>
+
+        <br />
+        {{$address->adresse|nl2br}}<br />
+        {{mb_value object=$address field=cp}} {{mb_value object=$address field=ville}}
+
+      {{* Bloc *}}
+      {{elseif $address instanceof CBlocOperatoire}}
+        <strong>
+          {{$address}}
+        </strong>
+
+        <br />
+        {{$order->_ref_group->adresse|nl2br}}<br />
+        {{mb_value object=$order->_ref_group field=cp}} {{mb_value object=$order->_ref_group field=ville}}
+
+      {{* Etablissement *}}
+      {{elseif $address instanceof CGroups}}
+        <strong>
+          {{$address}}
+        </strong>
+
+        <br />
+        {{$address->adresse|nl2br}}<br />
+        {{mb_value object=$address field=cp}} {{mb_value object=$address field=ville}}
       {{/if}}
-      {{$address}}
-      </strong>
-      
-      <br />
-      {{$address->adresse|nl2br}}<br />
-      {{mb_value object=$address field=cp}} {{mb_value object=$address field=ville}}
-      
+
       <br />
       {{if $address->tel}}
         <br />{{mb_title object=$address field=tel}}: {{mb_value object=$address field=tel}}
       {{/if}}
-      
+
       {{if $address->fax}}
         <br />{{mb_title object=$address field=fax}}: {{mb_value object=$address field=fax}}
       {{/if}}

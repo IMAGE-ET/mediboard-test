@@ -17,22 +17,22 @@ class CSetupdPbloc extends CSetup {
     
     $this->makeRevision("all");
     $query = "CREATE TABLE plagesop (
-              id bigint(20) NOT NULL auto_increment,
-              id_chir varchar(20) NOT NULL default '0',
-              id_anesth varchar(20) default NULL,
-              id_spec tinyint(4) default NULL,
-              id_salle tinyint(4) NOT NULL default '0',
-              date date NOT NULL default '0000-00-00',
-              debut time NOT NULL default '00:00:00',
-              fin time NOT NULL default '00:00:00',
-              PRIMARY KEY  (id)
-              ) /*! ENGINE=MyISAM */ COMMENT='Table des plages d\'opération';";
+                id bigint(20) NOT NULL auto_increment,
+                id_chir varchar(20) NOT NULL default '0',
+                id_anesth varchar(20) default NULL,
+                id_spec tinyint(4) default NULL,
+                id_salle tinyint(4) NOT NULL default '0',
+                date date NOT NULL default '0000-00-00',
+                debut time NOT NULL default '00:00:00',
+                fin time NOT NULL default '00:00:00',
+                PRIMARY KEY  (id)
+              ) /*! ENGINE=MyISAM */ COMMENT='Table des plages d opération';";
     $this->addQuery($query);
     $query = "CREATE TABLE sallesbloc (
                 id tinyint(4) NOT NULL auto_increment,
                 nom varchar(50) NOT NULL default '',
                 PRIMARY KEY  (id)
-                ) /*! ENGINE=MyISAM */ COMMENT='Table des salles d\'opération du bloc';";
+              ) /*! ENGINE=MyISAM */ COMMENT='Table des salles d opération du bloc';";
     $this->addQuery($query);         
               
     $this->makeRevision("0.1");
@@ -64,34 +64,36 @@ class CSetupdPbloc extends CSetup {
       $user = new CUser;
       
       // Changement des chirurgiens
-      $query = "SELECT id_chir" .
-          "\nFROM plagesop" .
-          "\nGROUP BY id_chir";
+      $query = "SELECT id_chir
+        FROM plagesop
+        GROUP BY id_chir";
       $listPlages = $ds->loadList($query);
-      foreach($listPlages as $key => $plage) {
+      foreach ($listPlages as $plage) {
         $where["user_username"] = "= '".$plage["id_chir"]."'";
         $user->loadObject($where);
-        if($user->user_id) {
-          $query = "UPDATE plagesop" .
-              "\nSET chir_id = '$user->user_id'" .
-              "\nWHERE id_chir = '$user->user_username'";
-          $ds->exec( $query ); $ds->error();
+        if ($user->user_id) {
+          $query = "UPDATE plagesop
+            SET chir_id = '$user->user_id'
+            WHERE id_chir = '$user->user_username'";
+          $ds->exec($query);
+          $ds->error();
         }
       }
       
       //Changement des anesthésistes
-      $query = "SELECT id_anesth" .
-          "\nFROM plagesop" .
-          "\nGROUP BY id_anesth";
+      $query = "SELECT id_anesth
+         FROM plagesop
+         GROUP BY id_anesth";
       $listPlages = $ds->loadList($query);
-      foreach($listPlages as $key => $plage) {
+      foreach ($listPlages as $plage) {
         $where["user_username"] = "= '".$plage["id_anesth"]."'";
         $user->loadObject($where);
-        if($user->user_id) {
-          $query = "UPDATE plagesop" .
-              "\nSET anesth_id = '$user->user_id'" .
-              "\nWHERE id_anesth = '$user->user_username'";
-          $ds->exec( $query ); $ds->error();
+        if ($user->user_id) {
+          $query = "UPDATE plagesop
+            SET anesth_id = '$user->user_id'
+            WHERE id_anesth = '$user->user_username'";
+          $ds->exec($query);
+          $ds->error();
         }
       }
       return true;
@@ -130,18 +132,18 @@ class CSetupdPbloc extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.17");
-    $query = "ALTER TABLE `plagesop` " .
-               "\nCHANGE `plageop_id` `plageop_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `anesth_id` `anesth_id` int(11) unsigned NOT NULL DEFAULT '0'," .
-               "\nCHANGE `spec_id` `spec_id` int(11) unsigned NULL," .
-               "\nCHANGE `salle_id` `salle_id` int(11) unsigned NOT NULL DEFAULT '0';";
+    $query = "ALTER TABLE `plagesop`
+                CHANGE `plageop_id` `plageop_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `chir_id` `chir_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `anesth_id` `anesth_id` int(11) unsigned NOT NULL DEFAULT '0',
+                CHANGE `spec_id` `spec_id` int(11) unsigned NULL,
+                CHANGE `salle_id` `salle_id` int(11) unsigned NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-    $query = "ALTER TABLE `sallesbloc` " .
-               "\nCHANGE `salle_id` `salle_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
-               "\nCHANGE `group_id` `group_id` int(11) unsigned NOT NULL DEFAULT '1'," .
-               "\nCHANGE `stats` `stats` enum('0','1') NOT NULL DEFAULT '0'," .
-               "\nCHANGE `nom` `nom` varchar(255) NOT NULL;";
+    $query = "ALTER TABLE `sallesbloc`
+                CHANGE `salle_id` `salle_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+                CHANGE `group_id` `group_id` int(11) unsigned NOT NULL DEFAULT '1',
+                CHANGE `stats` `stats` enum('0','1') NOT NULL DEFAULT '0',
+                CHANGE `nom` `nom` varchar(255) NOT NULL;";
     $this->addQuery($query);
     
     $this->makeRevision("0.18");
@@ -151,9 +153,9 @@ class CSetupdPbloc extends CSetup {
     $this->addQuery($query);
     
     $this->makeRevision("0.19");
-    $query = "ALTER TABLE `plagesop` " .
-               "\nCHANGE `chir_id` `chir_id` int(11) unsigned NULL DEFAULT NULL," .
-               "\nCHANGE `anesth_id` `anesth_id` int(11) unsigned NULL DEFAULT NULL;";
+    $query = "ALTER TABLE `plagesop`
+                CHANGE `chir_id` `chir_id` int(11) unsigned NULL DEFAULT NULL,
+                CHANGE `anesth_id` `anesth_id` int(11) unsigned NULL DEFAULT NULL;";
     $this->addQuery($query);
     $query = "UPDATE `plagesop` SET `chir_id` = NULL WHERE `chir_id` = '0';";
     $this->addQuery($query);
@@ -377,15 +379,21 @@ class CSetupdPbloc extends CSetup {
     $this->addQuery($query);
     
     $query = "ALTER TABLE `poste_sspi`
-      ADD `bloc_id` INT (11) UNSIGNED;";
+                ADD `bloc_id` INT (11) UNSIGNED;";
     $this->addQuery($query);
 
     $this->makeRevision("0.37");
-    $query = 'ALTER TABLE `plagesop`
-      ADD `secondary_function_id` INT (11) UNSIGNED AFTER `chir_id`,
-      ADD INDEX (`secondary_function_id`);';
+    $query = "ALTER TABLE `plagesop`
+                ADD `secondary_function_id` INT (11) UNSIGNED AFTER `chir_id`,
+                ADD INDEX (`secondary_function_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.38";
+    $this->makeRevision("0.38");
+    $query = "ALTER TABLE `bloc_operatoire`
+                ADD `tel` VARCHAR (20),
+                ADD `fax` VARCHAR (20);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.39";
   }
 }

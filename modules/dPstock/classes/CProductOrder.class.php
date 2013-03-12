@@ -17,6 +17,8 @@ class CProductOrder extends CMbMetaObject {
   public $comments;
   public $societe_id;
   public $group_id;
+  public $address_class;
+  public $address_id;
   public $locked;
   public $order_number;
   public $bill_number;
@@ -36,7 +38,7 @@ class CProductOrder extends CMbMetaObject {
   /** @var CGroups*/
   public $_ref_group;
 
-  /** @var CMbObject */
+  /** @var CGroups|CFunctions|CBlocOperatoire */
   public $_ref_address;
 
   // Form fields
@@ -82,6 +84,8 @@ class CProductOrder extends CMbMetaObject {
     $props['bill_number']     = 'str maxLength|64 protected';
     $props['societe_id']      = 'ref notNull class|CSociete seekable autocomplete|name';
     $props['group_id']        = 'ref notNull class|CGroups show|0';
+    $props['address_class']   = 'enum notNull list|CGroups|CFunctions|CBlocOperatoire';
+    $props['address_id']      = 'ref notNull class|CMbObject meta|address_class';
     $props['comments']        = 'text';
     $props['locked']          = 'bool show|0';
     $props['cancelled']       = 'bool show|0';
@@ -109,6 +113,8 @@ class CProductOrder extends CMbMetaObject {
 
   /**
    * Counts this received product's items
+   *
+   * @return int
    */
   function countReceivedItems() {
     $this->loadRefsOrderItems();
@@ -121,7 +127,10 @@ class CProductOrder extends CMbMetaObject {
     }
     return $this->_count_received = $count;
   }
-  
+
+  /**
+   * @return int
+   */
   function countRenewedItems(){
     $this->loadRefsOrderItems();
     $count = 0;
@@ -133,7 +142,10 @@ class CProductOrder extends CMbMetaObject {
     }
     return $this->_count_renewed = $count;
   }
-  
+
+  /**
+   * @return bool
+   */
   function containsRenewalLines() {
     $this->loadRefsOrderItems();
     
@@ -148,6 +160,8 @@ class CProductOrder extends CMbMetaObject {
 
   /**
    * Marks every order's items as received
+   *
+   * @return string|null
    */
   function receive() {
     $this->loadRefsOrderItems();
@@ -502,7 +516,12 @@ class CProductOrder extends CMbMetaObject {
     $this->_received = $this->received || ($items_count >= $this->_count_received);
     $this->_partial = !$this->_received && ($this->_count_received > 0);
   }
-  
+
+  /**
+   * @param bool $force
+   *
+   * @return CProductOrderItem[]
+   */
   function loadRefsOrderItems($force = false) {
     if ($this->_ref_order_items && !$force) {
       return $this->_ref_order_items;
@@ -517,15 +536,17 @@ class CProductOrder extends CMbMetaObject {
 
     return $this->_ref_order_items = $this->loadBackRefs('order_items', $order, null, null, $ljoin);
   }
-  
+
+  /**
+   * @return CGroups|CFunctions|CBlocOperatoire
+   */
   function loadRefAddress(){
-    $group = CGroups::loadCurrent();
-    if ($group->pharmacie_id) {
-      $this->_ref_address = $group->loadRefPharmacie();
+    $this->_ref_address = $this->loadFwdRef("address_id", true);
+
+    if ($this->address_class == "CFunctions" || $this->address_class == "CBlocOperatoire") {
+      $this->_ref_address->loadRefGroup();
     }
-    else {
-      $this->_ref_address = $group;
-    }
+
     return $this->_ref_address;
   }
   
@@ -576,10 +597,26 @@ class CProductOrder extends CMbMetaObject {
         }
       }
     }
+
+    if (!$this->_id && !$this->address_id) {
+      $group = $this->loadRefGroup();
+      if ($group->pharmacie_id) {
+        $this->address_class = "CFunctions";
+        $this->address_id    = $group->pharmacie_id;
+      }
+      else {
+        $this->address_class = "CGroups";
+        $this->address_id    = $this->group_id;
+      }
+    }
     
     // gestion des bons de commandes n'ayant pas de lignes renouvelables
     $this->completeField("object_id", "object_class", "comments");
-    if ($this->_order && ($this->object_id || strpos(self::$_return_form_label, $this->comments) === 0) && ($this->countRenewedItems() == 0)) {
+    if (
+        $this->_order &&
+        ($this->object_id || strpos(self::$_return_form_label, $this->comments) === 0) &&
+        $this->countRenewedItems() == 0
+    ) {
       $this->received = 1;
     }
     
@@ -598,25 +635,44 @@ class CProductOrder extends CMbMetaObject {
     $this->loadRefsOrderItems();
   }
 
-  function loadRefsFwd($cache = true){
-    parent::loadRefsFwd($cache);
-    $this->_ref_societe = $this->loadFwdRef("societe_id", $cache);
-    $this->_ref_group = $this->loadFwdRef("group_id", $cache);
+  function loadRefsFwd(){
+    parent::loadRefsFwd();
+
+    $this->loadRefGroup();
+    $this->loadRefSociete();
+  }
+
+  /**
+   * @param bool $cache
+   *
+   * @return CGroups
+   */
+  function loadRefGroup($cache = true){
+    return $this->_ref_group = $this->loadFwdRef("group_id", $cache);
+  }
+
+  /**
+   * @param bool $cache
+   *
+   * @return CSociete
+   */
+  function loadRefSociete($cache = true) {
+    return $this->_ref_societe = $this->loadFwdRef("societe_id", $cache);
   }
   
   function delete() {
     $items_count = $this->countBackRefs("order_items");
     
-    if (($items_count == 0) || !$this->date_ordered) {
+    if ($items_count == 0 || !$this->date_ordered) {
       return parent::delete();
     }
-    else if ($this->date_ordered && !$this->_received) {
-      
+
+    if ($this->date_ordered && !$this->_received) {
       // TODO: here : cancel order !!
-      
       return parent::delete();
     }
-    return 'This order cannot be deleted';
+
+    return "This order cannot be deleted";
   }
   
   function loadView(){
@@ -629,7 +685,12 @@ class CProductOrder extends CMbMetaObject {
       }
     }
   }
-  
+
+  /**
+   * Get the order's label
+   *
+   * @return string
+   */
   function getLabel(){
     if ($this->object_id) {
       return "Bon de commande / Facturation";
@@ -642,6 +703,11 @@ class CProductOrder extends CMbMetaObject {
     return "Bon de commande";
   }
 
+  /**
+   * @param int $permType
+   *
+   * @return bool
+   */
   function getPerm($permType) {
     $this->loadRefsOrderItems();
 
@@ -650,6 +716,7 @@ class CProductOrder extends CMbMetaObject {
         return false;
       }
     }
+
     return true;
   }
 }

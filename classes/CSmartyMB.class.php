@@ -23,22 +23,24 @@ class CSmartyMB extends Smarty {
 
   protected static $csrf_values = array();
   protected static $is_open = false;
-  
+
   /**
    * Construction
    * Directories initialisation
    * Standard data assignment
+   *
+   * @param string $dir The template directory
    */
   function __construct($dir = null) {
     global $version, $can, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $suppressHeaders, $uistyle;
-    
+
     $rootDir = CAppUI::conf("root_dir");
     $extraPath = self::$extraPath;
 
     $root = $extraPath ? "$rootDir/$extraPath" : $rootDir;
 
     $tmpDir = "$rootDir/tmp";
-    
+
     if (!$dir) {
       $dir = "$root/modules/$m"; 
       $this->compile_dir = "$tmpDir/templates_c/{$extraPath}modules/$m/";
@@ -46,10 +48,10 @@ class CSmartyMB extends Smarty {
     else {
       $this->compile_dir = "$tmpDir/templates_c/{$extraPath}$dir/";
     }
-    
+
     // Directories initialisation
     $this->template_dir = "$dir/templates/";
-    
+
     // Check if the cache dir is writeable
     if (!is_dir($this->compile_dir)) {
       CMbPath::forceDir($this->compile_dir);
@@ -58,56 +60,56 @@ class CSmartyMB extends Smarty {
     // Delimiter definition
     $this->left_delimiter  = "{{";
     $this->right_delimiter = "}}";
-    
+
     // Default modifier for security reason
     $this->default_modifiers = array("@cleanField");
-    
+
     // Register mediboard functions
-    $this->register_block   ("tr"                , array($this,"tr")); 
-    $this->register_block   ("main"              , array($this,"main")); 
-    
-    $this->register_function("mb_default"        , array($this,"mb_default"));
-    $this->register_function("mb_ditto"          , array($this,"mb_ditto"));
-    $this->register_function("mb_class"          , array($this,"mb_class"));
-    $this->register_function("mb_value"          , array($this,"mb_value"));
-    $this->register_function("mb_include"        , array($this,"mb_include"));
-    $this->register_function("mb_script"         , array($this,"mb_script"));
-    $this->register_function("thumb"             , array($this,"thumb"));
-    $this->register_function("unique_id"         , array($this,"unique_id"));
-    
-    $this->register_modifier("idex"              , array($this,"idex"));
-    $this->register_modifier("conf"              , array($this,"conf"));
+    $this->register_block("tr"  , array($this, "tr"));
+    $this->register_block("main", array($this, "main"));
 
-    $this->register_modifier("pad"               , array($this,"pad"));
-    $this->register_modifier("json"              , array($this,"json"));
-    $this->register_modifier("iso_date"          , array($this,"iso_date"));
-    $this->register_modifier("iso_time"          , array($this,"iso_time"));
-    $this->register_modifier("iso_datetime"      , array($this,"iso_datetime"));
-    $this->register_modifier("rel_datetime"      , array($this,"rel_datetime"));
-    $this->register_modifier("week_number_month" , array($this,"week_number_month"));
-    $this->register_modifier("const"             , array($this,"_const"));
-    $this->register_modifier("static"            , array($this,"_static"));
-    $this->register_modifier("static_call"       , array($this,"static_call"));
-    $this->register_modifier("cleanField"        , array($this,"cleanField"));
-    $this->register_modifier("stripslashes"      , array($this,"stripslashes"));
-    $this->register_modifier("emphasize"         , array($this,"emphasize"));
-    $this->register_modifier("ternary"           , array($this,"ternary"));
-    $this->register_modifier("trace"             , array($this,"trace"));
-    $this->register_modifier("currency"          , array($this,"currency"));
-    $this->register_modifier("percent"           , array($this,"percent"));
-    $this->register_modifier("spancate"          , array($this,"spancate"));
-    $this->register_modifier("decabinary"        , array($this,"decabinary"));
-    $this->register_modifier("module_installed"  , array($this,"module_installed"));
-    $this->register_modifier("module_active"     , array($this,"module_active"));
-    $this->register_modifier("JSAttribute"       , array($this,"JSAttribute"));
+    $this->register_function("mb_default"        , array($this, "mb_default"));
+    $this->register_function("mb_ditto"          , array($this, "mb_ditto"));
+    $this->register_function("mb_class"          , array($this, "mb_class"));
+    $this->register_function("mb_value"          , array($this, "mb_value"));
+    $this->register_function("mb_include"        , array($this, "mb_include"));
+    $this->register_function("mb_script"         , array($this, "mb_script"));
+    $this->register_function("thumb"             , array($this, "thumb"));
+    $this->register_function("unique_id"         , array($this, "unique_id"));
 
-    $this->register_function("mb_token"          , array($this,"mb_token"));
-    
+    $this->register_modifier("idex"              , array($this, "idex"));
+    $this->register_modifier("conf"              , array($this, "conf"));
+
+    $this->register_modifier("pad"               , array($this, "pad"));
+    $this->register_modifier("json"              , array($this, "json"));
+    $this->register_modifier("iso_date"          , array($this, "iso_date"));
+    $this->register_modifier("iso_time"          , array($this, "iso_time"));
+    $this->register_modifier("iso_datetime"      , array($this, "iso_datetime"));
+    $this->register_modifier("rel_datetime"      , array($this, "rel_datetime"));
+    $this->register_modifier("week_number_month" , array($this, "week_number_month"));
+    $this->register_modifier("const"             , array($this, "_const"));
+    $this->register_modifier("static"            , array($this, "_static"));
+    $this->register_modifier("static_call"       , array($this, "static_call"));
+    $this->register_modifier("cleanField"        , array($this, "cleanField"));
+    $this->register_modifier("stripslashes"      , array($this, "stripslashes"));
+    $this->register_modifier("emphasize"         , array($this, "emphasize"));
+    $this->register_modifier("ternary"           , array($this, "ternary"));
+    $this->register_modifier("trace"             , array($this, "trace"));
+    $this->register_modifier("currency"          , array($this, "currency"));
+    $this->register_modifier("percent"           , array($this, "percent"));
+    $this->register_modifier("spancate"          , array($this, "spancate"));
+    $this->register_modifier("decabinary"        , array($this, "decabinary"));
+    $this->register_modifier("module_installed"  , array($this, "module_installed"));
+    $this->register_modifier("module_active"     , array($this, "module_active"));
+    $this->register_modifier("JSAttribute"       , array($this, "JSAttribute"));
+
+    $this->register_function("mb_token"          , array($this, "mb_token"));
+
     $modules = CModule::getActive();
     foreach ($modules as $mod) {
       $mod->canDo();
     }
-    
+
     // Standard data assignment
     $this->assign("style", $uistyle);
     $this->assign("app", CAppUI::$instance);
@@ -128,27 +130,32 @@ class CSmartyMB extends Smarty {
     $this->assign("base_url", CApp::getBaseUrl());
     $this->assign("current_group", CGroups::loadCurrent());
   }
-  
-  
+
+
   /**
    * Assign a template var to default value if undefined
-   * @param array params 
-   * - name  : Name of the var
-   * - value : Default value of the var
+   *
+   * @param array $params
+   *  * var: Name of the var
+   *  * value : Default value of the var
+   *
+   * @param self  &$smarty The Smarty object
+   *
    * @return void
    */
   function mb_default($params, &$smarty) {
     $var   = CMbArray::extract($params, "var"  , true);
     $value = CMbArray::extract($params, "value", true);
-    
+
     if (!isset($smarty->_tpl_vars[$var])) {
       $smarty->assign($var, $value);
     }
   }
-  
+
   /**
    * Show a value if different from previous cached one
-   * @param array params Smarty parameters
+   *
+   * @param array $params Smarty parameters
    * - name  : Name of the cached value
    * - value : Value to show, empty string to clear out cache
    */
@@ -164,10 +171,11 @@ class CSmartyMB extends Smarty {
     $cache[$name] = $value;
     return $old != $value ? $value : "|";
   }
-  
+
   /**
-   * @param array params tableau des parametres
    * Cette fonction prend les mêmes paramètres que mb_field, mais seul object est requis.
+   *
+   * @param array $params tableau des parametres
    */
   function mb_class($params, &$smarty) {
     if (null == $object = CMbArray::extract($params, "object")) {
@@ -181,33 +189,32 @@ class CSmartyMB extends Smarty {
     if (CAppUI::conf("csrf_protection") && self::$is_open) {
       self::$csrf_values["@class"] = $class;
     }
-    
+
     return "<input type=\"hidden\" name=\"@class\" value=\"$class\" />";
   }
-  
-  
+
+
   /**
    * Get the value of a given field (property)
-   * 
    */
   function mb_value($params, &$smarty) {
     $object = CMbArray::extract($params, "object",  null, true);
     $field  = CMbArray::extract($params, "field");
-    
+
     if (!$field) {
       return "<span onmouseover=\"ObjectTooltip.createEx(this, '$object->_guid')\">$object->_view</span>";
     }  
-    
+
     if (null !== $value = CMbArray::extract($params, "value")) {
-      
+
       $object->$field = $value;
-      
+
       // Empties cache for forward references
       if (isset($object->_fwd[$field])) {
         unset($object->_fwd[$field]);  
       }
     }
-  
+
     $spec = $object->_specs[$field];
     return $spec->getHtmlValue($object, $smarty, $params);
   }
@@ -245,9 +252,8 @@ class CSmartyMB extends Smarty {
    * @param string $auto_base
    * @param string $auto_source
    * @param string $auto_id
+   *
    * @return string
-   * @staticvar string|null
-   * @staticvar string|null
    */
   function _get_auto_filename($auto_base, $auto_source = null, $auto_id = null){
     $_compile_dir_sep =  $this->use_sub_dirs ? DIRECTORY_SEPARATOR : '^';
@@ -255,7 +261,7 @@ class CSmartyMB extends Smarty {
 
     if (isset($auto_id)) {
       // make auto_id safe for directory names
-      $auto_id = str_replace('%7C',$_compile_dir_sep,(urlencode($auto_id)));
+      $auto_id = str_replace('%7C', $_compile_dir_sep, urlencode($auto_id));
       // split into separate directories
       $_return .= $auto_id . $_compile_dir_sep;
     }
@@ -266,7 +272,7 @@ class CSmartyMB extends Smarty {
       $_crc32 = sprintf('%08X', crc32($auto_source));
       // prepend %% to avoid name conflicts with
       // with $params['auto_id'] names
-      
+
       // increment this value at dev time to enforce template recompilation
       static $increment = 3;
       $_return .=  "$_filename.$increment.%$_crc32%";
@@ -274,7 +280,7 @@ class CSmartyMB extends Smarty {
 
     return $_return;
   }
-  
+
   /**
    * Show debug spans
    *
@@ -284,36 +290,35 @@ class CSmartyMB extends Smarty {
   function showDebugSpans($tpl_file, $params) {
     // The span
     echo "\n<span class='smarty-include ".(empty($params['ajax']) ? '' : 'ajax')."'>\n$tpl_file";
-    
+
     $vars = isset($params["smarty_include_vars"]) ? $params["smarty_include_vars"] : array();
-    
+
     foreach ($vars as $var => $value) {
       $show = $value;
       if ($value instanceof CMbObject) {
         $show = $value->_guid;
       }
-  
+
       if (is_array($value)) {
         $count = count($value);
         $show = "array ($count)";
       }
-       
+
       echo "\n<br />$var: $show";
     }
 
     echo "\n</span>\n";
   }
-  
+
   /**
    * called for included templates
    *
-   * @param string $params["smarty_include_tpl_file"]
-   * @param string $params["smarty_include_vars"]
+   * @param string $params
    */
   function _smarty_include($params) {
     $tpl_file = $params["smarty_include_tpl_file"];
     $vars     = $params["smarty_include_vars"];
-    
+
     // Only at debug time
     if (!CAppUI::pref("showTemplateSpans") || 
         isset($params["smarty_include_vars"]['nodebug']) ||
@@ -321,14 +326,14 @@ class CSmartyMB extends Smarty {
       parent::_smarty_include($params);
       return;
     }
-    
+
     $this->showDebugSpans($tpl_file, $params);
-    
+
     echo "\n<!-- Start include: $tpl_file -->\n";
     parent::_smarty_include($params);
     echo "\n<!-- Stop include: $tpl_file -->\n";
   }
-    
+
   /**
    * Delegates the actual translation to CAppUI framework object
    */
@@ -338,32 +343,32 @@ class CSmartyMB extends Smarty {
       // check for the multiple translation
       $vars = array();
       foreach ($params as $key => $value) {
-        if(preg_match("/^var\d+/", $key)) {
+        if (preg_match("/^var\d+/", $key)) {
           $vars[]=$value;
         }
       }
-      
+
       //CAppUI translation
-      $content = CAppUI::tr($content,$vars);
-      
+      $content = CAppUI::tr($content, $vars);
+
       foreach ($params as $_key => $_val) {
         switch ($_key) {
           case "escape":
-          if ($_val === "JSAttribute"){
-            $content = $this->JSAttribute($content);
+            if ($_val === "JSAttribute") {
+              $content = $this->JSAttribute($content);
+              break;
+            }
+
+            $content = smarty_modifier_escape($content, $_val);
             break;
-          }
-  
-          $content = smarty_modifier_escape($content, $_val);
-          break;
-            
+
           default:
         }
       }
       return $content;
     }
   }
-  
+
   function main($params, $content, &$smarty, &$repeat){
     // Let the whitespace around $content
     return "
@@ -371,7 +376,7 @@ class CSmartyMB extends Smarty {
         Main.add(function(){ $content });
       </script>";
   }
-  
+
   /**
    * Render an image using phpThumb
    */
@@ -385,10 +390,10 @@ class CSmartyMB extends Smarty {
         $finUrl .= ("&amp;$_key=$_val");
       }
     }
-    
+
     return "<img src=\"lib/phpThumb/phpThumb.php?src=$src$finUrl\" />";
   }
-  
+
   /**
    * @author   Pablo Dias <pablo at grafia dot com dot br>
    * @abstract pad a string to a certain length with another string. like php/str_pad
@@ -411,7 +416,7 @@ class CSmartyMB extends Smarty {
     );
     return str_pad($string, $length, $pad_string, $pads[$pad_type]);
   } 
-  
+
   /**
    * @abstract JSON encode an object for Javascript use
    *
@@ -420,14 +425,14 @@ class CSmartyMB extends Smarty {
    */
   function json($object, $force_object = false) {
     // $options = $force_object ? JSON_FORCE_OBJECT : 0; // Only PHP 5.3 !!
-    
+
     if ($force_object && is_array($object) && empty($object)) {
       return "{}";
     }
 
     return json_encode($object);
   }
-  
+
   /**
    * @abstract Format to ISO DATE
    * Example:  {$datetime|iso_date}
@@ -436,7 +441,7 @@ class CSmartyMB extends Smarty {
   function iso_date($datetime) {
     return strftime("%Y-%m-%d", strtotime($datetime));
   }
-  
+
   /**
    * @abstract Format to ISO TIME
    * Example:  {$datetime|iso_time}
@@ -445,7 +450,7 @@ class CSmartyMB extends Smarty {
   function iso_time($datetime) {
     return strftime("%H:%M:%S", strtotime($datetime));
   }
-  
+
   /**
    * @abstract Format to ISO DATETIME
    * Example:  {$datetime|iso_datetime}
@@ -454,7 +459,7 @@ class CSmartyMB extends Smarty {
   function iso_datetime($datetime) {
     return strftime("%Y-%m-%d %H:%M:%S", strtotime($datetime));
   }
-  
+
   /**
    * @abstract Week number in month to ISO DATETIME
    * Example:  {$datetime|week_number_month}
@@ -463,7 +468,7 @@ class CSmartyMB extends Smarty {
   function week_number_month($datetime) {
     return CMbDate::weekNumberInMonth($datetime);
   }
-  
+
   /**
    * Configuration accessor
    * 
@@ -473,7 +478,7 @@ class CSmartyMB extends Smarty {
   function conf($path, $context = null) {
     return CAppUI::conf($path, $context);
   }
-  
+
   /**
    * Idex loader and accessor
    * 
@@ -485,7 +490,7 @@ class CSmartyMB extends Smarty {
   function idex($object, $tag = null) {
     return $object->loadLastId400($tag)->id400;
   }
-  
+
   /**
    * @abstract Format to relative datetime 
    * Example:  {$datetime|rel_datetime:$now}
@@ -495,10 +500,10 @@ class CSmartyMB extends Smarty {
     if (!$datetime) {
       return;
     }
-    $relative = CMbDate::relative(mbDateTime($reference), $datetime);
+    $relative = CMbDate::relative(CMbDT::dateTime($reference), $datetime);
     return $relative["count"] . " " . CAppUI::tr($relative["unit"] . (abs($relative["count"]) > 1 ? "s" : ""));
   }
-  
+
   /**
    * @abstract Currency format modifier
    *
@@ -509,25 +514,25 @@ class CSmartyMB extends Smarty {
     if ($decimals == null) {
       $decimals = $precise ? 4 : 2;
     }
-    
+
     // Formatage et symbole monétaire
     $value = ($value !== null && $value !== "") ?
       number_format($value, $decimals, ",", " ")." ".CAppUI::conf("currency_symbol") : 
       "-";
-      
+
     // Negativité
     $html = $value < 0 ?
       "<span class=\"negative\">$value</span>" :
       $value;
-     
+
     // Nullité 
     $html = $empty && abs($value) < 0.001 ? 
       "<div class=\"empty\">$html</div>" :
       $html;
-      
+
     return $html;
   }
-  
+
   /**
    * @abstract Truncate a string, with a full string titled span if actually truncated 
    *
@@ -541,7 +546,7 @@ class CSmartyMB extends Smarty {
     $string = CMbString::htmlEntities($string);
     return strlen($string) > $length ? "<span title=\"$string\">$truncated</span>" : $truncated;
   }
-  
+
   /**
    * @abstract Converts a value to decabinary format
    *
@@ -552,7 +557,7 @@ class CSmartyMB extends Smarty {
     $decabinary = CMbString::toDecaBinary($value);
     return "<span title=\"$value\">$decabinary</span>";
   }
-  
+
   /**
    * @abstract Percentage 2-digit format modifier
    *
@@ -562,7 +567,7 @@ class CSmartyMB extends Smarty {
   function percent($value) {
     return  !is_null($value) ? number_format($value*100, 2) . "%" : "";
   }
-  
+
   function _const($object, $name) {
     // If the first arg is an instance, we get its class name
     if (!is_string($object)) {
@@ -570,29 +575,29 @@ class CSmartyMB extends Smarty {
     }
     return constant("$object::$name");
   }
-  
+
   function _static($object, $name) {
     if (!is_string($object)) {
       $object = get_class($object);
     }
-    
+
     $class = new ReflectionClass($object);
     $statics = $class->getStaticProperties();
     if (!array_key_exists($name, $statics)) {
       trigger_error("Static variable '$name' for class '$class->name' does not exist", E_USER_WARNING);
       return;
     }
-  
+
     return $statics[$name];
   }
-  
+
   function static_call($callback, $args) {
     $args = func_get_args();
     $callback = array_shift($args);
     $callback = explode("::", $callback);
     return call_user_func_array($callback, $args);
   }
-  
+
   /**
    * @abstract True if the module is installed
    * Example:  {"dPfiles"|module_installed}
@@ -601,7 +606,7 @@ class CSmartyMB extends Smarty {
   function module_installed($module) {
     return CModule::getInstalled($module);
   }
-  
+
   /**
    * @abstract True if the module is active
    * Example:  {"dPfiles"|module_active}
@@ -610,27 +615,29 @@ class CSmartyMB extends Smarty {
   function module_active($module) {
     return CModule::getActive($module);
   }
-  
+
   function JSAttribute($string){
     return str_replace(
-      array('\\',   "'",   '"',      "\r",  "\n",  '</'), 
-      array('\\\\', "\\'", '&quot;', '\\r', '\\n', '<\/'), 
+      array('\\',   "'",   '"',      "\r",  "\n",  '</'),
+      array('\\\\', "\\'", '&quot;', '\\r', '\\n', '<\/'),
+      //array('\\',   "'",   '"',      "\r",  "\n",  '<',    '>'),
+      //array('\\\\', "\\'", '&quot;', '\\r', '\\n', '&lt;', '&gt;'),
       $string
     );
   }
-  
+
   function cleanField($string){
     if (!is_scalar($string)) {
       return $string;
     }
-  
+
     return CMbString::htmlSpecialChars($string, ENT_QUOTES);
   }
-  
+
   function stripslashes($string){
     return stripslashes($string);
   }
-  
+
   /**
    * @abstract Emphasize a text, putting <em> nodes around found tokens
    *
@@ -643,20 +650,20 @@ class CSmartyMB extends Smarty {
       $tokens = explode(" ", $tokens);
     }
     CMbArray::removeValue("", $tokens);
-    
+
     if (count($tokens) == 0) {
       return $text;
     }
-  
+
     foreach ($tokens as &$token) {
       $token = preg_quote($token);
       $token = CMbString::allowDiacriticsInRegexp($token);
     }
-  
+
     $regexp = str_replace("/", "\\/", implode("|", $tokens));
     return preg_replace("/($regexp)/i", "<$tag>$1</$tag>", $text);  
   }
-  
+
   /**
    * A ternary operator
    * @todo Use this instead of mb_ternary
@@ -668,7 +675,7 @@ class CSmartyMB extends Smarty {
   function ternary($value, $option1, $option2) {
     return $value ? $option1 : $option2;
   }
-  
+
   /**
    * Trace modifier
    * @param object $value The condition
@@ -677,7 +684,7 @@ class CSmartyMB extends Smarty {
   function trace($value) {
     mbExport($value);
   }
-  
+
   /**
    * @param array params tableau des parametres
    * Cette fonction prend les mêmes paramètres que mb_field, mais seul object est requis.
@@ -694,7 +701,7 @@ class CSmartyMB extends Smarty {
 
     return $this->mb_field($params, $smarty);
   }
-  
+
   /**
    * Javascript HTML inclusion
    * @param array params 
@@ -707,7 +714,7 @@ class CSmartyMB extends Smarty {
     // Path provided
     $path = CMbArray::extract($params, "path");
     $ajax = CMbArray::extract($params, "ajax");
-    
+
     // Script name providied
     if ($script = CMbArray::extract($params, "script")) {
       if ($module = CMbArray::extract($params, "module")) {
@@ -717,12 +724,12 @@ class CSmartyMB extends Smarty {
           $module = "dP$module";
         }
       }
-  
+
       $prefix = CMbArray::extract($params, "mobile") ? "mobile/" : "";
       $dir = $module ? $prefix . "modules/$module/javascript" : "includes/javascript";
       $path = "$dir/$script.js";
     }
-    
+
     // Render HTML with build version
     if ($ajax && !empty($smarty->_tpl_vars["ajax"])) {
       $script = file_get_contents($path);
@@ -734,7 +741,7 @@ class CSmartyMB extends Smarty {
       return "<script type=\"text/javascript\" src=\"$path?build=$version_build\"></script>";
     }
   }
-  
+
   /**
    * Module/Style aware include alternative
    * @param array params 
@@ -745,7 +752,7 @@ class CSmartyMB extends Smarty {
    */
   function mb_include($params, &$smarty) {
     $template = CMbArray::extract($params, "template");
-    
+
     // Module précisé
     if ($module = CMbArray::extract($params, "module")) {
       // dP ugly prefix hack
@@ -753,17 +760,17 @@ class CSmartyMB extends Smarty {
       if (!is_dir("$root/modules/$module") && substr($module, 0, 2) != "dP") {
         $module = "dP$module";
       }
-      
+
       $template = "../../../modules/$module/templates/$template";
     }
-  
+
     // Style précisé
     if ($style = CMbArray::extract($params, "style")) {
       $template = "../../../style/$style/templates/$template";
     }
-  
+
     $path = "$template.tpl";
-    
+
     $tpl_vars = $smarty->_tpl_vars;
     $smarty->_smarty_include(array(
       'smarty_include_tpl_file' => $path,
@@ -771,9 +778,9 @@ class CSmartyMB extends Smarty {
     ));
     $smarty->_tpl_vars = $tpl_vars;
   }
-  
-  
-  
+
+
+
   /**
    * Assigns a unique id to a variable
    * @param array params 
@@ -785,7 +792,7 @@ class CSmartyMB extends Smarty {
     // The dot is removed to get valide CSS ID identifiers
     $smarty->assign($var, str_replace(".", "", uniqid("", true)));
   }
-  
+
 
   /**
    * executes & displays the template results
@@ -802,13 +809,11 @@ class CSmartyMB extends Smarty {
       parent::display($resource_name, $cache_id, $compile_id);
       return;
     }
-    
+
     $this->showDebugSpans($resource_name, $this->_tpl_vars);
-   
+
     echo "\n<!-- Start display: $resource_name -->\n";
     parent::display($resource_name, $cache_id, $compile_id);
     echo "\n<!-- Stop display: $resource_name -->\n";
   }
 }
-
-?>

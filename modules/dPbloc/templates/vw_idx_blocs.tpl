@@ -32,7 +32,6 @@ Main.add(function () {
   {{/if}}
   <li><button type="button" style="float:right;" onclick="return popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button></li></li>
 </ul>
-<hr class="control_tabs" />
 
 <div id="blocs" style="display: none;">
   <table class="main">
@@ -41,12 +40,28 @@ Main.add(function () {
         <a class="button new" href="?m={{$m}}&tab={{$tab}}&bloc_id=0">{{tr}}CBlocOperatoire-title-create{{/tr}}</a>
         <table class="tbl">
           <tr>
-            <th>{{tr}}CBlocOperatoire-nom{{/tr}}</th>
+            <th>{{mb_title class=CBlocOperatoire field=nom}}</th>
+            <th>{{mb_title class=CBlocOperatoire field=tel}}</th>
+            <th>{{mb_title class=CBlocOperatoire field=fax}}</th>
+            <th>{{mb_title class=CBlocOperatoire field=days_locked}}</th>
             <th>{{tr}}CBlocOperatoire-back-salles{{/tr}}</th>
           </tr>
           {{foreach from=$blocs_list item=_bloc}}
           <tr {{if $_bloc->_id == $bloc->_id}}class="selected"{{/if}}>
-            <td><a href="?m={{$m}}&tab={{$tab}}&bloc_id={{$_bloc->_id}}">{{$_bloc}}</a></td>
+            <td>
+              <a href="?m={{$m}}&tab={{$tab}}&bloc_id={{$_bloc->_id}}">
+                {{mb_value object=$_bloc field=nom}}
+              </a>
+            </td>
+            <td>
+              {{mb_value object=$_bloc field=tel}}
+            </td>
+            <td>
+              {{mb_value object=$_bloc field=fax}}
+            </td>
+            <td>
+              {{mb_value object=$_bloc field=days_locked}}
+            </td>
             <td>
               {{foreach from=$_bloc->_ref_salles item=_salle}}
                  <div>{{$_salle}}</div>
@@ -65,12 +80,15 @@ Main.add(function () {
           {{mb_key object=$bloc}}
           <input type="hidden" name="group_id" value="{{$g}}" />
           <table class="form">
-            <tr>
-              {{mb_include module=system template=inc_form_table_header object=$bloc}}
-            </tr>
+            {{mb_include module=system template=inc_form_table_header object=$bloc}}
+
             <tr>
               <th>{{mb_label object=$bloc field="nom"}}</th>
               <td>{{mb_field object=$bloc field="nom"}}</td>
+            </tr>
+            <tr>
+              <th>{{mb_label object=$bloc field="tel"}}</th>
+              <td>{{mb_field object=$bloc field="tel"}}</td>
             </tr>
             <tr>
               <th>{{mb_label object=$bloc field="days_locked"}}</th>
