@@ -1616,10 +1616,10 @@ class CSetupdPplanningOp extends CSetup {
               `duree_max` INT (11),
               `date_min` DATETIME,
               `date_max` DATETIME,
-              `typeAdminission` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult'),
-              `typePEC` ENUM ('M','C','O'),
-              `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0';
-) /*! ENGINE=MyISAM */;";
+              `type_adminission` ENUM ('comp','ambu','exte','seances','ssr','psy','urg','consult'),
+              `type_pec` ENUM ('M','C','O'),
+              `group_id` INT (11) UNSIGNED NOT NULL DEFAULT '0')
+              /*! ENGINE=MyISAM */;";
     $this->addQuery($query);
     $query = "ALTER TABLE `regle_sectorisation`
               ADD INDEX (`service_id`),
