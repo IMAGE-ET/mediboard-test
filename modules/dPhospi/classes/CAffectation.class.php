@@ -44,7 +44,8 @@ class CAffectation extends CMbObject {
   var $_start_prolongation = null;
   var $_stop_prolongation = null;
   var $_width_prolongation = null;
-
+  var $_affectations_enfant_ids = array();
+  
   // Order fields
   var $_patient   = null;
   var $_praticien = null;

@@ -99,6 +99,7 @@
             data-lit_id="{{$_affectation->lit_id}}"
             data-width="{{$_affectation->_width}}"
             data-offset="{{$_affectation->_entree_offset}}"
+            data-affectations_enfant="{{'-'|implode:$_affectation->_affectations_enfant_ids}}"
             style="left: {{$offset}}%; width: {{$width}}%; border: 1px solid #{{$color}}; margin-left: 15.1%;
               margin-top: {{math equation=x*y x=$_level y=$height_affectation}}em"
             onmouseover="
@@ -236,6 +237,7 @@
         </div>
         {{if !$readonly}}
           <script type="text/javascript">
+            console.log("aze");
             var container = $('affectation_temporel_{{$_affectation->_id}}');
             new Draggable(container, {
               constraint: "vertical",

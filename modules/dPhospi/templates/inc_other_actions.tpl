@@ -79,7 +79,7 @@
         <button type="button" class="hslip"
         onclick="
         {{if "maternite"|module_active && $sejour_maman}}
-          liaisonMaman(this.form._action_maman.checked, '{{$affectation->parent_affectation_id}}')
+          liaisonMaman(this.form._action_maman.checked, '{{$affectation->parent_affectation_id}}', '{{$smarty.now|@date_format:"%Y-%m-%d %H:%M:%S"}}')
         {{elseif !$lit_id}}
           changeLit('{{$affectation->_id}}', 1, $V(this.form._date_cut));
         {{else}}

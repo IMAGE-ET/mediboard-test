@@ -170,6 +170,8 @@ $sejours_non_affectes = array();
 $functions_filter = array();
 $operations = array();
 
+$maternite_active = CModule::getActive("maternite");
+
 foreach ($sejours as $_key => $_sejour) {
   $_sejour->loadRefPrestation();
   $_sejour->loadRefPraticien()->loadRefFunction();
@@ -226,6 +228,10 @@ foreach ($sejours as $_key => $_sejour) {
   else {
     @$sejours_non_affectes["np"][] = $_sejour;
   }
+  
+  if ($maternite_active && $_sejour->grossesse_id) {
+    $_sejour->_sejours_enfants_ids = CMbArray::pluck($_sejour->loadRefsNaissances(), "sejour_enfant_id");
+  }
 }
 
 $dossiers = CMbArray::pluck($sejours, "_ref_patient", "_ref_dossier_medical");
@@ -267,12 +273,12 @@ $services = $services + CMbObject::massLoadFwdRef($affectations, "service_id");
 $patients = CMbObject::massLoadFwdRef($sejours, "patient_id");
 $praticiens = CMbObject::massLoadFwdRef($sejours, "praticien_id");
 CMbObject::massLoadFwdRef($praticiens, "function_id");
-
+CMbObject::massCountBackRefs($affectations, "affectations_enfant");
 $operations = array();
 $suivi_affectation = false;
 
 foreach ($affectations as $_affectation) {
-  $lit = new CLit;
+  $lit = new CLit();
   $lit->_selected_item = new CItemPrestation;
   $lit->_affectation_id = $_affectation->_id;
   
@@ -280,6 +286,7 @@ foreach ($affectations as $_affectation) {
     $suivi_affectation = true;
   }
   $_affectation->loadRefsAffectations();
+  $_affectation->_affectations_enfant_ids = CMbArray::pluck($_affectation->loadBackRefs("affectations_enfant"), "affectation_id");
   $sejour = $_affectation->loadRefSejour();
   $sejour->loadRefPraticien()->loadRefFunction();
   $patient = $sejour->loadRefPatient();
@@ -349,10 +356,10 @@ CDossierMedical::massCountAntecedentsByType($dossiers, "deficience");
 
 ksort($sejours_non_affectes, SORT_STRING);
 
-$sejour = new CSejour;
+$sejour = new CSejour();
 $sejour->_type_admission = $_type_admission;
 
-$smarty = new CSmartyDP;
+$smarty = new CSmartyDP();
 
 $smarty->assign("sejours_non_affectes", $sejours_non_affectes);
 $smarty->assign("sejour", $sejour);

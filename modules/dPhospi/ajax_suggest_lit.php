@@ -13,6 +13,10 @@ $_link_affectation    = CValue::get("_link_affectation", 0);
 $services_ids_suggest = CValue::get("services_ids_suggest");
 $datetime             = CValue::get("datetime");
 
+if (!$datetime) {
+  $datetime = CMbDT::dateTime();
+}
+
 $entree = $datetime;
 $sortie = null;
 $lit_id = null;
@@ -66,7 +70,6 @@ foreach ($lits as $key => $_lit) {
     $affectation_collide->loadObject($where);
     
     if ($affectation_collide->_id) {
-
       unset($lits[$key]);
       continue;
     }

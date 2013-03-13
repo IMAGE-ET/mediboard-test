@@ -185,6 +185,13 @@
   delLine = function(object_id) {
     var line = $("wrapper_line_"+object_id);
     if (line) {
+      var div = line.down("div");
+      var ids = div.get("affectations_enfant");
+      if (ids.length > 0) { 
+        ids.split("-").each(function(id) {
+          $("wrapper_line_"+id).up("tr.line").remove();
+        });
+      }
       line.up("tr.line").remove();
     }
   }

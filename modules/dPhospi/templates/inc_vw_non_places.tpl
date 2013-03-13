@@ -136,6 +136,7 @@
                     id="sejour_temporel_{{$_object->_id}}"
                     data-patient_id="{{$patient->_id}}"
                     data-sejour_id="{{$_object->_id}}"
+                    data-affectations_enfant="{{'-'|implode:$_object->_sejours_enfants_ids}}";
                     onmouseover="this.select('.toolbar_affectation')[0].setStyle({visibility: 'visible'});"
                    {{$onmouseevent}}="this.select('.toolbar_affectation')[0].setStyle({visibility: 'hidden'});">
                     <span style="float: left; padding-left: 1px; padding-right: 1px;">
