@@ -1,17 +1,22 @@
-<?php /* $Id$ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage sante400
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * Idex
+ *
+ * @category IHE
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:$
+ * @link     http://www.mediboard.org
  */
 
 /**
- * @abstract Stores id linkage between Mediboard and other system records
+ * Class CIdSante400
+ * Idex
  */
- class CIdSante400 extends CMbMetaObject {
+
+class CIdSante400 extends CMbMetaObject {
   // DB Table key
   var $id_sante400_id = null;
 
@@ -27,7 +32,12 @@
   var $_start_date   = null;
   var $_end_date     = null;
   var $_type         = null;
-  
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'id_sante400';
@@ -36,6 +46,11 @@
     return $spec;
   }
 
+  /**
+   * Get properties specifications as strings
+   *
+   * @return array
+   */
   function getProps() {
     $specs = parent::getProps();
     $specs["id400"]        = "str notNull maxLength|80";
@@ -46,17 +61,27 @@
     $specs["_end_date"]    = "dateTime";
     return $specs;
   }
-  
+
+  /**
+   * Update the plain fields from the form fields
+   *
+   * @return void
+   */
   function updatePlainFields() {
-    if($this->last_update === "") {
+    if ($this->last_update === "") {
       $this->last_update = CMbDT::dateTime();
     }
-    return parent::updatePlainFields();
+
+    parent::updatePlainFields();
   }
   
   /**
    * Loads a specific id400 for a given object (and optionnaly tag)
-   * @return ref|CMbObject Id of the loaded object
+   *
+   * @param CMbObject $mbObject Object
+   * @param string    $tag      Tag name
+   *
+   * @return CMbObject Id of the loaded object
    */
   function loadLatestFor($mbObject, $tag = null) {
     $object_class = get_class($mbObject);
@@ -64,10 +89,10 @@
       trigger_error("Impossible d'associer un identifiant Santé 400 à un objet de classe '$object_class'");
     }
         
-    $this->_id = null;
+    $this->_id          = null;
     $this->object_class = $object_class;
-    $this->object_id = $mbObject->_id;
-    $this->tag = $tag;
+    $this->object_id    = $mbObject->_id;
+    $this->tag          = $tag;
     
     // Don't load if object is undefined
     if ($mbObject->_id) {
@@ -79,6 +104,10 @@
 
   /**
    * Loads list of idex for a given object and a wildcarded tag
+   *
+   * @param CMbObject $mbObject Object
+   * @param string    $tag      Tag name
+   *
    * @return array|CMbObject found ideces
    */
   function loadLikeListFor($mbObject, $tag = null) {
@@ -97,6 +126,10 @@
   
   /**
    * Load first idex for a given object and a wildcarded tag
+   *
+   * @param CMbObject $mbObject Object
+   * @param string    $tag      Tag name
+   *
    * @return CMbObject found idex
    */
   function loadLikeLatestFor($mbObject, $tag = null) {
@@ -115,7 +148,9 @@
   
   /**
    * Tries to get an already bound object if id400 is not older than delay
+   *
    * @param int $delay hours number of cache duration, if null use module config
+   *
    * @return CMbObject
    */
   function getCachedObject($delay = null) {
@@ -138,7 +173,8 @@
   }
   
   /**
-   * Tries to get an already bound object if id400
+   * Tries to get an already bound object if idex
+   *
    * @return CMbObject    
    */
   function getMbObject() {
@@ -154,10 +190,17 @@
 
     return $this->_ref_object;
   }
-  
+
   /**
-   * Binds the id400 to an object, and updates the object
+   * Binds the idex to an object, and updates the object
    * Will only bind default object properties when it's created
+   *
+   * @param CMbObject &$mbObject       Object
+   * @param CMbObject $mbObjectDefault Default object
+   *
+   * @throws Exception
+   *
+   * @return void
    */
   function bindObject(&$mbObject, $mbObjectDefault = null) {
     $object_class = get_class($mbObject);
@@ -197,6 +240,13 @@
   }
   
   /**
+   * Get match
+   *
+   * @param string $object_class Object class
+   * @param string $tag          Tag name
+   * @param string $id400        Idex
+   * @param string $object_id    Object ID
+   *
    * @return CIdSante400 The matching external ID
    */
   static function getMatch($object_class, $tag, $id400, $object_id = null) {
@@ -213,6 +263,20 @@
   }
 
   /**
+   * Get value
+   *
+   * @param string $object_class Object class
+   * @param string $tag          Tag name
+   * @param string $id400        Idex
+   * @param string $object_id    Object ID
+   *
+   * @return string Value the matching external ID
+   */
+  static function getValue($object_class, $tag, $id400, $object_id = null) {
+    return self::getMatch($object_class, $tag, $id400, $object_id)->id400;
+  }
+
+  /**
    * Static alternative to loadLatestFor()
    *
    * @param CMbObject $mbObject Object
@@ -223,6 +287,7 @@
   static function getLatestFor(CMbObject $mbObject, $tag = null) {
     $idex = new CIdSante400();
     $idex->loadLatestFor($mbObject, $tag);
+
     return $idex;
   }
 
