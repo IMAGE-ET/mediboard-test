@@ -15,7 +15,7 @@
   <tr>
     <th style="width: 40%;">{{mb_label object=$pack field=user_id}}</th>
     <td style="width: 60%;">
-      <select name="user_id" class="{{$pack->_props.user_id}}" style="width: 16em;" onchange="reloadListModele(this);">
+      <select name="user_id" class="{{$pack->_props.user_id}}" style="width: 16em;" {{if $pack->_id}}onchange="reloadListModele(this);"{{/if}}>
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{mb_include module=mediusers template=inc_options_mediuser list=$users selected=$pack->user_id}}
       </select>
@@ -25,7 +25,7 @@
   <tr>
     <th>{{mb_label object=$pack field=function_id}}</th>
     <td>
-      <select name="function_id" class="{{$pack->_props.function_id}}" style="width: 16em;" onchange="reloadListModele(this);">
+      <select name="function_id" class="{{$pack->_props.function_id}}" style="width: 16em;" {{if $pack->_id}}onchange="reloadListModele(this);"{{/if}}>
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{mb_include module=mediusers template=inc_options_function list=$functions selected=$pack->function_id}}
       </select>
@@ -35,7 +35,7 @@
   <tr>
     <th>{{mb_label object=$pack field=group_id}}</th>
     <td>
-      <select name="group_id" class="{{$pack->_props.group_id}}" style="width: 16em;" onchange="reloadListModele(this);">
+      <select name="group_id" class="{{$pack->_props.group_id}}" style="width: 16em;" {{if $pack->_id}}onchange="reloadListModele(this);"{{/if}}>
         <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
         {{foreach from=$groups item=_group}}
           <option value="{{$_group->_id}}" {{if $_group->_id == $pack->group_id}} selected="selected" {{/if}}>
@@ -86,7 +86,7 @@
       <button class="modify" type="submit">
         {{tr}}Save{{/tr}}
       </button>
-      <button class="trash" type="button" onclick="Pack.confirmDeletion(this);">
+      <button class="trash" type="button" onclick="Pack.confirmDeletion(this.form);">
         {{tr}}Delete{{/tr}}
       </button>
       {{else}}

@@ -28,7 +28,7 @@ class CContentHTML extends CMbObject {
 
   function getProps() { 
     $props = parent::getProps();
-    $props["_list_classes"] = "enum list|CBloodSalvage|CConsultAnesth|CConsultation|CDossierMedical|CFunctions|CGroups|CMediusers|COperation|CPatient|CPrescription|CSejour";
+    $specs["_list_classes"] = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
     $props["content"] = "html helped|_list_classes";
     return $props;
   }

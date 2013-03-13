@@ -161,8 +161,7 @@ class CCompteRendu extends CDocumentItem {
     $specs["font"]             = "enum list|arial|calibri|comic|courier|georgia|lucida|symbol|tahoma|times|trebuchet|verdana|zapfdingbats show|0";
     $specs["size"]             = "enum list|xx-small|x-small|small|medium|large|x-large|xx-large|8pt|9pt|10pt|11pt|12pt|14pt|16pt|18pt|20pt|22pt|24pt|26pt|28pt|36pt|48pt|72pt show|0";
     $specs["type"]             = "enum list|header|preface|body|ending|footer default|body";
-    $specs["_list_classes"]    = "enum list|CBloodSalvage|CConsultAnesth|CConsultation|CDossierMedical|CFunctions|CGroups|CMediusers|COperation|CPatient|CPrescription|CSejour";
-    //mbTrace(implode("|", array_keys(CCompteRendu::getTemplatedClasses())));
+    $specs["_list_classes"]    = "enum list|".implode("|", array_keys(CCompteRendu::getTemplatedClasses()));
     $specs["header_id"]        = "ref class|CCompteRendu";
     $specs["footer_id"]        = "ref class|CCompteRendu";
     $specs["preface_id"]       = "ref class|CCompteRendu";
@@ -898,9 +897,13 @@ class CCompteRendu extends CDocumentItem {
     }
     
     $all_classes = array(
+      "CConsultAnesth", "CConsultation",
+      "COperation", "CPatient", "CSejour"
+    );
+    /*$all_classes = array(
       "CBloodSalvage", "CConsultAnesth", "CConsultation", "CDossierMedical", "CRPU",
       "CFunctions", "CGroups", "CMediusers", "COperation", "CPatient", "CSejour"
-    );
+    );*/
     if (CModule::getActive("dPprescription")) {
       $all_classes[] = "CPrescription";
     }
