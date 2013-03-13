@@ -88,9 +88,15 @@
                   </td>
                 </tr>
                 <tr>
-                  <th style="font-weight: normal;">Position</th>
+                  <th style="font-weight: normal;">{{tr}}COperation-position{{/tr}}</th>
                   <td style="font-weight: bold;">
                     {{tr}}COperation.position.{{$operation->position}}{{/tr}}
+                  </td>
+                </tr>
+                <tr>
+                  <th style="font-weight: normal;">{{tr}}COperation-cote{{/tr}}</th>
+                  <td style="font-weight: bold;">
+                    {{tr}}COperation.cote.{{$operation->cote}}{{/tr}}
                   </td>
                 </tr>
               </table>

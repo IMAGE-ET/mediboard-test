@@ -17,7 +17,7 @@
       url.addParam("field", "libelle");
       url.addParam("where[group_id]", "{{$g}}");
       
-      url.autoComplete(form.elements._keywords, "besoins_area", {
+      url.autoComplete(form.elements.libelle, "besoins_area", {
         minChars: 3,
         method: "get",
         select: "view",
@@ -115,7 +115,7 @@
           <form name="addBesoin" method="post" onsubmit="onSubmitBesoins(this)">
             <input type="hidden" name="m" value="dPbloc" />
             <input type="hidden" name="dosql" value="do_besoin_ressource_aed" />
-            <input type="text" name="_keywords" class="autocomplete" />
+            <input type="text" name="libelle" class="autocomplete" />
             <input type="hidden" name="{{$type}}" value="{{$object_id}}"/>
             <input type="hidden" name="type_ressource_id" />
           </form>

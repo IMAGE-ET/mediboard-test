@@ -896,6 +896,10 @@ class CPatient extends CMbObject {
             $_sejour->loadRefsOperations(array("annulee" => "= '0'"));
           }
           foreach ($_sejour->_ref_operations as $_op) {
+            $consult_anesth = $_op->loadRefsConsultAnesth();
+            if ($consult_anesth->_id) {
+              continue;
+            }
             $_op->loadRefPlageOp();
             if (!$op->_id) {
               $op = $_op;

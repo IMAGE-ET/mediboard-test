@@ -38,6 +38,7 @@
     {{if $next_operation->libelle}} 
     <div><strong>{{$next_operation->libelle}}</strong></div>
     {{/if}}
+    <div><strong>Côté {{mb_value object=$next_operation field=cote}}</strong></div>
     <div><strong>Prévu le {{$next_operation->_datetime|date_format:$conf.date}}</strong></div>
     <div><strong>Avec le Dr {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$next_operation->_ref_chir}}</strong></div>
     <br />
@@ -91,7 +92,12 @@
     <optgroup label="{{if $curr_sejour->annule}}ANNULE - {{/if}}Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}"
     {{if $consult_anesth->sejour_id!=$curr_sejour->_id && $consult_anesth->sejour_id}}disabled="disabled"{{/if}}>
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
-      <option value="{{$curr_op->operation_id}}"{{if $consult_anesth->operation_id==$curr_op->_id}} selected="selected"{{/if}}>
+      <option value="{{$curr_op->operation_id}}"
+        {{if $consult_anesth->operation_id==$curr_op->_id}}
+          selected
+        {{elseif $curr_op->_ref_consult_anesth->_id && $curr_op->_ref_consult_anesth->_id != $consult_anesth->_id}}
+          disabled
+        {{/if}}>
         {{if $curr_op->annulee}}ANNULEE - {{/if}}Le {{$curr_op->_datetime|date_format:"%d/%m/%Y"}} &mdash; Dr {{$curr_op->_ref_chir->_view}}
       </option>
       {{/foreach}}

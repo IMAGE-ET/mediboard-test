@@ -64,6 +64,7 @@ if ($selConsult) {
   foreach ($patient->_ref_sejours as $_sejour) {
     $_sejour->loadRefsOperations();
     foreach ($_sejour->_ref_operations as $_operation) {
+      $_operation->loadRefsConsultAnesth();
       $_operation->loadRefPlageOp(true);
       $_operation->loadRefChir(true);
     }

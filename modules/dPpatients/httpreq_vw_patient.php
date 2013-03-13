@@ -17,7 +17,7 @@ $patient = new CPatient();
 if (CValue::get("new", 0)) {
   $patient->load(NULL);
   CValue::setSession("id", null);
-} 
+}
 else {
   $patient->load($patient_id);
 }
@@ -38,11 +38,12 @@ $listPrat = $user->loadPraticiens(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("patient"         , $patient);
 $smarty->assign("listPrat"        , $listPrat);
 $smarty->assign("canPatients"     , CModule::getCanDo("dPpatients"));
 $smarty->assign("canAdmissions"   , CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPlanningOp"   , CModule::getCanDo("dPplanningOp"));
 $smarty->assign("canCabinet"      , CModule::getCanDo("dPcabinet"));
+
 $smarty->display("inc_vw_patient.tpl");
-?>

@@ -13,7 +13,7 @@
   {{/if}}>
   <td class="text">
     {{if $object->_canEdit}}
-    <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
+    <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$object->_id}}">
       <img src="images/icons/planning.png" alt="Planifier"/>
     </a>
     {{/if}}
@@ -35,11 +35,11 @@
 <tr {{if $object->_guid == $selected_guid}} class="selected" {{/if}}>
   <td class="text" style="text-indent: 1em;">
     {{if $_consult->_canEdit}}
-    <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$_consult->_id}}">
+    <a class="actionPat" title="Modifier la consultation" href="?m=cabinet&tab=edit_planning&consultation_id={{$_consult->_id}}">
       <img src="images/icons/planning.png" alt="modifier" />
     </a>
     <a class="iconed-text {{$_consult->_type}}" 
-      href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$_consult->_id}}&amp;chirSel={{$_consult->_ref_plageconsult->chir_id}}">
+      href="?m=cabinet&tab=edit_consultation&selConsult={{$_consult->_id}}&chirSel={{$_consult->_ref_plageconsult->chir_id}}">
     {{else}}
     <a href="#nothing" class="iconed-text {{$_consult->_type}}">
     {{/if}}
@@ -80,6 +80,32 @@
     {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$curr_op->_ref_chir}}
   </td>
 </tr>
+{{if $curr_op->_ref_consult_anesth->_id}}
+  {{assign var=consult_anesth value=$curr_op->_ref_consult_anesth}}
+  {{assign var=consult value=$consult_anesth->_ref_consultation}}
+  <tr>
+    <td class="text" style="text-indent: 2em;">
+      {{if $consult->_canRead}}
+        <a class="actionPat" title="Modifier la consultation" href="?m=cabinet&tab=edit_planning&consultation_id={{$consult->_id}}">
+          <img src="images/icons/planning.png" alt="modifier" />
+        </a>
+      {{/if}}
+      {{if $consult->_canEdit}}
+      <a class="iconed-text anesth"
+         href="?m=cabinet&tab=edit_consultation&selConsult={{$consult->_id}}&chirSel={{$consult->_ref_plageconsult->chir_id}}&dossier_anesth_id={{$consult_anesth->_id}}">
+        {{else}}
+        <a href="#nothing" class="iconed-text anesth">
+          {{/if}}
+          <span onmouseover="ObjectTooltip.createEx(this, '{{$consult_anesth->_guid}}')">
+      Le {{$consult->_datetime|date_format:$conf.datetime}} - {{$consult->_etat}}
+    </span>
+        </a>
+    </td>
+    <td style="text-align: left;" {{if $object->annule}}class="cancelled"{{/if}}>
+      {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$consult->_ref_chir}}
+    </td>
+  </tr>
+{{/if}}
 {{/foreach}}
 {{elseif $conf.dPpatients.CPatient.multi_group == "limited" && !$object->annule}}
 <tr>
@@ -98,13 +124,13 @@
 <tr {{if $object->_guid == $selected_guid}} class="selected" {{/if}}>
   <td class="text">
     {{if $object->_canRead}}
-    <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$object->_id}}">
+    <a class="actionPat" title="Modifier la consultation" href="?m=cabinet&tab=edit_planning&consultation_id={{$object->_id}}">
       <img src="images/icons/planning.png" alt="modifier" />
     </a>
     {{/if}}
     {{if $object->_canEdit}}
     <a class="iconed-text {{$object->_type}}" 
-      href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$object->_id}}&amp;chirSel={{$object->_ref_plageconsult->chir_id}}">
+      href="?m=cabinet&tab=edit_consultation&selConsult={{$object->_id}}&chirSel={{$object->_ref_plageconsult->chir_id}}">
     {{else}}
     <a href="#nothing" class="iconed-text {{$object->_type}}">
     {{/if}}
