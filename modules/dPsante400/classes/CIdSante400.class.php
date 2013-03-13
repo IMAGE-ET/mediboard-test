@@ -7,7 +7,7 @@
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
- * @version  SVN: $Id:$
+ * @version  SVN: $Id$
  * @link     http://www.mediboard.org
  */
 
@@ -263,7 +263,7 @@ class CIdSante400 extends CMbMetaObject {
   }
 
   /**
-   * Get value
+   * Get idex value
    *
    * @param string $object_class Object class
    * @param string $tag          Tag name
@@ -277,18 +277,30 @@ class CIdSante400 extends CMbMetaObject {
   }
 
   /**
-   * Static alternative to loadLatestFor()
+   * Static shortcut to to idex for a given object
    *
    * @param CMbObject $mbObject Object
    * @param string    $tag      Tag
    * 
    * @return CIdSante400 
    */
-  static function getLatestFor(CMbObject $mbObject, $tag = null) {
+  static function getMatchFor(CMbObject $mbObject, $tag = null) {
     $idex = new CIdSante400();
     $idex->loadLatestFor($mbObject, $tag);
 
     return $idex;
+  }
+
+  /**
+   * Static shortcut to idex value for a given object
+   *
+   * @param CMbObject $mbObject Object
+   * @param string    $tag      Tag
+   * 
+   * @return string  
+   */
+  static function getValueFor(CMbObject $mbObject, $tag = null) {
+    return self::getMatchFor($mbObject, $tag)->id400;
   }
 
   /**

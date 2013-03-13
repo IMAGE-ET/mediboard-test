@@ -2116,7 +2116,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
 
     // Recuperation de la valeur de l'id400
-    $idex = CIdSante400::getLatestFor($this, $tag_NDA);
+    $idex = CIdSante400::getMatchFor($this, $tag_NDA);
 
     // Stockage de la valeur de l'id400
     $this->_ref_NDA  = $idex;
@@ -2146,7 +2146,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     // Recuperation de la valeur de l'id400
-    $idex = CIdSante400::getLatestFor($this, $tag_NPA);
+    $idex = CIdSante400::getMatchFor($this, $tag_NPA);
 
     // Stockage de la valeur de l'id400
     $this->_ref_NPA = $idex;
@@ -2177,7 +2177,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
 
     // Recuperation de la valeur de l'id400
-    $idex = CIdSante400::getLatestFor($this, $tag_NRA);
+    $idex = CIdSante400::getMatchFor($this, $tag_NRA);
 
     // Stockage de la valeur de l'id400
     $this->_ref_NRA = $idex;

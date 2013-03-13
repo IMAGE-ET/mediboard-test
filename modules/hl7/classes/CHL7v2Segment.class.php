@@ -795,12 +795,12 @@ class CHL7v2Segment extends CHL7v2Entity {
           $type_anesth = CIdSante400::getMatch("CTypeAnesth", $tag_hl7, null, $operation->type_anesth);
         }
         
-        $idex_chir   = CIdSante400::getLatestFor($operation->loadRefChir(), $receiver->_tag_mediuser);  
+        $idex_chir   = CIdSante400::getMatchFor($operation->loadRefChir(), $receiver->_tag_mediuser);  
         
         $anesth      = $operation->loadRefAnesth();
         $idex_anesth = null;
         if ($anesth->_id) {
-          $idex_anesth = CIdSante400::getLatestFor($operation->loadRefAnesth(), $receiver->_tag_mediuser);  
+          $idex_anesth = CIdSante400::getMatchFor($operation->loadRefAnesth(), $receiver->_tag_mediuser);  
         }
         
         $libelle = $operation->libelle;

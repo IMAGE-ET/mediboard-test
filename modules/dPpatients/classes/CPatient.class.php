@@ -1499,7 +1499,7 @@ class CPatient extends CMbObject {
     }
 
     // Recuperation de la valeur de l'id400
-    $idex = CIdSante400::getLatestFor($this, $tag_ipp);
+    $idex = CIdSante400::getMatchFor($this, $tag_ipp);
 
     // Stockage de la valeur de l'id400
     $this->_ref_IPP = $idex;

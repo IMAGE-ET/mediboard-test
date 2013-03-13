@@ -289,7 +289,7 @@ class CInteropActor extends CMbObject {
    * @return CIdSante400
    */
   function getIdex(CMbObject $object) {
-    return CIdSante400::getLatestFor($object, $this->getTag($this->group_id, $this->_class));
+    return CIdSante400::getMatchFor($object, $this->getTag($this->group_id, $this->_class));
   }
 
   /**

@@ -38,13 +38,13 @@ foreach ($praticiens as $_praticien) {
   $criteres["level1"]["plages"][$_praticien->_id] = $plage->countList($where);
   
   // Connexion LDAP
-  $idex = CIdSante400::getLatestFor($_praticien->_ref_user, "ldap");
+  $idex = CIdSante400::getMatchFor($_praticien->_ref_user, "ldap");
   $criteres["level1"]["ldap"][$_praticien->_id] = $idex->_id ? true : false;
 
   // Critères eCap
   if (CModule::getActive("ecap")) {
     // Identifiants CPRT
-    $idex = CIdSante400::getLatestFor($_praticien, "eCap CIDC:$cidc");
+    $idex = CIdSante400::getMatchFor($_praticien, "eCap CIDC:$cidc");
     $criteres["level1"]["cprt"][$_praticien->_id] = $idex->_id ? true : false;
   
     // Paramétrage eCap (appel d'un web service)
