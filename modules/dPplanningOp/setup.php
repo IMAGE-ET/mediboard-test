@@ -1630,6 +1630,12 @@ class CSetupdPplanningOp extends CSetup {
               ADD INDEX (`group_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.73";
+    $this->makeRevision("1.73");
+    $query = "ALTER TABLE `regle_sectorisation`
+    CHANGE `type_adminission` `type_admission` ENUM( 'comp', 'ambu', 'exte', 'seances', 'ssr', 'psy', 'urg', 'consult' )
+    NULL DEFAULT NULL ";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.74";
   }
 }
