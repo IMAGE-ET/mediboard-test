@@ -43,7 +43,6 @@ class CPAM extends CIHE {
    */
   static $evenements = array(
     // ITI-30
-    "A08" => "CHL7EventADTA08",
     "A24" => "CHL7EventADTA24",
     "A28" => "CHL7EventADTA28",
     "A29" => "CHL7EventADTA29",
@@ -107,7 +106,7 @@ class CPAM extends CIHE {
    *
    * @param string $code Event code
    *
-   * @return string Transaction name
+   * @return string|null Transaction name
    */
   static function getTransaction($code) {
     if (in_array($code, self::$transaction_iti30)) {
@@ -117,6 +116,8 @@ class CPAM extends CIHE {
     if (in_array($code, self::$transaction_iti31)) {
       return "ITI31";
     }
+
+    return null;
   }
   
   /**
@@ -124,7 +125,7 @@ class CPAM extends CIHE {
    *
    * @param CExchangeDataFormat $exchange Instance of exchange
    *
-   * @return object An instance of data format
+   * @return object|null An instance of data format
    */
   static function getEvent(CExchangeDataFormat $exchange) {
     $code    = $exchange->code;
@@ -136,5 +137,61 @@ class CPAM extends CIHE {
         return new $classname;
       }
     }
+
+    return null;
+  }
+
+  /**
+   * Test A24 - Link the two patients
+   *
+   * @return void
+   */
+  static function testA24() {
+
+  }
+
+  /**
+   * Test A28 - Create patient with full demographic data
+   *
+   * @return void
+   */
+  static function testA28() {
+
+  }
+
+  /**
+   * Test A31 - Update patient demographics
+   *
+   * @return void
+   */
+  static function testA31() {
+
+  }
+
+  /**
+   * Test A37 - Unlink the two previously linked patients
+   *
+   * @return void
+   */
+  static function testA37() {
+
+  }
+
+  /**
+   * Test A47 - Changes one of the identifiers
+   *
+   * @return void
+   */
+  static function testA47() {
+
+  }
+
+  /**
+   * Test A40 - Merge the two patients
+   *
+   * @return void
+   */
+  static function testA40() {
+
   }
 }
