@@ -59,8 +59,8 @@
       </td>
       <td>{{if $_regle->_ref_function->_id}}{{mb_include module="mediusers" template="inc_vw_function" function=$_regle->_ref_function}}{{/if}}</td>
       <td>{{if $_regle->_ref_praticien->_id}}{{mb_include module="mediusers" template="inc_vw_mediuser" mediuser=$_regle->_ref_praticien}}{{/if}}</td>
-      <td>{{if $_regle->duree_min}}{{mb_value object=$_regle field=duree_min}} {{tr}}days{{/tr}}{{/if}}</td>
-      <td>{{if $_regle->duree_max}}{{mb_value object=$_regle field=duree_max}} {{tr}}days{{/tr}}{{/if}}</td>
+      <td>{{if $_regle->duree_min}}{{mb_value object=$_regle field=duree_min}} {{tr}}night{{/tr}}(s){{/if}}</td>
+      <td>{{if $_regle->duree_max}}{{mb_value object=$_regle field=duree_max}} {{tr}}night{{/tr}}(s){{/if}}</td>
       <td>{{mb_value object=$_regle field=date_min}}</td>
       <td>{{mb_value object=$_regle field=date_max}}</td>
       <td>{{if $_regle->type_admission}}{{tr}}CSejour._type_admission.{{$_regle->type_admission}}{{/tr}}{{/if}}</td>

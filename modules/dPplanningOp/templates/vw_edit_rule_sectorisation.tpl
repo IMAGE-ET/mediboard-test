@@ -17,7 +17,7 @@
     <input type="hidden" name="dosql" value="do_sejour_sectorisation_aed" />
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="tab" value="vw_sectorisations" />
-  <table class="form tbl">
+  <table class="form">
     {{if $clone == true && !$rule->_id}}
     <tr>
       <th colspan="2"><div class="small-warning">{{tr}}CRegleSectorisation-msg-duplicate-rule{{/tr}}</div></th>
@@ -80,12 +80,12 @@
 
     <tr>
       <th>{{mb_label object=$rule field=duree_min}}</th>
-      <td>{{mb_field object=$rule field=duree_min }} {{tr}}days{{/tr}}</td>
+      <td>{{mb_field object=$rule field=duree_min }} {{tr}}night{{/tr}}(s)</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$rule field=duree_max}}</th>
-      <td>{{mb_field object=$rule field=duree_max}} {{tr}}days{{/tr}}</td>
+      <td>{{mb_field object=$rule field=duree_max}} {{tr}}night{{/tr}}(s)</td>
     </tr>
 
     <tr>

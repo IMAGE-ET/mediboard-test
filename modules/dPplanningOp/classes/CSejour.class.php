@@ -691,6 +691,8 @@ class CSejour extends CFacturable implements IPatientRelated {
    * @return bool
    */
   function getServiceFromSectorisationRules() {
+
+    $this->updatePlainFields(); // make sure entree & sortie well defined
     $this->completeField("type", "praticien_id", "entree", "sortie", "group_id", "type_pec");
     $praticien = $this->loadRefPraticien();
 
