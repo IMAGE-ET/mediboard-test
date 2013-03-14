@@ -318,7 +318,7 @@ class CGroups extends CMbObject {
    *
    * @return array
    */
-  function getCPHollidays($pays, $date) {
+  function getCpHollidays($pays, $date) {
     $subdivisionHolliday = array();
     if (!$this->cp) {
       return $subdivisionHolliday;
@@ -332,7 +332,6 @@ class CGroups extends CMbObject {
         $firstSundaySeptember = CMbDT::transform("next sunday", $year."-09-00", "%Y-%m-%d");
         $thirdSundaySeptember = CMbDT::transform("+2 WEEK", $firstSundaySeptember, "%Y-%m-%d");
 
-
         $canton = substr($this->cp, 0, 2);
         switch ($canton) {
           case '10':  // Vaud
@@ -340,7 +339,6 @@ class CGroups extends CMbObject {
             $subdivisionHolliday[] = CMbDT::transform("last friday", $paques, "%Y-%m-%d");  //vendredi saint
             $subdivisionHolliday[] = CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d");  //lundi de paques
             $subdivisionHolliday[] = CMbDT::transform("+39 DAY", $paques, "%Y-%m-%d");  //Ascension (40 jours - dimanche de paques)
-            $subdivisionHolliday[] = CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d");  //lundi de pantecote
             $subdivisionHolliday[] = CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d");  //lundi de pantecote
             $subdivisionHolliday[] = CMbDT::transform("+1 DAY", $thirdSundaySeptember, "%Y-%m-%d");  //Lundi du Jeûne fédéral
             break;
@@ -354,9 +352,6 @@ class CGroups extends CMbObject {
             $subdivisionHolliday[] = "$year-12-31"; //fete du travail
             break;
         }
-
-
-
         break;
 
     }
@@ -367,11 +362,12 @@ class CGroups extends CMbObject {
   /**
    * Récupère les congés pour un pays
    *
-   * @param string $date the date to check
+   * @param string $date          the date to check
+   * @param bool   $includeRegion are the territory hollidays included ?
    *
    * @return array
    */
-  function getHollidays($date){
+  function getHollidays($date = null, $includeRegion = true){
     $hollidays = array();
 
     // No Group, error
@@ -410,8 +406,10 @@ class CGroups extends CMbObject {
         break;
     }
 
-    $hollidaysSub = $this->getCPHollidays($code_pays, $date); //récupération des régions
-    $hollidays = array_merge($hollidays, $hollidaysSub);
+    if ($includeRegion) {
+      $hollidaysSub = $this->getCpHollidays($code_pays, $date); //récupération des régions
+      $hollidays = array_merge($hollidays, $hollidaysSub);
+    }
 
     return $hollidays;
   }
