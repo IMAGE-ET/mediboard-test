@@ -132,7 +132,7 @@ if (!$user->isPraticien()) {
   $user->load($user_id);
 }
 
-$user->loadRefFunction();
+$function = $user->loadRefFunction();
 
 // Chargement des catégories
 $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
