@@ -37,7 +37,7 @@ class CGesteComplementaireCsARR extends CCsARRObject {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = "$this->code <=> $this->libelle";
+    $this->_view = "$this->code_source => $this->code_cible";
   }
   
   function loadRefCodeSource() {

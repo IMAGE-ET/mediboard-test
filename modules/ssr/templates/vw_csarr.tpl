@@ -9,6 +9,8 @@ function changePage(page){
 
 </script>
 
+{{mb_script module=ssr script=csarr}}
+
 <form action="?" name="filter-activite" method="get" >
 
 <input type="hidden" name="m" value="{{$m}}" />
@@ -34,15 +36,22 @@ function changePage(page){
 
 <table class="tbl">
   <tr>
-    <th>{{mb_title object=$activite field=hierarchie}}</th>
-    <th>{{mb_title object=$activite field=code}}</th>
+    <th class="narrow">{{mb_title object=$activite field=hierarchie}}</th>
+    <th class="narrow">{{mb_title object=$activite field=code}}</th>
     <th>{{mb_title object=$activite field=libelle}}</th>
 		<th class="narrow">Nb. éléments</th>
   </tr>
   {{foreach from=$listActivites item=_activite}}
   <tr>
-    <td>{{$_activite->hierarchie|emphasize:$activite->code:"u"}}</td>
-    <td>{{$_activite->code|emphasize:$activite->code:"u"}}</td>
+    <td>
+      <button class="compact search"  onclick="CsARR.viewHierarchie('{{$_activite->hierarchie}}')">
+        {{$_activite->hierarchie|emphasize:$activite->code:"u"}}
+      </button></td>
+    <td>
+      <button class="compact search" onclick="CsARR.viewCode('{{$_activite->code}}')">
+        {{$_activite->code|emphasize:$activite->code:"u"}}
+      </button>
+    </td>
     <td>{{$_activite->libelle|emphasize:$activite->code:"u"}}</td>
 		<td style="text-align: center;">
 			{{if $_activite->_ref_elements}}

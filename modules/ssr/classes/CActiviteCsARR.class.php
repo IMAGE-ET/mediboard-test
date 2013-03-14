@@ -18,7 +18,12 @@ class CActiviteCsARR extends CCsARRObject {
   var $libelle_court = null;
   var $ordre         = null;
   
-  var $_ref_hierachie = null;
+  public $_ref_hierarchie;
+  public $_ref_hierarchies;
+  public $_ref_modulateurs;
+  public $_ref_notes_activites;
+  public $_ref_gestes_complementaires;
+  public $_ref_activites_complementaires;
     
   static $cached = array();
   
@@ -49,9 +54,58 @@ class CActiviteCsARR extends CCsARRObject {
   }
   
   function loadRefHierarchie() {
-    return $this->_ref_type_activite = CHierarchieCdARR::get($this->hierarchie);
+    return $this->_ref_hierarchie = CHierarchieCsARR::get($this->hierarchie);
   }
-	
+  
+  function loadRefsHierarchies() {
+    // Codes des hiérarchies intermédiaires
+    $parts = explode(".", $this->hierarchie);
+    $codes = array();
+    foreach ($parts as $_part) {
+      $last = $codes[] = count($codes) ? end($codes) . ".$_part" : $_part;
+    }
+    
+    // Chargement des hiérarchies intermédiaires
+    $hierarchie = new CHierarchieCsARR;
+    $hierarchies = $hierarchie->loadAll($codes);
+    return $this->_ref_hierarchies = $hierarchies;
+  }
+
+  function loadRefsNotesActivites() {
+    $note = new CNoteActiviteCsARR;
+    $note->code = $this->code;
+    $notes = array();
+    foreach ($note->loadMatchingList("ordre") as $_note) {
+      $notes[$_note->typenote][$_note->ordre] = $_note;
+    }
+    
+    return $this->_ref_notes_activites = $notes;
+  }
+  
+  function loadRefsModulateurs() {
+    $modulateur = new CModulateurCsARR;
+    $modulateur->code = $this->code;
+    $modulateurs = $modulateur->loadMatchingList();
+    return $this->_ref_modulateurs = $modulateurs;
+  }
+  
+  function loadRefsGestesComplementaires() {
+    // Chargement des gestes
+    $geste = new CGesteComplementaireCsARR;
+    $geste->code_source = $this->code;
+    $gestes = $geste->loadMatchingList();
+    $this->_ref_gestes_complementaires = $gestes;
+    
+    // Chargement directes des activités correspondantes.
+    $codes = CMbArray::pluck($gestes, "code_cible");
+    $activite = new CActiviteCsARR;
+    $this->_ref_activites_complementaires = $activite->loadAll($codes);
+    
+    // Retour de gestes
+    return $this->_ref_gestes_complementaires;
+    
+  }
+  
 	function loadView(){
     parent::loadView();
     $this->loadRefHierarchie();

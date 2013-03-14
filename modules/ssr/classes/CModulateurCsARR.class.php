@@ -36,7 +36,7 @@ class CModulateurCsARR extends CCsARRObject {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = "$this->code : $this->modulateur";
+    $this->_view = "Libellé du modulateur $this->modulateur";
   }
   
   function loadRefCode() {
