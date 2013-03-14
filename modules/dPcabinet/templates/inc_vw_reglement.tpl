@@ -53,10 +53,9 @@ validTarif = function(){
 loadFacture = function() {
   Facture.load(document.tarifFrm, '{{$consult->patient_id}}', '{{$pour_compte_praticien_id}}', '{{$consult->_id}}', 1);
 }
+
 reloadFacture = function() {
-  {{if $consult->facture_id}}
-    Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->facture_id}}');
-  {{/if}}
+  Facture.reload('{{$consult->patient_id}}', '{{$consult->_id}}', 1, '{{$consult->facture_id}}');
 }
 
 modifTotal = function(){

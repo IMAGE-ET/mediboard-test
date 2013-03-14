@@ -70,7 +70,7 @@ $listPrat = ($prat->_id) ?
 $where[] = "plageconsult.chir_id ".CSQLDataSource::prepareIn(array_keys($listPrat))
     ." OR plageconsult.pour_compte_id ".CSQLDataSource::prepareIn(array_keys($listPrat));
 
-$order = "plageconsult.date, plageconsult.debut, plageconsult.chir_id";
+$order = " plageconsult.chir_id, plageconsult.date, plageconsult.debut";
 
 // Initialisation du tableau de reglements
 $reglement = new CReglement();

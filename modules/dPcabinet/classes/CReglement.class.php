@@ -30,7 +30,6 @@ class CReglement extends CMbMetaObject {
   public $num_bvr;
   
   // Fwd References
-  public $_ref_consultation;
   public $_ref_banque;
   public $_ref_facture;
   

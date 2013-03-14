@@ -125,9 +125,8 @@ $reglement->montant = round($consult->_du_restant_patient, 2);
 // Codes et actes
 $consult->loadRefsActes();
 
-$facture_patient = new CFactureCabinet();
-$facture         = new CFactureCabinet();
-$where = array();
+$facture = new CFactureCabinet();
+$where 	 = array();
 $where["patient_id"] = "= '$consult->patient_id'";
 if ($consult->_ref_plageconsult->pour_compte_id) {
   $where["praticien_id"] = "= '".$consult->_ref_plageconsult->pour_compte_id."'";
@@ -136,52 +135,35 @@ else {
   $where["praticien_id"] = "= '$prat_id'";
 }
 
-if (CAppUI::conf("dPfacturation CFactureCabinet use_create_bill")) {
+//Recherche de la facture pour cette consultation
+if (CModule::getActive("facturation")) {
   $liaison = new CFactureLiaison();
   $liaison->object_id     = $consult->_id;
   $liaison->object_class  = $consult->_class;
   $liaison->facture_class = "CFactureCabinet";
   if ($liaison->loadMatchingObject()) {
-    $facture_patient = $liaison->loadRefFacture();
-    $facture_patient->loadRefs();
+    $facture = $liaison->loadRefFacture();
   }
 }
-elseif (CAppUI::conf("ref_pays") == 1 && $consult->facture_id) {
-  if ($facture->load($consult->facture_id)) {
-    $facture_patient = $facture;
-    $facture_patient->loadRefs();
-  }
+elseif ($consult->facture_id) {
+  $facture->load($consult->facture_id);
 }
-elseif (CAppUI::conf("ref_pays") == 2) {
+
+//Si on a pas de facture on recherche d'une facture ouverte 
+if (!$facture->_id && CAppUI::conf("ref_pays") == 2) {
   $where["cloture"] = " IS NULL";
-  //On essaie de retrouver une facture ouverte
-  if ($facture->loadObject($where)) {
-    $facture_patient = $facture;
-    $facture_patient->loadRefs();
-  }
-  else {
-    $where["cloture"] = " IS NOT NULL";
-    if ($factures = $facture->loadList($where)) {
-      foreach ($factures as $_facture) {
-        $_facture->loadRefPatient();
-        $_facture->loadRefsConsultation();
-        foreach ($_facture->_ref_consults as $consultation) {
-          if ($consultation->_id == $consult->_id) {
-            $facture_patient = $_facture;
-            $facture_patient->loadRefs();
-            break;
-          }
-        }
-      }  
-    }
-  }
+  $facture->loadObject($where);
+}
+
+if ($facture->_id) {
+  $facture->loadRefs();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("banques"  , $banques);
-$smarty->assign("facture"  , $facture_patient);
+$smarty->assign("facture"  , $facture);
 $smarty->assign("consult"  , $consult);
 $smarty->assign("reglement", $reglement);
 $smarty->assign("tarifs"   , $tarifs);
