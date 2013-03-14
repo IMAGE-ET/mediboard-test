@@ -97,6 +97,7 @@ $listConsults = array();
 foreach ($reglements as $_reglement) {
   $facture = $_reglement->loadRefFacture();
   $facture->loadRefsNotes();
+  $facture->_ref_praticien->loadRefFunction();
   foreach ($facture->_ref_consults as $_consult) {
     // Chargement des consultations
     $_consult->loadRefPatient(1);
