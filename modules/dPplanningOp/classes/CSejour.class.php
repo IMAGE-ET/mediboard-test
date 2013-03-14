@@ -692,6 +692,10 @@ class CSejour extends CFacturable implements IPatientRelated {
    */
   function getServiceFromSectorisationRules() {
 
+    if ((!$this->service_id) || (!CAppUI::conf("dPplanningOp CRegleSectorisation use_sectorisation"))) {
+      return false;
+    }
+
     $this->updatePlainFields(); // make sure entree & sortie well defined
     $this->completeField("type", "praticien_id", "entree", "sortie", "group_id", "type_pec");
     $praticien = $this->loadRefPraticien();
@@ -736,8 +740,6 @@ class CSejour extends CFacturable implements IPatientRelated {
       return true;
     }
 
-
-
   }
 
   /**
@@ -749,10 +751,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $this->completeField("entree_reelle", "entree", "patient_id", "type_pec");
 
     // Sectorisation Rules
-    if (!$this->service_id && CAppUI::conf("dPplanningOp CRegleSectorisation use_sectorisation")) {
-      $this->getServiceFromSectorisationRules();
-    }
-
+    $this->getServiceFromSectorisationRules();
 
     // Vérification de la validité des codes CIM
     if ($this->DP != null) {
