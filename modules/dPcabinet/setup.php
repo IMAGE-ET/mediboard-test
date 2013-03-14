@@ -1831,6 +1831,9 @@ class CSetupdPcabinet extends CSetup {
     $this->makeRevision("1.95");
     $this->addPrefQuery("create_dossier_anesth", "1");
 
-    $this->mod_version = "1.96";
+    $this->makeRevision("1.96");
+    $this->addDependency("dPfacturation", "0.21");
+
+    $this->mod_version = "1.97";
   }
 }
