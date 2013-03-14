@@ -9,13 +9,13 @@
  */
 
 CsARR = {
-  viewCode: function(code) {
+  viewActivite: function(code) {
     new Url('ssr', 'vw_activite_csarr') .
       addParam('code', code) .
       requestModal(500);
   },
   
-  viewCodeStats: function(code) {
+  viewActiviteStats: function(code) {
     new Url('ssr', 'vw_activite_csarr_stats') .
       addParam('code', code) .
       requestModal();

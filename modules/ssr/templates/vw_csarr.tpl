@@ -48,7 +48,7 @@ function changePage(page){
         {{$_activite->hierarchie|emphasize:$activite->code:"u"}}
       </button></td>
     <td>
-      <button class="compact search" onclick="CsARR.viewCode('{{$_activite->code}}')">
+      <button class="compact search" onclick="CsARR.viewActivite('{{$_activite->code}}')">
         {{$_activite->code|emphasize:$activite->code:"u"}}
       </button>
     </td>

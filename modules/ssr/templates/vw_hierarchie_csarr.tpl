@@ -39,7 +39,7 @@
       {{foreach from=$_notes_by_type item=_note}}
       <div style="padding-left: {{math equation="n-1" n=$_note->niveau}}em;">
         {{if $_note->code_exclu}}
-        <button class"compact search" onclick="CsARR.viewCode('{{$_note->code_exclu}}')">
+        <button class"compact search" onclick="CsARR.viewActivite('{{$_note->code_exclu}}')">
           {{$_note->code_exclu}}
         </button>
         {{$_note->libelle|substr:0:-10}}
