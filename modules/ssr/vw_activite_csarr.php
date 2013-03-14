@@ -22,6 +22,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("activite"      , $activite);
 
-$smarty->display("vw_code_csarr.tpl");
+$smarty->display("vw_activite_csarr.tpl");
 
 ?>

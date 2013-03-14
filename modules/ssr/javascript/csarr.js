@@ -10,17 +10,20 @@
 
 CsARR = {
   viewCode: function(code) {
-    new Url('ssr', 'vw_code_csarr') .
+    new Url('ssr', 'vw_activite_csarr') .
       addParam('code', code) .
       requestModal(500);
   },
   
   viewCodeStats: function(code) {
-    new Url('ssr', 'vw_code_csarr_stats') .
+    new Url('ssr', 'vw_activite_csarr_stats') .
       addParam('code', code) .
       requestModal();
   },
   
   viewHierarchie: function(hierarchie) {
+    new Url('ssr', 'vw_hierarchie_csarr') .
+      addParam('code', code) .
+      requestModal(500);
   }
 };
