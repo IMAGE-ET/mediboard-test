@@ -450,11 +450,27 @@ class CSetupssr extends CSetup {
       $this->addQuery($query);
     }
     
-    $this->mod_version = "0.42";
+    $this->makeRevision("0.42");
+
+    $query = "CREATE TABLE `element_prescription_to_csarr` (
+        `element_prescription_to_csarr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+        `element_prescription_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+        `code` CHAR (7) NOT NULL,
+        `commentaire` VARCHAR (255)
+      )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+            
+    $query = "ALTER TABLE `element_prescription_to_csarr` ADD INDEX (`element_prescription_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.43";
 
     // Data source query
-    $query = "SHOW COLUMNS FROM type_activite LIKE 'libelle_court'";
+    $query = "SHOW TABLES LIKE 'type_activite'";
     $this->addDatasource("cdarr", $query);
+
+    $query = "SHOW TABLES LIKE 'note_hierarchie'";
+    $this->addDatasource("csarr", $query);
   }
 }
 

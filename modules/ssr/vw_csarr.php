@@ -8,47 +8,36 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-
 CCanDo::checkRead();
 
-$activite = new CActiviteCdARR();
+$activite = new CActiviteCsARR();
 $activite->code = CValue::getOrSession("code");
-$activite->type = CValue::getOrSession("type");
 
 // Pagination
 $current = CValue::getOrSession("current", 0);
 $step    = 20;
-
-$type_activite = new CTypeActiviteCdARR();
-$listTypes = $type_activite->loadList(null, "code");
+$limit = "$current, $step";
 
 $where = array();
-if($activite->type) {
-  $where["type"] = "= '$activite->type'";
-}
-
-$limit = "$current, $step";
-$order = "type, code";
+$order = "";
 $listActivites = $activite->seek($activite->code, $where, $limit, true);
 $total = $activite->_totalSeek;
 
 // Détail du chargement
 foreach ($listActivites as $_activite) {
-  $_activite->loadRefTypeActivite();
-	$_activite->loadRefsElementsByCat();
+  $_activite->loadRefsElementsByCat();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("activite"      , $activite);
-$smarty->assign("listTypes"     , $listTypes);
 $smarty->assign("listActivites" , $listActivites);
 
 $smarty->assign("current", $current);
 $smarty->assign("step"   , $step);
 $smarty->assign("total"  , $total);
 
-$smarty->display("vw_cdarr.tpl");
+$smarty->display("vw_csarr.tpl");
 
 ?>

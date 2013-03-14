@@ -22,6 +22,7 @@ $module->registerTab("vw_plateau_board"       , TAB_READ);
 $module->registerTab("vw_aed_replacement"     , TAB_ADMIN);
 $module->registerTab("vw_idx_plateau"         , TAB_ADMIN);
 $module->registerTab("vw_cdarr"               , TAB_READ);
+$module->registerTab("vw_csarr"               , TAB_READ);
 $module->registerTab("edit_codes_intervenants", TAB_ADMIN);
 $module->registerTab("vw_facturation_rhs"     , TAB_EDIT);
 ?>

@@ -50,7 +50,7 @@ foreach ($prescription->_ref_prescription_lines_element_by_cat as $chapter => $_
       
       $cdarrs_by_type =& $element->_ref_cdarrs_by_type;
       foreach ($element->_back["cdarrs"] as $_acte_cdarr){
-        $_activite_cdarr = $_acte_cdarr->loadRefActiviteCdarr();
+        $_activite_cdarr = $_acte_cdarr->loadRefActiviteCdARR();
         $cdarrs_by_type[$_activite_cdarr->type][] = $_acte_cdarr;
       }
     }

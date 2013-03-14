@@ -8,16 +8,10 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  */
 
-class CElementPrescriptionToCdarr extends CMbObject {
+class CElementPrescriptionToCdarr extends CElementPrescriptionToReeducation {
   // DB Table key
   var $element_prescription_to_cdarr_id = null;
-  
-  // DB Fields
-  var $element_prescription_id = null;
-  var $code = null;
-  var $commentaire = null;
-  
-  var $_ref_element_prescription = null;
+    
   var $_ref_activite_cdarr = null;
   var $_count_cdarr_by_type = null;
   
@@ -30,29 +24,17 @@ class CElementPrescriptionToCdarr extends CMbObject {
 
   function getProps() {
     $props = parent::getProps();
-    $props["element_prescription_id"] = "ref notNull class|CElementPrescription";
     $props["code"]                    = "str notNull length|4";
-    $props["commentaire"]             = "str";
     return $props;
-  }
-  
-  function loadRefElementPrescription(){
-    $element = new CElementPrescription();
-    $this->_ref_element_prescription = $element->getCached($this->element_prescription_id);
   }
   
   function check(){
     // Verification du code Cdarr saisi
     $code_cdarr = CActiviteCdARR::get($this->code);
     if(!$code_cdarr->code){
-      return "Ce code n'est pas un code Cdarr valide";
+      return "Ce code n'est pas un code CdARR valide";
     }
     return parent::check();
-  }
-  
-  function updateFormFields(){
-    parent::updateFormFields();
-    $this->_view = "Code CdARR ".$this->code;
   }
   
   function loadRefActiviteCdarr(){
