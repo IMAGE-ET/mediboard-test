@@ -186,12 +186,7 @@
                   {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
                   <select name="executant_id" class="{{$acte->_props.executant_id}}">
                     <option value="">&mdash; Choisir un professionnel de santé</option>
-                    {{foreach from=$listExecutants item=_executant}}
-                    <option class="mediuser" style="border-color: #{{$_executant->_ref_function->color}};" value="{{$_executant->_id}}"
-                      {{if $acte->executant_id == $_executant->_id}} selected="selected" {{/if}}>
-                      {{$_executant->_view}}
-                    </option>
-                    {{/foreach}}
+                    {{mb_include module=mediusers template=inc_options_mediuser selected=$acte->executant_id list=$listExecutants}}
                   </select>
                 </td>
               </tr>
