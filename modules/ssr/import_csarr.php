@@ -99,14 +99,14 @@ function addFileIntoDB($file, $table) {
       
       // Détection de la hierarchie à exclure
       $data[6] = "";
-      if (preg_match("/\((\d{2}\.)+\d{2}\)/i", $data[4], $matches)) {
-        $data[6] = $matches[0];
+      if (preg_match("/\(((\d{2}\.)+\d{2})\)/i", $data[4], $matches)) {
+        $data[6] = $matches[1];
       }
 
       // Détection du code à exclure
       $data[7] = "";
-      if (preg_match("/\([a-z]{3}\+\d{3}\)/i", $data[4], $matches)) {
-        $data[7] = $matches[0];
+      if (preg_match("/\(([a-z]{3}\+\d{3})\)/i", $data[4], $matches)) {
+        $data[7] = $matches[1];
       }
     }
 
