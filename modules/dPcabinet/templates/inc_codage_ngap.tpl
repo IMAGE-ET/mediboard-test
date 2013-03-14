@@ -119,7 +119,7 @@ ActesNGAP = {
         <th class="category">{{mb_title object=$acte_ngap field=lieu}}</th>
       {{/if}}
 
-      {{if $object->_ref_patient && $object->_ref_patient->ald}}
+      {{if $object->_ref_patient->ald}}
         <th class="category">{{mb_title object=$acte_ngap field=ald}}</th>
       {{/if}}
 
@@ -153,7 +153,7 @@ ActesNGAP = {
             <td>{{mb_field object=$acte_ngap field="lieu"}}</td>
           {{/if}}
 
-          {{if $object->_ref_patient && $object->_ref_patient->ald}}
+          {{if $object->_ref_patient->ald}}
             <td>{{mb_field object=$acte_ngap field="ald"}}</td>
           {{/if}}
 
@@ -205,7 +205,7 @@ ActesNGAP = {
         <td>{{mb_value object=$_acte_ngap field="lieu"}}</td>
       {{/if}}
 
-      {{if $object->_ref_patient && $object->_ref_patient->ald}}
+      {{if $object->_ref_patient->ald}}
         <td>{{mb_value object=$_acte_ngap field="ald"}}</td>
       {{/if}}
 

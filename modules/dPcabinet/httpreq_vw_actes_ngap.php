@@ -16,6 +16,7 @@ $object = new $object_class;
 $object->load($object_id);
 $object->loadRefsActesNGAP();
 $object->loadRefPraticien();
+$object->loadRefPatient();
 
 $date            = CValue::getOrSession("date", CMbDT::date());
 $date_now        = CMbDT::date();
