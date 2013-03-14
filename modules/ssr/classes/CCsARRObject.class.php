@@ -11,7 +11,7 @@
 /**
  * Object CsARR
  */
-class CCsARRObject extends CMbObject {
+class CCsARRObject extends CStoredObject {
 	
   function getSpec() {
     $spec = parent::getSpec();
