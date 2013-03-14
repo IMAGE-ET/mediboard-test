@@ -103,6 +103,8 @@ refreshTabState = function(){
   window['aerosolSoinLoaded'] = false;
   window['alimentationSoinLoaded'] = false;
   window['inscriptionSoinLoaded'] = false;
+  window['all_medSoinLoaded'] = false;
+  
   
   window['injSoinLoaded'] = false;
   {{if "dPprescription"|module_active}}

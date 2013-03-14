@@ -218,8 +218,28 @@ if (CModule::getActive("dPprescription")) {
   else {
     if($prescription->_id){
       // Chargement des lignes de medicament
-      if($chapitre == "med" || $chapitre == "inj"){
+      if ($chapitre == "all_med") {
+        $prescription->loadRefsLinesMedByCat("1","1");
+        foreach($prescription->_ref_prescription_lines as &$_line_med){
+          $_line_med->loadRefLogSignee();
+          $_line_med->countVariantes();
+          $_line_med->countBackRefs("administration");
+          $_line_med->loadRefsVariantes();
+        }
         
+        // Chargement des prescription_line_mixes
+        $prescription->loadRefsPrescriptionLineMixes("","1");
+        foreach($prescription->_ref_prescription_line_mixes as &$_prescription_line_mix){
+          $_prescription_line_mix->countVariantes();
+          $_prescription_line_mix->loadRefsVariantes();
+          $_prescription_line_mix->getRecentModification();
+          $_prescription_line_mix->loadRefsLines();
+          $_prescription_line_mix->loadVoies();
+          $_prescription_line_mix->loadRefPraticien();
+          $_prescription_line_mix->loadRefLogSignaturePrat();
+          $_prescription_line_mix->calculVariations();
+        }
+      } elseif($chapitre == "med" || $chapitre == "inj"){
         $prescription->loadRefsLinesMedByCat("1","1");
         foreach($prescription->_ref_prescription_lines as &$_line_med){
           $_line_med->loadRefLogSignee();
