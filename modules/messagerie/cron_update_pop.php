@@ -18,6 +18,9 @@ CPop::checkImapLib();
 $nbAccount = CAppUI::conf("messagerie CronJob_nbMail");
 $older = CAppUI::conf("messagerie CronJob_olderThan");
 
+$user_id = CValue::get("user_id");
+
+
 $size_required = CAppUI::pref("getAttachmentOnUpdate");
 if ($size_required == "") {
   $size_required = 0;
@@ -26,27 +29,57 @@ if ($size_required == "") {
 $source = new CSourcePOP();
 $where = array();
 $where["active"] = "= '1'";
+if ($user_id) {
+  $where["object_class"] = " = 'CMediusers'";
+  $where["object_id"] = " = '$user_id'";
+}
 //$where["last_update"] = "< (NOW() - INTERVAL $older MINUTE)"; //doit avoir été updaté il y a plus de 5 minutes
 $order = "'last_update' ASC";
 $limit = "0, $nbAccount";
 $sources = $source->loadList($where, $order, $limit);
 
+
+//for each POP/IMAP source
 foreach ($sources as $_source) {
+
+  //no user => next
   if (!$_source->user) {
-    return;
+    continue;
   }
+
+  // when a mail is copied in mediboard, will it be marked as read on the server ?
+  $markReadServer = 0;
+  $pref = CPreferences::get($_source->object_id);   //for user_id
+  $markReadServer = (isset($pref["markMailOnServerAsRead"])) ? $pref["markMailOnServerAsRead"] : CAppUI::pref("markMailOnServerAsRead");
+
+
   $pop = new CPop($_source);
   if (!$pop->open()) {
-    //disable the account because of a problem
-    //$_source->active = 0;
-    //$_source->store();
     CMbObject::error("CPop-error-imap_open");
     continue;
   }
   $unseen = $pop->search('UNSEEN');
 
   if (count($unseen)>0) {
+
+    //how many
+    if ($user_id) {
+      if (count($unseen)>1) {
+        CAppUI::stepAjax("CPop-msg-newMsgs", UI_MSG_OK, count($unseen));
+      }
+      else {
+        CAppUI::stepAjax("CPop-msg-newMsg", UI_MSG_OK, count($unseen));
+      }
+    }
+
+
+    //set email as read in imap/pop server
+    if ($markReadServer) {
+      $pop->setFlag(implode(",", $unseen), "\\Seen");
+    }
+
     foreach ($unseen as $_mail) {
+
       $mail_unseen = new CUserMail();
       $mail_unseen->account_id = $_source->_id;
 
@@ -127,6 +160,9 @@ foreach ($sources as $_source) {
       }
 
     } //foreach
+  }
+  else {
+    CAppUI::stepAjax("CPop-msg-nonewMsg", UI_MSG_OK, $_source->libelle);
   }
 
   $_source->last_update = CMbDT::dateTime();

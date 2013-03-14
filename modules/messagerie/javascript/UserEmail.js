@@ -65,7 +65,7 @@ messagerie = {
   },
 
   getLastMessages:function (user_id) {
-    var url = new Url(messagerie.module, "ajax_get_last_email");
+    var url = new Url(messagerie.module, "cron_update_pop");
     url.addParam("user_id", user_id);
     url.requestUpdate("systemMsg", function () {
       messagerie.refreshList(0, messagerie.tab, 0);

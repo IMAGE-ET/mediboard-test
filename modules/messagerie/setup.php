@@ -102,7 +102,7 @@ class CSetupmessagerie extends CSetup {
     $this->addPrefQuery("LinkAttachment", 1);
 
     $this->makeRevision("0.18");
-    $this->addPrefQuery("showImgInMail", 0);
+    $this->addPrefQuery("showImgInMail", 1);
 
     $this->makeRevision("0.19");
     $query = "ALTER TABLE `user_mail`
@@ -135,6 +135,9 @@ class CSetupmessagerie extends CSetup {
               ADD `archived` ENUM ('0','1') DEFAULT '0' AFTER `favorite`;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.25";
+    $this->makeRevision("0.25");
+    $this->addPrefQuery("markMailOnServerAsRead", 1);
+
+    $this->mod_version = "0.26";
   }
 }
