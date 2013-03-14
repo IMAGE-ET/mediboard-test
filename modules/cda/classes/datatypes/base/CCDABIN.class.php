@@ -19,7 +19,7 @@ class CCDABIN extends CCDAANY {
   /**
    * Specifies the representation of the binary data that
    * is the content of the binary data value.
-   * @var CCDABinaryDataEncoding
+   * @var CCDA_BinaryDataEncoding
    */
   public $representation;
   /**
@@ -29,7 +29,8 @@ class CCDABIN extends CCDAANY {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["representation"] = "CCDABinaryDataEncoding xml|attribute default|TXT";
+    $props["representation"] = "CCDA_BinaryDataEncoding xml|attribute default|TXT";
+    $props["data"] = "str xml|data";
     return $props;
   }
 
@@ -49,12 +50,14 @@ class CCDABIN extends CCDAANY {
    */
   function test() {
 
-    $tabTest = array();
+    $tabTest = parent::test();
+
     /**
-     * Test avec une valeur null
+     * Test avec des données
      */
 
-    $tabTest[] = $this->sample("Test avec les valeurs null", "Document valide");
+    $this->setData("test");
+    $tabTest[] = $this->sample("Test avec des données", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -63,14 +66,14 @@ class CCDABIN extends CCDAANY {
     }
 
     /**
-     * Test avec une valeur erroné
+     * Test avec une valeur incorrecte
      */
 
-    $binaryDataEncoding = new CCDABinaryDataEncoding();
+    $binaryDataEncoding = new CCDA_BinaryDataEncoding();
     $binaryDataEncoding->setData("TESTTEST");
     $this->setRepresentation($binaryDataEncoding);
 
-    $tabTest[] = $this->sample("Test avec une representation erronée", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une representation incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 

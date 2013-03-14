@@ -134,13 +134,7 @@ class CCDAII extends CCDAANY {
    * @return array
    */
   function test() {
-    $tabTest = array();
-    /**
-     * Test avec les valeurs null
-     */
-    $tabTest[] = $this->sample("Test avec les valeurs null", "Document valide");
-
-    /*-------------------------------------------------------------------------------------*/
+    $tabTest = parent::test();
 
     /**
      * Test avec un uid incorrect

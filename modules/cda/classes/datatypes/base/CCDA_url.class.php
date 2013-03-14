@@ -19,29 +19,7 @@
  * telefax numbers, e-mail addresses, Hypertext references,
  * FTP references, etc.
  */
-class CCDA_url extends CCDA_Datatype {
-
-  public $data;
-
-  /**
-   * Setter data
-   *
-   * @param \String $data String
-   *
-   * @return void
-   */
-  public function setData($data) {
-    $this->data = $data;
-  }
-
-  /**
-   * Getter data
-   *
-   * @return URI
-   */
-  public function getData() {
-    return $this->data;
-  }
+class CCDA_url extends CCDA_Datatype_Base {
 
   /**
 	 * Get the properties of our class as strings
@@ -61,7 +39,8 @@ class CCDA_url extends CCDA_Datatype {
    */
   function test() {
 
-    $tabTest = array();
+    $tabTest = parent::test();
+
     /**
      * Test avec une valeur null
      */
@@ -69,18 +48,19 @@ class CCDA_url extends CCDA_Datatype {
     $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
+
     /**
-     * Test avec une valeur erronée
+     * Test avec une valeur incorrecte
      */
 
     $this->setData(":::$:!:");
-    $tabTest[] = $this->sample("Test avec une valeur erronée", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
+
     /**
      * Test avec une valeur correcte
      */
-
 
     $this->setData("test");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");

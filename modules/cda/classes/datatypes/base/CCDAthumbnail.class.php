@@ -51,7 +51,7 @@ class CCDAthumbnail extends CCDAED {
     $thum->setIntegrityCheckAlgorithm($integrityalgo);
 
     $this->setThumbnail($thum);
-    $tabTest[] = $this->sample("Test avec thumbnail correcte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un thumbnail correcte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 

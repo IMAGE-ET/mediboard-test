@@ -14,9 +14,8 @@
  * protected type that MUST not be used outside the data
  * type specification.
  */
-class CCDA_bin extends CCDA_Datatype {
+class CCDA_bin extends CCDA_Datatype_Base {
 
-  public $data;
   /**
 	 * Get the properties of our class as strings
 	 *
@@ -29,43 +28,37 @@ class CCDA_bin extends CCDA_Datatype {
   }
 
   /**
-   * Modifie la variable data
-   *
-   * @param String $data Data
-   *
-   * @return void
-   */
-  function setData($data) {
-    $this->data = $data;
-  }
-
-  function getdata() {
-    return $this->data;
-  }
-
-  /**
    * Fonction permettant de tester la classe
    *
    * @return void
    */
   function test() {
-    $tabTest = array();
+    $tabTest = parent::test();
+
     /**
      * Test avec une valeur null
      */
+
     $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
+
     /*-------------------------------------------------------------------------------------*/
+
     /**
      * Test avec une valeur correcte
      */
+
     $this->setData("JVBERi0xLjUNCiW1tbW1DQoxIDAgb2Jq");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
+
     /*-------------------------------------------------------------------------------------*/
+
     /**
      * Test avec une valeur incorrecte
      */
+
     $this->setData("111111111");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
+
     /*-------------------------------------------------------------------------------------*/
 
     return $tabTest;

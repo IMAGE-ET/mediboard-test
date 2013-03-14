@@ -20,18 +20,9 @@
  * the right to assign other forms of UIDs, such as mnemonic
  * identifiers for code systems.
  */
-class CCDA_uid extends CCDA_Datatype {
+class CCDA_uid extends CCDA_Datatype_Base {
 
-  public $data;
   public $union = array("oid", "uuid", "ruid");
-
-  public function setData($data) {
-    $this->data = $data;
-  }
-
-  public function getData() {
-    return $this->data;
-  }
 
   function getPropsUnion() {
     $pattern = "";
@@ -57,24 +48,25 @@ class CCDA_uid extends CCDA_Datatype {
   }
 
   function test() {
-    $tabTest = array();
-    /**
-     * Test avec une valeur null
-     */
-    $tabTest[] = $this->sample("Test avec une valeur null", "Document invalide");
-    /*-------------------------------------------------------------------------------------*/
+    $tabTest = parent::test();
+
     /**
      * Test avec une valeur correcte
      */
+
     $this->setData("HL7");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
+
     /*-------------------------------------------------------------------------------------*/
+
 
     /**
      * Test avec une valeur incorrecte
      */
+
     $this->setData("4TESTTEST");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
+
     /*-------------------------------------------------------------------------------------*/
 
     return $tabTest;

@@ -75,7 +75,7 @@ class CCDAIVXB_TS extends CCDATS {
     $bl = new CCDA_bl();
     $bl->setData("test");
     $this->setInclusive($bl);
-    $tabTest[] = $this->sample("Test avec inclusive incorrecte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un inclusive incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -86,7 +86,7 @@ class CCDAIVXB_TS extends CCDATS {
     $bl = new CCDA_bl();
     $bl->setData("true");
     $this->setInclusive($bl);
-    $tabTest[] = $this->sample("Test avec inclusive correcte", "Document valide");
+    $tabTest[] = $this->sample("Test avec un inclusive correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

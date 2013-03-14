@@ -29,33 +29,46 @@ class CCDAANY extends CCDA_Datatype{
     $this->nullFlavor = $nullFlavor;
   }
 
+  /**
+   * @return \CCDANullFlavor
+   */
+  public function getNullFlavor() {
+    return $this->nullFlavor;
+  }
+
   function getProps() {
-    parent::getProps();
+    $props = parent::getProps();
     $props["nullFlavor"] = "CCDANullFlavor xml|attribute";
 
     return $props;
   }
 
   function test() {
+
     $tabTest = array();
+
     /**
-     * Test avec un nullFlavor null
+     * Test avec les valeurs null
      */
 
-    $tabTest[] = $this->sample("Test avec un nullFlavor null", "Document valide");
+    $tabTest[] = $this->sample("Test avec les valeurs null", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec un nullFlavor erroné
+     * Test avec un nullFlavor incorrecte
      */
     $nullFlavor = new CCDANullFlavor();
     $nullFlavor->setData("TESTEST");
     $this->setNullFlavor($nullFlavor);
 
-    $tabTest[] = $this->sample("Test avec un nullFlavor erroné", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un nullFlavor incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
+
+    if (get_class($this) === "CCDAANYNonNull" || get_class($this) === "CCDABN") {
+      return $tabTest;
+    }
 
     /**
      * Test avec un nullFlavor correct

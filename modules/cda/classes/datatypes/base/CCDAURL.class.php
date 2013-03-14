@@ -61,22 +61,16 @@ class CCDAURL extends CCDAANY {
    */
   function test() {
 
-    $tabTest = array();
-    /**
-     * Test avec une valeur null
-     */
+    $tabTest = parent::test();
 
-    $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
-
-    /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec une valeur erronée
+     * Test avec une valeur incorrecte
      */
 
     $url = new CCDA_url();
     $url->setData(":::$:!:");
     $this->setValue($url);
-    $tabTest[] = $this->sample("Test avec une valeur erronée", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
     /**

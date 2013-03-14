@@ -72,26 +72,26 @@ class CCDASXCM_TS extends CCDATS {
    * @return array
    */
   function test() {
-    parent::test();
+    $tabTest = parent::test();
 
     /**
-     * Test avec une valeur incorrecte
+     * Test avec un operator incorrecte
      */
 
     $op = new CCDASetOperator();
     $op->setData("TESTTEST");
     $this->setOperator($op);
-    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un operator correcte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec une valeur correcte
+     * Test avec un operator correcte
      */
 
     $op->setData("H");
     $this->setOperator($op);
-    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
+    $tabTest[] = $this->sample("Test avec un operator correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

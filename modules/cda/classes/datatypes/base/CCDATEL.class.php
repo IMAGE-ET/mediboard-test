@@ -101,10 +101,10 @@ class CCDATEL extends CCDAURL {
    */
   function test() {
 
-    parent::test();
+    $tabTest = parent::test();
 
     /**
-     * Test avec un useablePeriod erronée
+     * Test avec un useablePeriod incorrecte
      */
 
     $useable = new CCDASXCM_TS();
@@ -112,7 +112,7 @@ class CCDATEL extends CCDAURL {
     $op->setData("TESTEST");
     $useable->setOperator($op);
     $this->setUseablePeriod($useable);
-    $tabTest[] = $this->sample("Test avec une useablePeriod erronée", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une useablePeriod incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 

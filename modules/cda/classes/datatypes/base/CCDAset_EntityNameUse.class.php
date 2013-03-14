@@ -2,26 +2,26 @@
 
 /**
  * $Id$
- *  
+ *
  * @category CDA
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
- * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @link     http://www.mediboard.org */
- 
+
 /**
- * CCDAset_PostalAddressUse Class
+ * CCDAset_EntityNameUse Class
  */
-class CCDAset_PostalAddressUse extends CCDA_Datatype_Set {
+class CCDAset_EntityNameUse extends CCDA_Datatype_Set {
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
-    $props["listData"] = "CCDAPostalAddressUse xml|data";
+    $props["listData"] = "CCDAEntityNameUse xml|data";
     return $props;
   }
 
@@ -34,33 +34,33 @@ class CCDAset_PostalAddressUse extends CCDA_Datatype_Set {
     $tabTest = parent::test();
 
     /**
-     * Test avec un PostalAddressUse incorrecte
+     * Test avec un EntityNameUse incorrecte
      */
-    $post = new CCDAPostalAddressUse();
+    $post = new CCDAEntityNameUse();
     $post->setData("TESTTEST");
     $this->addData($post);
-    $tabTest[] = $this->sample("Test avec un PostalAddressUse incorrecte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un EntityNameUse incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec un PostalAddressUse correcte
+     * Test avec un EntityNameUse correcte
      */
 
-    $post->setData("PST");
+    $post->setData("C");
     $this->razlistData();
     $this->addData($post);
-    $tabTest[] = $this->sample("Test avec un PostalAddressUse correcte", "Document valide");
+    $tabTest[] = $this->sample("Test avec un EntityNameUse correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec deux PostalAddressUse correcte
+     * Test avec deux EntityNameUse correcte
      */
 
-    $post2 = new CCDAPostalAddressUse();
-    $post2->setData("TMP");
+    $post2 = new CCDAEntityNameUse();
+    $post2->setData("I");
     $this->addData($post2);
-    $tabTest[] = $this->sample("Test avec deux PostalAddressUse correcte", "Document valide");
+    $tabTest[] = $this->sample("Test avec deux EntityNameUse correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

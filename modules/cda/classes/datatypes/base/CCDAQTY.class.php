@@ -44,4 +44,15 @@ class CCDAQTY extends CCDAANY {
     
     return $props;
   }
+
+  /**
+   * fonction permettant de tester la validité de la classe
+   *
+   * @return void
+   */
+  function test() {
+    $tabTest = parent::test();
+
+    return $tabTest;
+  }
 }

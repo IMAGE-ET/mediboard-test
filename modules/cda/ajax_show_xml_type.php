@@ -19,4 +19,4 @@ echo "<h1>$name</h1>";
 
 $cdatools = new CCdaTools();
 
-echo CMbString::highlightCode("xml", $cdatools->showNodeXSD($name));
+echo CMbString::highlightCode("xml", $cdatools->showNodeXSD($name, "modules/cda/resources/datatypes-base_original.xsd"));

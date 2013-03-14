@@ -102,6 +102,7 @@ class CCDAEN extends CCDAANY {
     $props["suffix"] = "CCDA_en_suffix xml|element";
     $props["validTime"] = "CCDAIVL_TS xml|element max|1";
     $props["use"] = "CCDAset_EntityNameUse xml|attribute";
+    $props["data"] = "str xml|data";
     return $props;
   }
 
@@ -111,13 +112,170 @@ class CCDAEN extends CCDAANY {
   * @return void
   */
   function test() {
-    $tabTest = array();
+    $tabTest = parent::test();
 
     /**
-     * test avec les valeurs null
+     * Test avec des données
      */
 
-    $tabTest[] = $this->sample("Test avec des valeurs null", "Document valide");
+    $this->setData("test");
+    $tabTest[] = $this->sample("Test avec des données", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec un use incorrecte
+     */
+
+    $us = new CCDAset_EntityNameUse();
+    $person = new CCDAEntityNameUse();
+    $person->setData("TESTTEST");
+    $us->addData($person);
+    $this->setUse($us);
+    $tabTest[] = $this->sample("Test avec un use incorrecte", "Document invalide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec un use correcte
+     */
+
+    $person->setData("C");
+    $us->razlistData();
+    $us->addData($person);
+    $this->setUse($us);
+    $tabTest[] = $this->sample("Test avec un use correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec un validTime incorrecte
+     */
+
+    $valid = new CCDAIVL_TS();
+    $ts = new CCDA_ts();
+    $ts->setData("TESTTEST");
+    $valid->setValue($ts);
+    $this->setValidTime($valid);
+    $tabTest[] = $this->sample("Test avec un validTime incorrecte", "Document invalide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec un validTime correcte
+     */
+
+    $ts->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
+    $valid->setValue($ts);
+    $this->setValidTime($valid);
+    $tabTest[] = $this->sample("Test avec un validTime correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    if(get_class($this) === "CCDATN") {
+      return $tabTest;
+    }
+
+    /**
+     * test avec un delimiter correcte
+     */
+
+    $enxp = new CCDA_en_delimiter();
+    $this->append("delimiter", $enxp);
+    $tabTest[] = $this->sample("Test avec un delimiter correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec deux delimiter correcte
+     */
+
+    $enxp = new CCDA_en_delimiter();
+    $this->append("delimiter", $enxp);
+    $tabTest[] = $this->sample("Test avec deux delimiter correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec un prefix correcte
+     */
+
+    $enxp = new CCDA_en_prefix();
+    $this->append("prefix", $enxp);
+    $tabTest[] = $this->sample("Test avec un prefix correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec deux prefix correcte
+     */
+
+    $enxp = new CCDA_en_prefix();
+    $this->append("prefix", $enxp);
+    $tabTest[] = $this->sample("Test avec deux prefix correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec un suffix correcte
+     */
+
+    $enxp = new CCDA_en_suffix();
+    $this->append("suffix", $enxp);
+    $tabTest[] = $this->sample("Test avec un suffix correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec deux prefix correcte
+     */
+
+    $enxp = new CCDA_en_suffix();
+    $this->append("suffix", $enxp);
+    $tabTest[] = $this->sample("Test avec deux suffix correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    if (get_class($this) === "CCDAON") {
+      return $tabTest;
+    }
+    /**
+     * test avec un family correcte
+     */
+
+    $enxp = new CCDA_en_family();
+    $this->append("family", $enxp);
+    $tabTest[] = $this->sample("Test avec un family correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec deux family correcte
+     */
+
+    $enxp = new CCDA_en_family();
+    $this->append("family", $enxp);
+    $tabTest[] = $this->sample("Test avec deux family correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec un given correcte
+     */
+
+    $enxp = new CCDA_en_given();
+    $this->append("given", $enxp);
+    $tabTest[] = $this->sample("Test avec un given correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * test avec deux given correcte
+     */
+
+    $enxp = new CCDA_en_given();
+    $this->append("given", $enxp);
+    $tabTest[] = $this->sample("Test avec deux given correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

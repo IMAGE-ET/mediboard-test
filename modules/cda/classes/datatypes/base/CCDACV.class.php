@@ -37,15 +37,6 @@ class CCDACV extends CCDACE {
     if(get_class($this) === "CCDAPQR") {
       return $tabTest;
     }
-    /**
-     * Test avec un translation correct sans valeur
-     */
-    $translation = new CCDACD();
-    $this->setTranslation($translation);
-
-    $tabTest[] = $this->sample("Test avec translation correct sans valeur", "Document invalide");
-
-    /*-------------------------------------------------------------------------------------*/
 
     /**
      * Test avec un translation correct avec valeur
@@ -56,8 +47,8 @@ class CCDACV extends CCDACE {
     $translation->setCodeSystemName($codeSystemNameTest);
     $this->setTranslation($translation);
 
-    $tabTest[] = $this->sample("Test avec translation correct avec valeur", "Document invalide");
-
+    $tabTest[] = $this->sample("Test avec une translation correct, interdit dans ce contexte", "Document invalide");
+    $this->razListTranslation();
     /*-------------------------------------------------------------------------------------*/
 
     return $tabTest;

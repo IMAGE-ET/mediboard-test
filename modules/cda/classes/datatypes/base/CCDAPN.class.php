@@ -10,18 +10,22 @@
  * @link     http://www.mediboard.org */
  
 /**
- * CCDA_bn class
+ * A name for a person. A sequence of name parts, such as
+ * given name or family name, prefix, suffix, etc. PN differs
+ * from EN because the qualifier type cannot include LS
+ * (Legal Status).
  */
-class CCDA_bn extends CCDA_bl {
+class CCDAPN extends CCDAEN {
 
+  
   /**
 	 * Get the properties of our class as strings
 	 *
 	 * @return array
 	 */
   function getProps() {
-    parent::getProps();
-    $props["data"] = "booleen xml|data notnull";
+    $props = parent::getProps();
+    
     return $props;
   }
 }

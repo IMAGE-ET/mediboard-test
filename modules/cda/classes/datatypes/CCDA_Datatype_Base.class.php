@@ -3,19 +3,17 @@
 /**
  * $Id$
  *  
- * @category CDA
+ * @category ${Module}
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
  
 /**
- * The BooleanNonNull type is used where a Boolean cannot
- * have a null value. A Boolean value can be either
- * true or false.
+ * Classe dont hériteront les classes de base (real, int...)
  */
-class CCDAANYNonNull extends CCDAANY {
-
+class CCDA_Datatype_Base extends CCDA_Datatype {
+  
   /**
 	 * Get the properties of our class as strings
 	 *
@@ -23,23 +21,26 @@ class CCDAANYNonNull extends CCDAANY {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["nullFlavor"] = "CCDANullFlavor xml|attribute prohibited";
+    
     return $props;
   }
 
+  /**
+   * Fonction permettant de tester la classe
+   *
+   * @return void
+   */
   function test() {
+    $tabTest = array();
 
-    $tabTest = parent::test();
-
+    if (get_class($this) === "CCDA_bin" || get_class($this) === "CCDA_url") {
+      return $tabTest;
+    }
     /**
-     * Test avec un nullFlavor incorrect
+     * Test avec une valeur null
      */
 
-    $nullFlavor = new CCDANullFlavor();
-    $nullFlavor->setData("TESTEST");
-    $this->setNullFlavor($nullFlavor);
-    $tabTest[] = $this->sample("Test avec un nullFlavor incorrect", "Document invalide");
-    $this->setNullFlavor(null);
+    $tabTest[] = $this->sample("Test avec une valeur null", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 

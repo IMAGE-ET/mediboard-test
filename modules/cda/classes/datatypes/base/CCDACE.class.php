@@ -25,7 +25,31 @@ class CCDACE extends CCDACD {
 	 */
   function getProps() {
     $props = parent::getProps();
-    //$props["qualifier"] = "CCDACR xml|element prohibited";
+    $props["qualifier"] = "CCDACR xml|element prohibited";
     return $props;
+  }
+  /**
+   * Fonction permettant de tester la classe
+   *
+   * @return array
+   */
+  function test() {
+    $tabTest = parent::test();
+
+    /**
+     * Test avec un qualifier correct
+     */
+
+    $cr = new CCDACR();
+    $bn = new CCDA_bn();
+    $bn->setData("true");
+    $cr->setInverted($bn);
+    $this->setQualifier($cr);
+
+    $tabTest[] = $this->sample("Test avec un qualifier correcte, interdit dans ce contexte", "Document invalide");
+    $this->razListQualifier();
+    /*-------------------------------------------------------------------------------------*/
+
+    return $tabTest;
   }
 }

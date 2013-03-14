@@ -3,21 +3,20 @@
 /**
  * $Id$
  *  
- * @category ${Module}
+ * @category CDA
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  * @link     http://www.mediboard.org */
  
 /**
- * Description
+ * Classe dont hériteront les classes vocabulaires
  */
-class CCDA_Datatype_Voc extends CCDA_Datatype {
+class CCDA_Datatype_Voc extends CCDA_cs {
 
   public $_enumeration     = array();
   public $_all_enumeration = array();
   public $_union = array();
-  public $data;
 
   function __construct() {
     $this->_enumeration     = $this->getEnumeration();
@@ -51,22 +50,15 @@ class CCDA_Datatype_Voc extends CCDA_Datatype {
     return $enumerations;
   }
 
-  function setData($data) {
-    $this->data = $data;
-  }
-
-  function getData() {
-    return $this->data;
-  }
-
   function getProps() {
-    $props = array();
+    $props = parent::getProps();
     return $props;
   }
 
   function getUnion() {
     return $this->_union;
   }
+
   /**
    * Fonction qui teste si la classe est valide
    *
@@ -74,37 +66,24 @@ class CCDA_Datatype_Voc extends CCDA_Datatype {
    */
   function test() {
 
-    $tabTest = array();
-    /**
-     * Test avec une valeur null
-     */
-    $tabTest[] = $this->sample("Test avec une valeur null", "Document invalide");
+    $tabTest = parent::test();
 
-    /*-------------------------------------------------------------------------------------*/
     /**
-     * Test avec une valeur erronée
-     */
-
-    $this->setData(" ");
-    $tabTest[] = $this->sample("Test avec une valeur erronée", "Document invalide");
-
-    /*-------------------------------------------------------------------------------------*/
-    /**
-     * Test avec une valeur bonne
+     * Test avec une valeur correcte
      */
     if ($this->_enumeration) {
       $enum = $this->_enumeration;
       $this->setData($enum[0]);
 
-      $tabTest[] = $this->sample("Test avec une valeur bonne", "Document valide");
+      $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
     }
 
-
-
     /*-------------------------------------------------------------------------------------*/
+
     /**
-     * Test avec une valeur bonne d'un union
+     * Test avec une valeur correcte d'un union
      */
+
     $union = $this->getUnion();
     if ($union) {
       $unionName = "CCDA".$union[0];
@@ -112,13 +91,12 @@ class CCDA_Datatype_Voc extends CCDA_Datatype {
       $unionEnum = $unionClass->getEnumeration(true);
       if ($unionEnum) {
         $this->setData($unionEnum[0]);
-        $tabTest[] = $this->sample("Test avec une valeur bonne d'un union", "Document valide");
+        $tabTest[] = $this->sample("Test avec une valeur correcte d'un union", "Document valide");
       }
-      /*-------------------------------------------------------------------------------------*/
     }
 
+    /*-------------------------------------------------------------------------------------*/
 
     return $tabTest;
   }
-
 }

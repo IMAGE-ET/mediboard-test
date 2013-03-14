@@ -11,8 +11,31 @@
  */
 
 
+$action = CValue::get("action", "null");
+
 $CCDATools = new CCdaTools();
-//$CCDATools->createClass();
-//$CCDATools->createTestSchemaClasses();
-mbTrace($CCDATools->missclass());
-//$CCDATools->clearXSD();
+$result = "";
+switch ($action) {
+  case "createClass":
+    $result = $CCDATools->createClass();
+    break;
+
+  case "createTest":
+    $result = $CCDATools->createTestSchemaClasses();
+    break;
+
+  case "clearXSD":
+    $result = $CCDATools->clearXSD();
+    break;
+
+  case "missClass";
+    $result = $CCDATools->missclass();
+    break;
+}
+
+$smarty = new CSmartyDP();
+
+$smarty->assign("action", $action);
+$smarty->assign("result", $result);
+
+$smarty->display("vw_toolsdatatype.tpl");

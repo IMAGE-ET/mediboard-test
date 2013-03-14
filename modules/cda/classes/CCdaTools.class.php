@@ -29,13 +29,6 @@ class CCdaTools {
    */
   var $xpath     = null;
 
-  static $listDataType = array(
-    "bl", "BL", "CD", "EN", "int", "INT", "PQ",
-    "AD", "real", "REAL", "st", "ST", "ED", "II",
-    "MO","ts","TS", "RTO", "TEL", "bin", "BIN",
-    "ANY", "QTY", "oid", "url", "URL", "cs", "CS",
-    "CE", "CV", "CR", "ADXP", "ENXP", "ON", "PN", "AD");
-
   /**
    * Permet de récupérer les attributs d'un noeud xml sous forme de tableau
    *
@@ -126,6 +119,13 @@ class CCdaTools {
     $this->xml = CMbString::highlightCode("xml", $message);
   }
 
+  /**
+   * permet de valider le CDA par le schematron (En cours de création)
+   * l'extension XSL ne permet pas de valider le XSLT2.0
+   * Il faut utiliser saxon
+   *
+   * @param $message
+   */
   function schematronValidate ($message) {
     $xsltsche = new XSLTProcessor();
 
@@ -145,130 +145,184 @@ class CCdaTools {
     $this->validateSchematron = $xslt->transformToXml($domcda);*/
   }
 
-  function parseElement($node) {
-    $tabElement = array();
-    foreach ($node as $_element) {
-      $tabElement[] = $this->parseattribute($_element);
-    }
-    return $tabElement;
-  }
-
   /**
    * Fonction de création des classes voc
    *
    * @return string
    */
   function createClass() {
+    //On charge le XSD contenant le vocabulaire
     $dom = new CMbXMLDocument("UTF-8");
     $dom->load("modules/cda/resources/voc.xsd");
 
+    //On enregistre le namespace utiliser dans le XSD
     $xpath = new CMbXPath($dom);
     $xpath->registerNamespace("xs", "http://www.w3.org/2001/XMLSchema");
 
+    //On recherche tous les simpleTypes et les complexTypes
     $nodeList = $xpath->query("//xs:complexType|xs:simpleType");
-    $node = $nodeList->item(1);
     $listvoc = array();
-    $node->attributes->getNamedItem("name")->nodeValue;
 
+    //On parcours la liste que retourne la requête XPATH
     foreach ($nodeList as $_node) {
+      //On récupère le nom du type
       $name = $_node->attributes->getNamedItem("name")->nodeValue;
+      //On récupère la documentation lié au type
       $documentation = $xpath->queryUniqueNode("//xs:*[@name='".$name."']//xs:documentation");
+      //on vérifie qu'il existe une documentation
       if ($documentation) {
         $documentation = $documentation->nodeValue;
       }
+      //On récupère les unions du type
       $union = $xpath->queryUniqueNode("//xs:*[@name='".$name."']//xs:union");
+      //On vérifie l'existence d'union
       if ($union) {
         $union = $union->attributes->getNamedItem("memberTypes")->nodeValue;
       }
-
-      $restriction = $xpath->queryUniqueNode("//xs:*[@name='".$name."']//xs:restriction");
-      if ($restriction) {
-        $restriction = $restriction->attributes->getNamedItem("base")->nodeValue;
-      }
-
+      //on récupère les énumérations
       $enumeration = $xpath->query("//xs:*[@name='".$name."']//xs:enumeration");
       $listEnumeration = array();
 
+      //on met chaque enumeration dans un tableau
       foreach ($enumeration as $_enumeration) {
         array_push($listEnumeration, $_enumeration->attributes->getNamedItem("value")->nodeValue);
       }
+      //On créé un tableau rassemblant toues les informations concernant un voc
       $listvoc[] = array( "name" => $name,
                           "documentation" => $documentation,
                           "union" => $union,
-                          "restriction" => $restriction,
                           "enumeration" => $listEnumeration);
     }
 
+    //On met le lien du dossier contenant les voc
     $cheminBase = "modules/cda/classes/datatypes/voc/";
 
+    //On parcours les voc
     foreach ($listvoc as $voc) {
+      //On affecte comme nom de fichier CCDA et le nom du voc
       $nameFichier = "CCDA".$voc["name"].".class.php";
       $smarty = new CSmartyDP();
       $smarty->assign("documentation", $voc["documentation"]);
       $smarty->assign("name", $voc["name"]);
       $smarty->assign("enumeration", $this->formatArray($voc["enumeration"]));
       $union = $this->formatArray(array());
+      //on vérifie la présence d'union
       if (CMbArray::get($voc, "union")) {
         $union = $this->formatArray(explode(" ", $voc["union"]));
       }
       $smarty->assign("union", $union);
-      $smarty->assign("extend", $voc["restriction"]);
+      //on récupère la classe former
       $data = $smarty->fetch("defaultClassVoc.tpl");
 
+      //on créé le fichier
       file_put_contents($cheminBase.$nameFichier, $data);
     }
+
+    return true;
   }
 
+  /**
+   * Permet de formater le tableau en entré
+   *
+   * @param $array
+   *
+   * @return mixed
+   */
   function formatArray($array) {
     return preg_replace('/\)$/', "  )", preg_replace("/\d+ => /", "  ", var_export($array, true)));
   }
 
-  function showNodeXSD($name) {
+  /**
+   * Permet de de retourner la portion xml du noeud choisi par le nom dans le schéma spécifié
+   *
+   * @param $name
+   * @param $schema
+   *
+   * @return string
+   */
+  function showNodeXSD($name, $schema) {
     $dom = new CMbXMLDocument();
-    $dom->load("modules/cda/resources/datatypes-base.xsd");
+    $dom->load($schema);
 
     $xpath = new CMbXPath($dom);
     $xpath->registerNamespace("xs", "http://www.w3.org/2001/XMLSchema");
-    $node = $xpath->queryUniqueNode("//xs:*[@name='".$name."']");
+    $node = $xpath->queryUniqueNode("//xs:simpleType[@name='".$name."']|//xs:complexType[@name='".$name."']");
     return $dom->saveXML($node);
   }
 
+  /**
+   * Permet de créer le xsd contenant la définition d'élément pour tester les types
+   *
+   * @return bool
+   */
   function createTestSchemaClasses() {
+    //URI du fichier
     $nameFile = "modules/cda/resources/TestClasses.xsd";
     $dom = new DOMDocument();
+    //On enregistre aps les nodeText vide
     $dom->preserveWhiteSpace = false;
     $dom->load($nameFile);
 
+    //on récupère tous les élements
     $xpath = new DOMXPath($dom);
     $nodeList = $xpath->query("//xs:element");
 
+    //on supprime tous les élements du fichier
     foreach ($nodeList as $_node) {
       $dom->documentElement->removeChild($_node);
     }
 
+    //On sauvegarde le fichier sans élément
     file_put_contents($nameFile, $dom->saveXML());
 
-    $file = glob("modules/cda/classes/datatypes/{voc,base}/*.class.php", GLOB_BRACE);
+    //on récupère tous les class existant dans les dossier voc, base, datatype
+    $file = glob("modules/cda/classes/datatypes/{voc,base,datatype}/*.class.php", GLOB_BRACE);
 
+    /**
+     * Pour chacun des fichier on créé un élément avec sont type correspondant
+     */
     foreach ($file as $_file) {
+      //on créé l'élément
       $element = $dom->createElement("xs:element");
+      //on formatte le nom du fichier
       $_file = CMbArray::get(explode(".", $_file), 0);
       $_file = substr($_file, strrpos($_file, "/")+1);
+      //on créé une instance de la classe
       $instanceClass = new $_file;
+      //on récupère le nom quisera égale au type et au nom de l'élément
       $_file = $instanceClass->getNameClass();
+      //On ajoute les attribut type et nom
       $element->setAttribute("name", $_file);
       $element->setAttribute("type", $_file);
+      //on ajoute au schéma l'élément
       $dom->documentElement->appendChild($element);
+      //On ajoute un saut de ligne dans le schéma
       $dom->documentElement->appendChild($dom->createTextNode("\n"));
     }
+    //on sauvegarde le fichier
     file_put_contents($nameFile, $dom->saveXML());
+
+    return true;
   }
 
+  /**
+   * Permet la création de la synthèse des tests
+   *
+   * @param $result
+   *
+   * @return array
+   */
   function syntheseTest($result) {
+    /**
+     * on créé le tableau qui contiendra le nombre total de test
+     * le nombre de succès et les classes qui sont en erreur
+     */
     $resultSynth = array("total" => 0,
                          "succes" => 0,
                          "erreur" => array());
+    //on parcours le tableau des tests
     foreach ($result as $keyClass => $valueClass) {
+      //on parcours les résultats et on compte les résultats
       foreach ($valueClass as $_test) {
         if ($_test["resultat"] === $_test["resultatAttendu"]) {
           $resultSynth["succes"]++;
@@ -283,8 +337,13 @@ class CCdaTools {
     return $resultSynth;
   }
 
+  /**
+   * Permet de lancer les tests de toutes les classes renseignées
+   *
+   * @return array
+   */
   function createTest() {
-    $file = glob("modules/cda/classes/datatypes/{voc,base}/*.class.php", GLOB_BRACE);
+    $file = glob("modules/cda/classes/datatypes/{voc,base,datatype}/*.class.php", GLOB_BRACE);
 
     $result = array();
     foreach ($file as $_file) {
@@ -297,13 +356,20 @@ class CCdaTools {
 
   }
 
+  /**
+   * Retourne tous les types présent dans le schéma renseigné
+   *
+   * @param $schema
+   *
+   * @return array
+   */
   function returnType($schema) {
     $dom = new CMbXMLDocument();
     $dom->load($schema);
 
     $xpath = new CMbXPath($dom);
     $xpath->registerNamespace("xs", "http://www.w3.org/2001/XMLSchema");
-    $nodelist = $xpath->query("//xs:simpleType[@name]|xs:complexType[@name]");
+    $nodelist = $xpath->query("//xs:simpleType[@name]|//xs:complexType[@name]");
     $listName =  array();
     foreach ($nodelist as $_node) {
       array_push($listName, $_node->attributes->getNamedItem("name")->nodeValue);
@@ -312,22 +378,42 @@ class CCdaTools {
     return $listName;
   }
 
+  /**
+   * Retourne les classes manqantes
+   *
+   * @return array
+   */
   function missclass() {
+    /**
+     * On récupère les types des différents XSD
+     */
     $listAllType = array();
     $listAllType = $this->returnType("modules/cda/resources/datatypes-base.xsd");
     $listAllType = array_merge($listAllType, $this->returnType("modules/cda/resources/voc.xsd"));
-    $file = glob("modules/cda/classes/datatypes/{voc,base}/*.class.php", GLOB_BRACE);
+    $listAllType = array_merge($listAllType, $this->returnType("modules/cda/resources/datatypes.xsd"));
+    $file = glob("modules/cda/classes/datatypes/{voc,base,datatype}/*.class.php", GLOB_BRACE);
 
     $result = array();
+    /**
+     * On parcours les classes existantes
+     */
     foreach ($file as $_file) {
       $_file = CMbArray::get(explode(".", $_file), 0);
       $_file = substr($_file, strrpos($_file, "/")+1);
       $class = new $_file;
       array_push($result, $class->getNameClass());
     }
+    //on retourne la différence entre le tableau des types XSd et le tableau des classes existantes
     return array_diff($listAllType, $result);
   }
 
+  /**
+   * Permet de nettoyer le XSD (suppression des minOccurs=0 maxOccurs=0 et des abtract)
+   * libxml ne gère pas la prohibition des élément avec maxOccurs = 0;
+   * les abtracts empêche l'instanciation des classes
+   *
+   * @return bool
+   */
   function clearXSD() {
     $pathSource = "modules/cda/resources/datatypes-base_original.xsd";
     $pathDest = "modules/cda/resources/datatypes-base.xsd";
@@ -353,5 +439,7 @@ class CCdaTools {
       $_node->parentNode->removeChild($_node);
     }
     file_put_contents($pathDest, $dom->saveXML());
+
+    return true;
   }
 }

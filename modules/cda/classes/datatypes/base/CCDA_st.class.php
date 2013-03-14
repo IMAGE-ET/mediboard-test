@@ -15,9 +15,8 @@
  * sorting, querying, indexing, etc.) Used for names,
  * symbols, and formal expressions.
  */
-class CCDA_st extends CCDA_Datatype {
+class CCDA_st extends CCDA_Datatype_Base {
 
-  public $data;
   /**
 	 * Get the properties of our class as strings
 	 *
@@ -30,44 +29,29 @@ class CCDA_st extends CCDA_Datatype {
   }
 
   /**
-   * Modifie la variable data
-   *
-   * @param String $data Data
-   *
-   * @return void
-   */
-  function setData($data) {
-    $this->data = $data;
-  }
-
-  function getData() {
-    return $this->data;
-  }
-
-  /**
    * Fonction permettant de tester la classe
    *
    * @return void
    */
   function test() {
-    $tabTest = array();
-    /**
-     * Test avec une valeur null
-     */
-    $tabTest[] = $this->sample("Test avec une valeur null", "Document invalide");
-    /*-------------------------------------------------------------------------------------*/
+    $tabTest = parent::test();
+
     /**
      * Test avec une valeur correcte
      */
-    $this->setData("TESTTEST");
 
+    $this->setData("TESTTEST");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
+
     /*-------------------------------------------------------------------------------------*/
+
     /**
      * Test avec une valeur incorrecte
      */
+
     $this->setData("");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
+
     /*-------------------------------------------------------------------------------------*/
 
     return $tabTest;

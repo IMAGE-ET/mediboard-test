@@ -46,27 +46,27 @@ class CCDAST extends CCDAED {
      * Test avec une valeur correcte mais refuser dans ce contexte
      */
 
-    $binaryDataEncoding = new CCDABinaryDataEncoding();
+    $binaryDataEncoding = new CCDA_BinaryDataEncoding();
     $binaryDataEncoding->setData("B64");
     $this->setRepresentation($binaryDataEncoding);
 
-    $tabTest[] = $this->sample("Test avec une representation correcte mais pas dans ce contexte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une representation correcte, interdit dans ce contexte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec une valeur correcte dans ce contexte
+     * Test avec une valeur correcte
      */
 
     $binaryDataEncoding->setData("TXT");
     $this->setRepresentation($binaryDataEncoding);
 
-    $tabTest[] = $this->sample("Test avec une representation correcte dans ce contexte", "Document valide");
+    $tabTest[] = $this->sample("Test avec une representation correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec un mediaType erroné dans ce contexte
+     * Test avec un mediaType incorrecte
      *
      */
 
@@ -74,7 +74,7 @@ class CCDAST extends CCDAED {
     $codeTest->setData(" ");
     $this->setMediaType($codeTest);
 
-    $tabTest[] = $this->sample("Test avec un mediaType correcte mais pas dans ce contexte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un mediaType correcte, interdit dans ce contexte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -86,7 +86,7 @@ class CCDAST extends CCDAED {
     $codeTest->setData("text/plain");
     $this->setMediaType($codeTest);
 
-    $tabTest[] = $this->sample("Test avec un mediaType correcte dans ce contexte", "Document valide");
+    $tabTest[] = $this->sample("Test avec un mediaType correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

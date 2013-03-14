@@ -13,7 +13,7 @@
 /**
  * {{$documentation}}
  */
-class CCDA{{$name}} extends {{if $extend}}CCDA_{{$extend}}{{else}}CCDA_Datatype_Voc{{/if}} {
+class CCDA{{$name}} extends CCDA_Datatype_Voc {
 
   public $_enumeration = {{$enumeration|smarty:nodefaults}};
   public $_union = {{$union|smarty:nodefaults}};

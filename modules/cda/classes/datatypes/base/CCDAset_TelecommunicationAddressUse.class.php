@@ -12,55 +12,7 @@
 /**
  * CCDAset_TelecommunicationAddressUse Class
  */
-class CCDAset_TelecommunicationAddressUse extends CCDA_Datatype {
-
-  public $listData = array();
-
-  /**
-   * ADD a CCDATelecommunicationAddressUse to the array listData
-   *
-   * @param \CCDATelecommunicationAddressUse $listData CCDATelecommunicationAddressUse
-   *
-   * @return void
-   */
-  function addData($listData) {
-    $this->listData[] = $listData;
-  }
-
-  /**
-   * Reinitialise la variable
-   *
-   * @return void
-   */
-  function razlistData () {
-    $this->listData = array();
-  }
-
-  /**
-   * retourne le nom de la classe
-   *
-   * @return string
-   */
-  function getNameClass() {
-    $name = get_class($this);
-    $name = substr($name, 4);
-
-    return $name;
-  }
-
-  /**
-   * Getter listData
-   *
-   * @return array
-   */
-  public function getData() {
-    $listdata = "";
-    foreach ($this->listData as $_tel) {
-      $listdata .= $_tel->getData()." ";
-    }
-    $listdata = substr($listdata, 0, strlen($listdata)-1);
-    return $listdata;
-  }
+class CCDAset_TelecommunicationAddressUse extends CCDA_Datatype_Set {
 
   /**
 	 * Get the properties of our class as strings
@@ -79,13 +31,7 @@ class CCDAset_TelecommunicationAddressUse extends CCDA_Datatype {
    * @return void
    */
   function test() {
-    $tabTest = array();
-
-    /**
-     * Test avec les valeurs nulls
-     */
-    $tabTest[] = $this->sample("Test avec les valeurs null", "Document valide");
-    /*-------------------------------------------------------------------------------------*/
+    $tabTest = parent::test();
 
     /**
      * Test avec un TelecommunicationAddressUse incorrecte
@@ -93,7 +39,7 @@ class CCDAset_TelecommunicationAddressUse extends CCDA_Datatype {
     $tel = new CCDATelecommunicationAddressUse();
     $tel->setData("TESTTEST");
     $this->addData($tel);
-    $tabTest[] = $this->sample("Test avec un TelecommunicationAddressUse erronée", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un TelecommunicationAddressUse incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 

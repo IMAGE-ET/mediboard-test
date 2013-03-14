@@ -16,28 +16,6 @@
  */
 class CCDATS extends CCDAQTY{
 
-  public $value;
-
-  /**
-   * Setter value
-   *
-   * @param \CCDA_ts $value CCDA_ts
-   *
-   * @return void
-   */
-  public function setValue($value) {
-    $this->value = $value;
-  }
-
-  /**
-   * Getter value
-   *
-   * @return mixed
-   */
-  public function getValue() {
-    return $this->value;
-  }
-
   /**
 	 * Get the properties of our class as strings
 	 *
@@ -50,15 +28,7 @@ class CCDATS extends CCDAQTY{
   }
 
   function test() {
-    $tabTest = array();
-
-    /**
-     * Test avec une valeur null
-     */
-
-    $tabTest[] = $this->sample("Test avec les valeurs null", "Document valide");
-
-    /*-------------------------------------------------------------------------------------*/
+    $tabTest = parent::test();
 
     /**
      * Test avec une valeur incorrecte

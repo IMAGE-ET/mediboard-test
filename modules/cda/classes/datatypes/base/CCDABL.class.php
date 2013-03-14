@@ -34,35 +34,16 @@ class CCDABL extends CCDAANY {
   }
 
   function test() {
-    $tabTest = array();
-    /**
-     * Test avec une valeur null
-     */
-
-    $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
-
-    /*-------------------------------------------------------------------------------------*/
+    $tabTest = parent::test();
 
     /**
-     * Test avec une valeur null et avec un nullFlavor
-     */
-    $nullFlavor = new CCDANullFlavor();
-    $nullFlavor->setData("NP");
-    $this->setNullFlavor($nullFlavor);
-
-    $tabTest[] = $this->sample("Test avec une valeur null et avec un nullFlavor", "Document valide");
-    $this->setNullFlavor(null);
-
-    /*-------------------------------------------------------------------------------------*/
-
-    /**
-     * Test avec une valeur erroné
+     * Test avec une valeur incorrecte
      */
     $bl = new CCDA_bl();
     $bl->setData("TESTTEST");
     $this->setValue($bl);
 
-    $tabTest[] = $this->sample("Test avec une valeur erronée", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -81,6 +62,7 @@ class CCDABL extends CCDAANY {
      * Test avec une valeur correcte et avec un nullflavor
      */
 
+    $nullFlavor = new CCDANullFlavor();
     $bl->setData("true");
     $this->setValue($bl);
     $this->setNullFlavor($nullFlavor);

@@ -10,18 +10,18 @@
  * @link     http://www.mediboard.org */
  
 /**
- * CCDA_bn class
+ * Description
  */
-class CCDA_bn extends CCDA_bl {
+class CCDARTO extends CCDARTO_QTY_QTY {
 
-  /**
+   /**
 	 * Get the properties of our class as strings
 	 *
 	 * @return array
 	 */
   function getProps() {
-    parent::getProps();
-    $props["data"] = "booleen xml|data notnull";
+    $props = parent::getProps();
+
     return $props;
   }
 }

@@ -232,7 +232,7 @@ class CCDAED extends CCDABIN {
     }
 
     /**
-     * Test avec un mediaType erroné
+     * Test avec un mediaType incorrecte
      *
      */
 
@@ -240,7 +240,7 @@ class CCDAED extends CCDABIN {
     $codeTest->setData(" ");
     $this->setMediaType($codeTest);
 
-    $tabTest[] = $this->sample("Test avec un mediaType erronée", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un mediaType incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 

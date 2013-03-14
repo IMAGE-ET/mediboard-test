@@ -22,8 +22,8 @@ class CCDACS extends CCDACV {
 	 */
   function getProps() {
     $props = parent::getProps();
-    //$props["originalText"] = "CCDAED xml|element max|1 prohibited";
-    //$props["qualifier"] = "CCDACR xml|element prohibited";
+    $props["originalText"] = "CCDAED xml|element max|1 prohibited";
+    $props["qualifier"] = "CCDACR xml|element prohibited";
     $props["translation"] = "CCDACD xml|element prohibited";
     $props["codeSystem"] = "CCDA_uid xml|attribute prohibited";
     $props["codeSystemName"] = "CCDA_st xml|attribute prohibited";
@@ -38,22 +38,17 @@ class CCDACS extends CCDACV {
    * @return array
    */
   function test() {
-    $tabTest = array();
-    /**
-     * Test avec les valeurs null
-     */
-    $tabTest[] = $this->sample("Test avec les valeurs null", "Document valide");
+    $tabTest = parent::test();
 
-    /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec code erroné
+     * Test avec code incorrecte
      */
     $codeTest = new CCDA_cs();
     $codeTest->setData(" ");
     $this->setCode($codeTest);
 
-    $tabTest[] = $this->sample("Test avec code erronée", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un code incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -63,19 +58,19 @@ class CCDACS extends CCDACV {
     $codeTest->setData("TEST");
     $this->setCode($codeTest);
 
-    $tabTest[] = $this->sample("Test avec code correct", "Document valide");
+    $tabTest[] = $this->sample("Test avec un code correct", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
      * Test avec codeSystem incorrecte
      */
-
+    $this->setCode(null);
     $codeSystemTest = new CCDA_uid();
     $codeSystemTest->setData("*");
     $this->setCodeSystem($codeSystemTest);
 
-    $tabTest[] = $this->sample("Test avec codeSystem incorrecte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un codeSystem incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -86,18 +81,19 @@ class CCDACS extends CCDACV {
     $codeSystemTest->setData("HL7");
     $this->setCodeSystem($codeSystemTest);
 
-    $tabTest[] = $this->sample("Test avec codeSystem correct", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un codeSystem correct", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
      * Test avec codeSystemName incorrecte
      */
+    $this->setCodeSystem(null);
     $codeSystemNameTest = new CCDA_st();
     $codeSystemNameTest->setData("");
     $this->setCodeSystemName($codeSystemNameTest);
 
-    $tabTest[] = $this->sample("Test avec codeSystemName incorrecte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un codeSystemName incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -109,18 +105,19 @@ class CCDACS extends CCDACV {
     $codeSystemNameTest->setData("test");
     $this->setCodeSystemName($codeSystemNameTest);
 
-    $tabTest[] = $this->sample("Test avec codeSystemName correct", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un codeSystemName correct", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
      * Test avec codeSystemVersion incorrecte
      */
+    $this->setCodeSystemName(null);
     $codeSystemVersionTest = new CCDA_st();
     $codeSystemVersionTest->setData("");
     $this->setCodeSystemVersion($codeSystemVersionTest);
 
-    $tabTest[] = $this->sample("Test avec codeSystemVersion incorrecte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un codeSystemVersion incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -131,19 +128,19 @@ class CCDACS extends CCDACV {
     $codeSystemVersionTest->setData("test");
     $this->setCodeSystemVersion($codeSystemVersionTest);
 
-    $tabTest[] = $this->sample("Test avec codeSystemVersion correct", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un codeSystemVersion correct", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
      * Test avec displayName incorrecte
      */
-
+    $this->setCodeSystemVersion(null);
     $displayNameTest = new CCDA_st();
     $displayNameTest->setData("");
     $this->setDisplayName($displayNameTest);
 
-    $tabTest[] = $this->sample("Test avec displayName incorrecte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un displayName incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -154,30 +151,25 @@ class CCDACS extends CCDACV {
     $displayNameTest->setData("test");
     $this->setDisplayName($displayNameTest);
 
-    $tabTest[] = $this->sample("Test avec displayName correct", "Document invalide");
+    $tabTest[] = $this->sample("Test avec un displayName correct", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec un translation correct sans valeur
+     * Test avec un originalText incorrect
      */
-    $translation = new CCDACD();
-    $this->setTranslation($translation);
 
-    $tabTest[] = $this->sample("Test avec translation correct sans valeur", "Document invalide");
+    $this->razListQualifier();
+    $ed = new CCDAED();
+    $language = new CCDA_cs();
+    $language->setData("test");
+    $ed->setLanguage($language);
+    $this->setOriginalText($ed);
+
+    $tabTest[] = $this->sample("Test avec un originalText correcte, interdit dans ce contexte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
-    /**
-     * Test avec un translation correct et une correcte valeur avec qualifier
-     */
-    /*
-    $translation->setDataTranslation("test");
-    $this->setTranslation($translation);
-
-    $tabTest[] = $this->sample("Test avec translation correct avec qualifier", "Document invalide");
-
-    /*-------------------------------------------------------------------------------------*/
     return $tabTest;
   }
 }

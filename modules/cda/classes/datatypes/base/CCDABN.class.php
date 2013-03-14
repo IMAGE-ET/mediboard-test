@@ -33,23 +33,28 @@ class CCDABN extends CCDAANYNonNull {
     $this->value = $value;
   }
 
+  function getvalue() {
+    return $this->value;
+  }
+
+  /**
+   * Foncntion permettant de tester la classe
+   *
+   * @return array
+   */
   function test() {
-    $tabTest = array();
-    /**
-     * Test avec une valeur null
-     */
-    $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
 
-    /*-------------------------------------------------------------------------------------*/
+    $tabTest = parent::test();
 
     /**
-     * Test avec une valeur erroné
+     * Test avec une valeur incorrecte
      */
+
     $bn = new CCDA_bn();
     $bn->setData("TESTTEST");
     $this->setValue($bn);
 
-    $tabTest[] = $this->sample("Test avec une valeur erronée", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 

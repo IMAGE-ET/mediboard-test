@@ -14,29 +14,7 @@
  * A point in time is most often represented as a calendar
  * expression.
  */
-class CCDA_ts extends CCDA_Datatype {
-
-  public $data;
-
-  /**
-   * setter data
-   *
-   * @param $data
-   *
-   * @return void
-   */
-  public function setData($data) {
-    $this->data = $data;
-  }
-
-  /**
-   * Getter Data
-   *
-   * @return mixed
-   */
-  public function getData() {
-    return $this->data;
-  }
+class CCDA_ts extends CCDA_Datatype_Base {
   
   /**
 	 * Get the properties of our class as strings
@@ -56,21 +34,14 @@ class CCDA_ts extends CCDA_Datatype {
    */
   function test() {
 
-    $tabTest = array();
+    $tabTest = parent::test();
 
     /**
-     * Test avec une valeur null
-     */
-
-    $tabTest[] = $this->sample("Test avec une valeur null", "Document invalide");
-    /*-------------------------------------------------------------------------------------*/
-
-    /**
-     * Test avec un use erronée
+     * Test avec un use incorrecte
      */
 
     $this->setData("TESTEST");
-    $tabTest[] = $this->sample("Test avec une valeur erronée", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
     /**

@@ -18,7 +18,7 @@
   <pre style="padding: 0; max-height: none;"><textarea name="message" rows="12" style="width: 100%;
       border: none; -webkit-box-sizing: border-box; -moz-box-sizing: border-box;
       margin: 0; resize: vertical;"></textarea></pre>
-  <button type="submit" class="change">Valider</button>
+  <button type="submit" class="change">{{tr}}Validate{{/tr}}</button>
 </form>
 
 <div id="highlighted"></div>

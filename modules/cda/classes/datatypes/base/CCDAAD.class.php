@@ -181,6 +181,7 @@ class CCDAAD extends CCDAANY {
     $props["useablePeriod"] = "CCDASXCM_TS xml|element";
     $props["use"] = "CCDAset_PostalAddressUse xml|attribute";
     $props["isNotOrdered"] = "CCDA_bl xml|attribute";
+    $props["data"] = "str xml|data";
     return $props;
   }
 
@@ -190,13 +191,14 @@ class CCDAAD extends CCDAANY {
    * @return void
    */
   function test() {
-    $tabTest = array();
+    $tabTest = parent::test();
 
     /**
-     * test avec les valeurs null
+     * Test avec des données
      */
 
-    $tabTest[] = $this->sample("Test avec des valeurs null","Document valide");
+    $this->setData("test");
+    $tabTest[] = $this->sample("Test avec des données", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -210,7 +212,7 @@ class CCDAAD extends CCDAANY {
     $postal->addData($post);
     $this->setUse($postal);
 
-    $tabTest[] = $this->sample("Test avec use incorrecte","Document invalide");
+    $tabTest[] = $this->sample("Test avec un use incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -223,7 +225,7 @@ class CCDAAD extends CCDAANY {
     $postal->addData($post);
     $this->setUse($postal);
 
-    $tabTest[] = $this->sample("Test avec use correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un use correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -235,7 +237,7 @@ class CCDAAD extends CCDAANY {
     $order->setData("TESTTEST");
     $this->setIsNotOrdered($order);
 
-    $tabTest[] = $this->sample("Test avec isNotOrdered incorrecte","Document invalide");
+    $tabTest[] = $this->sample("Test avec un isNotOrdered incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -246,7 +248,7 @@ class CCDAAD extends CCDAANY {
     $order->setData("true");
     $this->setIsNotOrdered($order);
 
-    $tabTest[] = $this->sample("Test avec isNotOrdered correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un isNotOrdered correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -256,7 +258,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_delimiter();
     $this->append("delimiter", $adxp);
-    $tabTest[] = $this->sample("Test avec delimiter correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un delimiter correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -266,7 +268,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_delimiter();
     $this->append("delimiter", $adxp);
-    $tabTest[] = $this->sample("Test avec deux delimiter correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec deux delimiter correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -276,7 +278,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_country();
     $this->append("country", $adxp);
-    $tabTest[] = $this->sample("Test avec country correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un country correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -286,7 +288,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_state();
     $this->append("state", $adxp);
-    $tabTest[] = $this->sample("Test avec state correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un state correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -296,7 +298,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_county();
     $this->append("county", $adxp);
-    $tabTest[] = $this->sample("Test avec county correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un county correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -306,7 +308,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_city();
     $this->append("city", $adxp);
-    $tabTest[] = $this->sample("Test avec city correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un city correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -316,7 +318,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_postalCode();
     $this->append("postalCode", $adxp);
-    $tabTest[] = $this->sample("Test avec postalCode correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un postalCode correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -326,7 +328,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_streetAddressLine();
     $this->append("streetAddressLine", $adxp);
-    $tabTest[] = $this->sample("Test avec streetAddressLine correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un streetAddressLine correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -336,7 +338,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_houseNumber();
     $this->append("houseNumber", $adxp);
-    $tabTest[] = $this->sample("Test avec houseNumber correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un houseNumber correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -346,7 +348,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_houseNumberNumeric();
     $this->append("houseNumberNumeric", $adxp);
-    $tabTest[] = $this->sample("Test avec houseNumberNumeric correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un houseNumberNumeric correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -356,7 +358,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_direction();
     $this->append("direction", $adxp);
-    $tabTest[] = $this->sample("Test avec direction correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un direction correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -366,7 +368,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_streetName();
     $this->append("streetName", $adxp);
-    $tabTest[] = $this->sample("Test avec streetName correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un streetName correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -376,7 +378,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_streetNameBase();
     $this->append("streetNameBase", $adxp);
-    $tabTest[] = $this->sample("Test avec streetNameBase correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un streetNameBase correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -386,7 +388,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_streetNameType();
     $this->append("streetNameType", $adxp);
-    $tabTest[] = $this->sample("Test avec streetNameType correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un streetNameType correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -396,7 +398,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_additionalLocator();
     $this->append("additionalLocator", $adxp);
-    $tabTest[] = $this->sample("Test avec additionalLocator correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un additionalLocator correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -406,7 +408,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_unitID();
     $this->append("unitID", $adxp);
-    $tabTest[] = $this->sample("Test avec unitID correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un unitID correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -416,7 +418,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_unitType();
     $this->append("unitType", $adxp);
-    $tabTest[] = $this->sample("Test avec unitType correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un unitType correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -426,7 +428,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_careOf();
     $this->append("careOf", $adxp);
-    $tabTest[] = $this->sample("Test avec careOf correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un careOf correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -436,7 +438,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_censusTract();
     $this->append("censusTract", $adxp);
-    $tabTest[] = $this->sample("Test avec censusTract correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un censusTract correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -446,7 +448,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_deliveryAddressLine();
     $this->append("deliveryAddressLine", $adxp);
-    $tabTest[] = $this->sample("Test avec deliveryAddressLine correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un deliveryAddressLine correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -456,7 +458,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_deliveryInstallationType();
     $this->append("deliveryInstallationType", $adxp);
-    $tabTest[] = $this->sample("Test avec deliveryInstallationType correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un deliveryInstallationType correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -466,7 +468,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_deliveryInstallationArea();
     $this->append("deliveryInstallationArea", $adxp);
-    $tabTest[] = $this->sample("Test avec deliveryInstallationArea correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un deliveryInstallationArea correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -476,7 +478,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_deliveryInstallationQualifier();
     $this->append("deliveryInstallationQualifier", $adxp);
-    $tabTest[] = $this->sample("Test avec deliveryInstallationQualifier correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un deliveryInstallationQualifier correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -486,7 +488,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_deliveryMode();
     $this->append("deliveryMode", $adxp);
-    $tabTest[] = $this->sample("Test avec deliveryMode correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un deliveryMode correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -496,7 +498,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_deliveryModeIdentifier();
     $this->append("deliveryModeIdentifier", $adxp);
-    $tabTest[] = $this->sample("Test avec deliveryModeIdentifier correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un deliveryModeIdentifier correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -506,7 +508,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_buildingNumberSuffix();
     $this->append("buildingNumberSuffix", $adxp);
-    $tabTest[] = $this->sample("Test avec buildingNumberSuffix correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un buildingNumberSuffix correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -516,7 +518,7 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_postBox();
     $this->append("postBox", $adxp);
-    $tabTest[] = $this->sample("Test avec postBox correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un postBox correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -526,20 +528,20 @@ class CCDAAD extends CCDAANY {
 
     $adxp = new CCDA_adxp_precinct();
     $this->append("precinct", $adxp);
-    $tabTest[] = $this->sample("Test avec precinct correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un precinct correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * test avec useablePeriod correcte
+     * test avec useablePeriod incorrecte
      */
 
     $useable = new CCDASXCM_TS();
     $cs = new CCDA_ts();
-    $cs->setData("test");
+    $cs->setData("TESTEST");
     $useable->setValue($cs);
     $this->append("useablePeriod", $useable);
-    $tabTest[] = $this->sample("Test avec useablePeriod incorrecte","Document invalide");
+    $tabTest[] = $this->sample("Test avec un useablePeriod incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
@@ -552,7 +554,7 @@ class CCDAAD extends CCDAANY {
     $useable->setValue($cs);
     $this->razListdata("useablePeriod");
     $this->append("useablePeriod", $useable);
-    $tabTest[] = $this->sample("Test avec useablePeriod correcte","Document valide");
+    $tabTest[] = $this->sample("Test avec un useablePeriod correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

@@ -12,13 +12,13 @@
 <table class="tbl">
   <tr>
     <th>
-      Description
+      {{tr}}Description{{/tr}}
     </th>
     <th>
-      Résultat attendu
+      {{tr}}ResultPlanned{{/tr}}
     </th>
     <th>
-      Résultat
+      {{tr}}Result{{/tr}}
     </th>
   </tr>
   {{foreach from=$result key=name item=_test}}

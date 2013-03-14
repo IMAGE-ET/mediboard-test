@@ -15,13 +15,13 @@
   </tr>
   <tr>
     <th>
-      Total des tests
+      {{tr}}testCount{{/tr}}
     </th>
     <th>
-      Nombre de succès
+      {{tr}}numberSuccess{{/tr}}
     </th>
     <th>
-      Classe en erreur
+      {{tr}}numbererror{{/tr}}
     </th>
   </tr>
   <tr>

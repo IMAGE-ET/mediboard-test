@@ -17,17 +17,7 @@
  * the range of integer numbers. Two NULL flavors are
  * defined for the positive and negative infinity.
  */
-class CCDA_int extends CCDA_Datatype {
-
-  public $data;
-
-  public function setData($data) {
-    $this->data = $data;
-  }
-
-  public function getData() {
-    return $this->data;
-  }
+class CCDA_int extends CCDA_Datatype_Base {
 
   /**
    * Get the properties of our class as strings
@@ -46,15 +36,7 @@ class CCDA_int extends CCDA_Datatype {
    * @return void
    */
   function test() {
-    $tabTest = array();
-
-    /**
-     * test avec des valeurs null
-     */
-
-    $tabTest[] = $this->sample("Test avec des valeurs Null", "Document invalide");
-
-    /*-------------------------------------------------------------------------------------*/
+    $tabTest = parent::test();
 
     /**
      * test avec data incorrecte

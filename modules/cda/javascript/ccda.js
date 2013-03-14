@@ -12,12 +12,18 @@
 Ccda = {
 
   showxml : function(name) {
-    var url = new Url('cda', 'ajax_show_xml_type');
+    var url = new Url("cda", "ajax_show_xml_type");
     url.addParam("name", name);
     url.requestUpdate("xmltype-view");
   },
 
   highlightMessage : function(form) {
     return Url.update(form, "highlighted");
+  },
+
+  action : function(action) {
+    var url = new Url("cda", "vw_toolsdatatype");
+    url.addParam("action", action);
+    url.requestUpdate("resultAction");
   }
 };

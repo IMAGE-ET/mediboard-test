@@ -13,9 +13,12 @@
 
 CCanDo::checkAdmin();
 
+$CCDATools = new CCdaTools();
+$listtypes = $CCDATools->returnType("modules/cda/resources/datatypes-base_original.xsd");
+
 //template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listTypes", CCdaTools::$listDataType);
+$smarty->assign("listTypes", $listtypes);
 
 $smarty->display("vw_datatype.tpl");

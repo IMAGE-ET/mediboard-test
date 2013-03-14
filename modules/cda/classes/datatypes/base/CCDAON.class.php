@@ -10,13 +10,9 @@
  * @link     http://www.mediboard.org */
  
 /**
- * Coded data in its simplest form, consists of a code.
- * The code system and code system version is fixed by
- * the context in which the CS value occurs. CS is used
- * for coded attributes that have a single HL7-defined
- * value set.
+ * A name for an organization. A sequence of name parts.
  */
-class CCDA_cs extends CCDA_Datatype_Base {
+class CCDAON extends CCDAEN {
 
   /**
 	 * Get the properties of our class as strings
@@ -24,8 +20,9 @@ class CCDA_cs extends CCDA_Datatype_Base {
 	 * @return array
 	 */
   function getProps() {
-    $props = array();
-    $props["data"] = "str xml|data pattern|[^\\s]+";
+    $props = parent::getProps();
+    $props["family"] = "CCDA_en_family xml|element prohibited";
+    $props["given"] = "CCDA_en_given xml|element prohibited";
     return $props;
   }
 
@@ -35,28 +32,26 @@ class CCDA_cs extends CCDA_Datatype_Base {
    * @return void
    */
   function test() {
-
     $tabTest = parent::test();
 
     /**
-     * Test avec un valeur incorrecte
+     * test avec un family correcte
      */
 
-    $this->setData(" ");
-    $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
+    $enxp = new CCDA_en_family();
+    $this->append("family", $enxp);
+    $tabTest[] = $this->sample("Test avec un family correcte, interdit dans ce contexte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
-    if(get_class($this) !== "CCDA_cs") {
-      return $tabTest;
-    }
-
     /**
-     * Test avec un valeur correcte
+     * test avec un given correcte
      */
 
-    $this->setData("test");
-    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
+    $this->razListdata("family");
+    $enxp = new CCDA_en_given();
+    $this->append("given", $enxp);
+    $tabTest[] = $this->sample("Test avec un given correcte, interdit dans ce contexte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
