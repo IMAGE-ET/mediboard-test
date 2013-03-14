@@ -2474,7 +2474,16 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $template->addProperty("Sejour - Libelle"                 , $this->getFormattedValue("libelle"));
     $template->addProperty("Sejour - Transport"               , $this->getFormattedValue("transport"));
-
+    
+    $consult_anesth = $this->loadRefsConsultAnesth();
+    $consult = $consult_anesth->loadRefConsultation();
+    $consult->loadRefPlageConsult();
+    
+    $template->addDateProperty("Sejour - Consultation anesthésie - Date", $consult->_id ? $consult->_datetime : "");
+    $template->addLongDateProperty("Sejour - Consultation anesthésie - Date (longue)", $consult->_id ? $consult->_datetime : "");
+    $template->addLongDateProperty("Sejour - Consultation anesthésie - Date (longue, minuscule)", $consult->_id ? $consult->_datetime : "", true);
+    $template->addTimeProperty("Sejour - Consultation anesthésie - Heure", $consult->_id ? $consult->_datetime : "");
+    
     $this->loadRefsFiles();
     $list = CMbArray::pluck($this->_ref_files, "file_name");
     $template->addListProperty("Sejour - Liste des fichiers", $list);

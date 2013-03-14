@@ -1146,7 +1146,7 @@ TESTS A EFFECTUER
     }
 
     // Consultation d'anesthésie
-    if ($praticien->isAnesth()) {
+    if ($this->countBackRefs("consult_anesth")) {
       $this->_type = "anesth";
     }
   }
