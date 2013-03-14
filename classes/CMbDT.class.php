@@ -293,16 +293,26 @@ class CMbDT {
    *
    * @param string $date The relative date, used to calculate the bank holidays of a specific year
    *
+   * @deprecated Use CGroups::getHollidays($date) instead
    * @return array List of bank holidays as dates
    **/
   static function bankHolidays($date = null) {
+    return CGroups::loadCurrent()->getHollidays($date);
+  }
+
+  /**
+   * Return the Easter Date following a date
+   *
+   * @param string $date mbDate
+   *
+   * @return string the Easter date (Y-m-d)
+   */
+
+  static function getEasterDate($date = null) {
     if (!$date) {
-      $date = self::date();
+      $date = CMbDT::date();
     }
-
-    $year = self::transform("+0 DAY", $date, "%Y");
-
-    // Calcul du Dimanche de Pâques : http://fr.wikipedia.org/wiki/Computus
+    $year = CMbDT::transform("+0 DAY", $date, "%Y");
     $n = $year - 1900;
     $a = $n % 19;
     $b = intval((7 * $a + 1) / 19);
@@ -313,22 +323,7 @@ class CMbDT {
     if ($P > 0) {
       $P = "+".$P;
     }
-
-    $paques = self::date("$P DAYS", "$year-03-31");
-
-    return array(
-      "$year-01-01",                  // Jour de l'an
-      self::date("+1 DAY", $paques),  // Lundi de paques
-      "$year-05-01",                  // Fête du travail
-      "$year-05-08",                  // Victoire de 1945
-      self::date("+39 DAYS", $paques),// Jeudi de l'ascension
-      self::date("+50 DAYS", $paques),// Lundi de pentecôte
-      "$year-07-14",                  // Fête nationnale
-      "$year-08-15",                  // Assomption
-      "$year-11-01",                  // Toussaint
-      "$year-11-11",                  // Armistice 1918
-      "$year-12-25",                  // Noël
-    );
+    return CMbDT::date("$P DAYS", "$year-03-31");
   }
 
   /**

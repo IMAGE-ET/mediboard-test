@@ -309,6 +309,113 @@ class CGroups extends CMbObject {
     return str_replace('$g', $this->_id, $tag_group);
   }
 
+
+  /**
+   * get hollidays for a postal code
+   *
+   * @param int    $pays the country (config mediboard)
+   * @param string $date date (Y-m-d)
+   *
+   * @return array
+   */
+  function getCPHollidays($pays, $date) {
+    $subdivisionHolliday = array();
+    if (!$this->cp) {
+      return $subdivisionHolliday;
+    }
+
+    $year = CMbDT::transform("+0 DAY", $date, "%Y");
+    $paques = CMbDT::getEasterDate($date);
+
+    switch ($pays) {
+      case '2':
+        $firstSundaySeptember = CMbDT::transform("next sunday", $year."-09-00", "%Y-%m-%d");
+        $thirdSundaySeptember = CMbDT::transform("+2 WEEK", $firstSundaySeptember, "%Y-%m-%d");
+
+
+        $canton = substr($this->cp, 0, 2);
+        switch ($canton) {
+          case '10':  // Vaud
+            $subdivisionHolliday[] = "$year-01-02"; // Saint-Berchtold
+            $subdivisionHolliday[] = CMbDT::transform("last friday", $paques, "%Y-%m-%d");  //vendredi saint
+            $subdivisionHolliday[] = CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d");  //lundi de paques
+            $subdivisionHolliday[] = CMbDT::transform("+39 DAY", $paques, "%Y-%m-%d");  //Ascension (40 jours - dimanche de paques)
+            $subdivisionHolliday[] = CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d");  //lundi de pantecote
+            $subdivisionHolliday[] = CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d");  //lundi de pantecote
+            $subdivisionHolliday[] = CMbDT::transform("+1 DAY", $thirdSundaySeptember, "%Y-%m-%d");  //Lundi du Jeûne fédéral
+            break;
+
+          case '12':  // Genève
+            $subdivisionHolliday[] = CMbDT::transform("next thursday", $firstSundaySeptember, "%Y-%m-%d");  //jeudi suivant le 1er dimanche de septembre
+            $subdivisionHolliday[] = CMbDT::transform("last friday", $paques, "%Y-%m-%d");  //vendredi saint
+            $subdivisionHolliday[] = CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d");  //lundi de paques
+            $subdivisionHolliday[] = CMbDT::transform("+39 DAY", $paques, "%Y-%m-%d");  //Ascension
+            $subdivisionHolliday[] = CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d");  //lundi de pantecote
+            $subdivisionHolliday[] = "$year-12-31"; //fete du travail
+            break;
+        }
+
+
+
+        break;
+
+    }
+    return $subdivisionHolliday;
+  }
+
+
+  /**
+   * Récupère les congés pour un pays
+   *
+   * @param string $date the date to check
+   *
+   * @return array
+   */
+  function getHollidays($date){
+    $hollidays = array();
+
+    // No Group, error
+    if (!$this->_id) {
+      return false;
+    }
+
+    //no date => today
+    if (!$date) {
+      $date = CMbDT::date();
+    }
+
+    $year = CMbDT::transform("+0 DAY", $date, "%Y");
+    $code_pays = CAppUI::conf("ref_pays");
+
+    switch ($code_pays) {
+      case '2': // Switzerland
+        $hollidays[] = "$year-01-01";                // Jour de l'an
+        $hollidays[] = "$year-08-01";                // fete nationnale suisse
+        $hollidays[] = "$year-12-25";                // Noël
+        break;
+
+      default:  // France
+        $paques = CMbDT::getEasterDate($date);
+        $hollidays[] = "$year-01-01";                   // Jour de l'an
+        $hollidays[] = CMbDT::date("+1 DAY", $paques);  // Lundi de paques
+        $hollidays[] = "$year-05-01";                   // Fête du travail
+        $hollidays[] = "$year-05-08";                   // Victoire de 1945
+        $hollidays[] = CMbDT::date("+39 DAYS", $paques);// Jeudi de l'ascension
+        $hollidays[] = CMbDT::date("+50 DAYS", $paques);// Lundi de pentecôte
+        $hollidays[] = "$year-07-14";                   // Fête nationnale
+        $hollidays[] = "$year-08-15";                   // Assomption
+        $hollidays[] = "$year-11-01";                   // Toussaint
+        $hollidays[] = "$year-11-11";                   // Armistice 1918
+        $hollidays[] = "$year-12-25";                   // Noël
+        break;
+    }
+
+    $hollidaysSub = $this->getCPHollidays($code_pays, $date); //récupération des régions
+    $hollidays = array_merge($hollidays, $hollidaysSub);
+
+    return $hollidays;
+  }
+
   /**
    * Charge l'idex de l'établissement
    */
