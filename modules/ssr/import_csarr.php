@@ -58,16 +58,17 @@ function addFileIntoDB($file, $table) {
     $data = array_map("trim", $data);
 
     static $note_ignores = array(
-      "à l\'exclusion de :",
-      "cet acte comprend :",
-      "avec ou sans :",
+      "À l\\'exclusion de :",
+      "Cet acte comprend :",
+      "Avec ou sans :",
+      "Codage :",
     );
     
     // CNoteActivite: Traitements spécifiques 
     if ($table == "note_activite") {
       // Nettoyage des termes à ignorer
       foreach ($note_ignores as $_ignore) {
-        if (stripos($data[4], $_ignore) === 0) {
+        if (strpos($data[4], $_ignore) === 0) {
           $data[4] = trim(substr($data[4], strlen($_ignore)));
           if (empty($data[4])) {
             $ignore++;
@@ -78,8 +79,8 @@ function addFileIntoDB($file, $table) {
             
       // Détection du code à exclure
       $data[6] = "";
-      if (preg_match("/\([a-z]{3}\+\d{3}\)/i", $data[4], $matches)) {
-        $data[6] = $matches[0];
+      if (preg_match("/\(([a-z]{3}\+\d{3})\)/i", $data[4], $matches)) {
+        $data[6] = $matches[1];
       }
     }
 
@@ -87,7 +88,7 @@ function addFileIntoDB($file, $table) {
     if ($table == "note_hierarchie") {
       // Nettoyage des termes à ignorer
       foreach ($note_ignores as $_ignore) {
-        if (stripos($data[4], $_ignore) === 0) {
+        if (strpos($data[4], $_ignore) === 0) {
           $data[4] = trim(substr($data[4], strlen($_ignore)));
           if (empty($data[4])) {
             $ignore++;
