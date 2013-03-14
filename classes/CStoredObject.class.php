@@ -77,6 +77,23 @@ class CStoredObject extends CModelObject {
   public $_mergeDeletion;
   
   /**
+   * Get properties specifications as strings
+   *
+   * @see parent::getProps()
+   * @return array
+   */
+  function getProps() {
+    $props = parent::getProps();
+
+    // Add primary key as ref on self class when existing
+    if ($key = $this->_spec->key) {
+      $props[$key] = "ref class|$this->_class show|0";
+    }
+    
+    return $props;
+  }
+
+  /**
    * Check whether object is persistant (ie has a specified table)
    *
    * @return bool
@@ -881,7 +898,14 @@ class CStoredObject extends CModelObject {
       $newObject->checkConfidential();
       $newObject->updateFormFields();
       $newObject->registerCache();
-      $list[$newObject->_id] = $newObject;
+      
+      // Some external classes do not have primary keys
+      if ($newObject->_id) {
+        $list[$newObject->_id] = $newObject;
+      }
+      else {
+        $list[] = $newObject;
+      }
     }
 
     return $list;

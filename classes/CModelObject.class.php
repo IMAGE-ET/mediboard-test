@@ -284,11 +284,10 @@ class CModelObject {
    * @return array
    */
   function getProps() {
-    return array (
-      "_shortview" => "str",
-      "_view"      => "str",
-      $this->_spec->key => "ref class|$this->_class show|0"
-    );
+    $props = array();
+    $props["_shortview"] = "str";
+    $props["_view"] = "str";
+    return $props;
   }
   
   /**
