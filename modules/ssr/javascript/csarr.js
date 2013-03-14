@@ -21,7 +21,7 @@ CsARR = {
       requestModal();
   },
   
-  viewHierarchie: function(hierarchie) {
+  viewHierarchie: function(code) {
     new Url('ssr', 'vw_hierarchie_csarr') .
       addParam('code', code) .
       requestModal(500);

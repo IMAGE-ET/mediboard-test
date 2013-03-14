@@ -15,6 +15,9 @@ class CHierarchieCsARR extends CCsARRObject {
   var $code          = null;
   var $libelle       = null;
   
+  public $_ref_parent_hierarchies;
+  public $_notes_hierarchie;
+  
   static $cached = array();
   
   function getSpec() {
@@ -38,6 +41,32 @@ class CHierarchieCsARR extends CCsARRObject {
     parent::updateFormFields();
     $this->_view = $this->code;
     $this->_shortview = $this->code;
+  }
+  
+  function loadRefsParentHierarchies() {
+    // Codes des hiérarchies intermédiaires
+    $parts = explode(".", $this->code);
+    array_pop($parts);
+    $codes = array();
+    foreach ($parts as $_part) {
+      $last = $codes[] = count($codes) ? end($codes) . ".$_part" : $_part;
+    }
+    
+    // Chargement des hiérarchies intermédiaires
+    $hierarchie = new self;
+    $hierarchies = $hierarchie->loadAll($codes);
+    return $this->_ref_parent_hierarchies = $hierarchies;
+  }
+
+  function loadRefsNotesHierarchies() {
+    $note = new CNoteHierarchieCsARR;
+    $note->hierarchie = $this->code;
+    $notes = array();
+    foreach ($note->loadMatchingList("ordre") as $_note) {
+      $notes[$_note->typenote][$_note->ordre] = $_note;
+    }
+    
+    return $this->_ref_notes_hierarchies = $notes;
   }
   
 	/**

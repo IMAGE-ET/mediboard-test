@@ -38,9 +38,9 @@ class CNoteHierarchieCsARR extends CCsARRObject {
     // DB Fields
     $props["hierarchie"]        = "str notNull length|11 seekable";
     $props["idnote"]            = "str notNull length|10";
-    $props["typenote"]          = "str notNull";
+    $props["typenote"]          = "enum notNull list|aut_note|avec_sans|codage|compr_tit|def|exclusion|inclus";
     $props["niveau"]            = "num show|0";
-    $props["libelle"]           = "str notNull seekable";
+    $props["libelle"]           = "text notNull seekable";
     $props["ordre"]             = "num show|0";
     $props["hierarchie_exclue"] = "str length|11 seekable";
     $props["code_exclu"       ] = "str length|7 seekable";
@@ -50,7 +50,7 @@ class CNoteHierarchieCsARR extends CCsARRObject {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = "$this->code ($this->typenote): $this->libelle";
+    $this->_view = "$this->hierarchie ($this->typenote): $this->libelle";
     $this->_shortview = $this->idnote;
   }
   
