@@ -133,8 +133,8 @@
           <th rowspan="2" style="width: 30%;">{{mb_label class=CConsultation field=_date}}: {{mb_label class=CConsultation field=tarif}}</th>
           
           {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-            <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=_montant_secteur1}}</th>
-            <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=_montant_secteur2}}</th>
+            <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=_secteur1}}</th>
+            <th rowspan="2" class="narrow">{{mb_title class=CFactureCabinet field=_secteur2}}</th>
           {{/if}}
           
           {{if @$modules.tarmed->_can->read && $conf.tarmed.CCodeTarmed.use_cotation_tarmed == "1"}}
@@ -196,8 +196,8 @@
           </td>
           
           {{if $conf.dPccam.CCodeCCAM.use_cotation_ccam == "1"}}
-            <td {{if $facture->_montant_secteur1 < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_montant_secteur1}}</td>
-            <td {{if $facture->_montant_secteur2 < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_montant_secteur2}}</td>
+            <td {{if $facture->_secteur1 < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_secteur1}}</td>
+            <td {{if $facture->_secteur2 < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_secteur2}}</td>
             <td {{if $facture->_montant_total    < 0.001}} class="empty" {{/if}} style="text-align: right;">{{mb_value object=$facture field=_montant_total   }}</td>
           {{/if}}
 
