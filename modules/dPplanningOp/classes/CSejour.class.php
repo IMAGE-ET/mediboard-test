@@ -687,17 +687,18 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   /**
    * check for a sectorisation rules to find a service_id
+   * if 0 rules, no work
+   * if 1 rule, => service_id of the rule
+   * if more than rules are found, if they all lead to the same service, we use this service
    *
    * @return bool
    */
   function getServiceFromSectorisationRules() {
-
-    if ((!$this->service_id) || (!CAppUI::conf("dPplanningOp CRegleSectorisation use_sectorisation"))) {
+    if (!CAppUI::conf("dPplanningOp CRegleSectorisation use_sectorisation") || $this->service_id) {
       return false;
     }
-
-    $this->updatePlainFields(); // make sure entree & sortie well defined
     $this->completeField("type", "praticien_id", "entree", "sortie", "group_id", "type_pec");
+    $this->updatePlainFields(); // make sure entree & sortie well defined
     $praticien = $this->loadRefPraticien();
 
     $where = array();
@@ -720,23 +721,32 @@ class CSejour extends CFacturable implements IPatientRelated {
     $regles = $regle->loadList($where);
     $count  = count($regles);
 
-    //too much results
-    if ($count > 1) {
-      CAppUI::setMsg("CRegleSectorisation-number%d-rules-unable-to-resolve", UI_MSG_WARNING, $count);
-      return false;
-    }
     //no result, no work
     if ($count == 0) {
       CAppUI::setMsg("CRegleSectorisation-no-rules-found", UI_MSG_WARNING);
       return false;
     }
 
-    // one rule, lets do the work
-    if ($count == 1) {
-      $regle = reset($regles);
-      $regle->loadRefService();
-      $this->service_id = $regle->service_id;
-      CAppUI::setMsg("CRegleSectorisation-unique-rule%s", UI_MSG_OK, $regle->_ref_service->nom);
+    // one or more rules, lets do the work
+    if ($count > 0) {
+      //check if all result = same service
+      $first = reset($regles);
+      $result = 0;
+      foreach ($regles as $_regle) {
+        if ($_regle->service_id == $first->service_id) {
+          $result++;
+        }
+      }
+
+      //too much results & differents result
+      if ($result != $count) {
+        CAppUI::setMsg("CRegleSectorisation-number%d-rules-unable-to-resolve", UI_MSG_WARNING, $count);
+        return false;
+      }
+
+      $first->loadRefService();
+      $this->service_id = $first->service_id;
+      CAppUI::setMsg("CRegleSectorisation-rule%d-rule%s", UI_MSG_OK, $count, $first->_ref_service->nom);
       return true;
     }
 
