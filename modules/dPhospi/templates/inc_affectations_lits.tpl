@@ -80,7 +80,7 @@
           <span>
         {{/if}}
         <span style="float: right;">
-          {{if $prestation_id && $sejour->_liaisons_for_prestation|@count}}
+          {{if $sejour->_liaisons_for_prestation|@count && $prestation_id}}
             {{mb_include module=hospi template=inc_vw_liaisons_prestation liaisons=$sejour->_liaisons_for_prestation}}
           {{/if}}
           {{mb_include module=patients template=inc_vw_antecedents type=deficience readonly=1}}

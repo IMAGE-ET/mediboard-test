@@ -970,7 +970,7 @@ class CMediusers extends CMbObject {
    * @return CMediusers[]
    */
   function loadPraticiens($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Dentiste"), $permType, $function_id, $name, $secondary, $actif);
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Dentiste"), $permType, $function_id, $name, $actif, $secondary);
   }
 
   /**
@@ -983,7 +983,7 @@ class CMediusers extends CMbObject {
    * @return CMediusers[]
    */
   function loadProfessionnelDeSante($permType = PERM_READ, $function_id = null, $name = null, $secondary = false, $actif = true) {
-    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $secondary, $actif);
+    return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin", "Infirmière", "Rééducateur", "Sage Femme", "Dentiste"), $permType, $function_id, $name, $actif, $secondary);
   }
 
   /**

@@ -352,7 +352,7 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
     
     $duree = CMbDT::minutesRelative(CMbDT::time($_plage->debut), CMbDT::time($_plage->fin));
     
-    $libelle = $_plage->chir_id ? $_plage->_ref_chir->_view : $_plage->_ref_spec->_view;
+    $libelle = CMbString::htmlEntities($_plage->chir_id ? $_plage->_ref_chir->_view : $_plage->_ref_spec->_view);
     
     $event = new CPlanningEvent($_plage->_guid, $debut, $duree, $libelle, "#aaa", true, null, $_plage->_guid, false);
     
