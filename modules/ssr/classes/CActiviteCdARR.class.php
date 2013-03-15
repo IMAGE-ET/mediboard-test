@@ -19,9 +19,15 @@ class CActiviteCdARR extends CCdARRObject {
 	var $inclu   = null;
 	var $exclu   = null;
 	
-	var $_ref_type_activite = null;
-	var $_ref_elements = null;
-	var $_ref_elements_by_cat = null;
+  public $_ref_type_activite;
+
+  public $_count_elements;
+  public $_count_actes;
+  public $_count_actes_by_executant;
+
+	public $_ref_elements;
+	public $_ref_elements_by_cat;
+  public $_ref_all_executants;
 	
 	static $cached = array();
 	
@@ -60,18 +66,54 @@ class CActiviteCdARR extends CCdARRObject {
     $this->loadRefTypeActivite();
   }
 
-	function loadRefsElements(){
-		$element_to_cdarr = new CElementPrescriptionToCdarr();
-		$element_to_cdarr->code = $this->code;
-		return $this->_ref_elements = $element_to_cdarr->loadMatchingList();
+  function countElements() {
+    $element = new CElementPrescriptionToCdarr();
+    $element->code = $this->code;
+    return $this->_count_elements = $element->countMatchingList();
+  }
+    
+	function loadRefsElements() {
+		$element = new CElementPrescriptionToCdarr();
+		$element->code = $this->code;
+		return $this->_ref_elements = $element->loadMatchingList();
 	}
 	
 	function loadRefsElementsByCat() {
 		foreach ($this->loadRefsElements() as $_element){
-      $_element->loadRefElementPrescription();
-      $this->_ref_elements_by_cat[$_element->_ref_element_prescription->category_prescription_id][] = $_element;
+      $element = $_element->loadRefElementPrescription();
+      $this->_ref_elements_by_cat[$element->category_prescription_id][] = $_element;
     }
 	}
+  
+  function countActes() {
+    $acte = new CActeCdARR();
+    $acte->code = $this->code;
+    return $this->_count_actes = $acte->countMatchingList();
+  }
+    
+  function loadRefsAllExecutants() {
+    // Comptage par executant
+    $query = "SELECT therapeute_id, COUNT(*)FROM `acte_cdarr` 
+      LEFT JOIN `evenement_ssr` ON  `evenement_ssr`.`evenement_ssr_id` = `acte_cdarr`.`evenement_ssr_id`
+      WHERE `code` = '$this->code'
+      GROUP BY `therapeute_id`";
+    $acte = new CActeCdARR();  
+    $ds = $acte->getDS();
+    $counts = $ds->loadHashList($query);
+    arsort($counts);
+    
+    // Chargement des executants
+    $user = new CMediusers;
+    $executants = $user->loadAll(array_keys($counts));
+    foreach ($executants as $_executant) {
+      $_executant->loadRefFunction();
+    }
+    
+    // Valeurs de retour
+    $this->_count_actes_by_executant = $counts;
+    return $this->_ref_all_executants = $executants;
+  }
+  
 	
 	static function getLibelle($type) {
 	  $found = new self();
