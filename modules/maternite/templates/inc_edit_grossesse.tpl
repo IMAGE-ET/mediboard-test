@@ -63,7 +63,15 @@
         {{mb_label object=$grossesse field=fausse_couche}}
       </th>
       <td>
-        {{mb_field object=$grossesse field=fausse_couche}}
+        {{mb_field object=$grossesse field=fausse_couche emptyLabel="Aucune"}}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        {{mb_label object=$grossesse field=lieu_accouchement}}
+      </th>
+      <td>
+        {{mb_field object=$grossesse field=lieu_accouchement}}
       </td>
     </tr>
     <tr>
