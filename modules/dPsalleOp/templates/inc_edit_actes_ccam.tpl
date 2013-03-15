@@ -297,7 +297,7 @@
 
 
               <!-- ALD -->
-              {{if $object->_ref_patient && $object->_ref_patient->ald}}
+              {{if $subject->_ref_patient->ald}}
                 <tr class="{{$view}}">
                   <th>{{mb_label object=$acte field=ald}}</th>
                   <td>{{mb_field object=$acte field=ald}}</td>

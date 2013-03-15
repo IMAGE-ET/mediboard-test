@@ -31,7 +31,6 @@ if($codable->_class == "COperation") {
   $codable->countExchanges();
 }
 
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("listAnesths"      , $listAnesths);
@@ -41,5 +40,3 @@ $smarty->assign("module"           , $module);
 $smarty->assign("do_subject_aed"   , $do_subject_aed);
 $smarty->assign("chir_id"          , $chir_id);
 $smarty->display("inc_codage_ccam.tpl");
-
-?>
