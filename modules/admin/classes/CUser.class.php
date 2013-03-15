@@ -251,6 +251,10 @@ class CUser extends CMbObject {
   function updatePlainFields() {
     parent::updatePlainFields();
 
+    // To prevent from recalculate new salt and re-hash password
+    if ($this->_merging) {
+      return;
+    }
     $this->user_password = null;
 
     // If no raw password or already hashed, nothing to do
