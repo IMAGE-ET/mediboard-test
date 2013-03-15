@@ -297,7 +297,7 @@ class CMbDT {
    * @return array List of bank holidays as dates
    **/
   static function bankHolidays($date = null) {
-    return CGroups::loadCurrent()->getHollidays($date);
+    return CGroups::loadCurrent()->getHolidays($date);
   }
 
   /**

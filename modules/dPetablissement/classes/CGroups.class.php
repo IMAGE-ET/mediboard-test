@@ -311,17 +311,17 @@ class CGroups extends CMbObject {
 
 
   /**
-   * get hollidays for a postal code
+   * get holidays for a postal code
    *
    * @param int    $pays the country (config mediboard)
    * @param string $date date (Y-m-d)
    *
    * @return array
    */
-  function getCpHollidays($pays, $date) {
-    $subdivisionHolliday = array();
+  function getCpHolidays($pays, $date) {
+    $subdivisionHoliday = array();
     if (!$this->cp) {
-      return $subdivisionHolliday;
+      return $subdivisionHoliday;
     }
 
     $year = CMbDT::transform("+0 DAY", $date, "%Y");
@@ -335,27 +335,27 @@ class CGroups extends CMbObject {
         $canton = substr($this->cp, 0, 2);
         switch ($canton) {
           case '10':  // Vaud
-            $subdivisionHolliday[] = "$year-01-02"; // Saint-Berchtold
-            $subdivisionHolliday[] = CMbDT::transform("last friday", $paques, "%Y-%m-%d");  //vendredi saint
-            $subdivisionHolliday[] = CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d");  //lundi de paques
-            $subdivisionHolliday[] = CMbDT::transform("+39 DAY", $paques, "%Y-%m-%d");  //Ascension (40 jours - dimanche de paques)
-            $subdivisionHolliday[] = CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d");  //lundi de pantecote
-            $subdivisionHolliday[] = CMbDT::transform("+1 DAY", $thirdSundaySeptember, "%Y-%m-%d");  //Lundi du Jeûne fédéral
+            $subdivisionHoliday[] = "$year-01-02"; // Saint-Berchtold
+            $subdivisionHoliday[] = CMbDT::transform("last friday", $paques, "%Y-%m-%d");  //vendredi saint
+            $subdivisionHoliday[] = CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d");  //lundi de paques
+            $subdivisionHoliday[] = CMbDT::transform("+39 DAY", $paques, "%Y-%m-%d");  //Ascension (40 jours - dimanche de paques)
+            $subdivisionHoliday[] = CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d");  //lundi de pantecote
+            $subdivisionHoliday[] = CMbDT::transform("+1 DAY", $thirdSundaySeptember, "%Y-%m-%d");  //Lundi du Jeûne fédéral
             break;
 
           case '12':  // Genève
-            $subdivisionHolliday[] = CMbDT::transform("next thursday", $firstSundaySeptember, "%Y-%m-%d");  //jeudi suivant le 1er dimanche de septembre
-            $subdivisionHolliday[] = CMbDT::transform("last friday", $paques, "%Y-%m-%d");  //vendredi saint
-            $subdivisionHolliday[] = CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d");  //lundi de paques
-            $subdivisionHolliday[] = CMbDT::transform("+39 DAY", $paques, "%Y-%m-%d");  //Ascension
-            $subdivisionHolliday[] = CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d");  //lundi de pantecote
-            $subdivisionHolliday[] = "$year-12-31"; //fete du travail
+            $subdivisionHoliday[] = CMbDT::transform("next thursday", $firstSundaySeptember, "%Y-%m-%d");  //jeudi suivant le 1er dimanche de septembre
+            $subdivisionHoliday[] = CMbDT::transform("last friday", $paques, "%Y-%m-%d");  //vendredi saint
+            $subdivisionHoliday[] = CMbDT::transform("+1 DAY", $paques, "%Y-%m-%d");  //lundi de paques
+            $subdivisionHoliday[] = CMbDT::transform("+39 DAY", $paques, "%Y-%m-%d");  //Ascension
+            $subdivisionHoliday[] = CMbDT::transform("+50 DAY", $paques, "%Y-%m-%d");  //lundi de pantecote
+            $subdivisionHoliday[] = "$year-12-31"; //fete du travail
             break;
         }
         break;
 
     }
-    return $subdivisionHolliday;
+    return $subdivisionHoliday;
   }
 
 
@@ -363,12 +363,12 @@ class CGroups extends CMbObject {
    * Récupère les congés pour un pays
    *
    * @param string $date          the date to check
-   * @param bool   $includeRegion are the territory hollidays included ?
+   * @param bool   $includeRegion are the territory holidays included ?
    *
    * @return array
    */
-  function getHollidays($date = null, $includeRegion = true){
-    $hollidays = array();
+  function getHolidays($date = null, $includeRegion = true){
+    $holidays = array();
 
     // No Group, error
     if (!$this->_id) {
@@ -385,33 +385,33 @@ class CGroups extends CMbObject {
 
     switch ($code_pays) {
       case '2': // Switzerland
-        $hollidays[] = "$year-01-01";                // Jour de l'an
-        $hollidays[] = "$year-08-01";                // fete nationnale suisse
-        $hollidays[] = "$year-12-25";                // Noël
+        $holidays[] = "$year-01-01";                // Jour de l'an
+        $holidays[] = "$year-08-01";                // fete nationnale suisse
+        $holidays[] = "$year-12-25";                // Noël
         break;
 
       default:  // France
         $paques = CMbDT::getEasterDate($date);
-        $hollidays[] = "$year-01-01";                   // Jour de l'an
-        $hollidays[] = CMbDT::date("+1 DAY", $paques);  // Lundi de paques
-        $hollidays[] = "$year-05-01";                   // Fête du travail
-        $hollidays[] = "$year-05-08";                   // Victoire de 1945
-        $hollidays[] = CMbDT::date("+39 DAYS", $paques);// Jeudi de l'ascension
-        $hollidays[] = CMbDT::date("+50 DAYS", $paques);// Lundi de pentecôte
-        $hollidays[] = "$year-07-14";                   // Fête nationnale
-        $hollidays[] = "$year-08-15";                   // Assomption
-        $hollidays[] = "$year-11-01";                   // Toussaint
-        $hollidays[] = "$year-11-11";                   // Armistice 1918
-        $hollidays[] = "$year-12-25";                   // Noël
+        $holidays[] = "$year-01-01";                   // Jour de l'an
+        $holidays[] = CMbDT::date("+1 DAY", $paques);  // Lundi de paques
+        $holidays[] = "$year-05-01";                   // Fête du travail
+        $holidays[] = "$year-05-08";                   // Victoire de 1945
+        $holidays[] = CMbDT::date("+39 DAYS", $paques);// Jeudi de l'ascension
+        $holidays[] = CMbDT::date("+50 DAYS", $paques);// Lundi de pentecôte
+        $holidays[] = "$year-07-14";                   // Fête nationnale
+        $holidays[] = "$year-08-15";                   // Assomption
+        $holidays[] = "$year-11-01";                   // Toussaint
+        $holidays[] = "$year-11-11";                   // Armistice 1918
+        $holidays[] = "$year-12-25";                   // Noël
         break;
     }
 
     if ($includeRegion) {
-      $hollidaysSub = $this->getCpHollidays($code_pays, $date); //récupération des régions
-      $hollidays = array_merge($hollidays, $hollidaysSub);
+      $holidaysSub = $this->getCpHolidays($code_pays, $date); //récupération des régions
+      $holidays = array_merge($holidays, $holidaysSub);
     }
 
-    return $hollidays;
+    return $holidays;
   }
 
   /**
