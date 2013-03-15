@@ -109,7 +109,13 @@ class CSetupdPetablissement extends CSetup {
                ADD `ean` VARCHAR (30),
                ADD `rcc` VARCHAR (30);";
     $this->addQuery($query);
-    $this->mod_version = "0.31";
+
+    $this->makeRevision("0.31");
+    $query = "ALTER TABLE `groups_mediboard`
+      CHANGE `cp` `cp` VARCHAR( 10 ) NULL DEFAULT NULL;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.32";
   } 
 }
 
