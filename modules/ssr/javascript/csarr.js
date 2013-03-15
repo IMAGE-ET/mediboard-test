@@ -12,7 +12,7 @@ CsARR = {
   viewActivite: function(code) {
     new Url('ssr', 'vw_activite_csarr') .
       addParam('code', code) .
-      requestModal(500);
+      requestModal(600);
   },
   
   viewActiviteStats: function(code) {
@@ -24,6 +24,6 @@ CsARR = {
   viewHierarchie: function(code) {
     new Url('ssr', 'vw_hierarchie_csarr') .
       addParam('code', code) .
-      requestModal(500);
+      requestModal(600);
   }
 };

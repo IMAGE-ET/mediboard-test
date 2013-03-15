@@ -16,7 +16,9 @@ class CHierarchieCsARR extends CCsARRObject {
   var $libelle       = null;
   
   public $_ref_parent_hierarchies;
-  public $_notes_hierarchie;
+  public $_ref_child_hierarchies;
+  public $_ref_activites;
+  public $_ref_notes_hierarchie;
   
   static $cached = array();
   
@@ -56,6 +58,20 @@ class CHierarchieCsARR extends CCsARRObject {
     $hierarchie = new self;
     $hierarchies = $hierarchie->loadAll($codes);
     return $this->_ref_parent_hierarchies = $hierarchies;
+  }
+
+  function loadRefsChildHierarchies() {
+    $where["code"] = "LIKE '$this->code.__'";
+    $hierarchie = new self;
+    $hierarchies = $hierarchie->loadList($where);
+    return $this->_ref_child_hierarchies = $hierarchies;
+  }
+
+  function loadRefsActivites() {
+    $activite = new CActiviteCsARR;
+    $activite->hierarchie = $this->code;
+    $activite = $activite->loadMatchingList();
+    return $this->_ref_activites = $activite;
   }
 
   function loadRefsNotesHierarchies() {

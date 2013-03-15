@@ -18,7 +18,7 @@
 {{foreach from=$activite->_ref_hierarchies item=_hierarchie}}
 <tr>
   <td class="narrow">
-    <button class"compact search" style="width: 6em;" onclick="CsARR.viewHierarchie('{{$_hierarchie->code}}')">
+    <button class="compact" style="width: 6em;" onclick="CsARR.viewHierarchie('{{$_hierarchie->code}}')">
       {{$_hierarchie->code}}
     </button>  
   </td>
@@ -39,7 +39,7 @@
       {{foreach from=$_notes_by_type item=_note}}
       <div style="padding-left: {{math equation="n-1" n=$_note->niveau}}em;">
         {{if $_note->code_exclu}}
-        <button class"compact search" style="width: 5em;" onclick="CsARR.viewActivite('{{$_note->code_exclu}}')">
+        <button class="compact" style="width: 5em;" onclick="CsARR.viewActivite('{{$_note->code_exclu}}')">
           {{$_note->code_exclu}}
         </button>
         {{$_note->libelle|substr:0:-10}}

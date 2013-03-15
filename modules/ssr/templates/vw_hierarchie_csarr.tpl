@@ -10,7 +10,7 @@
   </td>
 </tr>
 
-<!-- Hiérarchies -->
+<!-- Hiérarchies parentes -->
 <tr>
   <th colspan="2" class="section">{{tr}}CActiviteCsARR.back.parent_hierarchies{{/tr}}</th>
 </tr>
@@ -18,7 +18,7 @@
 {{foreach from=$hierarchie->_ref_parent_hierarchies item=_hierarchie}}
 <tr>
   <td class="narrow">
-    <button class"compact search" style="width: 6em;" onclick="CsARR.viewHierarchie('{{$_hierarchie->code}}')">
+    <button class="compact" style="width: 6em;" onclick="CsARR.viewHierarchie('{{$_hierarchie->code}}')">
       {{$_hierarchie->code}}
     </button>  
   </td>
@@ -60,11 +60,48 @@
       {{/foreach}}
     </td>
   </tr>  
-
-{{foreachelse}}
-<tr>
-  <td colspan="2" class="empty">{{tr}}CNoteHierarchieCsARR.none{{/tr}}</td>
-</tr>
 {{/foreach}}
+
+<!-- Hiérarchies filles -->
+{{if count($hierarchie->_ref_child_hierarchies)}}
+<tr>
+  <th colspan="2" class="section">{{tr}}CActiviteCsARR.back.child_hierarchies{{/tr}}</th>
+</tr>
+
+{{foreach from=$hierarchie->_ref_child_hierarchies item=_hierarchie}}
+<tr>
+  <td class="narrow">
+    <button class="compact" style="width: 6em;" onclick="CsARR.viewHierarchie('{{$_hierarchie->code}}')">
+      {{$_hierarchie->code}}
+    </button>  
+  </td>
+  <td class="text">
+    {{$_hierarchie->libelle}}
+  </td>
+</tr>  
+{{/foreach}}
+
+{{/if}}
+
+<!-- Activités -->
+{{if count($hierarchie->_ref_activites)}}
+<tr>
+  <th colspan="2" class="section">{{tr}}CActiviteCsARR.back.activites{{/tr}}</th>
+</tr>
+
+{{foreach from=$hierarchie->_ref_activites item=_activite}}
+<tr>
+  <td class="narrow">
+    <button class="compact" style="width: 6em;" onclick="CsARR.viewActivite('{{$_activite->code}}')">
+      {{$_activite->code}}
+    </button>  
+  </td>
+  <td class="text">
+    {{$_activite->libelle}}
+  </td>
+</tr>  
+{{/foreach}}
+
+{{/if}}
 
 </table>

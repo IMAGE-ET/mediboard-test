@@ -14,6 +14,8 @@ $code = CValue::get("code");
 $hierarchie = CHierarchieCsARR::get($code);
 $hierarchie->loadRefsNotesHierarchies();
 $hierarchie->loadRefsParentHierarchies();
+$hierarchie->loadRefsChildHierarchies();
+$hierarchie->loadRefsActivites();
 
 // Création du template
 $smarty = new CSmartyDP();
