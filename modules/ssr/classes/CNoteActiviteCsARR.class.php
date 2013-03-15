@@ -38,7 +38,7 @@ class CNoteActiviteCsARR extends CCsARRObject {
     $props["idnote"]     = "str notNull length|10";
     $props["typenote"]   = "enum notNull list|avec_sans|codage|comprend|exclusion|exemple";
     $props["niveau"]     = "num show|0";
-    $props["libelle"]    = "str notNull seekable";
+    $props["libelle"]    = "text notNull seekable";
     $props["ordre"]      = "num show|0";
     $props["code_exclu"] = "str length|7 seekable";
 
