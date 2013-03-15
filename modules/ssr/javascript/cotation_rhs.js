@@ -98,7 +98,7 @@ CotationRHS = {
   },
   
   autocompleteActivite: function(form) {
-    var url = new Url('ssr', 'httpreq_do_activite_autocomplete');
+    var url = new Url('ssr', 'httpreq_do_cdarr_autocomplete');
     url.autoComplete(form.code_activite_cdarr, form.down('.autocomplete.activite'), {
       dropdown: true,
       minChars: 2,

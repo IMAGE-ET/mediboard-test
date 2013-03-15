@@ -17,7 +17,7 @@ if (!$needle) {
 
 $activite = new CActiviteCdARR();
 $activites = $activite->seek($needle, null, 300);
-foreach($activites as $_activite) {
+foreach ($activites as $_activite) {
   $_activite->loadRefTypeActivite();
 }
 
@@ -28,6 +28,6 @@ $smarty->assign("activites", $activites);
 $smarty->assign("needle"   , $needle);
 $smarty->assign("nodebug"  , true);
 
-$smarty->display("inc_do_activite_autocomplete.tpl");
+$smarty->display("inc_do_cdarr_autocomplete.tpl");
 
 ?>

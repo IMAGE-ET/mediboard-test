@@ -42,7 +42,7 @@
 	}
 			
 	Main.add(function(){
-    var url = new Url("ssr", "httpreq_do_activite_autocomplete");
+    var url = new Url("ssr", "httpreq_do_cdarr_autocomplete");
     url.autoComplete(getForm("editCdarrs").code, "other_code_auto_complete", {
       dropdown: true,
       minChars: 2,

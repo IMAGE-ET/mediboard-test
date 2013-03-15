@@ -122,6 +122,12 @@ class CActiviteCsARR extends CCsARRObject {
     $this->loadRefHierarchie();
   }
 
+  function countElements() {
+    $element = new CElementPrescriptionToCsarr();
+    $element->code = $this->code;
+    return $this->_count_elements = $element->countMatchingList();
+  }
+    
 	function loadRefsElements() {
 		$element = new CElementPrescriptionToCsarr();
 		$element->code = $this->code;

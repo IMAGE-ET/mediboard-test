@@ -12,12 +12,14 @@
   {{foreach from=$activites item=_activite}}
     <li>
       <span style="display: none" class="value">{{$_activite->code}}</span>
-      {{$_activite->code|emphasize:$needle}}
-      {{$_activite->libelle|emphasize:$needle}}
-      <br />
-      <small class="opacity-70">
-        {{$_activite->_ref_type_activite->_view|emphasize:$needle}}
-      </small>
+      <div class="text" style="width: 300px;">
+        <strong>{{$_activite->code|emphasize:$needle}}</strong>
+        {{$_activite->libelle|emphasize:$needle}}
+      </div>
+      <div class="text compact" style="width: 300px;">
+        {{$_activite->hierarchie|emphasize:$needle}}:
+        {{$_activite->_ref_hierarchie->libelle|emphasize:$needle}}
+      </div>
     </li>
    {{foreachelse}}
     <li style="text-align: left;">

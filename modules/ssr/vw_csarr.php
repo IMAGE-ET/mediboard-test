@@ -25,8 +25,8 @@ $total = $activite->_totalSeek;
 
 // Détail du chargement
 foreach ($listActivites as $_activite) {
-  $_activite->loadRefsElementsByCat();
-  $_activite->loadRefsAllExecutants();  
+  $_activite->countElements();
+  $_activite->countActes(); 
 }
 
 // Création du template

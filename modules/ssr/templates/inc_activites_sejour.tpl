@@ -295,7 +295,7 @@ Main.add(function(){
   oFormEvenementSSR = getForm("editEvenementSSR");
   window.toCheck = false;
   if($('code_auto_complete')){
-    var url = new Url("ssr", "httpreq_do_activite_autocomplete");
+    var url = new Url("ssr", "httpreq_do_cdarr_autocomplete");
     url.autoComplete(oFormEvenementSSR.code, "code_auto_complete", {
       dropdown: true,
       minChars: 2,
