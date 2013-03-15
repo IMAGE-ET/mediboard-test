@@ -35,8 +35,22 @@ class CModulateurCsARR extends CCsARRObject {
   }
 
   function updateFormFields() {
+    static $libelles = array(
+      "ZV" => "Réalisation de l'acte au lit du patient",
+      "ME" => "Réalisation de l'acte en salle de soins",
+      "QM" => "Réalisation de l'acte en piscine ou en balnéothe rapie",
+      "TF" => "Réalisation de l'acte en établissement, en extérieur sans équipement",
+      "RW" => "Réalisation de l'acte en établissement, en extérieur avec équipement",
+      "HW" => "Réalisation de l'acte hors établissement en milieu urbain",
+      "LJ" => "Réalisation de l'acte hors établissement en milieu naturel",
+      "XH" => "Réalisation de l'acte sur le lieu de vie du patient",
+      "BN" => "Nécessité de recours à un interprète",
+      "EZ" => "Réalisation fractionnée de l'acte",
+    );
+    
     parent::updateFormFields();
-    $this->_view = "Libellé du modulateur $this->modulateur";
+    $this->_libelle = $libelles[$this->modulateur];
+    $this->_view = "$this->modulateur: $this->_libelle";
   }
   
   function loadRefCode() {

@@ -66,7 +66,7 @@
   <td colspan="2" class="text">
     {{foreach from=$activite->_ref_modulateurs item=_modulateur}}
       <div>
-        <strong>{{$_modulateur->modulateur}}</strong> : {{$_modulateur}}
+        <strong>{{$_modulateur->modulateur}}</strong> : {{$_modulateur->_libelle}}
       </div> 
     {{foreachelse}}
       <div class="empty">{{tr}}CModulateurCsARR{{/tr}}</div>
