@@ -11,9 +11,9 @@
 CCanDo::checkRead();
 
 $code = CValue::get("code");
-$activite = CActiviteCdARR::get($code);
+$activite = CActiviteCsARR::get($code);
 if (!$activite->code) {
-  CAppUI::stepMessage(UI_MSG_ERROR, "Activité CdARR '$code' non trouvée");
+  CAppUI::stepMessage(UI_MSG_ERROR, "Activité CsARR '$code' non trouvée");
   return;
 }
 

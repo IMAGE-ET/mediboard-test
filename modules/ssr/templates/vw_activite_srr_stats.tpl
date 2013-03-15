@@ -2,7 +2,9 @@
   <tr>
     <td style="width: 50%;">
       
-<!-- Eléments de prescription -->      
+<!-- Eléments de prescription -->
+<div style="max-height: 500px; overflow-y: auto;">
+  
 <table class="tbl">
   <tr>
     <th class="title">Eléments de prescription paramétrés</th>
@@ -29,6 +31,8 @@
   </tr>
   {{/foreach}}
 </table>
+
+</div>
 
     </td>
 
@@ -58,9 +62,10 @@
   {{/foreach}}
 </table>
       
+</div>
+
     </td>
   </tr>
   
 </table>
 
-</div>

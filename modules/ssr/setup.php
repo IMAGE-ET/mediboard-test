@@ -463,7 +463,25 @@ class CSetupssr extends CSetup {
     $query = "ALTER TABLE `element_prescription_to_csarr` ADD INDEX (`element_prescription_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.43";
+
+    $this->makeRevision("0.43");
+
+    $query = "CREATE TABLE `acte_csarr` (
+        `acte_csarr_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+        `evenement_ssr_id` INT (11) UNSIGNED,
+        `administration_id` INT (11) UNSIGNED,
+        `sejour_id` INT (11) UNSIGNED,
+        `code` CHAR (7) NOT NULL
+      )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+            
+    $query = "ALTER TABLE `acte_csarr` 
+      ADD INDEX (`evenement_ssr_id`),
+      ADD INDEX (`administration_id`),
+      ADD INDEX (`sejour_id`);";
+    $this->addQuery($query);
+    
+    $this->mod_version = "0.44";
 
     // Data source query
     $query = "SHOW TABLES LIKE 'type_activite'";

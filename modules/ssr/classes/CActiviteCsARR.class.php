@@ -18,13 +18,24 @@ class CActiviteCsARR extends CCsARRObject {
   var $libelle_court = null;
   var $ordre         = null;
   
+  // Refs
   public $_ref_hierarchie;
   public $_ref_hierarchies;
   public $_ref_modulateurs;
   public $_ref_notes_activites;
   public $_ref_gestes_complementaires;
   public $_ref_activites_complementaires;
-    
+  
+  // Counts
+  public $_count_elements;
+  public $_count_actes;
+  public $_count_actes_by_executant;
+
+  // Distant refs
+  public $_ref_elements;
+  public $_ref_elements_by_cat;
+  public $_ref_all_executants;
+  
   static $cached = array();
   
   function getSpec() {
@@ -119,10 +130,41 @@ class CActiviteCsARR extends CCsARRObject {
 	
 	function loadRefsElementsByCat() {
 		foreach ($this->loadRefsElements() as $_element){
-      $_element->loadRefElementPrescription();
-      $this->_ref_elements_by_cat[$_element->_ref_element_prescription->category_prescription_id][] = $_element;
+      $element = $_element->loadRefElementPrescription();
+      $this->_ref_elements_by_cat[$element->category_prescription_id][] = $_element;
     }
 	}
+
+  function countActes() {
+    $acte = new CActeCdARR();
+    $acte->code = $this->code;
+    return $this->_count_actes = $acte->countMatchingList();
+  }
+    
+  function loadRefsAllExecutants() {
+    // Comptage par executant
+    $query = "SELECT therapeute_id, COUNT(*)
+      FROM `acte_csarr` 
+      LEFT JOIN `evenement_ssr` ON  `evenement_ssr`.`evenement_ssr_id` = `acte_csarr`.`evenement_ssr_id`
+      WHERE `code` = '$this->code'
+      GROUP BY `therapeute_id`";
+    $acte = new CActeCsARR();  
+    $ds = $acte->getDS();
+    $counts = $ds->loadHashList($query);
+    arsort($counts);
+    
+    // Chargement des executants
+    $user = new CMediusers;
+    $executants = $user->loadAll(array_keys($counts));
+    foreach ($executants as $_executant) {
+      $_executant->loadRefFunction();
+    }
+    
+    // Valeurs de retour
+    $this->_count_actes_by_executant = $counts;
+    return $this->_ref_all_executants = $executants;
+  }
+  
 	
 	/**
 	 * Get an instance from the code

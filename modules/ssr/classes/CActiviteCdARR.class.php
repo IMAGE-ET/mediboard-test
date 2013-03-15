@@ -19,12 +19,15 @@ class CActiviteCdARR extends CCdARRObject {
 	var $inclu   = null;
 	var $exclu   = null;
 	
+  // Refs
   public $_ref_type_activite;
 
+  // Counts
   public $_count_elements;
   public $_count_actes;
   public $_count_actes_by_executant;
 
+  // Distant refs
 	public $_ref_elements;
 	public $_ref_elements_by_cat;
   public $_ref_all_executants;
@@ -93,7 +96,8 @@ class CActiviteCdARR extends CCdARRObject {
     
   function loadRefsAllExecutants() {
     // Comptage par executant
-    $query = "SELECT therapeute_id, COUNT(*)FROM `acte_cdarr` 
+    $query = "SELECT therapeute_id, COUNT(*)
+      FROM `acte_cdarr` 
       LEFT JOIN `evenement_ssr` ON  `evenement_ssr`.`evenement_ssr_id` = `acte_cdarr`.`evenement_ssr_id`
       WHERE `code` = '$this->code'
       GROUP BY `therapeute_id`";
@@ -114,8 +118,7 @@ class CActiviteCdARR extends CCdARRObject {
     return $this->_ref_all_executants = $executants;
   }
   
-	
-	static function getLibelle($type) {
+ 	static function getLibelle($type) {
 	  $found = new self();
 	  $found->type = $type;
 	  $found->loadMatchingObject();

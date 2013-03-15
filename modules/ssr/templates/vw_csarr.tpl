@@ -39,7 +39,9 @@ function changePage(page){
     <th class="narrow">{{mb_title object=$activite field=hierarchie}}</th>
     <th class="narrow">{{mb_title object=$activite field=code}}</th>
     <th>{{mb_title object=$activite field=libelle}}</th>
-		<th class="narrow">Nb. éléments</th>
+    <th colspan="3" class="narrow">
+      <label title="Eléments de prescription et actes réalisés">Usage</label>
+    </th>
   </tr>
   {{foreach from=$listActivites item=_activite}}
   <tr>
@@ -53,29 +55,21 @@ function changePage(page){
       </button>
     </td>
     <td>{{$_activite->libelle|emphasize:$activite->code:"u"}}</td>
-		<td style="text-align: center;">
-			{{if $_activite->_ref_elements}}
-			  <span onmouseover='ObjectTooltip.createDOM(this, "tooltip-content-csarr-{{$_activite->code}}")'>{{$_activite->_ref_elements|@count}}</span>
-				<table id="tooltip-content-csarr-{{$_activite->code}}" style="display: none;" class="tbl">
-          <tr>
-            <th class="title">Eléments de prescription</th>
-					</tr>
-					{{foreach from=$_activite->_ref_elements_by_cat item=_elements_by_cat}}
-						{{foreach from=$_elements_by_cat item=_element name="foreach_elt"}}
-						  {{assign var=elt_prescription value=$_element->_ref_element_prescription}}
-              {{if $smarty.foreach.foreach_elt.first}}
-							<tr>
-								<th>{{$elt_prescription->_ref_category_prescription->_view}}</th>
-						  </tr>
-							{{/if}}
-							<tr>
-                <td>{{$elt_prescription->_view}}</td>
-              </tr>
-						{{/foreach}}
-          {{/foreach}}
-        </table>
-			{{/if}}
-			</td>
+    <td class="narrow" style="text-align: center;">
+      {{if $_activite->_count_elements}}
+        {{$_activite->_count_elements}}
+      {{/if}}
+    </td>
+    <td class="narrow" style="text-align: center;">
+      {{if $_activite->_count_actes}}
+        {{$_activite->_count_actes}}
+      {{/if}}
+    </td>
+    <td class="narrow">
+      <button class="compact search notext" onclick="CsARR.viewActiviteStats('{{$_activite->code}}')">
+        {{tr}}Stats{{/tr}}
+      </button>
+    </td>
   </tr>
   {{foreachelse}}
   <tr>
