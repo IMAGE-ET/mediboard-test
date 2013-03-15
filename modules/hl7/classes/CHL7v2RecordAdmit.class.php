@@ -1353,16 +1353,16 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $object->_id;
     }
 
-    $sender  = $this->_ref_sender;
-    $ljoin = array();
-    $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
-
-    $where   = array();
-    $where["functions_mediboard.group_id"] = " = '$sender->group_id'";
-
-    $ds      = $object->getDS();
+    $sender = $this->_ref_sender;
+    $ds     = $object->getDS();
 
     if ($object instanceof CMediusers) {
+      $ljoin = array();
+      $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
+
+      $where   = array();
+      $where["functions_mediboard.group_id"] = " = '$sender->group_id'";
+
       if (($object->rpps || $object->adeli)) {
         if ($object->rpps) {
           $where[] = $ds->prepare("rpps = %", $object->rpps);
@@ -1384,10 +1384,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       $ljoin["users_mediboard"]     = "users.user_id = users_mediboard.user_id";
       $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
 
+      $where   = array();
+      $where["functions_mediboard.group_id"] = " = '$sender->group_id'";
       $where[] = $ds->prepare("users.user_first_name = %", $first_name);
       $where[] = $ds->prepare("users.user_last_name = %" , $last_name);
 
-      if ($user->loadObject($where, null, null, $ljoin)) {
+      $order = "users.user_id ASC";
+      if ($user->loadObject($where, $order, null, $ljoin)) {
         return $user->_id;
       }
       
