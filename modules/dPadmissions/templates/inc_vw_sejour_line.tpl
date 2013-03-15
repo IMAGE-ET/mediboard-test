@@ -22,7 +22,7 @@
   {{assign var="_fiche" value=$_sejour->_ref_fiche_autonomie}}
   
   {{if $_sejour->recuse == "-1"}}
-    <div style="white-space: nowrap;" onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')">En attente</div>
+    <div style="white-space: nowrap;" {{if $_fiche}}onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')"{{/if}}>En attente</div>
     <button type="button" class="tick notext" onclick="$V(this.form.recuse, '0'); this.form.submit();">
       {{tr}}OK{{/tr}}
     </button>
@@ -30,12 +30,12 @@
       {{tr}}Cancel{{/tr}}
     </button>
   {{elseif $_sejour->recuse == "1"}}
-    <div style="white-space: nowrap;" onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')">Récusé</div>
+    <div style="white-space: nowrap;" {{if $_fiche}}onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')"{{/if}}>Récusé</div>
     <button type="button" class="cancel notext" onclick="$V(this.form.recuse, '-1');  this.form.submit();">
       {{tr}}Cancel{{/tr}}
     </button>
   {{else}}
-    <div style="white-space: nowrap;" onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')">Validé</div>
+    <div style="white-space: nowrap;" {{if $_fiche}}onmouseover="ObjectTooltip.createEx(this, '{{$_fiche->_guid}}')"{{/if}}>Validé</div>
     <button type="button" class="cancel notext" onclick="$V(this.form.recuse, '-1');  this.form.submit();">
       {{tr}}Cancel{{/tr}}
     </button>

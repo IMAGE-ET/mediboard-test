@@ -281,14 +281,14 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
           $color = "#68f";
       }
     }
-    
+
     $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $libelle, $color, true, null, $_operation->_guid, false);
     
     if ($can_edit) {
-      $event->addMenuItem("edit" , "Modifier cette opération");
-      $event->addMenuItem("cut"  , "Couper cette opération");
-      $event->addMenuItem("copy"  , "Copier cette opération");
-      $event->addMenuItem("clock", "Modifier les dates d'entrée et sortie du séjour");
+      $event->addMenuItem("edit" , utf8_encode("Modifier cette opération"));
+      $event->addMenuItem("cut"  , utf8_encode("Couper cette opération"));
+      $event->addMenuItem("copy" , utf8_encode("Copier cette opération"));
+      $event->addMenuItem("clock", utf8_encode("Modifier les dates d'entrée et sortie du séjour"));
     }
     
     $event->plage["id"] = $_operation->_id;
