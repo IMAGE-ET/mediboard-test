@@ -12,7 +12,7 @@ Grossesse = {
       url.addParam("parturiente_id", parturiente_id);
     }
     url.addParam("object_guid", object_guid);
-    url.requestModal(700, 280);
+    url.requestModal(800, 400);
   },
   toggleGrossesse: function(sexe, form) {
     form.select(".button_grossesse")[0].disabled = sexe == "f" ? "" : "disabled";

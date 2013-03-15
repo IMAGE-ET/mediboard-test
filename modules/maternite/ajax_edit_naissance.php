@@ -59,7 +59,7 @@ else {
   $naissance->operation_id = $operation_id;
 
   $num_naissance = CAppUI::conf("maternite CNaissance num_naissance");
-  $naissance->num_naissance = $num_naissance + $naissance->countList();
+  $naissance->num_naissance = $num_naissance + CNaissance::countNaissances();
 
   if (!$anonmymous) {
     $patient->nom = $parturiente->nom;

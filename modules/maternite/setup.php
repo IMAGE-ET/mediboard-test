@@ -100,6 +100,17 @@ class CSetupmaternite extends CSetup {
       ADD `rques` TEXT;";
     $this->addQuery($query);
 
-    $this->mod_version = "0.10";
+    $this->makeRevision("0.10");
+    $query = "ALTER TABLE `naissance`
+      DROP `lieu_accouchement`;";
+    $this->addQuery($query);
+
+    $query = "ALTER TABLE `grossesse`
+      ADD `lieu_accouchement` ENUM ('sur_site','exte') DEFAULT 'sur_site',
+      ADD `fausse_couche` ENUM ('inf_15','sup_15'),
+      ADD `rques` TEXT;";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.11";
   }
 }

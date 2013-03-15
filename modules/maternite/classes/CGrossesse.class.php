@@ -25,7 +25,10 @@ class CGrossesse extends CMbObject{
   public $allaitement_maternel;
   public $date_fin_allaitement;
   public $date_dernieres_regles;
-  
+  public $lieu_accouchement;
+  public $fausse_couche;
+  public $rques;
+
   // DB References
   public $_ref_parturiente;
   
@@ -64,6 +67,9 @@ class CGrossesse extends CMbObject{
     else {
       $specs["date_dernieres_regles"] = "date";
     }
+    $specs["lieu_accouchement"] = "enum list|sur_site|exte default|sur_site";
+    $specs["fausse_couche"]     = "enum list|inf_15|sup_15";
+    $specs["rques"]             = "text helped";
     return $specs;
   }
   
@@ -160,4 +166,3 @@ class CGrossesse extends CMbObject{
     }
   }
 }
-?>

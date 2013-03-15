@@ -1,5 +1,6 @@
 <script type="text/javascript">
   Main.add(function() {
+    window.save_num_naissance = "{{$naissance->num_naissance}}"
     var form = getForm("newNaissance");
     var url = new Url("system", "ajax_seek_autocomplete");
     url.addParam("object_class", "CMediusers");
@@ -22,6 +23,10 @@
       }
     });
   });
+
+  toggleNumNaissance = function(fausse_couche) {
+    $V(fausse_couche.form.num_naissance, $V(fausse_couche) == "inf_15" ? "" : window.save_num_naissance);
+  }
 </script>
 
 <form name="newNaissance" method="post" action="?"
@@ -81,10 +86,10 @@
         {{mb_field object=$patient field="naissance" form="newNaissance" register="true"}}
       </td>
       <th>
-        {{mb_label object=$naissance field="lieu_accouchement"}}
+        {{mb_label object=$naissance field="fausse_couche"}}
       </th>
       <td>
-        {{mb_field object=$naissance field="lieu_accouchement"}}
+        {{mb_field object=$naissance field="fausse_couche" emptyLabel="Choose" onchange="toggleNumNaissance(this)"}}
       </td>
     </tr>
     <tr>
@@ -94,12 +99,7 @@
       <td>
         {{mb_field object=$patient field="nom"}}
       </td>
-      <th>
-        {{mb_label object=$naissance field="fausse_couche"}}
-      </th>
-      <td>
-        {{mb_field object=$naissance field="fausse_couche" emptyLabel="Choose"}}
-      </td>
+      <td colspan="2"></td>
     </tr>
     
     {{if !$provisoire}}

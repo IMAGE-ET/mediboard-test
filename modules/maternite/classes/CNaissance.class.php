@@ -13,29 +13,30 @@
 
 class CNaissance extends CMbObject {
   // DB Table key
-  var $naissance_id     = null;
+  public $naissance_id;
 
   // DB References
-  var $sejour_maman_id  = null;
-  var $sejour_enfant_id = null;
-  var $operation_id     = null;
-  var $grossesse_id     = null;
+  public $sejour_maman_id;
+  public $sejour_enfant_id;
+  public $operation_id;
+  public $grossesse_id;
   
   // DB Fields
-  var $hors_etab        = null;
-  var $heure            = null;
-  var $rang             = null;
-  var $num_naissance    = null;
-  var $lieu_accouchement = null;
-  var $fausse_couche    = null;
-  var $rques            = null;
+  public $hors_etab;
+  public $heure;
+  public $rang;
+  public $num_naissance;
+
+  public $fausse_couche;
+  public $rques;
+
   // DB References
-  var $_ref_operation   = null;
-  var $_ref_grossesse   = null;
-  var $_ref_sejour_enfant = null;
-  var $_ref_sejour_maman  = null;
-  
-  var $_eai_initiateur_group_id = null;
+  public $_ref_operation;
+  public $_ref_grossesse;
+  public $_ref_sejour_enfant;
+  public $_ref_sejour_maman;
+
+  public $_eai_initiateur_group_id;
 
   /**
    * Initialize object specification
@@ -64,7 +65,6 @@ class CNaissance extends CMbObject {
     $props["heure"]             = "time";
     $props["rang"]              = "num pos";
     $props["num_naissance"]     = "num pos";
-    $props["lieu_accouchement"] = "enum list|sur_site|exte default|sur_site";
     $props["fausse_couche"]     = "enum list|inf_15|sup_15";
     $props["rques"]             = "text helped";
     return $props;
@@ -162,5 +162,18 @@ class CNaissance extends CMbObject {
    */
   function loadRefSejourMaman() {
     return $this->_ref_sejour_maman = $this->loadFwdRef("sejour_maman_id", true);
+  }
+
+  /**
+   * Birth's counter
+   *
+   * @return int
+   */
+  static function countNaissances() {
+    $where = array(
+      "fausse_couche IS NULL OR fausse_couche = 'sup_15'"
+    );
+    $naissance = new CNaissance();
+    return $naissance->countList($where);
   }
 }

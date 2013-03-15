@@ -59,6 +59,22 @@
       </td>
     </tr>
     <tr>
+      <th>
+        {{mb_label object=$grossesse field=fausse_couche}}
+      </th>
+      <td>
+        {{mb_field object=$grossesse field=fausse_couche}}
+      </td>
+    </tr>
+    <tr>
+      <th>
+        {{mb_label object=$grossesse field=rques}}
+      </th>
+      <td>
+        {{mb_field object=$grossesse field=rques form=editFormGrossesse}}
+      </td>
+    </tr>
+    <tr>
       <td colspan="2" class="button">
         {{if $grossesse->_id}}
           <button type="button" class="save" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
