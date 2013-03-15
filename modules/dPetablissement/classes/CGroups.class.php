@@ -146,7 +146,7 @@ class CGroups extends CMbObject {
 
     $props["text"]                = "str notNull confidential seekable";
     $props["raison_sociale"]      = "str maxLength|50";
-    $props["adresse"]             = "str confidential";
+    $props["adresse"]             = "text confidential";
     $props["cp"]                  = "str minLength|4 maxLength|10";
     $props["ville"]               = "str maxLength|50 confidential";
     $props["tel"]                 = "phone";
