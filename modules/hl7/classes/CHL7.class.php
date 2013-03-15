@@ -15,11 +15,18 @@
  */
 class CHL7 {
   static $versions = array ();
-  
+
+  /**
+   * Get default tag
+   *
+   * @param int $group_id Group
+   *
+   * @return null|string
+   */
   static function getDefaultTag($group_id = null) {
     // Pas de tag hl7
     if (null == $tag_hl7 = CAppUI::conf("hl7 tag_default")) {
-      return;
+      return null;
     }
 
     // Permettre des id externes en fonction de l'établissement

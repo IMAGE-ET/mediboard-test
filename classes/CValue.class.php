@@ -89,6 +89,18 @@ abstract class CValue {
     global $m;
     return self::read($_SESSION[$m], $name, $default);
   }
+
+  /**
+   * Returns the value of a variable retrieved from Session, with at least a default value
+   *
+   * @param string $name    The key of the value to get from Session
+   * @param string $default The default value in the key's value doesn't exist
+   *
+   * @return mixed The value associated to $name in the Session
+   */
+  static function sessionAbs($name, $default = null) {
+    return self::read($_SESSION, $name, $default);
+  }
   
   /**
    * Returns a value from the client's cookies, with at least a default value

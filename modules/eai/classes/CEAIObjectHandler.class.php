@@ -50,35 +50,51 @@ class CEAIObjectHandler extends CMbObjectHandler {
     if (!$action) {
       return;
     }
-    
+
+    $cn_receiver_guid = CValue::sessionAbs("cn_receiver_guid");
+
     // Parcours des receivers actifs
-    $receiver = new CInteropReceiver(); 
-    $receivers = $receiver->getObjects();
+    if (!$cn_receiver_guid) {
+      $receiver = new CInteropReceiver();
+      $receivers = $receiver->getObjects();
+    }
+    // Sinon envoi destinataire sélectionné
+    else {
+      if ($cn_receiver_guid == "none") {
+        return;
+      }
+      $receiver = CMbObject::loadFromGuid($cn_receiver_guid);
+      if (!$receiver->_id) {
+        return;
+      }
+      $receivers[$receiver->_class][] = $receiver;
+    }
+
     foreach ($receivers as $_receivers) {
       if (!$_receivers) {
         continue;
       }
-      foreach ($_receivers as $_receiver) { 
+      foreach ($_receivers as $_receiver) {
         if (!$format_object_handler_classname = $_receiver->getFormatObjectHandler($this)) {
           continue;
         }
-        
+
         $_receiver->loadConfigValues();
         $_receiver->loadRefsMessagesSupported();
         // Destinataire non actif on envoi pas
         if (!$_receiver->actif) {
           continue;
         }
-        
+
         // Affectation du receiver à l'objet
         $mbObject->_receiver = $_receiver;
-        
+
         // Récupère le handler du format
         $format_object_handler = new $format_object_handler_classname;
         // Envoi l'action au handler du format
         try {
           $format_object_handler->$action($mbObject);
-        } 
+        }
         catch (Exception $e) {
           CAppUI::setMsg($e->getMessage(), UI_MSG_ERROR);
         }

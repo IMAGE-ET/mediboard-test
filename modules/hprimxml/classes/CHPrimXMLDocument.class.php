@@ -362,7 +362,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     }
     
     $identifiant = $this->addElement($acteCCAM, "identifiant");
-    $emetteur    = $this->addElement($identifiant, "emetteur", "acte{$mbActeCCAM->_id}");
+    $this->addElement($identifiant, "emetteur", "acte{$mbActeCCAM->_id}");
     
     $this->addElement($acteCCAM, "codeActe"    , $mbActeCCAM->code_acte);
     $this->addElement($acteCCAM, "codeActivite", $mbActeCCAM->code_activite);
@@ -416,6 +416,12 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     
     if ($mbActeCCAM->code_association) {
       $this->addElement($acteCCAM, "codeAssociationNonPrevue", $mbActeCCAM->code_association);
+    }
+
+    if ($mbActeCCAM->_anesth && $mbActeCCAM->object_class == "COperation") {
+      $type_anesth = $mbActeCCAM->loadTargetObject()->_ref_type_anesth;
+
+      $this->addElement($acteCCAM, "codeExtensionDocumentaire", $type_anesth->ext_doc);
     }
     
     $montant = $this->addElement($acteCCAM, "montant");

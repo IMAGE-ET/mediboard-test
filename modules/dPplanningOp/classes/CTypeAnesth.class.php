@@ -14,45 +14,73 @@
  */
 class CTypeAnesth extends CMbObject {
   // DB Table key
-  var $type_anesth_id = null;
+  public $type_anesth_id;
 
   // DB Fields
-  var $name = null;
-  var $ext_doc = null;
-  var $actif = null;
+  public $name;
+  public $ext_doc;
+  public $actif;
   
   // References
-  var $_count_operations = null;
-  
+  public $_count_operations;
+
+  /**
+   * Initialize object specification
+   *
+   * @return CMbObjectSpec the spec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'type_anesth';
     $spec->key   = 'type_anesth_id';
+
     return $spec;
   }
-  
+
+  /**
+   * Get properties specifications as strings
+   *
+   * @see parent::getProps()
+   * @return array
+   */
+  function getProps() {
+    $props = parent::getProps();
+    $props["name"]    = "str notNull";
+    $props["ext_doc"] = "enum list|1|2|3|4|5|6";
+    $props["actif"]   = "bool notNull default|1" ;
+
+    return $props;
+  }
+
+  /**
+   * Get backward reference specifications
+   *
+   * @return array Array of form "collection-name" => "class join-field"
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["operations"] = "COperation type_anesth";
     $backProps["protocole"]  = "CProtocole type_anesth";
+
     return $backProps;
   }
-  
+
+  /**
+   * Update the form (derived) fields plain fields
+   *
+   * @return void
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->name;
   }
-  
+
+  /**
+   * Count operations
+   *
+   * @return int
+   */
   function countOperations() {
-    $this->_count_operations = $this->countBackRefs("operations");
-  }
-  
-  function getProps() {
-    $specs = parent::getProps();
-    $specs["name"]    = "str notNull";
-    $specs["ext_doc"] = "enum list|1|2|3|4|5|6"; 
-    $specs["actif"]   = "bool notNull default|1" ;
-    return $specs;
+    return $this->_count_operations = $this->countBackRefs("operations");
   }
 }
-?>

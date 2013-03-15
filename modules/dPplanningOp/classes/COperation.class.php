@@ -194,6 +194,9 @@ class COperation extends CCodable implements IPatientRelated {
    * @var CMediusers
    */
   var $_ref_anesth          = null;
+  /**
+   * @var CTypeAnesth
+   */
   var $_ref_type_anesth     = null;
   var $_ref_consult_anesth  = null;
   var $_ref_anesth_visite   = null;

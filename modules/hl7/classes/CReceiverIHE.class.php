@@ -109,6 +109,8 @@ class CReceiverIHE extends CInteropReceiver {
         return $_version;
       }
     }
+
+    return null;
   }
 
   /**
@@ -149,7 +151,7 @@ class CReceiverIHE extends CInteropReceiver {
    * @param CHL7Event $evenement Event type
    * @param CMbObject $mbObject  Object
    *
-   * @return null
+   * @return null|string
    *
    * @throws CMbException
    */
@@ -163,14 +165,14 @@ class CReceiverIHE extends CInteropReceiver {
     CHL7v2Message::resetBuildMode();
 
     if (!$msg = $evenement->flatten()) {
-      return;
+      return null;
     }
 
     $evt    = $this->getEventMessage($evenement->profil);
     $source = CExchangeSource::get("$this->_guid-$evt");
 
     if (!$source->_id || !$source->active) {
-      return;
+      return null;
     }
     
     $exchange = $evenement->_exchange_ihe;
@@ -178,7 +180,7 @@ class CReceiverIHE extends CInteropReceiver {
     if ($this->_configs["encoding"] == "UTF-8") {
       $msg = utf8_encode($msg); 
     }
-    
+
     $source->setData($msg, null, $exchange);
     try {
       $source->send();
@@ -193,7 +195,7 @@ class CReceiverIHE extends CInteropReceiver {
 
     if (!$ack_data) {
       $exchange->store();
-      return;
+      return null;
     }
     
     $data_format = CIHE::getEvent($exchange);
