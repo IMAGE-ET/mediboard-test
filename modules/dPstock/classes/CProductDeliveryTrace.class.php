@@ -191,6 +191,7 @@ class CProductDeliveryTrace extends CMbObject {
 
       // Mise a jour de la quantité du stock en quantité d'administration
       $ratio = CBcbProduit::get($this->_code_cip)->_ratio_cis_cip;
+
       $quantity = $this->quantity / $ratio;
 
       // Mise à jour du stock
@@ -201,7 +202,7 @@ class CProductDeliveryTrace extends CMbObject {
 
       // Création du stock séjour
       else {
-        $quantite = $this->quantity;
+        $quantite = $quantity;
       }
 
       $stock_sejour->quantite = round($quantite, 4);
