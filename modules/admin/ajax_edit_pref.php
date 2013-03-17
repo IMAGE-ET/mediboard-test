@@ -1,9 +1,9 @@
-<?php /* $Id: ajax_edit_token.php 16523 2012-09-05 09:04:59Z phenxdesign $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage admin
- * @version $Revision: 16523 $
+ * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */

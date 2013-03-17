@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage dPressource
+* @subpackage dPressources
 * @version $Revision$
 * @author Romain Ollivier
 */

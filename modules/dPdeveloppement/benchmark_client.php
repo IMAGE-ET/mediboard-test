@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage dPinterop
+* @subpackage Developpement
 * @version $Revision: 16260 $
 * @author Romain Ollivier
 */

@@ -54,6 +54,7 @@ class CAppUI {
 
   // @todo Remove many calls in templates
   // @todo Handle the CMediusers::get() and CUser::get() cases
+  /** @var CMediusers */
   public $_ref_user;
 
   // END DEPRECATED

@@ -1,12 +1,12 @@
 <?php 
 /**
- * $Id: CHPRSpec.class.php 16236 2012-07-26 08:24:14Z phenxdesign $
+ * $Id$
  * 
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision: 16236 $
+ * @version    $Revision$
  */
 
 class CHPRSpec extends CTextSpec { 

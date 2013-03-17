@@ -1,9 +1,9 @@
-<?php /* $Id: CPlageconsult.class.php 17537 2012-12-16 21:17:11Z mytto $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPcabinet
-* @version $Revision: 17537 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 

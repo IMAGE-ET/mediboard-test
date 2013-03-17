@@ -1,25 +1,24 @@
-<?php /* $Id:  $ */
-
+<?php
 /**
- * @package Mediboard
- * @subpackage soins
- * @version $Revision:  $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * $Id$
+ *
+ * @package    Mediboard
+ * @subpackage Soins
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
 class CIndiceCout extends CMbObject {
-  
-  // DB Table key
-  var $indice_cout_id  = null;
+  public $indice_cout_id;
   
   // DB Fields
-  var $nb       = null;
-  var $ressource_soin_id = null;
-  var $element_prescription_id = null;
+  public $nb;
+  public $ressource_soin_id;
+  public $element_prescription_id;
   
-  // Ref Fields
-  var $_ref_ressource_soin = null;
+  /** @var CRessourceSoin */
+  public $_ref_ressource_soin;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -29,16 +28,17 @@ class CIndiceCout extends CMbObject {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    $specs["nb"]                      = "num notNull";
-    $specs["ressource_soin_id"]       = "ref class|CRessourceSoin notNull";
-    $specs["element_prescription_id"] = "ref class|CElementPrescription notNull";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["nb"]                      = "num notNull";
+    $props["ressource_soin_id"]       = "ref class|CRessourceSoin notNull";
+    $props["element_prescription_id"] = "ref class|CElementPrescription notNull";
+    return $props;
   }
-  
+
+  /**
+   * @return CRessourceSoin
+   */
   function loadRefRessourceSoin() {
     return $this->_ref_ressource_soin = $this->loadFwdRef("ressource_soin_id", true);
   }
 }
-?>

@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage dPinterop
+* @subpackage Labo
 * @version $Revision$
 * @author Thomas Despoix
 */

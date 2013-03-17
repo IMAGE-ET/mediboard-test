@@ -1,9 +1,9 @@
-<?php /* $Id: configure.php 6515 2009-06-30 09:58:59Z phenxdesign $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage admin
- * @version $Revision: 6515 $
+ * @version $Revision$
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */

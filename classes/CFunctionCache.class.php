@@ -1,12 +1,12 @@
 <?php 
 /**
- * $Id: CValue.class.php 16213 2012-07-24 14:16:26Z phenxdesign $
+ * $Id$
  * 
  * @package    Mediboard
  * @subpackage classes
  * @author     SARL OpenXtrem <dev@openxtrem.com>
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
- * @version    $Revision: 16213 $
+ * @version    $Revision$
  */
 
 /**
