@@ -32,6 +32,7 @@ function changePratPec(prat_id) {
 <!-- Formulaire de changement de praticien pour la pec -->
 <form name="editPratPec" method="post" action="?">
   <input type="hidden" name="m" value="dPcabinet" />
+  <input type="hidden" name="current_m" value="{{$current_m}}" />
   <input type="hidden" name="dosql" value="do_change_prat_pec" />
   {{mb_key object=$consult}}
   <input type="hidden" name="prat_id" value="" />
