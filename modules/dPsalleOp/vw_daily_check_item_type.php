@@ -10,16 +10,18 @@
 
 CCanDo::checkAdmin();
 
-$item_type_id = CValue::getOrSession('item_type_id');
+$item_type_id     = CValue::get('item_type_id');
+$item_category_id = CValue::get('item_category_id');
 
 $group_id = CGroups::loadCurrent()->_id;
 
 $item_type = new CDailyCheckItemType();
-if (!$item_type->load($item_type_id)) {
-  $item_type->index = 1;
+if ($item_type->load($item_type_id)) {
+  $item_type->loadRefsNotes();
 }
 else {
-  $item_type->loadRefsNotes();
+  $item_type->index = 1;
+  $item_type->category_id = $item_category_id;
 }
 
 $item_category = new CDailyCheckItemCategory();

@@ -68,14 +68,14 @@ confirmCheckList = function(form) {
     });
 }
 
-refreshCheckList{{$check_list->type}} = function(id){
-  var form = getForm("edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}");
+refreshCheckList{{$check_list->type}}_{{$check_list->list_type_id}} = function(id){
+  var form = getForm("edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}-{{$check_list->list_type_id}}");
 
   if ($V(form.validator_id) && $V(form._validator_password) && !$("systemMsg").select(".warning, .error").length) {
     $("{{$check_list->type}}-title").down("img").src = "images/icons/tick.png";
     var url = new Url("dPsalleOp", "httpreq_vw_check_list");
     url.addParam("check_list_id", id);
-    url.requestUpdate("{{$check_list->type}}");
+    url.requestUpdate("check_list_{{$check_list->type}}_{{$check_list->list_type_id}}");
   }
   else {
     if (!$V(form.daily_check_list_id)) {
@@ -84,8 +84,8 @@ refreshCheckList{{$check_list->type}} = function(id){
   }
 }
 
-saveCheckListIdCallback{{$check_list->type}} = function(id) {
-  var form = getForm("edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}");
+saveCheckListIdCallback{{$check_list->type}}_{{$check_list->list_type_id}} = function(id) {
+  var form = getForm("edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}-{{$check_list->list_type_id}}");
 
   if (!$V(form.daily_check_list_id)) {
     $V(form.daily_check_list_id, id);
@@ -105,24 +105,25 @@ submitCheckList = function(form, quicksave) {
 }
 
 Main.add(function(){
-  prepareForm('edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}');
+  prepareForm('edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}-{{$check_list->list_type_id}}');
 });
 </script>
 
-<form name="edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}" method="post" action="?" onsubmit="return submitCheckList(this, false)">
+<form name="edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}-{{$check_list->list_type_id}}" method="post" action="?" onsubmit="return submitCheckList(this, false)">
   <input type="hidden" name="dosql" value="do_daily_check_list_aed" />
-  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="m" value="salleOp" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="daily_check_list_id" value="{{$check_list->_id}}" />
   <input type="hidden" name="object_class" value="{{$check_list->object_class}}" />
   <input type="hidden" name="object_id" value="{{$check_list->object_id}}" />
   <input type="hidden" name="type" value="{{$check_list->type}}" />
+  <input type="hidden" name="list_type_id" value="{{$check_list->list_type_id}}" />
   <input type="hidden" name="date" value="{{$check_list->date|ternary:$check_list->date:"now"}}" />
 
   {{if in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}
-    <input type="hidden" name="callback" value="refreshCheckList{{$check_list->type}}" />
+    <input type="hidden" name="callback" value="refreshCheckList{{$check_list->type}}_{{$check_list->list_type_id}}" />
   {{else}}
-    <input type="hidden" name="callback" value="saveCheckListIdCallback{{$check_list->type}}" />
+    <input type="hidden" name="callback" value="saveCheckListIdCallback{{$check_list->type}}_{{$check_list->list_type_id}}" />
   {{/if}}
 
   {{if !in_array($check_list->object_class, 'CDailyCheckList'|static:_HAS_classes)}}

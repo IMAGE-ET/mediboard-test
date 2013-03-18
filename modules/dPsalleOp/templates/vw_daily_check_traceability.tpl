@@ -4,7 +4,7 @@
   <tr>
     <td>
       <form name="filter-check-lists" action="?" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="m" value="salleOp" />
         <input type="hidden" name="tab" value="{{$tab}}" />
         <table class="form">
           <tr>
@@ -42,6 +42,7 @@
           <th>{{mb_title class=CDailyCheckList field=object_id}}</th>
           <th>{{mb_title class=CDailyCheckList field=type}}</th>
           <th>{{mb_title class=CDailyCheckList field=comments}}</th>
+          <th>{{mb_title class=CDailyCheckList field=list_type_id}}</th>
           <th>{{mb_title class=CDailyCheckList field=validator_id}}</th>
         </tr>
         {{foreach from=$list_check_lists item=curr_list}}
@@ -59,6 +60,7 @@
           </td>
           <td>{{mb_value object=$curr_list field=type}}</td>
           <td>{{mb_value object=$curr_list field=comments}}</td>
+          <td>{{mb_value object=$curr_list field=list_type_id}}</td>
           <td>{{mb_value object=$curr_list field=validator_id}}</td>
         </tr>
         {{foreachelse}}
@@ -87,10 +89,17 @@
             </span>
           </td>
         </tr>
-        <tr>
-          <th>{{mb_label object=$check_list field=type}}</th>
-          <td>{{mb_value object=$check_list field=type}}</td>
-        </tr>
+        {{if $check_list->list_type_id}}
+          <tr>
+            <th>{{mb_label object=$check_list field=list_type_id}}</th>
+            <td>{{mb_value object=$check_list field=list_type_id tooltip=true}}</td>
+          </tr>
+        {{else}}
+          <tr>
+            <th>{{mb_label object=$check_list field=type}}</th>
+            <td>{{mb_value object=$check_list field=type}}</td>
+          </tr>
+        {{/if}}
         <tr>
           <th>{{mb_label object=$check_list field=validator_id}}</th>
           <td>{{mb_value object=$check_list field=validator_id}}</td>

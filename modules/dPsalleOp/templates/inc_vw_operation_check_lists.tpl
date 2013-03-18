@@ -142,7 +142,7 @@ Main.add(function(){
   <tbody id="check-lists" style="display: none;">
     <tr class="normal" style="display: none;">
       <td style="padding:1px;">
-        <div id="preanesth">
+        <div id="check_list_preanesth_">
         {{assign var=check_list value=$operation_check_lists.preanesth}}
         {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preanesth
@@ -150,7 +150,7 @@ Main.add(function(){
         </div>
       </td>
       <td style="padding:1px;">
-        <div id="preop">
+        <div id="check_list_preop_">
         {{assign var=check_list value=$operation_check_lists.preop}}
         {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preop
@@ -158,7 +158,7 @@ Main.add(function(){
         </div>
       </td>
       <td style="padding:1px;">
-        <div id="postop">
+        <div id="check_list_postop_">
         {{assign var=check_list value=$operation_check_lists.postop}}
         {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.postop
@@ -169,7 +169,7 @@ Main.add(function(){
     
     <tr class="endoscopie" style="display: none;">
       <td style="padding:0;" colspan="2">
-        <div id="preendoscopie">
+        <div id="check_list_preendoscopie_">
         {{assign var=check_list value=$operation_check_lists.preendoscopie}}
         {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preendoscopie
@@ -177,7 +177,7 @@ Main.add(function(){
         </div>
       </td>
       <td style="padding:0;">
-        <div id="postendoscopie">
+        <div id="check_list_postendoscopie_">
         {{assign var=check_list value=$operation_check_lists.postendoscopie}}
         {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.postendoscopie
@@ -188,7 +188,7 @@ Main.add(function(){
     
     <tr class="endoscopie-bronchique" style="display: none;">
       <td style="padding:0;" colspan="2">
-        <div id="preendoscopie_bronchique">
+        <div id="check_list_preendoscopie_bronchique_">
         {{assign var=check_list value=$operation_check_lists.preendoscopie_bronchique}}
         {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preendoscopie_bronchique
@@ -196,7 +196,7 @@ Main.add(function(){
         </div>
       </td>
       <td style="padding:0;">
-        <div id="postendoscopie_bronchique">
+        <div id="check_list_postendoscopie_bronchique_">
         {{assign var=check_list value=$operation_check_lists.postendoscopie_bronchique}}
         {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.postendoscopie_bronchique
@@ -207,7 +207,7 @@ Main.add(function(){
     
     <tr class="radio" style="display: none;">
       <td style="padding:1px;">
-        <div id="preanesth_radio">
+        <div id="check_list_preanesth_radio_">
         {{assign var=check_list value=$operation_check_lists.preanesth_radio}}
         {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preanesth_radio
@@ -215,7 +215,7 @@ Main.add(function(){
         </div>
       </td>
       <td style="padding:1px;">
-        <div id="preop_radio">
+        <div id="check_list_preop_radio_">
         {{assign var=check_list value=$operation_check_lists.preop_radio}}
         {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.preop_radio
@@ -223,7 +223,7 @@ Main.add(function(){
         </div>
       </td>
       <td style="padding:1px;">
-        <div id="postop_radio">
+        <div id="check_list_postop_radio_">
         {{assign var=check_list value=$operation_check_lists.postop_radio}}
         {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$operation_check_item_categories.postop_radio

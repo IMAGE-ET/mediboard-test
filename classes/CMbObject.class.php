@@ -22,14 +22,27 @@ class CMbObject extends CStoredObject {
   public $_nb_docs;
   public $_nb_exchanges;
   public $_nb_exchanges_by_format = array();
-    
+
+  /** @var CIdSante400 */
   public $_ref_last_id400;
-  public $_ref_notes; // Notes
-  public $_ref_documents      = array(); // Documents
-  public $_ref_files          = array(); // Fichiers
-  public $_ref_named_files    = array(); // Fichiers par nom
-  public $_ref_tag_items      = array(); // Object tag items
-  public $_ref_object_configs;   // Object configs
+
+  /** @var CNote[] */
+  public $_ref_notes;
+
+  /** @var CCompteRendu[] */
+  public $_ref_documents      = array();
+
+  /** @var CFile[] */
+  public $_ref_files          = array();
+
+  /** @var CFile[] */
+  public $_ref_named_files    = array();
+
+  /** @var CTagItem[] */
+  public $_ref_tag_items      = array();
+
+  /** @var CMbObjectConfig */
+  public $_ref_object_configs;
   
   public $_ref_affectations_personnel;
   public $_count_affectations_personnel;
@@ -49,8 +62,7 @@ class CMbObject extends CStoredObject {
     if ($this->_id) {
       $this->_ref_notes = $this->loadBackRefs("notes");
       self::filterByPerm($this->_ref_notes, $perm);
-      
-      
+
       // Find present levels
       foreach ($this->_ref_notes as $_note) {
         $notes_levels[$_note->degre] = true;

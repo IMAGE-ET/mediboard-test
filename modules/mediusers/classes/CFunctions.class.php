@@ -87,7 +87,7 @@ class CFunctions extends CMbObject {
     $backProps["affectations"]                   = "CAffectation function_id";
     $backProps["caisses_maladies"]               = "CCaisseMaladie function_id";
     $backProps["regle_sectorisation_function"]   = "CRegleSectorisation function_id";
-
+    $backProps["product_address_orders"]         = "CProductOrder address_id";
     return $backProps;
   }
 

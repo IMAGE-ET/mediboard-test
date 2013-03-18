@@ -20,10 +20,7 @@
   {{mb_script module="dPImeds" script="Imeds_results_watcher"}}
 {{/if}}
 
-{{if $conf.dPsalleOp.CDailyCheckList.active_salle_reveil != '1' || 
-     $date < $smarty.now|date_format:'%Y-%m-%d' || 
-     $check_list->_id && $check_list->validator_id}}
-     
+{{if !$require_check_list}}
 <script type="text/javascript">
 
 Main.add(function () {
@@ -102,44 +99,55 @@ printDossier = function(sejour_id, operation_id) {
 
 </script>
 
-     
-  <ul id="reveil_tabs" class="control_tabs">
-    <li onmousedown="refreshTabReveil('preop')">
-      <a class="empty" href="#preop">{{tr}}SSPI.Preop{{/tr}} <small>(&ndash;)</small></a>
-    </li>
-    <li onmousedown="refreshTabReveil('encours')">
-      <a class="empty" href="#encours">{{tr}}SSPI.Encours{{/tr}} <small>(&ndash;)</small></a>
-    </li>
-    <li onmousedown="refreshTabReveil('ops')">
-      <a class="empty" href="#ops"    >{{tr}}SSPI.Attente{{/tr}} <small>(&ndash;)</small></a>
-    </li>
-    <li onmousedown="refreshTabReveil('reveil')">
-      <a class="empty" href="#reveil" >{{tr}}SSPI.Reveil{{/tr}}  <small>(&ndash;)</small></a>
-    </li>
-    <li onmousedown="refreshTabReveil('out')">
-      <a class="empty" href="#out"    >{{tr}}SSPI.Sortie{{/tr}}  <small>(&ndash;)</small></a>
-    </li>
-    
-    <li style="float:right; font-weight: bold;">
-      {{mb_include template=inc_filter_reveil}}
-    </li>
-  </ul>
-    
-  <hr class="control_tabs" />
-  
-  <div id="preop"   style="display:none"></div>
-  <div id="encours" style="display:none"></div>
-  <div id="ops"     style="display:none"></div>
-  <div id="reveil"  style="display:none"></div>
-  <div id="out"     style="display:none"></div>
+<ul id="reveil_tabs" class="control_tabs">
+  <li onmousedown="refreshTabReveil('preop')">
+    <a class="empty" href="#preop">{{tr}}SSPI.Preop{{/tr}} <small>(&ndash;)</small></a>
+  </li>
+  <li onmousedown="refreshTabReveil('encours')">
+    <a class="empty" href="#encours">{{tr}}SSPI.Encours{{/tr}} <small>(&ndash;)</small></a>
+  </li>
+  <li onmousedown="refreshTabReveil('ops')">
+    <a class="empty" href="#ops"    >{{tr}}SSPI.Attente{{/tr}} <small>(&ndash;)</small></a>
+  </li>
+  <li onmousedown="refreshTabReveil('reveil')">
+    <a class="empty" href="#reveil" >{{tr}}SSPI.Reveil{{/tr}}  <small>(&ndash;)</small></a>
+  </li>
+  <li onmousedown="refreshTabReveil('out')">
+    <a class="empty" href="#out"    >{{tr}}SSPI.Sortie{{/tr}}  <small>(&ndash;)</small></a>
+  </li>
+
+  <li style="float:right; font-weight: bold;">
+    {{mb_include template=inc_filter_reveil}}
+  </li>
+</ul>
+
+<hr class="control_tabs" />
+
+<div id="preop"   style="display:none"></div>
+<div id="encours" style="display:none"></div>
+<div id="ops"     style="display:none"></div>
+<div id="reveil"  style="display:none"></div>
+<div id="out"     style="display:none"></div>
 
 {{else}}
+<div style="text-align: center">
+  {{mb_include module=dPsalleOp template=inc_filter_reveil}}
+</div>
 
-  <div style="text-align: center">
-    {{mb_include module=dPsalleOp template=inc_filter_reveil}}
-  </div>
-    
-  {{mb_include module=dPsalleOp template=inc_edit_check_list personnel=$personnels}}
+<table class="main layout">
+  <tr>
+    {{foreach from=$daily_check_lists item=check_list}}
+      <td>
+        <h2>{{$check_list->_ref_list_type->title}}</h2>
+
+        {{mb_include module=salleOp template=inc_edit_check_list
+          check_list=$check_list
+          check_item_categories=$check_list->_ref_list_type->_ref_categories
+          personnel=$personnels}}
+      </td>
+    {{/foreach}}
+  </tr>
+</table>
 {{/if}}
 
 <div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto; display: none;"></div> 

@@ -37,7 +37,7 @@ printCheckList = function(id){
   
   <tr class="{{$type_group}}">
     {{foreach from=$check_item_categories item=_cat key=_key}}
-    <td class="button" id="{{$_key}}-title">
+    <td class="button" id="check_list_{{$_key}}_{{$_cat->list_type_id}}-title">
       <h3 style="margin: 2px;">
         <img src="images/icons/{{$check_lists.$_key->_readonly|ternary:"tick":"cross"}}.png" />
         {{tr}}CDailyCheckItemCategory.type.{{$_key}}{{/tr}}
@@ -49,7 +49,7 @@ printCheckList = function(id){
   <tr class="{{$type_group}}">
     {{foreach from=$check_item_categories item=_cat key=_key}}
       <td style="padding:0;">
-        <div id="{{$_key}}">
+        <div id="check_list_{{$_key}}_{{$_cat->list_type_id}}">
         {{assign var=check_list value=$check_lists.$_key}}
         {{mb_include module=salleOp template=inc_edit_check_list 
              check_item_categories=$_cat

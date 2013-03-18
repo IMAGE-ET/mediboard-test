@@ -55,6 +55,7 @@ class CPoseDispositifVasculaire extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["check_lists"] = "CDailyCheckList object_id";
+    $backProps["check_list_categories"] = "CDailyCheckItemCategory target_id";
     return $backProps;
   }
 

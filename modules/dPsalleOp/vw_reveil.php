@@ -29,20 +29,50 @@ if (CModule::getActive("dPpersonnel")) {
 }
 
 // Vérification de la check list journalière
-$check_list = CDailyCheckList::getList($bloc, $date);
-$check_list->loadItemTypes();
-$check_list->loadBackRefs('items');
+$daily_check_lists = array();
+$daily_check_list_types = array();
+$require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active_salle_reveil") && $date >= CMbDT::date();
 
-$where = array('target_class' => "= 'CBlocOperatoire'");
-$check_item_category = new CDailyCheckItemCategory();
-$check_item_categories = $check_item_category->loadList($where);
+if ($require_check_list) {
+  $daily_check_list_type = new CDailyCheckListType();
+  $where = array(
+    "object_class" => "= 'CBlocOperatoire'",
+    "object_id IS NULL OR object_id = '$bloc->_id'",
+  );
+  /** @var CDailyCheckListType[] $daily_check_list_types  */
+  $daily_check_list_types = $daily_check_list_type->loadList($where, "title");
+
+  /** @var CDailyCheckList[] $daily_check_lists  */
+  $daily_check_lists = array();
+
+  $check_list_not_validated = 0;
+  foreach ($daily_check_list_types as $_list_type) {
+    $_list_type->loadRefsCategories();
+    $daily_check_list = CDailyCheckList::getList($bloc, $date, null, $_list_type->_id);
+    $daily_check_list->loadItemTypes();
+    $daily_check_list->loadBackRefs('items');
+
+    if (!$daily_check_list->_id || !$daily_check_list->validator_id) {
+      $check_list_not_validated++;
+    }
+
+    $daily_check_lists[] = $daily_check_list;
+  }
+
+  if ($check_list_not_validated == 0) {
+    $require_check_list = false;
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
+// Daily check lists
+$smarty->assign("require_check_list"    , $require_check_list);
+$smarty->assign("daily_check_lists"     , $daily_check_lists);
+$smarty->assign("daily_check_list_types", $daily_check_list_types);
+
 $smarty->assign("personnels"           , $personnels);
-$smarty->assign("check_list"           , $check_list);
-$smarty->assign("check_item_categories", $check_item_categories);
 $smarty->assign("date"                 , $date);
 $smarty->assign("hour"                 , $hour);
 $smarty->assign("modif_operation"      , $modif_operation);

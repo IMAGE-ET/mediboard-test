@@ -14,15 +14,23 @@ class CDailyCheckItemCategory extends CMbObject {
   // DB Fields
   public $title;
   public $desc;
+
+  ////////
   public $target_class;
   public $target_id;
   public $type;
+  // OR //
+  public $list_type_id;
+  ////////
 
   /** @var CDailyCheckItemType[] */
   public $_ref_item_types;
 
   /** @var CSalle|CBlocOperatoire|COperation|CPoseDispositifVasculaire */
   public $_ref_target;
+
+  /** @var CDailyCheckListType */
+  public $_ref_list_type;
 
   public $_target_guid;
 
@@ -36,10 +44,13 @@ class CDailyCheckItemCategory extends CMbObject {
   function getProps() {
     $props = parent::getProps();
     $props['title'] = 'str notNull';
+    $props['desc']  = 'text';
+
     $props['target_class'] = 'enum list|CSalle|CBlocOperatoire|COperation|CPoseDispositifVasculaire notNull default|CSalle';
     $props['target_id']    = 'ref class|CMbObject meta|target_class';
-    $props['type']  = 'enum list|'.implode('|', array_keys(CDailyCheckList::$types));
-    $props['desc']  = 'text';
+    $props['type']         = 'enum list|'.implode('|', array_keys(CDailyCheckList::$types));
+    $props['list_type_id'] = 'ref class|CDailyCheckListType autocomplete|_view';
+
     $props['_target_guid'] = 'str notNull';
     return $props;
   }
@@ -57,6 +68,20 @@ class CDailyCheckItemCategory extends CMbObject {
     return $this->_ref_target = $this->loadFwdRef("target_id");
   }
 
+  /**
+   * @return CDailyCheckListType
+   */
+  function loadRefListType(){
+    return $this->_ref_list_type = $this->loadFwdRef("list_type_id");
+  }
+
+  /**
+   * @return CDailyCheckItemType[]
+   */
+  function loadRefItemTypes() {
+    return $this->_ref_item_types = $this->loadBackRefs("item_types", "`index`, title");
+  }
+
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -67,43 +92,6 @@ class CDailyCheckItemCategory extends CMbObject {
    * @return array
    */
   static function getCategoriesTree(){
-    $item_category = new self();
-
-    $target_classes = array_keys($item_category->_specs["target_class"]->_locales);
-    foreach (CDailyCheckList::$_HAS_classes as $_class) {
-      unset($target_classes[$_class]);
-    }
-
-    $targets = array();
-    $item_categories_by_class = array();
-
-    foreach ($target_classes as $_class) {
-      /** @var CMbObject $_object */
-      $_object = new $_class;
-      $_targets = $_object->loadGroupList();
-      array_unshift($_targets, $_object);
-
-      $targets[$_class] = array_combine(CMbArray::pluck($_targets, "_id"), $_targets);
-
-      $where = array(
-        "target_class" => "= '$_class'",
-      );
-
-      /** @var CDailyCheckItemCategory[] $_list */
-      $_list = $item_category->loadList($where, 'target_id+0, type, title'); // target_id+0 to have NULL at the beginning
-
-      $item_categories_by_object = array();
-      foreach ($_list as $_category) {
-        $_key = $_category->target_id ? $_category->target_id : "all";
-        $item_categories_by_object[$_key][$_category->_id] = $_category;
-      }
-
-      $item_categories_by_class[$_class] = $item_categories_by_object;
-    }
-
-    return array(
-      $targets,
-      $item_categories_by_class,
-    );
+    return CDailyCheckListType::getObjectsTree("CDailyCheckItemCategory", "target_class", "target_id");
   }
 }

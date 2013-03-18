@@ -1,0 +1,55 @@
+/**
+ * $Id$
+ *
+ * @category SalleOp
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  $Revision$
+ * @link     http://www.mediboard.org
+ */
+
+CheckList = {
+  /**
+   * {Url}
+   */
+  urlCategory: null,
+
+  /**
+   * {Url}
+   */
+  urlItemType: null,
+
+  updateObject: function(select) {
+    var form = select.form;
+    var parts = $V(select).split(/-/);
+    $V(form.object_class, parts[0]);
+    $V(form.object_id,   (parts[1] === "none" ? "" : parts[1]));
+  },
+
+  editItemCategory: function(list_type_id, cat_id) {
+    var url = new Url('dPsalleOp', 'vw_daily_check_item_category');
+    url.addParam("list_type_id", list_type_id);
+    url.addParam("item_category_id", cat_id);
+    url.requestModal(800, 700);
+
+    url.modalObject.observe("afterClose", function(){
+      location.reload();
+    });
+
+    CheckList.urlCategory = url;
+  },
+
+  editItemType: function(category_id, item_type_id) {
+    var url = new Url('dPsalleOp', 'vw_daily_check_item_type');
+    url.addParam("item_category_id", category_id);
+    url.addParam("item_type_id", item_type_id);
+    url.requestModal(600, 400);
+
+    url.modalObject.observe("afterClose", function(){
+      CheckList.urlCategory.refreshModal();
+    });
+
+    CheckList.urlItemType = url;
+  }
+};

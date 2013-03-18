@@ -18,6 +18,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
   public $type;
   public $comments;
   public $validator_id;
+  public $list_type_id;
 
   /** @var CMediusers */
   public $_ref_validator;
@@ -27,6 +28,10 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
 
   /** @var CDailyCheckItemType[] */
   public $_ref_item_types;
+
+  /** @var CDailyCheckListType */
+  public $_ref_list_type;
+
   public $_items;
   public $_validator_password;
   public $_readonly;
@@ -70,6 +75,23 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     "radio"                 => "En radiologie interv. (v. 2011-01)",
   );
 
+  /**
+   * Get non-HAS classes
+   *
+   * @return array
+   */
+  static function getNonHASClasses(){
+    static $check_list = null;
+    if ($check_list === null) {
+      $check_list = new self;
+    }
+
+    $target_classes = array_keys($check_list->_specs["object_class"]->_locales);
+    $target_classes = array_diff($target_classes, CDailyCheckList::$_HAS_classes);
+
+    return $target_classes;
+  }
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'daily_check_list';
@@ -82,6 +104,7 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $props['date']         = 'date notNull';
     $props['object_class'] = 'enum list|CSalle|CBlocOperatoire|COperation|CPoseDispositifVasculaire notNull default|CSalle';
     $props['object_id']    = 'ref class|CMbObject meta|object_class notNull autocomplete';
+    $props['list_type_id'] = 'ref class|CDailyCheckListType';
     $props['type']         = 'enum list|'.implode('|', array_keys(CDailyCheckList::$types));
     $props['validator_id'] = 'ref class|CMediusers';
     $props['comments']     = 'text';
@@ -170,21 +193,30 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
 
   /**
    * @param CMbObject $object
-   * @param null      $date
-   * @param null      $type
+   * @param string    $date
+   * @param string    $type
    *
    * @return self
    */
-  static function getList(CMbObject $object, $date = null, $type = null){
+  static function getList(CMbObject $object, $date = null, $type = null, $list_type_id = null){
     $list = new self;
     $list->object_class = $object->_class;
     $list->object_id = $object->_id;
+    $list->list_type_id = $list_type_id;
     $list->date = $date;
     $list->type = $type;
     $list->loadRefsFwd();
     $list->loadMatchingObject();
+    $list->loadRefListType()->loadRefsCategories();
     $list->isReadonly();
     return $list;
+  }
+
+  /**
+   * @return CDailyCheckListType
+   */
+  function loadRefListType(){
+    return $this->_ref_list_type = $this->loadFwdRef("list_type_id");
   }
 
   static function getRooms() {
@@ -215,8 +247,6 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
 
     $where = array(
       "active" => "= '1'",
-      "daily_check_item_category.target_class" => $ds->prepare("= %", $this->object_class),
-      $ds->prepare("daily_check_item_category.target_id IS NULL OR daily_check_item_category.target_id = %", $this->object_id),
     );
     if ($this->type) {
       $where['daily_check_item_category.type'] = $ds->prepare("= %", $this->type);
@@ -224,6 +254,14 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     $ljoin = array(
       'daily_check_item_category' => 'daily_check_item_category.daily_check_item_category_id = daily_check_item_type.category_id'
     );
+
+    if ($this->list_type_id) {
+      $where["daily_check_item_category.list_type_id"] = $ds->prepare("= %", $this->list_type_id);
+    }
+    else {
+      $where["daily_check_item_category.target_class"] = $ds->prepare("= %", $this->object_class);
+      $where[] = $ds->prepare("daily_check_item_category.target_id IS NULL OR daily_check_item_category.target_id = %", $this->object_id);
+    }
 
     $orderby = 'daily_check_item_category.title, ';
 

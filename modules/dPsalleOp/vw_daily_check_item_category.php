@@ -11,14 +11,19 @@
 CCanDo::checkAdmin();
 
 $item_category_id = CValue::getOrSession('item_category_id');
-$target_class     = CValue::get('target_class');
+$list_type_id     = CValue::get('list_type_id');
+
+$list_type = new CDailyCheckListType();
+$list_type->load($list_type_id);
 
 $item_category = new CDailyCheckItemCategory();
 if ($item_category->load($item_category_id)) {
   $item_category->loadRefsNotes();
+  $item_category->loadRefItemTypes();
 }
 else {
-  $item_category->target_class = $target_class;
+  $item_category->list_type_id = $list_type_id;
+  $item_category->target_class = $list_type->object_class;
 }
 
 foreach (CDailyCheckList::$_HAS_classes as $_class) {
@@ -30,6 +35,5 @@ list($targets, $item_categories_by_class) = CDailyCheckItemCategory::getCategori
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("item_category", $item_category);
-$smarty->assign("item_categories_by_class", $item_categories_by_class);
 $smarty->assign("targets", $targets);
 $smarty->display("vw_daily_check_item_category.tpl");

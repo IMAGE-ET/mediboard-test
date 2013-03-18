@@ -30,17 +30,26 @@ Main.add(function () {
     <td style="width: 220px;" id="listplages"></td>
     <td>
     {{if $selOp->_id}}
-      {{if $conf.dPsalleOp.CDailyCheckList.active != '1' || 
-           $date < $smarty.now|date_format:'%Y-%m-%d' || 
-           $daily_check_list->_id && $daily_check_list->validator_id || 
-           $currUser->_is_praticien}}
-        {{mb_include module=salleOp template=inc_operation}}
+
+      {{if $require_check_list}}
+        <table class="main layout">
+          <tr>
+            {{foreach from=$daily_check_lists item=check_list}}
+              <td>
+                <h2>{{$check_list->_ref_list_type->title}}</h2>
+
+                {{mb_include module=salleOp template=inc_edit_check_list
+                    check_list=$check_list
+                    check_item_categories=$check_list->_ref_list_type->_ref_categories
+                    personnel=$listValidateurs}}
+              </td>
+            {{/foreach}}
+          </tr>
+        </table>
       {{else}}
-        {{mb_include module=salleOp template=inc_edit_check_list
-                  check_list=$daily_check_list 
-                  check_item_categories=$daily_check_item_categories
-                  personnel=$listValidateurs}}
+        {{mb_include module=salleOp template=inc_operation}}
       {{/if}}
+
     {{else}}
       <div class="big-info">
         Veuillez sélectionner une intervention dans la liste pour pouvoir :

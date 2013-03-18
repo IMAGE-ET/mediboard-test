@@ -1111,7 +1111,49 @@ class CSetupdPsalleOp extends CSetup {
                 ADD `lieu` ENUM('C', 'D') DEFAULT 'C' NOT NULL,
                 ADD `exoneration` ENUM('N', '13', '15', '17', '19') DEFAULT 'N' NOT NULL;";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.46");
+    $query = "CREATE TABLE `daily_check_list_type` (
+                `daily_check_list_type_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `object_class` ENUM ('CSalle','CBlocOperatoire') NOT NULL DEFAULT 'CSalle',
+                `object_id` INT (11) UNSIGNED,
+                `title` VARCHAR (255) NOT NULL,
+                `description` TEXT
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `daily_check_list_type`
+                ADD INDEX (`object_id`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `daily_check_item_category`
+                ADD `list_type_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "INSERT INTO `daily_check_list_type` (`object_class`, `object_id`, `title`)
+                SELECT `target_class`, `target_id`, 'Check list standard'
+                FROM `daily_check_item_category`
+                WHERE `target_class` NOT IN ('COperation', 'CPoseDispositifVasculaire')
+                GROUP BY `target_class`, `target_id`;";
+    $this->addQuery($query);
+    $query = "UPDATE `daily_check_item_category` SET
+                `list_type_id` = (
+                  SELECT `daily_check_list_type_id`
+                  FROM `daily_check_list_type`
+                  WHERE `daily_check_list_type`.`object_class` = `daily_check_item_category`.`target_class`
+                  AND   (
+                       `daily_check_list_type`.`object_id`    = `daily_check_item_category`.`target_id`
+                    OR `daily_check_list_type`.`object_id` IS NULL AND `daily_check_item_category`.`target_id` IS NULL
+                  )
+                  LIMIT 1
+                )
+                WHERE `target_class` NOT IN ('COperation', 'CPoseDispositifVasculaire');";
+    $this->addQuery($query);
 
-    $this->mod_version = "0.46";
+    $query = "ALTER TABLE `daily_check_list`
+                ADD `list_type_id` INT (11) UNSIGNED;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `daily_check_list`
+                ADD INDEX (`list_type_id`);";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.47";
   }
 }

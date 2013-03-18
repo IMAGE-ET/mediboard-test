@@ -159,16 +159,40 @@ $total["tarmed"] = round($total_tarmed["base"]+$total_tarmed["dh"], 2);
 $total["caisse"] = round($total_caisse["base"]+$total_caisse["dh"], 2);
 
 // Vérification de la check list journalière
-$daily_check_list = CDailyCheckList::getList($salle, $date);
-$daily_check_list->loadItemTypes();
-$daily_check_list->loadBackRefs('items');
+$daily_check_lists = array();
+$daily_check_list_types = array();
+$require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date >= CMbDT::date() && !$currUser->_is_praticien;
 
-$cat = new CDailyCheckItemCategory();
-$where = array(
-  "target_class" => " = 'CSalle'",
-  "target_id IS NULL OR target_id = '$salle->_id'",
-);
-$daily_check_item_categories = $cat->loadList($where);
+if ($require_check_list) {
+  $daily_check_list_type = new CDailyCheckListType();
+  $where = array(
+    "object_class" => "= 'CSalle'",
+    "object_id IS NULL OR object_id = '$salle->_id'",
+  );
+  /** @var CDailyCheckListType[] $daily_check_list_types  */
+  $daily_check_list_types = $daily_check_list_type->loadList($where, "title");
+
+  /** @var CDailyCheckList[] $daily_check_lists  */
+  $daily_check_lists = array();
+
+  $check_list_not_validated = 0;
+  foreach ($daily_check_list_types as $_list_type) {
+    $_list_type->loadRefsCategories();
+    $daily_check_list = CDailyCheckList::getList($salle, $date, null, $_list_type->_id);
+    $daily_check_list->loadItemTypes();
+    $daily_check_list->loadBackRefs('items');
+
+    if (!$daily_check_list->_id || !$daily_check_list->validator_id) {
+      $check_list_not_validated++;
+    }
+
+    $daily_check_lists[] = $daily_check_list;
+  }
+
+  if ($check_list_not_validated == 0) {
+    $require_check_list = false;
+  }
+}
 
 // Chargement des check lists de l'OMS
 $operation_check_lists = array();
@@ -179,17 +203,20 @@ $cat = new CDailyCheckItemCategory();
 $cat->target_class = "COperation";
 
 // Pre-anesth, pre-op, post-op
-foreach ($operation_check_list->_specs["type"]->_list as $type) {
-  $list = CDailyCheckList::getList($selOp, null, $type);
-  $list->loadItemTypes();
-  $list->loadRefsFwd();
-  $list->loadBackRefs('items');
-  $list->isReadonly();
-  $list->_ref_object->loadRefPraticien();
-  $operation_check_lists[$type] = $list;
-  
-  $cat->type = $type;
-  $operation_check_item_categories[$type] = $cat->loadMatchingList("title");
+// Don't load them if we have a daily check list to fill...
+if (!$require_check_list) {
+  foreach ($operation_check_list->_specs["type"]->_list as $type) {
+    $list = CDailyCheckList::getList($selOp, null, $type);
+    $list->loadItemTypes();
+    $list->loadRefsFwd();
+    $list->loadBackRefs('items');
+    $list->isReadonly();
+    $list->_ref_object->loadRefPraticien();
+    $operation_check_lists[$type] = $list;
+
+    $cat->type = $type;
+    $operation_check_item_categories[$type] = $cat->loadMatchingList("title");
+  }
 }
 
 $anesth = new CMediusers();
@@ -251,9 +278,12 @@ $smarty->assign("hide_finished"          , $hide_finished);
 $smarty->assign("user_id"                , $user->_id);
 $smarty->assign("create_dossier_anesth"  , 1);
 
-// Check lists
-$smarty->assign("daily_check_list"               , $daily_check_list);
-$smarty->assign("daily_check_item_categories"    , $daily_check_item_categories);
+// Daily check lists
+$smarty->assign("require_check_list"             , $require_check_list);
+$smarty->assign("daily_check_lists"              , $daily_check_lists);
+$smarty->assign("daily_check_list_types"         , $daily_check_list_types);
+
+// Operation check lists
 $smarty->assign("operation_check_lists"          , $operation_check_lists);
 $smarty->assign("operation_check_item_categories", $operation_check_item_categories);
 
