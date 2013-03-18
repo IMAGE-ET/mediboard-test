@@ -88,6 +88,7 @@ class CGroups extends CMbObject {
     $backProps["plateaux_techniques"]       = "CPlateauTechnique group_id";
     $backProps["prestations"]               = "CPrestation group_id";
     $backProps["product_orders"]            = "CProductOrder group_id";
+    $backProps["product_address_orders"]    = "CProductOrder address_id";
     $backProps["product_receptions"]        = "CProductReception group_id";
     $backProps["product_stock_locations"]   = "CProductStockLocation group_id";
     $backProps["product_stocks"]            = "CProductStockGroup group_id";
