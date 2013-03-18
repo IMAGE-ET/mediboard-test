@@ -1711,8 +1711,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
 
     switch ($sender->_configs["handle_PV2_12"]) {
       case "none" :
-        $newVenue->libelle = null;
-
         break;
       default :
         $newVenue->libelle = $this->queryTextNode("PV2.12", $node);
