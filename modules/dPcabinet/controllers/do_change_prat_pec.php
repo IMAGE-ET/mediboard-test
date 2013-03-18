@@ -15,7 +15,7 @@ $consult->loadRefPlageConsult();
 $_datetime = $consult->_datetime;
 
 if (!isset($current_m)) {
-  $current_m = CValue::post("current_m", "dPtest");
+  $current_m = CValue::post("current_m", "dPcabinet");
 }
 
 $day_now  = CMbDT::transform(null, $_datetime, "%Y-%m-%d");
@@ -75,9 +75,9 @@ if($msg = $consult->store()) {
 }
 
 if($current_m == "dPurgences") {
-  CAppUI::redirect("m=dPurgences&tab=edit_consultation&selConsult=$consult->_id");
+  CAppUI::redirect("m=dPurgences&tab=edit_consultation&selConsult=$consult->_id&ajax=$ajax");
 } else {
-  CAppUI::redirect("m=dPcabinet&tab=edit_consultation&selConsult=$consult->_id");
+  CAppUI::redirect("m=dPcabinet&tab=edit_consultation&selConsult=$consult->_id&ajax=$ajax");
 }
 
 ?>
