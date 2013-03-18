@@ -303,7 +303,7 @@ class CMbDT {
   /**
    * Return the Easter Date following a date
    *
-   * @param string $date mbDate
+   * @param string $date Reference date
    *
    * @return string the Easter date (Y-m-d)
    */

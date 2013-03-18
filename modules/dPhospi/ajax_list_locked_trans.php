@@ -44,10 +44,10 @@ foreach ($trans as $_trans) {
 
   $sort_key = "$_trans->date $_trans->_class $_trans->user_id $_trans->object_id $_trans->object_class $_trans->libelle_ATC";
 
-  $date_before = mbDateTime("-1 SECOND", $_trans->date);
+  $date_before = CMbDT::dateTime("-1 SECOND", $_trans->date);
   $sort_key_before = "$date_before $_trans->_class $_trans->user_id $_trans->object_id $_trans->object_class $_trans->libelle_ATC";
 
-  $date_after  = mbDateTime("+1 SECOND", $_trans->date);
+  $date_after  = CMbDT::dateTime("+1 SECOND", $_trans->date);
   $sort_key_after = "$date_after $_trans->_class $_trans->user_id $_trans->object_id $_trans->object_class $_trans->libelle_ATC";
 
   // Aggrégation à -1 sec

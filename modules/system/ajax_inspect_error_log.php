@@ -67,8 +67,8 @@ if (isset($_FILES["formfile"])) {
     
     $ip = $ip[0];
     
-    $day = mbTransformTime(mbDateTime($date), null, "%Y-%m-%d");
-    $hour = mbTransformTime(mbDateTime($date), null, "%H");
+    $day  = CMbDT::transform(CMbDT::dateTime($date), null, "%Y-%m-%d");
+    $hour = CMbDT::transform(CMbDT::dateTime($date), null, "%H");
     
     if (!isset($count_by_day[$day])) {
       $count_by_day[$day] = 0;
@@ -148,7 +148,7 @@ if (isset($_FILES["formfile"])) {
   $labels = array();
   
   foreach ($count_by_day as $_day => $count) {
-    $labels[] = array(count($labels), mbDateToLocale($_day));
+    $labels[] = array(count($labels), CMbDT::dateToLocale($_day));
     $serie['data'][] = array(count($serie['data']), $count);
   }
   

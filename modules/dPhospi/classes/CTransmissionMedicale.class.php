@@ -12,7 +12,7 @@
 class CTransmissionMedicale extends CMbMetaObject {
   // DB Table key
   var $transmission_medicale_id = null;	
-  
+
   // DB Fields
   var $sejour_id   = null;
   var $user_id     = null;
@@ -45,9 +45,9 @@ class CTransmissionMedicale extends CMbMetaObject {
   }
 
   function getProps() {
-  	$props = parent::getProps();
+    $props = parent::getProps();
     $props["object_id"]    = "ref class|CMbObject meta|object_class";
-  	$props["object_class"] = "enum list|CPrescriptionLineElement|CPrescriptionLineMedicament|CPrescriptionLineComment|CCategoryPrescription|CAdministration|CPrescriptionLineMix show|0";
+    $props["object_class"] = "enum list|CPrescriptionLineElement|CPrescriptionLineMedicament|CPrescriptionLineComment|CCategoryPrescription|CAdministration|CPrescriptionLineMix show|0";
     $props["sejour_id"]    = "ref notNull class|CSejour";
     $props["user_id"]      = "ref notNull class|CMediusers";
     $props["degre"]        = "enum notNull list|low|high default|low";
@@ -62,33 +62,33 @@ class CTransmissionMedicale extends CMbMetaObject {
     $props["_text_result"] = "text helped|type|object_id";
     return $props;
   }
-  
+
   function loadRefSejour() {
     return $this->_ref_sejour = $this->loadFwdRef("sejour_id", true);
   }
-  
+
   function loadRefUser() {
     $this->_ref_user = $this->loadFwdRef("user_id", true);
     $this->_ref_user->loadRefFunction();
-		return $this->_ref_user;
-	}
+    return $this->_ref_user;
+  }
 
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefSejour();
     $this->loadRefUser();
-  	$this->_view = "Transmission de ".$this->_ref_user->_view;
+    $this->_view = "Transmission de ".$this->_ref_user->_view;
   }
-  
+
   function canEdit(){
     $nb_hours = CAppUI::conf("soins max_time_modif_suivi_soins");
-    $datetime_max = mbDateTime("+ $nb_hours HOURS", $this->date);
-    return $this->_canEdit = (mbDateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->user_id);
+    $datetime_max = CMbDT::dateTime("+ $nb_hours HOURS", $this->date);
+    return $this->_canEdit = (CMbDT::dateTime() < $datetime_max) && (CAppUI::$instance->user_id == $this->user_id);
   }
 
   function calculCibles(&$cibles = array()){
     $state = $this->locked ? "closed" : "opened";
-    if($this->object_id && $this->object_class){
+    if ($this->object_id && $this->object_class) {
       // Ligne de medicament, cible => classe ATC
       if ($this->object_class == "CPrescriptionLineMedicament") {
         $libelle_ATC = $this->_ref_object->_ref_produit->_ref_ATC_2_libelle;
@@ -100,7 +100,7 @@ class CTransmissionMedicale extends CMbMetaObject {
           $cibles[$state]["ATC"][] = $libelle_ATC;
         }
       }
-      
+
       // Ligne d'element, cible => categorie
       if ($this->object_class == "CPrescriptionLineElement") {
         $category = $this->_ref_object->_ref_element_prescription->_ref_category_prescription;
@@ -110,7 +110,7 @@ class CTransmissionMedicale extends CMbMetaObject {
           $cibles[$state]["CCategoryPrescription"][$category->_id] = $category->_view;
         }
       }
-      
+
       // Administration => ATC ou categorie
       if ($this->object_class == "CAdministration") {
         if ($this->_ref_object->object_class == "CPrescriptionLineMedicament") {
@@ -132,7 +132,7 @@ class CTransmissionMedicale extends CMbMetaObject {
           }
         }
       }
-      
+
       if ($this->object_class == "CCategoryPrescription") {
         $this->_cible = $this->_ref_object->_view;
         if (!isset($cibles["opened"][$this->object_class][$this->object_id]) &&
@@ -140,14 +140,14 @@ class CTransmissionMedicale extends CMbMetaObject {
           $cibles[$state][$this->object_class][$this->object_id] = $this->_ref_object->_view;
         }
       }
-      
+
       if ($this->object_class == "CPrescriptionLineMix") {
         $this->_cible = "prescription_line_mix";
         if (!isset($cibles["opened"]["perf"][0]) && !isset($cibles["closed"]["perf"][0]))
         $cibles[$state]["perf"][0] = "prescription_line_mix";
       }
     }
-    
+
     if ($this->libelle_ATC) {
       $this->_cible = $this->libelle_ATC;
       if ((!isset($cibles["opened"]["ATC"]) && !isset($cibles["closed"]["ATC"])) ||
@@ -184,7 +184,7 @@ class CTransmissionMedicale extends CMbMetaObject {
   }
 
   function getPerm($perm) {
-    if(!isset($this->_ref_sejour->_id)) {
+    if (!isset($this->_ref_sejour->_id)) {
       $this->loadRefsFwd();
     }
     return $this->_ref_sejour->getPerm($perm);
