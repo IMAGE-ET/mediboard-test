@@ -12,12 +12,10 @@
 
 CAppUI::requireModuleFile("dPboard", "inc_board");
 
-$date = CValue::getOrSession("date", CMbDT::date());
-$prec = CMbDT::date("-1 week", $date);
-$suiv = CMbDT::date("+1 week", $date);
+$date  = CValue::getOrSession("date", CMbDT::date());
+$prec  = CMbDT::date("-1 week", $date);
+$suiv  = CMbDT::date("+1 week", $date);
 $today = CMbDT::date();
-
-global $smarty;
 
 //Planning au format  CPlanningWeek
 $debut = CValue::getOrSession("date", $date);
@@ -45,17 +43,22 @@ $where = array();
 $where["date"] = "= '$fin'";
 $where["chir_id"] = " = '$chirSel'";
 
-if (!$listPlageConsult->countList($where) && !$listPlageOp->countList($where)) {
+$operation = new COperation();
+$operation->chir_id = $chirSel;
+$operation->date = $fin;
+
+if (!$listPlageConsult->countList($where) && !$listPlageOp->countList($where) && !$operation->countMatchingList()) {
   $nbjours--;
   // Aucune plage le dimanche, on peut donc tester le samedi.
   $dateArr = CMbDT::date("-1 day", $fin);
   $where["date"] = "= '$dateArr'";
-  if (!$listPlageConsult->countList($where) && !$listPlageOp->countList($where)) {
+  $operation->date = $dateArr;
+  if (!$listPlageConsult->countList($where) && !$listPlageOp->countList($where) && !$operation->countMatchingList()) {
     $nbjours--;
   }
 }
 
-//Instanciation du planning
+// Instanciation du planning
 $planning = new CPlanningWeek($debut, $debut, $fin, $nbjours, false, null, null, true);
 
 if ($user->load($chirSel)) {
@@ -164,6 +167,8 @@ function ajoutEvent(&$planning, $_plage, $date, $libelle, $color, $type) {
 }
 
 // Variables de templates
+$smarty = new CSmartyDP();
+
 $smarty->assign("date", $date);
 $smarty->assign("today", $today);
 

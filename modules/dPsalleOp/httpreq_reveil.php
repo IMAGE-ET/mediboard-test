@@ -136,12 +136,7 @@ foreach ($listOperations as $key => $op) {
   }
   
   if ($type == "reveil" || $type == "out") {
-    if ($use_sortie_reveil_reel) {
-      if ($op->sortie_reveil_reel > $now) {
-        $nb_sorties_non_realisees++;
-      }
-    }
-    elseif ($op->sortie_reveil_possible > $now) {
+    if (!$sejour->sortie_reelle) {
       $nb_sorties_non_realisees++;
     }
 
