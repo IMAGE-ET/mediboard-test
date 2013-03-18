@@ -334,7 +334,3 @@ SQL;
     self::$started = false;
   }
 }
-
-global $dPconfig;
-CSessionHandler::setHandler($dPconfig["session_handler"]);
-//mbTrace(get_class(CSessionHandler::$engine));

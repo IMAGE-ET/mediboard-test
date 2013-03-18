@@ -95,7 +95,6 @@ if (!@CSQLDataSource::get("std")) {
   die("La base de données n'est pas connectée");
 }
 
-require "./classes/CSessionHandler.class.php"; // Explicit include before session.php
 require "./includes/session.php";
 
 // Start chrono (after session_start as it may be locked by another request)

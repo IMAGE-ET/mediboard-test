@@ -21,6 +21,8 @@ if (get_cfg_var("session.auto_start") > 0) {
   session_write_close();
 }
 
+CSessionHandler::setHandler(CAppUI::conf("session_handler"));
+
 CSessionHandler::start();
 
 // Check if the session was made via a temporary token
