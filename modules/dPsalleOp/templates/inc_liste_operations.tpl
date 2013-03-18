@@ -37,14 +37,17 @@
   {{assign var=postop_save value=$save_op->presence_postop}}
   {{assign var=timeop_save value=$save_op->time_operation}}
   {{assign var=tempop_save value=$save_op->temp_operation}}
-  
-  
-  {{assign var=intervalle_a value=$postop_save|mbAddTime:$tempop_save|mbAddTime:$timeop_save}}
-  {{assign var=intervalle_b value=$preop_curr|mbSubTime:$timeop_curr}}
+
+  {{assign var=intervalle_a value="CMbDT::addTime"|static_call:$postop_save:$tempop_save}}
+  {{assign var=intervalle_a value="CMbDT::addTime"|static_call:$intervalle_a:$timeop_save}}
+
+  {{assign var=intervalle_b value="CMbDT::subTime"|static_call:$preop_curr:$timeop_curr}}
+
   {{if $intervalle_a < $intervalle_b}}
     <tr>
       <th colspan="4" class="section">
-        [PAUSE] ({{$intervalle_a|mbTimeRelative:$intervalle_b:"%02dh%02d"}})
+        {{assign var=time_pause value="CMbDT::timeRelative"|static_call:$intervalle_a:$intervalle_b:"%02dh%02d"}}
+        [PAUSE] ({{$time_pause}})
       </th>
     </tr>
   {{/if}}
