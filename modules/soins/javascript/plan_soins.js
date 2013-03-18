@@ -20,6 +20,7 @@ PlanSoins = {
   anciennete:          null,
   time_anciennete:     [],
   timer_anciennete:    [],
+  with_navigation:     null,
 
   init: function(options){
     Object.extend(PlanSoins, options);
@@ -293,6 +294,9 @@ PlanSoins = {
     url.addParam("without_check_date", without_check_date);
     if (hide_close) {
       url.addParam("hide_close", hide_close);
+    }
+    if (PlanSoins.with_navigation) {
+      url.addParam("with_navigation", PlanSoins.with_navigation);
     }
     if(object_id && object_class){
       if(object_class == 'CPrescriptionLineMix'){
