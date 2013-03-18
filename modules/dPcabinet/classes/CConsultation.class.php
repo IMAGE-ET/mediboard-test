@@ -397,7 +397,7 @@ class CConsultation extends CFacturable {
       $sejour = $this->loadRefSejour();
 
       if ($sejour->type != "consult" &&
-         ($this->_date < CMbDT::date($sejour->entree) || CMbDT::date($this->_date) > $sejour->sortie)) {
+          ($this->_date < CMbDT::date($sejour->entree) || CMbDT::date($this->_date) > $sejour->sortie)) {
         $msg .= "Consultation en dehors du séjour<br />";
         return $msg . parent::check();
       }
@@ -430,7 +430,7 @@ class CConsultation extends CFacturable {
           $this->fieldModified("total_amo") ||
           $this->fieldModified("du_patient") ||
           $this->fieldModified("du_tiers")
-        ) {
+      ) {
         //$msg .= $this->du_patient." vs. ".$this->_old->du_patient." (".$this->fieldModified("du_patient").")";
         $msg .= "Vous ne pouvez plus modifier le tarif, il est déjà validé";
       }
@@ -451,6 +451,7 @@ class CConsultation extends CFacturable {
 
   /**
    * deleteActes() Redefinition
+   * 
    * @return string Store-like message
    */
   function deleteActes() {
@@ -504,116 +505,32 @@ class CConsultation extends CFacturable {
     }
 
     // Precodage des actes NGAP avec information sérialisée complète
-
     $this->_tokens_ngap = $tarif->codes_ngap;
-    if ($msg = $this->precodeNGAP()) {
+    if ($msg = $this->precodeActe("_tokens_ngap", "CActeNGAP", $this->getExecutantId())) {
       return $msg;
     }
 
     $this->codes_ccam = $tarif->codes_ccam;
     // Precodage des actes CCAM avec information sérialisée complète
-    if ($msg = $this->precodeCCAM()) {
+    if ($msg = $this->precodeActeCCAM()) {
       return $msg;
     }
 
     if (CModule::getActive("tarmed")) {
       $this->_tokens_tarmed = $tarif->codes_tarmed;
-      if ($msg = $this->precodeTARMED()) {
+      if ($msg = $this->precodeActe("_tokens_tarmed", "CActeTarmed", $this->getExecutantId())) {
         return $msg;
       }
       $this->_tokens_caisse = $tarif->codes_caisse;
-      if ($msg = $this->precodeCAISSE()) {
+      if ($msg = $this->precodeActe("_tokens_caisse", "CActeCaisse", $this->getExecutantId())) {
         return $msg;
       }
     }
   }
 
-  function precodeCCAM() {
+  function precodeActeCCAM() {
     $this->loadRefPlageConsult();
-    // Explode des codes_ccam du tarif
-    $listCodesCCAM = explode("|", $this->codes_ccam);
-    foreach ($listCodesCCAM as $code) {
-      $acte = new CActeCCAM();
-      $acte->_adapt_object = true;
-
-      $acte->_preserve_montant = true;
-      $acte->setFullCode($code);
-
-      // si le code ccam est composé de 3 elements, on le precode
-      if ($acte->code_activite != "" && $acte->code_phase != "") {
-        // Permet de sauvegarder le montant de base de l'acte CCAM
-        $acte->_calcul_montant_base = 1;
-
-        // Mise a jour de codes_ccam suivant les _tokens_ccam du tarif
-        $acte->object_id = $this->_id;
-        $acte->object_class = $this->_class;
-        $acte->executant_id = $this->_ref_chir->_id;
-        $acte->execution = $this->_datetime;
-        if ($msg = $acte->store()) {
-          return $msg;
-        }
-      }
-    }
-  }
-
-  function precodeNGAP() {
-    $listCodesNGAP = explode("|", $this->_tokens_ngap);
-    foreach ($listCodesNGAP as $code_ngap) {
-      if ($code_ngap) {
-        $acte = new CActeNGAP();
-        $acte->_preserve_montant = true;
-        $acte->setFullCode($code_ngap);
-
-        $acte->object_id = $this->_id;
-        $acte->object_class = $this->_class;
-        $acte->executant_id = $this->getExecutantId();
-        if (!$acte->countMatchingList()) {
-          if ($msg = $acte->store()) {
-            return $msg;
-          }
-        }
-      }
-    }
-  }
-
-  function precodeTARMED() {
-    $listCodesTarmed = explode("|", $this->_tokens_tarmed);
-    foreach ($listCodesTarmed as $code_tarmed) {
-      if ($code_tarmed) {
-        $acte = new CActeTarmed();
-        $acte->_preserve_montant = true;
-        $acte->setFullCode($code_tarmed);
-
-        $acte->object_id = $this->_id;
-        $acte->object_class = $this->_class;
-        $acte->executant_id = $this->getExecutantId();
-        if (!$acte->countMatchingList()) {
-          if ($msg = $acte->store()) {
-            return $msg;
-          }
-        }
-      }
-    }
-  }
-
-  function precodeCAISSE() {
-    $listCodesCaisse = explode("|", $this->_tokens_caisse);
-    foreach ($listCodesCaisse as $code_caisse) {
-      if ($code_caisse) {
-        $acte = new CActeCaisse();
-        $acte->_preserve_montant = true;
-        $acte->setFullCode($code_caisse);
-
-        $acte->object_id = $this->_id;
-        $acte->object_class = $this->_class;
-        $acte->executant_id = $this->getExecutantId();
-        if (!$acte->countMatchingList()) {
-          if ($msg = $acte->store()) {
-            return $msg;
-          }
-        }
-      }
-    }
+    $this->precodeCCAM($this->_ref_chir->_id);
   }
 
   function doUpdateMontants(){
@@ -1697,7 +1614,7 @@ TESTS A EFFECTUER
   /**
    * Construit le tag d'une consultation en fonction des variables de configuration
    * 
-   * @param $group_id Permet de charger l'id externe d'uns consultation pour un établissement donné si non null
+   * @param string $group_id Permet de charger l'id externe d'uns consultation pour un établissement donné si non null
    * 
    * @return string
    */

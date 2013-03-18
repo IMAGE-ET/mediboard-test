@@ -1,13 +1,17 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPplanningOp
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/*
+ * Opération
+ */
 class COperation extends CCodable implements IPatientRelated {
   // DB Table key
   var $operation_id  = null;
@@ -148,6 +152,10 @@ class COperation extends CCodable implements IPatientRelated {
   var $_ref_affectation   = null;
   var $_ref_besoins       = null;
 
+  // Tarif
+  public $_bind_tarif;
+  public $_tarif_id;
+  
   // EAI Fields
   var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
 
@@ -570,7 +578,7 @@ class COperation extends CCodable implements IPatientRelated {
             $op->store(false);
             $this->rank -= 1;
           }
-        break;
+          break;
 
         case 'after':
           $op->rank = $this->rank+1;
@@ -579,19 +587,19 @@ class COperation extends CCodable implements IPatientRelated {
             $op->store(false);
             $this->rank += 1;
           }
-        break;
+          break;
 
         case 'out':
           $this->rank = 0;
           $this->time_operation = '00:00:00';
           $this->pause = '00:00:00';
-        break;
+          break;
 
         case 'last':
           if ($op->loadMatchingObject('rank DESC')) {
             $this->rank = $op->rank+1;
           }
-        break;
+          break;
         default;
       }
 
@@ -845,6 +853,13 @@ class COperation extends CCodable implements IPatientRelated {
 
       $this->_ref_plageop->reorderOp($reorder_rank_voulu ? CPlageOp::RANK_REORDER : null);
     }
+  
+    // Gestion du tarif et precodage des actes
+    if ($this->_bind_tarif && $this->_id) {
+      if ($msg = $this->bindTarif()) {
+        return $msg;
+      }
+    }
   }
 
   /**
@@ -952,6 +967,8 @@ class COperation extends CCodable implements IPatientRelated {
   /**
    * Met à jour les information sur la salle
    * Nécessiste d'avoir chargé la plage opératoire au préalable
+   * 
+   * @return void
    */
   function updateSalle() {
     if ($this->plageop_id && $this->salle_id) {
@@ -969,16 +986,20 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   function loadRefAnesth($cache = true) {
-    if($this->anesth_id) {
+    if ($this->anesth_id) {
       return $this->_ref_anesth = $this->loadFwdRef("anesth_id", $cache);
     }
-    if($this->plageop_id) {
+    if ($this->plageop_id) {
       return $this->_ref_anesth = $this->_ref_plageop->loadFwdRef("anesth_id", $cache);
     }
     return $this->_ref_anesth = new CMediusers();
   }
 
   /**
+   * Chargement de la plage opératoire
+   * 
+   * @param bool $cache Utilisation du cache
+   * 
    * @return CPlageOp
    */
   function loadRefPlageOp($cache = true) {
@@ -996,7 +1017,8 @@ class COperation extends CCodable implements IPatientRelated {
 
       if ($this->anesth_id) {
         $this->loadRefAnesth();
-      } else {
+      }
+      else {
         $this->_ref_anesth = $plageOp->_ref_anesth;
       }
 
@@ -1074,6 +1096,10 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
+   * Chargement du séjour
+   * 
+   * @param bool $cache Utilisation du cache
+   * 
    * @return CSejour
    */
   function loadRefSejour($cache = true) {
@@ -1082,6 +1108,8 @@ class COperation extends CCodable implements IPatientRelated {
 
   /**
    * Chargement des gestes perop
+   * 
+   * @return $this->_ref_anesth_perops
    */
   function loadRefsAnesthPerops(){
     return $this->_ref_anesth_perops = $this->loadBackRefs("anesth_perops", "datetime");
@@ -1103,6 +1131,8 @@ class COperation extends CCodable implements IPatientRelated {
   }
 
   /**
+   * @param bool $cache Utilisation du cache
+   * 
    * @return CPatient
    */
   function loadRefPatient($cache = true) {
@@ -1370,5 +1400,36 @@ class COperation extends CCodable implements IPatientRelated {
     $fix_edit_doc = CAppUI::conf("dPplanningOp CSejour fix_doc_edit");
     $this->loadRefSejour();
     return !$fix_edit_doc ? true : $this->_ref_sejour->sortie_reelle === null;
+  }
+  
+  function bindTarif(){
+    $this->_bind_tarif = false;
+
+    // Chargement du tarif
+    $tarif = new CTarif();
+    $tarif->load($this->_tarif_id);
+
+    // Precodage des actes NGAP avec information sérialisée complète
+    $this->_tokens_ngap = $tarif->codes_ngap;
+    if ($msg = $this->precodeActe("_tokens_ngap", "CActeNGAP", $this->chir_id)) {
+      return $msg;
+    }
+
+    $this->codes_ccam = $tarif->codes_ccam;
+    // Precodage des actes CCAM avec information sérialisée complète
+    if ($msg = $this->precodeCCAM($this->chir_id)) {
+      return $msg;
+    }
+
+    if (CModule::getActive("tarmed")) {
+      $this->_tokens_tarmed = $tarif->codes_tarmed;
+      if ($msg = $this->precodeActe("_tokens_tarmed", "CActeTarmed", $this->chir_id)) {
+        return $msg;
+      }
+      $this->_tokens_caisse = $tarif->codes_caisse;
+      if ($msg = $this->precodeActe("_tokens_caisse", "CActeCaisse", $this->chir_id)) {
+        return $msg;
+      }
+    }
   }
 }

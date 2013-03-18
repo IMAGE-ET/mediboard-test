@@ -1,13 +1,17 @@
-<?php /* $Id$ */
-
+<?php 
 /**
- * @package Mediboard
+ * $Id$
+ *
+ * @package    Mediboard
  * @subpackage dPccam
- * @version $Revision$
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @author     SARL OpenXtrem <dev@openxtrem.com>
+ * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version    $Revision$
  */
 
+/*
+ * CCodable
+ */
 class CCodable extends CMbObject {
   public $codes_ccam;
   public $facture; // Séjour facturé ou non
@@ -340,6 +344,8 @@ class CCodable extends CMbObject {
 
   /**
    * Charge les actes CCAM codés
+   * 
+   * @return objects
    */
   function loadRefsActesCCAM() {
     if ($this->_ref_actes_ccam) {
@@ -368,6 +374,8 @@ class CCodable extends CMbObject {
 
   /**
    * Charge les actes NGAP codés
+   * 
+   * @return objects
    */
   function loadRefsActesNGAP() {
     /** ajout d'un paramètre d'ordre à passer, ici "lettre_cle" qui vaut 0 ou 1
@@ -390,7 +398,7 @@ class CCodable extends CMbObject {
   /**
    * Charge les actes Tarmed codés
    *
-   * return array
+   * @return array
    */
   function loadRefsActesTarmed(){
     $this->_ref_actes_tarmed = array();
@@ -444,7 +452,7 @@ class CCodable extends CMbObject {
   /**
    * Charge les actes Caisse codés
    *
-   * return array
+   * @return array 
    */
   function loadRefsActesCaisse(){
     $this->_ref_actes_caisse = array();
@@ -480,6 +488,10 @@ class CCodable extends CMbObject {
 
   /**
    * Charge les codes CCAM en tant qu'objets externes
+   * 
+   * @param string $full niveau de chargement
+   * 
+   * @return void
    */
   function loadExtCodesCCAM($full = false) {
     $this->_ext_codes_ccam = array();
@@ -622,6 +634,8 @@ class CCodable extends CMbObject {
 
   /**
    * Charge les actes CCAM codables en fonction des code CCAM fournis
+   * 
+   * @return void
    */
   function loadPossibleActes () {
     $this->preparePossibleActes();
@@ -671,8 +685,8 @@ class CCodable extends CMbObject {
           // Affect a loaded acte if exists
           foreach ($this->_ref_actes_ccam as $_acte) {
             if ($_acte->code_acte     == $possible_acte->code_acte
-             && $_acte->code_activite == $possible_acte->code_activite
-             && $_acte->code_phase    == $possible_acte->code_phase) {
+                && $_acte->code_activite == $possible_acte->code_activite
+                && $_acte->code_phase    == $possible_acte->code_phase) {
               if (!isset($used_actes[$_acte->acte_id])) {
                 $possible_acte = $_acte;
                 $used_actes[$_acte->acte_id] = true;
@@ -701,6 +715,69 @@ class CCodable extends CMbObject {
               }
             }
           }
+        }
+      }
+    }
+  }
+  
+  /**
+   * Ajout des actes non ccam d'un tarif dans une intervention ou consultation 
+   * 
+   * @param string $token      les tokens
+   * @param string $acte_class la classe des actes pris en compte
+   * @param string $chir       l'executant de l'acte
+   * 
+   * @return string $msg
+   */
+  function precodeActe($token, $acte_class, $chir) {
+    $listCodes = explode("|", $this->$token);
+    foreach ($listCodes as $code) {
+      if ($code) {
+        $acte = new $acte_class;
+        $acte->_preserve_montant = true;
+        $acte->setFullCode($code);
+
+        $acte->object_id = $this->_id;
+        $acte->object_class = $this->_class;
+        $acte->executant_id = $chir;
+        if (!$acte->countMatchingList()) {
+          if ($msg = $acte->store()) {
+            return $msg;
+          }
+        }
+      }
+    }
+  }
+  
+  /**
+   * Ajout des actes ccam d'un tarif dans une intervention ou consultation 
+   * 
+   * @param string $chir l'executant de l'acte
+   * 
+   * @return string $msg
+   */
+  function precodeCCAM($chir) {
+    // Explode des codes_ccam du tarif
+    $listCodesCCAM = explode("|", $this->codes_ccam);
+    foreach ($listCodesCCAM as $code) {
+      $acte = new CActeCCAM();
+      $acte->_adapt_object = true;
+
+      $acte->_preserve_montant = true;
+      $acte->setFullCode($code);
+
+      // si le code ccam est composé de 3 elements, on le precode
+      if ($acte->code_activite != "" && $acte->code_phase != "") {
+        // Permet de sauvegarder le montant de base de l'acte CCAM
+        $acte->_calcul_montant_base = 1;
+
+        // Mise a jour de codes_ccam suivant les _tokens_ccam du tarif
+        $acte->object_id = $this->_id;
+        $acte->object_class = $this->_class;
+        $acte->executant_id = $chir;
+        $acte->execution = $this->_datetime;
+        if ($msg = $acte->store()) {
+          return $msg;
         }
       }
     }
