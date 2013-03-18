@@ -8,8 +8,6 @@
 */
 
 class CConsultationCategorie extends CMbObject {
-  
-  // DB Table key
   var $categorie_id = null;
 
   // DB References
@@ -51,8 +49,9 @@ class CConsultationCategorie extends CMbObject {
 
   function updatePlainFields() {
     parent::updatePlainFields();
-    $this->nom_icone = basename($this->nom_icone);
+
+    if ($this->nom_icone) {
+      $this->nom_icone = basename($this->nom_icone);
+    }
   }
 }
-
-?>
