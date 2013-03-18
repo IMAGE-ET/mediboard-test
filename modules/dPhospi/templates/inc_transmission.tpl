@@ -210,6 +210,7 @@ toggleDateMax = function() {
                             classDependField2: 'CCategoryPrescription',
                             validateOnBlur: 0,
                             updateDF: 0,
+                            width: '250px',
                             strict: 0"}}
             {{/if}}
           </fieldset>
@@ -230,6 +231,7 @@ toggleDateMax = function() {
                             classDependField2: 'CCategoryPrescription',
                             validateOnBlur: 0,
                             updateDF: 0,
+                            width: '250px',
                             strict: 0"}}
             {{/if}}
             
@@ -251,6 +253,7 @@ toggleDateMax = function() {
                             classDependField2: 'CCategoryPrescription',
                             validateOnBlur: 0,
                             updateDF: 0,
+                            width: '250px',
                             strict: 0"}}
             {{/if}}
             

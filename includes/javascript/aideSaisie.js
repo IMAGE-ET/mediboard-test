@@ -34,7 +34,8 @@ var AideSaisie = {
         property: '',
         strict: true,
         timestamp: AideSaisie.timestamp,
-        height: "auto"
+        height: "auto",
+        width: null
       }, options);
       this.init();
     },
@@ -62,7 +63,7 @@ var AideSaisie = {
         });
       }
     },
-    
+
     // Create div to feed
     createListContainer: function(){
       var list = new Element("div", {
@@ -71,7 +72,7 @@ var AideSaisie = {
         width: "400px",
         height: this.options.height
       }).hide();
-      
+
       this.searchField.insert({after: list});
       return list;
     },
@@ -195,7 +196,7 @@ var AideSaisie = {
         "medium": 1.0,
         "long": 1.5
       };
-      
+
       // Setup the autocompleter
       var autocomplete = url.autoComplete(this.searchField, list, {
         minChars: Preferences.aideAutoComplete == '0' ? 65536 : 2,
@@ -204,6 +205,7 @@ var AideSaisie = {
         select: "value", 
         paramName: "_search",
         caretBounds: true,
+        width: this.options.width ? this.options.width : "auto",
         frequency: autocompleteDelays[Preferences.autocompleteDelay],
         callback: function(input, query){
           if (options.filterWithDependFields) {
