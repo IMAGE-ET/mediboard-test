@@ -136,19 +136,9 @@ else {
 }
 
 //Recherche de la facture pour cette consultation
-if (CModule::getActive("facturation")) {
-  $liaison = new CFactureLiaison();
-  $liaison->object_id     = $consult->_id;
-  $liaison->object_class  = $consult->_class;
-  $liaison->facture_class = "CFactureCabinet";
-  if ($liaison->loadMatchingObject()) {
-    $facture = $liaison->loadRefFacture();
-  }
+if ($consult->_ref_facture) {
+  $facture = $consult->_ref_facture;
 }
-elseif ($consult->facture_id) {
-  $facture->load($consult->facture_id);
-}
-
 //Si on a pas de facture on recherche d'une facture ouverte 
 if (!$facture->_id && CAppUI::conf("ref_pays") == 2) {
   $where["cloture"] = " IS NULL";

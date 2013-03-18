@@ -983,7 +983,7 @@ TESTS A EFFECTUER
     if ($this->_ref_facture) {
       return $this->_ref_facture;
     }
-    if (CModule::getActive("facturation")) {
+    if (CModule::getActive("dPfacturation")) {
       $where = array();
       $where["object_id"]     = "= '$this->_id'";
       $where["object_class"]  = "= '$this->_class'";
