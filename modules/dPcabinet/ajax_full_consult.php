@@ -16,13 +16,28 @@ $user = CMediusers::get();
 $consult_id   = CValue::getOrSession("consult_id");
 $dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
 
-$listChirs = CAppUI::pref("pratOnlyForConsult", 1) ?
-  $user->loadPraticiens(null) :
-  $user->loadProfessionnelDeSante(null);
+if (!isset($current_m)) {
+  $current_m = CValue::get("current_m", $m);
+}
+
+$listPrats = $listChirs = CAppUI::pref("pratOnlyForConsult", 1) ?
+  $user->loadPraticiens(PERM_EDIT) :
+  $user->loadProfessionnelDeSante(PERM_EDIT);
 
 $listAnesths = $user->loadAnesthesistes();
 
-$consult = new CConsultation();
+$list_mode_sortie = array();
+
+$consult = new CConsultation();if ($current_m == "dPurgences") {
+  if (!$selConsult) {
+    CAppUI::setMsg("Vous devez selectionner une consultation", UI_MSG_ALERT);
+    CAppUI::redirect("m=urgences&tab=0");
+  }
+  
+  $user = CAppUI::$user;
+  $group = CGroups::loadCurrent();
+  $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
+}
 
 $tabSejour = array();
 
@@ -258,7 +273,8 @@ $smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);
 $smarty->assign("listChirs"      , $listChirs);
-$smarty->assign("date"           , $date);;
+$smarty->assign("listPrats"      , $listPrats);
+$smarty->assign("date"           , $date);
 $smarty->assign("userSel"        , $userSel);
 $smarty->assign("anesth"         , $anesth);
 $smarty->assign("consult"        , $consult);

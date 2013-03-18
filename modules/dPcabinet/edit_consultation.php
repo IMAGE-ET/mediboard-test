@@ -31,13 +31,11 @@ $prat_id      = CValue::getOrSession("chirSel", $user->_id);
 $selConsult   = CValue::getOrSession("selConsult");
 $dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
 
-$listChirs = CAppUI::pref("pratOnlyForConsult", 1) ?
+$listPrats = $listChirs = CAppUI::pref("pratOnlyForConsult", 1) ?
   $user->loadPraticiens(null) :
   $user->loadProfessionnelDeSante(null);
 
 $listAnesths = $user->loadAnesthesistes();
-
-$listPrats = array();
 
 $list_mode_sortie = array();
 
