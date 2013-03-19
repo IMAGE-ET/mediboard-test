@@ -21,8 +21,6 @@ $today = CMbDT::date();
 $hour  = CMbDT::time(null);
 $now   = CMbDT::dateTime();
 
-CMbObject::$useObjectCache = false;
-
 if (!isset($current_m)) {
   $current_m = CValue::get("current_m", $m);
 }
