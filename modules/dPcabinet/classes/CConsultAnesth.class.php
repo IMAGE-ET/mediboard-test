@@ -260,8 +260,10 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
     if (!$this->_ref_consultation) {
       $this->loadRefConsultation();
     }
+
     $this->_ref_consultation->loadRefsFiles();
-    $this->_ref_files =& $this->_ref_consultation->_ref_files;
+    parent::loadRefsFiles();
+    $this->_ref_files = $this->_ref_files + $this->_ref_consultation->_ref_files;
   }
   
   function loadView() {

@@ -3,18 +3,18 @@
 
 <table class="form">
   <tr>
+    {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
     <td class="halfPane">
       <fieldset>
-        <legend>{{tr}}CFile{{/tr}} - {{tr}}{{$consult->_class}}{{/tr}}</legend>            
+        <legend>{{tr}}CFile{{/tr}} - {{tr}}{{$object->_class}}{{/tr}}</legend>
         <div id="files-fdr">
           <script type="text/javascript">
-            File.register('{{$consult->_id}}','{{$consult->_class}}', 'files-fdr');
+            File.register('{{$object->_id}}','{{$object->_class}}', 'files-fdr');
           </script>
         </div>
       </fieldset>
   	</td>
   	<td class="halfPane">
-  	  {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
       <fieldset>
         <legend>{{tr}}CCompteRendu{{/tr}} - {{tr}}{{$object->_class}}{{/tr}}</legend>            
         <div id="documents-fdr">

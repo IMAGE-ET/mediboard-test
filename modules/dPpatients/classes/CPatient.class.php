@@ -1321,6 +1321,7 @@ class CPatient extends CMbObject {
 
       foreach ($consult->_refs_dossiers_anesth as $_dossier_anesth) {
         $_dossier_anesth->countDocItems();
+        $_dossier_anesth->_nb_files_docs += $consult->_nb_files;
       }
       
       // Grossesse
