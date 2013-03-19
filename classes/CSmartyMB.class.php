@@ -102,6 +102,7 @@ class CSmartyMB extends Smarty {
     $this->register_modifier("module_installed"  , array($this, "module_installed"));
     $this->register_modifier("module_active"     , array($this, "module_active"));
     $this->register_modifier("JSAttribute"       , array($this, "JSAttribute"));
+    $this->register_modifier("nozero"            , array($this, "nozero"));
 
     $this->register_function("mb_token"          , array($this, "mb_token"));
 
@@ -556,6 +557,16 @@ class CSmartyMB extends Smarty {
   function decabinary($value) {
     $decabinary = CMbString::toDecaBinary($value);
     return "<span title=\"$value\">$decabinary</span>";
+  }
+
+  /**
+   * @abstract Converts a value to decabinary format
+   *
+   * Example:  {$value|decabinary}
+   * @param float $value The value to format
+   */
+  function nozero($value) {
+    return $value ? $value : '' ;
   }
 
   /**
