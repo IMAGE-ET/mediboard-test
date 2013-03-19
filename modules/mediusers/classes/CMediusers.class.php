@@ -795,6 +795,7 @@ class CMediusers extends CMbObject {
 
     $ljoin["functions_mediboard"] = "functions_mediboard.function_id = users_mediboard.function_id";
     $ljoin["secondary_function"] = "secondary_function.user_id = users_mediboard.user_id";
+    $ljoin[] = "functions_mediboard AS sec_fnc_mb ON sec_fnc_mb.function_id = secondary_function.function_id";
 
     if ($function_id) {
       if ($secondary) {
@@ -807,7 +808,7 @@ class CMediusers extends CMbObject {
 
     // Filter on current group or users in secondaries functions
     $group = CGroups::loadCurrent();
-    $where[] = "functions_mediboard.group_id = '$group->_id' OR secondary_function.user_id = users.user_id";
+    $where[] = "functions_mediboard.group_id = '$group->_id' OR sec_fnc_mb.group_id = '$group->_id'";
 
     // Filter on user type
     if (is_array($user_types)) {
