@@ -73,7 +73,7 @@ function changePage(page){
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="4" class="empty">{{tr}}CActiviteCsARR.none{{/tr}}</td>
+    <td colspan="6" class="empty">{{tr}}CActiviteCsARR.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>
