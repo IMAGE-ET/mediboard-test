@@ -9,8 +9,6 @@
  * @version    $Revision$
  */
 
-CCanDo::checkRead();
-
 $chir_id       = CValue::get("chir_id");
 $field_name    = CValue::get("field_name", "_secondary_function_id");
 $empty_function_principale = CValue::get("empty_function_principale", 0);

@@ -44,11 +44,11 @@ then
       echo "Do you want to update $line (y or n) [default n] ? \c" ; read REPLY < /dev/tty
       if [ "$REPLY" = "y" ] ; then
         echo "-- Rsync $line --"
-        eval rsync -avpz --stats $BASH_PATH/.. --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
+        eval rsync -avpgz --stats $BASH_PATH/.. --delete $line --exclude-from=$BASH_PATH/rsyncupdate.exclude \
           --exclude includes/config_overload.php \
-          --exclude tmp \
-          --exclude lib \
-          --exclude files \
+          --exclude /tmp \
+          --exclude /lib \
+          --exclude /files \
           --exclude includes/config.php \
           --exclude modules/hprimxml/xsd \
           --exclude images/pictures/logo_custom.png
