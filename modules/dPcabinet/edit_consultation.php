@@ -32,8 +32,8 @@ $selConsult   = CValue::getOrSession("selConsult");
 $dossier_anesth_id = CValue::getOrSession("dossier_anesth_id");
 
 $listPrats = $listChirs = CAppUI::pref("pratOnlyForConsult", 1) ?
-  $user->loadPraticiens(null) :
-  $user->loadProfessionnelDeSante(null);
+  $user->loadPraticiens(PERM_EDIT) :
+  $user->loadProfessionnelDeSante(PERM_EDIT);
 
 $listAnesths = $user->loadAnesthesistes();
 

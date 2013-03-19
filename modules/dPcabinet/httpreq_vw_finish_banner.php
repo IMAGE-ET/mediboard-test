@@ -18,6 +18,11 @@ $user = CMediusers::get($user_id);
 $canUser = $user->canDo();
 $canUser->needsEdit();
 
+// Liste des praticiens
+$listPrats = CAppUI::pref("pratOnlyForConsult", 1) ?
+  $user->loadPraticiens(PERM_EDIT) :
+  $user->loadProfessionnelDeSante(PERM_EDIT);
+
 // Consultation courante
 $consult = new CConsultation();
 $consult->load($consult_id);
@@ -39,8 +44,9 @@ if (CModule::getActive("maternite")) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("_is_anesth", $_is_anesth);
-$smarty->assign("consult"   , $consult);
+$smarty->assign("_is_anesth"    , $_is_anesth);
+$smarty->assign("consult"       , $consult);
 $smarty->assign("consult_anesth", $consult->_ref_consult_anesth);
+$smarty->assign("listPrats"     , $listPrats);
 
 $smarty->display("inc_finish_banner.tpl");
