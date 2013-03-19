@@ -1539,6 +1539,11 @@ class CStoredObject extends CModelObject {
     if (!$this->_id || !$backObject->_spec->table || !$backObject->_spec->key) {
       return $this->_count[$backName] = 0;
     }
+
+    // mass count optimization
+    if (isset($this->_count[$backName]) && !count($where) && !count($ljoin)) {
+      return $this->_count[$backName];
+    }
     
     // @todo Refactor using CRequest
     $query = "SELECT COUNT({$backObject->_spec->key}) 
