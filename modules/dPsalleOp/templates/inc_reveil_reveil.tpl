@@ -11,9 +11,6 @@
     submitFormAjax(oFormOperation,'systemMsg', {onComplete: function(){refreshTabsReveil()}});
   }
 </script>
-{{if @$modules.brancardage->_can->read}}
-  {{mb_script module=brancardage script=creation_brancardage ajax=true}}
-{{/if}}
 
 {{assign var=use_poste value=$conf.dPplanningOp.COperation.use_poste}}
 

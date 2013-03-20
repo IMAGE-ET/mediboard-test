@@ -124,6 +124,10 @@
       <button type="button" class="print" onclick="Operation.print('{{$operation->_id}}');">
         {{tr}}Print{{/tr}}
       </button>
+      {{if @$modules.brancardage->_can->read}}
+        {{mb_script module=brancardage script=creation_brancardage ajax=true}}
+        <button type="button" class="lookup" onmousedown="CreationBrancard.jumelles('{{$operation->_id}}', 'operation_id');">Brancardage</button>
+      {{/if}}
     </td>
   </tr>
 </table>

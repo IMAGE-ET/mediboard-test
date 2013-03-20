@@ -1,6 +1,10 @@
 {{mb_script module="bloodSalvage" script="bloodSalvage"}}
 {{mb_script module="soins" script="plan_soins"}}
 
+{{if @$modules.brancardage->_can->read}}
+  {{mb_script module=brancardage script=creation_brancardage ajax=true}}
+{{/if}}
+
 {{if "dPprescription"|module_active}}
   {{mb_script module="dPprescription" script="prescription"}}
   {{mb_script module="dPprescription" script="element_selector"}}
@@ -85,9 +89,9 @@ showDossierSoins = function(sejour_id, operation_id, default_tab){
   if(default_tab){
     url.addParam("default_tab", default_tab);
   }
-	url.requestUpdate($('dossier_sejour'));
+  url.requestUpdate($('dossier_sejour'));
   modalWindow = modal($('dossier_sejour'));
-	{{/if}}
+  {{/if}}
 }
 
 printDossier = function(sejour_id, operation_id) {

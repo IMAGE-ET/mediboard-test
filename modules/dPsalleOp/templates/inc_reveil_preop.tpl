@@ -20,6 +20,9 @@
     <th>Patient</th>
     <th>Interv</th>
     <th>Coté</th>
+    {{if @$modules.brancardage->_can->read}}
+      <th>{{tr}}CBrancardage{{/tr}}</th>
+    {{/if}}
     <th class="narrow">Début</th>
     <th class="narrow">Fin</th>
     <th class="narrow"></th>
@@ -48,13 +51,13 @@
         </a>
       </div>
       
-			<a href="#" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
-			<span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
+      <a href="#" onclick="showDossierSoins('{{$_operation->sejour_id}}','{{$_operation->_id}}');">
+      <span class="{{if !$_operation->_ref_sejour->entree_reelle}}patient-not-arrived{{/if}} {{if $_operation->_ref_sejour->septique}}septique{{/if}}"
             onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_ref_sejour->_ref_patient->_guid}}');">
         {{$_operation->_ref_patient->_view}}
       </span>
-			</a>
-		</td>
+      </a>
+    </td>
     <td class="text">
       <span onmouseover="ObjectTooltip.createEx(this, '{{$_operation->_guid}}')">
       {{if $_operation->libelle}}
@@ -67,6 +70,23 @@
       </span>
     </td>
     <td class="text">{{mb_value object=$_operation field="cote"}}</td>
+    {{if @$modules.brancardage->_can->read}}
+      <td>
+         <span id="demandebrancard-{{$_operation->sejour_id}}"></span>
+          <script>
+            Main.add(function () {
+              var url = new Url("brancardage", "ajax_exist_brancard");
+              url.addParam("sejour_id", "{{$_operation->sejour_id}}");
+              url.addParam("salle_id", "{{$_operation->salle_id}}");
+              url.addParam("operation_id", '{{$_operation->_id}}');
+              url.addParam("reveil", "preop");
+              url.addParam("id", "demandebrancard");
+              url.addParam("opid", "{{$_operation->_id}}");
+              url.requestUpdate('demandebrancard-{{$_operation->sejour_id}}');
+            });
+          </script>
+      </td>
+    {{/if}}
     <td class="button">
       {{if $modif_operation}}
         <form name="editDebutPreopFrm{{$_operation->_id}}" action="?m={{$m}}" method="post">
