@@ -141,20 +141,49 @@ class CMbXMLDocument extends DOMDocument {
     
   }
   
-  function loadXMLSafe($source, $options = null) {
-    $ret = @parent::loadXML($source, $options);
-    
+  function loadXMLSafe($source, $options = null, $returnErrors = false) {
+    $errors  = array();
+    if (!$returnErrors) {
+      $ret = @parent::loadXML($source, $options);
+    }
+    else {
+      // Enable user error handling
+      libxml_use_internal_errors(true);
+
+      $ret = @parent::loadXML($source, $options);
+
+      $errors = $this->libxml_display_errors(false);
+    }
+
     if (!$ret) {
-      return parent::loadXML($this->getUTF8($source), $options);
+      if (!$returnErrors) {
+        return parent::loadXML($this->getUTF8($source), $options);
+      }
+
+      // Enable user error handling
+      libxml_use_internal_errors(true);
+
+      parent::loadXML($this->getUTF8($source), $options);
+
+      return $this->libxml_display_errors(false);
     }
     
-    return $ret;
+    return $errors ? $errors : $ret;
   }
   
-  function loadXML($source, $options = null) {
+  function loadXML($source, $options = null, $returnErrors = false) {
     $source = $this->getUTF8($source);
-    
-    return parent::loadXML($source, $options);
+
+    if (!$returnErrors) {
+      return parent::loadXML($source, $options);
+    }
+
+    // Enable user error handling
+    libxml_use_internal_errors(true);
+
+    parent::loadXML($source, $options);
+
+    return $this->libxml_display_errors(false);
   }
   
   protected function getUTF8($source) {
