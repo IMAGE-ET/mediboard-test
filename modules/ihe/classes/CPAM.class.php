@@ -144,54 +144,171 @@ class CPAM extends CIHE {
   /**
    * Test A24 - Link the two patients
    *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
    * @return void
    */
-  static function testA24() {
+  static function testA24(CCnStep $step) {
+    //  PDS-PAM_Identification_Mgt_Link : Récupération du step 10
+    $patient_1        = self::loadPatient($step, 10);
 
+    //  PDS-PAM_Identification_Mgt_Link : Récupération du step 10
+    $patient_2 = self::loadPatient($step, 40);
+
+    $patient_1->patient_link_id = $patient_2->_id;
+
+    if ($msg = $patient_1->store()) {
+      throw new CMbException($msg);
+    }
   }
 
   /**
    * Test A28 - Create patient with full demographic data
    *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
    * @return void
    */
-  static function testA28() {
+  static function testA28(CCnStep $step) {
+    // PDS-PAM_Identification_Mgt_Merge
+    $patient = new CPatient();
+    // Random sur les champs du patient
+    $patient->random();
 
+    $test    = $step->_ref_test;
+    $partner = $test->_ref_partner;
+
+    // On sélectionne le nom du patient en fonction du partenaire, du test et de l'étape
+    $patient->nom = "{$partner->name}_{$test->_id}_{$step->number}";
+
+    if ($msg = $patient->store()) {
+      throw new CMbException($msg);
+    }
   }
 
   /**
    * Test A31 - Update patient demographics
    *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
    * @return void
    */
-  static function testA31() {
+  static function testA31(CCnStep $step) {
+    // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
+    $patient = self::loadPatient($step, 10);
 
+    $patient->prenom = "CHANGE_$patient->prenom";
+    if ($msg = $patient->store()) {
+      throw new CMbException($msg);
+    }
   }
 
   /**
    * Test A37 - Unlink the two previously linked patients
    *
-   * @return void
-   */
-  static function testA37() {
-
-  }
-
-  /**
-   * Test A47 - Changes one of the identifiers
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
    *
    * @return void
    */
-  static function testA47() {
+  static function testA37(CCnStep $step) {
+    //  PDS-PAM_Identification_Mgt_Link : Récupération du step 10
+    $patient = self::loadPatient($step, 10);
 
+    $patient->patient_link_id = "";
+
+    if ($msg = $patient->store()) {
+      throw new CMbException($msg);
+    }
   }
 
   /**
    * Test A40 - Merge the two patients
    *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
    * @return void
    */
-  static function testA40() {
+  static function testA40(CCnStep $step) {
+    // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
+    $patient_1        = self::loadPatient($step, 10);
+    $first_patient_id = $patient_1->_id;
 
+    // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
+    $patient_2 = self::loadPatient($step, 40);
+
+    $patient_2_array = array($patient_2);
+
+    $checkMerge = $patient_1->checkMerge($patient_2_array);
+    // Erreur sur le check du merge
+    if ($checkMerge) {
+      throw new CMbException("La fusion de ces deux patients n'est pas possible à cause des problèmes suivants : $checkMerge");
+    }
+
+    /** @todo mergePlainFields resets the _id */
+    $patient_1->_id = $first_patient_id;
+
+    $patient_1->_merging = CMbArray::pluck($patient_2_array, "_id");
+    if ($msg = $patient_1->merge($patient_2_array)) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A47 - Changes one of the identifiers
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA47(CCnStep $step) {
+    // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
+    $patient = self::loadPatient($step, 10);
+
+    $patient->loadIPP($step->_ref_test->group_id);
+    $idex = $patient->_ref_IPP;
+
+    $idex->id400 = rand(1000000, 9999999);
+    if ($msg = $idex->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Load patient
+   *
+   * @param CCnStep $step        Step
+   * @param int     $step_number Step number
+   *
+   * @throws CMbException
+   *
+   * @return CPatient $patient
+   */
+  static function loadPatient(CCnStep $step, $step_number) {
+    // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
+    $test    = $step->_ref_test;
+    $partner = $test->_ref_partner;
+
+    $patient = new CPatient();
+    $where = array();
+    $where["nom"] = " = '{$partner->name}_{$test->_id}_$step_number'";
+    $patient->loadObject($where);
+
+    if (!$patient->_id) {
+      throw new CMbException("CPAM-cn_test-no_patient_id");
+    }
+
+    return $patient;
   }
 }

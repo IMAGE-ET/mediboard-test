@@ -202,8 +202,8 @@ class CITI30DelegatedHandler extends CITIDelegatedHandler {
       
       $receiver = $mbObject->_receiver; 
       $receiver->getInternationalizationCode($this->transaction);
-      
-      foreach ($mbObject->_fusion as $group_id => $infos_fus) {
+
+      foreach ($patient->_fusion as $group_id => $infos_fus) {
         if ($receiver->group_id != $group_id) {
           continue;
         }      

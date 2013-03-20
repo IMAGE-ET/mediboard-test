@@ -1517,12 +1517,13 @@ class CStoredObject extends CModelObject {
    * @param string $backName name the of the back references to count
    * @param array  $where    Additional where clauses
    * @param array  $ljoin    Additionnal ljoin clauses
+   * @param bool   $cache    Cache
    * 
    * @return int the count null if back references module is not installed
    * 
    * @todo Add the missing arguments (the same as loadbackRefs)
    */
-  function countBackRefs($backName, $where = array(), $ljoin = array()) {
+  function countBackRefs($backName, $where = array(), $ljoin = array(), $cache = true) {
     if (!$backSpec = $this->makeBackSpec($backName)) {
       return null;
     }
@@ -1540,8 +1541,8 @@ class CStoredObject extends CModelObject {
       return $this->_count[$backName] = 0;
     }
 
-    // mass count optimization
-    if (isset($this->_count[$backName]) && !count($where) && !count($ljoin)) {
+    // Mass count optimization
+    if ($cache && isset($this->_count[$backName]) && !count($where) && !count($ljoin)) {
       return $this->_count[$backName];
     }
     
@@ -2027,7 +2028,7 @@ class CStoredObject extends CModelObject {
       
       // Vérification du nombre de backRefs
       if (!$fwdSpec->unlink) {
-        if ($backCount = $this->countBackRefs($backName)) {
+        if ($backCount = $this->countBackRefs($backName, array(), array(), false)) {
           $issues[] = $backCount 
             . " " . CAppUI::tr("$fwdSpec->class-back-$backName");
         }

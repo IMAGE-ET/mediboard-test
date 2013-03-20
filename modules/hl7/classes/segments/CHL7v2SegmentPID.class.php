@@ -242,8 +242,8 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
       $data[] = null;
     }
     
-    // PID-19: SSN Number - Patient (ST) (optional)
-    $data[] = $patient->matricule;
+    // PID-19: SSN Number - Patient (ST) (forbidden)
+    $data[] = null;
 
     // PID-20: Driver's License Number - Patient (DLN) (optional)
     $data[] = null;
@@ -319,7 +319,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     
     // PID-30: Patient Death Indicator (ID) (optional)
     $data[] = ($patient->deces) ? "Y" : "N";
-    
+
     // PID-31: Identity Unknown Indicator (ID) (optional)
     switch ($receiver->_configs["build_PID_31"]) {
       case 'avs':
@@ -375,7 +375,7 @@ class CHL7v2SegmentPID extends CHL7v2Segment {
     
     // PID-39: Tribal Citizenship (CWE) (optional repeating)
     $data[] = null;
-          
+
     $this->fill($data);
   }
 

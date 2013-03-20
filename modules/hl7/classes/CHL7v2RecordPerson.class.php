@@ -417,24 +417,15 @@ class CHL7v2RecordPerson extends CHL7v2MessageXML {
     }
 
     //NSS
+    if (array_key_exists("SS", $data["personIdentifiers"])) {
+      $newPatient->matricule = $data["personIdentifiers"]["SS"];
+    }
+
     $sender = $this->_ref_sender;
     if (!$sender) {
       return;
     }
 
-    switch ($sender->_configs["handle_NSS"]) {
-      // PID_19
-      case 'PID_19':
-        $newPatient->matricule = $this->queryTextNode("PID.19", $node);
-        break;
-      // PID_3
-      default:
-        if (array_key_exists("SS", $data["personIdentifiers"])) {
-          $newPatient->matricule = $data["personIdentifiers"]["SS"];
-        }
-        break; 
-    }
-    
     // AVS ?
     if ($sender->_configs["handle_PID_31"] == "avs") {
       $newPatient->avs = $this->queryTextNode("PID.31", $node);

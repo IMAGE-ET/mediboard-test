@@ -582,7 +582,7 @@ class CMbObject extends CStoredObject {
     $where["object_id"]    = " IS NULL";
     $class_config = new $object_class;
     $class_config->loadObject($where);
-    
+
     if (!$class_config->_id) {
       $class_config->valueDefaults();
     }
@@ -688,6 +688,28 @@ class CMbObject extends CStoredObject {
       elseif ($key[0] != "_") {
         $spec->sample($this, false);
       }
+    }
+  }
+
+  /**
+   * Fills the object with random sample data from database
+   *
+   * @return void
+   */
+  function random() {
+    $ds = $this->getDS();
+
+    $fields = $this->getPlainFields();
+    unset($fields[$this->_spec->key]);
+
+    foreach ($fields as $_field => $value) {
+      $query = new CRequest;
+      $query->addSelect($_field);
+      $query->addTable($this->_spec->table);
+      $query->addOrder("RAND()");
+      $query->setLimit(1);
+
+      $this->$_field = $ds->loadResult($query->getRequest());
     }
   }
 
