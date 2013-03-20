@@ -190,16 +190,15 @@ class CSetupdPfacturation extends CSetup {
               AND u.template = '1'
               AND n.mod_name = 'dPcabinet'
               AND p.mod_id = n.mod_id
-              AND p.permission = 2
+              AND p.permission = '2'
               AND p.user_id = u.user_id
               AND NOT EXISTS (
                 SELECT * FROM perm_module AS o
                 WHERE o.user_id = u.user_id
                 AND o.mod_id = m.mod_id
-                AND p.permission = 2
+                AND p.permission = '2'
               );";
     $this->addQuery($query);
     $this->mod_version = "0.22";
   }
 }
-?>
