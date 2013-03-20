@@ -534,7 +534,7 @@ ul.control_tabs_vertical li a.active {
   border-bottom: 1px solid #AECFF7;
   position: fixed;
   top: 0;
-  z-index: 10;
+  z-index: 1150;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -644,13 +644,6 @@ td.tabview {
   padding-top:30px;
 }
 
-.tabmenu {
-  list-style-type: none;
-  padding: 4px 0 0 0;
-  margin: 0;
-  font-weight: bold;
-  background: #eee;
-}
 
 .tabmenu li {
   margin-left: 3px;
