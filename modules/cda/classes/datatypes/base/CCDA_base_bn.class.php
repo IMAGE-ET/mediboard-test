@@ -10,9 +10,9 @@
  * @link     http://www.mediboard.org */
  
 /**
- * CCDA_bn class
+ * CCDA_base_bn class
  */
-class CCDA_bn extends CCDA_bl {
+class CCDA_base_bn extends CCDA_base_bl {
 
   /**
 	 * Get the properties of our class as strings

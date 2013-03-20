@@ -10,11 +10,9 @@
  * @link     http://www.mediboard.org */
  
 /**
- * Binary data is a raw block of bits. Binary data is a
- * protected type that MUST not be used outside the data
- * type specification.
+ * CCDAlist_int Class
  */
-class CCDA_bin extends CCDA_Datatype_Base {
+class CCDAlist_int extends CCDA_Datatype_Set {
 
   /**
 	 * Get the properties of our class as strings
@@ -22,42 +20,46 @@ class CCDA_bin extends CCDA_Datatype_Base {
 	 * @return array
 	 */
   function getProps() {
-    parent::getProps();
-    $props["data"] = "base64 xml|data";
+    $props = parent::getProps();
+    $props["listData"] = "CCDA_base_int xml|data";
     return $props;
   }
 
   /**
-   * Fonction permettant de tester la classe
+   * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();
 
     /**
-     * Test avec une valeur null
+     * Test avec un int incorrecte
      */
-
-    $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
+    $int = new CCDA_base_int();
+    $int->setData("10.25");
+    $this->addData($int);
+    $tabTest[] = $this->sample("Test avec un int incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec une valeur correcte
+     * Test avec un int correcte
      */
-
-    $this->setData("JVBERi0xLjUNCiW1tbW1DQoxIDAgb2Jq");
-    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
+    $int->setData("10");
+    $this->razlistData();
+    $this->addData($int);
+    $tabTest[] = $this->sample("Test avec un int correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
-
     /**
-     * Test avec une valeur incorrecte
+     * Test avec deux int correcte
      */
 
-    $this->setData("111111111");
-    $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
+    $int2 = new CCDA_base_int();
+    $int2->setData("11");
+    $this->addData($int2);
+    $tabTest[] = $this->sample("Test avec deux int correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

@@ -23,7 +23,7 @@
     <li><a href="#message-cda-tree">{{tr}}tree{{/tr}}</a></li>
     <li><a href="#message-cda-xml">XML</a></li>
     <li>
-      <a href="#message-cda-errors" {{if $treecda->validate !=1}}class="wrong"{{else}} class="special" {{/if}}>
+      <a href="#message-cda-errors" {{if $treecda->validate|@count == 0}}class="special"{{else}} class="wrong" {{/if}}>
         {{tr}}validation{{/tr}} XSD
       </a>
     </li>

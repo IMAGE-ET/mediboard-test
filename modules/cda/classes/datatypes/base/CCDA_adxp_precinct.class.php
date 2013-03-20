@@ -16,6 +16,9 @@ class CCDA_adxp_precinct extends CCDAADXP {
 
    private $XMLName = "adxp.precinct";
 
+  /**
+   * Fixe la donnée
+   */
   function __construct() {
     $part = new CCDAAddressPartType();
     $part->setData("PRE");
@@ -44,7 +47,7 @@ class CCDA_adxp_precinct extends CCDAADXP {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

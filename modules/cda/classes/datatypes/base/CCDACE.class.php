@@ -41,7 +41,7 @@ class CCDACE extends CCDACD {
      */
 
     $cr = new CCDACR();
-    $bn = new CCDA_bn();
+    $bn = new CCDA_base_bn();
     $bn->setData("true");
     $cr->setInverted($bn);
     $this->setQualifier($cr);

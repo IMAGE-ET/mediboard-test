@@ -16,6 +16,9 @@ class CCDA_adxp_additionalLocator extends CCDAADXP {
 
    private $XMLName = "adxp.additionalLocator";
 
+  /**
+   * Fixe la donnée
+   */
   function __construct() {
     $part = new CCDAAddressPartType();
     $part->setData("ADL");
@@ -44,7 +47,7 @@ class CCDA_adxp_additionalLocator extends CCDAADXP {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

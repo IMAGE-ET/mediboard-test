@@ -17,7 +17,6 @@ $message = stripslashes($message);
 $cdafile = new CCdaTools();
 $cdafile->parse($message);
 $cdafile->showxml($message);
-$cdafile->schematronValidate($message);
 
 $smarty = new CSmartyDP();
 

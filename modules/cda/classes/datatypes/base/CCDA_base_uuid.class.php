@@ -10,13 +10,17 @@
  * @link     http://www.mediboard.org */
  
 /**
- * HL7 reserved identifiers are strings consisting only of
- * (US-ASCII) letters, digits and hyphens, where the first
- * character must be a letter. HL7 may assign these reserved
- * identifiers as mnemonic identifiers for major concepts of
- * interest to HL7.
+ * A DCE Universal Unique Identifier is a globally unique
+ * string consisting of 5 groups of upper- or lower-case
+ * hexadecimal digits having 8, 4, 4, 4, and 12 places
+ * respectively. UUIDs are assigned using Ethernet MAC
+ * addresses, the point in time of creation and some random
+ * components. This mix is believed to generate sufficiently
+ * unique identifiers without any organizational policy for
+ * identifier assignment (in fact this piggy-backs on the
+ * organization of MAC address assignment.)
  */
-class CCDA_ruid extends CCDA_Datatype_Base {
+class CCDA_base_uuid extends CCDA_Datatype_Base {
 
   /**
 	 * Get the properties of our class as strings
@@ -25,14 +29,14 @@ class CCDA_ruid extends CCDA_Datatype_Base {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["data"] = "str xml|data pattern|[A-Za-z][A-Za-z0-9\\-]*";
+    $props["data"] = "str xml|data pattern|[0-9a-zA-Z]{8}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{4}-[0-9a-zA-Z]{12}";
     return $props;
   }
 
   /**
    * Fonction permettant de tester la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();
@@ -41,7 +45,7 @@ class CCDA_ruid extends CCDA_Datatype_Base {
      * Test avec une valeur correcte
      */
 
-    $this->setData("HL7");
+    $this->setData("azer1254-azer-azer-azer-Azert1257825");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -50,7 +54,7 @@ class CCDA_ruid extends CCDA_Datatype_Base {
      * Test avec une valeur incorrecte
      */
 
-    $this->setData("4TESTTEST");
+    $this->setData("TESTTEST");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/

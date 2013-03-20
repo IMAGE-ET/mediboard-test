@@ -18,12 +18,15 @@ class CCDAEIVL_event extends CCDACE {
 
   private $name = "EIVL.event";
 
+  /**
+   * Fixe les données
+   */
   function __construct() {
-    $codeSystemTest = new CCDA_uid();
+    $codeSystemTest = new CCDA_base_uid();
     $codeSystemTest->setData("2.16.840.1.113883.5.139");
     $this->setCodeSystem($codeSystemTest);
 
-    $codeSystemNameTest = new CCDA_st();
+    $codeSystemNameTest = new CCDA_base_st();
     $codeSystemNameTest->setData("TimingEvent");
     $this->setCodeSystemName($codeSystemNameTest);
   }
@@ -44,8 +47,8 @@ class CCDAEIVL_event extends CCDACE {
   function getProps() {
     $props = parent::getProps();
     $props["code"] = "CCDATimigEvent xml|attribute";
-    $props["codeSystem"] = "CCDA_uid xml|attribute fixed|2.16.840.1.113883.5.139";
-    $props["codeSystemName"] = "CCDA_st xml|attribute fixed|TimingEvent";
+    $props["codeSystem"] = "CCDA_base_uid xml|attribute fixed|2.16.840.1.113883.5.139";
+    $props["codeSystemName"] = "CCDA_base_st xml|attribute fixed|TimingEvent";
     return $props;
   }
 

@@ -25,17 +25,31 @@ class CCDAANY extends CCDA_Datatype{
    */
   public $nullFlavor;
 
+  /**
+   * Setter nullFlavor
+   *
+   * @param CCDANullFlavor $nullFlavor CCDANullFlavor
+   *
+   * @return void
+   */
   function setNullFlavor($nullFlavor) {
     $this->nullFlavor = $nullFlavor;
   }
 
   /**
+   * Getter nullFlavor
+   *
    * @return \CCDANullFlavor
    */
   public function getNullFlavor() {
     return $this->nullFlavor;
   }
 
+  /**
+   * Getter props
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["nullFlavor"] = "CCDANullFlavor xml|attribute";
@@ -43,6 +57,11 @@ class CCDAANY extends CCDA_Datatype{
     return $props;
   }
 
+  /**
+   * Fonction qui permet de vérifié que la classe fonctionne
+   *
+   * @return array
+   */
   function test() {
 
     $tabTest = array();

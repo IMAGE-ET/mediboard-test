@@ -23,10 +23,15 @@ class CCDATS extends CCDAQTY{
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["value"] = "CCDA_ts xml|attribute";
+    $props["value"] = "CCDA_base_ts xml|attribute";
     return $props;
   }
 
+  /**
+   * Fcontion qui permet de tester si la classe fonctionne
+   *
+   * @return array
+   */
   function test() {
     $tabTest = parent::test();
 
@@ -34,7 +39,7 @@ class CCDATS extends CCDAQTY{
      * Test avec une valeur incorrecte
      */
 
-    $ts = new CCDA_ts();
+    $ts = new CCDA_base_ts();
     $ts->setData("TESTTEST");
     $this->setValue($ts);
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document invalide");

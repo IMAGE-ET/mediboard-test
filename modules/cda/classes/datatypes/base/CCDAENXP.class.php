@@ -38,13 +38,19 @@ class CCDAENXP extends CCDAST {
   public $qualifier;
 
   /**
-   * @param \CCDAEntityNamePartType $partType
+   * Setter partType
+   *
+   * @param \CCDAEntityNamePartType $partType \CCDAEntityNamePartType
+   *
+   * @return void
    */
   public function setPartType($partType) {
     $this->partType = $partType;
   }
 
   /**
+   * Getter partType
+   *
    * @return \CCDAEntityNamePartType
    */
   public function getPartType() {
@@ -52,13 +58,19 @@ class CCDAENXP extends CCDAST {
   }
 
   /**
-   * @param \CCDAset_EntityNamePartQualifier $qualifier
+   * Setter qualifier
+   *
+   * @param \CCDAset_EntityNamePartQualifier $qualifier \CCDAset_EntityNamePartQualifier
+   *
+   * @return void
    */
   public function setQualifier($qualifier) {
     $this->qualifier = $qualifier;
   }
 
   /**
+   * Getter qualifier
+   *
    * @return \CCDAset_EntityNamePartQualifier
    */
   public function getQualifier() {
@@ -80,7 +92,7 @@ class CCDAENXP extends CCDAST {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

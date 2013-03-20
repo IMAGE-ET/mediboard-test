@@ -10,12 +10,11 @@
  * @link     http://www.mediboard.org */
  
 /**
- * The character string data type stands for text data,
- * primarily intended for machine processing (e.g.,
- * sorting, querying, indexing, etc.) Used for names,
- * symbols, and formal expressions.
+ * The Boolean type stands for the values of two-valued logic.
+ * A Boolean value can be either true or
+ * false, or, as any other value may be NULL.
  */
-class CCDA_st extends CCDA_Datatype_Base {
+class CCDA_base_bl extends CCDA_Datatype_Base {
 
   /**
 	 * Get the properties of our class as strings
@@ -24,14 +23,14 @@ class CCDA_st extends CCDA_Datatype_Base {
 	 */
   function getProps() {
     parent::getProps();
-    $props["data"] = "str xml|data minlength|1";
+    $props["data"] = "booleen xml|data pattern|true|false";
     return $props;
   }
 
   /**
    * Fonction permettant de tester la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();
@@ -40,7 +39,7 @@ class CCDA_st extends CCDA_Datatype_Base {
      * Test avec une valeur correcte
      */
 
-    $this->setData("TESTTEST");
+    $this->setData("true");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -49,7 +48,7 @@ class CCDA_st extends CCDA_Datatype_Base {
      * Test avec une valeur incorrecte
      */
 
-    $this->setData("");
+    $this->setData("TESTTEST");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/

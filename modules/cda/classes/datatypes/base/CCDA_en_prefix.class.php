@@ -16,6 +16,9 @@ class CCDA_en_prefix extends CCDAENXP {
 
    private $XMLName = "en.prefix";
 
+  /**
+   * Fixe la donnée
+   */
   function __construct() {
     $part = new CCDAEntityNamePartType();
     $part->setData("PFX");
@@ -44,7 +47,7 @@ class CCDA_en_prefix extends CCDAENXP {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

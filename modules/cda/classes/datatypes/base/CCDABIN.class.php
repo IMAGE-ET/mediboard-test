@@ -19,7 +19,7 @@ class CCDABIN extends CCDAANY {
   /**
    * Specifies the representation of the binary data that
    * is the content of the binary data value.
-   * @var CCDA_BinaryDataEncoding
+   * @var CCDA_base_BinaryDataEncoding
    */
   public $representation;
   /**
@@ -29,7 +29,7 @@ class CCDABIN extends CCDAANY {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["representation"] = "CCDA_BinaryDataEncoding xml|attribute default|TXT";
+    $props["representation"] = "CCDA_base_BinaryDataEncoding xml|attribute default|TXT";
     $props["data"] = "str xml|data";
     return $props;
   }
@@ -38,6 +38,8 @@ class CCDABIN extends CCDAANY {
    * Modifie la representation
    *
    * @param String $representation Representation
+   *
+   * @return void
    */
   function setRepresentation($representation) {
     $this->representation = $representation;
@@ -69,7 +71,7 @@ class CCDABIN extends CCDAANY {
      * Test avec une valeur incorrecte
      */
 
-    $binaryDataEncoding = new CCDA_BinaryDataEncoding();
+    $binaryDataEncoding = new CCDA_base_BinaryDataEncoding();
     $binaryDataEncoding->setData("TESTTEST");
     $this->setRepresentation($binaryDataEncoding);
 

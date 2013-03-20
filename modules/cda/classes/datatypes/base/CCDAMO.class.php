@@ -24,19 +24,25 @@ class CCDAMO extends CCDAQTY {
   /**
    * The currency unit as defined in ISO 4217.
    *
-   * @var CCDA_cs
+   * @var CCDA_base_cs
    */
   public $currency;
 
   /**
-   * @param \CCDA_cs $currency
+   * Setter currency
+   *
+   * @param \CCDA_base_cs $currency \CCDA_base_cs
+   *
+   * @return void
    */
   public function setCurrency($currency) {
     $this->currency = $currency;
   }
 
   /**
-   * @return \CCDA_cs
+   * Getter currency
+   *
+   * @return \CCDA_base_cs
    */
   public function getCurrency() {
     return $this->currency;
@@ -49,15 +55,15 @@ class CCDAMO extends CCDAQTY {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["value"] = "CCDA_real xml|attribute";
-    $props["currency"] = "CCDA_cs xml|attribute";
+    $props["value"] = "CCDA_base_real xml|attribute";
+    $props["currency"] = "CCDA_base_cs xml|attribute";
     return $props;
   }
 
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();
@@ -66,7 +72,7 @@ class CCDAMO extends CCDAQTY {
      * Test avec une valeur incorrecte
      */
 
-    $real = new CCDA_real();
+    $real = new CCDA_base_real();
     $real->setData("test");
     $this->setValue($real);
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
@@ -87,7 +93,7 @@ class CCDAMO extends CCDAQTY {
      * Test avec un currency incorrecte
      */
 
-    $cs = new CCDA_cs();
+    $cs = new CCDA_base_cs();
     $cs->setData(" ");
     $this->setCurrency($cs);
     $tabTest[] = $this->sample("Test avec un currency incorrecte", "Document invalide");

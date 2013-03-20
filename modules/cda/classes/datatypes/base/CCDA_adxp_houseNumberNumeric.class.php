@@ -16,6 +16,9 @@ class CCDA_adxp_houseNumberNumeric extends CCDAADXP {
 
    private $XMLName = "adxp.houseNumberNumeric";
 
+  /**
+   * Fixe la donnée
+   */
   function __construct() {
     $part = new CCDAAddressPartType();
     $part->setData("BNN");
@@ -44,7 +47,7 @@ class CCDA_adxp_houseNumberNumeric extends CCDAADXP {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

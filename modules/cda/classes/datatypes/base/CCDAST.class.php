@@ -36,7 +36,7 @@ class CCDAST extends CCDAED {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 
@@ -46,7 +46,7 @@ class CCDAST extends CCDAED {
      * Test avec une valeur correcte mais refuser dans ce contexte
      */
 
-    $binaryDataEncoding = new CCDA_BinaryDataEncoding();
+    $binaryDataEncoding = new CCDA_base_BinaryDataEncoding();
     $binaryDataEncoding->setData("B64");
     $this->setRepresentation($binaryDataEncoding);
 
@@ -70,7 +70,7 @@ class CCDAST extends CCDAED {
      *
      */
 
-    $codeTest = new CCDA_cs();
+    $codeTest = new CCDA_base_cs();
     $codeTest->setData(" ");
     $this->setMediaType($codeTest);
 

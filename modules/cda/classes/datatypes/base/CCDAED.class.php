@@ -78,13 +78,19 @@ class CCDAED extends CCDABIN {
   public $integrityCheckAlgorithm;
 
   /**
-   * @param \CCDACompressionAlgorithm $compression
+   * Setter compressionAlgorithm
+   *
+   * @param \CCDACompressionAlgorithm $compression \CCDACompressionAlgorithm
+   *
+   * @return void
    */
   public function setCompression($compression) {
     $this->compression = $compression;
   }
 
   /**
+   * Getter compressionAlgorithm
+   *
    * @return \CCDACompressionAlgorithm
    */
   public function getCompression() {
@@ -92,27 +98,39 @@ class CCDAED extends CCDABIN {
   }
 
   /**
-   * @param \CCDA_bin $integrityCheck
+   * Setter integrityCheck
+   *
+   * @param \CCDA_base_bin $integrityCheck \CCDA_base_bin
+   *
+   * @return void
    */
   public function setIntegrityCheck($integrityCheck) {
     $this->integrityCheck = $integrityCheck;
   }
 
   /**
-   * @return \CCDA_bin
+   * Getter integrityCheck
+   *
+   * @return \CCDA_base_bin
    */
   public function getIntegrityCheck() {
     return $this->integrityCheck;
   }
 
   /**
-   * @param \CCDAIntegrityCheckAlgorithm $integrityCheckAlgorithm
+   * Setter integrityCheckAlgorithm
+   *
+   * @param \CCDAIntegrityCheckAlgorithm $integrityCheckAlgorithm \CCDAIntegrityCheckAlgorithm
+   *
+   * @return void
    */
   public function setIntegrityCheckAlgorithm($integrityCheckAlgorithm) {
     $this->integrityCheckAlgorithm = $integrityCheckAlgorithm;
   }
 
   /**
+   * Getter integrityCheckAlgorithm
+   *
    * @return \CCDAIntegrityCheckAlgorithm
    */
   public function getIntegrityCheckAlgorithm() {
@@ -120,41 +138,59 @@ class CCDAED extends CCDABIN {
   }
 
   /**
-   * @param \CCDA_cs $language
+   * Setter language
+   *
+   * @param \CCDA_base_cs $language \CCDA_base_cs
+   *
+   * @return void
    */
   public function setLanguage($language) {
     $this->language = $language;
   }
 
   /**
-   * @return \CCDA_cs
+   * Getter language
+   *
+   * @return \CCDA_base_cs
    */
   public function getLanguage() {
     return $this->language;
   }
 
   /**
-   * @param \CCDA_cs $mediaType
+   * Setter mediaType
+   *
+   * @param \CCDA_base_cs $mediaType \CCDA_base_cs
+   *
+   * @return void
    */
   public function setMediaType($mediaType) {
     $this->mediaType = $mediaType;
   }
 
   /**
-   * @return \CCDA_cs
+   * Getter mediaType
+   *
+   * @return \CCDA_base_cs
    */
   public function getMediaType() {
     return $this->mediaType;
   }
 
   /**
-   * @param \CCDATEL $reference
+   * Setter reference
+   *
+   * @param \CCDATEL $reference \CCDATEL
+   *
+   * @return void
    */
   public function setReference($reference) {
     $this->reference = $reference;
   }
 
   /**
+   * Getter reference
+   *
    * @return \CCDATEL
    */
   public function getReference() {
@@ -162,20 +198,24 @@ class CCDAED extends CCDABIN {
   }
 
   /**
-   * @param \CCDAthumbnail $thumbnail
+   * Setter thumbnail
+   *
+   * @param \CCDAthumbnail $thumbnail \CCDAthumbnail
+   *
+   * @return void
    */
   public function setThumbnail($thumbnail) {
     $this->thumbnail = $thumbnail;
   }
 
   /**
+   * Getter thumbnail
+   *
    * @return \CCDAthumbnail
    */
   public function getThumbnail() {
     return $this->thumbnail;
   }
-
-
 
   /**
 	 * Get the properties of our class as strings
@@ -186,10 +226,10 @@ class CCDAED extends CCDABIN {
     $props = parent::getProps();
     $props["reference"] = "CCDATEL xml|element max:1";
     $props["thumbnail"] = "CCDAthumbnail xml|element max:1";
-    $props["mediaType"] = "CCDA_cs xml|attribute default:text/plain";
-    $props["language"] = "CCDA_cs xml|attribute";
+    $props["mediaType"] = "CCDA_base_cs xml|attribute default:text/plain";
+    $props["language"] = "CCDA_base_cs xml|attribute";
     $props["compression"] = "CCDACompressionAlgorithm xml|attribute";
-    $props["integrityCheck"] = "CCDA_bin xml|attribute";
+    $props["integrityCheck"] = "CCDA_base_bin xml|attribute";
     $props["integrityCheckAlgorithm"] = "CCDAintegrityCheckAlgorithm xml|attribute default:SHA-1";
     return $props;
   }
@@ -207,7 +247,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $language = new CCDA_cs();
+    $language = new CCDA_base_cs();
     $language->setData(" ");
     $this->setLanguage($language);
 
@@ -236,7 +276,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $codeTest = new CCDA_cs();
+    $codeTest = new CCDA_base_cs();
     $codeTest->setData(" ");
     $this->setMediaType($codeTest);
 
@@ -287,7 +327,7 @@ class CCDAED extends CCDABIN {
      *
      */
 
-    $integrity = new CCDA_bin();
+    $integrity = new CCDA_base_bin();
     $integrity->setData("111111111");
     $this->setIntegrityCheck($integrity);
 

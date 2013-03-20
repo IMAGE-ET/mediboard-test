@@ -16,6 +16,9 @@ class CCDA_adxp_postBox extends CCDAADXP {
 
    private $XMLName = "adxp.postBox";
 
+  /**
+   * Fixe la donnée
+   */
   function __construct() {
     $part = new CCDAAddressPartType();
     $part->setData("POB");
@@ -44,7 +47,7 @@ class CCDA_adxp_postBox extends CCDAADXP {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

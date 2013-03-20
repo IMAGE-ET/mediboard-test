@@ -34,7 +34,7 @@ class CCDACV extends CCDACE {
   function test() {
     $tabTest = parent::test();
 
-    if(get_class($this) === "CCDAPQR") {
+    if (get_class($this) === "CCDAPQR") {
       return $tabTest;
     }
 
@@ -42,7 +42,7 @@ class CCDACV extends CCDACE {
      * Test avec un translation correct avec valeur
      */
     $translation = new CCDACD();
-    $codeSystemNameTest = new CCDA_st();
+    $codeSystemNameTest = new CCDA_base_st();
     $codeSystemNameTest->setData("test");
     $translation->setCodeSystemName($codeSystemNameTest);
     $this->setTranslation($translation);

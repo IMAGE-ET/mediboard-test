@@ -16,6 +16,9 @@ class CCDA_en_family extends CCDAENXP {
 
    private $XMLName = "en.family";
 
+  /**
+   * Fixe la donnée
+   */
   function __construct() {
     $part = new CCDAEntityNamePartType();
     $part->setData("FAM");
@@ -44,7 +47,7 @@ class CCDA_en_family extends CCDAENXP {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

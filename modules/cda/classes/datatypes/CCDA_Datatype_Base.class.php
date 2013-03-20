@@ -3,7 +3,7 @@
 /**
  * $Id$
  *  
- * @category ${Module}
+ * @category CDA
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -26,14 +26,27 @@ class CCDA_Datatype_Base extends CCDA_Datatype {
   }
 
   /**
+   * Retourne le nom du type utilisé dans le XSD
+   *
+   * @return string
+   */
+  function getNameClass() {
+    $name = get_class($this);
+
+    $name = substr($name, strrpos($name, "_")+1);
+
+    return $name;
+  }
+
+  /**
    * Fonction permettant de tester la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = array();
 
-    if (get_class($this) === "CCDA_bin" || get_class($this) === "CCDA_url") {
+    if (get_class($this) === "CCDA_base_bin" || get_class($this) === "CCDA_base_url") {
       return $tabTest;
     }
     /**

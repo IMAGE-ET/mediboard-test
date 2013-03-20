@@ -10,45 +10,52 @@
  * @link     http://www.mediboard.org */
  
 /**
- * A quantity specifying a point on the axis of natural time.
- * A point in time is most often represented as a calendar
- * expression.
+ * Coded data in its simplest form, consists of a code.
+ * The code system and code system version is fixed by
+ * the context in which the CS value occurs. CS is used
+ * for coded attributes that have a single HL7-defined
+ * value set.
  */
-class CCDA_ts extends CCDA_Datatype_Base {
-  
+class CCDA_base_cs extends CCDA_Datatype_Base {
+
   /**
 	 * Get the properties of our class as strings
 	 *
 	 * @return array
 	 */
   function getProps() {
-    $props = parent::getProps();
-    $props["data"] = "str xml|data pattern|[0-9]{1,8}|([0-9]{9,14}|[0-9]{14,14}\\.[0-9]+)([+\\-][0-9]{1,4})?";
+    $props = array();
+    $props["data"] = "str xml|data pattern|[^\\s]+";
     return $props;
   }
 
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 
     $tabTest = parent::test();
 
     /**
-     * Test avec un use incorrecte
+     * Test avec un valeur incorrecte
      */
 
-    $this->setData("TESTEST");
+    $this->setData(" ");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
+
+    if (get_class($this) !== "CCDA_base_cs") {
+      return $tabTest;
+    }
+
     /**
-     * Test avec une valeur correcte
+     * Test avec un valeur correcte
      */
 
-    $this->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
+    $this->setData("test");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

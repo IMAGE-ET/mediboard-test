@@ -95,6 +95,7 @@ class CCdaTools {
    * @return void
    */
   function parse ($message) {
+
     $this->domschema = new CMbXMLDocument("UTF-8");
     $this->domschema->load("modules/cda/resources/CDA.xsd");
 
@@ -102,9 +103,19 @@ class CCdaTools {
     $this->xpath->registerNamespace("xs", "http://www.w3.org/2001/XMLSchema");
 
     $dom = new CMbXMLDocument("UTF-8");
-    $dom->loadXMLSafe($message);
+    $returnErrors = $dom->loadXMLSafe(utf8_encode($message), null, true);
+    $tabErrors = array_filter(explode("\n", $returnErrors));
 
-    $this->validate = $dom->schemaValidate("modules/cda/resources/CDA.xsd", true, false);
+    $returnErrors = $dom->schemaValidate("modules/cda/resources/CDA.xsd", true, false);
+    $tabErrors = array_merge($tabErrors, array_filter(explode("\n", $returnErrors)));
+
+    $this->validate = array_unique($tabErrors);
+
+    if ($this->validate[0] != "1") {
+      $this->contain = null;
+      return;
+    }
+    $this->validate = array();
     $this->contain = $this->parsedeep($dom->documentElement);
   }
 
@@ -117,32 +128,6 @@ class CCdaTools {
    */
   function showxml($message) {
     $this->xml = CMbString::highlightCode("xml", $message);
-  }
-
-  /**
-   * permet de valider le CDA par le schematron (En cours de création)
-   * l'extension XSL ne permet pas de valider le XSLT2.0
-   * Il faut utiliser saxon
-   *
-   * @param $message
-   */
-  function schematronValidate ($message) {
-    $xsltsche = new XSLTProcessor();
-
-    $domSche = new DOMDocument();
-    $domSche->loadXML($message);
-
-    $domXSLSche = new DOMDocument();
-    $domXSLSche->load("modules/cda/resources/schematron/CI-SIS_StructurationCommuneCDAr2.xsl");
-
-    $xsltsche->importStylesheet($domXSLSche);
-    $XSLValid = $xsltsche->transformToXml($domSche);
-/*
-    $xslt = new XSLTProcessor();
-    $xslt->importStylesheet($XSLValid);
-    $domcda = new CMbXMLDocument("UTF-8");
-    $domcda->loadXMLSafe($message);
-    $this->validateSchematron = $xslt->transformToXml($domcda);*/
   }
 
   /**
@@ -224,7 +209,7 @@ class CCdaTools {
   /**
    * Permet de formater le tableau en entré
    *
-   * @param $array
+   * @param array $array array
    *
    * @return mixed
    */
@@ -235,8 +220,8 @@ class CCdaTools {
   /**
    * Permet de de retourner la portion xml du noeud choisi par le nom dans le schéma spécifié
    *
-   * @param $name
-   * @param $schema
+   * @param String $name   String
+   * @param String $schema String
    *
    * @return string
    */
@@ -308,7 +293,7 @@ class CCdaTools {
   /**
    * Permet la création de la synthèse des tests
    *
-   * @param $result
+   * @param array $result array
    *
    * @return array
    */
@@ -340,10 +325,12 @@ class CCdaTools {
   /**
    * Permet de lancer les tests de toutes les classes renseignées
    *
+   * @param $test $test String
+   *
    * @return array
    */
-  function createTest() {
-    $file = glob("modules/cda/classes/datatypes/{voc,base,datatype}/*.class.php", GLOB_BRACE);
+  function createTest($test) {
+    $file = glob("modules/cda/classes/datatypes/$test/*.class.php", GLOB_BRACE);
 
     $result = array();
     foreach ($file as $_file) {
@@ -359,7 +346,7 @@ class CCdaTools {
   /**
    * Retourne tous les types présent dans le schéma renseigné
    *
-   * @param $schema
+   * @param String $schema String
    *
    * @return array
    */
@@ -387,7 +374,7 @@ class CCdaTools {
     /**
      * On récupère les types des différents XSD
      */
-    $listAllType = array();
+
     $listAllType = $this->returnType("modules/cda/resources/datatypes-base.xsd");
     $listAllType = array_merge($listAllType, $this->returnType("modules/cda/resources/voc.xsd"));
     $listAllType = array_merge($listAllType, $this->returnType("modules/cda/resources/datatypes.xsd"));
@@ -417,7 +404,7 @@ class CCdaTools {
   function clearXSD() {
     $pathSource = "modules/cda/resources/datatypes-base_original.xsd";
     $pathDest = "modules/cda/resources/datatypes-base.xsd";
-    $copyFile = false;
+
     $copyFile = copy($pathSource, $pathDest);
 
     if (!$copyFile) {

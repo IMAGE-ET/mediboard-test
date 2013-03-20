@@ -25,5 +25,11 @@ Ccda = {
     var url = new Url("cda", "vw_toolsdatatype");
     url.addParam("action", action);
     url.requestUpdate("resultAction");
+  },
+
+  actionTest : function(action) {
+    var url = new Url("cda", "vw_testdatatype");
+    url.addParam("action", action);
+    url.requestUpdate("resultAction");
   }
 };

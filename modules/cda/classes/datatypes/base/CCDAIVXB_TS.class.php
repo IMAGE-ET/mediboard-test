@@ -19,19 +19,25 @@ class CCDAIVXB_TS extends CCDATS {
    * interval (interval is closed) or excluded from the
    * interval (interval is open).
    *
-   * @var CCDA_bl
+   * @var CCDA_base_bl
    */
   public $inclusive;
 
   /**
-   * @param \CCDA_bl $inclusive
+   * Setter inclusive
+   *
+   * @param \CCDA_base_bl $inclusive \CCDA_base_bl
+   *
+   * @return void
    */
   public function setInclusive($inclusive) {
     $this->inclusive = $inclusive;
   }
 
   /**
-   * @return \CCDA_bl
+   * Getter inclusive
+   *
+   * @return \CCDA_base_bl
    */
   public function getInclusive() {
     return $this->inclusive;
@@ -56,14 +62,14 @@ class CCDAIVXB_TS extends CCDATS {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["inclusive"] = "CCDA_bl xml|attribute default|true";
+    $props["inclusive"] = "CCDA_base_bl xml|attribute default|true";
     return $props;
   }
 
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();
@@ -72,7 +78,7 @@ class CCDAIVXB_TS extends CCDATS {
      * test avec inclusive incorrecte
      */
 
-    $bl = new CCDA_bl();
+    $bl = new CCDA_base_bl();
     $bl->setData("test");
     $this->setInclusive($bl);
     $tabTest[] = $this->sample("Test avec un inclusive incorrecte", "Document invalide");
@@ -83,7 +89,7 @@ class CCDAIVXB_TS extends CCDATS {
      * test avec inclusive correcte
      */
 
-    $bl = new CCDA_bl();
+    $bl = new CCDA_base_bl();
     $bl->setData("true");
     $this->setInclusive($bl);
     $tabTest[] = $this->sample("Test avec un inclusive correcte", "Document valide");

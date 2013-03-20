@@ -12,28 +12,43 @@
 /**
  * Classe dont hériteront les classes vocabulaires
  */
-class CCDA_Datatype_Voc extends CCDA_cs {
+class CCDA_Datatype_Voc extends CCDA_base_cs {
 
   public $_enumeration     = array();
   public $_all_enumeration = array();
   public $_union = array();
 
+  /**
+   * construit la classe
+   */
   function __construct() {
     $this->_enumeration     = $this->getEnumeration();
     $this->_all_enumeration = $this->getEnumeration(true);
   }
 
+  /**
+   * Retourne le nom de la classe
+   *
+   * @return mixed|string
+   */
   function getNameClass() {
     $name = get_class($this);
     $name = substr($name, 4);
 
-    if (get_class($this) === "CCDA_cs") {
+    if (get_class($this) === "CCDA_base_cs") {
       $name = CMbArray::get(explode("_", $name), 1);
     }
 
     return $name;
   }
 
+  /**
+   * Getter enumeration
+   *
+   * @param bool $all bool
+   *
+   * @return array
+   */
   function getEnumeration($all = false) {
     if (!$all) {
       return $this->_enumeration;
@@ -50,11 +65,21 @@ class CCDA_Datatype_Voc extends CCDA_cs {
     return $enumerations;
   }
 
+  /**
+   * Getter props
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     return $props;
   }
 
+  /**
+   * Getter union
+   *
+   * @return array
+   */
   function getUnion() {
     return $this->_union;
   }
@@ -62,7 +87,7 @@ class CCDA_Datatype_Voc extends CCDA_cs {
   /**
    * Fonction qui teste si la classe est valide
    *
-   * @return void|void
+   * @return array()
    */
   function test() {
 

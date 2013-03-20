@@ -32,13 +32,19 @@ class CCDAADXP extends CCDAST {
   public $partType;
 
   /**
-   * @param \CCDAAddressPartType $partType
+   * Setter partType
+   *
+   * @param \CCDAAddressPartType $partType \CCDAAddressPartType
+   *
+   * @return void
    */
   public function setPartType($partType) {
     $this->partType = $partType;
   }
 
   /**
+   * Getter partType
+   *
    * @return \CCDAAddressPartType
    */
   public function getPartType() {
@@ -59,7 +65,7 @@ class CCDAADXP extends CCDAST {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

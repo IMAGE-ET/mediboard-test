@@ -18,7 +18,7 @@ class CCDA_Datatype_Set extends CCDA_Datatype {
   /**
    * ADD a class
    *
-   * @param \ClassSet
+   * @param mixed $listData mixed
    *
    * @return void
    */
@@ -75,7 +75,7 @@ class CCDA_Datatype_Set extends CCDA_Datatype {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = array();

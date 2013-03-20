@@ -10,14 +10,18 @@
  * @link     http://www.mediboard.org */
  
 /**
- * Integer numbers (-1,0,1,2, 100, 3398129, etc.) are precise
- * numbers that are results of counting and enumerating.
- * Integer numbers are discrete, the set of integers is
- * infinite but countable.  No arbitrary limit is imposed on
- * the range of integer numbers. Two NULL flavors are
- * defined for the positive and negative infinity.
+ * Fractional numbers. Typically used whenever quantities
+ * are measured, estimated, or computed from other real
+ * numbers.  The typical representation is decimal, where
+ * the number of significant decimal digits is known as the
+ * precision. Real numbers are needed beyond integers
+ * whenever quantities of the real world are measured,
+ * estimated, or computed from other real numbers. The term
+ * "Real number" in this specification is used to mean
+ * that fractional values are covered without necessarily
+ * implying the full set of the mathematical real numbers.
  */
-class CCDA_int extends CCDA_Datatype_Base {
+class CCDA_base_real extends CCDA_Datatype_Base {
 
   /**
    * Get the properties of our class as strings
@@ -26,14 +30,14 @@ class CCDA_int extends CCDA_Datatype_Base {
    */
   function getProps() {
     parent::getProps();
-    $props["data"] = "integer xml|data";
+    $props["data"] = "float xml|data";
     return $props;
   }
 
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();
@@ -41,7 +45,7 @@ class CCDA_int extends CCDA_Datatype_Base {
     /**
      * test avec data incorrecte
      */
-    $this->setData("10.25");
+    $this->setData("test");
     $tabTest[] = $this->sample("Test avec un data incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -49,7 +53,7 @@ class CCDA_int extends CCDA_Datatype_Base {
     /**
      * test avec data correcte
      */
-    $this->setData("10");
+    $this->setData("10.25");
     $tabTest[] = $this->sample("Test avec un data correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

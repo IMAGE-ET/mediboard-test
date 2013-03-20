@@ -55,14 +55,16 @@ class CCDACR extends CCDAANY {
    * system defines inversion but does not provide reciprocal
    * pairs of role names. By default, inverted is false.
    *
-   * @var CCDA_bn
+   * @var CCDA_base_bn
    */
   public $inverted;
 
   /**
    * Setter inverted
    *
-   * @param \CCDA_bn $inverted
+   * @param \CCDA_base_bn $inverted \CCDA_base_bn
+   *
+   * @return void
    */
   public function setInverted($inverted) {
     $this->inverted = $inverted;
@@ -71,7 +73,7 @@ class CCDACR extends CCDAANY {
   /**
    * Getter Inverted
    *
-   * @return \CCDA_bn
+   * @return \CCDA_base_bn
    */
   public function getInverted() {
     return $this->inverted;
@@ -80,7 +82,9 @@ class CCDACR extends CCDAANY {
   /**
    * Setter Name
    *
-   * @param \CCDACV $name
+   * @param \CCDACV $name \CCDACV
+   *
+   * @return void
    */
   public function setName($name) {
     $this->name = $name;
@@ -98,7 +102,9 @@ class CCDACR extends CCDAANY {
   /**
    * Setter Value
    *
-   * @param \CCDACD $value
+   * @param \CCDACD $value \CCDACD
+   *
+   * @return void
    */
   public function setValue($value) {
     $this->value = $value;
@@ -122,7 +128,7 @@ class CCDACR extends CCDAANY {
     $props = parent::getProps();
     $props["name"] = "CCDACV xml|element max|1";
     $props["value"] = "CCDACD xml|element max|1";
-    $props["inverted"] = "CCDA_bn xml|attribute default|false";
+    $props["inverted"] = "CCDA_base_bn xml|attribute default|false";
     return $props;
   }
 
@@ -137,7 +143,7 @@ class CCDACR extends CCDAANY {
     /**
      * Test avec inverted incorrecte
      */
-    $bn = new CCDA_bn();
+    $bn = new CCDA_base_bn();
     $bn->setData(" ");
     $this->setInverted($bn);
     $tabTest[] = $this->sample("Test avec un inverted incorrecte", "Document invalide");
@@ -147,7 +153,7 @@ class CCDACR extends CCDAANY {
     /**
      * Test avec inverted correcte
      */
-    $bn = new CCDA_bn();
+    $bn = new CCDA_base_bn();
     $bn->setData("false");
     $this->setInverted($bn);
     $tabTest[] = $this->sample("Test avec un inverted correcte", "Document valide");
@@ -158,7 +164,7 @@ class CCDACR extends CCDAANY {
      * Test avec name incorrecte
      */
     $cv = new CCDACV();
-    $code = new CCDA_cs();
+    $code = new CCDA_base_cs();
     $code->setData(" ");
     $cv->setCode($code);
     $this->setName($cv);
@@ -180,7 +186,7 @@ class CCDACR extends CCDAANY {
      * Test avec value incorrecte
      */
     $valuetest = new CCDACD();
-    $code = new CCDA_cs();
+    $code = new CCDA_base_cs();
     $code->setData(" ");
     $valuetest->setCode($code);
     $this->setValue($valuetest);
@@ -192,7 +198,7 @@ class CCDACR extends CCDAANY {
      * Test avec value correcte
      */
     $valuetest = new CCDACD();
-    $code = new CCDA_cs();
+    $code = new CCDA_base_cs();
     $code->setData("test");
     $valuetest->setCode($code);
     $this->setValue($valuetest);

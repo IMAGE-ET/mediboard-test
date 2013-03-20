@@ -16,6 +16,9 @@ class CCDA_adxp_deliveryAddressLine extends CCDAADXP {
 
    private $XMLName = "adxp.deliveryAddressLine";
 
+  /**
+   * Fixe la donnée
+   */
   function __construct() {
     $part = new CCDAAddressPartType();
     $part->setData("DAL");
@@ -44,7 +47,7 @@ class CCDA_adxp_deliveryAddressLine extends CCDAADXP {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

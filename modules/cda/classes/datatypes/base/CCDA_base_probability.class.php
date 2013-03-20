@@ -10,44 +10,43 @@
  * @link     http://www.mediboard.org */
  
 /**
- * CCDA_BinaryDataEncoding class
+ * The probability assigned to the value, a decimal number
+ * between 0 (very uncertain) and 1 (certain).
  */
-class CCDA_BinaryDataEncoding extends CCDA_Datatype_Base {
+class CCDA_base_probability extends CCDA_Datatype_Base {
 
   /**
-	 * Get the properties of our class as strings
-	 *
-	 * @return array
-	 */
+   * Get the properties of our class as strings
+   *
+   * @return array
+   */
   function getProps() {
     parent::getProps();
-    $props["data"] = "str xml|data enum|B64|TXT";
+    $props["data"] = "float xml|data min|0.0 max|1.0";
     return $props;
   }
 
   /**
-   * Fonction permettant de tester la classe
+   * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();
 
     /**
-     * Test avec une valeur correcte
+     * test avec data incorrecte
      */
-
-    $this->setData("B64");
-    $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
+    $this->setData("1.1");
+    $tabTest[] = $this->sample("Test avec un data incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 
     /**
-     * Test avec une valeur incorrecte
+     * test avec data correcte
      */
-
-    $this->setData(" ");
-    $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
+    $this->setData("0.89");
+    $tabTest[] = $this->sample("Test avec un data correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 

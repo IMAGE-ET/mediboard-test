@@ -20,14 +20,26 @@ class CCDAPQR extends CCDACV {
    * The magnitude of the measurement value in terms of
    * the unit specified in the code.
    *
-   * @var CCDA_real
+   * @var CCDA_base_real
    */
   public $value;
 
+  /**
+   * Setter value
+   *
+   * @param CCDA_base_real $value CCDA_base_real
+   *
+   * @return void
+   */
   public function setValue($value) {
     $this->value = $value;
   }
 
+  /**
+   * Getter value
+   *
+   * @return CCDA_base_real
+   */
   public function getValue() {
     return $this->value;
   }
@@ -40,7 +52,7 @@ class CCDAPQR extends CCDACV {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["value"] = "CCDA_real xml|attribute";
+    $props["value"] = "CCDA_base_real xml|attribute";
     return $props;
   }
 
@@ -55,7 +67,7 @@ class CCDAPQR extends CCDACV {
     /**
      * Test avec une valeur incorrecte
      */
-    $real = new CCDA_real();
+    $real = new CCDA_base_real();
     $real->setData("test");
     $this->setValue($real);
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");

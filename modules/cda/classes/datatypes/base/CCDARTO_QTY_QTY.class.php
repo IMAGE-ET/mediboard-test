@@ -44,13 +44,19 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
   }
 
   /**
-   * @param \CCDAQTY $denominator
+   * Setter denominator
+   *
+   * @param \CCDAQTY $denominator \CCDAQTY
+   *
+   * @return void
    */
   public function setDenominator($denominator) {
     $this->denominator = $denominator;
   }
 
   /**
+   * Getter denominator
+   *
    * @return \CCDAQTY
    */
   public function getDenominator() {
@@ -58,13 +64,19 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
   }
 
   /**
-   * @param \CCDAQTY $numerator
+   * Setter numerator
+   *
+   * @param \CCDAQTY $numerator \CCDAQTY
+   *
+   * @return void
    */
   public function setNumerator($numerator) {
     $this->numerator = $numerator;
   }
 
   /**
+   * Getter numerator
+   *
    * @return \CCDAQTY
    */
   public function getNumerator() {
@@ -86,7 +98,7 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = array();
@@ -104,7 +116,7 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
     /*-------------------------------------------------------------------------------------*/
 
     $num = new CCDAINT();
-    $int = new CCDA_int();
+    $int = new CCDA_base_int();
     $int->setData("10.25");
     $num->setValue($int);
     $this->setNumerator($num);
@@ -128,7 +140,7 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
      */
 
     $num = new CCDAINT();
-    $int = new CCDA_int();
+    $int = new CCDA_base_int();
     $int->setData("10.25");
     $num->setValue($int);
     $this->setDenominator($num);
@@ -152,7 +164,7 @@ class CCDARTO_QTY_QTY extends CCDAQTY {
      */
 
     $num = new CCDAREAL();
-    $real = new CCDA_real();
+    $real = new CCDA_base_real();
     $real->setData("10.25");
     $num->setValue($real);
     $this->setDenominator($num);

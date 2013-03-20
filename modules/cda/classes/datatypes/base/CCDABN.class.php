@@ -25,14 +25,26 @@ class CCDABN extends CCDAANYNonNull {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["value"] = "CCDA_bn xml|attribute";
+    $props["value"] = "CCDA_base_bn xml|attribute";
     return $props;
   }
 
+  /**
+   * Setter value
+   *
+   * @param CCDA_base_bn $value CCDA_base_bn
+   *
+   * @return CCDA_base_bn
+   */
   function setValue($value) {
     $this->value = $value;
   }
 
+  /**
+   * Getter value
+   *
+   * @return CCDA_base_bn
+   */
   function getvalue() {
     return $this->value;
   }
@@ -50,7 +62,7 @@ class CCDABN extends CCDAANYNonNull {
      * Test avec une valeur incorrecte
      */
 
-    $bn = new CCDA_bn();
+    $bn = new CCDA_base_bn();
     $bn->setData("TESTTEST");
     $this->setValue($bn);
 

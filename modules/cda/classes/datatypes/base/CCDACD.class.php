@@ -48,40 +48,40 @@ class CCDACD extends CCDAANY {
    * The plain code symbol defined by the code system.
    * For example, "784.0" is the code symbol of the ICD-9
    * code "784.0" for headache.
-   * @var CCDA_cs
+   * @var CCDA_base_cs
    */
   public $code;
 
   /**
    * Specifies the code system that defines the code.
-   * @var CCDA_uid
+   * @var CCDA_base_uid
    */
   public $codeSystem;
 
   /**
    * A common name of the coding system.
-   * @var CCDA_st
+   * @var CCDA_base_st
    */
   public $codeSystemName;
 
   /**
    * If applicable, a version descriptor defined
    * specifically for the given code system.
-   * @var CCDA_st
+   * @var CCDA_base_st
    */
   public $codeSystemVersion;
 
   /**
    * A name or title for the code, under which the sending
    * system shows the code value to its users.
-   * @var CCDA_st
+   * @var CCDA_base_st
    */
   public $displayName;
 
   /**
    * Getter code
    *
-   * @return CCDA_cs CCDA_cs code
+   * @return CCDA_base_cs CCDA_base_cs code
    */
   public function getCode() {
     return $this->code;
@@ -90,7 +90,7 @@ class CCDACD extends CCDAANY {
   /**
    * Getter CodeSystem
    *
-   * @return \CCDA_uid
+   * @return \CCDA_base_uid
    */
   public function getCodeSystem() {
     return $this->codeSystem;
@@ -100,7 +100,7 @@ class CCDACD extends CCDAANY {
   /**
    * Getter CodeSystemName
    *
-   * @return \CCDA_st
+   * @return \CCDA_base_st
    */
   public function getCodeSystemName() {
     return $this->codeSystemName;
@@ -109,7 +109,7 @@ class CCDACD extends CCDAANY {
   /**
    * Getter CodeSystemVersion
    *
-   * @return \CCDA_st
+   * @return \CCDA_base_st
    */
   public function getCodeSystemVersion() {
     return $this->codeSystemVersion;
@@ -118,7 +118,7 @@ class CCDACD extends CCDAANY {
   /**
    * Getter DisplayName
    *
-   * @return \CCDA_st
+   * @return \CCDA_base_st
    */
   public function getDisplayName() {
     return $this->displayName;
@@ -154,7 +154,7 @@ class CCDACD extends CCDAANY {
   /**
    * Setter Code
    *
-   * @param \CCDA_cs $code CCDA_cs
+   * @param \CCDA_base_cs $code CCDA_base_cs
    *
    * @return void
    */
@@ -165,7 +165,7 @@ class CCDACD extends CCDAANY {
   /**
    * Setter CodeSystem
    *
-   * @param \CCDA_uid $codeSystem CCDA_uid
+   * @param \CCDA_base_uid $codeSystem CCDA_base_uid
    *
    * @return void
    */
@@ -176,7 +176,7 @@ class CCDACD extends CCDAANY {
   /**
    * Setter codeSystemName
    *
-   * @param \CCDA_st $codeSystemName CCDA_st
+   * @param \CCDA_base_st $codeSystemName CCDA_base_st
    *
    * @return void
    */
@@ -187,7 +187,7 @@ class CCDACD extends CCDAANY {
   /**
    * Setter codeSystemVersion
    *
-   * @param \CCDA_st $codeSystemVersion CCDA_st
+   * @param \CCDA_base_st $codeSystemVersion CCDA_base_st
    *
    * @return void
    */
@@ -198,7 +198,7 @@ class CCDACD extends CCDAANY {
   /**
    * Setter displayName
    *
-   * @param \CCDA_st $displayName CCDA_st
+   * @param \CCDA_base_st $displayName CCDA_base_st
    *
    * @return void
    */
@@ -210,7 +210,8 @@ class CCDACD extends CCDAANY {
    * Setter originalText
    *
    * @param \CCDAED $originalText CCDAED
-   * v
+   *
+   * @return void
    */
   public function setOriginalText($originalText) {
     $this->originalText = $originalText;
@@ -238,10 +239,20 @@ class CCDACD extends CCDAANY {
     array_push($this->translation, $translation);
   }
 
+  /**
+   * Efface le tableau translation
+   *
+   * @return void
+   */
   public function razListTranslation() {
     $this->translation = array();
   }
 
+  /**
+   * Efface le tableau qualifier
+   *
+   * @return void
+   */
   public function razListQualifier() {
     $this->qualifier = array();
   }
@@ -256,11 +267,11 @@ class CCDACD extends CCDAANY {
     $props["originalText"] = "CCDAED xml|element max|1";
     $props["qualifier"] = "CCDACR xml|element";
     $props["translation"] = "CCDACD xml|element";
-    $props["code"] = "CCDA_cs xml|attribute";
-    $props["codeSystem"] = "CCDA_uid xml|attribute";
-    $props["codeSystemName"] = "CCDA_st xml|attribute";
-    $props["codeSystemVersion"] = "CCDA_st xml|attribute";
-    $props["displayName"] = "CCDA_st xml|attribute";
+    $props["code"] = "CCDA_base_cs xml|attribute";
+    $props["codeSystem"] = "CCDA_base_uid xml|attribute";
+    $props["codeSystemName"] = "CCDA_base_st xml|attribute";
+    $props["codeSystemVersion"] = "CCDA_base_st xml|attribute";
+    $props["displayName"] = "CCDA_base_st xml|attribute";
     return $props;
   }
 
@@ -278,7 +289,7 @@ class CCDACD extends CCDAANY {
     /**
      * Test avec code incorrecte
      */
-    $codeTest = new CCDA_cs();
+    $codeTest = new CCDA_base_cs();
     $codeTest->setData(" ");
     $this->setCode($codeTest);
 
@@ -300,7 +311,7 @@ class CCDACD extends CCDAANY {
      * Test avec codeSystem incorrecte
      */
 
-    $codeSystemTest = new CCDA_uid();
+    $codeSystemTest = new CCDA_base_uid();
     $codeSystemTest->setData("*");
     $this->setCodeSystem($codeSystemTest);
 
@@ -322,7 +333,7 @@ class CCDACD extends CCDAANY {
     /**
      * Test avec codeSystemName incorrecte
      */
-    $codeSystemNameTest = new CCDA_st();
+    $codeSystemNameTest = new CCDA_base_st();
     $codeSystemNameTest->setData("");
     $this->setCodeSystemName($codeSystemNameTest);
 
@@ -345,7 +356,7 @@ class CCDACD extends CCDAANY {
     /**
      * Test avec codeSystemVersion incorrecte
      */
-    $codeSystemVersionTest = new CCDA_st();
+    $codeSystemVersionTest = new CCDA_base_st();
     $codeSystemVersionTest->setData("");
     $this->setCodeSystemVersion($codeSystemVersionTest);
 
@@ -368,7 +379,7 @@ class CCDACD extends CCDAANY {
      * Test avec displayName incorrecte
      */
 
-    $displayNameTest = new CCDA_st();
+    $displayNameTest = new CCDA_base_st();
     $displayNameTest->setData("");
     $this->setDisplayName($displayNameTest);
 
@@ -416,7 +427,7 @@ class CCDACD extends CCDAANY {
      */
 
     $cr = new CCDACR();
-    $bn = new CCDA_bn();
+    $bn = new CCDA_base_bn();
     $bn->setData("TESTTEST");
     $cr->setInverted($bn);
     $this->setQualifier($cr);
@@ -442,7 +453,7 @@ class CCDACD extends CCDAANY {
      */
 
     $cr2 = new CCDACR();
-    $bn2 = new CCDA_bn();
+    $bn2 = new CCDA_base_bn();
     $bn2->setData("true");
     $cr2->setInverted($bn2);
     $this->setQualifier($cr2);
@@ -456,7 +467,7 @@ class CCDACD extends CCDAANY {
      */
 
     $ed = new CCDAED();
-    $language = new CCDA_cs();
+    $language = new CCDA_base_cs();
     $language->setData(" ");
     $ed->setLanguage($language);
     $this->setOriginalText($ed);

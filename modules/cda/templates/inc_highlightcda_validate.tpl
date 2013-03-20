@@ -13,13 +13,17 @@
   <tr>
     <th>{{tr}}Result{{/tr}}</th>
   </tr>
-  <tr>
-    <td>
-      {{if $treecda->validate != 1}}
-        {{$treecda->validate}}
-      {{else}}
+  {{foreach from=$treecda->validate item=_error}}
+    <tr>
+      <td>
+        {{$_error}}
+      </td>
+    </tr>
+   {{foreachelse}}
+    <tr>
+      <td>
         {{tr}}Document valide{{/tr}}
-      {{/if}}
-    </td>
-  </tr>
+      </td>
+    </tr>
+  {{/foreach}}
 </table>

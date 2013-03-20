@@ -10,10 +10,14 @@
  * @link     http://www.mediboard.org */
  
 /**
- * The probability assigned to the value, a decimal number
- * between 0 (very uncertain) and 1 (certain).
+ * Integer numbers (-1,0,1,2, 100, 3398129, etc.) are precise
+ * numbers that are results of counting and enumerating.
+ * Integer numbers are discrete, the set of integers is
+ * infinite but countable.  No arbitrary limit is imposed on
+ * the range of integer numbers. Two NULL flavors are
+ * defined for the positive and negative infinity.
  */
-class CCDA_probability extends CCDA_Datatype_Base {
+class CCDA_base_int extends CCDA_Datatype_Base {
 
   /**
    * Get the properties of our class as strings
@@ -22,14 +26,14 @@ class CCDA_probability extends CCDA_Datatype_Base {
    */
   function getProps() {
     parent::getProps();
-    $props["data"] = "float xml|data min|0.0 max|1.0";
+    $props["data"] = "integer xml|data";
     return $props;
   }
 
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();
@@ -37,7 +41,7 @@ class CCDA_probability extends CCDA_Datatype_Base {
     /**
      * test avec data incorrecte
      */
-    $this->setData("1.1");
+    $this->setData("10.25");
     $tabTest[] = $this->sample("Test avec un data incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
@@ -45,7 +49,7 @@ class CCDA_probability extends CCDA_Datatype_Base {
     /**
      * test avec data correcte
      */
-    $this->setData("0.89");
+    $this->setData("10");
     $tabTest[] = $this->sample("Test avec un data correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

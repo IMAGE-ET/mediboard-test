@@ -25,10 +25,10 @@ class CCDACS extends CCDACV {
     $props["originalText"] = "CCDAED xml|element max|1 prohibited";
     $props["qualifier"] = "CCDACR xml|element prohibited";
     $props["translation"] = "CCDACD xml|element prohibited";
-    $props["codeSystem"] = "CCDA_uid xml|attribute prohibited";
-    $props["codeSystemName"] = "CCDA_st xml|attribute prohibited";
-    $props["codeSystemVersion"] = "CCDA_st xml|attribute prohibited";
-    $props["displayName"] = "CCDA_st xml|attribute prohibited";
+    $props["codeSystem"] = "CCDA_base_uid xml|attribute prohibited";
+    $props["codeSystemName"] = "CCDA_base_st xml|attribute prohibited";
+    $props["codeSystemVersion"] = "CCDA_base_st xml|attribute prohibited";
+    $props["displayName"] = "CCDA_base_st xml|attribute prohibited";
     return $props;
   }
 
@@ -44,7 +44,7 @@ class CCDACS extends CCDACV {
     /**
      * Test avec code incorrecte
      */
-    $codeTest = new CCDA_cs();
+    $codeTest = new CCDA_base_cs();
     $codeTest->setData(" ");
     $this->setCode($codeTest);
 
@@ -66,7 +66,7 @@ class CCDACS extends CCDACV {
      * Test avec codeSystem incorrecte
      */
     $this->setCode(null);
-    $codeSystemTest = new CCDA_uid();
+    $codeSystemTest = new CCDA_base_uid();
     $codeSystemTest->setData("*");
     $this->setCodeSystem($codeSystemTest);
 
@@ -89,7 +89,7 @@ class CCDACS extends CCDACV {
      * Test avec codeSystemName incorrecte
      */
     $this->setCodeSystem(null);
-    $codeSystemNameTest = new CCDA_st();
+    $codeSystemNameTest = new CCDA_base_st();
     $codeSystemNameTest->setData("");
     $this->setCodeSystemName($codeSystemNameTest);
 
@@ -113,7 +113,7 @@ class CCDACS extends CCDACV {
      * Test avec codeSystemVersion incorrecte
      */
     $this->setCodeSystemName(null);
-    $codeSystemVersionTest = new CCDA_st();
+    $codeSystemVersionTest = new CCDA_base_st();
     $codeSystemVersionTest->setData("");
     $this->setCodeSystemVersion($codeSystemVersionTest);
 
@@ -136,7 +136,7 @@ class CCDACS extends CCDACV {
      * Test avec displayName incorrecte
      */
     $this->setCodeSystemVersion(null);
-    $displayNameTest = new CCDA_st();
+    $displayNameTest = new CCDA_base_st();
     $displayNameTest->setData("");
     $this->setDisplayName($displayNameTest);
 
@@ -161,7 +161,7 @@ class CCDACS extends CCDACV {
 
     $this->razListQualifier();
     $ed = new CCDAED();
-    $language = new CCDA_cs();
+    $language = new CCDA_base_cs();
     $language->setData("test");
     $ed->setLanguage($language);
     $this->setOriginalText($ed);

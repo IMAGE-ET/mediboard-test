@@ -26,10 +26,22 @@ class CCDAQTY extends CCDAANY {
    */
   public $value;
 
+  /**
+   * Setter value
+   *
+   * @param mixed $value mixed
+   *
+   * @return void
+   */
   public function setValue($value) {
     $this->value = $value;
   }
 
+  /**
+   * Getter value
+   *
+   * @return mixed
+   */
   public function getValue() {
     return $this->value;
   }
@@ -37,7 +49,7 @@ class CCDAQTY extends CCDAANY {
   /**
 	 * Get the properties of our class as strings
 	 *
-	 * @return array
+	 * @return array()
 	 */
   function getProps() {
     $props = parent::getProps();
@@ -48,7 +60,7 @@ class CCDAQTY extends CCDAANY {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();

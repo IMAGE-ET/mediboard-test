@@ -49,13 +49,19 @@ class CCDAEN extends CCDAANY {
   public $use;
 
   /**
-   * @param \CCDAset_EntityNameUse $use
+   * Setter use
+   *
+   * @param \CCDAset_EntityNameUse $use \CCDAset_EntityNameUse
+   *
+   * @return void
    */
   public function setUse($use) {
     $this->use = $use;
   }
 
   /**
+   * Getter use
+   *
    * @return \CCDAset_EntityNameUse
    */
   public function getUse() {
@@ -63,27 +69,55 @@ class CCDAEN extends CCDAANY {
   }
 
   /**
-   * @param \CCDAIVL_TS $validTime
+   * Setter validTime
+   *
+   * @param \CCDAIVL_TS $validTime \CCDAIVL_TS
+   *
+   * @return void
    */
   public function setValidTime($validTime) {
     $this->validTime = $validTime;
   }
 
   /**
+   * Getter validTime
+   *
    * @return \CCDAIVL_TS
    */
   public function getValidTime() {
     return $this->validTime;
   }
 
+  /**
+   * Ajoute l'instance dans le champ spécifié
+   *
+   * @param String $name  String
+   * @param mixed  $value mixed
+   *
+   * @return void
+   */
   function append($name, $value) {
     array_push($this->$name, $value);
   }
 
+  /**
+   * retourne le tableau d'instance du champ spécifié
+   *
+   * @param String $name String
+   *
+   * @return mixed
+   */
   function get($name) {
     return $this->$name;
   }
 
+  /**
+   * Efface le tableau d'instance du champ spécifié
+   *
+   * @param String $name String
+   *
+   * @return void
+   */
   function razListdata($name) {
     $this->$name = array();
   }
@@ -109,7 +143,7 @@ class CCDAEN extends CCDAANY {
   /**
   * fonction permettant de tester la validité de la classe
   *
-  * @return void
+  * @return array()
   */
   function test() {
     $tabTest = parent::test();
@@ -153,7 +187,7 @@ class CCDAEN extends CCDAANY {
      */
 
     $valid = new CCDAIVL_TS();
-    $ts = new CCDA_ts();
+    $ts = new CCDA_base_ts();
     $ts->setData("TESTTEST");
     $valid->setValue($ts);
     $this->setValidTime($valid);
@@ -172,7 +206,7 @@ class CCDAEN extends CCDAANY {
 
     /*-------------------------------------------------------------------------------------*/
 
-    if(get_class($this) === "CCDATN") {
+    if (get_class($this) === "CCDATN") {
       return $tabTest;
     }
 

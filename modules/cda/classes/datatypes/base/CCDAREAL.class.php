@@ -30,7 +30,7 @@ class CCDAREAL extends CCDAQTY {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["value"] = "CCDA_real xml|attribute";
+    $props["value"] = "CCDA_base_real xml|attribute";
     return $props;
   }
 
@@ -46,7 +46,7 @@ class CCDAREAL extends CCDAQTY {
      * Test avec une valeur incorrecte
      */
 
-    $real = new CCDA_real();
+    $real = new CCDA_base_real();
     $real->setData("test");
     $this->setValue($real);
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");

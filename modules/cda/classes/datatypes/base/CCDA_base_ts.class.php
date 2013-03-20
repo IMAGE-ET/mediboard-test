@@ -10,17 +10,12 @@
  * @link     http://www.mediboard.org */
  
 /**
- * A telecommunications address  specified according to
- * Internet standard RFC 1738
- * [http://www.ietf.org/rfc/rfc1738.txt]. The
- * URL specifies the protocol and the contact point defined
- * by that protocol for the resource.  Notable uses of the
- * telecommunication address data type are for telephone and
- * telefax numbers, e-mail addresses, Hypertext references,
- * FTP references, etc.
+ * A quantity specifying a point on the axis of natural time.
+ * A point in time is most often represented as a calendar
+ * expression.
  */
-class CCDA_url extends CCDA_Datatype_Base {
-
+class CCDA_base_ts extends CCDA_Datatype_Base {
+  
   /**
 	 * Get the properties of our class as strings
 	 *
@@ -28,41 +23,32 @@ class CCDA_url extends CCDA_Datatype_Base {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["data"] = "uri xml|data";
+    $props["data"] = "str xml|data pattern|[0-9]{1,8}|([0-9]{9,14}|[0-9]{14,14}\\.[0-9]+)([+\\-][0-9]{1,4})?";
     return $props;
   }
 
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 
     $tabTest = parent::test();
 
     /**
-     * Test avec une valeur null
+     * Test avec un use incorrecte
      */
 
-    $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
-
-    /*-------------------------------------------------------------------------------------*/
-
-    /**
-     * Test avec une valeur incorrecte
-     */
-
-    $this->setData(":::$:!:");
+    $this->setData("TESTEST");
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
-
     /**
      * Test avec une valeur correcte
      */
 
-    $this->setData("test");
+    $this->setData("75679245900741.869627871786625715081550660290154484483335306381809807748522068");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/

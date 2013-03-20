@@ -16,6 +16,9 @@ class CCDA_en_suffix extends CCDAENXP {
 
    private $XMLName = "en.suffix";
 
+  /**
+   * Fixe la donnée
+   */
   function __construct() {
     $part = new CCDAEntityNamePartType();
     $part->setData("SFX");
@@ -44,7 +47,7 @@ class CCDA_en_suffix extends CCDAENXP {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

@@ -19,7 +19,9 @@ class CCDA_Datatype {
   /**
    * Setter Data
    *
-   * @param $data
+   * @param String $data String
+   *
+   * @return void
    */
   function setData($data) {
     $this->data = $data;
@@ -42,7 +44,7 @@ class CCDA_Datatype {
   function validate() {
 
     $domDataType = $this->toXML();
-    /*if (get_class($this) === "CCDARTO_QTY_QTY") {
+    /*if (get_class($this) === "CCDASXPR_TS") {
       mbTrace($domDataType->saveXML());
     }*/
     return @$domDataType->schemaValidate("modules/cda/resources/TestClasses.xsd");
@@ -102,7 +104,7 @@ class CCDA_Datatype {
   /**
    * Transforme la classe en document XML
    *
-   * @param null $nameParent
+   * @param null $nameParent String
    *
    * @return DOMDocument
    */
@@ -114,7 +116,7 @@ class CCDA_Datatype {
     /**
      * Si le nom parent est spécifié, on utilisera ce nom pour le noeud racine
      */
-    if(!empty($nameParent)) {
+    if (!empty($nameParent)) {
       $name = $nameParent;
     }
     //on créé le nom racine
@@ -157,14 +159,14 @@ class CCDA_Datatype {
               //on récupère le code xml de l'instance en spécifiant le nom du noeud racine
               $xmlClass = $_class->toXML($key);
               //on ajoute à notre document notre instance
-              $baseXML->appendChild($dom->importNode($xmlClass->documentElement));
+              $baseXML->appendChild($dom->importNode($xmlClass->documentElement, true));
             }
           }
           else {
             //on récupère le code xml de l'instance en spécifiant le nom du noeud racine
             $xmlClass = $classInstance->toXML($key);
             //on ajoute à notre document notre instance
-            $baseXML->appendChild($dom->importNode($xmlClass->documentElement));
+            $baseXML->appendChild($dom->importNode($xmlClass->documentElement, true));
           }
           break;
       }
@@ -193,8 +195,8 @@ class CCDA_Datatype {
   /**
    * Appelle la méthode validate et retourne un tableau aevc le résultat
    *
-   * @param $description
-   * @param $resultAttendu
+   * @param String $description   String
+   * @param String $resultAttendu String
    *
    * @return array
    */

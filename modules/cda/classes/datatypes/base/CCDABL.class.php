@@ -25,21 +25,42 @@ class CCDABL extends CCDAANY {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["value"] = "CCDA_bl xml|attribute notNullFlavor";
+    $props["value"] = "CCDA_base_bl xml|attribute notNullFlavor";
     return $props;
   }
 
+  /**
+   * Setter value
+   *
+   * @param CCDA_base_bl $value CCDA_base_bl
+   *
+   * @return void
+   */
   function setValue($value) {
     $this->value = $value;
   }
 
+  /**
+   * Getter value
+   *
+   * @return CCDA_base_bl
+   */
+  function getValue() {
+    return $this->value;
+  }
+
+  /**
+   * Fonction qui permet de vérifier que la classe fonctionne
+   *
+   * @return array
+   */
   function test() {
     $tabTest = parent::test();
 
     /**
      * Test avec une valeur incorrecte
      */
-    $bl = new CCDA_bl();
+    $bl = new CCDA_base_bl();
     $bl->setData("TESTTEST");
     $this->setValue($bl);
 

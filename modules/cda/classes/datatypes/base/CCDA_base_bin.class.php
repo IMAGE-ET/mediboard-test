@@ -10,13 +10,11 @@
  * @link     http://www.mediboard.org */
  
 /**
- * Coded data in its simplest form, consists of a code.
- * The code system and code system version is fixed by
- * the context in which the CS value occurs. CS is used
- * for coded attributes that have a single HL7-defined
- * value set.
+ * Binary data is a raw block of bits. Binary data is a
+ * protected type that MUST not be used outside the data
+ * type specification.
  */
-class CCDA_cs extends CCDA_Datatype_Base {
+class CCDA_base_bin extends CCDA_Datatype_Base {
 
   /**
 	 * Get the properties of our class as strings
@@ -24,39 +22,42 @@ class CCDA_cs extends CCDA_Datatype_Base {
 	 * @return array
 	 */
   function getProps() {
-    $props = array();
-    $props["data"] = "str xml|data pattern|[^\\s]+";
+    parent::getProps();
+    $props["data"] = "base64 xml|data";
     return $props;
   }
 
   /**
-   * fonction permettant de tester la validité de la classe
+   * Fonction permettant de tester la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
-
     $tabTest = parent::test();
 
     /**
-     * Test avec un valeur incorrecte
+     * Test avec une valeur null
      */
 
-    $this->setData(" ");
-    $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
+    $tabTest[] = $this->sample("Test avec une valeur null", "Document valide");
 
     /*-------------------------------------------------------------------------------------*/
 
-    if(get_class($this) !== "CCDA_cs") {
-      return $tabTest;
-    }
-
     /**
-     * Test avec un valeur correcte
+     * Test avec une valeur correcte
      */
 
-    $this->setData("test");
+    $this->setData("JVBERi0xLjUNCiW1tbW1DQoxIDAgb2Jq");
     $tabTest[] = $this->sample("Test avec une valeur correcte", "Document valide");
+
+    /*-------------------------------------------------------------------------------------*/
+
+    /**
+     * Test avec une valeur incorrecte
+     */
+
+    $this->setData("111111111");
+    $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
 
     /*-------------------------------------------------------------------------------------*/
 

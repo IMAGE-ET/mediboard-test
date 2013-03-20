@@ -29,18 +29,24 @@ class CCDAPQ extends CCDAQTY {
    * Units of Measure (UCUM)
    * [http://aurora.rg.iupui.edu/UCUM].
    *
-   * @var CCDA_cs
+   * @var CCDA_base_cs
    */
   public $unit;
 
   /**
-   * @param \CCDAPQR
+   * Ajoute une instance de translation
+   *
+   * @param \CCDAPQR $translation \CCDAPQR
+   *
+   * @return void
    */
   public function appendTranslation($translation) {
     $this->translation[] = $translation;
   }
 
   /**
+   * Getter translation
+   *
    * @return array
    */
   public function getTranslation() {
@@ -48,20 +54,24 @@ class CCDAPQ extends CCDAQTY {
   }
 
   /**
-   * @param \CCDA_cs $unit
+   * Setter unit
+   *
+   * @param \CCDA_base_cs $unit \CCDA_base_cs
+   *
+   * @return void
    */
   public function setUnit($unit) {
     $this->unit = $unit;
   }
 
   /**
-   * @return \CCDA_cs
+   * Getter unit
+   *
+   * @return \CCDA_base_cs
    */
   public function getUnit() {
     return $this->unit;
   }
-
-
 
   /**
 	 * Get the properties of our class as strings
@@ -71,15 +81,15 @@ class CCDAPQ extends CCDAQTY {
   function getProps() {
     $props = parent::getProps();
     $props["translation"] = "CCDAPQR xml|element";
-    $props["value"] = "CCDA_real xml|attribute";
-    $props["unit"] = "CCDA_cs xml|attribute default|1";
+    $props["value"] = "CCDA_base_real xml|attribute";
+    $props["unit"] = "CCDA_base_cs xml|attribute default|1";
     return $props;
   }
 
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 
@@ -89,7 +99,7 @@ class CCDAPQ extends CCDAQTY {
      * Test avec une valeur incorrecte
      */
 
-    $real = new CCDA_real();
+    $real = new CCDA_base_real();
     $real->setData("test");
     $this->setValue($real);
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");
@@ -110,7 +120,7 @@ class CCDAPQ extends CCDAQTY {
      * Test avec une unit incorrecte
      */
 
-    $cs = new CCDA_cs();
+    $cs = new CCDA_base_cs();
     $cs->setData(" ");
     $this->setUnit($cs);
     $tabTest[] = $this->sample("Test avec une unit incorrecte", "Document invalide");
@@ -132,7 +142,7 @@ class CCDAPQ extends CCDAQTY {
      */
 
     $pqr = new CCDAPQR();
-    $real = new CCDA_real();
+    $real = new CCDA_base_real();
     $real->setData("test");
     $pqr->setValue($real);
     $this->appendTranslation($pqr);

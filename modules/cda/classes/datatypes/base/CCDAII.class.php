@@ -23,7 +23,7 @@ class CCDAII extends CCDAANY {
    * of the instance identifier. The root alone may be the
    * entire instance identifier.
    *
-   * @var CCDA_uid
+   * @var CCDA_base_uid
    */
   public $root;
 
@@ -31,7 +31,7 @@ class CCDAII extends CCDAANY {
    * A character string as a unique identifier within the
    * scope of the identifier root.
    *
-   * @var CCDA_st
+   * @var CCDA_base_st
    */
   public $extension;
 
@@ -43,7 +43,7 @@ class CCDAII extends CCDAANY {
    * automated processing must depend on the assigning
    * authority name to be present in any form.
    *
-   * @var CCDA_st
+   * @var CCDA_base_st
    */
   public $assigningAuthorityName;
 
@@ -53,66 +53,89 @@ class CCDAII extends CCDAANY {
    * opposed to pure machine interoperation (displayable
    * = false).
    *
-   * @var CCDA_bl
+   * @var CCDA_base_bl
    */
   public $displayable;
 
   /**
-   * @param \CCDA_st $assigningAuthorityName
+   * Setter assigningAuthorityName
+   *
+   * @param \CCDA_base_st $assigningAuthorityName \CCDA_base_st
+   *
+   * @return void
    */
   public function setAssigningAuthorityName($assigningAuthorityName) {
     $this->assigningAuthorityName = $assigningAuthorityName;
   }
 
   /**
-   * @return \CCDA_st
+   * Getter assigningAuthorityName
+   *
+   * @return \CCDA_base_st
    */
   public function getAssigningAuthorityName() {
     return $this->assigningAuthorityName;
   }
 
   /**
-   * @param \CCDA_bl $displayable
+   * Setter displayable
+   *
+   * @param \CCDA_base_bl $displayable \CCDA_base_bl
+   *
+   * @return void
    */
   public function setDisplayable($displayable) {
     $this->displayable = $displayable;
   }
 
   /**
-   * @return \CCDA_bl
+   * Getter displayable
+   *
+   * @return \CCDA_base_bl
    */
   public function getDisplayable() {
     return $this->displayable;
   }
 
   /**
-   * @param \CCDA_st $extension
+   * Setter extension
+   *
+   * @param \CCDA_base_st $extension \CCDA_base_st
+   *
+   * @return void
    */
   public function setExtension($extension) {
     $this->extension = $extension;
   }
 
   /**
-   * @return \CCDA_st
+   * Getter extension
+   *
+   * @return \CCDA_base_st
    */
   public function getExtension() {
     return $this->extension;
   }
 
   /**
-   * @param \CCDA_uid $root
+   * Setter root
+   *
+   * @param \CCDA_base_uid $root \CCDA_base_uid
+   *
+   * @return void
    */
   public function setRoot($root) {
     $this->root = $root;
   }
 
   /**
-   * @return \CCDA_uid
+   * Getter root
+   *
+   * @return \CCDA_base_uid
    */
   public function getRoot() {
     return $this->root;
   }
-
 
   /**
 	 * Get the properties of our class as strings
@@ -121,10 +144,10 @@ class CCDAII extends CCDAANY {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["root"] = "CCDA_uid xml|attribute";
-    $props["extension"] = "CCDA_st xml|attribute";
-    $props["assigningAuthorityName"] = "CCDA_st xml|attribute";
-    $props["displayable"] = "CCDA_bl xml|attribute";
+    $props["root"] = "CCDA_base_uid xml|attribute";
+    $props["extension"] = "CCDA_base_st xml|attribute";
+    $props["assigningAuthorityName"] = "CCDA_base_st xml|attribute";
+    $props["displayable"] = "CCDA_base_bl xml|attribute";
     return $props;
   }
 
@@ -139,7 +162,7 @@ class CCDAII extends CCDAANY {
     /**
      * Test avec un uid incorrect
      */
-    $uid = new CCDA_uid();
+    $uid = new CCDA_base_uid();
     $uid->setData("4TESTTEST");
     $this->setRoot($uid);
     $tabTest[] = $this->sample("Test avec un root incorrecte", "Document invalide");
@@ -158,7 +181,7 @@ class CCDAII extends CCDAANY {
     /**
      * Test avec un extension incorrect
      */
-    $st = new CCDA_st();
+    $st = new CCDA_base_st();
     $st->setData("");
     $this->setExtension($st);
     $tabTest[] = $this->sample("Test avec un extension incorrecte", "Document invalide");
@@ -177,7 +200,7 @@ class CCDAII extends CCDAANY {
     /**
      * Test avec un assigningAuthorityName incorrect
      */
-    $st = new CCDA_st();
+    $st = new CCDA_base_st();
     $st->setData("");
     $this->setAssigningAuthorityName($st);
     $tabTest[] = $this->sample("Test avec un assigningAuthorityName incorrecte", "Document invalide");
@@ -196,7 +219,7 @@ class CCDAII extends CCDAANY {
     /**
      * Test avec un displayable incorrect
      */
-    $bl = new CCDA_bl();
+    $bl = new CCDA_base_bl();
     $bl->setData("TESTTEST");
     $this->setDisplayable($bl);
     $tabTest[] = $this->sample("Test avec un displayable incorrecte", "Document invalide");

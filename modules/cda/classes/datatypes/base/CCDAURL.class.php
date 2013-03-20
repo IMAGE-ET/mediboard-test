@@ -37,7 +37,7 @@ class CCDAURL extends CCDAANY {
   /**
    * Getter value
    *
-   * @return CCDA_url
+   * @return CCDA_base_url
    */
   public function getValue() {
     return $this->value;
@@ -57,7 +57,7 @@ class CCDAURL extends CCDAANY {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 
@@ -67,7 +67,7 @@ class CCDAURL extends CCDAANY {
      * Test avec une valeur incorrecte
      */
 
-    $url = new CCDA_url();
+    $url = new CCDA_base_url();
     $url->setData(":::$:!:");
     $this->setValue($url);
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");

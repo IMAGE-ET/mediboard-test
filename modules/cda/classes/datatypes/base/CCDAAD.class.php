@@ -100,46 +100,80 @@ class CCDAAD extends CCDAANY {
    * isNotOrdered property can be used to convey this
    * information.
    *
-   * @var CCDA_bl
+   * @var CCDA_base_bl
    */
   public $isNotOrdered;
 
   /**
-   * @param \CCDA_bl $isNotOrdered
+   * Setter isNotOrdered
+   *
+   * @param \CCDA_base_bl $isNotOrdered \CCDA_base_bl
+   *
+   * @return void
    */
   public function setIsNotOrdered($isNotOrdered) {
     $this->isNotOrdered = $isNotOrdered;
   }
 
   /**
-   * @return \CCDA_bl
+   * Getter isNotOrdered
+   *
+   * @return \CCDA_base_bl
    */
   public function getIsNotOrdered() {
     return $this->isNotOrdered;
   }
 
   /**
-   * @param \CCDAset_PostalAddressUse $use
+   * Setter use
+   *
+   * @param \CCDAset_PostalAddressUse $use \CCDAset_PostalAddressUse
+   *
+   * @return void
    */
   public function setUse($use) {
     $this->use = $use;
   }
 
   /**
+   * Getter use
+   *
    * @return \CCDAset_PostalAddressUse
    */
   public function getUse() {
     return $this->use;
   }
 
+  /**
+   * Ajoute l'instance dans le champ spécifié
+   *
+   * @param String $name  String
+   * @param mixed  $value mixed
+   *
+   * @return void
+   */
   function append($name, $value) {
     array_push($this->$name, $value);
   }
 
+  /**
+   * retourne le tableau du champ spécifié
+   *
+   * @param String $name String
+   *
+   * @return mixed
+   */
   function get($name) {
     return $this->$name;
   }
 
+  /**
+   * Efface le tableau du champ spécifié
+   *
+   * @param String $name String
+   *
+   * @return void
+   */
   function razListdata($name) {
     $this->$name = array();
   }
@@ -180,7 +214,7 @@ class CCDAAD extends CCDAANY {
     $props["precinct"] = "CCDAadxp_precinct xml|element xml|element";
     $props["useablePeriod"] = "CCDASXCM_TS xml|element";
     $props["use"] = "CCDAset_PostalAddressUse xml|attribute";
-    $props["isNotOrdered"] = "CCDA_bl xml|attribute";
+    $props["isNotOrdered"] = "CCDA_base_bl xml|attribute";
     $props["data"] = "str xml|data";
     return $props;
   }
@@ -188,7 +222,7 @@ class CCDAAD extends CCDAANY {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();
@@ -233,7 +267,7 @@ class CCDAAD extends CCDAANY {
      * test avec isNotOrdered incorrecte
      */
 
-    $order = new CCDA_bl();
+    $order = new CCDA_base_bl();
     $order->setData("TESTTEST");
     $this->setIsNotOrdered($order);
 
@@ -537,7 +571,7 @@ class CCDAAD extends CCDAANY {
      */
 
     $useable = new CCDASXCM_TS();
-    $cs = new CCDA_ts();
+    $cs = new CCDA_base_ts();
     $cs->setData("TESTEST");
     $useable->setValue($cs);
     $this->append("useablePeriod", $useable);

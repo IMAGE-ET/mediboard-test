@@ -29,7 +29,7 @@ class CCDATEL extends CCDAURL {
    * which the web content is promised to be available
    * under the given address.
    *
-   * @var SXCM_TS
+   * @var CCDASXCM_TS
    */
   public $useablePeriod;
 
@@ -38,7 +38,7 @@ class CCDATEL extends CCDAURL {
    * telecommunication address in a set of like addresses
    * to select for a given telecommunication need.
    *
-   * @var set_TelecommunicationAddressUse
+   * @var CCDAset_TelecommunicationAddressUse
    */
   public $use;
 
@@ -97,7 +97,7 @@ class CCDATEL extends CCDAURL {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

@@ -16,6 +16,9 @@ class CCDA_adxp_state extends CCDAADXP {
 
    private $XMLName = "adxp.state";
 
+  /**
+   * Fixe la donnée
+   */
   function __construct() {
     $part = new CCDAAddressPartType();
     $part->setData("STA");
@@ -44,7 +47,7 @@ class CCDA_adxp_state extends CCDAADXP {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

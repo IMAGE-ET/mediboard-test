@@ -59,7 +59,11 @@ class CCDAIVL_TS extends CCDASXCM_TS {
   public $center;
 
   /**
-   * @param \CCDATS $center
+   * Setter center
+   *
+   * @param \CCDATS $center \CCDATS
+   *
+   * @return void
    */
   public function setCenter($center) {
     $this->setOrder("center");
@@ -67,6 +71,8 @@ class CCDAIVL_TS extends CCDASXCM_TS {
   }
 
   /**
+   * Getter center
+   *
    * @return \CCDATS
    */
   public function getCenter() {
@@ -74,7 +80,11 @@ class CCDAIVL_TS extends CCDASXCM_TS {
   }
 
   /**
-   * @param \CCDAIVXB_TS $high
+   * Setter high
+   *
+   * @param \CCDAIVXB_TS $high \CCDAIVXB_TS
+   *
+   * @return void
    */
   public function setHigh($high) {
     $this->setOrder("high");
@@ -82,6 +92,8 @@ class CCDAIVL_TS extends CCDASXCM_TS {
   }
 
   /**
+   * Getter high
+   *
    * @return \CCDAIVXB_TS
    */
   public function getHigh() {
@@ -89,7 +101,11 @@ class CCDAIVL_TS extends CCDASXCM_TS {
   }
 
   /**
-   * @param \CCDAIVXB_TS $low
+   * Setter low
+   *
+   * @param \CCDAIVXB_TS $low \CCDAIVXB_TS
+   *
+   * @return void
    */
   public function setLow($low) {
     $this->setOrder("low");
@@ -97,6 +113,8 @@ class CCDAIVL_TS extends CCDASXCM_TS {
   }
 
   /**
+   * Getter low
+   *
    * @return \CCDAIVXB_TS
    */
   public function getLow() {
@@ -104,7 +122,11 @@ class CCDAIVL_TS extends CCDASXCM_TS {
   }
 
   /**
-   * @param \CCDAPQ $width
+   * Setter width
+   *
+   * @param \CCDAPQ $width \CCDAPQ
+   *
+   * @return void
    */
   public function setWidth($width) {
     $this->setOrder("width");
@@ -112,6 +134,8 @@ class CCDAIVL_TS extends CCDASXCM_TS {
   }
 
   /**
+   * Getter width
+   *
    * @return \CCDAPQ
    */
   public function getWidth() {
@@ -119,6 +143,13 @@ class CCDAIVL_TS extends CCDASXCM_TS {
   }
 
 
+  /**
+   * Affecte la séquence à utiliser
+   *
+   * @param String $nameVar String
+   *
+   * @return void
+   */
   function setOrder($nameVar) {
     if (empty($this->_order)||empty($nameVar)) {
       $this->_order = $nameVar;
@@ -172,7 +203,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      */
 
     $xbts = new CCDAIVXB_TS();
-    $value = new CCDA_ts();
+    $value = new CCDA_base_ts();
     $value->setData("TESTTEST");
     $xbts->setValue($value);
     $this->setLow($xbts);
@@ -196,7 +227,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      */
 
     $hi = new CCDAIVXB_TS();
-    $value = new CCDA_ts();
+    $value = new CCDA_base_ts();
     $value->setData("TESTTEST");
     $hi->setValue($value);
     $this->setHigh($hi);
@@ -220,7 +251,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      */
 
     $pq = new CCDAPQ();
-    $real = new CCDA_real();
+    $real = new CCDA_base_real();
     $real->setData("test");
     $pq->setValue($real);
     $this->setWidth($pq);
@@ -247,7 +278,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
     $this->width = null;
     $this->center = null;
     $hi = new CCDAIVXB_TS();
-    $value = new CCDA_ts();
+    $value = new CCDA_base_ts();
     $value->setData("TESTTEST");
     $hi->setValue($value);
     $this->setHigh($hi);
@@ -273,7 +304,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
     $this->high = null;
     $this->setOrder(null);
     $pq = new CCDAPQ();
-    $real = new CCDA_real();
+    $real = new CCDA_base_real();
     $real->setData("test");
     $pq->setValue($real);
     $this->setWidth($pq);
@@ -297,7 +328,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      */
 
     $hi = new CCDAIVXB_TS();
-    $value = new CCDA_ts();
+    $value = new CCDA_base_ts();
     $value->setData("TESTTEST");
     $hi->setValue($value);
     $this->setHigh($hi);
@@ -323,7 +354,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
     $this->width = null;
     $this->high = null;
     $ts = new CCDATS();
-    $pTs = new CCDA_ts();
+    $pTs = new CCDA_base_ts();
     $pTs->setData("TESTTEST");
     $ts->setValue($pTs);
     $this->setCenter($ts);
@@ -347,7 +378,7 @@ class CCDAIVL_TS extends CCDASXCM_TS {
      */
 
     $pq = new CCDAPQ();
-    $real = new CCDA_real();
+    $real = new CCDA_base_real();
     $real->setData("test");
     $pq->setValue($real);
     $this->setWidth($pq);

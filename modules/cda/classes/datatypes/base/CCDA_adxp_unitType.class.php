@@ -16,6 +16,9 @@ class CCDA_adxp_unitType extends CCDAADXP {
 
    private $XMLName = "adxp.unitType";
 
+  /**
+   * Fixe la donnée
+   */
   function __construct() {
     $part = new CCDAAddressPartType();
     $part->setData("UNIT");
@@ -44,7 +47,7 @@ class CCDA_adxp_unitType extends CCDAADXP {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
 

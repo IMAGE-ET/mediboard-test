@@ -17,7 +17,7 @@
  * left-most number representing the root and the right-most number
  * representing a leaf.
  */
-class CCDA_oid extends CCDA_Datatype_Base {
+class CCDA_base_oid extends CCDA_Datatype_Base {
 
   /**
 	 * Get the properties of our class as strings
@@ -33,7 +33,7 @@ class CCDA_oid extends CCDA_Datatype_Base {
   /**
    * Fonction permettant de tester la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();

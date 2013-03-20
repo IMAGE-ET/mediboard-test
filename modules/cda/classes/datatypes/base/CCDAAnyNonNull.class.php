@@ -27,6 +27,11 @@ class CCDAANYNonNull extends CCDAANY {
     return $props;
   }
 
+  /**
+   * Fonction qui permet de vérifier si la classe fonctionne
+   *
+   * @return array
+   */
   function test() {
 
     $tabTest = parent::test();

@@ -26,7 +26,7 @@ class CCDAINT extends CCDAQTY {
 	 */
   function getProps() {
     $props = parent::getProps();
-    $props["value"] = "CCDA_int xml|attribute";
+    $props["value"] = "CCDA_base_int xml|attribute";
     return $props;
   }
 
@@ -42,7 +42,7 @@ class CCDAINT extends CCDAQTY {
      * Test avec une valeur incorrecte
      */
 
-    $int = new CCDA_int();
+    $int = new CCDA_base_int();
     $int->setData("10.25");
     $this->setValue($int);
     $tabTest[] = $this->sample("Test avec une valeur incorrecte", "Document invalide");

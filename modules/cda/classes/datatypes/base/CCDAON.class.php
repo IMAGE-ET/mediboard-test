@@ -29,7 +29,7 @@ class CCDAON extends CCDAEN {
   /**
    * fonction permettant de tester la validité de la classe
    *
-   * @return void
+   * @return array()
    */
   function test() {
     $tabTest = parent::test();
