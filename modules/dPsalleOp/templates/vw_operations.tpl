@@ -44,7 +44,10 @@ Main.add(function () {
                 {{mb_include module=salleOp template=inc_edit_check_list
                     check_list=$check_list
                     check_item_categories=$check_list->_ref_list_type->_ref_categories
-                    personnel=$listValidateurs}}
+                    personnel=$listValidateurs
+                    list_chirs=$listChirs
+                    list_anesths=$listAnesths
+                }}
               </td>
             {{/foreach}}
           </tr>

@@ -1,3 +1,6 @@
+{{mb_default var=list_chirs value=null}}
+{{mb_default var=list_anesths value=null}}
+
 {{if $check_list->isReadonly()}}
 
   <table class="main tbl">
@@ -216,20 +219,34 @@ Main.add(function(){
               <option value="{{$anesth->_id}}">{{$anesth}}</option>
               {{/if}}
             </optgroup>
-
-            <optgroup label="Personnel">
-              {{foreach from=$personnel item=curr_personnel}}
-                {{assign var=curr_user value=$curr_personnel->_ref_user}}
-                <option value="{{$curr_user->_id}}" {{if $app->user_id == $curr_user->_id}}selected="selected"{{/if}}>{{$curr_user->_view}}</option>
-              {{/foreach}}
-            </optgroup>
           {{else}}
+            {{if $list_chirs}}
+              <optgroup label="Chirurgiens">
+                {{foreach from=$list_chirs item=_user}}
+                  <option value="{{$_user->_id}}" {{if $app->user_id == $_user->_id}}selected="selected"{{/if}}>
+                    {{$_user->_view}}
+                  </option>
+                {{/foreach}}
+              </optgroup>
+            {{/if}}
+
+            {{if $list_anesths}}
+              <optgroup label="Anesthésiqtes">
+                {{foreach from=$list_anesths item=_user}}
+                  <option value="{{$_user->_id}}" {{if $app->user_id == $_user->_id}}selected="selected"{{/if}}>
+                    {{$_user->_view}}
+                  </option>
+                {{/foreach}}
+              </optgroup>
+            {{/if}}
+          {{/if}}
+
+          <optgroup label="Personnel">
             {{foreach from=$personnel item=curr_personnel}}
               {{assign var=curr_user value=$curr_personnel->_ref_user}}
               <option value="{{$curr_user->_id}}" {{if $app->user_id == $curr_user->_id}}selected="selected"{{/if}}>{{$curr_user->_view}}</option>
             {{/foreach}}
-          {{/if}}
-
+          </optgroup>
         </select>
         <label for="_validator_password" style="display: none;">{{tr}}CDailyCheckList-_validator_password{{/tr}}</label>
         <input type="password" class="notNull str" size="10" maxlength="32" name="_validator_password" />
