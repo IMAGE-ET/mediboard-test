@@ -11,24 +11,21 @@ global $can;
 
 $can->needsAdmin();
 
-$type_anesth_id = CValue::getOrSession("type_anesth_id");
+$show_inactive = CValue::getOrSession("inactive", 0);
 
-// Chargement du type d'anesthésie demandé
-$type_anesth = new CTypeAnesth;
-$type_anesth->load($type_anesth_id);
 
 // Liste des Type d'anesthésie
-$types_anesth = $type_anesth->loadList(null, "name");
+$type_anesth = new CTypeAnesth;
+$where = array(
+  "actif" =>  ($show_inactive) ? " IN ('0','1')" : " = '1' "
+);
+$types_anesth = $type_anesth->loadList($where, "name");
 foreach ($types_anesth as &$_type_anesth) {
   $_type_anesth->countOperations();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("types_anesth", $types_anesth);
-$smarty->assign("type_anesth" , $type_anesth );
-
+$smarty->assign("show_inactive", $show_inactive);
 $smarty->display("vw_edit_typeanesth.tpl");
-
-?>
