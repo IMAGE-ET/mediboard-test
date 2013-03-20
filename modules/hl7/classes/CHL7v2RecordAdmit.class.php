@@ -1528,19 +1528,29 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return;
     }
 
-    $PV1_20 = $this->queryTextNode("PV1.20", $node);
-
-    // Chargement d'une prestation journalière
-    $prestation           = new CPrestation();
-    $prestation->group_id = $sender->group_id;
-    $prestation->code     = $PV1_20;
-    $prestation->loadMatchingObject();
-
-    if (!$prestation->_id) {
+    $systeme_presta = CAppUI::conf("dPhospi systeme_prestations");
+    if ($systeme_presta == "standard") {
       return;
     }
 
-    $newVenue->prestation_id = $prestation->_id;
+    // Uniquement pour les prestas expertes
+
+    $PV1_20 = $this->queryTextNode("PV1.20", $node);
+
+    // Chargement d'un item de prestation
+    $item_presta = new CItemPrestation();
+    $item_presta->nom = $PV1_20;
+    $item_presta->loadMatchingObject();
+
+    if (!$item_presta->_id) {
+      return;
+    }
+
+    $item_liaison                  = new CItemLiaison();
+    $item_liaison->sejour_id       = $newVenue->_id;
+    $item_liaison->item_souhait_id = $item_presta->_id;
+
+    $item_liaison->store();
   }
   
   function getChargePriceIndicator(DOMNode $node, CSejour $newVenue) {

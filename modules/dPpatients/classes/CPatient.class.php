@@ -271,6 +271,7 @@ class CPatient extends CMbObject {
    */
   public $_ref_dossier_medical;
   public $_refs_devenirs_dentaires;
+  /** @var CIdSante400 */
   public $_ref_IPP;
   public $_ref_vitale_idsante400;
   public $_ref_constantes_medicales;
