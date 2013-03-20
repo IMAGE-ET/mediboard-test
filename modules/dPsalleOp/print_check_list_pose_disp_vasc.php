@@ -17,10 +17,17 @@ $pose->load($pose_disp_vasc_id);
 $pose->loadRefSejour();
 
 $check_lists = $pose->loadBackRefs("check_lists", "daily_check_list_id");
-foreach($check_lists as $_check_list) {
+foreach ($check_lists as $_check_list_id => $_check_list) {
+  // Remove check lists not signed
+  if (!$_check_list->validator_id) {
+    unset($pose->_back["check_lists"][$_check_list_id]);
+    unset($check_lists[$_check_list_id]);
+    continue;
+  }
+
   $_check_list->loadItemTypes();
   $_check_list->loadBackRefs('items', "daily_check_item_id");
-  foreach($_check_list->_back['items'] as $_item) {
+  foreach ($_check_list->_back['items'] as $_item) {
     $_item->loadRefsFwd();
   }
 }

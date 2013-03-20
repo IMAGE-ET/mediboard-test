@@ -1154,6 +1154,51 @@ class CSetupdPsalleOp extends CSetup {
                 ADD INDEX (`list_type_id`);";
     $this->addQuery($query);
 
-    $this->mod_version = "0.47";
+    $this->makeRevision("0.47");
+    $query = "CREATE TABLE `daily_check_list_type_link` (
+                `daily_check_list_type_link_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+                `object_class` ENUM ('CSalle','CBlocOperatoire') NOT NULL DEFAULT 'CSalle',
+                `object_id` INT (11) UNSIGNED,
+                `list_type_id` INT (11) UNSIGNED NOT NULL DEFAULT '0'
+              )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `daily_check_list_type_link`
+                ADD INDEX (`object_id`),
+                ADD INDEX (`object_class`),
+                ADD INDEX (`list_type_id`);";
+    $this->addQuery($query);
+    $query = "ALTER TABLE `daily_check_list_type`
+                ADD `group_id` INT ( 11 ) UNSIGNED NOT NULL DEFAULT 0;";
+    $this->addQuery($query);
+
+    $this->makeRevision("0.48");
+
+    function listToGroup($setup){
+      $query = "SELECT `daily_check_item_category`.`list_type_id`, `daily_check_item_type`.`group_id`
+        FROM `daily_check_item_type`
+        LEFT JOIN `daily_check_item_category`
+               ON `daily_check_item_category`.`daily_check_item_category_id` = `daily_check_item_type`.`category_id`
+        LEFT JOIN `daily_check_list_type`
+               ON `daily_check_list_type`.`daily_check_list_type_id` = `daily_check_item_category`.`list_type_id`
+        WHERE `daily_check_item_type`.`category_id` = `daily_check_item_category`.`daily_check_item_category_id`
+        AND `daily_check_item_category`.`list_type_id` IS NOT NULL
+        GROUP BY `daily_check_item_category`.`list_type_id`, `daily_check_item_type`.`group_id`";
+      $list_to_group = $setup->ds->loadHashList($query);
+
+      foreach ($list_to_group as $list_type_id => $group_id) {
+        $query = "UPDATE `daily_check_list_type` SET
+           `group_id` = '$group_id'
+           WHERE `daily_check_list_type`.daily_check_list_type_id = '$list_type_id'";
+        $setup->ds->exec($query);
+      }
+      return true;
+    }
+    $this->addFunction("listToGroup");
+
+    $query = "INSERT INTO `daily_check_list_type_link` (`object_class`, `object_id`, `list_type_id`)
+                SELECT `object_class`, `object_id`, `daily_check_list_type_id` FROM `daily_check_list_type`";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.49";
   }
 }

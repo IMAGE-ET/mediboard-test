@@ -34,30 +34,7 @@ $daily_check_list_types = array();
 $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active_salle_reveil") && $date >= CMbDT::date();
 
 if ($require_check_list) {
-  $daily_check_list_type = new CDailyCheckListType();
-  $where = array(
-    "object_class" => "= 'CBlocOperatoire'",
-    "object_id IS NULL OR object_id = '$bloc->_id'",
-  );
-  /** @var CDailyCheckListType[] $daily_check_list_types  */
-  $daily_check_list_types = $daily_check_list_type->loadList($where, "title");
-
-  /** @var CDailyCheckList[] $daily_check_lists  */
-  $daily_check_lists = array();
-
-  $check_list_not_validated = 0;
-  foreach ($daily_check_list_types as $_list_type) {
-    $_list_type->loadRefsCategories();
-    $daily_check_list = CDailyCheckList::getList($bloc, $date, null, $_list_type->_id);
-    $daily_check_list->loadItemTypes();
-    $daily_check_list->loadBackRefs('items');
-
-    if (!$daily_check_list->_id || !$daily_check_list->validator_id) {
-      $check_list_not_validated++;
-    }
-
-    $daily_check_lists[] = $daily_check_list;
-  }
+  list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($bloc, $date);
 
   if ($check_list_not_validated == 0) {
     $require_check_list = false;

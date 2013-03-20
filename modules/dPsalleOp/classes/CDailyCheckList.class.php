@@ -92,6 +92,50 @@ class CDailyCheckList extends CMbObject { // not a MetaObject, as there can be m
     return $target_classes;
   }
 
+  /**
+   * @param CMbObject $object
+   * @param           $date
+   *
+   * @return array
+   */
+  static function getCheckLists(CMbObject $object, $date) {
+    $daily_check_list_type = new CDailyCheckListType();
+    $where = array(
+      "daily_check_list_type_link.object_class" => "= '$object->_class'",
+      "daily_check_list_type_link.object_id IS NULL
+      OR
+     daily_check_list_type_link.object_id = '$object->_id'",
+    );
+    $ljoin = array(
+      "daily_check_list_type_link" => "daily_check_list_type_link.list_type_id = daily_check_list_type.daily_check_list_type_id",
+    );
+    /** @var CDailyCheckListType[] $daily_check_list_types  */
+    $daily_check_list_types = $daily_check_list_type->loadList($where, "title", null, null, $ljoin);
+
+    /** @var CDailyCheckList[] $daily_check_lists  */
+    $daily_check_lists = array();
+
+    $check_list_not_validated = 0;
+    foreach ($daily_check_list_types as $_list_type) {
+      $_list_type->loadRefsCategories();
+      $daily_check_list = CDailyCheckList::getList($object, $date, null, $_list_type->_id);
+      $daily_check_list->loadItemTypes();
+      $daily_check_list->loadBackRefs('items');
+
+      if (!$daily_check_list->_id || !$daily_check_list->validator_id) {
+        $check_list_not_validated++;
+      }
+
+      $daily_check_lists[] = $daily_check_list;
+    }
+
+    return array(
+      $check_list_not_validated,
+      $daily_check_list_types,
+      $daily_check_lists,
+    );
+  }
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'daily_check_list';

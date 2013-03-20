@@ -174,12 +174,16 @@ class CSejour extends CFacturable implements IPatientRelated {
   public $_cession_creance;
   
   // Object References
-  /**
-   * @var CPatient Patient
-   */
+  /** @var CPatient Patient */
   public $_ref_patient; // Declared in CCodable
+
+  /** @var CMediusers */
   public $_ref_praticien;
+
+  /** @var COperation[] */
   public $_ref_operations;
+
+  /** @var COperation */
   public $_ref_last_operation;
   public $_ref_affectations;
   public $_ref_first_affectation;

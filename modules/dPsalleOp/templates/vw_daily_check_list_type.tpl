@@ -17,7 +17,7 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
         {{/foreach}}
       </ul>
 
-      {{foreach from=$by_class key=_class item=_list_by_object}}
+      {{foreach from=$by_class key=_class item=_lists}}
         <div id="tab-{{$_class}}" style="display: none;">
           <a class="button new" href="?m=salleOp&amp;tab=vw_daily_check_list_type&amp;list_type_id=0&amp;target_class={{$_class}}&amp;dialog={{$dialog}}">
             {{tr}}CDailyCheckListType-title-create{{/tr}}
@@ -27,38 +27,36 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
             <tr>
               <th>{{mb_title class=CDailyCheckListType field=title}}</th>
               <th>{{mb_title class=CDailyCheckListType field=description}}</th>
+              <th>{{mb_title class=CDailyCheckListType field=_links}}</th>
               <th>{{tr}}CDailyCheckListType-back-daily_check_list_categories{{/tr}}</th>
             </tr>
 
-            {{foreach from=$_list_by_object key=_target item=_list}}
-              <tr>
-                <th class="title" colspan="4">
-                  {{if $_target == "all"}}
-                    {{tr}}All{{/tr}}
-                  {{else}}
-                    <span data-object_guid="{{$_class}}-{{$_target}}">
-                      {{$targets.$_class.$_target}}
-                    </span>
-                  {{/if}}
-                </th>
+            {{foreach from=$_lists item=_list}}
+              <tr {{if $_list->_id == $list_type->_id}} class="selected" {{/if}}>
+                <td>
+                  <a href="?m=salleOp&amp;tab=vw_daily_check_list_type&amp;list_type_id={{$_list->_id}}&amp;dialog={{$dialog}}">
+                    {{mb_value object=$_list field=title}}
+                  </a>
+                </td>
+                <td class="compact">{{mb_value object=$_list field=description}}</td>
+                <td class="compact">
+                  {{foreach from=$_list->_ref_type_links item=_link}}
+                    {{if $_link->object_id}}
+                      {{$_link->_ref_object}}
+                    {{else}}
+                      <em> &ndash; {{tr}}All{{/tr}}</em>
+                    {{/if}}
+                    <br />
+                  {{/foreach}}
+                </td>
+                <td>{{$_list->_count.daily_check_list_categories}}</td>
               </tr>
-              {{foreach from=$_list item=_item}}
-                <tr {{if $_item->_id == $list_type->_id}} class="selected" {{/if}}>
-                  <td>
-                    <a href="?m=salleOp&amp;tab=vw_daily_check_list_type&amp;list_type_id={{$_item->_id}}&amp;dialog={{$dialog}}">
-                      {{mb_value object=$_item field=title}}
-                    </a>
-                  </td>
-                  <td class="compact">{{mb_value object=$_item field=description}}</td>
-                  <td>{{$_item->_count.daily_check_list_categories}}</td>
-                </tr>
-                {{foreachelse}}
-                <tr>
-                  <td colspan="4" class="empty">
-                    {{tr}}CDailyCheckListType.none{{/tr}}
-                  </td>
-                </tr>
-              {{/foreach}}
+              {{foreachelse}}
+              <tr>
+                <td colspan="4" class="empty">
+                  {{tr}}CDailyCheckListType.none{{/tr}}
+                </td>
+              </tr>
             {{/foreach}}
           </table>
         </div>
@@ -67,11 +65,9 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
 
     <td>
       <form name="edit-CDailyCheckListType" action="?m=salleOp&amp;tab=vw_daily_check_list_type&amp;dialog={{$dialog}}" method="post" onsubmit="return checkForm(this)">
-      {{mb_class object=$list_type}}
-      {{mb_key   object=$list_type}}
-
-      {{mb_field object=$list_type field="object_class" hidden=true}}
-      {{mb_field object=$list_type field="object_id"    hidden=true}}
+        {{mb_class object=$list_type}}
+        {{mb_key   object=$list_type}}
+        {{mb_field object=$list_type field=group_id hidden=true}}
 
         <table class="main form">
         {{mb_include module=system template=inc_form_table_header object=$list_type}}
@@ -80,25 +76,33 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
             <td>{{mb_field object=$list_type field="title"}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$list_type field="_object_guid"}}</th>
+            <th>{{mb_label object=$list_type field="object_class"}}</th>
             <td>
-              <select name="_object_guid" class="str notNull" onchange="CheckList.updateObject(this)">
-                <option value=""> &ndash; Salle </option>
+              <select name="object_class" class="str notNull" onchange="$$('.object_id-list').invoke('hide'); $('object_class-'+$V(this)).show();">
+                {{foreach from=$targets key=_class item=_targets}}
+                  <option value="{{$_class}}" {{if $_class == $list_type->object_class}} selected {{/if}}>
+                    {{tr}}CDailyCheckItemCategory.target_class.{{$_class}}{{/tr}}
+                  </option>
+                {{/foreach}}
+              </select>
+
+              <input type="hidden" name="_links[dummy]" value="dummy-dummy" />
+
               {{foreach from=$targets key=_class item=_targets}}
-                <optgroup label="{{tr}}CDailyCheckItemCategory.target_class.{{$_class}}{{/tr}}">
+                <div class="object_id-list" id="object_class-{{$_class}}" {{if $_class != $list_type->object_class}} style="display: none;" {{/if}}>
                   {{foreach from=$_targets key=_id item=_target}}
-                    <option value="{{$_target->_guid}}"
-                      {{if $_target->_id == $list_type->object_id && $_target->_class == $list_type->object_class}} selected {{/if}}>
+                    <label>
+                      <input type="checkbox" name="_links[{{$_target->_guid}}]" value="{{$_target->_guid}}"
+                            {{if array_key_exists($_target->_guid,$list_type->_links)}} checked {{/if}}/>
                       {{if $_id == 0}}
-                        {{tr}}CDailyCheckItemCategory.target_class.{{$_class}}{{/tr}} - {{tr}}All{{/tr}}
+                        {{tr}}All{{/tr}}
                       {{else}}
                         {{$_target}}
                       {{/if}}
-                    </option>
+                    </label><br />
                   {{/foreach}}
-                </optgroup>
+                </div>
               {{/foreach}}
-              </select>
             </td>
           </tr>
           <tr>

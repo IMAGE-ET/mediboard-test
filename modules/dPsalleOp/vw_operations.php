@@ -164,30 +164,7 @@ $daily_check_list_types = array();
 $require_check_list = CAppUI::conf("dPsalleOp CDailyCheckList active") && $date >= CMbDT::date() && !$currUser->_is_praticien;
 
 if ($require_check_list) {
-  $daily_check_list_type = new CDailyCheckListType();
-  $where = array(
-    "object_class" => "= 'CSalle'",
-    "object_id IS NULL OR object_id = '$salle->_id'",
-  );
-  /** @var CDailyCheckListType[] $daily_check_list_types  */
-  $daily_check_list_types = $daily_check_list_type->loadList($where, "title");
-
-  /** @var CDailyCheckList[] $daily_check_lists  */
-  $daily_check_lists = array();
-
-  $check_list_not_validated = 0;
-  foreach ($daily_check_list_types as $_list_type) {
-    $_list_type->loadRefsCategories();
-    $daily_check_list = CDailyCheckList::getList($salle, $date, null, $_list_type->_id);
-    $daily_check_list->loadItemTypes();
-    $daily_check_list->loadBackRefs('items');
-
-    if (!$daily_check_list->_id || !$daily_check_list->validator_id) {
-      $check_list_not_validated++;
-    }
-
-    $daily_check_lists[] = $daily_check_list;
-  }
+  list($check_list_not_validated, $daily_check_list_types, $daily_check_lists) = CDailyCheckList::getCheckLists($salle, $date);
 
   if ($check_list_not_validated == 0) {
     $require_check_list = false;
@@ -232,7 +209,7 @@ if ($selOp->_id) {
 $group = CGroups::loadCurrent();
 $group->loadConfigValues();
 
-$listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse"), true, true);
+$listValidateurs = CPersonnel::loadListPers(array("op", "op_panseuse", "iade"), true, true);
 $operateurs_disp_vasc = implode("-", array_merge(CMbArray::pluck($listChirs, "_id"), CMbArray::pluck($listValidateurs, "user_id")));
 
 // Lib Flot pour les graphiques de surveillance perop

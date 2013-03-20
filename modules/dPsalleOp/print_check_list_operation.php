@@ -15,11 +15,19 @@ $operation_id = CValue::get("operation_id");
 $operation = new COperation;
 $operation->load($operation_id);
 
+/** @var CDailyCheckList[] $check_lists */
 $check_lists = $operation->loadBackRefs("check_lists", "date");
-foreach($check_lists as $_check_list) {
+foreach ($check_lists as $_check_list_id => $_check_list) {
+  // Remove check lists not signed
+  if (!$_check_list->validator_id) {
+    unset($operation->_back["check_lists"][$_check_list_id]);
+    unset($check_lists[$_check_list_id]);
+    continue;
+  }
+
   $_check_list->loadItemTypes();
   $_check_list->loadBackRefs('items', "daily_check_item_id");
-  foreach($_check_list->_back['items'] as $_item) {
+  foreach ($_check_list->_back['items'] as $_item) {
     $_item->loadRefsFwd();
   }
 }

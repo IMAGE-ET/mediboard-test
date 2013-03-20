@@ -50,9 +50,18 @@ foreach ($sejour->_ref_operations as $_interv) {
   $_interv->loadRefChir();
   $_interv->_ref_chir->loadRefFunction();
   $_interv->loadRefsConsultAnesth();
+
+  /** @var CDailyCheckList[] $check_lists  */
   $check_lists = $_interv->loadBackRefs("check_lists", "date");
 
-  foreach ($check_lists as $_check_list) {
+  foreach ($check_lists as $_check_list_id => $_check_list) {
+    // Remove check lists not signed
+    if (!$_check_list->validator_id) {
+      unset($_interv->_back["check_lists"][$_check_list_id]);
+      unset($check_lists[$_check_list_id]);
+      continue;
+    }
+
     $_check_list->loadItemTypes();
     $_check_list->loadBackRefs('items');
     foreach ($_check_list->_back['items'] as $_item) {
