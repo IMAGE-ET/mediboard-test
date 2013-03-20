@@ -12,7 +12,7 @@
 
 
 
-<form name="editRegleSectorisation" method="post">
+<form name="editRegleSectorisation" method="post" action="">
   {{mb_key object=$rule}}
     <input type="hidden" name="dosql" value="do_sejour_sectorisation_aed" />
     <input type="hidden" name="m" value="{{$m}}" />
@@ -29,7 +29,7 @@
     <tr>
       <th>{{mb_label object=$rule field=service_id}}</th>
       <td>
-        <select name="service_id">
+        <select name="service_id" class="notNull">
           {{foreach from=$services item=_service}}
             <option value="{{$_service->_id}}" {{if $_service->_id == $rule->service_id}}selected="selected" {{/if}}>{{$_service}}</option>
           {{/foreach}}
@@ -42,9 +42,9 @@
     </tr>
 
     <tr>
-      <th>{{mb_label object=$rule field=group_id}}</th>
+      <th>{{mb_label object=$rule field=group_id for="group_id"}}</th>
       <td>
-        <select name="group_id">
+        <select name="group_id" class="notNull">
           {{foreach from=$groups item=_group}}
             <option value="{{$_group->_id}}" {{if $_group->_id == $rule->group_id}}selected="selected" {{/if}}>{{$_group}}</option>
           {{/foreach}}
@@ -56,7 +56,7 @@
       <th>{{mb_label object=$rule field=function_id}}</th>
       <td>
         <select name="function_id">
-        <option value="">{{tr}}CRegleSectorisation-whatever{{/tr}}</option>
+        <option value="">{{tr}}CRegleSectorisation-function_id.all{{/tr}}</option>
         {{foreach from=$functions item=_function}}
           <option value="{{$_function->_id}}" {{if $_function->_id == $rule->function_id}}selected="selected" {{/if}}>
             {{$_function->_view}}
@@ -100,12 +100,12 @@
 
     <tr>
       <th>{{mb_label object=$rule field=type_admission}}</th>
-      <td>{{mb_field object=$rule field=type_admission emptyLabel="CRegleSectorisation-whatever"}}</td>
+      <td>{{mb_field object=$rule field=type_admission emptyLabel="CRegleSectorisation-type_admission.all"}}</td>
     </tr>
 
     <tr>
       <th>{{mb_label object=$rule field=type_pec}}</th>
-      <td>{{mb_field object=$rule field=type_pec emptyLabel="CRegleSectorisation-whatever"}}</td>
+      <td>{{mb_field object=$rule field=type_pec emptyLabel="CRegleSectorisation-type_pec.all"}}</td>
     </tr>
 
     <tr>
