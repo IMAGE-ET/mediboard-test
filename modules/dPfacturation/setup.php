@@ -180,7 +180,26 @@ class CSetupdPfacturation extends CSetup {
               ADD `code_ref` TEXT,
               ADD `code_caisse` TEXT;";
     $this->addQuery($query);
-    $this->mod_version = "0.21";
+    $this->makeRevision("0.21");
+    
+    // Ecrit les droits utilisateurs sur le module facturation
+    $query = "INSERT INTO `perm_module` (`user_id`, `mod_id`, `permission`, `view`)
+              SELECT u.user_id, m.mod_id, 2, 0
+              FROM perm_module AS p, modules AS m, modules AS n, users AS u
+              WHERE m.mod_name = 'dPfacturation'
+              AND u.template = '1'
+              AND n.mod_name = 'dPcabinet'
+              AND p.mod_id = n.mod_id
+              AND p.permission = 2
+              AND p.user_id = u.user_id
+              AND NOT EXISTS (
+                SELECT * FROM perm_module AS o
+                WHERE o.user_id = u.user_id
+                AND o.mod_id = m.mod_id
+                AND p.permission = 2
+              );";
+    $this->addQuery($query);
+    $this->mod_version = "0.22";
   }
 }
 ?>
