@@ -8,8 +8,13 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-Main.add(Control.Tabs.create.curry('tabs-configure', true));
+<script>
+  Main.add(function () {
+  var tabs = Control.Tabs.create('tabs-configure', true);
+  if (tabs.activeLink.key == "CConfigEtab") {
+    Configuration.edit('dPurgences', 'CGroups', $('CConfigEtab'));
+  }
+});
 </script>
 
 <ul id="tabs-configure" class="control_tabs">
@@ -17,8 +22,10 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
   <li><a href="#Display">{{tr}}config-dPurgences-display{{/tr}}</a></li>
   <li><a href="#Sender">{{tr}}config-dPurgences-sender{{/tr}}</a></li>
   <li><a href="#Offline">{{tr}}config-dPurgences-offline{{/tr}}</a></li>
+  <li onmousedown="Configuration.edit('dPurgences', 'CGroups', $('CConfigEtab'))">
+    <a href="#CConfigEtab">Config par établissement</a>
+  </li>
 </ul>
-
 <hr class="control_tabs" />
 
 <div id="RPU" style="display: none;">
@@ -32,6 +39,8 @@ Main.add(Control.Tabs.create.curry('tabs-configure', true));
 <div id="Sender" style="display: none;">
   {{mb_include template=inc_config_sender}}
 </div>
+
+<div id="CConfigEtab" style="display: none">
 
 <div id="Offline" style="display: none;">
   {{mb_include template=inc_config_offline}}

@@ -118,7 +118,7 @@ class CRPU extends CMbObject {
       "pec_douleur"      => "text helped",
       "pec_transport"    => "enum list|med|paramed|aucun",
       "motif"            => "text helped",
-      "ccmu"             => "enum list|1|P|2|3|4|5|D",
+      "ccmu"             => "enum ".(CAppUI::conf("dPurgences CRPU impose_degre_urgence", CGroups::loadCurrent()->_guid) == 1 ? 'notNull ' : '')."list|1|P|2|3|4|5|D",
       "gemsa"            => "enum list|1|2|3|4|5|6",
       "type_pathologie"  => "enum list|C|E|M|P|T",
       "orientation"      => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO",
@@ -159,7 +159,7 @@ class CRPU extends CMbObject {
       "_can_leave_since"   => "bool",
       "_can_leave_level"   => "enum list|ok|warning|error",
      );
-
+     
     $specs["urprov"] = "";
     $specs["urmuta"] = "";
     $specs["urtrau"] = "";
