@@ -11,7 +11,6 @@
 
 /**
  * Facture générique
- *
  */
 class CFacture extends CMbObject {
   
@@ -188,6 +187,14 @@ class CFacture extends CMbObject {
         }
       }
     }
+    
+    $this->loadRefsReglements();
+    foreach ($this->_ref_reglements as $reglement) {
+      if ($msg = $reglement->delete()) {
+        return $msg;
+      }
+    }
+    
     // Standard store
     if ($msg = parent::delete()) {
       return $msg;

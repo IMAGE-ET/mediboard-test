@@ -24,52 +24,52 @@
   </tr>
 {{/if}}
 <tr>
-  <td colspan="2"> {{tr}}CFactureEtablissement-type_facture{{/tr}}:
-    <form name="type_facture" method="post" action=""> 
+  <td colspan="8">
+    <form name="type_facture" method="post" action="">
       {{mb_class object=$facture}}
       {{mb_key   object=$facture}}
       <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-      <input type="radio" name="type_facture" value="maladie" {{if $facture->type_facture == 'maladie'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" 
-      {{if $facture->cloture}}disabled="disabled"{{/if}}/>
-      <label for="maladie">{{tr}}CFactureEtablissement.type_facture.maladie{{/tr}}</label>
-      <input type="radio" name="type_facture" value="accident" {{if $facture->type_facture == 'accident'}}checked{{/if}}
-      {{if $facture->cloture}}disabled="disabled"{{/if}} onchange="Facture.modifCloture(this.form);" />
-      <label for="accident">{{tr}}CFactureEtablissement.type_facture.accident{{/tr}}</label>
+      <table class="main tbl">
+        <tr>
+          <td class="narrow">{{tr}}CFactureEtablissement-type_facture{{/tr}}</td>
+          <td>
+            <input type="radio" name="type_facture" value="maladie" {{if $facture->type_facture == 'maladie'}}checked{{/if}} onchange="Facture.modifCloture(this.form);" 
+            {{if $facture->cloture}}disabled="disabled"{{/if}}/>
+            <label for="maladie">{{tr}}CFactureEtablissement.type_facture.maladie{{/tr}}</label>
+            <input type="radio" name="type_facture" value="accident" {{if $facture->type_facture == 'accident'}}checked{{/if}}
+            {{if $facture->cloture}}disabled="disabled"{{/if}} onchange="Facture.modifCloture(this.form);" />
+            <label for="accident">{{tr}}CFactureEtablissement.type_facture.accident{{/tr}}</label>
+          </td>
+          <td class="narrow">
+            <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+            <input type="hidden" name="cession_creance" value="{{if $facture->cession_creance == 1}}0{{else}}1{{/if}}" />
+            <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}}
+            {{if $facture->cloture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
+            {{mb_label object=$facture field=cession_creance}}
+            <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
+            <input type="hidden" name="npq" value="{{if $facture->npq == 1}}0{{else}}1{{/if}}" />
+            <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}}
+            {{if $facture->cloture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
+            {{mb_label object=$facture field=npq}}
+          </td>
+          <td style="width:400px;">
+            {{if $facture->_class == "CFactureEtablissement"}}
+              {{mb_label object=$facture field=dialyse}}
+              {{mb_field object=$facture field=dialyse onchange="Facture.modifCloture(this.form);"}} 
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <td>{{mb_label object=$facture field=envoi_xml}}</td>
+          <td>{{mb_field object=$facture field=envoi_xml onchange="Facture.modifCloture(this.form);"}}</td>
+          <td>
+            {{mb_label object=$facture field=statut_pro}}
+            {{mb_field object=$facture field=statut_pro emptyLabel="Choisir un status" onchange="Facture.cut(this.form);"}}
+          </td>
+          <td></td>
+        </tr>
+      </table>
     </form>
-  </td>
-  <td colspan="6">
-    <form name="cession_facture" method="post" action=""> 
-      {{mb_class object=$facture}}
-      {{mb_key   object=$facture}}
-      <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-      <input type="hidden" name="cession_creance" value="{{if $facture->cession_creance == 1}}0{{else}}1{{/if}}" />
-      <input type="checkbox" name="cession_tmp" value="{{$facture->cession_creance}}" {{if $facture->cession_creance}}checked="checked"{{/if}}
-      {{if $facture->cloture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
-      {{mb_label object=$facture field=cession_creance}}
-    </form>
-    <form name="npq_facture" method="post" action=""> 
-      {{mb_class object=$facture}}
-      {{mb_key   object=$facture}}
-      <input type="hidden" name="not_load_banque" value="{{if isset($factures|smarty:nodefaults) && count($factures)}}0{{else}}1{{/if}}" />
-      <input type="hidden" name="npq" value="{{if $facture->npq == 1}}0{{else}}1{{/if}}" />
-      <input type="checkbox" name="npq_tmp" value="{{$facture->npq}}" {{if $facture->npq}}checked="checked"{{/if}}
-      {{if $facture->cloture}}disabled="disabled"{{/if}} onclick="Facture.modifCloture(this.form);" />
-      {{mb_label object=$facture field=npq}}
-    </form>
-    <form name="statut_pro" method="post" action="" style="margin-left:30px;"> 
-      {{mb_class object=$facture}}
-      {{mb_key   object=$facture}}
-      {{mb_label object=$facture field=statut_pro}}
-      {{mb_field object=$facture field=statut_pro emptyLabel="Choisir un status" onchange="Facture.cut(this.form);"}} 
-    </form>
-    {{if $facture->_class == "CFactureEtablissement"}}
-      <form name="dialyse" method="post" action="" style="margin-left:30px;"> 
-        {{mb_class object=$facture}}
-        {{mb_key   object=$facture}}
-        {{mb_label object=$facture field=dialyse}}
-        {{mb_field object=$facture field=dialyse onchange="Facture.modifCloture(this.form);"}} 
-      </form>
-    {{/if}}
   </td>
 </tr>
 <tr>
