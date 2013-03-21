@@ -368,6 +368,10 @@ class CHL7v2Component extends CHL7v2Entity {
       else {
         $str = $this->getMessage()->escape($this->data);
       }
+
+      if (CHL7v2Message::$decorateToString) {
+        $str = CMbString::htmlEntities($str);
+      }
     }
 
     if (CHL7v2Message::$decorateToString) {

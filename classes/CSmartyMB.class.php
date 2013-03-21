@@ -305,7 +305,7 @@ class CSmartyMB extends Smarty {
         $show = "array ($count)";
       }
 
-      echo "\n<br />$var: $show";
+      echo "\n<br />".CMbString::htmlEntities($var).": ".CMbString::htmlEntities($show);
     }
 
     echo "\n</span>\n";
