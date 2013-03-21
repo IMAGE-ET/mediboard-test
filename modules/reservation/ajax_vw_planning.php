@@ -182,9 +182,12 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     $_operation->_ref_salle = $_operation->loadFwdRef("salle_id");
     
     $first_log = $_operation->loadFirstLog();
-    
+
+    $_operation->loadRefAffectation();
+    $lit = $_operation->_ref_affectation->_ref_lit;
     $chir    = $_operation->loadRefChir();
     $chir->loadRefFunction();
+    $chir->getBasicInfo();
     $chir_2  = $_operation->loadRefChir2();
     $chir_2->loadRefFunction();
     $chir_3  = $_operation->loadRefChir3();
@@ -195,6 +198,9 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     $anesth  = $_operation->_ref_anesth = $_operation->loadFwdRef("anesth_id");
     $sejour  = $_operation->loadRefSejour();
     $patient = $sejour->loadRefPatient();
+    $patient->loadRefDossierMedical();
+    $patient->_ref_dossier_medical->countAllergies();
+    $patient->_ref_dossier_medical->loadRefsAntecedents();
     $besoins = $_operation->loadRefsBesoins();
     
     if (!$anesth->_id) {
@@ -220,12 +226,23 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $libelle .= "<span style='float: right' title='Intervention en urgence'><img src='images/icons/attente_fourth_part.png' /></span>";
     }
     
-    $libelle .= "<span onmouseover='ObjectTooltip.createEx(this, \"".CMbString::htmlEntities($patient->_guid)."\")'>".CMbString::htmlEntities($patient->nom. " " .$patient->prenom)."</span>, ".$patient->getFormattedValue("naissance").
-    "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".CMbDT::transform($debut_op, null, "%H:%M")." - ".CMbDT::transform($fin_op, null, "%H:%M")."</span>".
-    "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>".
-    "\n<span style='font-size: 11px; font-weight: bold;'>".CMbString::htmlEntities($_operation->libelle)."</span>".
-    "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>".CMbString::htmlEntities($chir->_view)."</span>";
-    
+    $libelle .= "<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".CMbDT::transform($debut_op, null, "%H:%M")." - ".CMbDT::transform($fin_op, null, "%H:%M")."<br/>".
+    CMbString::htmlEntities($_operation->libelle)."</span>".
+    "\n<span  class=\"mediuser\" style=\"border-left-color: #".$chir->_ref_function->color.";\" onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>".CMbString::htmlEntities($chir->_view)."</span>".
+    "<hr/>".
+    "<span onmouseover='ObjectTooltip.createEx(this, \"".CMbString::htmlEntities($patient->_guid)."\")'>".CMbString::htmlEntities($patient->nom. " " .$patient->prenom." (".$patient->sexe.")")."<br/>[".$patient->getFormattedValue("naissance")."] ".$lit->_view."</span>";
+    if ($patient->_ref_dossier_medical->_count_allergies > 0) {
+      $libelle .= "
+            <span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_guid."', 'allergies');\" ><img src=\"images/icons/warning.png\" alt=\"WRN\"/></span>";
+    }
+    if (count($patient->_ref_dossier_medical->_ref_antecedents_by_type) > $patient->_ref_dossier_medical->_count_allergies) {
+      $libelle.="<span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_ref_dossier_medical->_guid."', 'antecedents');\" ><img src=\"images/icons/antecedents.gif\" alt=\"WRN\"/></span>";
+    }
+    $libelle.="\n<span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>";
+    if ($_operation->materiel) {
+      $libelle .="<hr/><span>".$_operation->materiel."</span>";
+    }
+
     if ($chir_2->_id) {
       $libelle .= "\n<span onmouseover='ObjectTooltip.createEx(this, \"".$chir_2->_guid."\")'>".CMbString::htmlEntities($chir_2->_view)."</span>";
     }
