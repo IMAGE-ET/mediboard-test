@@ -152,7 +152,7 @@ class CPAM extends CIHE {
    */
   static function testA24(CCnStep $step) {
     //  PDS-PAM_Identification_Mgt_Link : Récupération du step 10
-    $patient_1        = self::loadPatient($step, 10);
+    $patient_1 = self::loadPatient($step, 10);
 
     //  PDS-PAM_Identification_Mgt_Link : Récupération du step 10
     $patient_2 = self::loadPatient($step, 40);
