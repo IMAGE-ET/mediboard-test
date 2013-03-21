@@ -8,23 +8,29 @@
   * @version  SVN: $Id:$ 
   * @link     http://www.mediboard.org
 *}}
-
-<ul>
+<table class="tbl">
+  <tr>
+    <th class="title">
+      Antécédents
+    </th>
+  </tr>
   {{foreach from=$antecedents key=name item=cat}}
-    {{if ($type == "" || ($type == $name) ) && $cat|@count}}
-      <li>
-        <strong>{{tr}}CAntecedent.type.{{$name}}{{/tr}}</strong>
-        <ul>
-          {{foreach from=$cat item=ant}}
-            <li>
-              {{if $ant->date}}
-                {{mb_value object=$ant field=date}}:
-              {{/if}}
-              {{$ant->rques}}
-            </li>
-          {{/foreach}}
-        </ul>
-      </li>
+    {{if $name != "alle" && $cat|@count}}
+      <tr>
+        <th>
+          {{tr}}CAntecedent.type.{{$name}}{{/tr}}
+        </th>
+      </tr>
+      {{foreach from=$cat item=ant}}
+        <tr>
+          <td>
+            {{if $ant->date}}
+              {{mb_value object=$ant field=date}}:
+            {{/if}}
+            {{$ant->rques}}
+          </td>
+        </tr>
+      {{/foreach}}
     {{/if}}
   {{/foreach}}
-</ul>
+</table>

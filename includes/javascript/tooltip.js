@@ -241,6 +241,16 @@ Object.extend(ObjectTooltip, {
       action: "httpreq_vw_object_notes",
       sClass: "tooltip postit"
     },
+    allergies: {
+    module: "patients",
+    action: "ajax_vw_allergies",
+    sClass: "tooltip"
+    },
+    antecedents: {
+      module: "patients",
+      action: "ajax_tooltip_atcd",
+      sClass: "tooltip"
+    },
 
     objectUFs: {
       module: "dPhospi",

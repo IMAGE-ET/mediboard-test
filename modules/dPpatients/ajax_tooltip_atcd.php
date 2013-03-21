@@ -14,10 +14,17 @@
 CCanDo::checkRead();
 
 $dossier_medical_id = CValue::get("dossier_medical_id");
+$object_guid         = CValue::get("object_guid");
 $type               = CValue::get("type");
+$exclude            = CValue::get("exclude");
 
-$dossier_medical = new CDossierMedical();
-$dossier_medical->load($dossier_medical_id);
+if ($object_guid) {
+  $dossier_medical = CMbObject::loadFromGuid($object_guid);
+}
+else {
+  $dossier_medical = new CDossierMedical();
+  $dossier_medical->load($dossier_medical_id);
+}
 
 if ($type) {
   $dossier_medical->loadRefsAntecedentsOfType($type);
