@@ -65,7 +65,12 @@ class CHL7v2MessageXML extends CMbXMLDocument {
       // Création d'une venue - Mise à jour d'information de la venue
       if (CMbArray::in($event_code, CHL7v2RecordAdmit::$event_codes)) {
         return new CHL7v2RecordAdmit($encoding);
-      }  
+      }
+
+      // Association / Déssociation
+      if (CMbArray::in($event_code, CHL7v2LinkUnlink::$event_codes)) {
+        return new CHL7v2LinkUnlink($encoding);
+      }
     }    
     
     // Création des résultats d'observations  
@@ -395,7 +400,7 @@ class CHL7v2MessageXML extends CMbXMLDocument {
    * @param DOMNode        $contextNode Node
    * @param CInteropSender $sender      Sender
    *
-   * @return void
+   * @return array
    */
   function getPersonIdentifiers($nodeName, DOMNode $contextNode, CInteropSender $sender) {
     $data = array();
