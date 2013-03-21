@@ -1198,7 +1198,12 @@ class CSetupdPsalleOp extends CSetup {
     $query = "INSERT INTO `daily_check_list_type_link` (`object_class`, `object_id`, `list_type_id`)
                 SELECT `object_class`, `object_id`, `daily_check_list_type_id` FROM `daily_check_list_type`";
     $this->addQuery($query);
+    
+    $this->makeRevision("0.49");
+    $query = "ALTER TABLE `acte_ccam`
+                ADD `extension_documentaire` ENUM ('1','2','3','4','5','6') AFTER `code_association`;";
+    $this->addQuery($query);
 
-    $this->mod_version = "0.49";
+    $this->mod_version = "0.50";
   }
 }

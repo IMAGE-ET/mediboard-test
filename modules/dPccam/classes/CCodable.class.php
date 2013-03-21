@@ -290,6 +290,10 @@ class CCodable extends CMbObject {
   function getExecutantId($code_activite) {
     return null;
   }
+  
+  function getExtensionDocumentaire() {
+    return null;
+  }
 
   function countActes($user_id = null) {
     $where = array();
@@ -652,7 +656,7 @@ class CCodable extends CMbObject {
       foreach ($code_ccam->activites as &$activite) {
         foreach ($activite->phases as &$phase) {
 
-          $possible_acte = new CActeCCAM;
+          $possible_acte = new CActeCCAM();
           $possible_acte->montant_depassement = "";
           $possible_acte->code_acte = $code_ccam->code;
           $possible_acte->code_activite = $activite->numero;
@@ -677,6 +681,10 @@ class CCodable extends CMbObject {
           $possible_acte->executant_id = CAppUI::pref("user_executant") ?
             CMediusers::get()->_id :
             $this->getExecutantId($possible_acte->code_activite);
+          
+          if($possible_acte->code_activite == 4) {
+            $possible_acte->extension_documentaire = $this->getExtensionDocumentaire();
+          }
 
           $possible_acte->updateFormFields();
           $possible_acte->loadRefs();

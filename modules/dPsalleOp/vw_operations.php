@@ -70,7 +70,6 @@ if ($op) {
   $selOp->getAssociationCodesActes();
   $selOp->loadExtCodesCCAM();
   $selOp->loadPossibleActes();
-  
   $selOp->_ref_plageop->loadRefsFwd();
 
   // Affichage des données

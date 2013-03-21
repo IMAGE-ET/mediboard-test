@@ -33,6 +33,7 @@ class CActeCCAM extends CActe {
   public $motif_depassement;
   public $commentaire;
   public $code_association;
+  public $extension_documentaire;
   public $rembourse;
   public $charges_sup;
   public $regle;
@@ -71,23 +72,24 @@ class CActeCCAM extends CActe {
   
   function getProps() {
     $props = parent::getProps();
-    $props["code_acte"]           = "code notNull ccam seekable";
-    $props["code_activite"]       = "num notNull min|0 max|99";
-    $props["code_phase"]          = "num notNull min|0 max|99";
-    $props["execution"]           = "dateTime notNull";
-    $props["modificateurs"]       = "str maxLength|4";
-    $props["motif_depassement"]   = "enum list|d|e|f|n";
-    $props["commentaire"]         = "text";
-    $props["code_association"]    = "enum list|1|2|3|4|5";
-    $props["rembourse"]           = "bool default|1";
-    $props["charges_sup"]         = "bool";
-    $props["regle"]               = "bool default|0";
-    $props["regle_dh"]            = "bool default|0";
-    $props["signe"]               = "bool default|0";
-    $props["sent"]                = "bool default|0";
-    $props["lieu"]                = "enum list|C|D default|C";
-    $props["exoneration"]         = "enum list|N|13|17 default|N";
-    $props["ald"]                 = "bool";
+    $props["code_acte"]              = "code notNull ccam seekable";
+    $props["code_activite"]          = "num notNull min|0 max|99";
+    $props["code_phase"]             = "num notNull min|0 max|99";
+    $props["execution"]              = "dateTime notNull";
+    $props["modificateurs"]          = "str maxLength|4";
+    $props["motif_depassement"]      = "enum list|d|e|f|n";
+    $props["commentaire"]            = "text";
+    $props["code_association"]       = "enum list|1|2|3|4|5";
+    $props["extension_documentaire"] = "enum list|1|2|3|4|5|6";
+    $props["rembourse"]              = "bool default|1";
+    $props["charges_sup"]            = "bool";
+    $props["regle"]                  = "bool default|0";
+    $props["regle_dh"]               = "bool default|0";
+    $props["signe"]                  = "bool default|0";
+    $props["sent"]                   = "bool default|0";
+    $props["lieu"]                   = "enum list|C|D default|C";
+    $props["exoneration"]            = "enum list|N|13|17 default|N";
+    $props["ald"]                    = "bool";
 
     $props["_rembex"]             = "bool";
     

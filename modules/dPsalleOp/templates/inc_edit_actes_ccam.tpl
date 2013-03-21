@@ -184,12 +184,20 @@
                 <th>{{mb_label object=$acte field=executant_id}}</th>
                 <td colspan="10">
                   {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
-                  <select name="executant_id" class="{{$acte->_props.executant_id}}">
+                  <select name="executant_id" class="{{$acte->_props.executant_id}}" style="width: 15em;">
                     <option value="">&mdash; Choisir un professionnel de santé</option>
                     {{mb_include module=mediusers template=inc_options_mediuser selected=$acte->executant_id list=$listExecutants}}
                   </select>
                 </td>
               </tr>
+              
+              {{if $acte->_anesth}}
+              <!-- Extension documentaire -->
+              <tr class="{{$key}}">
+                <th>{{mb_label object=$acte field=extension_documentaire}}</th>
+                <td colspan="10">{{mb_field object=$acte field=extension_documentaire emptyLabel="Choose" canNull=false style="width: 15em;"}}</td>
+              </tr>
+              {{/if}}
       
               <!-- Modificateurs -->
               {{assign var=modifs_compacts value=$confCCAM.modifs_compacts}}  
@@ -283,7 +291,7 @@
                   <th>{{mb_label object=$acte field=montant_depassement}}</th>
                   <td>
                     {{mb_field object=$acte field=montant_depassement}}
-                    {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement"}}
+                    {{mb_field object=$acte field=motif_depassement emptyLabel="CActeCCAM-motif_depassement" style="width: 15em;"}}
                   </td>
                 </tr>
                 {{/if}}
@@ -292,7 +300,7 @@
               <!-- Codes d'exonération -->
               <tr class="{{$view}}">
                 <th>{{mb_label object=$acte field=exoneration}}</th>
-                <td>{{mb_field object=$acte field=exoneration}}</td>
+                <td>{{mb_field object=$acte field=exoneration style="width: 15em;"}}</td>
               </tr>
 
 

@@ -403,6 +403,11 @@ class COperation extends CCodable implements IPatientRelated {
     $this->loadRefPlageOp();
     return ($code_activite == 4 ? $this->_ref_anesth->user_id : $this->chir_id);
   }
+  
+  function getExtensionDocumentaire() {
+    $this->_ref_type_anesth = $this->loadFwdRef("type_anesth", true);
+    return $this->_ref_type_anesth->ext_doc;
+  }
 
   function getBackProps() {
     $backProps = parent::getBackProps();
