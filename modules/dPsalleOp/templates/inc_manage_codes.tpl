@@ -84,7 +84,7 @@
             <table class="main layout">
               <tr>
                 <td id="export_{{$subject->_class}}_{{$subject->_id}}">
-                  <div class="small-warning">Export PMSI impossible : dossier déjà envoyé en facturation</div>
+
                 </td>
               </tr>
             </table>
