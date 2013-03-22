@@ -67,7 +67,7 @@ class CApp {
       if (!headers_sent()) {
         header("HTTP/1.1 500 Application died unexpectedly");
       }
-      CModelObject::error("Application-died-unexpectedly");
+      trigger_error("Application died unexpectedly", E_USER_ERROR);
     }
   }
   
