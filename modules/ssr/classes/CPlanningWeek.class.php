@@ -36,6 +36,7 @@ class CPlanningWeek {
   var $no_dates  = 0;
   
   var $events = array();
+  var $events_sorted = array();
   var $ranges = array();
   
   var $pauses = array("08", "12", "16");
@@ -152,6 +153,38 @@ class CPlanningWeek {
       foreach($colliding as $_key => $_event) {
         $_event->width = 1 / $count;
         $_event->offset = $_key * $_event->width;
+      }
+    }
+  }
+
+  /**
+   * rearrange the current list of events in a optimized way
+   *
+   * @return null
+   */
+  function rearrange() {
+    //days
+    foreach ($this->events_sorted as $_events_by_day) {
+      $intervals = array();
+      // tab
+      foreach ($_events_by_day as $_events_by_hour) {
+        foreach ($_events_by_hour as $_event) {
+
+          $intervals[$_event->internal_id] = array(
+            "lower" => $_event->start,
+            "upper" => $_event->end
+          );
+          $events[$_event->internal_id] = $_event;
+        }
+      }
+      $lines = CMbRange::rearrange($intervals);
+      $lines_count = count($lines);
+      foreach ($lines as $_line_number => $_line) {
+        foreach ($_line as $_event_id) {
+          $event = $events[$_event_id];
+          $event->width = 1 / $lines_count;
+          $event->offset = $_line_number / $lines_count;
+        }
       }
     }
   }
