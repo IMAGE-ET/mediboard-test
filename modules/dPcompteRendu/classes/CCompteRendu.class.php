@@ -277,7 +277,7 @@ class CCompteRendu extends CDocumentItem {
     $this->_extensioned = "$this->nom.htm";
     $this->_view = $this->object_id ? "" : "Modèle : ";
     $this->_view.= $this->nom;
-    
+
     $modele = $this->loadModele();
     
     if ($modele->_id && $modele->purgeable) {
@@ -342,10 +342,24 @@ class CCompteRendu extends CDocumentItem {
    * @return void
    */
   function loadContent($field_source = true) {
+    global $can;
+    $curr_user = CMediusers::get();
     $this->_ref_content = $this->loadFwdRef("content_id", true);
     
     $this->_ref_content->content = preg_replace("/#body\s*{\s*padding/", "body { margin", $this->_ref_content->content);
-    
+
+    $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
+    $days = isset($days[$this->object_class]) ?
+      $days[$this->object_class] : $days["base"];
+
+    $last_log = $this->_ref_content->loadLastLogForField("content");
+    if (
+        (CMbDT::daysRelative($last_log->date, CMbDT::dateTime()) > $days) ||
+        (!$can->admin && $this->valide && $this->author_id != $curr_user->_id)
+    ) {
+      $this->_is_locked = true;
+    }
+
     if ($field_source) {
       $this->_source = $this->_ref_content->content;
       $this->_source = preg_replace("/<meta[^>]+>/", '', $this->_source);

@@ -31,6 +31,7 @@ $object->canDo();
 
 // Praticien concerné
 if (!$user->isPraticien()) {
+  $user = new CMediusers();
   $user->load($user_id);
 }
 
@@ -78,5 +79,3 @@ $smarty->assign("nb_modeles_etiquettes", $nb_modeles_etiquettes);
 $smarty->assign("can_doc", $compte_rendu->loadPermClass());
 
 $smarty->display($only_docs ? "inc_widget_list_documents.tpl" : "inc_widget_documents.tpl");
-
-?>

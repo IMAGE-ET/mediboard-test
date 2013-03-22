@@ -130,6 +130,18 @@
         {{assign var="var" value="dompdf_host"}}
         {{mb_include module=system template=inc_config_bool}}
       </tr>
+      {{assign var="var" value="days_to_lock"}}
+      {{assign var="var_item" value="base"}}
+      <tr>
+        <th>
+          <label for="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}-desc{{/tr}}">
+            {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$var_item}}{{/tr}}
+          </label>
+        </th>
+        <td>
+          <input type="text" name="{{$m}}[{{$class}}][{{$var}}][{{$var_item}}]" value="{{$conf.$m.$class.$var.$var_item}}"/>
+        </td>
+      </tr>
       <tr>
         <th class="category" colspan="2">
           Horodatage pour les aides à la saisie
