@@ -110,7 +110,7 @@ class CCDA_Datatype {
    */
   function toXML($nameParent = null) {
 
-    $dom = new DOMDocument();
+    $dom = new CCDADomDocument();
     //on affecte le nom de la classe comme noeud racine
     $name = $this->getNameClass();
     /**
@@ -120,11 +120,12 @@ class CCDA_Datatype {
       $name = $nameParent;
     }
     //on créé le nom racine
-    $dom->appendChild($dom->createElement($name));
+    $dom->createNodeRoot($name);
 
     //on récupère les specifications définie dans les props
     $spec = $this->getSpecs();
-    $baseXML = $dom->getElementsByTagName($name)->item(0);
+    $baseXML = $dom->getElement($name);
+
     //On parcours les specs
     foreach ($spec as $key => $value) {
       //on récupère une instance d'une classe stocké dans la variable
@@ -136,16 +137,12 @@ class CCDA_Datatype {
           if (empty($classInstance)) {
             continue;
           }
-          //on créé l'atribut avec le nom de la variable
-          $baseXML->appendChild($dom->createAttribute($key));
-          //on affecte la donnée stocké dans l'instance
-          $baseXML->attributes->getNamedItem($key)->nodeValue = $classInstance->getData();
+          //On créé l'attribut
+          $dom->appendAttribute($baseXML, $key, $classInstance->getData());
           break;
         case "data":
-          //on récupère le premier fils
-          $first = $baseXML->firstChild;
           //on insert la donnée avant tous les éléments
-          $baseXML->insertBefore($dom->createTextNode($this->getData()), $first);
+          $dom->insertTextFirst($baseXML, $this->getData());
           break;
         case "element":
           //on vérifie l'existence d'une instance
@@ -159,14 +156,14 @@ class CCDA_Datatype {
               //on récupère le code xml de l'instance en spécifiant le nom du noeud racine
               $xmlClass = $_class->toXML($key);
               //on ajoute à notre document notre instance
-              $baseXML->appendChild($dom->importNode($xmlClass->documentElement, true));
+              $dom->importDOMDocument($baseXML, $xmlClass);
             }
           }
           else {
             //on récupère le code xml de l'instance en spécifiant le nom du noeud racine
             $xmlClass = $classInstance->toXML($key);
             //on ajoute à notre document notre instance
-            $baseXML->appendChild($dom->importNode($xmlClass->documentElement, true));
+            $dom->importDOMDocument($baseXML, $xmlClass);
           }
           break;
       }
@@ -183,9 +180,7 @@ class CCDA_Datatype {
         /**
          * on spécifie le type de l'élément (on cast)
          */
-        $attribute = $dom->createAttributeNS("http://www.w3.org/2001/XMLSchema-instance", "xsi:type");
-        $attribute->nodeValue = $classInstance->getNameClass();
-        $nodeKey->appendChild($attribute);
+        $dom->castElement($nodeKey, $classInstance->getNameClass());
       }
     }
 
