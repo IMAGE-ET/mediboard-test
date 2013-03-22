@@ -525,6 +525,7 @@ $locales['COperation.ASA.2'] = '2 - Maladie systémique légère';
 $locales['COperation.ASA.3'] = '3 - Maladie systémique sévère ou invalidante';
 $locales['COperation.ASA.4'] = '4 - Atteinte sévère d\'une grande fonction';
 $locales['COperation.ASA.5'] = '5 - Patient moribond';
+$locales['COperation.ASA.6'] = '6 - Patient déclaré en état de mort cérébrale';
 $locales['COperation._cotation.ko'] = 'Sans actes';
 $locales['COperation._cotation.ok'] = 'Avec actes';
 $locales['COperation._ranking.ko'] = 'A planifier';

@@ -1635,7 +1635,12 @@ class CSetupdPplanningOp extends CSetup {
     CHANGE `type_adminission` `type_admission` ENUM( 'comp', 'ambu', 'exte', 'seances', 'ssr', 'psy', 'urg', 'consult' )
     NULL DEFAULT NULL ";
     $this->addQuery($query);
+    
+    $this->makeRevision("1.74");
+    $query = "ALTER TABLE `operations`
+                CHANGE `ASA` `ASA` ENUM ('1','2','3','4','5','6') DEFAULT '1';";
+    $this->addQuery($query);
 
-    $this->mod_version = "1.74";
+    $this->mod_version = "1.75";
   }
 }
