@@ -23,9 +23,11 @@ function printConsult() {
 }
 
 function changePratPec(prat_id) {
-  var oForm = getForm("editPratPec");
-  $V(oForm.prat_id, prat_id);
-  oForm.submit();
+  if(confirm('Etes-vous sur de vouloir changer le praticien de la consultation ?')) {
+    var oForm = getForm("editPratPec");
+    $V(oForm.prat_id, prat_id);
+    oForm.submit();
+  }
 }
 </script>
 
