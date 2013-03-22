@@ -860,7 +860,7 @@ class CActeCCAM extends CActe {
     
     // Charges supplémentaires
     if ($this->charges_sup) {
-      $this->_tarif += $phase->charges;
+      $this->_tarif += $code->_phase->charges;
     }
     
     return $this->_tarif;
