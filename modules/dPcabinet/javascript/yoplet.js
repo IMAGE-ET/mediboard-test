@@ -88,8 +88,9 @@ if (!window.File.applet) {
 
           // Si le répertoire à surveiller n'a que 3 caractères, il faut prendre en compte le slash
           // exemple : C:\
-          if (File.applet.directory.length == 3)
+          if (File.applet.directory.length == 3) {
             truncate --; 
+          }
 
           var base_name = res.path.slice(truncate);
           // Ajout du fichier dans la liste et dans la modale

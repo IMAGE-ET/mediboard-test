@@ -104,6 +104,8 @@
 
 </table>
 
-<div id="dossiers_anesth_area">
-  {{mb_include module=cabinet template=inc_multi_consult_anesth}}
-</div>
+{{if !$_consult->_is_anesth}}
+  <div id="dossiers_anesth_area">
+    {{mb_include module=cabinet template=inc_multi_consult_anesth}}
+  </div>
+{{/if}}
