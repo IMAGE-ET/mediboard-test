@@ -367,5 +367,5 @@ newExam = function(sAction, consultation_id) {
   il n'y a donc pas de dossier médical disponible.
 </div>
 {{elseif $sejour->_ref_dossier_medical->_id}}
-  {{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$sejour->_ref_dossier_medical}}
+  {{mb_include module=patients template=CDossierMedical_complete object=$sejour->_ref_dossier_medical}}
 {{/if}}
