@@ -859,8 +859,9 @@ class CActeCCAM extends CActe {
     $this->_tarif *= ($code->getCoeffAsso($this->code_association) / 100);
     
     // Charges supplémentaires
+    $phase = $code->activites[$this->code_activite]->phases[$this->code_phase];
     if ($this->charges_sup) {
-      $this->_tarif += $code->_phase->charges;
+      $this->_tarif += $phase->charges;
     }
     
     return $this->_tarif;
