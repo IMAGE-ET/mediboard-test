@@ -1,3 +1,5 @@
+{{mb_default var=offline value=0}}
+
 {{foreach from=$sejour->_ref_operations item=_operation name=operation}}
 <tr>
   <td>
