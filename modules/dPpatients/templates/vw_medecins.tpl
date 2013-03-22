@@ -130,12 +130,13 @@ function onSubmitCorrespondant(form) {
           <th>{{mb_title class=CMedecin field=type}}</th>
           <th>{{mb_title class=CMedecin field=disciplines}}</th>
           <th>{{mb_title class=CMedecin field=tel}}</th>
+          <th>{{mb_title class=CMedecin field=fax}}</th>
           {{if $dialog}}
           <th>{{tr}}Select{{/tr}}</th>
           {{/if}}
         </tr>
         <tr>
-          <th colspan="8">
+          <th colspan="9">
             <em>
               {{$count_medecins}} {{tr}}mod-dPlabo-tab-vw_resultats{{/tr}}
               {{if $count_medecins >= 50}}({{tr}}fifty-first-results{{/tr}}){{/if}}
@@ -162,6 +163,7 @@ function onSubmitCorrespondant(form) {
           <td>{{mb_value object=$_medecin field=type}}</td>
           <td class="text">{{mb_value object=$_medecin field=disciplines}}</td>
           <td>{{mb_value object=$_medecin field=tel}}</td>
+          <td>{{mb_value object=$_medecin field=fax}}</td>
           {{if $dialog}}
             <td>
               <button type="button" class="tick" onclick="setClose({{$_medecin->_id}}, '{{$_medecin->_view|smarty:nodefaults|JSAttribute}}' )">
@@ -171,7 +173,7 @@ function onSubmitCorrespondant(form) {
           {{/if}}
         </tr>
         {{foreachelse}}
-        <tr><td colspan="20" class="empty">{{tr}}CMedecin.none{{/tr}}</td></tr>
+        <tr><td colspan="21" class="empty">{{tr}}CMedecin.none{{/tr}}</td></tr>
         {{/foreach}}
       </table>
 
