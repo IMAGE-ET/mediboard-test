@@ -1701,6 +1701,9 @@ $locales['config-dPpatients-intermax-auto_watch-desc'] = 'Récupération automatiq
 $locales['dPpatients-CPatient-close-results'] = 'Résultats proches';
 $locales['dPpatients-CPatient-exact-results'] = 'Résultats exacts';
 $locales['dPpatients-CPatient-no-exact-results'] = 'Aucun résultat exact';
+$locales['install-mmp-alert'] = 'Cette installation nécessite une configuration de la source d\'échanges sur la source \'std\' dans le module Identifiants > Configurer > Source de données';
+$locales['install-mmp-success-install'] = 'Installation réussie';
+$locales['install-mmp-success-query'] = 'Requête réussie : %s';
 $locales['mod-covercard-tab-ajax_form_covercard'] = 'Lecture de Carte CoverCard';
 $locales['mod-dPcovercard-tab-ajax_form_covercard'] = 'Lecture de Carte CoverCard';
 $locales['mod-dPpatients-tab-ajax_edit_antecedents'] = 'Modification des antécédents';
@@ -1744,3 +1747,4 @@ $locales['pref-VitaleVisionDir'] = 'Répertoire VitaleVision';
 $locales['pref-VitaleVisionDir-desc'] = 'Répertoire du fichier généré par Vitale Vision';
 $locales['pref-vCardExport'] = 'Afficher les boutons d\'export vCard';
 $locales['pref-vCardExport-desc'] = 'Afficher les boutons d\'export vCard';
+?>

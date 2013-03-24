@@ -17,7 +17,7 @@ var Process = {
     
     this.step =  $V(form.step);
         
-    var url = new Url("dPpatients", "import_medecin");
+    var url = new Url("patients", "import_medecin");
     url.addElement(form.step);    
     url.addParam("mode", $V(form.mode));
     url.addParam("pass", this.pass);
@@ -115,6 +115,11 @@ function importKine(form) {
       element.innerHTML += content;
     }
   } );
+}
+
+function installMouvMedecinPatient() {
+  var url = new Url('patients', 'install_mouv_medecin_patient');
+  url.requestUpdate('installMouvMedecinPatient');
 }
 </script>
 
@@ -270,4 +275,21 @@ function importKine(form) {
   </tr>
 </table>
 
+<h2>
+  Mouvement (trigger) medecin-patient
+</h2>
+
+<table class="tbl">
+  <tr>
+    <th style="width: 50%">{{tr}}Action{{/tr}}</th>
+    <th style="width: 50%">{{tr}}Status{{/tr}}</th>
+  </tr>
+  <tr>
+    <td>
+      <button type="button" class="tick" onclick="installMouvMedecinPatient()">Installer le trigger</button>
+      </form>
+    </td>
+    <td class="text" id="installMouvMedecinPatient"></td>
+  </tr>
 </table>
+
