@@ -37,9 +37,9 @@ class CRecordSante400 {
       return;
     }
 
-    $dsConfig = CAppUI::conf("dPsante400");
+    $config = CAppUI::conf("sante400");
     
-    if (null == $dsn = $dsConfig["dsn"]) {
+    if (null == $dsn = $config["dsn"]) {
       trigger_error("Data Source Name not defined, please configure module", E_USER_ERROR);
       CApp::rip();
     }
@@ -48,10 +48,12 @@ class CRecordSante400 {
     CSQLDataSource::$dataSources[$dsn] = new CMySQLDataSource();
     $ds =& CSQLDataSource::$dataSources[$dsn];
     $ds->dsn = $dsn;
+
     self::$chrono =& CSQLDataSource::$dataSources[$dsn]->chrono;
-    
     self::$chrono->start();
-    self::$dbh = new PDO("odbc:$dsn", $dsConfig["user"], $dsConfig["pass"]);
+    
+    $prefix = $config["prefix"];
+    self::$dbh = new PDO("$prefix:$dsn", $config["user"], $config["pass"]);
     self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     self::$chrono->stop("connection");
@@ -131,7 +133,7 @@ class CRecordSante400 {
    * @param object $query             Query to execute
    * @param object $values [optional] Values to prepare against
    *
-   * @return int the number of affected rows (-1 for SELECTs);
+   * @return int the number of affected rows (-1 for SELECTs), false on error;
    */
   function query($query, $values = array()) {
     try {
@@ -153,6 +155,7 @@ class CRecordSante400 {
       }
   
       trigger_error("Error querying '$query' : " . $e->getMessage(), E_USER_ERROR);
+      return false;
     }
   }
   

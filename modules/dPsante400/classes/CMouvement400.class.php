@@ -9,6 +9,15 @@
  */
 
 class CMouvement400 extends CRecordSante400 {
+  const STATUS_ETABLISSEMENT = 0;
+  const STATUS_FONCSALLSERV  = 1;
+  const STATUS_PRATICIEN     = 2;
+  const STATUS_PATIENT       = 3;
+  const STATUS_SEJOUR        = 4;
+  const STATUS_OPERATION     = 5;
+  const STATUS_ACTES         = 6;
+  const STATUS_NAISSANCE     = 7;
+  
   public $base = null;
   public $table = null;
   public $class = null;
@@ -25,32 +34,15 @@ class CMouvement400 extends CRecordSante400 {
   public $type = null;
   public $prod = null;
   public $when = null;
+  public $mark = null;
+  
   public $changedFields = array();
 
   function initialize() {
     // Consume metadata
-    $this->when = $this->consumeDateTimeFlat("TRDATE", "TRHEURE");
     $this->rec  = $this->consume($this->idField);
-    $this->mark = $this->consume($this->markField);
     $this->type = $this->consume($this->typeField);
     $this->class = get_class($this); 
-    
-    // Analyse changed fields
-    foreach (array_keys($this->data) as $beforeName) {
-      $matches = array();
-      if (!preg_match("/B_(\w*)/i", $beforeName, $matches)) {
-        continue;
-      }
-      
-      $name = $matches[1];
-      $afterName = "A_$name";
-      if ($this->data[$beforeName] != $this->data[$afterName]) {
-        $this->changedFields[] = $name;
-      }
-    }
-    
-    // Initialize prefix
-    $this->valuePrefix = $this->type == "S" ? "B_": "A_";
   }
   
   
@@ -303,7 +295,7 @@ class CMouvement400 extends CRecordSante400 {
     $mark = $this->loadTriggerMark();
     $mark->mark = $this->status;
     $mark->done = in_array(null, $this->statuses, true) ? "0" : "1";
-    self::storeMark($mark);;
+    self::storeMark($mark);
   }
   
   /**

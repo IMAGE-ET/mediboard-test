@@ -10,11 +10,10 @@
 
 CCanDo::checkAdmin();
 
-$types = CMouvFactory::getTypes();
-
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("types", $types);
+$smarty->assign("types", CMouvFactory::getTypes());
+$smarty->assign("modes", array_keys(CMouvFactory::$modes));
 $smarty->display("configure.tpl");
 
 ?>

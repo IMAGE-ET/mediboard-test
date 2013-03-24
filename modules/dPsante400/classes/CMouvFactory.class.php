@@ -11,8 +11,15 @@
 // Mouvement factory
 
 class CMouvFactory {
-  static $matrix = array (
-    "default" => array (),
+  /**
+   * @todo Refactor to enable module extendability with definition files
+   */
+  static $modes = array (
+    "default" => array (
+    ),
+    "sample" => array (
+      "patient"      => "CMouvMbMedecinPatient",
+    ),
     "medicap" => array (
       "sejour"       => "CMouvECapSejour",
       "intervention" => "CMouvECapIntervention",
@@ -20,7 +27,7 @@ class CMouvFactory {
       "patient"      => "CMouvECapPatient",
     ),
   );
-
+  
   /**
    * Get available types for current compat config
    * 
@@ -32,12 +39,12 @@ class CMouvFactory {
 		  return;
 		}
 		
-		if (!array_key_exists($mode_compat, self::$matrix)) {
+		if (!array_key_exists($mode_compat, self::$modes)) {
 		  trigger_error("Mode de compatibilité '$mode_compat' non géré", E_USER_ERROR);
 		  return;  
 		}
 
-		return array_keys(self::$matrix[$mode_compat]);
+		return array_keys(self::$modes[$mode_compat]);
   }
   
   /**
@@ -51,12 +58,12 @@ class CMouvFactory {
 		  return;
 		}
 		
-		if (!array_key_exists($mode_compat, self::$matrix)) {
+		if (!array_key_exists($mode_compat, self::$modes)) {
 		  trigger_error("Mode de compatibilité '$mode_compat' non géré", E_USER_ERROR);
 		  return;  
 		}
 
-		return array_values(self::$matrix[$mode_compat]);
+		return array_values(self::$modes[$mode_compat]);
   }
   
   /**
@@ -67,8 +74,9 @@ class CMouvFactory {
    */
   static function create($type) {
     $mode_compat = CAppUI::conf("interop mode_compat");
-    if (null == $class = @self::$matrix[$mode_compat][$type]) {
+    if (null == $class = @self::$modes[$mode_compat][$type]) {
       trigger_error("Pas de gestionnaire en mode de compatibilité '$mode_compat' et type de mouvement '$type'", E_USER_ERROR);
+      return;
     }
     
     return new $class;

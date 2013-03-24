@@ -12,13 +12,16 @@ $dPconfig["dPsante400"] = array (
   "nb_rows"     => "5",
   "mark_row"    => "0",
   "cache_hours" => "1",
+  "prefix"      => "odbc",
   "dsn"         => "",
   "user"        => "",
   "pass"        => "",
   "group_id"    => "",
+  
   "CSejour"     => array(
     "sibling_hours" => 1,
   ),
+  
   "CIncrementer" => array(
     "cluster_count"    => 1,
     "cluster_position" => 0,

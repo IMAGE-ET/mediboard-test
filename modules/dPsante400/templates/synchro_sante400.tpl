@@ -6,61 +6,58 @@ Main.add(function() {
 })
 </script>
   
-{{if !$connection}}
+{{if ($type || $class) && !$connection}}
 <div class="big-error">
-Impossible d'établir la connexion avec le serveur Santé400<br/>
-Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante400'
+  <div><strong>Impossible d'établir la connexion avec le serveur de mouvements.</strong></div>
+  <br />
+  <div>Merci de vérifier les paramètres de la configuration à la source de données.</div>
 </div>
+{{mb_return}}
 {{/if}}
-
-<table class="main">
 
 {{if !$dialog}}
-<tr>
-  <td style="text-align: left">
+  <form action="?" name="typeFilter" method="get" style="float: left;">
 
-    <form action="?" name="typeFilter" method="get">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
 
-    <input type="hidden" name="m" value="{{$m}}" />
-    <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
+  <label for="type" title="{{tr}}CMouvement400-type-desc{{/tr}}">{{tr}}CMouvement400-type{{/tr}}</label>
+  <select name="type" onchange="this.form.submit()">
+    <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+    {{foreach from=$types item=_type}}
+    <option value="{{$_type}}" {{if $_type == $type}}selected="selected"{{/if}}>{{tr}}CMouvement400-type-{{$_type}}{{/tr}}</option>
+    {{/foreach}}
+  </select>
 
-    <label for="type" title="{{tr}}CMouvement400-type-desc{{/tr}}">{{tr}}CMouvement400-type{{/tr}}</label>
-    <select name="type" onchange="this.form.submit()">
-      {{foreach from=$types item=_type}}
-      <option value="{{$_type}}" {{if $_type == $type}}selected="selected"{{/if}}>{{tr}}CMouvement400-type-{{$_type}}{{/tr}}</option>
-      {{/foreach}}
-    </select>
+  <input name="relaunch" type="checkbox" {{if $relaunch}} checked="checked" {{/if}} onclick="Mouvements.relaunch();" />
+  <label for="relaunch" title="{{tr}}CMouvement400-relaunch-desc{{/tr}}">
+    {{tr}}CMouvement400-relaunch{{/tr}}
+  </label>
 
-    <input name="relaunch" type="checkbox" {{if $relaunch}} checked="checked" {{/if}} onclick="Mouvements.relaunch();" />
-    <label for="relaunch" title="{{tr}}CMouvement400-relaunch-desc{{/tr}}">
-      {{tr}}CMouvement400-relaunch{{/tr}}
-    </label>
+  </form>
 
-    </form>
-  
-  </td>
+  <form action="?" name="markFilter" method="get" style="float: right;">
 
-  <td style="text-align: right">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
 
-    <form action="?" name="markFilter" method="get">
+  <label for="marked" title="{{tr}}CMouvement400-marked-desc{{/tr}}">{{tr}}CMouvement400-marked{{/tr}}</label>
+  <select name="marked" onchange="this.form.submit()">
+    <option value="0" {{if !$marked}} selected="selected"{{/if}}>{{tr}}CMouvement400-marked-0{{/tr}}</option>
+    <option value="1" {{if  $marked}} selected="selected"{{/if}}>{{tr}}CMouvement400-marked-1{{/tr}}</option>
+  </select>
 
-    <input type="hidden" name="m" value="{{$m}}" />
-    <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
-
-    <label for="marked" title="{{tr}}CMouvement400-marked-desc{{/tr}}">{{tr}}CMouvement400-marked{{/tr}}</label>
-    <select name="marked" onchange="this.form.submit()">
-      <option value="0" {{if !$marked}} selected="selected"{{/if}}>{{tr}}CMouvement400-marked-0{{/tr}}</option>
-      <option value="1" {{if  $marked}} selected="selected"{{/if}}>{{tr}}CMouvement400-marked-1{{/tr}}</option>
-    </select>
-
-    </form>
-  
-  </td>
-</tr>
+  </form>
 {{/if}}
+  
+<br style="clear: both;" />
 
-<tr>
-  <td colspan="2">
+{{if !$type && !$class}}
+<div class="small-info">
+  Merci de choisir un type de mouvement à traiter.
+</div>
+{{mb_return}}
+{{/if}}
 
 <table class="tbl">
 
@@ -145,10 +142,5 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
   </td>
 </tr>
 {{/foreach}}
-
-</table>
-
-  </td>
-</tr>
 
 </table>
