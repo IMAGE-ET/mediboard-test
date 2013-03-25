@@ -22,8 +22,8 @@ if ($mediuser->isPraticien()) {
 $chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
 
 // Type de vue
-$hide_payees   = CValue::getOrSession("hide_payees"  , 0);
-$hide_annulees = CValue::getOrSession("hide_annulees", 1);
+$show_payees   = CValue::getOrSession("show_payees"  , 1);
+$show_annulees = CValue::getOrSession("show_annulees", 0);
 
 // Plage de consultation selectionnée
 $plageconsult_id = CValue::getOrSession("plageconsult_id", null);
@@ -46,7 +46,7 @@ else {
 }
 $plageSel->loadRefsFwd(1);
 $plageSel->loadRefsNotes();
-$plageSel->loadRefsBack();
+$plageSel->loadRefsBack($show_annulees, true, $show_payees);
 
 if ($plageSel->_affected) {
   $firstconsult = reset($plageSel->_ref_consultations);
@@ -55,18 +55,13 @@ if ($plageSel->_affected) {
   $_lastconsult_time  = substr($lastconsult->heure, 0, 5);
 }
 
+$consults = $plageSel->_ref_consultations;
+CMbObject::massLoadFwdRef($consults, "sejour_id");
+CMbObject::massLoadFwdRef($consults, "patient_id");
+CMbObject::massLoadFwdRef($consults, "categorie_id");
+
 // Détails sur les consultation affichées
 foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
-  // Cache les payées
-  if ($hide_payees && $consultation->patient_date_reglement) {
-    unset($plageSel->_ref_consultations[$keyConsult]);
-    continue;
-  }
-  // Cache les annulées
-  if ($hide_annulees && $consultation->annule) {
-    unset($plageSel->_ref_consultations[$keyConsult]);
-    continue;
-  }
   $consultation->loadRefSejour(1);
   $consultation->loadRefPatient(1);
   $consultation->loadRefCategorie(1);
@@ -83,10 +78,8 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("plageSel"          , $plageSel);
 $smarty->assign("chirSel"           , $chirSel);
-$smarty->assign("hide_payees"       , $hide_payees);
-$smarty->assign("hide_annulees"     , $hide_annulees);
+$smarty->assign("show_payees"       , $show_payees);
+$smarty->assign("show_annulees"     , $show_annulees);
 $smarty->assign("mediuser"          , $mediuser);
 
 $smarty->display("inc_consultations.tpl");
-
-?>

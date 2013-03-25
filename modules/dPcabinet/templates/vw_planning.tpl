@@ -48,6 +48,10 @@ function printPlanning() {
 Main.add(function () {
   var planning = window["planning-{{$planning->guid}}"];
   Calendar.regField(getForm("changeDate").debut, null, {noView: true});
+
+  {{if $plageSel->_id}}
+    showConsultations($$(".{{$plageSel->_guid}}")[0].down("a"), "{{$plageSel->_id}}");
+  {{/if}}
 });
 </script>
 
@@ -84,14 +88,14 @@ Main.add(function () {
           {{mb_include module=mediusers template=inc_options_mediuser selected=$chirSel list=$listChirs}}
         </select>
 
-        Cacher les : 
+        Afficher les :
           <label>
-            <input type="checkbox" onchange="$V(this.form.hide_payees, this.checked ? 1 : 0); this.form.submit()" {{if $hide_payees}}checked="checked"{{/if}} name="_hide_payees"> payées
-            <input type="hidden" name="hide_payees" value="{{$hide_payees}}" />
+            <input type="checkbox" onchange="$V(this.form.show_payees, this.checked ? 1 : 0); this.form.submit()" {{if $show_payees}}checked="checked"{{/if}} name="_show_payees"> payées
+            <input type="hidden" name="show_payees" value="{{$show_payees}}" />
           </label>
           <label>
-            <input type="checkbox" onchange="$V(this.form.hide_annulees, this.checked ? 1 : 0); this.form.submit()" {{if $hide_annulees}}checked="checked"{{/if}} name="_hide_annulees"> annulées
-            <input type="hidden" name="hide_annulees" value="{{$hide_annulees}}" />
+            <input type="checkbox" onchange="$V(this.form.show_annulees, this.checked ? 1 : 0); this.form.submit()" {{if $show_annulees}}checked="checked"{{/if}} name="_show_annulees"> annulées
+            <input type="hidden" name="show_annulees" value="{{$show_annulees}}" />
           </label>
       </form>
 
@@ -148,6 +152,10 @@ Main.add(function () {
         </script>
       </div>
     </td>
-    <td id="consultations">{{mb_include module=cabinet template=inc_consultations}}</td>
+    <td id="consultations">
+      {{if !$plageSel->_id}}
+        {{mb_include module=cabinet template=inc_consultations}}
+      {{/if}}
+    </td>
   </tr>
 </table>

@@ -19,8 +19,8 @@ if ($mediuser->isPraticien()) {
 }
 
 // Type de vue
-$hide_payees   = CValue::getOrSession("hide_payees"  , 0);
-$hide_annulees = CValue::getOrSession("hide_annulees", 1);
+$show_payees   = CValue::getOrSession("show_payees"  , 1);
+$show_annulees = CValue::getOrSession("show_annulees", 0);
 
 // Praticien selectionné
 $chirSel = CValue::getOrSession("chirSel", $chir ? $chir->user_id : null);
@@ -57,31 +57,7 @@ if (!$plageSel->plageconsult_id) {
 else {
   $plageconsult_id = $plageSel->plageconsult_id;
 }
-$plageSel->loadRefsFwd(1);
-$plageSel->loadRefsNotes();
-$plageSel->loadRefsBack();
 
-if ($plageSel->_affected) {
-  $firstconsult = reset($plageSel->_ref_consultations);
-  $lastconsult = end($plageSel->_ref_consultations);
-}
-// Détails sur les consultation affichées
-foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
-  // Cache les payées
-  if ($hide_payees && $consultation->patient_date_reglement) {
-    unset($plageSel->_ref_consultations[$keyConsult]);
-    continue;
-  }
-  // Cache les annulées
-  if ($hide_annulees && $consultation->annule) {
-    unset($plageSel->_ref_consultations[$keyConsult]);
-    continue;
-  }
-  $consultation->loadRefSejour(1);
-  $consultation->loadRefPatient(1);
-  $consultation->loadRefCategorie(1);
-  $consultation->countDocItems();    
-}
 if ($plageSel->chir_id != $chirSel && $plageSel->remplacant_id != $chirSel) {
   $plageconsult_id = null;
   $plageSel = new CPlageconsult();
@@ -221,8 +197,8 @@ $planning->rearrange();
 $smarty = new CSmartyDP();
 
 $smarty->assign("planning"            , $planning);
-$smarty->assign("hide_payees"         , $hide_payees);
-$smarty->assign("hide_annulees"       , $hide_annulees);
+$smarty->assign("show_payees"         , $show_payees);
+$smarty->assign("show_annulees"       , $show_annulees);
 $smarty->assign("chirSel"             , $chirSel);
 $smarty->assign("plageSel"            , $plageSel);
 $smarty->assign("listChirs"           , $listChir);

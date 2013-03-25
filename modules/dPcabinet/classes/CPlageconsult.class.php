@@ -112,7 +112,7 @@ class CPlageconsult extends CPlageHoraire {
    *
    * @return CConsultation[]
    */
-  function loadRefsConsultations($withCanceled = true, $withClosed = true) {
+  function loadRefsConsultations($withCanceled = true, $withClosed = true, $withPayees = true) {
     $where["plageconsult_id"] = "= '$this->_id'";
 
     if (!$withCanceled) {
@@ -121,6 +121,10 @@ class CPlageconsult extends CPlageHoraire {
 
     if (!$withClosed) {
       $where["chrono"] = "!=  '" . CConsultation::TERMINE . "'";   
+    }
+
+    if (!$withPayees) {
+      $where["patient_date_reglement"] = "IS NULL";
     }
 
     $order = "heure";
@@ -136,11 +140,12 @@ class CPlageconsult extends CPlageHoraire {
     $consultation->plageconsult_id = $this->_id;
     $where["plageconsult_id"] = "= '$this->_id'";
     $where["patient_id"] = " IS NOT NULL";
+    $where["annule"] = "= '0'";
     return $this->_nb_patients = $consultation->countList($where);
   }
 
-  function loadRefsBack($withCanceled = true) {
-    $this->loadRefsConsultations($withCanceled);
+  function loadRefsBack($withCanceled = true, $withClosed = true, $withPayees = true) {
+    $this->loadRefsConsultations($withCanceled, $withClosed, $withPayees);
     $this->loadFillRate();
   }
 

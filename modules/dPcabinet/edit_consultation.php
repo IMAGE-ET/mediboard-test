@@ -360,7 +360,7 @@ if ($consult->_is_dentiste) {
   $smarty->assign("devenirs_dentaires", $devenirs_dentaires);
 }
 
-if ($consult->_refs_dossiers_anesth|@count) {
+if (count($consult->_refs_dossiers_anesth)) {
   $nextSejourAndOperation = $consult->_ref_patient->getNextSejourAndOperation($consult->_ref_plageconsult->date);
   
   $secs = range(0, 60-1, 1);
