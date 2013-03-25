@@ -127,6 +127,8 @@ class CMbObject extends CStoredObject {
     if (!$this->_id) {
       return;
     }
+    global $can;
+    $curr_user = CAppUI::$user;
 
     $document = new CCompteRendu();
     if ($document->_ref_module) {
@@ -134,8 +136,15 @@ class CMbObject extends CStoredObject {
       $document->object_id    = $this->_id;
       $this->_ref_documents = $document->loadMatchingList("nom");
       $is_editable = $this->docsEditable();
+
       foreach ($this->_ref_documents as $_doc) {
         $_doc->_is_editable = $is_editable;
+
+        // Document verrouillé
+        if (!$can->admin && $_doc->valide && $_doc->author_id != $curr_user->_id) {
+          $_doc->_is_editable = false;
+        }
+
         if (!$_doc->canRead()) {
            unset($this->_ref_documents[$_doc->_id]);
         }

@@ -1787,7 +1787,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
   function loadRefsConsultAnesth() {
     if ($this->_ref_consult_anesth) {
-      return;
+      return $this->_ref_consult_anesth;
     }
 
     $order = "consultation_anesth_id ASC";
@@ -2487,7 +2487,7 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     $template->addProperty("Sejour - Libelle"                 , $this->getFormattedValue("libelle"));
     $template->addProperty("Sejour - Transport"               , $this->getFormattedValue("transport"));
-    
+
     $consult_anesth = $this->loadRefsConsultAnesth();
     $consult = $consult_anesth->loadRefConsultation();
     $consult->loadRefPlageConsult();

@@ -874,8 +874,11 @@ class CSetupdPcompteRendu extends CSetup {
       WHERE `object_class` = 'CPrescription'
       AND `type` = 'footer'";
     $this->addQuery($query);
-    
-    $this->mod_version = "0.89";
+
+    $this->makeRevision("0.89");
+    $query = self::replaceTemplateQuery("[Patient - Antécédents - Autres", "[Patient - Antécédents - Autres (type)", true);
+    $this->addQuery($query);
+
+    $this->mod_version = "0.90";
   }
 }
-?>

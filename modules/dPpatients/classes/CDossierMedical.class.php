@@ -383,14 +383,21 @@ class CDossierMedical extends CMbMetaObject {
     $parts = array();
     $types = $atcd->_specs["type"]->_list;
     $types[] = "";
+
     foreach ($types as $type) {
       $sType =  CAppUI::tr("CAntecedent.type.$type");
       $list = @$lists_par_type[$type];
-      $template->addListProperty("$champ - Antécédents - $sType", $list);
+      if ($type) {
+        $template->addListProperty("$champ - Antécédents - $sType", $list);
+      }
+      else {
+        $template->addListProperty("$champ - Antécédents - Autres (type)", $list);
+      }
       if ($list) {
         $parts[] = "<strong>$sType</strong>: " . $template->makeList($list);
       }
     }
+
     $template->addProperty("$champ - Antécédents - tous", implode($separator, $parts), null, false);
         
     // Création des listes par appareil
@@ -400,13 +407,18 @@ class CDossierMedical extends CMbMetaObject {
     foreach ($appareils as $appareil) {
       $sAppareil =  CAppUI::tr("CAntecedent.appareil.$appareil");
       $list = @$lists_par_appareil[$appareil];
-      $template->addListProperty("$champ - Antécédents - $sAppareil", $list);
+      if ($appareil) {
+        $template->addListProperty("$champ - Antécédents - $sAppareil", $list);
+      }
+      else {
+        $template->addListProperty("$champ - Antécédents - Autres (appareil)", $list);
+      }
       if ($list) {
         $parts[] = "<strong>$sAppareil</strong>: " . $template->makeList($list);
       }
     }
     $template->addProperty("$champ - Antécédents - tous par appareil", implode($separator, $parts), null, false);
-    
+
     // Traitements
     $this->loadRefsTraitements();
     if (is_array($this->_ref_traitements)) {
