@@ -29,8 +29,6 @@ Main.add(function () {
   <tr>
     <td style="width: 220px;" id="listplages"></td>
     <td>
-    {{if $selOp->_id}}
-
       {{if $require_check_list}}
         <table class="main layout">
           <tr>
@@ -42,32 +40,32 @@ Main.add(function () {
                 {{/if}}
 
                 {{mb_include module=salleOp template=inc_edit_check_list
-                    check_list=$check_list
-                    check_item_categories=$check_list->_ref_list_type->_ref_categories
-                    personnel=$listValidateurs
-                    list_chirs=$listChirs
-                    list_anesths=$listAnesths
+                check_list=$check_list
+                check_item_categories=$check_list->_ref_list_type->_ref_categories
+                personnel=$listValidateurs
+                list_chirs=$listChirs
+                list_anesths=$listAnesths
                 }}
               </td>
             {{/foreach}}
           </tr>
         </table>
       {{else}}
-        {{mb_include module=salleOp template=inc_operation}}
+        {{if $selOp->_id}}
+          {{mb_include module=salleOp template=inc_operation}}
+        {{else}}
+          <div class="big-info">
+            Veuillez sélectionner une intervention dans la liste pour pouvoir :
+            <ul>
+              <li>sélectionner le personnel en salle</li>
+              <li>effectuer l'horodatage</li>
+              <li>coder les diagnostics</li>
+              <li>coder les actes</li>
+              <li>consulter le dossier</li>
+            </ul>
+          </div>
+        {{/if}}
       {{/if}}
-
-    {{else}}
-      <div class="big-info">
-        Veuillez sélectionner une intervention dans la liste pour pouvoir :
-        <ul>
-          <li>sélectionner le personnel en salle</li>
-          <li>effectuer l'horodatage</li>
-          <li>coder les diagnostics</li>
-          <li>coder les actes</li>
-          <li>consulter le dossier</li>
-        </ul>
-      </div>
-    {{/if}}
     </td>
   </tr>
 </table>
