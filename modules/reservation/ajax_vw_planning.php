@@ -241,7 +241,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     if ((count($patient->_ref_dossier_medical->_ref_antecedents_by_type["anesth"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["chir"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["fam"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["gyn"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["med"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["obst"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["trans"])) > 0) {
       $libelle.="<span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_ref_dossier_medical->_guid."', 'antecedents');\" ><img src=\"images/icons/antecedents.gif\" alt=\"WRN\"/></span>";
     }
-    $libelle.="\nSejour: <span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>";
+    $libelle.="Sejour: <span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>";
     if ($_operation->materiel) {
       $libelle .="<hr/><span>".$_operation->materiel."</span>";
     }
@@ -307,13 +307,13 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       }
     }
 
-    $event = new CPlanningEvent($_operation->_guid, $debut, $duree, $libelle, $color, true, null, $_operation->_guid, false);
+    $event = new CPlanningEvent($_operation->_guid, $debut, $duree, utf8_encode($libelle), $color, true, null, $_operation->_guid, false);
     
     if ($can_edit) {
-      $event->addMenuItem("edit" , "Modifier cette opération");
-      $event->addMenuItem("cut"  , "Couper cette opération");
-      $event->addMenuItem("copy" , "Copier cette opération");
-      $event->addMenuItem("clock", "Modifier les dates d'entrée et sortie du séjour");
+      $event->addMenuItem("edit" , utf8_encode("Modifier cette opération"));
+      $event->addMenuItem("cut"  , utf8_encode("Couper cette opération"));
+      $event->addMenuItem("copy" , utf8_encode("Copier cette opération"));
+      $event->addMenuItem("clock", utf8_encode("Modifier les dates d'entrée et sortie du séjour"));
     }
     
     $event->plage["id"] = $_operation->_id;
