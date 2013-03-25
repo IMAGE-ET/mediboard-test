@@ -215,6 +215,8 @@ for ($i = 0; $i < 7; $i++) {
   }    
 }
 
+$planning->rearrange();
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -235,4 +237,3 @@ $smarty->assign("bank_holidays"       , $bank_holidays);
 $smarty->assign("mediuser"            , $mediuser);
 
 $smarty->display("vw_planning.tpl");
-?>

@@ -107,13 +107,17 @@ class CPlanningWeek {
   }
   
   function addEvent(CPlanningEvent $event) {
-    if ($event->day < $this->date_min || 
-        $event->day > $this->date_max) {
+    if (
+        $event->day < $this->date_min ||
+        $event->day > $this->date_max
+    ) {
       return;
     }
       
-    if ($event->day < $this->date_min_active || 
-        $event->day > $this->date_max_active) {
+    if (
+        $event->day < $this->date_min_active ||
+        $event->day > $this->date_max_active
+    ) {
       $event->disabled = true;
     }
     
@@ -122,7 +126,7 @@ class CPlanningWeek {
     $this->events_sorted[$event->day][$event->hour][] = $event;
     
     $colliding = array($event);
-    foreach($this->days[$event->day] as $_event) {
+    foreach ($this->days[$event->day] as $_event) {
       if ($_event->collides($event)) {
         $colliding[] = $_event;
         if (count($this->events_sorted[$_event->day][$_event->hour])) {
@@ -133,8 +137,10 @@ class CPlanningWeek {
             $min = min($event->start, $_event->start);
             $max = max($event->end  , $_event->end);
             
-            if (($__event->start < $min && $__event->end <= $min) ||
-                ($__event->start >= $max && $__event->end > $max)) {
+            if (
+                ($__event->start <  $min && $__event->end <= $min) ||
+                ($__event->start >= $max && $__event->end >  $max)
+            ) {
               continue;
             } 
             
@@ -150,7 +156,7 @@ class CPlanningWeek {
     $count = count($colliding);
     
     if ($count) {
-      foreach($colliding as $_key => $_event) {
+      foreach ($colliding as $_key => $_event) {
         $_event->width = 1 / $count;
         $_event->offset = $_key * $_event->width;
       }
@@ -169,7 +175,6 @@ class CPlanningWeek {
       // tab
       foreach ($_events_by_day as $_events_by_hour) {
         foreach ($_events_by_hour as $_event) {
-
           $intervals[$_event->internal_id] = array(
             "lower" => $_event->start,
             "upper" => $_event->end
@@ -177,6 +182,7 @@ class CPlanningWeek {
           $events[$_event->internal_id] = $_event;
         }
       }
+
       $lines = CMbRange::rearrange($intervals);
       $lines_count = count($lines);
       foreach ($lines as $_line_number => $_line) {
@@ -190,8 +196,10 @@ class CPlanningWeek {
   }
   
   function addRange(CPlanningRange $range) {
-    if ($range->day < $this->date_min || 
-        $range->day > $this->date_max) {
+    if (
+        $range->day < $this->date_min ||
+        $range->day > $this->date_max
+    ) {
       return;
     }
     
@@ -211,7 +219,8 @@ class CPlanningWeek {
   /**
    * @param object $min The min date
    * @param object $max [optional] The max date
-   * @return 
+   *
+   * @return void
    */
   function addUnavailability($min, $max = null) {
     $min = CMbDT::date($min);
@@ -231,6 +240,7 @@ class CPlanningWeek {
   /**
    * Tell wether given day is active in planning
    * @param date $day ISO date
+   *
    * @return bool
    */
   function isDayActive($day) {
@@ -238,10 +248,12 @@ class CPlanningWeek {
   }
 
   /**
-   * @param object $day The label's day
-   * @param object $text The label
+   * @param object $day    The label's day
+   * @param object $text   The label
    * @param object $detail [optional] Details about the label
-   * @param object $color [optional] The label's color
+   * @param object $color  [optional] The label's color
+   *
+   * @return void
    */
   function addDayLabel($day, $text, $detail = null, $color = null, $onclick = null) {
     $this->day_labels[$this->no_dates ? $day : CMbDT::date($day)][] = array(
@@ -254,8 +266,9 @@ class CPlanningWeek {
   
   /**
    * Add a load event
-   * @param CPlanningEvent|date $start
-   * @param integer $length [optional]
+   *
+   * @param CPlanningEvent|string $start
+   * @param integer               $length [optional]
    */
   function addLoad($start, $length = null) {
     $this->has_load = true;
@@ -287,7 +300,7 @@ class CPlanningWeek {
     $min = round(CMbDT::minutesRelative($day, $start) / $div_size) - 1;
     $max = round(CMbDT::minutesRelative($day, $end)   / $div_size) + 1;
 
-    for($i = $min; $i <= $max; $i++) {
+    for ($i = $min; $i <= $max; $i++) {
       $div_min = CMbDT::dateTime("+".($i*$div_size)." MINUTES", $day);
       $div_max = CMbDT::dateTime("+".(($i+1)*$div_size)." MINUTES", $day);
       
