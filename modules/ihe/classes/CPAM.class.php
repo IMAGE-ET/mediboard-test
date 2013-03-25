@@ -152,10 +152,10 @@ class CPAM extends CIHE {
    */
   static function testA24(CCnStep $step) {
     //  PDS-PAM_Identification_Mgt_Link : Récupération du step 10
-    $patient_1 = self::loadPatient($step, 10);
+    $patient_1 = self::loadPatientPDS($step, 10);
 
     //  PDS-PAM_Identification_Mgt_Link : Récupération du step 10
-    $patient_2 = self::loadPatient($step, 40);
+    $patient_2 = self::loadPatientPDS($step, 40);
 
     $patient_1->patient_link_id = $patient_2->_id;
 
@@ -201,7 +201,7 @@ class CPAM extends CIHE {
    */
   static function testA31(CCnStep $step) {
     // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
-    $patient = self::loadPatient($step, 10);
+    $patient = self::loadPatientPDS($step, 10);
 
     $patient->prenom = "CHANGE_$patient->prenom";
     if ($msg = $patient->store()) {
@@ -220,7 +220,7 @@ class CPAM extends CIHE {
    */
   static function testA37(CCnStep $step) {
     //  PDS-PAM_Identification_Mgt_Link : Récupération du step 10
-    $patient = self::loadPatient($step, 10);
+    $patient = self::loadPatientPDS($step, 10);
 
     $patient->patient_link_id = "";
 
@@ -239,12 +239,22 @@ class CPAM extends CIHE {
    * @return void
    */
   static function testA40(CCnStep $step) {
-    // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
-    $patient_1        = self::loadPatient($step, 10);
-    $first_patient_id = $patient_1->_id;
+    if ($step == "ITI-30") {
+      // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
+      $patient_1        = self::loadPatientPDS($step, 10);
+      $first_patient_id = $patient_1->_id;
 
-    // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
-    $patient_2 = self::loadPatient($step, 40);
+      // PDS-PAM_Identification_Mgt_Merge : Récupération du step 40
+      $patient_2 = self::loadPatientPDS($step, 40);
+    }
+    else {
+      // PES-PAM_Encounter_Management_Basic
+      $patient_1        = self::loadPatientPES($step, 10);
+      $first_patient_id = $patient_1->_id;
+
+      // PDS-PAM_Identification_Mgt_Merge : Récupération du step 50
+      $patient_2 = self::loadPatientPES($step, 50);
+    }
 
     $patient_2_array = array($patient_2);
 
@@ -254,7 +264,6 @@ class CPAM extends CIHE {
       throw new CMbException("La fusion de ces deux patients n'est pas possible à cause des problèmes suivants : $checkMerge");
     }
 
-    /** @todo mergePlainFields resets the _id */
     $patient_1->_id = $first_patient_id;
 
     $patient_1->_merging = CMbArray::pluck($patient_2_array, "_id");
@@ -274,7 +283,7 @@ class CPAM extends CIHE {
    */
   static function testA47(CCnStep $step) {
     // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
-    $patient = self::loadPatient($step, 10);
+    $patient = self::loadPatientPDS($step, 10);
 
     $patient->loadIPP($step->_ref_test->group_id);
     $idex = $patient->_ref_IPP;
@@ -286,7 +295,221 @@ class CPAM extends CIHE {
   }
 
   /**
-   * Load patient
+   * Test A01 - Admit inpatient
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA01(CCnStep $step) {
+    // PES-PAM_Encounter_Management_Basic
+    $patient = self::loadPatientPES($step, $step->number);
+
+    $sejour                = new CSejour();
+    $sejour->patient_id    = $patient->_id;
+    $sejour->group_id      = $step->_ref_test->group_id;
+
+    $timestamp = time() + (rand(1, 30) * rand(1, 24) * rand(1, 60) * rand(1, 60));
+
+    $sejour->entree_prevue = strftime(CMbDT::ISO_DATETIME, $timestamp);
+    $sejour->entree_reelle = $sejour->entree_prevue;
+    $sejour->sortie_prevue = CMbDT::dateTime("+4 day", $sejour->entree_reelle);
+    $sejour->praticien_id  = $sejour->getRandomValue("praticien_id", true);
+    $sejour->type          = "comp";
+    $sejour->service_id   = $sejour->getRandomValue("service_id", true);
+    $sejour->libelle       = "Séjour ITI-31 - $patient->nom";
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A04 - Admit outpatient
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA04(CCnStep $step) {
+    // PES-PAM_Encounter_Management_Basic
+    $patient = self::loadPatientPES($step, $step->number);
+
+    $sejour                = new CSejour();
+    $sejour->patient_id    = $patient->_id;
+    $sejour->group_id      = $step->_ref_test->group_id;
+
+    $timestamp = time() + (rand(1, 30) * rand(1, 24) * rand(1, 60) * rand(1, 60));
+
+    $sejour->entree_prevue = strftime(CMbDT::ISO_DATETIME, $timestamp);
+    $sejour->entree_reelle = $sejour->entree_prevue;
+    $sejour->sortie_prevue = CMbDT::dateTime("+6 hours", $sejour->entree_reelle);
+    $sejour->praticien_id  = $sejour->getRandomValue("praticien_id", true);
+    $sejour->type          = "urg";
+    $sejour->service_id    = $sejour->getRandomValue("service_id", true);
+    $sejour->libelle       = "Séjour ITI-31 - $patient->nom";
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A08 - Update last name
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA08(CCnStep $step) {
+    // PES-PAM_Encounter_Management_Basic
+    $patient = self::loadPatientPES($step, 50);
+
+    $sejour             = new CSejour();
+
+    $where["patient_id"] = " = '$patient->_id'";
+    $where["libelle"]    = " = 'Séjour ITI-31 - $patient->nom'";
+
+    $order = "sejour_id DESC";
+
+    $sejour->loadObject($where, $order);
+
+    if (!$sejour->_id) {
+      throw new CMbException("La séjour du patient '$patient->nom' n'a pas été retrouvé");
+    }
+
+    $patient->nom = "PAMUPDATE";
+
+    if ($msg = $patient->store()) {
+      throw new CMbException($msg);
+    }
+
+    $sejour->libelle = "Séjour ITI-31 - $patient->nom";
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A11 - Cancel visit
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA11(CCnStep $step) {
+    // PES-PAM_Encounter_Management_Basic
+    $patient = self::loadPatientPES($step, 20);
+
+    $sejour             = new CSejour();
+
+    $where["patient_id"] = " = '$patient->_id'";
+    $where["libelle"]    = " = 'Séjour ITI-31 - $patient->nom'";
+
+    $order = "sejour_id DESC";
+
+    $sejour->loadObject($where, $order);
+
+    if (!$sejour->_id) {
+      throw new CMbException("La séjour du patient '$patient->nom' n'a pas été retrouvé");
+    }
+
+    $sejour->entree_reelle = "";
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A03 - Discharge patient
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA03(CCnStep $step) {
+    $step_number = null;
+    if ($step->number == 90) {
+      $step_number = 30;
+    }
+    if ($step->number == 100) {
+      $step_number = 40;
+    }
+
+    if (!$step_number) {
+      throw new CMbException("Aucune étape trouvée");
+    }
+
+    // PES-PAM_Encounter_Management_Basic
+    $patient = self::loadPatientPES($step, $step_number);
+
+    $sejour             = new CSejour();
+
+    $where["patient_id"] = " = '$patient->_id'";
+    $where["libelle"]    = " = 'Séjour ITI-31 - $patient->nom'";
+
+    $order = "sejour_id DESC";
+
+    $sejour->loadObject($where, $order);
+
+    if (!$sejour->_id) {
+      throw new CMbException("La séjour du patient '$patient->nom' n'a pas été retrouvé");
+    }
+
+    $sejour->sortie_reelle = $sejour->sortie_prevue;
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A13 - Cancel discharge
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA13(CCnStep $step) {
+    // PES-PAM_Encounter_Management_Basic
+    $patient = self::loadPatientPES($step, 30);
+
+    $sejour             = new CSejour();
+
+    $where["patient_id"] = " = '$patient->_id'";
+    $where["libelle"]    = " = 'Séjour ITI-31 - $patient->nom'";
+
+    $order = "sejour_id DESC";
+
+    $sejour->loadObject($where, $order);
+
+    if (!$sejour->_id) {
+      throw new CMbException("La séjour du patient '$patient->nom' n'a pas été retrouvé");
+    }
+
+    $sejour->sortie_reelle = "";
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Load patient PDS
    *
    * @param CCnStep $step        Step
    * @param int     $step_number Step number
@@ -295,7 +518,7 @@ class CPAM extends CIHE {
    *
    * @return CPatient $patient
    */
-  static function loadPatient(CCnStep $step, $step_number) {
+  static function loadPatientPDS(CCnStep $step, $step_number) {
     // PDS-PAM_Identification_Mgt_Merge : Récupération du step 10
     $test    = $step->_ref_test;
     $partner = $test->_ref_partner;
@@ -307,6 +530,58 @@ class CPAM extends CIHE {
 
     if (!$patient->_id) {
       throw new CMbException("CPAM-cn_test-no_patient_id");
+    }
+
+    return $patient;
+  }
+
+  /**
+   * Load patient PES
+   *
+   * @param CCnStep $step        Step
+   * @param int     $step_number Step number
+   *
+   * @throws CMbException
+   *
+   * @return CPatient $patient
+   */
+  static function loadPatientPES(CCnStep $step, $step_number) {
+    // PES-PAM_Encounter_Management_Basic
+    $test    = $step->_ref_test;
+    $partner = $test->_ref_partner;
+
+    $name = null;
+    switch ($step_number) {
+      case 10 :
+        $name = "ONE";
+        break;
+      case 20 :
+        $name = "TWO";
+        break;
+      case 30 :
+        $name = "THREE";
+        break;
+      case 40 :
+        $name = "FOUR";
+        break;
+      case 50 :
+        $name = "FIVE";
+        break;
+    }
+    $name = "PAM$name";
+
+    $patient = new CPatient();
+    $where = array();
+    $where["nom"] = " = '{$name}_{$partner->name}_{$test->_id}'";
+    $patient->loadObject($where);
+
+    if (!$patient->_id) {
+      $patient->random();
+      $patient->nom = "{$name}_{$partner->name}_{$test->_id}";
+
+      if ($msg = $patient->store()) {
+        throw new CMbException($msg);
+      }
     }
 
     return $patient;
