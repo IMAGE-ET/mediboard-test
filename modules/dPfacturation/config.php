@@ -11,12 +11,11 @@
 
 $dPconfig["dPfacturation"] = array (
   "CFactureEtablissement" => array(
-    "create_items_bill" => "0",
     "use_temporary_bill" => "0"
   ),
-  "CFactureCabinet" => array(
-    "create_items_bill" => "0",
-    "use_create_bill"   => "0"
+  "CRelance" => array(
+    "nb_days_first_relance"   => "30",
+    "nb_days_second_relance"  => "60"
   )
 );
 ?>

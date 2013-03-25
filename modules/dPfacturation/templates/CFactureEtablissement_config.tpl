@@ -8,7 +8,6 @@
     </tr>
     
     {{assign var=class value=CFactureEtablissement}}
-    {{mb_include module=system template=inc_config_bool var=create_items_bill}}
     {{mb_include module=system template=inc_config_bool var=use_temporary_bill}}
     
     <tr>
@@ -16,6 +15,5 @@
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
       </td>
     </tr>
-    
   </table>
 </form>
