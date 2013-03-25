@@ -196,29 +196,33 @@ class CFactureCabinet extends CFacture {
     //@todo à déplacer dans le store de la facture/consult
     $this->_consult_id = $consult_id;
     // Si la facture existe déjà on la met à jour
-    $where["patient_id"]    = "= '$patient_id'";
-    $where["praticien_id"]  = "= '$chirsel_id'";
-    //La cloture est automatique en france donc toujours valuée
+    $where = array();
+    $ljoin = array();
     if (CAppUI::conf("ref_pays") == 2) {
+      $where["patient_id"]    = "= '$patient_id'";
+      $where["praticien_id"]  = "= '$chirsel_id'";
       $where["cloture"]       = "IS NULL";
+    }
+    else {
+      $ljoin["facture_liaison"] =  "facture_liaison.facture_id = facture_cabinet.facture_id";
+      $where["facture_liaison.object_id"]     = " = '$this->_consult_id'";
+      $where["facture_liaison.object_class"]  = " = 'CConsultation'";
+      $where["facture_liaison.facture_class"] = " = 'CFactureCabinet'";
     }
     
     //Si la facture existe déjà
-    if ($this->loadObject($where)) {
-      $this->loadRefsConsults();
-      if (CModule::getActive("dPfacturation")) {
-        $ligne = new CFactureLiaison();
-        $ligne->facture_id    = $this->_id;
-        $ligne->facture_class = $this->_class;
-        $ligne->object_id     = $consult_id;
-        $ligne->object_class  = 'CConsultation';
-        if (!$ligne->loadMatchingObject()) {
+    if ($this->loadObject($where, null, null, $ljoin)) {
+      //Dans le cas Suisse
+      if (CAppUI::conf("ref_pays") == 2) {
+        if (CModule::getActive("dPfacturation")) {
           $ligne = new CFactureLiaison();
           $ligne->facture_id    = $this->_id;
           $ligne->facture_class = $this->_class;
           $ligne->object_id     = $consult_id;
           $ligne->object_class  = 'CConsultation';
-          $ligne->store();
+          if (!$ligne->loadMatchingObject()) {
+            $ligne->store();
+          }
         }
       }
     }
