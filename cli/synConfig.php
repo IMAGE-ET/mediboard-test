@@ -88,7 +88,8 @@ else {
   return;
 }
 
-exec("scp -P ".$port." -p ".$username."@".$hostname.":".$file." /tmp/synConfig/".basename($file), $result, $returnVar);
+$ID = uniqid(basename($file)."_");
+exec("scp -P ".$port." -p ".$username."@".$hostname.":".$file." /tmp/synConfig/".$ID, $result, $returnVar);
 if (!(check_errs($returnVar, true, "Unable to get the file.", "File received!"))) {
   return;
 }
@@ -97,59 +98,61 @@ if (!(check_errs(is_readable($file), false, $file." is not readable.", $file." i
   return;
 }
 
-// If files have not the same last modification time
-if (filemtime("/tmp/synConfig/".basename($file)) != filemtime($file)) {
-  // If remote file is younger, we get
-  if (filemtime("/tmp/synConfig/".basename($file)) > filemtime($file)) {
-    echo "Remote file is younger. Older will be replaced.\n";
-    
-    if (!(check_errs(
-      rename("/tmp/synConfig/".basename($file), $file),
-      false,
-      "Unable to replace the file.",
-      "The file has been replaced!"
-    ))) {
-      return;
-    }
-    
-    // Set the owner group to APACHE_GROUP
-    $APACHE_USER = trim(shell_exec("ps -ef|grep apache|grep -v grep|head -2|tail -1|cut -d' ' -f1"));
-    $APACHE_GROUP = trim(shell_exec("groups ".$APACHE_USER."| cut -d' ' -f3"));
-    exec("chgrp ".$APACHE_GROUP." ".$file, $result, $returnVar);
-    
-    if (!(check_errs(
-      $returnVar,
-      true,
-      "Unable to change owner group of ".$file.".",
-      "Owner group of ".$file." set to ".$APACHE_GROUP."!"
-    ))) {
-      return;
-    }
-    
-    // Set group permissions to file
-    exec("chmod g+w ".$file, $result, $returnVar);
-    
-    if (!(check_errs(
-      $returnVar,
-      true,
-      "Unable to change permissions of ".$file.".",
-      "Permissions of ".$file." changed!"
-    ))) {
-      return;
-    }
+$localFileMTime  = filemtime($file);
+$remoteFileMTime = filemtime("/tmp/synConfig/".$ID);
+
+// If files have the same last modification time
+if ($remoteFileMTime == $localFileMTime) {
+  echo "Files have the same last modification time.\n";
+  return;
+}
+
+// If remote file is younger, we get
+if ($remoteFileMTime > $localFileMTime) {
+  echo "Remote file is younger. Older will be replaced.\n";
+
+  if (!(check_errs(
+    rename("/tmp/synConfig/".$ID, $file),
+    false,
+    "Unable to replace the file.",
+    "The file has been replaced!"
+  ))) {
+    return;
   }
-  // Else, we push
-  else {
-    echo "Remote file is older. It will be replaced.\n";
-    exec("scp -P ".$port." -p ".$file." ".$username."@".$hostname.":".$file, $result, $returnVar);
-    
-    if (!(check_errs($returnVar, true, "Unable to push the file.", "File sent!"))) {
-      return;
-    }
+
+  // Set the owner group to APACHE_GROUP
+  $APACHE_USER = trim(shell_exec("ps -ef|grep apache|grep -v grep|head -2|tail -1|cut -d' ' -f1"));
+  $APACHE_GROUP = trim(shell_exec("groups ".$APACHE_USER."| cut -d' ' -f3"));
+  exec("chgrp ".$APACHE_GROUP." ".$file, $result, $returnVar);
+
+  if (!(check_errs(
+    $returnVar,
+    true,
+    "Unable to change owner group of ".$file.".",
+    "Owner group of ".$file." set to ".$APACHE_GROUP."!"
+  ))) {
+    return;
+  }
+
+  // Set group permissions to file
+  exec("chmod g+w ".$file, $result, $returnVar);
+
+  if (!(check_errs(
+    $returnVar,
+    true,
+    "Unable to change permissions of ".$file.".",
+    "Permissions of ".$file." changed!"
+  ))) {
+    return;
   }
 }
+// Else, we push
 else {
-  echo "Files have the same last modification time.\n";
-  
-  return;
+  echo "Remote file is older. It will be replaced.\n";
+  unlink("/tmp/synConfig/".$ID);
+  exec("scp -P ".$port." -p ".$file." ".$username."@".$hostname.":".$file, $result, $returnVar);
+
+  if (!(check_errs($returnVar, true, "Unable to push the file.", "File sent!"))) {
+    return;
+  }
 }
