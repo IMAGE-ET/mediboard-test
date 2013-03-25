@@ -586,7 +586,6 @@ table#weeklyPlanning th.today {
 .planning .event:hover {
   outline: none;
   border-color: #666;
-  z-index: 100;
 }
 
 .planning .event.selected:hover {

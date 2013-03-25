@@ -105,7 +105,7 @@ $plages = $plageop->loadList($where);
 
 // Création du planning
 $planning = new CPlanningWeek(0, 0, count($salles), count($salles), false, "auto");
-$planning->title =  "Planning du ".CMbDT::dateToLocale($date_planning);
+$planning->title =  "Planning du ".CMbDT::transform(null, $date_planning, "%A %d %B %Y");
 
 if ($bloc_id) {
   $planning->title .= " - $bloc->nom";
@@ -124,7 +124,8 @@ foreach ($salles as $_salle) {
     $planning->addDayLabel($i, $_salle->_shortview);
   }
   else {
-    $planning->addDayLabel($i, $_salle->_view);
+    //@TODO : find a better way
+    $planning->addDayLabel($i, str_replace("-", "<br/>", $_salle->_view));
   }
   if ($today == $date_planning) {
     $planning->addEvent(new CPlanningEvent(null, "$i ".CMbDT::time(), null, null, "red", null, "now"));
@@ -221,24 +222,26 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     
     $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue' ".
       "data-sortie_prevue='$sejour->sortie_prevue' data-sejour_id='$sejour->_id' data-duree='$_operation->temp_operation'></span>";
+
+    $libelle.= "<span onmouseover='ObjectTooltip.createEx(this, \"".CMbString::htmlEntities($patient->_guid)."\")'>".CMbString::htmlEntities($patient->nom. " " .$patient->prenom." (".$patient->sexe.")")."<br/>[".$patient->getFormattedValue("naissance")."] ".$lit."</span>";
     
     if (abs(CMbDT::hoursRelative("$_operation->date $debut_op", $first_log->date)) <= $diff_hour_urgence) {
       $libelle .= "<span style='float: right' title='Intervention en urgence'><img src='images/icons/attente_fourth_part.png' /></span>";
     }
     
-    $libelle .= "<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".CMbDT::transform($debut_op, null, "%H:%M")." - ".CMbDT::transform($fin_op, null, "%H:%M")."<br/>".
-    CMbString::htmlEntities($_operation->libelle)."</span>".
-    "\n<span  class=\"mediuser\" style=\"border-left-color: #".$chir->_ref_function->color.";\" onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>".CMbString::htmlEntities($chir->_view)."</span>".
-    "<hr/>".
-    "<span onmouseover='ObjectTooltip.createEx(this, \"".CMbString::htmlEntities($patient->_guid)."\")'>".CMbString::htmlEntities($patient->nom. " " .$patient->prenom." (".$patient->sexe.")")."<br/>[".$patient->getFormattedValue("naissance")."] ".$lit->_view."</span>";
+
+    $libelle.="\n<span  class=\"mediuser\" style=\"border-left-color: #".$chir->_ref_function->color.";\" onmouseover='ObjectTooltip.createEx(this, \"".$chir->_guid."\")'>".CMbString::htmlEntities($chir->_view)."</span>";
+    $libelle .= "\n<span style='font-size: 11px; font-weight: bold;' onmouseover='ObjectTooltip.createEx(this, \"".$_operation->_guid."\")'>".CMbDT::transform($debut_op, null, "%H:%M")." - ".CMbDT::transform($fin_op, null, "%H:%M")."<br/>".
+      CMbString::htmlEntities($_operation->libelle)."</span><hr/>";
+
     if ($patient->_ref_dossier_medical->_count_allergies > 0) {
       $libelle .= "
             <span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_guid."', 'allergies');\" ><img src=\"images/icons/warning.png\" alt=\"WRN\"/></span>";
     }
-    if (count($patient->_ref_dossier_medical->_ref_antecedents_by_type) > $patient->_ref_dossier_medical->_count_allergies) {
+    if ((count($patient->_ref_dossier_medical->_ref_antecedents_by_type["anesth"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["chir"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["fam"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["gyn"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["med"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["obst"]) + count($patient->_ref_dossier_medical->_ref_antecedents_by_type["trans"])) > 0) {
       $libelle.="<span onmouseover=\"ObjectTooltip.createEx(this, '".$patient->_ref_dossier_medical->_guid."', 'antecedents');\" ><img src=\"images/icons/antecedents.gif\" alt=\"WRN\"/></span>";
     }
-    $libelle.="\n<span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>";
+    $libelle.="\nSejour: <span onmouseover='ObjectTooltip.createEx(this, \"".$sejour->_guid."\")'>".$sejour->getFormattedValue("entree")."</span>";
     if ($_operation->materiel) {
       $libelle .="<hr/><span>".$_operation->materiel."</span>";
     }
@@ -375,13 +378,14 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
     
     $event->type = "commentaire_planning";
     $event->plage["id"] = $_plage->_id;
-    
-    
+
     $planning->addEvent($event);
   }
 }
 
 $m = $save_m;
+
+$planning->rearrange(); //ReArrange the planning
 
 $smarty = new CSmartyDP();
 

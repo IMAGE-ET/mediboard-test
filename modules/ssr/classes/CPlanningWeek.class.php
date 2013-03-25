@@ -107,17 +107,11 @@ class CPlanningWeek {
   }
   
   function addEvent(CPlanningEvent $event) {
-    if (
-        $event->day < $this->date_min ||
-        $event->day > $this->date_max
-    ) {
+    if ($event->day < $this->date_min || $event->day > $this->date_max) {
       return;
     }
       
-    if (
-        $event->day < $this->date_min_active ||
-        $event->day > $this->date_max_active
-    ) {
+    if ( $event->day < $this->date_min_active || $event->day > $this->date_max_active) {
       $event->disabled = true;
     }
     
@@ -137,10 +131,8 @@ class CPlanningWeek {
             $min = min($event->start, $_event->start);
             $max = max($event->end  , $_event->end);
             
-            if (
-                ($__event->start <  $min && $__event->end <= $min) ||
-                ($__event->start >= $max && $__event->end >  $max)
-            ) {
+            if (($__event->start < $min && $__event->end <= $min) ||
+                ($__event->start >= $max && $__event->end > $max)) {
               continue;
             } 
             
@@ -175,6 +167,12 @@ class CPlanningWeek {
       // tab
       foreach ($_events_by_day as $_events_by_hour) {
         foreach ($_events_by_hour as $_event) {
+          if (stripos($_event->guid, "plage") !== false) {
+            $_event->width = 1;
+            $_event->offset = 0;
+            continue;
+          }
+
           $intervals[$_event->internal_id] = array(
             "lower" => $_event->start,
             "upper" => $_event->end
@@ -182,12 +180,11 @@ class CPlanningWeek {
           $events[$_event->internal_id] = $_event;
         }
       }
-
       $lines = CMbRange::rearrange($intervals);
       $lines_count = count($lines);
       foreach ($lines as $_line_number => $_line) {
         foreach ($_line as $_event_id) {
-          $event = $events[$_event_id];
+          $event = $events[$_event_id]; //get the event
           $event->width = 1 / $lines_count;
           $event->offset = $_line_number / $lines_count;
         }
@@ -196,10 +193,7 @@ class CPlanningWeek {
   }
   
   function addRange(CPlanningRange $range) {
-    if (
-        $range->day < $this->date_min ||
-        $range->day > $this->date_max
-    ) {
+    if ($range->day < $this->date_min || $range->day > $this->date_max) {
       return;
     }
     
