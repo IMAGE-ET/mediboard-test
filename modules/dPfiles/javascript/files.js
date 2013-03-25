@@ -74,7 +74,9 @@ reloadListFile = function(sAction, category_id){
   url.addParam('selKey', oForm.selKey.value);
   url.addParam('selClass', oForm.selClass.value);  
   url.addParam('typeVue', oForm.typeVue.value);
-  if (category_id != undefined) {
+
+  var category = $('Category-'+category_id);
+  if (category) {
     if (category_id == '') {
       category_id = 0;
     }
