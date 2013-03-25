@@ -193,11 +193,15 @@ class CFactureCabinet extends CFacture {
    * @return void
   **/
   function ajoutConsult($patient_id, $chirsel_id, $consult_id, $type_facture) {
+    //@todo à déplacer dans le store de la facture/consult
     $this->_consult_id = $consult_id;
     // Si la facture existe déjà on la met à jour
     $where["patient_id"]    = "= '$patient_id'";
     $where["praticien_id"]  = "= '$chirsel_id'";
-    $where["cloture"]       = "IS NULL";
+    //La cloture est automatique en france donc toujours valuée
+    if (CAppUI::conf("ref_pays") == 2) {
+      $where["cloture"]       = "IS NULL";
+    }
     
     //Si la facture existe déjà
     if ($this->loadObject($where)) {
@@ -242,8 +246,8 @@ class CFactureCabinet extends CFacture {
         $ligne->store();
       }
       else {
-         $consult->facture_id = $this->_id;
-         $consult->store();
+        $consult->facture_id = $this->_id;
+        $consult->store();
       }
     }
   }
