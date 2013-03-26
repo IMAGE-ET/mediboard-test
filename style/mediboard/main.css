@@ -544,7 +544,8 @@ table#weeklyPlanning th.today {
   cursor: help;
   z-index: 10;
   margin: -1px;
-  border: 1px solid #ccc;
+  box-shadow: 0 1px 4px #888;
+  border: solid 1px #888;
 }
 
 .planning .event .footer {

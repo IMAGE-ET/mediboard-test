@@ -5,3 +5,16 @@
 .planning .operation_horsplage {
   z-index:20;
 }
+
+.planning .pause {
+  z-index:11;
+}
+
+.planning .event:hover {
+  box-shadow: none;
+}
+
+.planning .operation_horsplage:hover .body {
+  border:solid 1px #888;
+  box-shadow: 0 1px 4px black;
+}

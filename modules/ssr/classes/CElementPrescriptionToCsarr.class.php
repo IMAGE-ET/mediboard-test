@@ -39,7 +39,7 @@ class CElementPrescriptionToCsarr extends CElementPrescriptionToReeducation {
   
   function loadRefActiviteCsarr(){
     $activite = CActiviteCsARR::get($this->code);
-    $activite->loadRefTypeActivite();
+    //$activite->loadRefTypeActivite();
     return $this->_ref_activite_csarr = $activite;
   }
   
