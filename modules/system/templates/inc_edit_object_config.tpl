@@ -109,8 +109,8 @@ toggleCustomValue = function(button, b) {
 
               <div class="custom-value {{if !$smarty.foreach.ancestor.last && $is_inherited}}opacity-30{{/if}}">
                 {{if $smarty.foreach.ancestor.last}}
-                  <button type="button" class="edit notext" onclick="toggleCustomValue(this, true)" {{if !$is_inherited}} style="display: none;" {{/if}}></button>
-                  <button type="button" class="cancel notext" onclick="toggleCustomValue(this, false)" {{if $is_inherited}} style="display: none;" {{/if}}></button>
+                  <button type="button" class="edit notext compact" onclick="toggleCustomValue(this, true)" {{if !$is_inherited}} style="display: none;" {{/if}}></button>
+                  <button type="button" class="cancel notext compact" onclick="toggleCustomValue(this, false)" {{if $is_inherited}} style="display: none;" {{/if}}></button>
 
                   {{if $_prop.type == "bool"}}
                     <label>

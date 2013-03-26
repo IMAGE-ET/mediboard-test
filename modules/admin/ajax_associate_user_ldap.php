@@ -40,5 +40,3 @@ $smarty = new CSmartyDP();
 $smarty->assign("user"       , $user);
 $smarty->assign("association", $mediuser_id ? 0 : 1);
 $smarty->display("inc_create_user_ldap.tpl");
-
-?>

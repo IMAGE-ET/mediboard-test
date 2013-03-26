@@ -348,4 +348,5 @@ $locales['pref-ccam_consultation-desc'] = 'Affiche le volet de cotation des acte
 $locales['utilities-source-ldap'] = 'Utilitaires LDAP';
 $locales['utilities-source-ldap-bind'] = 'Authentification au serveur LDAP';
 $locales['utilities-source-ldap-search'] = 'Recherche sur le serveur LDAP';
-?>
+$locales['user-unlink_from_ldap'] = "L'utilisateur a été desassocié du LDAP";
+$locales['user-updated-from-ldap'] = "L'utilisateur a été mis à jour à partir du LDAP";

@@ -26,11 +26,11 @@ $user = CUser::get();
 $can->edit |= ($user->user_type != 1);
 $can->needsEdit();
 
-$module   = CValue::post("module");
+$module_name   = CValue::post("module");
 $strings  = CValue::post("s");
 $language = CValue::post("language");
 
-if(!$module || !$strings || !is_array($strings)){
+if(!$module_name || !$strings || !is_array($strings)){
   CAppUI::setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );
   redirect();
   return;
@@ -42,8 +42,8 @@ $translateModule->sourcePath = null;
 // Ecriture du fichier
 $translateModule->options = array("name" => "locales");
 
-if ($module != "common") {
-  $translateModule->targetPath = "modules/$module/locales/$language.php";
+if ($module_name != "common") {
+  $translateModule->targetPath = "modules/$module_name/locales/$language.php";
 }
 else {
   $translateModule->targetPath = "locales/$language/common.php";
@@ -51,7 +51,7 @@ else {
 
 if (!is_file($translateModule->targetPath)) {
   CMbPath::forceDir(dirname($translateModule->targetPath));
-  file_put_contents($translateModule->targetPath, '<?php $locales["module-'.$module.'-court"] = "'.$module.'"; ?>');
+  file_put_contents($translateModule->targetPath, '<?php $locales["module-'.$module_name.'-court"] = "'.$module_name.'"; ?>');
 }
 
 $translateModule->load();
@@ -77,5 +77,3 @@ if ($error instanceof PEAR_Error) {
   CAppUI::setMsg("Locales file saved", UI_MSG_OK );
   redirect();
 }
-
-?>

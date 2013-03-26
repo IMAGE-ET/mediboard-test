@@ -48,6 +48,13 @@ changeRemote = function(input) {
   checkFormElement(oPassword);
 };
 
+unlinkOrUpdateUserLDAP = function(user_id, action) {
+  var url = new Url("admin", "ajax_unlink_update_user_ldap");
+  url.addParam("user_id", user_id);
+  url.addParam("action", action);
+  url.requestUpdate(SystemMessage.id, {onComplete: function() {showMediuser(user_id);}});
+};
+
 Main.add(function () {
   {{if $object->_id}}
     showPratInfo("{{$object->_user_type}}");
@@ -69,9 +76,13 @@ Main.add(function () {
   </a>
   
   {{if $configLDAP}}
-  <button class="search" {{if $readOnlyLDAP}}disabled="disabled"{{/if}} onclick="searchUserLDAP('{{$object->_id}}')">
-    {{tr}}CMediusers_search-ldap{{/tr}}
-  </button>
+    <button class="search" {{if $readOnlyLDAP}}disabled="disabled"{{/if}} onclick="searchUserLDAP('{{$object->_id}}')">
+      {{tr}}CMediusers_search-ldap{{/tr}}
+    </button>
+    {{if $object->_ref_user && $object->_ref_user->_ldap_linked}}
+      <button class="cancel" type="button" onclick="unlinkOrUpdateUserLDAP({{$object->_id}}, 'unlink')">{{tr}}Unlink{{/tr}} du LDAP</button>
+      <button class="search" type="button" onclick="unlinkOrUpdateUserLDAP({{$object->_id}}, 'update')">{{tr}}Update{{/tr}} à partir du LDAP</button>
+    {{/if}}
   {{/if}}
 {{/if}}
 
@@ -136,15 +147,14 @@ Main.add(function () {
     <tr>
       <td class="button" colspan="2">
         {{if $object->user_id}}
-        <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'utilisateur',objName:'{{$object->_user_username|smarty:nodefaults|JSAttribute}}'})">
-          {{tr}}Delete{{/tr}}
-        </button>
+          <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'utilisateur',objName:'{{$object->_user_username|smarty:nodefaults|JSAttribute}}'})">
+            {{tr}}Delete{{/tr}}
+          </button>
         {{else}}
-        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+          <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
         {{/if}}
       </td>
     </tr>
   </table>
-  
 </form>

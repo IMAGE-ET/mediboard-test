@@ -469,4 +469,25 @@ abstract class CMbArray {
     
     return in_array($needle, $haystack);
   }
+
+  /**
+   * Exchanges all keys with their associated values in an array, and keep all the values if there are several occurrences
+   *
+   * @param $trans array
+   *
+   * @return array[]
+   */
+  static function flip($trans) {
+    $result = array();
+    foreach ($trans as $_key => $_value) {
+      if (!array_key_exists($_value, $result)) {
+        $result[$_value] = array($_key);
+      }
+      else {
+        $result[$_value][] = $_key;
+      }
+    }
+
+    return $result;
+  }
 }
