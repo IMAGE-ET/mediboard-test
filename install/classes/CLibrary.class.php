@@ -438,7 +438,7 @@ $library->extraDir = "zebra_session";
 $library->sourceDir = "zebra_session";
 $library->targetDir = "zebra_session";
 $library->versionFile = "Zebra_Session.php";
-$library->versionString = "@version    2.0.3";
+$library->versionString = "yoplet";
 
 CLibrary::$all[$library->name] = $library;
 

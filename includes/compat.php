@@ -376,3 +376,17 @@ if (!function_exists("inet_ntop")) {
     return "";
   }
 }
+
+if (!function_exists('mime_content_type')) {
+  /**
+   * (PHP 5 > 5.2)
+   * Dectect the mime type of a file
+   *
+   * @param string $f Name of the file
+   *
+   * @return string Mime type
+   */
+  function mime_content_type($f) {
+    return trim(exec('file -bi '.escapeshellarg($f)));
+  }
+}
