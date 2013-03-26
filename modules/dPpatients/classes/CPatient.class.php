@@ -193,6 +193,8 @@ class CPatient extends CMbObject {
   public $_overweight;
   public $_age_min;
   public $_age_max;
+  public $_taille;
+  public $_poids;
 
   // Vitale behaviour
   public $_bind_vitale;
@@ -428,6 +430,8 @@ class CPatient extends CMbObject {
     $props["_age"]                        = "str";
     $props["_vip"]                        = "bool";
     $props["_age_assure"]                 = "num";
+    $props["_poids"]                      = "float show|1";
+    $props["_taille"]                     = "float show|1";
 
     $props["_age_min"]                    = "num min|0";
     $props["_age_max"]                    = "num min|0";
@@ -1226,6 +1230,14 @@ class CPatient extends CMbObject {
       foreach ($prescription->_ref_prescription_lines as $_line) {
         $_line->loadRefsPrises();
       }
+    }
+
+    $this->loadRefConstantesMedicales(null, array("poids", "taille"));
+    $const_med = $this->_ref_constantes_medicales;
+
+    if ($const_med) {
+      $this->_poids  = $const_med->poids;
+      $this->_taille = $const_med->taille;
     }
   }
 
