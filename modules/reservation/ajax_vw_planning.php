@@ -325,7 +325,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $hour_debut_preop = CMbDT::subTime($_operation->presence_preop, $_operation->time_operation);
       $debut_preop = "$i $hour_debut_preop";
       $duree = CMbDT::minutesRelative($hour_debut_preop, $_operation->time_operation);
-      $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_preop, $duree, "", "#ddd", true);
+      $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_preop, $duree, "", null, true, "hatching");
       
       $planning->addEvent($event);
     }
@@ -334,7 +334,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $hour_fin_postop = CMbDT::addTime($_operation->presence_postop, $fin_op);
       $debut_postop = "$i $fin_op";
       $duree = CMbDT::minutesRelative($fin_op, $hour_fin_postop);
-      $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_postop, $duree, "", "#ddd", true);
+      $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_postop, $duree, "", null, true, "hatching");
       
       $planning->addEvent($event);
     }
@@ -379,7 +379,7 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
     
     $libelle = CMbString::htmlEntities($_plage->chir_id ? $_plage->_ref_chir->_view : $_plage->_ref_spec->_view);
     
-    $event = new CPlanningEvent($_plage->_guid, $debut, $duree, $libelle, "#aaa", true, null, $_plage->_guid, false);
+    $event = new CPlanningEvent($_plage->_guid, $debut, $duree, $libelle, "#efbf99", true, null, $_plage->_guid, false);
     
     $event->type = "commentaire_planning";
     $event->plage["id"] = $_plage->_id;

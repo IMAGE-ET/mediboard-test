@@ -167,9 +167,10 @@ class CPlanningWeek {
       // tab
       foreach ($_events_by_day as $_events_by_hour) {
         foreach ($_events_by_hour as $_event) {
+
           if (stripos($_event->guid, "plage") !== false) {
-            $_event->width = 1;
-            $_event->offset = 0;
+            $_event->width = .9;
+            $_event->offset = .1;
             continue;
           }
 
@@ -185,8 +186,16 @@ class CPlanningWeek {
       foreach ($lines as $_line_number => $_line) {
         foreach ($_line as $_event_id) {
           $event = $events[$_event_id]; //get the event
-          $event->width = 1 / $lines_count;
-          $event->offset = $_line_number / $lines_count;
+
+          //global
+          $event->width = (1 / $lines_count)-0.1;
+          $event->offset = ($_line_number / $lines_count)+0.05;
+
+          //the line is not the first
+          if ($_line_number >= 1) {
+            $event->width = (1 / $lines_count)+0.05;
+            $event->offset = ($_line_number / $lines_count)-.1;
+          }
         }
       }
     }
