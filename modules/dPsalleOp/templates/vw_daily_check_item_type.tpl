@@ -61,7 +61,11 @@
         <button class="submit" type="submit">{{tr}}Save{{/tr}}</button>
 
         {{if $item_type->_id}}
-          <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$item_type->_view|smarty:nodefaults|JSAttribute}}'})">
+          <button type="button" class="trash" onclick="confirmDeletion(
+            this.form,
+            {ajax: true, typeName:'',objName:'{{$item_type->_view|smarty:nodefaults|JSAttribute}}'},
+            {onComplete: Control.Modal.close}
+            )">
             {{tr}}Delete{{/tr}}
           </button>
         {{/if}}
