@@ -706,20 +706,35 @@ class CMbObject extends CStoredObject {
    * @return void
    */
   function random() {
-    $ds = $this->getDS();
-
     $fields = $this->getPlainFields();
     unset($fields[$this->_spec->key]);
 
     foreach ($fields as $_field => $value) {
-      $query = new CRequest;
-      $query->addSelect($_field);
-      $query->addTable($this->_spec->table);
-      $query->addOrder("RAND()");
-      $query->setLimit(1);
-
-      $this->$_field = $ds->loadResult($query->getRequest());
+      $this->$_field = $this->getRandomValue($_field);
     }
+  }
+
+  /**
+   * Get random value
+   *
+   * @param string $field       Field name
+   * @param bool   $is_not_null Search field not null
+   *
+   * @return mixed
+   */
+  function getRandomValue($field, $is_not_null = false) {
+    $ds = $this->getDS();
+
+    $query = new CRequest;
+    $query->addSelect($field);
+    $query->addTable($this->_spec->table);
+    if ($is_not_null) {
+      $query->addWhereClause($field, "IS NOT NULL");
+    }
+    $query->addOrder("RAND()");
+    $query->setLimit(1);
+
+    return $ds->loadResult($query->getRequest());
   }
 
   /**
