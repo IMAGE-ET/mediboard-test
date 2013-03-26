@@ -66,6 +66,7 @@ $where = array();
 if (!$all_prats) {
   $where["executant_id"] = "= '$user->_id'";
 }
+
 CMbObject::massCountBackRefs($interventions, "actes_ccam", $where);
 
 foreach ($interventions as $key => $_interv) {
@@ -74,7 +75,9 @@ foreach ($interventions as $key => $_interv) {
   $_interv->loadExtCodesCCAM(true);
   $codes_ccam = $_interv->_ext_codes_ccam;
 
+  // Nombre d'acte cotés par le praticien et réinitialisation du count pour le cache
   $nb_actes_ccam = $_interv->_count["actes_ccam"];
+  $_interv->_count["actes_ccam"] = null;
 
   // Aucun acte prévu ou coté
   if (!count($codes_ccam) && !$_interv->_count_actes) {
