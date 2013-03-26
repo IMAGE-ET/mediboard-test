@@ -489,17 +489,21 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($sejour->fieldModified("type")) {
         return $this->getBasculeCode($sejour, $sejour->_old);
       }
-      
-      // Annulation du médecin responsable
-      $send_change_attending_doctor = $configs["send_change_attending_doctor"];
-      if ($sejour->fieldModified("praticien_id") && ($sejour->praticien_id != $sejour->_old->praticien_id)) {
-        return (($send_change_attending_doctor == "A54") ? "A55" : $this->getModificationAdmitCode($receiver));
-      } 
-      
+
       // Changement du médecin responsable
       if ($sejour->fieldModified("praticien_id")) {
+        $first_log = $sejour->loadFirstLog();
+
+        $praticien_id = $sejour->getValueAtDate($first_log->date, "praticien_id");
+
+        $send_change_attending_doctor = $configs["send_change_attending_doctor"];
+        // Annulation du médecin responsable
+        if ($sejour->praticien_id == $praticien_id) {
+          return (($send_change_attending_doctor == "A54") ? "A55" : $this->getModificationAdmitCode($receiver));
+        }
+
         return (($send_change_attending_doctor == "A54") ? "A54" : $this->getModificationAdmitCode($receiver));
-      } 
+      }
       
       // Réattribution dossier administratif
       if ($sejour->fieldModified("patient_id")) {
@@ -565,6 +569,12 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
             return "A02";
         }
       }
+
+      /* Affectation dans un service externe */
+      $service = $affectation->loadRefService();
+      if ($service->externe && $affectation->effectue) {
+        return "A21";
+      }
       
       // Création d'une affectation
       switch ($configs["send_transfer_patient"]) {
@@ -573,12 +583,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         default:
           return "A02";
       }
-    }
-    
-    /* Affectation dans un service externe */
-    $service = $affectation->loadRefService();
-    if ($service->externe && $affectation->effectue) {
-      return "A21";
     }
             
     /* Affectation dans un service externe effectuée */

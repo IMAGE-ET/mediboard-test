@@ -370,19 +370,7 @@ class CPAM extends CIHE {
   static function testA08(CCnStep $step) {
     // PES-PAM_Encounter_Management_Basic
     $patient = self::loadPatientPES($step, 50);
-
-    $sejour             = new CSejour();
-
-    $where["patient_id"] = " = '$patient->_id'";
-    $where["libelle"]    = " = 'Séjour ITI-31 - $patient->nom'";
-
-    $order = "sejour_id DESC";
-
-    $sejour->loadObject($where, $order);
-
-    if (!$sejour->_id) {
-      throw new CMbException("La séjour du patient '$patient->nom' n'a pas été retrouvé");
-    }
+    $sejour  = self::loadAdmitPES($patient);
 
     $patient->nom = "PAMUPDATE";
 
@@ -409,19 +397,7 @@ class CPAM extends CIHE {
   static function testA11(CCnStep $step) {
     // PES-PAM_Encounter_Management_Basic
     $patient = self::loadPatientPES($step, 20);
-
-    $sejour             = new CSejour();
-
-    $where["patient_id"] = " = '$patient->_id'";
-    $where["libelle"]    = " = 'Séjour ITI-31 - $patient->nom'";
-
-    $order = "sejour_id DESC";
-
-    $sejour->loadObject($where, $order);
-
-    if (!$sejour->_id) {
-      throw new CMbException("La séjour du patient '$patient->nom' n'a pas été retrouvé");
-    }
+    $sejour = self::loadAdmitPES($patient);
 
     $sejour->entree_reelle = "";
 
@@ -454,19 +430,7 @@ class CPAM extends CIHE {
 
     // PES-PAM_Encounter_Management_Basic
     $patient = self::loadPatientPES($step, $step_number);
-
-    $sejour             = new CSejour();
-
-    $where["patient_id"] = " = '$patient->_id'";
-    $where["libelle"]    = " = 'Séjour ITI-31 - $patient->nom'";
-
-    $order = "sejour_id DESC";
-
-    $sejour->loadObject($where, $order);
-
-    if (!$sejour->_id) {
-      throw new CMbException("La séjour du patient '$patient->nom' n'a pas été retrouvé");
-    }
+    $sejour  = self::loadAdmitPES($patient);
 
     $sejour->sortie_reelle = $sejour->sortie_prevue;
 
@@ -487,25 +451,108 @@ class CPAM extends CIHE {
   static function testA13(CCnStep $step) {
     // PES-PAM_Encounter_Management_Basic
     $patient = self::loadPatientPES($step, 30);
-
-    $sejour             = new CSejour();
-
-    $where["patient_id"] = " = '$patient->_id'";
-    $where["libelle"]    = " = 'Séjour ITI-31 - $patient->nom'";
-
-    $order = "sejour_id DESC";
-
-    $sejour->loadObject($where, $order);
-
-    if (!$sejour->_id) {
-      throw new CMbException("La séjour du patient '$patient->nom' n'a pas été retrouvé");
-    }
+    $sejour = self::loadAdmitPES($patient);
 
     $sejour->sortie_reelle = "";
 
     if ($msg = $sejour->store()) {
       throw new CMbException($msg);
     }
+  }
+
+  /**
+   * Test A54 - Change the name of the attending doctor
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA54(CCnStep $step) {
+    // PES-PAM_Encounter_Management_ADVANCE
+    $patient = self::loadPatientPES($step, 20);
+    $sejour  = self::loadAdmitPES($patient);
+
+    do {
+      $random_value = $sejour->getRandomValue("praticien_id", true);
+    } while ($sejour->praticien_id == $random_value);
+
+    $sejour->praticien_id = $random_value;
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A55 - Change back the name of the attending doctor to the original one
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA55(CCnStep $step) {
+    // PES-PAM_Encounter_Management_ADVANCE
+    $patient = self::loadPatientPES($step, 20);
+    $sejour  = self::loadAdmitPES($patient);
+
+    $sejour->praticien_id = $sejour->getValueAtDate($sejour->loadFirstLog()->date, "praticien_id");
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A21 - Gone on a leave of absence
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA21(CCnStep $step) {
+    // PES-PAM_Encounter_Management_ADVANCE
+    $patient = self::loadPatientPES($step, 30);
+    $sejour  = self::loadAdmitPES($patient);
+
+    $service_externe           = new CService();
+    $service_externe->group_id = $step->_ref_test->group_id;
+    $service_externe->externe  = 1;
+    $service_externe->loadMatchingObject();
+
+    if (!$service_externe->_id) {
+      throw new CMbException("Aucun service externe de configuré");
+    }
+
+    $affectation             = new CAffectation();
+    $affectation->service_id = $service_externe->_id;
+    $affectation->sejour_id  = $sejour->_id;
+    $affectation->entree     = $sejour->entree;
+    $affectation->effectue   = 1;
+    $affectation->sortie     = CMbDT::dateTime("+1 day", $affectation->entree);
+
+    if ($msg = $affectation->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A22 - Returned from its leave of absence
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA22(CCnStep $step) {
+
+
   }
 
   /**
@@ -585,5 +632,31 @@ class CPAM extends CIHE {
     }
 
     return $patient;
+  }
+
+  /**
+   * Load admit PES
+   *
+   * @param CPatient $patient Person
+   *
+   * @throws CMbException
+   *
+   * @return CSejour $sejour
+   */
+  function loadAdmitPES(CPatient $patient) {
+    $sejour             = new CSejour();
+
+    $where["patient_id"] = " = '$patient->_id'";
+    $where["libelle"]    = " = 'Séjour ITI-31 - $patient->nom'";
+
+    $order = "sejour_id DESC";
+
+    $sejour->loadObject($where, $order);
+
+    if (!$sejour->_id) {
+      throw new CMbException("La séjour du patient '$patient->nom' n'a pas été retrouvé");
+    }
+
+    return $sejour;
   }
 }
