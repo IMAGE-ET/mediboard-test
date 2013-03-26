@@ -164,7 +164,9 @@ for ($i = 0; $i < 7; $i++) {
 
     //Menu des évènements
     $event->addMenuItem("list", "Voir le contenu de la plage");
-    $event->addMenuItem("edit", "Modifier cette plage");
+    if (!$_plage->remplacant_id || $_plage->remplacant_id != $chirSel) {
+      $event->addMenuItem("edit", "Modifier cette plage");
+    }
     $event->addMenuItem("clock", "Planifier une consultation dans cette plage");
 
     //Paramètres de la plage de consultation
