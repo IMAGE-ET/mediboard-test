@@ -316,7 +316,7 @@ refreshFunction = function(chir_id) {
                 stop:  "{{$date_max}}"
               }
             };
-            Calendar.regField(getForm("editOp").date{{if !$can->admin}}, dates{{/if}});
+            Calendar.regField(getForm("editOp").date{{if !$can->admin && !@$modules.dPbloc->_can->edit}}, dates{{/if}});
           });
         </script>
         
