@@ -89,19 +89,30 @@ Main.add(Control.Tabs.create.curry("list_type_tabs", true));
               <input type="hidden" name="_links[dummy]" value="dummy-dummy" />
 
               {{foreach from=$targets key=_class item=_targets}}
-                <div class="object_id-list" id="object_class-{{$_class}}" {{if $_class != $list_type->object_class}} style="display: none;" {{/if}}>
+                <table clas="main layout object_id-list" id="object_class-{{$_class}}" {{if $_class != $list_type->object_class}} style="display: none;" {{/if}}>
                   {{foreach from=$_targets key=_id item=_target}}
-                    <label>
-                      <input type="checkbox" name="_links[{{$_target->_guid}}]" value="{{$_target->_guid}}"
+                    <tr>
+                      <td>
+                        <label>
+                          <input type="checkbox" name="_links[{{$_target->_guid}}]" value="{{$_target->_guid}}"
                             {{if array_key_exists($_target->_guid,$list_type->_links)}} checked {{/if}}/>
-                      {{if $_id == 0}}
-                        {{tr}}All{{/tr}}
-                      {{else}}
-                        {{$_target}}
-                      {{/if}}
-                    </label><br />
+                          {{if $_id == 0}}
+                            {{tr}}All{{/tr}}
+                          {{else}}
+                            {{$_target}}
+                          {{/if}}
+                        </label>
+                      </td>
+                      <td>
+                        {{if $_target->_id}}
+                          <button type="button" class="compact lookup notext" onclick="CheckList.preview('{{$_target->_class}}', '{{$_target->_id}}')">
+                            {{tr}}Preview{{/tr}}
+                          </button>
+                        {{/if}}
+                      </td>
+                    </tr>
                   {{/foreach}}
-                </div>
+                </table>
               {{/foreach}}
             </td>
           </tr>

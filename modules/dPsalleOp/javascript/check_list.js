@@ -39,6 +39,9 @@ CheckList = {
 
     CheckList.urlCategory = url;
   },
+  callbackItemCategory: function(id, obj) {
+    CheckList.editItemCategory(obj.list_type_id, id);
+  },
 
   editItemType: function(category_id, item_type_id) {
     var url = new Url('dPsalleOp', 'vw_daily_check_item_type');
@@ -51,5 +54,12 @@ CheckList = {
     });
 
     CheckList.urlItemType = url;
+  },
+
+  preview: function(object_class, object_id) {
+    var url = new Url("dPsalleOp", 'vw_daily_check_list_preview');
+    url.addParam("object_class", object_class);
+    url.addParam("object_id",    object_id);
+    url.requestModal(900, 700);
   }
 };

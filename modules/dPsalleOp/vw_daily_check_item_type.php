@@ -22,6 +22,7 @@ if ($item_type->load($item_type_id)) {
 else {
   $item_type->index = 1;
   $item_type->category_id = $item_category_id;
+  $item_type->active = "1";
 }
 
 $item_category = new CDailyCheckItemCategory();

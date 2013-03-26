@@ -1,5 +1,6 @@
-{{mb_default var=list_chirs value=null}}
+{{mb_default var=list_chirs   value=null}}
 {{mb_default var=list_anesths value=null}}
+{{mb_default var=preview      value=false}}
 
 {{if $check_list->isReadonly()}}
 
@@ -95,24 +96,29 @@ saveCheckListIdCallback{{$check_list->type}}_{{$check_list->list_type_id}} = fun
   }
 }
 
-submitCheckList = function(form, quicksave) {
-  if (!quicksave) {
-    return confirmCheckList(form);
+{{if $preview}}
+  submitCheckList = function() {};
+{{else}}
+  submitCheckList = function(form, quicksave) {
+    if (!quicksave) {
+      return confirmCheckList(form);
+    }
+
+    $V(form._validator_password, "");
+
+    return onSubmitFormAjax(form, {
+      check: function(){return true}
+    });
   }
-
-  $V(form._validator_password, "");
-
-  return onSubmitFormAjax(form, {
-    check: function(){return true}
-  });
-}
+{{/if}}
 
 Main.add(function(){
   prepareForm('edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}-{{$check_list->list_type_id}}');
 });
 </script>
 
-<form name="edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}-{{$check_list->list_type_id}}" method="post" action="?" onsubmit="return submitCheckList(this, false)">
+<form name="edit-CDailyCheckList-{{$check_list->object_class}}-{{$check_list->object_id}}-{{$check_list->type}}-{{$check_list->list_type_id}}"
+      method="post" action="?" onsubmit="{{if $preview}} return false; {{else}} return submitCheckList(this, false); {{/if}}">
   <input type="hidden" name="dosql" value="do_daily_check_list_aed" />
   <input type="hidden" name="m" value="salleOp" />
   <input type="hidden" name="del" value="0" />

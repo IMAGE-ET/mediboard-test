@@ -1,10 +1,11 @@
-<form name="edit-CDailyCheckItemCategory" action="?" method="post" onsubmit="return onSubmitFormAjax(this, Control.Modal.close)">
+<form name="edit-CDailyCheckItemCategory" action="?" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_daily_check_item_category_aed" />
   <input type="hidden" name="m" value="salleOp" />
   <input type="hidden" name="daily_check_item_category_id" value="{{$item_category->_id}}" />
   {{mb_field object=$item_category field="target_class" hidden=true}}
   {{mb_field object=$item_category field="target_id"    hidden=true}}
   {{mb_field object=$item_category field="list_type_id" hidden=true}}
+  <input type="hidden" name="callback" value="CheckList.callbackItemCategory" />
 
   <table class="main form">
     {{mb_include module=system template=inc_form_table_header object=$item_category}}
