@@ -7,8 +7,8 @@
   {{/if}}
 {{/if}}
 
-<tbody class="hoverable">
-  <tr class="{{$trClass}}">
+<tbody class="hoverable ">
+  <tr class="{{$trClass}} {{if $_patient->deces}}hatching{{/if}}">
     {{assign var="rowspan" value=1}}
     {{if count($_patient->_ref_consultations) || count($_patient->_ref_sejours)}}
       {{assign var="rowspan" value=2}}
@@ -61,7 +61,7 @@
         {{tr}}Edit{{/tr}}
       </button>
       {{/if}}
-      <button class="tick" {{if $_patient->deces}}disabled{{/if}} type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}', '{{$_patient->sexe}}')">
+      <button class="tick" type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}', '{{$_patient->sexe}}')">
         {{tr}}Select{{/tr}}
       </button>
     </td>
