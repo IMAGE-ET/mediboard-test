@@ -45,6 +45,16 @@
             {{$_interv}}
           </span>
         </a>
+        {{if $sejour->libelle}}
+        <div class="compact">
+            {{$sejour->libelle}}
+        </div>
+        {{/if}}
+        {{if $_interv->libelle}}
+        <div class="compact">
+            {{$_interv->libelle}}
+        </div>
+        {{/if}}
       </td>
       <td>
         {{if !$_interv->_count_actes && !$_interv->_ext_codes_ccam}}
@@ -54,7 +64,11 @@
         {{/if}}
       </td>
       <td class="text">
-        {{mb_include module=planningOp template=inc_vw_operation _operation=$_interv}}
+        {{foreach from=$_interv->_ext_codes_ccam item=code}}
+          <div>
+            {{$code->code}}
+          </div>
+        {{/foreach}}
       </td>
       
       <td>
