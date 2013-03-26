@@ -195,7 +195,7 @@
               <!-- Extension documentaire -->
               <tr class="{{$key}}">
                 <th>{{mb_label object=$acte field=extension_documentaire}}</th>
-                <td colspan="10">{{mb_field object=$acte field=extension_documentaire emptyLabel="Choose" canNull=false style="width: 15em;"}}</td>
+                <td colspan="10">{{mb_field object=$acte field=extension_documentaire emptyLabel="Choose" canNull=$conf.dPsalleOp.CActeCCAM.ext_documentaire_optionnelle|ternary:true:false style="width: 15em;"}}</td>
               </tr>
               {{/if}}
       
