@@ -241,10 +241,10 @@ class CService extends CMbObject {
    * @return CService
    */
   static function loadServiceExterne($group_id = null) {
-    $service             = new CService();
-    $service->group_id   = $group_id ? $group_id : CGroups::loadCurrent()->_id;
-    $service->service_id = "1";
-    $service->cancelled  = "0";
+    $service            = new CService();
+    $service->group_id  = $group_id ? $group_id : CGroups::loadCurrent()->_id;
+    $service->externe   = "1";
+    $service->cancelled = "0";
 
     $service = $service->loadMatchingObject();
 
