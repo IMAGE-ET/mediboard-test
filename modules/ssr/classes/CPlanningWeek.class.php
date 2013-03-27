@@ -24,7 +24,7 @@ class CPlanningWeek {
   var $date_min_active = null;
   var $date_max_active = null;
 
-  var $allow_superposition = true;
+  var $allow_superposition = false;
   
   var $hour_min = "09";
   var $hour_max = "16";
