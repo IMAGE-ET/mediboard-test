@@ -64,7 +64,8 @@ CMbObject::massLoadFwdRef($chirs, "function_id");
 
 $where = array();
 if (!$all_prats) {
-  $where["executant_id"] = "= '$user->_id'";
+  //$where["executant_id"] = "= '$user->_id'";
+  $where["code_activite"] = $user->_is_anesth ? "= '4'" : "!= '4'";
 }
 
 CMbObject::massCountBackRefs($interventions, "actes_ccam", $where);
@@ -97,17 +98,12 @@ foreach ($interventions as $key => $_interv) {
       $nbCodes += count($_activite);
       continue;
     }
-    foreach ($_activite as $_type) {
-//      if ($user->_is_anesth && $_type->numero == 4) {
-      if ($_interv->chir_id != $user->_id && $_type->numero == 4) {
+    foreach ($_activite as $_key_activite => $_type_activite) {
+      if($user->_is_anesth && $_key_activite == 4) {
         $nbCodes++;
-        continue;
       }
-      
-//      if (!$user->_is_anesth && $_type->numero != 4) {
-      if ($_interv->chir_id == $user->_id && $_type->numero != 4) {
+      if(!$user->_is_anesth && $_key_activite != 4) {
         $nbCodes++;
-        continue;
       }
     }
   }
@@ -124,7 +120,7 @@ foreach ($interventions as $key => $_interv) {
   $_interv->loadRefAnesth()->loadRefFunction();
   $_interv->loadRefPatient();
 
-  // Actes CCAM cotées
+  // Liste des actes CCAM cotées
   foreach ($_interv->loadRefsActesCCAM() as $_acte) {
     $_acte->loadRefExecutant();
   }
