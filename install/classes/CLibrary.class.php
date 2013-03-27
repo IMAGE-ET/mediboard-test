@@ -454,3 +454,15 @@ $library->versionFile = "phpseclib/Crypt/Random.php";
 $library->versionString = "crypt_random_string";
 
 CLibrary::$all[$library->name] = $library;
+
+$library = new CLibrary;
+$library->name = "HTMLPurifier";
+$library->url = "http://htmlpurifier.org/";
+$library->fileName = "htmlpurifier-4.5.0-lite.zip";
+$library->description = "Standards-Compliant HTML Filtering";
+$library->sourceDir = "htmlpurifier-4.5.0-lite";
+$library->targetDir = "htmlpurifier";
+$library->versionFile = "NEWS";
+$library->versionString = "4.5.0, released 2013-02-17";
+
+CLibrary::$all[$library->name] = $library;

@@ -39,18 +39,17 @@ $pdf_active = (CAppUI::conf("dPcompteRendu CCompteRendu pdf_thumbnails") == 1 ) 
 // Création du template
 $smarty = new CSmartyDP();
 
-if($objectClass && $objectId && $elementClass && $elementId){
-  
+if ($objectClass && $objectId && $elementClass && $elementId) {
   // Chargement de l'objet
   $object = new $objectClass;
-  if($object->load($objectId)){
 
+  if ($object->load($objectId)) {
     // Chargement des fichiers et des Documents
     $object->loadRefsFiles();
     $object->loadRefsDocs();
     
     // Recherche du fichier/document demandé et Vérification droit Read
-    if($elementClass == "CFile"){
+    if ($elementClass == "CFile") {
       $type = "_ref_files";
       $nameFile = "file_name";
     }
@@ -64,9 +63,11 @@ if($objectClass && $objectId && $elementClass && $elementId){
       $listFile =& $object->$type;
       $listFile[$elementId]->canRead();
       $acces_denied = !$listFile[$elementId]->_canRead;
+
       if ($listFile[$elementId]->_canRead) {
         $fileSel = $listFile[$elementId];
         $file_id = $fileSel->_id;
+
         if ($pdf_active && $type == "_ref_documents") {
           $compte_rendu = new CCompteRendu;
           $compte_rendu->load($elementId);
@@ -74,6 +75,7 @@ if($objectClass && $objectId && $elementClass && $elementId){
           $fileSel = $compte_rendu->_ref_file;
           $file_id = $fileSel->_id;
         }
+
         $keyTable = $listFile[$elementId]->_spec->key;
         $keyFileSel = $listFile[$elementId]->$nameFile;
         $keyFileSel .= "-" . $elementClass . "-";
@@ -87,8 +89,8 @@ if($objectClass && $objectId && $elementClass && $elementId){
       CAppUI::stepAjax(CAppUI::tr("CDocumentItem-_not_available"), UI_MSG_WARNING);
       CApp::rip();
     }
-    
-  }else {
+  }
+  else {
     // Objet Inexistant
     $object = null;
   }
@@ -101,38 +103,41 @@ if ($fileSel && $elementClass == "CFile" && !$acces_denied) {
   if (file_exists($fileSel->_file_path)) {
     $raw_content = file_get_contents($fileSel->_file_path);
 
-
     switch ($fileSel->file_type) {
+      case "application/x-hprim":
+        $includeInfosFile = CHprim21::formatHPRIMBiologie($raw_content);
+        $display_as_is    = true;
+        $show_editor      = false;
+        break;
+
       case "text/osoft":
         if (class_exists("COsoftHistorique")) {
-          $osoft_histo = new COsoftHistorique;
+          $osoft_histo      = new COsoftHistorique;
           $includeInfosFile = $osoft_histo->toHTML($raw_content);
-          $show_editor = false;
+          $show_editor      = false;
           break;
         }
 
       case "application/osoft":
         if (class_exists("COsoftDossier")) {
-          $osoft_dossier = new COsoftDossier;
+          $osoft_dossier    = new COsoftDossier;
           $includeInfosFile = $osoft_dossier->toHTML($raw_content);
-          $show_editor = false;
+          $show_editor      = false;
           break;
         }
 
-      case "application/x-hprim":
-        $includeInfosFile = CHprim21::formatHPRIMBiologie($raw_content);
-        $display_as_is = true;
-        $show_editor = false;
-        break;
-        
       case "text/plain": 
         $includeInfosFile = "<pre>".CMbString::htmlSpecialChars($raw_content)."</pre>";
         break;
 
       case "text/html":
-        $includeInfosFile = $raw_content;
-        $show_editor = false;
-        $display_as_is = true;
+        CAppUI::requireLibraryFile("htmlpurifier/library/HTMLPurifier.auto");
+        $config   = HTMLPurifier_Config::createDefault();
+        $purifier = new HTMLPurifier($config);
+
+        $includeInfosFile = $purifier->purify($raw_content);
+        $show_editor      = false;
+        $display_as_is    = true;
         break;
     }
   }
@@ -141,6 +146,7 @@ if ($fileSel && $elementClass == "CFile" && !$acces_denied) {
     $isConverted = true;
     $fileconvert = $fileSel->loadPDFconverted();
     $success = 1;
+
     if (!$fileconvert->_id) {
       $success = $fileSel->convertToPDF();
       
@@ -179,15 +185,18 @@ elseif ($fileSel && $elementClass == "CCompteRendu" && !$acces_denied && !$pdf_a
 
 if ($pdf_active && $elementClass == "CCompteRendu") {
   $fileSel->loadNbPages();
-  if($fileSel->_nb_pages) {
-    if($sfn>$fileSel->_nb_pages || $sfn<0){$sfn = 0;}
-    if($sfn!=0){
+
+  if ($fileSel->_nb_pages) {
+    if ($sfn>$fileSel->_nb_pages || $sfn<0) {
+      $sfn = 0;
+    }
+    if ($sfn!=0) {
       $page_prev = $sfn - 1; 
     }
-    if($sfn<($fileSel->_nb_pages-1)){
+    if ($sfn<($fileSel->_nb_pages-1)) {
       $page_next = $sfn + 1;
     }
-    for($i=1;$i<=$fileSel->_nb_pages;$i++){
+    for ($i=1;$i<=$fileSel->_nb_pages;$i++) {
       $arrNumPages[] = $i;
     }
   }
@@ -195,9 +204,9 @@ if ($pdf_active && $elementClass == "CCompteRendu") {
 else {
   // Initialisation de FCKEditor
   if ($includeInfosFile) {
-  $templateManager = new CTemplateManager;
-  $templateManager->printMode = true;
-  $templateManager->initHTMLArea();
+    $templateManager = new CTemplateManager;
+    $templateManager->printMode = true;
+    $templateManager->initHTMLArea();
   }
 }
 
@@ -221,22 +230,23 @@ $smarty->assign("isConverted"     , $isConverted);
 $smarty->assign("show_editor"     , $show_editor);
 $smarty->assign("display_as_is"   , $display_as_is);
 
-if($popup==1){
+if ($popup==1) {
   $listCat  = null;
   $fileprev = null;
   $filenext = null;
-  if($object){  
+
+  if ($object) {
     $affichageFile = CFile::loadDocItemsByObject($object);
     
     // Récupération du fichier/doc préc et suivant
     $aAllFilesDocs = array();
-    foreach($affichageFile as $keyCat => $currCat){
+    foreach ($affichageFile as $keyCat => $currCat) {
       $aAllFilesDocs = array_merge($aAllFilesDocs,$affichageFile[$keyCat]["items"]);
     }
         
     $aFilePrevNext = CMbArray::getPrevNextKeys($aAllFilesDocs, $keyFileSel);
-    foreach($aFilePrevNext as $key=>$value){
-      if($value){
+    foreach ($aFilePrevNext as $key=>$value) {
+      if ($value) {
         $aFile =& $aAllFilesDocs[$aFilePrevNext[$key]];
         $keyFile = $aFile->_spec->key;
         ${"file".$key} = array(
@@ -251,9 +261,11 @@ if($popup==1){
     CDestinataire::makeAllFor($object);
     $list_destinataires = CDestinataire::$destByClass;
     
-    foreach($list_destinataires as $_destinataires_by_class) {
-      foreach($_destinataires_by_class as $_destinataire) {
-        if (!isset($_destinataire->nom) || strlen($_destinataire->nom) == 0 || $_destinataire->nom === " ") continue;
+    foreach ($list_destinataires as $_destinataires_by_class) {
+      foreach ($_destinataires_by_class as $_destinataire) {
+        if (!isset($_destinataire->nom) || strlen($_destinataire->nom) == 0 || $_destinataire->nom === " ") {
+          continue;
+        }
         $destinataires[] =
           array("nom"   => $_destinataire->nom,
                 "email" => $_destinataire->email,
@@ -269,7 +281,7 @@ if($popup==1){
     $smarty->assign("fileNext" , $filenext);
     $smarty->display("inc_preview_file_popup.tpl");
   }
-}else{
+}
+else {
   $smarty->display("inc_preview_file.tpl");
 }
-?>
