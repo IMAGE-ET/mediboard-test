@@ -544,7 +544,7 @@ var ViewPort = {
   
     // Position Top de la div, hauteur de la fenetre,
     // puis calcul de la taille de la div
-    var pos       = element.cumulativeOffset()[1];
+    var pos       = element.cumulativeOffset().top;
     var winHeight = window.getInnerDimensions().height;
     element.style.overflowY = "auto";
     element.style.overflowX = "hidden";
@@ -991,7 +991,12 @@ Class.extend (Control.Tabs, {
 });
 
 window.getInnerDimensions = function() {
-  return {width: document.documentElement.clientWidth, height: document.documentElement.clientHeight};
+  var doc = document.documentElement;
+
+  return {
+    width:  doc.clientWidth,
+    height: doc.clientHeight
+  };
 };
 
 /** DOM element creator for Prototype by Fabien Ménager

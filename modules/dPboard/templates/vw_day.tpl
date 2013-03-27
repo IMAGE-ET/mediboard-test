@@ -101,8 +101,8 @@ Main.add(function () {
   {{/if}}
   ViewPort.SetAvlHeight("consultations", 0.5);
   ViewPort.SetAvlHeight("operations", 0.5);
-  ViewPort.SetAvlHeight("worklist", 1);
-  ViewPort.SetAvlHeight("hospi", 1);
+  ViewPort.SetAvlHeight("worklist", 1.0);
+  ViewPort.SetAvlHeight("hospi", 1.0);
   Calendar.regField(getForm("changeDate").date, null, {noView: true});
 });
 
@@ -123,37 +123,30 @@ Main.add(function () {
   </tr>
 
   <tbody class="viewported">
-  
-  <tr>
+    <tr>
+      <!--  Consultations -->
+      <td class="viewport" style="width: 50%">
+        <div id="consultations"></div>
+      </td>
 
-    <!--  Consultations -->
-    <td class="viewport" style="width: 50%">
-      <div id="consultations"></div>
-    </td>
-    
-    <!-- Operations -->
-    <td class="viewport" style="width: 50%">
-      <div id="operations"></div>
-    </td>
-    
-  </tr>
-  
-  <tr>
-  
-    <!-- Volet des worklists -->
-    <td class="viewport" style="width: 50%">
-      <div id="worklist" style="overflow: auto"></div>
-    </td>
+      <!-- Operations -->
+      <td class="viewport" style="width: 50%">
+        <div id="operations"></div>
+      </td>
+    </tr>
 
-    <!-- Patients hospitalisés -->
-    <td class="viewport" style="width: 50%">
-      <div id="hospi" style="overflow: auto"></div>
-    </td>
-    
-  </tr>
-  
+    <tr>
+      <!-- Volet des worklists -->
+      <td class="viewport" style="width: 50%">
+        <div id="worklist" style="overflow: auto"></div>
+      </td>
+
+      <!-- Patients hospitalisés -->
+      <td class="viewport" style="width: 50%">
+        <div id="hospi" style="overflow: auto"></div>
+      </td>
+    </tr>
   </tbody>
-  
 </table>
 
-<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto;"></div>
+<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto; position: absolute;"></div>
