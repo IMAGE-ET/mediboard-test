@@ -233,6 +233,24 @@ class CService extends CMbObject {
     return $services;
   }
 
+  /**
+   * Charge les services externes de l'établissement
+   *
+   * @param string $group_id Group
+   *
+   * @return CService
+   */
+  static function loadServiceExterne($group_id = null) {
+    $service             = new CService();
+    $service->group_id   = $group_id ? $group_id : CGroups::loadCurrent()->_id;
+    $service->service_id = "1";
+    $service->cancelled  = "0";
+
+    $service = $service->loadMatchingObject();
+
+    return $service;
+  }
+
   function loadListWithPerms($permType = PERM_READ, $where = array(), $order = "nom", $limit = null, $group = null, $leftjoin = null) {
     if ($where !== null && !isset($where["group_id"])) {
       $where["group_id"] = "='".CGroups::loadCurrent()->_id."'";

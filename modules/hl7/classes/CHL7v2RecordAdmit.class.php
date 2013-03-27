@@ -489,6 +489,24 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
+
+  function handleA21(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    // Mapping venue - création impossible
+    if (!$this->admitFound($newVenue, $data)) {
+      return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
+    }
+
+    return $this->mapAndStoreVenue($ack, $newVenue, $data);
+  }
+
+  function handleA22(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    // Mapping venue - création impossible
+    if (!$this->admitFound($newVenue, $data)) {
+      return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
+    }
+
+    return $this->mapAndStoreVenue($ack, $newVenue, $data);
+  }
   
   function handleA25(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
@@ -516,7 +534,25 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     
     return $this->mapAndStoreVenue($ack, $newVenue, $data);
   }
-  
+
+  function handleA52(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    // Mapping venue - création impossible
+    if (!$this->admitFound($newVenue, $data)) {
+      return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
+    }
+
+    return $this->mapAndStoreVenue($ack, $newVenue, $data);
+  }
+
+  function handleA53(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
+    // Mapping venue - création impossible
+    if (!$this->admitFound($newVenue, $data)) {
+      return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
+    }
+
+    return $this->mapAndStoreVenue($ack, $newVenue, $data);
+  }
+
   function handleA54(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
@@ -897,6 +933,8 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function mapAndStoreAffectation(CHL7Acknowledgment $ack, CSejour $newVenue, $data, CMovement $movement = null) {
+    $sender = $this->_ref_sender;
+
     $PV1_3 = $this->queryNode("PV1.3", $data["PV1"]);
         
     $affectation = new CAffectation();
@@ -908,10 +946,10 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $event_code = $this->_ref_exchange_ihe->code;
 
     switch ($event_code) {
-      // Cas d'une suppression de mutation
-      case "A12" :
+      // Cas d'une suppression de mutation ou d'une permission d'absence
+      case "A12" : case "A52" :
         if (!$movement) {
-          return;
+          return null;
         }
 
         $affectation->load($movement->affectation_id);
@@ -930,7 +968,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // Annulation admission
       case "A11" :
         if (!$movement) {
-          return;
+          return null;
         }
 
         $affectation =  $newVenue->getCurrAffectation($datetime);
@@ -945,11 +983,98 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
           $affectation = $movement->loadRefAffectation();
         }
 
+        // Pas de synchronisation
+        $affectation->_no_synchro = true;
         if ($msg = $affectation->delete()) {
           return $msg;
         }
 
         return null;
+
+      // Annuler le retour du patient
+      case "A53" :
+        if (!$movement) {
+          return null;
+        }
+
+        $affectation->load($movement->affectation_id);
+        if (!$affectation->_id) {
+          return "Le mouvement '$movement->_id' n'est pas lié à une affectation dans Mediboard";
+        }
+
+        $affectation->effectue = 0;
+
+        // Pas de synchronisation
+        $affectation->_no_synchro = true;
+        if ($msg = $affectation->store()) {
+          return $msg;
+        }
+
+        return $affectation;
+
+      // Cas d'un départ pour une permission d'absence
+      case "A21" :
+        $affectation->entree = $datetime;
+        $affectation->loadMatchingObject();
+
+        // Si on ne retrouve pas une affectation
+        // Création de l'affectation
+        // et mettre à 'effectuee' la précédente si elle existe sinon création de celle-ci
+        if (!$affectation->_id) {
+          $service_externe = CService::loadServiceExterne($sender->group_id);
+
+          if (!$service_externe->_id) {
+            return "CService-externe-none";
+          }
+
+          $affectation->service_id = $service_externe->_id;
+
+          $return_affectation = $newVenue->forceAffectation($affectation);
+          //$datetime, $affectation->lit_id, $affectation->service_id);
+          if (is_string($return_affectation)) {
+            return $return_affectation;
+          }
+
+          $affectation = $return_affectation;
+        }
+
+        return $affectation;
+
+      // Cas d'un retour pour une permission d'absence
+      case "A22" :
+        $service_externe = CService::loadServiceExterne($sender->group_id);
+
+        if (!$service_externe->_id) {
+          return "CService-externe-none";
+        }
+
+        // Recherche de l'affectation correspondant à une permission d'absence
+        $search              = new CAffectation();
+        $where = array();
+        $where["sejour_id"]  = "=  '$newVenue->_id'";
+        $where["service_id"] = "=  '$service_externe->_id'";
+        $where["effectue"]   = "=  '0'";
+        $where["entree"]     = "<= '$datetime'";
+        $where["sortie"]     = ">= '$datetime'";
+        $search->loadObject($where);
+
+        // Si on ne la retrouve pas on prend la plus proche
+        if (!$search->_id) {
+          $where = array();
+          $where["sejour_id"]  = "=  '$newVenue->_id'";
+          $where["service_id"] = "=  '$service_externe->_id'";
+          $where["effectue"]   = "=  '0'";
+
+          $search->loadObject($where);
+        }
+
+        $search->effectue = 1;
+        $search->sortie   = $datetime;
+        if ($msg = $search->store()) {
+          return $msg;
+        }
+
+        return $search;
 
       // Cas mutation
       case "A02" :
@@ -977,7 +1102,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       // Cas modification
       case "Z99" :
         if (!$movement) {
-          return;
+          return null;
         }
 
         $affectation =  $newVenue->getCurrAffectation($datetime);
