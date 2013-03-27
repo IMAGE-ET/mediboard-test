@@ -39,9 +39,11 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $this->queryNode("PV2", null, $data, true);
     
     // Traitement des segments spécifiques extension française PAM
-    if ($this->_is_i18n == "FR") {
+    if ($this->_is_i18n == "FR" || $sender->_configs["iti31_historic_movement"]) {
       $this->queryNode("ZBE", null, $data, true);
-    
+    }
+
+    if ($this->_is_i18n == "FR") {
       $this->queryNode("ZFP", null, $data, true);
       
       $this->queryNode("ZFV", null, $data, true);
@@ -399,7 +401,9 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     // Affectation de l'affectation au mouvement
     if ($movement && $affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
-      $movement->store();
+      if ($msg = $movement->store()) {
+        return $exchange_ihe->setAckAR($ack, "E208", $msg, $affectation);
+      }
     }
     
     // Dans le cas d'une grossesse
@@ -845,11 +849,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
       return $exchange_ihe->setAckAR($ack, "E208", $return_affectation, $newVenue);
     }
     $affectation = $return_affectation;
-    
+
     // Attribution de l'affectation au mouvement
     if ($movement && $affectation && $affectation->_id) {
       $movement->affectation_id = $affectation->_id;
-      $movement->store();
+      if ($msg = $movement->store()) {
+        return $exchange_ihe->setAckAR($ack, "E208", $msg, $affectation);
+      }
     }
     
     // Dans le cas d'une grossesse
@@ -921,7 +927,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     if (!array_key_exists("ZBE", $data)) {
       return;
     }
-    
+
     $exchange_ihe = $this->_ref_exchange_ihe;
     
     $movement = new CMovement();
@@ -1876,14 +1882,13 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
         $own_movement = $EI_1;
         break;
       }
-      
+
       // L'identifiant de mouvement du sender
       if ($EI_3 == $sender->_configs["assigning_authority_universal_id"]) {
         $sender_movement = $EI_1;
         continue;
       }    
     }
-    
     if (!$own_movement && !$sender_movement) {
       return "Impossible d'identifier le mouvement";
     }

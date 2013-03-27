@@ -2344,21 +2344,18 @@ class CSejour extends CFacturable implements IPatientRelated {
     if ($splitting->_id) {
       // Affecte la sortie de l'affectation a créer avec l'ancienne date de sortie
       $create->sortie = $splitting->sortie;
+
+      // On passe à effectuer la split
+      $splitting->effectue    = 1;
+      $splitting->sortie      = $datetime;
+      $splitting->_no_synchro = true;
+      if ($msg = $splitting->store()) {
+        return $msg;
+      }
     }
     // On créé une première affectation
     else {
       $create->sortie  = $this->sortie;
-      $splitting->sejour_id = $this->_id;
-      $splitting->entree    = $this->entree;
-      $splitting->lit_id    = $lit_id;
-    }
-
-    // On passe à effectuer la split
-    $splitting->effectue    = 1;
-    $splitting->sortie      = $datetime;
-    $splitting->_no_synchro = true;
-    if ($msg = $splitting->store()) {
-      return $msg;
     }
 
     // Créé la nouvelle affectation
