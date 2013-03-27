@@ -186,7 +186,7 @@ Main.add(function() {
                         
                         <div id="{{$_event->internal_id}}"
                              class="event {{$draggable}} {{$resizable}} {{if $disabled}}disabled{{/if}} {{$_event->css_class}} {{$_event->guid}} {{$_event->type}} {{if !$_event->important}}opacity-60{{/if}} {{if  isset($plageconsult_id|smarty:nodefaults) && $plageconsult_id == $_event->plage.id }}selected{{/if}}" 
-                             style="background-color:{{$_event->color}}; {{if $_event->type == 'consultation' || $_event->type == 'operation'}}text-align:center;{{/if}}"
+                             style="background-color:{{$_event->color}}; {{if $_event->type == 'consultation' || $_event->type == 'operation'}}text-align:center;{{/if}} {{if $_event->useHeight}}z-index:{{math equation="20+y" y=$_event->height}};{{/if}}"
                              {{if $_event->type == "rdvfull"}}onmouseover="ObjectTooltip.createEx(this, '{{$_event->guid}}')"{{/if}}
                              {{if ($_event->type == "rdvfree" || $_event->type == "rdvfull") && !$_event->disabled}}
                                onclick="setClose('{{$_event->start|date_format:"%H:%M:00"}}', '{{$_event->plage.id}}', '{{$_event->start|date_format:"%A %d/%m/%Y"}}', '{{$chir_id}}' {{if isset($_event->plage.consult_id|smarty:nodefaults)}}, '{{$_event->plage.consult_id}}'{{/if}});"

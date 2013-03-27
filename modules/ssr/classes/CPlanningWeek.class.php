@@ -23,6 +23,8 @@ class CPlanningWeek {
   
   var $date_min_active = null;
   var $date_max_active = null;
+
+  var $allow_superposition = true;
   
   var $hour_min = "09";
   var $hour_max = "16";
@@ -189,28 +191,29 @@ class CPlanningWeek {
       foreach ($lines as $_line_number => $_line) {
         foreach ($_line as $_event_id) {
           $event = $events[$_event_id]; //get the event
+          $event->height = $_line_number;
           //global = first line
           $event->width = (1 / $lines_count);
-          $event->offset = ($_line_number / $lines_count)+0.05;
+          $event->offset = ($_line_number / $lines_count);
+          if ($this->allow_superposition) {
+            $event->offset+=.05;
+          }
 
-          if ($lines_count == 1) {
-            $event->width =  $event->width-0.1;
+          if ($lines_count == 1 && $this->allow_superposition) {
+            $event->width =  $event->width-.1;
           }
 
           //the line is not the first
-          if ($_line_number >= 1) {
+          if ($_line_number >= 1 && $this->allow_superposition) {
             $event->width = (1 / ($lines_count))+0.05;
             $event->offset = ($_line_number / $lines_count)-.1;
           }
 
           // lines uncollided
-          if ((in_array($event->internal_id, array_keys($uncollided))) && ($_line_number < ($lines_count-1)) && (stripos($event->guid, "pause") === false)) {
-            if ($_line_number == 0) {
-              $event->width = (($lines_count - ($_line_number)) / $lines_count)-0.1;
-            }
-            else {
-              $event->width = (($lines_count - ($_line_number)) / $lines_count)+.05;
-            }
+          //TODO: fix collisions problems
+          if ((in_array($event->internal_id, array_keys($uncollided))) && ($_line_number < ($lines_count-1)) && !$event->below) {
+            //$event->width = (($lines_count - ($_line_number)) / $lines_count);
+            //$event->width = ($_line_number == 0) ? $event->width-0.1 :$event->width +.05;
           }
         }
       }

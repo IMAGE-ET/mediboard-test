@@ -35,6 +35,8 @@ class CPlanningEvent  {
   var $width     = null;
   var $offset    = null;
   var $color     = null;
+  var $height    = null;
+  var $useHeight = null;
   var $important = null;
   
   function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true, $css_class = null, $draggable_guid = null, $html_escape = true) {
