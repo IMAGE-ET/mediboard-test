@@ -221,7 +221,8 @@ class CFacture extends CMbObject {
   function updateMontants() {
     $this->du_patient = 0;
     $this->du_tiers   = 0;
-    
+    $this->_secteur1  = 0;
+    $this->_secteur2  = 0;
     if (count($this->_ref_sejours) != 0 || count($this->_ref_consults) != 0) {
       if (!count($this->_ref_items)) {
         if (count($this->_ref_sejours)) {
