@@ -109,6 +109,7 @@ class CPlageconsult extends CPlageHoraire {
    *
    * @param bool $withCanceled Include cancelled consults
    * @param bool $withClosed   Include closed consults
+   * @param bool $withPayees   Include payed consults
    *
    * @return CConsultation[]
    */
@@ -123,13 +124,19 @@ class CPlageconsult extends CPlageHoraire {
       $where["chrono"] = "!=  '" . CConsultation::TERMINE . "'";   
     }
 
-    if (!$withPayees) {
-      $where["patient_date_reglement"] = "IS NULL";
-    }
-
     $order = "heure";
     $consult = new CConsultation();
-    return $this->_ref_consultations = $consult->loadList($where, $order);
+    $this->_ref_consultations = $consult->loadList($where, $order);
+  
+    if (!$withPayees) {
+      foreach ($this->_ref_consultations as $key => $consult) {
+        $facture = $consult->loadRefFacture();
+        if ($facture->_id && $facture->patient_date_reglement) {
+          unset($this->_ref_consultations[$key]);
+        }
+      }
+    }
+    return $this->_ref_consultations;
   }
 
   /**
