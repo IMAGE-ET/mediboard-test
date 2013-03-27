@@ -245,8 +245,7 @@ class CService extends CMbObject {
     $service->group_id  = $group_id ? $group_id : CGroups::loadCurrent()->_id;
     $service->externe   = "1";
     $service->cancelled = "0";
-
-    $service = $service->loadMatchingObject();
+    $service->loadMatchingObject();
 
     return $service;
   }
