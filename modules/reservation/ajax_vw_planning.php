@@ -61,7 +61,7 @@ $where["operations.date"] = "= '$date_planning'";
 if (!$show_cancelled) {
   $where["operations.annulee"] = "= '0'";
 }
-$where["operations.plageop_id"] = "IS NULL";
+//$where["operations.plageop_id"] = "IS NULL";
 $where["operations.salle_id"] = CSQLDataSource::prepareIn($salles_ids);
 
 $ljoin["sallesbloc"] = "sallesbloc.salle_id = operations.salle_id";
@@ -165,11 +165,24 @@ CMbObject::massLoadFwdRef($plages, "spec_id");
 foreach ($plages as $_plage) {
   $_plage->loadRefChir();
   $_plage->loadRefSpec();
+  $_plage->loadRefsOperations();
   $salle_id = $_plage->salle_id;
   if (!isset($plages_by_salle[$salle_id])) {
     $plages_by_salle[$salle_id] = array();
   }
   $plages_by_salle[$salle_id][] = $_plage;
+
+  //load operation in salle
+  foreach ($_plage->_ref_operations as $_op) {
+    if (!$show_cancelled) {
+      if (!$_op->annulee) {
+        $operations_by_salle[$salle_id][] = $_op;
+      }
+    }
+    else {
+        $operations_by_salle[$salle_id][] = $_op;
+    }
+  }
 }
 
 // Ajout des événements (opérations)
@@ -279,35 +292,39 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       }
       $libelle .= "</span>";
     }
-    
+
+    $color = "#999";
+    $important = true;
+    $css = null;
     // Rouge
     if ($sejour->annule) {
-      $color = "#f22";
+      $color = "#CECCCD";
+      $css = "hatching";
+      $important = false;
     }
     else {
       switch ($sejour->recuse) {
         case "0":
           // Orange
           if ($sejour->type == "ambu")  {
-            $color = "#fa2";
+            $color = "#faa";
+            $css = "sejour-type-ambu";
           }
           // Vert
           else if ($sejour->type == "comp") {
-            $color = "#7f6";
+            $color = "#FFFFFF";
+            $css = "sejour-type-comp";
           }
           break;
         // Bleu
         case "-1" :
-          $color = "#68f";
-          break;
-
-        default:
-          $color = "#68f";
+          $color = "#FAFF94";
+          $css = "recuse";
           break;
       }
     }
 
-    $event = new CPlanningEvent($_operation->_guid, $debut, $duree, utf8_encode($libelle), $color, true, null, $_operation->_guid, false);
+    $event = new CPlanningEvent($_operation->_guid, $debut, $duree, utf8_encode($libelle), $color, $important, $css, $_operation->_guid, false);
     
     if ($can_edit) {
       $event->addMenuItem("edit" , utf8_encode("Modifier cette opération"));
@@ -318,6 +335,9 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     
     $event->plage["id"] = $_operation->_id;
     $event->type = "operation_horsplage";
+    if ($_operation->rank) {
+      $event->type = "operation_enplage";
+    }
     $event->draggable = $event->resizable = CCanDo::edit();
     $planning->addEvent($event);
     
@@ -325,7 +345,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $hour_debut_preop = CMbDT::subTime($_operation->presence_preop, $_operation->time_operation);
       $debut_preop = "$i $hour_debut_preop";
       $duree = CMbDT::minutesRelative($hour_debut_preop, $_operation->time_operation);
-      $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_preop, $duree, "", null, true, "hatching");
+      $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_preop, $duree, "", "#23425D", true, "hatching");
       
       $planning->addEvent($event);
     }
@@ -334,7 +354,7 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $hour_fin_postop = CMbDT::addTime($_operation->presence_postop, $fin_op);
       $debut_postop = "$i $fin_op";
       $duree = CMbDT::minutesRelative($fin_op, $hour_fin_postop);
-      $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_postop, $duree, "", null, true, "hatching");
+      $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_postop, $duree, "", "#23425D", true, "hatching");
       
       $planning->addEvent($event);
     }

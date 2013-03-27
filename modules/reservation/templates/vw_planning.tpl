@@ -215,6 +215,11 @@
     $V(form.time_operation, window.save_copy_operation.time_operation);
     onSubmitFormAjax(form, {onComplete: Control.Modal.close});
   }
+
+  openLegend = function() {
+    var url = new Url("reservation", "ajax_legend_planning");
+    url.requestModal();
+  }
 </script>
 
 <form name="editOperation" method="post">
@@ -260,8 +265,11 @@
       <th class="category" colspan="4">
         Filtre
       </th>
-      <th class="category" colspan="2">
+      <th class="category">
         Interface
+      </th>
+      <th class="category">
+        <a href="#" class="button search" onclick="openLegend();">{{tr}}Legend{{/tr}}</a>
       </th>
     </tr>
     <tr>

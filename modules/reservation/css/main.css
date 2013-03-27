@@ -1,20 +1,45 @@
-.planning .operation_horsplage:hover {
-  z-index: 100;
-}
-
-.planning .operation_horsplage {
-  z-index:20;
-}
-
 .planning .pause {
   z-index:11;
 }
 
 .planning .event:hover {
   box-shadow: none;
+  opacity: 1;
 }
 
+/* PLAGES d'operation */
+.planning .operation_horsplage,.planning .operation_enplage {
+  z-index:20;
+}
+
+.planning .operation_horsplage:hover,.planning .operation_enplage:hover {
+  z-index: 100;
+}
+
+
+/* HORS PLAGE */
 .planning .operation_horsplage:hover .body {
-  border:solid 1px #888;
+  border-left:solid 1px #888;
   box-shadow: 0 1px 4px black;
+}
+
+.planning .operation_horsplage, .planning .operation_horsplage:hover {
+  border-right:dotted 3px red;
+}
+
+/* EN PLAGE */
+.planning .operation_enplage, .planning .operation_enplage:hover {
+  border-right:dotted 3px #1dff00;
+}
+
+.planning .operation_enplage:hover .body {
+  box-shadow: 0 1px 4px green;
+}
+
+.planning .recuse {
+  border-left:solid 3px #3b5aff !important;
+}
+
+#planning_interv .planning tr:hover {
+  border:solid 3px black!important;
 }

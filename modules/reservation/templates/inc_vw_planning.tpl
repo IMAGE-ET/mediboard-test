@@ -26,7 +26,6 @@
     line-height: 120% !important;
   }
 </style>
-
 <div id="planningInterventions">
   {{mb_include module=ssr template=inc_vw_week}}
 </div>
