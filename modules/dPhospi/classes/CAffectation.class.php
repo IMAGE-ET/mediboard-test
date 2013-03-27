@@ -159,8 +159,8 @@ class CAffectation extends CMbObject {
       }
     }
 
-    if (!$_affectation->lit_id) {
-      $this->_view = $_affectation->loadRefService()->_view;
+    if (!$this->lit_id) {
+      $this->_view = $this->loadRefService()->_view;
     }
     else {
       $this->loadRefLit()->loadCompleteView();
