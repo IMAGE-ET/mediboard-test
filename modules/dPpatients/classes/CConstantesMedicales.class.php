@@ -228,6 +228,11 @@ class CConstantesMedicales extends CMbObject {
       "unit" => "",
       "min" => 0, "max" => 5
     ),
+    "douleur_evs" => array(
+      "type" => "physio",
+      "unit" => "",
+      "min" => 0, "max" => 4,
+    ),
     "ecpa_avant" => array(
       "type" => "physio",
       "unit" => "",
@@ -244,7 +249,7 @@ class CConstantesMedicales extends CMbObject {
       "min" => 0, "max" => 32,
       "plot" => true,
     ),
-
+    
     // Vision
     "vision_oeil_droit" => array(
       "type" => "physio",
@@ -605,6 +610,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['douleur_en']             = 'float min|0 max|10';
     $specs['douleur_doloplus']       = 'num min|0 max|30';
     $specs['douleur_algoplus']       = 'num min|0 max|5';
+    $specs['douleur_evs']            = 'num min|0 max|4';
     $specs['ecpa_avant']             = 'num min|0 max|16';
     $specs['ecpa_apres']             = 'num min|0 max|16';
     $specs['_ecpa_total']            = 'num min|0 max|32';

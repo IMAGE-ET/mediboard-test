@@ -2080,11 +2080,15 @@ class CSetupdPpatients extends CSetup {
       ADD `redon_5` FLOAT UNSIGNED AFTER `redon_4`;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.77";
-
+    $this->makeRevision("1.77");
+    
+    $query = "ALTER TABLE `constantes_medicales` 
+                ADD `douleur_evs` TINYINT (4) UNSIGNED";
+    $this->addQuery($query);
+    $this->mod_version = "1.78";
+    
     $query = "SHOW TABLES LIKE 'communes_suisse'";
     $this->addDatasource("INSEE", $query);
-
-
+    
   }
 }
