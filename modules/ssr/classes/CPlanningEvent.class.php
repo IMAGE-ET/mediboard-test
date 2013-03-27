@@ -24,6 +24,7 @@ class CPlanningEvent  {
   var $end       = null;
   var $length    = null;
   var $day       = null;
+  var $below     = false;
   var $draggable = false;
   var $resizable = false;
   var $disabled  = false;

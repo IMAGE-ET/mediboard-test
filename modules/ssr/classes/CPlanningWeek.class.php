@@ -168,7 +168,8 @@ class CPlanningWeek {
       foreach ($_events_by_day as $_events_by_hour) {
         foreach ($_events_by_hour as $_event) {
 
-          if (stripos($_event->guid, "plage") !== false) {
+          //used as background, skip the rearrange
+          if ($_event->below) {
             $_event->width = .9;
             $_event->offset = .1;
             continue;
