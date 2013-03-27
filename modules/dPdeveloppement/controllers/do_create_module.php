@@ -23,6 +23,11 @@ $licenses = array(
 
 $license = CValue::read($licenses, $license, $licenses["GNU GPL"]);
 
+// Only alphanumeric caracters
+$name_canonical = preg_replace("/\W/", "", $name_canonical);
+$name_short = preg_replace("/\W/", "", $name_short);
+$name_long = preg_replace("/\W/", "", $name_long);
+
 if (is_dir("modules/$name_canonical")) {
   CAppui::stepAjax("Module '$name_canonical' existe déjà", UI_MSG_ERROR);
 }
