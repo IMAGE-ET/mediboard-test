@@ -12,11 +12,6 @@
   z-index:20;
 }
 
-.planning .operation_horsplage:hover,.planning .operation_enplage:hover {
-  z-index: 100;
-}
-
-
 /* HORS PLAGE */
 .planning .operation_horsplage:hover .body {
   border-left:solid 1px #888;

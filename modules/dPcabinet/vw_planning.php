@@ -161,6 +161,7 @@ for ($i = 0; $i < 7; $i++) {
       $color = "#EDC";
     }
     $event = new CPlanningEvent($_plage->_guid, $debute, CMbDT::minutesRelative($_plage->debut, $_plage->fin), $libelle, $color, true, null, null);
+    $event->useHeight = true;
 
     //Menu des évènements
     $event->addMenuItem("list", "Voir le contenu de la plage");
@@ -194,6 +195,7 @@ for ($i = 0; $i < 7; $i++) {
   }    
 }
 
+$planning->allow_superposition = false;
 $planning->rearrange();
 
 // Création du template

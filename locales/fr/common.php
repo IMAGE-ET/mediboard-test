@@ -177,6 +177,7 @@ $locales['Keywords'] = 'Mots clés';
 $locales['Language'] = 'Langage';
 $locales['Last connection'] = 'Dernière connexion';
 $locales['Latest update'] = 'Màj il y a';
+$locales['Legend'] = 'Légende';
 $locales['Length'] = 'Longueur';
 $locales['Link'] = 'Associer';
 $locales['Loading in progress'] = 'Chargement en cours';

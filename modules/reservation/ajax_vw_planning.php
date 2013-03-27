@@ -400,7 +400,8 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
     $libelle = CMbString::htmlEntities($_plage->chir_id ? $_plage->_ref_chir->_view : $_plage->_ref_spec->_view);
     
     $event = new CPlanningEvent($_plage->_guid, $debut, $duree, $libelle, "#efbf99", true, null, $_plage->_guid, false);
-    
+
+    $event->below = true;
     $event->type = "commentaire_planning";
     $event->plage["id"] = $_plage->_id;
 
