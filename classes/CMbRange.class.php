@@ -170,11 +170,10 @@ abstract class CMbRange {
    * @param boolean $permissive [optional]
    *
    * @return array $lines lignes avec les keys positionned
-   * @TODO : sort values from longer to shorter to optimize render (param ?)
    */
   static function rearrange($intervals, $permissive = true) {
     $lines = array();
-    array_multisort($intervals, SORT_ASC, CMbArray::pluck($intervals, "lower")); //order by lower elements ASC
+
     foreach ($intervals as $_interval_id => $_interval) {
       foreach ($lines as &$_line) {
         foreach ($_line as $_positioned_id) {
@@ -183,7 +182,6 @@ abstract class CMbRange {
             continue 2; // Next line
           }
         }
-          
         $_line[] = $_interval_id;
         continue 2; // Next interval
       }
