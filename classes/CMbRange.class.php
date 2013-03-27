@@ -166,22 +166,38 @@ abstract class CMbRange {
   /**
    * rearrange a list of object in an optimized list
    * 
-   * @param array   $intervals  $intervals key => array(lower, upper);
-   * @param boolean $permissive [optional]
+   * @param array   $intervals   $intervals key => array(lower, upper);
+   * @param boolean $permissive  [optional]
+   * @param array   &$uncollided array of uncollided elements
    *
    * @return array $lines lignes avec les keys positionned
+   * @TODO : find a better way for uncollided
    */
-  static function rearrange($intervals, $permissive = true) {
+  static function rearrange($intervals, $permissive = true, &$uncollided = array()) {
+    if (!count($intervals)) {
+      return array();
+    }
     $lines = array();
-
+    $uncollided = $intervals;
+    // multisort ruins the keys if numeric
+    if (!is_numeric(reset(array_keys($intervals)))) {
+      array_multisort($intervals, SORT_ASC, CMbArray::pluck($intervals, "lower")); //order by lower elements ASC
+    }
     foreach ($intervals as $_interval_id => $_interval) {
       foreach ($lines as &$_line) {
+        $line_occupied = false;
         foreach ($_line as $_positioned_id) {
           $positioned = $intervals[$_positioned_id];
           if (CMbRange::collides($_interval["lower"], $_interval["upper"], $positioned["lower"], $positioned["upper"], $permissive)) {
-            continue 2; // Next line
+            $line_occupied = true;
+            unset($uncollided[$_positioned_id]);
+            //continue 2; // Next line
           }
         }
+        if ($line_occupied) {
+          continue;
+        }
+          
         $_line[] = $_interval_id;
         continue 2; // Next interval
       }
