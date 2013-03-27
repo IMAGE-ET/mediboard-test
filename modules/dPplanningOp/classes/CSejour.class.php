@@ -1547,6 +1547,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_patient;
   }
 
+  /**
+   * @param bool $cache
+   *
+   * @return CMediusers
+   */
   function loadRefPraticien($cache = true) {
     $this->_ref_praticien = $this->loadFwdRef("praticien_id", $cache);
     $this->_ref_executant = $this->_ref_praticien;
@@ -1618,6 +1623,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_transmissions;
   }
 
+  /**
+   * @param bool $important
+   *
+   * @return CObservationMedicale[]
+   */
   function loadRefsObservations($important = false) {
     $order = "date DESC";
     if ($important) {
@@ -1627,9 +1637,8 @@ class CSejour extends CFacturable implements IPatientRelated {
       $where["degre"]     = " = 'high'";
       return $this->_ref_observations = $obs->loadList($where, $order);
     }
-    else {
-      return $this->_ref_observations = $this->loadBackRefs("observations", $order);
-    }
+
+    return $this->_ref_observations = $this->loadBackRefs("observations", $order);
   }
 
   function countTasks() {
@@ -1845,20 +1854,24 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_prescriptions;
   }
 
+  /**
+   * @return CPrescription|null
+   */
   function loadRefPrescriptionSejour() {
     if (!CModule::getActive("dPprescription")) {
-      return;
+      return null;
     }
+
     $this->_ref_prescription_sejour = new CPrescription();
     $this->_ref_prescription_sejour->object_class = "CSejour";
     $this->_ref_prescription_sejour->object_id = $this->_id;
     $this->_ref_prescription_sejour->type = "sejour";
     $this->_ref_prescription_sejour->loadMatchingObject();
+
     return $this->_ref_prescription_sejour;
   }
 
   function loadRefsPrescripteurs() {
-    $prescription_sejour = new CPrescription();
     $this->loadRefsPrescriptions();
     foreach ($this->_ref_prescriptions as $_prescription) {
       $_prescription->getPraticiens();
@@ -1873,10 +1886,18 @@ class CSejour extends CFacturable implements IPatientRelated {
     }
   }
 
+  /**
+   * @return CReplacement[]
+   */
   function loadRefReplacements(){
     return $this->_ref_replacements = $this->loadBackRefs("replacements");
   }
 
+  /**
+   * @param int $conge_id
+   *
+   * @return CReplacement
+   */
   function loadRefReplacement($conge_id) {
     $this->_ref_replacement = new CReplacement;
     $this->_ref_replacement->sejour_id = $this->_id;
@@ -1885,6 +1906,9 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_replacement;
   }
 
+  /**
+   * @return CGrossesse
+   */
   function loadRefGrossesse() {
     return $this->_ref_grossesse = $this->loadFwdRef("grossesse_id");
   }
@@ -2271,6 +2295,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $curr_affectation;
   }
 
+  /**
+   * @param string $order
+   *
+   * @return CAffectation[]
+   */
   function loadRefsAffectations($order = "sortie DESC") {
     $affectations = $this->loadBackRefs("affectations", $order);
 
@@ -2344,6 +2373,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $create;
   }
 
+  /**
+   * @param array $where
+   *
+   * @return COperation[]
+   */
   function loadRefsOperations($where = array()) {
     $where["sejour_id"] = "= '$this->_id'";
     $order = "date ASC";

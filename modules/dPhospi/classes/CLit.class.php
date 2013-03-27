@@ -16,7 +16,7 @@ class CLit extends CMbObject {
   static $_prefixe = null;
   
   // DB Table key
-  var $lit_id = null;	
+  var $lit_id = null;
   
   // DB References
   var $chambre_id = null;
@@ -99,13 +99,19 @@ class CLit extends CMbObject {
     $chambre->loadRefsFwd();
     $this->_view = $this->nom_complet ? self::$_prefixe . $this->nom_complet : "{$chambre->_ref_service->_view} $chambre->_view $this->_shortview";
   }
-  
+
+  /**
+   * @return CChambre
+   */
   function loadRefChambre() {
     $this->_ref_chambre =  $this->loadFwdRef("chambre_id", true);
     $this->_view = $this->nom_complet ? self::$_prefixe . $this->nom_complet : "{$this->_ref_chambre->_view} - $this->_shortview";
     return $this->_ref_chambre;
   }
-  
+
+  /**
+   * @return CService
+   */
   function loadRefService() {
     if (!$this->_ref_chambre) {
       $this->loadRefChambre();
@@ -119,7 +125,7 @@ class CLit extends CMbObject {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_chambre) {
+    if (!$this->_ref_chambre) {
       $this->loadRefsFwd();
     }
     return ($this->_ref_chambre->getPerm($permType));
@@ -174,7 +180,9 @@ class CLit extends CMbObject {
   
   /**
    * Construit le tag Lit en fonction des variables de configuration
-   * @param $group_id Permet de charger l'id externe d'un lit pour un établissement donné si non null
+   *
+   * @param int $group_id Permet de charger l'id externe d'un lit pour un établissement donné si non null
+   *
    * @return string
    */
   static function getTagLit($group_id = null) {

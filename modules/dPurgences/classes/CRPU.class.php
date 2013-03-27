@@ -78,12 +78,14 @@ class CRPU extends CMbObject {
   var $_service_entree_id       = null;
   var $_service_sortie_id       = null;
 
-
   // Object References
   var $_ref_sejour  = null;
   var $_ref_consult = null;
   var $_ref_sejour_mutation = null;
   var $_ref_motif   = null;
+
+  /** @var CLit */
+  var $_ref_box     = null;
 
   // Behaviour fields
   var $_bind_sejour = null;
@@ -548,5 +550,13 @@ class CRPU extends CMbObject {
     }
     return $this->_ref_motif = $motif;
   }
+
+  /**
+   * @param bool $cache
+   *
+   * @return CLit
+   */
+  function loadRefBox($cache = true){
+    return $this->_ref_box = $this->loadFwdRef("box_id", $cache);
+  }
 }
-?>

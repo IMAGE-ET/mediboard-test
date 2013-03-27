@@ -1,88 +1,98 @@
 <?php /* $Id:affectation.class.php 8146 2010-02-25 14:38:16Z rhum1 $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPhospi
- *	@version $Revision:8146 $
+ *  @package Mediboard
+ *  @subpackage dPhospi
+ *  @version $Revision:8146 $
  *  @author Thomas Despoix
  */
 
 /**
  * Classe CAffectation.
+ *
  * @abstract Gère les affectation des séjours dans des lits
  */
 class CAffectation extends CMbObject {
-  // DB Table key
-  var $affectation_id = null;
+  public $affectation_id;
 
   // DB References
-  var $service_id = null;
-  var $lit_id     = null;
-  var $sejour_id  = null;
-  var $parent_affectation_id = null;
-  var $function_id = null;
-  var $praticien_id = null;
-  
+  public $service_id;
+  public $lit_id;
+  public $sejour_id;
+  public $parent_affectation_id;
+  public $function_id;
+  public $praticien_id;
+
   // DB Fields
-  var $entree   = null;
-  var $sortie   = null;
-  var $effectue = null;
-  var $rques    = null;
-  
-  var $uf_hebergement_id = null; // UF de responsabilité d'hébergement
-  var $uf_medicale_id    = null; // UF de responsabilité médicale
-  var $uf_soins_id       = null; // UF de responsabilité de soins
+  public $entree;
+  public $sortie;
+  public $effectue;
+  public $rques;
+
+  public $uf_hebergement_id; // UF de responsabilité d'hébergement
+  public $uf_medicale_id; // UF de responsabilité médicale
+  public $uf_soins_id; // UF de responsabilité de soins
 
   // Form Fields
-  var $_entree_relative = null;
-  var $_sortie_relative = null;
-  var $_mode_sortie     = null;
-  var $_duree           = null;
-  var $_is_prolong      = null;
-  var $_entree          = null;
-  var $_sortie          = null;
-  var $_start_prolongation = null;
-  var $_stop_prolongation = null;
-  var $_width_prolongation = null;
-  var $_affectations_enfant_ids = array();
-  
+  public $_entree_relative;
+  public $_sortie_relative;
+  public $_mode_sortie;
+  public $_duree;
+  public $_is_prolong;
+  public $_entree;
+  public $_sortie;
+  public $_start_prolongation;
+  public $_stop_prolongation;
+  public $_width_prolongation;
+  public $_affectations_enfant_ids = array();
+
   // Order fields
-  var $_patient   = null;
-  var $_praticien = null;
-  var $_chambre   = null;
+  public $_patient;
+  public $_praticien;
+  public $_chambre;
 
   // Object references
   /**
    * @var CLit
    */
-  var $_ref_lit     = null;
-  /**
-   * @var CService
-   */
-  var $_ref_service = null;
-  /**
-   * @var CSejour
-   */
-  var $_ref_sejour  = null;
-  /**
-   * @var CAffectation
-   */
-  var $_ref_prev    = null;
-  /**
-   * @var CAffectation
-   */
-  var $_ref_next    = null;
-  var $_no_synchro  = null;
-  var $_list_repas  = null;
-  var $_ref_uf_hebergement = null;
-  var $_ref_uf_medicale    = null;
-  var $_ref_uf_soins       = null;
-  var $_ref_parent_affectation = null;
-  var $_ref_praticien      = null;
-  
+  public $_ref_lit;
+
+  /** @var CService */
+  public $_ref_service;
+
+  /** @var CSejour */
+  public $_ref_sejour;
+
+  /** @var self */
+  public $_ref_prev;
+
+  /** @var self */
+  public $_ref_next;
+
+  public $_no_synchro;
+  public $_list_repas;
+
+  /** @var CUniteFonctionnelle */
+  public $_ref_uf_hebergement;
+
+  /** @var CUniteFonctionnelle */
+  public $_ref_uf_medicale;
+
+  /** @var CUniteFonctionnelle */
+  public $_ref_uf_soins;
+
+  /** @var self */
+  public $_ref_parent_affectation;
+
+  /** @var CAffectation[] */
+  public $_ref_affectations_enfant;
+
+  /** @var CMediusers */
+  public $_ref_praticien;
+
   // EAI Fields
-  var $_eai_initiateur_group_id  = null; // group initiateur du message EAI
-  
+  public $_eai_initiateur_group_id; // group initiateur du message EAI
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'affectation';
@@ -113,18 +123,18 @@ class CAffectation extends CMbObject {
     $specs["sortie"]                = "dateTime notNull";
     $specs["effectue"]              = "bool";
     $specs["rques"]                 = "text";
-    
+
     $specs["uf_hebergement_id"] = "ref class|CUniteFonctionnelle seekable";
     $specs["uf_medicale_id"]    = "ref class|CUniteFonctionnelle seekable";
     $specs["uf_soins_id"]       = "ref class|CUniteFonctionnelle seekable";
 
     $specs["_duree"]       = "num";
     $specs["_mode_sortie"] = "enum list|normal|mutation|transfert|deces default|normal";
-    
+
     $specs["_patient"]     = "str";
     $specs["_praticien"]   = "str";
     $specs["_chambre"]     = "str";
-    
+
     return $specs;
   }
 
@@ -134,7 +144,7 @@ class CAffectation extends CMbObject {
     $sejour->loadRefPraticien();
     $sejour->loadRefPatient()->loadRefPhotoIdentite();
     $affectations = $sejour->loadRefsAffectations();
-    
+
     if (is_array($affectations) && count($affectations)) {
       foreach ($affectations as $_affectation) {
         $_affectation->loadRefLit()->loadCompleteView();
@@ -142,16 +152,16 @@ class CAffectation extends CMbObject {
         $_affectation->loadRefParentAffectation();
       }
     }
-    
+
     $this->loadRefLit()->loadCompleteView();
     $this->_view = $this->_ref_lit->_view;
     $this->loadRefParentAffectation();
-    
+
     foreach ($sejour->loadRefsOperations() as $_operation) {
       $_operation->loadRefChir();
       $_operation->loadRefPlageOp();
     }
-    
+
     $sejour->getDroitsCMU();
   }
 
@@ -164,38 +174,42 @@ class CAffectation extends CMbObject {
     if ($msg = parent::check()) {
       return $msg;
     }
-    
+
     //TODO: utiliser moreThan
     $this->completeField("entree");
     $this->completeField("sortie");
     if ($this->sortie < $this->entree) {
       return "La date de sortie doit être supérieure ou égale à la date d'entrée";
     }
-    
+
     if ($msg = $this->checkCollisions()) {
       return $msg;
     }
-    
+
     return null;
   }
-  
+
   /**
-   * @return string Store-like message
+   * @return string|null Store-like message
    */
   function checkCollisions(){
     $this->completeField("sejour_id");
-    if (!$this->sejour_id) return;
-    
+    if (!$this->sejour_id) {
+      return null;
+    }
+
     $affectation = new CAffectation;
     $affectation->sejour_id = $this->sejour_id;
     $affectations = $affectation->loadMatchingList();
     unset($affectations[$this->_id]);
-    
+
     foreach ($affectations as $_aff) {
       if ($this->collide($_aff)) {
         return "Placement déjà effectué";
       }
     }
+
+    return null;
   }
 
   function deleteOne() {
@@ -207,43 +221,45 @@ class CAffectation extends CMbObject {
     if (!$this->sejour_id) {
       return $this->deleteOne();
     }
-    
+
     if ($this->loadRefSejour()->type == "seances") {
       return $this->deleteOne(); 
     }
-    
+
     $this->loadRefsAffectations();
-    
+
     $entree = $this->entree;
     $sortie = $this->sortie;
-    
+
     if ($msg = $this->deleteOne()) {
       return $msg;
     }
-    
+
     // On positionne la sortie de la précédente affectation à l'affectation que l'on supprime 
     $prev = $this->_ref_prev;
     if (isset($prev->_id)) {
       $prev->sortie = $sortie;
-      
+
       if ($msg = $prev->store()) {
         return $msg;
       }
-      
+
       return null;
     }
-    
+
     // On positionne l'entrée de la suivante affectation à l'affectation que l'on supprime 
     $next = $this->_ref_next;
     if (isset($next->_id)) {
       $next->entree = $entree;
-      
+
       if ($msg = $next->store()) {
         return $msg;
       }
-      
+
       return null;
-    } 
+    }
+
+    return null;
   }
 
   function store() {
@@ -251,19 +267,19 @@ class CAffectation extends CMbObject {
     $create_affectations = false;
     $sejour = $this->loadRefSejour();
     $sejour->loadRefPatient();
-    
+
     // Conserver l'ancien objet avant d'enregistrer
     $old = new CAffectation();
     if ($this->_id) {
       $old->load($this->_id);
       $old->loadRefsAffectations();
     }
-    
+
     // Gestion du service_id
     if ($this->lit_id) {
       $this->service_id = $this->loadRefLit()->loadRefChambre()->service_id;
     }
-    
+
     // Gestion des UFs
     $this->makeUF();
 
@@ -277,7 +293,7 @@ class CAffectation extends CMbObject {
         !$this->_ref_next->_id) {
       $create_affectations = true;
     }
-    
+
     // Enregistrement standard
     if ($msg = parent::store()) {
       return $msg;
@@ -289,7 +305,7 @@ class CAffectation extends CMbObject {
       $naissances = $grossesse->loadRefsNaissances();
 
       $sejours = CMbObject::massLoadFwdRef($naissances, "sejour_enfant_id");
-      
+
       foreach ($sejours as $_sejour) {
         $_affectation = new CAffectation;
         $_affectation->lit_id = $this->lit_id;
@@ -302,12 +318,12 @@ class CAffectation extends CMbObject {
         }
       }
     }
-    
+
     // Pas de problème de synchro pour les blocages de lits
     if (!$this->sejour_id || $this->_no_synchro) {
       return $msg;
     }
-    
+
     // Modification de la date d'admission et de la durée de l'hospi
     $this->load($this->affectation_id);
 
@@ -318,11 +334,11 @@ class CAffectation extends CMbObject {
     else {
       $this->loadRefsAffectations();
     }
-     
+
     $changeSejour = 0;
     $changePrev   = 0;
     $changeNext   = 0;
-    
+
     $prev = $this->_ref_prev;
     $next = $this->_ref_next;
 
@@ -338,7 +354,7 @@ class CAffectation extends CMbObject {
       $prev->sortie = $this->entree;
       $changePrev = 1;
     }
-    
+
     // Mise à jour vs la sortie
     if (!$next->_id) {
       if ($this->sortie != $sejour->_sortie) {
@@ -355,7 +371,7 @@ class CAffectation extends CMbObject {
     if ($changePrev) {
       $prev->store();
     }
-    
+
     if ($changeNext) {
       $next->store();
     }
@@ -367,23 +383,38 @@ class CAffectation extends CMbObject {
         return $msg;
       }
     }
-    
+
     return $msg;
   }
 
-  function loadRefLit($cache = 1) {
+  /**
+   * @param bool $cache
+   *
+   * @return CLit
+   */
+  function loadRefLit($cache = true) {
     return $this->_ref_lit = $this->loadFwdRef("lit_id", $cache);
   }
 
-  function loadRefSejour($cache = 1) {
-    return $this->_ref_sejour =  $this->loadFwdRef("sejour_id", $cache);
+  /**
+   * @param bool $cache
+   *
+   * @return CSejour
+   */
+  function loadRefSejour($cache = true) {
+    return $this->_ref_sejour = $this->loadFwdRef("sejour_id", $cache);
   }
 
-  function loadRefService($cache = 1) {
+  /**
+   * @param bool $cache
+   *
+   * @return CService
+   */
+  function loadRefService($cache = true) {
     return $this->_ref_service = $this->loadFwdRef("service_id", $cache);
   }
 
-  function loadRefsFwd($cache = 1) {
+  function loadRefsFwd($cache = true) {
     $this->loadRefLit($cache);
     $this->loadView();
     $this->loadRefSejour($cache);
@@ -397,7 +428,7 @@ class CAffectation extends CMbObject {
       "sortie" => "= '$this->entree'"
     );
 
-    $this->_ref_prev = new CAffectation;
+    $this->_ref_prev = new CAffectation();
     $this->_ref_prev->loadObject($where);
 
     $where = array (
@@ -406,14 +437,17 @@ class CAffectation extends CMbObject {
       "entree" => "= '$this->sortie'"
     );
 
-    $this->_ref_next = new CAffectation;
+    $this->_ref_next = new CAffectation();
     $this->_ref_next->loadObject($where);
   }
-  
+
+  /**
+   * @return self[]
+   */
   function loadRefsAffectationsEnfant() {
     return $this->_ref_affectations_enfant = $this->loadBackRefs("affectations_enfant");
   }
-  
+
   function getPerm($permType) {
     $lit = $this->loadRefLit();
     $sejour = $this->loadRefSejour();
@@ -438,50 +472,61 @@ class CAffectation extends CMbObject {
     if (!$listTypeRepas) {
       $listTypeRepas = new CTypeRepas;
       $order = "debut, fin, nom";
-      $listTypeRepas = $listTypeRepas->loadList(null,$order);
+      $listTypeRepas = $listTypeRepas->loadList(null, $order);
     }
 
     $where                   = array();
     $where["date"]           = $this->_spec->ds->prepare(" = %", $date);
     $where["affectation_id"] = $this->_spec->ds->prepare(" = %", $this->affectation_id);
-    foreach ($listTypeRepas as $keyType=>$typeRepas) {
-      $where["typerepas_id"] = $this->_spec->ds->prepare("= %",$keyType);
+    foreach ($listTypeRepas as $keyType => $typeRepas) {
+      $where["typerepas_id"] = $this->_spec->ds->prepare("= %", $keyType);
       $repasDuJour = new CRepas;
       $repasDuJour->loadObject($where);
       $repas[$keyType] = $repasDuJour;
     }
   }
-  
+
+  /**
+   * @return self
+   */
   function loadRefParentAffectation() {
     return $this->_ref_parent_affectation = $this->loadFwdRef("parent_affectation_id", true);
   }
-  
+
+  /**
+   * @param bool $cache
+   *
+   * @return CMediusers
+   */
   function loadRefPraticien($cache = true) {
     return $this->_ref_praticien = $this->loadFwdRef("praticien_id", $cache);
   }
-    
+
   function makeUF() {
     $this->completeField("lit_id", "uf_hebergement_id", "uf_soins_id", "uf_medicale_id");
     $this->loadRefsAffectations();
     $this->loadRefLit()->loadRefChambre()->loadRefService();
-    
+
     $lit       = $this->_ref_lit;
     $chambre   = $lit->_ref_chambre;
     $service   = $chambre->_ref_service;
     $sejour    = $this->loadRefSejour();
     $prev_aff  = $this->_ref_prev;
-    $modified  = false;
-    $ljoin = array("uf" => "uf.uf_id = affectation_uf.uf_id");
+    $ljoin = array(
+      "uf" => "uf.uf_id = affectation_uf.uf_id",
+    );
 
     if (!$this->uf_hebergement_id) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
-      $where = array("uf.type" => "= 'hebergement'");
- 
+      $where = array(
+        "uf.type" => "= 'hebergement'",
+      );
+
       if (!$affectation_uf->uf_id) {
         $where["object_id"]    = "= '$lit->_id'";
         $where["object_class"] = "= 'CLit'";
         $affectation_uf->loadObject($where, null, null, $ljoin);
-        
+
         if (!$affectation_uf->_id) {
           $where["object_id"]    = "= '$chambre->_id'";
           $where["object_class"] = "= 'CChambre'";
@@ -497,34 +542,37 @@ class CAffectation extends CMbObject {
 
       $this->uf_hebergement_id = $affectation_uf->uf_id;      
     }
-    
+
     if (!$this->uf_soins_id) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
-      $where = array("uf.type" => "= 'soins'");
-      
+      $where = array(
+        "uf.type" => "= 'soins'",
+      );
+
       if (!$prev_aff->_id) {
         $affectation_uf->uf_id = $sejour->uf_soins_id;
       }
-      
+
       if (!$affectation_uf->uf_id) {
         $where["object_id"]    = "= '$service->_id'";
         $where["object_class"] = "= 'CService'";
         $affectation_uf->loadObject($where, null, null, $ljoin);
       }
-      
+
       $this->uf_soins_id = $affectation_uf->uf_id;
     }
-    
+
     if (!$this->uf_medicale_id) {
       $affectation_uf = new CAffectationUniteFonctionnelle();
-      $where = array("uf.type" => "= 'medicale'");
-      
+      $where = array(
+        "uf.type" => "= 'medicale'",
+      );
+
       if (!$prev_aff->_id) {
         $affectation_uf->uf_id = $sejour->uf_medicale_id;
       }
-      
+
       if (!$affectation_uf->uf_id) {
-        $praticien = new CMediusers();
         if (!$this->praticien_id) {
           $praticien = $this->loadRefSejour()->loadRefPraticien();
         }
@@ -535,7 +583,7 @@ class CAffectation extends CMbObject {
         $where["object_id"]    = "= '$praticien->_id'";
         $where["object_class"] = "= 'CMediusers'";
         $affectation_uf->loadObject($where, null, null, $ljoin);
-        
+
         if (!$affectation_uf->_id) {
           $function = $praticien->_ref_function;
           $where["object_id"]    = "= '$function->_id'";
@@ -543,29 +591,47 @@ class CAffectation extends CMbObject {
           $affectation_uf->loadObject($where, null, null, $ljoin);
         }
       }
-      
+
       $this->uf_medicale_id = $affectation_uf->uf_id;
     }
   }
-  
+
   function loadRefUfs($cache = 1) {
     $this->loadRefUFHebergement($cache);
     $this->loadRefUFMedicale($cache);
     $this->loadRefUFSoins($cache);
   }
-  
+
+  /**
+   * @param bool $cache
+   *
+   * @return CUniteFonctionnelle
+   */
   function loadRefUFHebergement($cache = true) {
     return $this->_ref_uf_hebergement = $this->loadFwdRef("uf_hebergement_id", $cache);
   }
-  
+
+  /**
+   * @param bool $cache
+   *
+   * @return CUniteFonctionnelle
+   */
   function loadRefUFMedicale($cache = true) {
     return $this->_ref_uf_medicale = $this->loadFwdRef("uf_medicale_id", $cache);
   }
-  
+
+  /**
+   * @param bool $cache
+   *
+   * @return CUniteFonctionnelle
+   */
   function loadRefUFSoins($cache = true) {
     return $this->_ref_uf_soins = $this->loadFwdRef("uf_soins_id", $cache);
   }
-  
+
+  /**
+   * @return CUniteFonctionnelle[]
+   */
   function getUFs(){
     $this->loadRefUfs();
 
@@ -575,17 +641,17 @@ class CAffectation extends CMbObject {
       "soins"       => $this->_ref_uf_soins,
     );
   }
-  
+
   function getMovementType() {
     $sejour = $this->loadRefSejour();
-    
+
     return $sejour->getMovementType();
   }
-  
+
   function isLast() {
     $this->loadRefsAffectations();
-    
+
     return !$this->_ref_next->_id;
   }
 }
-?>
+
