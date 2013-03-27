@@ -236,7 +236,7 @@ function print_infos($var, $name = '') {
     $ret.= " - <a href='?$http_query' target='_blank'>Link</a>";
   }
   
-  $info = substr(print_r($var, true), 6);
+  $info = substr(print_r(array_map_recursive(array("CMbString", "HTMLEntities"), $var), true), 6);
   $ret.= "<span style='display:none;'>$info</span></pre>";
   return $ret;
 }
