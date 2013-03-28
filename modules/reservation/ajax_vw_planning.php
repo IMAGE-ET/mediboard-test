@@ -174,6 +174,9 @@ foreach ($plages as $_plage) {
 
   //load operation in salle
   foreach ($_plage->_ref_operations as $_op) {
+    if ($praticien_id != $_op->chir_id && $praticien_id != "") {
+      continue;
+    }
     if (!$show_cancelled) {
       if (!$_op->annulee) {
         $operations_by_salle[$salle_id][] = $_op;
