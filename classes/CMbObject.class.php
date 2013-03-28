@@ -137,16 +137,26 @@ class CMbObject extends CStoredObject {
       $this->_ref_documents = $document->loadMatchingList("nom");
       $is_editable = $this->docsEditable();
 
-      foreach ($this->_ref_documents as $_doc) {
-        $_doc->_is_editable = $is_editable;
+      if (!$can->admin) {
+        $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
+        $days = isset($days[$this->_class]) ?
+          $days[$this->_class] : $days["base"];
 
-        // Document verrouillé
-        if (!$can->admin && $_doc->valide && $_doc->author_id != $curr_user->_id) {
-          $_doc->_is_editable = false;
-        }
+        foreach ($this->_ref_documents as $_doc) {
+          $_doc->_is_editable = $is_editable;
 
-        if (!$_doc->canRead()) {
-           unset($this->_ref_documents[$_doc->_id]);
+          $last_log = $_doc->loadLastLogForContent();
+
+          // Document verrouillé
+          if (($_doc->valide && $_doc->author_id != $curr_user->_id) ||
+              (CMbDT::daysRelative($last_log->date, CMbDT::dateTime()) > $days)
+          ) {
+            $_doc->_is_editable = false;
+          }
+
+          if (!$_doc->canRead()) {
+             unset($this->_ref_documents[$_doc->_id]);
+          }
         }
       }
       return count($this->_ref_documents);

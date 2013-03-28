@@ -1391,4 +1391,12 @@ class CCompteRendu extends CDocumentItem {
     
     return $model;
   }
+
+  function loadLastLogForContent() {
+    $log = new CUserLog();
+    $log->object_class = "CContentHTML";
+    $log->object_id = $this->content_id;
+    $log->loadMatchingObject("date DESC");
+    return $log;
+  }
 }
