@@ -319,10 +319,10 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
     $event = new CPlanningEvent($_operation->_guid, $debut, $duree, utf8_encode($libelle), "#$color", $important, $css, $_operation->_guid, false);
     
     if ($can_edit) {
-      $event->addMenuItem("edit" , "Modifier cette opération");
-      $event->addMenuItem("cut"  , "Couper cette opération");
-      $event->addMenuItem("copy" , "Copier cette opération");
-      $event->addMenuItem("clock", "Modifier les dates d'entrée et sortie du séjour");
+      $event->addMenuItem("edit" , utf8_encode("Modifier cette opération"));
+      $event->addMenuItem("cut"  , utf8_encode("Couper cette opération"));
+      $event->addMenuItem("copy" , utf8_encode("Copier cette opération"));
+      $event->addMenuItem("clock", utf8_encode("Modifier les dates d'entrée et sortie du séjour"));
     }
     
     $event->plage["id"] = $_operation->_id;
@@ -373,8 +373,8 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
     $event->plage["id"] = $_commentaire->_id;
     
     if ($can_edit) {
-      $event->addMenuItem("edit" , "Modifier ce commentaire");
-      $event->addMenuItem("copy" , "Copier ce commentaire");
+      $event->addMenuItem("edit" , utf8_encode("Modifier ce commentaire"));
+      $event->addMenuItem("copy" , utf8_encode("Copier ce commentaire"));
     }
     
     $planning->addEvent($event);
