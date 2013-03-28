@@ -333,14 +333,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   function addProfessionnelSante($elParent, $mbMediuser) {
     $this->addElement($elParent, "numeroAdeli", $mbMediuser->adeli);
     $identification = $this->addElement($elParent, "identification");
-    $id400 = new CIdSante400();
-    $id400->object_class = "CMediusers";
-    $id400->object_id    = $mbMediuser->_id;
-    $id400->tag          = $this->getTagMediuser();
-    if ($id400->tag) {
-      $id400->loadMatchingObject();
-    }
-    $this->addElement($identification, "code", $id400->_id ? $id400->id400 : "prat$mbMediuser->user_id");
+
+    $idex = CIdSante400::getMatchFor($mbMediuser, $this->getTagMediuser());
+
+    $this->addElement($identification, "code", $idex->_id ? $idex->id400 : "prat$mbMediuser->user_id");
     $this->addElement($identification, "libelle", $mbMediuser->_view);
     $personne = $this->addElement($elParent, "personne");
     $this->addElement($personne, "nomUsuel", $mbMediuser->_user_last_name);
@@ -793,11 +789,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($medecin, "lien", $lien);
     $this->addElement($medecin, "numeroAdeli", $praticien->adeli);
     $identification = $this->addElement($medecin, "identification");
-    $id400 = new CIdSante400();
-    $id400->object_class = "CMediusers";
-    $id400->object_id    = $praticien->_id;
-    $id400->tag          = $this->getTagMediuser();
-    $this->addElement($identification, "code", $id400->loadMatchingObject() ? $id400->id400 : $praticien->_id);
+
+    $idex = CIdSante400::getMatchFor($praticien, $this->getTagMediuser());
+
+    $this->addElement($identification, "code", $idex->_id ? $id400->id400 : $praticien->_id);
     $this->addElement($identification, "libelle", $praticien->_view);
     $personne = $this->addElement($medecin, "personne");
     $this->addPersonne($personne, $praticien);
@@ -805,13 +800,14 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function addMedecinResponsable($elParent, $praticien) {
     $medecinResponsable = $this->addElement($elParent, "medecinResponsable");
+
     $this->addElement($medecinResponsable, "numeroAdeli", $praticien->adeli);
+
     $identification = $this->addElement($medecinResponsable, "identification");
-    $id400 = new CIdSante400();
-    $id400->object_class = "CMediusers";
-    $id400->object_id    = $praticien->_id;
-    $id400->tag          = $this->getTagMediuser();
-    $this->addElement($identification, "code", $id400->loadMatchingObject() ? $id400->id400 : $praticien->_id);
+
+    $idex = CIdSante400::getMatchFor($praticien, $this->getTagMediuser());
+
+    $this->addElement($identification, "code", $idex->_id ? $id400->id400 : $praticien->_id);
     $this->addElement($identification, "libelle", $praticien->_view);
     $personne = $this->addElement($medecinResponsable, "personne");
     $this->addPersonne($personne, $praticien);
@@ -1631,9 +1627,10 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $uniteFonctionnelleResponsable = $this->addElement($unitesFonctionnellesResponsables, "uniteFonctionnelleResponsable");
     $this->addAttribute($uniteFonctionnelleResponsable, "responsabilite", "m");
     $service = $mbAffectation->_ref_lit->_ref_chambre->_ref_service;
-    $id400Patient = new CIdSante400();
-    $id400Patient->loadLatestFor($service, $this->_ref_receiver->_tag_service);
-    $this->addTexte($uniteFonctionnelleResponsable, "code", $id400Patient->id400 ? $id400Patient->id400 : $service->_id, 10);
+
+    $idex = CIdSante400::getMatchFor($service, $this->_ref_receiver->_tag_service);
+
+    $this->addTexte($uniteFonctionnelleResponsable, "code", $idex->id400 ? $idex->id400 : $service->_id, 10);
     $this->addTexte($uniteFonctionnelleResponsable, "libelle", $service->_view, 35);
   }
 }
