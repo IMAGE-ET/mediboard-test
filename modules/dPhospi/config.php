@@ -42,6 +42,19 @@ $dPconfig["dPhospi"] = array (
   ),
   "CMovement" => array(
     "tag" => ""
+  ),
+
+  "colors" => array(
+    "comp"      => "fff",
+    "ambu"      => "ffaaaa",
+    "exte"      => "aaffaa",
+    "seances"   => "68f",
+    "ssr"       => "ffcc66",
+    "psy"       => "ff66ff",
+    "urg"       => "ff6666",
+    "consult"   => "cfdfff",
+    "default"   => "cccccc",
+    "recuse"    => "ffff66",
   )
 );
 

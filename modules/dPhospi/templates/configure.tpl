@@ -19,6 +19,7 @@
   <li><a href="#CIdSante400">{{tr}}CIdSante400-tag{{/tr}}</a></li>
   <li><a href="#CMovement">{{tr}}CMovement{{/tr}}</a></li>
   <li><a href="#config-synchro_sejour_affectation">{{tr}}config-synchro_sejour_affectation{{/tr}}</a></li>
+  <li><a href="#config-colors">{{tr}}config-color_type_hospi{{/tr}}</a></li>
 </ul>
 
 <hr class="control_tabs" />
@@ -45,4 +46,8 @@
 
 <div id="config-synchro_sejour_affectation" style="display: none;">
   {{mb_include template=inc_config_synchro_sejour_affectation}}
+</div>
+
+<div id="config-colors" style="display: none">
+  {{mb_include template=inc_config_color_type_hospi}}
 </div>
