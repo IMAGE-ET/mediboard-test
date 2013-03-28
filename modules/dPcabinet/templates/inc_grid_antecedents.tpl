@@ -217,40 +217,42 @@ Main.add(function () {
               </tr>
               <tr>
               {{foreach from=$_aides item=curr_aide name=aides}}
-                {{if $curr_aide->_owner == "user"}}
-                  {{assign var=owner_icon value="user"}}
-                {{elseif $curr_aide->_owner == "func"}}
-                  {{assign var=owner_icon value="function"}}
-                {{else}}
-                  {{assign var=owner_icon value="group"}}
+                {{if $curr_aide instanceof CAideSaisie}}
+                  {{if $curr_aide->_owner == "user"}}
+                    {{assign var=owner_icon value="user"}}
+                  {{elseif $curr_aide->_owner == "func"}}
+                    {{assign var=owner_icon value="function"}}
+                  {{else}}
+                    {{assign var=owner_icon value="group"}}
+                  {{/if}}
+                  {{assign var=i value=$smarty.foreach.aides.index}}
+                  {{assign var=text value=$curr_aide->text}}
+                  {{assign var=checked value=$curr_aide->_applied}}
+                  <td class="text {{if $checked}}opacity-30{{/if}} {{$owner_icon}}"
+                      style="cursor: pointer; width: {{$width}}%; {{if $checked}}cursor: default;{{/if}}" >
+                    <label onmouseover="ObjectTooltip.createDOM(this, 'tooltip_{{$curr_aide->_guid}}')">
+                      <input type="checkbox" {{if $checked}}checked="checked" disabled="disabled"{{/if}} id="aide_{{$curr_aide->_guid}}"
+                        onclick="addAntecedent(arguments[0] || window.event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)"/>
+                      {{$curr_aide->name}}
+                    </label>
+                    <div style="display: none" id="tooltip_{{$curr_aide->_guid}}">
+                      <table class="tbl">
+                        <tr>
+                          <th>
+                            {{$curr_aide->text}}
+                          </th>
+                        </tr>
+                        <tr>
+                          <td class="button">
+                            <button type="button" class="edit"
+                              onclick="var event = {ctrlKey: true}; addAntecedent(event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', $('aide_{{$curr_aide->_guid}}'))">Compléter</button>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </td>
+                  {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.aides.last}}</tr><tr>{{/if}}
                 {{/if}}
-                {{assign var=i value=$smarty.foreach.aides.index}}
-                {{assign var=text value=$curr_aide->text}}
-                {{assign var=checked value=$curr_aide->_applied}}
-                <td class="text {{if $checked}}opacity-30{{/if}} {{$owner_icon}}" 
-                    style="cursor: pointer; width: {{$width}}%; {{if $checked}}cursor: default;{{/if}}" >
-                  <label onmouseover="ObjectTooltip.createDOM(this, 'tooltip_{{$curr_aide->_guid}}')">
-                    <input type="checkbox" {{if $checked}}checked="checked" disabled="disabled"{{/if}} id="aide_{{$curr_aide->_guid}}"
-                      onclick="addAntecedent(arguments[0] || window.event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', this)"/> 
-                    {{$curr_aide->name}}
-                  </label>
-                  <div style="display: none" id="tooltip_{{$curr_aide->_guid}}">
-                    <table class="tbl">
-                      <tr>
-                        <th>
-                          {{$curr_aide->text}}
-                        </th>
-                      </tr>
-                      <tr>
-                        <td class="button">
-                          <button type="button" class="edit"
-                            onclick="var event = {ctrlKey: true}; addAntecedent(event, '{{$curr_aide->text|smarty:nodefaults|JSAttribute}}', '{{$type}}', '{{$appareil}}', $('aide_{{$curr_aide->_guid}}'))">Compléter</button>
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                </td>
-                {{if ($i % $numCols) == ($numCols-1) && !$smarty.foreach.aides.last}}</tr><tr>{{/if}}
               {{/foreach}}
               </tr>
             </tbody>
