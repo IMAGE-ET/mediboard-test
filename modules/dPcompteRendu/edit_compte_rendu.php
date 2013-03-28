@@ -117,16 +117,25 @@ if (!$user->isPraticien()) {
   if ($object instanceof CConsultAnesth) {
     $operation = $object->loadRefOperation();
     $anesth = $operation->_ref_anesth;
-    $user_id = null;
     if ($operation->_id && $anesth->_id) {
       $user_id = $anesth->_id;
     }
     
-    if ($user_id == null)
+    if ($user_id == null) {
       $user_id = $object->_ref_consultation->_praticien_id;
+    }
   }
+
   if ($object instanceof CCodable) {
     $user_id = $object->_praticien_id;
+  }
+
+  if ($object instanceof CSejour) {
+    $user_id = $object->praticien_id;
+  }
+
+  if ($object instanceof COperation) {
+    $user_id = $object->chir_id;
   }
 
   $user->load($user_id);
