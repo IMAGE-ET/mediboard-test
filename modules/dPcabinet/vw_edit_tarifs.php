@@ -1,11 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Thomas Despoix
-*/
+ * @package Mediboard
+ * @subpackage dPcabinet
+ * @version $Revision$
+ * @author Thomas Despoix
+ */
 
 CCanDo::checkEdit();
 
@@ -20,6 +20,7 @@ if (!$tarif->getPerm(PERM_EDIT)) {
 $tarif->loadRefsNotes();
 $tarif->getSecteur1Uptodate();
 $tarif->loadView();
+$tarif->getPrecodeReady();
 
 // L'utilisateur est-il praticien ?
 $user = CAppUI::$user;
@@ -41,13 +42,13 @@ if ($user->isPraticien()) {
 
 if ($user->isSecretaire()) {
   $prat_id = CValue::getOrSession("prat_id");
-  
+
   // Toujours choisir le praticien du tarif choisi
   if ($tarif->_id && $tarif->chir_id) {
     $prat_id = $tarif->chir_id;
     CValue::setSession("prat_id", $prat_id);
   }
-  
+
   if ($prat_id) {
     $prat->load($prat_id);
     $prat->loadRefFunction();
@@ -66,9 +67,10 @@ if ($listeTarifsChir) {
 }
 
 // Liste des tarifs de la spécialité
-$where = array();
-$where["chir_id"] = "IS NULL";
+$where                = array();
+$where["chir_id"]     = "IS NULL";
 $where["function_id"] = "= '$prat->function_id'";
+
 $listeTarifsSpe = new CTarif();
 $listeTarifsSpe = $listeTarifsSpe->loadList($where, $order);
 foreach ($listeTarifsSpe as $_tarif) {
@@ -85,7 +87,7 @@ if ($user->_is_secretaire) {
 else {
   $listPrat = array($user->_id => $user);
 }
-  
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -97,5 +99,3 @@ $smarty->assign("prat"           , $prat);
 $smarty->assign("listPrat"       , $listPrat);
 
 $smarty->display("vw_edit_tarifs.tpl");
-
-?>
