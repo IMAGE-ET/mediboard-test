@@ -31,16 +31,22 @@
     url.requestUpdate("planning");
   }
   
-  modifIntervention = function(date, hour, salle_id, operation_id) {
-    var url = new Url("dPplanningOp", "vw_edit_urgence");
-    
+  modifIntervention = function(date, hour, salle_id, operation_id, enplage) {
+    if (enplage) {
+      var url = new Url("dPplanningOp", "vw_edit_planning");
+    }
+    else {
+      var url = new Url("dPplanningOp", "vw_edit_urgence");
+      url.addParam("date_urgence", date);
+      url.addParam("hour_urgence", hour);
+      url.addParam("salle_id"    , salle_id);
+      url.addParam("min_urgence" , "00");
+    }
+
     url.addParam("operation_id", operation_id);
-    url.addParam("date_urgence", date);
-    url.addParam("hour_urgence", hour);
-    url.addParam("salle_id"    , salle_id);
-    url.addParam("min_urgence" , "00");
     url.addParam("dialog", 1);
     url.modal({width: 1000, height: 700});
+
     url.modalObject.observe("afterClose", function() {
       refreshPlanning();
     });

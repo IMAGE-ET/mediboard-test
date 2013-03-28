@@ -47,7 +47,12 @@
           }
           // DHE
           else {
-            modifIntervention('', '', '', object_id);
+            if (elem.up().up().hasClassName("operation_enplage")) {
+              modifIntervention('', '', '', object_id, true);
+            }
+            else {
+              modifIntervention('', '', '', object_id, false);
+            }
           }
           break;
         case 'cut':
