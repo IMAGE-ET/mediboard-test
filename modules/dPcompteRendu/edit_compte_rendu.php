@@ -114,28 +114,35 @@ $user = $curr_user;
 if (!$user->isPraticien()) {
   $user = new CMediusers();
   $user_id = null;
-  if ($object instanceof CConsultAnesth) {
-    $operation = $object->loadRefOperation();
-    $anesth = $operation->_ref_anesth;
-    if ($operation->_id && $anesth->_id) {
-      $user_id = $anesth->_id;
-    }
-    
-    if ($user_id == null) {
-      $user_id = $object->_ref_consultation->_praticien_id;
-    }
-  }
 
-  if ($object instanceof CCodable) {
-    $user_id = $object->_praticien_id;
-  }
+  switch ($object->_class) {
+    case "CConsultAnesth" :
+      $operation = $object->loadRefOperation();
+      $anesth = $operation->_ref_anesth;
+      if ($operation->_id && $anesth->_id) {
+        $user_id = $anesth->_id;
+      }
 
-  if ($object instanceof CSejour) {
-    $user_id = $object->praticien_id;
-  }
+      if ($user_id == null) {
+        $user_id = $object->_ref_consultation->_praticien_id;
+      }
+      break;
 
-  if ($object instanceof COperation) {
-    $user_id = $object->chir_id;
+    case "CConsultation" :
+      $user_id = $object->loadRefPraticien()->_id;
+      break;
+
+    case "CSejour" :
+      $user_id = $object->praticien_id;
+      break;
+
+    case "COperation" :
+      $user_id = $object->chir_id;
+      break;
+
+    default :
+      $user_id = $curr_user->_id;
+      break;
   }
 
   $user->load($user_id);
