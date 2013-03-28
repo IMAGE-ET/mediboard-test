@@ -34,7 +34,7 @@ insertGraph = function (container, data, id, width, height) {
   var element = $(id);
   
   if (!element) {
-    container.insert('<div id="'+id+'" style="width:'+width+';height:'+height+';margin:auto;" class="constantes-graph"></div>');
+    container.insert('<div id="'+id+'" style="width:'+width+';height:'+height+';margin:auto; margin-bottom: 12px;" class="constantes-graph"></div>');
     element = $(id);
   }
   
