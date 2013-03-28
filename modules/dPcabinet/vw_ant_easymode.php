@@ -43,10 +43,8 @@ $applied_antecedents = array();
 
 foreach ($dossier_medical->_ref_antecedents_by_type as $list) {
   foreach ($list as $a) {
-    if (!isset($applied_antecedents[$a->type])) {
-      $applied_antecedents[$a->type] = array();
-    }
-    
+    if (!isset($applied_antecedents[$a->type]))   $applied_antecedents[$a->type] = array();
+
     $applied_antecedents[$a->type][] = $a->rques;
   }
 }
@@ -82,6 +80,10 @@ foreach ($aides_antecedent as $_depend_1 => $_aides_by_depend_1) {
     }
   }
   foreach ($_aides_by_depend_1 as $_depend_2 => $_aides_by_depend_2) {
+    if (!is_array($_aides_by_depend_2)) {
+      continue;
+    }
+
     foreach ($_aides_by_depend_2 as $_aide) {
       if (isset($applied_antecedents[$_depend_1])) {
         foreach ($applied_antecedents[$_depend_1] as $_atcd) {
