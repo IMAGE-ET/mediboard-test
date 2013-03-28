@@ -309,6 +309,7 @@ class CCodable extends CMbObject {
 
   function correctActes() {
     $this->loadRefsActes();
+
     foreach ($this->_ref_actes_ccam as $_acte) {
       $_acte->guessAssociation();
       if ($_acte->_guess_association != "X") {
@@ -326,17 +327,21 @@ class CCodable extends CMbObject {
     $this->loadRefsActesNGAP();
     $this->loadRefsActesTarmed();
     $this->loadRefsActesCaisse();
+
     foreach ($this->_ref_actes_ccam as $acte_ccam) {
       $this->_ref_actes[] = $acte_ccam;
     }
+
     foreach ($this->_ref_actes_ngap as $acte_ngap) {
       $this->_ref_actes[] = $acte_ngap;
     }
+
     if ($this->_ref_actes_tarmed) {
       foreach ($this->_ref_actes_tarmed as $acte_tarmed) {
         $this->_ref_actes[] = $acte_tarmed;
       }
     }
+
     if ($this->_ref_actes_caisse) {
       foreach ($this->_ref_actes_caisse as $acte_caisse) {
         $this->_ref_actes[] = $acte_caisse;

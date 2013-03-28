@@ -152,9 +152,16 @@ class CAntecedent extends CMbObject {
       }
     }
   }
-  
+
   /**
-   * Add a count behaviour to parent load
+   * Charge toutes les aides à la saisie de l'objet pour un utilisateur donné
+   *
+   * @param int    $user_id        Utilisateur
+   * @param string $needle         Permet de filtrer les aides commançant par le filtre, si non null
+   * @param string $depend_value_1 Valeur de la dépendance 1 lié à l'aide
+   * @param string $depend_value_2 Valeur de la dépendance 2 lié à l'aide
+   *
+   * @return void
    */
   function loadAides($user_id, $needle = null, $depend_value_1 = null, $depend_value_2 = null) {
     parent::loadAides($user_id, $needle, $depend_value_1, $depend_value_2);

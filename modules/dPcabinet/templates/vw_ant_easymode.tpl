@@ -80,6 +80,6 @@ Main.add(function () {
 </ul>
 <hr class="control_tabs" />
 
-{{include file=inc_grid_antecedents.tpl}}
-{{include file=inc_grid_traitements.tpl}}
+{{mb_include template=inc_grid_antecedents}}
+{{mb_include template=inc_grid_traitements}}
 
