@@ -43,7 +43,7 @@
         case 'edit':
           // Commentaire
           if (elem.up().up().hasClassName("commentaire_planning")) {
-            modifCommentaire(null, null, null, object_id, "Control.Modal.close");
+            modifCommentaire(null, null, null, object_id, false, "Control.Modal.close");
           }
           // DHE
           else {
@@ -52,6 +52,11 @@
           break;
         case 'cut':
         case 'copy':
+          if (elem.up().up().hasClassName("commentaire_planning")) {
+            modifCommentaire(null, null, null, object_id, true,  "Control.Modal.close");
+            break;
+          }
+
           window.cut_operation_id = null;
           window.copy_operation_id = null;
           

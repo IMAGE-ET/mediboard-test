@@ -184,11 +184,15 @@
     }
   }
   
-  modifCommentaire = function(date, hour, salle_id, commentaire_id, callback) {
+  modifCommentaire = function(date, hour, salle_id, commentaire_id, clone, callback) {
     var url = new Url("reservation", "ajax_edit_commentaire");
     
     if (commentaire_id) {
       url.addParam("commentaire_id", commentaire_id);
+    }
+
+    if (clone) {
+      url.addParam("clone", true);
     }
     
     if (callback) {

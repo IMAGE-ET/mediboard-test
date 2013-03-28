@@ -12,6 +12,7 @@
 CCanDo::checkEdit();
 
 $commentaire_id = CValue::get("commentaire_id");
+$clone          = CValue::get("clone", false);
 $date           = CValue::get("date");
 $hour           = CValue::get("hour");
 $salle_id       = CValue::get("salle_id");
@@ -26,9 +27,14 @@ if (!$commentaire->_id) {
   $commentaire->salle_id = $salle_id;
 }
 
+if ($clone) {
+  $commentaire->_id = null;
+}
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("commentaire", $commentaire);
+$smarty->assign("clone", $clone);
 $smarty->assign("callback"   , $callback);
 
 $smarty->display("inc_edit_commentaire.tpl");
