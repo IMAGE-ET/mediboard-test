@@ -51,7 +51,7 @@
       <td class="salle" style="width: 1%; white-space: nowrap;" {{if $affichages.$keyHorsPlage|@count}}rowspan="2"{{/if}}>
         {{$curr_day|date_format:"sem. %U | %d/%m"}}
       </td>
-      {{mb_include template=inc_planning_bloc_line bloc=salle->_ref_bloc}}
+      {{mb_include template=inc_planning_bloc_line bloc=$salle->_ref_bloc}}
     </tr>
 
     {{if $affichages.$keyHorsPlage|@count}}
