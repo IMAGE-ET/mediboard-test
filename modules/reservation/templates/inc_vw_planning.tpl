@@ -48,10 +48,13 @@
           // DHE
           else {
             if (elem.up().up().hasClassName("operation_enplage")) {
-              modifIntervention('', '', '', object_id, true);
+              modifIntervention('', '', '', object_id,'', true);
+            }
+            else if (elem.up().up().hasClassName("operation_horsplage")) {
+              modifIntervention('', '', '', object_id,'', false);
             }
             else {
-              modifIntervention('', '', '', object_id, false);
+              modifIntervention('', '', '', '','', false);
             }
           }
           break;
@@ -160,11 +163,11 @@
     }
     
     var planning_div = $("{{$planning->guid}}");
-    
+
     
     {{if $can->edit}}
       // Création d'une interv sur une case à une heure donnée
-      planning_div.select("td, th").each(function(elt) {
+      planning_div.select("td").each(function(elt) {
         elt.observe('dblclick', function() {
           var classes = elt.className.split("  ");
           var hour = classes[0].split("-")[2];
