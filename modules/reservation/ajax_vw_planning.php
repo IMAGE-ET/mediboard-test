@@ -293,38 +293,27 @@ foreach ($operations_by_salle as $salle_id => $_operations) {
       $libelle .= "</span>";
     }
 
-    $color = "#999";
+    // couleurs
+    $color = CAppUI::conf("hospi colors default");
     $important = true;
     $css = null;
-    // Rouge
     if ($sejour->annule) {
-      $color = "#CECCCD";
       $css = "hatching";
       $important = false;
     }
     else {
       switch ($sejour->recuse) {
         case "0":
-          // Orange
-          if ($sejour->type == "ambu")  {
-            $color = "#faa";
-            $css = "sejour-type-ambu";
-          }
-          // Vert
-          else if ($sejour->type == "comp") {
-            $color = "#FFFFFF";
-            $css = "sejour-type-comp";
-          }
+            $color = CAppUI::conf("hospi colors $sejour->type");
           break;
-        // Bleu
         case "-1" :
-          $color = "#FAFF94";
+          $color = CAppUI::conf("hospi colors recuse");
           $css = "recuse";
           break;
       }
     }
 
-    $event = new CPlanningEvent($_operation->_guid, $debut, $duree, utf8_encode($libelle), $color, $important, $css, $_operation->_guid, false);
+    $event = new CPlanningEvent($_operation->_guid, $debut, $duree, utf8_encode($libelle), "#$color", $important, $css, $_operation->_guid, false);
     
     if ($can_edit) {
       $event->addMenuItem("edit" , utf8_encode("Modifier cette opération"));
@@ -381,7 +370,8 @@ foreach ($commentaires_by_salle as $salle_id => $_commentaires) {
     $event->plage["id"] = $_commentaire->_id;
     
     if ($can_edit) {
-      $event->addMenuItem("edit" , "Modifier ce commentaire");
+      $event->addMenuItem("edit" , utf8_encode("Modifier ce commentaire"));
+      $event->addMenuItem("copy" , utf8_encode("Copier ce commentaire"));
     }
     
     $planning->addEvent($event);
@@ -411,6 +401,7 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
 
 $m = $save_m;
 
+$planning->allow_superposition = true;
 $planning->rearrange(); //ReArrange the planning
 
 $smarty = new CSmartyDP();

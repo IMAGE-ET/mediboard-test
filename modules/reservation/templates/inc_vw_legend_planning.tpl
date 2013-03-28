@@ -20,19 +20,19 @@
     <th class="category" colspan="2">Type de plage</th>
   </tr>
   <tr>
-    <td style="background: #FFFFFF; width:50%;"></td><td>{{tr}}CService.type_sejour.comp{{/tr}}</td>
+    <td style="background: #{{$conf.dPhospi.colors.comp}}; width:50%;"></td><td>{{tr}}CService.type_sejour.comp{{/tr}}</td>
   </tr>
   <tr>
-    <td style="background:#faa"></td><td>{{tr}}CService.type_sejour.ambu{{/tr}}</td>
+    <td style="background:#{{$conf.dPhospi.colors.ambu}}"></td><td>{{tr}}CService.type_sejour.ambu{{/tr}}</td>
   </tr>
   <tr>
-    <td style="background: #FAFF94;border-left:solid 3px #3b5aff !important;"></td><td>{{tr}}CSejour.recuse.-1{{/tr}}</td>
+    <td style="background: #{{$conf.dPhospi.colors.recuse}};border-left:solid 3px #3b5aff !important;"></td><td>{{tr}}CSejour.recuse.-1{{/tr}}</td>
   </tr>
   <tr>
     <td style="background:url('images/icons/ray.gif') #23425D!important;" class="hatching"></td><td>Temps pré/post Operatoire</td>
   </tr>
   <tr>
-    <td style="background:#CECCCD; opacity:0.6" class="hatching"></td><td>{{tr}}Cancelled{{/tr}}</td>
+    <td style="background:#{{$conf.dPhospi.colors.annule}}; opacity:0.6" class="hatching"></td><td>{{tr}}Cancelled{{/tr}}</td>
   </tr>
   <tr>
     <th class="category" colspan="2">En/Hors Plage</th>
