@@ -12,6 +12,7 @@ CCanDo::checkRead();
 
 // Récupération des dates
 $date       = CValue::getOrSession("date", CMbDT::date());
+$type       = CValue::getOrSession("type", "ambu");
 $service_id = CValue::getOrSession("service_id");
 
 // Initialisation
@@ -43,7 +44,7 @@ $group = CGroups::loadCurrent();
 
 $order = "service.nom, sejour.entree_reelle";
 $where["sortie_prevue"]   = "BETWEEN '$limit1' AND '$limit2'";
-$where["type"]            = " = 'ambu'";
+$where["type"]            = " = '$type'";
 $where["sejour.annule"]   = " = '0'";
 $where["sejour.group_id"] = " = '$group->_id'";
 $sejours = $sejour->loadList($where, $order, null, null, $ljoin);
@@ -72,6 +73,7 @@ $smarty->assign("service_id", $service_id);
 $smarty->assign("sejours", $sejours);
 $smarty->assign("services", $services);
 $smarty->assign("date", $date);
+$smarty->assign("type", $type);
 $smarty->display("print_ambu.tpl");
 
 ?>

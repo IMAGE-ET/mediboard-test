@@ -60,8 +60,8 @@
         {{/foreach}}
       </select>
       
-      {{if $type == "ambu"}}
-      <button class="print" type="button" onclick="printAmbu()">Impression ambu</button>
+      {{if $type == "ambu" || $type == "exte" }}
+      <button class="print" type="button" onclick="printAmbu('{{$type}}')">{{tr}}Print{{/tr}} {{tr}}CSejour.type.{{$type}}{{/tr}}</button>
       {{/if}}
     </th>
   </tr>

@@ -25,7 +25,7 @@
         </select>
       </form>
       </span>
-      <a href="#" onclick="window.print()">Patients en séjour de type Ambulatoire du {{$date|date_format:$conf.date}}</a>
+      <a href="#" onclick="window.print()">Patients en séjour de type {{tr}}CSejour.type.{{$type}}{{/tr}} du {{$date|date_format:$conf.date}}</a>
     </th>
   </tr>
   <tr>
@@ -33,7 +33,7 @@
     <th>Praticien</th>
     <th>Service</th>
     <th>Chambre</th>
-    <th>Entrée<br />ambu</th>
+    <th>Entrée<br />établissement</th>
     <!-- <th>Entrée<br />au bloc</th>         -->
     <th>Départ<br />bloc</th>
     <!-- <th>Entrée<br />salle de réveil</th> -->

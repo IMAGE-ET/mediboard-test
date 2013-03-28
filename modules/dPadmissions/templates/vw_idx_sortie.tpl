@@ -20,9 +20,10 @@
 
 var sejours_enfants_ids;
 
-function printAmbu(){
+function printAmbu(type){
   var url = new Url("dPadmissions", "print_ambu");
   url.addParam("date", "{{$date}}");
+  url.addParam("type", type);
   url.popup(800,600,"Ambu");
 }
 
