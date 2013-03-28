@@ -142,7 +142,6 @@ if (!$user->isPraticien()) {
 
     default :
       $user_id = $curr_user->_id;
-      break;
   }
 
   $user->load($user_id);

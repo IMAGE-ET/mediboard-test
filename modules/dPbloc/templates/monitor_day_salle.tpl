@@ -42,25 +42,26 @@
   <tr>
     <th class="narrow">Date</th>
     {{foreach from=$listHours item=_hour}}
-    <th colspan="4" class="heure">{{$_hour}}:00</th>
+      <th colspan="4" class="heure">{{$_hour}}:00</th>
     {{/foreach}}
   </tr>
   {{foreach from=$listDays key=curr_day item=plagesPerDay}}
-  {{assign var="keyHorsPlage" value="$curr_day-HorsPlage"}}
-  <tr>
-    <td class="salle" style="width: 1%; white-space: nowrap;" {{if $affichages.$keyHorsPlage|@count}}rowspan="2"{{/if}}>
-      {{$curr_day|date_format:"sem. %U | %d/%m"}}
-    </td>
-    {{mb_include template=inc_planning_bloc_line}}
-  </tr>
-  {{if $affichages.$keyHorsPlage|@count}}
-  <tr>
-    <td colspan="100" class="empty">
-      <a href="?m=dPbloc&tab=vw_urgences&date={{$curr_day}}">
-        + {{$affichages.$keyHorsPlage|@count}} intervention(s) hors plage
-      </a>
-    </td>
-  </tr>
-  {{/if}}
+    {{assign var="keyHorsPlage" value="$curr_day-HorsPlage"}}
+    <tr>
+      <td class="salle" style="width: 1%; white-space: nowrap;" {{if $affichages.$keyHorsPlage|@count}}rowspan="2"{{/if}}>
+        {{$curr_day|date_format:"sem. %U | %d/%m"}}
+      </td>
+      {{mb_include template=inc_planning_bloc_line bloc=salle->_ref_bloc}}
+    </tr>
+
+    {{if $affichages.$keyHorsPlage|@count}}
+    <tr>
+      <td colspan="100" class="empty">
+        <a href="?m=dPbloc&tab=vw_urgences&date={{$curr_day}}">
+          + {{$affichages.$keyHorsPlage|@count}} intervention(s) hors plage
+        </a>
+      </td>
+    </tr>
+    {{/if}}
   {{/foreach}}
 </table>
