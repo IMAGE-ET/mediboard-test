@@ -68,7 +68,7 @@
               {{assign var=categorie value=$curr_consult->_ref_categorie}}
               <td rowspan="2" {{if !$categorie->_id}}colspan="2"{{/if}}
                 style="text-align: center; {{if $curr_consult->premiere}}background-color:#eaa;{{/if}}">
-                {{mb_value object=$curr_consult field=heure}}
+                {{$_place.time|date_format:$conf.time}}
               </td>
               {{mb_include template=inc_print_plages_line}}
             </tr>
