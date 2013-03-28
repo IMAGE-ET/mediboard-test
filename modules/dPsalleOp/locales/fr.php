@@ -468,6 +468,7 @@ $locales['mod-dPsalleOp-tab-vw_anesthesie'] = 'Anesthésie';
 $locales['mod-dPsalleOp-tab-vw_brancardage'] = 'Brancardage';
 $locales['mod-dPsalleOp-tab-vw_daily_check_item_category'] = 'Catégories de checklist';
 $locales['mod-dPsalleOp-tab-vw_daily_check_item_type'] = 'Questions check list';
+$locales['mod-dPsalleOp-tab-vw_daily_check_list_preview'] = 'Aperçu de check list';
 $locales['mod-dPsalleOp-tab-vw_daily_check_list_type'] = 'Checklist ouverture salle';
 $locales['mod-dPsalleOp-tab-vw_daily_check_traceability'] = 'Traçabilité Checklist';
 $locales['mod-dPsalleOp-tab-vw_dmi'] = 'DMI';

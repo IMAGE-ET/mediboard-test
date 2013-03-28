@@ -419,11 +419,17 @@ class CExClassEvent extends CMbObject {
   /**
    * @return array
    */
-  function buildHostFieldsList() {
+  function buildHostFieldsList($prefix = null) {
     $this->getAvailableFields();
     
     $list = array();
     foreach ($this->_host_class_fields as $_field => $_spec) {
+      $host_class = $this->host_class;
+
+      if ("CONNECTED_USER" === $_field) {
+        $host_class = "CMediusers";
+      }
+
       $element = array(
         "prop"  => $_spec,
         "title" => null,
@@ -432,13 +438,8 @@ class CExClassEvent extends CMbObject {
         "type"  => null,
         "level" => 0,
         "field" => null,
+        "class" => $host_class,
       );
-      
-      $host_class = $this->host_class;
-      
-      if ("CONNECTED_USER" === $_field) {
-        $host_class = "CMediusers";
-      }
       
       $_subfield = explode(".", $_field);
       
@@ -471,7 +472,7 @@ class CExClassEvent extends CMbObject {
       $element["view"] = $element["title"];
       $parent_view = $element["view"];
       
-      $list[$_field] = $element;
+      $list[($prefix ? "$prefix " : "") . $_field] = $element;
       
       // Level 2
       if ($_spec instanceof CRefSpec) {
@@ -484,6 +485,7 @@ class CExClassEvent extends CMbObject {
             "title" => null,
             "type"  => null,
             "level" => 1,
+            "class" => $host_class,
           );
           
           if ($_subspec instanceof CRefSpec && $_subspec->class) {
@@ -504,7 +506,7 @@ class CExClassEvent extends CMbObject {
           $element["title"] = " |- ".CAppUI::tr("$_subspec->className-$_subfield");
           $element["field"] = "$_subspec->className-$_subfield";
           
-          $list["$_field-$_key"] = $element;
+          $list[($prefix ? "$prefix " : "") . "$_field-$_key"] = $element;
         }
       }
     }

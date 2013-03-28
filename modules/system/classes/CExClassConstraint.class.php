@@ -51,8 +51,10 @@ class CExClassConstraint extends CMbObject {
    * @return array(CMbObject,string)
    */
   function getFieldAndObject(CMbObject $object){
-    $field = $this->field;
+    return self::getFieldAndObjectStatic($object, $this->field);
+  }
 
+  static function getFieldAndObjectStatic(CMbObject $object, $field) {
     if (strpos($field, "CONNECTED_USER") === 0) {
       $object = CMediusers::get();
       $object->_specs = CExClassEvent::getHostObjectSpecs($object);
@@ -120,14 +122,7 @@ class CExClassConstraint extends CMbObject {
     return $spec;
   }
 
-  /**
-   * @param CMbObject $object
-   *
-   * @return array(CMBobject,string)
-   */
-  function resolveObjectField(CMbObject $object){
-    list($object, $field) = $this->getFieldAndObject($object);
-
+  static function resolveObjectFieldStatic(CMbObject $object, $field) {
     $parts = explode("-", $field);
 
     if (count($parts) == 1) {
@@ -151,6 +146,17 @@ class CExClassConstraint extends CMbObject {
         "field"  => $parts[1],
       );
     }
+  }
+
+  /**
+   * @param CMbObject $object
+   *
+   * @return array(CMBobject,string)
+   */
+  function resolveObjectField(CMbObject $object){
+    list($object, $field) = $this->getFieldAndObject($object);
+
+    return self::resolveObjectFieldStatic($object, $field);
   }
 
   /**

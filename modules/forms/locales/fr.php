@@ -5,6 +5,8 @@ $locales['config-forms-CExClassField-force_concept'] = 'Forcer l\'utilisation de
 $locales['config-forms-CExClassField-force_concept-desc'] = 'Forcer l\'utilisation des concepts (vivement conseillé)';
 $locales['config-forms-CExConcept-force_list'] = 'Forcer l\'utilisation des listes';
 $locales['config-forms-CExConcept-force_list-desc'] = 'Forcer l\'utilisation des listes';
+$locales['config-forms-CExConcept-native_field'] = 'Activer le report de données depuis Mediboard';
+$locales['config-forms-CExConcept-native_field-desc'] = 'Activer la possibilité de définir des reports de données Mediboard vers les formulaires';
 $locales['mod-forms-tab-ajax_edit_ex_class_event'] = 'Evènement déclencheur';
 $locales['mod-forms-tab-ajax_edit_ex_constraint'] = 'Contrainte';
 $locales['mod-forms-tab-ajax_edit_ex_field'] = 'Champ';
@@ -29,4 +31,3 @@ $locales['mod-forms-tab-view_import'] = 'Importation';
 $locales['mod-forms-tab-view_import_fields'] = 'Importation de formulaires';
 $locales['module-forms-court'] = 'Formulaires';
 $locales['module-forms-long'] = 'Formulaires';
-?>

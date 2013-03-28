@@ -1271,7 +1271,12 @@ class CSetupsystem extends CSetup {
                 ADD `result_in_title` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.27";
+    $this->makeRevision("1.1.27");
+    $query = "ALTER TABLE `ex_concept`
+                ADD `native_field` VARCHAR (255);";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.28";
 
 
     /*$query = "ALTER TABLE user_log

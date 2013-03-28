@@ -268,10 +268,11 @@ class CExObject extends CMbMetaObject {
     
     return implode("|", $values);
   }
-  
-  // FIXME pas DU TOUT optimisé
+
   /*
    * attention aux dates, il faut surement checker le log de derniere modif des champs du concept
+   *
+   * @fixme pas trop optimisé
    */
   function getReportedValues(CExClassEvent $event){
     if ($this->_id) {
@@ -290,6 +291,10 @@ class CExObject extends CMbMetaObject {
       $ex_class->getLatestExObject($this->_ref_reference_object_1),
       $ex_class->getLatestExObject($this->_ref_reference_object_2),
     );
+
+    $this->_ref_object->loadComplete();
+    $this->_ref_reference_object_1->loadComplete();
+    $this->_ref_reference_object_2->loadComplete();
     
     $fields = $ex_class->loadRefsAllFields(true);
     
@@ -305,10 +310,49 @@ class CExObject extends CMbMetaObject {
       // valeur par défaut
       $spec_obj = $_field->getSpecObject();
       $this->$field_name = CExClassField::unescapeProp($spec_obj->default);
-      
+
+      $_concept = null;
+      if ($_field->concept_id) {
+        $_concept = $_field->loadRefConcept();
+      }
+
       // si champ pas reporté, on passe au suivant
-      if (!$_field->report_class) {
+      if (!($_field->report_class || $_field->concept_id && $_concept->native_field)) {
         continue;
+      }
+
+      // Native fields
+      if ($_concept && $_concept->native_field) {
+        list($_class, $_path) = explode(" ", $_concept->native_field, 2);
+
+        if (isset($this->_preview)) {
+          $this->_reported_fields[$field_name] = new $_class();
+          $this->$field_name = "Test";
+        }
+        else {
+          if ($this->_ref_object->_class == $_class) {
+            $_object = $this->_ref_object;
+          }
+          elseif ($this->_ref_reference_object_1->_class == $_class) {
+            $_object = $this->_ref_reference_object_1;
+          }
+          elseif ($this->_ref_reference_object_2->_class == $_class) {
+            $_object = $this->_ref_reference_object_2;
+          }
+
+          list($_object, $_path) = CExClassConstraint::getFieldAndObjectStatic($_object, $_path);
+          $_resolved = CExClassConstraint::resolveObjectFieldStatic($_object, $_path);
+
+          $_obj        = $_resolved["object"];
+          $_field_name = $_resolved["field"];
+
+          $this->_reported_fields[$field_name] = $_object;
+          $this->$field_name = $_obj->$_field_name;
+        }
+
+        if ($this->$field_name) {
+          continue;
+        }
       }
       
       $_report_class = $_field->report_class;
@@ -318,7 +362,6 @@ class CExObject extends CMbMetaObject {
       
       if ($_field->concept_id) {
         if (!isset($concepts[$_field->concept_id])) {
-          $_concept = $_field->loadRefConcept();
           $_concept_fields = $_concept->loadRefClassFields();
           
           foreach ($_concept_fields as $_concept_field) {

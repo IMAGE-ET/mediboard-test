@@ -70,6 +70,10 @@ else {
   $ex_object = new CExObject($ex_class_id);
 }
 
+if ($preview) {
+  $ex_object->_preview = true;
+}
+
 // Host and reference objects
 $ex_object->setObject($object);
 
@@ -154,7 +158,7 @@ foreach ($groups as $_group) {
   }
 }
 
-foreach($fields as $_field) {
+foreach ($fields as $_field) {
   $_field->loadTriggeredData();
 }
 

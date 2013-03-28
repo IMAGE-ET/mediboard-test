@@ -15,21 +15,18 @@ class CExConcept extends CExListItemsOwner {
   public $ex_list_id;
   public $name; // != object_class, object_id, ex_ClassName_event_id,
   public $prop;
+  public $native_field;
 
-  /**
-   * @var CExList
-   */
+  /** @var CExList */
   public $_ref_ex_list;
 
-  /**
-   * @var CExClassField[]
-   */
+  /** @var CExClassField[] */
   public $_ref_class_fields;
 
-  /**
-   * @var CMbFieldSpec
-   */
+  /** @var CMbFieldSpec */
   public $_concept_spec;
+
+  public $_native_field_view;
   
   static $_options_order = array(
     "list",
@@ -58,7 +55,7 @@ class CExConcept extends CExListItemsOwner {
   /**
    * Parse a search string, from the search form
    *
-   * @param string $concept_search
+   * @param string $concept_search The keywords to search for
    *
    * @return array
    */
@@ -93,16 +90,17 @@ class CExConcept extends CExListItemsOwner {
 
   function getProps() {
     $props = parent::getProps();
-    $props["ex_list_id"]  = "ref class|CExList autocomplete|name";
-    $props["name"]        = "str notNull seekable";
-    $props["prop"]        = "str notNull show|0";
+    $props["ex_list_id"]   = "ref class|CExList autocomplete|name";
+    $props["name"]         = "str notNull seekable";
+    $props["prop"]         = "str notNull show|0";
+    $props["native_field"] = "str show|0";
     return $props;
   }
   
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["class_fields"] = "CExClassField concept_id";
-    $backProps["list_items"] = "CExListItem concept_id";
+    $backProps["list_items"]   = "CExListItem concept_id";
     return $backProps;
   }
   
@@ -125,6 +123,22 @@ class CExConcept extends CExListItemsOwner {
   
   function loadEditView() {
     parent::loadEditView();
+
+    // Vue du "native field"
+    if ($this->native_field) {
+      list($class, $field) = explode(" ", $this->native_field, 2);
+
+      $ex_class_event = new CExClassEvent();
+      $ex_class_event->host_class = $class;
+      $list = $ex_class_event->buildHostFieldsList();
+
+      $this->_native_field_view = "";
+      if (strpos($field, "CONNECTED_USER") === false) {
+        $this->_native_field_view = CAppUI::tr($class) . " / ";
+      }
+
+      $this->_native_field_view .= $list[$field]["view"];
+    }
     
     $fields = $this->loadRefClassFields();
     foreach ($fields as $_field) {
@@ -224,6 +238,37 @@ class CExConcept extends CExListItemsOwner {
   function loadConceptSpec(){
     return $this->_concept_spec = self::getConceptSpec($this->prop);
   }
+
+  static function getReportableFields($class = null) {
+    $list = array();
+
+    if ($class) {
+      $classes = array($class);
+    }
+    else {
+      $classes = CExClassEvent::getReportableClasses();
+    }
+
+    $full = false;
+
+    foreach ($classes as $_class) {
+      $ex_class_event = new CExClassEvent();
+      $ex_class_event->host_class = $_class;
+      $list = array_merge($list, $ex_class_event->buildHostFieldsList($_class));
+    }
+
+    if (!$full) {
+      $select = array_flip(array(
+        "CPatient _annees",
+        "CPatient _poids",
+        "CPatient _taille",
+      ));
+
+      $list = array_intersect_key($list, $select);
+    }
+
+    return $list;
+  }
     
   static function compareSpecs($a, $b) {
     $options = self::$_options_order;
@@ -248,11 +293,12 @@ class CExConcept extends CExListItemsOwner {
         $modif = ($_field->prop != $new_prop);
         
         $_field->prop = $new_prop;
-        
+
         if ($msg = $_field->store()) {
-          
+          continue;
         }
-        else if ($modif) {
+
+        if ($modif) {
           $_field->updateTranslation();
           CAppUI::displayMsg($msg, "Champ <strong>$_field->_view</strong> mis à jour");
         }

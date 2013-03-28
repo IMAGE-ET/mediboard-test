@@ -30,6 +30,7 @@ var Action = {
       <th colspan="2" class="title">{{tr}}{{$class}}{{/tr}}</th>
     </tr>
     {{mb_include module=system template=inc_config_bool var=force_list}}
+    {{mb_include module=system template=inc_config_bool var=native_field}}
 
     {{assign var=class value=CExClass}}
       <tr>

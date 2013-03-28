@@ -14,7 +14,8 @@ $dPconfig["forms"] = array(
     "force_concept" => 1,
   ),
   "CExConcept" => array(
-    "force_list"    => 1,
+    "force_list"   => 1,
+    "native_field" => 0,
   ),
   "CExClass" => array(
     "pixel_positionning" => 0,

@@ -408,3 +408,34 @@ form[name="form-grid-layout"].pickmode .drop-grid .droppable:hover {
   vertical-align: middle;
   margin-right: -3px;
 }
+
+ul.ac-native-fields {
+  display: table;
+  width: 100%;
+}
+
+ul.ac-native-fields li {
+  display: table-row !important;
+}
+
+ul.ac-native-fields small,
+ul.ac-native-fields span {
+  display: table-cell !important;
+  white-space: nowrap !important;
+  padding: 2px;
+}
+
+ul.ac-native-fields .col-class,
+ul.ac-native-fields .col-type {
+  color: #666;
+}
+
+ul.ac-native-fields .col-class {
+  text-align: right;
+  padding-right: 3px;
+  max-width: 130px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  background-color: rgba(127,127,127,0.1);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#1A7F7F7F,endColorstr=#1A7F7F7F)";
+}
