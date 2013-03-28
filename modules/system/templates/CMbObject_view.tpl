@@ -8,7 +8,7 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{if !$object->_can->read}}
+{{if $object->_id && !$object->_can->read}}
   <div class="small-info">
     {{tr}}{{$object->_class}}{{/tr}} : {{tr}}access-forbidden{{/tr}}
   </div>

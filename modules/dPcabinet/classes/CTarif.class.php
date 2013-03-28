@@ -273,6 +273,7 @@ class CTarif extends CMbObject {
         $this->_has_mto = '1';
       }
     }
+
     if(CModule::getActive("tarmed")){
 	    foreach ($this->_codes_tarmed as $code) {
 	      $acte = new CActeTarmed();
