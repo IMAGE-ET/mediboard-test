@@ -9,7 +9,9 @@
 *}}
 
 
-<form name="colorHospi" method="get">
+<form name="editConfig-dPhospiColor" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+  <input type="hidden" name="dosql" value="do_configure" />
+  <input type="hidden" name="m" value="system" />
   <table class="form">
     <tr>
       <th colspan="2" class="title">
