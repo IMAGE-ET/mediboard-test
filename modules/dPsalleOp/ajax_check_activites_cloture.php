@@ -20,9 +20,9 @@ $object = new $object_class;
 $object->load($object_id);
 
 $actes = explode("|", $object->codes_ccam);
-$object->loadRefsActes();
+$object->loadRefsActesCCAM();
 
-$activites = CMbArray::pluck($object->_ref_actes, "code_activite");
+$activites = CMbArray::pluck($object->_ref_actes_ccam, "code_activite");
 
 $activite_1 = array_search("1", $activites);
 $activite_4 = array_search("4", $activites);

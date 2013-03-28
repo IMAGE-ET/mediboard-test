@@ -34,7 +34,7 @@ switch ($object_class) {
     if ($object->load($operation_id)) {
       $object->loadRefs();
       $codes = explode("|", $object->codes_ccam);
-      $actes = CMbArray::pluck($object->_ref_actes, "code_acte");
+      $actes = CMbArray::pluck($object->_ref_actes_ccam, "code_acte");
 
       foreach ($object->_ref_actes_ccam as $acte_ccam) {
         $acte_ccam->loadRefsFwd();
@@ -71,6 +71,7 @@ switch ($object_class) {
       }
     }
     break;
+
   case "CSejour" :
     $object = new CSejour();
 
