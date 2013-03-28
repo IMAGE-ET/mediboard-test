@@ -52,11 +52,12 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
   static function loadFiles($theme = "mediboard", $media = "all", $type = "text/css") {
     $compress = CAppUI::conf("minify_css");
     
-    if ($theme == "modules") {
+    if ($theme === "modules") {
       $files = glob("modules/*/css/main.css");
+      $files = array_merge($files, glob("modules/*/css/templates/main.css.tpl"));
     }
     else {
-      if ($theme == "mobile") {
+      if ($theme === "mobile") {
         $path = "mobile/style";
       }
       else {
@@ -105,8 +106,19 @@ abstract class CCSSLoader extends CHTMLResourceLoader {
       $all = "";
       foreach ($files as $_file) {
         $_path = dirname($_file);
-        $content = file_get_contents($_file);
-        $content = preg_replace("/\@import\s+(?:url\()?[\"']?([^\"\'\)]+)[\"']?\)?;/i", "", $content); // remove @imports
+
+        // CSS templates
+        if (substr($_file, -8) == ".css.tpl") {
+          $template = new CSmartyDP(dirname(dirname($_file)));
+          $content = $template->fetch(basename($_file));
+        }
+
+        // Standard CSS
+        else {
+          $content = file_get_contents($_file);
+          $content = preg_replace("/\@import\s+(?:url\()?[\"']?([^\"\'\)]+)[\"']?\)?;/i", "", $content); // remove @imports
+        }
+
         $content = preg_replace("/(url\s*\(\s*[\"\']?)/", "$1../$_path/", $content); // relative paths
         
         $all .= $content."\n";
