@@ -223,7 +223,7 @@ class CSourceFileSystem extends CExchangeSource {
   }
   
   function delFile($path) {
-    if (unlink($path) === false) {
+    if (file_exists($path) && unlink($path) === false) {
       throw new CMbException("CSourceFileSystem-file-not-deleted", $path);
     }    
   }
