@@ -502,4 +502,24 @@ abstract class CMbString {
     $text = preg_replace('/(\n[[:blank:]]*){2,}/U', "\n", $text);
     return $text;
   }
+
+  /**
+   * HTML cleaning method
+   *
+   * @param string $html HTML to purify
+   *
+   * @return string
+   */
+  static function purifyHTML($html) {
+    if (!class_exists("HTMLPurifier", false)) {
+      CAppUI::requireLibraryFile("htmlpurifier/library/HTMLPurifier.auto");
+    }
+
+    $config = HTMLPurifier_Config::createDefault();
+    // App encoding (in order to prevent from removing diacritics)
+    $config->set('Core.Encoding', CApp::$encoding);
+    $purifier = new HTMLPurifier($config);
+
+    return $purifier->purify($html);
+  }
 }

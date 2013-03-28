@@ -131,11 +131,7 @@ if ($fileSel && $elementClass == "CFile" && !$acces_denied) {
         break;
 
       case "text/html":
-        CAppUI::requireLibraryFile("htmlpurifier/library/HTMLPurifier.auto");
-        $config   = HTMLPurifier_Config::createDefault();
-        $purifier = new HTMLPurifier($config);
-
-        $includeInfosFile = $purifier->purify($raw_content);
+        $includeInfosFile = CMbString::purifyHTML($raw_content);
         $show_editor      = false;
         $display_as_is    = true;
         break;

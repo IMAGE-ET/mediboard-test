@@ -26,13 +26,14 @@ $user = CUser::get();
 $can->edit |= ($user->user_type != 1);
 $can->needsEdit();
 
-$module_name   = CValue::post("module");
-$strings  = CValue::post("s");
-$language = CValue::post("language");
+$module_name = CValue::post("module");
+$strings     = CValue::post("s");
+$language    = CValue::post("language");
 
-if(!$module_name || !$strings || !is_array($strings)){
+if (!$module_name || !$strings || !is_array($strings)) {
   CAppUI::setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );
   redirect();
+
   return;
 }
 
@@ -56,9 +57,9 @@ if (!is_file($translateModule->targetPath)) {
 
 $translateModule->load();
 
-foreach ($strings as $key => $valChaine){
-  if ($valChaine !== ""){
-    $translateModule->values[$key] = stripslashes($valChaine);
+foreach ($strings as $key => $valChaine) {
+  if ($valChaine !== "") {
+    $translateModule->values[$key] = CMbString::purifyHTML(stripslashes($valChaine));
   }
   else {
     unset($translateModule->values[$key]);
@@ -73,7 +74,8 @@ SHM::rem("locales-$language");
 
 if ($error instanceof PEAR_Error) {
   CAppUI::setMsg("Error while saving locales file : {$error->message}", UI_MSG_ERROR);
-} else {
+}
+else {
   CAppUI::setMsg("Locales file saved", UI_MSG_OK );
   redirect();
 }
