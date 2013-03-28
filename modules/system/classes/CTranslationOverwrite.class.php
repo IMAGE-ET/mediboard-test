@@ -50,6 +50,22 @@ class CTranslationOverwrite extends CMbObject {
   }
 
   /**
+   * Update DB fields before storing
+   */
+  function updatePlainFields() {
+    parent::updatePlainFields();
+
+    // HTML clenaning library
+    CAppUI::requireLibraryFile("htmlpurifier/library/HTMLPurifier.auto");
+    $config   = HTMLPurifier_Config::createDefault();
+    // App encoding (in order to prevent from removing diacritics)
+    $config->set('Core.Encoding', CApp::$encoding);
+    $purifier = new HTMLPurifier($config);
+
+    $this->translation = $purifier->purify($this->translation);
+  }
+
+  /**
    * the source must be found in locales
    *
    * @return string
