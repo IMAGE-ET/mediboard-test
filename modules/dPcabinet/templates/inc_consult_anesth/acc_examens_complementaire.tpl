@@ -217,7 +217,7 @@ function calculPSA () {
       </div>
       
       {{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription && $view_prescription}}
-        <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
+        <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour');">Accéder à la prescription</button>
       {{/if}}
       
       {{if $app->user_prefs.displayDocsConsult}}

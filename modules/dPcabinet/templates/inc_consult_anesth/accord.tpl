@@ -43,7 +43,15 @@ refreshFacteursRisque = function(){
 }
 
 Main.add(function () {
-  tabsConsultAnesth = Control.Tabs.create('tab-consult-anesth', false);
+  tabsConsultAnesth = Control.Tabs.create('tab-consult-anesth', false, {
+     afterChange: function(newContainer) {
+      switch (newContainer.id) {
+        case "prescription_sejour" :
+          Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null,'', null, false);       
+          break;
+      }    
+     }
+  });
   {{if $app->user_prefs.ccam_consultation == 1}}
   var tabsActes = Control.Tabs.create('tab-actes', false);
   {{/if}}
@@ -59,7 +67,7 @@ Main.add(function () {
   <li><a href="#ExamsComp">Exam. Comp.</a></li>
   <li><a href="#InfoAnesth">Infos. Anesth.</a></li>
 	{{if $isPrescriptionInstalled && $conf.dPcabinet.CPrescription.view_prescription}}
-	  <li onmousedown="Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'', '1', null, null, null,'', null, false);">
+	  <li>
 	    <a href="#prescription_sejour">Prescription</a>
 	  </li>
   {{/if}}
