@@ -48,6 +48,7 @@ Main.add(function(){
     {{mb_include module=system template=inc_config_str var=base_backup_lockfile_path}}
     {{mb_include module=system template=inc_config_str var=offline_time_start}}
     {{mb_include module=system template=inc_config_str var=offline_time_end}}
+    {{mb_include module=system template=inc_config_bool var=config_db}}
 
     <tr>
       <th colspan="2" class="title">

@@ -114,4 +114,41 @@ class CMbConfig {
     }
     return $conf;
   }
+
+  static function loadConf($key, $value, &$config) {
+    if (count($key) > 1) {
+      $firstkey = array_shift($key);
+      if (!isset($config[$firstkey])) {
+        $config[$firstkey] = "";
+      }
+      self::loadConf($key, $value, $config[$firstkey]);
+    }
+    else {
+      $config[$key[0]] = $value;
+    }
+  }
+
+  static function buildConf(&$list, $array, $_key) {
+    foreach ($array as $key => $value) {
+      $_conf_key = ($_key ? "$_key " : "") . $key;
+      if (is_array($value)) {
+        self::buildConf($list, $value, $_conf_key);
+        continue;
+      }
+      $list[$_conf_key] = $value;
+    }
+  }
+
+  static function loadValuesFromDB() {
+    global $dPconfig;
+    $ds = CSQLDataSource::get("std");
+
+    $request = "SELECT * FROM config_db;";
+
+    $configs = $ds->loadList($request);
+
+    foreach ($configs as $_value) {
+      CMbConfig::loadConf(explode(" ", $_value['key']), $_value['value'], $dPconfig);
+    }
+  }
 }

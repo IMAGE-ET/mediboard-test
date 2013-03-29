@@ -8,9 +8,9 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */
 
-global $mbpath, $dPconfig, $can;
+global $mbpath, $dPconfig;
 
-$can->needsAdmin();
+CCAnDo::checkAdmin();
 
 $mbpath = "";
 CMbArray::extract($_POST, "m");
@@ -18,23 +18,49 @@ CMbArray::extract($_POST, "dosql");
 CMbArray::extract($_POST, "suppressHeaders");
 $ajax = CMbArray::extract($_POST, "ajax");
 
-$mbConfig = new CMbConfig;
+$config_db = CAppUI::conf("config_db");
 
-$result = $mbConfig->update($_POST);
-if (PEAR::isError($result)) {
-  CAppUI::setMsg("Configure-failed-modify", UI_MSG_ERROR, $result->getMessage());
+if ($config_db) {
+  $configs = array_map_recursive('stripslashes', $_POST);
+
+  // DB Version
+  $inserts = array();
+  $ds = CSQLDataSource::get("std");
+
+  $list = array();
+  CMbConfig::buildConf($list, $configs, null);
+
+  foreach ($list as $key => $value) {
+    $query = $ds->prepare("INSERT INTO `config_db`
+      VALUES (%1, %2)
+      ON DUPLICATE KEY UPDATE value = %3", $key, $value, $value);
+
+    if ($ds->exec($query) == 1) {
+      CAppUI::setMsg("Configure-success-modify");
+    }
+    else {
+      CAppUI::setMsg("Configure-failed-modify", UI_MSG_ERROR);
+    }
+  }
+  CMbConfig::loadValuesFromDB();
 }
 else {
-  CAppUI::setMsg("Configure-success-modify");
-}
+  $mbConfig = new CMbConfig();
 
-$mbConfig->load();
-$dPconfig = $mbConfig->values;
+  $result = $mbConfig->update($_POST);
+  if (PEAR::isError($result)) {
+    CAppUI::setMsg("Configure-failed-modify", UI_MSG_ERROR, $result->getMessage());
+  }
+  else {
+    CAppUI::setMsg("Configure-success-modify");
+  }
+
+  $mbConfig->load();
+  $dPconfig = $mbConfig->values;
+}
 
 // Cas Ajax
 if ($ajax) {
   echo CAppUI::getMsg();
   CApp::rip();
 }
-
-?>

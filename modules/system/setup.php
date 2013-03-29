@@ -1270,13 +1270,21 @@ class CSetupsystem extends CSetup {
     $query = "ALTER TABLE `ex_class_field`
                 ADD `result_in_title` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
-
+    
     $this->makeRevision("1.1.27");
     $query = "ALTER TABLE `ex_concept`
                 ADD `native_field` VARCHAR (255);";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.28";
+    $this->makeRevision("1.1.28");
+    $query = "CREATE TABLE `config_db` (
+      `key` VARCHAR (255) PRIMARY KEY,
+      `value` VARCHAR(255)
+      )/*! ENGINE=MyISAM */;";
+    $this->addQuery($query);
+
+    $this->mod_version = "1.1.29";
+    
 
 
     /*$query = "ALTER TABLE user_log

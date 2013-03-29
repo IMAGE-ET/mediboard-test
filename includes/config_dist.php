@@ -52,6 +52,8 @@ $dPconfig["help_page_url"]        = "http://www.mediboard.org/public/mod-%m-tab-
 $dPconfig["csrf_protection"]      = "0";
 $dPconfig["csrf_token_lifetime"]  = "3600";
 
+$dPconfig["config_db"] = "0";
+
 // Object merge
 $dPconfig["alternative_mode"]  = "1";
 $dPconfig["merge_prevent_base_without_idex"]  = "1";

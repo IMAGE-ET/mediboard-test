@@ -87,6 +87,11 @@ require "./classes/CApp.class.php";
 require "./classes/CAppUI.class.php";
 require "./includes/autoload.php";
 
+// Include config in DB
+if (CAppUI::conf("config_db")) {
+  CMbConfig::loadValuesFromDB();
+}
+
 // Shutdown function
 register_shutdown_function(array("CApp", "checkPeace"));
 
