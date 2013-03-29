@@ -792,7 +792,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
     $idex = CIdSante400::getMatchFor($praticien, $this->getTagMediuser());
 
-    $this->addElement($identification, "code", $idex->_id ? $id400->id400 : $praticien->_id);
+    $this->addElement($identification, "code", $idex->_id ? $idex->id400 : $praticien->_id);
     $this->addElement($identification, "libelle", $praticien->_view);
     $personne = $this->addElement($medecin, "personne");
     $this->addPersonne($personne, $praticien);
@@ -807,7 +807,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
 
     $idex = CIdSante400::getMatchFor($praticien, $this->getTagMediuser());
 
-    $this->addElement($identification, "code", $idex->_id ? $id400->id400 : $praticien->_id);
+    $this->addElement($identification, "code", $idex->_id ? $idex->id400 : $praticien->_id);
     $this->addElement($identification, "libelle", $praticien->_view);
     $personne = $this->addElement($medecinResponsable, "personne");
     $this->addPersonne($personne, $praticien);
