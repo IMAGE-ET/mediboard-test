@@ -35,11 +35,11 @@ if ($config_db) {
       VALUES (%1, %2)
       ON DUPLICATE KEY UPDATE value = %3", $key, $value, $value);
 
-    if ($ds->exec($query) == 1) {
-      CAppUI::setMsg("Configure-success-modify");
+    if ($ds->exec($query) === false) {
+      CAppUI::setMsg("Configure-failed-modify", UI_MSG_ERROR);
     }
     else {
-      CAppUI::setMsg("Configure-failed-modify", UI_MSG_ERROR);
+      CAppUI::setMsg("Configure-success-modify");
     }
   }
   CMbConfig::loadValuesFromDB();
