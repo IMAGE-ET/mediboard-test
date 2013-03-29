@@ -37,10 +37,22 @@ checkOnlyTwoSelected = function(checkbox) {
 }
 
 function doMerge(oForm) {
+  var operation_checkbox = $V(oForm["operation_ids[]"]);
+
+  var checkboxs, object_class;
+  if (operation_checkbox && operation_checkbox.length > 0) {
+    checkboxs    = operation_checkbox;
+    object_class = "COperation";
+  }
+  else {
+    checkboxs    = $V(oForm["objects_id[]"]);
+    object_class = "CSejour";
+  }
+
   var url = new Url();
   url.setModuleAction("system", "object_merger");
-  url.addParam("objects_class", "CSejour");
-  url.addParam("objects_id", $V(oForm["objects_id[]"]).join("-"));
+  url.addParam("objects_class", object_class);
+  url.addParam("objects_id"   , checkboxs.join("-"));
   url.popup(800, 600, "merge_sejours");
 }
 
@@ -167,6 +179,12 @@ onMergeComplete = function() {
     {{foreach from=$_sejour->_ref_operations item=_op}}
     <tr>
       <td colspan="2">
+
+        {{if $can->admin}}
+          <input type="checkbox" name="operation_ids[]" class="merge" value="{{$_op->_id}}" style="float: left;"
+                 {{if $conf.alternative_mode}}onclick="checkOnlyTwoSelected(this)"{{/if}} />
+        {{/if}}
+
         <a href="#{{$_op->_guid}}" class="iconed-text interv" style="margin-left: 20px" 
            onclick="viewCompleteItem('{{$_op->_guid}}'); ViewFullPatient.select(this)">
           <span onmouseover="ObjectTooltip.createEx(this, '{{$_op->_guid}}')">
