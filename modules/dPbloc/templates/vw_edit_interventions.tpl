@@ -8,16 +8,15 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-<script type="text/javascript">
-
-  var printFicheAnesth = function(dossier_anesth_id, operation_id) {
+<script>
+  printFicheAnesth = function(dossier_anesth_id, operation_id) {
     var url = new Url("dPcabinet", "print_fiche"); 
     url.addParam("dossier_anesth_id", dossier_anesth_id);
     url.addParam("operation_id", operation_id);
     url.popup(700, 500, "printFicheAnesth");
   }
 
-  var chooseAnesthCallback = function() {
+  chooseAnesthCallback = function() {
     location.reload(); 
   }
   
@@ -26,21 +25,21 @@
     reloadRightList();
   }
   
-  var reloadLeftList = function() {
+  reloadLeftList = function() {
     var url = new Url("dPbloc", "ajax_list_intervs");
     url.addParam("plageop_id", {{$plage->_id}});
     url.addParam("list_type" , "left");
     url.requestUpdate("left_list");
   }
   
-  var reloadRightList = function() {
+  reloadRightList = function() {
     var url = new Url("dPbloc", "ajax_list_intervs");
     url.addParam("plageop_id", {{$plage->_id}});
     url.addParam("list_type" , "right");
     url.requestUpdate("right_list");
   }
   
-  var submitOrder = function(oForm, side) {
+  submitOrder = function(oForm, side) {
     var callback = reloadAllLists;
     
     if(side == "left") {
@@ -53,7 +52,7 @@
     return onSubmitFormAjax(oForm, callback);
   }
 
-  var extraInterv = function(op_id) {
+  extraInterv = function(op_id) {
     var url = new Url("dPbloc", "ajax_edit_extra_interv");
     url.addParam("op_id", op_id);
     url.requestModal(700, 400);

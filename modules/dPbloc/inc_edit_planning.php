@@ -8,11 +8,18 @@
  * @license    GNU General Public License, see http://www.gnu.org/licenses/gpl.html
  * @version    $Revision$
  */
+
 $date       = CValue::getOrSession("date", CMbDT::date());
 $plageop_id = CValue::getOrSession("plageop_id");
 
+// Informations sur la plage demandée
+$plagesel = new CPlageOp;
+$plagesel->load($plageop_id);
+$plagesel->loadRefSalle();
+
 $listBlocs  = CGroups::loadCurrent()->loadBlocs(PERM_READ, null, "nom");
-$bloc_id    = CValue::getOrSession("bloc_id", reset($listBlocs)->_id);
+$bloc_id    = CValue::getOrSession("bloc_id", ($plagesel->_ref_salle->bloc_id) ? $plagesel->_ref_salle->bloc_id : reset($listBlocs)->_id);
+
 
 if(!array_key_exists($bloc_id, $listBlocs)) {
   $bloc_id = reset($listBlocs)->_id;
@@ -30,9 +37,7 @@ $bloc->loadRefsSalles();
 
 $listSalles = $bloc->_ref_salles;
   
-// Informations sur la plage demandée
-$plagesel = new CPlageOp;
-$plagesel->load($plageop_id);
+
 if(!$plagesel->temps_inter_op) {
   $plagesel->temps_inter_op = "00:00:00";
 }

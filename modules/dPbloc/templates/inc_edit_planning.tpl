@@ -41,8 +41,8 @@ Main.add(function(){
   var options = {
     exactMinutes: false, 
     minInterval: {{"CPlageOp"|static:minutes_interval}},
-    minHours: {{"CPlageOp"|static:hours_start}},
-    maxHours: {{"CPlageOp"|static:hours_stop }}
+    minHours: {{"CPlageOp"|static:hours_start|intval}},
+    maxHours: {{"CPlageOp"|static:hours_stop|intval}}
   };
   Calendar.regField(oForm.debut, null, options);
   Calendar.regField(oForm.fin  , null, options);
