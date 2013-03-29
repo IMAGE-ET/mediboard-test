@@ -82,6 +82,7 @@ $locales['CSalle-back-commentaires.empty'] = 'Commentaires';
 $locales['alert-config_source_smtp'] = 'Veuillez configurer votre compte pour envoyer un email (Préférences Utilisateur > Source d\'échange';
 $locales['alert-praticien_email'] = 'L\'adresse du praticien de l\'intervention n\'a pas été saisie dans Mediboard. Veuillez contacter un administrateur.';
 $locales['checkbox-COperation-show_cancelled'] = 'Afficher les interventions annulées';
+$locales['checkbox-COperation-show_operations'] = 'Afficher les interventions';
 $locales['config-reservation-debut_planning'] = 'Heure de début du planning';
 $locales['config-reservation-debut_planning-0'] = '0';
 $locales['config-reservation-debut_planning-1'] = '1';

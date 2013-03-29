@@ -36,14 +36,24 @@
     planning.salles_ids = {{$salles_ids|@json}};
     
     planning.onMenuClick = function(event, object_id, elem) {
+
       window.cut_operation_id = null;
       window.copy_operation_id = null;
       
       switch (event) {
+        case 'list':
+          planningInter(object_id);
+          break;
+
+
         case 'edit':
           // Commentaire
           if (elem.up().up().hasClassName("commentaire_planning")) {
             modifCommentaire(null, null, null, object_id, false, "Control.Modal.close");
+          }
+
+          else if (elem.up().up().hasClassName("plage_planning")) {
+            modifPlage(object_id, '{{$date_planning}}');
           }
           // DHE
           else {

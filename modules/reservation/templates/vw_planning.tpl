@@ -22,6 +22,7 @@
     url.addParam("praticien_id" , $V(form.praticien_id));
     url.addParam("bloc_id"      , $V(form.bloc_id));
     url.addParam("show_cancelled", form.show_cancelled.checked ? 1 : 0);
+    url.addParam("show_operations", form.show_operations.checked ? 1 : 0);
     url.addParam("current_m"    , "{{$current_m}}");
     var week_container = $$(".week-container")[0];
     
@@ -29,6 +30,17 @@
       url.addParam("scroll_top", week_container.scrollTop);
     }
     url.requestUpdate("planning");
+
+  }
+
+  modifPlage = function(plage_id, date) {
+    var url = new Url("dPbloc", "inc_edit_planning");
+    url.addParam("plageop_id", plage_id);
+    url.addParam("date", date);
+    url.requestModal();
+    url.modalObject.observe("afterClose", function() {
+      refreshPlanning();
+    });
   }
   
   modifIntervention = function(date, hour, salle_id, operation_id, chir_id, enplage) {
@@ -227,6 +239,13 @@
     onSubmitFormAjax(form, {onComplete: Control.Modal.close});
   }
 
+  planningInter = function(plageop_id) {
+    var url = new Url("dPbloc", "vw_edit_interventions");
+    url.addParam("plageop_id", plageop_id)
+    url.requestModal(1000,700);
+    url.modalObject.observe("afterClose", refreshPlanning);
+  }
+
   openLegend = function() {
     var url = new Url("reservation", "ajax_legend_planning");
     url.requestModal();
@@ -273,7 +292,7 @@
 <form name="filterPlanning" method="get"> 
   <table class="form">
     <tr>
-      <th class="category" colspan="4">
+      <th class="category" colspan="5">
         Filtre
       </th>
       <th class="category">
@@ -316,6 +335,12 @@
           <input type="checkbox" name="show_cancelled" {{if $show_cancelled}}checked{{/if}} onclick="refreshPlanning()"/>
             {{tr}}checkbox-COperation-show_cancelled{{/tr}}
         </label>
+      </td>
+      <td>
+          <label>
+            <input type="checkbox" name="show_operations" {{if $show_operations}}checked{{/if}} onclick="refreshPlanning()"/>
+            {{tr}}checkbox-COperation-show_operations{{/tr}}
+          </label>
       </td>
       <td>
         <label>
