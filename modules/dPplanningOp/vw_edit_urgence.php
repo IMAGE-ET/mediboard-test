@@ -40,7 +40,7 @@ $salle_id     = CValue::get("salle_id");
 $patient_id   = CValue::get("pat_id");
 
 // L'utilisateur est-il un praticien
-$chir = CMediusers::get();
+$user = $chir = CMediusers::get();
 if ($chir->isPraticien() and !$chir_id) {
   $chir_id = $chir->user_id;
 }
@@ -65,7 +65,7 @@ if ($patient_id && !$operation_id && !$sejour_id) {
 }
 
 // Vérification des droits sur les praticiens
-$listPraticiens = $chir->loadPraticiens(PERM_EDIT);
+$listPraticiens = $user->_is_anesth ? $chir->loadPraticiens(PERM_READ) : $chir->loadPraticiens(PERM_EDIT);
 $categorie_prat = array();
 foreach ($listPraticiens as $keyPrat =>$prat) {
   $prat->loadRefsFwd();
