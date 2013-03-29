@@ -55,6 +55,10 @@ class CMbLock {
    * @return bool
    */
   function release() {
-    return unlink($this->lock_file);
+    if (file_exists($this->lock_file)) {
+      return unlink($this->lock_file);
+    }
+
+    return true;
   }
 }
