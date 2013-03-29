@@ -247,12 +247,17 @@ class CApp {
       "classes/*/*.class.php",
       "classes/*.class.php", 
       "*/*/*.class.php",
+
       // Require all modules classes
+      // Don't include classes in subdirectories (there are a lot !)
+      //"modules/*/classes/*/*/*.class.php",
+      //"modules/*/classes/*/*.class.php",
       "modules/*/classes/*.class.php",
+
       // Require all modules setups 
       "modules/*/setup.php",
     );
-    
+
     // Actual requires
     foreach ($dirs as $dir) {
       $files = glob("$rootDir/$dir");

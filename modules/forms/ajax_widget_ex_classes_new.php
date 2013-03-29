@@ -17,10 +17,10 @@ $_element_id = CValue::get("_element_id");
 
 $object = CMbObject::loadFromGuid($object_guid);
 
-CExObject::$_load_lite = true;
+//CExObject::$_load_lite = true;
 
-$ex_class = new CExClassEvent;
-$ds = $ex_class->_spec->ds;
+$ex_class_event = new CExClassEvent;
+$ds = $ex_class_event->_spec->ds;
 $group_id = CGroups::loadCurrent()->_id;
 
 $where = array(
@@ -33,31 +33,38 @@ $where = array(
 $ljoin = array(
   "ex_class" => "ex_class.ex_class_id = ex_class_event.ex_class_id",
 );
-$ex_class_events = $ex_class->loadList($where, null, null, null, $ljoin);
+
+/** @var CExClassEvent[] $ex_class_events */
+$ex_class_events = $ex_class_event->loadList($where, null, null, null, $ljoin);
 $ex_classes = array();
 $ex_objects = array();
 
 $count = 0;
 $count_available = count($ex_class_events);
 foreach ($ex_class_events as $_id => $_ex_class_event) {
-  $ex_classes[$_ex_class_event->ex_class_id] = $_ex_class_event->loadRefExClass();
-  /*if (!$_ex_class->checkConstraints($object)) {
-    unset($ex_classes[$_id]);
+  $_ex_class = $_ex_class_event->loadRefExClass();
+  $_ex_class->getFormulaField();
+
+  $ex_classes[$_ex_class->_id] = $_ex_class;
+
+  /*if (!$_ex_class_event->checkConstraints($object)) {
+    unset($ex_class_events[$_id]);
     $count_available--;
   }*/
 
-  $objects = $_ex_class_event->getExObjectForHostObject($object);
+  $_ex_objects = $_ex_class_event->getExObjectForHostObject($object);
 
-  foreach ($objects as $_object) {
-    $_object->loadLogs();
-    foreach ($_object->_ref_logs as $_log) {
+  foreach ($_ex_objects as $_ex_object) {
+    $_ex_object->load(); // Needed
+    $_ex_object->loadLogs();
+    foreach ($_ex_object->_ref_logs as $_log) {
       $_log->loadRefUser()->loadRefMediuser()->loadRefFunction();
     }
   }
 
-  $count += count($objects);
+  $count += count($_ex_objects);
 
-  $ex_objects[$_ex_class_event->ex_class_id] = $objects;
+  $ex_objects[$_ex_class->_id] = $_ex_objects;
 }
 
 foreach ($ex_objects as $_id => $_ex_object) {

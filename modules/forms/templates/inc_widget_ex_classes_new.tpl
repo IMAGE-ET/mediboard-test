@@ -22,6 +22,12 @@
           <button class="edit" title="{{mb_value object=$_ex_object->_ref_last_log field=user_id}}"
             onclick="showExClassForm({{$_ex_class_id}}, '{{$object->_guid}}', '{{$_ex_object}}', '{{$_ex_object->_id}}', '{{$event_name}}', '{{$_element_id}}')">
             {{mb_value object=$_ex_object->_ref_last_log field=date}}
+
+            {{if $ex_classes.$_ex_class_id->_formula_field}}
+              {{assign var=_formula_field value=$ex_classes.$_ex_class_id->_formula_field}}
+
+              <strong>= {{$_ex_object->$_formula_field}}</strong>
+            {{/if}}
           </button>
         {{else}}
           <button class="new" value="{{$_ex_class_id}}" onclick="selectExClass(this, '{{$object->_guid}}', '{{$event_name}}', '{{$_element_id}}')">
