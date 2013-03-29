@@ -395,14 +395,20 @@ foreach ($plages_by_salle as $salle_id => $_plages) {
   $i = array_search($salle_id, $salles_ids);
   
   foreach ($_plages as $_plage) {
+
     $validated = count($_plage->loadRefsOperations(false, null, true, true));
-    $notvalidated = count($_plage->loadRefsOperations(false, null, true, false));
+    $total = count($_plage->loadRefsOperations(false));
+    $_plage->loadRefAnesth();
+
     $debut = "$i ".CMbDT::time($_plage->debut);
     
     $duree = CMbDT::minutesRelative(CMbDT::time($_plage->debut), CMbDT::time($_plage->fin));
     
     $libelle = CMbString::htmlEntities($_plage->chir_id ? $_plage->_ref_chir->_view : $_plage->_ref_spec->_view);
-    $libelle.= "\n (<span style='color:green;font-weight: bold'>$validated V</span> / <span style='color:red;font-weight: bold'>$notvalidated NV</span>)";
+    $libelle.= "\n ( $validated / $total)";
+    if ($_plage->_ref_anesth->_id) {
+      $libelle.= "<hr/> <img src='images/icons/anesth.png'/> $_plage->_ref_anesth";
+    }
 
     $event = new CPlanningEvent($_plage->_guid, $debut, $duree, $libelle, "#efbf99", true, null, $_plage->_guid, false);
 
