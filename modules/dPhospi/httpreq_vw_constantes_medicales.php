@@ -32,6 +32,7 @@ $paginate              = CValue::get('paginate', 0);
 $start                 = CValue::get('start', 0);
 $count                 = CValue::get('count', 50);
 $simple_view           = CValue::get('simple_view', 0);
+$host_guid             = CValue::get('host_guid');
 
 if (!$start) {
   $start = 0;
@@ -44,9 +45,26 @@ else {
   $limit = $count;
 }
 
+$current_context = null;
+if ($context_guid) {
+  $current_context = CMbObject::loadFromGuid($context_guid);
+}
+
+//mbTrace($current_context->_view, "CONTEXT");
+
 if (!$selection || $selected_context_guid === 'all') {
-  //$selection = CConstantesMedicales::$list_constantes;
-  $conf_constantes = explode("|", CConstantesMedicales::getConfig("important_constantes"));
+  /** @var CGroups|CService|CRPU $host */
+
+  // On cherche le meilleur "hebergement" des constantes, pour charger les configurations adequat
+  if ($host_guid) {
+    $host = CMbObject::loadFromGuid($host_guid);
+  }
+  else {
+    $host = CConstantesMedicales::guessHost($current_context);
+  }
+
+  $important_constantes = CConstantesMedicales::getHostConfig("important_constantes", $host);
+  $conf_constantes = explode("|", $important_constantes);
   $selection = array_intersect_key(CConstantesMedicales::$list_constantes, array_flip($conf_constantes));
 }
 else {
@@ -121,8 +139,6 @@ foreach ($list as $_context) {
   $c->loadRefsFwd();
   $list_contexts[$c->_guid] = $c;
 }
-
-$current_context = CMbObject::loadFromGuid($context_guid);
 
 if ($current_context instanceof CConsultation) {
   $current_context->loadComplete();
@@ -267,6 +283,7 @@ $cumuls_day = array();
 
 // Si le séjour a des constantes médicales
 if ($list_constantes) {
+  $reset_hours = array();
   foreach ($list_constantes as $cst) {
     $comment = utf8_encode($cst->comment);
     $dates[] = CMbDT::transform($cst->datetime, null, '%d/%m/%y');
@@ -323,7 +340,11 @@ if ($list_constantes) {
           );
           
           if (isset($params["cumul_reset_config"])) {
-            $reset_hour = CConstantesMedicales::getResetHour($name);
+            if (!isset($reset_hours[$name])) {
+              $reset_hours[$name] = CConstantesMedicales::getResetHour($name);
+            }
+            $reset_hour = $reset_hours[$name];
+
             $day_24h = CMbDT::transform("-$reset_hour hours", $cst->datetime, '%d/%m/%y');
     
             if (!isset($cumuls_day[$name][$day_24h])) {

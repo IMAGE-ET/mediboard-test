@@ -1030,6 +1030,7 @@ class CConstantesMedicales extends CMbObject {
     $grid = array();
     $selection = array_keys(CConstantesMedicales::$list_constantes);
     $cumuls_day = array();
+    $reset_hours = array();
 
     if (!$full) {
       $conf_constantes = explode("|", CConstantesMedicales::getConfig("important_constantes"));
@@ -1066,7 +1067,11 @@ class CConstantesMedicales extends CMbObject {
 
           // cumul
           if (isset($_params["cumul_for"]) || isset($_params["formula"])) {
-            $reset_hour = self::getResetHour($_name);
+            if (!isset($reset_hours[$_name])) {
+              $reset_hours[$_name] = self::getResetHour($_name);
+            }
+            $reset_hour = $reset_hours[$_name];
+
             $day_24h = CMbDT::transform("-$reset_hour hours", $_constante_medicale->datetime, '%y-%m-%d');
 
             if (!isset($cumuls_day[$_name][$day_24h])) {
@@ -1254,20 +1259,121 @@ class CConstantesMedicales extends CMbObject {
   }
 
   /**
-   * Get service or group specific configuration value
+   * Get the config from a host
    *
-   * @param string $name     Configuration name
-   * @param int    $group_id Group ID
+   * @param string           $name The config name
+   * @param CGroups|CService $host The host object
    *
    * @return mixed
    */
-  static function getConfig($name, $group_id = null) {
+  static function getHostConfig($name, CMbObject $host) {
+    $host = self::guessHost($host);
+
+    $group_id = null;
     $service_id = null;
-    if (isset($_SESSION["soins"]["service_id"])) {
-      $service_id = $_SESSION["soins"]["service_id"];
+
+    // Etablissement
+    if ($host instanceof CGroups) {
+      $group_id = $host->_id;
     }
-    elseif (isset($_SESSION["ecap"]["service_id"])) {
-      $service_id = $_SESSION["ecap"]["service_id"];
+
+    // Service
+    if ($host instanceof CService) {
+      $service_id = $host->_id;
+      $group_id   = $host->group_id;
+    }
+
+    return self::getConfig($name, $group_id, $service_id);
+  }
+
+  /**
+   * Find the host from a context object
+   *
+   * @param CMbObject $context The context (séjour, rpu, service, etablissement)
+   *
+   * @return CGroups|CService
+   */
+  static function guessHost(CMbObject $context) {
+    // Etablissement ou service (deja un HOST)
+    if (
+        $context instanceof CGroups ||
+        $context instanceof CService
+    ) {
+      return $context;
+    }
+
+    // Séjour d'urgence
+    if ($context instanceof CSejour && $context->type = "urg") {
+      $rpu = $context->loadRefRPU();
+      if ($rpu->_id) {
+        $context = $rpu;
+      }
+    }
+
+    // Sejour
+    if ($context instanceof CSejour) {
+      $affectation = $context->loadRefCurrAffectation();
+      if (!$affectation->_id) {
+        $affectation = $context->loadRefFirstAffectation();
+      }
+
+      return $affectation->loadRefService();
+    }
+
+    // Urgences
+    if ($context instanceof CRPU) {
+      /** @var CService $service */
+      $service = null;
+
+      if ($context->box_id) {
+        return $context->loadRefBox()->loadRefService();
+      }
+
+      $sejour = $context->loadRefSejour();
+      $affectation = $sejour->loadRefCurrAffectation();
+      if (!$affectation->_id) {
+        $affectation = $sejour->loadRefFirstAffectation();
+      }
+
+      $service = $affectation->loadRefService();
+
+      if ($service && $service->_id) {
+        return $service;
+      }
+
+      // Recherche du premier service d'urgences actif
+      $group_id = CGroups::loadCurrent()->_id;
+      $where = array(
+        "group_id"  => "= '$group_id'",
+        "urgence"   => "= '1'",
+        "cancelled" => "= '0'",
+      );
+      $service = new CService();
+      $service->loadObject($where, "nom");
+
+      return $service;
+    }
+
+    return CGroups::loadCurrent();
+  }
+
+  /**
+   * Get service or group specific configuration value
+   *
+   * @param string $name       Configuration name
+   * @param int    $group_id   Group ID
+   * @param int    $service_id Service ID
+   *
+   * @return mixed
+   */
+  static function getConfig($name, $group_id = null, $service_id = null) {
+    if (!$service_id) {
+      if (isset($_SESSION["soins"]["service_id"])) {
+        $service_id = $_SESSION["soins"]["service_id"];
+      }
+      elseif (isset($_SESSION["ecap"]["service_id"])) {
+        $service_id = $_SESSION["ecap"]["service_id"];
+      }
     }
 
     $guid = "global";
@@ -1284,13 +1390,18 @@ class CConstantesMedicales extends CMbObject {
   /**
    * Get reset hour
    *
-   * @param string $name     Reset name
-   * @param int    $group_id Group id
+   * @param string $name       Reset name
+   * @param int    $group_id   Group ID
+   * @param int    $service_id Service ID
    *
    * @return mixed
    */
-  static function getResetHour($name, $group_id = null) {
+  static function getResetHour($name, $group_id = null, $service_id = null) {
     $list = CConstantesMedicales::$list_constantes;
+
+    if (!$group_id) {
+      $group_id = CGroups::loadCurrent()->_id;
+    }
 
     if (isset($list[$name]["cumul_reset_config"])) {
       $confname = $list[$name]["cumul_reset_config"];
@@ -1299,7 +1410,7 @@ class CConstantesMedicales extends CMbObject {
       $confname = $list[$list[$name]["cumul_for"]]["cumul_reset_config"];
     }
 
-    return self::getConfig($confname, $group_id);
+    return self::getConfig($confname, $group_id, $service_id);
   }
 }
 

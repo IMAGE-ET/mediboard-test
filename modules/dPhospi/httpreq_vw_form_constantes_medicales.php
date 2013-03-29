@@ -15,11 +15,27 @@ $patient_id   = CValue::get('patient_id');
 $readonly     = CValue::get('readonly');
 $selection    = CValue::get('selection');
 $tri          = CValue::get('tri', '');
+$host_guid    = CValue::get('host_guid');
 
-$dates     = array();
+$context = null;
+if ($context_guid) {
+  $context = CMbObject::loadFromGuid($context_guid);
+}
+
+$dates = array();
 if (!$selection) {
-  //$selection = CConstantesMedicales::$list_constantes;
-  $conf_constantes = explode("|", CConstantesMedicales::getConfig("important_constantes"));
+  /** @var CGroups|CService|CRPU $host */
+
+  // On cherche le meilleur "herbegement" des constantes, pour charger les configuration adequat
+  if ($host_guid) {
+    $host = CMbObject::loadFromGuid($host_guid);
+  }
+  else {
+    $host = CConstantesMedicales::guessHost($context);
+  }
+
+  $important_constantes = CConstantesMedicales::getHostConfig("important_constantes", $host);
+  $conf_constantes = explode("|", $important_constantes);
   $selection = array_intersect_key(CConstantesMedicales::$list_constantes, array_flip($conf_constantes));
 }
 else {
@@ -43,11 +59,10 @@ $constantes->load($const_id);
 $constantes->loadRefContext();
 $constantes->loadRefPatient();
 
-if ($context_guid) {
-  $context = CMbObject::loadFromGuid($context_guid);
-  $constantes->patient_id = $patient_id;
+if ($context) {
+  $constantes->patient_id    = $patient_id;
   $constantes->context_class = $context->_class;
-  $constantes->context_id = $context->_id;
+  $constantes->context_id    = $context->_id;
 }
 
 $patient_id = $constantes->patient_id ? $constantes->patient_id : $patient_id;
