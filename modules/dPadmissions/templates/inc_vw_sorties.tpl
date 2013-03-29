@@ -77,7 +77,7 @@
       <input type="text" size="3" onkeyup="Admissions.filter(this, 'sortie')" id="filter-patient-name" />
     </th>
     <th>
-      {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url="?$url"}}
+      {{mb_colonne class="CSejour" field="praticien_id" order_col=$order_col order_way=$order_way url="$url"}}
     </th>
     <th>
       {{mb_colonne class="CSejour" field="sortie_prevue" order_col=$order_col order_way=$order_way url="$url"}}
