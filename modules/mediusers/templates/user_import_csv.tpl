@@ -19,11 +19,12 @@
     <li>{{mb_label class=CMediusers field=_user_username  }} </li>
     <li>{{mb_label class=CMediusers field=_user_password  }} </li>
     <li><strong>{{mb_label class=CMediusers field=_user_type      }}</strong> (code numérique)</li>
-    <li><strong>{{mb_label class=CMediusers field=function_id     }}</strong> ({{mb_label class=CFunctions field=text}})</li>
-    <li>{{mb_label class=CMediusers field=_profile_id     }} ({{mb_label class=CUser field=user_username}})</li>
+    <li><strong>{{mb_label class=CMediusers field=function_id     }}</strong> ({{mb_label class=CFunctions field=text}}) : fonction créée si introuvable</li>
+    <li>{{mb_label class=CMediusers field=_profile_id     }} ({{mb_label class=CUser field=user_username}}): profil non créé si introuvable</li>
     <li>{{mb_label class=CMediusers field=adeli           }} </li>
-    <li>{{mb_label class=CMediusers field=spec_cpam_id    }} (code à deux chiffres)</li>
-    <li>{{mb_label class=CMediusers field=discipline_id   }} </li>
+    <li>{{mb_label class=CMediusers field=rpps            }} </li>
+    <li>{{mb_label class=CMediusers field=spec_cpam_id    }} (code à deux chiffres): spcécialité non créée si introuvable</li>
+    <li>{{mb_label class=CMediusers field=discipline_id   }} : discipline non créée si introuvable</li>
   </ul>
   <hr />
   <em>Champs obligatoires en gras.</em>
