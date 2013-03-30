@@ -10,7 +10,7 @@
 
 CCanDo::checkAdmin();
 
-$file = isset($_FILES['import']) ? $_FILES['import'] : null;
+$file = CValue::files("import");
 $dryrun = CValue::post("dryrun");
 
 $results = array();

@@ -71,11 +71,23 @@ abstract class CValue {
    * @param string $name    The key of the value to get from HTTP REQUEST (POST or GET)
    * @param string $default The default value in the key's value doesn't exist
    * 
-   * @return mixed The value associated to $valName in the HTTP REQUEST (POST or GET)
+   * @return mixed The value associated to $name in the HTTP REQUEST (POST or GET)
    */
   static function request($name, $default = null) {
     return isset($_REQUEST[$name]) ? $_REQUEST[$name] : $default;
   }
+  
+  /**
+   * Returns the value of a FILE variable retrieved from HTTP POST
+   * 
+   * @param string $name    The FILE key of the value to get from HTTP POST
+   * 
+   * @return mixed The FILE value associated to $name in the HTTP REQUEST (POST or GET)
+   */
+  static function files($name) {
+    return isset($_FILES[$name]) ? $_FILES[$name] : null;
+  }
+  
 
   /**
    * Returns the value of a variable retrieved from Session, with at least a default value
