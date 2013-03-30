@@ -43,7 +43,7 @@
 {{if $results|@count}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="11">{{$results|@count}} utilisateurs trouvés</th>
+    <th class="title" colspan="12">{{$results|@count}} utilisateurs trouvés</th>
   </tr>
   <tr>
     <th>Etat</th>
@@ -54,6 +54,7 @@
     <th>{{mb_label class=CMediusers field=_user_type      }}</th>
     <th>{{mb_label class=CMediusers field=function_id     }}</th>
     <th>{{mb_label class=CMediusers field=adeli           }}</th>
+    <th>{{mb_label class=CMediusers field=rpps            }}</th>
     <th>
       {{mb_label class=CMediusers field=_profile_id     }} 
       {{if array_key_exists("profil_name", $unfound)}}      
@@ -98,6 +99,7 @@
     <td class="text">{{$_user.type}}           </td>
     <td class="text">{{$_user.function_name}}  </td>
     <td class="text">{{$_user.adeli}}          </td>
+    <td class="text">{{$_user.rpps}}          </td>
     <td class="text {{if array_key_exists($_user.profil_name    , $unfound.profil_name    )}}warning{{/if}}">{{$_user.profil_name    }}</td>
     <td class="text {{if array_key_exists($_user.spec_cpam_code , $unfound.spec_cpam_code )}}warning{{/if}}">{{$_user.spec_cpam_code }}</td>
     <td class="text {{if array_key_exists($_user.discipline_name, $unfound.discipline_name)}}warning{{/if}}">{{$_user.discipline_name}}</td>

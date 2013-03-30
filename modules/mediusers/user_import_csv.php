@@ -31,16 +31,17 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     // Parsing
     $line = array_map("trim"      , $line);
     $line = array_map("addslashes", $line);
-    $results[$i]["lastname"]        = CMbArray::get($line, 0);
-    $results[$i]["firstname"]       = CMbArray::get($line, 1);
-    $results[$i]["username"]        = CMbArray::get($line, 2);
-    $results[$i]["password"]        = CMbArray::get($line, 3);
-    $results[$i]["type"]            = CMbArray::get($line, 4);
-    $results[$i]["function_name"]   = CMbArray::get($line, 5);
-    $results[$i]["profil_name"]     = CMbArray::get($line, 6);
-    $results[$i]["adeli"]           = CMbArray::get($line, 7);
-    $results[$i]["spec_cpam_code"]  = CMbArray::get($line, 8);
-    $results[$i]["discipline_name"] = CMbArray::get($line, 9);
+    $results[$i]["lastname"]        = CMbArray::get($line,  0);
+    $results[$i]["firstname"]       = CMbArray::get($line,  1);
+    $results[$i]["username"]        = CMbArray::get($line,  2);
+    $results[$i]["password"]        = CMbArray::get($line,  3);
+    $results[$i]["type"]            = CMbArray::get($line,  4);
+    $results[$i]["function_name"]   = CMbArray::get($line,  5);
+    $results[$i]["profil_name"]     = CMbArray::get($line,  6);
+    $results[$i]["adeli"]           = CMbArray::get($line,  7);
+    $results[$i]["rpps"]            = CMbArray::get($line,  8);
+    $results[$i]["spec_cpam_code"]  = CMbArray::get($line,  9);
+    $results[$i]["discipline_name"] = CMbArray::get($line, 10);
     
     $results[$i]["error"] = 0;
         
@@ -50,6 +51,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     $user->_user_first_name = $results[$i]["firstname"];
     $user->_user_type       = $results[$i]["type"];
     $user->adeli            = $results[$i]["adeli"];
+    $user->rpps             = $results[$i]["rpps"];
     $user->actif  = 1;
     $user->remote = 0;
     
