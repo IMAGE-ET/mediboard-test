@@ -57,7 +57,7 @@ $where["type"] = "= 'body'";
 $where["group_id"] = " = '$user->_group_id'";
 $modeles = array_merge($modeles, $compte_rendu->seek($keywords, $where, null, null, null, $order));
 
-$modeles = CStoredObject::naturalSort($modeles, array("nom"), true);
+$modeles = CModelObject::naturalSort($modeles, array("nom"), true);
 
 $smarty = new CSmartyDP();
 

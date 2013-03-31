@@ -126,7 +126,7 @@ foreach ($interventions as $key => $_interv) {
   }
 }
 
-$interventions = CMbObject::naturalSort($interventions, array("_datetime"));
+$interventions = CModelObject::naturalSort($interventions, array("_datetime"));
 
 $smarty = new CSmartyDP();
 

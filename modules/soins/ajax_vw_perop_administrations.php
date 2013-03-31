@@ -45,7 +45,7 @@ $ljoin = array(
 );
 $administrations = array_merge($administrations, $administration->loadList($where, null, null, null, $ljoin));
 
-$administrations = CMbObject::naturalSort($administrations, array("dateTime"));
+$administrations = CModelObject::naturalSort($administrations, array("dateTime"));
 
 foreach ($administrations as $_adm) {
   $_adm->loadTargetObject();
