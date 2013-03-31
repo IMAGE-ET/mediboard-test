@@ -14,7 +14,7 @@
   <li><strong>{{mb_label class=CProtocole field=function_id}}</strong> ({{mb_label class=CFunctions field=text}})</li>
   <li>{{mb_label class=CProtocole field=chir_id         }} ({{mb_label class=CMediusers field=_user_last_name }})</li>
   <li>{{mb_label class=CProtocole field=chir_id         }} ({{mb_label class=CMediusers field=_user_first_name}})</li>
-  <li><strong>{{mb_label class=CProtocole field=libelle}}</strong></li>
+  <li><strong>{{mb_label class=CProtocole field=libelle}}</strong> (mise à jour du protocole ayant exactement le même libellé)</li>
   <li><strong>{{mb_label class=CProtocole field=temp_operation}}</strong> (<tt>HH:MM</tt>)</li>
   <li>{{mb_label class=CProtocole field=codes_ccam}} (séparés par des barres verticales <tt>|</tt>)</li>
   <li>
