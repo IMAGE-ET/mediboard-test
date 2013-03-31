@@ -24,6 +24,8 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
   // Each line
   while ($line = fgetcsv($fp, null, ";")) {
     $i++;
+
+    // Skip empty lines
     if (!isset($line[0]) || $line[0] == "") {
       continue;
     }
@@ -80,6 +82,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     }
 
     // Fonction
+CSQLDataSource::$trace = true;
     $function = new CFunctions();
     $function->group_id = CGroups::loadCurrent()->_id;
     $function->text     = $results[$i]["function_name"];
@@ -94,6 +97,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       $function->color              = "ffffff";
       $function->compta_partagee    = 0;
       $function->consults_partagees = 1;
+      $function->unescapeValues();
       $msg = $function->store();
       if ($msg) {
         CAppUI::setMsg($msg, UI_MSG_ERROR);
@@ -104,6 +108,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
         continue;
       }
     }
+CSQLDataSource::$trace = false;
 
     $user->function_id = $function->_id;
     
@@ -137,6 +142,7 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
       continue;
     }
     
+    $user->unescapeValues();
     $msg = $user->store();
     if ($msg) {
       CAppUI::setMsg($msg, UI_MSG_ERROR);
