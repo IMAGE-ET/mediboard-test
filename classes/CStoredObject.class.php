@@ -21,7 +21,6 @@ class CStoredObject extends CModelObject {
   static $objectCounts   = array();
   static $objectCache    = array();
   static $cachableCounts = array();
-  private static $sortField = null;
 
   /**
    * @var CCanDo
@@ -2357,31 +2356,5 @@ class CStoredObject extends CModelObject {
    */
   function getDS(){
     return $this->_spec->ds;
-  }
-  
-  protected static function _cmpFieldNatural($a, $b) {
-    $sort_field = self::$sortField;
-    return strnatcasecmp($a->$sort_field, $b->$sort_field);
-  }
-  
-  protected static function _cmpFieldNaturalAccents($a, $b) {
-    $sort_field = self::$sortField;
-    return strnatcasecmp(CMbString::removeDiacritics($a->$sort_field), CMbString::removeDiacritics($b->$sort_field));
-  }
-  
-  static function naturalSort($objects, $fields, $accents = false) {
-    if (empty($objects)) {
-      return $objects;
-    }
-    
-    $callback = $accents ? "_cmpFieldNaturalAccents" : "_cmpFieldNatural";
-    
-    foreach ($fields as $field) {
-      self::$sortField = $field;
-      usort($objects, array(__CLASS__, $callback));
-    }
-    
-    // Restore original keys
-    return array_combine(CMbArray::pluck($objects, "_id"), $objects);
   }
 }

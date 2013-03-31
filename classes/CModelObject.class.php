@@ -711,4 +711,57 @@ class CModelObject {
   function log($label = null, $log = true) {
     return mbTrace($this->getPlainFields(), $label, $log);
   }
+  
+  
+  private static $sortField = null;
+  
+  /**
+   * Comparison callback for natural sorting
+   * 
+   * CModelObject $a Object having a self::$sortField property
+   * CModelObject $a Object having a self::$sortField property
+   * 
+   * return int Comparison result 
+   */
+  protected static function _cmpFieldNatural($a, $b) {
+    $sort_field = self::$sortField;
+    return strnatcasecmp($a->$sort_field, $b->$sort_field);
+  }
+  
+  /**
+   * Diacritic insensitive comparison callback for natural sorting
+   * 
+   * CModelObject $a Object having a self::$sortField property
+   * CModelObject $a Object having a self::$sortField property
+   * 
+   * return int Comparison result 
+   */
+  protected static function _cmpFieldNaturalAccentsDiacritics($a, $b) {
+    $sort_field = self::$sortField;
+    return strnatcasecmp(CMbString::removeDiacritics($a->$sort_field), CMbString::removeDiacritics($b->$sort_field));
+  }
+  
+  /**
+   * Collection natural sort utility with diacritic sensitiveness options
+   * 
+   * CModelObject[] $object Collection to be sorted
+   * string[]       $fields Fields to sort on
+   * 
+   */
+  public static function naturalSort($objects, $fields, $diacritics = false) {
+    if (empty($objects)) {
+      return $objects;
+    }
+    
+    $callback = $diacritics ? "_cmpFieldNaturalAccentsDiacritics" : "_cmpFieldNatural";
+    
+    foreach ($fields as $field) {
+      self::$sortField = $field;
+      usort($objects, array(__CLASS__, $callback));
+    }
+    
+    // Restore original keys
+    return array_combine(CMbArray::pluck($objects, "_id"), $objects);
+  }
+  
 }
