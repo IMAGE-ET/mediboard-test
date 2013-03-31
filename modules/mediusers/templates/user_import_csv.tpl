@@ -74,7 +74,7 @@
   {{foreach from=$results item=_user}}
   <tr>
     {{if $_user.error}}
-    <td class="text warning">
+    <td class="text warning compact">
       {{$_user.error}}
     </td>
     {{elseif $dryrun}}

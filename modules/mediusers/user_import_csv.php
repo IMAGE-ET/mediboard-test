@@ -82,7 +82,6 @@ if ($file && ($fp = fopen($file['tmp_name'], 'r'))) {
     }
 
     // Fonction
-CSQLDataSource::$trace = true;
     $function = new CFunctions();
     $function->group_id = CGroups::loadCurrent()->_id;
     $function->text     = $results[$i]["function_name"];
@@ -108,7 +107,6 @@ CSQLDataSource::$trace = true;
         continue;
       }
     }
-CSQLDataSource::$trace = false;
 
     $user->function_id = $function->_id;
     
