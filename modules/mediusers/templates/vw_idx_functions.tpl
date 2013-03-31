@@ -3,8 +3,10 @@
 
 <script type="text/javascript">
 
-showFunction = function(function_id, element){
-  element.up('tr').addUniqueClassName('selected');
+showFunction = function(function_id, element) {
+  if (element) {
+    element.up('tr').addUniqueClassName('selected');
+  }
   var url = new Url("mediusers", "ajax_edit_function");
   url.addParam("function_id", function_id);
   url.requestUpdate("vw_function");
@@ -14,6 +16,7 @@ function changePage(page) {
   $V(getForm('listFilter').page,page);
 }
 
+Main.add(showFunction.curry('{{$function_id}}'));
 </script>
 
 <table class="main">
@@ -62,10 +65,9 @@ function changePage(page) {
           {{mb_include module=system template=inc_pagination total=$total_functions current=$page change_page='changePage' step=25}}
         {{/if}}
       </form>
-      {{include file="vw_list_functions.tpl"}}
+      {{mb_include template=vw_list_functions}}
     </td>
     <td style="width: 40%" id="vw_function">
-      {{include file="inc_edit_function.tpl"}}
     </td>
   </tr>
 </table>
