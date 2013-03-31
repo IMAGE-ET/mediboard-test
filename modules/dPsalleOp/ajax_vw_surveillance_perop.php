@@ -164,7 +164,7 @@ if ($prescription->_id){
     }*/
    
     foreach ($_line_array["administrations"] as $_adms) {
-      $_adms = CStoredObject::naturalSort($_adms, array("dateTime"));
+      $_adms = CModelObject::naturalSort($_adms, array("dateTime"));
       
       foreach ($_adms as $_adm) {
         $unite = "";
