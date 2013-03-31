@@ -10,25 +10,19 @@
 
 <h2>Import d'utilisateurs Mediboard.</h2>
 
-<div class="small-info">
-  Veuillez indiquez les champs suivants dans un fichier CSV (<strong>au format ISO</strong>) dont les champs sont séparés par
-  <strong>;</strong> et les textes par <strong>"</strong>, la première ligne étant ignorée :
-  <ul>
-    <li><strong>{{mb_label class=CMediusers field=_user_last_name }}</strong></li>
-    <li><strong>{{mb_label class=CMediusers field=_user_first_name}}</strong></li>
-    <li>{{mb_label class=CMediusers field=_user_username  }} </li>
-    <li>{{mb_label class=CMediusers field=_user_password  }} </li>
-    <li><strong>{{mb_label class=CMediusers field=_user_type      }}</strong> (code numérique)</li>
-    <li><strong>{{mb_label class=CMediusers field=function_id     }}</strong> ({{mb_label class=CFunctions field=text}}) : fonction créée si introuvable</li>
-    <li>{{mb_label class=CMediusers field=_profile_id     }} ({{mb_label class=CUser field=user_username}}): profil non créé si introuvable</li>
-    <li>{{mb_label class=CMediusers field=adeli           }} </li>
-    <li>{{mb_label class=CMediusers field=rpps            }} </li>
-    <li>{{mb_label class=CMediusers field=spec_cpam_id    }} (code à deux chiffres): spcécialité non créée si introuvable</li>
-    <li>{{mb_label class=CMediusers field=discipline_id   }} : discipline non créée si introuvable</li>
-  </ul>
-  <hr />
-  <em>Champs obligatoires en gras.</em>
-</div>
+{{mb_include module=system template=inc_import_csv_info_intro}}
+  <li><strong>{{mb_label class=CMediusers field=_user_last_name }}</strong></li>
+  <li><strong>{{mb_label class=CMediusers field=_user_first_name}}</strong></li>
+  <li>{{mb_label class=CMediusers field=_user_username  }} </li>
+  <li>{{mb_label class=CMediusers field=_user_password  }} </li>
+  <li><strong>{{mb_label class=CMediusers field=_user_type      }}</strong> (code numérique)</li>
+  <li><strong>{{mb_label class=CMediusers field=function_id     }}</strong> ({{mb_label class=CFunctions field=text}}) : fonction créée si introuvable</li>
+  <li>{{mb_label class=CMediusers field=_profile_id     }} ({{mb_label class=CUser field=user_username}}): profil non créé si introuvable</li>
+  <li>{{mb_label class=CMediusers field=adeli           }} </li>
+  <li>{{mb_label class=CMediusers field=rpps            }} </li>
+  <li>{{mb_label class=CMediusers field=spec_cpam_id    }} (code à deux chiffres): spcécialité non créée si introuvable</li>
+  <li>{{mb_label class=CMediusers field=discipline_id   }} : discipline non créée si introuvable</li>
+{{mb_include module=system template=inc_import_csv_info_outro}}
 
 <form method="post" action="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog=1&amp;" name="import" enctype="multipart/form-data">
   <input type="hidden"   name="m" value="{{$m}}" />
@@ -37,7 +31,6 @@
   <input type="file"     name="import" />
   <input type="checkbox" name="dryrun" value="1" checked="checked" />
   <label for="dryrun">Essai à blanc</label>
-  
   <button type="submit" class="submit">{{tr}}Save{{/tr}}</button>
 </form>
 
