@@ -23,13 +23,13 @@ $marked = $marked == "all" ? array("0", "1") : array($marked);
 foreach ($types as $_type) {
   $mouv = CMouvFactory::create($_type);
 	if ($action == "count") {
-  $mouv->loadLatest();
-  CAppUI::stepAjax("Latest available trigger for type '%s' is '%s' dating '%s'", UI_MSG_OK, 
-    $_type,
-    $mouv->rec, 
-    $mouv->when);
+    $mouv->loadLatest();
+    CAppUI::stepAjax("Latest available trigger for type '%s' is '%s' dating '%s'", UI_MSG_OK, 
+      $_type,
+      $mouv->rec, 
+      $mouv->when);
       
-	foreach ($marked as $_marked) {
+	  foreach ($marked as $_marked) {
 	    $count = $mouv->count($_marked);
 	    CAppUI::stepAjax("%s - %s : %s disponibles ", UI_MSG_OK, 
 	      CAppUI::tr("CMouvement400-type-$_type"),
@@ -39,7 +39,6 @@ foreach ($types as $_type) {
 	}
 	
   if ($action == "obsolete") {
-  	CSQLDataSource::$trace = false;
     $mouv->loadOldest();
     CAppUI::stepAjax("Oldest available trigger for type '%s' is '%s' dating '%s'", UI_MSG_OK, 
 		  $_type,
@@ -58,8 +57,6 @@ foreach ($types as $_type) {
 		else {
       CAppUI::stepAjax("Marked '%s' obsolete triggers", UI_MSG_OK, $count);
 		}
-
-    CSQLDataSource::$trace = false;
   }	
 }
 

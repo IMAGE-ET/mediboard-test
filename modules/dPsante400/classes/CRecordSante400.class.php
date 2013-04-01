@@ -19,7 +19,7 @@ class CRecordSante400 {
   
   
   public $data = array();
-  public $valuePrefix = "";
+  public $value_prefix = "";
   
   
   function __construct() {
@@ -204,7 +204,7 @@ class CRecordSante400 {
    * @return string Trimmed and slashed value
    */
   function consume($valueName) {
-    $valueName = "$this->valuePrefix$valueName";
+    $valueName = "$this->value_prefix$valueName";
     
     if (!is_array($this->data)) {
       throw new Exception("The value '$valueName' doesn't exist in this record, which has NO value");
@@ -231,7 +231,7 @@ class CRecordSante400 {
    * @return string Trimmed and slashed value, null if no value
    */
   function lookup($valueName) {
-    $valueName = "$this->valuePrefix$valueName";
+    $valueName = "$this->value_prefix$valueName";
     
     if (!is_array($this->data)) {
       throw new Exception("Record has NO value, looking up for '$valueName'");

@@ -59,8 +59,10 @@
     </th>
     <th>
       <div class="small-info">
-        La position dans le cluster doit être définie dans le fichier <code>config_overload.php</code>
-        ('dPsante400 CIncrementer cluster_position').<br />
+        La position dans le cluster doit être définie dans le fichier <code>config_overload.php</code>, 
+        <br />
+        A la position : <code>dPsante400 CIncrementer cluster_position</code>
+        <br />
         Elle est définie à <strong>{{$conf.dPsante400.CIncrementer.cluster_position}}</strong> sur ce serveur.
       </div>
     </th>
@@ -77,29 +79,41 @@
 
 <h2>Mouvements</h2>
 
+<script type="text/javascript">
+
+var Moves = {
+  doAction: function(action) {
+    var url = new Url("sante400", "ajax_do_moves");
+    url.addParam("action", action);
+    url.addElement($("ActionType"));
+    url.addElement($("ActionMarked"));
+    url.requestUpdate("purgeMoves");
+  },
+  doImport: function() {
+    var url = new Url("sante400", "ajax_do_import");
+    url.addElement($("ImportType"));
+    url.addElement($("ImportOffset"));
+    url.addElement($("ImportStep"));
+    url.addElement($("ImportVerbose"));
+    var onComplete = $("ImportAuto").checked ? Moves.doImport : Prototype.emptyFunction;
+    url.requestUpdate("importMoves", onComplete);
+    
+    var offset = parseInt($V("ImportOffset"), 10);
+    var step   = parseInt($V("ImportStep"  ), 10);
+    $V("ImportOffset", offset+step);
+  }
+}
+
+</script>
 <table class="tbl">
   <tr>
-    <th>Choix des mouvements</th>
-    <th>Action sur les mouvements</th>
+    <th class="narrow">Mouvements</th>
+    <th class="narrow">Action</th>
     <th>Status</th>
   </tr>
+
   <tr>
     <td>
-
-			<script type="text/javascript">
-			
-			var Moves = {
-			  doAction: function(sAction) {
-			    var url = new Url("dPsante400", "httpreq_do_moves");
-			    url.addParam("action", sAction);
-			    url.addElement($("ActionType"));
-			    url.addElement($("ActionMarked"));
-			    url.requestUpdate("purgeMoves");
-			  }
-			}
-			
-			</script>
-
       <label for="ActionType" title="{{tr}}CMouvement400-type-desc{{/tr}}">{{tr}}CMouvement400-type{{/tr}}</label>
       <select id="ActionType" name="type">
         <option value="all">&mdash; {{tr}}All{{/tr}}</option>
@@ -120,14 +134,62 @@
 	    </select>
     </td>
     <td>
-      <button class="search singleclick" onclick="Moves.doAction('count')">
-        {{tr}}Count{{/tr}}
-      </button>
-      <button class="search singleclick" onclick="Moves.doAction('obsolete')">
-        {{tr}}Obsolete{{/tr}}
+      <div>
+        <button class="search singleclick" onclick="Moves.doAction('count')">
+          {{tr}}Count{{/tr}}
+        </button>
+      </div>
+      <div>
+        <button class="search singleclick" onclick="Moves.doAction('obsolete')">
+          {{tr}}Obsolete{{/tr}}
+        </button>
+      </div>
+    </td>
+    <td class="text" id="purgeMoves"></td>
+  </tr>
+
+  <tr>
+    <td>
+      <div>
+        <label for="ImportType" title="{{tr}}CMouvement400-type-desc{{/tr}}">{{tr}}CMouvement400-type{{/tr}}</label>
+        <select id="ImportType" name="type">
+          <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+          {{foreach from=$types item=_type}}
+          <option value="{{$_type}}">{{tr}}CMouvement400-type-{{$_type}}{{/tr}}</option>
+          {{foreachelse}}
+          <option value="">Pas de type disponible</option>
+          {{/foreach}}
+        </select>
+      </div>
+
+      <div>
+        <label for="ImportOffset">Offset</label>
+        <input id="ImportOffset" type="text" name="offset" value="0" />
+      </div>
+
+      <div>
+        <label for="ImportStep">Step</label>
+        <input id="ImportStep" type="text" name="step" value="1" />
+      </div>
+
+      <div>
+        <input id="ImportAuto" type="checkbox" name="auto" value="1"  />
+        <label for="ImportAuto">Auto</label>
+      </div>
+
+      <div>
+        <input id="ImportVerbose" type="checkbox" name="verbose" value="1" />
+        <label for="ImportVerbose">Verbose</label>
+      </div>
+
+    </td>
+    <td>
+
+      <button class="search singleclick" onclick="Moves.doImport()">
+        {{tr}}Import{{/tr}}
       </button>
     </td>
-    <td class="text" id="purgeMoves" />
+    <td class="text" id="importMoves"></td>
   </tr>
 
 </table>

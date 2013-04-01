@@ -18,13 +18,20 @@ class CMouvement400 extends CRecordSante400 {
   const STATUS_ACTES         = 6;
   const STATUS_NAISSANCE     = 7;
   
-  public $base = null;
-  public $table = null;
-  public $class = null;
+  public $base;
+  public $table;
+  public $class;
+  public $origin;
   
-  public $markField = null;
-  public $idField = null;
-  public $typeField = null;
+  public $mark_field;
+  public $type_field;
+  public $when_field;
+  public $trigger_key_field;
+  public $origin_key_field;
+  
+  public $old_prefix;
+  public $new_prefix;
+  public $origin_prefix;
   
   public $statuses = array(null, null, null, null, null, null, null, null);
   public $cached   = array(null, null, null, null, null, null, null, null);
@@ -38,11 +45,33 @@ class CMouvement400 extends CRecordSante400 {
   
   public $changedFields = array();
 
+  function __construct() {
+    parent::__construct();
+    $this->class = get_class($this); 
+  }
+
   function initialize() {
     // Consume metadata
-    $this->rec  = $this->consume($this->idField);
-    $this->type = $this->consume($this->typeField);
-    $this->class = get_class($this); 
+    $this->rec  = $this->consume($this->trigger_key_field);
+    $this->type = $this->consume($this->type_field);
+
+    if ($this->when_field) {
+      $this->when = $this->consume($this->when_field);
+    }
+ 
+    // Analyse changed fields
+    foreach (array_keys($this->data) as $beforeName) {
+      $matches = array();
+      if (!preg_match("/$this->old_prefix(\w*)/i", $beforeName, $matches)) {
+        continue;
+      }
+      
+      $name = $matches[1];
+      $afterName = $this->new_prefix . $name;
+      if ($this->data[$beforeName] != $this->data[$afterName]) {
+        $this->changedFields[] = $name;
+      }
+    }
   }
   
   
@@ -85,7 +114,7 @@ class CMouvement400 extends CRecordSante400 {
     $query = "SELECT * FROM $this->base.$this->table";
     $query.= $this->getNewMarkedClause($marked, $max);
     $query.= $this->getFilterClause();
-    $query.= "\n ORDER BY $this->idField";
+    $query.= "\n ORDER BY $this->trigger_key_field";
  
     $mouvs = CRecordSante400::loadMultiple($query, array(), $max, get_class($this));
 
@@ -148,12 +177,12 @@ class CMouvement400 extends CRecordSante400 {
       $where["done"] = "= '0'";
       $where["mark"] = "!= '========'";
       $marks = $mark->loadList($where, null, $max);
-      $clause = "\n WHERE $this->idField " . CSQLDataSource::prepareIn(CMbArray::pluck($marks, "trigger_number"));
+      $clause = "\n WHERE $this->trigger_key_field " . CSQLDataSource::prepareIn(CMbArray::pluck($marks, "trigger_number"));
     }
     else {
       $mark->loadMatchingObject("trigger_number DESC");
       $last_number = $mark->trigger_number ? $mark->trigger_number : 0;
-      $clause = "\n WHERE $this->idField > '$last_number'";
+      $clause = "\n WHERE $this->trigger_key_field > '$last_number'";
     }
     return $clause;
   }
@@ -187,7 +216,7 @@ class CMouvement400 extends CRecordSante400 {
       $query.= $this->getFilterClause();
 
       if ($newest) {
-        $query.= "AND $this->idField <= '$newest'";
+        $query.= "AND $this->trigger_key_field <= '$newest'";
       }
 
       $record->query($query);
@@ -205,9 +234,9 @@ class CMouvement400 extends CRecordSante400 {
    */
   function loadListWithFormerMark($max)  {
     $query = "SELECT * FROM $this->base.$this->table
-      WHERE $this->markField NOT IN ('', 'OKOKOKOK')";
+      WHERE $this->mark_field NOT IN ('', 'OKOKOKOK')";
     $query.= $this->getFilterClause();
-    $query.= "\n ORDER BY $this->idField DESC";
+    $query.= "\n ORDER BY $this->trigger_key_field DESC";
     $mouvs = CRecordSante400::loadMultiple($query, array(), $max, get_class($this));
     foreach ($mouvs as &$mouv) {
       $mouv->initialize();
@@ -222,9 +251,9 @@ class CMouvement400 extends CRecordSante400 {
    */
   function loadLatestSuccessWithFormerMark() {
     $query = "SELECT * FROM $this->base.$this->table
-      WHERE $this->markField = 'OKOKOKOK'";
+      WHERE $this->mark_field = 'OKOKOKOK'";
     $query.= $this->getFilterClause();
-    $query.= "\n ORDER BY $this->idField DESC";
+    $query.= "\n ORDER BY $this->trigger_key_field DESC";
     $this->loadOne($query);
     $this->initialize();
   }
@@ -237,7 +266,7 @@ class CMouvement400 extends CRecordSante400 {
    */
   function load($rec) {
     $query = "SELECT * FROM $this->base.$this->table 
-      WHERE $this->idField = ?";
+      WHERE $this->trigger_key_field = ?";
 
     $values = array (
       intval($rec),
@@ -255,7 +284,7 @@ class CMouvement400 extends CRecordSante400 {
    */
   function loadOldest() {
     $query = "SELECT * FROM $this->base.$this->table 
-      ORDER BY $this->idField ASC";
+      ORDER BY $this->trigger_key_field ASC";
     $this->loadOne($query);
     $this->initialize();
   }
@@ -267,7 +296,7 @@ class CMouvement400 extends CRecordSante400 {
    */
   function loadLatest() {
     $query = "SELECT * FROM $this->base.$this->table 
-      ORDER BY $this->idField DESC";
+      ORDER BY $this->trigger_key_field DESC";
     $this->loadOne($query);
     $this->initialize();
   }
@@ -375,12 +404,16 @@ class CMouvement400 extends CRecordSante400 {
   /**
    * Proceed the synchronisation of this mouvement
    * 
+   * @param bool $mark Tell wether it shoud generate a trigger mark
+   * 
    * @return bool Job-done value
    */
-  function proceed() {
+  function proceed($mark = true) {
+    // Pre trace
     $this->trace($this->data, "Données à traiter dans le mouvement");
     $this->trace(join(" ", $this->changedFields), "Données modifiées");
     
+    // Main syncing bloc 
     try {
       $this->synchronize();
       $return = true;
@@ -392,8 +425,14 @@ class CMouvement400 extends CRecordSante400 {
       $return = false;
     }
     
-    $this->markRow();
+    // Generate trigger mark
+    if ($mark) {
+      $this->markRow();
+    }
+
+    // Post trace
     $this->trace($this->data, "Données non traitées dans le mouvement");
+    
     return $return;
   }
   
@@ -412,7 +451,7 @@ class CMouvement400 extends CRecordSante400 {
    * 
    */
   function changedField($field, $value = null) {
-    $newValue = $this->data["A_$field"];
+    $newValue = $this->data[$this->new_prefix . $field];
     return in_array($field, $this->changedFields) && ($value !== null ? $newValue == $value : true);
   }
 }
