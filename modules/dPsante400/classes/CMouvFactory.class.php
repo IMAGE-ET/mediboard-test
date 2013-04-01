@@ -18,7 +18,7 @@ class CMouvFactory {
     "default" => array (
     ),
     "sample" => array (
-      "patient"      => "CMouvMbMedecinPatient",
+      "patient"      => "CMouvMedecinPatient",
     ),
     "medicap" => array (
       "sejour"       => "CMouvECapSejour",
