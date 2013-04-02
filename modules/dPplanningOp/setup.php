@@ -532,7 +532,6 @@ class CSetupdPplanningOp extends CSetup {
       CHANGE `code_uf` `code_uf` VARCHAR(3) NULL,
       CHANGE `libelle_uf` `libelle_uf` VARCHAR(35) NULL,
       CHANGE `salle_id` `salle_id` int(11) UNSIGNED NULL,
-      CHANGE `salle_id` `salle_id` int(11) UNSIGNED NULL,
       CHANGE `codes_ccam` `codes_ccam` VARCHAR(255) NULL,
       CHANGE `libelle` `libelle` VARCHAR(255) NULL,
       CHANGE `type_anesth` `type_anesth` int(11) UNSIGNED NULL,
@@ -1218,9 +1217,6 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($query);
 
     $this->makeRevision("1.30");
-    $query = "DROP TABLE `naissance`;";
-    $this->addQuery($query);
-
     $query = "ALTER TABLE `sejour`
     ADD `grossesse_id` INT (11) UNSIGNED;";
     $this->addQuery($query);

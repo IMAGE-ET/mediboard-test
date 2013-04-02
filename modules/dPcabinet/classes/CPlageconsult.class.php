@@ -337,7 +337,25 @@ class CPlageconsult extends CPlageHoraire {
     $this->pour_compte_id  = $pour_compte_id;
     $this->updateFormFields();
     return $week_jumped;
-  }    
+  }
+
+  function store() {
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+
+    $this->completeField("pour_compte_id", "chir_id");
+
+    if ($this->fieldModified("pour_compte_id")) {
+      $consults = $this->loadRefsConsultations();
+
+      foreach ($consults as $_consult) {
+        $facture = $_consult->loadRefFacture();
+        $facture->praticien_id = ($this->pour_compte_id ? $this->pour_compte_id : $this->chir_id);
+        $facture->store();
+      }
+    }
+  }
 }
 
 $pcConfig = CAppUI::conf("dPcabinet CPlageconsult");
