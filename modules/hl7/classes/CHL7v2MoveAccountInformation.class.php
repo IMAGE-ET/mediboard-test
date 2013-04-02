@@ -70,78 +70,78 @@ class CHL7v2MoveAccountInformation extends CHL7v2MessageXML {
     }
 
     $venue = new CSejour();
-    foreach ($data["merge"] as $_data_merge) {
-      $data = $_data_merge;
 
-      $mbPatient       = new CPatient();
-      $mbPatientChange = new CPatient();
+    // On considère que l'on a qu'un changement à faire
+    $data  = $data["merge"][0];
 
-      $patientPI        = CValue::read($data['personIdentifiers'], "PI");
-      $patientRI        = CValue::read($data['personIdentifiers'], "RI");
+    $mbPatient       = new CPatient();
+    $mbPatientChange = new CPatient();
 
-      $patientChangePI = CValue::read($data['personChangeIdentifiers'], "PI");
-      $patientChangeRI = CValue::read($data['personChangeIdentifiers'], "RI");
+    $patientPI        = CValue::read($data['personIdentifiers'], "PI");
+    $patientRI        = CValue::read($data['personIdentifiers'], "RI");
 
-      // Acquittement d'erreur : identifiants RI et PI non fournis
-      if (!$patientRI && !$patientPI || !$patientChangeRI && !$patientChangePI) {
-        return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
-      }
+    $patientChangePI = CValue::read($data['personChangeIdentifiers'], "PI");
+    $patientChangeRI = CValue::read($data['personChangeIdentifiers'], "RI");
 
-      $id400Patient = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
-      if ($mbPatient->load($patientRI)) {
-        if ($mbPatient->_id != $id400Patient->object_id) {
-          $comment  = "L'identifiant source fait référence au patient : $id400Patient->object_id";
-          $comment .= " et l'identifiant cible au patient : $mbPatient->_id.";
-          return $exchange_ihe->setAckAR($ack, "E601", $comment, $newPatient);
-        }
-      }
-      if (!$mbPatient->_id) {
-        $mbPatient->load($id400Patient->object_id);
-      }
-
-      $id400PatientChange = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientChangePI);
-      if ($mbPatientChange->load($patientChangeRI)) {
-        if ($mbPatientChange->_id != $id400PatientChange->object_id) {
-          $comment  = "L'identifiant source fait référence au patient : $id400PatientChange->object_id";
-          $comment .= "et l'identifiant cible au patient : $mbPatientChange->_id.";
-          return $exchange_ihe->setAckAR($ack, "E602", $comment, $newPatient);
-        }
-      }
-      if (!$mbPatientChange->_id) {
-        $mbPatientChange->load($id400PatientChange->object_id);
-      }
-
-      if (!$mbPatient->_id || !$mbPatientChange->_id) {
-        $comment = !$mbPatient->_id ?
-          "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientChange->_id est inconnu dans Mediboard.";
-        return $exchange_ihe->setAckAR($ack, "E603", $comment, $newPatient);
-      }
-
-      $venueAN = $this->getVenueAN($sender, $data);
-      $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
-
-      if (!$venueAN && !$NDA->_id) {
-        return $exchange_ihe->setAckAR($ack, "E604", $comment, $mbPatient);
-      }
-
-      $venue->load($NDA->object_id);
-
-      // Impossibilité dans Mediboard de modifier le patient d'un séjour ayant une entrée réelle
-      if (CAppUI::conf("dPplanningOp CSejour patient_id") == 2 && $venue->entree_reelle) {
-        return $exchange_ihe->setAckAR($ack, "E605", null, $venue);
-      }
-
-      if ($venue->patient_id != $mbPatient->_id) {
-        return $exchange_ihe->setAckAR($ack, "E606", null, $venue);
-      }
-
-      $venue->patient_id = $mbPatientChange->_id;
-      if ($msg = $venue->store()) {
-        return $exchange_ihe->setAckAR($ack, "E607", $msg, $venue);
-      }
-
-      $comment = CEAISejour::getComment($venue);
+    // Acquittement d'erreur : identifiants RI et PI non fournis
+    if (!$patientRI && !$patientPI || !$patientChangeRI && !$patientChangePI) {
+      return $exchange_ihe->setAckAR($ack, "E100", null, $newPatient);
     }
+
+    $id400Patient = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientPI);
+    if ($mbPatient->load($patientRI)) {
+      if ($mbPatient->_id != $id400Patient->object_id) {
+        $comment  = "L'identifiant source fait référence au patient : $id400Patient->object_id";
+        $comment .= " et l'identifiant cible au patient : $mbPatient->_id.";
+        return $exchange_ihe->setAckAR($ack, "E601", $comment, $newPatient);
+      }
+    }
+    if (!$mbPatient->_id) {
+      $mbPatient->load($id400Patient->object_id);
+    }
+
+    $id400PatientChange = CIdSante400::getMatch("CPatient", $sender->_tag_patient, $patientChangePI);
+    if ($mbPatientChange->load($patientChangeRI)) {
+      if ($mbPatientChange->_id != $id400PatientChange->object_id) {
+        $comment  = "L'identifiant source fait référence au patient : $id400PatientChange->object_id";
+        $comment .= "et l'identifiant cible au patient : $mbPatientChange->_id.";
+        return $exchange_ihe->setAckAR($ack, "E602", $comment, $newPatient);
+      }
+    }
+    if (!$mbPatientChange->_id) {
+      $mbPatientChange->load($id400PatientChange->object_id);
+    }
+
+    if (!$mbPatient->_id || !$mbPatientChange->_id) {
+      $comment = !$mbPatient->_id ?
+        "Le patient $mbPatient->_id est inconnu dans Mediboard." : "Le patient $mbPatientChange->_id est inconnu dans Mediboard.";
+      return $exchange_ihe->setAckAR($ack, "E603", $comment, $newPatient);
+    }
+
+    $venueAN = $this->getVenueAN($sender, $data);
+    $NDA = CIdSante400::getMatch("CSejour", $sender->_tag_sejour, $venueAN);
+
+    if (!$venueAN && !$NDA->_id) {
+      return $exchange_ihe->setAckAR($ack, "E604", $comment, $mbPatient);
+    }
+
+    $venue->load($NDA->object_id);
+
+    // Impossibilité dans Mediboard de modifier le patient d'un séjour ayant une entrée réelle
+    if (CAppUI::conf("dPplanningOp CSejour patient_id") == 2 && $venue->entree_reelle) {
+      return $exchange_ihe->setAckAR($ack, "E605", null, $venue);
+    }
+
+    if ($venue->patient_id != $mbPatientChange->_id) {
+      return $exchange_ihe->setAckAR($ack, "E606", null, $venue);
+    }
+
+    $venue->patient_id = $mbPatient->_id;
+    if ($msg = $venue->store()) {
+      return $exchange_ihe->setAckAR($ack, "E607", $msg, $venue);
+    }
+
+    $comment = CEAISejour::getComment($venue);
 
     return $exchange_ihe->setAckAA($ack, "I600", $comment, $venue);
   }
