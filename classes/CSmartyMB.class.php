@@ -136,9 +136,9 @@ class CSmartyMB extends Smarty {
   /**
    * Assign a template var to default value if undefined
    *
-   * @param array $params
-   *  * var: Name of the var
-   *  * value : Default value of the var
+   * @param array $params  Smarty parameters
+   *  * var  : Name of the var
+   *  * value: Default value of the var
    *
    * @param self  &$smarty The Smarty object
    *
@@ -156,9 +156,14 @@ class CSmartyMB extends Smarty {
   /**
    * Show a value if different from previous cached one
    *
-   * @param array $params Smarty parameters
-   * - name  : Name of the cached value
-   * - value : Value to show, empty string to clear out cache
+   * @param array $params  Smarty parameters
+   *  * name : Name of the cached value
+   *  * value: Value to show, empty string to clear out cache
+   *  * reset: Reset value
+   *
+   * @param self  &$smarty The Smarty object
+   *
+   * @return string
    */
   function mb_ditto($params, &$smarty) {
     static $cache = array();
@@ -176,12 +181,15 @@ class CSmartyMB extends Smarty {
   /**
    * Cette fonction prend les mêmes paramètres que mb_field, mais seul object est requis.
    *
-   * @param array $params tableau des parametres
+   * @param array $params  Smarty parameters
+   * @param self  &$smarty The Smarty object
+   *
+   * @return string
    */
   function mb_class($params, &$smarty) {
     if (null == $object = CMbArray::extract($params, "object")) {
       $class = CMbArray::extract($params, "class" , null, true);
-    } 
+    }
     else {
       $class = $object->_class;
     }
@@ -197,8 +205,14 @@ class CSmartyMB extends Smarty {
 
   /**
    * Get the value of a given field (property)
+   *
+   * @param array $params  Smarty parameters
+   * @param self  &$smarty The Smarty object
+   *
+   * @return string
    */
   function mb_value($params, &$smarty) {
+    /** @var CMbObject $object */
     $object = CMbArray::extract($params, "object",  null, true);
     $field  = CMbArray::extract($params, "field");
 
@@ -245,14 +259,12 @@ class CSmartyMB extends Smarty {
     }
   }
 
-
-
   /**
    * Get a concrete filename for automagically created content
    *
-   * @param string $auto_base
-   * @param string $auto_source
-   * @param string $auto_id
+   * @param string $auto_base   Base path
+   * @param string $auto_source Source path
+   * @param string $auto_id     Custom ID
    *
    * @return string
    */
@@ -285,8 +297,10 @@ class CSmartyMB extends Smarty {
   /**
    * Show debug spans
    *
-   * @param string $tpl_file
-   * @param string $vars
+   * @param string $tpl_file Template file
+   * @param string $params   Smarty parameters
+   *
+   * @return void
    */
   function showDebugSpans($tpl_file, $params) {
     // The span
@@ -314,16 +328,20 @@ class CSmartyMB extends Smarty {
   /**
    * called for included templates
    *
-   * @param string $params
+   * @param array $params Smarty parameters
+   *
+   * @return void
    */
   function _smarty_include($params) {
     $tpl_file = $params["smarty_include_tpl_file"];
     $vars     = $params["smarty_include_vars"];
+    $skip_files = array("login.tpl", "common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl");
 
     // Only at debug time
-    if (!CAppUI::pref("showTemplateSpans") || 
+    if (!CAppUI::pref("showTemplateSpans") ||
         isset($params["smarty_include_vars"]['nodebug']) ||
-        in_array(basename($tpl_file), array("login.tpl", "common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
+        in_array(basename($tpl_file), $skip_files)
+    ) {
       parent::_smarty_include($params);
       return;
     }
@@ -396,18 +414,19 @@ class CSmartyMB extends Smarty {
   }
 
   /**
-   * @author   Pablo Dias <pablo at grafia dot com dot br>
-   * @abstract pad a string to a certain length with another string. like php/str_pad
+   * Pad a string to a certain length with another string. like php/str_pad
    *
    * Example:  {$text|pad:20:'.':'both'}
    *    will pad $string with dots, in both sides
    *    until $text length equal to 20 characteres
    *    (assuming that $text has less than 20 characteres)
    *
-   * @param string $string The string to be padded
-   * @param int $length Desired string length
-   * @param string $pad_string - string used to pad
-   * @param enum $pad_type - both, left or right
+   * @param string $string     The string to be padded
+   * @param int    $length     Desired string length
+   * @param string $pad_string String used to pad
+   * @param string $pad_type   Both, left or right
+   *
+   * @return string
    */
   function pad($string, $length, $pad_string = ' ', $pad_type = 'left') {
     static $pads = array(
@@ -416,13 +435,16 @@ class CSmartyMB extends Smarty {
       'both' => STR_PAD_BOTH
     );
     return str_pad($string, $length, $pad_string, $pads[$pad_type]);
-  } 
+  }
 
   /**
-   * @abstract JSON encode an object for Javascript use
-   *
+   * JSON encode an object for Javascript use
    * Example:  {$object|json}
-   * @param any $object The object to be encoded
+   *
+   * @param mixed $object       The object to be encoded
+   * @param bool  $force_object Force object notation for empty arrays : "{}"
+   *
+   * @return string
    */
   function json($object, $force_object = false) {
     // $options = $force_object ? JSON_FORCE_OBJECT : 0; // Only PHP 5.3 !!
@@ -435,36 +457,48 @@ class CSmartyMB extends Smarty {
   }
 
   /**
-   * @abstract Format to ISO DATE
-   * Example:  {$datetime|iso_date}
-   * @param datetime $datetime The date to format
+   * Format to ISO DATE
+   * Example: {$datetime|iso_date}
+   *
+   * @param string $datetime The date to format
+   *
+   * @return string
    */
   function iso_date($datetime) {
     return strftime("%Y-%m-%d", strtotime($datetime));
   }
 
   /**
-   * @abstract Format to ISO TIME
-   * Example:  {$datetime|iso_time}
-   * @param datetime $datetime The date to format
+   * Format to ISO TIME
+   * Example: {$datetime|iso_time}
+   *
+   * @param string $datetime The date to format
+   *
+   * @return string
    */
   function iso_time($datetime) {
     return strftime("%H:%M:%S", strtotime($datetime));
   }
 
   /**
-   * @abstract Format to ISO DATETIME
-   * Example:  {$datetime|iso_datetime}
-   * @param datetime $datetime The date to format
+   * Format to ISO DATETIME
+   * Example: {$datetime|iso_datetime}
+   *
+   * @param string $datetime The date to format
+   *
+   * @return string
    */
   function iso_datetime($datetime) {
     return strftime("%Y-%m-%d %H:%M:%S", strtotime($datetime));
   }
 
   /**
-   * @abstract Week number in month to ISO DATETIME
-   * Example:  {$datetime|week_number_month}
-   * @param datetime $datetime The date to format
+   * Week number in month to ISO DATETIME
+   * Example: {$datetime|week_number_month}
+   *
+   * @param string $datetime The date to format
+   *
+   * @return string
    */
   function week_number_month($datetime) {
     return CMbDate::weekNumberInMonth($datetime);
@@ -475,6 +509,8 @@ class CSmartyMB extends Smarty {
    * 
    * @param string $path    The configuration path
    * @param object $context The context
+   *
+   * @return string
    */
   function conf($path, $context = null) {
     return CAppUI::conf($path, $context);
@@ -483,8 +519,8 @@ class CSmartyMB extends Smarty {
   /**
    * Idex loader and accessor
    * 
-   * @param CStoredObject $object  The configuration path
-   * @param string        $tag     The context
+   * @param CStoredObject $object The configuration path
+   * @param string        $tag    The context
    * 
    * @return string The idex scalar value, empty string if undefined
    */
@@ -493,9 +529,13 @@ class CSmartyMB extends Smarty {
   }
 
   /**
-   * @abstract Format to relative datetime 
-   * Example:  {$datetime|rel_datetime:$now}
-   * @param datetime $datetime The date to format
+   * Format to relative datetime
+   * Example: {$datetime|rel_datetime:$now}
+   *
+   * @param string $datetime  The date to format
+   * @param string $reference Reference datetime
+   *
+   * @return string
    */
   function rel_datetime($datetime, $reference = null) {
     if (!$datetime) {
@@ -506,10 +546,15 @@ class CSmartyMB extends Smarty {
   }
 
   /**
-   * @abstract Currency format modifier
-   *
+   * Currency format modifier
    * Example:  {$value|currency}
-   * @param float $value The value to format
+   *
+   * @param float $value    The value to format
+   * @param int   $decimals Number of decimals
+   * @param bool  $precise  Is the value precise (2 or 4 decimals), only applied if $decimals === null
+   * @param bool  $empty    Highlight empty values with the CSS "empty" class
+   *
+   * @return string
    */
   function currency($value, $decimals = null, $precise = null, $empty = true) {
     if ($decimals == null) {
@@ -535,10 +580,16 @@ class CSmartyMB extends Smarty {
   }
 
   /**
-   * @abstract Truncate a string, with a full string titled span if actually truncated 
-   *
+   * Truncate a string, with a full string titled span if actually truncated
    * Example:  {$value|spancate}
-   * @param float $value The value to format
+   *
+   * @param string $string      The string to truncate
+   * @param int    $length      The maximum string length
+   * @param string $etc         The ellipsis
+   * @param bool   $break_words Break words
+   * @param bool   $middle      Put the ellipsis at the middle of the string instead of at the end
+   *
+   * @return string
    */
   function spancate($string, $length = 80, $etc = '...', $break_words = true, $middle = false) {
     CAppUI::requireLibraryFile("smarty/libs/plugins/modifier.truncate");
@@ -549,10 +600,12 @@ class CSmartyMB extends Smarty {
   }
 
   /**
-   * @abstract Converts a value to decabinary format
+   * Converts a value to decabinary format
+   * Example: {$value|decabinary}
    *
-   * Example:  {$value|decabinary}
    * @param float $value The value to format
+   *
+   * @return string
    */
   function decabinary($value) {
     $decabinary = CMbString::toDecaBinary($value);
@@ -560,25 +613,37 @@ class CSmartyMB extends Smarty {
   }
 
   /**
-   * @abstract Converts a value to decabinary format
-   *
+   * Converts a value to decabinary format
    * Example:  {$value|decabinary}
+   *
    * @param float $value The value to format
+   *
+   * @return string
    */
   function nozero($value) {
     return $value ? $value : '' ;
   }
 
   /**
-   * @abstract Percentage 2-digit format modifier
-   *
+   * Percentage 2-digit format modifier
    * Example:  {$value|percent}
+   *
    * @param float $value The value to format
+   *
+   * @return string
    */
   function percent($value) {
     return  !is_null($value) ? number_format($value*100, 2) . "%" : "";
   }
 
+  /**
+   * Class constant accessor
+   *
+   * @param object|string $object The object or the class to get the constant from
+   * @param string        $name   The constant name
+   *
+   * @return mixed
+   */
   function _const($object, $name) {
     // If the first arg is an instance, we get its class name
     if (!is_string($object)) {
@@ -587,6 +652,14 @@ class CSmartyMB extends Smarty {
     return constant("$object::$name");
   }
 
+  /**
+   * Static property accessor
+   *
+   * @param object|string $object The object or the class to get the static property from
+   * @param string        $name   The static property name
+   *
+   * @return mixed
+   */
   function _static($object, $name) {
     if (!is_string($object)) {
       $object = get_class($object);
@@ -602,6 +675,14 @@ class CSmartyMB extends Smarty {
     return $statics[$name];
   }
 
+  /**
+   * Static call from Smarty
+   *
+   * @param string $callback The callback
+   * @param array  $args     Array of arguments
+   *
+   * @return mixed
+   */
   function static_call($callback, $args) {
     $args = func_get_args();
     $callback = array_shift($args);
@@ -610,23 +691,36 @@ class CSmartyMB extends Smarty {
   }
 
   /**
-   * @abstract True if the module is installed
+   * True if the module is installed
    * Example:  {"dPfiles"|module_installed}
+   *
    * @param string $module The module name
+   *
+   * @return CModule The module object if installed, null otherwise
    */
   function module_installed($module) {
     return CModule::getInstalled($module);
   }
 
   /**
-   * @abstract True if the module is active
-   * Example:  {"dPfiles"|module_active}
+   * True if the module is active
+   * Example: {"dPfiles"|module_active}
+   *
    * @param string $module The module name
+   *
+   * @return CModule The module object if active, null otherwise
    */
   function module_active($module) {
     return CModule::getActive($module);
   }
 
+  /**
+   * Escape a JavaScript code to be used inside DOM attributes
+   *
+   * @param string $string The string to escape
+   *
+   * @return string The escaped string
+   */
   function JSAttribute($string){
     return str_replace(
       array('\\',   "'",   '"',      "\r",  "\n",  '</'),
@@ -637,6 +731,13 @@ class CSmartyMB extends Smarty {
     );
   }
 
+  /**
+   * The default Smarty escape
+   *
+   * @param string $string The string to escape
+   *
+   * @return string Escaped string
+   */
   function cleanField($string){
     if (!is_scalar($string)) {
       return $string;
@@ -645,16 +746,26 @@ class CSmartyMB extends Smarty {
     return CMbString::htmlSpecialChars($string, ENT_QUOTES);
   }
 
+  /**
+   * Strip slashes
+   *
+   * @param string $string Strip slashes
+   *
+   * @return string Unescaped string
+   */
   function stripslashes($string){
     return stripslashes($string);
   }
 
   /**
-   * @abstract Emphasize a text, putting <em> nodes around found tokens
-   *
+   * Emphasize a text, putting <em> nodes around found tokens
    * Example:  {$text|emphasize:$tokens}
-   * @param string $text The text subject
+   *
+   * @param string       $text   The text subject
    * @param array|string $tokens The string tokens to emphasize, space seperated if string
+   * @param string       $tag    The HTML tag to use to emphasize
+   *
+   * @return string
    */
   function emphasize($text, $tokens, $tag = "em") {
     if (!is_array($tokens)) {
@@ -677,10 +788,11 @@ class CSmartyMB extends Smarty {
 
   /**
    * A ternary operator
-   * @todo Use this instead of mb_ternary
-   * @param object $value The condition
+   *
+   * @param object $value   The condition
    * @param object $option1 the value if the condition evaluates to true
    * @param object $option2 the value if the condition evaluates to false
+   *
    * @return object $option1 or $option2
    */
   function ternary($value, $option1, $option2) {
@@ -689,7 +801,9 @@ class CSmartyMB extends Smarty {
 
   /**
    * Trace modifier
-   * @param object $value The condition
+   *
+   * @param object $value The value to mbExport
+   *
    * @return void
    */
   function trace($value) {
@@ -697,8 +811,13 @@ class CSmartyMB extends Smarty {
   }
 
   /**
-   * @param array params tableau des parametres
+   * Insert an hidden input corresponding to the object's primary key
    * Cette fonction prend les mêmes paramètres que mb_field, mais seul object est requis.
+   *
+   * @param array $params  Smarty parameters
+   * @param self  &$smarty The Smarty object
+   *
+   * @return string
    */
   function mb_key($params, &$smarty) {
     $params['field'] = $params["object"]->_spec->key;
@@ -715,11 +834,14 @@ class CSmartyMB extends Smarty {
 
   /**
    * Javascript HTML inclusion
-   * @param array params 
-   * - path   : Direct script file path with extension
-   * - script : Script name, without extension, supersedes 'path' and depends on 'module'
-   * - module : Module name to find script, if not provided, use global includes
-   * @return HTML script node
+   *
+   * @param array $params  Smarty params
+   *  * path   : Direct script file path with extension
+   *  * script : Script name, without extension, supersedes 'path' and depends on 'module'
+   *  * module : Module name to find script, if not provided, use global includes
+   * @param self  &$smarty The Smarty object
+   *
+   * @return string Script element
    */
   function mb_script($params, &$smarty) {
     // Path provided
@@ -755,10 +877,13 @@ class CSmartyMB extends Smarty {
 
   /**
    * Module/Style aware include alternative
-   * @param array params 
-   * - module    : Module where template is located, no dP ugly prefix required
-   * - style     : Style where template is located
-   * - $template : Template name (no extension)
+   *
+   * @param array $params  Smarty params
+   *  * module    : Module where template is located, no dP ugly prefix required
+   *  * style     : Style where template is located
+   *  * $template : Template name (no extension)
+   * @param self  &$smarty The Smarty object
+   *
    * @return void
    */
   function mb_include($params, &$smarty) {
@@ -794,8 +919,11 @@ class CSmartyMB extends Smarty {
 
   /**
    * Assigns a unique id to a variable
-   * @param array params 
+   *
+   * @param array $params  Smarty params
    * - var: Name of the var
+   * @param self  &$smarty The Smarty object
+   *
    * @return void
    */
   function unique_id($params, &$smarty) {
@@ -811,6 +939,8 @@ class CSmartyMB extends Smarty {
    * @param string $resource_name
    * @param string $cache_id
    * @param string $compile_id
+   *
+   * @return void
    */
   function display($resource_name, $cache_id = null, $compile_id = null) {
     // Only at debug time

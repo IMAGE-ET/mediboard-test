@@ -154,10 +154,10 @@ class CSmartyDP extends CSmartyMB {
     }
   }
 
-   /**
-   * @param array params tableau des parametres
+  /**
+   * @param array $params  tableau des parametres
    * - object          : Objet
-   * - field           : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
+   * - field           : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel)
    * - prop            : {optionnel} Specification du champs, par defaut, celle de la classe
    * - separator       : {optionnel} Séparation entre les champs de type "radio" [default: ""]
    * - cycle           : {optionnel} Cycle de répétition du séparateur (pour les enums en type radio) [default: "1"]
@@ -166,6 +166,7 @@ class CSmartyDP extends CSmartyMB {
    * - class           : {optionnel} Permet de donner une classe aux champs
    * - hidden          : {optionnel} Permet de forcer le type "hidden"
    * - canNull         : {optionnel} Permet de passer outre le notNull de la spécification
+   * @param self  &$smarty The Smarty object
    */
   function mb_field($params, &$smarty) {
     if (CAppUI::conf("readonly")) {
@@ -188,7 +189,7 @@ class CSmartyDP extends CSmartyMB {
     }
 
     // Get spec, may create it
-    $spec = $prop !== null ? 
+    $spec = $prop !== null ?
       CMbFieldSpecFact::getSpec($object, $field, $prop) : 
       $object->_specs[$field];
 
@@ -218,13 +219,14 @@ class CSmartyDP extends CSmartyMB {
 
   /**
    * Fonction d'écriture  des labels
-   * @param array params tableau des parametres
+   * @param array $params tableau des parametres
    * - object      : Objet
    * - field       : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
    * - defaultFor  : {optionnel} Ajout d'une valeur à cibler pour "select" ou "radio"
    * - typeEnum    : {optionnel} Type d'affichage des enums à cibler (values : "select", "radio") [default: "select"]
    */
   function mb_label($params, &$smarty) {
+    /** @var CMbObject $object */
     if (null == $object = CMbArray::extract($params, "object")) {
       $class = CMbArray::extract($params, "class" , null, true);
       $object = new $class;
@@ -242,11 +244,12 @@ class CSmartyDP extends CSmartyMB {
 
   /**
    * Fonction d'écriture  des labels de titre
-   * @param array params tableau des parametres
+   * @param array $params tableau des parametres
    * - object      : Objet
    * - field       : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
    */
   function mb_title($params, &$smarty) {
+    /** @var CMbObject $object */
     if (null == $object = CMbArray::extract($params, "object")) {
       $class = CMbArray::extract($params, "class" , null, true);
       $object = new $class;
@@ -259,11 +262,15 @@ class CSmartyDP extends CSmartyMB {
 
   /**
    * Fonction d'écriture  des labels
-   * @param array params 
+   *
+   * @param array $params
    * - var   : Name of the new variable
    * - test  : Test for ternary operator 
    * - value : Value if test is true
    * - other : Value if test is false
+   * @param self  &$smarty The Smarty object
+   *
+   * @return mixed
    */
   function mb_ternary($params, &$smarty) {
     $test  = CMbArray::extract($params, "test"  , null, true);
@@ -314,5 +321,4 @@ class CSmartyDP extends CSmartyMB {
       }    
     }
   }
-
 }

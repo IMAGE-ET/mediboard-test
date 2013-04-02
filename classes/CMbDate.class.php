@@ -31,8 +31,8 @@ class CMbDate {
   /**
    * Compute real relative achieved gregorian durations in years and months
    *
-   * @param date $from Starting time
-   * @param date $to   Ending time, now if null
+   * @param string $from Starting time
+   * @param string $to   Ending time, now if null
    *
    * @return array[int] Number of years and months
    */
@@ -65,11 +65,11 @@ class CMbDate {
   /**
    * Compute user friendly approximative duration between two date time
    *
-   * @param datetime $from      From time
-   * @param datetime $to        To time, now if null
-   * @param int      $min_count The minimum count to reach the upper unit, 2 if undefined
+   * @param string $from      From time
+   * @param string $to        To time, now if null
+   * @param int    $min_count The minimum count to reach the upper unit, 2 if undefined
    *
-   * @return array("unit" => string, "count" => int)
+   * @return array array("unit" => string, "count" => int)
    */
   static function relative($from, $to = null, $min_count = 2) {
     if (!$from) {
@@ -99,7 +99,7 @@ class CMbDate {
   /**
    * Get the month number for a given datetime
    *
-   * @param datetime $date Datetime
+   * @param string $date Datetime
    *
    * @return int The month number
    */
@@ -110,7 +110,7 @@ class CMbDate {
   /**
    * Get the week number for a given datetime
    *
-   * @param datetime $date Datetime
+   * @param string $date Datetime
    *
    * @return int The week number
    */
@@ -121,7 +121,7 @@ class CMbDate {
   /**
    * Get the week number in the month
    *
-   * @param datetime $date Date
+   * @param string $date Date
    *
    * @return int The week number
    */
@@ -141,8 +141,8 @@ class CMbDate {
   /**
    * Give a Dirac hash of given datetime
    *
-   * @param string   $period   One of minute, hour, day, week, month or year
-   * @param datetime $datetime Datetime
+   * @param string $period   One of minute, hour, day, week, month or year
+   * @param string $datetime Datetime
    *
    * @return datetime Hash
    */
@@ -168,9 +168,9 @@ class CMbDate {
   /**
    * Give a position to a datetime relative to a reference
    *
-   * @param dateTime $datetime  Datetime
-   * @param dateTime $reference Reference
-   * @param string   $period    One of 1hour, 6hours, 1day
+   * @param string $datetime  Datetime
+   * @param string $reference Reference
+   * @param string $period    One of 1hour, 6hours, 1day
    *
    * @return float
    */
@@ -192,7 +192,7 @@ class CMbDate {
   /**
    * Turn a datetime to its UTC timestamp equivalent
    *
-   * @param dateTime $datetime Datetime
+   * @param string $datetime Datetime
    *
    * @return int
    */
