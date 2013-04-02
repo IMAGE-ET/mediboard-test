@@ -34,11 +34,7 @@ Main.add(function () {
       <input type="hidden" name="tab" value="{{$tab}}" />
       <select name="selPrat" onchange="this.form.submit()" style="max-width: 150px;">
         <option value="-1">&mdash; Choisir un praticien</option>
-        {{foreach from=$listPrat item=curr_prat}}
-        <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $selPrat}} selected="selected" {{/if}}>
-          {{$curr_prat->_view}}
-        </option>
-        {{/foreach}}
+        {{mb_include module=mediusers template=inc_options_mediuser list=$listPrat selected=$selPrat}}
       </select>
       </form>
     </th>
@@ -68,30 +64,30 @@ Main.add(function () {
           <th>Plage</th>
           <th colspan="2">Nb. Opér.</th>
         </tr>
-        {{foreach from=$listDays key=curr_date item=curr_day}}
-        <tbody class="hoverable" id="date-{{$curr_date|iso_date}}">
+        {{foreach from=$listDays key=_date item=_day}}
+        <tbody class="hoverable" id="date-{{$_date|iso_date}}">
         <tr>
-          <td style="text-align: right;" rowspan="{{$curr_day|@count}}">
-            <a href="#nothing" onclick="return updateListOperations('{{$curr_date|iso_date}}')">
-              {{$curr_date|date_format:"%a %d"}}
+          <td style="text-align: right;" rowspan="{{$_day|@count}}">
+            <a href="#nothing" onclick="return updateListOperations('{{$_date|iso_date}}')">
+              {{$_date|date_format:"%a %d"}}
             </a>
           </td>
-          {{foreach from=$curr_day item=curr_plage key=curr_key}}
-          {{if $curr_plage.plageop_id && $curr_key != "hors_plage"}}
-          <td {{if $curr_plage.unique_chir}}class="user"{{else}}class="function"{{/if}}>
-            {{$curr_plage.debut|date_format:$conf.time}} à {{$curr_plage.fin|date_format:$conf.time}}
+          {{foreach from=$_day item=_plage key=curr_key}}
+          {{if $_plage.plageop_id && $curr_key != "hors_plage"}}
+          <td {{if $_plage.unique_chir}}class="user"{{else}}class="function"{{/if}}>
+            {{$_plage.debut|date_format:$conf.time}} à {{$_plage.fin|date_format:$conf.time}}
           </td>
           {{else}}
           <td>
             Hors plage
           </td>
           {{/if}}
-          <td align="center">{{$curr_plage.total}}</td>
-          <td align="center" {{if $curr_plage.plageop_id && $curr_key != "hors_plage" && $curr_plage.spec_id}} style="background-color: #{{$curr_plage.color_function}}"{{/if}}>
-            {{if $curr_plage.plageop_id && $curr_key != "hors_plage" && $curr_plage.spec_id}}
-              <label title="{{$curr_plage.nom_function}}">{{$curr_plage.duree|date_format:$conf.time}}</label>
+          <td align="center">{{$_plage.total|nozero}}</td>
+          <td align="center" {{if $_plage.plageop_id && $curr_key != "hors_plage" && $_plage.spec_id}} style="background-color: #{{$_plage.color_function}}"{{/if}}>
+            {{if $_plage.plageop_id && $curr_key != "hors_plage" && $_plage.spec_id}}
+              <label title="{{$_plage.nom_function}}">{{$_plage.duree|date_format:$conf.time}}</label>
             {{else}}
-              {{$curr_plage.duree|date_format:$conf.time}}
+              {{$_plage.duree|date_format:$conf.time}}
             {{/if}}
           </td>
         </tr>
@@ -99,9 +95,10 @@ Main.add(function () {
           {{/foreach}}
         </tr>
         </tbody>
+        {{foreachelse}}
+        <tr><td class="empty" colspan="3">Aucune plage ni intervention hors plage</td></tr>
         {{/foreach}}
       </table>
-      
       
     </td>
   </tr>

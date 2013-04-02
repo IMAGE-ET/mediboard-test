@@ -57,13 +57,14 @@
     </th>
   </tr>
   
-  {{foreach from=$listDay item=curr_plage}}
+  {{foreach from=$listDay item=_plage}}
   <tr>
-    <th colspan="3" class="section">
-      {{mb_include module=system template=inc_object_notes object=$curr_plage}}
-      {{$curr_plage->_ref_salle->_view}} : 
-      de {{$curr_plage->debut|date_format:$conf.time}} 
-      à {{$curr_plage->fin|date_format:$conf.time}}
+    <th class="section">
+      {{mb_include module=system template=inc_object_notes object=$_plage}}
+    </th>
+    <th colspan="2" class="section">
+      {{$_plage->_ref_salle}} : 
+      {{mb_include module=system template=inc_interval_time from=$_plage->debut to=$_plage->fin}}
     </th>
   </tr>
   
@@ -71,7 +72,7 @@
   {{assign var=real_prev_interv value=null}}
   {{assign var=prev_prev_interv_id value=-1}}
   
-  {{assign var=list_operations value=$curr_plage->_ref_operations|@array_values}}
+  {{assign var=list_operations value=$_plage->_ref_operations|@array_values}}
   {{foreach from=$list_operations item=_operation name=_operation}}
   <tbody class="hoverable">
     <tr>
@@ -88,7 +89,7 @@
       {{/if}}
       <td rowspan="2" class="narrow {{if $_operation->annulee}}cancelled{{/if}}" style="text-align: center; {{$background}}">
         {{if !$_operation->annulee}}
-        {{if !$board && !$_operation->rank && (!$prev_interv || $prev_interv && !$prev_interv->rank) && !($curr_plage->spec_id && !$curr_plage->unique_chir)}}
+        {{if !$board && !$_operation->rank && (!$prev_interv || $prev_interv && !$prev_interv->rank) && !($_plage->spec_id && !$_plage->unique_chir)}}
           {{if $_operation->rank_voulu || $_operation->horaire_voulu}}
             {{if !$smarty.foreach._operation.first && $prev_interv && !$prev_interv->rank}}
               <form name="move-{{$_operation->_guid}}-up" action="?m={{$m}}" method="post" class="prepared" style="display: block;" 
@@ -120,7 +121,7 @@
           <div class="rank opacity-20"></div>
         {{/if}}
         
-        {{if !$board && !$_operation->rank && !$smarty.foreach._operation.last && !($curr_plage->spec_id && !$curr_plage->unique_chir)}}
+        {{if !$board && !$_operation->rank && !$smarty.foreach._operation.last && !($_plage->spec_id && !$_plage->unique_chir)}}
           {{assign var=next_index value=$smarty.foreach._operation.iteration}}
           {{assign var=next_interv value=$list_operations.$next_index}}
           
@@ -196,7 +197,12 @@
   </tbody>
   
   {{assign var=real_prev_interv value=$_operation}}
+  {{foreachelse}}
+  <tr><td colspan="3" class="empty">Aucune internvention dans cette plage</td></tr>
   {{/foreach}}
+ 
+  {{foreachelse}}
+  <tr><td colspan="3" class="empty">Aucune plage ce jour</td></tr>
   {{/foreach}}
   
   {{if $listUrgences|@count}}
