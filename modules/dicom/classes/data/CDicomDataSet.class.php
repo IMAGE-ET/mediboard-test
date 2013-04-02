@@ -632,7 +632,6 @@ class CDicomDataSet {
               $sequence[] = $item_delimiter;
               
               while ($item_delimiter->group_number == 0xFFFE && $item_delimiter->element_number != 0xE00D) {
-                mbLog("while 2");
                 $dataset = new CDicomDataSet();
                 $dataset->decode($value_stream, $this->transfer_syntax);
                 $sequence[] = $dataset;

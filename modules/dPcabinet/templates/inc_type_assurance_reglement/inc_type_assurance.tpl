@@ -29,7 +29,7 @@ changeType = function() {
     {{if $consult->_ref_patient->is_smg}}
       <label><input type="radio" name="type_assurance" id="type_smg" value="smg" onclick="this.form.onsubmit();" {{if $consult->type_assurance == "smg"}} checked=true{{/if}}/>SMG</label>
     {{else}}
-      <label><input type="radio" name="type_assurance" id="type_classique" value="classique" onclick="this.form.onsubmit();" {{if $consult->type_assurance == "classique"}} checked=true{{/if}}/>Classique</label>
+      <label><input type="radio" name="type_assurance" id="type_classique" value="classique" onclick="this.form.onsubmit();" {{if $consult->type_assurance == "classique"}} checked=true{{/if}}/>Assurance Maladie</label>
       <label><input type="radio" name="type_assurance" id="type_at" value="at" onclick="this.form.onsubmit();" {{if $consult->type_assurance == "at"}} checked=true{{/if}}/>Accident du travail</label>
 
       {{if "maternite"|module_active && $consult->grossesse_id}}
