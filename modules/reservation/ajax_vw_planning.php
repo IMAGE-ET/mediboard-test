@@ -33,13 +33,18 @@ $nbIntervNonPlacees = 0;
 $nbAlertesInterv    = 0;
 $debut = $fin = $date_planning;
 
-
 $bloc = new CBlocOperatoire();
-$bloc->load($bloc_id);
-if ($bloc->_id) {
-  $bloc->canDo();
-  $bloc->loadRefsSalles();
-  $nbAlertesInterv = count($bloc->loadRefsAlertesIntervs());
+$where = array();
+if ($bloc_id) {
+  $where["bloc_operatoire_id"] = " = '$bloc_id'";
+}
+$blocs = $bloc->loadList($where);
+
+foreach ($blocs as $_bloc) {
+  $_bloc->canDo();
+  $_bloc->loadRefsSalles();
+  $nbAlertesInterv+= count($_bloc->loadRefsAlertesIntervs());
+
 }
 
 $group = CGroups::loadCurrent();
@@ -50,11 +55,12 @@ $where = array();
 $ljoin = array();
 $order = "bloc_operatoire.nom";
 
+
+$blocs = $bloc->loadGroupList();
 if ($bloc_id) {
   $where["bloc_id"] = "= '$bloc_id'";
 }
 else {
-  $blocs = $bloc->loadGroupList();
   $where["bloc_id"] = CSQLDataSource::prepareIn(array_keys($blocs));
 } 
 
