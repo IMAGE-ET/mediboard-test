@@ -517,7 +517,22 @@ class CPAM extends CIHE {
    */
   static function testA21(CCnStep $step) {
     // PES-PAM_Encounter_Management_ADVANCE
-    $patient = self::loadPatientPES($step, 30);
+    $step_number = null;
+    $add_day     = 0;
+    if ($step->number == 60) {
+      $add_day     = 1;
+      $step_number = 30;
+    }
+    if ($step->number == 70) {
+      $add_day     = 2;
+      $step_number = 20;
+    }
+
+    if (!$step_number) {
+      throw new CMbException("Aucune étape trouvée");
+    }
+
+    $patient = self::loadPatientPES($step, $step_number);
     $sejour  = self::loadAdmitPES($patient);
 
     $service_externe           = new CService();
@@ -533,8 +548,7 @@ class CPAM extends CIHE {
     $affectation->service_id = $service_externe->_id;
     $affectation->sejour_id  = $sejour->_id;
     $affectation->entree     = $sejour->entree;
-    $affectation->effectue   = 1;
-    $affectation->sortie     = CMbDT::dateTime("+1 day", $affectation->entree);
+    $affectation->sortie     = CMbDT::dateTime("+$add_day day", $affectation->entree);
 
     if ($msg = $affectation->store()) {
       throw new CMbException($msg);
@@ -551,8 +565,80 @@ class CPAM extends CIHE {
    * @return void
    */
   static function testA22(CCnStep $step) {
+    // PES-PAM_Encounter_Management_ADVANCE
+    $patient     = self::loadPatientPES($step, 30);
+    $sejour      = self::loadAdmitPES($patient);
+    $affectation = self::loadLeaveOfAbsence($step, $sejour);
 
+    $affectation->effectue   = 1;
 
+    if ($msg = $affectation->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A52 - Cancel the leave of absence
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA52(CCnStep $step) {
+    // PES-PAM_Encounter_Management_ADVANCE
+    $patient     = self::loadPatientPES($step, 20);
+    $sejour      = self::loadAdmitPES($patient);
+    $affectation = self::loadLeaveOfAbsence($step, $sejour);
+
+    if ($msg = $affectation->delete()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A53 - Moves the account of patient#1 to patient#2
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA44(CCnStep $step) {
+    // PES-PAM_Encounter_Management_ADVANCE
+    $patient_1   = self::loadPatientPES($step, 20);
+    $patient_2   = self::loadPatientPES($step, 30);
+    $sejour      = self::loadAdmitPES($patient_2);
+
+    $sejour->patient_id = $patient_1->_id;
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A44 - Cancel the return from leave of absence
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA53(CCnStep $step) {
+    // PES-PAM_Encounter_Management_ADVANCE
+    $patient     = self::loadPatientPES($step, 30);
+    $sejour      = self::loadAdmitPES($patient);
+    $affectation = self::loadLeaveOfAbsence($step, $sejour);
+
+    $affectation->effectue   = 0;
+
+    if ($msg = $affectation->store()) {
+      throw new CMbException($msg);
+    }
   }
 
   /**
@@ -643,7 +729,7 @@ class CPAM extends CIHE {
    *
    * @return CSejour $sejour
    */
-  function loadAdmitPES(CPatient $patient) {
+  static function loadAdmitPES(CPatient $patient) {
     $sejour             = new CSejour();
 
     $where["patient_id"] = " = '$patient->_id'";
@@ -658,5 +744,35 @@ class CPAM extends CIHE {
     }
 
     return $sejour;
+  }
+
+  /**
+   * Load leave of absence
+   *
+   * @param CCnStep $step   Step
+   * @param CSejour $sejour Admit
+   *
+   * @throws CMbException
+   *
+   * @return CAffectation $affectation
+   */
+  static function loadLeaveOfAbsence(CCnStep $step, CSejour $sejour) {
+    $service_externe = CService::loadServiceExterne($step->_ref_test->group_id);
+
+    if (!$service_externe->_id) {
+      throw new CMbException("Aucun service externe de configuré");
+    }
+
+    $affectation             = new CAffectation();
+    $affectation->service_id = $service_externe->_id;
+    $affectation->sejour_id  = $sejour->_id;
+    $affectation->entree     = $sejour->entree;
+    $affectation->loadMatchingObject();
+
+    if (!$affectation->_id) {
+      throw new CMbException("Aucune affectation retrouvée");
+    }
+
+    return $affectation;
   }
 }

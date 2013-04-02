@@ -232,10 +232,10 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     $movement = new CMovement();
     // Initialise le mouvement 
     $movement->sejour_id = $sejour->_id;
-    
+
     $affectation_id = null;
     if ($affectation) {
-      $current_log       = $affectation->_ref_current_log;
+      /*$current_log       = $affectation->_ref_current_log;
       $first_affectation = $sejour->loadRefFirstAffectation();
     
       // Dans le cas où il s'agit de la première affectation du séjour et qu'on est en type "création" on ne recherche pas 
@@ -244,18 +244,18 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         $affectation_id = $affectation->_id;
         $affectation    = null;
       }
-      else {
+      else {*/
         $movement->affectation_id = $affectation->_id;  
-      }  
+      //}
     }
-      
+
     if ($insert) {
       // Dans le cas d'un insert le type correspond nécessairement au type actuel du séjour
       $movement->movement_type         = $sejour->getMovementType($code);
       $movement->original_trigger_code = $code;
       $movement->start_of_movement     = $this->getStartOfMovement($code, $sejour, $affectation);
       $movement->store();
-    
+
       return $sejour->_ref_hl7_movement = $movement;
     }
     elseif ($update) {
@@ -276,8 +276,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
 
     $order = "affectation_id DESC";
-    
-    $movements = $movement->loadMatchingList($order);    
+    $movement->log();
+    $movements = $movement->loadMatchingList($order);
+
     if (!empty($movements)) {
       $movement = reset($movements);
     }
@@ -558,8 +559,14 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     
     $receiver = $affectation->_receiver;
     $configs  = $receiver->_configs;
+    $service  = $affectation->loadRefService();
 
     if ($current_log->type == "create") {
+      /* Affectation dans un service externe */
+      if ($service->externe) {
+        return "A21";
+      }
+
       // Dans le cas où il s'agit de la première affectation du séjour on ne fait pas une mutation mais une modification
       if ($first_affectation && ($first_affectation->_id == $affectation->_id)) {
         switch ($configs["send_first_affectation"]) {
@@ -568,12 +575,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
           default:
             return "A02";
         }
-      }
-
-      /* Affectation dans un service externe */
-      $service = $affectation->loadRefService();
-      if ($service->externe && $affectation->effectue) {
-        return "A21";
       }
       
       // Création d'une affectation
@@ -586,8 +587,13 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
             
     /* Affectation dans un service externe effectuée */
-    if ($service->externe && $affectation->_old->effectue && !$affectation->effectue) {
+    if ($service->externe && !$affectation->_old->effectue && $affectation->effectue) {
       return "A22";
+    }
+
+    /* Affectation dans un service externe effectuée */
+    if ($service->externe && $affectation->_old->effectue && !$affectation->effectue) {
+      return "A53";
     }
     
     $send_change_medical_responsibility = $configs["send_change_medical_responsibility"];
@@ -707,10 +713,6 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       if ($service->externe) {
         // Affectation effectuée 
         if ($affectation->effectue) {
-          $code = "A52";
-        }
-        else {
-          // Affectation non effectuée
           $code = "A53";
         }
       }
