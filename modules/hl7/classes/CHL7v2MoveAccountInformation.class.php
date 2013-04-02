@@ -32,14 +32,14 @@ class CHL7v2MoveAccountInformation extends CHL7v2MessageXML {
       $sub_data["PID"] = $PID = $this->queryNode("PID", $_patient_group);
 
       $sub_data["personIdentifiers"] = $this->getPersonIdentifiers("PID.3", $PID, $sender);
-      $sub_data["admitIdentifiers"]  = $this->getAdmitIdentifiers("PID.18", $PID, $sender);
+      $sub_data["admitIdentifiers"]  = $this->getAdmitIdentifiers($PID, $sender);
 
       $sub_data["PD1"] = $this->queryNode("PD1", $_patient_group);
 
       $sub_data["MRG"] = $MRG = $this->queryNode("MRG", $_patient_group);
 
       $sub_data["personChangeIdentifiers"] = $this->getPersonIdentifiers("MRG.1", $MRG, $sender);
-      $sub_data["admitChangeIdentifiers"]  = $this->getAdmitIdentifiers("MRG.3", $MRG, $sender);
+      $sub_data["admitChangeIdentifiers"]  = $this->getAdmitIdentifiers($MRG, $sender);
 
       $data["merge"][] = $sub_data;
     }
