@@ -8,6 +8,7 @@
   <li><a href="#configure-mode_easy"  >Aff. DHE Simplifiée         </a></li>
   <li><a href="#configure-COperation" >{{tr}}COperation{{/tr}}     </a></li>
   <li><a href="#configure-CSejour"    >{{tr}}CSejour{{/tr}}        </a></li>
+  <li><a href="#configure-CProtocole" >{{tr}}CProtocole{{/tr}}     </a></li>
   {{if $conf.ref_pays == 2}}
     <li><a href="#configure-CFactureEtablissement"    >{{tr}}CFactureEtablissement{{/tr}} </a></li>
   {{/if}}
@@ -30,6 +31,10 @@
 
 <div id="configure-CSejour" style="display: none;">
   {{mb_include template=CSejour_config}}
+</div>
+
+<div id="configure-CProtocole" style="display: none;">
+  {{mb_include template=CProtocole_config}}
 </div>
 
 {{if $conf.ref_pays == 2}}

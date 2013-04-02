@@ -63,6 +63,7 @@ class CProtocole extends CMbObject {
   var $protocole_prescription_anesth_class = null;
 
   // Form fields
+  var $_owner          = null;
   var $_hour_op        = null;
   var $_min_op         = null;
   var $_codes_ccam     = array();
@@ -133,6 +134,8 @@ class CProtocole extends CMbObject {
     
     $props["_hour_op"]        = "num";
     $props["_min_op"]         = "num";
+    $props["_owner"]          = "enum list|user|function|group";
+
     return $props;
   }
   
@@ -165,6 +168,10 @@ class CProtocole extends CMbObject {
     else {
       $this->_view = $this->codes_ccam;
     }
+    
+    if ($this->chir_id    ) $this->_owner = "user"    ;
+    if ($this->function_id) $this->_owner = "function";
+    if ($this->group_id   ) $this->_owner = "group"   ;
   }
 
   function updatePlainFields() {

@@ -24,6 +24,7 @@ $function_id  = CValue::getOrSession("function_id");
 $type         = CValue::getOrSession("type", "interv"); 
 $page         = CValue::get("page");
 $sejour_type  = CValue::get("sejour_type");
+$step = 30;
 
 $protocole = new CProtocole;
 $where = array();
@@ -50,7 +51,7 @@ if ($sejour_type) {
 
 $order = "libelle_sejour, libelle, codes_ccam";
 
-$list_protocoles       = $protocole->loadList($where, $order, "{$page[$type]},40");
+$list_protocoles       = $protocole->loadList($where, $order, "{$page[$type]},$step");
 
 $total_protocoles = $protocole->countList($where);
 
@@ -65,6 +66,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("list_protocoles"      , $list_protocoles);
 $smarty->assign("total_protocoles"     , $total_protocoles);
 $smarty->assign("page"                 , $page);
+$smarty->assign("step"                 , $step);
 $smarty->assign("chir_id"              , $chir_id);
 $smarty->assign("type"                 , $type);
 

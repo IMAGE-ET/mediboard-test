@@ -171,7 +171,7 @@ Main.add(function(){
             <th><label for="function_id" title="Filtrer les protocoles d'une fonction">Fonction</label></th>
             <td>
               {{if $can->admin}}
-              <select name="function_id" style="width: 30em;" onchange="if (this.form.chir_id) { this.form.chir_id.selectedIndex=0; } refreshList(this.form);">
+              <select name="function_id" style="width: 20em;" onchange="if (this.form.chir_id) { this.form.chir_id.selectedIndex=0; } refreshList(this.form);">
                 <option value="0">&mdash; {{tr}}Choose{{/tr}}</option>
                 {{foreach from=$listFunc item=curr_function}}
                 <option class="mediuser" style="border-color: #{{$curr_function->color}}; {{if !$curr_function->_count_protocoles}}color: #999;{{/if}}"
@@ -196,8 +196,8 @@ Main.add(function(){
     <td>
       {{if !$dialog}}
       <ul id="tabs-protocoles" class="control_tabs">
-        <li><a href="#interv">Chirurgicaux <small>(0)</small></a></li>
-        <li><a href="#sejour">Médicaux <small>(0)</small></a></li>
+        <li><a href="#interv" class="empty">Chirurgicaux <small>(&ndash;)</small></a></li>
+        <li><a href="#sejour" class="empty">Médicaux     <small>(&ndash;)</small></a></li>
         {{if !$dialog}}
           <li>
             <button type="button" onclick="popupImport();" class="hslip">{{tr}}Import-CSV{{/tr}}</button>
