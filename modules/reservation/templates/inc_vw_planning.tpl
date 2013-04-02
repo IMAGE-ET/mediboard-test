@@ -17,6 +17,9 @@
     url.addParam("type"   , type);
     url.addParam("bloc_id", bloc_id);
     url.requestModal(800, 500);
+    url.modalObject.observe("afterClose", function() {
+      refreshPlanning();
+    });
   }
 
   Main.add(function() {
