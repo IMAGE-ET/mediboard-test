@@ -15,6 +15,8 @@ if (!$module) {
   $module = $m;
 }
 
+$canUnlockActes = $module == "dPpmsi" || CModule::$active["dPsalleOp"]->canAdmin();
+
 if (null == $object_class = CValue::get("object_class")) {
   CAppUI::stepMessage(UI_MSG_WARNING, "$tab-msg-mode-missing");
   return;
@@ -62,6 +64,7 @@ $object->countExchanges("pmsi", "evenementServeurActe");
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("canUnlockActes", $canUnlockActes);
 $smarty->assign("object", $object);
 $smarty->assign("IPP"   , $IPP);
 $smarty->assign("NDA"   , $NDA);

@@ -12,13 +12,13 @@
 {{if !$conf.sa.send_only_with_ipp_nda || ($IPP && $NDA)}}
 <div id="export_{{$object->_class}}_{{$object->_id}}">
   {{if $object->facture}}
-    {{if $module == "dPpmsi" || $can->admin}}
+    {{if $canUnlockActes}}
     <button class="cancel " onclick="PMSI.deverouilleDossier('{{$object->_id}}', '{{$object->_class}}', '{{$m}}')">
       Déverrouiller le dossier
     </button>
     {{else}}
     <div class="small-info">
-      Veuillez contacter le PMSI pour déverrouiller le dossier {{$module}}
+      Veuillez contacter le PMSI pour déverrouiller le dossier
     </div>
     {{/if}}
   {{else}}
