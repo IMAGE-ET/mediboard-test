@@ -340,13 +340,13 @@ class CPlageconsult extends CPlageHoraire {
   }
 
   function store() {
+    $this->completeField("pour_compte_id", "chir_id");
+    $change_pour_compte = $this->fieldModified("pour_compte_id");
     if ($msg = parent::store()) {
       return $msg;
     }
 
-    $this->completeField("pour_compte_id", "chir_id");
-
-    if ($this->fieldModified("pour_compte_id")) {
+    if ($change_pour_compte) {
       $consults = $this->loadRefsConsultations();
 
       foreach ($consults as $_consult) {
