@@ -10,7 +10,15 @@
 
 {{mb_script module=ssr script=planning ajax=1}}
 
-<script type="text/javascript">
+<script>
+  showAlerte = function(date, bloc_id, type) {
+    var url = new Url("dPbloc", "vw_alertes");
+    url.addParam("date"   , date);
+    url.addParam("type"   , type);
+    url.addParam("bloc_id", bloc_id);
+    url.requestModal(800, 500);
+  }
+
   Main.add(function() {
     ViewPort.SetAvlHeight("planningInterventions", 1);
       $('planningWeek').style.height = "1500px";
@@ -26,6 +34,21 @@
     line-height: 120% !important;
   }
 </style>
+  {{if $can->edit && ($nbIntervNonPlacees || $nbIntervHorsPlage || $nbAlertesInterv)}}
+  <div class="warning" style="margin:0 auto">
+    <a href="#nothing" onclick="showAlerte('{{$date_planning}}', '{{$bloc_id}}', 'day')">
+      {{if $nbAlertesInterv}}
+        {{$nbAlertesInterv}} alerte(s) sur des interventions<br/>
+      {{/if}}
+      {{if $nbIntervNonPlacees}}
+        {{$nbIntervNonPlacees}} intervention(s) non validée(s)<br/>
+      {{/if}}
+      {{if $nbIntervHorsPlage}}
+        {{$nbIntervHorsPlage}} intervention(s) hors plage
+      {{/if}}
+    </a>
+  </div>
+{{/if}}
 <div id="planningInterventions">
   {{mb_include module=ssr template=inc_vw_week}}
 </div>

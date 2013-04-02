@@ -27,9 +27,20 @@ $bloc_id          = CValue::getOrSession("bloc_id", "");
 $show_cancelled   = CValue::getOrSession("show_cancelled", 0);
 $show_operations  = CValue::get("show_operations", 1);
 
+//alerts
+$nbIntervHorsPlage  = 0;
+$nbIntervNonPlacees = 0;
+$nbAlertesInterv    = 0;
+$debut = $fin = $date_planning;
+
 
 $bloc = new CBlocOperatoire();
 $bloc->load($bloc_id);
+if ($bloc->_id) {
+  $bloc->canDo();
+  $bloc->loadRefsSalles();
+  $nbAlertesInterv = count($bloc->loadRefsAlertesIntervs());
+}
 
 $group = CGroups::loadCurrent();
 
@@ -81,6 +92,7 @@ if ($praticien_id) {
 }
 
 $operations = $operation->loadList($where, null, null, null, $ljoin);
+$nbIntervHorsPlage = $operation->countList($where, null, $ljoin);
 
 $prats  = CMbObject::massLoadFwdRef($operations, "chir_id");
 CMbObject::massLoadFwdRef($operations, "salle_id");
@@ -431,11 +443,16 @@ $planning->allow_superposition = true;
 $planning->rearrange(); //ReArrange the planning
 
 $smarty = new CSmartyDP();
-$smarty->assign("planning", $planning);
-$smarty->assign("salles"  , $salles);
-$smarty->assign("salles_ids", $salles_ids);
-$smarty->assign("date_planning", $date_planning);
-$smarty->assign("scroll_top", $scroll_top);
-$smarty->assign("show_cancelled", $show_cancelled);
-$smarty->assign("show_operations", $show_operations);
+$smarty->assign("planning",             $planning);
+$smarty->assign("salles"  ,             $salles);
+$smarty->assign("salles_ids",           $salles_ids);
+$smarty->assign("date_planning",        $date_planning);
+$smarty->assign("scroll_top",           $scroll_top);
+$smarty->assign("show_cancelled",       $show_cancelled);
+$smarty->assign("show_operations",      $show_operations);
+$smarty->assign("bloc_id",              $bloc_id );
+
+$smarty->assign("nbIntervNonPlacees",   $nbIntervNonPlacees);
+$smarty->assign("nbIntervHorsPlage" ,   $nbIntervHorsPlage );
+$smarty->assign("nbAlertesInterv",      $nbAlertesInterv);
 $smarty->display("inc_vw_planning.tpl");
