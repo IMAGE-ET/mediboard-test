@@ -67,6 +67,11 @@ class CHL7v2MessageXML extends CMbXMLDocument {
         return new CHL7v2RecordAdmit($encoding);
       }
 
+      // Changement du patient par un autre
+      if (CMbArray::in($event_code, CHL7v2MoveAccountInformation::$event_codes)) {
+        return new CHL7v2MoveAccountInformation($encoding);
+      }
+
       // Association / Déssociation
       if (CMbArray::in($event_code, CHL7v2LinkUnlink::$event_codes)) {
         return new CHL7v2LinkUnlink($encoding);
@@ -493,6 +498,23 @@ class CHL7v2MessageXML extends CMbXMLDocument {
     $this->queryNode("PD1", null, $data, true);
     
     return $data;
+  }
+
+  /**
+   * Get AN number
+   *
+   * @param CInteropSender $sender Sender
+   * @param array          $data   Data
+   *
+   * @return string
+   */
+  function getVenueAN($sender, $data) {
+    switch ($sender->_configs["handle_NDA"]) {
+      case 'PV1_19':
+        return CValue::read($data['admitIdentifiers'], "AN");
+      default :
+        return CValue::read($data['personIdentifiers'], "AN");
+    }
   }
 
   /**

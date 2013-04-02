@@ -14,7 +14,7 @@
  * Record admit, message XML HL7
  */
 class CHL7v2RecordAdmit extends CHL7v2MessageXML {
-  static $event_codes = "A01 A02 A03 A04 A05 A06 A07 A08 A11 A12 A13 A14 A16 A21 A22 A25 A38 A44 A52 A53 A54 A55 Z80 Z81 Z84 Z85 Z99";
+  static $event_codes = "A01 A02 A03 A04 A05 A06 A07 A08 A11 A12 A13 A14 A16 A21 A22 A25 A38 A52 A53 A54 A55 Z80 Z81 Z84 Z85 Z99";
   
   public $_object_found_by_vn;
 
@@ -58,15 +58,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
     $this->queryNodes("GT1", null, $data, true);
     
     return $data;
-  }
-  
-  function getVenueAN($sender, $data) {
-    switch ($sender->_configs["handle_NDA"]) {
-      case 'PV1_19':
-        return CValue::read($data['admitIdentifiers'], "AN");
-      default :
-        return CValue::read($data['personIdentifiers'], "AN");
-    }
   }
 
   /**
@@ -260,7 +251,7 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
             $code_NDA     = "A221";
             $_modif_sejour = true;
           }
-        } 
+        }
         else {
           // Valuer "entree" et "sortie" 
           $newVenue->updatePlainFields();
@@ -522,15 +513,6 @@ class CHL7v2RecordAdmit extends CHL7v2MessageXML {
   }
   
   function handleA38(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
-    // Mapping venue - création impossible
-    if (!$this->admitFound($newVenue, $data)) {
-      return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
-    }
-    
-    return $this->mapAndStoreVenue($ack, $newVenue, $data);
-  }
-  
-  function handleA44(CHL7Acknowledgment $ack, CSejour $newVenue, $data) {
     // Mapping venue - création impossible
     if (!$this->admitFound($newVenue, $data)) {
       return $this->_ref_exchange_ihe->setAckAR($ack, "E204", null, $newVenue);
