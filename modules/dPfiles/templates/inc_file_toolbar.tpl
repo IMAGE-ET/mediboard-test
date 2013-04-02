@@ -15,7 +15,7 @@
   
   <!-- Téléchargement du fichier -->
   {{if $_doc_item->_class=="CFile"}}
-    <a class="button new notext"
+    <a class="button download notext"
       href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$_doc_item->_id}}"
       target="_blank" title="{{tr}}CFile.download{{/tr}}"></a>
   {{/if}}
