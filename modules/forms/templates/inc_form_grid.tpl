@@ -9,7 +9,10 @@
     {{/foreach}}
 
   {{foreach from=$grid key=_group_id item=_grid}}
-  {{if $groups.$_group_id->_ref_fields|@count}}
+  {{if $groups.$_group_id->_ref_fields|@count ||
+       $groups.$_group_id->_ref_messages|@count ||
+       $groups.$_group_id->_ref_host_fields|@count ||
+       $groups.$_group_id->_ref_subgroups|@count}}
   <tbody id="tab-{{$groups.$_group_id->_guid}}" style="display: none;">
   {{foreach from=$_grid key=_y item=_line}}
   <tr>

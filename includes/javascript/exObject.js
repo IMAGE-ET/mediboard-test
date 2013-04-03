@@ -463,7 +463,8 @@ var ExObject = {
   toggleField: function(name, v, targetField) {
     $$("div.field-"+name).each(function(container){
       //container.setClassName("opacity-20", !v);
-      container.setVisibility(v);
+      //container.setVisibility(v);
+      container.setVisible(v);
 
       Form.getInputsArray(targetField).each(function(input){
         input.disabled = !v;

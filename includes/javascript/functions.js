@@ -1715,3 +1715,57 @@ var BarcodeParser = {
   })
 };
 
+/**
+ * iFrame shim, modified:
+ *  * this.element.src from "javascript:void(0);" to "about:blank" for IE10
+ *  * implicit global "prop" in setBounds
+ *  * Code formatting
+ *
+ * Must be included AFTER livepipe.js
+ *
+ * @type {IframeShim}
+ */
+var IframeShim = Class.create({
+  initialize: function() {
+    this.element = new Element('iframe',{
+      style: 'position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);display:none',
+      src: 'about:blank',
+      frameborder: 0
+    });
+    $(document.body).insert(this.element);
+  },
+  hide: function() {
+    this.element.hide();
+    return this;
+  },
+  show: function() {
+    this.element.show();
+    return this;
+  },
+  positionUnder: function(element) {
+    var element = $(element);
+    var offset = element.cumulativeOffset();
+    var dimensions = element.getDimensions();
+    this.element.setStyle({
+      left: offset[0] + 'px',
+      top: offset[1] + 'px',
+      width: dimensions.width + 'px',
+      height: dimensions.height + 'px',
+      zIndex: element.getStyle('zIndex') - 1
+    }).show();
+    return this;
+  },
+  setBounds: function(bounds) {
+    for (var prop in bounds) {
+      bounds[prop] += 'px';
+    }
+    this.element.setStyle(bounds);
+    return this;
+  },
+  destroy: function() {
+    if (this.element) {
+      this.element.remove();
+    }
+    return this;
+  }
+});

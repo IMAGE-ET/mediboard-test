@@ -11,6 +11,44 @@ body {
   padding-right: 6px;
 }
 
+/** WIP **/
+@media WIP/* screen */ {
+  body {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 10px auto!important;
+    padding: 2cm!important;
+    /*transform: scale(0.9);*/
+    transform-origin: center top 0;
+    width: 21cm;
+    position: relative;
+  }
+
+  body:before {
+    content: "";
+    display: block;
+    border: 1px dotted rgba(0,0,0,0.2);
+    position: absolute;
+    top: 2cm;
+    height: 25.7cm; /* height - margin-top - margin-bottom */
+    left: 0;
+    right: 0;
+    border-width: 1px 0 0 0; /*1px 0 1px;*/
+  }
+
+  body:after {
+    content: "";
+    display: block;
+    border: 1px dotted rgba(0,0,0,0.2);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 2cm;
+    right: 2cm;
+    border-width: 0 1px 0;
+  }
+}
+
 textarea#htmlarea {
   width: 99%;
   height: 100%;
@@ -21,9 +59,6 @@ ul {
   padding-left: 1.5em;
 }
 
-li {
-  
-}
 span.hilite {
   background: #f5f;
 }
@@ -110,7 +145,7 @@ span.page:before {
   span.choice {
     background: #eee;
   }
-  
+
   hr.pagebreak,
   hr.pageBreak {
     border: 1px dotted #aaa;
@@ -119,7 +154,7 @@ span.page:before {
     background: #bbb;
     height: 5px;
   }
-  
+
   img.barcode {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAABCAIAAABG0om7AAAABGdBTUEAALGPC%2FxhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuND6NzHYAAAAXSURBVBhXYziMBP4jAYgwRIB4NcgmAADkS0%2FP67r7igAAAABJRU5ErkJggg%3D%3D);
     margin: 0.2em;
@@ -135,7 +170,7 @@ span.page:before {
     overflow: hidden;
     border: none;
   }
-  
+
   table {
     border-collapse: collapse !important;
   }
@@ -163,7 +198,7 @@ span.page:before {
     margin: 0;
     page-break-before: always;
   }
-  
+
   input {
     font-family: dejavu sans;
     display: inline;

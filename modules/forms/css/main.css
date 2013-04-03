@@ -1,3 +1,8 @@
+table.ex-form td,
+table.ex-form th {
+  padding: 1px;
+}
+
 .out-of-grid div {
   /*display: inline-block;*/
 }

@@ -188,7 +188,11 @@ Main.add(function(){
 
   <ul id="ex_class-groups-tabs-{{$ex_form_hash}}" class="control_tabs" style="clear: left;">
     {{foreach from=$groups item=_group}}
-      {{if $_group->_ref_fields|@count}}
+      {{if $_group->_ref_fields|@count ||
+           $_group->_ref_messages|@count ||
+           $_group->_ref_host_fields|@count ||
+           $_group->_ref_subgroups|@count
+      }}
       <li>
         <a href="#tab-{{$_group->_guid}}">{{$_group}}</a>
       </li>
@@ -338,8 +342,11 @@ function switchMode(){
   {{else}}
 
     {{foreach from=$grid key=_group_id item=_grid}}
-
-    {{if $groups.$_group_id->_ref_fields|@count}}
+      {{*if $groups.$_group_id->_ref_fields|@count ||
+           $groups.$_group_id->_ref_messages|@count ||
+           $groups.$_group_id->_ref_host_fields|@count ||
+           $groups.$_group_id->_ref_subgroups|@count
+      *}}
     <tbody id="tab-{{$groups.$_group_id->_guid}}">
       <tr>
         <th class="title" colspan="4">{{$groups.$_group_id}}</th>
@@ -447,7 +454,7 @@ function switchMode(){
     {{/foreach}}
 
     </tbody>
-    {{/if}}
+    {{*/if*}}
     {{/foreach}}
 
     {{foreach from=$ex_object->_native_views item=_object key=_name}}
