@@ -22,16 +22,20 @@ $nb_canceled = 0;
 $list_urgences = array();
 $operation = new COperation();
 
-if($userSel->_id){
-  $operation->date = $date;
-  $operation->chir_id = $userSel->_id;
-  if(!$canceled) {
-    $operation->annulee = 0;
+if ($userSel->_id) {
+  $where = array();
+
+  $where["date"] = "= '$date'";
+  $where[] = "chir_id = '$userSel->_id' OR anesth_id = '$userSel->_id'";
+  if (!$canceled) {
+    $where["annulee"] = "= '0'";
   }
-  $list_urgences = $operation->loadMatchingList("annulee, date");
-  $operation->annulee = 1;
-  $nb_canceled += $operation->countMatchingList();
-  foreach($list_urgences as $curr_urg) {
+  $list_urgences = $operation->loadList($where, "annulee, date");
+
+  $where["annulee"] = "= '1'";
+  $nb_canceled += $operation->countList($where);
+
+  foreach ($list_urgences as $curr_urg) {
     $curr_urg->canDo();
     $curr_urg->loadRefsFwd();
     $_sejour = $curr_urg->_ref_sejour;
@@ -53,10 +57,10 @@ if($userSel->_id){
 // Liste des opérations du jour sélectionné
 $list_plages = array();
 
-if($userSel->_id){
+if ($userSel->_id) {
   $userSel->loadBackRefs("secondary_functions");
   $secondary_specs = array();
-  foreach($userSel->_back["secondary_functions"] as  $curr_sec_spec) {
+  foreach ($userSel->_back["secondary_functions"] as  $curr_sec_spec) {
     $curr_sec_spec->loadRefsFwd();
     $curr_function = $curr_sec_spec->_ref_function;
     $secondary_specs[$curr_function->_id] = $curr_function;
@@ -74,7 +78,7 @@ if($userSel->_id){
   
   $plageop = new CPlageOp();
   $list_plages = $plageop->loadList($where, $order);
-  
+
   foreach ($list_plages as $_plage) {
     $op_canceled = new COperation();
     $op_canceled->annulee = 1;
@@ -85,7 +89,7 @@ if($userSel->_id){
     $_plage->loadRefsNotes();
     
     $where = array();
-    if($userSel->_id && !$userSel->isAnesth()) {
+    if ($userSel->_id && !$userSel->isAnesth()) {
       $where["chir_id"] = "= '$userSel->_id'";
     }
     
@@ -114,7 +118,8 @@ if($userSel->_id){
 $user = CMediusers::get();
 if ($user->isPraticien()) {
   $praticien = $user;
-} else {
+}
+else {
   $praticien = new CMediusers();
   $praticien->load(CValue::getOrSession("pratSel", CValue::getOrSession("praticien_id")));
 }
@@ -163,5 +168,3 @@ $smarty->assign("nb_modeles_etiquettes_sejour", $nb_modeles_etiquettes_sejour);
 $smarty->assign("nb_modeles_etiquettes_operation", $nb_modeles_etiquettes_operation);
 
 $smarty->display("inc_list_operations.tpl");
-
-?>
