@@ -2319,6 +2319,11 @@ class CSejour extends CFacturable implements IPatientRelated {
     return $this->_ref_movements = $this->loadBackRefs("movements");
   }
 
+  /**
+   * Load first transfer
+   *
+   * @return CAffectation
+   */
   function loadRefFirstAffectation() {
     if (!$this->_ref_first_affectation) {
       $this->loadRefsAffectations();

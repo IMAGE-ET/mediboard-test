@@ -488,7 +488,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
       
       // Bascule du type et type_pec
       if ($sejour->fieldModified("type")) {
-        return $this->getBasculeCode($sejour, $sejour->_old);
+        return $this->getBasculeCode($sejour->_old, $sejour);
       }
 
       // Changement du médecin responsable

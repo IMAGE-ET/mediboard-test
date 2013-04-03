@@ -337,6 +337,31 @@ class CPAM extends CIHE {
   }
 
   /**
+   * Test A02 - Transfer the patient to a new room
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA02(CCnStep $step) {
+    // PES-PAM_Encounter_Management_IN_OUT
+    $patient = self::loadPatientPES($step, 40);
+    $sejour  = self::loadAdmitPES($patient);
+
+    $affectation             = new CAffectation();
+    $affectation->lit_id     = $affectation->getRandomValue("lit_id", true);
+    $affectation->sejour_id  = $sejour->_id;
+    $affectation->entree     = $sejour->entree;
+    $affectation->sortie     = CMbDT::dateTime("+2 day", $affectation->entree);
+
+    if ($msg = $affectation->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
    * Test A03 - Discharge patient
    *
    * @param CCnStep $step Step
@@ -413,6 +438,80 @@ class CPAM extends CIHE {
   }
 
   /**
+   * Test A05 - Pre-admit the inpatient
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA05(CCnStep $step) {
+    $patient = self::loadPatientPES($step, $step->number);
+
+    $scenario = $step->_ref_test->_ref_scenario;
+
+    $sejour              = new CSejour();
+    $sejour->patient_id  = $patient->_id;
+    $sejour->group_id    = $step->_ref_test->group_id;
+
+    $timestamp = time() + (rand(1, 30) * rand(1, 24) * rand(1, 60) * rand(1, 60));
+
+    $sejour->entree_prevue = strftime(CMbDT::ISO_DATETIME, $timestamp);
+    $sejour->sortie_prevue = CMbDT::dateTime("+4 day", $sejour->entree_prevue);
+    $sejour->praticien_id  = $sejour->getRandomValue("praticien_id", true);
+    $sejour->type          = "comp";
+    $sejour->service_id    = $sejour->getRandomValue("service_id", true);
+    $sejour->libelle       = "Séjour ITI-31 - $patient->nom";
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A06 - Change patient's class from outpatient (PV1-2 = O) to inpatient (PV1-2 = I)
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA06(CCnStep $step) {
+    // PES-PAM_Encounter_Management_Basic
+    $patient = self::loadPatientPES($step, 40);
+    $sejour  = self::loadAdmitPES($patient);
+
+    $sejour->type = "comp";
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A07 - Change patient's class from inpatient (PV1-2 = I) to outpatient (PV1-2 = O)
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA07(CCnStep $step) {
+    // PES-PAM_Encounter_Management_Basic
+    $patient = self::loadPatientPES($step, 40);
+    $sejour  = self::loadAdmitPES($patient);
+
+    $sejour->type = "exte";
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
    * Test A08 - Update last name
    *
    * @param CCnStep $step Step
@@ -456,6 +555,26 @@ class CPAM extends CIHE {
     $sejour->entree_reelle = "";
 
     if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A12 - Cancel the previous transfer
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA12(CCnStep $step) {
+    // PES-PAM_Encounter_Management_IN_OUT
+    $patient     = self::loadPatientPES($step, 40);
+    $sejour      = self::loadAdmitPES($patient);
+    $affectation = $sejour->loadRefFirstAffectation();
+
+    if ($msg = $affectation->delete()) {
       throw new CMbException($msg);
     }
   }
@@ -553,7 +672,7 @@ class CPAM extends CIHE {
   }
 
   /**
-   * Test A44 - Cancel the return from leave of absence
+   * Test A38 - Cancel the pre-admission
    *
    * @param CCnStep $step Step
    *
@@ -561,15 +680,36 @@ class CPAM extends CIHE {
    *
    * @return void
    */
-  static function testA53(CCnStep $step) {
+  static function testA38(CCnStep $step) {
+    // PES-PAM_Encounter_Management_Basic
+    $patient = self::loadPatientPES($step, 20);
+    $sejour  = self::loadAdmitPES($patient);
+
+    $sejour->annule = 1;
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A44 - Moves the account of patient#1 to patient#2
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA44(CCnStep $step) {
     // PES-PAM_Encounter_Management_ADVANCE
-    $patient     = self::loadPatientPES($step, 30);
-    $sejour      = self::loadAdmitPES($patient);
-    $affectation = self::loadLeaveOfAbsence($step, $sejour);
+    $patient_1   = self::loadPatientPES($step, 20);
+    $patient_2   = self::loadPatientPES($step, 30);
+    $sejour      = self::loadAdmitPES($patient_2);
 
-    $affectation->effectue   = 0;
+    $sejour->patient_id = $patient_1->_id;
 
-    if ($msg = $affectation->store()) {
+    if ($msg = $sejour->store()) {
       throw new CMbException($msg);
     }
   }
@@ -595,7 +735,7 @@ class CPAM extends CIHE {
   }
 
   /**
-   * Test A53 - Moves the account of patient#1 to patient#2
+   * Test A53 - Cancel the return from leave of absence
    *
    * @param CCnStep $step Step
    *
@@ -603,15 +743,15 @@ class CPAM extends CIHE {
    *
    * @return void
    */
-  static function testA44(CCnStep $step) {
+  static function testA53(CCnStep $step) {
     // PES-PAM_Encounter_Management_ADVANCE
-    $patient_1   = self::loadPatientPES($step, 20);
-    $patient_2   = self::loadPatientPES($step, 30);
-    $sejour      = self::loadAdmitPES($patient_2);
+    $patient     = self::loadPatientPES($step, 30);
+    $sejour      = self::loadAdmitPES($patient);
+    $affectation = self::loadLeaveOfAbsence($step, $sejour);
 
-    $sejour->patient_id = $patient_1->_id;
+    $affectation->effectue   = 0;
 
-    if ($msg = $sejour->store()) {
+    if ($msg = $affectation->store()) {
       throw new CMbException($msg);
     }
   }
