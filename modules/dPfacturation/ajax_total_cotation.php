@@ -83,12 +83,13 @@ foreach ($prats as $_chir_id => $_prat) {
             break;
           case "CSejour":
             $request .= "LEFT JOIN sejour ON sejour.sejour_id = acte_$key.object_id
-              WHERE DATE(sejour.entree) < '$fin' AND DATE(sejour.sortie) > '$debut' ";
+              WHERE DATE(sejour.entree) <= '$fin' AND DATE(sejour.sortie) >= '$debut' ";
             break;
           case "COperation":
             $request .= "LEFT JOIN operations ON operations.operation_id = acte_$key.object_id
               LEFT JOIN plagesop ON plagesop.plageop_id = operations.plageop_id
-              WHERE DATE(plagesop.date) BETWEEN '$debut' AND '$fin' ";
+              WHERE ((DATE(plagesop.date) BETWEEN '$debut' AND '$fin')
+                     OR (plagesop.plageop_id IS NULL AND operations.date BETWEEN '$debut' AND '$fin'))";
         }
     
         $request .= "AND object_class = '$_object_class'
