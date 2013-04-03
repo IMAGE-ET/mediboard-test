@@ -96,7 +96,7 @@ Main.add(function () {
         </tr>
         </tbody>
         {{foreachelse}}
-        <tr><td class="empty" colspan="3">Aucune plage ni intervention hors plage</td></tr>
+        <tr><td class="empty" colspan="4">Aucune plage ni intervention hors plage</td></tr>
         {{/foreach}}
       </table>
       
