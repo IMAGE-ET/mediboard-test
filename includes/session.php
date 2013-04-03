@@ -12,6 +12,9 @@
 // Load AppUI from session
 global $rootName;
 
+// Ignore aborted HTTP request, so that PHP finishes the current script
+ignore_user_abort(true);
+
 // Manage the session variable(s)
 $session_name = preg_replace("/[^a-z0-9]/i", "", $rootName);
 
