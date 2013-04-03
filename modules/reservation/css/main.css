@@ -8,7 +8,7 @@
 }
 
 /* PLAGES d'operation */
-.planning .operation_horsplage,.planning .operation_enplage {
+.planning .operation_horsplage,.planning .operation_enplage, .planning .post-op, .planning .pre-op {
   z-index:20;
 }
 
@@ -16,6 +16,11 @@
 .planning .operation_horsplage:hover .body {
   border-left:solid 1px #888;
   box-shadow: 0 1px 4px black;
+  z-index:130;
+}
+
+.planning .event:hover .pause_before, .planning .event:hover .pause_after {
+  display:none!important;
 }
 
 .planning .operation_horsplage, .planning .operation_horsplage:hover {

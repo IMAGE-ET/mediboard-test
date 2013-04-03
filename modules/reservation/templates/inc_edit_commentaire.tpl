@@ -87,7 +87,7 @@
     <tr>
       <td colspan="2" class="button">
         {{if !$commentaire->_id}}
-          <button type="button" class="save" onclick="this.form.onsubmit()">{{tr}}Create{{/tr}}</button>
+          <button type="button" class="save" onclick="this.form.onsubmit(); Control.Modal.close();">{{tr}}Create{{/tr}}</button>
         {{else}}
           <button type="button" class="save" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
           <button type="button" class="trash"

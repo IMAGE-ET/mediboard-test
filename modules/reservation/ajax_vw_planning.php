@@ -245,6 +245,9 @@ if ($show_operations) {
         continue;
       }
 
+      $offset_bottom = 0;
+      $offset_top    = 0;
+
       if (!$anesth->_id) {
         $anesth = $_operation->loadFwdRef("anesth_id", true);
       }
@@ -261,6 +264,21 @@ if ($show_operations) {
         $duree = CMbDT::minutesRelative($_operation->time_operation, $fin_op);
       }
 
+      // pré op
+      if ($_operation->presence_preop) {
+        $hour_debut_preop = CMbDT::subTime($_operation->presence_preop, $_operation->time_operation);
+        $offset_top = CMbDT::minutesRelative($hour_debut_preop, $_operation->time_operation);
+        $duree = $duree + $offset_top;
+        $debut = "$i $hour_debut_preop";
+      }
+
+      //post op
+      if ($_operation->presence_postop) {
+        $hour_fin_postop = CMbDT::addTime($_operation->presence_postop, $fin_op);
+        $offset_bottom = CMbDT::minutesRelative($fin_op, $hour_fin_postop);
+        $duree = $duree + $offset_bottom;
+
+      }
 
       $libelle = "<span style='display: none;' data-entree_prevue='$sejour->entree_prevue' ".
         "data-sortie_prevue='$sejour->sortie_prevue' data-sejour_id='$sejour->_id' data-duree='$_operation->temp_operation'></span>";
@@ -351,6 +369,16 @@ if ($show_operations) {
         $event->addMenuItem("clock", utf8_encode("Modifier les dates d'entrée et sortie du séjour"));
       }
 
+      if ($offset_bottom) {
+        $event->offset_bottom = $offset_bottom;
+        $event->offset_bottom_text = "Post op";
+      }
+
+      if ($offset_top) {
+        $event->offset_top = $offset_top;
+        $event->offset_top_text = "Pre op";
+      }
+
       $event->plage["id"] = $_operation->_id;
       $event->type = "operation_horsplage";
       if ($_operation->rank) {
@@ -358,24 +386,6 @@ if ($show_operations) {
       }
       $event->draggable = $event->resizable = CCanDo::edit();
       $planning->addEvent($event);
-
-      if ($_operation->presence_preop) {
-        $hour_debut_preop = CMbDT::subTime($_operation->presence_preop, $_operation->time_operation);
-        $debut_preop = "$i $hour_debut_preop";
-        $duree = CMbDT::minutesRelative($hour_debut_preop, $_operation->time_operation);
-        $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_preop, $duree, "", "#23425D", true, "hatching");
-
-        $planning->addEvent($event);
-      }
-
-      if ($_operation->presence_postop) {
-        $hour_fin_postop = CMbDT::addTime($_operation->presence_postop, $fin_op);
-        $debut_postop = "$i $fin_op";
-        $duree = CMbDT::minutesRelative($fin_op, $hour_fin_postop);
-        $event = new CPlanningEvent("pause-".$_operation->_guid, $debut_postop, $duree, "", "#23425D", true, "hatching");
-
-        $planning->addEvent($event);
-      }
     }
   }
 }
