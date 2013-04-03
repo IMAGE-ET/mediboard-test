@@ -8,7 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
-{{mb_script module="dPcabinet" script="edit_consultation"}}
+{{mb_script module=cabinet script=edit_consultation}}
+{{mb_script module=planningOp script=operation}}
 
 <script type="text/javascript">
 Consultation.useModal();
