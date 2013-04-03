@@ -1022,7 +1022,12 @@ class CSetuphl7 extends CSetup {
                 ADD `send_update_patient_information` ENUM ('A08','A31') DEFAULT 'A31';";
     $this->addQuery($query);
 
-    $this->mod_version = "0.62";
+    $this->makeRevision("0.62");
+    $query = "ALTER TABLE `receiver_ihe_config`
+                ADD `modification_admit_code` ENUM ('A08','Z99') DEFAULT 'A08';";
+    $this->addQuery($query);
+
+    $this->mod_version = "0.63";
 
     $query = "SHOW TABLES LIKE 'table_description'";
     $this->addDatasource("hl7v2", $query);

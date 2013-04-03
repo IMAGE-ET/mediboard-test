@@ -642,7 +642,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         break;
       // Cas internationnal : A08
       default :
-        $code = "A08";
+        $code = $receiver->_configs["modification_admit_code"];
         break;
     }
     

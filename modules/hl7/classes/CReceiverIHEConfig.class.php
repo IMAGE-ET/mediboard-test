@@ -47,6 +47,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
   public $iti31_historic_movement;
   
   // Send
+  public $modification_admit_code;
   public $send_assigning_authority;
   public $send_all_patients;
   public $send_default_affectation;
@@ -123,6 +124,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
       "build_cellular_phone"
     ),
     "send" => array(
+      "modification_admit_code",
       "send_assigning_authority",
       "send_change_medical_responsibility",
       "send_change_nursing_ward",
@@ -207,6 +209,7 @@ class CReceiverIHEConfig extends CMbObjectConfig {
     $props["iti31_historic_movement"]                   = "bool default|1";
     
     // Send
+    $props["modification_admit_code"]            = "enum list|A08|Z99 default|A08";
     $props["send_assigning_authority"]           = "bool default|1";
     $props["send_change_medical_responsibility"] = "enum list|A02|Z80|Z99 default|Z80";
     $props["send_change_nursing_ward"]           = "enum list|A02|Z84|Z99 default|Z84";

@@ -304,22 +304,76 @@ class CPAM extends CIHE {
    * @return void
    */
   static function testA01(CCnStep $step) {
-    // PES-PAM_Encounter_Management_Basic
     $patient = self::loadPatientPES($step, $step->number);
 
-    $sejour                = new CSejour();
-    $sejour->patient_id    = $patient->_id;
-    $sejour->group_id      = $step->_ref_test->group_id;
+    $scenario = $step->_ref_test->_ref_scenario;
+
+    $sejour              = new CSejour();
+    $sejour->patient_id  = $patient->_id;
+    $sejour->group_id    = $step->_ref_test->group_id;
 
     $timestamp = time() + (rand(1, 30) * rand(1, 24) * rand(1, 60) * rand(1, 60));
 
-    $sejour->entree_prevue = strftime(CMbDT::ISO_DATETIME, $timestamp);
+    switch ($scenario->option) {
+      case 'HISTORIC_MVT' :
+        $sejour->entree_prevue = CMbDT::date(strftime(CMbDT::ISO_DATETIME, $timestamp))." 08:00:00";
+        break;
+
+      default :
+        $sejour->entree_prevue = strftime(CMbDT::ISO_DATETIME, $timestamp);
+        break;
+    }
+
     $sejour->entree_reelle = $sejour->entree_prevue;
     $sejour->sortie_prevue = CMbDT::dateTime("+4 day", $sejour->entree_reelle);
     $sejour->praticien_id  = $sejour->getRandomValue("praticien_id", true);
     $sejour->type          = "comp";
-    $sejour->service_id   = $sejour->getRandomValue("service_id", true);
+    $sejour->service_id    = $sejour->getRandomValue("service_id", true);
     $sejour->libelle       = "Séjour ITI-31 - $patient->nom";
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A03 - Discharge patient
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA03(CCnStep $step) {
+    $scenario = $step->_ref_test->_ref_scenario;
+
+    $step_number = null;
+    switch ($scenario->option) {
+      case 'HISTORIC_MVT' :
+        $step_number = 10;
+        break;
+
+      default :
+        if ($step->number == 90) {
+          $step_number = 30;
+        }
+        if ($step->number == 100) {
+          $step_number = 40;
+        }
+
+        break;
+    }
+
+    if (!$step_number) {
+      throw new CMbException("Aucune étape trouvée");
+    }
+
+    // PES-PAM_Encounter_Management_Basic
+    $patient = self::loadPatientPES($step, $step_number);
+    $sejour  = self::loadAdmitPES($patient);
+
+    $sejour->sortie_reelle = $sejour->sortie_prevue;
 
     if ($msg = $sejour->store()) {
       throw new CMbException($msg);
@@ -407,39 +461,6 @@ class CPAM extends CIHE {
   }
 
   /**
-   * Test A03 - Discharge patient
-   *
-   * @param CCnStep $step Step
-   *
-   * @throws CMbException
-   *
-   * @return void
-   */
-  static function testA03(CCnStep $step) {
-    $step_number = null;
-    if ($step->number == 90) {
-      $step_number = 30;
-    }
-    if ($step->number == 100) {
-      $step_number = 40;
-    }
-
-    if (!$step_number) {
-      throw new CMbException("Aucune étape trouvée");
-    }
-
-    // PES-PAM_Encounter_Management_Basic
-    $patient = self::loadPatientPES($step, $step_number);
-    $sejour  = self::loadAdmitPES($patient);
-
-    $sejour->sortie_reelle = $sejour->sortie_prevue;
-
-    if ($msg = $sejour->store()) {
-      throw new CMbException($msg);
-    }
-  }
-
-  /**
    * Test A13 - Cancel discharge
    *
    * @param CCnStep $step Step
@@ -454,52 +475,6 @@ class CPAM extends CIHE {
     $sejour = self::loadAdmitPES($patient);
 
     $sejour->sortie_reelle = "";
-
-    if ($msg = $sejour->store()) {
-      throw new CMbException($msg);
-    }
-  }
-
-  /**
-   * Test A54 - Change the name of the attending doctor
-   *
-   * @param CCnStep $step Step
-   *
-   * @throws CMbException
-   *
-   * @return void
-   */
-  static function testA54(CCnStep $step) {
-    // PES-PAM_Encounter_Management_ADVANCE
-    $patient = self::loadPatientPES($step, 20);
-    $sejour  = self::loadAdmitPES($patient);
-
-    do {
-      $random_value = $sejour->getRandomValue("praticien_id", true);
-    } while ($sejour->praticien_id == $random_value);
-
-    $sejour->praticien_id = $random_value;
-
-    if ($msg = $sejour->store()) {
-      throw new CMbException($msg);
-    }
-  }
-
-  /**
-   * Test A55 - Change back the name of the attending doctor to the original one
-   *
-   * @param CCnStep $step Step
-   *
-   * @throws CMbException
-   *
-   * @return void
-   */
-  static function testA55(CCnStep $step) {
-    // PES-PAM_Encounter_Management_ADVANCE
-    $patient = self::loadPatientPES($step, 20);
-    $sejour  = self::loadAdmitPES($patient);
-
-    $sejour->praticien_id = $sejour->getValueAtDate($sejour->loadFirstLog()->date, "praticien_id");
 
     if ($msg = $sejour->store()) {
       throw new CMbException($msg);
@@ -578,6 +553,28 @@ class CPAM extends CIHE {
   }
 
   /**
+   * Test A44 - Cancel the return from leave of absence
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA53(CCnStep $step) {
+    // PES-PAM_Encounter_Management_ADVANCE
+    $patient     = self::loadPatientPES($step, 30);
+    $sejour      = self::loadAdmitPES($patient);
+    $affectation = self::loadLeaveOfAbsence($step, $sejour);
+
+    $affectation->effectue   = 0;
+
+    if ($msg = $affectation->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
    * Test A52 - Cancel the leave of absence
    *
    * @param CCnStep $step Step
@@ -620,7 +617,7 @@ class CPAM extends CIHE {
   }
 
   /**
-   * Test A44 - Cancel the return from leave of absence
+   * Test A54 - Change the name of the attending doctor
    *
    * @param CCnStep $step Step
    *
@@ -628,15 +625,74 @@ class CPAM extends CIHE {
    *
    * @return void
    */
-  static function testA53(CCnStep $step) {
+  static function testA54(CCnStep $step) {
     // PES-PAM_Encounter_Management_ADVANCE
-    $patient     = self::loadPatientPES($step, 30);
-    $sejour      = self::loadAdmitPES($patient);
-    $affectation = self::loadLeaveOfAbsence($step, $sejour);
+    $patient = self::loadPatientPES($step, 20);
+    $sejour  = self::loadAdmitPES($patient);
 
-    $affectation->effectue   = 0;
+    do {
+      $random_value = $sejour->getRandomValue("praticien_id", true);
+    } while ($sejour->praticien_id == $random_value);
 
-    if ($msg = $affectation->store()) {
+    $sejour->praticien_id = $random_value;
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test A55 - Change back the name of the attending doctor to the original one
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testA55(CCnStep $step) {
+    // PES-PAM_Encounter_Management_ADVANCE
+    $patient = self::loadPatientPES($step, 20);
+    $sejour  = self::loadAdmitPES($patient);
+
+    $sejour->praticien_id = $sejour->getValueAtDate($sejour->loadFirstLog()->date, "praticien_id");
+
+    if ($msg = $sejour->store()) {
+      throw new CMbException($msg);
+    }
+  }
+
+  /**
+   * Test Z99 - Update admit
+   *
+   * @param CCnStep $step Step
+   *
+   * @throws CMbException
+   *
+   * @return void
+   */
+  static function testZ99(CCnStep $step) {
+    $patient = self::loadPatientPES($step, 10);
+    $sejour  = self::loadAdmitPES($patient);
+
+    $scenario = $step->_ref_test->_ref_scenario;
+
+    switch ($scenario->option) {
+      case 'HISTORIC_MVT' :
+        if ($step->number == 30) {
+          $sejour->sortie_reelle = CMbDT::date($sejour->sortie)." 11:00:00";
+        }
+        if ($step->number == 40) {
+          $sejour->entree_reelle = CMbDT::date($sejour->entree_reelle)." 07:30:00";
+        }
+        break;
+
+      default :
+
+        break;
+    }
+
+    if ($msg = $sejour->store()) {
       throw new CMbException($msg);
     }
   }
