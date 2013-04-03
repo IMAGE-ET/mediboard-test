@@ -50,6 +50,7 @@ class CPlageOp extends CMbObject {
   public $_nb_operations_placees;
   public $_fill_rate;
   public $_reorder_up_to_interv_id;
+  public $_nbQuartHeure;
   
   // Behaviour Fields
   public $_verrouillee = array();
