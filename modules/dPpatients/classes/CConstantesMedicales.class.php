@@ -1305,7 +1305,7 @@ class CConstantesMedicales extends CMbObject {
     // Séjour d'urgence
     if ($context instanceof CSejour && $context->type = "urg") {
       $rpu = $context->loadRefRPU();
-      if ($rpu->_id) {
+      if ($rpu && $rpu->_id) {
         $context = $rpu;
       }
     }
