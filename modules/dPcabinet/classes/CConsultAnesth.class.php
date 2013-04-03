@@ -471,7 +471,19 @@ class CConsultAnesth extends CMbObject implements IPatientRelated {
 
     return parent::canDeleteEx();
   }
-  
+
+  function store() {
+    $this->completeField("operation_id");
+
+    if ($this->operation_id && $this->fieldModified("operation_id")) {
+      $op = new COperation();
+      $op->load($this->operation_id);
+      $this->sejour_id = $op->sejour_id;
+    }
+
+    return parent::store();
+  }
+
   function docsEditable() {
     if (parent::docsEditable()) {
       return true;

@@ -1,12 +1,12 @@
 <script type="text/javascript">
   function selectOperation(operation_id) {
-    oForm = document.addOpFrm;
-    $V(oForm.operation_id, operation_id);
+    oForm = getForm("addOpFrm");
+    $V(oForm.operation_id, operation_id, false);
     submitOpConsult();
   }
   function selectSejour(sejour_id) {
-    oForm = document.addOpFrm;
-    $V(oForm.sejour_id, sejour_id);
+    oForm = getForm("addOpFrm");
+    $V(oForm.sejour_id, sejour_id, false);
     submitOpConsult();
   }
   function newOperation(chir_id, pat_id) {
