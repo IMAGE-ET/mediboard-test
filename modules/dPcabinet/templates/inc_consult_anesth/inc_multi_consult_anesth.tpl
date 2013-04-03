@@ -10,6 +10,8 @@
 
 {{assign var=dossiers_anesth value=$consult->_refs_dossiers_anesth}}
 
+{{mb_default var=onlycreate value=false}}
+
 <script type="text/javascript">
   createDossier = function(consult_id) {
     var form = getForm("manageDossierAnesth");
@@ -44,21 +46,17 @@
   <input type="hidden" name="consultation_id" disabled/>
   <input type="hidden" name="postRedirect" value="m=cabinet&tab=edit_consultation&selConsult={{$consult->_id}}" />
   {{if $dossiers_anesth|@count}}
-    <select name="_consult_anesth_id" onchange="reloadDossierAnesth(this.value)">
+    <select name="_consult_anesth_id" style="width: 20em;" onchange="reloadDossierAnesth(this.value)">
       {{foreach from=$dossiers_anesth item=_dossier}}
         {{assign var=_op value=$_dossier->_ref_operation}}
         <option value="{{$_dossier->_id}}" {{if $consult_anesth->_id == $_dossier->_id}}selected{{/if}}>
-
-          Dossier d'anesthésie {{$_dossier->_id}} {{if $_op->_id}}(Intervention du {{$_op->_datetime|date_format:$conf.date}}){{/if}}
-          {{* Consult. anesth. du {{$_dossier->_ref_consultation->_ref_plageconsult->date|date_format:$conf.date}} à
-          {{$_dossier->_ref_consultation->heure|date_format:$conf.time}} *}}
+          Dossier d'anesthésie du {{$_dossier->_ref_consultation->_ref_plageconsult->date|date_format:$conf.date}}
+          {{if $_op->_id}}(Intervention du {{$_op->_datetime|date_format:$conf.date}}){{/if}}
         </option>
       {{/foreach}}
     </select>
     <button type="button" class="trash notext" title="Supprimer le dossier d'anesthésie"
-            onclick="delDossier($V(this.form._consult_anesth_id))"></button>
+            onclick="delDossier($V(this.form._consult_anesth_id))">{{tr}}Delete{{/tr}}</button>
   {{/if}}
-  <div>
-    <button typd="button" class="add" onclick="createDossier('{{$consult->_id}}')">Ajouter un dossier d'anesthésie</button>
-  </div>
+  <button type="button" class="add {{if !$onlycreate}}notext{{/if}}" onclick="createDossier('{{$consult->_id}}')">Ajouter un dossier d'anesthésie</button>
 </form>

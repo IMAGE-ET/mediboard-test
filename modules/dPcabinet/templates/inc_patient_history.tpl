@@ -104,8 +104,8 @@
 
 </table>
 
-{{if $consult->_is_anesth}}
+{{if $consult->_ref_chir->isAnesth() && !$consult->_refs_dossiers_anesth|@count}}
   <div id="dossiers_anesth_area">
-    {{mb_include module=cabinet template=inc_multi_consult_anesth}}
+    {{mb_include module=cabinet template=inc_consult_anesth/inc_multi_consult_anesth onlycreate=true}}
   </div>
 {{/if}}

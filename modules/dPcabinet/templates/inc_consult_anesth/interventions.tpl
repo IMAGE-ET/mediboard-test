@@ -28,6 +28,8 @@
   {{/if}}
 </script>
 
+
+
 <div class="big-info"  style="display: none; text-align: center;" id="evenement-chooser-modal">
   {{assign var=next_operation value=$nextSejourAndOperation.COperation}}
   {{assign var=next_sejour    value=$nextSejourAndOperation.CSejour   }}
@@ -58,6 +60,11 @@
     <button class="tick" onclick="selectSejour('{{$next_sejour->_id}}'); modalWindow.close();">Oui</button>
   {{/if}}
   <button class="cancel" onclick="modalWindow.close();">Non</button>
+</div>
+
+
+<div id="dossiers_anesth_area">
+  {{mb_include module=cabinet template=inc_consult_anesth/inc_multi_consult_anesth}}
 </div>
 
 {{assign var=operation value=$consult_anesth->_ref_operation}}
@@ -104,6 +111,11 @@
     </optgroup>
     {{/foreach}}
   </select>
+  {{if !$app->user_prefs.simpleCabinet && !@$modules.ecap->mod_active && !$operation->_id}}
+  <button class="new notext" type="button" onclick="newOperation({{$consult_anesth->_ref_consultation->_praticien_id}},{{$consult_anesth->_ref_consultation->patient_id}})">
+    Nouvelle intervention
+  </button>
+  {{/if}}
   <br />
 
   {{assign var=sejour value=$consult_anesth->_ref_sejour}}
@@ -160,12 +172,6 @@
   </table>
 </form>
 {{else}}
-
-{{if !$app->user_prefs.simpleCabinet && !@$modules.ecap->mod_active}}
-<button class="new" type="button" onclick="newOperation({{$consult_anesth->_ref_consultation->_praticien_id}},{{$consult_anesth->_ref_consultation->patient_id}})">
-  Nouvelle intervention
-</button>
-{{/if}}
 <form name="opInfoFrm" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
   <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
   <input type="hidden" name="del" value="0" />
