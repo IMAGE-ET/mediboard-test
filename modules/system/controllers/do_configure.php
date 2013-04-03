@@ -21,7 +21,19 @@ $ajax = CMbArray::extract($_POST, "ajax");
 $config_db = CAppUI::conf("config_db");
 
 if ($config_db) {
-  $configs = array_map_recursive('stripslashes', $_POST);
+  $configs = $_POST;
+
+  // Ne pas inclure de config relatives aux bases de données
+  foreach ($_POST as $key => $_config) {
+    if ($key === "db") {
+      unset($configs[$key]);
+    }
+    else {
+      unset($_POST[$key]);
+    }
+  }
+
+  $configs = array_map_recursive('stripslashes', $configs);
 
   // DB Version
   $inserts = array();
@@ -42,21 +54,23 @@ if ($config_db) {
       CAppUI::setMsg("Configure-success-modify");
     }
   }
-  CMbConfig::loadValuesFromDB();
+}
+
+$mbConfig = new CMbConfig();
+
+$result = $mbConfig->update($_POST);
+if (PEAR::isError($result)) {
+  CAppUI::setMsg("Configure-failed-modify", UI_MSG_ERROR, $result->getMessage());
 }
 else {
-  $mbConfig = new CMbConfig();
+  CAppUI::setMsg("Configure-success-modify");
+}
 
-  $result = $mbConfig->update($_POST);
-  if (PEAR::isError($result)) {
-    CAppUI::setMsg("Configure-failed-modify", UI_MSG_ERROR, $result->getMessage());
-  }
-  else {
-    CAppUI::setMsg("Configure-success-modify");
-  }
+$mbConfig->load();
+$dPconfig = $mbConfig->values;
 
-  $mbConfig->load();
-  $dPconfig = $mbConfig->values;
+if ($config_db) {
+  CMbConfig::loadValuesFromDB();
 }
 
 // Cas Ajax

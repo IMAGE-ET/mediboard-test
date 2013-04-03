@@ -142,13 +142,18 @@ class CMbConfig {
   static function loadValuesFromDB() {
     global $dPconfig;
     $ds = CSQLDataSource::get("std");
-
     $request = "SELECT * FROM config_db;";
-
     $configs = $ds->loadList($request);
 
     foreach ($configs as $_value) {
       CMbConfig::loadConf(explode(" ", $_value['key']), $_value['value'], $dPconfig);
     }
+
+    // Réinclusion du config_overload
+    $path = dirname(__FILE__);
+    if (is_file("$path/config_overload.php")) {
+      include "$path/config_overload.php";
+    }
+
   }
 }
