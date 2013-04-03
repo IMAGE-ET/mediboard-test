@@ -1,44 +1,68 @@
-<?php /* $Id: $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * CPlanningEvent class
+ * allow adding events to a CWeekPlanning
+ *
+ * @category Ssr
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
+/**
+ * Class CPlanningEvent
+ */
 class CPlanningEvent  {
-  var $guid        = null;
-  var $internal_id = null;
+  public $guid;
+  public $internal_id;
   
-  var $title     = null;
-  var $icon      = null;
-  var $icon_desc = null;
+  public $title;
+  public $icon;
+  public $icon_desc;
   
-  var $type      = null;
-  var $plage     = array();
-  var $menu      = array();
+  public $type;
+  public $plage     = array();
+  public $menu      = array();
   
-  var $start     = null;
-  var $end       = null;
-  var $length    = null;
-  var $day       = null;
-  var $below     = false;
-  var $draggable = false;
-  var $resizable = false;
-  var $disabled  = false;
-  
-  var $hour      = null;
-  var $minutes   = null;
-  var $hour_divider = null;
-  var $width     = null;
-  var $offset    = null;
-  var $color     = null;
-  var $height    = null;
-  var $useHeight = null;
-  var $important = null;
-  
+  public $start;
+  public $end;
+  public $length;
+  public $day;
+  public $below       = false;
+  public $draggable   = false;
+  public $resizable   = false;
+  public $disabled    = false;
+
+  public $hour;
+  public $minutes;
+  public $hour_divider;
+  public $width;
+  public $offset;               //minutes
+  public $offset_top;           //minutes
+  public $offset_top_text;      //string
+  public $offset_bottom;        //minutes
+  public $offset_bottom_text;   //string
+  public $color;                //aaa
+  public $height;
+  public $useHeight;
+  public $important;
+
+  /**
+   * constructor
+   *
+   * @param string      $guid           guid
+   * @param string      $date           [day h:m:s]
+   * @param int         $length         length of the event (minutes)
+   * @param string      $title          title displayed of the event
+   * @param null        $color          background color of the event
+   * @param bool        $important      is the event important
+   * @param null|string $css_class      css class
+   * @param null        $draggable_guid is the guid dragable
+   * @param bool        $html_escape    do I escape the html from title
+   */
   function __construct ($guid, $date, $length = 0, $title = "", $color = null, $important = true, $css_class = null, $draggable_guid = null, $html_escape = true) {
     if (!$color) {
       $color = "#999";
@@ -57,7 +81,7 @@ class CPlanningEvent  {
     $this->css_class = is_array($css_class) ? implode(" ", $css_class) : $css_class;
     
     if (preg_match("/[0-9]+ /", $this->start)) {
-      $parts = split(" ", $this->start);
+      $parts = explode(" ", $this->start);
       $this->end = "{$parts[0]} ".CMbDT::time("+{$this->length} MINUTES", $parts[1]);
       $this->day = $parts[0];
       $this->hour = CMbDT::transform(null, $parts[1], "%H");
@@ -70,7 +94,14 @@ class CPlanningEvent  {
       $this->minutes = CMbDT::transform(null, $date, "%M");
     }
   }
-  
+
+  /**
+   * check if an event collid with another
+   *
+   * @param CPlanningEvent $event the event to check
+   *
+   * @return bool
+   */
   function collides(self $event) {
     if ($event == $this || $this->length == 0 || $event->length == 0) {
       return false;
@@ -78,7 +109,15 @@ class CPlanningEvent  {
     
     return ($event->start < $this->end && $event->end > $this->start);
   }
-  
+
+  /**
+   * Add a menu to this
+   *
+   * @param string $type  class of the menu (css class)
+   * @param string $title title of the menu (displayed on hover event)
+   *
+   * @return null
+   */
   function addMenuItem($type, $title){
     $this->menu[] = array(
       "class" => $type, 

@@ -1,13 +1,20 @@
-<?php /* $Id: $ */
+<?php
 
 /**
- * @package Mediboard
- * @subpackage ssr
- * @version $Revision: $
- * @author SARL OpenXtrem
- * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
+ * CPlanningWeek class
+ *
+ * @category Ssr
+ * @package  Mediboard
+ * @author   SARL OpenXtrem <dev@openxtrem.com>
+ * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html
+ * @version  SVN: $Id:\$
+ * @link     http://www.mediboard.org
  */
 
+
+/**
+ * Class CPlanningWeek
+ */
 class CPlanningWeek {
   var $guid = null;
   var $title = null;
@@ -56,9 +63,20 @@ class CPlanningWeek {
     "12", "13", "14", "15", "16", "17", 
     "18", "19", "20", "21", "22", "23", 
   );
-
   var $days = array();
 
+  /**
+   * constructor
+   *
+   * @param string $date        current date in the planning
+   * @param null   $date_min    min date of the planning
+   * @param null   $date_max    max
+   * @param int    $nb_days     nb of day in the planning
+   * @param bool   $selectable  is the planning selectable
+   * @param string $height      [optional] height of the planning, default : auto
+   * @param bool   $large       [optional] is the planning a large one
+   * @param bool   $adapt_range [optional] can the planning adapt the range
+   */
   function __construct($date, $date_min = null, $date_max = null, $nb_days = 7, $selectable = false, $height = "auto", $large = false, $adapt_range = false) {
     $this->date = $date;
     $this->selectable = $selectable;
@@ -107,7 +125,14 @@ class CPlanningWeek {
       $this->_date_max_planning = end(array_keys($this->days));
     }
   }
-  
+
+  /**
+   * add an event to the present planning
+   *
+   * @param CPlanningEvent $event an event
+   *
+   * @return null
+   */
   function addEvent(CPlanningEvent $event) {
     if ($event->day < $this->date_min || $event->day > $this->date_max) {
       return;
@@ -133,8 +158,7 @@ class CPlanningWeek {
             $min = min($event->start, $_event->start);
             $max = max($event->end  , $_event->end);
             
-            if (($__event->start < $min && $__event->end <= $min) ||
-                ($__event->start >= $max && $__event->end > $max)) {
+            if (($__event->start < $min && $__event->end <= $min) || ($__event->start >= $max && $__event->end > $max)) {
               continue;
             } 
             
@@ -163,6 +187,7 @@ class CPlanningWeek {
    * @return null
    */
   function rearrange() {
+    $events = array();
     //days
     foreach ($this->events_sorted as $_events_by_day) {
       $intervals = array();
@@ -219,7 +244,14 @@ class CPlanningWeek {
       }
     }
   }
-  
+
+  /**
+   * Add a range to the planning
+   *
+   * @param CPlanningRange $range a range
+   *
+   * @return null
+   */
   function addRange(CPlanningRange $range) {
     if ($range->day < $this->date_min || $range->day > $this->date_max) {
       return;
@@ -233,12 +265,21 @@ class CPlanningWeek {
     $range->offset = 0.0;
     $range->width = 1.0;
   }
-  
+
+  /**
+   * Show the actual time in the planning
+   *
+   * @param string $color show the actual time
+   *
+   * @return null
+   */
   function showNow($color = "red") {
     $this->addEvent(new CPlanningEvent(null, CMbDT::dateTime(), null, null, $color, null, "now"));
   }
   
   /**
+   * Add an unavailability event to the planning
+   *
    * @param object $min The min date
    * @param object $max [optional] The max date
    *
@@ -261,7 +302,8 @@ class CPlanningWeek {
   
   /**
    * Tell wether given day is active in planning
-   * @param date $day ISO date
+   *
+   * @param string|object $day ISO date
    *
    * @return bool
    */
@@ -270,10 +312,13 @@ class CPlanningWeek {
   }
 
   /**
-   * @param object $day    The label's day
-   * @param object $text   The label
-   * @param object $detail [optional] Details about the label
-   * @param object $color  [optional] The label's color
+   * Add a label to a day
+   *
+   * @param object $day     The label's day
+   * @param object $text    The label
+   * @param object $detail  [optional] Details about the label
+   * @param object $color   [optional] The label's color
+   * @param string $onclick [optional] a function for the onclick event
    *
    * @return void
    */
@@ -289,8 +334,10 @@ class CPlanningWeek {
   /**
    * Add a load event
    *
-   * @param CPlanningEvent|string $start
-   * @param integer               $length [optional]
+   * @param CPlanningEvent|string $start  an event
+   * @param integer               $length [optional] length of the load
+   *
+   * @return null
    */
   function addLoad($start, $length = null) {
     $this->has_load = true;
