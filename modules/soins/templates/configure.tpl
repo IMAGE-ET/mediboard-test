@@ -30,10 +30,11 @@
     <col style="width: 50%" />
     <tr>
       <th class="category" colspan="2">
-      {{tr}}CLit{{/tr}}
+        {{tr}}CLit{{/tr}}
       </th>
     </tr>
     {{mb_include module=system template=inc_config_bool class=CLit var=align_right}}
+
     <tr>
       <th class="category" colspan="2">
       {{tr}}CConstantesMedicales{{/tr}}
@@ -58,8 +59,8 @@
       <td>
         <a class="button search" onclick="redirectOffline('sejour');">{{tr}}CSejour.all{{/tr}}</a>
         {{if "dPprescription"|module_active}}
-        <br/>
-        <a class="button search" onclick="redirectOffline('bilan');">{{tr}}CService.bilan{{/tr}}</a>
+          <br/>
+          <a class="button search" onclick="redirectOffline('bilan');">{{tr}}CService.bilan{{/tr}}</a>
         {{/if}}
       </td>
     </tr>
@@ -69,46 +70,26 @@
          Pancarte des services
       </th>
     </tr>
-    <tr>
-      <td colspan="2">
-        {{mb_include module=system template=inc_config_enum var=transmissions_hours values="12|24|36|48" skip_locales=1}}
-      </td>
-    </tr>	
+    {{mb_include module=system template=inc_config_enum var=transmissions_hours values="12|24|36|48" skip_locales=1}}
+
     <tr>
       <th class="category" colspan="2">
         Transmissions
       </th>
     </tr>
-    <tr>
-      <td colspan="2">
-        {{mb_include module=system template=inc_config_bool var=cible_mandatory_trans}}
-      </td>
-    </tr>
+    {{mb_include module=system template=inc_config_bool var=cible_mandatory_trans}}
+    {{mb_include module=system template=inc_config_bool var=trans_compact}}
+
     <tr>
        <th class="category" colspan="2">
          Autres paramètres
        </th>
     </tr>
-    <tr>
-       <td colspan="2">
-         {{mb_include module=system template=inc_config_bool var=show_charge_soins}}
-       </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        {{mb_include module=system template=inc_config_enum var=max_time_modif_suivi_soins values=$listHours skip_locales=1}}
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        {{mb_include module=system template=inc_config_bool var=show_only_lit_bilan}}
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        {{mb_include module=system template=inc_config_str var=ignore_allergies}}
-      </td>
-    </tr>
+    {{mb_include module=system template=inc_config_bool var=show_charge_soins}}
+    {{mb_include module=system template=inc_config_enum var=max_time_modif_suivi_soins values=$listHours skip_locales=1}}
+    {{mb_include module=system template=inc_config_bool var=show_only_lit_bilan}}
+    {{mb_include module=system template=inc_config_str var=ignore_allergies}}
+
     <tr>
       <td class="button" colspan="2">
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>

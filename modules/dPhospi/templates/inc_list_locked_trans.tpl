@@ -29,7 +29,7 @@
   </tr>
   {{foreach from=$transmissions item=_suivi}}
     <tr>
-      {{mb_include module=hospi template=inc_line_suivi show_patient=false force_new=true show_target=true}}
+      {{mb_include module=hospi template=inc_line_suivi show_patient=false show_link=false force_new=true show_target=true}}
     </tr>
   {{/foreach}}
 </table>
@@ -45,4 +45,8 @@
       addTransmission('{{$transmission->sejour_id}}', '{{$transmission->user_id}}', null, null, null, '{{$transmission->libelle_ATC|smarty:nodefaults|JSAttribute}}');
     {{/if}}
   ">
-  Réouvrir la cible</button>
+  {{if $from_compact}}
+    Ajouter une transmission
+  {{else}}
+    Réouvrir la cible
+  {{/if}}</button>

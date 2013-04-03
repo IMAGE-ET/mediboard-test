@@ -222,9 +222,10 @@ toggleLockCible = function(transmission_id, lock) {
   }});
 }
 
-showLockedTrans = function(transmission_id) {
+showTrans = function(transmission_id, from_compact) {
   var url = new Url("hospi", "ajax_list_locked_trans");
   url.addParam("transmission_id", transmission_id);
+  url.addParam("from_compact", from_compact);
   url.requestModal(850, 550, {maxHeight: '550'});
 }
 

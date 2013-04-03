@@ -1,18 +1,18 @@
 {{mb_default var=show_target value=true}}
 {{mb_default var=from_lock   value=false}}
 {{mb_default var=force_new   value=false}}
+{{mb_default var=show_link value=true}}
+
+{{assign var=trans_compact value=$conf.soins.trans_compact}}
+
 {{if $_suivi instanceof CObservationMedicale}}
   {{if @$show_patient}}
   <td><strong>{{$_suivi->_ref_sejour->_ref_patient}}</strong></td>
   <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
   {{/if}}
-  <td><strong>{{tr}}{{$_suivi->_class}}{{/tr}}</strong></td>
-  <td>
-    <strong>
-      <div class="mediuser" style="border-color: #{{$_suivi->_ref_user->_ref_function->color}};">
-        {{$_suivi->_ref_user}}
-      </div>
-    </strong>
+  <td><strong>Obs</strong></td>
+  <td class="narrow">
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user initials=border}}
   </td>
   <td  style="text-align: center">
     <strong>
@@ -52,9 +52,9 @@
 {{/if}}
 
 {{if $_suivi instanceof CConstantesMedicales}}
-  <td>{{tr}}{{$_suivi->_class}}{{/tr}}</td>
-  <td>
-    {{$_suivi->_ref_user->_view}}
+  <td>Cst</td>
+  <td class="narrow">
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user initials=border}}
   </td>
   <td style="text-align: center">
      {{mb_ditto name=date value=$_suivi->datetime|date_format:$conf.date}}
@@ -80,13 +80,9 @@
 {{/if}}
 
 {{if $_suivi instanceof CPrescriptionLineElement || $_suivi instanceof CPrescriptionLineComment}}
-  <td><strong>Prescription</strong></td>
-  <td>
-    <strong>
-      <div class="mediuser" style="border-color: #{{$_suivi->_ref_praticien->_ref_function->color}};">
-        {{mb_value object=$_suivi field="praticien_id"}}
-      </div>
-    </strong>
+  <td><strong>Presc</strong></td>
+  <td class="narrow">
+    {{mb_include module=mediusers template=$_suivi->_ref_praticien initials=border}}
   </td>
   <td style="text-align: center">
     {{mb_ditto name=date value=$_suivi->debut|date_format:$conf.date}}
@@ -126,20 +122,16 @@
   <td class="text">
     <strong onmouseover="ObjectTooltip.createEx(this, '{{$_suivi->_guid}}')">
       {{if $_suivi->type == "entree"}}
-        {{tr}}CConsultation.type.entree{{/tr}}
+        Obs. entrée
       {{elseif $_suivi->_refs_dossiers_anesth|@count >= 1}}
-        {{tr}}CConsultAnesth{{/tr}}
+        Cs anesth.
       {{else}}
-        {{tr}}CConsultation{{/tr}}
+        Cs
       {{/if}}
     </strong>
   </td>
-  <td class="text narrow">
-    <strong>
-      <div class="mediuser" style="border-color: #{{$_suivi->_ref_praticien->_ref_function->color}};">
-        {{mb_value object=$_suivi field="_praticien_id"}}
-      </div>
-    </strong>
+  <td class="narrow">
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_praticien initials=border}}
   </td>
   <td style="text-align: center">
     {{mb_ditto name=date value=$_suivi->_datetime|date_format:$conf.date}}
@@ -209,8 +201,8 @@
     <td>{{$_suivi->_ref_sejour->_ref_patient}}</td>
     <td class="text">{{$_suivi->_ref_sejour->_ref_last_affectation->_ref_lit->_view}}</td>
   {{/if}}
-  <td class="narrow">{{tr}}{{$_suivi->_class}}{{/tr}}</td>
-  <td class="text">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user}}</td>
+  <td class="narrow">TC</td>
+  <td class="narrow">{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi->_ref_user initials=border}}</td>
   <td style="text-align: center;" class="narrow">
     {{mb_ditto name=date value=$_suivi->date|date_format:$conf.date}}
   </td>
@@ -318,10 +310,10 @@
   {{/if}}
 
   <td class="narrow {{$locked}}">
-    {{tr}}{{$_suivi[0]->_class}}{{/tr}}
+    TC
   </td>
-  <td class="text {{$locked}}">
-    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi[0]->_ref_user}}
+  <td class="narrow {{$locked}}">
+    {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$_suivi[0]->_ref_user initials=border}}
   </td>
   <td style="text-align: center;" class="narrow {{$locked}}">
     {{if $locked}}
@@ -346,15 +338,17 @@
           style="float: left; border: 2px solid #800; width: 5px; height: 11px; margin-right: 3px;">
         </span>
       {{/if}}
-      {{if $locked}}
+      {{if $locked || $trans_compact}}
         <strong>
       {{/if}}
-      <a href="#1"
-        {{if $locked}}
-          onclick="showLockedTrans('{{$_suivi[0]->_id}}')"
-        {{else}}
-           onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$app->user_id}}', null, '{{$_suivi[0]->object_id}}', '{{$_suivi[0]->object_class}}'); }"
-        {{/if}}>
+      {{if $show_link}}
+        <a href="#1"
+          {{if $locked || $trans_compact}}
+            onclick="showTrans('{{$_suivi[0]->_id}}' {{if !$locked}}, 1{{/if}})"
+          {{else}}
+             onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$app->user_id}}', null, '{{$_suivi[0]->object_id}}', '{{$_suivi[0]->object_class}}'); }"
+          {{/if}}>
+      {{/if}}
       {{if !in_array($_suivi[0]->object_class, $classes)}}
         {{$_suivi[0]->_ref_object->_view}}
       {{/if}}
@@ -375,27 +369,33 @@
           [{{$_suivi[0]->_ref_object->_ref_object->_ref_element_prescription->_ref_category_prescription->_view}}]
         {{/if}}
       {{/if}}
-      {{if $locked}}
+      {{if $locked || $trans_compact}}
         </strong>
       {{/if}}
-      </a>
+      {{if $show_link}}
+        </a>
+      {{/if}}
     {{/if}}
     {{if $libelle_ATC}}
-      {{if $locked}}
+      {{if $locked || $trans_compact}}
         <strong>
       {{/if}}
-      <a href="#1"
-        {{if $locked}}
-           onclick="showLockedTrans('{{$_suivi[0]->_id}}')"
-        {{else}}
-           onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$_suivi[0]->user_id}}', null, null, null, '{{$_suivi[0]->libelle_ATC|smarty:nodefaults|JSAttribute}}'); }"
-        {{/if}}
-        >
-        {{$_suivi[0]->libelle_ATC}}
-      {{if $locked}}
+      {{if $show_link}}
+        <a href="#1"
+          {{if $locked || $trans_compact}}
+             onclick="showTrans('{{$_suivi[0]->_id}}' {{if !$locked}}, 1{{/if}})"
+          {{else}}
+             onclick="if (window.addTransmission) { addTransmission('{{$_suivi[0]->sejour_id}}', '{{$_suivi[0]->user_id}}', null, null, null, '{{$_suivi[0]->libelle_ATC|smarty:nodefaults|JSAttribute}}'); }"
+          {{/if}}
+          >
+      {{/if}}
+      {{$_suivi[0]->libelle_ATC}}
+      {{if $locked || $trans_compact}}
         </strong>
       {{/if}}
-      </a>
+      {{if $show_link}}
+        </a>
+      {{/if}}
     {{/if}}
   </td>
   {{if $locked}}

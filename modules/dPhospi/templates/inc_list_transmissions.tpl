@@ -58,12 +58,12 @@
   </tr>
   <tr>
     <th rowspan="2">{{tr}}Type{{/tr}}</th>
-    <th rowspan="2" style="width: 10%">{{tr}}User{{/tr}}</th>
+    <th rowspan="2">{{tr}}User{{/tr}}</th>
     <th rowspan="2">{{tr}}Date{{/tr}}</th>
     <th rowspan="2">{{tr}}Hour{{/tr}}</th>
     <th rowspan="2">{{mb_title class=CTransmissionMedicale field=object_class}}</th>
 		<th colspan="3" style="width: 50%">{{mb_title class=CTransmissionMedicale field=text}}</th>
-    <th rowspan="2"></th>
+    <th rowspan="2" class="narrow"></th>
   </tr>
   <tr>
     <th class="section" style="width: 17%">{{tr}}CTransmissionMedicale.type.data{{/tr}}</th>

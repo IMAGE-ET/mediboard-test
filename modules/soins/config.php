@@ -17,5 +17,6 @@ $dPconfig["soins"] = array (
   "show_only_lit_bilan" => "0",
   "CLit" => array (
     "align_right" => "1"),
-  "ignore_allergies" => "aucun|ras|r.a.s.|0"
+  "ignore_allergies" => "aucun|ras|r.a.s.|0",
+  "trans_compact" => "0"
 );

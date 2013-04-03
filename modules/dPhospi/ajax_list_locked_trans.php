@@ -14,6 +14,7 @@
 CCanDo::checkRead();
 
 $transmission_id = CValue::get("transmission_id");
+$from_compact = CValue::get("from_compact", 0);
 
 $transmission = new CTransmissionMedicale();
 $transmission->load($transmission_id);
@@ -70,7 +71,8 @@ foreach ($trans as $_trans) {
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("transmission", $transmission);
+$smarty->assign("transmission" , $transmission);
 $smarty->assign("transmissions", $transmissions);
+$smarty->assign("from_compact" , $from_compact);
 
 $smarty->display("inc_list_locked_trans.tpl");

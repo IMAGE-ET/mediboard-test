@@ -9,7 +9,7 @@
 
 $user = CMediusers::get();
 
-if(!$user->isPraticien()) {
+if (!$user->isPraticien()) {
   CCanDo::checkRead();
 }
 
@@ -88,7 +88,7 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_suivi) {
   }
 }
 
-foreach ($last_trans_cible as &$_last) {
+foreach ($last_trans_cible as $_last) {
   $_last->_log_lock = $_last->loadLastLogForField("locked");
   $_last->_log_lock->loadRefUser()->loadRefMediuser()->loadRefFunction();
 }
@@ -101,6 +101,8 @@ if (!$cible && CAppUI::conf("soins constantes_show") && $_show_const) {
 
 //mettre les transmissions dans un tableau dont l'index est le datetime
 $list_trans_const = array();
+
+$trans_compact = CAppUI::conf("soins trans_compact");
 
 foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
   if (is_array($_trans_const)) {
@@ -126,24 +128,32 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
     $list_trans_const[$_trans_const->_datetime] = $_trans_const;
   }
   elseif ($_trans_const instanceof CTransmissionMedicale) {
+    $sort_key_pattern = "$_trans_const->_class $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
+
+    $sort_key = "$_trans_const->date $sort_key_pattern";
+
+    $date_before = CMbDT::dateTime("-1 SECOND", $_trans_const->date);
+    $sort_key_before = "$date_before $sort_key_pattern";
+
+    $date_after  = CMbDT::dateTime("+1 SECOND", $_trans_const->date);
+    $sort_key_after = "$date_after $sort_key_pattern";
+
     if (($_trans_const->libelle_ATC &&
-         $last_trans_cible[$_trans_const->libelle_ATC] != $_trans_const && $last_trans_cible[$_trans_const->libelle_ATC]->locked) ||
-        ($_trans_const->object_id && $last_trans_cible["$_trans_const->object_class $_trans_const->object_id"]->locked &&
-         $last_trans_cible["$_trans_const->object_class $_trans_const->object_id"] != $_trans_const)) {
+      $last_trans_cible[$_trans_const->libelle_ATC] != $_trans_const &&
+      ($last_trans_cible[$_trans_const->libelle_ATC]->locked || ($trans_compact &&
+        !array_key_exists($sort_key, $list_trans_const) && !array_key_exists($sort_key_before, $list_trans_const) && !array_key_exists($sort_key_after, $list_trans_const)))) ||
+      ($_trans_const->object_id &&
+        ($last_trans_cible["$_trans_const->object_class $_trans_const->object_id"]->locked || ($trans_compact &&
+            !array_key_exists($sort_key, $list_trans_const) && !array_key_exists($sort_key_before, $list_trans_const) && !array_key_exists($sort_key_after, $list_trans_const))) &&
+        $last_trans_cible["$_trans_const->object_class $_trans_const->object_id"] != $_trans_const)
+    ) {
       unset($sejour->_ref_suivi_medical[$_key]);
       continue;
     }
-    $sort_key = "$_trans_const->date $_trans_const->_class $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
-    
-    $date_before = CMbDT::dateTime("-1 SECOND", $_trans_const->date);
-    $sort_key_before = "$date_before $_trans_const->_class $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
 
-    $date_after  = CMbDT::dateTime("+1 SECOND", $_trans_const->date);
-    $sort_key_after = "$date_after $_trans_const->_class $_trans_const->user_id $_trans_const->object_id $_trans_const->object_class $_trans_const->libelle_ATC";
-    
     // Aggrégation à -1 sec
     if (array_key_exists($sort_key_before, $list_trans_const)) {
-      array_unshift($list_trans_const[$sort_key_before], $_trans_const);  
+      array_unshift($list_trans_const[$sort_key_before], $_trans_const);
     }
     // à +1 sec
     else if (array_key_exists($sort_key_after, $list_trans_const)) {
@@ -166,10 +176,6 @@ foreach ($sejour->_ref_suivi_medical as $_key => $_trans_const) {
     $list_trans_const[$sort_key] = $_trans_const;
   }
 }
-
-/*foreach ($last_trans_cible as $_trans) {
-  $_trans->
-}*/
 
 krsort($list_trans_const);
 

@@ -106,7 +106,8 @@ class CTransmissionMedicale extends CMbMetaObject {
         $category = $this->_ref_object->_ref_element_prescription->_ref_category_prescription;
         $this->_cible = $category->_view;
         if (!isset($cibles["opened"]["CCategoryPrescription"][$category->_id]) &&
-            !isset($cibles["closed"]["CCategoryPrescription"][$category->_id])) {
+            !isset($cibles["closed"]["CCategoryPrescription"][$category->_id])
+        ) {
           $cibles[$state]["CCategoryPrescription"][$category->_id] = $category->_view;
         }
       }
@@ -117,9 +118,11 @@ class CTransmissionMedicale extends CMbMetaObject {
           $this->_ref_object->loadTargetObject();
           $libelle_ATC = $this->_ref_object->_ref_object->_ref_produit->_ref_ATC_2_libelle;
           $this->_cible = $libelle_ATC;
-           if ((!isset($cibles["opened"]["ATC"]) && !isset($cibles["closed"]["ATC"])) ||
-              (!in_array($libelle_ATC, $cibles["opened"]["ATC"]) && !in_array($libelle_ATC, $cibles["closed"]["ATC"]))) {
-            $cibles[$state]["ATC"][] = $libelle_ATC;
+
+          if (!isset($cibles["opened"]["ATC"][$libelle_ATC]) &&
+              !isset($cibles["closed"]["ATC"][$libelle_ATC])
+          ) {
+            $cibles[$state]["ATC"][$libelle_ATC] = $libelle_ATC;
           }
         }
         if ($this->_ref_object->object_class == "CPrescriptionLineElement") {
@@ -127,7 +130,8 @@ class CTransmissionMedicale extends CMbMetaObject {
           $category = $this->_ref_object->_ref_object->_ref_element_prescription->_ref_category_prescription;
           $this->_cible = $category->_view;
           if (!isset($cibles["opened"]["CCategoryPrescription"][$category->_id]) &&
-               !isset($cibles["closed"]["CCategoryPrescription"][$category->_id])) {
+              !isset($cibles["closed"]["CCategoryPrescription"][$category->_id])
+          ) {
             $cibles[$state]["CCategoryPrescription"][$category->_id] = $category->_view;
           }
         }
@@ -136,22 +140,25 @@ class CTransmissionMedicale extends CMbMetaObject {
       if ($this->object_class == "CCategoryPrescription") {
         $this->_cible = $this->_ref_object->_view;
         if (!isset($cibles["opened"][$this->object_class][$this->object_id]) &&
-            !isset($cibles["closed"][$this->object_class][$this->object_id])) {
+            !isset($cibles["closed"][$this->object_class][$this->object_id])
+        ) {
           $cibles[$state][$this->object_class][$this->object_id] = $this->_ref_object->_view;
         }
       }
 
       if ($this->object_class == "CPrescriptionLineMix") {
         $this->_cible = "prescription_line_mix";
-        if (!isset($cibles["opened"]["perf"][0]) && !isset($cibles["closed"]["perf"][0]))
-        $cibles[$state]["perf"][0] = "prescription_line_mix";
+        if (!isset($cibles["opened"]["perf"][0]) && !isset($cibles["closed"]["perf"][0])) {
+          $cibles[$state]["perf"][0] = "prescription_line_mix";
+        }
       }
     }
 
     if ($this->libelle_ATC) {
       $this->_cible = $this->libelle_ATC;
       if ((!isset($cibles["opened"]["ATC"]) && !isset($cibles["closed"]["ATC"])) ||
-          (!@in_array($this->libelle_ATC, $cibles["opened"]["ATC"]) && @!in_array($this->libelle_ATC, $cibles["closed"]["ATC"]))) {
+          (!@in_array($this->libelle_ATC, $cibles["opened"]["ATC"]) && @!in_array($this->libelle_ATC, $cibles["closed"]["ATC"]))
+      ) {
         $cibles[$state]["ATC"][] = $this->libelle_ATC;
       }
     }
