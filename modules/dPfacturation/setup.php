@@ -180,8 +180,20 @@ class CSetupdPfacturation extends CSetup {
               ADD `code_ref` TEXT,
               ADD `code_caisse` TEXT;";
     $this->addQuery($query);
+
+    /*
+     * Pour créer automatiquement les droits des utilisateurs sur le module fse,
+     * on a besoin de récupérer l'id du module Facturation dans la table modules.
+     * Mais l'entrée correspondante n'est créée qu'à la fin du setup.
+     * On doit donc faire le setup en 2 fois.
+     */
+    if (count($this->ds->loadList("SELECT * FROM modules WHERE mod_name = 'dPfacturation'")) == 0) {
+      $this->mod_version = "0.21";
+      return;
+    }
+
     $this->makeRevision("0.21");
-    
+
     // Ecrit les droits utilisateurs sur le module facturation
     $query = "INSERT INTO `perm_module` (`user_id`, `mod_id`, `permission`, `view`)
               SELECT u.user_id, m.mod_id, 2, 0
