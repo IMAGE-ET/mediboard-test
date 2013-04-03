@@ -3,27 +3,6 @@
   background-image: url(../../../images/icons/ray_vertical.gif)!important; 
   background-repeat: repeat!important;
 }
-
-.sejour-type-default > td {
-  background-color: #ccc!important;
-}
-
-.sejour-type-ambu > td {
-  background-color: #faa!important;
-}
-
-.sejour-type-comp > td {
-  background-color: #fff!important;
-}
-
-.sejour-type-exte > td {
-  background-color: #afa!important;
-}
-
-.sejour-type-consult > td {
-  background-color: #cfdfff!important;
-}
-
 /** TODO Supprimer ce message plus tard **/
 .refresh-page-message {
   display: none;
