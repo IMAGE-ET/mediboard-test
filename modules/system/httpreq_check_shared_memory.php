@@ -20,18 +20,18 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   
   foreach ($localeFiles as $localeFile) {
     if (basename($localeFile) != "meta.php") {
-      require $localeFile;
+      include $localeFile;
     }
   }
   
   $locales = array_filter($locales, "stringNotEmpty");
-  foreach($locales as &$_locale) {
+  foreach ($locales as &$_locale) {
     $_locale = CMbString::unslash($_locale);
   }
   
   $path = "./tmp/locales-$localeName.js";
   if (!is_file($path)) {
-    CAppUI::stepAjax("Locales-javascript-cache-none", UI_MSG_WARNING, $localeName);
+    CAppUI::stepAjax("Locales-javascript-cache-none", UI_MSG_OK, $localeName);
     continue;
   }
   
@@ -56,48 +56,44 @@ foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   CAppUI::stepAjax("Locales-shm-ok", UI_MSG_OK, $localeName);
 }
 
-// Check class paths
-$classNames = CApp::getChildClasses(null);
-foreach($classNames as $className) {
-  $class = new ReflectionClass($className);
-  $classPaths[$className] = $class->getFileName();
-}
-
-if (null == SHM::get("modules")) {
-  CAppUI::stepAjax("Modules-shm-none", UI_MSG_OK);
-}
-
-////////// Classes
-if (null == $sharedClassPaths = SHM::get("class-paths")) {
-  CAppUI::stepAjax("Classes-shm-none", UI_MSG_OK);
-} 
-else {
-  // Only if there are missing classes, but nothing must happen if classes are added
-  if (array_intersect($sharedClassPaths, $classPaths) != $classPaths) {
-    CAppUI::stepAjax("Classes-shm-ko", UI_MSG_WARNING);
-  }
-  else {
-    CAppUI::stepAjax("Classes-shm-ok", UI_MSG_OK);
-  }
-}
+// Not used yet (because of PHP 5.1)
+//if (null == SHM::get("modules")) {
+//  CAppUI::stepAjax("Modules-shm-none", UI_MSG_OK);
+//}
 
 ////////// Configuration model
 $cache_status = CConfiguration::getModelCacheStatus();
-switch($cache_status) {
-  case "empty": CAppUI::stepAjax("ConfigModel-shm-none", UI_MSG_OK);      break;
-  case "dirty": CAppUI::stepAjax("ConfigModel-shm-ko",   UI_MSG_WARNING); break;
-  case "ok":    CAppUI::stepAjax("ConfigModel-shm-ok",   UI_MSG_OK);      break;
+switch ($cache_status) {
+  case "empty":
+    CAppUI::stepAjax("ConfigModel-shm-none", UI_MSG_OK);
+    break;
+  case "dirty":
+    CAppUI::stepAjax("ConfigModel-shm-ko", UI_MSG_WARNING);
+    break;
+  case "ok":
+    CAppUI::stepAjax("ConfigModel-shm-ok", UI_MSG_OK);
+    break;
 }
 
 ////////// Configuration values
 $cache_status = CConfiguration::getValuesCacheStatus();
-switch($cache_status) {
-  case "empty": CAppUI::stepAjax("ConfigValues-shm-none", UI_MSG_OK);      break;
-  case "dirty": CAppUI::stepAjax("ConfigValues-shm-ko",   UI_MSG_WARNING); break;
-  case "ok":    CAppUI::stepAjax("ConfigValues-shm-ok",   UI_MSG_OK);      break;
+switch ($cache_status) {
+  case "empty":
+    CAppUI::stepAjax("ConfigValues-shm-none", UI_MSG_OK);
+    break;
+  case "dirty":
+    CAppUI::stepAjax("ConfigValues-shm-ko", UI_MSG_WARNING);
+    break;
+  case "ok":
+    CAppUI::stepAjax("ConfigValues-shm-ok", UI_MSG_OK);
+    break;
 }
+
+// Smarty templates
+$templates = glob("tmp/templates_c/*/*");
+CAppUI::stepAjax("template-cache-ok", UI_MSG_OK, count($templates));
 
 // Module specific checkings
 foreach (glob("modules/*/check_shared_memory.php") as $script) {
-  require $script;
+  include $script;
 }

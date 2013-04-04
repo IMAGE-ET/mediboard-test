@@ -53,31 +53,22 @@
           tab.removeClassName('wrong');
       }
       
-      var Templates = {
-        id: "TemplatesLog",
-        
-        empty: function() {
-          var url = new Url("system", "httpreq_do_empty_templates");
-          url.requestUpdate(this.id);
-        }
-      }
-      
-      var SharedMemory = {
-        id : "SharedMemoryLog",
+      var CacheManager = {
+        id : "CacheManagerLog",
         
         empty: function(ie) {
           var url = new Url("system", "httpreq_do_empty_shared_memory");
-          url.requestUpdate(this.id, {onComplete: updateControlTabs.bind(this)} );
+          url.requestUpdate(this.id, updateControlTabs.bind(this));
         },
         
         check: function(ie) {
           var url = new Url("system", "httpreq_check_shared_memory");
-          url.requestUpdate(this.id, {onComplete: updateControlTabs.bind(this)} );
+          url.requestUpdate(this.id, updateControlTabs.bind(this));
         }
       }
       
       Main.add(function () {
-        SharedMemory.check("SharedMemory");
+        CacheManager.check("CacheManagerLog");
       });
       
       </script>
@@ -88,20 +79,12 @@
           <th>{{tr}}Status{{/tr}}</th>
         </tr>
         <tr>
-          <td>
-            <button class="cancel singleclick" onclick="Templates.empty()">
-              Vider les caches template Smarty
+          <td style="text-align: right;">
+            <button class="cancel singleclick" onclick="CacheManager.empty(); ">
+              Vider les caches
             </button>
           </td>
-          <td id="TemplatesLog"></td>
-        </tr>
-        <tr>
-          <td>
-            <button class="cancel singleclick" onclick="SharedMemory.empty(); ">
-              Vider les variables de la mémoire partagée
-            </button>
-          </td>
-          <td id="SharedMemoryLog"></td>
+          <td id="CacheManagerLog"></td>
         </tr>
       </table>
   </div>
