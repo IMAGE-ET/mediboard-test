@@ -235,7 +235,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
 
     $affectation_id = null;
     if ($affectation) {
-      /*$current_log       = $affectation->_ref_current_log;
+      $current_log       = $affectation->_ref_current_log;
       $first_affectation = $sejour->loadRefFirstAffectation();
     
       // Dans le cas où il s'agit de la première affectation du séjour et qu'on est en type "création" on ne recherche pas 
@@ -244,9 +244,9 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
         $affectation_id = $affectation->_id;
         $affectation    = null;
       }
-      else {*/
+      else {
         $movement->affectation_id = $affectation->_id;  
-      //}
+      }
     }
 
     if ($insert) {
@@ -276,7 +276,7 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     }
 
     $order = "affectation_id DESC";
-    $movement->log();
+
     $movements = $movement->loadMatchingList($order);
 
     if (!empty($movements)) {
@@ -439,6 +439,11 @@ class CITI31DelegatedHandler extends CITIDelegatedHandler {
     if ($sejour->_etat == "preadmission") {
       // Création d'une pré-admission
       if ($current_log->type == "create") {
+        // Pending admit
+        /*if ($configs["iti31_pending_event_management"] && $sejour->recuse == -1) {
+          return "A14";
+        }*/
+
         return "A05";
       } 
       // Modification d'une pré-admission
