@@ -213,6 +213,9 @@ $can_edit = CCanDo::edit();
 
 $diff_hour_urgence = CAppUI::conf("reservation diff_hour_urgence");
 if ($show_operations) {
+  /**
+   * @var $_operation COperation
+   */
   foreach ($operations_by_salle as $salle_id => $_operations) {
     $i = array_search($salle_id, $salles_ids);
     foreach ($_operations as $_operation) {
@@ -251,18 +254,14 @@ if ($show_operations) {
       if (!$anesth->_id) {
         $anesth = $_operation->loadFwdRef("anesth_id", true);
       }
-      if ($_operation->horaire_voulu) {
-        $debut = "$i {$_operation->horaire_voulu}";
-        $debut_op = $_operation->horaire_voulu;
-        $fin_op = CMbDT::addTime($_operation->temp_operation, $_operation->horaire_voulu);
-        $duree = CMbDT::minutesRelative($_operation->horaire_voulu, $fin_op);
-      }
-      else {
-        $debut = "$i {$_operation->time_operation}";
-        $debut_op = $_operation->time_operation;
-        $fin_op = CMbDT::addTime($_operation->temp_operation, $_operation->time_operation);
-        $duree = CMbDT::minutesRelative($_operation->time_operation, $fin_op);
-      }
+
+      //best time (horaire voulu / time_operation
+      $horaire = CMbDT::time($_operation->_datetime_best);
+      $debut = "$i {$horaire}";
+      $debut_op = $horaire;
+      $fin_op = CMbDT::addTime($_operation->temp_operation, $horaire);
+      $duree = CMbDT::minutesRelative($horaire, $fin_op);
+
 
       // pré op
       if ($_operation->presence_preop) {
