@@ -14,33 +14,6 @@
   <exclude-pattern>/libpkg/</exclude-pattern>
   <exclude-pattern>/locales/</exclude-pattern>
   <exclude-pattern>/templates/</exclude-pattern>
-  <!--<exclude-pattern>/modules/a*</exclude-pattern>
-  <exclude-pattern>/modules/b*</exclude-pattern>
-  <exclude-pattern>/modules/c*</exclude-pattern>
-  <exclude-pattern>/modules/d*</exclude-pattern>
-  <exclude-pattern>/modules/dP*</exclude-pattern>
-  <exclude-pattern>/modules/e*</exclude-pattern>
-  <exclude-pattern>/modules/f*</exclude-pattern>
-  <exclude-pattern>/modules/g*</exclude-pattern>
-  <exclude-pattern>/modules/h*</exclude-pattern>
-  <exclude-pattern>/modules/i*</exclude-pattern>
-  <exclude-pattern>/modules/j*</exclude-pattern>
-  <exclude-pattern>/modules/k*</exclude-pattern>
-  <exclude-pattern>/modules/l*</exclude-pattern>
-  <exclude-pattern>/modules/m*</exclude-pattern>
-  <exclude-pattern>/modules/n*</exclude-pattern>
-  <exclude-pattern>/modules/o*</exclude-pattern>
-  <exclude-pattern>/modules/p*</exclude-pattern>
-  <exclude-pattern>/modules/q*</exclude-pattern>
-  <exclude-pattern>/modules/r*</exclude-pattern>
-  <exclude-pattern>/modules/s*</exclude-pattern>
-  <exclude-pattern>/modules/t*</exclude-pattern>
-  <exclude-pattern>/modules/u*</exclude-pattern>
-  <exclude-pattern>/modules/v*</exclude-pattern>
-  <exclude-pattern>/modules/w*</exclude-pattern>
-  <exclude-pattern>/modules/x*</exclude-pattern>
-  <exclude-pattern>/modules/y*</exclude-pattern>
-  <exclude-pattern>/modules/z*</exclude-pattern>-->
   <exclude-pattern>/tests/</exclude-pattern>
   <exclude-pattern>/tmp/</exclude-pattern>
   <exclude-pattern>*/vendor/*</exclude-pattern>
@@ -124,6 +97,10 @@
   </rule>
   
   <rule ref="PEAR.WhiteSpace.ScopeIndent.Incorrect">
+    <severity>0</severity>
+  </rule>
+
+  <rule ref="PEAR.WhiteSpace.ObjectOperatorIndent">
     <severity>0</severity>
   </rule>
   
