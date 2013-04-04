@@ -789,6 +789,7 @@ class CCodable extends CMbObject {
         $acte->object_class = $this->_class;
         $acte->executant_id = $chir;
         $acte->execution = $this->_datetime;
+        $acte->facturable = 1;
         if ($msg = $acte->store()) {
           return $msg;
         }
