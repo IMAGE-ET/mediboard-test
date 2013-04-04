@@ -298,7 +298,7 @@ function showCheckboxAnesth(element){
             
         <tr class="not-full">
           <th>
-            <label for="print_numdoss_1" title="Afficher ou cacher le numéro de dossier">Afficher le numéro de dossier</label>
+            <label for="_print_numdoss_1" title="Afficher ou cacher le numéro de dossier">Afficher le numéro de dossier</label>
           </th>
           <td>  
             <label>
@@ -312,14 +312,14 @@ function showCheckboxAnesth(element){
 
         <tr class="not-full">
           <th>
-            <label for="print_ipp_1" title="Afficher ou cacher l'IPP">Afficher l'IPP</label>
+            <label for="_print_ipp_1" title="Afficher ou cacher l'IPP">Afficher l'IPP</label>
           </th>
           <td>
             <label>
-              Oui <input type="radio" name="print_ipp" value="1" />
+              Oui <input type="radio" name="_print_ipp" value="1" />
             </label>
             <label>
-              Non <input type="radio" name="print_ipp" value="0" checked="checked"/>
+              Non <input type="radio" name="_print_ipp" value="0" checked="checked"/>
             </label>
           </td>
         </tr>
