@@ -496,7 +496,7 @@
         <th style="border: none; width: 250px;">Libellé</th> 
         <th style="border: none; width:  50px;">Prévues</th>
         <th style="border: none; width:  50px;">Effectuées</th>
-        <th style="border: none; width: 150px;">Unité adm.</th>
+        <th style="border: none; width: 150px;" colspan="2">Unité adm.</th>
       </tr>
       {{foreach from=$prises_by_hour key=hour item=prises_by_type  name="foreach_hour"}}
         {{assign var=_date_time value="$date $hour:00:00"}}
@@ -558,7 +558,7 @@
                       {{$_perf.administre}}
                       {{/if}}
                     </td>
-                    <td style="text-align: center;">
+                    <td style="text-align: center;" colspan="2">
                       {{$perf_line->_unite_administration}}
                     </td>
                   </tr>
@@ -582,15 +582,15 @@
                   </td> 
                   
                   {{if !$line->signee && $line->_class == "CPrescriptionLineMedicament" && $conf.dPprescription.CPrescription.show_unsigned_med_msg}}
-                  <td colspan="3">
-                    <div class="small-warning">
-                      Ligne non signée
-                    </div>
+                    <td colspan="4">
+                      <div class="small-warning">
+                        Ligne non signée
+                      </div>
                     </td>
                   {{else}}
                   <td style="width: 50px; text-align: center;">{{if array_key_exists('prevu', $quantite)}}{{$quantite.prevu}}{{else}} -{{/if}}</td>
                   <td style="width: 50px; text-align: center;">{{if array_key_exists('administre', $quantite)}}{{$quantite.administre}}{{else}}-{{/if}}</td>
-                  <td style="width: 150px; text-align: center;" class="text">
+                  <td style="width: 150px; text-align: center;" class="text" colspan="2">
                     {{if $line_class=="CPrescriptionLineMedicament"}}
                       {{$line->_ref_produit->libelle_unite_presentation}}
                     {{else}}
