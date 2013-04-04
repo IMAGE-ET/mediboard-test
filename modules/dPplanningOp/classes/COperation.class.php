@@ -1096,8 +1096,12 @@ class COperation extends CCodable implements IPatientRelated {
       return $this->_ref_consult_anesth;
     }
 
-    $order = "consultation_anesth_id ASC";
-    return $this->_ref_consult_anesth = @$this->loadUniqueBackRef("dossiers_anesthesie", $order);
+    $order = "date DESC";
+    $ljoin = array(
+      "consultation" => "consultation.consultation_id = consultation_anesth.consultation_id",
+      "plageconsult" => "consultation.plageconsult_id = plageconsult.plageconsult_id"
+    );
+    return $this->_ref_consult_anesth = @$this->loadUniqueBackRef("dossiers_anesthesie", $order, null, null, $ljoin);
   }
 
   /**
