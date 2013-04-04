@@ -241,13 +241,15 @@ class CProduct extends CMbObject {
     parent::loadView();
     $this->getConsumption("-3 MONTHS");
   }
-  
-  /** 
+
+  /**
    * Computes this product's consumption between two dates
-   * 
-   * @param date $since [optional]
-   * @param date $date_max [optional]
-   * 
+   *
+   * @param string $since        [optional] Min date
+   * @param string $date_max     [optional] Max date
+   * @param int    $service_id   Service ID
+   * @param bool   $include_loss Include "lost" products
+   *
    * @return float
    */
   function getConsumption($since = "-1 MONTH", $date_max = null, $service_id = null, $include_loss = true){
@@ -287,8 +289,8 @@ class CProduct extends CMbObject {
   /** 
    * Computes this product's consumption between two dates
    * 
-   * @param date $since    [optional]
-   * @param date $date_max [optional]
+   * @param string $since    [optional]
+   * @param string $date_max [optional]
    * 
    * @return float
    */
@@ -340,8 +342,8 @@ class CProduct extends CMbObject {
   /** 
    * Computes this product's supply between two dates
    * 
-   * @param date $since    [optional]
-   * @param date $date_max [optional]
+   * @param string $since    [optional]
+   * @param string $date_max [optional]
    * 
    * @return float
    */
@@ -401,12 +403,12 @@ class CProduct extends CMbObject {
   /** 
    * Computes the weighted average price (PMP)
    * 
-   * @param date $since    [optional]
-   * @param date $date_max [optional]
+   * @param string $since    [optional]
+   * @param string $date_max [optional]
    * 
    * @return float
    */
-  function getWAP($since = "-1 MONTH", $date_max = null){
+  function getWAP($since = "-1 MONTH", $date_max = null, $ttc = false){
     $qty = $this->getSupply($since, $date_max);
     
     if (!$qty) {
@@ -430,7 +432,13 @@ class CProduct extends CMbObject {
     
     $sql = new CRequest();
     $sql->addTable("product_order_item_reception");
-    $sql->addSelect("SUM(product_order_item_reception.quantity * product_order_item.unit_price)");
+
+    $select = "SUM(product_order_item_reception.quantity * product_order_item.unit_price)";
+    if ($ttc) {
+      $ttc_select = "product_order_item.unit_price + (product_order_item.unit_price * (product_order_item.tva / 100))";
+      $select = "SUM(product_order_item_reception.quantity * ($ttc_select))";
+    }
+    $sql->addSelect($select);
     $sql->addLJoin($ljoin);
     $sql->addWhere($where);
     
