@@ -127,6 +127,9 @@ if ($selPraticien->isAnesth()) {
         $_interv->loadRefAffectation();
         $_interv->loadRefsFwd(1);
         $_interv->_ref_anesth_visite->loadRefFunction();
+        if ($_interv->_ref_consult_anesth->_id) {
+          $_interv->_ref_consult_anesth->_ref_consultation->_ref_chir->loadRefFunction();
+        }
         $patient = $_interv->_ref_sejour->_ref_patient;
         $patient->loadRefConstantesMedicales();
       } 
