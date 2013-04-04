@@ -1,4 +1,4 @@
-<?php /* $Id: setup.php 6144 2009-04-21 14:22:50Z phenxdesign $ */
+<?php /** $Id: setup.php 6144 2009-04-21 14:22:50Z phenxdesign $ **/
 
 /**
  * @package Mediboard
@@ -446,7 +446,6 @@ class CSetupssr extends CSetup {
       $query = "UPDATE `sejour`
         SET `sejour`.`recuse` = '0'
         WHERE `sejour`.`type` = 'ssr'";
-      
       $this->addQuery($query);
     }
     
@@ -481,7 +480,16 @@ class CSetupssr extends CSetup {
       ADD INDEX (`sejour_id`);";
     $this->addQuery($query);
     
-    $this->mod_version = "0.44";
+
+    $this->makeRevision("0.44");
+    if (!CAppUI::conf("ssr recusation use_recuse")) {
+      $query = "UPDATE `sejour`
+        SET `sejour`.`recuse` = '0'
+        WHERE `sejour`.`type` = 'ssr'";
+      $this->addQuery($query);
+    }
+
+    $this->mod_version = "0.45";
 
     // Data source query
     $query = "SHOW TABLES LIKE 'type_activite'";

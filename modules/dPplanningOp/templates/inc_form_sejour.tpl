@@ -482,9 +482,9 @@ Main.add( function(){
 {{mb_field object=$sejour field="codes_ccam" hidden=1}}
 
 {{if !$sejour->annule}}
-  {{mb_field object=$sejour field="recuse" hidden=1}}
-
+  <input type="hidden" name="recuse" value="{{if $conf.dPplanningOp.CSejour.use_recuse && !$sejour->_id}}-1{{else}}{{$sejour->recuse}}{{/if}}"/>
 {{/if}}
+
 {{if $mode_operation}}
   <input type="hidden" name="callback" value="submitFormOperation" />
 {{/if}}

@@ -107,9 +107,11 @@ function printFormSejour() {
   
   {{mb_key object=$sejour}}
   {{mb_field object=$sejour field=group_id hidden=1}}
-  
-  {{mb_field object=$sejour field=recuse hidden=1}}
-  
+
+  {{if !$sejour->annule}}
+    <input type="hidden" name="recuse" value="{{if $conf.ssr.recusation.use_recuse && !$sejour->_id}}-1{{else}}{{$sejour->recuse}}{{/if}}"/>
+  {{/if}}
+
   <input type="hidden" name="_bind_sejour" value="1" />
 
   <table class="form">

@@ -46,8 +46,8 @@ $dPconfig["dPhospi"] = array (
 
   "colors" => array(
     "comp"      => "fff",
-    "ambu"      => "ffaaaa",
-    "exte"      => "aaffaa",
+    "ambu"      => "faa",
+    "exte"      => "afa",
     "seances"   => "68f",
     "ssr"       => "ffcc66",
     "psy"       => "ff66ff",

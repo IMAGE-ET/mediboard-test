@@ -1637,6 +1637,14 @@ class CSetupdPplanningOp extends CSetup {
                 CHANGE `ASA` `ASA` ENUM ('1','2','3','4','5','6') DEFAULT '1';";
     $this->addQuery($query);
 
-    $this->mod_version = "1.75";
+    $this->makeRevision("1.75");
+    if (!CAppUI::conf("dPplanningOp CSejour use_recuse")) {
+      $query = "UPDATE `sejour`
+        SET `sejour`.`recuse` = '0'
+        WHERE `sejour`.`type` != 'ssr'";
+      $this->addQuery($query);
+    }
+
+    $this->mod_version = "1.76";
   }
 }

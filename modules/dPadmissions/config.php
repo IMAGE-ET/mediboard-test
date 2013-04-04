@@ -3,7 +3,7 @@
 /**
  * dPadmissions
  *  
- * @category dPadmissions
+ * @category DPadmissions
  * @package  Mediboard
  * @author   SARL OpenXtrem <dev@openxtrem.com>
  * @license  GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
@@ -16,7 +16,6 @@ $dPconfig["dPadmissions"] = array(
   "show_dh"         => "1",
   "show_deficience" => 0,
   "show_prestations_sorties" => 0,
-  "use_recuse" => "0",
   "hour_matin_soir" => "12:00:00",
   "show_curr_affectation" => "0"
 );

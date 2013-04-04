@@ -340,7 +340,7 @@ class CSejour extends CFacturable implements IPatientRelated {
     $props["charge_id"]                = "ref class|CChargePriceIndicator autocomplete|libelle show|0";
     $props["modalite"]                 = "enum notNull list|office|libre|tiers default|libre show|0";
     $props["annule"]                   = "bool show|0";
-    $props["recuse"]                   = "enum list|-1|0|1 default|-1 show|0";
+    $props["recuse"]                   = "enum list|-1|0|1 default|0 show|0";
     $props["chambre_seule"]            = "bool notNull show|0 default|".(CGroups::loadCurrent()->chambre_particuliere ? 1 : 0);
     $props["reanimation"]              = "bool default|0";
     $props["UHCD"]                     = "bool default|0";
@@ -1167,16 +1167,14 @@ class CSejour extends CFacturable implements IPatientRelated {
 
     // Motif complet du séjour
     $this->_motif_complet .= $this->libelle;
-    if (CAppUI::conf("dPplanningOp CSejour use_recuse")) {
-      $this->_motif_complet = "";
-      if ($this->recuse == -1) {
-        $this->_motif_complet .= "[Att] ";
-      }
-      $this->_motif_complet .= $this->libelle;
+    $this->_motif_complet = "";
+    if ($this->recuse == -1) {
+      $this->_motif_complet .= "[Att] ";
+    }
+    $this->_motif_complet .= $this->libelle;
 
-      if (!$this->annule && $this->recuse == -1) {
-        $this->_view = "[Att] " . $this->_view;
-      }
+    if (!$this->annule && $this->recuse == -1) {
+      $this->_view = "[Att] " . $this->_view;
     }
     
     if (CModule::getActive("dPfacturation") && CAppUI::conf("dPplanningOp CFactureEtablissement use_facture_etab")) {
