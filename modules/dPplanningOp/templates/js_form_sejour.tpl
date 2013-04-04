@@ -264,7 +264,7 @@ function reloadListSejours() {
   }
 }
 
-function reloadSejour(sejour_id) {
+function reloadSejour() {
   var oFormSejour    = document.editSejour;
   var oFormOp        = document.editOp;
   
@@ -275,9 +275,15 @@ function reloadSejour(sejour_id) {
   var sDateSortie    = $V(oFormSejour._date_sortie_prevue);
   var sHeureSortie   = $V(oFormSejour._hour_sortie_prevue);
   var sMinutesSortie = $V(oFormSejour._min_sortie_prevue);
-  
+
+  var sejour_id = $V(oFormSejour.sejour_id);
+  var facturable     = $V(oFormSejour.facturable);
+  if (!sejour_id) {
+    window.save_facturable = facturable;
+  }
+
   var sejoursUrl = new Url("dPplanningOp", "httpreq_vw_sejour");
-  sejoursUrl.addParam("sejour_id", $V(oFormSejour.sejour_id));
+  sejoursUrl.addParam("sejour_id", sejour_id);
   sejoursUrl.addParam("patient_id", $V(oFormSejour.patient_id));
   if(oFormOp) {
     sejoursUrl.addParam("mode_operation", 1);

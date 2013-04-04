@@ -380,6 +380,15 @@ var Sejour = {
 }
 
 Main.add( function(){
+  // Conservation du non facturable lors de la sélection
+  // d'un nouveau séjour dans la liste déroulante
+  // des séjours existants dans la DHE
+  {{if !$sejour->_id}}
+    if (window.save_facturable) {
+      $V(getForm("editSejour").facturable, window.save_facturable);
+    }
+  {{/if}}
+
   Sejour.sejours_collision = {{$sejours_collision|@json}};
   var oForm = getForm("editOp");
   Sejour.preselectSejour($V(oForm._date));
@@ -538,7 +547,7 @@ Main.add( function(){
     Sejours existants
   </th>
   <td colspan="3" id="selectSejours">
-    <select name="sejour_id" style="width: 15em" onchange="reloadSejour(this.value)">
+    <select name="sejour_id" style="width: 15em" onchange="reloadSejour()">
       <option value="" {{if !$sejour->_id}} selected="selected" {{/if}}>
         &mdash; Créer un nouveau séjour
       </option>
