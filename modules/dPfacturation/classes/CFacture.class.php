@@ -219,6 +219,8 @@ class CFacture extends CMbObject {
    * @return void
   **/
   function updateMontants() {
+    $du_patient_init = $this->du_patient;
+    $du_tiers_init   = $this->du_tiers;
     $this->du_patient = 0;
     $this->du_tiers   = 0;
     $this->_secteur1  = 0;
@@ -253,13 +255,28 @@ class CFacture extends CMbObject {
         $this->_secteur2 *= $this->_coeff;
       }
       else {
+        $ngapccam = true;
         foreach ($this->_ref_items as $item) {
-          $this->_secteur1      += $item->montant_base * $item->quantite * $item->coeff;
-          $this->_secteur2      += $item->montant_depassement * $item->quantite * $item->coeff;
+          if($item->type != "CActeNGAP" && $item->type != "CActeCCAM") {
+            $ngapccam = false;
+          }
+          if($item->type = "CActeNGAP") {
+            $this->_secteur1      += $item->montant_base;
+            $this->_secteur2      += $item->montant_depassement;
+          } else {
+            $this->_secteur1      += $item->montant_base * $item->quantite * $item->coeff;
+            $this->_secteur2      += $item->montant_depassement * $item->quantite * $item->coeff;
+          }
           
         }
-        $this->du_patient += $this->_secteur1;
-        $this->du_tiers   += $this->_secteur2;
+        if(!$ngapccam) {
+          $this->du_patient += $this->_secteur1;
+          $this->du_tiers   += $this->_secteur2;
+        }
+        else {
+          $this->du_patient = $du_patient_init;
+          $this->du_tiers = $du_tiers_init;
+        }
       }
     }
   }
