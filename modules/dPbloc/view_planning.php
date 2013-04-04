@@ -28,6 +28,7 @@ $filter->_ccam_libelle   = CValue::get("_ccam_libelle", CAppUI::conf("dPbloc CPl
 $filter->_planning_perso = CValue::get("planning_perso");
 $_coordonnees            = CValue::get("_coordonnees");
 $_print_numdoss          = CValue::get("_print_numdoss");
+$_print_ipp              = CValue::get("_print_ipp");
 $_print_annulees         = CValue::get("_print_annulees");
 
 if (is_array($filter->_bloc_id)) {
@@ -202,6 +203,9 @@ foreach ($plagesop as &$plage) {
     $operation->loadAffectationsPersonnel();
     $sejour = $operation->loadRefSejour(1);
     $sejour->loadRefsFwd(1);
+    if ($_print_ipp) {
+      $sejour->_ref_patient->loadIPP();
+    }
     if ($_print_numdoss) {
       $sejour->loadNDA();
     }
@@ -250,6 +254,9 @@ foreach ($operations as $operation) {
   if ($_print_numdoss) {
     $sejour->loadNDA();
   }
+  if ($_print_ipp) {
+    $sejour->_ref_patient->loadIPP();
+  }
 
   // Chargement de l'affectation
   $affectation = $operation->getAffectation();
@@ -273,6 +280,7 @@ $smarty->assign("affectations_plage", $affectations_plage);
 $smarty->assign("filter"            , $filter);
 $smarty->assign("_coordonnees"      , $_coordonnees);
 $smarty->assign("_print_numdoss"    , $_print_numdoss);
+$smarty->assign("_print_ipp"        , $_print_ipp);
 $smarty->assign("listDates"         , $listDates);
 $smarty->assign("operations"        , $operations);
 $smarty->assign("numOp"             , $numOp);

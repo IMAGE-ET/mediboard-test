@@ -31,6 +31,7 @@ function popPlanning(form) {
   url.addElement(form.type);
   url.addRadio(form._coordonnees);
   url.addRadio(form._print_numdoss);
+  url.addRadio(form._print_ipp);
   url.addRadio(form._print_annulees);
   url.addRadio(form._plage);
   url.addRadio(form._ranking);
@@ -306,6 +307,20 @@ function showCheckboxAnesth(element){
             <label>
               Non <input type="radio" name="_print_numdoss" value="0" checked="checked"/>
             </label> 
+          </td>
+        </tr>
+
+        <tr class="not-full">
+          <th>
+            <label for="print_ipp_1" title="Afficher ou cacher l'IPP">Afficher l'IPP</label>
+          </th>
+          <td>
+            <label>
+              Oui <input type="radio" name="print_ipp" value="1" />
+            </label>
+            <label>
+              Non <input type="radio" name="print_ipp" value="0" checked="checked"/>
+            </label>
           </td>
         </tr>
         <tr class="not-full">

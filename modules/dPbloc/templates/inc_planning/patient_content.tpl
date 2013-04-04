@@ -13,6 +13,9 @@
   <span onmouseover="ObjectTooltip.createEx(this, '{{$patient->_guid}}');">
     {{$patient->_view}}
   </span>
+  {{if $_print_ipp && $patient->_IPP}}
+    [{{$patient->_IPP}}]
+  {{/if}}
 </td>
 <td>
   {{$patient->_age}}
