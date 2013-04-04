@@ -97,6 +97,7 @@ class CMbObject extends CStoredObject {
     $is_editable = $this->docsEditable();
     // Read permission
     foreach ($this->_ref_files as $_file) {
+      $_file->canDo();
       $this->_ref_files_by_name[$_file->file_name] = $_file;
       $_file->_is_editable = $is_editable;
       if (!$_file->canRead()) {
@@ -137,12 +138,15 @@ class CMbObject extends CStoredObject {
       $this->_ref_documents = $document->loadMatchingList("nom");
       $is_editable = $this->docsEditable();
 
-      if (!$can->admin) {
-        $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
-        $days = isset($days[$this->_class]) ?
-          $days[$this->_class] : $days["base"];
 
-        foreach ($this->_ref_documents as $_doc) {
+      $days = CAppUI::conf("dPcompteRendu CCompteRendu days_to_lock");
+      $days = isset($days[$this->_class]) ?
+        $days[$this->_class] : $days["base"];
+
+      foreach ($this->_ref_documents as $_doc) {
+        $_doc->canDo();
+
+        if (!$can->admin) {
           $_doc->_is_editable = $is_editable;
 
           $last_log = $_doc->loadLastLogForContent();
@@ -152,6 +156,7 @@ class CMbObject extends CStoredObject {
               (CMbDT::daysRelative($last_log->date, CMbDT::dateTime()) > $days)
           ) {
             $_doc->_is_editable = false;
+            $_doc->_can->edit = false;
           }
 
           if (!$_doc->canRead()) {
@@ -159,6 +164,7 @@ class CMbObject extends CStoredObject {
           }
         }
       }
+
       return count($this->_ref_documents);
     }
   }
