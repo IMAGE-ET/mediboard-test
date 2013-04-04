@@ -380,10 +380,12 @@ if ($show_operations) {
 
       $event->plage["id"] = $_operation->_id;
       $event->type = "operation_horsplage";
+      $event->draggable = $event->resizable = CCanDo::edit();
       if ($_operation->rank) {
         $event->type = "operation_enplage";
+        $event->draggable = false;
       }
-      $event->draggable = $event->resizable = CCanDo::edit();
+
       $planning->addEvent($event);
     }
   }
