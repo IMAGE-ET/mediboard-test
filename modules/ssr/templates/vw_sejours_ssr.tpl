@@ -107,5 +107,5 @@
 {{/if}}
 
 {{if $conf.ssr.CPrescription.show_dossier_soins}}
-<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto;"></div>  
+<div id="dossier_sejour" style="width: 95%; height: 90%; overflow: auto; display: none;"></div>
 {{/if}}
