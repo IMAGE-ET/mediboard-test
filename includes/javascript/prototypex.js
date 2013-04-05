@@ -568,6 +568,11 @@ Element.addMethods({
       var params = value.split("|");
       props[params.shift()] = (params.length == 0) ? true : (params.length > 1 ? params : params[0]);
     });
+
+    if (props.pattern) {
+      props.pattern = props.pattern.replace(/\\x7C/g, "|").replace(/\\x20/g, " ");
+    }
+
     return props;
   },
 
