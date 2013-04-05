@@ -25,6 +25,7 @@ class CSetup {
   public $ds;
 
   // Protected vars
+  public $messages     = array();
   public $revisions    = array();
   public $queries      = array();
   public $preferences  = array();
@@ -51,7 +52,7 @@ class CSetup {
   function makeRevision($revision) {
      
     if (in_array($revision, $this->revisions)) {
-      trigger_error("Revision '$revision' already exists", E_USER_ERROR);
+      CModelObject::error("Revision-revision%s-already-exists", $revision);
     }
     
     $this->revisions[] = $revision;
@@ -62,6 +63,17 @@ class CSetup {
     $this->config_moves[$revision] = array();
     $this->timeLimit   [$revision] = null;
     end($this->revisions);
+  }
+
+  /**
+   * Add a message for a specified revision
+   *
+   * @param string $message the message
+   *
+   * @return array ([$version] => [$message])
+   */
+  function addUpdateMessage($message) {
+    return $this->messages[end($this->revisions)] = $message;
   }
   
   /**
@@ -208,7 +220,7 @@ class CSetup {
    */
   function addTable($table) {
     if (in_array($table, $this->tables)) {
-      trigger_error("Table '$table' already exists", E_USER_ERROR);
+      CModelObject::error("Table-table%s-already-exists", $table);
     }
     $this->tables[] = $table;
   }

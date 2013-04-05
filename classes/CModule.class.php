@@ -72,6 +72,7 @@ class CModule extends CMbObject {
   public $_files_missing;
   public $_dependencies;
   public $_dependencies_not_verified;
+  public $_update_messages;
   
   // Other fields
   public $_dsns;
@@ -81,6 +82,9 @@ class CModule extends CMbObject {
   public $_can;    // Rights
   public $_canView;
 
+  /**
+   * constructor
+   */
   function __construct() {
     parent::__construct();
    
@@ -112,21 +116,36 @@ class CModule extends CMbObject {
     }
     return $tabClass;
   }
-  
+
+  /**
+   * Specs
+   *
+   * @return CMbObjectSpec
+   */
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'modules';
     $spec->key   = 'mod_id';
     return $spec;
   }
-  
+
+  /**
+   * backprops
+   *
+   * @return array
+   */
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["messages"]            = "CMessage module_id";
     $backProps["permissions_modules"] = "CPermModule mod_id";
     return $backProps;
   }
-  
+
+  /**
+   * Class props
+   *
+   * @return array
+   */
   function getProps() {
     $props = parent::getProps();
     $props["mod_name"]      = "str notNull maxLength|20";
@@ -161,7 +180,6 @@ class CModule extends CMbObject {
     $this->_latest  = $setup->mod_version;
     $this->_upgradable = $this->mod_version < $this->_latest;
     $this->_too_new    = $this->mod_version > $this->_latest;
-    
     $this->_configable = is_file("modules/$this->mod_name/configure.php");
     $this->_dsns = $setup->getDatasources();
     $this->_dependencies = $setup->dependencies;
@@ -170,28 +188,72 @@ class CModule extends CMbObject {
       $this->mod_ui_order = 100;
     }
   }
-  
+
+  /**
+   * checkModuleFiles
+   *
+   * @return bool
+   */
   function checkModuleFiles(){
     $this->_files_missing = !self::exists($this->mod_name);
     return !$this->_files_missing;
   }
-  
+
+  /**
+   * update form fields
+   *
+   * @return null
+   */
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = CAppUI::tr("module-$this->mod_name-court");
   }
-  
+
+  /**
+   * Load a module by name
+   *
+   * @param string $name module name
+   *
+   * @return object
+   */
   function loadByName($name) {
     $this->mod_name = $name;
     return $this->loadMatchingObject();
   }
-  
+
+  /**
+   * get the permission module
+   *
+   * @param int $permType
+   *
+   * @return bool
+   */
   function getPerm($permType) {
     return CPermModule::getPermModule($this->mod_id, $permType);
   }
   
   function getView($permType) {
     return CPermModule::getViewModule($this->mod_id, $permType);
+  }
+
+  /**
+   * get the update message following mod_version
+   *
+   * @param CSetup $setup          setup object to check
+   * @param bool   $onlyNextUpdate only the next update message ?
+   *
+   * @return array messages list [version => message]
+   */
+  function getUpdateMessages(CSetup $setup, $onlyNextUpdate = false) {
+    $this->_update_messages = $setup->messages;
+    if ($onlyNextUpdate) {
+      foreach ($this->_update_messages as $version => $message) {
+        if ($version <= $this->mod_version) {
+          unset($this->_update_messages[$version]);
+        }
+      }
+    }
+    return $this->_update_messages;
   }
 
   /**
@@ -241,6 +303,9 @@ class CModule extends CMbObject {
     }
 
     // Catagories
+    /**
+     * @var $module CModule
+     */
     foreach ($modules as &$module) {
       $module->checkModuleFiles();
       self::$installed[$module->mod_name] =& $module;
