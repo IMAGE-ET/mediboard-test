@@ -11,16 +11,15 @@
  * The CEtatDent Class
  */
 class CEtatDent extends CMbObject {
-  // DB Table key
-  var $etat_dent_id         = null;
+  public $etat_dent_id;
 
   // DB Fields
-  var $dossier_medical_id   = null;
-  var $dent                 = null;
-  var $etat                 = null;
+  public $dossier_medical_id;
+  public $dent;
+  public $etat;
 
-  // Object References
-  var $_ref_dossier_medical = null;
+  /** @var CDossierMedical */
+  public $_ref_dossier_medical;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -30,33 +29,33 @@ class CEtatDent extends CMbObject {
   }
   
   function getProps() {
-    $specs = parent::getProps();
-    
-    $specs["dossier_medical_id"] = "ref notNull class|CDossierMedical";
-    $specs["dent"]               = "num notNull pos";
-    $specs["etat"]               = "enum list|bridge|pivot|mobile|appareil|implant|defaut";
-    
-    return $specs;
+    $props = parent::getProps();
+    $props["dossier_medical_id"] = "ref notNull class|CDossierMedical";
+    $props["dent"]               = "num notNull pos";
+    $props["etat"]               = "enum list|bridge|pivot|mobile|appareil|implant|defaut";
+    return $props;
   }
   
   function store() {
-    $this->updatePlainFields();
-    
-    $etat_dent = new CEtatDent();
-    $etat_dent->dent = $this->dent;
-    $etat_dent->dossier_medical_id = $this->dossier_medical_id;
-    
-    if ($etat_dent->loadMatchingObject()) {
-      $this->etat_dent_id = $etat_dent->_id;
+    if (!$this->_id) {
+      $this->updatePlainFields();
+
+      $etat_dent = new CEtatDent();
+      $etat_dent->dent = $this->dent;
+      $etat_dent->dossier_medical_id = $this->dossier_medical_id;
+
+      if ($etat_dent->loadMatchingObject()) {
+        $this->_id = $etat_dent->_id;
+      }
     }
+
     return parent::store();
   }
 
-  // Forward references
+  /**
+   * @return CDossierMedical
+   */
   function loadRefsFwd() {
-    $this->_ref_dossier_medical = new CDossierMedical;
-    $this->_ref_dossier_medical->load($this->dossier_medical_id);
+    return $this->_ref_dossier_medical = $this->loadFwdRef("dossier_medical_id");
   }
 }
-
-?>
