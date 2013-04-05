@@ -31,21 +31,39 @@
     {{tr}}Module-_too_new-msg{{/tr}} ({{$_mb_module->_latest}})
   </div>
   {{elseif $_mb_module->_upgradable && $can->admin}}
-    <form name="formUpdateModule-{{$module_id}}" method="post" class="upgrade" data-id="{{$module_id}}" data-dependencies="{{$_mb_module->_dependencies_not_verified}}"
-          {{if $_mb_module->mod_type != "core"}} onsubmit="return Module.updateOne(this)" {{/if}}>
-      <input type="hidden" name="dosql" value="do_manage_module" />
-      <input type="hidden" name="m" value="system" /> 
-      {{if $_mb_module->mod_type != "core"}}       
-        <input type="hidden" name="ajax" value="1" />
-      {{/if}}
-      <input type="hidden" name="mod_id" value="{{$module_id}}" />
-      <input type="hidden" name="cmd" value="upgrade" />
-      
-      <button class="button change submit upgrade oneclick" type="submit" {{* onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')" *}}>
-        {{tr}}Upgrade{{/tr}} &gt;
-        {{$_mb_module->_latest}}
-      </button>
-    </form>
+    <table>
+      <tr>
+        <td>
+          <form name="formUpdateModule-{{$module_id}}" method="post" class="upgrade" data-id="{{$module_id}}" data-dependencies="{{$_mb_module->_dependencies_not_verified}}"
+                {{if $_mb_module->mod_type != "core"}} onsubmit="return Module.updateOne(this)" {{/if}}>
+            <input type="hidden" name="dosql" value="do_manage_module" />
+            <input type="hidden" name="m" value="system" />
+            {{if $_mb_module->mod_type != "core"}}
+              <input type="hidden" name="ajax" value="1" />
+            {{/if}}
+            <input type="hidden" name="mod_id" value="{{$module_id}}" />
+            <input type="hidden" name="cmd" value="upgrade" />
+
+            <button class="button change submit upgrade oneclick" type="submit" {{* onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')" *}}>
+              {{tr}}Upgrade{{/tr}} {{$_mb_module->mod_version}} -&gt;
+              {{$_mb_module->_latest}}
+            </button>
+          </form>
+        </td>
+        <td>
+          {{if $_mb_module->_update_messages|@count}}
+            <div class="warning" onmouseover="ObjectTooltip.createDOM(this, 'tooltip-message-module-{{$_mb_module->_id}}')">&nbsp;</div>
+          {{/if}}
+          <div id="tooltip-message-module-{{$_mb_module->_id}}" style="display:none;">
+            <div class="big-warning">
+              {{foreach from=$_mb_module->_update_messages key=_version item=_message}}
+                <strong>{{$_version}}</strong> : {{$_message}}<br/>
+              {{/foreach}}
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
   {{elseif $_mb_module->_upgradable}}
     {{tr}}Out of date{{/tr}} : {{$_mb_module->_latest}}
   {{elseif $_mb_module->mod_type != "core" && $can->admin}}
@@ -169,4 +187,5 @@
       {{/foreach}}
     {{/foreach}}
   </td>
+
 {{/if}}
