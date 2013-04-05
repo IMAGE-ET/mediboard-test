@@ -201,6 +201,7 @@ abstract class CSessionHandler {
     "memcache" => "CMemcacheSessionHandler",
     "mysql"    => "CMySQLSessionHandler",
   );
+  static protected $session;
   
   /**
    * Init the correct session handler
@@ -226,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `session_data` (
 SQL;
       $dataSource->exec($query);
 
-      new Zebra_Session(
+      self::$session = new Zebra_Session(
         null, // $session_lifetime
         null, // $gc_probability
         null, // $gc_divisor
@@ -263,6 +264,35 @@ SQL;
     }
 
     self::$engine = $engine;
+  }
+
+  /**
+   * Update the ZebraSession lifetime
+   *
+   * @param int $lifetime Session lifetime in seconds
+   */
+  static function updateLifetime($lifetime) {
+    if (CAppUI::conf("session_handler") == "zebra") {
+      self::$session->session_lifetime = intval($lifetime);
+    }
+  }
+
+  static function setUserDefinedLifetime() {
+    // Update ZebraSession lifetime
+    $prefSessionLifetime = intval(CAppUI::pref("sessionLifetime")) * 60;
+
+    // If default pref, we use session.gc_maxlifetime php.ini value
+    $session_gc_maxlifetime = intval(ini_get("session.gc_maxlifetime"));
+    $sessionLifetime = null;
+
+    if (!$prefSessionLifetime) {
+      $sessionLifetime = $session_gc_maxlifetime;
+    }
+    elseif ($prefSessionLifetime < $session_gc_maxlifetime) {
+      $sessionLifetime = $prefSessionLifetime;
+    }
+
+    self::updateLifetime($sessionLifetime);
   }
   
   static function onOpen() {

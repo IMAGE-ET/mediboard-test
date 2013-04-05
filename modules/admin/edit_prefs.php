@@ -60,6 +60,29 @@ $user = $user_clone;
 $locales = CAppUI::readDirs("locales");
 $styles  = CAppUI::readDirs("style");
 
+// Get session lifetime in php.ini
+$gc_maxlifetime = ini_get("session.gc_maxlifetime");
+$session_lifetime = false;
+if (!empty($gc_maxlifetime)) {
+  $session_lifetime = (int) ($gc_maxlifetime / 60);
+}
+
+$session_lifetime_values = array("", 5, 10, 15, 20, 25, 30, 45, 60, 120, 180, 240, 300);
+$session_lifetime_enum = implode("|", $session_lifetime_values);
+if ($session_lifetime) {
+  $session_lifetime_enum = array();
+
+  foreach ($session_lifetime_values as $_enum) {
+    if ($_enum <= $session_lifetime) {
+      $session_lifetime_enum[] = $_enum;
+    }
+  }
+
+  if (!empty($session_lifetime_enum)) {
+    $session_lifetime_enum = implode("|", $session_lifetime_enum);
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("user"   , $user);
@@ -69,6 +92,7 @@ $smarty->assign("locales", $locales);
 $smarty->assign("styles" , $styles);
 $smarty->assign("modules", $modules);
 $smarty->assign("prefs"  , $prefs);
+$smarty->assign("session_lifetime_enum"  , $session_lifetime_enum);
 $smarty->display("edit_prefs.tpl");
 
 ?>

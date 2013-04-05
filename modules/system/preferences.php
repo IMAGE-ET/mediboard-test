@@ -25,6 +25,7 @@ CPreferences::$modules["common"] = array (
   "autocompleteDelay",
   "showCounterTip",
   "textareaToolbarPosition",
+  "sessionLifetime",
 );  
   
 CPreferences::$modules["system"] = array (
@@ -33,4 +34,3 @@ CPreferences::$modules["system"] = array (
   "moduleFavicon",
   "notes_anonymous"
 );
-?>

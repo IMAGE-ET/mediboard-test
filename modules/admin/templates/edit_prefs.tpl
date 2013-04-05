@@ -110,6 +110,9 @@ Main.add(Control.Tabs.create.curry('tab-modules', true));
   {{mb_include template=inc_pref spec=bool var=showCounterTip}}
   {{mb_include template=inc_pref spec=bool var=showLastUpdate}}
   {{mb_include template=inc_pref spec=enum var=textareaToolbarPosition values="right|left"}}
+  {{if $conf.session_handler == "zebra"}}
+    {{mb_include template=inc_pref spec=enum var=sessionLifetime values=$session_lifetime_enum}}
+  {{/if}}
   
   </tbody>
   

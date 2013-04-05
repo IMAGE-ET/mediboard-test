@@ -112,6 +112,9 @@ if (!CAppUI::$instance->user_id) {
   CAppUI::loadPrefs();
 }
 
+// Update session lifetime
+CSessionHandler::setUserDefinedLifetime();
+
 // Default view
 $index = "index";
 

@@ -1283,10 +1283,11 @@ class CSetupsystem extends CSetup {
       )/*! ENGINE=MyISAM */;";
     $this->addQuery($query);
 
-    $this->mod_version = "1.1.29";
+    $this->makeRevision("1.1.29");
+    $this->addPrefQuery("sessionLifetime", "");
+
+    $this->mod_version = "1.1.30";
     
-
-
     /*$query = "ALTER TABLE user_log
                 DROP INDEX object_id,
                 ADD INDEX object_id_object_class (`object_id`, `object_class`)";
