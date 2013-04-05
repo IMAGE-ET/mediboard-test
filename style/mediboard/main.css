@@ -489,15 +489,18 @@ table#weeklyPlanning th.today {
 #planningWeek .operation_horsplage:hover,
 #planningWeek .operation_enplage:hover,
 #planningWeek .commentaire_planning:hover,
+#planningWeek .plage_planning:hover,
 #planningWeek .rdvfull:hover {
   overflow:visible;
   min-height:35px;
   opacity: 1;
 }
 
+/* only important plage */
 #planningWeek .operation:hover,
 #planningWeek .consultation:hover,
 #planningWeek .operation_horsplage:hover,
+#planningWeek .commentaire_planning:hover,
 #planningWeek .operation_enplage:hover {
   z-index:100;
 }
@@ -506,9 +509,9 @@ table#weeklyPlanning th.today {
 #planningWeek .toolbar {
   position: absolute; 
   top: -23px;
-  right: 0; 
+  right: -10px;
   height:20px;
-  background: #ddd;
+  background: transparent;
   display: none;
   border: 1px solid #AAA;
   border-radius: 3px;
@@ -517,6 +520,7 @@ table#weeklyPlanning th.today {
 #planningWeek div:hover .toolbar {
   display: block;
 }
+
 
 .planning {
   visibility: hidden;
@@ -556,6 +560,10 @@ table#weeklyPlanning th.today {
   margin: -1px;
   box-shadow: 0 1px 4px #888;
   border: solid 1px #888;
+
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .planning .event .footer {
