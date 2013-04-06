@@ -1881,29 +1881,39 @@ class CStoredObject extends CModelObject {
    * @return CMbObject concrete loaded object 
    */
   function loadFwdRef($field, $cached = false) {
+    // Object scope cache
     if (isset($this->_fwd[$field]) && $this->_fwd[$field]->_id) {
       return $this->_fwd[$field];
     }
 
+    // Not a ref spec
     $spec = $this->_specs[$field];
-    if ($spec instanceof CRefSpec) {
-      $class = $spec->meta ? $this->{$spec->meta} : $spec->class;
-      
-      if (!$class) {
-        return $this->_fwd[$field] = null;
-      }
-            
-      $fwd = new $class;
-      
-      if ($cached) {
-        $fwd = $fwd->getCached($this->$field);
-      }
-      else {
-        $fwd->load($this->$field);
-      }
-      
-      return $this->_fwd[$field] = $fwd;
+    if (!$spec instanceof CRefSpec) {
+      return;
     }
+    
+    // Absence de la classe
+    $class = $spec->meta ? $this->{$spec->meta} : $spec->class;
+    if (!$class) {
+      return $this->_fwd[$field] = null;
+    }
+          
+    $fwd = new $class;
+    
+    // Inactive module
+    if (!$fwd->_ref_module) {
+      return $this->_fwd[$field] = null;
+    }
+    
+    // Actual loading or cache fetching
+    if ($cached) {
+      $fwd = $fwd->getCached($this->$field);
+    }
+    else {
+      $fwd->load($this->$field);
+    }
+    
+    return $this->_fwd[$field] = $fwd;
   }
 
   /**
