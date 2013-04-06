@@ -96,16 +96,15 @@ foreach ($sejours as $_sejour) {
     continue;
 	}
 
-  // Filtre sur prescription
+  // Filtre sur prescription, pas nécessairement actif
   $prescription = $_sejour->loadRefPrescriptionSejour();
-	if ($show == "nopresc" && $prescription->_id) {
+	if ($show == "nopresc" && $prescription && $prescription->_id) {
 		unset($sejours[$_sejour->_id]);
 		continue;
 	}
 
   // Filtre sur praticien
-  $_sejour->loadRefPraticien(1);
-  $praticien =& $_sejour->_ref_praticien;
+  $praticien = $_sejour->loadRefPraticien();
   $praticiens[$praticien->_id] = $praticien;
   if ($filter->praticien_id && $_sejour->praticien_id != $filter->praticien_id) {
     unset($sejours[$_sejour->_id]);
@@ -150,7 +149,9 @@ foreach ($sejours as $_sejour) {
 	$patient->loadIPP();
 
   // Modification des prescription
-	$prescription->countFastRecentModif();
+  if ($prescription) {
+    $prescription->countFastRecentModif();
+  }
 
   // Praticien demandeur
 	$bilan->loadRefPraticienDemandeur();

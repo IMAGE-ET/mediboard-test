@@ -28,15 +28,13 @@ for ($i = 0; $i < 7; $i++) {
 
 // Prescription
 $prescription = $sejour->loadRefPrescriptionSejour();
-$prescription->loadRefsLinesElementByCat();
+$lines_by_cat = $prescription ? 
+  $prescription->loadRefsLinesElementByCat("0", "1", "kine") :
+  array();
 
 // Prescription lines and CdARRs
 $categories = array();
-foreach ($prescription->_ref_prescription_lines_element_by_cat as $chapter => $_lines_by_chap) {
-  if ($chapter != "kine") {
-  	unset($prescription->_ref_prescription_lines_element_by_cat[$chapter]);
-  }
-  
+foreach ($lines_by_cat as $chapter => $_lines_by_chap) {
   foreach ($_lines_by_chap as $_lines_by_cat) {
     foreach ($_lines_by_cat['element'] as $_line) {
       $element = $_line->_ref_element_prescription;
@@ -59,14 +57,13 @@ foreach ($prescription->_ref_prescription_lines_element_by_cat as $chapter => $_
 
 // Creation d'un nouveau tableau pour stocker les lignes par elements de prescription
 $lines_by_element = array(); 
-foreach ($prescription->_ref_prescription_lines_element_by_cat as $chap => $_lines_by_chap){
+foreach ($lines_by_cat as $chap => $_lines_by_chap){
   foreach ($_lines_by_chap as $cat => $_lines_by_cat){
-    foreach ($_lines_by_cat['element'] as $line_id => $_line){
+    foreach ($_lines_by_cat['element'] as $line_id => $_line) {
       $lines_by_element[$chap][$cat][$_line->element_prescription_id][$_line->_id] = $_line;
     }
   }
 }
-
 
 // Bilan
 $bilan = $sejour->loadRefBilanSSR();
@@ -101,7 +98,7 @@ $executants = array();
 $executants = array();
 $reeducateurs = array();
 $selected_cat = "";
-$user = CUser::get();
+$user = CMediusers::get();
 foreach ($categories as $_category) {
   // Chargement des associations pour chaque catégorie
   $associations[$_category->_id] = $_category->loadBackRefs("functions_category");
@@ -119,6 +116,11 @@ foreach ($categories as $_category) {
       $reeducateurs[$_user->_id] = $_user;
     }
   }
+}
+
+// Executants hors exécutant de prescription
+if (!$prescription) {
+  $executants = $user->loadKines();
 }
 
 $evenement = new CEvenementSSR();

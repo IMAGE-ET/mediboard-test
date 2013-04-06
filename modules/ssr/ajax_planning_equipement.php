@@ -31,20 +31,36 @@ if ($equipement->visualisable) {
   $where["equipement_id"] = " = '$equipement->_id'";
   $evenements = $evenement_ssr->loadList($where);
   
-  foreach($evenements as $_evenement){
+  foreach ($evenements as $_evenement){
   	$important = !$sejour_id || $_evenement->sejour_id == $sejour_id;
-  	
-  	$_evenement->loadRefPrescriptionLineElement();
-  	$_evenement->loadRefSejour();
-  	$_evenement->loadRefTherapeute();
-    $_evenement->_ref_sejour->loadRefPatient();
-  	$therapeute = $_evenement->_ref_therapeute;
-    $patient =  $_evenement->_ref_sejour->_ref_patient;
-    $title = ucfirst(strtolower($patient->nom))."  $therapeute->_shortview";
-    $element_prescription =& $_evenement->_ref_prescription_line_element->_ref_element_prescription;
-  	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
+    
+  	$sejour = $_evenement->loadRefSejour();
+    $patient = $sejour->loadRefPatient();
   
-    $css_classes = array($element_prescription->_guid);
+    // Title 
+    $therapeute = $_evenement->loadRefTherapeute();
+    $title = ucfirst(strtolower($patient->nom))."  $therapeute->_shortview";
+    
+    // Color
+    $function = $therapeute->loadRefFunction();
+    $color = "#$function->color";
+    
+    // Classes
+    $css_classes = array();
+
+    // Prescription case
+    if ($line = $_evenement->loadRefPrescriptionLineElement()) {
+      $element = $line->_ref_element_prescription;
+      $category = $element->loadRefCategory();
+      $title = $category->_view;
+    
+      // Color 
+      $color = $element->_color ? "#$element->_color" : null;
+      
+      // CSS Class
+      $css_classes[] = $element->_guid; 
+    }
+
     $planning->addEvent(new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, $important, $css_classes));
   }
   

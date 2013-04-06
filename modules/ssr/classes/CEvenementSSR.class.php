@@ -222,10 +222,15 @@ class CEvenementSSR extends CMbObject {
    * 
    * @return CPrescriptionLineElement
    */
-  function loadRefPrescriptionLineElement($cache = true){
-    $this->_ref_prescription_line_element = $this->loadFwdRef("prescription_line_element_id", $cache);
-    $this->_ref_prescription_line_element->loadRefElement();
-    return $this->_ref_prescription_line_element;
+  function loadRefPrescriptionLineElement($cache = true) {
+    $line = $this->loadFwdRef("prescription_line_element_id", $cache);
+    
+    // Prescription may not be active
+    if ($line) {
+      $line->loadRefElement();
+    }
+    
+    return $this->_ref_prescription_line_element = $line;
   }
   
   /**

@@ -8,6 +8,14 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{if !"dPrescription"|module_active && $mode == "plannable"}}
+  <div class="small-warning">
+    <div>Le module <strong>Param. Prescription</strong> n'est pas installé ou activé.</div>
+    <div>La prescription de rééducation n'est donc pas possible.</div>
+  </div>
+  {{mb_return}}
+{{/if}}
+
 <script type="text/javascript">
 Main.add(function() {
   Control.Tabs.setTabCount.curry('board-sejours-{{$mode}}', '{{$sejours|@count}}');
@@ -30,7 +38,8 @@ Main.add(function() {
   {{assign var=bilan value=$_sejour->_ref_bilan_ssr}}
   <tr {{if $_sejour->_count_evenements_ssr_week}} style="font-weight: bold;" {{/if}}>
     <td class="text {{if !$bilan->_encours}}arretee{{/if}}">
-      {{if $_sejour->_ref_prescription_sejour->_count_recent_modif_presc}}
+      {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
+      {{if $prescription && $prescription->_count_recent_modif_presc}}
       <img style="float: right" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
       {{/if}}
     	<a href="?m=ssr&amp;tab=vw_aed_sejour_ssr&amp;sejour_id={{$_sejour->_id}}#planification">

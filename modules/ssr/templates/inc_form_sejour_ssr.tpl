@@ -250,7 +250,7 @@ function printFormSejour() {
                  {{tr}}{{$sejour->annule|ternary:'Restore':'Cancel'}}{{/tr}}
               </button>
                 <button class="trash" type="button" tabindex="25" onclick="confirmDeletion(this.form,{typeName:'le séjour ',objName:'{{$sejour->_view|smarty:nodefaults|JSAttribute}}'})">
-                  {{tr}}Delete{{/tr}}f
+                  {{tr}}Delete{{/tr}}
                 </button>
               {{/if}}
             {{/if}}

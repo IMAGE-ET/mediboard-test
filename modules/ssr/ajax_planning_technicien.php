@@ -52,32 +52,34 @@ foreach($evenements_charge as $_evenement){
   $planning->addLoad($_evenement->debut, $_evenement->duree);
 }
 
-foreach($evenements as $_evenement){
-	$_evenement->loadRefPrescriptionLineElement();
-  $_evenement->loadRefSejour();
-  $_evenement->loadRefEquipement();
-  $_evenement->_ref_sejour->loadRefPatient();
+foreach ($evenements as $_evenement){
+  $important = $sejour_id ? ($_evenement->sejour_id == $sejour_id) : true;
+
+  $sejour = $_evenement->loadRefSejour();
+  $patient = $sejour->loadRefPatient();
+  $equipement = $_evenement->loadRefEquipement();
   
-	$important = $sejour_id ? ($_evenement->sejour_id == $sejour_id) : true;
-  
-  $patient =  $_evenement->_ref_sejour->_ref_patient;
-  
-	if($_evenement->sejour_id){
+  // Title  
+	if ($_evenement->sejour_id){
 	  $title = $patient->nom;
-  } else {
+  } 
+  else {
 		$_evenement->loadRefsEvenementsSeance();
 		$title = count($_evenement->_ref_evenements_seance)." patient(s)";
 	}
-	if($large){
+	if ($large) {
     $title .= " ". substr($patient->prenom,0,2).".";		
 	}
-	if(!$sejour_id && $_evenement->remarque){
+	if (!$sejour_id && $_evenement->remarque) {
 		$title .= " - ".$_evenement->remarque;
 	}
-  $element_prescription =& $_evenement->_ref_prescription_line_element->_ref_element_prescription;
-  $color = $element_prescription->_color ? "#$element_prescription->_color" : null;
   
+  // Color
+  $therapeute = $_evenement->loadRefTherapeute();
+  $function = $therapeute->loadRefFunction();
+  $color = "#$function->color";
   
+  // Classes
 	$class= "";
 	if (!$_evenement->countBackRefs("actes_cdarr")) {
     $class = "zero-actes";
@@ -96,13 +98,26 @@ foreach($evenements as $_evenement){
     $class = "annule";
   }
 
+  $css_classes = array();
+  $css_classes[] = $class;
+  $css_classes[] = $sejour->_guid;
+  $css_classes[] = $equipement->_guid;
 
-  $css_classes = array(
-	  $class,
-    $element_prescription->_guid, 
-    $_evenement->_ref_sejour->_guid, 
-    $_evenement->_ref_equipement->_guid
-	);
+  // Title and color in prescription case
+  if ($line = $_evenement->loadRefPrescriptionLineElement()) {
+    $element = $line->_ref_element_prescription;
+    $category = $element->loadRefCategory();
+    $title = $category->_view;
+  
+    // Color
+    $color = $element->_color ? "#$element->_color" : null;
+    
+    // CSS Class
+    $css_classes[] = $element->_guid; 
+    $css_classes[] = $category->_guid;
+  }
+  
+  
                        
   $planning->addEvent(new CPlanningEvent(
     $_evenement->_guid, 

@@ -3,6 +3,7 @@
     <td style="width: 50%;">
       
 <!-- Eléments de prescription -->
+{{if "dPprescription"|module_active}}
 <div style="max-height: 500px; overflow-y: auto;">
   
 <table class="tbl">
@@ -33,6 +34,13 @@
 </table>
 
 </div>
+
+{{else}}
+<div class="small-warning">
+  <div>Le module <strong>Param. Prescription</strong> n'est pas installé ou activé.</div>
+  <div>Les statistiques par éléments de prescription ne sont donc pas disponibles.</div>
+</div>
+{{/if}}
 
     </td>
 

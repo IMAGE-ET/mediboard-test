@@ -134,12 +134,15 @@ class CActiviteCsARR extends CCsARRObject {
 		return $this->_ref_elements = $element->loadMatchingList();
 	}
 	
-	function loadRefsElementsByCat() {
-		foreach ($this->loadRefsElements() as $_element){
-      $element = $_element->loadRefElementPrescription();
-      $this->_ref_elements_by_cat[$element->category_prescription_id][] = $_element;
+  function loadRefsElementsByCat() {
+    $this->_ref_elements_by_cat = array();
+    foreach ($this->loadRefsElements() as $_element) {
+      if ($element = $_element->loadRefElementPrescription()) {
+        $this->_ref_elements_by_cat[$element->category_prescription_id][] = $_element;
+      }
     }
-	}
+    return $this->_ref_elements_by_cat;
+  }
 
   function countActes() {
     $acte = new CActeCdARR();

@@ -229,7 +229,7 @@ printOffline = function(element) {
       
       <td colspan="2" style="text-align: center;">
         {{assign var=prescription value=$_sejour->_ref_prescription_sejour}}
-        {{if $prescription->_id}}
+        {{if $prescription && $prescription->_id}}
           {{if $prescription->_count_fast_recent_modif}}
             <img src="images/icons/ampoule.png" onmouseover="ObjectTooltip.createEx(this, '{{$prescription->_guid}}')"/>
           {{else}}

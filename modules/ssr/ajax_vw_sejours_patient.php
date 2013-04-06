@@ -18,7 +18,12 @@ $sejour_id = CValue::getOrSession("sejour_id");
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
-$sejour->loadRefPrescriptionSejour()->countBackRefs("prescription_line_element");
+$prescription = $sejour->loadRefPrescriptionSejour();
+
+// Prescription peut ne pas être actif
+if ($prescription) {
+  $prescription->countBackRefs("prescription_line_element");
+}
 
 // Recherche des sejours SSR du patient
 $where = array();

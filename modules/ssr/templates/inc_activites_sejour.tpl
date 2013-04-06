@@ -394,6 +394,7 @@ Main.add(function(){
     <input type="hidden" name="_category_id" value="" />
     
     <table class="form">
+      {{if $prescription}}
       <tr>
         <th style="width: 94px">Catégories</th>
         <td class="text">
@@ -412,6 +413,7 @@ Main.add(function(){
           {{/foreach}}
         </td>
       </tr>
+      
       <tr>
         <th>Eléments</th>
         <td class="text">
@@ -439,7 +441,7 @@ Main.add(function(){
                   </span>
                   
                   <label>
-                    {{if $_line->_recent_modification}}
+                    {{if $_line->_recent_modification}} 
                     <img style="float: left" src="images/icons/ampoule.png" title="Prescription recemment modifiée"/>
                     {{/if}}
                     
@@ -464,20 +466,24 @@ Main.add(function(){
                 {{/foreach}}
               {{/foreach}}
             {{/foreach}}
-          {{/foreach}}
-          
+          {{/foreach}}      
         </td>
       </tr>
+      {{/if}}
+        
       <tr id='tr-cdarrs'>
         <th>Codes CdARR</th>
         <td class="text">
           <button type="button" class="add" onclick="$('remarque_ssr').toggle(); this.form.remarque.focus();" style="float: right">Remarque</button>
+          
+          {{if $prescription}}
+          
+          <!-- Boutons de type de code cdarr-->
           {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
             {{foreach from=$_lines_by_chap item=_lines_by_cat}}
               {{foreach from=$_lines_by_cat.element item=_line}}
                 <div class="type-cdarrs" id="type-cdarrs-{{$_line->_id}}" style="display : none;">
                   {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
-                    <!-- Boutons de type de code cdarr-->
                     <button class="button-type-cdarrs none" type="button" onclick="selectTypeCdarr('{{$type_cdarr}}','{{$_line->_id}}',this);">
                       {{$type_cdarr}} <span class="counts_cdarr" id="count-{{$_line->_id}}-{{$type_cdarr}}"></span>
                     </button>
@@ -486,6 +492,8 @@ Main.add(function(){
               {{/foreach}}
             {{/foreach}}
           {{/foreach}}  
+          
+          <!-- Affichage des codes cdarrs -->
           {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
             {{foreach from=$_lines_by_chap item=_lines_by_cat}}
               {{foreach from=$_lines_by_cat.element item=_line}}
@@ -493,7 +501,6 @@ Main.add(function(){
                 <div id="cdarrs-{{$_line->_id}}" style="display : none;">
                   {{foreach from=$_line->_ref_element_prescription->_ref_cdarrs_by_type key=type_cdarr item=_cdarrs}}
                   
-                  <!-- Affichage des codes cdarrs -->
                   <div class="cdarrs" id="cdarrs-{{$_line->_id}}-{{$type_cdarr}}" style="display: none;">
                   {{foreach from=$_cdarrs item=_cdarr}}
                     <label>
@@ -510,27 +517,35 @@ Main.add(function(){
                 
               {{/foreach}}
             {{/foreach}}
-          {{/foreach}}  
-           
-          <div id="div_other_cdarr" style="display: none;">
+          {{/foreach}}
+            
+          {{/if}} 
+          
+          <!-- Autre code CdARR -->
+          <div id="div_other_cdarr" style="display: block;">
             <label>
               <input type="checkbox" name="_cdarr" value="other" onclick="toggleOther(this);" /> Autre:
             </label>
             
-            <span id="other_cdarr" style="display: none;">
+            <span id="other_cdarr" style="display: block;">
                <input type="text" name="code" class="autocomplete" canNull=true size="2" />
                <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
             </span>
           </div>
+          
         </td>
       </tr> 
+      
       <tr id="remarque_ssr" style="display: none;">
         <th>{{mb_label object=$evenement field=remarque}}</th>
         <td>{{mb_field object=$evenement field=remarque}}</td>
       </tr>
+
       <tr>
         <th>{{mb_label object=$evenement field=therapeute_id}}</th>
         <td class="text">
+          {{if $prescription}}
+          
           {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
             {{foreach from=$_lines_by_chap item=_lines_by_cat}}
               {{foreach from=$_lines_by_cat.element item=_line name=foreach_category}}
@@ -570,7 +585,16 @@ Main.add(function(){
                 
               {{/foreach}}
             {{/foreach}}
-          {{/foreach}}    
+          {{/foreach}}
+          
+          {{else}}
+            {{if $can->edit}}
+            <select class="_technicien_id" onchange="selectTechnicien(this.value)">
+              <option value="">&mdash; {{tr}}Choose{{/tr}}</option>
+              {{mb_include module=mediusers template=inc_options_mediuser list=$executants selected=$user->_id}}
+            </select>
+            {{/if}}
+          {{/if}}  
         </td>
       </tr>
       

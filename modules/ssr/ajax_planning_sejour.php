@@ -38,8 +38,8 @@ $where[] = "(evenement_ssr.sejour_id = '$sejour->_id') OR (evenement_ssr.sejour_
 $where["evenement_ssr.debut"] = "BETWEEN '$planning->_date_min_planning 00:00:00' AND '$planning->_date_max_planning 23:59:59'";
 $evenements = $evenement_ssr->loadList($where, null, null, null, $ljoin);
 
-foreach($evenements as $_evenement){
-	if(!$_evenement->sejour_id){
+foreach ($evenements as $_evenement){
+	if (!$_evenement->sejour_id){
 		// Chargement de l'evenement pour ce sejour
 		$evt = new CEvenementSSR();
 		$evt->sejour_id = $sejour->_id;
@@ -54,52 +54,60 @@ foreach($evenements as $_evenement){
 
     // Remplacement de la seance collective par le bon evenement    
 		$_evenement = $evt;	
-	} else {
+	} 
+	else {
 		$draggable_guid = $_evenement->_guid;
 	}
-		
-	// Title 
-	$_evenement->loadRefPrescriptionLineElement();
-	$element_prescription =& $_evenement->_ref_prescription_line_element->_ref_element_prescription;
 	
-	$element_prescription->loadRefCategory();
-  $category_prescription =& $element_prescription->_ref_category_prescription;
-  $title = $category_prescription->_view;
-
-	if ($print) {
-		$_evenement->loadRefEquipement();
-		$equipement = $_evenement->_ref_equipement;
-		$title .= $equipement->_id ? " - ". $equipement->_view : '';
-		$title .= $_evenement->remarque ? "\n ".$_evenement->remarque : ''; 
-	}
-	
-	// Color
-	$color = $element_prescription->_color ? "#".$element_prescription->_color : null;
-	
-	// CSS Classes
+  // CSS Classes
   $class = $_evenement->equipement_id ? "equipement" : "kine";
   if ($_evenement->seance_collective_id){
     $class = "seance";
-	}
-	
+  }
+  
   if (!$_evenement->countBackRefs("actes_cdarr")  && !$print){
     $class = "zero-actes";
   }
-	
+  
   if ($_evenement->realise && !$print){
     $class = "realise";
   }
-	
+  
   if ($_evenement->annule && !$print){
     $class = "annule";
   }
+		
+  $css_classes = array();
+  $css_classes[] = $class;
 
-
-  $css_classes = array(
-    $class,
-    $element_prescription->_guid, 
-    $category_prescription->_guid
-  );
+	// Title 
+	$therapeute = $_evenement->loadRefTherapeute();
+	$title = $therapeute->_view;
+  
+  // Color
+  $function = $therapeute->loadRefFunction();
+  $color = "#$function->color";
+	
+  // Title and color in prescription case
+	if ($line = $_evenement->loadRefPrescriptionLineElement()) {
+    $element = $line->_ref_element_prescription;
+    $category = $element->loadRefCategory();
+    $title = $category->_view;
+  
+    // Color
+    $color = $element->_color ? "#$element->_color" : null;
+    
+    // CSS Class
+    $css_classes[] = $element->_guid; 
+    $css_classes[] = $category->_guid;
+	}
+  
+  // Title Equipement
+  if ($print) {
+    $equipement = $_evenement->loadRefEquipement();
+    $title .= $equipement->_id ? " - ". $equipement->_view : '';
+    $title .= $_evenement->remarque ? "\n ".$_evenement->remarque : ''; 
+  }
 	
 	// Instanciation
   $event = new CPlanningEvent($_evenement->_guid, $_evenement->debut, $_evenement->duree, $title, $color, true, $css_classes, $draggable_guid);

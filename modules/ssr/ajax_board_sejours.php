@@ -174,9 +174,10 @@ foreach ($sejours as $_sejour) {
   $_sejour->loadRefBilanSSR()->getDatesEnCours($planning->date_min, $planning->date_max);
   
   // Modification des prescription
-  $_sejour->loadRefPrescriptionSejour();
-  $_sejour->_ref_prescription_sejour->loadRefsLinesElementByCat();
-  $_sejour->_ref_prescription_sejour->countRecentModif();
+  if ($prescription = $_sejour->loadRefPrescriptionSejour()) {
+    $prescription->loadRefsLinesElementByCat();
+    $prescription->countRecentModif();
+  }
 }
 
 // Création du template

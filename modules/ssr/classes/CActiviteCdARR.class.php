@@ -82,10 +82,13 @@ class CActiviteCdARR extends CCdARRObject {
 	}
 	
 	function loadRefsElementsByCat() {
-		foreach ($this->loadRefsElements() as $_element){
-      $element = $_element->loadRefElementPrescription();
-      $this->_ref_elements_by_cat[$element->category_prescription_id][] = $_element;
+	  $this->_ref_elements_by_cat = array();
+		foreach ($this->loadRefsElements() as $_element) {
+      if ($element = $_element->loadRefElementPrescription()) {
+        $this->_ref_elements_by_cat[$element->category_prescription_id][] = $_element;
+      }
     }
+    return $this->_ref_elements_by_cat;
 	}
   
   function countActes() {
