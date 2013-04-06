@@ -63,7 +63,7 @@ class CConfigServiceAbstract extends CMbObject {
     
     // Parcours des etablissements
     foreach($groups as $group_id => $group){
-      $group->loadRefsService();
+      $group->loadRefsServices();
       // Parcours des services
       foreach($group->_ref_services as $service_id => $_service){
         foreach($configs_default as $_config_default){

@@ -233,7 +233,7 @@ class CGroups extends CMbObject {
     $this->loadFunctions();
   }
 
-  function loadRefsService(){
+  function loadRefsServices(){
     return $this->_ref_services = $this->loadBackRefs("services", "nom");
   }
 
