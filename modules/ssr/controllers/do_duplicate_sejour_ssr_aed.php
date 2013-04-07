@@ -105,11 +105,11 @@ foreach($lines_element as $_line_element){
 	$original_to_new_line[$original_line_element_id] = $_line_element->_id;
 }
 
-// Duplication des evenements et des codes Cdarrs associés
-foreach($evenements as $_evenement){
-	$_evenement->loadRefsActesCdARR();
-	$actes_cdarrs = $_evenement->_ref_actes_cdarr;
-
+// Duplication des evenements et des actes associés
+foreach ($evenements as $_evenement){
+  $actes_cdarrs = $_evenement->loadRefsActesCdARR();
+  $actes_csarrs = $_evenement->loadRefsActesCsARR();
+  
 	$_evenement->_id = "";
 	$_evenement->sejour_id = $sejour_id;
   $_evenement->realise = "0";
@@ -119,11 +119,18 @@ foreach($evenements as $_evenement){
 	$msg = $_evenement->store();
 	CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
 
-  foreach($actes_cdarrs as $_acte){
+  foreach ($actes_cdarrs as $_acte) {
   	$_acte->_id = "";
 		$_acte->evenement_ssr_id = $_evenement->_id;
 		$msg = $_acte->store();
 		CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
+  }
+
+  foreach ($actes_csarrs as $_acte) {
+    $_acte->_id = "";
+    $_acte->evenement_ssr_id = $_evenement->_id;
+    $msg = $_acte->store();
+    CAppUI::displayMsg($msg, "CActeCsARR-msg-create");
   }
 }
 

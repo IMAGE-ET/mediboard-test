@@ -166,13 +166,23 @@ class CEvenementSSR extends CMbObject {
         $ligne->rhs_id                 = $rhs->_id;
         $ligne->executant_id           = $therapeute->_id;
         $ligne->code_activite_cdarr    = $_acte_cdarr->code;
-        $ligne->code_activite_csarr    = $_acte_cdarr->code;
         $ligne->code_intervenant_cdarr = $code_intervenant_cdarr;
         $ligne->loadMatchingObject();
         $ligne->crementDay($this->debut, $this->realise ? "inc" : "dec");
         $ligne->auto = "1";
         $msg = $ligne->store();
-        
+      }
+
+      foreach ($this->loadRefsActesCsARR() as $_acte_csarr) {
+        $ligne = new CLigneActivitesRHS();
+        $ligne->rhs_id                 = $rhs->_id;
+        $ligne->executant_id           = $therapeute->_id;
+        $ligne->code_activite_csarr    = $_acte_csarr->code;
+        $ligne->code_intervenant_cdarr = $code_intervenant_cdarr;
+        $ligne->loadMatchingObject();
+        $ligne->crementDay($this->debut, $this->realise ? "inc" : "dec");
+        $ligne->auto = "1";
+        $msg = $ligne->store();
       }
     }
     

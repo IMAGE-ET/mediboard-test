@@ -261,11 +261,13 @@ class CRHS extends CMbObject {
     
     $this->loadRefLignesActivites();
     $lines = $this->_ref_lignes_activites;
-    foreach($lines as $_line) {
-      $_line->loadRefActiviteCdARR();
-      $_line->_ref_activite_cdarr->loadRefTypeActivite();
-      $type_activite = $_line->_ref_activite_cdarr->_ref_type_activite;
-      $totaux[$type_activite->code] += $_line->_qty_total;
+    foreach ($lines as $_line) {
+      if ($_line->code_activite_cdarr) {
+        $_line->loadRefActiviteCdARR();
+        $_line->_ref_activite_cdarr->loadRefTypeActivite();
+        $type_activite = $_line->_ref_activite_cdarr->_ref_type_activite;
+        $totaux[$type_activite->code] += $_line->_qty_total;
+      }
     }
     
     return $totaux;
@@ -299,7 +301,9 @@ class CRHS extends CMbObject {
       $therapeute = $_evenement->loadRefTherapeute();
       $intervenant = $therapeute->loadRefIntervenantCdARR();
       $code_intervenant_cdarr = $intervenant->code;
-      $actes_cdarr =$_evenement->loadRefsActesCdARR();
+      
+      // Actes CdARRs
+      $actes_cdarr = $_evenement->loadRefsActesCdARR();
       foreach ($actes_cdarr as $_acte_cdarr) {
         $ligne = new CLigneActivitesRHS();
         $ligne->rhs_id                 = $this->_id;
@@ -311,12 +315,25 @@ class CRHS extends CMbObject {
         $ligne->auto = "1";
         $ligne->store();
       }
+
+      // Actes CsARRs
+      $actes_csarr = $_evenement->loadRefsActesCsARR();
+      foreach ($actes_csarr as $_acte_csarr) {
+        $ligne = new CLigneActivitesRHS();
+        $ligne->rhs_id                 = $this->_id;
+        $ligne->executant_id           = $therapeute->_id;
+        $ligne->code_activite_csarr    = $_acte_csarr->code;
+        $ligne->code_intervenant_cdarr = $code_intervenant_cdarr;
+        $ligne->loadMatchingObject();
+        $ligne->crementDay($_evenement->debut, "inc");
+        $ligne->auto = "1";
+        $ligne->store();
+      }
     }  
     
     // Gestion des administrations
     foreach ($sejour->loadBackRefs("actes_cdarr") as $_acte_cdarr_adm){
-      $_acte_cdarr_adm->loadRefAdministration();
-      $administration = $_acte_cdarr_adm->_ref_administration;
+      $administration = $_acte_cdarr_adm->loadRefAdministration();
       $administration->loadRefAdministrateur();
       $therapeute = $_evenement->loadRefTherapeute();
       
@@ -345,9 +362,19 @@ class CRHS extends CMbObject {
     $executants = array();
     $lines_by_executant = array();
     foreach ($this->loadBackRefs("lines") as $_line) {
-      $activite = $_line->loadRefActiviteCdARR();
-      $type = $activite->loadRefTypeActivite();
-      $totaux[$type->code] += $_line->_qty_total;
+      // Cas des actes CdARR  
+      if ($_line->code_activite_cdarr) {
+        $activite = $_line->loadRefActiviteCdARR();
+        $type = $activite->loadRefTypeActivite();
+        $totaux[$type->code] += $_line->_qty_total;
+      }
+      
+      // Cas des actes CsARR  
+      if ($_line->code_activite_csarr) {
+        $activite = $_line->loadRefActiviteCsARR();
+        $activite->loadRefHierarchie();
+      }
+
       $_line->loadRefIntervenantCdARR();
       $executant = $_line->loadFwdRef("executant_id", true);
       $executant->loadRefsFwd();

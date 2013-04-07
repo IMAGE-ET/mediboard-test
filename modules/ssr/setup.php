@@ -489,7 +489,16 @@ class CSetupssr extends CSetup {
       $this->addQuery($query);
     }
 
-    $this->mod_version = "0.45";
+    $this->makeRevision("0.45");
+    $query = "ALTER TABLE `ligne_activites_rhs` 
+      CHANGE `rhs_id` `rhs_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+      CHANGE `executant_id` `executant_id` INT (11) UNSIGNED NOT NULL DEFAULT '0',
+      CHANGE `code_activite_cdarr` `code_activite_cdarr` CHAR (4),
+      ADD `code_activite_csarr` CHAR (7);";
+    $this->addQuery($query);
+
+
+    $this->mod_version = "0.46";
 
     // Data source query
     $query = "SHOW TABLES LIKE 'type_activite'";

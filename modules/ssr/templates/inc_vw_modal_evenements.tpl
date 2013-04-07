@@ -64,16 +64,40 @@
         </td>
         <td>
           {{mb_value object=$_evenement field="duree"}} min
-        </td>   
+        </td>
+        
         <td>
-          {{foreach from=$_evenement->_ref_actes_cdarr item=_acte}}
-            <span onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
+          {{if $_evenement->_count_actes}}
+          <div>
+            {{foreach from=$_evenement->_ref_actes_cdarr item=_acte}}
+              <span onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
+                {{$_acte}}
+              </span> 
+            {{/foreach}}
+          </div>
+          
+          {{foreach from=$_evenement->_ref_actes_csarr item=_acte}}
+          <div>
+            <strong onmouseover="ObjectTooltip.createEx(this, '{{$_acte->_guid}}')">
               {{$_acte}}
-            </span> 
-					{{foreachelse}}
-					  <div class="warning">{{tr}}CActeCdARR.none{{/tr}}</div>	
+            </strong> 
+            {{foreach from=$_acte->_ref_activite_csarr->_ref_modulateurs item=_modulateur}}
+            <label title="{{$_modulateur->_libelle}}">
+              <!--input type="checkbox" /-->
+              {{$_modulateur->modulateur}}
+            </label>
+            {{/foreach}}
+          </div>
           {{/foreach}}
+          
+          {{else}}
+          <div class="small-warning">
+            {{tr}}CEvenementSSR-warning-no_code_ssr{{/tr}}
+          </div>
+          
+          {{/if}}
         </td> 
+
         <td>
         	{{assign var=equipement value=$_evenement->_ref_equipement}}
 					{{if $equipement->_id}} 
@@ -83,7 +107,7 @@
         <td>
           <input class="{{$sejour->_guid}} {{$_evenement->_guid}} realise" type="checkbox" value="{{$_evenement->_id}}" 
 					  onchange="if (this.checked) $$('input.{{$_evenement->_guid}}.annule')[0].checked = false;"
-					  {{if !count($_evenement->_ref_actes_cdarr)}} disabled="disabled" 
+					  {{if !$_evenement->_count_actes}} disabled="disabled" 
 						{{elseif $_evenement->realise || !$count_traite}}  checked="checked" 
 						{{/if}} 
 					/>
@@ -91,7 +115,7 @@
         <td>
           <input class="{{$sejour->_guid}} {{$_evenement->_guid}} annule" type="checkbox" value="{{$_evenement->_id}}" 
             onchange="if (this.checked) $$('input.{{$_evenement->_guid}}.realise')[0].checked = false;"
-            {{if !count($_evenement->_ref_actes_cdarr)}} disabled="disabled" 
+            {{if !$_evenement->_count_actes}} disabled="disabled" 
             {{elseif $_evenement->annule}}  checked="checked" 
             {{/if}} 
           />

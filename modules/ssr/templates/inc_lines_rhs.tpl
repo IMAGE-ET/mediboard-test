@@ -37,7 +37,8 @@
       </th>
     </tr>  
     {{foreach from=$_lines item=_line}}
-    {{assign var=activite  value=$_line->_ref_activite_cdarr}}
+    {{if $_line->code_activite_cdarr}} {{assign var=activite value=$_line->_ref_activite_cdarr}} {{/if}}
+    {{if $_line->code_activite_csarr}} {{assign var=activite value=$_line->_ref_activite_csarr}} {{/if}}
     <tr>
       <td>
         {{if !$read_only && !$_line->auto}}
@@ -62,7 +63,8 @@
       </td>
       
       <td class="narrow">
-        {{$activite->_ref_type_activite->code}}
+        {{if $_line->code_activite_cdarr}} {{$activite->_ref_type_activite->code}} {{/if}}
+        {{if $_line->code_activite_csarr}} {{$activite->_ref_hierarchie->code}} {{/if}}
       </td>
       
       <td class="text">

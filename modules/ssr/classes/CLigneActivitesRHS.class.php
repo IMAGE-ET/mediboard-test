@@ -20,6 +20,7 @@ class CLigneActivitesRHS extends CMbObject {
   var $executant_id           = null;
   var $auto                   = null;
   var $code_activite_cdarr    = null;
+  var $code_activite_csarr    = null;  
   var $code_intervenant_cdarr = null;
 	
   var $qty_mon = null;
@@ -50,6 +51,7 @@ class CLigneActivitesRHS extends CMbObject {
       "executant_id",
       "code_activite_cdarr"
     );
+    $spec->xor["code"] = array("code_activite_cdarr", "code_activite_csarr");
     return $spec;
   }
 
@@ -60,7 +62,8 @@ class CLigneActivitesRHS extends CMbObject {
     $props["rhs_id"]                 = "ref notNull class|CRHS";
     $props["executant_id"]           = "ref notNull class|CMediusers";
     $props["auto"]                   = "bool";
-    $props["code_activite_cdarr"]    = "str notNull length|4";
+    $props["code_activite_cdarr"]    = "str length|4";
+    $props["code_activite_csarr"]    = "str length|7";
     $props["code_intervenant_cdarr"] = "str length|2";
     $props["qty_mon"]                = "num length|1 min|0 max|9 default|0";
     $props["qty_tue"]                = "num length|1 min|0 max|9 default|0";
@@ -110,10 +113,15 @@ class CLigneActivitesRHS extends CMbObject {
   }
   
   function loadRefActiviteCdARR() {
-  	//    $this->_view = $this->loadRefActiviteCdARR()->_view;
   	$activite = CActiviteCdARR::get($this->code_activite_cdarr);
   	$this->_view = $activite->_view;
     return $this->_ref_activite_cdarr = $activite;
+  }
+  
+  function loadRefActiviteCsARR() {
+    $activite = CActiviteCsARR::get($this->code_activite_csarr);
+    $this->_view = $activite->_view;
+    return $this->_ref_activite_csarr = $activite;
   }
   
   function loadRefIntervenantCdARR() {

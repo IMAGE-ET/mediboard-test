@@ -32,13 +32,12 @@ foreach($_evenements as $_evenement_id){
 		$evenement->duree = $evenement->_ref_seance_collective->duree;
 	}
 	
-  $evenement->loadRefSejour();
-  $evenement->_ref_sejour->loadRefPatient();
+  $evenement->loadRefSejour()->loadRefPatient();
   $evenement->loadRefPrescriptionLineElement();
 
   // Chargement des actes cdarrs de l'evenement
   $evenement->loadRefsActesCdARR();
-	foreach($evenement->_ref_actes_cdarr as $_acte_cdarr){
+	foreach ($evenement->_ref_actes_cdarr as $_acte_cdarr){
 		$actes[$_acte_cdarr->code] = $_acte_cdarr->code;
 		if (!isset($count_actes[$_acte_cdarr->code])){
 			$count_actes[$_acte_cdarr->code] = 0;

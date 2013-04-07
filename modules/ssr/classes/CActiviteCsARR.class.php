@@ -188,6 +188,7 @@ class CActiviteCsARR extends CCsARRObject {
     if (!isset(self::$cached[$code])) {
       $activite = new self();
       $activite->load($code);
+      $activite->loadRefsModulateurs();
       self::$cached[$code] = $activite;
     }
     

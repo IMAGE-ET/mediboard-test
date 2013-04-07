@@ -15,7 +15,7 @@ $token_field_evts = CValue::getOrSession("token_field_evts");
 $sejours = array();
 $events = array();
 $_evenements = $token_field_evts ? explode("|", $token_field_evts) : array();
-foreach($_evenements as $_evenement_id){
+foreach ($_evenements as $_evenement_id){
 	$evenement = new CEvenementSSR();
 	$evenement->load($_evenement_id);
 	
@@ -36,24 +36,31 @@ foreach($_evenements as $_evenement_id){
 
 $count_zero_actes = 0;
 $evenements = array();
-foreach($events as $_event){
-  $_event->loadRefsActesCdarr();
+foreach ($events as $_event){
   $_event->loadRefEquipement();
-	if (!count($_event->_ref_actes_cdarr)) {
+
+  $actes_cdarr = $_event->loadRefsActesCdarr();
+  $actes_csarr = $_event->loadRefsActesCsarr();
+  foreach ($actes_csarr as $_acte_csarr) {
+    $_acte_csarr->loadRefActiviteCsARR();
+  }
+  
+  $_event->_count_actes = count($actes_cdarr) + count($actes_csarr);
+	if (!$_event->_count_actes) {
 		$count_zero_actes++;
 	}
-
-  $_event->loadRefSejour();
-  $_event->_ref_sejour->loadRefPatient();
-  $sejours[$_event->sejour_id] = $_event->_ref_sejour;
-  $_event->loadRefPrescriptionLineElement();
-  $element_prescription_id = $_event->_ref_prescription_line_element->element_prescription_id;
+  
+  $sejour = $_event->loadRefSejour();
+  $sejour->loadRefPatient();
+  $sejours[$sejour->_id] = $sejour;
+  $line = $_event->loadRefPrescriptionLineElement();
+  $element_id = $line->element_prescription_id;
   $date_debut = CMbDT::date($_event->debut);
-  $evenements[$_event->sejour_id][$element_prescription_id.$date_debut][$_event->_id] = $_event;
+  $evenements[$_event->sejour_id][$element_id.$date_debut][$_event->_id] = $_event;
 }
 
-foreach($evenements as &$evenements_by_sejour){
-  ksort($evenements_by_sejour);
+foreach ($evenements as &$evenements_by_sejour){
+  ksort ($evenements_by_sejour);
 }
 
 // Création du template

@@ -33,7 +33,8 @@ foreach($days as $day) {
 	foreach($elts_id as $_elt_id){
 	  $evenement = new CEvenementSSR();
 	  $evenement->load($_elt_id);
-	  $evenement->loadRefsActesCdARR();
+    $evenement->loadRefsActesCdARR();
+    $evenement->loadRefsActesCsARR();
 	
 	  // Duplication de l'événement  
 	  $evenement->_id = "";
@@ -99,12 +100,18 @@ foreach($days as $day) {
 	
 	  // Duplication des codes CdARR
 	  if ($evenement->_id) {
-	    foreach ($evenement->_ref_actes_cdarr as $_acte_cdarr) {
-	      $_acte_cdarr->_id = "";
-	      $_acte_cdarr->evenement_ssr_id = $evenement->_id;
-	      $msg = $_acte_cdarr->store();
+	    foreach ($evenement->_ref_actes_cdarr as $_acte) {
+	      $_acte->_id = "";
+	      $_acte->evenement_ssr_id = $evenement->_id;
+	      $msg = $_acte->store();
 	      CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
 	    }
+      foreach ($evenement->_ref_actes_csarr as $_acte) {
+        $_acte->_id = "";
+        $_acte->evenement_ssr_id = $evenement->_id;
+        $msg = $_acte->store();
+        CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
+      }
 	  }
 	}
 }
