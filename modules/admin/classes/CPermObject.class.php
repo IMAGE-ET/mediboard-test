@@ -18,7 +18,7 @@ if (!defined("PERM_DENY")) {
 /**
  * The CPermObject class
  */
-class CPermObject extends CMbObject {
+class CPermObject extends CStoredObject {
   
   // Constants
   const DENY = 0;
@@ -56,7 +56,7 @@ class CPermObject extends CMbObject {
   function getProps() {
     $specs = parent::getProps();
     $specs["user_id"]      = "ref notNull class|CUser cascade";
-    $specs["object_id"]    = "ref class|CMbObject meta|object_class cascade";
+    $specs["object_id"]    = "ref class|CStoredObject meta|object_class cascade";
     $specs["object_class"] = "str notNull";
     $specs["permission"]   = "enum list|0|1|2";
 
@@ -174,7 +174,7 @@ class CPermObject extends CMbObject {
     
   }
   
-  static function getPermObject(CMbObject $object, $permType, $defaultObject = null, $user_id = null) {
+  static function getPermObject(CStoredObject $object, $permType, $defaultObject = null, $user_id = null) {
     $user = CUser::get($user_id);
     
     // Shorteners
