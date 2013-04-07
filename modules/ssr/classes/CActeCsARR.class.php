@@ -28,10 +28,12 @@ class CActeCsARR extends CActeSSR {
     return $props;
   }
 
-  function loadRefActiviteCdARR() {
+  function loadRefActiviteCsarr() {
     $activite = CActiviteCsARR::get($this->code);
+    $activite->loadRefHierarchie();
     return $this->_ref_activite_csarr = $activite;
   }
+  
   
   function loadView(){
     parent::loadView();
