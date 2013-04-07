@@ -20,9 +20,8 @@ $remarque             = CValue::post("remarque");
 $seance_collective    = CValue::post("seance_collective");    // Checkbox de la seance collective
 $seance_collective_id = CValue::post("seance_collective_id"); // Id de la seance collective
 
-$codes_cdarrs = array();
-
 // Codes CdARR
+$codes_cdarrs = array();
 if (is_array($cdarrs)) {
 	foreach ($cdarrs as $_code){
 	  $codes_cdarrs[] = $_code;
@@ -36,6 +35,7 @@ if (is_array($_cdarrs)){
 }
 
 // Codes CdARR
+$codes_csarrs = array();
 if (is_array($csarrs)) {
   foreach ($csarrs as $_code){
     $codes_csarrs[] = $_code;

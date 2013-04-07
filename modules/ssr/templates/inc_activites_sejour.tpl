@@ -68,8 +68,8 @@ selectElement = function(line_id){
   $('div_other_cdarr').show();
   $('div_other_csarr').show();
 
-  // Deselection de tous les codes cdarrs
-  removeCdarrs();
+  // Deselection de tous les codes
+  removeCodes();
 
   // Mise en evidence des elements dans les plannings
   addBorderEvent();
@@ -139,17 +139,40 @@ refreshSelectSeances = function(){
   }
 }
 
-removeCdarrs = function(){
+hideCodes = function() {
+  // Deselection des codes cdarrs et csarrs
+  $V(oFormEvenementSSR._cdarr, false);
+  $V(oFormEvenementSSR._csarr, false);
+  $$('#other_cdarr span').invoke('remove'); 
+  $$('#other_csarr span').invoke('remove'); 
+  $('other_cdarr').hide();
+  $('other_csarr').hide();
+  
+}
+
+removeCodes = function() {
   oFormEvenementSSR.select('input[name^="cdarrs"]').each(function(e){
     e.checked = false;
   });
+
+  oFormEvenementSSR.select('input[name^="csarrs"]').each(function(e){
+    e.checked = false;
+  });
+  
   $$('.counts_cdarr').invoke('update','')
 }
 
 submitSSR = function(){
   // Test de la presence d'au moins un code SSR
-  if((oFormEvenementSSR.select('input.checkbox-cdarrs:checked').length == 0) && !$V(oFormEvenementSSR.code) && oFormEvenementSSR.select('input.checkbox-other-cdarrs').length == 0){
-    alert("Veuillez selectionner un code SSR");
+  var cdarr_count = $V(oFormEvenementSSR.code_cdarr) ? 1 : 0;
+  cdarr_count += oFormEvenementSSR.select('input.checkbox-cdarrs:checked').length;
+  cdarr_count += oFormEvenementSSR.select('input.checkbox-other-cdarrs').length;
+  var csarr_count = $V(oFormEvenementSSR.code_csarr) ? 1 : 0;
+  csarr_count += oFormEvenementSSR.select('input.checkbox-csarrs:checked').length;
+  csarr_count += oFormEvenementSSR.select('input.checkbox-other-csarrs').length;
+
+  if (cdarr_count + csarr_count == 0) {
+    alert("Veuillez selectionner au moins un code CsARR ou CsARR");
     return false;
   }
 
@@ -193,21 +216,10 @@ submitSSR = function(){
       oFormEvenementSSR.seance_collective_id.hide();
     }
 
-    unselectCodes();
+    hideCodes();
     
     selectElement($V(oFormEvenementSSR.line_id));
   }} );
-}
-
-unselectCodes = function() {
-  // Deselection des codes cdarrs et csarrs
-  $V(oFormEvenementSSR._cdarr, false);
-  $V(oFormEvenementSSR._csarr, false);
-  $$('#other_cdarr span').invoke('remove'); 
-  $$('#other_csarr span').invoke('remove'); 
-  $('other_cdarr').hide();
-  $('other_csarr').hide();
-  
 }
 
 refreshPlanningsSSR = function(){
@@ -474,7 +486,7 @@ Main.add(function(){
                     {{/if}}
                     
                     <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" 
-                           onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); unselectCodes();" />
+                           onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); hideCodes();" />
                    
                     {{if $_lines_by_elt|@count == 1}}
                      <span class="mediuser" style="font-weight: bold; border-left-color: #{{$element->_color}};" 

@@ -81,7 +81,7 @@ foreach ($evenements as $_evenement){
   
   // Classes
 	$class= "";
-	if (!$_evenement->countBackRefs("actes_cdarr")) {
+	if (!$_evenement->countBackRefs("actes_cdarr") && !$_evenement->countBackRefs("actes_csarr")) {
     $class = "zero-actes";
   }
   

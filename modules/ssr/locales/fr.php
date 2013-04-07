@@ -425,6 +425,7 @@ $locales['CEvenementSSR-therapeute_id-court'] = 'Rééducateur';
 $locales['CEvenementSSR-therapeute_id-desc'] = 'Rééducateur';
 $locales['CEvenementSSR-title-create'] = 'Nouvel événement';
 $locales['CEvenementSSR-title-modify'] = 'Modifier l\'événement';
+$locales['CEvenementSSR-warning-no_code_ssr'] = 'Ni code CdARR ni code CsARR sur cet évenement';
 $locales['CEvenementSSR._unite_decalage.jour'] = 'Jours';
 $locales['CEvenementSSR._unite_decalage.minute'] = 'Minutes';
 $locales['CEvenementSSR._unite_decalage_debut.days'] = 'Jours';
