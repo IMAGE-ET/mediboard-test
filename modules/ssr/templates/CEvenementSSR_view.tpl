@@ -23,31 +23,50 @@
 
 <table class="tbl tooltip">
   {{if $evenement_ssr->sejour_id}}
+  
+  <!-- Actes CdARRs -->
+  <tr>
 		{{if count($evenement_ssr->_ref_actes_cdarr)}} 
-		<tr>
 		  <td class="text">
 		    <strong>{{tr}}CEvenementSSR-back-actes_cdarr{{/tr}}</strong> :
-		    {{foreach from=$evenement_ssr->_ref_actes_cdarr item=_acte_cdarr}}
-		      {{$_acte_cdarr}}
+		    {{foreach from=$evenement_ssr->_ref_actes_cdarr item=_acte}}
+		      {{$_acte}}
 		    {{/foreach}}
 		  </td>
-		</tr>
 		{{else}}
-    <tr>
     	<td>
     		<div class="small-warning">
     			{{tr}}CEvenementSSR-back-actes_cdarr.empty{{/tr}}
     		</div>
     	</td>
-    </tr>		
 		{{/if}}
+  </tr>   
+
+  <!-- Actes CdARRs -->
+  <tr>
+    {{if count($evenement_ssr->_ref_actes_csarr)}} 
+      <td class="text">
+        <strong>{{tr}}CEvenementSSR-back-actes_csarr{{/tr}}</strong> :
+        {{foreach from=$evenement_ssr->_ref_actes_csarr item=_acte}}
+          {{$_acte}}
+        {{/foreach}}
+      </td>
+    {{else}}
+      <td>
+        <div class="small-warning">
+          {{tr}}CEvenementSSR-back-actes_cdarr.empty{{/tr}}
+        </div>
+      </td>
+    {{/if}}
+  </tr>   
+
 	{{else}}
   <tr>
     <td class="text">
 		  <strong>{{mb_label object=$evenement_ssr field="seance_collective_id"}}</strong>
       <ul>
 			{{foreach from=$evenement_ssr->_ref_evenements_seance item=_evenement}}
-        <li>{{$_evenement->_ref_sejour->_ref_patient->_view}}</li>
+        <li>{{$_evenement->_ref_sejour->_ref_patient}}</li>
       {{/foreach}}
 			</ul>
     </td>

@@ -38,8 +38,11 @@ selectActivite = function(activite) {
   $$("div.type-cdarrs").invoke("hide");
   
   $('div_other_cdarr').hide(); 
+  $('div_other_csarr').hide(); 
   $('other_cdarr').hide();
-  $V(oFormEvenementSSR.code, '');
+  $('other_csarr').hide();
+  $V(oFormEvenementSSR.code_cdarr, '');
+  $V(oFormEvenementSSR.code_csarr, '');
   oFormEvenementSSR._cdarr.checked = false;
   
   // Mise en evidence des elements dans les plannings
@@ -59,9 +62,11 @@ selectElement = function(line_id){
   
   $V(getForm("editEvenementSSR").cdarr, '');
   $("cdarrs-"+line_id).show();
+  $("csarrs-"+line_id).show();
   $("type-cdarrs-"+line_id).show();
   
   $('div_other_cdarr').show();
+  $('div_other_csarr').show();
 
   // Deselection de tous les codes cdarrs
   removeCdarrs();
@@ -97,12 +102,14 @@ selectTechnicien = function(kine_id, buttonSelected) {
 selectEquipement = function(equipement_id) {
   $V(oFormEvenementSSR.equipement_id, equipement_id);
   $$("button.equipement").invoke("removeClassName", "selected");
-  if($("equipement-"+equipement_id)){
+  if ($("equipement-"+equipement_id)){
     $("equipement-"+equipement_id).addClassName("selected");
   }
-  if(equipement_id){
+  
+  if (equipement_id) {
     PlanningEquipement.show(equipement_id,'{{$bilan->sejour_id}}');
-  } else {
+  } 
+  else {
     PlanningEquipement.hide();
   }
   refreshSelectSeances();
@@ -186,13 +193,21 @@ submitSSR = function(){
       oFormEvenementSSR.seance_collective_id.hide();
     }
 
-    // Deselection des codes cdarrs
-    $V(oFormEvenementSSR._cdarr, false);
-    $$('#other_cdarr span').invoke('remove'); 
-    $('other_cdarr').hide();
+    unselectCodes();
     
     selectElement($V(oFormEvenementSSR.line_id));
   }} );
+}
+
+unselectCodes = function() {
+  // Deselection des codes cdarrs et csarrs
+  $V(oFormEvenementSSR._cdarr, false);
+  $V(oFormEvenementSSR._csarr, false);
+  $$('#other_cdarr span').invoke('remove'); 
+  $$('#other_csarr span').invoke('remove'); 
+  $('other_cdarr').hide();
+  $('other_csarr').hide();
+  
 }
 
 refreshPlanningsSSR = function(){
@@ -294,13 +309,26 @@ var oFormEvenementSSR;
 Main.add(function(){
   oFormEvenementSSR = getForm("editEvenementSSR");
   window.toCheck = false;
-  if($('code_auto_complete')){
+
+  // CdARR other code autocomplete
+  if ($('code_cdarr_autocomplete')) {
     var url = new Url("ssr", "httpreq_do_cdarr_autocomplete");
-    url.autoComplete(oFormEvenementSSR.code, "code_auto_complete", {
+    url.autoComplete(oFormEvenementSSR.code_cdarr, "code_cdarr_autocomplete", {
       dropdown: true,
       minChars: 2,
       select: "value",
-      updateElement: updateFieldCode
+      updateElement: updateFieldCodeCdarr
+    } );
+  }
+  
+  // CsARR other code autocomplete
+  if ($('code_csarr_autocomplete')) {
+    var url = new Url("ssr", "httpreq_do_csarr_autocomplete");
+    url.autoComplete(oFormEvenementSSR.code_csarr, "code_csarr_autocomplete", {
+      dropdown: true,
+      minChars: 2,
+      select: "value",
+      updateElement: updateFieldCodeCsarr
     } );
   }
   
@@ -446,7 +474,7 @@ Main.add(function(){
                     {{/if}}
                     
                     <input type="radio" name="prescription_line_element_id" id="line-{{$_line->_id}}" class="search line" 
-                           onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); $V(this.form._cdarr, false); $$('#other_cdarr span').invoke('remove'); $('other_cdarr').hide();" />
+                           onclick="$V(this.form._element_id, '{{$_line->element_prescription_id}}'); selectElement('{{$_line->_id}}'); unselectCodes();" />
                    
                     {{if $_lines_by_elt|@count == 1}}
                      <span class="mediuser" style="font-weight: bold; border-left-color: #{{$element->_color}};" 
@@ -522,20 +550,63 @@ Main.add(function(){
           {{/if}} 
           
           <!-- Autre code CdARR -->
-          <div id="div_other_cdarr" style="display: block;">
+          <div id="div_other_cdarr" style="display: none;">
             <label>
-              <input type="checkbox" name="_cdarr" value="other" onclick="toggleOther(this);" /> Autre:
+              <input type="checkbox" name="_cdarr" value="other" onclick="toggleOtherCdarr(this);" /> Autre:
             </label>
             
             <span id="other_cdarr" style="display: block;">
-               <input type="text" name="code" class="autocomplete" canNull=true size="2" />
-               <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
+               <input type="text" name="code_cdarr" class="autocomplete" canNull=true size="2" />
+               <div style="display:none;" class="autocomplete" id="code_cdarr_autocomplete"></div>
             </span>
           </div>
           
         </td>
       </tr> 
       
+      <tr id='tr-csarrs'>
+        <th>Codes CsARR</th>
+        <td class="text">
+          {{if $prescription}}
+          
+          <!-- Affichage des codes cdarrs -->
+          {{foreach from=$prescription->_ref_prescription_lines_element_by_cat item=_lines_by_chap}}
+            {{foreach from=$_lines_by_chap item=_lines_by_cat}}
+              {{foreach from=$_lines_by_cat.element item=_line}}
+
+                <div id="csarrs-{{$_line->_id}}" style="display : none;">
+                  {{foreach from=$_line->_ref_element_prescription->_ref_csarrs item=_csarr}}
+                    <label>
+                      <input type="checkbox" class="checkbox-csarrs nocheck" name="csarrs[{{$_csarr->code}}]" value="{{$_csarr->code}}" /> 
+                      <span onmouseover="ObjectTooltip.createEx(this, '{{$_csarr->_guid}}')">
+                        {{$_csarr->code}}
+                      </span>
+                    </label>
+                    {{/foreach}}
+                    </div>
+                </div>
+                
+              {{/foreach}}
+            {{/foreach}}
+          {{/foreach}}
+            
+          {{/if}} 
+          
+          <!-- Autre code CsARR -->
+          <div id="div_other_csarr" style="display: none;">
+            <label>
+              <input type="checkbox" name="_csarr" value="other" onclick="toggleOtherCsarr(this);" /> Autre:
+            </label>
+            
+            <span id="other_csarr" style="display: block;">
+               <input type="text" name="code_csarr" class="autocomplete" canNull=true size="2" />
+               <div style="display: none;" class="autocomplete" id="code_csarr_autocomplete"></div>
+            </span>
+          </div>
+          
+        </td>
+      </tr> 
+
       <tr id="remarque_ssr" style="display: none;">
         <th>{{mb_label object=$evenement field=remarque}}</th>
         <td>{{mb_field object=$evenement field=remarque}}</td>
@@ -735,16 +806,25 @@ Main.add(function(){
       $V(oForm.equipement_id, ''); 
     }
     
-    toggleOther = function(elem, dontFocus) {
+    toggleOtherCdarr = function(elem) {
       var toggle = $V(elem);
       
       $('other_cdarr').setVisible(toggle); 
-      $V(elem.form.code, '');
-      $(elem.form.code).tryFocus();
+      $V(elem.form.code_cdarr, '');
+      $(elem.form.code_cdarr).tryFocus();
       $('other_cdarr').select('input[type=hidden]').each(function(e){e.disabled = toggle ? false : 'disabled';}, elem);
     }
 
-    updateFieldCode = function(selected, input) {
+    toggleOtherCsarr = function(elem) {
+      var toggle = $V(elem);
+      
+      $('other_csarr').setVisible(toggle); 
+      $V(elem.form.code_csarr, '');
+      $(elem.form.code_csarr).tryFocus();
+      $('other_cdarr').select('input[type=hidden]').each(function(e){e.disabled = toggle ? false : 'disabled';}, elem);
+    }
+
+    updateFieldCodeCdarr = function(selected, input) {
       var code_selected = selected.childElements()[0];
       $('other_cdarr').insert({bottom: 
         DOM.span({}, 
@@ -764,10 +844,36 @@ Main.add(function(){
         )
       });
          
-      var input = $('editEvenementSSR_code');
+      var input = $('editEvenementSSR_code_cdarr');
       input.value = '';
       input.tryFocus();
     }
+
+    updateFieldCodeCsarr = function(selected, input) {
+      var code_selected = selected.childElements()[0];
+      $('other_csarr').insert({bottom: 
+        DOM.span({}, 
+          DOM.input({
+            type: 'hidden', 
+            id: 'editEvenementSSR__cdarrs['+code_selected.innerHTML+']', 
+            name:'_csarrs['+code_selected.innerHTML+']',
+            value: code_selected.innerHTML,
+            className: 'checkbox-other-csarrs'
+          }),
+          DOM.button({
+            className: "cancel notext", 
+            type: "button",
+            onclick: "deleteCode(this)"
+          }),
+          DOM.label({}, code_selected.innerHTML)
+        )
+      });
+         
+      var input = $('editEvenementSSR_code_csarr');
+      input.value = '';
+      input.tryFocus();
+    }
+
 
     deleteCode = function(elem) {
       $(elem).up().remove();

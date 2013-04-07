@@ -9,28 +9,45 @@
  */
 
 $sejour_id            = CValue::post("sejour_id");
-$cdarrs               = CValue::post("cdarrs");
-$_cdarrs               = CValue::post("_cdarrs");
 $equipement_id        = CValue::post("equipement_id");
 $therapeute_id        = CValue::post("therapeute_id");
 $line_id              = CValue::post("line_id");
+$cdarrs               = CValue::post("cdarrs");
+$_cdarrs              = CValue::post("_cdarrs");
+$csarrs               = CValue::post("csarrs");
+$_csarrs              = CValue::post("_csarrs");
 $remarque             = CValue::post("remarque");
 $seance_collective    = CValue::post("seance_collective");    // Checkbox de la seance collective
 $seance_collective_id = CValue::post("seance_collective_id"); // Id de la seance collective
 
 $codes_cdarrs = array();
 
-//@TODO: array_merge
-if(is_array($cdarrs)){
-	foreach($cdarrs as $_code_cdarr){
-	  $codes_cdarrs[] = $_code_cdarr;
+// Codes CdARR
+if (is_array($cdarrs)) {
+	foreach ($cdarrs as $_code){
+	  $codes_cdarrs[] = $_code;
 	}
 }
-if(is_array($_cdarrs)){
-  foreach($_cdarrs as $_code_cdarr_manuel){
-    $codes_cdarrs[] = $_code_cdarr_manuel;
+
+if (is_array($_cdarrs)){
+  foreach($_cdarrs as $_code){
+    $codes_cdarrs[] = $_code;
   }
 }
+
+// Codes CdARR
+if (is_array($csarrs)) {
+  foreach ($csarrs as $_code){
+    $codes_csarrs[] = $_code;
+  }
+}
+
+if (is_array($_csarrs)) {
+  foreach($_csarrs as $_code){
+    $codes_csarrs[] = $_code;
+  }
+}
+
 
 $_days = CValue::post("_days");
 $_heure_deb = CValue::post("_heure_deb");
@@ -43,38 +60,47 @@ $sejour = new CSejour;
 $sejour->load($sejour_id);
 
 // Ajout d'un evenement dans la seance choisie
-if($seance_collective_id){
+if ($seance_collective_id){
 	$evenement = new CEvenementSSR();
 	$evenement->sejour_id = $sejour_id;
 	$evenement->prescription_line_element_id = $line_id;
 	$evenement->seance_collective_id = $seance_collective_id;
 	
 	$evenement->loadMatchingObject();
-	if($evenement->_id){
+	if ($evenement->_id){
 	  CAppUI::displayMsg("Patient déjà présent dans la séance", "CEvenementSSR-title-create");
-	} else {
+	} 
+	else {
 		$msg = $evenement->store();
 	  CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
-	  foreach($codes_cdarrs as $_cdarr){
-      $acte_cdarr = new CActeCdARR();
-      $acte_cdarr->code = $_cdarr;
-      $acte_cdarr->evenement_ssr_id = $evenement->_id;
-      $msg = $acte_cdarr->store();
-      CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
+    
+    // Actes CdARR
+	  foreach ($codes_cdarrs as $_code) {
+      $acte = new CActeCdARR();
+      $acte->code = $_code;
+      $acte->evenement_ssr_id = $evenement->_id;
+      $msg = $acte->store();
+      CAppUI::displayMsg($msg, "$acte->_class-msg-create");
+    }
+
+    // Actes CsARR
+    foreach ($codes_csarrs as $_code) {
+      $acte = new CActeCsARR();
+      $acte->code = $_code;
+      $acte->evenement_ssr_id = $evenement->_id;
+      $msg = $acte->store();
+      CAppUI::displayMsg($msg, "$acte->_class-msg-create");
     }
 	}
 } 
 
 // Creation des evenements et eventuellement des seances si la checkbox est cochée
 else {
-	if(count($_days)){
-    $sejour->loadRefBilanSSR();
+	if (count($_days)) {
     $entree = CMbDT::date($sejour->entree);
     $sortie = CMbDT::date($sejour->sortie);
-
-		$bilan =& $sejour->_ref_bilan_ssr;
-		$bilan->loadRefKineReferent();
-		$referant =& $bilan->_ref_kine_referent;
+		$bilan = $sejour->loadRefBilanSSR();
+		$referent = $bilan->loadRefKineReferent();
     
 		// Ugly hack du m_post
 		global $m;
@@ -102,7 +128,7 @@ else {
 			$evenement->therapeute_id = $therapeute_id;
 	          		
       // Transfert kiné référent => kiné remplaçant si disponible
-      if ($therapeute_id == $referant->_id) {
+      if ($therapeute_id == $referent->_id) {
         $conge = new CPlageConge();
         $conge->loadFor($therapeute_id, $_day);
 				// Référent en congés
@@ -120,10 +146,10 @@ else {
       // Transfert kiné remplacant => kiné référant si présent
       if ($sejour->isReplacer($therapeute_id)) {
         $conge = new CPlageConge();
-        $conge->loadFor($referant->_id, $_day);
+        $conge->loadFor($referent->_id, $_day);
         // Référent présent
         if (!$conge->_id){
-          $evenement->therapeute_id = $referant->_id;
+          $evenement->therapeute_id = $referent->_id;
         }
       }
 
@@ -137,7 +163,7 @@ else {
 			$msg = $evenement->store();
 			CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
 			
-			$evenement_id_for_cdarr = $evenement->_id;
+			$evenement_actes_id = $evenement->_id;
 						
 			// Si une seance a ete créée, on crée l'evenement lié a la seance, et on crée les code cdarr sur l'evenement
       if ($seance_collective){
@@ -149,16 +175,25 @@ else {
         CAppUI::displayMsg($msg, "CEvenementSSR-msg-create");
 				
 				// Si une seance a ete créée, les codes cdarrs seront créés sur l'evenement de la seance
-				$evenement_id_for_cdarr = $evt_ssr->_id;    
+				$evenement_actes_id = $evt_ssr->_id;    
       } 
 			
-      // On applique les codes cdarrs à l'evenement
-			foreach($codes_cdarrs as $_cdarr){
-        $acte_cdarr = new CActeCdARR();
-        $acte_cdarr->code = $_cdarr;
-        $acte_cdarr->evenement_ssr_id = $evenement_id_for_cdarr;
-        $msg = $acte_cdarr->store();
-        CAppUI::displayMsg($msg, "CActeCdARR-msg-create");
+      // Actes CdARR
+      foreach ($codes_cdarrs as $_code) {
+        $acte = new CActeCdARR();
+        $acte->code = $_code;
+        $acte->evenement_ssr_id = $evenement_actes_id;
+        $msg = $acte->store();
+        CAppUI::displayMsg($msg, "$acte->_class-msg-create");
+      }
+  
+      // Actes CsARR
+      foreach ($codes_csarrs as $_code) {
+        $acte = new CActeCsARR();
+        $acte->code = $_code;
+        $acte->evenement_ssr_id = $evenement_actes_id;
+        $msg = $acte->store();
+        CAppUI::displayMsg($msg, "$acte->_class-msg-create");
       }
 	  }
 	}

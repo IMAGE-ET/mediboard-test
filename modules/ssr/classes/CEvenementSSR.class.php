@@ -42,6 +42,7 @@ class CEvenementSSR extends CMbObject {
   var $_ref_sejour            = null;
   var $_ref_therapeute        = null;
   var $_ref_actes_cdarr       = null;
+  var $_ref_actes_csarr       = null;
   var $_ref_evenements_seance = null;
   
   // Behaviour field
@@ -83,6 +84,7 @@ class CEvenementSSR extends CMbObject {
   function getBackProps() {
     $backProps = parent::getBackProps();
     $backProps["actes_cdarr"] = "CActeCdARR evenement_ssr_id";
+    $backProps["actes_csarr"] = "CActeCsARR evenement_ssr_id";
     $backProps["evenements_ssr"] = "CEvenementSSR seance_collective_id";
     return $backProps;
   }
@@ -159,12 +161,12 @@ class CEvenementSSR extends CMbObject {
       }
       
       // Complétion de la ligne RHS    
-      $this->loadRefsActesCdARR();
-      foreach ($this->_ref_actes_cdarr as $_acte_cdarr) {
+      foreach ($this->loadRefsActesCdARR() as $_acte_cdarr) {
         $ligne = new CLigneActivitesRHS();
         $ligne->rhs_id                 = $rhs->_id;
         $ligne->executant_id           = $therapeute->_id;
         $ligne->code_activite_cdarr    = $_acte_cdarr->code;
+        $ligne->code_activite_csarr    = $_acte_cdarr->code;
         $ligne->code_intervenant_cdarr = $code_intervenant_cdarr;
         $ligne->loadMatchingObject();
         $ligne->crementDay($this->debut, $this->realise ? "inc" : "dec");
@@ -195,24 +197,25 @@ class CEvenementSSR extends CMbObject {
   
   function loadView() {
     parent::loadView();
-    $this->loadRefSejour();
-    $sejour =& $this->_ref_sejour;
-    $sejour->loadRefPatient();
-    $patient = $sejour->_ref_patient;
+    
+    $sejour = $this->loadRefSejour();
+    $patient = $sejour->loadRefPatient();
     
     if ($this->seance_collective_id){
       $this->loadRefSeanceCollective();
       $this->debut = $this->_ref_seance_collective->debut;
       $this->duree = $this->_ref_seance_collective->duree;
     }
+
     $this->_view = "$patient->_view - ". CMbDT::dateToLocale(CMbDT::date($this->debut));
+    
     $this->loadRefsActesCdARR();
+    $this->loadRefsActesCsARR();
     
     if(!$this->sejour_id){
       $this->loadRefsEvenementsSeance();
-      foreach($this->_ref_evenements_seance as $_evt_seance){
-        $_evt_seance->loadRefSejour();
-        $_evt_seance->_ref_sejour->loadRefPatient();
+      foreach ($this->_ref_evenements_seance as $_evt_seance){
+        $_evt_seance->loadRefSejour()->loadRefPatient();
       }
     }
   }
@@ -263,7 +266,11 @@ class CEvenementSSR extends CMbObject {
     return $this->_ref_actes_cdarr = $this->loadBackRefs("actes_cdarr");
   }
   
-  function loadRefsEvenementsSeance(){
+  function loadRefsActesCsARR(){
+    return $this->_ref_actes_csarr = $this->loadBackRefs("actes_csarr");
+  }
+  
+    function loadRefsEvenementsSeance(){
     return $this->_ref_evenements_seance = $this->loadBackRefs("evenements_ssr");
   }
   

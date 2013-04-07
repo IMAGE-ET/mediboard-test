@@ -10,7 +10,7 @@
 
 CCanDo::checkRead();
 
-$needle = CValue::post("code_activite_csarr", CValue::post("code"));
+$needle = CValue::post("code_activite_csarr", CValue::post("code_csarr", CValue::post("code")));
 if (!$needle) {
 	$needle = "%";
 }

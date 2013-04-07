@@ -32,25 +32,22 @@ $lines_by_cat = $prescription ?
   $prescription->loadRefsLinesElementByCat("0", "1", "kine") :
   array();
 
-// Prescription lines and CdARRs
+// Prescription lines for SSR codes
 $categories = array();
 foreach ($lines_by_cat as $chapter => $_lines_by_chap) {
   foreach ($_lines_by_chap as $_lines_by_cat) {
     foreach ($_lines_by_cat['element'] as $_line) {
       $element = $_line->_ref_element_prescription;
       $category = $element->_ref_category_prescription;
+      
+      // All categories
       if (!array_key_exists($category->_id, $categories)){
         $categories[$category->_id] = $category;
       }
       
-      $element->loadBackRefs("cdarrs");
-      $element->_ref_cdarrs_by_type = array();
-      
-      $cdarrs_by_type =& $element->_ref_cdarrs_by_type;
-      foreach ($element->_back["cdarrs"] as $_acte_cdarr){
-        $_activite_cdarr = $_acte_cdarr->loadRefActiviteCdARR();
-        $cdarrs_by_type[$_activite_cdarr->type][] = $_acte_cdarr;
-      }
+      // SSR Codes
+      $element->loadRefsCdarrsByType();
+      $element->loadRefsCsarrs();
     }
   }
 }
