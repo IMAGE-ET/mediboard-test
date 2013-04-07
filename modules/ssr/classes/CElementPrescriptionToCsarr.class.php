@@ -37,9 +37,9 @@ class CElementPrescriptionToCsarr extends CElementPrescriptionToReeducation {
     return parent::check();
   }
   
-  function loadRefActiviteCsarr(){
+  function loadRefActiviteCsarr() {
     $activite = CActiviteCsARR::get($this->code);
-    //$activite->loadRefTypeActivite();
+    $activite->loadRefHierarchie();
     return $this->_ref_activite_csarr = $activite;
   }
   

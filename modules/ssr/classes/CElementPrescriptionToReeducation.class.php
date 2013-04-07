@@ -33,10 +33,6 @@ class CElementPrescriptionToReeducation extends CMbObject {
     $this->_view = "Code $this->code";
   }
   
-  function loadView(){
-    parent::loadView();
-    $this->loadRefActiviteCsARR();
-  }
 }
 
 ?>

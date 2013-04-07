@@ -15,7 +15,7 @@
   {{mb_return}}
 {{/if}}
 
-{{include file=CMbObject_view.tpl}}
+{{mb_include template=CMbObject_view}}
 
 {{assign var=element_prescription_to_cdarr value=$object}}
 

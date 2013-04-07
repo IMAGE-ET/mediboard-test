@@ -24,41 +24,42 @@
 <table class="tbl tooltip">
   {{if $evenement_ssr->sejour_id}}
   
-  <!-- Actes CdARRs -->
-  <tr>
-		{{if count($evenement_ssr->_ref_actes_cdarr)}} 
-		  <td class="text">
-		    <strong>{{tr}}CEvenementSSR-back-actes_cdarr{{/tr}}</strong> :
-		    {{foreach from=$evenement_ssr->_ref_actes_cdarr item=_acte}}
-		      {{$_acte}}
-		    {{/foreach}}
-		  </td>
-		{{else}}
-    	<td>
-    		<div class="small-warning">
-    			{{tr}}CEvenementSSR-back-actes_cdarr.empty{{/tr}}
-    		</div>
-    	</td>
-		{{/if}}
-  </tr>   
-
-  <!-- Actes CdARRs -->
-  <tr>
-    {{if count($evenement_ssr->_ref_actes_csarr)}} 
-      <td class="text">
-        <strong>{{tr}}CEvenementSSR-back-actes_csarr{{/tr}}</strong> :
-        {{foreach from=$evenement_ssr->_ref_actes_csarr item=_acte}}
-          {{$_acte}}
-        {{/foreach}}
-      </td>
+    {{if count($evenement_ssr->_ref_actes_cdarr) || count($evenement_ssr->_ref_actes_csarr)}}
+    
+      <!-- Actes CdARRs -->
+      {{if count($evenement_ssr->_ref_actes_cdarr)}} 
+      <tr>
+    	  <td class="text">
+    	    <strong>{{tr}}CEvenementSSR-back-actes_cdarr{{/tr}}</strong> :
+    	    {{foreach from=$evenement_ssr->_ref_actes_cdarr item=_acte}}
+    	      {{$_acte}}
+    	    {{/foreach}}
+    	  </td>
+      </tr>   
+      {{/if}}
+    
+      <!-- Actes CdARRs -->
+      {{if count($evenement_ssr->_ref_actes_csarr)}} 
+      <tr>
+        <td class="text">
+          <strong>{{tr}}CEvenementSSR-back-actes_csarr{{/tr}}</strong> :
+          {{foreach from=$evenement_ssr->_ref_actes_csarr item=_acte}}
+            {{$_acte}}
+          {{/foreach}}
+        </td>
+      </tr>   
+      {{/if}}
+      
     {{else}}
+    <tr>
       <td>
         <div class="small-warning">
-          {{tr}}CEvenementSSR-back-actes_cdarr.empty{{/tr}}
+          {{tr}}CEvenementSSR-warning-no_code_ssr{{/tr}}
         </div>
       </td>
+    </tr>
+    
     {{/if}}
-  </tr>   
 
 	{{else}}
   <tr>
