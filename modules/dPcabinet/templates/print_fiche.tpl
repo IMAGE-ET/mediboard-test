@@ -194,6 +194,10 @@
                   {{if $const_med->_vst}}{{$const_med->_vst}} ml{{/if}}
                 </td>
               </tr>
+              <tr>
+                <th style="font-weight: normal;">APFEL</th>
+                <td style="font-weight: bold;">{{math equation="a+b+c+d" a=$dossier_anesth->apfel_femme b=$dossier_anesth->apfel_non_fumeur c=$dossier_anesth->apfel_atcd_nvp d=$dossier_anesth->apfel_morphine}}</td>
+              </tr>
               {{if $dossier_anesth->_psa}}
               <tr>
                 <th style="font-weight: normal;">PSA</th>
