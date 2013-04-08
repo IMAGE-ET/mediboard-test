@@ -103,6 +103,7 @@ $remoteFileMTime = filemtime("/tmp/synConfig/".$ID);
 
 // If files have the same last modification time
 if ($remoteFileMTime == $localFileMTime) {
+  unlink("/tmp/synConfig/".$ID);
   echo "Files have the same last modification time.\n";
   return;
 }
