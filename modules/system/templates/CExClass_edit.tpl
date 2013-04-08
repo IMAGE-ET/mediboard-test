@@ -77,7 +77,7 @@ Main.add(function(){
                 <button type="button" class="search" onclick="(new Url('forms', 'ajax_ex_class_preview_events')).addParam('ex_class_id', '{{$object->_id}}').requestModal(300, 200)">{{tr}}Preview{{/tr}}</button>
 
                 <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
-                <button type="button" class="hslip" onclick="if (confirm('Confirmez-vous la duplication de ce formulaire ?')) { $V(this.form._duplicate, 1); this.form.onsubmit(); }">{{tr}}Duplicate{{/tr}}</button>
+                <button type="button" class="duplicate" onclick="if (confirm('Confirmez-vous la duplication de ce formulaire ?')) { $V(this.form._duplicate, 1); this.form.onsubmit(); }">{{tr}}Duplicate{{/tr}}</button>
                 
                 <button type="button" class="trash" onclick="confirmDeletion(this.form,{ajax:true,typeName:'{{tr}}CExClass.one{{/tr}}',objName:'{{$object->_view|smarty:nodefaults|JSAttribute}}'})">
                   {{tr}}Delete{{/tr}}

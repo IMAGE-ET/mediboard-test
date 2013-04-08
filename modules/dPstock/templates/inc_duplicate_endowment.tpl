@@ -23,7 +23,7 @@ endowmentDuplicateCallback = function(id){
     
     <tr>
       <td class="button" colspan="2">
-        <button class="hslip" type="submit">{{tr}}Duplicate{{/tr}}</button>
+        <button class="duplicate" type="submit">{{tr}}Duplicate{{/tr}}</button>
       </td>
     </tr>
   </table>

@@ -62,7 +62,7 @@
           {{if $actor->_id}}
             <button type="submit" class="modify">{{tr}}Save{{/tr}}</button>
             {{if $actor instanceof CSenderMLLP}}
-              <button type="button" class="tick" onclick="$V(this.form._duplicate,1);this.form.onsubmit()">{{tr}}Duplicate{{/tr}}</button>
+              <button type="button" class="duplicate" onclick="$V(this.form._duplicate,1);this.form.onsubmit()">{{tr}}Duplicate{{/tr}}</button>
             {{/if}}
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$actor->_view|smarty:nodefaults|JSAttribute}}',ajax:true})">
               {{tr}}Delete{{/tr}}

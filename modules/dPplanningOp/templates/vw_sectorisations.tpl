@@ -55,7 +55,7 @@
     <tr {{if $_regle->_inactive}}class="hatching"{{/if}}>
       <td>
         <button class="edit notext" onclick="editSRF('{{$_regle->_id}}', 0)">{{tr}}Edit{{/tr}}</button>
-        <button class="add notext" onclick="editSRF('{{$_regle->_id}}', 1)">{{tr}}Duplicate{{/tr}}</button>
+        <button class="duplicate notext" onclick="editSRF('{{$_regle->_id}}', 1)">{{tr}}Duplicate{{/tr}}</button>
       </td>
       <td>{{if $_regle->_ref_function->_id}}{{mb_include module="mediusers" template="inc_vw_function" function=$_regle->_ref_function}}{{/if}}</td>
       <td>{{if $_regle->_ref_praticien->_id}}{{mb_include module="mediusers" template="inc_vw_mediuser" mediuser=$_regle->_ref_praticien}}{{/if}}</td>

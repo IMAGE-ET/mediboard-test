@@ -71,7 +71,7 @@
   <td class="button" colspan="2">
     {{if $message->_id}}
     <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-    <button class="new oneclick" type="submit" onclick="Message.duplicate(this.form);">
+    <button class="duplicate oneclick" type="submit" onclick="Message.duplicate(this.form);">
       {{tr}}Duplicate{{/tr}}
     </button>
     <button class="trash singleclick" type="button" onclick="Message.confirmDeletion(this.form);">

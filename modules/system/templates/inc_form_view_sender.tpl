@@ -68,7 +68,7 @@
       <td class="button" colspan="2">
         {{if $sender->_id}}
         <button class="modify" type="submit">{{tr}}Save{{/tr}}</button>
-        <button class="new" type="submit" onclick="ViewSender.duplicate(this.form);">
+        <button class="duplicate" type="submit" onclick="ViewSender.duplicate(this.form);">
           {{tr}}Duplicate{{/tr}}
         </button>
         <button class="trash" type="button" onclick="ViewSender.confirmDeletion(this.form);">

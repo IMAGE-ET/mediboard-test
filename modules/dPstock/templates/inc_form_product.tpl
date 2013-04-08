@@ -249,7 +249,7 @@ duplicateObject = function (form) {
       </button>
       {{/if}}
 
-      <button type="button" class="add" onclick="duplicateObject(this.form)">
+      <button type="button" class="duplicate" onclick="duplicateObject(this.form)">
         {{tr}}Duplicate{{/tr}}
       </button>
       

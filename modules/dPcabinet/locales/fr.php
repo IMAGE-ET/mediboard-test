@@ -1121,6 +1121,7 @@ $locales['COperation-back-dossiers_anesthesie'] = 'Dossier d\'anesthésie';
 $locales['COperation-back-dossiers_anesthesie.empty'] = 'Aucune dossier d\'anesthésie';
 $locales['COperation-type_anesth'] = 'Type d\'anesthésie';
 $locales['COperation-type_anesth-desc'] = 'Type d\'anesthésie pour l\'intervention';
+$locales['COperation.ASA.'] = 'Non défini';
 $locales['CPatient-back-consultations'] = 'Consultations';
 $locales['CPatient-back-consultations.empty'] = 'Aucune consultation';
 $locales['CPatient-back-facture_patient_consult'] = 'Patient';

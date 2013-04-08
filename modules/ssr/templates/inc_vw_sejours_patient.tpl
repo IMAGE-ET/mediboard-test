@@ -89,7 +89,7 @@ duplicateSejour = function(sejour_id, original_sejour_id){
 		
 		<td class="button">
 			{{if !$sejour->_ref_prescription_sejour->_count.prescription_line_element}}
-			  <button type="button" class="tick notext" onclick="duplicateSejour('{{$sejour->_id}}', '{{$_sejour->_id}}');"></button>
+			  <button type="button" class="duplicate notext" onclick="duplicateSejour('{{$sejour->_id}}', '{{$_sejour->_id}}');">{{tr}}Duplicate{{/tr}}</button>
 			{{/if}}
 		</td>
   </tr>

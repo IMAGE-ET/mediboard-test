@@ -1004,7 +1004,7 @@ Main.add(function(){
         </th>
         
         <td class="button">
-          <button type="button" class="new singleclick" onclick="$V(this.form.propagate, '0'); this.form.onsubmit();">
+          <button type="button" class="duplicate singleclick" onclick="$V(this.form.propagate, '0'); this.form.onsubmit();">
             {{tr}}Duplicate{{/tr}}
           </button>
         </td>
