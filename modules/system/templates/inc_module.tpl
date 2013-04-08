@@ -31,7 +31,7 @@
     {{tr}}Module-_too_new-msg{{/tr}} ({{$_mb_module->_latest}})
   </div>
   {{elseif $_mb_module->_upgradable && $can->admin}}
-    <table>
+    <table class="layout">
       <tr>
         <td>
           <form name="formUpdateModule-{{$module_id}}" method="post" class="upgrade" data-id="{{$module_id}}" data-dependencies="{{$_mb_module->_dependencies_not_verified}}"
