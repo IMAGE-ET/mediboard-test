@@ -17,9 +17,8 @@
     [{{$patient->_IPP}}]
   {{/if}}
 </td>
-<td>
+<td class="text">
   {{$patient->_age}}
-  <br />
   ({{mb_value object=$patient field=naissance}})
 </td>
 <td class="button">
