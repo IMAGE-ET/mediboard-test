@@ -156,6 +156,9 @@ function managePersonnel($obj) {
     }
   }
 }
+if($ajax) {
+  CApp::rip();
+}
 
 if ($otherm = CValue::post("otherm", 0)) {
   $m = $otherm;

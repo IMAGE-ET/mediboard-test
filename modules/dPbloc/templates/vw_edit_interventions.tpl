@@ -10,7 +10,7 @@
 
 <script>
   printFicheAnesth = function(dossier_anesth_id, operation_id) {
-    var url = new Url("dPcabinet", "print_fiche"); 
+    var url = new Url("cabinet", "print_fiche"); 
     url.addParam("dossier_anesth_id", dossier_anesth_id);
     url.addParam("operation_id", operation_id);
     url.popup(700, 500, "printFicheAnesth");
@@ -26,14 +26,14 @@
   }
   
   reloadLeftList = function() {
-    var url = new Url("dPbloc", "ajax_list_intervs");
+    var url = new Url("bloc", "ajax_list_intervs");
     url.addParam("plageop_id", {{$plage->_id}});
     url.addParam("list_type" , "left");
     url.requestUpdate("left_list");
   }
   
   reloadRightList = function() {
-    var url = new Url("dPbloc", "ajax_list_intervs");
+    var url = new Url("bloc", "ajax_list_intervs");
     url.addParam("plageop_id", {{$plage->_id}});
     url.addParam("list_type" , "right");
     url.requestUpdate("right_list");
@@ -53,14 +53,20 @@
   }
 
   extraInterv = function(op_id) {
-    var url = new Url("dPbloc", "ajax_edit_extra_interv");
+    var url = new Url("bloc", "ajax_edit_extra_interv");
     url.addParam("op_id", op_id);
     url.requestModal(700, 400);
     url.modalObject.observe("afterClose", reloadAllLists);
   }
+  
+  reloadPersonnelPrevu = function() {
+    var url = new Url("bloc", "ajax_view_personnel_plage");
+    url.addParam("plageop_id", {{$plage->_id}});
+    url.requestUpdate("personnel_en_salle");
+  }
 
   reloadPersonnel = function(operation_id){
-    var url = new Url("dPsalleOp", "httpreq_vw_personnel");
+    var url = new Url("salleOp", "httpreq_vw_personnel");
     url.addParam("operation_id", operation_id);
     url.addParam("in_salle", 0);
     url.requestUpdate("listPersonnel");
@@ -81,6 +87,7 @@
     };
     Calendar.regField(oForm.temps_inter_op, null, options);
     reloadAllLists();
+    reloadPersonnelPrevu();
   });
 
 </script>
@@ -123,155 +130,12 @@
       <table class="form">
         <tr>
           <td>
-            <!-- liste déroulante de choix de l'anesthesiste  et du personnel de bloc -->
-            <form name="editPlage" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$plage->_spec}}">
-            <input type="hidden" name="m" value="dPbloc" />
-            <input type="hidden" name="dosql" value="do_plagesop_aed" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
-            <input type="hidden" name="_repeat" value="1" />
-            <input type="hidden" name="_type_repeat" value="simple" />
-          
-            <select name="anesth_id" style="width: 10em;">
-            <option value="">&mdash; Anesthésiste</option>
-            {{foreach from=$listAnesth item=_anesth}}
-            <option value="{{$_anesth->_id}}" {{if $plage->anesth_id == $_anesth->_id}} selected="selected" {{/if}}>{{$_anesth->_view}}</option>
-            {{/foreach}}
-            </select>
-            <button class="tick" type="submit">Modifier</button>
-            </form>
+            <div class="big-info">Pour plus de simplicité, l'ajout de personnel se fait maintenant directement dans la case de droite.</div>
           </td>
         </tr>
-        {{if $listPersIADE}}
-        <tr>
-          <td>
-            <form name="editAffectationIADE" action="?m={{$m}}" method="post">
-            <input type="hidden" name="m" value="dPpersonnel" />
-            <input type="hidden" name="dosql" value="do_affectation_aed" />
-            
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="object_id" value="{{$plage->_id}}" />
-            <input type="hidden" name="object_class" value="{{$plage->_class}}" />
-            <input type="hidden" name="realise" value="0" />
-            <select name="personnel_id" style="width: 10em;">
-              <option value="">&mdash; {{tr}}CPersonnel.emplacement.iade{{/tr}}</option>
-              {{foreach from=$listPersIADE item=_personnelBloc}}
-              <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
-              {{/foreach}}
-            </select>
-            <button class="submit" type="submit">Ajouter personnel en salle</button>
-            </form>
-          </td>
-        </tr>
-        {{/if}}
-        {{if $listPersAideOp}}
-        <tr>
-          <td>
-            <form name="editAffectationAideOp" action="?m={{$m}}" method="post">
-            <input type="hidden" name="m" value="dPpersonnel" />
-            <input type="hidden" name="dosql" value="do_affectation_aed" />
-            
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="object_id" value="{{$plage->_id}}" />
-            <input type="hidden" name="object_class" value="{{$plage->_class}}" />
-            <input type="hidden" name="realise" value="0" />
-            <select name="personnel_id" style="width: 10em;">
-              <option value="">&mdash; {{tr}}CPersonnel.emplacement.op{{/tr}}</option>
-              {{foreach from=$listPersAideOp item=_personnelBloc}}
-              <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
-              {{/foreach}}
-            </select>
-            <button class="submit" type="submit">Ajouter personnel en salle</button>
-            </form>
-          </td>
-        </tr>
-        {{/if}}
-        {{if $listPersPanseuse}}
-        <tr>
-          <td>
-            <form name="editAffectationPanseuse" action="?m={{$m}}" method="post">
-            <input type="hidden" name="m" value="dPpersonnel" />
-            <input type="hidden" name="dosql" value="do_affectation_aed" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="object_id" value="{{$plage->_id}}" />
-            <input type="hidden" name="object_class" value="{{$plage->_class}}" />
-            <input type="hidden" name="realise" value="0" />
-            <select name="personnel_id" style="width: 10em;">
-              <option value="">&mdash; {{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</option>
-              {{foreach from=$listPersPanseuse item=_personnelBloc}}
-              <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
-              {{/foreach}}
-            </select>
-            <button class="submit" type="submit">Ajouter personnel en salle</button>
-            </form>
-          </td>
-        </tr>
-        {{/if}}
       </table>   
     </td>
-    
-    <td>
-      <table class="tbl">
-        <tr>
-          <th>Anesthésiste</th>
-          {{if $plage->anesth_id}}
-            <td>{{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage->_ref_anesth}}</td>
-          {{else}}
-            <td class="empty">Aucun anesthésiste</td>
-          {{/if}}
-        </tr>
-        {{if $affectations_plage.iade}}
-        <tr>
-          <th>{{tr}}CPersonnel.emplacement.iade{{/tr}}</th>
-          <td class="text">
-            <!-- div qui affiche le personnel de bloc -->
-            {{foreach from=$affectations_plage.iade item=_affectation}}
-              <form name="supAffectation-{{$_affectation->_id}}" action="?m={{$m}}" method="post">
-                <input type="hidden" name="m" value="dPpersonnel" />
-                <input type="hidden" name="dosql" value="do_affectation_aed" />
-                <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
-                <input type="hidden" name="del" value="1" />
-                <button class="cancel" type="submit">{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
-              </form>
-            {{/foreach}}
-          </td>
-        </tr>
-        {{/if}}
-        {{if $affectations_plage.op}}
-        <tr>
-          <th>{{tr}}CPersonnel.emplacement.op{{/tr}}</th>
-          <td class="text">
-            <!-- div qui affiche le personnel de bloc -->
-            {{foreach from=$affectations_plage.op item=_affectation}}
-              <form name="supAffectation-{{$_affectation->_id}}" action="?m={{$m}}" method="post">
-                <input type="hidden" name="m" value="dPpersonnel" />
-                <input type="hidden" name="dosql" value="do_affectation_aed" />
-                <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
-                <input type="hidden" name="del" value="1" />
-                <button class="cancel" type="submit">{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
-              </form>
-            {{/foreach}}
-          </td>
-        </tr>
-        {{/if}}
-        {{if $affectations_plage.op_panseuse}}
-        <tr>
-          <th>{{tr}}CPersonnel.emplacement.op_panseuse{{/tr}}</th>
-          <td class="text">
-            <!-- div qui affiche le personnel de bloc -->
-            {{foreach from=$affectations_plage.op_panseuse item=_affectation}}
-              <form name="supAffectation-{{$_affectation->_id}}" action="?m={{$m}}" method="post">
-                <input type="hidden" name="m" value="dPpersonnel" />
-                <input type="hidden" name="dosql" value="do_affectation_aed" />
-                <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
-                <input type="hidden" name="del" value="1" />
-                <button class="cancel" type="submit">{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
-              </form>
-            {{/foreach}}
-          </td>
-        </tr>
-        {{/if}}
-      </table>
+    <td id="personnel_en_salle">
     </td> 
   </tr>
   <tr>
