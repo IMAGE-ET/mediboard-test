@@ -21,16 +21,18 @@
     {{$curr_op->libelle}}
     <br />
   {{/if}}
-  {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-    {{if !$curr_code->_code7}}<strong>{{/if}}
-    <em>{{$curr_code->code}}</em>
-    {{if $filter->_ccam_libelle}}
-      : {{$curr_code->libelleLong|truncate:60:"...":false}}
-      <br/>
-    {{else}}
-      ;
+  {{foreach from=$curr_op->_ext_codes_ccam item=_code}}
+    {{if !$curr_op->libelle}}
+      {{if !$_code->_code7}}<strong>{{/if}}
+      <em>{{$_code->code}}</em>
+      {{if $filter->_ccam_libelle}}
+        : {{$_code->libelleLong|truncate:60:"...":false}}
+        <br/>
+      {{else}}
+        ;
+      {{/if}}
+      {{if !$_code->_code7}}</strong>{{/if}}
     {{/if}}
-    {{if !$curr_code->_code7}}</strong>{{/if}}
   {{/foreach}}
 </td>
 <td class="button">{{$curr_op->cote|truncate:1:""|capitalize}}</td>

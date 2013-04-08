@@ -12,13 +12,13 @@
       {{mb_include module=system template=inc_object_idsante400 object=$patient}}
       {{mb_include module=system template=inc_object_history object=$patient}}
       {{mb_include module=system template=inc_object_notes object=$patient}}
-      {{$patient}}
+      {{$patient}} {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
     </th>
   </tr>
   {{if !$tooltip}}
     <tr>
       <th class="category" colspan="3" style="width: 50%;">
-        Identité {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}}
+        Identité
       </th>
       <th class="category" colspan="2" style="width: 50%;">Coordonnées</th>
     </tr>

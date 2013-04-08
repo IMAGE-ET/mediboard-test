@@ -18,7 +18,7 @@
       {{mb_include module=patients template=inc_vw_ipp ipp=$patient->_IPP}} 
       <br />
       né(e) le {{mb_value object=$patient field=naissance}} ({{mb_value object=$patient field="_age"}})
-      de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}} <br /> <hr />
+      de sexe {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}} <br /> <hr />
       <span style="font-size: 14px">
         par le Dr {{$consult->_ref_praticien}}
         le {{mb_value object=$consult field=_date}}

@@ -22,8 +22,8 @@
   <br />
   ({{mb_value object=$patient field=naissance}})
 </td>
-<td>
-  {{mb_value object=$patient field=sexe}}
+<td class="button">
+  {{$patient->sexe|strtoupper}}
 </td>
 {{if $_coordonnees}}
 <td>

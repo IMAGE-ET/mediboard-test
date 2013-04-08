@@ -160,7 +160,7 @@
           <td colspan="2">
             Né{{if $patient->sexe != "m"}}e{{/if}} le {{mb_value object=$patient field=naissance}}
             ({{$patient->_age}})
-            - sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}<br />
+            - sexe {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}<br />
             {{if $patient->profession}}Profession : {{$patient->profession}}<br />{{/if}} 
             {{if $const_med->poids}}<strong>{{$const_med->poids}} kg</strong> - {{/if}}
             {{if $const_med->taille}}<strong>{{$const_med->taille}} cm</strong> - {{/if}}
