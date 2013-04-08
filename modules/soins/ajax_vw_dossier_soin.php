@@ -182,7 +182,7 @@ if (CModule::getActive("dPprescription")) {
       $line->removePrisesPlanif();
     }  
 
-    if($line instanceof CPrescriptionLineMix){
+    if ($line instanceof CPrescriptionLineMix){
       $line->countVariantes();
       $line->loadRefsVariantes();
       $line->loadRefsLines();
@@ -212,6 +212,10 @@ if (CModule::getActive("dPprescription")) {
         }
       }
     }
+
+    if (in_array($line->jour_decalage, array("ER", "R"))) {
+      $line->loadRefOperation();
+    }
   } 
   
   
@@ -226,6 +230,9 @@ if (CModule::getActive("dPprescription")) {
           $_line_med->countVariantes();
           $_line_med->countBackRefs("administration");
           $_line_med->loadRefsVariantes();
+          if (in_array($_line_med->jour_decalage, array("ER", "R"))) {
+            $_line_med->loadRefOperation();
+          }
         }
         
         // Chargement des prescription_line_mixes
@@ -239,6 +246,9 @@ if (CModule::getActive("dPprescription")) {
           $_prescription_line_mix->loadRefPraticien();
           $_prescription_line_mix->loadRefLogSignaturePrat();
           $_prescription_line_mix->calculVariations();
+          if (in_array($_prescription_line_mix->jour_decalage, array("ER", "R"))) {
+            $_prescription_line_mix->loadRefOperation();
+          }
         }
       } elseif($chapitre == "med" || $chapitre == "inj"){
         $prescription->loadRefsLinesMedByCat("1","1");
@@ -247,6 +257,9 @@ if (CModule::getActive("dPprescription")) {
           $_line_med->countVariantes();
           $_line_med->countBackRefs("administration");
           $_line_med->loadRefsVariantes();
+          if (in_array($_line_med->jour_decalage, array("ER", "R"))) {
+            $_line_med->loadRefOperation();
+          }
         }
       } elseif($chapitre == "perfusion" || $chapitre == "aerosol" || $chapitre == "alimentation" || $chapitre == "oxygene") {
         // Chargement des prescription_line_mixes
@@ -260,6 +273,9 @@ if (CModule::getActive("dPprescription")) {
           $_prescription_line_mix->loadRefPraticien();
           $_prescription_line_mix->loadRefLogSignaturePrat();
           $_prescription_line_mix->calculVariations();
+          if (in_array($_prescription_line_mix->jour_decalage, array("ER", "R"))) {
+            $_prescription_line_mix->loadRefOperation();
+          }
         }
       } 
       elseif ($chapitre == "inscription"){
