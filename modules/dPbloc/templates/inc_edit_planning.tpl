@@ -60,7 +60,7 @@ Main.add(function(){
   <tr>
     {{if $plagesel->plageop_id}}
     <th class="title modify" colspan="2">
-      
+      {{mb_include module=system template=inc_object_notes object=$plagesel}}
       {{mb_include module=system template=inc_object_idsante400 object=$plagesel}}
       {{mb_include module=system template=inc_object_history object=$plagesel}}
       {{tr}}CPlageOp-title-modify{{/tr}}

@@ -64,7 +64,7 @@
   reloadModifPlage = function() {
     var url = new Url("bloc", "ajax_modif_plage");
     url.addParam("plageop_id", {{$plage->_id}});
-    url.requestUpdate("modif_plage", reloadRightList);
+    url.requestUpdate("modif_plage", reloadAllLists);
   }
   
   reloadPersonnelPrevu = function() {
@@ -83,7 +83,6 @@
   Main.add(function(){
     reloadModifPlage();
     reloadPersonnelPrevu();
-    reloadLeftList();
   });
 
 </script>
@@ -91,6 +90,8 @@
   <tr>
     <th class="title" colspan="2">
       {{mb_include module=system template=inc_object_notes object=$plage}}
+      {{mb_include module=system template=inc_object_idsante400 object=$plage}}
+      {{mb_include module=system template=inc_object_history object=$plage}}
       {{if $plage->chir_id}}
         {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage->_ref_chir}}
       {{else}}
