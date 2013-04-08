@@ -312,14 +312,12 @@ Main.add(function(){
   </tr>
   <tr>
     <td class="button">
-    {{if $plagesel->plageop_id}}
-      <button type="submit" class="modify">Modifier</button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la plage opératoire',objName:'{{$plagesel->_view|smarty:nodefaults|JSAttribute}}'})">
-        Supprimer
-      </button>
-    {{else}}
-      <button type="submit" class="new">Ajouter</button>
-    {{/if}}
+      <button type="submit" class="save">{{tr}}Save{{/tr}}</button>
+      {{if $plagesel->plageop_id}}
+        <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'la plage opératoire',objName:'{{$plagesel->_view|smarty:nodefaults|JSAttribute}}'})">
+          {{tr}}Delete{{/tr}}
+        </button>
+      {{/if}}
     </td>
   </tr>
 </table>

@@ -157,6 +157,7 @@ function managePersonnel($obj) {
   }
 }
 if($ajax) {
+  echo CAppUI::getMsg();
   CApp::rip();
 }
 

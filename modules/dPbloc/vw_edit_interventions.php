@@ -16,7 +16,7 @@ if(!($plageop_id = CValue::getOrSession("plageop_id"))) {
 }
 
 // Infos sur la plage opératoire
-$plage = new CPlageOp;
+$plage = new CPlageOp();
 $plage->load($plageop_id);
 if(!$plage->temps_inter_op) {
   $plage->temps_inter_op = "00:00:00";

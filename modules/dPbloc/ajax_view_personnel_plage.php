@@ -1,9 +1,9 @@
-<?php /* $Id: vw_edit_interventions.php 14257 2012-01-07 21:00:16Z mytto $ */
+<?php /* $Id: $ */
 
 /**
  * @package Mediboard
  * @subpackage dPbloc
- * @version $Revision: 14257 $
+ * @version $Revision: $
  * @author SARL OpenXtrem
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html 
  */

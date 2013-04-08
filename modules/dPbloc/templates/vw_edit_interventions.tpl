@@ -8,6 +8,8 @@
  * @license GNU General Public License, see http://www.gnu.org/licenses/gpl.html
 *}}
 
+{{mb_script module=bloc script=edit_planning}}
+
 <script>
   printFicheAnesth = function(dossier_anesth_id, operation_id) {
     var url = new Url("cabinet", "print_fiche"); 
@@ -59,6 +61,12 @@
     url.modalObject.observe("afterClose", reloadAllLists);
   }
   
+  reloadModifPlage = function() {
+    var url = new Url("bloc", "ajax_modif_plage");
+    url.addParam("plageop_id", {{$plage->_id}});
+    url.requestUpdate("modif_plage", reloadRightList);
+  }
+  
   reloadPersonnelPrevu = function() {
     var url = new Url("bloc", "ajax_view_personnel_plage");
     url.addParam("plageop_id", {{$plage->_id}});
@@ -73,64 +81,33 @@
   }
 
   Main.add(function(){
-    var oForm = getForm("editPlageTiming");
-    var options = {
-      exactMinutes: false, 
-      minInterval : {{"CPlageOp"|static:minutes_interval}},
-      minHours    : {{"CPlageOp"|static:hours_start}},
-      maxHours    : {{"CPlageOp"|static:hours_stop}}
-    };
-    Calendar.regField(oForm.debut, null, options);
-    Calendar.regField(oForm.fin  , null, options);
-    options = {
-      exactMinutes: false
-    };
-    Calendar.regField(oForm.temps_inter_op, null, options);
-    reloadAllLists();
+    reloadModifPlage();
     reloadPersonnelPrevu();
+    reloadLeftList();
   });
 
 </script>
 <table class="main">
   <tr>
-    <th colspan="2">
+    <th class="title" colspan="2">
       {{mb_include module=system template=inc_object_notes object=$plage}}
-      <form name="editPlageTiming" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)" class="{{$plage->_spec}}">
-        <input type="hidden" name="m" value="dPbloc" />
-        <input type="hidden" name="dosql" value="do_plagesop_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
-        <input type="hidden" name="_repeat" value="1" />
-        <input type="hidden" name="_type_repeat" value="simple" />
-        <span style="float: right;">
-          {{mb_field object=$plage field="temps_inter_op" hidden=true onchange="this.form.submit();"}}
-          <br />
-          entre chaque intervention
-        </span>
-        {{if $plage->chir_id}}
-          {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage->_ref_chir}}
-        {{else}}
+      {{if $plage->chir_id}}
+        {{mb_include module=mediusers template=inc_vw_mediuser mediuser=$plage->_ref_chir}}
+      {{else}}
         {{$plage->_ref_spec}}
-        {{/if}}
-        - {{$plage->date|date_format:$conf.longdate}}
-        <br />
-        {{$plage->_ref_salle->nom}}
-        de {{mb_field object=$plage field="debut" hidden=true onchange="this.form.submit();"}}
-        à  {{mb_field object=$plage field="fin"   hidden=true onchange="this.form.submit();"}}
-      </form>
+      {{/if}}
+      - {{$plage->date|date_format:$conf.longdate}}
+      - {{$plage->_ref_salle->nom}}
     </th>
-  </tr>
-  
-  <tr>
-    <th class="title">Ajout de personnes</th>
-    <th class="title">Personnes en salle</th>
   </tr>
   <tr>
     <td>
       <table class="form">
         <tr>
           <td>
-            <div class="big-info">Pour plus de simplicité, l'ajout de personnel se fait maintenant directement dans la case de droite.</div>
+            <div id="modif_plage">
+            </div>
+            <div class="small-info">Pour plus de simplicité, l'ajout de personnel se fait maintenant directement dans la case de droite.</div>
           </td>
         </tr>
       </table>   
