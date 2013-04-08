@@ -22,6 +22,7 @@ class CDestinataireHprimConfig extends CMbObjectConfig {
   public $send_all_patients;
   public $send_default_serv_with_type_sej;
   public $send_volet_medical;
+  public $send_movement_location;
   
   // Application
   public $receive_ack;
@@ -43,7 +44,8 @@ class CDestinataireHprimConfig extends CMbObjectConfig {
       "send_sortie_prevue", 
       "send_all_patients",
       "send_default_serv_with_type_sej",
-      "send_volet_medical"
+      "send_volet_medical",
+      "send_movement_location"
     )
   );
 
@@ -78,6 +80,7 @@ class CDestinataireHprimConfig extends CMbObjectConfig {
     $props["send_all_patients"]               = "bool default|0";
     $props["send_default_serv_with_type_sej"] = "bool default|0";
     $props["send_volet_medical"]              = "bool default|0";
+    $props["send_movement_location"]          = "bool default|0";
     
     // Application
     $props["receive_ack"]          = "bool default|1";

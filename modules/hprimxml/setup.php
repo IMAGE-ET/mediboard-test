@@ -430,7 +430,13 @@ class CSetuphprimxml extends CSetup {
     $query = "ALTER TABLE `destinataire_hprim_config`
                 ADD `send_volet_medical` ENUM ('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($query);
+
+    $this->makeRevision("0.47");
+
+    $query = "ALTER TABLE `destinataire_hprim_config`
+                ADD `send_movement_location` ENUM ('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($query);
         
-    $this->mod_version = "0.47";
+    $this->mod_version = "0.48";
   }
 }

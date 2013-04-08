@@ -1605,32 +1605,82 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($elParent, "total", $mbFraisDivers->montant_base);
   }
   
-  function addMouvement($elParent, CAffectation  $mbAffectation, $referent = null) {
+  function addMouvement($elParent, CAffectation  $affectation, $referent = null) {
     $mouvement = $this->addElement($elParent, "mouvement");
-    
+
     // Correspond à l'identification de l'affectation
     $identifiant = $this->addElement($mouvement, "identifiant");
-    $emetteur = $this->addElement($identifiant, "emetteur", "$mbAffectation->_id");
-    
+    $this->addElement($identifiant, "emetteur", "$affectation->_id");
+
     // Traitement du médecin responsable du séjour
-    $this->addMedecinResponsable($mouvement, $mbAffectation->_ref_sejour->_ref_praticien);
-    
+    $this->addMedecinResponsable($mouvement, $affectation->_ref_sejour->_ref_praticien);
+
+    // Emplacement
+    $this->addEmplacement($mouvement, $affectation);
+
     // Debut de l'affectation
     $debut = $this->addElement($mouvement, "debut");
-    $this->addDateHeure($debut, $mbAffectation->entree);
+    $this->addDateHeure($debut, $affectation->entree);
     
     // Fin de l'affectation
     $fin = $this->addElement($mouvement, "fin");
-    $this->addDateHeure($fin, $mbAffectation->sortie);
+    $this->addDateHeure($fin, $affectation->sortie);
 
     $unitesFonctionnellesResponsables = $this->addElement($mouvement, "unitesFonctionnellesResponsables");
-    $uniteFonctionnelleResponsable = $this->addElement($unitesFonctionnellesResponsables, "uniteFonctionnelleResponsable");
-    $this->addAttribute($uniteFonctionnelleResponsable, "responsabilite", "m");
-    $service = $mbAffectation->_ref_lit->_ref_chambre->_ref_service;
+    $uniteFonctionnelleResponsable    = $this->addElement($unitesFonctionnellesResponsables, "uniteFonctionnelleResponsable");
 
-    $idex = CIdSante400::getMatchFor($service, $this->_ref_receiver->_tag_service);
+    $this->addUFResponsable($uniteFonctionnelleResponsable, $affectation);
+  }
 
-    $this->addTexte($uniteFonctionnelleResponsable, "code", $idex->id400 ? $idex->id400 : $service->_id, 10);
-    $this->addTexte($uniteFonctionnelleResponsable, "libelle", $service->_view, 35);
+  function addEmplacement($elParent, CAffectation $affectation) {
+    $receiver = $this->_ref_receiver;
+
+    if (!$receiver->_configs["send_movement_location"]) {
+      return;
+    }
+
+    $emplacement = $this->addElement($elParent, "emplacement");
+
+    $affectation->loadRefLit()->loadRefChambre()->loadRefService();
+
+    // Chambre
+    $lit      = $affectation->_ref_lit;
+    $chambre  = $lit->_ref_chambre;
+    $idex     = CIdSante400::getMatchFor($chambre, $receiver->_tag_chambre);
+    $code     = $idex->_id ? $idex->id400 : $chambre->_id;
+    $this->addCodeLibelleCommentaire($emplacement, "chambre", $code, $chambre->nom, null, $chambre->caracteristiques);
+
+    // Lit
+    $idex     = CIdSante400::getMatchFor($lit, $receiver->_tag_lit);
+    $code     = $idex->_id ? $idex->id400 : $lit->_id;
+    $this->addCodeLibelleCommentaire($emplacement, "lit", $code, $lit->nom, null, $lit->nom_complet);
+
+    // Chambre seul
+    $this->addAttribute($emplacement, "chambreSeul", $chambre->_chambre_seule ? "oui" : "non");
+  }
+
+  function addUFResponsable($elParent, CAffectation $affectation) {
+    $ufs = $affectation->getUFs();
+
+    $uf_hebergement = isset($ufs["hebergement"]) ? $ufs["hebergement"] : null;
+    if (isset($uf_hebergement->_id)) {
+      $this->addAttribute($elParent, "responsabilite", "h");
+      $this->addTexte($elParent, "code", $uf_hebergement->code, 10);
+      $this->addTexte($elParent, "libelle", $uf_hebergement->libelle, 35);
+    }
+
+    $uf_medicale = isset($ufs["medicale"]) ? $ufs["medicale"] : null;
+    if (isset($uf_medicale->_id)) {
+      $this->addAttribute($elParent, "responsabilite", "m");
+      $this->addTexte($elParent, "code", $uf_medicale->code, 10);
+      $this->addTexte($elParent, "libelle", $uf_medicale->libelle, 35);
+    }
+
+    $uf_soins = isset($ufs["soins"]) ? $ufs["soins"] : null;
+    if (isset($uf_soins->_id)) {
+      $this->addAttribute($elParent, "responsabilite", "s");
+      $this->addTexte($elParent, "code", $uf_soins->code, 10);
+      $this->addTexte($elParent, "libelle", $uf_soins->libelle, 35);
+    }
   }
 }

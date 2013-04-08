@@ -145,6 +145,8 @@ class CInteropActor extends CMbObject {
    */
   var $_ref_msg_supported_family = array();
 
+  public $_type_echange;
+
   /**
    * Get properties specifications as strings
    *

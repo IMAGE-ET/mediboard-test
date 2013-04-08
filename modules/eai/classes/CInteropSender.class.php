@@ -110,5 +110,3 @@ class CInteropSender extends CInteropActor {
     }
   }
 }
-
-?>

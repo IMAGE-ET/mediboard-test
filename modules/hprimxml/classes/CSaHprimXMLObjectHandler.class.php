@@ -121,6 +121,7 @@ class CSaHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
 
     $codable = $mbObject;
+
     // Chargement des actes du codable
     $codable->loadRefsActes();  
     

@@ -37,12 +37,12 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
   /**
    * Generate content message
    *
-   * @param CAffectation $mouvement Movement
-   * @param bool         $referent  Is referring ?
+   * @param CAffectation $affectation Movement
+   * @param bool         $referent    Is referring ?
    *
    * @return void
    */
-  function generateFromOperation(CAffectation $mouvement, $referent) {
+  function generateFromOperation(CAffectation $affectation, $referent) {
     $evenementsPatients = $this->documentElement;
     $evenementPatient   = $this->addElement($evenementsPatients, "evenementPatient");
     
@@ -52,20 +52,26 @@ class CHPrimXMLMouvementPatient extends CHPrimXMLEvenementsPatients {
       "store"  => "modification",
       "delete" => "suppression"
     );
-    $action = $mouvement->_ref_last_log->type ? $mouvement->_ref_last_log->type : "create";
+    $affectation->loadLastLog();
+    $action = $affectation->_ref_last_log->type ? $affectation->_ref_last_log->type : "create";
     $this->addAttribute($mouvementPatient, "action", $actionConversion[$action]);
-    
+
+    $affectation->loadRefSejour();
+    $affectation->_ref_sejour->loadNDA();
+    $affectation->_ref_sejour->loadRefPatient();
+    $affectation->_ref_sejour->loadRefPraticien();
+
     $patient = $this->addElement($mouvementPatient, "patient");
     // Ajout du patient   
-    $this->addPatient($patient, $mouvement->_ref_sejour->_ref_patient, $referent);
+    $this->addPatient($patient, $affectation->_ref_sejour->_ref_patient, $referent);
     
     $venue = $this->addElement($mouvementPatient, "venue"); 
     // Ajout de la venue   
-    $this->addVenue($venue, $mouvement->_ref_sejour, $referent);
+    $this->addVenue($venue, $affectation->_ref_sejour, $referent);
     
     // Ajout du mouvement (1 seul dans notre cas pas l'historique)
     $mouvements = $this->addElement($mouvementPatient, "mouvements"); 
-    $this->addMouvement($mouvements, $mouvement, $referent);
+    $this->addMouvement($mouvements, $affectation, $referent);
 
     // Traitement final
     $this->purgeEmptyElements();

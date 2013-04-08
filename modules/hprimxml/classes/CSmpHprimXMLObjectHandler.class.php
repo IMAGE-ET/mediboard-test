@@ -24,19 +24,21 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     
     // Traitement Sejour
     if ($mbObject instanceof CSejour) {
-      $mbObject->loadRefPraticien();
-      $mbObject->loadNDA();
-      $mbObject->loadLastLog();
-      
-      $mbObject->loadRefPatient();
-      $mbObject->loadRefAdresseParPraticien();
+      $sejour = $mbObject;
+
+      $sejour->loadRefPraticien();
+      $sejour->loadNDA();
+      $sejour->loadLastLog();
+
+      $sejour->loadRefPatient();
+      $sejour->loadRefAdresseParPraticien();
 
       // Si Serveur
       if (CAppUI::conf('smp server')) {
         
         $echange_hprim = new CEchangeHprim();
-        if (isset($mbObject->_eai_exchange_initiator_id)) {
-          $echange_hprim->load($mbObject->_eai_exchange_initiator_id);
+        if (isset($sejour->_eai_exchange_initiator_id)) {
+          $echange_hprim->load($sejour->_eai_exchange_initiator_id);
         }
 
         $initiateur = ($receiver->_id == $echange_hprim->sender_id) ? $echange_hprim->_id : null;
@@ -45,20 +47,16 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
         $group->load($receiver->group_id);
         $group->loadConfigValues();
         
-        if (!$initiateur && !$group->_configs["sip_notify_all_actors"]) {
-          
-        }
-        
         $mbObject->_id400 = null;
         $id400Patient = new CIdSante400();
-        $id400Patient->loadLatestFor($mbObject, $receiver->_tag_sejour);
+        $id400Patient->loadLatestFor($sejour, $receiver->_tag_sejour);
         $mbObject->_id400 = $id400Patient->id400;
 
-        $this->generateTypeEvenement("CHPrimXMLVenuePatient", $mbObject, true, $initiateur);
+        $this->generateTypeEvenement("CHPrimXMLVenuePatient", $sejour, true, $initiateur);
       }
       // Si Client
       else {
-        if ($mbObject->_eai_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLVenuePatient")) {
+        if ($sejour->_eai_initiateur_group_id || !$receiver->isMessageSupported("CHPrimXMLVenuePatient")) {
           return;
         }
           
@@ -66,84 +64,49 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
           return;
         }
         
-        if (!$mbObject->_NDA) {
+        if (!$sejour->_NDA) {
           $nda = new CIdSante400();
           //Paramétrage de l'id 400
-          $nda->loadLatestFor($mbObject, $receiver->_tag_sejour);
-  
-          $mbObject->_NDA = $nda->id400;
+          $nda->loadLatestFor($sejour, $receiver->_tag_sejour);
+
+          $sejour->_NDA = $nda->id400;
         }
         
-        if (!$mbObject->_ref_patient->_IPP) {
+        if (!$sejour->_ref_patient->_IPP) {
           $IPP = new CIdSante400();
           //Paramétrage de l'id 400
-          $IPP->loadLatestFor($mbObject->_ref_patient, $receiver->_tag_patient);
-  
-          $mbObject->_ref_patient->_IPP = $IPP->id400;
+          $IPP->loadLatestFor($sejour->_ref_patient, $receiver->_tag_patient);
+
+          $sejour->_ref_patient->_IPP = $IPP->id400;
         }
         
-        $this->sendEvenementPatient("CHPrimXMLVenuePatient", $mbObject);
+        $this->sendEvenementPatient("CHPrimXMLVenuePatient", $sejour);
         
-        if ($receiver->isMessageSupported("CHPrimXMLDebiteursVenue") && 
-            $mbObject->_ref_patient->code_regime) {
-          $this->sendEvenementPatient("CHPrimXMLDebiteursVenue", $mbObject);
+        if ($receiver->isMessageSupported("CHPrimXMLDebiteursVenue") && $sejour->_ref_patient->code_regime) {
+          $this->sendEvenementPatient("CHPrimXMLDebiteursVenue", $sejour);
         }
         
-        if ($receiver->isMessageSupported("CHPrimXMLMouvementPatient") && $receiver->_configs["send_default_serv_with_type_sej"] 
-              && ($mbObject->_ref_last_log->type == "create")) {
-          $service = new CService();
-          $service->load(CAppUI::conf("dPhospi default_service_types_sejour $mbObject->type"));
-          if (!$service->_id) {
-            // envoi par défaut le premier de la liste si pas défini
-            $service->loadObject();  
-          }
-                      
-          $affectation = new CAffectation();
-          $affectation->entree = $mbObject->entree;
-          $affectation->sortie = $mbObject->sortie;
-          $affectation->loadRefLit();
-          $affectation->_ref_lit->loadRefChambre();
-          $affectation->_ref_lit->_ref_chambre->_ref_service = $service;
-          $affectation->sejour_id = $mbObject->_id;
-          $affectation->loadRefSejour();
-          $affectation->_ref_sejour->loadNDA();
-          $affectation->_ref_sejour->loadRefPatient();
-          $affectation->_ref_sejour->loadRefPraticien();
-          
-          $this->sendEvenementPatient("CHPrimXMLMouvementPatient", $affectation);
+        if ($receiver->isMessageSupported("CHPrimXMLMouvementPatient") && ($sejour->_ref_last_log->type == "create")) {
+          $affectation = $sejour->loadRefFirstAffectation();
+
+         // $this->sendEvenementPatient("CHPrimXMLMouvementPatient", $affectation);
         }
-        
-        $mbObject->_NDA = null;
+
+        $sejour->_NDA = null;
       }
     }
+
     // Traitement Affectation
     elseif ($mbObject instanceof CAffectation) {
+      $affectation = $mbObject;
+
       // Si Client
       if (!CAppUI::conf('smp server')) {
         if (!$receiver->isMessageSupported("CHPrimXMLMouvementPatient")) {
           return;
         }
         
-        $mbObject->loadRefLit();
-        $mbObject->_ref_lit->loadRefChambre();
-        $mbObject->_ref_lit->_ref_chambre->loadRefService();
-        $mbObject->loadLastLog();
-        $mbObject->loadRefSejour();
-        $mbObject->_ref_sejour->loadNDA();
-        $mbObject->_ref_sejour->loadRefPatient();
-        $mbObject->_ref_sejour->loadRefPraticien();
-      
-        if (!$mbObject->_ref_sejour->_NDA) {
-          $nda = new CIdSante400();
-          //Paramétrage de l'id 400
-          $nda->loadLatestFor($mbObject->_ref_sejour, $receiver->_tag_sejour);
-  
-          $mbObject->_ref_sejour->_NDA = $nda->id400;
-        }
-        
-        $this->sendEvenementPatient("CHPrimXMLMouvementPatient", $mbObject);
-        
-        $mbObject->_NDA = null;
+        //$this->sendEvenementPatient("CHPrimXMLMouvementPatient", $affectation);
       }
     }
   }
@@ -290,4 +253,3 @@ class CSmpHprimXMLObjectHandler extends CHprimXMLObjectHandler {
     }
   }
 }
-?>

@@ -47,5 +47,3 @@ class CHprimXMLObjectHandler {
     $receiver->sendEvenementPMSI($dom, $mbObject);
   }
 }
-
-?>

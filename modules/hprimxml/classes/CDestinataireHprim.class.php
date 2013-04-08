@@ -110,7 +110,7 @@ class CDestinataireHprim extends CInteropReceiver {
     if (!$msg = $dom_evt->generateTypeEvenement($mbObject, $referent, $initiateur)) {
       return;
     }
-    
+
     $source = CExchangeSource::get("$this->_guid-evenementPatient");
     if (!$source->_id || !$source->active) {
       return;
