@@ -366,6 +366,10 @@ button.copy:before, a.button.copy:before {
   content: url(images/buttons/copy.png);
 }
 
+button.duplicate:before, a.button.duplicate:before {
+  content: url(images/buttons/duplicate.png);
+}
+
 button.phone:before, a.button.phone:before {
   content: url(images/buttons/phone.png);
 }
