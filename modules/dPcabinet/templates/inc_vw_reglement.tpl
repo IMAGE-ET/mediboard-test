@@ -365,7 +365,7 @@ Main.add( function(){
                 </button>
                 {{/if}}
                 <button class="print" type="button" onclick="printActes()">Imprimer les actes</button>
-                <button class="submit" type="button" onclick="loadFacture();">Créer facture</button>
+                {{*<button class="submit" type="button" onclick="loadFacture();">Créer facture</button>*}}
               </td>
             </tr>
             {{elseif !$consult->patient_date_reglement}}
